@@ -14,6 +14,7 @@ class DB2ActiveRecord extends CActiveRecord {
             return self::$db1;
         else
         {
+	  try{
             self::$db1 = Yii::app()->db1;
             if (self::$db1 instanceof CDbConnection)
             {
@@ -22,6 +23,10 @@ class DB2ActiveRecord extends CActiveRecord {
             }
             else
                 throw new CDbException(Yii::t('yii','Active Record requires a "db" CDbConnection application component.'));
+	  } catch (Exception $e) {
+    		header("Location: index.php?r=user/login&return=filed");
+    		exit;
+	  }
         }
     }
 }

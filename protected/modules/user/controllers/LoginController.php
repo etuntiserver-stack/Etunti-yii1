@@ -14,17 +14,18 @@ class LoginController extends Controller
 			// collect user input data
 			if(isset($_POST['UserLogin']))
 			{
-				$model->attributes=$_POST['UserLogin'];
-				Yii::app()->user->setState('domain', $_POST['UserLogin']['domain']);
-				$_SESSION['domain'] = $_POST['UserLogin']['domain'];
-				// validate user input and redirect to previous page if valid
-				if($model->validate()) {
-					$this->lastViset();
-					if (Yii::app()->user->returnUrl=='/index.php')
-						$this->redirect("index.php?r=site/index");
-					else
-						$this->redirect("index.php?r=site/index");
-				}
+
+			$mod=Administrators::model()->find(" adm_login = '".$_POST['UserLogin']['username']."' and adm_salasana = '".md5($_POST['UserLogin']['password'])."' ");
+
+			  if(isset($mod->id))
+			  {
+			    Yii::app()->user->setState('adminID', $mod->id);
+			    Yii::app()->user->setState('adminTunnus', $mod->adm_login);
+			    $this->redirect("index.php?r=sivexkuitti/index");
+			  } else {
+			    $this->render('/user/login',array('model'=>$model));
+			  }
+			exit;
 			}
 			// display the login form
 			$this->render('/user/login',array('model'=>$model));

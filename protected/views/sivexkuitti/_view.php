@@ -1,103 +1,110 @@
 <?php
 /* @var $this SivexkuittiController */
 /* @var $data Sivexkuitti */
+$tag = explode("_",$data->asiakas_num);
 ?>
 
-<div class="view">
+<tr>
+	<td><?php echo CHtml::link(CHtml::encode($data->id), array('view', 'id'=>$data->id)); ?></td>
+	<td><?php echo CHtml::encode(date("d.m",strtotime($data->aloitan))); ?></td>
+	<td><?php echo CHtml::encode($tag[1]); ?></td>
+	<td><?php echo CHtml::encode($data->tekijan_nimi); ?></td>
+	<td><?php echo CHtml::encode($data->kohde_kannasta); ?></td>		
+	<td><?php echo CHtml::encode(date("H:i",strtotime($data->aloitan))); ?></td>
+	<td><?php echo CHtml::encode(date("H:i",strtotime($data->loppui))); ?></td>	
+</tr>
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('id')); ?>:</b>
-	<?php echo CHtml::link(CHtml::encode($data->id), array('view', 'id'=>$data->id)); ?>
-	<br />
+	
+	
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('asiakas_num')); ?>:</b>
-	<?php echo CHtml::encode($data->asiakas_num); ?>
-	<br />
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('time')); ?>:</b>
-	<?php echo CHtml::encode($data->time); ?>
-	<br />
-
-	<b><?php echo CHtml::encode($data->getAttributeLabel('requests')); ?>:</b>
-	<?php echo CHtml::encode($data->requests); ?>
-	<br />
-
-	<b><?php echo CHtml::encode($data->getAttributeLabel('puh_numero')); ?>:</b>
-	<?php echo CHtml::encode($data->puh_numero); ?>
-	<br />
-
-	<b><?php echo CHtml::encode($data->getAttributeLabel('imei')); ?>:</b>
-	<?php echo CHtml::encode($data->imei); ?>
-	<br />
-
-	<b><?php echo CHtml::encode($data->getAttributeLabel('bluetooth_name')); ?>:</b>
-	<?php echo CHtml::encode($data->bluetooth_name); ?>
-	<br />
+	
+	
 
 	<?php /*
-	<b><?php echo CHtml::encode($data->getAttributeLabel('sim_serial_number')); ?>:</b>
+
+	<td><?php echo CHtml::encode($data->asiakas_num); ?></td>
+	
+	
+
+	<td><?php echo CHtml::encode($data->time); ?></td>
+	
+	
+
+	<td><?php echo CHtml::encode($data->requests); ?></td>
+	
+	
+
+	<td><?php echo CHtml::encode($data->puh_numero); ?></td>
+	
+	
+
+	<td><?php echo CHtml::encode($data->imei); ?></td>
+
+	<td><?php echo CHtml::encode($data->getAttributeLabel('sim_serial_number')); ?>:</td>
 	<?php echo CHtml::encode($data->sim_serial_number); ?>
-	<br />
+	
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('subscriber_id')); ?>:</b>
+	<td><?php echo CHtml::encode($data->getAttributeLabel('subscriber_id')); ?>:</td>
 	<?php echo CHtml::encode($data->subscriber_id); ?>
-	<br />
+	
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('my_location')); ?>:</b>
+	<td><?php echo CHtml::encode($data->getAttributeLabel('my_location')); ?>:</td>
 	<?php echo CHtml::encode($data->my_location); ?>
-	<br />
+	
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('osoite')); ?>:</b>
+	<td><?php echo CHtml::encode($data->getAttributeLabel('osoite')); ?>:</td>
 	<?php echo CHtml::encode($data->osoite); ?>
-	<br />
+	
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('kohde_kannasta')); ?>:</b>
+	<td><?php echo CHtml::encode($data->getAttributeLabel('kohde_kannasta')); ?>:</td>
 	<?php echo CHtml::encode($data->kohde_kannasta); ?>
-	<br />
+	
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('kohdenID')); ?>:</b>
+	<td><?php echo CHtml::encode($data->getAttributeLabel('kohdenID')); ?>:</td>
 	<?php echo CHtml::encode($data->kohdenID); ?>
-	<br />
+	
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('aloitan')); ?>:</b>
+	<td><?php echo CHtml::encode($data->getAttributeLabel('aloitan')); ?>:</td>
 	<?php echo CHtml::encode($data->aloitan); ?>
-	<br />
+	
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('loppui')); ?>:</b>
+	<td><?php echo CHtml::encode($data->getAttributeLabel('loppui')); ?>:</td>
 	<?php echo CHtml::encode($data->loppui); ?>
-	<br />
+	
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('viesti')); ?>:</b>
+	<td><?php echo CHtml::encode($data->getAttributeLabel('viesti')); ?>:</td>
 	<?php echo CHtml::encode($data->viesti); ?>
-	<br />
+	
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('tekijan_nimi')); ?>:</b>
+	<td><?php echo CHtml::encode($data->getAttributeLabel('tekijan_nimi')); ?>:</td>
 	<?php echo CHtml::encode($data->tekijan_nimi); ?>
-	<br />
+	
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('tid')); ?>:</b>
+	<td><?php echo CHtml::encode($data->getAttributeLabel('tid')); ?>:</td>
 	<?php echo CHtml::encode($data->tid); ?>
-	<br />
+	
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('etaisyys')); ?>:</b>
+	<td><?php echo CHtml::encode($data->getAttributeLabel('etaisyys')); ?>:</td>
 	<?php echo CHtml::encode($data->etaisyys); ?>
-	<br />
+	
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('status')); ?>:</b>
+	<td><?php echo CHtml::encode($data->getAttributeLabel('status')); ?>:</td>
 	<?php echo CHtml::encode($data->status); ?>
-	<br />
+	
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('tietoja')); ?>:</b>
+	<td><?php echo CHtml::encode($data->getAttributeLabel('tietoja')); ?>:</td>
 	<?php echo CHtml::encode($data->tietoja); ?>
-	<br />
+	
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('admin')); ?>:</b>
+	<td><?php echo CHtml::encode($data->getAttributeLabel('admin')); ?>:</td>
 	<?php echo CHtml::encode($data->admin); ?>
-	<br />
+	
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('hyvaksytty')); ?>:</b>
+	<td><?php echo CHtml::encode($data->getAttributeLabel('hyvaksytty')); ?>:</td>
 	<?php echo CHtml::encode($data->hyvaksytty); ?>
-	<br />
+	
 
 	*/ ?>
 
-</div>
+

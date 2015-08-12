@@ -6,6 +6,11 @@ body
 	font: normal 10pt Arial,Helvetica,sans-serif;
 	background: #EFEFEF;
 }
+
+.table-striped > tbody > tr:nth-child(2n+1) > td, .table-striped > tbody > tr:nth-child(2n+1) > th {
+   background-color: #E8E8E8;
+}
+
 a.prev, a.next {
     background: url(../images/miscellaneous_sprite.png) no-repeat transparent;
     width: 45px;

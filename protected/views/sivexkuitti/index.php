@@ -7,14 +7,22 @@ $this->breadcrumbs=array(
 );
 
 $this->menu=array(
-	array('label'=>'Create Sivexkuitti', 'url'=>array('create')),
-	array('label'=>'Manage Sivexkuitti', 'url'=>array('admin')),
+	//array('label'=>'Create Sivexkuitti', 'url'=>array('create')),
+	array('label'=>'Luetut Hallinta', 'url'=>array('admin')),
 );
 ?>
 
 <h1>Luetut kohteet</h1>
 
+
+<div class="row">
+  <table class="table table-striped">
+  <tbody>
 <?php $this->widget('zii.widgets.CListView', array(
 	'dataProvider'=>$dataProvider,
 	'itemView'=>'_view',
+
 )); ?>
+  </tbody>
+  </table>
+</div>

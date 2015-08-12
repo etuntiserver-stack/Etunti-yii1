@@ -1,6 +1,6 @@
 <?php
 
-class SivexkuittiController extends Controller
+class AdministratorsController extends Controller
 {
 	/**
 	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
@@ -29,31 +29,21 @@ class SivexkuittiController extends Controller
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
 				'actions'=>array('index','view'),
-                		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
+				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
 				'actions'=>array('create','update'),
-                		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
+				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
 				'actions'=>array('admin','delete'),
-                		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
+				'users'=>array('admin'),
 			),
 			array('deny',  // deny all users
 				'users'=>array('*'),
 			),
 		);
 	}
-
-	public function isEtuntiAdmin() {
-
-		$m = Administrators::model()->findbypk(Yii::app()->user->adminID);
-	        if($m->id == Yii::app()->user->adminID)
-	            return true;
-		else
-	            return false;
-	}
-
 
 	/**
 	 * Displays a particular model.
@@ -72,14 +62,14 @@ class SivexkuittiController extends Controller
 	 */
 	public function actionCreate()
 	{
-		$model=new Sivexkuitti;
+		$model=new Administrators;
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['Sivexkuitti']))
+		if(isset($_POST['Administrators']))
 		{
-			$model->attributes=$_POST['Sivexkuitti'];
+			$model->attributes=$_POST['Administrators'];
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
 		}
@@ -101,9 +91,9 @@ class SivexkuittiController extends Controller
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['Sivexkuitti']))
+		if(isset($_POST['Administrators']))
 		{
-			$model->attributes=$_POST['Sivexkuitti'];
+			$model->attributes=$_POST['Administrators'];
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
 		}
@@ -132,17 +122,10 @@ class SivexkuittiController extends Controller
 	 */
 	public function actionIndex()
 	{
-
-       		$criteria = new CDbCriteria();
-        	$criteria->order = 'time DESC';
-
-		$dataProvider=new CActiveDataProvider('Sivexkuitti', array(
-			'criteria'=>$criteria,
-			//'pagination'=>false
+		$dataProvider=new CActiveDataProvider('Administrators');
+		$this->render('index',array(
+			'dataProvider'=>$dataProvider,
 		));
-
-		$dataProvider->pagination->pageSize = 100;
-		$this->render('index', array('dataProvider' => $dataProvider));
 	}
 
 	/**
@@ -150,10 +133,10 @@ class SivexkuittiController extends Controller
 	 */
 	public function actionAdmin()
 	{
-		$model=new Sivexkuitti('search');
+		$model=new Administrators('search');
 		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['Sivexkuitti']))
-			$model->attributes=$_GET['Sivexkuitti'];
+		if(isset($_GET['Administrators']))
+			$model->attributes=$_GET['Administrators'];
 
 		$this->render('admin',array(
 			'model'=>$model,
@@ -164,12 +147,12 @@ class SivexkuittiController extends Controller
 	 * Returns the data model based on the primary key given in the GET variable.
 	 * If the data model is not found, an HTTP exception will be raised.
 	 * @param integer $id the ID of the model to be loaded
-	 * @return Sivexkuitti the loaded model
+	 * @return Administrators the loaded model
 	 * @throws CHttpException
 	 */
 	public function loadModel($id)
 	{
-		$model=Sivexkuitti::model()->findByPk($id);
+		$model=Administrators::model()->findByPk($id);
 		if($model===null)
 			throw new CHttpException(404,'The requested page does not exist.');
 		return $model;
@@ -177,11 +160,11 @@ class SivexkuittiController extends Controller
 
 	/**
 	 * Performs the AJAX validation.
-	 * @param Sivexkuitti $model the model to be validated
+	 * @param Administrators $model the model to be validated
 	 */
 	protected function performAjaxValidation($model)
 	{
-		if(isset($_POST['ajax']) && $_POST['ajax']==='sivexkuitti-form')
+		if(isset($_POST['ajax']) && $_POST['ajax']==='administrators-form')
 		{
 			echo CActiveForm::validate($model);
 			Yii::app()->end();

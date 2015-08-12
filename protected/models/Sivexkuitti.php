@@ -30,6 +30,9 @@
  */
 class Sivexkuitti extends DB2ActiveRecord
 {
+
+public $tekijan_nimi;
+
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
@@ -66,7 +69,7 @@ class Sivexkuitti extends DB2ActiveRecord
 			array('viesti', 'length', 'max'=>250),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, asiakas_num, time, requests, puh_numero, imei, bluetooth_name, sim_serial_number, subscriber_id, my_location, osoite, kohde_kannasta, kohdenID, aloitan, loppui, viesti, tekijan_nimi, tid, etaisyys, status, tietoja, admin, hyvaksytty', 'safe', 'on'=>'search'),
+			array('id, asiakas_num, time, requests, puh_numero, imei, bluetooth_name, sim_serial_number, subscriber_id, my_location, osoite, kohde_kannasta, kohdenID, aloitan, loppui, viesti, tekijan_nimi, tid, etaisyys, status, tietoja, admin, hyvaksytty, tekijan_nimi', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -78,6 +81,7 @@ class Sivexkuitti extends DB2ActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+		        'tyontekijat' => array(self::BELONGS_TO, 'Tyontekijat', 'tid'),
 		);
 	}
 
@@ -103,7 +107,7 @@ class Sivexkuitti extends DB2ActiveRecord
 			'aloitan' => 'Aloitan',
 			'loppui' => 'Loppui',
 			'viesti' => 'Viesti',
-			'tekijan_nimi' => 'Tekijan Nimi',
+			'tekijan_nimi' => 'Työntekijä',
 			'tid' => 'Tid',
 			'etaisyys' => 'Etaisyys',
 			'status' => 'Status',
@@ -123,6 +127,10 @@ class Sivexkuitti extends DB2ActiveRecord
 		// should not be searched.
 
 		$criteria=new CDbCriteria;
+
+		$criteria->with=array('tyontekijat');
+
+		$criteria->compare('tekijan_nimi',$this->tekijan_nimi);
 
 		$criteria->compare('id',$this->id);
 		$criteria->compare('asiakas_num',$this->asiakas_num,true);

@@ -52,12 +52,12 @@ Yii::app()->clientScript->registerPackage('bootstrapCSS');
 		<?php  $this->widget('zii.widgets.CMenu',array(
 			'items'=>array(
 				array('label'=>Yii::t('main', 'Etusivu'), 'url'=>array('/site/index')),
-				array('label'=>Yii::t('main', 'Luetut'), 'url'=>array('/sivexkuitti/index')),
+				array('label'=>Yii::t('main', 'Luetut'), 'url'=>array('/sivexkuitti/index'), 'visible'=>isset(Yii::app()->user->adminID)),
 				//array('label'=>Yii::t('main', 'About'), 'url'=>array('/site/page', 'view'=>'about')),
 				//array('label'=>Yii::t('main', 'Contact'), 'url'=>array('/site/contact')),
-				array('label'=>Yii::t('main', 'Sisään'), 'url'=>array('/user/login'), 'visible'=>Yii::app()->user->isGuest),
-				array('label'=>Yii::t('main', 'Profile'), 'url'=>array('/user/profile'), 'visible'=>!Yii::app()->user->isGuest),
-				array('label'=>Yii::t('main', 'Ulos'), 'url'=>array('/site/logout'), 'visible'=>!Yii::app()->user->isGuest)
+				array('label'=>Yii::t('main', 'Sisään'), 'url'=>array('/user/login'), 'visible'=>!isset(Yii::app()->user->adminID)),
+				//array('label'=>Yii::t('main', 'Profile'), 'url'=>array('/user/profile'), 'visible'=>!Yii::app()->user->isGuest),
+				array('label'=>Yii::t('main', 'Ulos'), 'url'=>array('/site/logout'), 'visible'=>isset(Yii::app()->user->adminID))
 			),
 		)); ?>
 	</div>
