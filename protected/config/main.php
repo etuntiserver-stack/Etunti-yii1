@@ -27,7 +27,7 @@ Yii::setPathOfAlias('chartjs', dirname(__FILE__).'/../extensions/yii-chartjs');
   $etuntifw_user = 'bb4018da4bf8cb';
   $etuntifw_pass = '97ea15c4';
 
-  $db2 = 'sivex';
+  $db2 = $_SESSION['domain'];
   $db2_host = 'eu-cdbr-azure-north-d.cloudapp.net';
   $db2_user = 'root';
   $db2_pass = '';
