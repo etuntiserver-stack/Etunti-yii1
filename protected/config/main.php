@@ -8,9 +8,27 @@
 
 Yii::setPathOfAlias('chartjs', dirname(__FILE__).'/../extensions/yii-chartjs');
 
+/*
+  $db = 'etuntifw';
+  $db_host = 'localhost';
+  $etuntifw_user = 'root';
+  $etuntifw_pass = '';
 
-  $domain = 'sivex';
+  $db2 = 'sivex';
+  $db2_host = 'localhost';
+  $db2_user = 'root';
+  $db2_pass = '';
+*/
 
+  $db = 'etuntifw';
+  $db_host = 'eu-cdbr-azure-north-d.cloudapp.net';
+  $etuntifw_user = 'bb4018da4bf8cb';
+  $etuntifw_pass = '97ea15c4';
+
+  $db2 = 'sivex';
+  $db2_host = 'eu-cdbr-azure-north-d.cloudapp.net';
+  $db2_user = 'root';
+  $db2_pass = '';
 
 return array(
 	'basePath'=>dirname(__FILE__).DIRECTORY_SEPARATOR.'..',
@@ -151,19 +169,18 @@ return array(
 		// uncomment the following to use a MySQL database
 		
 		'db'=>array(
-			'connectionString' => 'mysql:host=localhost;dbname=etuntifw',
+			'connectionString' => 'mysql:host=localhost;dbname='.$db,
 			'emulatePrepare' => true,
-			'username' => 'root',
-			'password' => '',
+			'username' => $etuntifw_user,
+			'password' => $etuntifw_pass,
 		        'tablePrefix' => 'tbl_',
 			//'charset' => 'utf8',
 		),
-
         	'db1'=>array(
-	            'connectionString' => 'mysql:host=localhost;dbname='.$domain,
+	            'connectionString' => 'mysql:host=localhost;dbname='.$db2,
 	            'emulatePrepare' => true,
-	            'username' => 'root',
-	            'password' => '',
+	            'username' => $db2_user,
+	            'password' => $db2_pass,
 	            'tablePrefix' => '',
 		    'class'=> 'CDbConnection'
         	),
