@@ -8,6 +8,8 @@ $this->pageTitle=Yii::app()->name;
 <?php
 	if(isset(Yii::app()->user->domain))
 	echo Yii::app()->user->domain;
+
+	//echo Yii::app()->session['domain'];
 ?>
 
 

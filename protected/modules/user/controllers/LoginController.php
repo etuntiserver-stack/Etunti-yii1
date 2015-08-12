@@ -16,6 +16,7 @@ class LoginController extends Controller
 			{
 				$model->attributes=$_POST['UserLogin'];
 				Yii::app()->user->setState('domain', $_POST['UserLogin']['domain']);
+				$_SESSION['domain'] = $_POST['UserLogin']['domain'];
 				// validate user input and redirect to previous page if valid
 				if($model->validate()) {
 					$this->lastViset();

@@ -1,5 +1,5 @@
 <?php
-
+session_start();
 // uncomment the following to define a path alias
 // Yii::setPathOfAlias('local','path/to/local-folder');
 
@@ -9,12 +9,14 @@
 Yii::setPathOfAlias('chartjs', dirname(__FILE__).'/../extensions/yii-chartjs');
 
 
+//print_r($_SESSION);
+
   $db = 'etuntifw';
   $db_host = 'localhost';
   $etuntifw_user = 'root';
   $etuntifw_pass = '';
 
-  $db2 = 'sivex';
+  $db2 = $_SESSION['domain'];
   $db2_host = 'localhost';
   $db2_user = 'root';
   $db2_pass = '';
