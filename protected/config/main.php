@@ -8,7 +8,7 @@
 
 Yii::setPathOfAlias('chartjs', dirname(__FILE__).'/../extensions/yii-chartjs');
 
-/*
+
   $db = 'etuntifw';
   $db_host = 'localhost';
   $etuntifw_user = 'root';
@@ -18,8 +18,8 @@ Yii::setPathOfAlias('chartjs', dirname(__FILE__).'/../extensions/yii-chartjs');
   $db2_host = 'localhost';
   $db2_user = 'root';
   $db2_pass = '';
-*/
 
+/*
   $db = 'etuntifw';
   $db_host = 'eu-cdbr-azure-north-d.cloudapp.net';
   $etuntifw_user = 'bb4018da4bf8cb';
@@ -29,6 +29,7 @@ Yii::setPathOfAlias('chartjs', dirname(__FILE__).'/../extensions/yii-chartjs');
   $db2_host = 'eu-cdbr-azure-north-d.cloudapp.net';
   $db2_user = 'root';
   $db2_pass = '';
+*/
 
 return array(
 	'basePath'=>dirname(__FILE__).DIRECTORY_SEPARATOR.'..',
