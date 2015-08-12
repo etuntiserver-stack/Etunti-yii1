@@ -1,0 +1,27 @@
+//.ui-multiselect { background:#ddd; color: #333; text-shadow: 1px 1px 0px #fff; padding:2px 0 2px 4px; text-align:left }
+.ui-multiselect { color: #333;  text-align:left }
+.ui-multiselect span.ui-icon { float:right }
+.ui-multiselect-single .ui-multiselect-checkboxes input { position:absolute !important; top: auto !important; left:-9999px; }
+.ui-multiselect-single .ui-multiselect-checkboxes label { padding:5px !important }
+
+.ui-multiselect-header { margin-bottom:3px; padding:3px 0 3px 4px }
+.ui-multiselect-header ul { }
+.ui-multiselect-header ul li { float:left; padding:0 10px 0 0 }
+.ui-multiselect-header a { text-decoration:none }
+.ui-multiselect-header a:hover { text-decoration:underline }
+.ui-multiselect-header span.ui-icon { float:left }
+.ui-multiselect-header li.ui-multiselect-close { float:right; text-align:right; padding-right:0 }
+
+.ui-multiselect-menu { background:#fff;display:none; padding:3px; position:absolute; z-index:10000; text-align: left }
+.ui-multiselect-checkboxes { position:relative /* fixes bug in IE6/7 */; overflow-y:scroll }
+.ui-multiselect-checkboxes label { cursor:default; display:block; border:1px solid transparent; padding:3px 1px }
+.ui-multiselect-checkboxes label input { position:relative; top:1px }
+.ui-multiselect-checkboxes li { clear:both;  padding-right:3px }
+.ui-multiselect-checkboxes li.ui-multiselect-optgroup-label { text-align:center;  border-bottom:1px solid }
+.ui-multiselect-checkboxes li.ui-multiselect-optgroup-label a { display:block; padding:3px; margin:1px 0; text-decoration:none }
+
+.ui-multiselect {	height: 30px;	padding: 5px 10px;	font-size: 12px;	line-height: 1.5;	border-radius: 3px;	font-weight: normal;	background-color: #fff;  background-image: none;  border: 1px solid #ccc;  border-radius: 4px;  color: #434a54;  border-color: #C8C8C8;
+}.ui-multiselect label{	font-weight: normal!important;}.ui-widget-header {  border: 0px;  background: #E8E8E8;  color: inherit;  font-weight: normal;}
+.ui-widget-header span{
+  color: #333;
+}.ui-state-hover, .ui-widget-content .ui-state-hover, .ui-widget-header .ui-state-hover, .ui-state-focus, .ui-widget-content .ui-state-focus, .ui-widget-header .ui-state-focus {  border: 0px;  background: #66ccff;  font-weight: normal;  color: #fff;}.ui-multiselect-checkboxes label {  font-weight: normal;}
