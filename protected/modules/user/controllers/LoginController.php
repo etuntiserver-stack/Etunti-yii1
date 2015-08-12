@@ -20,9 +20,9 @@ class LoginController extends Controller
 				if($model->validate()) {
 					$this->lastViset();
 					if (Yii::app()->user->returnUrl=='/index.php')
-						$this->redirect("index.php?r=site/index&domain=".Yii::app()->user->domain);
+						$this->redirect("index.php?r=site/index");
 					else
-						$this->redirect("index.php?r=site/index&domain=".Yii::app()->user->domain);
+						$this->redirect("index.php?r=site/index");
 				}
 			}
 			// display the login form
