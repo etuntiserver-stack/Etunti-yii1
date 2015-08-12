@@ -9,14 +9,17 @@ session_start();
 Yii::setPathOfAlias('chartjs', dirname(__FILE__).'/../extensions/yii-chartjs');
 
 
-//print_r($_SESSION);
+  if(isset($_SESSION['domain']))
+     $domain = $_SESSION['domain'];
+  else
+     $domain = 'demo';
 
   $db = 'etuntifw';
   $db_host = 'localhost';
   $etuntifw_user = 'root';
   $etuntifw_pass = '';
 
-  $db2 = $_SESSION['domain'];
+  $db2 = $domain;
   $db2_host = 'localhost';
   $db2_user = 'root';
   $db2_pass = '';
