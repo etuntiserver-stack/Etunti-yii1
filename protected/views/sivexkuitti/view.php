@@ -37,6 +37,7 @@ $this->menu=array(
 		'aloitan',
 		'loppui',
 		'viesti',
+		'tid',
 		'tekijan_nimi',
 		'etaisyys',
 		'status',

@@ -59,7 +59,7 @@ public $tekijan_nimi;
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('asiakas_num, time, puh_numero, imei, bluetooth_name, sim_serial_number, subscriber_id, my_location, osoite, kohde_kannasta, kohdenID, aloitan, loppui, viesti, tekijan_nimi, tid, etaisyys, status, tietoja, hyvaksytty', 'required'),
+			//array('asiakas_num, osoite, kohde_kannasta, kohdenID, aloitan, loppui, viesti, tekijan_nimi, tid, etaisyys, status, tietoja, hyvaksytty', 'required'),
 			array('requests, kohdenID, tid, status, admin', 'numerical', 'integerOnly'=>true),
 			array('asiakas_num, puh_numero, bluetooth_name, subscriber_id, tekijan_nimi', 'length', 'max'=>50),
 			array('imei, sim_serial_number, kohde_kannasta, hyvaksytty', 'length', 'max'=>100),
@@ -92,7 +92,7 @@ public $tekijan_nimi;
 	{
 		return array(
 			'id' => 'ID',
-			'asiakas_num' => 'Asiakas Num',
+			'asiakas_num' => 'Versio ja TAG:in ID',
 			'time' => 'Time',
 			'requests' => 'Requests',
 			'puh_numero' => 'Puh Numero',
@@ -101,15 +101,15 @@ public $tekijan_nimi;
 			'sim_serial_number' => 'Sim Serial Number',
 			'subscriber_id' => 'Subscriber',
 			'my_location' => 'My Location',
-			'osoite' => 'Osoite',
-			'kohde_kannasta' => 'Kohde Kannasta',
-			'kohdenID' => 'Kohden',
+			'osoite' => 'Osoite GPS',
+			'kohde_kannasta' => 'Kohde',
+			'kohdenID' => 'Kohteen ID',
 			'aloitan' => 'Aloitan',
 			'loppui' => 'Loppui',
 			'viesti' => 'Viesti',
 			'tekijan_nimi' => 'Työntekijä',
-			'tid' => 'Tid',
-			'etaisyys' => 'Etaisyys',
+			'tid' => 'Työntekijän ID',
+			'etaisyys' => 'Etäisyys',
 			'status' => 'Status',
 			'tietoja' => 'Tietoja',
 			'admin' => 'Admin',

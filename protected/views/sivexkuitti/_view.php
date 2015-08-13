@@ -1,17 +1,44 @@
 <?php
 /* @var $this SivexkuittiController */
 /* @var $data Sivexkuitti */
-$tag = explode("_",$data->asiakas_num);
+
+
+ $tag = explode("_",$data->asiakas_num);
+
+if(!empty($data->loppui))
+ $dloppu[$data->id] = date("H:i",strtotime($data->loppui));
+else
+ $dloppu[$data->id] = '';
+
+if(!empty($data->aloitan))
+ $aloitan[$data->id] = date("Y-m-d H:i",strtotime($data->aloitan));
+else
+ $aloitan[$data->id] = '';
+
+
+	if($data->status == '1')
+	$door = " <img src='img/uborka.png' alt='aloitettu' height='40'/>";
+	elseif($data->status == '3')
+	$door = " <img src='img/ok.png' alt='valmiit' height='40' />";
+	elseif($data->status == '2')
+	$door = " <img src='img/bussi.jpg' alt='valmiit' height='40' />";
+	elseif($data->status == '10')
+	$door = " <img src='img/food.png' alt='lounaalla' height='40' />";
+	elseif($data->status == '7')
+	$door = " <img src='img/virhe.png' alt='virhe' height='40' />";
+	else
+	$door = "";
 ?>
 
 <tr>
-	<td><?php echo CHtml::link(CHtml::encode($data->id), array('view', 'id'=>$data->id)); ?></td>
+	<td width="1"><?php echo $door; ?></td>
+	<td><?php echo CHtml::link(CHtml::encode($data->id), array('update', 'id'=>$data->id)); ?></td>
 	<td><?php echo CHtml::encode(date("d.m",strtotime($data->aloitan))); ?></td>
 	<td><?php echo CHtml::encode($tag[1]); ?></td>
 	<td><?php echo CHtml::encode($data->tekijan_nimi); ?></td>
 	<td><?php echo CHtml::encode($data->kohde_kannasta); ?></td>		
-	<td><?php echo CHtml::encode(date("H:i",strtotime($data->aloitan))); ?></td>
-	<td><?php echo CHtml::encode(date("H:i",strtotime($data->loppui))); ?></td>	
+	<td width="1"><?php echo $aloitan[$data->id].'<input type="datetime-local" class="pvmupdate btn btn-sm btn-default" request="aloitan" status="'.$data->status.'" pvm="'.$data->aloitan.'" id="al_'.$data->id.'" value="'.$aloitan[$data->id].'">'; ?></td>
+	<td width="1"><?php echo '<input type="datetime-local" class="pvmupdate btn btn-sm btn-default" request="loppui" status="'.$data->status.'" pvm="'.$data->loppui.'" id="lp_'.$data->id.'" value="'.$dloppu[$data->id].'">'; ?></td>
 </tr>
 
 	
@@ -90,7 +117,7 @@ $tag = explode("_",$data->asiakas_num);
 	
 
 	<td><?php echo CHtml::encode($data->getAttributeLabel('status')); ?>:</td>
-	<?php echo CHtml::encode($data->status); ?>
+	<?php echo CHtml::encode($$data->status); ?>
 	
 
 	<td><?php echo CHtml::encode($data->getAttributeLabel('tietoja')); ?>:</td>

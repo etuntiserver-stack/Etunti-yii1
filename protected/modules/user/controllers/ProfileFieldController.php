@@ -398,6 +398,8 @@ class ProfileFieldController extends Controller
 			// we only allow deletion via POST request
 			$scheme = get_class(Yii::app()->db->schema);
 			$model = $this->loadModel();
+			ProfileField::model()->deletebypk($model->id); //Roman
+
 			if ($scheme=='CSqliteSchema') {
 				$attr = Profile::model()->attributes;
 				unset($attr[$model->varname]);

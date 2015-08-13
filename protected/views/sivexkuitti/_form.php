@@ -11,7 +11,7 @@
 	'enableAjaxValidation'=>false,
 )); ?>
 
-	<p class="note">Fields with <span class="required">*</span> are required.</p>
+
 
 	<?php echo $form->errorSummary($model); ?>
 
@@ -19,24 +19,6 @@
 		<?php echo $form->labelEx($model,'asiakas_num'); ?>
 		<?php echo $form->textField($model,'asiakas_num',array('size'=>50,'maxlength'=>50,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'asiakas_num'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'time'); ?>
-		<?php echo $form->textField($model,'time',array('class'=>'form-control')); ?>
-		<?php echo $form->error($model,'time'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'requests'); ?>
-		<?php echo $form->textField($model,'requests',array('class'=>'form-control')); ?>
-		<?php echo $form->error($model,'requests'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'puh_numero'); ?>
-		<?php echo $form->textField($model,'puh_numero',array('size'=>50,'maxlength'=>50,'class'=>'form-control')); ?>
-		<?php echo $form->error($model,'puh_numero'); ?>
 	</div>
 
 	<div class="row">
@@ -49,18 +31,6 @@
 		<?php echo $form->labelEx($model,'bluetooth_name'); ?>
 		<?php echo $form->textField($model,'bluetooth_name',array('size'=>50,'maxlength'=>50,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'bluetooth_name'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'sim_serial_number'); ?>
-		<?php echo $form->textField($model,'sim_serial_number',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
-		<?php echo $form->error($model,'sim_serial_number'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'subscriber_id'); ?>
-		<?php echo $form->textField($model,'subscriber_id',array('size'=>50,'maxlength'=>50,'class'=>'form-control')); ?>
-		<?php echo $form->error($model,'subscriber_id'); ?>
 	</div>
 
 	<div class="row">
@@ -101,7 +71,7 @@
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'viesti'); ?>
-		<?php echo $form->textField($model,'viesti',array('size'=>60,'maxlength'=>250,'class'=>'form-control')); ?>
+		<?php echo $form->textArea($model,'viesti',array('rows'=>6, 'cols'=>50,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'viesti'); ?>
 	</div>
 

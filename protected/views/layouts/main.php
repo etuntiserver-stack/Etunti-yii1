@@ -42,49 +42,73 @@ Yii::app()->clientScript->registerPackage('bootstrapCSS');
 
 
 
-    <div class="no-js">
-        <nav id="topNav" class="navbar" role="navigation">
-			<div class="navbar-header">
-				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#etunti-navbar">
-					<span class="sr-only">Menu</span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-				</button> 
-				<a class="navbar-brand" href="#" onClick="window.location.href='index.php'">Etunti</a>
-			</div>
-			<div class="collapse navbar-collapse" id="etunti-navbar">
-                <ul class="nav navbar-nav">
-                    <li><a href="#" onClick="window.location.href='index.php'">rtrtr</a></li>
-                    <li><a href="#" onClick="window.location.href='?tvuoro=true'">tt</a></li>
-<!-- Ajanvaraus on piilossa mutta toiminta -->
-		<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">trttr <b class="caret"></b></a>
-		  <ul class="dropdown-menu">										<li><a href="#" onClick="window.location.href='?toteuma=true'">erer</a></li>
-                    <li><a href="#" onClick="window.location.href='?yhteenveto=true'">reer></a></li>
-                    <li><a href="#" onClick="window.location.href='?palkkataulukko=true'">rfe</a></li>
-
-		  </ul>
-		</li>
-
- 
-			
-
-			<ul class="nav navbar-nav navbar-right">
-				<li><a class="navbar-link dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-user"></span> dfssfg <b class="caret"></b></a>
-				<ul class="dropdown-menu" role="menu">
-					<li><a href="#" onClick="window.location.href='?lang=fi'">Suomeksi</a></li>
-					<li><a href="#" onClick="window.location.href='?lang=en'">In English</a></li>
-					<li><a href="#" onClick="window.location.href='?lang=ee'">Eesti</a></li>
-					<li><a href="#" onClick="window.location.href='?ulos=true'">ul</a></li>
-				</ul></li>
-			</ul>
-			
-		</div>
-        </nav>
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    <a class="navbar-brand" rel="home" href="index.php" title="Etunti">
+        <img style="max-width:100px; margin-top: -7px;" src="img/logo-black.png">
+    </a>
     </div>
 
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
 
-<div class="container-fluid" id="page">
+	<!--class="active"-->
+        <li><?php echo CHtml::link(Yii::t('main', 'Etusivu'),array('/site/index')); ?></li>
+
+	<?php if(!isset(Yii::app()->user->adminID) and !Yii::app()->User->isAdmin()) : ?>
+        <li><?php echo CHtml::link(Yii::t('main', 'Kirjaudu'),array('/user/login')); ?></li>
+	<?php endif; ?>
+
+	<?php if(Yii::app()->User->isAdmin()) : ?>
+        <li><?php echo CHtml::link(Yii::t('main', 'Profiili'),array('/user/profile')); ?></li>
+        <li><?php echo CHtml::link(Yii::t('main', 'Domainit'),array('/domainit/admin')); ?></li>
+	<?php endif; ?>
+
+	<?php if(isset(Yii::app()->user->adminID)) : ?>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?php echo Yii::t('main', 'Mobiili'); ?> <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><?php echo CHtml::link(Yii::t('main', 'Luetut kohteet'),array('/sivexkuitti/index')); ?></li>
+
+          </ul>
+        </li>
+	<?php endif; ?>
+
+      </ul>
+
+      <ul class="nav navbar-nav navbar-right">
+
+	    <?php 
+	    if(isset(Yii::app()->user->adminPaketti)) {
+     	    $d = Domainit::model()->findbypk(Yii::app()->user->adminPaketti);
+            echo '<li><a href="#">'.$d->yritys.': '.$d->pakettin_nimetus.'</a></li>';
+	    } 
+	    ?>
+
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?php echo Yii::t('main', 'Käyttäjä'); ?> <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+
+            <li role="separator" class="divider"></li>
+            <li><a href="#"><?php echo CHtml::link(Yii::t('main', 'Ulos'),array('/site/logout')); ?></a></li>
+          </ul>
+        </li>
+      </ul>
+
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+
+<div class="container-fluid">
 	<!--
 	<div id="header" class="row">
 	<a href="index.php">Sivu</a>

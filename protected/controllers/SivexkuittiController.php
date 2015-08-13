@@ -27,16 +27,8 @@ class SivexkuittiController extends Controller
 	public function accessRules()
 	{
 		return array(
-			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view'),
-                		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
-			),
-			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update'),
-                		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
-			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete'),
+				'actions'=>array('admin','delete','create','update','index','view','updatetime'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -59,6 +51,16 @@ class SivexkuittiController extends Controller
 	 * Displays a particular model.
 	 * @param integer $id the ID of the model to be displayed
 	 */
+
+	public function actionUpdatetime($id,$request)
+	{
+
+		$model = $this->loadModel($id);
+		$model->$request=date("d.m.Y",strtotime($_POST['pvm']))." ".date("H:i:s",strtotime($_POST['value']));
+		$model->status=$_POST['status'];
+		$model->save();
+	}
+
 	public function actionView($id)
 	{
 		$this->render('view',array(
@@ -133,8 +135,32 @@ class SivexkuittiController extends Controller
 	public function actionIndex()
 	{
 
+		if(Yii::app()->request->getPost('etsi_tekijan_nimi') == 'kaikki')
+		unset(Yii::app()->session['etsi_tekijan_nimi']);
+		if(Yii::app()->request->getPost('etsi_tekijan_nimi') and Yii::app()->request->getPost('etsi_tekijan_nimi') != 'kaikki'){
+		Yii::app()->session['etsi_tekijan_nimi'] = Yii::app()->request->getPost('etsi_tekijan_nimi');
+		}
+
+		if(Yii::app()->request->getPost('etsi_kohteet') == 'kaikki')
+		unset(Yii::app()->session['etsi_kohteet']);
+		if(Yii::app()->request->getPost('etsi_kohteet') and Yii::app()->request->getPost('etsi_kohteet') != 'kaikki'){
+		Yii::app()->session['etsi_kohteet'] = Yii::app()->request->getPost('etsi_kohteet');
+		}
+		if(Yii::app()->request->getPost('etsi_pvm') == 'kaikki')
+		unset(Yii::app()->session['etsi_pvm']);
+		if(Yii::app()->request->getPost('etsi_pvm') and Yii::app()->request->getPost('etsi_pvm') != 'kaikki'){
+		Yii::app()->session['etsi_pvm'] = date("Y-m-d",strtotime(Yii::app()->request->getPost('etsi_pvm')));
+		}
+
        		$criteria = new CDbCriteria();
         	$criteria->order = 'time DESC';
+
+		if(Yii::app()->session['etsi_tekijan_nimi'])
+	        $criteria->addCondition ("tekijan_nimi = '".Yii::app()->session['etsi_tekijan_nimi']."'");
+		if(Yii::app()->session['etsi_kohteet'])
+	        $criteria->addCondition ("kohde_kannasta = '".Yii::app()->session['etsi_kohteet']."'");
+		if(Yii::app()->session['etsi_pvm'])
+	        $criteria->addCondition ("DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = '".Yii::app()->session['etsi_pvm']."' ");
 
 		$dataProvider=new CActiveDataProvider('Sivexkuitti', array(
 			'criteria'=>$criteria,
