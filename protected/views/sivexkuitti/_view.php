@@ -3,17 +3,34 @@
 /* @var $data Sivexkuitti */
 
 
- $tag = explode("_",$data->asiakas_num);
+// $tag = explode("_",$data->asiakas_num);
+/*<td><?php echo CHtml::encode($tag[1]); ?></td>*/
 
 if(!empty($data->loppui))
  $dloppu[$data->id] = date("H:i",strtotime($data->loppui));
 else
  $dloppu[$data->id] = '';
 
-if(!empty($data->aloitan))
- $aloitan[$data->id] = date("Y-m-d H:i",strtotime($data->aloitan));
+if(!empty($data->aloitan)){
+ $at[$data->id] = date("H:i",strtotime($data->aloitan));
+ $apvm[$data->id] = date("Y-m-d",strtotime($data->aloitan));
+} else {
+ $at[$data->id] = '';
+ $apvm[$data->id] = '';
+}
+
+if(!empty($data->loppui)){
+ $lt[$data->id] = date("H:i",strtotime($data->loppui));
+ $lpvm[$data->id] = date("Y-m-d",strtotime($data->loppui));
+} else {
+ $lt[$data->id] = '';
+ $lpvm[$data->id] = '';
+}
+
+if(!empty($data->loppui) and !empty($data->aloitan))
+  $kesto[$data->id] =  strtotime($data->loppui) - strtotime($data->aloitan);
 else
- $aloitan[$data->id] = '';
+  $kesto[$data->id] =  '';
 
 
 	if($data->status == '1')
@@ -33,12 +50,12 @@ else
 <tr>
 	<td width="1"><?php echo $door; ?></td>
 	<td><?php echo CHtml::link(CHtml::encode($data->id), array('update', 'id'=>$data->id)); ?></td>
-	<td><?php echo CHtml::encode(date("d.m",strtotime($data->aloitan))); ?></td>
-	<td><?php echo CHtml::encode($tag[1]); ?></td>
+	<td><b><?php echo CHtml::encode(date("d.m",strtotime($data->aloitan))); ?></b></td>
 	<td><?php echo CHtml::encode($data->tekijan_nimi); ?></td>
 	<td><?php echo CHtml::encode($data->kohde_kannasta); ?></td>		
-	<td width="1"><?php echo $aloitan[$data->id].'<input type="datetime-local" class="pvmupdate btn btn-sm btn-default" request="aloitan" status="'.$data->status.'" pvm="'.$data->aloitan.'" id="al_'.$data->id.'" value="'.$aloitan[$data->id].'">'; ?></td>
-	<td width="1"><?php echo '<input type="datetime-local" class="pvmupdate btn btn-sm btn-default" request="loppui" status="'.$data->status.'" pvm="'.$data->loppui.'" id="lp_'.$data->id.'" value="'.$dloppu[$data->id].'">'; ?></td>
+	<td width="1"><?php echo '<input type="datetime-local" class="pvmupdate btn btn-sm btn-default" request="aloitan" status="'.$data->status.'" id="al_'.$data->id.'" value="'.$apvm[$data->id].'T'.$at[$data->id].'">'; ?></td>
+	<td width="1"><?php echo '<input type="datetime-local" class="pvmupdate btn btn-sm btn-default" request="loppui" status="'.$data->status.'" id="lp_'.$data->id.'" value="'.$lpvm[$data->id].'T'.$lt[$data->id].'">'; ?></td>
+	<td><?php echo sprint($kesto[$data->id]); ?></td>
 </tr>
 
 	

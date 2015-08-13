@@ -30,6 +30,7 @@
  */
 class Tyontekijat extends DB2ActiveRecord
 {
+
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
@@ -91,21 +92,21 @@ class Tyontekijat extends DB2ActiveRecord
 			'imei' => 'Imei',
 			'laiten_puh' => 'Laiten Puh',
 			'tekijan_nimi' => 'Työntekijä',
-			'tekijan_henkilotunnus' => 'Tekijan Henkilotunnus',
-			'tekijan_puh' => 'Tekijan Puh',
-			'tekijan_email' => 'Tekijan Email',
-			'tekijan_lanka_puh' => 'Tekijan Lanka Puh',
-			'tekijan_katuosoite' => 'Tekijan Katuosoite',
-			'tekijan_pnumero' => 'Tekijan Pnumero',
-			'tekijan_ptoimipaikka' => 'Tekijan Ptoimipaikka',
-			'tyoryhma' => 'Tyoryhma',
-			'tyoehtosopimus' => 'Tyoehtosopimus',
-			'tekijan_kulunvalvonta' => 'Tekijan Kulunvalvonta',
-			'tekijan_pankkitili' => 'Tekijan Pankkitili',
-			'tekijan_konttori' => 'Tekijan Konttori',
+			'tekijan_henkilotunnus' => 'Henkilötunnus',
+			'tekijan_puh' => 'Puhelin',
+			'tekijan_email' => 'Sähköposti',
+			'tekijan_lanka_puh' => 'Lanka Puh',
+			'tekijan_katuosoite' => 'Katuosoite',
+			'tekijan_pnumero' => 'Postinumero',
+			'tekijan_ptoimipaikka' => 'Postitoimipaikka',
+			'tyoryhma' => 'Työryhma',
+			'tyoehtosopimus' => 'Työehtosopimus',
+			'tekijan_kulunvalvonta' => 'Kulunvalvonta',
+			'tekijan_pankkitili' => 'Pankkitili',
+			'tekijan_konttori' => 'Konttori',
 			'aktiivinen' => 'Aktiivinen',
-			'tekijan_tietoja' => 'Tekijan Tietoja',
-			'tekijan_muisti' => 'Tekijan Muisti',
+			'tekijan_tietoja' => 'Tietoja',
+			'tekijan_muisti' => 'Muisti',
 			'salasana' => 'Salasana',
 			'online_varauksen_valmina' => 'Online Varauksen Valmina',
 			'kortit' => 'Kortit',

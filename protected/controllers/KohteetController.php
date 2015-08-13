@@ -1,6 +1,6 @@
 <?php
 
-class TyontekijatController extends Controller
+class KohteetController extends Controller
 {
 	/**
 	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
@@ -63,14 +63,14 @@ class TyontekijatController extends Controller
 	 */
 	public function actionCreate()
 	{
-		$model=new Tyontekijat;
+		$model=new Kohteet;
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['Tyontekijat']))
+		if(isset($_POST['Kohteet']))
 		{
-			$model->attributes=$_POST['Tyontekijat'];
+			$model->attributes=$_POST['Kohteet'];
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
 		}
@@ -92,9 +92,9 @@ class TyontekijatController extends Controller
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['Tyontekijat']))
+		if(isset($_POST['Kohteet']))
 		{
-			$model->attributes=$_POST['Tyontekijat'];
+			$model->attributes=$_POST['Kohteet'];
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
 		}
@@ -123,7 +123,7 @@ class TyontekijatController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$dataProvider=new CActiveDataProvider('Tyontekijat');
+		$dataProvider=new CActiveDataProvider('Kohteet');
 		$this->render('index',array(
 			'dataProvider'=>$dataProvider,
 		));
@@ -134,10 +134,10 @@ class TyontekijatController extends Controller
 	 */
 	public function actionAdmin()
 	{
-		$model=new Tyontekijat('search');
+		$model=new Kohteet('search');
 		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['Tyontekijat']))
-			$model->attributes=$_GET['Tyontekijat'];
+		if(isset($_GET['Kohteet']))
+			$model->attributes=$_GET['Kohteet'];
 
 		$this->render('admin',array(
 			'model'=>$model,
@@ -148,12 +148,12 @@ class TyontekijatController extends Controller
 	 * Returns the data model based on the primary key given in the GET variable.
 	 * If the data model is not found, an HTTP exception will be raised.
 	 * @param integer $id the ID of the model to be loaded
-	 * @return Tyontekijat the loaded model
+	 * @return Kohteet the loaded model
 	 * @throws CHttpException
 	 */
 	public function loadModel($id)
 	{
-		$model=Tyontekijat::model()->findByPk($id);
+		$model=Kohteet::model()->findByPk($id);
 		if($model===null)
 			throw new CHttpException(404,'The requested page does not exist.');
 		return $model;
@@ -161,11 +161,11 @@ class TyontekijatController extends Controller
 
 	/**
 	 * Performs the AJAX validation.
-	 * @param Tyontekijat $model the model to be validated
+	 * @param Kohteet $model the model to be validated
 	 */
 	protected function performAjaxValidation($model)
 	{
-		if(isset($_POST['ajax']) && $_POST['ajax']==='tyontekijat-form')
+		if(isset($_POST['ajax']) && $_POST['ajax']==='kohteet-form')
 		{
 			echo CActiveForm::validate($model);
 			Yii::app()->end();

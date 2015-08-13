@@ -55,8 +55,10 @@ class SivexkuittiController extends Controller
 	public function actionUpdatetime($id,$request)
 	{
 
+ 		$newdate = date("d.m.Y H:i:s",strtotime($_POST['value']));
+
 		$model = $this->loadModel($id);
-		$model->$request=date("d.m.Y",strtotime($_POST['pvm']))." ".date("H:i:s",strtotime($_POST['value']));
+		$model->$request=$newdate;
 		$model->status=$_POST['status'];
 		$model->save();
 	}
@@ -134,6 +136,12 @@ class SivexkuittiController extends Controller
 	 */
 	public function actionIndex()
 	{
+
+	function sprint($val){
+	    if($val > 0)
+		return sprintf('%02d:%02d', $val/3600, ($val % 3600)/60);
+	}
+
 
 		if(Yii::app()->request->getPost('etsi_tekijan_nimi') == 'kaikki')
 		unset(Yii::app()->session['etsi_tekijan_nimi']);
@@ -213,4 +221,8 @@ class SivexkuittiController extends Controller
 			Yii::app()->end();
 		}
 	}
+
+
+
+
 }

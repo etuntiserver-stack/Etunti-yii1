@@ -4,7 +4,7 @@
 /* @var $dataProvider CActiveDataProvider */
 
 $this->breadcrumbs=array(
-	'Luetut kohteet',
+	Yii::t('main', 'Luetut kohteet'),
 );
 
 $this->menu=array(
@@ -13,7 +13,7 @@ $this->menu=array(
 );
 ?>
 
-<h1>Luetut kohteet</h1>
+<h1><?php echo Yii::t('main', 'Luetut kohteet'); ?></h1>
 
 
 <div class="row">
@@ -60,14 +60,26 @@ $this->menu=array(
   </div>
 </div>
 
-
+<br>
 
   <table class="table table-striped">
-  <tbody>
+  <thead>
+  <tr>
+  <th><?php echo Yii::t('main', 'T'); ?></th>
+  <th><?php echo Yii::t('main', 'ID'); ?></th>
+  <th><?php echo Yii::t('main', 'Päivä'); ?></th>
+  <th><?php echo Yii::t('main', 'Työntekijä'); ?></th>
+  <th><?php echo Yii::t('main', 'Osoite/Matka'); ?></th>
+  <th><?php echo Yii::t('main', 'Aloitus'); ?></th>
+  <th><?php echo Yii::t('main', 'Lopetus'); ?></th>
+  <th><?php echo Yii::t('main', 'Kesto'); ?></th>
+  </tr>
+  </thead>
+
 <?php $this->widget('zii.widgets.CListView', array(
 	'dataProvider'=>$dataProvider,
 	'itemView'=>'_view',
-  	'template'=>'<table class="table table-striped table-bordered table-condensed">{items}</table><br/>{pager}',
+  	'template'=>'{items}<table class="table table-striped table-condensed"></table><br/>{pager}',
 
 
 'pager' => array(
@@ -81,7 +93,7 @@ $this->menu=array(
        ), 
 
 )); ?>
-  </tbody>
+
   </table>
 </div>
 
@@ -92,29 +104,29 @@ $(document).ready(function(){
 $(".pvmupdate").blur(function(){
 
 	var st = $(this).attr("status");
-	var pvm = $(this).attr("pvm");
 	var thisID = $(this).attr("id").split("_");
 	var request = $(this).attr("request");
-	var thisVal = $(this).val();
+	var thisVal = $(this).val().replace("T"," ");
 
 	if((request == 'loppui') && (st == '1') && (thisVal != ''))
-	var status = '3';
+	status = 3;
+	else
+	status = st;
+
 	if(thisVal == ''){
 	alert("Error");
 	return false;
 	}
 	
-alert(thisVal)
-/*
         $.ajax({
            url: 'index.php?r=sivexkuitti/updatetime&id='+thisID[1]+'&request='+request,
            type: "POST",
-           data: { "pvm" : pvm, "value" : thisVal, "status" : status },
+           data: { "value" : thisVal, "status" : status },
            success: function(html){
 		$('#'+thisID[0]+'_'+thisID[1]).removeClass("btn-default").addClass("btn-success");
            }
         });
-*/
+
 });
 
 

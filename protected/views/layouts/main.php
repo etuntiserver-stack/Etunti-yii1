@@ -73,7 +73,7 @@ Yii::app()->clientScript->registerPackage('bootstrapCSS');
         <li><?php echo CHtml::link(Yii::t('main', 'Domainit'),array('/domainit/admin')); ?></li>
 	<?php endif; ?>
 
-	<?php if(isset(Yii::app()->user->adminID)) : ?>
+	<?php /* if(isset(Yii::app()->user->adminID)) : ?>
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?php echo Yii::t('main', 'Mobiili'); ?> <span class="caret"></span></a>
           <ul class="dropdown-menu">
@@ -81,6 +81,13 @@ Yii::app()->clientScript->registerPackage('bootstrapCSS');
 
           </ul>
         </li>
+	<?php endif; */ ?>
+
+	<?php if(isset(Yii::app()->user->adminID)) : ?>
+        <li><?php echo CHtml::link(Yii::t('main', 'Luetut kohteet'),array('/sivexkuitti/index')); ?></li>
+        <li><?php echo CHtml::link(Yii::t('main', 'Työntekijät'),array('/tyontekijat/admin')); ?></li>
+        <li><?php echo CHtml::link(Yii::t('main', 'Kohteet'),array('/kohteet/admin')); ?></li>
+        <li><?php echo CHtml::link(Yii::t('main', 'Työvuoroot'),array('/tyovuoroot/index')); ?></li>
 	<?php endif; ?>
 
       </ul>

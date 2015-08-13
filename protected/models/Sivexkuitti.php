@@ -160,4 +160,8 @@ public $tekijan_nimi;
 			'criteria'=>$criteria,
 		));
 	}
+
+
+
+
 }

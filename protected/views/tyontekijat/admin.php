@@ -3,13 +3,13 @@
 /* @var $model Tyontekijat */
 
 $this->breadcrumbs=array(
-	'Tyontekijats'=>array('index'),
-	'Manage',
+	'Työntekijät'=>array('index'),
+	Yii::t('main', 'Hallinta'),
 );
 
 $this->menu=array(
-	array('label'=>'List Tyontekijat', 'url'=>array('index')),
-	array('label'=>'Create Tyontekijat', 'url'=>array('create')),
+	array('label'=>Yii::t('main', 'Lista työntekijä'), 'url'=>array('index')),
+	array('label'=>Yii::t('main', 'Luo työntekijä'), 'url'=>array('create')),
 );
 
 Yii::app()->clientScript->registerScript('search', "
@@ -26,14 +26,11 @@ $('.search-form form').submit(function(){
 ");
 ?>
 
-<h1>Manage Tyontekijats</h1>
+<h1><?php echo Yii::t('main', 'Työntekijät'); ?></h1>
 
-<p>
-You may optionally enter a comparison operator (<b>&lt;</b>, <b>&lt;=</b>, <b>&gt;</b>, <b>&gt;=</b>, <b>&lt;&gt;</b>
-or <b>=</b>) at the beginning of each of your search values to specify how the comparison should be done.
-</p>
 
-<?php echo CHtml::link('Advanced Search','#',array('class'=>'search-button')); ?>
+
+<?php echo CHtml::link('Haku','#',array('class'=>'search-button')); ?>
 <div class="search-form" style="display:none">
 <?php $this->renderPartial('_search',array(
 	'model'=>$model,
@@ -47,22 +44,25 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 	'columns'=>array(
 		'id',
 		'imei',
-		'laiten_puh',
+		//'laiten_puh',
 		'tekijan_nimi',
-		'tekijan_henkilotunnus',
+		//'tekijan_henkilotunnus',
 		'tekijan_puh',
-		/*
 		'tekijan_email',
+		'tyoryhma',
+		//'aktiivinen',
+		/*
+
 		'tekijan_lanka_puh',
 		'tekijan_katuosoite',
 		'tekijan_pnumero',
 		'tekijan_ptoimipaikka',
-		'tyoryhma',
+
 		'tyoehtosopimus',
 		'tekijan_kulunvalvonta',
 		'tekijan_pankkitili',
 		'tekijan_konttori',
-		'aktiivinen',
+
 		'tekijan_tietoja',
 		'tekijan_muisti',
 		'salasana',
