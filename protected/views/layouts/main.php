@@ -41,13 +41,56 @@ Yii::app()->clientScript->registerPackage('bootstrapCSS');
 <body>
 
 
-<div class="container container-fluid" id="page">
+
+    <div class="no-js">
+        <nav id="topNav" class="navbar" role="navigation">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#etunti-navbar">
+					<span class="sr-only">Menu</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button> 
+				<a class="navbar-brand" href="#" onClick="window.location.href='index.php'">Etunti</a>
+			</div>
+			<div class="collapse navbar-collapse" id="etunti-navbar">
+                <ul class="nav navbar-nav">
+                    <li><a href="#" onClick="window.location.href='index.php'">rtrtr</a></li>
+                    <li><a href="#" onClick="window.location.href='?tvuoro=true'">tt</a></li>
+<!-- Ajanvaraus on piilossa mutta toiminta -->
+		<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">trttr <b class="caret"></b></a>
+		  <ul class="dropdown-menu">										<li><a href="#" onClick="window.location.href='?toteuma=true'">erer</a></li>
+                    <li><a href="#" onClick="window.location.href='?yhteenveto=true'">reer></a></li>
+                    <li><a href="#" onClick="window.location.href='?palkkataulukko=true'">rfe</a></li>
+
+		  </ul>
+		</li>
+
+ 
+			
+
+			<ul class="nav navbar-nav navbar-right">
+				<li><a class="navbar-link dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-user"></span> dfssfg <b class="caret"></b></a>
+				<ul class="dropdown-menu" role="menu">
+					<li><a href="#" onClick="window.location.href='?lang=fi'">Suomeksi</a></li>
+					<li><a href="#" onClick="window.location.href='?lang=en'">In English</a></li>
+					<li><a href="#" onClick="window.location.href='?lang=ee'">Eesti</a></li>
+					<li><a href="#" onClick="window.location.href='?ulos=true'">ul</a></li>
+				</ul></li>
+			</ul>
+			
+		</div>
+        </nav>
+    </div>
+
+
+<div class="container-fluid" id="page">
 	<!--
 	<div id="header" class="row">
 	<a href="index.php">Sivu</a>
 	</div><!-- header -->
 
-
+<!--
 	<div id="mainmenu" class="row">
 		<?php  $this->widget('zii.widgets.CMenu',array(
 			'items'=>array(
@@ -61,6 +104,7 @@ Yii::app()->clientScript->registerPackage('bootstrapCSS');
 			),
 		)); ?>
 	</div>
+-->
 
 	<?php if(isset($this->breadcrumbs)):?>
 		<?php $this->widget('zii.widgets.CBreadcrumbs', array(

@@ -58,67 +58,116 @@ for ($i = 1; $i <= 12; $i++) {
 ?>
 
 
-
-
-
-
-
-
-
-
-
-
-<!--
-<div class="row">
-  <div class="col-sm-12">
-    Tavallinen tekstti
-    <h4>Isompi 4 tekstti</h4>
-    <h3>Isompi 3 tekstti</h3>
-    <h2>Isompi 2 tekstti</h2>
-    <h1>Isompi 1 tekstti</h1>
-  </div>
+<?php if(!isset(Yii::app()->user->adminID)) : ?>
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="panel panel-success">
+                <div class="panel-heading">
+                    <h4 class="text-center">Basic paketti</h4>
+                </div>
+                <div class="panel-body text-center">
+                    <p class="lead">
+                        <strong>10&euro; / kk</strong>
+                    </p>
+                </div>
+                <ul class="list-group list-group-flush text-center">
+                    <li class="list-group-item">
+                        Personal Use
+                        <span class="glyphicon glyphicon-ok pull-right"></span>
+                    </li>
+                    <li class="list-group-item">
+                        Single Commercial License
+                        <span class="glyphicon glyphicon-remove pull-right"></span>
+                    </li>
+                    <li class="list-group-item">
+                        Multiple site Commercial license
+                        <span class="glyphicon glyphicon-remove pull-right"></span>
+                    </li>
+                    <li class="list-group-item">
+                        Technical Support
+                        <span class="glyphicon glyphicon-remove pull-right"></span>
+                    </li>
+                </ul>
+                <div class="panel-footer">
+                    <a class="btn btn-lg btn-block btn-success">Osta heti</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h4 class="text-center">Standard paketti</h4>
+                </div>
+                <div class="panel-body text-center">
+                    <p class="lead">
+                        <strong>30&euro; / kk</strong>
+                    </p>
+                </div>
+                <ul class="list-group list-group-flush text-center">
+                    <li class="list-group-item">
+                        Personal Use
+                        <span class="glyphicon glyphicon-ok pull-right"></span>
+                    </li>
+                    <li class="list-group-item">
+                        Single Commercial License
+                        <span class="glyphicon glyphicon-ok pull-right"></span>
+                    </li>
+                    <li class="list-group-item">
+                        Multiple site Commercial license
+                        <span class="glyphicon glyphicon-remove pull-right"></span>
+                    </li>
+                    <li class="list-group-item">
+                        Technical Support
+                        <span class="glyphicon glyphicon-ok pull-right"></span>
+                    </li>
+                </ul>
+                <div class="panel-footer">
+                    <a class="btn btn-lg btn-block btn-info">Osta heti</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h4 class="text-center">Premium paketti</h4>
+                </div>
+                <div class="panel-body text-center">
+                    <p class="lead">
+                        <strong>50&euro; / kk</strong>
+                    </p>
+                </div>
+                <ul class="list-group list-group-flush text-center">
+                    <li class="list-group-item">
+                        Personal Use
+                        <span class="glyphicon glyphicon-ok pull-right"></span>
+                    </li>
+                    <li class="list-group-item">
+                        Single Commercial License
+                        <span class="glyphicon glyphicon-ok pull-right"></span>
+                    </li>
+                    <li class="list-group-item">
+                        Multiple site Commercial license
+                        <span class="glyphicon glyphicon-ok pull-right"></span>
+                    </li>
+                    <li class="list-group-item">
+                        Technical Support
+                        <span class="glyphicon glyphicon-ok pull-right"></span>
+                    </li>
+                </ul>
+                <div class="panel-footer">
+                    <a class="btn btn-lg btn-block btn-primary">Osta heti</a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+<?php endif; ?>
 
-<div class="row">
-  <div class="col-sm-3">
-    <p class="well">Bootstrap on sisällä</p>
-  </div>
-</div>
 
-<div class="row col-sm-12">
-    <div class="col-sm-4 alert alert-warning">Bootstrap on sisällä. Bootstrap on sisällä. Bootstrap on sisällä. Bootstrap on sisällä.</div>
-    <div class="col-sm-4 col-sm-offset-1 alert alert-danger">Bootstrap on sisällä. Bootstrap on sisällä. Bootstrap on sisällä. Bootstrap on sisällä.</div>
-    <div class="col-sm-4 alert alert-success">Bootstrap on sisällä. Bootstrap on sisällä. Bootstrap on sisällä. Bootstrap on sisällä.</div>
-    <div class="col-sm-4 col-sm-offset-1 alert alert-info">Bootstrap on sisällä. Bootstrap on sisällä. Bootstrap on sisällä. Bootstrap on sisällä.</div>
-</div>
 
-<div class="row">
-  <div class="col-sm-12">
-    <button type="button" class="btn btn-danger" data-toggle="collapse" data-target="#suodattimet">Avaa minut <b class="caret"></b></button>
-    <br><br>
-      <div class="collapse" id="suodattimet">
-        Tässä on piilottu sisältö. Tässä on piilottu sisältö. Tässä on piilottu sisältö. Tässä on piilottu sisältö
-      </div>
-  </div>
-</div>
 
-<h3>Linkit</h3>
-<div class="row">
-  <div class="col-sm-12">
-    <?php echo CHtml::link('Linkki kirjautumiselle',array('user/login')); ?>
-    <br>
-    <a href="http://yle.fi" target="_blank">Linkki YLE.fi lle</a>
-  </div>
-</div>
 
-<h3>Nappit</h3>
-<div class="row">
-  <div class="col-sm-12">
-    <?php echo CHtml::button('Punainen nappi kirjautumiselle', array('class'=>'btn btn-danger', 'submit' => array('user/login'))); ?>
-    <?php echo CHtml::button('Keltainen nappi kirjautumiselle', array('class'=>'btn btn-warning', 'submit' => array('user/login'))); ?>
-    <?php echo CHtml::button('Vihreä nappi kirjautumiselle', array('class'=>'btn btn-success', 'submit' => array('user/login'))); ?>
-    <?php echo CHtml::button('Sininen nappi kirjautumiselle', array('class'=>'btn btn-info', 'submit' => array('user/login'))); ?>
-    <?php echo CHtml::button('Submit nappi kirjautumiselle', array('class'=>'btn btn-primary', 'submit' => array('user/login'))); ?>
-  </div>
-</div>
--->
+
+
+
