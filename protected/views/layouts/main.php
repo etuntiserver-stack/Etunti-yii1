@@ -21,11 +21,11 @@
 
   <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/form.css" />
   <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/main.css" />
-  <link href="css/openSans.css" rel="stylesheet" type="text/css">
+  <link href="<?php echo Yii::app()->request->baseUrl; ?>/css/openSans.css" rel="stylesheet" type="text/css">
 
 
 
-  <script type="text/javascript" src="js/jquery-1.11.2.min.js"></script>
+  <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/jquery-1.11.2.min.js"></script>
 
 
 <?php
@@ -53,7 +53,7 @@ Yii::app()->clientScript->registerPackage('bootstrapCSS');
         <span class="icon-bar"></span>
       </button>
     <a class="navbar-brand" rel="home" href="index.php" title="Etunti">
-        <img style="max-width:100px; margin-top: -7px;" src="img/logo-black.png">
+        <img style="max-width:100px; margin-top: -7px;" src="<?php echo Yii::app()->request->baseUrl; ?>/img/logo-black.png">
     </a>
     </div>
 

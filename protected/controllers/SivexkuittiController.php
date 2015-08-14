@@ -33,12 +33,12 @@ class SivexkuittiController extends Controller
 	public function accessRules()
 	{
 		return array(
-/*
+
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
 				'actions'=>array('admin','delete','create','update','index','view','updatetime'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
-*/
+
             		array('allow', 'actions'=>array('REST.GET', 'REST.PUT', 'REST.POST', 'REST.DELETE'),
 		            'users'=>array('*'),
             		),
@@ -72,13 +72,13 @@ class SivexkuittiController extends Controller
 	 * @param integer $id the ID of the model to be displayed
 	 */
 
-	public function actionUpdatetime($id,$request)
+	public function actionUpdatetime()
 	{
 
  		$newdate = date("d.m.Y H:i:s",strtotime($_POST['value']));
 
-		$model = $this->loadModel($id);
-		$model->$request=$newdate;
+		$model = $this->loadModel($_POST['id']);
+		$model->$_POST['request']=$newdate;
 		$model->status=$_POST['status'];
 		$model->save();
 	}
