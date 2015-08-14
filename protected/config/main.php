@@ -105,6 +105,14 @@ return array(
 	'components'=>array(
 
 
+        'urlManager'=>array(
+            'urlFormat'=>'path',
+            'rules'=>require(
+                dirname(__FILE__).'/../extensions/starship/restfullyii/config/routes.php'
+            ),
+        ),
+
+
 	'clientScript' => array(
           'scriptMap' => array(
             'jquery.js'=>false,  //disable default implementation of jquery
@@ -225,9 +233,9 @@ return array(
 		// this is used in contact page
 		'adminEmail'=>'webmaster@example.com',
 	),
-/*
+
 	'aliases' => array(
         'RestfullYii' =>realpath(__DIR__ . '/../extensions/starship/RestfullYii'),
 	),
-*/
+
 );
