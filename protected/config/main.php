@@ -105,9 +105,8 @@ return array(
 	'components'=>array(
 
 
-
-'clientScript' => array(
-        'scriptMap' => array(
+	'clientScript' => array(
+          'scriptMap' => array(
             'jquery.js'=>false,  //disable default implementation of jquery
             'jquery.min.js'=>false,  //desable any others default implementation
             'core.css'=>false, //disable
@@ -128,8 +127,15 @@ return array(
 		    'bootstrap-filestyle.min.js',
 		    'bootstrap-select.js',
 		    'bootstrap-switch.js',
-		    //'jquery-migrate-1.2.1.js',
-		    //'jquery.ba-bbq.min.js',
+	  	),
+                'depends'=>array('jquery'),         // cause load jquery before load this.
+            ),
+            'fixedTable'=>array(                       //set others js libraries
+                'baseUrl'=>'js/',
+                'js'=>array(
+		    'jquery-migrate-1.2.1.min.js',
+		    'jquery.dataTables.min.js',
+		    'FixedColumns.js',
 	  	),
                 'depends'=>array('jquery'),         // cause load jquery before load this.
             ),
@@ -176,7 +182,7 @@ return array(
 		// uncomment the following to use a MySQL database
 		
 		'db'=>array(
-			'connectionString' => 'mysql:host=localhost;dbname='.$db,
+			'connectionString' => 'mysql:host='.$db_host.';dbname='.$db,
 			'emulatePrepare' => true,
 			'username' => $etuntifw_user,
 			'password' => $etuntifw_pass,
@@ -184,7 +190,7 @@ return array(
 			//'charset' => 'utf8',
 		),
         	'db1'=>array(
-	            'connectionString' => 'mysql:host=localhost;dbname='.$db2,
+	            'connectionString' => 'mysql:host='.$db2_host.';dbname='.$db2,
 	            'emulatePrepare' => true,
 	            'username' => $db2_user,
 	            'password' => $db2_pass,
@@ -219,4 +225,9 @@ return array(
 		// this is used in contact page
 		'adminEmail'=>'webmaster@example.com',
 	),
+/*
+	'aliases' => array(
+        'RestfullYii' =>realpath(__DIR__ . '/../extensions/starship/RestfullYii'),
+	),
+*/
 );

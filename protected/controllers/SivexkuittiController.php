@@ -16,6 +16,12 @@ class SivexkuittiController extends Controller
 		return array(
 			'accessControl', // perform access control for CRUD operations
 			'postOnly + delete', // we only allow deletion via POST request
+/*
+        	array(
+        	        'ext.starship.RestfullYii.filters.ERestFilter + 
+	                REST.GET, REST.PUT, REST.POST, REST.DELETE'
+            		),
+*/        
 		);
 	}
 
@@ -31,11 +37,24 @@ class SivexkuittiController extends Controller
 				'actions'=>array('admin','delete','create','update','index','view','updatetime'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
+/*
+            		array('allow', 'actions'=>array('REST.GET', 'REST.PUT', 'REST.POST', 'REST.DELETE'),
+		            'users'=>array('*'),
+            		),
+*/
 			array('deny',  // deny all users
 				'users'=>array('*'),
 			),
 		);
 	}
+/*
+	public function actions()
+	{
+	        return array(
+	            'REST.'=>'ext.starship.RestfullYii.actions.ERestActionProvider',
+	        );
+	}
+*/
 
 	public function isEtuntiAdmin() {
 
