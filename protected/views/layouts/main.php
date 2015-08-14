@@ -68,7 +68,7 @@ Yii::app()->clientScript->registerPackage('bootstrapCSS');
         <li><?php echo CHtml::link(Yii::t('main', 'Kirjaudu'),array('/user/login')); ?></li>
 	<?php endif; ?>
 
-	<?php if(Yii::app()->User->isAdmin()) : ?>
+	<?php if(isset(Yii::app()->user->adminID)) : ?>
         <li><?php echo CHtml::link(Yii::t('main', 'Profiili'),array('/user/profile')); ?></li>
         <li><?php echo CHtml::link(Yii::t('main', 'Domainit'),array('/domainit/admin')); ?></li>
 	<?php endif; ?>

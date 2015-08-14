@@ -3,6 +3,8 @@
 
 $this->pageTitle=Yii::app()->name;
 
+//echo Yii::app()->user->isGuest ;
+//print_r(Yii::app()->user);
 ?>
 
 <?php
