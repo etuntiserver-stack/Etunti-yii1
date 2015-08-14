@@ -7565,3 +7565,25 @@ Stack trace:
 REQUEST_URI=/index.php?r=tyovuoroot/index
 HTTP_REFERER=http://etuntifw.local/index.php?r=sivexkuitti/index
 ---
+2015/08/14 07:26:52 [error] [php] Undefined variable: strlen (E:\GITHUB\etuntifw\protected\views\tyovuoroot\index.php:63)
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(869): TyovuorootController->renderFile()
+#1 E:\GITHUB\etuntifw\YII\framework\web\CController.php(782): TyovuorootController->renderPartial()
+#2 E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php(126): TyovuorootController->render()
+#3 E:\GITHUB\etuntifw\YII\framework\web\actions\CInlineAction.php(49): TyovuorootController->actionIndex()
+#4 E:\GITHUB\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams()
+#5 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(133): TyovuorootController->runAction()
+#6 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#7 E:\GITHUB\etuntifw\YII\framework\web\CController.php(1145): CAccessControlFilter->filter()
+#8 E:\GITHUB\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): TyovuorootController->filterAccessControl()
+#9 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#10 E:\GITHUB\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#11 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): TyovuorootController->runActionWithFilters()
+#12 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): TyovuorootController->run()
+#13 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#14 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#15 E:\GITHUB\etuntifw\index.php(13): CWebApplication->run()
+REQUEST_URI=/index.php?r=tyovuoroot/index
+in E:\GITHUB\etuntifw\protected\views\tyovuoroot\index.php (63)
+in E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php (126)
+in E:\GITHUB\etuntifw\index.php (13)

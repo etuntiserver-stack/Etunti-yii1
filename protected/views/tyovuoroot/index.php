@@ -37,7 +37,7 @@ function dateDiff($start, $end) {
 	$tt = Tyontekijat::model()->findAll("aktiivinen = '1'",array('select'=>'id,tekijan_nimi'));
 
 	foreach($tt as $t){
-	  echo '<th><div style="width:170px;">';
+	  echo '<th><div style="width:200px;">';
  	  echo $t->tekijan_nimi;	
 	  echo '</div></th>';
 	}
@@ -55,10 +55,24 @@ function dateDiff($start, $end) {
   	echo '<td class="fixed-column">'.$i.'</td>';
 
 	foreach($tt as $t){
-	  echo '<td><div style="width:170px;">';
+	  echo '<td><div class="small" style="white-space: nowrap;width:200px;min-height:70px">';
 		$tv = Tyovuoroot::model()->find("tid = '".$t->id."' and pvm = '".$date."' ",array('select'=>'kohde')); 
 		$k = Kohteet::model()->findbypk($tv['kohde']);
-		print_r($k['osoite']);
+
+	  	    $strlen = strlen($k['osoite']);
+
+	     	  if($strlen > 18)
+	  	    $k['osoite'] = substr($k['osoite'],0,18).'..';
+	   	  else
+		    $k['osoite'] = $k['osoite'];
+
+		  if($tv['alku'] > 0 and $tv['loppu'] > 0)
+		    $al = $tv['alku'].'-'.$tv['loppu'];
+		  else
+		    $al = '';
+
+		  echo '<a href="#" class="link">'.$al.' '.$k['osoite'].'</a>';
+
 	  echo '</div></td>';
 	}
 
