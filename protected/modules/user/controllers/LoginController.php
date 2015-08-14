@@ -25,9 +25,9 @@ class LoginController extends Controller
 			    if(isset($domainit->paketti))
 			    Yii::app()->user->setState('adminPaketti', $domainit->id);
 
-			    $this->redirect("index.php?r=sivexkuitti/index");
+			    $this->redirect("/index.php/sivexkuitti/index");
 			  } else {
-			    $this->render('/user/login',array('model'=>$model));
+			    $this->render('/index.php/user/login',array('model'=>$model));
 			  }
 			exit;
 			}
@@ -40,9 +40,9 @@ class LoginController extends Controller
 				Yii::app()->user->setState('superadmin', true);
 					$this->lastViset();
 					if (Yii::app()->user->returnUrl=='/index.php')
-						$this->redirect("index.php?r=user/profile");
+						$this->redirect("/index.php/user/profile");
 					else
-						$this->redirect("index.php?r=user/profile"); //Yii::app()->user->returnUrl
+						$this->redirect("/index.php/user/profile"); //Yii::app()->user->returnUrl
 				}
 			}
 

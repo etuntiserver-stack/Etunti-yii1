@@ -9244,3 +9244,46 @@ Stack trace:
 #12 {main}
 REQUEST_URI=/index.php/api/sivexkuitti/index
 ---
+2015/08/14 11:45:39 [error] [exception.CHttpException.401] exception 'CHttpException' with message 'Unauthorized' in C:\xampp\htdocs\etuntifw\protected\extensions\starship\RestfullYii\filters\ERestFilter.php:81
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(38): ERestFilter->preFilter(Object(CFilterChain))
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CFilter->filter(Object(CFilterChain))
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(EActionRestGET), Array)
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('REST.GET')
+#9 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('sivexkuitti/RES...')
+#10 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#11 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#12 {main}
+REQUEST_URI=/index.php/api/sivexkuitti/index
+---
+2015/08/14 11:45:40 [error] [exception.CHttpException.401] exception 'CHttpException' with message 'Unauthorized' in C:\xampp\htdocs\etuntifw\protected\extensions\starship\RestfullYii\filters\ERestFilter.php:81
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(38): ERestFilter->preFilter(Object(CFilterChain))
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CFilter->filter(Object(CFilterChain))
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(EActionRestGET), Array)
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('REST.GET')
+#9 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('sivexkuitti/RES...')
+#10 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#11 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#12 {main}
+REQUEST_URI=/index.php/api/sivexkuitti/index
+---
+2015/08/14 11:46:58 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Pyynnön selvittäminen "user/index.php" epäonnistui.' in C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php:286
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('user/index.php')
+#1 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#2 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/index.php/user/index.php?r=user/profile
+HTTP_REFERER=http://etuntifw.local/index.php/user/login
+---
