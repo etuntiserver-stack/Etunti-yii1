@@ -34,15 +34,15 @@ else
 
 
 	if($data->status == '1')
-	$door = " <img src='img/uborka.png' alt='aloitettu' height='40'/>";
+	$door = " <img src='".Yii::app()->request->baseUrl."/img/uborka.png' alt='aloitettu' height='40'/>";
 	elseif($data->status == '3')
-	$door = " <img src='img/ok.png' alt='valmiit' height='40' />";
+	$door = " <img src='".Yii::app()->request->baseUrl."/img/ok.png' alt='valmiit' height='40' />";
 	elseif($data->status == '2')
-	$door = " <img src='img/bussi.jpg' alt='valmiit' height='40' />";
+	$door = " <img src='".Yii::app()->request->baseUrl."/img/bussi.jpg' alt='valmiit' height='40' />";
 	elseif($data->status == '10')
-	$door = " <img src='img/food.png' alt='lounaalla' height='40' />";
+	$door = " <img src='".Yii::app()->request->baseUrl."/img/food.png' alt='lounaalla' height='40' />";
 	elseif($data->status == '7')
-	$door = " <img src='img/virhe.png' alt='virhe' height='40' />";
+	$door = " <img src='".Yii::app()->request->baseUrl."/img/virhe.png' alt='virhe' height='40' />";
 	else
 	$door = "";
 ?>

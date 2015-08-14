@@ -119,9 +119,9 @@ $(".pvmupdate").blur(function(){
 	}
 	
         $.ajax({
-           url: 'index.php?r=sivexkuitti/updatetime&id='+thisID[1]+'&request='+request,
+           url: 'updatetime',
            type: "POST",
-           data: { "value" : thisVal, "status" : status },
+           data: { "id" : thisID, "request" : request, "value" : thisVal, "status" : status },
            success: function(html){
 		$('#'+thisID[0]+'_'+thisID[1]).removeClass("btn-default").addClass("btn-success");
            }
@@ -133,7 +133,7 @@ $(".pvmupdate").blur(function(){
 $(".etsi_tekijan_nimi").change(function(){
 	var thisVal = $(this).val();
         $.ajax({
-           url: "index.php?r=sivexkuitti/index",
+           url: "index",
 	   type:'POST',
 	   data: { "etsi_tekijan_nimi" : thisVal },
            success: function(html){
@@ -145,7 +145,7 @@ $(".etsi_tekijan_nimi").change(function(){
 $(".etsi_kohteet").change(function(){
 	var thisVal = $(this).val();
         $.ajax({
-           url: "index.php?r=sivexkuitti/index",
+           url: "index",
 	   type:'POST',
 	   data: { "etsi_kohteet" : thisVal },
            success: function(html){
@@ -160,7 +160,7 @@ $(".etsi_pvm").on('blur', function() {
 	var thisVal = 'kaikki';
 
         $.ajax({
-           url: "index.php?r=sivexkuitti/index",
+           url: "index",
 	   type:'POST',
 	   data: { "etsi_pvm" : thisVal },
            success: function(html){
