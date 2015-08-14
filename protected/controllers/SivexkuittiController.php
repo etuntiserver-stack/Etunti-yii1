@@ -1,7 +1,10 @@
 <?php
 
+
 class SivexkuittiController extends Controller
 {
+
+
 	/**
 	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
 	 * using two-column layout. See 'protected/views/layouts/column2.php'.
@@ -24,6 +27,23 @@ class SivexkuittiController extends Controller
        
 		);
 	}
+
+/*
+public function init()
+{
+    parent::init();
+    Yii::$app->user->enableSession = false;
+}
+
+public function behaviors()
+{
+    $behaviors = parent::behaviors();
+    $behaviors['authenticator'] = [
+        'class' => HttpBasicAuth::className(),
+    ];
+    return $behaviors;
+}
+*/
 
 	/**
 	 * Specifies the access control rules.
