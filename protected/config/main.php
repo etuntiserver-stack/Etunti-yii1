@@ -11,7 +11,9 @@ Yii::setPathOfAlias('chartjs', dirname(__FILE__).'/../extensions/yii-chartjs');
   if(isset($_POST['UserLogin']['domain']) and !empty($_POST['UserLogin']['domain']) and $_POST['UserLogin']['domain'] != 'superadmin')
   $_SESSION['domain'] = $_POST['UserLogin']['domain'];
 
-/*
+
+  if( $_SERVER['REMOTE_ADDR'] == '::1' or $_SERVER['REMOTE_ADDR'] == '127.0.0.1' )
+  {
   $db = 'etuntifw';
   $db_host = 'localhost';
   $etuntifw_user = 'root';
@@ -25,7 +27,7 @@ else
   $db2_user = 'root';
   $db2_pass = '';
 
-*/
+  } else {
 
   $db = 'etuntifw';
   $db_host = 'eu-cdbr-azure-north-d.cloudapp.net';
@@ -36,6 +38,8 @@ else
   $db2_host = 'eu-cdbr-azure-north-d.cloudapp.net';
   $db2_user = 'b6b2a4e8995384';
   $db2_pass = 'df12e849';
+  }
+
 
 return array(
 	'basePath'=>dirname(__FILE__).DIRECTORY_SEPARATOR.'..',
