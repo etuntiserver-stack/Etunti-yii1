@@ -24,10 +24,6 @@ function dateDiff($start, $end) {
 
 
 
-    <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
-    <script src="//cdn.datatables.net/1.9.4/js/jquery.dataTables.min.js"></script>
-    <script src="//cdn.rawgit.com/DataTables/FixedColumns/RELEASE_2_0_3/media/js/FixedColumns.js"></script>
-
 <div class="row tvuoro">
   <table class="table table-striped table-condensed table-bordered">
      <thead>
@@ -85,6 +81,7 @@ function dateDiff($start, $end) {
   </table>
 </div>
 
+<?php Yii::app()->clientScript->registerPackage('fixedTable'); ?>
 
 <script type="text/javascript">
 $(document).ready(function(){
