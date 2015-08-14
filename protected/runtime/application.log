@@ -9287,3 +9287,548 @@ Stack trace:
 REQUEST_URI=/index.php/user/index.php?r=user/profile
 HTTP_REFERER=http://etuntifw.local/index.php/user/login
 ---
+2015/08/14 11:51:14 [error] [exception.CHttpException.401] exception 'CHttpException' with message 'Unauthorized' in C:\xampp\htdocs\etuntifw\protected\extensions\starship\RestfullYii\filters\ERestFilter.php:81
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(38): ERestFilter->preFilter(Object(CFilterChain))
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CFilter->filter(Object(CFilterChain))
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(EActionRestGET), Array)
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('REST.GET')
+#9 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('sivexkuitti/RES...')
+#10 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#11 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#12 {main}
+REQUEST_URI=/index.php/api/sivexkuitti/index
+---
+2015/08/14 11:51:29 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Resource Not Found' in C:\xampp\htdocs\etuntifw\protected\extensions\starship\RestfullYii\actions\EActionRestGET.php:56
+Stack trace:
+#0 [internal function]: EActionRestGET->run('index', NULL, NULL)
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CAction.php(108): ReflectionMethod->invokeArgs(Object(EActionRestGET), Array)
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CAction.php(74): CAction->runWithParamsInternal(Object(EActionRestGET), Object(ReflectionMethod), Array)
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CAction->runWithParams(Array)
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(EActionRestGET))
+#5 C:\xampp\htdocs\etuntifw\protected\extensions\starship\RestfullYii\filters\ERestFilter.php(88): CFilterChain->run()
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(38): ERestFilter->preFilter(Object(CFilterChain))
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CFilter->filter(Object(CFilterChain))
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#9 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#10 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#11 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#12 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#13 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(EActionRestGET), Array)
+#14 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('REST.GET')
+#15 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('sivexkuitti/RES...')
+#16 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#17 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#18 {main}
+REQUEST_URI=/index.php/api/sivexkuitti/index
+---
+2015/08/14 11:52:00 [error] [system.db.CDbCommand] CDbCommand::fetchAll() epäonnistui: SQLSTATE[3D000]: Invalid catalog name: 1046 No database selected. Suoritettu SQL-komento oli: SHOW FULL COLUMNS FROM `sivexkuitti`.
+in C:\xampp\htdocs\etuntifw\protected\extensions\starship\RestfullYii\events\ERestEventListenerRegistry.php (579)
+in C:\xampp\htdocs\etuntifw\protected\extensions\starship\RestfullYii\events\Eventor\Eventor.php (170)
+in C:\xampp\htdocs\etuntifw\protected\extensions\starship\RestfullYii\behaviors\ERestBehavior.php (109)
+2015/08/14 11:52:00 [error] [exception.CDbException] exception 'CDbException' with message 'Active record -luokan "Sivexkuitti" taulua "sivexkuitti" ei löydy tietokannasta.' in C:\xampp\htdocs\etuntifw\YII\framework\db\ar\CActiveRecord.php:2310
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\db\ar\CActiveRecord.php(387): CActiveRecordMetaData->__construct(Object(Sivexkuitti))
+#1 C:\xampp\htdocs\etuntifw\YII\framework\db\ar\CActiveRecord.php(402): CActiveRecord::model('Sivexkuitti')
+#2 C:\xampp\htdocs\etuntifw\YII\framework\db\ar\CActiveRecord.php(77): CActiveRecord->getMetaData()
+#3 C:\xampp\htdocs\etuntifw\protected\extensions\starship\RestfullYii\events\ERestEventListenerRegistry.php(579): CActiveRecord->__construct()
+#4 [internal function]: ERestEventListenerRegistry->{closure}()
+#5 C:\xampp\htdocs\etuntifw\protected\extensions\starship\RestfullYii\events\Eventor\Eventor.php(170): call_user_func_array(Object(Closure), Array)
+#6 C:\xampp\htdocs\etuntifw\protected\extensions\starship\RestfullYii\behaviors\ERestBehavior.php(109): Eventor->emit('model.instance', Array)
+#7 C:\xampp\htdocs\etuntifw\protected\extensions\starship\RestfullYii\components\ERestResourceHelper.php(72): ERestBehavior->emitRest('model.instance')
+#8 C:\xampp\htdocs\etuntifw\protected\extensions\starship\RestfullYii\actions\ERestBaseAction.php(64): ERestResourceHelper->prepareRestModel(NULL)
+#9 C:\xampp\htdocs\etuntifw\protected\extensions\starship\RestfullYii\actions\EActionRestGET.php(34): ERestBaseAction->getModel(NULL)
+#10 [internal function]: EActionRestGET->run(NULL, NULL, NULL)
+#11 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CAction.php(108): ReflectionMethod->invokeArgs(Object(EActionRestGET), Array)
+#12 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CAction.php(74): CAction->runWithParamsInternal(Object(EActionRestGET), Object(ReflectionMethod), Array)
+#13 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CAction->runWithParams(Array)
+#14 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(EActionRestGET))
+#15 C:\xampp\htdocs\etuntifw\protected\extensions\starship\RestfullYii\filters\ERestFilter.php(88): CFilterChain->run()
+#16 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(38): ERestFilter->preFilter(Object(CFilterChain))
+#17 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CFilter->filter(Object(CFilterChain))
+#18 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#19 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#20 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#21 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#22 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#23 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(EActionRestGET), Array)
+#24 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('REST.GET')
+#25 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('sivexkuitti/RES...')
+#26 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#27 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#28 {main}
+REQUEST_URI=/index.php/api/sivexkuitti
+---
+2015/08/14 11:54:55 [error] [exception.CException] exception 'CException' with message 'Ominaisuus "WebUser.isGuest" on vain luettavissa.' in C:\xampp\htdocs\etuntifw\YII\framework\base\CComponent.php:241
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\auth\CWebUser.php(182): CComponent->__unset('isGuest')
+#1 C:\xampp\htdocs\etuntifw\protected\modules\user\controllers\LoginController.php(22): CWebUser->__unset('isGuest')
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(49): LoginController->actionLogin()
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(286): CController->runAction(Object(CInlineAction))
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('')
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('user/login')
+#8 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#9 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#10 {main}
+REQUEST_URI=/index.php/user/login
+HTTP_REFERER=http://etuntifw.local/index.php/user/login
+---
+2015/08/14 11:55:28 [error] [exception.CException] exception 'CException' with message 'Ominaisuus "WebUser.isGuest" on vain luettavissa.' in C:\xampp\htdocs\etuntifw\YII\framework\base\CComponent.php:170
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\auth\CWebUser.php(154): CComponent->__set('isGuest', 0)
+#1 C:\xampp\htdocs\etuntifw\protected\modules\user\controllers\LoginController.php(22): CWebUser->__set('isGuest', 0)
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(49): LoginController->actionLogin()
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(286): CController->runAction(Object(CInlineAction))
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('')
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('user/login')
+#8 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#9 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#10 {main}
+REQUEST_URI=/index.php/user/login
+HTTP_REFERER=http://etuntifw.local/index.php/user/login
+---
+2015/08/14 11:58:03 [error] [php] Undefined variable: user (C:\xampp\htdocs\etuntifw\protected\modules\user\controllers\LoginController.php:22)
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(286): LoginController->runAction()
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): LoginController->runActionWithFilters()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): LoginController->run()
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#4 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#5 C:\xampp\htdocs\etuntifw\index.php(13): CWebApplication->run()
+REQUEST_URI=/index.php/user/login
+in C:\xampp\htdocs\etuntifw\protected\modules\user\controllers\LoginController.php (22)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/14 11:58:16 [error] [exception.CException] exception 'CException' with message 'Ominaisuutta "LoginController._id" ei ole määritelty.' in C:\xampp\htdocs\etuntifw\YII\framework\base\CComponent.php:173
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\protected\modules\user\controllers\LoginController.php(22): CComponent->__set('_id', '21')
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(49): LoginController->actionLogin()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(286): CController->runAction(Object(CInlineAction))
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('')
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('user/login')
+#7 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#8 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#9 {main}
+REQUEST_URI=/index.php/user/login
+HTTP_REFERER=http://etuntifw.local/index.php/user/login
+---
+2015/08/14 11:58:49 [error] [exception.CException] exception 'CException' with message 'Luokan LoginController ja sen käyttäytymismallit eivät sisällä metodia tai sulkeumaa nimeltä "setState".' in C:\xampp\htdocs\etuntifw\YII\framework\base\CComponent.php:265
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\protected\modules\user\controllers\LoginController.php(22): CComponent->__call('setState', Array)
+#1 C:\xampp\htdocs\etuntifw\protected\modules\user\controllers\LoginController.php(22): LoginController->setState('id', '21')
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(49): LoginController->actionLogin()
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(286): CController->runAction(Object(CInlineAction))
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('')
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('user/login')
+#8 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#9 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#10 {main}
+REQUEST_URI=/index.php/user/login
+HTTP_REFERER=http://etuntifw.local/index.php/user/login
+---
+2015/08/14 12:02:36 [error] [exception.CException] exception 'CException' with message 'Ominaisuutta "LoginController.username" ei ole määritelty.' in C:\xampp\htdocs\etuntifw\YII\framework\base\CComponent.php:173
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\protected\modules\user\controllers\LoginController.php(24): CComponent->__set('username', 'roman')
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(49): LoginController->actionLogin()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(286): CController->runAction(Object(CInlineAction))
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('')
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('user/login')
+#7 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#8 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#9 {main}
+REQUEST_URI=/index.php/user/login
+HTTP_REFERER=http://etuntifw.local/index.php/user/login
+---
+2015/08/14 12:03:02 [error] [exception.CException] exception 'CException' with message 'Ominaisuutta "WebUser.username" ei ole määritelty.' in C:\xampp\htdocs\etuntifw\YII\framework\base\CComponent.php:173
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\auth\CWebUser.php(154): CComponent->__set('username', 'roman')
+#1 C:\xampp\htdocs\etuntifw\protected\modules\user\controllers\LoginController.php(24): CWebUser->__set('username', 'roman')
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(49): LoginController->actionLogin()
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(286): CController->runAction(Object(CInlineAction))
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('')
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('user/login')
+#8 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#9 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#10 {main}
+REQUEST_URI=/index.php/user/login
+HTTP_REFERER=http://etuntifw.local/index.php/user/login
+---
+2015/08/14 12:03:36 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Järjestelmä ei löydä pyydettyä toimintoa "index.php".' in C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php:483
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(270): CController->missingAction('index.php')
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('index.php')
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('sivexkuitti/ind...')
+#3 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php/sivexkuitti/index.php
+HTTP_REFERER=http://etuntifw.local/index.php/sivexkuitti/index
+---
+2015/08/14 12:07:33 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Pyynnön selvittäminen "user/index.php" epäonnistui.' in C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php:286
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('user/index.php')
+#1 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#2 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/index.php/user/index.php
+HTTP_REFERER=http://etuntifw.local/index.php/user/login
+---
+2015/08/14 12:09:01 [error] [exception.CException] exception 'CException' with message 'Ominaisuus "WebUser.isGuest" on vain luettavissa.' in C:\xampp\htdocs\etuntifw\YII\framework\base\CComponent.php:170
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\auth\CWebUser.php(154): CComponent->__set('isGuest', '')
+#1 C:\xampp\htdocs\etuntifw\protected\modules\user\controllers\LoginController.php(22): CWebUser->__set('isGuest', '')
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(49): LoginController->actionLogin()
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(286): CController->runAction(Object(CInlineAction))
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('')
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('user/login')
+#8 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#9 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#10 {main}
+REQUEST_URI=/index.php/user/login
+HTTP_REFERER=http://etuntifw.local/index.php/user/login
+---
+2015/08/14 12:10:22 [error] [exception.CException] exception 'CException' with message 'Luokan LoginController ja sen käyttäytymismallit eivät sisällä metodia tai sulkeumaa nimeltä "setState".' in C:\xampp\htdocs\etuntifw\YII\framework\base\CComponent.php:265
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\protected\modules\user\controllers\LoginController.php(22): CComponent->__call('setState', Array)
+#1 C:\xampp\htdocs\etuntifw\protected\modules\user\controllers\LoginController.php(22): LoginController->setState('id', '21')
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(49): LoginController->actionLogin()
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(286): CController->runAction(Object(CInlineAction))
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('')
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('user/login')
+#8 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#9 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#10 {main}
+REQUEST_URI=/index.php/user/login
+HTTP_REFERER=http://etuntifw.local/index.php/user/login
+---
+2015/08/14 12:10:39 [error] [exception.CException] exception 'CException' with message 'Luokan UserLogin ja sen käyttäytymismallit eivät sisällä metodia tai sulkeumaa nimeltä "setState".' in C:\xampp\htdocs\etuntifw\YII\framework\base\CComponent.php:265
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\protected\modules\user\controllers\LoginController.php(22): CComponent->__call('setState', Array)
+#1 C:\xampp\htdocs\etuntifw\protected\modules\user\controllers\LoginController.php(22): UserLogin->setState('id', '21')
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(49): LoginController->actionLogin()
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(286): CController->runAction(Object(CInlineAction))
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('')
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('user/login')
+#8 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#9 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#10 {main}
+REQUEST_URI=/index.php/user/login
+HTTP_REFERER=http://etuntifw.local/index.php/user/login
+---
+2015/08/14 12:13:15 [error] [exception.CException] exception 'CException' with message 'Ominaisuutta "WebUser.identity" ei ole määritelty.' in C:\xampp\htdocs\etuntifw\YII\framework\base\CComponent.php:130
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\auth\CWebUser.php(140): CComponent->__get('identity')
+#1 C:\xampp\htdocs\etuntifw\protected\modules\user\controllers\LoginController.php(23): CWebUser->__get('identity')
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(49): LoginController->actionLogin()
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(286): CController->runAction(Object(CInlineAction))
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('')
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('user/login')
+#8 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#9 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#10 {main}
+REQUEST_URI=/index.php/user/login
+HTTP_REFERER=http://etuntifw.local/index.php/user/login
+---
+2015/08/14 12:23:32 [error] [exception.CException] exception 'CException' with message 'Ominaisuutta "LoginController.record" ei ole määritelty.' in C:\xampp\htdocs\etuntifw\YII\framework\base\CComponent.php:130
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\protected\modules\user\controllers\LoginController.php(27): CComponent->__get('record')
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(49): LoginController->actionLogin()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(286): CController->runAction(Object(CInlineAction))
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('')
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('user/login')
+#7 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#8 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#9 {main}
+REQUEST_URI=/index.php/user/login
+HTTP_REFERER=http://etuntifw.local/index.php/user/login
+---
+2015/08/14 12:26:21 [error] [exception.CException] exception 'CException' with message 'Ominaisuutta "LoginController.record" ei ole määritelty.' in C:\xampp\htdocs\etuntifw\YII\framework\base\CComponent.php:130
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\protected\modules\user\controllers\LoginController.php(30): CComponent->__get('record')
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(49): LoginController->actionLogin()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(286): CController->runAction(Object(CInlineAction))
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('')
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('user/login')
+#7 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#8 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#9 {main}
+REQUEST_URI=/index.php/user/login
+HTTP_REFERER=http://etuntifw.local/index.php/user/login
+---
+2015/08/14 12:37:16 [error] [php] Trying to get property of non-object (C:\xampp\htdocs\etuntifw\protected\modules\user\UserModule.php:194)
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\CBaseController.php(126): require()
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\CBaseController.php(95): SivexkuittiController->renderInternal()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\widgets\CContentDecorator.php(76): SivexkuittiController->renderFile()
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\widgets\CContentDecorator.php(54): CContentDecorator->decorate()
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\widgets\COutputProcessor.php(44): CContentDecorator->processOutput()
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CBaseController.php(206): CContentDecorator->run()
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\CBaseController.php(300): SivexkuittiController->endWidget()
+#7 C:\xampp\htdocs\etuntifw\protected\views\layouts\column2.php(22): SivexkuittiController->endContent()
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CBaseController.php(126): require()
+#9 C:\xampp\htdocs\etuntifw\YII\framework\web\CBaseController.php(95): SivexkuittiController->renderInternal()
+#10 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(784): SivexkuittiController->renderFile()
+#11 C:\xampp\htdocs\etuntifw\protected\controllers\SivexkuittiController.php(199): SivexkuittiController->render()
+#12 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(49): SivexkuittiController->actionIndex()
+#13 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams()
+#14 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): SivexkuittiController->runAction()
+#15 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#16 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CAccessControlFilter->filter()
+#17 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): SivexkuittiController->filterAccessControl()
+#18 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#19 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#20 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): SivexkuittiController->runActionWithFilters()
+#21 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): SivexkuittiController->run()
+#22 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#23 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#24 C:\xampp\htdocs\etuntifw\index.php(13): CWebApplication->run()
+REQUEST_URI=/index.php/sivexkuitti/index
+in C:\xampp\htdocs\etuntifw\protected\modules\user\UserModule.php (194)
+in C:\xampp\htdocs\etuntifw\protected\modules\user\components\WebUser.php (66)
+in C:\xampp\htdocs\etuntifw\protected\views\layouts\main.php (71)
+2015/08/14 12:39:12 [error] [php] Trying to get property of non-object (C:\xampp\htdocs\etuntifw\protected\modules\user\UserModule.php:194)
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\CBaseController.php(126): require()
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\CBaseController.php(95): SiteController->renderInternal()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\widgets\CContentDecorator.php(76): SiteController->renderFile()
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\widgets\CContentDecorator.php(54): CContentDecorator->decorate()
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\widgets\COutputProcessor.php(44): CContentDecorator->processOutput()
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CBaseController.php(206): CContentDecorator->run()
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\CBaseController.php(300): SiteController->endWidget()
+#7 C:\xampp\htdocs\etuntifw\protected\views\layouts\column1.php(6): SiteController->endContent()
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CBaseController.php(126): require()
+#9 C:\xampp\htdocs\etuntifw\YII\framework\web\CBaseController.php(95): SiteController->renderInternal()
+#10 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(784): SiteController->renderFile()
+#11 C:\xampp\htdocs\etuntifw\protected\controllers\SiteController.php(50): SiteController->render()
+#12 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(49): SiteController->actionIndex()
+#13 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams()
+#14 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(286): SiteController->runAction()
+#15 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): SiteController->runActionWithFilters()
+#16 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): SiteController->run()
+#17 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#18 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#19 C:\xampp\htdocs\etuntifw\index.php(13): CWebApplication->run()
+REQUEST_URI=/index.php
+in C:\xampp\htdocs\etuntifw\protected\modules\user\UserModule.php (194)
+in C:\xampp\htdocs\etuntifw\protected\modules\user\components\WebUser.php (66)
+in C:\xampp\htdocs\etuntifw\protected\views\layouts\main.php (71)
+2015/08/14 12:39:21 [error] [php] Trying to get property of non-object (C:\xampp\htdocs\etuntifw\protected\modules\user\UserModule.php:194)
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\CBaseController.php(126): require()
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\CBaseController.php(95): SiteController->renderInternal()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\widgets\CContentDecorator.php(76): SiteController->renderFile()
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\widgets\CContentDecorator.php(54): CContentDecorator->decorate()
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\widgets\COutputProcessor.php(44): CContentDecorator->processOutput()
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CBaseController.php(206): CContentDecorator->run()
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\CBaseController.php(300): SiteController->endWidget()
+#7 C:\xampp\htdocs\etuntifw\protected\views\layouts\column1.php(6): SiteController->endContent()
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CBaseController.php(126): require()
+#9 C:\xampp\htdocs\etuntifw\YII\framework\web\CBaseController.php(95): SiteController->renderInternal()
+#10 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(784): SiteController->renderFile()
+#11 C:\xampp\htdocs\etuntifw\protected\controllers\SiteController.php(50): SiteController->render()
+#12 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(49): SiteController->actionIndex()
+#13 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams()
+#14 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(286): SiteController->runAction()
+#15 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): SiteController->runActionWithFilters()
+#16 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): SiteController->run()
+#17 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#18 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#19 C:\xampp\htdocs\etuntifw\index.php(13): CWebApplication->run()
+REQUEST_URI=/
+in C:\xampp\htdocs\etuntifw\protected\modules\user\UserModule.php (194)
+in C:\xampp\htdocs\etuntifw\protected\modules\user\components\WebUser.php (66)
+in C:\xampp\htdocs\etuntifw\protected\views\layouts\main.php (71)
+2015/08/14 12:40:27 [error] [php] Trying to get property of non-object (C:\xampp\htdocs\etuntifw\protected\modules\user\UserModule.php:194)
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\CBaseController.php(126): require()
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\CBaseController.php(95): SiteController->renderInternal()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\widgets\CContentDecorator.php(76): SiteController->renderFile()
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\widgets\CContentDecorator.php(54): CContentDecorator->decorate()
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\widgets\COutputProcessor.php(44): CContentDecorator->processOutput()
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CBaseController.php(206): CContentDecorator->run()
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\CBaseController.php(300): SiteController->endWidget()
+#7 C:\xampp\htdocs\etuntifw\protected\views\layouts\column1.php(6): SiteController->endContent()
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CBaseController.php(126): require()
+#9 C:\xampp\htdocs\etuntifw\YII\framework\web\CBaseController.php(95): SiteController->renderInternal()
+#10 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(784): SiteController->renderFile()
+#11 C:\xampp\htdocs\etuntifw\protected\controllers\SiteController.php(50): SiteController->render()
+#12 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(49): SiteController->actionIndex()
+#13 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams()
+#14 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(286): SiteController->runAction()
+#15 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): SiteController->runActionWithFilters()
+#16 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): SiteController->run()
+#17 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#18 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#19 C:\xampp\htdocs\etuntifw\index.php(13): CWebApplication->run()
+REQUEST_URI=/
+in C:\xampp\htdocs\etuntifw\protected\modules\user\UserModule.php (194)
+in C:\xampp\htdocs\etuntifw\protected\modules\user\components\WebUser.php (66)
+in C:\xampp\htdocs\etuntifw\protected\views\layouts\main.php (71)
+2015/08/14 12:42:03 [error] [exception.CHttpException.401] exception 'CHttpException' with message 'Unauthorized' in C:\xampp\htdocs\etuntifw\protected\extensions\starship\RestfullYii\filters\ERestFilter.php:81
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(38): ERestFilter->preFilter(Object(CFilterChain))
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CFilter->filter(Object(CFilterChain))
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(EActionRestGET), Array)
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('REST.GET')
+#9 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('sivexkuitti/RES...')
+#10 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#11 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#12 {main}
+REQUEST_URI=/index.php/api/sivexkuitti/index
+---
+2015/08/14 12:42:40 [error] [php] Trying to get property of non-object (C:\xampp\htdocs\etuntifw\protected\modules\user\UserModule.php:194)
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\CBaseController.php(126): require()
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\CBaseController.php(95): SivexkuittiController->renderInternal()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\widgets\CContentDecorator.php(76): SivexkuittiController->renderFile()
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\widgets\CContentDecorator.php(54): CContentDecorator->decorate()
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\widgets\COutputProcessor.php(44): CContentDecorator->processOutput()
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CBaseController.php(206): CContentDecorator->run()
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\CBaseController.php(300): SivexkuittiController->endWidget()
+#7 C:\xampp\htdocs\etuntifw\protected\views\layouts\column2.php(22): SivexkuittiController->endContent()
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CBaseController.php(126): require()
+#9 C:\xampp\htdocs\etuntifw\YII\framework\web\CBaseController.php(95): SivexkuittiController->renderInternal()
+#10 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(784): SivexkuittiController->renderFile()
+#11 C:\xampp\htdocs\etuntifw\protected\controllers\SivexkuittiController.php(199): SivexkuittiController->render()
+#12 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(49): SivexkuittiController->actionIndex()
+#13 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams()
+#14 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): SivexkuittiController->runAction()
+#15 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#16 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CAccessControlFilter->filter()
+#17 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): SivexkuittiController->filterAccessControl()
+#18 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#19 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#20 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): SivexkuittiController->runActionWithFilters()
+#21 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): SivexkuittiController->run()
+#22 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#23 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#24 C:\xampp\htdocs\etuntifw\index.php(13): CWebApplication->run()
+REQUEST_URI=/index.php/sivexkuitti/index
+in C:\xampp\htdocs\etuntifw\protected\modules\user\UserModule.php (194)
+in C:\xampp\htdocs\etuntifw\protected\modules\user\components\WebUser.php (66)
+in C:\xampp\htdocs\etuntifw\protected\views\layouts\main.php (71)
+2015/08/14 12:43:29 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Resource Not Found' in C:\xampp\htdocs\etuntifw\protected\extensions\starship\RestfullYii\actions\EActionRestGET.php:56
+Stack trace:
+#0 [internal function]: EActionRestGET->run('index', NULL, NULL)
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CAction.php(108): ReflectionMethod->invokeArgs(Object(EActionRestGET), Array)
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CAction.php(74): CAction->runWithParamsInternal(Object(EActionRestGET), Object(ReflectionMethod), Array)
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CAction->runWithParams(Array)
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(EActionRestGET))
+#5 C:\xampp\htdocs\etuntifw\protected\extensions\starship\RestfullYii\filters\ERestFilter.php(88): CFilterChain->run()
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(38): ERestFilter->preFilter(Object(CFilterChain))
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CFilter->filter(Object(CFilterChain))
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#9 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#10 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#11 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#12 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#13 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(EActionRestGET), Array)
+#14 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('REST.GET')
+#15 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('sivexkuitti/RES...')
+#16 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#17 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#18 {main}
+REQUEST_URI=/index.php/api/sivexkuitti/index
+---
+2015/08/14 12:44:24 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Resource Not Found' in C:\xampp\htdocs\etuntifw\protected\extensions\starship\RestfullYii\actions\EActionRestGET.php:56
+Stack trace:
+#0 [internal function]: EActionRestGET->run('index', NULL, NULL)
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CAction.php(108): ReflectionMethod->invokeArgs(Object(EActionRestGET), Array)
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CAction.php(74): CAction->runWithParamsInternal(Object(EActionRestGET), Object(ReflectionMethod), Array)
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CAction->runWithParams(Array)
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(EActionRestGET))
+#5 C:\xampp\htdocs\etuntifw\protected\extensions\starship\RestfullYii\filters\ERestFilter.php(88): CFilterChain->run()
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(38): ERestFilter->preFilter(Object(CFilterChain))
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CFilter->filter(Object(CFilterChain))
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#9 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#10 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#11 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#12 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#13 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(EActionRestGET), Array)
+#14 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('REST.GET')
+#15 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('sivexkuitti/RES...')
+#16 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#17 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#18 {main}
+REQUEST_URI=/index.php/api/sivexkuitti/index
+---
+2015/08/14 12:44:58 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Resource Not Found' in C:\xampp\htdocs\etuntifw\protected\extensions\starship\RestfullYii\actions\EActionRestGET.php:56
+Stack trace:
+#0 [internal function]: EActionRestGET->run('index', NULL, NULL)
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CAction.php(108): ReflectionMethod->invokeArgs(Object(EActionRestGET), Array)
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CAction.php(74): CAction->runWithParamsInternal(Object(EActionRestGET), Object(ReflectionMethod), Array)
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CAction->runWithParams(Array)
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(EActionRestGET))
+#5 C:\xampp\htdocs\etuntifw\protected\extensions\starship\RestfullYii\filters\ERestFilter.php(88): CFilterChain->run()
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(38): ERestFilter->preFilter(Object(CFilterChain))
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CFilter->filter(Object(CFilterChain))
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#9 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#10 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#11 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#12 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#13 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(EActionRestGET), Array)
+#14 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('REST.GET')
+#15 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('sivexkuitti/RES...')
+#16 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#17 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#18 {main}
+REQUEST_URI=/index.php/api/sivexkuitti/index
+---
+2015/08/14 12:45:02 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Resource Not Found' in C:\xampp\htdocs\etuntifw\protected\extensions\starship\RestfullYii\actions\EActionRestGET.php:56
+Stack trace:
+#0 [internal function]: EActionRestGET->run('index', NULL, NULL)
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CAction.php(108): ReflectionMethod->invokeArgs(Object(EActionRestGET), Array)
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CAction.php(74): CAction->runWithParamsInternal(Object(EActionRestGET), Object(ReflectionMethod), Array)
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CAction->runWithParams(Array)
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(EActionRestGET))
+#5 C:\xampp\htdocs\etuntifw\protected\extensions\starship\RestfullYii\filters\ERestFilter.php(88): CFilterChain->run()
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(38): ERestFilter->preFilter(Object(CFilterChain))
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CFilter->filter(Object(CFilterChain))
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#9 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#10 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#11 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#12 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#13 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(EActionRestGET), Array)
+#14 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('REST.GET')
+#15 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('sivexkuitti/RES...')
+#16 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#17 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#18 {main}
+REQUEST_URI=/index.php/api/sivexkuitti/index
+---
