@@ -22,6 +22,9 @@ Yii::setPathOfAlias('chartjs', dirname(__FILE__).'/../extensions/yii-chartjs');
 
   foreach($_POST as $key => $name) {
     $obj = json_decode($key);
+
+print_r($obj);
+
     if(isset($obj->domain) and !empty($obj->domain) and isset($obj->imei) and !empty($obj->imei))
     {
       $_SESSION['imei'] = $obj->imei;
