@@ -158,28 +158,6 @@ $curpage .= '/'.Yii::app()->getController()->getAction()->controller->action->id
 
 
 
-<!--
-	<div class="clear"></div>
-
-	<div id="footer" style="text-align: left;">
-
-	<div class="col-sm-3">
-		WWW.VETEL.FI <br />
-		pekka.ylimartimo@vetel.fi <br />
-		Puh: +358 414 370 486
-	</div>
-
-	<div class="col-sm-3">
-		VETEL avoin yhtiö <br />
-		Y-tunnus: 26877134<br />
-		Puhelin: 041 437 0486
-	</div>
-	<div class="col-sm-3">
-		Copyright &copy; <?php echo date('Y'); ?> by VETEL.FI.<br/>
-		All Rights Reserved.
-	</div>
-	</div><!-- footer -->
-
 
 </div><!-- page -->
 </center>
