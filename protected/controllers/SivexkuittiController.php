@@ -45,7 +45,8 @@ class SivexkuittiController extends Controller
 			),
 
             		array('allow', 'actions'=>array('REST.GET', 'REST.PUT', 'REST.POST', 'REST.DELETE'),
-                		'expression'=>"Yii::app()->controller->imeiCheck()",
+                		//'expression'=>"Yii::app()->controller->imeiCheck()",
+				'users'=>array('*'),
             		),
             		array('deny', 'actions'=>array('REST.GET', 'REST.PUT', 'REST.POST', 'REST.DELETE'),
                 		'message' => Yii::t('main', 'Imei error'),
@@ -61,7 +62,7 @@ class SivexkuittiController extends Controller
 	{
 
 	header("Access-Control-Allow-Origin: *");
-var_dump($_POST);
+
 
 	$identity=new UserIdentity('demo','111111');
 	if($identity->authenticate())
