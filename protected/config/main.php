@@ -51,7 +51,7 @@ print_r($obj);
   }
 */
 
-//print_r($_POST);
+print_r($_POST);
 //var_dump($_SESSION);
 
 
