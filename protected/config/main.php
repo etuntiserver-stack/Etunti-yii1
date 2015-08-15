@@ -33,7 +33,7 @@ Yii::setPathOfAlias('chartjs', dirname(__FILE__).'/../extensions/yii-chartjs');
     } 
   }
 
-  //$_SESSION['domain'] = 'sivex';
+  $_SESSION['domain'] = 'sivex';
 
 /*
   foreach($_POST['postData'] as $key => $name) {
