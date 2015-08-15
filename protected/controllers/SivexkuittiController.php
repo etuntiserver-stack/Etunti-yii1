@@ -61,7 +61,7 @@ class SivexkuittiController extends Controller
 	{
 
         header('Access-Control-Allow-Origin: *');
-        header('Content-Type: application/json');
+        //header('Content-Type: application/json');
 
 	$identity=new UserIdentity('demo','111111');
 	if($identity->authenticate())
