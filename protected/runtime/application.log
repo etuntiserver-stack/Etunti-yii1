@@ -2124,3 +2124,358 @@ in E:\GITHUB\etuntifw\protected\extensions\starship\RestfullYii\events\ERestEven
 in E:\GITHUB\etuntifw\protected\extensions\starship\RestfullYii\ARBehaviors\ERestActiveRecordRelationBehavior.php (114)
 in E:\GITHUB\etuntifw\protected\extensions\starship\RestfullYii\ARBehaviors\ERestActiveRecordRelationBehavior.php (48)
 in E:\GITHUB\etuntifw\protected\extensions\starship\RestfullYii\events\ERestEventListenerRegistry.php (851)
+2015/08/15 21:47:33 [error] [system.db.CDbCommand] CDbCommand::fetchAll() epäonnistui: SQLSTATE[3D000]: Invalid catalog name: 1046 No database selected. Suoritettu SQL-komento oli: SHOW FULL COLUMNS FROM `sivexkuitti`.
+in E:\GITHUB\etuntifw\protected\extensions\starship\RestfullYii\events\ERestEventListenerRegistry.php (579)
+in E:\GITHUB\etuntifw\protected\extensions\starship\RestfullYii\events\Eventor\Eventor.php (170)
+in E:\GITHUB\etuntifw\protected\extensions\starship\RestfullYii\behaviors\ERestBehavior.php (109)
+2015/08/15 21:47:33 [error] [exception.CDbException] exception 'CDbException' with message 'Active record -luokan "Sivexkuitti" taulua "sivexkuitti" ei löydy tietokannasta.' in E:\GITHUB\etuntifw\YII\framework\db\ar\CActiveRecord.php:2310
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\db\ar\CActiveRecord.php(387): CActiveRecordMetaData->__construct(Object(Sivexkuitti))
+#1 E:\GITHUB\etuntifw\YII\framework\db\ar\CActiveRecord.php(402): CActiveRecord::model('Sivexkuitti')
+#2 E:\GITHUB\etuntifw\YII\framework\db\ar\CActiveRecord.php(77): CActiveRecord->getMetaData()
+#3 E:\GITHUB\etuntifw\protected\extensions\starship\RestfullYii\events\ERestEventListenerRegistry.php(579): CActiveRecord->__construct()
+#4 [internal function]: ERestEventListenerRegistry->{closure}()
+#5 E:\GITHUB\etuntifw\protected\extensions\starship\RestfullYii\events\Eventor\Eventor.php(170): call_user_func_array(Object(Closure), Array)
+#6 E:\GITHUB\etuntifw\protected\extensions\starship\RestfullYii\behaviors\ERestBehavior.php(109): Eventor->emit('model.instance', Array)
+#7 [internal function]: ERestBehavior->emitRest('model.instance')
+#8 E:\GITHUB\etuntifw\YII\framework\base\CComponent.php(260): call_user_func_array(Array, Array)
+#9 E:\GITHUB\etuntifw\protected\extensions\starship\RestfullYii\actions\EActionRestPOST.php(61): CComponent->__call('emitRest', Array)
+#10 E:\GITHUB\etuntifw\protected\extensions\starship\RestfullYii\actions\EActionRestPOST.php(61): SivexkuittiController->emitRest('model.instance')
+#11 E:\GITHUB\etuntifw\protected\extensions\starship\RestfullYii\actions\EActionRestPOST.php(31): EActionRestPOST->handlePost()
+#12 [internal function]: EActionRestPOST->run(NULL, NULL, NULL)
+#13 E:\GITHUB\etuntifw\YII\framework\web\actions\CAction.php(108): ReflectionMethod->invokeArgs(Object(EActionRestPOST), Array)
+#14 E:\GITHUB\etuntifw\YII\framework\web\actions\CAction.php(74): CAction->runWithParamsInternal(Object(EActionRestPOST), Object(ReflectionMethod), Array)
+#15 E:\GITHUB\etuntifw\YII\framework\web\CController.php(308): CAction->runWithParams(Array)
+#16 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(EActionRestPOST))
+#17 E:\GITHUB\etuntifw\protected\extensions\starship\RestfullYii\filters\ERestFilter.php(88): CFilterChain->run()
+#18 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilter.php(38): ERestFilter->preFilter(Object(CFilterChain))
+#19 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CFilter->filter(Object(CFilterChain))
+#20 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#21 E:\GITHUB\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#22 E:\GITHUB\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#23 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#24 E:\GITHUB\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#25 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(EActionRestPOST), Array)
+#26 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('REST.POST')
+#27 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('sivexkuitti/RES...')
+#28 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#29 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#30 {main}
+REQUEST_URI=/index.php/api/sivexkuitti
+HTTP_REFERER=http://localhost/temp/mob.php
+---
+2015/08/15 21:49:19 [warning] [application] Ei voitu asettaa "Sivexkuitti"-luokan turvatonta attribuuttia "id".
+in E:\GITHUB\etuntifw\protected\extensions\starship\RestfullYii\ARBehaviors\ERestActiveRecordRelationBehavior.php (114)
+in E:\GITHUB\etuntifw\protected\extensions\starship\RestfullYii\ARBehaviors\ERestActiveRecordRelationBehavior.php (48)
+in E:\GITHUB\etuntifw\protected\extensions\starship\RestfullYii\events\ERestEventListenerRegistry.php (851)
+2015/08/15 21:49:19 [warning] [application] Ei voitu asettaa "Sivexkuitti"-luokan turvatonta attribuuttia "time".
+in E:\GITHUB\etuntifw\protected\extensions\starship\RestfullYii\ARBehaviors\ERestActiveRecordRelationBehavior.php (114)
+in E:\GITHUB\etuntifw\protected\extensions\starship\RestfullYii\ARBehaviors\ERestActiveRecordRelationBehavior.php (48)
+in E:\GITHUB\etuntifw\protected\extensions\starship\RestfullYii\events\ERestEventListenerRegistry.php (851)
+2015/08/15 21:49:19 [warning] [application] Ei voitu asettaa "Sivexkuitti"-luokan turvatonta attribuuttia "tietoja".
+in E:\GITHUB\etuntifw\protected\extensions\starship\RestfullYii\ARBehaviors\ERestActiveRecordRelationBehavior.php (114)
+in E:\GITHUB\etuntifw\protected\extensions\starship\RestfullYii\ARBehaviors\ERestActiveRecordRelationBehavior.php (48)
+in E:\GITHUB\etuntifw\protected\extensions\starship\RestfullYii\events\ERestEventListenerRegistry.php (851)
+2015/08/15 22:06:19 [error] [system.db.CDbCommand] CDbCommand::fetchAll() epäonnistui: SQLSTATE[3D000]: Invalid catalog name: 1046 No database selected. Suoritettu SQL-komento oli: SHOW FULL COLUMNS FROM `sivex_administrators`.
+in E:\GITHUB\etuntifw\protected\models\Administrators.php (23)
+in E:\GITHUB\etuntifw\protected\controllers\SivexkuittiController.php (94)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/15 22:06:19 [error] [exception.CDbException] exception 'CDbException' with message 'Active record -luokan "Administrators" taulua "sivex_administrators" ei löydy tietokannasta.' in E:\GITHUB\etuntifw\YII\framework\db\ar\CActiveRecord.php:2310
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\db\ar\CActiveRecord.php(387): CActiveRecordMetaData->__construct(Object(Administrators))
+#1 E:\GITHUB\etuntifw\protected\models\Administrators.php(23): CActiveRecord::model('Administrators')
+#2 E:\GITHUB\etuntifw\protected\controllers\SivexkuittiController.php(94): Administrators::model()
+#3 E:\GITHUB\etuntifw\YII\framework\base\CComponent.php(606) : eval()'d code(1): SivexkuittiController->isEtuntiAdmin()
+#4 E:\GITHUB\etuntifw\YII\framework\base\CComponent.php(606): eval()
+#5 E:\GITHUB\etuntifw\YII\framework\web\auth\CAccessControlFilter.php(384): CComponent->evaluateExpression('Yii::app()->con...', Array)
+#6 E:\GITHUB\etuntifw\YII\framework\web\auth\CAccessControlFilter.php(280): CAccessRule->isExpressionMatched(Object(WebUser))
+#7 E:\GITHUB\etuntifw\YII\framework\web\auth\CAccessControlFilter.php(135): CAccessRule->isUserAllowed(Object(WebUser), Object(SivexkuittiController), Object(CInlineAction), '127.0.0.1', 'GET')
+#8 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilter.php(38): CAccessControlFilter->preFilter(Object(CFilterChain))
+#9 E:\GITHUB\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#10 E:\GITHUB\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#11 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#12 E:\GITHUB\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#13 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#14 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('admin')
+#15 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('sivexkuitti/adm...')
+#16 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#17 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#18 {main}
+REQUEST_URI=/index.php/sivexkuitti/admin
+HTTP_REFERER=http://etuntifw.local/index.php/sivexkuitti/14278
+---
+2015/08/15 22:06:20 [error] [system.db.CDbCommand] CDbCommand::fetchAll() epäonnistui: SQLSTATE[3D000]: Invalid catalog name: 1046 No database selected. Suoritettu SQL-komento oli: SHOW FULL COLUMNS FROM `sivex_administrators`.
+in E:\GITHUB\etuntifw\protected\models\Administrators.php (23)
+in E:\GITHUB\etuntifw\protected\controllers\SivexkuittiController.php (94)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/15 22:06:20 [error] [exception.CDbException] exception 'CDbException' with message 'Active record -luokan "Administrators" taulua "sivex_administrators" ei löydy tietokannasta.' in E:\GITHUB\etuntifw\YII\framework\db\ar\CActiveRecord.php:2310
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\db\ar\CActiveRecord.php(387): CActiveRecordMetaData->__construct(Object(Administrators))
+#1 E:\GITHUB\etuntifw\protected\models\Administrators.php(23): CActiveRecord::model('Administrators')
+#2 E:\GITHUB\etuntifw\protected\controllers\SivexkuittiController.php(94): Administrators::model()
+#3 E:\GITHUB\etuntifw\YII\framework\base\CComponent.php(606) : eval()'d code(1): SivexkuittiController->isEtuntiAdmin()
+#4 E:\GITHUB\etuntifw\YII\framework\base\CComponent.php(606): eval()
+#5 E:\GITHUB\etuntifw\YII\framework\web\auth\CAccessControlFilter.php(384): CComponent->evaluateExpression('Yii::app()->con...', Array)
+#6 E:\GITHUB\etuntifw\YII\framework\web\auth\CAccessControlFilter.php(280): CAccessRule->isExpressionMatched(Object(WebUser))
+#7 E:\GITHUB\etuntifw\YII\framework\web\auth\CAccessControlFilter.php(135): CAccessRule->isUserAllowed(Object(WebUser), Object(SivexkuittiController), Object(CInlineAction), '127.0.0.1', 'GET')
+#8 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilter.php(38): CAccessControlFilter->preFilter(Object(CFilterChain))
+#9 E:\GITHUB\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#10 E:\GITHUB\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#11 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#12 E:\GITHUB\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#13 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#14 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('admin')
+#15 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('sivexkuitti/adm...')
+#16 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#17 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#18 {main}
+REQUEST_URI=/index.php/sivexkuitti/admin
+HTTP_REFERER=http://etuntifw.local/index.php/sivexkuitti/14278
+---
+2015/08/15 22:06:21 [error] [system.db.CDbCommand] CDbCommand::fetchAll() epäonnistui: SQLSTATE[3D000]: Invalid catalog name: 1046 No database selected. Suoritettu SQL-komento oli: SHOW FULL COLUMNS FROM `sivex_administrators`.
+in E:\GITHUB\etuntifw\protected\models\Administrators.php (23)
+in E:\GITHUB\etuntifw\protected\controllers\SivexkuittiController.php (94)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/15 22:06:21 [error] [exception.CDbException] exception 'CDbException' with message 'Active record -luokan "Administrators" taulua "sivex_administrators" ei löydy tietokannasta.' in E:\GITHUB\etuntifw\YII\framework\db\ar\CActiveRecord.php:2310
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\db\ar\CActiveRecord.php(387): CActiveRecordMetaData->__construct(Object(Administrators))
+#1 E:\GITHUB\etuntifw\protected\models\Administrators.php(23): CActiveRecord::model('Administrators')
+#2 E:\GITHUB\etuntifw\protected\controllers\SivexkuittiController.php(94): Administrators::model()
+#3 E:\GITHUB\etuntifw\YII\framework\base\CComponent.php(606) : eval()'d code(1): SivexkuittiController->isEtuntiAdmin()
+#4 E:\GITHUB\etuntifw\YII\framework\base\CComponent.php(606): eval()
+#5 E:\GITHUB\etuntifw\YII\framework\web\auth\CAccessControlFilter.php(384): CComponent->evaluateExpression('Yii::app()->con...', Array)
+#6 E:\GITHUB\etuntifw\YII\framework\web\auth\CAccessControlFilter.php(280): CAccessRule->isExpressionMatched(Object(WebUser))
+#7 E:\GITHUB\etuntifw\YII\framework\web\auth\CAccessControlFilter.php(135): CAccessRule->isUserAllowed(Object(WebUser), Object(SivexkuittiController), Object(CInlineAction), '127.0.0.1', 'GET')
+#8 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilter.php(38): CAccessControlFilter->preFilter(Object(CFilterChain))
+#9 E:\GITHUB\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#10 E:\GITHUB\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#11 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#12 E:\GITHUB\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#13 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#14 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('view')
+#15 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('sivexkuitti/vie...')
+#16 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#17 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#18 {main}
+REQUEST_URI=/index.php/sivexkuitti/14278
+HTTP_REFERER=http://etuntifw.local/index.php/sivexkuitti/admin
+---
+2015/08/15 22:06:22 [error] [system.db.CDbCommand] CDbCommand::fetchAll() epäonnistui: SQLSTATE[3D000]: Invalid catalog name: 1046 No database selected. Suoritettu SQL-komento oli: SHOW FULL COLUMNS FROM `sivex_administrators`.
+in E:\GITHUB\etuntifw\protected\models\Administrators.php (23)
+in E:\GITHUB\etuntifw\protected\controllers\SivexkuittiController.php (94)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/15 22:06:22 [error] [exception.CDbException] exception 'CDbException' with message 'Active record -luokan "Administrators" taulua "sivex_administrators" ei löydy tietokannasta.' in E:\GITHUB\etuntifw\YII\framework\db\ar\CActiveRecord.php:2310
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\db\ar\CActiveRecord.php(387): CActiveRecordMetaData->__construct(Object(Administrators))
+#1 E:\GITHUB\etuntifw\protected\models\Administrators.php(23): CActiveRecord::model('Administrators')
+#2 E:\GITHUB\etuntifw\protected\controllers\SivexkuittiController.php(94): Administrators::model()
+#3 E:\GITHUB\etuntifw\YII\framework\base\CComponent.php(606) : eval()'d code(1): SivexkuittiController->isEtuntiAdmin()
+#4 E:\GITHUB\etuntifw\YII\framework\base\CComponent.php(606): eval()
+#5 E:\GITHUB\etuntifw\YII\framework\web\auth\CAccessControlFilter.php(384): CComponent->evaluateExpression('Yii::app()->con...', Array)
+#6 E:\GITHUB\etuntifw\YII\framework\web\auth\CAccessControlFilter.php(280): CAccessRule->isExpressionMatched(Object(WebUser))
+#7 E:\GITHUB\etuntifw\YII\framework\web\auth\CAccessControlFilter.php(135): CAccessRule->isUserAllowed(Object(WebUser), Object(SivexkuittiController), Object(CInlineAction), '127.0.0.1', 'GET')
+#8 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilter.php(38): CAccessControlFilter->preFilter(Object(CFilterChain))
+#9 E:\GITHUB\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#10 E:\GITHUB\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#11 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#12 E:\GITHUB\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#13 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#14 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('admin')
+#15 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('sivexkuitti/adm...')
+#16 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#17 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#18 {main}
+REQUEST_URI=/index.php/sivexkuitti/admin
+---
+2015/08/15 22:06:23 [error] [system.db.CDbCommand] CDbCommand::fetchAll() epäonnistui: SQLSTATE[3D000]: Invalid catalog name: 1046 No database selected. Suoritettu SQL-komento oli: SHOW FULL COLUMNS FROM `sivex_administrators`.
+in E:\GITHUB\etuntifw\protected\models\Administrators.php (23)
+in E:\GITHUB\etuntifw\protected\controllers\SivexkuittiController.php (94)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/15 22:06:23 [error] [exception.CDbException] exception 'CDbException' with message 'Active record -luokan "Administrators" taulua "sivex_administrators" ei löydy tietokannasta.' in E:\GITHUB\etuntifw\YII\framework\db\ar\CActiveRecord.php:2310
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\db\ar\CActiveRecord.php(387): CActiveRecordMetaData->__construct(Object(Administrators))
+#1 E:\GITHUB\etuntifw\protected\models\Administrators.php(23): CActiveRecord::model('Administrators')
+#2 E:\GITHUB\etuntifw\protected\controllers\SivexkuittiController.php(94): Administrators::model()
+#3 E:\GITHUB\etuntifw\YII\framework\base\CComponent.php(606) : eval()'d code(1): SivexkuittiController->isEtuntiAdmin()
+#4 E:\GITHUB\etuntifw\YII\framework\base\CComponent.php(606): eval()
+#5 E:\GITHUB\etuntifw\YII\framework\web\auth\CAccessControlFilter.php(384): CComponent->evaluateExpression('Yii::app()->con...', Array)
+#6 E:\GITHUB\etuntifw\YII\framework\web\auth\CAccessControlFilter.php(280): CAccessRule->isExpressionMatched(Object(WebUser))
+#7 E:\GITHUB\etuntifw\YII\framework\web\auth\CAccessControlFilter.php(135): CAccessRule->isUserAllowed(Object(WebUser), Object(SivexkuittiController), Object(CInlineAction), '127.0.0.1', 'GET')
+#8 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilter.php(38): CAccessControlFilter->preFilter(Object(CFilterChain))
+#9 E:\GITHUB\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#10 E:\GITHUB\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#11 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#12 E:\GITHUB\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#13 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#14 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('index')
+#15 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('sivexkuitti/ind...')
+#16 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#17 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#18 {main}
+REQUEST_URI=/index.php/sivexkuitti/index
+HTTP_REFERER=http://etuntifw.local/index.php/user/login
+---
+2015/08/15 22:06:35 [error] [exception.CHttpException.401] exception 'CHttpException' with message 'Unauthorized' in E:\GITHUB\etuntifw\protected\extensions\starship\RestfullYii\filters\ERestFilter.php:81
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilter.php(38): ERestFilter->preFilter(Object(CFilterChain))
+#1 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CFilter->filter(Object(CFilterChain))
+#2 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#3 E:\GITHUB\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#4 E:\GITHUB\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#5 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#6 E:\GITHUB\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#7 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#8 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('delete')
+#9 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('sivexkuitti/del...')
+#10 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#11 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#12 {main}
+REQUEST_URI=/index.php/sivexkuitti/delete/14290?ajax=sivexkuitti-grid
+HTTP_REFERER=http://etuntifw.local/index.php/sivexkuitti/admin
+---
+2015/08/15 22:06:42 [error] [exception.CHttpException.401] exception 'CHttpException' with message 'Unauthorized' in E:\GITHUB\etuntifw\protected\extensions\starship\RestfullYii\filters\ERestFilter.php:81
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilter.php(38): ERestFilter->preFilter(Object(CFilterChain))
+#1 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CFilter->filter(Object(CFilterChain))
+#2 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#3 E:\GITHUB\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#4 E:\GITHUB\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#5 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#6 E:\GITHUB\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#7 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#8 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('delete')
+#9 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('sivexkuitti/del...')
+#10 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#11 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#12 {main}
+REQUEST_URI=/index.php/sivexkuitti/delete/14290?ajax=sivexkuitti-grid
+HTTP_REFERER=http://etuntifw.local/index.php/sivexkuitti/admin
+---
+2015/08/15 22:06:50 [error] [exception.CHttpException.401] exception 'CHttpException' with message 'Unauthorized' in E:\GITHUB\etuntifw\protected\extensions\starship\RestfullYii\filters\ERestFilter.php:81
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilter.php(38): ERestFilter->preFilter(Object(CFilterChain))
+#1 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CFilter->filter(Object(CFilterChain))
+#2 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#3 E:\GITHUB\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#4 E:\GITHUB\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#5 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#6 E:\GITHUB\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#7 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#8 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('delete')
+#9 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('sivexkuitti/del...')
+#10 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#11 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#12 {main}
+REQUEST_URI=/index.php/sivexkuitti/delete/14290
+HTTP_REFERER=http://etuntifw.local/index.php/sivexkuitti/14290
+---
+2015/08/15 22:06:54 [error] [exception.CHttpException.401] exception 'CHttpException' with message 'Unauthorized' in E:\GITHUB\etuntifw\protected\extensions\starship\RestfullYii\filters\ERestFilter.php:81
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilter.php(38): ERestFilter->preFilter(Object(CFilterChain))
+#1 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CFilter->filter(Object(CFilterChain))
+#2 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#3 E:\GITHUB\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#4 E:\GITHUB\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#5 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#6 E:\GITHUB\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#7 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#8 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('delete')
+#9 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('sivexkuitti/del...')
+#10 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#11 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#12 {main}
+REQUEST_URI=/index.php/sivexkuitti/delete/14290
+HTTP_REFERER=http://etuntifw.local/index.php/sivexkuitti/14290
+---
+2015/08/15 22:06:55 [error] [exception.CHttpException.401] exception 'CHttpException' with message 'Unauthorized' in E:\GITHUB\etuntifw\protected\extensions\starship\RestfullYii\filters\ERestFilter.php:81
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilter.php(38): ERestFilter->preFilter(Object(CFilterChain))
+#1 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CFilter->filter(Object(CFilterChain))
+#2 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#3 E:\GITHUB\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#4 E:\GITHUB\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#5 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#6 E:\GITHUB\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#7 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#8 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('delete')
+#9 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('sivexkuitti/del...')
+#10 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#11 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#12 {main}
+REQUEST_URI=/index.php/sivexkuitti/delete/14290
+HTTP_REFERER=http://etuntifw.local/index.php/sivexkuitti/14290
+---
+2015/08/15 22:07:05 [error] [system.db.CDbCommand] CDbCommand::fetchAll() epäonnistui: SQLSTATE[3D000]: Invalid catalog name: 1046 No database selected. Suoritettu SQL-komento oli: SHOW FULL COLUMNS FROM `sivex_administrators`.
+in E:\GITHUB\etuntifw\protected\models\Administrators.php (23)
+in E:\GITHUB\etuntifw\protected\controllers\SivexkuittiController.php (94)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/15 22:07:05 [error] [exception.CDbException] exception 'CDbException' with message 'Active record -luokan "Administrators" taulua "sivex_administrators" ei löydy tietokannasta.' in E:\GITHUB\etuntifw\YII\framework\db\ar\CActiveRecord.php:2310
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\db\ar\CActiveRecord.php(387): CActiveRecordMetaData->__construct(Object(Administrators))
+#1 E:\GITHUB\etuntifw\protected\models\Administrators.php(23): CActiveRecord::model('Administrators')
+#2 E:\GITHUB\etuntifw\protected\controllers\SivexkuittiController.php(94): Administrators::model()
+#3 E:\GITHUB\etuntifw\YII\framework\base\CComponent.php(606) : eval()'d code(1): SivexkuittiController->isEtuntiAdmin()
+#4 E:\GITHUB\etuntifw\YII\framework\base\CComponent.php(606): eval()
+#5 E:\GITHUB\etuntifw\YII\framework\web\auth\CAccessControlFilter.php(384): CComponent->evaluateExpression('Yii::app()->con...', Array)
+#6 E:\GITHUB\etuntifw\YII\framework\web\auth\CAccessControlFilter.php(280): CAccessRule->isExpressionMatched(Object(WebUser))
+#7 E:\GITHUB\etuntifw\YII\framework\web\auth\CAccessControlFilter.php(135): CAccessRule->isUserAllowed(Object(WebUser), Object(SivexkuittiController), Object(CInlineAction), '127.0.0.1', 'GET')
+#8 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilter.php(38): CAccessControlFilter->preFilter(Object(CFilterChain))
+#9 E:\GITHUB\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#10 E:\GITHUB\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#11 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#12 E:\GITHUB\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#13 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#14 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('admin')
+#15 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('sivexkuitti/adm...')
+#16 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#17 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#18 {main}
+REQUEST_URI=/index.php/sivexkuitti/admin
+HTTP_REFERER=http://etuntifw.local/index.php/sivexkuitti/index
+---
+2015/08/15 22:07:06 [error] [system.db.CDbCommand] CDbCommand::fetchAll() epäonnistui: SQLSTATE[3D000]: Invalid catalog name: 1046 No database selected. Suoritettu SQL-komento oli: SHOW FULL COLUMNS FROM `sivex_administrators`.
+in E:\GITHUB\etuntifw\protected\models\Administrators.php (23)
+in E:\GITHUB\etuntifw\protected\controllers\SivexkuittiController.php (94)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/15 22:07:06 [error] [exception.CDbException] exception 'CDbException' with message 'Active record -luokan "Administrators" taulua "sivex_administrators" ei löydy tietokannasta.' in E:\GITHUB\etuntifw\YII\framework\db\ar\CActiveRecord.php:2310
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\db\ar\CActiveRecord.php(387): CActiveRecordMetaData->__construct(Object(Administrators))
+#1 E:\GITHUB\etuntifw\protected\models\Administrators.php(23): CActiveRecord::model('Administrators')
+#2 E:\GITHUB\etuntifw\protected\controllers\SivexkuittiController.php(94): Administrators::model()
+#3 E:\GITHUB\etuntifw\YII\framework\base\CComponent.php(606) : eval()'d code(1): SivexkuittiController->isEtuntiAdmin()
+#4 E:\GITHUB\etuntifw\YII\framework\base\CComponent.php(606): eval()
+#5 E:\GITHUB\etuntifw\YII\framework\web\auth\CAccessControlFilter.php(384): CComponent->evaluateExpression('Yii::app()->con...', Array)
+#6 E:\GITHUB\etuntifw\YII\framework\web\auth\CAccessControlFilter.php(280): CAccessRule->isExpressionMatched(Object(WebUser))
+#7 E:\GITHUB\etuntifw\YII\framework\web\auth\CAccessControlFilter.php(135): CAccessRule->isUserAllowed(Object(WebUser), Object(SivexkuittiController), Object(CInlineAction), '127.0.0.1', 'GET')
+#8 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilter.php(38): CAccessControlFilter->preFilter(Object(CFilterChain))
+#9 E:\GITHUB\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#10 E:\GITHUB\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#11 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#12 E:\GITHUB\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#13 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#14 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('index')
+#15 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('sivexkuitti/ind...')
+#16 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#17 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#18 {main}
+REQUEST_URI=/index.php/sivexkuitti/index
+HTTP_REFERER=http://etuntifw.local/index.php/user/login
+---
+2015/08/15 22:07:19 [error] [exception.CHttpException.401] exception 'CHttpException' with message 'Unauthorized' in E:\GITHUB\etuntifw\protected\extensions\starship\RestfullYii\filters\ERestFilter.php:81
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilter.php(38): ERestFilter->preFilter(Object(CFilterChain))
+#1 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CFilter->filter(Object(CFilterChain))
+#2 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#3 E:\GITHUB\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#4 E:\GITHUB\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#5 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#6 E:\GITHUB\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#7 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#8 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('delete')
+#9 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('sivexkuitti/del...')
+#10 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#11 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#12 {main}
+REQUEST_URI=/index.php/sivexkuitti/delete/14290?ajax=sivexkuitti-grid
+HTTP_REFERER=http://etuntifw.local/index.php/sivexkuitti/admin
+---
