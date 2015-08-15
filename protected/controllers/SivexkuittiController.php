@@ -1,5 +1,5 @@
 <?php
-header('Access-Control-Allow-Origin: *'); 
+
 
 class SivexkuittiController extends Controller
 {
@@ -59,6 +59,10 @@ class SivexkuittiController extends Controller
 
 	public function actions()
 	{
+
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Methods: PUT, GET, POST");
+header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept");
 
 	$identity=new UserIdentity('demo','111111');
 	if($identity->authenticate())
