@@ -25,7 +25,8 @@ Yii::setPathOfAlias('chartjs', dirname(__FILE__).'/../extensions/yii-chartjs');
     } 
   }
 
-var_dump($_POST);
+
+$_SESSION['domain'] = 'sivex';
 
 
   if( $_SERVER['REMOTE_ADDR'] == '::1' or $_SERVER['REMOTE_ADDR'] == '127.0.0.1' )
