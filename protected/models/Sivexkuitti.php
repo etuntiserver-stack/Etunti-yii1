@@ -128,6 +128,7 @@ public $domain;
 		// should not be searched.
 
 		$criteria=new CDbCriteria;
+		$criteria->order = 't.id DESC';
 
 		$criteria->with=array('tyontekijat');
 
