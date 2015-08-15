@@ -28,22 +28,7 @@ class SivexkuittiController extends Controller
 		);
 	}
 
-/*
-public function init()
-{
-    parent::init();
-    Yii::$app->user->enableSession = false;
-}
 
-public function behaviors()
-{
-    $behaviors = parent::behaviors();
-    $behaviors['authenticator'] = [
-        'class' => HttpBasicAuth::className(),
-    ];
-    return $behaviors;
-}
-*/
 
 	/**
 	 * Specifies the access control rules.
@@ -60,7 +45,10 @@ public function behaviors()
 			),
 
             		array('allow', 'actions'=>array('REST.GET', 'REST.PUT', 'REST.POST', 'REST.DELETE'),
-		            'users'=>array('*'),
+                		'expression'=>"Yii::app()->controller->imeiCheck()",
+            		),
+            		array('deny', 'actions'=>array('REST.GET', 'REST.PUT', 'REST.POST', 'REST.DELETE'),
+                		'message' => Yii::t('main', 'Imei error'),
             		),
 
 			array('deny',  // deny all users
@@ -71,11 +59,29 @@ public function behaviors()
 
 	public function actions()
 	{
+
+	$identity=new UserIdentity('demo','111111');
+	if($identity->authenticate())
+	    Yii::app()->user->login($identity);
+	else
+	    echo $identity->errorMessage;
+
 	        return array(
 	            'REST.'=>'ext.starship.RestfullYii.actions.ERestActionProvider',
 	        );
+
+	Yii::app()->user->logout();
 	}
 
+
+	public function imeiCheck() {
+
+		$m = Tyontekijat::model()->find(" imei = '".$_SESSION['imei']."' ");
+	        if(isset($m->imei) and $m->imei == $_SESSION['imei'])
+	            return true;
+		else
+	            return false;
+	}
 
 	public function isEtuntiAdmin() {
 
@@ -91,6 +97,7 @@ public function behaviors()
 	 * Displays a particular model.
 	 * @param integer $id the ID of the model to be displayed
 	 */
+
 
 	public function actionUpdatetime()
 	{

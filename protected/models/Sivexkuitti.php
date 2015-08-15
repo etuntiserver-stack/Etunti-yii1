@@ -32,6 +32,7 @@ class Sivexkuitti extends DB2ActiveRecord
 {
 
 public $tekijan_nimi;
+public $domain;
 
 	/**
 	 * Returns the static model of the specified AR class.
@@ -62,14 +63,14 @@ public $tekijan_nimi;
 			//array('asiakas_num, osoite, kohde_kannasta, kohdenID, aloitan, loppui, viesti, tekijan_nimi, tid, etaisyys, status, tietoja, hyvaksytty', 'required'),
 			array('requests, kohdenID, tid, status, admin', 'numerical', 'integerOnly'=>true),
 			array('asiakas_num, puh_numero, bluetooth_name, subscriber_id, tekijan_nimi', 'length', 'max'=>50),
-			array('imei, sim_serial_number, kohde_kannasta, hyvaksytty', 'length', 'max'=>100),
+			array('domain, imei, sim_serial_number, kohde_kannasta, hyvaksytty', 'length', 'max'=>100),
 			array('my_location', 'length', 'max'=>1000),
 			array('osoite', 'length', 'max'=>255),
 			array('aloitan, loppui, etaisyys', 'length', 'max'=>20),
 			array('viesti', 'length', 'max'=>250),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, asiakas_num, time, requests, puh_numero, imei, bluetooth_name, sim_serial_number, subscriber_id, my_location, osoite, kohde_kannasta, kohdenID, aloitan, loppui, viesti, tekijan_nimi, tid, etaisyys, status, tietoja, admin, hyvaksytty, tekijan_nimi', 'safe', 'on'=>'search'),
+			array('id, asiakas_num, time, requests, puh_numero, imei, bluetooth_name, sim_serial_number, subscriber_id, my_location, osoite, kohde_kannasta, kohdenID, aloitan, loppui, viesti, tekijan_nimi, tid, etaisyys, status, tietoja, admin, hyvaksytty, tekijan_nimi, domain', 'safe', 'on'=>'search'),
 		);
 	}
 

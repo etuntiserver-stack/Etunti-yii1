@@ -74,40 +74,40 @@ for ($i = 1; $i <= 12; $i++) {
 -->
 <br>
     <div class="row">
-        <div class="col-md-3 col-md-offset-1">
+        <div class="col-md-4 col-md-offset-1">
             <div class="panel panel-success">
                 <div class="panel-heading">
-                    <h4 class="text-center"><?php echo Yii::t('main', 'Taso 1 ETUNTI'); ?></h4>
+                    <h4 class="text-center"><?php echo Yii::t('main', 'TILAUKSEN VALINTA'); ?></h4>
                 </div>
                 <div class="panel-body text-center">
                     <p class="lead">
-                        <strong>15&euro; / <?php echo Yii::t('main', 'kk per työntekijä'); ?> </strong>
+                        <strong><?php echo Yii::t('main', 'Valitse sopiiva paketti'); ?></strong>
                     </p>
                 </div>
                 <ul class="list-group list-group-flush text-center">
                     <li class="list-group-item">
                         <?php echo Yii::t('main', 'Työajanseuranta liikuvalle työlle ja Mobiili sovellus'); ?>
-                        <span class="glyphicon glyphicon-ok pull-right"></span>
+                        <strong class="pull-right"><input type="checkbox" checked vlaue="basic"></strong>
                     </li>
                     <li class="list-group-item">
                         <?php echo Yii::t('main', 'Työvuorosuunnittelu ohjelma'); ?>
-                        <span class="glyphicon glyphicon-remove pull-right"></span>
+                        <strong class="pull-right"><input type="checkbox"></strong>
                     </li>
                     <li class="list-group-item">
                         <?php echo Yii::t('main', 'Asiakkuuksien hallinta ohjelma'); ?>
-                        <span class="glyphicon glyphicon-remove pull-right"></span>
+                        <strong class="pull-right"><input type="checkbox"></strong>
                     </li>
                     <li class="list-group-item">
                         <?php echo Yii::t('main', 'Työnjohdon kuntopuntari'); ?>
-                        <span class="glyphicon glyphicon-remove pull-right"></span>
+                        <strong class="pull-right"><input type="checkbox"></strong>
                     </li>
                     <li class="list-group-item">
                         <?php echo Yii::t('main', 'Laskutus ohjelma'); ?>
-                        <span class="glyphicon glyphicon-remove pull-right"></span>
+                        <strong class="pull-right"><input type="checkbox"></strong>
                     </li>
                     <li class="list-group-item">
                         <?php echo Yii::t('main', 'Online varaus'); ?>
-                        <span class="glyphicon glyphicon-remove pull-right"></span>
+                        <strong class="pull-right"><input type="checkbox"></strong>
                     </li>
                 </ul>
                 <div class="panel-footer">
@@ -115,227 +115,11 @@ for ($i = 1; $i <= 12; $i++) {
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="panel panel-info">
-                <div class="panel-heading">
-                    <h4 class="text-center"><?php echo Yii::t('main', 'Taso 2 ETUNTI'); ?></h4>
-                </div>
-                <div class="panel-body text-center">
-                    <p class="lead">
-                        <strong>30&euro; / <?php echo Yii::t('main', 'kk per työntekijä'); ?></strong>
-                    </p>
-                </div>
-                <ul class="list-group list-group-flush text-center">
-                    <li class="list-group-item">
-                        <?php echo Yii::t('main', 'Työajanseuranta liikuvalle työlle ja Mobiili sovellus'); ?>
-                        <span class="glyphicon glyphicon-ok pull-right"></span>
-                    </li>
-                    <li class="list-group-item">
-                        <?php echo Yii::t('main', 'Työvuorosuunnittelu ohjelma'); ?>
-                        <span class="glyphicon glyphicon-ok pull-right"></span>
-                    </li>
-                    <li class="list-group-item">
-                        <?php echo Yii::t('main', 'Asiakkuuksien hallinta ohjelma'); ?>
-                        <span class="glyphicon glyphicon-remove pull-right"></span>
-                    </li>
-                    <li class="list-group-item">
-                        <?php echo Yii::t('main', 'Työnjohdon kuntopuntari'); ?>
-                        <span class="glyphicon glyphicon-remove pull-right"></span>
-                    </li>
-                    <li class="list-group-item">
-                        <?php echo Yii::t('main', 'Laskutus ohjelma'); ?>
-                        <span class="glyphicon glyphicon-remove pull-right"></span>
-                    </li>
-                    <li class="list-group-item">
-                        <?php echo Yii::t('main', 'Online varaus'); ?>
-                        <span class="glyphicon glyphicon-remove pull-right"></span>
-                    </li>
-                </ul>
-                <div class="panel-footer">
-                    <a class="btn btn-lg btn-block btn-info"><?php echo Yii::t('main', 'Tilaa heti!'); ?></a>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="panel panel-primary">
-                <div class="panel-heading">
-                    <h4 class="text-center"><?php echo Yii::t('main', 'Taso 3 ETUNTI'); ?></h4>
-                </div>
-                <div class="panel-body text-center">
-                    <p class="lead">
-                        <strong>50&euro; / <?php echo Yii::t('main', 'kk per työntekijä'); ?></strong>
-                    </p>
-                </div>
-                <ul class="list-group list-group-flush text-center">
-                    <li class="list-group-item">
-                        <?php echo Yii::t('main', 'Työajanseuranta liikuvalle työlle ja Mobiili sovellus'); ?>
-                        <span class="glyphicon glyphicon-ok pull-right"></span>
-                    </li>
-                    <li class="list-group-item">
-                        <?php echo Yii::t('main', 'Työvuorosuunnittelu ohjelma'); ?>
-                        <span class="glyphicon glyphicon-ok pull-right"></span>
-                    </li>
-                    <li class="list-group-item">
-                        <?php echo Yii::t('main', 'Asiakkuuksien hallinta ohjelma'); ?>
-                        <span class="glyphicon glyphicon-ok pull-right"></span>
-                    </li>
-                    <li class="list-group-item">
-                        <?php echo Yii::t('main', 'Työnjohdon kuntopuntari'); ?>
-                        <span class="glyphicon glyphicon-remove pull-right"></span>
-                    </li>
-                    <li class="list-group-item">
-                        <?php echo Yii::t('main', 'Laskutus ohjelma'); ?>
-                        <span class="glyphicon glyphicon-remove pull-right"></span>
-                    </li>
-                    <li class="list-group-item">
-                        <?php echo Yii::t('main', 'Online varaus'); ?>
-                        <span class="glyphicon glyphicon-remove pull-right"></span>
-                    </li>
-                </ul>
-                <div class="panel-footer">
-                    <a class="btn btn-lg btn-block btn-primary"><?php echo Yii::t('main', 'Tilaa heti!'); ?></a>
-                </div>
-            </div>
-        </div>
     </div>
 
 
-    <div class="row">
-        <div class="col-md-3 col-md-offset-1">
-            <div class="panel panel-success">
-                <div class="panel-heading">
-                    <h4 class="text-center"><?php echo Yii::t('main', 'Taso 4 ETUNTI'); ?></h4>
-                </div>
-                <div class="panel-body text-center">
-                    <p class="lead">
-                        <strong>15&euro; / <?php echo Yii::t('main', 'kk per työntekijä'); ?> </strong>
-                    </p>
-                </div>
-                <ul class="list-group list-group-flush text-center">
-                    <li class="list-group-item">
-                        <?php echo Yii::t('main', 'Työajanseuranta liikuvalle työlle ja Mobiili sovellus'); ?>
-                        <span class="glyphicon glyphicon-ok pull-right"></span>
-                    </li>
-                    <li class="list-group-item">
-                        <?php echo Yii::t('main', 'Työvuorosuunnittelu ohjelma'); ?>
-                        <span class="glyphicon glyphicon-ok pull-right"></span>
-                    </li>
-                    <li class="list-group-item">
-                        <?php echo Yii::t('main', 'Asiakkuuksien hallinta ohjelma'); ?>
-                        <span class="glyphicon glyphicon-ok pull-right"></span>
-                    </li>
-                    <li class="list-group-item">
-                        <?php echo Yii::t('main', 'Työnjohdon kuntopuntari'); ?>
-                        <span class="glyphicon glyphicon-ok pull-right"></span>
-                    </li>
-                    <li class="list-group-item">
-                        <?php echo Yii::t('main', 'Laskutus ohjelma'); ?>
-                        <span class="glyphicon glyphicon-remove pull-right"></span>
-                    </li>
-                    <li class="list-group-item">
-                        <?php echo Yii::t('main', 'Online varaus'); ?>
-                        <span class="glyphicon glyphicon-remove pull-right"></span>
-                    </li>
-                </ul>
-                <div class="panel-footer">
-                    <a class="btn btn-lg btn-block btn-success"><?php echo Yii::t('main', 'Tilaa heti!'); ?></a>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="panel panel-info">
-                <div class="panel-heading">
-
-                    <h4 class="text-center"><?php echo Yii::t('main', 'Taso 5 ETUNTI'); ?></h4>
-                </div>
-                <div class="panel-body text-center">
-                    <p class="lead">
-                        <strong>30&euro; / <?php echo Yii::t('main', 'kk per työntekijä'); ?></strong>
-
-                    </p>
-                </div>
-                <ul class="list-group list-group-flush text-center">
-                    <li class="list-group-item">
-                        <?php echo Yii::t('main', 'Työajanseuranta liikuvalle työlle ja Mobiili sovellus'); ?>
-                        <span class="glyphicon glyphicon-ok pull-right"></span>
-                    </li>
-                    <li class="list-group-item">
-                        <?php echo Yii::t('main', 'Työvuorosuunnittelu ohjelma'); ?>
-                        <span class="glyphicon glyphicon-ok pull-right"></span>
-                    </li>
-                    <li class="list-group-item">
-                        <?php echo Yii::t('main', 'Asiakkuuksien hallinta ohjelma'); ?>
-                        <span class="glyphicon glyphicon-ok pull-right"></span>
-                    </li>
-                    <li class="list-group-item">
-                        <?php echo Yii::t('main', 'Työnjohdon kuntopuntari'); ?>
-                        <span class="glyphicon glyphicon-ok pull-right"></span>
-                    </li>
-                    <li class="list-group-item">
-                        <?php echo Yii::t('main', 'Laskutus ohjelma'); ?>
-                        <span class="glyphicon glyphicon-ok pull-right"></span>
-                    </li>
-                    <li class="list-group-item">
-                        <?php echo Yii::t('main', 'Online varaus'); ?>
-                        <span class="glyphicon glyphicon-remove pull-right"></span>
-                    </li>
-                </ul>
-
-                <div class="panel-footer">
-                    <a class="btn btn-lg btn-block btn-info"><?php echo Yii::t('main', 'Tilaa heti!'); ?></a>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-3">
-            <div class="panel panel-primary">
-                <div class="panel-heading">
-                    <h4 class="text-center"><?php echo Yii::t('main', 'Taso 6 ETUNTI'); ?></h4>
-                </div>
-
-                <div class="panel-body text-center">
-                    <p class="lead">
-                        <strong>50&euro; / <?php echo Yii::t('main', 'kk per työntekijä'); ?></strong>
-                    </p>
-                </div>
-
-                <ul class="list-group list-group-flush text-center">
-                    <li class="list-group-item">
-                        <?php echo Yii::t('main', 'Työajanseuranta liikuvalle työlle ja Mobiili sovellus'); ?>
-                        <span class="glyphicon glyphicon-ok pull-right"></span>
-                    </li>
-                    <li class="list-group-item">
-                        <?php echo Yii::t('main', 'Työvuorosuunnittelu ohjelma'); ?>
-                        <span class="glyphicon glyphicon-ok pull-right"></span>
-                    </li>
-                    <li class="list-group-item">
-                        <?php echo Yii::t('main', 'Asiakkuuksien hallinta ohjelma'); ?>
-                        <span class="glyphicon glyphicon-ok pull-right"></span>
-                    </li>
-                    <li class="list-group-item">
-                        <?php echo Yii::t('main', 'Työnjohdon kuntopuntari'); ?>
-                        <span class="glyphicon glyphicon-ok pull-right"></span>
-                    </li>
-                    <li class="list-group-item">
-                        <?php echo Yii::t('main', 'Laskutus ohjelma'); ?>
-                        <span class="glyphicon glyphicon-ok pull-right"></span>
-                    </li>
-                    <li class="list-group-item">
-                        <?php echo Yii::t('main', 'Online varaus'); ?>
-                        <span class="glyphicon glyphicon-ok pull-right"></span>
-                    </li>
-
-                </ul>
-                <div class="panel-footer">
-                    <a class="btn btn-lg btn-block btn-primary"><?php echo Yii::t('main', 'Tilaa heti!'); ?></a>
-                </div>
-            </div>
-
-        </div>
-    </div>
 
 <?php endif; ?>
-
 
 
 
