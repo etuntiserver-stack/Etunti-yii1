@@ -11,6 +11,18 @@ Yii::setPathOfAlias('chartjs', dirname(__FILE__).'/../extensions/yii-chartjs');
   if(isset($_POST['UserLogin']['domain']) and !empty($_POST['UserLogin']['domain']) and $_POST['UserLogin']['domain'] != 'superadmin')
   $_SESSION['domain'] = $_POST['UserLogin']['domain'];
 
+  //if(isset($_POST['domain']))
+  //$_SESSION['domain'] = $_POST['domain'];
+
+  foreach($_POST as $key => $name) {
+    $obj = json_decode($key);
+    if(isset($obj->domain) and !empty($obj->domain) and isset($obj->imei) and !empty($obj->imei))
+    {
+      $_SESSION['imei'] = $obj->imei;
+      $_SESSION['domain'] = $obj->domain;
+    } 
+  }
+
 
   if( $_SERVER['REMOTE_ADDR'] == '::1' or $_SERVER['REMOTE_ADDR'] == '127.0.0.1' )
   {
@@ -19,10 +31,11 @@ Yii::setPathOfAlias('chartjs', dirname(__FILE__).'/../extensions/yii-chartjs');
   $etuntifw_user = 'root';
   $etuntifw_pass = '';
 
-if(isset($_SESSION['domain']))
+  if(isset($_SESSION['domain']))
   $db2 = $_SESSION['domain'];
-else
+  else
   $db2 = '';
+
   $db2_host = 'localhost';
   $db2_user = 'root';
   $db2_pass = '';
@@ -107,6 +120,8 @@ return array(
 
 	// application components
 	'components'=>array(
+
+
         'urlManager'=>array(
             'urlFormat'=>'path',
             'rules'=>require(
