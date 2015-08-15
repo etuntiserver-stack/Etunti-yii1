@@ -8718,3 +8718,49 @@ in E:\GITHUB\etuntifw\protected\extensions\starship\RestfullYii\events\ERestEven
 in E:\GITHUB\etuntifw\protected\extensions\starship\RestfullYii\ARBehaviors\ERestActiveRecordRelationBehavior.php (114)
 in E:\GITHUB\etuntifw\protected\extensions\starship\RestfullYii\ARBehaviors\ERestActiveRecordRelationBehavior.php (48)
 in E:\GITHUB\etuntifw\protected\extensions\starship\RestfullYii\events\ERestEventListenerRegistry.php (851)
+2015/08/15 17:57:09 [warning] [application] Ei voitu asettaa "Sivexkuitti"-luokan turvatonta attribuuttia "id".
+in E:\GITHUB\etuntifw\protected\extensions\starship\RestfullYii\ARBehaviors\ERestActiveRecordRelationBehavior.php (114)
+in E:\GITHUB\etuntifw\protected\extensions\starship\RestfullYii\ARBehaviors\ERestActiveRecordRelationBehavior.php (48)
+in E:\GITHUB\etuntifw\protected\extensions\starship\RestfullYii\events\ERestEventListenerRegistry.php (851)
+2015/08/15 17:57:09 [warning] [application] Ei voitu asettaa "Sivexkuitti"-luokan turvatonta attribuuttia "time".
+in E:\GITHUB\etuntifw\protected\extensions\starship\RestfullYii\ARBehaviors\ERestActiveRecordRelationBehavior.php (114)
+in E:\GITHUB\etuntifw\protected\extensions\starship\RestfullYii\ARBehaviors\ERestActiveRecordRelationBehavior.php (48)
+in E:\GITHUB\etuntifw\protected\extensions\starship\RestfullYii\events\ERestEventListenerRegistry.php (851)
+2015/08/15 17:57:09 [warning] [application] Ei voitu asettaa "Sivexkuitti"-luokan turvatonta attribuuttia "tietoja".
+in E:\GITHUB\etuntifw\protected\extensions\starship\RestfullYii\ARBehaviors\ERestActiveRecordRelationBehavior.php (114)
+in E:\GITHUB\etuntifw\protected\extensions\starship\RestfullYii\ARBehaviors\ERestActiveRecordRelationBehavior.php (48)
+in E:\GITHUB\etuntifw\protected\extensions\starship\RestfullYii\events\ERestEventListenerRegistry.php (851)
+2015/08/15 17:57:10 [error] [php] Undefined index: HTTP_ORIGIN (E:\GITHUB\etuntifw\protected\controllers\SivexkuittiController.php:2)
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#1 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#2 E:\GITHUB\etuntifw\index.php(13): CWebApplication->run()
+REQUEST_URI=/index.php/sivexkuitti/admin
+in E:\GITHUB\etuntifw\protected\controllers\SivexkuittiController.php (2)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/15 18:00:06 [error] [exception.CException] exception 'CException' with message 'Luokan SivexkuittiController ja sen käyttäytymismallit eivät sisällä metodia tai sulkeumaa nimeltä "_getStatusCodeMessage".' in E:\GITHUB\etuntifw\YII\framework\base\CComponent.php:265
+Stack trace:
+#0 E:\GITHUB\etuntifw\protected\controllers\SivexkuittiController.php(66): CComponent->__call('_getStatusCodeM...', Array)
+#1 E:\GITHUB\etuntifw\protected\controllers\SivexkuittiController.php(66): SivexkuittiController->_getStatusCodeMessage(200)
+#2 E:\GITHUB\etuntifw\YII\framework\web\CController.php(417): SivexkuittiController->actions()
+#3 E:\GITHUB\etuntifw\YII\framework\web\CController.php(259): CController->createAction('REST.POST')
+#4 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('REST.POST')
+#5 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('sivexkuitti/RES...')
+#6 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#7 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#8 {main}
+REQUEST_URI=/index.php/api/sivexkuitti
+HTTP_REFERER=http://localhost/temp/mob.php
+---
+2015/08/15 18:00:58 [warning] [application] Ei voitu asettaa "Sivexkuitti"-luokan turvatonta attribuuttia "id".
+in E:\GITHUB\etuntifw\protected\extensions\starship\RestfullYii\ARBehaviors\ERestActiveRecordRelationBehavior.php (114)
+in E:\GITHUB\etuntifw\protected\extensions\starship\RestfullYii\ARBehaviors\ERestActiveRecordRelationBehavior.php (48)
+in E:\GITHUB\etuntifw\protected\extensions\starship\RestfullYii\events\ERestEventListenerRegistry.php (851)
+2015/08/15 18:00:58 [warning] [application] Ei voitu asettaa "Sivexkuitti"-luokan turvatonta attribuuttia "time".
+in E:\GITHUB\etuntifw\protected\extensions\starship\RestfullYii\ARBehaviors\ERestActiveRecordRelationBehavior.php (114)
+in E:\GITHUB\etuntifw\protected\extensions\starship\RestfullYii\ARBehaviors\ERestActiveRecordRelationBehavior.php (48)
+in E:\GITHUB\etuntifw\protected\extensions\starship\RestfullYii\events\ERestEventListenerRegistry.php (851)
+2015/08/15 18:00:58 [warning] [application] Ei voitu asettaa "Sivexkuitti"-luokan turvatonta attribuuttia "tietoja".
+in E:\GITHUB\etuntifw\protected\extensions\starship\RestfullYii\ARBehaviors\ERestActiveRecordRelationBehavior.php (114)
+in E:\GITHUB\etuntifw\protected\extensions\starship\RestfullYii\ARBehaviors\ERestActiveRecordRelationBehavior.php (48)
+in E:\GITHUB\etuntifw\protected\extensions\starship\RestfullYii\events\ERestEventListenerRegistry.php (851)
