@@ -12,14 +12,15 @@ Yii::setPathOfAlias('chartjs', dirname(__FILE__).'/../extensions/yii-chartjs');
   if(isset($_POST['UserLogin']['domain']) and !empty($_POST['UserLogin']['domain']) and $_POST['UserLogin']['domain'] != 'superadmin')
   $_SESSION['domain'] = $_POST['UserLogin']['domain'];
 
-/*
-  if(isset($_POST['postData']['domain'])){
-  $_SESSION['domain'] = $_POST['postData']['domain'];
-  }
-  if(isset($_POST['postData']['imei']))
-  $_SESSION['imei'] = $_POST['postData']['imei'];
-*/
 
+  if(isset($_POST['domain'])){
+  $_SESSION['domain'] = $_POST['domain'];
+  }
+  if(isset($_POST['imei']))
+  $_SESSION['imei'] = $_POST['imei'];
+
+
+/*
   foreach($_POST as $key => $name) {
     $obj = json_decode($key);
 
@@ -32,7 +33,7 @@ print_r($obj);
       echo "Imei: ".$obj->imei."\n";
     } 
   }
-
+*/
 
 /*
   foreach($_POST['postData'] as $key => $name) {
