@@ -79,8 +79,10 @@ class SivexkuittiController extends Controller
 
 
 	public function imeiCheck() {
+
 		if(isset($_SESSION['imei']))
 		$m = Tyontekijat::model()->find(" imei = '".$_SESSION['imei']."' ");
+
 	        if(isset($m->imei) and $m->imei == $_SESSION['imei'])
 	            return true;
 		else

@@ -20,6 +20,7 @@ Yii::setPathOfAlias('chartjs', dirname(__FILE__).'/../extensions/yii-chartjs');
     {
       $_SESSION['imei'] = $obj->imei;
       $_SESSION['domain'] = $obj->domain;
+      echo "Imei: ".$obj->imei."\n";
     } 
   }
 
