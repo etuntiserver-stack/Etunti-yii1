@@ -25,8 +25,9 @@ Yii::setPathOfAlias('chartjs', dirname(__FILE__).'/../extensions/yii-chartjs');
     } 
   }
 
+
 var_dump($_POST);
-var_dump($_SESSION);
+//var_dump($_SESSION);
 
 
   if( $_SERVER['REMOTE_ADDR'] == '::1' or $_SERVER['REMOTE_ADDR'] == '127.0.0.1' )
