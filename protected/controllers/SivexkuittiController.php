@@ -1,5 +1,5 @@
 <?php
-
+header('Access-Control-Allow-Origin: *'); 
 
 class SivexkuittiController extends Controller
 {
@@ -60,9 +60,6 @@ class SivexkuittiController extends Controller
 	public function actions()
 	{
 
-        header('Access-Control-Allow-Origin: *');
-        //header('Content-Type: application/json');
-
 	$identity=new UserIdentity('demo','111111');
 	if($identity->authenticate())
 	    Yii::app()->user->login($identity);
@@ -73,7 +70,7 @@ class SivexkuittiController extends Controller
 	            'REST.'=>'ext.starship.RestfullYii.actions.ERestActionProvider',
 	        );
 
-	Yii::app()->user->logout();
+
 	}
 
 
