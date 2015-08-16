@@ -21,37 +21,13 @@ Yii::setPathOfAlias('chartjs', dirname(__FILE__).'/../extensions/yii-chartjs');
 */
 
 
-  foreach($_POST as $key => $name) {
-    $obj = json_decode($key);
+//var_dump($_SERVER);
 
-    if(isset($obj->domain) and !empty($obj->domain) and isset($obj->imei) and !empty($obj->imei))
-    {
+	if(isset($_GET['domain']))
+  	$_SESSION['domain'] = $_GET['domain'];
 
-      $_SESSION['imei'] = $obj->imei;
-      $_SESSION['domain'] = $obj->domain;
-      //echo "Imei: ".$obj->imei."\n";
-    } 
-  }
-
-  $_SESSION['domain'] = 'sivex';
-
-/*
-  foreach($_POST['postData'] as $key => $name) {
-
-    if(isset($key) and $key == 'domain')
-    {
-      $_SESSION['domain'] = $name;
-      echo "Domain: ".$name."\n";
-    } 
-    if(isset($key) and $key == 'imei')
-    {
-      header("Access-Control-Allow-Origin: *");
-      $_SESSION['imei'] = $name;
-      echo "Imei: ".$name."\n";
-    } 
-  }
-*/
-
+	if(isset($_POST['domain']))
+  	$_SESSION['domain'] = $_POST['domain'];
 
 
 //header("Access-Control-Allow-Origin: *");

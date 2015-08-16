@@ -31,3 +31,1254 @@ Stack trace:
 REQUEST_URI=/index.php/api/posts/updaterow/14322
 in E:\GITHUB\etuntifw\protected\controllers\ApiController.php (236)
 in E:\GITHUB\etuntifw\index.php (13)
+2015/08/16 19:02:57 [error] [system.db.CDbCommand] CDbCommand::fetchAll() epäonnistui: SQLSTATE[3D000]: Invalid catalog name: 1046 No database selected. Suoritettu SQL-komento oli: SHOW FULL COLUMNS FROM `sivex_ttekijat`.
+in E:\GITHUB\etuntifw\protected\models\Tyontekijat.php (41)
+in E:\GITHUB\etuntifw\protected\controllers\ApiController.php (95)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/16 19:02:57 [error] [exception.CDbException] exception 'CDbException' with message 'Active record -luokan "Tyontekijat" taulua "sivex_ttekijat" ei löydy tietokannasta.' in E:\GITHUB\etuntifw\YII\framework\db\ar\CActiveRecord.php:2310
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\db\ar\CActiveRecord.php(387): CActiveRecordMetaData->__construct(Object(Tyontekijat))
+#1 E:\GITHUB\etuntifw\protected\models\Tyontekijat.php(41): CActiveRecord::model('Tyontekijat')
+#2 E:\GITHUB\etuntifw\protected\controllers\ApiController.php(95): Tyontekijat::model()
+#3 E:\GITHUB\etuntifw\YII\framework\web\actions\CInlineAction.php(49): ApiController->actionImei()
+#4 E:\GITHUB\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#5 E:\GITHUB\etuntifw\YII\framework\web\CController.php(286): CController->runAction(Object(CInlineAction))
+#6 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#7 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('imei')
+#8 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/imei')
+#9 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#10 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#11 {main}
+REQUEST_URI=/index.php/api/posts/imei/353888067886268
+HTTP_REFERER=http://localhost/temp/mob.html
+---
+2015/08/16 19:03:06 [error] [system.db.CDbCommand] CDbCommand::fetchAll() epäonnistui: SQLSTATE[3D000]: Invalid catalog name: 1046 No database selected. Suoritettu SQL-komento oli: SHOW FULL COLUMNS FROM `sivex_ttekijat`.
+in E:\GITHUB\etuntifw\protected\models\Tyontekijat.php (41)
+in E:\GITHUB\etuntifw\protected\controllers\ApiController.php (95)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/16 19:03:06 [error] [exception.CDbException] exception 'CDbException' with message 'Active record -luokan "Tyontekijat" taulua "sivex_ttekijat" ei löydy tietokannasta.' in E:\GITHUB\etuntifw\YII\framework\db\ar\CActiveRecord.php:2310
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\db\ar\CActiveRecord.php(387): CActiveRecordMetaData->__construct(Object(Tyontekijat))
+#1 E:\GITHUB\etuntifw\protected\models\Tyontekijat.php(41): CActiveRecord::model('Tyontekijat')
+#2 E:\GITHUB\etuntifw\protected\controllers\ApiController.php(95): Tyontekijat::model()
+#3 E:\GITHUB\etuntifw\YII\framework\web\actions\CInlineAction.php(49): ApiController->actionImei()
+#4 E:\GITHUB\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#5 E:\GITHUB\etuntifw\YII\framework\web\CController.php(286): CController->runAction(Object(CInlineAction))
+#6 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#7 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('imei')
+#8 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/imei')
+#9 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#10 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#11 {main}
+REQUEST_URI=/index.php/api/posts/imei/353888067886268
+HTTP_REFERER=http://localhost/temp/mob.html
+---
+2015/08/16 19:03:21 [error] [system.db.CDbCommand] CDbCommand::fetchAll() epäonnistui: SQLSTATE[3D000]: Invalid catalog name: 1046 No database selected. Suoritettu SQL-komento oli: SHOW FULL COLUMNS FROM `sivex_ttekijat`.
+in E:\GITHUB\etuntifw\protected\models\Tyontekijat.php (41)
+in E:\GITHUB\etuntifw\protected\controllers\ApiController.php (95)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/16 19:03:21 [error] [exception.CDbException] exception 'CDbException' with message 'Active record -luokan "Tyontekijat" taulua "sivex_ttekijat" ei löydy tietokannasta.' in E:\GITHUB\etuntifw\YII\framework\db\ar\CActiveRecord.php:2310
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\db\ar\CActiveRecord.php(387): CActiveRecordMetaData->__construct(Object(Tyontekijat))
+#1 E:\GITHUB\etuntifw\protected\models\Tyontekijat.php(41): CActiveRecord::model('Tyontekijat')
+#2 E:\GITHUB\etuntifw\protected\controllers\ApiController.php(95): Tyontekijat::model()
+#3 E:\GITHUB\etuntifw\YII\framework\web\actions\CInlineAction.php(49): ApiController->actionImei()
+#4 E:\GITHUB\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#5 E:\GITHUB\etuntifw\YII\framework\web\CController.php(286): CController->runAction(Object(CInlineAction))
+#6 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#7 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('imei')
+#8 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/imei')
+#9 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#10 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#11 {main}
+REQUEST_URI=/index.php/api/posts/imei/353888067886268
+HTTP_REFERER=http://localhost/temp/mob.html
+---
+2015/08/16 19:03:24 [error] [system.db.CDbCommand] CDbCommand::fetchAll() epäonnistui: SQLSTATE[3D000]: Invalid catalog name: 1046 No database selected. Suoritettu SQL-komento oli: SHOW FULL COLUMNS FROM `sivex_ttekijat`.
+in E:\GITHUB\etuntifw\protected\models\Tyontekijat.php (41)
+in E:\GITHUB\etuntifw\protected\controllers\ApiController.php (95)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/16 19:03:24 [error] [exception.CDbException] exception 'CDbException' with message 'Active record -luokan "Tyontekijat" taulua "sivex_ttekijat" ei löydy tietokannasta.' in E:\GITHUB\etuntifw\YII\framework\db\ar\CActiveRecord.php:2310
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\db\ar\CActiveRecord.php(387): CActiveRecordMetaData->__construct(Object(Tyontekijat))
+#1 E:\GITHUB\etuntifw\protected\models\Tyontekijat.php(41): CActiveRecord::model('Tyontekijat')
+#2 E:\GITHUB\etuntifw\protected\controllers\ApiController.php(95): Tyontekijat::model()
+#3 E:\GITHUB\etuntifw\YII\framework\web\actions\CInlineAction.php(49): ApiController->actionImei()
+#4 E:\GITHUB\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#5 E:\GITHUB\etuntifw\YII\framework\web\CController.php(286): CController->runAction(Object(CInlineAction))
+#6 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#7 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('imei')
+#8 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/imei')
+#9 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#10 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#11 {main}
+REQUEST_URI=/index.php/api/posts/imei/353888067886268
+HTTP_REFERER=http://localhost/temp/mob.html
+---
+2015/08/16 19:04:04 [error] [system.db.CDbCommand] CDbCommand::fetchAll() epäonnistui: SQLSTATE[3D000]: Invalid catalog name: 1046 No database selected. Suoritettu SQL-komento oli: SHOW FULL COLUMNS FROM `sivex_ttekijat`.
+in E:\GITHUB\etuntifw\protected\models\Tyontekijat.php (41)
+in E:\GITHUB\etuntifw\protected\controllers\ApiController.php (95)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/16 19:04:04 [error] [exception.CDbException] exception 'CDbException' with message 'Active record -luokan "Tyontekijat" taulua "sivex_ttekijat" ei löydy tietokannasta.' in E:\GITHUB\etuntifw\YII\framework\db\ar\CActiveRecord.php:2310
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\db\ar\CActiveRecord.php(387): CActiveRecordMetaData->__construct(Object(Tyontekijat))
+#1 E:\GITHUB\etuntifw\protected\models\Tyontekijat.php(41): CActiveRecord::model('Tyontekijat')
+#2 E:\GITHUB\etuntifw\protected\controllers\ApiController.php(95): Tyontekijat::model()
+#3 E:\GITHUB\etuntifw\YII\framework\web\actions\CInlineAction.php(49): ApiController->actionImei()
+#4 E:\GITHUB\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#5 E:\GITHUB\etuntifw\YII\framework\web\CController.php(286): CController->runAction(Object(CInlineAction))
+#6 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#7 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('imei')
+#8 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/imei')
+#9 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#10 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#11 {main}
+REQUEST_URI=/index.php/api/posts/imei/353888067886268
+HTTP_REFERER=http://localhost/temp/mob.html
+---
+2015/08/16 19:04:13 [error] [system.db.CDbCommand] CDbCommand::fetchAll() epäonnistui: SQLSTATE[3D000]: Invalid catalog name: 1046 No database selected. Suoritettu SQL-komento oli: SHOW FULL COLUMNS FROM `sivex_ttekijat`.
+in E:\GITHUB\etuntifw\protected\models\Tyontekijat.php (41)
+in E:\GITHUB\etuntifw\protected\controllers\ApiController.php (95)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/16 19:04:13 [error] [exception.CDbException] exception 'CDbException' with message 'Active record -luokan "Tyontekijat" taulua "sivex_ttekijat" ei löydy tietokannasta.' in E:\GITHUB\etuntifw\YII\framework\db\ar\CActiveRecord.php:2310
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\db\ar\CActiveRecord.php(387): CActiveRecordMetaData->__construct(Object(Tyontekijat))
+#1 E:\GITHUB\etuntifw\protected\models\Tyontekijat.php(41): CActiveRecord::model('Tyontekijat')
+#2 E:\GITHUB\etuntifw\protected\controllers\ApiController.php(95): Tyontekijat::model()
+#3 E:\GITHUB\etuntifw\YII\framework\web\actions\CInlineAction.php(49): ApiController->actionImei()
+#4 E:\GITHUB\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#5 E:\GITHUB\etuntifw\YII\framework\web\CController.php(286): CController->runAction(Object(CInlineAction))
+#6 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#7 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('imei')
+#8 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/imei')
+#9 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#10 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#11 {main}
+REQUEST_URI=/index.php/api/posts/imei/353888067886268
+HTTP_REFERER=http://localhost/temp/mob.html
+---
+2015/08/16 19:05:24 [error] [system.db.CDbCommand] CDbCommand::fetchAll() epäonnistui: SQLSTATE[3D000]: Invalid catalog name: 1046 No database selected. Suoritettu SQL-komento oli: SHOW FULL COLUMNS FROM `sivex_ttekijat`.
+in E:\GITHUB\etuntifw\protected\models\Tyontekijat.php (41)
+in E:\GITHUB\etuntifw\protected\controllers\ApiController.php (95)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/16 19:05:24 [error] [exception.CDbException] exception 'CDbException' with message 'Active record -luokan "Tyontekijat" taulua "sivex_ttekijat" ei löydy tietokannasta.' in E:\GITHUB\etuntifw\YII\framework\db\ar\CActiveRecord.php:2310
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\db\ar\CActiveRecord.php(387): CActiveRecordMetaData->__construct(Object(Tyontekijat))
+#1 E:\GITHUB\etuntifw\protected\models\Tyontekijat.php(41): CActiveRecord::model('Tyontekijat')
+#2 E:\GITHUB\etuntifw\protected\controllers\ApiController.php(95): Tyontekijat::model()
+#3 E:\GITHUB\etuntifw\YII\framework\web\actions\CInlineAction.php(49): ApiController->actionImei()
+#4 E:\GITHUB\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#5 E:\GITHUB\etuntifw\YII\framework\web\CController.php(286): CController->runAction(Object(CInlineAction))
+#6 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#7 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('imei')
+#8 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/imei')
+#9 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#10 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#11 {main}
+REQUEST_URI=/index.php/api/posts/imei/353888067886268
+HTTP_REFERER=http://localhost/temp/mob.html
+---
+2015/08/16 19:07:00 [error] [system.db.CDbCommand] CDbCommand::fetchAll() epäonnistui: SQLSTATE[3D000]: Invalid catalog name: 1046 No database selected. Suoritettu SQL-komento oli: SHOW FULL COLUMNS FROM `sivex_ttekijat`.
+in E:\GITHUB\etuntifw\protected\models\Tyontekijat.php (41)
+in E:\GITHUB\etuntifw\protected\controllers\ApiController.php (95)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/16 19:07:00 [error] [exception.CDbException] exception 'CDbException' with message 'Active record -luokan "Tyontekijat" taulua "sivex_ttekijat" ei löydy tietokannasta.' in E:\GITHUB\etuntifw\YII\framework\db\ar\CActiveRecord.php:2310
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\db\ar\CActiveRecord.php(387): CActiveRecordMetaData->__construct(Object(Tyontekijat))
+#1 E:\GITHUB\etuntifw\protected\models\Tyontekijat.php(41): CActiveRecord::model('Tyontekijat')
+#2 E:\GITHUB\etuntifw\protected\controllers\ApiController.php(95): Tyontekijat::model()
+#3 E:\GITHUB\etuntifw\YII\framework\web\actions\CInlineAction.php(49): ApiController->actionImei()
+#4 E:\GITHUB\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#5 E:\GITHUB\etuntifw\YII\framework\web\CController.php(286): CController->runAction(Object(CInlineAction))
+#6 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#7 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('imei')
+#8 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/imei')
+#9 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#10 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#11 {main}
+REQUEST_URI=/index.php/api/posts/imei/353888067886268
+HTTP_REFERER=http://localhost/temp/mob.html
+---
+2015/08/16 19:07:14 [error] [system.db.CDbCommand] CDbCommand::fetchAll() epäonnistui: SQLSTATE[3D000]: Invalid catalog name: 1046 No database selected. Suoritettu SQL-komento oli: SHOW FULL COLUMNS FROM `sivex_ttekijat`.
+in E:\GITHUB\etuntifw\protected\models\Tyontekijat.php (41)
+in E:\GITHUB\etuntifw\protected\controllers\ApiController.php (95)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/16 19:07:14 [error] [exception.CDbException] exception 'CDbException' with message 'Active record -luokan "Tyontekijat" taulua "sivex_ttekijat" ei löydy tietokannasta.' in E:\GITHUB\etuntifw\YII\framework\db\ar\CActiveRecord.php:2310
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\db\ar\CActiveRecord.php(387): CActiveRecordMetaData->__construct(Object(Tyontekijat))
+#1 E:\GITHUB\etuntifw\protected\models\Tyontekijat.php(41): CActiveRecord::model('Tyontekijat')
+#2 E:\GITHUB\etuntifw\protected\controllers\ApiController.php(95): Tyontekijat::model()
+#3 E:\GITHUB\etuntifw\YII\framework\web\actions\CInlineAction.php(49): ApiController->actionImei()
+#4 E:\GITHUB\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#5 E:\GITHUB\etuntifw\YII\framework\web\CController.php(286): CController->runAction(Object(CInlineAction))
+#6 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#7 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('imei')
+#8 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/imei')
+#9 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#10 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#11 {main}
+REQUEST_URI=/index.php/api/posts/imei/353888067886268
+HTTP_REFERER=http://localhost/temp/mob.html
+---
+2015/08/16 19:08:06 [error] [system.db.CDbCommand] CDbCommand::fetchAll() epäonnistui: SQLSTATE[3D000]: Invalid catalog name: 1046 No database selected. Suoritettu SQL-komento oli: SHOW FULL COLUMNS FROM `sivex_ttekijat`.
+in E:\GITHUB\etuntifw\protected\models\Tyontekijat.php (41)
+in E:\GITHUB\etuntifw\protected\controllers\ApiController.php (95)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/16 19:08:06 [error] [exception.CDbException] exception 'CDbException' with message 'Active record -luokan "Tyontekijat" taulua "sivex_ttekijat" ei löydy tietokannasta.' in E:\GITHUB\etuntifw\YII\framework\db\ar\CActiveRecord.php:2310
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\db\ar\CActiveRecord.php(387): CActiveRecordMetaData->__construct(Object(Tyontekijat))
+#1 E:\GITHUB\etuntifw\protected\models\Tyontekijat.php(41): CActiveRecord::model('Tyontekijat')
+#2 E:\GITHUB\etuntifw\protected\controllers\ApiController.php(95): Tyontekijat::model()
+#3 E:\GITHUB\etuntifw\YII\framework\web\actions\CInlineAction.php(49): ApiController->actionImei()
+#4 E:\GITHUB\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#5 E:\GITHUB\etuntifw\YII\framework\web\CController.php(286): CController->runAction(Object(CInlineAction))
+#6 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#7 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('imei')
+#8 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/imei')
+#9 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#10 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#11 {main}
+REQUEST_URI=/index.php/api/posts/imei/353888067886268
+HTTP_REFERER=http://localhost/temp/mob.html
+---
+2015/08/16 19:09:05 [error] [system.db.CDbCommand] CDbCommand::fetchAll() epäonnistui: SQLSTATE[3D000]: Invalid catalog name: 1046 No database selected. Suoritettu SQL-komento oli: SHOW FULL COLUMNS FROM `sivex_ttekijat`.
+in E:\GITHUB\etuntifw\protected\models\Tyontekijat.php (41)
+in E:\GITHUB\etuntifw\protected\controllers\ApiController.php (95)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/16 19:09:05 [error] [exception.CDbException] exception 'CDbException' with message 'Active record -luokan "Tyontekijat" taulua "sivex_ttekijat" ei löydy tietokannasta.' in E:\GITHUB\etuntifw\YII\framework\db\ar\CActiveRecord.php:2310
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\db\ar\CActiveRecord.php(387): CActiveRecordMetaData->__construct(Object(Tyontekijat))
+#1 E:\GITHUB\etuntifw\protected\models\Tyontekijat.php(41): CActiveRecord::model('Tyontekijat')
+#2 E:\GITHUB\etuntifw\protected\controllers\ApiController.php(95): Tyontekijat::model()
+#3 E:\GITHUB\etuntifw\YII\framework\web\actions\CInlineAction.php(49): ApiController->actionImei()
+#4 E:\GITHUB\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#5 E:\GITHUB\etuntifw\YII\framework\web\CController.php(286): CController->runAction(Object(CInlineAction))
+#6 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#7 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('imei')
+#8 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/imei')
+#9 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#10 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#11 {main}
+REQUEST_URI=/index.php/api/posts/imei/353888067886268
+HTTP_REFERER=http://localhost/temp/mob.html
+---
+2015/08/16 19:09:18 [error] [system.db.CDbCommand] CDbCommand::fetchAll() epäonnistui: SQLSTATE[3D000]: Invalid catalog name: 1046 No database selected. Suoritettu SQL-komento oli: SHOW FULL COLUMNS FROM `sivex_ttekijat`.
+in E:\GITHUB\etuntifw\protected\models\Tyontekijat.php (41)
+in E:\GITHUB\etuntifw\protected\controllers\ApiController.php (95)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/16 19:09:18 [error] [exception.CDbException] exception 'CDbException' with message 'Active record -luokan "Tyontekijat" taulua "sivex_ttekijat" ei löydy tietokannasta.' in E:\GITHUB\etuntifw\YII\framework\db\ar\CActiveRecord.php:2310
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\db\ar\CActiveRecord.php(387): CActiveRecordMetaData->__construct(Object(Tyontekijat))
+#1 E:\GITHUB\etuntifw\protected\models\Tyontekijat.php(41): CActiveRecord::model('Tyontekijat')
+#2 E:\GITHUB\etuntifw\protected\controllers\ApiController.php(95): Tyontekijat::model()
+#3 E:\GITHUB\etuntifw\YII\framework\web\actions\CInlineAction.php(49): ApiController->actionImei()
+#4 E:\GITHUB\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#5 E:\GITHUB\etuntifw\YII\framework\web\CController.php(286): CController->runAction(Object(CInlineAction))
+#6 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#7 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('imei')
+#8 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/imei')
+#9 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#10 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#11 {main}
+REQUEST_URI=/index.php/api/posts/imei/353888067886268
+HTTP_REFERER=http://localhost/temp/mob.html
+---
+2015/08/16 19:09:49 [error] [system.db.CDbCommand] CDbCommand::fetchAll() epäonnistui: SQLSTATE[3D000]: Invalid catalog name: 1046 No database selected. Suoritettu SQL-komento oli: SHOW FULL COLUMNS FROM `sivex_ttekijat`.
+in E:\GITHUB\etuntifw\protected\models\Tyontekijat.php (41)
+in E:\GITHUB\etuntifw\protected\controllers\ApiController.php (95)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/16 19:09:49 [error] [exception.CDbException] exception 'CDbException' with message 'Active record -luokan "Tyontekijat" taulua "sivex_ttekijat" ei löydy tietokannasta.' in E:\GITHUB\etuntifw\YII\framework\db\ar\CActiveRecord.php:2310
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\db\ar\CActiveRecord.php(387): CActiveRecordMetaData->__construct(Object(Tyontekijat))
+#1 E:\GITHUB\etuntifw\protected\models\Tyontekijat.php(41): CActiveRecord::model('Tyontekijat')
+#2 E:\GITHUB\etuntifw\protected\controllers\ApiController.php(95): Tyontekijat::model()
+#3 E:\GITHUB\etuntifw\YII\framework\web\actions\CInlineAction.php(49): ApiController->actionImei()
+#4 E:\GITHUB\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#5 E:\GITHUB\etuntifw\YII\framework\web\CController.php(286): CController->runAction(Object(CInlineAction))
+#6 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#7 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('imei')
+#8 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/imei')
+#9 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#10 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#11 {main}
+REQUEST_URI=/index.php/api/posts/imei/353888067886268
+HTTP_REFERER=http://localhost/temp/mob.html
+---
+2015/08/16 19:10:18 [error] [system.db.CDbCommand] CDbCommand::fetchAll() epäonnistui: SQLSTATE[3D000]: Invalid catalog name: 1046 No database selected. Suoritettu SQL-komento oli: SHOW FULL COLUMNS FROM `sivex_ttekijat`.
+in E:\GITHUB\etuntifw\protected\models\Tyontekijat.php (41)
+in E:\GITHUB\etuntifw\protected\controllers\ApiController.php (95)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/16 19:10:18 [error] [exception.CDbException] exception 'CDbException' with message 'Active record -luokan "Tyontekijat" taulua "sivex_ttekijat" ei löydy tietokannasta.' in E:\GITHUB\etuntifw\YII\framework\db\ar\CActiveRecord.php:2310
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\db\ar\CActiveRecord.php(387): CActiveRecordMetaData->__construct(Object(Tyontekijat))
+#1 E:\GITHUB\etuntifw\protected\models\Tyontekijat.php(41): CActiveRecord::model('Tyontekijat')
+#2 E:\GITHUB\etuntifw\protected\controllers\ApiController.php(95): Tyontekijat::model()
+#3 E:\GITHUB\etuntifw\YII\framework\web\actions\CInlineAction.php(49): ApiController->actionImei()
+#4 E:\GITHUB\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#5 E:\GITHUB\etuntifw\YII\framework\web\CController.php(286): CController->runAction(Object(CInlineAction))
+#6 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#7 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('imei')
+#8 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/imei')
+#9 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#10 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#11 {main}
+REQUEST_URI=/index.php/api/posts/imei/353888067886268
+HTTP_REFERER=http://localhost/temp/mob.html
+---
+2015/08/16 19:10:40 [error] [system.db.CDbCommand] CDbCommand::fetchAll() epäonnistui: SQLSTATE[3D000]: Invalid catalog name: 1046 No database selected. Suoritettu SQL-komento oli: SHOW FULL COLUMNS FROM `sivex_ttekijat`.
+in E:\GITHUB\etuntifw\protected\models\Tyontekijat.php (41)
+in E:\GITHUB\etuntifw\protected\controllers\ApiController.php (95)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/16 19:10:40 [error] [exception.CDbException] exception 'CDbException' with message 'Active record -luokan "Tyontekijat" taulua "sivex_ttekijat" ei löydy tietokannasta.' in E:\GITHUB\etuntifw\YII\framework\db\ar\CActiveRecord.php:2310
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\db\ar\CActiveRecord.php(387): CActiveRecordMetaData->__construct(Object(Tyontekijat))
+#1 E:\GITHUB\etuntifw\protected\models\Tyontekijat.php(41): CActiveRecord::model('Tyontekijat')
+#2 E:\GITHUB\etuntifw\protected\controllers\ApiController.php(95): Tyontekijat::model()
+#3 E:\GITHUB\etuntifw\YII\framework\web\actions\CInlineAction.php(49): ApiController->actionImei()
+#4 E:\GITHUB\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#5 E:\GITHUB\etuntifw\YII\framework\web\CController.php(286): CController->runAction(Object(CInlineAction))
+#6 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#7 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('imei')
+#8 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/imei')
+#9 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#10 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#11 {main}
+REQUEST_URI=/index.php/api/posts/imei/353888067886268
+HTTP_REFERER=http://localhost/temp/mob.html
+---
+2015/08/16 19:10:50 [error] [system.db.CDbCommand] CDbCommand::fetchAll() epäonnistui: SQLSTATE[3D000]: Invalid catalog name: 1046 No database selected. Suoritettu SQL-komento oli: SHOW FULL COLUMNS FROM `sivex_ttekijat`.
+in E:\GITHUB\etuntifw\protected\models\Tyontekijat.php (41)
+in E:\GITHUB\etuntifw\protected\controllers\ApiController.php (95)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/16 19:10:50 [error] [exception.CDbException] exception 'CDbException' with message 'Active record -luokan "Tyontekijat" taulua "sivex_ttekijat" ei löydy tietokannasta.' in E:\GITHUB\etuntifw\YII\framework\db\ar\CActiveRecord.php:2310
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\db\ar\CActiveRecord.php(387): CActiveRecordMetaData->__construct(Object(Tyontekijat))
+#1 E:\GITHUB\etuntifw\protected\models\Tyontekijat.php(41): CActiveRecord::model('Tyontekijat')
+#2 E:\GITHUB\etuntifw\protected\controllers\ApiController.php(95): Tyontekijat::model()
+#3 E:\GITHUB\etuntifw\YII\framework\web\actions\CInlineAction.php(49): ApiController->actionImei()
+#4 E:\GITHUB\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#5 E:\GITHUB\etuntifw\YII\framework\web\CController.php(286): CController->runAction(Object(CInlineAction))
+#6 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#7 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('imei')
+#8 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/imei')
+#9 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#10 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#11 {main}
+REQUEST_URI=/index.php/api/posts/imei/353888067886268
+HTTP_REFERER=http://localhost/temp/mob.html
+---
+2015/08/16 19:11:06 [error] [system.db.CDbCommand] CDbCommand::fetchAll() epäonnistui: SQLSTATE[3D000]: Invalid catalog name: 1046 No database selected. Suoritettu SQL-komento oli: SHOW FULL COLUMNS FROM `sivex_ttekijat`.
+in E:\GITHUB\etuntifw\protected\models\Tyontekijat.php (41)
+in E:\GITHUB\etuntifw\protected\controllers\ApiController.php (95)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/16 19:11:06 [error] [exception.CDbException] exception 'CDbException' with message 'Active record -luokan "Tyontekijat" taulua "sivex_ttekijat" ei löydy tietokannasta.' in E:\GITHUB\etuntifw\YII\framework\db\ar\CActiveRecord.php:2310
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\db\ar\CActiveRecord.php(387): CActiveRecordMetaData->__construct(Object(Tyontekijat))
+#1 E:\GITHUB\etuntifw\protected\models\Tyontekijat.php(41): CActiveRecord::model('Tyontekijat')
+#2 E:\GITHUB\etuntifw\protected\controllers\ApiController.php(95): Tyontekijat::model()
+#3 E:\GITHUB\etuntifw\YII\framework\web\actions\CInlineAction.php(49): ApiController->actionImei()
+#4 E:\GITHUB\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#5 E:\GITHUB\etuntifw\YII\framework\web\CController.php(286): CController->runAction(Object(CInlineAction))
+#6 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#7 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('imei')
+#8 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/imei')
+#9 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#10 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#11 {main}
+REQUEST_URI=/index.php/api/posts/imei/353888067886268
+HTTP_REFERER=http://localhost/temp/mob.html
+---
+2015/08/16 19:11:17 [error] [system.db.CDbCommand] CDbCommand::fetchAll() epäonnistui: SQLSTATE[3D000]: Invalid catalog name: 1046 No database selected. Suoritettu SQL-komento oli: SHOW FULL COLUMNS FROM `sivex_ttekijat`.
+in E:\GITHUB\etuntifw\protected\models\Tyontekijat.php (41)
+in E:\GITHUB\etuntifw\protected\controllers\ApiController.php (95)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/16 19:11:17 [error] [exception.CDbException] exception 'CDbException' with message 'Active record -luokan "Tyontekijat" taulua "sivex_ttekijat" ei löydy tietokannasta.' in E:\GITHUB\etuntifw\YII\framework\db\ar\CActiveRecord.php:2310
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\db\ar\CActiveRecord.php(387): CActiveRecordMetaData->__construct(Object(Tyontekijat))
+#1 E:\GITHUB\etuntifw\protected\models\Tyontekijat.php(41): CActiveRecord::model('Tyontekijat')
+#2 E:\GITHUB\etuntifw\protected\controllers\ApiController.php(95): Tyontekijat::model()
+#3 E:\GITHUB\etuntifw\YII\framework\web\actions\CInlineAction.php(49): ApiController->actionImei()
+#4 E:\GITHUB\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#5 E:\GITHUB\etuntifw\YII\framework\web\CController.php(286): CController->runAction(Object(CInlineAction))
+#6 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#7 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('imei')
+#8 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/imei')
+#9 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#10 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#11 {main}
+REQUEST_URI=/index.php/api/posts/imei/353888067886268
+HTTP_REFERER=http://localhost/temp/mob.html
+---
+2015/08/16 19:11:37 [error] [system.db.CDbCommand] CDbCommand::fetchAll() epäonnistui: SQLSTATE[3D000]: Invalid catalog name: 1046 No database selected. Suoritettu SQL-komento oli: SHOW FULL COLUMNS FROM `sivex_ttekijat`.
+in E:\GITHUB\etuntifw\protected\models\Tyontekijat.php (41)
+in E:\GITHUB\etuntifw\protected\controllers\ApiController.php (95)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/16 19:11:37 [error] [exception.CDbException] exception 'CDbException' with message 'Active record -luokan "Tyontekijat" taulua "sivex_ttekijat" ei löydy tietokannasta.' in E:\GITHUB\etuntifw\YII\framework\db\ar\CActiveRecord.php:2310
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\db\ar\CActiveRecord.php(387): CActiveRecordMetaData->__construct(Object(Tyontekijat))
+#1 E:\GITHUB\etuntifw\protected\models\Tyontekijat.php(41): CActiveRecord::model('Tyontekijat')
+#2 E:\GITHUB\etuntifw\protected\controllers\ApiController.php(95): Tyontekijat::model()
+#3 E:\GITHUB\etuntifw\YII\framework\web\actions\CInlineAction.php(49): ApiController->actionImei()
+#4 E:\GITHUB\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#5 E:\GITHUB\etuntifw\YII\framework\web\CController.php(286): CController->runAction(Object(CInlineAction))
+#6 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#7 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('imei')
+#8 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/imei')
+#9 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#10 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#11 {main}
+REQUEST_URI=/index.php/api/posts/imei/353888067886268
+HTTP_REFERER=http://localhost/temp/mob.html
+---
+2015/08/16 19:11:46 [error] [system.db.CDbCommand] CDbCommand::fetchAll() epäonnistui: SQLSTATE[3D000]: Invalid catalog name: 1046 No database selected. Suoritettu SQL-komento oli: SHOW FULL COLUMNS FROM `sivex_ttekijat`.
+in E:\GITHUB\etuntifw\protected\models\Tyontekijat.php (41)
+in E:\GITHUB\etuntifw\protected\controllers\ApiController.php (95)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/16 19:11:46 [error] [exception.CDbException] exception 'CDbException' with message 'Active record -luokan "Tyontekijat" taulua "sivex_ttekijat" ei löydy tietokannasta.' in E:\GITHUB\etuntifw\YII\framework\db\ar\CActiveRecord.php:2310
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\db\ar\CActiveRecord.php(387): CActiveRecordMetaData->__construct(Object(Tyontekijat))
+#1 E:\GITHUB\etuntifw\protected\models\Tyontekijat.php(41): CActiveRecord::model('Tyontekijat')
+#2 E:\GITHUB\etuntifw\protected\controllers\ApiController.php(95): Tyontekijat::model()
+#3 E:\GITHUB\etuntifw\YII\framework\web\actions\CInlineAction.php(49): ApiController->actionImei()
+#4 E:\GITHUB\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#5 E:\GITHUB\etuntifw\YII\framework\web\CController.php(286): CController->runAction(Object(CInlineAction))
+#6 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#7 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('imei')
+#8 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/imei')
+#9 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#10 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#11 {main}
+REQUEST_URI=/index.php/api/posts/imei/353888067886268
+HTTP_REFERER=http://localhost/temp/mob.html
+---
+2015/08/16 19:12:50 [error] [system.db.CDbCommand] CDbCommand::fetchAll() epäonnistui: SQLSTATE[3D000]: Invalid catalog name: 1046 No database selected. Suoritettu SQL-komento oli: SHOW FULL COLUMNS FROM `sivex_ttekijat`.
+in E:\GITHUB\etuntifw\protected\models\Tyontekijat.php (41)
+in E:\GITHUB\etuntifw\protected\controllers\ApiController.php (95)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/16 19:12:50 [error] [exception.CDbException] exception 'CDbException' with message 'Active record -luokan "Tyontekijat" taulua "sivex_ttekijat" ei löydy tietokannasta.' in E:\GITHUB\etuntifw\YII\framework\db\ar\CActiveRecord.php:2310
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\db\ar\CActiveRecord.php(387): CActiveRecordMetaData->__construct(Object(Tyontekijat))
+#1 E:\GITHUB\etuntifw\protected\models\Tyontekijat.php(41): CActiveRecord::model('Tyontekijat')
+#2 E:\GITHUB\etuntifw\protected\controllers\ApiController.php(95): Tyontekijat::model()
+#3 E:\GITHUB\etuntifw\YII\framework\web\actions\CInlineAction.php(49): ApiController->actionImei()
+#4 E:\GITHUB\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#5 E:\GITHUB\etuntifw\YII\framework\web\CController.php(286): CController->runAction(Object(CInlineAction))
+#6 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#7 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('imei')
+#8 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/imei')
+#9 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#10 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#11 {main}
+REQUEST_URI=/index.php/api/posts/imei/353888067886268
+HTTP_REFERER=http://localhost/temp/mob.html
+---
+2015/08/16 19:13:08 [error] [system.db.CDbCommand] CDbCommand::fetchAll() epäonnistui: SQLSTATE[3D000]: Invalid catalog name: 1046 No database selected. Suoritettu SQL-komento oli: SHOW FULL COLUMNS FROM `sivex_ttekijat`.
+in E:\GITHUB\etuntifw\protected\models\Tyontekijat.php (41)
+in E:\GITHUB\etuntifw\protected\controllers\ApiController.php (95)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/16 19:13:08 [error] [exception.CDbException] exception 'CDbException' with message 'Active record -luokan "Tyontekijat" taulua "sivex_ttekijat" ei löydy tietokannasta.' in E:\GITHUB\etuntifw\YII\framework\db\ar\CActiveRecord.php:2310
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\db\ar\CActiveRecord.php(387): CActiveRecordMetaData->__construct(Object(Tyontekijat))
+#1 E:\GITHUB\etuntifw\protected\models\Tyontekijat.php(41): CActiveRecord::model('Tyontekijat')
+#2 E:\GITHUB\etuntifw\protected\controllers\ApiController.php(95): Tyontekijat::model()
+#3 E:\GITHUB\etuntifw\YII\framework\web\actions\CInlineAction.php(49): ApiController->actionImei()
+#4 E:\GITHUB\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#5 E:\GITHUB\etuntifw\YII\framework\web\CController.php(286): CController->runAction(Object(CInlineAction))
+#6 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#7 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('imei')
+#8 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/imei')
+#9 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#10 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#11 {main}
+REQUEST_URI=/index.php/api/posts/imei/353888067886268
+HTTP_REFERER=http://localhost/temp/mob.html
+---
+2015/08/16 19:28:29 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Järjestelmä ei löydä pyydettyä toimintoa "posts".' in E:\GITHUB\etuntifw\YII\framework\web\CController.php:483
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(270): CController->missingAction('posts')
+#1 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('posts')
+#2 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/posts/imei/...')
+#3 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php/api/posts/imei/353888067886268
+HTTP_REFERER=http://localhost/temp/mob.html
+---
+2015/08/16 19:28:35 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Järjestelmä ei löydä pyydettyä toimintoa "posts".' in E:\GITHUB\etuntifw\YII\framework\web\CController.php:483
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(270): CController->missingAction('posts')
+#1 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('posts')
+#2 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/posts/imei/...')
+#3 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php/api/posts/imei/353888067886268
+HTTP_REFERER=http://localhost/temp/mob.html
+---
+2015/08/16 19:28:39 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Järjestelmä ei löydä pyydettyä toimintoa "posts".' in E:\GITHUB\etuntifw\YII\framework\web\CController.php:483
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(270): CController->missingAction('posts')
+#1 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('posts')
+#2 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/posts/imei/...')
+#3 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php/api/posts/imei/353888067886268
+HTTP_REFERER=http://localhost/temp/mob.html
+---
+2015/08/16 19:29:24 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Järjestelmä ei löydä pyydettyä toimintoa "posts".' in E:\GITHUB\etuntifw\YII\framework\web\CController.php:483
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(270): CController->missingAction('posts')
+#1 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('posts')
+#2 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/posts/imei/...')
+#3 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php/api/posts/imei/353888067886268
+HTTP_REFERER=http://localhost/temp/mob.html
+---
+2015/08/16 19:29:32 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Järjestelmä ei löydä pyydettyä toimintoa "posts".' in E:\GITHUB\etuntifw\YII\framework\web\CController.php:483
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(270): CController->missingAction('posts')
+#1 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('posts')
+#2 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/posts/imei/...')
+#3 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php/api/posts/imei/353888067886268
+HTTP_REFERER=http://localhost/temp/mob.html
+---
+2015/08/16 19:30:10 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Järjestelmä ei löydä pyydettyä toimintoa "posts".' in E:\GITHUB\etuntifw\YII\framework\web\CController.php:483
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(270): CController->missingAction('posts')
+#1 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('posts')
+#2 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/posts/imei/...')
+#3 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php/api/posts/imei/353888067886268
+HTTP_REFERER=http://localhost/temp/mob.html
+---
+2015/08/16 19:30:25 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Järjestelmä ei löydä pyydettyä toimintoa "posts".' in E:\GITHUB\etuntifw\YII\framework\web\CController.php:483
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(270): CController->missingAction('posts')
+#1 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('posts')
+#2 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/posts/imei/...')
+#3 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php/api/posts/imei/353888067886268
+HTTP_REFERER=http://localhost/temp/mob.html
+---
+2015/08/16 19:31:30 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Järjestelmä ei löydä pyydettyä toimintoa "posts".' in E:\GITHUB\etuntifw\YII\framework\web\CController.php:483
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(270): CController->missingAction('posts')
+#1 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('posts')
+#2 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/posts/imei/...')
+#3 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php/api/posts/imei/353888067886268
+HTTP_REFERER=http://localhost/temp/mob.html
+---
+2015/08/16 20:01:31 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Järjestelmä ei löydä pyydettyä toimintoa "posts".' in E:\GITHUB\etuntifw\YII\framework\web\CController.php:483
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(270): CController->missingAction('posts')
+#1 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('posts')
+#2 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/posts/imei/...')
+#3 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php/api/posts/imei/353888067886268
+HTTP_REFERER=http://localhost/temp/mob.html
+---
+2015/08/16 20:01:41 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Järjestelmä ei löydä pyydettyä toimintoa "posts".' in E:\GITHUB\etuntifw\YII\framework\web\CController.php:483
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(270): CController->missingAction('posts')
+#1 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('posts')
+#2 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/posts/imei/...')
+#3 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php/api/posts/imei/353888067886268
+HTTP_REFERER=http://localhost/temp/mob.html
+---
+2015/08/16 20:01:44 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Järjestelmä ei löydä pyydettyä toimintoa "posts".' in E:\GITHUB\etuntifw\YII\framework\web\CController.php:483
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(270): CController->missingAction('posts')
+#1 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('posts')
+#2 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/posts/imei/...')
+#3 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php/api/posts/imei/353888067886268
+HTTP_REFERER=http://localhost/temp/mob.html
+---
+2015/08/16 20:02:25 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Järjestelmä ei löydä pyydettyä toimintoa "posts".' in E:\GITHUB\etuntifw\YII\framework\web\CController.php:483
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(270): CController->missingAction('posts')
+#1 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('posts')
+#2 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/posts/imei/...')
+#3 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php/api/posts/imei/353888067886268
+HTTP_REFERER=http://localhost/temp/mob.html
+---
+2015/08/16 20:02:48 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Järjestelmä ei löydä pyydettyä toimintoa "posts".' in E:\GITHUB\etuntifw\YII\framework\web\CController.php:483
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(270): CController->missingAction('posts')
+#1 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('posts')
+#2 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/posts/imei/...')
+#3 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php/api/posts/imei/353888067886268
+HTTP_REFERER=http://localhost/temp/mob.html
+---
+2015/08/16 20:03:27 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Järjestelmä ei löydä pyydettyä toimintoa "posts".' in E:\GITHUB\etuntifw\YII\framework\web\CController.php:483
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(270): CController->missingAction('posts')
+#1 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('posts')
+#2 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/posts/imei/...')
+#3 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php/api/posts/imei/353888067886268
+HTTP_REFERER=http://localhost/temp/mob.html
+---
+2015/08/16 20:04:13 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Järjestelmä ei löydä pyydettyä toimintoa "posts".' in E:\GITHUB\etuntifw\YII\framework\web\CController.php:483
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(270): CController->missingAction('posts')
+#1 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('posts')
+#2 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/posts/imei/...')
+#3 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php/api/posts/imei/353888067886268
+HTTP_REFERER=http://localhost/temp/mob.html
+---
+2015/08/16 20:04:31 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Järjestelmä ei löydä pyydettyä toimintoa "posts".' in E:\GITHUB\etuntifw\YII\framework\web\CController.php:483
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(270): CController->missingAction('posts')
+#1 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('posts')
+#2 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/posts/imei/...')
+#3 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php/api/posts/imei/353888067886268
+HTTP_REFERER=http://localhost/temp/mob.html
+---
+2015/08/16 20:04:43 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Järjestelmä ei löydä pyydettyä toimintoa "posts".' in E:\GITHUB\etuntifw\YII\framework\web\CController.php:483
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(270): CController->missingAction('posts')
+#1 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('posts')
+#2 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/posts/imei/...')
+#3 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php/api/posts/imei/353888067886268
+HTTP_REFERER=http://localhost/temp/mob.html
+---
+2015/08/16 20:05:10 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Järjestelmä ei löydä pyydettyä toimintoa "posts".' in E:\GITHUB\etuntifw\YII\framework\web\CController.php:483
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(270): CController->missingAction('posts')
+#1 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('posts')
+#2 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/posts/imei/...')
+#3 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php/api/posts/imei/353888067886268
+HTTP_REFERER=http://localhost/temp/mob.html
+---
+2015/08/16 20:05:37 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Järjestelmä ei löydä pyydettyä toimintoa "posts".' in E:\GITHUB\etuntifw\YII\framework\web\CController.php:483
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(270): CController->missingAction('posts')
+#1 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('posts')
+#2 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/posts/imei/...')
+#3 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php/api/posts/imei/353888067886268
+HTTP_REFERER=http://localhost/temp/mob.html
+---
+2015/08/16 20:06:28 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Järjestelmä ei löydä pyydettyä toimintoa "posts".' in E:\GITHUB\etuntifw\YII\framework\web\CController.php:483
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(270): CController->missingAction('posts')
+#1 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('posts')
+#2 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/posts/imei/...')
+#3 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php/api/posts/imei/353888067886268
+HTTP_REFERER=http://localhost/temp/mob.html
+---
+2015/08/16 20:06:34 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Järjestelmä ei löydä pyydettyä toimintoa "posts".' in E:\GITHUB\etuntifw\YII\framework\web\CController.php:483
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(270): CController->missingAction('posts')
+#1 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('posts')
+#2 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/posts/imei/...')
+#3 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php/api/posts/imei/353888067886268
+HTTP_REFERER=http://localhost/temp/mob.html
+---
+2015/08/16 20:07:30 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Järjestelmä ei löydä pyydettyä toimintoa "posts".' in E:\GITHUB\etuntifw\YII\framework\web\CController.php:483
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(270): CController->missingAction('posts')
+#1 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('posts')
+#2 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/posts/imei/...')
+#3 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php/api/posts/imei/353888067886268
+HTTP_REFERER=http://localhost/temp/mob.html
+---
+2015/08/16 20:09:33 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Järjestelmä ei löydä pyydettyä toimintoa "posts".' in E:\GITHUB\etuntifw\YII\framework\web\CController.php:483
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(270): CController->missingAction('posts')
+#1 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('posts')
+#2 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/posts/imei/...')
+#3 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php/api/posts/imei/353888067886268
+HTTP_REFERER=http://localhost/temp/mob.html
+---
+2015/08/16 20:09:41 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Järjestelmä ei löydä pyydettyä toimintoa "posts".' in E:\GITHUB\etuntifw\YII\framework\web\CController.php:483
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(270): CController->missingAction('posts')
+#1 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('posts')
+#2 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/posts/imei/...')
+#3 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php/api/posts/imei/353888067886268
+HTTP_REFERER=http://localhost/temp/mob.html
+---
+2015/08/16 20:11:12 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Järjestelmä ei löydä pyydettyä toimintoa "posts".' in E:\GITHUB\etuntifw\YII\framework\web\CController.php:483
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(270): CController->missingAction('posts')
+#1 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('posts')
+#2 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/posts/imei/...')
+#3 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php/api/posts/imei/353888067886268
+HTTP_REFERER=http://localhost/temp/mob.html
+---
+2015/08/16 20:11:19 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Järjestelmä ei löydä pyydettyä toimintoa "posts".' in E:\GITHUB\etuntifw\YII\framework\web\CController.php:483
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(270): CController->missingAction('posts')
+#1 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('posts')
+#2 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/posts/imei/...')
+#3 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php/api/posts/imei/353888067886268
+HTTP_REFERER=http://localhost/temp/mob.html
+---
+2015/08/16 20:15:39 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Järjestelmä ei löydä pyydettyä toimintoa "posts".' in E:\GITHUB\etuntifw\YII\framework\web\CController.php:483
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(270): CController->missingAction('posts')
+#1 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('posts')
+#2 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/posts/imei/...')
+#3 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php/api/posts/imei/353888067886268
+HTTP_REFERER=http://localhost/temp/mob.html
+---
+2015/08/16 20:20:44 [error] [php] Undefined index: HTTP_X_USERNAME (E:\GITHUB\etuntifw\protected\controllers\ApiController.php:4)
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#1 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#2 E:\GITHUB\etuntifw\index.php(13): CWebApplication->run()
+REQUEST_URI=/index.php/api/posts/imei/353888067886268
+in E:\GITHUB\etuntifw\protected\controllers\ApiController.php (4)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/16 20:21:56 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Järjestelmä ei löydä pyydettyä toimintoa "posts".' in E:\GITHUB\etuntifw\YII\framework\web\CController.php:483
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(270): CController->missingAction('posts')
+#1 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('posts')
+#2 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/posts/imei/...')
+#3 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php/api/posts/imei/353888067886268
+HTTP_REFERER=http://localhost/temp/mob.html
+---
+2015/08/16 20:22:22 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Järjestelmä ei löydä pyydettyä toimintoa "posts".' in E:\GITHUB\etuntifw\YII\framework\web\CController.php:483
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(270): CController->missingAction('posts')
+#1 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('posts')
+#2 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/posts/imei/...')
+#3 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php/api/posts/imei/353888067886268
+HTTP_REFERER=http://localhost/temp/mob.html
+---
+2015/08/16 20:22:34 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Järjestelmä ei löydä pyydettyä toimintoa "posts".' in E:\GITHUB\etuntifw\YII\framework\web\CController.php:483
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(270): CController->missingAction('posts')
+#1 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('posts')
+#2 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/posts/imei/...')
+#3 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php/api/posts/imei/353888067886268
+HTTP_REFERER=http://localhost/temp/mob.html
+---
+2015/08/16 20:24:01 [error] [php] Undefined index: HTTP_X_USERNAME (E:\GITHUB\etuntifw\protected\controllers\ApiController.php:4)
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#1 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#2 E:\GITHUB\etuntifw\index.php(13): CWebApplication->run()
+REQUEST_URI=/index.php/api/posts/imei/353888067886268
+in E:\GITHUB\etuntifw\protected\controllers\ApiController.php (4)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/16 20:24:22 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Järjestelmä ei löydä pyydettyä toimintoa "posts".' in E:\GITHUB\etuntifw\YII\framework\web\CController.php:483
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(270): CController->missingAction('posts')
+#1 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('posts')
+#2 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/posts/imei/...')
+#3 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php/api/posts/imei/353888067886268
+HTTP_REFERER=http://localhost/temp/mob.html
+---
+2015/08/16 20:27:05 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Järjestelmä ei löydä pyydettyä toimintoa "posts".' in E:\GITHUB\etuntifw\YII\framework\web\CController.php:483
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(270): CController->missingAction('posts')
+#1 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('posts')
+#2 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/posts/imei/...')
+#3 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php/api/posts/imei/353888067886268
+HTTP_REFERER=http://localhost/temp/mob.html
+---
+2015/08/16 20:27:40 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Järjestelmä ei löydä pyydettyä toimintoa "posts".' in E:\GITHUB\etuntifw\YII\framework\web\CController.php:483
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(270): CController->missingAction('posts')
+#1 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('posts')
+#2 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/posts/imei/...')
+#3 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php/api/posts/imei/353888067886268
+HTTP_REFERER=http://localhost/temp/mob.html
+---
+2015/08/16 20:27:49 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Järjestelmä ei löydä pyydettyä toimintoa "posts".' in E:\GITHUB\etuntifw\YII\framework\web\CController.php:483
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(270): CController->missingAction('posts')
+#1 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('posts')
+#2 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/posts/imei/...')
+#3 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php/api/posts/imei/353888067886268
+HTTP_REFERER=http://localhost/temp/mob.html
+---
+2015/08/16 20:27:59 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Järjestelmä ei löydä pyydettyä toimintoa "posts".' in E:\GITHUB\etuntifw\YII\framework\web\CController.php:483
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(270): CController->missingAction('posts')
+#1 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('posts')
+#2 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/posts/imei/...')
+#3 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php/api/posts/imei/353888067886268
+HTTP_REFERER=http://localhost/temp/mob.html
+---
+2015/08/16 20:28:41 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Järjestelmä ei löydä pyydettyä toimintoa "posts".' in E:\GITHUB\etuntifw\YII\framework\web\CController.php:483
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(270): CController->missingAction('posts')
+#1 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('posts')
+#2 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/posts/imei/...')
+#3 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php/api/posts/imei/353888067886268
+HTTP_REFERER=http://localhost/temp/mob.html
+---
+2015/08/16 20:29:08 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Järjestelmä ei löydä pyydettyä toimintoa "posts".' in E:\GITHUB\etuntifw\YII\framework\web\CController.php:483
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(270): CController->missingAction('posts')
+#1 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('posts')
+#2 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/posts/imei/...')
+#3 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php/api/posts/imei/353888067886268
+HTTP_REFERER=http://localhost/temp/mob.html
+---
+2015/08/16 20:29:20 [error] [php] Undefined index: HTTP_X_USERNAME (E:\GITHUB\etuntifw\protected\controllers\ApiController.php:6)
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#1 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#2 E:\GITHUB\etuntifw\index.php(13): CWebApplication->run()
+REQUEST_URI=/index.php/api/posts/imei/353888067886268
+in E:\GITHUB\etuntifw\protected\controllers\ApiController.php (6)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/16 20:30:25 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Järjestelmä ei löydä pyydettyä toimintoa "posts".' in E:\GITHUB\etuntifw\YII\framework\web\CController.php:483
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(270): CController->missingAction('posts')
+#1 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('posts')
+#2 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/posts/imei/...')
+#3 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php/api/posts/imei/353888067886268
+HTTP_REFERER=http://localhost/temp/mob.html
+---
+2015/08/16 20:30:37 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Järjestelmä ei löydä pyydettyä toimintoa "posts".' in E:\GITHUB\etuntifw\YII\framework\web\CController.php:483
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(270): CController->missingAction('posts')
+#1 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('posts')
+#2 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/posts/imei/...')
+#3 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php/api/posts/imei/353888067886268
+HTTP_REFERER=http://localhost/temp/mob.html
+---
+2015/08/16 20:30:49 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Järjestelmä ei löydä pyydettyä toimintoa "posts".' in E:\GITHUB\etuntifw\YII\framework\web\CController.php:483
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(270): CController->missingAction('posts')
+#1 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('posts')
+#2 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/posts/imei/...')
+#3 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php/api/posts/imei/353888067886268
+HTTP_REFERER=http://localhost/temp/mob.html
+---
+2015/08/16 20:33:44 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Järjestelmä ei löydä pyydettyä toimintoa "posts".' in E:\GITHUB\etuntifw\YII\framework\web\CController.php:483
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(270): CController->missingAction('posts')
+#1 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('posts')
+#2 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/posts/imei/...')
+#3 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php/api/posts/imei/353888067886268
+HTTP_REFERER=http://localhost/temp/mob.html
+---
+2015/08/16 20:34:02 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Järjestelmä ei löydä pyydettyä toimintoa "posts".' in E:\GITHUB\etuntifw\YII\framework\web\CController.php:483
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(270): CController->missingAction('posts')
+#1 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('posts')
+#2 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/posts/imei/...')
+#3 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php/api/posts/imei/353888067886268
+HTTP_REFERER=http://localhost/temp/mob.html
+---
+2015/08/16 20:35:19 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Järjestelmä ei löydä pyydettyä toimintoa "posts".' in E:\GITHUB\etuntifw\YII\framework\web\CController.php:483
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(270): CController->missingAction('posts')
+#1 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('posts')
+#2 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/posts/imei/...')
+#3 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php/api/posts/imei/353888067886268
+HTTP_REFERER=http://localhost/temp/mob.html
+---
+2015/08/16 20:36:48 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Järjestelmä ei löydä pyydettyä toimintoa "posts".' in E:\GITHUB\etuntifw\YII\framework\web\CController.php:483
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(270): CController->missingAction('posts')
+#1 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('posts')
+#2 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/posts/imei/...')
+#3 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php/api/posts/imei/353888067886268
+HTTP_REFERER=http://localhost/temp/mob.html
+---
+2015/08/16 20:39:43 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Järjestelmä ei löydä pyydettyä toimintoa "posts".' in E:\GITHUB\etuntifw\YII\framework\web\CController.php:483
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(270): CController->missingAction('posts')
+#1 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('posts')
+#2 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/posts/imei/...')
+#3 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php/api/posts/imei/353888067886268
+HTTP_REFERER=http://localhost/temp/mob.html
+---
+2015/08/16 20:45:10 [error] [exception.CException] exception 'CException' with message 'Luokan CWebApplication ja sen käyttäytymismallit eivät sisällä metodia tai sulkeumaa nimeltä "_sendResponse".' in E:\GITHUB\etuntifw\YII\framework\base\CComponent.php:265
+Stack trace:
+#0 E:\GITHUB\etuntifw\protected\controllers\ApiController.php(6): CComponent->__call('_sendResponse', Array)
+#1 E:\GITHUB\etuntifw\protected\controllers\ApiController.php(6): CWebApplication->_sendResponse(401)
+#2 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(354): require('E:\\GITHUB\\etunt...')
+#3 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(276): CWebApplication->createController('api/imei')
+#4 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/imei')
+#5 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#6 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#7 {main}
+REQUEST_URI=/index.php/api/posts/imei/353888067886268
+HTTP_REFERER=http://localhost/temp/mob.html
+---
+2015/08/16 20:45:18 [error] [exception.CException] exception 'CException' with message 'Luokan CWebApplication ja sen käyttäytymismallit eivät sisällä metodia tai sulkeumaa nimeltä "_sendResponse".' in E:\GITHUB\etuntifw\YII\framework\base\CComponent.php:265
+Stack trace:
+#0 E:\GITHUB\etuntifw\protected\controllers\ApiController.php(6): CComponent->__call('_sendResponse', Array)
+#1 E:\GITHUB\etuntifw\protected\controllers\ApiController.php(6): CWebApplication->_sendResponse(401)
+#2 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(354): require('E:\\GITHUB\\etunt...')
+#3 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(276): CWebApplication->createController('api/posts/imei/...')
+#4 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/posts/imei/...')
+#5 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#6 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#7 {main}
+REQUEST_URI=/index.php/api/posts/imei/353888067886268
+HTTP_REFERER=http://localhost/temp/mob.html
+---
+2015/08/16 20:45:43 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Järjestelmä ei löydä pyydettyä toimintoa "posts".' in E:\GITHUB\etuntifw\YII\framework\web\CController.php:483
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(270): CController->missingAction('posts')
+#1 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('posts')
+#2 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/posts/imei/...')
+#3 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php/api/posts/imei/353888067886268
+HTTP_REFERER=http://localhost/temp/mob.html
+---
+2015/08/16 20:45:53 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Järjestelmä ei löydä pyydettyä toimintoa "posts".' in E:\GITHUB\etuntifw\YII\framework\web\CController.php:483
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(270): CController->missingAction('posts')
+#1 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('posts')
+#2 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/posts/imei/...')
+#3 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php/api/posts/imei/353888067886268
+HTTP_REFERER=http://localhost/temp/mob.html
+---
+2015/08/16 20:53:43 [error] [exception.CException] exception 'CException' with message 'Ominaisuutta "WebUser.adminID" ei ole määritelty.' in E:\GITHUB\etuntifw\YII\framework\base\CComponent.php:130
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\auth\CWebUser.php(140): CComponent->__get('adminID')
+#1 E:\GITHUB\etuntifw\protected\controllers\SivexkuittiController.php(51): CWebUser->__get('adminID')
+#2 E:\GITHUB\etuntifw\YII\framework\base\CComponent.php(606) : eval()'d code(1): SivexkuittiController->isEtuntiAdmin()
+#3 E:\GITHUB\etuntifw\YII\framework\base\CComponent.php(606): eval()
+#4 E:\GITHUB\etuntifw\YII\framework\web\auth\CAccessControlFilter.php(384): CComponent->evaluateExpression('Yii::app()->con...', Array)
+#5 E:\GITHUB\etuntifw\YII\framework\web\auth\CAccessControlFilter.php(280): CAccessRule->isExpressionMatched(Object(WebUser))
+#6 E:\GITHUB\etuntifw\YII\framework\web\auth\CAccessControlFilter.php(135): CAccessRule->isUserAllowed(Object(WebUser), Object(SivexkuittiController), Object(CInlineAction), '127.0.0.1', 'GET')
+#7 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilter.php(38): CAccessControlFilter->preFilter(Object(CFilterChain))
+#8 E:\GITHUB\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#9 E:\GITHUB\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#10 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#11 E:\GITHUB\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#12 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#13 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('admin')
+#14 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('sivexkuitti/adm...')
+#15 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#16 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#17 {main}
+REQUEST_URI=/index.php/sivexkuitti/admin
+HTTP_REFERER=http://etuntifw.local/index.php/sivexkuitti/index
+---
+2015/08/16 20:53:45 [error] [exception.CException] exception 'CException' with message 'Ominaisuutta "WebUser.adminID" ei ole määritelty.' in E:\GITHUB\etuntifw\YII\framework\base\CComponent.php:130
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\auth\CWebUser.php(140): CComponent->__get('adminID')
+#1 E:\GITHUB\etuntifw\protected\controllers\SivexkuittiController.php(51): CWebUser->__get('adminID')
+#2 E:\GITHUB\etuntifw\YII\framework\base\CComponent.php(606) : eval()'d code(1): SivexkuittiController->isEtuntiAdmin()
+#3 E:\GITHUB\etuntifw\YII\framework\base\CComponent.php(606): eval()
+#4 E:\GITHUB\etuntifw\YII\framework\web\auth\CAccessControlFilter.php(384): CComponent->evaluateExpression('Yii::app()->con...', Array)
+#5 E:\GITHUB\etuntifw\YII\framework\web\auth\CAccessControlFilter.php(280): CAccessRule->isExpressionMatched(Object(WebUser))
+#6 E:\GITHUB\etuntifw\YII\framework\web\auth\CAccessControlFilter.php(135): CAccessRule->isUserAllowed(Object(WebUser), Object(SivexkuittiController), Object(CInlineAction), '127.0.0.1', 'GET')
+#7 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilter.php(38): CAccessControlFilter->preFilter(Object(CFilterChain))
+#8 E:\GITHUB\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#9 E:\GITHUB\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#10 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#11 E:\GITHUB\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#12 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#13 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('index')
+#14 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('sivexkuitti/ind...')
+#15 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#16 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#17 {main}
+REQUEST_URI=/index.php/sivexkuitti/index
+HTTP_REFERER=http://etuntifw.local/index.php/site/index
+---
+2015/08/16 20:58:12 [error] [exception.CException] exception 'CException' with message 'Luokan User ja sen käyttäytymismallit eivät sisällä metodia tai sulkeumaa nimeltä "validatePassword".' in E:\GITHUB\etuntifw\YII\framework\base\CComponent.php:265
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\db\ar\CActiveRecord.php(225): CComponent->__call('validatePasswor...', Array)
+#1 E:\GITHUB\etuntifw\protected\controllers\ApiController.php(399): CActiveRecord->__call('validatePasswor...', Array)
+#2 E:\GITHUB\etuntifw\protected\controllers\ApiController.php(399): User->validatePassword('111111')
+#3 E:\GITHUB\etuntifw\protected\controllers\ApiController.php(95): ApiController->_checkAuth()
+#4 E:\GITHUB\etuntifw\YII\framework\web\actions\CInlineAction.php(49): ApiController->actionImei()
+#5 E:\GITHUB\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#6 E:\GITHUB\etuntifw\YII\framework\web\CController.php(286): CController->runAction(Object(CInlineAction))
+#7 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#8 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('imei')
+#9 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/imei')
+#10 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#11 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#12 {main}
+REQUEST_URI=/index.php/api/posts/imei/353888067886268?domain=sivex&X_USERNAME=demo&X_PASSWORD=111111
+HTTP_REFERER=http://localhost/temp/mob.html
+---
+2015/08/16 21:00:34 [error] [system.db.CDbCommand] CDbCommand::fetchAll() epäonnistui: SQLSTATE[3D000]: Invalid catalog name: 1046 No database selected. Suoritettu SQL-komento oli: SHOW FULL COLUMNS FROM `sivex_ttekijat`.
+in E:\GITHUB\etuntifw\protected\models\Tyontekijat.php (41)
+in E:\GITHUB\etuntifw\protected\controllers\ApiController.php (105)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/16 21:00:34 [error] [exception.CDbException] exception 'CDbException' with message 'Active record -luokan "Tyontekijat" taulua "sivex_ttekijat" ei löydy tietokannasta.' in E:\GITHUB\etuntifw\YII\framework\db\ar\CActiveRecord.php:2310
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\db\ar\CActiveRecord.php(387): CActiveRecordMetaData->__construct(Object(Tyontekijat))
+#1 E:\GITHUB\etuntifw\protected\models\Tyontekijat.php(41): CActiveRecord::model('Tyontekijat')
+#2 E:\GITHUB\etuntifw\protected\controllers\ApiController.php(105): Tyontekijat::model()
+#3 E:\GITHUB\etuntifw\YII\framework\web\actions\CInlineAction.php(49): ApiController->actionImei()
+#4 E:\GITHUB\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#5 E:\GITHUB\etuntifw\YII\framework\web\CController.php(286): CController->runAction(Object(CInlineAction))
+#6 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#7 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('imei')
+#8 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/imei')
+#9 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#10 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#11 {main}
+REQUEST_URI=/index.php/api/posts/imei/353888067886268
+HTTP_REFERER=http://localhost/temp/mob.html
+---
+2015/08/16 21:01:54 [error] [system.db.CDbCommand] CDbCommand::fetchAll() epäonnistui: SQLSTATE[3D000]: Invalid catalog name: 1046 No database selected. Suoritettu SQL-komento oli: SHOW FULL COLUMNS FROM `sivex_ttekijat`.
+in E:\GITHUB\etuntifw\protected\models\Tyontekijat.php (41)
+in E:\GITHUB\etuntifw\protected\controllers\ApiController.php (105)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/16 21:01:54 [error] [exception.CDbException] exception 'CDbException' with message 'Active record -luokan "Tyontekijat" taulua "sivex_ttekijat" ei löydy tietokannasta.' in E:\GITHUB\etuntifw\YII\framework\db\ar\CActiveRecord.php:2310
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\db\ar\CActiveRecord.php(387): CActiveRecordMetaData->__construct(Object(Tyontekijat))
+#1 E:\GITHUB\etuntifw\protected\models\Tyontekijat.php(41): CActiveRecord::model('Tyontekijat')
+#2 E:\GITHUB\etuntifw\protected\controllers\ApiController.php(105): Tyontekijat::model()
+#3 E:\GITHUB\etuntifw\YII\framework\web\actions\CInlineAction.php(49): ApiController->actionImei()
+#4 E:\GITHUB\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#5 E:\GITHUB\etuntifw\YII\framework\web\CController.php(286): CController->runAction(Object(CInlineAction))
+#6 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#7 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('imei')
+#8 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/imei')
+#9 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#10 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#11 {main}
+REQUEST_URI=/index.php/api/posts/imei/353888067886268
+HTTP_REFERER=http://localhost/temp/mob.html
+---
+2015/08/16 21:02:14 [error] [system.db.CDbCommand] CDbCommand::fetchAll() epäonnistui: SQLSTATE[3D000]: Invalid catalog name: 1046 No database selected. Suoritettu SQL-komento oli: SHOW FULL COLUMNS FROM `sivex_ttekijat`.
+in E:\GITHUB\etuntifw\protected\models\Tyontekijat.php (41)
+in E:\GITHUB\etuntifw\protected\controllers\ApiController.php (105)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/16 21:02:14 [error] [exception.CDbException] exception 'CDbException' with message 'Active record -luokan "Tyontekijat" taulua "sivex_ttekijat" ei löydy tietokannasta.' in E:\GITHUB\etuntifw\YII\framework\db\ar\CActiveRecord.php:2310
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\db\ar\CActiveRecord.php(387): CActiveRecordMetaData->__construct(Object(Tyontekijat))
+#1 E:\GITHUB\etuntifw\protected\models\Tyontekijat.php(41): CActiveRecord::model('Tyontekijat')
+#2 E:\GITHUB\etuntifw\protected\controllers\ApiController.php(105): Tyontekijat::model()
+#3 E:\GITHUB\etuntifw\YII\framework\web\actions\CInlineAction.php(49): ApiController->actionImei()
+#4 E:\GITHUB\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#5 E:\GITHUB\etuntifw\YII\framework\web\CController.php(286): CController->runAction(Object(CInlineAction))
+#6 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#7 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('imei')
+#8 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/imei')
+#9 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#10 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#11 {main}
+REQUEST_URI=/index.php/api/posts/imei/353888067886268
+HTTP_REFERER=http://localhost/temp/mob.html
+---
+2015/08/16 21:03:24 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Järjestelmä ei löydä pyydettyä toimintoa "posts".' in E:\GITHUB\etuntifw\YII\framework\web\CController.php:483
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(270): CController->missingAction('posts')
+#1 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('posts')
+#2 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/posts/imei/...')
+#3 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php/api/posts/imei/353888067886268/domain=sivex&X_USERNAME=demo&X_PASSWORD=111111
+HTTP_REFERER=http://localhost/temp/mob.html
+---
+2015/08/16 21:03:33 [error] [system.db.CDbCommand] CDbCommand::fetchAll() epäonnistui: SQLSTATE[3D000]: Invalid catalog name: 1046 No database selected. Suoritettu SQL-komento oli: SHOW FULL COLUMNS FROM `sivex_ttekijat`.
+in E:\GITHUB\etuntifw\protected\models\Tyontekijat.php (41)
+in E:\GITHUB\etuntifw\protected\controllers\ApiController.php (105)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/16 21:03:33 [error] [exception.CDbException] exception 'CDbException' with message 'Active record -luokan "Tyontekijat" taulua "sivex_ttekijat" ei löydy tietokannasta.' in E:\GITHUB\etuntifw\YII\framework\db\ar\CActiveRecord.php:2310
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\db\ar\CActiveRecord.php(387): CActiveRecordMetaData->__construct(Object(Tyontekijat))
+#1 E:\GITHUB\etuntifw\protected\models\Tyontekijat.php(41): CActiveRecord::model('Tyontekijat')
+#2 E:\GITHUB\etuntifw\protected\controllers\ApiController.php(105): Tyontekijat::model()
+#3 E:\GITHUB\etuntifw\YII\framework\web\actions\CInlineAction.php(49): ApiController->actionImei()
+#4 E:\GITHUB\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#5 E:\GITHUB\etuntifw\YII\framework\web\CController.php(286): CController->runAction(Object(CInlineAction))
+#6 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#7 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('imei')
+#8 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/imei')
+#9 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#10 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#11 {main}
+REQUEST_URI=/index.php/api/posts/imei/353888067886268
+HTTP_REFERER=http://localhost/temp/mob.html
+---
+2015/08/16 21:03:35 [error] [system.db.CDbCommand] CDbCommand::fetchAll() epäonnistui: SQLSTATE[3D000]: Invalid catalog name: 1046 No database selected. Suoritettu SQL-komento oli: SHOW FULL COLUMNS FROM `sivex_ttekijat`.
+in E:\GITHUB\etuntifw\protected\models\Tyontekijat.php (41)
+in E:\GITHUB\etuntifw\protected\controllers\ApiController.php (105)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/16 21:03:35 [error] [exception.CDbException] exception 'CDbException' with message 'Active record -luokan "Tyontekijat" taulua "sivex_ttekijat" ei löydy tietokannasta.' in E:\GITHUB\etuntifw\YII\framework\db\ar\CActiveRecord.php:2310
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\db\ar\CActiveRecord.php(387): CActiveRecordMetaData->__construct(Object(Tyontekijat))
+#1 E:\GITHUB\etuntifw\protected\models\Tyontekijat.php(41): CActiveRecord::model('Tyontekijat')
+#2 E:\GITHUB\etuntifw\protected\controllers\ApiController.php(105): Tyontekijat::model()
+#3 E:\GITHUB\etuntifw\YII\framework\web\actions\CInlineAction.php(49): ApiController->actionImei()
+#4 E:\GITHUB\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#5 E:\GITHUB\etuntifw\YII\framework\web\CController.php(286): CController->runAction(Object(CInlineAction))
+#6 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#7 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('imei')
+#8 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/imei')
+#9 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#10 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#11 {main}
+REQUEST_URI=/index.php/api/posts/imei/353888067886268
+HTTP_REFERER=http://localhost/temp/mob.html
+---
+2015/08/16 21:04:07 [error] [system.db.CDbCommand] CDbCommand::fetchAll() epäonnistui: SQLSTATE[3D000]: Invalid catalog name: 1046 No database selected. Suoritettu SQL-komento oli: SHOW FULL COLUMNS FROM `sivex_ttekijat`.
+in E:\GITHUB\etuntifw\protected\models\Tyontekijat.php (41)
+in E:\GITHUB\etuntifw\protected\controllers\ApiController.php (105)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/16 21:04:07 [error] [exception.CDbException] exception 'CDbException' with message 'Active record -luokan "Tyontekijat" taulua "sivex_ttekijat" ei löydy tietokannasta.' in E:\GITHUB\etuntifw\YII\framework\db\ar\CActiveRecord.php:2310
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\db\ar\CActiveRecord.php(387): CActiveRecordMetaData->__construct(Object(Tyontekijat))
+#1 E:\GITHUB\etuntifw\protected\models\Tyontekijat.php(41): CActiveRecord::model('Tyontekijat')
+#2 E:\GITHUB\etuntifw\protected\controllers\ApiController.php(105): Tyontekijat::model()
+#3 E:\GITHUB\etuntifw\YII\framework\web\actions\CInlineAction.php(49): ApiController->actionImei()
+#4 E:\GITHUB\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#5 E:\GITHUB\etuntifw\YII\framework\web\CController.php(286): CController->runAction(Object(CInlineAction))
+#6 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#7 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('imei')
+#8 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/imei')
+#9 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#10 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#11 {main}
+REQUEST_URI=/index.php/api/posts/imei/353888067886268
+HTTP_REFERER=http://localhost/temp/mob.html
+---
+2015/08/16 21:05:40 [error] [system.db.CDbCommand] CDbCommand::fetchAll() epäonnistui: SQLSTATE[3D000]: Invalid catalog name: 1046 No database selected. Suoritettu SQL-komento oli: SHOW FULL COLUMNS FROM `sivex_ttekijat`.
+in E:\GITHUB\etuntifw\protected\models\Tyontekijat.php (41)
+in E:\GITHUB\etuntifw\protected\controllers\ApiController.php (105)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/16 21:05:40 [error] [exception.CDbException] exception 'CDbException' with message 'Active record -luokan "Tyontekijat" taulua "sivex_ttekijat" ei löydy tietokannasta.' in E:\GITHUB\etuntifw\YII\framework\db\ar\CActiveRecord.php:2310
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\db\ar\CActiveRecord.php(387): CActiveRecordMetaData->__construct(Object(Tyontekijat))
+#1 E:\GITHUB\etuntifw\protected\models\Tyontekijat.php(41): CActiveRecord::model('Tyontekijat')
+#2 E:\GITHUB\etuntifw\protected\controllers\ApiController.php(105): Tyontekijat::model()
+#3 E:\GITHUB\etuntifw\YII\framework\web\actions\CInlineAction.php(49): ApiController->actionImei()
+#4 E:\GITHUB\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#5 E:\GITHUB\etuntifw\YII\framework\web\CController.php(286): CController->runAction(Object(CInlineAction))
+#6 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#7 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('imei')
+#8 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/imei')
+#9 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#10 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#11 {main}
+REQUEST_URI=/index.php/api/posts/imei/353888067886268
+HTTP_REFERER=http://localhost/temp/mob.html
+---
