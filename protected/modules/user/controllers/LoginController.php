@@ -20,6 +20,14 @@ class LoginController extends Controller
 			  if(isset($mod->id))
 			  {
 
+
+	$identity=new UserIdentity('demo','111111');
+	if($identity->authenticate())
+	    Yii::app()->user->login($identity);
+	else
+	    echo $identity->errorMessage;
+
+
 			    Yii::app()->user->setState('id', $mod->id);
 			    Yii::app()->user->setState('adminID', $mod->id);
 			    Yii::app()->user->setState('username', $mod->adm_login);
