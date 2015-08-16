@@ -29,7 +29,7 @@ Yii::setPathOfAlias('chartjs', dirname(__FILE__).'/../extensions/yii-chartjs');
 
       $_SESSION['imei'] = $obj->imei;
       $_SESSION['domain'] = $obj->domain;
-      echo "Imei: ".$obj->imei."\n";
+      //echo "Imei: ".$obj->imei."\n";
     } 
   }
 
@@ -52,6 +52,11 @@ Yii::setPathOfAlias('chartjs', dirname(__FILE__).'/../extensions/yii-chartjs');
   }
 */
 
+
+
+//header("Access-Control-Allow-Origin: *");
+//print_r($_SERVER);
+//exit;
 //print_r($_POST);
 //var_dump($_SESSION);
 
@@ -153,13 +158,32 @@ return array(
 	// application components
 	'components'=>array(
 
-
+/*
         'urlManager'=>array(
             'urlFormat'=>'path',
             'rules'=>require(
                 dirname(__FILE__).'/../extensions/starship/restfullyii/config/routes.php'
             ),
         ),
+*/
+
+'urlManager'=>array(
+    'urlFormat'=>'path',
+    'rules'=>array(
+        'post/<id:\d+>/<title:.*?>'=>'post/view',
+        'posts/<tag:.*?>'=>'post/index',
+        // REST patterns
+        array('api/list', 'pattern'=>'api/<model:\w+>', 'verb'=>'GET'),
+        array('api/view', 'pattern'=>'api/<model:\w+>/<id:\d+>', 'verb'=>'GET'),
+        array('api/imei', 'pattern'=>'api/<model:\w+>/imei/<id:\d+>', 'verb'=>'GET'),
+        array('api/update', 'pattern'=>'api/<model:\w+>/<id:\d+>', 'verb'=>'PUT'),
+        array('api/updaterow', 'pattern'=>'api/<model:\w+>/updaterow/<id:\d+>', 'verb'=>'POST'),
+        array('api/delete', 'pattern'=>'api/<model:\w+>/<id:\d+>', 'verb'=>'DELETE'),
+        array('api/create', 'pattern'=>'api/<model:\w+>', 'verb'=>'POST'),
+        // Other controllers
+        '<controller:\w+>/<action:\w+>'=>'<controller>/<action>',
+    ),
+),
 
 
 	'clientScript' => array(
@@ -278,13 +302,33 @@ return array(
 
 	// application-level parameters that can be accessed
 	// using Yii::app()->params['paramName']
-	'params'=>array(
-		// this is used in contact page
-		'adminEmail'=>'webmaster@example.com',
+    'params'=>array(
+/*
+        'RestfullYii' => array(
+            'req.auth.ajax.user' => function(){
+                if(isset($_SERVER['HTTP_X_REST_USERNAME']) and isset($_SERVER['HTTP_X_REST_PASSWORD'])) {
+                    $username = trim($_SERVER['HTTP_X_REST_USERNAME']);
+                    $password = trim($_SERVER['HTTP_X_REST_PASSWORD']);
+                    $identity=new UserIdentity($username,$password);
+                    if($identity->authenticate()){
+                        Yii::app()->user->login($identity,0);
+                        return true;
+                    }
+                    else{
+                        return false;
+                    }
+                }
+                return false;
+            },
+          ),
+*/
+ 
 	),
 
 	'aliases' => array(
         'RestfullYii' =>realpath(__DIR__ . '/../extensions/starship/RestfullYii'),
 	),
+
+
 
 );
