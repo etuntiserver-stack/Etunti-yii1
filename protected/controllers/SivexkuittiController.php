@@ -18,13 +18,7 @@ class SivexkuittiController extends Controller
 	{
 		return array(
 			'accessControl', // perform access control for CRUD operations
-			//'postOnly + delete', // we only allow deletion via POST request
-
-        	array(
-        	        'ext.starship.RestfullYii.filters.ERestFilter + 
-	                REST.GET, REST.PUT, REST.POST, REST.DELETE'
-            		),
-       
+			'postOnly + delete', // we only allow deletion via POST request
 		);
 	}
 
@@ -43,51 +37,14 @@ class SivexkuittiController extends Controller
 				'actions'=>array('admin','delete','create','update','index','view','updatetime'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
-
-            		array('allow', 'actions'=>array('REST.GET', 'REST.PUT', 'REST.POST'), //'REST.DELETE'
-                		//'expression'=>"Yii::app()->controller->imeiCheck()",
-				'users'=>array('*'),
-            		),
-            		array('deny', 'actions'=>array('REST.GET', 'REST.PUT', 'REST.POST', 'REST.DELETE'),
-                		'message' => Yii::t('main', 'Imei error'),
-            		),
-
 			array('deny',  // deny all users
 				'users'=>array('*'),
 			),
 		);
 	}
 
-	public function actions()
-	{
-
-	header("Access-Control-Allow-Origin: *");
 
 
-	$identity=new UserIdentity('demo','111111');
-	if($identity->authenticate())
-	    Yii::app()->user->login($identity);
-	else
-	    echo $identity->errorMessage;
-
-	        return array(
-	            'REST.'=>'ext.starship.RestfullYii.actions.ERestActionProvider',
-	        );
-
-
-	}
-
-
-	public function imeiCheck() {
-
-		if(isset($_SESSION['imei']))
-		$m = Tyontekijat::model()->find(" imei = '".$_SESSION['imei']."' ");
-
-	        if(isset($m->imei) and $m->imei == $_SESSION['imei'])
-	            return true;
-		else
-	            return false;
-	}
 
 	public function isEtuntiAdmin() {
 

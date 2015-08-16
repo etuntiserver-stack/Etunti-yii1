@@ -40,33 +40,36 @@ class MobController extends Controller
 		return array(
 
 
-            		array('allow', 'actions'=>array('REST.GET', 'REST.PUT', 'REST.POST'), //'REST.DELETE'
+            		array('allow', 'actions'=>array('REST.GET', 'REST.PUT', 'REST.POST', 'REST.DELETE'), //'REST.DELETE'
                 		//'expression'=>"Yii::app()->controller->imeiCheck()",
 				'users'=>array('*'),
             		),
+			/*
             		array('deny', 'actions'=>array('REST.GET', 'REST.PUT', 'REST.POST', 'REST.DELETE'),
                 		'message' => Yii::t('main', 'Imei error'),
             		),
-
+			*/
 			array('deny',  // deny all users
 				'users'=>array('*'),
 			),
 		);
 	}
 
+
 	public function actions()
 	{
 
 	header("Access-Control-Allow-Origin: *");
 
-
+/*
 	$identity=new UserIdentity('demo','111111');
 	if($identity->authenticate())
 	    Yii::app()->user->login($identity);
 	else
 	    echo $identity->errorMessage;
-
+*/
 	//print_r($_POST);
+
 
 	        return array(
 	            'REST.'=>'ext.starship.RestfullYii.actions.ERestActionProvider',
@@ -74,6 +77,8 @@ class MobController extends Controller
 
 
 	}
+
+
 
 
 	public function imeiCheck() {
