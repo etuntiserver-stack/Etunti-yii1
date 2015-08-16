@@ -45,8 +45,9 @@ $('.search-form form').submit(function(){
 		'id',
 		'asiakas_num',
 		'time',
-		'requests',
-		'puh_numero',
+		'aloitan',
+		'loppui',
+		'status',
 		'imei',
 		/*
 		'bluetooth_name',

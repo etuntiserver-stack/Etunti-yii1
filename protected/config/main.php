@@ -52,7 +52,7 @@ Yii::setPathOfAlias('chartjs', dirname(__FILE__).'/../extensions/yii-chartjs');
   }
 */
 
-print_r($_POST);
+//print_r($_POST);
 //var_dump($_SESSION);
 
 
