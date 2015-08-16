@@ -1,6 +1,11 @@
 <?php
 	header("Access-Control-Allow-Origin: *");
 
+
+
+//echo $_SERVER['HTTP_X_USERNAME'];
+//var_dump($_GET);
+
 class ApiController extends Controller
 {
     // Members
@@ -57,6 +62,7 @@ class ApiController extends Controller
 
 public function actionView()
 {
+/*
     // Check if id was submitted via GET
     if(!isset($_GET['id']))
         $this->_sendResponse(500, 'Error: Parameter <b>id</b> is missing' );
@@ -79,11 +85,15 @@ public function actionView()
     } else {
         $this->_sendResponse(200, CJSON::encode($model));
     }
+*/
 }
 
 
 public function actionImei()
 {
+
+//$this->_checkAuth();
+
     // Check if id was submitted via GET
     if(!isset($_GET['id']))
         $this->_sendResponse(500, 'Error: Parameter <b>id</b> is missing' );
@@ -121,6 +131,7 @@ public function actionImei()
 
 public function actionCreate()
 {
+
     switch($_GET['model'])
     {
         // Get an instance of the respective model
@@ -166,6 +177,7 @@ public function actionCreate()
 
 public function actionUpdate()
 {
+/*
     // Parse the PUT parameters. This didn't work: parse_str(file_get_contents('php://input'), $put_vars);
     $json = file_get_contents('php://input'); //$GLOBALS['HTTP_RAW_POST_DATA'] is not preferred: http://www.php.net/manual/en/ini.core.php#ini.always-populate-raw-post-data
     $put_vars = CJSON::decode($json,true);  //true means use associative array
@@ -207,6 +219,7 @@ public function actionUpdate()
         // see actionCreate
         // ...
         $this->_sendResponse(500, $msg );
+*/
 }
 
 
@@ -370,6 +383,25 @@ private function _getStatusCodeMessage($status)
 
 private function _checkAuth()
 {
+
+
+    if(!(isset($_GET['X_USERNAME']) and isset($_GET['X_PASSWORD']))) {
+        // Error: Unauthorized
+        $this->_sendResponse(401);
+    }
+    $username = $_GET['X_USERNAME'];
+    $password = $_GET['X_PASSWORD'];
+    // Find the user
+    $user=User::model()->find('LOWER(username)=?',array(strtolower($username)));
+    if($user===null) {
+        // Error: Unauthorized
+        $this->_sendResponse(401, 'Error: User Name is invalid');
+    } else if(!$user->validatePassword($password)) {
+        // Error: Unauthorized
+        $this->_sendResponse(401, 'Error: User Password is invalid');
+    }
+
+/*
     // Check if we have the USERNAME and PASSWORD HTTP headers set?
     if(!(isset($_SERVER['HTTP_X_USERNAME']) and isset($_SERVER['HTTP_X_PASSWORD']))) {
         // Error: Unauthorized
@@ -386,6 +418,7 @@ private function _checkAuth()
         // Error: Unauthorized
         $this->_sendResponse(401, 'Error: User Password is invalid');
     }
+*/
 }
 
 
