@@ -44,9 +44,8 @@ class SivexkuittiController extends Controller
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 
-            		array('allow', 'actions'=>array('REST.GET', 'REST.PUT', 'REST.POST', 'REST.DELETE'),
-                		//'expression'=>"Yii::app()->controller->imeiCheck()",
-				'users'=>array('*'),
+            		array('allow', 'actions'=>array('REST.GET', 'REST.PUT', 'REST.POST'), //'REST.DELETE'
+                		'expression'=>"Yii::app()->controller->imeiCheck()",
             		),
             		array('deny', 'actions'=>array('REST.GET', 'REST.PUT', 'REST.POST', 'REST.DELETE'),
                 		'message' => Yii::t('main', 'Imei error'),
