@@ -71,8 +71,8 @@ class TyovuorootController extends Controller
 		if(isset($_POST['Tyovuoroot']))
 		{
 			$model->attributes=$_POST['Tyovuoroot'];
-			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+			$model->save();
+				//$this->redirect(array('view','id'=>$model->id));
 		}
 
 		$this->render('create',array(
@@ -87,6 +87,22 @@ class TyovuorootController extends Controller
 	 */
 	public function actionUpdate($id)
 	{
+
+	?>
+	<div class="modal-dialog modal-lg">
+	    <div class="modal-content">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
+		<h2 class="modal-title"><?php echo Yii::t('main', 'Työvuoroon suunnittelu'); ?></h2>
+	
+		</div>
+		<div class="modal-body">
+
+	<div class="dialogTable clearfix modal-osio">
+	<?php
+
 		$model=$this->loadModel($id);
 
 		// Uncomment the following line if AJAX validation is needed
@@ -94,14 +110,53 @@ class TyovuorootController extends Controller
 
 		if(isset($_POST['Tyovuoroot']))
 		{
+			$_POST['Tyovuoroot']['pvm'] = date("d.m.Y",strtotime($_POST['Tyovuoroot']['pvm']));
 			$model->attributes=$_POST['Tyovuoroot'];
-			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+			$model->save();
 		}
 
-		$this->render('update',array(
+		$this->renderPartial('update',array(
 			'model'=>$model,
 		));
+	?>
+	</div>
+	</div> <!-- end modal-body -->
+	
+
+
+	<script type="text/javascript">
+	$(document).ready(function(){
+
+	$('.submitThis').click(function(){
+		$('#tyovuoroot-form').submit();
+	});
+
+	$('#tyovuoroot-form').on('submit',function(e) {
+
+	console.log( $( this ).serializeArray() );
+	console.log( e.target[0].value );
+
+	  $.ajax({
+		  url:'update?id='+e.target[0].value,
+		  data:$(this).serialize(),
+		  type:'POST',
+		  success:function(data){
+			  console.log(data);
+			//alert(data)
+			$('#showres').modal('hide');
+		return false;
+	},
+	error:function(data){
+	console.log(data);
+	}
+	});
+	e.preventDefault(); 
+	});
+
+
+	});
+	</script>
+	<?php
 	}
 
 	/**

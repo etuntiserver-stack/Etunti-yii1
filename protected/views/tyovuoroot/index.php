@@ -2,13 +2,16 @@
 /* @var $this TyovuorootController */
 /* @var $dataProvider CActiveDataProvider */
 
-$this->breadcrumbs=array(
-	Yii::t('main', 'Työvuoroot'),
-);
+  if(Yii::app()->request->getPost('etsi_month') == 'kaikki')
+    unset(Yii::app()->session['etsi_month']);
+  if(Yii::app()->request->getPost('etsi_month') and Yii::app()->request->getPost('etsi_month') != 'kaikki')
+  {
+    Yii::app()->session['etsi_month'] = Yii::app()->request->getPost('etsi_month');
+  }
 
 
-Yii::app()->session['from'] = '01.07.2015';
-Yii::app()->session['to'] = '01.08.2015';
+$from = date("d.m.Y",strtotime(Yii::app()->session['etsi_month']));
+$to = date("d.m.Y",strtotime(Yii::app()->session['etsi_month']." +1 month"));
 
 function dateDiff($start, $end) {
   $start_ts = strtotime($start);
@@ -16,14 +19,17 @@ function dateDiff($start, $end) {
   $diff = $end_ts - $start_ts;
   return round($diff / 86400);
 }
-	$dateDiff = dateDiff(Yii::app()->session['from'], Yii::app()->session['to']);
+	$dateDiff = dateDiff($from, $to);
 
 ?>
 
 
-
-
-
+<div class="row">
+  <div class="row col-sm-2">
+   <input type="month" class="btn btn-info form-control etsi_month" value="<?php echo Yii::app()->session['etsi_month']; ?>">
+  </div>
+</div>
+<br>
 <div class="row tvuoro">
   <table class="table table-striped table-condensed table-bordered">
      <thead>
@@ -42,18 +48,24 @@ function dateDiff($start, $end) {
      </thead>
      <tbody>
         <?php
+	$arrDate = array(1=>"Ma",2=>"Ti",3=>"Ke",4=>"To",5=>"Pe",6=>"La",7=>"Su");
     	for ($i = 0; $i <= $dateDiff; $i++) {
 
 	$plus = "+$i day";
-	$date = date("d.m.Y",strtotime(Yii::app()->session['from']." ".$plus));
+	$date = date("d.m.Y",strtotime($from." ".$plus));
+
+	$columnDate = date("N/d.m",strtotime($date));
+	$explColDate = explode("/",$columnDate);
 
   	echo '<tr>';
-  	echo '<td class="fixed-column">'.$i.'</td>';
+  	echo '<td class="fixed-column"><b>'.$arrDate[$explColDate[0]].", ".$explColDate[1].'</b></td>';
 
 	foreach($tt as $t){
 	  echo '<td><div class="small" style="white-space: nowrap;width:200px;min-height:70px">';
-		$tv = Tyovuoroot::model()->find("tid = '".$t->id."' and pvm = '".$date."' ",array('select'=>'kohde')); 
-		$k = Kohteet::model()->findbypk($tv['kohde']);
+		$tv = Tyovuoroot::model()->findAll("tid = '".$t->id."' and pvm = '".$date."' ",array('select'=>'kohde')); 
+		foreach($tv as $tvVal)
+		{
+		$k = Kohteet::model()->findbypk($tvVal->kohde);
 
 	  	    $strlen = strlen($k['osoite']);
 
@@ -62,12 +74,13 @@ function dateDiff($start, $end) {
 	   	  else
 		    $k['osoite'] = $k['osoite'];
 
-		  if($tv['alku'] > 0 and $tv['loppu'] > 0)
-		    $al = $tv['alku'].'-'.$tv['loppu'];
+		  if($tvVal->alku > 0 and $tvVal->loppu > 0)
+		    $al = $tvVal->alku.'-'.$tvVal->loppu;
 		  else
 		    $al = '';
 
-		  echo '<a href="#" class="link">'.$al.' '.$k['osoite'].'</a>';
+		  echo '<a href="#" class="link tv_edit" tvid="'.$tvVal->id.'">'.$al.' '.$k['osoite'].'</a><br>';
+		}
 
 	  echo '</div></td>';
 	}
@@ -81,7 +94,8 @@ function dateDiff($start, $end) {
   </table>
 </div>
 
-<?php Yii::app()->clientScript->registerPackage('fixedTable'); ?>
+	<div id="showres" class="modal fade" tabindex="-1" role="dialog"></div>
+	<?php Yii::app()->clientScript->registerPackage('fixedTable'); ?>
 
 <script type="text/javascript">
 $(document).ready(function(){
@@ -108,7 +122,7 @@ $(function () {
 
     var onResize = function () {
         var oSettings = dataTable.fnSettings();
-        oSettings.oScroll.sY = tableHeight()-200; 
+        oSettings.oScroll.sY = tableHeight()-230; 
         dataTable.fnDraw();
     };
 
@@ -123,6 +137,38 @@ $(function () {
     });
 
     $(window).resize(onResize);
+});
+
+
+
+$(".etsi_month").on('change', function() {
+	var thisVal = $(this).val();
+	if(!thisVal)
+	var thisVal = 'kaikki';
+
+        $.ajax({
+           url: "index",
+	   type:'POST',
+	   data: { "etsi_month" : thisVal },
+           success: function(html){
+		window.location.reload();
+           }
+        });
+});
+
+$(".tv_edit").click(function(){
+
+	var thisVal = $(this).attr("tvid");
+
+        $.ajax({
+           url: 'update?id='+thisVal,
+           type: "GET",
+           //data: {"tarjousPainike" : "true"},
+           success: function(html){
+		$('#showres').modal().html(html);
+           }
+        });
+
 });
 
 });
