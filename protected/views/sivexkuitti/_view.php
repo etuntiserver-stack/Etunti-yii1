@@ -52,9 +52,32 @@ else
 	<td><?php echo CHtml::link(CHtml::encode($data->id), array('update', 'id'=>$data->id)); ?></td>
 	<td><b><?php echo CHtml::encode(date("d.m",strtotime($data->aloitan))); ?></b></td>
 	<td><?php echo CHtml::encode($data->tekijan_nimi); ?></td>
-	<td><?php echo CHtml::encode($data->kohde_kannasta); ?></td>		
-	<td width="1"><?php echo '<input type="datetime-local" class="pvmupdate btn btn-sm btn-default" request="aloitan" status="'.$data->status.'" id="al_'.$data->id.'" value="'.$apvm[$data->id].'T'.$at[$data->id].'">'; ?></td>
-	<td width="1"><?php echo '<input type="datetime-local" class="pvmupdate btn btn-sm btn-default" request="loppui" status="'.$data->status.'" id="lp_'.$data->id.'" value="'.$lpvm[$data->id].'T'.$lt[$data->id].'">'; ?></td>
+	<td><?php echo CHtml::encode($data->kohde_kannasta); ?></td>
+		
+	<td width="1">
+	<div class="row">
+	 <div class="col-sm-3">
+	  <div class="btn btn-default" data-toggle="collapse" data-target="<?php echo '#alshow_'.$data->id; ?>"><?php echo $at[$data->id]; ?> <b class="caret"></b></div>
+	  <div class="row collapse col-sm-3" id="<?php echo 'alshow_'.$data->id; ?>">
+	  <br>
+	     <?php echo '<input type="datetime-local" class="pvmupdate btn btn-sm btn-default" request="aloitan" status="'.$data->status.'" id="al_'.$data->id.'" value="'.$apvm[$data->id].'T'.$at[$data->id].'">'; ?>
+	  </div>
+	 </div>
+	</div>
+	</td>
+
+	<td width="1">
+	<div class="row">
+	 <div class="col-sm-3">
+	  <div class="btn btn-default" data-toggle="collapse" data-target="<?php echo '#ltshow_'.$data->id; ?>"><?php echo $lt[$data->id]; ?> <b class="caret"></b></div>
+	  <div class="row collapse col-sm-3" id="<?php echo 'ltshow_'.$data->id; ?>">
+	  <br>
+	     <?php echo '<input type="datetime-local" class="pvmupdate btn btn-sm btn-default" request="loppui" status="'.$data->status.'" id="lt_'.$data->id.'" value="'.$lpvm[$data->id].'T'.$lt[$data->id].'">'; ?>
+	  </div>
+	 </div>
+	</div>
+	</td>
+
 	<td><?php echo sprint($kesto[$data->id]); ?></td>
 </tr>
 

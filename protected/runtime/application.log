@@ -1471,3 +1471,6 @@ Stack trace:
 REQUEST_URI=/index.php/user/login
 HTTP_REFERER=http://etuntifw.local/index.php/user/login
 ---
+2015/08/17 10:52:00 [warning] [application] Ei voitu asettaa "Sivexkuitti"-luokan turvatonta attribuuttia "tietoja".
+in C:\xampp\htdocs\etuntifw\protected\controllers\SivexkuittiController.php (121)
+in C:\xampp\htdocs\etuntifw\index.php (13)
