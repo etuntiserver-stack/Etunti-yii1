@@ -18,8 +18,6 @@ $to = date("d.m.Y",strtotime(Yii::app()->session['etsi_month']." +1 month"));
 if(!isset($from) or empty($from))
 exit;
 
-echo Yii::app()->session['etsi_month'];
-exit;
 
 function dateDiff($start, $end) {
   $start_ts = strtotime($start);
