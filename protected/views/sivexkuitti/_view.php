@@ -52,12 +52,16 @@ else
  	{
 	  $su = Tyovuoroot::model()->findAll(" tid='".$data->tid."' and pvm='".$apvmForSu[$data->id]."' ");
 	    $objcts = '';
+	    $osoite = '';
 	    $obtrue = false;
      	  foreach($su as $ob)
 	  {
-	     $k = Kohteet::model()->findbypk($ob->kohde);
+	    $k = Kohteet::model()->findbypk($ob->kohde);
+	    if(isset($k->osoite))
+	    $osoite = $k->osoite;
+
 	    $obtrue = true;
-	    $objcts .=  $ob->alku."-".$ob->loppu." ".$k->osoite."<br>";
+	    $objcts .=  $ob->alku."-".$ob->loppu." ".$osoite."<br>";
 	  }
 	}
 ?>
