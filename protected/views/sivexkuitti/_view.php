@@ -14,9 +14,11 @@ else
 if(!empty($data->aloitan)){
  $at[$data->id] = date("H:i",strtotime($data->aloitan));
  $apvm[$data->id] = date("Y-m-d",strtotime($data->aloitan));
+ $apvmForSu[$data->id] = date("d.m.Y",strtotime($data->aloitan));
 } else {
  $at[$data->id] = '';
  $apvm[$data->id] = '';
+ $apvmForSu[$data->id] = '';
 }
 
 if(!empty($data->loppui)){
@@ -45,6 +47,19 @@ else
 	$door = " <img src='".Yii::app()->request->baseUrl."/img/virhe.png' alt='virhe' height='40' />";
 	else
 	$door = "";
+
+	if(Yii::app()->user->adminPaketti == '2' and isset($data->tid) and !empty($apvmForSu[$data->id]))
+ 	{
+	  $su = Tyovuoroot::model()->findAll(" tid='".$data->tid."' and pvm='".$apvmForSu[$data->id]."' ");
+	    $objcts = '';
+	    $obtrue = false;
+     	  foreach($su as $ob)
+	  {
+	     $k = Kohteet::model()->findbypk($ob->kohde);
+	    $obtrue = true;
+	    $objcts .=  $ob->alku."-".$ob->loppu." ".$k->osoite."<br>";
+	  }
+	}
 ?>
 
 <tr>
@@ -54,11 +69,29 @@ else
 	<td><?php echo CHtml::encode($data->tekijan_nimi); ?></td>
 	<td><?php echo CHtml::encode($data->kohde_kannasta); ?></td>
 		
+	<?php if(Yii::app()->user->adminPaketti == '2') : ?>
+	<td width="1">
+	<?php if($obtrue) : ?>
+	<div class="row">
+	 <div class="col-sm-3">
+	  <div class="btn btn-info" data-toggle="collapse" data-target="<?php echo '#sushow_'.$data->id; ?>"><?php echo Yii::t('main', 'suunniteltu'); ?> <b class="caret"></b></div>
+	  <div style="position:absolute;width:300px;z-index: 99999999;" class="collapse" id="<?php echo 'sushow_'.$data->id; ?>">
+	  <br>
+	    <div class="alert alert-info" style="">
+	      <?php  echo $objcts; ?>
+	    </div>
+	  </div>
+	 </div>
+	</div>
+	<?php endif; ?>
+	</td>
+	<?php endif; ?>
+
 	<td width="1">
 	<div class="row">
 	 <div class="col-sm-3">
 	  <div class="btn btn-default" data-toggle="collapse" data-target="<?php echo '#alshow_'.$data->id; ?>"><?php echo $at[$data->id]; ?> <b class="caret"></b></div>
-	  <div class="row collapse col-sm-3" id="<?php echo 'alshow_'.$data->id; ?>">
+	  <div class="row collapse col-sm-4" id="<?php echo 'alshow_'.$data->id; ?>">
 	  <br>
 	     <?php echo '<input type="datetime-local" class="pvmupdate btn btn-sm btn-default" request="aloitan" status="'.$data->status.'" id="al_'.$data->id.'" value="'.$apvm[$data->id].'T'.$at[$data->id].'">'; ?>
 	  </div>
@@ -70,7 +103,7 @@ else
 	<div class="row">
 	 <div class="col-sm-3">
 	  <div class="btn btn-default" data-toggle="collapse" data-target="<?php echo '#ltshow_'.$data->id; ?>"><?php echo $lt[$data->id]; ?> <b class="caret"></b></div>
-	  <div class="row collapse col-sm-3" id="<?php echo 'ltshow_'.$data->id; ?>">
+	  <div class="row collapse col-sm-4" id="<?php echo 'ltshow_'.$data->id; ?>">
 	  <br>
 	     <?php echo '<input type="datetime-local" class="pvmupdate btn btn-sm btn-default" request="loppui" status="'.$data->status.'" id="lt_'.$data->id.'" value="'.$lpvm[$data->id].'T'.$lt[$data->id].'">'; ?>
 	  </div>

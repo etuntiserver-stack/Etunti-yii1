@@ -36,7 +36,7 @@ class LoginController extends Controller
 
 			    $domainit=Domainit::model()->find(" domain = '".$_POST['UserLogin']['domain']."' ");
 			    if(isset($domainit->paketti))
-			    Yii::app()->user->setState('adminPaketti', $domainit->id);
+			    Yii::app()->user->setState('adminPaketti', $domainit->paketti);
 
 			    $this->redirect("/index.php/sivexkuitti/index");
 			  } else {

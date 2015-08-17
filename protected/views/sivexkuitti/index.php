@@ -70,6 +70,11 @@ $this->menu=array(
   <th><?php echo Yii::t('main', 'Päivä'); ?></th>
   <th><?php echo Yii::t('main', 'Työntekijä'); ?></th>
   <th><?php echo Yii::t('main', 'Osoite/Matka'); ?></th>
+
+  <?php if(Yii::app()->user->adminPaketti == '2') : ?>
+  <th><?php echo Yii::t('main', 'Suunniteltu'); ?></th>
+  <?php endif; ?>
+
   <th><?php echo Yii::t('main', 'Aloitus'); ?></th>
   <th><?php echo Yii::t('main', 'Lopetus'); ?></th>
   <th><?php echo Yii::t('main', 'Kesto'); ?></th>
