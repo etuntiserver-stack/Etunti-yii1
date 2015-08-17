@@ -13,7 +13,7 @@ $this->menu=array(
 );
 ?>
 
-<h1><?php echo Yii::t('main', 'Luetut kohteet'); ?></h1>
+<h1><?php echo Yii::t('main', 'Mobiili'); ?></h1>
 
 
 <div class="row">
@@ -69,15 +69,16 @@ $this->menu=array(
   <th><?php echo Yii::t('main', 'ID'); ?></th>
   <th><?php echo Yii::t('main', 'Päivä'); ?></th>
   <th><?php echo Yii::t('main', 'Työntekijä'); ?></th>
-  <th><?php echo Yii::t('main', 'Osoite/Matka'); ?></th>
+  <th class="col-sm-3"><?php echo Yii::t('main', 'Osoite/Matka'); ?></th>
 
   <?php if(Yii::app()->user->adminPaketti == '2') : ?>
-  <th><?php echo Yii::t('main', 'Suunniteltu'); ?></th>
+  <th><?php echo Yii::t('main', 'Työvuoroot'); ?></th>
   <?php endif; ?>
 
   <th><?php echo Yii::t('main', 'Aloitus'); ?></th>
   <th><?php echo Yii::t('main', 'Lopetus'); ?></th>
   <th><?php echo Yii::t('main', 'Kesto'); ?></th>
+  <th><center><?php echo Yii::t('main', 'M'); ?></center></th>
   </tr>
   </thead>
 
@@ -129,6 +130,23 @@ $(".pvmupdate").blur(function(){
            data: { "id" : thisID, "request" : request, "value" : thisVal, "status" : status },
            success: function(html){
 		$('#'+thisID[0]+'_'+thisID[1]).removeClass("btn-default").addClass("btn-success");
+           }
+        });
+
+});
+
+$(".openkohde").click(function(){
+
+	var thisID = $(this).attr("id");
+	var forid = $(this).attr("for");
+	var riviid = $(this).attr("for").split("_");
+	
+        $.ajax({
+           url: 'showkohteet/',
+           type: "POST",
+           data: { "id" : riviid[1], "thisID" : thisID },
+           success: function(html){
+		$('#'+forid).html(html);
            }
         });
 

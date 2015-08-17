@@ -84,10 +84,11 @@ Yii::app()->clientScript->registerPackage('bootstrapCSS');
 	<?php endif; */ ?>
 
 	<?php if(isset(Yii::app()->user->adminID)) : ?>
-        <li><?php echo CHtml::link(Yii::t('main', 'Luetut kohteet'),array('/sivexkuitti/index')); ?></li>
+        <li><?php echo CHtml::link(Yii::t('main', 'Mobiili'),array('/sivexkuitti/index')); ?></li>
         <li><?php echo CHtml::link(Yii::t('main', 'Työntekijät'),array('/tyontekijat/admin')); ?></li>
         <li><?php echo CHtml::link(Yii::t('main', 'Kohteet'),array('/kohteet/admin')); ?></li>
         <li><?php echo CHtml::link(Yii::t('main', 'Työvuoroot'),array('/tyovuoroot/index')); ?></li>
+        <li><?php echo CHtml::link(Yii::t('main', 'Järjestelmänvalvojat'),array('/administrators/admin')); ?></li>
 	<?php endif; ?>
 
       </ul>
@@ -95,8 +96,8 @@ Yii::app()->clientScript->registerPackage('bootstrapCSS');
       <ul class="nav navbar-nav navbar-right">
 
 	    <?php 
-	    if(isset(Yii::app()->user->adminPaketti)) {
-     	    $d = Domainit::model()->findbypk(Yii::app()->user->adminPaketti);
+	    if(isset(Yii::app()->user->domain)) {
+     	    $d = Domainit::model()->find("domain='".Yii::app()->user->domain."'");
             echo '<li><a href="#">'.$d->yritys.': '.$d->pakettin_nimetus.'</a></li>';
 	    } 
 	    ?>

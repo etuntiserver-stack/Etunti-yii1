@@ -3,13 +3,13 @@
 /* @var $model Administrators */
 
 $this->breadcrumbs=array(
-	'Administrators'=>array('index'),
-	'Manage',
+	Yii::t('main', 'Järjestelmänvalvojat')=>array('index'),
+	Yii::t('main', 'Hallinta'),
 );
 
 $this->menu=array(
-	array('label'=>'List Administrators', 'url'=>array('index')),
-	array('label'=>'Create Administrators', 'url'=>array('create')),
+	array('label'=>Yii::t('main', 'Järjestelmänvalvoja lista'), 'url'=>array('index')),
+	array('label'=>Yii::t('main', 'Luo järjestelmänvalvoja'), 'url'=>array('create')),
 );
 
 Yii::app()->clientScript->registerScript('search', "
@@ -26,14 +26,10 @@ $('.search-form form').submit(function(){
 ");
 ?>
 
-<h1>Manage Administrators</h1>
+<h1><?php echo Yii::t('main', 'Järjestelmänvalvojat'); ?></h1>
 
-<p>
-You may optionally enter a comparison operator (<b>&lt;</b>, <b>&lt;=</b>, <b>&gt;</b>, <b>&gt;=</b>, <b>&lt;&gt;</b>
-or <b>=</b>) at the beginning of each of your search values to specify how the comparison should be done.
-</p>
 
-<?php echo CHtml::link('Advanced Search','#',array('class'=>'search-button')); ?>
+<?php echo CHtml::link('Haku','#',array('class'=>'search-button')); ?>
 <div class="search-form" style="display:none">
 <?php $this->renderPartial('_search',array(
 	'model'=>$model,
@@ -47,7 +43,7 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 	'columns'=>array(
 		'id',
 		'adm_login',
-		'adm_salasana',
+		//'adm_salasana',
 		'adm_email',
 		'adm_nimi',
 		'status',
