@@ -48,12 +48,14 @@ else
 	else
 	$door = "";
 
+
+	$objcts = '';
+	$osoite = '';
+	$obtrue = false;
+
 	if(Yii::app()->user->adminPaketti == '2' and isset($data->tid) and !empty($apvmForSu[$data->id]))
  	{
 	  $su = Tyovuoroot::model()->findAll(" tid='".$data->tid."' and pvm='".$apvmForSu[$data->id]."' ");
-	    $objcts = '';
-	    $osoite = '';
-	    $obtrue = false;
      	  foreach($su as $ob)
 	  {
 	    $k = Kohteet::model()->findbypk($ob->kohde);
