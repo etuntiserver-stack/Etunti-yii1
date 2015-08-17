@@ -9,6 +9,8 @@
     Yii::app()->session['etsi_month'] = Yii::app()->request->getPost('etsi_month');
   }
 
+if(!Yii::app()->session['etsi_month'])
+	Yii::app()->session['etsi_month'] = date("Y-m");
 
 $from = date("d.m.Y",strtotime(Yii::app()->session['etsi_month']));
 $to = date("d.m.Y",strtotime(Yii::app()->session['etsi_month']." +1 month"));
