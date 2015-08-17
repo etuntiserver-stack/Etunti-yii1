@@ -2,6 +2,15 @@
 /* @var $this SivexkuittiController */
 /* @var $model Sivexkuitti */
 /* @var $form CActiveForm */
+
+  $perusTiedot = array('0'=>$model->kohde_kannasta,'1'=>$model->aloitan,'2'=>$model->loppui);
+if(isset($model->tietoja))
+{
+  preg_match("/<perus>(.*?)<\/perus>/",$model->tietoja, $match);
+  if(isset($match['0']))
+  $perusTiedot = explode("//",$match['0']);
+  $model->tietoja = preg_replace("/<perus>(.*?)<\/perus>/", "", $model->tietoja);
+}
 ?>
 
 <div class="form">
@@ -9,18 +18,117 @@
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'sivexkuitti-form',
 	'enableAjaxValidation'=>false,
+	'clientOptions' => array(
+                    'validateOnSubmit' => false,
+                ),
 )); ?>
 
 
 
 	<?php echo $form->errorSummary($model); ?>
 
+<style>
+.minheight{
+	min-height: 65px;
+}
+</style>
 <div class="row">
-  <div class="col-sm-4">
+
+        <div class="col-md-3">
+            <div class="panel panel-warning">
+                <div class="panel-heading">
+                    <h4 class="text-center"><?php echo Yii::t('main', 'Mobiililaitteesta luettu tiedot'); ?></h4>
+                </div>
+                <div class="panel-body text-center">
+                    <p class="lead">
+                        <strong><?php echo $model->tekijan_nimi; ?></strong>
+                    </p>
+                </div>
+                <ul class="list-group list-group-flush text-center">
+                    <li class="list-group-item minheight">
+                        <?php echo $form->labelEx($model,'kohde_kannasta'); ?>
+                        <strong><?php echo $perusTiedot['0']; ?></strong>
+                    </li>
+                    <li class="list-group-item minheight">
+                        <?php echo $form->labelEx($model,'aloitan'); ?>
+                        <strong><?php echo $perusTiedot['1']; ?></strong>
+                    </li>
+                    <li class="list-group-item minheight">
+                        <?php echo $form->labelEx($model,'loppui'); ?>
+                        <strong><?php echo $perusTiedot['2']; ?></strong>
+                    </li>
+                    <li class="list-group-item"  style="height:172px">
+                        <?php echo $form->labelEx($model,'viesti'); ?>
+                        <strong><?php echo $model->viesti; ?></strong>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="panel panel-success">
+                <div class="panel-heading">
+                    <h4 class="text-center"><?php echo Yii::t('main', 'Toteutuneet tiedot'); ?></h4>
+                </div>
+                <div class="panel-body text-center">
+                    <p class="lead">
+                        <strong><?php echo $model->tekijan_nimi; ?></strong>
+                    </p>
+                </div>
+                <ul class="list-group list-group-flush text-center">
+                    <li class="list-group-item minheight">
+                        <?php echo $form->labelEx($model,'kohde_kannasta'); ?>
+                        <strong><?php echo $model->kohde_kannasta; ?></strong>
+                    </li>
+                    <li class="list-group-item minheight">
+                        <?php echo $form->labelEx($model,'aloitan'); ?>
+                        <strong><?php echo $model->aloitan; ?></strong>
+                    </li>
+                    <li class="list-group-item minheight">
+                        <?php echo $form->labelEx($model,'loppui'); ?>
+                        <strong><?php echo $model->loppui; ?></strong>
+                    </li>
+                    <li class="list-group-item"  style="height:172px">
+                        <?php echo $form->labelEx($model,'viesti'); ?>
+                        <strong><?php echo $model->viesti; ?></strong>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+
+        <div class="col-md-6">
+            <div class="panel panel-danger">
+                <div class="panel-heading">
+                    <h4 class="text-center"><?php echo $form->labelEx($model,'tietoja'); ?></h4>
+                </div>
+                <ul class="list-group list-group-flush text-center">
+                    <li class="list-group-item">
+                        <?php echo $form->textArea($model,'tietoja',array('rows'=>20, 'cols'=>50,'class'=>'form-control')) //,'readonly'=>'yes'; ?>
+                    </li>
+                </ul>
+            </div>
+        </div>
+</div>
+
+  <?php if(Yii::app()->user->adminStatus == 1) : ?>
+  <div class="row">
+    <div class="col-sm-4">
+	<div class="buttons">
+		<?php echo CHtml::submitButton($model->isNewRecord ? 'Luo' : 'Tallenna', array('class'=>'btn btn-primary')); ?>
+	</div>
+    </div>
+  </div>
+  <?php endif; ?>
+
+
+
+
+<!--
 	<div class="row">
-		<?php echo $form->labelEx($model,'kohde_kannasta'); ?>
-		<?php echo $form->textField($model,'kohde_kannasta',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
-		<?php echo $form->error($model,'kohde_kannasta'); ?>
+		<?php echo $form->labelEx($model,'etaisyys'); ?>
+		<?php echo $form->textField($model,'etaisyys',array('size'=>20,'maxlength'=>20,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'etaisyys'); ?>
 	</div>
 
 	<div class="row">
@@ -35,35 +143,6 @@
 		<?php echo $form->error($model,'loppui'); ?>
 	</div>
 
-	<div class="row">
-		<?php echo $form->labelEx($model,'viesti'); ?>
-		<?php echo $form->textArea($model,'viesti',array('rows'=>6, 'cols'=>50,'class'=>'form-control')); ?>
-		<?php echo $form->error($model,'viesti'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'tekijan_nimi'); ?>
-		<?php echo $form->textField($model,'tekijan_nimi',array('size'=>50,'maxlength'=>50,'class'=>'form-control')); ?>
-		<?php echo $form->error($model,'tekijan_nimi'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'etaisyys'); ?>
-		<?php echo $form->textField($model,'etaisyys',array('size'=>20,'maxlength'=>20,'class'=>'form-control')); ?>
-		<?php echo $form->error($model,'etaisyys'); ?>
-	</div>
-  </div>
-  <div class="col-sm-8">
-	<div class="row">
-		<?php echo $form->labelEx($model,'tietoja'); ?>
-		<?php echo $form->textArea($model,'tietoja',array('rows'=>20, 'cols'=>50,'class'=>'form-control')); ?>
-		<?php echo $form->error($model,'tietoja'); ?>
-	</div>
-  </div>
-</div>
-
-
-<!--
 	<div class="row">
 		<?php echo $form->labelEx($model,'status'); ?>
 		<?php echo $form->textField($model,'status',array('class'=>'form-control')); ?>
@@ -125,7 +204,6 @@
 		<?php echo $form->textField($model,'tid',array('class'=>'form-control')); ?>
 		<?php echo $form->error($model,'tid'); ?>
 	</div>
--->
 
 <div class="row">
   <div class="col-sm-4">
@@ -134,6 +212,9 @@
 	</div>
   </div>
 </div>
+-->
+
+
 
 <?php $this->endWidget(); ?>
 

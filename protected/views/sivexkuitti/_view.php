@@ -25,7 +25,7 @@ if(!empty($data->loppui)){
  $lt[$data->id] = date("H:i",strtotime($data->loppui));
  $lpvm[$data->id] = date("Y-m-d",strtotime($data->loppui));
 } else {
- $lt[$data->id] = '';
+ $lt[$data->id] = '00:00';
  $lpvm[$data->id] = '';
 }
 
@@ -33,6 +33,11 @@ if(!empty($data->loppui) and !empty($data->aloitan))
   $kesto[$data->id] =  strtotime($data->loppui) - strtotime($data->aloitan);
 else
   $kesto[$data->id] =  '';
+
+if(!empty($data->tietoja) and !empty($data->tietoja))
+  $muokattu[$data->id] =  '<h4 class="glyphicon glyphicon-check text-info"></h4>';
+else
+  $muokattu[$data->id] =  '<h4 class="glyphicon glyphicon-arrow-down text-danger"></h4>';
 
 
 	if($data->status == '1')
@@ -53,6 +58,7 @@ else
 	$osoite = '';
 	$obtrue = false;
 
+	// <-- adminPaketti
 	if(Yii::app()->user->adminPaketti == '2' and isset($data->tid) and !empty($apvmForSu[$data->id]))
  	{
 	  $su = Tyovuoroot::model()->findAll(" tid='".$data->tid."' and pvm='".$apvmForSu[$data->id]."' ");
@@ -60,12 +66,19 @@ else
 	  {
 	    $k = Kohteet::model()->findbypk($ob->kohde);
 	    if(isset($k->osoite))
-	    $osoite = $k->osoite;
+	    {
+	  	  $strlen = strlen($k->osoite);
+	     	  if($strlen > 18)
+	  	    $osoite = substr($k->osoite,0,18).'..';
+	   	  else
+		    $osoite = $k->osoite;
+	    }
 
 	    $obtrue = true;
 	    $objcts .=  $ob->alku."-".$ob->loppu." ".$osoite."<br>";
 	  }
 	}
+	// <-- adminPaketti 
 ?>
 
 <tr>
@@ -73,25 +86,42 @@ else
 	<td><?php echo CHtml::link(CHtml::encode($data->id), array('update', 'id'=>$data->id)); ?></td>
 	<td><b><?php echo CHtml::encode(date("d.m",strtotime($data->aloitan))); ?></b></td>
 	<td><?php echo CHtml::encode($data->tekijan_nimi); ?></td>
-	<td><?php echo CHtml::encode($data->kohde_kannasta); ?></td>
-		
-	<?php if(Yii::app()->user->adminPaketti == '2') : ?>
+
+
 	<td width="1">
-	<?php if($obtrue) : ?>
 	<div class="row">
-	 <div class="col-sm-3">
-	  <div class="btn btn-info" data-toggle="collapse" data-target="<?php echo '#sushow_'.$data->id; ?>"><?php echo Yii::t('main', 'suunniteltu'); ?> <b class="caret"></b></div>
-	  <div style="position:absolute;width:300px;z-index: 99999999;" class="collapse" id="<?php echo 'sushow_'.$data->id; ?>">
+	 <div class="col-sm-12">
+	  <div class="btn btn-default form-control openkohde" id="<?php echo 'kohttisID_'.$data->id; ?>" for="<?php echo 'kohtval_'.$data->id; ?>" data-toggle="collapse" data-target="<?php echo '#kshow_'.$data->id; ?>"><?php echo $data->kohde_kannasta; ?> <b class="caret"></b></div>
+	  <div class="collapse" id="<?php echo 'kshow_'.$data->id; ?>">
 	  <br>
-	    <div class="alert alert-info" style="">
-	      <?php  echo $objcts; ?>
-	    </div>
+	     <div id="<?php echo 'kohtval_'.$data->id; ?>"></div>
 	  </div>
 	 </div>
 	</div>
-	<?php endif; ?>
+	</td>
+
+		
+	<!-- adminPaketti -->
+	<?php if(Yii::app()->user->adminPaketti == '2') : ?>
+	<td width="1">
+	<?php  if($obtrue == true) $obclass = 'info'; else $obclass = 'default'; ?>
+	<div class="row">
+	 <div class="col-sm-3">
+
+	  <div class="btn btn-<?php echo $obclass; ?>" data-toggle="collapse" data-target="<?php echo '#sushow_'.$data->id; ?>">
+	  <?php echo Yii::t('main', 'suunnitellu'); ?> <b class="caret"></b>
+	  </div>
+
+	    <div style="position:absolute;width:300px;z-index: 99999999;" class="collapse" id="<?php echo 'sushow_'.$data->id; ?>">
+	    <br>
+	    <div class="alert alert-info" style=""><?php  echo $objcts; ?></div>
+	    </div>
+
+	 </div>
+	</div>
 	</td>
 	<?php endif; ?>
+	<!-- adminPaketti -->
 
 	<td width="1">
 	<div class="row">
@@ -117,7 +147,8 @@ else
 	</div>
 	</td>
 
-	<td><?php echo sprint($kesto[$data->id]); ?></td>
+	<td><h4><?php echo sprint($kesto[$data->id]); ?></h4></td>
+	<td><center><?php echo $muokattu[$data->id]; ?></center></td>
 </tr>
 
 	

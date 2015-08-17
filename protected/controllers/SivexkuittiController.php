@@ -34,7 +34,7 @@ class SivexkuittiController extends Controller
 		return array(
 
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','updatetime'),
+				'actions'=>array('admin','delete','create','update','index','view','updatetime','showkohteet'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -76,12 +76,50 @@ class SivexkuittiController extends Controller
 		if(!empty($model->tietoja)) 
 		  $tietoja = $model->tietoja."\n"; 
 		else 
-		  $tietoja = "Perustiedot ovat: Aloitus-".$model->aloitan.", Lopetus-".$model->loppui."\n";
+		  $tietoja = "<perus>".$model->kohde_kannasta."//".$model->aloitan."//".$model->loppui."</perus>";
 
 		$model->$_POST['request']=$newdate;
 		$model->status=$_POST['status'];
-		$model->tietoja=$tietoja.Yii::app()->user->nimi." (".date("d.m.Y H:i")."): tilanne-".$_POST['request'].", vanha-".$model->$_POST['request'].", uusi-".$newdate;
+		$model->tietoja=$tietoja.Yii::app()->user->nimi." (".date("d.m.Y H:i")."):\nTilanne-".$_POST['request'].", vanha-".$model->$_POST['request'].", uusi-".$newdate;
 		$model->save();
+	}
+
+	public function actionShowkohteet()
+	{
+		$as=new Kohteet;
+		echo   CHtml::activeDropDownList($as, 'id',
+		CHtml::listData(Kohteet::model()->findAll(), 'id', 'osoite'),   
+		    array('empty'=>'Muokka', "class"=>"kohdenvaihto btn btn-default") 
+		);
+
+		?>
+		<script type="text/javascript">
+		$(document).ready(function(){
+
+		  $(".kohdenvaihto").change(function(){
+
+			var thisText = $(this).find("option:selected").text();
+			var thisVal = $(this).val();
+		
+
+   		var Sivexkuitti = {kohdenID: thisVal,kohde_kannasta: thisText};
+   		var svk = {Sivexkuitti};
+
+		        $.ajax({
+		           url: "update?id=<?php echo $_POST['id']; ?>",
+		           type: "POST",
+		           data: svk,
+		           success: function(html){
+				$("#<?php echo $_POST['thisID']; ?>").removeClass("btn-default").addClass("btn-success").text(thisText);
+				//alert(html)
+		           }
+		        });
+		
+		  });
+
+		});
+		</script>
+		<?php
 	}
 
 	public function actionView($id)
@@ -121,7 +159,11 @@ class SivexkuittiController extends Controller
 	 */
 	public function actionUpdate($id)
 	{
+	//print_r($_POST);
+	//exit;
+
 		$model=$this->loadModel($id);
+		$vanha_kohde_kannasta = $model->kohde_kannasta;
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
@@ -129,8 +171,16 @@ class SivexkuittiController extends Controller
 		if(isset($_POST['Sivexkuitti']))
 		{
 			$model->attributes=$_POST['Sivexkuitti'];
-			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+
+			if(!empty($model->tietoja)) 
+			  $tietoja = $model->tietoja."\n"; 
+			else 
+			  $tietoja = "<perus>".$vanha_kohde_kannasta."//".$model->aloitan."//".$model->loppui."</perus>";
+
+			if(isset($_POST['Sivexkuitti']['kohde_kannasta']))
+			$model->tietoja=$tietoja.Yii::app()->user->nimi." (".date("d.m.Y H:i")."):\nTilanne-Kohteen muutos, vanha-".$vanha_kohde_kannasta.", uusi-".$_POST['Sivexkuitti']['kohde_kannasta'];
+
+			$model->save();
 		}
 
 		$this->render('update',array(
