@@ -39,7 +39,7 @@ class LoginController extends Controller
 
 			    $this->redirect("/index.php/sivexkuitti/index");
 			  } else {
-			    $this->render('/index.php/user/login',array('model'=>$model));
+			    $this->redirect('/index.php/user/login');
 			  }
 			exit;
 			}
