@@ -1874,3 +1874,806 @@ REQUEST_URI=/index.php/sivexkuitti/index
 in E:\GITHUB\etuntifw\protected\views\sivexkuitti\_view.php (151)
 in E:\GITHUB\etuntifw\protected\views\sivexkuitti\index.php (101)
 in E:\GITHUB\etuntifw\protected\controllers\SivexkuittiController.php (250)
+2015/08/17 19:57:46 [error] [php] date() expects at most 2 parameters, 3 given (E:\GITHUB\etuntifw\protected\views\tyovuoroot\index.php:15)
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CBaseController.php(95): TyovuorootController->renderInternal()
+#1 E:\GITHUB\etuntifw\YII\framework\web\CController.php(869): TyovuorootController->renderFile()
+#2 E:\GITHUB\etuntifw\YII\framework\web\CController.php(782): TyovuorootController->renderPartial()
+#3 E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php(126): TyovuorootController->render()
+#4 E:\GITHUB\etuntifw\YII\framework\web\actions\CInlineAction.php(49): TyovuorootController->actionIndex()
+#5 E:\GITHUB\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams()
+#6 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(133): TyovuorootController->runAction()
+#7 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#8 E:\GITHUB\etuntifw\YII\framework\web\CController.php(1145): CAccessControlFilter->filter()
+#9 E:\GITHUB\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): TyovuorootController->filterAccessControl()
+#10 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#11 E:\GITHUB\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#12 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): TyovuorootController->runActionWithFilters()
+#13 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): TyovuorootController->run()
+#14 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#15 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#16 E:\GITHUB\etuntifw\index.php(13): CWebApplication->run()
+REQUEST_URI=/index.php/tyovuoroot/index
+in E:\GITHUB\etuntifw\protected\views\tyovuoroot\index.php (15)
+in E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php (126)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/17 19:57:56 [error] [php] A non well formed numeric value encountered (E:\GITHUB\etuntifw\protected\views\tyovuoroot\index.php:15)
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CBaseController.php(95): TyovuorootController->renderInternal()
+#1 E:\GITHUB\etuntifw\YII\framework\web\CController.php(869): TyovuorootController->renderFile()
+#2 E:\GITHUB\etuntifw\YII\framework\web\CController.php(782): TyovuorootController->renderPartial()
+#3 E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php(126): TyovuorootController->render()
+#4 E:\GITHUB\etuntifw\YII\framework\web\actions\CInlineAction.php(49): TyovuorootController->actionIndex()
+#5 E:\GITHUB\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams()
+#6 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(133): TyovuorootController->runAction()
+#7 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#8 E:\GITHUB\etuntifw\YII\framework\web\CController.php(1145): CAccessControlFilter->filter()
+#9 E:\GITHUB\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): TyovuorootController->filterAccessControl()
+#10 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#11 E:\GITHUB\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#12 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): TyovuorootController->runActionWithFilters()
+#13 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): TyovuorootController->run()
+#14 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#15 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#16 E:\GITHUB\etuntifw\index.php(13): CWebApplication->run()
+REQUEST_URI=/index.php/tyovuoroot/index
+in E:\GITHUB\etuntifw\protected\views\tyovuoroot\index.php (15)
+in E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php (126)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/17 20:00:18 [error] [php] Undefined index: kohde (E:\GITHUB\etuntifw\protected\views\tyovuoroot\index.php:66)
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(869): TyovuorootController->renderFile()
+#1 E:\GITHUB\etuntifw\YII\framework\web\CController.php(782): TyovuorootController->renderPartial()
+#2 E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php(126): TyovuorootController->render()
+#3 E:\GITHUB\etuntifw\YII\framework\web\actions\CInlineAction.php(49): TyovuorootController->actionIndex()
+#4 E:\GITHUB\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams()
+#5 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(133): TyovuorootController->runAction()
+#6 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#7 E:\GITHUB\etuntifw\YII\framework\web\CController.php(1145): CAccessControlFilter->filter()
+#8 E:\GITHUB\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): TyovuorootController->filterAccessControl()
+#9 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#10 E:\GITHUB\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#11 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): TyovuorootController->runActionWithFilters()
+#12 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): TyovuorootController->run()
+#13 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#14 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#15 E:\GITHUB\etuntifw\index.php(13): CWebApplication->run()
+REQUEST_URI=/index.php/tyovuoroot/index
+in E:\GITHUB\etuntifw\protected\views\tyovuoroot\index.php (66)
+in E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php (126)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/17 20:10:59 [error] [exception.CHttpException.400] exception 'CHttpException' with message 'Pyyntösi on virheellinen.' in E:\GITHUB\etuntifw\YII\framework\web\CController.php:336
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(309): CController->invalidActionParams(Object(CInlineAction))
+#1 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#2 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#3 E:\GITHUB\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#4 E:\GITHUB\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#5 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#6 E:\GITHUB\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#7 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#8 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('update')
+#9 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('tyovuoroot/upda...')
+#10 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#11 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#12 {main}
+REQUEST_URI=/index.php/tyovuoroot/update/6748
+HTTP_REFERER=http://etuntifw.local/index.php/tyovuoroot/index
+---
+2015/08/17 20:11:14 [error] [exception.CHttpException.400] exception 'CHttpException' with message 'Pyyntösi on virheellinen.' in E:\GITHUB\etuntifw\YII\framework\web\CController.php:336
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(309): CController->invalidActionParams(Object(CInlineAction))
+#1 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#2 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#3 E:\GITHUB\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#4 E:\GITHUB\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#5 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#6 E:\GITHUB\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#7 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#8 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('update')
+#9 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('tyovuoroot/upda...')
+#10 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#11 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#12 {main}
+REQUEST_URI=/index.php/tyovuoroot/update/6748
+HTTP_REFERER=http://etuntifw.local/index.php/tyovuoroot/index
+---
+2015/08/17 20:11:29 [error] [exception.CHttpException.400] exception 'CHttpException' with message 'Pyyntösi on virheellinen.' in E:\GITHUB\etuntifw\YII\framework\web\CController.php:336
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(309): CController->invalidActionParams(Object(CInlineAction))
+#1 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#2 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#3 E:\GITHUB\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#4 E:\GITHUB\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#5 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#6 E:\GITHUB\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#7 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#8 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('update')
+#9 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('tyovuoroot/upda...')
+#10 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#11 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#12 {main}
+REQUEST_URI=/index.php/tyovuoroot/update/6748
+---
+2015/08/17 20:12:33 [error] [exception.CHttpException.400] exception 'CHttpException' with message 'Pyyntösi on virheellinen.' in E:\GITHUB\etuntifw\YII\framework\web\CController.php:336
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(309): CController->invalidActionParams(Object(CInlineAction))
+#1 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#2 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#3 E:\GITHUB\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#4 E:\GITHUB\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#5 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#6 E:\GITHUB\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#7 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#8 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('update')
+#9 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('tyovuoroot/upda...')
+#10 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#11 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#12 {main}
+REQUEST_URI=/index.php/tyovuoroot/update/id=6753
+HTTP_REFERER=http://etuntifw.local/index.php/tyovuoroot/index
+---
+2015/08/17 20:18:50 [error] [php] require(_form): failed to open stream: No such file or directory (E:\GITHUB\etuntifw\YII\framework\web\CBaseController.php:130)
+Stack trace:
+#0 E:\GITHUB\etuntifw\protected\views\tyovuoroot\update.php(21): TyovuorootController->renderFile()
+#1 E:\GITHUB\etuntifw\YII\framework\web\CBaseController.php(126): require()
+#2 E:\GITHUB\etuntifw\YII\framework\web\CBaseController.php(95): TyovuorootController->renderInternal()
+#3 E:\GITHUB\etuntifw\YII\framework\web\CController.php(869): TyovuorootController->renderFile()
+#4 E:\GITHUB\etuntifw\YII\framework\web\CController.php(782): TyovuorootController->renderPartial()
+#5 E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php(120): TyovuorootController->render()
+#6 unknown(0): TyovuorootController->actionUpdate()
+#7 E:\GITHUB\etuntifw\YII\framework\web\actions\CAction.php(108): ReflectionMethod->invokeArgs()
+#8 E:\GITHUB\etuntifw\YII\framework\web\actions\CInlineAction.php(47): CInlineAction->runWithParamsInternal()
+#9 E:\GITHUB\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams()
+#10 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(133): TyovuorootController->runAction()
+#11 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#12 E:\GITHUB\etuntifw\YII\framework\web\CController.php(1145): CAccessControlFilter->filter()
+#13 E:\GITHUB\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): TyovuorootController->filterAccessControl()
+#14 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#15 E:\GITHUB\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#16 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): TyovuorootController->runActionWithFilters()
+#17 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): TyovuorootController->run()
+#18 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#19 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#20 E:\GITHUB\etuntifw\index.php(13): CWebApplication->run()
+REQUEST_URI=/index.php/tyovuoroot/update?id=6978
+in E:\GITHUB\etuntifw\protected\views\tyovuoroot\update.php (21)
+in E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php (120)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/17 20:21:14 [error] [exception.CException] exception 'CException' with message 'TyovuorootController ei löydä pyydettyä näkymää "//_form".' in E:\GITHUB\etuntifw\YII\framework\web\CController.php:878
+Stack trace:
+#0 E:\GITHUB\etuntifw\protected\views\tyovuoroot\update.php(21): CController->renderPartial('//_form', Array)
+#1 E:\GITHUB\etuntifw\YII\framework\web\CBaseController.php(126): require('E:\\GITHUB\\etunt...')
+#2 E:\GITHUB\etuntifw\YII\framework\web\CBaseController.php(95): CBaseController->renderInternal('E:\\GITHUB\\etunt...', Array, true)
+#3 E:\GITHUB\etuntifw\YII\framework\web\CController.php(869): CBaseController->renderFile('E:\\GITHUB\\etunt...', Array, true)
+#4 E:\GITHUB\etuntifw\YII\framework\web\CController.php(782): CController->renderPartial('update', Array, true)
+#5 E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php(120): CController->render('update', Array)
+#6 [internal function]: TyovuorootController->actionUpdate('6979')
+#7 E:\GITHUB\etuntifw\YII\framework\web\actions\CAction.php(108): ReflectionMethod->invokeArgs(Object(TyovuorootController), Array)
+#8 E:\GITHUB\etuntifw\YII\framework\web\actions\CInlineAction.php(47): CAction->runWithParamsInternal(Object(TyovuorootController), Object(ReflectionMethod), Array)
+#9 E:\GITHUB\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#10 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#11 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#12 E:\GITHUB\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#13 E:\GITHUB\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#14 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#15 E:\GITHUB\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#16 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#17 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('update')
+#18 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('tyovuoroot/upda...')
+#19 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#20 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#21 {main}
+REQUEST_URI=/index.php/tyovuoroot/update?id=6979
+HTTP_REFERER=http://etuntifw.local/index.php/tyovuoroot/index
+---
+2015/08/17 20:21:21 [error] [exception.CException] exception 'CException' with message 'TyovuorootController ei löydä pyydettyä näkymää "/_form".' in E:\GITHUB\etuntifw\YII\framework\web\CController.php:878
+Stack trace:
+#0 E:\GITHUB\etuntifw\protected\views\tyovuoroot\update.php(21): CController->renderPartial('/_form', Array)
+#1 E:\GITHUB\etuntifw\YII\framework\web\CBaseController.php(126): require('E:\\GITHUB\\etunt...')
+#2 E:\GITHUB\etuntifw\YII\framework\web\CBaseController.php(95): CBaseController->renderInternal('E:\\GITHUB\\etunt...', Array, true)
+#3 E:\GITHUB\etuntifw\YII\framework\web\CController.php(869): CBaseController->renderFile('E:\\GITHUB\\etunt...', Array, true)
+#4 E:\GITHUB\etuntifw\YII\framework\web\CController.php(782): CController->renderPartial('update', Array, true)
+#5 E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php(120): CController->render('update', Array)
+#6 [internal function]: TyovuorootController->actionUpdate('6750')
+#7 E:\GITHUB\etuntifw\YII\framework\web\actions\CAction.php(108): ReflectionMethod->invokeArgs(Object(TyovuorootController), Array)
+#8 E:\GITHUB\etuntifw\YII\framework\web\actions\CInlineAction.php(47): CAction->runWithParamsInternal(Object(TyovuorootController), Object(ReflectionMethod), Array)
+#9 E:\GITHUB\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#10 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#11 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#12 E:\GITHUB\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#13 E:\GITHUB\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#14 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#15 E:\GITHUB\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#16 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#17 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('update')
+#18 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('tyovuoroot/upda...')
+#19 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#20 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#21 {main}
+REQUEST_URI=/index.php/tyovuoroot/update?id=6750
+HTTP_REFERER=http://etuntifw.local/index.php/tyovuoroot/index
+---
+2015/08/17 20:37:41 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "tietoja".
+in E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php (113)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/17 20:40:42 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "tietoja".
+in E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php (113)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/17 20:41:18 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "tietoja".
+in E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php (113)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/17 20:42:15 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "tietoja".
+in E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php (113)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/17 20:43:23 [error] [exception.CHttpException.400] exception 'CHttpException' with message 'Pyyntösi on virheellinen.' in E:\GITHUB\etuntifw\YII\framework\web\CController.php:336
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(309): CController->invalidActionParams(Object(CInlineAction))
+#1 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#2 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#3 E:\GITHUB\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#4 E:\GITHUB\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#5 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#6 E:\GITHUB\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#7 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#8 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('view')
+#9 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('tyovuoroot/view')
+#10 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#11 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#12 {main}
+REQUEST_URI=/index.php/tyovuoroot/view
+---
+2015/08/17 20:43:43 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "tietoja".
+in E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php (113)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/17 20:45:22 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "tietoja".
+in E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php (113)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/17 20:45:46 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "tietoja".
+in E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php (113)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/17 20:47:16 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "tietoja".
+in E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php (113)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/17 20:48:29 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "tietoja".
+in E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php (113)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/17 20:48:58 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "tietoja".
+in E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php (113)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/17 21:02:25 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "id".
+in E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php (113)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/17 21:03:22 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "id".
+in E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php (113)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/17 21:04:22 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "id".
+in E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php (113)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/17 21:10:39 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "id".
+in E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php (113)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/17 21:10:39 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "tietoja".
+in E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php (113)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/17 21:13:40 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "id".
+in E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php (113)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/17 21:13:40 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "tietoja".
+in E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php (113)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/17 21:16:14 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "id".
+in E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php (113)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/17 21:16:14 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "tietoja".
+in E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php (113)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/17 21:20:53 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "id".
+in E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php (113)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/17 21:23:00 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Järjestelmä ei löydä pyydettyä toimintoa "uus_klient_new.php".' in E:\GITHUB\etuntifw\YII\framework\web\CController.php:483
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(270): CController->missingAction('uus_klient_new....')
+#1 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('uus_klient_new....')
+#2 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('tyovuoroot/uus_...')
+#3 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php/tyovuoroot/uus_klient_new.php
+HTTP_REFERER=http://etuntifw.local/index.php/tyovuoroot/index
+---
+2015/08/17 21:23:25 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Järjestelmä ei löydä pyydettyä toimintoa "uus_klient_new.php".' in E:\GITHUB\etuntifw\YII\framework\web\CController.php:483
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(270): CController->missingAction('uus_klient_new....')
+#1 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('uus_klient_new....')
+#2 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('tyovuoroot/uus_...')
+#3 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php/tyovuoroot/uus_klient_new.php
+HTTP_REFERER=http://etuntifw.local/index.php/tyovuoroot/index
+---
+2015/08/17 21:23:54 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "id".
+in E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php (113)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/17 21:24:54 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "id".
+in E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php (113)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/17 21:25:37 [error] [exception.CHttpException.400] exception 'CHttpException' with message 'Pyyntösi on virheellinen.' in E:\GITHUB\etuntifw\YII\framework\web\CController.php:336
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(309): CController->invalidActionParams(Object(CInlineAction))
+#1 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#2 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#3 E:\GITHUB\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#4 E:\GITHUB\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#5 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#6 E:\GITHUB\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#7 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#8 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('update')
+#9 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('tyovuoroot/upda...')
+#10 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#11 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#12 {main}
+REQUEST_URI=/index.php/tyovuoroot/update
+HTTP_REFERER=http://etuntifw.local/index.php/tyovuoroot/index
+---
+2015/08/17 21:25:50 [error] [exception.CHttpException.400] exception 'CHttpException' with message 'Pyyntösi on virheellinen.' in E:\GITHUB\etuntifw\YII\framework\web\CController.php:336
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(309): CController->invalidActionParams(Object(CInlineAction))
+#1 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#2 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#3 E:\GITHUB\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#4 E:\GITHUB\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#5 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#6 E:\GITHUB\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#7 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#8 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('update')
+#9 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('tyovuoroot/upda...')
+#10 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#11 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#12 {main}
+REQUEST_URI=/index.php/tyovuoroot/update
+HTTP_REFERER=http://etuntifw.local/index.php/tyovuoroot/index
+---
+2015/08/17 21:26:17 [error] [exception.CHttpException.400] exception 'CHttpException' with message 'Pyyntösi on virheellinen.' in E:\GITHUB\etuntifw\YII\framework\web\CController.php:336
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(309): CController->invalidActionParams(Object(CInlineAction))
+#1 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#2 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#3 E:\GITHUB\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#4 E:\GITHUB\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#5 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#6 E:\GITHUB\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#7 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#8 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('update')
+#9 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('tyovuoroot/upda...')
+#10 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#11 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#12 {main}
+REQUEST_URI=/index.php/tyovuoroot/update
+HTTP_REFERER=http://etuntifw.local/index.php/tyovuoroot/index
+---
+2015/08/17 21:29:17 [error] [exception.CHttpException.400] exception 'CHttpException' with message 'Pyyntösi on virheellinen.' in E:\GITHUB\etuntifw\YII\framework\web\CController.php:336
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(309): CController->invalidActionParams(Object(CInlineAction))
+#1 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#2 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#3 E:\GITHUB\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#4 E:\GITHUB\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#5 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#6 E:\GITHUB\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#7 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#8 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('update')
+#9 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('tyovuoroot/upda...')
+#10 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#11 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#12 {main}
+REQUEST_URI=/index.php/tyovuoroot/update
+HTTP_REFERER=http://etuntifw.local/index.php/tyovuoroot/index
+---
+2015/08/17 21:29:46 [error] [exception.CHttpException.400] exception 'CHttpException' with message 'Pyyntösi on virheellinen.' in E:\GITHUB\etuntifw\YII\framework\web\CController.php:336
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(309): CController->invalidActionParams(Object(CInlineAction))
+#1 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#2 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#3 E:\GITHUB\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#4 E:\GITHUB\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#5 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#6 E:\GITHUB\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#7 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#8 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('update')
+#9 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('tyovuoroot/upda...')
+#10 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#11 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#12 {main}
+REQUEST_URI=/index.php/tyovuoroot/update
+HTTP_REFERER=http://etuntifw.local/index.php/tyovuoroot/index
+---
+2015/08/17 21:30:02 [error] [exception.CHttpException.400] exception 'CHttpException' with message 'Pyyntösi on virheellinen.' in E:\GITHUB\etuntifw\YII\framework\web\CController.php:336
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(309): CController->invalidActionParams(Object(CInlineAction))
+#1 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#2 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#3 E:\GITHUB\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#4 E:\GITHUB\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#5 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#6 E:\GITHUB\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#7 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#8 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('update')
+#9 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('tyovuoroot/upda...')
+#10 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#11 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#12 {main}
+REQUEST_URI=/index.php/tyovuoroot/update
+HTTP_REFERER=http://etuntifw.local/index.php/tyovuoroot/index
+---
+2015/08/17 21:32:52 [error] [exception.CHttpException.400] exception 'CHttpException' with message 'Pyyntösi on virheellinen.' in E:\GITHUB\etuntifw\YII\framework\web\CController.php:336
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(309): CController->invalidActionParams(Object(CInlineAction))
+#1 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#2 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#3 E:\GITHUB\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#4 E:\GITHUB\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#5 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#6 E:\GITHUB\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#7 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#8 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('update')
+#9 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('tyovuoroot/upda...')
+#10 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#11 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#12 {main}
+REQUEST_URI=/index.php/tyovuoroot/update
+HTTP_REFERER=http://etuntifw.local/index.php/tyovuoroot/index
+---
+2015/08/17 21:34:27 [error] [exception.CHttpException.400] exception 'CHttpException' with message 'Pyyntösi on virheellinen.' in E:\GITHUB\etuntifw\YII\framework\web\CController.php:336
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(309): CController->invalidActionParams(Object(CInlineAction))
+#1 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#2 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#3 E:\GITHUB\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#4 E:\GITHUB\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#5 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#6 E:\GITHUB\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#7 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#8 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('update')
+#9 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('tyovuoroot/upda...')
+#10 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#11 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#12 {main}
+REQUEST_URI=/index.php/tyovuoroot/update
+HTTP_REFERER=http://etuntifw.local/index.php/tyovuoroot/index
+---
+2015/08/17 21:34:56 [error] [exception.CHttpException.400] exception 'CHttpException' with message 'Pyyntösi on virheellinen.' in E:\GITHUB\etuntifw\YII\framework\web\CController.php:336
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(309): CController->invalidActionParams(Object(CInlineAction))
+#1 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#2 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#3 E:\GITHUB\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#4 E:\GITHUB\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#5 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#6 E:\GITHUB\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#7 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#8 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('update')
+#9 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('tyovuoroot/upda...')
+#10 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#11 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#12 {main}
+REQUEST_URI=/index.php/tyovuoroot/update
+HTTP_REFERER=http://etuntifw.local/index.php/tyovuoroot/index
+---
+2015/08/17 21:35:03 [error] [exception.CHttpException.400] exception 'CHttpException' with message 'Pyyntösi on virheellinen.' in E:\GITHUB\etuntifw\YII\framework\web\CController.php:336
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(309): CController->invalidActionParams(Object(CInlineAction))
+#1 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#2 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#3 E:\GITHUB\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#4 E:\GITHUB\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#5 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#6 E:\GITHUB\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#7 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#8 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('update')
+#9 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('tyovuoroot/upda...')
+#10 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#11 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#12 {main}
+REQUEST_URI=/index.php/tyovuoroot/update
+HTTP_REFERER=http://etuntifw.local/index.php/tyovuoroot/index
+---
+2015/08/17 21:35:43 [error] [exception.CHttpException.400] exception 'CHttpException' with message 'Pyyntösi on virheellinen.' in E:\GITHUB\etuntifw\YII\framework\web\CController.php:336
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(309): CController->invalidActionParams(Object(CInlineAction))
+#1 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#2 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#3 E:\GITHUB\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#4 E:\GITHUB\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#5 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#6 E:\GITHUB\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#7 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#8 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('update')
+#9 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('tyovuoroot/upda...')
+#10 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#11 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#12 {main}
+REQUEST_URI=/index.php/tyovuoroot/update
+HTTP_REFERER=http://etuntifw.local/index.php/tyovuoroot/index
+---
+2015/08/17 21:35:55 [error] [exception.CHttpException.400] exception 'CHttpException' with message 'Pyyntösi on virheellinen.' in E:\GITHUB\etuntifw\YII\framework\web\CController.php:336
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(309): CController->invalidActionParams(Object(CInlineAction))
+#1 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#2 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#3 E:\GITHUB\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#4 E:\GITHUB\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#5 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#6 E:\GITHUB\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#7 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#8 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('update')
+#9 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('tyovuoroot/upda...')
+#10 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#11 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#12 {main}
+REQUEST_URI=/index.php/tyovuoroot/update
+HTTP_REFERER=http://etuntifw.local/index.php/tyovuoroot/index
+---
+2015/08/17 21:36:47 [error] [exception.CHttpException.400] exception 'CHttpException' with message 'Pyyntösi on virheellinen.' in E:\GITHUB\etuntifw\YII\framework\web\CController.php:336
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(309): CController->invalidActionParams(Object(CInlineAction))
+#1 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#2 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#3 E:\GITHUB\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#4 E:\GITHUB\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#5 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#6 E:\GITHUB\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#7 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#8 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('update')
+#9 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('tyovuoroot/upda...')
+#10 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#11 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#12 {main}
+REQUEST_URI=/index.php/tyovuoroot/update
+HTTP_REFERER=http://etuntifw.local/index.php/tyovuoroot/index
+---
+2015/08/17 21:36:58 [error] [exception.CHttpException.400] exception 'CHttpException' with message 'Pyyntösi on virheellinen.' in E:\GITHUB\etuntifw\YII\framework\web\CController.php:336
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(309): CController->invalidActionParams(Object(CInlineAction))
+#1 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#2 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#3 E:\GITHUB\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#4 E:\GITHUB\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#5 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#6 E:\GITHUB\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#7 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#8 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('update')
+#9 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('tyovuoroot/upda...')
+#10 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#11 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#12 {main}
+REQUEST_URI=/index.php/tyovuoroot/update
+HTTP_REFERER=http://etuntifw.local/index.php/tyovuoroot/index
+---
+2015/08/17 21:37:53 [error] [exception.CHttpException.400] exception 'CHttpException' with message 'Pyyntösi on virheellinen.' in E:\GITHUB\etuntifw\YII\framework\web\CController.php:336
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(309): CController->invalidActionParams(Object(CInlineAction))
+#1 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#2 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#3 E:\GITHUB\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#4 E:\GITHUB\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#5 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#6 E:\GITHUB\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#7 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#8 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('update')
+#9 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('tyovuoroot/upda...')
+#10 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#11 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#12 {main}
+REQUEST_URI=/index.php/tyovuoroot/update
+HTTP_REFERER=http://etuntifw.local/index.php/tyovuoroot/index
+---
+2015/08/17 21:38:07 [error] [exception.CHttpException.400] exception 'CHttpException' with message 'Pyyntösi on virheellinen.' in E:\GITHUB\etuntifw\YII\framework\web\CController.php:336
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(309): CController->invalidActionParams(Object(CInlineAction))
+#1 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#2 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#3 E:\GITHUB\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#4 E:\GITHUB\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#5 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#6 E:\GITHUB\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#7 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#8 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('update')
+#9 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('tyovuoroot/upda...')
+#10 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#11 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#12 {main}
+REQUEST_URI=/index.php/tyovuoroot/update
+HTTP_REFERER=http://etuntifw.local/index.php/tyovuoroot/index
+---
+2015/08/17 21:38:37 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "id".
+in E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php (113)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/17 21:39:52 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "id".
+in E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php (113)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/17 21:40:02 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "id".
+in E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php (113)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/17 21:42:59 [error] [exception.CException] exception 'CException' with message 'Luokan CActiveForm ja sen käyttäytymismallit eivät sisällä metodia tai sulkeumaa nimeltä "timeField".' in E:\GITHUB\etuntifw\YII\framework\base\CComponent.php:265
+Stack trace:
+#0 E:\GITHUB\etuntifw\protected\views\tyovuoroot\_form.php(26): CComponent->__call('timeField', Array)
+#1 E:\GITHUB\etuntifw\protected\views\tyovuoroot\_form.php(26): CActiveForm->timeField(Object(Tyovuoroot), 'alku', Array)
+#2 E:\GITHUB\etuntifw\YII\framework\web\CBaseController.php(126): require('E:\\GITHUB\\etunt...')
+#3 E:\GITHUB\etuntifw\YII\framework\web\CBaseController.php(95): CBaseController->renderInternal('E:\\GITHUB\\etunt...', Array, true)
+#4 E:\GITHUB\etuntifw\YII\framework\web\CController.php(869): CBaseController->renderFile('E:\\GITHUB\\etunt...', Array, true)
+#5 E:\GITHUB\etuntifw\protected\views\tyovuoroot\create.php(7): CController->renderPartial('_form', Array)
+#6 E:\GITHUB\etuntifw\YII\framework\web\CBaseController.php(126): require('E:\\GITHUB\\etunt...')
+#7 E:\GITHUB\etuntifw\YII\framework\web\CBaseController.php(95): CBaseController->renderInternal('E:\\GITHUB\\etunt...', Array, true)
+#8 E:\GITHUB\etuntifw\YII\framework\web\CController.php(869): CBaseController->renderFile('E:\\GITHUB\\etunt...', Array, true)
+#9 E:\GITHUB\etuntifw\YII\framework\web\CController.php(782): CController->renderPartial('create', Array, true)
+#10 E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php(80): CController->render('create', Array)
+#11 E:\GITHUB\etuntifw\YII\framework\web\actions\CInlineAction.php(49): TyovuorootController->actionCreate()
+#12 E:\GITHUB\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#13 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#14 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#15 E:\GITHUB\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#16 E:\GITHUB\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#17 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#18 E:\GITHUB\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#19 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#20 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('create')
+#21 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('tyovuoroot/crea...')
+#22 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#23 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#24 {main}
+REQUEST_URI=/index.php/tyovuoroot/create
+---
+2015/08/17 21:43:08 [error] [exception.CException] exception 'CException' with message 'Luokan CActiveForm ja sen käyttäytymismallit eivät sisällä metodia tai sulkeumaa nimeltä "datetimeField".' in E:\GITHUB\etuntifw\YII\framework\base\CComponent.php:265
+Stack trace:
+#0 E:\GITHUB\etuntifw\protected\views\tyovuoroot\_form.php(26): CComponent->__call('datetimeField', Array)
+#1 E:\GITHUB\etuntifw\protected\views\tyovuoroot\_form.php(26): CActiveForm->datetimeField(Object(Tyovuoroot), 'alku', Array)
+#2 E:\GITHUB\etuntifw\YII\framework\web\CBaseController.php(126): require('E:\\GITHUB\\etunt...')
+#3 E:\GITHUB\etuntifw\YII\framework\web\CBaseController.php(95): CBaseController->renderInternal('E:\\GITHUB\\etunt...', Array, true)
+#4 E:\GITHUB\etuntifw\YII\framework\web\CController.php(869): CBaseController->renderFile('E:\\GITHUB\\etunt...', Array, true)
+#5 E:\GITHUB\etuntifw\protected\views\tyovuoroot\create.php(7): CController->renderPartial('_form', Array)
+#6 E:\GITHUB\etuntifw\YII\framework\web\CBaseController.php(126): require('E:\\GITHUB\\etunt...')
+#7 E:\GITHUB\etuntifw\YII\framework\web\CBaseController.php(95): CBaseController->renderInternal('E:\\GITHUB\\etunt...', Array, true)
+#8 E:\GITHUB\etuntifw\YII\framework\web\CController.php(869): CBaseController->renderFile('E:\\GITHUB\\etunt...', Array, true)
+#9 E:\GITHUB\etuntifw\YII\framework\web\CController.php(782): CController->renderPartial('create', Array, true)
+#10 E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php(80): CController->render('create', Array)
+#11 E:\GITHUB\etuntifw\YII\framework\web\actions\CInlineAction.php(49): TyovuorootController->actionCreate()
+#12 E:\GITHUB\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#13 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#14 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#15 E:\GITHUB\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#16 E:\GITHUB\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#17 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#18 E:\GITHUB\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#19 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#20 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('create')
+#21 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('tyovuoroot/crea...')
+#22 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#23 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#24 {main}
+REQUEST_URI=/index.php/tyovuoroot/create
+---
+2015/08/17 21:43:15 [error] [exception.CException] exception 'CException' with message 'Ominaisuutta "CActiveForm.datetime" ei ole määritelty.' in E:\GITHUB\etuntifw\YII\framework\base\CComponent.php:130
+Stack trace:
+#0 E:\GITHUB\etuntifw\protected\views\tyovuoroot\_form.php(26): CComponent->__get('datetime')
+#1 E:\GITHUB\etuntifw\YII\framework\web\CBaseController.php(126): require('E:\\GITHUB\\etunt...')
+#2 E:\GITHUB\etuntifw\YII\framework\web\CBaseController.php(95): CBaseController->renderInternal('E:\\GITHUB\\etunt...', Array, true)
+#3 E:\GITHUB\etuntifw\YII\framework\web\CController.php(869): CBaseController->renderFile('E:\\GITHUB\\etunt...', Array, true)
+#4 E:\GITHUB\etuntifw\protected\views\tyovuoroot\create.php(7): CController->renderPartial('_form', Array)
+#5 E:\GITHUB\etuntifw\YII\framework\web\CBaseController.php(126): require('E:\\GITHUB\\etunt...')
+#6 E:\GITHUB\etuntifw\YII\framework\web\CBaseController.php(95): CBaseController->renderInternal('E:\\GITHUB\\etunt...', Array, true)
+#7 E:\GITHUB\etuntifw\YII\framework\web\CController.php(869): CBaseController->renderFile('E:\\GITHUB\\etunt...', Array, true)
+#8 E:\GITHUB\etuntifw\YII\framework\web\CController.php(782): CController->renderPartial('create', Array, true)
+#9 E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php(80): CController->render('create', Array)
+#10 E:\GITHUB\etuntifw\YII\framework\web\actions\CInlineAction.php(49): TyovuorootController->actionCreate()
+#11 E:\GITHUB\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#12 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#13 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#14 E:\GITHUB\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#15 E:\GITHUB\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#16 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#17 E:\GITHUB\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#18 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#19 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('create')
+#20 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('tyovuoroot/crea...')
+#21 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#22 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#23 {main}
+REQUEST_URI=/index.php/tyovuoroot/create
+---
+2015/08/17 21:43:23 [error] [exception.CException] exception 'CException' with message 'Luokan CActiveForm ja sen käyttäytymismallit eivät sisällä metodia tai sulkeumaa nimeltä "time".' in E:\GITHUB\etuntifw\YII\framework\base\CComponent.php:265
+Stack trace:
+#0 E:\GITHUB\etuntifw\protected\views\tyovuoroot\_form.php(26): CComponent->__call('time', Array)
+#1 E:\GITHUB\etuntifw\protected\views\tyovuoroot\_form.php(26): CActiveForm->time(Object(Tyovuoroot), 'alku', Array)
+#2 E:\GITHUB\etuntifw\YII\framework\web\CBaseController.php(126): require('E:\\GITHUB\\etunt...')
+#3 E:\GITHUB\etuntifw\YII\framework\web\CBaseController.php(95): CBaseController->renderInternal('E:\\GITHUB\\etunt...', Array, true)
+#4 E:\GITHUB\etuntifw\YII\framework\web\CController.php(869): CBaseController->renderFile('E:\\GITHUB\\etunt...', Array, true)
+#5 E:\GITHUB\etuntifw\protected\views\tyovuoroot\create.php(7): CController->renderPartial('_form', Array)
+#6 E:\GITHUB\etuntifw\YII\framework\web\CBaseController.php(126): require('E:\\GITHUB\\etunt...')
+#7 E:\GITHUB\etuntifw\YII\framework\web\CBaseController.php(95): CBaseController->renderInternal('E:\\GITHUB\\etunt...', Array, true)
+#8 E:\GITHUB\etuntifw\YII\framework\web\CController.php(869): CBaseController->renderFile('E:\\GITHUB\\etunt...', Array, true)
+#9 E:\GITHUB\etuntifw\YII\framework\web\CController.php(782): CController->renderPartial('create', Array, true)
+#10 E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php(80): CController->render('create', Array)
+#11 E:\GITHUB\etuntifw\YII\framework\web\actions\CInlineAction.php(49): TyovuorootController->actionCreate()
+#12 E:\GITHUB\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#13 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#14 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#15 E:\GITHUB\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#16 E:\GITHUB\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#17 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#18 E:\GITHUB\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#19 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#20 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('create')
+#21 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('tyovuoroot/crea...')
+#22 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#23 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#24 {main}
+REQUEST_URI=/index.php/tyovuoroot/create
+---
+2015/08/17 21:46:26 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Järjestelmä ei löydä pyydettyä toimintoa "creat".' in E:\GITHUB\etuntifw\YII\framework\web\CController.php:483
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(270): CController->missingAction('creat')
+#1 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('creat')
+#2 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('tyovuoroot/crea...')
+#3 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php/tyovuoroot/creat
+---
+2015/08/17 21:48:22 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "id".
+in E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php (113)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/17 21:49:04 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "id".
+in E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php (113)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/17 21:49:56 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "id".
+in E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php (113)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/17 21:53:19 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "id".
+in E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php (113)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/17 21:57:14 [error] [php] strtotime() expects parameter 1 to be string, array given (E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php:113)
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\actions\CAction.php(108): ReflectionMethod->invokeArgs()
+#1 E:\GITHUB\etuntifw\YII\framework\web\actions\CInlineAction.php(47): CInlineAction->runWithParamsInternal()
+#2 E:\GITHUB\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams()
+#3 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(133): TyovuorootController->runAction()
+#4 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#5 E:\GITHUB\etuntifw\YII\framework\web\CController.php(1145): CAccessControlFilter->filter()
+#6 E:\GITHUB\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): TyovuorootController->filterAccessControl()
+#7 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#8 E:\GITHUB\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#9 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): TyovuorootController->runActionWithFilters()
+#10 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): TyovuorootController->run()
+#11 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#12 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#13 E:\GITHUB\etuntifw\index.php(13): CWebApplication->run()
+REQUEST_URI=/index.php/tyovuoroot/update?id=6978
+in E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php (113)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/17 21:57:19 [error] [php] strtotime() expects parameter 1 to be string, array given (E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php:113)
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\actions\CAction.php(108): ReflectionMethod->invokeArgs()
+#1 E:\GITHUB\etuntifw\YII\framework\web\actions\CInlineAction.php(47): CInlineAction->runWithParamsInternal()
+#2 E:\GITHUB\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams()
+#3 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(133): TyovuorootController->runAction()
+#4 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#5 E:\GITHUB\etuntifw\YII\framework\web\CController.php(1145): CAccessControlFilter->filter()
+#6 E:\GITHUB\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): TyovuorootController->filterAccessControl()
+#7 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#8 E:\GITHUB\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#9 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): TyovuorootController->runActionWithFilters()
+#10 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): TyovuorootController->run()
+#11 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#12 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#13 E:\GITHUB\etuntifw\index.php(13): CWebApplication->run()
+REQUEST_URI=/index.php/tyovuoroot/update?id=6978
+in E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php (113)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/17 21:58:02 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "id".
+in E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php (114)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/17 22:04:48 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "id".
+in E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php (114)
+in E:\GITHUB\etuntifw\index.php (13)

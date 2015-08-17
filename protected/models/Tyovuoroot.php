@@ -50,13 +50,14 @@ public $osoite;
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('tid, time, kohde, pvm, alku, loppu, pituus, ruokatauko, alku_r, kesto, tyoajanlaatu, tyoajanmerkinta, tietoja, osoiteOnline', 'required'),
+			array('kohde, pvm, alku, loppu, pituus, tyoajanlaatu, tyoajanmerkinta', 'required'),
 			array('tid', 'numerical', 'integerOnly'=>true),
 			array('kohde', 'length', 'max'=>255),
 			array('pvm', 'length', 'max'=>20),
 			array('alku, loppu, pituus, alku_r, kesto', 'length', 'max'=>10),
 			array('ruokatauko, tyoajanlaatu, tyoajanmerkinta', 'length', 'max'=>50),
 			array('osoiteOnline', 'length', 'max'=>100),
+			array('tietoja', 'length', 'max'=>2000),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('id, tid, time, kohde, pvm, alku, loppu, pituus, ruokatauko, alku_r, kesto, tyoajanlaatu, tyoajanmerkinta, tietoja, osoiteOnline, osoite', 'safe', 'on'=>'search'),
