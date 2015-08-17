@@ -65,11 +65,17 @@ class SivexkuittiController extends Controller
 	public function actionUpdatetime()
 	{
 
- 		$newdate = date("d.m.Y H:i:s",strtotime($_POST['value']));
-
 		$model = $this->loadModel($_POST['id']);
+
+ 		$newdate = date("d.m.Y H:i:s",strtotime($_POST['value']));
+		if(!empty($model->tietoja)) 
+		  $tietoja = $model->tietoja."\n"; 
+		else 
+		  $tietoja = "Perustiedot ovat: Aloitus-".$model->aloitan.", Lopetus-".$model->loppui."\n";
+
 		$model->$_POST['request']=$newdate;
 		$model->status=$_POST['status'];
+		$model->tietoja=$tietoja.Yii::app()->user->nimi." (".date("d.m.Y H:i")."): tilanne-".$_POST['request'].", vanha-".$model->$_POST['request'].", uusi-".$newdate;
 		$model->save();
 	}
 
@@ -185,7 +191,7 @@ class SivexkuittiController extends Controller
 			//'pagination'=>false
 		));
 
-		$dataProvider->pagination->pageSize = 100;
+		$dataProvider->pagination->pageSize = 50;
 		$this->render('index', array('dataProvider' => $dataProvider));
 	}
 
