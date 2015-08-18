@@ -59,14 +59,14 @@ if(isset($m->toimenpiteet))
 		<?php echo $form->labelEx($model,'tyoajanlaatu'); ?>
 		<?php
         	$list = CHtml::listData(Tyontekijat::model()->findAll(array('order' => 'tekijan_nimi')), 'id', 'id');
-        	echo $form->dropDownList($model, 'id', $list,array('class'=>'form-control'));
+        	echo $form->dropDownList($model, 'tyoajanlaatu', $list,array('class'=>'form-control'));
         	?>
   </div>
   <div class="col-sm-3">
 		<?php echo $form->labelEx($model,'tyoajanmerkinta'); ?>
 		<?php
         	$list = CHtml::listData(Tyontekijat::model()->findAll(array('order' => 'tekijan_nimi')), 'id', 'id');
-        	echo $form->dropDownList($model, 'id', $list,array('class'=>'form-control'));
+        	echo $form->dropDownList($model, 'tyoajanmerkinta', $list,array('class'=>'form-control'));
         	?>
   </div>
   <div class="col-sm-3">
