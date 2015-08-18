@@ -88,7 +88,14 @@ Yii::app()->clientScript->registerPackage('bootstrapCSS');
 	<?php if(isset(Yii::app()->user->adminID)) : ?>
         <li><?php echo CHtml::link(Yii::t('main', 'Mobiili'),array('/sivexkuitti/index')); ?></li>
         <li><?php echo CHtml::link(Yii::t('main', 'Työntekijät'),array('/tyontekijat/admin')); ?></li>
-        <li><?php echo CHtml::link(Yii::t('main', 'Kohteet'),array('/kohteet/admin')); ?></li>
+
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?php echo Yii::t('main', 'Kohteet'); ?> <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+        	<li><?php echo CHtml::link(Yii::t('main', 'Kohteet lista'),array('/kohteet/index')); ?></li>
+        	<li><?php echo CHtml::link(Yii::t('main', 'Kohteet hallinta'),array('/kohteet/admin')); ?></li>
+          </ul>
+        </li>
 
 	<?php if(Yii::app()->user->adminPaketti == '2') : ?>
         <li class="dropdown">
