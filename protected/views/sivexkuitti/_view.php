@@ -76,22 +76,22 @@ else
 
 	<!-- adminPaketti -->
 	<?php if(Yii::app()->user->adminPaketti == '2') : ?>
+	<?php
+	$did = date("Ymd",strtotime($apvm[$data->id]));
+	?>
 	<td width="1">
+	  <button class="btn btn-default vietyovuoroon" pvmtid="<?php echo $did.'_'.$data->tid; ?>"><b class="glyphicon glyphicon-time"></b></button>
 	<?php  if($obtrue == true):  ?>
-	<div class="row">
-	 <div class="col-sm-3">
 
-	  <div class="btn btn-info" data-toggle="collapse" data-target="<?php echo '#sushow_'.$data->id; ?>">
-	  <?php echo Yii::t('main', 'suunnitellu'); ?> <b class="caret"></b>
-	  </div>
+	  <button class="btn btn-success" data-toggle="collapse" data-target="<?php echo '#sushow_'.$data->id; ?>">
+	  <b class="caret"></b>
+	  </button>
 
 	    <div style="position:absolute;width:300px;z-index: 2;" class="collapse" id="<?php echo 'sushow_'.$data->id; ?>">
 	    <br>
 	    <div class="well" style=""><?php $this->renderPartial('//tyovuoroot/did',array('id'=>$su['id'])); ?></div>
 	    </div>
 
-	 </div>
-	</div>
 	<?php  endif;  ?>
 	</td>
 
