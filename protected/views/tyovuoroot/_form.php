@@ -29,6 +29,7 @@ if(isset($m->toimenpiteet))
 	<?php echo $form->errorSummary($model); ?>
 	<?php echo $form->hiddenField($model,'id',array('id'=>$model->id)); ?>
 	<?php echo $form->hiddenField($model,'tid'); ?>
+	<?php echo $form->hiddenField($model,'ruokatauko'); ?>
 	<?php echo $form->error($model,'tid'); ?>
 
 <div class="row">
