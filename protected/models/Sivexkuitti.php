@@ -31,7 +31,6 @@
 class Sivexkuitti extends DB2ActiveRecord
 {
 
-public $tekijan_nimi;
 public $domain;
 
 	/**
@@ -70,7 +69,7 @@ public $domain;
 			array('viesti', 'length', 'max'=>250),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, asiakas_num, time, requests, puh_numero, imei, bluetooth_name, sim_serial_number, subscriber_id, my_location, osoite, kohde_kannasta, kohdenID, aloitan, loppui, viesti, tekijan_nimi, tid, etaisyys, status, tietoja, admin, hyvaksytty, tekijan_nimi, domain', 'safe', 'on'=>'search'),
+			array('id, asiakas_num, time, requests, puh_numero, imei, bluetooth_name, sim_serial_number, subscriber_id, my_location, osoite, kohde_kannasta, kohdenID, aloitan, loppui, viesti, tekijan_nimi, tid, etaisyys, status, tietoja, admin, hyvaksytty, domain', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -82,7 +81,6 @@ public $domain;
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-		        'tyontekijat' => array(self::BELONGS_TO, 'Tyontekijat', 'tid'),
 		);
 	}
 
@@ -130,9 +128,6 @@ public $domain;
 		$criteria=new CDbCriteria;
 		$criteria->order = 't.id DESC';
 
-		$criteria->with=array('tyontekijat');
-
-		$criteria->compare('tekijan_nimi',$this->tekijan_nimi);
 
 		$criteria->compare('id',$this->id);
 		$criteria->compare('asiakas_num',$this->asiakas_num,true);

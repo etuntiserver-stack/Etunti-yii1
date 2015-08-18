@@ -29,6 +29,13 @@ function dateDiff($start, $end) {
 
 ?>
 
+<style>
+td .latikkoAsetukset{
+	width: 220px;
+	white-space: nowrap;
+	min-height:70px;
+}
+</style>
 
 <div class="row">
   <div class="row col-sm-2">
@@ -45,7 +52,7 @@ function dateDiff($start, $end) {
 	$tt = Tyontekijat::model()->findAll("aktiivinen = '1'",array('select'=>'id,tekijan_nimi'));
 
 	foreach($tt as $t){
-	  echo '<th><div style="width:200px;">';
+	  echo '<th><div class="latikkoAsetukset">';
  	  echo $t->tekijan_nimi;	
 	  echo '</div></th>';
 	}
@@ -59,6 +66,7 @@ function dateDiff($start, $end) {
 
 	$plus = "+$i day";
 	$date = date("d.m.Y",strtotime($from." ".$plus));
+	$did = date("Ymd",strtotime($from." ".$plus));
 
 	$columnDate = date("N/d.m",strtotime($date));
 	$explColDate = explode("/",$columnDate);
@@ -67,7 +75,8 @@ function dateDiff($start, $end) {
   	echo '<td class="fixed-column"><b>'.$arrDate[$explColDate[0]].", ".$explColDate[1].'</b></td>';
 
 	foreach($tt as $t){
-	  echo '<td><div class="small" style="white-space: nowrap;width:200px;min-height:70px">';
+	  echo '<td id="'.$did.'_'.$t->id.'"><div class="small laatikko latikkoAsetukset" pvm="'.$date.'" tid="'.$t->id.'">';
+
 		$tv = Tyovuoroot::model()->findAll("tid = '".$t->id."' and pvm = '".$date."' ",array('select'=>'kohde')); 
 		foreach($tv as $tvVal)
 		{
@@ -85,7 +94,8 @@ function dateDiff($start, $end) {
 		  else
 		    $al = '';
 
-		  echo '<a href="#" class="link tv_edit" tvid="'.$tvVal->id.'">'.$al.' '.$k['osoite'].'</a><br>';
+		  echo '<a href="#" class="link tv_edit" id="tv_'.$tvVal->id.'">'.$al.' '.$k['osoite'].'</a><br>';
+
 		}
 
 	  echo '</div></td>';
@@ -102,6 +112,8 @@ function dateDiff($start, $end) {
 
 	<div id="showres" class="modal fade" tabindex="-1" role="dialog"></div>
 	<?php Yii::app()->clientScript->registerPackage('fixedTable'); ?>
+	<?php Yii::app()->clientScript->registerPackage('tyovuoroot'); ?>
+
 
 <script type="text/javascript">
 $(document).ready(function(){
@@ -145,37 +157,6 @@ $(function () {
     $(window).resize(onResize);
 });
 
-
-
-$(".etsi_month").on('change', function() {
-	var thisVal = $(this).val();
-	if(!thisVal)
-	var thisVal = 'kaikki';
-
-        $.ajax({
-           url: "index",
-	   type:'POST',
-	   data: { "etsi_month" : thisVal },
-           success: function(html){
-		window.location.reload();
-           }
-        });
-});
-
-$(".tv_edit").click(function(){
-
-	var thisVal = $(this).attr("tvid");
-
-        $.ajax({
-           url: 'update?id='+thisVal,
-           type: "GET",
-           //data: {"tarjousPainike" : "true"},
-           success: function(html){
-		$('#showres').modal().html(html);
-           }
-        });
-
-});
 
 });
 </script>
