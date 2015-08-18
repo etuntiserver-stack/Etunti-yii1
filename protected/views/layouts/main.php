@@ -35,6 +35,8 @@ Yii::app()->clientScript->registerPackage('bootstrapCSS');
 ?>
 
 
+
+
 	<title><?php echo CHtml::encode($this->pageTitle); ?></title>
 </head>
 
@@ -87,7 +89,17 @@ Yii::app()->clientScript->registerPackage('bootstrapCSS');
         <li><?php echo CHtml::link(Yii::t('main', 'Mobiili'),array('/sivexkuitti/index')); ?></li>
         <li><?php echo CHtml::link(Yii::t('main', 'Työntekijät'),array('/tyontekijat/admin')); ?></li>
         <li><?php echo CHtml::link(Yii::t('main', 'Kohteet'),array('/kohteet/admin')); ?></li>
-        <li><?php echo CHtml::link(Yii::t('main', 'Työvuoroot'),array('/tyovuoroot/index')); ?></li>
+
+	<?php if(Yii::app()->user->adminPaketti == '2') : ?>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?php echo Yii::t('main', 'Työvuoroot'); ?> <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+        	<li><?php echo CHtml::link(Yii::t('main', 'Työvuoroon taulukko'),array('/tyovuoroot/index')); ?></li>
+        	<li><?php echo CHtml::link(Yii::t('main', 'Työvuoroon hallinta'),array('/tyovuoroot/admin')); ?></li>
+          </ul>
+        </li>
+	<?php endif; ?>
+
         <li><?php echo CHtml::link(Yii::t('main', 'Järjestelmänvalvojat'),array('/administrators/admin')); ?></li>
 	<?php endif; ?>
 

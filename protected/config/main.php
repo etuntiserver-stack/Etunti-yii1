@@ -49,7 +49,7 @@ Yii::setPathOfAlias('chartjs', dirname(__FILE__).'/../extensions/yii-chartjs');
   else
   $db2 = '';
 
-  $db2_host = 'localhost';
+  $db2_host = '127.0.0.1';
   $db2_user = 'root';
   $db2_pass = '';
 
@@ -193,6 +193,13 @@ return array(
 		    'jquery-migrate-1.2.1.min.js',
 		    'jquery.dataTables.min.js',
 		    'FixedColumns.js',
+	  	),
+                'depends'=>array('jquery'),         // cause load jquery before load this.
+            ),
+            'tyovuoroot'=>array(                       //set others js libraries
+                'baseUrl'=>'js/',
+                'js'=>array(
+		    'tvuoroot.js',
 	  	),
                 'depends'=>array('jquery'),         // cause load jquery before load this.
             ),

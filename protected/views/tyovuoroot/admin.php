@@ -3,8 +3,8 @@
 /* @var $model Tyovuoroot */
 
 $this->breadcrumbs=array(
-	'Tyovuoroots'=>array('index'),
-	'Manage',
+	Yii::t('main', 'Työvuoroot')=>array('index'),
+	Yii::t('main', 'Hallinta'),
 );
 
 $this->menu=array(
@@ -26,14 +26,11 @@ $('.search-form form').submit(function(){
 ");
 ?>
 
-<h1>Manage Tyovuoroots</h1>
+<h1><?php echo Yii::t('main', 'Työvuoroon hallinta'); ?></h1>
 
-<p>
-You may optionally enter a comparison operator (<b>&lt;</b>, <b>&lt;=</b>, <b>&gt;</b>, <b>&gt;=</b>, <b>&lt;&gt;</b>
-or <b>=</b>) at the beginning of each of your search values to specify how the comparison should be done.
-</p>
 
-<?php echo CHtml::link('Advanced Search','#',array('class'=>'search-button')); ?>
+
+<?php echo CHtml::link('Haku','#',array('class'=>'search-button')); ?>
 <div class="search-form" style="display:none">
 <?php $this->renderPartial('_search',array(
 	'model'=>$model,
@@ -46,11 +43,23 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 	'filter'=>$model,
 	'columns'=>array(
 		'id',
-		'tid',
-		'time',
-		'kohde',
+		//'tid',
+array(
+        'name'  => 'tt.tekijan_nimi',
+        'filter'=>CHtml::activeTextField($model,'tekijan_nimi'),
+    ),
+array(
+        'name'  => 'kohteet.osoite',
+        'filter'=>CHtml::activeTextField($model,'osoite'),
+    ),
+
 		'pvm',
 		'alku',
+		'loppu',
+		'pituus',
+
+
+
 		/*
 		'loppu',
 		'pituus',

@@ -49,6 +49,7 @@ $('.search-form form').submit(function(){
 		'loppui',
 		'status',
 		'imei',
+		'tekijan_nimi',
 		/*
 		'bluetooth_name',
 		'sim_serial_number',
