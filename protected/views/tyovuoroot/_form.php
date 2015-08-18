@@ -30,6 +30,8 @@ if(isset($m->toimenpiteet))
 	<?php echo $form->hiddenField($model,'id',array('id'=>$model->id)); ?>
 	<?php echo $form->hiddenField($model,'tid'); ?>
 	<?php echo $form->hiddenField($model,'ruokatauko'); ?>
+	<?php echo $form->hiddenField($model,'alku_r'); ?>
+	<?php echo $form->hiddenField($model,'kesto'); ?>
 	<?php echo $form->error($model,'tid'); ?>
 
 <div class="row">
