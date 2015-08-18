@@ -119,15 +119,15 @@ $(document).ready(function(){
 	if( e.target[0].value != '')
 	{
 	  $.ajax({
-		  url:'update?id='+e.target[0].value,
+		  url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/update?id='+e.target[0].value,
 		  data:$(this).serialize(),
 		  type:'POST',
 		  success:function(data){
 			console.log(data);
 
 	  		$.ajax({
-				  url:'did',
-				  type:'POST',
+				  url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/did',
+				  type:'GET',
 				  data: { id : e.target[0].value },
 				  success:function(data){
 					  console.log(data);
@@ -150,13 +150,13 @@ $(document).ready(function(){
 	} else {
 
 	  $.ajax({
-		  url:'create',
+		  url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/create',
 		  data:$(this).serialize(),
 		  type:'POST',
 		  success:function(data){
 			//console.log(data);
 	  		$.ajax({
-				  url:'did',
+				  url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/did',
 				  success:function(data){
 					  console.log(data);
 					  $('#showres').modal('hide');
@@ -211,7 +211,7 @@ $(document).ready(function(){
 	var thisID = $(this).val();
 
 	  $.ajax({
-		  url:'showohje?id='+thisID,
+		  url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/showohje?id='+thisID,
 		  success:function(data){
 			console.log(data);
 			$('.ohje').text(data);

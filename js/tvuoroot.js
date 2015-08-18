@@ -5,7 +5,7 @@ $(".tv_edit").click(function(){
 	var thisVal = $(this).attr("id").split("_");
 
         $.ajax({
-           url: 'update?id='+thisVal[1],
+           url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/update?id='+thisVal[1],
            type: "GET",
            //data: {"tarjousPainike" : "true"},
            success: function(html){

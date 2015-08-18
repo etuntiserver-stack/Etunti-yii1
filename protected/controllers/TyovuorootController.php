@@ -31,6 +31,10 @@ class TyovuorootController extends Controller
 				'actions'=>array('admin','delete','create','update','index','view','updatetime','showohje','did'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
+			array('deny', // allow admin user to perform 'admin' and 'delete' actions
+				'actions'=>array('admin','delete','create','update','index','view','updatetime','showohje','did'),
+                		'message'=>Yii::t('main', 'Tämä TASO ei kuuluu teille'),
+			),
 			array('deny',  // deny all users
 				'users'=>array('*'),
 			),
@@ -40,7 +44,7 @@ class TyovuorootController extends Controller
 	public function isEtuntiAdmin() {
 
 		$m = Administrators::model()->findbypk(Yii::app()->user->adminID);
-	        if($m->id == Yii::app()->user->adminID)
+	        if($m->id == Yii::app()->user->adminID and Yii::app()->user->adminPaketti == '2')
 	            return true;
 		else
 	            return false;
@@ -66,40 +70,7 @@ class TyovuorootController extends Controller
 
 	public function actionDid()
 	{
-		if(isset($_POST['id']))
-		  $tv=$this->loadModel($_POST['id']);
-		else
-		  $tv = Tyovuoroot::model()->find("id !='' order by id desc");
-
-		$did = date("Ymd",strtotime($tv->pvm));
-		echo '<div class="small laatikko latikkoAsetukset" pvm="'.$tv->pvm.'" tid="'.$tv->tid.'" id="'.$did.'_'.$tv->tid.'">';
-
-		$tv = Tyovuoroot::model()->findAll("tid = '".$tv->tid."' and pvm = '".$tv->pvm."' ",array('select'=>'kohde')); 
-		foreach($tv as $tvVal)
-		{
-		$k = Kohteet::model()->findbypk($tvVal->kohde);
-
-	  	    $strlen = strlen($k['osoite']);
-
-	     	  if($strlen > 18)
-	  	    $k['osoite'] = substr($k['osoite'],0,18).'..';
-	   	  else
-		    $k['osoite'] = $k['osoite'];
-
-		  if($tvVal->alku > 0 and $tvVal->loppu > 0)
-		    $al = $tvVal->alku.'-'.$tvVal->loppu;
-		  else
-		    $al = '';
-
-		  echo '<a href="#" class="link tv_edit" id="tv_'.$tvVal->id.'">'.$al.' '.$k['osoite'].'</a><br>';
-
-		}
-
-	  	echo '</div>';
-		?>
-		<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/tvuoroot.js"></script>
-		<?php
-
+		$this->renderPartial('did');
 	}
 
 	/**

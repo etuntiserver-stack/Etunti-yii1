@@ -61,22 +61,9 @@ else
 	// <-- adminPaketti
 	if(Yii::app()->user->adminPaketti == '2' and isset($data->tid) and !empty($apvmForSu[$data->id]))
  	{
-	  $su = Tyovuoroot::model()->findAll(" tid='".$data->tid."' and pvm='".$apvmForSu[$data->id]."' ");
-     	  foreach($su as $ob)
-	  {
-	    $k = Kohteet::model()->findbypk($ob->kohde);
-	    if(isset($k->osoite))
-	    {
-	  	  $strlen = strlen($k->osoite);
-	     	  if($strlen > 18)
-	  	    $osoite = substr($k->osoite,0,18).'..';
-	   	  else
-		    $osoite = $k->osoite;
-	    }
-
-	    $obtrue = true;
-	    $objcts .=  $ob->alku."-".$ob->loppu." ".$osoite."<br>";
-	  }
+	  $su = Tyovuoroot::model()->find(" tid='".$data->tid."' and pvm='".$apvmForSu[$data->id]."' ");
+	  if(isset($su['id']))
+	  $obtrue = true;
 	}
 	// <-- adminPaketti 
 ?>
@@ -87,6 +74,29 @@ else
 	<td><b><?php echo CHtml::encode(date("d.m",strtotime($data->aloitan))); ?></b></td>
 	<td><?php echo CHtml::encode($data->tekijan_nimi); ?></td>
 
+	<!-- adminPaketti -->
+	<?php if(Yii::app()->user->adminPaketti == '2') : ?>
+	<td width="1">
+	<?php  if($obtrue == true):  ?>
+	<div class="row">
+	 <div class="col-sm-3">
+
+	  <div class="btn btn-info" data-toggle="collapse" data-target="<?php echo '#sushow_'.$data->id; ?>">
+	  <?php echo Yii::t('main', 'suunnitellu'); ?> <b class="caret"></b>
+	  </div>
+
+	    <div style="position:absolute;width:300px;z-index: 2;" class="collapse" id="<?php echo 'sushow_'.$data->id; ?>">
+	    <br>
+	    <div class="well" style=""><?php $this->renderPartial('//tyovuoroot/did',array('id'=>$su['id'])); ?></div>
+	    </div>
+
+	 </div>
+	</div>
+	<?php  endif;  ?>
+	</td>
+
+	<?php endif; ?>
+	<!-- adminPaketti -->
 
 	<td width="1">
 	<div class="row">
@@ -99,29 +109,6 @@ else
 	 </div>
 	</div>
 	</td>
-
-		
-	<!-- adminPaketti -->
-	<?php if(Yii::app()->user->adminPaketti == '2') : ?>
-	<td width="1">
-	<?php  if($obtrue == true) $obclass = 'info'; else $obclass = 'default'; ?>
-	<div class="row">
-	 <div class="col-sm-3">
-
-	  <div class="btn btn-<?php echo $obclass; ?>" data-toggle="collapse" data-target="<?php echo '#sushow_'.$data->id; ?>">
-	  <?php echo Yii::t('main', 'suunnitellu'); ?> <b class="caret"></b>
-	  </div>
-
-	    <div style="position:absolute;width:300px;z-index: 99999999;" class="collapse" id="<?php echo 'sushow_'.$data->id; ?>">
-	    <br>
-	    <div class="alert alert-info" style=""><?php  echo $objcts; ?></div>
-	    </div>
-
-	 </div>
-	</div>
-	</td>
-	<?php endif; ?>
-	<!-- adminPaketti -->
 
 	<td width="1">
 	<div class="row">

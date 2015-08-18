@@ -69,11 +69,12 @@ $this->menu=array(
   <th><?php echo Yii::t('main', 'ID'); ?></th>
   <th><?php echo Yii::t('main', 'Päivä'); ?></th>
   <th><?php echo Yii::t('main', 'Työntekijä'); ?></th>
-  <th class="col-sm-3"><?php echo Yii::t('main', 'Osoite/Matka'); ?></th>
 
   <?php if(Yii::app()->user->adminPaketti == '2') : ?>
   <th><?php echo Yii::t('main', 'Työvuoroot'); ?></th>
   <?php endif; ?>
+
+  <th class="col-sm-3"><?php echo Yii::t('main', 'Osoite/Matka'); ?></th>
 
   <th><?php echo Yii::t('main', 'Aloitus'); ?></th>
   <th><?php echo Yii::t('main', 'Lopetus'); ?></th>
@@ -103,6 +104,8 @@ $this->menu=array(
   </table>
 </div>
 
+	<div id="showres" class="modal fade" tabindex="-1" role="dialog"></div>
+	<?php Yii::app()->clientScript->registerPackage('tyovuoroot'); ?>
 
 <script type="text/javascript">
 $(document).ready(function(){
