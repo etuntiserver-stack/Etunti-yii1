@@ -6223,3 +6223,480 @@ in E:\GITHUB\etuntifw\index.php (13)
 2015/08/18 19:15:58 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "time".
 in E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php (159)
 in E:\GITHUB\etuntifw\index.php (13)
+2015/08/18 19:20:09 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Pyynnön selvittäminen "create" epäonnistui.' in E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php:286
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('create')
+#1 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#2 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/index.php/create
+HTTP_REFERER=http://etuntifw.local/index.php/tyovuoroot?pvmtid=20150814_81
+---
+2015/08/18 19:20:11 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Pyynnön selvittäminen "create" epäonnistui.' in E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php:286
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('create')
+#1 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#2 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/index.php/create
+HTTP_REFERER=http://etuntifw.local/index.php/tyovuoroot?pvmtid=20150814_81
+---
+2015/08/18 19:20:32 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Pyynnön selvittäminen "create" epäonnistui.' in E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php:286
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('create')
+#1 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#2 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/index.php/create
+HTTP_REFERER=http://etuntifw.local/index.php/tyovuoroot?pvmtid=20150814_81
+---
+2015/08/18 19:21:50 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Pyynnön selvittäminen "create" epäonnistui.' in E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php:286
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('create')
+#1 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#2 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/index.php/create
+HTTP_REFERER=http://etuntifw.local/index.php/tyovuoroot?pvmtid=20150814_81
+---
+2015/08/18 19:21:51 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Pyynnön selvittäminen "create" epäonnistui.' in E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php:286
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('create')
+#1 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#2 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/index.php/create
+HTTP_REFERER=http://etuntifw.local/index.php/tyovuoroot?pvmtid=20150814_81
+---
+2015/08/18 19:21:54 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Pyynnön selvittäminen "create" epäonnistui.' in E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php:286
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('create')
+#1 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#2 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/index.php/create
+HTTP_REFERER=http://etuntifw.local/index.php/tyovuoroot?pvmtid=20150814_81
+---
+2015/08/18 19:21:55 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Pyynnön selvittäminen "create" epäonnistui.' in E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php:286
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('create')
+#1 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#2 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/index.php/create
+HTTP_REFERER=http://etuntifw.local/index.php/tyovuoroot?pvmtid=20150814_81
+---
+2015/08/18 19:22:19 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Pyynnön selvittäminen "create" epäonnistui.' in E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php:286
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('create')
+#1 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#2 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/index.php/create
+HTTP_REFERER=http://etuntifw.local/index.php/tyovuoroot?pvmtid=20150814_81
+---
+2015/08/18 19:22:20 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Pyynnön selvittäminen "create" epäonnistui.' in E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php:286
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('create')
+#1 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#2 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/index.php/create
+HTTP_REFERER=http://etuntifw.local/index.php/tyovuoroot?pvmtid=20150814_81
+---
+2015/08/18 19:22:27 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Pyynnön selvittäminen "create" epäonnistui.' in E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php:286
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('create')
+#1 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#2 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/index.php/create
+HTTP_REFERER=http://etuntifw.local/index.php/tyovuoroot
+---
+2015/08/18 19:22:28 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Pyynnön selvittäminen "create" epäonnistui.' in E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php:286
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('create')
+#1 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#2 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/index.php/create
+HTTP_REFERER=http://etuntifw.local/index.php/tyovuoroot
+---
+2015/08/18 19:22:29 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Pyynnön selvittäminen "create" epäonnistui.' in E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php:286
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('create')
+#1 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#2 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/index.php/create
+HTTP_REFERER=http://etuntifw.local/index.php/tyovuoroot
+---
+2015/08/18 19:22:35 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Pyynnön selvittäminen "create" epäonnistui.' in E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php:286
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('create')
+#1 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#2 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/index.php/create
+HTTP_REFERER=http://etuntifw.local/index.php/tyovuoroot
+---
+2015/08/18 19:22:36 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Pyynnön selvittäminen "create" epäonnistui.' in E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php:286
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('create')
+#1 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#2 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/index.php/create
+HTTP_REFERER=http://etuntifw.local/index.php/tyovuoroot
+---
+2015/08/18 19:22:37 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Pyynnön selvittäminen "create" epäonnistui.' in E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php:286
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('create')
+#1 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#2 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/index.php/create
+HTTP_REFERER=http://etuntifw.local/index.php/tyovuoroot
+---
+2015/08/18 19:22:41 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Pyynnön selvittäminen "create" epäonnistui.' in E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php:286
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('create')
+#1 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#2 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/index.php/create
+HTTP_REFERER=http://etuntifw.local/index.php/tyovuoroot
+---
+2015/08/18 19:23:09 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Pyynnön selvittäminen "create" epäonnistui.' in E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php:286
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('create')
+#1 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#2 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/index.php/create
+---
+2015/08/18 19:24:55 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "id".
+in E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php (110)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/18 19:24:55 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "time".
+in E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php (110)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/18 19:47:17 [error] [php] Undefined variable: al (E:\GITHUB\etuntifw\protected\views\tyovuoroot\index.php:114)
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(869): TyovuorootController->renderFile()
+#1 E:\GITHUB\etuntifw\YII\framework\web\CController.php(782): TyovuorootController->renderPartial()
+#2 E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php(191): TyovuorootController->render()
+#3 E:\GITHUB\etuntifw\YII\framework\web\actions\CInlineAction.php(49): TyovuorootController->actionIndex()
+#4 E:\GITHUB\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams()
+#5 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(133): TyovuorootController->runAction()
+#6 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#7 E:\GITHUB\etuntifw\YII\framework\web\CController.php(1145): CAccessControlFilter->filter()
+#8 E:\GITHUB\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): TyovuorootController->filterAccessControl()
+#9 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#10 E:\GITHUB\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#11 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): TyovuorootController->runActionWithFilters()
+#12 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): TyovuorootController->run()
+#13 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#14 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#15 E:\GITHUB\etuntifw\index.php(13): CWebApplication->run()
+REQUEST_URI=/index.php/tyovuoroot/index
+in E:\GITHUB\etuntifw\protected\views\tyovuoroot\index.php (114)
+in E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php (191)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/18 20:58:13 [error] [php] Array to string conversion (E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php:64)
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(133): TyovuorootController->runAction()
+#1 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#2 E:\GITHUB\etuntifw\YII\framework\web\CController.php(1145): CAccessControlFilter->filter()
+#3 E:\GITHUB\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): TyovuorootController->filterAccessControl()
+#4 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#5 E:\GITHUB\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#6 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): TyovuorootController->runActionWithFilters()
+#7 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): TyovuorootController->run()
+#8 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#9 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#10 E:\GITHUB\etuntifw\index.php(13): CWebApplication->run()
+REQUEST_URI=/index.php/tyovuoroot/muisti
+in E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php (64)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/18 20:58:26 [error] [php] Array to string conversion (E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php:64)
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(133): TyovuorootController->runAction()
+#1 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#2 E:\GITHUB\etuntifw\YII\framework\web\CController.php(1145): CAccessControlFilter->filter()
+#3 E:\GITHUB\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): TyovuorootController->filterAccessControl()
+#4 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#5 E:\GITHUB\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#6 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): TyovuorootController->runActionWithFilters()
+#7 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): TyovuorootController->run()
+#8 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#9 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#10 E:\GITHUB\etuntifw\index.php(13): CWebApplication->run()
+REQUEST_URI=/index.php/tyovuoroot/muisti
+in E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php (64)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/18 20:58:57 [error] [php] Array to string conversion (E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php:64)
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(133): TyovuorootController->runAction()
+#1 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#2 E:\GITHUB\etuntifw\YII\framework\web\CController.php(1145): CAccessControlFilter->filter()
+#3 E:\GITHUB\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): TyovuorootController->filterAccessControl()
+#4 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#5 E:\GITHUB\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#6 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): TyovuorootController->runActionWithFilters()
+#7 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): TyovuorootController->run()
+#8 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#9 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#10 E:\GITHUB\etuntifw\index.php(13): CWebApplication->run()
+REQUEST_URI=/index.php/tyovuoroot/muisti
+in E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php (64)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/18 20:59:05 [error] [php] Array to string conversion (E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php:66)
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(133): TyovuorootController->runAction()
+#1 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#2 E:\GITHUB\etuntifw\YII\framework\web\CController.php(1145): CAccessControlFilter->filter()
+#3 E:\GITHUB\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): TyovuorootController->filterAccessControl()
+#4 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#5 E:\GITHUB\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#6 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): TyovuorootController->runActionWithFilters()
+#7 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): TyovuorootController->run()
+#8 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#9 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#10 E:\GITHUB\etuntifw\index.php(13): CWebApplication->run()
+REQUEST_URI=/index.php/tyovuoroot/muisti
+in E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php (66)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/18 20:59:05 [error] [php] Array to string conversion (E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php:66)
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(133): TyovuorootController->runAction()
+#1 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#2 E:\GITHUB\etuntifw\YII\framework\web\CController.php(1145): CAccessControlFilter->filter()
+#3 E:\GITHUB\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): TyovuorootController->filterAccessControl()
+#4 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#5 E:\GITHUB\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#6 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): TyovuorootController->runActionWithFilters()
+#7 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): TyovuorootController->run()
+#8 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#9 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#10 E:\GITHUB\etuntifw\index.php(13): CWebApplication->run()
+REQUEST_URI=/index.php/tyovuoroot/muisti
+in E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php (66)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/18 21:05:14 [error] [php] Trying to get property of non-object (E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php:68)
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(133): TyovuorootController->runAction()
+#1 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#2 E:\GITHUB\etuntifw\YII\framework\web\CController.php(1145): CAccessControlFilter->filter()
+#3 E:\GITHUB\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): TyovuorootController->filterAccessControl()
+#4 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#5 E:\GITHUB\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#6 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): TyovuorootController->runActionWithFilters()
+#7 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): TyovuorootController->run()
+#8 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#9 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#10 E:\GITHUB\etuntifw\index.php(13): CWebApplication->run()
+REQUEST_URI=/index.php/tyovuoroot/muisti
+in E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php (68)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/18 21:07:35 [error] [php] Invalid argument supplied for foreach() (E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php:67)
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(133): TyovuorootController->runAction()
+#1 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#2 E:\GITHUB\etuntifw\YII\framework\web\CController.php(1145): CAccessControlFilter->filter()
+#3 E:\GITHUB\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): TyovuorootController->filterAccessControl()
+#4 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#5 E:\GITHUB\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#6 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): TyovuorootController->runActionWithFilters()
+#7 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): TyovuorootController->run()
+#8 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#9 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#10 E:\GITHUB\etuntifw\index.php(13): CWebApplication->run()
+REQUEST_URI=/index.php/tyovuoroot/muisti
+in E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php (67)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/18 21:07:51 [error] [php] Invalid argument supplied for foreach() (E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php:67)
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(133): TyovuorootController->runAction()
+#1 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#2 E:\GITHUB\etuntifw\YII\framework\web\CController.php(1145): CAccessControlFilter->filter()
+#3 E:\GITHUB\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): TyovuorootController->filterAccessControl()
+#4 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#5 E:\GITHUB\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#6 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): TyovuorootController->runActionWithFilters()
+#7 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): TyovuorootController->run()
+#8 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#9 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#10 E:\GITHUB\etuntifw\index.php(13): CWebApplication->run()
+REQUEST_URI=/index.php/tyovuoroot/muisti
+in E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php (67)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/18 21:08:09 [error] [php] Invalid argument supplied for foreach() (E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php:67)
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(133): TyovuorootController->runAction()
+#1 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#2 E:\GITHUB\etuntifw\YII\framework\web\CController.php(1145): CAccessControlFilter->filter()
+#3 E:\GITHUB\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): TyovuorootController->filterAccessControl()
+#4 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#5 E:\GITHUB\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#6 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): TyovuorootController->runActionWithFilters()
+#7 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): TyovuorootController->run()
+#8 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#9 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#10 E:\GITHUB\etuntifw\index.php(13): CWebApplication->run()
+REQUEST_URI=/index.php/tyovuoroot/muisti
+in E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php (67)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/18 21:08:10 [error] [php] Invalid argument supplied for foreach() (E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php:67)
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(133): TyovuorootController->runAction()
+#1 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#2 E:\GITHUB\etuntifw\YII\framework\web\CController.php(1145): CAccessControlFilter->filter()
+#3 E:\GITHUB\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): TyovuorootController->filterAccessControl()
+#4 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#5 E:\GITHUB\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#6 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): TyovuorootController->runActionWithFilters()
+#7 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): TyovuorootController->run()
+#8 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#9 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#10 E:\GITHUB\etuntifw\index.php(13): CWebApplication->run()
+REQUEST_URI=/index.php/tyovuoroot/muisti
+in E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php (67)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/18 21:08:43 [error] [php] A non well formed numeric value encountered (E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php:62)
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams()
+#1 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(133): TyovuorootController->runAction()
+#2 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#3 E:\GITHUB\etuntifw\YII\framework\web\CController.php(1145): CAccessControlFilter->filter()
+#4 E:\GITHUB\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): TyovuorootController->filterAccessControl()
+#5 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#6 E:\GITHUB\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#7 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): TyovuorootController->runActionWithFilters()
+#8 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): TyovuorootController->run()
+#9 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#10 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#11 E:\GITHUB\etuntifw\index.php(13): CWebApplication->run()
+REQUEST_URI=/index.php/tyovuoroot/muisti
+in E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php (62)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/18 21:09:10 [error] [php] trim() expects parameter 1 to be string, array given (E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php:62)
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams()
+#1 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(133): TyovuorootController->runAction()
+#2 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#3 E:\GITHUB\etuntifw\YII\framework\web\CController.php(1145): CAccessControlFilter->filter()
+#4 E:\GITHUB\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): TyovuorootController->filterAccessControl()
+#5 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#6 E:\GITHUB\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#7 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): TyovuorootController->runActionWithFilters()
+#8 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): TyovuorootController->run()
+#9 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#10 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#11 E:\GITHUB\etuntifw\index.php(13): CWebApplication->run()
+REQUEST_URI=/index.php/tyovuoroot/muisti
+in E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php (62)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/18 21:17:46 [error] [php] Trying to get property of non-object (E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php:71)
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(133): TyovuorootController->runAction()
+#1 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#2 E:\GITHUB\etuntifw\YII\framework\web\CController.php(1145): CAccessControlFilter->filter()
+#3 E:\GITHUB\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): TyovuorootController->filterAccessControl()
+#4 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#5 E:\GITHUB\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#6 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): TyovuorootController->runActionWithFilters()
+#7 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): TyovuorootController->run()
+#8 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#9 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#10 E:\GITHUB\etuntifw\index.php(13): CWebApplication->run()
+REQUEST_URI=/index.php/tyovuoroot/muisti
+in E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php (71)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/18 21:18:57 [error] [php] Invalid argument supplied for foreach() (E:\GITHUB\etuntifw\YII\framework\db\schema\CDbCommandBuilder.php:567)
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\actions\CInlineAction.php(49): TyovuorootController->actionMuisti()
+#1 E:\GITHUB\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams()
+#2 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(133): TyovuorootController->runAction()
+#3 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#4 E:\GITHUB\etuntifw\YII\framework\web\CController.php(1145): CAccessControlFilter->filter()
+#5 E:\GITHUB\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): TyovuorootController->filterAccessControl()
+#6 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#7 E:\GITHUB\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#8 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): TyovuorootController->runActionWithFilters()
+#9 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): TyovuorootController->run()
+#10 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#11 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#12 E:\GITHUB\etuntifw\index.php(13): CWebApplication->run()
+REQUEST_URI=/index.php/tyovuoroot/muisti
+in E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php (70)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/18 21:35:28 [error] [php] Trying to get property of non-object (E:\GITHUB\etuntifw\protected\views\tyovuoroot\did.php:8)
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(869): TyovuorootController->renderFile()
+#1 E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php(103): TyovuorootController->renderPartial()
+#2 E:\GITHUB\etuntifw\YII\framework\web\actions\CInlineAction.php(49): TyovuorootController->actionDid()
+#3 E:\GITHUB\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams()
+#4 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(133): TyovuorootController->runAction()
+#5 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#6 E:\GITHUB\etuntifw\YII\framework\web\CController.php(1145): CAccessControlFilter->filter()
+#7 E:\GITHUB\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): TyovuorootController->filterAccessControl()
+#8 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#9 E:\GITHUB\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#10 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): TyovuorootController->runActionWithFilters()
+#11 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): TyovuorootController->run()
+#12 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#13 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#14 E:\GITHUB\etuntifw\index.php(13): CWebApplication->run()
+REQUEST_URI=/index.php/tyovuoroot/did?id=20150803_3
+in E:\GITHUB\etuntifw\protected\views\tyovuoroot\did.php (8)
+in E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php (103)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/18 21:36:10 [error] [php] Trying to get property of non-object (E:\GITHUB\etuntifw\protected\views\tyovuoroot\did.php:8)
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(869): TyovuorootController->renderFile()
+#1 E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php(103): TyovuorootController->renderPartial()
+#2 E:\GITHUB\etuntifw\YII\framework\web\actions\CInlineAction.php(49): TyovuorootController->actionDid()
+#3 E:\GITHUB\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams()
+#4 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(133): TyovuorootController->runAction()
+#5 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#6 E:\GITHUB\etuntifw\YII\framework\web\CController.php(1145): CAccessControlFilter->filter()
+#7 E:\GITHUB\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): TyovuorootController->filterAccessControl()
+#8 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#9 E:\GITHUB\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#10 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): TyovuorootController->runActionWithFilters()
+#11 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): TyovuorootController->run()
+#12 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#13 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#14 E:\GITHUB\etuntifw\index.php(13): CWebApplication->run()
+REQUEST_URI=/index.php/tyovuoroot/did?id=20150802_3
+in E:\GITHUB\etuntifw\protected\views\tyovuoroot\did.php (8)
+in E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php (103)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/18 21:38:10 [error] [php] Trying to get property of non-object (E:\GITHUB\etuntifw\protected\views\tyovuoroot\did.php:8)
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(869): TyovuorootController->renderFile()
+#1 E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php(101): TyovuorootController->renderPartial()
+#2 E:\GITHUB\etuntifw\YII\framework\web\actions\CInlineAction.php(49): TyovuorootController->actionDid()
+#3 E:\GITHUB\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams()
+#4 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(133): TyovuorootController->runAction()
+#5 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#6 E:\GITHUB\etuntifw\YII\framework\web\CController.php(1145): CAccessControlFilter->filter()
+#7 E:\GITHUB\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): TyovuorootController->filterAccessControl()
+#8 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#9 E:\GITHUB\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#10 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): TyovuorootController->runActionWithFilters()
+#11 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): TyovuorootController->run()
+#12 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#13 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#14 E:\GITHUB\etuntifw\index.php(13): CWebApplication->run()
+REQUEST_URI=/index.php/tyovuoroot/did?id=20150803_3
+in E:\GITHUB\etuntifw\protected\views\tyovuoroot\did.php (8)
+in E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php (101)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/18 21:42:38 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "id".
+in E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php (187)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/18 21:42:38 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "time".
+in E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php (187)
+in E:\GITHUB\etuntifw\index.php (13)

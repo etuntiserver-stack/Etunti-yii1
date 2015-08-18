@@ -28,11 +28,11 @@ class TyovuorootController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','updatetime','showohje','did'),
+				'actions'=>array('admin','delete','create','update','index','view','updatetime','showohje','did','muisti'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','updatetime','showohje','did'),
+				'actions'=>array('admin','delete','create','update','index','view','updatetime','showohje','did','muisti'),
                 		'message'=>Yii::t('main', 'Tämä TASO ei kuuluu teille'),
 			),
 			array('deny',  // deny all users
@@ -54,6 +54,34 @@ class TyovuorootController extends Controller
 	 * Displays a particular model.
 	 * @param integer $id the ID of the model to be displayed
 	 */
+
+	public function actionMuisti()
+	{
+		if(isset($_POST['str']))
+		Yii::app()->session['copymove'] = $_POST['str'];
+
+		$expl = explode(" ", $_POST['total']);
+		$thisID = explode("_", $_POST['thisID']);
+
+	
+
+	foreach($expl as $idv){
+	   if(!empty($idv))
+	   {
+		$t = Tyovuoroot::model()->findbypk($idv);
+		$model=new Tyovuoroot;
+		$model->pvm=date("d.m.Y",strtotime($thisID['1']));
+		$model->tid=$thisID['2'];
+		$model->alku=$t->alku;
+		$model->loppu=$t->loppu;
+		$model->pituus=$t->pituus;
+		$model->kohde=$t->kohde;
+		$model->save();
+	   }
+	}
+
+		echo $model->id;
+	}
 
 	public function actionShowohje($id)
 	{
