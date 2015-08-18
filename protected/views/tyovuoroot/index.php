@@ -9,6 +9,21 @@
     Yii::app()->session['etsi_month'] = Yii::app()->request->getPost('etsi_month');
   }
 
+   $pvmtid = Yii::app()->request->getParam('pvmtid', 0);
+   if(!empty($pvmtid)){
+	$expl = explode("_",$pvmtid);
+	Yii::app()->session['etsi_month'] = date("Y-m",strtotime($expl['0']));
+	?>
+	<script type="text/javascript">
+	$(document).ready(function(){
+	
+	  $('#<?php echo $pvmtid; ?>').addClass("alert alert-info");
+	
+	});
+	</script>
+	<?php
+   }
+
 if(!isset(Yii::app()->session['etsi_month']))
 	Yii::app()->session['etsi_month'] = date("Y-m");
 
