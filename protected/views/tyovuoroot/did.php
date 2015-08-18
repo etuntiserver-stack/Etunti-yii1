@@ -6,7 +6,7 @@
 		  $tv = Tyovuoroot::model()->find("id !='' order by id desc");
 
 		$did = date("Ymd",strtotime($tv->pvm));
-		echo '<div class="small laatikko latikkoAsetukset" pvm="'.$tv->pvm.'" tid="'.$tv->tid.'" id="'.$did.'_'.$tv->tid.'">';
+		echo '<div class="laatikko latikkoAsetukset" pvm="'.$tv->pvm.'" tid="'.$tv->tid.'" id="'.$did.'_'.$tv->tid.'">';
 
 		$tv = Tyovuoroot::model()->findAll("tid = '".$tv->tid."' and pvm = '".$tv->pvm."' ",array('select'=>'kohde')); 
 		foreach($tv as $tvVal)
