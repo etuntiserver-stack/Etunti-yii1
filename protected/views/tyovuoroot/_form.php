@@ -32,6 +32,8 @@ if(isset($m->toimenpiteet))
 	<?php echo $form->hiddenField($model,'ruokatauko'); ?>
 	<?php echo $form->hiddenField($model,'alku_r'); ?>
 	<?php echo $form->hiddenField($model,'kesto'); ?>
+	<?php echo $form->hiddenField($model,'osoiteOnline'); ?>
+	<?php echo $form->hiddenField($model,'time'); ?>
 	<?php echo $form->error($model,'tid'); ?>
 
 <div class="row">
