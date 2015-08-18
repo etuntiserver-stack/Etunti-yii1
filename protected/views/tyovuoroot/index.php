@@ -42,6 +42,8 @@ function dateDiff($start, $end) {
 }
 	$dateDiff = dateDiff($from, $to);
 
+echo Yii::app()->session['copymove'];
+
 ?>
 
 <style>
@@ -52,9 +54,13 @@ td .latikkoAsetukset{
 }
 </style>
 
+
 <div class="row">
   <div class="row col-sm-2">
    <input type="month" class="btn btn-info form-control etsi_month" value="<?php echo Yii::app()->session['etsi_month']; ?>">
+  </div>
+  <div class="col-sm-2">
+   <div id="total" class="btn btn-info">Muisti</div>
   </div>
 </div>
 <br>
@@ -90,7 +96,10 @@ td .latikkoAsetukset{
   	echo '<td class="fixed-column"><b>'.$arrDate[$explColDate[0]].", ".$explColDate[1].'</b></td>';
 
 	foreach($tt as $t){
-	  echo '<td id="'.$did.'_'.$t->id.'"><div class="small laatikko latikkoAsetukset" pvm="'.$date.'" tid="'.$t->id.'">';
+	  echo '<td id="'.$did.'_'.$t->id.'">
+	   <a href="#" class="forMuisti" id="forMuisti_'.$did.'_'.$t->id.'"></a>
+	   <br>
+	   <div class="drop small laatikko latikkoAsetukset" pvm="'.$date.'" tid="'.$t->id.'">';
 
 		$tv = Tyovuoroot::model()->findAll("tid = '".$t->id."' and pvm = '".$date."' ",array('select'=>'kohde')); 
 		foreach($tv as $tvVal)
@@ -109,11 +118,16 @@ td .latikkoAsetukset{
 		  else
 		    $al = '';
 
-		  echo '<a href="#" class="link tv_edit" id="tv_'.$tvVal->id.'">'.$al.' '.$k['osoite'].'</a><br>';
+		  if(isset($tvVal->id) and $k['osoite'])
+		  {
+		    echo '<a href=# class="text-danger glyphicon glyphicon-paste" id="move_'.$tvVal->id.'"></a>
+		    <a href="#" class="link tv_edit drag" id="tv_'.$tvVal->id.'">'.$al.' '.$k['osoite'].'</a><br>';
+		  }
 
 		}
 
-	  echo '</div></td>';
+	  echo '</div>
+		</td>';
 	}
 
 
@@ -124,6 +138,9 @@ td .latikkoAsetukset{
      </tbody>  
   </table>
 </div>
+
+
+
 
 	<div id="showres" class="modal fade" tabindex="-1" role="dialog"></div>
 	<?php Yii::app()->clientScript->registerPackage('fixedTable'); ?>
@@ -175,3 +192,49 @@ $(function () {
 
 });
 </script>
+
+
+<?php
+/*
+<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+
+        $('a.drag').draggable({
+		appendTo: 'body',
+		containment: 'parent',
+		scroll: false,
+                helper : 'clone',
+               // opacity : 0.5,
+		cursor: "pointer",
+		//axis:        'x'
+        });
+        
+
+        $('div.drop').droppable({
+                tolerance : 'fit',
+                accept : 'div.drop',
+                drop : function(event, ui) {
+                        $(this).append(ui.draggable);
+
+		var dragID = $(ui.draggable).attr("drID");
+
+                $.ajax({
+                    type: "POST",
+                    url: "index.php?r=tehtava/tehtava_ajax",
+		    data: {"draggableID" : dragID, "dr" : '1' } ,
+                    success: function (data) {
+                        $('#result').html(data);
+                    }
+                });
+
+                }
+
+        });
+
+
+
+});
+</script>
+*/
+?>
