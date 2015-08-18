@@ -28,7 +28,7 @@ class TyovuorootController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','updatetime'),
+				'actions'=>array('admin','delete','create','update','index','view','updatetime','showohje','did'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -50,11 +50,56 @@ class TyovuorootController extends Controller
 	 * Displays a particular model.
 	 * @param integer $id the ID of the model to be displayed
 	 */
+
+	public function actionShowohje($id)
+	{
+		$m = Kohteet::model()->findbypk($id);
+		echo $m->toimenpiteet;
+	}
+
 	public function actionView($id)
 	{
 		$this->render('view',array(
 			'model'=>$this->loadModel($id),
 		));
+	}
+
+	public function actionDid()
+	{
+		if(isset($_POST['id']))
+		  $tv=$this->loadModel($_POST['id']);
+		else
+		  $tv = Tyovuoroot::model()->find("id !='' order by id desc");
+
+		$did = date("Ymd",strtotime($tv->pvm));
+		echo '<div class="small laatikko latikkoAsetukset" pvm="'.$tv->pvm.'" tid="'.$tv->tid.'" id="'.$did.'_'.$tv->tid.'">';
+
+		$tv = Tyovuoroot::model()->findAll("tid = '".$tv->tid."' and pvm = '".$tv->pvm."' ",array('select'=>'kohde')); 
+		foreach($tv as $tvVal)
+		{
+		$k = Kohteet::model()->findbypk($tvVal->kohde);
+
+	  	    $strlen = strlen($k['osoite']);
+
+	     	  if($strlen > 18)
+	  	    $k['osoite'] = substr($k['osoite'],0,18).'..';
+	   	  else
+		    $k['osoite'] = $k['osoite'];
+
+		  if($tvVal->alku > 0 and $tvVal->loppu > 0)
+		    $al = $tvVal->alku.'-'.$tvVal->loppu;
+		  else
+		    $al = '';
+
+		  echo '<a href="#" class="link tv_edit" id="tv_'.$tvVal->id.'">'.$al.' '.$k['osoite'].'</a><br>';
+
+		}
+
+	  	echo '</div>';
+		?>
+		<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/tvuoroot.js"></script>
+		<?php
+
 	}
 
 	/**
@@ -63,6 +108,27 @@ class TyovuorootController extends Controller
 	 */
 	public function actionCreate()
 	{
+
+  	$tnimi = '';
+	if(isset($_POST['tid'])){
+  	  $tekija = Tyontekijat::model()->findbypk($_POST['tid']);
+	  $tnimi = $tekija->tekijan_nimi;
+	}
+	?>
+	<div class="modal-dialog modal-lg">
+	    <div class="modal-content">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
+		<h2 class="modal-title"><?php echo Yii::t('main', 'Työvuoroon suunnittelu').' '.$tnimi; ?></h2>
+	
+		</div>
+		<div class="modal-body">
+
+	<div class="dialogTable clearfix modal-osio">
+	<?php
+
 		$model=new Tyovuoroot;
 
 		// Uncomment the following line if AJAX validation is needed
@@ -71,13 +137,18 @@ class TyovuorootController extends Controller
 		if(isset($_POST['Tyovuoroot']))
 		{
 			$model->attributes=$_POST['Tyovuoroot'];
+			$model->pvm = date("d.m.Y",strtotime($_POST['Tyovuoroot']['pvm']));
 			$model->save();
 				//$this->redirect(array('view','id'=>$model->id));
 		}
 
-		$this->render('create',array(
+		$this->renderPartial('create',array(
 			'model'=>$model,
 		));
+	?>
+	</div>
+	</div> <!-- end modal-body -->
+	<?php
 	}
 
 	/**
@@ -88,6 +159,9 @@ class TyovuorootController extends Controller
 	public function actionUpdate($id)
 	{
 
+		$model=$this->loadModel($id);
+	  	$t = Tyontekijat::model()->findbypk($model->tid);
+
 	?>
 	<div class="modal-dialog modal-lg">
 	    <div class="modal-content">
@@ -95,7 +169,7 @@ class TyovuorootController extends Controller
 			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 				<span aria-hidden="true">&times;</span>
 			</button>
-		<h2 class="modal-title"><?php echo Yii::t('main', 'Työvuoroon suunnittelu'); ?></h2>
+		<h2 class="modal-title"><?php echo Yii::t('main', 'Työvuoroon suunnittelu').' '.$t->tekijan_nimi; ?></h2>
 	
 		</div>
 		<div class="modal-body">
@@ -103,7 +177,7 @@ class TyovuorootController extends Controller
 	<div class="dialogTable clearfix modal-osio">
 	<?php
 
-		$model=$this->loadModel($id);
+
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
@@ -121,41 +195,6 @@ class TyovuorootController extends Controller
 	?>
 	</div>
 	</div> <!-- end modal-body -->
-	
-
-
-	<script type="text/javascript">
-	$(document).ready(function(){
-
-	$('.submitThis').click(function(){
-		$('#tyovuoroot-form').submit();
-	});
-
-	$('#tyovuoroot-form').on('submit',function(e) {
-
-	console.log( $( this ).serializeArray() );
-	console.log( e.target[0].value );
-
-	  $.ajax({
-		  url:'update?id='+e.target[0].value,
-		  data:$(this).serialize(),
-		  type:'POST',
-		  success:function(data){
-			  console.log(data);
-			//alert(data)
-			$('#showres').modal('hide');
-		return false;
-	},
-	error:function(data){
-	console.log(data);
-	}
-	});
-	e.preventDefault(); 
-	});
-
-
-	});
-	</script>
 	<?php
 	}
 

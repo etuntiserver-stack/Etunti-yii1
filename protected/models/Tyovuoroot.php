@@ -23,6 +23,8 @@
 class Tyovuoroot extends DB2ActiveRecord
 {
 public $osoite;
+public $tekijan_nimi;
+public $toimenpiteet;
 
 	/**
 	 * Returns the static model of the specified AR class.
@@ -50,7 +52,7 @@ public $osoite;
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('kohde, pvm, alku, loppu, pituus, tyoajanlaatu, tyoajanmerkinta', 'required'),
+			//array('kohde, pvm, alku, loppu, pituus, tyoajanlaatu, tyoajanmerkinta', 'required'),
 			array('tid', 'numerical', 'integerOnly'=>true),
 			array('kohde', 'length', 'max'=>255),
 			array('pvm', 'length', 'max'=>20),
@@ -60,7 +62,7 @@ public $osoite;
 			array('tietoja', 'length', 'max'=>2000),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, tid, time, kohde, pvm, alku, loppu, pituus, ruokatauko, alku_r, kesto, tyoajanlaatu, tyoajanmerkinta, tietoja, osoiteOnline, osoite', 'safe', 'on'=>'search'),
+			array('id, tid, time, kohde, pvm, alku, loppu, pituus, ruokatauko, alku_r, kesto, tyoajanlaatu, tyoajanmerkinta, tietoja, osoiteOnline, tekijan_nimi, toimenpiteet, osoite', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -73,6 +75,7 @@ public $osoite;
 		// class name for the relations automatically generated below.
 		return array(
 		        'kohteet' => array(self::BELONGS_TO, 'Kohteet', 'kohde'),
+		        'tt' => array(self::BELONGS_TO, 'Tyontekijat', 'tid'),
 		);
 	}
 
@@ -84,11 +87,14 @@ public $osoite;
 		return array(
 			'id' => 'ID',
 			'tid' => 'Tid',
+			'tekijan_nimi' => 'Työntekijä',
+			'toimenpiteet' => 'Ohje',
+			'osoite' => 'Katuosoite',
 			'time' => 'Time',
 			'kohde' => 'Kohde',
-			'pvm' => 'Pvm',
-			'alku' => 'Alku',
-			'loppu' => 'Loppu',
+			'pvm' => 'Päivämäärä',
+			'alku' => 'Aloitus',
+			'loppu' => 'Lopetus',
 			'pituus' => 'Pituus',
 			'ruokatauko' => 'Ruokatauko',
 			'alku_r' => 'Alku R',
@@ -110,9 +116,12 @@ public $osoite;
 		// should not be searched.
 
 		$criteria=new CDbCriteria;
+		$criteria->order = 't.id DESC';
 
-		$criteria->with=array('kohteet');
-		$criteria->compare('osoite',$this->osoite);
+		$criteria->with=array('kohteet','tt');
+		$criteria->compare('kohteet.osoite',$this->osoite,true);
+		$criteria->compare('kohteet.ohje',$this->toimenpiteet,true);
+		$criteria->compare('tt.tekijan_nimi',$this->tekijan_nimi,true);
 
 		$criteria->compare('id',$this->id);
 		$criteria->compare('tid',$this->tid);
