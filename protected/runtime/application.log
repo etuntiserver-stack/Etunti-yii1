@@ -7273,3 +7273,487 @@ REQUEST_URI=/index.php/tyovuoroot/did?id=%3Cscript+type%3D%22text%2Fjavascript%2
 in C:\xampp\htdocs\etuntifw\protected\views\tyovuoroot\did.php (8)
 in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (117)
 in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/19 10:44:13 [error] [exception.CHttpException.403] exception 'CHttpException' with message 'Tämä TASO ei kuuluu teille' in C:\xampp\htdocs\etuntifw\YII\framework\web\auth\CAccessControlFilter.php:179
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\auth\CAccessControlFilter.php(142): CAccessControlFilter->accessDenied(Object(WebUser), 'T\xC3\xA4m\xC3\xA4 TASO ei ...')
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(38): CAccessControlFilter->preFilter(Object(CFilterChain))
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('index')
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('tyovuoroot/inde...')
+#9 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#10 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#11 {main}
+REQUEST_URI=/index.php/tyovuoroot/index
+HTTP_REFERER=http://etuntifw.local/index.php/sivexkuitti/index
+---
+2015/08/19 11:04:58 [error] [php] Trying to get property of non-object (C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php:79)
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): TyovuorootController->runAction()
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CAccessControlFilter->filter()
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): TyovuorootController->filterAccessControl()
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): TyovuorootController->runActionWithFilters()
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): TyovuorootController->run()
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#9 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#10 C:\xampp\htdocs\etuntifw\index.php(13): CWebApplication->run()
+REQUEST_URI=/index.php/tyovuoroot/muisti
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (79)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/19 11:05:38 [error] [php] Trying to get property of non-object (C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php:79)
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): TyovuorootController->runAction()
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CAccessControlFilter->filter()
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): TyovuorootController->filterAccessControl()
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): TyovuorootController->runActionWithFilters()
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): TyovuorootController->run()
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#9 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#10 C:\xampp\htdocs\etuntifw\index.php(13): CWebApplication->run()
+REQUEST_URI=/index.php/tyovuoroot/muisti
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (79)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/19 11:05:58 [error] [php] Trying to get property of non-object (C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php:79)
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): TyovuorootController->runAction()
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CAccessControlFilter->filter()
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): TyovuorootController->filterAccessControl()
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): TyovuorootController->runActionWithFilters()
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): TyovuorootController->run()
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#9 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#10 C:\xampp\htdocs\etuntifw\index.php(13): CWebApplication->run()
+REQUEST_URI=/index.php/tyovuoroot/muisti
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (79)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/19 11:06:08 [error] [php] Undefined index: total (C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php:68)
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): TyovuorootController->runAction()
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CAccessControlFilter->filter()
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): TyovuorootController->filterAccessControl()
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): TyovuorootController->runActionWithFilters()
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): TyovuorootController->run()
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#9 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#10 C:\xampp\htdocs\etuntifw\index.php(13): CWebApplication->run()
+REQUEST_URI=/index.php/tyovuoroot/muisti
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (68)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/19 11:17:19 [error] [php] Trying to get property of non-object (C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php:79)
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): TyovuorootController->runAction()
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CAccessControlFilter->filter()
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): TyovuorootController->filterAccessControl()
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): TyovuorootController->runActionWithFilters()
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): TyovuorootController->run()
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#9 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#10 C:\xampp\htdocs\etuntifw\index.php(13): CWebApplication->run()
+REQUEST_URI=/index.php/tyovuoroot/muisti
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (79)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/19 11:17:21 [error] [php] Trying to get property of non-object (C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php:79)
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): TyovuorootController->runAction()
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CAccessControlFilter->filter()
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): TyovuorootController->filterAccessControl()
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): TyovuorootController->runActionWithFilters()
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): TyovuorootController->run()
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#9 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#10 C:\xampp\htdocs\etuntifw\index.php(13): CWebApplication->run()
+REQUEST_URI=/index.php/tyovuoroot/muisti
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (79)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/19 11:17:32 [error] [php] Trying to get property of non-object (C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php:79)
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): TyovuorootController->runAction()
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CAccessControlFilter->filter()
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): TyovuorootController->filterAccessControl()
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): TyovuorootController->runActionWithFilters()
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): TyovuorootController->run()
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#9 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#10 C:\xampp\htdocs\etuntifw\index.php(13): CWebApplication->run()
+REQUEST_URI=/index.php/tyovuoroot/muisti
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (79)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/19 11:18:41 [error] [php] Trying to get property of non-object (C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php:79)
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): TyovuorootController->runAction()
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CAccessControlFilter->filter()
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): TyovuorootController->filterAccessControl()
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): TyovuorootController->runActionWithFilters()
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): TyovuorootController->run()
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#9 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#10 C:\xampp\htdocs\etuntifw\index.php(13): CWebApplication->run()
+REQUEST_URI=/index.php/tyovuoroot/muisti
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (79)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/19 11:28:37 [error] [php] Trying to get property of non-object (C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php:79)
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): TyovuorootController->runAction()
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CAccessControlFilter->filter()
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): TyovuorootController->filterAccessControl()
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): TyovuorootController->runActionWithFilters()
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): TyovuorootController->run()
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#9 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#10 C:\xampp\htdocs\etuntifw\index.php(13): CWebApplication->run()
+REQUEST_URI=/index.php/tyovuoroot/muisti
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (79)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/19 12:00:20 [error] [php] Trying to get property of non-object (C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php:79)
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): TyovuorootController->runAction()
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CAccessControlFilter->filter()
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): TyovuorootController->filterAccessControl()
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): TyovuorootController->runActionWithFilters()
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): TyovuorootController->run()
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#9 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#10 C:\xampp\htdocs\etuntifw\index.php(13): CWebApplication->run()
+REQUEST_URI=/index.php/tyovuoroot/muisti
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (79)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/19 12:18:22 [error] [php] Trying to get property of non-object (C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php:79)
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): TyovuorootController->runAction()
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CAccessControlFilter->filter()
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): TyovuorootController->filterAccessControl()
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): TyovuorootController->runActionWithFilters()
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): TyovuorootController->run()
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#9 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#10 C:\xampp\htdocs\etuntifw\index.php(13): CWebApplication->run()
+REQUEST_URI=/index.php/tyovuoroot/muisti
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (79)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/19 12:18:32 [error] [php] Trying to get property of non-object (C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php:79)
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): TyovuorootController->runAction()
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CAccessControlFilter->filter()
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): TyovuorootController->filterAccessControl()
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): TyovuorootController->runActionWithFilters()
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): TyovuorootController->run()
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#9 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#10 C:\xampp\htdocs\etuntifw\index.php(13): CWebApplication->run()
+REQUEST_URI=/index.php/tyovuoroot/muisti
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (79)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/19 12:18:43 [error] [php] Undefined index: total (C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php:68)
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): TyovuorootController->runAction()
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CAccessControlFilter->filter()
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): TyovuorootController->filterAccessControl()
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): TyovuorootController->runActionWithFilters()
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): TyovuorootController->run()
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#9 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#10 C:\xampp\htdocs\etuntifw\index.php(13): CWebApplication->run()
+REQUEST_URI=/index.php/tyovuoroot/muisti
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (68)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/19 12:19:29 [error] [php] Trying to get property of non-object (C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php:79)
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): TyovuorootController->runAction()
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CAccessControlFilter->filter()
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): TyovuorootController->filterAccessControl()
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): TyovuorootController->runActionWithFilters()
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): TyovuorootController->run()
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#9 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#10 C:\xampp\htdocs\etuntifw\index.php(13): CWebApplication->run()
+REQUEST_URI=/index.php/tyovuoroot/muisti
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (79)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/19 12:19:54 [error] [php] Undefined index: total (C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php:68)
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): TyovuorootController->runAction()
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CAccessControlFilter->filter()
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): TyovuorootController->filterAccessControl()
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): TyovuorootController->runActionWithFilters()
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): TyovuorootController->run()
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#9 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#10 C:\xampp\htdocs\etuntifw\index.php(13): CWebApplication->run()
+REQUEST_URI=/index.php/tyovuoroot/muisti
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (68)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/19 12:33:21 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Järjestelmä ei löydä pyydettyä toimintoa "posts".' in C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php:483
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(270): CController->missingAction('posts')
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('posts')
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/posts/imei')
+#3 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php/api/posts/imei?domain=sivex&X_USERNAME=demo&X_PASSWORD=111111
+HTTP_REFERER=http://etuntifw.local/mob.html
+---
+2015/08/19 12:37:38 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Järjestelmä ei löydä pyydettyä toimintoa "posts".' in C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php:483
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(270): CController->missingAction('posts')
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('posts')
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/posts/imei')
+#3 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php/api/posts/imei?domain=sivex&X_USERNAME=demo&X_PASSWORD=111111
+HTTP_REFERER=http://etuntifw.local/mob2.html
+---
+2015/08/19 12:39:41 [error] [exception.CException] exception 'CException' with message 'URL-ratkaisumalli "api/<model:\w+>/imei/<model:\w+>" reitille "api/imei" ei ole kelvollinen säännöllinen lauseke.' in C:\xampp\htdocs\etuntifw\YII\framework\web\CUrlManager.php:698
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\CUrlManager.php(268): CUrlRule->__construct(Array, 2)
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\CUrlManager.php(226): CUrlManager->createUrlRule(Array, 2)
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CUrlManager.php(206): CUrlManager->processRules()
+#3 C:\xampp\htdocs\etuntifw\YII\framework\base\CModule.php(387): CUrlManager->init()
+#4 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(510): CModule->getComponent('urlManager')
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(140): CApplication->getUrlManager()
+#6 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#7 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#8 {main}
+REQUEST_URI=/index.php/api/posts/imei?domain=sivex&X_USERNAME=demo&X_PASSWORD=111111
+HTTP_REFERER=http://etuntifw.local/mob2.html
+---
+2015/08/19 12:40:32 [error] [exception.CException] exception 'CException' with message 'URL-ratkaisumalli "api/<model:\w+>/imei/<model:\w+>" reitille "api/imei" ei ole kelvollinen säännöllinen lauseke.' in C:\xampp\htdocs\etuntifw\YII\framework\web\CUrlManager.php:698
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\CUrlManager.php(268): CUrlRule->__construct(Array, 2)
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\CUrlManager.php(226): CUrlManager->createUrlRule(Array, 2)
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CUrlManager.php(206): CUrlManager->processRules()
+#3 C:\xampp\htdocs\etuntifw\YII\framework\base\CModule.php(387): CUrlManager->init()
+#4 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(510): CModule->getComponent('urlManager')
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(140): CApplication->getUrlManager()
+#6 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#7 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#8 {main}
+REQUEST_URI=/index.php/
+---
+2015/08/19 12:40:35 [error] [exception.CException] exception 'CException' with message 'URL-ratkaisumalli "api/<model:\w+>/imei/<model:\w+>" reitille "api/imei" ei ole kelvollinen säännöllinen lauseke.' in C:\xampp\htdocs\etuntifw\YII\framework\web\CUrlManager.php:698
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\CUrlManager.php(268): CUrlRule->__construct(Array, 2)
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\CUrlManager.php(226): CUrlManager->createUrlRule(Array, 2)
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CUrlManager.php(206): CUrlManager->processRules()
+#3 C:\xampp\htdocs\etuntifw\YII\framework\base\CModule.php(387): CUrlManager->init()
+#4 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(510): CModule->getComponent('urlManager')
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(140): CApplication->getUrlManager()
+#6 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#7 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#8 {main}
+REQUEST_URI=/index.php/api/imei
+---
+2015/08/19 12:41:34 [error] [php] Undefined index: imei (C:\xampp\htdocs\etuntifw\protected\controllers\ApiController.php:104)
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(286): ApiController->runAction()
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): ApiController->runActionWithFilters()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): ApiController->run()
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#4 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#5 C:\xampp\htdocs\etuntifw\index.php(13): CWebApplication->run()
+REQUEST_URI=/index.php/api/posts/imei?domain=sivex&X_USERNAME=demo&X_PASSWORD=111111
+in C:\xampp\htdocs\etuntifw\protected\controllers\ApiController.php (104)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/19 12:47:54 [error] [php] Undefined variable: model (C:\xampp\htdocs\etuntifw\protected\controllers\ApiController.php:118)
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(286): ApiController->runAction()
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): ApiController->runActionWithFilters()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): ApiController->run()
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#4 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#5 C:\xampp\htdocs\etuntifw\index.php(13): CWebApplication->run()
+REQUEST_URI=/index.php/api/posts/imei?domain=sivex&X_USERNAME=demo&X_PASSWORD=111111
+in C:\xampp\htdocs\etuntifw\protected\controllers\ApiController.php (118)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/19 12:48:08 [error] [php] Undefined variable: model (C:\xampp\htdocs\etuntifw\protected\controllers\ApiController.php:118)
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(286): ApiController->runAction()
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): ApiController->runActionWithFilters()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): ApiController->run()
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#4 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#5 C:\xampp\htdocs\etuntifw\index.php(13): CWebApplication->run()
+REQUEST_URI=/index.php/api/posts/imei?domain=sivex&X_USERNAME=demo&X_PASSWORD=111111
+in C:\xampp\htdocs\etuntifw\protected\controllers\ApiController.php (118)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/19 12:49:31 [error] [php] Undefined variable: model (C:\xampp\htdocs\etuntifw\protected\controllers\ApiController.php:118)
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(286): ApiController->runAction()
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): ApiController->runActionWithFilters()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): ApiController->run()
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#4 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#5 C:\xampp\htdocs\etuntifw\index.php(13): CWebApplication->run()
+REQUEST_URI=/index.php/api/posts/imei?domain=sivex&X_USERNAME=demo&X_PASSWORD=111111
+in C:\xampp\htdocs\etuntifw\protected\controllers\ApiController.php (118)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/19 12:51:52 [error] [php] Trying to get property of non-object (C:\xampp\htdocs\etuntifw\protected\controllers\ApiController.php:106)
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(286): ApiController->runAction()
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): ApiController->runActionWithFilters()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): ApiController->run()
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#4 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#5 C:\xampp\htdocs\etuntifw\index.php(13): CWebApplication->run()
+REQUEST_URI=/index.php/api/posts/imei?domain=sivex&X_USERNAME=demo&X_PASSWORD=111111
+in C:\xampp\htdocs\etuntifw\protected\controllers\ApiController.php (106)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/19 12:52:18 [error] [php] Undefined variable: tekija (C:\xampp\htdocs\etuntifw\protected\controllers\ApiController.php:106)
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(286): ApiController->runAction()
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): ApiController->runActionWithFilters()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): ApiController->run()
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#4 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#5 C:\xampp\htdocs\etuntifw\index.php(13): CWebApplication->run()
+REQUEST_URI=/index.php/api/posts/imei?domain=sivex&X_USERNAME=demo&X_PASSWORD=111111
+in C:\xampp\htdocs\etuntifw\protected\controllers\ApiController.php (106)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/19 12:53:20 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Järjestelmä ei löydä pyydettyä toimintoa "posts".' in C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php:483
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(270): CController->missingAction('posts')
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('posts')
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/posts/imei/...')
+#3 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php/api/posts/imei/353888067886268?domain=sivex&X_USERNAME=demo&X_PASSWORD=111111
+HTTP_REFERER=http://etuntifw.local/mob2.html
+---
+2015/08/19 12:53:45 [error] [php] Trying to get property of non-object (C:\xampp\htdocs\etuntifw\protected\controllers\ApiController.php:106)
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(286): ApiController->runAction()
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): ApiController->runActionWithFilters()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): ApiController->run()
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#4 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#5 C:\xampp\htdocs\etuntifw\index.php(13): CWebApplication->run()
+REQUEST_URI=/index.php/api/posts/imei?domain=sivex&X_USERNAME=demo&X_PASSWORD=111111
+in C:\xampp\htdocs\etuntifw\protected\controllers\ApiController.php (106)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/19 12:54:23 [error] [php] Object of class Mob could not be converted to string (C:\xampp\htdocs\etuntifw\protected\controllers\ApiController.php:127)
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(286): ApiController->runAction()
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): ApiController->runActionWithFilters()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): ApiController->run()
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#4 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#5 C:\xampp\htdocs\etuntifw\index.php(13): CWebApplication->run()
+REQUEST_URI=/index.php/api/posts/imei?domain=sivex&X_USERNAME=demo&X_PASSWORD=111111
+in C:\xampp\htdocs\etuntifw\protected\controllers\ApiController.php (127)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/19 12:54:56 [error] [php] Trying to get property of non-object (C:\xampp\htdocs\etuntifw\protected\controllers\ApiController.php:106)
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(286): ApiController->runAction()
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): ApiController->runActionWithFilters()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): ApiController->run()
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#4 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#5 C:\xampp\htdocs\etuntifw\index.php(13): CWebApplication->run()
+REQUEST_URI=/index.php/api/posts/imei?domain=sivex&X_USERNAME=demo&X_PASSWORD=111111
+in C:\xampp\htdocs\etuntifw\protected\controllers\ApiController.php (106)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/19 12:55:24 [error] [php] Trying to get property of non-object (C:\xampp\htdocs\etuntifw\protected\controllers\ApiController.php:106)
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(286): ApiController->runAction()
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): ApiController->runActionWithFilters()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): ApiController->run()
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#4 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#5 C:\xampp\htdocs\etuntifw\index.php(13): CWebApplication->run()
+REQUEST_URI=/index.php/api/posts/imei?domain=sivex&X_USERNAME=demo&X_PASSWORD=111111
+in C:\xampp\htdocs\etuntifw\protected\controllers\ApiController.php (106)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/19 12:55:51 [error] [php] Trying to get property of non-object (C:\xampp\htdocs\etuntifw\protected\controllers\ApiController.php:106)
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(286): ApiController->runAction()
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): ApiController->runActionWithFilters()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): ApiController->run()
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#4 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#5 C:\xampp\htdocs\etuntifw\index.php(13): CWebApplication->run()
+REQUEST_URI=/index.php/api/posts/imei?domain=sivex&X_USERNAME=demo&X_PASSWORD=111111
+in C:\xampp\htdocs\etuntifw\protected\controllers\ApiController.php (106)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/19 12:56:46 [error] [php] Trying to get property of non-object (C:\xampp\htdocs\etuntifw\protected\controllers\ApiController.php:106)
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(286): ApiController->runAction()
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): ApiController->runActionWithFilters()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): ApiController->run()
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#4 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#5 C:\xampp\htdocs\etuntifw\index.php(13): CWebApplication->run()
+REQUEST_URI=/index.php/api/posts/imei?domain=sivex&X_USERNAME=demo&X_PASSWORD=111111
+in C:\xampp\htdocs\etuntifw\protected\controllers\ApiController.php (106)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/19 12:57:11 [error] [php] Trying to get property of non-object (C:\xampp\htdocs\etuntifw\protected\controllers\ApiController.php:106)
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(286): ApiController->runAction()
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): ApiController->runActionWithFilters()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): ApiController->run()
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#4 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#5 C:\xampp\htdocs\etuntifw\index.php(13): CWebApplication->run()
+REQUEST_URI=/index.php/api/posts/imei?domain=sivex&X_USERNAME=demo&X_PASSWORD=111111
+in C:\xampp\htdocs\etuntifw\protected\controllers\ApiController.php (106)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/19 12:57:46 [error] [php] Trying to get property of non-object (C:\xampp\htdocs\etuntifw\protected\controllers\ApiController.php:106)
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(286): ApiController->runAction()
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): ApiController->runActionWithFilters()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): ApiController->run()
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#4 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#5 C:\xampp\htdocs\etuntifw\index.php(13): CWebApplication->run()
+REQUEST_URI=/index.php/api/posts/imei?domain=sivex&X_USERNAME=demo&X_PASSWORD=111111
+in C:\xampp\htdocs\etuntifw\protected\controllers\ApiController.php (106)
+in C:\xampp\htdocs\etuntifw\index.php (13)

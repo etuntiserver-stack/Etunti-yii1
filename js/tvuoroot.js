@@ -1,5 +1,33 @@
 $(document).ready(function(){
 
+
+function Checker(e,forid) {
+// Delete one
+  if (e.shiftKey)
+  {
+alert(forid)
+return false;
+/*
+        $.ajax({
+           url: "suunnittelu.php",
+	   type:'POST',
+	   data: {"delete" : "true", "rowid" : rowid, "tid" : tid, "pvm" : pvm},
+           success: function(html){
+		$('#'+forid).html(html);
+           }
+        });
+*/
+  }
+}
+
+
+  $('.tv_edit').click(function(){
+	var forid = $(this).attr("id");
+	Checker(event,forid);
+  });
+
+
+
 $(".tv_edit").click(function(){
 
 	var thisVal = $(this).attr("id").split("_");
@@ -55,6 +83,12 @@ $(".vietyovuoroon").click(function(){
 
 });
 
+$("#total").click(function() {
+	thisID = $(this).text("Muisti");
+	$('#totalForCut').val('');
+	$('.tv_edit').css({"opacity":"1"});
+});
+
 var kl = '';
 
 $(".glyphicon-paste").click(function() {
@@ -66,10 +100,12 @@ $(".glyphicon-paste").click(function() {
 	$(".forCut").removeClass("forCut").addClass("mcut glyphicon glyphicon-transfer text-success");
 
 	if($('#total').html() == 'Muisti')
-	$('#total').html('');
+	$('#total').text('');
 
-	$('#total').html(thisVal[1] + ' ' + $('#total').html());
-	kl = (thisVal[1] + ' ' + $('#total').html());
+	$('#total').text(thisVal[1] + ' ' + $('#total').text());
+
+	$('#totalForCut').val("#tvt_"+thisVal[1] + ' ' + $('#totalForCut').val());
+	kl = $('#totalForCut').val();	
 });
 
 
@@ -96,6 +132,7 @@ $(".forMuisti").click(function() {
 			  $('.mplus').removeClass("mplus glyphicon glyphicon-plus text-success").addClass("forMuisti");
 			  $('.mcut').removeClass("mcut glyphicon glyphicon-transfer text-success").addClass("forCut");
 			  $('#total').html('Muisti');
+			  $('#totalForCut').val('');
 			  return false;
 			  },
 			  error:function(data){
@@ -114,8 +151,12 @@ $(".forCut").click(function() {
 	var spID = $(this).attr("id").split("_");
 	var total = $('#total').html();
 
-alert(kl)
-return false;
+	var cutThis = kl.split(" ");
+
+	$.each( cutThis, function( key, value ) {
+	  $(value).remove();
+	});
+
 
         $.ajax({
            url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/muisti',
@@ -136,6 +177,7 @@ return false;
 			  $('.mplus').removeClass("mplus glyphicon glyphicon-plus text-success").addClass("forMuisti");
 			  $('.mcut').removeClass("mcut glyphicon glyphicon-transfer text-success").addClass("forCut");
 			  $('#total').html('Muisti');
+			  $('#totalForCut').val('');
 			  return false;
 			  },
 			  error:function(data){
@@ -147,6 +189,9 @@ return false;
            }
         });
 });
+
+
+
 
 
 });

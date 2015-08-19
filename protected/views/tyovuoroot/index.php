@@ -71,6 +71,7 @@ td .tp{
   </div>
   <div class="col-sm-2">
    <div id="total" class="btn btn-info">Muisti</div>
+   <input type="text" id="totalForCut">
   </div>
 </div>
 <br>
@@ -138,8 +139,11 @@ td .tp{
 
 		  if(isset($tvVal->id) and $k['osoite'])
 		  {
-		    echo '<a href=# class="text-danger glyphicon glyphicon-paste" id="move_'.$tvVal->id.'"></a>
-		    <a href="#" class="link tv_edit" id="tv_'.$tvVal->id.'">'.$al.' '.$k['osoite'].'</a><br>';
+		    echo '
+		    <div id="tvt_'.$tvVal->id.'">
+			<a href=# class="text-danger glyphicon glyphicon-paste" id="move_'.$tvVal->id.'"></a>
+		    	<a href="#" class="link tv_edit" id="tv_'.$tvVal->id.'">'.$al.' '.$k['osoite'].'</a><br>
+		    </div>';
 		  }
 
 		}
