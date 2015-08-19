@@ -106,7 +106,7 @@ public function actionImei()
 	    if(isset($mob->id)){
               $model = new Mob;   
 	    } else {
-              $this->_sendResponse(200, "imei on persessä");
+              $this->_sendResponse(200, "imei on persessä ".$_POST['imei']);
 	      exit;
 	    }
             break;
