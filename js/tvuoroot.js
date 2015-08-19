@@ -55,10 +55,13 @@ $(".vietyovuoroon").click(function(){
 
 });
 
+var kl = '';
+
 $(".glyphicon-paste").click(function() {
 	var thisID = $(this).attr("id");
 	var thisVal = $(this).attr("id").split("_");
 	$("#tv_"+thisVal[1]).css({"opacity":"0.4"});
+
 	$(".forMuisti").removeClass("forMuisti").addClass("mplus glyphicon glyphicon-plus text-success");
 	$(".forCut").removeClass("forCut").addClass("mcut glyphicon glyphicon-transfer text-success");
 
@@ -66,6 +69,7 @@ $(".glyphicon-paste").click(function() {
 	$('#total').html('');
 
 	$('#total').html(thisVal[1] + ' ' + $('#total').html());
+	kl = (thisVal[1] + ' ' + $('#total').html());
 });
 
 
@@ -110,8 +114,8 @@ $(".forCut").click(function() {
 	var spID = $(this).attr("id").split("_");
 	var total = $('#total').html();
 
-//alert(thisID)
-//return false;
+alert(kl)
+return false;
 
         $.ajax({
            url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/muisti',

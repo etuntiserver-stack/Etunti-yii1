@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Bootstrap Case</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+<div class="container-fluid">
+
+<br>
+
+<div class="row">
+  <div class="col-lg-6 col-lg-offset-3">
+	<button id="aloitan" class="btn btn-primary">Aloitan työn</button>
+	<button id="loppui" class="btn btn-primary">Työ päättyy</button>
+	<button id="status" class="btn btn-primary">Status</button>
+	<br>
+	<br>
+	<!--<input type="text" id="server" value="http://etuntifw.local">-->
+	<input type="text" class="form-control" id="server" value="http://etuntifw.azurewebsites.net">
+	<br>
+	<textarea cols="100" rows="20" class="form-control" id="result"></textarea>
+  </div>
+</div>
+
+</div>
+</body>
+
+ 
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+
+function curDateTime(){
+
+  	var date = new Date();
+	var year = date.getFullYear();
+	var month = date.getMonth();
+	month = month < 10 ? "0" + (month+1) : month+1;
+	var day = date.getDate();
+	day = day < 10 ? "0" + (day) : day;
+	var hours = date.getHours();
+	var minutes = date.getMinutes();
+	var seconds = date.getSeconds();
+
+	return (day + "." + month + "." + year + " " + hours + ":" + minutes + ":" + seconds);
+}
+
+  var domain = "sivex";
+  var domainData = 'domain=sivex&X_USERNAME=demo&X_PASSWORD=111111';
+  var url = $("#server").val()+"/index.php/api/posts";
+  var imei = "353888067886268";
+  var puh_nro = "0449304851";
+  var versio = "0.47";
+  var tag = "36073245411209220";
+
+
+function insertRow(){
+
+   	var postData = {
+	domain: domain,
+	imei: imei,
+	asiakas_num: versio+"_"+tag,
+	puh_numero: puh_nro,
+	bluetooth_name: "0",
+	sim_serial_number: "0",
+	subscriber_id: "0",
+	my_location: "0",
+	osoite: "0",
+	kohde_kannasta: "Testti Osoite",
+	kohdenID: "0",
+	aloitan: curDateTime(),
+	loppui: "",
+	viesti: "xxx",
+	tekijan_nimi: "Roman Sizov",
+	tid: "38",
+	etaisyys: "0",
+	status: "1",
+	tietoja: "",
+	hyvaksytty: "0",
+	};
+
+
+        $.ajax({
+           url: url,
+	   type:'POST',
+ 	   data: postData,
+	   //dataType: "json",
+           success: function(data){
+        	console.log("Uusi kohde: \n"+data);
+		$("#result").val("Uusi kohde: \n"+data);
+    	},
+    		error:function (xhr, ajaxOptions, thrownError){
+        	console.log(xhr.responseText);
+		$("#result").val(xhr.responseText);
+    	}
+        });
+
+}
+
+function updateRow(id){
+
+  	var postData = {
+	domain: domain,
+	loppui: curDateTime(),
+	status: "3",
+	};
+
+        $.ajax({
+           url: url+"/updaterow/"+id,
+	   type:'POST',
+ 	   data: postData,
+	   //dataType: "json",
+           success: function(data){
+        	console.log(data);
+		$("#result").val(data);
+    	   },
+    	   error: function(XMLHttpRequest, textStatus, errorThrown) {
+	    	console.log(XMLHttpRequest);
+		$("#result").val(XMLHttpRequest);
+ 	    }
+        });
+
+}
+
+
+
+$('#aloitan').click(function(){ 
+
+	var getData = '';
+	var status = '';
+	var KantaID = '';
+
+	$.ajax({
+	    //url: url+'?filter=[{"property":"imei","value":"'+imei+'"},{"property":"loppui","value":"","operator": "="}]',
+	    url : url+'/imei/'+imei,
+	    type:"GET",
+	    data: domainData,
+
+/*
+    beforeSend: function(xhr) {
+        xhr.setRequestHeader("X_USERNAME", "demo");
+        xhr.setRequestHeader("X_PASSWORD", "111111");
+        console.log(xhr);
+    }, 
+*/
+	    success:function(data, textStatus, XMLHttpRequest) {
+	      console.log(data);
+	      getData = JSON.parse(data);
+	
+
+	      if(getData['Kohde'] === null)
+	      {
+		insertRow();
+	      } else {
+	      	console.log(getData['Kohde'] + " on avoina");
+		$("#result").val(getData['Kohde'] + " on avoina");
+	      }
+
+	    },
+    	    error: function(textStatus, errorThrown) {
+	    	console.log(textStatus);
+		$("#result").val(textStatus);
+ 	    }
+	});
+
+});
+
+
+$('#loppui').click(function(){ 
+
+	var getData = '';
+	var status = '';
+	var KantaID = '';
+
+	$.ajax({
+	    //url: url+'?filter=[{"property":"imei","value":"'+imei+'"},{"property":"loppui","value":"","operator": "="}]',
+	    url : url+'/imei/'+imei,
+	    type:"GET",
+	    data: domainData,
+/*
+    beforeSend: function(xhr) {
+        xhr.setRequestHeader("X_USERNAME", "demo");
+        xhr.setRequestHeader("X_PASSWORD", "111111");
+        console.log(xhr);
+    }, 
+*/
+	    success:function(data, textStatus, XMLHttpRequest) {
+	      console.log(data);
+	      getData = JSON.parse(data);
+	
+
+	      if(getData['Kohde'] === null)
+	      {
+	      	console.log("Ei ole mitään avoina");
+		$("#result").val("Ei ole mitään avoina");
+	      } else {
+		KantaID = getData['Kohde'];
+		updateRow(KantaID);
+	      }
+
+	    },
+    	    error: function(textStatus, errorThrown) {
+	    	console.log(textStatus);
+		$("#result").val(textStatus);
+ 	    }
+	});
+
+});
+
+
+$('#status').click(function(){ 
+
+	var getData = '';
+	var status = '';
+	var KantaID = '';
+
+
+/*
+$.ajaxSetup({
+    beforeSend: function(xhr) {
+        xhr.setRequestHeader("X_USERNAME", "demo");
+        xhr.setRequestHeader("X_PASSWORD", "111111");
+        console.log(xhr);
+    }, 
+});
+*/
+	$.ajax({
+	    url : url+'/imei/'+imei,
+	    type:"GET",
+	    data: domainData,
+
+	    success:function(data, textStatus, XMLHttpRequest) {
+	      console.log(data);
+	      getData = JSON.parse(data);
+	
+	      if(getData['Kohde'] === null)
+	      {
+	      	console.log("Ei ole mitään avoina");
+		$("#result").val("Ei ole mitään avoina");
+	      } else {
+		KantaID = getData['Kohde'];
+	      	console.log(KantaID + " on avoina");
+	      	$("#result").val("Kohde: "+KantaID + "  on avoina. Status: " +getData['Status']);
+	      }
+
+	    },
+    	    error: function(textStatus, errorThrown) {
+	    	console.log(textStatus.responseText);
+		$("#result").val(textStatus.responseText);
+ 	    }
+	});
+
+});
+
+
+
+
+});
+</script>
+
+
+
+
+</html>
+
