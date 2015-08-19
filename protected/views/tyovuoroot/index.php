@@ -139,7 +139,7 @@ td .tp{
 		  if(isset($tvVal->id) and $k['osoite'])
 		  {
 		    echo '<a href=# class="text-danger glyphicon glyphicon-paste" id="move_'.$tvVal->id.'"></a>
-		    <a href="#" class="link tv_edit drag" id="tv_'.$tvVal->id.'">'.$al.' '.$k['osoite'].'</a><br>';
+		    <a href="#" class="link tv_edit" id="tv_'.$tvVal->id.'">'.$al.' '.$k['osoite'].'</a><br>';
 		  }
 
 		}

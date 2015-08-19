@@ -110,6 +110,9 @@ $(".forCut").click(function() {
 	var spID = $(this).attr("id").split("_");
 	var total = $('#total').html();
 
+//alert(thisID)
+//return false;
+
         $.ajax({
            url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/muisti',
 	   type:'POST',
@@ -118,6 +121,7 @@ $(".forCut").click(function() {
 		//alert(html);
 		var newID = html;
 
+		/* uusi latikko */
 	  	$.ajax({
 			url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/did',
 			type:'GET',

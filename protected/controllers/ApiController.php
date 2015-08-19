@@ -35,7 +35,7 @@ class ApiController extends Controller
     switch($_GET['model'])
     {
         case 'posts':
-            $models = Mob::model()->findAll();
+            $models = Mob::model()->findAll("id != '' order by id limit 10",array("select"=>"id"));
             break;
         default:
             // Model not implemented error
@@ -63,7 +63,7 @@ class ApiController extends Controller
 
 public function actionView()
 {
-
+$this->_checkAuth();
     // Check if id was submitted via GET
     if(!isset($_GET['id']))
         $this->_sendResponse(500, 'Error: Parameter <b>id</b> is missing' );

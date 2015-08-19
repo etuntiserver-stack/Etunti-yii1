@@ -82,9 +82,19 @@ class TyovuorootController extends Controller
 		$model->kohde=$t->kohde;
 		$model->save();
 
-		if(isset($_POST['cut']))
+		if(isset($_POST['cut'])){
 		$t = Tyovuoroot::model()->deletebypk($idv);
+?>
+<script type="text/javascript">
+$(document).ready(function(){
 
+
+			  $('#"<?php echo $thisID['1']."_".$model->tid; ?>"').remove();
+			  return false;
+});
+</script>
+<?php
+		}
 	   }
 	}
 
