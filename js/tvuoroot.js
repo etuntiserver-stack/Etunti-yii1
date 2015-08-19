@@ -5,8 +5,8 @@ function Checker(e,forid) {
 // Delete one
   if (e.shiftKey)
   {
-alert(forid)
-
+	alert(forid)
+	return false;
 /*
         $.ajax({
            url: "suunnittelu.php",
@@ -22,25 +22,11 @@ alert(forid)
 }
 
 
-  $('.tv_edit').click(function(){
-	var forid = $(this).attr("id");
-	Checker(event,forid);
-	return false;
-  });
-
-	var fal = '1';
-function ShiftChecker(e) {
-  if (e.shiftKey)
-	fal = '0';
-}
-
-
 
 $(".tv_edit").click(function(){
 
-	ShiftChecker(e)
-alert(fal)
-	if(fal){
+	var forid = $(this).attr("id");
+	Checker(event,forid);
 
 	var thisVal = $(this).attr("id").split("_");
 
@@ -52,7 +38,6 @@ alert(fal)
 		$('#showres').modal().html(html);
            }
         });
-	}
 
 });
 
