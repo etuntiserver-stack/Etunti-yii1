@@ -71,7 +71,7 @@ td .tp{
   </div>
   <div class="col-sm-2">
    <div id="total" class="btn btn-info">Muisti</div>
-   <input type="text" id="totalForCut">
+   <input type="hidden" id="totalForCut">
   </div>
 </div>
 <br>
