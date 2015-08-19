@@ -6700,3 +6700,303 @@ in E:\GITHUB\etuntifw\index.php (13)
 2015/08/18 21:42:38 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "time".
 in E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php (187)
 in E:\GITHUB\etuntifw\index.php (13)
+2015/08/19 08:23:57 [error] [php] Trying to get property of non-object (C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php:79)
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): TyovuorootController->runAction()
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CAccessControlFilter->filter()
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): TyovuorootController->filterAccessControl()
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): TyovuorootController->runActionWithFilters()
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): TyovuorootController->run()
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#9 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#10 C:\xampp\htdocs\etuntifw\index.php(13): CWebApplication->run()
+REQUEST_URI=/index.php/tyovuoroot/muisti
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (79)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/19 08:46:25 [error] [php] Undefined variable: su (C:\xampp\htdocs\etuntifw\protected\views\tyovuoroot\index.php:117)
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(869): TyovuorootController->renderFile()
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(782): TyovuorootController->renderPartial()
+#2 C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php(227): TyovuorootController->render()
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(49): TyovuorootController->actionIndex()
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams()
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): TyovuorootController->runAction()
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CAccessControlFilter->filter()
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): TyovuorootController->filterAccessControl()
+#9 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#10 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#11 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): TyovuorootController->runActionWithFilters()
+#12 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): TyovuorootController->run()
+#13 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#14 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#15 C:\xampp\htdocs\etuntifw\index.php(13): CWebApplication->run()
+REQUEST_URI=/index.php/tyovuoroot/index
+in C:\xampp\htdocs\etuntifw\protected\views\tyovuoroot\index.php (117)
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (227)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/19 08:46:26 [error] [php] Undefined variable: su (C:\xampp\htdocs\etuntifw\protected\views\tyovuoroot\index.php:117)
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(869): TyovuorootController->renderFile()
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(782): TyovuorootController->renderPartial()
+#2 C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php(227): TyovuorootController->render()
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(49): TyovuorootController->actionIndex()
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams()
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): TyovuorootController->runAction()
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CAccessControlFilter->filter()
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): TyovuorootController->filterAccessControl()
+#9 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#10 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#11 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): TyovuorootController->runActionWithFilters()
+#12 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): TyovuorootController->run()
+#13 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#14 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#15 C:\xampp\htdocs\etuntifw\index.php(13): CWebApplication->run()
+REQUEST_URI=/index.php/tyovuoroot/index
+in C:\xampp\htdocs\etuntifw\protected\views\tyovuoroot\index.php (117)
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (227)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/19 09:01:15 [error] [system.db.CDbCommand] CDbCommand::fetchAll() epäonnistui: SQLSTATE[3D000]: Invalid catalog name: 1046 No database selected. Suoritettu SQL-komento oli: SHOW FULL COLUMNS FROM `sivexkuitti`.
+in C:\xampp\htdocs\etuntifw\protected\models\Mob.php (44)
+in C:\xampp\htdocs\etuntifw\protected\controllers\ApiController.php (38)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/19 09:01:15 [error] [exception.CDbException] exception 'CDbException' with message 'Active record -luokan "Mob" taulua "sivexkuitti" ei löydy tietokannasta.' in C:\xampp\htdocs\etuntifw\YII\framework\db\ar\CActiveRecord.php:2310
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\db\ar\CActiveRecord.php(387): CActiveRecordMetaData->__construct(Object(Mob))
+#1 C:\xampp\htdocs\etuntifw\protected\models\Mob.php(44): CActiveRecord::model('Mob')
+#2 C:\xampp\htdocs\etuntifw\protected\controllers\ApiController.php(38): Mob::model()
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(49): ApiController->actionList()
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(286): CController->runAction(Object(CInlineAction))
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('list')
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/list')
+#9 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#10 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#11 {main}
+REQUEST_URI=/index.php/api/posts
+---
+2015/08/19 09:01:58 [error] [system.db.CDbCommand] CDbCommand::fetchAll() epäonnistui: SQLSTATE[3D000]: Invalid catalog name: 1046 No database selected. Suoritettu SQL-komento oli: SHOW FULL COLUMNS FROM `sivex_ttekijat`.
+in C:\xampp\htdocs\etuntifw\protected\models\Tyontekijat.php (41)
+in C:\xampp\htdocs\etuntifw\protected\controllers\ApiController.php (106)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/19 09:01:58 [error] [exception.CDbException] exception 'CDbException' with message 'Active record -luokan "Tyontekijat" taulua "sivex_ttekijat" ei löydy tietokannasta.' in C:\xampp\htdocs\etuntifw\YII\framework\db\ar\CActiveRecord.php:2310
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\db\ar\CActiveRecord.php(387): CActiveRecordMetaData->__construct(Object(Tyontekijat))
+#1 C:\xampp\htdocs\etuntifw\protected\models\Tyontekijat.php(41): CActiveRecord::model('Tyontekijat')
+#2 C:\xampp\htdocs\etuntifw\protected\controllers\ApiController.php(106): Tyontekijat::model()
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(49): ApiController->actionImei()
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(286): CController->runAction(Object(CInlineAction))
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('imei')
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/imei')
+#9 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#10 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#11 {main}
+REQUEST_URI=/index.php/api/posts/imei/353888067886268
+---
+2015/08/19 09:02:18 [error] [system.db.CDbCommand] CDbCommand::fetchAll() epäonnistui: SQLSTATE[3D000]: Invalid catalog name: 1046 No database selected. Suoritettu SQL-komento oli: SHOW FULL COLUMNS FROM `sivexkuitti`.
+in C:\xampp\htdocs\etuntifw\protected\models\Mob.php (44)
+in C:\xampp\htdocs\etuntifw\protected\controllers\ApiController.php (38)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/19 09:02:18 [error] [exception.CDbException] exception 'CDbException' with message 'Active record -luokan "Mob" taulua "sivexkuitti" ei löydy tietokannasta.' in C:\xampp\htdocs\etuntifw\YII\framework\db\ar\CActiveRecord.php:2310
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\db\ar\CActiveRecord.php(387): CActiveRecordMetaData->__construct(Object(Mob))
+#1 C:\xampp\htdocs\etuntifw\protected\models\Mob.php(44): CActiveRecord::model('Mob')
+#2 C:\xampp\htdocs\etuntifw\protected\controllers\ApiController.php(38): Mob::model()
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(49): ApiController->actionList()
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(286): CController->runAction(Object(CInlineAction))
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('list')
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/list')
+#9 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#10 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#11 {main}
+REQUEST_URI=/index.php/api/posts?imei=353888067886268
+---
+2015/08/19 09:02:20 [error] [system.db.CDbCommand] CDbCommand::fetchAll() epäonnistui: SQLSTATE[3D000]: Invalid catalog name: 1046 No database selected. Suoritettu SQL-komento oli: SHOW FULL COLUMNS FROM `sivex_ttekijat`.
+in C:\xampp\htdocs\etuntifw\protected\models\Tyontekijat.php (41)
+in C:\xampp\htdocs\etuntifw\protected\controllers\ApiController.php (106)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/19 09:02:20 [error] [exception.CDbException] exception 'CDbException' with message 'Active record -luokan "Tyontekijat" taulua "sivex_ttekijat" ei löydy tietokannasta.' in C:\xampp\htdocs\etuntifw\YII\framework\db\ar\CActiveRecord.php:2310
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\db\ar\CActiveRecord.php(387): CActiveRecordMetaData->__construct(Object(Tyontekijat))
+#1 C:\xampp\htdocs\etuntifw\protected\models\Tyontekijat.php(41): CActiveRecord::model('Tyontekijat')
+#2 C:\xampp\htdocs\etuntifw\protected\controllers\ApiController.php(106): Tyontekijat::model()
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(49): ApiController->actionImei()
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(286): CController->runAction(Object(CInlineAction))
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('imei')
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/imei')
+#9 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#10 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#11 {main}
+REQUEST_URI=/index.php/api/posts/imei/353888067886268
+---
+2015/08/19 09:02:21 [error] [system.db.CDbCommand] CDbCommand::fetchAll() epäonnistui: SQLSTATE[3D000]: Invalid catalog name: 1046 No database selected. Suoritettu SQL-komento oli: SHOW FULL COLUMNS FROM `sivexkuitti`.
+in C:\xampp\htdocs\etuntifw\protected\models\Mob.php (44)
+in C:\xampp\htdocs\etuntifw\protected\controllers\ApiController.php (38)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/19 09:02:21 [error] [exception.CDbException] exception 'CDbException' with message 'Active record -luokan "Mob" taulua "sivexkuitti" ei löydy tietokannasta.' in C:\xampp\htdocs\etuntifw\YII\framework\db\ar\CActiveRecord.php:2310
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\db\ar\CActiveRecord.php(387): CActiveRecordMetaData->__construct(Object(Mob))
+#1 C:\xampp\htdocs\etuntifw\protected\models\Mob.php(44): CActiveRecord::model('Mob')
+#2 C:\xampp\htdocs\etuntifw\protected\controllers\ApiController.php(38): Mob::model()
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(49): ApiController->actionList()
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(286): CController->runAction(Object(CInlineAction))
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('list')
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/list')
+#9 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#10 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#11 {main}
+REQUEST_URI=/index.php/api/posts
+---
+2015/08/19 09:02:24 [error] [system.db.CDbCommand] CDbCommand::fetchAll() epäonnistui: SQLSTATE[3D000]: Invalid catalog name: 1046 No database selected. Suoritettu SQL-komento oli: SHOW FULL COLUMNS FROM `sivexkuitti`.
+in C:\xampp\htdocs\etuntifw\protected\models\Mob.php (44)
+in C:\xampp\htdocs\etuntifw\protected\controllers\ApiController.php (38)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/19 09:02:24 [error] [exception.CDbException] exception 'CDbException' with message 'Active record -luokan "Mob" taulua "sivexkuitti" ei löydy tietokannasta.' in C:\xampp\htdocs\etuntifw\YII\framework\db\ar\CActiveRecord.php:2310
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\db\ar\CActiveRecord.php(387): CActiveRecordMetaData->__construct(Object(Mob))
+#1 C:\xampp\htdocs\etuntifw\protected\models\Mob.php(44): CActiveRecord::model('Mob')
+#2 C:\xampp\htdocs\etuntifw\protected\controllers\ApiController.php(38): Mob::model()
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(49): ApiController->actionList()
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(286): CController->runAction(Object(CInlineAction))
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('list')
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/list')
+#9 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#10 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#11 {main}
+REQUEST_URI=/index.php/api/posts
+---
+2015/08/19 09:03:03 [error] [system.db.CDbCommand] CDbCommand::fetchAll() epäonnistui: SQLSTATE[3D000]: Invalid catalog name: 1046 No database selected. Suoritettu SQL-komento oli: SHOW FULL COLUMNS FROM `sivexkuitti`.
+in C:\xampp\htdocs\etuntifw\protected\models\Mob.php (44)
+in C:\xampp\htdocs\etuntifw\protected\controllers\ApiController.php (38)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/19 09:03:03 [error] [exception.CDbException] exception 'CDbException' with message 'Active record -luokan "Mob" taulua "sivexkuitti" ei löydy tietokannasta.' in C:\xampp\htdocs\etuntifw\YII\framework\db\ar\CActiveRecord.php:2310
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\db\ar\CActiveRecord.php(387): CActiveRecordMetaData->__construct(Object(Mob))
+#1 C:\xampp\htdocs\etuntifw\protected\models\Mob.php(44): CActiveRecord::model('Mob')
+#2 C:\xampp\htdocs\etuntifw\protected\controllers\ApiController.php(38): Mob::model()
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(49): ApiController->actionList()
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(286): CController->runAction(Object(CInlineAction))
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('list')
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/list')
+#9 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#10 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#11 {main}
+REQUEST_URI=/index.php/api/posts
+---
+2015/08/19 09:04:32 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Järjestelmä ei löydä pyydettyä toimintoa "imei".' in C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php:483
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(270): CController->missingAction('imei')
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('imei')
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('mob/imei/353888...')
+#3 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php/mob/imei/353888067886268
+---
+2015/08/19 09:05:42 [error] [system.db.CDbCommand] CDbCommand::fetchAll() epäonnistui: SQLSTATE[3D000]: Invalid catalog name: 1046 No database selected. Suoritettu SQL-komento oli: SHOW FULL COLUMNS FROM `sivex_ttekijat`.
+in C:\xampp\htdocs\etuntifw\protected\models\Tyontekijat.php (41)
+in C:\xampp\htdocs\etuntifw\protected\controllers\ApiController.php (106)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/19 09:05:42 [error] [exception.CDbException] exception 'CDbException' with message 'Active record -luokan "Tyontekijat" taulua "sivex_ttekijat" ei löydy tietokannasta.' in C:\xampp\htdocs\etuntifw\YII\framework\db\ar\CActiveRecord.php:2310
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\db\ar\CActiveRecord.php(387): CActiveRecordMetaData->__construct(Object(Tyontekijat))
+#1 C:\xampp\htdocs\etuntifw\protected\models\Tyontekijat.php(41): CActiveRecord::model('Tyontekijat')
+#2 C:\xampp\htdocs\etuntifw\protected\controllers\ApiController.php(106): Tyontekijat::model()
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(49): ApiController->actionImei()
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(286): CController->runAction(Object(CInlineAction))
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('imei')
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/imei')
+#9 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#10 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#11 {main}
+REQUEST_URI=/index.php/api/posts/imei/353888067886268
+---
+2015/08/19 09:06:26 [error] [system.db.CDbCommand] CDbCommand::fetchAll() epäonnistui: SQLSTATE[3D000]: Invalid catalog name: 1046 No database selected. Suoritettu SQL-komento oli: SHOW FULL COLUMNS FROM `sivex_ttekijat`.
+in C:\xampp\htdocs\etuntifw\protected\models\Tyontekijat.php (41)
+in C:\xampp\htdocs\etuntifw\protected\controllers\ApiController.php (106)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/19 09:06:26 [error] [exception.CDbException] exception 'CDbException' with message 'Active record -luokan "Tyontekijat" taulua "sivex_ttekijat" ei löydy tietokannasta.' in C:\xampp\htdocs\etuntifw\YII\framework\db\ar\CActiveRecord.php:2310
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\db\ar\CActiveRecord.php(387): CActiveRecordMetaData->__construct(Object(Tyontekijat))
+#1 C:\xampp\htdocs\etuntifw\protected\models\Tyontekijat.php(41): CActiveRecord::model('Tyontekijat')
+#2 C:\xampp\htdocs\etuntifw\protected\controllers\ApiController.php(106): Tyontekijat::model()
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(49): ApiController->actionImei()
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(286): CController->runAction(Object(CInlineAction))
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('imei')
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/imei')
+#9 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#10 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#11 {main}
+REQUEST_URI=/index.php/api/posts/imei/353888067886268
+---
+2015/08/19 09:06:51 [error] [system.db.CDbCommand] CDbCommand::fetchAll() epäonnistui: SQLSTATE[3D000]: Invalid catalog name: 1046 No database selected. Suoritettu SQL-komento oli: SHOW FULL COLUMNS FROM `sivex_ttekijat`.
+in C:\xampp\htdocs\etuntifw\protected\models\Tyontekijat.php (41)
+in C:\xampp\htdocs\etuntifw\protected\controllers\ApiController.php (106)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/19 09:06:51 [error] [exception.CDbException] exception 'CDbException' with message 'Active record -luokan "Tyontekijat" taulua "sivex_ttekijat" ei löydy tietokannasta.' in C:\xampp\htdocs\etuntifw\YII\framework\db\ar\CActiveRecord.php:2310
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\db\ar\CActiveRecord.php(387): CActiveRecordMetaData->__construct(Object(Tyontekijat))
+#1 C:\xampp\htdocs\etuntifw\protected\models\Tyontekijat.php(41): CActiveRecord::model('Tyontekijat')
+#2 C:\xampp\htdocs\etuntifw\protected\controllers\ApiController.php(106): Tyontekijat::model()
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(49): ApiController->actionImei()
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(286): CController->runAction(Object(CInlineAction))
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('imei')
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/imei')
+#9 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#10 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#11 {main}
+REQUEST_URI=/index.php/api/posts/imei/353888067886268
+---
+2015/08/19 09:07:25 [error] [system.db.CDbCommand] CDbCommand::fetchAll() epäonnistui: SQLSTATE[3D000]: Invalid catalog name: 1046 No database selected. Suoritettu SQL-komento oli: SHOW FULL COLUMNS FROM `sivex_ttekijat`.
+in C:\xampp\htdocs\etuntifw\protected\models\Tyontekijat.php (41)
+in C:\xampp\htdocs\etuntifw\protected\controllers\ApiController.php (106)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/19 09:07:25 [error] [exception.CDbException] exception 'CDbException' with message 'Active record -luokan "Tyontekijat" taulua "sivex_ttekijat" ei löydy tietokannasta.' in C:\xampp\htdocs\etuntifw\YII\framework\db\ar\CActiveRecord.php:2310
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\db\ar\CActiveRecord.php(387): CActiveRecordMetaData->__construct(Object(Tyontekijat))
+#1 C:\xampp\htdocs\etuntifw\protected\models\Tyontekijat.php(41): CActiveRecord::model('Tyontekijat')
+#2 C:\xampp\htdocs\etuntifw\protected\controllers\ApiController.php(106): Tyontekijat::model()
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(49): ApiController->actionImei()
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(286): CController->runAction(Object(CInlineAction))
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('imei')
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/imei')
+#9 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#10 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#11 {main}
+REQUEST_URI=/index.php/api/posts/imei/353888067886268
+---
+2015/08/19 09:10:25 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Järjestelmä ei löydä pyydettyä toimintoa "index.php".' in C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php:483
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(270): CController->missingAction('index.php')
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('index.php')
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/index.php')
+#3 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php/api/index.php?r=user/login&return=filed
+---

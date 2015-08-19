@@ -90,6 +90,7 @@ $(".forMuisti").click(function() {
 			  console.log(data);
 			  $('#'+spID[1]+"_"+spID[2]).html(data);
 			  $('.mplus').removeClass("mplus glyphicon glyphicon-plus text-success").addClass("forMuisti");
+			  $('.mcut').removeClass("mcut glyphicon glyphicon-transfer text-success").addClass("forCut");
 			  $('#total').html('Muisti');
 			  return false;
 			  },
@@ -124,6 +125,7 @@ $(".forCut").click(function() {
 			  success:function(data){
 			  console.log(data);
 			  $('#'+spID[1]+"_"+spID[2]).html(data);
+			  $('.mplus').removeClass("mplus glyphicon glyphicon-plus text-success").addClass("forMuisti");
 			  $('.mcut').removeClass("mcut glyphicon glyphicon-transfer text-success").addClass("forCut");
 			  $('#total').html('Muisti');
 			  return false;

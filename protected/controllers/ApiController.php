@@ -30,6 +30,7 @@ class ApiController extends Controller
     // Actions
     public function actionList()
     {
+//$this->_checkAuth();
     // Get the respective model instance
     switch($_GET['model'])
     {
@@ -62,7 +63,7 @@ class ApiController extends Controller
 
 public function actionView()
 {
-/*
+
     // Check if id was submitted via GET
     if(!isset($_GET['id']))
         $this->_sendResponse(500, 'Error: Parameter <b>id</b> is missing' );
@@ -85,7 +86,7 @@ public function actionView()
     } else {
         $this->_sendResponse(200, CJSON::encode($model));
     }
-*/
+
 }
 
 

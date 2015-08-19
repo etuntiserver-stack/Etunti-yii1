@@ -59,6 +59,9 @@ td .latikkoAsetukset{
 td:hover .mplus, td:hover .mcut{
 	display : block;
 }
+td .tp{
+	height:20px;
+}
 </style>
 
 
@@ -104,14 +107,19 @@ td:hover .mplus, td:hover .mcut{
 
 	foreach($tt as $t){
 	  echo '<td id="'.$did.'_'.$t->id.'">
-	   <div>
-	   <a href="#" class="forMuisti" id="forMuisti_'.$did.'_'.$t->id.'"></a>
-	   <a href="#" class="forCut" id="forCut_'.$did.'_'.$t->id.'"></a>
+	   <div class="tp row">
+	     <div class="col-sm-1">
+	   	<a href="#" class="forMuisti" id="forMuisti_'.$did.'_'.$t->id.'"></a>
+	     </div><div class="col-sm-1">
+	   	<a href="#" class="forCut" id="forCut_'.$did.'_'.$t->id.'"></a>
+	     </div>
 	   </div>
-	   <br>
 	   <div class="small laatikko latikkoAsetukset" pvm="'.$date.'" tid="'.$t->id.'">';
 
+
+
 		$tv = Tyovuoroot::model()->findAll("tid = '".$t->id."' and pvm = '".$date."' ",array('select'=>'kohde')); 
+
 		foreach($tv as $tvVal)
 		{
 		$k = Kohteet::model()->findbypk($tvVal->kohde);
