@@ -100,42 +100,7 @@ class TyovuorootController extends Controller
 		}
 	}
 
-	public function actionMuisti()
-	{
 
-	if(!isset($_POST['total']) or !isset($_POST['thisID'])){
-	echo 'jotain puutuu';
-	//exit;
-	}
-	//print_r($_POST);
-	//exit;
-
-
-		$expl = explode(" ", $_POST['total']);
-		$thisID = explode("_", $_POST['thisID']);
-
-
-	foreach($expl as $idv){
-	   if(!empty($idv))
-	   {
-		$t = Tyovuoroot::model()->findbypk($idv);
-		$model=new Tyovuoroot;
-		$model->pvm=date("d.m.Y",strtotime($thisID['1']));
-		$model->tid=$thisID['2'];
-		$model->alku=$t->alku;
-		$model->loppu=$t->loppu;
-		$model->pituus=$t->pituus;
-		$model->kohde=$t->kohde;
-		$model->save();
-
-		if(isset($_POST['cut'])){
-		$t = Tyovuoroot::model()->deletebypk($idv);
-		}
-	   }
-	}
-
-		echo $model->id;
-	}
 
 	public function actionShowohje($id)
 	{
