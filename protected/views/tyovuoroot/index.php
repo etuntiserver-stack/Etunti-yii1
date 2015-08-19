@@ -65,14 +65,13 @@ td .tp{
 </style>
 
 
+   <input type="hidden" id="totalForCut">
+
 <div class="row">
   <div class="row col-sm-2">
    <input type="month" class="btn btn-info form-control etsi_month" value="<?php echo Yii::app()->session['etsi_month']; ?>">
   </div>
-  <div class="col-sm-2">
-   <div id="total" class="btn btn-info">Muisti</div>
-   <input type="hidden" id="totalForCut">
-  </div>
+  <div class="col-sm-2"><i id="trash"></i> <i id="clear"></i></div>
 </div>
 <br>
 <div class="row tvuoro">
@@ -110,7 +109,7 @@ td .tp{
 	  echo '<td id="'.$did.'_'.$t->id.'">
 	   <div class="tp row">
 	     <div class="col-sm-1">
-	   	<a href="#" class="forMuisti" id="forMuisti_'.$did.'_'.$t->id.'"></a>
+	   	<a href="#" class="forCopy" id="forCopy_'.$did.'_'.$t->id.'"></a>
 	     </div><div class="col-sm-1">
 	   	<a href="#" class="forCut" id="forCut_'.$did.'_'.$t->id.'"></a>
 	     </div>
@@ -140,8 +139,9 @@ td .tp{
 		  if(isset($tvVal->id) and $k['osoite'])
 		  {
 		    echo '
-		    <div id="tvt_'.$tvVal->id.'">
-			<a href=# class="text-danger glyphicon glyphicon-paste" id="move_'.$tvVal->id.'"></a>
+		    <div id="'.$tvVal->id.'_'.$did.'_'.$t->id.'" class="fullRivi">
+			<a href=# class="text-danger glyphicon glyphicon-paste" for="'.$tvVal->id.'_'.$did.'_'.$t->id.'"></a>
+			&nbsp;
 		    	<a href="#" class="link tv_edit" id="tv_'.$tvVal->id.'">'.$al.' '.$k['osoite'].'</a><br>
 		    </div>';
 		  }

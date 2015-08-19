@@ -1,32 +1,7 @@
 $(document).ready(function(){
 
 
-function Checker(e,forid) {
-// Delete one
-  if (e.shiftKey)
-  {
-	alert(forid)
-	return false;
-/*
-        $.ajax({
-           url: "suunnittelu.php",
-	   type:'POST',
-	   data: {"delete" : "true", "rowid" : rowid, "tid" : tid, "pvm" : pvm},
-           success: function(html){
-		$('#'+forid).html(html);
-           }
-        });
-*/
-
-  } 
-}
-
-
-
 $(".tv_edit").click(function(){
-
-	var forid = $(this).attr("id");
-	Checker(event,forid);
 
 	var thisVal = $(this).attr("id").split("_");
 
@@ -81,56 +56,74 @@ $(".vietyovuoroon").click(function(){
 
 });
 
-$("#total").click(function() {
-	thisID = $(this).text("Muisti");
+
+function clearKaikki(){
+
 	$('#totalForCut').val('');
-	$('.tv_edit').css({"opacity":"1"});
+	$('#total').val('');
+	$('#trash').removeClass();
+	$("#clear").removeClass();
+	$(".mplus").removeClass().addClass("forCopy");
+	$(".mcut").removeClass().addClass("forCut");
+	$('.fullRivi').css({"opacity":"1"});
+
+}
+
+$("#clear").click(function() {
+	clearKaikki();
 });
 
 var kl = '';
 
 $(".glyphicon-paste").click(function() {
-	var thisID = $(this).attr("id");
-	var thisVal = $(this).attr("id").split("_");
-	$("#tv_"+thisVal[1]).css({"opacity":"0.4"});
+	var thisID = $(this).attr("for");
+	$("#"+thisID).css({"opacity":"0.4"});
 
-	$(".forMuisti").removeClass("forMuisti").addClass("mplus glyphicon glyphicon-plus text-success");
+	$(".forCopy").removeClass("forCopy").addClass("mplus glyphicon glyphicon-plus text-success");
 	$(".forCut").removeClass("forCut").addClass("mcut glyphicon glyphicon-transfer text-success");
 
-	if($('#total').html() == 'Muisti')
-	$('#total').text('');
+	$('#totalForCut').val(thisID + '//' + $('#totalForCut').val());
+	kl = $('#totalForCut').val();
 
-	$('#total').text(thisVal[1] + ' ' + $('#total').text());
-
-	$('#totalForCut').val("#tvt_"+thisVal[1] + ' ' + $('#totalForCut').val());
-	kl = $('#totalForCut').val();	
+	$("#trash").addClass("glyphicon glyphicon-trash btn btn-danger btn-group");
+	$("#clear").addClass("glyphicon glyphicon-refresh btn btn-success btn-group");
 });
 
 
-$(".forMuisti").click(function() {
-	var thisID = $(this).attr("id");
-	var spID = $(this).attr("id").split("_");
-	var total = $('#total').html();
+$(".forCopy").click(function() {
 
+  var thisID = $(this).attr("id").split("_");
+  var kaikkiIDs = kl.split("//");
+
+  $.each( kaikkiIDs, function( key, value ) {
+
+    //$("#"+value).remove();
+
+    var splVal 	= value.split("_");
+    var tvID	= splVal[0];
+    var pvm	= splVal[1];
+    var newPvm	= thisID[1];
+    var tid	= splVal[2];
+    var newTid	= thisID[2];
+
+      //alert(value)
+      if(tvID[1])
+      {
         $.ajax({
-           url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/muisti',
+           url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/operatio',
 	   type:'POST',
-	   data: { "thisID" : thisID, "total" : total },
-           success: function(html){
-		//alert(html);
-		var newID = html;
+	   data: { "id" : tvID, "copy" : "true", "newPvm" : newPvm, "newTid" : newTid },
+           success: function(data){
+        	console.log(data);
 
 	  	$.ajax({
 			url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/did',
 			type:'GET',
-			data: { id : newID },
+			data: { "pvm" : newPvm, "tid" : newTid, "from" : "tvuoro" },
 			  success:function(data){
 			  console.log(data);
-			  $('#'+spID[1]+"_"+spID[2]).html(data);
-			  $('.mplus').removeClass("mplus glyphicon glyphicon-plus text-success").addClass("forMuisti");
-			  $('.mcut').removeClass("mcut glyphicon glyphicon-transfer text-success").addClass("forCut");
-			  $('#total').html('Muisti');
-			  $('#totalForCut').val('');
+			  $('#'+newPvm+"_"+newTid).html(data);
+			  clearKaikki()
 			  return false;
 			  },
 			  error:function(data){
@@ -138,20 +131,79 @@ $(".forMuisti").click(function() {
 			  }
 	 	});
 
-
-           }
+    	   },
+    	   error: function(XMLHttpRequest, textStatus, errorThrown) {
+	    	console.log(XMLHttpRequest);
+ 	   }
         });
+      }
+
+  });
+
+
 });
 
 
 $(".forCut").click(function() {
+
+
+  var thisID = $(this).attr("id").split("_");
+  var kaikkiIDs = kl.split("//");
+
+  $.each( kaikkiIDs, function( key, value ) {
+
+    $("#"+value).remove();
+
+    var splVal 	= value.split("_");
+    var tvID	= splVal[0];
+    var pvm	= splVal[1];
+    var newPvm	= thisID[1];
+    var tid	= splVal[2];
+    var newTid	= thisID[2];
+
+      //alert(value)
+      if(tvID[1])
+      {
+        $.ajax({
+           url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/operatio',
+	   type:'POST',
+	   data: { "id" : tvID, "cut" : "true", "newPvm" : newPvm, "newTid" : newTid },
+           success: function(data){
+        	console.log(data);
+
+	  	$.ajax({
+			url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/did',
+			type:'GET',
+			data: { "pvm" : newPvm, "tid" : newTid, "from" : "tvuoro" },
+			  success:function(data){
+			  console.log(data);
+			  $('#'+newPvm+"_"+newTid).html(data);
+			  clearKaikki();
+			  return false;
+			  },
+			  error:function(data){
+			  console.log(data);
+			  }
+	 	});
+
+    	   },
+    	   error: function(XMLHttpRequest, textStatus, errorThrown) {
+	    	console.log(XMLHttpRequest);
+ 	   }
+        });
+      }
+
+  });
+
+
+/*
 	var thisID = $(this).attr("id");
 	var spID = $(this).attr("id").split("_");
-	var total = $('#total').html();
+	var total = $('#total').val();
 
-	var cutThis = kl.split(" ");
+	var kaikkiIDs = kl.split(" ");
 
-	$.each( cutThis, function( key, value ) {
+	$.each( kaikkiIDs, function( key, value ) {
 	  $(value).remove();
 	});
 
@@ -164,7 +216,7 @@ $(".forCut").click(function() {
 		//alert(html);
 		var newID = html;
 
-		/* uusi latikko */
+
 	  	$.ajax({
 			url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/did',
 			type:'GET',
@@ -172,9 +224,9 @@ $(".forCut").click(function() {
 			  success:function(data){
 			  console.log(data);
 			  $('#'+spID[1]+"_"+spID[2]).html(data);
-			  $('.mplus').removeClass("mplus glyphicon glyphicon-plus text-success").addClass("forMuisti");
+			  $('.mplus').removeClass("mplus glyphicon glyphicon-plus text-success").addClass("forCopy");
 			  $('.mcut').removeClass("mcut glyphicon glyphicon-transfer text-success").addClass("forCut");
-			  $('#total').html('Muisti');
+			  $('#total').val('');
 			  $('#totalForCut').val('');
 			  return false;
 			  },
@@ -186,9 +238,44 @@ $(".forCut").click(function() {
 
            }
         });
+*/
 });
 
 
+
+$("#trash").click(function() {
+
+  var kaikkiIDs = kl.split("//");
+
+  $.each( kaikkiIDs, function( key, value ) {
+
+    $("#"+value).remove();
+
+    var splVal 	= value.split("_");
+    var tvID	= splVal[0];
+    var pvm	= splVal[1];
+    var tid	= splVal[2];
+
+      //alert(value)
+      if(tvID[1])
+      {
+        $.ajax({
+           url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/operatio',
+	   type:'POST',
+	   data: { "id" : tvID, "remove" : "true" },
+           success: function(data){
+        	console.log(data);
+		clearKaikki();
+    	   },
+    	   error: function(XMLHttpRequest, textStatus, errorThrown) {
+	    	console.log(XMLHttpRequest);
+ 	   }
+        });
+      }
+
+  });
+
+});
 
 
 

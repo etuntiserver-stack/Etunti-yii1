@@ -28,11 +28,11 @@ class TyovuorootController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','updatetime','showohje','did','muisti'),
+				'actions'=>array('admin','delete','create','update','index','view','updatetime','showohje','did','muisti','operatio'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','updatetime','showohje','did','muisti'),
+				'actions'=>array('admin','delete','create','update','index','view','updatetime','showohje','did','muisti','operatio'),
                 		'message'=>Yii::t('main', 'Tämä TASO ei kuuluu teille'),
 			),
 			array('deny',  // deny all users
@@ -60,10 +60,56 @@ class TyovuorootController extends Controller
 	 * @param integer $id the ID of the model to be displayed
 	 */
 
+	public function actionOperatio()
+	{
+
+		// remove
+		if(isset($_POST['id']) and isset($_POST['remove']))
+		{
+		    $this->loadModel($_POST['id'])->delete();
+		    echo $_POST['id'];
+		}
+		// copy
+		if(isset($_POST['id']) and isset($_POST['copy']))
+		{
+			$t = Tyovuoroot::model()->findbypk($_POST['id']);
+			$model=new Tyovuoroot;
+			$model->pvm=date("d.m.Y",strtotime($_POST['newPvm']));
+			$model->tid=$_POST['newTid'];
+			$model->alku=$t->alku;
+			$model->loppu=$t->loppu;
+			$model->pituus=$t->pituus;
+			$model->kohde=$t->kohde;
+			$model->save();
+			echo $model->id;
+		}
+		// cut
+		if(isset($_POST['id']) and isset($_POST['cut']))
+		{
+			$t = Tyovuoroot::model()->findbypk($_POST['id']);
+			$model=new Tyovuoroot;
+			$model->pvm=date("d.m.Y",strtotime($_POST['newPvm']));
+			$model->tid=$_POST['newTid'];
+			$model->alku=$t->alku;
+			$model->loppu=$t->loppu;
+			$model->pituus=$t->pituus;
+			$model->kohde=$t->kohde;
+			$model->save();
+			$t = Tyovuoroot::model()->deletebypk($_POST['id']);
+			echo $model->id;
+		}
+	}
+
 	public function actionMuisti()
 	{
-		if(isset($_POST['str']))
-		Yii::app()->session['copymove'] = $_POST['str'];
+
+	if(!isset($_POST['total']) or !isset($_POST['thisID'])){
+	echo 'jotain puutuu';
+	//exit;
+	}
+	//print_r($_POST);
+	//exit;
+
 
 		$expl = explode(" ", $_POST['total']);
 		$thisID = explode("_", $_POST['thisID']);
@@ -104,9 +150,13 @@ class TyovuorootController extends Controller
 		));
 	}
 
-	public function actionDid()
+	public function actionDid($pvm,$tid,$from)
 	{
-		$this->renderPartial('did');
+		$this->renderPartial('did',array(
+			'pvm'=>$pvm,
+			'tid'=>$tid,
+			'from'=>$from,
+		));
 	}
 
 	/**

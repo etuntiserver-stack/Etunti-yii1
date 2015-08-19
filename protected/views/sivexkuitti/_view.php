@@ -89,7 +89,7 @@ else
 
 	    <div style="position:absolute;width:300px;z-index: 2;" class="collapse" id="<?php echo 'sushow_'.$data->id; ?>">
 	    <br>
-	    <div class="well" style=""><?php $this->renderPartial('//tyovuoroot/did',array('id'=>$su['id'])); ?></div>
+	    <div class="well" style=""><?php $this->renderPartial('//tyovuoroot/did',array('pvm'=>$data->aloitan,'tid'=>$data->tid,'from'=>'mobiili')); ?></div>
 	    </div>
 
 	<?php  endif;  ?>
