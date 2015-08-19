@@ -43,11 +43,16 @@ class TyovuorootController extends Controller
 
 	public function isEtuntiAdmin() {
 
+		if(isset(Yii::app()->user->adminID) and Yii::app()->user->adminPaketti == '2')
+		{
 		$m = Administrators::model()->findbypk(Yii::app()->user->adminID);
-	        if($m->id == Yii::app()->user->adminID and Yii::app()->user->adminPaketti == '2')
+	        if($m->id == Yii::app()->user->adminID)
 	            return true;
 		else
 	            return false;
+		} else {
+	            return false;
+		}
 	}
 
 	/**
@@ -63,7 +68,6 @@ class TyovuorootController extends Controller
 		$expl = explode(" ", $_POST['total']);
 		$thisID = explode("_", $_POST['thisID']);
 
-	
 
 	foreach($expl as $idv){
 	   if(!empty($idv))
@@ -77,6 +81,10 @@ class TyovuorootController extends Controller
 		$model->pituus=$t->pituus;
 		$model->kohde=$t->kohde;
 		$model->save();
+
+		if(isset($_POST['cut']))
+		$t = Tyovuoroot::model()->deletebypk($idv);
+
 	   }
 	}
 

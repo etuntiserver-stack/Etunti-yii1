@@ -52,6 +52,13 @@ td .latikkoAsetukset{
 	white-space: nowrap;
 	min-height:70px;
 }
+.mplus, .mcut{ 
+	display: none;
+	font-size: 80%;
+}
+td:hover .mplus, td:hover .mcut{
+	display : block;
+}
 </style>
 
 
@@ -97,9 +104,12 @@ td .latikkoAsetukset{
 
 	foreach($tt as $t){
 	  echo '<td id="'.$did.'_'.$t->id.'">
+	   <div>
 	   <a href="#" class="forMuisti" id="forMuisti_'.$did.'_'.$t->id.'"></a>
+	   <a href="#" class="forCut" id="forCut_'.$did.'_'.$t->id.'"></a>
+	   </div>
 	   <br>
-	   <div class="drop small laatikko latikkoAsetukset" pvm="'.$date.'" tid="'.$t->id.'">';
+	   <div class="small laatikko latikkoAsetukset" pvm="'.$date.'" tid="'.$t->id.'">';
 
 		$tv = Tyovuoroot::model()->findAll("tid = '".$t->id."' and pvm = '".$date."' ",array('select'=>'kohde')); 
 		foreach($tv as $tvVal)
