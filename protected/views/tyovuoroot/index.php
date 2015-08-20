@@ -74,6 +74,7 @@ td .tp{
   <div class="col-sm-2"><i id="trash"></i> <i id="clear"></i></div>
 </div>
 <br>
+
 <div class="row tvuoro">
   <table class="table table-striped table-condensed table-bordered">
      <thead>
@@ -106,7 +107,12 @@ td .tp{
   	echo '<td class="fixed-column"><b>'.$arrDate[$explColDate[0]].", ".$explColDate[1].'</b></td>';
 
 	foreach($tt as $t){
-	  echo '<td id="'.$did.'_'.$t->id.'">
+
+	  echo '<td id="'.$did.'_'.$t->id.'">';
+
+	  $this->renderPartial('//tyovuoroot/did',array('pvm'=>$date,'tid'=>$t->id,'from'=>'tvuoro'));
+/*
+
 	   <div class="tp row">
 	     <div class="col-sm-1">
 	   	<a href="#" class="forCopy" id="forCopy_'.$did.'_'.$t->id.'"></a>
@@ -148,8 +154,10 @@ td .tp{
 
 		}
 
-	  echo '</div>
-		</td>';
+
+	  echo '</div>';
+*/
+		echo '</td>';
 	}
 
 

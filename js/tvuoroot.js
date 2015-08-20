@@ -119,12 +119,12 @@ $(".forCopy").click(function() {
 	  	$.ajax({
 			url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/did',
 			type:'GET',
-			data: { "pvm" : newPvm, "tid" : newTid, "from" : "tvuoro" },
+			data: { "pvm" : newPvm, "tid" : newTid, "from" : "ajax" },
 			  success:function(data){
 			  console.log(data);
 			  $('#'+newPvm+"_"+newTid).html(data);
 			  clearKaikki()
-			  return false;
+			  //return false;
 			  },
 			  error:function(data){
 			  console.log(data);
@@ -174,12 +174,12 @@ $(".forCut").click(function() {
 	  	$.ajax({
 			url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/did',
 			type:'GET',
-			data: { "pvm" : newPvm, "tid" : newTid, "from" : "tvuoro" },
+			data: { "pvm" : newPvm, "tid" : newTid, "from" : "ajax" },
 			  success:function(data){
 			  console.log(data);
 			  $('#'+newPvm+"_"+newTid).html(data);
 			  clearKaikki();
-			  return false;
+			  //return false;
 			  },
 			  error:function(data){
 			  console.log(data);
@@ -195,50 +195,6 @@ $(".forCut").click(function() {
 
   });
 
-
-/*
-	var thisID = $(this).attr("id");
-	var spID = $(this).attr("id").split("_");
-	var total = $('#total').val();
-
-	var kaikkiIDs = kl.split(" ");
-
-	$.each( kaikkiIDs, function( key, value ) {
-	  $(value).remove();
-	});
-
-
-        $.ajax({
-           url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/muisti',
-	   type:'POST',
-	   data: { "thisID" : thisID, "total" : total, "cut" : "true" },
-           success: function(html){
-		//alert(html);
-		var newID = html;
-
-
-	  	$.ajax({
-			url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/did',
-			type:'GET',
-			data: { id : newID },
-			  success:function(data){
-			  console.log(data);
-			  $('#'+spID[1]+"_"+spID[2]).html(data);
-			  $('.mplus').removeClass("mplus glyphicon glyphicon-plus text-success").addClass("forCopy");
-			  $('.mcut').removeClass("mcut glyphicon glyphicon-transfer text-success").addClass("forCut");
-			  $('#total').val('');
-			  $('#totalForCut').val('');
-			  return false;
-			  },
-			  error:function(data){
-			  console.log(data);
-			  }
-	 	});
-
-
-           }
-        });
-*/
 });
 
 

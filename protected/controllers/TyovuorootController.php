@@ -74,6 +74,7 @@ class TyovuorootController extends Controller
 		{
 			$t = Tyovuoroot::model()->findbypk($_POST['id']);
 			$model=new Tyovuoroot;
+			$model->attributes=$t->attributes;
 			$model->pvm=date("d.m.Y",strtotime($_POST['newPvm']));
 			$model->tid=$_POST['newTid'];
 			$model->alku=$t->alku;
@@ -87,7 +88,9 @@ class TyovuorootController extends Controller
 		if(isset($_POST['id']) and isset($_POST['cut']))
 		{
 			$t = Tyovuoroot::model()->findbypk($_POST['id']);
+
 			$model=new Tyovuoroot;
+			$model->attributes=$t->attributes;
 			$model->pvm=date("d.m.Y",strtotime($_POST['newPvm']));
 			$model->tid=$_POST['newTid'];
 			$model->alku=$t->alku;
@@ -117,6 +120,7 @@ class TyovuorootController extends Controller
 
 	public function actionDid($pvm,$tid,$from)
 	{
+
 		$this->renderPartial('did',array(
 			'pvm'=>$pvm,
 			'tid'=>$tid,
