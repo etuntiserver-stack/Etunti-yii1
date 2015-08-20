@@ -35,23 +35,33 @@ $this->breadcrumbs=array(
   <div class="col-md-2">
    <input type="date" class="btn btn-info form-control etsi_pvm" value="<?php echo Yii::app()->session['etsi_pvm']; ?>">
   </div>
+  <div class="row col-sm-2">
+   <input type="month" class="btn btn-info form-control etsi_month" value="<?php echo Yii::app()->session['etsi_month']; ?>">
+  </div>
 </div>
 
 <br>
+<?php if(Yii::app()->session['etsi_tekijan_nimi']) : ?>
 
   <table class="table table-striped table-bordered">
   <thead>
   <tr>
-  <th><?php echo Yii::t('main', 'Työntekijä'); ?></th>
+  <th><?php echo Yii::t('main', 'Päivämäärä'); ?></th>
+  <?php if(Yii::app()->user->adminPaketti == '2') : ?>
+  <th><?php echo Yii::t('main', 'Suunnitellut'); ?></th>
+  <?php endif; ?>
+  <th><?php echo Yii::t('main', 'Luettu'); ?></th>
+  <th><?php echo Yii::t('main', 'Toteutuneet'); ?></th>
+  <th><?php echo Yii::t('main', 'Yhteensä'); ?></th>
   </tr>
   </thead>
-
-<?php $this->widget('zii.widgets.CListView', array(
+  <?php $this->widget('zii.widgets.CListView', array(
 	'dataProvider'=>$dataProvider,
 	'itemView'=>'_view',
-)); ?>
-
+  )); ?>
   </table>
+<?php endif; ?>
+
 </div>
 
 	<div id="showres" class="modal fade" tabindex="-1" role="dialog"></div>
@@ -59,6 +69,36 @@ $this->breadcrumbs=array(
 
 <script type="text/javascript">
 $(document).ready(function(){
+
+$(".totRivi").click(function(){
+
+	var thisVal = $(this).attr("id").split("_");
+	var mod = $(this).attr("mod");
+
+	if( mod == 'update' )
+	{
+        $.ajax({
+           url: location.protocol + "//" + location.host + '/index.php/toteutuneet/update?id='+thisVal[1],
+           type: "GET",
+           success: function(html){
+		$('#showres').modal().html(html);
+           }
+        });
+	}
+
+	if( mod == 'create' )
+	{
+        $.ajax({
+           url: location.protocol + "//" + location.host + '/index.php/toteutuneet/create',
+           type: "POST",
+	   data: { forid : thisVal[1] },
+           success: function(html){
+		$('#showres').modal().html(html);
+           }
+        });
+	}
+
+});
 
 $(".etsi_tekijan_nimi").change(function(){
 	var thisVal = $(this).val();
@@ -81,6 +121,21 @@ $(".etsi_pvm").on('blur', function() {
            url: "index",
 	   type:'POST',
 	   data: { "etsi_pvm" : thisVal },
+           success: function(html){
+		window.location.reload();
+           }
+        });
+});
+
+$(".etsi_month").on('change', function() {
+	var thisVal = $(this).val();
+	if(!thisVal)
+	var thisVal = 'kaikki';
+
+        $.ajax({
+           url: 'index',
+	   type:'POST',
+	   data: { "etsi_month" : thisVal },
            success: function(html){
 		window.location.reload();
            }

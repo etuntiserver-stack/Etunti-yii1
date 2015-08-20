@@ -56,9 +56,9 @@ else
 
 	$objcts = '';
 	$osoite = '';
-	$obtrue = false;
 
 	// <-- adminPaketti
+	$obtrue = false;
 	if(Yii::app()->user->adminPaketti == '2' and isset($data->tid) and !empty($apvmForSu[$data->id]))
  	{
 	  $su = Tyovuoroot::model()->find(" tid='".$data->tid."' and pvm='".$apvmForSu[$data->id]."' ");

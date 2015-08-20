@@ -29,7 +29,7 @@ class ToteutuneetController extends Controller
 		return array(
 
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view'),
+				'actions'=>array('admin','delete','create','update','index','view','luetutpvmtid','totpvmtid','al','totyhteensa','sunyhteensa'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -55,12 +55,60 @@ class ToteutuneetController extends Controller
 		}
 	}
 
+	public function actionAl($str){
+
+		$this->renderPartial('al',array(
+			'str'=>$str,
+		));
+	}
+
+	public function actionTotyhteensa($pvm,$tid)
+	{
+		$this->renderPartial('totyhteensa',array(
+			'pvm'=>$pvm,
+			'tid'=>$tid,
+		));
+	}
+
+	public function actionSunyhteensa($pvm,$tid)
+	{
+		$this->renderPartial('sunyhteensa',array(
+			'pvm'=>$pvm,
+			'tid'=>$tid,
+		));
+
+	}
+
+	public function actionLuetutPvmTid($pvm,$tid,$from)
+	{
+		$this->renderPartial('luetutpvmtid',array(
+			'pvm'=>$pvm,
+			'tid'=>$tid,
+			'from'=>$from,
+		));
+	}
+
+	public function actionTotPvmTid($pvm,$tid,$from)
+	{
+
+		$this->renderPartial('totpvmtid',array(
+			'pvm'=>$pvm,
+			'tid'=>$tid,
+			'from'=>$from,
+		));
+	}
+
 	/**
 	 * Displays a particular model.
 	 * @param integer $id the ID of the model to be displayed
 	 */
 	public function actionView($id)
 	{
+	   function sprint($val){
+	       if($val > 0)
+	   	   return sprintf('%02d:%02d', $val/3600, ($val % 3600)/60);
+	   }
+
 		$this->render('view',array(
 			'model'=>$this->loadModel($id),
 		));
@@ -84,7 +132,7 @@ class ToteutuneetController extends Controller
 				$this->redirect(array('view','id'=>$model->id));
 		}
 
-		$this->render('create',array(
+		$this->renderPartial('create',array(
 			'model'=>$model,
 		));
 	}
@@ -108,7 +156,7 @@ class ToteutuneetController extends Controller
 				$this->redirect(array('view','id'=>$model->id));
 		}
 
-		$this->render('update',array(
+		$this->renderPartial('update',array(
 			'model'=>$model,
 		));
 	}
@@ -137,7 +185,12 @@ class ToteutuneetController extends Controller
 		return sprintf('%02d:%02d', $val/3600, ($val % 3600)/60);
 	}
 
-
+		if(Yii::app()->request->getPost('etsi_month') == 'kaikki')
+		    unset(Yii::app()->session['etsi_month']);
+		  if(Yii::app()->request->getPost('etsi_month') and Yii::app()->request->getPost('etsi_month') != 'kaikki')
+		  {
+		    Yii::app()->session['etsi_month'] = Yii::app()->request->getPost('etsi_month');
+  		}
 		if(Yii::app()->request->getPost('etsi_tekijan_nimi') == 'kaikki')
 		unset(Yii::app()->session['etsi_tekijan_nimi']);
 		if(Yii::app()->request->getPost('etsi_tekijan_nimi') and Yii::app()->request->getPost('etsi_tekijan_nimi') != 'kaikki'){
@@ -153,14 +206,15 @@ class ToteutuneetController extends Controller
 
         	//$criteria->condition = " l_loppu = '' and l_alku = '' ";
 
-        	//$criteria->order = 'tekijan_nimi';
+        	$criteria->order = 'id DESC';
         	$criteria->group = "DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'),'%Y%m%d')";
 
 		if(Yii::app()->session['etsi_tekijan_nimi'])
 	        $criteria->addCondition ("tekijan_nimi = '".Yii::app()->session['etsi_tekijan_nimi']."'");
 		if(Yii::app()->session['etsi_pvm'])
 	        $criteria->addCondition ("DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = '".Yii::app()->session['etsi_pvm']."' ");
-
+		if(Yii::app()->session['etsi_month'])
+	        $criteria->addCondition ("DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m') = '".Yii::app()->session['etsi_month']."' ");
 		$dataProvider=new CActiveDataProvider('Sivexkuitti', array(
 			'criteria'=>$criteria,
 			'pagination'=>false
