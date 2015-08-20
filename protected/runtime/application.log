@@ -10833,3 +10833,146 @@ Stack trace:
 REQUEST_URI=/index.php/sivexkuitti/index.php?r=user/login&return=filed
 HTTP_REFERER=http://etuntifw.local/index.php/sivexkuitti/index.php?r=user/login&return=filed
 ---
+2015/08/20 07:11:52 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Järjestelmä ei löydä pyydettyä toimintoa "index.php".' in E:\GITHUB\etuntifw\YII\framework\web\CController.php:483
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(270): CController->missingAction('index.php')
+#1 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('index.php')
+#2 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('sivexkuitti/ind...')
+#3 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php/sivexkuitti/index.php?r=user/login&return=filed
+HTTP_REFERER=http://etuntifw.local/index.php/sivexkuitti/index.php?r=user/login&return=filed
+---
+2015/08/20 07:11:54 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Järjestelmä ei löydä pyydettyä toimintoa "index.php".' in E:\GITHUB\etuntifw\YII\framework\web\CController.php:483
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(270): CController->missingAction('index.php')
+#1 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('index.php')
+#2 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('sivexkuitti/ind...')
+#3 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php/sivexkuitti/index.php?r=user/login&return=filed
+HTTP_REFERER=http://etuntifw.local/index.php/sivexkuitti/index.php?r=user/login&return=filed
+---
+2015/08/20 07:11:55 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Järjestelmä ei löydä pyydettyä toimintoa "index.php".' in E:\GITHUB\etuntifw\YII\framework\web\CController.php:483
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(270): CController->missingAction('index.php')
+#1 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('index.php')
+#2 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('sivexkuitti/ind...')
+#3 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php/sivexkuitti/index.php?r=user/login&return=filed
+HTTP_REFERER=http://etuntifw.local/index.php/sivexkuitti/index.php?r=user/login&return=filed
+---
+2015/08/20 07:11:56 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Järjestelmä ei löydä pyydettyä toimintoa "index.php".' in E:\GITHUB\etuntifw\YII\framework\web\CController.php:483
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(270): CController->missingAction('index.php')
+#1 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('index.php')
+#2 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('site/index.php')
+#3 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php/site/index.php?r=user/login&return=filed
+HTTP_REFERER=http://etuntifw.local/index.php/sivexkuitti/index.php?r=user/login&return=filed
+---
+2015/08/20 07:11:59 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Järjestelmä ei löydä pyydettyä toimintoa "index.php".' in E:\GITHUB\etuntifw\YII\framework\web\CController.php:483
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(270): CController->missingAction('index.php')
+#1 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('index.php')
+#2 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('sivexkuitti/ind...')
+#3 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php/sivexkuitti/index.php?r=user/login&return=filed
+HTTP_REFERER=http://etuntifw.local/index.php/site/index.php?r=user/login&return=filed
+---
+2015/08/20 07:12:00 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Järjestelmä ei löydä pyydettyä toimintoa "index.php".' in E:\GITHUB\etuntifw\YII\framework\web\CController.php:483
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(270): CController->missingAction('index.php')
+#1 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('index.php')
+#2 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('sivexkuitti/ind...')
+#3 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php/sivexkuitti/index.php?r=user/login&return=filed
+HTTP_REFERER=http://etuntifw.local/index.php/sivexkuitti/index.php?r=user/login&return=filed
+---
+2015/08/20 07:13:37 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Järjestelmä ei löydä pyydettyä toimintoa "index.php".' in E:\GITHUB\etuntifw\YII\framework\web\CController.php:483
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(270): CController->missingAction('index.php')
+#1 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('index.php')
+#2 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('sivexkuitti/ind...')
+#3 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php/sivexkuitti/index.php?r=user/login&return=filed
+HTTP_REFERER=http://etuntifw.local/index.php/sivexkuitti/index.php?r=user/login&return=filed
+---
+2015/08/20 07:13:39 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Järjestelmä ei löydä pyydettyä toimintoa "index.php".' in E:\GITHUB\etuntifw\YII\framework\web\CController.php:483
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(270): CController->missingAction('index.php')
+#1 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('index.php')
+#2 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('sivexkuitti/ind...')
+#3 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php/sivexkuitti/index.php?r=user/login&return=filed
+HTTP_REFERER=http://etuntifw.local/index.php/sivexkuitti/index.php?r=user/login&return=filed
+---
+2015/08/20 07:13:39 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Järjestelmä ei löydä pyydettyä toimintoa "index.php".' in E:\GITHUB\etuntifw\YII\framework\web\CController.php:483
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(270): CController->missingAction('index.php')
+#1 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('index.php')
+#2 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('sivexkuitti/ind...')
+#3 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php/sivexkuitti/index.php?r=user/login&return=filed
+HTTP_REFERER=http://etuntifw.local/index.php/sivexkuitti/index.php?r=user/login&return=filed
+---
+2015/08/20 07:13:44 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Järjestelmä ei löydä pyydettyä toimintoa "index.php".' in E:\GITHUB\etuntifw\YII\framework\web\CController.php:483
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(270): CController->missingAction('index.php')
+#1 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('index.php')
+#2 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('sivexkuitti/ind...')
+#3 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php/sivexkuitti/index.php?r=user/login&return=filed
+HTTP_REFERER=http://etuntifw.local/index.php/sivexkuitti/index.php?r=user/login&return=filed
+---
+2015/08/20 07:13:46 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Järjestelmä ei löydä pyydettyä toimintoa "index.php".' in E:\GITHUB\etuntifw\YII\framework\web\CController.php:483
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(270): CController->missingAction('index.php')
+#1 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('index.php')
+#2 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('sivexkuitti/ind...')
+#3 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php/sivexkuitti/index.php?r=user/login&return=filed
+HTTP_REFERER=http://etuntifw.local/index.php/sivexkuitti/index.php?r=user/login&return=filed
+---
+2015/08/20 07:13:46 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Järjestelmä ei löydä pyydettyä toimintoa "index.php".' in E:\GITHUB\etuntifw\YII\framework\web\CController.php:483
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(270): CController->missingAction('index.php')
+#1 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('index.php')
+#2 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('sivexkuitti/ind...')
+#3 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php/sivexkuitti/index.php?r=user/login&return=filed
+HTTP_REFERER=http://etuntifw.local/index.php/sivexkuitti/index.php?r=user/login&return=filed
+---
+2015/08/20 07:13:54 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Järjestelmä ei löydä pyydettyä toimintoa "index.php".' in E:\GITHUB\etuntifw\YII\framework\web\CController.php:483
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(270): CController->missingAction('index.php')
+#1 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('index.php')
+#2 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('sivexkuitti/ind...')
+#3 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php/sivexkuitti/index.php?r=user/login&return=filed
+HTTP_REFERER=http://etuntifw.local/index.php/sivexkuitti/index.php?r=user/login&return=filed
+---
