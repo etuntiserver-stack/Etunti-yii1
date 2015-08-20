@@ -1,15 +1,15 @@
 <?php
-/* @var $this SivexkuittiController */
-/* @var $model Sivexkuitti */
+/* @var $this ToteutuneetController */
+/* @var $model Toteutuneet */
 
 $this->breadcrumbs=array(
-	'Sivexkuittis'=>array('index'),
-	'Manage',
+	Yii::t('main', 'Toteutuneet')=>array('index'),
+	Yii::t('main', 'Hallinta'),
 );
 
 $this->menu=array(
-	array('label'=>'List Sivexkuitti', 'url'=>array('index')),
-	array('label'=>'Create Sivexkuitti', 'url'=>array('create')),
+	array('label'=>'List Toteutuneet', 'url'=>array('index')),
+	array('label'=>'Create Toteutuneet', 'url'=>array('create')),
 );
 
 Yii::app()->clientScript->registerScript('search', "
@@ -18,7 +18,7 @@ $('.search-button').click(function(){
 	return false;
 });
 $('.search-form form').submit(function(){
-	$('#sivexkuitti-grid').yiiGridView('update', {
+	$('#toteutuneet-grid').yiiGridView('update', {
 		data: $(this).serialize()
 	});
 	return false;
@@ -26,7 +26,7 @@ $('.search-form form').submit(function(){
 ");
 ?>
 
-<h1>Luetut Hallinta</h1>
+<h1><?php echo Yii::t('main', 'Toteutuneet hallinta'); ?></h1>
 
 
 
@@ -38,20 +38,18 @@ $('.search-form form').submit(function(){
 </div><!-- search-form -->
 
 <?php $this->widget('zii.widgets.grid.CGridView', array(
-	'id'=>'sivexkuitti-grid',
+	'id'=>'toteutuneet-grid',
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,
 	'columns'=>array(
 		'id',
-		'kohde_kannasta',
-		//'time',
-		'aloitan',
-		'loppui',
-		'status',
-		'imei',
-		'tekijan_nimi',
-		'viesti',
+		'kid',
+		'asiakas_num',
+		'time',
+		'requests',
+		'puh_numero',
 		/*
+		'imei',
 		'bluetooth_name',
 		'sim_serial_number',
 		'subscriber_id',
@@ -68,7 +66,8 @@ $('.search-form form').submit(function(){
 		'status',
 		'tietoja',
 		'admin',
-		'hyvaksytty',
+		'tyoajanlaatu',
+		'tyoajanmerkinta',
 		*/
 		array(
 			'class'=>'CButtonColumn',

@@ -54,7 +54,7 @@ Yii::app()->clientScript->registerPackage('bootstrapCSS');
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-    <a class="navbar-brand" rel="home" href="index.php" title="Etunti">
+    <a class="navbar-brand" rel="home" href="index" title="Etunti">
         <img style="max-width:100px; margin-top: -7px;" src="<?php echo Yii::app()->request->baseUrl; ?>/img/logo-black.png">
     </a>
     </div>
@@ -86,8 +86,31 @@ Yii::app()->clientScript->registerPackage('bootstrapCSS');
 	<?php endif; */ ?>
 
 	<?php if(isset(Yii::app()->user->adminID)) : ?>
-        <li><?php echo CHtml::link(Yii::t('main', 'Mobiili'),array('/sivexkuitti/index')); ?></li>
-        <li><?php echo CHtml::link(Yii::t('main', 'Työntekijät'),array('/tyontekijat/admin')); ?></li>
+
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?php echo Yii::t('main', 'Mobiili'); ?> <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+        	<li><?php echo CHtml::link(Yii::t('main', 'Mobiili lista'),array('/sivexkuitti/index')); ?></li>
+        	<li><?php echo CHtml::link(Yii::t('main', 'Mobiili hallinta'),array('/sivexkuitti/admin')); ?></li>
+        	<li><?php echo CHtml::link(Yii::t('main', 'Yhteenveto luetut'),array('/sivexkuitti/yhteenveto_l')); ?></li>
+          </ul>
+        </li>
+
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?php echo Yii::t('main', 'Toteuma'); ?> <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+        	<li><?php echo CHtml::link(Yii::t('main', 'Toteutuneet taulukko'),array('/toteutuneet/index')); ?></li>
+        	<li><?php echo CHtml::link(Yii::t('main', 'Toteutuneet hallinta'),array('/toteutuneet/admin')); ?></li>
+          </ul>
+        </li>
+
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?php echo Yii::t('main', 'Työntekijät'); ?> <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+        	<li><?php echo CHtml::link(Yii::t('main', 'Työntekijät lista'),array('/tyontekijat/index')); ?></li>
+        	<li><?php echo CHtml::link(Yii::t('main', 'Työntekijät hallinta'),array('/tyontekijat/admin')); ?></li>
+          </ul>
+        </li>
 
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?php echo Yii::t('main', 'Kohteet'); ?> <span class="caret"></span></a>
@@ -158,6 +181,7 @@ Yii::app()->clientScript->registerPackage('bootstrapCSS');
 -->
 
 	<?php if(isset($this->breadcrumbs)):?>
+
 		<?php $this->widget('zii.widgets.CBreadcrumbs', array(
 			'links'=>$this->breadcrumbs,
 		)); ?>

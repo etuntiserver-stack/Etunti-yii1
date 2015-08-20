@@ -7,13 +7,9 @@ $this->breadcrumbs=array(
 	Yii::t('main', 'Luetut kohteet'),
 );
 
-$this->menu=array(
-	//array('label'=>'Create Sivexkuitti', 'url'=>array('create')),
-	array('label'=>'Luetut Hallinta', 'url'=>array('admin')),
-);
 ?>
 
-<h1><?php echo Yii::t('main', 'Mobiili luetut'); ?></h1>
+<h1><?php echo Yii::t('main', 'Yhteenveto luetut'); ?></h1>
 
 
 <div class="row">
@@ -62,43 +58,17 @@ $this->menu=array(
 
 <br>
 
-  <table class="table table-striped">
+  <table class="table table-striped table-bordered">
   <thead>
   <tr>
-  <th><?php echo Yii::t('main', 'T'); ?></th>
-  <th><?php echo Yii::t('main', 'ID'); ?></th>
-  <th><?php echo Yii::t('main', 'Päivä'); ?></th>
   <th><?php echo Yii::t('main', 'Työntekijä'); ?></th>
-
-  <?php if(Yii::app()->user->adminPaketti == '2') : ?>
-  <th><?php echo Yii::t('main', 'Työvuoroot'); ?></th>
-  <?php endif; ?>
-
-  <th class="col-sm-3"><?php echo Yii::t('main', 'Osoite/Matka'); ?></th>
-
-  <th><?php echo Yii::t('main', 'Aloitus'); ?></th>
-  <th><?php echo Yii::t('main', 'Lopetus'); ?></th>
-  <th><?php echo Yii::t('main', 'Kesto'); ?></th>
-  <th><center><?php echo Yii::t('main', 'M'); ?></center></th>
+  <th><?php echo Yii::t('main', 'Luetut'); ?></th>
   </tr>
   </thead>
 
 <?php $this->widget('zii.widgets.CListView', array(
 	'dataProvider'=>$dataProvider,
-	'itemView'=>'_view',
-  	'template'=>'{items}<table class="table table-striped table-condensed"></table><br/>{pager}',
-
-
-'pager' => array(
-           'firstPageLabel'=>'<<',
-           'prevPageLabel'=>'< Edellinen',
-           'nextPageLabel'=>'Seuraava >',
-           'lastPageLabel'=>'>>',
-           //'maxButtonCount'=>'10',
-           'header'=>'<h3>Siirry sivulle:</h3>',
-           'cssFile'=>false,
-       ), 
-
+	'itemView'=>'_yhteenveto',
 )); ?>
 
   </table>
@@ -159,7 +129,7 @@ $(".openkohde").click(function(){
 $(".etsi_tekijan_nimi").change(function(){
 	var thisVal = $(this).val();
         $.ajax({
-           url: "index",
+           url: "yhteenveto",
 	   type:'POST',
 	   data: { "etsi_tekijan_nimi" : thisVal },
            success: function(html){
@@ -171,7 +141,7 @@ $(".etsi_tekijan_nimi").change(function(){
 $(".etsi_kohteet").change(function(){
 	var thisVal = $(this).val();
         $.ajax({
-           url: "index",
+           url: "yhteenveto",
 	   type:'POST',
 	   data: { "etsi_kohteet" : thisVal },
            success: function(html){
@@ -186,7 +156,7 @@ $(".etsi_pvm").on('blur', function() {
 	var thisVal = 'kaikki';
 
         $.ajax({
-           url: "index",
+           url: "yhteenveto",
 	   type:'POST',
 	   data: { "etsi_pvm" : thisVal },
            success: function(html){

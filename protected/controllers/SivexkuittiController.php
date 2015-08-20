@@ -34,7 +34,7 @@ class SivexkuittiController extends Controller
 		return array(
 
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','updatetime','showkohteet'),
+				'actions'=>array('admin','delete','create','update','index','view','updatetime','showkohteet','yhteenveto_l'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -82,6 +82,9 @@ class SivexkuittiController extends Controller
 		$model->status=$_POST['status'];
 		$model->tietoja=$tietoja.Yii::app()->user->nimi." (".date("d.m.Y H:i")."):\nTilanne-".$_POST['request'].", vanha-".$model->$_POST['request'].", uusi-".$newdate;
 		$model->save();
+
+		$as=new Toteutuneet;
+
 	}
 
 	public function actionShowkohteet()
@@ -120,6 +123,57 @@ class SivexkuittiController extends Controller
 		});
 		</script>
 		<?php
+	}
+
+	public function actionYhteenveto_l()
+	{
+	function sprint($val){
+	    if($val > 0)
+		return sprintf('%02d:%02d', $val/3600, ($val % 3600)/60);
+	}
+
+
+		if(Yii::app()->request->getPost('etsi_tekijan_nimi') == 'kaikki')
+		unset(Yii::app()->session['etsi_tekijan_nimi']);
+		if(Yii::app()->request->getPost('etsi_tekijan_nimi') and Yii::app()->request->getPost('etsi_tekijan_nimi') != 'kaikki'){
+		Yii::app()->session['etsi_tekijan_nimi'] = Yii::app()->request->getPost('etsi_tekijan_nimi');
+		}
+
+		if(Yii::app()->request->getPost('etsi_kohteet') == 'kaikki')
+		unset(Yii::app()->session['etsi_kohteet']);
+		if(Yii::app()->request->getPost('etsi_kohteet') and Yii::app()->request->getPost('etsi_kohteet') != 'kaikki'){
+		Yii::app()->session['etsi_kohteet'] = Yii::app()->request->getPost('etsi_kohteet');
+		}
+		if(Yii::app()->request->getPost('etsi_pvm') == 'kaikki')
+		unset(Yii::app()->session['etsi_pvm']);
+		if(Yii::app()->request->getPost('etsi_pvm') and Yii::app()->request->getPost('etsi_pvm') != 'kaikki'){
+		Yii::app()->session['etsi_pvm'] = date("Y-m-d",strtotime(Yii::app()->request->getPost('etsi_pvm')));
+		}
+
+       		$criteria = new CDbCriteria();
+        	$criteria->select = "
+		SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(l_loppu, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s'), DATE_FORMAT(STR_TO_DATE(l_alku, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s')))) as l_tunnit,
+		t.*";
+
+        	//$criteria->condition = " l_loppu = '' and l_alku = '' ";
+
+        	$criteria->order = 'tekijan_nimi';
+        	$criteria->group = 'tid';
+
+		if(Yii::app()->session['etsi_tekijan_nimi'])
+	        $criteria->addCondition ("tekijan_nimi = '".Yii::app()->session['etsi_tekijan_nimi']."'");
+		if(Yii::app()->session['etsi_kohteet'])
+	        $criteria->addCondition ("kohde_kannasta = '".Yii::app()->session['etsi_kohteet']."'");
+		if(Yii::app()->session['etsi_pvm'])
+	        $criteria->addCondition ("DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = '".Yii::app()->session['etsi_pvm']."' ");
+
+		$dataProvider=new CActiveDataProvider('Sivexkuitti', array(
+			'criteria'=>$criteria,
+			'pagination'=>false
+		));
+
+		//$dataProvider->pagination->pageSize = 50;
+		$this->render('yhteenveto_l', array('dataProvider' => $dataProvider));
 	}
 
 	public function actionView($id)

@@ -95,74 +95,22 @@ td .tp{
         <?php
 	$arrDate = array(1=>"Ma",2=>"Ti",3=>"Ke",4=>"To",5=>"Pe",6=>"La",7=>"Su");
     	for ($i = 0; $i <= $dateDiff; $i++) {
+	  $plus = "+$i day";
+	  $date = date("d.m.Y",strtotime($from." ".$plus));
+	  $did = date("Ymd",strtotime($from." ".$plus));
 
-	$plus = "+$i day";
-	$date = date("d.m.Y",strtotime($from." ".$plus));
-	$did = date("Ymd",strtotime($from." ".$plus));
+	  $columnDate = date("N/d.m",strtotime($date));
+	  $explColDate = explode("/",$columnDate);
 
-	$columnDate = date("N/d.m",strtotime($date));
-	$explColDate = explode("/",$columnDate);
+  	    echo '<tr>';
+  		echo '<td class="fixed-column"><b>'.$arrDate[$explColDate[0]].", ".$explColDate[1].'</b></td>';
 
-  	echo '<tr>';
-  	echo '<td class="fixed-column"><b>'.$arrDate[$explColDate[0]].", ".$explColDate[1].'</b></td>';
-
-	foreach($tt as $t){
-
-	  echo '<td id="'.$did.'_'.$t->id.'">';
-
-	  $this->renderPartial('//tyovuoroot/did',array('pvm'=>$date,'tid'=>$t->id,'from'=>'tvuoro'));
-/*
-
-	   <div class="tp row">
-	     <div class="col-sm-1">
-	   	<a href="#" class="forCopy" id="forCopy_'.$did.'_'.$t->id.'"></a>
-	     </div><div class="col-sm-1">
-	   	<a href="#" class="forCut" id="forCut_'.$did.'_'.$t->id.'"></a>
-	     </div>
-	   </div>
-	   <div class="small laatikko latikkoAsetukset" pvm="'.$date.'" tid="'.$t->id.'">';
-
-
-
-		$tv = Tyovuoroot::model()->findAll("tid = '".$t->id."' and pvm = '".$date."' ",array('select'=>'kohde')); 
-
-		foreach($tv as $tvVal)
-		{
-		$k = Kohteet::model()->findbypk($tvVal->kohde);
-
-	  	    $strlen = strlen($k['osoite']);
-
-	     	  if($strlen > 18)
-	  	    $k['osoite'] = substr($k['osoite'],0,18).'..';
-	   	  else
-		    $k['osoite'] = $k['osoite'];
-
-		  if($tvVal->alku > 0 and $tvVal->loppu > 0)
-		    $al = $tvVal->alku.'-'.$tvVal->loppu;
-		  else
-		    $al = '';
-
-		  if(isset($tvVal->id) and $k['osoite'])
-		  {
-		    echo '
-		    <div id="'.$tvVal->id.'_'.$did.'_'.$t->id.'" class="fullRivi">
-			<a href=# class="text-danger glyphicon glyphicon-paste" for="'.$tvVal->id.'_'.$did.'_'.$t->id.'"></a>
-			&nbsp;
-		    	<a href="#" class="link tv_edit" id="tv_'.$tvVal->id.'">'.$al.' '.$k['osoite'].'</a><br>
-		    </div>';
-		  }
-
+		foreach($tt as $t){
+		  echo '<td id="'.$did.'_'.$t->id.'">';
+		  $this->renderPartial('//tyovuoroot/did',array('pvm'=>$date,'tid'=>$t->id,'from'=>'tvuoro'));
+		  echo '</td>';
 		}
-
-
-	  echo '</div>';
-*/
-		echo '</td>';
-	}
-
-
-  	echo '</tr>';
-
+	    echo '</tr>';
   	}
         ?>
      </tbody>  
