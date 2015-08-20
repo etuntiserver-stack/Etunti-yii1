@@ -10709,3 +10709,127 @@ Stack trace:
 REQUEST_URI=/index.php/tyovuoroot/operatio
 in E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php (79)
 in E:\GITHUB\etuntifw\index.php (13)
+2015/08/20 07:09:22 [error] [php] Invalid argument supplied for foreach() (E:\GITHUB\etuntifw\YII\framework\db\CDbConnection.php:445)
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\db\CDbConnection.php(308): CDbConnection->setActive()
+#1 E:\GITHUB\etuntifw\YII\framework\base\CModule.php(387): CDbConnection->init()
+#2 E:\GITHUB\etuntifw\YII\framework\base\CModule.php(103): CWebApplication->getComponent()
+#3 E:\GITHUB\etuntifw\protected\components\DB2ActiveRecord.php(18): CWebApplication->__get()
+#4 E:\GITHUB\etuntifw\YII\framework\db\ar\CActiveRecord.php(2309): Administrators->getDbConnection()
+#5 E:\GITHUB\etuntifw\YII\framework\db\ar\CActiveRecord.php(387): CActiveRecordMetaData->__construct()
+#6 E:\GITHUB\etuntifw\protected\models\Administrators.php(23): model()
+#7 E:\GITHUB\etuntifw\protected\controllers\SivexkuittiController.php(53): model()
+#8 E:\GITHUB\etuntifw\YII\framework\base\CComponent.php(606) : eval()'d code(1): SivexkuittiController->isEtuntiAdmin()
+#9 E:\GITHUB\etuntifw\YII\framework\base\CComponent.php(606): eval()
+#10 E:\GITHUB\etuntifw\YII\framework\web\auth\CAccessControlFilter.php(384): CAccessRule->evaluateExpression()
+#11 E:\GITHUB\etuntifw\YII\framework\web\auth\CAccessControlFilter.php(280): CAccessRule->isExpressionMatched()
+#12 E:\GITHUB\etuntifw\YII\framework\web\auth\CAccessControlFilter.php(135): CAccessRule->isUserAllowed()
+#13 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilter.php(38): CAccessControlFilter->preFilter()
+#14 E:\GITHUB\etuntifw\YII\framework\web\CController.php(1145): CAccessControlFilter->filter()
+#15 E:\GITHUB\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): SivexkuittiController->filterAccessControl()
+#16 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#17 E:\GITHUB\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#18 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): SivexkuittiController->runActionWithFilters()
+#19 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): SivexkuittiController->run()
+#20 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#21 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#22 E:\GITHUB\etuntifw\index.php(13): CWebApplication->run()
+REQUEST_URI=/index.php/sivexkuitti/index?Sivexkuitti_page=3
+in E:\GITHUB\etuntifw\protected\components\DB2ActiveRecord.php (18)
+in E:\GITHUB\etuntifw\protected\models\Administrators.php (23)
+in E:\GITHUB\etuntifw\protected\controllers\SivexkuittiController.php (53)
+2015/08/20 07:09:30 [error] [php] Invalid argument supplied for foreach() (E:\GITHUB\etuntifw\YII\framework\db\CDbConnection.php:445)
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\db\CDbConnection.php(308): CDbConnection->setActive()
+#1 E:\GITHUB\etuntifw\YII\framework\base\CModule.php(387): CDbConnection->init()
+#2 E:\GITHUB\etuntifw\YII\framework\base\CModule.php(103): CWebApplication->getComponent()
+#3 E:\GITHUB\etuntifw\protected\components\DB2ActiveRecord.php(18): CWebApplication->__get()
+#4 E:\GITHUB\etuntifw\YII\framework\db\ar\CActiveRecord.php(2309): Administrators->getDbConnection()
+#5 E:\GITHUB\etuntifw\YII\framework\db\ar\CActiveRecord.php(387): CActiveRecordMetaData->__construct()
+#6 E:\GITHUB\etuntifw\protected\models\Administrators.php(23): model()
+#7 E:\GITHUB\etuntifw\protected\controllers\SivexkuittiController.php(53): model()
+#8 E:\GITHUB\etuntifw\YII\framework\base\CComponent.php(606) : eval()'d code(1): SivexkuittiController->isEtuntiAdmin()
+#9 E:\GITHUB\etuntifw\YII\framework\base\CComponent.php(606): eval()
+#10 E:\GITHUB\etuntifw\YII\framework\web\auth\CAccessControlFilter.php(384): CAccessRule->evaluateExpression()
+#11 E:\GITHUB\etuntifw\YII\framework\web\auth\CAccessControlFilter.php(280): CAccessRule->isExpressionMatched()
+#12 E:\GITHUB\etuntifw\YII\framework\web\auth\CAccessControlFilter.php(135): CAccessRule->isUserAllowed()
+#13 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilter.php(38): CAccessControlFilter->preFilter()
+#14 E:\GITHUB\etuntifw\YII\framework\web\CController.php(1145): CAccessControlFilter->filter()
+#15 E:\GITHUB\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): SivexkuittiController->filterAccessControl()
+#16 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#17 E:\GITHUB\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#18 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): SivexkuittiController->runActionWithFilters()
+#19 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): SivexkuittiController->run()
+#20 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#21 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#22 E:\GITHUB\etuntifw\index.php(13): CWebApplication->run()
+REQUEST_URI=/index.php/sivexkuitti/index?Sivexkuitti_page=3
+in E:\GITHUB\etuntifw\protected\components\DB2ActiveRecord.php (18)
+in E:\GITHUB\etuntifw\protected\models\Administrators.php (23)
+in E:\GITHUB\etuntifw\protected\controllers\SivexkuittiController.php (53)
+2015/08/20 07:09:51 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Järjestelmä ei löydä pyydettyä toimintoa "index.php".' in E:\GITHUB\etuntifw\YII\framework\web\CController.php:483
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(270): CController->missingAction('index.php')
+#1 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('index.php')
+#2 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('sivexkuitti/ind...')
+#3 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php/sivexkuitti/index.php?r=user/login&return=filed
+HTTP_REFERER=http://etuntifw.local/index.php/sivexkuitti/index
+---
+2015/08/20 07:09:57 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Järjestelmä ei löydä pyydettyä toimintoa "index.php".' in E:\GITHUB\etuntifw\YII\framework\web\CController.php:483
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(270): CController->missingAction('index.php')
+#1 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('index.php')
+#2 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('sivexkuitti/ind...')
+#3 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php/sivexkuitti/index.php?r=user/login&return=filed
+HTTP_REFERER=http://etuntifw.local/index.php/sivexkuitti/index.php?r=user/login&return=filed
+---
+2015/08/20 07:09:58 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Järjestelmä ei löydä pyydettyä toimintoa "index.php".' in E:\GITHUB\etuntifw\YII\framework\web\CController.php:483
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(270): CController->missingAction('index.php')
+#1 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('index.php')
+#2 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('sivexkuitti/ind...')
+#3 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php/sivexkuitti/index.php?r=user/login&return=filed
+HTTP_REFERER=http://etuntifw.local/index.php/sivexkuitti/index.php?r=user/login&return=filed
+---
+2015/08/20 07:10:00 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Järjestelmä ei löydä pyydettyä toimintoa "index.php".' in E:\GITHUB\etuntifw\YII\framework\web\CController.php:483
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(270): CController->missingAction('index.php')
+#1 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('index.php')
+#2 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('sivexkuitti/ind...')
+#3 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php/sivexkuitti/index.php?r=user/login&return=filed
+HTTP_REFERER=http://etuntifw.local/index.php/sivexkuitti/index.php?r=user/login&return=filed
+---
+2015/08/20 07:10:05 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Järjestelmä ei löydä pyydettyä toimintoa "index.php".' in E:\GITHUB\etuntifw\YII\framework\web\CController.php:483
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(270): CController->missingAction('index.php')
+#1 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('index.php')
+#2 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('sivexkuitti/ind...')
+#3 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php/sivexkuitti/index.php?r=user/login&return=filed
+HTTP_REFERER=http://etuntifw.local/index.php/sivexkuitti/index.php?r=user/login&return=filed
+---
+2015/08/20 07:10:12 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Järjestelmä ei löydä pyydettyä toimintoa "index.php".' in E:\GITHUB\etuntifw\YII\framework\web\CController.php:483
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(270): CController->missingAction('index.php')
+#1 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('index.php')
+#2 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('sivexkuitti/ind...')
+#3 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php/sivexkuitti/index.php?r=user/login&return=filed
+HTTP_REFERER=http://etuntifw.local/index.php/sivexkuitti/index.php?r=user/login&return=filed
+---
