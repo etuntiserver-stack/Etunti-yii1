@@ -251,15 +251,16 @@ return array(
 			'username' => $etuntifw_user,
 			'password' => $etuntifw_pass,
 		        'tablePrefix' => 'tbl_',
-			//'charset' => 'utf8',
+
 		),
         	'db1'=>array(
-	            'connectionString' => 'mysql:host='.$db2_host.';dbname='.$db2,
-	            'emulatePrepare' => true,
-	            'username' => $db2_user,
-	            'password' => $db2_pass,
-	            'tablePrefix' => '',
-		    'class'=> 'CDbConnection'
+	            	'connectionString' => 'mysql:host='.$db2_host.';dbname='.$db2,
+	            	'emulatePrepare' => true,
+	            	'username' => $db2_user,
+	            	'password' => $db2_pass,
+	            	'tablePrefix' => '',
+			'charset' => 'utf8',
+		    	'class'=> 'CDbConnection'
         	),
 		
 		'errorHandler'=>array(
