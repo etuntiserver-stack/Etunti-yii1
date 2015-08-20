@@ -260,7 +260,6 @@ return array(
 	            	'password' => $db2_pass,
 	            	'tablePrefix' => '',
 			'charset' => 'utf8',
-'initSQLs'=>array('SET NAMES utf8'), 
 		    	'class'=> 'CDbConnection'
         	),
 		
