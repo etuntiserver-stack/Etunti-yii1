@@ -1,6 +1,6 @@
 <?php
 $did = date("Ymd",strtotime($pvm));
-echo '<div id="'.$did.'_'.$tid.'">';
+//echo '<div id="'.$did.'_'.$tid.'">';
 	echo '<div class="small">';
 
 	$muutos = false;
@@ -41,9 +41,11 @@ echo '<div id="'.$did.'_'.$tid.'">';
 
 	echo '</div>';
 
-echo '</div>';
 
-//print_r($tvVal->kohde);
-//exit;
+	if( $from == 'ajax' ){
+	?>
+	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/toteuma.js"></script>
+	<?php
+	}
 ?>
 

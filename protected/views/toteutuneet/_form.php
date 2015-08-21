@@ -136,7 +136,7 @@ $(document).ready(function(){
 	  	$.ajax({
 			url: location.protocol + "//" + location.host + '/index.php/toteutuneet/TotPvmTid',
 			type:'GET',
-			data: { "pvm" : $("#aloitan").val(), "tid" : $("#tid").val(), "from" : "create" },
+			data: { "pvm" : $("#aloitan").val(), "tid" : $("#tid").val(), "from" : "ajax" },
 			  success:function(data){
 			  console.log(data);
 

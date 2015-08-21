@@ -1,5 +1,6 @@
 <?php
 
+$did = date("Ymd",strtotime($data->aloitan));
 ?>
 <tr>
 
@@ -11,7 +12,10 @@
 	<?php endif; ?>
 	<!-- adminPaketti -->
 	<td><?php $this->renderPartial('luetutpvmtid',array('pvm'=>$data->aloitan,'tid'=>$data->tid,'from'=>'mobiili')); ?></td>
-	<td><?php $this->renderPartial('totpvmtid',array('pvm'=>$data->aloitan,'tid'=>$data->tid,'from'=>'mobiili')); ?></td>
+
+	<td id="<?php echo $did.'_'.$data->tid; ?>">
+	<?php $this->renderPartial('totpvmtid',array('pvm'=>$data->aloitan,'tid'=>$data->tid,'from'=>'mobiili')); ?>
+	</td>
 
 	<td>
 	    <?php 

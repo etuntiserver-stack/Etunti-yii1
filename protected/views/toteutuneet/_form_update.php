@@ -133,7 +133,7 @@ $(document).ready(function(){
 	  	$.ajax({
 			url: location.protocol + "//" + location.host + '/index.php/toteutuneet/TotPvmTid',
 			type:'GET',
-			data: { "pvm" : "<?php echo $model->aloitan; ?>", "tid" : "<?php echo $model->tid; ?>", "from" : "update" },
+			data: { "pvm" : "<?php echo $model->aloitan; ?>", "tid" : "<?php echo $model->tid; ?>", "from" : "ajax" },
 			  success:function(data){
 			  console.log(data);
 			  $('#showres').modal('hide');
