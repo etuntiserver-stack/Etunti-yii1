@@ -203,6 +203,13 @@ return array(
 	  	),
                 'depends'=>array('jquery'),         // cause load jquery before load this.
             ),
+            'toteuma'=>array(                       //set others js libraries
+                'baseUrl'=>'js/',
+                'js'=>array(
+		    'toteuma.js',
+	  	),
+                'depends'=>array('jquery'),         // cause load jquery before load this.
+            ),
             'bootstrapCSS'=>array(                       //set others js libraries
                 'baseUrl'=>'css/',
                 'css'=>array(  
