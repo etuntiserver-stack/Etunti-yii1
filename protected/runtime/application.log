@@ -1664,3 +1664,9 @@ Stack trace:
 REQUEST_URI=/index.php/toteutuneet/yhteenveto
 HTTP_REFERER=http://etuntifw.local/index.php/toteutuneet/index
 ---
+2015/08/21 07:10:56 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "id".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (77)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/21 07:10:56 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "time".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (77)
+in C:\xampp\htdocs\etuntifw\index.php (13)
