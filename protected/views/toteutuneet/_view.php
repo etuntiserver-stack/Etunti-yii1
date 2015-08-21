@@ -17,7 +17,7 @@ $did = date("Ymd",strtotime($data->aloitan));
 	<?php $this->renderPartial('totpvmtid',array('pvm'=>$data->aloitan,'tid'=>$data->tid,'from'=>'mobiili')); ?>
 	</td>
 
-	<td>
+	<td id="yht_<?php echo $did.'_'.$data->tid; ?>">
 	    <?php 
 		$sun[$data->id] = $this->renderPartial('sunyhteensa',array('pvm'=>date("Y-m-d",strtotime($data->aloitan)),'tid'=>$data->tid),true);
 		if($sun[$data->id] > 0)

@@ -91,9 +91,6 @@
 		<?php echo $form->error($model,'tyoajanmerkinta'); ?>
 	</div>
 
-	<div class="row buttons">
-		<?php echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save'); ?>
-	</div>
 
 <?php $this->endWidget(); ?>
 
@@ -129,30 +126,36 @@ $(document).ready(function(){
 		  type:'POST',
 		  success:function(data){
 			console.log(data);
+			var divID = data.split("_");
+
+		if( divID ){
 
 	  	$.ajax({
-			url: location.protocol + "//" + location.host + '/index.php/toteutuneet/TotPvmTid',
+			url: location.protocol + "//" + location.host + '/index.php/toteutuneet/totpvmtid',
 			type:'GET',
-			data: { "pvm" : "<?php echo $model->aloitan; ?>", "tid" : "<?php echo $model->tid; ?>", "from" : "ajax" },
+			data: { "pvm" : divID[0], "tid" : divID[1], "from" : "ajax" },
 			  success:function(data){
 			  console.log(data);
-			  $('#showres').modal('hide');
-			  $('#<?php echo date("Ymd",strtotime($model->aloitan))."_".$model->tid; ?>').html(data);
-			  return false;
+
+			  $('#'+divID[0]+'_'+divID[1]).html(data);
+			  $('#yht_'+divID[0]+'_'+divID[1]).html("Päivittäkä sivua");
+
 			  },
 			  error:function(data){
 			  console.log(data);
 			  }
 	 	});
 
+		}
+
+
+		$('#showres').modal('hide');
 		return false;
 	   	},
 		error:function(data){
 		console.log(data);
 	    	}
 	  });
-
-
 
 	e.preventDefault(); 
 	});

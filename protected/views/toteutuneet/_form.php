@@ -3,8 +3,17 @@
 /* @var $model Toteutuneet */
 /* @var $form CActiveForm */
 
-if(isset($_POST['forid']))
+if(isset($_POST['forid'])){
   $s= Sivexkuitti::model()->findbypk($_POST['forid']);
+
+  $at[$s->id] = date("H:i",strtotime($s->aloitan));
+  $apvm[$s->id] = date("Y-m-d",strtotime($s->aloitan));
+
+  $lt[$s->id] = date("H:i",strtotime($s->loppui));
+  $lpvm[$s->id] = date("Y-m-d",strtotime($s->loppui));
+
+  $model->kohde_kannasta = $s->kohde_kannasta;
+}
 ?>
 
 
@@ -33,46 +42,28 @@ if(isset($_POST['forid']))
 
 	<?php echo $form->errorSummary($model); ?>
 
-	<div class="row">
-		<?php echo $form->labelEx($model,'kid'); ?>
-		<?php echo $form->textField($model,'kid',array('value'=>$s->id,'class'=>'form-control')); ?>
-		<?php echo $form->error($model,'kid'); ?>
-	</div>
+
+		<?php echo $form->hiddenField($model,'kid',array('value'=>$s->id)); ?>
+		<?php echo $form->hiddenField($model,'tid',array('value'=>$s->tid)); ?>
+		<?php echo $form->hiddenField($model,'kohdenID',array('value'=>$s->kohdenID,'class'=>'form-control','id'=>'kohdenID')); ?>
+
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'kohde_kannasta'); ?>
-		<?php echo $form->textField($model,'kohde_kannasta',array('size'=>60,'maxlength'=>100,'value'=>$s->kohde_kannasta,'class'=>'form-control')); ?>
+		<?php echo $form->dropDownList($model,'kohde_kannasta', 
+			CHtml::listData(Kohteet::model()->findAll(array('order' => 'osoite ASC')), 'osoite', 'osoite'), 
+			array('class'=>'form-control','id'=>'osoite')) ?>
 		<?php echo $form->error($model,'kohde_kannasta'); ?>
 	</div>
 
 	<div class="row">
-		<?php echo $form->labelEx($model,'kohdenID'); ?>
-		<?php echo $form->textField($model,'kohdenID',array('value'=>$s->kohdenID,'class'=>'form-control')); ?>
-		<?php echo $form->error($model,'kohdenID'); ?>
-	</div>
-
-	<div class="row">
 		<?php echo $form->labelEx($model,'aloitan'); ?>
-		<?php echo $form->textField($model,'aloitan',array('size'=>20,'maxlength'=>20,'value'=>$s->aloitan,'class'=>'form-control','id'=>'aloitan')); ?>
-		<?php echo $form->error($model,'aloitan'); ?>
+		<input type="datetime-local" name="Toteutuneet[aloitan]" value="<?php echo $apvm[$s->id].'T'.$at[$s->id]; ?>" class="form-control" id="aloitan">
 	</div>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'loppui'); ?>
-		<?php echo $form->textField($model,'loppui',array('size'=>20,'maxlength'=>20,'value'=>$s->loppui,'class'=>'form-control')); ?>
-		<?php echo $form->error($model,'loppui'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'tekijan_nimi'); ?>
-		<?php echo $form->textField($model,'tekijan_nimi',array('size'=>50,'maxlength'=>50,'value'=>$s->tekijan_nimi,'class'=>'form-control')); ?>
-		<?php echo $form->error($model,'tekijan_nimi'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'tid'); ?>
-		<?php echo $form->textField($model,'tid',array('value'=>$s->tid,'class'=>'form-control','id'=>'tid')); ?>
-		<?php echo $form->error($model,'tid'); ?>
+		<input type="datetime-local" name="Toteutuneet[loppui]" value="<?php echo $lpvm[$s->id].'T'.$lt[$s->id]; ?>" class="form-control" id="loppui">
 	</div>
 
 	<div class="row">
@@ -125,31 +116,34 @@ $(document).ready(function(){
 	var str = '';
 
 	  $.ajax({
-		  url: location.protocol + "//" + location.host + '/index.php/toteutuneet/create',
+		  url: 'create',
 		  data:$(this).serialize(),
 		  type:'POST',
 		  success:function(data){
 			console.log(data);
+			var divID = data.split("_");
 
+		if( divID ){
 
-		if( data ){
 	  	$.ajax({
-			url: location.protocol + "//" + location.host + '/index.php/toteutuneet/TotPvmTid',
+			url: location.protocol + "//" + location.host + '/index.php/toteutuneet/totpvmtid',
 			type:'GET',
-			data: { "pvm" : $("#aloitan").val(), "tid" : $("#tid").val(), "from" : "ajax" },
+			data: { "pvm" : divID[0], "tid" : divID[1], "from" : "ajax" },
 			  success:function(data){
 			  console.log(data);
 
-			  $('#showres').modal('hide');
-			  $('#'+$("#aloitan").val()+'_'+$("#tid").val()).html(data);
-			  return false;
+			  $('#'+divID[0]+'_'+divID[1]).html(data);
+			  $('#yht_'+divID[0]+'_'+divID[1]).html("Päivittäkä<br>sivua");
+
 			  },
 			  error:function(data){
 			  console.log(data);
 			  }
 	 	});
+
 		}
 
+		$('#showres').modal('hide');
 		return false;
 	   	},
 		error:function(data){
@@ -163,6 +157,19 @@ $(document).ready(function(){
 
 
 
+
+  $("#osoite").change(function(){
+
+	var thisVal = $(this).val();
+        $.ajax({
+           url: location.protocol + "//" + location.host + '/index.php/kohteet/osoite?osoite='+thisVal,
+           type: "GET",
+           success: function(data){
+		console.log(data);
+		$("#kohdenID").val(data);
+           }
+        });
+  });
 
 
 

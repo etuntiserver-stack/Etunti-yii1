@@ -31,5 +31,45 @@ $(".totRivi").click(function(){
 });
 
 
+$(".poistaTot").click(function(){
+
+	var thisVal = $(this).attr("rivi");
+	var divID = $(this).attr("for").split("_");
+
+        $.ajax({
+           url: location.protocol + "//" + location.host + '/index.php/toteutuneet/deletebyajax',
+           type: "POST",
+	   data : { "id" : thisVal },
+           success: function(data){
+		console.log(data);
+
+
+	  	$.ajax({
+			url: location.protocol + "//" + location.host + '/index.php/toteutuneet/totpvmtid',
+			type:'GET',
+			data: { "pvm" : divID[0], "tid" : divID[1], "from" : "ajax" },
+			  success:function(data){
+			  console.log(data);
+
+			  $('#'+divID[0]+'_'+divID[1]).html(data);
+
+			  },
+			  error:function(data){
+			  console.log(data);
+			  }
+	 	});
+
+
+           },
+	        error:function(data){
+		console.log(data);
+	  }
+        });
+
+
+});
+
+
+
 });
 

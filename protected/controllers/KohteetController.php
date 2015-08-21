@@ -28,7 +28,7 @@ class KohteetController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view'),
+				'actions'=>array('admin','delete','create','update','index','view','osoite'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -55,6 +55,12 @@ class KohteetController extends Controller
 		$this->render('view',array(
 			'model'=>$this->loadModel($id),
 		));
+	}
+
+	public function actionOsoite($osoite)
+	{
+		$model = Kohteet::model()->find(" osoite = '".$osoite."' ");
+		echo $model['id'];
 	}
 
 	/**

@@ -29,7 +29,7 @@ class ToteutuneetController extends Controller
 		return array(
 
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','luetutpvmtid','totpvmtid','al','totyhteensa','sunyhteensa'),
+				'actions'=>array('admin','delete','create','update','index','view','luetutpvmtid','totpvmtid','al','totyhteensa','sunyhteensa','deletebyajax'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -98,6 +98,11 @@ class ToteutuneetController extends Controller
 		));
 	}
 
+	public function actionDeletebyajax()
+	{
+		Toteutuneet::model()->deleteByPk($_POST['id']);
+	}
+
 	/**
 	 * Displays a particular model.
 	 * @param integer $id the ID of the model to be displayed
@@ -127,9 +132,21 @@ class ToteutuneetController extends Controller
 
 		if(isset($_POST['Toteutuneet']))
 		{
+
+
+			$_POST['Toteutuneet']['aloitan'] = str_replace("T"," ",$_POST['Toteutuneet']['aloitan']);
+			$_POST['Toteutuneet']['loppui'] = str_replace("T"," ",$_POST['Toteutuneet']['loppui']);
+
 			$model->attributes=$_POST['Toteutuneet'];
-			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+			$model->aloitan = date("d.m.Y H:i:s",strtotime($_POST['Toteutuneet']['aloitan']));
+			$model->loppui = date("d.m.Y H:i:s",strtotime($_POST['Toteutuneet']['loppui']));
+
+			if($model->save()){
+			   $did = date("Ymd",strtotime($model->aloitan));
+			   echo $did."_".$model->tid;
+			   exit;
+			}
+
 		}
 
 		$this->renderPartial('create',array(
@@ -152,8 +169,11 @@ class ToteutuneetController extends Controller
 		if(isset($_POST['Toteutuneet']))
 		{
 			$model->attributes=$_POST['Toteutuneet'];
-			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+			if($model->save()){
+			   $did = date("Ymd",strtotime($model->aloitan));
+			   echo $did."_".$model->tid;
+			   exit;
+			}
 		}
 
 		$this->renderPartial('update',array(

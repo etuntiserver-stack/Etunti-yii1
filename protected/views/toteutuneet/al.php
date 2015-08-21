@@ -14,7 +14,7 @@
 
   if(isset($muutos) and $muutos == true){
     $mod = 'update';
-    $ap = ' <a href="#" class="text-danger">AP</a>';
+    $ap = ' <a href="#" class="text-danger poistaTot" rivi="'.$rivi.'" for="'.$did.'_'.$tid.'">AP</a>';
   } else {
     $mod = 'create';
     $ap = '';

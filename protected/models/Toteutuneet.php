@@ -101,7 +101,7 @@ class Toteutuneet extends DB2ActiveRecord
 			'subscriber_id' => 'Subscriber',
 			'my_location' => 'My Location',
 			'osoite' => 'Osoite',
-			'kohde_kannasta' => 'Kohde Kannasta',
+			'kohde_kannasta' => 'Osoite',
 			'kohdenID' => 'Kohden',
 			'aloitan' => 'Aloitan',
 			'loppui' => 'Loppui',
