@@ -32,6 +32,8 @@ class Sivexkuitti extends DB2ActiveRecord
 {
 
 public $domain;
+public $l_tunnit;
+public $t_tunnit;
 
 	/**
 	 * Returns the static model of the specified AR class.

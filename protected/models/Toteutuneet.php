@@ -32,6 +32,8 @@
  */
 class Toteutuneet extends DB2ActiveRecord
 {
+
+public $t_tunnit;
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
@@ -103,8 +105,8 @@ class Toteutuneet extends DB2ActiveRecord
 			'osoite' => 'Osoite',
 			'kohde_kannasta' => 'Osoite',
 			'kohdenID' => 'Kohden',
-			'aloitan' => 'Aloitan',
-			'loppui' => 'Loppui',
+			'aloitan' => 'Aloitus',
+			'loppui' => 'Lopetus',
 			'viesti' => 'Viesti',
 			'tekijan_nimi' => 'Tekijan Nimi',
 			'tid' => 'Tid',

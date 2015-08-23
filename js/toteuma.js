@@ -59,6 +59,20 @@ $(".poistaTot").click(function(){
 			  }
 	 	});
 
+	  	$.ajax({
+			url: location.protocol + "//" + location.host + '/index.php/toteutuneet/yhteensapvm',
+			type:'GET',
+			data: { "pvm" : divID[0], "tid" : divID[1], "from" : "ajax" },
+			  success:function(data){
+			  console.log(data);
+
+			  $('#yht_'+divID[0]+'_'+divID[1]).html(data);
+			  },
+			  error:function(data){
+			  console.log(data);
+			  }
+	 	});
+
 
            },
 	        error:function(data){
@@ -70,6 +84,136 @@ $(".poistaTot").click(function(){
 });
 
 
+
+});
+
+
+
+
+
+
+$(document).ready(function(){
+
+  $('.uusiTot').click(function(){
+		$('#toteutuneet-form').submit();
+  });
+
+  $('#toteutuneet-form').on('submit',function(e) {
+
+	console.log( $( this ).serializeArray() );
+	console.log( e.target[0].value );
+
+	  $.ajax({
+		  url: 'create',
+		  data:$(this).serialize(),
+		  type:'POST',
+		  success:function(data){
+			console.log(data);
+			var divID = data.split("_");
+
+		if( divID ){
+
+		blockUpdater(divID);
+
+		}
+
+		$('#showres').modal('hide');
+		return false;
+	   	},
+		error:function(data){
+		console.log(data);
+	    	}
+	  });
+
+
+	e.preventDefault(); 
+  });
+
+
+  $('.updTot').click(function(){
+		$('#toteutuneet-form-upd').submit();
+  });
+
+  $('#toteutuneet-form-upd').on('submit',function(e) {
+
+	console.log( $( this ).serializeArray() );
+	console.log( e.target[0].value );
+
+	//alert(e.target[0].value)
+	  $.ajax({
+		  url: 'update?id='+e.target[0].value,
+		  data:$(this).serialize(),
+		  type:'POST',
+		  success:function(data){
+			console.log(data);
+			var divID = data.split("_");
+
+		if( divID ){
+
+		blockUpdater(divID);
+
+		}
+
+		$('#showres').modal('hide');
+		return false;
+	   	},
+		error:function(data){
+		console.log(data);
+	    	}
+	  });
+
+
+
+	e.preventDefault(); 
+  });
+
+
+
+  $("#osoite").change(function(){
+
+	var thisVal = $(this).val();
+        $.ajax({
+           url: location.protocol + "//" + location.host + '/index.php/kohteet/osoite?osoite='+thisVal,
+           type: "GET",
+           success: function(data){
+		console.log(data);
+		$("#kohdenID").val(data);
+           }
+        });
+  });
+
+
+
+  function blockUpdater(divID){
+
+	  	$.ajax({
+			url: location.protocol + "//" + location.host + '/index.php/toteutuneet/totpvmtid',
+			type:'GET',
+			data: { "pvm" : divID[0], "tid" : divID[1], "from" : "ajax" },
+			  success:function(data){
+			  console.log(data);
+
+			  $('#'+divID[0]+'_'+divID[1]).html(data);
+			  },
+			  error:function(data){
+			  console.log(data);
+			  }
+	 	});
+
+	  	$.ajax({
+			url: location.protocol + "//" + location.host + '/index.php/toteutuneet/yhteensapvm',
+			type:'GET',
+			data: { "pvm" : divID[0], "tid" : divID[1], "from" : "ajax" },
+			  success:function(data){
+			  console.log(data);
+
+			  $('#yht_'+divID[0]+'_'+divID[1]).html(data);
+			  },
+			  error:function(data){
+			  console.log(data);
+			  }
+	 	});
+  }
 
 });
 

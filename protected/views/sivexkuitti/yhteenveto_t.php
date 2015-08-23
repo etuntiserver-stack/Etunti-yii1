@@ -9,7 +9,7 @@ $this->breadcrumbs=array(
 
 ?>
 
-<h1><?php echo Yii::t('main', 'Yhteenveto luetut'); ?></h1>
+<h1><?php echo Yii::t('main', 'Yhteenveto toteutuneet'); ?></h1>
 
 
 <div class="row">
@@ -43,13 +43,13 @@ $this->breadcrumbs=array(
   <thead>
   <tr>
   <th><?php echo Yii::t('main', 'Työntekijä'); ?></th>
-  <th><?php echo Yii::t('main', 'Luetut'); ?></th>
+  <th><?php echo Yii::t('main', 'Toteutuneet'); ?></th>
   </tr>
   </thead>
 
 <?php $this->widget('zii.widgets.CListView', array(
 	'dataProvider'=>$dataProvider,
-	'itemView'=>'_yhteenveto_l',
+	'itemView'=>'_yhteenveto_t',
 )); ?>
 
   </table>

@@ -16,24 +16,7 @@ $did = date("Ymd",strtotime($data->aloitan));
 	<td id="<?php echo $did.'_'.$data->tid; ?>">
 	<?php $this->renderPartial('totpvmtid',array('pvm'=>$data->aloitan,'tid'=>$data->tid,'from'=>'mobiili')); ?>
 	</td>
+	<td id="yht_<?php echo $did.'_'.$data->tid; ?>"><?php $this->renderPartial('yhteensapvm',array('pvm'=>date("Y-m-d",strtotime($data->aloitan)),'tid'=>$data->tid,'from'=>'mobiili')); ?></td>
 
-	<td id="yht_<?php echo $did.'_'.$data->tid; ?>">
-	    <?php 
-		$sun[$data->id] = $this->renderPartial('sunyhteensa',array('pvm'=>date("Y-m-d",strtotime($data->aloitan)),'tid'=>$data->tid),true);
-		if($sun[$data->id] > 0)
-		echo Yii::t('main', 'Sun. ').sprint($sun[$data->id]); 
-	    ?>
-	    <br>
-	    <?php 
-		$tot[$data->id] = $this->renderPartial('totyhteensa',array('pvm'=>date("Y-m-d",strtotime($data->aloitan)),'tid'=>$data->tid),true);
-		if($tot[$data->id] > 0)
-		echo Yii::t('main', 'Tot. ').sprint($tot[$data->id]); 
-	    ?>
-	    <br>
-	    <?php 
-		$ero[$data->id] = $sun[$data->id]-$tot[$data->id];
-		if($ero[$data->id] > 0)
-		echo Yii::t('main', 'Ero aika: ').sprint($ero[$data->id]); 
-	    ?>
-	</td>
+
 </tr>

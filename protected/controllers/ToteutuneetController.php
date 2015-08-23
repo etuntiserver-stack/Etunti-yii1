@@ -29,7 +29,7 @@ class ToteutuneetController extends Controller
 		return array(
 
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','luetutpvmtid','totpvmtid','al','totyhteensa','sunyhteensa','deletebyajax'),
+				'actions'=>array('admin','delete','create','update','index','view','luetutpvmtid','totpvmtid','al','yhteensapvm','deletebyajax'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -62,21 +62,17 @@ class ToteutuneetController extends Controller
 		));
 	}
 
-	public function actionTotyhteensa($pvm,$tid)
+	public function actionYhteensapvm($pvm,$tid)
 	{
-		$this->renderPartial('totyhteensa',array(
+	   function sprint($val){
+	       if($val > 0)
+	   	   return sprintf('%02d:%02d', $val/3600, ($val % 3600)/60);
+	   }
+
+		$this->renderPartial('yhteensapvm',array(
 			'pvm'=>$pvm,
 			'tid'=>$tid,
 		));
-	}
-
-	public function actionSunyhteensa($pvm,$tid)
-	{
-		$this->renderPartial('sunyhteensa',array(
-			'pvm'=>$pvm,
-			'tid'=>$tid,
-		));
-
 	}
 
 	public function actionLuetutPvmTid($pvm,$tid,$from)
@@ -101,6 +97,7 @@ class ToteutuneetController extends Controller
 	public function actionDeletebyajax()
 	{
 		Toteutuneet::model()->deleteByPk($_POST['id']);
+
 	}
 
 	/**
@@ -144,6 +141,18 @@ class ToteutuneetController extends Controller
 			if($model->save()){
 			   $did = date("Ymd",strtotime($model->aloitan));
 			   echo $did."_".$model->tid;
+
+
+			// <-- Kirjoitetaan historia luettut tietokantaan
+			$this->renderPartial('//sivexkuitti/historia',array(
+			'id'=>$model->kid,
+			'tilanne'=>"Toteuma",
+			'uusikohde'=>$model->kohde_kannasta,
+			'uusialoitus'=>$model->aloitan,
+			'uusilopetus'=>$model->loppui,
+			));
+			// Kirjoitetaan historia luettut tietokantaan -->
+
 			   exit;
 			}
 
@@ -168,10 +177,28 @@ class ToteutuneetController extends Controller
 
 		if(isset($_POST['Toteutuneet']))
 		{
+
+			$_POST['Toteutuneet']['aloitan'] = str_replace("T"," ",$_POST['Toteutuneet']['aloitan']);
+			$_POST['Toteutuneet']['loppui'] = str_replace("T"," ",$_POST['Toteutuneet']['loppui']);
+
 			$model->attributes=$_POST['Toteutuneet'];
+			$model->aloitan = date("d.m.Y H:i:s",strtotime($_POST['Toteutuneet']['aloitan']));
+			$model->loppui = date("d.m.Y H:i:s",strtotime($_POST['Toteutuneet']['loppui']));
+
 			if($model->save()){
 			   $did = date("Ymd",strtotime($model->aloitan));
 			   echo $did."_".$model->tid;
+
+			// <-- Kirjoitetaan historia luettut tietokantaan
+			$this->renderPartial('//sivexkuitti/historia',array(
+			'id'=>$model->kid,
+			'tilanne'=>"Toteuma",
+			'uusikohde'=>$model->kohde_kannasta,
+			'uusialoitus'=>$model->aloitan,
+			'uusilopetus'=>$model->loppui,
+			));
+			// Kirjoitetaan historia luettut tietokantaan -->
+
 			   exit;
 			}
 		}

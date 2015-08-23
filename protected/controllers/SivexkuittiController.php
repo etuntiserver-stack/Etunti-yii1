@@ -34,7 +34,7 @@ class SivexkuittiController extends Controller
 		return array(
 
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','updatetime','showkohteet','yhteenveto_l'),
+				'actions'=>array('admin','delete','create','update','index','view','updatetime','showkohteet','yhteenveto_l','yhteenveto_t','historia'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -66,6 +66,17 @@ class SivexkuittiController extends Controller
 	 * @param integer $id the ID of the model to be displayed
 	 */
 
+	public function actionHistoria($id,$tilanne,$uusikohde,$uusialoitus,$uusilopetus)
+	{
+
+		$this->renderPartial('historia',array(
+			'id'=>$id,
+			'tilanne'=>$tilanne,
+			'uusikohde'=>$uusikohde,
+			'uusialoitus'=>$uusialoitus,
+			'uusilopetus'=>$uusilopetus,
+		));
+	}
 
 	public function actionUpdatetime()
 	{
@@ -73,17 +84,22 @@ class SivexkuittiController extends Controller
 		$model = $this->loadModel($_POST['id']);
 
  		$newdate = date("d.m.Y H:i:s",strtotime($_POST['value']));
-		if(!empty($model->tietoja)) 
-		  $tietoja = $model->tietoja."\n"; 
-		else 
-		  $tietoja = "<perus>".$model->kohde_kannasta."//".$model->aloitan."//".$model->loppui."</perus>";
-
 		$model->$_POST['request']=$newdate;
 		$model->status=$_POST['status'];
-		$model->tietoja=$tietoja.Yii::app()->user->nimi." (".date("d.m.Y H:i")."):\nTilanne-".$_POST['request'].", vanha-".$model->$_POST['request'].", uusi-".$newdate;
-		$model->save();
 
-		$as=new Toteutuneet;
+		if($model->save()){
+
+			// <-- Kirjoitetaan historia luettut tietokantaan
+			$this->renderPartial('//sivexkuitti/historia',array(
+			'id'=>$model->id,
+			'tilanne'=>"Luetut ".$_POST['request'],
+			'uusikohde'=>$model->kohde_kannasta,
+			'uusialoitus'=>$model->aloitan,
+			'uusilopetus'=>$model->loppui,
+			));
+			// Kirjoitetaan historia luettut tietokantaan -->
+
+		}
 
 	}
 
@@ -139,11 +155,6 @@ class SivexkuittiController extends Controller
 		Yii::app()->session['etsi_tekijan_nimi'] = Yii::app()->request->getPost('etsi_tekijan_nimi');
 		}
 
-		if(Yii::app()->request->getPost('etsi_kohteet') == 'kaikki')
-		unset(Yii::app()->session['etsi_kohteet']);
-		if(Yii::app()->request->getPost('etsi_kohteet') and Yii::app()->request->getPost('etsi_kohteet') != 'kaikki'){
-		Yii::app()->session['etsi_kohteet'] = Yii::app()->request->getPost('etsi_kohteet');
-		}
 		if(Yii::app()->request->getPost('etsi_pvm') == 'kaikki')
 		unset(Yii::app()->session['etsi_pvm']);
 		if(Yii::app()->request->getPost('etsi_pvm') and Yii::app()->request->getPost('etsi_pvm') != 'kaikki'){
@@ -152,7 +163,7 @@ class SivexkuittiController extends Controller
 
        		$criteria = new CDbCriteria();
         	$criteria->select = "
-		SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(l_loppu, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s'), DATE_FORMAT(STR_TO_DATE(l_alku, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s')))) as l_tunnit,
+		SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s')))) as l_tunnit,
 		t.*";
 
         	//$criteria->condition = " l_loppu = '' and l_alku = '' ";
@@ -162,8 +173,7 @@ class SivexkuittiController extends Controller
 
 		if(Yii::app()->session['etsi_tekijan_nimi'])
 	        $criteria->addCondition ("tekijan_nimi = '".Yii::app()->session['etsi_tekijan_nimi']."'");
-		if(Yii::app()->session['etsi_kohteet'])
-	        $criteria->addCondition ("kohde_kannasta = '".Yii::app()->session['etsi_kohteet']."'");
+
 		if(Yii::app()->session['etsi_pvm'])
 	        $criteria->addCondition ("DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = '".Yii::app()->session['etsi_pvm']."' ");
 
@@ -174,6 +184,53 @@ class SivexkuittiController extends Controller
 
 		//$dataProvider->pagination->pageSize = 50;
 		$this->render('yhteenveto_l', array('dataProvider' => $dataProvider));
+	}
+
+
+	public function actionYhteenveto_t()
+	{
+	function sprint($val){
+	    if($val > 0)
+		return sprintf('%02d:%02d', $val/3600, ($val % 3600)/60);
+	}
+
+
+		if(Yii::app()->request->getPost('etsi_tekijan_nimi') == 'kaikki')
+		unset(Yii::app()->session['etsi_tekijan_nimi']);
+		if(Yii::app()->request->getPost('etsi_tekijan_nimi') and Yii::app()->request->getPost('etsi_tekijan_nimi') != 'kaikki'){
+
+		Yii::app()->session['etsi_tekijan_nimi'] = Yii::app()->request->getPost('etsi_tekijan_nimi');
+		}
+
+		if(Yii::app()->request->getPost('etsi_pvm') == 'kaikki')
+		unset(Yii::app()->session['etsi_pvm']);
+		if(Yii::app()->request->getPost('etsi_pvm') and Yii::app()->request->getPost('etsi_pvm') != 'kaikki'){
+		Yii::app()->session['etsi_pvm'] = date("Y-m-d",strtotime(Yii::app()->request->getPost('etsi_pvm')));
+		}
+
+       		$criteria = new CDbCriteria();
+        	$criteria->select = "
+		SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s')))) as l_tunnit,
+		t.*";
+
+        	$criteria->condition = " id not in (select kid from sivexkuitti_repaired) ";
+
+        	$criteria->order = 'tekijan_nimi';
+        	$criteria->group = 'tid';
+
+		if(Yii::app()->session['etsi_tekijan_nimi'])
+	        $criteria->addCondition ("tekijan_nimi = '".Yii::app()->session['etsi_tekijan_nimi']."'");
+
+		if(Yii::app()->session['etsi_pvm'])
+	        $criteria->addCondition ("DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = '".Yii::app()->session['etsi_pvm']."' ");
+
+		$dataProvider=new CActiveDataProvider('Sivexkuitti', array(
+			'criteria'=>$criteria,
+			'pagination'=>false
+		));
+
+		//$dataProvider->pagination->pageSize = 50;
+		$this->render('yhteenveto_t', array('dataProvider' => $dataProvider));
 	}
 
 	public function actionView($id)

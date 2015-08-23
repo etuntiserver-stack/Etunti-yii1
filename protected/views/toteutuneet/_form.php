@@ -40,12 +40,9 @@ if(isset($_POST['forid'])){
 
 
 
-	<?php echo $form->errorSummary($model); ?>
-
-
 		<?php echo $form->hiddenField($model,'kid',array('value'=>$s->id)); ?>
 		<?php echo $form->hiddenField($model,'tid',array('value'=>$s->tid)); ?>
-		<?php echo $form->hiddenField($model,'kohdenID',array('value'=>$s->kohdenID,'class'=>'form-control','id'=>'kohdenID')); ?>
+		<?php echo $form->hiddenField($model,'kohdenID',array('value'=>$s->kohdenID,'id'=>'kohdenID')); ?>
 
 
 	<div class="row">
@@ -66,12 +63,30 @@ if(isset($_POST['forid'])){
 		<input type="datetime-local" name="Toteutuneet[loppui]" value="<?php echo $lpvm[$s->id].'T'.$lt[$s->id]; ?>" class="form-control" id="loppui">
 	</div>
 
-	<div class="row">
-		<?php echo $form->labelEx($model,'tietoja'); ?>
-		<?php echo $form->textArea($model,'tietoja',array('rows'=>6, 'cols'=>50,'value'=>$s->tietoja,'class'=>'form-control')); ?>
-		<?php echo $form->error($model,'tietoja'); ?>
-	</div>
 
+<?php $this->endWidget(); ?>
+
+
+  </div>
+</div><!-- form -->
+
+	<div class="modal-footer">
+		<?php echo CHtml::Button('Sulje',array('class'=>'btn btn-default','data-dismiss'=>'modal')); ?>
+		<?php echo CHtml::Button('Tallenna',array('class'=>'btn btn-primary uusiTot')); ?>
+	</div>		
+		</div> <!-- end modal-content -->
+	</div> <!-- end modal-dialog -->
+
+
+
+
+	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/toteuma.js"></script>
+
+
+
+<?php
+/*
+<!--
 	<div class="row">
 		<?php echo $form->labelEx($model,'tyoajanlaatu'); ?>
 		<?php echo $form->textField($model,'tyoajanlaatu',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
@@ -85,93 +100,11 @@ if(isset($_POST['forid'])){
 	</div>
 
 
-
-<?php $this->endWidget(); ?>
-
-
-  </div>
-</div><!-- form -->
-
-	<div class="modal-footer">
-		<?php echo CHtml::Button('Sulje',array('class'=>'btn btn-default','data-dismiss'=>'modal')); ?>
-		<?php echo CHtml::submitButton($model->isNewRecord ? 'Luo' : 'Tallenna',array('class'=>'btn btn-primary submitThis')); ?>
-	</div>		
-		</div> <!-- end modal-content -->
-	</div> <!-- end modal-dialog -->
-
-
-
-
-<script type="text/javascript">
-$(document).ready(function(){
-
-	$('.submitThis').click(function(){
-		$('#toteutuneet-form').submit();
-	});
-
-	$('#toteutuneet-form').on('submit',function(e) {
-
-	console.log( $( this ).serializeArray() );
-	console.log( e.target[0].value );
-	var str = '';
-
-	  $.ajax({
-		  url: 'create',
-		  data:$(this).serialize(),
-		  type:'POST',
-		  success:function(data){
-			console.log(data);
-			var divID = data.split("_");
-
-		if( divID ){
-
-	  	$.ajax({
-			url: location.protocol + "//" + location.host + '/index.php/toteutuneet/totpvmtid',
-			type:'GET',
-			data: { "pvm" : divID[0], "tid" : divID[1], "from" : "ajax" },
-			  success:function(data){
-			  console.log(data);
-
-			  $('#'+divID[0]+'_'+divID[1]).html(data);
-			  $('#yht_'+divID[0]+'_'+divID[1]).html("Päivittäkä<br>sivua");
-
-			  },
-			  error:function(data){
-			  console.log(data);
-			  }
-	 	});
-
-		}
-
-		$('#showres').modal('hide');
-		return false;
-	   	},
-		error:function(data){
-		console.log(data);
-	    	}
-	  });
-
-
-	e.preventDefault(); 
-	});
-
-
-
-
-  $("#osoite").change(function(){
-
-	var thisVal = $(this).val();
-        $.ajax({
-           url: location.protocol + "//" + location.host + '/index.php/kohteet/osoite?osoite='+thisVal,
-           type: "GET",
-           success: function(data){
-		console.log(data);
-		$("#kohdenID").val(data);
-           }
-        });
-  });
-
-
-
-});
-</script>
+	<div class="row">
+		<?php echo $form->labelEx($model,'tietoja'); ?>
+		<?php echo $form->textArea($model,'tietoja',array('rows'=>6, 'cols'=>50,'value'=>$s->tietoja,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'tietoja'); ?>
+	</div>
+-->
+*/
+?>

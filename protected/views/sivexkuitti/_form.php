@@ -10,6 +10,16 @@ if(isset($model->tietoja))
   $perusTiedot = explode("//",$match['0']);
   $model->tietoja = preg_replace("/<perus>(.*?)<\/perus>/", "", $model->tietoja);
 }
+  $kohde_kannasta = $model->kohde_kannasta;
+  $aloitan = $model->aloitan;
+  $loppui = $model->loppui;
+
+  $tot = Toteutuneet::model()->find(" kid = '".$model->id."' ");
+  if(isset($tot->id)){
+  $kohde_kannasta = $tot->kohde_kannasta;
+  $aloitan = $tot->aloitan;
+  $loppui = $tot->loppui;
+  }
 ?>
 
 <div class="form">
@@ -33,10 +43,10 @@ if(isset($model->tietoja))
 </style>
 <div class="row">
 
-        <div class="col-md-3">
+        <div class="col-md-4 col-md-offset-2">
             <div class="panel panel-warning">
                 <div class="panel-heading">
-                    <h4 class="text-center"><?php echo Yii::t('main', 'Mobiililaitteesta luettu tiedot'); ?></h4>
+                    <h4 class="text-center"><?php echo Yii::t('main', 'Perustiedot'); ?></h4>
                 </div>
                 <div class="panel-body text-center">
                     <p class="lead">
@@ -64,7 +74,7 @@ if(isset($model->tietoja))
             </div>
         </div>
 
-        <div class="col-md-3">
+        <div class="col-md-4">
             <div class="panel panel-success">
                 <div class="panel-heading">
                     <h4 class="text-center"><?php echo Yii::t('main', 'Toteutuneet tiedot'); ?></h4>
@@ -77,15 +87,15 @@ if(isset($model->tietoja))
                 <ul class="list-group list-group-flush text-center">
                     <li class="list-group-item minheight">
                         <?php echo $form->labelEx($model,'kohde_kannasta'); ?>
-                        <strong><?php echo $model->kohde_kannasta; ?></strong>
+                        <strong><?php echo $kohde_kannasta; ?></strong>
                     </li>
                     <li class="list-group-item minheight">
                         <?php echo $form->labelEx($model,'aloitan'); ?>
-                        <strong><?php echo $model->aloitan; ?></strong>
+                        <strong><?php echo $aloitan; ?></strong>
                     </li>
                     <li class="list-group-item minheight">
                         <?php echo $form->labelEx($model,'loppui'); ?>
-                        <strong><?php echo $model->loppui; ?></strong>
+                        <strong><?php echo $loppui; ?></strong>
                     </li>
                     <li class="list-group-item"  style="height:172px">
                         <?php echo $form->labelEx($model,'viesti'); ?>
@@ -95,8 +105,11 @@ if(isset($model->tietoja))
             </div>
         </div>
 
+</div>
 
-        <div class="col-md-6">
+
+<div class="row">
+        <div class="col-md-12">
             <div class="panel panel-danger">
                 <div class="panel-heading">
                     <h4 class="text-center"><?php echo $form->labelEx($model,'tietoja'); ?></h4>
@@ -109,6 +122,7 @@ if(isset($model->tietoja))
             </div>
         </div>
 </div>
+
 
   <?php if(Yii::app()->user->adminStatus == 1) : ?>
   <div class="row">

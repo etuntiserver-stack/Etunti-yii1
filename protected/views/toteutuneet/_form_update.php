@@ -3,6 +3,11 @@
 /* @var $model Toteutuneet */
 /* @var $form CActiveForm */
 
+  $at[$model->id] = date("H:i",strtotime($model->aloitan));
+  $apvm[$model->id] = date("Y-m-d",strtotime($model->aloitan));
+
+  $lt[$model->id] = date("H:i",strtotime($model->loppui));
+  $lpvm[$model->id] = date("Y-m-d",strtotime($model->loppui));
 ?>
 
 
@@ -20,150 +25,52 @@
 	<div class="dialogTable clearfix modal-osio">
 
 
-<div class="form">
+<div class="row form">
+  <div class="col-sm-4">
 
 <?php $form=$this->beginWidget('CActiveForm', array(
-	'id'=>'toteutuneet-form',
+	'id'=>'toteutuneet-form-upd',
 	'enableAjaxValidation'=>false,
 )); ?>
 
-	<p class="note">Fields with <span class="required">*</span> are required.</p>
+		<?php echo $form->textField($model,'id'); ?>
+		<?php echo $form->hiddenField($model,'kid'); ?>
+		<?php echo $form->hiddenField($model,'tid'); ?>
+		<?php echo $form->hiddenField($model,'kohdenID',array('id'=>'kohdenID')); ?>
 
-	<?php echo $form->errorSummary($model); ?>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'kid'); ?>
-		<?php echo $form->textField($model,'kid'); ?>
-		<?php echo $form->error($model,'kid'); ?>
-	</div>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'kohde_kannasta'); ?>
-		<?php echo $form->textField($model,'kohde_kannasta',array('size'=>60,'maxlength'=>100)); ?>
+		<?php echo $form->dropDownList($model,'kohde_kannasta', 
+			CHtml::listData(Kohteet::model()->findAll(array('order' => 'osoite ASC')), 'osoite', 'osoite'), 
+			array('class'=>'form-control','id'=>'osoite')) ?>
 		<?php echo $form->error($model,'kohde_kannasta'); ?>
 	</div>
 
 	<div class="row">
-		<?php echo $form->labelEx($model,'kohdenID'); ?>
-		<?php echo $form->textField($model,'kohdenID'); ?>
-		<?php echo $form->error($model,'kohdenID'); ?>
-	</div>
-
-	<div class="row">
 		<?php echo $form->labelEx($model,'aloitan'); ?>
-		<?php echo $form->textField($model,'aloitan',array('size'=>20,'maxlength'=>20,'id'=>'aloitan')); ?>
-		<?php echo $form->error($model,'aloitan'); ?>
+		<input type="datetime-local" name="Toteutuneet[aloitan]" value="<?php echo $apvm[$model->id].'T'.$at[$model->id]; ?>" class="form-control" id="aloitan">
 	</div>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'loppui'); ?>
-		<?php echo $form->textField($model,'loppui',array('size'=>20,'maxlength'=>20)); ?>
-		<?php echo $form->error($model,'loppui'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'tekijan_nimi'); ?>
-		<?php echo $form->textField($model,'tekijan_nimi',array('size'=>50,'maxlength'=>50)); ?>
-		<?php echo $form->error($model,'tekijan_nimi'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'tid'); ?>
-		<?php echo $form->textField($model,'tid'); ?>
-		<?php echo $form->error($model,'tid'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'tietoja'); ?>
-		<?php echo $form->textArea($model,'tietoja',array('rows'=>6, 'cols'=>50)); ?>
-		<?php echo $form->error($model,'tietoja'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'tyoajanlaatu'); ?>
-		<?php echo $form->textField($model,'tyoajanlaatu',array('size'=>60,'maxlength'=>100)); ?>
-		<?php echo $form->error($model,'tyoajanlaatu'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'tyoajanmerkinta'); ?>
-		<?php echo $form->textField($model,'tyoajanmerkinta',array('size'=>60,'maxlength'=>100)); ?>
-		<?php echo $form->error($model,'tyoajanmerkinta'); ?>
+		<input type="datetime-local" name="Toteutuneet[loppui]" value="<?php echo $lpvm[$model->id].'T'.$lt[$model->id]; ?>" class="form-control" id="loppui">
 	</div>
 
 
 <?php $this->endWidget(); ?>
 
+  </div>
 </div><!-- form -->
 
 
 	<div class="modal-footer">
 		<?php echo CHtml::Button('Sulje',array('class'=>'btn btn-default','data-dismiss'=>'modal')); ?>
-		<?php echo CHtml::submitButton($model->isNewRecord ? 'Luo' : 'Tallenna',array('class'=>'btn btn-primary submitThis')); ?>
+		<?php echo CHtml::submitButton($model->isNewRecord ? 'Luo' : 'Tallenna',array('class'=>'btn btn-primary updTot')); ?>
 	</div>		
 		</div> <!-- end modal-content -->
 	</div> <!-- end modal-dialog -->
 
 
 
-<script type="text/javascript">
-$(document).ready(function(){
-
-
-	$('.submitThis').click(function(){
-		$('#toteutuneet-form').submit();
-	});
-
-	$('#toteutuneet-form').on('submit',function(e) {
-
-	console.log( $( this ).serializeArray() );
-	console.log( e.target[0].value );
-	var str = '';
-
-	  $.ajax({
-		  url: location.protocol + "//" + location.host + '/index.php/toteutuneet/update?id=<?php echo $model->id; ?>',
-		  data:$(this).serialize(),
-		  type:'POST',
-		  success:function(data){
-			console.log(data);
-			var divID = data.split("_");
-
-		if( divID ){
-
-	  	$.ajax({
-			url: location.protocol + "//" + location.host + '/index.php/toteutuneet/totpvmtid',
-			type:'GET',
-			data: { "pvm" : divID[0], "tid" : divID[1], "from" : "ajax" },
-			  success:function(data){
-			  console.log(data);
-
-			  $('#'+divID[0]+'_'+divID[1]).html(data);
-			  $('#yht_'+divID[0]+'_'+divID[1]).html("Päivittäkä sivua");
-
-			  },
-			  error:function(data){
-			  console.log(data);
-			  }
-	 	});
-
-		}
-
-
-		$('#showres').modal('hide');
-		return false;
-	   	},
-		error:function(data){
-		console.log(data);
-	    	}
-	  });
-
-	e.preventDefault(); 
-	});
-
-
-
-
-
-
-});
-</script>
+	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/toteuma.js"></script>

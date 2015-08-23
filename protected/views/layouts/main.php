@@ -92,7 +92,14 @@ Yii::app()->clientScript->registerPackage('bootstrapCSS');
           <ul class="dropdown-menu">
         	<li><?php echo CHtml::link(Yii::t('main', 'Mobiili lista'),array('/sivexkuitti/index')); ?></li>
         	<li><?php echo CHtml::link(Yii::t('main', 'Mobiili hallinta'),array('/sivexkuitti/admin')); ?></li>
+          </ul>
+        </li>
+
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?php echo Yii::t('main', 'Yhteenvedot'); ?> <span class="caret"></span></a>
+          <ul class="dropdown-menu">
         	<li><?php echo CHtml::link(Yii::t('main', 'Yhteenveto luetut'),array('/sivexkuitti/yhteenveto_l')); ?></li>
+        	<li><?php echo CHtml::link(Yii::t('main', 'Yhteenveto toteuma'),array('/sivexkuitti/yhteenveto_t')); ?></li>
           </ul>
         </li>
 
