@@ -34,7 +34,7 @@ class SivexkuittiController extends Controller
 		return array(
 
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','updatetime','showkohteet','yhteenveto_l','yhteenveto_t','historia'),
+				'actions'=>array('admin','delete','create','update','index','view','updatetime','showkohteet','yhteenveto','historia'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -141,7 +141,7 @@ class SivexkuittiController extends Controller
 		<?php
 	}
 
-	public function actionYhteenveto_l()
+	public function actionYhteenveto()
 	{
 	function sprint($val){
 	    if($val > 0)
@@ -168,7 +168,7 @@ class SivexkuittiController extends Controller
 
         	//$criteria->condition = " l_loppu = '' and l_alku = '' ";
 
-        	$criteria->order = 'tekijan_nimi';
+        	$criteria->order = "SUBSTR(LTRIM(tekijan_nimi), LOCATE(' ',LTRIM(tekijan_nimi)))";
         	$criteria->group = 'tid';
 
 		if(Yii::app()->session['etsi_tekijan_nimi'])
@@ -183,55 +183,9 @@ class SivexkuittiController extends Controller
 		));
 
 		//$dataProvider->pagination->pageSize = 50;
-		$this->render('yhteenveto_l', array('dataProvider' => $dataProvider));
+		$this->render('yhteenveto', array('dataProvider' => $dataProvider));
 	}
 
-
-	public function actionYhteenveto_t()
-	{
-	function sprint($val){
-	    if($val > 0)
-		return sprintf('%02d:%02d', $val/3600, ($val % 3600)/60);
-	}
-
-
-		if(Yii::app()->request->getPost('etsi_tekijan_nimi') == 'kaikki')
-		unset(Yii::app()->session['etsi_tekijan_nimi']);
-		if(Yii::app()->request->getPost('etsi_tekijan_nimi') and Yii::app()->request->getPost('etsi_tekijan_nimi') != 'kaikki'){
-
-		Yii::app()->session['etsi_tekijan_nimi'] = Yii::app()->request->getPost('etsi_tekijan_nimi');
-		}
-
-		if(Yii::app()->request->getPost('etsi_pvm') == 'kaikki')
-		unset(Yii::app()->session['etsi_pvm']);
-		if(Yii::app()->request->getPost('etsi_pvm') and Yii::app()->request->getPost('etsi_pvm') != 'kaikki'){
-		Yii::app()->session['etsi_pvm'] = date("Y-m-d",strtotime(Yii::app()->request->getPost('etsi_pvm')));
-		}
-
-       		$criteria = new CDbCriteria();
-        	$criteria->select = "
-		SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s')))) as l_tunnit,
-		t.*";
-
-        	$criteria->condition = " id not in (select kid from sivexkuitti_repaired) ";
-
-        	$criteria->order = 'tekijan_nimi';
-        	$criteria->group = 'tid';
-
-		if(Yii::app()->session['etsi_tekijan_nimi'])
-	        $criteria->addCondition ("tekijan_nimi = '".Yii::app()->session['etsi_tekijan_nimi']."'");
-
-		if(Yii::app()->session['etsi_pvm'])
-	        $criteria->addCondition ("DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = '".Yii::app()->session['etsi_pvm']."' ");
-
-		$dataProvider=new CActiveDataProvider('Sivexkuitti', array(
-			'criteria'=>$criteria,
-			'pagination'=>false
-		));
-
-		//$dataProvider->pagination->pageSize = 50;
-		$this->render('yhteenveto_t', array('dataProvider' => $dataProvider));
-	}
 
 	public function actionView($id)
 	{

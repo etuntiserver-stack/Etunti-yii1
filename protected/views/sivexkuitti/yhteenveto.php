@@ -9,7 +9,7 @@ $this->breadcrumbs=array(
 
 ?>
 
-<h1><?php echo Yii::t('main', 'Yhteenveto toteutuneet'); ?></h1>
+<h1><?php echo Yii::t('main', 'Yhteenveto luetut'); ?></h1>
 
 
 <div class="row">
@@ -43,13 +43,14 @@ $this->breadcrumbs=array(
   <thead>
   <tr>
   <th><?php echo Yii::t('main', 'Työntekijä'); ?></th>
+  <th><?php echo Yii::t('main', 'Luetut'); ?></th>
   <th><?php echo Yii::t('main', 'Toteutuneet'); ?></th>
   </tr>
   </thead>
 
 <?php $this->widget('zii.widgets.CListView', array(
 	'dataProvider'=>$dataProvider,
-	'itemView'=>'_yhteenveto_t',
+	'itemView'=>'_yhteenveto',
 )); ?>
 
   </table>
@@ -65,7 +66,7 @@ $(document).ready(function(){
 $(".etsi_tekijan_nimi").change(function(){
 	var thisVal = $(this).val();
         $.ajax({
-           url: "yhteenveto_l",
+           url: "yhteenveto",
 	   type:'POST',
 	   data: { "etsi_tekijan_nimi" : thisVal },
            success: function(html){
@@ -81,7 +82,7 @@ $(".etsi_pvm").on('blur', function() {
 	var thisVal = 'kaikki';
 
         $.ajax({
-           url: "yhteenveto_l",
+           url: "yhteenveto",
 	   type:'POST',
 	   data: { "etsi_pvm" : thisVal },
            success: function(html){
