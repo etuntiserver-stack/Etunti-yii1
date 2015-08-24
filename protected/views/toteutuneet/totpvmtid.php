@@ -34,10 +34,10 @@ $did = date("Ymd",strtotime($pvm));
 	   foreach($get as $v)
 	      $this->renderPartial('al',array('str'=>$v));
 
-	} else {
+	} /*else {
 
 	      $this->renderPartial('al',array('str'=>$get[strtotime($tvVal->aloitan)]));
-	}
+	}*/
 
 	echo '</div>';
 

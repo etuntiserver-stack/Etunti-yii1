@@ -34,16 +34,15 @@ $this->breadcrumbs=array(
    ?>
 
    <?php
+
     $lounas = '';
-    $lounas = ( isset(Yii::app()->session['ilmanlounastauko']))  ? 'selected' : '';
+    $lounas = ( isset(Yii::app()->session['Lounastauko']))  ? 'selected' : '';
     $matka = '';
-    $matka = ( isset(Yii::app()->session['ilmanmatka']))  ? 'selected' : '';
+    $matka = ( isset(Yii::app()->session['MATKA']))  ? 'selected' : '';
 
     echo '<select name="ilman[]" class="selectpicker ilman"  multiple="multiple"  title="Ilman...">';
-
-    echo '<option value="kaikki">kaikki</option>';
-    echo '<option value="10" '.$lounas.'>Lounastauko</option>';
-    echo '<option value="2" '.$matka.'>MATKA</option>';
+    echo '<option value="Lounastauko" '.$lounas.'>Lounastauko</option>';
+    echo '<option value="MATKA" '.$matka.'>MATKA</option>';
     echo '</select>';
    ?>
 
@@ -64,6 +63,7 @@ $this->breadcrumbs=array(
   <th><?php echo Yii::t('main', 'Työntekijä'); ?></th>
   <th><?php echo Yii::t('main', 'Luetut'); ?></th>
   <th><?php echo Yii::t('main', 'Toteutuneet'); ?></th>
+  <th><?php echo Yii::t('main', 'Ilta'); ?></th>
   </tr>
   </thead>
 

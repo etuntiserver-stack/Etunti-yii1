@@ -155,12 +155,25 @@ class SivexkuittiController extends Controller
 		Yii::app()->session['etsi_tekijan_nimi'] = Yii::app()->request->getPost('etsi_tekijan_nimi');
 		}
 
+		if(isset($_POST['etsi_tekijan_nimi']))
+		{
+		unset(Yii::app()->session['Lounastauko']);
+		unset(Yii::app()->session['MATKA']);
+		}
 
-		if( Yii::app()->request->getPost('ilman') and in_array(10,Yii::app()->request->getPost('ilman'),true))
-		Yii::app()->session['ilmanlounastauko'] = 10;
+		if(isset($_POST['ilman']))
+		{
+		  foreach($_POST['ilman'] as $val){
+			if($val == 'Lounastauko')
+			Yii::app()->session['Lounastauko'] = 10;
 
-		if( Yii::app()->request->getPost('ilman') and in_array(2,Yii::app()->request->getPost('ilman'),true))
-		Yii::app()->session['ilmanmatka'] = 2;
+			if($val == 'MATKA')
+			Yii::app()->session['MATKA'] = 2;
+		  }
+		}
+
+
+
 
 		if(Yii::app()->request->getPost('from'))
 		Yii::app()->session['from'] = date("Y-m-d",strtotime(Yii::app()->request->getPost('from')));
@@ -181,6 +194,12 @@ class SivexkuittiController extends Controller
 
 		if(Yii::app()->session['etsi_tekijan_nimi'])
 	        $criteria->addCondition ("tekijan_nimi = '".Yii::app()->session['etsi_tekijan_nimi']."'");
+
+		if(Yii::app()->session['Lounastauko'])
+	        $criteria->addCondition (" status != '10' ");
+
+		if(Yii::app()->session['MATKA'])
+	        $criteria->addCondition (" status != '2' ");
 
 		if(Yii::app()->session['from'] and Yii::app()->session['to'])
 	        $criteria->addCondition ("DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."' ");
