@@ -155,11 +155,15 @@ class SivexkuittiController extends Controller
 		Yii::app()->session['etsi_tekijan_nimi'] = Yii::app()->request->getPost('etsi_tekijan_nimi');
 		}
 
-		if(Yii::app()->request->getPost('etsi_pvm') == 'kaikki')
-		unset(Yii::app()->session['etsi_pvm']);
-		if(Yii::app()->request->getPost('etsi_pvm') and Yii::app()->request->getPost('etsi_pvm') != 'kaikki'){
-		Yii::app()->session['etsi_pvm'] = date("Y-m-d",strtotime(Yii::app()->request->getPost('etsi_pvm')));
-		}
+		if(Yii::app()->request->getPost('ilman'))
+		Yii::app()->session['ilman'] = Yii::app()->request->getPost('ilman');
+
+		if(Yii::app()->request->getPost('from'))
+		Yii::app()->session['from'] = date("Y-m-d",strtotime(Yii::app()->request->getPost('from')));
+
+		if(Yii::app()->request->getPost('to'))
+		Yii::app()->session['to'] = date("Y-m-d",strtotime(Yii::app()->request->getPost('to')));
+		
 
        		$criteria = new CDbCriteria();
         	$criteria->select = "
@@ -174,8 +178,8 @@ class SivexkuittiController extends Controller
 		if(Yii::app()->session['etsi_tekijan_nimi'])
 	        $criteria->addCondition ("tekijan_nimi = '".Yii::app()->session['etsi_tekijan_nimi']."'");
 
-		if(Yii::app()->session['etsi_pvm'])
-	        $criteria->addCondition ("DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = '".Yii::app()->session['etsi_pvm']."' ");
+		if(Yii::app()->session['from'] and Yii::app()->session['to'])
+	        $criteria->addCondition ("DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."' ");
 
 		$dataProvider=new CActiveDataProvider('Sivexkuitti', array(
 			'criteria'=>$criteria,

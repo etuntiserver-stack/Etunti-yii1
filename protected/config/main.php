@@ -174,7 +174,10 @@ return array(
         'packages'=>array(
             'jquery'=>array(                             // set the new jquery
                 'baseUrl'=>'js/',
-                'js'=>array('jquery-1.11.2.min.js'),
+                'js'=>array(
+		    'jquery-1.11.2.min.js',
+		    'jquery-ui.min.js',
+		),
             ),
             'bootstrapJS'=>array(                       //set others js libraries
                 'baseUrl'=>'js/',
@@ -210,6 +213,13 @@ return array(
 	  	),
                 'depends'=>array('jquery'),         // cause load jquery before load this.
             ),
+            'multiselect'=>array(                       //set others js libraries
+                'baseUrl'=>'js/',
+                'js'=>array(
+		    'jquery.multiselect.min.fi.js',
+	  	),
+                'depends'=>array('jquery'),         // cause load jquery before load this.
+            ),
             'bootstrapCSS'=>array(                       //set others js libraries
                 'baseUrl'=>'css/',
                 'css'=>array(  
@@ -219,6 +229,8 @@ return array(
                     'bootstrap-switch.css',
                     'bootstrap-select.min.css',
                     'bootstrap-slider.css',
+		    'jquery-ui.min.css',
+                    'multiselect.css',
                 ),
 
             ),

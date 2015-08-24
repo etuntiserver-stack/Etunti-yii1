@@ -7,42 +7,28 @@
 
        		$criteria = new CDbCriteria();
         	$criteria->select = "
-		SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s')))) as l_tunnit,
-		t.*";
+		TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s'))) as l_tunnit,
+		t.id";
 
-        	$criteria->condition = " id not in (select kid from sivexkuitti_repaired) ";
         	$criteria->addCondition ( " tid = '".$data->tid."' " );
 
-		if(Yii::app()->session['etsi_pvm'])
-	        $criteria->addCondition ("DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = '".Yii::app()->session['etsi_pvm']."' ");
+		if(Yii::app()->session['from'] and Yii::app()->session['to'])
+	        $criteria->addCondition ("DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."' ");
 
-		$tot = Sivexkuitti::model()->findAll($criteria);
+		$lu = Sivexkuitti::model()->findAll($criteria);
 
-		  foreach($tot as $val)
-		  {
-			$total_l += $val->l_tunnit;
-		  }
+		foreach($lu as $val)
+		{
+			$tot = Toteutuneet::model()->find(" kid = '".$val->id."' ");
+			if(isset($tot['id']))
+			$val->l_tunnit = (strtotime($tot['loppui'])-strtotime($tot['aloitan']));
+
+			$total_l += $val->l_tunnit.'<br>';
+
+		}
 
 
-       		$criteria = new CDbCriteria();
-        	$criteria->select = "
-		SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s')))) as t_tunnit,
-		t.*";
-
-        	$criteria->condition = " kid not in (select id from sivexkuitti) ";
-        	$criteria->addCondition ( " tid = '".$data->tid."' " );
-
-		if(Yii::app()->session['etsi_pvm'])
-	        $criteria->addCondition ("DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = '".Yii::app()->session['etsi_pvm']."' ");
-
-		$tot = Toteutuneet::model()->findAll($criteria);
-
-		  foreach($tot as $val)
-		  {
-			$total_t += $val->t_tunnit;
-		  }
-
-		$total = $total_t + $total_l;
+		$total = $total_l;
 
 ?>
 
@@ -51,6 +37,7 @@
 	<td><?php echo CHtml::encode($data->tekijan_nimi); ?></td>
 	<td><?php echo sprint($data->l_tunnit); ?></td>
 	<td><?php echo sprint($total); ?></td>
+
 
 </tr>
 

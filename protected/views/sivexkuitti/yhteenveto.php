@@ -4,25 +4,26 @@
 /* @var $dataProvider CActiveDataProvider */
 
 $this->breadcrumbs=array(
-	Yii::t('main', 'Luetut kohteet'),
+	Yii::t('main', 'Tunnit'),
 );
 
 ?>
 
-<h1><?php echo Yii::t('main', 'Yhteenveto luetut'); ?></h1>
+<h1><?php echo Yii::t('main', 'Yhteenveto tunnit'); ?></h1>
 
 
 <div class="row">
-  <div class="col-md-2">
+  <form action="#" method="POST">
+  <div class="col-md-12">
    <?php
     $model=new Sivexkuitti;
     $list = CHtml::listData(Sivexkuitti::model()->findAll(array('group' => 'tid','order' => 'tekijan_nimi')), 'tekijan_nimi', 'tekijan_nimi');
 
-    echo '<select class="btn btn-info etsi_tekijan_nimi form-control">';
+    echo '<select name="etsi_tekijan_nimi" class="btn btn-default">';
     if(Yii::app()->session['etsi_tekijan_nimi'])
        echo '<option value="'.Yii::app()->session['etsi_tekijan_nimi'].'">'.Yii::app()->session['etsi_tekijan_nimi'].'</option>';
     else
-       echo '<option>'.Yii::t('main', 'Työntekijät').'</option>';
+       echo '<option value="kaikki">'.Yii::t('main', 'Kaikki').'</option>';
 
        echo '<option value="kaikki">Kaikki</option>';
 
@@ -31,14 +32,28 @@ $this->breadcrumbs=array(
     }
     echo '</select>';
    ?>
-  </div>
-  <div class="col-md-2">
-   <input type="date" class="btn btn-info form-control etsi_pvm" value="<?php echo Yii::app()->session['etsi_pvm']; ?>">
+
+   <?php
+print_r( Yii::app()->session['ilman']);
+
+    echo '<select name="ilman[]" class="selectpicker ilman"  multiple="multiple"  title="Ilman...">';
+
+    echo '<option value="Lounastauko">Lounastauko</option>';
+    echo '<option value="MATKA">MATKA</option>';
+    echo '</select>';
+   ?>
+
+   <input type="date" name="from" class="btn btn-default" value="<?php echo Yii::app()->session['from']; ?>">
+
+   <input type="date" name="to" class="btn btn-default" value="<?php echo Yii::app()->session['to']; ?>">
+
+   <input type="submit" class="btn btn-primary" value="<?php echo Yii::t('main', 'haku'); ?>">
   </div>
 </div>
 
 <br>
 
+<?php if(Yii::app()->session['from'] and Yii::app()->session['to']) : ?>
   <table class="table table-striped table-bordered">
   <thead>
   <tr>
@@ -54,15 +69,24 @@ $this->breadcrumbs=array(
 )); ?>
 
   </table>
+<?php endif; ?>
 </div>
 
 	<div id="showres" class="modal fade" tabindex="-1" role="dialog"></div>
+
 	<?php Yii::app()->clientScript->registerPackage('tyovuoroot'); ?>
+
 
 <script type="text/javascript">
 $(document).ready(function(){
 
 
+$('.selectpicker').selectpicker({
+      style: 'btn-default',
+      size: 4
+  });
+
+/*
 $(".etsi_tekijan_nimi").change(function(){
 	var thisVal = $(this).val();
         $.ajax({
@@ -90,6 +114,9 @@ $(".etsi_pvm").on('blur', function() {
            }
         });
 });
+*/
+
+
 
 });
 </script>
