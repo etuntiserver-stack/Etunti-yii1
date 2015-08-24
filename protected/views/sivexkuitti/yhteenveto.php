@@ -34,12 +34,16 @@ $this->breadcrumbs=array(
    ?>
 
    <?php
-print_r( Yii::app()->session['ilman']);
+    $lounas = '';
+    $lounas = ( isset(Yii::app()->session['ilmanlounastauko']))  ? 'selected' : '';
+    $matka = '';
+    $matka = ( isset(Yii::app()->session['ilmanmatka']))  ? 'selected' : '';
 
     echo '<select name="ilman[]" class="selectpicker ilman"  multiple="multiple"  title="Ilman...">';
 
-    echo '<option value="Lounastauko">Lounastauko</option>';
-    echo '<option value="MATKA">MATKA</option>';
+    echo '<option value="kaikki">kaikki</option>';
+    echo '<option value="10" '.$lounas.'>Lounastauko</option>';
+    echo '<option value="2" '.$matka.'>MATKA</option>';
     echo '</select>';
    ?>
 

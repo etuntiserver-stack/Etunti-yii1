@@ -155,8 +155,12 @@ class SivexkuittiController extends Controller
 		Yii::app()->session['etsi_tekijan_nimi'] = Yii::app()->request->getPost('etsi_tekijan_nimi');
 		}
 
-		if(Yii::app()->request->getPost('ilman'))
-		Yii::app()->session['ilman'] = Yii::app()->request->getPost('ilman');
+
+		if( Yii::app()->request->getPost('ilman') and in_array(10,Yii::app()->request->getPost('ilman'),true))
+		Yii::app()->session['ilmanlounastauko'] = 10;
+
+		if( Yii::app()->request->getPost('ilman') and in_array(2,Yii::app()->request->getPost('ilman'),true))
+		Yii::app()->session['ilmanmatka'] = 2;
 
 		if(Yii::app()->request->getPost('from'))
 		Yii::app()->session['from'] = date("Y-m-d",strtotime(Yii::app()->request->getPost('from')));
