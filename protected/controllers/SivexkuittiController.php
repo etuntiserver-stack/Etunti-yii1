@@ -143,9 +143,63 @@ class SivexkuittiController extends Controller
 
 	public function actionYhteenveto()
 	{
+
 	function sprint($val){
 	    if($val > 0)
 		return sprintf('%02d:%02d', $val/3600, ($val % 3600)/60);
+	}
+
+	function ilta($al,$lop){
+
+		$totalIlta = 0;
+
+	    if($al[0] == $lop[0])
+	    {
+
+	  	if(strtotime($al[0]." ".$al[1]) >= strtotime($al[0]." 18:00")
+		and strtotime($lop[0]." ".$lop[1]) <= strtotime($lop[0]." 23:00"))
+		{
+	   	  $strAl0 = strtotime($al[0]." ".$al[1]);
+	   	  $strLop0 = strtotime($lop[0]." ".$lop[1]);
+
+	 	  $str = ($strLop0-$strAl0);
+	      	  $totalIlta += $str;
+		}
+
+	  	if(strtotime($al[0]." ".$al[1]) <= strtotime($al[0]." 18:00")
+		and strtotime($lop[0]." ".$lop[1]) <= strtotime($lop[0]." 23:00")
+		and strtotime($lop[0]." ".$lop[1]) >= strtotime($lop[0]." 18:00"))
+		{
+	   	  $strAl0 = strtotime($al[0]." 18:00");
+	   	  $strLop0 = strtotime($lop[0]." ".$lop[1]);
+
+	 	  $str = ($strLop0-$strAl0);
+	      	  $totalIlta += $str;
+		}
+
+	  	if(strtotime($al[0]." ".$al[1]) <= strtotime($al[0]." 18:00")
+		and strtotime($lop[0]." ".$lop[1]) >= strtotime($lop[0]." 23:00"))
+		{
+	   	  $strAl0 = strtotime($al[0]." 18:00");
+	   	  $strLop0 = strtotime($lop[0]." 23:00");
+
+	 	  $str = ($strLop0-$strAl0);
+	      	  $totalIlta += $str;
+		}
+
+	  	if(strtotime($al[0]." ".$al[1]) >= strtotime($al[0]." 18:00")
+		and strtotime($lop[0]." ".$lop[1]) >= strtotime($lop[0]." 23:00"))
+		{
+	   	  $strAl0 = strtotime($al[0]." ".$al[1]);
+	   	  $strLop0 = strtotime($lop[0]." 23:00");
+
+	 	  $str = ($strLop0-$strAl0);
+	      	  $totalIlta += $str;
+		}
+
+		}
+
+		return $totalIlta;
 	}
 
 

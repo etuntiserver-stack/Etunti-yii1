@@ -9,7 +9,7 @@
        		$criteria = new CDbCriteria();
         	$criteria->select = "
 		TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s'))) as l_tunnit,
-		t.id";
+		t.id,t.aloitan,t.loppui";
 
         	$criteria->addCondition ( " tid = '".$data->tid."' " );
 
@@ -32,6 +32,19 @@
 			$val->l_tunnit = (strtotime($tot['loppui'])-strtotime($tot['aloitan']));
 
 			$total_l += $val->l_tunnit.'<br>';
+
+
+			//ilta
+			if(isset($tot['id']))
+			{
+			  $al = explode(" ",$tot['aloitan']);
+			  $lop = explode(" ",$tot['loppui']);
+			} else {
+			  $al = explode(" ",$val->aloitan);
+			  $lop = explode(" ",$val->loppui);
+			}
+			$totalIlta = ilta($al,$lop);
+
 
 		}
 

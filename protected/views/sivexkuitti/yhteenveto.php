@@ -13,7 +13,7 @@ $this->breadcrumbs=array(
 
 
 <div class="row">
-  <form action="#" method="POST">
+  <form action="#" id="yhtveto" method="POST">
   <div class="col-md-12">
    <?php
     $model=new Sivexkuitti;
@@ -46,9 +46,9 @@ $this->breadcrumbs=array(
     echo '</select>';
    ?>
 
-   <input type="date" name="from" class="btn btn-default" value="<?php echo Yii::app()->session['from']; ?>">
+   <input type="date" name="from" id="from" class="btn btn-default" value="<?php echo Yii::app()->session['from']; ?>">
 
-   <input type="date" name="to" class="btn btn-default" value="<?php echo Yii::app()->session['to']; ?>">
+   <input type="date" name="to" id="to" class="btn btn-default" value="<?php echo Yii::app()->session['to']; ?>">
 
    <input type="submit" class="btn btn-primary" value="<?php echo Yii::t('main', 'haku'); ?>">
   </div>
@@ -90,35 +90,21 @@ $('.selectpicker').selectpicker({
       size: 4
   });
 
-/*
-$(".etsi_tekijan_nimi").change(function(){
-	var thisVal = $(this).val();
-        $.ajax({
-           url: "yhteenveto",
-	   type:'POST',
-	   data: { "etsi_tekijan_nimi" : thisVal },
-           success: function(html){
-		window.location.reload();
-           }
-        });
+$("#yhtveto").on('submit',function(e){
+
+  var from = $("#from").val();
+  var to = $("#to").val();
+
+    if (from  === '') {
+        $('#from').css({"border" : "2px #f14010 solid"}).focus();
+        return false;
+    }
+    if (to  === '') {
+        $('#to').css({"border" : "2px #f14010 solid"}).focus();
+        return false;
+    }
+
 });
-
-
-$(".etsi_pvm").on('blur', function() {
-	var thisVal = $(this).val();
-	if(!thisVal)
-	var thisVal = 'kaikki';
-
-        $.ajax({
-           url: "yhteenveto",
-	   type:'POST',
-	   data: { "etsi_pvm" : thisVal },
-           success: function(html){
-		window.location.reload();
-           }
-        });
-});
-*/
 
 
 
