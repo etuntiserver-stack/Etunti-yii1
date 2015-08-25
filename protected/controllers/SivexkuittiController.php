@@ -34,7 +34,7 @@ class SivexkuittiController extends Controller
 		return array(
 
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','updatetime','showkohteet','yhteenveto','historia'),
+				'actions'=>array('admin','delete','create','update','index','view','updatetime','showkohteet','yhteenveto','historia','poistaKohde'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -141,132 +141,6 @@ class SivexkuittiController extends Controller
 		<?php
 	}
 
-	public function actionYhteenveto()
-	{
-
-	function sprint($val){
-	    if($val > 0)
-		return sprintf('%02d:%02d', $val/3600, ($val % 3600)/60);
-	}
-
-	function ilta($al,$lop){
-
-		$totalIlta = 0;
-
-	    if($al[0] == $lop[0])
-	    {
-
-	  	if(strtotime($al[0]." ".$al[1]) >= strtotime($al[0]." 18:00")
-		and strtotime($lop[0]." ".$lop[1]) <= strtotime($lop[0]." 23:00"))
-		{
-	   	  $strAl0 = strtotime($al[0]." ".$al[1]);
-	   	  $strLop0 = strtotime($lop[0]." ".$lop[1]);
-
-	 	  $str = ($strLop0-$strAl0);
-	      	  $totalIlta += $str;
-		}
-
-	  	if(strtotime($al[0]." ".$al[1]) <= strtotime($al[0]." 18:00")
-		and strtotime($lop[0]." ".$lop[1]) <= strtotime($lop[0]." 23:00")
-		and strtotime($lop[0]." ".$lop[1]) >= strtotime($lop[0]." 18:00"))
-		{
-	   	  $strAl0 = strtotime($al[0]." 18:00");
-	   	  $strLop0 = strtotime($lop[0]." ".$lop[1]);
-
-	 	  $str = ($strLop0-$strAl0);
-	      	  $totalIlta += $str;
-		}
-
-	  	if(strtotime($al[0]." ".$al[1]) <= strtotime($al[0]." 18:00")
-		and strtotime($lop[0]." ".$lop[1]) >= strtotime($lop[0]." 23:00"))
-		{
-	   	  $strAl0 = strtotime($al[0]." 18:00");
-	   	  $strLop0 = strtotime($lop[0]." 23:00");
-
-	 	  $str = ($strLop0-$strAl0);
-	      	  $totalIlta += $str;
-		}
-
-	  	if(strtotime($al[0]." ".$al[1]) >= strtotime($al[0]." 18:00")
-		and strtotime($lop[0]." ".$lop[1]) >= strtotime($lop[0]." 23:00"))
-		{
-	   	  $strAl0 = strtotime($al[0]." ".$al[1]);
-	   	  $strLop0 = strtotime($lop[0]." 23:00");
-
-	 	  $str = ($strLop0-$strAl0);
-	      	  $totalIlta += $str;
-		}
-
-		}
-
-		return $totalIlta;
-	}
-
-
-		if(Yii::app()->request->getPost('etsi_tekijan_nimi') == 'kaikki')
-		unset(Yii::app()->session['etsi_tekijan_nimi']);
-		if(Yii::app()->request->getPost('etsi_tekijan_nimi') and Yii::app()->request->getPost('etsi_tekijan_nimi') != 'kaikki'){
-		Yii::app()->session['etsi_tekijan_nimi'] = Yii::app()->request->getPost('etsi_tekijan_nimi');
-		}
-
-		if(isset($_POST['etsi_tekijan_nimi']))
-		{
-		unset(Yii::app()->session['Lounastauko']);
-		unset(Yii::app()->session['MATKA']);
-		}
-
-		if(isset($_POST['ilman']))
-		{
-		  foreach($_POST['ilman'] as $val){
-			if($val == 'Lounastauko')
-			Yii::app()->session['Lounastauko'] = 10;
-
-			if($val == 'MATKA')
-			Yii::app()->session['MATKA'] = 2;
-		  }
-		}
-
-
-
-
-		if(Yii::app()->request->getPost('from'))
-		Yii::app()->session['from'] = date("Y-m-d",strtotime(Yii::app()->request->getPost('from')));
-
-		if(Yii::app()->request->getPost('to'))
-		Yii::app()->session['to'] = date("Y-m-d",strtotime(Yii::app()->request->getPost('to')));
-		
-
-       		$criteria = new CDbCriteria();
-        	$criteria->select = "
-		SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s')))) as l_tunnit,
-		t.*";
-
-        	//$criteria->condition = " l_loppu = '' and l_alku = '' ";
-
-        	$criteria->order = "SUBSTR(LTRIM(tekijan_nimi), LOCATE(' ',LTRIM(tekijan_nimi)))";
-        	$criteria->group = 'tid';
-
-		if(Yii::app()->session['etsi_tekijan_nimi'])
-	        $criteria->addCondition ("tekijan_nimi = '".Yii::app()->session['etsi_tekijan_nimi']."'");
-
-		if(Yii::app()->session['Lounastauko'])
-	        $criteria->addCondition (" status != '10' ");
-
-		if(Yii::app()->session['MATKA'])
-	        $criteria->addCondition (" status != '2' ");
-
-		if(Yii::app()->session['from'] and Yii::app()->session['to'])
-	        $criteria->addCondition ("DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."' ");
-
-		$dataProvider=new CActiveDataProvider('Sivexkuitti', array(
-			'criteria'=>$criteria,
-			'pagination'=>false
-		));
-
-		//$dataProvider->pagination->pageSize = 50;
-		$this->render('yhteenveto', array('dataProvider' => $dataProvider));
-	}
-
 
 	public function actionView($id)
 	{
@@ -334,11 +208,7 @@ class SivexkuittiController extends Controller
 		));
 	}
 
-	/**
-	 * Deletes a particular model.
-	 * If deletion is successful, the browser will be redirected to the 'admin' page.
-	 * @param integer $id the ID of the model to be deleted
-	 */
+
 	public function actionDelete($id)
 	{
 		$this->loadModel($id)->delete();
@@ -348,9 +218,13 @@ class SivexkuittiController extends Controller
 			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
 	}
 
-	/**
-	 * Lists all models.
-	 */
+	public function actionPoistaKohde()
+	{
+		$this->loadModel($_POST['id'])->delete();
+		Toteutuneet::model()->deleteAll(" kid='".$_POST['id']."' ");
+	}
+
+
 	public function actionIndex()
 	{
 
@@ -438,6 +312,195 @@ class SivexkuittiController extends Controller
 			Yii::app()->end();
 		}
 	}
+
+
+
+
+
+
+
+
+	public function actionYhteenveto()
+	{
+
+	function sprint($val){
+	    if($val > 0)
+		return sprintf('%02d:%02d', $val/3600, ($val % 3600)/60);
+	}
+
+	function ilta($al,$lop){
+
+		$totalIlta = 0;
+
+	    if($al[0] == $lop[0])
+	    {
+
+	  	if(strtotime($al[0]." ".$al[1]) >= strtotime($al[0]." 18:00")
+		and strtotime($lop[0]." ".$lop[1]) <= strtotime($lop[0]." 23:00"))
+		{
+	   	  $strAl0 = strtotime($al[0]." ".$al[1]);
+	   	  $strLop0 = strtotime($lop[0]." ".$lop[1]);
+
+	 	  $str = ($strLop0-$strAl0);
+	      	  $totalIlta += $str;
+		}
+
+	  	if(strtotime($al[0]." ".$al[1]) <= strtotime($al[0]." 18:00")
+		and strtotime($lop[0]." ".$lop[1]) <= strtotime($lop[0]." 23:00")
+		and strtotime($lop[0]." ".$lop[1]) >= strtotime($lop[0]." 18:00"))
+		{
+	   	  $strAl0 = strtotime($al[0]." 18:00");
+	   	  $strLop0 = strtotime($lop[0]." ".$lop[1]);
+
+	 	  $str = ($strLop0-$strAl0);
+	      	  $totalIlta += $str;
+		}
+
+	  	if(strtotime($al[0]." ".$al[1]) <= strtotime($al[0]." 18:00")
+		and strtotime($lop[0]." ".$lop[1]) >= strtotime($lop[0]." 23:00"))
+		{
+	   	  $strAl0 = strtotime($al[0]." 18:00");
+	   	  $strLop0 = strtotime($lop[0]." 23:00");
+
+	 	  $str = ($strLop0-$strAl0);
+	      	  $totalIlta += $str;
+		}
+
+	  	if(strtotime($al[0]." ".$al[1]) >= strtotime($al[0]." 18:00")
+		and strtotime($lop[0]." ".$lop[1]) >= strtotime($lop[0]." 23:00"))
+		{
+	   	  $strAl0 = strtotime($al[0]." ".$al[1]);
+	   	  $strLop0 = strtotime($lop[0]." 23:00");
+
+	 	  $str = ($strLop0-$strAl0);
+	      	  $totalIlta += $str;
+		}
+
+	    }
+
+		return $totalIlta;
+	}
+
+
+	function yo($al,$lop){
+
+		$totalYo = 0;
+
+	 	if(strtotime($al[0]." ".$al[1]) <= strtotime($al[0]." 06:00") 
+		and strtotime($lop[0]." ".$lop[1]) > strtotime($lop[0]." 06:00"))
+		{
+
+		   if($al[0] == $lop[0])
+		   {
+		   $strAl = strtotime($al[0]." ".$al[1]);
+		   $strLop = strtotime($lop[0]." 06:00");
+		   }
+
+		   $str = ($strLop-$strAl);
+		   $totalYo += $str;
+	  	} 
+
+	 	if(strtotime($al[0]." ".$al[1]) <= strtotime($al[0]." 23:00") 
+		and $lop[0] != $al[0])
+		{
+		   $str = 3600;
+		   $totalYo += $str;
+	  	} 
+
+	 	if(strtotime($al[0]." ".$al[1]) >= strtotime($al[0]." 23:00") 
+		and strtotime($al[0]." ".$al[1]) <= strtotime($al[0]." 00:00"))
+		{
+
+		   $strAl = strtotime($al[0]." ".$al[1]);
+		   $strLop = strtotime($al[0]." 00:00");
+
+		   $str = ($strLop-$strAl);
+		   $totalYo += $str;
+
+		}
+
+	 	if(strtotime($lop[0]." ".$lop[1]) >= strtotime($lop[0]." 00:00") 
+		and $lop[0] != $al[0])
+		{
+
+		   $strAl = strtotime($lop[0]." 00:00");
+		   $strLop = strtotime($lop[0]." ".$lop[1]);
+
+		   $str = ($strLop-$strAl);
+		   $totalYo += $str;
+	  	}   
+
+
+		if($totalYo > 0)
+		return $totalYo;
+	}
+
+
+
+		if(Yii::app()->request->getPost('etsi_tekijan_nimi') == 'kaikki')
+		unset(Yii::app()->session['etsi_tekijan_nimi']);
+		if(Yii::app()->request->getPost('etsi_tekijan_nimi') and Yii::app()->request->getPost('etsi_tekijan_nimi') != 'kaikki'){
+		Yii::app()->session['etsi_tekijan_nimi'] = Yii::app()->request->getPost('etsi_tekijan_nimi');
+		}
+
+		if(isset($_POST['etsi_tekijan_nimi']))
+		{
+		unset(Yii::app()->session['Lounastauko']);
+		unset(Yii::app()->session['MATKA']);
+		}
+
+		if(isset($_POST['ilman']))
+		{
+		  foreach($_POST['ilman'] as $val){
+			if($val == 'Lounastauko')
+			Yii::app()->session['Lounastauko'] = 10;
+
+			if($val == 'MATKA')
+			Yii::app()->session['MATKA'] = 2;
+		  }
+		}
+
+
+		if(Yii::app()->request->getPost('from'))
+		Yii::app()->session['from'] = date("Y-m-d",strtotime(Yii::app()->request->getPost('from')));
+
+		if(Yii::app()->request->getPost('to'))
+		Yii::app()->session['to'] = date("Y-m-d",strtotime(Yii::app()->request->getPost('to')));
+		
+
+       		$criteria = new CDbCriteria();
+        	$criteria->select = "
+
+		SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s')))) as l_tunnit,
+
+		t.*";
+
+        	//$criteria->condition = " l_loppu = '' and l_alku = '' ";
+
+        	$criteria->order = "SUBSTR(LTRIM(tekijan_nimi), LOCATE(' ',LTRIM(tekijan_nimi)))";
+        	$criteria->group = 'tid';
+
+		if(Yii::app()->session['etsi_tekijan_nimi'])
+	        $criteria->addCondition ("tekijan_nimi = '".Yii::app()->session['etsi_tekijan_nimi']."'");
+
+		if(Yii::app()->session['Lounastauko'])
+	        $criteria->addCondition (" status != '10' ");
+
+		if(Yii::app()->session['MATKA'])
+	        $criteria->addCondition (" status != '2' ");
+
+		if(Yii::app()->session['from'] and Yii::app()->session['to'])
+	        $criteria->addCondition ("DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."' ");
+
+		$dataProvider=new CActiveDataProvider('Sivexkuitti', array(
+			'criteria'=>$criteria,
+			'pagination'=>false
+		));
+
+		//$dataProvider->pagination->pageSize = 50;
+		$this->render('yhteenveto', array('dataProvider' => $dataProvider));
+	}
+
 
 
 

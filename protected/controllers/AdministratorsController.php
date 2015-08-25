@@ -70,6 +70,7 @@ class AdministratorsController extends Controller
 
 		if(isset($_POST['Administrators']))
 		{
+			$_POST['Administrators']['adm_salasana']=md5($_POST['Administrators']['adm_salasana']);
 			$model->attributes=$_POST['Administrators'];
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
@@ -94,6 +95,7 @@ class AdministratorsController extends Controller
 
 		if(isset($_POST['Administrators']))
 		{
+			$_POST['Administrators']['adm_salasana']=md5($_POST['Administrators']['adm_salasana']);
 			$model->attributes=$_POST['Administrators'];
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));

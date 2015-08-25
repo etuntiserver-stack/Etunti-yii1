@@ -2,16 +2,22 @@
 /* @var $this SivexkuittiController */
 /* @var $data Sivexkuitti */
 
-		$total_l = 0;
-		$total_t = 0;
-		$totalIlta = 0;
+		$total_l 	= 0;
+		$total_t 	= 0;
+		$totalTp	= 0;
+		$totalIlta 	= 0;
+		$totalYo 	= 0;
+		$totalSu	= 0;
+		$tp		= 0;
+		$al		= '';
+		$lop		= '';
 
        		$criteria = new CDbCriteria();
         	$criteria->select = "
 		TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s'))) as l_tunnit,
 		t.id,t.aloitan,t.loppui";
 
-        	$criteria->addCondition ( " tid = '".$data->tid."' " );
+        	$criteria->condition = "  tid = '".$data->tid."' and aloitan !='' and loppui !='' ";
 
 		if(Yii::app()->session['Lounastauko'])
 	        $criteria->addCondition (" status != '10' ");
@@ -28,24 +34,33 @@
 		{
 
 			$tot = Toteutuneet::model()->find(" kid = '".$val->id."' ");
-			if(isset($tot['id']))
-			$val->l_tunnit = (strtotime($tot['loppui'])-strtotime($tot['aloitan']));
 
-			$total_l += $val->l_tunnit.'<br>';
-
-
-			//ilta
 			if(isset($tot['id']))
 			{
+			  $val->l_tunnit = (strtotime($tot['loppui'])-strtotime($tot['aloitan']));
 			  $al = explode(" ",$tot['aloitan']);
 			  $lop = explode(" ",$tot['loppui']);
 			} else {
 			  $al = explode(" ",$val->aloitan);
 			  $lop = explode(" ",$val->loppui);
 			}
-			$totalIlta = ilta($al,$lop);
 
-
+			// Toteutuneet
+			$total_l += $val->l_tunnit;
+			// Ilta
+			$totalIlta += ilta($al,$lop);
+			// Yo
+			$totalYo += yo($al,$lop);
+			// Suunnuntai
+			if(date('N', strtotime($al[0])) == 7)
+			$totalSu += (strtotime($lop[0]." ".$lop[1])-strtotime($al[0]." ".$al[1]));
+			// Työpäiviä
+			if($tp != $al[0])
+			{
+			  if((strtotime($lop[0]." ".$lop[1])-strtotime($al[0]." ".$al[1])) != 0)
+				$totalTp += 1;
+			}
+			$tp = $al[0];
 		}
 
 
@@ -58,9 +73,10 @@
 	<td><?php echo CHtml::encode($data->tekijan_nimi); ?></td>
 	<td><?php echo sprint($data->l_tunnit); ?></td>
 	<td><?php echo sprint($total); ?></td>
+	<td><?php echo $totalTp; ?></td>
 	<td><?php echo sprint($totalIlta); ?></td>
-
-
+	<td><?php echo sprint($totalYo); ?></td>
+	<td><?php echo sprint($totalSu); ?></td>
 </tr>
 
 	

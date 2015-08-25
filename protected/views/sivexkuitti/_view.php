@@ -68,7 +68,7 @@ else
 	// <-- adminPaketti 
 ?>
 
-<tr>
+<tr id="rivi_<?php echo $data->id; ?>">
 	<td width="1"><?php echo $door; ?></td>
 	<td><?php echo CHtml::link(CHtml::encode($data->id), array('update', 'id'=>$data->id)); ?></td>
 	<td><b><?php echo CHtml::encode(date("d.m",strtotime($data->aloitan))); ?></b></td>
@@ -136,6 +136,7 @@ else
 
 	<td><h4><?php echo sprint($kesto[$data->id]); ?></h4></td>
 	<td><center><?php echo $muokattu[$data->id]; ?></center></td>
+	<td><center><a href="#"><h4 class="glyphicon glyphicon-trash text-danger poistaKohde" for="rivi_<?php echo $data->id; ?>"></h4></center></a></td>
 </tr>
 
 	

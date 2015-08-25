@@ -232,22 +232,34 @@ class ToteutuneetController extends Controller
 		return sprintf('%02d:%02d', $val/3600, ($val % 3600)/60);
 	}
 
-		if(Yii::app()->request->getPost('etsi_month') == 'kaikki')
-		    unset(Yii::app()->session['etsi_month']);
-		  if(Yii::app()->request->getPost('etsi_month') and Yii::app()->request->getPost('etsi_month') != 'kaikki')
-		  {
-		    Yii::app()->session['etsi_month'] = Yii::app()->request->getPost('etsi_month');
-  		}
 		if(Yii::app()->request->getPost('etsi_tekijan_nimi') == 'kaikki')
 		unset(Yii::app()->session['etsi_tekijan_nimi']);
 		if(Yii::app()->request->getPost('etsi_tekijan_nimi') and Yii::app()->request->getPost('etsi_tekijan_nimi') != 'kaikki'){
 		Yii::app()->session['etsi_tekijan_nimi'] = Yii::app()->request->getPost('etsi_tekijan_nimi');
 		}
-		if(Yii::app()->request->getPost('etsi_pvm') == 'kaikki')
-		unset(Yii::app()->session['etsi_pvm']);
-		if(Yii::app()->request->getPost('etsi_pvm') and Yii::app()->request->getPost('etsi_pvm') != 'kaikki'){
-		Yii::app()->session['etsi_pvm'] = date("Y-m-d",strtotime(Yii::app()->request->getPost('etsi_pvm')));
+
+		if(isset($_POST['etsi_tekijan_nimi']))
+		{
+		unset(Yii::app()->session['Lounastauko']);
+		unset(Yii::app()->session['MATKA']);
 		}
+
+		if(isset($_POST['ilman']))
+		{
+		  foreach($_POST['ilman'] as $val){
+			if($val == 'Lounastauko')
+			Yii::app()->session['Lounastauko'] = 10;
+
+			if($val == 'MATKA')
+			Yii::app()->session['MATKA'] = 2;
+		  }
+		}
+
+		if(Yii::app()->request->getPost('from'))
+		Yii::app()->session['from'] = date("Y-m-d",strtotime(Yii::app()->request->getPost('from')));
+
+		if(Yii::app()->request->getPost('to'))
+		Yii::app()->session['to'] = date("Y-m-d",strtotime(Yii::app()->request->getPost('to')));
 
        		$criteria = new CDbCriteria();
 
@@ -258,10 +270,11 @@ class ToteutuneetController extends Controller
 
 		if(Yii::app()->session['etsi_tekijan_nimi'])
 	        $criteria->addCondition ("tekijan_nimi = '".Yii::app()->session['etsi_tekijan_nimi']."'");
-		if(Yii::app()->session['etsi_pvm'])
-	        $criteria->addCondition ("DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = '".Yii::app()->session['etsi_pvm']."' ");
-		if(Yii::app()->session['etsi_month'])
-	        $criteria->addCondition ("DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m') = '".Yii::app()->session['etsi_month']."' ");
+
+		if(Yii::app()->session['from'] and Yii::app()->session['to'])
+	        $criteria->addCondition ("DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."' ");
+
+
 		$dataProvider=new CActiveDataProvider('Sivexkuitti', array(
 			'criteria'=>$criteria,
 			'pagination'=>false
@@ -282,6 +295,7 @@ class ToteutuneetController extends Controller
 			$model->attributes=$_GET['Toteutuneet'];
 
 		$this->render('admin',array(
+
 			'model'=>$model,
 		));
 	}

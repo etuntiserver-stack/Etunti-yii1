@@ -32,7 +32,7 @@ $('.laatikko').bind("contextmenu",function(e){
    	return false;
 });
 
-
+/*
 $(".etsi_month").on('change', function() {
 	var thisVal = $(this).val();
 	if(!thisVal)
@@ -47,7 +47,7 @@ $(".etsi_month").on('change', function() {
            }
         });
 });
-
+*/
 
 $(".vietyovuoroon").click(function(){
 
@@ -233,6 +233,29 @@ $("#trash").click(function() {
 
 });
 
+
+
+
+$("#yhtveto").on('submit',function(e){
+
+  var from = $("#from").val();
+  var to = $("#to").val();
+
+    if (from  === '') {
+        $('#from').css({"border" : "2px #f14010 solid"}).focus();
+        return false;
+    }
+    if (to  === '') {
+        $('#to').css({"border" : "2px #f14010 solid"}).focus();
+        return false;
+    }
+
+});
+
+$('.selectpicker').selectpicker({
+      style: 'btn-default',
+      //size: 4
+  });
 
 
 });

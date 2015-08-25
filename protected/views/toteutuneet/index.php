@@ -13,34 +13,49 @@ $this->breadcrumbs=array(
 
 
 <div class="row">
-  <div class="col-md-2">
+  <form action="#" id="yhtveto" method="POST">
+  <div class="col-md-12">
    <?php
     $model=new Sivexkuitti;
     $list = CHtml::listData(Sivexkuitti::model()->findAll(array('group' => 'tid','order' => 'tekijan_nimi')), 'tekijan_nimi', 'tekijan_nimi');
 
-    echo '<select class="btn btn-info etsi_tekijan_nimi form-control">';
+    echo '<select name="etsi_tekijan_nimi" id="nimi" class="btn btn-default">';
     if(Yii::app()->session['etsi_tekijan_nimi'])
        echo '<option value="'.Yii::app()->session['etsi_tekijan_nimi'].'">'.Yii::app()->session['etsi_tekijan_nimi'].'</option>';
     else
        echo '<option>'.Yii::t('main', 'Työntekijät').'</option>';
 
-       echo '<option value="kaikki">Kaikki</option>';
 
     foreach($list as $val){
     echo '<option value="'.$val.'">'.$val.'</option>';
     }
     echo '</select>';
    ?>
-  </div>
-  <div class="col-md-2">
-   <input type="date" class="btn btn-info form-control etsi_pvm" value="<?php echo Yii::app()->session['etsi_pvm']; ?>">
-  </div>
-  <div class="row col-sm-2">
-   <input type="month" class="btn btn-info form-control etsi_month" value="<?php echo Yii::app()->session['etsi_month']; ?>">
+
+   <?php
+
+    $lounas = '';
+    $lounas = ( isset(Yii::app()->session['Lounastauko']))  ? 'selected' : '';
+    $matka = '';
+    $matka = ( isset(Yii::app()->session['MATKA']))  ? 'selected' : '';
+
+    echo '<select name="ilman[]" class="selectpicker ilman"  multiple="multiple"  title="Ilman...">';
+    echo '<option value="Lounastauko" '.$lounas.'>Lounastauko</option>';
+    echo '<option value="MATKA" '.$matka.'>MATKA</option>';
+    echo '</select>';
+   ?>
+
+   <input type="date" name="from" id="from" class="btn btn-default" value="<?php echo Yii::app()->session['from']; ?>">
+
+   <input type="date" name="to" id="to" class="btn btn-default" value="<?php echo Yii::app()->session['to']; ?>">
+
+   <input type="submit" class="btn btn-primary" value="<?php echo Yii::t('main', 'haku'); ?>">
+   </form>
   </div>
 </div>
 
 <br>
+
 <?php if(Yii::app()->session['etsi_tekijan_nimi']) : ?>
 
   <table class="table table-striped table-bordered">
@@ -71,46 +86,25 @@ $this->breadcrumbs=array(
 <script type="text/javascript">
 $(document).ready(function(){
 
-$(".etsi_tekijan_nimi").change(function(){
-	var thisVal = $(this).val();
-        $.ajax({
-           url: "index",
-	   type:'POST',
-	   data: { "etsi_tekijan_nimi" : thisVal },
-           success: function(html){
-		window.location.reload();
-           }
-        });
-});
+$("#yhtveto").on('submit',function(e){
 
-$(".etsi_pvm").on('blur', function() {
-	var thisVal = $(this).val();
-	if(!thisVal)
-	var thisVal = 'kaikki';
+  var from = $("#from").val();
+  var to = $("#to").val();
+  var nimi = $("#nimi").val();
 
-        $.ajax({
-           url: "index",
-	   type:'POST',
-	   data: { "etsi_pvm" : thisVal },
-           success: function(html){
-		window.location.reload();
-           }
-        });
-});
+    if (from  === '') {
+        $('#from').css({"border" : "2px #f14010 solid"}).focus();
+        return false;
+    }
+    if (to  === '') {
+        $('#to').css({"border" : "2px #f14010 solid"}).focus();
+        return false;
+    }
+    if (nimi  === '') {
+        $('#nimi').css({"border" : "2px #f14010 solid"}).focus();
+        return false;
+    }
 
-$(".etsi_month").on('change', function() {
-	var thisVal = $(this).val();
-	if(!thisVal)
-	var thisVal = 'kaikki';
-
-        $.ajax({
-           url: 'index',
-	   type:'POST',
-	   data: { "etsi_month" : thisVal },
-           success: function(html){
-		window.location.reload();
-           }
-        });
 });
 
 });

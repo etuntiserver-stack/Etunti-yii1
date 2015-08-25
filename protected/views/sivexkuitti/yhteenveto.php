@@ -51,6 +51,7 @@ $this->breadcrumbs=array(
    <input type="date" name="to" id="to" class="btn btn-default" value="<?php echo Yii::app()->session['to']; ?>">
 
    <input type="submit" class="btn btn-primary" value="<?php echo Yii::t('main', 'haku'); ?>">
+   </form>
   </div>
 </div>
 
@@ -63,7 +64,10 @@ $this->breadcrumbs=array(
   <th><?php echo Yii::t('main', 'Työntekijä'); ?></th>
   <th><?php echo Yii::t('main', 'Luetut'); ?></th>
   <th><?php echo Yii::t('main', 'Toteutuneet'); ?></th>
+  <th><?php echo Yii::t('main', 'Työpäiviä'); ?></th>
   <th><?php echo Yii::t('main', 'Ilta'); ?></th>
+  <th><?php echo Yii::t('main', 'Yö'); ?></th>
+  <th><?php echo Yii::t('main', 'Su'); ?></th>
   </tr>
   </thead>
 

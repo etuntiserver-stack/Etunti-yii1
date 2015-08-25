@@ -66,10 +66,10 @@ class Administrators extends DB2ActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'adm_login' => 'Adm Login',
-			'adm_salasana' => 'Adm Salasana',
-			'adm_email' => 'Adm Email',
-			'adm_nimi' => 'Adm Nimi',
+			'adm_login' => 'Käyttäjätunnus',
+			'adm_salasana' => 'Uusi salasana',
+			'adm_email' => 'Sähköposti',
+			'adm_nimi' => 'Nimi',
 			'status' => 'Status',
 		);
 	}

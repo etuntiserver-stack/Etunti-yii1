@@ -2,17 +2,12 @@
 /* @var $this TyovuorootController */
 /* @var $dataProvider CActiveDataProvider */
 
-  if(Yii::app()->request->getPost('etsi_month') == 'kaikki')
-    unset(Yii::app()->session['etsi_month']);
-  if(Yii::app()->request->getPost('etsi_month') and Yii::app()->request->getPost('etsi_month') != 'kaikki')
-  {
-    Yii::app()->session['etsi_month'] = Yii::app()->request->getPost('etsi_month');
-  }
-
    $pvmtid = Yii::app()->request->getParam('pvmtid', 0);
    if(!empty($pvmtid)){
 	$expl = explode("_",$pvmtid);
-	Yii::app()->session['etsi_month'] = date("Y-m",strtotime($expl['0']));
+	Yii::app()->session['from'] = date("Y-m-d",strtotime($expl['0']));
+	Yii::app()->session['to'] = date("Y-m-d",strtotime($expl['0']." +1 week"));
+	Yii::app()->session['tvuoroTekija'] = $expl['1'];
 	?>
 	<script type="text/javascript">
 	$(document).ready(function(){
@@ -24,15 +19,42 @@
 	<?php
    }
 
-if(!isset(Yii::app()->session['etsi_month']))
-	Yii::app()->session['etsi_month'] = date("Y-m");
 
-$from = date("d.m.Y",strtotime(Yii::app()->session['etsi_month']));
-$to = date("d.m.Y",strtotime(Yii::app()->session['etsi_month']." +1 month"));
+		if(Yii::app()->request->getPost('tvuoroTekija'))
+		Yii::app()->session['tvuoroTekija'] = Yii::app()->request->getPost('tvuoroTekija');
+
+       		$criteria = new CDbCriteria();
+        	$criteria->select = "id,tekijan_nimi";
+        	$criteria->condition = " aktiivinen = '1' ";
+
+		if(Yii::app()->session['tvuoroTekija']){
+		  if(count(Yii::app()->session['tvuoroTekija']) > 1)
+		    $ids = implode(",",Yii::app()->session['tvuoroTekija']);
+		  else
+		    $ids = Yii::app()->session['tvuoroTekija'];
+
+	        $criteria->addCondition ('id IN ('.$ids.') ');
+		}
+
+		$tt = Tyontekijat::model()->findAll($criteria);
+
+
+
+		if(Yii::app()->request->getPost('from'))
+		Yii::app()->session['from'] = date("Y-m-d",strtotime(Yii::app()->request->getPost('from')));
+
+		if(Yii::app()->request->getPost('to'))
+		Yii::app()->session['to'] = date("Y-m-d",strtotime(Yii::app()->request->getPost('to')));
+
+
+		$from = date("d.m.Y",strtotime(Yii::app()->session['from']));
+		$to = date("d.m.Y",strtotime(Yii::app()->session['to']));
+
 
 if(!isset($from) or empty($from))
 exit;
 
+//print_r(Yii::app()->session['tvuoroTekija']);
 
 function dateDiff($start, $end) {
   $start_ts = strtotime($start);
@@ -42,7 +64,7 @@ function dateDiff($start, $end) {
 }
 	$dateDiff = dateDiff($from, $to);
 
-echo Yii::app()->session['copymove'];
+//echo Yii::app()->session['copymove'];
 
 ?>
 
@@ -68,11 +90,31 @@ td .tp{
    <input type="hidden" id="totalForCut">
 
 <div class="row">
-  <div class="row col-sm-2">
-   <input type="month" class="btn btn-info form-control etsi_month" value="<?php echo Yii::app()->session['etsi_month']; ?>">
-  </div>
-  <div class="col-sm-2"><i id="trash"></i> <i id="clear"></i></div>
+  <form action="#" id="yhtveto" method="POST">
+
+   <?php
+    $model=new Tyontekijat;
+    $list = CHtml::listData(Tyontekijat::model()->findAll("aktiivinen = '1'",array('order' => 'tekijan_nimi')), 'id', 'tekijan_nimi');
+
+    echo '<select name="tvuoroTekija[]" class="selectpicker" multiple title="Työntekijät">';
+    //if(Yii::app()->session['tvuoroTekija'])
+
+    foreach($list as $key=>$val){
+      echo '<option value="'.$key.'">'.$val.'</option>';
+    }
+    echo '</select>';
+   ?>
+
+   <input type="date" name="from" id="from" class="btn btn-default" value="<?php echo Yii::app()->session['from']; ?>">
+
+   <input type="date" name="to" id="to" class="btn btn-default" value="<?php echo Yii::app()->session['to']; ?>">
+
+   <input type="submit" class="btn btn-primary" value="<?php echo Yii::t('main', 'haku'); ?>">
+   </form>
+
 </div>
+
+
 <br>
 
 <div class="row tvuoro">
@@ -81,8 +123,6 @@ td .tp{
      <tr>
      <th></th>
         <?php 
-	$tt = Tyontekijat::model()->findAll("aktiivinen = '1'",array('select'=>'id,tekijan_nimi'));
-
 	foreach($tt as $t){
 	  echo '<th><div class="latikkoAsetukset">';
  	  echo $t->tekijan_nimi;	
@@ -111,6 +151,20 @@ td .tp{
 		  echo '</td>';
 		}
 	    echo '</tr>';
+
+	    if(date('N', strtotime($date)) == 7)
+	    {
+  	    echo '<tr>';
+  		echo '<td style="background: #669999;color: white" class="viikkoRivi fixed-column"><b>'.Yii::t('main', 'Viikko').' '.date("W",strtotime($date)).'</b></td>';
+
+		foreach($tt as $t){
+		  echo '<td style="background: #669999;color: white" class="viikkoRivi" id="'.$did.'_'.$t->id.'">';
+
+		  echo '</td>';
+		}
+	    echo '</tr>';
+	    }
+
   	}
         ?>
      </tbody>  
@@ -172,47 +226,3 @@ $(function () {
 </script>
 
 
-<?php
-/*
-<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-<script type="text/javascript">
-$(document).ready(function(){
-
-        $('a.drag').draggable({
-		appendTo: 'body',
-		containment: 'parent',
-		scroll: false,
-                helper : 'clone',
-               // opacity : 0.5,
-		cursor: "pointer",
-		//axis:        'x'
-        });
-        
-
-        $('div.drop').droppable({
-                tolerance : 'fit',
-                accept : 'div.drop',
-                drop : function(event, ui) {
-                        $(this).append(ui.draggable);
-
-		var dragID = $(ui.draggable).attr("drID");
-
-                $.ajax({
-                    type: "POST",
-                    url: "index.php?r=tehtava/tehtava_ajax",
-		    data: {"draggableID" : dragID, "dr" : '1' } ,
-                    success: function (data) {
-                        $('#result').html(data);
-                    }
-                });
-
-                }
-
-        });
-
-
-
-});
-</script>
-*/
-?>

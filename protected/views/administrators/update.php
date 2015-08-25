@@ -3,9 +3,9 @@
 /* @var $model Administrators */
 
 $this->breadcrumbs=array(
-	'Administrators'=>array('index'),
+	Yii::t('main', 'Administrators')=>array('index'),
 	$model->id=>array('view','id'=>$model->id),
-	'Update',
+	Yii::t('main', 'Päivitä'),
 );
 
 $this->menu=array(
@@ -16,6 +16,6 @@ $this->menu=array(
 );
 ?>
 
-<h1>Update Administrators <?php echo $model->id; ?></h1>
+<h1><?php echo Yii::t('main', 'Päivitä administrators').' '.$model->id; ?></h1>
 
 <?php echo $this->renderPartial('_form', array('model'=>$model)); ?>

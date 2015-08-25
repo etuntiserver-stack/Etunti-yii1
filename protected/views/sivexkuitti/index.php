@@ -6,11 +6,12 @@
 $this->breadcrumbs=array(
 	Yii::t('main', 'Luetut kohteet'),
 );
-
+/*
 $this->menu=array(
 	//array('label'=>'Create Sivexkuitti', 'url'=>array('create')),
 	array('label'=>'Luetut Hallinta', 'url'=>array('admin')),
 );
+*/
 ?>
 
 <h1><?php echo Yii::t('main', 'Mobiili luetut'); ?></h1>
@@ -22,7 +23,7 @@ $this->menu=array(
     $model=new Sivexkuitti;
     $list = CHtml::listData(Sivexkuitti::model()->findAll(array('group' => 'tid','order' => 'tekijan_nimi')), 'tekijan_nimi', 'tekijan_nimi');
 
-    echo '<select class="btn btn-info etsi_tekijan_nimi form-control">';
+    echo '<select class="btn btn-default etsi_tekijan_nimi form-control">';
     if(Yii::app()->session['etsi_tekijan_nimi'])
        echo '<option value="'.Yii::app()->session['etsi_tekijan_nimi'].'">'.Yii::app()->session['etsi_tekijan_nimi'].'</option>';
     else
@@ -41,7 +42,7 @@ $this->menu=array(
     $model=new Sivexkuitti;
     $list = CHtml::listData(Sivexkuitti::model()->findAll(array('group' => 'kohdenID','order' => 'kohde_kannasta')), 'kohde_kannasta', 'kohde_kannasta');
 
-    echo '<select class="btn btn-info etsi_kohteet form-control">';
+    echo '<select class="btn btn-default etsi_kohteet form-control">';
     if(Yii::app()->session['etsi_kohteet'])
        echo '<option value="'.Yii::app()->session['etsi_kohteet'].'">'.Yii::app()->session['etsi_kohteet'].'</option>';
     else
@@ -56,7 +57,7 @@ $this->menu=array(
    ?>
   </div>
   <div class="col-md-2">
-   <input type="date" class="btn btn-info form-control etsi_pvm" value="<?php echo Yii::app()->session['etsi_pvm']; ?>">
+   <input type="date" class="btn btn-default form-control etsi_pvm" value="<?php echo Yii::app()->session['etsi_pvm']; ?>">
   </div>
 </div>
 
@@ -80,6 +81,7 @@ $this->menu=array(
   <th><?php echo Yii::t('main', 'Lopetus'); ?></th>
   <th><?php echo Yii::t('main', 'Kesto'); ?></th>
   <th><center><?php echo Yii::t('main', 'M'); ?></center></th>
+  <th><center><?php echo Yii::t('main', 'P'); ?></center></th>
   </tr>
   </thead>
 
@@ -155,6 +157,23 @@ $(".openkohde").click(function(){
 
 });
 
+$(".poistaKohde").click(function(){
+
+	var forRivi = $(this).attr("for");
+	var riviid = $(this).attr("for").split("_");
+	if(confirm('Oletko varmaa?'))
+	{
+        $.ajax({
+           url: 'poistaKohde',
+           type: "POST",
+           data: { "id" : riviid[1] },
+           success: function(html){
+		$("#"+forRivi).remove();
+           }
+        });
+	}
+
+});
 
 $(".etsi_tekijan_nimi").change(function(){
 	var thisVal = $(this).val();
