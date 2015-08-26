@@ -96,6 +96,16 @@ Yii::app()->clientScript->registerPackage('bootstrapCSS');
           </ul>
         </li>
 
+	<?php if(Yii::app()->user->adminPaketti == '2') : ?>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?php echo Yii::t('main', 'Työvuoroot'); ?> <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+        	<li><?php echo CHtml::link(Yii::t('main', 'Työvuoroon taulukko'),array('/tyovuoroot/index')); ?></li>
+        	<li><?php echo CHtml::link(Yii::t('main', 'Työvuoroon hallinta'),array('/tyovuoroot/admin')); ?></li>
+          </ul>
+        </li>
+	<?php endif; ?>
+
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?php echo Yii::t('main', 'Toteuma'); ?> <span class="caret"></span></a>
           <ul class="dropdown-menu">
@@ -120,17 +130,15 @@ Yii::app()->clientScript->registerPackage('bootstrapCSS');
           </ul>
         </li>
 
-	<?php if(Yii::app()->user->adminPaketti == '2') : ?>
         <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?php echo Yii::t('main', 'Työvuoroot'); ?> <span class="caret"></span></a>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?php echo Yii::t('main', 'Hallinnat'); ?> <span class="caret"></span></a>
           <ul class="dropdown-menu">
-        	<li><?php echo CHtml::link(Yii::t('main', 'Työvuoroon taulukko'),array('/tyovuoroot/index')); ?></li>
-        	<li><?php echo CHtml::link(Yii::t('main', 'Työvuoroon hallinta'),array('/tyovuoroot/admin')); ?></li>
+        <li><?php echo CHtml::link(Yii::t('main', 'Järjestelmänvalvojat'),array('/administrators/admin')); ?></li>
+        	<li><?php echo CHtml::link(Yii::t('main', 'Valikkoot'),array('/valikkoot/admin')); ?></li>
           </ul>
         </li>
-	<?php endif; ?>
 
-        <li><?php echo CHtml::link(Yii::t('main', 'Järjestelmänvalvojat'),array('/administrators/admin')); ?></li>
+
 	<?php endif; ?>
 
       </ul>

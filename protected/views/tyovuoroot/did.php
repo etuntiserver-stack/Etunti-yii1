@@ -1,6 +1,6 @@
 <?php
 
-
+    	$color = '';
 	$did = date("Ymd",strtotime($pvm));
 
 	echo '
@@ -17,7 +17,7 @@
 	foreach($tv as $tvVal)
 	{
 
-	 if(isset($tvVal) and !empty($tvVal->kohde))
+	 if(isset($tvVal))
 	 {
 	   $k = Kohteet::model()->findbypk($tvVal->kohde,array("select"=>"osoite"));
 	   $strlen = strlen($k['osoite']);
@@ -32,11 +32,25 @@
 	   else
 	    $al = '';
 
+
+	 if(!empty($tvVal->tyoajanlaatu) and empty($k['osoite']))
+	 {
+	    $expl1 = explode("/",$tvVal->tyoajanlaatu);
+	    $color = (isset($expl1[1])) ? $expl1[1] : '';
+	    $k['osoite'] = (isset($expl1[0])) ? $expl1[0] : '';
+	 } 
+
+	 if(!empty($tvVal->tyoajanmerkinta))
+	 {
+	    $expl = explode("/",$tvVal->tyoajanmerkinta);
+	    $color = (isset($expl[1])) ? $expl[1] : '';
+	 }
+
 	   echo '
-	   <div id="'.$tvVal->id.'_'.$did.'_'.$tid.'" class="fullRivi">';
+	   <div id="'.$tvVal->id.'_'.$did.'_'.$tid.'" class="fullRivi" style="color:'.$color.'">';
 	   if( $from != 'mobiili' )
 	   echo '<a href=# class="text-danger glyphicon glyphicon-paste" for="'.$tvVal->id.'_'.$did.'_'.$tid.'"></a>';
-	   echo '&nbsp;<a href="#" class="link tv_edit" id="tv_'.$tvVal->id.'">'.$al.' '.$k['osoite'].'</a><br>
+	   echo '&nbsp;<span class="link tv_edit" id="tv_'.$tvVal->id.'">'.$al.' '.$k['osoite'].'</span><br>
 	   </div>';
 
 	 }

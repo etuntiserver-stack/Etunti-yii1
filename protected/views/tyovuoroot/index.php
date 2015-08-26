@@ -84,10 +84,14 @@ td:hover .mplus, td:hover .mcut{
 td .tp{
 	height:20px;
 }
+.link{
+	cursor: pointer;
+}
 </style>
 
 
    <input type="hidden" id="totalForCut">
+   <div class="pull-right"><i id="trash"></i> <i id="clear"></i></div>
 
 <div class="row">
   <form action="#" id="yhtveto" method="POST">
@@ -144,7 +148,6 @@ td .tp{
 
   	    echo '<tr>';
   		echo '<td class="fixed-column"><b>'.$arrDate[$explColDate[0]].", ".$explColDate[1].'</b></td>';
-
 		foreach($tt as $t){
 		  echo '<td id="'.$did.'_'.$t->id.'">';
 		  $this->renderPartial('//tyovuoroot/did',array('pvm'=>$date,'tid'=>$t->id,'from'=>'tvuoro'));
@@ -156,10 +159,9 @@ td .tp{
 	    {
   	    echo '<tr>';
   		echo '<td style="background: #669999;color: white" class="viikkoRivi fixed-column"><b>'.Yii::t('main', 'Viikko').' '.date("W",strtotime($date)).'</b></td>';
-
 		foreach($tt as $t){
-		  echo '<td style="background: #669999;color: white" class="viikkoRivi" id="'.$did.'_'.$t->id.'">';
-
+		  echo '<td style="background: #669999;color: white" class="viikkoRivi" id="vk_'.date("W",strtotime($date)).'_'.$t->id.'">';
+		  $this->renderPartial('//tyovuoroot/viikko',array('tid'=>$t->id,'viikko'=>date("W",strtotime($date))));
 		  echo '</td>';
 		}
 	    echo '</tr>';
@@ -167,7 +169,19 @@ td .tp{
 
   	}
         ?>
-     </tbody>  
+     </tbody>
+     <tfoot>
+        <?php
+  	    echo '<tr>';
+  		echo '<td style="background: #669999;color: white" class="viikkoRivi fixed-column"></td>';
+		foreach($tt as $t){
+		  echo '<td style="background: #669999;color: white" class="viikkoRivi" id="fromto_'.$t->id.'">';
+		  $this->renderPartial('//tyovuoroot/fromto',array('tid'=>$t->id));
+		  echo '</td>';
+		}
+	    echo '</tr>';
+        ?>
+     </tfoot>
   </table>
 </div>
 
