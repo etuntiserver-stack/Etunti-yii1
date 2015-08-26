@@ -149,9 +149,9 @@ return array(
         'post/<id:\d+>/<title:.*?>'=>'post/view',
         'posts/<tag:.*?>'=>'post/index',
         // REST patterns
-        array('api/list', 'pattern'=>'api/<model:\w+>', 'verb'=>'POST'),
+        array('api/list', 'pattern'=>'api/<model:\w+>', 'verb'=>'GET'),
         array('api/view', 'pattern'=>'api/<model:\w+>/<id:\d+>', 'verb'=>'GET'),
-        array('api/imei', 'pattern'=>'api/<model:\w+>/imei/<id:\d+>', 'verb'=>'POST'),
+        array('api/imei', 'pattern'=>'api/<model:\w+>/imei', 'verb'=>'POST'),
         array('api/update', 'pattern'=>'api/<model:\w+>/<id:\d+>', 'verb'=>'PUT'),
         array('api/updaterow', 'pattern'=>'api/<model:\w+>/updaterow/<id:\d+>', 'verb'=>'POST'),
         array('api/delete', 'pattern'=>'api/<model:\w+>/<id:\d+>', 'verb'=>'DELETE'),
