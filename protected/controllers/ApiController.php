@@ -90,7 +90,7 @@ $this->_checkAuth();
 }
 
 
-public function actionImei()
+public function actionImei($domain)
 {
 
 //$this->_checkAuth();
