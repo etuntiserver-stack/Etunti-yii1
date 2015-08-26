@@ -23,8 +23,8 @@ Yii::setPathOfAlias('chartjs', dirname(__FILE__).'/../extensions/yii-chartjs');
 
 //var_dump($_SERVER);
 
-	if(isset($_GET['domain']))
-  	$_SESSION['domain'] = $_GET['domain'];
+	if(isset($_GET['dd']))
+  	$_SESSION['domain'] = $_GET['dd'];
 
 	if(isset($_POST['domain']))
   	$_SESSION['domain'] = $_POST['domain'];
