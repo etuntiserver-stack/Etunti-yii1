@@ -93,6 +93,8 @@ $this->_checkAuth();
 public function actionImei()
 {
 
+echo 'test';
+exit;
 //$this->_checkAuth();
 
     switch($_GET['model'])
