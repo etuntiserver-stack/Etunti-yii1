@@ -38,12 +38,16 @@
 	    $expl1 = explode("/",$tvVal->tyoajanlaatu);
 	    $color = (isset($expl1[1])) ? $expl1[1] : '';
 	    $k['osoite'] = (isset($expl1[0])) ? $expl1[0] : '';
-	 } 
+	 } else {
+	    $color = '';
+	 }
 
 	 if(!empty($tvVal->tyoajanmerkinta))
 	 {
 	    $expl = explode("/",$tvVal->tyoajanmerkinta);
 	    $color = (isset($expl[1])) ? $expl[1] : '';
+	 } else {
+	    $color = '';
 	 }
 
 	   echo '
