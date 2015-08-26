@@ -23,8 +23,8 @@ Yii::setPathOfAlias('chartjs', dirname(__FILE__).'/../extensions/yii-chartjs');
 
 //var_dump($_SERVER);
 
-	if(isset($_GET['dd']))
-  	$_SESSION['domain'] = $_GET['dd'];
+	if(isset($_GET['id']))
+  	$_SESSION['domain'] = $_GET['id'];
 
 	if(isset($_POST['domain']))
   	$_SESSION['domain'] = $_POST['domain'];
@@ -151,7 +151,7 @@ return array(
         // REST patterns
         array('api/list', 'pattern'=>'api/<model:\w+>', 'verb'=>'GET'),
         array('api/view', 'pattern'=>'api/<model:\w+>/<id:\d+>', 'verb'=>'GET'),
-        array('api/imei', 'pattern'=>'api/<model:\w+>/imei', 'verb'=>'POST'),
+        array('api/imei', 'pattern'=>'api/<model:\w+>/imei/<id:\d+>', 'verb'=>'POST'),
         array('api/update', 'pattern'=>'api/<model:\w+>/<id:\d+>', 'verb'=>'PUT'),
         array('api/updaterow', 'pattern'=>'api/<model:\w+>/updaterow/<id:\d+>', 'verb'=>'POST'),
         array('api/delete', 'pattern'=>'api/<model:\w+>/<id:\d+>', 'verb'=>'DELETE'),
