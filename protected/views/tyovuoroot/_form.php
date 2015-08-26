@@ -194,7 +194,7 @@ $(document).ready(function(){
 			data: { "tid" : "<?php echo $model->tid; ?>" },
 			  success:function(data){
 			  console.log(data);
-			  $('#fromto_<?php echo $model->tid; ?>').html(data);
+			  $('.fromto_<?php echo $model->tid; ?>').html(data);
 			  return false;
 			  },
 			  error:function(data){

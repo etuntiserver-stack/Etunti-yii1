@@ -160,9 +160,11 @@ td .tp{
   	    echo '<tr>';
   		echo '<td style="background: #669999;color: white" class="viikkoRivi fixed-column"><b>'.Yii::t('main', 'Viikko').' '.date("W",strtotime($date)).'</b></td>';
 		foreach($tt as $t){
-		  echo '<td style="background: #669999;color: white" class="viikkoRivi" id="vk_'.date("W",strtotime($date)).'_'.$t->id.'">';
+		  echo '<td style="background: #669999;color: white" class="viikkoRivi" id="vk_'.date("W",strtotime($date)).'_'.$t->id.'">
+		  <center>';
 		  $this->renderPartial('//tyovuoroot/viikko',array('tid'=>$t->id,'viikko'=>date("W",strtotime($date))));
-		  echo '</td>';
+		  
+		  echo '</center></td>';
 		}
 	    echo '</tr>';
 	    }
@@ -175,9 +177,10 @@ td .tp{
   	    echo '<tr>';
   		echo '<td style="background: #669999;color: white" class="viikkoRivi fixed-column"></td>';
 		foreach($tt as $t){
-		  echo '<td style="background: #669999;color: white" class="viikkoRivi" id="fromto_'.$t->id.'">';
+		  echo '<td style="background: #669999;color: white" class="viikkoRivi fromto_'.$t->id.'" />
+		  <center>';
 		  $this->renderPartial('//tyovuoroot/fromto',array('tid'=>$t->id));
-		  echo '</td>';
+		  echo '</center></td>';
 		}
 	    echo '</tr>';
         ?>
