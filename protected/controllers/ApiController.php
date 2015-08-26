@@ -30,6 +30,61 @@ class ApiController extends Controller
     // Actions
     public function actionList()
     {
+
+//$this->_checkAuth();
+
+    switch($_GET['model'])
+    {
+        // Get an instance of the respective model
+        case 'posts':
+
+            $ttekija = Tyontekijat::model()->find(" imei = '".$_POST['imei']."' ");
+            //$mob = Mob::model()->find(" imei = '".$_POST['imei']."' and loppui = '' ");
+
+	    if(isset($ttekija->id)){
+              $model = new Mob;   
+	    } else {
+              $this->_sendResponse(200, "imei on persessä ".$_POST['imei']." ".$ttekija['imei']);
+	      exit;
+	    }
+            break;
+
+        default:
+            $this->_sendResponse(501, 
+                sprintf('Mode <b>create</b> is not implemented for model <b>%s</b>',
+                $_GET['model']) );
+                Yii::app()->end();
+    }
+    // Try to assign POST values to attributes
+    foreach($_POST as $var=>$value) {
+        // Does the model have this attribute? If not raise an error
+        if($model->hasAttribute($var))
+            $model->$var = $value;
+        else
+            $this->_sendResponse(500, 
+                sprintf('Parameter <b>%s</b> is not allowed for model <b>%s</b>', $var,
+                $_GET['model']) );
+    }
+    // Try to save the model
+    if($model->save())
+        $this->_sendResponse(200, CJSON::encode($model));
+    else {
+        // Errors occurred
+        $msg = "<h1>Error</h1>";
+        $msg .= sprintf("Couldn't create model <b>%s</b>", $_GET['model']);
+        $msg .= "<ul>";
+        foreach($model->errors as $attribute=>$attr_errors) {
+            $msg .= "<li>Attribute: $attribute</li>";
+            $msg .= "<ul>";
+            foreach($attr_errors as $attr_error)
+                $msg .= "<li>$attr_error</li>";
+            $msg .= "</ul>";
+        }
+        $msg .= "</ul>";
+        $this->_sendResponse(500, $msg );
+    }
+
+/*
 //$this->_checkAuth();
     // Get the respective model instance
     switch($_GET['model'])
@@ -57,7 +112,7 @@ class ApiController extends Controller
         // Send the response
         $this->_sendResponse(200, CJSON::encode($rows));
     }
-
+*/
     }
 
 
@@ -89,12 +144,11 @@ $this->_checkAuth();
 
 }
 
-
+/*
 public function actionImei()
 {
 
-echo 'test';
-exit;
+
 //$this->_checkAuth();
 
     switch($_GET['model'])
@@ -147,7 +201,7 @@ exit;
         $this->_sendResponse(500, $msg );
     }
 }
-
+*/
 
 /*
 public function actionImei()

@@ -21,8 +21,8 @@
 	<button id="status" class="btn btn-primary">Status</button>
 	<br>
 	<br>
-	<!--<input type="text" id="server" value="http://etuntifw.local">-->
-	<input type="text" class="form-control" id="server" value="http://etuntifw.azurewebsites.net">
+	<input type="text" id="server" value="http://etuntifw.local">
+	<!--<input type="text" class="form-control" id="server" value="http://etuntifw.azurewebsites.net">-->
 	<br>
 	<textarea cols="100" rows="20" class="form-control" id="result"></textarea>
   </div>
@@ -88,7 +88,7 @@ function insertRow(){
 
 
         $.ajax({
-           url: url+'/imei',
+           url: url,
 	   type:'POST',
  	   data: postData,
 	   //dataType: "json",
