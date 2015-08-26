@@ -47,12 +47,16 @@
 		Yii::app()->session['to'] = date("Y-m-d",strtotime(Yii::app()->request->getPost('to')));
 
 
+		$from = '';
+		$to = '';
+		
+		if(isset(Yii::app()->session['from']))
 		$from = date("d.m.Y",strtotime(Yii::app()->session['from']));
+		if(isset(Yii::app()->session['to']))
 		$to = date("d.m.Y",strtotime(Yii::app()->session['to']));
 
 
-if(!isset($from) or empty($from))
-exit;
+
 
 //print_r(Yii::app()->session['tvuoroTekija']);
 
@@ -121,6 +125,7 @@ td .tp{
 
 <br>
 
+<?php if(!empty($from) and !empty($to)) : ?>
 <div class="row tvuoro">
   <table class="table table-striped table-condensed table-bordered">
      <thead>
@@ -187,7 +192,7 @@ td .tp{
      </tfoot>
   </table>
 </div>
-
+<?php endif; ?>
 
 
 
