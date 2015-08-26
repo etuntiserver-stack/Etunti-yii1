@@ -31,7 +31,7 @@ class ApiController extends Controller
     public function actionList()
     {
 
-//$this->_checkAuth();
+$this->_checkAuth();
 
     switch($_GET['model'])
     {
