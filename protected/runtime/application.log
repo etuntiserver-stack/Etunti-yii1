@@ -367,3 +367,9 @@ REQUEST_URI=/index.php/tyovuoroot/update?id=7245
 in C:\xampp\htdocs\etuntifw\protected\views\tyovuoroot\_form.php (63)
 in C:\xampp\htdocs\etuntifw\protected\views\tyovuoroot\update.php (20)
 in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (247)
+2015/08/26 12:41:08 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "id".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (241)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 12:41:08 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "time".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (241)
+in C:\xampp\htdocs\etuntifw\index.php (13)
