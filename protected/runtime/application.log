@@ -516,3 +516,146 @@ Stack trace:
 REQUEST_URI=/index.php/api/posts/imei?domain=sivex
 HTTP_REFERER=http://etuntifw.local/mob2.html
 ---
+2015/08/26 13:21:03 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Järjestelmä ei löydä pyydettyä toimintoa "posts".' in C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php:483
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(270): CController->missingAction('posts')
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('posts')
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/posts/imei')
+#3 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php/api/posts/imei?dom=sivex
+HTTP_REFERER=http://etuntifw.local/mob2.html
+---
+2015/08/26 13:21:15 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Järjestelmä ei löydä pyydettyä toimintoa "posts".' in C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php:483
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(270): CController->missingAction('posts')
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('posts')
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/posts/imei')
+#3 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php/api/posts/imei?dom=sivex
+HTTP_REFERER=http://etuntifw.local/mob2.html
+---
+2015/08/26 13:22:13 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Järjestelmä ei löydä pyydettyä toimintoa "posts".' in C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php:483
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(270): CController->missingAction('posts')
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('posts')
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/posts/imei')
+#3 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php/api/posts/imei?dom=sivex
+HTTP_REFERER=http://etuntifw.local/mob2.html
+---
+2015/08/26 13:22:24 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Järjestelmä ei löydä pyydettyä toimintoa "posts".' in C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php:483
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(270): CController->missingAction('posts')
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('posts')
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/posts/imei')
+#3 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php/api/posts/imei?dom=sivex
+HTTP_REFERER=http://etuntifw.local/mob2.html
+---
+2015/08/26 13:22:30 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Järjestelmä ei löydä pyydettyä toimintoa "posts".' in C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php:483
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(270): CController->missingAction('posts')
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('posts')
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/posts/imei')
+#3 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php/api/posts/imei?dom=sivex
+HTTP_REFERER=http://etuntifw.local/mob2.html
+---
+2015/08/26 13:22:42 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Järjestelmä ei löydä pyydettyä toimintoa "posts".' in C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php:483
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(270): CController->missingAction('posts')
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('posts')
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/posts/imei')
+#3 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php/api/posts/imei?dom=sivex
+HTTP_REFERER=http://etuntifw.local/mob2.html
+---
+2015/08/26 13:23:08 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Järjestelmä ei löydä pyydettyä toimintoa "posts".' in C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php:483
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(270): CController->missingAction('posts')
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('posts')
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/posts/imei')
+#3 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php/api/posts/imei?dom=sivex
+HTTP_REFERER=http://etuntifw.local/mob2.html
+---
+2015/08/26 13:23:43 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Järjestelmä ei löydä pyydettyä toimintoa "posts".' in C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php:483
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(270): CController->missingAction('posts')
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('posts')
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/posts/imei/...')
+#3 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php/api/posts/imei/sivex
+HTTP_REFERER=http://etuntifw.local/mob2.html
+---
+2015/08/26 13:24:11 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Järjestelmä ei löydä pyydettyä toimintoa "posts".' in C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php:483
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(270): CController->missingAction('posts')
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('posts')
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/posts/imei/...')
+#3 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php/api/posts/imei/sivex
+HTTP_REFERER=http://etuntifw.local/mob2.html
+---
+2015/08/26 13:24:20 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Järjestelmä ei löydä pyydettyä toimintoa "posts".' in C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php:483
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(270): CController->missingAction('posts')
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('posts')
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/posts/imei/...')
+#3 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php/api/posts/imei/sivex
+HTTP_REFERER=http://etuntifw.local/mob2.html
+---
+2015/08/26 13:24:28 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Järjestelmä ei löydä pyydettyä toimintoa "posts".' in C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php:483
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(270): CController->missingAction('posts')
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('posts')
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/posts/imei/...')
+#3 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php/api/posts/imei/sivex
+HTTP_REFERER=http://etuntifw.local/mob2.html
+---
+2015/08/26 13:24:40 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Järjestelmä ei löydä pyydettyä toimintoa "posts".' in C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php:483
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(270): CController->missingAction('posts')
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('posts')
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/posts/imei/...')
+#3 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php/api/posts/imei/sivex
+HTTP_REFERER=http://etuntifw.local/mob2.html
+---
+2015/08/26 13:26:02 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Järjestelmä ei löydä pyydettyä toimintoa "posts".' in C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php:483
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(270): CController->missingAction('posts')
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('posts')
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/posts/imei')
+#3 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php/api/posts/imei?id=sivex
+HTTP_REFERER=http://etuntifw.local/mob2.html
+---
