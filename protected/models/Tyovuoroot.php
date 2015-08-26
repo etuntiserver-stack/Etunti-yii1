@@ -25,6 +25,7 @@ class Tyovuoroot extends DB2ActiveRecord
 public $osoite;
 public $tekijan_nimi;
 public $toimenpiteet;
+public $l_tunnit;
 
 	/**
 	 * Returns the static model of the specified AR class.

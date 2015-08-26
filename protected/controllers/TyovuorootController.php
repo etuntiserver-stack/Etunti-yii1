@@ -28,11 +28,11 @@ class TyovuorootController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','updatetime','showohje','did','muisti','operatio'),
+				'actions'=>array('admin','delete','create','update','index','view','updatetime','showohje','did','muisti','operatio','viikko','fromto'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','updatetime','showohje','did','muisti','operatio'),
+				'actions'=>array('admin','delete','create','update','index','view','updatetime','showohje','did','muisti','operatio','viikko','fromto'),
                 		'message'=>Yii::t('main', 'Tämä TASO ei kuuluu teille'),
 			),
 			array('deny',  // deny all users
@@ -125,6 +125,33 @@ class TyovuorootController extends Controller
 			'pvm'=>$pvm,
 			'tid'=>$tid,
 			'from'=>$from,
+		));
+	}
+
+	public function actionViikko($tid,$viikko)
+	{
+
+	function sprint($val){
+	    if($val > 0)
+		return sprintf('%02d:%02d', $val/3600, ($val % 3600)/60);
+	}
+
+		$this->renderPartial('viikko',array(
+			'tid'=>$tid,
+			'viikko'=>$viikko,
+		));
+	}
+
+	public function actionFromto($tid)
+	{
+
+	function sprint($val){
+	    if($val > 0)
+		return sprintf('%02d:%02d', $val/3600, ($val % 3600)/60);
+	}
+
+		$this->renderPartial('fromto',array(
+			'tid'=>$tid,
 		));
 	}
 
@@ -243,6 +270,12 @@ class TyovuorootController extends Controller
 	 */
 	public function actionIndex()
 	{
+
+	function sprint($val){
+	    if($val > 0)
+		return sprintf('%02d:%02d', $val/3600, ($val % 3600)/60);
+	}
+
 		$this->render('index');
 	}
 

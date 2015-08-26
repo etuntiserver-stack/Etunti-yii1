@@ -60,25 +60,55 @@ if(isset($m->toimenpiteet))
   <div class="col-sm-3">
 		<?php echo $form->labelEx($model,'tyoajanlaatu'); ?>
 		<?php
-        	$list = CHtml::listData(Tyontekijat::model()->findAll(array('order' => 'tekijan_nimi')), 'id', 'id');
-        	echo $form->dropDownList($model, 'tyoajanlaatu', $list,array('class'=>'form-control'));
+        	$tal = Valikkoot::model()->findAll(" select_type='tyoajanlaatu' ", array('order' => 'select_type'));
+		echo '<select name="Tyovuoroot[tyoajanlaatu]" class="form-control">';
+
+		 if(!empty($model->tyoajanlaatu)){
+		   $expl1 = explode("/",$model->tyoajanlaatu);
+		   $value1 = (isset($expl1[0])) ? $expl1[0] : '';
+		   echo '<option value="'.$model->tyoajanlaatu.'">'.$value1.'</option>';
+		 }
+
+		 foreach($tal as $v)
+		 {
+		   $expl1 = explode("/",$v->value);
+		   $color = (isset($expl1[1])) ? $expl1[1] : '';
+		   $value1 = (isset($expl1[0])) ? $expl1[0] : '';
+		   echo '<option style="color:'.$color.'" value="'.$v->value.'">'.$value1.'</option>';
+		 }
+		echo '</select>';
         	?>
   </div>
   <div class="col-sm-3">
 		<?php echo $form->labelEx($model,'tyoajanmerkinta'); ?>
 		<?php
-        	$list = CHtml::listData(Tyontekijat::model()->findAll(array('order' => 'tekijan_nimi')), 'id', 'id');
-        	echo $form->dropDownList($model, 'tyoajanmerkinta', $list,array('class'=>'form-control'));
+        	$tal = Valikkoot::model()->findAll(" select_type='tyoajanmerkinta' ", array('order' => 'select_type'));
+		echo '<select name="Tyovuoroot[tyoajanmerkinta]" class="form-control">';
+
+		 if(!empty($model->tyoajanmerkinta)){
+		   $expl = explode("/",$model->tyoajanmerkinta);
+		   $value = (isset($expl[0])) ? $expl[0] : '';
+		   echo '<option value="'.$model->tyoajanmerkinta.'">'.$value.'</option>';
+		 }
+
+		 foreach($tal as $v)
+		 {
+		   $expl = explode("/",$v->value);
+		   $color = (isset($expl[1])) ? $expl[1] : '';
+		   $value = (isset($expl[0])) ? $expl[0] : '';
+		   echo '<option style="color:'.$color.'" value="'.$v->value.'">'.$value.'</option>';
+		 }
+		echo '</select>';
         	?>
   </div>
   <div class="col-sm-3">
 
   </div>
-  <div class="col-sm-3">
+  <div class="col-sm-6">
 		<?php echo $form->labelEx($model,'kohde'); ?>
 		<?php
         	$list = CHtml::listData(Kohteet::model()->findAll(array('order' => 'osoite')), 'id', 'osoite');
-        	echo $form->dropDownList($model, 'kohde', $list,array('class'=>'form-control kohde'));
+        	echo $form->dropDownList($model, 'kohde', $list,array('empty'=>'Valitse','class'=>'form-control kohde'));
         	?>
   </div>
 </div>
@@ -133,10 +163,9 @@ $(document).ready(function(){
 	  	$.ajax({
 			url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/did',
 			type:'GET',
-			data: { "pvm" : "<?php echo $model->pvm; ?>", "tid" : "<?php echo $model->tid; ?>", "from" : "tvuoro" },
+			data: { "pvm" : "<?php echo $model->pvm; ?>", "tid" : "<?php echo $model->tid; ?>", "from" : "ajax" },
 			  success:function(data){
 			  console.log(data);
-			  $('#showres').modal('hide');
 			  $('#<?php echo date("Ymd",strtotime($model->pvm))."_".$model->tid; ?>').html(data);
 			  return false;
 			  },
@@ -145,6 +174,35 @@ $(document).ready(function(){
 			  }
 	 	});
 
+	  	$.ajax({
+			url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/viikko',
+			type:'GET',
+			data: { "tid" : "<?php echo $model->tid; ?>", "viikko" : "<?php echo date('W',strtotime($model->pvm)); ?>" },
+			  success:function(data){
+			  console.log(data);
+			  $('#vk_<?php echo date("W",strtotime($model->pvm))."_".$model->tid; ?>').html(data);
+			  return false;
+			  },
+			  error:function(data){
+			  console.log(data);
+			  }
+	 	});
+
+	  	$.ajax({
+			url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/fromto',
+			type:'GET',
+			data: { "tid" : "<?php echo $model->tid; ?>" },
+			  success:function(data){
+			  console.log(data);
+			  $('#fromto_<?php echo $model->tid; ?>').html(data);
+			  return false;
+			  },
+			  error:function(data){
+			  console.log(data);
+			  }
+	 	});
+
+		$('#showres').modal('hide');
 		return false;
 	   	},
 		error:function(data){
@@ -164,7 +222,7 @@ $(document).ready(function(){
 	  	$.ajax({
 			url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/did',
 			type:'GET',
-			data: { "pvm" : "<?php echo $model->pvm; ?>", "tid" : "<?php echo $model->tid; ?>", "from" : "tvuoro" },
+			data: { "pvm" : "<?php echo $model->pvm; ?>", "tid" : "<?php echo $model->tid; ?>", "from" : "ajax" },
 			  success:function(data){
 			  console.log(data);
 			  $('#showres').modal('hide');

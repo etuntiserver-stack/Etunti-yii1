@@ -9404,3 +9404,1222 @@ REQUEST_URI=/index.php/tyovuoroot?pvmtid=20150819_38
 in C:\xampp\htdocs\etuntifw\protected\views\tyovuoroot\index.php (36)
 in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (246)
 in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 08:09:49 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "id".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (77)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 08:09:49 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "time".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (77)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 08:34:05 [error] [system.db.CDbCommand] CDbCommand::fetchAll() epäonnistui: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'sivex.domainit' doesn't exist. Suoritettu SQL-komento oli: SHOW FULL COLUMNS FROM `domainit`.
+in C:\xampp\htdocs\etuntifw\protected\models\Domainit.php (20)
+in C:\xampp\htdocs\etuntifw\protected\views\layouts\main.php (142)
+in C:\xampp\htdocs\etuntifw\protected\views\layouts\column2.php (22)
+2015/08/26 08:34:05 [error] [exception.CDbException] exception 'CDbException' with message 'Active record -luokan "Domainit" taulua "domainit" ei löydy tietokannasta.' in C:\xampp\htdocs\etuntifw\YII\framework\db\ar\CActiveRecord.php:2310
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\db\ar\CActiveRecord.php(387): CActiveRecordMetaData->__construct(Object(Domainit))
+#1 C:\xampp\htdocs\etuntifw\protected\models\Domainit.php(20): CActiveRecord::model('Domainit')
+#2 C:\xampp\htdocs\etuntifw\protected\views\layouts\main.php(142): Domainit::model()
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\CBaseController.php(126): require('C:\\xampp\\htdocs...')
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\CBaseController.php(95): CBaseController->renderInternal('C:\\xampp\\htdocs...', Array, true)
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\widgets\CContentDecorator.php(76): CBaseController->renderFile('C:\\xampp\\htdocs...', Array, true)
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\widgets\CContentDecorator.php(54): CContentDecorator->decorate('<div class="spa...')
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\widgets\COutputProcessor.php(44): CContentDecorator->processOutput('<div class="spa...')
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CBaseController.php(206): COutputProcessor->run()
+#9 C:\xampp\htdocs\etuntifw\YII\framework\web\CBaseController.php(300): CBaseController->endWidget('CContentDecorat...')
+#10 C:\xampp\htdocs\etuntifw\protected\views\layouts\column2.php(22): CBaseController->endContent()
+#11 C:\xampp\htdocs\etuntifw\YII\framework\web\CBaseController.php(126): require('C:\\xampp\\htdocs...')
+#12 C:\xampp\htdocs\etuntifw\YII\framework\web\CBaseController.php(95): CBaseController->renderInternal('C:\\xampp\\htdocs...', Array, true)
+#13 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(784): CBaseController->renderFile('C:\\xampp\\htdocs...', Array, true)
+#14 C:\xampp\htdocs\etuntifw\protected\controllers\ValikkootController.php(128): CController->render('index', Array)
+#15 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(49): ValikkootController->actionIndex()
+#16 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#17 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#18 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#19 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#20 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#21 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#22 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#23 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#24 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('')
+#25 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('valikkoot')
+#26 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#27 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#28 {main}
+REQUEST_URI=/index.php/valikkoot
+HTTP_REFERER=http://etuntifw.local/index.php/gii/crud
+---
+2015/08/26 08:36:03 [error] [exception.CHttpException.403] exception 'CHttpException' with message 'Sinulla ei ole tarvittavia oikeuksia toiminnon suorittamiseen.' in C:\xampp\htdocs\etuntifw\YII\framework\web\auth\CAccessControlFilter.php:179
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\auth\CAccessControlFilter.php(142): CAccessControlFilter->accessDenied(Object(WebUser), 'Sinulla ei ole ...')
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(38): CAccessControlFilter->preFilter(Object(CFilterChain))
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('admin')
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('valikkoot/admin')
+#9 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#10 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#11 {main}
+REQUEST_URI=/index.php/valikkoot/admin
+HTTP_REFERER=http://etuntifw.local/index.php/sivexkuitti/index
+---
+2015/08/26 08:45:06 [error] [system.db.CDbCommand] CDbCommand::fetchAll() epäonnistui: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'vlaue' in 'where clause'. Suoritettu SQL-komento oli: SELECT * FROM `sivex_selects` `t` WHERE  vlaue='tyoajanlaatu'.
+in C:\xampp\htdocs\etuntifw\protected\views\tyovuoroot\_form.php (63)
+in C:\xampp\htdocs\etuntifw\protected\views\tyovuoroot\update.php (20)
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (220)
+2015/08/26 08:45:06 [error] [exception.CDbException] exception 'CDbException' with message 'CDbCommand ei voinut suorittaa SQL-komentoa: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'vlaue' in 'where clause'. The SQL statement executed was: SELECT * FROM `sivex_selects` `t` WHERE  vlaue='tyoajanlaatu'' in C:\xampp\htdocs\etuntifw\YII\framework\db\CDbCommand.php:541
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\db\CDbCommand.php(395): CDbCommand->queryInternal('fetchAll', Array, Array)
+#1 C:\xampp\htdocs\etuntifw\YII\framework\db\ar\CActiveRecord.php(1297): CDbCommand->queryAll()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\db\ar\CActiveRecord.php(1416): CActiveRecord->query(Object(CDbCriteria), true)
+#3 C:\xampp\htdocs\etuntifw\protected\views\tyovuoroot\_form.php(63): CActiveRecord->findAll(' vlaue='tyoajan...', Array)
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\CBaseController.php(126): require('C:\\xampp\\htdocs...')
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CBaseController.php(95): CBaseController->renderInternal('C:\\xampp\\htdocs...', Array, true)
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(869): CBaseController->renderFile('C:\\xampp\\htdocs...', Array, true)
+#7 C:\xampp\htdocs\etuntifw\protected\views\tyovuoroot\update.php(20): CController->renderPartial('_form', Array)
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CBaseController.php(126): require('C:\\xampp\\htdocs...')
+#9 C:\xampp\htdocs\etuntifw\YII\framework\web\CBaseController.php(95): CBaseController->renderInternal('C:\\xampp\\htdocs...', Array, true)
+#10 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(869): CBaseController->renderFile('C:\\xampp\\htdocs...', Array, true)
+#11 C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php(220): CController->renderPartial('update', Array)
+#12 [internal function]: TyovuorootController->actionUpdate('7152')
+#13 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CAction.php(108): ReflectionMethod->invokeArgs(Object(TyovuorootController), Array)
+#14 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(47): CAction->runWithParamsInternal(Object(TyovuorootController), Object(ReflectionMethod), Array)
+#15 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#16 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#17 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#18 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#19 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#20 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#21 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#22 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#23 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('update')
+#24 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('tyovuoroot/upda...')
+#25 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#26 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#27 {main}
+REQUEST_URI=/index.php/tyovuoroot/update?id=7152
+HTTP_REFERER=http://etuntifw.local/index.php/tyovuoroot/index
+---
+2015/08/26 09:02:46 [error] [php] Undefined offset: 1 (C:\xampp\htdocs\etuntifw\protected\views\tyovuoroot\_form.php:68)
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(869): TyovuorootController->renderFile()
+#1 C:\xampp\htdocs\etuntifw\protected\views\tyovuoroot\update.php(20): TyovuorootController->renderPartial()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CBaseController.php(126): require()
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\CBaseController.php(95): TyovuorootController->renderInternal()
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(869): TyovuorootController->renderFile()
+#5 C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php(220): TyovuorootController->renderPartial()
+#6 unknown(0): TyovuorootController->actionUpdate()
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CAction.php(108): ReflectionMethod->invokeArgs()
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(47): CInlineAction->runWithParamsInternal()
+#9 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams()
+#10 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): TyovuorootController->runAction()
+#11 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#12 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CAccessControlFilter->filter()
+#13 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): TyovuorootController->filterAccessControl()
+#14 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#15 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#16 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): TyovuorootController->runActionWithFilters()
+#17 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): TyovuorootController->run()
+#18 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#19 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#20 C:\xampp\htdocs\etuntifw\index.php(13): CWebApplication->run()
+REQUEST_URI=/index.php/tyovuoroot/update?id=7152
+in C:\xampp\htdocs\etuntifw\protected\views\tyovuoroot\_form.php (68)
+in C:\xampp\htdocs\etuntifw\protected\views\tyovuoroot\update.php (20)
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (220)
+2015/08/26 09:02:55 [error] [php] Undefined offset: 1 (C:\xampp\htdocs\etuntifw\protected\views\tyovuoroot\_form.php:68)
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(869): TyovuorootController->renderFile()
+#1 C:\xampp\htdocs\etuntifw\protected\views\tyovuoroot\update.php(20): TyovuorootController->renderPartial()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CBaseController.php(126): require()
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\CBaseController.php(95): TyovuorootController->renderInternal()
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(869): TyovuorootController->renderFile()
+#5 C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php(220): TyovuorootController->renderPartial()
+#6 unknown(0): TyovuorootController->actionUpdate()
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CAction.php(108): ReflectionMethod->invokeArgs()
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(47): CInlineAction->runWithParamsInternal()
+#9 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams()
+#10 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): TyovuorootController->runAction()
+#11 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#12 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CAccessControlFilter->filter()
+#13 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): TyovuorootController->filterAccessControl()
+#14 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#15 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#16 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): TyovuorootController->runActionWithFilters()
+#17 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): TyovuorootController->run()
+#18 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#19 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#20 C:\xampp\htdocs\etuntifw\index.php(13): CWebApplication->run()
+REQUEST_URI=/index.php/tyovuoroot/update?id=7152
+in C:\xampp\htdocs\etuntifw\protected\views\tyovuoroot\_form.php (68)
+in C:\xampp\htdocs\etuntifw\protected\views\tyovuoroot\update.php (20)
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (220)
+2015/08/26 09:05:29 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "id".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (214)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 09:05:29 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "time".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (214)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 09:05:47 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "id".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (214)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 09:05:47 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "time".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (214)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 09:07:18 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "id".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (214)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 09:07:18 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "time".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (214)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 09:08:59 [error] [php] Undefined variable: color (C:\xampp\htdocs\etuntifw\protected\views\tyovuoroot\_form.php:67)
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(869): TyovuorootController->renderFile()
+#1 C:\xampp\htdocs\etuntifw\protected\views\tyovuoroot\update.php(20): TyovuorootController->renderPartial()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CBaseController.php(126): require()
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\CBaseController.php(95): TyovuorootController->renderInternal()
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(869): TyovuorootController->renderFile()
+#5 C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php(220): TyovuorootController->renderPartial()
+#6 unknown(0): TyovuorootController->actionUpdate()
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CAction.php(108): ReflectionMethod->invokeArgs()
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(47): CInlineAction->runWithParamsInternal()
+#9 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams()
+#10 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): TyovuorootController->runAction()
+#11 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#12 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CAccessControlFilter->filter()
+#13 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): TyovuorootController->filterAccessControl()
+#14 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#15 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#16 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): TyovuorootController->runActionWithFilters()
+#17 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): TyovuorootController->run()
+#18 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#19 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#20 C:\xampp\htdocs\etuntifw\index.php(13): CWebApplication->run()
+REQUEST_URI=/index.php/tyovuoroot/update?id=7152
+in C:\xampp\htdocs\etuntifw\protected\views\tyovuoroot\_form.php (67)
+in C:\xampp\htdocs\etuntifw\protected\views\tyovuoroot\update.php (20)
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (220)
+2015/08/26 09:09:15 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "id".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (214)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 09:09:15 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "time".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (214)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 09:10:15 [error] [php] Undefined offset: 1 (C:\xampp\htdocs\etuntifw\protected\views\tyovuoroot\_form.php:73)
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(869): TyovuorootController->renderFile()
+#1 C:\xampp\htdocs\etuntifw\protected\views\tyovuoroot\update.php(20): TyovuorootController->renderPartial()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CBaseController.php(126): require()
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\CBaseController.php(95): TyovuorootController->renderInternal()
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(869): TyovuorootController->renderFile()
+#5 C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php(220): TyovuorootController->renderPartial()
+#6 unknown(0): TyovuorootController->actionUpdate()
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CAction.php(108): ReflectionMethod->invokeArgs()
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(47): CInlineAction->runWithParamsInternal()
+#9 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams()
+#10 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): TyovuorootController->runAction()
+#11 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#12 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CAccessControlFilter->filter()
+#13 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): TyovuorootController->filterAccessControl()
+#14 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#15 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#16 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): TyovuorootController->runActionWithFilters()
+#17 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): TyovuorootController->run()
+#18 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#19 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#20 C:\xampp\htdocs\etuntifw\index.php(13): CWebApplication->run()
+REQUEST_URI=/index.php/tyovuoroot/update?id=7152
+in C:\xampp\htdocs\etuntifw\protected\views\tyovuoroot\_form.php (73)
+in C:\xampp\htdocs\etuntifw\protected\views\tyovuoroot\update.php (20)
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (220)
+2015/08/26 09:10:58 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "id".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (214)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 09:10:58 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "time".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (214)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 09:13:10 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "id".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (214)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 09:13:10 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "time".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (214)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 09:13:50 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "id".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (214)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 09:13:50 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "time".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (214)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 09:14:01 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "id".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (214)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 09:14:01 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "time".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (214)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 09:24:51 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "id".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (214)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 09:24:51 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "time".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (214)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 09:24:51 [error] [php] Undefined variable: model (C:\xampp\htdocs\etuntifw\protected\views\tyovuoroot\did.php:37)
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(869): TyovuorootController->renderFile()
+#1 C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php(128): TyovuorootController->renderPartial()
+#2 unknown(0): TyovuorootController->actionDid()
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CAction.php(108): ReflectionMethod->invokeArgs()
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(47): CInlineAction->runWithParamsInternal()
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams()
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): TyovuorootController->runAction()
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CAccessControlFilter->filter()
+#9 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): TyovuorootController->filterAccessControl()
+#10 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#11 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#12 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): TyovuorootController->runActionWithFilters()
+#13 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): TyovuorootController->run()
+#14 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#15 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#16 C:\xampp\htdocs\etuntifw\index.php(13): CWebApplication->run()
+REQUEST_URI=/index.php/tyovuoroot/did?pvm=2015-08-01&tid=8&from=ajax
+in C:\xampp\htdocs\etuntifw\protected\views\tyovuoroot\did.php (37)
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (128)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 09:24:53 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "id".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (214)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 09:24:53 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "time".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (214)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 09:24:53 [error] [php] Undefined variable: model (C:\xampp\htdocs\etuntifw\protected\views\tyovuoroot\did.php:37)
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(869): TyovuorootController->renderFile()
+#1 C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php(128): TyovuorootController->renderPartial()
+#2 unknown(0): TyovuorootController->actionDid()
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CAction.php(108): ReflectionMethod->invokeArgs()
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(47): CInlineAction->runWithParamsInternal()
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams()
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): TyovuorootController->runAction()
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CAccessControlFilter->filter()
+#9 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): TyovuorootController->filterAccessControl()
+#10 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#11 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#12 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): TyovuorootController->runActionWithFilters()
+#13 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): TyovuorootController->run()
+#14 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#15 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#16 C:\xampp\htdocs\etuntifw\index.php(13): CWebApplication->run()
+REQUEST_URI=/index.php/tyovuoroot/did?pvm=2015-08-01&tid=8&from=ajax
+in C:\xampp\htdocs\etuntifw\protected\views\tyovuoroot\did.php (37)
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (128)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 09:25:00 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "id".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (214)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 09:25:00 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "time".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (214)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 09:25:00 [error] [php] Undefined variable: model (C:\xampp\htdocs\etuntifw\protected\views\tyovuoroot\did.php:37)
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(869): TyovuorootController->renderFile()
+#1 C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php(128): TyovuorootController->renderPartial()
+#2 unknown(0): TyovuorootController->actionDid()
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CAction.php(108): ReflectionMethod->invokeArgs()
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(47): CInlineAction->runWithParamsInternal()
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams()
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): TyovuorootController->runAction()
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CAccessControlFilter->filter()
+#9 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): TyovuorootController->filterAccessControl()
+#10 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#11 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#12 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): TyovuorootController->runActionWithFilters()
+#13 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): TyovuorootController->run()
+#14 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#15 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#16 C:\xampp\htdocs\etuntifw\index.php(13): CWebApplication->run()
+REQUEST_URI=/index.php/tyovuoroot/did?pvm=2015-08-01&tid=8&from=ajax
+in C:\xampp\htdocs\etuntifw\protected\views\tyovuoroot\did.php (37)
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (128)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 09:25:13 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "id".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (214)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 09:25:13 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "time".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (214)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 09:25:35 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "id".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (214)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 09:25:35 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "time".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (214)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 09:26:20 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "id".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (214)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 09:26:20 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "time".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (214)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 09:26:25 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "id".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (214)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 09:26:25 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "time".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (214)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 09:26:54 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "id".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (214)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 09:26:54 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "time".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (214)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 09:27:04 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "id".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (165)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 09:27:04 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "time".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (165)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 09:38:15 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "id".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (165)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 09:38:15 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "time".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (165)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 09:38:45 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "id".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (165)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 09:38:45 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "time".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (165)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 09:43:38 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "id".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (165)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 09:43:38 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "time".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (165)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 09:43:52 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "id".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (165)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 09:43:52 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "time".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (165)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 09:43:56 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The requested page does not exist.' in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php:275
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php(69): TyovuorootController->loadModel('7234')
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(49): TyovuorootController->actionOperatio()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#9 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#10 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('operatio')
+#11 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('tyovuoroot/oper...')
+#12 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#13 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#14 {main}
+REQUEST_URI=/index.php/tyovuoroot/operatio
+HTTP_REFERER=http://etuntifw.local/index.php/tyovuoroot/index
+---
+2015/08/26 09:54:24 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "id".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (165)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 09:54:24 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "time".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (165)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 09:58:30 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "id".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (214)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 09:58:30 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "time".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (214)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 09:58:39 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "id".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (214)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 09:58:39 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "time".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (214)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 09:58:46 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "id".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (214)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 09:58:46 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "time".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (214)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 09:59:35 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The requested page does not exist.' in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php:275
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php(69): TyovuorootController->loadModel('7235')
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(49): TyovuorootController->actionOperatio()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#9 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#10 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('operatio')
+#11 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('tyovuoroot/oper...')
+#12 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#13 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#14 {main}
+REQUEST_URI=/index.php/tyovuoroot/operatio
+HTTP_REFERER=http://etuntifw.local/index.php/tyovuoroot/index
+---
+2015/08/26 09:59:35 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The requested page does not exist.' in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php:275
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php(69): TyovuorootController->loadModel('7237')
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(49): TyovuorootController->actionOperatio()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#9 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#10 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('operatio')
+#11 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('tyovuoroot/oper...')
+#12 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#13 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#14 {main}
+REQUEST_URI=/index.php/tyovuoroot/operatio
+HTTP_REFERER=http://etuntifw.local/index.php/tyovuoroot/index
+---
+2015/08/26 09:59:35 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The requested page does not exist.' in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php:275
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php(69): TyovuorootController->loadModel('7235')
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(49): TyovuorootController->actionOperatio()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#9 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#10 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('operatio')
+#11 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('tyovuoroot/oper...')
+#12 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#13 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#14 {main}
+REQUEST_URI=/index.php/tyovuoroot/operatio
+HTTP_REFERER=http://etuntifw.local/index.php/tyovuoroot/index
+---
+2015/08/26 09:59:35 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The requested page does not exist.' in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php:275
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php(69): TyovuorootController->loadModel('7237')
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(49): TyovuorootController->actionOperatio()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#9 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#10 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('operatio')
+#11 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('tyovuoroot/oper...')
+#12 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#13 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#14 {main}
+REQUEST_URI=/index.php/tyovuoroot/operatio
+HTTP_REFERER=http://etuntifw.local/index.php/tyovuoroot/index
+---
+2015/08/26 09:59:35 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The requested page does not exist.' in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php:275
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php(69): TyovuorootController->loadModel('7235')
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(49): TyovuorootController->actionOperatio()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#9 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#10 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('operatio')
+#11 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('tyovuoroot/oper...')
+#12 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#13 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#14 {main}
+REQUEST_URI=/index.php/tyovuoroot/operatio
+HTTP_REFERER=http://etuntifw.local/index.php/tyovuoroot/index
+---
+2015/08/26 10:05:40 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "id".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (165)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 10:05:40 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "time".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (165)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 10:06:03 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "id".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (165)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 10:06:03 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "time".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (165)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 10:06:48 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "id".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (165)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 10:06:48 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "time".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (165)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 10:08:23 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "id".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (214)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 10:08:23 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "time".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (214)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 10:08:31 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "id".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (214)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 10:08:31 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "time".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (214)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 10:09:59 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "id".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (165)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 10:09:59 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "time".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (165)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 10:10:05 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "id".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (214)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 10:10:05 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "time".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (214)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 10:10:45 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The requested page does not exist.' in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php:275
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php(69): TyovuorootController->loadModel('7240')
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(49): TyovuorootController->actionOperatio()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#9 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#10 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('operatio')
+#11 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('tyovuoroot/oper...')
+#12 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#13 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#14 {main}
+REQUEST_URI=/index.php/tyovuoroot/operatio
+HTTP_REFERER=http://etuntifw.local/index.php/tyovuoroot/index
+---
+2015/08/26 10:10:49 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "id".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (165)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 10:10:49 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "time".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (165)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 10:10:56 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "id".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (214)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 10:10:56 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "time".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (214)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 10:14:33 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "id".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (214)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 10:14:33 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "time".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (214)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 10:19:12 [error] [exception.CException] exception 'CException' with message 'TyovuorootController ei löydä pyydettyä näkymää "//tyovuoroot/viikko".' in C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php:878
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\protected\views\tyovuoroot\index.php(166): CController->renderPartial('//tyovuoroot/vi...', Array)
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\CBaseController.php(126): require('C:\\xampp\\htdocs...')
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CBaseController.php(95): CBaseController->renderInternal('C:\\xampp\\htdocs...', NULL, true)
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(869): CBaseController->renderFile('C:\\xampp\\htdocs...', NULL, true)
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(782): CController->renderPartial('index', NULL, true)
+#5 C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php(256): CController->render('index')
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(49): TyovuorootController->actionIndex()
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#9 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#10 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#11 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#12 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#13 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#14 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#15 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('index')
+#16 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('tyovuoroot/inde...')
+#17 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#18 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#19 {main}
+REQUEST_URI=/index.php/tyovuoroot/index
+HTTP_REFERER=http://etuntifw.local/index.php/valikkoot/update?id=2
+---
+2015/08/26 10:20:08 [error] [php] Undefined variable: from (C:\xampp\htdocs\etuntifw\protected\views\tyovuoroot\viikko.php:51)
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(869): TyovuorootController->renderFile()
+#1 C:\xampp\htdocs\etuntifw\protected\views\tyovuoroot\index.php(166): TyovuorootController->renderPartial()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CBaseController.php(126): require()
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\CBaseController.php(95): TyovuorootController->renderInternal()
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(869): TyovuorootController->renderFile()
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(782): TyovuorootController->renderPartial()
+#6 C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php(256): TyovuorootController->render()
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(49): TyovuorootController->actionIndex()
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams()
+#9 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): TyovuorootController->runAction()
+#10 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#11 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CAccessControlFilter->filter()
+#12 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): TyovuorootController->filterAccessControl()
+#13 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#14 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#15 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): TyovuorootController->runActionWithFilters()
+#16 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): TyovuorootController->run()
+#17 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#18 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#19 C:\xampp\htdocs\etuntifw\index.php(13): CWebApplication->run()
+REQUEST_URI=/index.php/tyovuoroot/index
+in C:\xampp\htdocs\etuntifw\protected\views\tyovuoroot\viikko.php (51)
+in C:\xampp\htdocs\etuntifw\protected\views\tyovuoroot\index.php (166)
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (256)
+2015/08/26 10:20:48 [error] [php] Undefined variable: from (C:\xampp\htdocs\etuntifw\protected\views\tyovuoroot\viikko.php:51)
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(869): TyovuorootController->renderFile()
+#1 C:\xampp\htdocs\etuntifw\protected\views\tyovuoroot\index.php(166): TyovuorootController->renderPartial()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CBaseController.php(126): require()
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\CBaseController.php(95): TyovuorootController->renderInternal()
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(869): TyovuorootController->renderFile()
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(782): TyovuorootController->renderPartial()
+#6 C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php(256): TyovuorootController->render()
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(49): TyovuorootController->actionIndex()
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams()
+#9 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): TyovuorootController->runAction()
+#10 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#11 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CAccessControlFilter->filter()
+#12 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): TyovuorootController->filterAccessControl()
+#13 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#14 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#15 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): TyovuorootController->runActionWithFilters()
+#16 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): TyovuorootController->run()
+#17 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#18 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#19 C:\xampp\htdocs\etuntifw\index.php(13): CWebApplication->run()
+REQUEST_URI=/index.php/tyovuoroot/index
+in C:\xampp\htdocs\etuntifw\protected\views\tyovuoroot\viikko.php (51)
+in C:\xampp\htdocs\etuntifw\protected\views\tyovuoroot\index.php (166)
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (256)
+2015/08/26 10:26:12 [error] [system.db.CDbCommand] CDbCommand::fetchAll() epäonnistui: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'loppui' in 'field list'. Suoritettu SQL-komento oli: SELECT 
+	TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s'))) as l_tunnit,
+	t.id,t.aloitan,t.loppui FROM `sivex_tvuoro` `t` WHERE ( tid = '8'  ) AND (DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '2015-08-01' AND '2015-08-31' ).
+in C:\xampp\htdocs\etuntifw\protected\views\tyovuoroot\viikko.php (13)
+in C:\xampp\htdocs\etuntifw\protected\views\tyovuoroot\index.php (166)
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (256)
+2015/08/26 10:26:12 [error] [exception.CDbException] exception 'CDbException' with message 'CDbCommand ei voinut suorittaa SQL-komentoa: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'loppui' in 'field list'. The SQL statement executed was: SELECT 
+	TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s'))) as l_tunnit,
+	t.id,t.aloitan,t.loppui FROM `sivex_tvuoro` `t` WHERE ( tid = '8'  ) AND (DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '2015-08-01' AND '2015-08-31' )' in C:\xampp\htdocs\etuntifw\YII\framework\db\CDbCommand.php:541
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\db\CDbCommand.php(395): CDbCommand->queryInternal('fetchAll', Array, Array)
+#1 C:\xampp\htdocs\etuntifw\YII\framework\db\ar\CActiveRecord.php(1297): CDbCommand->queryAll()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\db\ar\CActiveRecord.php(1416): CActiveRecord->query(Object(CDbCriteria), true)
+#3 C:\xampp\htdocs\etuntifw\protected\views\tyovuoroot\viikko.php(13): CActiveRecord->findAll(Object(CDbCriteria))
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\CBaseController.php(126): require('C:\\xampp\\htdocs...')
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CBaseController.php(95): CBaseController->renderInternal('C:\\xampp\\htdocs...', Array, true)
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(869): CBaseController->renderFile('C:\\xampp\\htdocs...', Array, true)
+#7 C:\xampp\htdocs\etuntifw\protected\views\tyovuoroot\index.php(166): CController->renderPartial('//tyovuoroot/vi...', Array)
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CBaseController.php(126): require('C:\\xampp\\htdocs...')
+#9 C:\xampp\htdocs\etuntifw\YII\framework\web\CBaseController.php(95): CBaseController->renderInternal('C:\\xampp\\htdocs...', NULL, true)
+#10 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(869): CBaseController->renderFile('C:\\xampp\\htdocs...', NULL, true)
+#11 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(782): CController->renderPartial('index', NULL, true)
+#12 C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php(256): CController->render('index')
+#13 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(49): TyovuorootController->actionIndex()
+#14 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#15 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#16 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#17 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#18 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#19 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#20 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#21 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#22 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('index')
+#23 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('tyovuoroot/inde...')
+#24 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#25 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#26 {main}
+REQUEST_URI=/index.php/tyovuoroot/index
+HTTP_REFERER=http://etuntifw.local/index.php/valikkoot/update?id=2
+---
+2015/08/26 10:26:25 [error] [system.db.CDbCommand] CDbCommand::fetchAll() epäonnistui: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'loppui' in 'field list'. Suoritettu SQL-komento oli: SELECT 
+	TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s'))) as l_tunnit,
+	t.id,t.aloitan,t.loppui FROM `sivex_tvuoro` `t` WHERE ( tid = '8'  ) AND (DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '2015-08-01' AND '2015-08-31' ).
+in C:\xampp\htdocs\etuntifw\protected\views\tyovuoroot\viikko.php (13)
+in C:\xampp\htdocs\etuntifw\protected\views\tyovuoroot\index.php (166)
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (256)
+2015/08/26 10:26:25 [error] [exception.CDbException] exception 'CDbException' with message 'CDbCommand ei voinut suorittaa SQL-komentoa: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'loppui' in 'field list'. The SQL statement executed was: SELECT 
+	TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s'))) as l_tunnit,
+	t.id,t.aloitan,t.loppui FROM `sivex_tvuoro` `t` WHERE ( tid = '8'  ) AND (DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '2015-08-01' AND '2015-08-31' )' in C:\xampp\htdocs\etuntifw\YII\framework\db\CDbCommand.php:541
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\db\CDbCommand.php(395): CDbCommand->queryInternal('fetchAll', Array, Array)
+#1 C:\xampp\htdocs\etuntifw\YII\framework\db\ar\CActiveRecord.php(1297): CDbCommand->queryAll()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\db\ar\CActiveRecord.php(1416): CActiveRecord->query(Object(CDbCriteria), true)
+#3 C:\xampp\htdocs\etuntifw\protected\views\tyovuoroot\viikko.php(13): CActiveRecord->findAll(Object(CDbCriteria))
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\CBaseController.php(126): require('C:\\xampp\\htdocs...')
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CBaseController.php(95): CBaseController->renderInternal('C:\\xampp\\htdocs...', Array, true)
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(869): CBaseController->renderFile('C:\\xampp\\htdocs...', Array, true)
+#7 C:\xampp\htdocs\etuntifw\protected\views\tyovuoroot\index.php(166): CController->renderPartial('//tyovuoroot/vi...', Array)
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CBaseController.php(126): require('C:\\xampp\\htdocs...')
+#9 C:\xampp\htdocs\etuntifw\YII\framework\web\CBaseController.php(95): CBaseController->renderInternal('C:\\xampp\\htdocs...', NULL, true)
+#10 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(869): CBaseController->renderFile('C:\\xampp\\htdocs...', NULL, true)
+#11 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(782): CController->renderPartial('index', NULL, true)
+#12 C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php(256): CController->render('index')
+#13 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(49): TyovuorootController->actionIndex()
+#14 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#15 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#16 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#17 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#18 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#19 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#20 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#21 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#22 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('index')
+#23 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('tyovuoroot/inde...')
+#24 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#25 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#26 {main}
+REQUEST_URI=/index.php/tyovuoroot/index
+HTTP_REFERER=http://etuntifw.local/index.php/valikkoot/update?id=2
+---
+2015/08/26 10:26:55 [error] [system.db.CDbCommand] CDbCommand::fetchAll() epäonnistui: SQLSTATE[42S22]: Column not found: 1054 Unknown column 't.aloitan' in 'field list'. Suoritettu SQL-komento oli: SELECT 
+	TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppu, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s'), DATE_FORMAT(STR_TO_DATE(alku, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s'))) as l_tunnit,
+	t.id,t.aloitan,t.loppui FROM `sivex_tvuoro` `t` WHERE ( tid = '8'  ) AND (DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '2015-08-01' AND '2015-08-31' ).
+in C:\xampp\htdocs\etuntifw\protected\views\tyovuoroot\viikko.php (13)
+in C:\xampp\htdocs\etuntifw\protected\views\tyovuoroot\index.php (166)
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (256)
+2015/08/26 10:26:55 [error] [exception.CDbException] exception 'CDbException' with message 'CDbCommand ei voinut suorittaa SQL-komentoa: SQLSTATE[42S22]: Column not found: 1054 Unknown column 't.aloitan' in 'field list'. The SQL statement executed was: SELECT 
+	TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppu, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s'), DATE_FORMAT(STR_TO_DATE(alku, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s'))) as l_tunnit,
+	t.id,t.aloitan,t.loppui FROM `sivex_tvuoro` `t` WHERE ( tid = '8'  ) AND (DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '2015-08-01' AND '2015-08-31' )' in C:\xampp\htdocs\etuntifw\YII\framework\db\CDbCommand.php:541
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\db\CDbCommand.php(395): CDbCommand->queryInternal('fetchAll', Array, Array)
+#1 C:\xampp\htdocs\etuntifw\YII\framework\db\ar\CActiveRecord.php(1297): CDbCommand->queryAll()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\db\ar\CActiveRecord.php(1416): CActiveRecord->query(Object(CDbCriteria), true)
+#3 C:\xampp\htdocs\etuntifw\protected\views\tyovuoroot\viikko.php(13): CActiveRecord->findAll(Object(CDbCriteria))
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\CBaseController.php(126): require('C:\\xampp\\htdocs...')
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CBaseController.php(95): CBaseController->renderInternal('C:\\xampp\\htdocs...', Array, true)
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(869): CBaseController->renderFile('C:\\xampp\\htdocs...', Array, true)
+#7 C:\xampp\htdocs\etuntifw\protected\views\tyovuoroot\index.php(166): CController->renderPartial('//tyovuoroot/vi...', Array)
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CBaseController.php(126): require('C:\\xampp\\htdocs...')
+#9 C:\xampp\htdocs\etuntifw\YII\framework\web\CBaseController.php(95): CBaseController->renderInternal('C:\\xampp\\htdocs...', NULL, true)
+#10 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(869): CBaseController->renderFile('C:\\xampp\\htdocs...', NULL, true)
+#11 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(782): CController->renderPartial('index', NULL, true)
+#12 C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php(256): CController->render('index')
+#13 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(49): TyovuorootController->actionIndex()
+#14 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#15 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#16 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#17 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#18 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#19 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#20 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#21 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#22 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('index')
+#23 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('tyovuoroot/inde...')
+#24 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#25 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#26 {main}
+REQUEST_URI=/index.php/tyovuoroot/index
+HTTP_REFERER=http://etuntifw.local/index.php/valikkoot/update?id=2
+---
+2015/08/26 10:27:53 [error] [exception.CException] exception 'CException' with message 'Ominaisuutta "Tyovuoroot.l_tunnit" ei ole määritelty.' in C:\xampp\htdocs\etuntifw\YII\framework\base\CComponent.php:130
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\db\ar\CActiveRecord.php(143): CComponent->__get('l_tunnit')
+#1 C:\xampp\htdocs\etuntifw\YII\framework\base\CModel.php(595): CActiveRecord->__get('l_tunnit')
+#2 C:\xampp\htdocs\etuntifw\protected\views\tyovuoroot\viikko.php(13): CModel->offsetGet('l_tunnit')
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\CBaseController.php(126): require('C:\\xampp\\htdocs...')
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\CBaseController.php(95): CBaseController->renderInternal('C:\\xampp\\htdocs...', Array, true)
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(869): CBaseController->renderFile('C:\\xampp\\htdocs...', Array, true)
+#6 C:\xampp\htdocs\etuntifw\protected\views\tyovuoroot\index.php(166): CController->renderPartial('//tyovuoroot/vi...', Array)
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\CBaseController.php(126): require('C:\\xampp\\htdocs...')
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CBaseController.php(95): CBaseController->renderInternal('C:\\xampp\\htdocs...', NULL, true)
+#9 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(869): CBaseController->renderFile('C:\\xampp\\htdocs...', NULL, true)
+#10 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(782): CController->renderPartial('index', NULL, true)
+#11 C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php(256): CController->render('index')
+#12 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(49): TyovuorootController->actionIndex()
+#13 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#14 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#15 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#16 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#17 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#18 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#19 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#20 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#21 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('index')
+#22 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('tyovuoroot/inde...')
+#23 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#24 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#25 {main}
+REQUEST_URI=/index.php/tyovuoroot/index
+HTTP_REFERER=http://etuntifw.local/index.php/valikkoot/update?id=2
+---
+2015/08/26 10:28:48 [error] [system.db.CDbCommand] CDbCommand::fetch() epäonnistui: SQLSTATE[42000]: Syntax error or access violation: 1583 Incorrect parameters in the call to native function 'DATE_FORMAT'. Suoritettu SQL-komento oli: SELECT 
+	TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppu, '%d.%m.%Y %H:%i'), pvm'%H:%i'), DATE_FORMAT(STR_TO_DATE(alku, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s'))) as l_tunnit FROM `sivex_tvuoro` `t` WHERE ( tid = '8'  ) AND (DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '2015-08-01' AND '2015-08-31' ) LIMIT 1.
+in C:\xampp\htdocs\etuntifw\protected\views\tyovuoroot\viikko.php (12)
+in C:\xampp\htdocs\etuntifw\protected\views\tyovuoroot\index.php (166)
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (256)
+2015/08/26 10:28:48 [error] [exception.CDbException] exception 'CDbException' with message 'CDbCommand ei voinut suorittaa SQL-komentoa: SQLSTATE[42000]: Syntax error or access violation: 1583 Incorrect parameters in the call to native function 'DATE_FORMAT'. The SQL statement executed was: SELECT 
+	TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppu, '%d.%m.%Y %H:%i'), pvm'%H:%i'), DATE_FORMAT(STR_TO_DATE(alku, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s'))) as l_tunnit FROM `sivex_tvuoro` `t` WHERE ( tid = '8'  ) AND (DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '2015-08-01' AND '2015-08-31' ) LIMIT 1' in C:\xampp\htdocs\etuntifw\YII\framework\db\CDbCommand.php:541
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\db\CDbCommand.php(414): CDbCommand->queryInternal('fetch', Array, Array)
+#1 C:\xampp\htdocs\etuntifw\YII\framework\db\ar\CActiveRecord.php(1297): CDbCommand->queryRow()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\db\ar\CActiveRecord.php(1402): CActiveRecord->query(Object(CDbCriteria))
+#3 C:\xampp\htdocs\etuntifw\protected\views\tyovuoroot\viikko.php(12): CActiveRecord->find(Object(CDbCriteria))
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\CBaseController.php(126): require('C:\\xampp\\htdocs...')
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CBaseController.php(95): CBaseController->renderInternal('C:\\xampp\\htdocs...', Array, true)
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(869): CBaseController->renderFile('C:\\xampp\\htdocs...', Array, true)
+#7 C:\xampp\htdocs\etuntifw\protected\views\tyovuoroot\index.php(166): CController->renderPartial('//tyovuoroot/vi...', Array)
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CBaseController.php(126): require('C:\\xampp\\htdocs...')
+#9 C:\xampp\htdocs\etuntifw\YII\framework\web\CBaseController.php(95): CBaseController->renderInternal('C:\\xampp\\htdocs...', NULL, true)
+#10 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(869): CBaseController->renderFile('C:\\xampp\\htdocs...', NULL, true)
+#11 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(782): CController->renderPartial('index', NULL, true)
+#12 C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php(256): CController->render('index')
+#13 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(49): TyovuorootController->actionIndex()
+#14 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#15 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#16 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#17 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#18 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#19 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#20 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#21 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#22 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('index')
+#23 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('tyovuoroot/inde...')
+#24 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#25 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#26 {main}
+REQUEST_URI=/index.php/tyovuoroot/index
+HTTP_REFERER=http://etuntifw.local/index.php/valikkoot/update?id=2
+---
+2015/08/26 10:39:15 [error] [php] Undefined variable: from (C:\xampp\htdocs\etuntifw\protected\views\tyovuoroot\viikko.php:10)
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(869): TyovuorootController->renderFile()
+#1 C:\xampp\htdocs\etuntifw\protected\views\tyovuoroot\index.php(166): TyovuorootController->renderPartial()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CBaseController.php(126): require()
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\CBaseController.php(95): TyovuorootController->renderInternal()
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(869): TyovuorootController->renderFile()
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(782): TyovuorootController->renderPartial()
+#6 C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php(256): TyovuorootController->render()
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(49): TyovuorootController->actionIndex()
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams()
+#9 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): TyovuorootController->runAction()
+#10 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#11 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CAccessControlFilter->filter()
+#12 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): TyovuorootController->filterAccessControl()
+#13 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#14 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#15 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): TyovuorootController->runActionWithFilters()
+#16 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): TyovuorootController->run()
+#17 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#18 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#19 C:\xampp\htdocs\etuntifw\index.php(13): CWebApplication->run()
+REQUEST_URI=/index.php/tyovuoroot/index
+in C:\xampp\htdocs\etuntifw\protected\views\tyovuoroot\viikko.php (10)
+in C:\xampp\htdocs\etuntifw\protected\views\tyovuoroot\index.php (166)
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (256)
+2015/08/26 10:39:34 [error] [php] Undefined variable: from (C:\xampp\htdocs\etuntifw\protected\views\tyovuoroot\viikko.php:10)
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(869): TyovuorootController->renderFile()
+#1 C:\xampp\htdocs\etuntifw\protected\views\tyovuoroot\index.php(166): TyovuorootController->renderPartial()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CBaseController.php(126): require()
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\CBaseController.php(95): TyovuorootController->renderInternal()
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(869): TyovuorootController->renderFile()
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(782): TyovuorootController->renderPartial()
+#6 C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php(255): TyovuorootController->render()
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(49): TyovuorootController->actionIndex()
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams()
+#9 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): TyovuorootController->runAction()
+#10 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#11 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CAccessControlFilter->filter()
+#12 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): TyovuorootController->filterAccessControl()
+#13 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#14 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#15 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): TyovuorootController->runActionWithFilters()
+#16 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): TyovuorootController->run()
+#17 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#18 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#19 C:\xampp\htdocs\etuntifw\index.php(13): CWebApplication->run()
+REQUEST_URI=/index.php/tyovuoroot/index
+in C:\xampp\htdocs\etuntifw\protected\views\tyovuoroot\viikko.php (10)
+in C:\xampp\htdocs\etuntifw\protected\views\tyovuoroot\index.php (166)
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (255)
+2015/08/26 10:40:07 [error] [php] Undefined variable: from (C:\xampp\htdocs\etuntifw\protected\views\tyovuoroot\viikko.php:13)
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(869): TyovuorootController->renderFile()
+#1 C:\xampp\htdocs\etuntifw\protected\views\tyovuoroot\index.php(166): TyovuorootController->renderPartial()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CBaseController.php(126): require()
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\CBaseController.php(95): TyovuorootController->renderInternal()
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(869): TyovuorootController->renderFile()
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(782): TyovuorootController->renderPartial()
+#6 C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php(255): TyovuorootController->render()
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(49): TyovuorootController->actionIndex()
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams()
+#9 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): TyovuorootController->runAction()
+#10 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#11 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CAccessControlFilter->filter()
+#12 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): TyovuorootController->filterAccessControl()
+#13 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#14 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#15 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): TyovuorootController->runActionWithFilters()
+#16 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): TyovuorootController->run()
+#17 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#18 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#19 C:\xampp\htdocs\etuntifw\index.php(13): CWebApplication->run()
+REQUEST_URI=/index.php/tyovuoroot/index
+in C:\xampp\htdocs\etuntifw\protected\views\tyovuoroot\viikko.php (13)
+in C:\xampp\htdocs\etuntifw\protected\views\tyovuoroot\index.php (166)
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (255)
+2015/08/26 10:45:05 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "id".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (174)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 10:45:05 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "time".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (174)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 10:50:04 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "id".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (223)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 10:50:04 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "time".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (223)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 10:51:49 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "id".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (228)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 10:51:49 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "time".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (228)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 10:58:09 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "id".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (228)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 10:58:09 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "time".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (228)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 10:59:55 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "id".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (228)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 10:59:55 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "time".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (228)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 11:02:12 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "id".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (228)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 11:02:12 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "time".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (228)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 11:03:35 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "id".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (228)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 11:03:35 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "time".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (228)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 11:04:49 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "id".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (228)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 11:04:49 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "time".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (228)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 11:04:59 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "id".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (228)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 11:04:59 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "time".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (228)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 11:05:11 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "id".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (228)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 11:05:11 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "time".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (228)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 11:19:27 [error] [exception.CException] exception 'CException' with message 'TyovuorootController ei löydä pyydettyä näkymää "//tyovuoroot/fromto".' in C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php:878
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\protected\views\tyovuoroot\index.php(182): CController->renderPartial('//tyovuoroot/fr...', Array)
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\CBaseController.php(126): require('C:\\xampp\\htdocs...')
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CBaseController.php(95): CBaseController->renderInternal('C:\\xampp\\htdocs...', NULL, true)
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(869): CBaseController->renderFile('C:\\xampp\\htdocs...', NULL, true)
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(782): CController->renderPartial('index', NULL, true)
+#5 C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php(266): CController->render('index')
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(49): TyovuorootController->actionIndex()
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#9 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#10 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#11 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#12 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#13 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#14 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#15 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('index')
+#16 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('tyovuoroot/inde...')
+#17 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#18 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#19 {main}
+REQUEST_URI=/index.php/tyovuoroot/index
+HTTP_REFERER=http://etuntifw.local/index.php/valikkoot/update?id=2
+---
+2015/08/26 11:20:49 [error] [php] Undefined variable: viikko (C:\xampp\htdocs\etuntifw\protected\views\tyovuoroot\fromto.php:11)
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(869): TyovuorootController->renderFile()
+#1 C:\xampp\htdocs\etuntifw\protected\views\tyovuoroot\index.php(182): TyovuorootController->renderPartial()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CBaseController.php(126): require()
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\CBaseController.php(95): TyovuorootController->renderInternal()
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(869): TyovuorootController->renderFile()
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(782): TyovuorootController->renderPartial()
+#6 C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php(281): TyovuorootController->render()
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(49): TyovuorootController->actionIndex()
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams()
+#9 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): TyovuorootController->runAction()
+#10 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#11 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CAccessControlFilter->filter()
+#12 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): TyovuorootController->filterAccessControl()
+#13 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#14 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#15 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): TyovuorootController->runActionWithFilters()
+#16 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): TyovuorootController->run()
+#17 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#18 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#19 C:\xampp\htdocs\etuntifw\index.php(13): CWebApplication->run()
+REQUEST_URI=/index.php/tyovuoroot/index
+in C:\xampp\htdocs\etuntifw\protected\views\tyovuoroot\fromto.php (11)
+in C:\xampp\htdocs\etuntifw\protected\views\tyovuoroot\index.php (182)
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (281)
+2015/08/26 11:27:22 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "id".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (241)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 11:27:22 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "time".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (241)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 11:28:24 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "id".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (241)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 11:28:24 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "time".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (241)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 11:32:35 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "id".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (241)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 11:32:35 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "time".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (241)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 11:33:29 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "id".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (241)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 11:33:29 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "time".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (241)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 11:33:38 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "id".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (241)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 11:33:38 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "time".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (241)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 11:35:31 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "id".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (241)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 11:35:31 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "time".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (241)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 11:36:08 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "id".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (241)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 11:36:08 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "time".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (241)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 11:37:50 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "id".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (241)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 11:37:50 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "time".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (241)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 11:38:37 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "id".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (241)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 11:38:37 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "time".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (241)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 11:39:09 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "id".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (241)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 11:39:09 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "time".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (241)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 11:40:41 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "id".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (192)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 11:40:41 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "time".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (192)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 11:40:54 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "id".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (241)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 11:40:54 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "time".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (241)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 11:42:45 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "id".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (241)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 11:42:45 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "time".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (241)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 11:46:40 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "id".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (241)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 11:46:40 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "time".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (241)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 11:47:28 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "id".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (241)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 11:47:28 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "time".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (241)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 11:49:51 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "id".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (192)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 11:49:51 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "time".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (192)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 11:51:32 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "id".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (241)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 11:51:32 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "time".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (241)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 11:52:47 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "id".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (241)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 11:52:47 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "time".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (241)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 11:53:30 [error] [exception.CException] exception 'CException' with message 'Ominaisuutta "Tyontekijat.pvm" ei ole määritelty.' in C:\xampp\htdocs\etuntifw\YII\framework\base\CComponent.php:130
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\db\ar\CActiveRecord.php(143): CComponent->__get('pvm')
+#1 C:\xampp\htdocs\etuntifw\protected\views\tyovuoroot\index.php(178): CActiveRecord->__get('pvm')
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CBaseController.php(126): require('C:\\xampp\\htdocs...')
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\CBaseController.php(95): CBaseController->renderInternal('C:\\xampp\\htdocs...', NULL, true)
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(869): CBaseController->renderFile('C:\\xampp\\htdocs...', NULL, true)
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(782): CController->renderPartial('index', NULL, true)
+#6 C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php(279): CController->render('index')
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(49): TyovuorootController->actionIndex()
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#9 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#10 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#11 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#12 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#13 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#14 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#15 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#16 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('index')
+#17 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('tyovuoroot/inde...')
+#18 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#19 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#20 {main}
+REQUEST_URI=/index.php/tyovuoroot/index
+---
+2015/08/26 11:56:20 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "id".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (241)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/26 11:56:20 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "time".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (241)
+in C:\xampp\htdocs\etuntifw\index.php (13)
