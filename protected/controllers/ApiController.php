@@ -102,7 +102,7 @@ public function actionImei($dom)
     switch($_GET['model'])
     {
         // Get an instance of the respective model
-        case 'posts':
+        case 'mob':
 
             $ttekija = Tyontekijat::model()->find(" imei = '".$_POST['imei']."' ");
             //$mob = Mob::model()->find(" imei = '".$_POST['imei']."' and loppui = '' ");
@@ -195,7 +195,7 @@ public function actionImei()
 
 public function actionCreate()
 {
-/*
+
     switch($_GET['model'])
     {
         // Get an instance of the respective model
@@ -236,7 +236,7 @@ public function actionCreate()
         $msg .= "</ul>";
         $this->_sendResponse(500, $msg );
     }
-*/
+
 }
 
 

@@ -659,3 +659,16 @@ Stack trace:
 REQUEST_URI=/index.php/api/posts/imei?id=sivex
 HTTP_REFERER=http://etuntifw.local/mob2.html
 ---
+2015/08/26 13:36:01 [error] [php] Undefined variable: model (C:\xampp\htdocs\etuntifw\protected\controllers\ApiController.php:123)
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(47): CInlineAction->runWithParamsInternal()
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(286): ApiController->runAction()
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): ApiController->runActionWithFilters()
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): ApiController->run()
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#6 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#7 C:\xampp\htdocs\etuntifw\index.php(13): CWebApplication->run()
+REQUEST_URI=/index.php/api/mob/imei?dom=sivex
+in C:\xampp\htdocs\etuntifw\protected\controllers\ApiController.php (123)
+in C:\xampp\htdocs\etuntifw\index.php (13)
