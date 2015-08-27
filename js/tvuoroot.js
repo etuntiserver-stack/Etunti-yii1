@@ -1,6 +1,7 @@
 $(document).ready(function(){
 
 
+
 $(".tv_edit").click(function(){
 
 	var thisVal = $(this).attr("id").split("_");

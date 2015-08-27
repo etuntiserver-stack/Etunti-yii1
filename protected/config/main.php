@@ -40,7 +40,7 @@ Yii::setPathOfAlias('chartjs', dirname(__FILE__).'/../extensions/yii-chartjs');
   if( $_SERVER['REMOTE_ADDR'] == '::1' or $_SERVER['REMOTE_ADDR'] == '127.0.0.1' )
   {
   $db = 'etuntifw';
-  $db_host = 'localhost';
+  $db_host = '127.0.0.1';
   $etuntifw_user = 'root';
   $etuntifw_pass = '';
 

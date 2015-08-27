@@ -1,19 +1,20 @@
 <?php
 
 /**
- * This is the model class for table "domainit".
+ * This is the model class for table "tasot".
  *
- * The followings are the available columns in table 'domainit':
+ * The followings are the available columns in table 'tasot':
  * @property integer $id
- * @property string $domain
- * @property integer $paketti
+ * @property integer $taso
+ * @property string $nimetys
+ * @property string $kuvaus
  */
-class Domainit extends CActiveRecord
+class Tasot extends CActiveRecord
 {
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
-	 * @return Domainit the static model class
+	 * @return Tasot the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{
@@ -25,7 +26,7 @@ class Domainit extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'domainit';
+		return 'tasot';
 	}
 
 	/**
@@ -36,11 +37,12 @@ class Domainit extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('domain', 'required'),
-			array('domain, paketti, yritys, pakettin_nimetus', 'length', 'max'=>100),
+			array('taso, nimetys, kuvaus', 'required'),
+			array('taso', 'numerical', 'integerOnly'=>true),
+			array('nimetys', 'length', 'max'=>100),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, domain, paketti, yritys, pakettin_nimetus', 'safe', 'on'=>'search'),
+			array('id, taso, nimetys, kuvaus', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -62,10 +64,9 @@ class Domainit extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'domain' => 'Domain',
-			'paketti' => 'Tasot',
-			'yritys' => 'Yritys',
-			'pakettin_nimetus' => 'Pakettin nimetus',
+			'taso' => 'Taso',
+			'nimetys' => 'Nimetys',
+			'kuvaus' => 'Kuvaus',
 		);
 	}
 
@@ -81,10 +82,9 @@ class Domainit extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('id',$this->id);
-		$criteria->compare('yritys',$this->yritys);
-		$criteria->compare('pakettin_nimetus',$this->pakettin_nimetus);
-		$criteria->compare('domain',$this->domain,true);
-		$criteria->compare('paketti',$this->paketti);
+		$criteria->compare('taso',$this->taso);
+		$criteria->compare('nimetys',$this->nimetys,true);
+		$criteria->compare('kuvaus',$this->kuvaus,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

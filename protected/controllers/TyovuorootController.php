@@ -43,7 +43,9 @@ class TyovuorootController extends Controller
 
 	public function isEtuntiAdmin() {
 
-		if(isset(Yii::app()->user->adminID) and Yii::app()->user->adminPaketti == '2')
+	 $tas = explode(",",Yii::app()->user->adminPaketti);
+
+		if(isset(Yii::app()->user->adminID) and in_array('2',$tas))
 		{
 		$m = Administrators::model()->findbypk(Yii::app()->user->adminID);
 	        if($m->id == Yii::app()->user->adminID)
