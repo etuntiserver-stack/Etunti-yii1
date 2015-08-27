@@ -97,19 +97,6 @@ Yii::app()->clientScript->registerPackage('bootstrapCSS');
           </ul>
         </li>
 
-	<?php
-	 $tas = explode(",",Yii::app()->user->adminPaketti);
-	 if(in_array('2',$tas)) : 
-	?>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?php echo Yii::t('main', 'Työvuoroot'); ?> <span class="caret"></span></a>
-          <ul class="dropdown-menu">
-        	<li><?php echo CHtml::link(Yii::t('main', 'Työvuoroon taulukko'),array('/tyovuoroot/index')); ?></li>
-        	<li><?php echo CHtml::link(Yii::t('main', 'Työvuoroon hallinta'),array('/tyovuoroot/admin')); ?></li>
-          </ul>
-        </li>
-	<?php endif; ?>
-
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?php echo Yii::t('main', 'Toteuma'); ?> <span class="caret"></span></a>
           <ul class="dropdown-menu">
@@ -141,6 +128,19 @@ Yii::app()->clientScript->registerPackage('bootstrapCSS');
           </ul>
         </li>
 
+	<?php
+	 $tas = explode(",",Yii::app()->user->adminPaketti);
+	 if(in_array('2',$tas)) : 
+	?>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?php echo Yii::t('main', 'TASO 2'); ?> <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+        	<li><?php echo CHtml::link(Yii::t('main', 'Työvuoroon taulukko'),array('/tyovuoroot/index')); ?></li>
+        	<li><?php echo CHtml::link(Yii::t('main', 'Työvuoroon hallinta'),array('/tyovuoroot/admin')); ?></li>
+        	<li><?php echo CHtml::link(Yii::t('main', 'Vuosilomat taulukko'),array('/vuosilomat/index')); ?></li>
+          </ul>
+        </li>
+	<?php endif; ?>
 
 	<?php endif; ?>
 

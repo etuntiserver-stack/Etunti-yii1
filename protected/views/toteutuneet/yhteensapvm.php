@@ -42,8 +42,11 @@
 	echo Yii::t('main', 'Tot. ').sprint($tot).'<br>';
 	}
 
+	if($getSun > 0)
+	  $ero = $getSun-$getTot;
+	else
+	  $ero = $getTot-$getSun;
 
-	$ero = $getSun-$getTot;
 	echo Yii::t('main', 'Ero aika: ').sprint($ero); 
 	
 

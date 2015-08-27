@@ -33,7 +33,7 @@
 	'enableAjaxValidation'=>false,
 )); ?>
 
-		<?php echo $form->textField($model,'id'); ?>
+		<?php echo $form->hiddenField($model,'id'); ?>
 		<?php echo $form->hiddenField($model,'kid'); ?>
 		<?php echo $form->hiddenField($model,'tid'); ?>
 		<?php echo $form->hiddenField($model,'kohdenID',array('id'=>'kohdenID')); ?>

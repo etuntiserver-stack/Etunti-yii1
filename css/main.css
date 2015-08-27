@@ -11,6 +11,10 @@ body
    background-color: #E8E8E8;
 }
 
+.link{
+	cursor: pointer;
+}
+
 a.prev, a.next {
     background: url(../images/miscellaneous_sprite.png) no-repeat transparent;
     width: 45px;

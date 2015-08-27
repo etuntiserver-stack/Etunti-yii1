@@ -7,7 +7,10 @@ $did = date("Ymd",strtotime($data->aloitan));
 	<td><?php echo CHtml::encode(date("d.m.Y",strtotime($data->aloitan))); ?></td>
 
 	<!-- adminPaketti -->
-	<?php if(Yii::app()->user->adminPaketti == '2') : ?>
+	<?php
+	 $tas = explode(",",Yii::app()->user->adminPaketti);
+	 if(in_array('2',$tas)) : 
+	?>
 	<td><?php $this->renderPartial('//tyovuoroot/did',array('pvm'=>$data->aloitan,'tid'=>$data->tid,'from'=>'mobiili')); ?></td>
 	<?php endif; ?>
 	<!-- adminPaketti -->
