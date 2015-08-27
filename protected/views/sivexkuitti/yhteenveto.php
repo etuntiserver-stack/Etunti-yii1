@@ -15,20 +15,20 @@ $this->breadcrumbs=array(
 <div class="row">
   <form action="#" id="yhtveto" method="POST">
   <div class="col-md-12">
+   <a href="#" id="selAll" class="btn btn-default glyphicon glyphicon-check"></a>
    <?php
     $model=new Sivexkuitti;
-    $list = CHtml::listData(Sivexkuitti::model()->findAll(array('group' => 'tid','order' => 'tekijan_nimi')), 'tekijan_nimi', 'tekijan_nimi');
+    $list = CHtml::listData(Sivexkuitti::model()->findAll(array('group' => 'tid','order' => 'tekijan_nimi')), 'tid', 'tekijan_nimi');
 
-    echo '<select name="etsi_tekijan_nimi" class="btn btn-default">';
-    if(Yii::app()->session['etsi_tekijan_nimi'])
-       echo '<option value="'.Yii::app()->session['etsi_tekijan_nimi'].'">'.Yii::app()->session['etsi_tekijan_nimi'].'</option>';
-    else
-       echo '<option value="kaikki">'.Yii::t('main', 'Kaikki').'</option>';
-
-       echo '<option value="kaikki">Kaikki</option>';
-
-    foreach($list as $val){
-    echo '<option value="'.$val.'">'.$val.'</option>';
+    echo '<select name="Tekija[]" class="selectpicker" id="tyontekijat" multiple class="btn btn-default" title="Työntekijät">';
+    foreach($list as $key=>$val){
+     if(!empty($val))
+     {
+       if(isset(Yii::app()->session['Tekija']) and in_array($key,Yii::app()->session['Tekija']))
+       	 echo '<option value="'.$key.'" selected>'.$val.'</option>';
+       else
+       	 echo '<option value="'.$key.'">'.$val.'</option>';
+     }
     }
     echo '</select>';
    ?>
@@ -82,7 +82,7 @@ $this->breadcrumbs=array(
 
 	<div id="showres" class="modal fade" tabindex="-1" role="dialog"></div>
 
-	<?php Yii::app()->clientScript->registerPackage('tyovuoroot'); ?>
+
 
 
 <script type="text/javascript">
@@ -91,8 +91,15 @@ $(document).ready(function(){
 
 $('.selectpicker').selectpicker({
       style: 'btn-default',
-      size: 4
-  });
+      //size: 4
+});
+
+$('#selAll').click(function(){
+   $('#tyontekijat').selectpicker('selectAll');
+});
+
+
+
 
 $("#yhtveto").on('submit',function(e){
 

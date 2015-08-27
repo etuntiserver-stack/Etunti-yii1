@@ -1,6 +1,6 @@
 <?php
 
-class DomainitController extends Controller
+class TasotController extends Controller
 {
 	/**
 	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
@@ -29,15 +29,15 @@ class DomainitController extends Controller
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
 				'actions'=>array('index','view'),
-				'expression' => "Yii::app()->User->isAdmin()",
+				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
 				'actions'=>array('create','update'),
-				'expression' => "Yii::app()->User->isAdmin()",
+				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
 				'actions'=>array('admin','delete'),
-				'expression' => "Yii::app()->User->isAdmin()",
+				'users'=>array('admin'),
 			),
 			array('deny',  // deny all users
 				'users'=>array('*'),
@@ -62,14 +62,14 @@ class DomainitController extends Controller
 	 */
 	public function actionCreate()
 	{
-		$model=new Domainit;
+		$model=new Tasot;
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['Domainit']))
+		if(isset($_POST['Tasot']))
 		{
-			$model->attributes=$_POST['Domainit'];
+			$model->attributes=$_POST['Tasot'];
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
 		}
@@ -91,10 +91,9 @@ class DomainitController extends Controller
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['Domainit']))
+		if(isset($_POST['Tasot']))
 		{
-			$model->attributes=$_POST['Domainit'];
-			if(isset($_POST['tasot'])) $model->paketti = implode(",",$_POST['tasot']);
+			$model->attributes=$_POST['Tasot'];
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
 		}
@@ -123,7 +122,7 @@ class DomainitController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$dataProvider=new CActiveDataProvider('Domainit');
+		$dataProvider=new CActiveDataProvider('Tasot');
 		$this->render('index',array(
 			'dataProvider'=>$dataProvider,
 		));
@@ -134,10 +133,10 @@ class DomainitController extends Controller
 	 */
 	public function actionAdmin()
 	{
-		$model=new Domainit('search');
+		$model=new Tasot('search');
 		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['Domainit']))
-			$model->attributes=$_GET['Domainit'];
+		if(isset($_GET['Tasot']))
+			$model->attributes=$_GET['Tasot'];
 
 		$this->render('admin',array(
 			'model'=>$model,
@@ -148,12 +147,12 @@ class DomainitController extends Controller
 	 * Returns the data model based on the primary key given in the GET variable.
 	 * If the data model is not found, an HTTP exception will be raised.
 	 * @param integer $id the ID of the model to be loaded
-	 * @return Domainit the loaded model
+	 * @return Tasot the loaded model
 	 * @throws CHttpException
 	 */
 	public function loadModel($id)
 	{
-		$model=Domainit::model()->findByPk($id);
+		$model=Tasot::model()->findByPk($id);
 		if($model===null)
 			throw new CHttpException(404,'The requested page does not exist.');
 		return $model;
@@ -161,11 +160,11 @@ class DomainitController extends Controller
 
 	/**
 	 * Performs the AJAX validation.
-	 * @param Domainit $model the model to be validated
+	 * @param Tasot $model the model to be validated
 	 */
 	protected function performAjaxValidation($model)
 	{
-		if(isset($_POST['ajax']) && $_POST['ajax']==='domainit-form')
+		if(isset($_POST['ajax']) && $_POST['ajax']==='tasot-form')
 		{
 			echo CActiveForm::validate($model);
 			Yii::app()->end();

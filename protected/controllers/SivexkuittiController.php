@@ -436,12 +436,9 @@ class SivexkuittiController extends Controller
 	}
 
 
-
-		if(Yii::app()->request->getPost('etsi_tekijan_nimi') == 'kaikki')
-		unset(Yii::app()->session['etsi_tekijan_nimi']);
-		if(Yii::app()->request->getPost('etsi_tekijan_nimi') and Yii::app()->request->getPost('etsi_tekijan_nimi') != 'kaikki'){
-		Yii::app()->session['etsi_tekijan_nimi'] = Yii::app()->request->getPost('etsi_tekijan_nimi');
-		}
+		//unset(Yii::app()->session['Tekija']);
+		if(Yii::app()->request->getPost('Tekija'))
+		Yii::app()->session['Tekija'] = Yii::app()->request->getPost('Tekija');
 
 		if(isset($_POST['etsi_tekijan_nimi']))
 		{
@@ -480,8 +477,14 @@ class SivexkuittiController extends Controller
         	$criteria->order = "SUBSTR(LTRIM(tekijan_nimi), LOCATE(' ',LTRIM(tekijan_nimi)))";
         	$criteria->group = 'tid';
 
-		if(Yii::app()->session['etsi_tekijan_nimi'])
-	        $criteria->addCondition ("tekijan_nimi = '".Yii::app()->session['etsi_tekijan_nimi']."'");
+		if(Yii::app()->session['Tekija']){
+		  if(count(Yii::app()->session['Tekija']) > 1)
+		    $ids = implode(",",Yii::app()->session['Tekija']);
+		  else
+		    $ids = Yii::app()->session['Tekija'];
+
+	        $criteria->addCondition ('tid IN ('.$ids.') ');
+		}
 
 		if(Yii::app()->session['Lounastauko'])
 	        $criteria->addCondition (" status != '10' ");

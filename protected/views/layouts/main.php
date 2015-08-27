@@ -73,6 +73,7 @@ Yii::app()->clientScript->registerPackage('bootstrapCSS');
 	<?php if(!isset(Yii::app()->user->adminID) and Yii::app()->User->isAdmin()) : ?>
         <li><?php echo CHtml::link(Yii::t('main', 'Profiili'),array('/user/profile')); ?></li>
         <li><?php echo CHtml::link(Yii::t('main', 'Domainit'),array('/domainit/admin')); ?></li>
+        <li><?php echo CHtml::link(Yii::t('main', 'Tasot'),array('/tasot/admin')); ?></li>
 	<?php endif; ?>
 
 	<?php /* if(isset(Yii::app()->user->adminID)) : ?>
@@ -96,7 +97,10 @@ Yii::app()->clientScript->registerPackage('bootstrapCSS');
           </ul>
         </li>
 
-	<?php if(Yii::app()->user->adminPaketti == '2') : ?>
+	<?php
+	 $tas = explode(",",Yii::app()->user->adminPaketti);
+	 if(in_array('2',$tas)) : 
+	?>
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?php echo Yii::t('main', 'Työvuoroot'); ?> <span class="caret"></span></a>
           <ul class="dropdown-menu">
@@ -148,7 +152,7 @@ Yii::app()->clientScript->registerPackage('bootstrapCSS');
 	    <?php 
 	    if(isset(Yii::app()->user->domain)) {
      	    $d = Domainit::model()->find("domain='".Yii::app()->user->domain."'");
-            echo '<li><a href="#">'.$d->yritys.': '.$d->pakettin_nimetus.'</a></li>';
+            echo '<li><a href="#">'.$d->yritys.', '.Yii::t('main', 'Tasot').': '.$d->paketti.'</a></li>';
 	    } 
 	    ?>
 

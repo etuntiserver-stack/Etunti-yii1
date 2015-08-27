@@ -23,7 +23,26 @@
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'paketti'); ?>
-		<?php echo $form->textField($model,'paketti',array('class'=>'form-control')); ?>
+		<?php 
+		$a = Tasot::model()->findAll();
+		$check = explode(",",$model->paketti);
+
+		echo '<select name="tasot[]" class="selectpicker form-control" multiple title="Valitse">';
+		  foreach($a as $val){
+		    	$on = false;
+		   foreach($check as $c)
+		   {
+		     if(trim($c) == trim($val->taso))
+		     {
+		    echo '<option value="'.$val->taso.'" selected>'.$val->nimetys.'</option>';
+		    	$on = true;
+		     }
+		   }
+		    if($on == false)
+		    echo '<option value="'.$val->taso.'">'.$val->nimetys.'</option>';
+		  }
+		echo '</select>';
+		?>
 		<?php echo $form->error($model,'paketti'); ?>
 	</div>
 
@@ -33,11 +52,6 @@
 		<?php echo $form->error($model,'yritys'); ?>
 	</div>
 
-	<div class="row">
-		<?php echo $form->labelEx($model,'pakettin_nimetus'); ?>
-		<?php echo $form->textField($model,'pakettin_nimetus',array('class'=>'form-control')); ?>
-		<?php echo $form->error($model,'pakettin_nimetus'); ?>
-	</div>
 
 	<div class="row buttons">
 		<?php echo CHtml::submitButton($model->isNewRecord ? 'Luo' : 'Tallenna',array('class'=>'btn btn-primary')); ?>

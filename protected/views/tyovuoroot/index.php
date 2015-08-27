@@ -20,18 +20,18 @@
    }
 
 
-		if(Yii::app()->request->getPost('tvuoroTekija'))
-		Yii::app()->session['tvuoroTekija'] = Yii::app()->request->getPost('tvuoroTekija');
+		if(Yii::app()->request->getPost('Tekija'))
+		Yii::app()->session['Tekija'] = Yii::app()->request->getPost('Tekija');
 
        		$criteria = new CDbCriteria();
         	$criteria->select = "id,tekijan_nimi";
         	$criteria->condition = " aktiivinen = '1' ";
 
-		if(Yii::app()->session['tvuoroTekija']){
-		  if(count(Yii::app()->session['tvuoroTekija']) > 1)
-		    $ids = implode(",",Yii::app()->session['tvuoroTekija']);
+		if(Yii::app()->session['Tekija']){
+		  if(count(Yii::app()->session['Tekija']) > 1)
+		    $ids = implode(",",Yii::app()->session['Tekija']);
 		  else
-		    $ids = Yii::app()->session['tvuoroTekija'];
+		    $ids = Yii::app()->session['Tekija'];
 
 	        $criteria->addCondition ('id IN ('.$ids.') ');
 		}
@@ -71,8 +71,10 @@ function dateDiff($start, $end) {
 //echo Yii::app()->session['copymove'];
 
 ?>
-
 <style>
+body{
+    overflow-y: hidden;
+}
 td .latikkoAsetukset{
 	width: 220px;
 	white-space: nowrap;
@@ -98,17 +100,18 @@ td .tp{
    <div class="pull-right"><i id="trash"></i> <i id="clear"></i></div>
 
 <div class="row">
+  
   <form action="#" id="yhtveto" method="POST">
-
    <?php
     $model=new Tyontekijat;
     $list = CHtml::listData(Tyontekijat::model()->findAll("aktiivinen = '1'",array('order' => 'tekijan_nimi')), 'id', 'tekijan_nimi');
-
-    echo '<select name="tvuoroTekija[]" class="selectpicker" multiple title="Työntekijät">';
-    //if(Yii::app()->session['tvuoroTekija'])
-
+    echo '<a href="#" id="selAll" class="btn btn-default glyphicon glyphicon-check"></a> ';
+    echo '<select name="Tekija[]" id="tyontekijat" class="selectpicker" multiple class="btn btn-default" title="Työntekijät">';
     foreach($list as $key=>$val){
-      echo '<option value="'.$key.'">'.$val.'</option>';
+       if(isset(Yii::app()->session['Tekija']) and in_array($key,Yii::app()->session['Tekija']))
+       	 echo '<option value="'.$key.'" selected>'.$val.'</option>';
+       else
+       	 echo '<option value="'.$key.'">'.$val.'</option>';
     }
     echo '</select>';
    ?>
@@ -206,6 +209,16 @@ td .tp{
 
 <script type="text/javascript">
 $(document).ready(function(){
+
+$('.selectpicker').selectpicker({
+      style: 'btn-default',
+      //size: 4
+});
+
+$('#selAll').click(function(){
+   $('#tyontekijat').selectpicker('selectAll');
+});
+
 
 $(function () {
 
