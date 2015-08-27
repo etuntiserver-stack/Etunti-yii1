@@ -481,7 +481,7 @@ class SivexkuittiController extends Controller
 		  if(count(Yii::app()->session['Tekija']) > 1)
 		    $ids = implode(",",Yii::app()->session['Tekija']);
 		  else
-		    $ids = Yii::app()->session['Tekija'];
+		    $ids = Yii::app()->session['Tekija'][0];
 
 	        $criteria->addCondition ('tid IN ('.$ids.') ');
 		}

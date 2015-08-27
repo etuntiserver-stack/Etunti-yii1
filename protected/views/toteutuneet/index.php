@@ -62,7 +62,10 @@ $this->breadcrumbs=array(
   <thead>
   <tr>
   <th><?php echo Yii::t('main', 'Päivämäärä'); ?></th>
-  <?php if(Yii::app()->user->adminPaketti == '2') : ?>
+  <?php
+	 $tas = explode(",",Yii::app()->user->adminPaketti);
+	 if(in_array('2',$tas)) : 
+  ?>
   <th><?php echo Yii::t('main', 'Suunnitellut'); ?></th>
   <?php endif; ?>
   <th><?php echo Yii::t('main', 'Luettu'); ?></th>
