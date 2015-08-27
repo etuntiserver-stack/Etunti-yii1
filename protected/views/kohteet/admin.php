@@ -51,6 +51,8 @@ $('.search-form form').submit(function(){
 		'kaupunki',
 		'email',
 		'puh_nro',
+		'tietoja',
+		'avain',
 		/*
 		'katuosoite',
 
@@ -61,11 +63,11 @@ $('.search-form form').submit(function(){
 		'hinnoittelu',
 		'muut',
 		'toimenpiteet',
-		'tietoja',
+
 		'tyoryhma',
 		'ryhma',
 		'aktiivinen',
-		'avain',
+
 		'kenella_on_avain',
 
 		'siivous',
