@@ -163,13 +163,17 @@ td .tp{
 	    if(date('N', strtotime($date)) == 7)
 	    {
   	    echo '<tr>';
-  		echo '<td style="background: #669999;color: white" class="viikkoRivi fixed-column"><b>'.Yii::t('main', 'Viikko').' '.date("W",strtotime($date)).'</b></td>';
+  		echo '<td style="background: #669999;color: white" class="text-center viikkoRivi fixed-column"><b>'.Yii::t('main', 'Viikko').' '.date("W",strtotime($date)).'</b></td>';
 		foreach($tt as $t){
-		  echo '<td style="background: #669999;color: white" class="viikkoRivi" id="vk_'.date("W",strtotime($date)).'_'.$t->id.'">
-		  <center>';
+		 $vktyoaika = '--:--';
+		 $ts = Tyosuhdet::model()->find(" tid = '".$t->id."' ");
+		 if(isset($ts->id) and !empty($ts['vktyoaika']))
+		  $vktyoaika = $ts['vktyoaika'];
+
+		  echo '<td style="background: #669999;color: white" class="viikkoRivi text-center" id="vk_'.date("W",strtotime($date)).'_'.$t->id.'">';
 		  $this->renderPartial('//tyovuoroot/viikko',array('tid'=>$t->id,'viikko'=>date("W",strtotime($date))));
-		  
-		  echo '</center></td>';
+		  echo '('.$vktyoaika.')';
+		  echo '</td>';
 		}
 	    echo '</tr>';
 	    }
@@ -180,12 +184,11 @@ td .tp{
      <tfoot>
         <?php
   	    echo '<tr>';
-  		echo '<td style="background: #669999;color: white" class="viikkoRivi fixed-column"></td>';
+  		echo '<td style="background: #669999;color: white" class="text-center viikkoRivi fixed-column"></td>';
 		foreach($tt as $t){
-		  echo '<td style="background: #669999;color: white" class="viikkoRivi fromto_'.$t->id.'" />
-		  <center>';
+		  echo '<td style="background: #669999;color: white" class="text-center viikkoRivi fromto_'.$t->id.'" />';
 		  $this->renderPartial('//tyovuoroot/fromto',array('tid'=>$t->id));
-		  echo '</center></td>';
+		  echo '</td>';
 		}
 	    echo '</tr>';
         ?>
