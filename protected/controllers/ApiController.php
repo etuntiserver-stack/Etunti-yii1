@@ -105,8 +105,12 @@ public function actionImei($dom)
         case 'mob':
 
             $ttekija = Tyontekijat::model()->find(" imei = '".$_POST['imei']."' ");
-            //$mob = Mob::model()->find(" imei = '".$_POST['imei']."' and loppui = '' ");
+            $mob = Mob::model()->find(" imei = '".$_POST['imei']."' and loppui = '' ");
 
+	    if(isset($mob->id)){
+              $this->_sendResponse(200, "Kohde: ".$mob->kohde_kannasta." on avattu");
+	      exit;
+	    }
 	    if(isset($ttekija->id)){
               $model = new Mob;   
 	    } else {
