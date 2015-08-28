@@ -5,3 +5,8 @@ protected/runtime/application.log
 protected/data/*.db
 themes/classic/views/
 protected/config/*
+.DS_Store
+etuntiAPP/.DS_Store
+etuntiAPP/etunti.zip
+etuntiAPP/etunti/.DS_Store
+etuntiAPP/etunti/www/.DS_Store
