@@ -156,6 +156,12 @@ function row(tilanne,st,gps){
            success: function(data){
         	console.log(data);
 		$("#result").val(data);
+		if(data == '1')
+		{
+		  $('.tyo').bootstrapSwitch('state', true, true);
+		  $('.matka').bootstrapSwitch('toggleDisabled');
+		  $('.lounas').bootstrapSwitch('toggleDisabled');
+		}	
     	},
     		error:function (xhr, ajaxOptions, thrownError){
         	console.log(xhr.responseText);

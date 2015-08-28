@@ -54,6 +54,13 @@ public function actionImei($dom)
 
 	    if(isset($_POST['check'])){
             	$mobCheck = Mob::model()->find(" imei = '".$_POST['imei']."' order by id DESC ");
+
+		  if($mobCheck->status == 2 and $mobCheck->loppui == '')
+		   $mobCheck->status = 2.1;
+
+		  if($mobCheck->status == 10 and $mobCheck->loppui == '')
+		   $mobCheck->status = 10.1;
+
                 $this->_sendResponse(200, $mobCheck->status);
 	     	exit;
 	    }
