@@ -113,6 +113,7 @@ Yii::app()->clientScript->registerPackage('bootstrapCSS');
           <ul class="dropdown-menu">
         <li><?php echo CHtml::link(Yii::t('main', 'Järjestelmänvalvojat'),array('/administrators/admin')); ?></li>
         	<li><?php echo CHtml::link(Yii::t('main', 'Valikkoot'),array('/valikkoot/admin')); ?></li>
+        	<li><?php echo CHtml::link(Yii::t('main', 'Mobiili emulattori'),array('/site/mobemu')); ?></li>
           </ul>
         </li>
 
