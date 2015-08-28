@@ -156,12 +156,39 @@ function row(tilanne,st,gps){
            success: function(data){
         	//console.log(data);
 		$("#result").val(data);
+
+
+		if((data == '3') || (data == '2') || (data == '10'))
+		{
+		  $('.tyo').bootstrapSwitch('toggleEnabled');
+		  $('.matka').bootstrapSwitch('toggleEnabled');
+		  $('.lounas').bootstrapSwitch('toggleEnabled');
+		return false;
+		} 
+
 		if(data == '1')
 		{
 		  $('.tyo').bootstrapSwitch('state', true, true);
 		  $('.matka').bootstrapSwitch('toggleDisabled');
 		  $('.lounas').bootstrapSwitch('toggleDisabled');
-		}	
+		return false;
+		}
+		if(data == '2.1')
+		{
+		  $('.tyo').bootstrapSwitch('toggleDisabled');
+		  $('.matka').bootstrapSwitch('state', true, true);
+		  $('.lounas').bootstrapSwitch('toggleDisabled');
+		return false;
+		}
+		if(data == '10.1')
+		{
+		  $('.tyo').bootstrapSwitch('toggleDisabled');
+		  $('.matka').bootstrapSwitch('toggleDisabled');
+		  $('.lounas').bootstrapSwitch('state', true, true);
+		return false;
+		}
+
+		
     	},
     		error:function (xhr, ajaxOptions, thrownError){
         	//console.log(xhr.responseText);
