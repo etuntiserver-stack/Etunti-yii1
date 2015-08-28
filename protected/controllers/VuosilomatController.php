@@ -88,7 +88,7 @@ class VuosilomatController extends Controller
 		}
 
 	   } else {
-		Tyovuoroot::model()->deleteAll(" tid = '".$_POST['Vuosilomat']['tid']."' and pvm='".date("d.m.Y",strtotime($_POST['Vuosilomat']['pvm']))."' and tyoajanlaatu like '%".$lat."%' ");
+		Tyovuoroot::model()->deleteAll(" tid = '".$_POST['Vuosilomat']['tid']."' and pvm='".date("d.m.Y",strtotime($_POST['Vuosilomat']['pvm']))."' and tyoajanlaatu like '%".$txt."%' ");
 		$this->loadModel($id)->delete();
 				echo 'removed';
 	   }

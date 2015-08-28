@@ -1932,3 +1932,129 @@ in C:\xampp\htdocs\etuntifw\index.php (13)
 2015/08/27 13:35:26 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "time".
 in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (79)
 in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/28 08:05:43 [error] [exception.CHttpException.403] exception 'CHttpException' with message 'Tämä TASO ei kuuluu teille' in C:\xampp\htdocs\etuntifw\YII\framework\web\auth\CAccessControlFilter.php:179
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\auth\CAccessControlFilter.php(142): CAccessControlFilter->accessDenied(Object(WebUser), 'T\xC3\xA4m\xC3\xA4 TASO ei ...')
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(38): CAccessControlFilter->preFilter(Object(CFilterChain))
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('index')
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('tyovuoroot/inde...')
+#9 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#10 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#11 {main}
+REQUEST_URI=/index.php/tyovuoroot/index
+---
+2015/08/28 08:13:14 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The requested page does not exist.' in C:\xampp\htdocs\etuntifw\protected\controllers\VuosilomatController.php:236
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\protected\controllers\VuosilomatController.php(92): VuosilomatController->loadModel('removed')
+#1 [internal function]: VuosilomatController->actionVlupdater('removed', '', '(SP) Sopimus p\xC3...')
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CAction.php(108): ReflectionMethod->invokeArgs(Object(VuosilomatController), Array)
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(47): CAction->runWithParamsInternal(Object(VuosilomatController), Object(ReflectionMethod), Array)
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#9 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#10 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#11 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#12 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('vlupdater')
+#13 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('vuosilomat/vlup...')
+#14 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#15 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#16 {main}
+REQUEST_URI=/index.php/vuosilomat/vlupdater?id=removed&txt=&lat=(SP)%20Sopimus%20p%C3%A4%C3%A4ttynyt/red
+HTTP_REFERER=http://etuntifw.local/index.php/vuosilomat/index
+---
+2015/08/28 08:17:37 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The requested page does not exist.' in C:\xampp\htdocs\etuntifw\protected\controllers\VuosilomatController.php:236
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\protected\controllers\VuosilomatController.php(92): VuosilomatController->loadModel('removed')
+#1 [internal function]: VuosilomatController->actionVlupdater('removed', '', '(SP) Sopimus p\xC3...')
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CAction.php(108): ReflectionMethod->invokeArgs(Object(VuosilomatController), Array)
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(47): CAction->runWithParamsInternal(Object(VuosilomatController), Object(ReflectionMethod), Array)
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#9 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#10 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#11 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#12 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('vlupdater')
+#13 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('vuosilomat/vlup...')
+#14 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#15 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#16 {main}
+REQUEST_URI=/index.php/vuosilomat/vlupdater?id=removed&txt=&lat=(SP)%20Sopimus%20p%C3%A4%C3%A4ttynyt/red
+HTTP_REFERER=http://etuntifw.local/index.php/vuosilomat/index
+---
+2015/08/28 08:17:37 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The requested page does not exist.' in C:\xampp\htdocs\etuntifw\protected\controllers\VuosilomatController.php:236
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\protected\controllers\VuosilomatController.php(92): VuosilomatController->loadModel('removed')
+#1 [internal function]: VuosilomatController->actionVlupdater('removed', '', '(SP) Sopimus p\xC3...')
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CAction.php(108): ReflectionMethod->invokeArgs(Object(VuosilomatController), Array)
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(47): CAction->runWithParamsInternal(Object(VuosilomatController), Object(ReflectionMethod), Array)
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#9 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#10 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#11 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#12 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('vlupdater')
+#13 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('vuosilomat/vlup...')
+#14 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#15 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#16 {main}
+REQUEST_URI=/index.php/vuosilomat/vlupdater?id=removed&txt=&lat=(SP)%20Sopimus%20p%C3%A4%C3%A4ttynyt/red
+HTTP_REFERER=http://etuntifw.local/index.php/vuosilomat/index
+---
+2015/08/28 08:17:37 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The requested page does not exist.' in C:\xampp\htdocs\etuntifw\protected\controllers\VuosilomatController.php:236
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\protected\controllers\VuosilomatController.php(92): VuosilomatController->loadModel('removed')
+#1 [internal function]: VuosilomatController->actionVlupdater('removed', '', '(SP) Sopimus p\xC3...')
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CAction.php(108): ReflectionMethod->invokeArgs(Object(VuosilomatController), Array)
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(47): CAction->runWithParamsInternal(Object(VuosilomatController), Object(ReflectionMethod), Array)
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#9 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#10 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#11 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#12 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('vlupdater')
+#13 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('vuosilomat/vlup...')
+#14 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#15 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#16 {main}
+REQUEST_URI=/index.php/vuosilomat/vlupdater?id=removed&txt=&lat=(SP)%20Sopimus%20p%C3%A4%C3%A4ttynyt/red
+HTTP_REFERER=http://etuntifw.local/index.php/vuosilomat/index
+---
+2015/08/28 08:17:38 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The requested page does not exist.' in C:\xampp\htdocs\etuntifw\protected\controllers\VuosilomatController.php:236
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\protected\controllers\VuosilomatController.php(92): VuosilomatController->loadModel('removed')
+#1 [internal function]: VuosilomatController->actionVlupdater('removed', '', '(SP) Sopimus p\xC3...')
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CAction.php(108): ReflectionMethod->invokeArgs(Object(VuosilomatController), Array)
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(47): CAction->runWithParamsInternal(Object(VuosilomatController), Object(ReflectionMethod), Array)
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#9 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#10 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#11 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#12 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('vlupdater')
+#13 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('vuosilomat/vlup...')
+#14 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#15 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#16 {main}
+REQUEST_URI=/index.php/vuosilomat/vlupdater?id=removed&txt=&lat=(SP)%20Sopimus%20p%C3%A4%C3%A4ttynyt/red
+HTTP_REFERER=http://etuntifw.local/index.php/vuosilomat/index
+---

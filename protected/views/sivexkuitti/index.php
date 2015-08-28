@@ -72,7 +72,10 @@ $this->menu=array(
   <th><?php echo Yii::t('main', 'Päivä'); ?></th>
   <th><?php echo Yii::t('main', 'Työntekijä'); ?></th>
 
-  <?php if(Yii::app()->user->adminPaketti == '2') : ?>
+  <?php
+  $tas = explode(",",Yii::app()->user->adminPaketti);
+  if(in_array('2',$tas)) : 
+  ?>
   <th><?php echo Yii::t('main', 'Työvuoroot'); ?></th>
   <?php endif; ?>
 

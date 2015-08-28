@@ -59,7 +59,9 @@ else
 
 	// <-- adminPaketti
 	$obtrue = false;
-	if(Yii::app()->user->adminPaketti == '2' and isset($data->tid) and !empty($apvmForSu[$data->id]))
+	$tas = explode(",",Yii::app()->user->adminPaketti);
+
+	if(in_array('2',$tas) and isset($data->tid) and !empty($apvmForSu[$data->id]))
  	{
 	  $su = Tyovuoroot::model()->find(" tid='".$data->tid."' and pvm='".$apvmForSu[$data->id]."' ");
 	  if(isset($su['id']))
@@ -77,7 +79,7 @@ else
 	<td><?php echo CHtml::encode($data->tekijan_nimi); ?></td>
 
 	<!-- adminPaketti -->
-	<?php if(Yii::app()->user->adminPaketti == '2') : ?>
+	<?php if(in_array('2',$tas)) : ?>
 	<?php
 	$did = date("Ymd",strtotime($apvm[$data->id]));
 	?>
