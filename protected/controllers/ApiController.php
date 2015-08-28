@@ -115,7 +115,7 @@ public function actionImei($dom)
 
 	    if(isset($mob->id)){
 
-	     if($_POST['status'] == 3 and !empty($_POST['loppui']))
+	     if($mob->status == 1 and $_POST['status'] == 3 and !empty($_POST['loppui']))
 	     {
                 $mobupdate = Mob::model()->findbypk($mob->id);
                 $mobupdate->loppui = date("d.m.Y H:i:s",strtotime($_POST['loppui']));
@@ -123,7 +123,7 @@ public function actionImei($dom)
                 $mobupdate->save();
                 $this->_sendResponse(200, $mobupdate->id." on nyt lopetettu, status: ".$mobupdate->status);
 
-	     } elseif($_POST['status'] == 2 and !empty($_POST['loppui']))
+	     } elseif($mob->status == 2 and $_POST['status'] == 2 and !empty($_POST['loppui']))
 	     {
                 $mobupdate = Mob::model()->findbypk($mob->id);
                 $mobupdate->loppui = date("d.m.Y H:i:s",strtotime($_POST['loppui']));
@@ -131,7 +131,7 @@ public function actionImei($dom)
                 $mobupdate->save();
                 $this->_sendResponse(200, $mobupdate->id." on nyt lopetettu, status: ".$mobupdate->status);
 
-	     } elseif($_POST['status'] == 10 and !empty($_POST['loppui']))
+	     } elseif($mob->status == 10 and $_POST['status'] == 10 and !empty($_POST['loppui']))
 	     {
                 $mobupdate = Mob::model()->findbypk($mob->id);
                 $mobupdate->loppui = date("d.m.Y H:i:s",strtotime($_POST['loppui']));
@@ -140,7 +140,15 @@ public function actionImei($dom)
                 $this->_sendResponse(200, $mobupdate->id." on nyt lopetettu, status: ".$mobupdate->status);
 
 	     } else {
-                $this->_sendResponse(200, "on avattu ID: ".$mob->id.", ".$mob->kohde_kannasta);
+		  $ms = '';
+		if($mob->status == 1)
+		  $ms = 'Työ';
+		if($mob->status == 2)
+		  $ms = 'Matka';
+		if($mob->status == 10)
+		  $ms = 'Lounas';
+
+                $this->_sendResponse(200, $ms." on avattu ID: ".$mob->id.", ".$mob->kohde_kannasta);
 	     }
 	      exit;
 	    }
