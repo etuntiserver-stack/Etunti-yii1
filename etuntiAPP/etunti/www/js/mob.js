@@ -154,7 +154,7 @@ function row(tilanne,st,gps){
 	   type:'POST',
  	   data: { check : "testi", imei : imei },
            success: function(data){
-        	console.log(data);
+        	//console.log(data);
 		$("#result").val(data);
 		if(data == '1')
 		{
@@ -164,7 +164,7 @@ function row(tilanne,st,gps){
 		}	
     	},
     		error:function (xhr, ajaxOptions, thrownError){
-        	console.log(xhr.responseText);
+        	//console.log(xhr.responseText);
 		$("#result").val(xhr.responseText);
     	}
         });
