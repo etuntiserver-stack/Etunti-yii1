@@ -27,69 +27,8 @@ class ApiController extends Controller
             return array();
     }
  
-    // Actions
-    public function actionList()
-    {
-
-/*
-//$this->_checkAuth();
-    // Get the respective model instance
-    switch($_GET['model'])
-    {
-        case 'posts':
-            $models = Mob::model()->findAll("id != '' order by id limit 10",array("select"=>"id"));
-            break;
-        default:
-            // Model not implemented error
-            $this->_sendResponse(501, sprintf(
-                'Error: Mode <b>list</b> is not implemented for model <b>%s</b>',
-                $_GET['model']) );
-            Yii::app()->end();
-    }
-    // Did we get some results?
-    if(empty($models)) {
-        // No
-        $this->_sendResponse(200, 
-                sprintf('No items where found for model <b>%s</b>', $_GET['model']) );
-    } else {
-        // Prepare response
-        $rows = array();
-        foreach($models as $model)
-            $rows[] = $model->attributes;
-        // Send the response
-        $this->_sendResponse(200, CJSON::encode($rows));
-    }
-*/
-    }
 
 
-public function actionView()
-{
-$this->_checkAuth();
-    // Check if id was submitted via GET
-    if(!isset($_GET['id']))
-        $this->_sendResponse(500, 'Error: Parameter <b>id</b> is missing' );
- 
-    switch($_GET['model'])
-    {
-        // Find respective model    
-        case 'posts':
-            $model = Mob::model()->findbypk($_GET['id']);
-            break;
-        default:
-            $this->_sendResponse(501, sprintf(
-                'Mode <b>view</b> is not implemented for model <b>%s</b>',
-                $_GET['model']) );
-            Yii::app()->end();
-    }
-    // Did we find the requested model? If not, raise an error
-    if(is_null($model)){
-        $this->_sendResponse(404, 'No Item found with id '.$_GET['id']); //'No Item found with id '.$_GET['id']
-    } else {
-        $this->_sendResponse(200, CJSON::encode($model));
-    }
-
-}
 
 
 public function actionImei($dom)
@@ -115,31 +54,6 @@ public function actionImei($dom)
 
 	    if(isset($mob->id)){
 
-	     if($mob->status == 1 and $_POST['status'] == 3 and !empty($_POST['loppui']))
-	     {
-                $mobupdate = Mob::model()->findbypk($mob->id);
-                $mobupdate->loppui = date("d.m.Y H:i:s",strtotime($_POST['loppui']));
-                $mobupdate->status = 3;
-                $mobupdate->save();
-                $this->_sendResponse(200, $mobupdate->id." on nyt lopetettu, status: ".$mobupdate->status);
-
-	     } elseif($mob->status == 2 and $_POST['status'] == 2 and !empty($_POST['loppui']))
-	     {
-                $mobupdate = Mob::model()->findbypk($mob->id);
-                $mobupdate->loppui = date("d.m.Y H:i:s",strtotime($_POST['loppui']));
-                $mobupdate->status = 2;
-                $mobupdate->save();
-                $this->_sendResponse(200, $mobupdate->id." on nyt lopetettu, status: ".$mobupdate->status);
-
-	     } elseif($mob->status == 10 and $_POST['status'] == 10 and !empty($_POST['loppui']))
-	     {
-                $mobupdate = Mob::model()->findbypk($mob->id);
-                $mobupdate->loppui = date("d.m.Y H:i:s",strtotime($_POST['loppui']));
-                $mobupdate->status = 10;
-                $mobupdate->save();
-                $this->_sendResponse(200, $mobupdate->id." on nyt lopetettu, status: ".$mobupdate->status);
-
-	     } else {
 		  $ms = '';
 		if($mob->status == 1)
 		  $ms = 'Työ';
@@ -147,6 +61,32 @@ public function actionImei($dom)
 		  $ms = 'Matka';
 		if($mob->status == 10)
 		  $ms = 'Lounas';
+
+	     if($mob->status == 1 and $_POST['status'] == 3 and !empty($_POST['loppui']))
+	     {
+                $mobupdate = Mob::model()->findbypk($mob->id);
+                $mobupdate->loppui = date("d.m.Y H:i:s",strtotime($_POST['loppui']));
+                $mobupdate->status = 3;
+                $mobupdate->save();
+                $this->_sendResponse(200, $ms." ID: ".$mobupdate->id." on nyt lopetettu, status: ".$mobupdate->status);
+
+	     } elseif($mob->status == 2 and $_POST['status'] == 2 and !empty($_POST['loppui']))
+	     {
+                $mobupdate = Mob::model()->findbypk($mob->id);
+                $mobupdate->loppui = date("d.m.Y H:i:s",strtotime($_POST['loppui']));
+                $mobupdate->status = 2;
+                $mobupdate->save();
+                $this->_sendResponse(200, $ms." ID: ".$mobupdate->id." on nyt lopetettu, status: ".$mobupdate->status);
+
+	     } elseif($mob->status == 10 and $_POST['status'] == 10 and !empty($_POST['loppui']))
+	     {
+                $mobupdate = Mob::model()->findbypk($mob->id);
+                $mobupdate->loppui = date("d.m.Y H:i:s",strtotime($_POST['loppui']));
+                $mobupdate->status = 10;
+                $mobupdate->save();
+                $this->_sendResponse(200, $ms." ID: ".$mobupdate->id." on nyt lopetettu, status: ".$mobupdate->status);
+
+	     } else {
 
                 $this->_sendResponse(200, $ms." on avattu ID: ".$mob->id.", ".$mob->kohde_kannasta);
 	     }
@@ -196,6 +136,76 @@ public function actionImei($dom)
 }
 
 
+
+/*
+    // Actions
+    public function actionList()
+    {
+
+
+//$this->_checkAuth();
+    // Get the respective model instance
+    switch($_GET['model'])
+    {
+        case 'posts':
+            $models = Mob::model()->findAll("id != '' order by id limit 10",array("select"=>"id"));
+            break;
+        default:
+            // Model not implemented error
+            $this->_sendResponse(501, sprintf(
+                'Error: Mode <b>list</b> is not implemented for model <b>%s</b>',
+                $_GET['model']) );
+            Yii::app()->end();
+    }
+    // Did we get some results?
+    if(empty($models)) {
+        // No
+        $this->_sendResponse(200, 
+                sprintf('No items where found for model <b>%s</b>', $_GET['model']) );
+    } else {
+        // Prepare response
+        $rows = array();
+        foreach($models as $model)
+            $rows[] = $model->attributes;
+        // Send the response
+        $this->_sendResponse(200, CJSON::encode($rows));
+    }
+
+    }
+*/
+
+
+/*
+public function actionView()
+{
+$this->_checkAuth();
+    // Check if id was submitted via GET
+    if(!isset($_GET['id']))
+        $this->_sendResponse(500, 'Error: Parameter <b>id</b> is missing' );
+ 
+    switch($_GET['model'])
+    {
+        // Find respective model    
+        case 'posts':
+            $model = Mob::model()->findbypk($_GET['id']);
+            break;
+        default:
+            $this->_sendResponse(501, sprintf(
+                'Mode <b>view</b> is not implemented for model <b>%s</b>',
+                $_GET['model']) );
+            Yii::app()->end();
+    }
+    // Did we find the requested model? If not, raise an error
+    if(is_null($model)){
+        $this->_sendResponse(404, 'No Item found with id '.$_GET['id']); //'No Item found with id '.$_GET['id']
+    } else {
+        $this->_sendResponse(200, CJSON::encode($model));
+    }
+
+}
+*/
+
+
 /*
 public function actionImei()
 {
@@ -238,6 +248,7 @@ public function actionImei()
 }
 */
 
+/*
 public function actionCreate()
 {
 
@@ -283,11 +294,12 @@ public function actionCreate()
     }
 
 }
+*/
 
-
+/*
 public function actionUpdate()
 {
-/*
+
     // Parse the PUT parameters. This didn't work: parse_str(file_get_contents('php://input'), $put_vars);
     $json = file_get_contents('php://input'); //$GLOBALS['HTTP_RAW_POST_DATA'] is not preferred: http://www.php.net/manual/en/ini.core.php#ini.always-populate-raw-post-data
     $put_vars = CJSON::decode($json,true);  //true means use associative array
@@ -329,10 +341,11 @@ public function actionUpdate()
         // see actionCreate
         // ...
         $this->_sendResponse(500, $msg );
-*/
+
 }
+*/
 
-
+/*
 public function actionUpdaterow()
 {
     // Check if id was submitted via GET
@@ -370,11 +383,12 @@ public function actionUpdaterow()
         // ...
         $this->_sendResponse(500, $msg );
 }
+*/
 
-
+/*
 public function actionDelete()
 {
-/*
+
     switch($_GET['model'])
     {
         // Load the respective model
@@ -401,9 +415,9 @@ public function actionDelete()
         $this->_sendResponse(500, 
                 sprintf("Error: Couldn't delete model <b>%s</b> with ID <b>%s</b>.",
                 $_GET['model'], $_GET['id']) );
-*/
-}
 
+}
+*/
 
 
 private function _sendResponse($status = 200, $body = '', $content_type = 'text/html')
