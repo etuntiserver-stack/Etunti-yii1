@@ -16,8 +16,8 @@
 
 <div class="row">
   <div class="col-lg-6 col-lg-offset-3">
-	<button id="aloitan" class="btn btn-primary">Työ alkaa</button>
-	<button id="loppui" class="btn btn-primary">Työ loppu</button>
+	<button id="t_aloitan" class="btn btn-primary">Työ alkaa</button>
+	<button id="t_loppui" class="btn btn-primary">Työ loppu</button>
 	<br><br>
 	<button id="m_aloitan" class="btn btn-primary">Matka alkaa</button>
 	<button id="m_loppui" class="btn btn-primary">Matka loppu</button>
@@ -141,11 +141,11 @@ function row(tilanne,st,gps){
 
 
 
-$('#aloitan').click(function(){ 
+$('#t_aloitan').click(function(){ 
 	row("tyo_al",1,gps)
 });
 
-$('#loppui').click(function(){ 
+$('#t_loppui').click(function(){ 
 	row("tyo_lp",3,gps)
 });
 
