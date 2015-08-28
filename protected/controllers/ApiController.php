@@ -53,7 +53,8 @@ public function actionImei($dom)
             $mob = Mob::model()->find(" imei = '".$_POST['imei']."' and loppui = '' ");
 
 	    if(isset($_POST['check'])){
-                $this->_sendResponse(200, $mob->status);
+            	$mobCheck = Mob::model()->find(" imei = '".$_POST['imei']."' ");
+                $this->_sendResponse(200, $mobCheck->status);
 	     	exit;
 	    }
 
