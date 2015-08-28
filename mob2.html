@@ -16,14 +16,18 @@
 
 <div class="row">
   <div class="col-lg-6 col-lg-offset-3">
-	<button id="aloitan" class="btn btn-primary">Aloitan työn</button>
-	<button id="loppui" class="btn btn-primary">Työ päättyy</button>
-	<button id="status" class="btn btn-primary">Status</button>
-	<br>
-	<br>
+	<button id="aloitan" class="btn btn-primary">Työ alkaa</button>
+	<button id="loppui" class="btn btn-primary">Työ loppu</button>
+	<br><br>
+	<button id="m_aloitan" class="btn btn-primary">Matka alkaa</button>
+	<button id="m_loppui" class="btn btn-primary">Matka loppu</button>
+	<br><br>
+	<button id="l_aloitan" class="btn btn-primary">Lounastauko alkaa</button>
+	<button id="l_loppui" class="btn btn-primary">Lounastauko loppu</button>
+	<br><br>
 	<input type="text" id="server" value="http://etuntifw.local">
 	<!--<input type="text" class="form-control" id="server" value="http://etuntifw.azurewebsites.net">-->
-	<br>
+	<br><br>
 	<textarea cols="100" rows="20" class="form-control" id="result"></textarea>
   </div>
 </div>
@@ -59,17 +63,37 @@ function curDateTime(){
   var puh_nro = "0449304851";
   var versio = "0.47";
   var tag = "36073245411209220";
+  var gps = "000000";
 
 
-function row(tilanne){
+function row(tilanne,st,gps){
 
-   if(tilanne == 1)
+   if((tilanne == 'tyo_al') & (st == 1))
    {
 	var al 	= curDateTime();
 	var lp 	= '';
    }
-
-   if(tilanne == 3)
+   if((tilanne == 'tyo_lp') & (st == 3))
+   {
+	var al 	= '';
+	var lp 	= curDateTime();
+   }
+   if((tilanne == 'matka_al') & (st == 2))
+   {
+	var al 	= curDateTime();
+	var lp 	= '';
+   }
+   if((tilanne == 'matka_lp') & (st == 2))
+   {
+	var al 	= '';
+	var lp 	= curDateTime();
+   }
+   if((tilanne == 'lounas_al') & (st == 10))
+   {
+	var al 	= curDateTime();
+	var lp 	= '';
+   }
+   if((tilanne == 'lounas_lp') & (st == 10))
    {
 	var al 	= '';
 	var lp 	= curDateTime();
@@ -83,7 +107,7 @@ function row(tilanne){
 	bluetooth_name: "0",
 	sim_serial_number: "0",
 	subscriber_id: "0",
-	my_location: "0",
+	my_location: gps,
 	osoite: "0",
 	kohde_kannasta: "Testti Osoite",
 	kohdenID: "0",
@@ -93,7 +117,7 @@ function row(tilanne){
 	tekijan_nimi: "Roman Sizov",
 	tid: "38",
 	etaisyys: "0",
-	status: tilanne,
+	status: st,
 	tietoja: "",
 	hyvaksytty: "0",
 	};
@@ -103,7 +127,6 @@ function row(tilanne){
            url: url+'/imei?dom=sivex',
 	   type:'POST',
  	   data: postData,
-	   //dataType: "json",
            success: function(data){
         	console.log(data);
 		$("#result").val(data);
@@ -119,13 +142,51 @@ function row(tilanne){
 
 
 $('#aloitan').click(function(){ 
-	row(1)
+	row("tyo_al",1,gps)
 });
-
 
 $('#loppui').click(function(){ 
-	row(3)
+	row("tyo_lp",3,gps)
 });
+
+$('#m_aloitan').click(function(){ 
+	row("matka_al",2,gps)
+});
+
+$('#m_loppui').click(function(){ 
+	row("matka_lp",2,gps)
+});
+
+$('#l_aloitan').click(function(){ 
+	row("lounas_al",10,gps)
+});
+
+$('#l_loppui').click(function(){ 
+	row("lounas_lp",10,gps)
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 $('#status').click(function(){ 

@@ -2058,3 +2058,14 @@ Stack trace:
 REQUEST_URI=/index.php/vuosilomat/vlupdater?id=removed&txt=&lat=(SP)%20Sopimus%20p%C3%A4%C3%A4ttynyt/red
 HTTP_REFERER=http://etuntifw.local/index.php/vuosilomat/index
 ---
+2015/08/28 09:20:19 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Järjestelmä ei löydä pyydettyä toimintoa "mob".' in C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php:483
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(270): CController->missingAction('mob')
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('mob')
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/mob/imei/35...')
+#3 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php/api/mob/imei/353888067886268?domain=sivex
+HTTP_REFERER=http://etuntifw.local/mob2.html
+---

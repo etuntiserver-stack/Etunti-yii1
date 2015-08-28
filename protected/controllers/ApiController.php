@@ -123,13 +123,29 @@ public function actionImei($dom)
                 $mobupdate->save();
                 $this->_sendResponse(200, $mobupdate->id." on nyt lopetettu, status: ".$mobupdate->status);
 
+	     } elseif($_POST['status'] == 2 and !empty($_POST['loppui']))
+	     {
+                $mobupdate = Mob::model()->findbypk($mob->id);
+                $mobupdate->loppui = date("d.m.Y H:i:s",strtotime($_POST['loppui']));
+                $mobupdate->status = 2;
+                $mobupdate->save();
+                $this->_sendResponse(200, $mobupdate->id." on nyt lopetettu, status: ".$mobupdate->status);
+
+	     } elseif($_POST['status'] == 10 and !empty($_POST['loppui']))
+	     {
+                $mobupdate = Mob::model()->findbypk($mob->id);
+                $mobupdate->loppui = date("d.m.Y H:i:s",strtotime($_POST['loppui']));
+                $mobupdate->status = 10;
+                $mobupdate->save();
+                $this->_sendResponse(200, $mobupdate->id." on nyt lopetettu, status: ".$mobupdate->status);
+
 	     } else {
                 $this->_sendResponse(200, "on avattu ID: ".$mob->id.", ".$mob->kohde_kannasta);
 	     }
 	      exit;
 	    }
 
-	    if(isset($ttekija->id) and $_POST['status'] == 1 and !empty($_POST['aloitan'])){
+	    if(isset($ttekija->id) and !empty($_POST['aloitan'])){
               $model = new Mob;   
 	    } else {
 	      exit;
