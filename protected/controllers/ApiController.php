@@ -104,6 +104,7 @@ public function actionImei($dom)
                 $mobinsert->kohde_kannasta = 'Testi kohde';
                 $mobinsert->aloitan = $_POST['aloitan'];
                 $mobinsert->status = $_POST['status'];
+                $mobinsert->tietoja = $_POST['tietoja'];
                 $mobinsert->save();
                 $this->_sendResponse(200, "Luotu ID: ".$mobinsert->id." ".$ttekija->imei);
 
