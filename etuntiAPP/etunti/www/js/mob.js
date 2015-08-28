@@ -1,11 +1,44 @@
 $(document).ready(function(){
 
 
-$(".tyo").bootstrapSwitch({
+$(".sw").bootstrapSwitch({
 	size: "large",
 	onColor: "info",
 	onText: "Lopetus",
 	offText: "Aloitus"
+});
+
+$('input[name="tyo"]').on('switchChange.bootstrapSwitch', function(event, state) {
+  console.log(state); 
+  if(state == true)
+  {
+	row("tyo_al",1,gps);
+  } else {
+	row("tyo_lp",3,gps)
+  }
+
+});
+
+$('input[name="matka"]').on('switchChange.bootstrapSwitch', function(event, state) {
+  console.log(state); 
+  if(state == true)
+  {
+	row("matka_al",2,gps)
+  } else {
+	row("matka_lp",2,gps)
+  }
+
+});
+
+$('input[name="lounas"]').on('switchChange.bootstrapSwitch', function(event, state) {
+  console.log(state); 
+  if(state == true)
+  {
+	row("lounas_al",10,gps)
+  } else {
+	row("lounas_lp",10,gps)
+  }
+
 });
 
 
@@ -106,35 +139,8 @@ function row(tilanne,st,gps){
 
 }
 
-$('#tyo input[type="checkbox"]:checked').change(function(){ 
 
-        alert('ok')
-    
-});
 
-$('#t_aloitan').click(function(){ 
-	row("tyo_al",1,gps)
-});
-
-$('#t_loppui').click(function(){ 
-	row("tyo_lp",3,gps)
-});
-
-$('#m_aloitan').click(function(){ 
-	row("matka_al",2,gps)
-});
-
-$('#m_loppui').click(function(){ 
-	row("matka_lp",2,gps)
-});
-
-$('#l_aloitan').click(function(){ 
-	row("lounas_al",10,gps)
-});
-
-$('#l_loppui').click(function(){ 
-	row("lounas_lp",10,gps)
-});
 
 
 });
