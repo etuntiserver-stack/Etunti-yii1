@@ -157,23 +157,24 @@ function row(tilanne,st,gps){
  	   data: { check : "testi", imei : imei },
            success: function(data){
         	//console.log(data);
-		//$("#result").val(data);
 		var sp = split.data("//");
-		if(data[0] == '1')
+		$("#result").val(data);
+
+		if(sp[0] == '1')
 		{
 		  $('.tyo').bootstrapSwitch('state', true, true);
 		  $('.matka').bootstrapSwitch('toggleDisabled');
 		  $('.lounas').bootstrapSwitch('toggleDisabled');
 		return false;
 		}
-		if(data[0] == '2.1')
+		if(sp[0] == '2.1')
 		{
 		  $('.tyo').bootstrapSwitch('toggleDisabled');
 		  $('.matka').bootstrapSwitch('state', true, true);
 		  $('.lounas').bootstrapSwitch('toggleDisabled');
 		return false;
 		}
-		if(data[0] == '10.1')
+		if(sp[0] == '10.1')
 		{
 		  $('.tyo').bootstrapSwitch('toggleDisabled');
 		  $('.matka').bootstrapSwitch('toggleDisabled');

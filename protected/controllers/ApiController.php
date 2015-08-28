@@ -61,7 +61,7 @@ public function actionImei($dom)
 		  if($mobCheck->status == 10 and $mobCheck->loppui == '')
 		   $mobCheck->status = 10.1;
 
-                $this->_sendResponse(200, $mobCheck->status."//".$mobCheck->kohde_kannasta."//".$mobCheck->aloitan."//".$mobCheck->loppui);
+                $this->_sendResponse(200, CJSON::encode($mobCheck->status."//".$mobCheck->kohde_kannasta."//".$mobCheck->aloitan."//".$mobCheck->loppui));
 	     	exit;
 	    }
 
