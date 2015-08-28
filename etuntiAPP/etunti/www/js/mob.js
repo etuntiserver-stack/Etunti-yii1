@@ -152,7 +152,7 @@ function row(tilanne,st,gps){
         $.ajax({
            url: url+'/imei?dom='+domain,
 	   type:'POST',
- 	   data: { check : "testi" },
+ 	   data: { check : "testi", imei : imei },
            success: function(data){
         	console.log(data);
 		$("#result").val(data);
