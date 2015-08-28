@@ -167,14 +167,14 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe07b', end
   $valikkoot = Valikkoot::model()->findAll("select_type = 'vuosilomat'");
   foreach($valikkoot as $vl){
     $expl = explode("/",$vl->value);
-    $back = " style='background:".$expl[2]."' ";
+    $back = " style='background:".$expl[2].";color: white;'";
     if($expl[0] == 'VL')
     $checked = 'checked';
     else
     $checked = '';
 
     echo '<p><input type=radio name="valikko" class="valikko" value="'.$expl[0].'//'.$expl[2].'//'.$expl[1].'" '.$checked.'> 
-	<span '.$back.'>'.$expl[0].'</span>  '.$expl[1].'</p>';
+	<span '.$back.' class="btn">'.$expl[0].'</span>  '.$expl[1].'</p>';
   }
  ?>
  </div>

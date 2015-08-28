@@ -62,6 +62,7 @@ public function actionImei($dom)
 		if($mob->status == 10)
 		  $ms = 'Lounas';
 
+
 	     if($mob->status == 1 and $_POST['status'] == 3 and !empty($_POST['loppui']))
 	     {
                 $mobupdate = Mob::model()->findbypk($mob->id);
@@ -93,9 +94,10 @@ public function actionImei($dom)
 	      exit;
 	    }
 
-	    if(isset($ttekija->id) and !empty($_POST['aloitan'])){
+	    if(isset($ttekija->id) and !empty($_POST['aloitan']) and empty($_POST['loppui'])){
               $model = new Mob;   
 	    } else {
+                $this->_sendResponse(200, "Kaikki on suljettu, ei ole mitään avoina");
 	      exit;
 	    }
             break;
