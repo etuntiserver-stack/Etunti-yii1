@@ -61,7 +61,19 @@ function curDateTime(){
   var tag = "36073245411209220";
 
 
-function insertRow(){
+function row(tilanne){
+
+   if(tilanne == 1)
+   {
+	var al 	= curDateTime();
+	var lp 	= '';
+   }
+
+   if(tilanne == 3)
+   {
+	var al 	= '';
+	var lp 	= curDateTime();
+   }
 
    	var postData = {
 	domain: domain,
@@ -75,13 +87,13 @@ function insertRow(){
 	osoite: "0",
 	kohde_kannasta: "Testti Osoite",
 	kohdenID: "0",
-	aloitan: curDateTime(),
-	loppui: "",
+	aloitan: al,
+	loppui: lp,
 	viesti: "xxx",
 	tekijan_nimi: "Roman Sizov",
 	tid: "38",
 	etaisyys: "0",
-	status: "1",
+	status: tilanne,
 	tietoja: "",
 	hyvaksytty: "0",
 	};
@@ -93,8 +105,8 @@ function insertRow(){
  	   data: postData,
 	   //dataType: "json",
            success: function(data){
-        	console.log("Uusi kohde: \n"+data);
-		$("#result").val("Uusi kohde: \n"+data);
+        	console.log(data);
+		$("#result").val(data);
     	},
     		error:function (xhr, ajaxOptions, thrownError){
         	console.log(xhr.responseText);
@@ -104,77 +116,15 @@ function insertRow(){
 
 }
 
-function updateRow(id){
-
-  	var postData = {
-	domain: domain,
-	loppui: curDateTime(),
-	status: "3",
-	};
-
-        $.ajax({
-           url: url+"/updaterow/"+id,
-	   type:'POST',
- 	   data: postData,
-	   //dataType: "json",
-           success: function(data){
-        	console.log(data);
-		$("#result").val(data);
-    	   },
-    	   error: function(XMLHttpRequest, textStatus, errorThrown) {
-	    	console.log(XMLHttpRequest);
-		$("#result").val(XMLHttpRequest);
- 	    }
-        });
-
-}
-
 
 
 $('#aloitan').click(function(){ 
-	insertRow()
+	row(1)
 });
 
 
 $('#loppui').click(function(){ 
-
-	var getData = '';
-	var status = '';
-	var KantaID = '';
-
-	$.ajax({
-	    //url: url+'?filter=[{"property":"imei","value":"'+imei+'"},{"property":"loppui","value":"","operator": "="}]',
-	    url : url+'/imei/'+imei,
-	    type:"GET",
-	    data: domainData,
-/*
-    beforeSend: function(xhr) {
-        xhr.setRequestHeader("X_USERNAME", "demo");
-        xhr.setRequestHeader("X_PASSWORD", "111111");
-        console.log(xhr);
-    }, 
-*/
-	    success:function(data, textStatus, XMLHttpRequest) {
-	      console.log(data);
-	      getData = JSON.parse(data);
-	
-
-	      if(getData['Kohde'] === null)
-	      {
-	      	console.log("Ei ole mitään avoina");
-		$("#result").val("Ei ole mitään avoina");
-	      } else {
-		KantaID = getData['Kohde'];
-		updateRow(KantaID);
-	      }
-
-	    },
-    	    error: function(textStatus, errorThrown) {
-	    	console.log(textStatus);
-		$("#result").val(textStatus);
- 	    }
-	});
-
+	row(3)
 });
 
 

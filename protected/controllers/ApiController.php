@@ -95,8 +95,6 @@ $this->_checkAuth();
 public function actionImei($dom)
 {
 
-
-
 //$this->_checkAuth();
 
     switch($_GET['model'])
@@ -105,16 +103,35 @@ public function actionImei($dom)
         case 'mob':
 
             $ttekija = Tyontekijat::model()->find(" imei = '".$_POST['imei']."' ");
+
+	     if(!isset($ttekija['id']))
+	     {
+              $this->_sendResponse(200, "imei on persessä ".$_POST['imei']." ".$ttekija['imei']);
+	      exit;
+	     }
+
+
             $mob = Mob::model()->find(" imei = '".$_POST['imei']."' and loppui = '' ");
 
 	    if(isset($mob->id)){
-              $this->_sendResponse(200, "Kohde: ".$mob->kohde_kannasta." on avattu");
+
+	     if($_POST['status'] == 3 and !empty($_POST['loppui']))
+	     {
+                $mobupdate = Mob::model()->findbypk($mob->id);
+                $mobupdate->loppui = date("d.m.Y H:i:s",strtotime($_POST['loppui']));
+                $mobupdate->status = 3;
+                $mobupdate->save();
+                $this->_sendResponse(200, $mobupdate->id." on nyt lopetettu, status: ".$mobupdate->status);
+
+	     } else {
+                $this->_sendResponse(200, "on avattu ID: ".$mob->id.", ".$mob->kohde_kannasta);
+	     }
 	      exit;
 	    }
-	    if(isset($ttekija->id)){
+
+	    if(isset($ttekija->id) and $_POST['status'] == 1 and !empty($_POST['aloitan'])){
               $model = new Mob;   
 	    } else {
-              $this->_sendResponse(200, "imei on persessä ".$_POST['imei']." ".$ttekija['imei']);
 	      exit;
 	    }
             break;
