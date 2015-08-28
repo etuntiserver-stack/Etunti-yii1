@@ -95,7 +95,17 @@ public function actionImei($dom)
 	    }
 
 	    if(isset($ttekija->id) and !empty($_POST['aloitan']) and empty($_POST['loppui'])){
-              $model = new Mob;   
+
+                $mobinsert = new Mob;
+                $mobinsert->imei = $ttekija->imei;
+                $mobinsert->tid = $ttekija->id;
+                $mobinsert->tekijan_nimi = $ttekija->tekijan_nimi;
+                $mobinsert->kohde_kannasta = 'Testi kohde';
+                $mobinsert->aloitan = $_POST['aloitan'];
+                $mobinsert->status = $_POST['status'];
+                $mobinsert->save();
+                $this->_sendResponse(200, "Luotu ID: ".$mobinsert->id." ".$ttekija->imei);
+
 	    } else {
                 $this->_sendResponse(200, "Kaikki on suljettu, ei ole mitään avoina");
 	      exit;
@@ -107,34 +117,7 @@ public function actionImei($dom)
                 $_GET['model']) );
                 Yii::app()->end();
     }
-    // Try to assign POST values to attributes
-    foreach($_POST as $var=>$value) {
-        // Does the model have this attribute? If not raise an error
-        if($model->hasAttribute($var))
-            $model->$var = $value;
-        else
-            $this->_sendResponse(500, 
-                sprintf('Parameter <b>%s</b> is not allowed for model <b>%s</b>', $var,
-                $_GET['model']) );
-    }
-    // Try to save the model
-    if($model->save())
-        $this->_sendResponse(200, CJSON::encode($model));
-    else {
-        // Errors occurred
-        $msg = "<h1>Error</h1>";
-        $msg .= sprintf("Couldn't create model <b>%s</b>", $_GET['model']);
-        $msg .= "<ul>";
-        foreach($model->errors as $attribute=>$attr_errors) {
-            $msg .= "<li>Attribute: $attribute</li>";
-            $msg .= "<ul>";
-            foreach($attr_errors as $attr_error)
-                $msg .= "<li>$attr_error</li>";
-            $msg .= "</ul>";
-        }
-        $msg .= "</ul>";
-        $this->_sendResponse(500, $msg );
-    }
+
 }
 
 

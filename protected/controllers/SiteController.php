@@ -29,7 +29,7 @@ class SiteController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array(''),
+				'actions'=>array('mobemu'),
 				'users'=>array('@'),
 			),
 			array('deny',  // deny all users
@@ -39,10 +39,11 @@ class SiteController extends Controller
 	}
 
 
-	/**
-	 * This is the default 'index' action that is invoked
-	 * when an action is not explicitly requested by users.
-	 */
+	public function actionMobemu()
+	{
+		$this->render('mobemu');
+	}
+
 	public function actionIndex()
 	{
 		// renders the view file 'protected/views/site/index.php'
