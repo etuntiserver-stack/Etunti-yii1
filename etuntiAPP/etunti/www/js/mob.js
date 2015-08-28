@@ -157,7 +157,7 @@ function row(tilanne,st,gps){
  	   data: { check : "testi", imei : imei },
            success: function(data){
         	//console.log(data);
-		var sp = split.data("//");
+		var sp = data.split("//");
 		$("#result").val(data);
 
 		if(sp[0] == '1')
