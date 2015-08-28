@@ -16,7 +16,7 @@ $('input[name="tyo"]').on('switchChange.bootstrapSwitch', function(event, state)
   } else {
 	row("tyo_lp",3,gps)
   }
-
+	set();
 });
 
 $('input[name="matka"]').on('switchChange.bootstrapSwitch', function(event, state) {
@@ -27,7 +27,7 @@ $('input[name="matka"]').on('switchChange.bootstrapSwitch', function(event, stat
   } else {
 	row("matka_lp",2,gps)
   }
-
+	set();
 });
 
 $('input[name="lounas"]').on('switchChange.bootstrapSwitch', function(event, state) {
@@ -38,7 +38,7 @@ $('input[name="lounas"]').on('switchChange.bootstrapSwitch', function(event, sta
   } else {
 	row("lounas_lp",10,gps)
   }
-
+	set();
 });
 
 
@@ -147,40 +147,33 @@ function row(tilanne,st,gps){
 
 
 // Checker
-    updateChecker();
-    function updateChecker() {
+    set();
+
+
+    function set() {
         $.ajax({
            url: url+'/imei?dom='+domain,
 	   type:'POST',
  	   data: { check : "testi", imei : imei },
            success: function(data){
         	//console.log(data);
-		$("#result").val(data);
-
-
-		if((data == '3') || (data == '2') || (data == '10'))
-		{
-		  $('.tyo').bootstrapSwitch('toggleEnabled');
-		  $('.matka').bootstrapSwitch('toggleEnabled');
-		  $('.lounas').bootstrapSwitch('toggleEnabled');
-		return false;
-		} 
-
-		if(data == '1')
+		//$("#result").val(data);
+		var sp = split.data("//");
+		if(data[0] == '1')
 		{
 		  $('.tyo').bootstrapSwitch('state', true, true);
 		  $('.matka').bootstrapSwitch('toggleDisabled');
 		  $('.lounas').bootstrapSwitch('toggleDisabled');
 		return false;
 		}
-		if(data == '2.1')
+		if(data[0] == '2.1')
 		{
 		  $('.tyo').bootstrapSwitch('toggleDisabled');
 		  $('.matka').bootstrapSwitch('state', true, true);
 		  $('.lounas').bootstrapSwitch('toggleDisabled');
 		return false;
 		}
-		if(data == '10.1')
+		if(data[0] == '10.1')
 		{
 		  $('.tyo').bootstrapSwitch('toggleDisabled');
 		  $('.matka').bootstrapSwitch('toggleDisabled');
@@ -196,8 +189,32 @@ function row(tilanne,st,gps){
     	}
         });
     }
+
+
+
+
+
+/*
+    updateChecker();
+
+    function updateChecker() {
+        $.ajax({
+           url: url+'/imei?dom='+domain,
+	   type:'POST',
+ 	   data: { check : "testi", imei : imei },
+           success: function(data){
+        	//console.log(data);
+		$("#result").val(data);
+		
+    	},
+    		error:function (xhr, ajaxOptions, thrownError){
+        	//console.log(xhr.responseText);
+		$("#result").val(xhr.responseText);
+    	}
+        });
+    }
     	    setInterval(updateChecker, "10000");
-//
+*/
 
 
 
