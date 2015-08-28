@@ -14,35 +14,39 @@ $('input[name="tyo"]').on('switchChange.bootstrapSwitch', function(event, state)
   {
 	row("tyo_al",1,gps);
   } else {
-	row("tyo_lp",3,gps)
+	row("tyo_lp",3,gps);
   }
-	set();
 });
 
 $('input[name="matka"]').on('switchChange.bootstrapSwitch', function(event, state) {
   console.log(state); 
   if(state == true)
   {
-	row("matka_al",2,gps)
+	row("matka_al",2,gps);
   } else {
-	row("matka_lp",2,gps)
+	row("matka_lp",2,gps);
   }
-	set();
+
 });
 
 $('input[name="lounas"]').on('switchChange.bootstrapSwitch', function(event, state) {
   console.log(state); 
   if(state == true)
   {
-	row("lounas_al",10,gps)
+	row("lounas_al",10,gps);
   } else {
-	row("lounas_lp",10,gps)
+	row("lounas_lp",10,gps);
   }
-	set();
+
 });
 
 
-
+function allEnable(){
+	$('.tyo').bootstrapSwitch('toggleEnabled');
+	$('.matka').bootstrapSwitch('toggleEnabled');
+	$('.lounas').bootstrapSwitch('toggleEnabled');
+	return false;
+}
 
 
 
@@ -104,26 +108,26 @@ function row(tilanne,st,gps){
    }
 
    	var postData = {
-	domain: domain,
-	imei: imei,
-	asiakas_num: versio+"_"+tag,
-	puh_numero: puh_nro,
-	bluetooth_name: "0",
-	sim_serial_number: "0",
-	subscriber_id: "0",
-	my_location: gps,
-	osoite: "0",
-	kohde_kannasta: "Testti Osoite",
-	kohdenID: "0",
-	aloitan: al,
-	loppui: lp,
-	viesti: "xxx",
-	tekijan_nimi: "Roman Sizov",
-	tid: "38",
-	etaisyys: "0",
-	status: st,
-	tietoja: "testi",
-	hyvaksytty: "0",
+		domain: domain,
+		imei: imei,
+		asiakas_num: versio+"_"+tag,
+		puh_numero: puh_nro,
+		bluetooth_name: "0",
+		sim_serial_number: "0",
+		subscriber_id: "0",
+		my_location: gps,
+		osoite: "0",
+		kohde_kannasta: "Testti Osoite",
+		kohdenID: "0",
+		aloitan: al,
+		loppui: lp,
+		viesti: "xxx",
+		tekijan_nimi: "Roman Sizov",
+		tid: "38",
+		etaisyys: "0",
+		status: st,
+		tietoja: "testi",
+		hyvaksytty: "0",
 	};
 
 
@@ -134,6 +138,7 @@ function row(tilanne,st,gps){
            success: function(data){
         	console.log(data);
 		$("#result").val(data);
+		set();
     	},
     		error:function (xhr, ajaxOptions, thrownError){
         	console.log(xhr.responseText);
@@ -158,28 +163,28 @@ function row(tilanne,st,gps){
            success: function(data){
         	//console.log(data);
 		var sp = data.split("//");
-		$("#result").val(data);
+		$("#result").append(sp);
+
+		//if((sp[0] == '3') || (sp[0] == '2') || (sp[0] == '10'))
+		//allEnable();
 
 		if(sp[0] == '1')
 		{
 		  $('.tyo').bootstrapSwitch('state', true, true);
 		  $('.matka').bootstrapSwitch('toggleDisabled');
 		  $('.lounas').bootstrapSwitch('toggleDisabled');
-		return false;
-		}
+		} 
 		if(sp[0] == '2.1')
 		{
 		  $('.tyo').bootstrapSwitch('toggleDisabled');
 		  $('.matka').bootstrapSwitch('state', true, true);
 		  $('.lounas').bootstrapSwitch('toggleDisabled');
-		return false;
 		}
 		if(sp[0] == '10.1')
 		{
 		  $('.tyo').bootstrapSwitch('toggleDisabled');
 		  $('.matka').bootstrapSwitch('toggleDisabled');
 		  $('.lounas').bootstrapSwitch('state', true, true);
-		return false;
 		}
 
 		
