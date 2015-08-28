@@ -42,6 +42,10 @@ $('input[name="lounas"]').on('switchChange.bootstrapSwitch', function(event, sta
 });
 
 
+
+
+
+
 function curDateTime(){
 
   	var date = new Date();
@@ -140,6 +144,27 @@ function row(tilanne,st,gps){
 }
 
 
+
+
+// Checker
+    updateChecker();
+    function updateChecker() {
+        $.ajax({
+           url: url+'/imei?dom='+domain,
+	   type:'POST',
+ 	   data: { check : "testi" },
+           success: function(data){
+        	console.log(data);
+		$("#result").val(data);
+    	},
+    		error:function (xhr, ajaxOptions, thrownError){
+        	console.log(xhr.responseText);
+		$("#result").val(xhr.responseText);
+    	}
+        });
+    }
+    	    setInterval(updateChecker, "10000");
+//
 
 
 
