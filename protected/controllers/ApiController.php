@@ -97,6 +97,7 @@ public function actionImei($dom)
 	    if(isset($ttekija->id) and !empty($_POST['aloitan']) and empty($_POST['loppui'])){
 
                 $mobinsert = new Mob;
+                $mobinsert->attributes = $mobinsert->attributes;
                 $mobinsert->imei = $ttekija->imei;
                 $mobinsert->tid = $ttekija->id;
                 $mobinsert->tekijan_nimi = $ttekija->tekijan_nimi;

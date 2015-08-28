@@ -2130,3 +2130,12 @@ REQUEST_URI=/index.php/site/mobemu
 in C:\xampp\htdocs\etuntifw\protected\views\site\mobemu.php (23)
 in C:\xampp\htdocs\etuntifw\protected\controllers\SiteController.php (44)
 in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/28 11:41:07 [warning] [application] Ei voitu asettaa "Mob"-luokan turvatonta attribuuttia "id".
+in C:\xampp\htdocs\etuntifw\protected\controllers\ApiController.php (100)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/28 11:41:07 [warning] [application] Ei voitu asettaa "Mob"-luokan turvatonta attribuuttia "time".
+in C:\xampp\htdocs\etuntifw\protected\controllers\ApiController.php (100)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/08/28 11:41:07 [warning] [application] Ei voitu asettaa "Mob"-luokan turvatonta attribuuttia "tietoja".
+in C:\xampp\htdocs\etuntifw\protected\controllers\ApiController.php (100)
+in C:\xampp\htdocs\etuntifw\index.php (13)
