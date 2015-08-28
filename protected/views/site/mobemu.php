@@ -120,7 +120,7 @@ function row(tilanne,st,gps){
 	tid: "38",
 	etaisyys: "0",
 	status: st,
-	tietoja: "",
+	tietoja: "0",
 	hyvaksytty: "0",
 	};
 
