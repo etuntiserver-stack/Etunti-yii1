@@ -74,6 +74,19 @@ public function actionImei($dom)
 
 	    if(isset($mob->id)){
 
+
+		$osoite = explode("/",$_POST['my_location']); 
+		$forDistance = $osoite;
+		$osoite = $osoite[0].",".$osoite[1];   
+
+
+		$json_url = 'http://maps.googleapis.com/maps/api/geocode/json?latlng='.$osoite.'&language=fi&sensor=true';
+		$json = file_get_contents($json_url);
+		$obj = json_decode($json);
+		$get_osoite = $obj->results[0]->formatted_address;
+		$get_osoite = str_replace(", Suomi", "", $get_osoite);
+
+
 		  $ms = '';
 		if($mob->status == 1)
 		  $ms = 'Työ';
@@ -90,7 +103,7 @@ public function actionImei($dom)
                 $mobupdate->status = 3;
                 $mobupdate->my_location = $mobupdate->my_location."**".$_POST['my_location'];
                 $mobupdate->save();
-                $this->_sendResponse(200, $ms." ID: ".$mobupdate->id." on nyt lopetettu, status: ".$mobupdate->status);
+                $this->_sendResponse(200, $ms."//".$mobupdate->id."//".$mobupdate->status."//".$get_osoite);
 
 	     } elseif($mob->status == 2 and $_POST['status'] == 2 and !empty($_POST['loppui']))
 	     {
@@ -99,7 +112,7 @@ public function actionImei($dom)
                 $mobupdate->status = 2;
                 $mobupdate->my_location = $mobupdate->my_location."**".$_POST['my_location'];
                 $mobupdate->save();
-                $this->_sendResponse(200, $ms." ID: ".$mobupdate->id." on nyt lopetettu, status: ".$mobupdate->status);
+                $this->_sendResponse(200, $ms."//".$mobupdate->id."//".$mobupdate->status."//".$get_osoite);
 
 	     } elseif($mob->status == 10 and $_POST['status'] == 10 and !empty($_POST['loppui']))
 	     {
@@ -108,11 +121,11 @@ public function actionImei($dom)
                 $mobupdate->status = 10;
                 $mobupdate->my_location = $mobupdate->my_location."**".$_POST['my_location'];
                 $mobupdate->save();
-                $this->_sendResponse(200, $ms." ID: ".$mobupdate->id." on nyt lopetettu, status: ".$mobupdate->status);
+                $this->_sendResponse(200, $ms."//".$mobupdate->id."//".$mobupdate->status."//".$get_osoite);
 
 	     } else {
 
-                $this->_sendResponse(200, $ms." on avattu ID: ".$mob->id.", ".$mob->kohde_kannasta);
+                $this->_sendResponse(200, $ms."//".$mob->id."//".$mob->kohde_kannasta."//".$get_osoite);
 	     }
 	      exit;
 	    }
