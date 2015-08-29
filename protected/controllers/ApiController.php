@@ -53,27 +53,6 @@ public function actionImei($dom)
             $mob = Mob::model()->find(" imei = '".$_POST['imei']."' and loppui = '' ");
 
 	    if(isset($_POST['check'])){
-            	$mobCheck = Mob::model()->find(" imei = '".$_POST['imei']."' order by id DESC ");
-
-		if(isset($mobCheck->id))
-		{
-		  if($mobCheck->status == 2 and $mobCheck->loppui == '')
-		   $mobCheck->status = 2.1;
-
-		  if($mobCheck->status == 10 and $mobCheck->loppui == '')
-		   $mobCheck->status = 10.1;
-
-                $this->_sendResponse(200, $mobCheck->status."//".$mobCheck->kohde_kannasta."//".$mobCheck->aloitan."//".$mobCheck->loppui);
-		} else {
-                $this->_sendResponse(200, "3//mull//null//null");
-		}
-
-
-	     	exit;
-	    }
-
-	    if(isset($mob->id)){
-
 
 		$osoite = explode("/",$_POST['my_location']); 
 		$forDistance = $osoite;
@@ -86,6 +65,27 @@ public function actionImei($dom)
 		$get_osoite = $obj->results[0]->formatted_address;
 		$get_osoite = str_replace(", Suomi", "", $get_osoite);
 
+
+            	$mobCheck = Mob::model()->find(" imei = '".$_POST['imei']."' order by id DESC ");
+
+		if(isset($mobCheck->id))
+		{
+		  if($mobCheck->status == 2 and $mobCheck->loppui == '')
+		   $mobCheck->status = 2.1;
+
+		  if($mobCheck->status == 10 and $mobCheck->loppui == '')
+		   $mobCheck->status = 10.1;
+
+                $this->_sendResponse(200, $mobCheck->status."//".$mobCheck->kohde_kannasta."//".$mobCheck->aloitan."//".$mobCheck->loppui."//".$get_osoite);
+		} else {
+                $this->_sendResponse(200, "3//mull//null//null//".$get_osoite);
+		}
+
+
+	     	exit;
+	    }
+
+	    if(isset($mob->id)){
 
 		  $ms = '';
 		if($mob->status == 1)
@@ -103,7 +103,7 @@ public function actionImei($dom)
                 $mobupdate->status = 3;
                 $mobupdate->my_location = $mobupdate->my_location."**".$_POST['my_location'];
                 $mobupdate->save();
-                $this->_sendResponse(200, $ms."//".$mobupdate->id."//".$mobupdate->status."//".$get_osoite);
+                $this->_sendResponse(200, $ms." ID: ".$mobupdate->id." on nyt lopetettu, status: ".$mobupdate->status);
 
 	     } elseif($mob->status == 2 and $_POST['status'] == 2 and !empty($_POST['loppui']))
 	     {
@@ -112,7 +112,7 @@ public function actionImei($dom)
                 $mobupdate->status = 2;
                 $mobupdate->my_location = $mobupdate->my_location."**".$_POST['my_location'];
                 $mobupdate->save();
-                $this->_sendResponse(200, $ms."//".$mobupdate->id."//".$mobupdate->status."//".$get_osoite);
+                $this->_sendResponse(200, $ms." ID: ".$mobupdate->id." on nyt lopetettu, status: ".$mobupdate->status);
 
 	     } elseif($mob->status == 10 and $_POST['status'] == 10 and !empty($_POST['loppui']))
 	     {
@@ -121,11 +121,11 @@ public function actionImei($dom)
                 $mobupdate->status = 10;
                 $mobupdate->my_location = $mobupdate->my_location."**".$_POST['my_location'];
                 $mobupdate->save();
-                $this->_sendResponse(200, $ms."//".$mobupdate->id."//".$mobupdate->status."//".$get_osoite);
+                $this->_sendResponse(200, $ms." ID: ".$mobupdate->id." on nyt lopetettu, status: ".$mobupdate->status);
 
 	     } else {
 
-                $this->_sendResponse(200, $ms."//".$mob->id."//".$mob->kohde_kannasta."//".$get_osoite);
+                $this->_sendResponse(200, $ms." on avattu ID: ".$mob->id.", ".$mob->kohde_kannasta);
 	     }
 	      exit;
 	    }
