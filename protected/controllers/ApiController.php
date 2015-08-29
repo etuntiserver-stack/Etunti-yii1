@@ -62,7 +62,8 @@ public function actionImei($dom)
 		$json_url = 'http://maps.googleapis.com/maps/api/geocode/json?latlng='.$osoite.'&language=fi&sensor=true';
 		$json = file_get_contents($json_url);
 		$obj = json_decode($json);
-		$get_osoite = $obj->results[1]->address_components[0]->long_name;
+		$get_osoite = $obj->results[0]->formatted_address;
+		$get_osoite = explode(" ", $get_osoite);
 
 
             	$mobCheck = Mob::model()->find(" imei = '".$_POST['imei']."' order by id DESC ");
@@ -75,9 +76,9 @@ public function actionImei($dom)
 		  if($mobCheck->status == 10 and $mobCheck->loppui == '')
 		   $mobCheck->status = 10.1;
 
-                $this->_sendResponse(200, $mobCheck->status."//".$mobCheck->kohde_kannasta."//".$mobCheck->aloitan."//".$mobCheck->loppui."//".$get_osoite);
+                $this->_sendResponse(200, $mobCheck->status."//".$mobCheck->kohde_kannasta."//".$mobCheck->aloitan."//".$mobCheck->loppui."//".$get_osoite[0]);
 		} else {
-                $this->_sendResponse(200, "3//mull//null//null//".$get_osoite);
+                $this->_sendResponse(200, "3//mull//null//null//".$get_osoite[0]);
 		}
 
 
