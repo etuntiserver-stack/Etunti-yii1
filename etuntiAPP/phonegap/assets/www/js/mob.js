@@ -80,9 +80,11 @@ for(var i = 0; i < querysplit.length; i++)
 
 var DeviceIMEI = query['imei'];
 var my_location = query['location'];
+var nfc = query['nfc'];
 
 $("#result").append("DeviceIMEI : " + DeviceIMEI + "\n");
 $("#result").append("Location : " + my_location + "\n");
+$("#result").append("NFC TAG : " + nfc + "\n");
 
 
   var domain = "sivex";
@@ -182,7 +184,7 @@ function row(tilanne,st){
            success: function(data){
         	//console.log(data);
 		var sp = data.split("//");
-		$("#result").append(sp);
+		$("#result").append(sp+"\n");
 
 		if((sp[0] == '3') || (sp[0] == '2') || (sp[0] == '10')){
 		//allEnable();
