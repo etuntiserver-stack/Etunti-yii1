@@ -12,9 +12,9 @@ $('input[name="tyo"]').on('switchChange.bootstrapSwitch', function(event, state)
   console.log(state); 
   if(state == true)
   {
-	row("tyo_al",1,gps);
+	row("tyo_al",1);
   } else {
-	row("tyo_lp",3,gps);
+	row("tyo_lp",3);
   }
 });
 
@@ -22,9 +22,9 @@ $('input[name="matka"]').on('switchChange.bootstrapSwitch', function(event, stat
   console.log(state); 
   if(state == true)
   {
-	row("matka_al",2,gps);
+	row("matka_al",2);
   } else {
-	row("matka_lp",2,gps);
+	row("matka_lp",2);
   }
 
 });
@@ -33,9 +33,9 @@ $('input[name="lounas"]').on('switchChange.bootstrapSwitch', function(event, sta
   console.log(state); 
   if(state == true)
   {
-	row("lounas_al",10,gps);
+	row("lounas_al",10);
   } else {
-	row("lounas_lp",10,gps);
+	row("lounas_lp",10);
   }
 
 });
@@ -65,16 +65,35 @@ function curDateTime(){
 	return (day + "." + month + "." + year + " " + hours + ":" + minutes + ":" + seconds);
 }
 
+
+
+var query = location.href.substring((location.href.indexOf('?')+1), location.href.length);
+if(location.href.indexOf('?') < 0) query = '';
+    querysplit = query.split('&');
+    query = new Array();
+for(var i = 0; i < querysplit.length; i++)
+{
+        var namevalue = querysplit[i].split('=');
+        namevalue[1] = namevalue[1].replace(/\+/g, ' ');
+        query[namevalue[0]] = unescape(namevalue[1]);
+}
+
+var DeviceIMEI = query['imei'];
+var my_location = query['location'];
+
+$("#result").append("DeviceIMEI : " + DeviceIMEI + "\n");
+$("#result").append("Location : " + my_location + "\n");
+
+
   var domain = "sivex";
   var url = $("#server").val()+"/index.php/api/mob";
   var puh_nro = "0449304851";
   var versio = "0.47";
   var tag = "36073245411209220";
-  var gps = "000000";
-  var imei = "353888067886268";
+  var imei = DeviceIMEI;
 
 
-function row(tilanne,st,gps){
+function row(tilanne,st){
 
    if((tilanne == 'tyo_al') & (st == 1))
    {
@@ -115,7 +134,7 @@ function row(tilanne,st,gps){
 		bluetooth_name: "0",
 		sim_serial_number: "0",
 		subscriber_id: "0",
-		my_location: gps,
+		my_location: my_location,
 		osoite: "0",
 		kohde_kannasta: "Testti Osoite",
 		kohdenID: "0",

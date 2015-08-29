@@ -55,6 +55,8 @@ public function actionImei($dom)
 	    if(isset($_POST['check'])){
             	$mobCheck = Mob::model()->find(" imei = '".$_POST['imei']."' order by id DESC ");
 
+		if(isset($mobCheck->id))
+		{
 		  if($mobCheck->status == 2 and $mobCheck->loppui == '')
 		   $mobCheck->status = 2.1;
 
@@ -62,6 +64,11 @@ public function actionImei($dom)
 		   $mobCheck->status = 10.1;
 
                 $this->_sendResponse(200, $mobCheck->status."//".$mobCheck->kohde_kannasta."//".$mobCheck->aloitan."//".$mobCheck->loppui);
+		} else {
+                $this->_sendResponse(200, "3//mull//null//null");
+		}
+
+
 	     	exit;
 	    }
 
