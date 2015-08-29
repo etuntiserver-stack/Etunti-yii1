@@ -88,6 +88,7 @@ public function actionImei($dom)
                 $mobupdate = Mob::model()->findbypk($mob->id);
                 $mobupdate->loppui = date("d.m.Y H:i:s",strtotime($_POST['loppui']));
                 $mobupdate->status = 3;
+                $mobupdate->my_location = $mobupdate->my_location."**".$_POST['my_location'];
                 $mobupdate->save();
                 $this->_sendResponse(200, $ms." ID: ".$mobupdate->id." on nyt lopetettu, status: ".$mobupdate->status);
 
@@ -96,6 +97,7 @@ public function actionImei($dom)
                 $mobupdate = Mob::model()->findbypk($mob->id);
                 $mobupdate->loppui = date("d.m.Y H:i:s",strtotime($_POST['loppui']));
                 $mobupdate->status = 2;
+                $mobupdate->my_location = $mobupdate->my_location."**".$_POST['my_location'];
                 $mobupdate->save();
                 $this->_sendResponse(200, $ms." ID: ".$mobupdate->id." on nyt lopetettu, status: ".$mobupdate->status);
 
@@ -104,6 +106,7 @@ public function actionImei($dom)
                 $mobupdate = Mob::model()->findbypk($mob->id);
                 $mobupdate->loppui = date("d.m.Y H:i:s",strtotime($_POST['loppui']));
                 $mobupdate->status = 10;
+                $mobupdate->my_location = $mobupdate->my_location."**".$_POST['my_location'];
                 $mobupdate->save();
                 $this->_sendResponse(200, $ms." ID: ".$mobupdate->id." on nyt lopetettu, status: ".$mobupdate->status);
 
