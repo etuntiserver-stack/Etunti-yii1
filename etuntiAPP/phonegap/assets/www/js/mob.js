@@ -178,7 +178,7 @@ function row(tilanne,st){
         $.ajax({
            url: url+'/imei?dom='+domain,
 	   type:'POST',
- 	   data: { check : "testi", imei : imei },
+ 	   data: { check : "testi", imei : imei, my_location : my_location },
            success: function(data){
         	//console.log(data);
 		var sp = data.split("//");
