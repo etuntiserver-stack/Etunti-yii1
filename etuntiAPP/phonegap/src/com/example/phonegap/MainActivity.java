@@ -5,12 +5,14 @@ package com.example.phonegap;
 import android.support.v4.app.Fragment;
 import android.telephony.TelephonyManager;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.os.Build;
 import android.location.Location;
 
@@ -20,26 +22,50 @@ import org.apache.cordova.DroidGap;
 
 
 public class MainActivity extends DroidGap {
-	private static String imei;
+	private static String IMEI;
+	private static String my_location;
+	private String nfc;
     @Override
 	public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        String IMEI;
-        String my_location;
+        setContentView(R.layout.activity_main);
+
+        
         MyLocationListener.SetUpLocationListener(this);
         TelephonyManager telephonyManager = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
         IMEI  = telephonyManager.getDeviceId();
         //Phno =  telephonyManager.getPhoneType();
         
+
+        
+        Button getAnswerButton = (Button) findViewById(R.id.button1);
+        getAnswerButton.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View v) {
+            	zaxod();     	
+            }
+        });
+        /*
         if(MyLocationListener.imHere != null){
         	 my_location =  MyLocationListener.imHere.getLatitude()+"/"+MyLocationListener.imHere.getLongitude();
+        	 super.loadUrl("file:///android_asset/www/index.html?imei="+IMEI+"&location="+my_location+"&nfc="+nfc);
             } else {
         	 my_location = "GPS disabled";
+        	 super.loadUrl("file:///android_asset/www/gpsdisabled.html");
             }
+        */
         
-        super.loadUrl("file:///android_asset/www/index.html?imei="+IMEI+"&location="+my_location);
-    }
 
+    }
+    public void zaxod(){
+    if(MyLocationListener.imHere != null){
+      	 my_location =  MyLocationListener.imHere.getLatitude()+"/"+MyLocationListener.imHere.getLongitude();
+      	 super.loadUrl("file:///android_asset/www/index.html?imei="+IMEI+"&location="+my_location+"&nfc="+nfc);
+          } else {
+      	 my_location = "GPS disabled";
+      	 super.loadUrl("file:///android_asset/www/gpsdisabled.html");
+          }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
