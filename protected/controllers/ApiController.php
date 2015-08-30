@@ -162,7 +162,7 @@ public function actionImei($dom)
                 $mobinsert->status = $_POST['status'];
                 $mobinsert->tietoja = $_POST['tietoja'];
                 $mobinsert->save();
-                $this->_sendResponse(200, "Luotu ID: ".$mobinsert->id." ".$ttekija->imei);
+                $this->_sendResponse(200, $mobinsert->id."//".$mobinsert->kohde_kannasta);
 
 	    } else {
                 $this->_sendResponse(200, "Kaikki on suljettu, ei ole mitään avoina");

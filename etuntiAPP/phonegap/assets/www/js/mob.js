@@ -41,13 +41,17 @@ $('input[name="lounas"]').on('switchChange.bootstrapSwitch', function(event, sta
 });
 
 
-function allEnable(){
-	$('.tyo').bootstrapSwitch('toggleEnabled');
-	$('.matka').bootstrapSwitch('toggleEnabled');
-	$('.lounas').bootstrapSwitch('toggleEnabled');
-	return false;
+function allHide(){
+	$("#osoite").hide('slow');
+	$('#tyo').hide('slow');
+	$('#matka').hide('slow');
+	$('#lounas').hide('slow');
 }
-
+function allShow(){
+	$('#tyo').show('slow');
+	$('#matka').show('slow');
+	$('#lounas').show('slow');
+}
 
 
 function curDateTime(){
@@ -188,26 +192,24 @@ function row(tilanne,st){
 
 		if((sp[0] == '3') || (sp[0] == '2') || (sp[0] == '10')){
 		  $("#osoite").show('slow');
+		  allShow();
 		}
 		if(sp[0] == '1')
 		{
-		  $("#osoite").hide('slow');
+		  allHide();
+		  $("#tyo").show('slow');
 		  $('.tyo').bootstrapSwitch('state', true, true);
-		  $('.matka').bootstrapSwitch('toggleDisabled');
-		  $('.lounas').bootstrapSwitch('toggleDisabled');
 		} 
 		if(sp[0] == '2.1')
 		{
-		  $("#osoite").hide('slow');
-		  $('.tyo').bootstrapSwitch('toggleDisabled');
+		  allHide();
+		  $("#matka").show('slow');
 		  $('.matka').bootstrapSwitch('state', true, true);
-		  $('.lounas').bootstrapSwitch('toggleDisabled');
 		}
 		if(sp[0] == '10.1')
 		{
-		  $("#osoite").hide('slow');
-		  $('.tyo').bootstrapSwitch('toggleDisabled');
-		  $('.matka').bootstrapSwitch('toggleDisabled');
+		  allHide();
+		  $("#lounas").show('slow');
 		  $('.lounas').bootstrapSwitch('state', true, true);
 		}
 		$("#os").val(sp[4]);
