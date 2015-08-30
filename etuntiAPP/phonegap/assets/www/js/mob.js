@@ -229,7 +229,7 @@ $("#os").keyup(function(){
  	   data: { check : "osoitevaihto", imei : imei, my_location : my_location, thisKey : thisKey },
            success: function(data){
         	//console.log(data);
-		$("#result").val(data);
+		//$("#result").val(data);
 		$("#getListFromServer").html(data);	
     	},
     		error:function (xhr, ajaxOptions, thrownError){
