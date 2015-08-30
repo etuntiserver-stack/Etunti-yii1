@@ -54,16 +54,19 @@ public function actionImei($dom)
 
 	    if(isset($_POST['check'])){
 
-		$loc = explode("/",$_POST['my_location']); 
-		$gps = '';
-	  	$get_osoite = '';
- 
+		$loc = explode("/",$_POST['my_location']);
+		$get_osoite = '';
 
+ 		if(isset($loc[0]) and isset($loc[1]))
+		{
+		  $gps = $loc[0].",".$loc[1]; 
+ 
 		  $json_url = 'http://maps.googleapis.com/maps/api/geocode/json?latlng='.$gps.'&language=fi&sensor=true';
 		  $json = file_get_contents($json_url);
 		  $obj = json_decode($json);
 		  $get_osoite = $obj->results[0]->formatted_address;
 		  $get_osoite = str_replace(", Suomi", "", $get_osoite);
+		}
 
             	  $mobCheck = Mob::model()->find(" imei = '".$_POST['imei']."' order by id DESC ");
 
