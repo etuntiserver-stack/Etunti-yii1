@@ -140,7 +140,7 @@ function row(tilanne,st){
 		my_location: my_location,
 		osoite: "0",
 		kohde_kannasta: $("#os").val(),
-		kohdenID: "0",
+		kohdenID: $("#kohdenID").val(),
 		aloitan: al,
 		loppui: lp,
 		viesti: "xxx",
@@ -187,22 +187,25 @@ function row(tilanne,st){
 		$("#result").append(sp+"\n");
 
 		if((sp[0] == '3') || (sp[0] == '2') || (sp[0] == '10')){
-
+		  $("#osoite").show('slow');
 		}
 		if(sp[0] == '1')
 		{
+		  $("#osoite").hide('slow');
 		  $('.tyo').bootstrapSwitch('state', true, true);
 		  $('.matka').bootstrapSwitch('toggleDisabled');
 		  $('.lounas').bootstrapSwitch('toggleDisabled');
 		} 
 		if(sp[0] == '2.1')
 		{
+		  $("#osoite").hide('slow');
 		  $('.tyo').bootstrapSwitch('toggleDisabled');
 		  $('.matka').bootstrapSwitch('state', true, true);
 		  $('.lounas').bootstrapSwitch('toggleDisabled');
 		}
 		if(sp[0] == '10.1')
 		{
+		  $("#osoite").hide('slow');
 		  $('.tyo').bootstrapSwitch('toggleDisabled');
 		  $('.matka').bootstrapSwitch('toggleDisabled');
 		  $('.lounas').bootstrapSwitch('state', true, true);
@@ -222,7 +225,7 @@ function row(tilanne,st){
 $("#os").keyup(function(){
 
 	var thisKey = $(this).val();
-
+	$("#getListFromServer").show('slow');
         $.ajax({
            url: url+'/imei?dom='+domain,
 	   type:'POST',
@@ -230,14 +233,27 @@ $("#os").keyup(function(){
            success: function(data){
         	//console.log(data);
 		//$("#result").val(data);
-		$("#getListFromServer").html(data);	
+		$("#getListFromServer").html(data);
+
+  		$("#list").change(function(){
+			$("#getListFromServer").hide('slow');
+			$("#os").val($( "#list option:selected" ).text());
+			$("#kohdenID").val($( "#list option:selected" ).val());
+		});
+	
     	},
     		error:function (xhr, ajaxOptions, thrownError){
         	//console.log(xhr.responseText);
 		$("#result").val(xhr.responseText);
     	}
         });
+
+
+
 });
+
+
+
 
 
 
