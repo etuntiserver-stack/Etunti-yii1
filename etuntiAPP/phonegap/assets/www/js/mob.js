@@ -187,6 +187,7 @@ function row(tilanne,st){
 		$("#result").append(sp+"\n");
 
 		if((sp[0] == '3') || (sp[0] == '2') || (sp[0] == '10')){
+		$("#os").val(sp[4]);
 		//allEnable();
 		}
 		if(sp[0] == '1')
