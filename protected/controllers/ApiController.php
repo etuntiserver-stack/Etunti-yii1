@@ -50,7 +50,6 @@ public function actionImei($dom)
 	     }
 
 
-            $mob = Mob::model()->find(" imei = '".$_POST['imei']."' and loppui = '' ");
 
 	    if(isset($_POST['check'])){
 
@@ -107,7 +106,7 @@ public function actionImei($dom)
 
 
 
-
+            $mob = Mob::model()->find(" imei = '".$_POST['imei']."' and loppui = '' ");
 
 	    if(isset($mob->id)){
 
