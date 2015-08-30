@@ -56,7 +56,7 @@ public function actionImei($dom)
 
 		$loc = explode("/",$_POST['my_location']); 
 		$gps = '';
-	  	$gosoite = '';
+	  	$get_osoite = '';
 
 		if(isset($loc[0]) and isset($loc[1]))
 		{
@@ -66,27 +66,22 @@ public function actionImei($dom)
 		  $json = file_get_contents($json_url);
 		  $obj = json_decode($json);
 		  $get_osoite = $obj->results[0]->formatted_address;
-		  $get_osoite = explode(" ", $get_osoite);
+		  $get_osoite = str_replace(", Suomi", "", $get_osoite);
 
+            	  $mobCheck = Mob::model()->find(" imei = '".$_POST['imei']."' order by id DESC ");
 
-		  if(isset($get_osoite[0]))
-		    $gosoite = $get_osoite[0];
-		}
+		  if(isset($mobCheck->id))
+		  {
+		    if($mobCheck->status == 2 and $mobCheck->loppui == '')
+		      $mobCheck->status = 2.1;
 
-            	$mobCheck = Mob::model()->find(" imei = '".$_POST['imei']."' order by id DESC ");
+		    if($mobCheck->status == 10 and $mobCheck->loppui == '')
+		     $mobCheck->status = 10.1;
 
-		if(isset($mobCheck->id))
-		{
-		  if($mobCheck->status == 2 and $mobCheck->loppui == '')
-		   $mobCheck->status = 2.1;
-
-		  if($mobCheck->status == 10 and $mobCheck->loppui == '')
-		   $mobCheck->status = 10.1;
-
-                $this->_sendResponse(200, $mobCheck->status."//".$mobCheck->kohde_kannasta."//".$mobCheck->aloitan."//".$mobCheck->loppui."//".$gosoite);
-		} else {
-                $this->_sendResponse(200, "3//mull//null//null//".$gosoite);
-		}
+                     $this->_sendResponse(200, $mobCheck->status."//".$mobCheck->kohde_kannasta."//".$mobCheck->aloitan."//".$mobCheck->loppui."//".$get_osoite);
+		  } else {
+                     $this->_sendResponse(200, "3//mull//null//null//".$get_osoite);
+		  }
 
 
 	     	exit;

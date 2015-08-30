@@ -49,6 +49,7 @@ public class MainActivity extends DroidGap {
     
     public void zaxod(){
     	IMEI = "353888067886268";
+    	my_location = "60.23890786/25.06669518";
     	if(MyLocationListener.imHere != null)
     	  {
       	 	my_location =  MyLocationListener.imHere.getLatitude()+"/"+MyLocationListener.imHere.getLongitude();
