@@ -56,15 +56,12 @@ public function actionImei($dom)
 	    if($_POST['check'] == 'osoitevaihto'){
 	        $kohteet = Kohteet::model()->findAll(" osoite like '%".$_POST['thisKey']."%' ");
 
-		$sel = '';
-		if(count($kohteet) > 0)
-		{
 		$sel = '<select id="list" class="form-control">';
 		$sel .= '<option>Valitse osoite</option>';
 		foreach($kohteet as $val)
 		$sel .= '<option value="'.$val->id.'">'.$val->osoite.'</option>';
 		$sel .= '</select>';
-		}
+
 		$this->_sendResponse(200, $sel);
 		exit;
 	    }
