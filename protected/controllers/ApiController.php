@@ -54,6 +54,18 @@ public function actionImei($dom)
 
 	    if(isset($_POST['check'])){
 
+	    if($_POST['check'] == 'osoitevaihto'){
+	        $kohteet = Kohteet::model()->findAll(" osoite like '%".$_POST['thisKey']."%' ");
+
+		$sel = '<select id="list">';
+		foreach($kohteet as $val)
+		$sel .= '<option value="'.$val->id.'">'.$val->osoite.'</option>';
+		$sel .= '</select>';
+
+		$this->_sendResponse(200, $sel);
+		exit;
+	    }
+
 		$loc = explode("/",$_POST['my_location']);
 		$get_osoite = '';
 
@@ -88,6 +100,10 @@ public function actionImei($dom)
 
 	     	exit;
 	    }
+
+
+
+
 
 	    if(isset($mob->id)){
 

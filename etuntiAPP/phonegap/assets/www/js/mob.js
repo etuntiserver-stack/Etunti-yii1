@@ -93,7 +93,7 @@ var query = location.href.substring((location.href.indexOf('?')+1), location.hre
   var versio = "0.47";
   var tag = "36073245411209220";
   var imei = DeviceIMEI;
-  var osoite = $("#os").val();
+
 
 
 function row(tilanne,st){
@@ -139,7 +139,7 @@ function row(tilanne,st){
 		subscriber_id: "0",
 		my_location: my_location,
 		osoite: "0",
-		kohde_kannasta: osoite,
+		kohde_kannasta: $("#os").val(),
 		kohdenID: "0",
 		aloitan: al,
 		loppui: lp,
@@ -176,7 +176,6 @@ function row(tilanne,st){
 // Checker
     set();
 
-
     function set() {
         $.ajax({
            url: url+'/imei?dom='+domain,
@@ -188,8 +187,7 @@ function row(tilanne,st){
 		$("#result").append(sp+"\n");
 
 		if((sp[0] == '3') || (sp[0] == '2') || (sp[0] == '10')){
-		$("#os").val(sp[4]);
-		//allEnable();
+
 		}
 		if(sp[0] == '1')
 		{
@@ -209,7 +207,7 @@ function row(tilanne,st){
 		  $('.matka').bootstrapSwitch('toggleDisabled');
 		  $('.lounas').bootstrapSwitch('state', true, true);
 		}
-
+		$("#os").val(sp[4]);
 		
     	},
     		error:function (xhr, ajaxOptions, thrownError){
@@ -221,29 +219,26 @@ function row(tilanne,st){
 
 
 
+$("#os").keyup(function(){
 
+	var thisKey = $(this).val();
 
-/*
-    updateChecker();
-
-    function updateChecker() {
         $.ajax({
            url: url+'/imei?dom='+domain,
 	   type:'POST',
- 	   data: { check : "testi", imei : imei },
+ 	   data: { check : "osoitevaihto", imei : imei, my_location : my_location, thisKey : thisKey },
            success: function(data){
         	//console.log(data);
 		$("#result").val(data);
-		
+		$("#getListFromServer").html(data);	
     	},
     		error:function (xhr, ajaxOptions, thrownError){
         	//console.log(xhr.responseText);
 		$("#result").val(xhr.responseText);
     	}
         });
-    }
-    	    setInterval(updateChecker, "10000");
-*/
+});
+
 
 
 
