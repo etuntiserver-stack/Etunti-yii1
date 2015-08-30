@@ -1,6 +1,7 @@
 $(document).ready(function(){
 
 
+
 $(".sw").bootstrapSwitch({
 	size: "large",
 	onColor: "info",
@@ -92,12 +93,14 @@ var query = location.href.substring((location.href.indexOf('?')+1), location.hre
   var my_location = query['location'];
   var nfc = query['nfc'];
 
+
+
   $("#result").append("DeviceIMEI : " + DeviceIMEI + "\n");
   $("#result").append("Location : " + my_location + "\n");
 
 
 
-  var domain = "sivex";
+  var domain = $("#domain").val();
   var url = $("#server").val()+"/index.php/api/mob";
   var puh_nro = "0449304851";
   var versio = "0.47";
@@ -184,8 +187,49 @@ function row(tilanne,st){
 
 
 
+        document.addEventListener("deviceready", onDeviceReady, false);
+        
+        function onDeviceReady() 
+        {
+            requestFileSystem(LocalFileSystem.PERSISTENT, 0, onSuccess, onError);
+        }
+        
+        function onSuccess(fileSystem) 
+        {   
+            var directoryEntry = fileSystem.root;
+            
+            //lets create a file named readme.txt. getFile method actually creates a file and returns a pointer(FileEntry) if it doesn't exist otherwise just returns a pointer to it. It returns the file pointer as callback parameter.
+            directoryEntry.getFile("readme.txt", {create: true, exclusive: false}, function(fileEntry){
+                //lets write something into the file
+                fileEntry.createWriter(function(writer){
+                    writer.write("This is the text inside readme file");
+                }, function(error){
+                    console.log("Error occurred while writing to file. Error code is: " + error.code);
+                });
+            }, function(error){
+                console.log("Error occurred while getting a pointer to file. Error code is: " + error.code);
+            });
+        }
+        
+        function onError(evt)
+        {
+            console.log("Error occurred during request to file system pointer. Error code is: " + evt.code);
+        }
+
+
+
+  $(".aloita").click(function(){
+
+  	domain = $("#domain").val();
+	set();
+
+  });
+
 // Checker
-    set();
+    if(domain != '')
+       	set();
+    else
+   	$("#result").append("Domaini puutuu \n");
 
     function set() {
 
@@ -256,7 +300,7 @@ $("#os").keyup(function(){
 		$("#getListFromServer").html(data);
 
   		$("#list").change(function(){
-			$("#loyty").hide();
+
 			$("#getListFromServer").hide('slow');
 			$("#os").val($( "#list option:selected" ).text());
 			$("#kohdenID").val($( "#list option:selected" ).val());
@@ -264,7 +308,7 @@ $("#os").keyup(function(){
 
 		var listSize = $('#list option').size();
 
-			$("#loyty").html("<h3>Löyty: "+(listSize-1)+" kohteita</h3>");
+			$("#valitseOsoite").text("Löyty: "+(listSize-1)+" kohteita");
 
 		if(listSize > 1)
 		{

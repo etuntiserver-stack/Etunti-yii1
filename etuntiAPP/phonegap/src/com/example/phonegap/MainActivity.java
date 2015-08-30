@@ -13,8 +13,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.os.Build;
 import android.location.Location;
+
 
 import org.apache.cordova.DroidGap;
 
@@ -22,14 +24,17 @@ import org.apache.cordova.DroidGap;
 
 
 public class MainActivity extends DroidGap {
+
 	private static String IMEI;
 	private static String my_location;
 
     @Override
 	public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+             
         /*
         setContentView(R.layout.activity_main);
+        
         Button getAnswerButton = (Button) findViewById(R.id.button1);
         getAnswerButton.setOnClickListener(new View.OnClickListener() {
 
@@ -38,17 +43,20 @@ public class MainActivity extends DroidGap {
             }
         });
         */
-        MyLocationListener.SetUpLocationListener(this);
-        TelephonyManager telephonyManager = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
-        IMEI  = telephonyManager.getDeviceId();
-        //Phno =  telephonyManager.getPhoneType();
              
         zaxod();
    }
     
     
     public void zaxod(){
-    	    	
+    	   
+    	
+        MyLocationListener.SetUpLocationListener(this);
+        TelephonyManager telephonyManager = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
+        IMEI  = telephonyManager.getDeviceId();
+        //Phno =  telephonyManager.getPhoneType();
+        
+        
     	if(MyLocationListener.imHere != null)
     	  {
       	 	my_location =  MyLocationListener.imHere.getLatitude()+"/"+MyLocationListener.imHere.getLongitude();

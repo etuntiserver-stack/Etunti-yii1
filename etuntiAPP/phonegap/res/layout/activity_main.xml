@@ -8,9 +8,25 @@
 
     <Button
         android:id="@+id/button1"
-        android:layout_width="134dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Ei TAGeja" />
+        android:layout_marginTop="100dp"
+        android:text="start" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="match_parent"
+        android:layout_height="43dp"
+        android:layout_marginTop="10dp"
+        android:text="Domaini"
+        android:textSize="30sp" />
+
+    <EditText
+        android:id="@+id/editText1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        android:ems="10" />
 
 </FrameLayout>
 
