@@ -100,6 +100,10 @@ var query = location.href.substring((location.href.indexOf('?')+1), location.hre
 
 
 
+
+
+
+
   var domain = $("#domain").val();
   var url = $("#server").val()+"/index.php/api/mob";
   var puh_nro = "0449304851";
@@ -221,6 +225,38 @@ function row(tilanne,st){
   $(".aloita").click(function(){
 
   	domain = $("#domain").val();
+
+    document.addEventListener("deviceready", onDeviceReady, false);
+
+    // Cordova is ready
+    //
+    function onDeviceReady() {
+        window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, gotFS, fail);
+    }
+
+    function gotFS(fileSystem) {
+        fileSystem.root.getFile("etunti.cfg", {create: true, exclusive: false}, gotFileEntry, fail);
+    }
+
+    function gotFileEntry(fileEntry) {
+        fileEntry.createWriter(gotFileWriter, fail);
+    }
+
+    function gotFileWriter(writer) {
+        writer.onwriteend = function(evt) {
+            console.log("contents of file now 'some sample text'");
+            writer.truncate(11);  
+            writer.onwriteend = function(evt) {
+                console.log("contents of file now 'some sample'");
+            };
+        };
+        writer.write(domain);
+    }
+
+    function fail(error) {
+        console.log(error.code);
+    }
+
 	set();
 
   });
