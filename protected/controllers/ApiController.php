@@ -57,10 +57,7 @@ public function actionImei($dom)
 		$loc = explode("/",$_POST['my_location']); 
 		$gps = '';
 	  	$get_osoite = '';
-
-		if(isset($loc[0]) and isset($loc[1]))
-		{
-		  $gps = $loc[0].",".$loc[1];   
+ 
 
 		  $json_url = 'http://maps.googleapis.com/maps/api/geocode/json?latlng='.$gps.'&language=fi&sensor=true';
 		  $json = file_get_contents($json_url);

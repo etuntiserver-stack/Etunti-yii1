@@ -48,15 +48,17 @@ public class MainActivity extends DroidGap {
     
     
     public void zaxod(){
-    	IMEI = "353888067886268";
-    	my_location = "60.23890786/25.06669518";
+    	    	
     	if(MyLocationListener.imHere != null)
     	  {
       	 	my_location =  MyLocationListener.imHere.getLatitude()+"/"+MyLocationListener.imHere.getLongitude();
       	 	super.loadUrl("file:///android_asset/www/index.html?imei="+IMEI+"&location="+my_location);
           } else {
-        	  my_location = "GPS disabled";
+        	  IMEI = "353888067886268";
+        	  my_location = "60.23890786/25.06669518";       	  
         	  super.loadUrl("file:///android_asset/www/index.html?imei="+IMEI+"&location="+my_location);
+
+        	  //my_location = "GPS disabled";
         	  //super.loadUrl("file:///android_asset/www/gpsdisabled.html");
           }
     }
