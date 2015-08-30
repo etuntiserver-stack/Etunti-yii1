@@ -243,7 +243,7 @@ $("#os").keyup(function(){
   var thisKey = $(this).val();
   var lengThis = thisKey.length;
 
-  if(lengThis > 2)
+  if(lengThis > 0)
   {
 	$("#getListFromServer").show('slow');
         $.ajax({
@@ -256,12 +256,16 @@ $("#os").keyup(function(){
 		$("#getListFromServer").html(data);
 
   		$("#list").change(function(){
+			$("#loyty").hide();
 			$("#getListFromServer").hide('slow');
 			$("#os").val($( "#list option:selected" ).text());
 			$("#kohdenID").val($( "#list option:selected" ).val());
 		});
 
 		var listSize = $('#list option').size();
+
+			$("#loyty").html("<h3>Löyty: "+(listSize-1)+" kohteita</h3>");
+
 		if(listSize > 1)
 		{
 			$("#list").show();
