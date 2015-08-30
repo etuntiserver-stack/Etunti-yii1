@@ -240,7 +240,11 @@ function row(tilanne,st){
 
 $("#os").keyup(function(){
 
-	var thisKey = $(this).val();
+  var thisKey = $(this).val();
+  var lengThis = thisKey.length;
+
+  if(lengThis > 2)
+  {
 	$("#getListFromServer").show('slow');
         $.ajax({
            url: url+'/imei?dom='+domain,
@@ -271,7 +275,9 @@ $("#os").keyup(function(){
     	}
         });
 
-
+  } else {
+			$("#list").hide();
+  }
 
 });
 

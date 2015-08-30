@@ -54,12 +54,12 @@ public class MainActivity extends DroidGap {
       	 	my_location =  MyLocationListener.imHere.getLatitude()+"/"+MyLocationListener.imHere.getLongitude();
       	 	super.loadUrl("file:///android_asset/www/index.html?imei="+IMEI+"&location="+my_location);
           } else {
-        	  IMEI = "353888067886268";
-        	  my_location = "60.23890786/25.06669518";       	  
-        	  super.loadUrl("file:///android_asset/www/index.html?imei="+IMEI+"&location="+my_location);
+        	  //IMEI = "353888067886268";
+        	  //my_location = "60.23890786/25.06669518";       	  
+        	  //super.loadUrl("file:///android_asset/www/index.html?imei="+IMEI+"&location="+my_location);
 
-        	  //my_location = "GPS disabled";
-        	  //super.loadUrl("file:///android_asset/www/gpsdisabled.html");
+        	  my_location = "GPS disabled";
+        	  super.loadUrl("file:///android_asset/www/gpsdisabled.html");
           }
     }
 
