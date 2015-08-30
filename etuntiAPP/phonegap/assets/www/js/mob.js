@@ -16,6 +16,7 @@ $('input[name="tyo"]').on('switchChange.bootstrapSwitch', function(event, state)
   } else {
 	row("tyo_lp",3);
   }
+	$('.full').css({"opacity" : "0.3"});
 });
 
 $('input[name="matka"]').on('switchChange.bootstrapSwitch', function(event, state) {
@@ -26,7 +27,7 @@ $('input[name="matka"]').on('switchChange.bootstrapSwitch', function(event, stat
   } else {
 	row("matka_lp",2);
   }
-
+	$('.full').css({"opacity" : "0.3"});
 });
 
 $('input[name="lounas"]').on('switchChange.bootstrapSwitch', function(event, state) {
@@ -37,7 +38,7 @@ $('input[name="lounas"]').on('switchChange.bootstrapSwitch', function(event, sta
   } else {
 	row("lounas_lp",10);
   }
-
+	$('.full').css({"opacity" : "0.3"});
 });
 
 
@@ -51,6 +52,11 @@ function allShow(){
 	$('#tyo').show('slow');
 	$('#matka').show('slow');
 	$('#lounas').show('slow');
+}
+function allTilasetHide(){
+	$("#tyo_kohde").hide();
+	$("#matka_kohde").hide();
+	$("#lounas_kohde").hide();
 }
 
 
@@ -163,7 +169,8 @@ function row(tilanne,st){
  	   data: postData,
            success: function(data){
         	console.log(data);
-		$("#result").val(data);
+		//var spNew = data.split("//");
+		$("#result").append(data+"\n");
 		set();
     	},
     		error:function (xhr, ajaxOptions, thrownError){
@@ -181,6 +188,8 @@ function row(tilanne,st){
     set();
 
     function set() {
+
+
         $.ajax({
            url: url+'/imei?dom='+domain,
 	   type:'POST',
@@ -189,27 +198,32 @@ function row(tilanne,st){
         	//console.log(data);
 		var sp = data.split("//");
 		$("#result").append(sp+"\n");
+		$('.full').css({"opacity" : "1"});
 
 		if((sp[0] == '3') || (sp[0] == '2') || (sp[0] == '10')){
 		  $("#osoite").show('slow');
 		  allShow();
+		  allTilasetHide();
 		}
 		if(sp[0] == '1')
 		{
 		  allHide();
 		  $("#tyo").show('slow');
+		  $("#tyo_kohde").html(sp[1]).show('slow');
 		  $('.tyo').bootstrapSwitch('state', true, true);
 		} 
 		if(sp[0] == '2.1')
 		{
 		  allHide();
 		  $("#matka").show('slow');
+		  $("#matka_kohde").html(sp[1]).show('slow');
 		  $('.matka').bootstrapSwitch('state', true, true);
 		}
 		if(sp[0] == '10.1')
 		{
 		  allHide();
 		  $("#lounas").show('slow');
+		  $("#lounas_kohde").html(sp[1]).show('slow');
 		  $('.lounas').bootstrapSwitch('state', true, true);
 		}
 		$("#os").val(sp[4]);
@@ -242,7 +256,14 @@ $("#os").keyup(function(){
 			$("#os").val($( "#list option:selected" ).text());
 			$("#kohdenID").val($( "#list option:selected" ).val());
 		});
-	
+
+		var listSize = $('#list option').size();
+		if(listSize > 1)
+		{
+			$("#list").show();
+		} else {
+			$("#list").hide();
+		}
     	},
     		error:function (xhr, ajaxOptions, thrownError){
         	//console.log(xhr.responseText);
