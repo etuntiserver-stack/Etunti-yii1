@@ -68,23 +68,23 @@ function curDateTime(){
 
 
 var query = location.href.substring((location.href.indexOf('?')+1), location.href.length);
-if(location.href.indexOf('?') < 0) query = '';
-    querysplit = query.split('&');
-    query = new Array();
-for(var i = 0; i < querysplit.length; i++)
-{
+  if(location.href.indexOf('?') < 0) query = '';
+      querysplit = query.split('&');
+      query = new Array();
+  for(var i = 0; i < querysplit.length; i++)
+  {
         var namevalue = querysplit[i].split('=');
         namevalue[1] = namevalue[1].replace(/\+/g, ' ');
         query[namevalue[0]] = unescape(namevalue[1]);
-}
+  }
 
-var DeviceIMEI = query['imei'];
-var my_location = query['location'];
-var nfc = query['nfc'];
+  var DeviceIMEI = query['imei'];
+  var my_location = query['location'];
+  var nfc = query['nfc'];
 
-$("#result").append("DeviceIMEI : " + DeviceIMEI + "\n");
-$("#result").append("Location : " + my_location + "\n");
-$("#result").append("NFC TAG : " + nfc + "\n");
+  $("#result").append("DeviceIMEI : " + DeviceIMEI + "\n");
+  $("#result").append("Location : " + my_location + "\n");
+
 
 
   var domain = "sivex";

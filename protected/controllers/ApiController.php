@@ -65,6 +65,9 @@ public function actionImei($dom)
 		$get_osoite = $obj->results[0]->formatted_address;
 		$get_osoite = explode(" ", $get_osoite);
 
+		  $osoite = '';
+		if(isset($get_osoite[0]))
+		  $osoite = $get_osoite[0];
 
             	$mobCheck = Mob::model()->find(" imei = '".$_POST['imei']."' order by id DESC ");
 
@@ -76,9 +79,9 @@ public function actionImei($dom)
 		  if($mobCheck->status == 10 and $mobCheck->loppui == '')
 		   $mobCheck->status = 10.1;
 
-                $this->_sendResponse(200, $mobCheck->status."//".$mobCheck->kohde_kannasta."//".$mobCheck->aloitan."//".$mobCheck->loppui."//".$get_osoite[0]);
+                $this->_sendResponse(200, $mobCheck->status."//".$mobCheck->kohde_kannasta."//".$mobCheck->aloitan."//".$mobCheck->loppui."//".$osoite);
 		} else {
-                $this->_sendResponse(200, "3//mull//null//null//".$get_osoite[0]);
+                $this->_sendResponse(200, "3//mull//null//null//".$osoite);
 		}
 
 
