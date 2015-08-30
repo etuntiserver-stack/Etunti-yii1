@@ -141,7 +141,7 @@ public function actionImei($dom)
                 $mobinsert->imei = $ttekija->imei;
                 $mobinsert->tid = $ttekija->id;
                 $mobinsert->tekijan_nimi = $ttekija->tekijan_nimi;
-                $mobinsert->kohde_kannasta = 'Testi kohde';
+                $mobinsert->kohde_kannasta = $_POST['kohde_kannasta'];
                 $mobinsert->aloitan = $_POST['aloitan'];
                 $mobinsert->status = $_POST['status'];
                 $mobinsert->tietoja = $_POST['tietoja'];

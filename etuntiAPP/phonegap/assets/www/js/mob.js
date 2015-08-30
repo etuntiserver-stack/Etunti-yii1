@@ -93,6 +93,7 @@ var query = location.href.substring((location.href.indexOf('?')+1), location.hre
   var versio = "0.47";
   var tag = "36073245411209220";
   var imei = DeviceIMEI;
+  var osoite = $("#os").val();
 
 
 function row(tilanne,st){
@@ -138,7 +139,7 @@ function row(tilanne,st){
 		subscriber_id: "0",
 		my_location: my_location,
 		osoite: "0",
-		kohde_kannasta: "Testti Osoite",
+		kohde_kannasta: osoite,
 		kohdenID: "0",
 		aloitan: al,
 		loppui: lp,
