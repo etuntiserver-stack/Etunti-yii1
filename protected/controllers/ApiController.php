@@ -61,7 +61,7 @@ public function actionImei($dom)
 		    $criteria->condition = " tid = '".$ttekija->id."' and DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') >= '".date("Y-m-d")."' ";
 	            $tvuoro = Tyovuoroot::model()->findAll($criteria);
 
-		    if(!isset($tvuoro[0]->attributes['id']))
+		    if(empty($tvuoro))
 		    {
 		    $this->_sendResponse(200, 'ei tuloksia');
 		    exit;
@@ -94,7 +94,7 @@ public function actionImei($dom)
 		    $criteria->condition = " tekija = '".$ttekija->id."' and status = '0' ";
 	            $viestinta = Viestinta::model()->findAll($criteria);
 
-		    if(!isset($viestinta[0]->attributes['id']))
+		    if(empty($viestinta))
 		    {
 		    $this->_sendResponse(200, 'ei tuloksia');
 		    exit;

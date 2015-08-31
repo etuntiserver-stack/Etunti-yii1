@@ -20,6 +20,7 @@
    }
 
 
+
 		if(Yii::app()->request->getPost('Tekija'))
 		Yii::app()->session['Tekija'] = Yii::app()->request->getPost('Tekija');
 
