@@ -381,21 +381,21 @@ $("#os").keyup(function(){
 
 
 /* check messages */
-
+if(domain != ''){
         $.ajax({
            url: url+'/imei?dom='+domain,
 	   type:'POST',
  	   data: { check : "viestinta_checkNew", imei : imei, my_location : my_location },
            success: function(data){
         	console.log(data);
-		$("#viestit").html(data);
+
     	},
     		error:function (xhr, ajaxOptions, thrownError){
         	console.log(xhr.responseText);
-		$("#viestit").html(xhr.responseText);
+		$("#result2").html(xhr.responseText).show();
     	}
         });
-
+}
 
 
 
