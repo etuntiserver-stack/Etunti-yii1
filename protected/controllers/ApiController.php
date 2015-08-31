@@ -56,11 +56,11 @@ public function actionImei($dom)
 	        if($_POST['check'] == 'viestinta'){
 	            $viestinta = Viestinta::model()->findAll(" tekija = '".$ttekija->id."' ");
 
-		    $sel = '<div class="">';
+		    $sel = '<div class="row">';
 		    foreach($viestinta as $val)
-		      $sel .= '<div class="row">
+		      $sel .= '<div class="alert alert-info">
 				  '.$val->admin.'<br>
-				  '.$val->pvm.'<br>
+				  '.$val->pvm.'<hr>
 				  <b>'.$val->viesti.'</b>
 				</div>';
 		    $sel .= '</div>';
