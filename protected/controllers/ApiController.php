@@ -116,6 +116,12 @@ public function actionImei($dom)
 		    $criteria->condition = " tekija = '".$ttekija->id."' ";
 	            $viestinta = Viestinta::model()->findAll($criteria);
 
+		    if(empty($viestinta))
+		    {
+		    $this->_sendResponse(200, 'ei tuloksia');
+		    exit;
+		    }
+
 		    $sel = '';
 		    $cl = '';
 		    foreach($viestinta as $val)
