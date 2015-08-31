@@ -54,7 +54,7 @@ public function actionImei($dom)
 	    if(isset($_POST['check'])){
 
 	        if($_POST['check'] == 'viestinta'){
-	            $viestinta = Viestinta::model()->findAll(" tekija = '".$ttekija->id."' ");
+	            $viestinta = Viestinta::model()->findAll(" tekija = '".$ttekija->id."' ",array('order'=>'id DESC'));
 
 		    $sel = '';
 		    foreach($viestinta as $val)
