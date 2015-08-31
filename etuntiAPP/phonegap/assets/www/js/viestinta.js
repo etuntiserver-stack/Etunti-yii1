@@ -16,7 +16,8 @@ $(document).ready(function(){
   var DeviceIMEI = query['imei'];
   var my_location = query['location'];
 
-  var url = $("#server").val()+"/index.php/api/mob";
+  var server = "http://etuntifw.azurewebsites.net";
+  var url = server+"/index.php/api/mob";
   var puh_nro = "0449304851";
   var versio = "0.47";
   var tag = "36073245411209220";
@@ -41,7 +42,7 @@ $(document).ready(function(){
     	},
     		error:function (xhr, ajaxOptions, thrownError){
         	console.log(xhr.responseText);
-		$("#result").val(xhr.responseText).show();
+		$("#viestit").html(xhr.responseText);
     	}
         });
 

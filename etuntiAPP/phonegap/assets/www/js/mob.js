@@ -20,7 +20,8 @@ $(document).ready(function(){
   else
     var domain = $("#domain").val();
 
-  var url = $("#server").val()+"/index.php/api/mob";
+  var server = "http://etuntifw.azurewebsites.net";
+  var url = server+"/index.php/api/mob";
   var puh_nro = "0449304851";
   var versio = "0.47";
   var tag = "36073245411209220";
