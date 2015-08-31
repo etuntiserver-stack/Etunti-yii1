@@ -61,6 +61,9 @@ public function actionImei($dom)
 		    $criteria->condition = " tid = '".$ttekija->id."' and DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') >= '".date("Y-m-d")."' ";
 	            $tvuoro = Tyovuoroot::model()->findAll($criteria);
 
+		    if(!$tvuoro)
+		    $this->_sendResponse(200, $tvuoro);
+
 		    $sel = '';
 		    $cl = '';
 		    $osoite = '';
