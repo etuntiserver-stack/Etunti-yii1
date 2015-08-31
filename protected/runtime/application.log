@@ -2243,3 +2243,32 @@ Stack trace:
 REQUEST_URI=/index.php/kohteet/index.php?r=user/login&return=filed
 HTTP_REFERER=http://etuntifw.local/index.php/sivexkuitti/index
 ---
+2015/08/31 08:27:14 [error] [php] Undefined variable: text (C:\xampp\htdocs\etuntifw\protected\views\layouts\main.php:19)
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\widgets\CContentDecorator.php(76): KohteetController->renderFile()
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\widgets\CContentDecorator.php(54): CContentDecorator->decorate()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\widgets\COutputProcessor.php(44): CContentDecorator->processOutput()
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\CBaseController.php(206): CContentDecorator->run()
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\CBaseController.php(300): KohteetController->endWidget()
+#5 C:\xampp\htdocs\etuntifw\protected\views\layouts\column2.php(22): KohteetController->endContent()
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\CBaseController.php(126): require()
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\CBaseController.php(95): KohteetController->renderInternal()
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(784): KohteetController->renderFile()
+#9 C:\xampp\htdocs\etuntifw\protected\controllers\KohteetController.php(150): KohteetController->render()
+#10 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(49): KohteetController->actionAdmin()
+#11 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams()
+#12 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): KohteetController->runAction()
+#13 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#14 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CAccessControlFilter->filter()
+#15 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): KohteetController->filterAccessControl()
+#16 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#17 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#18 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): KohteetController->runActionWithFilters()
+#19 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): KohteetController->run()
+#20 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#21 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#22 C:\xampp\htdocs\etuntifw\index.php(13): CWebApplication->run()
+REQUEST_URI=/index.php/kohteet/admin
+in C:\xampp\htdocs\etuntifw\protected\views\layouts\main.php (19)
+in C:\xampp\htdocs\etuntifw\protected\views\layouts\column2.php (22)
+in C:\xampp\htdocs\etuntifw\protected\controllers\KohteetController.php (150)

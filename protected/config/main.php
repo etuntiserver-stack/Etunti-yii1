@@ -74,7 +74,6 @@ return array(
 	// preloading 'log' component
 	'preload'=>array('log','chartjs'),
 	'language' => 'fi',
-	'charset'=>'utf-8',
 	// autoloading model and component classes
 	'import'=>array(
         'application.models.*',
@@ -271,6 +270,7 @@ return array(
 			'username' => $etuntifw_user,
 			'password' => $etuntifw_pass,
 		        'tablePrefix' => 'tbl_',
+			'charset' => 'utf8',
 
 		),
         	'db1'=>array(
@@ -279,7 +279,7 @@ return array(
 	            	'username' => $db2_user,
 	            	'password' => $db2_pass,
 	            	'tablePrefix' => '',
-			//'charset' => 'utf8',
+			'charset' => 'utf8',
 		    	'class'=> 'CDbConnection'
         	),
 		
