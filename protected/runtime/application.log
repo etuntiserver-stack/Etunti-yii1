@@ -2529,3 +2529,85 @@ Stack trace:
 REQUEST_URI=/index.php/sivexkuitti/index
 HTTP_REFERER=http://etuntifw.local/index.php/user/login
 ---
+2015/08/31 16:55:25 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "id".
+in E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php (79)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/31 16:55:25 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "time".
+in E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php (79)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/31 16:55:29 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "id".
+in E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php (79)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/31 16:55:29 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "time".
+in E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php (79)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/31 17:00:19 [error] [php] Undefined variable: ttekija (E:\GITHUB\etuntifw\protected\views\tyovuoroot\index.php:25)
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(869): TyovuorootController->renderFile()
+#1 E:\GITHUB\etuntifw\YII\framework\web\CController.php(782): TyovuorootController->renderPartial()
+#2 E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php(281): TyovuorootController->render()
+#3 E:\GITHUB\etuntifw\YII\framework\web\actions\CInlineAction.php(49): TyovuorootController->actionIndex()
+#4 E:\GITHUB\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams()
+#5 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(133): TyovuorootController->runAction()
+#6 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#7 E:\GITHUB\etuntifw\YII\framework\web\CController.php(1145): CAccessControlFilter->filter()
+#8 E:\GITHUB\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): TyovuorootController->filterAccessControl()
+#9 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#10 E:\GITHUB\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#11 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): TyovuorootController->runActionWithFilters()
+#12 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): TyovuorootController->run()
+#13 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#14 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#15 E:\GITHUB\etuntifw\index.php(13): CWebApplication->run()
+REQUEST_URI=/index.php/tyovuoroot/index
+in E:\GITHUB\etuntifw\protected\views\tyovuoroot\index.php (25)
+in E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php (281)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/31 17:00:31 [error] [exception.CException] exception 'CException' with message 'Luokan TyovuorootController ja sen käyttäytymismallit eivät sisällä metodia tai sulkeumaa nimeltä "_sendResponse".' in E:\GITHUB\etuntifw\YII\framework\base\CComponent.php:265
+Stack trace:
+#0 E:\GITHUB\etuntifw\protected\views\tyovuoroot\index.php(30): CComponent->__call('_sendResponse', Array)
+#1 E:\GITHUB\etuntifw\protected\views\tyovuoroot\index.php(30): TyovuorootController->_sendResponse(200, 'ei tuloksia')
+#2 E:\GITHUB\etuntifw\YII\framework\web\CBaseController.php(126): require('E:\\GITHUB\\etunt...')
+#3 E:\GITHUB\etuntifw\YII\framework\web\CBaseController.php(95): CBaseController->renderInternal('E:\\GITHUB\\etunt...', NULL, true)
+#4 E:\GITHUB\etuntifw\YII\framework\web\CController.php(869): CBaseController->renderFile('E:\\GITHUB\\etunt...', NULL, true)
+#5 E:\GITHUB\etuntifw\YII\framework\web\CController.php(782): CController->renderPartial('index', NULL, true)
+#6 E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php(281): CController->render('index')
+#7 E:\GITHUB\etuntifw\YII\framework\web\actions\CInlineAction.php(49): TyovuorootController->actionIndex()
+#8 E:\GITHUB\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#9 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#10 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#11 E:\GITHUB\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#12 E:\GITHUB\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#13 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#14 E:\GITHUB\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#15 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#16 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('index')
+#17 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('tyovuoroot/inde...')
+#18 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#19 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#20 {main}
+REQUEST_URI=/index.php/tyovuoroot/index
+HTTP_REFERER=http://etuntifw.local/index.php/tyovuoroot/index
+---
+2015/08/31 17:01:45 [error] [php] Trying to get property of non-object (E:\GITHUB\etuntifw\protected\views\tyovuoroot\index.php:27)
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(869): TyovuorootController->renderFile()
+#1 E:\GITHUB\etuntifw\YII\framework\web\CController.php(782): TyovuorootController->renderPartial()
+#2 E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php(281): TyovuorootController->render()
+#3 E:\GITHUB\etuntifw\YII\framework\web\actions\CInlineAction.php(49): TyovuorootController->actionIndex()
+#4 E:\GITHUB\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams()
+#5 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(133): TyovuorootController->runAction()
+#6 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#7 E:\GITHUB\etuntifw\YII\framework\web\CController.php(1145): CAccessControlFilter->filter()
+#8 E:\GITHUB\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): TyovuorootController->filterAccessControl()
+#9 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#10 E:\GITHUB\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#11 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): TyovuorootController->runActionWithFilters()
+#12 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): TyovuorootController->run()
+#13 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#14 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#15 E:\GITHUB\etuntifw\index.php(13): CWebApplication->run()
+REQUEST_URI=/index.php/tyovuoroot/index
+in E:\GITHUB\etuntifw\protected\views\tyovuoroot\index.php (27)
+in E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php (281)
+in E:\GITHUB\etuntifw\index.php (13)
