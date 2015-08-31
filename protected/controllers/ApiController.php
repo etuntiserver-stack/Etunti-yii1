@@ -54,13 +54,13 @@ public function actionImei($dom)
 	    if(isset($_POST['check'])){
 
 	        if($_POST['check'] == 'viestinta'){
-	            $kohteet = Viestinta::model()->findAll(" tekija = '".$ttekija->id."' ");
+	            $viestinta = Viestinta::model()->findAll(" tekija = '".$ttekija->id."' ");
 
-		    $sel = '<div class="">';
-		    foreach($kohteet as $val)
-		      $sel .= '<div class="row">
+		    $sel = '<div class="row">';
+		    foreach($viestinta as $val)
+		      $sel .= '<div class="alert alert-info">
 				  '.$val->admin.'<br>
-				  '.$val->pvm.'<br>
+				  '.$val->pvm.'<hr>
 				  <b>'.$val->viesti.'</b>
 				</div>';
 		    $sel .= '</div>';
