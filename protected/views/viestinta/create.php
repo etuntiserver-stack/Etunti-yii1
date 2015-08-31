@@ -3,8 +3,8 @@
 /* @var $model Viestinta */
 
 $this->breadcrumbs=array(
-	'Viestintas'=>array('index'),
-	'Create',
+	Yii::t('main', 'Viestintä')=>array('index'),
+	Yii::t('main', 'Luominen'),
 );
 
 $this->menu=array(
@@ -13,6 +13,6 @@ $this->menu=array(
 );
 ?>
 
-<h1>Create Viestinta</h1>
+<h1><?php echo Yii::t('main', 'Luo viesti'); ?></h1>
 
 <?php echo $this->renderPartial('_form', array('model'=>$model)); ?>
