@@ -3,9 +3,9 @@
 /* @var $model Viestinta */
 
 $this->breadcrumbs=array(
-	'Viestintas'=>array('index'),
+	Yii::t('main', 'Viestintä')=>array('index'),
 	$model->id=>array('view','id'=>$model->id),
-	'Update',
+	Yii::t('main', 'Päivitä'),
 );
 
 $this->menu=array(
@@ -16,6 +16,6 @@ $this->menu=array(
 );
 ?>
 
-<h1>Update Viestinta <?php echo $model->id; ?></h1>
+<h1><?php echo Yii::t('main', 'Päivitä viesti'); ?> <?php echo $model->id; ?></h1>
 
 <?php echo $this->renderPartial('_form', array('model'=>$model)); ?>

@@ -2462,3 +2462,6 @@ Stack trace:
 #5 {main}
 REQUEST_URI=/index.php/api/mob/imei
 ---
+2015/08/31 13:31:16 [warning] [application] Ei voitu asettaa "Viestinta"-luokan turvatonta attribuuttia "viesti".
+in C:\xampp\htdocs\etuntifw\protected\controllers\ViestintaController.php (82)
+in C:\xampp\htdocs\etuntifw\index.php (13)

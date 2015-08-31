@@ -40,9 +40,11 @@ class Viestinta extends DB2ActiveRecord
 		// will receive user inputs.
 		return array(
 			//array('time, pvm, tekija, viesti, admin', 'required'),
-			array('pvm', 'length', 'max'=>20),
+			array('pvm, time', 'length', 'max'=>20),
 			array('tekija', 'length', 'max'=>255),
+			array('status', 'length', 'max'=>1),
 			array('admin', 'length', 'max'=>50),
+			array('viesti', 'length', 'max'=>2000),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('id, time, pvm, tekija, viesti, admin', 'safe', 'on'=>'search'),
@@ -69,7 +71,7 @@ class Viestinta extends DB2ActiveRecord
 			'id' => 'ID',
 			'time' => 'Time',
 			'pvm' => 'Pvm',
-			'tekija' => 'Tekija',
+			'tekija' => 'Työntekijä',
 			'viesti' => 'Viesti',
 			'admin' => 'Admin',
 		);
@@ -87,6 +89,7 @@ class Viestinta extends DB2ActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('id',$this->id);
+		$criteria->compare('status',$this->status);
 		$criteria->compare('time',$this->time,true);
 		$criteria->compare('pvm',$this->pvm,true);
 		$criteria->compare('tekija',$this->tekija,true);
