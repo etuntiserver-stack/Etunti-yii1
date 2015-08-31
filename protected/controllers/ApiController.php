@@ -60,9 +60,9 @@ public function actionImei($dom)
 		    $criteria->condition = " tekija = '".$ttekija->id."' and status = '0' ";
 	            $viestinta = Viestinta::model()->findAll($criteria);
 
-		    $sel = '';
-		    if(count($viestinta) > 0)
-		    $sel = count($viestinta);
+		    $sel = '0';
+		    foreach($viestinta as $count)
+		    $sel += 1;
 
 		    $this->_sendResponse(200, $sel);
 		exit;
