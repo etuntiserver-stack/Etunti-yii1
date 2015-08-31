@@ -61,8 +61,8 @@ public function actionImei($dom)
 	            $viestinta = Viestinta::model()->findAll($criteria);
 
 		    $sel = '';
-		    if(count($viestinta) > 0)
-		    $sel = count($viestinta);
+		    //if(count($viestinta) > 0)
+		    //$sel = count($viestinta);
 
 		    $this->_sendResponse(200, $sel);
 		exit;
