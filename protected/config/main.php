@@ -270,6 +270,7 @@ return array(
 			'emulatePrepare' => true,
 			'username' => $etuntifw_user,
 			'password' => $etuntifw_pass,
+			'charset' => 'utf8',
 		        'tablePrefix' => 'tbl_',
 
 		),
@@ -279,7 +280,7 @@ return array(
 	            	'username' => $db2_user,
 	            	'password' => $db2_pass,
 	            	'tablePrefix' => '',
-			//'charset' => 'utf8',
+			'charset' => 'utf8',
 		    	'class'=> 'CDbConnection'
         	),
 		
