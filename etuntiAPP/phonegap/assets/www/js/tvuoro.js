@@ -40,11 +40,11 @@ $(document).ready(function(){
  	   data: { check : "tvuoro", imei : imei, my_location : my_location },
            success: function(data){
         	console.log(data);
-		$("#viestit").html(data);
+		$("#tvuoroot").html(data);
     	},
     		error:function (xhr, ajaxOptions, thrownError){
         	console.log(xhr.responseText);
-		$("#viestit").html(xhr.responseText);
+		$("#tvuoroot").html(xhr.responseText);
     	}
         });
 

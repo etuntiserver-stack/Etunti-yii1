@@ -58,7 +58,7 @@ public function actionImei($dom)
 
 		    $criteria = new CDbCriteria();
 		    $criteria->order = " id DESC ";
-		    $criteria->condition = " tid = '".$ttekija->id."' and DATE(DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d')) > CURDATE() ";
+		    $criteria->condition = " tid = '".$ttekija->id."'  ";
 	            $tvuoro = Tyovuoroot::model()->findAll($criteria);
 
 		    $sel = '';
@@ -71,7 +71,7 @@ public function actionImei($dom)
 		      $osoite = $kohde['osoite'];
 
 		      $sel .= '<div class="alert alert-info">
-				  '.$val->pvm.'<hr>
+				  <b>'.$val->pvm.'</b><hr>
 				  <span class="text">'.$val->alku.'-'.$val->loppu.' '.$osoite.'</span>
 				  <div class="text-small">'.$val->tietoja.'</div>
 				</div>';
