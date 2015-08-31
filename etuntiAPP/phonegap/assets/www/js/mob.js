@@ -182,7 +182,7 @@ function row(tilanne,st){
     	},
     		error:function (xhr, ajaxOptions, thrownError){
         	console.log(xhr.responseText);
-		$("#result").val(xhr.responseText);
+		$("#result").val(xhr.responseText).show();
     	}
         });
 
@@ -263,6 +263,7 @@ function row(tilanne,st){
 
 // Checker
     if(domain != ''){
+	$("#odotta").html("<h1>ODOTTA</h1>");
        	set();
     } else {
    	$("#result").append("Domaini puutuu \n");
@@ -278,6 +279,7 @@ function row(tilanne,st){
            success: function(data){
         	console.log(data);
 		var sp = data.split("//");
+		$("#odotta").hide();
 
 		$("#result").append(sp+"\n");
 		$('.full').css({"opacity" : "1"});
@@ -310,11 +312,12 @@ function row(tilanne,st){
 		  $('.lounas').bootstrapSwitch('state', true, true);
 		}
 		$("#os").val(sp[4]);
-		
+
+		$("#result").hide();
     	},
     		error:function (xhr, ajaxOptions, thrownError){
         	console.log(xhr.responseText);
-		$("#result").val(xhr.responseText);
+		$("#result").val(xhr.responseText).show();
     	}
         });
     }
@@ -334,7 +337,7 @@ $("#os").keyup(function(){
 	   type:'POST',
  	   data: { check : "osoitevaihto", imei : imei, my_location : my_location, thisKey : thisKey },
            success: function(data){
-        	//console.log(data);
+        	console.log(data);
 		//$("#result").val(data);
 		$("#getListFromServer").html(data);
 
@@ -355,10 +358,12 @@ $("#os").keyup(function(){
 		} else {
 			$("#list").hide();
 		}
+
+		$("#result").hide();
     	},
     		error:function (xhr, ajaxOptions, thrownError){
-        	//console.log(xhr.responseText);
-		$("#result").val(xhr.responseText);
+        	console.log(xhr.responseText);
+		$("#result").val(xhr.responseText).show();
     	}
         });
 

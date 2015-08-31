@@ -17,6 +17,7 @@
 
 
 <?php 
+Yii::app()->db->createCommand("SET NAMES utf8")->execute();
 Yii::app()->clientScript->registerPackage('jquery');
 Yii::app()->clientScript->registerPackage('bootstrapJS');
 Yii::app()->clientScript->registerPackage('bootstrapCSS');

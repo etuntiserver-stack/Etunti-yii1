@@ -45,7 +45,7 @@ public function actionImei($dom)
 
 	     if(!isset($ttekija['id']))
 	     {
-              $this->_sendResponse(200, "imei on persessä ".$_POST['imei']." ".$ttekija['imei']);
+              $this->_sendResponse(200, "Virhellinen imei koodi ".$_POST['imei']." ".$ttekija['imei']);
 	      exit;
 	     }
 
