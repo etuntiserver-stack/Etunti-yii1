@@ -389,9 +389,12 @@ if(domain != ''){
            success: function(data){
         	console.log(data);
 		if(parseInt(data) > 0)
+		{
+
 		  $("#viestintaURL").addClass("text-danger");
-		else
+		} else {
 		  $("#viestintaURL").removeClass("text-danger");
+		}
     	},
     		error:function (xhr, ajaxOptions, thrownError){
         	console.log(xhr.responseText);
@@ -399,6 +402,14 @@ if(domain != ''){
     	}
         });
 }
+
+
+    var blink = function(){
+        $('#viestintaURL').toggle();
+    };
+    $(document).ready(function() {
+        setInterval(blink, 1000);
+    });
 
 
 
