@@ -53,6 +53,22 @@ public function actionImei($dom)
 
 	    if(isset($_POST['check'])){
 
+	        if($_POST['check'] == 'viestinta_checkNew'){
+
+		    $criteria = new CDbCriteria();
+		    $criteria->order = " id DESC ";
+		    $criteria->condition = " tekija = '".$ttekija->id."' and status = '0' ";
+	            $viestinta = Viestinta::model()->findAll($criteria);
+
+		    $sel = '';
+		    if(count($viestinta) > 0)
+		    $sel = count($viestinta);
+
+		    $this->_sendResponse(200, $sel);
+		exit;
+	        }
+
+
 	        if($_POST['check'] == 'viestinta'){
 
 		    $criteria = new CDbCriteria();
@@ -68,7 +84,7 @@ public function actionImei($dom)
 		      $sel .= '<div class="alert alert-info">
 				  '.$val->admin.'<br>
 				  '.$val->pvm.'<hr>
-				  '.$val->viesti.'
+				  <span class="span6">'.$val->viesti.'</span>
 				</div>';
 		    }
 
