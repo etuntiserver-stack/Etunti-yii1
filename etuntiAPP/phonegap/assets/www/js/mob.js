@@ -1,6 +1,42 @@
 $(document).ready(function(){
 
 
+  var query = location.href.substring((location.href.indexOf('?')+1), location.href.length);
+  if(location.href.indexOf('?') < 0) query = '';
+      querysplit = query.split('&');
+      query = new Array();
+  for(var i = 0; i < querysplit.length; i++)
+  {
+        var namevalue = querysplit[i].split('=');
+        namevalue[1] = namevalue[1].replace(/\+/g, ' ');
+        query[namevalue[0]] = unescape(namevalue[1]);
+  }
+
+  var DeviceIMEI = query['imei'];
+  var my_location = query['location'];
+
+  if(query['domain'])
+    var domain = query['domain'];
+  else
+    var domain = $("#domain").val();
+
+  var url = $("#server").val()+"/index.php/api/mob";
+  var puh_nro = "0449304851";
+  var versio = "0.47";
+  var tag = "36073245411209220";
+  var imei = DeviceIMEI;
+
+
+
+  $("#result").append("DeviceIMEI : " + DeviceIMEI + "\n");
+  $("#result").append("Location : " + my_location + "\n");
+
+
+  $("#viestintaURL").click(function(){
+	window.location.href='viestinta.html?domain='+domain+'&imei='+DeviceIMEI+'&location='+my_location;
+  });
+
+
 
 $(".sw").bootstrapSwitch({
 	size: "large",
@@ -78,38 +114,6 @@ function curDateTime(){
 
 
 
-var query = location.href.substring((location.href.indexOf('?')+1), location.href.length);
-  if(location.href.indexOf('?') < 0) query = '';
-      querysplit = query.split('&');
-      query = new Array();
-  for(var i = 0; i < querysplit.length; i++)
-  {
-        var namevalue = querysplit[i].split('=');
-        namevalue[1] = namevalue[1].replace(/\+/g, ' ');
-        query[namevalue[0]] = unescape(namevalue[1]);
-  }
-
-  var DeviceIMEI = query['imei'];
-  var my_location = query['location'];
-  var nfc = query['nfc'];
-
-
-
-  $("#result").append("DeviceIMEI : " + DeviceIMEI + "\n");
-  $("#result").append("Location : " + my_location + "\n");
-
-
-
-
-
-
-
-  var domain = $("#domain").val();
-  var url = $("#server").val()+"/index.php/api/mob";
-  var puh_nro = "0449304851";
-  var versio = "0.47";
-  var tag = "36073245411209220";
-  var imei = DeviceIMEI;
 
 
 
@@ -280,7 +284,7 @@ function row(tilanne,st){
         	console.log(data);
 		var sp = data.split("//");
 		$("#odotta").hide();
-
+		$("#footer").show('slow');
 		$("#result").append(sp+"\n");
 		$('.full').css({"opacity" : "1"});
 		$("#domainBlokki").hide();

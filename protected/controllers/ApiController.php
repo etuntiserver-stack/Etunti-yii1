@@ -53,18 +53,30 @@ public function actionImei($dom)
 
 	    if(isset($_POST['check'])){
 
-	    if($_POST['check'] == 'osoitevaihto'){
-	        $kohteet = Kohteet::model()->findAll(" osoite like '%".$_POST['thisKey']."%' ");
+	        if($_POST['check'] == 'viestinta'){
+	            $kohteet = Viestinta::model()->findAll(" tid = '".$ttekija->id."' ");
 
-		$sel = '<select id="list" class="form-control btn btn-success">';
-		$sel .= '<option id="valitseOsoite">Valitse osoite</option>';
-		foreach($kohteet as $val)
-		$sel .= '<option value="'.$val->id.'">'.$val->osoite.'</option>';
-		$sel .= '</select>';
+		    $sel = '<div class="">';
+		    foreach($kohteet as $val)
+		      $sel .= '<div class="row">'.$val->viesti.'</div>';
+		    $sel .= '</div>';
 
-		$this->_sendResponse(200, $sel);
+		    $this->_sendResponse(200, $sel);
 		exit;
-	    }
+	        }
+
+	        if($_POST['check'] == 'osoitevaihto'){
+	            $kohteet = Kohteet::model()->findAll(" osoite like '%".$_POST['thisKey']."%' ");
+
+		    $sel = '<select id="list" class="form-control btn btn-success">';
+		    $sel .= '<option id="valitseOsoite">Valitse osoite</option>';
+		    foreach($kohteet as $val)
+		      $sel .= '<option value="'.$val->id.'">'.$val->osoite.'</option>';
+		    $sel .= '</select>';
+
+		    $this->_sendResponse(200, $sel);
+		exit;
+	        }
 
 		$loc = explode("/",$_POST['my_location']);
 		$get_osoite = '';
