@@ -388,7 +388,10 @@ if(domain != ''){
  	   data: { check : "checkviesti", imei : imei, my_location : my_location },
            success: function(data){
         	console.log(data);
-
+		if(parseInt(data) > 0)
+		  $("#viestintaURL").addClass("text-danger");
+		else
+		  $("#viestintaURL").removeClass("text-danger");
     	},
     		error:function (xhr, ajaxOptions, thrownError){
         	console.log(xhr.responseText);

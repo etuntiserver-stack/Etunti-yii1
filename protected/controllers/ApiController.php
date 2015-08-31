@@ -76,18 +76,22 @@ public function actionImei($dom)
 		    $criteria->condition = " tekija = '".$ttekija->id."' ";
 	            $viestinta = Viestinta::model()->findAll($criteria);
 
-		    Viestinta::model()->updateAll(array('status'=>1),'tekija="'.$ttekija->id.'"');
-
 		    $sel = '';
+		    $cl = '';
 		    foreach($viestinta as $val)
 		    {
-		      $sel .= '<div class="alert alert-info">
+		      if($val->status == '0')
+  			$cl = 'danger';
+		      else
+  			$cl = 'info';
+
+		      $sel .= '<div class="alert alert-'.$cl.'">
 				  '.$val->admin.'<br>
 				  '.$val->pvm.'<hr>
 				  <span class="span6">'.$val->viesti.'</span>
 				</div>';
 		    }
-
+		    Viestinta::model()->updateAll(array('status'=>1),'tekija="'.$ttekija->id.'"');
 
 		    $this->_sendResponse(200, $sel);
 		exit;
