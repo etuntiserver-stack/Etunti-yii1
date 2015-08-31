@@ -58,7 +58,7 @@ public function actionImei($dom)
 
 		    $criteria = new CDbCriteria();
 		    $criteria->order = " id DESC ";
-		    $criteria->condition = " tid = '".$ttekija->id."' and DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d')) > '".date("Y-m-d")."' ";
+		    $criteria->condition = " tid = '".$ttekija->id."' and DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d')) >= '".date("Y-m-d")."' ";
 	            $tvuoro = Tyovuoroot::model()->findAll($criteria);
 
 		    $sel = '';
