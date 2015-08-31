@@ -1,6 +1,6 @@
 <?php
 
-
+Yii::app()->db->createCommand("SET NAMES utf8")->execute();
 class SivexkuittiController extends Controller
 {
 

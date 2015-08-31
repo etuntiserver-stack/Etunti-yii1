@@ -9,6 +9,7 @@ session_start();
 
 Yii::setPathOfAlias('chartjs', dirname(__FILE__).'/../extensions/yii-chartjs');
 
+
   if(isset($_POST['UserLogin']['domain']) and !empty($_POST['UserLogin']['domain']) and $_POST['UserLogin']['domain'] != 'superadmin')
   $_SESSION['domain'] = $_POST['UserLogin']['domain'];
 
