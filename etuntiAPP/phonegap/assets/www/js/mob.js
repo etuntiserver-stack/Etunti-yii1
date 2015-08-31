@@ -262,10 +262,11 @@ function row(tilanne,st){
   });
 
 // Checker
-    if(domain != '')
+    if(domain != ''){
        	set();
-    else
+    } else {
    	$("#result").append("Domaini puutuu \n");
+    }
 
     function set() {
 
@@ -275,10 +276,12 @@ function row(tilanne,st){
 	   type:'POST',
  	   data: { check : "testi", imei : imei, my_location : my_location },
            success: function(data){
-        	//console.log(data);
+        	console.log(data);
 		var sp = data.split("//");
+
 		$("#result").append(sp+"\n");
 		$('.full').css({"opacity" : "1"});
+		$("#domainBlokki").hide();
 
 		if((sp[0] == '3') || (sp[0] == '2') || (sp[0] == '10')){
 		  $("#osoite").show('slow');
@@ -310,7 +313,7 @@ function row(tilanne,st){
 		
     	},
     		error:function (xhr, ajaxOptions, thrownError){
-        	//console.log(xhr.responseText);
+        	console.log(xhr.responseText);
 		$("#result").val(xhr.responseText);
     	}
         });
