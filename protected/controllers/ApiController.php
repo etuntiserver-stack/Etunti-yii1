@@ -65,9 +65,11 @@ public function actionImei($dom)
 		    $cl = '';
 		    foreach($tvuoro as $val)
 		    {
+		      $kohde = Kohteet::model()->findbypk($val->kohde);
 		      $sel .= '<div class="alert alert-info">
 				  '.$val->pvm.'<hr>
-				  <span class="text">'.$val->alku.'-'.$val->loppu.'</span>
+				  <span class="text">'.$val->alku.'-'.$val->loppu.' '.$kohde['osoite'].'</span>
+				  <div class="text-small">'.$val->tietoja.'</div>
 				</div>';
 		    }
 
