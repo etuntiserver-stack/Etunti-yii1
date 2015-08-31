@@ -62,7 +62,10 @@ public function actionImei($dom)
 	            $tvuoro = Tyovuoroot::model()->findAll($criteria);
 
 		    if(!$tvuoro)
+		    {
 		    $this->_sendResponse(200, 'ei tuulosta');
+		    exit;
+		    }
 
 		    $sel = '';
 		    $cl = '';
