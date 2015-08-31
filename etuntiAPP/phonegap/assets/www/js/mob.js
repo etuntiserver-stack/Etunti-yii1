@@ -385,7 +385,7 @@ if(domain != ''){
         $.ajax({
            url: url+'/imei?dom='+domain,
 	   type:'POST',
- 	   data: { check : "viestinta_checkNew", imei : imei, my_location : my_location },
+ 	   data: { check : "viestintaCheckNew", imei : imei, my_location : my_location },
            success: function(data){
         	console.log(data);
 

@@ -53,7 +53,7 @@ public function actionImei($dom)
 
 	    if(isset($_POST['check'])){
 
-	        if($_POST['check'] == 'viestinta_checkNew'){
+	        if($_POST['check'] == 'viestintaCheckNew'){
 
 		    $criteria = new CDbCriteria();
 		    $criteria->order = " id DESC ";
