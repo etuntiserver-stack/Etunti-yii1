@@ -2475,3 +2475,57 @@ Stack trace:
 #5 {main}
 REQUEST_URI=/index.php/api/mob
 ---
+2015/08/31 15:18:36 [error] [php] Undefined variable: ttekija (E:\GITHUB\etuntifw\protected\views\sivexkuitti\index.php:18)
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(869): SivexkuittiController->renderFile()
+#1 E:\GITHUB\etuntifw\YII\framework\web\CController.php(782): SivexkuittiController->renderPartial()
+#2 E:\GITHUB\etuntifw\protected\controllers\SivexkuittiController.php(270): SivexkuittiController->render()
+#3 E:\GITHUB\etuntifw\YII\framework\web\actions\CInlineAction.php(49): SivexkuittiController->actionIndex()
+#4 E:\GITHUB\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams()
+#5 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(133): SivexkuittiController->runAction()
+#6 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#7 E:\GITHUB\etuntifw\YII\framework\web\CController.php(1145): CAccessControlFilter->filter()
+#8 E:\GITHUB\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): SivexkuittiController->filterAccessControl()
+#9 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#10 E:\GITHUB\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#11 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): SivexkuittiController->runActionWithFilters()
+#12 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): SivexkuittiController->run()
+#13 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#14 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#15 E:\GITHUB\etuntifw\index.php(13): CWebApplication->run()
+REQUEST_URI=/index.php/sivexkuitti/index
+in E:\GITHUB\etuntifw\protected\views\sivexkuitti\index.php (18)
+in E:\GITHUB\etuntifw\protected\controllers\SivexkuittiController.php (270)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/31 15:18:50 [error] [system.db.CDbCommand] CDbCommand::fetchAll() epäonnistui: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'status' in 'where clause'. Suoritettu SQL-komento oli: SELECT * FROM `sivex_viestinta` `t` WHERE  tekija = '38' and status = '0'  ORDER BY  id DESC .
+in E:\GITHUB\etuntifw\protected\views\sivexkuitti\index.php (19)
+in E:\GITHUB\etuntifw\protected\controllers\SivexkuittiController.php (270)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/31 15:18:50 [error] [exception.CDbException] exception 'CDbException' with message 'CDbCommand ei voinut suorittaa SQL-komentoa: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'status' in 'where clause'. The SQL statement executed was: SELECT * FROM `sivex_viestinta` `t` WHERE  tekija = '38' and status = '0'  ORDER BY  id DESC ' in E:\GITHUB\etuntifw\YII\framework\db\CDbCommand.php:541
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\db\CDbCommand.php(395): CDbCommand->queryInternal('fetchAll', Array, Array)
+#1 E:\GITHUB\etuntifw\YII\framework\db\ar\CActiveRecord.php(1297): CDbCommand->queryAll()
+#2 E:\GITHUB\etuntifw\YII\framework\db\ar\CActiveRecord.php(1416): CActiveRecord->query(Object(CDbCriteria), true)
+#3 E:\GITHUB\etuntifw\protected\views\sivexkuitti\index.php(19): CActiveRecord->findAll(Object(CDbCriteria))
+#4 E:\GITHUB\etuntifw\YII\framework\web\CBaseController.php(126): require('E:\\GITHUB\\etunt...')
+#5 E:\GITHUB\etuntifw\YII\framework\web\CBaseController.php(95): CBaseController->renderInternal('E:\\GITHUB\\etunt...', Array, true)
+#6 E:\GITHUB\etuntifw\YII\framework\web\CController.php(869): CBaseController->renderFile('E:\\GITHUB\\etunt...', Array, true)
+#7 E:\GITHUB\etuntifw\YII\framework\web\CController.php(782): CController->renderPartial('index', Array, true)
+#8 E:\GITHUB\etuntifw\protected\controllers\SivexkuittiController.php(270): CController->render('index', Array)
+#9 E:\GITHUB\etuntifw\YII\framework\web\actions\CInlineAction.php(49): SivexkuittiController->actionIndex()
+#10 E:\GITHUB\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#11 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#12 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#13 E:\GITHUB\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#14 E:\GITHUB\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#15 E:\GITHUB\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#16 E:\GITHUB\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#17 E:\GITHUB\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#18 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('index')
+#19 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('sivexkuitti/ind...')
+#20 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#21 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#22 {main}
+REQUEST_URI=/index.php/sivexkuitti/index
+HTTP_REFERER=http://etuntifw.local/index.php/user/login
+---
