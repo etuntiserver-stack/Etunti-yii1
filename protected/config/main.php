@@ -74,6 +74,7 @@ return array(
 	// preloading 'log' component
 	'preload'=>array('log','chartjs'),
 	'language' => 'fi',
+	'charset'=>'utf-8',
 	// autoloading model and component classes
 	'import'=>array(
         'application.models.*',

@@ -2197,3 +2197,49 @@ REQUEST_URI=/index.php/kohteet/admin
 in C:\xampp\htdocs\etuntifw\protected\components\DB2ActiveRecord.php (18)
 in C:\xampp\htdocs\etuntifw\protected\models\Administrators.php (23)
 in C:\xampp\htdocs\etuntifw\protected\controllers\KohteetController.php (42)
+2015/08/31 08:22:56 [error] [exception.CDbException] exception 'CDbException' with message 'Active record -luokan "Administrators" taulua "sivex_administrators" ei löydy tietokannasta.' in C:\xampp\htdocs\etuntifw\YII\framework\db\ar\CActiveRecord.php:2310
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\db\ar\CActiveRecord.php(387): CActiveRecordMetaData->__construct(Object(Administrators))
+#1 C:\xampp\htdocs\etuntifw\protected\models\Administrators.php(23): CActiveRecord::model('Administrators')
+#2 C:\xampp\htdocs\etuntifw\protected\controllers\KohteetController.php(42): Administrators::model()
+#3 C:\xampp\htdocs\etuntifw\YII\framework\base\CComponent.php(606) : eval()'d code(1): KohteetController->isEtuntiAdmin()
+#4 C:\xampp\htdocs\etuntifw\YII\framework\base\CComponent.php(606): eval()
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\auth\CAccessControlFilter.php(384): CComponent->evaluateExpression('Yii::app()->con...', Array)
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\auth\CAccessControlFilter.php(280): CAccessRule->isExpressionMatched(Object(WebUser))
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\auth\CAccessControlFilter.php(135): CAccessRule->isUserAllowed(Object(WebUser), Object(KohteetController), Object(CInlineAction), '127.0.0.1', 'GET')
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(38): CAccessControlFilter->preFilter(Object(CFilterChain))
+#9 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#10 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#11 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#12 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#13 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#14 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('admin')
+#15 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('kohteet/admin')
+#16 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#17 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#18 {main}
+REQUEST_URI=/index.php/kohteet/admin
+HTTP_REFERER=http://etuntifw.local/index.php/sivexkuitti/index
+---
+2015/08/31 08:23:06 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Järjestelmä ei löydä pyydettyä toimintoa "index.php".' in C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php:483
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(270): CController->missingAction('index.php')
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('index.php')
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('kohteet/index.p...')
+#3 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php/kohteet/index.php?r=user/login&return=filed
+HTTP_REFERER=http://etuntifw.local/index.php/sivexkuitti/index
+---
+2015/08/31 08:23:11 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Järjestelmä ei löydä pyydettyä toimintoa "index.php".' in C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php:483
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(270): CController->missingAction('index.php')
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('index.php')
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('kohteet/index.p...')
+#3 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php/kohteet/index.php?r=user/login&return=filed
+HTTP_REFERER=http://etuntifw.local/index.php/sivexkuitti/index
+---
