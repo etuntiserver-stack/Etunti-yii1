@@ -39,7 +39,7 @@ class Viestinta extends DB2ActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			//array('time, pvm, tekija, viesti, admin', 'required'),
+			array('tekija, viesti', 'required'),
 			array('pvm, time', 'length', 'max'=>20),
 			array('tekija', 'length', 'max'=>255),
 			array('status', 'length', 'max'=>1),

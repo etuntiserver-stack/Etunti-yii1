@@ -16,6 +16,7 @@
 	<?php echo $form->errorSummary($model); ?>
 
 		<?php echo $form->hiddenField($model,'admin',array('value'=>Yii::app()->user->username)); ?>
+		<?php echo $form->hiddenField($model,'pvm',array('value'=>date("Y-m-d H:i:s"))); ?>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'tekija'); ?>
