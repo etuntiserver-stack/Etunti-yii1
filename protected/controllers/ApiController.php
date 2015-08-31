@@ -63,7 +63,7 @@ public function actionImei($dom)
 
 		    if(!$tvuoro)
 		    {
-		    $this->_sendResponse(200, 'ei tuulosta');
+		    $this->_sendResponse(200, 'ei tuloksia');
 		    exit;
 		    }
 
@@ -93,6 +93,12 @@ public function actionImei($dom)
 		    $criteria->order = " id DESC ";
 		    $criteria->condition = " tekija = '".$ttekija->id."' and status = '0' ";
 	            $viestinta = Viestinta::model()->findAll($criteria);
+
+		    if(!$viestinta)
+		    {
+		    $this->_sendResponse(200, 'ei tuloksia');
+		    exit;
+		    }
 
 		    $sel = '0';
 		    foreach($viestinta as $count)
