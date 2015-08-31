@@ -278,7 +278,7 @@ return array(
 	            	'username' => $db2_user,
 	            	'password' => $db2_pass,
 	            	'tablePrefix' => '',
-			'charset' => 'utf8',
+			//'charset' => 'utf8',
 		    	'class'=> 'CDbConnection'
         	),
 		

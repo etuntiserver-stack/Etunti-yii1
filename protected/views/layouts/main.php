@@ -17,6 +17,7 @@
 
 
 <?php 
+header('Content-Type: text/html; charset=utf-8');
 Yii::app()->clientScript->registerPackage('jquery');
 Yii::app()->clientScript->registerPackage('bootstrapJS');
 Yii::app()->clientScript->registerPackage('bootstrapCSS');
