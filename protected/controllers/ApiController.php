@@ -60,13 +60,15 @@ public function actionImei($dom)
 		    $criteria->condition = " tekija = '".$ttekija->id."' ";
 	            $viestinta = Viestinta::model()->findAll($criteria);
 
+		    Viestinta::model()->updateAll(array('status'=>1),'tekija="'.$ttekija->id.'"');
+
 		    $sel = '';
 		    foreach($viestinta as $val)
 		    {
 		      $sel .= '<div class="alert alert-info">
 				  '.$val->admin.'<br>
 				  '.$val->pvm.'<hr>
-				  <b>'.$val->viesti.'</b>
+				  '.$val->viesti.'
 				</div>';
 		    }
 
