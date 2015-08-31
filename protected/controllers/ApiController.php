@@ -54,7 +54,11 @@ public function actionImei($dom)
 	    if(isset($_POST['check'])){
 
 	        if($_POST['check'] == 'viestinta'){
-	            $viestinta = Viestinta::model()->findAll(" tekija = '".$ttekija->id."' ",array('order'=>'id DESC'));
+
+		    $criteria = new CDbCriteria();
+		    $criteria->order = " id DESC ";
+		    $criteria->condition = " tekija = '".$ttekija->id."' ";
+	            $viestinta = Viestinta::model()->findAll($criteria);
 
 		    $sel = '';
 		    foreach($viestinta as $val)

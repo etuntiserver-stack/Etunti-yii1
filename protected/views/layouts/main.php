@@ -80,7 +80,6 @@ Yii::app()->clientScript->registerPackage('bootstrapCSS');
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?php echo Yii::t('main', 'Mobiili'); ?> <span class="caret"></span></a>
           <ul class="dropdown-menu">
         	<li><?php echo CHtml::link(Yii::t('main', 'Mobiili lista'),array('/sivexkuitti/index')); ?></li>
-        	<li><?php echo CHtml::link(Yii::t('main', 'Mobiili hallinta'),array('/sivexkuitti/admin')); ?></li>
         	<li><?php echo CHtml::link(Yii::t('main', 'Yhteenveto tunnit'),array('/sivexkuitti/yhteenveto')); ?></li>
           </ul>
         </li>
@@ -112,7 +111,9 @@ Yii::app()->clientScript->registerPackage('bootstrapCSS');
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?php echo Yii::t('main', 'Hallinnat'); ?> <span class="caret"></span></a>
           <ul class="dropdown-menu">
         <li><?php echo CHtml::link(Yii::t('main', 'Järjestelmänvalvojat'),array('/administrators/admin')); ?></li>
+        	<li><?php echo CHtml::link(Yii::t('main', 'Mobiili hallinta'),array('/sivexkuitti/admin')); ?></li>
         	<li><?php echo CHtml::link(Yii::t('main', 'Valikkoot'),array('/valikkoot/admin')); ?></li>
+        	<li><?php echo CHtml::link(Yii::t('main', 'Viestintä hallinta'),array('/viestinta/admin')); ?></li>
         	<li><?php echo CHtml::link(Yii::t('main', 'Mobiili emulattori'),array('/site/mobemu')); ?></li>
           </ul>
         </li>

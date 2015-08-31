@@ -2432,3 +2432,33 @@ Stack trace:
 REQUEST_URI=/index.php/viestinta
 HTTP_REFERER=http://etuntifw.local/index.php/gii/crud
 ---
+2015/08/31 13:03:31 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Järjestelmä ei löydä pyydettyä toimintoa "list".' in C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php:483
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(270): CController->missingAction('list')
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('list')
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/list')
+#3 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php/api/sivexkuitti
+---
+2015/08/31 13:03:36 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Järjestelmä ei löydä pyydettyä toimintoa "list".' in C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php:483
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(270): CController->missingAction('list')
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('list')
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/list')
+#3 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php/api/mob
+---
+2015/08/31 13:03:46 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Järjestelmä ei löydä pyydettyä toimintoa "mob".' in C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php:483
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(270): CController->missingAction('mob')
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('mob')
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('api/mob/imei')
+#3 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php/api/mob/imei
+---
