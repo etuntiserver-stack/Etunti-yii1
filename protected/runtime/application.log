@@ -2677,3 +2677,33 @@ REQUEST_URI=/index.php/tyovuoroot/index
 in E:\GITHUB\etuntifw\protected\views\tyovuoroot\index.php (26)
 in E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php (281)
 in E:\GITHUB\etuntifw\index.php (13)
+2015/08/31 17:34:40 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "id".
+in E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php (194)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/31 17:34:40 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "time".
+in E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php (194)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/31 17:35:17 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "id".
+in E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php (79)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/31 17:35:17 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "time".
+in E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php (79)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/31 17:35:27 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "id".
+in E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php (95)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/31 17:35:27 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "time".
+in E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php (95)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/31 17:35:33 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "id".
+in E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php (95)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/31 17:35:33 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "time".
+in E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php (95)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/31 17:36:14 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "id".
+in E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php (95)
+in E:\GITHUB\etuntifw\index.php (13)
+2015/08/31 17:36:14 [warning] [application] Ei voitu asettaa "Tyovuoroot"-luokan turvatonta attribuuttia "time".
+in E:\GITHUB\etuntifw\protected\controllers\TyovuorootController.php (95)
+in E:\GITHUB\etuntifw\index.php (13)
