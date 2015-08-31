@@ -286,13 +286,14 @@ function row(tilanne,st){
 	   type:'POST',
  	   data: { check : "testi", imei : imei, my_location : my_location },
            success: function(data){
-        	console.log(data);
+        	//console.log(data);
 		var sp = data.split("//");
 		$("#odotta").hide();
 		$("#footer").show('slow');
 		$("#result").append(sp+"\n");
 		$('.full').css({"opacity" : "1"});
 		$("#domainBlokki").hide();
+		$("#tekija").html("<h4 class='text-warning'>"+sp[5]+"</h4>");
 
 		if((sp[0] == '3') || (sp[0] == '2') || (sp[0] == '10')){
 		  $("#osoite").show('slow');
