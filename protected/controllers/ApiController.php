@@ -62,7 +62,7 @@ public function actionImei($dom)
 
 		    $sel = '';
 		    //if(count($viestinta) > 0)
-		    //$sel = count($viestinta);
+		    $sel = count($viestinta);
 
 		    $this->_sendResponse(200, $sel);
 		exit;
