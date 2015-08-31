@@ -53,6 +53,28 @@ public function actionImei($dom)
 
 	    if(isset($_POST['check'])){
 
+
+	        if($_POST['check'] == 'tvuoro'){
+
+		    $criteria = new CDbCriteria();
+		    $criteria->order = " id DESC ";
+		    $criteria->condition = " tid = '".$ttekija->id."' ";
+	            $tvuoro = Tyovuoroot::model()->findAll($criteria);
+
+		    $sel = '';
+		    $cl = '';
+		    foreach($tvuoro as $val)
+		    {
+		      $sel .= '<div class="alert alert-info">
+				  '.$val->pvm.'<hr>
+				  <span class="text">'.$val->alku.'-'.$val->loppu.'</span>
+				</div>';
+		    }
+
+		    $this->_sendResponse(200, $sel);
+		exit;
+	        }
+
 	        if($_POST['check'] == 'checkviesti'){
 
 		    $criteria = new CDbCriteria();

@@ -37,6 +37,10 @@ $(document).ready(function(){
 	window.location.href='viestinta.html?domain='+domain+'&imei='+DeviceIMEI+'&location='+my_location;
   });
 
+  $("#tvuoro").click(function(){
+	window.location.href='tvuoro.html?domain='+domain+'&imei='+DeviceIMEI+'&location='+my_location;
+  });
+
 
 
 $(".sw").bootstrapSwitch({

@@ -29,16 +29,15 @@ $(document).ready(function(){
 	window.location.href='index.html?domain='+domain+'&imei='+DeviceIMEI+'&location='+my_location;
   });
 
-  $("#tvuoro").click(function(){
-	window.location.href='tvuoro.html?domain='+domain+'&imei='+DeviceIMEI+'&location='+my_location;
+  $("#viestintaURL").click(function(){
+	window.location.href='viestinta.html?domain='+domain+'&imei='+DeviceIMEI+'&location='+my_location;
   });
-
 
 
         $.ajax({
            url: url+'/imei?dom='+domain,
 	   type:'POST',
- 	   data: { check : "viestinta", imei : imei, my_location : my_location },
+ 	   data: { check : "tvuoro", imei : imei, my_location : my_location },
            success: function(data){
         	console.log(data);
 		$("#viestit").html(data);
