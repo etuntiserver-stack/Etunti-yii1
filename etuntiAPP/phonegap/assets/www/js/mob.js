@@ -390,7 +390,7 @@ if(domain != ''){
         	console.log(data);
 		if(parseInt(data) > 0)
 		{
-
+		  setInterval(blink, 1000);
 		  $("#viestintaURL").addClass("text-danger");
 		} else {
 		  $("#viestintaURL").removeClass("text-danger");
@@ -404,12 +404,10 @@ if(domain != ''){
 }
 
 
-    var blink = function(){
+  var blink = function(){
         $('#viestintaURL').toggle();
-    };
-    $(document).ready(function() {
-        setInterval(blink, 1000);
-    });
+  };
+
 
 
 
