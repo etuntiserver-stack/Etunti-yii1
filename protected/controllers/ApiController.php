@@ -134,16 +134,17 @@ public function actionImei($dom)
   			$cl = 'info';
 
 		      $exAdmin = explode(",",$val->admin);
-		      if(isset($exAdmin[0]))
-  			$admin = $exAdmin[0];
+		      if(isset($exAdmin[1]))
+  			$admin = $exAdmin[1];
 		      else
   			$admin = $val->admin;
 
 		      $sel .= '<div class="alert alert-'.$cl.'">
 				  '.$admin.'<br>
 				  '.$val->pvm.'<hr>
-				  <button class="pull-right viesti btn btn-primary" id="'.$val->id.'">Viestiin vastaaminen</button>
-				  <span class="text">'.$val->viesti.'</span>
+				  <span class="text">'.$val->viesti.'</span><br>
+				  <input type="text" class="form-control form-input" id="vastaus_'.$val->id.'">
+				  <button class="viesti btn btn-primary btn-group" id="'.$val->id.'">Viestiin vastaaminen</button>
 				</div>';
 		    }
 		    Viestinta::model()->updateAll(array('status'=>1),'tekija="'.$ttekija->id.'"');
