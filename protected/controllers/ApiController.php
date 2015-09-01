@@ -175,6 +175,7 @@ public function actionImei($dom)
 	            $viestinta->save();
 		    // lahetta sahkopostiin
 		    $admin = '';
+		    $sending = '';
 		      $exAdmin = explode(",",$viestinta->admin);
 		      if(isset($exAdmin[0]))
   			$admin = $exAdmin[0];
@@ -191,8 +192,10 @@ public function actionImei($dom)
 					"MIME-Version: 1.0\r\n".
 					"Content-type: text/plain; charset=UTF-8";
 
-				mail($adm->adm_email,$subject,$viestinta->viesti,$headers);
-
+				if(mail($adm->adm_email,$subject,$viestinta->viesti,$headers))
+				   $sending = 'ok';
+				else
+				   $sending = 'mail error';
 		      }
 
 		    $this->_sendResponse(200, $viestinta->viesti);
