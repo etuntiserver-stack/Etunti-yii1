@@ -330,6 +330,7 @@ function row(tilanne,st){
 
 		}
 		$("#os").val(sp[4]);
+		$("#kohdenID").val(sp[5]);
 
 		$("#result").hide();
     	},
