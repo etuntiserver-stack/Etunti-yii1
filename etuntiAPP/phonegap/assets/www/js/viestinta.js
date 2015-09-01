@@ -42,11 +42,40 @@ $(document).ready(function(){
            success: function(data){
         	console.log(data);
 		$("#viestit").html(data);
+
+		/* vastaus */
+  		$(".viesti").click(function(){
+		    	var thisID = $(this).attr("id");
+		    	var vastaus = $("#vastaus_"+thisID).val();
+
+		    if (vastaus  === '') {
+		        $("#vastaus_"+thisID).css({"border" : "2px #f14010 solid"}).focus();
+		        return false;
+		    }
+
+
+	        $.ajax({
+	           url: url+'/imei?dom='+domain,
+		   type:'POST',
+	 	   data: { check : "vastaus", imei : imei, my_location : my_location, viestinID : thisID },
+	           success: function(data){
+	        	console.log(data);
+	    	},
+	    		error:function (xhr, ajaxOptions, thrownError){
+	        	console.log(xhr.responseText);
+			$("#viestit").html(xhr.responseText);
+	    	}
+
+		});
+		/* vastaus */
     	},
     		error:function (xhr, ajaxOptions, thrownError){
         	console.log(xhr.responseText);
 		$("#viestit").html(xhr.responseText);
     	}
         });
+
+
+
 
 });

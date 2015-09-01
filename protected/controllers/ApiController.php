@@ -167,6 +167,16 @@ public function actionImei($dom)
 		exit;
 	        }
 
+
+	        if($_POST['check'] == 'vastaus' and isset($_POST['viestinID'])){
+
+	            $viestinta = Viestinta::model()->findbypk($_POST['viestinID']);
+
+		    $this->_sendResponse(200, $viestinta->viesti);
+		exit;
+	        }
+
+
 	        if($_POST['check'] == 'osoitevaihto'){
 	            $kohteet = Kohteet::model()->findAll(" osoite like '%".$_POST['thisKey']."%' ");
 
