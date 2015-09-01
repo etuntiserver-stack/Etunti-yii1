@@ -142,7 +142,7 @@ public function actionImei($dom)
 		     	$sel .= '<div class="alert alert-'.$cl.'">
 				  '.$admin.'<br>
 				  '.$val->pvm.'<hr>
-				  <span class="text">'.str_replace("\n","<br>",$val->viesti).'</span><br>';
+				  <span class="text" id="text_'.$val->id.'">'.str_replace("\n","<br>",$val->viesti).'</span><br>';
 
 				  if(isset($exAdmin[0]) and !empty($exAdmin[0])){
 				  $sel .= '
