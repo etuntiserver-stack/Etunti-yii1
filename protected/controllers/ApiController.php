@@ -144,7 +144,7 @@ public function actionImei($dom)
 				  '.$val->pvm.'<hr>
 				  <span class="text">'.$val->viesti.'</span><br>';
 
-				  if(isset($exAdmin[0]) and empty($exAdmin[0])){
+				  if(isset($exAdmin[0]) and !empty($exAdmin[0])){
 				  echo '
 				  <div class="row">
             			    <div class="input-group">
