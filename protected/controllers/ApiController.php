@@ -154,7 +154,7 @@ public function actionImei($dom)
 			                <button class="viesti btn btn-primary btn-group" id="'.$val->id.'">vastaus</button>
 			              </div>
 			            </div>
-				   </div">
+				   </div>
 			          </div>
 				  ';
 				  }
