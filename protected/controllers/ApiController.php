@@ -180,7 +180,7 @@ public function actionImei($dom)
   			$admin = $exAdmin[0];
 
 	            $adm = Administrators::model()->findbypk($admin);
-		      if(isset($adm->email) and !empty($adm->email) and isset($viestinta->tekija))
+		      if(isset($adm->email) and !empty($adm->email))
 		      {
 			$tekija = Tyontekijat::model()->findbypk($viestinta->tekija);
 			
