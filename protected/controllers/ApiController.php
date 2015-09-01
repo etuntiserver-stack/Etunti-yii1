@@ -192,10 +192,11 @@ public function actionImei($dom)
 					"MIME-Version: 1.0\r\n".
 					"Content-type: text/plain; charset=UTF-8";
 
-				if(mail($adm->adm_email,$subject,$viestinta->viesti,$headers))
+				if(mail($adm->adm_email,$subject,$viestinta->viesti,$headers)){
 				   $sending = 'ok';
-				else
-				   $sending = 'mail error';
+				} else {
+				   $this->_sendResponse(200, 'Mail send ERROR');
+				}
 		      }
 
 		    $this->_sendResponse(200, $viestinta->viesti);
