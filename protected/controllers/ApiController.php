@@ -179,6 +179,8 @@ public function actionImei($dom)
 		      if(isset($exAdmin[0]))
   			$admin = $exAdmin[0];
 
+		    $this->_sendResponse(200, $admin);
+
 	            $adm = Administrators::model()->findbypk($admin);
 		      if(isset($adm->email) and !empty($adm->email))
 		      {
@@ -192,7 +194,7 @@ public function actionImei($dom)
 					"Content-type: text/plain; charset=UTF-8";
 
 				mail($adm->email,$subject,$viestinta->viesti,$headers);
-		    $this->_sendResponse(200, $headers);
+
 		      }
 
 		    $this->_sendResponse(200, $viestinta->viesti);
