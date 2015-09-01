@@ -144,13 +144,15 @@ public function actionImei($dom)
 				  '.$val->pvm.'<hr>
 				  <span class="text">'.$val->viesti.'</span><br>';
 
-				  if(isset($exAdmin[0])){
+				  if(isset($exAdmin[0]) and empty($exAdmin[0])){
 				  echo '
-            			  <div class="input-group">
+				  <div class="row">
+            			    <div class="input-group">
 			              <input type="text" class="form-control form-input" id="vastaus_'.$val->id.'">
 			              <div class="input-group-btn">
 			                <button class="viesti btn btn-primary btn-group" id="'.$val->id.'">Viestiin vastaaminen</button>
 			              </div>
+			            </div>
 			          </div>
 				  ';
 				  }
