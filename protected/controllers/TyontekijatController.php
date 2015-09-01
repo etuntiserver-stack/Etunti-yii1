@@ -71,6 +71,7 @@ class TyontekijatController extends Controller
 		if(isset($_POST['Tyontekijat']))
 		{
 			$model->attributes=$_POST['Tyontekijat'];
+			if(isset($_POST['kortit'])) $model->kortit = implode("##***",$_POST['kortit']);
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
 		}
@@ -95,6 +96,7 @@ class TyontekijatController extends Controller
 		if(isset($_POST['Tyontekijat']))
 		{
 			$model->attributes=$_POST['Tyontekijat'];
+			if(isset($_POST['kortit'])) $model->kortit = implode("##***",$_POST['kortit']);
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
 		}

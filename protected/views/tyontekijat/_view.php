@@ -3,10 +3,36 @@
 /* @var $data Tyontekijat */
 ?>
 
-<div class="view">
+<div class="well col-sm-3">
 
 	<b><?php echo CHtml::encode($data->getAttributeLabel('id')); ?>:</b>
-	<?php echo CHtml::link(CHtml::encode($data->id), array('view', 'id'=>$data->id)); ?>
+	<?php echo CHtml::encode($data->id); ?>
+	<br />
+
+
+	<?php echo CHtml::link(CHtml::encode($data->tekijan_nimi), array('update', 'id'=>$data->id)); ?>
+	<br />
+
+	<b><?php echo CHtml::encode($data->getAttributeLabel('tekijan_puh')); ?>:</b>
+	<?php echo CHtml::encode($data->tekijan_puh); ?>
+	<br />
+
+	<b><?php echo CHtml::encode($data->getAttributeLabel('laiten_puh')); ?>:</b>
+	<?php echo CHtml::encode($data->laiten_puh); ?>
+	<br />
+
+	<b><?php echo CHtml::encode($data->getAttributeLabel('tekijan_email')); ?>:</b>
+	<?php echo CHtml::encode($data->tekijan_email); ?>
+	<br />
+
+	<b><?php echo CHtml::encode($data->getAttributeLabel('tyoryhma')); ?>:</b>
+	<?php echo CHtml::encode($data->tyoryhma); ?>
+	<br />
+
+	<?php /*
+
+	<b><?php echo CHtml::encode($data->getAttributeLabel('tekijan_henkilotunnus')); ?>:</b>
+	<?php echo CHtml::encode($data->tekijan_henkilotunnus); ?>
 	<br />
 
 	<b><?php echo CHtml::encode($data->getAttributeLabel('imei')); ?>:</b>
@@ -17,23 +43,6 @@
 	<?php echo CHtml::encode($data->laiten_puh); ?>
 	<br />
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('tekijan_nimi')); ?>:</b>
-	<?php echo CHtml::encode($data->tekijan_nimi); ?>
-	<br />
-
-	<b><?php echo CHtml::encode($data->getAttributeLabel('tekijan_henkilotunnus')); ?>:</b>
-	<?php echo CHtml::encode($data->tekijan_henkilotunnus); ?>
-	<br />
-
-	<b><?php echo CHtml::encode($data->getAttributeLabel('tekijan_puh')); ?>:</b>
-	<?php echo CHtml::encode($data->tekijan_puh); ?>
-	<br />
-
-	<b><?php echo CHtml::encode($data->getAttributeLabel('tekijan_email')); ?>:</b>
-	<?php echo CHtml::encode($data->tekijan_email); ?>
-	<br />
-
-	<?php /*
 	<b><?php echo CHtml::encode($data->getAttributeLabel('tekijan_lanka_puh')); ?>:</b>
 	<?php echo CHtml::encode($data->tekijan_lanka_puh); ?>
 	<br />
@@ -50,9 +59,7 @@
 	<?php echo CHtml::encode($data->tekijan_ptoimipaikka); ?>
 	<br />
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('tyoryhma')); ?>:</b>
-	<?php echo CHtml::encode($data->tyoryhma); ?>
-	<br />
+
 
 	<b><?php echo CHtml::encode($data->getAttributeLabel('tyoehtosopimus')); ?>:</b>
 	<?php echo CHtml::encode($data->tyoehtosopimus); ?>
