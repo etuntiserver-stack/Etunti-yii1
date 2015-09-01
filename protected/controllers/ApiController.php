@@ -186,8 +186,8 @@ public function actionImei($dom)
 			
 				$name='=?UTF-8?B?'.base64_encode($viestinta->id).'?=';
 				$subject='=?UTF-8?B?'.base64_encode("Työntekijä ".$tekija->tekijan_nimi." vastaa").'?=';
-				$headers="From: $tekija->tekijan_nimi <no_replay@server.fi>\r\n".
-					"Reply-To: no_replay@server.fi\r\n".
+				$headers="From: $tekija->tekijan_nimi <no_replay@etunti.fi>\r\n".
+					"Reply-To: no_replay@etunti.fi\r\n".
 					"MIME-Version: 1.0\r\n".
 					"Content-type: text/plain; charset=UTF-8";
 
