@@ -60,6 +60,7 @@ $(document).ready(function(){
 	 	   data: { check : "vastaus", imei : imei, my_location : my_location, viestinID : thisID, vastText : vastaus },
 	           success: function(data){
 	        	console.log(data);
+			$("#text_"+thisID).html(data);
 	    	  },
 	    		error:function (xhr, ajaxOptions, thrownError){
 	        	console.log(xhr.responseText);
