@@ -135,7 +135,8 @@ public function actionImei($dom)
 		      $sel .= '<div class="alert alert-'.$cl.'">
 				  '.$val->admin.'<br>
 				  '.$val->pvm.'<hr>
-				  <span class="text">'.$val->viesti.'</span>
+				  <span class="text">'.$val->viesti.'</span><br>
+				  <button class="viesti btn btn-primari" id="'.$val->id.'">Viestiin vastaaminen</button>
 				</div>';
 		    }
 		    Viestinta::model()->updateAll(array('status'=>1),'tekija="'.$ttekija->id.'"');

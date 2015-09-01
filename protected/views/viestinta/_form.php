@@ -2,6 +2,11 @@
 /* @var $this ViestintaController */
 /* @var $model Viestinta */
 /* @var $form CActiveForm */
+
+  $admin = '';
+$ad = Administrators::model()->findbypk(Yii::app()->user->adminID);
+if(isset($ad->adm_nimi))
+  $admin = $ad->adm_nimi;
 ?>
 
 <div class="row form">
@@ -15,8 +20,13 @@
 
 	<?php echo $form->errorSummary($model); ?>
 
-		<?php echo $form->hiddenField($model,'admin',array('value'=>Yii::app()->user->username)); ?>
 		<?php echo $form->hiddenField($model,'pvm',array('value'=>date("Y-m-d H:i:s"))); ?>
+
+	<div class="row">
+		<?php echo $form->labelEx($model,'admin'); ?>
+		<?php echo $form->textField($model,'admin',array('value'=>$admin,'class'=>'form-control','readonly'=>'yes')); ?>
+		<?php echo $form->error($model,'admin'); ?>
+	</div>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'tekija'); ?>
