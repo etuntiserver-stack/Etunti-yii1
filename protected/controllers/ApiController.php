@@ -76,7 +76,7 @@ public function actionImei($dom)
 		      if(isset($kohde['osoite']))
 		      $osoite = $kohde['osoite'];
 
-		      $sel .= '<div class="alert alert-default">
+		      $sel .= '<div class="alert alert-success">
 				  <b>'.$val->pvm.'</b><br>
 				  <b><span class="text">'.$val->alku.'-'.$val->loppu.' '.$osoite.'</span></b>
 				  <hr>
