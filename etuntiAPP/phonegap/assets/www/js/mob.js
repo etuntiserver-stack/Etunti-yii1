@@ -272,7 +272,6 @@ function row(tilanne,st){
 
 // Checker
     if(domain != ''){
-	$("#odotta").html("<h1>ODOTTA</h1>");
        	set();
     } else {
    	$("#result").append("Domaini puutuu \n");
@@ -280,7 +279,7 @@ function row(tilanne,st){
 
     function set() {
 
-
+	$("#odotta").html("<h1>ODOTTA</h1>");
         $.ajax({
            url: url+'/imei?dom='+domain,
 	   type:'POST',
@@ -320,6 +319,7 @@ function row(tilanne,st){
 		  $("#lounas").show('slow');
 		  $("#lounas_kohde").html(sp[1]).show('slow');
 		  $('.lounas').bootstrapSwitch('state', true, true);
+
 		}
 		$("#os").val(sp[4]);
 

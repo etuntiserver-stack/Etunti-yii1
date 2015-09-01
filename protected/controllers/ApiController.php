@@ -57,7 +57,7 @@ public function actionImei($dom)
 	        if($_POST['check'] == 'tvuoro'){
 
 		    $criteria = new CDbCriteria();
-		    $criteria->order = " DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') DESC ";
+		    $criteria->order = " DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d'),alku DESC ";
 		    $criteria->condition = " tid = '".$ttekija->id."' and DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') >= '".date("Y-m-d")."' ";
 	            $tvuoro = Tyovuoroot::model()->findAll($criteria);
 
@@ -76,9 +76,10 @@ public function actionImei($dom)
 		      if(isset($kohde['osoite']))
 		      $osoite = $kohde['osoite'];
 
-		      $sel .= '<div class="alert alert-info">
-				  <b>'.$val->pvm.'</b><hr>
-				  <span class="text">'.$val->alku.'-'.$val->loppu.' '.$osoite.'</span>
+		      $sel .= '<div class="alert alert-default">
+				  <b>'.$val->pvm.'</b><br>
+				  <b><span class="text">'.$val->alku.'-'.$val->loppu.' '.$osoite.'</span></b>
+				  <hr>
 				  <div class="text-small">'.$val->tietoja.'</div>
 				</div>';
 		    }
