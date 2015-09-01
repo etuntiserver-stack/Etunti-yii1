@@ -30,7 +30,6 @@ $(document).ready(function(){
   var url = server+"/index.php/api/mob";
   var puh_nro = "0449304851";
   var versio = "0.47";
-  var tag = "36073245411209220";
   var imei = DeviceIMEI;
 
 
@@ -275,6 +274,8 @@ function row(tilanne,st){
 	set();
 
   });
+
+
 
 // Checker
     if(domain != ''){
