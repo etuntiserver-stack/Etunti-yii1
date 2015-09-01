@@ -20,6 +20,12 @@ $(document).ready(function(){
   else
     var domain = $("#domain").val();
 
+    var tag = '';
+  if(query['tag'])
+    tag = query['tag'];
+
+
+
   var server = "http://etuntifw.azurewebsites.net";
   var url = server+"/index.php/api/mob";
   var puh_nro = "0449304851";
@@ -283,7 +289,7 @@ function row(tilanne,st){
         $.ajax({
            url: url+'/imei?dom='+domain,
 	   type:'POST',
- 	   data: { check : "testi", imei : imei, my_location : my_location },
+ 	   data: { check : "testi", imei : imei, my_location : my_location, tag : tag },
            success: function(data){
         	//console.log(data);
 		var sp = data.split("//");
@@ -319,6 +325,7 @@ function row(tilanne,st){
 		  $("#lounas").show('slow');
 		  $("#lounas_kohde").html(sp[1]).show('slow');
 		  $('.lounas').bootstrapSwitch('state', true, true);
+
 
 		}
 		$("#os").val(sp[4]);
