@@ -142,7 +142,7 @@ public function actionImei($dom)
 		     	$sel .= '<div class="alert alert-'.$cl.'">
 				  '.$admin.'<br>
 				  '.$val->pvm.'<hr>
-				  <span class="text">'.$val->viesti.'</span><br>';
+				  <span class="text">'.str_replace("\n","<br>",$val->viesti).'</span><br>';
 
 				  if(isset($exAdmin[0]) and !empty($exAdmin[0])){
 				  $sel .= '
@@ -171,6 +171,8 @@ public function actionImei($dom)
 	        if($_POST['check'] == 'vastaus' and isset($_POST['viestinID'])){
 
 	            $viestinta = Viestinta::model()->findbypk($_POST['viestinID']);
+	            $viestinta->viesti = $viestinta->viesti."\nVastaus: ".$_POST['vastText'];
+	            $viestinta->save();
 
 		    $this->_sendResponse(200, $viestinta->viesti);
 		exit;

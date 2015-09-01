@@ -40,7 +40,7 @@ $(document).ready(function(){
 	   type:'POST',
  	   data: { check : "viestinta", imei : imei, my_location : my_location },
            success: function(data){
-        	console.log(data);
+        	//console.log(data);
 		$("#viestit").html(data);
 
 		/* vastaus */
@@ -54,17 +54,18 @@ $(document).ready(function(){
 		    }
 
 
-	        $.ajax({
+	          $.ajax({
 	           url: url+'/imei?dom='+domain,
 		   type:'POST',
-	 	   data: { check : "vastaus", imei : imei, my_location : my_location, viestinID : thisID },
+	 	   data: { check : "vastaus", imei : imei, my_location : my_location, viestinID : thisID, vastText : vastaus },
 	           success: function(data){
 	        	console.log(data);
-	    	},
+	    	  },
 	    		error:function (xhr, ajaxOptions, thrownError){
 	        	console.log(xhr.responseText);
 			$("#viestit").html(xhr.responseText);
-	    	}
+	    	  }
+		  });
 
 		});
 		/* vastaus */
