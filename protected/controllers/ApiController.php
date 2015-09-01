@@ -146,7 +146,8 @@ public function actionImei($dom)
 
 				  if(isset($exAdmin[0]) and !empty($exAdmin[0])){
 				  $sel .= '
-				  <div class="row col-sm-12">
+				  <br>
+				  <div class="col-sm-12">
             			    <div class="input-group">
 			              <input type="text" class="form-control form-input" id="vastaus_'.$val->id.'">
 			              <div class="input-group-btn">
@@ -154,6 +155,7 @@ public function actionImei($dom)
 			              </div>
 			            </div>
 			          </div>
+			  	  <br><br>
 				  ';
 				  }
 
