@@ -191,7 +191,7 @@ public function actionImei($dom)
 					"MIME-Version: 1.0\r\n".
 					"Content-type: text/plain; charset=UTF-8";
 
-				mail($adm->email,$subject,$viestinta->viesti,$headers);
+				mail($adm->adm_email,$subject,$viestinta->viesti,$headers);
 
 		      }
 
