@@ -57,7 +57,7 @@ class Tyontekijat extends DB2ActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('imei, laiten_puh, tekijan_nimi, tekijan_henkilotunnus, tekijan_puh, tekijan_email, tekijan_lanka_puh, tekijan_katuosoite, tekijan_pnumero, tekijan_ptoimipaikka, tyoryhma, tyoehtosopimus, tekijan_kulunvalvonta, tekijan_pankkitili, tekijan_konttori, aktiivinen, tekijan_tietoja, tekijan_muisti, salasana, kortit, ayjasenyys', 'required'),
+			array('tekijan_nimi, tekijan_email, tekijan_pnumero, aktiivinen', 'required'),
 			array('online_varauksen_valmina', 'numerical', 'integerOnly'=>true),
 			array('imei', 'length', 'max'=>30),
 			array('laiten_puh, tekijan_nimi, tekijan_katuosoite, tekijan_pankkitili, salasana', 'length', 'max'=>100),
@@ -65,6 +65,7 @@ class Tyontekijat extends DB2ActiveRecord
 			array('tekijan_email, tekijan_ptoimipaikka, tyoehtosopimus, tekijan_kulunvalvonta, tekijan_konttori, aktiivinen', 'length', 'max'=>50),
 			array('tekijan_pnumero', 'length', 'max'=>7),
 			array('ayjasenyys', 'length', 'max'=>10),
+			array('kortit, tekijan_muisti, tekijan_tietoja', 'length', 'max'=>1000),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('id, imei, laiten_puh, tekijan_nimi, tekijan_henkilotunnus, tekijan_puh, tekijan_email, tekijan_lanka_puh, tekijan_katuosoite, tekijan_pnumero, tekijan_ptoimipaikka, tyoryhma, tyoehtosopimus, tekijan_kulunvalvonta, tekijan_pankkitili, tekijan_konttori, aktiivinen, tekijan_tietoja, tekijan_muisti, salasana, online_varauksen_valmina, kortit, ayjasenyys', 'safe', 'on'=>'search'),
