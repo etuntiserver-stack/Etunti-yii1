@@ -219,7 +219,7 @@ public function actionImei($dom)
 
 		$loc = explode("/",$_POST['my_location']);
 		$get_osoite = '';
-
+		$kohdenID = '';
  		if(isset($loc[0]) and isset($loc[1]))
 		{
 		  $gps = $loc[0].",".$loc[1]; 
@@ -238,7 +238,10 @@ public function actionImei($dom)
 		  $kohteet = Kohteet::model()->find(" tag_id='".$_POST['tag']."' ");
 		  $get_osoite = $kohteet['osoite'];
 		  $kohdenID = $kohteet['id'];
-		} 
+		} else {
+		  $get_osoite = $get_osoite;
+		  $kohdenID = '';
+		}
 
 
             	  $mobCheck = Mob::model()->find(" imei = '".$_POST['imei']."' order by id DESC ");
@@ -251,9 +254,9 @@ public function actionImei($dom)
 		    if($mobCheck->status == 10 and $mobCheck->loppui == '')
 		       $mobCheck->status = 10.1;
 
-                       $this->_sendResponse(200, $mobCheck->status."//".$mobCheck->kohde_kannasta."//".$mobCheck->aloitan."//".$mobCheck->loppui."//".$get_osoite."//".$ttekija->tekijan_nimi);
+                       $this->_sendResponse(200, $mobCheck->status."//".$mobCheck->kohde_kannasta."//".$mobCheck->aloitan."//".$mobCheck->loppui."//".$get_osoite."//".$ttekija->tekijan_nimi."//".$kohdenID);
 		  } else {
-                     $this->_sendResponse(200, "3//mull//null//null//".$get_osoite."//".$ttekija->tekijan_nimi);
+                     $this->_sendResponse(200, "3//mull//null//null//".$get_osoite."//".$ttekija->tekijan_nimi."//".$kohdenID);
 		  }
 
 
