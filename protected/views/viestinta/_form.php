@@ -6,7 +6,7 @@
   $admin = '';
 $ad = Administrators::model()->findbypk(Yii::app()->user->adminID);
 if(isset($ad->adm_nimi))
-  $admin = $ad->adm_nimi;
+  $admin = $ad->id.",".$ad->adm_nimi;
 ?>
 
 <div class="row form">
