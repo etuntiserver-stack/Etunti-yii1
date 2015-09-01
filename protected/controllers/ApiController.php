@@ -316,24 +316,12 @@ public function actionImei($dom)
 
 	    if(isset($ttekija->id) and !empty($_POST['aloitan']) and empty($_POST['loppui'])){
 
-		$osoite = '';
-		if(isset($_POST['tag']) and $_POST['tag'] != 'notag')
-		{
-		  $kohteet = Kohteet::model()->find(" tag_id='".$_POST['tag']."' ");
-		  $osoite = $kohteet['osoite'];
-		  $kohdenID = $kohteet['id'];
-		} else {
-		  $osoite = $_POST['kohde_kannasta'];
-		  $kohdenID = '';
-		}
 
                 $mobinsert = new Mob;
                 $mobinsert->attributes = $_POST;
                 $mobinsert->imei = $ttekija->imei;
                 $mobinsert->tid = $ttekija->id;
                 $mobinsert->tekijan_nimi = $ttekija->tekijan_nimi;
-                $mobinsert->kohde_kannasta = $osoite;
-                $mobinsert->kohdenID = $kohdenID;
                 $mobinsert->aloitan = $_POST['aloitan'];
                 $mobinsert->status = $_POST['status'];
                 $mobinsert->tietoja = $_POST['tietoja'];
