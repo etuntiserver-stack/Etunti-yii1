@@ -173,6 +173,27 @@ public function actionImei($dom)
 	            $viestinta = Viestinta::model()->findbypk($_POST['viestinID']);
 	            $viestinta->viesti = $viestinta->viesti."\nVastaus: ".$_POST['vastText'];
 	            $viestinta->save();
+		    // lahetta sahkopostiin
+		    $admin = '';
+		      $exAdmin = explode(",",$viestinta->admin);
+		      if(isset($exAdmin[0]))
+  			$admin = $exAdmin[0];
+
+	            $adm = Administrators::model()->findbypk($admin);
+		      if(isset($adm->email) and !empty($adm->email) and isset($viestinta->tekija))
+		      {
+			$tekija = Tyontekijat::model()->findbypk($viestinta->tekija);
+			
+				$name='=?UTF-8?B?'.base64_encode($viestinta->id).'?=';
+				$subject='=?UTF-8?B?'.base64_encode("Työntekijä ".$tekija->tekijan_nimi." vastaa").'?=';
+				$headers="From: $tekija->tekijan_nimi <no_replay@server.fi>\r\n".
+					"Reply-To: no_replay@server.fi\r\n".
+					"MIME-Version: 1.0\r\n".
+					"Content-type: text/plain; charset=UTF-8";
+
+				mail($adm->email,$subject,$viestinta->viesti,$headers);
+
+		      }
 
 		    $this->_sendResponse(200, $viestinta->viesti);
 		exit;
