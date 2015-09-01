@@ -179,10 +179,8 @@ public function actionImei($dom)
 		      if(isset($exAdmin[0]))
   			$admin = $exAdmin[0];
 
-		    $this->_sendResponse(200, $admin);
-
 	            $adm = Administrators::model()->findbypk($admin);
-		      if(isset($adm->email) and !empty($adm->email))
+		      if(isset($adm->adm_email) and !empty($adm->adm_email))
 		      {
 			$tekija = Tyontekijat::model()->findbypk($viestinta->tekija);
 			
