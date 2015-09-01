@@ -217,6 +217,8 @@ public function actionImei($dom)
 		exit;
 	        }
 
+
+
 		$loc = explode("/",$_POST['my_location']);
 		$get_osoite = '';
 		$kohdenID = '';
@@ -236,12 +238,12 @@ public function actionImei($dom)
 		if(isset($_POST['tag']) and $_POST['tag'] != 'notag')
 		{
 		  $kohteet = Kohteet::model()->find(" tag_id='".$_POST['tag']."' ");
-		  $get_osoite = $kohteet['osoite'];
-		  $kohdenID = $kohteet['id'];
-		} else {
-		  $get_osoite = $get_osoite;
-		  $kohdenID = '';
-		}
+		    if(isset($kohteet['osoite']) and !empty($kohteet['osoite']))
+		    {
+		      $get_osoite = $kohteet['osoite'];
+		      $kohdenID = $kohteet['id'];
+		    }
+		} 
 
 
             	  $mobCheck = Mob::model()->find(" imei = '".$_POST['imei']."' order by id DESC ");
