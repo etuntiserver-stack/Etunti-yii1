@@ -179,17 +179,15 @@ public function actionImei($dom)
 		      if(isset($exAdmin[0]))
   			$admin = $exAdmin[0];
 
-		    $this->_sendResponse(200, $admin);
-
 	            $adm = Administrators::model()->findbypk($admin);
-		      if(isset($adm->email) and !empty($adm->email))
+		      if(isset($adm->adm_email) and !empty($adm->adm_email))
 		      {
 			$tekija = Tyontekijat::model()->findbypk($viestinta->tekija);
 			
 				$name='=?UTF-8?B?'.base64_encode($viestinta->id).'?=';
 				$subject='=?UTF-8?B?'.base64_encode("Työntekijä ".$tekija->tekijan_nimi." vastaa").'?=';
-				$headers="From: $tekija->tekijan_nimi <no_replay@server.fi>\r\n".
-					"Reply-To: no_replay@server.fi\r\n".
+				$headers="From: $tekija->tekijan_nimi <no_replay@etunti.fi>\r\n".
+					"Reply-To: no_replay@etunti.fi\r\n".
 					"MIME-Version: 1.0\r\n".
 					"Content-type: text/plain; charset=UTF-8";
 
