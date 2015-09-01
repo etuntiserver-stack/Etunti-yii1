@@ -276,7 +276,6 @@ function row(tilanne,st){
   });
 
 
-
 // Checker
     if(domain != ''){
        	set();

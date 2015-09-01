@@ -34,13 +34,8 @@
 
 
     <script type="text/javascript" charset="utf-8">
-
-    // Wait for device API libraries to load
-    //
     document.addEventListener("deviceready", onDeviceReady, false);
 
-    // device APIs are available
-    //
     function onDeviceReady() {
         window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, gotFS, fail);
     }
@@ -81,13 +76,9 @@
     function fail(evt) {
         console.log(evt.target.error.code);
     }
-
     </script>
 
 
-
-
-<div id="rand"></div>
 
         <title>ETUNTI</title>
     </head>
