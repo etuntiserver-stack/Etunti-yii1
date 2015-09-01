@@ -125,6 +125,7 @@ public function actionImei($dom)
 
 		    $sel = '';
 		    $cl = '';
+		    $admin = '';
 		    foreach($viestinta as $val)
 		    {
 		      if($val->status == '0')
@@ -132,8 +133,14 @@ public function actionImei($dom)
 		      else
   			$cl = 'info';
 
+		      $exAdmin = explode(",",$val->admin);
+		      if(isset($exAdmin[0]))
+  			$admin = $exAdmin[0];
+		      else
+  			$admin = $val->admin;
+
 		      $sel .= '<div class="alert alert-'.$cl.'">
-				  '.$val->admin.'<br>
+				  '.$admin.'<br>
 				  '.$val->pvm.'<hr>
 				  <button class="pull-right viesti btn btn-primary" id="'.$val->id.'">Viestiin vastaaminen</button>
 				  <span class="text">'.$val->viesti.'</span>
