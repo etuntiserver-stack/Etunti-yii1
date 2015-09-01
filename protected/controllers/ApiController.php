@@ -139,13 +139,13 @@ public function actionImei($dom)
 		      else
   			$admin = $val->admin;
 
-		      $sel .= '<div class="alert alert-'.$cl.'">
+		     	$sel .= '<div class="alert alert-'.$cl.'">
 				  '.$admin.'<br>
 				  '.$val->pvm.'<hr>
 				  <span class="text">'.$val->viesti.'</span><br>';
 
-				  if(isset($exAdmin[0]) and empty($exAdmin[0])){
-				  echo '
+				  if(isset($exAdmin[0]) and !empty($exAdmin[0])){
+				  $sel .= '
 				  <div class="row">
             			    <div class="input-group">
 			              <input type="text" class="form-control form-input" id="vastaus_'.$val->id.'">
@@ -157,7 +157,7 @@ public function actionImei($dom)
 				  ';
 				  }
 
-				echo '</div>';
+			$sel .= '</div>';
 		    }
 		    Viestinta::model()->updateAll(array('status'=>1),'tekija="'.$ttekija->id.'"');
 
