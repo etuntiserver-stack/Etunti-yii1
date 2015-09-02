@@ -81,7 +81,9 @@ public function actionImei($dom)
 		      $kesto = (strtotime($val->loppui)-strtotime($val->aloitan));
 
 		      $sel .= '<div class="alert alert-success">
-				  <b><span class="text">'.$val->aloitan.'-'.$val->loppui.' '.$val->kohde_kannasta.'</span></b>
+				  <b>'.date("d.m.Y",strtotime($val->aloitan).'</b><br> 
+				  '.$val->aloitan.'-'.$val->loppui.'<br> 
+				  <h4>'.$val->kohde_kannasta.'</h4>
 				  <hr>
 				  <h3>Kesto: '.sprint($kesto).'</h3>
 				</div>';
