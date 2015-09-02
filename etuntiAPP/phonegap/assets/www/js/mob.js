@@ -175,11 +175,9 @@ function row(tilanne,st){
 		aloitan: al,
 		loppui: lp,
 		viesti: "xxx",
-		tekijan_nimi: "Roman Sizov",
-		tid: "38",
 		etaisyys: "0",
 		status: st,
-		tietoja: "testi",
+		tietoja: "",
 		hyvaksytty: "0",
 	};
 
