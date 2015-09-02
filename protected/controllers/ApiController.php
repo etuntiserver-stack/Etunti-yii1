@@ -283,11 +283,18 @@ public function actionImei($dom)
 	     if($mob->status == 1 and $_POST['status'] == 3 and !empty($_POST['loppui']))
 	     {
                 $mobupdate = Mob::model()->findbypk($mob->id);
+
+		if( $mobupdate->asiakas_num != $_POST['asiakas_num'] )
+		{
+                $this->_sendResponse(200, $ms."//".$mobupdate->id."//".$mobupdate->status."//tagnumerror");
+	        exit;
+		}
+
                 $mobupdate->loppui = date("d.m.Y H:i:s",strtotime($_POST['loppui']));
                 $mobupdate->status = 3;
                 $mobupdate->my_location = $mobupdate->my_location."**".$_POST['my_location'];
                 $mobupdate->save();
-                $this->_sendResponse(200, $ms." ID: ".$mobupdate->id." on nyt lopetettu, status: ".$mobupdate->status);
+                $this->_sendResponse(200, $ms."//".$mobupdate->id."//".$mobupdate->status."//null");
 
 	     } elseif($mob->status == 2 and $_POST['status'] == 2 and !empty($_POST['loppui']))
 	     {
@@ -296,7 +303,7 @@ public function actionImei($dom)
                 $mobupdate->status = 2;
                 $mobupdate->my_location = $mobupdate->my_location."**".$_POST['my_location'];
                 $mobupdate->save();
-                $this->_sendResponse(200, $ms." ID: ".$mobupdate->id." on nyt lopetettu, status: ".$mobupdate->status);
+                $this->_sendResponse(200, $ms."//".$mobupdate->id."//".$mobupdate->status."//null");
 
 	     } elseif($mob->status == 10 and $_POST['status'] == 10 and !empty($_POST['loppui']))
 	     {
@@ -305,11 +312,12 @@ public function actionImei($dom)
                 $mobupdate->status = 10;
                 $mobupdate->my_location = $mobupdate->my_location."**".$_POST['my_location'];
                 $mobupdate->save();
-                $this->_sendResponse(200, $ms." ID: ".$mobupdate->id." on nyt lopetettu, status: ".$mobupdate->status);
+                $this->_sendResponse(200, $ms."//".$mobupdate->id."//".$mobupdate->status."//null");
 
 	     } else {
 
                 $this->_sendResponse(200, $ms." on avattu ID: ".$mob->id.", ".$mob->kohde_kannasta);
+
 	     }
 	      exit;
 	    }
