@@ -73,7 +73,6 @@ else
 
 <tr id="rivi_<?php echo $data->id; ?>">
 	<td width="1"><?php echo $door; ?></td>
-	<td><input type="text" class="form-control" value="<?php echo $data->my_location; ?>"></td>
 	<td><?php echo CHtml::link(CHtml::encode($data->id), array('update', 'id'=>$data->id)); ?></td>
 	<td><b><?php echo CHtml::encode(date("d.m",strtotime($data->aloitan))); ?></b></td>
 	<td><?php echo CHtml::encode($data->tekijan_nimi); ?></td>

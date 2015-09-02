@@ -190,10 +190,10 @@ function row(tilanne,st){
         	console.log(data);
 
 		var query = data.split("//");
-		 if(query[4] == 'tagnumerror')
+		 if(query[4] === 'tagnumerror')
 		 {
-		   $("#result2").val("<h2>"+query[4]+ " on avoina</h2>").show();
-		   return false;
+		   $("#result2").html("<h2>VIRHE!!!.<br>NFC-tagin numero on erilainen.</h2>").show();
+		   //return false;
 		 }
 
 		set();
