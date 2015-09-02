@@ -34,8 +34,13 @@
 
 
     <script type="text/javascript" charset="utf-8">
+
+    // Wait for device API libraries to load
+    //
     document.addEventListener("deviceready", onDeviceReady, false);
 
+    // device APIs are available
+    //
     function onDeviceReady() {
         window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, gotFS, fail);
     }
@@ -68,9 +73,7 @@
         reader.onloadend = function(evt) {
             console.log("Read as text");
             console.log(evt.target.result);
-
 	    $("#domain").val(evt.target.result);
-
         };
         reader.readAsText(file);
     }
@@ -78,7 +81,9 @@
     function fail(evt) {
         console.log(evt.target.error.code);
     }
+
     </script>
+
 
 
 
@@ -86,88 +91,37 @@
     </head>
     <body>
 
-        <script type="text/javascript" src="js/index.js"></script>
-        <script type="text/javascript" src="js/mob.js"></script>
-        <script type="text/javascript">
-            app.initialize();
-        </script>
-
-
+        <script type="text/javascript" src="js/tehty.js"></script>
 
 
 <div class="container-fluid">
 
-
   <div class="row">
     <div class="col-lg-12 full">
      <br>
-     <center>
-     <img src="img/logo-black.png" class="logo">
+     <center><img src="img/logo-black.png" class="logo"></center>
      <hr>
+     <h1>Tänään tekemasi työtä</h1>
 
-	    <div id="odotta"></div>
+	    <div id="viestit"></div>
 
-	    <div id="domainBlokki">
-	    <label>Domaini</label>
-            <div class="input-group">
-              <input type="text" class="form-control hakusana" id="domain" name="srch-term" id="srch-term">
-              <div class="input-group-btn">
-                <button class="btn btn-primary aloita" type="button"><i class="glyphicon glyphicon-warning-sign"> Aloita</i></button>
-              </div>
-            </div>
-	    </div>
-
-	    <div id="osoite" style="display:none">
-		<label>OSOITE</label> 
-		<input type="text" class="form-control" id="os"><br>
-		<div id="getListFromServer"></div>
-		<input type="hidden" id="kohdenID" value="0"><br>
-	    </div>
-
-
-     	      <div id="tyo" style="display:none">
-		<h4>TYÖ</h4>
-		<h4 id="tyo_kohde" style="display:none"></h4>
-		<input type="checkbox" name="tyo" class="sw tyo">
-	      </div>
-     	      <div id="matka" style="display:none">
-		<h4>MATKA</h4>
-		<h4 id="matka_kohde" style="display:none"></h4>
-		<input type="checkbox" name="matka" class="sw matka">
-	      </div>
-     	      <div id="lounas" style="display:none">
-		<h4>LOUNASTAUKO</h4> 
-		<h4 id="lounas_kohde" style="display:none"></h4>
-		<input type="checkbox" name="lounas" class="sw lounas">
-	      </div>
-
-
-	<BR><BR>
-	<div id="result2" style="display:none"></div>
-	<textarea cols="100" rows="6" class="form-control" id="result" style="display:none"></textarea>
-     </center>
     </div>
   </div>
 
-
-  <!--<p id="deviceProperties">Loading device properties...</p>-->
 </div>
 
 <br><br><br><br>
 
-<footer id="footer" style="display:none">
+<footer>
     <div class="navbar navbar-inverse navbar-fixed-bottom">
         <div class="container">
             <div class="" id="footer-body">
 		<div class="col-xs-1 col-xs-offset-1">
+           	<a href="#" id="home"><h1 class="glyphicon glyphicon-home"></h1></a>
+		</div><div class="col-xs-1 col-xs-offset-1">
            	<a href="#" id="viestintaURL"><h1 class="glyphicon glyphicon-envelope form-group"></h1></a>
 		</div><div class="col-xs-1 col-xs-offset-1">
 	        <a href="#" id="tvuoro"><h1 class="glyphicon glyphicon-time form-group"></h1></a>
-		</div><div class="col-xs-1 col-xs-offset-1">
-	        <a href="#" id="tehty"><h1 class="glyphicon glyphicon-chevron-down"></h1></a>
-		</div>
-		</div><div class="pull-right">
-	        <div id="tekija"></div>
 		</div>
             </div>
         </div>

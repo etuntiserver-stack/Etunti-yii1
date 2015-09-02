@@ -53,6 +53,44 @@ public function actionImei($dom)
 
 	    if(isset($_POST['check'])){
 
+	        if($_POST['check'] == 'tehty'){
+
+		    $criteria = new CDbCriteria();
+		    $criteria->order = " DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') ASC ";
+		    $criteria->condition = " tid = '".$ttekija->id."' and DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') >= '".date("Y-m-d")."' ";
+	            $mob = Mob::model()->findAll($criteria);
+
+		    if(empty($mob))
+		    {
+		    $this->_sendResponse(200, 'ei tuloksia');
+		    exit;
+		    }
+
+		    function sprint($val)
+ 		    {
+			if($val > 0)
+		    return sprintf('%02d:%02d', $val/3600, ($val % 3600)/60);
+		    }
+
+		    $sel = '';
+		    $kesto = '00:00';
+		    foreach($mob as $val)
+		    {
+
+		     if(!empty($val->loppui))
+		      $kesto = (strtotime($val->loppui)-strtotime($val->aloitan));
+
+		      $sel .= '<div class="alert alert-success">
+				  <b><span class="text">'.$val->aloitan.'-'.$val->loppui.' '.$val->kohde_kannasta.'</span></b>
+				  <hr>
+				  <h3>Kesto: '.sprint($kesto).'</h3>
+				</div>';
+		    }
+
+		    $this->_sendResponse(200, $sel);
+		exit;
+	        }
+
 
 	        if($_POST['check'] == 'tvuoro'){
 
