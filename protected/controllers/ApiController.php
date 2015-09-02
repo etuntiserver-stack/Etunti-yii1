@@ -286,7 +286,7 @@ public function actionImei($dom)
 
 		if( $mobupdate->asiakas_num != $_POST['asiakas_num'] )
 		{
-                $this->_sendResponse(200, $ms."//".$mobupdate->id."//".$mobupdate->status."//tagnumerror");
+                $this->_sendResponse(200, $ms."//".$mobupdate->id."//".$mobupdate->status."//".$mob->kohde_kannasta."//tagnumerror");
 	        exit;
 		}
 
@@ -294,7 +294,7 @@ public function actionImei($dom)
                 $mobupdate->status = 3;
                 $mobupdate->my_location = $mobupdate->my_location."**".$_POST['my_location'];
                 $mobupdate->save();
-                $this->_sendResponse(200, $ms."//".$mobupdate->id."//".$mobupdate->status."//null");
+                $this->_sendResponse(200, $ms."//".$mobupdate->id."//".$mobupdate->status."//".$mob->kohde_kannasta."//null");
 
 	     } elseif($mob->status == 2 and $_POST['status'] == 2 and !empty($_POST['loppui']))
 	     {
@@ -303,7 +303,7 @@ public function actionImei($dom)
                 $mobupdate->status = 2;
                 $mobupdate->my_location = $mobupdate->my_location."**".$_POST['my_location'];
                 $mobupdate->save();
-                $this->_sendResponse(200, $ms."//".$mobupdate->id."//".$mobupdate->status."//null");
+                $this->_sendResponse(200, $ms."//".$mobupdate->id."//".$mobupdate->status."//".$mob->kohde_kannasta."//null");
 
 	     } elseif($mob->status == 10 and $_POST['status'] == 10 and !empty($_POST['loppui']))
 	     {
@@ -312,7 +312,7 @@ public function actionImei($dom)
                 $mobupdate->status = 10;
                 $mobupdate->my_location = $mobupdate->my_location."**".$_POST['my_location'];
                 $mobupdate->save();
-                $this->_sendResponse(200, $ms."//".$mobupdate->id."//".$mobupdate->status."//null");
+                $this->_sendResponse(200, $ms."//".$mobupdate->id."//".$mobupdate->status."//".$mob->kohde_kannasta."//null");
 
 	     } else {
 
