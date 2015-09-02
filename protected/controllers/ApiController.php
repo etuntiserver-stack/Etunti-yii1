@@ -57,7 +57,7 @@ public function actionImei($dom)
 
 		    $criteria = new CDbCriteria();
 		    $criteria->order = " DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') ASC ";
-		    $criteria->condition = " tid = '".$ttekija->id."' and DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') >= '".date("Y-m-d")."' ";
+		    $criteria->condition = " tid = '".$ttekija->id."' and DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = '".date("Y-m-d")."' ";
 	            $mob = Mob::model()->findAll($criteria);
 
 		    if(empty($mob))
@@ -73,15 +73,14 @@ public function actionImei($dom)
 		    }
 
 		    $sel = '';
-		    $kesto = '00:00';
 		    foreach($mob as $val)
 		    {
-
-		     if(!empty($val->loppui))
-		      $kesto = (strtotime($val->loppui)-strtotime($val->aloitan));
+		    $kesto = '00:00';
+		    if(!empty($val->loppui))
+		    $kesto = (strtotime($val->loppui)-strtotime($val->aloitan));
 
 		      $sel .= '<div class="well">
-				  Päivämäärä: <b>'.date("d.m.Y",strtotime($val->aloitan).'</b><br> 
+				  Päivämäärä: <b>'.date("d.m.Y",strtotime($val->aloitan)).'</b><br> 
 				  Klo: '.$val->aloitan.'-'.$val->loppui.'<br> 
 				  <h4>Osoite: '.$val->kohde_kannasta.'</h4>
 				  <hr>
