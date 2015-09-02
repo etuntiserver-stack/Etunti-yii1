@@ -2946,3 +2946,775 @@ Stack trace:
 #5 {main}
 REQUEST_URI=/index.php/api/mob
 ---
+2015/09/02 12:28:14 [error] [system.db.CDbCommand] CDbCommand::fetchAll() failed: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'sivex.sivex_administrators' doesn't exist. The SQL statement executed was: SHOW FULL COLUMNS FROM `sivex_administrators`.
+in C:\xampp\htdocs\etuntifw\protected\models\Administrators.php (23)
+in C:\xampp\htdocs\etuntifw\protected\controllers\SivexkuittiController.php (53)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/09/02 12:28:14 [error] [exception.CDbException] exception 'CDbException' with message 'The table "sivex_administrators" for active record class "Administrators" cannot be found in the database.' in C:\xampp\htdocs\etuntifw\YII\framework\db\ar\CActiveRecord.php:2310
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\db\ar\CActiveRecord.php(387): CActiveRecordMetaData->__construct(Object(Administrators))
+#1 C:\xampp\htdocs\etuntifw\protected\models\Administrators.php(23): CActiveRecord::model('Administrators')
+#2 C:\xampp\htdocs\etuntifw\protected\controllers\SivexkuittiController.php(53): Administrators::model()
+#3 C:\xampp\htdocs\etuntifw\YII\framework\base\CComponent.php(606) : eval()'d code(1): SivexkuittiController->isEtuntiAdmin()
+#4 C:\xampp\htdocs\etuntifw\YII\framework\base\CComponent.php(606): eval()
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\auth\CAccessControlFilter.php(384): CComponent->evaluateExpression('Yii::app()->con...', Array)
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\auth\CAccessControlFilter.php(280): CAccessRule->isExpressionMatched(Object(WebUser))
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\auth\CAccessControlFilter.php(135): CAccessRule->isUserAllowed(Object(WebUser), Object(SivexkuittiController), Object(CInlineAction), '127.0.0.1', 'GET')
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(38): CAccessControlFilter->preFilter(Object(CFilterChain))
+#9 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#10 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#11 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#12 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#13 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#14 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('index')
+#15 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('sivexkuitti/ind...')
+#16 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#17 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#18 {main}
+REQUEST_URI=/index.php/sivexkuitti/index
+HTTP_REFERER=http://etuntifw.local/index.php/sivexkuitti/kyhteenveto
+---
+2015/09/02 12:32:46 [error] [php] Array to string conversion (C:\xampp\htdocs\etuntifw\protected\views\tyovuoroot\index.php:22)
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(869): TyovuorootController->renderFile()
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(782): TyovuorootController->renderPartial()
+#2 C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php(281): TyovuorootController->render()
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(49): TyovuorootController->actionIndex()
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams()
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): TyovuorootController->runAction()
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CAccessControlFilter->filter()
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): TyovuorootController->filterAccessControl()
+#9 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#10 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#11 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): TyovuorootController->runActionWithFilters()
+#12 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): TyovuorootController->run()
+#13 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#14 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#15 C:\xampp\htdocs\etuntifw\index.php(13): CWebApplication->run()
+REQUEST_URI=/index.php/tyovuoroot/index
+in C:\xampp\htdocs\etuntifw\protected\views\tyovuoroot\index.php (22)
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (281)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/09/02 12:35:38 [warning] [application] Failed to set unsafe attribute "id" of "Tyovuoroot".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (79)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/09/02 12:35:38 [warning] [application] Failed to set unsafe attribute "time" of "Tyovuoroot".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (79)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/09/02 12:35:44 [warning] [application] Failed to set unsafe attribute "id" of "Tyovuoroot".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (79)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/09/02 12:35:44 [warning] [application] Failed to set unsafe attribute "time" of "Tyovuoroot".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (79)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/09/02 12:35:48 [warning] [application] Failed to set unsafe attribute "id" of "Tyovuoroot".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (95)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/09/02 12:35:48 [warning] [application] Failed to set unsafe attribute "time" of "Tyovuoroot".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (95)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/09/02 12:35:59 [warning] [application] Failed to set unsafe attribute "id" of "Tyovuoroot".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (95)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/09/02 12:35:59 [warning] [application] Failed to set unsafe attribute "time" of "Tyovuoroot".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (95)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/09/02 12:35:59 [error] [php] Trying to get property of non-object (C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php:95)
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): TyovuorootController->runAction()
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CAccessControlFilter->filter()
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): TyovuorootController->filterAccessControl()
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): TyovuorootController->runActionWithFilters()
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): TyovuorootController->run()
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#9 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#10 C:\xampp\htdocs\etuntifw\index.php(13): CWebApplication->run()
+REQUEST_URI=/index.php/tyovuoroot/operatio
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (95)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/09/02 12:35:59 [error] [php] Trying to get property of non-object (C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php:95)
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): TyovuorootController->runAction()
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CAccessControlFilter->filter()
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): TyovuorootController->filterAccessControl()
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): TyovuorootController->runActionWithFilters()
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): TyovuorootController->run()
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#9 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#10 C:\xampp\htdocs\etuntifw\index.php(13): CWebApplication->run()
+REQUEST_URI=/index.php/tyovuoroot/operatio
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (95)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/09/02 12:35:59 [warning] [application] Failed to set unsafe attribute "id" of "Tyovuoroot".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (95)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/09/02 12:35:59 [warning] [application] Failed to set unsafe attribute "time" of "Tyovuoroot".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (95)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/09/02 12:35:59 [error] [php] Trying to get property of non-object (C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php:95)
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): TyovuorootController->runAction()
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CAccessControlFilter->filter()
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): TyovuorootController->filterAccessControl()
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): TyovuorootController->runActionWithFilters()
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): TyovuorootController->run()
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#9 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#10 C:\xampp\htdocs\etuntifw\index.php(13): CWebApplication->run()
+REQUEST_URI=/index.php/tyovuoroot/operatio
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (95)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/09/02 12:35:59 [warning] [application] Failed to set unsafe attribute "id" of "Tyovuoroot".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (95)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/09/02 12:35:59 [warning] [application] Failed to set unsafe attribute "time" of "Tyovuoroot".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (95)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/09/02 12:35:59 [error] [php] Trying to get property of non-object (C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php:95)
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): TyovuorootController->runAction()
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CAccessControlFilter->filter()
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): TyovuorootController->filterAccessControl()
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): TyovuorootController->runActionWithFilters()
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): TyovuorootController->run()
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#9 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#10 C:\xampp\htdocs\etuntifw\index.php(13): CWebApplication->run()
+REQUEST_URI=/index.php/tyovuoroot/operatio
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (95)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/09/02 12:35:59 [warning] [application] Failed to set unsafe attribute "id" of "Tyovuoroot".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (95)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/09/02 12:35:59 [warning] [application] Failed to set unsafe attribute "time" of "Tyovuoroot".
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (95)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/09/02 12:35:59 [error] [php] Trying to get property of non-object (C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php:95)
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): TyovuorootController->runAction()
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CAccessControlFilter->filter()
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): TyovuorootController->filterAccessControl()
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): TyovuorootController->runActionWithFilters()
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): TyovuorootController->run()
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#9 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#10 C:\xampp\htdocs\etuntifw\index.php(13): CWebApplication->run()
+REQUEST_URI=/index.php/tyovuoroot/operatio
+in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php (95)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/09/02 12:36:06 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The requested page does not exist.' in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php:310
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php(71): TyovuorootController->loadModel('6850')
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(49): TyovuorootController->actionOperatio()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#9 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#10 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('operatio')
+#11 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('tyovuoroot/oper...')
+#12 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#13 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#14 {main}
+REQUEST_URI=/index.php/tyovuoroot/operatio
+HTTP_REFERER=http://etuntifw.local/index.php/tyovuoroot/index
+---
+2015/09/02 12:36:06 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The requested page does not exist.' in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php:310
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php(71): TyovuorootController->loadModel('7124')
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(49): TyovuorootController->actionOperatio()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#9 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#10 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('operatio')
+#11 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('tyovuoroot/oper...')
+#12 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#13 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#14 {main}
+REQUEST_URI=/index.php/tyovuoroot/operatio
+HTTP_REFERER=http://etuntifw.local/index.php/tyovuoroot/index
+---
+2015/09/02 12:36:06 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The requested page does not exist.' in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php:310
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php(71): TyovuorootController->loadModel('7123')
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(49): TyovuorootController->actionOperatio()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#9 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#10 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('operatio')
+#11 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('tyovuoroot/oper...')
+#12 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#13 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#14 {main}
+REQUEST_URI=/index.php/tyovuoroot/operatio
+HTTP_REFERER=http://etuntifw.local/index.php/tyovuoroot/index
+---
+2015/09/02 12:36:06 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The requested page does not exist.' in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php:310
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php(71): TyovuorootController->loadModel('7123')
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(49): TyovuorootController->actionOperatio()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#9 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#10 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('operatio')
+#11 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('tyovuoroot/oper...')
+#12 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#13 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#14 {main}
+REQUEST_URI=/index.php/tyovuoroot/operatio
+HTTP_REFERER=http://etuntifw.local/index.php/tyovuoroot/index
+---
+2015/09/02 12:36:06 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The requested page does not exist.' in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php:310
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php(71): TyovuorootController->loadModel('7122')
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(49): TyovuorootController->actionOperatio()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#9 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#10 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('operatio')
+#11 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('tyovuoroot/oper...')
+#12 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#13 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#14 {main}
+REQUEST_URI=/index.php/tyovuoroot/operatio
+HTTP_REFERER=http://etuntifw.local/index.php/tyovuoroot/index
+---
+2015/09/02 12:36:06 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The requested page does not exist.' in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php:310
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php(71): TyovuorootController->loadModel('7122')
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(49): TyovuorootController->actionOperatio()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#9 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#10 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('operatio')
+#11 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('tyovuoroot/oper...')
+#12 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#13 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#14 {main}
+REQUEST_URI=/index.php/tyovuoroot/operatio
+HTTP_REFERER=http://etuntifw.local/index.php/tyovuoroot/index
+---
+2015/09/02 12:36:06 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The requested page does not exist.' in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php:310
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php(71): TyovuorootController->loadModel('6850')
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(49): TyovuorootController->actionOperatio()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#9 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#10 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('operatio')
+#11 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('tyovuoroot/oper...')
+#12 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#13 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#14 {main}
+REQUEST_URI=/index.php/tyovuoroot/operatio
+HTTP_REFERER=http://etuntifw.local/index.php/tyovuoroot/index
+---
+2015/09/02 12:36:06 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The requested page does not exist.' in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php:310
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php(71): TyovuorootController->loadModel('6850')
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(49): TyovuorootController->actionOperatio()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#9 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#10 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('operatio')
+#11 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('tyovuoroot/oper...')
+#12 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#13 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#14 {main}
+REQUEST_URI=/index.php/tyovuoroot/operatio
+HTTP_REFERER=http://etuntifw.local/index.php/tyovuoroot/index
+---
+2015/09/02 12:36:07 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The requested page does not exist.' in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php:310
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php(71): TyovuorootController->loadModel('7124')
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(49): TyovuorootController->actionOperatio()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#9 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#10 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('operatio')
+#11 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('tyovuoroot/oper...')
+#12 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#13 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#14 {main}
+REQUEST_URI=/index.php/tyovuoroot/operatio
+HTTP_REFERER=http://etuntifw.local/index.php/tyovuoroot/index
+---
+2015/09/02 12:36:07 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The requested page does not exist.' in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php:310
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php(71): TyovuorootController->loadModel('7123')
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(49): TyovuorootController->actionOperatio()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#9 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#10 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('operatio')
+#11 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('tyovuoroot/oper...')
+#12 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#13 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#14 {main}
+REQUEST_URI=/index.php/tyovuoroot/operatio
+HTTP_REFERER=http://etuntifw.local/index.php/tyovuoroot/index
+---
+2015/09/02 12:36:07 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The requested page does not exist.' in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php:310
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php(71): TyovuorootController->loadModel('7123')
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(49): TyovuorootController->actionOperatio()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#9 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#10 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('operatio')
+#11 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('tyovuoroot/oper...')
+#12 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#13 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#14 {main}
+REQUEST_URI=/index.php/tyovuoroot/operatio
+HTTP_REFERER=http://etuntifw.local/index.php/tyovuoroot/index
+---
+2015/09/02 12:36:07 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The requested page does not exist.' in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php:310
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php(71): TyovuorootController->loadModel('7122')
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(49): TyovuorootController->actionOperatio()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#9 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#10 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('operatio')
+#11 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('tyovuoroot/oper...')
+#12 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#13 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#14 {main}
+REQUEST_URI=/index.php/tyovuoroot/operatio
+HTTP_REFERER=http://etuntifw.local/index.php/tyovuoroot/index
+---
+2015/09/02 12:36:07 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The requested page does not exist.' in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php:310
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php(71): TyovuorootController->loadModel('7122')
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(49): TyovuorootController->actionOperatio()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#9 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#10 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('operatio')
+#11 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('tyovuoroot/oper...')
+#12 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#13 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#14 {main}
+REQUEST_URI=/index.php/tyovuoroot/operatio
+HTTP_REFERER=http://etuntifw.local/index.php/tyovuoroot/index
+---
+2015/09/02 12:36:07 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The requested page does not exist.' in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php:310
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php(71): TyovuorootController->loadModel('6850')
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(49): TyovuorootController->actionOperatio()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#9 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#10 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('operatio')
+#11 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('tyovuoroot/oper...')
+#12 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#13 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#14 {main}
+REQUEST_URI=/index.php/tyovuoroot/operatio
+HTTP_REFERER=http://etuntifw.local/index.php/tyovuoroot/index
+---
+2015/09/02 12:36:07 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The requested page does not exist.' in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php:310
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php(71): TyovuorootController->loadModel('6850')
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(49): TyovuorootController->actionOperatio()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#9 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#10 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('operatio')
+#11 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('tyovuoroot/oper...')
+#12 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#13 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#14 {main}
+REQUEST_URI=/index.php/tyovuoroot/operatio
+HTTP_REFERER=http://etuntifw.local/index.php/tyovuoroot/index
+---
+2015/09/02 12:36:07 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The requested page does not exist.' in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php:310
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php(71): TyovuorootController->loadModel('6850')
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(49): TyovuorootController->actionOperatio()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#9 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#10 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('operatio')
+#11 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('tyovuoroot/oper...')
+#12 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#13 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#14 {main}
+REQUEST_URI=/index.php/tyovuoroot/operatio
+HTTP_REFERER=http://etuntifw.local/index.php/tyovuoroot/index
+---
+2015/09/02 12:36:07 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The requested page does not exist.' in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php:310
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php(71): TyovuorootController->loadModel('7124')
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(49): TyovuorootController->actionOperatio()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#9 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#10 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('operatio')
+#11 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('tyovuoroot/oper...')
+#12 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#13 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#14 {main}
+REQUEST_URI=/index.php/tyovuoroot/operatio
+HTTP_REFERER=http://etuntifw.local/index.php/tyovuoroot/index
+---
+2015/09/02 12:36:07 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The requested page does not exist.' in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php:310
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php(71): TyovuorootController->loadModel('7123')
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(49): TyovuorootController->actionOperatio()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#9 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#10 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('operatio')
+#11 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('tyovuoroot/oper...')
+#12 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#13 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#14 {main}
+REQUEST_URI=/index.php/tyovuoroot/operatio
+HTTP_REFERER=http://etuntifw.local/index.php/tyovuoroot/index
+---
+2015/09/02 12:36:07 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The requested page does not exist.' in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php:310
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php(71): TyovuorootController->loadModel('7123')
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(49): TyovuorootController->actionOperatio()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#9 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#10 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('operatio')
+#11 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('tyovuoroot/oper...')
+#12 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#13 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#14 {main}
+REQUEST_URI=/index.php/tyovuoroot/operatio
+HTTP_REFERER=http://etuntifw.local/index.php/tyovuoroot/index
+---
+2015/09/02 12:36:07 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The requested page does not exist.' in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php:310
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php(71): TyovuorootController->loadModel('7122')
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(49): TyovuorootController->actionOperatio()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#9 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#10 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('operatio')
+#11 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('tyovuoroot/oper...')
+#12 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#13 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#14 {main}
+REQUEST_URI=/index.php/tyovuoroot/operatio
+HTTP_REFERER=http://etuntifw.local/index.php/tyovuoroot/index
+---
+2015/09/02 12:36:07 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The requested page does not exist.' in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php:310
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php(71): TyovuorootController->loadModel('7122')
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(49): TyovuorootController->actionOperatio()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#9 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#10 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('operatio')
+#11 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('tyovuoroot/oper...')
+#12 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#13 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#14 {main}
+REQUEST_URI=/index.php/tyovuoroot/operatio
+HTTP_REFERER=http://etuntifw.local/index.php/tyovuoroot/index
+---
+2015/09/02 12:36:07 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The requested page does not exist.' in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php:310
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php(71): TyovuorootController->loadModel('6850')
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(49): TyovuorootController->actionOperatio()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#9 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#10 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('operatio')
+#11 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('tyovuoroot/oper...')
+#12 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#13 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#14 {main}
+REQUEST_URI=/index.php/tyovuoroot/operatio
+HTTP_REFERER=http://etuntifw.local/index.php/tyovuoroot/index
+---
+2015/09/02 12:36:07 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The requested page does not exist.' in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php:310
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php(71): TyovuorootController->loadModel('6850')
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(49): TyovuorootController->actionOperatio()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#9 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#10 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('operatio')
+#11 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('tyovuoroot/oper...')
+#12 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#13 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#14 {main}
+REQUEST_URI=/index.php/tyovuoroot/operatio
+HTTP_REFERER=http://etuntifw.local/index.php/tyovuoroot/index
+---
+2015/09/02 12:36:07 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The requested page does not exist.' in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php:310
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php(71): TyovuorootController->loadModel('6850')
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(49): TyovuorootController->actionOperatio()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#9 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#10 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('operatio')
+#11 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('tyovuoroot/oper...')
+#12 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#13 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#14 {main}
+REQUEST_URI=/index.php/tyovuoroot/operatio
+HTTP_REFERER=http://etuntifw.local/index.php/tyovuoroot/index
+---
+2015/09/02 12:36:07 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The requested page does not exist.' in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php:310
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php(71): TyovuorootController->loadModel('6850')
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(49): TyovuorootController->actionOperatio()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#9 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#10 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('operatio')
+#11 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('tyovuoroot/oper...')
+#12 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#13 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#14 {main}
+REQUEST_URI=/index.php/tyovuoroot/operatio
+HTTP_REFERER=http://etuntifw.local/index.php/tyovuoroot/index
+---
+2015/09/02 12:36:07 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The requested page does not exist.' in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php:310
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php(71): TyovuorootController->loadModel('7124')
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(49): TyovuorootController->actionOperatio()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#9 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#10 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('operatio')
+#11 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('tyovuoroot/oper...')
+#12 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#13 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#14 {main}
+REQUEST_URI=/index.php/tyovuoroot/operatio
+HTTP_REFERER=http://etuntifw.local/index.php/tyovuoroot/index
+---
+2015/09/02 12:36:07 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The requested page does not exist.' in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php:310
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php(71): TyovuorootController->loadModel('7123')
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(49): TyovuorootController->actionOperatio()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#9 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#10 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('operatio')
+#11 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('tyovuoroot/oper...')
+#12 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#13 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#14 {main}
+REQUEST_URI=/index.php/tyovuoroot/operatio
+HTTP_REFERER=http://etuntifw.local/index.php/tyovuoroot/index
+---
+2015/09/02 12:36:07 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The requested page does not exist.' in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php:310
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php(71): TyovuorootController->loadModel('7123')
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(49): TyovuorootController->actionOperatio()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#9 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#10 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('operatio')
+#11 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('tyovuoroot/oper...')
+#12 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#13 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#14 {main}
+REQUEST_URI=/index.php/tyovuoroot/operatio
+HTTP_REFERER=http://etuntifw.local/index.php/tyovuoroot/index
+---
+2015/09/02 12:36:08 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The requested page does not exist.' in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php:310
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php(71): TyovuorootController->loadModel('7122')
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(49): TyovuorootController->actionOperatio()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#9 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#10 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('operatio')
+#11 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('tyovuoroot/oper...')
+#12 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#13 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#14 {main}
+REQUEST_URI=/index.php/tyovuoroot/operatio
+HTTP_REFERER=http://etuntifw.local/index.php/tyovuoroot/index
+---
+2015/09/02 12:36:08 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The requested page does not exist.' in C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php:310
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\protected\controllers\TyovuorootController.php(71): TyovuorootController->loadModel('7122')
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(49): TyovuorootController->actionOperatio()
+#2 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#9 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#10 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('operatio')
+#11 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('tyovuoroot/oper...')
+#12 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#13 C:\xampp\htdocs\etuntifw\index.php(13): CApplication->run()
+#14 {main}
+REQUEST_URI=/index.php/tyovuoroot/operatio
+HTTP_REFERER=http://etuntifw.local/index.php/tyovuoroot/index
+---
