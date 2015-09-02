@@ -202,7 +202,7 @@ function row(tilanne,st){
     	},
     		error:function (xhr, ajaxOptions, thrownError){
         	console.log(xhr.responseText);
-		$("#result").val(xhr.responseText).show();
+		$("#result2").html(xhr.responseText).show();
     	}
         });
 
