@@ -80,7 +80,7 @@ public function actionImei($dom)
 		     if(!empty($val->loppui))
 		      $kesto = (strtotime($val->loppui)-strtotime($val->aloitan));
 
-		      $sel .= '<div class="alert alert-success">
+		      $sel .= '<div class="well">
 				  Päivämäärä: <b>'.date("d.m.Y",strtotime($val->aloitan).'</b><br> 
 				  Klo: '.$val->aloitan.'-'.$val->loppui.'<br> 
 				  <h4>Osoite: '.$val->kohde_kannasta.'</h4>
