@@ -126,7 +126,7 @@ td .tp{
 
 <br>
 
-<?php if(!empty($from) and !empty($to)) : ?>
+<?php if(!empty($from) and !empty($to) and count(Yii::app()->session['Tekija']) > 0 and Yii::app()->session['Tekija'][0] != 0) : ?>
 <div class="row tvuoro">
   <table class="table table-striped table-condensed table-bordered">
      <thead>

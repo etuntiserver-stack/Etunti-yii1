@@ -34,7 +34,7 @@ class SivexkuittiController extends Controller
 		return array(
 
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','updatetime','showkohteet','yhteenveto','historia','poistaKohde'),
+				'actions'=>array('admin','delete','create','update','index','view','updatetime','showkohteet','yhteenveto','kyhteenveto','historia','poistaKohde'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -505,6 +505,56 @@ class SivexkuittiController extends Controller
 	}
 
 
+
+	public function actionKyhteenveto()
+	{
+
+	function sprint($val){
+	    if($val > 0)
+		return sprintf('%02d:%02d', $val/3600, ($val % 3600)/60);
+	}
+
+
+		//unset(Yii::app()->session['Tekija']);
+		if(Yii::app()->request->getPost('kohteet'))
+		Yii::app()->session['kohteet'] = Yii::app()->request->getPost('kohteet');
+
+		if(Yii::app()->request->getPost('from'))
+		Yii::app()->session['from'] = date("Y-m-d",strtotime(Yii::app()->request->getPost('from')));
+
+		if(Yii::app()->request->getPost('to'))
+		Yii::app()->session['to'] = date("Y-m-d",strtotime(Yii::app()->request->getPost('to')));
+		
+
+       		$criteria = new CDbCriteria();
+        	$criteria->select = "
+
+
+		SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s')))) as l_tunnit,
+
+
+		t.*";
+
+        	//$criteria->condition = " l_loppu = '' and l_alku = '' ";
+
+        	$criteria->order = "SUBSTR(LTRIM(tekijan_nimi), LOCATE(' ',LTRIM(tekijan_nimi)))";
+        	$criteria->group = 'kohde_kannasta';
+        	$criteria->condition = " status='3' ";
+
+		if(Yii::app()->session['kohteet'])
+	        $criteria->addCondition (" kohde_kannasta like '%".Yii::app()->session['kohteet']."%' ");
+
+		if(Yii::app()->session['from'] and Yii::app()->session['to'])
+	        $criteria->addCondition ("DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."' ");
+
+		$dataProvider=new CActiveDataProvider('Sivexkuitti', array(
+			'criteria'=>$criteria,
+			'pagination'=>false
+		));
+
+		//$dataProvider->pagination->pageSize = 50;
+		$this->render('kyhteenveto', array('dataProvider' => $dataProvider));
+	}
 
 
 
