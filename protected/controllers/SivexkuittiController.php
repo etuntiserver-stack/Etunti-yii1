@@ -515,8 +515,10 @@ class SivexkuittiController extends Controller
 	}
 
 
-		//unset(Yii::app()->session['Tekija']);
-		if(Yii::app()->request->getPost('kohteet'))
+		if(Yii::app()->request->getPost('kohteet') == 'kaikki')
+		unset(Yii::app()->session['kohteet']);
+
+		if(Yii::app()->request->getPost('kohteet') and Yii::app()->request->getPost('kohteet') != 'kaikki')
 		Yii::app()->session['kohteet'] = Yii::app()->request->getPost('kohteet');
 
 		if(Yii::app()->request->getPost('from'))
