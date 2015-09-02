@@ -330,6 +330,7 @@ public function actionImei($dom)
                 $mobinsert->imei = $ttekija->imei;
                 $mobinsert->tid = $ttekija->id;
                 $mobinsert->tekijan_nimi = $ttekija->tekijan_nimi;
+                $mobinsert->tietoja = $_POST['tietoja'];
                 $mobinsert->save();
                 $this->_sendResponse(200, $mobinsert->id."//".$mobinsert->kohde_kannasta);
 
