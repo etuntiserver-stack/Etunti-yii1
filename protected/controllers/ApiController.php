@@ -81,9 +81,9 @@ public function actionImei($dom)
 		      $kesto = (strtotime($val->loppui)-strtotime($val->aloitan));
 
 		      $sel .= '<div class="alert alert-success">
-				  <b>'.date("d.m.Y",strtotime($val->aloitan).'</b><br> 
-				  '.$val->aloitan.'-'.$val->loppui.'<br> 
-				  <h4>'.$val->kohde_kannasta.'</h4>
+				  Päivämäärä: <b>'.date("d.m.Y",strtotime($val->aloitan).'</b><br> 
+				  Klo: '.$val->aloitan.'-'.$val->loppui.'<br> 
+				  <h4>Osoite: '.$val->kohde_kannasta.'</h4>
 				  <hr>
 				  <h3>Kesto: '.sprint($kesto).'</h3>
 				</div>';
