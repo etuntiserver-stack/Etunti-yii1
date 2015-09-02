@@ -16,76 +16,6 @@
   	<script src="js/bootstrap.min.js"></script>
   	<script src="js/bootstrap-switch.js"></script>
 
-<!--
-    <script type="text/javascript" charset="utf-8">
-    document.addEventListener("deviceready", onDeviceReady, false);
-    function onDeviceReady() {
-        var element = document.getElementById('deviceProperties');
-        element.innerHTML = 'Device Model: '    + device.model    + '<br />' +
-                            'Device Cordova: '  + device.cordova  + '<br />' +
-                            'Device Platform: ' + device.platform + '<br />' +
-                            'Device UUID: '     + device.uuid     + '<br />' +
-                            'Device Version: '  + device.version  + '<br />';
-    }
-    </script>
--->
-
-
-
-
-    <script type="text/javascript" charset="utf-8">
-
-    // Wait for device API libraries to load
-    //
-    document.addEventListener("deviceready", onDeviceReady, false);
-
-    // device APIs are available
-    //
-    function onDeviceReady() {
-        window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, gotFS, fail);
-    }
-
-    function gotFS(fileSystem) {
-        fileSystem.root.getFile("etunti.cfg", null, gotFileEntry, fail);
-    }
-
-    function gotFileEntry(fileEntry) {
-        fileEntry.file(gotFile, fail);
-    }
-
-    function gotFile(file){
-        readDataUrl(file);
-        readAsText(file);
-    }
-
-    function readDataUrl(file) {
-        var reader = new FileReader();
-        reader.onloadend = function(evt) {
-            console.log("Read as data URL");
-            console.log(evt.target.result);
-
-        };
-        reader.readAsDataURL(file);
-    }
-
-    function readAsText(file) {
-        var reader = new FileReader();
-        reader.onloadend = function(evt) {
-            console.log("Read as text");
-            console.log(evt.target.result);
-	    $("#domain").val(evt.target.result);
-        };
-        reader.readAsText(file);
-    }
-
-    function fail(evt) {
-        console.log(evt.target.error.code);
-    }
-
-    </script>
-
-
-
 
         <title>ETUNTI</title>
     </head>
@@ -101,7 +31,7 @@
      <br>
      <center><img src="img/logo-black.png" class="logo"></center>
      <hr>
-     <h1>Tänään tekemasi työtä</h1>
+     <h1>Tänään tekemasi työt</h1>
 
 	    <div id="viestit"></div>
 
