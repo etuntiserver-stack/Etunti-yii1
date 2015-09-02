@@ -67,7 +67,6 @@ $this->menu=array(
   <thead>
   <tr>
   <th><?php echo Yii::t('main', 'T'); ?></th>
-  <th><?php echo Yii::t('main', 'Loc'); ?></th>
   <th><?php echo Yii::t('main', 'ID'); ?></th>
   <th><?php echo Yii::t('main', 'Päivä'); ?></th>
   <th><?php echo Yii::t('main', 'Työntekijä'); ?></th>
