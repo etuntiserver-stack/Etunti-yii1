@@ -23,14 +23,21 @@ $(document).ready(function(){
   var tag = "36073245411209220";
   var imei = DeviceIMEI;
 
+    var tag = 'notag';
+  if(query['tag'])
+    tag = query['tag'];
 
 
   $("#home").click(function(){
-	window.location.href='index.html?domain='+domain+'&imei='+DeviceIMEI+'&location='+my_location;
+	window.location.href='index.html?domain='+domain+'&imei='+DeviceIMEI+'&location='+my_location+'&tag='+tag;
   });
 
   $("#tvuoro").click(function(){
-	window.location.href='tvuoro.html?domain='+domain+'&imei='+DeviceIMEI+'&location='+my_location;
+	window.location.href='tvuoro.html?domain='+domain+'&imei='+DeviceIMEI+'&location='+my_location+'&tag='+tag;
+  });
+
+  $("#tehty").click(function(){
+	window.location.href='tehty.html?domain='+domain+'&imei='+DeviceIMEI+'&location='+my_location+'&tag='+tag;
   });
 
 

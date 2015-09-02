@@ -15,12 +15,13 @@ $(document).ready(function(){
   var DeviceIMEI = query['imei'];
   var my_location = query['location'];
 
+
   if(query['domain'])
     var domain = query['domain'];
   else
     var domain = $("#domain").val();
 
-    var tag = '';
+    var tag = 'notag';
   if(query['tag'])
     tag = query['tag'];
 
@@ -39,13 +40,16 @@ $(document).ready(function(){
 
 
   $("#viestintaURL").click(function(){
-	window.location.href='viestinta.html?domain='+domain+'&imei='+DeviceIMEI+'&location='+my_location;
+	window.location.href='viestinta.html?domain='+domain+'&imei='+DeviceIMEI+'&location='+my_location+'&tag='+tag;
   });
 
   $("#tvuoro").click(function(){
-	window.location.href='tvuoro.html?domain='+domain+'&imei='+DeviceIMEI+'&location='+my_location;
+	window.location.href='tvuoro.html?domain='+domain+'&imei='+DeviceIMEI+'&location='+my_location+'&tag='+tag;
   });
 
+  $("#tehty").click(function(){
+	window.location.href='tehty.html?domain='+domain+'&imei='+DeviceIMEI+'&location='+my_location+'&tag='+tag;
+  });
 
 
 $(".sw").bootstrapSwitch({
@@ -275,14 +279,17 @@ function row(tilanne,st){
         console.log(error.code);
     }
 
-	set();
-
+       	set();
+ 	checkviesti(domain);
   });
+
+
 
 
 // Checker
     if(domain != ''){
        	set();
+ 	checkviesti(domain);
     } else {
    	$("#result").append("Domaini puutuu \n");
     }
@@ -398,7 +405,8 @@ $("#os").keyup(function(){
 
 
 /* check messages */
-if(domain != ''){
+function checkviesti(domain){
+
         $.ajax({
            url: url+'/imei?dom='+domain,
 	   type:'POST',
@@ -418,6 +426,7 @@ if(domain != ''){
 		$("#result2").html(xhr.responseText).show();
     	}
         });
+  
 }
 
 

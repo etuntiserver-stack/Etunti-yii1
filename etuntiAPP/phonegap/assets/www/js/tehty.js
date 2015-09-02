@@ -16,10 +16,6 @@ $(document).ready(function(){
   var DeviceIMEI = query['imei'];
   var my_location = query['location'];
 
-    var tag = 'notag';
-  if(query['tag'])
-    tag = query['tag'];
-
   var server = "http://etuntifw.azurewebsites.net";
   var url = server+"/index.php/api/mob";
   var puh_nro = "0449304851";
@@ -27,33 +23,40 @@ $(document).ready(function(){
   var tag = "36073245411209220";
   var imei = DeviceIMEI;
 
+    var tag = 'notag';
+  if(query['tag'])
+    tag = query['tag'];
 
 
   $("#home").click(function(){
 	window.location.href='index.html?domain='+domain+'&imei='+DeviceIMEI+'&location='+my_location+'&tag='+tag;
   });
 
+  $("#tvuoro").click(function(){
+	window.location.href='tvuoro.html?domain='+domain+'&imei='+DeviceIMEI+'&location='+my_location+'&tag='+tag;
+  });
+
   $("#viestintaURL").click(function(){
 	window.location.href='viestinta.html?domain='+domain+'&imei='+DeviceIMEI+'&location='+my_location+'&tag='+tag;
   });
 
-  $("#tehty").click(function(){
-	window.location.href='tehty.html?domain='+domain+'&imei='+DeviceIMEI+'&location='+my_location+'&tag='+tag;
-  });
 
 
         $.ajax({
            url: url+'/imei?dom='+domain,
 	   type:'POST',
- 	   data: { check : "tvuoro", imei : imei, my_location : my_location },
+ 	   data: { check : "tehty", imei : imei, my_location : my_location },
            success: function(data){
-        	console.log(data);
-		$("#tvuoroot").html(data);
+        	//console.log(data);
+		$("#viestit").html(data);
     	},
     		error:function (xhr, ajaxOptions, thrownError){
         	console.log(xhr.responseText);
-		$("#tvuoroot").html(xhr.responseText);
+		$("#viestit").html(xhr.responseText);
     	}
         });
+
+
+
 
 });
