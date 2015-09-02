@@ -74,7 +74,7 @@ return array(
 	//'defaultController'=>'sivexkuitti/index',
 	// preloading 'log' component
 	'preload'=>array('log','chartjs'),
-	'language' => 'fi',
+	'language' => 'en',
 	// autoloading model and component classes
 	'import'=>array(
         'application.models.*',
