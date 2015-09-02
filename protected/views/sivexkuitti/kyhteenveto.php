@@ -20,6 +20,7 @@ $this->breadcrumbs=array(
     $list = CHtml::listData(Sivexkuitti::model()->findAll(array('group' => 'kohde_kannasta','order' => 'kohde_kannasta')), 'kohde_kannasta', 'kohde_kannasta');
 
     echo '<select name="kohteet" class="selectpicker" id="kohteet" class="btn btn-default" title="Kohteet">';
+       	 echo '<option value="kaikki">Kaikki</option>';
     foreach($list as $key=>$val){
        	 echo '<option value="'.$key.'">'.$val.'</option>';
     }
