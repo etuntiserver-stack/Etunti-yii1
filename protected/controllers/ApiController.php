@@ -115,7 +115,7 @@ public function actionImei($dom)
 		      if(isset($kohde['osoite']))
 		      $osoite = $kohde['osoite'];
 
-		      $sel .= '<div class="alert alert-success">
+		      $sel .= '<div class="well">
 				  <b>'.$val->pvm.'</b><br>
 				  <b><span class="text">'.$val->alku.'-'.$val->loppu.' '.$osoite.'</span></b>
 				  <hr>
@@ -168,9 +168,9 @@ public function actionImei($dom)
 		    foreach($viestinta as $val)
 		    {
 		      if($val->status == '0')
-  			$cl = 'danger';
+  			$cl = 'alert alert-danger';
 		      else
-  			$cl = 'info';
+  			$cl = 'well';
 
 		      $exAdmin = explode(",",$val->admin);
 		      if(isset($exAdmin[1]))
@@ -178,7 +178,7 @@ public function actionImei($dom)
 		      else
   			$admin = $val->admin;
 
-		     	$sel .= '<div class="alert alert-'.$cl.'">
+		     	$sel .= '<div class="'.$cl.'">
 				  '.$admin.'<br>
 				  '.$val->pvm.'<hr>
 				  <span class="text" id="text_'.$val->id.'">'.str_replace("\n","<br>",$val->viesti).'</span><br>';
