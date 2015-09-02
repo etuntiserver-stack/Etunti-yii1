@@ -190,13 +190,19 @@ function row(tilanne,st){
  	   data: postData,
            success: function(data){
         	console.log(data);
-		//var spNew = data.split("//");
-		$("#result").append(data+"\n");
+
+		var query = data.split("//");
+		 if(query[4] == 'tagnumerror')
+		 {
+		   $("#result2").val("<h2>"+query[4]+ " on avoina</h2>").show();
+		   return false;
+		 }
+
 		set();
     	},
     		error:function (xhr, ajaxOptions, thrownError){
         	console.log(xhr.responseText);
-		$("#result").val(xhr.responseText).show();
+		$("#result2").html(xhr.responseText).show();
     	}
         });
 
