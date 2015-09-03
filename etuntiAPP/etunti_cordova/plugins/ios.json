@@ -9,6 +9,9 @@
     "installed_plugins": {
         "cordova-plugin-whitelist": {
             "PACKAGE_NAME": "fi.eunti.app"
+        },
+        "com.dnrps.nfc.plugin": {
+            "PACKAGE_NAME": "fi.eunti.app"
         }
     },
     "dependent_plugins": {}

@@ -1,0 +1,9 @@
+{
+    "version": "0.0.0",
+    "name": "com.dnrps.nfc.plugin",
+    "cordova_name": "NfcPlugin",
+    "platforms": [
+        "android"
+    ],
+    "engines": []
+}
