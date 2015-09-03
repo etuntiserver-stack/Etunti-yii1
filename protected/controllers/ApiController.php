@@ -34,7 +34,7 @@ class ApiController extends Controller
 public function actionImei($dom)
 {
 
-//$this->_checkAuth();
+$this->_checkAuth();
 
     switch($_GET['model'])
     {
@@ -57,7 +57,7 @@ public function actionImei($dom)
 
 		    $criteria = new CDbCriteria();
 		    $criteria->order = " DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') ASC ";
-		    $criteria->condition = " tid = '".$ttekija->id."' and DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = '".date("Y-m-d")."' ";
+		    $criteria->condition = " tid = '".$ttekija->id."' and DATE(DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d')) = CURDATE() ";
 	            $mob = Mob::model()->findAll($criteria);
 
 		    if(empty($mob))
