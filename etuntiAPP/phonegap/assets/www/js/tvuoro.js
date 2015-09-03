@@ -47,7 +47,7 @@ $(document).ready(function(){
 	   type:'POST',
  	   data: { check : "tvuoro", imei : imei, my_location : my_location },
            success: function(data){
-        	console.log(data);
+        	//console.log(data);
 		$("#tvuoroot").html(data);
     	},
     		error:function (xhr, ajaxOptions, thrownError){

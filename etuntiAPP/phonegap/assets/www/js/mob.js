@@ -308,7 +308,11 @@ function row(tilanne,st){
 
 		if(sp[0] == 'imeiError')
 		{
+<<<<<<< HEAD
 		  $("#result2").html("<h2>"+sp[1]+" "+sp[2]+"</h2>").show();
+=======
+		  $("#result2").html("<h2>"+sp[1]+" "+sp[2]+"</h2>").show()
+>>>>>>> origin/master
 		  return false;
 		} 
 
