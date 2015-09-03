@@ -304,6 +304,15 @@ function row(tilanne,st){
            success: function(data){
         	//console.log(data);
 		var sp = data.split("//");
+
+
+		if(sp[0] == 'imeiError')
+		{
+		  $("#result2").html("<h2>"sp[1]+" "sp[2]+"</h2>").show()
+		  return false;
+		} 
+
+
 		$("#odotta").hide();
 		$("#footer").show('slow');
 		$("#result").append(sp+"\n");
