@@ -34,7 +34,7 @@ class ApiController extends Controller
 public function actionImei($dom)
 {
 
-$this->_checkAuth();
+//$this->_checkAuth();
 
     switch($_GET['model'])
     {
