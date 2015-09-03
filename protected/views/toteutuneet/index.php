@@ -17,17 +17,19 @@ $this->breadcrumbs=array(
   <div class="col-md-12">
    <?php
     $model=new Sivexkuitti;
-    $list = CHtml::listData(Sivexkuitti::model()->findAll(array('group' => 'tid','order' => 'tekijan_nimi')), 'tekijan_nimi', 'tekijan_nimi');
+    $list = CHtml::listData(Sivexkuitti::model()->findAll(array('group' => 'tid','order' => 'tekijan_nimi')), 'tid', 'tekijan_nimi');
 
-    echo '<select name="etsi_tekijan_nimi" id="nimi" class="btn btn-default">';
-    if(Yii::app()->session['etsi_tekijan_nimi'])
-       echo '<option value="'.Yii::app()->session['etsi_tekijan_nimi'].'">'.Yii::app()->session['etsi_tekijan_nimi'].'</option>';
-    else
+    echo '<select name="tekija" id="nimi" class="btn btn-default">';
+    if(Yii::app()->session['tekija']){
+       $explTekija = explode("//",Yii::app()->session['tekija']);
+       echo '<option value="'.$explTekija[0].'//'.$explTekija[1].'">'.$explTekija[1].'</option>';
+    } else {
        echo '<option>'.Yii::t('main', 'Työntekijät').'</option>';
+    }
 
 
-    foreach($list as $val){
-    echo '<option value="'.$val.'">'.$val.'</option>';
+    foreach($list as $key=>$val){
+    echo '<option value="'.$key.'//'.$val.'">'.$val.'</option>';
     }
     echo '</select>';
    ?>
@@ -62,21 +64,44 @@ $this->breadcrumbs=array(
   <thead>
   <tr>
   <th><?php echo Yii::t('main', 'Päivämäärä'); ?></th>
+
   <?php
-	 $tas = explode(",",Yii::app()->user->adminPaketti);
-	 if(in_array('2',$tas)) : 
+  $tas = explode(",",Yii::app()->user->adminPaketti);
+  if(in_array('2',$tas)) : 
   ?>
   <th><?php echo Yii::t('main', 'Suunnitellut'); ?></th>
   <?php endif; ?>
+
   <th><?php echo Yii::t('main', 'Luettu'); ?></th>
   <th><?php echo Yii::t('main', 'Toteutuneet'); ?></th>
   <th><?php echo Yii::t('main', 'Yhteensä'); ?></th>
   </tr>
   </thead>
+  <tbody>
   <?php $this->widget('zii.widgets.CListView', array(
 	'dataProvider'=>$dataProvider,
 	'itemView'=>'_view',
   )); ?>
+  </tbody>
+
+  <tfoot>
+  <tr>
+  <th></th>
+
+  <?php
+  $tas = explode(",",Yii::app()->user->adminPaketti);
+  if(in_array('2',$tas) and isset($explTekija[0])){
+  $total_sunniteltu = $this->renderPartial('//sivexkuitti/suunniteltu',array('id'=>$explTekija[0],'kohde_tid'=>'tid'),true);
+  echo '<th>'.sprint($total_sunniteltu).'</th>';
+  }
+  ?>
+
+  <th></th>
+  <th></th>
+  <th></th>
+  </tr>
+  </tfoot>
+
   </table>
 <?php endif; ?>
 

@@ -7,6 +7,7 @@
 		$tp		= 0;
 		$al		= '';
 		$lop		= '';
+		$total_sunniteltu = 0;
 
        		$criteria = new CDbCriteria();
         	$criteria->select = "
@@ -20,7 +21,6 @@
 	        $criteria->addCondition ("DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."' ");
 
 		$lu = Sivexkuitti::model()->findAll($criteria);
-
 		foreach($lu as $val)
 		{
 
@@ -40,15 +40,24 @@
 			$total_l += $val->l_tunnit;
 
 		}
-
-
 		$total = $total_l;
+
 
 ?>
 
 <tr>
 
 	<td><?php echo CHtml::encode($data->kohde_kannasta); ?></td>
+
+	<?php
+	$tas = explode(",",Yii::app()->user->adminPaketti);
+	if(in_array('2',$tas)) {
+	$total_sunniteltu = $this->renderPartial('//sivexkuitti/suunniteltu',array('id'=>$data->kohdenID,'kohde_tid'=>'kohde'),true);
+	echo '<td>'.sprint($total_sunniteltu).'</td>';
+	}
+	?>
+
+	<td><?php echo sprint($data->l_tunnit); ?></td>
 	<td><?php echo sprint($total_l); ?></td>
 
 </tr>

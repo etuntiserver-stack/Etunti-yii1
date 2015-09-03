@@ -232,13 +232,13 @@ class ToteutuneetController extends Controller
 		return sprintf('%02d:%02d', $val/3600, ($val % 3600)/60);
 	}
 
-		if(Yii::app()->request->getPost('etsi_tekijan_nimi') == 'kaikki')
-		unset(Yii::app()->session['etsi_tekijan_nimi']);
-		if(Yii::app()->request->getPost('etsi_tekijan_nimi') and Yii::app()->request->getPost('etsi_tekijan_nimi') != 'kaikki'){
-		Yii::app()->session['etsi_tekijan_nimi'] = Yii::app()->request->getPost('etsi_tekijan_nimi');
+		if(Yii::app()->request->getPost('tekija') == 'kaikki')
+		unset(Yii::app()->session['tekija']);
+		if(Yii::app()->request->getPost('tekija') and Yii::app()->request->getPost('tekija') != 'kaikki'){
+		Yii::app()->session['tekija'] = Yii::app()->request->getPost('tekija');
 		}
 
-		if(isset($_POST['etsi_tekijan_nimi']))
+		if(isset($_POST['tekija']))
 		{
 		unset(Yii::app()->session['Lounastauko']);
 		unset(Yii::app()->session['MATKA']);
@@ -268,8 +268,8 @@ class ToteutuneetController extends Controller
         	$criteria->order = 'id DESC';
         	$criteria->group = "DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'),'%Y%m%d')";
 
-		if(Yii::app()->session['etsi_tekijan_nimi'])
-	        $criteria->addCondition ("tekijan_nimi = '".Yii::app()->session['etsi_tekijan_nimi']."'");
+		if(Yii::app()->session['tekija'])
+	        $criteria->addCondition (" tid = '".Yii::app()->session['tekija']."'");
 
 		if(Yii::app()->session['from'] and Yii::app()->session['to'])
 	        $criteria->addCondition ("DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."' ");
