@@ -25,7 +25,8 @@ module.exports.metadata =
 {
     "cordova-plugin-whitelist": "1.0.0",
     "com.dnrps.nfc.plugin": "0.0.0",
-    "cordova-plugin-device": "1.0.2-dev"
+    "cordova-plugin-device": "1.0.2-dev",
+    "cordova-plugin-geolocation": "1.0.2-dev"
 }
 // BOTTOM OF METADATA
 });

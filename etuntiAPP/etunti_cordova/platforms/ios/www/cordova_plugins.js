@@ -13,6 +13,34 @@ module.exports = [
         "clobbers": [
             "device"
         ]
+    },
+    {
+        "file": "plugins/cordova-plugin-geolocation/www/Coordinates.js",
+        "id": "cordova-plugin-geolocation.Coordinates",
+        "clobbers": [
+            "Coordinates"
+        ]
+    },
+    {
+        "file": "plugins/cordova-plugin-geolocation/www/PositionError.js",
+        "id": "cordova-plugin-geolocation.PositionError",
+        "clobbers": [
+            "PositionError"
+        ]
+    },
+    {
+        "file": "plugins/cordova-plugin-geolocation/www/Position.js",
+        "id": "cordova-plugin-geolocation.Position",
+        "clobbers": [
+            "Position"
+        ]
+    },
+    {
+        "file": "plugins/cordova-plugin-geolocation/www/geolocation.js",
+        "id": "cordova-plugin-geolocation.geolocation",
+        "clobbers": [
+            "navigator.geolocation"
+        ]
     }
 ];
 module.exports.metadata = 
@@ -20,7 +48,8 @@ module.exports.metadata =
 {
     "cordova-plugin-whitelist": "1.0.0",
     "com.dnrps.nfc.plugin": "0.0.0",
-    "cordova-plugin-device": "1.0.2-dev"
+    "cordova-plugin-device": "1.0.2-dev",
+    "cordova-plugin-geolocation": "1.0.2-dev"
 }
 // BOTTOM OF METADATA
 });
