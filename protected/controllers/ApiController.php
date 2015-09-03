@@ -57,7 +57,7 @@ $this->_checkAuth();
 
 		    $criteria = new CDbCriteria();
 		    $criteria->order = " DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') ASC ";
-		    $criteria->condition = " tid = '".$ttekija->id."' and DATE(time) = CURDATE() ";
+		    $criteria->condition = " tid = '".$ttekija->id."' and DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = '".date("Y-m-d")."' ";
 	            $mob = Mob::model()->findAll($criteria);
 
 		    if(empty($mob))
