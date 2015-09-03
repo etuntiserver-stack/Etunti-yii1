@@ -15,6 +15,10 @@
                         {
                             "xml": "<feature name=\"NfcPlugin\"><param name=\"android-package\" value=\"com.dnrps.nfc.plugin.NfcPlugin\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Device\"><param name=\"android-package\" value=\"org.apache.cordova.device.Device\" /></feature>",
+                            "count": 1
                         }
                     ]
                 }
@@ -26,6 +30,9 @@
             "PACKAGE_NAME": "fi.eunti.app"
         },
         "com.dnrps.nfc.plugin": {
+            "PACKAGE_NAME": "fi.eunti.app"
+        },
+        "cordova-plugin-device": {
             "PACKAGE_NAME": "fi.eunti.app"
         }
     },
