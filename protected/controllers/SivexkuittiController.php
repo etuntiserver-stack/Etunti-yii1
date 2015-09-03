@@ -34,7 +34,7 @@ class SivexkuittiController extends Controller
 		return array(
 
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','updatetime','showkohteet','yhteenveto','kyhteenveto','historia','poistaKohde'),
+				'actions'=>array('admin','delete','create','update','index','view','updatetime','showkohteet','yhteenveto','kyhteenveto','historia','poistaKohde','suunniteltu'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -60,6 +60,16 @@ class SivexkuittiController extends Controller
 		}
 	}
 
+
+	public function actionSuunniteltu($id,$kohde_tid)
+	{
+
+		$this->renderPartial('suunniteltu',array(
+			'id'=>$id,
+			'kohde_tid'=>$kohde_tid,
+		));
+
+	}
 
 	/**
 	 * Displays a particular model.

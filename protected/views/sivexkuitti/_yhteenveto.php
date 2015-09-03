@@ -11,6 +11,7 @@
 		$tp		= 0;
 		$al		= '';
 		$lop		= '';
+		$total_sunniteltu = 0;
 
        		$criteria = new CDbCriteria();
         	$criteria->select = "
@@ -71,6 +72,15 @@
 <tr>
 
 	<td><?php echo CHtml::encode($data->tekijan_nimi); ?></td>
+
+	<?php
+	$tas = explode(",",Yii::app()->user->adminPaketti);
+	if(in_array('2',$tas)) {
+	$total_sunniteltu = $this->renderPartial('//sivexkuitti/suunniteltu',array('id'=>$data->tid,'kohde_tid'=>'tid'),true);
+	echo '<td>'.sprint($total_sunniteltu).'</td>';
+	}
+	?>
+
 	<td><?php echo sprint($data->l_tunnit); ?></td>
 	<td><?php echo sprint($total); ?></td>
 	<td><?php echo $totalTp; ?></td>
