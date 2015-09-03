@@ -308,7 +308,7 @@ function row(tilanne,st){
 
 		if(sp[0] == 'imeiError')
 		{
-		  $("#result2").html("<h2>"sp[1]+" "sp[2]+"</h2>").show()
+		  $("#result2").html("<h2>"+sp[1]+" "+sp[2]+"</h2>").show();
 		  return false;
 		} 
 
