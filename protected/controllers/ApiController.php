@@ -276,7 +276,7 @@ public function actionImei($dom)
 
 		if(isset($_POST['tag']) and $_POST['tag'] != 'notag')
 		{
-		  $kohteet = Kohteet::model()->find(" tag_id='".$_POST['tag']."' ");
+		  $kohteet = Kohteet::model()->find(" tag_id='".trim($_POST['tag'])."' ");
 		    if(isset($kohteet['osoite']) and !empty($kohteet['osoite']))
 		    {
 		      $get_osoite = $kohteet['osoite'];
@@ -297,7 +297,7 @@ public function actionImei($dom)
 
                        $this->_sendResponse(200, $mobCheck->status."//".$mobCheck->kohde_kannasta."//".$mobCheck->aloitan."//".$mobCheck->loppui."//".$get_osoite."//".$ttekija->tekijan_nimi."//".$kohdenID."//".$_POST['tag']);
 		  } else {
-                     $this->_sendResponse(200, "3//mull//null//null//".$get_osoite."//".$ttekija->tekijan_nimi."//".$kohdenID);
+                     $this->_sendResponse(200, "3//mull//null//null//".$get_osoite."//".$ttekija->tekijan_nimi."//".$kohdenID."//".$_POST['tag']);
 		  }
 
 
