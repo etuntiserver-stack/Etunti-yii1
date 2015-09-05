@@ -276,9 +276,7 @@ public function actionImei($dom)
 
 		if(isset($_POST['tag']))
 		{
-		  $kohteet = Kohteet::model()->find(" tag_id='".$_POST['tag']."' ");
-$this->_sendResponse(200, $kohteet['osoite']);
-exit;
+		  $kohteet = Kohteet::model()->find(" tag_id like '%".$_POST['tag']."%' ");
 		    if(isset($kohteet['osoite']) and !empty($kohteet['osoite']))
 		    {
 		      $get_osoite = $kohteet['osoite'];
