@@ -1,40 +1,57 @@
 $(document).ready(function(){
 
+  var query = location.href.substring((location.href.indexOf('?')+1), location.href.length);
+  if(location.href.indexOf('?') < 0) query = '';
+      querysplit = query.split('&');
+      query = new Array();
+  for(var i = 0; i < querysplit.length; i++)
+  {
+        var namevalue = querysplit[i].split('=');
+        namevalue[1] = namevalue[1].replace(/\+/g, ' ');
+        query[namevalue[0]] = unescape(namevalue[1]);
+  }
 
+  if(query['imei'])
+    var imei = query['imei'];
+  else
+    var imei = $("#imei").val();
 
-  var DeviceIMEI = $('#imei').val();
-  var my_location = $('#location').val();
-  var domain = $("#domain").val();
+  if(query['location'])
+    var my_location = query['location'];
+  else
+    var my_location = $("#location").val();
+
+  if(query['domain'])
+    var domain = query['domain'];
+  else
+    var domain = $("#domain").val();
 
     var tag = 'notag';
   if(query['tag'])
-    tag = $("#tagginro").val();
+    tag = query['tag'];
 
-
+alert(imei)
 
   var server = "http://etuntifw.azurewebsites.net";
   var url = server+"/index.php/api/mob";
   var puh_nro = "0449304851";
   var versio = "0.47";
-  var imei = DeviceIMEI;
 
-
-
-  $("#result").append("DeviceIMEI : " + DeviceIMEI + "\n");
-  $("#result").append("Location : " + my_location + "\n");
 
 
   $("#viestintaURL").click(function(){
-	window.location.href='viestinta.html?domain='+domain+'&imei='+DeviceIMEI+'&location='+my_location+'&tag='+tag;
+	window.location.href='viestinta.html?domain='+domain+'&imei='+imei+'&location='+my_location+'&tag='+tag;
   });
 
   $("#tvuoro").click(function(){
-	window.location.href='tvuoro.html?domain='+domain+'&imei='+DeviceIMEI+'&location='+my_location+'&tag='+tag;
+	window.location.href='tvuoro.html?domain='+domain+'&imei='+imei+'&location='+my_location+'&tag='+tag;
   });
 
   $("#tehty").click(function(){
-	window.location.href='tehty.html?domain='+domain+'&imei='+DeviceIMEI+'&location='+my_location+'&tag='+tag;
+	window.location.href='tehty.html?domain='+domain+'&imei='+imei+'&location='+my_location+'&tag='+tag;
   });
+
+
 
 
 $(".sw").bootstrapSwitch({
@@ -149,6 +166,7 @@ function row(tilanne,st){
 	var lp 	= curDateTime();
    }
 
+
    	var postData = {
 		domain: domain,
 		imei: imei,
@@ -202,7 +220,7 @@ function row(tilanne,st){
 
   $(".aloita").click(function(){
 
-  	domain = $("#domain").val();
+    domain = $("#domain").val();
 
 
     document.addEventListener("deviceready", onDeviceReady, false);
@@ -262,6 +280,7 @@ function row(tilanne,st){
         	//console.log(data);
 		var sp = data.split("//");
 
+		$("#result2").html(data).show();
 
 		if(sp[0] == 'imeiError')
 		{
