@@ -6,6 +6,7 @@
         <meta name="msapplication-tap-highlight" content="no" />
         <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height" />
 
+        <link rel="stylesheet" type="text/css" href="css/index.css" />
         <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
         <link rel="stylesheet" type="text/css" href="css/bootstrap-switch.css" />
 
@@ -26,6 +27,9 @@
 
 	        document.getElementById('imei').value = cordova.plugins.uid.IMEI;
 	        navigator.geolocation.getCurrentPosition(onSuccess, onError);
+
+		if(cordova.plugins.uid.IMEI > 0)
+		document.getElementById("all").style.display = "block";
 
 	    }
 	    function onSuccess(position) {
@@ -53,6 +57,7 @@
 
 	    <div id="odotta"></div>
 
+     <div id="all" style="display:none">
 	    <div id="domainBlokki">
 	    <label>Domaini</label>
             <div class="input-group">
@@ -86,7 +91,13 @@
 		<h4 id="lounas_kohde" style="display:none"></h4>
 		<input type="checkbox" name="lounas" class="sw lounas">
 	      </div>
+     </div><!--all-->
 
+	<BR><BR>
+
+	    <input type="text" id="tagginro" class="form-control">
+	    <input type="text" id="location" class="form-control">
+	    <input type="text" id="imei" class="form-control">
 
 	<BR><BR>
 	<div id="result2" style="display:none"></div>
@@ -120,8 +131,6 @@
     </div>
 </footer>
 
-    <input type="hidden" id="tagginro">
-    <input type="hidden" id="location">
-    <input type="hidden" id="imei">
+
   </body>
 </html>

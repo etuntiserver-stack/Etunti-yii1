@@ -54,7 +54,8 @@ var app = {
 	var par = parseFloat(val+"e-"+val.toString().length).toString().replace("0.","");
         return par;
    }
-   document.getElementById('tagginro').value = toDec(ms);
+   	document.getElementById('tagginro').value = toDec(ms);
+
  },
 
  clear: function() {
