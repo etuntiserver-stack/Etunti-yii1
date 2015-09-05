@@ -277,10 +277,13 @@ public function actionImei($dom)
 		if(isset($_POST['tag']) and $_POST['tag'] != 'notag')
 		{
 		  $kohteet = Kohteet::model()->find(" tag_id='".$_POST['tag']."' ");
+
 		    if(isset($kohteet['osoite']) and !empty($kohteet['osoite']))
 		    {
 		      $get_osoite = $kohteet['osoite'];
 		      $kohdenID = $kohteet['id'];
+		    } else {
+		      $this->_sendResponse(200, $_POST['tag']."//ei ole yhdistetty tietokantaan");
 		    }
 		} 
 
