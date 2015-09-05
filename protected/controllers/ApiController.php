@@ -297,7 +297,7 @@ public function actionImei($dom)
 
                        $this->_sendResponse(200, $mobCheck->status."//".$mobCheck->kohde_kannasta."//".$mobCheck->aloitan."//".$mobCheck->loppui."//".$get_osoite."//".$ttekija->tekijan_nimi."//".$kohdenID."//".$_POST['tag']);
 		  } else {
-                     $this->_sendResponse(200, "3//mull//null//null//".$get_osoite."//".$ttekija->tekijan_nimi."//".$kohdenID);
+                     $this->_sendResponse(200, "3//mull//null//null//".$get_osoite."//".$ttekija->tekijan_nimi."//".$kohdenID."//".$_POST['tag']);
 		  }
 
 
