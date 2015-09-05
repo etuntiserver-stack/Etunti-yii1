@@ -1,43 +1,46 @@
 $(document).ready(function(){
 
-
-  var query = location.href.substring((location.href.indexOf('?')+1), location.href.length);
-  if(location.href.indexOf('?') < 0) query = '';
-      querysplit = query.split('&');
-      query = new Array();
-  for(var i = 0; i < querysplit.length; i++)
-  {
-        var namevalue = querysplit[i].split('=');
-        namevalue[1] = namevalue[1].replace(/\+/g, ' ');
-        query[namevalue[0]] = unescape(namevalue[1]);
-  }
-
-  var domain = query['domain'];
-  var DeviceIMEI = query['imei'];
-  var my_location = query['location'];
+  var imei = '';
+  var my_location = '';
+  var domain = '';
+  var tag = 'notag';
 
   var server = "http://etuntifw.azurewebsites.net";
   var url = server+"/index.php/api/mob";
   var puh_nro = "0449304851";
   var versio = "0.47";
-  var tag = "36073245411209220";
-  var imei = DeviceIMEI;
 
-    var tag = 'notag';
-  if(query['tag'])
-    tag = query['tag'];
+  var query = location.href.substring((location.href.indexOf('?')+1), location.href.length);
+  if(location.href.indexOf('?') < 0) 
+  {
+     query = '';
+  } else {
+     querysplit = query.split('&');
+     query = new Array();
+     for(var i = 0; i < querysplit.length; i++)
+     {
+        var namevalue = querysplit[i].split('=');
+        namevalue[1] = namevalue[1].replace(/\+/g, ' ');
+        query[namevalue[0]] = unescape(namevalue[1]);
+     }
+
+     if(query['imei']) 		imei = query['imei'];
+     if(query['location']) 	my_location = query['location'];
+     if(query['domain']) 	domain = query['domain'];
+     if(query['tag'])		tag = query['tag'];
+  }
 
 
   $("#home").click(function(){
-	window.location.href='index.html?domain='+domain+'&imei='+DeviceIMEI+'&location='+my_location+'&tag='+tag;
+	window.location.href='index.html?domain='+domain+'&imei='+imei+'&location='+my_location+'&tag='+tag;
   });
 
   $("#tvuoro").click(function(){
-	window.location.href='tvuoro.html?domain='+domain+'&imei='+DeviceIMEI+'&location='+my_location+'&tag='+tag;
+	window.location.href='tvuoro.html?domain='+domain+'&imei='+imei+'&location='+my_location+'&tag='+tag;
   });
 
   $("#tehty").click(function(){
-	window.location.href='tehty.html?domain='+domain+'&imei='+DeviceIMEI+'&location='+my_location+'&tag='+tag;
+	window.location.href='tehty.html?domain='+domain+'&imei='+imei+'&location='+my_location+'&tag='+tag;
   });
 
 

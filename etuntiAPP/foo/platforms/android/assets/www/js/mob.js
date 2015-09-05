@@ -1,41 +1,46 @@
 $(document).ready(function(){
 
-  var query = location.href.substring((location.href.indexOf('?')+1), location.href.length);
-  if(location.href.indexOf('?') < 0) query = '';
-      querysplit = query.split('&');
-      query = new Array();
-  for(var i = 0; i < querysplit.length; i++)
-  {
-        var namevalue = querysplit[i].split('=');
-        namevalue[1] = namevalue[1].replace(/\+/g, ' ');
-        query[namevalue[0]] = unescape(namevalue[1]);
-  }
-
-  if(query['imei'])
-    var imei = query['imei'];
-  else
-    var imei = $("#imei").val();
-
-  if(query['location'])
-    var my_location = query['location'];
-  else
-    var my_location = $("#location").val();
-
-  if(query['domain'])
-    var domain = query['domain'];
-  else
-    var domain = $("#domain").val();
-
-    var tag = 'notag';
-  if(query['tag'])
-    tag = query['tag'];
-
-
+  var imei = '';
+  var my_location = '';
+  var domain = '';
+  var tag = 'notag';
 
   var server = "http://etuntifw.azurewebsites.net";
   var url = server+"/index.php/api/mob";
   var puh_nro = "0449304851";
   var versio = "0.47";
+
+  var query = location.href.substring((location.href.indexOf('?')+1), location.href.length);
+  if(location.href.indexOf('?') < 0) 
+  {
+     query = '';
+  } else {
+     querysplit = query.split('&');
+     query = new Array();
+     for(var i = 0; i < querysplit.length; i++)
+     {
+        var namevalue = querysplit[i].split('=');
+        namevalue[1] = namevalue[1].replace(/\+/g, ' ');
+        query[namevalue[0]] = unescape(namevalue[1]);
+     }
+
+     if(query['imei']) 		imei = query['imei'];
+     if(query['location']) 	my_location = query['location'];
+     if(query['domain']) 	domain = query['domain'];
+     if(query['tag'])		tag = query['tag'];
+  }
+
+
+  function tiedot(){
+
+     domain = $("#domain").val();
+     imei = $("#imei").val();
+     my_location = $("#location").val();
+
+     if($("#tagginro").val() != '')
+         tag = $("#tagginro").val();
+
+  }
 
 
 
@@ -135,6 +140,12 @@ function curDateTime(){
 
 function row(tilanne,st){
 
+   if($("#os").val() == ''){
+	alert("Osoite puutuu!");
+  	return false;
+   }
+
+
    if((tilanne == 'tyo_al') & (st == 1))
    {
 	var al 	= curDateTime();
@@ -220,7 +231,7 @@ function row(tilanne,st){
 
   $(".aloita").click(function(){
 
-    domain = $("#domain").val();
+    tiedot();
 
 
     document.addEventListener("deviceready", onDeviceReady, false);
@@ -278,9 +289,8 @@ function row(tilanne,st){
  	   data: { check : "testi", imei : imei, my_location : my_location, tag : tag },
            success: function(data){
         	//console.log(data);
+		//$("#result2").html(data).show();
 		var sp = data.split("//");
-
-		$("#result2").html(data).show();
 
 		if(sp[0] == 'imeiError')
 		{
@@ -331,7 +341,7 @@ function row(tilanne,st){
     	},
     		error:function (xhr, ajaxOptions, thrownError){
         	console.log(xhr.responseText);
-		$("#result").val(xhr.responseText).show();
+		$("#result2").val(xhr.responseText).show();
     	}
         });
     }
