@@ -278,7 +278,7 @@ public function actionImei($dom)
 		{
 		  $kohteet = Kohteet::model()->find(" tag_id='".$_POST['tag']."' ");
 
-		    $this->_sendResponse(200, $kohteet['osoite']);
+		    $this->_sendResponse(200, $_POST['tag']);
 		exit;
 		    if(isset($kohteet['osoite']) and !empty($kohteet['osoite']))
 		    {
