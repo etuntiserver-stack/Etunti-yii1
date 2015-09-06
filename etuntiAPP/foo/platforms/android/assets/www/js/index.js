@@ -30,14 +30,6 @@ var app = {
  app.nro(tag.id);
  },
   
-/*
- display: function(message) {
- var label = document.createTextNode(message),
- lineBreak = document.createElement("br");
- tagginro.appendChild(lineBreak); // add a line break
- tagginro.appendChild(label); // add the text
- },
-*/
  
  nro: function(ms) {
    function toDec( x ){
@@ -55,6 +47,31 @@ var app = {
         return par;
    }
    	document.getElementById('tagginro').value = toDec(ms);
+
+
+$(document).ready(function(){
+
+	var domain = document.getElementById('domain').value;
+	var imei = document.getElementById('imei').value;
+
+        $.ajax({
+           url: url+'/imei?dom='+domain,
+	   type:'POST',
+ 	   data: { check : "checkviesti", imei : imei, tag : toDec(ms) },
+           success: function(data){
+        	console.log(data);
+		alert('ok');
+    	},
+    		error:function (xhr, ajaxOptions, thrownError){
+        	console.log(xhr.responseText);
+		alert('error');
+    	}
+        });
+});
+
+  
+
+
 
  },
 
