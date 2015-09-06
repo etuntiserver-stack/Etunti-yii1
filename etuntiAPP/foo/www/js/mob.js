@@ -295,7 +295,7 @@ function row(tilanne,st){
  	   data: { check : "testi", imei : imei, my_location : my_location, tag : tag },
            success: function(data){
         	//console.log(data);
-		//$("#result2").html(data).show();
+		$("#result2").html(data).show();
 		var sp = data.split("//");
 
 		if(sp[0] == 'imeiError')

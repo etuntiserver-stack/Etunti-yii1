@@ -68,7 +68,7 @@ public function actionImei($dom)
 		    }
 		  } 
 		    $this->_sendResponse(200, $get_osoite."//".$kohdenID."//ok");
-		exit;
+		//exit;
 	        }
 
 	        if($_POST['check'] == 'tehty'){
