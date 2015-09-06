@@ -369,6 +369,19 @@ public function actionImei($dom)
 
                 $mobinsert = new Mob;
                 $mobinsert->attributes = $_POST;
+
+		if($_POST['status'] == 2)
+		{
+                $mobinsert->kohde_kannasta = 'MATKA';
+                $mobinsert->viesti = $_POST['kohde_kannasta'];
+		}
+
+		if($_POST['status'] == 10)
+		{
+                $mobinsert->kohde_kannasta = 'LOUNASTAUKO';
+                $mobinsert->viesti = $_POST['kohde_kannasta'];
+		}
+
                 $mobinsert->imei = $ttekija->imei;
                 $mobinsert->tid = $ttekija->id;
                 $mobinsert->tekijan_nimi = $ttekija->tekijan_nimi;

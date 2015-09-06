@@ -1,14 +1,5 @@
 $(document).ready(function(){
 
-  var imei = '';
-  var my_location = '';
-  var domain = '';
-  var tag = 'notag';
-
-  var server = "http://etuntifw.azurewebsites.net";
-  var url = server+"/index.php/api/mob";
-  var puh_nro = "0449304851";
-  var versio = "0.47";
 
   var query = location.href.substring((location.href.indexOf('?')+1), location.href.length);
   if(location.href.indexOf('?') < 0) 
