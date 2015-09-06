@@ -1,14 +1,5 @@
 $(document).ready(function(){
 
-  var imei = '';
-  var my_location = '';
-  var domain = '';
-  var tag = 'notag';
-
-  var server = "http://etuntifw.azurewebsites.net";
-  var url = server+"/index.php/api/mob";
-  var puh_nro = "0449304851";
-  var versio = "0.47";
 
   var query = location.href.substring((location.href.indexOf('?')+1), location.href.length);
   if(location.href.indexOf('?') < 0) 
@@ -31,17 +22,32 @@ $(document).ready(function(){
   }
 
 
+  $("#odotta").html("<h1>ODOTA</h1>");
+
+  if(!query['domain'])
+    setTimeout(tiedot,3000);
+
   function tiedot(){
 
-     domain = $("#domain").val();
-     imei = $("#imei").val();
-     my_location = $("#location").val();
+    if($("#domain").val() != '')
+    {
+	domain 		= $("#domain").val();
+	imei 		= $("#imei").val();
+	my_location 	= $("#location").val();
 
-     if($("#tagginro").val() != '')
-         tag = $("#tagginro").val();
+	 if($("#tagginro").val() != '')
+	    tag = $("#tagginro").val();
+	 else
+	    tag = 'notag';
+
+	set();
+
+    } else {
+	$("#domainBlokki").show();
+	return false;
+    }
 
   }
-
 
 
   $("#viestintaURL").click(function(){
@@ -233,12 +239,11 @@ function row(tilanne,st){
 
     tiedot();
 
-
-    document.addEventListener("deviceready", onDeviceReady, false);
+    document.addEventListener("deviceready", onDeviceReadyFileSave, false);
 
     // Cordova is ready
     //
-    function onDeviceReady() {
+    function onDeviceReadyFileSave() {
         window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, gotFS, fail);
     }
 
@@ -251,22 +256,17 @@ function row(tilanne,st){
     }
 
     function gotFileWriter(writer) {
-        writer.onwriteend = function(evt) {
-            console.log("contents of file now 'some sample text'");
-            writer.truncate(11);  
-            writer.onwriteend = function(evt) {
-                console.log("contents of file now 'some sample'");
-            };
-        };
         writer.write(domain);
+
+       	  set();
+ 	  checkviesti(domain);
     }
 
     function fail(error) {
         console.log(error.code);
     }
 
-       	set();
- 	checkviesti(domain);
+
   });
 
 
@@ -282,7 +282,7 @@ function row(tilanne,st){
 
     function set() {
 
-	$("#odotta").html("<h1>ODOTTA</h1>");
+	$("#odotta").html("<h1>ODOTA</h1>");
         $.ajax({
            url: url+'/imei?dom='+domain,
 	   type:'POST',
@@ -298,7 +298,7 @@ function row(tilanne,st){
 		  return false;
 		} 
 
-
+		$('#tietoja').hide();
 		$("#odotta").hide();
 		$("#footer").show('slow');
 		$("#result").append(sp+"\n");
@@ -341,7 +341,15 @@ function row(tilanne,st){
     	},
     		error:function (xhr, ajaxOptions, thrownError){
         	console.log(xhr.responseText);
-		$("#result2").val(xhr.responseText).show();
+
+		  if($("#domain").val() != '')
+		     $("#odotta").html("<h1>Domain: <br><b>" + $("#domain").val() + "</b><br> on virhellinen</h1>").show();
+		  else
+		     $("#odotta").hide();
+
+		$("#domainBlokki").show();
+		//$("#result2").val(xhr.responseText).show();
+		//$("#domain").addClass("btn btn-danger");
     	}
         });
     }
@@ -418,7 +426,7 @@ function checkviesti(domain){
     	},
     		error:function (xhr, ajaxOptions, thrownError){
         	console.log(xhr.responseText);
-		$("#result2").html(xhr.responseText).show();
+		//$("#result2").html(xhr.responseText).show();
     	}
         });
   

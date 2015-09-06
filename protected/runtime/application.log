@@ -3975,3 +3975,13 @@ REQUEST_URI=/index.php/toteutuneet/index
 in C:\xampp\htdocs\etuntifw\protected\views\toteutuneet\index.php (92)
 in C:\xampp\htdocs\etuntifw\protected\controllers\ToteutuneetController.php (284)
 in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/09/06 14:33:52 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The system is unable to find the requested action "view&id=14385".' in E:\GITHUB\etuntifw\YII\framework\web\CController.php:483
+Stack trace:
+#0 E:\GITHUB\etuntifw\YII\framework\web\CController.php(270): CController->missingAction('view&id=14385')
+#1 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(282): CController->run('view&id=14385')
+#2 E:\GITHUB\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController('sivexkuitti/vie...')
+#3 E:\GITHUB\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#4 E:\GITHUB\etuntifw\index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php/sivexkuitti/view&id=14385
+---
