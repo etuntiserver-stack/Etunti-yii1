@@ -31,15 +31,7 @@ $(document).ready(function(){
 
     if($("#domain").val() != '')
     {
-	domain 		= $("#domain").val();
-	imei 		= $("#imei").val();
-	my_location 	= $("#location").val();
-
-	 if($("#tagginro").val() != '')
-	    tag = $("#tagginro").val();
-	 else
-	    tag = 'notag';
-
+	t();
 	set();
 
     } else {
@@ -49,6 +41,16 @@ $(document).ready(function(){
 
   }
 
+  function t(){
+	domain 		= $("#domain").val();
+	imei 		= $("#imei").val();
+	my_location 	= $("#location").val();
+
+	 if($("#tagginro").val() != '')
+	    tag = $("#tagginro").val();
+	 else
+	    tag = 'notag';
+  }
 
   $("#viestintaURL").click(function(){
 	window.location.href='viestinta.html?domain='+domain+'&imei='+imei+'&location='+my_location+'&tag='+tag;
@@ -140,11 +142,9 @@ function curDateTime(){
 }
 
 
-
-
-
-
 function row(tilanne,st){
+
+   t();
 
    if($("#os").val() == ''){
 	alert("Osoite puutuu!");
@@ -213,11 +213,13 @@ function row(tilanne,st){
            success: function(data){
         	console.log(data);
 
-		var query = data.split("//");
-		 if(query[4] === 'tagnumerror')
+		var sp = data.split("//");
+		 if(sp[4] === 'tagnumerror')
 		 {
-		   $("#result2").html("<h2>VIRHE!!!.<br>NFC-tagin numero on erilainen.</h2>").show();
+		   $("#result2").html("<div class='alert alert-danger'><h3>VIRHE!!!</h3>Voit lopettaa osoitessa <b>"+sp[3]+"</b></div>").show();
 		   //return false;
+		 } else {
+		   $("#result2").hide();
 		 }
 
 		set();
@@ -237,7 +239,7 @@ function row(tilanne,st){
 
   $(".aloita").click(function(){
 
-    tiedot();
+    t();
 
     document.addEventListener("deviceready", onDeviceReadyFileSave, false);
 
@@ -282,6 +284,8 @@ function row(tilanne,st){
 
     function set() {
 
+     	t();
+
 	$("#odotta").html("<h1>ODOTA</h1>");
         $.ajax({
            url: url+'/imei?dom='+domain,
@@ -298,7 +302,7 @@ function row(tilanne,st){
 		  return false;
 		} 
 
-		$('#tietoja').hide();
+		//$('#tietoja').hide();
 		$("#odotta").hide();
 		$("#footer").show('slow');
 		$("#result").append(sp+"\n");
@@ -322,14 +326,14 @@ function row(tilanne,st){
 		{
 		  allHide();
 		  $("#matka").show('slow');
-		  $("#matka_kohde").html(sp[1]).show('slow');
+		  //$("#matka_kohde").html(sp[1]).show('slow');
 		  $('.matka').bootstrapSwitch('state', true, true);
 		}
 		if(sp[0] == '10.1')
 		{
 		  allHide();
 		  $("#lounas").show('slow');
-		  $("#lounas_kohde").html(sp[1]).show('slow');
+		  //$("#lounas_kohde").html(sp[1]).show('slow');
 		  $('.lounas').bootstrapSwitch('state', true, true);
 
 
