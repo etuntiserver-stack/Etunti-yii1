@@ -41,10 +41,11 @@ $(document).ready(function(){
 
   }
 
+
   function t(){
-	domain 		= $("#domain").val();
-	imei 		= $("#imei").val();
-	my_location 	= $("#location").val();
+	if(domain == '') domain	= $("#domain").val();
+	if(imei == '') imei = $("#imei").val();
+	if(my_location == '') my_location = $("#location").val();
 
 	 if($("#tagginro").val() != '')
 	    tag = $("#tagginro").val();
@@ -69,10 +70,19 @@ $(document).ready(function(){
 
 $(".sw").bootstrapSwitch({
 	size: "large",
-	onColor: "info",
+	onColor: "warning",
+	offColor: "success",
 	onText: "Lopetus",
 	offText: "Aloitus"
 });
+
+function stateFalse(){
+   if($("#os").val() == ''){
+	alert("Osoite puutuu!");
+	$('.tyo').bootstrapSwitch('state', false, true);
+  	return false;
+   }
+}
 
 $('input[name="tyo"]').on('switchChange.bootstrapSwitch', function(event, state) {
   console.log(state); 
@@ -82,7 +92,6 @@ $('input[name="tyo"]').on('switchChange.bootstrapSwitch', function(event, state)
   } else {
 	row("tyo_lp",3);
   }
-	$('.full').css({"opacity" : "0.3"});
 });
 
 $('input[name="matka"]').on('switchChange.bootstrapSwitch', function(event, state) {
@@ -93,7 +102,6 @@ $('input[name="matka"]').on('switchChange.bootstrapSwitch', function(event, stat
   } else {
 	row("matka_lp",2);
   }
-	$('.full').css({"opacity" : "0.3"});
 });
 
 $('input[name="lounas"]').on('switchChange.bootstrapSwitch', function(event, state) {
@@ -104,7 +112,6 @@ $('input[name="lounas"]').on('switchChange.bootstrapSwitch', function(event, sta
   } else {
 	row("lounas_lp",10);
   }
-	$('.full').css({"opacity" : "0.3"});
 });
 
 
@@ -146,14 +153,9 @@ function row(tilanne,st){
 
    t();
 
-   if($("#os").val() == ''){
-	alert("Osoite puutuu!");
-  	return false;
-   }
-
-
    if((tilanne == 'tyo_al') & (st == 1))
    {
+ 	stateFalse();
 	var al 	= curDateTime();
 	var lp 	= '';
    }
@@ -306,7 +308,7 @@ function row(tilanne,st){
 		$("#odotta").hide();
 		$("#footer").show('slow');
 		$("#result").append(sp+"\n");
-		$('.full').css({"opacity" : "1"});
+		//$('.full').css({"opacity" : "1"});
 		$("#domainBlokki").hide();
 		$("#tekija").html("<h4 class='text-warning'>"+sp[5]+"</h4>");
 

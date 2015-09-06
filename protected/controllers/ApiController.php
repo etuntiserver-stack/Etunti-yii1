@@ -64,10 +64,10 @@ public function actionImei($dom)
 		      $get_osoite = $kohteet['osoite'];
 		      $kohdenID = $kohteet['id'];
 		    } else {
-		      $this->_sendResponse(200, $_POST['tag']."//ei ole yhdistetty tietokantaan");
+		      $this->_sendResponse(200, "Tuntematon TAG//".$_POST['tag']."//error");
 		    }
 		  } 
-		    $this->_sendResponse(200, $get_osoite."//".$kohdenID);
+		    $this->_sendResponse(200, $get_osoite."//".$kohdenID."//ok");
 		exit;
 	        }
 
