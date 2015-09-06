@@ -70,7 +70,7 @@ $this->menu=array(
   <th><?php echo Yii::t('main', 'ID'); ?></th>
   <th><?php echo Yii::t('main', 'Päivä'); ?></th>
   <th><?php echo Yii::t('main', 'Työntekijä'); ?></th>
-
+  <th><?php echo Yii::t('main', 'Kartta'); ?></th>
   <?php
   $tas = explode(",",Yii::app()->user->adminPaketti);
   if(in_array('2',$tas)) : 

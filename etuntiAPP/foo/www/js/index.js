@@ -60,11 +60,16 @@ $(document).ready(function(){
  	   data: { check : "getObjbyTag", imei : imei, tag : toDec(ms) },
            success: function(data){
         	console.log(data);
-		alert('ok');
+		var sp = data.split("//");
+		if(sp[0])
+		{
+		$('#os').val(sp[0]);
+		$('#kohdenID').val(sp[1]);
+		}
     	},
     		error:function (xhr, ajaxOptions, thrownError){
         	console.log(xhr.responseText);
-		alert('error');
+		//alert('error');
     	}
         });
 });
