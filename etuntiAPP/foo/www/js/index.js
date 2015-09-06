@@ -63,8 +63,14 @@ $(document).ready(function(){
 		var sp = data.split("//");
 		if(sp[2] == 'ok')
 		{
-		$('#os').val(sp[0]);
-		$('#kohdenID').val(sp[1]);
+		   $('#os').val(sp[0]);
+		   $('#kohdenID').val(sp[1]);
+		}
+		if(sp[2] == 'error')
+		{
+		   $('#os').val('').css({"border" : "2px #f14010 solid"}).focus();
+		   $('#kohdenID').val('0');
+		   //alert(sp[0]+" "+sp[1])
 		}
     	},
     		error:function (xhr, ajaxOptions, thrownError){
