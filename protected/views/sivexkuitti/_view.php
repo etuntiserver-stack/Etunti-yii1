@@ -6,6 +6,24 @@
 // $tag = explode("_",$data->asiakas_num);
 /*<td><?php echo CHtml::encode($tag[1]); ?></td>*/
 
+ $karttaA = '';
+ $karttaL = '';
+if(!empty($data->my_location))
+{
+ $expl = explode("_",$data->my_location);
+
+ $my_locationStart = explode("**",$data->my_location);
+ if(isset($my_locationStart[0]))  
+ $my_locationReal[1] = explode("/",$my_locationStart[0]);
+ if(isset($my_locationStart[1]))
+ $my_locationReal[2] = explode("/",$my_locationStart[1]);
+
+ if(isset($my_locationReal[1][0]) and isset($my_locationReal[1][1]))
+ $karttaA = '<a href="http://maps.google.com/maps?q='.$my_locationReal[1][0].','.$my_locationReal[1][1].'&ll='.$my_locationReal[1][0].','.$my_locationReal[1][1].'&z=17" target="_blank">alkku</a>';
+ if(isset($my_locationReal[2][0]) and isset($my_locationReal[2][1]))
+ $karttaL = '<a href="http://maps.google.com/maps?q='.$my_locationReal[2][0].','.$my_locationReal[2][1].'&ll='.$my_locationReal[2][0].','.$my_locationReal[2][1].'&z=17" target="_blank">loppu</a>';
+}
+
 if(!empty($data->loppui))
  $dloppu[$data->id] = date("H:i",strtotime($data->loppui));
 else
@@ -76,6 +94,7 @@ else
 	<td><?php echo CHtml::link(CHtml::encode($data->id), array('update', 'id'=>$data->id)); ?></td>
 	<td><b><?php echo CHtml::encode(date("d.m",strtotime($data->aloitan))); ?></b></td>
 	<td><?php echo CHtml::encode($data->tekijan_nimi); ?></td>
+	<td><?php echo $karttaA."<br>".$karttaL; ?></td>
 
 	<!-- adminPaketti -->
 	<?php if(in_array('2',$tas)) : ?>

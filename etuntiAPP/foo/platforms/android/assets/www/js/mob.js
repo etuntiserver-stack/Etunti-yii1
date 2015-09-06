@@ -302,7 +302,7 @@ function row(tilanne,st){
 		  return false;
 		} 
 
-		//$('#tietoja').hide();
+		$('#tietoja').hide();
 		$("#odotta").hide();
 		$("#footer").show('slow');
 		$("#result").append(sp+"\n");
