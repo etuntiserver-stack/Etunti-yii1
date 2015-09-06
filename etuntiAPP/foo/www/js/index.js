@@ -61,7 +61,7 @@ $(document).ready(function(){
            success: function(data){
         	console.log(data);
 		var sp = data.split("//");
-		if(sp[0])
+		if(sp[2] == 'ok')
 		{
 		$('#os').val(sp[0]);
 		$('#kohdenID').val(sp[1]);
