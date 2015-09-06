@@ -60,7 +60,7 @@ $(document).ready(function(){
  	   data: { check : "getObjbyTag", imei : imei, tag : toDec(ms) },
            success: function(data){
         	console.log(data);
-		$("#result2").html(data).show();
+		//$("#result2").html(data).show();
 		var sp = data.split("//");
 		if(sp[2] == 'ok')
 		{

@@ -295,7 +295,7 @@ function row(tilanne,st){
  	   data: { check : "testi", imei : imei, my_location : my_location, tag : tag },
            success: function(data){
         	//console.log(data);
-		$("#result2").html(data).show();
+		//$("#result2").html(data).show();
 		var sp = data.split("//");
 
 		if(sp[0] == 'imeiError')
@@ -310,7 +310,7 @@ function row(tilanne,st){
 		$("#result").append(sp+"\n");
 		//$('.full').css({"opacity" : "1"});
 		$("#domainBlokki").hide();
-		$("#tekija").html("<h4 class='text-warning'>"+sp[5]+"</h4>");
+		$("#tekija").html("<h3>"+sp[5]+"</h3>");
 
 		if((sp[0] == '3') || (sp[0] == '2') || (sp[0] == '10')){
 		  $("#osoite").show('slow');
