@@ -344,6 +344,7 @@ public function actionImei($dom)
                 $mobupdate->loppui = date("d.m.Y H:i:s",strtotime($_POST['loppui']));
                 $mobupdate->status = 2;
                 $mobupdate->my_location = $mobupdate->my_location."**".$_POST['my_location'];
+                $mobupdate->viesti = $mobupdate->viesti."/".$_POST['kohde_kannasta'];
                 $mobupdate->save();
                 $this->_sendResponse(200, $ms."//".$mobupdate->id."//".$mobupdate->status."//".$mob->kohde_kannasta."//null");
 
@@ -353,6 +354,7 @@ public function actionImei($dom)
                 $mobupdate->loppui = date("d.m.Y H:i:s",strtotime($_POST['loppui']));
                 $mobupdate->status = 10;
                 $mobupdate->my_location = $mobupdate->my_location."**".$_POST['my_location'];
+                $mobupdate->viesti = $mobupdate->viesti."/".$_POST['kohde_kannasta'];
                 $mobupdate->save();
                 $this->_sendResponse(200, $ms."//".$mobupdate->id."//".$mobupdate->status."//".$mob->kohde_kannasta."//null");
 
