@@ -68,7 +68,7 @@ public function actionImei($dom)
 		    }
 		  } 
 		    $this->_sendResponse(200, $get_osoite."//".$kohdenID."//ok");
-		//exit;
+		exit;
 	        }
 
 	        if($_POST['check'] == 'tehty'){
@@ -301,7 +301,7 @@ public function actionImei($dom)
 		      $get_osoite = $kohteet['osoite'];
 		      $kohdenID = $kohteet['id'];
 		    } else {
-		      $this->_sendResponse(200, $_POST['tag']."//ei ole yhdistetty tietokantaan");
+		      $this->_sendResponse(200, "3//mull//null//null//".$get_osoite."//".$ttekija->tekijan_nimi."//".$kohdenID."//".$_POST['tag']."//EiOleMeidanTag");
 		    }
 		} 
 
