@@ -43,6 +43,7 @@ $('.search-form form').submit(function(){
 	'filter'=>$model,
 	'columns'=>array(
 		'id',
+		'asiakas_num',
 		'kohde_kannasta',
 		//'time',
 		'aloitan',
