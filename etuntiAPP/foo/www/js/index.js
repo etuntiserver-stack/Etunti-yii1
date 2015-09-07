@@ -26,12 +26,13 @@ var app = {
   
  onNfc: function(nfcEvent) {
  var tag = nfcEvent.tag;
- //app.display(nfc.bytesToHexString(tag.id));
+ //app.nro(nfc.bytesToHexString(tag.id));
  app.nro(tag.id);
  },
   
  
  nro: function(ms) {
+
    function toDec( x ){
       var val = 0;
       var res = 0;
@@ -43,7 +44,7 @@ var app = {
           fa *= 256;
 
        }
-	var par = parseFloat(val+"e-"+val.toString().length).toString().replace("0.","");
+	var par = val;
         return par;
    }
    	document.getElementById('tagginro').value = toDec(ms);
