@@ -306,7 +306,7 @@ function row(tilanne,st){
 		  return false;
 		} 
 
-		//$('#tietoja').hide();
+		$('#tietoja').hide();
 		$("#odotta").fadeOut(370);
 		$("#footer").show(370);
 		$("#result").append(sp+"\n");
