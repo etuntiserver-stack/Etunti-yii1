@@ -14,12 +14,18 @@ $this->menu=array(
 	array('label'=>'Katso mobiili', 'url'=>array('view', 'id'=>$model->id)),
 	array('label'=>'Hallinta mobiili', 'url'=>array('admin')),
 );
+
+  $tag = '';
+  $tag = explode("_",$model->asiakas_num);
+  if(isset($tag[1]))
+  $tag = $tag[1];
+
 ?>
 
-<h1><?php echo Yii::t('main', 'Rivi'); ?> <?php echo $model->id; ?></h1>
+<h1><?php echo Yii::t('main', 'Rivi'); ?> <?php echo $model->id; ?>, TAG: <?php echo $tag; ?></h1>
 
 <BR>
-<div class="form">
+<div class="row form">
   <div class="row">
 	<div class="col-lg-4">
 	<?php echo CHtml::button('Palaa takaisin',array("class"=>"btn btn-info","onClick"=>"history.back();return false;")); ?>
