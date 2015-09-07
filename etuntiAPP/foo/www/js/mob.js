@@ -116,15 +116,15 @@ $('input[name="lounas"]').on('switchChange.bootstrapSwitch', function(event, sta
 
 
 function allHide(){
-	$("#osoite").hide('slow');
-	$('#tyo').hide('slow');
-	$('#matka').hide('slow');
-	$('#lounas').hide('slow');
+	$("#osoite").hide(370);
+	$('#tyo').hide(370);
+	$('#matka').hide(370);
+	$('#lounas').hide(370);
 }
 function allShow(){
-	$('#tyo').show('slow');
-	$('#matka').show('slow');
-	$('#lounas').show('slow');
+	$('#tyo').show(370);
+	$('#matka').show(370);
+	$('#lounas').show(370);
 }
 function allTilasetHide(){
 	$("#tyo_kohde").hide();
@@ -152,6 +152,9 @@ function curDateTime(){
 function row(tilanne,st){
 
    t();
+   allHide();
+   allTilasetHide();
+   $("#odotta").html("<h1>ODOTA</h1>").fadeIn(370);
 
    if((tilanne == 'tyo_al') & (st == 1))
    {
@@ -288,14 +291,13 @@ function row(tilanne,st){
 
      	t();
 
-	$("#odotta").html("<h1>ODOTA</h1>");
         $.ajax({
            url: url+'/imei?dom='+domain,
 	   type:'POST',
  	   data: { check : "testi", imei : imei, my_location : my_location, tag : tag },
            success: function(data){
         	//console.log(data);
-		$("#result2").html(data).show();
+		//$("#result2").html(data).show();
 		var sp = data.split("//");
 
 		if(sp[0] == 'imeiError')
@@ -304,38 +306,38 @@ function row(tilanne,st){
 		  return false;
 		} 
 
-		$('#tietoja').hide();
-		$("#odotta").hide();
-		$("#footer").show('slow');
+		//$('#tietoja').hide();
+		$("#odotta").fadeOut(370);
+		$("#footer").show(370);
 		$("#result").append(sp+"\n");
 		//$('.full').css({"opacity" : "1"});
 		$("#domainBlokki").hide();
 		$("#tekija").html("<h3>"+sp[5]+"</h3>");
 
 		if((sp[0] == '3') || (sp[0] == '2') || (sp[0] == '10')){
-		  $("#osoite").show('slow');
+		  $("#osoite").show(370);
 		  allShow();
 		  allTilasetHide();
 		}
 		if(sp[0] == '1')
 		{
 		  allHide();
-		  $("#tyo").show('slow');
-		  $("#tyo_kohde").html(sp[1]).show('slow');
+		  $("#tyo").show(370);
+		  $("#tyo_kohde").html(sp[1]).show(370);
 		  $('.tyo').bootstrapSwitch('state', true, true);
 		} 
 		if(sp[0] == '2.1')
 		{
 		  allHide();
-		  $("#matka").show('slow');
-		  //$("#matka_kohde").html(sp[1]).show('slow');
+		  $("#matka").show(370);
+		  //$("#matka_kohde").html(sp[1]).show(370);
 		  $('.matka').bootstrapSwitch('state', true, true);
 		}
 		if(sp[0] == '10.1')
 		{
 		  allHide();
-		  $("#lounas").show('slow');
-		  //$("#lounas_kohde").html(sp[1]).show('slow');
+		  $("#lounas").show(370);
+		  //$("#lounas_kohde").html(sp[1]).show(370);
 		  $('.lounas').bootstrapSwitch('state', true, true);
 
 
@@ -369,7 +371,7 @@ $("#os").keyup(function(){
 
   if(lengThis > 0)
   {
-	$("#getListFromServer").show('slow');
+	$("#getListFromServer").show(370);
         $.ajax({
            url: url+'/imei?dom='+domain,
 	   type:'POST',
@@ -381,7 +383,7 @@ $("#os").keyup(function(){
 
   		$("#list").change(function(){
 
-			$("#getListFromServer").hide('slow');
+			$("#getListFromServer").hide(370);
 			$("#os").val($( "#list option:selected" ).text());
 			$("#kohdenID").val($( "#list option:selected" ).val());
 		});
