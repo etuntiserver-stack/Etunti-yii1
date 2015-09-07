@@ -20,6 +20,8 @@ if(isset($model->tietoja))
   $aloitan = $tot->aloitan;
   $loppui = $tot->loppui;
   }
+
+
 ?>
 
 <div class="form">
@@ -41,6 +43,7 @@ if(isset($model->tietoja))
 	min-height: 65px;
 }
 </style>
+
 <div class="row">
 
         <div class="col-md-4 col-md-offset-2">
