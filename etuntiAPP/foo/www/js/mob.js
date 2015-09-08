@@ -158,6 +158,7 @@ function row(tilanne,st){
    t();
    allHide();
    allTilasetHide();
+
    $("#odotta").html("<h1>ODOTA</h1>").fadeIn(370);
 
    if((tilanne == 'tyo_al') & (st == 1))
