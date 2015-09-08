@@ -275,6 +275,8 @@ public function actionImei($dom)
 	        }
 
 
+           	$mobCheck = Mob::model()->find(" imei = '".$_POST['imei']."' order by id DESC ");
+
 
 		$loc = explode("/",$_POST['my_location']);
 		$get_osoite = '';
@@ -301,12 +303,12 @@ public function actionImei($dom)
 		      $get_osoite = $kohteet['osoite'];
 		      $kohdenID = $kohteet['id'];
 		    } else {
-		      $this->_sendResponse(200, "3//mull//null//null//".$get_osoite."//".$ttekija->tekijan_nimi."//".$kohdenID."//".$_POST['tag']."//EiOleMeidanTag");
+		      //$this->_sendResponse(200, $mobCheck->status."//null//null//null//".$get_osoite."//".$ttekija->tekijan_nimi."//".$kohdenID."//".$_POST['tag']."//EiOleMeidanTag");
 		    }
 		} 
 
 
-            	  $mobCheck = Mob::model()->find(" imei = '".$_POST['imei']."' order by id DESC ");
+
 
 		  if(isset($mobCheck->id))
 		  {
@@ -787,6 +789,7 @@ private function _getStatusCodeMessage($status)
         403 => 'Forbidden',
         404 => 'Not Found',
         500 => 'Internal Server Error',
+
         501 => 'Not Implemented',
     );
     return (isset($codes[$status])) ? $codes[$status] : '';
