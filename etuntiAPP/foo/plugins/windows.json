@@ -1,0 +1,81 @@
+{
+    "prepare_queue": {
+        "installed": [],
+        "uninstalled": []
+    },
+    "config_munge": {
+        "files": {
+            "config.xml": {
+                "parents": {
+                    "/*": [
+                        {
+                            "xml": "<feature name=\"NfcPlugin\"><param name=\"wp-package\" value=\"NfcPlugin\" /></feature>",
+                            "count": 1
+                        }
+                    ]
+                }
+            },
+            "package.phone.appxmanifest": {
+                "parents": {
+                    "/Package/Capabilities": [
+                        {
+                            "xml": "<DeviceCapability Name=\"proximity\" />",
+                            "count": 1
+                        }
+                    ]
+                }
+            },
+            "package.windows.appxmanifest": {
+                "parents": {
+                    "/Package/Capabilities": [
+                        {
+                            "xml": "<DeviceCapability Name=\"proximity\" />",
+                            "count": 1
+                        }
+                    ]
+                }
+            },
+            "package.windows80.appxmanifest": {
+                "parents": {
+                    "/Package/Capabilities": [
+                        {
+                            "xml": "<DeviceCapability Name=\"proximity\" />",
+                            "count": 1
+                        }
+                    ]
+                }
+            },
+            "package.appxmanifest": {
+                "parents": {
+                    "/Package/Capabilities": [
+                        {
+                            "xml": "<DeviceCapability Name=\"location\" />",
+                            "count": 1
+                        }
+                    ]
+                }
+            }
+        }
+    },
+    "installed_plugins": {
+        "com.chariotsolutions.nfc.plugin": {
+            "PACKAGE_NAME": "ETUNTI.FI"
+        },
+        "cordova-plugin-geolocation": {
+            "PACKAGE_NAME": "ETUNTI.FI"
+        },
+        "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "ETUNTI.FI"
+        },
+        "org.apache.cordova.device": {
+            "PACKAGE_NAME": "ETUNTI.FI"
+        },
+        "org.apache.cordova.file": {
+            "PACKAGE_NAME": "ETUNTI.FI"
+        },
+        "org.hygieiasoft.cordova.uid": {
+            "PACKAGE_NAME": "ETUNTI.FI"
+        }
+    },
+    "dependent_plugins": {}
+}
