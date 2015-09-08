@@ -39,11 +39,14 @@ class KohteetController extends Controller
 
 	public function isEtuntiAdmin() {
 
+		if(isset(Yii::app()->user->adminID))
+		{
 		$m = Administrators::model()->findbypk(Yii::app()->user->adminID);
 	        if($m->id == Yii::app()->user->adminID)
 	            return true;
-		else
+		} else {
 	            return false;
+		}
 	}
 
 	/**
