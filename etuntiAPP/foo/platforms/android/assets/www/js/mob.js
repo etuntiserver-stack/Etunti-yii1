@@ -65,6 +65,10 @@ $(document).ready(function(){
 	window.location.href='tehty.html?domain='+domain+'&imei='+imei+'&location='+my_location+'&tag='+tag;
   });
 
+  $("#asetukset").click(function(){
+	window.location.href='asetukset.html?domain='+domain+'&imei='+imei+'&location='+my_location+'&tag='+tag;
+  });
+
 
 
 
@@ -241,10 +245,7 @@ function row(tilanne,st){
 
 
 
-
-  $(".aloita").click(function(){
-
-    t();
+  function saveFile(){
 
     document.addEventListener("deviceready", onDeviceReadyFileSave, false);
 
@@ -263,17 +264,21 @@ function row(tilanne,st){
     }
 
     function gotFileWriter(writer) {
-        writer.write(domain);
-
-       	  set();
- 	  checkviesti(domain);
+        writer.write($("#domain").val());
+	  window.location.href='index.html';
+       	  //set();
+ 	  //checkviesti(domain);
     }
 
     function fail(error) {
         console.log(error.code);
     }
+  }
 
 
+  $(".aloita").click(function(){
+	t();
+	saveFile();
   });
 
 
@@ -302,7 +307,8 @@ function row(tilanne,st){
 
 		if(sp[0] == 'imeiError')
 		{
-		  $("#result2").html("<h2>"+sp[1]+" "+sp[2]+"</h2>").show()
+		  $("#result2").html("<h2>"+sp[1]+" "+sp[2]+"</h2>").show();
+		  $("#footer").show(370);
 		  return false;
 		} 
 
@@ -351,7 +357,7 @@ function row(tilanne,st){
         	console.log(xhr.responseText);
 
 		  if($("#domain").val() != '')
-		     $("#odotta").html("<h1>Domain: <br><b>" + $("#domain").val() + "</b><br> on virhellinen</h1>").show();
+		     $("#odotta").html("<div class='alert alert-danger'>Domain: <b>" + $("#domain").val() + "</b> on virhellinen,  tai tietokantaa ei löydy</div>").show();
 		  else
 		     $("#odotta").hide();
 

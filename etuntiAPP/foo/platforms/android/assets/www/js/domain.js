@@ -4,10 +4,10 @@
   var my_location = '';
   var tag = 'notag';
 
-  var server = "http://etuntifw.azurewebsites.net";
+  var server = "http://new.etunti.fi";
   var url = server+"/index.php/api/mob";
   var puh_nro = "0449304851";
-  var versio = "0.47";
+  var versio = "0.50";
 
 
   document.addEventListener('deviceready', this.readFile, true);
