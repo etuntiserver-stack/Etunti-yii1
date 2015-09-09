@@ -73,6 +73,23 @@ $('.search-form form').submit(function(){
 )); ?>
 </div>
 
+<?php if(Yii::app()->session['aktiivinen']) : ?>
+<script type="text/javascript">
+$(document).ready(function(){
+
+  $(".sw").bootstrapSwitch({
+	size: "large",
+	onColor: "warning",
+	offColor: "success",
+	onText: "Aktiiviset",
+	offText: "Kaikki"
+  });
+
+$('input[name="aktiivinen"]').bootstrapSwitch('state', true, true);
+
+});
+</script>
+<?php endif; ?>
 
 <script type="text/javascript">
 $(document).ready(function(){
