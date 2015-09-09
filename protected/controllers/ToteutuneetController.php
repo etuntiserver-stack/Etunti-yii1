@@ -60,10 +60,27 @@ class ToteutuneetController extends Controller
 	public function actionKk()
 	{
 
-	   function sprint($val){
-	       if($val > 0)
-	   	   return sprintf('%02d:%02d', $val/3600, ($val % 3600)/60);
-	   }
+		if(isset($_POST['ilman']))
+		{
+		  unset(Yii::app()->session['Lounastauko']);
+		  unset(Yii::app()->session['MATKA']);
+
+		  if(!empty($_POST['ilman']) and count($_POST['ilman']) > 0)
+		  {
+		    foreach($_POST['ilman'] as $val){
+			if($val == 'Lounastauko')
+			Yii::app()->session['Lounastauko'] = 10;
+
+			if($val == 'MATKA')
+			Yii::app()->session['MATKA'] = 2;
+		    }
+		  }
+		}
+
+		function sprint($val){
+	   	    if($val > 0)
+		   	   return sprintf('%02d:%02d', $val/3600, ($val % 3600)/60);
+		}
 
 		$dataProvider=new CActiveDataProvider('Toteutuneet');
 		$this->render('kk',array(

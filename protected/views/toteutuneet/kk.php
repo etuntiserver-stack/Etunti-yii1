@@ -51,32 +51,31 @@ echo	'<input type=hidden id=number value='.cal_days_in_month(CAL_GREGORIAN, $mon
 
 <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/verkko.css" />
 
-<h1><?php echo Yii::t('main', 'Toteutuneet (kk)'); ?></h1>
-
 
 <div class="row">
-  <div class="col-sm-12">
-
-
-  <H4><a href="kk?pvm=<?php echo $previous; ?>"><<</a> <?php echo $months[$month].' '.$year; ?> <a href="kk?pvm=<?php echo $next; ?>">>></a></H4>
-
-   <?php
-    $lounas = '';
-    $lounas = ( isset(Yii::app()->session['Lounastauko']))  ? 'selected' : '';
-    $matka = '';
-    $matka = ( isset(Yii::app()->session['MATKA']))  ? 'selected' : '';
-
-    echo '<select name="ilman[]" class="selectpicker ilman"  multiple="multiple"  title="EI LASKE...">';
-    echo '<option value="Lounastauko" '.$lounas.'>Lounastauko</option>';
-    echo '<option value="MATKA" '.$matka.'>MATKA</option>';
-    echo '</select>';
-   ?>
-
-  </div>
+    <div class="col-sm-3">
+       <H2><a href="kk?pvm=<?php echo $previous; ?>">
+		<<</a> <?php echo $months[$month].' '.$year; ?> <a href="kk?pvm=<?php echo $next; ?>">>></a>
+       </H2>
+    </div><div class="col-sm-5">
+   	<?php
+	    $lounas = '';
+	    $lounas = ( isset(Yii::app()->session['Lounastauko']))  ? 'selected' : '';
+	    $matka = '';
+	    $matka = ( isset(Yii::app()->session['MATKA']))  ? 'selected' : '';
+	    echo '<label>Ei lasketa</label><br> ';
+	    echo '<select name="ilman[]" class="selectpicker" id="ilman"  multiple="multiple" title="Ei lasketa..." >'; //
+	    echo '<option value="Lounastauko" '.$lounas.'>Lounastauko</option>';
+	    echo '<option value="MATKA" '.$matka.'>MATKA</option>';
+	    echo '</select>';
+	    echo '<button id="send" class="btn btn-default">OK</button>';
+	   ?>
+    </div>
 </div>
 <br>
 
 
+<div id="taulukkoPaa">
 
   <TABLE id="verkko" class="">
   <?php 
@@ -115,46 +114,30 @@ echo	'<input type=hidden id=number value='.cal_days_in_month(CAL_GREGORIAN, $mon
   ?>
   </TABLE>
 
-
+</div>
 
 
 <script type="text/javascript">
 $(document).ready(function(){
 
-  $("ilman").blur(function(){
+  $("#send").click(function(){
 
-	var thisVal = $(this).val();
+	var thisVal = $("#ilman").val();
+	$("#taulukkoPaa").html('<h1>ODOTA...</h>');
 
-	alert(thisVal)
-/*
         $.ajax({
            url: location.protocol + "//" + location.host + '/index.php/toteutuneet/kk',
 	   type:'POST',
-	   data: { "id" : tvID, "cut" : "true", "newPvm" : newPvm, "newTid" : newTid },
+	   data: { "ilman" : thisVal },
            success: function(data){
         	console.log(data);
-
-	  	$.ajax({
-			url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/did',
-			type:'GET',
-			data: { "pvm" : newPvm, "tid" : newTid, "from" : "ajax" },
-			  success:function(data){
-			  console.log(data);
-			  $('#'+newPvm+"_"+newTid).html(data);
-			  clearKaikki();
-			  //return false;
-			  },
-			  error:function(data){
-			  console.log(data);
-			  }
-	 	});
-
+	 	window.location.reload();
     	   },
     	   error: function(XMLHttpRequest, textStatus, errorThrown) {
 	    	console.log(XMLHttpRequest);
  	   }
         });
-*/
+
 
   });
 
