@@ -28,7 +28,7 @@ class TyontekijatController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view'),
+				'actions'=>array('admin','admin_ajax','delete','create','update','index','view'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -147,6 +147,20 @@ class TyontekijatController extends Controller
 		$this->render('admin',array(
 			'model'=>$model,
 		));
+	}
+
+	public function actionAdmin_ajax()
+	{
+
+		$model=new Tyontekijat('search');
+		$model->unsetAttributes();  // clear any default values
+		if(isset($_GET['Tyontekijat']))
+			$model->attributes=$_GET['Tyontekijat'];
+
+		$this->renderPartial('admin_ajax',array(
+			'model'=>$model,
+		));
+
 	}
 
 	/**
