@@ -34,7 +34,6 @@ $this->breadcrumbs=array(
    ?>
 
    <?php
-
     $lounas = '';
     $lounas = ( isset(Yii::app()->session['Lounastauko']))  ? 'selected' : '';
     $matka = '';

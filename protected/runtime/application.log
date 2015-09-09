@@ -4412,3 +4412,28 @@ Stack trace:
 #5 {main}
 REQUEST_URI=/index.php/toteutuneet/index.php?r=user/login&return=filed
 ---
+2015/09/09 11:57:16 [error] [php] Undefined variable: yht (C:\xampp\htdocs\etuntifw\protected\views\toteutuneet\kk.php:94)
+Stack trace:
+#0 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(869): ToteutuneetController->renderFile()
+#1 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(782): ToteutuneetController->renderPartial()
+#2 C:\xampp\htdocs\etuntifw\protected\controllers\ToteutuneetController.php(71): ToteutuneetController->render()
+#3 C:\xampp\htdocs\etuntifw\YII\framework\web\actions\CInlineAction.php(49): ToteutuneetController->actionKk()
+#4 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(308): CInlineAction->runWithParams()
+#5 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(133): ToteutuneetController->runAction()
+#6 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#7 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(1145): CAccessControlFilter->filter()
+#8 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CInlineFilter.php(58): ToteutuneetController->filterAccessControl()
+#9 C:\xampp\htdocs\etuntifw\YII\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#10 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(291): CFilterChain->run()
+#11 C:\xampp\htdocs\etuntifw\YII\framework\web\CController.php(265): ToteutuneetController->runActionWithFilters()
+#12 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(282): ToteutuneetController->run()
+#13 C:\xampp\htdocs\etuntifw\YII\framework\web\CWebApplication.php(141): CWebApplication->runController()
+#14 C:\xampp\htdocs\etuntifw\YII\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#15 C:\xampp\htdocs\etuntifw\index.php(13): CWebApplication->run()
+REQUEST_URI=/index.php/toteutuneet/kk
+in C:\xampp\htdocs\etuntifw\protected\views\toteutuneet\kk.php (94)
+in C:\xampp\htdocs\etuntifw\protected\controllers\ToteutuneetController.php (71)
+in C:\xampp\htdocs\etuntifw\index.php (13)
+2015/09/09 12:19:02 [warning] [application] Failed to set unsafe attribute "id" of "Toteutuneet".
+in C:\xampp\htdocs\etuntifw\protected\controllers\ToteutuneetController.php (201)
+in C:\xampp\htdocs\etuntifw\index.php (13)

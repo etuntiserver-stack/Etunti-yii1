@@ -23,8 +23,11 @@ $did = date("Ymd",strtotime($pvm));
 	foreach($tv as $tvVal){
 	   if($tvVal->id){
 	   $muutos = true;
+
 	   $get[strtotime($tvVal->aloitan)] = $tvVal->id."//".$tvVal->aloitan."//".$tvVal->loppui."//".$tvVal->kohde_kannasta."//".$did."//".$tid."//".$muutos."//".(strtotime($tvVal->loppui)-strtotime($tvVal->aloitan));
-	   $tun += (strtotime($tvVal->loppui)-strtotime($tvVal->aloitan));
+
+	   if(!empty($tvVal->aloitan) and !empty($tvVal->loppui) and $from == 'kk')
+	   $tun += strtotime($tvVal->loppui)-strtotime($tvVal->aloitan);
 	   }
 	}
 
@@ -46,14 +49,17 @@ $did = date("Ymd",strtotime($pvm));
 	foreach($tv as $tvVal){
 	   if($tvVal->id){
 	   $muutos = false;
+
 	   $get[strtotime($tvVal->aloitan)] = $tvVal->id."//".$tvVal->aloitan."//".$tvVal->loppui."//".$tvVal->kohde_kannasta."//".$did."//".$tid."//".$muutos."//".(strtotime($tvVal->loppui)-strtotime($tvVal->aloitan));
-	   $tun += (strtotime($tvVal->loppui)-strtotime($tvVal->aloitan));
+
+	   if(!empty($tvVal->aloitan) and !empty($tvVal->loppui) and $from == 'kk')
+	   $tun += strtotime($tvVal->loppui)-strtotime($tvVal->aloitan);
 	   }
 	}
 
 	if( $from == 'kk' ){
 		if($tun > 0)
-		echo $tun;
+		echo sprint($tun)."//".$tun;
 
 	} else {
 

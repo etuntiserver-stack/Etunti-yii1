@@ -60,11 +60,23 @@ echo	'<input type=hidden id=number value='.cal_days_in_month(CAL_GREGORIAN, $mon
 
   <H4><a href="kk?pvm=<?php echo $previous; ?>"><<</a> <?php echo $months[$month].' '.$year; ?> <a href="kk?pvm=<?php echo $next; ?>">>></a></H4>
 
+   <?php
+    $lounas = '';
+    $lounas = ( isset(Yii::app()->session['Lounastauko']))  ? 'selected' : '';
+    $matka = '';
+    $matka = ( isset(Yii::app()->session['MATKA']))  ? 'selected' : '';
+
+    echo '<select name="ilman[]" class="selectpicker ilman"  multiple="multiple"  title="EI LASKE...">';
+    echo '<option value="Lounastauko" '.$lounas.'>Lounastauko</option>';
+    echo '<option value="MATKA" '.$matka.'>MATKA</option>';
+    echo '</select>';
+   ?>
+
   </div>
 </div>
 <br>
 
-<div class="row">
+
 
   <TABLE id="verkko" class="">
   <?php 
@@ -76,11 +88,12 @@ echo	'<input type=hidden id=number value='.cal_days_in_month(CAL_GREGORIAN, $mon
    {
      echo '<TH>'.$i.'</TH>';
    }
-
+     echo '<TH>Yht.</TH>';
   echo '</TR>';
   $t = Tyontekijat::model()->findAll(" aktiivinen = '1' ");
   foreach($t as $v)
   {
+  $yht = 0;
   echo '<TR>';
   echo '<TD>'.$v->tekijan_nimi.'</TD>';
 
@@ -89,80 +102,59 @@ echo	'<input type=hidden id=number value='.cal_days_in_month(CAL_GREGORIAN, $mon
      $thisDate = $year.'-'.$month.'-'.$i;
      $date = $i.'.'.$month;
 
-
-	$tot = $this->renderPartial('totpvmtid',array('pvm'=>$thisDate,'tid'=>$v->id,'from'=>'kk'),true);
-	echo '<TD class="text-warning">'.sprint($tot).'</TD>';
+	$tot[$i] = $this->renderPartial('totpvmtid',array('pvm'=>$thisDate,'tid'=>$v->id,'from'=>'kk'),true);
+	$explT = explode("//",$tot[$i]);
+	if(isset($explT[1]))
+	$yht += $explT[1];
+	echo '<TD class="text-small" style="font-size:90%">'.$explT[0].'</TD>';
 
    }
-
+  echo '<TD class="text-small"><b>'.sprint($yht).'</b></TD>';
   echo '<TR>';
   }
   ?>
   </TABLE>
 
-</div>
+
 
 
 <script type="text/javascript">
 $(document).ready(function(){
 
-  $(".muokka").click(function(){
+  $("ilman").blur(function(){
 
-    $(this).css({"background" : "#ccc"});
+	var thisVal = $(this).val();
 
-    var thisID = $(this).attr("id");
-    var thisDate = $(this).attr("thisDate");
-    var thisTid = parseInt($(this).attr("thisTid"));
-    var thisTXT = $(this).text();
-    var id = $(this).attr("method");
-    var thisStatus = $("input:radio:checked").val();
-    var lat1 = thisStatus.split("//");
-    var lat = '('+lat1[0]+') '+lat1[2]+'/'+lat1[1];
-
-
-
-    var postdata = {
-	tid 	: thisTid,
-	pvm 	: thisDate,
-	status 	: thisStatus
-    }
-
+	alert(thisVal)
+/*
         $.ajax({
-           url: 'vlupdater?id='+id+'&txt='+thisTXT+'&lat='+lat,
-	   type: 'POST',
-	   data: { Vuosilomat : postdata },
+           url: location.protocol + "//" + location.host + '/index.php/toteutuneet/kk',
+	   type:'POST',
+	   data: { "id" : tvID, "cut" : "true", "newPvm" : newPvm, "newTid" : newTid },
            success: function(data){
-		console.log(data);
+        	console.log(data);
 
-		var spData  = data.split("//");
+	  	$.ajax({
+			url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/did',
+			type:'GET',
+			data: { "pvm" : newPvm, "tid" : newTid, "from" : "ajax" },
+			  success:function(data){
+			  console.log(data);
+			  $('#'+newPvm+"_"+newTid).html(data);
+			  clearKaikki();
+			  //return false;
+			  },
+			  error:function(data){
+			  console.log(data);
+			  }
+	 	});
 
-		if(spData[3] != ''){
-		   $("#"+thisID).attr("method",spData[0]);
-		   $("#"+thisID).attr("style","background:"+spData[4]+";color:white;");
-		   $("#"+thisID).html(spData[3]);
-		}
-
-		if(data == 'removed')
-		   $("#"+thisID).html('');
-
-    		if(thisTXT == ''){
-		    $("#lisattyTyovuoroon").html("<h3>Lisätty työvuoroon</h3>").fadeToggle("fade", function() {
-			$("#lisattyTyovuoroon").fadeOut(2000);
-  		    });
-		 
-	   	} else {
-		    $("#lisattyTyovuoroon").html("<h3>Poistettu</h3>").fadeToggle("fade", function() {
-			$("#lisattyTyovuoroon").fadeOut(2000);
-  		    });
-		}
-    
-
-           },
-	   error:function(data){
-		console.log(data);
-	   }
+    	   },
+    	   error: function(XMLHttpRequest, textStatus, errorThrown) {
+	    	console.log(XMLHttpRequest);
+ 	   }
         });
-
+*/
 
   });
 

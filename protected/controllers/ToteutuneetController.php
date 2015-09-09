@@ -80,6 +80,7 @@ class ToteutuneetController extends Controller
 
 	public function actionYhteensapvm($pvm,$tid)
 	{
+
 	   function sprint($val){
 	       if($val > 0)
 	   	   return sprintf('%02d:%02d', $val/3600, ($val % 3600)/60);
