@@ -4,6 +4,7 @@ $did = date("Ymd",strtotime($pvm));
 	echo '<div class="small">';
 
 	$muutos = false;
+	$tun = 0;
 
        	$criteria = new CDbCriteria();
 
@@ -23,6 +24,7 @@ $did = date("Ymd",strtotime($pvm));
 	   if($tvVal->id){
 	   $muutos = true;
 	   $get[strtotime($tvVal->aloitan)] = $tvVal->id."//".$tvVal->aloitan."//".$tvVal->loppui."//".$tvVal->kohde_kannasta."//".$did."//".$tid."//".$muutos."//".(strtotime($tvVal->loppui)-strtotime($tvVal->aloitan));
+	   $tun += (strtotime($tvVal->loppui)-strtotime($tvVal->aloitan));
 	   }
 	}
 
@@ -45,21 +47,29 @@ $did = date("Ymd",strtotime($pvm));
 	   if($tvVal->id){
 	   $muutos = false;
 	   $get[strtotime($tvVal->aloitan)] = $tvVal->id."//".$tvVal->aloitan."//".$tvVal->loppui."//".$tvVal->kohde_kannasta."//".$did."//".$tid."//".$muutos."//".(strtotime($tvVal->loppui)-strtotime($tvVal->aloitan));
+	   $tun += (strtotime($tvVal->loppui)-strtotime($tvVal->aloitan));
 	   }
 	}
 
-	if(isset($get) and count($get) > 1)
-	{
-	   ksort($get);
-
-	   foreach($get as $v)
-	      $this->renderPartial('al',array('str'=>$v));
+	if( $from == 'kk' ){
+		if($tun > 0)
+		echo $tun;
 
 	} else {
 
-	      $this->renderPartial('al',array('str'=>$get[strtotime($tvVal->aloitan)]));
-	}
+		if(isset($get) and count($get) > 1)
+		{
+		   ksort($get);
+	
+		   foreach($get as $v)
+		      $this->renderPartial('al',array('str'=>$v));
+	
+		} else {
+	
+		      $this->renderPartial('al',array('str'=>$get[strtotime($tvVal->aloitan)]));
+		}
 
+	}
 	echo '</div>';
 
 

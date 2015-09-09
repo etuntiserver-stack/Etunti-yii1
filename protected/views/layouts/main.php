@@ -135,6 +135,7 @@ Yii::app()->clientScript->registerPackage('bootstrapCSS');
         	<li><?php echo CHtml::link(Yii::t('main', 'Työvuoroon taulukko'),array('/tyovuoroot/index')); ?></li>
         	<li><?php echo CHtml::link(Yii::t('main', 'Työvuoroon hallinta'),array('/tyovuoroot/admin')); ?></li>
         	<li><?php echo CHtml::link(Yii::t('main', 'Vuosilomat taulukko'),array('/vuosilomat/index')); ?></li>
+        	<li><?php echo CHtml::link(Yii::t('main', 'Toteutuneet (kk)'),array('/toteutuneet/kk')); ?></li>
           </ul>
         </li>
 	<?php endif; ?>

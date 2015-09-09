@@ -3,7 +3,7 @@
 /* @var $dataProvider CActiveDataProvider */
 
 $this->breadcrumbs=array(
-	Yii::t('main', 'Vuosilomat'),
+	Yii::t('main', 'Toteutuneet (kk)'),
 );
 /*
 $this->menu=array(
@@ -51,23 +51,28 @@ echo	'<input type=hidden id=number value='.cal_days_in_month(CAL_GREGORIAN, $mon
 
 <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/verkko.css" />
 
-<h1><?php echo Yii::t('main', 'Vuosilomat'); ?></h1>
+<h1><?php echo Yii::t('main', 'Toteutuneet (kk)'); ?></h1>
 
 
 <div class="row">
   <div class="col-sm-12">
 
 
-  <H4><a href="index?pvm=<?php echo $previous; ?>"><<</a> <?php echo $months[$month].' '.$year; ?> <a href="index?pvm=<?php echo $next; ?>">>></a></H4>
+  <H4><a href="kk?pvm=<?php echo $previous; ?>"><<</a> <?php echo $months[$month].' '.$year; ?> <a href="kk?pvm=<?php echo $next; ?>">>></a></H4>
 
   </div>
 </div>
 <br>
 
 <div class="row">
- <div class="col-sm-10">
+
   <TABLE id="verkko" class="">
   <?php 
+	   function sprint($val){
+	       if($val > 0)
+	   	   return sprintf('%02d:%02d', $val/3600, ($val % 3600)/60);
+	   }
+
   echo '<TR>';
   echo '<TH>Nimi</TH>';
 
@@ -88,26 +93,11 @@ echo	'<input type=hidden id=number value='.cal_days_in_month(CAL_GREGORIAN, $mon
      $thisDate = $year.'-'.$month.'-'.$i;
      $date = $i.'.'.$month;
 
-     $vl = Vuosilomat::model()->find(" pvm = '".$thisDate."' AND tid = '".$v->id."' ");
-     if(isset($vl['id'])){
-      	$status = explode("//",$vl['status']);
-	if(isset($status[1]))
-      	$style = " style='background: $status[1]; color: white' ";
-	$st0 = $status[0];
-	$id = $vl['id'];
-     } else {
-      	$status = '';
-      	$style = '';
-	$st0 = '';
-	$id = 'new';
-     }
 
-     if(pyhat($thisDate,$date))
-     {
-       echo '<TD id="riv_'.$thisDate.$v->id.'" class="muokka viikkonloppu" method="'.$id.'" thisDate='.$thisDate.' thisTid='.$v->id.'>'.$st0.'</TD>';
-     } else {
-       echo '<TD id="riv_'.$thisDate.$v->id.'" '.$style.' class="muokka" method="'.$id.'" thisDate='.$thisDate.' thisTid='.$v->id.'>'.$st0.'</TD>';
-     }
+	$tot =	$this->renderPartial('totpvmtid',array('pvm'=>$thisDate,'tid'=>$v->id,'from'=>'kk'),true);
+
+	echo '<TD class="text-warning">'.sprint($tot).'</TD>';
+
    }
 
   echo '<TR>';
@@ -115,23 +105,6 @@ echo	'<input type=hidden id=number value='.cal_days_in_month(CAL_GREGORIAN, $mon
   ?>
   </TABLE>
 
- </div>
- <div class="col-sm-2">
- <?php
-  $valikkoot = Valikkoot::model()->findAll("select_type = 'vuosilomat'");
-  foreach($valikkoot as $vl){
-    $expl = explode("/",$vl->value);
-    $back = " style='background:".$expl[2].";color: white;'";
-    if($expl[0] == 'VL')
-    $checked = 'checked';
-    else
-    $checked = '';
-
-    echo '<p><input type=radio name="valikko" class="valikko" value="'.$expl[0].'//'.$expl[2].'//'.$expl[1].'" '.$checked.'> 
-	<span '.$back.' class="btn">'.$expl[0].'</span>  '.$expl[1].'</p>';
-  }
- ?>
- </div>
 </div>
 
 

@@ -29,7 +29,7 @@ class ToteutuneetController extends Controller
 		return array(
 
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','luetutpvmtid','totpvmtid','al','yhteensapvm','deletebyajax'),
+				'actions'=>array('admin','delete','create','update','index','view','luetutpvmtid','totpvmtid','al','yhteensapvm','deletebyajax','kk'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -43,7 +43,8 @@ class ToteutuneetController extends Controller
 
 	public function isEtuntiAdmin() {
 
-		if(isset(Yii::app()->user->adminID))
+		$tas = explode(",",Yii::app()->user->adminPaketti);
+		if(isset(Yii::app()->user->adminID) and in_array('2',$tas))
 		{
 		$m = Administrators::model()->findbypk(Yii::app()->user->adminID);
 	        if($m->id == Yii::app()->user->adminID)
@@ -53,6 +54,18 @@ class ToteutuneetController extends Controller
 		} else {
 	            return false;
 		}
+	}
+
+
+	public function actionKk()
+	{
+
+
+
+		$dataProvider=new CActiveDataProvider('Toteutuneet');
+		$this->render('kk',array(
+			'dataProvider'=>$dataProvider,
+		));
 	}
 
 	public function actionAl($str){
