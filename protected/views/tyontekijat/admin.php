@@ -70,3 +70,30 @@ $('.search-form form').submit(function(){
 		),
 	),
 )); ?>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+
+  $(".sw").bootstrapSwitch({
+	size: "large",
+	onColor: "warning",
+	offColor: "success",
+	onText: "Kaikki",
+	offText: "Aktiiviset"
+  });
+
+
+  $('input[name="aktiiviset"]').on('switchChange.bootstrapSwitch', function(event, state) {
+  	console.log(state); 
+	  if(state == true)
+	  {
+	
+	  } else {
+	
+	  }
+  });
+
+});
+</script>
+

@@ -45,6 +45,8 @@ Yii::setPathOfAlias('chartjs', dirname(__FILE__).'/../extensions/yii-chartjs');
   $etuntifw_user = 'root';
   $etuntifw_pass = '';
 
+  $db2 = '';
+  if(isset($_SESSION['domain']))
   $db2 = $_SESSION['domain'];
 
   $db2_host = '127.0.0.1';
