@@ -28,10 +28,11 @@ $('.search-form form').submit(function(){
 
 <div class="row">
   <div class="col-sm-3">
-    <input type="checkbox" name="aktiiviset" class="sw">
+    <input type="checkbox" name="aktiivinen" class="sw">
   </div>
 </div>
 
+<div id="adminTable">
 <?php $this->widget('zii.widgets.grid.CGridView', array(
 	'id'=>'tyontekijat-grid',
 	'dataProvider'=>$model->search(),
@@ -70,6 +71,7 @@ $('.search-form form').submit(function(){
 		),
 	),
 )); ?>
+</div>
 
 
 <script type="text/javascript">
@@ -79,19 +81,39 @@ $(document).ready(function(){
 	size: "large",
 	onColor: "warning",
 	offColor: "success",
-	onText: "Kaikki",
-	offText: "Aktiiviset"
+	onText: "Aktiiviset",
+	offText: "Kaikki"
   });
 
 
-  $('input[name="aktiiviset"]').on('switchChange.bootstrapSwitch', function(event, state) {
-  	console.log(state); 
-	  if(state == true)
-	  {
+  $('input[name="aktiivinen"]').on('switchChange.bootstrapSwitch', function(event, state) {
+  console.log(state); 
+    if(state == true)
+    {
 	
-	  } else {
+        $.ajax({
+           url: "admin_ajax",
+	   type:'POST',
+	   data: { aktiivinen : "yes" },
+           success: function(data){
+		console.log(data);
+		$("#adminTable").html(data);
+           }
+        });
+
+    } else {
 	
-	  }
+        $.ajax({
+           url: "admin_ajax",
+	   type:'POST',
+	   data: { aktiivinen : "no" },
+           success: function(data){
+		console.log(data);
+		$("#adminTable").html(data);
+           }
+        });
+
+    }
   });
 
 });

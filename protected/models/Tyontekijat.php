@@ -127,6 +127,15 @@ class Tyontekijat extends DB2ActiveRecord
 		$criteria=new CDbCriteria;
 		$criteria->order = "tekijan_nimi";
 
+
+		if(Yii::app()->request->getPost('aktiivinen') == 'yes')
+		Yii::app()->session['aktiivinen'] = true;
+		if(Yii::app()->request->getPost('aktiivinen') == 'no')
+		unset(Yii::app()->session['aktiivinen']);
+
+		if(Yii::app()->session['aktiivinen'])
+		$criteria->condition = " aktiivinen=0 or aktiivinen=1 ";
+		else
 		$criteria->condition = " aktiivinen=1 ";
 
 		$criteria->compare('id',$this->id);
