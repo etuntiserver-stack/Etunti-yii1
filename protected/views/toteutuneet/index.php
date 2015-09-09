@@ -58,7 +58,7 @@ $this->breadcrumbs=array(
 
 <br>
 
-<?php if(Yii::app()->session['etsi_tekijan_nimi']) : ?>
+<?php if(Yii::app()->session['tekija']) : ?>
 
   <table class="table table-striped table-bordered">
   <thead>
