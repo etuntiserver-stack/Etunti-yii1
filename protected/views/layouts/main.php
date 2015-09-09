@@ -23,7 +23,30 @@ Yii::app()->clientScript->registerPackage('bootstrapCSS');
 ?>
 
 
+<script type="text/javascript">
+$(document).ready(function(){
 
+  $(".sw").bootstrapSwitch({
+	size: "large",
+	onColor: "warning",
+	offColor: "success",
+	onText: "Kaikki",
+	offText: "Aktiiviset"
+  });
+
+
+  $('input[name="aktiiviset"]').on('switchChange.bootstrapSwitch', function(event, state) {
+  	console.log(state); 
+	  if(state == true)
+	  {
+	
+	  } else {
+	
+	  }
+  });
+
+});
+</script>
 
 	<title><?php echo CHtml::encode($this->pageTitle); ?></title>
 </head>
@@ -88,6 +111,7 @@ Yii::app()->clientScript->registerPackage('bootstrapCSS');
           <ul class="dropdown-menu">
         	<li><?php echo CHtml::link(Yii::t('main', 'Toteutuneet taulukko'),array('/toteutuneet/index')); ?></li>
         	<li><?php echo CHtml::link(Yii::t('main', 'Toteutuneet hallinta'),array('/toteutuneet/admin')); ?></li>
+        	<li><?php echo CHtml::link(Yii::t('main', 'Toteutuneet (kk)'),array('/toteutuneet/kk')); ?></li>
           </ul>
         </li>
 
@@ -100,25 +124,13 @@ Yii::app()->clientScript->registerPackage('bootstrapCSS');
         </li>
 
         <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?php echo Yii::t('main', 'Työntekijät'); ?> <span class="caret"></span></a>
-          <ul class="dropdown-menu">
-        	<li><?php echo CHtml::link(Yii::t('main', 'Työntekijät lista'),array('/tyontekijat/index')); ?></li>
-        	<li><?php echo CHtml::link(Yii::t('main', 'Työntekijät hallinta'),array('/tyontekijat/admin')); ?></li>
-          </ul>
-        </li>
-
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?php echo Yii::t('main', 'Kohteet'); ?> <span class="caret"></span></a>
-          <ul class="dropdown-menu">
-        	<li><?php echo CHtml::link(Yii::t('main', 'Kohteet hallinta'),array('/kohteet/admin')); ?></li>
-          </ul>
-        </li>
-
-        <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?php echo Yii::t('main', 'Hallinnat'); ?> <span class="caret"></span></a>
           <ul class="dropdown-menu">
-        <li><?php echo CHtml::link(Yii::t('main', 'Järjestelmänvalvojat'),array('/administrators/admin')); ?></li>
+        	<li><?php echo CHtml::link(Yii::t('main', 'Työntekijät hallinta'),array('/tyontekijat/admin')); ?></li>
+        	<li><?php echo CHtml::link(Yii::t('main', 'Kohteet hallinta'),array('/kohteet/admin')); ?></li>
         	<li><?php echo CHtml::link(Yii::t('main', 'Mobiili hallinta'),array('/sivexkuitti/admin')); ?></li>
+	        <li role="separator" class="divider"></li>
+        	<li><?php echo CHtml::link(Yii::t('main', 'Järjestelmänvalvojat'),array('/administrators/admin')); ?></li>
         	<li><?php echo CHtml::link(Yii::t('main', 'Valikkoot'),array('/valikkoot/admin')); ?></li>
         	<li><?php echo CHtml::link(Yii::t('main', 'Viestintä hallinta'),array('/viestinta/admin')); ?></li>
         	<li><?php echo CHtml::link(Yii::t('main', 'Mobiili emulattori'),array('/site/mobemu')); ?></li>
@@ -135,7 +147,6 @@ Yii::app()->clientScript->registerPackage('bootstrapCSS');
         	<li><?php echo CHtml::link(Yii::t('main', 'Työvuoroon taulukko'),array('/tyovuoroot/index')); ?></li>
         	<li><?php echo CHtml::link(Yii::t('main', 'Työvuoroon hallinta'),array('/tyovuoroot/admin')); ?></li>
         	<li><?php echo CHtml::link(Yii::t('main', 'Vuosilomat taulukko'),array('/vuosilomat/index')); ?></li>
-        	<li><?php echo CHtml::link(Yii::t('main', 'Toteutuneet (kk)'),array('/toteutuneet/kk')); ?></li>
           </ul>
         </li>
 	<?php endif; ?>

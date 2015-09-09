@@ -26,16 +26,11 @@ $('.search-form form').submit(function(){
 ");
 ?>
 
-<h1><?php echo Yii::t('main', 'Työntekijät'); ?></h1>
-
-
-
-<?php echo CHtml::link('Haku','#',array('class'=>'search-button')); ?>
-<div class="search-form" style="display:none">
-<?php $this->renderPartial('_search',array(
-	'model'=>$model,
-)); ?>
-</div><!-- search-form -->
+<div class="row">
+  <div class="col-sm-3">
+    <input type="checkbox" name="aktiiviset" class="sw">
+  </div>
+</div>
 
 <?php $this->widget('zii.widgets.grid.CGridView', array(
 	'id'=>'tyontekijat-grid',

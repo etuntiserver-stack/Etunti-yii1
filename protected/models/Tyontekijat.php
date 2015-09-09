@@ -125,6 +125,9 @@ class Tyontekijat extends DB2ActiveRecord
 		// should not be searched.
 
 		$criteria=new CDbCriteria;
+		$criteria->order = "tekijan_nimi";
+
+		$criteria->condition = " aktiivinen=1 ";
 
 		$criteria->compare('id',$this->id);
 		$criteria->compare('imei',$this->imei,true);
