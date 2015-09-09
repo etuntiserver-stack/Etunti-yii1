@@ -45,10 +45,7 @@ Yii::setPathOfAlias('chartjs', dirname(__FILE__).'/../extensions/yii-chartjs');
   $etuntifw_user = 'root';
   $etuntifw_pass = '';
 
-  if(isset($_SESSION['domain']))
   $db2 = $_SESSION['domain'];
-  else
-  $db2 = '';
 
   $db2_host = '127.0.0.1';
   $db2_user = 'root';
@@ -56,15 +53,15 @@ Yii::setPathOfAlias('chartjs', dirname(__FILE__).'/../extensions/yii-chartjs');
 
   } else {
 
-  $db = 'etuntifw';
-  $db_host = 'eu-cdbr-azure-north-d.cloudapp.net';
-  $etuntifw_user = 'bb4018da4bf8cb';
-  $etuntifw_pass = '97ea15c4';
+  $db = 'estromfi_fw';
+  $db_host = 'localhost';
+  $etuntifw_user = 'estromfi_fw';
+  $etuntifw_pass = 'KristinA1';
 
-  $db2 = $_SESSION['domain'];
-  $db2_host = 'eu-cdbr-azure-north-d.cloudapp.net';
-  $db2_user = 'b6b2a4e8995384';
-  $db2_pass = 'df12e849';
+  $db2 = 'estromfi_'.$_SESSION['domain'];
+  $db2_host = 'localhost';
+  $db2_user = 'estromfi_'.$_SESSION['domain'];
+  $db2_pass = 'KristinA1';
   }
 
 

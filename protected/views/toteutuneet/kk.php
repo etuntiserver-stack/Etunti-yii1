@@ -68,10 +68,6 @@ echo	'<input type=hidden id=number value='.cal_days_in_month(CAL_GREGORIAN, $mon
 
   <TABLE id="verkko" class="">
   <?php 
-	   function sprint($val){
-	       if($val > 0)
-	   	   return sprintf('%02d:%02d', $val/3600, ($val % 3600)/60);
-	   }
 
   echo '<TR>';
   echo '<TH>Nimi</TH>';
@@ -94,7 +90,7 @@ echo	'<input type=hidden id=number value='.cal_days_in_month(CAL_GREGORIAN, $mon
      $date = $i.'.'.$month;
 
 
-	$tot =	$this->renderPartial('totpvmtid',array('pvm'=>$thisDate,'tid'=>$v->id,'from'=>'kk'),true);
+	(int)$tot =	$this->renderPartial('totpvmtid',array('pvm'=>$thisDate,'tid'=>$v->id,'from'=>'kk'),true);
 
 	echo '<TD class="text-warning">'.sprint($tot).'</TD>';
 
