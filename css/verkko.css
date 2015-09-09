@@ -1,0 +1,45 @@
+#verkko { 
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+#verkko TH,#verkko TD {
+    text-align: center;
+    min-width: 23px;
+    border:1px #999 solid;
+}
+
+#verkko  th:first-child,#verkko td:first-child {
+    width: 150px;
+    text-align: left;
+    white-space: nowrap;
+    font-size: 9pt;
+    padding: 2px 5px;
+}
+#valikot span{
+    color: white; 
+    padding: 2px 7px;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    border-radius: 6px;
+    border:1px #999 solid;
+}
+.muokka{
+	cursor: pointer;
+}
+#lisattyTyovuoroon{
+    display: none;
+    color: red;
+    position: absolute;
+}
+.viikkonloppu{
+	color: #333;
+	//text-shadow: 1px 1px 0px #fff;
+background: rgb(255,224,123);
+background: -moz-linear-gradient(top,  rgba(255,224,123,1) 0%, rgba(255,215,83,1) 58%, rgba(255,215,83,1) 58%, rgba(255,202,89,1) 59%, rgba(255,202,87,1) 100%); 
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,224,123,1)), color-stop(58%,rgba(255,215,83,1)), color-stop(58%,rgba(255,215,83,1)), color-stop(59%,rgba(255,202,89,1)), color-stop(100%,rgba(255,202,87,1)));
+background: -webkit-linear-gradient(top,  rgba(255,224,123,1) 0%,rgba(255,215,83,1) 58%,rgba(255,215,83,1) 58%,rgba(255,202,89,1) 59%,rgba(255,202,87,1) 100%); 
+background: -o-linear-gradient(top,  rgba(255,224,123,1) 0%,rgba(255,215,83,1) 58%,rgba(255,215,83,1) 58%,rgba(255,202,89,1) 59%,rgba(255,202,87,1) 100%); 
+background: -ms-linear-gradient(top,  rgba(255,224,123,1) 0%,rgba(255,215,83,1) 58%,rgba(255,215,83,1) 58%,rgba(255,202,89,1) 59%,rgba(255,202,87,1) 100%); 
+background: linear-gradient(to bottom,  rgba(255,224,123,1) 0%,rgba(255,215,83,1) 58%,rgba(255,215,83,1) 58%,rgba(255,202,89,1) 59%,rgba(255,202,87,1) 100%); 
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe07b', endColorstr='#ffca57',GradientType=0 );
+}

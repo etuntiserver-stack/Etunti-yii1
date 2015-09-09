@@ -33,6 +33,7 @@
     {
 	t();
 	set();
+ 	checkviesti($("#domain").val());
 
     } else {
 	$("#domainBlokki").show();
@@ -288,7 +289,6 @@ function row(tilanne,st){
 // Checker
     if(domain != ''){
        	set();
- 	checkviesti(domain);
     } else {
    	$("#result").append("Domaini puutuu \n");
     }
@@ -430,17 +430,17 @@ function checkviesti(domain){
 	   type:'POST',
  	   data: { check : "checkviesti", imei : imei, my_location : my_location },
            success: function(data){
-        	console.log(data);
+        	//console.log(data);
+		//$("#result2").html(data).show();
 		if(parseInt(data) > 0)
 		{
-		  setInterval(blink, 1000);
 		  $("#viestintaURL").addClass("text-danger");
 		} else {
 		  $("#viestintaURL").removeClass("text-danger");
 		}
     	},
     		error:function (xhr, ajaxOptions, thrownError){
-        	console.log(xhr.responseText);
+        	//console.log(xhr.responseText);
 		//$("#result2").html(xhr.responseText).show();
     	}
         });
@@ -448,9 +448,7 @@ function checkviesti(domain){
 }
 
 
-  var blink = function(){
-        $('#viestintaURL').toggle();
-  };
+
 
 
 
