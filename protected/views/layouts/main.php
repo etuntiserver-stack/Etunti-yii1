@@ -23,30 +23,6 @@ Yii::app()->clientScript->registerPackage('bootstrapCSS');
 ?>
 
 
-<script type="text/javascript">
-$(document).ready(function(){
-
-  $(".sw").bootstrapSwitch({
-	size: "large",
-	onColor: "warning",
-	offColor: "success",
-	onText: "Kaikki",
-	offText: "Aktiiviset"
-  });
-
-
-  $('input[name="aktiiviset"]').on('switchChange.bootstrapSwitch', function(event, state) {
-  	console.log(state); 
-	  if(state == true)
-	  {
-	
-	  } else {
-	
-	  }
-  });
-
-});
-</script>
 
 	<title><?php echo CHtml::encode($this->pageTitle); ?></title>
 </head>
@@ -188,6 +164,7 @@ $(document).ready(function(){
 	<div id="mainmenu" class="row">
 		<?php  $this->widget('zii.widgets.CMenu',array(
 			'items'=>array(
+
 				array('label'=>Yii::t('main', 'Etusivu'), 'url'=>array('/site/index')),
 				array('label'=>Yii::t('main', 'Luetut'), 'url'=>array('/sivexkuitti/index'), 'visible'=>isset(Yii::app()->user->adminID)),
 				//array('label'=>Yii::t('main', 'About'), 'url'=>array('/site/page', 'view'=>'about')),
