@@ -90,8 +90,7 @@ echo	'<input type=hidden id=number value='.cal_days_in_month(CAL_GREGORIAN, $mon
      $date = $i.'.'.$month;
 
 
-	(int)$tot =	$this->renderPartial('totpvmtid',array('pvm'=>$thisDate,'tid'=>$v->id,'from'=>'kk'),true);
-
+	$tot = $this->renderPartial('totpvmtid',array('pvm'=>$thisDate,'tid'=>$v->id,'from'=>'kk'),true);
 	echo '<TD class="text-warning">'.sprint($tot).'</TD>';
 
    }
