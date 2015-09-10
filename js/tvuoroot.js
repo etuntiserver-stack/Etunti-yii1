@@ -1,6 +1,18 @@
 $(document).ready(function(){
 
 
+$("#autoInsert").click(function(){
+
+        $.ajax({
+           url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/autoinsert',
+           //type: "POST",
+           //data: { "pvm" : pvm, "tid" : tid },
+           success: function(html){
+		$('#showres').modal().html(html);
+           }
+        });
+
+});
 
 $(".tv_edit").click(function(){
 

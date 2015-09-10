@@ -28,11 +28,11 @@ class TyovuorootController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','updatetime','showohje','did','muisti','operatio','viikko','fromto'),
+				'actions'=>array('admin','delete','create','update','index','view','updatetime','showohje','did','muisti','operatio','viikko','fromto','autoinsert'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','updatetime','showohje','did','muisti','operatio','viikko','fromto'),
+				'actions'=>array('admin','delete','create','update','index','view','updatetime','showohje','did','muisti','operatio','viikko','fromto','autoinsert'),
                 		'message'=>Yii::t('main', 'Tämä TASO ei kuuluu teille'),
 			),
 			array('deny',  // deny all users
@@ -105,6 +105,11 @@ class TyovuorootController extends Controller
 	}
 
 
+
+	public function actionAutoinsert()
+	{
+		$this->renderPartial('autoinsert');
+	}
 
 	public function actionShowohje($id)
 	{
