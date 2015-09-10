@@ -14,6 +14,20 @@ $("#autoInsert").click(function(){
 
 });
 
+$("#autoRemove").click(function(){
+
+        $.ajax({
+           url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/autoremove',
+           //type: "POST",
+           //data: { "pvm" : pvm, "tid" : tid },
+           success: function(html){
+		$('#showres').modal().html(html);
+           }
+        });
+
+});
+
+
 $(".tv_edit").click(function(){
 
 	var thisVal = $(this).attr("id").split("_");

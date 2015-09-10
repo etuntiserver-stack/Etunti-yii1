@@ -95,10 +95,11 @@ td .tp{
 
 
    <input type="hidden" id="totalForCut">
-   <div class="pull-right">
+   <div class="row pull-right">
 	<i id="trash"></i> 
 	<i id="clear"></i> 
 	<i class="glyphicon glyphicon-download-alt btn btn-success btn-group" id="autoInsert"></i>
+	<i class="glyphicon glyphicon-new-window btn btn-danger btn-group" id="autoRemove"></i>
    </div>
 
 <div class="row">

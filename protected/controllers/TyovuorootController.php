@@ -28,11 +28,11 @@ class TyovuorootController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','updatetime','showohje','did','muisti','operatio','viikko','fromto','autoinsert'),
+				'actions'=>array('admin','delete','create','update','index','view','updatetime','showohje','did','muisti','operatio','viikko','fromto','autoinsert','autoremove'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','updatetime','showohje','did','muisti','operatio','viikko','fromto','autoinsert'),
+				'actions'=>array('admin','delete','create','update','index','view','updatetime','showohje','did','muisti','operatio','viikko','fromto','autoinsert','autoremove'),
                 		'message'=>Yii::t('main', 'Tämä TASO ei kuuluu teille'),
 			),
 			array('deny',  // deny all users
@@ -108,8 +108,140 @@ class TyovuorootController extends Controller
 
 	public function actionAutoinsert()
 	{
+	//print_r($_POST);
+	  if(isset($_POST['checktietoja']))
+	  {
+		$k = Kohteet::model()->findbypk($_POST['kohdeVal']);
+		if(isset($k->toimenpiteet))
+		echo $k->toimenpiteet;
+		exit;
+	  }
+
+	  if(isset($_POST['asenna']))
+	  {
+
+		$fi = array(
+		    1=>'Maanantai',
+		    2=>'Tiistai',
+		    3=>'Keskkiviikko',
+		    4=>'Torstai',
+		    5=>'Perjantai',
+		    6=>'Lauantai',
+		    0=>'Sunnuntai',
+		);
+
+		$startdate 	= strtotime($_POST['pfrom']);
+		$enddate	= strtotime($_POST['pto']);
+		$w		= $_POST['P'];
+		$viikkoja 	= $_POST['viikkoja'];
+
+		  $i=0; 
+		  while($startdate<$enddate) 
+		   {  
+		      if(in_array(date('w',$startdate),$w))
+		      {
+		    	$pvm = date('d.m.Y',$startdate);
+		    	echo $pvm.' '.$fi[date('w',$startdate)]."\n";
+
+			if($_POST['valmis'] == "true")
+			{
+
+				$t = new Tyovuoroot;
+				$t->tid = $_POST['tekija'];
+				$t->kohde = $_POST['kohde'];
+				$t->pvm = $pvm;
+				$t->alku = $_POST['tfrom'];
+				$t->loppu = $_POST['tto'];
+				$t->tyoajanlaatu = "(N) Normaali/blue";
+				$t->tyoajanmerkinta = "Normaali/";
+				$t->tietoja = $_POST['tietoja'];
+				$t->save();
+		
+			}
+		      }
+
+		      $i++; 
+		      if($viikkoja == 1)
+	     	    	$startdate+=86400; 
+
+		      if($viikkoja == 2)
+	     	    	$startdate+=86400*2; 
+
+		      if($viikkoja == 3)
+	     	    	$startdate+=86400*3; 
+
+		      if($viikkoja == 4)
+	     	    	$startdate+=86400*4; 
+
+		   }	
+	
+		exit;
+	  }
+	
 		$this->renderPartial('autoinsert');
 	}
+
+
+	public function actionAutoremove()
+	{
+	//print_r($_POST);
+
+	  if(isset($_POST['asenna']))
+	  {
+
+		$fi = array(
+		    1=>'Maanantai',
+		    2=>'Tiistai',
+		    3=>'Keskkiviikko',
+		    4=>'Torstai',
+		    5=>'Perjantai',
+		    6=>'Lauantai',
+		    0=>'Sunnuntai',
+		);
+
+		$startdate 	= strtotime($_POST['pfrom']);
+		$enddate	= strtotime($_POST['pto']);
+		$w		= $_POST['P'];
+		$viikkoja 	= $_POST['viikkoja'];
+
+		  $i=0; 
+		  while($startdate<$enddate) 
+		   {  
+		      if(in_array(date('w',$startdate),$w))
+		      {
+		    	$pvm = date('d.m.Y',$startdate);
+		    	echo $pvm.' '.$fi[date('w',$startdate)]."\n";
+
+			if($_POST['valmis'] == "true")
+			{
+
+			  Tyovuoroot::model()->deleteAll(" tid='".$_POST['tekija']."' and pvm='".$pvm."' and kohde='".$_POST['kohde']."' ");
+
+			}
+		      }
+
+		      $i++; 
+		      if($viikkoja == 1)
+	     	    	$startdate+=86400; 
+
+		      if($viikkoja == 2)
+	     	    	$startdate+=86400*2; 
+
+		      if($viikkoja == 3)
+	     	    	$startdate+=86400*3; 
+
+		      if($viikkoja == 4)
+	     	    	$startdate+=86400*4; 
+
+		   }	
+	
+		exit;
+	  }
+	
+		$this->renderPartial('autoremove');
+	}
+
+
 
 	public function actionShowohje($id)
 	{

@@ -31,7 +31,7 @@
 		<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 			<span aria-hidden="true">&times;</span>
 		</button>
-	<h2 class="modal-title text-success"><?php echo Yii::t('main', 'Työvuorojen toistuvuus'); ?></h2>
+	<h2 class="modal-title text-danger"><?php echo Yii::t('main', 'Työvuorojen poistaminen'); ?></h2>
 	</div>
 
 <div class="modal-body">
@@ -53,26 +53,13 @@
   </div>
 </div>
 
-<div class="row">
-  <div class="col-sm-6">
-	<label><?php echo Yii::t('main', 'Klo. aloitus'); ?></label>
-	<input type="time" class="form-control" name="tfrom" id="tfrom">
-  </div>
-  <div class="col-sm-6">
-	<label><?php echo Yii::t('main', 'Klo. lopetus'); ?></label>
-	<input type="time" class="form-control" name="tto" id="tto">
-  </div>
-</div>
 <br>
 <div class="row">
   <div class="col-sm-6"><?php echo $tt; ?></div>
   <div class="col-sm-6"><?php echo $k; ?></div>
 </div>
 <br>
-  <label><?php echo Yii::t('main', 'Toimenpiteet'); ?></label>
-  <textarea class="form-control tietoja" rows="3" name="tietoja" id="tietoja"></textarea>
 
-<br>
 <div class="row">
   <div class="col-sm-6">
 <div class="row">
@@ -111,7 +98,7 @@
 
 <div id="row">
     <div class="pull-right" id="supersubmit"></div>
-    <div  class="pull-right" id="oldBut"><button class="btn btn-success doit"><?php echo Yii::t('main', 'Tarkista tekemäsi työvuoroot'); ?></button></div> 
+    <div id="oldBut"><button class="btn btn-danger doit"><?php echo Yii::t('main', 'Tarkista valitsemäsi päiviä'); ?></button></div> 
     <div id="newBut"></div>
 </div>
 
@@ -133,20 +120,6 @@ $("#tekija").change(function(){
   var kohdeVal = '';
 $("#kohde").change(function(){
   kohdeVal = $( "#kohde option:selected" ).val();
-
-  $.ajax({
-  url:'autoinsert',
-  data:{"checktietoja": true, kohdeVal : kohdeVal},
-  type:'POST',
-  success:function(data){
-  	console.log(data);
-	$("#tietoja").val(data);
-  },
-  error:function (xhr, ajaxOptions, thrownError){
-        //console.log(xhr.responseText);
-  }
-  });
-
 });
 
 
@@ -160,8 +133,6 @@ $('#autoinsForm').on('submit',function(e) {
 
   var pfrom = $("#pfrom").val();
   var pto = $("#pto").val();
-  var tfrom = $("#tfrom").val();
-  var tto = $("#tto").val();
   var tekija = $("#tekija").find('selected').val();
   var kohde = $("#kohde").find('selected').val();
 
@@ -172,14 +143,6 @@ $('#autoinsForm').on('submit',function(e) {
     }
     if (pto  === '') {
         $('#pto').css({"border" : "2px #f14010 solid"}).focus();
-        return false;
-    }
-    if (tfrom  === '') {
-        $('#tfrom').css({"border" : "2px #f14010 solid"}).focus();
-        return false;
-    }
-    if (tto  === '') {
-        $('#tto').css({"border" : "2px #f14010 solid"}).focus();
         return false;
     }
     if (!tekijaVal) {
@@ -194,7 +157,7 @@ $('#autoinsForm').on('submit',function(e) {
 
 
   $.ajax({
-  url:'autoinsert',
+  url:'autoremove',
   data:$(this).serialize(),
   type:'POST',
   success:function(data){
@@ -206,7 +169,7 @@ function palaTakais(){
 
 	   $('#oldBut').html('');
 	   $('#newBut').html("<button class='btn btn-warning takaisin'><?php echo Yii::t('main', 'Palaa takaisin'); ?></button>");
-	   $('#supersubmit').html("<button class='btn btn-primary submit'><?php echo Yii::t('main', 'LÄHETÄ TYÖVUOROON'); ?></button>");
+	   $('#supersubmit').html("<button class='btn btn-danger submit'><?php echo Yii::t('main', 'POISTA TYÖVUOROSTA'); ?></button>");
 	   $('#tarkistaLista').html("<textarea class='form-control' rows='14'>"+data+"</textarea>").show('hide');
 	   $('#lomake').hide('slow');
 	   $('#valmis').val("true");
@@ -218,7 +181,7 @@ function palaTakais(){
 
 	$('#newBut').click(function(){
 	   $(this).html('');
-	   $('#oldBut').html("<button class='btn btn-success doit'><?php echo Yii::t('main', 'Tarkista tekemäsi työvuoroot'); ?></button>");
+	   $('#oldBut').html("<button class='btn btn-danger doit'><?php echo Yii::t('main', 'Tarkista valitsemäsi päiviä'); ?></button>");
 	   $('#supersubmit').html("");
 	   $('#tarkistaLista').hide('slow');
 	   $('#lomake').show('slow');
