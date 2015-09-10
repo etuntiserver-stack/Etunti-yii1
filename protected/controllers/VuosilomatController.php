@@ -43,21 +43,22 @@ class VuosilomatController extends Controller
 
 	public function isEtuntiAdmin() {
 
-	 $tas = explode(",",Yii::app()->user->adminPaketti);
+	$tas = '';
+	if(isset(Yii::app()->user->adminPaketti))
+	$tas = explode(",",Yii::app()->user->adminPaketti);
 
 		if(isset(Yii::app()->user->adminID) and in_array('2',$tas))
 		{
 		$m = Administrators::model()->findbypk(Yii::app()->user->adminID);
-	        if($m->id == Yii::app()->user->adminID)
-	            return true;
+	       	if($m->id == Yii::app()->user->adminID)
+	       	  return true;
 		else
-	            return false;
+	       	   return false;		
+
 		} else {
 	            return false;
 		}
 	}
-
-
 
 
 	public function actionVlupdater($id,$txt,$lat)
