@@ -74,7 +74,9 @@ return array(
 	// preloading 'log' component
 	'preload'=>array('chartjs'), //'log'
 	'language' => 'en',
-	// autoloading model and component classes
+
+  	'theme' => 'admin',
+
 	'import'=>array(
         'application.models.*',
         'application.components.*',
@@ -82,7 +84,6 @@ return array(
         'application.modules.user.components.*',
 	'application.extensions.carouFredSel.*',
 	//'application.extensions.EasySlider.*',
-
 	),
 
     'modules'=>array(
