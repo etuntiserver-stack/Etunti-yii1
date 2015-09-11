@@ -178,11 +178,14 @@ return array(
                 'js'=>array(
 		    'jquery-1.11.2.min.js',
 		    'jquery-ui.min.js',
+		    'bootstrap-select.js',
+		    'bootstrap-switch.js',
 		),
             ),
             'bootstrapJS'=>array(                       //set others js libraries
                 'baseUrl'=>'js/',
                 'js'=>array(
+		    'jquery-ui.min.js',
 		    'bootstrap355.min.js',
 		    'bootstrap-slider.js',
 		    'bootstrap-filestyle.min.js',
