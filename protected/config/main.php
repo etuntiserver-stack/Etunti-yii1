@@ -72,7 +72,7 @@ return array(
 	'name'=>'Etunti',
 	//'defaultController'=>'sivexkuitti/index',
 	// preloading 'log' component
-	'preload'=>array('log','chartjs'),
+	//'preload'=>array('log','chartjs'),
 	'language' => 'en',
 	// autoloading model and component classes
 	'import'=>array(
