@@ -69,6 +69,39 @@
   <div class="col-sm-6"><?php echo $k; ?></div>
 </div>
 <br>
+<div class="row">
+  <div class="col-sm-6">
+		<?php
+        	$tal = Valikkoot::model()->findAll(" select_type='tyoajanlaatu' ", array('order' => 'select_type'));
+		echo '<select name="tyoajanlaatu" class="form-control">';
+
+		 foreach($tal as $v)
+		 {
+		   $expl1 = explode("/",$v->value);
+		   $color = (isset($expl1[1])) ? $expl1[1] : '';
+		   $value1 = (isset($expl1[0])) ? $expl1[0] : '';
+		   echo '<option style="color:'.$color.'" value="'.$v->value.'">'.$value1.'</option>';
+		 }
+		echo '</select>';
+        	?>
+  </div>
+  <div class="col-sm-6">
+		<?php
+        	$tal = Valikkoot::model()->findAll(" select_type='tyoajanmerkinta' ", array('order' => 'select_type'));
+		echo '<select name="tyoajanmerkinta" class="form-control">';
+
+		 foreach($tal as $v)
+		 {
+		   $expl = explode("/",$v->value);
+		   $color = (isset($expl[1])) ? $expl[1] : '';
+		   $value = (isset($expl[0])) ? $expl[0] : '';
+		   echo '<option style="color:'.$color.'" value="'.$v->value.'">'.$value.'</option>';
+		 }
+		echo '</select>';
+        	?>
+  </div>
+</div>
+
   <label><?php echo Yii::t('main', 'Toimenpiteet'); ?></label>
   <textarea class="form-control tietoja" rows="3" name="tietoja" id="tietoja"></textarea>
 
@@ -100,6 +133,8 @@
 	<select class="form-control" name="viikkoja">
 	<option value="1">1</option>
 	<option value="2">2</option>
+	<option value="3">3</option>
+	<option value="4">4</option>
 	</select>
   </div>
 </div>

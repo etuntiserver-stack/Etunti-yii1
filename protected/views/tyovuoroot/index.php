@@ -108,7 +108,9 @@ td .tp{
    <?php
     $model=new Tyontekijat;
     $list = CHtml::listData(Tyontekijat::model()->findAll("aktiivinen = '1'",array('order' => 'tekijan_nimi')), 'id', 'tekijan_nimi');
-    echo '<a href="#" id="selAll" class="btn btn-default glyphicon glyphicon-check"></a> ';
+
+    echo '<a href="#" id="deselAll" class="btn btn-default glyphicon glyphicon-remove-circle"></a> ';
+    echo '<a href="#" id="selAll" class="btn btn-default glyphicon glyphicon-ok-circle"></a> ';
     echo '<select name="Tekija[]" id="tyontekijat" class="selectpicker" multiple class="btn btn-default" title="Työntekijät">';
     foreach($list as $key=>$val){
        if(isset(Yii::app()->session['Tekija']) and in_array($key,Yii::app()->session['Tekija']))
@@ -218,6 +220,11 @@ $('.selectpicker').selectpicker({
       style: 'btn-default',
       //size: 4
 });
+
+$('#deselAll').click(function(){
+   $('#tyontekijat').selectpicker('deselectAll');
+});
+
 
 $('#selAll').click(function(){
    $('#tyontekijat').selectpicker('selectAll');
