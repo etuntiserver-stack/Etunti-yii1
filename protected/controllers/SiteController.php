@@ -46,9 +46,10 @@ class SiteController extends Controller
 
 	public function actionIndex()
 	{
-		// renders the view file 'protected/views/site/index.php'
-		// using the default layout 'protected/views/layouts/main.php'
-		$this->render('index');
+		if(isset(Yii::app()->user->adminID))
+			$this->render('index');
+		else
+			$this->render('start');
 
 	}
 
