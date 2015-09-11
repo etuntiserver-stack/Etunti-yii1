@@ -156,8 +156,8 @@ class TyovuorootController extends Controller
 				$t->pvm = $pvm;
 				$t->alku = $_POST['tfrom'];
 				$t->loppu = $_POST['tto'];
-				$t->tyoajanlaatu = "(N) Normaali/blue";
-				$t->tyoajanmerkinta = "Normaali/";
+				$t->tyoajanlaatu = $_POST['tyoajanlaatu'];
+				$t->tyoajanmerkinta = $_POST['tyoajanmerkinta'];
 				$t->tietoja = $_POST['tietoja'];
 				$t->save();
 		
