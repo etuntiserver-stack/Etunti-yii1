@@ -4,7 +4,7 @@
   var my_location = '';
   var tag = 'notag';
 
-  var server = "http://new.etunti.fi";
+  var server = "http://staging.etunti.fi";
   var url = server+"/index.php/api/mob";
   var puh_nro = "0449304851";
   var versio = "0.50";
