@@ -33,7 +33,7 @@ for ($i = 1; $i <= 12; $i++) {
 	$criteria = new CDbCriteria;
 	$criteria->addCondition('YEAR(time) = '.date("Y"));
 	$criteria->addCondition('MONTH(time) = '.$i);
-	$result = Sivexkuitti::model()->findAll($criteria);
+	$result = Mobile::model()->findAll($criteria);
   
 
     $res = $result;

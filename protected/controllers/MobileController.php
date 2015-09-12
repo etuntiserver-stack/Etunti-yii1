@@ -1,7 +1,7 @@
 <?php
 
 
-class SivexkuittiController extends Controller
+class MobileController extends Controller
 {
 
 
@@ -100,7 +100,7 @@ class SivexkuittiController extends Controller
 		if($model->save()){
 
 			// <-- Kirjoitetaan historia luettut tietokantaan
-			$this->renderPartial('//sivexkuitti/historia',array(
+			$this->renderPartial('//mobile/historia',array(
 			'id'=>$model->id,
 			'tilanne'=>"Luetut ".$_POST['request'],
 			'uusikohde'=>$model->kohde_kannasta,
@@ -131,8 +131,8 @@ class SivexkuittiController extends Controller
 			var thisVal = $(this).val();
 		
 
-   		var Sivexkuitti = {kohdenID: thisVal,kohde_kannasta: thisText};
-   		var svk = {Sivexkuitti};
+   		var Mobile = {kohdenID: thisVal,kohde_kannasta: thisText};
+   		var svk = {Mobile};
 
 		        $.ajax({
 		           url: "update?id=<?php echo $_POST['id']; ?>",
@@ -165,14 +165,14 @@ class SivexkuittiController extends Controller
 	 */
 	public function actionCreate()
 	{
-		$model=new Sivexkuitti;
+		$model=new Mobile;
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['Sivexkuitti']))
+		if(isset($_POST['Mobile']))
 		{
-			$model->attributes=$_POST['Sivexkuitti'];
+			$model->attributes=$_POST['Mobile'];
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
 		}
@@ -198,17 +198,17 @@ class SivexkuittiController extends Controller
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['Sivexkuitti']))
+		if(isset($_POST['Mobile']))
 		{
-			$model->attributes=$_POST['Sivexkuitti'];
+			$model->attributes=$_POST['Mobile'];
 
 			if(!empty($model->tietoja)) 
 			  $tietoja = $model->tietoja."\n"; 
 			else 
 			  $tietoja = "<perus>".$vanha_kohde_kannasta."//".$model->aloitan."//".$model->loppui."</perus>";
 
-			if(isset($_POST['Sivexkuitti']['kohde_kannasta']))
-			$model->tietoja=$tietoja.Yii::app()->user->nimi." (".date("d.m.Y H:i")."):\nTilanne-Kohteen muutos, vanha-".$vanha_kohde_kannasta.", uusi-".$_POST['Sivexkuitti']['kohde_kannasta'];
+			if(isset($_POST['Mobile']['kohde_kannasta']))
+			$model->tietoja=$tietoja.Yii::app()->user->nimi." (".date("d.m.Y H:i")."):\nTilanne-Kohteen muutos, vanha-".$vanha_kohde_kannasta.", uusi-".$_POST['Mobile']['kohde_kannasta'];
 
 			$model->save();
 		}
@@ -271,7 +271,7 @@ class SivexkuittiController extends Controller
 		if(Yii::app()->session['etsi_pvm'])
 	        $criteria->addCondition ("DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = '".Yii::app()->session['etsi_pvm']."' ");
 
-		$dataProvider=new CActiveDataProvider('Sivexkuitti', array(
+		$dataProvider=new CActiveDataProvider('Mobile', array(
 			'criteria'=>$criteria,
 			//'pagination'=>false
 		));
@@ -285,10 +285,10 @@ class SivexkuittiController extends Controller
 	 */
 	public function actionAdmin()
 	{
-		$model=new Sivexkuitti('search');
+		$model=new Mobile('search');
 		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['Sivexkuitti']))
-			$model->attributes=$_GET['Sivexkuitti'];
+		if(isset($_GET['Mobile']))
+			$model->attributes=$_GET['Mobile'];
 
 		$this->render('admin',array(
 			'model'=>$model,
@@ -299,12 +299,12 @@ class SivexkuittiController extends Controller
 	 * Returns the data model based on the primary key given in the GET variable.
 	 * If the data model is not found, an HTTP exception will be raised.
 	 * @param integer $id the ID of the model to be loaded
-	 * @return Sivexkuitti the loaded model
+	 * @return Mobile the loaded model
 	 * @throws CHttpException
 	 */
 	public function loadModel($id)
 	{
-		$model=Sivexkuitti::model()->findByPk($id);
+		$model=Mobile::model()->findByPk($id);
 		if($model===null)
 			throw new CHttpException(404,'The requested page does not exist.');
 		return $model;
@@ -312,11 +312,11 @@ class SivexkuittiController extends Controller
 
 	/**
 	 * Performs the AJAX validation.
-	 * @param Sivexkuitti $model the model to be validated
+	 * @param Mobile $model the model to be validated
 	 */
 	protected function performAjaxValidation($model)
 	{
-		if(isset($_POST['ajax']) && $_POST['ajax']==='sivexkuitti-form')
+		if(isset($_POST['ajax']) && $_POST['ajax']==='mobile-form')
 		{
 			echo CActiveForm::validate($model);
 			Yii::app()->end();
@@ -505,7 +505,7 @@ class SivexkuittiController extends Controller
 		if(Yii::app()->session['from'] and Yii::app()->session['to'])
 	        $criteria->addCondition ("DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."' ");
 
-		$dataProvider=new CActiveDataProvider('Sivexkuitti', array(
+		$dataProvider=new CActiveDataProvider('Mobile', array(
 			'criteria'=>$criteria,
 			'pagination'=>false
 		));
@@ -559,7 +559,7 @@ class SivexkuittiController extends Controller
 		if(Yii::app()->session['from'] and Yii::app()->session['to'])
 	        $criteria->addCondition ("DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."' ");
 
-		$dataProvider=new CActiveDataProvider('Sivexkuitti', array(
+		$dataProvider=new CActiveDataProvider('Mobile', array(
 			'criteria'=>$criteria,
 			'pagination'=>false
 		));

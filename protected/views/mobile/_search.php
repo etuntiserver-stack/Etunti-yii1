@@ -1,6 +1,6 @@
 <?php
-/* @var $this SivexkuittiController */
-/* @var $model Sivexkuitti */
+/* @var $this MobileController */
+/* @var $model Mobile */
 /* @var $form CActiveForm */
 ?>
 

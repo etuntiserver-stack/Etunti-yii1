@@ -1,9 +1,9 @@
 <?php
 
 /**
- * This is the model class for table "sivexkuitti".
+ * This is the model class for table "mobile".
  *
- * The followings are the available columns in table 'sivexkuitti':
+ * The followings are the available columns in table 'mobile':
  * @property integer $id
  * @property string $asiakas_num
  * @property string $time
@@ -28,7 +28,7 @@
  * @property integer $admin
  * @property string $hyvaksytty
  */
-class Sivexkuitti extends DB2ActiveRecord
+class Mobile extends DB2ActiveRecord
 {
 
 public $domain;
@@ -39,7 +39,7 @@ public $t_tunnit;
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
-	 * @return Sivexkuitti the static model class
+	 * @return Mobile the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{

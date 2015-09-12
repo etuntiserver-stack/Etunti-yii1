@@ -178,7 +178,7 @@ class ToteutuneetController extends Controller
 
 
 			// <-- Kirjoitetaan historia luettut tietokantaan
-			$this->renderPartial('//sivexkuitti/historia',array(
+			$this->renderPartial('//mobile/historia',array(
 			'id'=>$model->kid,
 			'tilanne'=>"Toteuma",
 			'uusikohde'=>$model->kohde_kannasta,
@@ -224,7 +224,7 @@ class ToteutuneetController extends Controller
 			   echo $did."_".$model->tid;
 
 			// <-- Kirjoitetaan historia luettut tietokantaan
-			$this->renderPartial('//sivexkuitti/historia',array(
+			$this->renderPartial('//mobile/historia',array(
 			'id'=>$model->kid,
 			'tilanne'=>"Toteuma",
 			'uusikohde'=>$model->kohde_kannasta,
@@ -309,7 +309,7 @@ class ToteutuneetController extends Controller
 	        $criteria->addCondition ("DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."' ");
 
 
-		$dataProvider=new CActiveDataProvider('Sivexkuitti', array(
+		$dataProvider=new CActiveDataProvider('Mobile', array(
 			'criteria'=>$criteria,
 			'pagination'=>false
 		));

@@ -16,7 +16,7 @@
 	<br><br>
 
    <?php
-    $model=new Sivexkuitti;
+    $model=new Mobile;
     $list = CHtml::listData(Tyontekijat::model()->findAll(array('order' => 'tekijan_nimi')), 'imei', 'tekijan_nimi');
 
     echo '<select id="tekija" class="btn btn-default form-control">';

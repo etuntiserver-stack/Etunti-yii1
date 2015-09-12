@@ -44,7 +44,7 @@ $did = date("Ymd",strtotime($pvm));
 	if(Yii::app()->session['MATKA'])
 	$criteria->addCondition (" status != '2' ");
 
-	$tv = Sivexkuitti::model()->findAll($criteria); 
+	$tv = Mobile::model()->findAll($criteria); 
 
 	foreach($tv as $tvVal){
 	   if($tvVal->id){

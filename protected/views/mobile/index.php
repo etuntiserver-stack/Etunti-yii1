@@ -1,6 +1,6 @@
 <div class="row">
 <?php
-/* @var $this SivexkuittiController */
+/* @var $this MobileController */
 /* @var $dataProvider CActiveDataProvider */
 
 $this->breadcrumbs=array(
@@ -8,7 +8,7 @@ $this->breadcrumbs=array(
 );
 /*
 $this->menu=array(
-	//array('label'=>'Create Sivexkuitti', 'url'=>array('create')),
+	//array('label'=>'Create Mobile', 'url'=>array('create')),
 	array('label'=>'Luetut Hallinta', 'url'=>array('admin')),
 );
 */
@@ -20,8 +20,8 @@ $this->menu=array(
 <div class="row">
   <div class="col-md-2">
    <?php
-    $model=new Sivexkuitti;
-    $list = CHtml::listData(Sivexkuitti::model()->findAll(array('group' => 'tid','order' => 'tekijan_nimi')), 'tekijan_nimi', 'tekijan_nimi');
+    $model=new Mobile;
+    $list = CHtml::listData(Mobile::model()->findAll(array('group' => 'tid','order' => 'tekijan_nimi')), 'tekijan_nimi', 'tekijan_nimi');
 
     echo '<select class="btn btn-default etsi_tekijan_nimi form-control">';
     if(Yii::app()->session['etsi_tekijan_nimi'])
@@ -39,8 +39,8 @@ $this->menu=array(
   </div>
   <div class="col-md-2">
    <?php
-    $model=new Sivexkuitti;
-    $list = CHtml::listData(Sivexkuitti::model()->findAll(array('group' => 'kohdenID','order' => 'kohde_kannasta')), 'kohde_kannasta', 'kohde_kannasta');
+    $model=new Mobile;
+    $list = CHtml::listData(Mobile::model()->findAll(array('group' => 'kohdenID','order' => 'kohde_kannasta')), 'kohde_kannasta', 'kohde_kannasta');
 
     echo '<select class="btn btn-default etsi_kohteet form-control">';
     if(Yii::app()->session['etsi_kohteet'])

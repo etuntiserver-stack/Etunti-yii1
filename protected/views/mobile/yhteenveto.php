@@ -1,6 +1,6 @@
 <div class="row">
 <?php
-/* @var $this SivexkuittiController */
+/* @var $this MobileController */
 /* @var $dataProvider CActiveDataProvider */
 
 $this->breadcrumbs=array(
@@ -17,8 +17,8 @@ $this->breadcrumbs=array(
   <div class="col-md-12">
    <a href="#" id="selAll" class="btn btn-default glyphicon glyphicon-check"></a>
    <?php
-    $model=new Sivexkuitti;
-    $list = CHtml::listData(Sivexkuitti::model()->findAll(array('group' => 'tid','order' => 'tekijan_nimi')), 'tid', 'tekijan_nimi');
+    $model=new Mobile;
+    $list = CHtml::listData(Mobile::model()->findAll(array('group' => 'tid','order' => 'tekijan_nimi')), 'tid', 'tekijan_nimi');
 
     echo '<select name="Tekija[]" class="selectpicker" id="tyontekijat" multiple class="btn btn-default" title="Työntekijät">';
     foreach($list as $key=>$val){
