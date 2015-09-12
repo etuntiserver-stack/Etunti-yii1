@@ -75,7 +75,7 @@ $this->menu=array(
   $tas = explode(",",Yii::app()->user->adminPaketti);
   if(in_array('2',$tas)) : 
   ?>
-  <th><?php echo Yii::t('main', 'Työvuoroot'); ?></th>
+  <th width=50><b class="glyphicon glyphicon-time"></b></th>
   <?php endif; ?>
 
   <th class="col-sm-3"><?php echo Yii::t('main', 'Osoite/Matka'); ?></th>
