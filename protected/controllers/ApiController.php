@@ -67,7 +67,7 @@ public function actionImei($dom)
 		      $this->_sendResponse(200, "Tuntematon TAG//".$_POST['tag']."//error");
 		    }
 		  } 
-		    $this->_sendResponse(200, $get_osoite."//".$kohdenID."//ok");
+		      $this->_sendResponse(200, $get_osoite."//".$kohdenID."//ok");
 		exit;
 	        }
 

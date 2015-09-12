@@ -26,29 +26,33 @@ var app = {
   
  onNfc: function(nfcEvent) {
  var tag = nfcEvent.tag;
- app.nro(nfc.bytesToHexString(tag.id));
- //app.nro(tag.id);
+ //app.nro(nfc.bytesToHexString(tag.id));
+ app.nro(tag.id);
  },
   
  
  nro: function(ms) {
- /*
+
+
    function toDec( x ){
       var val = 0;
       var res = 0;
+      var go = 0;
       var fa = 1;
        // reverse var i = x.length - 1; i >= 0; i--
        for (var i = 0; i < x.length; i++) {  
           res = x[i] & 0xff;
-          val += res * fa;
+	  go = bigInt(res).times(fa).plus(val);
+          val += bigInt(res).times(fa);
           fa *= 256;
 
+	  //console.log(go);
        }
-	var par = val;
-        return par;
+
+        return go;
    }
- */
-   	document.getElementById('tagginro').value = parseInt(ms,16);
+
+   	document.getElementById('tagginro').value = toDec(ms);
 
 
 $(document).ready(function(){
@@ -59,7 +63,7 @@ $(document).ready(function(){
         $.ajax({
            url: url+'/imei?dom='+domain,
 	   type:'POST',
- 	   data: { check : "getObjbyTag", imei : imei, tag : toDec(ms) },
+ 	   data: { check : "getObjbyTag", imei : imei, tag : $('#tagginro').val() },
            success: function(data){
         	console.log(data);
 		//$("#result2").html(data).show();
@@ -78,7 +82,7 @@ $(document).ready(function(){
     	},
     		error:function (xhr, ajaxOptions, thrownError){
         	console.log(xhr.responseText);
-		//alert('error');
+		//$("#result2").html(xhr.responseText).show();
     	}
         });
 });
