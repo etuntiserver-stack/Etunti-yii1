@@ -1,6 +1,6 @@
 <div class="row">
 <?php
-/* @var $this SivexkuittiController */
+/* @var $this MobileController */
 /* @var $dataProvider CActiveDataProvider */
 
 $this->breadcrumbs=array(
@@ -16,8 +16,8 @@ $this->breadcrumbs=array(
   <form action="#" id="yhtveto" method="POST">
   <div class="col-md-12">
    <?php
-    $model=new Sivexkuitti;
-    $list = CHtml::listData(Sivexkuitti::model()->findAll(array('group' => 'tid','order' => 'tekijan_nimi')), 'tid', 'tekijan_nimi');
+    $model=new Mobile;
+    $list = CHtml::listData(Mobile::model()->findAll(array('group' => 'tid','order' => 'tekijan_nimi')), 'tid', 'tekijan_nimi');
 
     echo '<select name="tekija" id="nimi" class="btn btn-default">';
     if(Yii::app()->session['tekija']){
@@ -91,7 +91,7 @@ $this->breadcrumbs=array(
   <?php
   $tas = explode(",",Yii::app()->user->adminPaketti);
   if(in_array('2',$tas) and isset($explTekija[0])){
-  $total_sunniteltu = $this->renderPartial('//sivexkuitti/suunniteltu',array('id'=>$explTekija[0],'kohde_tid'=>'tid'),true);
+  $total_sunniteltu = $this->renderPartial('//mobile/suunniteltu',array('id'=>$explTekija[0],'kohde_tid'=>'tid'),true);
   echo '<th>'.sprint($total_sunniteltu).'</th>';
   }
   ?>

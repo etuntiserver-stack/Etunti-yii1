@@ -1,6 +1,6 @@
 <?php
-/* @var $this SivexkuittiController */
-/* @var $data Sivexkuitti */
+/* @var $this MobileController */
+/* @var $data Mobile */
 
 		$total_l 	= 0;
 		$total_t 	= 0;
@@ -29,7 +29,7 @@
 		if(Yii::app()->session['from'] and Yii::app()->session['to'])
 	        $criteria->addCondition ("DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."' ");
 
-		$lu = Sivexkuitti::model()->findAll($criteria);
+		$lu = Mobile::model()->findAll($criteria);
 
 		foreach($lu as $val)
 		{
@@ -76,7 +76,7 @@
 	<?php
 	$tas = explode(",",Yii::app()->user->adminPaketti);
 	if(in_array('2',$tas)) {
-	$total_sunniteltu = $this->renderPartial('//sivexkuitti/suunniteltu',array('id'=>$data->tid,'kohde_tid'=>'tid'),true);
+	$total_sunniteltu = $this->renderPartial('//mobile/suunniteltu',array('id'=>$data->tid,'kohde_tid'=>'tid'),true);
 	echo '<td>'.sprint($total_sunniteltu).'</td>';
 	}
 	?>

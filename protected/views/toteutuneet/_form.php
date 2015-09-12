@@ -4,7 +4,7 @@
 /* @var $form CActiveForm */
 
 if(isset($_POST['forid'])){
-  $s= Sivexkuitti::model()->findbypk($_POST['forid']);
+  $s= Mobile::model()->findbypk($_POST['forid']);
 
   $at[$s->id] = date("H:i",strtotime($s->aloitan));
   $apvm[$s->id] = date("Y-m-d",strtotime($s->aloitan));

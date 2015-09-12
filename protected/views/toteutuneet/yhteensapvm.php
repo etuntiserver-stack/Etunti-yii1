@@ -27,7 +27,7 @@
 	   }
 	}
 
-	$tv = Sivexkuitti::model()->findAll("tid = '".$tid."' 
+	$tv = Mobile::model()->findAll("tid = '".$tid."' 
 	and DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = '".date("Y-m-d",strtotime($pvm))."' 
 	AND id NOT IN (SELECT kid FROM sivexkuitti_repaired) "); 
 

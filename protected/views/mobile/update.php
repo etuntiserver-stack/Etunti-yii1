@@ -1,6 +1,6 @@
 <?php
-/* @var $this SivexkuittiController */
-/* @var $model Sivexkuitti */
+/* @var $this MobileController */
+/* @var $model Mobile */
 
 $this->breadcrumbs=array(
 	Yii::t('main', 'Mobiili')=>array('index'),
@@ -10,7 +10,7 @@ $this->breadcrumbs=array(
 
 $this->menu=array(
 	array('label'=>'Lista mobiili', 'url'=>array('index')),
-	//array('label'=>'Create Sivexkuitti', 'url'=>array('create')),
+	//array('label'=>'Create Mobile', 'url'=>array('create')),
 	array('label'=>'Katso mobiili', 'url'=>array('view', 'id'=>$model->id)),
 	array('label'=>'Hallinta mobiili', 'url'=>array('admin')),
 );

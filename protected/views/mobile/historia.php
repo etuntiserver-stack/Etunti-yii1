@@ -1,7 +1,7 @@
 <?php
 
 
-	$sv= Sivexkuitti::model()->findbypk($id);
+	$sv= Mobile::model()->findbypk($id);
 	if(!empty($sv->tietoja)) 
 	  $tietoja = $sv->tietoja."\n"; 
 	else 

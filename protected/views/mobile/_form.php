@@ -1,6 +1,6 @@
 <?php
-/* @var $this SivexkuittiController */
-/* @var $model Sivexkuitti */
+/* @var $this MobileController */
+/* @var $model Mobile */
 /* @var $form CActiveForm */
   $perusTiedot = array('0'=>$model->kohde_kannasta,'1'=>$model->aloitan,'2'=>$model->loppui);
 if(isset($model->tietoja))
@@ -27,7 +27,7 @@ if(isset($model->tietoja))
 <div class="form">
 
 <?php $form=$this->beginWidget('CActiveForm', array(
-	'id'=>'sivexkuitti-form',
+	'id'=>'mobile-form',
 	'enableAjaxValidation'=>false,
 	'clientOptions' => array(
                     'validateOnSubmit' => false,

@@ -70,7 +70,7 @@ Yii::setPathOfAlias('chartjs', dirname(__FILE__).'/../extensions/yii-chartjs');
 return array(
 	'basePath'=>dirname(__FILE__).DIRECTORY_SEPARATOR.'..',
 	'name'=>'Etunti',
-	//'defaultController'=>'sivexkuitti/index',
+	//'defaultController'=>'mobile/index',
 	// preloading 'log' component
 	'preload'=>array('chartjs'), //'log'
 	'language' => 'en',

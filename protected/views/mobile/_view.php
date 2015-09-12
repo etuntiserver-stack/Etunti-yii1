@@ -1,6 +1,6 @@
 <?php
-/* @var $this SivexkuittiController */
-/* @var $data Sivexkuitti */
+/* @var $this MobileController */
+/* @var $data Mobile */
 
 
 // $tag = explode("_",$data->asiakas_num);

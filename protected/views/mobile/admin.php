@@ -1,15 +1,15 @@
 <?php
-/* @var $this SivexkuittiController */
-/* @var $model Sivexkuitti */
+/* @var $this MobileController */
+/* @var $model Mobile */
 
 $this->breadcrumbs=array(
-	'Sivexkuittis'=>array('index'),
+	'Mobiles'=>array('index'),
 	'Manage',
 );
 
 $this->menu=array(
-	array('label'=>'List Sivexkuitti', 'url'=>array('index')),
-	array('label'=>'Create Sivexkuitti', 'url'=>array('create')),
+	array('label'=>'List Mobile', 'url'=>array('index')),
+	array('label'=>'Create Mobile', 'url'=>array('create')),
 );
 
 Yii::app()->clientScript->registerScript('search', "
@@ -18,7 +18,7 @@ $('.search-button').click(function(){
 	return false;
 });
 $('.search-form form').submit(function(){
-	$('#sivexkuitti-grid').yiiGridView('update', {
+	$('#mobile-grid').yiiGridView('update', {
 		data: $(this).serialize()
 	});
 	return false;
@@ -38,7 +38,7 @@ $('.search-form form').submit(function(){
 </div><!-- search-form -->
 
 <?php $this->widget('zii.widgets.grid.CGridView', array(
-	'id'=>'sivexkuitti-grid',
+	'id'=>'mobile-grid',
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,
 	'columns'=>array(

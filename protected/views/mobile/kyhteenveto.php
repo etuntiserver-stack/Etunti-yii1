@@ -1,6 +1,6 @@
 <div class="row">
 <?php
-/* @var $this SivexkuittiController */
+/* @var $this MobileController */
 /* @var $dataProvider CActiveDataProvider */
 
 $this->breadcrumbs=array(
@@ -16,8 +16,8 @@ $this->breadcrumbs=array(
   <form action="#" id="yhtveto" method="POST">
   <div class="col-md-12">
    <?php
-    $model=new Sivexkuitti;
-    $list = CHtml::listData(Sivexkuitti::model()->findAll(array('group' => 'kohde_kannasta','order' => 'kohde_kannasta')), 'kohde_kannasta', 'kohde_kannasta');
+    $model=new Mobile;
+    $list = CHtml::listData(Mobile::model()->findAll(array('group' => 'kohde_kannasta','order' => 'kohde_kannasta')), 'kohde_kannasta', 'kohde_kannasta');
 
     echo '<select name="kohteet" class="selectpicker" id="kohteet" class="btn btn-default" title="Kohteet">';
        	 echo '<option value="kaikki">Kaikki</option>';

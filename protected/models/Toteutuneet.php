@@ -1,9 +1,9 @@
 <?php
 
 /**
- * This is the model class for table "sivexkuitti_repaired".
+ * This is the model class for table "mobile_repaired".
  *
- * The followings are the available columns in table 'sivexkuitti_repaired':
+ * The followings are the available columns in table 'mobile_repaired':
  * @property integer $id
  * @property integer $kid
  * @property string $asiakas_num

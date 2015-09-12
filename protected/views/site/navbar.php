@@ -34,7 +34,7 @@
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?php echo Yii::t('main', 'Mobiili'); ?> <span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li><?php echo CHtml::link(Yii::t('main', 'Luetut kohteet'),array('/sivexkuitti/index')); ?></li>
+            <li><?php echo CHtml::link(Yii::t('main', 'Luetut kohteet'),array('/mobile/index')); ?></li>
 
           </ul>
         </li>
@@ -45,7 +45,7 @@
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?php echo Yii::t('main', 'Mobiili'); ?> <span class="caret"></span></a>
           <ul class="dropdown-menu">
-        	<li><?php echo CHtml::link(Yii::t('main', 'Mobiili lista'),array('/sivexkuitti/index')); ?></li>
+        	<li><?php echo CHtml::link(Yii::t('main', 'Mobiili lista'),array('/mobile/index')); ?></li>
           </ul>
         </li>
 
@@ -61,8 +61,8 @@
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?php echo Yii::t('main', 'Yhteenvedot'); ?> <span class="caret"></span></a>
           <ul class="dropdown-menu">
-        	<li><?php echo CHtml::link(Yii::t('main', 'Työtunnit'),array('/sivexkuitti/yhteenveto')); ?></li>
-        	<li><?php echo CHtml::link(Yii::t('main', 'Kohteet'),array('/sivexkuitti/kyhteenveto')); ?></li>
+        	<li><?php echo CHtml::link(Yii::t('main', 'Työtunnit'),array('/mobile/yhteenveto')); ?></li>
+        	<li><?php echo CHtml::link(Yii::t('main', 'Kohteet'),array('/mobile/kyhteenveto')); ?></li>
           </ul>
         </li>
 
@@ -71,7 +71,7 @@
           <ul class="dropdown-menu">
         	<li><?php echo CHtml::link(Yii::t('main', 'Työntekijät hallinta'),array('/tyontekijat/admin')); ?></li>
         	<li><?php echo CHtml::link(Yii::t('main', 'Kohteet hallinta'),array('/kohteet/admin')); ?></li>
-        	<li><?php echo CHtml::link(Yii::t('main', 'Mobiili hallinta'),array('/sivexkuitti/admin')); ?></li>
+        	<li><?php echo CHtml::link(Yii::t('main', 'Mobiili hallinta'),array('/mobile/admin')); ?></li>
 	        <li role="separator" class="divider"></li>
         	<li><?php echo CHtml::link(Yii::t('main', 'Järjestelmänvalvojat'),array('/administrators/admin')); ?></li>
         	<li><?php echo CHtml::link(Yii::t('main', 'Valikkoot'),array('/valikkoot/admin')); ?></li>
