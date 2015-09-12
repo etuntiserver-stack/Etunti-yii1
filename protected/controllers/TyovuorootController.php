@@ -134,16 +134,20 @@ class TyovuorootController extends Controller
 		    0=>'Sunnuntai',
 		);
 
+		$pvmstart 	= $_POST['pfrom'];
 		$startdate 	= strtotime($_POST['pfrom']);
 		$enddate	= strtotime($_POST['pto']);
 		$w		= $_POST['P'];
-		$viikkoja 	= $_POST['viikkoja'];
+		$v 		= $_POST['viikkoja'];
 
 		  $i=0; 
+
 		  while($startdate<$enddate) 
 		   {  
-		      if(in_array(date('w',$startdate),$w))
+
+		      if(in_array(date('w',$startdate),$w) and (date('W',$startdate) % $v) == 0)
 		      {
+
 		    	$pvm = date('d.m.Y',$startdate);
 		    	echo $pvm.' '.$fi[date('w',$startdate)]."\n";
 
@@ -162,20 +166,12 @@ class TyovuorootController extends Controller
 				$t->save();
 		
 			}
+
 		      }
 
-		      $i++; 
-		      if($viikkoja == 1)
-	     	    	$startdate+=86400; 
+			$i++; 
+			$startdate+=86400; 
 
-		      if($viikkoja == 2)
-	     	    	$startdate+=86400*2; 
-
-		      if($viikkoja == 3)
-	     	    	$startdate+=86400*3; 
-
-		      if($viikkoja == 4)
-	     	    	$startdate+=86400*4; 
 
 		   }	
 	
@@ -206,12 +202,12 @@ class TyovuorootController extends Controller
 		$startdate 	= strtotime($_POST['pfrom']);
 		$enddate	= strtotime($_POST['pto']);
 		$w		= $_POST['P'];
-		$viikkoja 	= $_POST['viikkoja'];
+		$v 		= $_POST['viikkoja'];
 
 		  $i=0; 
 		  while($startdate<$enddate) 
 		   {  
-		      if(in_array(date('w',$startdate),$w))
+		      if(in_array(date('w',$startdate),$w) and (date('W',$startdate) % $v) == 0)
 		      {
 		    	$pvm = date('d.m.Y',$startdate);
 		    	echo $pvm.' '.$fi[date('w',$startdate)]."\n";
@@ -224,18 +220,8 @@ class TyovuorootController extends Controller
 			}
 		      }
 
-		      $i++; 
-		      if($viikkoja == 1)
-	     	    	$startdate+=86400; 
-
-		      if($viikkoja == 2)
-	     	    	$startdate+=86400*2; 
-
-		      if($viikkoja == 3)
-	     	    	$startdate+=86400*3; 
-
-		      if($viikkoja == 4)
-	     	    	$startdate+=86400*4; 
+			$i++; 
+			$startdate+=86400; 
 
 		   }	
 	
