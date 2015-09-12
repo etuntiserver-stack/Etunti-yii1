@@ -19,9 +19,9 @@ if(!empty($data->my_location))
  $my_locationReal[2] = explode("/",$my_locationStart[1]);
 
  if(isset($my_locationReal[1][0]) and isset($my_locationReal[1][1]))
- $karttaA = '<a href="http://maps.google.com/maps?q='.$my_locationReal[1][0].','.$my_locationReal[1][1].'&ll='.$my_locationReal[1][0].','.$my_locationReal[1][1].'&z=17" target="_blank">alkku</a>';
+ $karttaA = '<a href="http://maps.google.com/maps?q='.$my_locationReal[1][0].','.$my_locationReal[1][1].'&ll='.$my_locationReal[1][0].','.$my_locationReal[1][1].'&z=17" target="_blank"><b class="glyphicon glyphicon-download"></b></a>';
  if(isset($my_locationReal[2][0]) and isset($my_locationReal[2][1]))
- $karttaL = '<a href="http://maps.google.com/maps?q='.$my_locationReal[2][0].','.$my_locationReal[2][1].'&ll='.$my_locationReal[2][0].','.$my_locationReal[2][1].'&z=17" target="_blank">loppu</a>';
+ $karttaL = '<a href="http://maps.google.com/maps?q='.$my_locationReal[2][0].','.$my_locationReal[2][1].'&ll='.$my_locationReal[2][0].','.$my_locationReal[2][1].'&z=17" target="_blank"><b class="glyphicon glyphicon-upload"></b></a>';
 }
 
 if(!empty($data->loppui))
@@ -53,21 +53,21 @@ else
   $kesto[$data->id] =  '';
 
 if(!empty($data->tietoja) and !empty($data->tietoja))
-  $muokattu[$data->id] =  '<h4 class="glyphicon glyphicon-check text-info"></h4>';
+  $muokattu[$data->id] =  '<span class="glyphicon glyphicon-check text-info"></span>';
 else
-  $muokattu[$data->id] =  '<h4 class="glyphicon glyphicon-arrow-down text-danger"></h4>';
+  $muokattu[$data->id] =  '<span class="glyphicon glyphicon-arrow-down text-danger"></span>';
 
 
 	if($data->status == '1')
-	$door = " <img src='".Yii::app()->request->baseUrl."/img/uborka.png' alt='aloitettu' height='40'/>";
+	$door = " <img src='".Yii::app()->request->baseUrl."/img/uborka.png' alt='aloitettu' height='25'/>";
 	elseif($data->status == '3')
-	$door = " <img src='".Yii::app()->request->baseUrl."/img/ok.png' alt='valmiit' height='40' />";
+	$door = " <img src='".Yii::app()->request->baseUrl."/img/ok.png' alt='valmiit' height='25' />";
 	elseif($data->status == '2')
-	$door = " <img src='".Yii::app()->request->baseUrl."/img/bussi.jpg' alt='valmiit' height='40' />";
+	$door = " <img src='".Yii::app()->request->baseUrl."/img/bussi.jpg' alt='valmiit' height='25' />";
 	elseif($data->status == '10')
-	$door = " <img src='".Yii::app()->request->baseUrl."/img/food.png' alt='lounaalla' height='40' />";
+	$door = " <img src='".Yii::app()->request->baseUrl."/img/food.png' alt='lounaalla' height='25' />";
 	elseif($data->status == '7')
-	$door = " <img src='".Yii::app()->request->baseUrl."/img/virhe.png' alt='virhe' height='40' />";
+	$door = " <img src='".Yii::app()->request->baseUrl."/img/virhe.png' alt='virhe' height='25' />";
 	else
 	$door = "";
 
@@ -90,11 +90,11 @@ else
 ?>
 
 <tr id="rivi_<?php echo $data->id; ?>">
-	<td width="1"><?php echo $door; ?></td>
+	<td width="1"><center><?php echo $door; ?></center></td>
 	<td><?php echo CHtml::link(CHtml::encode($data->id), array('update', 'id'=>$data->id)); ?></td>
 	<td><b><?php echo CHtml::encode(date("d.m",strtotime($data->aloitan))); ?></b></td>
 	<td><?php echo CHtml::encode($data->tekijan_nimi); ?></td>
-	<td><?php echo $karttaA."<br>".$karttaL; ?></td>
+	<td><?php echo $karttaA." ".$karttaL; ?></td>
 
 	<!-- adminPaketti -->
 	<?php if(in_array('2',$tas)) : ?>
@@ -102,12 +102,12 @@ else
 	$did = date("Ymd",strtotime($apvm[$data->id]));
 	?>
 	<td width="1">
-	  <button class="btn btn-default vietyovuoroon" pvmtid="<?php echo $did.'_'.$data->tid; ?>"><b class="glyphicon glyphicon-time"></b></button>
+	  <span class="link text-warning vietyovuoroon" pvmtid="<?php echo $did.'_'.$data->tid; ?>"><b class="glyphicon glyphicon-fullscreen"></b></span>
 	<?php  if($obtrue == true):  ?>
 
-	  <button class="btn btn-success" data-toggle="collapse" data-target="<?php echo '#sushow_'.$data->id; ?>">
-	  <b class="caret"></b>
-	  </button>
+	  <span class="link text-success" data-toggle="collapse" data-target="<?php echo '#sushow_'.$data->id; ?>">
+	  <b class="glyphicon glyphicon-sort-by-attributes-alt"></b>
+	  </a>
 
 	    <div style="position:absolute;width:300px;z-index: 2;" class="collapse" id="<?php echo 'sushow_'.$data->id; ?>">
 	    <br>
@@ -123,8 +123,8 @@ else
 	<td width="1">
 	<div class="row">
 	 <div class="col-sm-12">
-	  <div class="btn btn-default form-control openkohde" id="<?php echo 'kohttisID_'.$data->id; ?>" for="<?php echo 'kohtval_'.$data->id; ?>" data-toggle="collapse" data-target="<?php echo '#kshow_'.$data->id; ?>"><?php echo $data->kohde_kannasta; ?> <b class="caret"></b></div>
-	  <div class="collapse" id="<?php echo 'kshow_'.$data->id; ?>">
+	  <span class="link openkohde" id="<?php echo 'kohttisID_'.$data->id; ?>" for="<?php echo 'kohtval_'.$data->id; ?>" data-toggle="collapse" data-target="<?php echo '#kshow_'.$data->id; ?>"><?php echo $data->kohde_kannasta; ?></span>
+	  <div style="position:absolute;width:300px;z-index: 2;" class="collapse" id="<?php echo 'kshow_'.$data->id; ?>">
 	  <br>
 	     <div id="<?php echo 'kohtval_'.$data->id; ?>"></div>
 	  </div>
@@ -135,8 +135,8 @@ else
 	<td width="1">
 	<div class="row">
 	 <div class="col-sm-3">
-	  <div class="btn btn-default" data-toggle="collapse" data-target="<?php echo '#alshow_'.$data->id; ?>"><?php echo $at[$data->id]; ?> <b class="caret"></b></div>
-	  <div class="row collapse col-sm-4" id="<?php echo 'alshow_'.$data->id; ?>">
+	  <span class="link" data-toggle="collapse" data-target="<?php echo '#alshow_'.$data->id; ?>"><?php echo $at[$data->id]; ?></span>
+	  <div style="position:absolute;width:300px;z-index: 2;" class="collapse col-sm-4" id="<?php echo 'alshow_'.$data->id; ?>">
 	  <br>
 	     <?php echo '<input type="datetime-local" class="pvmupdate btn btn-sm btn-default" request="aloitan" status="'.$data->status.'" id="al_'.$data->id.'" value="'.$apvm[$data->id].'T'.$at[$data->id].'">'; ?>
 	  </div>
@@ -147,8 +147,8 @@ else
 	<td width="1">
 	<div class="row">
 	 <div class="col-sm-3">
-	  <div class="btn btn-default" data-toggle="collapse" data-target="<?php echo '#ltshow_'.$data->id; ?>"><?php echo $lt[$data->id]; ?> <b class="caret"></b></div>
-	  <div class="row collapse col-sm-4" id="<?php echo 'ltshow_'.$data->id; ?>">
+	  <span class="link" data-toggle="collapse" data-target="<?php echo '#ltshow_'.$data->id; ?>"><?php echo $lt[$data->id]; ?></span>
+	  <div style="position:absolute;width:300px;z-index: 2;" class="collapse col-sm-4" id="<?php echo 'ltshow_'.$data->id; ?>">
 	  <br>
 	     <?php echo '<input type="datetime-local" class="pvmupdate btn btn-sm btn-default" request="loppui" status="'.$data->status.'" id="lt_'.$data->id.'" value="'.$lpvm[$data->id].'T'.$lt[$data->id].'">'; ?>
 	  </div>
@@ -156,9 +156,9 @@ else
 	</div>
 	</td>
 
-	<td><h4><?php echo sprint($kesto[$data->id]); ?></h4></td>
+	<td><span><?php echo sprint($kesto[$data->id]); ?></span></td>
 	<td><center><?php echo $muokattu[$data->id]; ?></center></td>
-	<td><center><a href="#"><h4 class="glyphicon glyphicon-trash text-danger poistaKohde" for="rivi_<?php echo $data->id; ?>"></h4></center></a></td>
+	<td><center><span class="link glyphicon glyphicon-trash text-danger poistaKohde" for="rivi_<?php echo $data->id; ?>"></span></center></td>
 </tr>
 
 	

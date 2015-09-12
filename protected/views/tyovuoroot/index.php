@@ -7,7 +7,7 @@
 	$expl = explode("_",$pvmtid);
 	Yii::app()->session['from'] = date("Y-m-d",strtotime($expl['0']));
 	Yii::app()->session['to'] = date("Y-m-d",strtotime($expl['0']." +1 week"));
-	Yii::app()->session['tvuoroTekija'] = $expl['1'];
+	Yii::app()->session['Tekija'] = array($expl['1']);
 	?>
 	<script type="text/javascript">
 	$(document).ready(function(){
