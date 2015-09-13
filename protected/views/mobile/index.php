@@ -71,20 +71,20 @@ $this->menu=array(
   <table class="table table-striped">
   <thead>
   <tr>
-  <th><?php echo Yii::t('main', 'T'); ?></th>
+  <th class="col-sm-1"><?php echo Yii::t('main', 'T'); ?></th>
   <th><?php echo Yii::t('main', 'ID'); ?></th>
   <th><?php echo Yii::t('main', 'Päivä'); ?></th>
-  <th><?php echo Yii::t('main', 'TAG'); ?></th>
   <th><?php echo Yii::t('main', 'Kartta'); ?></th>
+  <th class="col-sm-4"><?php echo Yii::t('main', 'Työntekijä'); ?></th>
 
   <?php
   $tas = explode(",",Yii::app()->user->adminPaketti);
   if(in_array('2',$tas)) : 
   ?>
-  <th><b class="glyphicon glyphicon-time"></b></th>
+  <th><?php echo Yii::t('main', 'Työvuoroot'); ?></th>
   <?php endif; ?>
 
-  <th class="col-sm-3"><?php echo Yii::t('main', 'Työntekijä'); ?></th>
+  <th><?php echo Yii::t('main', 'TAG'); ?></th>
   <th class="col-sm-3"><?php echo Yii::t('main', 'Osoite/Matka'); ?></th>
   <th><?php echo Yii::t('main', 'Aloitus'); ?></th>
   <th><?php echo Yii::t('main', 'Lopetus'); ?></th>

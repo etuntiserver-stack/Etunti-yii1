@@ -63,15 +63,15 @@ else
 
 
 	if($data->status == '1')
-	$door = " <img src='".Yii::app()->request->baseUrl."/img/uborka.png' alt='aloitettu' height='25'/>";
+	$door = " <img src='".Yii::app()->request->baseUrl."/img/uborka.png' alt='aloitettu' class='img-responsive' />";
 	elseif($data->status == '3')
-	$door = " <img src='".Yii::app()->request->baseUrl."/img/ok.png' alt='valmiit' height='25' />";
+	$door = " <img src='".Yii::app()->request->baseUrl."/img/ok.png' alt='valmiit' class='img-responsive' />";
 	elseif($data->status == '2')
-	$door = " <img src='".Yii::app()->request->baseUrl."/img/bussi.jpg' alt='valmiit' height='25' />";
+	$door = " <img src='".Yii::app()->request->baseUrl."/img/bussi.jpg' alt='valmiit' class='img-responsive' />";
 	elseif($data->status == '10')
-	$door = " <img src='".Yii::app()->request->baseUrl."/img/food.png' alt='lounaalla' height='25' />";
+	$door = " <img src='".Yii::app()->request->baseUrl."/img/food.png' alt='lounaalla' class='img-responsive' />";
 	elseif($data->status == '7')
-	$door = " <img src='".Yii::app()->request->baseUrl."/img/virhe.png' alt='virhe' height='25' />";
+	$door = " <img src='".Yii::app()->request->baseUrl."/img/virhe.png' alt='virhe' class='img-responsive' />";
 	else
 	$door = "";
 
@@ -95,24 +95,32 @@ else
 
 <tr id="rivi_<?php echo $data->id; ?>">
 
-	<td width="1"><center><?php echo $door; ?></center></td>
-	<td><?php echo CHtml::link(CHtml::encode($data->id), array('update', 'id'=>$data->id)); ?></td>
-	<td><b><?php echo CHtml::encode(date("d.m",strtotime($data->aloitan))); ?></b></td>
-
-	<td width="1">
-	  <span class="link" data-toggle="collapse" data-target="<?php echo '#tagshow_'.$data->id; ?>">
-	   <?php if(!empty($tag) and $tag != 000000) : ?>
-	    <b class="text-success glyphicon glyphicon-tag"></b>
-	   <?php else: ?>
-	    <b class="text-danger glyphicon glyphicon-tag"></b>
-	   <?php endif; ?>
-	  </span>
-	  <div style="position:absolute;z-index: 2;" class="collapse" id="<?php echo 'tagshow_'.$data->id; ?>">
-	     <div class="alert alert-info"><?php echo $tag; ?></div>
+	<td>
+	<div class="row">
+	  <div class="col-sm-6">
+		<?php echo $door; ?>
 	  </div>
+	</div>
 	</td>
 
+	<td><?php echo CHtml::link(CHtml::encode($data->id), array('update', 'id'=>$data->id)); ?></td>
+	<td><b><?php echo CHtml::encode(date("d.m",strtotime($data->aloitan))); ?></b></td>
 	<td><?php echo $karttaA." ".$karttaL; ?></td>
+
+	<td>
+	<div class="row">
+	  <div class="col-sm-2">
+	  <?php 
+	     $filename = "../../img/tekijat/".Yii::app()->user->domain."/".$data->tid.".jpg";
+	     if (file_exists(Yii::app()->request->baseUrl."img/tekijat/".Yii::app()->user->domain."/".$data->tid.".jpg"))
+	     echo '<img src="'.$filename.'" class="img-thumbnail">';
+	     else
+	     echo '<img src="../../img/tekijat/noname.jpg" class="img-responsive">';
+	  ?>
+	  </div>
+	  <?php echo CHtml::link($data->tekijan_nimi,'/index.php/tyontekijat/update?id='.$data->tid,array('target'=>'_blank')); ?>
+	</div>
+	</td>
 
 	<!-- adminPaketti -->
 	<?php if(in_array('2',$tas)) : ?>
@@ -133,36 +141,30 @@ else
 
 	<?php endif; ?>
 	</td>
-
 	<?php endif; ?>
 	<!-- adminPaketti -->
 
 	<td>
-	<div class="row">
-	  <div class="col-sm-2">
-	  <?php 
-	     $filename = "../../img/tekijat/".Yii::app()->user->domain."/".$data->tid.".jpg";
-	     if (file_exists(Yii::app()->request->baseUrl."img/tekijat/".Yii::app()->user->domain."/".$data->tid.".jpg"))
-	     echo '<img src="'.$filename.'" class="img-thumbnail">';
-	     else
-	     echo '<img src="../../img/tekijat/noname.jpg" class="img-responsive">';
-	  ?>
+	  <span class="link" data-toggle="collapse" data-target="<?php echo '#tagshow_'.$data->id; ?>">
+	   <?php if(!empty($tag) and $tag != 000000) : ?>
+	    <b class="text-success glyphicon glyphicon-tag"></b>
+	   <?php else: ?>
+	    <b class="text-danger glyphicon glyphicon-tag"></b>
+	   <?php endif; ?>
+	  </span>
+	  <div style="position:absolute;z-index: 2;" class="collapse" id="<?php echo 'tagshow_'.$data->id; ?>">
+	     <div class="well"><?php echo $tag; ?></div>
 	  </div>
-	  <?php echo CHtml::link($data->tekijan_nimi,'/index.php/tyontekijat/update?id='.$data->tid,array('target'=>'_blank')); ?>
-
-	</div>
 	</td>
 
-
 	<td>
-	<div class="row">
 	  <span class="link glyphicon glyphicon-edit openkohde" id="<?php echo 'kohttisID_'.$data->id; ?>" for="<?php echo 'kohtval_'.$data->id; ?>" data-toggle="collapse" data-target="<?php echo '#kshow_'.$data->id; ?>"></span>&nbsp;
 
 	  <?php 
 	  if(!empty($data->kohdenID))
-		echo CHtml::link($data->kohde_kannasta,'/index.php/kohteet/update?id='.$data->kohdenID,array('target'=>'_blank')); 
+		echo CHtml::link($data->kohde_kannasta,'/index.php/kohteet/update?id='.$data->kohdenID,array('target'=>'_blank','class'=>'text-success')); 
 	  else
-		echo $data->kohde_kannasta;
+		echo '<span class="text-danger">'.$data->kohde_kannasta.'</span>';
 	  ?>
 
 	  <div style="position:absolute;z-index: 2;" class="collapse" id="<?php echo 'kshow_'.$data->id; ?>">
