@@ -51,7 +51,7 @@ $(document).ready(function(){
 	 if($("#tagginro").val() != '')
 	    tag = $("#tagginro").val();
 	 else
-	    tag = 'notag';
+	    tag = '000000';
   }
 
   $("#viestintaURL").click(function(){

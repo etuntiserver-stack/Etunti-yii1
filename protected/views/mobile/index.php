@@ -70,6 +70,7 @@ $this->menu=array(
   <th><?php echo Yii::t('main', 'ID'); ?></th>
   <th><?php echo Yii::t('main', 'Päivä'); ?></th>
   <th><?php echo Yii::t('main', 'Työntekijä'); ?></th>
+  <th><?php echo Yii::t('main', 'TAG'); ?></th>
   <th><?php echo Yii::t('main', 'Kartta'); ?></th>
   <?php
   $tas = explode(",",Yii::app()->user->adminPaketti);
@@ -118,6 +119,7 @@ $(document).ready(function(){
 $(".pvmupdate").blur(function(){
 
 	var st = $(this).attr("status");
+	var forTxt = $(this).attr("for");
 	var thisID = $(this).attr("id").split("_");
 	var request = $(this).attr("request");
 	var thisVal = $(this).val().replace("T"," ");
@@ -137,7 +139,27 @@ $(".pvmupdate").blur(function(){
            type: "POST",
            data: { "id" : thisID, "request" : request, "value" : thisVal, "status" : status },
            success: function(html){
-		$('#'+thisID[0]+'_'+thisID[1]).removeClass("btn-default").addClass("btn-success");
+
+		var newText = $('#'+thisID[0]+'_'+thisID[1]).val().split("T");
+		$('#'+forTxt).html(newText[1]).addClass("text-success");
+		$('#'+thisID[0]+'_'+thisID[1]).removeClass("btn-default").addClass("text-success");
+
+		if(request == 'aloitan')
+		  $('#alshow_'+thisID[1]).hide('slow');
+
+		if(request == 'loppui')
+		  $('#ltshow_'+thisID[1]).hide('slow');
+
+        	$.ajax({
+	           url: 'kesto?id='+thisID[1],
+	           success: function(data){
+		      	console.log(data);
+			$('#kesto_'+thisID[1]).html("<strong>"+data+"</strong>").addClass("text-success");	
+	           }
+	        });
+
+
+
            }
         });
 
