@@ -201,7 +201,7 @@ if(isset($_POST['uploaded'])){
 	   <div class="pull-right col-sm-3">
 	   <?php
 	   $filename = "../../img/tekijat/".Yii::app()->user->domain."/".$model->id.".jpg";
-	   if (file_exists(Yii::app()->basePath.$filename))
+	   if (file_exists(Yii::app()->request->baseUrl."img/tekijat/".Yii::app()->user->domain."/".$model->id.".jpg"))
 	     echo '<img src="'.$filename.'" class="img-thumbnail">';
 	   else
 	     echo '<img src="../../img/tekijat/noname.jpg" class="img-thumbnail">';

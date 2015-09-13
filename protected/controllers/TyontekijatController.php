@@ -118,7 +118,7 @@ class TyontekijatController extends Controller
 	{
 	
 	   $filename = "../../img/tekijat/".Yii::app()->user->domain."/".$id.".jpg";
-	   if (file_exists(Yii::app()->basePath.$filename))
+	   if (file_exists(Yii::app()->request->baseUrl."img/tekijat/".Yii::app()->user->domain."/".$id.".jpg"))
 	   unlink(Yii::app()->basePath.$filename);
 
 		$this->loadModel($id)->delete();
