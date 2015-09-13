@@ -2,7 +2,7 @@
   var domain = '';
   var imei = '';
   var my_location = '';
-  var tag = 'notag';
+  var tag = '000000';
 
   var server = "http://staging.etunti.fi";
   var url = server+"/index.php/api/mob";

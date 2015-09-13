@@ -2,9 +2,13 @@
 /* @var $this MobileController */
 /* @var $data Mobile */
 
-
-// $tag = explode("_",$data->asiakas_num);
-/*<td><?php echo CHtml::encode($tag[1]); ?></td>*/
+/* TAG */
+ $tag = '';
+ $t = explode("_",$data->asiakas_num);
+ if(isset($t[1]) and $t[1] != 000000)
+    $tag = $t[1];
+ else
+    $tag = Yii::t('main', 'TAG ei ollut käytetty');
 
  $karttaA = '';
  $karttaL = '';
@@ -19,9 +23,9 @@ if(!empty($data->my_location))
  $my_locationReal[2] = explode("/",$my_locationStart[1]);
 
  if(isset($my_locationReal[1][0]) and isset($my_locationReal[1][1]))
- $karttaA = '<a href="http://maps.google.com/maps?q='.$my_locationReal[1][0].','.$my_locationReal[1][1].'&ll='.$my_locationReal[1][0].','.$my_locationReal[1][1].'&z=17" target="_blank"><b class="glyphicon glyphicon-download"></b></a>';
+ $karttaA = '<a href="http://maps.google.com/maps?q='.$my_locationReal[1][0].','.$my_locationReal[1][1].'&ll='.$my_locationReal[1][0].','.$my_locationReal[1][1].'&z=17" target="_blank"><span class="glyphicon glyphicon-arrow-down"></span></a>';
  if(isset($my_locationReal[2][0]) and isset($my_locationReal[2][1]))
- $karttaL = '<a href="http://maps.google.com/maps?q='.$my_locationReal[2][0].','.$my_locationReal[2][1].'&ll='.$my_locationReal[2][0].','.$my_locationReal[2][1].'&z=17" target="_blank"><b class="glyphicon glyphicon-upload"></b></a>';
+ $karttaL = '<a href="http://maps.google.com/maps?q='.$my_locationReal[2][0].','.$my_locationReal[2][1].'&ll='.$my_locationReal[2][0].','.$my_locationReal[2][1].'&z=17" target="_blank"><span class="glyphicon glyphicon-arrow-up"></span></a>';
 }
 
 if(!empty($data->loppui))
@@ -94,6 +98,20 @@ else
 	<td><?php echo CHtml::link(CHtml::encode($data->id), array('update', 'id'=>$data->id)); ?></td>
 	<td><b><?php echo CHtml::encode(date("d.m",strtotime($data->aloitan))); ?></b></td>
 	<td><?php echo CHtml::encode($data->tekijan_nimi); ?></td>
+
+	<td width="1">
+	  <span class="link" data-toggle="collapse" data-target="<?php echo '#tagshow_'.$data->id; ?>">
+	   <?php if(!empty($tag) and $tag != 000000) : ?>
+	    <b class="text-success glyphicon glyphicon-tag"></b>
+	   <?php else: ?>
+	    <b class="text-danger glyphicon glyphicon-tag"></b>
+	   <?php endif; ?>
+	  </span>
+	  <div style="position:absolute;z-index: 2;" class="collapse" id="<?php echo 'tagshow_'.$data->id; ?>">
+	     <div class="alert alert-info"><?php echo $tag; ?></div>
+	  </div>
+	</td>
+
 	<td><?php echo $karttaA." ".$karttaL; ?></td>
 
 	<!-- adminPaketti -->
@@ -110,53 +128,41 @@ else
 	  </a>
 
 	    <div style="position:absolute;width:300px;z-index: 2;" class="collapse" id="<?php echo 'sushow_'.$data->id; ?>">
-	    <br>
-	    <div class="well" style=""><?php $this->renderPartial('//tyovuoroot/did',array('pvm'=>$data->aloitan,'tid'=>$data->tid,'from'=>'mobiili')); ?></div>
+	    <div class="alert alert-info" style=""><?php $this->renderPartial('//tyovuoroot/did',array('pvm'=>$data->aloitan,'tid'=>$data->tid,'from'=>'mobiili')); ?></div>
 	    </div>
 
-	<?php  endif;  ?>
+	<?php endif; ?>
 	</td>
 
 	<?php endif; ?>
 	<!-- adminPaketti -->
 
 	<td width="1">
-	<div class="row">
-	 <div class="col-sm-12">
 	  <span class="link openkohde" id="<?php echo 'kohttisID_'.$data->id; ?>" for="<?php echo 'kohtval_'.$data->id; ?>" data-toggle="collapse" data-target="<?php echo '#kshow_'.$data->id; ?>"><?php echo $data->kohde_kannasta; ?></span>
-	  <div style="position:absolute;width:300px;z-index: 2;" class="collapse" id="<?php echo 'kshow_'.$data->id; ?>">
-	  <br>
-	     <div id="<?php echo 'kohtval_'.$data->id; ?>"></div>
+	  <div style="position:absolute;z-index: 2;" class="collapse" id="<?php echo 'kshow_'.$data->id; ?>">
+	     <div class="alert alert-info" id="<?php echo 'kohtval_'.$data->id; ?>"></div>
 	  </div>
-	 </div>
-	</div>
 	</td>
 
 	<td width="1">
-	<div class="row">
-	 <div class="col-sm-3">
-	  <span class="link" data-toggle="collapse" data-target="<?php echo '#alshow_'.$data->id; ?>"><?php echo $at[$data->id]; ?></span>
-	  <div style="position:absolute;width:300px;z-index: 2;" class="collapse col-sm-4" id="<?php echo 'alshow_'.$data->id; ?>">
-	  <br>
-	     <?php echo '<input type="datetime-local" class="pvmupdate btn btn-sm btn-default" request="aloitan" status="'.$data->status.'" id="al_'.$data->id.'" value="'.$apvm[$data->id].'T'.$at[$data->id].'">'; ?>
+	  <span class="link" data-toggle="collapse" id="<?php echo 'altxt_'.$data->id; ?>" data-target="<?php echo '#alshow_'.$data->id; ?>"><?php echo $at[$data->id]; ?></span>
+	  <div style="position:absolute;z-index: 2;" class="collapse" id="<?php echo 'alshow_'.$data->id; ?>">
+	    <div class="alert alert-info">
+	     <?php echo '<input type="datetime-local" class="pvmupdate form-control" request="aloitan" status="'.$data->status.'" id="al_'.$data->id.'" for="altxt_'.$data->id.'" value="'.$apvm[$data->id].'T'.$at[$data->id].'">'; ?>
+	    </div>
 	  </div>
-	 </div>
-	</div>
 	</td>
 
 	<td width="1">
-	<div class="row">
-	 <div class="col-sm-3">
-	  <span class="link" data-toggle="collapse" data-target="<?php echo '#ltshow_'.$data->id; ?>"><?php echo $lt[$data->id]; ?></span>
-	  <div style="position:absolute;width:300px;z-index: 2;" class="collapse col-sm-4" id="<?php echo 'ltshow_'.$data->id; ?>">
-	  <br>
-	     <?php echo '<input type="datetime-local" class="pvmupdate btn btn-sm btn-default" request="loppui" status="'.$data->status.'" id="lt_'.$data->id.'" value="'.$lpvm[$data->id].'T'.$lt[$data->id].'">'; ?>
+	  <span class="link" data-toggle="collapse" id="<?php echo 'lptxt_'.$data->id; ?>" data-target="<?php echo '#ltshow_'.$data->id; ?>"><?php echo $lt[$data->id]; ?></span>
+	  <div style="position:absolute;z-index: 2;" class="collapse" id="<?php echo 'ltshow_'.$data->id; ?>">
+	    <div class="alert alert-info">
+	     <?php echo '<input type="datetime-local" class="pvmupdate form-control" request="loppui" status="'.$data->status.'" id="lt_'.$data->id.'" for="lptxt_'.$data->id.'" value="'.$lpvm[$data->id].'T'.$lt[$data->id].'">'; ?>
+	    </div>
 	  </div>
-	 </div>
-	</div>
 	</td>
 
-	<td><span><?php echo sprint($kesto[$data->id]); ?></span></td>
+	<td><span id="kesto_<?php echo $data->id; ?>"><?php echo sprint($kesto[$data->id]); ?></span></td>
 	<td><center><?php echo $muokattu[$data->id]; ?></center></td>
 	<td><center><span class="link glyphicon glyphicon-trash text-danger poistaKohde" for="rivi_<?php echo $data->id; ?>"></span></center></td>
 </tr>
