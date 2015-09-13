@@ -76,7 +76,7 @@ class TyontekijatController extends Controller
 			$model->attributes=$_POST['Tyontekijat'];
 			if(isset($_POST['kortit'])) $model->kortit = implode("##***",$_POST['kortit']);
 			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+				$this->redirect(array('update','id'=>$model->id));
 		}
 
 		$this->render('create',array(
@@ -116,6 +116,11 @@ class TyontekijatController extends Controller
 	 */
 	public function actionDelete($id)
 	{
+	
+	   $filename = "../../img/tekijat/".Yii::app()->user->domain."/".$id.".jpg";
+	   if (file_exists(Yii::app()->basePath.$filename))
+	   unlink(Yii::app()->basePath.$filename);
+
 		$this->loadModel($id)->delete();
 
 		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser

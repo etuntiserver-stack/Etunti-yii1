@@ -16,8 +16,13 @@ $this->menu=array(
 
 <h1><?php echo Yii::t('main', 'Mobiili luetut'); ?></h1>
 
+<div class="pull-right">
+  <?php echo CHtml::link(Yii::t('main', 'Luo työntekijä'),'/index.php/tyontekijat/create',array('target'=>'_blank','class'=>'btn btn-success glyphicon-plus')); ?>
+  <?php echo CHtml::link(Yii::t('main', 'Luo kohde'),'/index.php/kohteet/create',array('target'=>'_blank','class'=>'btn btn-success glyphicon-plus')); ?>
+</div>
 
 <div class="row">
+
   <div class="col-md-2">
    <?php
     $model=new Mobile;
@@ -69,18 +74,18 @@ $this->menu=array(
   <th><?php echo Yii::t('main', 'T'); ?></th>
   <th><?php echo Yii::t('main', 'ID'); ?></th>
   <th><?php echo Yii::t('main', 'Päivä'); ?></th>
-  <th><?php echo Yii::t('main', 'Työntekijä'); ?></th>
   <th><?php echo Yii::t('main', 'TAG'); ?></th>
   <th><?php echo Yii::t('main', 'Kartta'); ?></th>
+
   <?php
   $tas = explode(",",Yii::app()->user->adminPaketti);
   if(in_array('2',$tas)) : 
   ?>
-  <th width=50><b class="glyphicon glyphicon-time"></b></th>
+  <th><b class="col-sm-3 glyphicon glyphicon-time"></b></th>
   <?php endif; ?>
 
+  <th class="col-sm-3"><?php echo Yii::t('main', 'Työntekijä'); ?></th>
   <th class="col-sm-3"><?php echo Yii::t('main', 'Osoite/Matka'); ?></th>
-
   <th><?php echo Yii::t('main', 'Aloitus'); ?></th>
   <th><?php echo Yii::t('main', 'Lopetus'); ?></th>
   <th><?php echo Yii::t('main', 'Kesto'); ?></th>

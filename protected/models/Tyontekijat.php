@@ -57,7 +57,7 @@ class Tyontekijat extends DB2ActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('tekijan_nimi, tekijan_email, tekijan_pnumero, aktiivinen', 'required'),
+			array('tekijan_nimi, aktiivinen', 'required'),
 			array('online_varauksen_valmina', 'numerical', 'integerOnly'=>true),
 			array('imei', 'length', 'max'=>30),
 			array('laiten_puh, tekijan_nimi, tekijan_katuosoite, tekijan_pankkitili, salasana', 'length', 'max'=>100),
@@ -92,7 +92,7 @@ class Tyontekijat extends DB2ActiveRecord
 			'id' => 'ID',
 			'imei' => 'Imei',
 			'laiten_puh' => 'Laiten Puh',
-			'tekijan_nimi' => 'Työntekijä',
+			'tekijan_nimi' => 'Etu-Suku nimet',
 			'tekijan_henkilotunnus' => 'Henkilötunnus',
 			'tekijan_puh' => 'Puhelin',
 			'tekijan_email' => 'Sähköposti',
