@@ -142,7 +142,7 @@ else
 	  <div class="col-sm-2">
 	  <?php 
 	     $filename = "../../img/tekijat/".Yii::app()->user->domain."/".$data->tid.".jpg";
-	     if (file_exists($filename))
+	     if (file_exists(Yii::app()->request->baseUrl."img/tekijat/".Yii::app()->user->domain."/".$data->tid.".jpg"))
 	     echo '<img src="'.$filename.'" class="img-thumbnail">';
 	     else
 	     echo '<img src="../../img/tekijat/noname.jpg" class="img-responsive">';
