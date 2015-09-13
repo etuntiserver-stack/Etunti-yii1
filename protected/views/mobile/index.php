@@ -93,14 +93,13 @@ $this->menu=array(
   <th><center><?php echo Yii::t('main', 'P'); ?></center></th>
   </tr>
   </thead>
-
-<?php $this->widget('zii.widgets.CListView', array(
+  <?php $this->widget('zii.widgets.CListView', array(
 	'dataProvider'=>$dataProvider,
 	'itemView'=>'_view',
   	'template'=>'{items}<table class="table table-striped table-condensed"></table><br/>{pager}',
 
 
-'pager' => array(
+	'pager' => array(
            'firstPageLabel'=>'<<',
            'prevPageLabel'=>'< Edellinen',
            'nextPageLabel'=>'Seuraava >',
@@ -110,16 +109,49 @@ $this->menu=array(
            'cssFile'=>false,
        ), 
 
-)); ?>
-
+  )); ?>
   </table>
 </div>
 
 	<div id="showres" class="modal fade" tabindex="-1" role="dialog"></div>
 	<?php Yii::app()->clientScript->registerPackage('tyovuoroot'); ?>
 
+	<input type="text" id="dataChange" >
+
 <script type="text/javascript">
 $(document).ready(function(){
+
+/*
+    updateRivi();
+    function updateRivi() {
+        $.ajax({
+           url: 'index_ajax',
+           success: function(data){
+		if(data)
+		{
+                //console.log(data);
+		  if(($("#dataChange").val() != data) & ($("#dataChange").val() != ''))
+		  {
+                    console.log("new "+data);
+
+	            $.ajax({
+	              url: 'index_ajax',
+           	      type: "POST",
+           	      data: { "setRivi" : "true" },
+	              success: function(data){
+			  //console.log(data);
+			  $("#uusirivi").html(data);
+
+	              }
+	            });
+		  }
+		}
+		$("#dataChange").val(data);
+           }
+        });
+    }
+    setInterval(updateRivi, "10000");
+*/
 
 $(".pvmupdate").blur(function(){
 

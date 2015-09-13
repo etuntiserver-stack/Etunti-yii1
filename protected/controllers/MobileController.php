@@ -34,7 +34,7 @@ class MobileController extends Controller
 		return array(
 
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','updatetime','showkohteet','yhteenveto','kyhteenveto','historia','poistaKohde','suunniteltu','kesto'),
+				'actions'=>array('admin','delete','create','update','index','view','updatetime','showkohteet','yhteenveto','kyhteenveto','historia','poistaKohde','suunniteltu','kesto','index_ajax'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -71,10 +71,22 @@ class MobileController extends Controller
 
 	}
 
-	/**
-	 * Displays a particular model.
-	 * @param integer $id the ID of the model to be displayed
-	 */
+	public function actionIndex_ajax()
+	{
+
+	function sprint($val){
+	    if($val > 0)
+		return sprintf('%02d:%02d', $val/3600, ($val % 3600)/60);
+	}
+
+		$model = Mobile::model()->find("id!='' order by id DESC");
+		
+		if(isset($_POST['setRivi']))
+		$this->renderPartial('_view', array('data' => $model));
+		else
+		echo $model->id;
+
+	}
 
 	public function actionKesto($id)
 	{
