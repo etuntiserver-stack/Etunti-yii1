@@ -81,7 +81,7 @@ $this->menu=array(
   $tas = explode(",",Yii::app()->user->adminPaketti);
   if(in_array('2',$tas)) : 
   ?>
-  <th><b class="col-sm-3 glyphicon glyphicon-time"></b></th>
+  <th><b class="glyphicon glyphicon-time"></b></th>
   <?php endif; ?>
 
   <th class="col-sm-3"><?php echo Yii::t('main', 'Työntekijä'); ?></th>

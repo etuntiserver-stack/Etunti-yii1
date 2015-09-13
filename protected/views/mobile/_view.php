@@ -155,16 +155,25 @@ else
 
 
 	<td>
-	     <span class="link openkohde" id="<?php echo 'kohttisID_'.$data->id; ?>" for="<?php echo 'kohtval_'.$data->id; ?>" data-toggle="collapse" data-target="<?php echo '#kshow_'.$data->id; ?>"><?php echo $data->kohde_kannasta; ?></span>
-	     <div style="position:absolute;z-index: 2;" class="collapse" id="<?php echo 'kshow_'.$data->id; ?>">
-	     <div class="alert alert-info" id="<?php echo 'kohtval_'.$data->id; ?>"></div>
-	     </div>
+	<div class="row">
+	  <span class="link glyphicon glyphicon-edit openkohde" id="<?php echo 'kohttisID_'.$data->id; ?>" for="<?php echo 'kohtval_'.$data->id; ?>" data-toggle="collapse" data-target="<?php echo '#kshow_'.$data->id; ?>"></span>&nbsp;
+
+	  <?php 
+	  if(!empty($data->kohdenID))
+		echo CHtml::link($data->kohde_kannasta,'/index.php/kohteet/update?id='.$data->kohdenID,array('target'=>'_blank')); 
+	  else
+		echo $data->kohde_kannasta;
+	  ?>
+
+	  <div style="position:absolute;z-index: 2;" class="collapse" id="<?php echo 'kshow_'.$data->id; ?>">
+	    <div class="well" id="<?php echo 'kohtval_'.$data->id; ?>"></div>
+	  </div>
 	</td>
 
 	<td width="1">
 	  <span class="link" data-toggle="collapse" id="<?php echo 'altxt_'.$data->id; ?>" data-target="<?php echo '#alshow_'.$data->id; ?>"><?php echo $at[$data->id]; ?></span>
 	  <div style="position:absolute;z-index: 2;" class="collapse" id="<?php echo 'alshow_'.$data->id; ?>">
-	    <div class="alert alert-info">
+	    <div class="well">
 	     <?php echo '<input type="datetime-local" class="pvmupdate form-control" request="aloitan" status="'.$data->status.'" id="al_'.$data->id.'" for="altxt_'.$data->id.'" value="'.$apvm[$data->id].'T'.$at[$data->id].'">'; ?>
 	    </div>
 	  </div>
@@ -173,7 +182,7 @@ else
 	<td width="1">
 	  <span class="link" data-toggle="collapse" id="<?php echo 'lptxt_'.$data->id; ?>" data-target="<?php echo '#ltshow_'.$data->id; ?>"><?php echo $lt[$data->id]; ?></span>
 	  <div style="position:absolute;z-index: 2;" class="collapse" id="<?php echo 'ltshow_'.$data->id; ?>">
-	    <div class="alert alert-info">
+	    <div class="well">
 	     <?php echo '<input type="datetime-local" class="pvmupdate form-control" request="loppui" status="'.$data->status.'" id="lt_'.$data->id.'" for="lptxt_'.$data->id.'" value="'.$lpvm[$data->id].'T'.$lt[$data->id].'">'; ?>
 	    </div>
 	  </div>
