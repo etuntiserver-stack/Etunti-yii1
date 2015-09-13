@@ -94,10 +94,10 @@ else
 ?>
 
 <tr id="rivi_<?php echo $data->id; ?>">
+
 	<td width="1"><center><?php echo $door; ?></center></td>
 	<td><?php echo CHtml::link(CHtml::encode($data->id), array('update', 'id'=>$data->id)); ?></td>
 	<td><b><?php echo CHtml::encode(date("d.m",strtotime($data->aloitan))); ?></b></td>
-	<td><?php echo CHtml::encode($data->tekijan_nimi); ?></td>
 
 	<td width="1">
 	  <span class="link" data-toggle="collapse" data-target="<?php echo '#tagshow_'.$data->id; ?>">
@@ -119,7 +119,7 @@ else
 	<?php
 	$did = date("Ymd",strtotime($apvm[$data->id]));
 	?>
-	<td width="1">
+	<td>
 	  <span class="link text-warning vietyovuoroon" pvmtid="<?php echo $did.'_'.$data->tid; ?>"><b class="glyphicon glyphicon-fullscreen"></b></span>
 	<?php  if($obtrue == true):  ?>
 
@@ -137,11 +137,28 @@ else
 	<?php endif; ?>
 	<!-- adminPaketti -->
 
-	<td width="1">
-	  <span class="link openkohde" id="<?php echo 'kohttisID_'.$data->id; ?>" for="<?php echo 'kohtval_'.$data->id; ?>" data-toggle="collapse" data-target="<?php echo '#kshow_'.$data->id; ?>"><?php echo $data->kohde_kannasta; ?></span>
-	  <div style="position:absolute;z-index: 2;" class="collapse" id="<?php echo 'kshow_'.$data->id; ?>">
-	     <div class="alert alert-info" id="<?php echo 'kohtval_'.$data->id; ?>"></div>
+	<td>
+	<div class="row">
+	  <div class="col-sm-2">
+	  <?php 
+	     $filename = "../../img/tekijat/".Yii::app()->user->domain."/".$data->tid.".jpg";
+	     if (file_exists(Yii::app()->basePath.$filename))
+	     echo '<img src="'.$filename.'" class="img-thumbnail">';
+	     else
+	     echo '<img src="../../img/tekijat/noname.jpg" class="img-responsive">';
+	  ?>
 	  </div>
+	  <?php echo CHtml::link($data->tekijan_nimi,'/index.php/tyontekijat/update?id='.$data->tid,array('target'=>'_blank')); ?>
+
+	</div>
+	</td>
+
+
+	<td>
+	     <span class="link openkohde" id="<?php echo 'kohttisID_'.$data->id; ?>" for="<?php echo 'kohtval_'.$data->id; ?>" data-toggle="collapse" data-target="<?php echo '#kshow_'.$data->id; ?>"><?php echo $data->kohde_kannasta; ?></span>
+	     <div style="position:absolute;z-index: 2;" class="collapse" id="<?php echo 'kshow_'.$data->id; ?>">
+	     <div class="alert alert-info" id="<?php echo 'kohtval_'.$data->id; ?>"></div>
+	     </div>
 	</td>
 
 	<td width="1">

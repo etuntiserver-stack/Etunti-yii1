@@ -110,16 +110,16 @@ class Kohteet extends DB2ActiveRecord
 			'muut' => 'Muut',
 			'toimenpiteet' => 'Toimenpiteet',
 			'tietoja' => 'Tietoja',
-			'tyoryhma' => 'Tyoryhma',
+			'tyoryhma' => 'Työryhmä',
 			'ryhma' => 'Ryhma',
 			'aktiivinen' => 'Aktiivinen',
 			'avain' => 'Avain',
-			'kenella_on_avain' => 'Kenella On Avain',
+			'kenella_on_avain' => 'Kenellä avain',
 			'puh_nro' => 'Puh Nro',
 			'siivous' => 'Siivous',
-			'etu_suku_nimet' => 'Etu Suku Nimet',
+			'etu_suku_nimet' => 'Etu-Suku Nimet',
 			'maksuehto_paiva' => 'Maksuehto Paiva',
-			'viivastyskorko' => 'Viivastyskorko',
+			'viivastyskorko' => 'Viivästyskorko',
 			'lasku_tiedot' => 'Lasku Tiedot',
 		);
 	}
@@ -134,6 +134,7 @@ class Kohteet extends DB2ActiveRecord
 		// should not be searched.
 
 		$criteria=new CDbCriteria;
+		$criteria->order = "osoite";
 
 		$criteria->compare('id',$this->id);
 		$criteria->compare('time',$this->time,true);

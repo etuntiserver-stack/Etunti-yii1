@@ -2,6 +2,20 @@
 /* @var $this TyontekijatController */
 /* @var $model Tyontekijat */
 /* @var $form CActiveForm */
+
+if(isset($_POST['uploaded'])){
+
+  if (!file_exists(Yii::app()->basePath."/../img/tekijat/".Yii::app()->user->domain)) {
+  	mkdir(Yii::app()->basePath."/../img/tekijat/".Yii::app()->user->domain, 0777, true);
+  }
+
+  $uploaddir = Yii::app()->basePath.'/../img/tekijat/'.Yii::app()->user->domain.'/';
+  $uploadfile = $uploaddir . basename($model->id.'.jpg');
+  if (move_uploaded_file($_FILES['file']['tmp_name'], $uploadfile)) {
+     echo "";
+  } 
+}
+
 ?>
 
 
@@ -12,7 +26,7 @@
 )); ?>
 
 <div class="row form">
-   <div class="col-sm-4">
+   <div class="col-sm-3">
 
 	<?php echo $form->errorSummary($model); ?>
 
@@ -64,7 +78,14 @@
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'tyoryhma'); ?>
-		<?php echo $form->textField($model,'tyoryhma',array('size'=>20,'maxlength'=>20,'class'=>'form-control')); ?>
+		<?php
+      		$l = Valikkoot::model()->findAll(" select_type='tyoryhma' ",array('order' => "select_type"));
+		foreach($l as $v)
+		$list[$v->value] = $v->value;
+
+        	echo $form->dropDownList($model, 'tyoryhma', $list,
+		array('empty'=>'','class'=>'form-control'));
+        	?>
 		<?php echo $form->error($model,'tyoryhma'); ?>
 	</div>
 
@@ -100,13 +121,13 @@
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'ayjasenyys'); ?>
-		<?php echo $form->textField($model,'ayjasenyys',array('size'=>10,'maxlength'=>10,'class'=>'form-control')); ?>
+		<?php echo $form->checkbox($model,'ayjasenyys',array('size'=>10,'maxlength'=>10,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'ayjasenyys'); ?>
 	</div>
 
 
    </div>
-   <div class="col-sm-4">
+   <div class="col-sm-3">
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'imei'); ?>
@@ -173,7 +194,21 @@
 	</div>
 
    </div>
-   <div class="col-sm-4">
+   <div class="col-sm-6">
+
+	<?php if(isset($model->id)): ?>
+	<div class="row">
+	   <div class="pull-right col-sm-3">
+	   <?php
+	   $filename = "../../img/tekijat/".Yii::app()->user->domain."/".$model->id.".jpg";
+	   if (file_exists(Yii::app()->basePath.$filename))
+	     echo '<img src="'.$filename.'" class="img-thumbnail">';
+	   else
+	     echo '<img src="../../img/tekijat/noname.jpg" class="img-thumbnail">';
+	   ?>  		
+	   </div>
+	</div>
+	<?php endif; ?>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'tekijan_tietoja'); ?>
@@ -189,6 +224,7 @@
 
    </div>
 
+
 </div><!-- form -->
 
 <br>
@@ -198,5 +234,7 @@
 	</div>
 
 <?php $this->endWidget(); ?>
+
+
 
 
