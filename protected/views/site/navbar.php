@@ -55,6 +55,7 @@
         	<li><?php echo CHtml::link(Yii::t('main', 'Toteutuneet taulukko'),array('/toteutuneet/index')); ?></li>
         	<li><?php echo CHtml::link(Yii::t('main', 'Toteutuneet hallinta'),array('/toteutuneet/admin')); ?></li>
         	<li><?php echo CHtml::link(Yii::t('main', 'Toteutuneet (kk)'),array('/toteutuneet/kk')); ?></li>
+        	<li><?php echo CHtml::link(Yii::t('main', 'Raportit'),array('/mobile/raportit')); ?></li>
           </ul>
         </li>
 

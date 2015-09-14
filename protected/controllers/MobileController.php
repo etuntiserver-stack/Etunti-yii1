@@ -34,7 +34,7 @@ class MobileController extends Controller
 		return array(
 
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','updatetime','showkohteet','yhteenveto','kyhteenveto','historia','poistaKohde','total_suunniteltu','total_toteutu','total_luettu','kesto','index_ajax'),
+				'actions'=>array('admin','delete','create','update','index','view','updatetime','showkohteet','yhteenveto','kyhteenveto','historia','poistaKohde','total_suunniteltu','total_toteutu','total_luettu','kesto','index_ajax','raportit'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -60,6 +60,54 @@ class MobileController extends Controller
 		}
 	}
 
+	public function actionRaportit()
+	{
+		if(Yii::app()->request->getPost('method'))
+		{
+
+		  unset(Yii::app()->session['Lounastauko']);
+		  unset(Yii::app()->session['MATKA']);
+
+		  if(Yii::app()->request->getPost('method') == 'luetut')
+		  {
+
+
+			if(isset($_POST['ilman']))
+			{
+			  foreach($_POST['ilman'] as $val){
+				if($val == 'Lounastauko')
+				Yii::app()->session['Lounastauko'] = 10;
+	
+				if($val == 'MATKA')
+				Yii::app()->session['MATKA'] = 2;
+			  }
+			}
+
+		       	$criteria = new CDbCriteria();
+			$criteria->select = " aloitan,loppui,kohde_kannasta ";
+
+			$criteria->condition = " tid = '".Yii::app()->request->getPost('tid')."' AND
+			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
+			BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."' ";
+		
+			if(Yii::app()->session['Lounastauko'])
+			$criteria->addCondition (" status != '10' ");
+		
+			if(Yii::app()->session['MATKA'])
+			$criteria->addCondition (" status != '2' ");
+
+			$model = Mobile::model()->findAll($criteria); 
+		
+		        $html2pdf = Yii::app()->ePdf->HTML2PDF('L', 'A4', 'en');
+			$html2pdf->setDefaultFont('Arial');
+		        $html2pdf->WriteHTML($this->renderPartial('raportit', array('model' => $model),true));
+		        $html2pdf->Output();
+
+		  }
+		}
+		$this->render('raportit');
+
+	}
 
 	public function actionTotal_suunniteltu($id,$kohde_tid)
 	{

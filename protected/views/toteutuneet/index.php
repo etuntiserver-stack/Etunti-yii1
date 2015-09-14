@@ -17,7 +17,6 @@ $this->breadcrumbs=array(
   <div class="col-md-12">
    <?php
     $list = CHtml::listData(Mobile::model()->findAll(array('order' => 'tekijan_nimi','group'=>'tekijan_nimi')), 'tid', 'tekijan_nimi');
-
     echo '<select name="tekija" id="nimi" class="btn btn-default">';
     if(Yii::app()->session['tekija']){
        $explTekija = explode("//",Yii::app()->session['tekija']);
@@ -25,7 +24,6 @@ $this->breadcrumbs=array(
     } else {
        echo '<option>'.Yii::t('main', 'Työntekijät').'</option>';
     }
-
 
     foreach($list as $key=>$val){
     echo '<option value="'.$key.'//'.$val.'">'.$val.'</option>';
