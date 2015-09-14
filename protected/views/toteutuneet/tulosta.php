@@ -13,7 +13,7 @@ td{
 
 <?php if(Yii::app()->session['tekija']) : ?>
   <h1><?php echo $explTekija[1]; ?></h1>
-  <table width="300">
+  <table width="290">
   <thead>
   <tr>
   <th><?php echo Yii::t('main', 'Päivämäärä'); ?></th>
