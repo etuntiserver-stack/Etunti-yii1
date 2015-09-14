@@ -34,7 +34,7 @@ class MobileController extends Controller
 		return array(
 
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','updatetime','showkohteet','yhteenveto','kyhteenveto','historia','poistaKohde','suunniteltu','kesto','index_ajax'),
+				'actions'=>array('admin','delete','create','update','index','view','updatetime','showkohteet','yhteenveto','kyhteenveto','historia','poistaKohde','total_suunniteltu','total_toteutu','total_luettu','kesto','index_ajax'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -61,12 +61,30 @@ class MobileController extends Controller
 	}
 
 
-	public function actionSuunniteltu($id,$kohde_tid)
+	public function actionTotal_suunniteltu($id,$kohde_tid)
 	{
 
 		$this->renderPartial('suunniteltu',array(
 			'id'=>$id,
 			'kohde_tid'=>$kohde_tid,
+		));
+
+	}
+
+	public function actionTotal_luettu($tid)
+	{
+
+		$this->renderPartial('total_luettu',array(
+			'tid'=>$tid,
+		));
+
+	}
+
+	public function actionTotal_toteutu($tid)
+	{
+
+		$this->renderPartial('total_toteutu',array(
+			'tid'=>$tid,
 		));
 
 	}

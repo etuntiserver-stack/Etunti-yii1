@@ -14,7 +14,7 @@
 
   if(isset($muutos) and $muutos == true){
     $mod = 'update';
-    $ap = ' <a href="#" class="text-danger poistaTot" rivi="'.$rivi.'" for="'.$did.'_'.$tid.'">AP</a>';
+    $ap = ' <span class="link text-danger poistaTot" rivi="'.$rivi.'" for="'.$did.'_'.$tid.'">AP</span>';
   } else {
     $mod = 'create';
     $ap = '';
@@ -33,7 +33,7 @@
 
 	   echo '
 	   <div id="'.$rivi.'_'.$did.'_'.$tid.'" class="fullRivi">';
-	   echo '&nbsp;<a href="#" class="link totRivi" mod="'.$mod.'" id="tot_'.$rivi.'">'.$al.' '.$kohde.'</a>'.$ap.'<br>
+	   echo '&nbsp;<span class="link totRivi" mod="'.$mod.'" id="tot_'.$rivi.'">'.$al.' '.$kohde.'</span>'.$ap.'<br>
 	   </div>';
 
 ?>
