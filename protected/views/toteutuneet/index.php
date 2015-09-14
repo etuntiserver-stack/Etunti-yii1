@@ -118,6 +118,8 @@ $this->breadcrumbs=array(
 	<?php Yii::app()->clientScript->registerPackage('tyovuoroot'); ?>
 	<?php Yii::app()->clientScript->registerPackage('toteuma'); ?>
 
+
+
 <script type="text/javascript">
 $(document).ready(function(){
 
