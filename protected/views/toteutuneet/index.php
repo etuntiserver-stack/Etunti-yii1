@@ -85,18 +85,26 @@ $this->breadcrumbs=array(
 
   <tfoot>
   <tr>
-  <th></th>
+  <th><?php echo Yii::t('main', 'Yhteensä'); ?></th>
 
   <?php
   $tas = explode(",",Yii::app()->user->adminPaketti);
   if(in_array('2',$tas) and isset($explTekija[0])){
   $total_sunniteltu = $this->renderPartial('//mobile/suunniteltu',array('id'=>$explTekija[0],'kohde_tid'=>'tid'),true);
-  echo '<th>'.sprint($total_sunniteltu).'</th>';
+  echo '<th><center>'.sprint($total_sunniteltu).'</center></th>';
   }
   ?>
 
-  <th></th>
-  <th></th>
+  <?php
+  $total_luettu = $this->renderPartial('//mobile/total_luettu',array('tid'=>$explTekija[0]),true);
+  echo '<th><center>'.sprint($total_luettu).'</center></th>';
+  ?>
+
+  <?php
+  $total_toteutu = $this->renderPartial('//mobile/total_toteutu',array('tid'=>$explTekija[0]),true);
+  echo '<th><center>'.sprint($total_toteutu).'</center></th>';
+  ?>
+
   <th></th>
   </tr>
   </tfoot>
@@ -109,6 +117,8 @@ $this->breadcrumbs=array(
 	<div id="showres" class="modal fade" tabindex="-1" role="dialog"></div>
 	<?php Yii::app()->clientScript->registerPackage('tyovuoroot'); ?>
 	<?php Yii::app()->clientScript->registerPackage('toteuma'); ?>
+
+
 
 <script type="text/javascript">
 $(document).ready(function(){

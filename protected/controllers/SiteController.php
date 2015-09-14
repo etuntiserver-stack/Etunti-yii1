@@ -25,7 +25,7 @@ class SiteController extends Controller
 	{
 		return array(
 			array('allow', 
-				'actions'=>array('index'),
+				'actions'=>array('index','test'),
 				'users'=>array('*'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -38,6 +38,15 @@ class SiteController extends Controller
 		);
 	}
 
+	public function actionTest()
+	{
+
+        $html2pdf = Yii::app()->ePdf->HTML2PDF();
+        $html2pdf->WriteHTML($this->renderPartial('test', compact('model'),true));
+        $html2pdf->Output();
+
+
+	}
 
 	public function actionMobemu()
 	{
