@@ -47,8 +47,12 @@ $this->breadcrumbs=array(
    ?>
 
    <input type="date" name="from" id="from" class="btn btn-default" value="<?php echo Yii::app()->session['from']; ?>">
-
    <input type="date" name="to" id="to" class="btn btn-default" value="<?php echo Yii::app()->session['to']; ?>">
+
+   <select name="tulosta" class="btn btn-default">
+     <option value="web"><?php echo Yii::t('main', 'WEB muoto'); ?></option>
+     <option value="pdf"><?php echo Yii::t('main', 'PDF muoto'); ?></option>
+   </select>
 
    <input type="submit" class="btn btn-primary" value="<?php echo Yii::t('main', 'haku'); ?>">
    </form>

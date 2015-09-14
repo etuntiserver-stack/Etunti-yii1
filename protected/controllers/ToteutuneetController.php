@@ -261,6 +261,7 @@ class ToteutuneetController extends Controller
 	 */
 	public function actionIndex()
 	{
+
 	function sprint($val){
 	    if($val > 0)
 		return sprintf('%02d:%02d', $val/3600, ($val % 3600)/60);
@@ -314,8 +315,20 @@ class ToteutuneetController extends Controller
 			'pagination'=>false
 		));
 
-		//$dataProvider->pagination->pageSize = 50;
-		$this->render('index', array('dataProvider' => $dataProvider));
+
+
+		if(Yii::app()->request->getPost('tulosta') == 'pdf')
+		{
+		  $model = Mobile::model()->findAll($criteria);
+	          $html2pdf = Yii::app()->ePdf->HTML2PDF('L', 'A4', 'en');
+		  $html2pdf->setDefaultFont('Arial');
+	          $html2pdf->WriteHTML($this->renderPartial('tulosta', array('model' => $model),true));
+	          $html2pdf->Output();
+		} else {
+		  //$dataProvider->pagination->pageSize = 50;
+		  $this->render('index', array('dataProvider' => $dataProvider));
+		}
+		
 	}
 
 	/**
