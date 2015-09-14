@@ -17,7 +17,7 @@ $this->breadcrumbs=array(
   <div class="col-md-12">
    <?php
     $model=new Mobile;
-    $list = CHtml::listData(Mobile::model()->findAll(array('group' => 'tid','order' => 'tekijan_nimi')), 'tid', 'tekijan_nimi');
+    $list = CHtml::listData(Mobile::model()->findAll(array('order'=>'id DESC','group' => 'tid','order' => 'tekijan_nimi')), 'tid', 'tekijan_nimi');
 
     echo '<select name="tekija" id="nimi" class="btn btn-default">';
     if(Yii::app()->session['tekija']){
