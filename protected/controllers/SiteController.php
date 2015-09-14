@@ -40,6 +40,18 @@ class SiteController extends Controller
 
 	public function actionTest()
 	{
+	/*
+        # Example from HTML2PDF wiki: Send PDF by email
+        $content_PDF = $html2pdf->Output('', EYiiPdf::OUTPUT_TO_STRING);
+        require_once(dirname(__FILE__).'/pjmail/pjmail.class.php');
+        $mail = new PJmail();
+        $mail->setAllFrom('webmaster@my_site.net', "My personal site");
+        $mail->addrecipient('mail_user@my_site.net');
+        $mail->addsubject("Example sending PDF");
+        $mail->text = "This is an example of sending a PDF file";
+        $mail->addbinattachement("my_document.pdf", $content_PDF);
+        $res = $mail->sendmail();
+	*/
 
         $html2pdf = Yii::app()->ePdf->HTML2PDF();
         $html2pdf->WriteHTML($this->renderPartial('test', compact('model'),true));
