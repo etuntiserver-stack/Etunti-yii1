@@ -15,9 +15,10 @@ $this->breadcrumbs=array(
 <div class="row">
   <form action="#" id="yhtveto" method="POST">
   <div class="col-md-12">
-   <a href="#" id="selAll" class="btn btn-default glyphicon glyphicon-check"></a>
+   <a href="#" id="deselAll" class="btn btn-default glyphicon glyphicon-remove-circle"></a>
+   <a href="#" id="selAll" class="btn btn-default glyphicon glyphicon-ok-circle"></a>
    <?php
-    $list = CHtml::listData(Tyontekijat::model()->findAll(" aktiivinen='1' ", array('order' => 'tekijan_nimi')), 'id', 'tekijan_nimi');
+    $list = CHtml::listData(Mobile::model()->findAll(array('order' => 'tekijan_nimi DESC')), 'tid', 'tekijan_nimi');
 
     echo '<select name="Tekija[]" class="selectpicker" id="tyontekijat" multiple class="btn btn-default" title="Työntekijät">';
     foreach($list as $key=>$val){
@@ -99,6 +100,11 @@ $('.selectpicker').selectpicker({
       style: 'btn-default',
       //size: 4
 });
+
+$('#deselAll').click(function(){
+   $('#tyontekijat').selectpicker('deselectAll');
+});
+
 
 $('#selAll').click(function(){
    $('#tyontekijat').selectpicker('selectAll');
