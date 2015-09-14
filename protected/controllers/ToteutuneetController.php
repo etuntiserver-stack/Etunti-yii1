@@ -277,6 +277,9 @@ class ToteutuneetController extends Controller
 		Yii::app()->session['tekija'] = Yii::app()->request->getPost('tekija');
 		}
 
+		if(Yii::app()->session['tekija'])
+		   $explTekija = explode("//",Yii::app()->session['tekija']);
+
 		if(isset($_POST['tekija']))
 		{
 		unset(Yii::app()->session['Lounastauko']);
@@ -307,7 +310,7 @@ class ToteutuneetController extends Controller
         	$criteria->order = 'id DESC';
         	$criteria->group = "DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'),'%Y%m%d')";
 
-		if(Yii::app()->session['tekija'])
+		if(isset($explTekija[0]))
 	        $criteria->addCondition (" tid = '".Yii::app()->session['tekija']."'");
 
 		if(Yii::app()->session['from'] and Yii::app()->session['to'])

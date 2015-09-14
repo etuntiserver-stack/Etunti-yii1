@@ -1,16 +1,4 @@
 <?php
-
-
-if(isset($model))
-{
-  foreach($model as $tvVal){
-   if($tvVal->id){
-   echo  $tvVal->aloitan."//".$tvVal->loppui."//".$tvVal->kohde_kannasta;
-   }
-  }
-exit;
-}
-
 $this->breadcrumbs=array(
 	Yii::t('main', 'Raportit'),
 );
@@ -41,7 +29,15 @@ $this->breadcrumbs=array(
       	<?php
 	   $list = CHtml::listData(Mobile::model()->findAll(array('order' => 'tekijan_nimi','group'=>'tekijan_nimi')), 'tid', 'tekijan_nimi');
 	   echo '<select name="tekija" id="nimi" class="form-control">';
-       	   echo '<option>'.Yii::t('main', 'Työntekijä').'</option>';	
+
+	    if(Yii::app()->session['tekija']){
+	       $explTekija = explode("//",Yii::app()->session['tekija']);
+	       echo '<option value="'.$explTekija[0].'//'.$explTekija[1].'">'.$explTekija[1].'</option>';
+	    } else {
+	       echo '<option>'.Yii::t('main', 'Työntekijät').'</option>';
+	    }
+
+       	   echo '<option value="kaikki">'.Yii::t('main', 'Kaikki').'</option>';
 	   foreach($list as $key=>$val)
 	   echo '<option value="'.$key.'//'.$val.'">'.$val.'</option>';
 
@@ -99,8 +95,16 @@ $this->breadcrumbs=array(
        <div class="col-sm-6">
       	<?php
 	   $list = CHtml::listData(Mobile::model()->findAll(array('order' => 'tekijan_nimi','group'=>'tekijan_nimi')), 'tid', 'tekijan_nimi');
-	   echo '<select name="tid" id="nimi" class="form-control">';
-       	   echo '<option>'.Yii::t('main', 'Työntekijä').'</option>';
+	   echo '<select name="tekija" id="nimi" class="form-control">';
+
+	    if(Yii::app()->session['tekija']){
+	       $explTekija = explode("//",Yii::app()->session['tekija']);
+	       echo '<option value="'.$explTekija[0].'//'.$explTekija[1].'">'.$explTekija[1].'</option>';
+	    } else {
+	       echo '<option>'.Yii::t('main', 'Työntekijät').'</option>';
+	    }
+
+       	   echo '<option value="kaikki">'.Yii::t('main', 'Kaikki').'</option>';
 	   foreach($list as $key=>$val)
 	   echo '<option value="'.$key.'//'.$val.'">'.$val.'</option>';
 

@@ -13,8 +13,6 @@ td{
 
 	border:1px #333 solid;
 }
-
-
 </style>
 
 <?php if(Yii::app()->session['tekija']) : ?>

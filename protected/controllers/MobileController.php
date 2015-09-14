@@ -62,6 +62,13 @@ class MobileController extends Controller
 
 	public function actionRaportit()
 	{
+
+	function sprint($val){
+	    if($val > 0)
+		return sprintf('%02d:%02d', $val/3600, ($val % 3600)/60);
+	}
+
+
 		if(Yii::app()->request->getPost('method'))
 		{
 
@@ -71,6 +78,20 @@ class MobileController extends Controller
 		  if(Yii::app()->request->getPost('method') == 'luetut')
 		  {
 
+			if(Yii::app()->request->getPost('tekija') == 'kaikki')
+			unset(Yii::app()->session['tekija']);
+			if(Yii::app()->request->getPost('tekija') and Yii::app()->request->getPost('tekija') != 'kaikki'){
+			Yii::app()->session['tekija'] = Yii::app()->request->getPost('tekija');
+			}
+
+			if(Yii::app()->session['tekija'])
+			   $explTekija = explode("//",Yii::app()->session['tekija']);
+
+			if(Yii::app()->request->getPost('from'))
+			Yii::app()->session['from'] = date("Y-m-d",strtotime(Yii::app()->request->getPost('from')));
+	
+			if(Yii::app()->request->getPost('to'))
+			Yii::app()->session['to'] = date("Y-m-d",strtotime(Yii::app()->request->getPost('to')));
 
 			if(isset($_POST['ilman']))
 			{
@@ -84,12 +105,16 @@ class MobileController extends Controller
 			}
 
 		       	$criteria = new CDbCriteria();
-			$criteria->select = " aloitan,loppui,kohde_kannasta ";
+			$criteria->select = " aloitan,loppui,tekijan_nimi,kohde_kannasta ";
+			$criteria->order = " id DESC ";
+			$criteria->condition = " aloitan!='' and loppui!='' ";
 
-			$criteria->condition = " tid = '".Yii::app()->request->getPost('tid')."' AND
-			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
-			BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."' ";
-		
+			if(isset($explTekija[0]))
+	        	$criteria->addCondition (" tid = '".Yii::app()->session['tekija']."'");
+
+			if(Yii::app()->session['from'] and Yii::app()->session['to'])
+	        	$criteria->addCondition ("DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."' ");
+
 			if(Yii::app()->session['Lounastauko'])
 			$criteria->addCondition (" status != '10' ");
 		
@@ -97,15 +122,102 @@ class MobileController extends Controller
 			$criteria->addCondition (" status != '2' ");
 
 			$model = Mobile::model()->findAll($criteria); 
-		
-		        $html2pdf = Yii::app()->ePdf->HTML2PDF('L', 'A4', 'en');
+	
+		        $html2pdf = Yii::app()->ePdf->HTML2PDF('P', 'A4', 'en');
 			$html2pdf->setDefaultFont('Arial');
-		        $html2pdf->WriteHTML($this->renderPartial('raportit', array('model' => $model),true));
+		        $html2pdf->WriteHTML($this->renderPartial('raportit_pdf_l', array('model' => $model),true));
 		        $html2pdf->Output();
-
+			//$this->renderPartial('raportit', array('model' => $model));
 		  }
+
+
+
+		  if(Yii::app()->request->getPost('method') == 'toteutuneet')
+		  {
+
+			if(Yii::app()->request->getPost('tekija') == 'kaikki')
+			unset(Yii::app()->session['tekija']);
+			if(Yii::app()->request->getPost('tekija') and Yii::app()->request->getPost('tekija') != 'kaikki'){
+			Yii::app()->session['tekija'] = Yii::app()->request->getPost('tekija');
+			}
+
+			if(Yii::app()->session['tekija'])
+			   $explTekija = explode("//",Yii::app()->session['tekija']);
+
+			if(Yii::app()->request->getPost('from'))
+			Yii::app()->session['from'] = date("Y-m-d",strtotime(Yii::app()->request->getPost('from')));
+	
+			if(Yii::app()->request->getPost('to'))
+			Yii::app()->session['to'] = date("Y-m-d",strtotime(Yii::app()->request->getPost('to')));
+
+			if(isset($_POST['ilman']))
+			{
+			  foreach($_POST['ilman'] as $val){
+				if($val == 'Lounastauko')
+				Yii::app()->session['Lounastauko'] = 10;
+	
+				if($val == 'MATKA')
+				Yii::app()->session['MATKA'] = 2;
+			  }
+			}
+
+			/* lu */
+		       	$criteria = new CDbCriteria();
+			$criteria->select = " aloitan,loppui,tekijan_nimi,kohde_kannasta ";
+			$criteria->order = " id DESC ";
+			$criteria->condition = " aloitan!='' and loppui!='' AND id NOT IN (SELECT kid FROM sivexkuitti_repaired) ";
+
+			if(isset($explTekija[0]))
+	        	$criteria->addCondition (" tid = '".Yii::app()->session['tekija']."'");
+
+			if(Yii::app()->session['from'] and Yii::app()->session['to'])
+	        	$criteria->addCondition ("DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."' ");
+
+			if(Yii::app()->session['Lounastauko'])
+			$criteria->addCondition (" status != '10' ");
+		
+			if(Yii::app()->session['MATKA'])
+			$criteria->addCondition (" status != '2' ");
+
+			$lu = Mobile::model()->findAll($criteria); 
+
+
+			/* tot */
+		       	$criteria = new CDbCriteria();
+			$criteria->select = " aloitan,loppui,tekijan_nimi,kohde_kannasta ";
+			$criteria->order = " id DESC ";
+			$criteria->condition = " aloitan!='' and loppui!='' AND id NOT IN (SELECT kid FROM sivexkuitti) ";
+
+			if(isset($explTekija[0]))
+	        	$criteria->addCondition (" tid = '".Yii::app()->session['tekija']."'");
+
+			if(Yii::app()->session['from'] and Yii::app()->session['to'])
+	        	$criteria->addCondition ("DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."' ");
+
+			if(Yii::app()->session['Lounastauko'])
+			$criteria->addCondition (" status != '10' ");
+		
+			if(Yii::app()->session['MATKA'])
+			$criteria->addCondition (" status != '2' ");
+
+			$tot = Toteutuneet::model()->findAll($criteria); 
+
+	
+			$model = array_merge($lu, $tot);
+
+		        $html2pdf = Yii::app()->ePdf->HTML2PDF('P', 'A4', 'en');
+			$html2pdf->setDefaultFont('Arial');
+		        $html2pdf->WriteHTML($this->renderPartial('raportit_pdf_t', array('model' => $model),true));
+		        $html2pdf->Output();
+			//$this->renderPartial('raportit', array('model' => $model));
+		  }
+
+
+		} else {
+
+			$this->render('raportit');
+
 		}
-		$this->render('raportit');
 
 	}
 
