@@ -17,8 +17,7 @@ $this->breadcrumbs=array(
   <div class="col-md-12">
    <a href="#" id="selAll" class="btn btn-default glyphicon glyphicon-check"></a>
    <?php
-    $model=new Mobile;
-    $list = CHtml::listData(Mobile::model()->findAll(array('group' => 'tid','order' => 'tekijan_nimi')), 'tid', 'tekijan_nimi');
+    $list = CHtml::listData(Tyontekijat::model()->findAll(" aktiivinen='1' ", array('order' => 'tekijan_nimi')), 'id', 'tekijan_nimi');
 
     echo '<select name="Tekija[]" class="selectpicker" id="tyontekijat" multiple class="btn btn-default" title="Työntekijät">';
     foreach($list as $key=>$val){
