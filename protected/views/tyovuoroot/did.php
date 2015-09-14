@@ -3,6 +3,7 @@
     	$color = '';
 	$did = date("Ymd",strtotime($pvm));
 
+
 	echo '
 	   <div class="tp row">
 	     <div class="col-sm-1">
@@ -10,8 +11,10 @@
 	     </div><div class="col-sm-1">
 	   	<a href="#" class="forCut" id="forCut_'.$did.'_'.$tid.'"></a>
 	     </div>
-	   </div>
-	   <div class="small laatikko latikkoAsetukset" pvm="'.date("d.m.Y",strtotime($pvm)).'" tid="'.$tid.'">';
+	   </div>';
+
+	echo '<div class="small laatikko latikkoAsetukset" pvm="'.date("d.m.Y",strtotime($pvm)).'" tid="'.$tid.'">';
+	
 
 	$tv = Tyovuoroot::model()->with('kohteet')->findAll("tid = '".$tid."' and pvm = '".date("d.m.Y",strtotime($pvm))."' "); 
 	foreach($tv as $tvVal)
@@ -50,8 +53,8 @@
 	    $color = '';
 	 }
 
-	   echo '
-	   <div id="'.$tvVal->id.'_'.$did.'_'.$tid.'" class="fullRivi" style="color:'.$color.'">';
+
+	   echo '<div id="'.$tvVal->id.'_'.$did.'_'.$tid.'" class="fullRivi" style="color:'.$color.'">';
 	   if( $from != 'mobiili' )
 	   echo '<a href=# class="text-danger glyphicon glyphicon-paste" for="'.$tvVal->id.'_'.$did.'_'.$tid.'"></a>';
 	   echo '&nbsp;<span class="link tv_edit" id="tv_'.$tvVal->id.'">'.$al.' '.$k['osoite'].'</span><br>

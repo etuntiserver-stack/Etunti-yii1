@@ -6,14 +6,20 @@
    ?>
 
 <style>
+table{
+	width: 290px;
+}
 td{
+
 	border:1px #333 solid;
 }
+
+
 </style>
 
 <?php if(Yii::app()->session['tekija']) : ?>
   <h1><?php echo $explTekija[1]; ?></h1>
-  <table width="290">
+  <table>
   <thead>
   <tr>
   <th><?php echo Yii::t('main', 'Päivämäärä'); ?></th>
@@ -35,12 +41,12 @@ td{
   foreach($model as $data)
   {
     echo '<tr>';
-    echo '<td>'.date("d.m.Y",strtotime($data->aloitan)).'</td>';
+    echo '<td width="1">'.date("d.m",strtotime($data->aloitan)).'</td>';
     $tas = explode(",",Yii::app()->user->adminPaketti);
     if(in_array('2',$tas))
-    echo '<td>'.$this->renderPartial('//tyovuoroot/did',array('pvm'=>$data->aloitan,'tid'=>$data->tid,'from'=>'mobiili'),true).'</td>';
-    echo '<td>'.$this->renderPartial('luetutpvmtid',array('pvm'=>$data->aloitan,'tid'=>$data->tid,'from'=>'mobiili'),true).'</td>';
-    echo '<td>'.$this->renderPartial('totpvmtid',array('pvm'=>$data->aloitan,'tid'=>$data->tid,'from'=>'mobiili'),true).'</td>';
+    echo '<td width=240>'.$this->renderPartial('//tyovuoroot/did',array('pvm'=>$data->aloitan,'tid'=>$data->tid,'from'=>'tulosta'),true).'</td>';
+    echo '<td width=240>'.$this->renderPartial('luetutpvmtid',array('pvm'=>$data->aloitan,'tid'=>$data->tid,'from'=>'mobiili'),true).'</td>';
+    echo '<td width=240>'.$this->renderPartial('totpvmtid',array('pvm'=>$data->aloitan,'tid'=>$data->tid,'from'=>'mobiili'),true).'</td>';
     echo '<td>'.$this->renderPartial('yhteensapvm',array('pvm'=>date("Y-m-d",strtotime($data->aloitan)),'tid'=>$data->tid,'from'=>'mobiili'),true).'</td>';
     echo '</tr>';
   }
