@@ -2,7 +2,7 @@
 
 $did = date("Ymd",strtotime($data->aloitan));
 ?>
-<tr>
+<TR>
 
 	<td><?php echo CHtml::encode(date("d.m.Y",strtotime($data->aloitan))); ?></td>
 
@@ -22,4 +22,4 @@ $did = date("Ymd",strtotime($data->aloitan));
 	<td id="yht_<?php echo $did.'_'.$data->tid; ?>"><?php $this->renderPartial('yhteensapvm',array('pvm'=>date("Y-m-d",strtotime($data->aloitan)),'tid'=>$data->tid,'from'=>'mobiili')); ?></td>
 
 
-</tr>
+</TR>
