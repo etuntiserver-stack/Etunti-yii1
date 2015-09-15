@@ -93,8 +93,6 @@ else
 
 ?>
 
-<div id="uusirivi"></div>
-
 <tr id="rivi_<?php echo $data->id; ?>">
 
 	<td>

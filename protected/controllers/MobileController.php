@@ -34,7 +34,7 @@ class MobileController extends Controller
 		return array(
 
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','updatetime','showkohteet','yhteenveto','kyhteenveto','historia','poistaKohde','total_suunniteltu','total_toteutu','total_luettu','kesto','index_ajax','raportit'),
+				'actions'=>array('admin','delete','create','update','index','index_a','view','updatetime','showkohteet','yhteenveto','kyhteenveto','historia','poistaKohde','total_suunniteltu','total_toteutu','total_luettu','kesto','index_ajax','raportit'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -241,8 +241,8 @@ class MobileController extends Controller
 		return sprintf('%02d:%02d', $val/3600, ($val % 3600)/60);
 	}
 
+
 		$model = Mobile::model()->find("id!='' order by id DESC");
-		
 		if(isset($_POST['setRivi']))
 		$this->renderPartial('_view', array('data' => $model));
 		else
@@ -465,6 +465,10 @@ class MobileController extends Controller
 		));
 
 		$dataProvider->pagination->pageSize = 50;
+
+		if(isset($_POST['index_ajax']))
+		$this->renderPartial('index_a', array('dataProvider' => $dataProvider));
+		else
 		$this->render('index', array('dataProvider' => $dataProvider));
 	}
 

@@ -76,12 +76,6 @@ $(".etsi_month").on('change', function() {
 });
 */
 
-$(".vietyovuoroon").click(function(){
-
-	var thisVal = $(this).attr("pvmtid");
-	window.open(location.protocol + "//" + location.host + '/index.php/tyovuoroot?pvmtid='+thisVal+'#'+thisVal);
-
-});
 
 
 function clearKaikki(){
