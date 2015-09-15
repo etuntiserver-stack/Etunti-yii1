@@ -205,6 +205,13 @@ class MobileController extends Controller
 	
 			$model = array_merge($lu, $tot);
 
+			/*
+  			foreach($m as $data){
+			$model[$data->aloitan] = date("d.m",strtotime($data->aloitan))."//".$data->tekijan_nimi."//".$data->kohde_kannasta."//".date("H:i",strtotime($data->aloitan))."//".date("H:i",strtotime($data->loppui));
+  			}
+			ksort($model);
+			*/
+
 		        $html2pdf = Yii::app()->ePdf->HTML2PDF('P', 'A4', 'en');
 			$html2pdf->setDefaultFont('Arial');
 		        $html2pdf->WriteHTML($this->renderPartial('raportit_pdf_t', array('model' => $model),true));

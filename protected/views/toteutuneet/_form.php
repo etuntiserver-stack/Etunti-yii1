@@ -42,6 +42,7 @@ if(isset($_POST['forid'])){
 
 		<?php echo $form->hiddenField($model,'kid',array('value'=>$s->id)); ?>
 		<?php echo $form->hiddenField($model,'tid',array('value'=>$s->tid)); ?>
+		<?php echo $form->hiddenField($model,'tekijan_nimi',array('value'=>$s->tekijan_nimi)); ?>
 		<?php echo $form->hiddenField($model,'kohdenID',array('value'=>$s->kohdenID,'id'=>'kohdenID')); ?>
 
 
