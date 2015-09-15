@@ -34,7 +34,7 @@ $this->breadcrumbs=array(
 	       $explTekija = explode("//",Yii::app()->session['tekija']);
 	       echo '<option value="'.$explTekija[0].'//'.$explTekija[1].'">'.$explTekija[1].'</option>';
 	    } else {
-	       echo '<option>'.Yii::t('main', 'Työntekijät').'</option>';
+	       echo '<option value="kaikki">'.Yii::t('main', 'Kaikki työntekijät').'</option>';
 	    }
 
        	   echo '<option value="kaikki">'.Yii::t('main', 'Kaikki').'</option>';
@@ -50,7 +50,7 @@ $this->breadcrumbs=array(
     	   $list = CHtml::listData(Mobile::model()->findAll(array('group' => 'kohde_kannasta','order' => 'kohde_kannasta')), 'kohde_kannasta', 'kohde_kannasta');
 	
     	   echo '<select name="kohteet" class="form-control" id="kohteet" title="Kohteet">';
-       	   echo '<option>'.Yii::t('main', 'Kohde').'</option>';	
+	       echo '<option value="kaikki">'.Yii::t('main', 'Kaikki kohteet').'</option>';
     	   foreach($list as $key=>$val){
        	 	echo '<option value="'.$key.'">'.$val.'</option>';
     	   }
@@ -101,7 +101,7 @@ $this->breadcrumbs=array(
 	       $explTekija = explode("//",Yii::app()->session['tekija']);
 	       echo '<option value="'.$explTekija[0].'//'.$explTekija[1].'">'.$explTekija[1].'</option>';
 	    } else {
-	       echo '<option>'.Yii::t('main', 'Työntekijät').'</option>';
+	       echo '<option value="kaikki">'.Yii::t('main', 'Kaikki työntekijät').'</option>';
 	    }
 
        	   echo '<option value="kaikki">'.Yii::t('main', 'Kaikki').'</option>';
@@ -117,7 +117,7 @@ $this->breadcrumbs=array(
     	   $list = CHtml::listData(Mobile::model()->findAll(array('group' => 'kohde_kannasta','order' => 'kohde_kannasta')), 'kohde_kannasta', 'kohde_kannasta');
 	
     	   echo '<select name="kohteet" class="form-control" id="kohteet" title="Kohteet">';
-       	   echo '<option>'.Yii::t('main', 'Kohde').'</option>';	
+	       echo '<option value="kaikki">'.Yii::t('main', 'Kaikki kohteet').'</option>';
     	   foreach($list as $key=>$val){
        	 	echo '<option value="'.$key.'">'.$val.'</option>';
     	   }
