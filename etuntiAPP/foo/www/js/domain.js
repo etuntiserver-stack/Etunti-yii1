@@ -6,7 +6,7 @@
 
   var server = "http://staging.etunti.fi";
   var url = server+"/index.php/api/mob";
-  var puh_nro = "0449304851";
+  var puh_nro = "";
   var versio = "0.50";
 
 
