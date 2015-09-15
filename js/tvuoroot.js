@@ -100,7 +100,6 @@ $("#clear").click(function() {
 	clearKaikki();
 });
 
-var kl = '';
 
 $(".glyphicon-paste").click(function() {
 	var thisID = $(this).attr("for");
@@ -110,7 +109,6 @@ $(".glyphicon-paste").click(function() {
 	$(".forCut").removeClass("forCut").addClass("mcut glyphicon glyphicon-transfer text-success");
 
 	$('#totalForCut').val(thisID + '//' + $('#totalForCut').val());
-	kl = $('#totalForCut').val();
 
 	$("#trash").addClass("glyphicon glyphicon-trash btn btn-danger btn-group");
 	$("#clear").addClass("glyphicon glyphicon-refresh btn btn-success btn-group");
@@ -120,6 +118,7 @@ $(".glyphicon-paste").click(function() {
 $(".forCopy").click(function() {
 
   var thisID = $(this).attr("id").split("_");
+  var kl = kl = $('#totalForCut').val();
   var kaikkiIDs = kl.split("//");
 
   $.each( kaikkiIDs, function( key, value ) {
@@ -175,6 +174,7 @@ $(".forCut").click(function() {
 
 
   var thisID = $(this).attr("id").split("_");
+  var kl = kl = $('#totalForCut').val();
   var kaikkiIDs = kl.split("//");
 
   $.each( kaikkiIDs, function( key, value ) {
@@ -228,6 +228,7 @@ $(".forCut").click(function() {
 
 $("#trash").click(function() {
 
+  var kl = kl = $('#totalForCut').val();
   var kaikkiIDs = kl.split("//");
 
   $.each( kaikkiIDs, function( key, value ) {

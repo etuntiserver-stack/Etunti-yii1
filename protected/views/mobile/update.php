@@ -34,3 +34,36 @@ $this->menu=array(
 </div>
 
 <?php echo $this->renderPartial('_form', array('model'=>$model)); ?>
+
+<hr>
+
+<h1><?php echo Yii::t('main', 'Tärkeimmät tiedot'); ?></h1>
+
+<?php $this->widget('zii.widgets.CDetailView', array(
+	'data'=>$model,
+	'attributes'=>array(
+		'id',
+		'asiakas_num',
+		'time',
+		'requests',
+		'puh_numero',
+		'imei',
+		'bluetooth_name',
+		'sim_serial_number',
+		'subscriber_id',
+		'my_location',
+		'osoite',
+		'kohde_kannasta',
+		'kohdenID',
+		'aloitan',
+		'loppui',
+		'viesti',
+		'tid',
+		'tekijan_nimi',
+		'etaisyys',
+		'status',
+		'tietoja',
+		'admin',
+		'hyvaksytty',
+	),
+)); ?>

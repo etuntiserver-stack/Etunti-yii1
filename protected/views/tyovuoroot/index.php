@@ -94,7 +94,7 @@ td .tp{
 </style>
 
 
-   <input type="hidden" id="totalForCut">
+   <input type="text" id="totalForCut">
    <div class="row pull-right">
 	<i id="trash"></i> 
 	<i id="clear"></i> 
