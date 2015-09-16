@@ -81,8 +81,6 @@ $(document).ready(function(){
 
 /* koko taulukko päivittä joka 60 sek, ja uuden rivin tarkistaminen on 10 sek kuluttua */
 
-function tableAjax(e){
-
 function getParameterByName(name) {
     name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
     var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
@@ -92,6 +90,7 @@ function getParameterByName(name) {
 
 var mobnum = getParameterByName('Mobile_page');
 
+function tableAjax(e){
 
    $.ajax({
       url: 'index?Mobile_page='+mobnum,
@@ -121,7 +120,7 @@ var mobnum = getParameterByName('Mobile_page');
 		    var e = data;
 
 		   $.ajax({
-		      url: 'index',
+		      url: 'index?Mobile_page='+mobnum,
 		      type: "POST",
 		      data: { index_ajax : "true" },
 		      success: function(data){		

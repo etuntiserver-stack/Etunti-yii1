@@ -324,7 +324,7 @@ class ToteutuneetController extends Controller
 
 
 
-		if(Yii::app()->request->getPost('tulosta') == 'pdf')
+		if(Yii::app()->request->getPost('tulosta'))
 		{
 		  $model = Mobile::model()->findAll($criteria);
 	          $html2pdf = Yii::app()->ePdf->HTML2PDF('L', 'A4', 'en');

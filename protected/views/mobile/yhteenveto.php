@@ -50,6 +50,15 @@ $this->breadcrumbs=array(
 
    <input type="submit" class="btn btn-primary" value="<?php echo Yii::t('main', 'haku'); ?>">
    </form>
+
+   <!-- tulostus -->
+   <div class="pull-right">
+     <form action="#" target="_blank" method="POST">
+      <input type="submit" name="tulosta" class="btn btn-success" value="PDF">
+     </form>
+   </div>
+   <!-- tulostus -->
+
   </div>
 </div>
 

@@ -45,7 +45,7 @@ $('.search-form form').submit(function(){
 		'id',
 		'asiakas_num',
 		'kohde_kannasta',
-		//'time',
+		'time',
 		'aloitan',
 		'loppui',
 		'status',

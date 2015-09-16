@@ -10,7 +10,6 @@ table{
 	width: 290px;
 }
 td{
-
 	border:1px #333 solid;
 }
 </style>
@@ -38,15 +37,7 @@ td{
   <?php 
   foreach($model as $data)
   {
-    echo '<tr>';
-    echo '<td width="1">'.date("d.m",strtotime($data->aloitan)).'</td>';
-    $tas = explode(",",Yii::app()->user->adminPaketti);
-    if(in_array('2',$tas))
-    echo '<td width=240>'.$this->renderPartial('//tyovuoroot/did',array('pvm'=>$data->aloitan,'tid'=>$data->tid,'from'=>'tulosta'),true).'</td>';
-    echo '<td width=240>'.$this->renderPartial('luetutpvmtid',array('pvm'=>$data->aloitan,'tid'=>$data->tid,'from'=>'mobiili'),true).'</td>';
-    echo '<td width=240>'.$this->renderPartial('totpvmtid',array('pvm'=>$data->aloitan,'tid'=>$data->tid,'from'=>'mobiili'),true).'</td>';
-    echo '<td>'.$this->renderPartial('yhteensapvm',array('pvm'=>date("Y-m-d",strtotime($data->aloitan)),'tid'=>$data->tid,'from'=>'mobiili'),true).'</td>';
-    echo '</tr>';
+	$this->renderPartial('_view',array('data'=>$data));
   }
   ?>
   </tbody>
