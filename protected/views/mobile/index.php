@@ -83,8 +83,18 @@ $(document).ready(function(){
 
 function tableAjax(e){
 
+function getParameterByName(name) {
+    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+        results = regex.exec(location.search);
+    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+}
+
+var mobnum = getParameterByName('Mobile_page');
+
+
    $.ajax({
-      url: 'index',
+      url: 'index?Mobile_page='+mobnum,
       type: "POST",
       data: { index_ajax : "true" },
       success: function(data){
