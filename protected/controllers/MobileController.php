@@ -703,7 +703,18 @@ class MobileController extends Controller
 		));
 
 		//$dataProvider->pagination->pageSize = 50;
-		$this->render('yhteenveto', array('dataProvider' => $dataProvider));
+
+		if(Yii::app()->request->getPost('tulosta'))
+		{
+		  $model = Mobile::model()->findAll($criteria);
+	          $html2pdf = Yii::app()->ePdf->HTML2PDF('P', 'A4', 'en');
+		  $html2pdf->setDefaultFont('Arial');
+	          $html2pdf->WriteHTML($this->renderPartial('tulosta_yhteenveto', array('model' => $model),true));
+	          $html2pdf->Output();
+		} else {
+		  //$dataProvider->pagination->pageSize = 50;
+		  $this->render('yhteenveto', array('dataProvider' => $dataProvider));
+		}
 	}
 
 
@@ -757,7 +768,18 @@ class MobileController extends Controller
 		));
 
 		//$dataProvider->pagination->pageSize = 50;
-		$this->render('kyhteenveto', array('dataProvider' => $dataProvider));
+
+		if(Yii::app()->request->getPost('tulosta'))
+		{
+		  $model = Mobile::model()->findAll($criteria);
+	          $html2pdf = Yii::app()->ePdf->HTML2PDF('P', 'A4', 'en');
+		  $html2pdf->setDefaultFont('Arial');
+	          $html2pdf->WriteHTML($this->renderPartial('tulosta_kyhteenveto', array('model' => $model),true));
+	          $html2pdf->Output();
+		} else {
+		  //$dataProvider->pagination->pageSize = 50;
+		  $this->render('kyhteenveto', array('dataProvider' => $dataProvider));
+		}
 	}
 
 
