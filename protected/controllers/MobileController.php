@@ -677,7 +677,7 @@ class MobileController extends Controller
 
         	//$criteria->condition = " l_loppu = '' and l_alku = '' ";
 
-        	$criteria->order = "SUBSTR(LTRIM(tekijan_nimi), LOCATE(' ',LTRIM(tekijan_nimi)))";
+        	$criteria->order = "tekijan_nimi"; //"SUBSTR(LTRIM(tekijan_nimi), LOCATE(' ',LTRIM(tekijan_nimi)))"
         	$criteria->group = 'tid';
 
 		if(Yii::app()->session['Tekija']){
