@@ -92,6 +92,7 @@ $(".poistaKohde").click(function(){
 
 });
 
+/*
 $(".etsi_tekijan_nimi").change(function(){
 	var thisVal = $(this).val();
         $.ajax({
@@ -130,5 +131,6 @@ $(".etsi_pvm").on('blur', function() {
            }
         });
 });
+*/
 
 });

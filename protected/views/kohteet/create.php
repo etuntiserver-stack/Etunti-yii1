@@ -3,16 +3,16 @@
 /* @var $model Kohteet */
 
 $this->breadcrumbs=array(
-	'Kohteets'=>array('index'),
-	'Create',
+	Yii::t('main', 'Kohteet')=>array('index'),
+	Yii::t('main', 'Luo'),
 );
 
 $this->menu=array(
-	array('label'=>'List Kohteet', 'url'=>array('index')),
-	array('label'=>'Manage Kohteet', 'url'=>array('admin')),
+	array('label'=>Yii::t('main', 'Kohde lista'), 'url'=>array('index')),
+	array('label'=>Yii::t('main', 'Kohde hallinta'), 'url'=>array('admin')),
 );
 ?>
 
-<h1>Create Kohteet</h1>
+<h1><?php echo Yii::t('main', 'Luo kohde'); ?></h1>
 
 <?php echo $this->renderPartial('_form', array('model'=>$model)); ?>

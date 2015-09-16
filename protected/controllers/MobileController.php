@@ -442,9 +442,11 @@ class MobileController extends Controller
 		if(Yii::app()->request->getPost('etsi_kohteet') and Yii::app()->request->getPost('etsi_kohteet') != 'kaikki'){
 		Yii::app()->session['etsi_kohteet'] = Yii::app()->request->getPost('etsi_kohteet');
 		}
-		if(Yii::app()->request->getPost('etsi_pvm') == 'kaikki')
+
+		if(isset($_POST['etsi_pvm']) and empty($_POST['etsi_pvm']))
 		unset(Yii::app()->session['etsi_pvm']);
-		if(Yii::app()->request->getPost('etsi_pvm') and Yii::app()->request->getPost('etsi_pvm') != 'kaikki'){
+
+		if(Yii::app()->request->getPost('etsi_pvm')){
 		Yii::app()->session['etsi_pvm'] = date("Y-m-d",strtotime(Yii::app()->request->getPost('etsi_pvm')));
 		}
 

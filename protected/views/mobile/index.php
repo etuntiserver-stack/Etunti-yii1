@@ -14,25 +14,28 @@ $this->menu=array(
 */
 ?>
 
-<h1><?php echo Yii::t('main', 'Mobiili luetut'); ?></h1>
-
 <div class="pull-right">
-  <?php echo CHtml::link(Yii::t('main', 'Luo työntekijä'),'/index.php/tyontekijat/create',array('target'=>'_blank','class'=>'btn btn-success glyphicon-plus')); ?>
-  <?php echo CHtml::link(Yii::t('main', 'Luo kohde'),'/index.php/kohteet/create',array('target'=>'_blank','class'=>'btn btn-success glyphicon-plus')); ?>
+  <?php echo CHtml::link(' +','/index.php/tyontekijat/create',array('target'=>'_blank','class'=>'btn btn-default glyphicon glyphicon-user')); ?>
+  <?php echo CHtml::link(' +','/index.php/kohteet/create',array('target'=>'_blank','class'=>'btn btn-default glyphicon glyphicon-home')); ?>
 </div>
 
-<div class="row">
+<h1><?php echo Yii::t('main', 'MOBIILI'); ?></h1>
 
-  <div class="col-md-2">
+
+
+ <div class="row">
+   <div class="col-sm-12">
+   <form id="mobForm" action="#" class="form-inline" method="POST">
+   <input type="hidden" name="mob_hae">
    <?php
     $model=new Mobile;
     $list = CHtml::listData(Mobile::model()->findAll(array('group' => 'tid','order' => 'tekijan_nimi')), 'tekijan_nimi', 'tekijan_nimi');
 
-    echo '<select class="btn btn-default etsi_tekijan_nimi form-control">';
+    echo '<select class="form-control form-group" name="etsi_tekijan_nimi">';
     if(Yii::app()->session['etsi_tekijan_nimi'])
        echo '<option value="'.Yii::app()->session['etsi_tekijan_nimi'].'">'.Yii::app()->session['etsi_tekijan_nimi'].'</option>';
     else
-       echo '<option>'.Yii::t('main', 'Työntekijät').'</option>';
+       echo '<option value="kaikki">'.Yii::t('main', 'Työntekijät').'</option>';
 
        echo '<option value="kaikki">Kaikki</option>';
 
@@ -41,17 +44,16 @@ $this->menu=array(
     }
     echo '</select>';
    ?>
-  </div>
-  <div class="col-md-2">
+
    <?php
     $model=new Mobile;
     $list = CHtml::listData(Mobile::model()->findAll(array('group' => 'kohdenID','order' => 'kohde_kannasta')), 'kohde_kannasta', 'kohde_kannasta');
 
-    echo '<select class="btn btn-default etsi_kohteet form-control">';
+    echo '<select class="form-control form-group" name="etsi_kohteet">';
     if(Yii::app()->session['etsi_kohteet'])
        echo '<option value="'.Yii::app()->session['etsi_kohteet'].'">'.Yii::app()->session['etsi_kohteet'].'</option>';
     else
-       echo '<option>'.Yii::t('main', 'Kohteet').'</option>';
+       echo '<option value="kaikki">'.Yii::t('main', 'Kohteet').'</option>';
 
        echo '<option value="kaikki">Kaikki</option>';
 
@@ -60,13 +62,28 @@ $this->menu=array(
     }
     echo '</select>';
    ?>
-  </div>
-  <div class="col-md-2">
-   <input type="date" class="btn btn-default form-control etsi_pvm" value="<?php echo Yii::app()->session['etsi_pvm']; ?>">
-  </div>
-</div>
+   <input type="date" class="form-control form-group" name="etsi_pvm" value="<?php echo Yii::app()->session['etsi_pvm']; ?>">
 
-<br>
+     <div class="form-group input-group-btn">
+        <button class="btn btn-primary haemob" type="button"><i class="glyphicon glyphicon-search"> Hae</i></button>
+     </div>
+   </div>
+  </form>
+ </div>
+
+  <br>
+<!--
+  <div class="row">
+   <div class="col-sm-4">
+        <div class="input-group">
+            <input type="text" class="form-control hakusana" placeholder="Hakusana" name="srch-term" id="srch-term" value="<?php echo Yii::app()->session['hakusana']; ?>">
+            <div class="input-group-btn">
+                <button class="btn btn-primary hae" type="button"><i class="glyphicon glyphicon-search"> Hae</i></button>
+            </div>
+        </div>
+   </div>
+  </div>
+-->
 
   <div id="tb"></div>
 
@@ -87,10 +104,37 @@ function getParameterByName(name) {
         results = regex.exec(location.search);
     return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
 }
-
 var mobnum = getParameterByName('Mobile_page');
 
-function tableAjax(e){
+
+$(".haemob").click(function(){
+	$("#mobForm").submit();
+});
+
+
+// Send form by ajax
+$('#mobForm').on('submit',function(e) {
+
+  $.ajax({
+  url: 'index?Mobile_page='+mobnum,
+  data:$(this).serialize(),
+  type:'POST',
+  success:function(data){
+  //console.log(data);
+	tableAjax();
+	return false;
+  },
+  error:function(data){
+  console.log(data); 
+  }
+  });
+
+e.preventDefault(); 
+});
+
+
+
+function tableAjax(){
 
    $.ajax({
       url: 'index?Mobile_page='+mobnum,

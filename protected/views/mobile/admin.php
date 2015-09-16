@@ -51,6 +51,7 @@ $('.search-form form').submit(function(){
 		'status',
 		'imei',
 		'tekijan_nimi',
+		'tid',
 		'viesti',
 		/*
 		'bluetooth_name',
