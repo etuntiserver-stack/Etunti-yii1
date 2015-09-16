@@ -50,7 +50,6 @@
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?php echo Yii::t('main', 'Toteuma'); ?> <span class="caret"></span></a>
           <ul class="dropdown-menu">
         	<li><?php echo CHtml::link(Yii::t('main', 'Toteutuneet taulukko'),array('/toteutuneet/index')); ?></li>
-        	<li><?php echo CHtml::link(Yii::t('main', 'Toteutuneet hallinta'),array('/toteutuneet/admin')); ?></li>
         	<li><?php echo CHtml::link(Yii::t('main', 'Toteutuneet (kk)'),array('/toteutuneet/kk')); ?></li>
 	        <li role="separator" class="divider"></li>
         	<li><?php echo CHtml::link(Yii::t('main', 'Raportit'),array('/mobile/raportit')); ?></li>

@@ -2,7 +2,17 @@
 
 	echo '<div class="small" style="opacity:0.6">';
 	$did = date("Ymd",strtotime($pvm));
-	$tv = Mobile::model()->findAll("tid = '".$tid."' and DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = '".date("Y-m-d",strtotime($pvm))."' "); 
+
+       	$criteria = new CDbCriteria();
+	$criteria->condition = " tid = '".$tid."' and DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = '".date("Y-m-d",strtotime($pvm))."' ";
+
+	if(Yii::app()->session['Lounastauko'])
+	$criteria->addCondition (" status != '10' ");
+
+	if(Yii::app()->session['MATKA'])
+	$criteria->addCondition (" status != '2' ");
+
+	$tv = Mobile::model()->findAll($criteria); 
 	foreach($tv as $tvVal)
 	{
 	   $strlen = strlen($tvVal->kohde_kannasta);

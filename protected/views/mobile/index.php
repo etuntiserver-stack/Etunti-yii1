@@ -14,17 +14,22 @@ $this->menu=array(
 */
 ?>
 
-<div class="pull-right">
-  <?php echo CHtml::link(' +','/index.php/tyontekijat/create',array('target'=>'_blank','class'=>'btn btn-default glyphicon glyphicon-user')); ?>
-  <?php echo CHtml::link(' +','/index.php/kohteet/create',array('target'=>'_blank','class'=>'btn btn-default glyphicon glyphicon-home')); ?>
-</div>
 
-<h1><?php echo Yii::t('main', 'MOBIILI'); ?></h1>
-
+<legend>
+<button class="pull-right btn btn-info" data-toggle="collapse"  data-target="#haku"><?php echo Yii::t('main', 'Haku'); ?> <b class="caret"></b></button>
+<h1> <?php echo Yii::t('main', 'MOBIILI'); ?> <i class="glyphicon glyphicon-phone"></i></h1>
+</legend>
 
 
- <div class="row">
+
+ <div class="row collapse" id="haku">
    <div class="col-sm-12">
+
+   <div class="pull-right">
+     <?php echo CHtml::link(' +','/index.php/tyontekijat/create',array('target'=>'_blank','class'=>'btn btn-default glyphicon glyphicon-user')); ?>
+     <?php echo CHtml::link(' +','/index.php/kohteet/create',array('target'=>'_blank','class'=>'btn btn-default glyphicon glyphicon-home')); ?>
+   </div>
+
    <form id="mobForm" action="#" class="form-inline" method="POST">
    <input type="hidden" name="mob_hae">
    <?php
@@ -71,7 +76,7 @@ $this->menu=array(
   </form>
  </div>
 
-  <br>
+
 <!--
   <div class="row">
    <div class="col-sm-4">

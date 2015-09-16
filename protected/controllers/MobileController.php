@@ -643,7 +643,7 @@ class MobileController extends Controller
 		if(Yii::app()->request->getPost('Tekija'))
 		Yii::app()->session['Tekija'] = Yii::app()->request->getPost('Tekija');
 
-		if(isset($_POST['etsi_tekijan_nimi']))
+		if(isset($_POST['yhtvetoform']))
 		{
 		unset(Yii::app()->session['Lounastauko']);
 		unset(Yii::app()->session['MATKA']);

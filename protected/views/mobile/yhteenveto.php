@@ -9,11 +9,14 @@ $this->breadcrumbs=array(
 
 ?>
 
-<h1><?php echo Yii::t('main', 'Yhteenveto tunnit'); ?></h1>
+<legend>
+<button class="pull-right btn btn-info" data-toggle="collapse"  data-target="#haku"><?php echo Yii::t('main', 'Haku'); ?> <b class="caret"></b></button>
+<h1> <?php echo Yii::t('main', 'YHTEENVETO TUNNIT'); ?> <i class="glyphicon glyphicon-time"></i></h1>
+</legend>
 
-
-<div class="row">
+<div class="row collapse" id="haku">
   <form action="#" id="yhtveto" method="POST">
+  <input type="hidden" name="yhtvetoform">
   <div class="col-md-12">
    <a href="#" id="deselAll" class="btn btn-default glyphicon glyphicon-remove-circle"></a>
    <a href="#" id="selAll" class="btn btn-default glyphicon glyphicon-ok-circle"></a>
@@ -39,7 +42,7 @@ $this->breadcrumbs=array(
     $matka = '';
     $matka = ( isset(Yii::app()->session['MATKA']))  ? 'selected' : '';
 
-    echo '<select name="ilman[]" class="selectpicker ilman"  multiple="multiple"  title="Ilman...">';
+    echo '<select name="ilman[]" class="selectpicker ilman"  multiple="multiple"  title="Ei lasketa...">';
     echo '<option value="Lounastauko" '.$lounas.'>Lounastauko</option>';
     echo '<option value="MATKA" '.$matka.'>MATKA</option>';
     echo '</select>';
