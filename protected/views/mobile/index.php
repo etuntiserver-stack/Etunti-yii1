@@ -127,8 +127,7 @@ function tableAjax(e){
 			  $('#tb').html(data);		
 			  if(e){
 			    console.log(e);
-			    $('#rivi_'+e).hide('slow');
-		  	    $('#rivi_'+e).show('slow');
+			    $('#rivi_'+e).fadeOut(1000).fadeIn(1000).fadeOut(1000).fadeIn(1000);
 			  }		
 		      }
 		   });
