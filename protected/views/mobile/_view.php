@@ -176,7 +176,7 @@ else
 
 	<td width="1">
 	  <span class="link" data-toggle="collapse" id="<?php echo 'altxt_'.$data->id; ?>" data-target="<?php echo '#alshow_'.$data->id; ?>"><?php echo $at[$data->id]; ?></span>
-	  <div style="position:absolute;z-index: 2;" class="collapse" id="<?php echo 'alshow_'.$data->id; ?>">
+	  <div style="position:absolute;z-index: 2;margin-left:-100px" class="collapse" id="<?php echo 'alshow_'.$data->id; ?>">
 	    <div class="well">
 	     <?php echo '<input type="datetime-local" class="pvmupdate form-control" request="aloitan" status="'.$data->status.'" id="al_'.$data->id.'" for="altxt_'.$data->id.'" value="'.$apvm[$data->id].'T'.$at[$data->id].'">'; ?>
 	    </div>
@@ -185,7 +185,7 @@ else
 
 	<td width="1">
 	  <span class="link" data-toggle="collapse" id="<?php echo 'lptxt_'.$data->id; ?>" data-target="<?php echo '#ltshow_'.$data->id; ?>"><?php echo $lt[$data->id]; ?></span>
-	  <div style="position:absolute;z-index: 2;" class="collapse" id="<?php echo 'ltshow_'.$data->id; ?>">
+	  <div style="position:absolute;z-index: 2;margin-left:-100px" class="collapse" id="<?php echo 'ltshow_'.$data->id; ?>">
 	    <div class="well">
 	     <?php echo '<input type="datetime-local" class="pvmupdate form-control" request="loppui" status="'.$data->status.'" id="lt_'.$data->id.'" for="lptxt_'.$data->id.'" value="'.$lpvm[$data->id].'T'.$lt[$data->id].'">'; ?>
 	    </div>
@@ -212,6 +212,7 @@ else
 
 	<td><?php echo CHtml::encode($data->time); ?></td>
 	
+
 	
 
 	<td><?php echo CHtml::encode($data->requests); ?></td>
