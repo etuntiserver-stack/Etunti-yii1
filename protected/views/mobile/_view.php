@@ -160,12 +160,14 @@ else
 	<td>
 	  <span class="link glyphicon glyphicon-edit openkohde" id="<?php echo 'kohttisID_'.$data->id; ?>" for="<?php echo 'kohtval_'.$data->id; ?>" data-toggle="collapse" data-target="<?php echo '#kshow_'.$data->id; ?>"></span>&nbsp;
 
+	  <span id="vaihto_<?php echo 'kohttisID_'.$data->id; ?>">
 	  <?php 
 	  if(!empty($data->kohdenID))
 		echo CHtml::link($data->kohde_kannasta,'/index.php/kohteet/update?id='.$data->kohdenID,array('target'=>'_blank','class'=>'text-success')); 
 	  else
 		echo '<span class="text-danger">'.$data->kohde_kannasta.'</span>';
 	  ?>
+	  </div>
 
 	  <div style="position:absolute;z-index: 2;" class="collapse" id="<?php echo 'kshow_'.$data->id; ?>">
 	    <div class="well" id="<?php echo 'kohtval_'.$data->id; ?>"></div>

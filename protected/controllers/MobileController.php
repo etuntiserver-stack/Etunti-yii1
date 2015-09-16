@@ -317,18 +317,17 @@ class MobileController extends Controller
 
 			var thisText = $(this).find("option:selected").text();
 			var thisVal = $(this).val();
-		
 
-   		var Mobile = {kohdenID: thisVal,kohde_kannasta: thisText};
-   		var svk = {Mobile};
+   			var Mobile = {kohdenID: thisVal,kohde_kannasta: thisText};
+   			var svk = {Mobile};
 
 		        $.ajax({
 		           url: "update?id=<?php echo $_POST['id']; ?>",
 		           type: "POST",
 		           data: svk,
 		           success: function(html){
-				$("#<?php echo $_POST['thisID']; ?>").removeClass("btn-default").addClass("btn-success").text(thisText);
-				//alert(html)
+				$("#vaihto_<?php echo $_POST['thisID']; ?>").addClass("text-success").text(thisText);
+				//alert(thisText)
 		           }
 		        });
 		
