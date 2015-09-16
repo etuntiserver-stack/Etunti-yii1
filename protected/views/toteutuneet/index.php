@@ -9,15 +9,18 @@ $this->breadcrumbs=array(
 
 ?>
 
-<h1><?php echo Yii::t('main', 'Toteuma'); ?></h1>
+<legend>
+<button class="pull-right btn btn-info" data-toggle="collapse"  data-target="#haku"><?php echo Yii::t('main', 'Haku'); ?> <b class="caret"></b></button>
+<h1> <?php echo Yii::t('main', 'TOTEUMA'); ?> <i class="glyphicon glyphicon-time"></i></h1>
+</legend>
 
+<div class="row collapse" id="haku">
 
-<div class="row">
-  <form action="#" id="yhtveto" method="POST">
+  <form action="#" id="yhtveto" class="form-inline" method="POST">
   <div class="col-md-12">
    <?php
     $list = CHtml::listData(Mobile::model()->findAll(array('order' => 'tekijan_nimi','group'=>'tekijan_nimi')), 'tid', 'tekijan_nimi');
-    echo '<select name="tekija" id="nimi" class="btn btn-default">';
+    echo '<select name="tekija" id="nimi" class="form-control form-group">';
     if(Yii::app()->session['tekija']){
        $explTekija = explode("//",Yii::app()->session['tekija']);
        echo '<option value="'.$explTekija[0].'//'.$explTekija[1].'">'.$explTekija[1].'</option>';
@@ -32,22 +35,25 @@ $this->breadcrumbs=array(
    ?>
 
    <?php
-
     $lounas = '';
     $lounas = ( isset(Yii::app()->session['Lounastauko']))  ? 'selected' : '';
     $matka = '';
     $matka = ( isset(Yii::app()->session['MATKA']))  ? 'selected' : '';
 
-    echo '<select name="ilman[]" class="selectpicker ilman"  multiple="multiple"  title="Ilman...">';
+    echo '<select name="ilman[]" class="selectpicker ilman"  multiple="multiple"  title="Ei lasketa">';
     echo '<option value="Lounastauko" '.$lounas.'>Lounastauko</option>';
     echo '<option value="MATKA" '.$matka.'>MATKA</option>';
     echo '</select>';
    ?>
 
-   <input type="date" name="from" id="from" class="btn btn-default" value="<?php echo Yii::app()->session['from']; ?>">
-   <input type="date" name="to" id="to" class="btn btn-default" value="<?php echo Yii::app()->session['to']; ?>">
+   <input type="date" name="from" id="from" class="form-control form-group" value="<?php echo Yii::app()->session['from']; ?>">
+   <input type="date" name="to" id="to" class="form-control form-group" value="<?php echo Yii::app()->session['to']; ?>">
 
-   <input type="submit" class="btn btn-primary" value="<?php echo Yii::t('main', 'haku'); ?>">
+
+   <div class="form-group input-group-btn">
+        <input type="submit" class="btn btn-primary" value="<?php echo Yii::t('main', 'Hae'); ?>">
+   </div>
+
    </form>
 
    <!-- tulostus -->

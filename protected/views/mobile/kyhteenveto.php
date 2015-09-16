@@ -9,27 +9,44 @@ $this->breadcrumbs=array(
 
 ?>
 
-<h1><?php echo Yii::t('main', 'Yhteenveto kohteet'); ?></h1>
+<legend>
+<button class="pull-right btn btn-info" data-toggle="collapse"  data-target="#haku"><?php echo Yii::t('main', 'Haku'); ?> <b class="caret"></b></button>
+<h1> <?php echo Yii::t('main', 'YHTEENVETO KOHTEET'); ?> <i class="glyphicon glyphicon-home"></i></h1>
+</legend>
 
 
-<div class="row">
-  <form action="#" id="yhtveto" method="POST">
+
+<div class="row collapse" id="haku">
+
+  <form action="#" id="yhtveto" class="form-inline" method="POST">
   <div class="col-md-12">
    <?php
     $model=new Mobile;
     $list = CHtml::listData(Mobile::model()->findAll(array('group' => 'kohde_kannasta','order' => 'kohde_kannasta')), 'kohde_kannasta', 'kohde_kannasta');
 
-    echo '<select name="kohteet" class="selectpicker" id="kohteet"  title="Kohteet">';
+    echo '<select name="kohteet" class="form-control form-group" id="kohteet">';
        	 echo '<option value="kaikki">Kaikki</option>';
     foreach($list as $key=>$val){
+
+	   $strlen = strlen($val);
+	   if($strlen > 27)
+	    $val = substr($val,0,27).'..';
+	   else
+	    $val = $val;
+
        	 echo '<option value="'.$key.'">'.$val.'</option>';
     }
     echo '</select>';
    ?>
 
-   <input type="date" name="from" id="from" class="btn btn-default" value="<?php echo Yii::app()->session['from']; ?>">
-   <input type="date" name="to" id="to" class="btn btn-default" value="<?php echo Yii::app()->session['to']; ?>">
-   <input type="submit" class="btn btn-primary" value="<?php echo Yii::t('main', 'haku'); ?>">
+   <input type="date" name="from" id="from" class="form-control form-group" value="<?php echo Yii::app()->session['from']; ?>">
+   <input type="date" name="to" id="to" class="form-control form-group" value="<?php echo Yii::app()->session['to']; ?>">
+
+
+   <div class="form-group input-group-btn">
+      <input type="submit" class="btn btn-primary" value="<?php echo Yii::t('main', 'Hae'); ?>">
+   </div>
+
    </form>
 
    <!-- tulostus -->

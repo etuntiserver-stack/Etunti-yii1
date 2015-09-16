@@ -17,6 +17,11 @@ if(isset($ad->adm_nimi))
 )); ?>
 
 
+	<?php 
+	if(empty($ad->adm_email)){
+	echo CHtml::link('Sähköposti puutuu vastauksen varten','/index.php/administrators/update?id='.$ad->id,array('class'=>'btn btn-danger'));
+	} else {
+	?>
 
 	<?php echo $form->errorSummary($model); ?>
 
@@ -29,10 +34,16 @@ if(isset($ad->adm_nimi))
 	</div>
 
 	<div class="row">
-		<?php echo $form->labelEx($model,'tekija'); ?>
 		<?php
-        	$list = CHtml::listData(Tyontekijat::model()->findAll(array('order' => 'tekijan_nimi')), 'id', 'tekijan_nimi');
-        	echo $form->dropDownList($model, 'tekija', $list,array('class'=>'form-control'));
+		if(isset($_GET['tid']))
+		{
+		  echo $form->hiddenField($model,'tekija',array('value'=>$_GET['tid'],'class'=>'form-control','readonly'=>'yes'));
+		} else {
+
+		  echo $form->labelEx($model,'tekija');
+        	  $list = CHtml::listData(Tyontekijat::model()->findAll(array('order' => 'tekijan_nimi')), 'id', 'tekijan_nimi');
+        	  echo $form->dropDownList($model, 'tekija', $list,array('class'=>'form-control'));
+		}
         	?>
 		<?php echo $form->error($model,'tekija'); ?>
 	</div>
@@ -43,10 +54,13 @@ if(isset($ad->adm_nimi))
 		<?php echo $form->error($model,'viesti'); ?>
 	</div>
 
-
+	<?php if(!empty($ad->adm_email)): ?>
 	<div class="row buttons">
 		<?php echo CHtml::submitButton($model->isNewRecord ? 'Tallenna' : 'Luo',array('class'=>'btn btn-primary')); ?>
 	</div>
+	<?php endif; 
+	} 
+	?>
 
 <?php $this->endWidget(); ?>
   </div>
