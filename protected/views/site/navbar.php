@@ -9,7 +9,7 @@
         <span class="icon-bar"></span>
       </button>
     <a class="navbar-brand" rel="home" href="index" title="Etunti">
-        <img style="max-width:100px; margin-top: -7px;" src="<?php echo Yii::app()->request->baseUrl; ?>/img/logo-black.png">
+        <!--<img style="max-width:100px; margin-top: -7px;" src="<?php echo Yii::app()->request->baseUrl; ?>/img/logo-black.png">-->
     </a>
     </div>
 
@@ -18,7 +18,7 @@
       <ul class="nav navbar-nav">
 
 	<!--class="active"-->
-        <li><?php echo CHtml::link(Yii::t('main', 'Etusivu'),array('/site/index')); ?></li>
+
 
 	<?php if(!isset(Yii::app()->user->adminID) and !Yii::app()->User->isAdmin()) : ?>
         <li><?php echo CHtml::link(Yii::t('main', 'Kirjaudu'),array('/user/login')); ?></li>
@@ -42,52 +42,41 @@
 
 	<?php if(isset(Yii::app()->user->adminID)) : ?>
 
-
-        	<li><?php echo CHtml::link(Yii::t('main', 'Mobiili'),array('/mobile/index')); ?></li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?php echo Yii::t('main', 'Asiakkaat'); ?> <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+        	<li><?php echo CHtml::link(Yii::t('main', 'Kohteet'),array('/kohteet/admin')); ?></li>
+          </ul>
+        </li>
 
 
         <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?php echo Yii::t('main', 'Toteuma'); ?> <span class="caret"></span></a>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?php echo Yii::t('main', 'Tunnit'); ?> <span class="caret"></span></a>
           <ul class="dropdown-menu">
-        	<li><?php echo CHtml::link(Yii::t('main', 'Toteutuneet taulukko'),array('/toteutuneet/index')); ?></li>
-        	<li><?php echo CHtml::link(Yii::t('main', 'Toteutuneet (kk)'),array('/toteutuneet/kk')); ?></li>
+        	<li><?php echo CHtml::link(Yii::t('main', 'Tunnit'),array('/mobile/index')); ?></li>
+        	<li><?php echo CHtml::link(Yii::t('main', 'Tuntien hyväksyntä'),array('/toteutuneet/index')); ?></li>
 	        <li role="separator" class="divider"></li>
-        	<li><?php echo CHtml::link(Yii::t('main', 'Raportit'),array('/mobile/raportit')); ?></li>
-          </ul>
-        </li>
-
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?php echo Yii::t('main', 'Yhteenvedot'); ?> <span class="caret"></span></a>
-          <ul class="dropdown-menu">
-        	<li><?php echo CHtml::link(Yii::t('main', 'Työtunnit'),array('/mobile/yhteenveto')); ?></li>
-        	<li><?php echo CHtml::link(Yii::t('main', 'Kohteet'),array('/mobile/kyhteenveto')); ?></li>
-          </ul>
-        </li>
-
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?php echo Yii::t('main', 'Hallinnat'); ?> <span class="caret"></span></a>
-          <ul class="dropdown-menu">
-        	<li><?php echo CHtml::link(Yii::t('main', 'Työntekijät hallinta'),array('/tyontekijat/admin')); ?></li>
-        	<li><?php echo CHtml::link(Yii::t('main', 'Kohteet hallinta'),array('/kohteet/admin')); ?></li>
-        	<li><?php echo CHtml::link(Yii::t('main', 'Mobiili hallinta'),array('/mobile/admin')); ?></li>
+        	<li><?php echo CHtml::link(Yii::t('main', 'Yhteenveto työntekijät'),array('/mobile/yhteenveto')); ?></li>
+        	<li><?php echo CHtml::link(Yii::t('main', 'Yhteenveto kohteet'),array('/mobile/kyhteenveto')); ?></li>
 	        <li role="separator" class="divider"></li>
-        	<li><?php echo CHtml::link(Yii::t('main', 'Järjestelmänvalvojat'),array('/administrators/admin')); ?></li>
-        	<li><?php echo CHtml::link(Yii::t('main', 'Valikkoot'),array('/valikkoot/admin')); ?></li>
-        	<li><?php echo CHtml::link(Yii::t('main', 'Viestintä hallinta'),array('/viestinta/admin')); ?></li>
-        	<li><?php echo CHtml::link(Yii::t('main', 'Mobiili emulattori'),array('/site/mobemu')); ?></li>
+        	<li><?php echo CHtml::link(Yii::t('main', 'Kuukauden tunnit'),array('/toteutuneet/kk')); ?></li>
+	        <li role="separator" class="divider"></li>
+        	<li><?php echo CHtml::link(Yii::t('main', 'Raportit tunneista'),array('/mobile/raportit')); ?></li>
           </ul>
         </li>
+
+        	<li><?php echo CHtml::link(Yii::t('main', 'Työntekijät'),array('/tyontekijat/admin')); ?></li>
+        	<li><?php echo CHtml::link(Yii::t('main', 'Viestit'),array('/viestinta/admin')); ?></li>
 
 	<?php
 	 $tas = explode(",",Yii::app()->user->adminPaketti);
 	 if(in_array('2',$tas)) : 
 	?>
         <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?php echo Yii::t('main', 'TASO 2'); ?> <span class="caret"></span></a>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?php echo Yii::t('main', 'Työvuorot'); ?> <span class="caret"></span></a>
           <ul class="dropdown-menu">
-        	<li><?php echo CHtml::link(Yii::t('main', 'Työvuoroon taulukko'),array('/tyovuoroot/index')); ?></li>
-        	<li><?php echo CHtml::link(Yii::t('main', 'Työvuoroon hallinta'),array('/tyovuoroot/admin')); ?></li>
-        	<li><?php echo CHtml::link(Yii::t('main', 'Vuosilomat taulukko'),array('/vuosilomat/index')); ?></li>
+        	<li><?php echo CHtml::link(Yii::t('main', 'Työvuorot'),array('/tyovuoroot/index')); ?></li>
+        	<li><?php echo CHtml::link(Yii::t('main', 'Vuosilomat'),array('/vuosilomat/index')); ?></li>
           </ul>
         </li>
 	<?php endif; ?>
@@ -104,6 +93,15 @@
             echo '<li><a href="#">'.$d->yritys.', '.Yii::t('main', 'Tasot').': '.$d->paketti.'</a></li>';
 	    } 
 	    ?>
+
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?php echo Yii::t('main', 'Asetukset'); ?> <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+        	<li><?php echo CHtml::link(Yii::t('main', 'Järjestelmänvalvojat'),array('/administrators/admin')); ?></li>
+        	<li><?php echo CHtml::link(Yii::t('main', 'Valikkoot'),array('/valikkoot/admin')); ?></li>
+        	<li><?php echo CHtml::link(Yii::t('main', 'Mobiili emulattori'),array('/site/mobemu')); ?></li>
+          </ul>
+        </li>
 
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?php echo Yii::t('main', 'Käyttäjä'); ?> <span class="caret"></span></a>
