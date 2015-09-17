@@ -112,8 +112,9 @@ $(".glyphicon-paste").click(function() {
 $(".forCopy").click(function() {
 
   var thisID = $(this).attr("id").split("_");
-  var kl = kl = $('#totalForCut').val();
+  var kl = $('#totalForCut').val();
   var kaikkiIDs = kl.split("//");
+  clearKaikki();
 
   $.each( kaikkiIDs, function( key, value ) {
 
@@ -141,10 +142,9 @@ $(".forCopy").click(function() {
 			type:'GET',
 			data: { "pvm" : newPvm, "tid" : newTid, "from" : "ajax" },
 			  success:function(data){
-			  console.log(data);
+			  //console.log(data);
 			  $('#'+newPvm+"_"+newTid).html(data);
-			  clearKaikki()
-			  //return false;
+			  return false;
 			  },
 			  error:function(data){
 			  console.log(data);
@@ -168,7 +168,7 @@ $(".forCut").click(function() {
 
 
   var thisID = $(this).attr("id").split("_");
-  var kl = kl = $('#totalForCut').val();
+  var kl = $('#totalForCut').val();
   var kaikkiIDs = kl.split("//");
 
   $.each( kaikkiIDs, function( key, value ) {
@@ -222,7 +222,7 @@ $(".forCut").click(function() {
 
 $("#trash").click(function() {
 
-  var kl = kl = $('#totalForCut').val();
+  var kl = $('#totalForCut').val();
   var kaikkiIDs = kl.split("//");
 
   $.each( kaikkiIDs, function( key, value ) {

@@ -38,7 +38,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#87d9ff', end
 
 
 .navbar-brand {
-	background: url(img/logo.png) 0 0 no-repeat;
+	background: url(../img/logo.png) 0 0 no-repeat;
 	padding: 0px;
 	height: 40px;
 	width: 129px;

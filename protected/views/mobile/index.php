@@ -17,7 +17,7 @@ $this->menu=array(
 
 <legend>
 <button class="pull-right btn btn-info" data-toggle="collapse"  data-target="#haku"><?php echo Yii::t('main', 'Haku'); ?> <b class="caret"></b></button>
-<h1> <?php echo Yii::t('main', 'MOBIILI'); ?> <i class="glyphicon glyphicon-phone"></i></h1>
+<h1> <?php echo Yii::t('main', 'TUNNIT'); ?> <i class="glyphicon glyphicon-phone"></i></h1>
 </legend>
 
 
