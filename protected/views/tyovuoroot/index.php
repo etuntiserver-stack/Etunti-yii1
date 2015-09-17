@@ -122,9 +122,9 @@ td .tp{
     echo '</select>';
    ?>
 
-   <input type="date" name="from" id="from" class="form-control form-group datepicker" value="<?php echo Yii::app()->session['from']; ?>">
+   <input type="text" name="from" id="from" class="form-control form-group datepicker" value="<?php echo Yii::app()->session['from']; ?>">
 
-   <input type="date" name="to" id="to" class="form-control form-group datepicker" value="<?php echo Yii::app()->session['to']; ?>">
+   <input type="text" name="to" id="to" class="form-control form-group datepicker" value="<?php echo Yii::app()->session['to']; ?>">
 
    <input type="submit" class="btn btn-primary" value="<?php echo Yii::t('main', 'haku'); ?>">
    </form>
@@ -215,12 +215,6 @@ td .tp{
 
 <script type="text/javascript">
 $(document).ready(function(){
-
-  <script>
-  $(function() {
-    $( ".datepicker" ).datepicker();
-  });
-  </script>
 
 
 $('.selectpicker').selectpicker({
