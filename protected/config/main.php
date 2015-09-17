@@ -75,7 +75,7 @@ return array(
 	'preload'=>array('chartjs'), //'log'
 	'language' => 'en',
 
-  	//'theme' => 'admin',
+  	'theme' => 'admin',
 
 	'import'=>array(
         'application.models.*',
