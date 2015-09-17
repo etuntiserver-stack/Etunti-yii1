@@ -20,6 +20,16 @@ $curpage .= '/'.Yii::app()->getController()->getAction()->controller->action->id
   <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/jquery-1.11.2.min.js"></script>
 
 
+
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+
+  <script>
+  $(function() {
+    $( ".datepicker" ).datepicker();
+  });
+  </script>
+
+
 <?php 
 Yii::app()->clientScript->registerPackage('jquery');
 Yii::app()->clientScript->registerPackage('bootstrapJS');
