@@ -15,7 +15,7 @@ $this->breadcrumbs=array(
 </legend>
 
 <div class="row collapse" id="haku">
-  <form action="#" id="yhtveto" method="POST">
+  <form action="#" id="yhtveto" class="form-inline" method="POST">
   <input type="hidden" name="yhtvetoform">
   <div class="col-md-12">
    <a href="#" id="deselAll" class="btn btn-default glyphicon glyphicon-remove-circle"></a>
@@ -48,8 +48,8 @@ $this->breadcrumbs=array(
     echo '</select>';
    ?>
 
-   <input type="date" name="from" id="from" class="btn btn-default" value="<?php echo Yii::app()->session['from']; ?>">
-   <input type="date" name="to" id="to" class="btn btn-default" value="<?php echo Yii::app()->session['to']; ?>">
+   <input type="text" name="from" id="from" class="form-control form-group datepicker" value="<?php echo Yii::app()->session['from']; ?>">
+   <input type="text" name="to" id="to" class="form-control form-group datepicker" value="<?php echo Yii::app()->session['to']; ?>">
 
    <input type="submit" class="btn btn-primary" value="<?php echo Yii::t('main', 'haku'); ?>">
    </form>
