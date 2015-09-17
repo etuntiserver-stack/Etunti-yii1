@@ -8,7 +8,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-    <a class="navbar-brand" rel="home" href="index" title="Etunti">
+    <a class="navbar-brand" rel="home" href="index.php" title="Etunti">
         <!--<img style="max-width:100px; margin-top: -7px;" src="<?php echo Yii::app()->request->baseUrl; ?>/img/logo-black.png">-->
     </a>
     </div>
@@ -30,18 +30,8 @@
         <li><?php echo CHtml::link(Yii::t('main', 'Tasot'),array('/tasot/admin')); ?></li>
 	<?php endif; ?>
 
-	<?php /* if(isset(Yii::app()->user->adminID)) : ?>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?php echo Yii::t('main', 'Mobiili'); ?> <span class="caret"></span></a>
-          <ul class="dropdown-menu">
-            <li><?php echo CHtml::link(Yii::t('main', 'Luetut kohteet'),array('/mobile/index')); ?></li>
-
-          </ul>
-        </li>
-	<?php endif; */ ?>
 
 	<?php if(isset(Yii::app()->user->adminID)) : ?>
-
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?php echo Yii::t('main', 'Asiakkaat'); ?> <span class="caret"></span></a>
           <ul class="dropdown-menu">
