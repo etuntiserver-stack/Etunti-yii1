@@ -54,7 +54,7 @@ for ($i = 1; $i <= 12; $i++) {
 ?>
 
 
-<?php if(!isset(Yii::app()->user->adminID)) : ?>
+<?php /* if(!isset(Yii::app()->user->adminID)) : ?>
 <!--
 <div class="row">
  <div class="col-md-12">
@@ -126,7 +126,7 @@ for ($i = 1; $i <= 12; $i++) {
 
 
 
-<?php endif; ?>
+<?php endif; */ ?>
 
 
 
