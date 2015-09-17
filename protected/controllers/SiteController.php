@@ -67,10 +67,10 @@ class SiteController extends Controller
 
 	public function actionIndex()
 	{
-		if(isset(Yii::app()->user->adminID) or Yii::app()->User->isAdmin())
+		//if(isset(Yii::app()->user->adminID))
 			$this->render('index');
-		else
-			$this->render('start');
+		//else
+			//$this->render('start');
 
 	}
 
