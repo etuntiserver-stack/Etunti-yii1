@@ -94,6 +94,7 @@
 	    } 
 	    ?>
 
+	<?php if(isset(Yii::app()->user->adminID)) : ?>	
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?php echo Yii::t('main', 'Asetukset'); ?> <span class="caret"></span></a>
           <ul class="dropdown-menu">
@@ -102,6 +103,7 @@
         	<li><?php echo CHtml::link(Yii::t('main', 'Mobiili emulattori'),array('/site/mobemu')); ?></li>
           </ul>
         </li>
+	<?php endif; ?>
 
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?php echo Yii::t('main', 'Käyttäjä'); ?> <span class="caret"></span></a>
