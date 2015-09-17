@@ -103,7 +103,7 @@ td .tp{
    </div>
 
 <div class="row">
-  <form action="#" id="yhtveto" method="POST">
+  <form action="#" id="yhtveto" class="form-inline" method="POST">
 
    <a href="#" id="deselAll" class="btn btn-default glyphicon glyphicon-remove-circle"></a>
    <a href="#" id="selAll" class="btn btn-default glyphicon glyphicon-ok-circle"></a>  
@@ -112,7 +112,7 @@ td .tp{
     $model=new Tyontekijat;
     $list = CHtml::listData(Tyontekijat::model()->findAll("aktiivinen = '1'",array('order' => 'tekijan_nimi')), 'id', 'tekijan_nimi');
 
-    echo '<select name="Tekija[]" id="tyontekijat" class="selectpicker" multiple class="btn btn-default" title="Työntekijät">';
+    echo '<select name="Tekija[]" id="tyontekijat" class="selectpicker" multiple class="" title="Työntekijät">';
     foreach($list as $key=>$val){
        if(isset(Yii::app()->session['Tekija']) and in_array($key,Yii::app()->session['Tekija']))
        	 echo '<option value="'.$key.'" selected>'.$val.'</option>';
@@ -122,9 +122,9 @@ td .tp{
     echo '</select>';
    ?>
 
-   <input type="date" name="from" id="from" class="btn btn-default" value="<?php echo Yii::app()->session['from']; ?>">
+   <input type="date" name="from" id="from" class="form-control form-group datepicker" value="<?php echo Yii::app()->session['from']; ?>">
 
-   <input type="date" name="to" id="to" class="btn btn-default" value="<?php echo Yii::app()->session['to']; ?>">
+   <input type="date" name="to" id="to" class="form-control form-group datepicker" value="<?php echo Yii::app()->session['to']; ?>">
 
    <input type="submit" class="btn btn-primary" value="<?php echo Yii::t('main', 'haku'); ?>">
    </form>
@@ -215,6 +215,12 @@ td .tp{
 
 <script type="text/javascript">
 $(document).ready(function(){
+
+  <script>
+  $(function() {
+    $( ".datepicker" ).datepicker();
+  });
+  </script>
 
 
 $('.selectpicker').selectpicker({
