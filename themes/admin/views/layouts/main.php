@@ -4,7 +4,7 @@ $curpage .= '/'.Yii::app()->getController()->getAction()->controller->action->id
 //echo $curpage;
 ?>
 
-<?php if(isset(Yii::app()->user->adminID) or $curpage == 'login/login' or Yii::app()->User->isAdmin()) : ?>
+<?php //if(isset(Yii::app()->user->adminID) or $curpage == 'login/login' or Yii::app()->User->isAdmin()) : ?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -36,7 +36,7 @@ Yii::app()->clientScript->registerPackage('bootstrapJS');
 Yii::app()->clientScript->registerPackage('bootstrapCSS');
 ?>
 
-<?php endif; ?>
+<?php // endif; ?>
 
 
 	<title><?php echo CHtml::encode($this->pageTitle); ?></title>
@@ -44,9 +44,9 @@ Yii::app()->clientScript->registerPackage('bootstrapCSS');
 
 <body>
 
-<?php if(isset(Yii::app()->user->adminID) or Yii::app()->User->isAdmin()) : ?>
+<?php // if(isset(Yii::app()->user->adminID) or Yii::app()->User->isAdmin()) : ?>
 	<?php echo $this->renderPartial('//site/navbar'); ?>
-<?php endif; ?>
+<?php // endif; ?>
 
 <div class="container-fluid">
 
