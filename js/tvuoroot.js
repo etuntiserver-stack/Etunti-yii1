@@ -43,7 +43,7 @@ $(".tv_edit").click(function(){
 
 });
 
-
+/*
 $('.laatikko').bind("contextmenu",function(e){
 	var pvm = $(this).attr("pvm");
 	var tid = $(this).attr("tid");
@@ -58,35 +58,29 @@ $('.laatikko').bind("contextmenu",function(e){
         });
    	return false;
 });
-
-/*
-$(".etsi_month").on('change', function() {
-	var thisVal = $(this).val();
-	if(!thisVal)
-	var thisVal = 'kaikki';
-
-        $.ajax({
-           url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/index',
-	   type:'POST',
-	   data: { "etsi_month" : thisVal },
-           success: function(html){
-		window.location.reload();
-           }
-        });
-});
 */
 
 
 
+  	var kaikkiIDs = '';
+	var muistissa = '';
+
 function clearKaikki(){
 
+  $(".muistissa").each(function() {
+     $(this).css({"opacity":"1"});
+     $(this).removeClass("muistissa").addClass("muistin");
+  });
+
+	muistissa = '';
+	kaikkiIDs = '';
+
 	$('#totalForCut').val('');
-	$('#total').val('');
 	$('#trash').removeClass();
 	$("#clear").removeClass();
 	$(".mplus").removeClass().addClass("forCopy");
 	$(".mcut").removeClass().addClass("forCut");
-	$('.fullRivi').css({"opacity":"1"});
+	//$('.fullRivi').css({"opacity":"1"});
 
 }
 
@@ -95,30 +89,41 @@ $("#clear").click(function() {
 });
 
 
-$(".glyphicon-paste").click(function() {
+$(".muistin").click(function() {
+
+	$(this).removeClass("muistin").addClass("muistissa");
+
 	var thisID = $(this).attr("for");
-	$("#"+thisID).css({"opacity":"0.4"});
 
 	$(".forCopy").removeClass("forCopy").addClass("mplus glyphicon glyphicon-plus text-success");
 	$(".forCut").removeClass("forCut").addClass("mcut glyphicon glyphicon-transfer text-success");
 
-	$('#totalForCut').val(thisID + '//' + $('#totalForCut').val());
+	//$('#totalForCut').val(thisID + '//' + $('#totalForCut').val());
 
 	$("#trash").addClass("glyphicon glyphicon-trash btn btn-danger btn-group");
 	$("#clear").addClass("glyphicon glyphicon-refresh btn btn-success btn-group");
+
+
+  $(".muistissa").each(function() {
+     muistissa += $(this).attr("for")+"//";
+     $(this).css({"opacity":"0.4"});
+     //$(this).removeClass("muistissa").addClass("muistin");
+     console.log($(this).text())
+  });
+
+
 });
+
 
 
 $(".forCopy").click(function() {
 
   var thisID = $(this).attr("id").split("_");
-  var kl = $('#totalForCut').val();
-  var kaikkiIDs = kl.split("//");
-  clearKaikki();
+  kaikkiIDs = muistissa.split("//");
 
   $.each( kaikkiIDs, function( key, value ) {
 
-    //$("#"+value).remove();
+    console.log(value);
 
     var splVal 	= value.split("_");
     var tvID	= splVal[0];
@@ -144,13 +149,14 @@ $(".forCopy").click(function() {
 			  success:function(data){
 			  //console.log(data);
 			  $('#'+newPvm+"_"+newTid).html(data);
-			  return false;
 			  },
 			  error:function(data){
 			  console.log(data);
 			  }
 	 	});
 
+  		clearKaikki();
+  		return false;
     	   },
     	   error: function(XMLHttpRequest, textStatus, errorThrown) {
 	    	console.log(XMLHttpRequest);
@@ -168,8 +174,7 @@ $(".forCut").click(function() {
 
 
   var thisID = $(this).attr("id").split("_");
-  var kl = $('#totalForCut').val();
-  var kaikkiIDs = kl.split("//");
+  kaikkiIDs = muistissa.split("//");
 
   $.each( kaikkiIDs, function( key, value ) {
 
@@ -197,19 +202,19 @@ $(".forCut").click(function() {
 			type:'GET',
 			data: { "pvm" : newPvm, "tid" : newTid, "from" : "ajax" },
 			  success:function(data){
-			  console.log(data);
+			  //console.log(data);
 			  $('#'+newPvm+"_"+newTid).html(data);
-			  clearKaikki();
-			  //return false;
 			  },
 			  error:function(data){
 			  console.log(data);
 			  }
 	 	});
 
+  		clearKaikki();
+  		return false;
     	   },
-    	   error: function(XMLHttpRequest, textStatus, errorThrown) {
-	    	console.log(XMLHttpRequest);
+    	   error: function(data) {
+	    	console.log(data);
  	   }
         });
       }
@@ -222,8 +227,8 @@ $(".forCut").click(function() {
 
 $("#trash").click(function() {
 
-  var kl = $('#totalForCut').val();
-  var kaikkiIDs = kl.split("//");
+  var kl = muistissa;
+  kaikkiIDs = muistissa.split("//");
 
   $.each( kaikkiIDs, function( key, value ) {
 
@@ -243,10 +248,11 @@ $("#trash").click(function() {
 	   data: { "id" : tvID, "remove" : "true" },
            success: function(data){
         	console.log(data);
-		clearKaikki();
+  		clearKaikki();
+  		return false;
     	   },
-    	   error: function(XMLHttpRequest, textStatus, errorThrown) {
-	    	console.log(XMLHttpRequest);
+    	   error: function(data) {
+	    	console.log(data);
  	   }
         });
       }

@@ -56,7 +56,7 @@
 
 	   echo '<div id="'.$tvVal->id.'_'.$did.'_'.$tid.'" class="fullRivi" style="color:'.$color.'">';
 	   if( $from != 'mobiili' )
-	   echo '<a href=# class="text-danger glyphicon glyphicon-paste" for="'.$tvVal->id.'_'.$did.'_'.$tid.'"></a>';
+	   echo '<a href=# class="text-danger glyphicon glyphicon-paste muistin" for="'.$tvVal->id.'_'.$did.'_'.$tid.'"></a>';
 	   echo '&nbsp;<span class="link tv_edit" id="tv_'.$tvVal->id.'">'.$al.' '.$k['osoite'].'</span><br>
 	   </div>';
 
