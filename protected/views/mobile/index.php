@@ -67,7 +67,7 @@ $this->menu=array(
     }
     echo '</select>';
    ?>
-   <input type="date" class="form-control form-group" name="etsi_pvm" value="<?php echo Yii::app()->session['etsi_pvm']; ?>">
+   <input type="text" class="form-control form-group datepicker" name="etsi_pvm" value="<?php echo Yii::app()->session['etsi_pvm']; ?>">
 
      <div class="form-group input-group-btn">
         <button class="btn btn-primary haemob" type="button"><i class="glyphicon glyphicon-search"> Hae</i></button>
