@@ -43,7 +43,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#87d9ff', end
 	height: 40px;
 	width: 129px;
 	text-indent: -9999px;
-	//margin: 5px 40px 5px 10px;
+	margin: 0px 40px 0px 10px;
 	outline: none;
 	-webkit-background-size: 129px 40px;
 	background-size: 129px 40px;

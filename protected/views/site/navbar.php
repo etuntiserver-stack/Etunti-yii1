@@ -8,7 +8,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-    <a class="navbar-brand" rel="home" href="index.php" title="Etunti">
+    <a class="navbar-brand" rel="home" href="index" title="Etunti">
         <!--<img style="max-width:100px; margin-top: -7px;" src="<?php echo Yii::app()->request->baseUrl; ?>/img/logo-black.png">-->
     </a>
     </div>
