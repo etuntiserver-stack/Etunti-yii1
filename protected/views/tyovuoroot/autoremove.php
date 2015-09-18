@@ -193,7 +193,7 @@ function palaTakais(){
 
 	$('.submit').click(function(){
 	   $("#autoinsForm").submit();
-	   window.location.reload();
+	   window.location.href='index';
 	});
 
 	$('#newBut').click(function(){
