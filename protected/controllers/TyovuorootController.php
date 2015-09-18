@@ -172,7 +172,6 @@ class TyovuorootController extends Controller
 			$i++; 
 			$startdate+=86400; 
 
-
 		   }	
 	
 		exit;
