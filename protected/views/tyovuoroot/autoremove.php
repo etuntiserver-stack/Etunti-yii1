@@ -25,7 +25,7 @@
 .big-checkbox {width: 30px; height: 30px;}
 </style>
 
-<div class="modal-dialog">
+<div class="modal-dialog modal-lg">
     <div class="modal-content">
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -45,11 +45,11 @@
 <div class="row">
   <div class="col-sm-6">
 	<label><?php echo Yii::t('main', 'Alkaen'); ?></label>
-	<input type="date" class="form-control" name="pfrom" value="<?php echo date('Y-m-d'); ?>">
+	<input type="text" class="form-control datepicker" name="pfrom" value="<?php echo date('Y-m-d'); ?>">
   </div>
   <div class="col-sm-6">
 	<label><?php echo Yii::t('main', 'Loppuun'); ?></label>
-	<input type="date" class="form-control" name="pto" id="pto">
+	<input type="text" class="form-control datepicker" name="pto" id="pto">
   </div>
 </div>
 
@@ -60,29 +60,35 @@
 </div>
 <br>
 
+
+<div class="row">
+  <div class="col-sm-12 col-sm-offset-1">
+  <label><?php echo Yii::t('main', 'Ma'); ?></label>
+  <input type="checkbox" class="sw" name="P[1]" id="ma" value="1">
+
+  <label><?php echo Yii::t('main', 'Ti'); ?></label>
+  <input type="checkbox" class="sw" name="P[2]" id="ti" value="2">
+
+  <label><?php echo Yii::t('main', 'Ke'); ?></label>
+  <input type="checkbox" class="sw" name="P[3]" id="ke" value="3">
+
+  <label><?php echo Yii::t('main', 'To'); ?></label>
+  <input type="checkbox" class="sw" name="P[4]" id="to" value="4">
+
+  <label><?php echo Yii::t('main', 'Pe'); ?></label>
+  <input type="checkbox" class="sw" name="P[5]" id="pe" value="5">
+
+  <label><?php echo Yii::t('main', 'La'); ?></label>
+  <input type="checkbox" class="sw" name="P[6]" id="la" value="6">
+
+  <label><?php echo Yii::t('main', 'Su'); ?></label>
+  <input type="checkbox" class="sw" name="P[0]" id="su" value="0">
+
+  </div>
+</div>
+
 <div class="row">
   <div class="col-sm-6">
-<div class="row">
-  <div class="col-sm-1"><label><?php echo Yii::t('main', 'Ma'); ?></label></div>
-  <div class="col-sm-1"><label><?php echo Yii::t('main', 'Ti'); ?></label></div>
-  <div class="col-sm-1"><label><?php echo Yii::t('main', 'Ke'); ?></label></div>
-  <div class="col-sm-1"><label><?php echo Yii::t('main', 'To'); ?></label></div>
-  <div class="col-sm-1"><label><?php echo Yii::t('main', 'Pe'); ?></label></div>
-  <div class="col-sm-1"><label><?php echo Yii::t('main', 'La'); ?></label></div>
-  <div class="col-sm-1"><label><?php echo Yii::t('main', 'Su'); ?></label></div>
-</div>
-
-<div class="row">
-  <div class="col-sm-1"><input type="checkbox" class="big-checkbox" name="P[1]" id="ma" value="1"></div>
-  <div class="col-sm-1"><input type="checkbox" class="big-checkbox" name="P[2]" id="ti" value="2"></div>
-  <div class="col-sm-1"><input type="checkbox" class="big-checkbox" name="P[3]" id="ke" value="3"></div>
-  <div class="col-sm-1"><input type="checkbox" class="big-checkbox" name="P[4]" id="to" value="4"></div>
-  <div class="col-sm-1"><input type="checkbox" class="big-checkbox" name="P[5]" id="pe" value="5"></div>
-  <div class="col-sm-1"><input type="checkbox" class="big-checkbox" name="P[6]" id="la" value="6"></div>
-  <div class="col-sm-1"><input type="checkbox" class="big-checkbox" name="P[0]" id="su" value="0"></div>
-</div>
-
-  </div><div class="col-sm-6">
 	<label><?php echo Yii::t('main', 'Viikkoja'); ?></label>
 	<select class="form-control" name="viikkoja">
 	<option value="1">1</option>
@@ -92,6 +98,7 @@
 	</select>
   </div>
 </div>
+
 </form>
 </div><!--lomake-->
 
@@ -109,10 +116,18 @@
 </div> <!-- end modal-body -->
 
 
-
+  <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/asetukset.js"></script>
 
 <script type="text/javascript">
 $(document).ready(function(){
+
+  $(".sw").bootstrapSwitch({
+	size: "mini",
+	onColor: "danger",
+	offColor: "success",
+	onText: "Ei",
+	offText: "Kyllä"
+  });
 
   var tekijaVal = '';
 $("#tekija").change(function(){

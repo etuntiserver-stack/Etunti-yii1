@@ -42,11 +42,11 @@
 <div class="row">
   <div class="col-sm-4">
 	<label><?php echo Yii::t('main', 'Alkaen'); ?></label>
-	<input type="date" class="form-control" name="pfrom" value="<?php echo date('Y-m-d'); ?>">
+	<input type="text" class="form-control datepicker" name="pfrom" value="<?php echo date('Y-m-d'); ?>">
   </div>
   <div class="col-sm-4">
 	<label><?php echo Yii::t('main', 'Loppuun'); ?></label>
-	<input type="date" class="form-control" name="pto" id="pto">
+	<input type="text" class="form-control datepicker" name="pto" id="pto">
   </div>
   <div class="col-sm-4">
 	<label><?php echo Yii::t('main', 'Viikkoja'); ?></label>
@@ -62,11 +62,11 @@
 <div class="row">
   <div class="col-sm-4">
 	<label><?php echo Yii::t('main', 'Klo. aloitus'); ?></label>
-	<input type="time" class="form-control" name="tfrom" id="tfrom">
+	<input type="text" class="form-control timepicker" name="tfrom" id="tfrom">
   </div>
   <div class="col-sm-4">
 	<label><?php echo Yii::t('main', 'Klo. lopetus'); ?></label>
-	<input type="time" class="form-control" name="tto" id="tto">
+	<input type="text" class="form-control timepicker" name="tto" id="tto">
   </div>
 </div>
 <br>
@@ -156,7 +156,7 @@
 </div> <!-- end modal-body -->
 
 
-
+  <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/asetukset.js"></script>
 
 <script type="text/javascript">
 $(document).ready(function(){
