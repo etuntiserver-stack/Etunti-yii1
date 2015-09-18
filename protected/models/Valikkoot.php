@@ -78,6 +78,7 @@ class Valikkoot extends DB2ActiveRecord
 		// should not be searched.
 
 		$criteria=new CDbCriteria;
+		$criteria->order = "id DESC";
 
 		$criteria->compare('id',$this->id);
 		$criteria->compare('value',$this->value,true);

@@ -43,6 +43,7 @@ $('.search-form form').submit(function(){
 	'filter'=>$model,
 	'columns'=>array(
 		'id',
+		'asiakas_id',
 		//'time',
 		'tag_id',
 		//'gps_sijainti',

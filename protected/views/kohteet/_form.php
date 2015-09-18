@@ -17,6 +17,18 @@
 
   <div class="col-sm-3">
 
+	<?php if(Yii::app()->user->username == 'roman'): ?>
+	<div class="row">
+		<?php echo $form->labelEx($model,'asiakas_id'); ?>
+    		<?php 
+		echo $form->dropDownList($model, 'asiakas_id', CHtml::listData(Asiakkaat::model()->findAll(array('order'=>'osoite')), 'id', 'osoite')
+		,array('empty'=>'Valitse asiakas','class'=>'form-control'));
+		?>
+
+		<?php echo $form->error($model,'asiakas_id'); ?>
+	</div>
+	<?php endif; ?>
+
 	<div class="row">
 		<?php echo $form->labelEx($model,'etu_suku_nimet'); ?>
 		<?php echo $form->textField($model,'etu_suku_nimet',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>

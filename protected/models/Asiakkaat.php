@@ -45,8 +45,8 @@ class Asiakkaat extends DB2ActiveRecord
 		// will receive user inputs.
 		return array(
 			array('etunimi, sukunimi, osoite, kaupunki, postinumero, puhelin, sahkoposti, ryhma, aktiivinen', 'required'),
-			array('postinumero, ryhma, aktiivinen', 'numerical', 'integerOnly'=>true),
-			array('etunimi, sukunimi, kaupunki, puhelin, sahkoposti', 'length', 'max'=>100),
+			array('ryhma, aktiivinen', 'numerical', 'integerOnly'=>true),
+			array('postinumero,etunimi, sukunimi, kaupunki, puhelin, sahkoposti', 'length', 'max'=>100),
 			array('osoite', 'length', 'max'=>255),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
@@ -95,6 +95,7 @@ class Asiakkaat extends DB2ActiveRecord
 		// should not be searched.
 
 		$criteria=new CDbCriteria;
+		$criteria->order = "id DESC";
 
 		$criteria->compare('id',$this->id);
 		$criteria->compare('time',$this->time,true);

@@ -61,7 +61,7 @@ class Kohteet extends DB2ActiveRecord
 		// will receive user inputs.
 		return array(
 			array('etu_suku_nimet', 'required'),
-			array('aktiivinen, maksuehto_paiva', 'numerical', 'integerOnly'=>true),
+			array('asiakas_id,aktiivinen, maksuehto_paiva', 'numerical', 'integerOnly'=>true),
 			array('tag_id, kaupunki, toimipaikka, tyoryhma', 'length', 'max'=>20),
 			array('gps_sijainti, osoite, katuosoite, kenella_on_avain, puh_nro', 'length', 'max'=>50),
 			array('lyhenne', 'length', 'max'=>46),
@@ -73,7 +73,7 @@ class Kohteet extends DB2ActiveRecord
 			array('aikataulu, hinnoittelu, muut, toimenpiteet, tietoja', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, time, tag_id, gps_sijainti, lyhenne, osoite, katuosoite, kaupunki, toimipaikka, pnumero, email, aikataulu, hinnoittelu, muut, toimenpiteet, tietoja, tyoryhma, ryhma, aktiivinen, avain, kenella_on_avain, puh_nro, siivous, etu_suku_nimet, maksuehto_paiva, viivastyskorko, lasku_tiedot', 'safe', 'on'=>'search'),
+			array('id, time, tag_id, gps_sijainti, lyhenne, osoite, katuosoite, kaupunki, toimipaikka, pnumero, email, aikataulu, hinnoittelu, muut, toimenpiteet, tietoja, tyoryhma, ryhma, aktiivinen, avain, kenella_on_avain, puh_nro, siivous, etu_suku_nimet, maksuehto_paiva, viivastyskorko, lasku_tiedot, asiakas_id', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -95,6 +95,7 @@ class Kohteet extends DB2ActiveRecord
 	{
 		return array(
 			'id' => 'ID',
+			'asiakas_id' => 'Asiakas',
 			'time' => 'Time',
 			'tag_id' => 'Tag',
 			'gps_sijainti' => 'Gps Sijainti',
@@ -137,6 +138,7 @@ class Kohteet extends DB2ActiveRecord
 		$criteria->order = "osoite";
 
 		$criteria->compare('id',$this->id);
+		$criteria->compare('asiakas_id',$this->asiakas_id);
 		$criteria->compare('time',$this->time,true);
 		$criteria->compare('tag_id',$this->tag_id,true);
 		$criteria->compare('gps_sijainti',$this->gps_sijainti,true);
