@@ -62,7 +62,11 @@ $('.laatikko').bind("contextmenu",function(e){
 
 function clearKaikki(){
 
-	$('#totalForCut').val('');
+  $(".muistissa").each(function() {
+     $(this).css({"opacity":"1"});
+     $(this).removeClass("muistissa").addClass("muistin");
+  });
+
 	$('#trash').removeClass();
 	$("#clear").removeClass();
 	$(".mplus").removeClass().addClass("forCopy");
