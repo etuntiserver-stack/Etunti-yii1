@@ -35,6 +35,7 @@
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?php echo Yii::t('main', 'Asiakkaat'); ?> <span class="caret"></span></a>
           <ul class="dropdown-menu">
+        	<li><?php echo CHtml::link(Yii::t('main', 'Asiakkaat'),array('/asiakkaat/admin')); ?></li>
         	<li><?php echo CHtml::link(Yii::t('main', 'Kohteet'),array('/kohteet/admin')); ?></li>
           </ul>
         </li>

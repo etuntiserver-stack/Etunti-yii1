@@ -1,15 +1,15 @@
 <?php
-/* @var $this KohteetController */
-/* @var $model Kohteet */
+/* @var $this AsiakkaatController */
+/* @var $model Asiakkaat */
 
 $this->breadcrumbs=array(
-	Yii::t('main', 'Kohteet')=>array('index'),
+	Yii::t('main', 'Asiakkaat')=>array('index'),
 	Yii::t('main', 'Hallinta'),
 );
 
 $this->menu=array(
-	array('label'=>'Lista Kohteet', 'url'=>array('index')),
-	array('label'=>Yii::t('main', 'Luo kohde'), 'url'=>array('create')),
+	array('label'=>Yii::t('main', 'Lista asiakas'), 'url'=>array('index')),
+	array('label'=>Yii::t('main', 'Luo asiakas'), 'url'=>array('create')),
 );
 
 Yii::app()->clientScript->registerScript('search', "
@@ -18,7 +18,7 @@ $('.search-button').click(function(){
 	return false;
 });
 $('.search-form form').submit(function(){
-	$('#kohteet-grid').yiiGridView('update', {
+	$('#asiakkaat-grid').yiiGridView('update', {
 		data: $(this).serialize()
 	});
 	return false;
@@ -26,7 +26,7 @@ $('.search-form form').submit(function(){
 ");
 ?>
 
-<h1><?php echo Yii::t('main', 'Kohteet'); ?></h1>
+<h1><?php echo Yii::t('main', 'Asiakas hallinta'); ?></h1>
 
 
 
@@ -38,43 +38,22 @@ $('.search-form form').submit(function(){
 </div><!-- search-form -->
 
 <?php $this->widget('zii.widgets.grid.CGridView', array(
-	'id'=>'kohteet-grid',
+	'id'=>'asiakkaat-grid',
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,
 	'columns'=>array(
 		'id',
-		//'time',
-		'tag_id',
-		//'gps_sijainti',
-		//'lyhenne',
+		'time',
+		'etunimi',
+		'sukunimi',
 		'osoite',
 		'kaupunki',
-		'email',
-		'puh_nro',
-		'tietoja',
-		'avain',
 		/*
-		'katuosoite',
-
-		'toimipaikka',
-		'pnumero',
-		'email',
-		'aikataulu',
-		'hinnoittelu',
-		'muut',
-		'toimenpiteet',
-
-		'tyoryhma',
+		'postinumero',
+		'puhelin',
+		'sahkoposti',
 		'ryhma',
 		'aktiivinen',
-
-		'kenella_on_avain',
-
-		'siivous',
-		'etu_suku_nimet',
-		'maksuehto_paiva',
-		'viivastyskorko',
-		'lasku_tiedot',
 		*/
 		array(
 			'class'=>'CButtonColumn',
