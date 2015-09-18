@@ -212,6 +212,8 @@ return array(
 		    'jquery-ui.min.js',
 		    'bootstrap-select.js',
 		    'bootstrap-switch.js',
+		    'jquery.datetimepicker.js',
+		    'asetukset.js',
 		),
             ),
             'bootstrapJS'=>array(                       //set others js libraries
@@ -268,6 +270,7 @@ return array(
                     'bootstrap-slider.css',
 		    'jquery-ui.min.css',
                     'multiselect.css',
+		    'jquery.datetimepicker.css',
                 ),
 
             ),

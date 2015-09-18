@@ -21,13 +21,8 @@ $curpage .= '/'.Yii::app()->getController()->getAction()->controller->action->id
 
 
 
-  <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+  <!--<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">-->
 
-  <script>
-  $(function() {
-    $( ".datepicker" ).datepicker();
-  });
-  </script>
 
 
 <?php 
