@@ -39,20 +39,20 @@ if(isset($m->toimenpiteet))
 <div class="row">
   <div class="col-sm-3">
 		<?php echo $form->labelEx($model,'pvm'); ?>
-		<?php echo $form->dateField($model,'pvm',array('size'=>20,'maxlength'=>20,'class'=>'form-control'));//,'readonly'=>'yes' ?>
+		<?php echo $form->textField($model,'pvm',array('size'=>20,'maxlength'=>20,'class'=>'form-control datepicker'));//,'readonly'=>'yes' ?>
 		<?php echo $form->error($model,'pvm'); ?>
   </div>
   <div class="col-sm-3">
 		<?php echo $form->labelEx($model,'alku'); ?>
-		<input type="time" name="Tyovuoroot[alku]" class="form-control laske" id="alku" value="<?php echo $model->alku; ?>">
+		<input type="text" name="Tyovuoroot[alku]" class="form-control laske timepicker" id="alku" value="<?php echo $model->alku; ?>">
   </div>
   <div class="col-sm-3">
 		<?php echo $form->labelEx($model,'loppu'); ?>
-		<input type="time" name="Tyovuoroot[loppu]" class="form-control laske" id="loppu" value="<?php echo $model->loppu; ?>">
+		<input type="text" name="Tyovuoroot[loppu]" class="form-control laske timepicker" id="loppu" value="<?php echo $model->loppu; ?>">
   </div>
   <div class="col-sm-3">
 		<?php echo $form->labelEx($model,'pituus'); ?>
-		<input type="time" name="Tyovuoroot[pituus]" id="pituus" class="form-control" value="<?php echo $model->pituus; ?>">
+		<input type="text" name="Tyovuoroot[pituus]" id="pituus" class="form-control timepicker" value="<?php echo $model->pituus; ?>">
   </div>
 </div>
 
@@ -138,6 +138,7 @@ if(isset($m->toimenpiteet))
 <?php $this->endWidget(); ?>
 
 
+<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/asetukset.js"></script>
 
 <script type="text/javascript">
 $(document).ready(function(){
@@ -264,6 +265,14 @@ $(document).ready(function(){
   }
 
 
+  $('#alku').keyup(function(){
+	laskePituus();
+  });
+
+  $('#loppu').keyup(function(){
+	laskePituus();
+  });
+
   $('#alku').change(function(){
 	laskePituus();
   });
@@ -271,6 +280,7 @@ $(document).ready(function(){
   $('#loppu').change(function(){
 	laskePituus();
   });
+
 
   $('#Tyovuoroot_kohde').change(function(){
 

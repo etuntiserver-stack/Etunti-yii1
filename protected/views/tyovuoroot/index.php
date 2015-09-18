@@ -110,9 +110,11 @@ td .tp{
    <a href="#" id="selAll" class="btn btn-default glyphicon glyphicon-ok-circle"></a>  
 
    <?php
-    $model=new Tyontekijat;
-    $list = CHtml::listData(Tyontekijat::model()->findAll("aktiivinen = '1'",array('order' => 'tekijan_nimi')), 'id', 'tekijan_nimi');
+   $criteria = new CDbCriteria();
+   $criteria->order = " tekijan_nimi ";
+   $criteria->condition = " aktiivinen='1' ";
 
+    $list = CHtml::listData(Tyontekijat::model()->findAll($criteria), 'id', 'tekijan_nimi');
     echo '<select name="Tekija[]" id="tyontekijat" class="selectpicker" multiple class="" title="Työntekijät">';
     foreach($list as $key=>$val){
        if(isset(Yii::app()->session['Tekija']) and in_array($key,Yii::app()->session['Tekija']))
