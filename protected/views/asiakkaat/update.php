@@ -16,6 +16,7 @@ $this->menu=array(
 );
 ?>
 
-<h1><?php echo Yii::t('main', 'Asiakas'); ?> <?php echo $model->etunimi." ".$model->sukunimi; ?></h1>
+<h1><?php echo Yii::t('main', 'Asiakas')." ID# ".$model->id; ?></h1>
+
 
 <?php echo $this->renderPartial('_form', array('model'=>$model)); ?>

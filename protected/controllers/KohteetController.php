@@ -28,7 +28,7 @@ class KohteetController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','osoite','autotaytaminen'),
+				'actions'=>array('admin','delete','create','update','index','view','osoite','autotaytaminen','createfromasiakas'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -76,10 +76,23 @@ class KohteetController extends Controller
 		echo $model['id'];
 	}
 
-	/**
-	 * Creates a new model.
-	 * If creation is successful, the browser will be redirected to the 'view' page.
-	 */
+	public function actionCreatefromasiakas($id)
+	{
+		$model=new Kohteet;
+		$asiakas=Asiakkaat::model()->findbypk($id);
+		if(isset($_POST['Kohteet']))
+		{
+			$model->attributes=$_POST['Kohteet'];
+			if($model->save())
+				$this->redirect(array('view','id'=>$model->id));
+		}
+
+		$this->render('createfromasiakas',array(
+			'model'=>$model,
+			'asiakas'=>$asiakas,
+		));
+	}
+
 	public function actionCreate()
 	{
 		$model=new Kohteet;
