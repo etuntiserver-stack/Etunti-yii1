@@ -26,7 +26,7 @@ td,th{
 
 <?php if(!$tulosta) : ?>
 <legend>
-<h1> <?php echo Yii::t('main', 'TYÖVOROT'). ' '.$tt->tekijan_nimi.', '.Yii::t('main', 'VIIKKO').'-'.$week; ?></h1>
+<h1> <?php echo Yii::t('main', 'TYÖVUOROT'). ' '.$tt->tekijan_nimi.', '.Yii::t('main', 'VIIKKO').'-'.$week; ?></h1>
 </legend>
 
 <form action="#" method="POST">
@@ -36,7 +36,7 @@ td,th{
 
 
 <?php if($tulosta) : ?>
-<h1> <?php echo Yii::t('main', 'TYÖVOROT'). ' '.$tt->tekijan_nimi.', '.Yii::t('main', 'VIIKKO').'-'.$week; ?></h1>
+<h1> <?php echo Yii::t('main', 'TYÖVUOROT'). ' '.$tt->tekijan_nimi.', '.Yii::t('main', 'VIIKKO').'-'.$week; ?></h1>
 <?php endif; ?>
 
 <?php
