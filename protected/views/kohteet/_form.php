@@ -131,6 +131,24 @@
 		<?php echo $form->error($model,'kenella_on_avain'); ?>
 	</div>
 
+	<div class="row">
+		<?php echo $form->labelEx($model,'ryhma'); ?>
+		<?php
+		$list = array();
+      		$l = Valikkoot::model()->findAll(" select_type='asiakas_ryhma' ",array('order' => "select_type"));
+		foreach($l as $v)
+		$list[$v->id] = $v->value;
+
+		if(count($list) > 0)
+		{
+        	echo $form->dropDownList($model, 'ryhma', $list,
+		array('empty'=>'Valitse ryhmä','class'=>'form-control'));
+		} else {
+		echo 'Luo Valikko tietokannassa "Select Type = asiakas_ryhma"';
+		}		
+        	?>
+		<?php echo $form->error($model,'ryhma'); ?>
+	</div>
 
   </div><div class="col-sm-6">
 
@@ -173,6 +191,44 @@
 	</div>
 
 <?php $this->endWidget(); ?>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+
+
+// Send form by ajax
+$('#Kohteet_asiakas_id').change(function(){
+
+   var thisVal = $(this).val();
+
+   $.ajax({
+      url: 'autotaytaminen?id='+thisVal,
+      //type: "POST",
+      //data: { index_ajax : "true" },
+      success: function(data){
+	  console.log(data);
+	  var sp = data.split("//");
+	  $("#Kohteet_etu_suku_nimet").val(sp[0] + " " + sp[1]);
+	  //$("#Kohteet_kaupunki").val(sp[2]);
+	  //$("#Kohteet_pnumero").val(sp[3]);
+	  $("#Kohteet_email").val(sp[4]);
+	  $("#Kohteet_puh_nro").val(sp[5]);
+
+	  if(sp[6] != 0)
+	  {
+	  var ryhma = sp[6].split("-");
+	  $("#Kohteet_ryhma option:selected").val(ryhma[0]);
+	  $("#Kohteet_ryhma option:selected").text(ryhma[1]);
+	  }
+      }
+   });
+
+});
+
+
+});
+</script>
 
 
 <?php /*

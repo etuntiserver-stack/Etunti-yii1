@@ -53,14 +53,16 @@ if(isset($_POST['up']) and Yii::app()->user->username == 'roman')
   $a->postinumero=$v->pnumero;
   $a->puhelin=$v->puh_nro;
   $a->sahkoposti=$v->email;
-  $a->ryhma=1;
+  $a->ryhma=0;
   $a->aktiivinen=1;
 
-  if($a->save())
-  {
-	Kohteet::model()->updateByPk($v->id,array('asiakas_id'=>$a->id));
-	echo $v->id.'<br>';
-  }
+  	if($a->save())
+  	{
+		Kohteet::model()->updateByPk($v->id,array('asiakas_id'=>$a->id));
+		//echo $v->id.'<br>';
+  	} else {
+		echo $v->id.' ei tallennettu<br>';
+ 	}
   }
 }
 ?>
@@ -90,11 +92,12 @@ if(isset($_POST['up']) and Yii::app()->user->username == 'roman')
 		'sukunimi',
 		'osoite',
 		'kaupunki',
+		'ryhma',
 		/*
 		'postinumero',
 		'puhelin',
 		'sahkoposti',
-		'ryhma',
+
 		'aktiivinen',
 		*/
 		array(

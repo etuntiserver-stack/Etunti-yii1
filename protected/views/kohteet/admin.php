@@ -44,15 +44,16 @@ $('.search-form form').submit(function(){
 	'columns'=>array(
 		'id',
 		'asiakas_id',
+		'etu_suku_nimet',
 		//'time',
 		'tag_id',
 		//'gps_sijainti',
 		//'lyhenne',
 		'osoite',
-		'kaupunki',
+		//'kaupunki',
 		'email',
 		'puh_nro',
-		'tietoja',
+		//'tietoja',
 		'avain',
 		/*
 		'katuosoite',
@@ -72,7 +73,7 @@ $('.search-form form').submit(function(){
 		'kenella_on_avain',
 
 		'siivous',
-		'etu_suku_nimet',
+
 		'maksuehto_paiva',
 		'viivastyskorko',
 		'lasku_tiedot',
