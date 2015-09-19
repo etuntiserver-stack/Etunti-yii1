@@ -60,7 +60,7 @@ class Kohteet extends DB2ActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('etu_suku_nimet', 'required'),
+			array('asiakas_id,etu_suku_nimet,osoite', 'required'),
 			array('asiakas_id,aktiivinen, maksuehto_paiva', 'numerical', 'integerOnly'=>true),
 			array('tag_id, kaupunki, toimipaikka, tyoryhma', 'length', 'max'=>20),
 			array('gps_sijainti, osoite, katuosoite, kenella_on_avain, puh_nro', 'length', 'max'=>50),

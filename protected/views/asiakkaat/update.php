@@ -3,9 +3,9 @@
 /* @var $model Asiakkaat */
 
 $this->breadcrumbs=array(
-	'Asiakkaats'=>array('index'),
+	Yii::t('main', 'Asiakaat')=>array('index'),
 	$model->id=>array('view','id'=>$model->id),
-	'Update',
+	Yii::t('main', 'Päivitä'),
 );
 
 $this->menu=array(
@@ -16,6 +16,6 @@ $this->menu=array(
 );
 ?>
 
-<h1>Update Asiakkaat <?php echo $model->id; ?></h1>
+<h1><?php echo Yii::t('main', 'Asiakas'); ?> <?php echo $model->etunimi." ".$model->sukunimi; ?></h1>
 
 <?php echo $this->renderPartial('_form', array('model'=>$model)); ?>

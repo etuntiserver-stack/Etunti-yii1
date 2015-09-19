@@ -28,7 +28,7 @@ class KohteetController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','osoite'),
+				'actions'=>array('admin','delete','create','update','index','view','osoite','autotaytaminen'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -49,10 +49,20 @@ class KohteetController extends Controller
 		}
 	}
 
-	/**
-	 * Displays a particular model.
-	 * @param integer $id the ID of the model to be displayed
-	 */
+	public function actionAutotaytaminen($id)
+	{
+		$m=Asiakkaat::model()->findbypk($id);
+
+		$ryhma = 0;
+		if($m->ryhma != 0)
+		{
+		$l = Valikkoot::model()->findbypk($m->ryhma);
+		$ryhma = $l['id']."-".$l['value'];
+		}
+
+		echo $m->etunimi."//".$m->sukunimi."//".$m->kaupunki."//".$m->postinumero."//".$m->sahkoposti."//".$m->puhelin."//".$ryhma;
+	}
+
 	public function actionView($id)
 	{
 		$this->render('view',array(

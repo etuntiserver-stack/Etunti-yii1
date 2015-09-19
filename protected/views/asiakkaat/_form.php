@@ -5,7 +5,7 @@
 ?>
 
 <div class="row form">
-  <div class="col-sm-4">
+
 
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'asiakkaat-form',
@@ -15,6 +15,7 @@
 
 	<?php echo $form->errorSummary($model); ?>
 
+  <div class="col-sm-4">
 	<div class="row">
 		<?php echo $form->labelEx($model,'etunimi'); ?>
 		<?php echo $form->textField($model,'etunimi',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
@@ -86,10 +87,27 @@
 		<?php echo $form->error($model,'aktiivinen'); ?>
 	</div>
 
-	<div class="row buttons">
+  </div><div class="col-sm-4">
+
+	<?php if(isset($model->id)): ?>
+	<label><?php echo Yii::t('main', 'Asiakkaaseen liittyviä kohteita'); ?></label>
+	<div class="row">		
+		<?php
+		$k = Kohteet::model()->findAll("asiakas_id='".$model->id."'");
+        	foreach($k as $v)
+		{
+			echo '<div class="alert alert-info">'.CHtml::link($v->osoite,'/index.php/kohteet/update?id='.$v->id,array('target'=>'_blank','class'=>'link')).'</div>';
+		}	
+        	?>
+	</div>
+	<?php endif; ?>
+
+  </div>
+</div><!-- form -->
+
+	<div class="buttons">
 		<?php echo CHtml::submitButton($model->isNewRecord ? 'Luo' : 'Tallenna',array('class'=>'btn btn-primary')); ?>
 	</div>
 
 <?php $this->endWidget(); ?>
-  </div>
-</div><!-- form -->
+
