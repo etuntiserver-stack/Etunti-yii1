@@ -15,7 +15,8 @@
 
 	<?php echo $form->errorSummary($model); ?>
 
-  <div class="col-sm-4">
+  <div class="col-sm-3">
+	<legend><h3><?php echo Yii::t('main', 'Asiakkaan tiedot'); ?></h3></legend>
 	<div class="row">
 		<?php echo $form->labelEx($model,'etunimi'); ?>
 		<?php echo $form->textField($model,'etunimi',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
@@ -90,13 +91,22 @@
   </div><div class="col-sm-4">
 
 	<?php if(isset($model->id)): ?>
-	<label><?php echo Yii::t('main', 'Asiakkaaseen liittyviä kohteita'); ?></label>
+	<legend><h3><?php echo Yii::t('main', 'Asiakkaaseen liittyviä kohteita'); ?></h3></legend>
+
+	<div class="row">
+		<label><?php echo Yii::t('main', 'Luo kohde'); ?></label>
+		<?php echo CHtml::link(' +','/index.php/kohteet/createfromasiakas?id='.$model->id,array('target'=>'_blank','class'=>'btn btn-default glyphicon glyphicon-home')); ?>
+	</div>
+
 	<div class="row">		
 		<?php
 		$k = Kohteet::model()->findAll("asiakas_id='".$model->id."'");
         	foreach($k as $v)
 		{
-			echo '<div class="alert alert-info">'.CHtml::link($v->osoite,'/index.php/kohteet/update?id='.$v->id,array('target'=>'_blank','class'=>'link')).'</div>';
+		   echo '<div class="row">
+		   <h3 class="glyphicon glyphicon-home"></h3>&nbsp;&nbsp;&nbsp; 
+		   '.CHtml::link($v->osoite,'/index.php/kohteet/update?id='.$v->id,array('target'=>'_blank','class'=>'link')).'	       	  
+		   </div>';
 		}	
         	?>
 	</div>
