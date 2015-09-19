@@ -28,11 +28,11 @@ class TyovuorootController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','updatetime','showohje','did','muisti','operatio','viikko','fromto','autoinsert','autoremove'),
+				'actions'=>array('admin','delete','create','update','index','view','updatetime','showohje','did','muisti','operatio','viikko','fromto','autoinsert','autoremove','viikkottain','laheta'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','updatetime','showohje','did','muisti','operatio','viikko','fromto','autoinsert','autoremove'),
+				'actions'=>array('admin','delete','create','update','index','view','updatetime','showohje','did','muisti','operatio','viikko','fromto','autoinsert','autoremove','viikkottain','laheta'),
                 		'message'=>Yii::t('main', 'Tämä TASO ei kuuluu teille'),
 			),
 			array('deny',  // deny all users
@@ -60,10 +60,26 @@ class TyovuorootController extends Controller
 		}
 	}
 
-	/**
-	 * Displays a particular model.
-	 * @param integer $id the ID of the model to be displayed
-	 */
+	public function actionLaheta($tid,$week,$year,$tulosta) {
+
+
+		if(Yii::app()->request->getPost('pdf'))
+		{
+	          $html2pdf = Yii::app()->ePdf->HTML2PDF('P', 'A4', 'en');
+		  $html2pdf->setDefaultFont('Arial');
+	          $html2pdf->WriteHTML($this->renderPartial('laheta',array('tid'=>$tid,'week'=>$week,'year'=>$year,'tulosta'=>true),true));
+	          $html2pdf->Output();
+		} else {
+		  $this->render('laheta',array('tid'=>$tid,'week'=>$week,'year'=>$year,'tulosta'=>false));
+		}
+
+
+	}
+
+	public function actionViikkottain() {
+
+		$this->render('viikkottain');
+	}
 
 	public function actionOperatio()
 	{
@@ -235,7 +251,13 @@ class TyovuorootController extends Controller
 	public function actionShowohje($id)
 	{
 		$m = Kohteet::model()->findbypk($id);
-		echo $m->toimenpiteet;
+
+		  $ohje = '';
+		if(!empty($m->avain))
+		  $ohje .= Yii::t('main', 'Avain: ')." ".$m->avain."\n";
+		if(!empty($m->toimenpiteet))
+		  $ohje .= $m->toimenpiteet;
+		echo $ohje;
 	}
 
 	public function actionView($id)

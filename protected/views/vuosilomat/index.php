@@ -51,7 +51,10 @@ echo	'<input type=hidden id=number value='.cal_days_in_month(CAL_GREGORIAN, $mon
 
 <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/verkko.css" />
 
-<h1><?php echo Yii::t('main', 'Vuosilomat'); ?></h1>
+
+<legend>
+<h1> <?php echo Yii::t('main', 'VUOSILOMAT'); ?> <i class="glyphicon glyphicon-time"></i></h1>
+</legend>
 
 
 <div class="row">
