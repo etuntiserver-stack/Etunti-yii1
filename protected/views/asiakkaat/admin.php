@@ -69,10 +69,11 @@ if(isset($_POST['up']) and Yii::app()->user->username == 'roman')
 
 <h1><?php echo Yii::t('main', 'Asiakas hallinta'); ?></h1>
 
+<?php if(Yii::app()->user->username == 'roman') : ?>
 <form action="#" method="POST">
 <input type="submit" name="up" value="update kantaat">
 </form>
-
+<?php endif; ?>
 
 <?php echo CHtml::link('Haku','#',array('class'=>'search-button')); ?>
 <div class="search-form" style="display:none">
