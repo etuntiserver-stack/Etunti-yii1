@@ -59,8 +59,24 @@
           </ul>
         </li>
 
-        	<li><?php echo CHtml::link(Yii::t('main', 'Työntekijät'),array('/tyontekijat/admin')); ?></li>
-        	<li><?php echo CHtml::link(Yii::t('main', 'Viestit'),array('/viestinta/admin')); ?></li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?php echo Yii::t('main', 'Työntekijät'); ?> <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+        	<li><?php echo CHtml::link(Yii::t('main', 'Luo työntekijä'),array('/tyontekijat/create')); ?></li>
+        	<li><?php echo CHtml::link(Yii::t('main', 'Työntekijät hallinta'),array('/tyontekijat/admin')); ?></li>
+          </ul>
+        </li>
+
+
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?php echo Yii::t('main', 'Viestit'); ?> <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+        	<li><?php echo CHtml::link(Yii::t('main', 'Luo viesti'),array('/viestinta/create')); ?></li>
+        	<li><?php echo CHtml::link(Yii::t('main', 'Viestit hallinta'),array('/viestinta/admin')); ?></li>
+          </ul>
+        </li>
+
+
 
 	<?php
 	 $tas = explode(",",Yii::app()->user->adminPaketti);
@@ -70,6 +86,8 @@
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?php echo Yii::t('main', 'Työvuorot'); ?> <span class="caret"></span></a>
           <ul class="dropdown-menu">
         	<li><?php echo CHtml::link(Yii::t('main', 'Työvuorot'),array('/tyovuoroot/index')); ?></li>
+        	<li><?php echo CHtml::link(Yii::t('main', 'Työvuorot VIIKKO'),array('/tyovuoroot/viikkottain')); ?></li>
+	        <li role="separator" class="divider"></li>
         	<li><?php echo CHtml::link(Yii::t('main', 'Vuosilomat'),array('/vuosilomat/index')); ?></li>
           </ul>
         </li>

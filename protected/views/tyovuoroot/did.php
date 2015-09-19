@@ -22,7 +22,7 @@
 
 	 if(isset($tvVal))
 	 {
-	   $k = Kohteet::model()->findbypk($tvVal->kohde,array("select"=>"osoite"));
+	   $k = Kohteet::model()->findbypk($tvVal->kohde,array("select"=>"osoite,avain"));
 	   $strlen = strlen($k['osoite']);
 
 	   if($strlen > 18)
@@ -57,7 +57,10 @@
 	   echo '<div id="'.$tvVal->id.'_'.$did.'_'.$tid.'" class="fullRivi" style="color:'.$color.'">';
 	   if( $from != 'mobiili' )
 	   echo '<a href=# class="text-danger glyphicon glyphicon-paste muistin" for="'.$tvVal->id.'_'.$did.'_'.$tid.'"></a>';
-	   echo '&nbsp;<span class="link tv_edit" id="tv_'.$tvVal->id.'">'.$al.' '.$k['osoite'].'</span><br>
+	   echo '&nbsp;<span class="link tv_edit" id="tv_'.$tvVal->id.'">'.$al.' '.$k['osoite'].'</span>';
+	   if(!empty($k['avain']))
+	   echo ' <img src="'.Yii::app()->request->baseUrl.'/img/avain.png" height="8">';
+	   echo '<br>
 	   </div>';
 
 	 }

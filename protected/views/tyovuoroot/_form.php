@@ -14,8 +14,12 @@ if(isset($_POST['tid']))
 
   $ohje = '';
 $m = Kohteet::model()->findbypk($model->kohde);
-if(isset($m->toimenpiteet))
-  $ohje = $m->toimenpiteet;
+
+if(!empty($m->avain))
+  $ohje .= Yii::t('main', 'Avain: ')." ".$m->avain."\n";
+if(!empty($m->toimenpiteet))
+  $ohje .= $m->toimenpiteet;
+
 ?>
 
 <div class="row form">
@@ -289,7 +293,7 @@ $(document).ready(function(){
 	  $.ajax({
 		  url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/showohje?id='+thisID,
 		  success:function(data){
-			console.log(data);
+			//console.log(data);
 			$('.ohje').text(data);
 		return false;
 	   	},
