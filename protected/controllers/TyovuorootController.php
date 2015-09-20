@@ -80,11 +80,15 @@ class TyovuorootController extends Controller
 
 
 
-function mail_attachment_lahettaminen($fileContent, $filename, $mailto, $from_mail, $from_name, $replyto, $subject, $message) {
-
-    $content = chunk_split(base64_encode($fileContent));
+function mail_attachment_lahettaminen($filename, $path, $mailto, $from_mail, $from_name, $replyto, $subject, $message) {
+    $file = $path.'/'.$filename;
+    $file_size = filesize($file);
+    $handle = fopen($file, "r");
+    $content = fread($handle, $file_size);
+    fclose($handle);
+    $content = chunk_split(base64_encode($content));
     $uid = md5(uniqid(time()));
-    $name = basename($filename);
+    $name = basename($file);
     $header = "From: ".$from_name." <".$from_mail.">\r\n";
     $header .= "Reply-To: ".$replyto."\r\n";
     $header .= "MIME-Version: 1.0\r\n";
@@ -104,24 +108,37 @@ function mail_attachment_lahettaminen($fileContent, $filename, $mailto, $from_ma
 
     if (mail($mailto, $subject, "", $header)) {
         echo "mail send ... OK"; // or use booleans here
+
     } else {
         echo "mail send ... ERROR!";
-echo $mailto.' '.$subject.' '.$header;
+	echo $mailto.' '.$subject.' '.$header;
     }
-
 
 }
 
+		if(isset($_POST['week']))
+		{
+		$file = $_POST['week'].'_'.$_POST['year'].'_'.$_POST['tid'].'.pdf';
+		$path = Yii::app()->request->baseUrl."emails/tyovuorot/".Yii::app()->user->domain;
 
-$my_name = "ETUNTI.FI";
-$my_mail = 'laptopsr@gmail.com';
-$my_replyto = 'laptopsr@gmail.com';
-$my_subject = 'test';
-$my_message = 'terve';
-$tekijan_email = 'laptopsr@gmail.com';
-$filename = 'test.pdf';
+  		if (!file_exists($path))
+		  	mkdir($path, 0777, true);
 
-mail_attachment_lahettaminen($content_PDF, $filename, $tekijan_email, $my_mail, $my_name, $my_replyto, $my_subject, $my_message);
+		file_put_contents($path.'/'.$file, $content_PDF);
+		}
+
+
+
+
+		$my_name = "ETUNTI.FI";
+		$my_mail = 'laptopsr@gmail.com';
+		$my_replyto = 'laptopsr@gmail.com';
+		$my_subject = 'test';
+		$my_message = 'terve';
+		$tekijan_email = 'laptopsr@gmail.com';
+		
+		mail_attachment_lahettaminen($file, $path, $tekijan_email, $my_mail, $my_name, $my_replyto, $my_subject, $my_message);
+
 
 		} else {
 		  $this->render('laheta',array('tid'=>$tid,'week'=>$week,'year'=>$year,'tulosta'=>false));
