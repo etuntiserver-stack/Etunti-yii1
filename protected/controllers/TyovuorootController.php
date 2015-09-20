@@ -79,33 +79,6 @@ class TyovuorootController extends Controller
 
 
 
-
-function mail_attachment_lahettaminen($filename, $path, $mailto, $from_mail, $from_name, $replyto, $subject, $message) {
-
-    $file = $path.'/'.$filename;
-    $file_size = filesize($file);
-    $handle = fopen($file, "r");
-    $content = fread($handle, $file_size);
-    fclose($handle);
-    $content = chunk_split(base64_encode($content));
-    $uid = md5(uniqid(time()));
-    $name = basename($file);
-    $header = "From: ".$from_name." <".$from_mail.">\r\n";
-    $header .= "Reply-To: ".$replyto."\r\n";
-    $header .= "MIME-Version: 1.0\r\n";
-    $header .= "Content-Type: multipart/mixed; boundary=\"".$uid."\"\r\n\r\n";
-
-
-    if (mail($mailto, $subject, "", $header)) {
-        echo "mail send ... OK"; // or use booleans here
-
-    } else {
-        echo "mail send ... ERROR!";
-	echo $mailto.' '.$subject.' '.$header;
-    }
-
-}
-
 		if(isset($_POST['week']))
 		{
 		$file = $_POST['week'].'_'.$_POST['year'].'_'.$_POST['tid'].'.pdf';
@@ -119,15 +92,14 @@ function mail_attachment_lahettaminen($filename, $path, $mailto, $from_mail, $fr
 
 
 
-
-		$my_name = "ETUNTI.FI";
-		$my_mail = 'laptopsr@gmail.com';
-		$my_replyto = 'laptopsr@gmail.com';
-		$my_subject = 'test';
-		$my_message = 'terve';
-		$tekijan_email = 'laptopsr@gmail.com';
-		
-		mail_attachment_lahettaminen($file, $path, $tekijan_email, $my_mail, $my_name, $my_replyto, $my_subject, $my_message);
+$mail = new YiiMailer();
+//$mail->clearLayout();//if layout is already set in config
+$mail->setFrom('laptopsr@gmail.com', 'John Doe');
+$mail->setTo('laptopsr@gmail.com');
+$mail->setSubject('Mail subject');
+$mail->setBody('Simple message');
+$mail->setAttachment($path.'/'.$file);
+$mail->send();
 
 
 		} else {

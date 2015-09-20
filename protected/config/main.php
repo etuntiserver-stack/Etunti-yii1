@@ -83,6 +83,7 @@ return array(
         'application.modules.user.models.*',
         'application.modules.user.components.*',
 	'application.extensions.carouFredSel.*',
+	'ext.YiiMailer.YiiMailer',
 	//'application.extensions.EasySlider.*',
 	),
 
