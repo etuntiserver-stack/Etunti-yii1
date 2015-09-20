@@ -2,6 +2,10 @@
 	'id'=>'tyontekijat-grid',
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,
+
+                    'pagerCssClass' => 'dataTables_paginate paging_bootstrap',
+                    'itemsCssClass' => 'table table-striped table-bordered table-hover',
+
 	'columns'=>array(
 		'id',
 		'imei',

@@ -3,32 +3,65 @@
 
 ?>
 
-<div class="row">
-  <div class="alert alert-info col-lg-4 col-lg-offset-3">
-	<button id="t_aloitan" class="btn btn-primary">Työ alkaa</button>
-	<button id="t_loppui" class="btn btn-primary">Työ loppu</button>
-	<br><br>
-	<button id="m_aloitan" class="btn btn-primary">Matka alkaa</button>
-	<button id="m_loppui" class="btn btn-primary">Matka loppu</button>
-	<br><br>
-	<button id="l_aloitan" class="btn btn-primary">Lounastauko alkaa</button>
-	<button id="l_loppui" class="btn btn-primary">Lounastauko loppu</button>
-	<br><br>
 
-   <?php
-    $model=new Mobile;
-    $list = CHtml::listData(Tyontekijat::model()->findAll(array('order' => 'tekijan_nimi')), 'imei', 'tekijan_nimi');
 
-    echo '<select id="tekija" class="btn btn-default form-control">';
-    foreach($list as $key=>$val){
-    echo '<option value="'.$key.'">'.$val.'</option>';
-    }
-    echo '</select>';
-   ?>
+  <div class="row">
+    <div class="col-lg-3 col-sm-offset-4 full">
+     <br>
 
-	<textarea cols="100" rows="10" class="form-control" id="result"></textarea>
+     <div id="tekija"></div>
+
+     <hr>
+
+	    <?php
+	    $model=new Mobile;
+	    $list = CHtml::listData(Tyontekijat::model()->findAll(array('order' => 'tekijan_nimi')), 'imei', 'tekijan_nimi');
+	
+	    echo '<select class="form-control tekija">';
+	    foreach($list as $key=>$val){
+	    echo '<option value="'.$key.'">'.$val.'</option>';
+	    }
+	    echo '</select>';
+	   ?>
+
+
+	    <BR><BR>
+
+	   <div id="odotta"></div>
+
+	    <div id="osoite" style="display:none">
+		<input type="text" class="form-control input-lg" id="os" placeholder="osoite">
+		<div id="getListFromServer"></div>
+		<input type="hidden" id="kohdenID" value="0">
+	    </div>
+	    <br>
+	    <center>
+     	      <div id="tyo" style="display:none">
+		<h4>TYÖ</h4>
+		<h4 id="tyo_kohde" style="display:none"></h4>
+		<input type="checkbox" name="tyo" class="sw tyo">
+	      </div>
+     	      <div id="matka" style="display:none">
+		<h4>MATKA</h4>
+		<h4 id="matka_kohde" style="display:none"></h4>
+		<input type="checkbox" name="matka" class="sw matka">
+	      </div>
+     	      <div id="lounas" style="display:none">
+		<h4>LOUNASTAUKO</h4> 
+		<h4 id="lounas_kohde" style="display:none"></h4>
+		<input type="checkbox" name="lounas" class="sw lounas">
+	      </div>
+	    </center>
+
+	    <BR><BR>
+
+
+
+	    <!--<textarea cols="100" rows="6" class="form-control" id="result2" style="display:none"></textarea>-->
+	    <div id="result2" style="display:none"></div>
+    </div>
   </div>
-</div>
+
 
 
 	<input type="hidden" id="server" value="<?php echo Yii::app()->getBaseUrl(true); ?>">
@@ -38,6 +71,92 @@
 
 <script type="text/javascript">
 $(document).ready(function(){
+
+  var domain = '<?php echo Yii::app()->user->domain; ?>';
+  var imei = '';
+  var my_location = '';
+  var tag = '000000';
+
+  var server = location.protocol + "//" + location.host + '/index.php/';
+  var url = server+"api/mob";
+  var puh_nro = "";
+  var versio = "0.50";
+
+  $(".tekija").change(function(){
+	allHide();
+	allTilasetHide();
+     	imei = $(this).val();
+     	set();
+  });
+
+  set();
+
+
+$(".sw").bootstrapSwitch({
+	size: "large",
+	onColor: "warning",
+	offColor: "success",
+	onText: "Lopetus",
+	offText: "Aloitus"
+});
+
+
+function stateFalse(){
+   if($("#os").val() == ''){
+	alert("Osoite puutuu!");
+	$('.tyo').bootstrapSwitch('state', false, true);
+  	return false;
+   }
+}
+
+$('input[name="tyo"]').on('switchChange.bootstrapSwitch', function(event, state) {
+  console.log(state); 
+  if(state == true)
+  {
+	row("tyo_al",1);
+  } else {
+	row("tyo_lp",3);
+  }
+});
+
+$('input[name="matka"]').on('switchChange.bootstrapSwitch', function(event, state) {
+  console.log(state); 
+  if(state == true)
+  {
+	row("matka_al",2);
+  } else {
+	row("matka_lp",2);
+  }
+});
+
+$('input[name="lounas"]').on('switchChange.bootstrapSwitch', function(event, state) {
+  console.log(state); 
+  if(state == true)
+  {
+	row("lounas_al",10);
+  } else {
+	row("lounas_lp",10);
+  }
+});
+
+
+function allHide(){
+	$("#osoite").hide(370);
+	$('#tyo').hide(370);
+	$('#matka').hide(370);
+	$('#lounas').hide(370);
+}
+function allShow(){
+	$('#tyo').show(370);
+	$('#matka').show(370);
+	$('#lounas').show(370);
+}
+function allTilasetHide(){
+	$("#tyo_kohde").hide();
+	$("#matka_kohde").hide();
+	$("#lounas_kohde").hide();
+}
+
 
 function curDateTime(){
 
@@ -54,24 +173,17 @@ function curDateTime(){
 	return (day + "." + month + "." + year + " " + hours + ":" + minutes + ":" + seconds);
 }
 
-  var domain = "<?php echo Yii::app()->user->domain; ?>";
-  var url = $("#server").val()+"/index.php/api/mob";
-  var puh_nro = "0449304851";
-  var versio = "0.47";
-  var tag = "36073245411209220";
-  var gps = "000000";
 
-  var imei = $("#tekija").val();
+function row(tilanne,st){
 
-  $('#tekija').change(function(){ 
-	imei = $("#tekija").val();
-  });
+   allHide();
+   allTilasetHide();
 
-
-function row(tilanne,st,gps){
+   $("#odotta").html("<h1>ODOTA</h1>").fadeIn(370);
 
    if((tilanne == 'tyo_al') & (st == 1))
    {
+ 	stateFalse();
 	var al 	= curDateTime();
 	var lp 	= '';
    }
@@ -101,27 +213,26 @@ function row(tilanne,st,gps){
 	var lp 	= curDateTime();
    }
 
+
    	var postData = {
-	domain: domain,
-	imei: imei,
-	asiakas_num: versio+"_"+tag,
-	puh_numero: puh_nro,
-	bluetooth_name: "0",
-	sim_serial_number: "0",
-	subscriber_id: "0",
-	my_location: gps,
-	osoite: "0",
-	kohde_kannasta: "Testti Osoite",
-	kohdenID: "0",
-	aloitan: al,
-	loppui: lp,
-	viesti: "xxx",
-	tekijan_nimi: "Roman Sizov",
-	tid: "38",
-	etaisyys: "0",
-	status: st,
-	tietoja: "testi",
-	hyvaksytty: "0",
+		domain: domain,
+		imei: imei,
+		asiakas_num: versio+"_"+tag,
+		puh_numero: puh_nro,
+		bluetooth_name: "0",
+		sim_serial_number: "0",
+		subscriber_id: "0",
+		my_location: my_location,
+		osoite: "0",
+		kohde_kannasta: $("#os").val(),
+		kohdenID: $("#kohdenID").val(),
+		aloitan: al,
+		loppui: lp,
+		viesti: "xxx",
+		etaisyys: "0",
+		status: st,
+		tietoja: "",
+		hyvaksytty: "0",
 	};
 
 
@@ -131,11 +242,21 @@ function row(tilanne,st,gps){
  	   data: postData,
            success: function(data){
         	console.log(data);
-		$("#result").val(data);
+
+		var sp = data.split("//");
+		 if(sp[4] === 'tagnumerror')
+		 {
+		   $("#result2").html("<div class='alert alert-danger'><h3>VIRHE!!!</h3>Voit lopettaa osoitessa <b>"+sp[3]+"</b></div>").show();
+		   //return false;
+		 } else {
+		   $("#result2").hide();
+		 }
+
+		set();
     	},
     		error:function (xhr, ajaxOptions, thrownError){
         	console.log(xhr.responseText);
-		$("#result").val(xhr.responseText);
+		$("#result2").html(xhr.responseText).show();
     	}
         });
 
@@ -143,98 +264,131 @@ function row(tilanne,st,gps){
 
 
 
-$('#t_aloitan').click(function(){ 
-	row("tyo_al",1,gps)
+   function set() {
+
+
+        $.ajax({
+           url: url+'/imei?dom='+domain,
+	   type:'POST',
+ 	   data: { check : "testi", imei : imei, my_location : my_location, tag : tag },
+           success: function(data){
+        	console.log(data);
+		//$("#result2").html(data).show();
+		var sp = data.split("//");
+
+		if(sp[0] == 'imeiError')
+		{
+		  //$("#result2").html("<h2>"+sp[1]+" "+sp[2]+"</h2>").show();
+		  $("#footer").show(370);
+		  return false;
+		} 
+
+		$('#tietoja').hide();
+		$("#odotta").fadeOut(370);
+		$("#footer").show(370);
+		$("#result").append(sp+"\n");
+		//$('.full').css({"opacity" : "1"});
+		$("#domainBlokki").hide();
+		$("#tekija").html("<h3>"+domain+", "+sp[5]+"</h3>");
+
+		if((sp[0] == '3') || (sp[0] == '2') || (sp[0] == '10')){
+		  $("#osoite").show(370);
+		  allShow();
+		  allTilasetHide();
+		}
+		if(sp[0] == '1')
+		{
+		  allHide();
+		  $("#tyo").show(370);
+		  $("#tyo_kohde").html(sp[1]).show(370);
+		  $('.tyo').bootstrapSwitch('state', true, true);
+		} 
+		if(sp[0] == '2.1')
+		{
+		  allHide();
+		  $("#matka").show(370);
+		  //$("#matka_kohde").html(sp[1]).show(370);
+		  $('.matka').bootstrapSwitch('state', true, true);
+		}
+		if(sp[0] == '10.1')
+		{
+		  allHide();
+		  $("#lounas").show(370);
+		  //$("#lounas_kohde").html(sp[1]).show(370);
+		  $('.lounas').bootstrapSwitch('state', true, true);
+
+
+		}
+		$("#os").val(sp[4]);
+		$("#kohdenID").val(sp[6]);
+
+		$("#result").hide();
+    	},
+    		error:function (xhr, ajaxOptions, thrownError){
+        	console.log(xhr.responseText);
+
+		  if($("#domain").val() != '')
+		     $("#odotta").html("<div class='alert alert-danger'>Domain: <b>" + $("#domain").val() + "</b> on virhellinen,  tai tietokantaa ei löydy</div>").show();
+		  else
+		     $("#odotta").hide();
+
+		$("#domainBlokki").show();
+		//$("#result2").val(xhr.responseText).show();
+		//$("#domain").addClass("btn btn-danger");
+    	}
+        });
+    }
+
+
+
+$("#os").keyup(function(){
+
+  var thisKey = $(this).val();
+  var lengThis = thisKey.length;
+
+  if(lengThis > 0)
+  {
+	$("#getListFromServer").show(370);
+        $.ajax({
+           url: url+'/imei?dom='+domain,
+	   type:'POST',
+ 	   data: { check : "osoitevaihto", imei : imei, my_location : my_location, thisKey : thisKey },
+           success: function(data){
+        	console.log(data);
+		//$("#result").val(data);
+		$("#getListFromServer").html(data);
+
+  		$("#list").change(function(){
+
+			$("#getListFromServer").hide(370);
+			$("#os").val($( "#list option:selected" ).text());
+			$("#kohdenID").val($( "#list option:selected" ).val());
+		});
+
+		var listSize = $('#list option').size();
+
+			$("#valitseOsoite").text("Löyty: "+(listSize-1)+" kohteita");
+
+		if(listSize > 1)
+		{
+			$("#list").show();
+		} else {
+			$("#list").hide();
+		}
+
+		$("#result").hide();
+    	},
+    		error:function (xhr, ajaxOptions, thrownError){
+        	console.log(xhr.responseText);
+		$("#result2").val(xhr.responseText).show();
+    	}
+        });
+
+  } else {
+			$("#list").hide();
+  }
+
 });
-
-$('#t_loppui').click(function(){ 
-	row("tyo_lp",3,gps)
-});
-
-$('#m_aloitan').click(function(){ 
-	row("matka_al",2,gps)
-});
-
-$('#m_loppui').click(function(){ 
-	row("matka_lp",2,gps)
-});
-
-$('#l_aloitan').click(function(){ 
-	row("lounas_al",10,gps)
-});
-
-$('#l_loppui').click(function(){ 
-	row("lounas_lp",10,gps)
-});
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-$('#status').click(function(){ 
-
-	var getData = '';
-	var status = '';
-	var KantaID = '';
-
-
-/*
-$.ajaxSetup({
-    beforeSend: function(xhr) {
-        xhr.setRequestHeader("X_USERNAME", "demo");
-        xhr.setRequestHeader("X_PASSWORD", "111111");
-        console.log(xhr);
-    }, 
-});
-*/
-	$.ajax({
-	    url : url+'/imei/'+imei,
-	    type:"GET",
-	    data: domainData,
-
-	    success:function(data, textStatus, XMLHttpRequest) {
-	      console.log(data);
-	      getData = JSON.parse(data);
-	
-	      if(getData['Kohde'] === null)
-	      {
-	      	console.log("Ei ole mitään avoina");
-		$("#result").val("Ei ole mitään avoina");
-	      } else {
-		KantaID = getData['Kohde'];
-	      	console.log(KantaID + " on avoina");
-	      	$("#result").val("Kohde: "+KantaID + "  on avoina. Status: " +getData['Status']);
-	      }
-
-	    },
-    	    error: function(textStatus, errorThrown) {
-	    	console.log(textStatus.responseText);
-		$("#result").val(textStatus.responseText);
- 	    }
-	});
-
-});
-
 
 
 
