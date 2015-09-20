@@ -26,6 +26,10 @@ $('.search-form form').submit(function(){
 ");
 ?>
 
+<legend>
+<h1> <?php echo Yii::t('main', 'TYÖNTEKIJÄT'); ?> <i class="glyphicon glyphicon-user"></i></h1>
+</legend>
+
 <div class="row">
   <div class="col-sm-3">
     <input type="checkbox" name="aktiivinen" class="sw">
@@ -37,6 +41,10 @@ $('.search-form form').submit(function(){
 	'id'=>'tyontekijat-grid',
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,
+
+                    'pagerCssClass' => 'dataTables_paginate paging_bootstrap',
+                    'itemsCssClass' => 'table table-striped table-bordered table-hover',
+
 	'columns'=>array(
 		'id',
 		'imei',
@@ -78,7 +86,7 @@ $('.search-form form').submit(function(){
 $(document).ready(function(){
 
   $(".sw").bootstrapSwitch({
-	size: "large",
+	//size: "large",
 	onColor: "warning",
 	offColor: "success",
 	onText: "Aktiiviset",
@@ -95,7 +103,7 @@ $('input[name="aktiivinen"]').bootstrapSwitch('state', true, true);
 $(document).ready(function(){
 
   $(".sw").bootstrapSwitch({
-	size: "large",
+	//size: "large",
 	onColor: "warning",
 	offColor: "success",
 	onText: "Aktiiviset",

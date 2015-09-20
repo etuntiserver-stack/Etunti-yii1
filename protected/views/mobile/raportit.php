@@ -4,7 +4,9 @@ $this->breadcrumbs=array(
 );
 ?>
 
-<h1><?php echo Yii::t('main', 'Raportit'); ?></h1>
+<legend>
+<h1> <?php echo Yii::t('main', 'RAPORTIT'); ?> <i class="glyphicon glyphicon-th-list"></i></h1>
+</legend>
 
 <br>
 

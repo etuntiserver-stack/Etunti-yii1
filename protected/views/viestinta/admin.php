@@ -26,7 +26,9 @@ $('.search-form form').submit(function(){
 ");
 ?>
 
-<h1><?php echo Yii::t('main', 'Viestintä hallinta'); ?></h1>
+<legend>
+<h1> <?php echo Yii::t('main', 'VIESTIT'); ?> <i class="glyphicon glyphicon-envelope"></i></h1>
+</legend>
 
 
 
@@ -41,6 +43,10 @@ $('.search-form form').submit(function(){
 	'id'=>'viestinta-grid',
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,
+
+                    'pagerCssClass' => 'dataTables_paginate paging_bootstrap',
+                    'itemsCssClass' => 'table table-striped table-bordered table-hover',
+
 	'columns'=>array(
 		'id',
 		'time',

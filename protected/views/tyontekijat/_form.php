@@ -18,8 +18,6 @@ if(isset($_POST['uploaded'])){
 
 ?>
 
-
-
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'tyontekijat-form',
 	'enableAjaxValidation'=>false,
@@ -89,43 +87,6 @@ if(isset($_POST['uploaded'])){
 		<?php echo $form->error($model,'tyoryhma'); ?>
 	</div>
 
-	<div class="row">
-		<?php echo $form->labelEx($model,'tyoehtosopimus'); ?>
-		<?php echo $form->textField($model,'tyoehtosopimus',array('size'=>50,'maxlength'=>50,'class'=>'form-control')); ?>
-		<?php echo $form->error($model,'tyoehtosopimus'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'tekijan_kulunvalvonta'); ?>
-		<?php echo $form->textField($model,'tekijan_kulunvalvonta',array('size'=>50,'maxlength'=>50,'class'=>'form-control')); ?>
-		<?php echo $form->error($model,'tekijan_kulunvalvonta'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'tekijan_pankkitili'); ?>
-		<?php echo $form->textField($model,'tekijan_pankkitili',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
-		<?php echo $form->error($model,'tekijan_pankkitili'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'tekijan_konttori'); ?>
-		<?php echo $form->textField($model,'tekijan_konttori',array('size'=>50,'maxlength'=>50,'class'=>'form-control')); ?>
-		<?php echo $form->error($model,'tekijan_konttori'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'salasana'); ?>
-		<?php echo $form->textField($model,'salasana',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
-		<?php echo $form->error($model,'salasana'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'ayjasenyys'); ?>
-		<?php echo $form->checkbox($model,'ayjasenyys',array('size'=>10,'maxlength'=>10,'class'=>'form-control')); ?>
-		<?php echo $form->error($model,'ayjasenyys'); ?>
-	</div>
-
-
    </div>
    <div class="col-sm-3">
 
@@ -194,21 +155,64 @@ if(isset($_POST['uploaded'])){
 	</div>
 
    </div>
-   <div class="col-sm-6">
+   <div class="col-sm-3">
 
-	<?php if(isset($model->id)): ?>
 	<div class="row">
-	   <div class="pull-right col-sm-3">
-	   <?php
-	   $filename = "../../img/tekijat/".Yii::app()->user->domain."/".$model->id.".jpg";
-	   if (file_exists(Yii::app()->request->baseUrl."img/tekijat/".Yii::app()->user->domain."/".$model->id.".jpg"))
-	     echo '<img src="'.$filename.'" class="img-thumbnail">';
-	   else
-	     echo '<img src="../../img/tekijat/noname.jpg" class="img-thumbnail">';
-	   ?>  		
-	   </div>
+		<?php echo $form->labelEx($model,'tyoehtosopimus'); ?>
+		<?php echo $form->textField($model,'tyoehtosopimus',array('size'=>50,'maxlength'=>50,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'tyoehtosopimus'); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->labelEx($model,'tekijan_kulunvalvonta'); ?>
+		<?php echo $form->textField($model,'tekijan_kulunvalvonta',array('size'=>50,'maxlength'=>50,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'tekijan_kulunvalvonta'); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->labelEx($model,'tekijan_pankkitili'); ?>
+		<?php echo $form->textField($model,'tekijan_pankkitili',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'tekijan_pankkitili'); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->labelEx($model,'tekijan_konttori'); ?>
+		<?php echo $form->textField($model,'tekijan_konttori',array('size'=>50,'maxlength'=>50,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'tekijan_konttori'); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->labelEx($model,'salasana'); ?>
+		<?php echo $form->textField($model,'salasana',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'salasana'); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->labelEx($model,'ayjasenyys'); ?>
+		<?php echo $form->checkbox($model,'ayjasenyys',array('size'=>10,'maxlength'=>10,'class'=>'form-control')); ?>
+
+		<?php echo $form->error($model,'ayjasenyys'); ?>
+	</div>
+
+   </div>
+   <div class="col-sm-2">
+	<?php if(isset($model->id)): ?>
+	<div class="row"><br>
+		<?php
+		$filename = "../../img/tekijat/".Yii::app()->user->domain."/".$model->id.".jpg";
+		if (file_exists(Yii::app()->request->baseUrl."img/tekijat/".Yii::app()->user->domain."/".$model->id.".jpg"))
+		   echo '<img src="'.$filename.'" class="img-thumbnail">';
+		else
+		   echo '<img src="../../img/tekijat/noname.jpg" class="img-thumbnail">';
+		?>		
 	</div>
 	<?php endif; ?>
+   </div>
+
+</div><!-- form -->
+
+<div class="row form">
+   <div class="col-sm-6">
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'tekijan_tietoja'); ?>
@@ -223,9 +227,8 @@ if(isset($_POST['uploaded'])){
 	</div>
 
    </div>
+</div>
 
-
-</div><!-- form -->
 
 <br>
 
@@ -236,5 +239,14 @@ if(isset($_POST['uploaded'])){
 <?php $this->endWidget(); ?>
 
 
+<script type="text/javascript">
+$(document).ready(function(){
+
+  $(":file").filestyle({
+	buttonText: "Etsi tiedosto"
+  });
+
+});
+</script>
 
 

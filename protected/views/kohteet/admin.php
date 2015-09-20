@@ -26,7 +26,9 @@ $('.search-form form').submit(function(){
 ");
 ?>
 
-<h1><?php echo Yii::t('main', 'Kohteet'); ?></h1>
+<legend>
+<h1> <?php echo Yii::t('main', 'KOHTEET'); ?> <i class="glyphicon glyphicon-home"></i></h1>
+</legend>
 
 
 
@@ -37,10 +39,16 @@ $('.search-form form').submit(function(){
 )); ?>
 </div><!-- search-form -->
 
+
 <?php $this->widget('zii.widgets.grid.CGridView', array(
 	'id'=>'kohteet-grid',
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,
+
+                    'pagerCssClass' => 'dataTables_paginate paging_bootstrap',
+                    'itemsCssClass' => 'table table-striped table-bordered table-hover',
+
+
 	'columns'=>array(
 		'id',
 		'asiakas_id',
