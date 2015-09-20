@@ -35,6 +35,9 @@ td,th{
   </form>
 
   <form action="#" class="form-group" method="POST">
+    <input type="hidden" name="week" value="<?php echo $week; ?>">
+    <input type="hidden" name="year" value="<?php echo $year; ?>">
+    <input type="hidden" name="tid" value="<?php echo $tid; ?>">
     <input type="submit" class="btn btn-success" name="pdf_email" value="PDF >>> sähköposti">
   </form>
 </div>
