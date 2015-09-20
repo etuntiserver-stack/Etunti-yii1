@@ -62,48 +62,49 @@ class TyovuorootController extends Controller
 
 	public function actionLaheta($tid,$week,$year,$tulosta) {
 
+		$tt = Tyontekijat::model()->findbypk($tid);
 
 		if(Yii::app()->request->getPost('pdf'))
 		{
 	          $html2pdf = Yii::app()->ePdf->HTML2PDF('P', 'A4', 'en');
 		  $html2pdf->setDefaultFont('Arial');
-	          $html2pdf->WriteHTML($this->renderPartial('laheta',array('tid'=>$tid,'week'=>$week,'year'=>$year,'tulosta'=>true),true));
+	          $html2pdf->WriteHTML($this->renderPartial('laheta',array('tid'=>$tid,'week'=>$week,'year'=>$year,'tulosta'=>true,'tt'=>$tt),true));
 	          $html2pdf->Output();
+
 		} elseif(Yii::app()->request->getPost('pdf_email'))
 		{
 
 	          $html2pdf = Yii::app()->ePdf->HTML2PDF('P', 'A4', 'en');
 		  $html2pdf->setDefaultFont('Arial');
-	          $html2pdf->WriteHTML($this->renderPartial('laheta',array('tid'=>$tid,'week'=>$week,'year'=>$year,'tulosta'=>true),true));
+	          $html2pdf->WriteHTML($this->renderPartial('laheta',array('tid'=>$tid,'week'=>$week,'year'=>$year,'tulosta'=>true,'tt'=>$tt),true));
          	  $content_PDF = $html2pdf->Output('my_doc.pdf', EYiiPdf::OUTPUT_TO_STRING);
 
 
-
-		if(isset($_POST['week']))
-		{
-		$file = $_POST['week'].'_'.$_POST['year'].'_'.$_POST['tid'].'.pdf';
+		/* file */
+		$file = $week.'_'.$year.'_'.$tid.'.pdf';
 		$path = Yii::app()->request->baseUrl."emails/tyovuorot/".Yii::app()->user->domain;
 
   		if (!file_exists($path))
 		  	mkdir($path, 0777, true);
 
 		file_put_contents($path.'/'.$file, $content_PDF);
-		}
+		/* file */
+		$message = Yii::t('main', 'VIIKKO').'-'.$week.'<br>'.Yii::t('main', ' Liitteenä uusi PDF-tiedosto');
 
 
-
-$mail = new YiiMailer();
-//$mail->clearLayout();//if layout is already set in config
-$mail->setFrom('laptopsr@gmail.com', 'John Doe');
-$mail->setTo('laptopsr@gmail.com');
-$mail->setSubject('Mail subject');
-$mail->setBody('Simple message');
-$mail->setAttachment($path.'/'.$file);
-$mail->send();
-
+		$mail = new YiiMailer();
+		//$mail->clearLayout();//if layout is already set in config
+		$mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
+		$mail->setTo($tt->tekijan_email);
+		$mail->setSubject(Yii::t('main', 'TYÖVUOROT'). ' '.$tt->tekijan_nimi);
+		$mail->setBody($message);
+		$mail->setAttachment($path.'/'.$file);
+	
+		if($mail->send())
+		  $this->render('laheta',array('tid'=>$tid,'week'=>$week,'year'=>$year,'tulosta'=>false,'tt'=>$tt));
 
 		} else {
-		  $this->render('laheta',array('tid'=>$tid,'week'=>$week,'year'=>$year,'tulosta'=>false));
+		  $this->render('laheta',array('tid'=>$tid,'week'=>$week,'year'=>$year,'tulosta'=>false,'tt'=>$tt));
 		}
 
 
