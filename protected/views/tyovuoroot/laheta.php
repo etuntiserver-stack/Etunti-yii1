@@ -1,6 +1,5 @@
 <?php
 
-  $tt = Tyontekijat::model()->findbypk($tid);
 
 $paivat=array(
 	1=>'Maanantai',
@@ -34,11 +33,9 @@ td,th{
     <input type="submit" class="btn btn-success" name="pdf" value="PDF">
   </form>
 
-  <form action="#" class="form-group" method="POST">
-    <input type="hidden" name="week" value="<?php echo $week; ?>">
-    <input type="hidden" name="year" value="<?php echo $year; ?>">
-    <input type="hidden" name="tid" value="<?php echo $tid; ?>">
-    <input type="submit" class="btn btn-success" name="pdf_email" value="PDF >>> sähköposti">
+  <form action="#" id="pdf_email" class="form-group" method="POST">
+    <input type="hidden" name="pdf_email" value="true">
+    <button class="btn btn-success laheta">PDF >>> sähköposti</button>
   </form>
 </div>
 <?php endif; ?>
@@ -118,5 +115,24 @@ for($day= 1; $day <= 7; $day++) {
 }
 ?>
 </table>
+
+
+<?php if(!$tulosta) : ?>
+<script type="text/javascript">
+$(document).ready(function(){
+
+$(".laheta").click(function(){
+        var r=confirm("Oletko varmaa?")
+        if (!r){
+	   return false;
+	} else {
+	   $("#pdf_email").submit();
+	}
+});
+
+
+});
+</script>
+<?php endif; ?>
 
 
