@@ -91,7 +91,7 @@ function mail_attachment_lahettaminen($filename, $path, $mailto, $from_mail, $fr
     $name = basename($file);
     $header = "From: ".$from_name." <".$from_mail.">\n";
     $header .= "Reply-To: ".$replyto."\n";
-    $header .= "MIME-Version: 1.0\n";
+    $header .= "MIME-Version: 1.0\n";//t
     $header .= "Content-Type: multipart/mixed; boundary=\"".$uid."\"\n\n";
     $header .= "This is a multi-part message in MIME format.\n";
     $header .= "--".$uid."\n";
