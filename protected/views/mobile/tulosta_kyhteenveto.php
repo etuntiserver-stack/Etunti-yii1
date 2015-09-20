@@ -8,6 +8,9 @@ td,th{
 }
 </style>
 
+<h1> <?php echo Yii::t('main', 'YHTEENVETO KOHTEET'); ?></h1>
+<h3><?php echo date("d.m.Y",strtotime(Yii::app()->session['from']))." - ".date("d.m.Y",strtotime(Yii::app()->session['to'])); ?></h3>
+
 <?php if(Yii::app()->session['from'] and Yii::app()->session['to']) : ?>
   <table>
   <thead>
