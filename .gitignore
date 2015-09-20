@@ -1,5 +1,6 @@
 assets/*
 emails/*
+img/tekijat/*
 protected/runtime/*
 protected/runtime/application.log
 !protected/runtime/.gitignore
