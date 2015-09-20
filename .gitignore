@@ -1,4 +1,5 @@
 assets/*
+emails/*
 protected/runtime/*
 protected/runtime/application.log
 !protected/runtime/.gitignore
