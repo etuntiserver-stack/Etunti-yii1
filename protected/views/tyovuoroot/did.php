@@ -59,7 +59,7 @@
 	   echo '<a href=# class="text-danger glyphicon glyphicon-paste muistin" for="'.$tvVal->id.'_'.$did.'_'.$tid.'"></a>';
 	   echo '&nbsp;<span class="link tv_edit" id="tv_'.$tvVal->id.'">'.$al.' '.$k['osoite'].'</span>';
 	   if(!empty($k['avain']))
-	   echo ' <img src="'.Yii::app()->request->baseUrl.'/img/avain.png" height="8">';
+	   echo ' <img src="'.Yii::app()->request->baseUrl.'/img/key.png" height="10">';
 	   echo '<br>
 	   </div>';
 

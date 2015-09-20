@@ -1,9 +1,22 @@
 <?php
 
 ?>
+<style>
+th{
+	text-align: center;
+}
+td{
+  	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+td:first-child {
+	white-space: normal;
+}
+</style>
 
 <legend>
-<h1> <?php echo Yii::t('main', 'TYÖVUOROT VIIKKO'); ?> <i class="glyphicon glyphicon-time"></i></h1>
+<h1> <?php echo Yii::t('main', 'TYÖVUOROT VIIKKO'); ?> <i class="glyphicon glyphicon-th-list"></i></h1>
 </legend>
 
 
@@ -48,7 +61,7 @@ if($week > 52) {
   }
   for($day= 1; $day <= 7; $day++) {
     $d = strtotime($year ."W". $week . $day);
-    echo "<th>". $paivat[date('N', $d)] ." ". date('d.m', $d) ."</th>";
+    echo "<th>". $paivat[date('N', $d)] ."<br>". date('d.m', $d) ."</th>";
   }
   ?>
   </tr>
@@ -70,10 +83,10 @@ if($week > 52) {
 
     if(count($tv) > 0)
     {
-	$tnimi = explode(" ",$t->tekijan_nimi);
 	echo '<tr>';
-	echo '<td>'.CHtml::link('','/index.php/tyovuoroot/laheta?tid='.$t->id.'&week='.$week.'&year='.$year.'&tulosta=false',array('target'=>'_blank','class'=>'glyphicon glyphicon-file')).'
-	 '.$tnimi[0].'</td>';
+	echo '<td><center>'.$t->tekijan_nimi.'<BR>
+	'.CHtml::link('<img src="'.Yii::app()->request->baseUrl.'/img/pdf.png" height="35">','/index.php/tyovuoroot/laheta?tid='.$t->id.'&week='.$week.'&year='.$year.'&tulosta=false',array('target'=>'_blank')).'
+	</center></td>';
 
 	  if($week < 10) {
 	    $week = '0'. $week;
