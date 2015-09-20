@@ -38,6 +38,13 @@ td,th{
     <input type="hidden" name="pdf_email" value="true">
     <button class="btn btn-success laheta">PDF >>> <?php echo $tt->tekijan_email; ?></button>
   </form>
+  <?php
+	$file = $week.'_'.$year.'_'.$tid.'.pdf';
+	$path = Yii::app()->request->baseUrl."emails/tyovuorot/".Yii::app()->user->domain;
+	if (file_exists($path))
+	echo CHtml::link(Yii::t('main', ' Lähetetty'),'../../emails/tyovuorot/'.Yii::app()->user->domain.'/'.$file,array('target'=>'_blank','class'=>'btn btn-danger glyphicon glyphicon-file'));
+
+  ?>
   <?php endif; ?>
 </div>
 <?php endif; ?>
