@@ -41,9 +41,11 @@ public function actionImei($dom)
         // Get an instance of the respective model
         case 'mob':
 
-            $ttekija = Tyontekijat::model()->find(" imei = '".$_POST['imei']."' ");
+	    $criteria = new CDbCriteria();
+	    $criteria->condition = " imei!='' AND imei = '".$_POST['imei']."' ";
+            $ttekija = Tyontekijat::model()->find($criteria);
 
-	     if(!isset($ttekija['id']))
+	     if(empty($ttekija['id']))
 	     {
               $this->_sendResponse(200, "imeiError//Virhellinen imei koodi//".$_POST['imei']);
 	      exit;
