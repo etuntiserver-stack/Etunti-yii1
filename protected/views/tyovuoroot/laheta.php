@@ -29,14 +29,21 @@ td,th{
 <h1> <?php echo Yii::t('main', 'TYÖVUOROT'). ' '.$tt->tekijan_nimi.', '.Yii::t('main', 'VIIKKO').'-'.$week; ?></h1>
 </legend>
 
-<form action="#" method="POST">
-<input type="submit" class="btn btn-primary" name="pdf" value="PDF">
-</form>
+<div class="form-inline">
+  <form action="#" class="form-group" method="POST">
+    <input type="submit" class="btn btn-success" name="pdf" value="PDF">
+  </form>
+
+  <form action="#" class="form-group" method="POST">
+    <input type="submit" class="btn btn-success" name="pdf_email" value="PDF >>> sähköposti">
+  </form>
+</div>
 <?php endif; ?>
 
 
 <?php if($tulosta) : ?>
-<h1> <?php echo Yii::t('main', 'TYÖVUOROT'). ' '.$tt->tekijan_nimi.', '.Yii::t('main', 'VIIKKO').'-'.$week; ?></h1>
+<h1> <?php echo Yii::t('main', 'TYÖVUOROT'). ' '.Yii::t('main', 'VIIKKO').'-'.$week; ?></h1>
+<h3><?php echo $tt->tekijan_nimi.', ',date('d.m.Y',strtotime($year ."W". $week .'1')).' - '.date('d.m.Y',strtotime($year ."W". $week .'7')); ?></h3>
 <?php endif; ?>
 
 <?php

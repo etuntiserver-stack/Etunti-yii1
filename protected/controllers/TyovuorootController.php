@@ -69,6 +69,23 @@ class TyovuorootController extends Controller
 		  $html2pdf->setDefaultFont('Arial');
 	          $html2pdf->WriteHTML($this->renderPartial('laheta',array('tid'=>$tid,'week'=>$week,'year'=>$year,'tulosta'=>true),true));
 	          $html2pdf->Output();
+		} elseif(Yii::app()->request->getPost('pdf_email'))
+		{
+
+	          $html2pdf = Yii::app()->ePdf->HTML2PDF('P', 'A4', 'en');
+		  $html2pdf->setDefaultFont('Arial');
+	          $html2pdf->WriteHTML($this->renderPartial('laheta',array('tid'=>$tid,'week'=>$week,'year'=>$year,'tulosta'=>true),true));
+
+
+         	  $content_PDF = $html2pdf->Output('my_doc.pdf', EYiiPdf::OUTPUT_TO_STRING);
+  	          require_once('pjmail/pjmail.class.php');
+	          $mail = new PJmail();
+	          $mail->setAllFrom('laptopsr@gmail.com', "My personal site");
+         	  $mail->addrecipient('mail_user@my_site.net');
+ 	          $mail->addsubject("Example sending PDF");
+	          $mail->text = "This is an example of sending a PDF file";
+	          $mail->addbinattachement("my_document.pdf", $content_PDF);
+ 	          $res = $mail->sendmail();
 		} else {
 		  $this->render('laheta',array('tid'=>$tid,'week'=>$week,'year'=>$year,'tulosta'=>false));
 		}
