@@ -33,10 +33,12 @@ td,th{
     <input type="submit" class="btn btn-success" name="pdf" value="PDF">
   </form>
 
+  <?php if(!empty($tt->tekijan_email)): ?>
   <form action="#" id="pdf_email" class="form-group" method="POST">
     <input type="hidden" name="pdf_email" value="true">
-    <button class="btn btn-success laheta">PDF >>> sähköposti</button>
+    <button class="btn btn-success laheta">PDF >>> <?php echo $tt->tekijan_email; ?></button>
   </form>
+  <?php endif; ?>
 </div>
 <?php endif; ?>
 
