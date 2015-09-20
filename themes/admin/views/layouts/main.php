@@ -4,8 +4,10 @@ $curpage .= '/'.Yii::app()->getController()->getAction()->controller->action->id
 //echo $curpage;
 ?>
 
-<?php //if(isset(Yii::app()->user->adminID) or $curpage == 'login/login' or Yii::app()->User->isAdmin()) : ?>
+<?php if($curpage != 'kohteet/googlemap') : ?>
 <!DOCTYPE html>
+<?php endif; ?>
+
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />

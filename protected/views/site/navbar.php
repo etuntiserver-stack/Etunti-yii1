@@ -40,6 +40,7 @@
 	        <li role="separator" class="divider"></li>
         	<li><?php echo CHtml::link(Yii::t('main', 'Luo kohde'),array('/kohteet/create')); ?></li>
         	<li><?php echo CHtml::link(Yii::t('main', 'Kohteet'),array('/kohteet/admin')); ?></li>
+        	<li><?php echo CHtml::link(Yii::t('main', 'Kartta'),array('/kohteet/googlemap')); ?></li>
           </ul>
         </li>
 

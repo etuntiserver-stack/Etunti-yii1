@@ -28,7 +28,7 @@ class KohteetController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','osoite','autotaytaminen','createfromasiakas'),
+				'actions'=>array('admin','delete','create','update','index','view','osoite','autotaytaminen','createfromasiakas','googlemap','googlemap_k'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -47,6 +47,22 @@ class KohteetController extends Controller
 		} else {
 	            return false;
 		}
+	}
+
+	public function actionGooglemap()
+	{
+
+		$this->render('googlemap');
+	}
+
+	public function actionGooglemap_k()
+	{
+
+		$model=Kohteet::model()->findAll();
+
+		$this->renderPartial('googlemap_k',array(
+			'model'=>$model,
+		));
 	}
 
 	public function actionAutotaytaminen($id)
