@@ -29,14 +29,16 @@ td,th{
 </legend>
 
 <div class="form-inline">
-  <form action="#" class="form-group" method="POST">
+  <form action="#" class="form-group" target="_blank" method="POST">
     <input type="submit" class="btn btn-success" name="pdf" value="PDF">
   </form>
 
-  <form action="#" id="pdf_email" class="form-group" method="POST">
+  <?php if(!empty($tt->tekijan_email)): ?>
+  <form action="#" id="pdf_email" class="form-group" target="_blank" method="POST">
     <input type="hidden" name="pdf_email" value="true">
-    <button class="btn btn-success laheta">PDF >>> sähköposti</button>
+    <button class="btn btn-success laheta">PDF >>> <?php echo $tt->tekijan_email; ?></button>
   </form>
+  <?php endif; ?>
 </div>
 <?php endif; ?>
 
