@@ -81,6 +81,7 @@ class TyovuorootController extends Controller
 
 
 function mail_attachment_lahettaminen($filename, $path, $mailto, $from_mail, $from_name, $replyto, $subject, $message) {
+
     $file = $path.'/'.$filename;
     $file_size = filesize($file);
     $handle = fopen($file, "r");
@@ -89,20 +90,20 @@ function mail_attachment_lahettaminen($filename, $path, $mailto, $from_mail, $fr
     $content = chunk_split(base64_encode($content));
     $uid = md5(uniqid(time()));
     $name = basename($file);
-    $header = "From: ".$from_name." <".$from_mail.">\n";
-    $header .= "Reply-To: ".$replyto."\n";
-    $header .= "MIME-Version: 1.0\n";//t
-    $header .= "Content-Type: multipart/mixed; boundary=\"".$uid."\"\n\n";
-    $header .= "This is a multi-part message in MIME format.\n";
-    $header .= "--".$uid."\n";
-    $header .= "Content-type:text/plain; charset=UTF-8\n";
-    $header .= "Content-Transfer-Encoding: 7bit\n\n";
-    $header .= $message."\n\n";
-    $header .= "--".$uid."\n";
-    $header .= "Content-Type: application/octet-stream; name=\"".$filename."\"\n"; // use different content types here
-    $header .= "Content-Transfer-Encoding: base64\r\n";
-    $header .= "Content-Disposition: attachment; filename=\"".$filename."\"\n\n";
-    $header .= $content."\n\n";
+    $header = "From: ".$from_name." <".$from_mail.">".PHP_EOL;
+    $header .= "Reply-To: ".$replyto.PHP_EOL;
+    $header .= "MIME-Version: 1.0".PHP_EOL;
+    $header .= "Content-Type: multipart/mixed; boundary=\"".$uid."\"".PHP_EOL.PHP_EOL;
+    $header .= "This is a multi-part message in MIME format.".PHP_EOL;
+    $header .= "--".$uid."\r\n";
+    $header .= "Content-type:text/plain; charset=iso-8859-1".PHP_EOL;
+    $header .= "Content-Transfer-Encoding: 7bit".PHP_EOL;
+    $header .= $message.PHP_EOL;
+    $header .= "--".$uid.PHP_EOL;
+    $header .= "Content-Type: application/octet-stream; name=\"".$filename."\"".PHP_EOL; // use different content types here
+    $header .= "Content-Transfer-Encoding: base64".PHP_EOL;
+    $header .= "Content-Disposition: attachment; filename=\"".$filename."\"".PHP_EOL;
+    $header .= $content.PHP_EOL;
     $header .= "--".$uid."--";
 
 
