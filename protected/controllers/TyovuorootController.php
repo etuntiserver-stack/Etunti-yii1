@@ -90,21 +90,10 @@ function mail_attachment_lahettaminen($filename, $path, $mailto, $from_mail, $fr
     $content = chunk_split(base64_encode($content));
     $uid = md5(uniqid(time()));
     $name = basename($file);
-    $header = "From: ".$from_name." <".$from_mail.">".PHP_EOL;
-    $header .= "Reply-To: ".$replyto.PHP_EOL;
-    $header .= "MIME-Version: 1.0".PHP_EOL;
-    $header .= "Content-Type: multipart/mixed; boundary=\"".$uid."\"".PHP_EOL.PHP_EOL;
-    $header .= "This is a multi-part message in MIME format.".PHP_EOL;
-    $header .= "--".$uid."\r\n";
-    $header .= "Content-type:text/plain; charset=iso-8859-1".PHP_EOL;
-    $header .= "Content-Transfer-Encoding: 7bit".PHP_EOL;
-    $header .= $message.PHP_EOL;
-    $header .= "--".$uid.PHP_EOL;
-    $header .= "Content-Type: application/octet-stream; name=\"".$filename."\"".PHP_EOL; // use different content types here
-    $header .= "Content-Transfer-Encoding: base64".PHP_EOL;
-    $header .= "Content-Disposition: attachment; filename=\"".$filename."\"".PHP_EOL;
-    $header .= $content.PHP_EOL;
-    $header .= "--".$uid."--";
+    $header = "From: ".$from_name." <".$from_mail.">\r\n";
+    $header .= "Reply-To: ".$replyto."\r\n";
+    $header .= "MIME-Version: 1.0\r\n";
+    $header .= "Content-Type: multipart/mixed; boundary=\"".$uid."\"\r\n\r\n";
 
 
     if (mail($mailto, $subject, "", $header)) {
