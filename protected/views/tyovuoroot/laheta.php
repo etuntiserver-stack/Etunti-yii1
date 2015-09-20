@@ -79,17 +79,12 @@ for($day= 1; $day <= 7; $day++) {
 
   echo '<tr>';
   echo '<td width="50">'.$paivat[date('N',$d)].'<br>'.$date.'</td>';
-  echo '<td width="200">';
+  echo '<td width="300">';
   foreach($tv as $t)
   {
     if($t->pvm == $date)
     {
 	$k = Kohteet::model()->findbypk($t->kohde,array("select"=>"osoite"));
-	$strlen = strlen($k['osoite']);
-   	if($strlen > 18)
-	  $k['osoite'] = substr($k['osoite'],0,18).'..';
-	else
-	  $k['osoite'] = $k['osoite'];
 
 	if($t->alku > 0 and $t->loppu > 0)
 	  $al = $t->alku.'-'.$t->loppu;
@@ -101,7 +96,7 @@ for($day= 1; $day <= 7; $day++) {
   }
   echo '</td>';
 
-  echo '<td width="380">';
+  echo '<td width="300">';
   foreach($tv as $t)
   {
 	$k = Kohteet::model()->findbypk($t->kohde,array("select"=>"osoite,avain"));
