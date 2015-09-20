@@ -16,7 +16,10 @@ $this->menu=array(
 );
 ?>
 
-<h1><?php echo Yii::t('main', 'Asiakas')." ID# ".$model->id; ?></h1>
+<legend>
+<h1> <?php echo Yii::t('main', 'ASIAKAS')." ID# ".$model->id; ?> <i class="glyphicon glyphicon-user"></i></h1>
+</legend>
+
 
 
 <?php echo $this->renderPartial('_form', array('model'=>$model)); ?>

@@ -13,6 +13,8 @@ $this->menu=array(
 );
 ?>
 
-<h1><?php echo Yii::t('main', 'Luo viesti'); ?></h1>
+<legend>
+<h1> <?php echo Yii::t('main', 'LUO VIESTI'); ?> <i class="glyphicon glyphicon-envelope"></i></h1>
+</legend>
 
 <?php echo $this->renderPartial('_form', array('model'=>$model)); ?>

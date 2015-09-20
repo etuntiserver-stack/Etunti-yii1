@@ -27,6 +27,7 @@ $('.search-form form').submit(function(){
 
 if(isset($_POST['up']) and Yii::app()->user->username == 'roman')
 {
+/*
   Asiakkaat::model()->deleteAll();
   $k = Kohteet::model()->findAll();
  foreach($k as $v){
@@ -64,16 +65,23 @@ if(isset($_POST['up']) and Yii::app()->user->username == 'roman')
 		echo $v->id.' ei tallennettu<br>';
  	}
   }
-}
-?>
 
-<h1><?php echo Yii::t('main', 'Asiakas hallinta'); ?></h1>
 
 <?php if(Yii::app()->user->username == 'roman') : ?>
 <form action="#" method="POST">
 <input type="submit" name="up" value="update kantaat">
+
 </form>
 <?php endif; ?>
+*/
+}
+?>
+
+<legend>
+<h1> <?php echo Yii::t('main', 'ASIAKKAAT'); ?> <i class="glyphicon glyphicon-user"></i></h1>
+</legend>
+
+
 
 <?php echo CHtml::link('Haku','#',array('class'=>'search-button')); ?>
 <div class="search-form" style="display:none">
@@ -86,6 +94,10 @@ if(isset($_POST['up']) and Yii::app()->user->username == 'roman')
 	'id'=>'asiakkaat-grid',
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,
+
+                    'pagerCssClass' => 'dataTables_paginate paging_bootstrap',
+                    'itemsCssClass' => 'table table-striped table-bordered table-hover',
+
 	'columns'=>array(
 		'id',
 		'time',

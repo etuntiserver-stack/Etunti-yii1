@@ -19,8 +19,16 @@
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'asiakas_id'); ?>
-		<?php echo $form->textField($model,'asiakas_id',array('value'=>$asiakas->id,'size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
-		<?php echo $form->error($model,'asiakas_id'); ?>
+    		<?php 
+		echo $form->dropDownList($model, 'asiakas_id', CHtml::listData(Asiakkaat::model()->findAll
+		("id='$asiakas->id'"), 'id', 'osoite'),
+    			array(
+                		'class'=>'form-control',
+		                'maxlength'=>20,
+		                'options' => array($asiakas->id=>array('selected'=>true)),
+	    		)
+		);
+		?>
 	</div>
 
 	<div class="row">

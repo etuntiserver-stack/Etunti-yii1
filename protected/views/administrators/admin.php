@@ -26,7 +26,11 @@ $('.search-form form').submit(function(){
 ");
 ?>
 
-<h1><?php echo Yii::t('main', 'Järjestelmänvalvojat'); ?></h1>
+<legend>
+<h1> <?php echo Yii::t('main', 'JÄRJESTELMÄNVALVOJAT'); ?> <i class="glyphicon glyphicon-user"></i></h1>
+</legend>
+
+
 
 
 <?php echo CHtml::link('Haku','#',array('class'=>'search-button')); ?>
@@ -40,6 +44,10 @@ $('.search-form form').submit(function(){
 	'id'=>'administrators-grid',
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,
+
+                    'pagerCssClass' => 'dataTables_paginate paging_bootstrap',
+                    'itemsCssClass' => 'table table-striped table-bordered table-hover',
+
 	'columns'=>array(
 		'id',
 		'adm_login',
