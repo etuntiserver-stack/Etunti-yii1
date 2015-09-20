@@ -75,17 +75,54 @@ class TyovuorootController extends Controller
 	          $html2pdf = Yii::app()->ePdf->HTML2PDF('P', 'A4', 'en');
 		  $html2pdf->setDefaultFont('Arial');
 	          $html2pdf->WriteHTML($this->renderPartial('laheta',array('tid'=>$tid,'week'=>$week,'year'=>$year,'tulosta'=>true),true));
-
-
          	  $content_PDF = $html2pdf->Output('my_doc.pdf', EYiiPdf::OUTPUT_TO_STRING);
-  	          require_once('pjmail/pjmail.class.php');
-	          $mail = new PJmail();
-	          $mail->setAllFrom('laptopsr@gmail.com', "My personal site");
-         	  $mail->addrecipient('mail_user@my_site.net');
- 	          $mail->addsubject("Example sending PDF");
-	          $mail->text = "This is an example of sending a PDF file";
-	          $mail->addbinattachement("my_document.pdf", $content_PDF);
- 	          $res = $mail->sendmail();
+
+
+
+
+function mail_attachment_lahettaminen($fileContent, $filename, $mailto, $from_mail, $from_name, $replyto, $subject, $message) {
+
+    $content = chunk_split(base64_encode($fileContent));
+    $uid = md5(uniqid(time()));
+    $name = basename($filename);
+    $header = "From: ".$from_name." <".$from_mail.">\r\n";
+    $header .= "Reply-To: ".$replyto."\r\n";
+    $header .= "MIME-Version: 1.0\r\n";
+    $header .= "Content-Type: multipart/mixed; boundary=\"".$uid."\"\r\n\r\n";
+    $header .= "This is a multi-part message in MIME format.\r\n";
+    $header .= "--".$uid."\r\n";
+    $header .= "Content-type:text/plain; charset=UTF-8\r\n";
+    $header .= "Content-Transfer-Encoding: 7bit\r\n\r\n";
+    $header .= $message."\r\n\r\n";
+    $header .= "--".$uid."\r\n";
+    $header .= "Content-Type: application/octet-stream; name=\"".$filename."\"\r\n"; // use different content types here
+    $header .= "Content-Transfer-Encoding: base64\r\n";
+    $header .= "Content-Disposition: attachment; filename=\"".$filename."\"\r\n\r\n";
+    $header .= $content."\r\n\r\n";
+    $header .= "--".$uid."--";
+
+
+    if (mail($mailto, $subject, "", $header)) {
+        echo "mail send ... OK"; // or use booleans here
+    } else {
+        echo "mail send ... ERROR!";
+echo $mailto.' '.$subject.' '.$header;
+    }
+
+
+}
+
+
+$my_name = "ETUNTI.FI";
+$my_mail = 'laptopsr@gmail.com';
+$my_replyto = 'laptopsr@gmail.com';
+$my_subject = 'test';
+$my_message = 'terve';
+$tekijan_email = 'laptopsr@gmail.com';
+$filename = 'test.pdf';
+
+mail_attachment_lahettaminen($content_PDF, $filename, $tekijan_email, $my_mail, $my_name, $my_replyto, $my_subject, $my_message);
+
 		} else {
 		  $this->render('laheta',array('tid'=>$tid,'week'=>$week,'year'=>$year,'tulosta'=>false));
 		}
