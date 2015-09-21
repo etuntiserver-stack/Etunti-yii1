@@ -45,6 +45,7 @@
   <div id="showres" class="modal fade" tabindex="-1" role="dialog"></div>
   <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/tvuoroot.js"></script>
   <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/mobile.js"></script>
+  <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/asetukset.js"></script>
   <?php //Yii::app()->clientScript->registerPackage('tyovuoroot'); ?>
 
 

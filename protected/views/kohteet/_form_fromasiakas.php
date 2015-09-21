@@ -21,7 +21,7 @@
 		<?php echo $form->labelEx($model,'asiakas_id'); ?>
     		<?php 
 		echo $form->dropDownList($model, 'asiakas_id', CHtml::listData(Asiakkaat::model()->findAll
-		("id='$asiakas->id'"), 'id', 'osoite'),
+		("id='$asiakas->id'"), 'id', 'etunimi'),
     			array(
                 		'class'=>'form-control',
 		                'maxlength'=>20,

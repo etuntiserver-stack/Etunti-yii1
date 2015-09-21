@@ -8,13 +8,13 @@ $(".vietyovuoroon").click(function(){
 
 });
 
-$(".pvmupdate").blur(function(){
+$(".pvmupdate").click(function(){
 
-	var st = $(this).attr("status");
-	var forTxt = $(this).attr("for");
-	var thisID = $(this).attr("id").split("_");
-	var request = $(this).attr("request");
-	var thisVal = $(this).val().replace("T"," ");
+
+	var thisID = $(this).attr("for").split("_");
+	var st = $("#"+thisID[0]+"_"+thisID[1]).attr("status");
+	var request = $("#"+thisID[0]+"_"+thisID[1]).attr("request");
+	var thisVal = $("#"+thisID[0]+"_"+thisID[1]).val();
 
 	if((request == 'loppui') && (st == '1') && (thisVal != ''))
 	status = 3;
@@ -22,25 +22,31 @@ $(".pvmupdate").blur(function(){
 	status = st;
 
 	if(thisVal == ''){
-	alert("Error");
+	alert("VIRHE! Ei voidaan olla tyhjänä");
 	return false;
 	}
-	
+
         $.ajax({
            url: 'updatetime',
            type: "POST",
-           data: { "id" : thisID, "request" : request, "value" : thisVal, "status" : status },
-           success: function(html){
+           data: { "id" : thisID[1], "request" : request, "value" : thisVal, "status" : status },
+           success: function(data){
+		console.log(data);
+		var getData = data.split("//");
 
-		var newText = $('#'+thisID[0]+'_'+thisID[1]).val().split("T");
-		$('#'+forTxt).html(newText[1]).addClass("text-success");
-		$('#'+thisID[0]+'_'+thisID[1]).removeClass("btn-default").addClass("text-success");
+		if(getData[0] == 'aloitan')
+		{
+		   $('#altxt_'+thisID[1]).html(getData[1]).addClass("text-success");
+		   //$('#'+thisID[0]+'_'+thisID[1]).removeClass("btn-default").addClass("text-success");
+		   $('#alshow_'+thisID[1]).hide('slow');
+		}
 
-		if(request == 'aloitan')
-		  $('#alshow_'+thisID[1]).hide('slow');
-
-		if(request == 'loppui')
-		  $('#ltshow_'+thisID[1]).hide('slow');
+		if(getData[0] == 'loppui')
+		{
+		   $('#lptxt_'+thisID[1]).html(getData[2]).addClass("text-success");
+		   //$('#'+thisID[0]+'_'+thisID[1]).removeClass("btn-default").addClass("text-success");
+		   $('#ltshow_'+thisID[1]).hide('slow');
+		}
 
         	$.ajax({
 	           url: 'kesto?id='+thisID[1],
@@ -49,8 +55,6 @@ $(".pvmupdate").blur(function(){
 			$('#kesto_'+thisID[1]).html("<strong>"+data+"</strong>").addClass("text-success");	
 	           }
 	        });
-
-
 
            }
         });
