@@ -84,8 +84,8 @@ echo '
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,
 
-                    'pagerCssClass' => 'dataTables_paginate paging_bootstrap',
-                    'itemsCssClass' => 'table table-striped table-bordered table-hover',
+        'pagerCssClass' => 'dataTables_paginate paging_bootstrap',
+        'itemsCssClass' => 'table table-striped table-bordered table-hover',
 
 	'columns'=>array(
 		'id',
@@ -95,7 +95,13 @@ echo '
 		'yhteyshenkilo',
 		'osoite',
 		'kaupunki',
-		'ryhma',
+  
+               array(
+                    'name'=>'ryhma',
+                    'filter'=>CHtml::dropDownList('Asiakkaat[ryhma]','',
+		    CHtml::listData(Valikkoot::model()->findAll(" select_type='asiakas_ryhma' ",array('order' => "select_type")), 'id', 'value'),array('empty'=>'valitse','class'=>'form-control')),
+                    
+		),
 		/*
 		'postinumero',
 		'puhelin',
