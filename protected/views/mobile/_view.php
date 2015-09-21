@@ -35,7 +35,7 @@ else
 
 if(!empty($data->aloitan)){
  $at[$data->id] = date("H:i",strtotime($data->aloitan));
- $apvm[$data->id] = date("Y-m-d",strtotime($data->aloitan));
+ $apvm[$data->id] = date("d.m.Y",strtotime($data->aloitan));
  $apvmForSu[$data->id] = date("d.m.Y",strtotime($data->aloitan));
 } else {
  $at[$data->id] = '';
@@ -45,7 +45,7 @@ if(!empty($data->aloitan)){
 
 if(!empty($data->loppui)){
  $lt[$data->id] = date("H:i",strtotime($data->loppui));
- $lpvm[$data->id] = date("Y-m-d",strtotime($data->loppui));
+ $lpvm[$data->id] = date("d.m.Y",strtotime($data->loppui));
 } else {
  $lt[$data->id] = '';
  $lpvm[$data->id] = '';
@@ -180,8 +180,15 @@ else
 	<td width="1">
 	  <span class="link" data-toggle="collapse" id="<?php echo 'altxt_'.$data->id; ?>" data-target="<?php echo '#alshow_'.$data->id; ?>"><?php echo $at[$data->id]; ?></span>
 	  <div style="position:absolute;z-index: 2;margin-left:-100px" class="collapse" id="<?php echo 'alshow_'.$data->id; ?>">
-	    <div class="well">
-	     <?php echo '<input type="datetime-local" class="pvmupdate form-control" request="aloitan" status="'.$data->status.'" id="al_'.$data->id.'" for="altxt_'.$data->id.'" value="'.$apvm[$data->id].'T'.$at[$data->id].'">'; ?>
+	    <div class="well form-inline">
+	     <?php echo '<input type="text" class="form-control form-group datetimepicker" request="aloitan" status="'.$data->status.'" id="al_'.$data->id.'" value="'.$apvm[$data->id].' '.$at[$data->id].'">'; ?>
+
+		<div class="form-group input-group-btn">
+		     <button class="btn btn-success pvmupdate" for="al_<?php echo $data->id; ?>" >
+			<?php echo Yii::t('main', 'ok'); ?>
+		     </button>
+		</div>
+
 	    </div>
 	  </div>
 	</td>
@@ -194,9 +201,17 @@ else
 	  else
 	 	echo $lt[$data->id]; 
 	  ?></span>
+
 	  <div style="position:absolute;z-index: 2;margin-left:-100px" class="collapse" id="<?php echo 'ltshow_'.$data->id; ?>">
-	    <div class="well">
-	     <?php echo '<input type="datetime-local" class="pvmupdate form-control" request="loppui" status="'.$data->status.'" id="lt_'.$data->id.'" for="lptxt_'.$data->id.'" value="'.$lpvm[$data->id].'T'.$lt[$data->id].'">'; ?>
+	    <div class="well form-inline">
+	     <?php echo '<input type="text" class="form-control form-group datetimepicker" request="loppui" status="'.$data->status.'" id="lt_'.$data->id.'" value="'.$lpvm[$data->id].' '.$lt[$data->id].'">'; ?>
+
+		<div class="form-group input-group-btn">
+		     <button class="btn btn-success pvmupdate" for="lt_<?php echo $data->id; ?>" >
+			<?php echo Yii::t('main', 'ok'); ?>
+		     </button>
+		</div>
+
 	    </div>
 	  </div>
 	</td>

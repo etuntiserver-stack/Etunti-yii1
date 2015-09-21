@@ -252,7 +252,7 @@ class MobileController extends Controller
 
 	public function actionKesto($id)
 	{
-
+	
 	function sprint($val){
 	    if($val > 0)
 		return sprintf('%02d:%02d', $val/3600, ($val % 3600)/60);
@@ -296,7 +296,7 @@ class MobileController extends Controller
 			'uusilopetus'=>$model->loppui,
 			));
 			// Kirjoitetaan historia luettut tietokantaan -->
-
+			echo $_POST['request']."//".date("H:i",strtotime($model->aloitan))."//".date("H:i",strtotime($model->loppui));
 		}
 
 	}
