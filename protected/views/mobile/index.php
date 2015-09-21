@@ -16,8 +16,8 @@ $this->menu=array(
 
 
 <legend>
-  <div class="pull-right">
-  	<span class="btn btn-warning klo form-group"></span>
+  <div class="pull-right form-inline">
+  	<span class="form-control form-group klo"></span>
   	<button class="btn btn-info" data-toggle="collapse"  data-target="#haku"><?php echo Yii::t('main', 'Haku'); ?> <b class="caret"></b></button>
   </div>
   <h1> 
@@ -167,15 +167,14 @@ function tableAjax(){
            url: 'index_ajax',
            success: function(data){
 
-		var currentdate = new Date(); 
-    		var datetime = currentdate.getDate() + "."
-                + (currentdate.getMonth()+1)  + "." 
-                + currentdate.getFullYear() + " "  
-                + currentdate.getHours() + ":"  
-                + currentdate.getMinutes() + ":" 
-                + currentdate.getSeconds();
+        var date = new Date();
+        var hours = date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
+        var minutes = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
+        var seconds = date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
+        time = hours + ":" + minutes + ":" + seconds;
 
-	  	$('.klo').text( datetime );	
+
+	  	$('.klo').text( time );	
 		if(data)
 		{
 		  if(($("#dataChange").val() != data) & ($("#dataChange").val() != ''))
