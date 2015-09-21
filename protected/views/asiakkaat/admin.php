@@ -25,6 +25,7 @@ $('.search-form form').submit(function(){
 });
 ");
 
+/*
 if(isset($_POST['up']) and Yii::app()->user->username == 'roman')
 {
 
@@ -59,6 +60,7 @@ echo '
 </form>
 ';
 } 
+*/
 ?>
 
 

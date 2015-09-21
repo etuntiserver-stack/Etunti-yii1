@@ -21,18 +21,22 @@
 		<?php echo $form->labelEx($model,'asiakas_id'); ?>
     		<?php 
        		$criteria = new CDbCriteria();
-        	$criteria->select = ' COALESCE(yrityksen_nimi,yhteyshenkilo) AS yhteyshenkilo';
-        	$criteria->order = 'yhteyshenkilo';
+		//$criteria->select = " COALESCE(NULLIF(yhteyshenkilo,yhteyshenkilo),'gg') AS yht ";
         	$criteria->condition = " id='$asiakas->id' ";
 
-		echo $form->dropDownList($model, 'asiakas_id', CHtml::listData(Asiakkaat::model()->findAll
-		($criteria), 'id', 'yhteyshenkilo'),
-    			array(
-                		'class'=>'form-control',
-		                'maxlength'=>20,
-		                'options' => array($asiakas->id=>array('selected'=>true)),
-	    		)
-		);
+        	$a = Asiakkaat::model()->findAll($criteria);
+		echo '<select name="Kohteet[asiakas_id]" class="form-control" id="Kohteet_asiakas_id">';
+
+		foreach($a as $aa)
+		{
+		  if(!empty($aa->yrityksen_nimi))
+		    echo '<option value="'.$aa->id.'">'.$aa->yrityksen_nimi.'</option>';
+		  elseif(empty($aa->yhteyshenkilo) and empty($aa->yrityksen_nimi))
+		    echo '<option value="'.$aa->id.'">nimet puutuu '.$aa->id.'</option>';
+		  else
+		    echo '<option value="'.$aa->id.'">'.$aa->yhteyshenkilo.'</option>';
+		}
+		echo '</select>';
 		?>
 	</div>
 
