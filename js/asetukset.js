@@ -10,6 +10,11 @@
 	mask:true,
 	format:'H:i',
     });
+
+    $( ".datetimepicker" ).datetimepicker({
+
+    });
+
   });
 
 

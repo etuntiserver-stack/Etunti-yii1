@@ -47,7 +47,7 @@ if(!empty($data->loppui)){
  $lt[$data->id] = date("H:i",strtotime($data->loppui));
  $lpvm[$data->id] = date("Y-m-d",strtotime($data->loppui));
 } else {
- $lt[$data->id] = '00:00';
+ $lt[$data->id] = '';
  $lpvm[$data->id] = '';
 }
 
@@ -187,7 +187,13 @@ else
 	</td>
 
 	<td width="1">
-	  <span class="link" data-toggle="collapse" id="<?php echo 'lptxt_'.$data->id; ?>" data-target="<?php echo '#ltshow_'.$data->id; ?>"><?php echo $lt[$data->id]; ?></span>
+	  <span class="link" data-toggle="collapse" id="<?php echo 'lptxt_'.$data->id; ?>" data-target="<?php echo '#ltshow_'.$data->id; ?>">
+	  <?php 
+	  if(empty($lt[$data->id])) 
+		echo '<b class="text-success glyphicon glyphicon-plus"></b>'; 
+	  else
+	 	echo $lt[$data->id]; 
+	  ?></span>
 	  <div style="position:absolute;z-index: 2;margin-left:-100px" class="collapse" id="<?php echo 'ltshow_'.$data->id; ?>">
 	    <div class="well">
 	     <?php echo '<input type="datetime-local" class="pvmupdate form-control" request="loppui" status="'.$data->status.'" id="lt_'.$data->id.'" for="lptxt_'.$data->id.'" value="'.$lpvm[$data->id].'T'.$lt[$data->id].'">'; ?>
