@@ -22,13 +22,18 @@
 	</div>
 
 	<div class="row">
-		<?php echo $form->label($model,'etunimi'); ?>
-		<?php echo $form->textField($model,'etunimi',array('size'=>60,'maxlength'=>100)); ?>
+		<?php echo $form->label($model,'yrityksen_nimi'); ?>
+		<?php echo $form->textField($model,'yrityksen_nimi',array('size'=>60,'maxlength'=>100)); ?>
 	</div>
 
 	<div class="row">
-		<?php echo $form->label($model,'sukunimi'); ?>
-		<?php echo $form->textField($model,'sukunimi',array('size'=>60,'maxlength'=>100)); ?>
+		<?php echo $form->label($model,'y_tunnus'); ?>
+		<?php echo $form->textField($model,'y_tunnus',array('size'=>60,'maxlength'=>50)); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->label($model,'yhteyshenkilo'); ?>
+		<?php echo $form->textField($model,'yhteyshenkilo',array('size'=>60,'maxlength'=>255)); ?>
 	</div>
 
 	<div class="row">

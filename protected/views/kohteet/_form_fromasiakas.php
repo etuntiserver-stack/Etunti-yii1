@@ -20,8 +20,13 @@
 	<div class="row">
 		<?php echo $form->labelEx($model,'asiakas_id'); ?>
     		<?php 
+       		$criteria = new CDbCriteria();
+        	$criteria->select = ' COALESCE(yrityksen_nimi,yhteyshenkilo) AS yhteyshenkilo';
+        	$criteria->order = 'yhteyshenkilo';
+        	$criteria->condition = " id='$asiakas->id' ";
+
 		echo $form->dropDownList($model, 'asiakas_id', CHtml::listData(Asiakkaat::model()->findAll
-		("id='$asiakas->id'"), 'id', 'etunimi'),
+		($criteria), 'id', 'yhteyshenkilo'),
     			array(
                 		'class'=>'form-control',
 		                'maxlength'=>20,
@@ -33,7 +38,7 @@
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'etu_suku_nimet'); ?>
-		<?php echo $form->textField($model,'etu_suku_nimet',array('value'=>$asiakas->etunimi.' '.$asiakas->sukunimi,'size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
+		<?php echo $form->textField($model,'etu_suku_nimet',array('value'=>$asiakas->yhteyshenkilo,'size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'etu_suku_nimet'); ?>
 	</div>
 

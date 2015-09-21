@@ -21,11 +21,24 @@
 	<div class="row">
 		<?php echo $form->labelEx($model,'asiakas_id'); ?>
     		<?php 
-		echo $form->dropDownList($model, 'asiakas_id', CHtml::listData(Asiakkaat::model()->findAll(array('order'=>'etunimi')), 'id', 'etunimi')
-		,array('empty'=>'Valitse asiakas','class'=>'form-control'));
-		?>
+       		$criteria = new CDbCriteria();
+		//$criteria->select = " COALESCE(NULLIF(yhteyshenkilo,yhteyshenkilo),'gg') AS yht ";
+		$criteria->order = " yhteyshenkilo ";
 
-		<?php echo $form->error($model,'asiakas_id'); ?>
+        	$a = Asiakkaat::model()->findAll($criteria);
+		echo '<select name="Kohteet[asiakas_id]" class="form-control" id="Kohteet_asiakas_id">';
+		    echo '<option></option>';
+		foreach($a as $aa)
+		{
+		  if(!empty($aa->yrityksen_nimi))
+		    echo '<option value="'.$aa->id.'">'.$aa->yrityksen_nimi.'</option>';
+		  elseif(empty($aa->yhteyshenkilo) and empty($aa->yrityksen_nimi))
+		    echo '<option value="'.$aa->id.'">nimet puutuu '.$aa->id.'</option>';
+		  else
+		    echo '<option value="'.$aa->id.'">'.$aa->yhteyshenkilo.'</option>';
+		}
+		echo '</select>';
+		?>
 	</div>
 
 
@@ -209,15 +222,15 @@ $('#Kohteet_asiakas_id').change(function(){
       success: function(data){
 	  console.log(data);
 	  var sp = data.split("//");
-	  $("#Kohteet_etu_suku_nimet").val(sp[0] + " " + sp[1]);
+	  $("#Kohteet_etu_suku_nimet").val(sp[0]);
 	  //$("#Kohteet_kaupunki").val(sp[2]);
 	  //$("#Kohteet_pnumero").val(sp[3]);
-	  $("#Kohteet_email").val(sp[4]);
-	  $("#Kohteet_puh_nro").val(sp[5]);
+	  $("#Kohteet_email").val(sp[3]);
+	  $("#Kohteet_puh_nro").val(sp[4]);
 
 	  if(sp[6] != 0)
 	  {
-	  var ryhma = sp[6].split("-");
+	  var ryhma = sp[5].split("-");
 	  $("#Kohteet_ryhma option:selected").val(ryhma[0]);
 	  $("#Kohteet_ryhma option:selected").text(ryhma[1]);
 	  }
