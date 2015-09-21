@@ -16,8 +16,8 @@ $this->menu=array(
 
 
 <legend>
-  <div class="pull-right">
-  	<span class="btn btn-warning klo form-group"></span>
+  <div class="pull-right form-inline">
+  	<span class="form-control form-group klo"></span>
   	<button class="btn btn-info" data-toggle="collapse"  data-target="#haku"><?php echo Yii::t('main', 'Haku'); ?> <b class="caret"></b></button>
   </div>
   <h1> 
