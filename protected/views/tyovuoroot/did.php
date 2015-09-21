@@ -16,7 +16,10 @@
 	echo '<div class="small laatikko latikkoAsetukset" pvm="'.date("d.m.Y",strtotime($pvm)).'" tid="'.$tid.'">';
 	
 
-	$tv = Tyovuoroot::model()->with('kohteet')->findAll("tid = '".$tid."' and pvm = '".date("d.m.Y",strtotime($pvm))."' "); 
+       	$criteria = new CDbCriteria();
+	$criteria->order = " alku ASC";
+	$criteria->condition = " tid = '".$tid."' and pvm = '".date("d.m.Y",strtotime($pvm))."' ";
+	$tv = Tyovuoroot::model()->findAll($criteria); 
 	foreach($tv as $tvVal)
 	{
 
