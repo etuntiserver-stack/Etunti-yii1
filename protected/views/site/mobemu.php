@@ -4,32 +4,23 @@
 ?>
 
 
-
-  <div class="row">
-    <div class="col-lg-3 col-sm-offset-4 full">
-     <br>
-
-     <div id="tekija"></div>
-
-     <hr>
-
-	    <?php
-	    $model=new Mobile;
-	    $list = CHtml::listData(Tyontekijat::model()->findAll(array('order' => 'tekijan_nimi')), 'imei', 'tekijan_nimi');
-	
-	    echo '<select class="form-control tekija">';
-	    foreach($list as $key=>$val){
-	    echo '<option value="'.$key.'">'.$val.'</option>';
-	    }
-	    echo '</select>';
-	   ?>
+    <div class="row">
+        <div class="col-md-4 col-md-offset-4">
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h4 class="text-center"><?php echo Yii::t('main', 'MOBIILI EMULATTORI'); ?></h4>
+                </div>
+                <div class="panel-body text-center">
+                    <p class="lead">
+                        <strong><div id="tekija"></div></strong>
+			<div id="osoite" style="display:none"></div>
+                    </p>
 
 
-	    <BR><BR>
 
 	   <div id="odotta"></div>
 
-	    <div id="osoite" style="display:none">
+	    
 		<input type="text" class="form-control input-lg" id="os" placeholder="osoite">
 		<div id="getListFromServer"></div>
 		<input type="hidden" id="kohdenID" value="0">
@@ -59,8 +50,26 @@
 
 	    <!--<textarea cols="100" rows="6" class="form-control" id="result2" style="display:none"></textarea>-->
 	    <div id="result2" style="display:none"></div>
-    </div>
-  </div>
+
+                <div class="panel-footer">
+                    <i class="btn btn-lg btn-block btn-info">
+
+	    <?php
+	    $model=new Mobile;
+	    $list = CHtml::listData(Tyontekijat::model()->findAll(array('order' => 'tekijan_nimi')), 'imei', 'tekijan_nimi');
+	
+	    echo '<select class="form-control tekija">';
+	    echo '<option>'.Yii::t('main','Valitse työntekijä').'</option>';
+	    foreach($list as $key=>$val){
+	    echo '<option value="'.$key.'">'.$val.'</option>';
+	    }
+	    echo '</select>';
+	   ?>
+			</i>
+                </div>
+            </div>
+        </div>
+
 
 
 
@@ -82,6 +91,7 @@ $(document).ready(function(){
   var puh_nro = "";
   var versio = "0.50";
 
+
   $(".tekija").change(function(){
 	allHide();
 	allTilasetHide();
@@ -89,7 +99,6 @@ $(document).ready(function(){
      	set();
   });
 
-  set();
 
 
 $(".sw").bootstrapSwitch({
