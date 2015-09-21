@@ -17,7 +17,7 @@
 
   <div class="col-sm-3">
 
-	<?php if(Yii::app()->user->username == 'roman'): ?>
+
 	<div class="row">
 		<?php echo $form->labelEx($model,'asiakas_id'); ?>
     		<?php 
@@ -27,7 +27,7 @@
 
 		<?php echo $form->error($model,'asiakas_id'); ?>
 	</div>
-	<?php endif; ?>
+
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'etu_suku_nimet'); ?>
