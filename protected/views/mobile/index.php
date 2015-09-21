@@ -167,15 +167,14 @@ function tableAjax(){
            url: 'index_ajax',
            success: function(data){
 
-		var currentdate = new Date(); 
-    		var datetime = currentdate.getDate() + "."
-                + (currentdate.getMonth()+1)  + "." 
-                + currentdate.getFullYear() + " "  
-                + currentdate.getHours() + ":"  
-                + currentdate.getMinutes() + ":" 
-                + currentdate.getSeconds();
+        var date = new Date();
+        var hours = date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
+        var minutes = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
+        var seconds = date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
+        time = hours + ":" + minutes + ":" + seconds;
 
-	  	$('.klo').text( datetime );	
+
+	  	$('.klo').text( time );	
 		if(data)
 		{
 		  if(($("#dataChange").val() != data) & ($("#dataChange").val() != ''))
