@@ -91,14 +91,25 @@ else
 	}
 	// <-- adminPaketti 
 
+  $class 	= '';
+  $diff 	= 0;
+  if(date('Y-m-d H:i:s', strtotime($data->aloitan.'+4 hour')) < date('Y-m-d H:i:s') and empty($data->loppui))
+  {
+  	$diff = strtotime(date('Y-m-d H:i:s'))-strtotime($data->aloitan);
+  	$class = 'border:2px red solid;';
+  }
 ?>
 
-<tr id="rivi_<?php echo $data->id; ?>">
+<tr style="<?php echo $class; ?>" id="rivi_<?php echo $data->id; ?>">
 
 	<td>
 	<div class="row">
 	  <div class="col-sm-6">
 		<?php echo $door; ?>
+
+		<?php if($diff > 0) : ?>
+		<b class="text-danger"><?php echo sprint($diff); ?></b>
+		<?php endif; ?>
 	  </div>
 	</div>
 	</td>
