@@ -16,8 +16,13 @@ $this->menu=array(
 
 
 <legend>
-<button class="pull-right btn btn-info" data-toggle="collapse"  data-target="#haku"><?php echo Yii::t('main', 'Haku'); ?> <b class="caret"></b></button>
-<h1> <?php echo Yii::t('main', 'TUNNIT'); ?> <i class="glyphicon glyphicon-phone"></i></h1>
+  <div class="pull-right">
+  	<span class="btn btn-warning klo form-group"></span>
+  	<button class="btn btn-info" data-toggle="collapse"  data-target="#haku"><?php echo Yii::t('main', 'Haku'); ?> <b class="caret"></b></button>
+  </div>
+  <h1> 
+	<?php echo Yii::t('main', 'TUNNIT'); ?> <i class="glyphicon glyphicon-phone"></i> 
+  </h1>
 </legend>
 
 
@@ -161,6 +166,16 @@ function tableAjax(){
         $.ajax({
            url: 'index_ajax',
            success: function(data){
+
+		var currentdate = new Date(); 
+    		var datetime = currentdate.getDate() + "."
+                + (currentdate.getMonth()+1)  + "." 
+                + currentdate.getFullYear() + " "  
+                + currentdate.getHours() + ":"  
+                + currentdate.getMinutes() + ":" 
+                + currentdate.getSeconds();
+
+	  	$('.klo').text( datetime );	
 		if(data)
 		{
 		  if(($("#dataChange").val() != data) & ($("#dataChange").val() != ''))
@@ -173,7 +188,7 @@ function tableAjax(){
 		      type: "POST",
 		      data: { index_ajax : "true" },
 		      success: function(data){		
-			  $('#tb').html(data);		
+			  $('#tb').html(data);	
 			  if(e){
 			    console.log(e);
 			    $('#rivi_'+e).fadeOut(1000).fadeIn(1000).fadeOut(1000).fadeIn(1000);
