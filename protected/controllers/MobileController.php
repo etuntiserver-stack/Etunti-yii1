@@ -451,7 +451,20 @@ class MobileController extends Controller
 		}
 
        		$criteria = new CDbCriteria();
-        	$criteria->order = 'time DESC';
+/*
+$criteria->order =
+"    	  case 
+            when loppui='' then 1
+            when aloitan  then 2
+	  else 100 
+    	  end  DESC
+";
+time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DESC, 
+*/
+        	$criteria->order = " 
+		DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s') < DATE_ADD(NOW(), interval 4 hour) AND status IN (1,2,10) AND loppui='' DESC, 
+		time and status IN (1,2,10) AND loppui='' DESC, 
+		time DESC ";
 
 		if(Yii::app()->session['etsi_tekijan_nimi'])
 	        $criteria->addCondition ("tekijan_nimi = '".Yii::app()->session['etsi_tekijan_nimi']."'");
