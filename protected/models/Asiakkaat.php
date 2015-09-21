@@ -18,6 +18,7 @@
  */
 class Asiakkaat extends DB2ActiveRecord
 {
+
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
@@ -46,7 +47,7 @@ class Asiakkaat extends DB2ActiveRecord
 		return array(
 			//array('etunimi, sukunimi, osoite, kaupunki, postinumero, puhelin, sahkoposti, ryhma, aktiivinen', 'required'),
 			array('ryhma, aktiivinen', 'numerical', 'integerOnly'=>true),
-			array('postinumero,etunimi, sukunimi, kaupunki, puhelin, sahkoposti', 'length', 'max'=>100),
+			array('postinumero, yhteyshenkilo, yrityksen_nimi, y_tunnus, kaupunki, puhelin, sahkoposti', 'length', 'max'=>100),
 			array('osoite', 'length', 'max'=>255),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
@@ -73,9 +74,10 @@ class Asiakkaat extends DB2ActiveRecord
 		return array(
 			'id' => 'ID',
 			'time' => 'Time',
-			'etunimi' => 'Etunimi',
-			'sukunimi' => 'Sukunimi',
-			'osoite' => 'Osoite',
+			'yhteyshenkilo' => 'Yhteyshenkilö',
+			'yrityksen_nimi' => 'Yrityksen Nimi',
+			'y_tunnus' => 'Y-Tunnus',
+			'osoite' => 'Työkohteen osoite',
 			'kaupunki' => 'Kaupunki',
 			'postinumero' => 'Postinumero',
 			'puhelin' => 'Puhelin',
@@ -99,8 +101,9 @@ class Asiakkaat extends DB2ActiveRecord
 
 		$criteria->compare('id',$this->id);
 		$criteria->compare('time',$this->time,true);
-		$criteria->compare('etunimi',$this->etunimi,true);
-		$criteria->compare('sukunimi',$this->sukunimi,true);
+		$criteria->compare('yhteyshenkilo',$this->yhteyshenkilo,true);
+		$criteria->compare('yrityksen_nimi',$this->yrityksen_nimi,true);
+		$criteria->compare('y_tunnus',$this->y_tunnus,true);
 		$criteria->compare('osoite',$this->osoite,true);
 		$criteria->compare('kaupunki',$this->kaupunki,true);
 		$criteria->compare('postinumero',$this->postinumero);

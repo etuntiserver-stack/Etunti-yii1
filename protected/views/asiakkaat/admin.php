@@ -27,28 +27,13 @@ $('.search-form form').submit(function(){
 
 if(isset($_POST['up']) and Yii::app()->user->username == 'roman')
 {
-/*
+
   Asiakkaat::model()->deleteAll();
   $k = Kohteet::model()->findAll();
  foreach($k as $v){
 
-  $etunimi = '';
-  $expl = explode(" ",$v->etu_suku_nimet);
-  if(isset($expl[0]))
-  $etunimi .= $expl[0];
-
-  $sukunimi = '';
-  $expl = explode(" ",$v->etu_suku_nimet);
-  if(isset($expl[1]))
-  $sukunimi .= $expl[1];
-  if(isset($expl[2]))
-  $sukunimi .= ' '.$expl[2];
-  if(isset($expl[3]))
-  $sukunimi .= ' '.$expl[3];
-
   $a = new Asiakkaat;
-  $a->etunimi=$etunimi;
-  $a->sukunimi=$sukunimi;
+  $a->yhteyshenkilo=$v->etu_suku_nimet;
   $a->osoite=$v->osoite;
   $a->kaupunki=$v->kaupunki;
   $a->postinumero=$v->pnumero;
@@ -65,17 +50,19 @@ if(isset($_POST['up']) and Yii::app()->user->username == 'roman')
 		echo $v->id.' ei tallennettu<br>';
  	}
   }
+}
 
-
-<?php if(Yii::app()->user->username == 'roman') : ?>
+if(Yii::app()->user->username == 'roman') {
+echo '
 <form action="#" method="POST">
 <input type="submit" name="up" value="update kantaat">
-
 </form>
-<?php endif; ?>
-*/
-}
+';
+} 
 ?>
+
+
+
 
 <legend>
 <h1> <?php echo Yii::t('main', 'ASIAKKAAT'); ?> <i class="glyphicon glyphicon-user"></i></h1>
@@ -100,9 +87,10 @@ if(isset($_POST['up']) and Yii::app()->user->username == 'roman')
 
 	'columns'=>array(
 		'id',
-		'time',
-		'etunimi',
-		'sukunimi',
+		//'time',
+		'yrityksen_nimi',
+		'y_tunnus',
+		'yhteyshenkilo',
 		'osoite',
 		'kaupunki',
 		'ryhma',

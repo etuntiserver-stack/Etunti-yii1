@@ -23,8 +23,9 @@ $this->menu=array(
 	'attributes'=>array(
 		'id',
 		'time',
-		'etunimi',
-		'sukunimi',
+		'yrityksen_nimi',
+		'y_tunnus',
+		'yhteyshenkilo',
 		'osoite',
 		'kaupunki',
 		'postinumero',

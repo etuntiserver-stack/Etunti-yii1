@@ -76,7 +76,7 @@ class KohteetController extends Controller
 		$ryhma = $l['id']."-".$l['value'];
 		}
 
-		echo $m->etunimi."//".$m->sukunimi."//".$m->kaupunki."//".$m->postinumero."//".$m->sahkoposti."//".$m->puhelin."//".$ryhma;
+		echo $m->yhteyshenkilo."//".$m->kaupunki."//".$m->postinumero."//".$m->sahkoposti."//".$m->puhelin."//".$ryhma;
 	}
 
 	public function actionView($id)

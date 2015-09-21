@@ -17,16 +17,23 @@
 
   <div class="col-sm-3">
 	<legend><h3><?php echo Yii::t('main', 'Asiakkaan tiedot'); ?></h3></legend>
+
 	<div class="row">
-		<?php echo $form->labelEx($model,'etunimi'); ?>
-		<?php echo $form->textField($model,'etunimi',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
-		<?php echo $form->error($model,'etunimi'); ?>
+		<?php echo $form->labelEx($model,'yrityksen_nimi'); ?>
+		<?php echo $form->textField($model,'yrityksen_nimi',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'yrityksen_nimi'); ?>
 	</div>
 
 	<div class="row">
-		<?php echo $form->labelEx($model,'sukunimi'); ?>
-		<?php echo $form->textField($model,'sukunimi',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
-		<?php echo $form->error($model,'sukunimi'); ?>
+		<?php echo $form->labelEx($model,'y_tunnus'); ?>
+		<?php echo $form->textField($model,'y_tunnus',array('size'=>60,'maxlength'=>255,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'y_tunnus'); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->labelEx($model,'yhteyshenkilo'); ?>
+		<?php echo $form->textField($model,'yhteyshenkilo',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'yhteyshenkilo'); ?>
 	</div>
 
 	<div class="row">
