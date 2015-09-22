@@ -96,7 +96,7 @@ class Kohteet extends DB2ActiveRecord
 		return array(
 			'id' => 'ID',
 			'asiakas_id' => 'Asiakas',
-			'time' => 'Time',
+			'time' => 'Luotu',
 			'tag_id' => 'Tag',
 			'gps_sijainti' => 'Gps Sijainti',
 			'lyhenne' => 'Lyhenne',
@@ -118,7 +118,7 @@ class Kohteet extends DB2ActiveRecord
 			'kenella_on_avain' => 'Kenellä avain',
 			'puh_nro' => 'Puh Nro',
 			'siivous' => 'Siivous',
-			'etu_suku_nimet' => 'Etu-Suku Nimet',
+			'etu_suku_nimet' => 'Nimi',
 			'maksuehto_paiva' => 'Maksuehto Paiva',
 			'viivastyskorko' => 'Viivästyskorko',
 			'lasku_tiedot' => 'Lasku Tiedot',

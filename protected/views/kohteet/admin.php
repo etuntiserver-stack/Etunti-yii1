@@ -46,14 +46,20 @@ $('.search-form form').submit(function(){
 	'filter'=>$model,
 
                     'pagerCssClass' => 'dataTables_paginate paging_bootstrap',
-                    'itemsCssClass' => 'table table-striped table-bordered table-hover',
+                    'itemsCssClass' => 'table table-striped table-hover',
 
 
 	'columns'=>array(
 		'id',
-		'asiakas_id',
+		'time',
+               array(
+                    'name'=>'asiakas_id',
+                    'filter'=>CHtml::dropDownList('Kohteet[asiakas_id]','',
+		    CHtml::listData(Asiakkaat::model()->findAll(array('order' => "yhteyshenkilo")), 'id', 'yhteyshenkilo'),array('empty'=>'valitse','class'=>'form')),
+                    
+		),
+		//'asiakas_id',
 		'etu_suku_nimet',
-		//'time',
 		'tag_id',
 		//'gps_sijainti',
 		//'lyhenne',
