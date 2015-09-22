@@ -27,7 +27,20 @@
 
         	$a = Asiakkaat::model()->findAll($criteria);
 		echo '<select name="Kohteet[asiakas_id]" class="form-control" id="Kohteet_asiakas_id">';
-		    echo '<option></option>';
+
+		if(isset($model->asiakas_id) and !empty($model->asiakas_id))
+		{
+        	  $aon = Asiakkaat::model()->findbypk($model->asiakas_id);
+		  if(!empty($aa->yrityksen_nimi))
+		    echo '<option value="'.$aon->id.'">'.$aon->yrityksen_nimi.'</option>';
+		  elseif(empty($aon->yhteyshenkilo) and empty($aon->yrityksen_nimi))
+		    echo '<option value="'.$aon->id.'">nimet puutuu '.$aon->id.'</option>';
+		  else
+		    echo '<option value="'.$aon->id.'">'.$aon->yhteyshenkilo.' ID:'.$aon->id.'</option>';
+		} else {
+	        echo '<option></option>';
+		}
+
 		foreach($a as $aa)
 		{
 		  if(!empty($aa->yrityksen_nimi))
