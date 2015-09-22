@@ -106,8 +106,8 @@ td .tp{
 <div class="row">
   <form action="#" id="yhtveto" class="form-inline" method="POST">
 
-   <a href="#" id="deselAll" class="btn btn-default glyphicon glyphicon-remove-circle"></a>
-   <a href="#" id="selAll" class="btn btn-default glyphicon glyphicon-ok-circle"></a>  
+   <a href="#" id="deselAll" class="btn btn-default glyphicon glyphicon-minus"></a>
+   <a href="#" id="selAll" class="btn btn-default glyphicon glyphicon-plus"></a>  
 
    <?php
    $criteria = new CDbCriteria();

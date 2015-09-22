@@ -79,6 +79,7 @@
 
 
 
+	<?php if(isset(Yii::app()->user->adminPaketti)) : ?>
 	<?php
 	 $tas = explode(",",Yii::app()->user->adminPaketti);
 	 if(in_array('2',$tas)) : 
@@ -93,6 +94,8 @@
           </ul>
         </li>
 	<?php endif; ?>
+	<?php endif; ?>
+
 
 	<?php endif; ?>
 
@@ -100,12 +103,14 @@
 
       <ul class="nav navbar-nav navbar-right">
 
+	<?php if(isset(Yii::app()->user->adminPaketti)) : ?>
 	    <?php 
 	    if(isset(Yii::app()->user->domain)) {
      	    $d = Domainit::model()->find("domain='".Yii::app()->user->domain."'");
             echo '<li><a href="#">'.$d->yritys.', '.Yii::t('main', 'Tasot').': '.$d->paketti.'</a></li>';
 	    } 
 	    ?>
+	<?php endif; ?>
 
 	<?php if(isset(Yii::app()->user->adminID)) : ?>	
         <li class="dropdown">
