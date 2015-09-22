@@ -1,6 +1,21 @@
 $(document).ready(function(){
 
 
+$(".vastaanotettu").click(function(){
+
+	var thisVid = $(this).attr("for");
+	var id = $(this).attr("for").split("_");
+
+        $.ajax({
+           url: location.protocol + "//" + location.host + '/index.php/viestinta/vastaanotettu?id='+id[1],
+           success: function(data){
+		console.log(data);
+		$("#"+thisVid).hide('slow');
+           }
+        });
+
+});
+
 $(".vietyovuoroon").click(function(){
 
 	var thisVal = $(this).attr("pvmtid");

@@ -29,7 +29,7 @@ class ViestintaController extends Controller
 		return array(
 
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view'),
+				'actions'=>array('admin','delete','create','update','index','view','vastaanotettu'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -55,10 +55,12 @@ class ViestintaController extends Controller
 		}
 	}
 
-	/**
-	 * Displays a particular model.
-	 * @param integer $id the ID of the model to be displayed
-	 */
+
+	public function actionVastaanotettu($id)
+	{
+		Viestinta::model()->updateByPk($id,array('status'=>'1'));
+	}
+
 	public function actionView($id)
 	{
 		$this->render('view',array(

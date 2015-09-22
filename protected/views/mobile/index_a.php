@@ -1,3 +1,31 @@
+  <?php
+       	$criteria = new CDbCriteria();
+	$criteria->condition = " status=0 AND tekija='toimisto' ";
+	$vi = Viestinta::model()->findAll($criteria);
+
+	if(isset($vi[0]->id) and !empty($vi[0]->id))
+	{
+	echo '<h2>'.Yii::t('main','Vastaamattomia viestiä').'</h2>';
+	echo '<div class="row">';
+	
+	   foreach($vi as $v)
+	   {
+		$exAdm = explode(",",$v->admin);
+
+	   	echo '<div class="col-sm-6" id="v_'.$v->id.'">';
+		echo '<div class="link pull-right col-sm-2 vastaanotettu" for="v_'.$v->id.'">'.Yii::t('main','vastaanotettu').'</div>';
+	   	echo '<div class="alert alert-danger">';
+		echo 'ID: '.$v->id.'<br>';
+		if(isset($exAdm[1]))
+		echo '<b>'.date("d.m H:i",strtotime($v->time)).'<br>'.$exAdm[1].'</b><hr>';
+		echo $v->viesti;
+		echo '</div>';
+		echo '</div>';
+	   }
+	echo '</div>';
+	}
+  ?>
+
   <table class="table table-striped" id="mobileTable">
   <thead>
   <tr>
