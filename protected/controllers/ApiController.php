@@ -192,6 +192,7 @@ public function actionImei($dom)
 			'model'=>$model,
 		    ),true);
 */
+
 		    foreach($viestinta as $val)
 		    {
 		      if($val->status == '0')
