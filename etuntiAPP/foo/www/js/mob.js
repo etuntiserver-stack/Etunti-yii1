@@ -319,7 +319,7 @@ function row(tilanne,st){
 		$("#result").append(sp+"\n");
 		//$('.full').css({"opacity" : "1"});
 		$("#domainBlokki").hide();
-		$("#tekija").html("<h3>"+$('#domain').val()+", "+sp[5]+"</h3>");
+		$("#tekija").html("<b>"+$('#domain').val()+", "+sp[5]+"</b>");
 
 		if((sp[0] == '3') || (sp[0] == '2') || (sp[0] == '10')){
 		  $("#osoite").show(370);

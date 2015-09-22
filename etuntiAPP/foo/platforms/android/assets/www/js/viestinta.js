@@ -78,6 +78,30 @@ $(document).ready(function(){
         });
 
 
+$(".lahetaToimistoon").click(function(){
+
+  var viesti = $("#toimistoon").val();
+  if (viesti  === '') {
+        $('#toimistoon').css({"border" : "2px #f14010 solid"}).focus();
+        return false;
+  }
+
+        $.ajax({
+           url: url+'/imei?dom='+domain,
+	   type:'POST',
+ 	   data: { check : "uusiviesti", viesti : viesti, imei : imei, my_location : my_location },
+           success: function(data){
+        	//console.log(data);
+		$(".lahetaToimistoon").hide('slow');
+		$("#result2").html('<h2 class="text-danger">'+data+'</h2>').show('slow');
+    	},
+    		error:function (xhr, ajaxOptions, thrownError){
+        	console.log(xhr.responseText);
+		$("#result2").html(xhr.responseText);
+    	}
+        });
+});
+
 
 
 });

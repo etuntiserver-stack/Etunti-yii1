@@ -26,17 +26,29 @@
 
 <div class="container-fluid">
 
-  <div class="row">
-    <div class="col-lg-12 full">
+
      <br>
      <center><img src="img/logo-black.png" class="logo"></center>
      <hr>
      <h1>Viestintä</h1>
 
-	<div id="viestit"></div>
 
-    </div>
-  </div>
+     <button class="btn btn-lg btn-block btn-success full-width" data-toggle="collapse" data-target="#uusiviesti">Uusi viesti <b class="caret"></b></button>
+
+     <div class="collapse" id="uusiviesti"> 
+     <br>
+	<label>Viesti</label>
+	<textarea class="form-control" id="toimistoon" rows="3"></textarea>
+	<br>
+	<button class="btn btn-lg btn-block btn-primary lahetaToimistoon">Lähetä viesti toimistoon</button>
+     </div>
+     <div id="result2" style="display:none"></div>
+     <br><br>
+
+     <div id="viestit"></div>
+
+
+
 
 </div>
 
