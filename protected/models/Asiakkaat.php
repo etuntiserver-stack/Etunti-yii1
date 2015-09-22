@@ -73,7 +73,7 @@ class Asiakkaat extends DB2ActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'time' => 'Time',
+			'time' => 'Luotu',
 			'yhteyshenkilo' => 'Yhteyshenkilö',
 			'yrityksen_nimi' => 'Yrityksen Nimi',
 			'y_tunnus' => 'Y-Tunnus',
