@@ -150,7 +150,8 @@ public function actionImei($dom)
 	        if($_POST['check'] == 'uusiviesti'){
 
 		    $model = new Viestinta;
-		    $model->tekija = "tt_".$ttekija->id;
+		    $model->admin = "tt_".$ttekija->id.",".$ttekija->tekijan_nimi;
+		    $model->tekija = "toimisto";
 		    $model->viesti = $_POST['viesti'];
 		    if($model->save())
 		       $this->_sendResponse(200, "Viesti vastaanotettu");
