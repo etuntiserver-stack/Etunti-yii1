@@ -147,6 +147,18 @@ public function actionImei($dom)
 		exit;
 	        }
 
+	        if($_POST['check'] == 'uusiviesti'){
+
+		    $model = new Viestinta;
+		    $model->tekija = "tt_".$ttekija->id;
+		    $model->viesti = $_POST['viesti'];
+		    if($model->save())
+		       $this->_sendResponse(200, "Viesti vastaanotettu");
+		    else
+		       $this->_sendResponse(200, "Ei onnistuu");
+		exit;
+	        }
+
 	        if($_POST['check'] == 'checkviesti'){
 
 		    $criteria = new CDbCriteria();
