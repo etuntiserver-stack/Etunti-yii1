@@ -35,7 +35,7 @@
 		  elseif(empty($aa->yhteyshenkilo) and empty($aa->yrityksen_nimi))
 		    echo '<option value="'.$aa->id.'">nimet puutuu '.$aa->id.'</option>';
 		  else
-		    echo '<option value="'.$aa->id.'">'.$aa->yhteyshenkilo.'</option>';
+		    echo '<option value="'.$aa->id.'">'.$aa->yhteyshenkilo.' ID:'.$aa->id.'</option>';
 		}
 		echo '</select>';
 		?>
@@ -257,6 +257,7 @@ $('#Kohteet_asiakas_id').change(function(){
 		<?php echo $form->textField($model,'ryhma',array('size'=>10,'maxlength'=>10,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'ryhma'); ?>
 	</div>
+
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'maksuehto_paiva'); ?>
