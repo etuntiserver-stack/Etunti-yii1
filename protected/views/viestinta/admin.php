@@ -50,7 +50,7 @@ $('.search-form form').submit(function(){
 	'columns'=>array(
 		'id',
 		'time',
-		'pvm',
+		//'pvm',
 		'tekija',
 		'viesti',
 		'admin',
