@@ -186,10 +186,12 @@ public function actionImei($dom)
 		    $cl = '';
 		    $admin = '';
 
+/*
 		    $model=new Viestinta;
 		    $sel .= $this->renderPartial('//viestinta/create',array(
 			'model'=>$model,
 		    ),true);
+*/
 
 		    foreach($viestinta as $val)
 		    {
