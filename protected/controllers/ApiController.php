@@ -185,6 +185,9 @@ public function actionImei($dom)
 		    $sel = '';
 		    $cl = '';
 		    $admin = '';
+
+		    $sel .= $this->renderPartial('//viestinta/create',true);
+
 		    foreach($viestinta as $val)
 		    {
 		      if($val->status == '0')
