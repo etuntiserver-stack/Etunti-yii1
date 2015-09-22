@@ -13,7 +13,7 @@
 		$exAdm = explode(",",$v->admin);
 
 	   	echo '<div class="col-sm-6" id="v_'.$v->id.'">';
-		echo '<div class="link pull-right col-sm-2 vastaanotettu" for="v_'.$v->id.'">'.Yii::t('main','vastaanotettu').'</div>';
+		echo '<div class="link pull-right col-sm-2 vastaanotettu" for="v_'.$v->id.'">'.Yii::t('main','Vastaanotto').'</div>';
 	   	echo '<div class="alert alert-danger">';
 		echo 'ID: '.$v->id.'<br>';
 		if(isset($exAdm[1]))
