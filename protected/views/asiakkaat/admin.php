@@ -85,16 +85,16 @@ echo '
 	'filter'=>$model,
 
         'pagerCssClass' => 'dataTables_paginate paging_bootstrap',
-        'itemsCssClass' => 'table table-striped table-bordered table-hover',
+        'itemsCssClass' => 'table table-striped table-hover',
 
 	'columns'=>array(
 		'id',
-		//'time',
+		'time',
 		'yrityksen_nimi',
 		'y_tunnus',
 		'yhteyshenkilo',
 		'osoite',
-		'kaupunki',
+		//'kaupunki',
   
                array(
                     'name'=>'ryhma',
