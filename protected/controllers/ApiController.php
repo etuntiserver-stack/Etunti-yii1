@@ -187,7 +187,7 @@ public function actionImei($dom)
 		    $admin = '';
 
 		    $model=new Viestinta;
-		    $sel .= $this->renderPartial('create',array(
+		    $sel .= $this->renderPartial('//viestinta/create',array(
 			'model'=>$model,
 		    ),true);
 
