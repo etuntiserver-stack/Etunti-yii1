@@ -193,7 +193,7 @@ CREATE TABLE `log` (
   `text` text NOT NULL,
   `kuka` varchar(50) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=20890 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=20864 DEFAULT CHARSET=latin1;
 
 
 
@@ -704,7 +704,7 @@ CREATE TABLE `sivex_tvuoro` (
   KEY `alku` (`alku`),
   KEY `loppu` (`loppu`),
   KEY `pituus` (`pituus`)
-) ENGINE=InnoDB AUTO_INCREMENT=5277 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=5278 DEFAULT CHARSET=latin1;
 
 
 
@@ -935,7 +935,7 @@ CREATE TABLE `sivexkuitti` (
   KEY `tid` (`tid`),
   KEY `etaisyys` (`etaisyys`),
   KEY `status` (`status`)
-) ENGINE=InnoDB AUTO_INCREMENT=3770 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3735 DEFAULT CHARSET=latin1;
 
 
 
@@ -1036,7 +1036,7 @@ CREATE TABLE `users_online` (
   `user` varchar(100) NOT NULL,
   `url` varchar(1000) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4832 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=4800 DEFAULT CHARSET=latin1;
 
 
 

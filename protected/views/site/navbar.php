@@ -99,6 +99,20 @@
 	<?php endif; ?>
 
 
+	<?php if(isset(Yii::app()->user->adminPaketti)) : ?>
+	<?php
+	 $tas = explode(",",Yii::app()->user->adminPaketti);
+	 if(in_array('3',$tas)) : 
+	?>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?php echo Yii::t('main', 'Laskutus'); ?> <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+        	<li><?php echo CHtml::link(Yii::t('main', 'Laskutus pääsivu'),array('/laskutus/index')); ?></li>
+          </ul>
+        </li>
+	<?php endif; ?>
+	<?php endif; ?>
+
 	<?php endif; ?>
 
       </ul>
