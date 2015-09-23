@@ -28,7 +28,7 @@ class DomainitController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view'),
+				'actions'=>array('index','view','tietokannat'),
 				'expression' => "Yii::app()->User->isAdmin()",
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
@@ -45,10 +45,12 @@ class DomainitController extends Controller
 		);
 	}
 
-	/**
-	 * Displays a particular model.
-	 * @param integer $id the ID of the model to be displayed
-	 */
+
+	public function actionTietokannat()
+	{
+		$this->render('tietokannat');
+	}
+
 	public function actionView($id)
 	{
 		$this->render('view',array(
@@ -56,10 +58,6 @@ class DomainitController extends Controller
 		));
 	}
 
-	/**
-	 * Creates a new model.
-	 * If creation is successful, the browser will be redirected to the 'view' page.
-	 */
 	public function actionCreate()
 	{
 		$model=new Domainit;
