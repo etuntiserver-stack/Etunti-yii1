@@ -106,31 +106,3 @@ echo	'<input type=hidden id=number value='.cal_days_in_month(CAL_GREGORIAN, $mon
   </TABLE>
 
 </div>
-
-
-<script type="text/javascript">
-$(document).ready(function(){
-
-  $("#send").click(function(){
-
-	var thisVal = $("#ilman").val();
-	$("#taulukkoPaa").html('<h1>ODOTA...</h>');
-
-        $.ajax({
-           url: location.protocol + "//" + location.host + '/index.php/toteutuneet/kk',
-	   type:'POST',
-	   data: { "ilman" : thisVal },
-           success: function(data){
-        	console.log(data);
-	 	window.location.reload();
-    	   },
-    	   error: function(XMLHttpRequest, textStatus, errorThrown) {
-	    	console.log(XMLHttpRequest);
- 	   }
-        });
-
-
-  });
-
-});
-</script>
