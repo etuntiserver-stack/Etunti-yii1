@@ -90,6 +90,7 @@
           <ul class="dropdown-menu">
         	<li><?php echo CHtml::link(Yii::t('main', 'Työvuorot'),array('/tyovuoroot/index')); ?></li>
         	<li><?php echo CHtml::link(Yii::t('main', 'Työvuorot VIIKKO'),array('/tyovuoroot/viikkottain')); ?></li>
+        	<li><?php echo CHtml::link(Yii::t('main', 'Työvuorot KK'),array('/tyovuoroot/kk')); ?></li>
 	        <li role="separator" class="divider"></li>
         	<li><?php echo CHtml::link(Yii::t('main', 'Vuosilomat'),array('/vuosilomat/index')); ?></li>
           </ul>

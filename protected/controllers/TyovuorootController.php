@@ -28,11 +28,11 @@ class TyovuorootController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','updatetime','showohje','did','muisti','operatio','viikko','fromto','autoinsert','autoremove','viikkottain','laheta'),
+				'actions'=>array('admin','delete','create','update','index','view','updatetime','showohje','did','muisti','operatio','viikko','fromto','autoinsert','autoremove','viikkottain','laheta','kk','pvmtid'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','updatetime','showohje','did','muisti','operatio','viikko','fromto','autoinsert','autoremove','viikkottain','laheta'),
+				'actions'=>array('admin','delete','create','update','index','view','updatetime','showohje','did','muisti','operatio','viikko','fromto','autoinsert','autoremove','viikkottain','laheta','kk','pvmtid'),
                 		'message'=>Yii::t('main', 'Tämä TASO ei kuuluu teille'),
 			),
 			array('deny',  // deny all users
@@ -58,6 +58,47 @@ class TyovuorootController extends Controller
 		} else {
 	            return false;
 		}
+	}
+
+	public function actionKk()
+	{
+
+		if(isset($_POST['ilman']))
+		{
+		  unset(Yii::app()->session['Lounastauko']);
+		  unset(Yii::app()->session['MATKA']);
+
+		  if(!empty($_POST['ilman']) and count($_POST['ilman']) > 0)
+		  {
+		    foreach($_POST['ilman'] as $val){
+			if($val == 'Lounastauko')
+			Yii::app()->session['Lounastauko'] = 10;
+
+			if($val == 'MATKA')
+			Yii::app()->session['MATKA'] = 2;
+		    }
+		  }
+		}
+
+		function sprint($val){
+	   	    if($val > 0)
+		   	   return sprintf('%02d:%02d', $val/3600, ($val % 3600)/60);
+		}
+
+		$dataProvider=new CActiveDataProvider('Tyovuoroot');
+		$this->render('kk',array(
+			'dataProvider'=>$dataProvider,
+		));
+	}
+
+	public function actionPvmTid($pvm,$tid,$from)
+	{
+
+		$this->renderPartial('pvmtid',array(
+			'pvm'=>$pvm,
+			'tid'=>$tid,
+			'from'=>$from,
+		));
 	}
 
 	public function actionLaheta($tid,$week,$year,$tulosta) {
