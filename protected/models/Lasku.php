@@ -48,12 +48,12 @@
  * @property string $hyvityslasku
  * @property string $laskun_nimetys
  */
-class Laskutus extends DB2ActiveRecord
+class Lasku extends DB2ActiveRecord
 {
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
-	 * @return Laskutus the static model class
+	 * @return Lasku the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{
@@ -76,7 +76,7 @@ class Laskutus extends DB2ActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('lid, yid, time, tyyppi, yritys, y_tunnus, nimi, as_nro, osoite, postinumero, toimipaikka, laskutus, sahkoposti, verkkolaskuosoite, v_tunnus, yhteyshenkilo, nimitarkenne, puhelin, t_yritys, t_y_tunnus, t_nimi, t_osoite, t_postinumero, t_toimipaikka, t_puhelin, t_sahkoposti, toimitusosoite, paivays, erapaiva, toimituspaiva, maksuehto, viitenumero, viivastyskorko, yhteensa_total_verot, yhteensa_total_veroton, yhteensa_total, saaja_iban, saaja_virtualkoodi, tilanne, maksettu_euro, hyvityslasku, laskun_nimetys', 'required'),
+			array('tyyppi, nimi, as_nro, osoite, postinumero, toimipaikka, laskutus, paivays, erapaiva, toimituspaiva, maksuehto, viitenumero, viivastyskorko, toimitusosoite', 'required'),
 			array('lid, yid, as_nro', 'numerical', 'integerOnly'=>true),
 			array('tyyppi, yritys, nimi, sahkoposti, v_tunnus, yhteyshenkilo, nimitarkenne, t_yritys, t_nimi, t_osoite, t_toimipaikka, t_sahkoposti, toimitusosoite, viitenumero, saaja_iban, maksettu_euro, laskun_nimetys', 'length', 'max'=>100),
 			array('y_tunnus, toimipaikka, laskutus, puhelin, t_y_tunnus, t_puhelin, viivastyskorko, tilanne', 'length', 'max'=>50),
@@ -108,32 +108,32 @@ class Laskutus extends DB2ActiveRecord
 		return array(
 			'id' => 'ID',
 			'lid' => 'Lid',
-			'yid' => 'Yid',
+			'yid' => 'Saaja',
 			'time' => 'Time',
 			'tyyppi' => 'Tyyppi',
 			'yritys' => 'Yritys',
 			'y_tunnus' => 'Y Tunnus',
 			'nimi' => 'Nimi',
-			'as_nro' => 'As Nro',
+			'as_nro' => 'Asiakas',
 			'osoite' => 'Osoite',
 			'postinumero' => 'Postinumero',
 			'toimipaikka' => 'Toimipaikka',
 			'laskutus' => 'Laskutus',
 			'sahkoposti' => 'Sahkoposti',
 			'verkkolaskuosoite' => 'Verkkolaskuosoite',
-			'v_tunnus' => 'V Tunnus',
+			'v_tunnus' => 'Välittäjän tunnus',
 			'yhteyshenkilo' => 'Yhteyshenkilo',
 			'nimitarkenne' => 'Nimitarkenne',
 			'puhelin' => 'Puhelin',
-			't_yritys' => 'T Yritys',
-			't_y_tunnus' => 'T Y Tunnus',
-			't_nimi' => 'T Nimi',
-			't_osoite' => 'T Osoite',
-			't_postinumero' => 'T Postinumero',
-			't_toimipaikka' => 'T Toimipaikka',
-			't_puhelin' => 'T Puhelin',
-			't_sahkoposti' => 'T Sahkoposti',
-			'toimitusosoite' => 'Toimitusosoite',
+			't_yritys' => 'Toimitus Yritys',
+			't_y_tunnus' => 'Toimitus Y Tunnus',
+			't_nimi' => 'Toimitus Nimi',
+			't_osoite' => 'Toimitus Osoite',
+			't_postinumero' => 'Toimitus Postinumero',
+			't_toimipaikka' => 'Toimitus Toimipaikka',
+			't_puhelin' => 'Toimitus Puhelin',
+			't_sahkoposti' => 'Toimitus Sahkoposti',
+			'toimitusosoite' => 'Toimitusosoite on eri kuin laskutusosoite',
 			'paivays' => 'Paivays',
 			'erapaiva' => 'Erapaiva',
 			'toimituspaiva' => 'Toimituspaiva',

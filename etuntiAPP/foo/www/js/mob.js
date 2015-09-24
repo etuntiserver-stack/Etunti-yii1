@@ -346,9 +346,9 @@ function row(tilanne,st){
 		  $("#lounas").show(370);
 		  //$("#lounas_kohde").html(sp[1]).show(370);
 		  $('.lounas').bootstrapSwitch('state', true, true);
-
-
 		}
+
+
 		$("#os").val(sp[4]);
 		$("#kohdenID").val(sp[6]);
 
