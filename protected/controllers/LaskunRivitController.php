@@ -45,10 +45,7 @@ class LaskunRivitController extends Controller
 		);
 	}
 
-	/**
-	 * Displays a particular model.
-	 * @param integer $id the ID of the model to be displayed
-	 */
+
 	public function actionView($id)
 	{
 		$this->render('view',array(
@@ -56,10 +53,6 @@ class LaskunRivitController extends Controller
 		));
 	}
 
-	/**
-	 * Creates a new model.
-	 * If creation is successful, the browser will be redirected to the 'view' page.
-	 */
 	public function actionCreate()
 	{
 		$model=new LaskunRivit;
