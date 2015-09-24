@@ -1,6 +1,6 @@
 <?php
 
-class LaskutusController extends Controller
+class FirmanTiedotController extends Controller
 {
 	/**
 	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
@@ -27,13 +27,17 @@ class LaskutusController extends Controller
 	public function accessRules()
 	{
 		return array(
-			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','taulukko_erapaiva','taulukko_sahkopostille','taulukko_postille','luolasku'),
-                		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
+			array('allow',  // allow all users to perform 'index' and 'view' actions
+				'actions'=>array('index','view'),
+				'users'=>array('*'),
 			),
-			array('deny', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','taulukko_erapaiva','taulukko_sahkopostille','taulukko_postille','luolasku'),
-                		'message'=>Yii::t('main', 'Tämä TASO ei kuuluu teille'),
+			array('allow', // allow authenticated user to perform 'create' and 'update' actions
+				'actions'=>array('create','update'),
+				'users'=>array('@'),
+			),
+			array('allow', // allow admin user to perform 'admin' and 'delete' actions
+				'actions'=>array('admin','delete'),
+				'users'=>array('admin'),
 			),
 			array('deny',  // deny all users
 				'users'=>array('*'),
@@ -41,60 +45,10 @@ class LaskutusController extends Controller
 		);
 	}
 
-	public function isEtuntiAdmin() {
-
-	$tas = '';
-	if(isset(Yii::app()->user->adminPaketti))
-	$tas = explode(",",Yii::app()->user->adminPaketti);
-
-		if(isset(Yii::app()->user->adminID) and in_array('3',$tas))
-		{
-		$m = Administrators::model()->findbypk(Yii::app()->user->adminID);
-	       	if($m->id == Yii::app()->user->adminID)
-	       	  return true;
-		else
-	       	   return false;		
-
-		} else {
-	            return false;
-		}
-	}
-
-	public function actionLuolasku()
-	{
-		$laskunumero = '';
-		$this->render('luolasku',array('laskunumero'=>$laskunumero));
-	}
-
-	public function actionTaulukko_erapaiva($from,$to)
-	{
-		
-		$this->render('taulukko_erapaiva',array(
-			'from'=>$from,
-			'to'=>$to,
-		));
-	}
-
-	public function actionTaulukko_sahkopostille($from,$to)
-	{
-		
-		$this->render('taulukko_sahkopostille',array(
-			'from'=>$from,
-			'to'=>$to,
-		));
-	}
-
-	public function actionTaulukko_postille($from,$to)
-	{
-		
-
-
-		$this->render('taulukko_postille',array(
-			'from'=>$from,
-			'to'=>$to,
-		));
-	}
-
+	/**
+	 * Displays a particular model.
+	 * @param integer $id the ID of the model to be displayed
+	 */
 	public function actionView($id)
 	{
 		$this->render('view',array(
@@ -102,16 +56,20 @@ class LaskutusController extends Controller
 		));
 	}
 
+	/**
+	 * Creates a new model.
+	 * If creation is successful, the browser will be redirected to the 'view' page.
+	 */
 	public function actionCreate()
 	{
-		$model=new Laskutus;
+		$model=new FirmanTiedot;
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['Laskutus']))
+		if(isset($_POST['FirmanTiedot']))
 		{
-			$model->attributes=$_POST['Laskutus'];
+			$model->attributes=$_POST['FirmanTiedot'];
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
 		}
@@ -133,9 +91,9 @@ class LaskutusController extends Controller
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['Laskutus']))
+		if(isset($_POST['FirmanTiedot']))
 		{
-			$model->attributes=$_POST['Laskutus'];
+			$model->attributes=$_POST['FirmanTiedot'];
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
 		}
@@ -164,15 +122,9 @@ class LaskutusController extends Controller
 	 */
 	public function actionIndex()
 	{
-
-	function num($val){
-	    if($val > 0)
-		return  number_format((float)$val, 2, '.', '');
-	}
-
-		$model=Laskutus::model()->findAll();
+		$dataProvider=new CActiveDataProvider('FirmanTiedot');
 		$this->render('index',array(
-			'model'=>$model,
+			'dataProvider'=>$dataProvider,
 		));
 	}
 
@@ -181,10 +133,10 @@ class LaskutusController extends Controller
 	 */
 	public function actionAdmin()
 	{
-		$model=new Laskutus('search');
+		$model=new FirmanTiedot('search');
 		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['Laskutus']))
-			$model->attributes=$_GET['Laskutus'];
+		if(isset($_GET['FirmanTiedot']))
+			$model->attributes=$_GET['FirmanTiedot'];
 
 		$this->render('admin',array(
 			'model'=>$model,
@@ -195,12 +147,12 @@ class LaskutusController extends Controller
 	 * Returns the data model based on the primary key given in the GET variable.
 	 * If the data model is not found, an HTTP exception will be raised.
 	 * @param integer $id the ID of the model to be loaded
-	 * @return Laskutus the loaded model
+	 * @return FirmanTiedot the loaded model
 	 * @throws CHttpException
 	 */
 	public function loadModel($id)
 	{
-		$model=Laskutus::model()->findByPk($id);
+		$model=FirmanTiedot::model()->findByPk($id);
 		if($model===null)
 			throw new CHttpException(404,'The requested page does not exist.');
 		return $model;
@@ -208,11 +160,11 @@ class LaskutusController extends Controller
 
 	/**
 	 * Performs the AJAX validation.
-	 * @param Laskutus $model the model to be validated
+	 * @param FirmanTiedot $model the model to be validated
 	 */
 	protected function performAjaxValidation($model)
 	{
-		if(isset($_POST['ajax']) && $_POST['ajax']==='laskutus-form')
+		if(isset($_POST['ajax']) && $_POST['ajax']==='firman-tiedot-form')
 		{
 			echo CActiveForm::validate($model);
 			Yii::app()->end();
