@@ -28,11 +28,11 @@ class TyovuorootController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','updatetime','showohje','did','muisti','operatio','viikko','fromto','autoinsert','autoremove','viikkottain','laheta','kk','pvmtid'),
+				'actions'=>array('admin','delete','create','update','index','view','updatetime','showohje','did','muisti','operatio','viikko','fromto','autoinsert','autoremove','viikkottain','laheta','kk','pvmtid','laheta_k'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','updatetime','showohje','did','muisti','operatio','viikko','fromto','autoinsert','autoremove','viikkottain','laheta','kk','pvmtid'),
+				'actions'=>array('admin','delete','create','update','index','view','updatetime','showohje','did','muisti','operatio','viikko','fromto','autoinsert','autoremove','viikkottain','laheta','kk','pvmtid','laheta_k'),
                 		'message'=>Yii::t('main', 'Tämä TASO ei kuuluu teille'),
 			),
 			array('deny',  // deny all users
@@ -151,6 +151,69 @@ class TyovuorootController extends Controller
 
 	}
 
+
+	public function actionLaheta_k($week,$year,$tulosta) {
+
+
+
+		if(Yii::app()->request->getPost('pdf'))
+		{
+		  $tt = Tyontekijat::model()->findbypk($_POST['kuka']);
+
+	          $html2pdf = Yii::app()->ePdf->HTML2PDF('P', 'A4', 'en');
+		  $html2pdf->setDefaultFont('Arial');
+	          $html2pdf->WriteHTML($this->renderPartial('laheta',array('tid'=>$_POST['kuka'],'week'=>$week,'year'=>$year,'tulosta'=>true,'tt'=>$tt),true));
+	          $html2pdf->Output();
+
+		} elseif(Yii::app()->request->getPost('pdf_email'))
+		{
+
+		$kenelle = explode(",",Yii::app()->request->getPost('kenelle'));
+
+		foreach($kenelle as $key)
+		{
+		 if(!empty($key))
+		 {
+		  $tt = Tyontekijat::model()->findbypk($key);
+
+	          $html2pdf = Yii::app()->ePdf->HTML2PDF('P', 'A4', 'en');
+		  $html2pdf->setDefaultFont('Arial');
+	          $html2pdf->WriteHTML($this->renderPartial('laheta',array('tid'=>$tt->id,'week'=>$week,'year'=>$year,'tulosta'=>true,'tt'=>$tt),true));
+         	  $content_PDF = $html2pdf->Output('my_doc.pdf', EYiiPdf::OUTPUT_TO_STRING);
+
+
+		  /* file */
+		  $file = $week.'_'.$year.'_'.$key.'.pdf';
+		  $path = Yii::app()->request->baseUrl."emails/tyovuorot/".Yii::app()->user->domain;
+
+  		  if (!file_exists($path))
+		  	mkdir($path, 0777, true);
+
+		  file_put_contents($path.'/'.$file, $content_PDF);
+		  /* file */
+		  $message = Yii::t('main', 'VIIKKO').'-'.$week.'<br>'.Yii::t('main', ' Liitteenä uusi PDF-tiedosto');
+
+		
+		  $mail = new YiiMailer();
+		  //$mail->clearLayout();//if layout is already set in config
+		  $mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
+		  $mail->setTo($tt->tekijan_email);
+		  $mail->setSubject(Yii::t('main', 'TYÖVUOROT'). ' '.$tt->tekijan_nimi);
+		  $mail->setBody($message);
+		  $mail->setAttachment($path.'/'.$file);
+		  $mail->send();
+		
+		 }
+		}
+
+		  $this->redirect('viikkottain');
+
+		} else {
+		  $this->render('laheta_k',array('week'=>$week,'year'=>$year,'tulosta'=>false));
+		}
+
+
+	}
 	public function actionViikkottain() {
 
 		$this->render('viikkottain');
