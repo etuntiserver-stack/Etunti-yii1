@@ -27,7 +27,10 @@ $('.search-form form').submit(function(){
 ?>
 
 <legend>
-<h1> <?php echo Yii::t('main', 'LASKU HALLINTA'); ?> <i class="glyphicon glyphicon-time"></i></h1>
+   <div class="pull-right">
+     <?php echo CHtml::link(' +','/index.php/lasku/create',array('target'=>'_blank','class'=>'btn btn-default glyphicon glyphicon-barcode')); ?>
+   </div>
+<h1> <?php echo Yii::t('main', 'LASKUT'); ?> <i class="glyphicon glyphicon-barcode"></i></h1>
 </legend>
 
 
