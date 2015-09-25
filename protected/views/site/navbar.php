@@ -170,7 +170,7 @@
 	<?php endif; ?>
 
         <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?php echo Yii::t('main', 'Käyttäjä'); ?> <span class="caret"></span></a>
+          <a href="#" class="dropdown-toggle glyphicon glyphicon-user" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?php echo Yii::t('main', ''); ?> <span class="caret"></span></a>
           <ul class="dropdown-menu">
 
 	    <?php if(isset(Yii::app()->user->adminPaketti)) : ?>
@@ -183,8 +183,11 @@
 	    <?php endif; ?>
 
             <li role="separator" class="divider"></li>
-            <li><a href="#"><?php echo CHtml::link(Yii::t('main', 'Ulos'),array('/site/logout')); ?></a></li>
+
           </ul>
+        </li>
+        <li>
+          <a href="#"><?php echo CHtml::link(Yii::t('main', ''),array('/site/logout') , array("class" =>"glyphicon glyphicon-off")); ?></a>
         </li>
       </ul>
 
