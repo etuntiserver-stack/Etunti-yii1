@@ -152,14 +152,6 @@
 
       <ul class="nav navbar-nav navbar-right">
 
-	<?php if(isset(Yii::app()->user->adminPaketti)) : ?>
-	    <?php 
-	    if(isset(Yii::app()->user->domain)) {
-     	    $d = Domainit::model()->find("domain='".Yii::app()->user->domain."'");
-            echo '<li><a href="#">'.$d->yritys.', '.Yii::t('main', 'Tasot').': '.$d->paketti.'</a></li>';
-	    } 
-	    ?>
-	<?php endif; ?>
 
 	<?php if(isset(Yii::app()->user->adminID)) : ?>	
         <li class="dropdown">
@@ -175,6 +167,15 @@
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?php echo Yii::t('main', 'Käyttäjä'); ?> <span class="caret"></span></a>
           <ul class="dropdown-menu">
+
+	    <?php if(isset(Yii::app()->user->adminPaketti)) : ?>
+	    <?php 
+	    if(isset(Yii::app()->user->domain)) {
+     	    $d = Domainit::model()->find("domain='".Yii::app()->user->domain."'");
+            echo '<li><a href="#">'.$d->yritys.', '.Yii::t('main', 'Tasot').': '.$d->paketti.'</a></li>';
+	    } 
+	    ?>
+	    <?php endif; ?>
 
             <li role="separator" class="divider"></li>
             <li><a href="#"><?php echo CHtml::link(Yii::t('main', 'Ulos'),array('/site/logout')); ?></a></li>
