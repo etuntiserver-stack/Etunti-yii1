@@ -95,6 +95,23 @@
 		<?php echo $form->error($model,'aktiivinen'); ?>
 	</div>
 
+  </div><div class="col-sm-3">
+	<?php if(isset($model->id)): ?>
+	<legend><h3><?php echo Yii::t('main', 'Laskutus tiedot'); ?></h3></legend>
+
+	<div class="row">
+		<?php echo $form->labelEx($model,'laskutus_kanava'); ?>
+		<?php echo $form->textField($model,'laskutus_kanava',array('class'=>'form-control')); ?>
+		<?php echo $form->error($model,'laskutus_kanava'); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->labelEx($model,'maksuehto'); ?>
+		<?php echo $form->textField($model,'maksuehto',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'maksuehto'); ?>
+	</div>
+	<?php endif; ?>
+
   </div><div class="col-sm-4">
 
 	<?php if(isset($model->id)): ?>
