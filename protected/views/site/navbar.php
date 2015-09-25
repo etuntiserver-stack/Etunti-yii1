@@ -42,6 +42,20 @@
         	<li><?php echo CHtml::link(Yii::t('main', 'Luo kohde'),array('/kohteet/create')); ?></li>
         	<li><?php echo CHtml::link(Yii::t('main', 'Kohteet'),array('/kohteet/admin')); ?></li>
         	<li><?php echo CHtml::link(Yii::t('main', 'Kartta'),array('/kohteet/googlemap')); ?></li>
+
+
+		<?php if(isset(Yii::app()->user->adminPaketti)) : ?>
+		<?php
+		 $tas = explode(",",Yii::app()->user->adminPaketti);
+		 if(in_array('4',$tas)) : 
+		?>
+	        	<li role="separator" class="divider"></li>
+	        	<li><?php echo CHtml::link(Yii::t('main', 'CRM'),array('/site/index')); ?></li>
+	        	<li><?php echo CHtml::link(Yii::t('main', 'Tarjoukset'),array('/site/index')); ?></li>
+	        	<li><?php echo CHtml::link(Yii::t('main', 'Sopimukset'),array('/site/index')); ?></li>
+		<?php endif; ?>
+		<?php endif; ?>
+	
           </ul>
         </li>
 
