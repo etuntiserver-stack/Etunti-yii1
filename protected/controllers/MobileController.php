@@ -305,7 +305,7 @@ class MobileController extends Controller
 	{
 		$as=new Kohteet;
 		echo   CHtml::activeDropDownList($as, 'id',
-		CHtml::listData(Kohteet::model()->findAll(), 'id', 'osoite'),   
+		CHtml::listData(Kohteet::model()->findAll(array("order"=>"osoite")), 'id', 'osoite'),   
 		    array('empty'=>'Muokka', "class"=>"kohdenvaihto btn btn-default") 
 		);
 
@@ -594,6 +594,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 	protected function yo($al,$lop){
 
 		$totalYo = 0;
+
 
 	 	if(strtotime($al[0]." ".$al[1]) <= strtotime($al[0]." 06:00") 
 		and strtotime($lop[0]." ".$lop[1]) > strtotime($lop[0]." 06:00"))
