@@ -18,13 +18,7 @@
 		TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s'))) as l_tunnit,
 		t.id,t.aloitan,t.loppui";
 
-        	$criteria->condition = "  tid = '".$data->tid."' and aloitan !='' and loppui !='' ";
-
-		if(Yii::app()->session['Lounastauko'])
-	        $criteria->addCondition (" status != '10' ");
-
-		if(Yii::app()->session['MATKA'])
-	        $criteria->addCondition (" status != '2' ");
+        	$criteria->condition = "  status = '2' and tid = '".$data->tid."' and aloitan !='' and loppui !='' ";
 
 		if(Yii::app()->session['from'] and Yii::app()->session['to'])
 	        $criteria->addCondition ("DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."' ");

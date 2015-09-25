@@ -34,7 +34,7 @@ class MobileController extends Controller
 		return array(
 
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','index_a','view','updatetime','showkohteet','yhteenveto','kyhteenveto','historia','poistaKohde','total_suunniteltu','total_toteutu','total_luettu','kesto','index_ajax','raportit'),
+				'actions'=>array('admin','delete','create','update','index','index_a','view','updatetime','showkohteet','yhteenveto','kyhteenveto','yhteenveto_m','historia','poistaKohde','total_suunniteltu','total_toteutu','total_luettu','kesto','index_ajax','raportit'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -531,20 +531,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 
 
 
-
-
-
-
-
-	public function actionYhteenveto()
-	{
-
-	function sprint($val){
-	    if($val > 0)
-		return sprintf('%02d:%02d', $val/3600, ($val % 3600)/60);
-	}
-
-	function ilta($al,$lop){
+	protected function ilta($al,$lop){
 
 		$totalIlta = 0;
 
@@ -589,6 +576,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 	   	  $strLop0 = strtotime($lop[0]." 23:00");
 
 	 	  $str = ($strLop0-$strAl0);
+
 	      	  $totalIlta += $str;
 		}
 
@@ -598,7 +586,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 	}
 
 
-	function yo($al,$lop){
+	protected function yo($al,$lop){
 
 		$totalYo = 0;
 
@@ -650,6 +638,15 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		if($totalYo > 0)
 		return $totalYo;
 	}
+
+	protected function sprint($val){
+	    if($val > 0)
+		return sprintf('%02d:%02d', $val/3600, ($val % 3600)/60);
+	}
+
+
+	public function actionYhteenveto()
+	{
 
 
 		//unset(Yii::app()->session['Tekija']);
@@ -716,18 +713,92 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			'pagination'=>false
 		));
 
-		//$dataProvider->pagination->pageSize = 50;
+		  $model = Mobile::model()->findAll($criteria);
 
 		if(Yii::app()->request->getPost('tulosta'))
 		{
-		  $model = Mobile::model()->findAll($criteria);
 	          $html2pdf = Yii::app()->ePdf->HTML2PDF('P', 'A4', 'en');
 		  $html2pdf->setDefaultFont('Arial');
 	          $html2pdf->WriteHTML($this->renderPartial('tulosta_yhteenveto', array('model' => $model),true));
 	          $html2pdf->Output();
 		} else {
 		  //$dataProvider->pagination->pageSize = 50;
-		  $this->render('yhteenveto', array('dataProvider' => $dataProvider));
+		  $this->render('yhteenveto', array('model' => $model));
+		}
+	}
+
+
+	public function actionYhteenveto_m()
+	{
+
+
+		//unset(Yii::app()->session['Tekija']);
+		if(Yii::app()->request->getPost('Tekija'))
+		Yii::app()->session['Tekija'] = Yii::app()->request->getPost('Tekija');
+
+		if(isset($_POST['yhtvetoform']))
+		{
+		unset(Yii::app()->session['Lounastauko']);
+		unset(Yii::app()->session['MATKA']);
+		}
+
+		if(isset($_POST['ilman']))
+		{
+		  foreach($_POST['ilman'] as $val){
+			if($val == 'Lounastauko')
+			Yii::app()->session['Lounastauko'] = 10;
+
+			if($val == 'MATKA')
+			Yii::app()->session['MATKA'] = 2;
+		  }
+		}
+
+
+		if(Yii::app()->request->getPost('from'))
+		Yii::app()->session['from'] = date("Y-m-d",strtotime(Yii::app()->request->getPost('from')));
+
+		if(Yii::app()->request->getPost('to'))
+		Yii::app()->session['to'] = date("Y-m-d",strtotime(Yii::app()->request->getPost('to')));
+		
+
+       		$criteria = new CDbCriteria();
+        	$criteria->select = "
+
+		SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s')))) as l_tunnit,
+
+		t.*";
+
+        	//$criteria->condition = " l_loppu = '' and l_alku = '' ";
+
+        	$criteria->order = "tekijan_nimi"; //"SUBSTR(LTRIM(tekijan_nimi), LOCATE(' ',LTRIM(tekijan_nimi)))"
+        	$criteria->group = 'tid';
+	        $criteria->condition = " status = '2' ";
+
+		if(Yii::app()->session['Tekija']){
+		  if(count(Yii::app()->session['Tekija']) > 1)
+		    $ids = implode(",",Yii::app()->session['Tekija']);
+		  else
+		    $ids = Yii::app()->session['Tekija'][0];
+
+	        $criteria->addCondition ('tid IN ('.$ids.') ');
+		}
+
+
+		if(Yii::app()->session['from'] and Yii::app()->session['to'])
+	        $criteria->addCondition ("DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."' ");
+
+
+		  $model = Mobile::model()->findAll($criteria);
+
+		if(Yii::app()->request->getPost('tulosta'))
+		{
+	          $html2pdf = Yii::app()->ePdf->HTML2PDF('P', 'A4', 'en');
+		  $html2pdf->setDefaultFont('Arial');
+	          $html2pdf->WriteHTML($this->renderPartial('tulosta_yhteenveto_m', array('model' => $model),true));
+	          $html2pdf->Output();
+		} else {
+		  //$dataProvider->pagination->pageSize = 50;
+		  $this->render('yhteenveto_m', array('model' => $model));
 		}
 	}
 
