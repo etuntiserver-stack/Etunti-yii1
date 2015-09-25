@@ -159,7 +159,7 @@
 
 	<?php if(isset(Yii::app()->user->adminID)) : ?>	
         <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?php echo Yii::t('main', 'Asetukset'); ?> <span class="caret"></span></a>
+          <a href="#" class="dropdown-toggle glyphicon glyphicon-cog" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> <span class="caret"></span></a>
           <ul class="dropdown-menu">
 
         	<li><?php echo CHtml::link(Yii::t('main', 'Järjestelmänvalvojat'),array('/administrators/admin')); ?></li>
@@ -172,7 +172,6 @@
         <li class="dropdown">
           <a href="#" class="dropdown-toggle glyphicon glyphicon-user" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?php echo Yii::t('main', ''); ?> <span class="caret"></span></a>
           <ul class="dropdown-menu">
-
 	    <?php if(isset(Yii::app()->user->adminPaketti)) : ?>
 	    <?php 
 	    if(isset(Yii::app()->user->domain)) {
@@ -181,14 +180,11 @@
 	    } 
 	    ?>
 	    <?php endif; ?>
-
-            <li role="separator" class="divider"></li>
-
           </ul>
         </li>
-        <li>
-          <a href="#"><?php echo CHtml::link(Yii::t('main', ''),array('/site/logout') , array("class" =>"glyphicon glyphicon-off")); ?></a>
-        </li>
+
+        <li><?php echo CHtml::link(Yii::t('main', ''),array('/site/logout') , array("class" =>"glyphicon glyphicon-off")); ?></li>
+
       </ul>
 
     </div><!-- /.navbar-collapse -->
