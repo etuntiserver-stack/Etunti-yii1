@@ -310,23 +310,24 @@ class MobileController extends Controller
 		);
 
 		?>
+		<input type="hidden" id="sainkohdenID" value="<?php echo $_POST['thisID']; ?>">
 		<script type="text/javascript">
 		$(document).ready(function(){
 
-		  $(".kohdenvaihto").change(function(){
+		  $("#Kohteet_id").on('change',function(){
 
+			var kohdenID = $("#sainkohdenID").val().split("_");
 			var thisText = $(this).find("option:selected").text();
 			var thisVal = $(this).val();
 
-   			var Mobile = {kohdenID: thisVal,kohde_kannasta: thisText};
-   			var svk = {Mobile};
+   			var Mobile = {fromMob: "true",kohdenID: thisVal,kohde_kannasta: thisText};
 
 		        $.ajax({
-		           url: "update?id=<?php echo $_POST['id']; ?>",
+		           url: "update?id="+kohdenID[1],
 		           type: "POST",
-		           data: svk,
+		           data: Mobile,
 		           success: function(html){
-				$("#vaihto_<?php echo $_POST['thisID']; ?>").addClass("text-success").text(thisText);
+				$("#vaihto_kohttisID_"+kohdenID[1]).addClass("text-success").text(thisText);
 				//alert(thisText)
 		           }
 		        });
@@ -384,6 +385,10 @@ class MobileController extends Controller
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
+
+		if(isset($_POST['fromMob'])){
+			$_POST['Mobile']=$_POST;
+		}
 
 		if(isset($_POST['Mobile']))
 		{
@@ -596,6 +601,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 
 		   if($al[0] == $lop[0])
 		   {
+
 
 		   $strAl = strtotime($al[0]." ".$al[1]);
 		   $strLop = strtotime($lop[0]." 06:00");
