@@ -596,6 +596,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 
 		   if($al[0] == $lop[0])
 		   {
+
 		   $strAl = strtotime($al[0]." ".$al[1]);
 		   $strLop = strtotime($lop[0]." 06:00");
 		   }
@@ -837,7 +838,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 
         	//$criteria->condition = " l_loppu = '' and l_alku = '' ";
 
-        	$criteria->order = "SUBSTR(LTRIM(tekijan_nimi), LOCATE(' ',LTRIM(tekijan_nimi)))";
+        	$criteria->order = "kohde_kannasta";
         	$criteria->group = 'kohde_kannasta';
         	$criteria->condition = " status='3' ";
 
