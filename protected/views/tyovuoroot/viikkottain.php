@@ -45,6 +45,12 @@ if($week > 52) {
 }
 ?>
 <center>
+
+<div class="pull-left">
+<?php echo CHtml::link(Yii::t('main', 'Lähetä kaikille'),'/index.php/tyovuoroot/laheta_k?week='.$week.'&year='.$year.'&tulosta=false',array('target'=>'_blank','class'=>'btn btn-success'));
+?>
+</div>
+
 <h2>
   <a href="<?php echo $_SERVER['PHP_SELF'].'?week='.($week == 1 ? 52 : $week -1).'&year='.($week == 1 ? $year - 1 : $year); ?>"><<</a> 
   <?php echo date('d.m.Y',strtotime($year ."W". $week .'1')).' - '.date('d.m.Y',strtotime($year ."W". $week .'7')); ?>
@@ -84,9 +90,15 @@ if($week > 52) {
     if(count($tv) > 0)
     {
 	echo '<tr>';
-	echo '<td><center>'.$t->tekijan_nimi.'<BR>
-	'.CHtml::link('<img src="'.Yii::app()->request->baseUrl.'/img/pdf.png" height="35">','/index.php/tyovuoroot/laheta?tid='.$t->id.'&week='.$week.'&year='.$year.'&tulosta=false',array('target'=>'_blank')).'
-	</center></td>';
+	echo '<td>'.$t->tekijan_nimi.'<BR>
+	'.CHtml::link('Lähettäminen','/index.php/tyovuoroot/laheta?tid='.$t->id.'&week='.$week.'&year='.$year.'&tulosta=false',array('target'=>'_blank','class'=>'text-success'));
+
+	$file = $week.'_'.$year.'_'.$t->id.'.pdf';
+	$path = Yii::app()->request->baseUrl."emails/tyovuorot/".Yii::app()->user->domain;
+	if (file_exists($path.'/'.$file))
+	echo CHtml::link(Yii::t('main', ' Lähetetty'),'../../emails/tyovuorot/'.Yii::app()->user->domain.'/'.$file,array('target'=>'_blank','class'=>'text-danger'));
+
+	echo '</td>';
 
 	  if($week < 10) {
 	    $week = '0'. $week;
