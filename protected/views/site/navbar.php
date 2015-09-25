@@ -54,6 +54,7 @@
 	        <li role="separator" class="divider"></li>
         	<li><?php echo CHtml::link(Yii::t('main', 'Yhteenveto työntekijät'),array('/mobile/yhteenveto')); ?></li>
         	<li><?php echo CHtml::link(Yii::t('main', 'Yhteenveto kohteet'),array('/mobile/kyhteenveto')); ?></li>
+        	<li><?php echo CHtml::link(Yii::t('main', 'Yhteenveto matkat'),array('/mobile/yhteenveto_m')); ?></li>
 	        <li role="separator" class="divider"></li>
         	<li><?php echo CHtml::link(Yii::t('main', 'Kuukauden tunnit'),array('/toteutuneet/kk')); ?></li>
 	        <li role="separator" class="divider"></li>

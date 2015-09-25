@@ -11,7 +11,7 @@ $this->breadcrumbs=array(
 
 <legend>
 <button class="pull-right btn btn-info" data-toggle="collapse"  data-target="#haku"><?php echo Yii::t('main', 'Haku'); ?> <b class="caret"></b></button>
-<h1> <?php echo Yii::t('main', 'YHTEENVETO TUNNIT'); ?> <i class="glyphicon glyphicon-time"></i></h1>
+<h1> <?php echo Yii::t('main', 'YHTEENVETO MATKAT'); ?> <i class="glyphicon glyphicon-time"></i></h1>
 </legend>
 
 <div class="row collapse" id="haku">
@@ -33,18 +33,6 @@ $this->breadcrumbs=array(
        	 echo '<option value="'.$key.'">'.$val.'</option>';
      }
     }
-    echo '</select>';
-   ?>
-
-   <?php
-    $lounas = '';
-    $lounas = ( isset(Yii::app()->session['Lounastauko']))  ? 'selected' : '';
-    $matka = '';
-    $matka = ( isset(Yii::app()->session['MATKA']))  ? 'selected' : '';
-
-    echo '<select name="ilman[]" class="selectpicker ilman"  multiple="multiple"  title="Ei lasketa...">';
-    echo '<option value="Lounastauko" '.$lounas.'>Lounastauko</option>';
-    echo '<option value="MATKA" '.$matka.'>MATKA</option>';
     echo '</select>';
    ?>
 
@@ -92,7 +80,7 @@ $this->breadcrumbs=array(
   <?php 
   foreach($model as $data)
   {
-	$this->renderPartial('_yhteenveto',array('data'=>$data));
+	$this->renderPartial('_yhteenveto_m',array('data'=>$data));
   }
   ?>
 
