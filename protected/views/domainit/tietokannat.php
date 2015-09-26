@@ -40,9 +40,9 @@
 <?php if(isset($_POST['method']) and $_POST['method'] == 'getStrukture') : ?>
 <?php
 
-
-    Yii::app()->db1->setActive(false);
     Yii::app()->db1->connectionString = 'mysql:host=localhost;dbname='.$pref.'defdb';
+    Yii::app()->db1->setActive(false);
+
     if( $_SERVER['REMOTE_ADDR'] != '::1' and $_SERVER['REMOTE_ADDR'] != '127.0.0.1' )
     {
       Yii::app()->db1->username = 'estromfi_defdb';
