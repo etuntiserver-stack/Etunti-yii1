@@ -14,7 +14,6 @@ CREATE TABLE `asetukset` (
 
 
 
-
 CREATE TABLE `asiakkaat` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -28,9 +27,10 @@ CREATE TABLE `asiakkaat` (
   `sahkoposti` varchar(100) NOT NULL,
   `ryhma` int(2) NOT NULL,
   `aktiivinen` int(1) NOT NULL,
+  `laskutus_kanava` varchar(255) NOT NULL,
+  `maksuehto` varchar(20) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=607 DEFAULT CHARSET=latin1;
-
+) ENGINE=InnoDB AUTO_INCREMENT=614 DEFAULT CHARSET=latin1;
 
 
 
@@ -43,8 +43,7 @@ CREATE TABLE `chatbox` (
   `text` varchar(500) CHARACTER SET utf8 NOT NULL,
   `kenelle` varchar(100) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=59 DEFAULT CHARSET=latin1;
-
+) ENGINE=InnoDB AUTO_INCREMENT=62 DEFAULT CHARSET=latin1;
 
 
 
@@ -56,7 +55,6 @@ CREATE TABLE `chatbox_kirjoittaja` (
   `time` int(50) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
 
 
 
@@ -78,8 +76,7 @@ CREATE TABLE `laskun_rivit` (
   `veroton` varchar(20) NOT NULL,
   `yhteensa_alv` varchar(20) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=240 DEFAULT CHARSET=latin1;
-
+) ENGINE=InnoDB AUTO_INCREMENT=242 DEFAULT CHARSET=latin1;
 
 
 
@@ -130,8 +127,7 @@ CREATE TABLE `laskut` (
   `hyvityslasku` varchar(20) NOT NULL,
   `laskun_nimetys` varchar(100) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
-
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 
 
 
@@ -147,7 +143,6 @@ CREATE TABLE `laskutus_tuotteet` (
   `yksikko` varchar(20) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
-
 
 
 
@@ -186,15 +181,13 @@ CREATE TABLE `laskutus_uusi` (
 
 
 
-
 CREATE TABLE `log` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `text` text NOT NULL,
   `kuka` varchar(50) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=30001 DEFAULT CHARSET=latin1;
-
+) ENGINE=InnoDB AUTO_INCREMENT=36228 DEFAULT CHARSET=latin1;
 
 
 
@@ -214,7 +207,6 @@ CREATE TABLE `omat_muistutukset` (
 
 
 
-
 CREATE TABLE `omat_muistutukset_roskis` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `ratkaisija` int(11) NOT NULL,
@@ -224,7 +216,6 @@ CREATE TABLE `omat_muistutukset_roskis` (
   `status` int(2) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
-
 
 
 
@@ -240,7 +231,6 @@ CREATE TABLE `pvk` (
   `status` int(1) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
-
 
 
 
@@ -279,7 +269,6 @@ CREATE TABLE `pvk_rivit` (
 
 
 
-
 CREATE TABLE `sivex_administrators` (
   `id` int(5) NOT NULL AUTO_INCREMENT,
   `adm_login` varchar(100) NOT NULL,
@@ -288,8 +277,7 @@ CREATE TABLE `sivex_administrators` (
   `adm_nimi` varchar(100) NOT NULL,
   `status` int(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=latin1;
-
+) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=latin1;
 
 
 
@@ -304,7 +292,6 @@ CREATE TABLE `sivex_ennakko` (
   `ennakko` varchar(20) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
-
 
 
 
@@ -336,7 +323,6 @@ CREATE TABLE `sivex_kirjallinen_varoitus` (
   `NimikeTehtava` varchar(100) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
-
 
 
 
@@ -374,8 +360,7 @@ CREATE TABLE `sivex_kohdet` (
   PRIMARY KEY (`id`),
   KEY `osoite` (`osoite`),
   KEY `avain` (`avain`)
-) ENGINE=InnoDB AUTO_INCREMENT=31122 DEFAULT CHARSET=utf8;
-
+) ENGINE=InnoDB AUTO_INCREMENT=31134 DEFAULT CHARSET=utf8;
 
 
 
@@ -402,7 +387,6 @@ CREATE TABLE `sivex_kohdet_notuse` (
 
 
 
-
 CREATE TABLE `sivex_korvaukset` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `tid` int(11) NOT NULL,
@@ -412,7 +396,6 @@ CREATE TABLE `sivex_korvaukset` (
   `korvaus` varchar(10) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
-
 
 
 
@@ -428,7 +411,6 @@ CREATE TABLE `sivex_lahetaminen` (
   `text` text NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=latin1;
-
 
 
 
@@ -452,7 +434,6 @@ CREATE TABLE `sivex_laskut` (
 
 
 
-
 CREATE TABLE `sivex_lisatyot` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `tid` int(11) NOT NULL,
@@ -463,7 +444,6 @@ CREATE TABLE `sivex_lisatyot` (
   `tunnimaara` varchar(10) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
-
 
 
 
@@ -487,14 +467,12 @@ CREATE TABLE `sivex_palautteet` (
 
 
 
-
 CREATE TABLE `sivex_selects` (
   `id` int(7) NOT NULL AUTO_INCREMENT,
   `value` varchar(255) NOT NULL,
   `select_type` varchar(50) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=134 DEFAULT CHARSET=latin1;
-
+) ENGINE=InnoDB AUTO_INCREMENT=133 DEFAULT CHARSET=latin1;
 
 
 
@@ -537,15 +515,13 @@ CREATE TABLE `sivex_suhteen_paattaminen` (
 
 
 
-
 CREATE TABLE `sivex_syntarit` (
   `id` int(7) NOT NULL AUTO_INCREMENT,
   `tid` int(7) NOT NULL,
   `date` varchar(20) NOT NULL,
   `status` int(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=91 DEFAULT CHARSET=latin1;
-
+) ENGINE=InnoDB AUTO_INCREMENT=97 DEFAULT CHARSET=latin1;
 
 
 
@@ -561,7 +537,6 @@ CREATE TABLE `sivex_tarjoukset` (
   `status` int(1) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=latin1;
-
 
 
 
@@ -647,7 +622,6 @@ CREATE TABLE `sivex_tehtavat` (
 
 
 
-
 CREATE TABLE `sivex_ttekijat` (
   `id` int(7) NOT NULL AUTO_INCREMENT,
   `imei` varchar(30) NOT NULL,
@@ -680,7 +654,6 @@ CREATE TABLE `sivex_ttekijat` (
 
 
 
-
 CREATE TABLE `sivex_tvuoro` (
   `id` int(7) NOT NULL AUTO_INCREMENT,
   `tid` int(7) NOT NULL,
@@ -704,8 +677,7 @@ CREATE TABLE `sivex_tvuoro` (
   KEY `alku` (`alku`),
   KEY `loppu` (`loppu`),
   KEY `pituus` (`pituus`)
-) ENGINE=InnoDB AUTO_INCREMENT=7311 DEFAULT CHARSET=latin1;
-
+) ENGINE=InnoDB AUTO_INCREMENT=7161 DEFAULT CHARSET=latin1;
 
 
 
@@ -726,7 +698,6 @@ CREATE TABLE `sivex_tyonantaja` (
   `johtaja` varchar(100) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
-
 
 
 
@@ -797,7 +768,6 @@ CREATE TABLE `sivex_tyosopimukset` (
 
 
 
-
 CREATE TABLE `sivex_tyosuhdet` (
   `id` int(7) NOT NULL AUTO_INCREMENT,
   `tid` int(7) NOT NULL,
@@ -821,8 +791,7 @@ CREATE TABLE `sivex_tyosuhdet` (
   `atk_varten` varchar(10) NOT NULL,
   `yksi_tuloraja` varchar(10) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=79 DEFAULT CHARSET=latin1;
-
+) ENGINE=InnoDB AUTO_INCREMENT=82 DEFAULT CHARSET=latin1;
 
 
 
@@ -866,7 +835,6 @@ CREATE TABLE `sivex_tyotodistukset` (
 
 
 
-
 CREATE TABLE `sivex_viestinta` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -876,8 +844,7 @@ CREATE TABLE `sivex_viestinta` (
   `admin` varchar(50) NOT NULL,
   `status` int(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=latin1;
-
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=latin1;
 
 
 
@@ -890,8 +857,7 @@ CREATE TABLE `sivex_virhet` (
   `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `virhe` text NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2604 DEFAULT CHARSET=latin1;
-
+) ENGINE=InnoDB AUTO_INCREMENT=2784 DEFAULT CHARSET=latin1;
 
 
 
@@ -935,8 +901,7 @@ CREATE TABLE `sivexkuitti` (
   KEY `tid` (`tid`),
   KEY `etaisyys` (`etaisyys`),
   KEY `status` (`status`)
-) ENGINE=InnoDB AUTO_INCREMENT=15315 DEFAULT CHARSET=latin1;
-
+) ENGINE=InnoDB AUTO_INCREMENT=16745 DEFAULT CHARSET=latin1;
 
 
 
@@ -969,8 +934,7 @@ CREATE TABLE `sivexkuitti_repaired` (
   `tyoajanlaatu` varchar(100) NOT NULL,
   `tyoajanmerkinta` varchar(100) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6199 DEFAULT CHARSET=latin1;
-
+) ENGINE=InnoDB AUTO_INCREMENT=6225 DEFAULT CHARSET=latin1;
 
 
 
@@ -981,8 +945,7 @@ CREATE TABLE `soitot_sihterille` (
   `puh_nro` varchar(30) NOT NULL,
   `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=920 DEFAULT CHARSET=latin1;
-
+) ENGINE=InnoDB AUTO_INCREMENT=984 DEFAULT CHARSET=latin1;
 
 
 
@@ -1014,7 +977,6 @@ CREATE TABLE `tarjouksen_rivit` (
 
 
 
-
 CREATE TABLE `tehtavat_palvelukuvaus` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -1022,7 +984,6 @@ CREATE TABLE `tehtavat_palvelukuvaus` (
   `kuvaus` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=77 DEFAULT CHARSET=latin1;
-
 
 
 
@@ -1036,8 +997,7 @@ CREATE TABLE `users_online` (
   `user` varchar(100) NOT NULL,
   `url` varchar(1000) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8122 DEFAULT CHARSET=latin1;
-
+) ENGINE=InnoDB AUTO_INCREMENT=8410 DEFAULT CHARSET=latin1;
 
 
 
@@ -1049,9 +1009,9 @@ CREATE TABLE `vuosilomat` (
   `pvm` varchar(50) NOT NULL,
   `status` varchar(100) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `pvm` (`pvm`,`status`,`tid`)
-) ENGINE=InnoDB AUTO_INCREMENT=556 DEFAULT CHARSET=latin1;
-
+  KEY `tid` (`tid`),
+  KEY `pvm` (`pvm`)
+) ENGINE=InnoDB AUTO_INCREMENT=555 DEFAULT CHARSET=latin1;
 
 
 
