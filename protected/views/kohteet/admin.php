@@ -27,6 +27,9 @@ $('.search-form form').submit(function(){
 ?>
 
 <legend>
+   <div class="pull-right">
+     <?php echo CHtml::link(' +','/index.php/kohteet/create',array('target'=>'_blank','class'=>'btn btn-default glyphicon glyphicon-home')); ?>
+   </div>
 <h1> <?php echo Yii::t('main', 'KOHTEET'); ?> <i class="glyphicon glyphicon-home"></i></h1>
 </legend>
 

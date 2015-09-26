@@ -29,6 +29,7 @@ CREATE TABLE `asiakkaat` (
   `aktiivinen` int(1) NOT NULL,
   `laskutus_kanava` varchar(255) NOT NULL,
   `maksuehto` varchar(20) NOT NULL,
+  `test` varchar(50) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=614 DEFAULT CHARSET=latin1;
 
@@ -143,39 +144,6 @@ CREATE TABLE `laskutus_tuotteet` (
   `yksikko` varchar(20) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
-
-
-
-
-
-CREATE TABLE `laskutus_uusi` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `user_id` varchar(100) NOT NULL DEFAULT '0',
-  `erapaiva` varchar(50) NOT NULL,
-  `korkoprosentti` varchar(50) NOT NULL,
-  `asiakkaan_id` int(11) NOT NULL,
-  `asiakkaan_tiedot` text NOT NULL,
-  `viitenumero` varchar(50) NOT NULL,
-  `laskun_paivays` varchar(50) NOT NULL,
-  `tilinumero` varchar(100) NOT NULL,
-  `iban` varchar(50) NOT NULL,
-  `bic` varchar(20) NOT NULL,
-  `saaja` text NOT NULL,
-  `euro` varchar(10) NOT NULL,
-  `tuote` text NOT NULL,
-  `logon_polkku` varchar(255) NOT NULL,
-  `logon_korkeus` int(3) NOT NULL,
-  `tilanne` varchar(100) NOT NULL,
-  `ajanjakso` varchar(100) NOT NULL,
-  `maaramuoto` varchar(100) NOT NULL,
-  `maksettu` varchar(100) NOT NULL,
-  `y_tunnus` varchar(100) NOT NULL,
-  `saajan_puh` varchar(100) NOT NULL,
-  `saajan_email` varchar(100) NOT NULL,
-  `viivkorko_pvm` varchar(20) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=60 DEFAULT CHARSET=latin1;
 
 
 
