@@ -101,13 +101,27 @@
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'laskutus_kanava'); ?>
-		<?php echo $form->textField($model,'laskutus_kanava',array('class'=>'form-control')); ?>
+		<?php
+		$list = array(	'posti'=>Yii::t('main','Posti'),
+				'verkkolasku'=>Yii::t('main','Verkkolasku'),
+				'sahkoposti'=>Yii::t('main','Sähköposti')
+				);
+        	echo $form->dropDownList($model, 'laskutus_kanava', $list,
+		array('empty'=>'Valitse','class'=>'form-control'));
+        	?>
 		<?php echo $form->error($model,'laskutus_kanava'); ?>
 	</div>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'maksuehto'); ?>
-		<?php echo $form->textField($model,'maksuehto',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
+		<?php
+		$list = array(	'14'=>14,
+				7=>7,
+				5=>5
+				);
+        	echo $form->dropDownList($model, 'maksuehto', $list,
+		array('empty'=>'Valitse','class'=>'form-control'));
+        	?>
 		<?php echo $form->error($model,'maksuehto'); ?>
 	</div>
 	<?php endif; ?>

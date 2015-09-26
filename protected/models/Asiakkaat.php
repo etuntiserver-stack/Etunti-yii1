@@ -78,7 +78,7 @@ class Asiakkaat extends DB2ActiveRecord
 			'yhteyshenkilo' => 'Yhteyshenkilö',
 			'yrityksen_nimi' => 'Yrityksen Nimi',
 			'y_tunnus' => 'Y-Tunnus',
-			'osoite' => 'Työkohteen osoite',
+			'osoite' => 'Osoite',
 			'kaupunki' => 'Kaupunki',
 			'postinumero' => 'Postinumero',
 			'puhelin' => 'Puhelin',

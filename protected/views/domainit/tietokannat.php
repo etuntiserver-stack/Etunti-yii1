@@ -1,7 +1,7 @@
 <?php
 
 //Yii::app()->db->createCommand('CREATE DATABASE tutu')->query();
-//Yii::app()->db1->createCommand('SELECT * FROM tutu')->query(); 
+//Yii::app()->db1->createCommand('SELECT * FROM tutu')->query(); //test
 
   if( $_SERVER['REMOTE_ADDR'] == '::1' or $_SERVER['REMOTE_ADDR'] == '127.0.0.1' )
     $pref = '';
@@ -20,6 +20,7 @@
   <div class="form-group">
     <form action="#" class="form-inline" method="POST">
 	<input type="hidden" name="method" value="getStrukture">
+	<input type="hidden" name="domain" value="defdb">
 	<input type="submit" class="btn btn-success" value="<?php echo Yii::t('main', 'GET defdb strukture'); ?>">
     </form>
   </div>
@@ -40,13 +41,13 @@
 <?php if(isset($_POST['method']) and $_POST['method'] == 'getStrukture') : ?>
 <?php
 
-    Yii::app()->db1->connectionString = 'mysql:host=localhost;dbname='.$pref.'defdb';
-    Yii::app()->db1->setActive(false);
 
+    Yii::app()->db1->setActive(false);
+    Yii::app()->db1->connectionString = 'mysql:host=localhost;dbname='.$pref.'defdb';
     if( $_SERVER['REMOTE_ADDR'] != '::1' and $_SERVER['REMOTE_ADDR'] != '127.0.0.1' )
     {
-      Yii::app()->db1->username = 'estromfi_defdb';
-      Yii::app()->db1->username = 'KristinA1';
+      Yii::app()->db1->username = $pref.'defdb';
+      Yii::app()->db1->password = 'KristinA1';
     }
     Yii::app()->db1->setActive(true);
 
@@ -94,7 +95,7 @@
 <br>
 <div class="">
 <legend>
-<h2>COMPARE COLUMNS FROM defdb BASE</h2>
+<h2>SARAKKEEN VERTAILLU DEFDB KANNASTA</h2>
 </legend>
 <?php
 
@@ -106,15 +107,9 @@
 
 		<form class="form-group" action="#" method="POST">
 		<input type="hidden" name="compare" value="'.$defdb.'">
-		<input class="btn btn-success btn-group" type="submit" value="'.$end.' >> CHECK">
+		<input class="btn btn-success btn-group" type="submit" value="TARKISTA">
 		</form>
-
-		<form class="form-group" action="#" method="POST">
-		<input type="hidden" name="compare" value="'.$defdb.'">
-		<input type="hidden" name="insert" value="true">
-		<input class="btn btn-danger btn-group" type="submit" value="'.$end.' >> INSERT">
-		</form>
-	 	</div> ';
+		';
   }
 
 ?>
@@ -145,9 +140,9 @@ function arrayRecursiveDiff($aArray1, $aArray2) {
   return $aReturn;
 } 
 
-
+$insert = false;
 $domain = '';
-$list = Domainit::model()->findAll();
+$list = Domainit::model()->findAll(" domain!='defdb' ");
 foreach($list as $d)
 {
 
@@ -157,7 +152,7 @@ foreach($list as $d)
         if( $_SERVER['REMOTE_ADDR'] != '::1' and $_SERVER['REMOTE_ADDR'] != '127.0.0.1' )
         {
       	    Yii::app()->db1->username = 'estromfi_defdb';
-            Yii::app()->db1->username = 'KristinA1';
+            Yii::app()->db1->password = 'KristinA1';
     	}
 	Yii::app()->db1->setActive(true);
 	
@@ -174,7 +169,7 @@ foreach($list as $d)
         if( $_SERVER['REMOTE_ADDR'] != '::1' and $_SERVER['REMOTE_ADDR'] != '127.0.0.1' )
         {
       	    Yii::app()->db1->username = $pref.$d->domain;
-            Yii::app()->db1->username = 'KristinA1';
+            Yii::app()->db1->password = 'KristinA1';
     	}
 	Yii::app()->db1->setActive(true);
 	
@@ -193,12 +188,16 @@ foreach($list as $d)
 	  $tb = '';
 	    foreach($result as $k=>$v)
 	    {
+		echo $k."\n";
+		print_r($v);
 
 		  foreach($v as $field)
 		  {
+
 		    if(isset($field['Field']) and !empty($field['Field']))
   		    {
 
+			$insert = true;
 		    	$tb = "alter table $k add ";
 		    	$tb .= $field['Field'].' '.$field['Type'];
 
@@ -225,15 +224,23 @@ foreach($list as $d)
 		 		Yii::app()->db1->createCommand($return)->query();
 			*/
 
-		    	print_r($field);
+		    	
 			echo $tb."\n";
 
-			if(isset($_POST['insert']) )
+			if(isset($_POST['insert']) 
+				and $_POST['domainForInsert'] != 'kaikki' 
+				and $_POST['domainForInsert'] == $d->domain)
+			{
+		    		Yii::app()->db1->createCommand($tb)->query();
+				$this->redirect('tietokannat');
+			} 
+
+			if(isset($_POST['insert']) and $_POST['domainForInsert'] == 'kaikki')
 		    		Yii::app()->db1->createCommand($tb)->query();
 
-		    } else {
-		    	print_r($field);
-		    }		
+
+		    } 
+	
 		  }
 	    }
 
@@ -245,7 +252,23 @@ foreach($list as $d)
   
 }
 
+if($insert){
+	echo '<BR>
+		<form class="form-inline" action="#" method="POST">';
 
+		echo '<select name="domainForInsert" class="form-control">';
+		echo '<option value="kaikki">Kaikki</option>';
+		foreach($list as $d)
+		echo '<option value="'.$d->domain.'">'.$d->domain.'</option>';
+		echo '</select>';
+
+	echo '
+		<input type="hidden" name="compare" value="'.$defdb.'">
+		<input type="hidden" name="insert" value="true">
+		<input class="btn btn-danger btn-group" type="submit" value="'.$end.' >> INSERT">
+		</form>
+	 	</div> ';
+}
 
 ?>
 <?php endif; ?>

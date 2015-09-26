@@ -7,11 +7,12 @@ $this->breadcrumbs=array(
 	Yii::t('main', 'Hallinta'),
 );
 
+/*
 $this->menu=array(
 	array('label'=>Yii::t('main', 'Lista asiakas'), 'url'=>array('index')),
 	array('label'=>Yii::t('main', 'Luo asiakas'), 'url'=>array('create')),
 );
-
+*/
 Yii::app()->clientScript->registerScript('search', "
 $('.search-button').click(function(){
 	$('.search-form').toggle();
@@ -67,6 +68,9 @@ echo '
 
 
 <legend>
+   <div class="pull-right">
+     <?php echo CHtml::link(' +','/index.php/asiakkaat/create',array('target'=>'_blank','class'=>'btn btn-default glyphicon glyphicon-user')); ?>
+   </div>
 <h1> <?php echo Yii::t('main', 'ASIAKKAAT'); ?> <i class="glyphicon glyphicon-user"></i></h1>
 </legend>
 
