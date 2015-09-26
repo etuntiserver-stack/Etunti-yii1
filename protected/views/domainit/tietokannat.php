@@ -1,7 +1,7 @@
 <?php
 
 //Yii::app()->db->createCommand('CREATE DATABASE tutu')->query();
-//Yii::app()->db1->createCommand('SELECT * FROM tutu')->query();
+//Yii::app()->db1->createCommand('SELECT * FROM tutu')->query(); test
 ?>
 
 <legend>
