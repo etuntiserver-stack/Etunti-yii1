@@ -2,6 +2,12 @@
 
 //Yii::app()->db->createCommand('CREATE DATABASE tutu')->query();
 //Yii::app()->db1->createCommand('SELECT * FROM tutu')->query(); 
+
+  if( $_SERVER['REMOTE_ADDR'] == '::1' or $_SERVER['REMOTE_ADDR'] == '127.0.0.1' )
+    $pref = '';
+  else
+    $pref = 'estromfi_';
+
 ?>
 
 <legend>
@@ -36,7 +42,7 @@
 
 
     Yii::app()->db1->setActive(false);
-    Yii::app()->db1->connectionString = 'mysql:host=localhost;dbname=defdb';
+    Yii::app()->db1->connectionString = 'mysql:host=localhost;dbname='.$pref.'defdb';
     if( $_SERVER['REMOTE_ADDR'] != '::1' and $_SERVER['REMOTE_ADDR'] != '127.0.0.1' )
     {
       Yii::app()->db1->username = 'estromfi';
@@ -145,16 +151,9 @@ $list = Domainit::model()->findAll();
 foreach($list as $d)
 {
 
-  if( $_SERVER['REMOTE_ADDR'] == '::1' or $_SERVER['REMOTE_ADDR'] == '127.0.0.1' )
-    $domain = $d->domain;
-  else
-    $domain = 'estromfi_'.$d->domain;
-
-  if($domain != 'defdb' and !empty($domain))
-  {
 
 	Yii::app()->db1->setActive(false);
-	Yii::app()->db1->connectionString = 'mysql:host=localhost;dbname=defdb';
+	Yii::app()->db1->connectionString = 'mysql:host=localhost;dbname='.$pref.'defdb';
         if( $_SERVER['REMOTE_ADDR'] != '::1' and $_SERVER['REMOTE_ADDR'] != '127.0.0.1' )
         {
       	    Yii::app()->db1->username = 'estromfi';
@@ -171,7 +170,7 @@ foreach($list as $d)
 	
 	
 	Yii::app()->db1->setActive(false);
-	Yii::app()->db1->connectionString = 'mysql:host=localhost;dbname='.$domain;
+	Yii::app()->db1->connectionString = 'mysql:host=localhost;dbname='.$pref.$d->domain;
         if( $_SERVER['REMOTE_ADDR'] != '::1' and $_SERVER['REMOTE_ADDR'] != '127.0.0.1' )
         {
       	    Yii::app()->db1->username = 'estromfi';
@@ -243,7 +242,7 @@ foreach($list as $d)
 	  echo ' OK<hr>';
 	}
 
-  }
+  
 }
 
 
