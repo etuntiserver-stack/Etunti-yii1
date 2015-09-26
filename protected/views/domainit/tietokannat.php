@@ -45,8 +45,8 @@
     Yii::app()->db1->connectionString = 'mysql:host=localhost;dbname='.$pref.'defdb';
     if( $_SERVER['REMOTE_ADDR'] != '::1' and $_SERVER['REMOTE_ADDR'] != '127.0.0.1' )
     {
-      Yii::app()->db1->username = 'estromfi';
-      Yii::app()->db1->username = 'Estrom2016!';
+      Yii::app()->db1->username = 'estromfi_defdb';
+      Yii::app()->db1->username = 'KristinA1';
     }
     Yii::app()->db1->setActive(true);
 
@@ -156,8 +156,8 @@ foreach($list as $d)
 	Yii::app()->db1->connectionString = 'mysql:host=localhost;dbname='.$pref.'defdb';
         if( $_SERVER['REMOTE_ADDR'] != '::1' and $_SERVER['REMOTE_ADDR'] != '127.0.0.1' )
         {
-      	    Yii::app()->db1->username = 'estromfi';
-            Yii::app()->db1->username = 'Estrom2016!';
+      	    Yii::app()->db1->username = 'estromfi_defdb';
+            Yii::app()->db1->username = 'KristinA1';
     	}
 	Yii::app()->db1->setActive(true);
 	
@@ -173,8 +173,8 @@ foreach($list as $d)
 	Yii::app()->db1->connectionString = 'mysql:host=localhost;dbname='.$pref.$d->domain;
         if( $_SERVER['REMOTE_ADDR'] != '::1' and $_SERVER['REMOTE_ADDR'] != '127.0.0.1' )
         {
-      	    Yii::app()->db1->username = 'estromfi';
-            Yii::app()->db1->username = 'Estrom2016!';
+      	    Yii::app()->db1->username = $pref.$d->domain;
+            Yii::app()->db1->username = 'KristinA1';
     	}
 	Yii::app()->db1->setActive(true);
 	
