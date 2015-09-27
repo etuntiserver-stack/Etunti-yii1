@@ -23,11 +23,11 @@ class LaskuController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','etsikohde'),
+				'actions'=>array('admin','delete','create','update','index','view','etsikohde','etsiasiakas','etsisaaja','luoKohteista','tr_rivit','tr_rivitkk','lasku_pdf'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','etsikohde'),
+				'actions'=>array('admin','delete','create','update','index','view','etsikohde','etsiasiakas','etsisaaja','luoKohteista','tr_rivit','tr_rivitkk','lasku_pdf'),
                 		'message'=>Yii::t('main', 'Tämä TASO ei kuuluu teille'),
 			),
 			array('deny',  // deny all users
@@ -55,6 +55,113 @@ class LaskuController extends Controller
 		}
 	}
 
+	protected function num($val){
+	    if($val > 0)
+		return  number_format((float)$val/3600, 2, '.', '');
+	}
+
+	public function actionLasku_pdf($id)
+	{
+
+		$lasku=$this->loadModel($id);
+		$laskunRivit=LaskunRivit::model()->findAll("lid='".$id."'");
+		$asetukset=Asetukset::model()->find("id=1");
+		$firmanTiedot=FirmanTiedot::model()->find("id=1");
+
+
+	          $html2pdf = Yii::app()->ePdf->HTML2PDF('P', 'A4', 'en');
+		  $html2pdf->setDefaultFont('Arial');
+	          $html2pdf->WriteHTML($this->renderPartial('lasku_pdf', 
+			array(
+			'lasku'=>$lasku,
+			'asetukset'=>$asetukset,
+			'laskunRivit'=>$laskunRivit,
+			'yritys'=>$firmanTiedot,
+			),true));
+	          $html2pdf->Output();
+
+/*
+		$this->render('lasku_pdf', 
+			array(
+			'lasku'=>$lasku,
+			'asetukset'=>$asetukset,
+			'laskunRivit'=>$laskunRivit,
+			'yritys'=>$firmanTiedot,
+			));
+*/
+	}
+
+	public function actionTr_rivitkk($asiakas)
+	{
+
+		$hintaForTunti 	= $_POST['hintaForTunti'];
+		$palvelu 	= $_POST['palvelu'];
+		$from 		= $_POST['from'];
+		$to 		= $_POST['to'];
+
+		$this->renderPartial('tr_rivitkk',array(
+			'from'=>$from,
+			'to'=>$to,
+			'asiakas'=>$asiakas,
+			'palvelu'=>$palvelu,
+			'hintaForTunti'=>$hintaForTunti,
+		));
+	}
+
+	public function actionTr_rivit($num,$id)
+	{
+
+		$kpl 		= $_POST['kpl'];
+		$lt 		= $_POST['lt'];
+		$from 		= $_POST['from'];
+		$to 		= $_POST['to'];
+
+		$this->renderPartial('tr_rivit',array(
+			'from'=>$from,
+			'to'=>$to,
+			'num'=>$num,
+			'kohde'=>$id,
+			'kpl'=>$kpl,
+			'lt'=>$lt,
+		));
+	}
+
+	public function actionLuoKohteista($id)
+	{
+
+	function num($val){
+	    if($val > 0)
+		return  number_format((float)$val/3600, 2, '.', '');
+	}
+
+       		$criteria = new CDbCriteria();
+		$criteria->select = "
+		SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s')))) as t_tunnit ";
+		$criteria->condition = " 
+		kohdenID = '".$id."'
+		and DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
+		BETWEEN 
+		'".date("Y-m-d",strtotime($_POST['from']))."' AND '".date("Y-m-d",strtotime($_POST['to']))."'
+		AND status='3'
+		AND id NOT IN (SELECT kid FROM sivexkuitti) ";
+		$tot = Toteutuneet::model()->find($criteria); 
+	
+	
+	       	$criteria = new CDbCriteria();
+		$criteria->select = "
+		SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s')))) as l_tunnit ";
+		$criteria->condition = "
+		kohdenID = '".$id."'
+		and DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
+		BETWEEN 
+		'".date("Y-m-d",strtotime($_POST['from']))."' AND '".date("Y-m-d",strtotime($_POST['to']))."'
+		AND status='3'
+		AND id NOT IN (SELECT kid FROM sivexkuitti_repaired) ";	
+		$lu = Mobile::model()->find($criteria); 
+	
+		echo num($lu->l_tunnit+$tot->t_tunnit);
+
+	}
 
 	public function actionEtsikohde($id)
 	{
@@ -65,22 +172,52 @@ class LaskuController extends Controller
 		      style: 'btn-default',
 		      //size: 4
 		});
-
+		/*
 		$('.selectpicker').on('change', function(){
 			$(".tyyppi").show('slow');
 			$("#kohteistaRivit").val($(this).val());
 		});
+		*/
 	  });
 	</script>
 	<?php
 		$k = Kohteet::model()->findAll(" asiakas_id='".$id."' ");
-		$body = '<label>'.Yii::t('main','Asiakkaan kohteet').'</label>';
-		$body .= '<select id="kohteet" class="form-control selectpicker" multiple title="Valitse kohteet">';
+		$body = '<b class="glyphicon glyphicon-home"></b>
+		<select id="kohteet" class="selectpicker" multiple title="Valitse kohteet">';
 		foreach($k as $a)
 		$body .= '<option value="'.$a->id.'">'.$a->osoite.'</option>';
 		$body .= '</select>';
 		echo $body;
 	}
+
+
+	public function actionEtsisaaja($id)
+	{
+		$a = FirmanTiedot::model()->findbypk($id);
+		echo $a->iban;
+	}
+
+	public function actionEtsiasiakas($id)
+	{
+
+		$a = Asiakkaat::model()->findbypk($id);
+		$k = Kohteet::model()->findAll(" asiakas_id='".$id."' ");
+
+		$tyyppi = '';
+		if(!empty($a->yrityksen_nimi))
+		$tyyppi = "yritys**".$a->yrityksen_nimi."**".$a->y_tunnus;
+
+		if(empty($a->yrityksen_nimi) and !empty($a->yhteyshenkilo))
+		$tyyppi = "henkilo**".$a->yhteyshenkilo;
+
+		$kodeOn = 0;
+		if(isset($k[0]))
+		$kodeOn = 1;
+
+
+		echo $a->laskutus_kanava."//".$a->maksuehto."//".$tyyppi."//".$a->osoite."//".$a->postinumero."//".$a->kaupunki."//".$a->yhteyshenkilo."//".$a->puhelin."//".$kodeOn;
+	}
+
 
 	public function actionView($id)
 	{
@@ -89,10 +226,7 @@ class LaskuController extends Controller
 		));
 	}
 
-	public function actionCreate()
-	{
-
-	function yksikkot($row){
+	protected function yksikkot($row){
 		$body = '';
 		if($row)
 		$body .= '<option value="'.$row.'">'.$row.' kpl</option>';
@@ -106,7 +240,8 @@ class LaskuController extends Controller
 		';
 		return $body;
 	}
-	function alv($row){
+
+	protected function alv($row){
 		$body = '';
 		if($row)
 		$body .= '<option value="'.$row.'">'.$row.' %</option>';
@@ -117,6 +252,9 @@ class LaskuController extends Controller
 		return $body;
 	}
 
+	public function actionCreate()
+	{
+
 		$model=new Lasku;
 
 		// Uncomment the following line if AJAX validation is needed
@@ -124,9 +262,30 @@ class LaskuController extends Controller
 
 		if(isset($_POST['Lasku']))
 		{
+
 			$model->attributes=$_POST['Lasku'];
-			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+			if($model->save()){
+
+			foreach($_POST['tkoodi'] as $key=>$val)
+			{
+				$lr = new LaskunRivit;
+				$lr->lid	=$model->id;
+				$lr->rivi	=$key;
+				$lr->tkoodi	=$_POST['tkoodi'][$key];
+				$lr->nimike	=$_POST['nimike'][$key];
+				$lr->kpl	=$_POST['kpl'][$key];
+				$lr->yksikko	=$_POST['yksikko'][$key];
+				$lr->hinta	=$_POST['hinta'][$key];
+				$lr->alv	=$_POST['alv'][$key];
+				$lr->hinta_alv	=$_POST['hinta_alv'][$key];
+				$lr->ale	=$_POST['ale'][$key];
+				$lr->veroton	=$_POST['veroton'][$key];
+				$lr->yhteensa_alv=$_POST['yhteensa_alv'][$key];
+				$lr->save();
+			}
+
+				$this->redirect(array('lasku/admin'));
+			}
 		}
 
 		$this->render('create',array(

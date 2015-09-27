@@ -50,6 +50,8 @@
  */
 class Lasku extends DB2ActiveRecord
 {
+
+
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
@@ -76,7 +78,7 @@ class Lasku extends DB2ActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('tyyppi, nimi, as_nro, osoite, postinumero, toimipaikka, laskutus, paivays, erapaiva, toimituspaiva, maksuehto, viitenumero, viivastyskorko, toimitusosoite', 'required'),
+			array('yid, tyyppi, as_nro, osoite, postinumero, toimipaikka, laskutus, paivays, erapaiva, maksuehto, toimitusosoite', 'required'),
 			array('lid, yid, as_nro', 'numerical', 'integerOnly'=>true),
 			array('tyyppi, yritys, nimi, sahkoposti, v_tunnus, yhteyshenkilo, nimitarkenne, t_yritys, t_nimi, t_osoite, t_toimipaikka, t_sahkoposti, toimitusosoite, viitenumero, saaja_iban, maksettu_euro, laskun_nimetys', 'length', 'max'=>100),
 			array('y_tunnus, toimipaikka, laskutus, puhelin, t_y_tunnus, t_puhelin, viivastyskorko, tilanne', 'length', 'max'=>50),
@@ -139,7 +141,7 @@ class Lasku extends DB2ActiveRecord
 			'toimituspaiva' => 'Toimituspaiva',
 			'maksuehto' => 'Maksuehto',
 			'viitenumero' => 'Viitenumero',
-			'viivastyskorko' => 'Viivastyskorko',
+			'viivastyskorko' => 'Viivästyskorko',
 			'yhteensa_total_verot' => 'Yhteensa Total Verot',
 			'yhteensa_total_veroton' => 'Yhteensa Total Veroton',
 			'yhteensa_total' => 'Yhteensa Total',
