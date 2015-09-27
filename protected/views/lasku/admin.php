@@ -51,6 +51,13 @@ $('.search-form form').submit(function(){
 
 	'columns'=>array(
 		'id',
+
+	array(
+        'header'  => 'PDF',
+        'value' => 'CHtml::link("", Yii::app()->createUrl("lasku/lasku_pdf",array("id"=>$data->id)),array("class"=>"glyphicon glyphicon-file"))',
+        'type'  => 'raw',
+    	),
+
 		//'lid',
 		//'yid',
 		'time',

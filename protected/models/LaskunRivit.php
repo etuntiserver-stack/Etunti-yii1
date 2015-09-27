@@ -47,9 +47,10 @@ class LaskunRivit extends DB2ActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('time, lid, rivi, tkoodi, nimike, kpl, yksikko, hinta, alv, hinta_alv, ale, veroton, yhteensa_alv', 'required'),
-			array('lid, rivi, tkoodi, kpl', 'numerical', 'integerOnly'=>true),
-			array('nimike', 'length', 'max'=>100),
+			array('lid, rivi, tkoodi, nimike, kpl, yksikko, hinta, alv, hinta_alv, ale, veroton, yhteensa_alv', 'required'),
+			array('lid, rivi', 'numerical', 'integerOnly'=>true),
+			array('nimike,kpl', 'length', 'max'=>100),
+			array('tkoodi', 'length', 'max'=>255),
 			array('yksikko, hinta, alv, hinta_alv, ale, veroton, yhteensa_alv', 'length', 'max'=>20),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.

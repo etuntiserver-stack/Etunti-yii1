@@ -123,7 +123,7 @@
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?php echo Yii::t('main', 'Laskutus'); ?> <span class="caret"></span></a>
           <ul class="dropdown-menu">
         	<li><?php echo CHtml::link(Yii::t('main', 'Laskut'),array('/lasku/admin')); ?></li>
-        	<li><?php echo CHtml::link(Yii::t('main', 'Tuotteet ja palvelut'),array('/site/index')); ?></li>
+        	<li><?php echo CHtml::link(Yii::t('main', 'Tuotteet ja palvelut'),array('/LaskutusTuotteet/admin')); ?></li>
           </ul>
         </li>
 	<?php endif; ?>
@@ -160,7 +160,7 @@
         <li class="dropdown">
           <a href="#" class="dropdown-toggle glyphicon glyphicon-cog" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> <span class="caret"></span></a>
           <ul class="dropdown-menu">
-
+        	<li><?php echo CHtml::link(Yii::t('main', 'Asetukset'),array('/asetukset/update',"id"=>"1")); ?></li>
         	<li><?php echo CHtml::link(Yii::t('main', 'Järjestelmänvalvojat'),array('/administrators/admin')); ?></li>
         	<li><?php echo CHtml::link(Yii::t('main', 'Valikkoot'),array('/valikkoot/admin')); ?></li>
         	<li><?php echo CHtml::link(Yii::t('main', 'Mobiili emulattori'),array('/site/mobemu')); ?></li>
