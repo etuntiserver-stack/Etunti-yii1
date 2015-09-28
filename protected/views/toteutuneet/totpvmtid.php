@@ -7,14 +7,11 @@ $did = date("Ymd",strtotime($pvm));
 	$tun = 0;
 
        	$criteria = new CDbCriteria();
-
 	$criteria->condition = " tid = '".$tid."' 
 	and DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = '".date("Y-m-d",strtotime($pvm))."' 
 	AND kid IN (SELECT id FROM sivexkuitti) ";
-
 	if(Yii::app()->session['Lounastauko'])
 	$criteria->addCondition (" status != '10' ");
-
 	if(Yii::app()->session['MATKA'])
 	$criteria->addCondition (" status != '2' ");
 
@@ -33,20 +30,17 @@ $did = date("Ymd",strtotime($pvm));
 
 
        	$criteria = new CDbCriteria();
-
 	$criteria->condition = " tid = '".$tid."' 
 	and DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = '".date("Y-m-d",strtotime($pvm))."' 
 	AND id NOT IN (SELECT kid FROM sivexkuitti_repaired) ";
-
 	if(Yii::app()->session['Lounastauko'])
 	$criteria->addCondition (" status != '10' ");
-
 	if(Yii::app()->session['MATKA'])
 	$criteria->addCondition (" status != '2' ");
 
-	$tv = Mobile::model()->findAll($criteria); 
+	$mob = Mobile::model()->findAll($criteria); 
 
-	foreach($tv as $tvVal){
+	foreach($mob as $tvVal){
 	   if($tvVal->id){
 	   $muutos = false;
 
