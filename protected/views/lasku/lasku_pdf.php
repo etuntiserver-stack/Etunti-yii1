@@ -43,9 +43,10 @@
 
 $html = '<style>
 html,body { 
-  width: 100%; height: 100%;
-  padding: 0;
-  //margin:10px;
+  width: 50px; height: 100%;
+  border:1px #333 solid;
+  padding: 4;
+  margin:4px;
   //font-family: DejaVu Sans, sans-serif; font-size: 10pt;
   color: #333;
   background: #ffffff;
@@ -99,17 +100,14 @@ embed {height:100%;width:100%}
 	$html .= '<TR><TD valign="top">';
 
 
-	$html .= '<TABLE width="650">';
-
+	$html .= '<TABLE>';
 	$html .= '<TR>';
-	$html .= '<TD width="400" style="padding: 10px;"><img src="'.$asetukset->logon_polkku.'" height="'.$asetukset->logon_korkeus.'"></TD>';
-	$html .= '<TD width="250" style="padding: 10px;"><b>'.$laskunNimetus.'</b></TD>';
+	$html .= '<TD  style="padding: 10px;"><img src="'.$asetukset->logon_polkku.'" height="'.$asetukset->logon_korkeus.'"></TD>';
+	$html .= '<TD  style="padding: 10px;"><b>'.$laskunNimetus.'</b></TD>';
 	$html .= '</TR>';
-
-
 	$html .= '<TR>';
 
-	$html .= '<TD width="400" height="1" valign="top" style="border-top:1px #333 solid;border-bottom:1px #333 solid;border-right:1px #333 solid;">';
+	$html .= '<TD height="1" valign="top" style="border-top:1px #333 solid;border-bottom:1px #333 solid;border-right:1px #333 solid;">';
 	$html .= '<div style="padding:10px 20px">';
 	$html .= '<BR>';
 	$html .= '<H3 class="asiakasKirje">';
@@ -121,30 +119,30 @@ embed {height:100%;width:100%}
 	$html .= '</div>';
 	$html .= '</TD>';
 
-	$html .= '<TD width="250" style="border-top:1px #333 solid;border-bottom:1px #333 solid;">';
-	$html .= '<TABLE width="250">';
+	$html .= '<TD style="border-top:1px #333 solid;border-bottom:1px #333 solid;">';
+	$html .= '<TABLE >';
 
-	$html .= '<TR><TD width="250" class="class10p">';
+	$html .= '<TR><TD  class="class10p">';
 	$html .= '<label>Laskun numero</label><BR>';
 	$html .= '<b class="class50p">'.$lasku->id.'</b>';
 	$html .= '</TD></TR>';
 
-	$html .= '<TR><TD width="250" class="class10p">';
+	$html .= '<TR><TD  class="class10p">';
 	$html .= '<label>Laskun päiväys</label><BR>';
 	$html .= '<b class="class50p">'.date("d.m.Y", strtotime($lasku->paivays)).'</b>';
 	$html .= '</TD></TR>';
 
-	$html .= '<TR><TD width="250" class="class10p">';
+	$html .= '<TR><TD  class="class10p">';
 	$html .= '<label>Eräpäivä</label><BR>';
 	$html .= '<b class="class50p">'.date("d.m.Y", strtotime($lasku->erapaiva)).'</b>';
 	$html .= '</TD></TR>';
 
-	$html .= '<TR><TD width="250" class="class10p">';
+	$html .= '<TR><TD  class="class10p">';
 	$html .= '<label>Viivästyskorko</label><BR>';
 	$html .= '<b class="class50p">'.$lasku->viivastyskorko.' %</b>';
 	$html .= '</TD></TR>';
 
-	$html .= '<TR><TD width="250" class="class10pNB">';
+	$html .= '<TR><TD  class="class10pNB">';
 	$html .= '<label>Viitenumero</label><BR>';
 	$html .= '<b class="class50p">'.$lasku->viitenumero.'</b>';
 	$html .= '</TD></TR>';
@@ -155,16 +153,13 @@ embed {height:100%;width:100%}
 	$html .= '</TR>';
 	$html .= '</TABLE>';
 
+	$html .= '</TD></TR>';
+	$html .= '</TABLE>';
 
-
-	$html .= '</TD></TR>
-	
-	<TR><TD width="650" valign="top" height="280">';
 
 	$html .= '<BR><BR>';
 
 	$html .= '<TABLE width="650" id="tuote">';
-	$html .= '<thead>';
 	$html .= '<TR>';
 	$html .= '<TH style="text-align:left">Tuote</TH>';
 	$html .= '<TH>KPL</TH>';
@@ -175,7 +170,7 @@ embed {height:100%;width:100%}
 	$html .= '<TH>ALV</TH>';
 	$html .= '<TH>Yhteensä</TH>';
 	$html .= '</TR>';
-	$html .= '</thead>';
+
 
 	$html .= '<tbody>';
 
@@ -232,7 +227,7 @@ embed {height:100%;width:100%}
 	  $html .= '<TR><TD align="left">Brutto</TD><TD align="left">'.$lasku->yhteensa_total.' &euro;</TD></TR>';
 	  $html .= '</TABLE>';
 	$html .= '</TD>';
-	$html .= '<TD width="250" valign="right">';
+	$html .= '<TD  valign="right">';
 	  $html .= '<TABLE width="100%" class="colapse1">';
 	  $html .= '<TR>';
 	  $html .= '<TD align="right">';
@@ -249,19 +244,16 @@ embed {height:100%;width:100%}
 
 
 
-	$html .= '</TD></TR>
-	
-	<TR><TD valign="bottom">';
 
 
 	$html .= '<TABLE width="650">';
 	$html .= '<TR>';
-	$html .= '<TD valign="top">';
+	$html .= '<TD width="400" valign="top">';
 	$html .= '<span>'.$yritys->tyonantaja.'<BR>';
 	$html .= $yritys->osoite.'<BR>';
 	$html .= $yritys->postinumero.' '.$yritys->postitoimipaikka.'</span>';
 	$html .= '</TD>';
-	$html .= '<TD valign="top">';
+	$html .= '<TD  valign="top">';
 	$html .= '<span>Y-tunnus: '.$yritys->y_tunnus.'<BR>';
 	$html .= $yritys->puhelin.'<BR>';
 	$html .= $yritys->sahkoposti.'<BR>';
@@ -386,7 +378,7 @@ embed {height:100%;width:100%}
 	$html .= '</TABLE>';
 
 
-	$html .= '</TD></TR></TABLE>';
+
 
 
 
