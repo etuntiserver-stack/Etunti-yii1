@@ -168,13 +168,13 @@ class ToteutuneetController extends Controller
 		if(isset($_POST['Toteutuneet']))
 		{
 
-
 			$_POST['Toteutuneet']['aloitan'] = str_replace("T"," ",$_POST['Toteutuneet']['aloitan']);
 			$_POST['Toteutuneet']['loppui'] = str_replace("T"," ",$_POST['Toteutuneet']['loppui']);
 
 			$model->attributes=$_POST['Toteutuneet'];
 			$model->aloitan = date("d.m.Y H:i:s",strtotime($_POST['Toteutuneet']['aloitan']));
 			$model->loppui = date("d.m.Y H:i:s",strtotime($_POST['Toteutuneet']['loppui']));
+
 
 			if($model->save()){
 			   $did = date("Ymd",strtotime($model->aloitan));
