@@ -13,6 +13,8 @@ $this->menu=array(
 );
 ?>
 
-<h1>Create Lisatyotunnit</h1>
+<legend>
+<h1> <?php echo Yii::t('main', 'Lisätyötunnin luominen'); ?> <i class="glyphicon glyphicon-ok"></i></h1>
+</legend>
 
 <?php echo $this->renderPartial('_form', array('model'=>$model)); ?>
