@@ -34,7 +34,7 @@ class MobileController extends Controller
 		return array(
 
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','index_a','view','updatetime','showkohteet','yhteenveto','kyhteenveto','yhteenveto_m','historia','poistaKohde','total_suunniteltu','total_toteutu','total_luettu','kesto','index_ajax','raportit'),
+				'actions'=>array('admin', 'delete', 'create', 'update', 'index', 'index_a', 'view', 'updatetime', 'showkohteet', 'yhteenveto', 'kyhteenveto', 'yhteenveto_m', 'historia', 'poistaKohde', 'total_suunniteltu', 'total_toteutu', 'total_luettu', 'kesto', 'index_ajax', 'raportit', 'palkkataulukko', 'tidfromtomatkat'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -652,6 +652,72 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		return sprintf('%02d:%02d', $val/3600, ($val % 3600)/60);
 	}
 
+	protected function num($val){
+	    if($val > 0)
+		return  number_format((float)$val/3600, 2, '.', '');
+	}
+
+
+	public function actionTidfromtomatkat($from,$to,$tid)
+	{
+		$this->renderPartial('palkkataulukko', array(
+		'from'=>$from,
+		'to'=>$to,
+		'tid'=>$tid
+		));
+	}
+
+
+	public function actionPalkkataulukko()
+	{
+
+
+		//unset(Yii::app()->session['Tekija']);
+		if(Yii::app()->request->getPost('Tekija'))
+		Yii::app()->session['Tekija'] = Yii::app()->request->getPost('Tekija');
+
+		if(Yii::app()->request->getPost('from'))
+		Yii::app()->session['from'] = date("Y-m-d",strtotime(Yii::app()->request->getPost('from')));
+
+		if(Yii::app()->request->getPost('to'))
+		Yii::app()->session['to'] = date("Y-m-d",strtotime(Yii::app()->request->getPost('to')));
+		
+
+       		$criteria = new CDbCriteria();
+        	$criteria->order = " SUBSTR(LTRIM(tekijan_nimi), LOCATE(' ',LTRIM(tekijan_nimi))) "; 
+        	$criteria->group = 'tid';
+
+		if(Yii::app()->session['Tekija']){
+		  if(count(Yii::app()->session['Tekija']) > 1)
+		    $ids = implode(",",Yii::app()->session['Tekija']);
+		  else
+		    $ids = Yii::app()->session['Tekija'][0];
+
+	        $criteria->addCondition ('tid IN ('.$ids.') ');
+		}
+
+
+		if(Yii::app()->session['from'] and Yii::app()->session['to'])
+	        $criteria->addCondition ("DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."' ");
+
+		$dataProvider=new CActiveDataProvider('Mobile', array(
+			'criteria'=>$criteria,
+			'pagination'=>false
+		));
+
+		  $model = Mobile::model()->findAll($criteria);
+
+		if(Yii::app()->request->getPost('tulosta'))
+		{
+	          $html2pdf = Yii::app()->ePdf->HTML2PDF('P', 'A4', 'en');
+		  $html2pdf->setDefaultFont('Arial');
+	          $html2pdf->WriteHTML($this->renderPartial('tulosta_palkkataulukko', array('model' => $model),true));
+	          $html2pdf->Output();
+		} else {
+		  //$dataProvider->pagination->pageSize = 50;
+		  $this->render('palkkataulukko', array('model' => $model));
+		}
+	}
 
 	public function actionYhteenveto()
 	{

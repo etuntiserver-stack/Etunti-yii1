@@ -134,7 +134,7 @@ class ToteutuneetController extends Controller
 
 	public function actionDeletebyajax()
 	{
-		Toteutuneet::model()->deleteByPk($_POST['id']);
+		Toteutuneet::model()->deleteAll(" kid='".$_POST['id']."' ");
 
 	}
 
@@ -307,7 +307,7 @@ class ToteutuneetController extends Controller
 
         	//$criteria->condition = " l_loppu = '' and l_alku = '' ";
 
-        	$criteria->order = 'id DESC';
+        	$criteria->order = "DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'),'%Y%m%d')";
         	$criteria->group = "DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'),'%Y%m%d')";
 
 		if(isset($explTekija[0]))
