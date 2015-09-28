@@ -12,14 +12,14 @@
 		$al		= '';
 		$lop		= '';
 		$total_sunniteltu = 0;
+		$total 		= 0;
 
        		$criteria = new CDbCriteria();
         	$criteria->select = "
 		TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s'))) as l_tunnit,
 		t.id,t.aloitan,t.loppui";
 
-        	$criteria->condition = "  status = '2' and tid = '".$data->tid."' and aloitan !='' and loppui !='' ";
-
+        	$criteria->condition = "  tid = '".$data->tid."' and aloitan !='' and loppui !='' and status=3 ";
 		if(Yii::app()->session['from'] and Yii::app()->session['to'])
 	        $criteria->addCondition ("DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."' ");
 
@@ -58,20 +58,35 @@
 			$tp = $al[0];
 		}
 
+		if($total_l != 0)
+		$total = $this->sprint($total_l).'<br>('.$this->num($total_l).')';
 
-		$total = $total_l;
+		if($totalIlta != 0)
+		$totalIlta = $this->sprint($totalIlta).'<br>('.$this->num($totalIlta).')';
+
+		if($totalYo != 0)
+		$totalYo = $this->sprint($totalYo).'<br>('.$this->num($totalYo).')';
+
+		if($totalSu != 0)
+		$totalSu = $this->sprint($totalSu).'<br>('.$this->num($totalSu).')';
+
+
 
 ?>
 
 <tr>
 
 	<td><?php echo CHtml::encode($data->tekijan_nimi); ?></td>
-	<td><?php echo $this->sprint($data->l_tunnit); ?></td>
-	<td><?php echo $this->sprint($total); ?></td>
 	<td><?php echo $totalTp; ?></td>
-	<td><?php echo $this->sprint($totalIlta); ?></td>
-	<td><?php echo $this->sprint($totalYo); ?></td>
-	<td><?php echo $this->sprint($totalSu); ?></td>
+	<td><?php $this->renderPartial('//mobile/tidfromtomatkat',array(
+		'from'=>Yii::app()->session['from'],
+		'to'=>Yii::app()->session['to'],
+		'tid'=>$data->tid
+		)); ?></td>
+	<td><?php echo $total; ?></td>
+	<td><?php echo $totalIlta; ?></td>
+	<td><?php echo $totalYo; ?></td>
+	<td><?php echo $totalSu; ?></td>
 </tr>
 
 	

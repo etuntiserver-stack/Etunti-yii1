@@ -11,15 +11,15 @@ $this->breadcrumbs=array(
 
 <legend>
 <button class="pull-right btn btn-info" data-toggle="collapse"  data-target="#haku"><?php echo Yii::t('main', 'Haku'); ?> <b class="caret"></b></button>
-<h1> <?php echo Yii::t('main', 'YHTEENVETO TUNNIT'); ?> <i class="glyphicon glyphicon-time"></i></h1>
+<h1> <?php echo Yii::t('main', 'PALKKATAULUKKO'); ?> <i class="glyphicon glyphicon-ok"></i></h1>
 </legend>
 
 <div class="row collapse" id="haku">
   <form action="#" id="yhtveto" class="form-inline" method="POST">
   <input type="hidden" name="yhtvetoform">
   <div class="col-md-12">
-   <a href="#" id="deselAll" class="btn btn-default glyphicon glyphicon-remove-circle"></a>
-   <a href="#" id="selAll" class="btn btn-default glyphicon glyphicon-ok-circle"></a>
+   <a href="#" id="deselAll" class="btn btn-default glyphicon glyphicon-minus"></a>
+   <a href="#" id="selAll" class="btn btn-default glyphicon glyphicon-plus"></a>
    <?php
     $list = CHtml::listData(Mobile::model()->findAll(array('order' => 'tekijan_nimi','group'=>'tekijan_nimi')), 'tid', 'tekijan_nimi');
 
@@ -33,18 +33,6 @@ $this->breadcrumbs=array(
        	 echo '<option value="'.$key.'">'.$val.'</option>';
      }
     }
-    echo '</select>';
-   ?>
-
-   <?php
-    $lounas = '';
-    $lounas = ( isset(Yii::app()->session['Lounastauko']))  ? 'selected' : '';
-    $matka = '';
-    $matka = ( isset(Yii::app()->session['MATKA']))  ? 'selected' : '';
-
-    echo '<select name="ilman[]" class="selectpicker ilman"  multiple="multiple"  title="Ei lasketa...">';
-    echo '<option value="Lounastauko" '.$lounas.'>Lounastauko</option>';
-    echo '<option value="MATKA" '.$matka.'>MATKA</option>';
     echo '</select>';
    ?>
    <b class="glyphicon glyphicon-calendar"></b>
@@ -73,17 +61,9 @@ $this->breadcrumbs=array(
   <thead>
   <tr>
   <th><?php echo Yii::t('main', 'Työntekijä'); ?></th>
-
-  <?php
-  $tas = explode(",",Yii::app()->user->adminPaketti);
-  if(in_array('2',$tas)) : 
-  ?>
-  <th><?php echo Yii::t('main', 'Suunniteltu tunnit'); ?></th>
-  <?php endif; ?>
-
-  <th><?php echo Yii::t('main', 'Luetut'); ?></th>
-  <th><?php echo Yii::t('main', 'Toteutuneet'); ?></th>
   <th><?php echo Yii::t('main', 'Työpäiviä'); ?></th>
+  <th><?php echo Yii::t('main', 'Matkat'); ?></th>
+  <th><?php echo Yii::t('main', 'Työtunnit'); ?></th>
   <th><?php echo Yii::t('main', 'Ilta'); ?></th>
   <th><?php echo Yii::t('main', 'Yö'); ?></th>
   <th><?php echo Yii::t('main', 'Su'); ?></th>
@@ -93,7 +73,7 @@ $this->breadcrumbs=array(
   <?php 
   foreach($model as $data)
   {
-	$this->renderPartial('_yhteenveto',array('data'=>$data));
+	$this->renderPartial('_palkkataulukko',array('data'=>$data));
   }
   ?>
 

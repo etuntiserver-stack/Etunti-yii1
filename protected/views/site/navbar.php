@@ -69,6 +69,8 @@
         	<li><?php echo CHtml::link(Yii::t('main', 'Yhteenveto kohteet'),array('/mobile/kyhteenveto')); ?></li>
         	<li><?php echo CHtml::link(Yii::t('main', 'Yhteenveto matkat'),array('/mobile/yhteenveto_m')); ?></li>
 	        <li role="separator" class="divider"></li>
+        	<li><?php echo CHtml::link(Yii::t('main', 'Palkkataulukko'),array('/mobile/palkkataulukko')); ?></li>
+	        <li role="separator" class="divider"></li>
         	<li><?php echo CHtml::link(Yii::t('main', 'Kuukauden tunnit'),array('/toteutuneet/kk')); ?></li>
 	        <li role="separator" class="divider"></li>
         	<li><?php echo CHtml::link(Yii::t('main', 'Raportit tunneista'),array('/mobile/raportit')); ?></li>

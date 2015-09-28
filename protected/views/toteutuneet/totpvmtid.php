@@ -10,7 +10,7 @@ $did = date("Ymd",strtotime($pvm));
 
 	$criteria->condition = " tid = '".$tid."' 
 	and DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = '".date("Y-m-d",strtotime($pvm))."' 
-	AND id NOT IN (SELECT kid FROM sivexkuitti) ";
+	AND kid IN (SELECT id FROM sivexkuitti) ";
 
 	if(Yii::app()->session['Lounastauko'])
 	$criteria->addCondition (" status != '10' ");
@@ -24,7 +24,7 @@ $did = date("Ymd",strtotime($pvm));
 	   if($tvVal->id){
 	   $muutos = true;
 
-	   $get[strtotime($tvVal->aloitan)] = $tvVal->id."//".$tvVal->aloitan."//".$tvVal->loppui."//".$tvVal->kohde_kannasta."//".$did."//".$tid."//".$muutos."//".(strtotime($tvVal->loppui)-strtotime($tvVal->aloitan));
+	   $get[strtotime($tvVal->aloitan)] = $tvVal->kid."//".$tvVal->aloitan."//".$tvVal->loppui."//".$tvVal->kohde_kannasta."//".$did."//".$tid."//".$muutos."//".(strtotime($tvVal->loppui)-strtotime($tvVal->aloitan));
 
 	   if(!empty($tvVal->aloitan) and !empty($tvVal->loppui) and $from == 'kk')
 	   $tun += strtotime($tvVal->loppui)-strtotime($tvVal->aloitan);
@@ -63,7 +63,7 @@ $did = date("Ymd",strtotime($pvm));
 
 	} else {
 
-		if(isset($get) and count($get) > 1)
+		if(isset($get) and count($get) > 0)
 		{
 		   ksort($get);
 	
@@ -72,7 +72,7 @@ $did = date("Ymd",strtotime($pvm));
 	
 		} else {
 	
-		      $this->renderPartial('al',array('str'=>$get[strtotime($tvVal->aloitan)]));
+		      //$this->renderPartial('al',array('str'=>$get[strtotime($tvVal->aloitan)]));
 		}
 
 	}
