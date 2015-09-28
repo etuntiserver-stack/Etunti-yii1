@@ -35,15 +35,8 @@ $this->breadcrumbs=array(
 
 	   $list = CHtml::listData(Mobile::model()->findAll($criteriaT), 'tid', 'tekijan_nimi');
 	   echo '<select name="tekija" id="nimi" class="form-control">';
+	   echo '<option value="kaikki">'.Yii::t('main', 'Kaikki työntekijät').'</option>';
 
-	    if(Yii::app()->session['tekija']){
-	       $explTekija = explode("//",Yii::app()->session['tekija']);
-	       echo '<option value="'.$explTekija[0].'//'.$explTekija[1].'">'.$explTekija[1].'</option>';
-	    } else {
-	       echo '<option value="kaikki">'.Yii::t('main', 'Kaikki työntekijät').'</option>';
-	    }
-
-       	   echo '<option value="kaikki">'.Yii::t('main', 'Kaikki').'</option>';
 	   foreach($list as $key=>$val)
 	   echo '<option value="'.$key.'//'.$val.'">'.$val.'</option>';
 
@@ -102,15 +95,8 @@ $this->breadcrumbs=array(
       	<?php
 	   $list = CHtml::listData(Mobile::model()->findAll($criteriaT), 'tid', 'tekijan_nimi');
 	   echo '<select name="tekija" id="nimi" class="form-control">';
+	   echo '<option value="kaikki">'.Yii::t('main', 'Kaikki työntekijät').'</option>';
 
-	    if(Yii::app()->session['tekija']){
-	       $explTekija = explode("//",Yii::app()->session['tekija']);
-	       echo '<option value="'.$explTekija[0].'//'.$explTekija[1].'">'.$explTekija[1].'</option>';
-	    } else {
-	       echo '<option value="kaikki">'.Yii::t('main', 'Kaikki työntekijät').'</option>';
-	    }
-
-       	   echo '<option value="kaikki">'.Yii::t('main', 'Kaikki').'</option>';
 	   foreach($list as $key=>$val)
 	   echo '<option value="'.$key.'//'.$val.'">'.$val.'</option>';
 

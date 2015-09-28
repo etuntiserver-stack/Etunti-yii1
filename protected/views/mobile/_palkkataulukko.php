@@ -72,21 +72,28 @@
 
 
 
+  $matka = $this->renderPartial('//mobile/tidfromtomatkat',array(
+		'from'=>Yii::app()->session['from'],
+		'to'=>Yii::app()->session['to'],
+		'tid'=>$data->tid
+		),true);
+
+		if($matka != 0)
+		$matka = $this->sprint($matka).'<br>('.$this->num($matka).')';
 ?>
 
 <tr>
 
 	<td><?php echo CHtml::encode($data->tekijan_nimi); ?></td>
 	<td><?php echo $totalTp; ?></td>
-	<td><?php $this->renderPartial('//mobile/tidfromtomatkat',array(
-		'from'=>Yii::app()->session['from'],
-		'to'=>Yii::app()->session['to'],
-		'tid'=>$data->tid
-		)); ?></td>
+	<td><?php echo $matka; ?></td>
 	<td><?php echo $total; ?></td>
 	<td><?php echo $totalIlta; ?></td>
 	<td><?php echo $totalYo; ?></td>
 	<td><?php echo $totalSu; ?></td>
+	<td><?php echo ''; ?></td>
+	<td><?php echo ''; ?></td>
+	<td><?php echo ''; ?></td>
 </tr>
 
 	

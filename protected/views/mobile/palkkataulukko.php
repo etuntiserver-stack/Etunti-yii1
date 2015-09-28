@@ -51,7 +51,18 @@ $this->breadcrumbs=array(
    </div>
    <!-- tulostus -->
 
+  <br><br>
+
+
+    <div class="form-inline">
+  	<?php echo CHtml::link(Yii::t('main', '+ Lisätyötunnit'),array('/lisatyotunnit/create'),array('target'=>'_blank','class'=>'btn btn-success')); ?>
+  	<?php echo CHtml::link(Yii::t('main', '+ Ennakko'),array('/ennakko/create'),array('target'=>'_blank','class'=>'btn btn-success')); ?>
+  	<?php echo CHtml::link(Yii::t('main', '+ Korvaukset'),array('/korvaukset/create'),array('target'=>'_blank','class'=>'btn btn-success')); ?>
+    </div>
+
+
   </div>
+
 </div>
 
 <br>
@@ -67,6 +78,9 @@ $this->breadcrumbs=array(
   <th><?php echo Yii::t('main', 'Ilta'); ?></th>
   <th><?php echo Yii::t('main', 'Yö'); ?></th>
   <th><?php echo Yii::t('main', 'Su'); ?></th>
+  <th><?php echo Yii::t('main', 'Korvaus'); ?></th>
+  <th><?php echo Yii::t('main', 'Lisätyötunnit'); ?></th>
+  <th><?php echo Yii::t('main', 'Ennakko'); ?></th>
   </tr>
   </thead>
 

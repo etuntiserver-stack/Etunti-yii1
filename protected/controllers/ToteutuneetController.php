@@ -134,7 +134,7 @@ class ToteutuneetController extends Controller
 
 	public function actionDeletebyajax()
 	{
-		Toteutuneet::model()->deleteAll(" kid='".$_POST['id']."' ");
+		Toteutuneet::model()->deletebypk($_POST['id']);
 
 	}
 
