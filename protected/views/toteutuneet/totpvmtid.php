@@ -21,7 +21,7 @@ $did = date("Ymd",strtotime($pvm));
 	   if($tvVal->id){
 	   $muutos = true;
 
-	   $get[strtotime($tvVal->aloitan)] = $tvVal->kid."//".$tvVal->aloitan."//".$tvVal->loppui."//".$tvVal->kohde_kannasta."//".$did."//".$tid."//".$muutos."//".(strtotime($tvVal->loppui)-strtotime($tvVal->aloitan));
+	   $get[strtotime($tvVal->aloitan)] = $tvVal->id."//".$tvVal->aloitan."//".$tvVal->loppui."//".$tvVal->kohde_kannasta."//".$did."//".$tid."//".$muutos."//".(strtotime($tvVal->loppui)-strtotime($tvVal->aloitan));
 
 	   if(!empty($tvVal->aloitan) and !empty($tvVal->loppui) and $from == 'kk')
 	   $tun += strtotime($tvVal->loppui)-strtotime($tvVal->aloitan);

@@ -17,9 +17,16 @@
 	}
 
 
-	$tot = Toteutuneet::model()->findAll("tid = '".$tid."' 
+       	$criteria = new CDbCriteria();
+	$criteria->condition = " tid = '".$tid."' 
 	and DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = '".date("Y-m-d",strtotime($pvm))."' 
-	AND kid IN (SELECT id FROM sivexkuitti) "); 
+	AND kid IN (SELECT id FROM sivexkuitti) ";
+	if(Yii::app()->session['Lounastauko'])
+	$criteria->addCondition (" status != '10' ");
+	if(Yii::app()->session['MATKA'])
+	$criteria->addCondition (" status != '2' ");
+
+	$tot = Toteutuneet::model()->findAll($criteria); 
 
 	foreach($tot as $tvVal){
 	   if($tvVal->id){
@@ -27,11 +34,18 @@
 	   }
 	}
 
-	$tv = Mobile::model()->findAll("tid = '".$tid."' 
+       	$criteria = new CDbCriteria();
+	$criteria->condition = " tid = '".$tid."' 
 	and DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = '".date("Y-m-d",strtotime($pvm))."' 
-	AND id NOT IN (SELECT kid FROM sivexkuitti_repaired) "); 
+	AND id NOT IN (SELECT kid FROM sivexkuitti_repaired) ";
+	if(Yii::app()->session['Lounastauko'])
+	$criteria->addCondition (" status != '10' ");
+	if(Yii::app()->session['MATKA'])
+	$criteria->addCondition (" status != '2' ");
 
-	foreach($tv as $tvVal){
+	$mob = Mobile::model()->findAll($criteria); 
+
+	foreach($mob as $tvVal){
 	   if($tvVal->id){
 	   $getTot += (strtotime($tvVal->loppui)-strtotime($tvVal->aloitan));
 	   }

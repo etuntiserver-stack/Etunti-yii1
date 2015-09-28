@@ -71,23 +71,10 @@ class MobileController extends Controller
 		function allSess(){
 
 
-			if(Yii::app()->request->getPost('tekija') == 'kaikki'){
-			unset(Yii::app()->session['tekija']);
-			unset(Yii::app()->session['tid']);
-			}
-			if(Yii::app()->request->getPost('tekija') and Yii::app()->request->getPost('tekija') != 'kaikki'){
-			$tekija = explode("//",Yii::app()->request->getPost('tekija'));
-			}
-
 			if(Yii::app()->request->getPost('kohteet') == 'kaikki')
 			unset(Yii::app()->session['kohteet']);
 			if(Yii::app()->request->getPost('kohteet') and Yii::app()->request->getPost('kohteet') != 'kaikki'){
 			Yii::app()->session['kohteet'] = Yii::app()->request->getPost('kohteet');
-			}
-
-			if(Yii::app()->session['tekija']){
-			   $explTekija = explode("//",Yii::app()->session['tekija']);
-			   Yii::app()->session['tid'] = $explTekija[0];
 			}
 
 			if(Yii::app()->request->getPost('from'))
@@ -113,8 +100,8 @@ class MobileController extends Controller
 		function allCrit($criteria){
 
 
-			if(!empty(Yii::app()->session['tid']))
-	        	$criteria->addCondition (" tid = '".Yii::app()->session['tid']."'");
+			if(Yii::app()->request->getPost('tekija') != 'kaikki')
+	        	$criteria->addCondition (" tid = '".Yii::app()->request->getPost('tekija')."'");
 
 			if(isset(Yii::app()->session['kohteet']) and Yii::app()->session['kohteet'] != 'kaikki')
 	        	$criteria->addCondition (" kohde_kannasta = '".Yii::app()->session['kohteet']."'");
