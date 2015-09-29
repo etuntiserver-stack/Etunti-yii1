@@ -11,10 +11,21 @@
   $tid = $explStr['5'];
   $muutos = $explStr['6'];
   $kesto = $explStr['7'];
+  $idKid = $explStr['8'];
+
+
+  $m = Mobile::model()->findbypk($idKid,array("select"=>"hyvaksytty"));
+
+
+    $chk[$rivi] = '';
+  if(!empty($m->hyvaksytty))
+  {
+    $chk[$rivi] = 'checked';
+  }
 
   if(isset($muutos) and $muutos == true){
     $mod = 'update';
-    $ap = ' <span class="link text-danger poistaTot" rivi="'.$rivi.'" for="'.$did.'_'.$tid.'">AP</span>';
+    $ap = ' <i class="link text-danger poistaTot" rivi="'.$rivi.'" for="'.$did.'_'.$tid.'">AP</i>';
   } else {
     $mod = 'create';
     $ap = '';
@@ -32,8 +43,13 @@
 	    $al = '';
 
 	   echo '
-	   <div id="'.$rivi.'_'.$did.'_'.$tid.'" class="fullRivi">';
-	   echo '&nbsp;<span class="link totRivi" mod="'.$mod.'" id="tot_'.$rivi.'">'.$al.' '.$kohde.'</span>'.$ap.'<br>
+	   <div id="'.$rivi.'_'.$did.'_'.$tid.'" class="fullRivi form-inline">';
+	   echo '&nbsp;
+		<span class="form-group">
+			<input type="checkbox" class="chckbxHyvaksynta" id="hyv_'.$rivi.'" '.$chk[$rivi].' kuka="'.Yii::app()->user->username.'///'.date('d.m.Y').'">&nbsp; 
+		</span><span class="form-group">
+			<i class="form-group link totRivi" mod="'.$mod.'" id="tot_'.$rivi.'">'.$al.' '.$kohde.'</i>'.$ap.'
+		</span>
 	   </div>';
 
 ?>

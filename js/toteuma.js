@@ -1,5 +1,34 @@
 $(document).ready(function(){
 
+
+$(".chckbxHyvaksynta").click(function(){
+  $(this).each(function() {
+      var label = $(this).prop("checked");
+      var kuka = $(this).attr("kuka");
+      var thisID = $(this).attr("id").split("_");
+      if(label)
+      {
+        $.ajax({
+           url: location.protocol + "//" + location.host + '/index.php/toteutuneet/hyvaksy?id='+thisID[1],
+           type: "POST",
+	   data: { hyvaksy : "kylla", kuka : kuka },
+           success: function(data){
+		console.log(data);
+           }
+        });
+      } else {
+        $.ajax({
+           url: location.protocol + "//" + location.host + '/index.php/toteutuneet/hyvaksy?id='+thisID[1],
+           type: "POST",
+	   data: { hyvaksy : "ei" },
+           success: function(data){
+		console.log(data);
+           }
+        });
+      }
+  });
+});
+
 $(".totRivi").click(function(){
 
 	var thisVal = $(this).attr("id").split("_");

@@ -11,7 +11,7 @@ $this->breadcrumbs=array(
 
 <legend>
 <button class="pull-right btn btn-info" data-toggle="collapse"  data-target="#haku"><?php echo Yii::t('main', 'Haku'); ?> <b class="caret"></b></button>
-<h1> <?php echo Yii::t('main', 'TOTEUMA'); ?> <i class="glyphicon glyphicon-time"></i></h1>
+<h1> <?php echo Yii::t('main', 'TUNTIEN HYVÄKSYNTÄ'); ?> <i class="glyphicon glyphicon-time"></i></h1>
 </legend>
 
 <div class="row collapse" id="haku">
