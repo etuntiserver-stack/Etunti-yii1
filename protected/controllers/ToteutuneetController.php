@@ -29,7 +29,7 @@ class ToteutuneetController extends Controller
 		return array(
 
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','luetutpvmtid','totpvmtid','al','yhteensapvm','deletebyajax','kk'),
+				'actions'=>array('admin','delete','create','update','index','view','luetutpvmtid','totpvmtid','al','yhteensapvm','deletebyajax','kk','hyvaksy'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -90,6 +90,22 @@ class ToteutuneetController extends Controller
 		$this->render('kk',array(
 			'dataProvider'=>$dataProvider,
 		));
+	}
+
+	public function actionHyvaksy($id){
+
+		$model=Mobile::model()->findbypk($id);
+		if($_POST['hyvaksy'] == 'kylla')
+		{
+		$model->hyvaksytty=$_POST['kuka'];
+		$model->save();
+		}
+
+		if($_POST['hyvaksy'] == 'ei')
+		{
+		$model->hyvaksytty="";
+		$model->save();
+		}
 	}
 
 	public function actionAl($str){
