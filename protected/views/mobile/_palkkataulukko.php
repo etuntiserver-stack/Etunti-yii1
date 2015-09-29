@@ -19,7 +19,7 @@
 		TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s'))) as l_tunnit,
 		t.id,t.aloitan,t.loppui";
 
-        	$criteria->condition = "  tid = '".$data->tid."' and aloitan !='' and loppui !='' and status=3 ";
+        	$criteria->condition = "  tid = '".$data->id."' and aloitan !='' and loppui !='' and status=3 ";
 		if(Yii::app()->session['from'] and Yii::app()->session['to'])
 	        $criteria->addCondition ("DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."' ");
 
@@ -75,7 +75,7 @@
   $matka = $this->renderPartial('//mobile/tidfromtomatkat',array(
 		'from'=>Yii::app()->session['from'],
 		'to'=>Yii::app()->session['to'],
-		'tid'=>$data->tid
+		'tid'=>$data->id
 		),true);
 
 		if($matka != 0)
@@ -84,25 +84,25 @@
   $lisatt = $this->renderPartial('//lisatyotunnit/tidfromto',array(
 		'from'=>Yii::app()->session['from'],
 		'to'=>Yii::app()->session['to'],
-		'tid'=>$data->tid
+		'tid'=>$data->id
 		),true);
 
   $korv = $this->renderPartial('//korvaukset/tidfromto',array(
 		'from'=>Yii::app()->session['from'],
 		'to'=>Yii::app()->session['to'],
-		'tid'=>$data->tid
+		'tid'=>$data->id
 		),true);
 
   $ennakko = $this->renderPartial('//ennakko/tidfromto',array(
 		'from'=>Yii::app()->session['from'],
 		'to'=>Yii::app()->session['to'],
-		'tid'=>$data->tid
+		'tid'=>$data->id
 		),true);
 ?>
 
 <tr>
 
-	<td><?php echo CHtml::encode($data->tekijan_nimi); ?></td>
+	<td class="tulostus_tekija"><?php echo CHtml::encode($data->tekijan_nimi); ?></td>
 	<td><?php echo $totalTp; ?></td>
 	<td><?php echo $matka; ?></td>
 	<td><?php echo $total; ?></td>
