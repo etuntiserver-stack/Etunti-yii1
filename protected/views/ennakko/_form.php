@@ -103,13 +103,13 @@ $('#ennakko-form').on('submit',function(e) {
      url: location.protocol + "//" + location.host + '/index.php/ennakko/create',
      data:$(this).serialize(),
      type:'POST',
-     info:function(data){
+     success:function(data){
     	console.log(data);
-	setTimeout(function(){document.location.href = location.protocol + "//" + location.host + '/index.php/mobile/palkkataulukko';},500);
+	setTimeout(function(){document.location.href = "palkkataulukko";},500);
 	return false;
      },
      error:function(data){
-	onsole.log(data); 
+	console.log(data); 
      }
   });
 

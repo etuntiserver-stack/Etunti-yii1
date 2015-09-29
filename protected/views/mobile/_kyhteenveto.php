@@ -59,6 +59,7 @@
 
 	<td><?php echo sprint($data->l_tunnit); ?></td>
 	<td><?php echo sprint($total_l); ?></td>
+	<td><?php echo $data->kpl; ?></td>
 
 </tr>
 
