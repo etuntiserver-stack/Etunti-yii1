@@ -15,7 +15,13 @@
 	'<div class="well small">'.
 		$v->getAttributeLabel('pvm').': '.$v->pvm.'<br>'.
 		$v->getAttributeLabel('syy').': '.$v->syy.'<br>'.
-		$v->getAttributeLabel('korvaus').': '.$v->korvaus.
+		$v->getAttributeLabel('korvaus').': '.$v->korvaus.'<br>'.
+
+	CHtml::link("Poista", '#', array(
+	  'submit'=>array('korvaukset/delete', "id"=>$v->id), 
+	  'confirm' => 'Oletko varmaa?')
+	).
+
 	'</div>';
 
 ?>
