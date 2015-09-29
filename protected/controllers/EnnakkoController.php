@@ -13,7 +13,7 @@ class EnnakkoController extends Controller
 		return array(
 
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin', 'delete', 'create', 'update', 'index'),
+				'actions'=>array('admin', 'delete', 'create', 'update', 'index','tidfromto'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -35,6 +35,15 @@ class EnnakkoController extends Controller
 		} else {
 	            return false;
 		}
+	}
+
+	public function actionTidfromto($from,$to,$tid)
+	{
+		$this->render('tidfromto',array(
+		'from'=>$from,
+		'to'=>$to,
+		'tid'=>$tid
+		));
 	}
 
 	/**
@@ -62,8 +71,10 @@ class EnnakkoController extends Controller
 		if(isset($_POST['Ennakko']))
 		{
 			$model->attributes=$_POST['Ennakko'];
-			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+			if($model->save()){
+				echo 'ok';
+				exit;
+			}
 		}
 
 		$this->render('create',array(

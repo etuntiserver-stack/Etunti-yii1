@@ -24,7 +24,7 @@ class KorvauksetController extends Controller
 		return array(
 
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin', 'delete', 'create', 'update', 'index'),
+				'actions'=>array('admin', 'delete', 'create', 'update', 'index','tidfromto'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -48,6 +48,15 @@ class KorvauksetController extends Controller
 		}
 	}
 
+	public function actionTidfromto($from,$to,$tid)
+	{
+		$this->render('tidfromto',array(
+		'from'=>$from,
+		'to'=>$to,
+		'tid'=>$tid
+		));
+	}
+
 	public function actionView($id)
 	{
 		$this->render('view',array(
@@ -69,8 +78,10 @@ class KorvauksetController extends Controller
 		if(isset($_POST['Korvaukset']))
 		{
 			$model->attributes=$_POST['Korvaukset'];
-			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+			if($model->save()){
+				echo 'ok';
+				exit;
+			}
 		}
 
 		$this->render('create',array(

@@ -51,25 +51,20 @@ $this->breadcrumbs=array(
    </div>
    <!-- tulostus -->
 
-  <br><br>
+   <br><br><br>
 
-
-
-
-
-		<?php
-		$lt = new Lisatyotunnit;
-		echo $this->renderPartial('//lisatyotunnit/_form',array('model'=>$lt)); 
-		?>
-
-
-
-
-    <div class="form-inline">
-  	<?php echo CHtml::link(Yii::t('main', '+ Lisätyötunnit'),array('/lisatyotunnit/create'),array('target'=>'_blank','class'=>'btn btn-success')); ?>
-  	<?php echo CHtml::link(Yii::t('main', '+ Ennakko'),array('/ennakko/create'),array('target'=>'_blank','class'=>'btn btn-success')); ?>
-  	<?php echo CHtml::link(Yii::t('main', '+ Korvaukset'),array('/korvaukset/create'),array('target'=>'_blank','class'=>'btn btn-success')); ?>
-    </div>
+   <?php
+	$ko = new Korvaukset;
+	echo $this->renderPartial('//korvaukset/_form',array('model'=>$ko)); 
+   ?>
+   <?php
+	$lt = new Lisatyotunnit;
+	echo $this->renderPartial('//lisatyotunnit/_form',array('model'=>$lt)); 
+   ?>
+   <?php
+	$en = new Ennakko;
+	echo $this->renderPartial('//ennakko/_form',array('model'=>$en)); 
+   ?>
 
 
   </div>

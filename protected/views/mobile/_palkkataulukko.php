@@ -80,6 +80,24 @@
 
 		if($matka != 0)
 		$matka = $this->sprint($matka).'<br>('.$this->num($matka).')';
+
+  $lisatt = $this->renderPartial('//lisatyotunnit/tidfromto',array(
+		'from'=>Yii::app()->session['from'],
+		'to'=>Yii::app()->session['to'],
+		'tid'=>$data->tid
+		),true);
+
+  $korv = $this->renderPartial('//korvaukset/tidfromto',array(
+		'from'=>Yii::app()->session['from'],
+		'to'=>Yii::app()->session['to'],
+		'tid'=>$data->tid
+		),true);
+
+  $ennakko = $this->renderPartial('//ennakko/tidfromto',array(
+		'from'=>Yii::app()->session['from'],
+		'to'=>Yii::app()->session['to'],
+		'tid'=>$data->tid
+		),true);
 ?>
 
 <tr>
@@ -91,9 +109,9 @@
 	<td><?php echo $totalIlta; ?></td>
 	<td><?php echo $totalYo; ?></td>
 	<td><?php echo $totalSu; ?></td>
-	<td><?php echo ''; ?></td>
-	<td><?php echo ''; ?></td>
-	<td><?php echo ''; ?></td>
+	<td><?php echo $korv; ?></td>
+	<td><?php echo $lisatt; ?></td>
+	<td><?php echo $ennakko; ?></td>
 </tr>
 
 	
