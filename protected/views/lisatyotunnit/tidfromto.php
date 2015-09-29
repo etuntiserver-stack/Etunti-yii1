@@ -26,9 +26,11 @@
 	  	'confirm' => 'Oletko varmaa?')
 	  );
 	}
+	echo '</div>';
+
 	if($v->id)
 	echo '<hr>';
-	echo '</div>';
+
   }
 
 ?>
