@@ -16,7 +16,13 @@
 		$v->getAttributeLabel('pvm').': '.$v->pvm.'<br>'.
 		$v->getAttributeLabel('syy').': '.$v->syy.'<br>'.
 		$v->getAttributeLabel('prosentti').': '.$v->prosentti.'<br>'.
-		$v->getAttributeLabel('tunnimaara').': '.$v->tunnimaara.
+		$v->getAttributeLabel('tunnimaara').': '.$v->tunnimaara.'<br>'.
+
+	CHtml::link("Poista", '#', array(
+	  'submit'=>array('lisatyotunnit/delete', "id"=>$v->id), 
+	  'confirm' => 'Oletko varmaa?')
+	).
+
 	'</div>';
 
 ?>

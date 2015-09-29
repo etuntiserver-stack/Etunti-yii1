@@ -15,7 +15,13 @@
 	'<div class="well small">'.
 		$v->getAttributeLabel('pvm').': '.$v->pvm.'<br>'.
 		$v->getAttributeLabel('syy').': '.$v->syy.'<br>'.
-		$v->getAttributeLabel('ennakko').': '.$v->ennakko.
+		$v->getAttributeLabel('ennakko').': '.$v->ennakko.'<br>'.
+
+	CHtml::link("Poista", '#', array(
+	  'submit'=>array('ennakko/delete', "id"=>$v->id), 
+	  'confirm' => 'Oletko varmaa?')
+	).
+
 	'</div>';
 
 ?>
