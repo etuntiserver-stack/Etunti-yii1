@@ -11,17 +11,23 @@
 
   $m = Ennakko::model()->findAll($criteria);
   foreach($m as $v)
+  {
 	echo 
 	'<div class="well small">'.
 		$v->getAttributeLabel('pvm').': '.$v->pvm.'<br>'.
 		$v->getAttributeLabel('syy').': '.$v->syy.'<br>'.
-		$v->getAttributeLabel('ennakko').': '.$v->ennakko.'<br>'.
+		$v->getAttributeLabel('ennakko').': '.$v->ennakko.'<br>';
 
-	CHtml::link("Poista", '#', array(
-	  'submit'=>array('ennakko/delete', "id"=>$v->id), 
-	  'confirm' => 'Oletko varmaa?')
-	).
-
-	'</div>';
+	if(!Yii::app()->request->getPost('tulosta'))
+	{
+	  echo CHtml::link("Poista", '#', array(
+	  	'submit'=>array('ennakko/delete', "id"=>$v->id), 
+	  	'confirm' => 'Oletko varmaa?')
+	  );
+	}
+	if($v->id)
+	echo '<hr>';
+	echo '</div>';
+  }
 
 ?>

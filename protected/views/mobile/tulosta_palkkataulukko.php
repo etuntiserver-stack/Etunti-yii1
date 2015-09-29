@@ -7,6 +7,12 @@ td,th{
 	padding:3px 7px;
 	border:1px #333 solid;
 }
+.well{
+	width:150px;
+}
+.tulostus_tekija{
+	width:100px;
+}
 </style>
 
 <h1> <?php echo Yii::t('main', 'PALKKATAULUKKO'); ?></h1>
@@ -16,7 +22,7 @@ td,th{
   <table>
   <thead>
   <tr>
-  <th><?php echo Yii::t('main', 'Työntekijä'); ?></th>
+  <th class="tulostus_tekija"><?php echo Yii::t('main', 'Työntekijä'); ?></th>
   <th><?php echo Yii::t('main', 'Työpäiviä'); ?></th>
   <th><?php echo Yii::t('main', 'Matkat'); ?></th>
   <th><?php echo Yii::t('main', 'Työtunnit'); ?></th>

@@ -671,28 +671,25 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		
 
        		$criteria = new CDbCriteria();
-        	$criteria->order = " SUBSTR(LTRIM(tekijan_nimi), LOCATE(' ',LTRIM(tekijan_nimi))) "; 
-        	$criteria->group = 'tid';
+        	$criteria->order = " tekijan_nimi "; //SUBSTR(LTRIM(tekijan_nimi), LOCATE(' ',LTRIM(tekijan_nimi)))
+        	$criteria->condition = " aktiivinen=1 "; 
 
-		if(Yii::app()->session['Tekija']){
-		  if(count(Yii::app()->session['Tekija']) > 1)
-		    $ids = implode(",",Yii::app()->session['Tekija']);
+		if(Yii::app()->request->getPost('Tekija')){
+		  if(count(Yii::app()->request->getPost('Tekija')) > 1)
+		    $ids = implode(",",Yii::app()->request->getPost('Tekija'));
 		  else
-		    $ids = Yii::app()->session['Tekija'][0];
+		    $ids = Yii::app()->request->getPost('Tekija')[0];
 
-	        $criteria->addCondition ('tid IN ('.$ids.') ');
+	        $criteria->addCondition ('id IN ('.$ids.') ');
 		}
 
-
-		if(Yii::app()->session['from'] and Yii::app()->session['to'])
-	        $criteria->addCondition ("DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."' ");
 
 		$dataProvider=new CActiveDataProvider('Mobile', array(
 			'criteria'=>$criteria,
 			'pagination'=>false
 		));
 
-		  $model = Mobile::model()->findAll($criteria);
+		  $model = Tyontekijat::model()->findAll($criteria);
 
 		if(Yii::app()->request->getPost('tulosta'))
 		{
