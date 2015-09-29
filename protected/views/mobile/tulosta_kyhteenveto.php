@@ -26,6 +26,7 @@ td,th{
 
   <th><?php echo Yii::t('main', 'Luetut tunnit'); ?></th>
   <th><?php echo Yii::t('main', 'Toteutuneet tunnit'); ?></th>
+  <th><?php echo Yii::t('main', 'Kpl'); ?></th>
   </tr>
   </thead>
 

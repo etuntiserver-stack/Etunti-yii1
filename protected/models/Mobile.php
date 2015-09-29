@@ -34,6 +34,7 @@ class Mobile extends DB2ActiveRecord
 public $domain;
 public $l_tunnit;
 public $t_tunnit;
+public $kpl;
 
 
 	/**
