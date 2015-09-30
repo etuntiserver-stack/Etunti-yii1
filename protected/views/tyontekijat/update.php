@@ -17,7 +17,8 @@ $this->menu=array(
 
 
 
-if(isset($_POST['uploaded'])){
+if(isset($_POST['uploaded']))
+{
 
   if (!file_exists(Yii::app()->basePath."/../img/tekijat/".Yii::app()->user->domain)) {
   	mkdir(Yii::app()->basePath."/../img/tekijat/".Yii::app()->user->domain, 0777, true);
@@ -29,18 +30,158 @@ if(isset($_POST['uploaded'])){
      echo "";
   } 
 }
+
+
+if(isset($_POST['uploaded_t']))
+{
+
+  if (!file_exists(Yii::app()->basePath."/../tiedostot/tekijat/".Yii::app()->user->domain)) {
+  	mkdir(Yii::app()->basePath."/../tiedostot/tekijat/".Yii::app()->user->domain, 0777, true);
+  }
+
+  $uploaddir = Yii::app()->basePath.'/../tiedostot/tekijat/'.Yii::app()->user->domain.'/';
+  $uploadfile = $uploaddir . basename($model->id.'_'.$_FILES['file']['name']);
+  if (move_uploaded_file($_FILES['file']['tmp_name'], $uploadfile)) {
+     //echo "";
+  } 
+}
+
+if(isset($_POST['poistaTamaTiedosto'])){
+	unlink($_POST['poistaTamaTiedosto']);
+exit;
+}
 ?>
+
+<legend>
+<h1><?php echo Yii::t('main', 'Työntekijä ID:'); ?> <?php echo $model->id; ?></h1>
+</legend>
+
+<?php echo $this->renderPartial('_form', array('model'=>$model)); ?>
+
+
+<hr>
+
+<div class="row">
+ <div class="col-sm-12">
 
 <div class="pull-right">
  <div class="kuva form-inline">
+  <label><?php echo Yii::t('main', 'Työntekijän kuva'); ?></label>
   <form id="uploadimage" action="#" class="form-input" method="post" enctype="multipart/form-data">
    <input type="hidden" name="uploaded" value="true" />
    <input type="file" name="file" id="i_file" data-icon="false" data-buttonText="Etsi kuvaa" class="form-group" />
-   <input type="submit" value="Lataa kuva" class="btn btn-primary btn-group" id="kuvaUP" /></button>
+   <input type="submit" value="Lataa" class="btn btn-primary btn-group" id="kuvaUP" /></button>
   </form>
  </div>
 </div>
 
-<h1><?php echo Yii::t('main', 'Työntekijä ID:'); ?> <?php echo $model->id; ?></h1>
 
-<?php echo $this->renderPartial('_form', array('model'=>$model)); ?>
+ <div class="tiedosto form-inline">
+  <label><?php echo Yii::t('main', 'Tiedostot (sopimukset jne)'); ?></label>
+  <form id="uploadimage" action="#" class="form-input" method="post" enctype="multipart/form-data">
+   <input type="hidden" name="uploaded_t" value="true" />
+   <input type="file" name="file" id="t_file" data-icon="false" data-buttonText="Etsi kuvaa" class="form-group" />
+   <input type="submit" value="Lataa" class="btn btn-primary btn-group" id="tiedostoUP" /></button>
+  </form>
+ </div>
+
+ </div>
+</div>
+
+<br>
+
+<div class="row">
+  <div class="col-sm-12">
+<?php
+	$i = 0;
+	foreach(array_reverse(glob(Yii::app()->baseUrl.'tiedostot/tekijat/'.Yii::app()->user->domain.'/'.$model->id.'_*.*')) as $file) {
+	$i++;
+	$explNimi = explode("/",$file);
+ 	echo '
+	<div class="form-inline" id="t_'.$model->id.$i.'">
+	  <div class="btn btn-xs btn-danger poistaTiedosto" this="'.$file.'" model="'.$model->id.'" for="t_'.$model->id.$i.'">X</div>
+	  <a href="../../'.$file.'">'.end($explNimi).'</a>
+	</div>
+	';
+	$kuvat[$i] = $file;
+	}
+?>
+  </div>
+</div>
+
+<br>
+
+
+<div class="row">
+  <div class="col-sm-12">
+	<?php 
+		$tid = $model->id;
+
+
+		$ts = Tyosuhdet::model()->find(" tid='".$model->id."' ");
+		if(isset($ts['id']))
+		{
+
+			$m=Tyosuhdet::model()->findbypk($ts['id']);
+
+		    if(isset($_POST['Tyosuhdet']))
+		    {
+			$m->attributes=$_POST['Tyosuhdet'];
+			$m->tid=$tid;
+			if($m->save())
+				$this->redirect(array('update','id'=>$model->id));
+		    }
+
+			echo $this->renderPartial('//tyosuhdet/_form', array('model'=>$ts));
+		} else {
+
+			$m=new Tyosuhdet;
+
+		    if(isset($_POST['Tyosuhdet']))
+		    {
+			$m->attributes=$_POST['Tyosuhdet'];
+			$m->tid=$tid;
+			if($m->save())
+				$this->redirect(array('update','id'=>$model->id));
+		    }
+
+			echo $this->renderPartial('//tyosuhdet/_form',array('model'=>$m));
+		}
+	?>
+  </div>
+</div>
+
+
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+
+
+$(".poistaTiedosto").click(function(){
+	var forThis = $(this).attr("this");
+	var model = $(this).attr("model");
+	var forID = $(this).attr("for");
+
+        $.ajax({
+           url: "update?id="+model,
+	   type:'POST',
+	   data: { "poistaTamaTiedosto" : forThis },
+           success: function(data){
+		console.log(data);
+		$("#"+forID).remove();
+           }
+        });
+});
+
+
+  $("#i_file").filestyle({
+	buttonText: "Etsi kuva"
+  });
+
+  $("#t_file").filestyle({
+	buttonText: "Etsi tiedosto"
+  });
+
+});
+</script>
