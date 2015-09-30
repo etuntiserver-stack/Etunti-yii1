@@ -6,11 +6,6 @@
 if(isset($_POST['forid'])){
   $s= Mobile::model()->findbypk($_POST['forid']);
 
-  $at[$s->id] = date("H:i",strtotime($s->aloitan));
-  $apvm[$s->id] = date("Y-m-d",strtotime($s->aloitan));
-
-  $lt[$s->id] = date("H:i",strtotime($s->loppui));
-  $lpvm[$s->id] = date("Y-m-d",strtotime($s->loppui));
 
   $model->kohde_kannasta = $s->kohde_kannasta;
 }
@@ -57,12 +52,12 @@ if(isset($_POST['forid'])){
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'aloitan'); ?>
-		<input type="datetime-local" name="Toteutuneet[aloitan]" value="<?php echo $apvm[$s->id].'T'.$at[$s->id]; ?>" class="form-control" id="aloitan">
+		<input type="text" name="Toteutuneet[aloitan]" value="<?php echo $s->aloitan; ?>" class="form-control datetimepicker" id="aloitan">
 	</div>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'loppui'); ?>
-		<input type="datetime-local" name="Toteutuneet[loppui]" value="<?php echo $lpvm[$s->id].'T'.$lt[$s->id]; ?>" class="form-control" id="loppui">
+		<input type="text" name="Toteutuneet[loppui]" value="<?php echo $s->loppui; ?>" class="form-control datetimepicker" id="loppui">
 	</div>
 
 
@@ -82,6 +77,7 @@ if(isset($_POST['forid'])){
 
 
 
+	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/asetukset.js"></script>
 	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/toteuma.js"></script>
 
 
