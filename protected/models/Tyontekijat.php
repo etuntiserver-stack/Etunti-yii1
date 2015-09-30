@@ -91,7 +91,7 @@ class Tyontekijat extends DB2ActiveRecord
 		return array(
 			'id' => 'ID',
 			'imei' => 'Imei',
-			'laiten_puh' => 'Laiten Puh',
+			'laiten_puh' => 'Laiten nro.',
 			'tekijan_nimi' => 'Etu-Suku nimet',
 			'tekijan_henkilotunnus' => 'Henkilötunnus',
 			'tekijan_puh' => 'Puhelin',

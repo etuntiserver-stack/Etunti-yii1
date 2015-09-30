@@ -61,18 +61,6 @@
 		<?php echo $form->error($model,'aktiivinen'); ?>
 	</div>
 
-	<div class="row">
-		<?php echo $form->labelEx($model,'tyoryhma'); ?>
-		<?php
-      		$l = Valikkoot::model()->findAll(" select_type='tyoryhma' ",array('order' => "select_type"));
-		foreach($l as $v)
-		$list[$v->value] = $v->value;
-
-        	echo $form->dropDownList($model, 'tyoryhma', $list,
-		array('empty'=>'','class'=>'form-control'));
-        	?>
-		<?php echo $form->error($model,'tyoryhma'); ?>
-	</div>
 
    </div>
    <div class="col-sm-3">
@@ -102,18 +90,46 @@
 	</div>
 
 	<div class="row">
-		<?php echo $form->labelEx($model,'tekijan_lanka_puh'); ?>
-		<?php echo $form->textField($model,'tekijan_lanka_puh',array('size'=>20,'maxlength'=>20,'class'=>'form-control')); ?>
-		<?php echo $form->error($model,'tekijan_lanka_puh'); ?>
-	</div>
-
-	<div class="row">
 		<?php echo $form->labelEx($model,'online_varauksen_valmina'); ?>
 		<?php 
         	$tal = array(0=>'Ei',1=>'Kyllä');
 		echo $form->dropDownList($model,'online_varauksen_valmina', $tal, 
 		array('class'=>'form-control','id'=>'osoite')) ?>
 		<?php echo $form->error($model,'online_varauksen_valmina'); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->labelEx($model,'tyoryhma'); ?>
+		<?php
+      		$l = Valikkoot::model()->findAll(" select_type='tyoryhma' ",array('order' => "select_type"));
+		foreach($l as $v)
+		$list[$v->value] = $v->value;
+
+        	echo $form->dropDownList($model, 'tyoryhma', $list,
+		array('empty'=>'','class'=>'form-control'));
+        	?>
+		<?php echo $form->error($model,'tyoryhma'); ?>
+	</div>
+
+   </div>
+   <div class="col-sm-3">
+
+	<div class="row">
+		<?php echo $form->labelEx($model,'tyoehtosopimus'); ?>
+		<?php echo $form->textField($model,'tyoehtosopimus',array('size'=>50,'maxlength'=>50,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'tyoehtosopimus'); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->labelEx($model,'tekijan_pankkitili'); ?>
+		<?php echo $form->textField($model,'tekijan_pankkitili',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'tekijan_pankkitili'); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->labelEx($model,'tekijan_konttori'); ?>
+		<?php echo $form->textField($model,'tekijan_konttori',array('size'=>50,'maxlength'=>50,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'tekijan_konttori'); ?>
 	</div>
 
 	<div class="row">
@@ -139,39 +155,6 @@
 		echo '</select>';
 		?>
 		<?php echo $form->error($model,'kortit'); ?>
-	</div>
-
-   </div>
-   <div class="col-sm-3">
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'tyoehtosopimus'); ?>
-		<?php echo $form->textField($model,'tyoehtosopimus',array('size'=>50,'maxlength'=>50,'class'=>'form-control')); ?>
-		<?php echo $form->error($model,'tyoehtosopimus'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'tekijan_kulunvalvonta'); ?>
-		<?php echo $form->textField($model,'tekijan_kulunvalvonta',array('size'=>50,'maxlength'=>50,'class'=>'form-control')); ?>
-		<?php echo $form->error($model,'tekijan_kulunvalvonta'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'tekijan_pankkitili'); ?>
-		<?php echo $form->textField($model,'tekijan_pankkitili',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
-		<?php echo $form->error($model,'tekijan_pankkitili'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'tekijan_konttori'); ?>
-		<?php echo $form->textField($model,'tekijan_konttori',array('size'=>50,'maxlength'=>50,'class'=>'form-control')); ?>
-		<?php echo $form->error($model,'tekijan_konttori'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'salasana'); ?>
-		<?php echo $form->textField($model,'salasana',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
-		<?php echo $form->error($model,'salasana'); ?>
 	</div>
 
 	<div class="row">
@@ -227,5 +210,26 @@
 
 
 
+<?php
+/*
 
+	<div class="row">
+		<?php echo $form->labelEx($model,'tekijan_lanka_puh'); ?>
+		<?php echo $form->textField($model,'tekijan_lanka_puh',array('size'=>20,'maxlength'=>20,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'tekijan_lanka_puh'); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->labelEx($model,'tekijan_kulunvalvonta'); ?>
+		<?php echo $form->textField($model,'tekijan_kulunvalvonta',array('size'=>50,'maxlength'=>50,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'tekijan_kulunvalvonta'); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->labelEx($model,'salasana'); ?>
+		<?php echo $form->textField($model,'salasana',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'salasana'); ?>
+	</div>
+
+*/
 
