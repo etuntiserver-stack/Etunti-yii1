@@ -5,7 +5,7 @@
 ?>
 
 <div class="row form">
-  <div class="col-sm-3">
+  <div class="col-sm-6">
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'asetukset-form',
 	'enableAjaxValidation'=>false,

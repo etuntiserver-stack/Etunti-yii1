@@ -86,25 +86,25 @@ class Tyosuhdet extends DB2ActiveRecord
 		return array(
 			'id' => 'ID',
 			'tid' => 'Tid',
-			'alku' => 'Alku',
-			'loppu' => 'Loppu',
-			'vktyoaika' => 'Vktyoaika',
+			'alku' => 'Aloitus',
+			'loppu' => 'Lopetus',
+			'vktyoaika' => 'Viikko työaika',
 			'nimike' => 'Nimike',
 			'palkkausmuoto' => 'Palkkausmuoto',
 			'tuntihinta' => 'Tuntihinta',
-			'matka_thinta' => 'Matka Thinta',
-			'lippu_kuumaks' => 'Lippu Kuumaks',
-			'koe_loppu' => 'Koe Loppu',
-			'koe_hinta' => 'Koe Hinta',
-			'tuloraja_ajalle' => 'Tuloraja Ajalle',
-			'perusprosentti' => 'Perusprosentti',
-			'lisaprosentti' => 'Lisaprosentti',
-			'kuukaudessa' => 'Kuukaudessa',
-			'kahdessa_viikossa' => 'Kahdessa Viikossa',
+			'matka_thinta' => 'Matka tuntihinta',
+			'lippu_kuumaks' => 'Matkalipun kuukausihinta',
+			'koe_loppu' => 'Koeajan päättyminen',
+			'koe_hinta' => 'Koeajan tuntihinta',
+			'tuloraja_ajalle' => 'Tuloraja ajalle',
+			'perusprosentti' => 'Palkkaa varten Perusprosentti',
+			'lisaprosentti' => 'Lisäprosentti',
+			'kuukaudessa' => 'AKuukaudessa',
+			'kahdessa_viikossa' => 'Kahdessa viikossa',
 			'viikossa' => 'Viikossa',
-			'paivassa' => 'Paivassa',
-			'atk_varten' => 'Atk Varten',
-			'yksi_tuloraja' => 'Yksi Tuloraja',
+			'paivassa' => 'Päivässä',
+			'atk_varten' => 'Laskennalinen tuloraja ATK-järjestelmiä varten',
+			'yksi_tuloraja' => 'BEnnakonpidätys yhden tulorajan mukaan',
 		);
 	}
 
@@ -118,6 +118,7 @@ class Tyosuhdet extends DB2ActiveRecord
 		// should not be searched.
 
 		$criteria=new CDbCriteria;
+		$criteria->order = 'id DESC';
 
 		$criteria->compare('id',$this->id);
 		$criteria->compare('tid',$this->tid);

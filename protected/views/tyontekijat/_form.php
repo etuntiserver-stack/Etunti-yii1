@@ -226,14 +226,6 @@
 <?php $this->endWidget(); ?>
 
 
-<script type="text/javascript">
-$(document).ready(function(){
 
-  $(":file").filestyle({
-	buttonText: "Etsi tiedosto"
-  });
-
-});
-</script>
 
 
