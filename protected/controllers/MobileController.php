@@ -459,7 +459,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		time DESC ";
 
 		if(Yii::app()->session['etsi_tekijan_nimi'])
-	        $criteria->addCondition ("tekijan_nimi = '".Yii::app()->session['etsi_tekijan_nimi']."'");
+	        $criteria->addCondition (" tekijan_nimi = '".Yii::app()->session['etsi_tekijan_nimi']."' ");
 		if(Yii::app()->session['etsi_kohteet'])
 	        $criteria->addCondition ("kohde_kannasta = '".Yii::app()->session['etsi_kohteet']."'");
 		if(Yii::app()->session['etsi_pvm'])

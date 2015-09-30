@@ -39,7 +39,7 @@ $this->menu=array(
    <input type="hidden" name="mob_hae">
    <?php
     $model=new Mobile;
-    $list = CHtml::listData(Mobile::model()->findAll(array('group' => 'tid','order' => 'tekijan_nimi')), 'tekijan_nimi', 'tekijan_nimi');
+    $list = CHtml::listData(Mobile::model()->findAll(array('group' => 'tekijan_nimi','order' => 'tekijan_nimi')), 'tekijan_nimi', 'tekijan_nimi');
 
     echo '<select class="form-control form-group" name="etsi_tekijan_nimi">';
     if(Yii::app()->session['etsi_tekijan_nimi'])
@@ -130,12 +130,12 @@ $('#mobForm').on('submit',function(e) {
   data:$(this).serialize(),
   type:'POST',
   success:function(data){
-  //console.log(data);
+  	console.log(data);
 	tableAjax();
 	return false;
   },
   error:function(data){
-  console.log(data); 
+  	console.log(data); 
   }
   });
 
