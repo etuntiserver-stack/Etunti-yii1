@@ -3,11 +3,11 @@
 /* @var $model Toteutuneet */
 /* @var $form CActiveForm */
 
-  $at[$model->id] = date("H:i",strtotime($model->aloitan));
-  $apvm[$model->id] = date("Y-m-d",strtotime($model->aloitan));
 
-  $lt[$model->id] = date("H:i",strtotime($model->loppui));
-  $lpvm[$model->id] = date("Y-m-d",strtotime($model->loppui));
+$kesto = '<h1>'.$this->sprint(strtotime($model->loppui)-strtotime($model->aloitan)).'</h1>';
+$forPVM = date('d.m.Y',strtotime($model->aloitan));
+$model->aloitan = date("H:i",strtotime($model->aloitan));
+$model->loppui = date("H:i",strtotime($model->loppui));
 ?>
 
 
@@ -33,6 +33,7 @@
 	'enableAjaxValidation'=>false,
 )); ?>
 
+
 		<?php echo $form->hiddenField($model,'id'); ?>
 		<?php echo $form->hiddenField($model,'kid'); ?>
 		<?php echo $form->hiddenField($model,'tid'); ?>
@@ -49,14 +50,21 @@
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'aloitan'); ?>
-		<input type="datetime-local" name="Toteutuneet[aloitan]" value="<?php echo $apvm[$model->id].'T'.$at[$model->id]; ?>" class="form-control" id="aloitan">
+		<?php echo $form->textField($model,'aloitan',array('size'=>60,'maxlength'=>100,'class'=>'form-control timepicker al')); ?>
 	</div>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'loppui'); ?>
-		<input type="datetime-local" name="Toteutuneet[loppui]" value="<?php echo $lpvm[$model->id].'T'.$lt[$model->id]; ?>" class="form-control" id="loppui">
+		<?php echo $form->textField($model,'loppui',array('size'=>60,'maxlength'=>100,'class'=>'form-control timepicker lp')); ?>
 	</div>
 
+		<input type="hidden" name="forPVM" value="<?php echo $forPVM; ?>">
+
+  </div><div class="col-sm-4">
+
+	<div class="row">
+		<div id="kesto"><?php echo $kesto; ?></div>
+	</div>
 
 <?php $this->endWidget(); ?>
 
@@ -72,5 +80,5 @@
 	</div> <!-- end modal-dialog -->
 
 
-
+	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/asetukset.js"></script>
 	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/toteuma.js"></script>

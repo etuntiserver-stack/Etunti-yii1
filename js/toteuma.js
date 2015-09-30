@@ -1,6 +1,31 @@
 $(document).ready(function(){
 
 
+$(".timepicker").keyup(function(){
+	lasketaanKesto();
+});
+
+$(".timepicker").blur(function(){
+	lasketaanKesto();
+});
+
+
+function lasketaanKesto(){
+	var hmaD = $(".al").val().split(":");
+	var hmaL = $(".lp").val().split(":");
+
+	var secondsD = (+hmaD[0]) * 60 * 60 + (+hmaD[1]);
+	var secondsL = (+hmaL[0]) * 60 * 60 + (+hmaL[1]);
+	var totalSec =  (secondsL - secondsD);
+
+	var hours = parseInt( totalSec / 3600 ) % 24;
+	var minutes = parseInt( totalSec / 60 ) % 60;
+	var seconds = totalSec % 60;
+
+	$("#kesto").html('<h1>'+(hours < 10 ? "0" + hours : hours) + ":" + (seconds  < 10 ? "0" + seconds : seconds)+'</h1>');
+	return false;
+}
+
 $(".chckbxHyvaksynta").click(function(){
   $(this).each(function() {
       var label = $(this).prop("checked");
