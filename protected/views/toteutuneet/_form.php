@@ -9,6 +9,11 @@ if(isset($_POST['forid'])){
 
   $model->kohde_kannasta = $s->kohde_kannasta;
 }
+
+$kesto = '<h1>'.$this->sprint(strtotime($s->loppui)-strtotime($s->aloitan)).'</h1>';
+$forPVM = date('d.m.Y',strtotime($s->aloitan));
+$aloitan = date("H:i",strtotime($s->aloitan));
+$loppui = date("H:i",strtotime($s->loppui));
 ?>
 
 
@@ -34,7 +39,7 @@ if(isset($_POST['forid'])){
 )); ?>
 
 
-
+		<input type="hidden" name="forPVM" value="<?php echo $forPVM; ?>">
 		<?php echo $form->hiddenField($model,'kid',array('value'=>$s->id)); ?>
 		<?php echo $form->hiddenField($model,'tid',array('value'=>$s->tid)); ?>
 		<?php echo $form->hiddenField($model,'status',array('value'=>$s->status)); ?>
@@ -52,13 +57,20 @@ if(isset($_POST['forid'])){
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'aloitan'); ?>
-		<input type="text" name="Toteutuneet[aloitan]" value="<?php echo $s->aloitan; ?>" class="form-control datetimepicker" id="aloitan">
+		<?php echo $form->textField($model,'aloitan',array('value'=>$aloitan,'size'=>60,'maxlength'=>100,'class'=>'form-control timepicker al')); ?>
 	</div>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'loppui'); ?>
-		<input type="text" name="Toteutuneet[loppui]" value="<?php echo $s->loppui; ?>" class="form-control datetimepicker" id="loppui">
+		<?php echo $form->textField($model,'loppui',array('value'=>$loppui,'size'=>60,'maxlength'=>100,'class'=>'form-control timepicker lp')); ?>
 	</div>
+
+  </div><div class="col-sm-4">
+
+	<div class="row">
+		<div id="kesto"><?php echo $kesto; ?></div>
+	</div>
+
 
 
 <?php $this->endWidget(); ?>

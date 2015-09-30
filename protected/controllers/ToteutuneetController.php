@@ -61,6 +61,11 @@ class ToteutuneetController extends Controller
 	}
 
 
+	protected function sprint($val){
+	    if($val > 0)
+		return sprintf('%02d:%02d', $val/3600, ($val % 3600)/60);
+	}
+
 	public function actionKk()
 	{
 
@@ -184,12 +189,9 @@ class ToteutuneetController extends Controller
 		if(isset($_POST['Toteutuneet']))
 		{
 
-			$_POST['Toteutuneet']['aloitan'] = str_replace("T"," ",$_POST['Toteutuneet']['aloitan']);
-			$_POST['Toteutuneet']['loppui'] = str_replace("T"," ",$_POST['Toteutuneet']['loppui']);
-
 			$model->attributes=$_POST['Toteutuneet'];
-			$model->aloitan = date("d.m.Y H:i:s",strtotime($_POST['Toteutuneet']['aloitan']));
-			$model->loppui = date("d.m.Y H:i:s",strtotime($_POST['Toteutuneet']['loppui']));
+			$model->aloitan = date("d.m.Y H:i:s",strtotime($_POST['forPVM'].' '.$_POST['Toteutuneet']['aloitan']));
+			$model->loppui = date("d.m.Y H:i:s",strtotime($_POST['forPVM'].' '.$_POST['Toteutuneet']['loppui']));
 
 
 			if($model->save()){
@@ -232,12 +234,10 @@ class ToteutuneetController extends Controller
 		if(isset($_POST['Toteutuneet']))
 		{
 
-			$_POST['Toteutuneet']['aloitan'] = str_replace("T"," ",$_POST['Toteutuneet']['aloitan']);
-			$_POST['Toteutuneet']['loppui'] = str_replace("T"," ",$_POST['Toteutuneet']['loppui']);
 
 			$model->attributes=$_POST['Toteutuneet'];
-			$model->aloitan = date("d.m.Y H:i:s",strtotime($_POST['Toteutuneet']['aloitan']));
-			$model->loppui = date("d.m.Y H:i:s",strtotime($_POST['Toteutuneet']['loppui']));
+			$model->aloitan = date("d.m.Y H:i:s",strtotime($_POST['forPVM'].' '.$_POST['Toteutuneet']['aloitan']));
+			$model->loppui = date("d.m.Y H:i:s",strtotime($_POST['forPVM'].' '.$_POST['Toteutuneet']['loppui']));
 
 			if($model->save()){
 			   $did = date("Ymd",strtotime($model->aloitan));
