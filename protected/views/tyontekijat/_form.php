@@ -3,19 +3,6 @@
 /* @var $model Tyontekijat */
 /* @var $form CActiveForm */
 
-if(isset($_POST['uploaded'])){
-
-  if (!file_exists(Yii::app()->basePath."/../img/tekijat/".Yii::app()->user->domain)) {
-  	mkdir(Yii::app()->basePath."/../img/tekijat/".Yii::app()->user->domain, 0777, true);
-  }
-
-  $uploaddir = Yii::app()->basePath.'/../img/tekijat/'.Yii::app()->user->domain.'/';
-  $uploadfile = $uploaddir . basename($model->id.'.jpg');
-  if (move_uploaded_file($_FILES['file']['tmp_name'], $uploadfile)) {
-     echo "";
-  } 
-}
-
 ?>
 
 <?php $form=$this->beginWidget('CActiveForm', array(
