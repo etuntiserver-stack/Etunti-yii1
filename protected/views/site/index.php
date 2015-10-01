@@ -7,28 +7,6 @@ $this->pageTitle=Yii::app()->name;
 //print_r(Yii::app()->user);
 
 
-$_POST['loppui'] = "01.010.2015 10:45:57";
-// ongelma
-if(isset($_POST['loppui'])){
-$expl = explode(".",$_POST['loppui']);
-  if(isset($expl[1])){
-
-	if(strlen($expl[1]) >2){
-	$_POST['loppui'] = $expl[0].'.'.substr($expl[1], 1).'.'.$expl[2];
-	}
-  }
-}
-
-// ongelma
-if(isset($_POST['aloitan'])){
-$expl = explode(".",$_POST['aloitan']);
-  if(isset($expl[1])){
-
-	if(strlen($expl[1]) >2){
-	$_POST['aloitan'] = $expl[0].'.'.substr($expl[1], 1).'.'.$expl[2];
-	}
-  }
-}
 ?>
 
 

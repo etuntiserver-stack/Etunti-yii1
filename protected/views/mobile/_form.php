@@ -127,9 +127,24 @@ if(isset($model->tietoja))
 </div>
 
 
+
+
   <?php if(Yii::app()->user->adminStatus == 1) : ?>
   <div class="row">
     <div class="col-sm-4">
+
+	<div class="row">
+		<?php echo $form->labelEx($model,'aloitan'); ?>
+		<?php echo $form->textField($model,'aloitan',array('size'=>20,'maxlength'=>20,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'aloitan'); ?>
+	</div>
+	<div class="row">
+		<?php echo $form->labelEx($model,'loppui'); ?>
+		<?php echo $form->textField($model,'loppui',array('size'=>20,'maxlength'=>20,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'loppui'); ?>
+	</div>
+
+
 	<div class="buttons">
 		<?php echo CHtml::submitButton($model->isNewRecord ? 'Luo' : 'Tallenna', array('class'=>'btn btn-primary')); ?>
 	</div>
