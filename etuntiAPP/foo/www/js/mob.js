@@ -143,9 +143,9 @@ function curDateTime(){
   	var date = new Date();
 	var year = date.getFullYear();
 	var month = date.getMonth();
-	month = month < 10 ? "0" + (month+1) : month+1;
+	month = month < 10 ? (month+1) : month+1;
 	var day = date.getDate();
-	day = day < 10 ? "0" + (day) : day;
+	day = day < 10 ? (day) : day;
 	var hours = date.getHours();
 	var minutes = date.getMinutes();
 	var seconds = date.getSeconds();

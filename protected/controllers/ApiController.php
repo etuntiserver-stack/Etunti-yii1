@@ -367,7 +367,7 @@ public function actionImei($dom)
 	        exit;
 		}
 
-                $mobupdate->loppui = date("d.m.Y H:i:s",strtotime($_POST['loppui']));
+                $mobupdate->loppui = $_POST['loppui'];
                 $mobupdate->status = 3;
                 $mobupdate->my_location = $mobupdate->my_location."**".$_POST['my_location'];
                 $mobupdate->save();
@@ -376,7 +376,7 @@ public function actionImei($dom)
 	     } elseif($mob->status == 2 and $_POST['status'] == 2 and !empty($_POST['loppui']))
 	     {
                 $mobupdate = Mob::model()->findbypk($mob->id);
-                $mobupdate->loppui = date("d.m.Y H:i:s",strtotime($_POST['loppui']));
+                $mobupdate->loppui = $_POST['loppui'];
                 $mobupdate->status = 2;
                 $mobupdate->my_location = $mobupdate->my_location."**".$_POST['my_location'];
                 $mobupdate->viesti = $mobupdate->viesti."/".$_POST['kohde_kannasta'];
@@ -386,7 +386,7 @@ public function actionImei($dom)
 	     } elseif($mob->status == 10 and $_POST['status'] == 10 and !empty($_POST['loppui']))
 	     {
                 $mobupdate = Mob::model()->findbypk($mob->id);
-                $mobupdate->loppui = date("d.m.Y H:i:s",strtotime($_POST['loppui']));
+                $mobupdate->loppui = $_POST['loppui'];
                 $mobupdate->status = 10;
                 $mobupdate->my_location = $mobupdate->my_location."**".$_POST['my_location'];
                 $mobupdate->viesti = $mobupdate->viesti."/".$_POST['kohde_kannasta'];
@@ -423,7 +423,6 @@ public function actionImei($dom)
                 $mobinsert->tid = $ttekija->id;
                 $mobinsert->tekijan_nimi = $ttekija->tekijan_nimi;
                 $mobinsert->tietoja = $_POST['tietoja'];
-                $mobinsert->aloitan = date("d.m.Y H:i:s",strtotime($_POST['aloitan']));
                 $mobinsert->save();
                 $this->_sendResponse(200, $mobinsert->id."//".$mobinsert->kohde_kannasta);
 
