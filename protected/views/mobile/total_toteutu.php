@@ -4,10 +4,12 @@
 
 	/* luettu */
        	$criteria = new CDbCriteria();
-	$criteria->condition = " tid = '".$tid."' AND
-	DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
-	BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."' 
-	AND id NOT IN (SELECT kid FROM sivexkuitti_repaired) ";
+	$criteria->condition = " 
+		tid = '".$tid."' AND
+		DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
+		BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."' 
+		AND id NOT IN (SELECT kid FROM sivexkuitti_repaired) 
+	";
 
 	if(Yii::app()->session['Lounastauko'])
 	$criteria->addCondition (" status != '10' ");
@@ -27,10 +29,12 @@
 
 	/* toteutu */
        	$criteria = new CDbCriteria();
-	$criteria->condition = " tid = '".$tid."' AND
-	DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
-	BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."' 
-	AND id NOT IN (SELECT kid FROM sivexkuitti) ";
+	$criteria->condition = " 
+		tid = '".$tid."' AND
+		DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
+		BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."' 
+		AND kid IN (SELECT id FROM sivexkuitti)
+	";
 
 	if(Yii::app()->session['Lounastauko'])
 	$criteria->addCondition (" status != '10' ");

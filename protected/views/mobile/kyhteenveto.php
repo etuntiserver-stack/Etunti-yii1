@@ -40,6 +40,12 @@ $this->breadcrumbs=array(
    ?>
 
    <select class="form-control form-group" name="mitkatKohteet">
+	<?php
+	if(isset(Yii::app()->session['mitkatKohteet']) and Yii::app()->session['mitkatKohteet'] == 'kohdenID')
+	echo '<option value="kohdenID">'.Yii::t('main', 'Asiakkaan kohteet').'</option>';
+	if(isset(Yii::app()->session['mitkatKohteet']) and Yii::app()->session['mitkatKohteet'] == 'kohde_kannasta')
+	echo '<option value="kohdenID">'.Yii::t('main', 'Tuntemattomat kohteet').'</option>';
+	?>
 	<option value="kohdenID"><?php echo Yii::t('main', 'Asiakkaan kohteet'); ?></option>
 	<option value="kohde_kannasta"><?php echo Yii::t('main', 'Tuntemattomat kohteet'); ?></option>
    </select>

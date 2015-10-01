@@ -887,29 +887,40 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		Yii::app()->session['mitkatKohteet'] = Yii::app()->request->getPost('mitkatKohteet');
 
        		$criteria = new CDbCriteria();
-/*
+
         	$criteria->select = "
+			COUNT(*) as kpl,
+			SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s'), 
+			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s')))) as l_tunnit,
+			t.*
+		";
 
-		COUNT(*) as kpl,
-		SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s')))) as l_tunnit,
-
-
-		t.*";
-*/
 		if(isset(Yii::app()->session['mitkatKohteet']))
-			$mitkatKohteet = Yii::app()->request->getPost('mitkatKohteet');
+			$mitkatKohteet = Yii::app()->session['mitkatKohteet'];
 		else
 			$mitkatKohteet = "kohdenID";
 
-		$criteria->select = "kohdenID,kohde_kannasta";
-
 		if($mitkatKohteet == 'kohdenID')
+		{
         	$criteria->condition = " 
 			loppui!='' and aloitan!='' 
 			AND status='3'
-			AND $mitkatKohteet !='' 
+			AND kohdenID !='' 
 		";
-        	$criteria->order = $mitkatKohteet;
+		}
+
+		if($mitkatKohteet == 'kohde_kannasta')
+		{
+        	$criteria->condition = " 
+			loppui!='' and aloitan!='' 
+			AND status='3'
+			AND kohdenID =''
+			AND kohde_kannasta!='' 
+		";
+		}
+
+
+        	$criteria->order = "kohde_kannasta";
         	$criteria->group = $mitkatKohteet;
 
 		if(Yii::app()->session['kohteet'])
