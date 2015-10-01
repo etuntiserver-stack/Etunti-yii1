@@ -3,7 +3,7 @@
 /* @var $model Tyosuhdet */
 /* @var $form CActiveForm */
 
-
+echo $model->alku;
 ?>
 
 

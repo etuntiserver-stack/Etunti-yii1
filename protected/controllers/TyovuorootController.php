@@ -389,10 +389,13 @@ class TyovuorootController extends Controller
 	public function actionShowohje($id)
 	{
 		$m = Kohteet::model()->findbypk($id);
+		$k = explode("//",$m->kenella_on_avain);
 
 		  $ohje = '';
+		if(isset($k[1]))
+		  $ohje .= Yii::t('main', 'Avain on: ')." ".$k[1]."\n";
 		if(!empty($m->avain))
-		  $ohje .= Yii::t('main', 'Avain: ')." ".$m->avain."\n";
+		  $ohje .= Yii::t('main', 'Avain: ')." ".$m->avain."\n\n";
 		if(!empty($m->toimenpiteet))
 		  $ohje .= $m->toimenpiteet;
 		echo $ohje;
