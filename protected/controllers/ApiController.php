@@ -343,7 +343,7 @@ public function actionImei($dom)
 	    }
 
 
-
+// toi ei tarvitse enaa
 // ongelma
 if(isset($_POST['loppui'])){
 $expl = explode(".",$_POST['loppui']);
