@@ -39,6 +39,11 @@ $this->breadcrumbs=array(
     echo '</select>';
    ?>
 
+   <select class="form-control form-group" name="mitkatKohteet">
+	<option value="kohdenID"><?php echo Yii::t('main', 'Asiakkaan kohteet'); ?></option>
+	<option value="kohde_kannasta"><?php echo Yii::t('main', 'Tuntemattomat kohteet'); ?></option>
+   </select>
+
    <input type="text" name="from" id="from" class="form-control form-group datepicker" value="<?php echo Yii::app()->session['from']; ?>">
    <input type="text" name="to" id="to" class="form-control form-group datepicker" value="<?php echo Yii::app()->session['to']; ?>">
 

@@ -36,7 +36,7 @@ echo $model->alku;
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'vktyoaika'); ?>
-		<?php echo $form->textField($model,'vktyoaika',array('size'=>10,'maxlength'=>10,'class'=>'form-control')); ?>
+		<?php echo $form->textField($model,'vktyoaika',array('size'=>10,'maxlength'=>10,'class'=>'form-control timepicker_false')); ?>
 		<?php echo $form->error($model,'vktyoaika'); ?>
 	</div>
 

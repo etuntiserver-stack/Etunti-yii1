@@ -18,7 +18,12 @@
 
 
 		if(Yii::app()->session['from'] and Yii::app()->session['to'])
-	        $criteria->addCondition ("DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."' ");
+	        $criteria->addCondition (" 
+
+			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
+			BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."' 
+
+		");
 
 		$lu = Mobile::model()->findAll($criteria);
 		foreach($lu as $val)
@@ -57,7 +62,7 @@
 	}
 	?>
 
-	<td><?php echo sprint($data->l_tunnit); ?></td>
+	<td><?php echo sprint($total_l); ?></td>
 	<td><?php echo sprint($total_l); ?></td>
 	<td><?php echo $data->kpl; ?></td>
 
