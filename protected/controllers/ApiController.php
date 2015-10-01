@@ -344,6 +344,32 @@ public function actionImei($dom)
 
 
 
+// ongelma
+if(isset($_POST['loppui'])){
+$expl = explode(".",$_POST['loppui']);
+  if(isset($expl[1])){
+
+	if(strlen($expl[1]) >2){
+	$_POST['loppui'] = $expl[0].'.'.substr($expl[1], 1).'.'.$expl[2];
+	}
+  }
+}
+
+// ongelma
+if(isset($_POST['aloitan'])){
+$expla = explode(".",$_POST['aloitan']);
+  if(isset($expla[1])){
+
+	if(strlen($expla[1]) >2){
+	$_POST['aloitan'] = $expla[0].'.'.substr($expla[1], 1).'.'.$expla[2];
+	}
+  }
+}
+
+
+
+
+
             $mob = Mob::model()->find(" imei = '".$_POST['imei']."' and loppui = '' ");
 
 	    if(isset($mob->id)){
