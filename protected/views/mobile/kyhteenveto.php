@@ -25,6 +25,9 @@ $this->breadcrumbs=array(
     $list = CHtml::listData(Mobile::model()->findAll(array('group' => 'kohde_kannasta','order' => 'kohde_kannasta')), 'kohde_kannasta', 'kohde_kannasta');
 
     echo '<select name="kohteet" class="form-control form-group" id="kohteet">';
+    if(isset(Yii::app()->session['kohteet']) and Yii::app()->session['kohteet'] != 'kaikki')
+       	 echo '<option value="'.Yii::app()->session['kohteet'].'">'.Yii::app()->session['kohteet'].'</option>';
+
        	 echo '<option value="kaikki">Kaikki</option>';
     foreach($list as $key=>$val){
 
@@ -95,7 +98,33 @@ $this->breadcrumbs=array(
 <?php $this->widget('zii.widgets.CListView', array(
 	'dataProvider'=>$dataProvider,
 	'itemView'=>'_kyhteenveto',
-)); ?>
+));  ?>
+
+  <tfoot>
+  <tr>
+  <th><?php echo Yii::t('main', 'Yhteensä'); ?></th>
+
+  <?php
+  $tas = explode(",",Yii::app()->user->adminPaketti);
+  if(in_array('2',$tas)) : 
+  ?>
+  <th></th>
+  <?php endif; ?>
+
+  <?php
+	$lu = '0';
+	$tot = '0';
+	if(isset(Yii::app()->session['mitkatKohteet']))
+	{
+		$lu = $this->yhtLU(Yii::app()->session['mitkatKohteet']);
+		$tot = $this->yhtTOT(Yii::app()->session['mitkatKohteet']);
+	}
+  ?>
+  <th><?php echo sprint($lu); ?></th>
+  <th><?php echo sprint($tot); ?></th>
+  <th></th>
+  </tr>
+  </tfoot>
 
   </table>
 <?php endif; ?>
