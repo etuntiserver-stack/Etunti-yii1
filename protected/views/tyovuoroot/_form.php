@@ -12,10 +12,13 @@ else
 if(isset($_POST['tid']))
   $model->tid = $_POST['tid'];
 
+
+		  $ohje = '';
+if(isset($model->id))
+{
 		$m = Kohteet::model()->findbypk($model->kohde);
 		$k = explode("//",$m->kenella_on_avain);
 
-		  $ohje = '';
 		if(isset($k[1]))
 		  $ohje .= Yii::t('main', 'Avain on: ')." ".$k[1]."\n";
 		if(!empty($m->avain))
@@ -23,6 +26,7 @@ if(isset($_POST['tid']))
 		if(!empty($m->toimenpiteet))
 		  $ohje .= $m->toimenpiteet;
 
+}
 ?>
 
 <div class="row form">

@@ -4,17 +4,32 @@
 
 		$total_l 	= 0;
 		$total_t 	= 0;
-		$tp		= 0;
-		$al		= '';
-		$lop		= '';
 		$total_sunniteltu = 0;
 
        		$criteria = new CDbCriteria();
         	$criteria->select = "
-		TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s'))) as l_tunnit,
-		t.id,t.aloitan,t.loppui";
+			SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s'), 
+			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s')))) as l_tunnit
+		";
 
-        	$criteria->condition = "  kohde_kannasta = '".$data->kohde_kannasta."' and status='3' ";
+		if(Yii::app()->session['mitkatKohteet'] == 'kohdenID')
+		{
+        	$criteria->condition = " 
+			loppui!='' and aloitan!='' 
+			AND status='3'
+			AND kohdenID ='".$data->kohdenID."' 
+		";
+		}
+
+		if(Yii::app()->session['mitkatKohteet'] == 'kohde_kannasta')
+		{
+        	$criteria->condition = " 
+			loppui!='' and aloitan!='' 
+			AND status='3'
+			AND kohdenID =''
+			AND kohde_kannasta='".$data->kohde_kannasta."' 
+		";
+		}
 
 
 		if(Yii::app()->session['from'] and Yii::app()->session['to'])
@@ -25,27 +40,46 @@
 
 		");
 
-		$lu = Mobile::model()->findAll($criteria);
-		foreach($lu as $val)
+
+		$criteria->addCondition (" id NOT IN (SELECT kid FROM sivexkuitti_repaired) ");
+		$lu = Mobile::model()->find($criteria);
+
+
+       		$criteria = new CDbCriteria();
+        	$criteria->select = "
+			SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s'), 
+			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s')))) as t_tunnit
+		";
+
+		if(Yii::app()->session['mitkatKohteet'] == 'kohdenID')
 		{
-
-			$tot = Toteutuneet::model()->find(" kid = '".$val->id."' ");
-
-			if(isset($tot['id']))
-			{
-			  $val->l_tunnit = (strtotime($tot['loppui'])-strtotime($tot['aloitan']));
-			  $al = explode(" ",$tot['aloitan']);
-			  $lop = explode(" ",$tot['loppui']);
-			} else {
-			  $al = explode(" ",$val->aloitan);
-			  $lop = explode(" ",$val->loppui);
-			}
-
-			// Toteutuneet
-			$total_l += $val->l_tunnit;
-
+        	$criteria->condition = " 
+			loppui!='' and aloitan!='' 
+			AND status='3'
+			AND kohdenID ='".$data->kohdenID."' 
+		";
 		}
-		$total = $total_l;
+
+		if(Yii::app()->session['mitkatKohteet'] == 'kohde_kannasta')
+		{
+        	$criteria->condition = " 
+			loppui!='' and aloitan!='' 
+			AND status='3'
+			AND kohdenID =''
+			AND kohde_kannasta='".$data->kohde_kannasta."' 
+		";
+		}
+
+
+		if(Yii::app()->session['from'] and Yii::app()->session['to'])
+	        $criteria->addCondition (" 
+
+			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
+			BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."' 
+
+		");
+
+		$tot = Toteutuneet::model()->find($criteria);
 
 
 ?>
@@ -62,8 +96,8 @@
 	}
 	?>
 
-	<td><?php echo sprint($total_l); ?></td>
-	<td><?php echo sprint($total_l); ?></td>
+	<td><?php echo sprint($data->l_tunnit); ?></td>
+	<td><?php echo sprint($lu->l_tunnit+$tot->t_tunnit); ?></td>
 	<td><?php echo $data->kpl; ?></td>
 
 </tr>
