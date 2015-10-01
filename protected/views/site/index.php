@@ -5,55 +5,7 @@ $this->pageTitle=Yii::app()->name;
 
 //echo Yii::app()->user->isGuest ;
 //print_r(Yii::app()->user);
-
-
-$_POST['loppui'] = "01.010.2015 10:4:57";
-// ongelma
-if(isset($_POST['loppui'])){
-$expl = explode(".",$_POST['loppui']);
-  if(isset($expl[1])){
-
-	if(strlen($expl[1]) >2){
-	echo $_POST['loppui'] = $expl[0].'.'.substr($expl[1], 1).'.'.$expl[2];
-	}
-  }
-}
-
-// ongelma
-if(isset($_POST['aloitan'])){
-$expl = explode(".",$_POST['aloitan']);
-  if(isset($expl[1])){
-
-	if(strlen($expl[1]) >2){
-	$_POST['aloitan'] = $expl[0].'.'.substr($expl[1], 1).'.'.$expl[2];
-	}
-  }
-}
 ?>
-
-<div id=reso"></div>
-<script type="text/javascript">
-$(document).ready(function(){
-
-function curDateTime(){
-
-  	var date = new Date();
-	var year = date.getFullYear();
-	var month = date.getMonth();
-	month = month < 10 ? "0" + (month+1) : month+1;
-	var day = date.getDate();
-	day = day < 10 ? "0" + (day) : day;
-	var hours = date.getHours();
-	var minutes = date.getMinutes();
-	var seconds = date.getSeconds();
-
-	return (day + "." + month + "." + year + " " + hours + ":" + minutes + ":" + seconds);
-}
-      	$("#reso").html(curDateTime())
-
-});
-</script>
-
 
 
 
@@ -62,7 +14,6 @@ function curDateTime(){
 
 
 <?php 
-/*
 if(isset(Yii::app()->user->adminID))
 {
   if(isset($_SESSION['domain']))
@@ -100,7 +51,6 @@ for ($i = 1; $i <= 12; $i++) {
         ); 
     
 }
-*/
 ?>
 
 
