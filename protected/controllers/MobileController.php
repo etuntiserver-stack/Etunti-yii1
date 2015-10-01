@@ -861,6 +861,117 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 	}
 
 
+	protected function totLu($criteria,$kohdenID,$kohde_kannasta){
+
+
+        	$criteria->select = "
+			SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s'), 
+			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s')))) as l_tunnit
+		";
+
+		if(Yii::app()->session['mitkatKohteet'] == 'kohdenID')
+		{
+        	$criteria->condition = " 
+			loppui!='' and aloitan!='' 
+			AND status='3'
+			AND kohdenID ='".$kohdenID."' 
+		";
+		}
+
+		if(Yii::app()->session['mitkatKohteet'] == 'kohde_kannasta')
+		{
+        	$criteria->condition = " 
+			loppui!='' and aloitan!='' 
+			AND status='3'
+			AND kohdenID =''
+			AND kohde_kannasta='".$kohde_kannasta."' 
+		";
+		}
+
+
+		if(Yii::app()->session['from'] and Yii::app()->session['to'])
+	        $criteria->addCondition (" 
+
+			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
+			BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."' 
+
+		");
+
+		return $criteria;
+	}
+
+
+	protected function totLuYhteensa($criteria,$mitkatKohteet){
+
+
+        	$criteria->select = "
+			SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s'), 
+			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s')))) as l_tunnit
+		";
+
+		if($mitkatKohteet == 'kohdenID')
+		{
+        	$criteria->condition = " 
+			loppui!='' and aloitan!='' 
+			AND status='3'
+			AND kohdenID !='' 
+		";
+		}
+
+		if($mitkatKohteet == 'kohde_kannasta')
+		{
+        	$criteria->condition = " 
+			loppui!='' and aloitan!='' 
+			AND status='3'
+			AND kohdenID =''
+			AND kohde_kannasta!='' 
+		";
+		}
+
+
+		if(Yii::app()->session['from'] and Yii::app()->session['to'])
+	        $criteria->addCondition (" 
+
+			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
+			BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."' 
+
+		");
+
+		return $criteria;
+	}
+
+
+	protected function yhtLU($mitkatKohteet){
+
+
+       		$cr1 = new CDbCriteria();
+		$this->totLuYhteensa($cr1,$mitkatKohteet);
+		$l = Mobile::model()->find($cr1);
+
+		$lu = $l->l_tunnit;
+
+	return $lu;
+
+	}
+
+
+	protected function yhtTOT($mitkatKohteet){
+
+       		$cr1 = new CDbCriteria();
+		$this->totLuYhteensa($cr1,$mitkatKohteet);
+		$cr1->addCondition (" id NOT IN (SELECT kid FROM sivexkuitti_repaired) ");
+		$tt = Mobile::model()->find($cr1);
+
+       		$cr2 = new CDbCriteria();
+		$this->totLuYhteensa($cr2,$mitkatKohteet);
+		$tt2 = Toteutuneet::model()->find($cr2);
+		
+		$tot = $tt->l_tunnit+$tt2->l_tunnit;
+
+	return $tot;
+
+	}
+
 
 	public function actionKyhteenveto()
 	{
@@ -899,6 +1010,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			$mitkatKohteet = Yii::app()->session['mitkatKohteet'];
 		else
 			$mitkatKohteet = "kohdenID";
+
 
 		if($mitkatKohteet == 'kohdenID')
 		{
