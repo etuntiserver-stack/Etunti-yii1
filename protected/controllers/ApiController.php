@@ -423,6 +423,7 @@ public function actionImei($dom)
                 $mobinsert->tid = $ttekija->id;
                 $mobinsert->tekijan_nimi = $ttekija->tekijan_nimi;
                 $mobinsert->tietoja = $_POST['tietoja'];
+                $mobinsert->aloitan = date("d.m.Y H:i:s",strtotime($_POST['aloitan']));
                 $mobinsert->save();
                 $this->_sendResponse(200, $mobinsert->id."//".$mobinsert->kohde_kannasta);
 
