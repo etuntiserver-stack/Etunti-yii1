@@ -114,7 +114,7 @@ public $t_tunnit;
 			'tekijan_nimi' => 'Tekijan Nimi',
 			'tid' => 'Tid',
 			'etaisyys' => 'Etaisyys',
-			'status' => 'Status',
+			'status' => 'Tilanne',
 			'tietoja' => 'Tietoja',
 			'admin' => 'Admin',
 			'tyoajanlaatu' => 'Tyoajanlaatu',

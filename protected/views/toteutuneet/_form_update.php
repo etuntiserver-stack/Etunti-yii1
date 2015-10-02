@@ -49,6 +49,18 @@ $model->loppui = date("H:i",strtotime($model->loppui));
 	</div>
 
 	<div class="row">
+		<?php echo $form->labelEx($model,'status'); ?>
+		<?php 
+		      $list = array(3=>Yii::t('main','TYÖ'),2=>Yii::t('main','MATKA'),10=>Yii::t('main','LOUNASTAUKO'));
+		      //array_unshift($list, $list[$s->status]);
+		      echo $form->dropDownList($model,'status', 
+			 	$list, 
+				array('options' => array($model->status=>array('selected'=>true)),'class'=>'form-control'));
+		?>
+		<?php echo $form->error($model,'status'); ?>
+	</div>
+
+	<div class="row">
 		<?php echo $form->labelEx($model,'aloitan'); ?>
 		<?php echo $form->textField($model,'aloitan',array('size'=>60,'maxlength'=>100,'class'=>'form-control timepicker al')); ?>
 	</div>

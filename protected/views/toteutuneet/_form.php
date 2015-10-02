@@ -42,7 +42,6 @@ $loppui = date("H:i",strtotime($s->loppui));
 		<input type="hidden" name="forPVM" value="<?php echo $forPVM; ?>">
 		<?php echo $form->hiddenField($model,'kid',array('value'=>$s->id)); ?>
 		<?php echo $form->hiddenField($model,'tid',array('value'=>$s->tid)); ?>
-		<?php echo $form->hiddenField($model,'status',array('value'=>$s->status)); ?>
 		<?php echo $form->hiddenField($model,'tekijan_nimi',array('value'=>$s->tekijan_nimi)); ?>
 		<?php echo $form->hiddenField($model,'kohdenID',array('value'=>$s->kohdenID,'id'=>'kohdenID')); ?>
 
@@ -51,8 +50,20 @@ $loppui = date("H:i",strtotime($s->loppui));
 		<?php echo $form->labelEx($model,'kohde_kannasta'); ?>
 		<?php echo $form->dropDownList($model,'kohde_kannasta', 
 			CHtml::listData(Kohteet::model()->findAll(array('order' => 'osoite ASC')), 'osoite', 'osoite'), 
-			array('class'=>'form-control','id'=>'osoite')) ?>
+			array('class'=>'form-control')); ?>
 		<?php echo $form->error($model,'kohde_kannasta'); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->labelEx($model,'status'); ?>
+		<?php 
+		      $list = array(3=>Yii::t('main','TYÖ'),2=>Yii::t('main','MATKA'),10=>Yii::t('main','LOUNASTAUKO'));
+		      //array_unshift($list, $list[$s->status]);
+		      echo $form->dropDownList($model,'status', 
+			 	$list, 
+				array('options' => array($s->status=>array('selected'=>true)),'class'=>'form-control'));
+		?>
+		<?php echo $form->error($model,'status'); ?>
 	</div>
 
 	<div class="row">
