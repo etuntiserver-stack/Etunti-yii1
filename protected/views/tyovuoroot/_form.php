@@ -16,7 +16,12 @@ if(isset($_POST['tid']))
 		  $ohje = '';
 if(isset($model->id))
 {
-		$m = Kohteet::model()->findbypk($model->kohde);
+
+	$m = Kohteet::model()->findbypk($model->kohde);
+		
+	if(isset($m->id))
+	{
+
 		$k = explode("//",$m->kenella_on_avain);
 
 		if(isset($k[1]))
@@ -25,6 +30,8 @@ if(isset($model->id))
 		  $ohje .= Yii::t('main', 'Avain: ')." ".$m->avain."\n\n";
 		if(!empty($m->toimenpiteet))
 		  $ohje .= $m->toimenpiteet;
+
+	}
 
 }
 ?>
