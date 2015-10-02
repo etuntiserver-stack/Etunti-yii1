@@ -95,7 +95,7 @@ $(".poistaTot").click(function(){
            type: "POST",
 	   data : { "id" : thisVal },
            success: function(data){
-		console.log(data);
+		//console.log(data);
 
 
 	  	$.ajax({
@@ -103,7 +103,7 @@ $(".poistaTot").click(function(){
 			type:'GET',
 			data: { "pvm" : divID[0], "tid" : divID[1], "from" : "ajax" },
 			  success:function(data){
-			  console.log(data);
+			  //console.log(data);
 
 			  $('#'+divID[0]+'_'+divID[1]).html(data);
 
@@ -118,7 +118,7 @@ $(".poistaTot").click(function(){
 			type:'GET',
 			data: { "pvm" : divID[0], "tid" : divID[1], "from" : "ajax" },
 			  success:function(data){
-			  console.log(data);
+			  //console.log(data);
 
 			  $('#yht_'+divID[0]+'_'+divID[1]).html(data);
 			  },
@@ -162,7 +162,7 @@ $(document).ready(function(){
 		  data:$(this).serialize(),
 		  type:'POST',
 		  success:function(data){
-			console.log(data);
+			//console.log(data);
 			var divID = data.split("_");
 
 		if( divID ){
