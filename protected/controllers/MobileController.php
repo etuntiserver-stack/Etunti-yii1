@@ -860,6 +860,30 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		}
 	}
 
+	protected function yhtSUUNN(){
+
+       		$criteria = new CDbCriteria();
+        	$criteria->select = "
+			SUM(TIME_TO_SEC(TIMEDIFF(loppu, alku))) as l_tunnit
+		";
+
+        	$criteria->condition = " 
+			loppu!='' and alku!='' 
+			AND tyoajanmerkinta NOT LIKE '%Ei lasketa%'
+		";
+
+		if(Yii::app()->session['from'] and Yii::app()->session['to'])
+	        $criteria->addCondition (" 
+
+			DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') 
+			BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."' 
+
+
+		");
+		$model = Tyovuoroot::model()->find($criteria);
+		return $model->l_tunnit;
+	}
+
 
 	protected function totLu($criteria,$kohdenID,$kohde_kannasta){
 

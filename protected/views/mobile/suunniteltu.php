@@ -1,22 +1,27 @@
 <?php
 
 
-	$total_sunniteltu = 0;
-	$criteria = new CDbCriteria();
+		$criteria = new CDbCriteria();
 
-	$criteria->condition = " $kohde_tid = '".$id."' ";
+        	$criteria->select = "
+			SUM(TIME_TO_SEC(TIMEDIFF(loppu, alku))) as l_tunnit
+		";
 
-	  if(Yii::app()->session['from'] and Yii::app()->session['to'])
-	  {
-	  $criteria->addCondition ("DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') 
-		BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."' ");
-	  }
+        	$criteria->condition = " 
+			$kohde_tid = '".$id."'
+			AND loppu!='' and alku!='' 
+			AND tyoajanmerkinta NOT LIKE '%Ei lasketa%'
+		";
 
-	  $su = Tyovuoroot::model()->findAll($criteria);
+		if(Yii::app()->session['from'] and Yii::app()->session['to'])
+	        $criteria->addCondition (" 
 
-	    foreach($su as $val)
-	      $total_sunniteltu += (strtotime($val->pvm." ".$val->loppu)-strtotime($val->pvm." ".$val->alku));
+			DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') 
+			BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."' 
 
+		");
 
-	echo $total_sunniteltu;
+	  	$su = Tyovuoroot::model()->find($criteria);
+
+		echo $su->l_tunnit;
 ?>
