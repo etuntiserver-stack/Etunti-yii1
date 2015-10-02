@@ -62,10 +62,14 @@ $this->breadcrumbs=array(
   <th><?php echo Yii::t('main', 'Työntekijä'); ?></th>
   <th><?php echo Yii::t('main', 'Luetut'); ?></th>
   <th><?php echo Yii::t('main', 'Toteutuneet'); ?></th>
+<?php 
+/*
   <th><?php echo Yii::t('main', 'Työpäiviä'); ?></th>
   <th><?php echo Yii::t('main', 'Ilta'); ?></th>
   <th><?php echo Yii::t('main', 'Yö'); ?></th>
   <th><?php echo Yii::t('main', 'Su'); ?></th>
+*/
+?>
   </tr>
   </thead>
 

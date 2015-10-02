@@ -34,7 +34,7 @@ class MobileController extends Controller
 		return array(
 
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin', 'delete', 'create', 'update', 'index', 'index_a', 'view', 'updatetime', 'showkohteet', 'yhteenveto', 'kyhteenveto', 'yhteenveto_m', 'historia', 'poistaKohde', 'total_suunniteltu', 'total_toteutu', 'total_luettu', 'kesto', 'index_ajax', 'raportit', 'palkkataulukko', 'tidfromtomatkat'),
+				'actions'=>array('admin', 'delete', 'create', 'update', 'index', 'index_a', 'view', 'updatetime', 'showkohteet', 'yhteenveto', 'kyhteenveto', 'yhteenveto_m', 'historia', 'poistaKohde', 'total_suunniteltu', 'total_toteutu', 'total_luettu', 'kesto', 'index_ajax', 'raportit', 'uusirivi', 'palkkataulukko', 'tidfromtomatkat'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -192,6 +192,7 @@ class MobileController extends Controller
 
 	}
 
+
 	public function actionTotal_suunniteltu($id,$kohde_tid)
 	{
 
@@ -334,10 +335,37 @@ class MobileController extends Controller
 		));
 	}
 
-	/**
-	 * Creates a new model.
-	 * If creation is successful, the browser will be redirected to the 'view' page.
-	 */
+
+	public function actionUusirivi()
+	{
+		$model=new Mobile;
+
+		// Uncomment the following line if AJAX validation is needed
+		// $this->performAjaxValidation($model);
+
+		if(isset($_POST['Mobile']))
+		{
+			$k = Kohteet::model()->findbypk($_POST['Mobile']['kohdenID']);
+			$model->attributes=$_POST['Mobile'];
+			$model->aloitan=date("d.m.Y H:i:s", strtotime($_POST['pvm'].' '.$_POST['Mobile']['aloitan']));
+			$model->loppui=date("d.m.Y H:i:s", strtotime($_POST['pvm'].' '.$_POST['Mobile']['loppui']));
+			$model->kohde_kannasta=$k->osoite;
+			$model->admin=1;
+
+			if($model->save()){
+			   $did = date("Ymd",strtotime($model->aloitan));
+			   echo $did."_".$model->tid;
+			   exit;
+			}
+
+		}
+
+		$this->renderPartial('_uusirivi',array(
+			'model'=>$model,
+		));
+
+	}
+
 	public function actionCreate()
 	{
 		$model=new Mobile;
@@ -786,6 +814,54 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 	}
 
 
+	protected function luMatka($criteria,$tid,$from,$to){
+
+        	$criteria->select = "
+			SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s'), 
+			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s')))) as l_tunnit
+		";
+
+        	$criteria->condition = "  
+			status = '2' and tid = '".$tid."' and aloitan !='' and loppui !='' 
+		";
+
+		if(!empty($from) and !empty($to))
+		{
+	        $criteria->addCondition (" 
+			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
+			BETWEEN '".$from."' AND '".$to."' 
+		");
+		}
+
+	        $criteria->addCondition (" id NOT IN (SELECT kid FROM sivexkuitti_repaired) ");
+
+	return $criteria;
+	}
+
+	protected function totMatka($criteria,$tid,$from,$to){
+
+        	$criteria->select = "
+			SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s'), 
+			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s')))) as l_tunnit
+		";
+
+        	$criteria->condition = "  
+			status = '2' and tid = '".$tid."' and aloitan !='' and loppui !='' 
+		";
+
+		if(!empty($from) and !empty($to))
+		{
+	        $criteria->addCondition (" 
+			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
+			BETWEEN '".$from."' AND '".$to."' 
+		");
+		}
+
+	        $criteria->addCondition (" kid IN (SELECT id FROM sivexkuitti) ");
+
+	return $criteria;
+	}
+
 	public function actionYhteenveto_m()
 	{
 
@@ -793,23 +869,6 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		//unset(Yii::app()->session['Tekija']);
 		if(Yii::app()->request->getPost('Tekija'))
 		Yii::app()->session['Tekija'] = Yii::app()->request->getPost('Tekija');
-
-		if(isset($_POST['yhtvetoform']))
-		{
-		unset(Yii::app()->session['Lounastauko']);
-		unset(Yii::app()->session['MATKA']);
-		}
-
-		if(isset($_POST['ilman']))
-		{
-		  foreach($_POST['ilman'] as $val){
-			if($val == 'Lounastauko')
-			Yii::app()->session['Lounastauko'] = 10;
-
-			if($val == 'MATKA')
-			Yii::app()->session['MATKA'] = 2;
-		  }
-		}
 
 
 		if(Yii::app()->request->getPost('from'))
@@ -821,16 +880,19 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 
        		$criteria = new CDbCriteria();
         	$criteria->select = "
-
-		SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s')))) as l_tunnit,
-
-		t.*";
+			SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s'), 
+			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s')))) as l_tunnit,
+		t.*
+		";
 
         	//$criteria->condition = " l_loppu = '' and l_alku = '' ";
 
         	$criteria->order = "tekijan_nimi"; //"SUBSTR(LTRIM(tekijan_nimi), LOCATE(' ',LTRIM(tekijan_nimi)))"
         	$criteria->group = 'tid';
-	        $criteria->condition = " status = '2' ";
+	        $criteria->condition = " 
+			aloitan!='' AND loppui!=''
+			AND status = '2' 
+		";
 
 		if(Yii::app()->session['Tekija']){
 		  if(count(Yii::app()->session['Tekija']) > 1)
