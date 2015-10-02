@@ -14,8 +14,13 @@
   $idKid = $explStr['8'];
 
 
-  $m = Mobile::model()->findbypk($idKid,array("select"=>"hyvaksytty"));
+  $m = Mobile::model()->findbypk($idKid,array("select"=>"hyvaksytty,admin"));
 
+    $admin = '';
+  if($m->admin == 1)
+  {
+    $admin = 'text-danger text-uppercase';
+  }
 
     $chk[$rivi] = '';
   if(!empty($m->hyvaksytty))
@@ -48,7 +53,7 @@
 		<span class="form-group">
 			<input type="checkbox" class="chckbxHyvaksynta" id="hyv_'.$rivi.'" '.$chk[$rivi].' kuka="'.Yii::app()->user->username.'///'.date('d.m.Y').'">&nbsp; 
 		</span><span class="form-group">
-			<i class="form-group link totRivi" mod="'.$mod.'" id="tot_'.$rivi.'">'.$al.' '.$kohde.'</i>'.$ap.'
+			<i class="form-group link totRivi '.$admin.'" mod="'.$mod.'" id="tot_'.$rivi.'">'.$al.' '.$kohde.'</i>'.$ap.'
 		</span>
 	   </div>';
 

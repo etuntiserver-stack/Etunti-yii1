@@ -113,7 +113,7 @@ public $kpl;
 			'tekijan_nimi' => 'Työntekijä',
 			'tid' => 'Työntekijän ID',
 			'etaisyys' => 'Etäisyys',
-			'status' => 'Status',
+			'status' => 'Tilanne',
 			'tietoja' => 'Historia muutoksesta',
 			'admin' => 'Admin',
 			'hyvaksytty' => 'Hyvaksytty',

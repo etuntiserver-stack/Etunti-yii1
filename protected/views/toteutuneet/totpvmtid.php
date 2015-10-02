@@ -70,6 +70,7 @@ $did = date("Ymd",strtotime($pvm));
 		}
 
 	}
+	echo '&nbsp;&nbsp;<b class="link glyphicon glyphicon-plus uusirivi" for="'.$did.'_'.$tid.'"></b>';
 	echo '</div>';
 
 
