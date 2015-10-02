@@ -101,6 +101,16 @@ $this->breadcrumbs=array(
 ));  ?>
 
   <tfoot>
+  <?php
+	$lu = '0';
+	$tot = '0';
+	if(isset(Yii::app()->session['mitkatKohteet']))
+	{
+		$suunn = $this->yhtSUUNN();
+		$lu = $this->yhtLU(Yii::app()->session['mitkatKohteet']);
+		$tot = $this->yhtTOT(Yii::app()->session['mitkatKohteet']);
+	}
+  ?>
   <tr>
   <th><?php echo Yii::t('main', 'Yhteensä'); ?></th>
 
@@ -108,18 +118,9 @@ $this->breadcrumbs=array(
   $tas = explode(",",Yii::app()->user->adminPaketti);
   if(in_array('2',$tas)) : 
   ?>
-  <th></th>
+  <th>/ <?php echo Yii::t('main', 'oikeasti:'); ?><?php echo sprint($suunn); ?></th>
   <?php endif; ?>
 
-  <?php
-	$lu = '0';
-	$tot = '0';
-	if(isset(Yii::app()->session['mitkatKohteet']))
-	{
-		$lu = $this->yhtLU(Yii::app()->session['mitkatKohteet']);
-		$tot = $this->yhtTOT(Yii::app()->session['mitkatKohteet']);
-	}
-  ?>
   <th><?php echo sprint($lu); ?></th>
   <th><?php echo sprint($tot); ?></th>
   <th></th>

@@ -40,6 +40,16 @@ td,th{
   </tbody>
 
   <tfoot>
+  <?php
+	$lu = '0';
+	$tot = '0';
+	if(isset(Yii::app()->session['mitkatKohteet']))
+	{
+		$suunn = $this->yhtSUUNN();
+		$lu = $this->yhtLU(Yii::app()->session['mitkatKohteet']);
+		$tot = $this->yhtTOT(Yii::app()->session['mitkatKohteet']);
+	}
+  ?>
   <tr>
   <th><?php echo Yii::t('main', 'Yhteensä'); ?></th>
 
@@ -47,11 +57,11 @@ td,th{
   $tas = explode(",",Yii::app()->user->adminPaketti);
   if(in_array('2',$tas)) : 
   ?>
-  <th></th>
+  <th><?php echo sprint($suunn); ?></th>
   <?php endif; ?>
 
-  <th></th>
-  <th></th>
+  <th><?php echo sprint($lu); ?></th>
+  <th><?php echo sprint($tot); ?></th>
   <th></th>
   </tr>
   </tfoot>
