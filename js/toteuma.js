@@ -1,5 +1,17 @@
 $(document).ready(function(){
 
+$("#Toteutuneet_aloitan").click(function(){
+	$(this).select();
+});
+$("#Toteutuneet_loppui").click(function(){
+	$(this).select();
+});
+$("#Mobile_aloitan").click(function(){
+	$(this).select();
+});
+$("#Mobile_loppui").click(function(){
+	$(this).select();
+});
 
 $("#Mobile_kohde_kannasta").change(function(){
 	var kohdenID = $(this).val();
