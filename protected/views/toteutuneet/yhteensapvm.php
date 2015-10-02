@@ -3,7 +3,14 @@
 	$getTot = 0;
 	$ero = 0;
 
-	$sun = Tyovuoroot::model()->findAll("tid = '".$tid."' and pvm = '".date("d.m.Y",strtotime($pvm))."'  "); 
+       	$criteria = new CDbCriteria();
+	$criteria->order = " alku ASC";
+	$criteria->condition = " 
+		tid = '".$tid."' and pvm = '".date("d.m.Y",strtotime($pvm))."' 
+		AND tyoajanmerkinta NOT LIKE '%Ei lasketa%'
+	";
+
+	$sun = Tyovuoroot::model()->findAll($criteria); 
 
 	foreach($sun as $tvVal){
 	   if($tvVal->id){
