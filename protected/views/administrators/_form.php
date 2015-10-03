@@ -49,8 +49,13 @@
 		   $tal[$exV[1]] = $exV[0];
 		}
 
-		echo $form->dropDownList($model,'status', $tal, 
-		array('class'=>'form-control')) ?>
+		if(isset($tal[0])){
+			echo $form->dropDownList($model,'status', $tal, 
+			array('class'=>'form-control')); 
+		} else {
+			echo $form->textField($model,'status',array('size'=>60,'maxlength'=>1,'class'=>'form-control'));
+		}
+		?>
 		<?php echo $form->error($model,'status'); ?>
 	</div>
 
