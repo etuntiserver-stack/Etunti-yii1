@@ -30,6 +30,7 @@
    echo '<div class="form-group">';
 
  	echo '	<form class="form-inline" action="#" method="POST">
+		<input type="hidden" name="domain" value="defdb">
 		<input type="hidden" name="file" value="'.$filepath.'">
 		<input class="btn btn-primary btn-group" type="submit" value="defdb.sql">
 		</form>';

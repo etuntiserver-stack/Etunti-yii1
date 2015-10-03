@@ -5,6 +5,15 @@ $this->pageTitle=Yii::app()->name;
 
 //echo Yii::app()->user->isGuest ;
 //print_r(Yii::app()->user);
+
+/*
+$criteria = new CDbCriteria;
+$criteria->select = " COUNT(*) as count,imei ";
+$criteria->group = " imei ";
+$t = Tyontekijat::model()->findAll($criteria); 
+foreach($t as $g)
+echo $g->imei.' '.$g->count.'<br>';
+*/
 ?>
 
 

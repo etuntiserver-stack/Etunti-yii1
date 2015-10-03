@@ -70,7 +70,10 @@ $did = date("Ymd",strtotime($pvm));
 		}
 
 	}
+	
+	if($from != 'kk')
 	echo '&nbsp;&nbsp;<b class="link glyphicon glyphicon-plus uusirivi" for="'.$did.'_'.$tid.'"></b>';
+
 	echo '</div>';
 
 
