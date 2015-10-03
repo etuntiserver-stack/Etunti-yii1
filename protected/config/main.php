@@ -272,6 +272,7 @@ return array(
 		    'jquery-ui.min.css',
                     'multiselect.css',
 		    'jquery.datetimepicker.css',
+		    'font-awesome.min.css',
                 ),
 
             ),
