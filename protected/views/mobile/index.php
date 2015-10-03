@@ -53,7 +53,7 @@ $fi = array(
 
   $viikonpaiva = str_replace($en, $fi, $date);
 ?>
-		<div class="col-md-3">
+		<div class="col-md-2">
 			<div class="panel panel-default date-panel">
 				<div class="panel-heading">
 					<h3 class="panel-title"><?php echo $viikonpaiva; ?></h3>
@@ -70,9 +70,9 @@ $fi = array(
 
   <div class="col-sm-3">
 <?php 
-	$s = Tyovuoroot::model()->findAll(" DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE() ");
-	$a = Mobile::model()->findAll("status=1");	
-	$t = Mobile::model()->findAll(" DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE() and status=3");	
+	$s = Tyovuoroot::model()->findAll(" DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE() ",array('select'=>'id'));
+	$a = Mobile::model()->findAll("status=1",array('select'=>'id'));	
+	$t = Mobile::model()->findAll(" DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE() and status=3",array('select'=>'id'));	
 
 
         $this->widget(
@@ -107,15 +107,15 @@ $fi = array(
   </div><div class="col-sm-3">
 <?php 
 
-	$a = Mobile::model()->findAll(" DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE() and status=3");	
-	$m = Mobile::model()->findAll(" DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE() and status=2");
-	$l = Mobile::model()->findAll(" DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE() and status=10");
+	$a = Mobile::model()->findAll(" DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE() and status=3",array('select'=>'id'));	
+	$m = Mobile::model()->findAll(" DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE() and status=2",array('select'=>'id'));
+	$l = Mobile::model()->findAll(" DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE() and status=10",array('select'=>'id'));
 
 
         $this->widget(
             'chartjs.widgets.ChBars', 
             array(
-                'width' => 400,
+                'width' => 350,
                 'height' => 210,
                 'htmlOptions' => array(),
                 'labels' => array(Yii::t('main','Työt'),Yii::t('main','Matkat'),Yii::t('main','Lounaat')),
@@ -124,6 +124,33 @@ $fi = array(
                         "fillColor" => "#ff00ff",
                         "strokeColor" => "rgba(220,220,220,1)",
                         "data" => array(count($a),count($m),count($l))
+                    )       
+                ),
+                'options' => array()
+            )
+        ); 
+    ?>
+
+  </div><div class="col-sm-3">
+<?php 
+
+	$sop = Mobile::model()->findAll(" DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE() and status=3 and kohdenID!='' ",array('select'=>'id'));	
+	$tunt = Mobile::model()->findAll(" DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE() and status=3 and kohdenID='' ",array('select'=>'id'));
+
+
+
+        $this->widget(
+            'chartjs.widgets.ChBars', 
+            array(
+                'width' => 400,
+                'height' => 210,
+                'htmlOptions' => array(),
+                'labels' => array(Yii::t('main','Sopimusasiakas'),Yii::t('main','Tuntematon')),
+                'datasets' => array(
+                    array(
+                        "fillColor" => "rgba(100,100,220,1)",
+                        "strokeColor" => "rgba(100,100,220,1)",
+                        "data" => array(count($sop),count($tunt))
                     )       
                 ),
                 'options' => array()
