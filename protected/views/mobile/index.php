@@ -79,7 +79,7 @@ $fi = array(
             'chartjs.widgets.ChPolar', 
             array(
                 'width' => 400,
-                'height' => 200,
+                'height' => 175,
                 'htmlOptions' => array(),
                 'drawLabels' => true,
                 'datasets' => array(
