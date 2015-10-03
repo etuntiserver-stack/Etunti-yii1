@@ -26,15 +26,57 @@ $this->menu=array(
 </legend>
 
 <br>
+
 <div class="row">
+
+<?php
+$date = date("l");
+$en = array(
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday',
+    'Sunday',
+);
+$fi = array(
+    'Maanantai',
+    'Tiistai',
+    'Keskkiviikko',
+    'Torstai',
+    'Perjantai',
+    'Lauantai',
+    'Sunnuntai',
+);
+
+
+  $viikonpaiva = str_replace($en, $fi, $date);
+?>
+		<div class="col-sm-6 col-md-3">
+			<div class="panel panel-default date-panel">
+				<div class="panel-heading">
+					<h3 class="panel-title"><?php echo $viikonpaiva; ?></h3>
+				</div>
+				<div class="panel-body">
+
+					<div class="date"><?php echo date("d"); ?></div>
+				</div>	
+				<div class="month panel-footer">
+				  <?php echo date("F"); ?>, <span class="year"><?php echo date("Y"); ?></span>
+				</div>
+			</div>
+		</div>
+
   <div class="col-sm-3">
 <?php 
 	$s = Tyovuoroot::model()->findAll(" DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE() ");
 	$a = Mobile::model()->findAll(" DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE() and status=1");	
 	$t = Mobile::model()->findAll(" DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE() and status=3");	
 
+
         $this->widget(
-            'chartjs.widgets.ChDoughnut', 
+            'chartjs.widgets.ChPolar', 
             array(
                 'width' => 400,
                 'height' => 200,
@@ -56,7 +98,6 @@ $this->menu=array(
                         "color" => "rgba(220,30, 70,1)",
                         "label" => Yii::t('main','Tehdyt')
                     ),
-
                 ),
                 'options' => array()
             )
