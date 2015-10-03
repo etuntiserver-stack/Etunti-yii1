@@ -49,7 +49,7 @@
 		   $tal[$exV[1]] = $exV[0];
 		}
 
-		if(isset($tal[0])){
+		if(isset($a[0])){
 			echo $form->dropDownList($model,'status', $tal, 
 			array('class'=>'form-control')); 
 		} else {
