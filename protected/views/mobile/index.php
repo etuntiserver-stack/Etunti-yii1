@@ -53,7 +53,7 @@ $fi = array(
 
   $viikonpaiva = str_replace($en, $fi, $date);
 ?>
-		<div class="col-sm-6 col-md-3">
+		<div class="col-md-3">
 			<div class="panel panel-default date-panel">
 				<div class="panel-heading">
 					<h3 class="panel-title"><?php echo $viikonpaiva; ?></h3>
@@ -98,6 +98,43 @@ $fi = array(
                         "color" => "rgba(220,30, 70,1)",
                         "label" => Yii::t('main','Tehdyt')
                     ),
+                ),
+                'options' => array()
+            )
+        ); 
+    ?>
+
+  </div><div class="col-sm-3">
+<?php 
+
+	$a = Mobile::model()->findAll(" DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE() and status=3");	
+	$m = Mobile::model()->findAll(" DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE() and status=2");
+	$l = Mobile::model()->findAll(" DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE() and status=10");
+
+        $this->widget(
+            'chartjs.widgets.ChPolar', 
+            array(
+                'width' => 400,
+                'height' => 175,
+                'htmlOptions' => array(),
+                'drawLabels' => true,
+                'datasets' => array(
+                    array(
+                        "value" => count($a),
+                        "color" => "rgba(220,30, 70,1)",
+                        "label" => Yii::t('main','Työt')
+                    ),
+                    array(
+                        "value" => count($m),
+                        "color" => "rgba(66,66,66,1)",
+                        "label" => Yii::t('main','Matkat')
+                    ),
+                    array(
+                        "value" => count($l),
+                        "color" => "rgba(100,100,220,1)",
+                        "label" => Yii::t('main','Lounaat')
+                    ),
+
                 ),
                 'options' => array()
             )
