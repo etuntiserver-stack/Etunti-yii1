@@ -68,6 +68,7 @@ class DomainitController extends Controller
 		if(isset($_POST['Domainit']))
 		{
 			$model->attributes=$_POST['Domainit'];
+			if(isset($_POST['tasot'])) $model->paketti = implode(",",$_POST['tasot']);
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
 		}

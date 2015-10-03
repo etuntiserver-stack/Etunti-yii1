@@ -119,7 +119,6 @@ else
 	<td><?php echo $karttaA." ".$karttaL; ?></td>
 
 	<td>
-	<div class="row">
 	<!--
 	  <div class="col-sm-2">
 	  <?php 
@@ -133,7 +132,6 @@ else
 	 -->
 	  <?php echo CHtml::link(' ','/index.php/viestinta/create?tid='.$data->tid,array('target'=>'_blank','class'=>'link glyphicon glyphicon-envelope')); ?>&nbsp;
 	  <?php echo CHtml::link($data->tekijan_nimi,'/index.php/tyontekijat/update?id='.$data->tid,array('target'=>'_blank')); ?>
-	</div>
 	</td>
 
 	<!-- adminPaketti -->
