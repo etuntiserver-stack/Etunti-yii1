@@ -133,9 +133,9 @@
 		<?php
       		$l = Tyontekijat::model()->findAll(array('order' => "tekijan_nimi"));
 		foreach($l as $v)
-		$list[$v->id."//".$v->tekijan_nimi] = $v->tekijan_nimi;
+		$listt[$v->id."//".$v->tekijan_nimi] = $v->tekijan_nimi;
 
-        	echo $form->dropDownList($model, 'kenella_on_avain', $list,
+        	echo $form->dropDownList($model, 'kenella_on_avain', $listt,
 		array('empty'=>'','class'=>'form-control'));
         	?>
 

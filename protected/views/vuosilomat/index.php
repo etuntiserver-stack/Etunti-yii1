@@ -130,8 +130,11 @@ echo	'<input type=hidden id=number value='.cal_days_in_month(CAL_GREGORIAN, $mon
     else
     $checked = '';
 
-    echo '<p><input type=radio name="valikko" class="valikko" value="'.$expl[0].'//'.$expl[2].'//'.$expl[1].'" '.$checked.'> 
-	<span '.$back.' class="btn">'.$expl[0].'</span>  '.$expl[1].'</p>';
+    echo '
+    <div class="">
+	<input type=radio name="valikko" class="valikko form-inline" value="'.$expl[0].'//'.$expl[2].'//'.$expl[1].'" '.$checked.'> 
+	<span '.$back.' class="btn btn-xs btn-group btn-group-justified">'.$expl[0].'</span>  '.$expl[1].'
+    </div>';
   }
  ?>
  </div>

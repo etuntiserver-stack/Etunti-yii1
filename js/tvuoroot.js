@@ -110,7 +110,7 @@ $(".forCopy").click(function() {
      var newTid	= thisID[2];
 
 
-      if(tvID[1])
+      if(tvID[1] != '')
       {
         $.ajax({
            url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/operatio',
@@ -167,7 +167,7 @@ $(".forCut").click(function() {
 
      $("#"+v).remove();
 
-      if(tvID[1])
+      if(tvID[1] != '')
       {
         $.ajax({
            url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/operatio',
@@ -226,7 +226,7 @@ $("#trash").click(function() {
      $("#"+v).remove();
 
 
-      if(tvID[1])
+      if(tvID[1] != '')
       {
         $.ajax({
            url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/operatio',

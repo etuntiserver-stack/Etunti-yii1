@@ -5,7 +5,7 @@
 ?>
 
 <div class="row form">
-<div class="col-md-4">
+<div class="col-md-3">
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'domainit-form',
 	'enableAjaxValidation'=>false,

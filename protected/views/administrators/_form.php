@@ -5,7 +5,7 @@
 ?>
 
 <div class="row form">
-  <div class="col-sm-4">
+  <div class="col-sm-3">
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'administrators-form',
 	'enableAjaxValidation'=>false,
@@ -41,7 +41,16 @@
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'status'); ?>
-		<?php echo $form->textField($model,'status',array('class'=>'form-control')); ?>
+		<?php 
+		$a = Valikkoot::model()->findAll(" select_type='admin status' ");
+        	$tal = '';
+		foreach($a as $v){
+		$exV = explode("/",$v->value);
+		   $tal[$exV[1]] = $exV[0];
+		}
+
+		echo $form->dropDownList($model,'status', $tal, 
+		array('class'=>'form-control')) ?>
 		<?php echo $form->error($model,'status'); ?>
 	</div>
 
