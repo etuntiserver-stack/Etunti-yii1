@@ -8,9 +8,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-    <a class="navbar-brand" rel="home" href="index" title="Etunti">
-        <!--<img style="max-width:100px; margin-top: -7px;" src="<?php echo Yii::app()->request->baseUrl; ?>/img/logo-black.png">-->
-    </a>
+    <?php echo CHtml::link('',array('/site/index'),array('class'=>'navbar-brand','rel'=>'home')); ?>
     </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->
