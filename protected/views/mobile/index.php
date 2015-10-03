@@ -71,7 +71,7 @@ $fi = array(
   <div class="col-sm-3">
 <?php 
 	$s = Tyovuoroot::model()->findAll(" DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE() ");
-	$a = Mobile::model()->findAll(" DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE() and status=1");	
+	$a = Mobile::model()->findAll("status=1");	
 	$t = Mobile::model()->findAll(" DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE() and status=3");	
 
 
