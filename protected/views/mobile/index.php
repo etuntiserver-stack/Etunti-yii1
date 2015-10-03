@@ -111,30 +111,20 @@ $fi = array(
 	$m = Mobile::model()->findAll(" DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE() and status=2");
 	$l = Mobile::model()->findAll(" DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE() and status=10");
 
+
         $this->widget(
-            'chartjs.widgets.ChPolar', 
+            'chartjs.widgets.ChBars', 
             array(
                 'width' => 400,
-                'height' => 175,
+                'height' => 210,
                 'htmlOptions' => array(),
-                'drawLabels' => true,
+                'labels' => array(Yii::t('main','Työt'),Yii::t('main','Matkat'),Yii::t('main','Lounaat')),
                 'datasets' => array(
                     array(
-                        "value" => count($a),
-                        "color" => "rgba(220,30, 70,1)",
-                        "label" => Yii::t('main','Työt')
-                    ),
-                    array(
-                        "value" => count($m),
-                        "color" => "rgba(66,66,66,1)",
-                        "label" => Yii::t('main','Matkat')
-                    ),
-                    array(
-                        "value" => count($l),
-                        "color" => "rgba(100,100,220,1)",
-                        "label" => Yii::t('main','Lounaat')
-                    ),
-
+                        "fillColor" => "#ff00ff",
+                        "strokeColor" => "rgba(220,220,220,1)",
+                        "data" => array(count($a),count($m),count($l))
+                    )       
                 ),
                 'options' => array()
             )
