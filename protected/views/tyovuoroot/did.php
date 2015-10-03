@@ -62,7 +62,7 @@
 	   echo '<a href=# class="text-danger glyphicon glyphicon-paste muistin" for="'.$tvVal->id.'_'.$did.'_'.$tid.'"></a>';
 	   echo '&nbsp;<span class="link tv_edit" id="tv_'.$tvVal->id.'">'.$al.' '.$k['osoite'].'</span>';
 	   if(!empty($k['avain']))
-	   echo ' <b class="fa fa-key pull-right"></b>';
+	   echo ' <b class="fa fa-key text-warning pull-right"></b>';
 	   echo '<br>
 	   </div>';
 

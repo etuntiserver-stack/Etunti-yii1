@@ -25,7 +25,47 @@ $this->menu=array(
   </h1>
 </legend>
 
+<br>
+<div class="row">
+  <div class="col-sm-3">
+<?php 
+	$s = Tyovuoroot::model()->findAll(" DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE() ");
+	$a = Mobile::model()->findAll(" DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE() and status=1");	
+	$t = Mobile::model()->findAll(" DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE() and status=3");	
 
+        $this->widget(
+            'chartjs.widgets.ChDoughnut', 
+            array(
+                'width' => 400,
+                'height' => 200,
+                'htmlOptions' => array(),
+                'drawLabels' => true,
+                'datasets' => array(
+                    array(
+                        "value" => count($s),
+                        "color" => "rgba(20,120,120,1)",
+                        "label" => Yii::t('main','Suunnitellut')
+                    ),
+                    array(
+                        "value" => count($a),
+                        "color" => "rgba(100,100,220,1)",
+                        "label" => Yii::t('main','Aloitetut')
+                    ),
+                    array(
+                        "value" => count($t),
+                        "color" => "rgba(220,30, 70,1)",
+                        "label" => Yii::t('main','Tehdyt')
+                    ),
+
+                ),
+                'options' => array()
+            )
+        ); 
+    ?>
+  </div>
+</div>
+
+<br>
 
  <div class="row collapse" id="haku">
    <div class="col-sm-12">
