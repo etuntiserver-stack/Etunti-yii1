@@ -66,6 +66,40 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#87d9ff', end
 }
 
 
+.date-panel>.panel-heading {
+	color: #FFFFFF;
+	background-color: #434a54;
+	border-color: #434a54;
+}
+.panel-title{
+	color: #FFFFFF;
+}
+.date-panel{
+	text-align: center;
+}
+.panel-heading {
+	padding: 15px;
+}
+.date-panel .panel-title{
+	text-transform: uppercase;
+	letter-spacing: 2px;
+	font-weight: bold;
+}
+.date-panel .wheather{
+	font-size: 20px;
+
+}
+.date-panel .date{
+	font-size: 70px;
+	padding: 20px 0px;
+	line-height: 55px;
+	font-weight: 300;
+}
+.date-panel .month{
+	
+}
+
+
 .table-striped > tbody > tr:nth-child(2n+1) > td, .table-striped > tbody > tr:nth-child(2n+1) > th {
    background-color: #E8E8E8;
 }
