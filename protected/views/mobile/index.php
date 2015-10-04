@@ -115,7 +115,7 @@ $fi = array(
         $this->widget(
             'chartjs.widgets.ChBars', 
             array(
-                'width' => 350,
+                'width' => 250,
                 'height' => 210,
                 'htmlOptions' => array(),
                 'labels' => array(Yii::t('main','Työt'),Yii::t('main','Matkat'),Yii::t('main','Lounaat')),
@@ -152,24 +152,31 @@ $fi = array(
 
 
 
-        $this->widget(
-            'chartjs.widgets.ChBars', 
-            array(
-                'width' => 400,
-                'height' => 210,
-                'htmlOptions' => array(),
-                'labels' => array(Yii::t('main','Sopimusasiakas'),Yii::t('main','Tuntematon')),
-                'datasets' => array(
-                    array(
-                        "fillColor" => "rgba(100,100,220,1)",
-                        "strokeColor" => "rgba(100,100,220,1)",
-                        "data" => array($sop->count,$tunt->count)
-                    )       
-                ),
-                'options' => array()
-            )
-        ); 
+            $this->widget(
+                'chartjs.widgets.ChDoughnut', 
+                array(
+                    'width' => 350,
+                    'height' => 175,
+                    'htmlOptions' => array(),
+                    'drawLabels' => true,
+                    'datasets' => array(
+                        array(
+                            "value" => (int)$sop->count,
+                            "color" => "rgba(220,30, 70,1)",
+                            "label" => Yii::t('main','Sopimusasiakas')
+                        ),
+                        array(
+                            "value" => (int)$tunt->count,
+                            "color" => "rgba(66,66,66,1)",
+                            "label" => Yii::t('main','Tuntematon')
+                        )
+                    ),
+                    'options' => array()
+                )
+            ); 
     ?>
+
+
   </div>
 </div>
 
