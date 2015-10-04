@@ -126,10 +126,21 @@ class TyosuhdetController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$dataProvider=new CActiveDataProvider('Tyosuhdet');
-		$this->render('index',array(
-			'dataProvider'=>$dataProvider,
+
+	       	$criteria = new CDbCriteria();
+		$criteria->order = 'id DESC';
+		$criteria->condition = " tid!='' and tid!=0 ";
+
+		$dataProvider=new CActiveDataProvider('Tyosuhdet', array(
+			'criteria'=>$criteria,
+    			'pagination'=>array(
+			        'pageSize'=>12,
+			        'pageVar'=>'page',
+			    ),
+			//'pagination'=>false
 		));
+
+		$this->render('index', array('dataProvider' => $dataProvider));
 	}
 
 	/**

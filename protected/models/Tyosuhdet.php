@@ -119,6 +119,7 @@ class Tyosuhdet extends DB2ActiveRecord
 
 		$criteria=new CDbCriteria;
 		$criteria->order = 'id DESC';
+		//$criteria->condition = " tid!='' and tid!=0 ";
 
 		$criteria->compare('id',$this->id);
 		$criteria->compare('tid',$this->tid);
