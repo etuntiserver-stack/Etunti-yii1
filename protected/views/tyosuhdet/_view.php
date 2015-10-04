@@ -1,7 +1,57 @@
 <?php
 /* @var $this TyosuhdetController */
 /* @var $data Tyosuhdet */
+
+$tekijan_nimi = '';
+$tt = Tyontekijat::model()->find(" id='".$data->tid."' ");
+if(isset($tt['tekijan_nimi']))
+ $tekijan_nimi = $tt['tekijan_nimi']
 ?>
+
+
+        <div class="col-md-3">
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h4 class="text-center"><?php echo CHtml::encode($tekijan_nimi); ?></h4>
+                </div>
+                <div class="panel-body text-center">
+                    <p class="lead">
+                        <strong></strong>
+                    </p>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <?php echo CHtml::encode($data->getAttributeLabel('alku')); ?>
+                        <strong class="pull-right"><?php echo CHtml::encode($data->alku); ?></strong>
+                    </li>
+                    <li class="list-group-item">
+                        <?php echo CHtml::encode($data->getAttributeLabel('loppu')); ?>
+                        <strong class="pull-right"><?php echo CHtml::encode($data->loppu); ?></strong>
+                    </li>
+                    <li class="list-group-item">
+                        <?php echo CHtml::encode($data->getAttributeLabel('vktyoaika')); ?>
+                        <strong class="pull-right"><?php echo CHtml::encode($data->vktyoaika); ?></strong>
+                    </li>
+                    <li class="list-group-item">
+                        <?php echo CHtml::encode($data->getAttributeLabel('tuntihinta')); ?>
+                        <strong class="pull-right"><?php echo CHtml::encode($data->tuntihinta); ?></strong>
+                    </li>
+                    <li class="list-group-item">
+                        <?php echo CHtml::encode($data->getAttributeLabel('palkkausmuoto')); ?>
+                        <strong class="pull-right"><?php echo CHtml::encode($data->palkkausmuoto); ?></strong>
+                    </li>
+
+                </ul>
+                <div class="panel-footer">
+                    <?php echo CHtml::link(Yii::t('main', 'Muoka'), array('tyontekijat/update', 'id'=>$tt['id']),array('class'=>'btn btn-block btn-info')); ?>
+                </div>
+            </div>
+        </div>
+
+
+
+
+	<?php /*
 
 <div class="view">
 
@@ -32,8 +82,6 @@
 	<b><?php echo CHtml::encode($data->getAttributeLabel('palkkausmuoto')); ?>:</b>
 	<?php echo CHtml::encode($data->palkkausmuoto); ?>
 	<br />
-
-	<?php /*
 	<b><?php echo CHtml::encode($data->getAttributeLabel('tuntihinta')); ?>:</b>
 	<?php echo CHtml::encode($data->tuntihinta); ?>
 	<br />
@@ -90,6 +138,7 @@
 	<?php echo CHtml::encode($data->yksi_tuloraja); ?>
 	<br />
 
+</div>
 	*/ ?>
 
-</div>
+
