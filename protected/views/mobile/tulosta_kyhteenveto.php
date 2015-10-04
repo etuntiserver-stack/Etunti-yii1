@@ -1,6 +1,6 @@
 <style>
 table{
-	width: 290px;
+	//width: 150px;
 }
 td,th{
 	padding:3px 7px;
@@ -32,10 +32,8 @@ td,th{
 
   <tbody>
   <?php 
-  foreach($model as $data)
-  {
-	$this->renderPartial('_kyhteenveto',array('data'=>$data));
-  }
+  foreach($lu as $key=>$val)
+	$this->renderPartial('_kyhteenveto',array('kohde_kannasta'=>$key,'kohdenID'=>$val));
   ?>
   </tbody>
 
@@ -58,11 +56,11 @@ td,th{
   $tas = explode(",",Yii::app()->user->adminPaketti);
   if(in_array('2',$tas)) : 
   ?>
-  <th><?php echo sprint($suunn); ?></th>
+  <th><?php echo $this->sprint($suunn); ?></th>
   <?php endif; ?>
 
-  <th><?php echo sprint($lu); ?></th>
-  <th><?php echo sprint($tot); ?></th>
+  <th><?php echo $this->sprint($lu); ?></th>
+  <th><?php echo $this->sprint($tot); ?></th>
   <th></th>
   </tr>
   </tfoot>

@@ -21,6 +21,7 @@ $this->breadcrumbs=array(
   <form action="#" id="yhtveto" class="form-inline" method="POST">
   <div class="col-md-12">
    <?php
+/*
     $model=new Mobile;
     $list = CHtml::listData(Mobile::model()->findAll(array('group' => 'kohde_kannasta','order' => 'kohde_kannasta')), 'kohde_kannasta', 'kohde_kannasta');
 
@@ -40,7 +41,7 @@ $this->breadcrumbs=array(
        	 echo '<option value="'.$key.'">'.$val.'</option>';
     }
     echo '</select>';
-   ?>
+
 
    <select class="form-control form-group" name="mitkatKohteet">
 	<?php
@@ -52,7 +53,8 @@ $this->breadcrumbs=array(
 	<option value="kohdenID"><?php echo Yii::t('main', 'Asiakkaan kohteet'); ?></option>
 	<option value="kohde_kannasta"><?php echo Yii::t('main', 'Tuntemattomat kohteet'); ?></option>
    </select>
-
+*/
+   ?>
    <input type="text" name="from" id="from" class="form-control form-group datepicker" value="<?php echo Yii::app()->session['from']; ?>">
    <input type="text" name="to" id="to" class="form-control form-group datepicker" value="<?php echo Yii::app()->session['to']; ?>">
 
@@ -95,22 +97,21 @@ $this->breadcrumbs=array(
   </tr>
   </thead>
 
-<?php $this->widget('zii.widgets.CListView', array(
-	'dataProvider'=>$dataProvider,
-	'itemView'=>'_kyhteenveto',
-));  ?>
+  <?php 
+  foreach($lu as $key=>$val)
+	$this->renderPartial('_kyhteenveto',array('kohde_kannasta'=>$key,'kohdenID'=>$val));
+  ?>
 
   <tfoot>
   <?php
 	$lu = '0';
 	$tot = '0';
 	$suunn = '0';
-	if(isset(Yii::app()->session['mitkatKohteet']))
-	{
+
 		$suunn = $this->yhtSUUNN();
-		$lu = $this->yhtLU(Yii::app()->session['mitkatKohteet']);
-		$tot = $this->yhtTOT(Yii::app()->session['mitkatKohteet']);
-	}
+		$lu = $this->yhtLU();
+		$tot = $this->yhtTOT();
+
   ?>
   <tr>
   <th><?php echo Yii::t('main', 'Yhteensä'); ?></th>
@@ -119,11 +120,11 @@ $this->breadcrumbs=array(
   $tas = explode(",",Yii::app()->user->adminPaketti);
   if(in_array('2',$tas)) : 
   ?>
-  <th>/ <?php echo Yii::t('main', 'oikeasti:'); ?><?php echo sprint($suunn); ?></th>
+  <th>/ <?php echo Yii::t('main', 'oikeasti:'); ?><?php echo $this->sprint($suunn); ?></th>
   <?php endif; ?>
 
-  <th><?php echo sprint($lu); ?></th>
-  <th><?php echo sprint($tot); ?></th>
+  <th><?php echo $this->sprint($lu); ?></th>
+  <th><?php echo $this->sprint($tot); ?></th>
   <th></th>
   </tr>
   </tfoot>
@@ -157,6 +158,23 @@ $("#yhtveto").on('submit',function(e){
 });
 
 
+$(".showKuka").click(function(){
+	
+	var thisID = $(this).attr("id").split("_");
+	var kohde_kannasta = $(this).attr("for").split("_");
+
+        $.ajax({
+           url: location.protocol + "//" + location.host + '/index.php/mobile/tyobykohde',
+           type: "POST",
+	   data: { kohde_kannasta : kohde_kannasta[1] },
+           success: function(data){
+		console.log(data);
+		$("#showtyo_"+thisID[1]).html(data);
+           }
+        });
+	
+
+});
 
 });
 </script>
