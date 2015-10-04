@@ -84,17 +84,17 @@ $fi = array(
                 'drawLabels' => true,
                 'datasets' => array(
                     array(
-                        "value" => count($s),
+                        "value" => (int)count($s),
                         "color" => "rgba(20,120,120,1)",
                         "label" => Yii::t('main','Suunnitellut')
                     ),
                     array(
-                        "value" => count($a),
+                        "value" => (int)count($a),
                         "color" => "rgba(100,100,220,1)",
                         "label" => Yii::t('main','Aloitetut')
                     ),
                     array(
-                        "value" => count($t),
+                        "value" => (int)count($t),
                         "color" => "rgba(220,30, 70,1)",
                         "label" => Yii::t('main','Tehdyt')
                     ),
@@ -123,7 +123,7 @@ $fi = array(
                     array(
                         "fillColor" => "#ff00ff",
                         "strokeColor" => "rgba(220,220,220,1)",
-                        "data" => array(count($a),count($m),count($l))
+                        "data" => array((int)count($a),(int)count($m),(int)count($l))
                     )       
                 ),
                 'options' => array()
