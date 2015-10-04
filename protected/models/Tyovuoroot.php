@@ -26,6 +26,7 @@ public $osoite;
 public $tekijan_nimi;
 public $toimenpiteet;
 public $l_tunnit;
+public $count;
 
 	/**
 	 * Returns the static model of the specified AR class.

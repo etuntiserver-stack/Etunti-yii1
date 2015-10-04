@@ -68,22 +68,24 @@ $fi = array(
 			</div>
 		</div>
 
-  <div class="col-sm-3">
+  <div class="col-sm-3 col-sm-offset-1">
 <?php 
 	$crsun = new CDbCriteria();
+	$crsun->select = "  COUNT(*) as count ";
 	$crsun->condition = " 
 		DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE()
 		AND kohde!=''
 		AND tyoajanmerkinta NOT LIKE '%Ei lasketa%'
 	";
+	$s = Tyovuoroot::model()->find($crsun);
 
-	$s = Tyovuoroot::model()->findAll($crsun);
+
 	$a = Mobile::model()->findAll("status=1",array('select'=>'id'));	
 	$t = Mobile::model()->findAll(" DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE() and status=3",array('select'=>'id'));	
 
 
         $this->widget(
-            'chartjs.widgets.ChPolar', 
+            'chartjs.widgets.ChDoughnut', 
             array(
                 'width' => 400,
                 'height' => 175,
@@ -91,20 +93,20 @@ $fi = array(
                 'drawLabels' => true,
                 'datasets' => array(
                     array(
-                        "value" => (int)count($s),
-                        "color" => "rgba(20,120,120,1)",
+                        "value" => (int)$s->count,
+                        "color" => "#cecece",
                         "label" => Yii::t('main','Suunnitellut')
                     ),
                     array(
                         "value" => (int)count($a),
-                        "color" => "rgba(100,100,220,1)",
+                        "color" => "#ebebcb",
                         "label" => Yii::t('main','Aloitetut')
                     ),
                     array(
                         "value" => (int)count($t),
-                        "color" => "rgba(220,30, 70,1)",
+                        "color" => "#8cc152",
                         "label" => Yii::t('main','Tehdyt')
-                    ),
+                    )
                 ),
                 'options' => array()
             )
@@ -112,33 +114,7 @@ $fi = array(
     ?>
 
   </div><div class="col-sm-3">
-<?php 
 
-	$a = Mobile::model()->findAll(" DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE() and status=3",array('select'=>'id'));	
-	$m = Mobile::model()->findAll(" DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE() and status=2",array('select'=>'id'));
-	$l = Mobile::model()->findAll(" DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE() and status=10",array('select'=>'id'));
-
-
-        $this->widget(
-            'chartjs.widgets.ChBars', 
-            array(
-                'width' => 250,
-                'height' => 210,
-                'htmlOptions' => array(),
-                'labels' => array(Yii::t('main','Työt'),Yii::t('main','Matkat'),Yii::t('main','Lounaat')),
-                'datasets' => array(
-                    array(
-                        "fillColor" => "#ff00ff",
-                        "strokeColor" => "rgba(220,220,220,1)",
-                        "data" => array((int)count($a),(int)count($m),(int)count($l))
-                    )       
-                ),
-                'options' => array()
-            )
-        ); 
-    ?>
-
-  </div><div class="col-sm-3">
 <?php 
 
 	$crsop = new CDbCriteria();
@@ -169,12 +145,12 @@ $fi = array(
                     'datasets' => array(
                         array(
                             "value" => (int)$sop->count,
-                            "color" => "rgba(220,30, 70,1)",
+                            "color" => "#8cc152",
                             "label" => Yii::t('main','Sopimusasiakas')
                         ),
                         array(
                             "value" => (int)$tunt->count,
-                            "color" => "rgba(66,66,66,1)",
+                            "color" => "#cecece",
                             "label" => Yii::t('main','Tuntematon')
                         )
                     ),
@@ -183,6 +159,35 @@ $fi = array(
             ); 
     ?>
 
+
+  </div><div class="col-sm-3">
+
+<?php 
+
+	$a = Mobile::model()->findAll(" DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE() and status=3",array('select'=>'id'));	
+	$m = Mobile::model()->findAll(" DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE() and status=2",array('select'=>'id'));
+	$l = Mobile::model()->findAll(" DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE() and status=10",array('select'=>'id'));
+
+
+        $this->widget(
+            'chartjs.widgets.ChBars', 
+            array(
+                'width' => 250,
+                'height' => 210,
+                'htmlOptions' => array(),
+
+                'labels' => array(Yii::t('main','Työt'),Yii::t('main','Matkat'),Yii::t('main','Lounaat')),
+                'datasets' => array(
+                    array(
+                        "fillColor" => "#cecece",
+                        "strokeColor" => "#8cc152",
+                        "data" => array((int)count($a),(int)count($m),(int)count($l))
+                    )       
+                ),
+                'options' => array()
+            )
+        ); 
+    ?>
 
   </div>
 </div>
@@ -319,7 +324,7 @@ function tableAjax(){
 
 }
 
-   tableAjax();
+   setTimeout(function(){tableAjax();},1500);
    setInterval(tableAjax, "60000");
 
 
