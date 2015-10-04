@@ -70,7 +70,14 @@ $fi = array(
 
   <div class="col-sm-3">
 <?php 
-	$s = Tyovuoroot::model()->findAll(" DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE() ",array('select'=>'id'));
+	$crsun = new CDbCriteria();
+	$crsun->select = "  COUNT(*) as count ";
+	$crsun->condition = " 
+		DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE()
+		AND tyoajanmerkinta NOT LIKE '%Ei lasketa%'
+
+	";
+	$s = Tyovuoroot::model()->findAll($crsun);
 	$a = Mobile::model()->findAll("status=1",array('select'=>'id'));	
 	$t = Mobile::model()->findAll(" DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE() and status=3",array('select'=>'id'));	
 
