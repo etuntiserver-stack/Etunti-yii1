@@ -9,7 +9,7 @@ $did = date("Ymd",strtotime($pvm));
        	$criteria = new CDbCriteria();
 	$criteria->condition = " tid = '".$tid."' 
 	and DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = '".date("Y-m-d",strtotime($pvm))."' 
-	AND kid IN (SELECT id FROM sivexkuitti) ";
+	 "; //AND kid IN (SELECT id FROM sivexkuitti)
 	if(Yii::app()->session['Lounastauko'])
 	$criteria->addCondition (" status != '10' ");
 	if(Yii::app()->session['MATKA'])

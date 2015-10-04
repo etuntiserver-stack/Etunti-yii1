@@ -18,6 +18,8 @@ $("#Mobile_kohde_kannasta").change(function(){
 	$("#Mobile_kohdenID").val(kohdenID);
 });
 
+
+
 $(".uusirivi").click(function(){
 
       var forThis = $(this).attr("for");

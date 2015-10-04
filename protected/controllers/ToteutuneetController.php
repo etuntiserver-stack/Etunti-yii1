@@ -189,9 +189,12 @@ class ToteutuneetController extends Controller
 		if(isset($_POST['Toteutuneet']))
 		{
 
+			$k = Kohteet::model()->findbypk($_POST['Toteutuneet']['kohde_kannasta']);
 			$model->attributes=$_POST['Toteutuneet'];
 			$model->aloitan = date("d.m.Y H:i:s",strtotime($_POST['forPVM'].' '.$_POST['Toteutuneet']['aloitan']));
 			$model->loppui = date("d.m.Y H:i:s",strtotime($_POST['forPVM'].' '.$_POST['Toteutuneet']['loppui']));
+			$model->kohdenID=$k->id;			
+			$model->kohde_kannasta=$k->osoite;
 
 
 			if($model->save()){
@@ -234,10 +237,13 @@ class ToteutuneetController extends Controller
 		if(isset($_POST['Toteutuneet']))
 		{
 
-
+			$k = Kohteet::model()->findbypk($_POST['Toteutuneet']['kohde_kannasta']);
 			$model->attributes=$_POST['Toteutuneet'];
 			$model->aloitan = date("d.m.Y H:i:s",strtotime($_POST['forPVM'].' '.$_POST['Toteutuneet']['aloitan']));
 			$model->loppui = date("d.m.Y H:i:s",strtotime($_POST['forPVM'].' '.$_POST['Toteutuneet']['loppui']));
+			$model->kohdenID=$k->id;			
+			$model->kohde_kannasta=$k->osoite;
+
 
 			if($model->save()){
 			   $did = date("Ymd",strtotime($model->aloitan));
@@ -325,6 +331,7 @@ class ToteutuneetController extends Controller
 
         	$criteria->order = "DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'),'%Y%m%d')";
         	$criteria->group = "DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'),'%Y%m%d')";
+
 
 		if(isset($explTekija[0]))
 	        $criteria->addCondition (" tid = '".Yii::app()->session['tekija']."'");

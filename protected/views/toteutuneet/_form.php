@@ -43,14 +43,18 @@ $loppui = date("H:i",strtotime($s->loppui));
 		<?php echo $form->hiddenField($model,'kid',array('value'=>$s->id)); ?>
 		<?php echo $form->hiddenField($model,'tid',array('value'=>$s->tid)); ?>
 		<?php echo $form->hiddenField($model,'tekijan_nimi',array('value'=>$s->tekijan_nimi)); ?>
-		<?php echo $form->hiddenField($model,'kohdenID',array('value'=>$s->kohdenID,'id'=>'kohdenID')); ?>
 
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'kohde_kannasta'); ?>
 		<?php echo $form->dropDownList($model,'kohde_kannasta', 
-			CHtml::listData(Kohteet::model()->findAll(array('order' => 'osoite ASC')), 'osoite', 'osoite'), 
-			array('class'=>'form-control')); ?>
+			CHtml::listData(Kohteet::model()->findAll(array('order' => 'osoite ASC')), 'id', 'osoite'), 
+			    array(
+                		'class'=>'form-control',
+		                'options' => array($s->kohdenID=>array('selected'=>true)),
+			    )
+			);
+		?>
 		<?php echo $form->error($model,'kohde_kannasta'); ?>
 	</div>
 

@@ -38,7 +38,20 @@ td,th{
   }
   ?>
   </tbody>
+  <tfoot>
+  <?php
+	$lu = '0';
+	$tot = '0';
 
+		$lu = $this->yhtLUmatka();
+		$tot = $this->yhtTOTmatka();
+  ?>
+  <tr>
+  <th><?php echo Yii::t('main', 'Yhteensä'); ?></th>
+  <th><?php echo $this->sprint($lu); ?></th>
+  <th><?php echo $this->sprint($tot); ?></th>
+  </tr>
+  </tfoot>
   </table>
 <?php endif; ?>
 
