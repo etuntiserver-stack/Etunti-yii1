@@ -43,6 +43,7 @@ td,th{
   <?php
 	$lu = '0';
 	$tot = '0';
+	$suunn = '0';
 	if(isset(Yii::app()->session['mitkatKohteet']))
 	{
 		$suunn = $this->yhtSUUNN();

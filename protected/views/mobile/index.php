@@ -68,7 +68,7 @@ $fi = array(
 			</div>
 		</div>
 
-  <div class="col-sm-3 col-sm-offset-1">
+  <div class="col-sm-3">
 <?php 
 	$crsun = new CDbCriteria();
 	$crsun->select = "  COUNT(*) as count ";
@@ -87,7 +87,7 @@ $fi = array(
         $this->widget(
             'chartjs.widgets.ChDoughnut', 
             array(
-                'width' => 400,
+                'width' => 250,
                 'height' => 175,
                 'htmlOptions' => array(),
                 'drawLabels' => true,
@@ -138,7 +138,7 @@ $fi = array(
             $this->widget(
                 'chartjs.widgets.ChDoughnut', 
                 array(
-                    'width' => 350,
+                    'width' => 250,
                     'height' => 175,
                     'htmlOptions' => array(),
                     'drawLabels' => true,
