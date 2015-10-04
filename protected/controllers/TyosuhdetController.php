@@ -129,7 +129,10 @@ class TyosuhdetController extends Controller
 
 	       	$criteria = new CDbCriteria();
 		$criteria->order = 'id DESC';
-		$criteria->condition = " tid!='' and tid!=0 ";
+		$criteria->condition = " 
+			tid!='' and tid!=0 
+			and tid IN (select id from sivex_ttekijat)
+		";
 
 		$dataProvider=new CActiveDataProvider('Tyosuhdet', array(
 			'criteria'=>$criteria,
