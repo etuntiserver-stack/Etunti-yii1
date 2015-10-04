@@ -134,8 +134,21 @@ $fi = array(
   </div><div class="col-sm-3">
 <?php 
 
-	$sop = Mobile::model()->findAll(" DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE() and status=3 and kohdenID!='' ",array('select'=>'id'));	
-	$tunt = Mobile::model()->findAll(" DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE() and status=3 and kohdenID='' ",array('select'=>'id'));
+	$crsop = new CDbCriteria();
+	$crsop->select = "  COUNT(*) as count ";
+	$crsop->condition = " 
+		DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE() 
+		and status=3 and kohdenID!='' 
+	";
+	$sop = Mobile::model()->find($crsop);	
+
+	$crtunt = new CDbCriteria();
+	$crtunt->select = " COUNT(*) as count ";
+	$crtunt->condition = " 
+		DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE() 
+		and status=3 and kohdenID='' 
+	";
+	$tunt = Mobile::model()->find($crtunt);
 
 
 
@@ -150,7 +163,7 @@ $fi = array(
                     array(
                         "fillColor" => "rgba(100,100,220,1)",
                         "strokeColor" => "rgba(100,100,220,1)",
-                        "data" => array(count($sop),count($tunt))
+                        "data" => array($sop->count,$tunt->count)
                     )       
                 ),
                 'options' => array()

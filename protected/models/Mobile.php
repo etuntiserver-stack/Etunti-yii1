@@ -35,6 +35,7 @@ public $domain;
 public $l_tunnit;
 public $t_tunnit;
 public $kpl;
+public $count;
 
 
 	/**
