@@ -16,17 +16,19 @@
 
   $k = Kohteet::model()->findbypk(Yii::app()->session['kohdenID']);
   $a = Asiakkaat::model()->findbypk($k->asiakas_id);
-?>
 
-  <h1><?php echo $k->osoite.', '.Yii::app()->session['fromPosti'].'-'.Yii::app()->session['toPosti']; ?></h1>
+
+$body = '
+
+  <h1>'.$k->osoite.', '.Yii::app()->session['fromPosti'].'-'.Yii::app()->session['toPosti'].'</h1>
   <table cellspacing="0" cellpadding="10" border="1" style="color:#666;font:13px Arial;line-height:1.4em;width:100%;">
   <tr>
-  <th style="padding: 3px 7px"><?php echo Yii::t('main','Työntekijä ID'); ?></th>
-  <th style="padding: 3px 7px"><?php echo Yii::t('main','Päivämäärä'); ?></th>
-  <th style="padding: 3px 7px"><?php echo Yii::t('main','Ajaat'); ?></th>
-  <th style="padding: 3px 7px"><?php echo Yii::t('main','Kesto'); ?></th>
-  </tr>
-  <?php
+  <th style="padding: 3px 7px">'.Yii::t('main','Työntekijä ID').'</th>
+  <th style="padding: 3px 7px">'.Yii::t('main','Päivämäärä').'</th>
+  <th style="padding: 3px 7px">'.Yii::t('main','Ajaat').'</th>
+  <th style="padding: 3px 7px">'.Yii::t('main','Kesto').'</th>
+  </tr>';
+
   foreach(Yii::app()->session['idsToSahkoposti'] as $v){
 
 	$explV = explode("_",$v);
@@ -38,7 +40,7 @@
 	$kesto = 0;
 	$kesto = strtotime($str['loppui'])-strtotime($str['aloitan']);
 
-	echo 
+	$body .= 
 	'<tr>
 		<td style="padding: 3px 7px">'.$str['tid'].'</td>
 		<td style="padding: 3px 7px">'.date("d.m",strtotime($str['aloitan'])).'</td>
@@ -51,17 +53,19 @@
 	';
 
   }
-  ?>
-  </table>
 
+  $body .= '</table>';
 
-<?php
+echo $body;
+
+		$body = preg_replace('!(?:\xc2\xa0|[\pZ\s]++)++!', ' ', $body);
 
 		echo '<br>';
-		echo '<div class="pull-right">';
+		echo '<div class="">';
 		echo '<form action="asiakas_hyvaksyminen" method="POST" target="_blank">';
+		echo '<textarea name="body" class="form-control" rows="20">'.trim($body).'</textarea>';
 		echo '<input type="hidden" name="laheta" value="true">';
-		echo '<input type="submit" class="btn btn-sm btn-success" value="'.Yii::t('main','lähetä asiakkaalle hyväksymiseksi').'">';
+		echo '<input type="submit" class="btn btn-sm btn-success" value="'.Yii::t('main','Lähetä ').' '.$a->sahkoposti.'">';
 		echo '</form>';
 		echo '</div>';
 ?>

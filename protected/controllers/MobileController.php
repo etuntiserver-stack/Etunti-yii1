@@ -1266,14 +1266,18 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 
 		if(Yii::app()->request->getPost('laheta'))
 		{
-		  $message = $this->renderPartial('asiakas_hyvaksyminen');
+
+print_r($_POST);
+exit;
+		  $message = $this->renderPartial('asiakas_hyvaksyminen',true);
 	          $mail = new YiiMailer();
 		  //$mail->clearLayout();//if layout is already set in config
 		  $mail->setFrom('no-replay@etunti.fi', 'ETUNTI.FI');
 		  $mail->setTo('laptopsr@gmail.com');
 		  $mail->setSubject('Uusi tarjouspyyntö');
 		  $mail->setBody($message);	
-		  $mail->send();
+		  if($mail->send())
+			$this->redirect(array('kyhteenveto'));
 
 		} else {
 		  $this->render('asiakas_hyvaksyminen');
