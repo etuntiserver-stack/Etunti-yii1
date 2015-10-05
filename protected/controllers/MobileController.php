@@ -192,32 +192,6 @@ class MobileController extends Controller
 	}
 
 
-	public function actionTyobykohde()
-	{
-
-       		$criteria = new CDbCriteria();
-        	$criteria->select = " tekijan_nimi,aloitan,loppui ";
-        	$criteria->order = "time";
-	        $criteria->condition = "
-			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
-			BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."' 
-			AND kohde_kannasta = '".Yii::app()->request->getPost('kohde_kannasta')."'
-			AND status=3
-		";
-		$model = Mobile::model()->findAll($criteria);
-		foreach($model as $m)
-		{
-			echo 
-			'<div>'
-				.date("d.m",strtotime($m->aloitan)).', 
-				<b>'.date("H:i",strtotime($m->aloitan)).'-'.date("H:i",strtotime($m->loppui)).'</b> &nbsp;'
-				.$m->tekijan_nimi.
-			'</div>';
-		}
-
-	}
-
-
 	public function actionTotal_suunniteltu($id,$kohde_tid)
 	{
 
@@ -1111,6 +1085,71 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 
 	}
 
+
+	public function actionTyobykohde($kohdenID,$from,$to)
+	{
+
+		$lu = array();
+
+		$fromTo = " DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$from."' AND '".$to."' ";
+
+       		$criteria = new CDbCriteria();
+        	$criteria->select = "tekijan_nimi,aloitan,loppui";
+        	$criteria->order = "kohde_kannasta";
+        	//$criteria->group = "kohde_kannasta";
+        	$criteria->condition = "
+			id NOT IN (select kid from sivexkuitti_repaired) 
+			AND status='3'
+			AND kohdenID='".$kohdenID."'
+			AND $fromTo
+		";
+
+		$model = Mobile::model()->findAll($criteria);
+
+		foreach($model as $d){
+			$kesto = 0;
+			$kesto = strtotime($d->loppui)-strtotime($d->aloitan);
+			$lu[] = $d->tekijan_nimi."//".date("d.m",strtotime($d->aloitan))."//".$kesto;
+		}
+
+
+       		$criteria = new CDbCriteria();
+        	$criteria->select = "tekijan_nimi,aloitan,loppui";
+        	$criteria->order = "kohde_kannasta";
+        	//$criteria->group = "kohde_kannasta";
+        	$criteria->condition = "
+			status='3'
+			AND kohdenID='".$kohdenID."'
+			AND $fromTo
+		";
+
+		$model = Toteutuneet::model()->findAll($criteria);
+		foreach($model as $d){
+			$kesto = 0;
+			$kesto = strtotime($d->loppui)-strtotime($d->aloitan);
+			$lu[] = $d->tekijan_nimi."//".date("d.m",strtotime($d->aloitan))."//".$kesto;
+		}
+
+		//if(count($lu) > 0)
+		//ksort($lu);
+
+
+		foreach($lu as $k=>$v)
+		{
+			$explV = explode("//",$v);
+			if(isset($explV[0]) and isset($explV[1]) and isset($explV[2]))
+			{
+			echo 
+			'<div class="row">
+			   <div class="col-sm-6 text-right">'.$explV[0].', '.$explV[1].'</div>
+			   <div class="col-sm-3"> kesto: <b> '.$this->sprint($explV[2]).'</b></div>
+			</div>';
+			}
+
+		}
+
+	}
+
 	public function actionKyhteenveto()
 	{
 
@@ -1131,61 +1170,6 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		if(Yii::app()->request->getPost('mitkatKohteet'))
 		Yii::app()->session['mitkatKohteet'] = Yii::app()->request->getPost('mitkatKohteet');
 
-
-		/*
-        	$criteria->select = "
-
-			COUNT(*) as kpl,
-			SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s'), 
-			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s')))) as l_tunnit,
-			t.*
-
-		";
-		*/
-
-		//$criteria->join = 'LEFT JOIN sivexkuitti_repaired a ON t.id != a.kid'; 
-		//IF(id = '2', '4', id) AS kohde_kannasta,
-
-		/*
-		if(isset(Yii::app()->session['mitkatKohteet']))
-			$mitkatKohteet = Yii::app()->session['mitkatKohteet'];
-		else
-			$mitkatKohteet = "kohdenID";
-		
-
-		if($mitkatKohteet == 'kohdenID')
-		{
-        	$criteria->condition = " 
-			loppui!='' and aloitan!='' 
-			AND status='3'
-			AND kohdenID !='' 
-		"; //			AND id NOT IN(select kid from sivexkuitti_repaired)
-		}
-
-		if($mitkatKohteet == 'kohde_kannasta')
-		{
-        	$criteria->condition = " 
-			loppui!='' and aloitan!='' 
-			AND status='3'
-			AND kohdenID =''
-			AND kohde_kannasta!='' 
-		";
-		}
-		*/
-
-
-        	//$criteria->group = "t.kohde_kannasta";
-
-		//if(Yii::app()->session['kohteet'])
-	        //$criteria->addCondition (" kohde_kannasta like '%".Yii::app()->session['kohteet']."%' ");
-
-/*
-		$dataProvider=new CActiveDataProvider('Mobile', array(
-			'criteria'=>$criteria,
-			'pagination'=>false
-		));
-*/
-		//$dataProvider->pagination->pageSize = 50;
 
 
        		$criteria = new CDbCriteria();
