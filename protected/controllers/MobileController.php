@@ -733,7 +733,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 	protected function TP($tid){
 
        		$criteria = new CDbCriteria();
-        	$criteria->group = "DATE(time)";
+        	$criteria->group = "DATE(DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d'))";
 
 		if(Yii::app()->session['from'] and Yii::app()->session['to'])
 		{
@@ -1264,7 +1264,20 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 	public function actionAsiakas_hyvaksyminen()
 	{
 
-		$this->render('asiakas_hyvaksyminen');
+		if(Yii::app()->request->getPost('laheta'))
+		{
+		  $message = $this->renderPartial('asiakas_hyvaksyminen');
+	          $mail = new YiiMailer();
+		  //$mail->clearLayout();//if layout is already set in config
+		  $mail->setFrom('no-replay@etunti.fi', 'ETUNTI.FI');
+		  $mail->setTo('laptopsr@gmail.com');
+		  $mail->setSubject('Uusi tarjouspyyntö');
+		  $mail->setBody($message);	
+		  $mail->send();
+
+		} else {
+		  $this->render('asiakas_hyvaksyminen');
+		}
 
 	}
 

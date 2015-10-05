@@ -1,6 +1,6 @@
 <?php
-print_r($_POST);
-exit;
+//print_r($_POST);
+//exit;
 
   if(Yii::app()->request->getPost('ids'))
   Yii::app()->session['idsToSahkoposti'] = explode(",",Yii::app()->request->getPost('ids'));
@@ -9,10 +9,10 @@ exit;
   Yii::app()->session['kohdenID'] = Yii::app()->request->getPost('kohdenID');
 
   if(Yii::app()->request->getPost('fromPosti'))
-  Yii::app()->session['fromPosti'] = date("d.m.Y",Yii::app()->request->getPost('fromPosti'));
+  Yii::app()->session['fromPosti'] = date("d.m.Y",strtotime(Yii::app()->request->getPost('fromPosti')));
 
   if(Yii::app()->request->getPost('toPosti'))
-  Yii::app()->session['toPosti'] = date("d.m.Y",Yii::app()->request->getPost('toPosti'));
+  Yii::app()->session['toPosti'] = date("d.m.Y",strtotime(Yii::app()->request->getPost('toPosti')));
 
   $k = Kohteet::model()->findbypk(Yii::app()->session['kohdenID']);
   $a = Asiakkaat::model()->findbypk($k->asiakas_id);
@@ -23,6 +23,7 @@ exit;
   <tr>
   <th style="padding: 3px 7px"><?php echo Yii::t('main','Työntekijä ID'); ?></th>
   <th style="padding: 3px 7px"><?php echo Yii::t('main','Päivämäärä'); ?></th>
+  <th style="padding: 3px 7px"><?php echo Yii::t('main','Ajaat'); ?></th>
   <th style="padding: 3px 7px"><?php echo Yii::t('main','Kesto'); ?></th>
   </tr>
   <?php
@@ -41,6 +42,10 @@ exit;
 	'<tr>
 		<td style="padding: 3px 7px">'.$str['tid'].'</td>
 		<td style="padding: 3px 7px">'.date("d.m",strtotime($str['aloitan'])).'</td>
+		<td style="padding: 3px 7px">
+			'.date("H:i",strtotime($str['aloitan'])).' -
+			'.date("H:i",strtotime($str['loppui'])).'
+						</td>
 		<td style="padding: 3px 7px">'.$this->sprint($kesto).'</td>
 	</tr>
 	';
@@ -49,3 +54,14 @@ exit;
   ?>
   </table>
 
+
+<?php
+
+		echo '<br>';
+		echo '<div class="pull-right">';
+		echo '<form action="asiakas_hyvaksyminen" method="POST" target="_blank">';
+		echo '<input type="hidden" name="laheta" value="true">';
+		echo '<input type="submit" class="btn btn-sm btn-success" value="'.Yii::t('main','lähetä asiakkaalle hyväksymiseksi').'">';
+		echo '</form>';
+		echo '</div>';
+?>
