@@ -33,7 +33,7 @@ class MobileController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin', 'delete', 'create', 'update', 'index', 'index_a', 'view', 'updatetime', 'showkohteet', 'yhteenveto', 'kyhteenveto', 'yhteenveto_m', 'historia', 'poistaKohde', 'total_suunniteltu', 'total_toteutu', 'total_luettu', 'kesto', 'index_ajax', 'raportit', 'uusirivi', 'palkkataulukko', 'tidfromtomatkat', 'tyobykohde'),
+				'actions'=>array('admin', 'delete', 'create', 'update', 'index', 'index_a', 'view', 'updatetime', 'showkohteet', 'yhteenveto', 'kyhteenveto', 'yhteenveto_m', 'historia', 'poistaKohde', 'total_suunniteltu', 'total_toteutu', 'total_luettu', 'kesto', 'index_ajax', 'raportit', 'uusirivi', 'palkkataulukko', 'tidfromtomatkat', 'tyobykohde', 'asiakas_hyvaksyminen'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -730,6 +730,25 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		}
 	}
 
+	protected function TP($tid){
+
+       		$criteria = new CDbCriteria();
+        	$criteria->group = "DATE(time)";
+
+		if(Yii::app()->session['from'] and Yii::app()->session['to'])
+		{
+	        $criteria->condition = "
+			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
+			BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."' 
+			AND tid='".$tid."'
+		";
+		}
+
+		$model = Mobile::model()->findAll($criteria);
+		return count($model);
+
+	}
+
 	public function actionYhteenveto()
 	{
 
@@ -1090,11 +1109,12 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 	{
 
 		$lu = array();
+		$ids = array();
 
 		$fromTo = " DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$from."' AND '".$to."' ";
 
        		$criteria = new CDbCriteria();
-        	$criteria->select = "tekijan_nimi,aloitan,loppui";
+        	$criteria->select = "id,tekijan_nimi,aloitan,loppui";
         	$criteria->order = "kohde_kannasta";
         	//$criteria->group = "kohde_kannasta";
         	$criteria->condition = "
@@ -1109,12 +1129,12 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		foreach($model as $d){
 			$kesto = 0;
 			$kesto = strtotime($d->loppui)-strtotime($d->aloitan);
-			$lu[] = $d->tekijan_nimi."//".date("d.m",strtotime($d->aloitan))."//".$kesto;
+			$lu[] = $d->tekijan_nimi."//".date("d.m",strtotime($d->aloitan))."//".$kesto."//mobile_".$d->id;
 		}
 
 
        		$criteria = new CDbCriteria();
-        	$criteria->select = "tekijan_nimi,aloitan,loppui";
+        	$criteria->select = "id,tekijan_nimi,aloitan,loppui";
         	$criteria->order = "kohde_kannasta";
         	//$criteria->group = "kohde_kannasta";
         	$criteria->condition = "
@@ -1127,7 +1147,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		foreach($model as $d){
 			$kesto = 0;
 			$kesto = strtotime($d->loppui)-strtotime($d->aloitan);
-			$lu[] = $d->tekijan_nimi."//".date("d.m",strtotime($d->aloitan))."//".$kesto;
+			$lu[] = $d->tekijan_nimi."//".date("d.m",strtotime($d->aloitan))."//".$kesto."//toteutu_".$d->id;
 		}
 
 		//if(count($lu) > 0)
@@ -1142,11 +1162,24 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			echo 
 			'<div class="row">
 			   <div class="col-sm-6 text-right">'.$explV[0].', '.$explV[1].'</div>
-			   <div class="col-sm-3"> kesto: <b> '.$this->sprint($explV[2]).'</b></div>
+			   <div class="col-sm-6"> kesto: <b> '.$this->sprint($explV[2]).'</b></div>
 			</div>';
 			}
-
+			if(isset($explV[3]))
+			$ids[] = $explV[3];
 		}
+
+		echo '<br>';
+		echo '<div class="pull-right">';
+		echo '<form action="asiakas_hyvaksyminen" method="POST" target="_blank">';
+		echo '<input type="hidden" name="fromPosti" value="'.$from.'">';
+		echo '<input type="hidden" name="toPosti" value="'.$to.'">';
+		echo '<input type="hidden" name="ids" value="'.implode(",",$ids).'">';
+		echo '<input type="hidden" name="kohdenID" value="'.$kohdenID.'">';
+		echo '<input type="submit" class="btn btn-sm btn-success" value="'.Yii::t('main','lähetä asiakkaalle hyväksymiseksi').'">';
+		echo '</form>';
+		echo '</div>';
+
 
 	}
 
@@ -1175,7 +1208,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
        		$criteria = new CDbCriteria();
         	$criteria->select = "kohdenID,kohde_kannasta";
         	$criteria->order = "kohde_kannasta";
-        	$criteria->group = "kohde_kannasta";
+        	$criteria->group = "kohdenID";
         	$criteria->condition = "
 			id NOT IN (select kid from sivexkuitti_repaired) 
 			AND status='3'
@@ -1196,7 +1229,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
        		$criteria = new CDbCriteria();
         	$criteria->select = "kohdenID,kohde_kannasta";
         	$criteria->order = "kohde_kannasta";
-        	$criteria->group = "kohde_kannasta";
+        	$criteria->group = "kohdenID";
         	$criteria->condition = "
 			id NOT IN (select kid from sivexkuitti_repaired) 
 			AND status='3'
@@ -1226,6 +1259,13 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		  //$dataProvider->pagination->pageSize = 50;
 		  $this->render('kyhteenveto', array('lu' => $lu));
 		}
+	}
+
+	public function actionAsiakas_hyvaksyminen()
+	{
+
+		$this->render('asiakas_hyvaksyminen');
+
 	}
 
 
