@@ -45,7 +45,7 @@
 <tr>
 
 	<td>
-		<span class="link caret showKuka" data-toggle="collapse" id="<?php echo 'kohde_'.$kohdenID; ?>" for="<?php echo 'kohde_'.$kohde_kannasta; ?>" data-target="<?php echo '#kohdeshow_'.$kohdenID; ?>"></span>
+		<span class="link caret showKuka" data-toggle="collapse" id="<?php echo 'kohde_'.$kohdenID; ?>" for="<?php echo 'kohde_'.$kohdenID; ?>" data-target="<?php echo '#kohdeshow_'.$kohdenID; ?>"></span>
 
 		<?php echo CHtml::encode($kohde_kannasta); ?>
 

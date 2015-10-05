@@ -135,7 +135,8 @@ $this->breadcrumbs=array(
 
 	<div id="showres" class="modal fade" tabindex="-1" role="dialog"></div>
 
-
+	<input type="hidden" id="from" value="<?php echo Yii::app()->session['from']; ?>">
+	<input type="hidden" id="to" value="<?php echo Yii::app()->session['to']; ?>">
 
 
 <script type="text/javascript">
@@ -162,11 +163,13 @@ $(".showKuka").click(function(){
 	
 	var thisID = $(this).attr("id").split("_");
 	var kohde_kannasta = $(this).attr("for").split("_");
+	var from = $("#from").val();
+	var to = $("#to").val();
 
         $.ajax({
            url: location.protocol + "//" + location.host + '/index.php/mobile/tyobykohde',
-           type: "POST",
-	   data: { kohde_kannasta : kohde_kannasta[1] },
+           type: "GET",
+	   data: { kohdenID : kohde_kannasta[1], from : from, to : to },
            success: function(data){
 		console.log(data);
 		$("#showtyo_"+thisID[1]).html(data);
