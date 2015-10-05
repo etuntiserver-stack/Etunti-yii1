@@ -44,10 +44,14 @@ $('.search-form form').submit(function(){
 	'columns'=>array(
 		'id',
 		'kid',
-		'asiakas_num',
+		'kohde_kannasta',
 		'time',
-		'requests',
-		'puh_numero',
+		'aloitan',
+		'loppui',
+		'status',
+		'imei',
+		'tekijan_nimi',
+		'tid',
 		/*
 		'imei',
 		'bluetooth_name',
