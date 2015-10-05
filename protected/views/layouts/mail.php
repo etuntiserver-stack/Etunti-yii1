@@ -7,7 +7,7 @@
 	<tbody>
 		<tr>
             <td style="color:#4D90FE;font-size:22px;border-bottom: 2px solid #4D90FE;">
-				<?php echo CHtml::encode(Yii::app()->name); ?>
+				ETUNTI.FI
             </td>
 		</tr>
 		<tr>
@@ -22,7 +22,7 @@
 		</tr>
 		<tr>
             <td style="padding:15px 20px;text-align:right;padding-top:5px;border-top:solid 1px #dfdfdf">
-				<a href="http://www.yiiframework.com/"><img alt="yiiframework.com" src="yii.png" /></a>
+				ETUNTI.FI
 			</td>
 		</tr>
 	</tbody>

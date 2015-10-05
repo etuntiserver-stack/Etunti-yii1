@@ -55,13 +55,7 @@
 			// Suunnuntai
 			if(date('N', strtotime($al[0])) == 7)
 			$totalSu += (strtotime($lop[0]." ".$lop[1])-strtotime($al[0]." ".$al[1]));
-			// Työpäiviä
-			if($tp != $al[0])
-			{
-			  if((strtotime($lop[0]." ".$lop[1])-strtotime($al[0]." ".$al[1])) != 0)
-				$totalTp += 1;
-			}
-			$tp = $al[0];
+
 		}
 
 
@@ -83,7 +77,7 @@
 
 	<td><?php echo $this->sprint($data->l_tunnit); ?></td>
 	<td><?php echo $this->sprint($total); ?></td>
-	<td><?php echo $totalTp; ?></td>
+	<td><?php echo $this->Tp($data->tid); ?></td>
 	<td><?php echo $this->sprint($totalIlta); ?></td>
 	<td><?php echo $this->sprint($totalYo); ?></td>
 	<td><?php echo $this->sprint($totalSu); ?></td>
