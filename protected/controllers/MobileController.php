@@ -1267,17 +1267,45 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		if(Yii::app()->request->getPost('laheta'))
 		{
 
-print_r($_POST);
-exit;
-		  $message = json_decode($_POST['kirje']);
+		  $length = 50;
+		  $code = substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, $length);
+
+
+	  	$model=new AsiakasHyvaksynta;
+	  	$model->attributes=$_POST;
+	  	$model->kirjen_body=$_POST['kirjen_body'];
+	  	$model->code=$code;
+
+	  	if($model->save())
+		{
+
+		  $message = json_decode($_POST['kirjen_body']);
+		  $message .= '
+			<br>
+			<center>
+			<a href="../site/hyvaksy&id='.$model->id.'&code='.$model->code.'">'.Yii::t('main','Hyväksy').'</a> &nbsp;&nbsp;&nbsp;
+			<a href="../site/hylkaa&id='.$model->id.'&code='.$model->code.'">'.Yii::t('main','Hylkää').'</a>
+			</center>
+
+		  ';		 
+
 	          $mail = new YiiMailer();
 		  //$mail->clearLayout();//if layout is already set in config
 		  $mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
-		  $mail->setTo('laptopsr@gmail.com');
-		  $mail->setSubject('Tuntien hyväksyntä');
-		  $mail->setBody($message);	
-		  if($mail->send())
-			$this->redirect(array('kyhteenveto'));
+		  $mail->setTo($_POST['sahkoposti']);
+		  $mail->setSubject($_POST['otsikko']);
+		  $mail->setBody($message);
+	
+		     if($mail->send())
+		     		$this->redirect(array('kyhteenveto'));
+		     else
+				echo Yii::t('main','Sähköpostissa on vika');
+
+		}
+		if(!$model->save()){
+		   var_dump($model->getErrors());
+		}
+
 
 		} else {
 		  $this->render('asiakas_hyvaksyminen');
