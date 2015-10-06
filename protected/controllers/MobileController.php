@@ -1269,12 +1269,12 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 
 print_r($_POST);
 exit;
-		  $message = $this->renderPartial('asiakas_hyvaksyminen',true);
+		  $message = json_decode($_POST['kirje']);
 	          $mail = new YiiMailer();
 		  //$mail->clearLayout();//if layout is already set in config
-		  $mail->setFrom('no-replay@etunti.fi', 'ETUNTI.FI');
+		  $mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
 		  $mail->setTo('laptopsr@gmail.com');
-		  $mail->setSubject('Uusi tarjouspyyntö');
+		  $mail->setSubject('Tuntien hyväksyntä');
 		  $mail->setBody($message);	
 		  if($mail->send())
 			$this->redirect(array('kyhteenveto'));

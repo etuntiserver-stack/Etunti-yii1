@@ -59,13 +59,25 @@ $body = '
 echo $body;
 
 		$body = preg_replace('!(?:\xc2\xa0|[\pZ\s]++)++!', ' ', $body);
+		$body = json_encode($body);
 
-		echo '<br>';
-		echo '<div class="">';
-		echo '<form action="asiakas_hyvaksyminen" method="POST" target="_blank">';
-		echo '<textarea name="body" class="form-control" rows="20">'.trim($body).'</textarea>';
-		echo '<input type="hidden" name="laheta" value="true">';
-		echo '<input type="submit" class="btn btn-sm btn-success" value="'.Yii::t('main','Lähetä ').' '.$a->sahkoposti.'">';
-		echo '</form>';
-		echo '</div>';
 ?>
+
+
+
+<br>
+<div class="row form">
+ <div class="col-sm-4">
+   <form action="asiakas_hyvaksyminen" method="POST" target="_blank">
+	<label><?php echo Yii::t('main','Otsikko '); ?></label>
+	<input type="text" name="otsikko" class="form-control" value="<?php echo Yii::t('main','Tuntien hyväksyntä. '); ?>">
+	<label><?php echo Yii::t('main','Saaja '); ?></label>
+	<input type="text" name="sahkoposti" class="form-control" value="<?php echo $a->sahkoposti; ?>">
+	<textarea name="kirje" class="form-control" rows="4" style="display:none"><?php echo $body; ?></textarea>
+	<input type="hidden" name="laheta" value="true">
+	<input type="submit" class="btn btn-sm btn-success" value="<?php echo Yii::t('main','Lähetä '); ?>">
+   </form>
+ </div>
+</div>
+
+
