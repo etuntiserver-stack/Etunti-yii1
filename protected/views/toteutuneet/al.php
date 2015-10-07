@@ -12,7 +12,17 @@
   $muutos = $explStr['6'];
   $kesto = $explStr['7'];
   $idKid = $explStr['8'];
+  $ashyv = $explStr['9'];
 
+
+	$asiakas_hyvaksy = '';
+  if(isset($ashyv) and !empty($ashyv)){
+    $exp = explode("//", $ashyv);
+      if(isset($exp[0]) and $exp[0] == 1)
+  	$asiakas_hyvaksy = '<b class="glyphicon glyphicon-ok pull-right text-success"></b>';
+      if(isset($exp[0]) and $exp[0] == 2)
+	$asiakas_hyvaksy = '<b class="glyphicon glyphicon-warning-sign pull-right text-danger"></b>';
+  }
 
   $m = Mobile::model()->findbypk($idKid,array("select"=>"hyvaksytty,admin"));
 
@@ -53,8 +63,10 @@
 		<span class="form-group">
 			<input type="checkbox" class="chckbxHyvaksynta" id="hyv_'.$rivi.'" '.$chk[$rivi].' kuka="'.Yii::app()->user->username.'///'.date('d.m.Y').'">&nbsp; 
 		</span><span class="form-group">
-			<i class="form-group link totRivi '.$admin.'" mod="'.$mod.'" id="tot_'.$rivi.'">'.$al.' '.$kohde.'</i>'.$ap.'
+			<i class="form-group link totRivi '.$admin.'" mod="'.$mod.'" id="tot_'.$rivi.'">'.$al.' '.$kohde.'</i>
+			'.$ap.'
 		</span>
+		'.$asiakas_hyvaksy.'
 	   </div>';
 
 ?>
