@@ -1283,8 +1283,8 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		  $message .= '
 			<br>
 			<center>
-			<a href="http://etunti.fi/index.php/site/hyvaksy&id='.$model->id.'&code='.$model->code.'">'.Yii::t('main','Hyväksy').'</a> &nbsp;&nbsp;&nbsp;
-			<a href="http://etunti.fi/index.php/site/hylkaa&id='.$model->id.'&code='.$model->code.'">'.Yii::t('main','Hylkää').'</a>
+			<a href="http://etunti.fi/index.php/site/hyvaksy&id='.$model->id.'&code='.$model->code.'&domain='.Yii::app()->user->domain.'">'.Yii::t('main','Hyväksy').'</a> &nbsp;&nbsp;&nbsp;
+			<a href="http://etunti.fi/index.php/site/hylkaa&id='.$model->id.'&code='.$model->code.'&domain='.Yii::app()->user->domain.'">'.Yii::t('main','Hylkää').'</a>
 			</center>
 
 		  ';		 
