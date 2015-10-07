@@ -1,10 +1,18 @@
 <?php
 /* @var $this AsiakasHyvaksyntaController */
 /* @var $data AsiakasHyvaksynta */
+
+$cl = 'alert alert-info';
+if($data->status == 1)
+$cl = 'alert alert-info';
+if($data->status == 3)
+$cl = 'alert alert-success';
+if($data->status == 2)
+$cl = 'alert alert-danger';
 ?>
 
-<div class="row">
- <div class="col-sm-12">
+<div class="<?php echo $cl; ?>">
+
 	<b><?php echo CHtml::encode($data->getAttributeLabel('id')); ?>:</b>
 	<?php echo CHtml::link(CHtml::encode($data->id), array('view', 'id'=>$data->id)); ?>
 	<br />
@@ -47,5 +55,5 @@
 	<br />
 
 	*/ ?>
-  </div>
+
 </div>
