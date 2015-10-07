@@ -3,8 +3,8 @@
 /* @var $data AsiakasHyvaksynta */
 ?>
 
-<div class="view">
-
+<div class="row">
+ <div class="col-sm-12">
 	<b><?php echo CHtml::encode($data->getAttributeLabel('id')); ?>:</b>
 	<?php echo CHtml::link(CHtml::encode($data->id), array('view', 'id'=>$data->id)); ?>
 	<br />
@@ -25,7 +25,7 @@
 	<?php echo CHtml::encode($data->status); ?>
 	<br />
 
-	<?php echo $data->kirjen_body; ?>
+	<?php echo json_decode($data->kirjen_body); ?>
 
 	<?php /*
 
@@ -47,5 +47,5 @@
 	<br />
 
 	*/ ?>
-
+  </div>
 </div>

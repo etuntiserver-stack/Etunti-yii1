@@ -12,7 +12,9 @@ $this->menu=array(
 );
 ?>
 
-<h1>Asiakas Hyvaksyntas</h1>
+<legend>
+<h1><?php echo Yii::t('main','Hyväksytty tunnit'); ?></h1>
+</legend>
 
 <?php $this->widget('zii.widgets.CListView', array(
 	'dataProvider'=>$dataProvider,
