@@ -67,7 +67,7 @@
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'imei'); ?>
-		<?php echo $form->textField($model,'imei',array('size'=>30,'maxlength'=>30,'class'=>'form-control')); ?>
+		<?php echo $form->textField($model,'imei',array('size'=>30,'maxlength'=>100,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'imei'); ?>
 	</div>
 

@@ -61,7 +61,7 @@ public $count;
 		return array(
 			array('tekijan_nimi, aktiivinen', 'required'),
 			array('online_varauksen_valmina', 'numerical', 'integerOnly'=>true),
-			array('imei', 'length', 'max'=>30),
+			array('imei', 'length', 'max'=>100),
 			array('laiten_puh, tekijan_nimi, tekijan_katuosoite, tekijan_pankkitili, salasana', 'length', 'max'=>100),
 			array('tekijan_henkilotunnus, tekijan_puh, tekijan_lanka_puh, tyoryhma', 'length', 'max'=>20),
 			array('tekijan_email, tekijan_ptoimipaikka, tyoehtosopimus, tekijan_kulunvalvonta, tekijan_konttori, aktiivinen', 'length', 'max'=>50),
