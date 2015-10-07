@@ -1114,7 +1114,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		$fromTo = " DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$from."' AND '".$to."' ";
 
        		$criteria = new CDbCriteria();
-        	$criteria->select = "id,tekijan_nimi,aloitan,loppui";
+        	$criteria->select = "id,tekijan_nimi,aloitan,loppui,asiakas_hyvaksy";
         	$criteria->order = "kohde_kannasta";
         	//$criteria->group = "kohde_kannasta";
         	$criteria->condition = "
@@ -1129,12 +1129,12 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		foreach($model as $d){
 			$kesto = 0;
 			$kesto = strtotime($d->loppui)-strtotime($d->aloitan);
-			$lu[] = $d->tekijan_nimi."//".date("d.m",strtotime($d->aloitan))."//".$kesto."//mobile_".$d->id;
+			$lu[] = $d->tekijan_nimi."//".date("d.m",strtotime($d->aloitan))."//".$kesto."//mobile_".$d->id."//".$d->asiakas_hyvaksy;
 		}
 
 
        		$criteria = new CDbCriteria();
-        	$criteria->select = "id,tekijan_nimi,aloitan,loppui";
+        	$criteria->select = "id,tekijan_nimi,aloitan,loppui,asiakas_hyvaksy";
         	$criteria->order = "kohde_kannasta";
         	//$criteria->group = "kohde_kannasta";
         	$criteria->condition = "
@@ -1147,7 +1147,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		foreach($model as $d){
 			$kesto = 0;
 			$kesto = strtotime($d->loppui)-strtotime($d->aloitan);
-			$lu[] = $d->tekijan_nimi."//".date("d.m",strtotime($d->aloitan))."//".$kesto."//toteutu_".$d->id;
+			$lu[] = $d->tekijan_nimi."//".date("d.m",strtotime($d->aloitan))."//".$kesto."//toteutu_".$d->id."//".$d->asiakas_hyvaksy;
 		}
 
 		//if(count($lu) > 0)
@@ -1157,12 +1157,22 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		foreach($lu as $k=>$v)
 		{
 			$explV = explode("//",$v);
+
+			$asiakas_hyvaksy = '';
+			if(isset($explV[4]) and !empty($explV[4])){
+			  $exp = explode("//", $explV[4]);
+			    if(isset($exp[0]) and $exp[0] == 1)
+				$asiakas_hyvaksy = '<b class="glyphicon glyphicon-ok pull-right text-success"></b>';
+			    if(isset($exp[0]) and $exp[0] == 2)
+				$asiakas_hyvaksy = '<b class="glyphicon glyphicon-warning-sign pull-right text-danger"></b>';
+			}
+
 			if(isset($explV[0]) and isset($explV[1]) and isset($explV[2]))
 			{
 			echo 
 			'<div class="row">
 			   <div class="col-sm-6 text-right">'.$explV[0].', '.$explV[1].'</div>
-			   <div class="col-sm-6"> kesto: <b> '.$this->sprint($explV[2]).'</b></div>
+			   <div class="col-sm-6"> kesto: <b> '.$this->sprint($explV[2]).'</b> '.$asiakas_hyvaksy.'</div>
 			</div>';
 			}
 			if(isset($explV[3]))
