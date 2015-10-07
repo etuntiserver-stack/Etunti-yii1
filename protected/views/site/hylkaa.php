@@ -15,13 +15,13 @@ if(isset($_POST['palaute'])){
 
 		if($explVal[0] == 'mobile') 
 		{
-		   Mobile::model()->updatebypk($explVal[1], array('asiakas_hyvaksy'=>'2//'.date("d.m.Y").'//'.$_POST['palaute']));
+		   Mobile::model()->updatebypk($explVal[1], array('asiakas_hyvaksy'=>'2//'.date("d.m.Y").'//'.$_POST['palaute'],'status'=>2));
 		   //echo $explVal[1].'<br>';
 		}
 
 		if($explVal[0] == 'toteutu')
 		{
-		   Toteutuneet::model()->updatebypk($explVal[1], array('asiakas_hyvaksy'=>'2//'.date("d.m.Y").'//'.$_POST['palaute']));
+		   Toteutuneet::model()->updatebypk($explVal[1], array('asiakas_hyvaksy'=>'2//'.date("d.m.Y").'//'.$_POST['palaute'],'status'=>2));
 		   //echo $explVal[1].'<br>';
 		}
 
