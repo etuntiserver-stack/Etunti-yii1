@@ -25,7 +25,7 @@ class SiteController extends Controller
 	{
 		return array(
 			array('allow', 
-				'actions'=>array('index','test','hyvaksy'),
+				'actions'=>array('index','test','hyvaksy','hylkaa'),
 				'users'=>array('*'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -66,6 +66,16 @@ class SiteController extends Controller
 
 		$this->render('hyvaksy', array(
 			'model' => $model,
+		));
+	}
+
+	public function actionHylkaa($id,$code,$domain)
+	{
+
+		$this->render('hylkaa', array(
+			'id' => $id,
+			'code' => $code,
+			'domain' => $domain,
 		));
 	}
 

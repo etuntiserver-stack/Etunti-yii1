@@ -89,7 +89,7 @@ echo $body;
 <hr>
 <div class="row form">
  <div class="col-sm-4">
-   <form action="asiakas_hyvaksyminen" method="POST" target="_blank">
+   <form action="asiakas_hyvaksyminen" method="POST">
 	<input type="hidden" name="laheta" value="true">
 	<input type="hidden" name="asiakas_id" class="form-control" value="<?php echo $asiakas_id; ?>">
 	<input type="hidden" name="status" class="form-control" value="1">
