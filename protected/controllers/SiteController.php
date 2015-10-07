@@ -25,7 +25,7 @@ class SiteController extends Controller
 	{
 		return array(
 			array('allow', 
-				'actions'=>array('index','test'),
+				'actions'=>array('index','test','hyvaksy'),
 				'users'=>array('*'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -58,6 +58,15 @@ class SiteController extends Controller
         $html2pdf->Output();
 
 
+	}
+
+	public function actionHyvaksy($id,$code,$domain)
+	{
+		$model = AsiakasHyvaksynta::model()->find(" id='".$id."' and code='".$code."' ");
+
+		$this->render('hyvaksy', array(
+			'model' => $model,
+		));
 	}
 
 	public function actionMobemu()
