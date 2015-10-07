@@ -7,7 +7,11 @@
 	<tbody>
 		<tr>
             <td style="color:#4D90FE;font-size:22px;border-bottom: 2px solid #4D90FE;">
-				ETUNTI.FI
+	    <?php
+		$d = Domainit::model()->find("domain='".Yii::app()->user->domain."'");
+		if(isset($d->yritys))
+		echo $d->yritys;
+	    ?>
             </td>
 		</tr>
 		<tr>
@@ -22,7 +26,7 @@
 		</tr>
 		<tr>
             <td style="padding:15px 20px;text-align:right;padding-top:5px;border-top:solid 1px #dfdfdf">
-				ETUNTI.FI
+				http://etunti.fi
 			</td>
 		</tr>
 	</tbody>
