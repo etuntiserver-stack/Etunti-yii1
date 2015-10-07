@@ -28,7 +28,7 @@ class AsiakasHyvaksyntaController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin', 'delete', 'create', 'update', 'index'),
+				'actions'=>array('view','admin', 'delete', 'create', 'update', 'index'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
