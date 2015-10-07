@@ -11,13 +11,13 @@
 
 		if($explVal[0] == 'mobile') 
 		{
-		   Mobile::model()->updatebypk($explVal[1], array('asiakas_hyvaksy'=>'1//'.date("d.m.Y")));
+		   Mobile::model()->updatebypk($explVal[1], array('asiakas_hyvaksy'=>'1//'.date("d.m.Y"),'status'=>3));
 		   //echo $explVal[1].'<br>';
 		}
 
 		if($explVal[0] == 'toteutu')
 		{
-		   Toteutuneet::model()->updatebypk($explVal[1], array('asiakas_hyvaksy'=>'1//'.date("d.m.Y")));
+		   Toteutuneet::model()->updatebypk($explVal[1], array('asiakas_hyvaksy'=>'1//'.date("d.m.Y"),'status'=>3));
 		   //echo $explVal[1].'<br>';
 		}
 

@@ -17,23 +17,27 @@
 	<?php echo CHtml::encode($data->time); ?>
 	<br />
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('ids')); ?>:</b>
-	<?php echo CHtml::encode($data->ids); ?>
-	<br />
-
 	<b><?php echo CHtml::encode($data->getAttributeLabel('sahkoposti')); ?>:</b>
 	<?php echo CHtml::encode($data->sahkoposti); ?>
-	<br />
-
-	<b><?php echo CHtml::encode($data->getAttributeLabel('code')); ?>:</b>
-	<?php echo CHtml::encode($data->code); ?>
 	<br />
 
 	<b><?php echo CHtml::encode($data->getAttributeLabel('status')); ?>:</b>
 	<?php echo CHtml::encode($data->status); ?>
 	<br />
 
+	<?php echo $data->kirjen_body; ?>
+
 	<?php /*
+
+	<b><?php echo CHtml::encode($data->getAttributeLabel('ids')); ?>:</b>
+	<?php echo CHtml::encode($data->ids); ?>
+	<br />
+
+	<b><?php echo CHtml::encode($data->getAttributeLabel('code')); ?>:</b>
+	<?php echo CHtml::encode($data->code); ?>
+	<br />
+
+
 	<b><?php echo CHtml::encode($data->getAttributeLabel('selitys')); ?>:</b>
 	<?php echo CHtml::encode($data->selitys); ?>
 	<br />
