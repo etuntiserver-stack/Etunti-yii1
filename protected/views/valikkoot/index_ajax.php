@@ -59,10 +59,6 @@ echo '	<div class="row">';
 	<br>';
 
 
-
-	$sql = mysql_query("SELECT id,select_type FROM sivex_selects GROUP BY select_type 
-	ORDER BY id DESC ");
-
        	$criteria = new CDbCriteria();
 	$criteria->order = "id DESC";
 	$criteria->group = "select_type";
