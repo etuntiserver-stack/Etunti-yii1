@@ -1289,6 +1289,32 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 	  	if($model->save())
 		{
 
+
+
+	$ids = explode(",",$model['ids']);
+	foreach($ids as $val)
+	{
+	    $explVal = explode("_", $val);
+	    if(isset($explVal[1]))
+	    {
+
+		if($explVal[0] == 'mobile') 
+		{
+		   Mobile::model()->updatebypk($explVal[1], array('asiakas_hyvaksy'=>'0//'.date("d.m.Y")));
+		   //echo $explVal[1].'<br>';
+		}
+
+		if($explVal[0] == 'toteutu')
+		{
+		   Toteutuneet::model()->updatebypk($explVal[1], array('asiakas_hyvaksy'=>'0//'.date("d.m.Y")));
+		   //echo $explVal[1].'<br>';
+		}
+
+	    }
+
+	}
+
+
 		  $message = json_decode($_POST['kirjen_body']);
 		  $message .= '
 			<br>
