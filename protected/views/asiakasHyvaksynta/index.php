@@ -13,7 +13,7 @@ $this->menu=array(
 ?>
 
 <legend>
-<h1><?php echo Yii::t('main','Hyväksytty tunnit'); ?></h1>
+<h1><?php echo Yii::t('main','HYVÄKSYTTY TUNNIT'); ?></h1>
 </legend>
 
 <?php $this->widget('zii.widgets.CListView', array(
