@@ -4,11 +4,20 @@
 
 $cl = 'alert alert-info';
 if($data->status == 1)
-$cl = 'alert alert-info';
+$cl = 'alert alert-warning';
 if($data->status == 3)
 $cl = 'alert alert-success';
 if($data->status == 2)
 $cl = 'alert alert-danger';
+
+$asiakas = '';
+$a = Asiakkaat::model()->findbypk($data->asiakas_id);
+if(isset($a->yrityksen_nimi) and !empty($a->yrityksen_nimi))
+$asiakas = $a->yrityksen_nimi;
+elseif(isset($a->yhteyshenkilo) and !empty($a->yhteyshenkilo))
+$asiakas = $a->yhteyshenkilo;
+else
+$asiakas = $data->asiakas_id;
 ?>
 
 <div class="<?php echo $cl; ?>">
@@ -18,8 +27,9 @@ $cl = 'alert alert-danger';
 	<br />
 
 	<b><?php echo CHtml::encode($data->getAttributeLabel('asiakas_id')); ?>:</b>
-	<?php echo CHtml::encode($data->asiakas_id); ?>
+	<?php echo CHtml::link(CHtml::encode($asiakas), array('asiakkaat/update', 'id'=>$data->asiakas_id)); ?>
 	<br />
+
 
 	<b><?php echo CHtml::encode($data->getAttributeLabel('time')); ?>:</b>
 	<?php echo CHtml::encode($data->time); ?>
@@ -36,9 +46,11 @@ $cl = 'alert alert-danger';
 	<?php echo json_decode($data->kirjen_body); ?>
 	<br />
 
+	<?php if(!empty($data->selitys)) : ?>
 	<b><?php echo CHtml::encode($data->getAttributeLabel('selitys')); ?>:</b>
 	<?php echo CHtml::encode($data->selitys); ?>
 	<br />
+	<?php endif; ?>
 
 	<?php /*
 

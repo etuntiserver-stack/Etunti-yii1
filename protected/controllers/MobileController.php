@@ -1160,9 +1160,9 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 
 			$asiakas_hyvaksy = '';
 			if(isset($explV[4]) and !empty($explV[4])){
-			  $exp = explode("//", $explV[4]);
+			  $exp = explode("_", $explV[4]);
 			    if(isset($exp[0]) and $exp[0] == 0)
-				$asiakas_hyvaksy = '<b class="glyphicon glyphicon-transfer pull-right text-warning"></b>';
+				$asiakas_hyvaksy = '<b class="fa fa-share pull-right text-warning"></b>';
 			    if(isset($exp[0]) and $exp[0] == 1)
 				$asiakas_hyvaksy = '<b class="glyphicon glyphicon-ok pull-right text-success"></b>';
 			    if(isset($exp[0]) and $exp[0] == 2)
@@ -1171,6 +1171,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 
 			if(isset($explV[0]) and isset($explV[1]) and isset($explV[2]))
 			{
+
 			echo 
 			'<div class="row">
 			   <div class="col-sm-6 text-right">'.$explV[0].', '.$explV[1].'</div>
@@ -1302,13 +1303,13 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 
 		if($explVal[0] == 'mobile') 
 		{
-		   Mobile::model()->updatebypk($explVal[1], array('asiakas_hyvaksy'=>'0//'.date("d.m.Y")));
+		   Mobile::model()->updatebypk($explVal[1], array('asiakas_hyvaksy'=>'0_'.date("d.m.Y")));
 		   //echo $explVal[1].'<br>';
 		}
 
 		if($explVal[0] == 'toteutu')
 		{
-		   Toteutuneet::model()->updatebypk($explVal[1], array('asiakas_hyvaksy'=>'0//'.date("d.m.Y")));
+		   Toteutuneet::model()->updatebypk($explVal[1], array('asiakas_hyvaksy'=>'0_'.date("d.m.Y")));
 		   //echo $explVal[1].'<br>';
 		}
 
