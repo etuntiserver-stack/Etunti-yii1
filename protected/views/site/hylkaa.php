@@ -48,8 +48,8 @@ if(isset($_POST['palaute'])){
 	<input type="hidden" name="id" id="id" value="<?php echo $id; ?>">
 	<input type="hidden" name="code" id="code" value="<?php echo $code; ?>">
 	<input type="hidden" name="domain" id="domain" value="<?php echo $domain; ?>">
-	<label><?php echo Yii::t('main','Pikku selitys'); ?></label>
-	<textarea name="palaute" id="palauteText" maxlength="70" class="form-control"></textarea>
+	<label><?php echo Yii::t('main','Selitys'); ?></label>
+	<textarea name="palaute" id="palauteText" class="form-control"></textarea>
 	<button class="btn btn-primary" id="tallenna-btn"><?php echo Yii::t('main','Lähetä'); ?></button>
 	</form>
   </div>
