@@ -28,7 +28,7 @@ class TyontekijatController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','admin_ajax','delete','create','update','index','view'),
+				'actions'=>array('admin','admin_ajax','delete','create','update','index','view','merkkipaivat'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -49,10 +49,25 @@ class TyontekijatController extends Controller
 		}
 	}
 
-	/**
-	 * Displays a particular model.
-	 * @param integer $id the ID of the model to be displayed
-	 */
+
+	public function actionMerkkipaivat()
+	{
+		//STR_TO_DATE(sivexkuitti.aloitan, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s'))
+
+	       	$criteria = new CDbCriteria();
+		$criteria->select = " 
+			SUBSTRING_INDEX(tekijan_henkilotunnus,'-',1) as tunnus
+			,t.*
+		";
+		//$criteria->order = " tekijan_henkilotunnus DESC";
+		$criteria->condition = " aktiivinen='1' AND tekijan_henkilotunnus !='' ";
+
+		$model=Tyontekijat::model()->findAll($criteria);
+		$this->render('merkkipaivat',array(
+			'model'=>$model,
+		));
+	}
+
 	public function actionView($id)
 	{
 		$this->render('view',array(
