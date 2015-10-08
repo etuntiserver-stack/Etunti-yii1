@@ -17,9 +17,9 @@
 
 	$asiakas_hyvaksy = '';
   if(isset($ashyv) and !empty($ashyv)){
-    $exp = explode("//", $ashyv);
+    $exp = explode("_", $ashyv);
       if(isset($exp[0]) and $exp[0] == 0)
-	$asiakas_hyvaksy = '<b class="glyphicon glyphicon-transfer pull-right text-warning"></b>';
+	$asiakas_hyvaksy = '<b class="fa fa-share pull-right text-warning"></b>';
       if(isset($exp[0]) and $exp[0] == 1)
   	$asiakas_hyvaksy = '<b class="glyphicon glyphicon-ok pull-right text-success"></b>';
       if(isset($exp[0]) and $exp[0] == 2)
