@@ -15,13 +15,13 @@ if(isset($_POST['palaute'])){
 
 		if($explVal[0] == 'mobile') 
 		{
-		   Mobile::model()->updatebypk($explVal[1], array('asiakas_hyvaksy'=>'2//'.date("d.m.Y").'//'.$_POST['palaute']));
+		   Mobile::model()->updatebypk($explVal[1], array('asiakas_hyvaksy'=>'2//'.date("d.m.Y")));
 		   //echo $explVal[1].'<br>';
 		}
 
 		if($explVal[0] == 'toteutu')
 		{
-		   Toteutuneet::model()->updatebypk($explVal[1], array('asiakas_hyvaksy'=>'2//'.date("d.m.Y").'//'.$_POST['palaute']));
+		   Toteutuneet::model()->updatebypk($explVal[1], array('asiakas_hyvaksy'=>'2//'.date("d.m.Y")));
 		   //echo $explVal[1].'<br>';
 		}
 
@@ -29,7 +29,7 @@ if(isset($_POST['palaute'])){
 
 	}
 
-  AsiakasHyvaksynta::model()->updatebypk($model['id'], array('code'=>'','status'=>2));
+  AsiakasHyvaksynta::model()->updatebypk($model['id'], array('code'=>'','status'=>2,'selitys'=>$_POST['palaute']));
 
   }
 
