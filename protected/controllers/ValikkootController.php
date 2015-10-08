@@ -29,7 +29,7 @@ class ValikkootController extends Controller
 		return array(
 
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view'),
+				'actions'=>array('admin','delete','create','update','index','view','index_ajax'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -127,15 +127,16 @@ class ValikkootController extends Controller
 			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
 	}
 
-	/**
-	 * Lists all models.
-	 */
+
+
 	public function actionIndex()
 	{
-		$dataProvider=new CActiveDataProvider('Valikkoot');
-		$this->render('index',array(
-			'dataProvider'=>$dataProvider,
-		));
+		$this->render('index');
+	}
+
+	public function actionIndex_ajax()
+	{
+		$this->renderPartial('index_ajax');
 	}
 
 	/**
