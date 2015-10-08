@@ -34,7 +34,7 @@ $cl = 'alert alert-danger';
 	<br />
 
 	<?php echo json_decode($data->kirjen_body); ?>
-
+	<br />
 
 	<b><?php echo CHtml::encode($data->getAttributeLabel('selitys')); ?>:</b>
 	<?php echo CHtml::encode($data->selitys); ?>
