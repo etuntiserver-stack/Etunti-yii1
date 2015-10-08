@@ -18,31 +18,31 @@
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'tekijan_nimi'); ?>
-		<?php echo $form->textField($model,'tekijan_nimi',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
+		<?php echo $form->textField($model,'tekijan_nimi',array('size'=>60,'maxlength'=>100,'class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'tekijan_nimi'); ?>
 	</div>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'tekijan_email'); ?>
-		<?php echo $form->textField($model,'tekijan_email',array('size'=>50,'maxlength'=>50,'class'=>'form-control')); ?>
+		<?php echo $form->textField($model,'tekijan_email',array('size'=>50,'maxlength'=>50,'class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'tekijan_email'); ?>
 	</div>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'tekijan_katuosoite'); ?>
-		<?php echo $form->textField($model,'tekijan_katuosoite',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
+		<?php echo $form->textField($model,'tekijan_katuosoite',array('size'=>60,'maxlength'=>100,'class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'tekijan_katuosoite'); ?>
 	</div>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'tekijan_pnumero'); ?>
-		<?php echo $form->textField($model,'tekijan_pnumero',array('size'=>7,'maxlength'=>7,'class'=>'form-control')); ?>
+		<?php echo $form->textField($model,'tekijan_pnumero',array('size'=>7,'maxlength'=>7,'class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'tekijan_pnumero'); ?>
 	</div>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'tekijan_ptoimipaikka'); ?>
-		<?php echo $form->textField($model,'tekijan_ptoimipaikka',array('size'=>50,'maxlength'=>50,'class'=>'form-control')); ?>
+		<?php echo $form->textField($model,'tekijan_ptoimipaikka',array('size'=>50,'maxlength'=>50,'class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'tekijan_ptoimipaikka'); ?>
 	</div>
 
@@ -57,7 +57,7 @@
 		}
 
 		echo $form->dropDownList($model,'aktiivinen', $tal, 
-		array('class'=>'form-control','id'=>'osoite')) ?>
+		array('class'=>'form-control input-sm','id'=>'osoite')) ?>
 		<?php echo $form->error($model,'aktiivinen'); ?>
 	</div>
 
@@ -67,25 +67,25 @@
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'imei'); ?>
-		<?php echo $form->textField($model,'imei',array('size'=>30,'maxlength'=>100,'class'=>'form-control')); ?>
+		<?php echo $form->textField($model,'imei',array('size'=>30,'maxlength'=>100,'class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'imei'); ?>
 	</div>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'laiten_puh'); ?>
-		<?php echo $form->textField($model,'laiten_puh',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
+		<?php echo $form->textField($model,'laiten_puh',array('size'=>60,'maxlength'=>100,'class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'laiten_puh'); ?>
 	</div>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'tekijan_henkilotunnus'); ?>
-		<?php echo $form->textField($model,'tekijan_henkilotunnus',array('size'=>20,'maxlength'=>20,'class'=>'form-control')); ?>
+		<?php echo $form->textField($model,'tekijan_henkilotunnus',array('size'=>20,'maxlength'=>20,'class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'tekijan_henkilotunnus'); ?>
 	</div>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'tekijan_puh'); ?>
-		<?php echo $form->textField($model,'tekijan_puh',array('size'=>20,'maxlength'=>20,'class'=>'form-control')); ?>
+		<?php echo $form->textField($model,'tekijan_puh',array('size'=>20,'maxlength'=>20,'class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'tekijan_puh'); ?>
 	</div>
 
@@ -94,7 +94,7 @@
 		<?php 
         	$tal = array(0=>'Ei',1=>'Kyllä');
 		echo $form->dropDownList($model,'online_varauksen_valmina', $tal, 
-		array('class'=>'form-control','id'=>'osoite')) ?>
+		array('class'=>'form-control input-sm','id'=>'osoite')) ?>
 		<?php echo $form->error($model,'online_varauksen_valmina'); ?>
 	</div>
 
@@ -106,7 +106,7 @@
 		$list[$v->value] = $v->value;
 
         	echo $form->dropDownList($model, 'tyoryhma', $list,
-		array('empty'=>'','class'=>'form-control'));
+		array('empty'=>'','class'=>'form-control input-sm'));
         	?>
 		<?php echo $form->error($model,'tyoryhma'); ?>
 	</div>
@@ -116,19 +116,19 @@
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'tyoehtosopimus'); ?>
-		<?php echo $form->textField($model,'tyoehtosopimus',array('size'=>50,'maxlength'=>50,'class'=>'form-control')); ?>
+		<?php echo $form->textField($model,'tyoehtosopimus',array('size'=>50,'maxlength'=>50,'class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'tyoehtosopimus'); ?>
 	</div>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'tekijan_pankkitili'); ?>
-		<?php echo $form->textField($model,'tekijan_pankkitili',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
+		<?php echo $form->textField($model,'tekijan_pankkitili',array('size'=>60,'maxlength'=>100,'class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'tekijan_pankkitili'); ?>
 	</div>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'tekijan_konttori'); ?>
-		<?php echo $form->textField($model,'tekijan_konttori',array('size'=>50,'maxlength'=>50,'class'=>'form-control')); ?>
+		<?php echo $form->textField($model,'tekijan_konttori',array('size'=>50,'maxlength'=>50,'class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'tekijan_konttori'); ?>
 	</div>
 
@@ -138,7 +138,7 @@
 		$a = Valikkoot::model()->findAll(" select_type='kortit' ");
 		$check = explode("##***",$model->kortit);
 
-		echo '<select name="kortit[]" class="selectpicker form-control" multiple title="Valitse">';
+		echo '<select name="kortit[]" class="selectpicker form-control input-sm" multiple title="Valitse">';
 		  foreach($a as $val){
 		    	$on = false;
 		   foreach($check as $c)
@@ -159,7 +159,7 @@
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'ayjasenyys'); ?>
-		<?php echo $form->checkbox($model,'ayjasenyys',array('size'=>10,'maxlength'=>10,'class'=>'form-control')); ?>
+		<?php echo $form->checkbox($model,'ayjasenyys',array('size'=>10,'maxlength'=>10,'class'=>'form-control input-sm')); ?>
 
 		<?php echo $form->error($model,'ayjasenyys'); ?>
 	</div>
@@ -186,13 +186,13 @@
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'tekijan_tietoja'); ?>
-		<?php echo $form->textArea($model,'tekijan_tietoja',array('rows'=>6, 'cols'=>50,'class'=>'form-control')); ?>
+		<?php echo $form->textArea($model,'tekijan_tietoja',array('rows'=>6, 'cols'=>50,'class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'tekijan_tietoja'); ?>
 	</div>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'tekijan_muisti'); ?>
-		<?php echo $form->textArea($model,'tekijan_muisti',array('rows'=>6, 'cols'=>50,'class'=>'form-control')); ?>
+		<?php echo $form->textArea($model,'tekijan_muisti',array('rows'=>6, 'cols'=>50,'class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'tekijan_muisti'); ?>
 	</div>
 
@@ -215,19 +215,19 @@
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'tekijan_lanka_puh'); ?>
-		<?php echo $form->textField($model,'tekijan_lanka_puh',array('size'=>20,'maxlength'=>20,'class'=>'form-control')); ?>
+		<?php echo $form->textField($model,'tekijan_lanka_puh',array('size'=>20,'maxlength'=>20,'class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'tekijan_lanka_puh'); ?>
 	</div>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'tekijan_kulunvalvonta'); ?>
-		<?php echo $form->textField($model,'tekijan_kulunvalvonta',array('size'=>50,'maxlength'=>50,'class'=>'form-control')); ?>
+		<?php echo $form->textField($model,'tekijan_kulunvalvonta',array('size'=>50,'maxlength'=>50,'class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'tekijan_kulunvalvonta'); ?>
 	</div>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'salasana'); ?>
-		<?php echo $form->textField($model,'salasana',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
+		<?php echo $form->textField($model,'salasana',array('size'=>60,'maxlength'=>100,'class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'salasana'); ?>
 	</div>
 

@@ -32,6 +32,8 @@ class Tyontekijat extends DB2ActiveRecord
 {
 
 public $count;
+public $tunnus;
+
 
 	/**
 	 * Returns the static model of the specified AR class.

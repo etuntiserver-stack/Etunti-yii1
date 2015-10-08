@@ -32,7 +32,7 @@
 		$criteria->order = " yhteyshenkilo ";
 
         	$a = Asiakkaat::model()->findAll($criteria);
-		echo '<select name="Lasku[as_nro]" class="form-control" id="Lasku_as_nro">';
+		echo '<select name="Lasku[as_nro]" class="form-control input-sm" id="Lasku_as_nro">';
 
 		if(isset($model->asiakas_id) and !empty($model->asiakas_id))
 		{
@@ -66,44 +66,44 @@
 		<?php
 		$list = array('yritys'=>Yii::t('main', 'Yritys'),'henkilo'=>Yii::t('main', 'Yksityishenkilö'));
         	echo $form->dropDownList($model, 'tyyppi', $list,
-		array('empty'=>'Valitse tyyppi','class'=>'form-control'));	
+		array('empty'=>'Valitse tyyppi','class'=>'form-control input-sm'));	
         	?>
 		<?php echo $form->error($model,'tyyppi'); ?>
 	</div>
 
 	<div class="row yritys ashidd">
 		<?php echo $form->labelEx($model,'yritys'); ?>
-		<?php echo $form->textField($model,'yritys',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
+		<?php echo $form->textField($model,'yritys',array('size'=>60,'maxlength'=>100,'class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'yritys'); ?>
 	</div>
 
 	<div class="row y_tunnus ashidd">
 		<?php echo $form->labelEx($model,'y_tunnus'); ?>
-		<?php echo $form->textField($model,'y_tunnus',array('size'=>50,'maxlength'=>50,'class'=>'form-control')); ?>
+		<?php echo $form->textField($model,'y_tunnus',array('size'=>50,'maxlength'=>50,'class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'y_tunnus'); ?>
 	</div>
 
 	<div class="row nimi ashidd">
 		<?php echo $form->labelEx($model,'nimi'); ?>
-		<?php echo $form->textField($model,'nimi',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
+		<?php echo $form->textField($model,'nimi',array('size'=>60,'maxlength'=>100,'class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'nimi'); ?>
 	</div>
 
 	<div class="row ashidd_a">
 		<?php echo $form->labelEx($model,'osoite'); ?>
-		<?php echo $form->textField($model,'osoite',array('size'=>60,'maxlength'=>255,'class'=>'form-control')); ?>
+		<?php echo $form->textField($model,'osoite',array('size'=>60,'maxlength'=>255,'class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'osoite'); ?>
 	</div>
 
 	<div class="row ashidd_a">
 		<?php echo $form->labelEx($model,'postinumero'); ?>
-		<?php echo $form->textField($model,'postinumero',array('size'=>10,'maxlength'=>10,'class'=>'form-control')); ?>
+		<?php echo $form->textField($model,'postinumero',array('size'=>10,'maxlength'=>10,'class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'postinumero'); ?>
 	</div>
 
 	<div class="row ashidd_a">
 		<?php echo $form->labelEx($model,'toimipaikka'); ?>
-		<?php echo $form->textField($model,'toimipaikka',array('size'=>50,'maxlength'=>50,'class'=>'form-control')); ?>
+		<?php echo $form->textField($model,'toimipaikka',array('size'=>50,'maxlength'=>50,'class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'toimipaikka'); ?>
 	</div>
 
@@ -112,7 +112,7 @@
 		<?php
 		$list = array(0=>'Ei',1=>'Kyllä');
         	echo $form->dropDownList($model, 'toimitusosoite', $list,
-		array('class'=>'form-control'));
+		array('class'=>'form-control input-sm'));
         	?>
 		<?php echo $form->error($model,'toimitusosoite'); ?>
 	</div>
@@ -128,44 +128,44 @@
 				'sahkoposti'=>Yii::t('main','Sähköposti')
 				);
         	echo $form->dropDownList($model, 'laskutus', $list,
-		array('empty'=>'Valitse','class'=>'form-control'));
+		array('empty'=>'Valitse','class'=>'form-control input-sm'));
         	?>
 		<?php echo $form->error($model,'laskutus'); ?>
 	</div>
 
 	<div class="row sahkoposti hidd">
 		<?php echo $form->labelEx($model,'sahkoposti'); ?>
-		<?php echo $form->textField($model,'sahkoposti',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
+		<?php echo $form->textField($model,'sahkoposti',array('size'=>60,'maxlength'=>100,'class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'sahkoposti'); ?>
 	</div>
 
 	<div class="row verkkolaskuosoite hidd">
 		<?php echo $form->labelEx($model,'verkkolaskuosoite'); ?>
-		<?php echo $form->textField($model,'verkkolaskuosoite',array('size'=>60,'maxlength'=>255,'class'=>'form-control')); ?>
+		<?php echo $form->textField($model,'verkkolaskuosoite',array('size'=>60,'maxlength'=>255,'class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'verkkolaskuosoite'); ?>
 	</div>
 
 	<div class="row v_tunnus hidd">
 		<?php echo $form->labelEx($model,'v_tunnus'); ?>
-		<?php echo $form->textField($model,'v_tunnus',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
+		<?php echo $form->textField($model,'v_tunnus',array('size'=>60,'maxlength'=>100,'class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'v_tunnus'); ?>
 	</div>
 
 	<div class="row yhteyshenkilo hidd">
 		<?php echo $form->labelEx($model,'yhteyshenkilo'); ?>
-		<?php echo $form->textField($model,'yhteyshenkilo',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
+		<?php echo $form->textField($model,'yhteyshenkilo',array('size'=>60,'maxlength'=>100,'class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'yhteyshenkilo'); ?>
 	</div>
 
 	<div class="row nimitarkenne hidd">
 		<?php echo $form->labelEx($model,'nimitarkenne'); ?>
-		<?php echo $form->textField($model,'nimitarkenne',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
+		<?php echo $form->textField($model,'nimitarkenne',array('size'=>60,'maxlength'=>100,'class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'nimitarkenne'); ?>
 	</div>
 
 	<div class="row puhelin hidd">
 		<?php echo $form->labelEx($model,'puhelin'); ?>
-		<?php echo $form->textField($model,'puhelin',array('size'=>50,'maxlength'=>50,'class'=>'form-control')); ?>
+		<?php echo $form->textField($model,'puhelin',array('size'=>50,'maxlength'=>50,'class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'puhelin'); ?>
 	</div>
 
@@ -173,37 +173,37 @@
   <legend><?php echo Yii::t('main', 'LASKUN TIEDOT'); ?></legend>
 	<div class="row">
 		<?php echo $form->labelEx($model,'paivays'); ?>
-		<?php echo $form->textField($model,'paivays',array('value'=>date("d.m.Y"),'size'=>20,'maxlength'=>20,'class'=>'form-control datepicker')); ?>
+		<?php echo $form->textField($model,'paivays',array('value'=>date("d.m.Y"),'size'=>20,'maxlength'=>20,'class'=>'form-control input-sm datepicker')); ?>
 		<?php echo $form->error($model,'paivays'); ?>
 	</div>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'erapaiva'); ?>
-		<?php echo $form->textField($model,'erapaiva',array('size'=>20,'maxlength'=>20,'class'=>'form-control datepicker')); ?>
+		<?php echo $form->textField($model,'erapaiva',array('size'=>20,'maxlength'=>20,'class'=>'form-control input-sm datepicker')); ?>
 		<?php echo $form->error($model,'erapaiva'); ?>
 	</div>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'toimituspaiva'); ?>
-		<?php echo $form->textField($model,'toimituspaiva',array('size'=>20,'maxlength'=>20,'class'=>'form-control datepicker')); ?>
+		<?php echo $form->textField($model,'toimituspaiva',array('size'=>20,'maxlength'=>20,'class'=>'form-control input-sm datepicker')); ?>
 		<?php echo $form->error($model,'toimituspaiva'); ?>
 	</div>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'maksuehto'); ?>
-		<?php echo $form->textField($model,'maksuehto',array('size'=>20,'maxlength'=>20,'class'=>'form-control')); ?>
+		<?php echo $form->textField($model,'maksuehto',array('size'=>20,'maxlength'=>20,'class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'maksuehto'); ?>
 	</div>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'viitenumero'); ?>
-		<?php echo $form->textField($model,'viitenumero',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
+		<?php echo $form->textField($model,'viitenumero',array('size'=>60,'maxlength'=>100,'class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'viitenumero'); ?>
 	</div>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'viivastyskorko'); ?>
-		<?php echo $form->textField($model,'viivastyskorko',array('size'=>50,'maxlength'=>50,'class'=>'form-control')); ?>
+		<?php echo $form->textField($model,'viivastyskorko',array('size'=>50,'maxlength'=>50,'class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'viivastyskorko'); ?>
 	</div>
 
@@ -214,13 +214,13 @@
 		<?php echo $form->labelEx($model,'yid'); ?>
 		<?php echo $form->dropDownList($model,'yid', 
 		CHtml::listData(FirmanTiedot::model()->findAll(), 'id', 'tyonantaja'), 
-		array('empty'=>'Valitse saaja','class'=>'form-control')) ?>
+		array('empty'=>'Valitse saaja','class'=>'form-control input-sm')) ?>
 		<?php echo $form->error($model,'yid'); ?>
 	</div>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'saaja_iban'); ?>
-		<?php echo $form->textField($model,'saaja_iban',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
+		<?php echo $form->textField($model,'saaja_iban',array('size'=>60,'maxlength'=>100,'class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'saaja_iban'); ?>
 	</div>
 
@@ -236,49 +236,49 @@
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'t_yritys'); ?>
-		<?php echo $form->textField($model,'t_yritys',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
+		<?php echo $form->textField($model,'t_yritys',array('size'=>60,'maxlength'=>100,'class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'t_yritys'); ?>
 	</div>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'t_y_tunnus'); ?>
-		<?php echo $form->textField($model,'t_y_tunnus',array('size'=>50,'maxlength'=>50,'class'=>'form-control')); ?>
+		<?php echo $form->textField($model,'t_y_tunnus',array('size'=>50,'maxlength'=>50,'class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'t_y_tunnus'); ?>
 	</div>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'t_nimi'); ?>
-		<?php echo $form->textField($model,'t_nimi',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
+		<?php echo $form->textField($model,'t_nimi',array('size'=>60,'maxlength'=>100,'class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'t_nimi'); ?>
 	</div>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'t_osoite'); ?>
-		<?php echo $form->textField($model,'t_osoite',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
+		<?php echo $form->textField($model,'t_osoite',array('size'=>60,'maxlength'=>100,'class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'t_osoite'); ?>
 	</div>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'t_postinumero'); ?>
-		<?php echo $form->textField($model,'t_postinumero',array('size'=>10,'maxlength'=>10,'class'=>'form-control')); ?>
+		<?php echo $form->textField($model,'t_postinumero',array('size'=>10,'maxlength'=>10,'class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'t_postinumero'); ?>
 	</div>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'t_toimipaikka'); ?>
-		<?php echo $form->textField($model,'t_toimipaikka',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
+		<?php echo $form->textField($model,'t_toimipaikka',array('size'=>60,'maxlength'=>100,'class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'t_toimipaikka'); ?>
 	</div>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'t_puhelin'); ?>
-		<?php echo $form->textField($model,'t_puhelin',array('size'=>50,'maxlength'=>50,'class'=>'form-control')); ?>
+		<?php echo $form->textField($model,'t_puhelin',array('size'=>50,'maxlength'=>50,'class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'t_puhelin'); ?>
 	</div>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'t_sahkoposti'); ?>
-		<?php echo $form->textField($model,'t_sahkoposti',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
+		<?php echo $form->textField($model,'t_sahkoposti',array('size'=>60,'maxlength'=>100,'class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'t_sahkoposti'); ?>
 	</div>
   </div>
@@ -293,10 +293,10 @@
       <div class="row">
 	<div class="col-sm-6">
 		<b class="glyphicon glyphicon-calendar"></b> 
-   		<input type="text" id="from" class="form-control form-group datepicker" value="<?php echo date("d.m.Y",strtotime('first day of this month', time())); ?>">
+   		<input type="text" id="from" class="form-control input-sm form-group datepicker" value="<?php echo date("d.m.Y",strtotime('first day of this month', time())); ?>">
 	</div><div class="col-sm-6">
 		<b class="glyphicon glyphicon-calendar"></b> 
-   		<input type="text" id="to" class="form-control form-group datepicker" value="<?php echo date("d.m.Y",strtotime('last day of this month', time())); ?>">
+   		<input type="text" id="to" class="form-control input-sm form-group datepicker" value="<?php echo date("d.m.Y",strtotime('last day of this month', time())); ?>">
 	</div>
       </div>
 
@@ -304,7 +304,7 @@
 	<div class="col-sm-6">
 		<b class="glyphicon glyphicon-th-list"></b>
 		<?php
-		echo CHtml::dropdownList('','palvelu', CHtml::listData(LaskutusTuotteet::model()->findAll(), 'id', 'tuotenimi'), array('empty'=>'Valitse palvelu','class'=>'form-control','id'=>'lt'));
+		echo CHtml::dropdownList('','palvelu', CHtml::listData(LaskutusTuotteet::model()->findAll(), 'id', 'tuotenimi'), array('empty'=>'Valitse palvelu','class'=>'form-control input-sm','id'=>'lt'));
 		?>
 	</div><div class="col-sm-6">
 		<div id="getkohde" class="form-group"></div>
@@ -320,21 +320,21 @@
       <div class="row">
 	<div class="col-sm-6">
 		<b class="glyphicon glyphicon-calendar"></b> 
-   		<input type="text" id="fromkk" class="form-control form-group datepicker" value="<?php echo date("d.m.Y",strtotime('first day of this month', time())); ?>">
+   		<input type="text" id="fromkk" class="form-control input-sm form-group datepicker" value="<?php echo date("d.m.Y",strtotime('first day of this month', time())); ?>">
 	</div><div class="col-sm-6">
 		<b class="glyphicon glyphicon-calendar"></b> 
-   		<input type="text" id="tokk" class="form-control form-group datepicker" value="<?php echo date("d.m.Y",strtotime('last day of this month', time())); ?>">
+   		<input type="text" id="tokk" class="form-control input-sm form-group datepicker" value="<?php echo date("d.m.Y",strtotime('last day of this month', time())); ?>">
 	</div>
       </div>
 
       <div class="row">
 	<div class="col-sm-6">
 		<b class="glyphicon glyphicon-euro"></b> 
-		<input type="text" id="hintaForTuntikk" class="form-control form-group" placeholder="syötä kk hinta">
+		<input type="text" id="hintaForTuntikk" class="form-control input-sm form-group" placeholder="syötä kk hinta">
 	</div><div class="col-sm-6">
 		<b class="glyphicon glyphicon-th-list"></b>
 		<?php
-		echo CHtml::dropdownList('','palvelu', CHtml::listData(LaskutusTuotteet::model()->findAll(), 'tuotenimi', 'tuotenimi'), array('empty'=>'Valitse palvelu','class'=>'form-control','id'=>'palvelu'));
+		echo CHtml::dropdownList('','palvelu', CHtml::listData(LaskutusTuotteet::model()->findAll(), 'tuotenimi', 'tuotenimi'), array('empty'=>'Valitse palvelu','class'=>'form-control input-sm','id'=>'palvelu'));
 		?>
 	</div>
       </div>
@@ -346,7 +346,7 @@
 
 </div>
 
-	<input type="hidden" class="form-control" id="kohteistaRivit" readonly><br>
+	<input type="hidden" class="form-control input-sm" id="kohteistaRivit" readonly><br>
 	<div id="tuntienTulos"></div>
 
 <div id="rivit">
@@ -380,10 +380,10 @@
 	<TD></TD>
 	<TD></TD>
 	<TD></TD>
-	<TD><input type="text" class="form-control" size="10" name="Lasku[yhteensa_total_verot]" id="yhteensa_total_verot" readonly></TD>
+	<TD><input type="text" class="form-control input-sm" size="10" name="Lasku[yhteensa_total_verot]" id="yhteensa_total_verot" readonly></TD>
 	<TD></TD>
-	<TD><input type="text" class="form-control" size="10" name="Lasku[yhteensa_total_veroton]" id="yhteensa_total_veroton" readonly></TD>
-	<TD><input type="text" class="form-control" size="10" name="Lasku[yhteensa_total]" id="yhteensa_total" readonly></TD>
+	<TD><input type="text" class="form-control input-sm" size="10" name="Lasku[yhteensa_total_veroton]" id="yhteensa_total_veroton" readonly></TD>
+	<TD><input type="text" class="form-control input-sm" size="10" name="Lasku[yhteensa_total]" id="yhteensa_total" readonly></TD>
      </TR>
      </tfoot>
 </TABLE>
@@ -463,6 +463,7 @@ function eachLaskenta(){
 	var alv = $("#alv_"+inputKenta[1]).val();
 	var kpl = $("#kpl_"+inputKenta[1]).val();
 	var ale = $("#ale_"+inputKenta[1]).val();
+
 
 	var laske = parseFloat(((hinta_alv_0*kpl)/100*alv), 10);
 	var laskeAleY = parseFloat((($("#yhteensa_alv_"+inputKenta[1]).val())/100*ale), 10);
@@ -840,7 +841,7 @@ function laskutus(value){
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'saaja_virtualkoodi'); ?>
-		<?php echo $form->textField($model,'saaja_virtualkoodi',array('size'=>60,'maxlength'=>255,'class'=>'form-control')); ?>
+		<?php echo $form->textField($model,'saaja_virtualkoodi',array('size'=>60,'maxlength'=>255,'class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'saaja_virtualkoodi'); ?>
 	</div>
 
@@ -853,44 +854,44 @@ function laskutus(value){
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'maksettu_euro'); ?>
-		<?php echo $form->textField($model,'maksettu_euro',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
+		<?php echo $form->textField($model,'maksettu_euro',array('size'=>60,'maxlength'=>100,'class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'maksettu_euro'); ?>
 	</div>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'hyvityslasku'); ?>
-		<?php echo $form->textField($model,'hyvityslasku',array('size'=>20,'maxlength'=>20,'class'=>'form-control')); ?>
+		<?php echo $form->textField($model,'hyvityslasku',array('size'=>20,'maxlength'=>20,'class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'hyvityslasku'); ?>
 	</div>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'laskun_nimetys'); ?>
-		<?php echo $form->textField($model,'laskun_nimetys',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
+		<?php echo $form->textField($model,'laskun_nimetys',array('size'=>60,'maxlength'=>100,'class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'laskun_nimetys'); ?>
 	</div>
 
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'yhteensa_total_verot'); ?>
-		<?php echo $form->textField($model,'yhteensa_total_verot',array('size'=>20,'maxlength'=>20,'class'=>'form-control')); ?>
+		<?php echo $form->textField($model,'yhteensa_total_verot',array('size'=>20,'maxlength'=>20,'class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'yhteensa_total_verot'); ?>
 	</div>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'yhteensa_total_veroton'); ?>
-		<?php echo $form->textField($model,'yhteensa_total_veroton',array('size'=>20,'maxlength'=>20,'class'=>'form-control')); ?>
+		<?php echo $form->textField($model,'yhteensa_total_veroton',array('size'=>20,'maxlength'=>20,'class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'yhteensa_total_veroton'); ?>
 	</div>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'yhteensa_total'); ?>
-		<?php echo $form->textField($model,'yhteensa_total',array('size'=>20,'maxlength'=>20,'class'=>'form-control')); ?>
+		<?php echo $form->textField($model,'yhteensa_total',array('size'=>20,'maxlength'=>20,'class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'yhteensa_total'); ?>
 	</div>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'tilanne'); ?>
-		<?php echo $form->textField($model,'tilanne',array('size'=>50,'maxlength'=>50,'class'=>'form-control')); ?>
+		<?php echo $form->textField($model,'tilanne',array('size'=>50,'maxlength'=>50,'class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'tilanne'); ?>
 	</div>
 */

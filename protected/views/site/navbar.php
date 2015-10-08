@@ -83,7 +83,7 @@
 	        <li role="separator" class="divider"></li>
         	<li><?php echo CHtml::link(Yii::t('main', 'Palkkataulukko'),array('/mobile/palkkataulukko')); ?></li>
 	        <li role="separator" class="divider"></li>
-        	<li><?php echo CHtml::link(Yii::t('main', 'Merkkipäivät'),array('/site/index')); ?></li>
+        	<li><?php echo CHtml::link(Yii::t('main', 'Merkkipäivät'),array('/tyontekijat/merkkipaivat')); ?></li>
           </ul>
         </li>
 

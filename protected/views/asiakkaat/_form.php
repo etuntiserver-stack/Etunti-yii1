@@ -20,49 +20,49 @@
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'yrityksen_nimi'); ?>
-		<?php echo $form->textField($model,'yrityksen_nimi',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
+		<?php echo $form->textField($model,'yrityksen_nimi',array('size'=>60,'maxlength'=>100,'class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'yrityksen_nimi'); ?>
 	</div>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'y_tunnus'); ?>
-		<?php echo $form->textField($model,'y_tunnus',array('size'=>60,'maxlength'=>255,'class'=>'form-control')); ?>
+		<?php echo $form->textField($model,'y_tunnus',array('size'=>60,'maxlength'=>255,'class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'y_tunnus'); ?>
 	</div>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'yhteyshenkilo'); ?>
-		<?php echo $form->textField($model,'yhteyshenkilo',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
+		<?php echo $form->textField($model,'yhteyshenkilo',array('size'=>60,'maxlength'=>100,'class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'yhteyshenkilo'); ?>
 	</div>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'osoite'); ?>
-		<?php echo $form->textField($model,'osoite',array('size'=>60,'maxlength'=>255,'class'=>'form-control')); ?>
+		<?php echo $form->textField($model,'osoite',array('size'=>60,'maxlength'=>255,'class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'osoite'); ?>
 	</div>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'kaupunki'); ?>
-		<?php echo $form->textField($model,'kaupunki',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
+		<?php echo $form->textField($model,'kaupunki',array('size'=>60,'maxlength'=>100,'class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'kaupunki'); ?>
 	</div>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'postinumero'); ?>
-		<?php echo $form->textField($model,'postinumero',array('class'=>'form-control')); ?>
+		<?php echo $form->textField($model,'postinumero',array('class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'postinumero'); ?>
 	</div>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'puhelin'); ?>
-		<?php echo $form->textField($model,'puhelin',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
+		<?php echo $form->textField($model,'puhelin',array('size'=>60,'maxlength'=>100,'class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'puhelin'); ?>
 	</div>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'sahkoposti'); ?>
-		<?php echo $form->textField($model,'sahkoposti',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
+		<?php echo $form->textField($model,'sahkoposti',array('size'=>60,'maxlength'=>100,'class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'sahkoposti'); ?>
 	</div>
 
@@ -77,7 +77,7 @@
 		if(count($list) > 0)
 		{
         	echo $form->dropDownList($model, 'ryhma', $list,
-		array('empty'=>'Valitse ryhmä','class'=>'form-control'));
+		array('empty'=>'Valitse ryhmä','class'=>'form-control input-sm'));
 		} else {
 		echo 'Luo Valikko tietokannassa "Select Type = asiakas_ryhma"';
 		}		
@@ -90,7 +90,7 @@
 		<?php
 		$list = array(1=>Yii::t('main', 'Kyllä'),0=>Yii::t('main', 'Ei'));
         	echo $form->dropDownList($model, 'aktiivinen', $list,
-		array('empty'=>'Valitse tilanne','class'=>'form-control'));	
+		array('empty'=>'Valitse tilanne','class'=>'form-control input-sm'));	
         	?>
 		<?php echo $form->error($model,'aktiivinen'); ?>
 	</div>
@@ -107,7 +107,7 @@
 				'sahkoposti'=>Yii::t('main','Sähköposti')
 				);
         	echo $form->dropDownList($model, 'laskutus_kanava', $list,
-		array('empty'=>'Valitse','class'=>'form-control'));
+		array('empty'=>'Valitse','class'=>'form-control input-sm'));
         	?>
 		<?php echo $form->error($model,'laskutus_kanava'); ?>
 	</div>
@@ -120,7 +120,7 @@
 				5=>5
 				);
         	echo $form->dropDownList($model, 'maksuehto', $list,
-		array('empty'=>'Valitse','class'=>'form-control'));
+		array('empty'=>'Valitse','class'=>'form-control input-sm'));
         	?>
 		<?php echo $form->error($model,'maksuehto'); ?>
 	</div>
