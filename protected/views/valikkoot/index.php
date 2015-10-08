@@ -11,10 +11,8 @@ $this->menu=array(
 	array('label'=>'Manage Valikkoot', 'url'=>array('admin')),
 );
 ?>
+<legend>
+<h1><?php echo Yii:t('main','ALASVETOVALIKOT'); ?></h1>
+</legend>
 
-<h1>Valikkoots</h1>
 
-<?php $this->widget('zii.widgets.CListView', array(
-	'dataProvider'=>$dataProvider,
-	'itemView'=>'_view',
-)); ?>
