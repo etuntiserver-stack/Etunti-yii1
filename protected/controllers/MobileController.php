@@ -1161,6 +1161,8 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			$asiakas_hyvaksy = '';
 			if(isset($explV[4]) and !empty($explV[4])){
 			  $exp = explode("//", $explV[4]);
+			    if(isset($exp[0]) and $exp[0] == 0)
+				$asiakas_hyvaksy = '<b class="glyphicon glyphicon-transfer pull-right text-warning"></b>';
 			    if(isset($exp[0]) and $exp[0] == 1)
 				$asiakas_hyvaksy = '<b class="glyphicon glyphicon-ok pull-right text-success"></b>';
 			    if(isset($exp[0]) and $exp[0] == 2)
