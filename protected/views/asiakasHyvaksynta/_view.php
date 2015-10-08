@@ -35,6 +35,11 @@ $cl = 'alert alert-danger';
 
 	<?php echo json_decode($data->kirjen_body); ?>
 
+
+	<b><?php echo CHtml::encode($data->getAttributeLabel('selitys')); ?>:</b>
+	<?php echo CHtml::encode($data->selitys); ?>
+	<br />
+
 	<?php /*
 
 	<b><?php echo CHtml::encode($data->getAttributeLabel('ids')); ?>:</b>
@@ -46,9 +51,7 @@ $cl = 'alert alert-danger';
 	<br />
 
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('selitys')); ?>:</b>
-	<?php echo CHtml::encode($data->selitys); ?>
-	<br />
+
 
 	<b><?php echo CHtml::encode($data->getAttributeLabel('kirjen_body')); ?>:</b>
 	<?php echo CHtml::encode($data->kirjen_body); ?>
