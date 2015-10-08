@@ -5,7 +5,11 @@
 
        	$criteria = new CDbCriteria();
 	$criteria->order = "DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'),'%Y%m%d')";
-	$criteria->condition = " tid = '".$tid."' and DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = '".date("Y-m-d",strtotime($pvm))."' ";
+	$criteria->condition = " 
+		tid = '".$tid."' 
+		AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = '".date("Y-m-d",strtotime($pvm))."' 
+		AND admin!='1'
+	";
 
 	if(Yii::app()->session['Lounastauko'])
 	$criteria->addCondition (" status != '10' ");
