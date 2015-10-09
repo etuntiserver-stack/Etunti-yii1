@@ -58,12 +58,13 @@ var app = {
 $(document).ready(function(){
 
 	var domain = document.getElementById('domain').value;
-	var imei = document.getElementById('imei').value;
+	var email = document.getElementById('email').value;
+	var salasana = document.getElementById('salasana').value;
 
         $.ajax({
            url: url+'/imei?dom='+domain,
 	   type:'POST',
- 	   data: { check : "getObjbyTag", imei : imei, tag : $('#tagginro').val() },
+ 	   data: { check : "getObjbyTag", tag : $('#tagginro').val(),  email : email, salasana : salasana },
            success: function(data){
         	console.log(data);
 		//$("#result2").html(data).show();
