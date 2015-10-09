@@ -342,7 +342,7 @@ public function actionImei($dom)
 	        }
 
 
-           	$mobCheck = Mob::model()->find(" imei = '".$_POST['imei']."' order by id DESC ");
+           	$mobCheck = Mob::model()->find(" tid = '".$ttekija->id."' order by id DESC ");
 
 
 		$loc = explode("/",$_POST['my_location']);
@@ -427,7 +427,7 @@ $expla = explode(".",$_POST['aloitan']);
 
 
 
-            $mob = Mob::model()->find(" imei = '".$_POST['imei']."' and loppui = '' ");
+            $mob = Mob::model()->find(" tid = '".$ttekija->id."' and loppui = '' ");
 
 	    if(isset($mob->id)){
 

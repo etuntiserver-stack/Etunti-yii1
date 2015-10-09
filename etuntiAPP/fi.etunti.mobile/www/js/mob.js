@@ -15,7 +15,6 @@ $(document).ready(function(){
         query[namevalue[0]] = unescape(namevalue[1]);
      }
 
-     if(query['imei']) 		imei = query['imei'];
      if(query['location']) 	my_location = query['location'];
      if(query['domain']) 	domain = query['domain'];
      if(query['tag'])		tag = query['tag'];
@@ -44,7 +43,6 @@ $(document).ready(function(){
 
   function t(){
 	if(domain == '') domain	= $("#domain").val();
-	if(imei == '') imei = $("#imei").val();
 	if(my_location == '') my_location = $("#location").val();
 
 	 if($("#tagginro").val() != '')
@@ -54,19 +52,19 @@ $(document).ready(function(){
   }
 
   $("#viestintaURL").click(function(){
-	window.location.href='viestinta.html?domain='+domain+'&imei='+imei+'&location='+my_location+'&tag='+tag;
+	window.location.href='viestinta.html?domain='+domain+'&location='+my_location+'&tag='+tag;
   });
 
   $("#tvuoro").click(function(){
-	window.location.href='tvuoro.html?domain='+domain+'&imei='+imei+'&location='+my_location+'&tag='+tag;
+	window.location.href='tvuoro.html?domain='+domain+'&location='+my_location+'&tag='+tag;
   });
 
   $("#tehty").click(function(){
-	window.location.href='tehty.html?domain='+domain+'&imei='+imei+'&location='+my_location+'&tag='+tag;
+	window.location.href='tehty.html?domain='+domain+'&location='+my_location+'&tag='+tag;
   });
 
   $("#asetukset").click(function(){
-	window.location.href='asetukset.html?domain='+domain+'&imei='+imei+'&location='+my_location+'&tag='+tag;
+	window.location.href='asetukset.html?domain='+domain+'&location='+my_location+'&tag='+tag;
   });
 
 
@@ -196,7 +194,7 @@ function row(tilanne,st){
 
    	var postData = {
 		domain: domain,
-		imei: imei,
+		imei: "ei ole",
 		asiakas_num: versio+"_"+tag,
 		puh_numero: puh_nro,
 		bluetooth_name: "0",

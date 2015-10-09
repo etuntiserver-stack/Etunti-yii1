@@ -1,6 +1,5 @@
 
   var domain = '';
-  var imei = '';
   var my_location = '';
   var tag = '000000';
 

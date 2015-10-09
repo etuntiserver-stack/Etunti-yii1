@@ -26,11 +26,13 @@
 	    document.addEventListener("deviceready", onDeviceReady, false);
 	    function onDeviceReady() {
 
-	        document.getElementById('imei').value = cordova.plugins.uid.IMEI;
 	        navigator.geolocation.getCurrentPosition(onSuccess, onError);
-
+		
+		/*
+	        document.getElementById('imei').value = cordova.plugins.uid.IMEI;
 		if(cordova.plugins.uid.IMEI > 0)
 		document.getElementById("all").style.display = "block";
+		*/
 
 	    }
 	    function onSuccess(position) {
