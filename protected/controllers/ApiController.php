@@ -60,7 +60,7 @@ public function actionImei($dom)
 	    ";
             $ttekija = Tyontekijat::model()->find($criteria);
 
-		$this->_sendResponse(200, $ttekija['id']);
+		$this->_sendResponse(200, $ttekija->id);
 	    }
 
 
