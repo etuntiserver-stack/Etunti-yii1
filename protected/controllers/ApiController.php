@@ -129,7 +129,7 @@ public function actionImei($dom)
 
 		    if(!isset($tvuoro[0]))
 		    {
-		    $this->_sendResponse(200, 'ei tuloksia');
+		    //$this->_sendResponse(200, 'ei tuloksia');
 		    exit;
 		    }
 
