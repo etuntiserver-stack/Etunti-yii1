@@ -41,8 +41,7 @@ public function actionImei($dom)
         // Get an instance of the respective model
         case 'mob':
 
-	    if(!isset($_POST['imei']))
-		$this->_sendResponse(200, "Imei puutuu");
+
 
 	    if(isset($_POST['imei']) and !isset($_POST['salasana']))
 	    {
@@ -60,6 +59,8 @@ public function actionImei($dom)
 			AND salasana = '".$_POST['salasana']."' 
 	    ";
             $ttekija = Tyontekijat::model()->find($criteria);
+
+		$this->_sendResponse(200, $ttekija['id']);
 	    }
 
 
@@ -390,9 +391,9 @@ public function actionImei($dom)
 		    if(isset($_POST['tag']))
 	 	    $tag = $_POST['tag'];
 
-                       $this->_sendResponse(200, $mobCheck->status."//".$mobCheck->kohde_kannasta."//".$mobCheck->aloitan."//".$mobCheck->loppui."//".$get_osoite."//m".$ttekija->tekijan_nimi."//".$kohdenID."//".$tag);
+                       $this->_sendResponse(200, $mobCheck->status."//".$mobCheck->kohde_kannasta."//".$mobCheck->aloitan."//".$mobCheck->loppui."//".$get_osoite."//".$ttekija->tekijan_nimi."//".$kohdenID."//".$tag);
 		  } else {
-                     $this->_sendResponse(200, "3//mull//null//null//".$get_osoite."//m".$ttekija->tekijan_nimi."//".$kohdenID."//".$tag);
+                     $this->_sendResponse(200, "3//mull//null//null//".$get_osoite."//".$ttekija->tekijan_nimi."//".$kohdenID."//".$tag);
 		  }
 
 
