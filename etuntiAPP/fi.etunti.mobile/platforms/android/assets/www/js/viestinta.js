@@ -1,44 +1,52 @@
 $(document).ready(function(){
 
-  var query = location.href.substring((location.href.indexOf('?')+1), location.href.length);
-  if(location.href.indexOf('?') < 0) 
-  {
-     query = '';
-  } else {
-     querysplit = query.split('&');
-     query = new Array();
-     for(var i = 0; i < querysplit.length; i++)
-     {
-        var namevalue = querysplit[i].split('=');
-        namevalue[1] = namevalue[1].replace(/\+/g, ' ');
-        query[namevalue[0]] = unescape(namevalue[1]);
-     }
 
-     if(query['imei']) 		imei = query['imei'];
-     if(query['location']) 	my_location = query['location'];
-     if(query['domain']) 	domain = query['domain'];
-     if(query['tag'])		tag = query['tag'];
-  }
 
 
   $("#home").click(function(){
-	window.location.href='index.html?domain='+domain+'&imei='+imei+'&location='+my_location+'&tag='+tag;
+	window.location.href='index.html';
   });
 
   $("#tvuoro").click(function(){
-	window.location.href='tvuoro.html?domain='+domain+'&imei='+imei+'&location='+my_location+'&tag='+tag;
+	window.location.href='tvuoro.html';
   });
 
   $("#tehty").click(function(){
-	window.location.href='tehty.html?domain='+domain+'&imei='+imei+'&location='+my_location+'&tag='+tag;
+	window.location.href='tehty.html';
   });
 
 
+  $("#odotta").html("<h1>ODOTA</h1>");
+  setTimeout(tiedot,1000);
+
+  function tiedot(){
+
+	domain	= $("#domain").val();
+	email = $("#email").val();
+	salasana = $("#salasana").val();
+
+	if(my_location == '') my_location = $("#location").val();
+
+	if((domain != '') & (email !='') & (salasana != ''))
+	{
+		$("#domainBlokki").hide();
+		set();
+		$("#odotta").hide();
+
+	} else {
+		$("#domainBlokki").show();
+		return false;
+ 	}
+	
+  }
+
+
+function set(){
 
         $.ajax({
            url: url+'/imei?dom='+domain,
 	   type:'POST',
- 	   data: { check : "viestinta", imei : imei, my_location : my_location },
+ 	   data: { check : "viestinta", my_location : my_location, email : email, salasana : salasana },
            success: function(data){
         	//console.log(data);
 		$("#viestit").html(data);
@@ -57,7 +65,7 @@ $(document).ready(function(){
 	          $.ajax({
 	           url: url+'/imei?dom='+domain,
 		   type:'POST',
-	 	   data: { check : "vastaus", imei : imei, my_location : my_location, viestinID : thisID, vastText : vastaus },
+	 	   data: { check : "vastaus", my_location : my_location, email : email, salasana : salasana, viestinID : thisID, vastText : vastaus },
 	           success: function(data){
 	        	console.log(data);
 			$("#text_"+thisID).html(data.replace(/\n/g, "<br />"));
@@ -77,6 +85,7 @@ $(document).ready(function(){
     	}
         });
 
+}
 
 $(".lahetaToimistoon").click(function(){
 
@@ -89,7 +98,7 @@ $(".lahetaToimistoon").click(function(){
         $.ajax({
            url: url+'/imei?dom='+domain,
 	   type:'POST',
- 	   data: { check : "uusiviesti", viesti : viesti, imei : imei, my_location : my_location },
+ 	   data: { check : "uusiviesti", viesti : viesti, my_location : my_location, email : email, salasana : salasana },
            success: function(data){
         	//console.log(data);
 		$(".lahetaToimistoon").hide('slow');

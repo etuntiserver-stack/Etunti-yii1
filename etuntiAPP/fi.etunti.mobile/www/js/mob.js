@@ -1,32 +1,9 @@
 $(document).ready(function(){
 
 
-
-
-  var query = location.href.substring((location.href.indexOf('?')+1), location.href.length);
-  if(location.href.indexOf('?') < 0) 
-  {
-     query = '';
-  } else {
-     querysplit = query.split('&');
-     query = new Array();
-     for(var i = 0; i < querysplit.length; i++)
-     {
-        var namevalue = querysplit[i].split('=');
-        namevalue[1] = namevalue[1].replace(/\+/g, ' ');
-        query[namevalue[0]] = unescape(namevalue[1]);
-     }
-
-     if(query['location']) 	my_location = query['location'];
-     if(query['domain']) 	domain = query['domain'];
-     if(query['tag'])		tag = query['tag'];
-  }
-
-
   $("#odotta").html("<h1>ODOTA</h1>");
 
-  if(!query['domain'])
-    setTimeout(tiedot,3000);
+  setTimeout(tiedot,1000);
 
 
 
@@ -43,23 +20,32 @@ $(document).ready(function(){
 	 else
 	    tag = '000000';
 
-	set();
+	if((domain != '') & (email !='') & (salasana != ''))
+	{
+		$("#odotta").hide();
+		$("#domainBlokki").hide();
+		set();
+	} else {
+		$("#domainBlokki").show();
+		return false;
+ 	}
+	
   }
 
   $("#viestintaURL").click(function(){
-	window.location.href='viestinta.html?domain='+domain+'&location='+my_location+'&tag='+tag;
+	window.location.href='viestinta.html';
   });
 
   $("#tvuoro").click(function(){
-	window.location.href='tvuoro.html?domain='+domain+'&location='+my_location+'&tag='+tag;
+	window.location.href='tvuoro.html';
   });
 
   $("#tehty").click(function(){
-	window.location.href='tehty.html?domain='+domain+'&location='+my_location+'&tag='+tag;
+	window.location.href='tehty.html';
   });
 
   $("#asetukset").click(function(){
-	window.location.href='asetukset.html?domain='+domain+'&location='+my_location+'&tag='+tag;
+	window.location.href='asetukset.html';
   });
 
 
@@ -282,8 +268,8 @@ function row(tilanne,st){
 
     function set() {
 
- 	//checkviesti(domain);
-	//getTyovuorotToday(domain);
+ 	checkviesti(domain);
+	getTyovuorotToday(domain);
 
         $.ajax({
            url: url+'/imei?dom='+domain,
@@ -291,7 +277,7 @@ function row(tilanne,st){
  	   data: { check : "testi", my_location : my_location, tag : tag, email : email, salasana : salasana },
            success: function(data){
         	//console.log(data);
-		$("#result2").html(data).show();
+		//$("#result2").html(data).show();
 		var sp = data.split("//");
 
 		if(sp[0] == 'imeiError')
