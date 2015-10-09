@@ -282,8 +282,8 @@ function row(tilanne,st){
 
     function set() {
 
- 	checkviesti(domain);
-	getTyovuorotToday(domain);
+ 	//checkviesti(domain);
+	//getTyovuorotToday(domain);
 
         $.ajax({
            url: url+'/imei?dom='+domain,
