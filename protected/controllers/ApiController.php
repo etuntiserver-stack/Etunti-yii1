@@ -113,6 +113,37 @@ public function actionImei($dom)
 	        }
 
 
+	        if($_POST['check'] == 'getTyovuorotToday'){
+
+		    $criteria = new CDbCriteria();
+		    $criteria->order = " DATE_FORMAT(STR_TO_DATE(alku, '%H.%i'), '%H.%i') ASC ";
+		    $criteria->condition = " 
+				tid = '".$ttekija->id."' 
+				and DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE() 
+		    ";
+
+	            $tvuoro = Tyovuoroot::model()->findAll($criteria);
+
+		    if(!isset($tvuoro[0]))
+		    {
+		    $this->_sendResponse(200, 'ei tuloksia');
+		    exit;
+		    }
+
+		    $sel = '<select id="list" class="form-control btn btn-success">';
+		    $sel .= '<option id="valitseOsoite">Valitse osoite</option>';
+		    foreach($tvuoro as $val){
+			$k = Kohteet::model()->findbypk($val->kohde);
+		      	$sel .= '<option value="'.$k->id.'">'.$k->osoite.'</option>';
+		    }
+		    $sel .= '</select>';
+
+		    $this->_sendResponse(200, $sel);
+		exit;
+	        }
+
+
+
 	        if($_POST['check'] == 'tvuoro'){
 
 		    $criteria = new CDbCriteria();
@@ -796,6 +827,7 @@ private function _sendResponse($status = 200, $body = '', $content_type = 'text/
         $signature = ($_SERVER['SERVER_SIGNATURE'] == '') ? $_SERVER['SERVER_SOFTWARE'] . ' Server at ' . $_SERVER['SERVER_NAME'] . ' Port ' . $_SERVER['SERVER_PORT'] : $_SERVER['SERVER_SIGNATURE'];
  
         // this should be templated in a real-world solution
+
         $body = '
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
