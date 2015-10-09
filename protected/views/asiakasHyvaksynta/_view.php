@@ -18,10 +18,22 @@ elseif(isset($a->yhteyshenkilo) and !empty($a->yhteyshenkilo))
 $asiakas = $a->yhteyshenkilo;
 else
 $asiakas = $data->asiakas_id;
+
+
+$tilanne = '';
+if($data->status = 1)
+$tilanne = Yii::t('main','Lähetetty');
+elseif($data->status = 3)
+$tilanne = Yii::t('main','Hyväksyty');
+elseif($data->status = 2)
+$tilanne = Yii::t('main','Hylätty');
 ?>
 
 <div class="<?php echo $cl; ?>">
 
+  <div class="row">
+
+	<div class="col-sm-3">
 	<b><?php echo CHtml::encode($data->getAttributeLabel('id')); ?>:</b>
 	<?php echo CHtml::link(CHtml::encode($data->id), array('view', 'id'=>$data->id)); ?>
 	<br />
@@ -40,9 +52,20 @@ $asiakas = $data->asiakas_id;
 	<br />
 
 	<b><?php echo CHtml::encode($data->getAttributeLabel('status')); ?>:</b>
-	<?php echo CHtml::encode($data->status); ?>
+	<?php echo CHtml::encode($tilanne); ?>
 	<br />
 
+	</div><div class="col-sm-3">
+
+	<h2 data-toggle="collapse" data-target="#col_<?php echo $data->id; ?>">
+	  <b class="glyphicon glyphicon-sort-by-attributes-alt"></b>
+	</h2>
+
+	</div>
+
+  </div>
+
+	<div class="collapse" id="col_<?php echo $data->id; ?>">
 	<?php echo json_decode($data->kirjen_body); ?>
 	<br />
 
@@ -51,6 +74,10 @@ $asiakas = $data->asiakas_id;
 	<?php echo CHtml::encode($data->selitys); ?>
 	<br />
 	<?php endif; ?>
+	</div>
+
+
+
 
 	<?php /*
 

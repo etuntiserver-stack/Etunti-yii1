@@ -145,6 +145,8 @@ class AsiakasHyvaksyntaController extends Controller
 		if(isset($_POST['asiakas']) and $_POST['asiakas'] != 'kaikki')
 	        $criteria->addCondition (" asiakas_id = '".$_POST['asiakas']."'");
 		
+		if(isset($_POST['status']) and $_POST['status'] != 'status')
+	        $criteria->addCondition (" status = '".$_POST['status']."'");
 
 		if(Yii::app()->session['from'] and Yii::app()->session['to'])
 	        $criteria->addCondition (" time BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."' ");
