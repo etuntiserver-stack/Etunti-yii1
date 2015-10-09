@@ -62,9 +62,9 @@ public function actionImei($dom)
 	    }
 
 
-	     if(empty($ttekija['id']))
+	     if(empty($ttekija->id))
 	     {
-              $this->_sendResponse(200, "imeiError//Virhellinen imei koodi//".$_POST['imei']);
+              $this->_sendResponse(200, "eiLoytyTekija//Tämän työntekijä ei löydy");
 	      exit;
 	     }
 
