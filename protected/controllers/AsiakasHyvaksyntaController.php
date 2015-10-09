@@ -131,7 +131,29 @@ class AsiakasHyvaksyntaController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$dataProvider=new CActiveDataProvider('AsiakasHyvaksynta');
+
+		if(Yii::app()->request->getPost('from'))
+		Yii::app()->session['from'] = date("Y-m-d",strtotime(Yii::app()->request->getPost('from')));
+
+		if(Yii::app()->request->getPost('to'))
+		Yii::app()->session['to'] = date("Y-m-d",strtotime(Yii::app()->request->getPost('to')));
+
+
+       		$criteria = new CDbCriteria();
+        	$criteria->order = 'time DESC';
+
+		if(isset($_POST['asiakas']) and $_POST['asiakas'] != 'kaikki')
+	        $criteria->addCondition (" asiakas_id = '".$_POST['asiakas']."'");
+		
+
+		if(Yii::app()->session['from'] and Yii::app()->session['to'])
+	        $criteria->addCondition (" time BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."' ");
+
+		$dataProvider=new CActiveDataProvider('AsiakasHyvaksynta', array(
+			'criteria'=>$criteria,
+			//'pagination'=>false
+		));
+
 		$this->render('index',array(
 			'dataProvider'=>$dataProvider,
 		));
