@@ -17,8 +17,8 @@ $this->menu=array(
 
 <legend>
   <div class="pull-right form-inline">
-  	<span class="form-control form-group klo"></span>
-  	<button class="btn btn-info" data-toggle="collapse"  data-target="#haku"><?php echo Yii::t('main', 'Haku'); ?> <b class="caret"></b></button>
+  	<span class="form-control input-sm form-group klo"></span>
+  	<button class="btn btn-sm btn-info" data-toggle="collapse"  data-target="#haku"><?php echo Yii::t('main', 'Haku'); ?> <b class="caret"></b></button>
   </div>
   <h1> 
 	<?php echo Yii::t('main', 'TUNNIT'); ?> <i class="glyphicon glyphicon-phone"></i> 
@@ -198,8 +198,8 @@ $fi = array(
    <div class="col-sm-12">
 
    <div class="pull-right">
-     <?php echo CHtml::link(' +','/index.php/tyontekijat/create',array('target'=>'_blank','class'=>'btn btn-default glyphicon glyphicon-user')); ?>
-     <?php echo CHtml::link(' +','/index.php/kohteet/create',array('target'=>'_blank','class'=>'btn btn-default glyphicon glyphicon-home')); ?>
+     <?php echo CHtml::link(' +','/index.php/tyontekijat/create',array('target'=>'_blank','class'=>'btn btn-sm btn-default glyphicon glyphicon-user')); ?>
+     <?php echo CHtml::link(' +','/index.php/kohteet/create',array('target'=>'_blank','class'=>'btn btn-sm btn-default glyphicon glyphicon-home')); ?>
    </div>
 
    <form id="mobForm" action="#" class="form-inline" method="POST">
@@ -208,7 +208,7 @@ $fi = array(
     $model=new Mobile;
     $list = CHtml::listData(Mobile::model()->findAll(array('group' => 'tekijan_nimi','order' => 'tekijan_nimi')), 'tekijan_nimi', 'tekijan_nimi');
 
-    echo '<select class="form-control form-group" name="etsi_tekijan_nimi">';
+    echo '<select class="form-control input-sm form-group" name="etsi_tekijan_nimi">';
     if(Yii::app()->session['etsi_tekijan_nimi'])
        echo '<option value="'.Yii::app()->session['etsi_tekijan_nimi'].'">'.Yii::app()->session['etsi_tekijan_nimi'].'</option>';
     else
@@ -226,7 +226,7 @@ $fi = array(
     $model=new Mobile;
     $list = CHtml::listData(Mobile::model()->findAll(array('group' => 'kohdenID','order' => 'kohde_kannasta')), 'kohde_kannasta', 'kohde_kannasta');
 
-    echo '<select class="form-control form-group" name="etsi_kohteet">';
+    echo '<select class="form-control input-sm form-group" name="etsi_kohteet">';
     if(Yii::app()->session['etsi_kohteet'])
        echo '<option value="'.Yii::app()->session['etsi_kohteet'].'">'.Yii::app()->session['etsi_kohteet'].'</option>';
     else
@@ -239,15 +239,15 @@ $fi = array(
     }
     echo '</select>';
    ?>
-   <input type="text" class="form-control form-group datepicker" name="etsi_pvm" value="<?php echo Yii::app()->session['etsi_pvm']; ?>">
+   <input type="text" class="form-control input-sm form-group datepicker" name="etsi_pvm" value="<?php echo Yii::app()->session['etsi_pvm']; ?>">
 
      <div class="form-group input-group-btn">
-        <button class="btn btn-primary haemob" type="button"><i class="glyphicon glyphicon-search"> Hae</i></button>
+        <button class="btn btn-sm btn-primary haemob" type="button"><i class="glyphicon glyphicon-search"> Hae</i></button>
      </div>
    </div>
   </form>
  </div>
-
+<br>
 
 <!--
   <div class="row">
@@ -262,7 +262,7 @@ $fi = array(
   </div>
 -->
 
-  <div id="tb"></div>
+  <div id="tb" class="table-responsive"></div>
 
 </div>
 

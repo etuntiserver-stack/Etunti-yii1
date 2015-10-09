@@ -76,7 +76,7 @@ class AsiakasHyvaksynta extends DB2ActiveRecord
 			'ids' => 'Ids',
 			'sahkoposti' => 'Sähköposti',
 			'code' => 'Code',
-			'status' => 'Status',
+			'status' => 'Tilanne',
 			'selitys' => 'Selitys',
 			'kirjen_body' => 'Kirje',
 		);

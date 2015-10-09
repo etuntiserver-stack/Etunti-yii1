@@ -159,7 +159,7 @@
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'ayjasenyys'); ?>
-		<?php echo $form->checkbox($model,'ayjasenyys',array('size'=>10,'maxlength'=>10,'class'=>'form-control input-sm')); ?>
+		<?php echo $form->checkbox($model,'ayjasenyys',array('size'=>10,'maxlength'=>10,'class'=>'sw input-sm')); ?>
 
 		<?php echo $form->error($model,'ayjasenyys'); ?>
 	</div>
@@ -207,6 +207,23 @@
 	</div>
 
 <?php $this->endWidget(); ?>
+
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+
+  $(".sw").bootstrapSwitch({
+	size: "small",
+	onColor: "success",
+	offColor: "warning",
+	onText: "Kyllä",
+	offText: "Ei"
+  });
+
+});
+</script>
+
 
 
 

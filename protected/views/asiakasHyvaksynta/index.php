@@ -28,7 +28,7 @@ $this->menu=array(
         	$a = Asiakkaat::model()->findAll($criteria);
 		echo '<select name="asiakas" class="form-control input-sm">';
 
-	        echo '<option value="kaikki">Kaikki</option>';
+	        echo '<option value="kaikki">'.Yii::t('main','Asiakas').'</option>';
 
 		foreach($a as $aa)
 		{
@@ -41,6 +41,13 @@ $this->menu=array(
 		}
 		echo '</select>';
 	?>
+
+   <select name="status" class="form-control form-group input-sm">
+   <option value="kaikki"><?php echo Yii::t('main','Tilanne'); ?></option>
+   <option value="1"><?php echo Yii::t('main','Lähetetty'); ?></option>
+   <option value="3"><?php echo Yii::t('main','Hyväksyty'); ?></option>
+   <option value="2"><?php echo Yii::t('main','Hylätty'); ?></option>
+   </select> 
 
    <b class="glyphicon glyphicon-calendar"></b>
    <input type="text" name="from" id="from" class="form-control form-group input-sm datepicker" value="<?php echo Yii::app()->session['from']; ?>">
