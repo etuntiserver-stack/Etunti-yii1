@@ -56,7 +56,7 @@ public function actionImei($dom)
 	    $criteria = new CDbCriteria();
 	    $criteria->condition = " 
 			salasana!='' 
-			AND email = '".$_POST['email']."' 
+			AND tekijan_email = '".$_POST['email']."' 
 			AND salasana = '".$_POST['salasana']."' 
 	    ";
             $ttekija = Tyontekijat::model()->find($criteria);
