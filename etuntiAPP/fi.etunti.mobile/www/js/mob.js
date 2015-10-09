@@ -33,8 +33,6 @@ $(document).ready(function(){
     {
 	t();
 	set();
- 	checkviesti($("#domain").val());
-	getTyovuorotToday($("#domain").val());
 
     } else {
 	$("#domainBlokki").show();
@@ -297,6 +295,8 @@ function row(tilanne,st){
     function set() {
 
      	t();
+ 	checkviesti(domain);
+	getTyovuorotToday(domain);
 
         $.ajax({
            url: url+'/imei?dom='+domain,
