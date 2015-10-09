@@ -59,8 +59,6 @@ public function actionImei($dom)
 			AND salasana = '".$_POST['salasana']."' 
 	    ";
             $ttekija = Tyontekijat::model()->find($criteria);
-
-		$this->_sendResponse(200, $ttekija->tekijan_nimi);
 	    }
 
 
@@ -345,6 +343,7 @@ public function actionImei($dom)
 
            	$mobCheck = Mob::model()->find(" tid = '".$ttekija->id."' order by id DESC ");
 
+$this->_sendResponse(200, $mobCheck->id);
 
 		$loc = explode("/",$_POST['my_location']);
 		$get_osoite = '';
