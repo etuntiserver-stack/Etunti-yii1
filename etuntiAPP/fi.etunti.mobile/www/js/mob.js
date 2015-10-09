@@ -457,7 +457,7 @@ function getTyovuorotToday(domain){
         $.ajax({
            url: url+'/imei?dom='+domain,
 	   type:'POST',
- 	   data: { check : "getTyovuorotToday", imei : imei },
+ 	   data: { check : "getTyovuorotToday", imei : imei, my_location : my_location },
            success: function(data){
         	//console.log(data);
 		$("#getTyovuorotToday").html(data);
