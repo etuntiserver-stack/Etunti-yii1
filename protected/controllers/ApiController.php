@@ -123,6 +123,7 @@ public function actionImei($dom)
 		    $criteria->condition = " 
 				tid = '".$ttekija->id."' 
 				and DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE() 
+				AND tyoajanmerkinta NOT LIKE '%Ei lasketa%'
 		    ";
 
 	            $tvuoro = Tyovuoroot::model()->findAll($criteria);
