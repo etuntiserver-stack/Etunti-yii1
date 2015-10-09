@@ -1,5 +1,7 @@
 
   var domain = '';
+  var email = '';
+  var salasana = '';
   var my_location = '';
   var tag = '000000';
 
@@ -27,7 +29,11 @@
 	            console.log("Read as text");
 	            console.log(evt.target.result);
 
-		    document.getElementById('domain').value = evt.target.result;
+		    var spFile = evt.target.result.split("//");
+
+		    document.getElementById('domain').value = spFile[0];
+		    document.getElementById('email').value = spFile[1];
+		    document.getElementById('salasana').value = spFile[2];
 			
 	        };
 	        reader.readAsText(file);

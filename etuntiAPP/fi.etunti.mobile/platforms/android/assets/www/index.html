@@ -34,6 +34,9 @@
 		document.getElementById("all").style.display = "block";
 		*/
 
+		document.getElementById("all").style.display = "block";
+		document.getElementById("domainBlokki").style.display = "block";
+
 	    }
 	    function onSuccess(position) {
 	        document.getElementById('location').value = position.coords.latitude + '/' + position.coords.longitude;
@@ -65,13 +68,14 @@
      	   <div id="all" style="display:none">
 
 	    <div id="domainBlokki" style="display:none">
-	    <label>Domaini</label>
-            <div class="input-group">
-              <input type="text" class="form-control hakusana" id="domain" name="srch-term" id="srch-term">
-              <div class="input-group-btn">
-                <button class="btn btn-primary aloita" type="button"><i class="glyphicon glyphicon-warning-sign"> Aloita</i></button>
-              </div>
-            </div>
+		<label>Domaini</label><br>
+	        <input type="text" class="form-control" id="domain" name="srch-term" id="srch-term"><br>
+		<label>Työntekijän sähköposti</label><br>
+	        <input type="text" class="form-control" id="email" name="srch-term" id="srch-term"><br>
+		<label>Työntekijän salasana</label><br>
+	        <input type="text" class="form-control" id="salasana" name="srch-term" id="srch-term"><br>
+	
+	        <button class="btn btn-primary aloita" type="button"><i class="glyphicon glyphicon-warning-sign"> Aloita</i></button>
 	    </div>
 
 	    <div id="osoite" style="display:none">
@@ -109,8 +113,6 @@
 	       <input type="text" id="tagginro" class="form-control" readonly="yes">
 	       <label>gps</label>
 	       <input type="text" id="location" class="form-control" readonly="yes">
-	       <label>imei</label>
-	       <input type="text" id="imei" class="form-control" readonly="yes">
 	    </div>
 
 	    <BR><BR>

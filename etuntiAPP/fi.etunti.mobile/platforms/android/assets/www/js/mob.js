@@ -1,6 +1,8 @@
 $(document).ready(function(){
 
 
+
+
   var query = location.href.substring((location.href.indexOf('?')+1), location.href.length);
   if(location.href.indexOf('?') < 0) 
   {
@@ -15,7 +17,6 @@ $(document).ready(function(){
         query[namevalue[0]] = unescape(namevalue[1]);
      }
 
-     if(query['imei']) 		imei = query['imei'];
      if(query['location']) 	my_location = query['location'];
      if(query['domain']) 	domain = query['domain'];
      if(query['tag'])		tag = query['tag'];
@@ -27,46 +28,38 @@ $(document).ready(function(){
   if(!query['domain'])
     setTimeout(tiedot,3000);
 
+
+
   function tiedot(){
 
-    if($("#domain").val() != '')
-    {
-	t();
-	set();
+	domain	= $("#domain").val();
+	email = $("#email").val();
+	salasana = $("#salasana").val();
 
-    } else {
-	$("#domainBlokki").show();
-	return false;
-    }
-
-  }
-
-
-  function t(){
-	if(domain == '') domain	= $("#domain").val();
-	if(imei == '') imei = $("#imei").val();
 	if(my_location == '') my_location = $("#location").val();
 
 	 if($("#tagginro").val() != '')
 	    tag = $("#tagginro").val();
 	 else
 	    tag = '000000';
+
+	set();
   }
 
   $("#viestintaURL").click(function(){
-	window.location.href='viestinta.html?domain='+domain+'&imei='+imei+'&location='+my_location+'&tag='+tag;
+	window.location.href='viestinta.html?domain='+domain+'&location='+my_location+'&tag='+tag;
   });
 
   $("#tvuoro").click(function(){
-	window.location.href='tvuoro.html?domain='+domain+'&imei='+imei+'&location='+my_location+'&tag='+tag;
+	window.location.href='tvuoro.html?domain='+domain+'&location='+my_location+'&tag='+tag;
   });
 
   $("#tehty").click(function(){
-	window.location.href='tehty.html?domain='+domain+'&imei='+imei+'&location='+my_location+'&tag='+tag;
+	window.location.href='tehty.html?domain='+domain+'&location='+my_location+'&tag='+tag;
   });
 
   $("#asetukset").click(function(){
-	window.location.href='asetukset.html?domain='+domain+'&imei='+imei+'&location='+my_location+'&tag='+tag;
+	window.location.href='asetukset.html?domain='+domain+'&location='+my_location+'&tag='+tag;
   });
 
 
@@ -155,7 +148,6 @@ function curDateTime(){
 
 function row(tilanne,st){
 
-   t();
    allHide();
    allTilasetHide();
 
@@ -195,8 +187,10 @@ function row(tilanne,st){
 
 
    	var postData = {
+		email : email,
+		salasana : salasana,
 		domain: domain,
-		imei: imei,
+		imei: "ei ole",
 		asiakas_num: versio+"_"+tag,
 		puh_numero: puh_nro,
 		bluetooth_name: "0",
@@ -265,7 +259,7 @@ function row(tilanne,st){
     }
 
     function gotFileWriter(writer) {
-        writer.write($("#domain").val());
+        writer.write($("#domain").val() +"//"+$("#email").val() +"//"+$("#salasana").val());
 	  window.location.href='index.html';
        	  //set();
  	  //checkviesti(domain);
@@ -278,7 +272,6 @@ function row(tilanne,st){
 
 
   $(".aloita").click(function(){
-	t();
 	saveFile();
   });
 
@@ -286,27 +279,21 @@ function row(tilanne,st){
 
 
 // Checker
-    if(domain != ''){
-       	set();
-    } else {
-   	$("#result").append("Domaini puutuu \n");
-    }
 
     function set() {
 
-     	t();
  	checkviesti(domain);
 	getTyovuorotToday(domain);
 
         $.ajax({
            url: url+'/imei?dom='+domain,
 	   type:'POST',
- 	   data: { check : "testi", imei : imei, my_location : my_location, tag : tag },
+ 	   data: { check : "testi", my_location : my_location, tag : tag, email : email, salasana : salasana },
            success: function(data){
         	//console.log(data);
 		//$("#result2").html(data).show();
 		var sp = data.split("//");
-
+alert()
 		if(sp[0] == 'imeiError')
 		{
 		  $("#result2").html("<h2>"+sp[1]+" "+sp[2]+"</h2>").show();
@@ -383,7 +370,7 @@ $("#os").keyup(function(){
         $.ajax({
            url: url+'/imei?dom='+domain,
 	   type:'POST',
- 	   data: { check : "osoitevaihto", imei : imei, my_location : my_location, thisKey : thisKey },
+ 	   data: { check : "osoitevaihto", my_location : my_location, thisKey : thisKey, email : email, salasana : salasana },
            success: function(data){
         	console.log(data);
 		//$("#result").val(data);
@@ -429,7 +416,7 @@ function checkviesti(domain){
         $.ajax({
            url: url+'/imei?dom='+domain,
 	   type:'POST',
- 	   data: { check : "checkviesti", imei : imei, my_location : my_location },
+ 	   data: { check : "checkviesti", my_location : my_location, email : email, salasana : salasana },
            success: function(data){
         	//console.log(data);
 		//$("#result2").html(data).show();
@@ -457,7 +444,7 @@ function getTyovuorotToday(domain){
         $.ajax({
            url: url+'/imei?dom='+domain,
 	   type:'POST',
- 	   data: { check : "getTyovuorotToday", imei : imei, my_location : my_location },
+ 	   data: { check : "getTyovuorotToday", my_location : my_location, email : email, salasana : salasana },
            success: function(data){
         	//console.log(data);
 		$("#getTyovuorotToday").html(data);
