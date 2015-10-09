@@ -133,7 +133,8 @@ public function actionImei($dom)
 		    exit;
 		    }
 
-		    $sel = '<select id="list" class="form-control btn btn-success">';
+		    $sel = '<br>';
+		    $sel .= '<select id="list" class="form-control input-sm">';
 		    $sel .= '<option id="valitseOsoite">Valitse osoite</option>';
 		    foreach($tvuoro as $val){
 			$k = Kohteet::model()->findbypk($val->kohde);
