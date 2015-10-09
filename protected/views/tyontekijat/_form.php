@@ -164,6 +164,12 @@
 		<?php echo $form->error($model,'ayjasenyys'); ?>
 	</div>
 
+	<div class="row">
+		<?php echo $form->labelEx($model,'salasana'); ?>
+		<?php echo $form->textField($model,'salasana',array('size'=>60,'maxlength'=>100,'class'=>'form-control input-sm')); ?>
+		<?php echo $form->error($model,'salasana'); ?>
+	</div>
+
    </div>
    <div class="col-sm-2">
 	<?php if(isset($model->id)): ?>
@@ -242,11 +248,7 @@ $(document).ready(function(){
 		<?php echo $form->error($model,'tekijan_kulunvalvonta'); ?>
 	</div>
 
-	<div class="row">
-		<?php echo $form->labelEx($model,'salasana'); ?>
-		<?php echo $form->textField($model,'salasana',array('size'=>60,'maxlength'=>100,'class'=>'form-control input-sm')); ?>
-		<?php echo $form->error($model,'salasana'); ?>
-	</div>
+
 
 */
 

@@ -44,9 +44,24 @@ public function actionImei($dom)
 	    if(!isset($_POST['imei']))
 		$this->_sendResponse(200, "Imei puutuu");
 
+	    if(isset($_POST['imei']) and !isset($_POST['salasana']))
+	    {
 	    $criteria = new CDbCriteria();
 	    $criteria->condition = " imei!='' AND imei = '".$_POST['imei']."' ";
             $ttekija = Tyontekijat::model()->find($criteria);
+	    }
+
+	    if(isset($_POST['email']) and isset($_POST['salasana']))
+	    {
+	    $criteria = new CDbCriteria();
+	    $criteria->condition = " 
+			salasana!='' 
+			AND email = '".$_POST['email']."' 
+			AND salasana = '".$_POST['salasana']."' 
+	    ";
+            $ttekija = Tyontekijat::model()->find($criteria);
+	    }
+
 
 	     if(empty($ttekija['id']))
 	     {
