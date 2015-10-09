@@ -280,9 +280,9 @@ function row(tilanne,st){
 		//$("#result2").html(data).show();
 		var sp = data.split("//");
 
-		if(sp[0] == 'imeiError')
+		if(sp[0] == 'eiLoytyTekija')
 		{
-		  $("#result2").html("<h2>"+sp[1]+" "+sp[2]+"</h2>").show();
+		  $("#result2").html("<h2>"+sp[1]+"</h2>").show();
 		  $("#footer").show(370);
 		  return false;
 		} 
