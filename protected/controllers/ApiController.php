@@ -134,6 +134,7 @@ public function actionImei($dom)
 		    }
 
 		    $sel = '<br>';
+		    $sel .= '<label>'.Yii::t('main','Valitse kohde työvuorosta').'</label><br>';
 		    $sel .= '<select id="list" class="form-control input-sm">';
 		    $sel .= '<option id="valitseOsoite">Valitse osoite</option>';
 		    foreach($tvuoro as $val){
