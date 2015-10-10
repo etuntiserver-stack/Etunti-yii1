@@ -278,7 +278,7 @@ function row(tilanne,st){
 		$("#domainBlokki").hide();
 		$("#result").append(sp+"\n");
 
-		$("#tekija").html("<b>"+$('#domain').val()+", "+sp[5]+"</b>");
+		$("#tekija").html(sp[5]);
 
 		if((sp[0] == '3') || (sp[0] == '2') || (sp[0] == '10')){
 		  $("#osoite").show(370);
@@ -375,6 +375,7 @@ $("#os").keyup(function(){
 
   } else {
 			$("#list").hide();
+
   }
 
 });

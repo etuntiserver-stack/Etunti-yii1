@@ -182,7 +182,10 @@ public function actionImei($dom)
 
 		    $criteria = new CDbCriteria();
 		    $criteria->order = " DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d'),alku ASC ";
-		    $criteria->condition = " tid = '".$ttekija->id."' and DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') >= '".date("Y-m-d")."' ";
+		    $criteria->condition = " 
+				tid = '".$ttekija->id."' 
+				and DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE() 
+		    ";
 	            $tvuoro = Tyovuoroot::model()->findAll($criteria);
 
 		    if(empty($tvuoro))
@@ -191,7 +194,7 @@ public function actionImei($dom)
 		    exit;
 		    }
 
-		    $sel = '';
+		    $sel = '<h2>Työvuorot '.date("d.m").'</h2>';
 		    $cl = '';
 		    $osoite = '';
 		    foreach($tvuoro as $val)
