@@ -5,7 +5,7 @@
   var my_location = '';
   var tag = '000000';
 
-  var server = "https://etunti.fi";
+  var server = "http://etunti.fi";
   var url = server+"/index.php/api/mob";
   var puh_nro = "";
   var versio = "0.50";

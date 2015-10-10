@@ -388,6 +388,10 @@ public function actionImei($dom)
 
 
 
+	 	 $tag = '';
+		 if(isset($_POST['tag']))
+	 	 $tag = $_POST['tag'];
+
 
 		  if(isset($mobCheck->id))
 		  {
@@ -398,10 +402,6 @@ public function actionImei($dom)
 		       $mobCheck->status = 10.1;
 
 	
-	 	    $tag = '';
-		    if(isset($_POST['tag']))
-	 	    $tag = $_POST['tag'];
-
                        $this->_sendResponse(200, $mobCheck->status."//".$mobCheck->kohde_kannasta."//".$mobCheck->aloitan."//".$mobCheck->loppui."//".$get_osoite."//".$ttekija->tekijan_nimi."//".$kohdenID."//".$tag);
 		  } else {
                      $this->_sendResponse(200, "3//mull//null//null//".$get_osoite."//".$ttekija->tekijan_nimi."//".$kohdenID."//".$tag);

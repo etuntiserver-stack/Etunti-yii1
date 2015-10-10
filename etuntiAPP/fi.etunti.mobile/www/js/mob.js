@@ -337,7 +337,7 @@ function row(tilanne,st){
 		     $("#odotta").hide();
 
 		$("#domainBlokki").show();
-		//$("#result2").val(xhr.responseText).show();
+		$("#result2").html(xhr.responseText).show();
 		//$("#domain").addClass("btn btn-danger");
     	}
         });
