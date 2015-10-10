@@ -116,6 +116,45 @@ function allTilasetHide(){
 }
 
 
+
+
+
+  function saveFile(){
+
+    document.addEventListener("deviceready", onDeviceReadyFileSave, false);
+
+    function onDeviceReadyFileSave() {
+        window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, gotFS, fail);
+    }
+
+    function gotFS(fileSystem) {
+        fileSystem.root.getFile("etunti.cfg", {create: true, exclusive: false}, gotFileEntry, fail);
+    }
+
+    function gotFileEntry(fileEntry) {
+        fileEntry.createWriter(gotFileWriter, fail);
+    }
+
+    function gotFileWriter(writer) {
+        writer.write($("#domain").val() +"//"+$("#email").val() +"//"+$("#salasana").val());
+	  window.location.href='index.html';
+       	  //set();
+ 	  //checkviesti(domain);
+    }
+
+    function fail(error) {
+        console.log(error.code);
+    }
+  }
+
+
+  $(".aloita").click(function(){
+	saveFile();
+  });
+
+
+
+
 function curDateTime(){
 
   	var date = new Date();
@@ -221,45 +260,6 @@ function row(tilanne,st){
         });
 
 }
-
-
-
-
-
-  function saveFile(){
-
-    document.addEventListener("deviceready", onDeviceReadyFileSave, false);
-
-    // Cordova is ready
-    //
-    function onDeviceReadyFileSave() {
-        window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, gotFS, fail);
-    }
-
-    function gotFS(fileSystem) {
-        fileSystem.root.getFile("etunti.cfg", {create: true, exclusive: false}, gotFileEntry, fail);
-    }
-
-    function gotFileEntry(fileEntry) {
-        fileEntry.createWriter(gotFileWriter, fail);
-    }
-
-    function gotFileWriter(writer) {
-        writer.write($("#domain").val() +"//"+$("#email").val() +"//"+$("#salasana").val());
-	  window.location.href='index.html';
-       	  //set();
- 	  //checkviesti(domain);
-    }
-
-    function fail(error) {
-        console.log(error.code);
-    }
-  }
-
-
-  $(".aloita").click(function(){
-	saveFile();
-  });
 
 
 

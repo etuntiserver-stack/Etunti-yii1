@@ -230,8 +230,6 @@ function row(tilanne,st){
 
     document.addEventListener("deviceready", onDeviceReadyFileSave, false);
 
-    // Cordova is ready
-    //
     function onDeviceReadyFileSave() {
         window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, gotFS, fail);
     }

@@ -38,8 +38,6 @@ $(document).ready(function(){
 
     document.addEventListener("deviceready", onDeviceReadyFileSave, false);
 
-    // Cordova is ready
-    //
     function onDeviceReadyFileSave() {
         window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, gotFS, fail);
     }
@@ -53,7 +51,7 @@ $(document).ready(function(){
     }
 
     function gotFileWriter(writer) {
-        writer.write($("#domain").val());
+        writer.write($("#domain").val() +"//"+$("#email").val() +"//"+$("#salasana").val());
 	  window.location.href='index.html';
        	  //set();
  	  //checkviesti(domain);
