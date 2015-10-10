@@ -48,6 +48,13 @@ public function actionImei($dom)
 	    $criteria = new CDbCriteria();
 	    $criteria->condition = " imei!='' AND imei = '".$_POST['imei']."' ";
             $ttekija = Tyontekijat::model()->find($criteria);
+
+	     if(empty($ttekija->id))
+	     {
+              $this->_sendResponse(200, "imeiError//Virhellinen imei koodi//".$_POST['imei']);
+	      exit;
+	     }
+
 	    }
 
 	    if(isset($_POST['email']) and isset($_POST['salasana']))
@@ -59,14 +66,17 @@ public function actionImei($dom)
 			AND salasana = '".$_POST['salasana']."' 
 	    ";
             $ttekija = Tyontekijat::model()->find($criteria);
-	    }
-
 
 	     if(empty($ttekija->id))
 	     {
               $this->_sendResponse(200, "eiLoytyTekija//Tämän työntekijä ei löydy");
 	      exit;
 	     }
+
+	    }
+
+
+
 
 
 
