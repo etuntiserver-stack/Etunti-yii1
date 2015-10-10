@@ -381,12 +381,7 @@ public function actionImei($dom)
 
 		$criteria = new CDbCriteria();
 		$criteria->order = " id DESC ";
-		$criteria->condition = " 
-
-			tid = '".$ttekija->id."' 
-			AND status IN (1,2,3,10)
-
-		";
+		$criteria->condition = " tid = '".$ttekija->id."' ";
            	$mob = Mob::model()->find($criteria);
 
 
@@ -415,12 +410,7 @@ public function actionImei($dom)
 
 	$criteria = new CDbCriteria();
 	$criteria->order = " id DESC ";
-	$criteria->condition = " 
-
-		tid = '".$ttekija->id."' 
-		AND status IN (1,2,3,10)
-
-	";
+	$criteria->condition = " tid = '".$ttekija->id."' ";
        	$mob = Mob::model()->find($criteria);
 
 
@@ -478,6 +468,11 @@ public function actionImei($dom)
 	     }
 	      exit;
 	    }
+
+
+
+
+
 
 	    if(isset($ttekija->id) and !empty($_POST['aloitan']) and empty($_POST['loppui'])){
 
