@@ -228,8 +228,9 @@ public function actionImei($dom)
 		    $viesti .= "<BR>". $_POST['my_location'];
 
 		    $model->viesti = $viesti;
+
 		    if($model->save())
-		       $this->_sendResponse(200, "Viesti vastaanotettu");
+		       $this->_sendResponse(200, "Viestisi vastaanotettu");
 		    else
 		       $this->_sendResponse(200, "Ei onnistuu");
 		exit;
