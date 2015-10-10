@@ -2,7 +2,7 @@ $(document).ready(function(){
 
 
 
-  $("#odotta").html("<h1>ODOTA</h1>");
+  $("#odotta").html("<img src='img/search.gif'>");
 
   setTimeout(tiedot,1000);
 
@@ -16,9 +16,8 @@ $(document).ready(function(){
 
 	if((domain != '') & (email !='') & (salasana != ''))
 	{
-		$("#domainBlokki").hide();
+
 		set();
-		$("#odotta").hide();
 
 	} else {
 		$("#domainBlokki").show();
@@ -41,11 +40,12 @@ function set(){
 		if(sp[0] == 'eiLoytyTekija')
 		{
 		  $("#tekija").html("<div class='alert alert-danger'>"+sp[1]+"</div>").show();
-		  $("#odotta").fadeOut(370);
+		  $("#odotta").hide('slow');
 		  return false;
 		} 
 
-
+		$("#odotta").hide('slow');
+		$("#domainBlokki").hide();
 		$("#viestit").html(data);
 
 		/* vastaus */

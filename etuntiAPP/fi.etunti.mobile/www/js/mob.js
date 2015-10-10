@@ -1,7 +1,7 @@
 $(document).ready(function(){
 
 
-  $("#odotta").html("<h1>ODOTA</h1>");
+  $("#odotta").html("<img src='img/search.gif'>");
 
   setTimeout(tiedot,1000);
 
@@ -25,7 +25,7 @@ $(document).ready(function(){
 		set();
 
 	} else {
-		$("#domainBlokki").show();
+		setTimeout(function(){document.location.href = "asetukset.html";},500);
 		return false;
  	}
 	
@@ -274,7 +274,7 @@ function row(tilanne,st){
 		} 
 
 		$('#tietoja').fadeOut(370);
-		$("#odotta").fadeOut(370);
+		$("#odotta").hide('slow');
 		$("#domainBlokki").hide();
 		$("#result").append(sp+"\n");
 
