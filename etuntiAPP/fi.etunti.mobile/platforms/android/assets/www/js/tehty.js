@@ -1,21 +1,8 @@
 $(document).ready(function(){
 
 
-
-  $("#home").click(function(){
-	window.location.href='index.html';
-  });
-
-  $("#tvuoro").click(function(){
-	window.location.href='tvuoro.html';
-  });
-
-  $("#viestintaURL").click(function(){
-	window.location.href='viestinta.html';
-  });
-
-
   $("#odotta").html("<h1>ODOTA</h1>");
+
   setTimeout(tiedot,1000);
 
   function tiedot(){
@@ -47,7 +34,17 @@ function set(){
  	   data: { check : "tehty", my_location : my_location, email : email, salasana : salasana },
            success: function(data){
         	//console.log(data);
+
+		var sp = data.split("//");
+		if(sp[0] == 'eiLoytyTekija')
+		{
+		  $("#tekija").html("<div class='alert alert-danger'>"+sp[1]+"</div>").show();
+		  $("#odotta").fadeOut(370);
+		  return false;
+		} 
+
 		$("#viestit").html(data);
+
     	},
     		error:function (xhr, ajaxOptions, thrownError){
         	console.log(xhr.responseText);

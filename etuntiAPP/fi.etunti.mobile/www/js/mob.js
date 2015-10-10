@@ -22,31 +22,14 @@ $(document).ready(function(){
 
 	if((domain != '') & (email !='') & (salasana != ''))
 	{
-		$("#odotta").hide();
-		$("#domainBlokki").hide();
 		set();
+
 	} else {
 		$("#domainBlokki").show();
 		return false;
  	}
 	
   }
-
-  $("#viestintaURL").click(function(){
-	window.location.href='viestinta.html';
-  });
-
-  $("#tvuoro").click(function(){
-	window.location.href='tvuoro.html';
-  });
-
-  $("#tehty").click(function(){
-	window.location.href='tehty.html';
-  });
-
-  $("#asetukset").click(function(){
-	window.location.href='asetukset.html';
-  });
 
 
 
@@ -61,9 +44,11 @@ $(".sw").bootstrapSwitch({
 
 function stateFalse(){
    if($("#os").val() == ''){
-	alert("Osoite puutuu!");
 	$('.tyo').bootstrapSwitch('state', false, true);
+	alert("Osoite puutuu!");
   	return false;
+   } else {
+  	return true;
    }
 }
 
@@ -71,7 +56,9 @@ $('input[name="tyo"]').on('switchChange.bootstrapSwitch', function(event, state)
   console.log(state); 
   if(state == true)
   {
-	row("tyo_al",1);
+ 	if(stateFalse())
+		row("tyo_al",1);
+
   } else {
 	row("tyo_lp",3);
   }
@@ -180,7 +167,6 @@ function row(tilanne,st){
 
    if((tilanne == 'tyo_al') & (st == 1))
    {
- 	stateFalse();
 	var al 	= curDateTime();
 	var lp 	= '';
    }
@@ -282,17 +268,16 @@ function row(tilanne,st){
 
 		if(sp[0] == 'eiLoytyTekija')
 		{
-		  $("#result2").html("<h2>"+sp[1]+"</h2>").show();
-		  $("#footer").show(370);
+		  $("#tekija").html("<div class='alert alert-danger'>"+sp[1]+"</div>").show();
+		  $("#odotta").fadeOut(370);
 		  return false;
 		} 
 
-		$('#tietoja').hide();
+		$('#tietoja').fadeOut(370);
 		$("#odotta").fadeOut(370);
-		$("#footer").show(370);
-		$("#result").append(sp+"\n");
-		//$('.full').css({"opacity" : "1"});
 		$("#domainBlokki").hide();
+		$("#result").append(sp+"\n");
+
 		$("#tekija").html("<b>"+$('#domain').val()+", "+sp[5]+"</b>");
 
 		if((sp[0] == '3') || (sp[0] == '2') || (sp[0] == '10')){

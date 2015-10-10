@@ -439,7 +439,7 @@ $expla = explode(".",$_POST['aloitan']);
 
 
 
-            $mob = Mob::model()->find(" tid = '".$ttekija->id."' and loppui = '' ");
+            $mob = Mob::model()->find(" tid = '".$ttekija->id."' and loppui='' order by id DESC ");
 
 	    if(isset($mob->id)){
 

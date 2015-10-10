@@ -49,3 +49,37 @@
   {
        navigator.app.exitApp();
   }
+
+
+
+
+$(document).ready(function(){
+
+
+  $("#dm").html('<label>Domaini</label><br><input type="text" class="form-control" id="domain" name="srch-term" id="srch-term"><br><label>Työntekijän sähköposti</label><br><input type="text" class="form-control" id="email" name="srch-term" id="srch-term"><br><label>Työntekijän salasana</label><br><input type="text" class="form-control" id="salasana" name="srch-term" id="srch-term"><br><button class="btn btn-primary aloita" type="button"><i class="glyphicon glyphicon-warning-sign"> Tallenna</i></button>');
+
+  $("#footlinks").html('<footer id="footer"><div class="navbar navbar-default navbar-fixed-bottom"><div class="container"><div class="" id="footer-body">	<center><a href="#" id="home"><h1 class="glyphicon glyphicon-home"></h1></a>&nbsp;&nbsp;&nbsp;<a href="#" id="viestintaURL"><h1 class="glyphicon glyphicon-envelope form-group"></h1></a>&nbsp;&nbsp;&nbsp;<a href="#" id="tvuoro"><h1 class="glyphicon glyphicon-time form-group"></h1></a>&nbsp;&nbsp;&nbsp;<a href="#" id="tehty"><h1 class="glyphicon glyphicon-chevron-down"></h1></a>&nbsp;&nbsp;&nbsp;<a href="#" onclick="exitFromApp()"><h1 class="glyphicon glyphicon-new-window"></h1></a>&nbsp;&nbsp;&nbsp;<a href="#" id="asetukset"><h1 class="glyphicon glyphicon-cog"></h1></a>	    </center></div></div></div></footer>');
+
+
+
+  $("#home").click(function(){
+	window.location.href='index.html';
+  });
+
+  $("#viestintaURL").click(function(){
+	window.location.href='viestinta.html';
+  });
+
+  $("#tvuoro").click(function(){
+	window.location.href='tvuoro.html';
+  });
+
+  $("#tehty").click(function(){
+	window.location.href='tehty.html';
+  });
+
+  $("#asetukset").click(function(){
+	window.location.href='asetukset.html';
+  });
+
+});
