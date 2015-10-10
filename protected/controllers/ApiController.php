@@ -167,6 +167,7 @@ public function actionImei($dom)
 		    $sel .= '<option id="valitseOsoite">Valitse osoite</option>';
 		    foreach($tvuoro as $val){
 			$k = Kohteet::model()->findbypk($val->kohde);
+			if(isset($k->osoite))
 		      	$sel .= '<option value="'.$k->id.'">'.$k->osoite.'</option>';
 		    }
 		    $sel .= '</select>';

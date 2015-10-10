@@ -1,7 +1,7 @@
 $(document).ready(function(){
 
 
-  $("#odotta").html("<h1>ODOTA</h1>");
+  $("#odotta").html("<img src='img/search.gif'>");
 
   setTimeout(tiedot,1000);
 
@@ -14,9 +14,7 @@ $(document).ready(function(){
 	if(my_location == '') my_location = $("#location").val();
 	if((domain != '') & (email !='') & (salasana != ''))
 	{
-		$("#domainBlokki").hide();
 		set();
-		$("#odotta").hide();
 
 	} else {
 		$("#domainBlokki").show();
@@ -43,6 +41,8 @@ function set(){
 		  return false;
 		} 
 
+		$("#odotta").hide('slow');
+		$("#domainBlokki").hide();
 		$("#viestit").html(data);
 
     	},
