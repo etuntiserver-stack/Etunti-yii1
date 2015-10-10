@@ -317,9 +317,13 @@ function tableAjax(){
   url: location.protocol + "//" + location.host + '/index.php/mobile/index?Mobile_page='+mobnum,
       type: "POST",
       data: { index_ajax : "true" },
-      success: function(data){
-	  $('#tb').html(data);
-      }
+      	success: function(data){
+  	  	//console.log(data);
+	  	$('#tb').html(data);
+      	},
+  	error:function(data){
+  		console.log(data); 
+  	}
    });
 
 }
