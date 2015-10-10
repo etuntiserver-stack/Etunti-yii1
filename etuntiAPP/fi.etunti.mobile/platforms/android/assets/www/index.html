@@ -23,28 +23,7 @@
 
 
 	<script type="text/javascript" charset="utf-8">
-	    document.addEventListener("deviceready", onDeviceReady, false);
-	    function onDeviceReady() {
 
-	        navigator.geolocation.getCurrentPosition(onSuccess, onError);
-		
-		/*
-	        document.getElementById('imei').value = cordova.plugins.uid.IMEI;
-		if(cordova.plugins.uid.IMEI > 0)
-		document.getElementById("all").style.display = "block";
-		*/
-
-		document.getElementById("all").style.display = "block";
-
-
-	    }
-	    function onSuccess(position) {
-	        document.getElementById('location').value = position.coords.latitude + '/' + position.coords.longitude;
-	    }
-	    function onError(error) {
-	        alert('code: '    + error.code    + '\n' +
-	              'message: ' + error.message + '\n');
-	    }
 
 	</script>
 
@@ -62,7 +41,7 @@
      <div class=""> 
      	  <div class="pull-right">
 	    <div id="tekija" class="small"></div>
-		<button class="btn btn-warning btn-xs olenEksynyt">Olen eksynyt</button>
+		<button class="btn btn-danger btn-xs olenEksynyt">Olen eksynyt</button>
 	  </div>
 	<img src="img/logo-black.png" class="logo"> 
      </div>

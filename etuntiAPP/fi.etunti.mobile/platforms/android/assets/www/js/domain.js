@@ -12,7 +12,6 @@
 
 
 
-
   document.addEventListener('deviceready', this.readFile, true);
   function readFile() {
         window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, gotFS, fail);

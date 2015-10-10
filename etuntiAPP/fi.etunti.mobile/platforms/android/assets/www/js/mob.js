@@ -3,11 +3,37 @@ $(document).ready(function(){
 
   $("#odotta").html("<img src='img/search.gif'>");
 
-  setTimeout(tiedot,1000);
+  setTimeout(tiedot,5000);
 
+
+
+	    document.addEventListener("deviceready", onDeviceReady, false);
+	    function onDeviceReady() {
+
+	        navigator.geolocation.getCurrentPosition(onSuccess, onError);
+		
+		/*
+	        document.getElementById('imei').value = cordova.plugins.uid.IMEI;
+		if(cordova.plugins.uid.IMEI > 0)
+		document.getElementById("all").style.display = "block";
+		*/
+
+		document.getElementById("all").style.display = "block";
+
+
+	    }
+	    function onSuccess(position) {
+	        document.getElementById('location').value = position.coords.latitude + '/' + position.coords.longitude;
+		tiedot();
+	    }
+	    function onError(error) {
+	        alert('code: '    + error.code    + '\n' +
+	              'message: ' + error.message + '\n');
+	    }
 
 
   function tiedot(){
+
 
 	domain	= $("#domain").val();
 	email = $("#email").val();
@@ -273,7 +299,7 @@ function row(tilanne,st){
 		  return false;
 		} 
 
-		$('#tietoja').fadeOut(370);
+		//$('#tietoja').fadeOut(370);
 		$("#odotta").hide('slow');
 		$("#domainBlokki").hide();
 		$("#result").append(sp+"\n");
