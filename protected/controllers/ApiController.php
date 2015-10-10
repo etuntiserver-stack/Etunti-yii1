@@ -226,7 +226,7 @@ public function actionImei($dom)
 
 		    if(isset($_POST['my_location']))
 		    {
-		    $viesti .= '<br> <a href="http://maps.google.com/maps?q='.str_replace("/",",",$_POST['my_location']).'&ll='.str_replace("/",",",$_POST['my_location']).'&z=17" target="_blank"><span class="glyphicon glyphicon-arrow-down"></span></a>';
+		    $viesti .= '<br> <a href="http://maps.google.com/maps?q='.str_replace("/",",",$_POST['my_location']).'&ll='.str_replace("/",",",$_POST['my_location']).'&z=17" target="_blank">KARTTA</a>';
 		    }
 
 		    $model->viesti = $viesti;
