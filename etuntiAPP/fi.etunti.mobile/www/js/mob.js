@@ -446,7 +446,7 @@ function getTyovuorotToday(domain){
  	   data: { check : "uusiviesti", viesti : viesti, my_location : my_location, email : email, salasana : salasana },
            success: function(data){
         	//console.log(data);
-		alert()
+		alert(data);
     	},
     		error:function (xhr, ajaxOptions, thrownError){
         	console.log(xhr.responseText);
