@@ -195,7 +195,6 @@ public function actionImei($dom)
 		    }
 
 		    $sel = '<h2>Työvuorot '.date("d.m").'</h2>';
-		    $cl = '';
 		    $osoite = '';
 		    foreach($tvuoro as $val)
 		    {
@@ -220,7 +219,15 @@ public function actionImei($dom)
 		    $model = new Viestinta;
 		    $model->admin = "tt_".$ttekija->id.",".$ttekija->tekijan_nimi;
 		    $model->tekija = "toimisto";
-		    $model->viesti = $_POST['viesti'];
+	
+		    $viesti = '';
+		    if(isset($_POST['viesti']))
+		    $viesti .= $_POST['viesti'];
+
+		    if(isset($_POST['my_location']))
+		    $viesti .= "<BR>". $_POST['my_location'];
+
+		    $model->viesti = $viesti;
 		    if($model->save())
 		       $this->_sendResponse(200, "Viesti vastaanotettu");
 		    else

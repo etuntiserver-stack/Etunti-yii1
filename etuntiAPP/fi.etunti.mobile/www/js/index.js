@@ -72,11 +72,13 @@ $(document).ready(function(){
 		if(sp[2] == 'ok')
 		{
 		   $('#os').val(sp[0]);
+		   $('body,html').css({"background" : "green","color":"white"});
 		   $('#kohdenID').val(sp[1]);
 		}
 		if(sp[2] == 'error')
 		{
-		   $('#os').val('').css({"border" : "2px #f14010 solid"}).focus();
+		   $('#os').css({"border" : "2px #f14010 solid"}).focus();
+		   $('body,html').css({"background" : "#FF9900","color":"white"});
 		   $('#kohdenID').val('0');
 		   //alert(sp[0]+" "+sp[1])
 		}

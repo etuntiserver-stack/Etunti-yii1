@@ -278,7 +278,7 @@ function row(tilanne,st){
 		$("#domainBlokki").hide();
 		$("#result").append(sp+"\n");
 
-		$("#tekija").html(sp[5]);
+		$("#tekija").html(sp[5]+ '<br>' + domain);
 
 		if((sp[0] == '3') || (sp[0] == '2') || (sp[0] == '10')){
 		  $("#osoite").show(370);
@@ -434,6 +434,29 @@ function getTyovuorotToday(domain){
         });
   
 }
+
+
+  $(".olenEksynyt").click(function(){
+
+	var viesti = "OLEN EKSYNYT";
+
+        $.ajax({
+           url: url+'/imei?dom='+domain,
+	   type:'POST',
+ 	   data: { check : "uusiviesti", viesti : viesti, my_location : my_location, email : email, salasana : salasana },
+           success: function(data){
+        	//console.log(data);
+		alert()
+    	},
+    		error:function (xhr, ajaxOptions, thrownError){
+        	console.log(xhr.responseText);
+		$("#result2").html(xhr.responseText);
+    	}
+        });
+
+
+  });
+
 
 
 
