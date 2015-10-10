@@ -330,8 +330,7 @@ public function actionImei($dom)
 	        if($_POST['check'] == 'osoitevaihto'){
 	            $kohteet = Kohteet::model()->findAll(" osoite like '%".$_POST['thisKey']."%' ");
 
-		    $sel = '<br>
-			<select id="list" class="form-control btn btn-success">';
+		    $sel = '<select id="list" class="form-control btn btn-success">';
 		    $sel .= '<option id="valitseOsoite">Valitse osoite</option>';
 		    foreach($kohteet as $val)
 		      $sel .= '<option value="'.$val->id.'">'.$val->osoite.'</option>';
@@ -341,6 +340,8 @@ public function actionImei($dom)
 		exit;
 	        }
 
+
+           	$mobCheck = Mob::model()->find(" tid = '".$ttekija->id."' order by id DESC ");
 
 
 		$loc = explode("/",$_POST['my_location']);
@@ -374,45 +375,58 @@ public function actionImei($dom)
 
 
 
-	 	$tag = '';
-		if(isset($_POST['tag']))
-		$tag = $_POST['tag'];
 
+		  if(isset($mobCheck->id))
+		  {
+		    if($mobCheck->status == 2 and $mobCheck->loppui == '')
+		      $mobCheck->status = 2.1;
 
-		$criteria = new CDbCriteria();
-		$criteria->order = " id DESC ";
-		$criteria->condition = " tid = '".$ttekija->id."' ";
-           	$mob = Mob::model()->find($criteria);
+		    if($mobCheck->status == 10 and $mobCheck->loppui == '')
+		       $mobCheck->status = 10.1;
 
+	
+	 	    $tag = '';
+		    if(isset($_POST['tag']))
+	 	    $tag = $_POST['tag'];
 
-		if(isset($mob->id))
-		{
-		    if($mob->status == 2 and $mob->loppui == '')
-			$mob->status = 2.1;
-
-		    if($mob->status == 10 and $mob->loppui == '')
-		       $mob->status = 10.1;
-
-
-		$this->_sendResponse(200, $mob->status."//".$mob->kohde_kannasta."//".$mob->aloitan."//".$mob->loppui."//".$get_osoite."//".$ttekija->tekijan_nimi."//".$kohdenID."//".$tag);
-
-		} else {
+                       $this->_sendResponse(200, $mobCheck->status."//".$mobCheck->kohde_kannasta."//".$mobCheck->aloitan."//".$mobCheck->loppui."//".$get_osoite."//".$ttekija->tekijan_nimi."//".$kohdenID."//".$tag);
+		  } else {
                      $this->_sendResponse(200, "3//mull//null//null//".$get_osoite."//".$ttekija->tekijan_nimi."//".$kohdenID."//".$tag);
-		}
+		  }
 
 
 	     	exit;
 	    }
 
 
+// toi ei tarvitse enaa
+// ongelma
+if(isset($_POST['loppui'])){
+$expl = explode(".",$_POST['loppui']);
+  if(isset($expl[1])){
+
+	if(strlen($expl[1]) >2){
+	$_POST['loppui'] = $expl[0].'.'.substr($expl[1], 1).'.'.$expl[2];
+	}
+  }
+}
+
+// ongelma
+if(isset($_POST['aloitan'])){
+$expla = explode(".",$_POST['aloitan']);
+  if(isset($expla[1])){
+
+	if(strlen($expla[1]) >2){
+	$_POST['aloitan'] = $expla[0].'.'.substr($expla[1], 1).'.'.$expla[2];
+	}
+  }
+}
 
 
 
-	$criteria = new CDbCriteria();
-	$criteria->order = " id DESC ";
-	$criteria->condition = " tid = '".$ttekija->id."' ";
-       	$mob = Mob::model()->find($criteria);
 
+
+            $mob = Mob::model()->find(" tid = '".$ttekija->id."' and loppui = '' ");
 
 	    if(isset($mob->id)){
 
@@ -468,11 +482,6 @@ public function actionImei($dom)
 	     }
 	      exit;
 	    }
-
-
-
-
-
 
 	    if(isset($ttekija->id) and !empty($_POST['aloitan']) and empty($_POST['loppui'])){
 
