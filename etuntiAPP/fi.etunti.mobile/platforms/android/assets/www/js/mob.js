@@ -440,6 +440,8 @@ function getTyovuorotToday(domain){
 
 	var viesti = "OLEN EKSYNYT";
 
+	if(my_location !== '')
+	{
         $.ajax({
            url: url+'/imei?dom='+domain,
 	   type:'POST',
@@ -453,7 +455,9 @@ function getTyovuorotToday(domain){
 		$("#result2").html(xhr.responseText);
     	}
         });
-
+	} else {
+		alert('ei löydy GPS sijainti');
+	}
 
   });
 
