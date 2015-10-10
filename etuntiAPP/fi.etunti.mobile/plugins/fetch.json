@@ -48,5 +48,13 @@
         },
         "is_top_level": true,
         "variables": {}
+    },
+    "uk.co.whiteoctober.cordova.appversion": {
+        "source": {
+            "type": "registry",
+            "id": "cordova-plugin-app-version"
+        },
+        "is_top_level": true,
+        "variables": {}
     }
 }

@@ -48,6 +48,8 @@ function set(){
 		$("#domainBlokki").hide();
 		$("#viestit").html(data);
 
+		$("#fullViesti").show('slow');
+
 		/* vastaus */
   		$(".viesti").click(function(){
 		    	var thisID = $(this).attr("id");

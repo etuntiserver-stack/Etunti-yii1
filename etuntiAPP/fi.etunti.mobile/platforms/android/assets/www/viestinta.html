@@ -41,21 +41,22 @@
 
      <h2>Viestintä</h2>
 
+	<div id="fullViesti" style="display:none">
+     		<button class="btn btn-lg btn-block btn-success full-width" data-toggle="collapse" data-target="#uusiviesti">Uusi viesti <b class="caret"></b></button>
 
-     <button class="btn btn-lg btn-block btn-success full-width" data-toggle="collapse" data-target="#uusiviesti">Uusi viesti <b class="caret"></b></button>
+     		<div class="collapse" id="uusiviesti"> 
+     		<br>
+		<label>Viesti</label>
+		<textarea class="form-control" id="toimistoon" rows="3"></textarea>
+		<br>
+		<button class="btn btn-lg btn-block btn-primary lahetaToimistoon">Lähetä viesti toimistoon</button>
+	     </div>
+	     <div id="result2" style="display:none"></div>
+	     <br><br>
+	
+	     <div id="viestit"></div>
 
-     <div class="collapse" id="uusiviesti"> 
-     <br>
-	<label>Viesti</label>
-	<textarea class="form-control" id="toimistoon" rows="3"></textarea>
-	<br>
-	<button class="btn btn-lg btn-block btn-primary lahetaToimistoon">Lähetä viesti toimistoon</button>
-     </div>
-     <div id="result2" style="display:none"></div>
-     <br><br>
-
-     <div id="viestit"></div>
-
+	<div>
 
 
 
