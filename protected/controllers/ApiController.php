@@ -161,7 +161,7 @@ public function actionImei($dom)
 		    exit;
 		    }
 
-		    $sel = '<br>';
+		    $sel = '';
 		    $sel .= '<label>'.Yii::t('main','Valitse kohde työvuorosta').'</label><br>';
 		    $sel .= '<select id="list" class="form-control input-sm">';
 		    $sel .= '<option id="valitseOsoite">Valitse osoite</option>';
