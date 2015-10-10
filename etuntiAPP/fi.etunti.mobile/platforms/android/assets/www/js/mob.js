@@ -277,7 +277,7 @@ function row(tilanne,st){
  	   data: { check : "testi", my_location : my_location, tag : tag, email : email, salasana : salasana },
            success: function(data){
         	//console.log(data);
-		$("#result2").html(data).show();
+		//$("#result2").html(data).show();
 		var sp = data.split("//");
 
 		if(sp[0] == 'eiLoytyTekija')
