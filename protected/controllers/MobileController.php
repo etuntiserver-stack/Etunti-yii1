@@ -305,6 +305,7 @@ class MobileController extends Controller
 		$(document).ready(function(){
 
 
+
 		  $("#Kohteet_id").on('change',function(){
 
 			var kohdenID = $("#sainkohdenID").val().split("_");
