@@ -35,7 +35,7 @@ $domain = $_GET['domain'];
 	$criteria->condition = " domain!='defdb' ";
     	$list = Domainit::model()->findAll($criteria);
 
-    echo '<select class="form-control input-sm form-group" name="dom">';
+    echo '<select class="form-control input-sm form-group" name="domain">';
 
 	if(!empty($domain))
        	echo '<option value="'.$domain.'">'.$domain.'</option>';
