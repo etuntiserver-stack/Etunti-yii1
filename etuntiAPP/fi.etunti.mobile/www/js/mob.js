@@ -3,7 +3,7 @@ $(document).ready(function(){
 
   $("#odotta").html("<img src='img/search.gif'>");
 
-  setTimeout(tiedot,5000); // dva raza nado dumat
+  var timer = setTimeout(tiedot,5000); 
 
 
 	    document.addEventListener("deviceready", onDeviceReady, false);
@@ -23,6 +23,8 @@ $(document).ready(function(){
 	    }
 	    function onSuccess(position) {
 	        document.getElementById('location').value = position.coords.latitude + '/' + position.coords.longitude;
+		document.getElementById('olenEksynyt').style.display="block";
+		clearTimeout(timer);
 		tiedot();
 	    }
 	    function onError(error) {
@@ -461,9 +463,12 @@ function getTyovuorotToday(domain){
 }
 
 
-  $(".olenEksynyt").click(function(){
+  $("#olenEksynyt").click(function(){
 
-	var viesti = "OLEN EKSYNYT";
+  var viesti = "OLEN EKSYNYT";
+
+  var r = confirm("Lähetä GPS tiedot?");
+  if (r == true) {
 
 	if(my_location !== '')
 	{
@@ -483,6 +488,8 @@ function getTyovuorotToday(domain){
 	} else {
 		alert('ei löydy GPS sijainti');
 	}
+
+   }
 
   });
 
