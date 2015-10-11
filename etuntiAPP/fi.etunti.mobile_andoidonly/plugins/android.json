@@ -69,6 +69,11 @@
                     ],
                     "/manifest/application": []
                 }
+            },
+            "undefined": {
+                "parents": {
+                    "undefined": []
+                }
             }
         }
     },
