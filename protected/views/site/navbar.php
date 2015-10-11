@@ -25,6 +25,7 @@
 	<?php if(!isset(Yii::app()->user->adminID) and Yii::app()->User->isAdmin()) : ?>
         <li><?php echo CHtml::link(Yii::t('main', 'Profiili'),array('/user/profile')); ?></li>
         <li><?php echo CHtml::link(Yii::t('main', 'Domainit'),array('/domainit/admin')); ?></li>
+        <li><?php echo CHtml::link(Yii::t('main', 'Domaini Seuranta'),array('/domainit/domaini_seuranta')); ?></li>
         <li><?php echo CHtml::link(Yii::t('main', 'Tasot'),array('/tasot/admin')); ?></li>
         <li><?php echo CHtml::link(Yii::t('main', 'Tietokannat'),array('/domainit/tietokannat')); ?></li>
 	<?php endif; ?>

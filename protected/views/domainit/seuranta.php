@@ -52,32 +52,11 @@ echo	'<input type=hidden id=number value='.cal_days_in_month(CAL_GREGORIAN, $mon
 <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/verkko.css" />
 
 
-<legend>
-<button class="pull-right btn btn-info" data-toggle="collapse"  data-target="#haku"><?php echo Yii::t('main', 'Haku'); ?> <b class="caret"></b></button>
-<h1> <?php echo Yii::t('main', 'TOTEUTUNEET KK'); ?> <i class="glyphicon glyphicon-time"></i></h1>
-</legend>
-
-
-<div class="row collapse" id="haku">
+<div class="row" id="haku">
     <div class="col-sm-12 form-inline">
-       	<b class="form-control form-group"><a href="kk?pvm=<?php echo $previous; ?>">
-	  <<</a> <?php echo $months[$month].' '.$year; ?> <a href="kk?pvm=<?php echo $next; ?>">>></a>
+       	<b class="form-control form-group"><a href="domaini_seuranta?domain=<?php echo $domain; ?>&pvm=<?php echo $previous; ?>">
+	  <<</a> <?php echo $months[$month].' '.$year; ?> <a href="domaini_seuranta?domain=<?php echo $domain; ?>&pvm=<?php echo $next; ?>">>></a>
        	</b>
-	
-   	<?php
-	    $lounas = '';
-	    $lounas = ( isset(Yii::app()->session['Lounastauko']))  ? 'selected' : '';
-	    $matka = '';
-	    $matka = ( isset(Yii::app()->session['MATKA']))  ? 'selected' : '';
-
-	    echo '<select name="ilman[]" class="selectpicker form-group" id="ilman"  multiple="multiple" title="Ei lasketa..." >'; //
-	    echo '<option value="Lounastauko" '.$lounas.'>Lounastauko</option>';
-	    echo '<option value="MATKA" '.$matka.'>MATKA</option>';
-	    echo '</select>';
-	   ?>
-	   <div class="form-group input-group-btn">
-	        <button id="send" class="btn btn-primary btn-group">OK</button>
-	   </div>
     </div>
 </div>
 <br>
@@ -102,7 +81,7 @@ echo	'<input type=hidden id=number value='.cal_days_in_month(CAL_GREGORIAN, $mon
   {
   $yht = 0;
   echo '<TR>';
-  echo '<TD>'.$v->tekijan_nimi.'</TD>';
+  echo '<TD>'.Yii::t('main','Työntekijä').' '.$v->id.'</TD>';
 
    for ($i = 1; $i <= $number; $i++) 
    {

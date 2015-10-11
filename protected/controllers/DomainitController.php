@@ -28,7 +28,7 @@ class DomainitController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view','tietokannat'),
+				'actions'=>array('index','view','tietokannat','domaini_seuranta'),
 				'expression' => "Yii::app()->User->isAdmin()",
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
@@ -45,6 +45,17 @@ class DomainitController extends Controller
 		);
 	}
 
+
+	public function actionDomaini_seuranta()
+	{
+
+	function sprint($val){
+	    if($val > 0)
+		return sprintf('%02d:%02d', $val/3600, ($val % 3600)/60);
+	}
+
+		$this->render('domaini_seuranta');
+	}
 
 	public function actionTietokannat()
 	{
