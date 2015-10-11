@@ -10,11 +10,11 @@
 
 $domain = '';
 
-if(isset($_POST['domain']))
-$domain = $_POST['domain'];
+if(isset($_POST['dom']))
+$domain = $_POST['dom'];
 
-if(isset($_GET['domain']))
-$domain = $_GET['domain'];
+if(isset($_GET['dom']))
+$domain = $_GET['dom'];
 ?>
 
 <legend>
@@ -35,7 +35,7 @@ $domain = $_GET['domain'];
 	$criteria->condition = " domain!='defdb' ";
     	$list = Domainit::model()->findAll($criteria);
 
-    echo '<select class="form-control input-sm form-group" name="domain">';
+    echo '<select class="form-control input-sm form-group" name="dom">';
 
 	if(!empty($domain))
        	echo '<option value="'.$domain.'">'.$domain.'</option>';
