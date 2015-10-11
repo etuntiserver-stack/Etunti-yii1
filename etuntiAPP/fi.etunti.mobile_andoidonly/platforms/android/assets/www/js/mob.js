@@ -6,8 +6,29 @@ $(document).ready(function(){
   var timer = setTimeout(tiedot,5000); 
 
 
+function initPushwoosh() {
+	var pushNotification = cordova.require("com.pushwoosh.plugins.pushwoosh.PushNotification");
+	if(device.platform == "Android")
+	{
+		registerPushwooshAndroid();
+	}
+
+	if(device.platform == "iPhone" || device.platform == "iOS")
+	{
+		registerPushwooshIOS();
+	}
+
+	if (device.platform == "Win32NT") {
+	    registerPushwooshWP();
+	}
+}
+
+
+
+
 	    document.addEventListener("deviceready", onDeviceReady, false);
 	    function onDeviceReady() {
+
 
 	        navigator.geolocation.getCurrentPosition(onSuccess, onError);
 		
@@ -19,6 +40,10 @@ $(document).ready(function(){
 
 		document.getElementById("all").style.display = "block";
 
+		/*
+        	initPushwoosh();
+        	app.receivedEvent('deviceready');
+		*/
 
 	    }
 	    function onSuccess(position) {
