@@ -33,6 +33,8 @@ $(document).ready(function(){
 	    }
 
 
+
+
   function tiedot(){
 
 
@@ -300,7 +302,7 @@ function row(tilanne,st){
 		  return false;
 		} 
 
-		//$('#tietoja').fadeOut(370);
+		$('#tietoja').fadeOut(370);
 		$("#odotta").hide('slow');
 		$("#domainBlokki").hide();
 		$("#result").append(sp+"\n");

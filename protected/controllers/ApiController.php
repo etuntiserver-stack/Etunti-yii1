@@ -378,13 +378,15 @@ public function actionImei($dom)
 		{
 		  $gps = $loc[0].",".$loc[1]; 
  
-		  $json_url = 'http://maps.googleapis.com/maps/api/geocode/json?latlng='.$gps.'&language=fi&sensor=true';
-		  $json = file_get_contents($json_url);
-		  $obj = json_decode($json);
-		  $go = $obj->results[0]->formatted_address;
-		  $go = explode(",", $go);
-		  if(isset($go[0]))
-		  $get_osoite = $go[0];
+		   $json_url = 'http://maps.googleapis.com/maps/api/geocode/json?latlng='.$gps.'&language=fi&sensor=true';
+		   if($json = file_get_contents($json_url))
+		   {
+			$obj = json_decode($json);
+			$go = $obj->results[0]->formatted_address;
+		  	$go = explode(",", $go);
+		  	if(isset($go[0]))
+		  	$get_osoite = $go[0];
+		   }
 		}
 
 		if(isset($_POST['tag']) and $_POST['tag'] != '000000')
