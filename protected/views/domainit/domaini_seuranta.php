@@ -10,11 +10,11 @@
 
 $domain = '';
 
-if(isset($_POST['dom']))
-$domain = $_POST['dom'];
+if(isset($_POST['domain']))
+$domain = $_POST['domain'];
 
-if(isset($_GET['dom']))
-$domain = $_GET['dom'];
+if(isset($_GET['domain']))
+$domain = $_GET['domain'];
 ?>
 
 <legend>
@@ -63,7 +63,7 @@ $domain = $_GET['dom'];
     Yii::app()->db1->connectionString = 'mysql:host=localhost;dbname='.$pref.$domain;
     if( $_SERVER['REMOTE_ADDR'] != '::1' and $_SERVER['REMOTE_ADDR'] != '127.0.0.1' )
     {
-      Yii::app()->db1->username = $pref.'defdb';
+      Yii::app()->db1->username = $pref.$domain;
       Yii::app()->db1->password = 'KristinA1';
     }
     Yii::app()->db1->setActive(true);
