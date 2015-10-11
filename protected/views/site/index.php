@@ -20,7 +20,7 @@ echo $g->imei.' '.$g->count.'<br>';
 
 
 <?php
-
+/*
 define( 'API_ACCESS_KEY', 'AIzaSyCnMuvBry0dxLPntaAW-HSLrcyrkwy6BzY' );
 $registrationIds = array( '841664836849' );
 // prep the bundle
@@ -57,8 +57,7 @@ curl_setopt( $ch,CURLOPT_POSTFIELDS, json_encode( $fields ) );
 $result = curl_exec($ch );
 curl_close( $ch );
 echo $result;
-
-
+*/
 ?>
 
 
