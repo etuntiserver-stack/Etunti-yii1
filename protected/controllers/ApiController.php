@@ -426,32 +426,6 @@ public function actionImei($dom)
 	    }
 
 
-// toi ei tarvitse enaa
-// ongelma
-if(isset($_POST['loppui'])){
-$expl = explode(".",$_POST['loppui']);
-  if(isset($expl[1])){
-
-	if(strlen($expl[1]) >2){
-	$_POST['loppui'] = $expl[0].'.'.substr($expl[1], 1).'.'.$expl[2];
-	}
-  }
-}
-
-// ongelma
-if(isset($_POST['aloitan'])){
-$expla = explode(".",$_POST['aloitan']);
-  if(isset($expla[1])){
-
-	if(strlen($expla[1]) >2){
-	$_POST['aloitan'] = $expla[0].'.'.substr($expla[1], 1).'.'.$expla[2];
-	}
-  }
-}
-
-
-
-
 
             $mob = Mob::model()->find(" tid = '".$ttekija->id."' and loppui='' order by id DESC ");
 
@@ -466,7 +440,7 @@ $expla = explode(".",$_POST['aloitan']);
 		  $ms = 'Lounas';
 
 
-	     if($mob->status == 1 and $_POST['status'] == 3 and !empty($_POST['loppui']))
+	     if($mob->status == 1 and $_POST['status'] == 3)
 	     {
                 $mobupdate = Mob::model()->findbypk($mob->id);
 
@@ -482,7 +456,7 @@ $expla = explode(".",$_POST['aloitan']);
                 $mobupdate->save();
                 $this->_sendResponse(200, $ms."//".$mobupdate->id."//".$mobupdate->status."//".$mob->kohde_kannasta."//null");
 
-	     } elseif($mob->status == 2 and $_POST['status'] == 2 and !empty($_POST['loppui']))
+	     } elseif($mob->status == 2 and $_POST['status'] == 2)
 	     {
                 $mobupdate = Mob::model()->findbypk($mob->id);
                 $mobupdate->loppui = date("d.m.Y H:i:s");
@@ -492,7 +466,7 @@ $expla = explode(".",$_POST['aloitan']);
                 $mobupdate->save();
                 $this->_sendResponse(200, $ms."//".$mobupdate->id."//".$mobupdate->status."//".$mob->kohde_kannasta."//null");
 
-	     } elseif($mob->status == 10 and $_POST['status'] == 10 and !empty($_POST['loppui']))
+	     } elseif($mob->status == 10 and $_POST['status'] == 10)
 	     {
                 $mobupdate = Mob::model()->findbypk($mob->id);
                 $mobupdate->loppui = date("d.m.Y H:i:s");
@@ -510,6 +484,8 @@ $expla = explode(".",$_POST['aloitan']);
 	      exit;
 	    }
 
+
+	    // uusi rivi
 	    if(isset($ttekija->id) and !empty($_POST['aloitan']) and empty($_POST['loppui'])){
 
 
