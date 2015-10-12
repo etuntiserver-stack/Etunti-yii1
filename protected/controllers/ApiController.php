@@ -69,7 +69,15 @@ public function actionImei($dom)
 
 	     if(empty($ttekija->id))
 	     {
-              $this->_sendResponse(200, "eiLoytyTekija//Tämän työntekijä ei löydy");
+
+		if(isset($_POST['gcm_reg_id']) and $ttekija->gcm_reg_id != $_POST['gcm_reg_id'])
+	   		Tyontekijat::model()->updatebypk($ttekija->id, array('gcm_reg_id'=>$_POST['gcm_reg_id']));
+
+		if(isset($_POST['gcm_reg_id']))
+			unset($_POST['gcm_reg_id']);
+
+
+              	$this->_sendResponse(200, "eiLoytyTekija//Tämän työntekijä ei löydy");
 	      exit;
 	     }
 

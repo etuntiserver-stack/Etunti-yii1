@@ -21,8 +21,9 @@ echo $g->imei.' '.$g->count.'<br>';
 
 <?php
 /*
+
 define( 'API_ACCESS_KEY', 'AIzaSyCnMuvBry0dxLPntaAW-HSLrcyrkwy6BzY' );
-$registrationIds = array( '841664836849' );
+$registrationIds = array( 'fhmNdmNvSi4:APA91bFggwwe1OZfYtNUAJeTTz9_pzhEVcKR_cbCJUkoeMA8n50RmxmOHIYQ4syOD7d-qxow2GGALm1dJHl4bgRYj7RrrUug70uVW-cBWLhTFUP9kPryp8piT2lr3lGi9ocJod88Pizp' );
 // prep the bundle
 $msg = array
 (
@@ -57,6 +58,7 @@ curl_setopt( $ch,CURLOPT_POSTFIELDS, json_encode( $fields ) );
 $result = curl_exec($ch );
 curl_close( $ch );
 echo $result;
+
 */
 ?>
 
