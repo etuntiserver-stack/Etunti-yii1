@@ -170,6 +170,12 @@
 		<?php echo $form->error($model,'salasana'); ?>
 	</div>
 
+	<div class="row">
+		<?php echo $form->labelEx($model,'gcm_reg_id'); ?>
+		<?php echo $form->textField($model,'gcm_reg_id',array('size'=>60,'maxlength'=>500,'class'=>'form-control input-sm')); ?>
+		<?php echo $form->error($model,'gcm_reg_id'); ?>
+	</div>
+
    </div>
    <div class="col-sm-2">
 	<?php if(isset($model->id)): ?>
