@@ -44,5 +44,6 @@ $this->menu=array(
 		'online_varauksen_valmina',
 		'kortit',
 		'ayjasenyys',
+		'gcm_reg_id',
 	),
 )); ?>
