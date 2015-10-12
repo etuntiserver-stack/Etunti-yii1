@@ -280,6 +280,7 @@ function row(tilanne,st){
 		status: st,
 		tietoja: "",
 		hyvaksytty: "0",
+		gcm_reg_id : $("#regId").text(),
 	};
 
 
@@ -289,7 +290,7 @@ function row(tilanne,st){
  	   data: postData,
            success: function(data){
         	console.log(data);
-
+		//$("#result2").html("data: <br>" + data).show();
 		var sp = data.split("//");
 		 if(sp[4] === 'tagnumerror')
 		 {
@@ -322,7 +323,7 @@ function row(tilanne,st){
         $.ajax({
            url: url+'/imei?dom='+domain,
 	   type:'POST',
- 	   data: { check : "testi", my_location : my_location, tag : tag, email : email, salasana : salasana },
+ 	   data: { check : "testi", my_location : my_location, tag : tag, email : email, salasana : salasana, gcm_reg_id : $("#regId").text() },
            success: function(data){
         	//console.log(data);
 		//$("#result2").html(data).show();
