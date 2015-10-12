@@ -169,6 +169,13 @@ module.exports = [
             "cordova"
         ],
         "runs": true
+    },
+    {
+        "file": "plugins/phonegap-plugin-push/www/push.js",
+        "id": "phonegap-plugin-push.PushNotification",
+        "clobbers": [
+            "PushNotification"
+        ]
     }
 ];
 module.exports.metadata = 
@@ -179,7 +186,8 @@ module.exports.metadata =
     "org.apache.cordova.device": "0.3.0",
     "cordova-plugin-geolocation": "1.0.2-dev",
     "org.hygieiasoft.cordova.uid": "1.1.0",
-    "org.apache.cordova.file": "1.3.3"
+    "org.apache.cordova.file": "1.3.3",
+    "phonegap-plugin-push": "1.3.0"
 }
 // BOTTOM OF METADATA
 });
