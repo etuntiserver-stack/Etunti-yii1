@@ -383,10 +383,14 @@ public function actionImei($dom)
 		   $json = file_get_contents($json_url);
 
 			$obj = json_decode($json);
-			$go = $obj->results[0]->formatted_address;
-		  	$go = explode(",", $go);
-		  	if(isset($go[0]))
-		  	$get_osoite = $go[0];
+			  if(isset($obj->results[0]))
+			  {
+				$go = $obj->results[0]->formatted_address;
+		  		$go = explode(",", $go);
+		  		if(isset($go[0]))
+		  		$get_osoite = $go[0];
+			  }
+
 		   } catch(Exception $e) {
 
 
