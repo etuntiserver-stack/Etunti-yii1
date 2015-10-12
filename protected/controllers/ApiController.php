@@ -49,11 +49,11 @@ public function actionImei($dom)
 	    $criteria->condition = " imei!='' AND imei = '".$_POST['imei']."' ";
             $ttekija = Tyontekijat::model()->find($criteria);
 
-	     if(empty($ttekija->id))
-	     {
-              $this->_sendResponse(200, "imeiError//Virhellinen imei koodi//".$_POST['imei']);
-	      exit;
-	     }
+	     	if(empty($ttekija->id))
+	     	{
+                  $this->_sendResponse(200, "imeiError//Virhellinen imei koodi//".$_POST['imei']);
+	         exit;
+	     	}
 
 	    }
 
@@ -67,19 +67,21 @@ public function actionImei($dom)
 	    ";
             $ttekija = Tyontekijat::model()->find($criteria);
 
-	     if(empty($ttekija->id))
-	     {
+	    	if(empty($ttekija->id))
+	    	{
+              	   $this->_sendResponse(200, "eiLoytyTekija//Tämän työntekijä ei löydy");
+	         exit;
+	    	}
 
-		if(isset($_POST['gcm_reg_id']) and $ttekija->gcm_reg_id != $_POST['gcm_reg_id'])
+	    	if(isset($ttekija->id) and !empty(isset($ttekija->id)))
+	    	{
+		   if(isset($_POST['gcm_reg_id']) and $ttekija->gcm_reg_id != $_POST['gcm_reg_id'])
 	   		Tyontekijat::model()->updatebypk($ttekija->id, array('gcm_reg_id'=>$_POST['gcm_reg_id']));
 
-		if(isset($_POST['gcm_reg_id']))
+		   if(isset($_POST['gcm_reg_id']))
 			unset($_POST['gcm_reg_id']);
 
-
-              	$this->_sendResponse(200, "eiLoytyTekija//Tämän työntekijä ei löydy");
-	      exit;
-	     }
+		}
 
 	    }
 
