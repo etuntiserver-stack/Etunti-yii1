@@ -45,6 +45,8 @@ class DomainitController extends Controller
 		);
 	}
 
+	
+
 
 	public function actionDomaini_seuranta()
 	{

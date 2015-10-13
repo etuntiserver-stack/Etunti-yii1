@@ -3,16 +3,54 @@
 
 $this->pageTitle=Yii::app()->name;
 
-//echo Yii::app()->user->isGuest ;
-//print_r(Yii::app()->user);
 
 /*
-$criteria = new CDbCriteria;
-$criteria->select = " COUNT(*) as count,imei ";
-$criteria->group = " imei ";
-$t = Tyontekijat::model()->findAll($criteria); 
-foreach($t as $g)
-echo $g->imei.' '.$g->count.'<br>';
+$t = Tyontekijat::model()->findbypk(38); 
+$a = AsetuksetForAll::model()->find(" asetus='asetus1' ");
+
+define( 'API_ACCESS_KEY', $a->api_access_key );
+$registrationIds = array( $t->gcm_reg_id );
+// prep the bundle
+$msg = array
+(
+	'message' 	=> 'testo',
+	'title'		=> 'ETUNTI',
+	'subtitle'	=> 'This is a subtitle. subtitle',
+	'tickerText'	=> 'Ticker text here...Ticker text here...Ticker text here',
+	'vibrate'	=> 1,
+	'sound'		=> 1,
+	'largeIcon'	=> 'large_icon',
+	'smallIcon'	=> 'small_icon'
+);
+$fields = array
+(
+	'registration_ids' 	=> $registrationIds,
+	'data'			=> $msg
+);
+ 
+$headers = array
+(
+	'Authorization: key=' . API_ACCESS_KEY,
+	'Content-Type: application/json'
+);
+ 
+$ch = curl_init();
+curl_setopt( $ch,CURLOPT_URL, 'https://android.googleapis.com/gcm/send' );
+curl_setopt( $ch,CURLOPT_POST, true );
+curl_setopt( $ch,CURLOPT_HTTPHEADER, $headers );
+curl_setopt( $ch,CURLOPT_RETURNTRANSFER, true );
+curl_setopt( $ch,CURLOPT_SSL_VERIFYPEER, false );
+curl_setopt( $ch,CURLOPT_POSTFIELDS, json_encode( $fields ) );
+$result = curl_exec($ch );
+curl_close( $ch );
+
+$result = json_decode($result);
+var_dump($result->success);
+*/
+
+/*
+$callpush = Domainit::PushNotify(38,"title","mess");
+print_r($callpush->success);
 */
 ?>
 

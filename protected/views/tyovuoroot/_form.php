@@ -177,14 +177,14 @@ $(document).ready(function(){
 		  data:$(this).serialize(),
 		  type:'POST',
 		  success:function(data){
-			console.log(data);
+			//console.log(data);
 
 	  	$.ajax({
 			url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/did',
 			type:'GET',
 			data: { "pvm" : "<?php echo $model->pvm; ?>", "tid" : "<?php echo $model->tid; ?>", "from" : "ajax" },
 			  success:function(data){
-			  console.log(data);
+			  //console.log(data);
 			  $('#<?php echo date("Ymd",strtotime($model->pvm))."_".$model->tid; ?>').html(data);
 			  return false;
 			  },
@@ -198,7 +198,7 @@ $(document).ready(function(){
 			type:'GET',
 			data: { "tid" : "<?php echo $model->tid; ?>", "viikko" : "<?php echo date('W',strtotime($model->pvm)); ?>" },
 			  success:function(data){
-			  console.log(data);
+			  //console.log(data);
 			  $('#vk_<?php echo date("W",strtotime($model->pvm))."_".$model->tid; ?>').html(data);
 			  return false;
 			  },
@@ -212,7 +212,7 @@ $(document).ready(function(){
 			type:'GET',
 			data: { "tid" : "<?php echo $model->tid; ?>" },
 			  success:function(data){
-			  console.log(data);
+			  //console.log(data);
 			  $('.fromto_<?php echo $model->tid; ?>').html(data);
 			  return false;
 			  },
