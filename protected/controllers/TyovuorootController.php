@@ -401,7 +401,11 @@ class TyovuorootController extends Controller
 		if(!empty($m->avain))
 		  $ohje .= Yii::t('main', 'Avain: ')." ".$m->avain."\n\n";
 		if(!empty($m->toimenpiteet))
-		  $ohje .= $m->toimenpiteet;
+		  $ohje .= "\nToimenpiteet:\n".$m->toimenpiteet;
+		if(!empty($m->tietoja))
+		  $ohje .= "\nTietoja:\n".$m->tietoja;
+		if(!empty($m->muut))
+		  $ohje .= "\nMuut:\n".$m->muut;
 		echo $ohje;
 	}
 
