@@ -1,6 +1,6 @@
 <?php
 
-class ViestintaController extends Controller
+class AsetuksetForAllController extends Controller
 {
 	/**
 	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
@@ -27,10 +27,17 @@ class ViestintaController extends Controller
 	public function accessRules()
 	{
 		return array(
-
+			array('allow',  // allow all users to perform 'index' and 'view' actions
+				'actions'=>array('index','view'),
+				'users'=>array('*'),
+			),
+			array('allow', // allow authenticated user to perform 'create' and 'update' actions
+				'actions'=>array('create','update'),
+				'users'=>array('@'),
+			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','vastaanotettu'),
-                		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
+				'actions'=>array('admin','delete'),
+				'users'=>array('admin'),
 			),
 			array('deny',  // deny all users
 				'users'=>array('*'),
@@ -38,29 +45,10 @@ class ViestintaController extends Controller
 		);
 	}
 
-
-
-
-	public function isEtuntiAdmin() {
-
-		if(isset(Yii::app()->user->adminID))
-		{
-		$m = Administrators::model()->findbypk(Yii::app()->user->adminID);
-	        if($m->id == Yii::app()->user->adminID)
-	            return true;
-		else
-	            return false;
-		} else {
-	            return false;
-		}
-	}
-
-
-	public function actionVastaanotettu($id)
-	{
-		Viestinta::model()->updateByPk($id,array('status'=>'1'));
-	}
-
+	/**
+	 * Displays a particular model.
+	 * @param integer $id the ID of the model to be displayed
+	 */
 	public function actionView($id)
 	{
 		$this->render('view',array(
@@ -74,68 +62,16 @@ class ViestintaController extends Controller
 	 */
 	public function actionCreate()
 	{
-		$model=new Viestinta;
+		$model=new AsetuksetForAll;
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['Viestinta']))
+		if(isset($_POST['AsetuksetForAll']))
 		{
-			$model->attributes=$_POST['Viestinta'];
-			if($model->save()){
-
-
-
-$t = Tyontekijat::model()->findbypk($model->tekija); 
-$a = AsetuksetForAll::model()->find(" asetus='asetus1' "); //AIzaSyCnMuvBry0dxLPntaAW-HSLrcyrkwy6BzY
-
-if(isset($t->gcm_reg_id) and isset($a->api_access_key))
-{
-
-define( 'API_ACCESS_KEY', $a->api_access_key );
-$registrationIds = array( $t->gcm_reg_id );
-// prep the bundle
-$msg = array
-(
-	'message' 	=> $model->viesti,
-	'title'		=> 'ETUNTI',
-	'subtitle'	=> 'This is a subtitle. subtitle',
-	'tickerText'	=> 'Ticker text here...Ticker text here...Ticker text here',
-	'vibrate'	=> 1,
-	'sound'		=> 1,
-	'largeIcon'	=> 'large_icon',
-	'smallIcon'	=> 'small_icon'
-);
-$fields = array
-(
-	'registration_ids' 	=> $registrationIds,
-	'data'			=> $msg
-);
- 
-$headers = array
-(
-	'Authorization: key=' . API_ACCESS_KEY,
-	'Content-Type: application/json'
-);
- 
-$ch = curl_init();
-curl_setopt( $ch,CURLOPT_URL, 'https://android.googleapis.com/gcm/send' );
-curl_setopt( $ch,CURLOPT_POST, true );
-curl_setopt( $ch,CURLOPT_HTTPHEADER, $headers );
-curl_setopt( $ch,CURLOPT_RETURNTRANSFER, true );
-curl_setopt( $ch,CURLOPT_SSL_VERIFYPEER, false );
-curl_setopt( $ch,CURLOPT_POSTFIELDS, json_encode( $fields ) );
-$result = curl_exec($ch );
-curl_close( $ch );
-
-//$result = json_decode($result);
-//print_r($result->success);
-
-}
-
-
+			$model->attributes=$_POST['AsetuksetForAll'];
+			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
-			}
 		}
 
 		$this->render('create',array(
@@ -155,9 +91,9 @@ curl_close( $ch );
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['Viestinta']))
+		if(isset($_POST['AsetuksetForAll']))
 		{
-			$model->attributes=$_POST['Viestinta'];
+			$model->attributes=$_POST['AsetuksetForAll'];
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
 		}
@@ -186,7 +122,7 @@ curl_close( $ch );
 	 */
 	public function actionIndex()
 	{
-		$dataProvider=new CActiveDataProvider('Viestinta');
+		$dataProvider=new CActiveDataProvider('AsetuksetForAll');
 		$this->render('index',array(
 			'dataProvider'=>$dataProvider,
 		));
@@ -197,10 +133,10 @@ curl_close( $ch );
 	 */
 	public function actionAdmin()
 	{
-		$model=new Viestinta('search');
+		$model=new AsetuksetForAll('search');
 		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['Viestinta']))
-			$model->attributes=$_GET['Viestinta'];
+		if(isset($_GET['AsetuksetForAll']))
+			$model->attributes=$_GET['AsetuksetForAll'];
 
 		$this->render('admin',array(
 			'model'=>$model,
@@ -211,12 +147,12 @@ curl_close( $ch );
 	 * Returns the data model based on the primary key given in the GET variable.
 	 * If the data model is not found, an HTTP exception will be raised.
 	 * @param integer $id the ID of the model to be loaded
-	 * @return Viestinta the loaded model
+	 * @return AsetuksetForAll the loaded model
 	 * @throws CHttpException
 	 */
 	public function loadModel($id)
 	{
-		$model=Viestinta::model()->findByPk($id);
+		$model=AsetuksetForAll::model()->findByPk($id);
 		if($model===null)
 			throw new CHttpException(404,'The requested page does not exist.');
 		return $model;
@@ -224,11 +160,11 @@ curl_close( $ch );
 
 	/**
 	 * Performs the AJAX validation.
-	 * @param Viestinta $model the model to be validated
+	 * @param AsetuksetForAll $model the model to be validated
 	 */
 	protected function performAjaxValidation($model)
 	{
-		if(isset($_POST['ajax']) && $_POST['ajax']==='viestinta-form')
+		if(isset($_POST['ajax']) && $_POST['ajax']==='asetukset-for-all-form')
 		{
 			echo CActiveForm::validate($model);
 			Yii::app()->end();
