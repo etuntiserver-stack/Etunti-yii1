@@ -205,7 +205,7 @@ public function actionImei($dom)
 		    exit;
 		    }
 
-		    $sel = '<h2>Työvuorot '.date("d.m").'</h2>';
+		    $sel = '<h2>Viikon työvuorot</h2>';
 		    $osoite = '';
 		    foreach($tvuoro as $val)
 		    {
