@@ -485,8 +485,23 @@ class TyovuorootController extends Controller
 		{
 			$model->attributes=$_POST['Tyovuoroot'];
 			$model->pvm = date("d.m.Y",strtotime($_POST['Tyovuoroot']['pvm']));
-			$model->save();
-				//$this->redirect(array('view','id'=>$model->id));
+			if($model->save())
+			{
+
+			   $t = Tyontekijat::model()->findbypk($model->tid);
+			   $k = Kohteet::model()->findbypk($model->kohde);
+			   if(isset($k->osoite) and !empty($k->osoite))
+			   {
+				$pushviesti = "<h3>Uusi työvuoro</h3><br>
+					<b>".$model->pvm."</b><br>
+					".$model->alku."-".$model->loppu." <b>".$k->osoite."</b>
+					<br><p>".$model->tietoja."</p>";
+
+				Domainit::PushNotify($t->id,"Hei ".$t->tekijan_nimi,$pushviesti);
+
+			   }
+
+			}
 		}
 
 		$this->renderPartial('create',array(
@@ -534,7 +549,21 @@ class TyovuorootController extends Controller
 		{
 			$_POST['Tyovuoroot']['pvm'] = date("d.m.Y",strtotime($_POST['Tyovuoroot']['pvm']));
 			$model->attributes=$_POST['Tyovuoroot'];
-			$model->save();
+			if($model->save()){
+
+			   $k = Kohteet::model()->findbypk($model->kohde);
+			   if(isset($k->osoite) and !empty($k->osoite))
+			   {
+				$pushviesti = "<h3>Työvuorossa on muutokset</h3><br>
+					<b>".$model->pvm."</b><br>
+					".$model->alku."-".$model->loppu." <b>".$k->osoite."</b>
+					<br><p>".$model->tietoja."</p>";
+
+				Domainit::PushNotify($t->id,"Hei ".$t->tekijan_nimi,$pushviesti);
+
+			   }
+
+			}
 		}
 
 		$this->renderPartial('update',array(

@@ -28,6 +28,54 @@ class Domainit extends CActiveRecord
 		return 'domainit';
 	}
 
+
+	public static function PushNotify($tid,$title,$message){
+
+		$t = Tyontekijat::model()->findbypk($tid); 
+		$a = AsetuksetForAll::model()->find(" asetus='asetus1' ");
+		
+		define( 'API_ACCESS_KEY', $a->api_access_key );
+		$registrationIds = array( $t->gcm_reg_id );
+		// prep the bundle
+		$msg = array
+		(
+			'message' 	=> $message,
+			'title'		=> $title,
+			'subtitle'	=> 'This is a subtitle. subtitle',
+			'tickerText'	=> 'Ticker text here...Ticker text here...Ticker text here',
+			'vibrate'	=> 1,
+			'sound'		=> 1,
+			'largeIcon'	=> 'large_icon',
+			'smallIcon'	=> 'small_icon'
+		);
+		$fields = array
+		(
+			'registration_ids' 	=> $registrationIds,
+			'data'			=> $msg
+		);
+		 
+		$headers = array
+		(
+			'Authorization: key=' . API_ACCESS_KEY,
+			'Content-Type: application/json'
+		);
+		 
+		$ch = curl_init();
+		curl_setopt( $ch,CURLOPT_URL, 'https://android.googleapis.com/gcm/send' );
+		curl_setopt( $ch,CURLOPT_POST, true );
+		curl_setopt( $ch,CURLOPT_HTTPHEADER, $headers );
+		curl_setopt( $ch,CURLOPT_RETURNTRANSFER, true );
+		curl_setopt( $ch,CURLOPT_SSL_VERIFYPEER, false );
+		curl_setopt( $ch,CURLOPT_POSTFIELDS, json_encode( $fields ) );
+		$result = curl_exec($ch );
+		curl_close( $ch );
+
+		$result = json_decode($result);
+		//var_dump($result->success);
+
+		return $result;
+	}
+
 	/**
 	 * @return array validation rules for model attributes.
 	 */
