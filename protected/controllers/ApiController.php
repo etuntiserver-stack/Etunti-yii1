@@ -194,7 +194,8 @@ public function actionImei($dom)
 		    $criteria->order = " DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d'),alku ASC ";
 		    $criteria->condition = " 
 				tid = '".$ttekija->id."' 
-				and DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE() 
+				and DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') 
+				BETWEEN CURDATE() AND DATE_ADD(CURDATE() , INTERVAL 1 WEEK)
 		    ";
 	            $tvuoro = Tyovuoroot::model()->findAll($criteria);
 

@@ -52,6 +52,7 @@ var_dump($result->success);
 $callpush = Domainit::PushNotify(38,"title","mess");
 print_r($callpush->success);
 */
+
 ?>
 
 
@@ -194,4 +195,4 @@ $(document).ready(function(){
 </script>
 
 
-
+;
