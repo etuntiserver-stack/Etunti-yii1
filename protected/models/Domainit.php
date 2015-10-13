@@ -44,7 +44,7 @@ class Domainit extends CActiveRecord
 			'subtitle'	=> 'This is a subtitle. subtitle',
 			'tickerText'	=> 'Ticker text here...Ticker text here...Ticker text here',
 			'vibrate'	=> 1,
-			'sound'		=> 1,
+			'sound'		=> 'beep37.wav',
 			'largeIcon'	=> 'large_icon',
 			'smallIcon'	=> 'small_icon'
 		);
