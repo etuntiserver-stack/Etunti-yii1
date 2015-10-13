@@ -48,10 +48,10 @@ var appPush = {
         });
 
         push.on('notification', function(data) {
-        	console.log("notification event");
+            console.log("notification event");
             console.log(JSON.stringify(data));
             var cards = document.getElementById("cards");
-            var push = '<div class="row">' +
+            var push = '<br><div class="row">' +
 		  		  '<div class="col-sm-12">' +
 				  '  <div class="alert alert-danger">' +
 				  '    <div class="card-content black-text">' +
@@ -62,8 +62,13 @@ var appPush = {
 				  ' </div>' +
 				  '</div>';
             cards.innerHTML += push;
-	    //if(data.sound == 1)
-	    //data.sound
+
+	    if(data.sound)
+	    {
+	        var snd = new Media("http://etunti.fi/etuntiAPP/SOUNDS_FOR_APP/"+data.sound);
+	        snd.play();
+	    }
+
 
         });
 

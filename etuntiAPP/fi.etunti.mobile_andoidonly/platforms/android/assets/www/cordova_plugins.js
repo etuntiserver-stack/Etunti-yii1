@@ -176,6 +176,20 @@ module.exports = [
         "clobbers": [
             "PushNotification"
         ]
+    },
+    {
+        "file": "plugins/cordova-plugin-media/www/MediaError.js",
+        "id": "cordova-plugin-media.MediaError",
+        "clobbers": [
+            "window.MediaError"
+        ]
+    },
+    {
+        "file": "plugins/cordova-plugin-media/www/Media.js",
+        "id": "cordova-plugin-media.Media",
+        "clobbers": [
+            "window.Media"
+        ]
     }
 ];
 module.exports.metadata = 
@@ -187,7 +201,8 @@ module.exports.metadata =
     "cordova-plugin-geolocation": "1.0.2-dev",
     "org.hygieiasoft.cordova.uid": "1.1.0",
     "org.apache.cordova.file": "1.3.3",
-    "phonegap-plugin-push": "1.3.0"
+    "phonegap-plugin-push": "1.3.0",
+    "cordova-plugin-media": "1.0.1"
 }
 // BOTTOM OF METADATA
 });
