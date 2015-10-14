@@ -33,14 +33,6 @@
         "is_top_level": true,
         "variables": {}
     },
-    "org.hygieiasoft.cordova.uid": {
-        "source": {
-            "type": "registry",
-            "id": "org.hygieiasoft.cordova.uid"
-        },
-        "is_top_level": true,
-        "variables": {}
-    },
     "org.apache.cordova.file": {
         "source": {
             "type": "registry",
