@@ -496,10 +496,10 @@ class TyovuorootController extends Controller
 			   $k = Kohteet::model()->findbypk($model->kohde);
 			   if(isset($k->osoite) and !empty($k->osoite))
 			   {
-				$pushviesti = "<h3>Uusi työvuoro</h3><br>
-					<b>".$model->pvm."</b><br>
-					".$model->alku."-".$model->loppu." <b>".$k->osoite."</b>
-					<br><p>".$model->tietoja."</p>";
+				$pushviesti = "Uusi työvuoro\n
+					".$model->pvm."
+					".$model->alku."-".$model->loppu." ".$k->osoite."
+					".$model->tietoja;
 
 				Domainit::PushNotify($t->id,"Hei ".$t->tekijan_nimi,$pushviesti);
 
@@ -558,10 +558,10 @@ class TyovuorootController extends Controller
 			   $k = Kohteet::model()->findbypk($model->kohde);
 			   if(isset($k->osoite) and !empty($k->osoite))
 			   {
-				$pushviesti = "<h3>Työvuorossa on muutokset</h3><br>
-					<b>".$model->pvm."</b><br>
-					".$model->alku."-".$model->loppu." <b>".$k->osoite."</b>
-					<br><p>".$model->tietoja."</p>";
+				$pushviesti = "Työvuorossa on muutokset\n
+					".$model->pvm."
+					".$model->alku."-".$model->loppu." ".$k->osoite."
+					".$model->tietoja;
 
 				Domainit::PushNotify($t->id,"Hei ".$t->tekijan_nimi,$pushviesti);
 
