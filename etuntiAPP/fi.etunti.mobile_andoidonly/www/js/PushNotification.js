@@ -56,7 +56,7 @@ var appPush = {
 				  '  <div class="alert alert-danger">' +
 				  '    <div class="card-content black-text">' +
 				  '      <span class="card-title black-text">' + data.title + '</span>' +
-				  '      <p>' + data.message + '</p>' +
+				  '      <p>' + data.message.replace(/\n/g,"<br>") + '</p>' +
 				  '    </div>' +
 				  '  </div>' +
 				  ' </div>' +

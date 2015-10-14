@@ -3,24 +3,21 @@ $(document).ready(function(){
 
   $("#odotta").html("<img src='img/search.gif'>");
 
-  var timer = setTimeout(tiedot,5000); 
-  var asset = 'file:///android_asset/www/sounds/beep26.wav';
+	var timer = setTimeout(tiedot,3000); 
+	var asset = 'file:///android_asset/www/sounds/beep26.wav';
 
 	    document.addEventListener("deviceready", onDeviceReady, false);
 	    function onDeviceReady() {
 
-
 	        navigator.geolocation.getCurrentPosition(onSuccess, onError);
 		//var watchID = navigator.geolocation.watchPosition(onSuccess, onError, { timeout: 30000 });
-
-		document.getElementById("all").style.display = "block";
 
 	    }
 	    function onSuccess(position) {
 	        document.getElementById('location').value = position.coords.latitude + '/' + position.coords.longitude;
 		document.getElementById('olenEksynyt').style.display="block";
-		clearTimeout(timer);
-		tiedot();
+		//clearTimeout(timer);
+		//tiedot();
 	    }
 	    function onError(error) {
 	        alert('code: '    + error.code    + '\n' +
@@ -55,7 +52,8 @@ $(document).ready(function(){
 		set();
 
 	} else {
-		setTimeout(function(){document.location.href = "asetukset.html";},500);
+		//setTimeout(function(){document.location.href = "asetukset.html";},500);
+		$("#domainBlokki").show();
 		return false;
  	}
 	
@@ -331,14 +329,16 @@ function row(tilanne,st){
 		  $("#tekija").html("<div class='alert alert-danger'>"+sp[1]+"</div>").show();
 		  $("#odotta").fadeOut(370);
 		  return false;
-		} 
+		} else {
 
-		//$('#tietoja').fadeOut(370);
-		$("#odotta").hide('slow');
-		$("#domainBlokki").hide();
-		$("#result").append(sp+"\n");
+		  //$('#tietoja').fadeOut(370);
+		  $("#all").show('slow');
+		  $("#odotta").hide('slow');
+		  $("#domainBlokki").hide();
+		  $("#result").append(sp+"\n");
+		  $("#tekija").html(sp[5]+ '<br>' + domain);
 
-		$("#tekija").html(sp[5]+ '<br>' + domain);
+		}
 
 		if((sp[0] == '3') || (sp[0] == '2') || (sp[0] == '10')){
 		  $("#osoite").show(370);

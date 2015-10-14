@@ -36,7 +36,8 @@
 		    document.getElementById('domain').value = spFile[0];
 		    document.getElementById('email').value = spFile[1];
 		    document.getElementById('salasana').value = spFile[2];
-			
+
+		
 	        };
 	        reader.readAsText(file);
 	    }
