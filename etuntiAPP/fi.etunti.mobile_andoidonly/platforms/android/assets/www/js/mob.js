@@ -307,7 +307,7 @@ function row(tilanne,st){
 		  $("#all").hide();
 		  $("#olenEksynyt").hide();
 		  return false;
-		} else {
+		} 
 
 		  //$('#tietoja').fadeOut(370);
 		  $("#odotta").hide('slow');
@@ -315,7 +315,6 @@ function row(tilanne,st){
 		  $("#result").append(sp+"\n");
 		  $("#tekija").html(sp[5]+ '<br>' + domain);
 
-		}
 
 		if((sp[0] == '3') || (sp[0] == '2') || (sp[0] == '10')){
 		  $("#osoite").show(370);
