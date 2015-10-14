@@ -91,6 +91,10 @@ for($day= 1; $day <= 7; $day++) {
 	else
 	  $al = '';
 
+	$expl = explode("/",$t->tyoajanlaatu);
+	if(empty($k['osoite']) and isset($expl[0]))
+		$k['osoite'] = $expl[0];
+
 	echo $al.' '.$k['osoite'].'<br>';
     }
   }
