@@ -101,7 +101,7 @@ $loppui = date("H:i",strtotime($s->loppui));
 		  $ohje .= "\n\nTietoja:\n".$m->tietoja;
 		if(!empty($m->muut))
 		  $ohje .= "\n\nMuut:\n".$m->muut;
-		echo '<textarea class="form-control" rows="12">'.$ohje.'</textarea>';
+		echo '<textarea class="form-control" rows="12" >'.$ohje.'</textarea>';
 	?>
 	</div>
 
@@ -112,7 +112,7 @@ $loppui = date("H:i",strtotime($s->loppui));
 </div><!-- form -->
 
 	<div class="modal-footer">
-		<?php echo CHtml::Button('Sulje',array('class'=>'btn btn-default','data-dismiss'=>'modal')); ?>
+		<span class="btn btn-default" data-dismiss="modal">Sulje</span>
 		<?php echo CHtml::Button('Tallenna',array('class'=>'btn btn-primary uusiTot')); ?>
 	</div>		
 		</div> <!-- end modal-content -->

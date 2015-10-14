@@ -109,7 +109,7 @@ $model->loppui = date("H:i",strtotime($model->loppui));
 
 
 	<div class="modal-footer">
-		<?php echo CHtml::Button('Sulje',array('class'=>'btn btn-default','data-dismiss'=>'modal')); ?>
+		<span class="btn btn-default" data-dismiss="modal">Sulje</span>
 		<?php echo CHtml::submitButton($model->isNewRecord ? 'Luo' : 'Tallenna',array('class'=>'btn btn-primary updTot')); ?>
 	</div>		
 		</div> <!-- end modal-content -->
