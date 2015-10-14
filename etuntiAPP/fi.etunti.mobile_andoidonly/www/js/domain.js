@@ -31,26 +31,20 @@
 	            console.log("Read as text");
 	            console.log(evt.target.result);
 
+	    var spFile = evt.target.result.split("//");
+
             var fordm = '<label>Domaini</label>' +
-		'<input type="text" class="form-control" id="domain" name="srch-term" id="srch-term">' +
+		'<input type="text" class="form-control" id="domain" name="srch-term" id="srch-term" value="'+spFile[0]+'">' +
 		'<label>Työntekijän sähköposti</label>' +
-		'<input type="text" class="form-control" id="email" name="srch-term" id="srch-term">' +
+		'<input type="text" class="form-control" id="email" name="srch-term" id="srch-term" value="'+spFile[1]+'">' +
 		'<label>Työntekijän salasana</label>' +
-		'<input type="password" class="form-control" id="salasana" name="srch-term" id="srch-term"><br>' +
+		'<input type="password" class="form-control" id="salasana" name="srch-term" id="srch-term" value="'+spFile[2]+'"><br>' +
 		'<button class="btn btn-primary btn-group-justified aloita" type="button">' +
 		'<i class="glyphicon glyphicon-warning-sign"> Tallenna</i></button>';
 
-            dm.innerHTML += fordm;
+            	dm.innerHTML += fordm;
 
-
-
-		    var spFile = evt.target.result.split("//");
-
-		    document.getElementById('domain').value = spFile[0];
-		    document.getElementById('email').value = spFile[1];
-		    document.getElementById('salasana').value = spFile[2];
-
-		    document.getElementById('all').style.display="block";
+		document.getElementById('all').style.display="block";
 		
 	        };
 	        reader.readAsText(file);
