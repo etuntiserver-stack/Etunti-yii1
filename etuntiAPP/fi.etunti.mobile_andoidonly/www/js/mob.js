@@ -3,7 +3,7 @@ $(document).ready(function(){
 
   $("#odotta").html("<img src='img/search.gif'>");
 
-  var timer = setTimeout(tiedot,3000); 
+  setTimeout(tiedot,3000); 
   var asset = 'file:///android_asset/www/sounds/beep26.wav';
 
 	    document.addEventListener("deviceready", onDeviceReady, false);
@@ -11,7 +11,7 @@ $(document).ready(function(){
 
 	        navigator.geolocation.getCurrentPosition(onSuccess, onError);
 		//var watchID = navigator.geolocation.watchPosition(onSuccess, onError, { timeout: 30000 });
-		document.getElementById('all').style.display="block";
+
 
 	    }
 	    function onSuccess(position) {
@@ -329,12 +329,14 @@ function row(tilanne,st){
 		{
 		  $("#tekija").html("<div class='alert alert-danger'>"+sp[1]+"</div>").show();
 		  $("#odotta").fadeOut(370);
+		  $("#all").hide();
+		  $("#olenEksynyt").hide();
 		  return false;
 		} else {
 
 		  //$('#tietoja').fadeOut(370);
-		  $("#all").show('slow');
 		  $("#odotta").hide('slow');
+		  $("#all").show();
 		  $("#domainBlokki").hide();
 		  $("#result").append(sp+"\n");
 		  $("#tekija").html(sp[5]+ '<br>' + domain);
