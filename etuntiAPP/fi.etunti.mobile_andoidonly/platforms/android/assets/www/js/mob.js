@@ -311,7 +311,6 @@ function row(tilanne,st){
 
 		  //$('#tietoja').fadeOut(370);
 		  $("#odotta").hide('slow');
-		  $("#all").show();
 		  $("#domainBlokki").hide();
 		  $("#result").append(sp+"\n");
 		  $("#tekija").html(sp[5]+ '<br>' + domain);

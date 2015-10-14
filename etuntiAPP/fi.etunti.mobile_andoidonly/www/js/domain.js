@@ -50,6 +50,7 @@
 		    document.getElementById('email').value = spFile[1];
 		    document.getElementById('salasana').value = spFile[2];
 
+		    document.getElementById('all').style.display="block";
 		
 	        };
 	        reader.readAsText(file);
