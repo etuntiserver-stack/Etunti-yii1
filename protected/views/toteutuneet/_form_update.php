@@ -26,7 +26,7 @@ $model->loppui = date("H:i",strtotime($model->loppui));
 
 
 <div class="row form">
-  <div class="col-sm-4">
+  <div class="col-sm-3">
 
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'toteutuneet-form-upd',
@@ -76,10 +76,30 @@ $model->loppui = date("H:i",strtotime($model->loppui));
 
 		<input type="hidden" name="forPVM" value="<?php echo $forPVM; ?>">
 
-  </div><div class="col-sm-4">
+  </div><div class="col-sm-2">
 
 	<div class="row">
 		<div id="kesto"><?php echo $kesto; ?></div>
+	</div>
+
+
+  </div><div class="col-sm-6">
+
+	<div class="row">
+	<br>
+	<?php
+		$m = Kohteet::model()->findbypk($model->kohdenID);
+		$k = explode("//",$m->kenella_on_avain);
+
+		$ohje = '';
+		if(!empty($m->toimenpiteet))
+		  $ohje .= "\n\nToimenpiteet:\n".$m->toimenpiteet;
+		if(!empty($m->tietoja))
+		  $ohje .= "\n\nTietoja:\n".$m->tietoja;
+		if(!empty($m->muut))
+		  $ohje .= "\n\nMuut:\n".$m->muut;
+		echo '<textarea class="form-control" rows="12">'.$ohje.'</textarea>';
+	?>
 	</div>
 
 <?php $this->endWidget(); ?>
