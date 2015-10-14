@@ -93,6 +93,15 @@ for($day= 1; $day <= 7; $day++) {
   echo '<tr>';
   echo '<td width="50">'.$paivat[date('N',$d)].'<br>'.$date.'</td>';
   echo '<td width="300">';
+
+  $criteria = new CDbCriteria();
+  $criteria->condition = "  
+  tid = '".$tt->id."'
+  AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d')  
+  BETWEEN  '".date('Y-m-d',strtotime($year ."W". $week .'1'))."' AND '".date('Y-m-d',strtotime($year ."W". $week .'7'))."' 
+  AND pvm!='' ";
+  $tv = Tyovuoroot::model()->findAll($criteria);
+
   foreach($tv as $t)
   {
     if($t->pvm == $date)
