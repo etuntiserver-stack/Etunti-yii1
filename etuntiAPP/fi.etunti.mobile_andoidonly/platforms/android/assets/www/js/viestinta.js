@@ -44,7 +44,7 @@ function set(){
 		  return false;
 		} 
 
-		$("#odotta").hide();
+		$("#odotta").hide('slow');
 		$("#domainBlokki").hide();
 		$("#viestit").html(data);
 

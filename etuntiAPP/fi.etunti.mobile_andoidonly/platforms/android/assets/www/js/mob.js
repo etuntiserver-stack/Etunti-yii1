@@ -4,7 +4,6 @@ $(document).ready(function(){
   $("#odotta").html("<img src='img/search.gif'>");
 
   setTimeout(tiedot,3000); 
-  var asset = 'file:///android_asset/www/sounds/beep26.wav';
 
 	    document.addEventListener("deviceready", onDeviceReady, false);
 	    function onDeviceReady() {
@@ -83,14 +82,6 @@ function stateFalse(){
 
 $('input[name="tyo"]').on('switchChange.bootstrapSwitch', function(event, state) {
 
-
-    media = new Media(asset, function() {
-        console.log("works")
-    }, function(r) {
-        console.log("do not work", r)
-    });
-    media.play();
-
   console.log(state); 
   if(state == true)
   {
@@ -104,14 +95,6 @@ $('input[name="tyo"]').on('switchChange.bootstrapSwitch', function(event, state)
 
 $('input[name="matka"]').on('switchChange.bootstrapSwitch', function(event, state) {
 
-
-    media = new Media(asset, function() {
-        console.log("works")
-    }, function(r) {
-        console.log("do not work", r)
-    });
-    media.play();
-
   console.log(state); 
   if(state == true)
   {
@@ -122,14 +105,6 @@ $('input[name="matka"]').on('switchChange.bootstrapSwitch', function(event, stat
 });
 
 $('input[name="lounas"]').on('switchChange.bootstrapSwitch', function(event, state) {
-
-
-    media = new Media(asset, function() {
-        console.log("works")
-    }, function(r) {
-        console.log("do not work", r)
-    });
-    media.play();
 
   console.log(state); 
   if(state == true)
