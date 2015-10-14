@@ -43,7 +43,6 @@
 		'<i class="glyphicon glyphicon-warning-sign"> Tallenna</i></button>';
 
             	dm.innerHTML += fordm;
-
 		document.getElementById('all').style.display="block";
 		
 	        };

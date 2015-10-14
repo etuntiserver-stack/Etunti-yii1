@@ -18,13 +18,6 @@ module.exports = [
         ]
     },
     {
-        "file": "plugins/org.hygieiasoft.cordova.uid/www/uid.js",
-        "id": "org.hygieiasoft.cordova.uid.uid",
-        "clobbers": [
-            "cordova.plugins.uid"
-        ]
-    },
-    {
         "file": "plugins/org.apache.cordova.file/www/DirectoryEntry.js",
         "id": "org.apache.cordova.file.DirectoryEntry",
         "clobbers": [
@@ -199,7 +192,6 @@ module.exports.metadata =
     "com.chariotsolutions.nfc.plugin": "0.6.2",
     "org.apache.cordova.device": "0.3.0",
     "cordova-plugin-geolocation": "1.0.2-dev",
-    "org.hygieiasoft.cordova.uid": "1.1.0",
     "org.apache.cordova.file": "1.3.3",
     "phonegap-plugin-push": "1.3.0",
     "cordova-plugin-media": "1.0.1"
