@@ -3,14 +3,15 @@ $(document).ready(function(){
 
   $("#odotta").html("<img src='img/search.gif'>");
 
-	var timer = setTimeout(tiedot,3000); 
-	var asset = 'file:///android_asset/www/sounds/beep26.wav';
+  var timer = setTimeout(tiedot,3000); 
+  var asset = 'file:///android_asset/www/sounds/beep26.wav';
 
 	    document.addEventListener("deviceready", onDeviceReady, false);
 	    function onDeviceReady() {
 
 	        navigator.geolocation.getCurrentPosition(onSuccess, onError);
 		//var watchID = navigator.geolocation.watchPosition(onSuccess, onError, { timeout: 30000 });
+		document.getElementById('all').style.display="block";
 
 	    }
 	    function onSuccess(position) {
