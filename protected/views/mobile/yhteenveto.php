@@ -51,13 +51,13 @@ $this->breadcrumbs=array(
    <b class="glyphicon glyphicon-calendar"></b>
    <input type="text" name="to" id="to" class="form-control form-group input-sm datepicker" value="<?php echo Yii::app()->session['to']; ?>">
 
-   <input type="submit" class="btn btn-primary" value="<?php echo Yii::t('main', 'haku'); ?>">
+   <input type="submit" class="btn btn-primary btn-sm" value="<?php echo Yii::t('main', 'haku'); ?>">
    </form>
 
    <!-- tulostus -->
    <div class="pull-right">
      <form action="#" target="_blank" method="POST">
-      <input type="submit" name="tulosta" class="btn btn-success" value="PDF">
+      <input type="submit" name="tulosta" class="btn btn-success btn-sm" value="PDF">
      </form>
    </div>
    <!-- tulostus -->
