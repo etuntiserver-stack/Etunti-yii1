@@ -99,15 +99,15 @@ td .tp{
    <div class="row pull-right">
 	<i id="trash"></i> 
 	<i id="clear"></i> 
-	<i class="glyphicon glyphicon-download-alt btn btn-success btn-group" id="autoInsert"></i>
-	<i class="glyphicon glyphicon-new-window btn btn-danger btn-group" id="autoRemove"></i>
+	<i class="glyphicon glyphicon-download-alt btn btn-success btn-sm btn-group" id="autoInsert"></i>
+	<i class="glyphicon glyphicon-new-window btn btn-danger btn-sm btn-group" id="autoRemove"></i>
    </div>
 
 <div class="row">
   <form action="#" id="yhtveto" class="form-inline" method="POST">
 
-   <a href="#" id="deselAll" class="btn btn-default glyphicon glyphicon-minus"></a>
-   <a href="#" id="selAll" class="btn btn-default glyphicon glyphicon-plus"></a>  
+   <a href="#" id="deselAll" class="btn btn-default btn-sm glyphicon glyphicon-minus"></a>
+   <a href="#" id="selAll" class="btn btn-default btn-sm glyphicon glyphicon-plus"></a>  
 
    <?php
    $criteria = new CDbCriteria();
@@ -115,7 +115,7 @@ td .tp{
    $criteria->condition = " aktiivinen='1' ";
 
     $list = CHtml::listData(Tyontekijat::model()->findAll($criteria), 'id', 'tekijan_nimi');
-    echo '<select name="Tekija[]" id="tyontekijat" class="selectpicker" multiple class="" title="Työntekijät">';
+    echo '<select name="Tekija[]" id="tyontekijat" class="selectpicker btn-sm" multiple title="Työntekijät">';
     foreach($list as $key=>$val){
        if(isset(Yii::app()->session['Tekija']) and in_array($key,Yii::app()->session['Tekija']))
        	 echo '<option value="'.$key.'" selected>'.$val.'</option>';
@@ -124,11 +124,12 @@ td .tp{
     }
     echo '</select>';
    ?>
+   <b class="glyphicon glyphicon-calendar"></b>
+   <input type="text" name="from" id="from" class="form-control form-group input-sm datepicker" value="<?php echo Yii::app()->session['from']; ?>">
+   <b class="glyphicon glyphicon-calendar"></b>
+   <input type="text" name="to" id="to" class="form-control form-group input-sm datepicker" value="<?php echo Yii::app()->session['to']; ?>">
 
-   <input type="text" name="from" id="from" class="form-control form-group datepicker" value="<?php echo Yii::app()->session['from']; ?>">
-   <input type="text" name="to" id="to" class="form-control form-group datepicker" value="<?php echo Yii::app()->session['to']; ?>">
-
-   <input type="submit" class="btn btn-primary" value="<?php echo Yii::t('main', 'haku'); ?>">
+   <input type="submit" class="btn btn-primary btn-sm" value="<?php echo Yii::t('main', 'haku'); ?>">
    </form>
 
 </div>

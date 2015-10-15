@@ -18,7 +18,6 @@ $this->menu=array(
 <legend>
   <div class="pull-right form-inline">
   	<span class="form-control input-sm form-group klo"></span>
-  	<button class="btn btn-sm btn-info" data-toggle="collapse"  data-target="#haku"><?php echo Yii::t('main', 'Haku'); ?> <b class="caret"></b></button>
   </div>
   <h1> 
 	<?php echo Yii::t('main', 'TUNNIT'); ?> <i class="glyphicon glyphicon-phone"></i> 
@@ -194,7 +193,7 @@ $fi = array(
 
 <br>
 
- <div class="row collapse" id="haku">
+ <div class="row" id="haku">
    <div class="col-sm-12">
 
    <div class="pull-right">

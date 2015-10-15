@@ -10,11 +10,10 @@ $this->breadcrumbs=array(
 ?>
 
 <legend>
-<button class="pull-right btn btn-info" data-toggle="collapse"  data-target="#haku"><?php echo Yii::t('main', 'Haku'); ?> <b class="caret"></b></button>
 <h1> <?php echo Yii::t('main', 'YHTEENVETO MATKAT'); ?> <i class="glyphicon glyphicon-time"></i></h1>
 </legend>
 
-<div class="row collapse" id="haku">
+<div class="row" id="haku">
   <form action="#" id="yhtveto" class="form-inline" method="POST">
   <input type="hidden" name="yhtvetoform">
   <div class="col-md-12">
@@ -35,17 +34,18 @@ $this->breadcrumbs=array(
     }
     echo '</select>';
    ?>
+   <b class="glyphicon glyphicon-calendar"></b>
+   <input type="text" name="from" id="from" class="form-control form-group input-sm datepicker" value="<?php echo Yii::app()->session['from']; ?>">
+   <b class="glyphicon glyphicon-calendar"></b>
+   <input type="text" name="to" id="to" class="form-control form-group input-smdatepicker" value="<?php echo Yii::app()->session['to']; ?>">
 
-   <input type="text" name="from" id="from" class="form-control form-group datepicker" value="<?php echo Yii::app()->session['from']; ?>">
-   <input type="text" name="to" id="to" class="form-control form-group datepicker" value="<?php echo Yii::app()->session['to']; ?>">
-
-   <input type="submit" class="btn btn-primary" value="<?php echo Yii::t('main', 'haku'); ?>">
+   <input type="submit" class="btn btn-primary btn-sm" value="<?php echo Yii::t('main', 'haku'); ?>">
    </form>
 
    <!-- tulostus -->
    <div class="pull-right">
      <form action="#" target="_blank" method="POST">
-      <input type="submit" name="tulosta" class="btn btn-success" value="PDF">
+      <input type="submit" name="tulosta" class="btn btn-success btn-sm" value="PDF">
      </form>
    </div>
    <!-- tulostus -->
