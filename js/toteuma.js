@@ -101,6 +101,7 @@ $(".totRivi").click(function(){
            url: location.protocol + "//" + location.host + '/index.php/toteutuneet/update?id='+thisVal[1],
            type: "GET",
            success: function(html){
+		console.log("update " + thisVal[1]);
 		$('#showres').modal().html(html);
            }
         });
@@ -113,11 +114,13 @@ $(".totRivi").click(function(){
            type: "POST",
 	   data: { forid : thisVal[1] },
            success: function(html){
+		console.log("create " + thisVal[1]);
 		$('#showres').modal().html(html);
            }
         });
 	}
 
+		return false;
 });
 
 

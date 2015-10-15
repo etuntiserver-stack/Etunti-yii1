@@ -12,8 +12,8 @@ if(isset($_POST['forid'])){
 
 $kesto = '<h1>'.$this->sprint(strtotime($s->loppui)-strtotime($s->aloitan)).'</h1>';
 $forPVM = date('d.m.Y',strtotime($s->aloitan));
-$aloitan = date("H:i",strtotime($s->aloitan));
-$loppui = date("H:i",strtotime($s->loppui));
+//$aloitan = date("H:i",strtotime($s->aloitan));
+//$loppui = date("H:i",strtotime($s->loppui));
 ?>
 
 
@@ -71,13 +71,14 @@ $loppui = date("H:i",strtotime($s->loppui));
 	</div>
 
 	<div class="row">
+		<span class="text-danger small"><?php echo Yii::t('','valitse päivämäärä ja tunnit sitten muoka'); ?></span>
 		<?php echo $form->labelEx($model,'aloitan'); ?>
-		<?php echo $form->textField($model,'aloitan',array('value'=>$aloitan,'size'=>60,'maxlength'=>100,'class'=>'form-control timepicker al')); ?>
+		<?php echo $form->textField($model,'aloitan',array('value'=>$s->aloitan,'size'=>60,'maxlength'=>100,'class'=>'form-control datetimepicker al')); ?>
 	</div>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'loppui'); ?>
-		<?php echo $form->textField($model,'loppui',array('value'=>$loppui,'size'=>60,'maxlength'=>100,'class'=>'form-control timepicker lp')); ?>
+		<?php echo $form->textField($model,'loppui',array('value'=>$s->loppui,'size'=>60,'maxlength'=>100,'class'=>'form-control datetimepicker lp')); ?>
 	</div>
 
   </div><div class="col-sm-2">

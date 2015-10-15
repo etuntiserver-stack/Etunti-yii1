@@ -15,10 +15,13 @@
 
        		$criteria = new CDbCriteria();
         	$criteria->select = "
-		TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s'))) as l_tunnit,
-		t.id,t.aloitan,t.loppui";
+		TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s'))) as l_tunnit,aloitan,loppui
+		";
 
-        	$criteria->condition = "  tid = '".$data->tid."' and aloitan !='' and loppui !='' ";
+        	$criteria->condition = "  
+			tid = '".$data->tid."' and aloitan !='' and loppui !='' 
+			AND id NOT IN(select kid from sivexkuitti_repaired)
+		";
 
 		if(Yii::app()->session['Lounastauko'])
 	        $criteria->addCondition (" status != '10' ");
@@ -30,34 +33,49 @@
 	        $criteria->addCondition ("DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."' ");
 
 		$lu = Mobile::model()->findAll($criteria);
-
-		foreach($lu as $val)
+		foreach($lu as $l)
 		{
-
-			$tot = Toteutuneet::model()->find(" kid = '".$val->id."' ");
-
-			if(isset($tot['id']))
-			{
-			  $val->l_tunnit = (strtotime($tot['loppui'])-strtotime($tot['aloitan']));
-			  $al = explode(" ",$tot['aloitan']);
-			  $lop = explode(" ",$tot['loppui']);
-			} else {
-			  $al = explode(" ",$val->aloitan);
-			  $lop = explode(" ",$val->loppui);
-			}
-
-			// Toteutuneet
-			$total_l += $val->l_tunnit;
-			// Ilta
-			$totalIlta += $this->ilta($al,$lop);
-			// Yo
-			$totalYo += $this->yo($al,$lop);
-			// Suunnuntai
-			if(date('N', strtotime($al[0])) == 7)
-			$totalSu += (strtotime($lop[0]." ".$lop[1])-strtotime($al[0]." ".$al[1]));
-
+		    $l->l_tunnit = (strtotime($l->loppui)-strtotime($l->aloitan));
+		    $al = explode(" ",$l->aloitan);
+		    $lop = explode(" ",$l->loppui);
+		    $totalIlta += $this->ilta($al,$lop);
+		    $totalYo += $this->yo($al,$lop);
+		    $total_l += $l->l_tunnit;
+		    if(date('N', strtotime($al[0])) == 7)
+		    $totalSu += (strtotime($lop[0]." ".$lop[1])-strtotime($al[0]." ".$al[1]));
 		}
+		/* ////////////////////////// */
 
+       		$criteria = new CDbCriteria();
+        	$criteria->select = "
+		TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s'))) as l_tunnit,aloitan,loppui 
+		";
+
+        	$criteria->condition = "  
+			tid = '".$data->tid."' and aloitan !='' and loppui !='' 
+		";
+
+		if(Yii::app()->session['Lounastauko'])
+	        $criteria->addCondition (" status != '10' ");
+
+		if(Yii::app()->session['MATKA'])
+	        $criteria->addCondition (" status != '2' ");
+
+		if(Yii::app()->session['from'] and Yii::app()->session['to'])
+	        $criteria->addCondition ("DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."' ");
+
+		$tot = Toteutuneet::model()->findAll($criteria);
+		foreach($tot as $l)
+		{
+		    $l->l_tunnit = (strtotime($l->loppui)-strtotime($l->aloitan));
+		    $al = explode(" ",$l->aloitan);
+		    $lop = explode(" ",$l->loppui);
+		    $totalIlta += $this->ilta($al,$lop);
+		    $totalYo += $this->yo($al,$lop);
+		    $total_l += $l->l_tunnit;
+		    if(date('N', strtotime($al[0])) == 7)
+		    $totalSu += (strtotime($lop[0]." ".$lop[1])-strtotime($al[0]." ".$al[1]));
+		}
 
 		$total = $total_l;
 
