@@ -307,6 +307,7 @@ class MobileController extends Controller
 
 
 
+
 		  $("#Kohteet_id").on('change',function(){
 
 			var kohdenID = $("#sainkohdenID").val().split("_");
@@ -565,7 +566,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 	    if($al[0] == $lop[0])
 	    {
 
-	  	if(strtotime($al[0]." ".$al[1]) >= strtotime($al[0]." 18:00")
+	  	if(strtotime($al[0]." ".$al[1]) > strtotime($al[0]." 18:00")
 		and strtotime($lop[0]." ".$lop[1]) <= strtotime($lop[0]." 23:00"))
 		{
 	   	  $strAl0 = strtotime($al[0]." ".$al[1]);
@@ -574,7 +575,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 	 	  $str = ($strLop0-$strAl0);
 	      	  $totalIlta += $str;
 		}
-/*
+
 	  	if(strtotime($al[0]." ".$al[1]) <= strtotime($al[0]." 18:00")
 		and strtotime($lop[0]." ".$lop[1]) <= strtotime($lop[0]." 23:00")
 		and strtotime($lop[0]." ".$lop[1]) >= strtotime($lop[0]." 18:00"))
@@ -585,7 +586,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 	 	  $str = ($strLop0-$strAl0);
 	      	  $totalIlta += $str;
 		}
-*/
+
 	  	if(strtotime($al[0]." ".$al[1]) <= strtotime($al[0]." 18:00")
 		and strtotime($lop[0]." ".$lop[1]) >= strtotime($lop[0]." 23:00"))
 		{
@@ -618,52 +619,47 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		$totalYo = 0;
 
 
-	 	if(strtotime($al[0]." ".$al[1]) <= strtotime($al[0]." 06:00") 
-		and strtotime($lop[0]." ".$lop[1]) > strtotime($lop[0]." 06:00"))
+	  	if(strtotime($al[0]." ".$al[1]) >= strtotime($al[0]." 23:00")
+		and strtotime($lop[0]." ".$lop[1]) <= strtotime($lop[0]." 06:00"))
 		{
+	   	  $strAl0 = strtotime($al[0]." ".$al[1]);
+	   	  $strLop0 = strtotime($lop[0]." ".$lop[1]);
 
-		   if($al[0] == $lop[0])
-		   {
-
-
-		   $strAl = strtotime($al[0]." ".$al[1]);
-		   $strLop = strtotime($lop[0]." 06:00");
-		   }
-
-		   $str = ($strLop-$strAl);
-		   $totalYo += $str;
-	  	} 
-
-	 	if(strtotime($al[0]." ".$al[1]) <= strtotime($al[0]." 23:00") 
-		and $lop[0] != $al[0])
-		{
-		   $str = 3600;
-		   $totalYo += $str;
-	  	} 
-
-	 	if(strtotime($al[0]." ".$al[1]) >= strtotime($al[0]." 23:00") 
-		and strtotime($al[0]." ".$al[1]) <= strtotime($al[0]." 00:00"))
-		{
-
-		   $strAl = strtotime($al[0]." ".$al[1]);
-		   $strLop = strtotime($al[0]." 00:00");
-
-		   $str = ($strLop-$strAl);
-		   $totalYo += $str;
-
+	 	  $str = ($strLop0-$strAl0);
+	      	  $totalYo += $str;
 		}
 
-	 	if(strtotime($lop[0]." ".$lop[1]) >= strtotime($lop[0]." 00:00") 
-		and $lop[0] != $al[0])
+	  	if(strtotime($al[0]." ".$al[1]) <= strtotime($al[0]." 23:00")
+		and strtotime($lop[0]." ".$lop[1]) <= strtotime($lop[0]." 06:00")
+		and strtotime($lop[0]." ".$lop[1]) >= strtotime($lop[0]." 23:00"))
 		{
+	   	  $strAl0 = strtotime($al[0]." 23:00");
+	   	  $strLop0 = strtotime($lop[0]." ".$lop[1]);
 
-		   $strAl = strtotime($lop[0]." 00:00");
-		   $strLop = strtotime($lop[0]." ".$lop[1]);
+	 	  $str = ($strLop0-$strAl0);
+	      	  $totalYo += $str;
+		}
 
-		   $str = ($strLop-$strAl);
-		   $totalYo += $str;
-	  	}   
+	  	if(strtotime($al[0]." ".$al[1]) <= strtotime($al[0]." 23:00")
+		and strtotime($lop[0]." ".$lop[1]) >= strtotime($lop[0]." 06:00"))
+		{
+	   	  $strAl0 = strtotime($al[0]." 23:00");
+	   	  $strLop0 = strtotime($lop[0]." 06:00");
 
+	 	  $str = ($strLop0-$strAl0);
+	      	  $totalYo += $str;
+		}
+
+	  	if(strtotime($al[0]." ".$al[1]) >= strtotime($al[0]." 23:00")
+		and strtotime($lop[0]." ".$lop[1]) >= strtotime($lop[0]." 06:00"))
+		{
+	   	  $strAl0 = strtotime($al[0]." ".$al[1]);
+	   	  $strLop0 = strtotime($lop[0]." 06:00");
+
+	 	  $str = ($strLop0-$strAl0);
+
+	      	  $totalYo += $str;
+		}
 
 		if($totalYo > 0)
 		return $totalYo;

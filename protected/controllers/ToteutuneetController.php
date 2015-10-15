@@ -191,8 +191,8 @@ class ToteutuneetController extends Controller
 
 			$k = Kohteet::model()->findbypk($_POST['Toteutuneet']['kohde_kannasta']);
 			$model->attributes=$_POST['Toteutuneet'];
-			$model->aloitan = date("d.m.Y H:i:s",strtotime($_POST['forPVM'].' '.$_POST['Toteutuneet']['aloitan']));
-			$model->loppui = date("d.m.Y H:i:s",strtotime($_POST['forPVM'].' '.$_POST['Toteutuneet']['loppui']));
+			$model->aloitan = date("d.m.Y H:i:s",strtotime($_POST['Toteutuneet']['aloitan']));
+			$model->loppui = date("d.m.Y H:i:s",strtotime($_POST['Toteutuneet']['loppui']));
 			$model->kohdenID=$k->id;			
 			$model->kohde_kannasta=$k->osoite;
 
@@ -239,8 +239,8 @@ class ToteutuneetController extends Controller
 
 			$k = Kohteet::model()->findbypk($_POST['Toteutuneet']['kohde_kannasta']);
 			$model->attributes=$_POST['Toteutuneet'];
-			$model->aloitan = date("d.m.Y H:i:s",strtotime($_POST['forPVM'].' '.$_POST['Toteutuneet']['aloitan']));
-			$model->loppui = date("d.m.Y H:i:s",strtotime($_POST['forPVM'].' '.$_POST['Toteutuneet']['loppui']));
+			$model->aloitan = date("d.m.Y H:i:s",strtotime($_POST['Toteutuneet']['aloitan']));
+			$model->loppui = date("d.m.Y H:i:s",strtotime($_POST['Toteutuneet']['loppui']));
 			$model->kohdenID=$k->id;			
 			$model->kohde_kannasta=$k->osoite;
 
