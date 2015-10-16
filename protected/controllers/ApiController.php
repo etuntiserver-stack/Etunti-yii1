@@ -366,9 +366,13 @@ public function actionImei($dom)
 
 
 	        if($_POST['check'] == 'osoitevaihto'){
-	            $kohteet = Kohteet::model()->findAll(" osoite like '%".$_POST['thisKey']."%' ");
 
-		    $sel = '<select id="list" class="form-control btn btn-success">';
+		    $criteria = new CDbCriteria();
+		    $criteria->order = " osoite ";
+		    $criteria->condition = " osoite like '%".$_POST['thisKey']."%' ";
+	            $kohteet = Kohteet::model()->findAll($criteria);
+
+		    $sel = '<select id="list" class="form-control">';
 		    $sel .= '<option id="valitseOsoite">Valitse osoite</option>';
 		    foreach($kohteet as $val)
 		      $sel .= '<option value="'.$val->id.'">'.$val->osoite.'</option>';
