@@ -25,7 +25,7 @@ class SiteController extends Controller
 	{
 		return array(
 			array('allow', 
-				'actions'=>array('index','test','hyvaksy','hylkaa'),
+				'actions'=>array('index','test','hyvaksy','hylkaa','uploadfromphone'),
 				'users'=>array('*'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -58,6 +58,17 @@ class SiteController extends Controller
         $html2pdf->Output();
 
 
+	}
+
+	public function actionUploadfromphone($tyontekija,$domain,$kohdenID)
+	{
+		$model = Kohteet::model()->findbypk($kohdenID);
+
+		$this->render('uploadfromphone', array(
+			'model' => $model,
+			'tyontekija' => $tyontekija,
+			'domain' => $domain,
+		));
 	}
 
 	public function actionHyvaksy($id,$code,$domain)
