@@ -60,7 +60,7 @@ class SiteController extends Controller
 
 	}
 
-	public function actionUploadfromphone($domain,$tyontekija,$kohdenID)
+	public function actionUploadfromphone($dom,$tyontekija,$kohdenID)
 	{
 		$model = Kohteet::model()->findbypk($kohdenID);
 
