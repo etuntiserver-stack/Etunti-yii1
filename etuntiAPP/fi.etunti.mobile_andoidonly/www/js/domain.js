@@ -8,8 +8,7 @@
   var server = "http://etunti.fi";
   var url = server+"/index.php/api/mob";
   var puh_nro = "";
-  var versio = "0.50";
-
+  var versio = "1.70";
 
 
 
@@ -43,7 +42,48 @@
 		'<i class="glyphicon glyphicon-warning-sign"> Tallenna</i></button>';
 
             	dm.innerHTML += fordm;
-		document.getElementById('all').style.display="block";
+
+
+
+$(document).ready(function(){
+
+  $(".aloita").click(function(){
+	saveFile();
+  });
+
+
+  function saveFile(){
+
+    document.addEventListener("deviceready", onDeviceReadyFileSave, false);
+
+    function onDeviceReadyFileSave() {
+        window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, gotFS, fail);
+    }
+
+    function gotFS(fileSystem) {
+        fileSystem.root.getFile("etunti.cfg", {create: true, exclusive: false}, gotFileEntry, fail);
+    }
+
+    function gotFileEntry(fileEntry) {
+        fileEntry.createWriter(gotFileWriter, fail);
+    }
+
+    function gotFileWriter(writer) {
+        writer.write($("#domain").val() +"//"+$("#email").val() +"//"+$("#salasana").val());
+	  window.location.href='index.html';
+       	  //set();
+ 	  //checkviesti(domain);
+    }
+
+    function fail(error) {
+        console.log(error.code);
+    }
+  }
+
+
+});
+
+
 		
 	        };
 	        reader.readAsText(file);

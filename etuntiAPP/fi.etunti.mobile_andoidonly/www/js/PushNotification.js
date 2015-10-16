@@ -63,13 +63,6 @@ var appPush = {
 				  '</div>';
             cards.innerHTML += push;
 
-	    if(data.sound)
-	    {
-	        var snd = new Media("http://etunti.fi/etuntiAPP/SOUNDS_FOR_APP/"+data.sound);
-	        snd.play();
-	    }
-
-
         });
 
         push.on('error', function(e) {

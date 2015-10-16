@@ -183,6 +183,41 @@ module.exports = [
         "clobbers": [
             "window.Media"
         ]
+    },
+    {
+        "file": "plugins/uk.co.whiteoctober.cordova.appversion/www/AppVersionPlugin.js",
+        "id": "uk.co.whiteoctober.cordova.appversion.AppVersionPlugin",
+        "clobbers": [
+            "cordova.getAppVersion"
+        ]
+    },
+    {
+        "file": "plugins/cordova-plugin-camera/www/CameraConstants.js",
+        "id": "cordova-plugin-camera.Camera",
+        "clobbers": [
+            "Camera"
+        ]
+    },
+    {
+        "file": "plugins/cordova-plugin-camera/www/CameraPopoverOptions.js",
+        "id": "cordova-plugin-camera.CameraPopoverOptions",
+        "clobbers": [
+            "CameraPopoverOptions"
+        ]
+    },
+    {
+        "file": "plugins/cordova-plugin-camera/www/Camera.js",
+        "id": "cordova-plugin-camera.camera",
+        "clobbers": [
+            "navigator.camera"
+        ]
+    },
+    {
+        "file": "plugins/cordova-plugin-camera/www/CameraPopoverHandle.js",
+        "id": "cordova-plugin-camera.CameraPopoverHandle",
+        "clobbers": [
+            "CameraPopoverHandle"
+        ]
     }
 ];
 module.exports.metadata = 
@@ -194,7 +229,9 @@ module.exports.metadata =
     "cordova-plugin-geolocation": "1.0.2-dev",
     "org.apache.cordova.file": "1.3.3",
     "phonegap-plugin-push": "1.3.0",
-    "cordova-plugin-media": "1.0.1"
+    "cordova-plugin-media": "1.0.1",
+    "uk.co.whiteoctober.cordova.appversion": "0.1.7",
+    "cordova-plugin-camera": "1.2.0"
 }
 // BOTTOM OF METADATA
 });
