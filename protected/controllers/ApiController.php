@@ -453,6 +453,14 @@ public function actionImei($dom)
 
 	    if(isset($mob->id)){
 
+
+	    function sprint($val){
+	      if($val > 0)
+		return sprintf('%02d:%02d', $val/3600, ($val % 3600)/60);
+	    }
+
+		$kesto = '';
+
 		  $ms = '';
 		if($mob->status == 1)
 		  $ms = 'Työ';
@@ -468,7 +476,7 @@ public function actionImei($dom)
 
 		if( $mobupdate->asiakas_num != $_POST['asiakas_num'] )
 		{
-                $this->_sendResponse(200, $ms."//".$mobupdate->id."//".$mobupdate->status."//".$mob->kohde_kannasta."//tagnumerror");
+                $this->_sendResponse(200, $ms."//".$mobupdate->id."//".$mobupdate->status."//".$mob->kohde_kannasta."//tagnumerror//null");
 	        exit;
 		}
 
@@ -476,7 +484,10 @@ public function actionImei($dom)
                 $mobupdate->status = 3;
                 $mobupdate->my_location = $mobupdate->my_location."**".$_POST['my_location'];
                 $mobupdate->save();
-                $this->_sendResponse(200, $ms."//".$mobupdate->id."//".$mobupdate->status."//".$mob->kohde_kannasta."//null");
+
+		$kesto = sprint(strtotime($mobupdate->loppui)-strtotime($mobupdate->aloitan));
+
+                $this->_sendResponse(200, $ms."//".$mobupdate->id."//".$mobupdate->status."//".$mob->kohde_kannasta."//null//".$kesto);
 
 	     } elseif($mob->status == 2 and $_POST['status'] == 2)
 	     {
@@ -486,7 +497,10 @@ public function actionImei($dom)
                 $mobupdate->my_location = $mobupdate->my_location."**".$_POST['my_location'];
                 $mobupdate->viesti = $mobupdate->viesti."/".$_POST['kohde_kannasta'];
                 $mobupdate->save();
-                $this->_sendResponse(200, $ms."//".$mobupdate->id."//".$mobupdate->status."//".$mob->kohde_kannasta."//null");
+
+		$kesto = sprint(strtotime($mobupdate->loppui)-strtotime($mobupdate->aloitan));
+
+                $this->_sendResponse(200, $ms."//".$mobupdate->id."//".$mobupdate->status."//".$mob->kohde_kannasta."//null//".$kesto);
 
 	     } elseif($mob->status == 10 and $_POST['status'] == 10)
 	     {
@@ -496,7 +510,10 @@ public function actionImei($dom)
                 $mobupdate->my_location = $mobupdate->my_location."**".$_POST['my_location'];
                 $mobupdate->viesti = $mobupdate->viesti."/".$_POST['kohde_kannasta'];
                 $mobupdate->save();
-                $this->_sendResponse(200, $ms."//".$mobupdate->id."//".$mobupdate->status."//".$mob->kohde_kannasta."//null");
+
+		$kesto = sprint(strtotime($mobupdate->loppui)-strtotime($mobupdate->aloitan));
+
+                $this->_sendResponse(200, $ms."//".$mobupdate->id."//".$mobupdate->status."//".$mob->kohde_kannasta."//null//".$kesto);
 
 	     } else {
 
