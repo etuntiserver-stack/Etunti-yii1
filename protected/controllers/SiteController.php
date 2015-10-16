@@ -71,7 +71,7 @@ class SiteController extends Controller
 	
 	  $uploaddir = Yii::app()->basePath.'/../img/uploadedfromphone/'.$dom.'/';
 	  $uploadfile = $uploaddir . basename($model->id.'_'.$tyontekija.'.jpg');
-	  if (move_uploaded_file($_FILES['file']['tmp_name'], $uploadfile)) {
+	  if (move_uploaded_file($_POST['data'], $uploadfile)) {
 		echo 'ok';
 	  } else {
 		echo 'Ei onnistu!';
