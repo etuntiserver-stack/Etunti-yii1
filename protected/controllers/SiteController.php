@@ -60,15 +60,13 @@ class SiteController extends Controller
 
 	}
 
-	public function actionUploadfromphone($tyontekija,$domain,$kohdenID)
+	public function actionUploadfromphone($domain,$tyontekija,$kohdenID)
 	{
 		$model = Kohteet::model()->findbypk($kohdenID);
 
-		$this->render('uploadfromphone', array(
-			'model' => $model,
-			'tyontekija' => $tyontekija,
-			'domain' => $domain,
-		));
+		//move_uploaded_file($_FILES["file"]["tmp_name"], '../../temp');
+		echo 'ok';
+
 	}
 
 	public function actionHyvaksy($id,$code,$domain)
