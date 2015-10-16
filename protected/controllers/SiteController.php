@@ -64,8 +64,19 @@ class SiteController extends Controller
 	{
 		$model = Kohteet::model()->findbypk($kohdenID);
 
-		//move_uploaded_file($_FILES["file"]["tmp_name"], '../../temp');
+
+	  if (!file_exists(Yii::app()->basePath."/../img/uploadedfromphone/".Yii::app()->user->domain)) {
+	  	mkdir(Yii::app()->basePath."/../img/uploadedfromphone/".Yii::app()->user->domain, 0777, true);
+	  }
+	
+	  $uploaddir = Yii::app()->basePath.'/../img/uploadedfromphone/'.Yii::app()->user->domain.'/';
+	  $uploadfile = $uploaddir . basename($model->id.'_'.$tyontekija.'.jpg');
+	  if (move_uploaded_file($_FILES['file']['tmp_name'], $uploadfile)) {
 		echo 'ok';
+	  } else {
+		echo 'Ei onnistu!';
+	  }
+
 
 	}
 
