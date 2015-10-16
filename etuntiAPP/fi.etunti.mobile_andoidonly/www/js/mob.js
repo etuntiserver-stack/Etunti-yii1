@@ -9,8 +9,14 @@ $(document).ready(function(){
 	    function onDeviceReady() {
 
 	        navigator.geolocation.getCurrentPosition(onSuccess, onError);
-		//var watchID = navigator.geolocation.watchPosition(onSuccess, onError, { timeout: 30000 });
+		//var watchID = navigator.geolocation.watchPosition(onSuccessWatch, onErrorWatch, { timeout: 30000 });
 
+		function showAppVersion() {
+		  cordova.getAppVersion(function(version) {
+		  document.getElementById('version').innerHTML = 'version: ' +version;
+		  });
+		}
+		showAppVersion();
 
 	    }
 	    function onSuccess(position) {
@@ -136,43 +142,6 @@ function allTilasetHide(){
 
 
 
-
-  function saveFile(){
-
-    document.addEventListener("deviceready", onDeviceReadyFileSave, false);
-
-    function onDeviceReadyFileSave() {
-        window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, gotFS, fail);
-    }
-
-    function gotFS(fileSystem) {
-        fileSystem.root.getFile("etunti.cfg", {create: true, exclusive: false}, gotFileEntry, fail);
-    }
-
-    function gotFileEntry(fileEntry) {
-        fileEntry.createWriter(gotFileWriter, fail);
-    }
-
-    function gotFileWriter(writer) {
-        writer.write($("#domain").val() +"//"+$("#email").val() +"//"+$("#salasana").val());
-	  window.location.href='index.html';
-       	  //set();
- 	  //checkviesti(domain);
-    }
-
-    function fail(error) {
-        console.log(error.code);
-    }
-  }
-
-
-  $(".aloita").click(function(){
-	saveFile();
-  });
-
-
-
-
 function curDateTime(){
 
   	var date = new Date();
@@ -261,7 +230,7 @@ function row(tilanne,st){
  	   data: postData,
            success: function(data){
         	console.log(data);
-		//$("#result2").html("data: <br>" + data).show();
+
 		var sp = data.split("//");
 		 if(sp[4] === 'tagnumerror')
 		 {
@@ -269,6 +238,23 @@ function row(tilanne,st){
 		   //return false;
 		 } else {
 		   $("#result2").hide();
+		   //$("#result2").html("data: <br>" + data).show();
+		 }
+
+		 if(sp[5])
+		 {
+
+            	   var kestoBlock = '<br><div class="row">' +
+		  		  '<div class="col-sm-12">' +
+				  '  <div class="alert alert-success">' +
+				  '    <div class="card-content black-text">' +
+				  '      <center><h2>Kesto: ' + sp[5] + '</h2></center>' +
+				  '    </div>' +
+				  '  </div>' +
+				  ' </div>' +
+				  '</div>';
+
+		   $("#kesto").html(kestoBlock);
 		 }
 
 		set();
