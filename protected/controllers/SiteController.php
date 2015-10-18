@@ -60,11 +60,10 @@ class SiteController extends Controller
 
 	}
 
-	public function actionUploadfromphone()
+	public function actionUploadfromphone($dom)
 	{
 
 
-		$dom = $_POST['domain'];
 		$kohdenID = $_POST['kohdenID'];
 
 		function saveImage($base64img,$dom,$kohde,$tekija){
