@@ -221,6 +221,12 @@
 <br>
 
 <?php
+
+   if(isset($_POST['poistaTamaKuva']))
+   {
+	unlink($_POST['poistaTamaKuva']);
+   }
+
    echo '<div class="row">';
 	$i = 0;
 	foreach(array_reverse(glob(Yii::app()->basePath."/../img/uploadedfromphone/".Yii::app()->user->domain."/".$model->id."_*.*")) as $file) {
@@ -228,7 +234,7 @@
 	$explNimi = explode("/",$file);
  	echo '
 	<div class="col-sm-3">
-	  <div class="btn btn-danger poistaKuvan pull-right" this="'.$file.'">X</div>
+	  <div class="btn btn-danger btn-sm poistaKuva pull-right" this="'.$file.'">X</div>
 	  <img src="../../img/uploadedfromphone/'.Yii::app()->user->domain.'/'.end($explNimi).'" class="img-responsive thumbnail" style="height:200px">
 	</div>
 	';
@@ -270,6 +276,22 @@ $('#Kohteet_asiakas_id').change(function(){
    });
 
 });
+
+
+
+$(".poistaKuva").click(function(){
+	var forThis = $(this).attr("this");
+        $.ajax({
+           url: "update?id=<?php echo $model->id; ?>",
+	   type:'POST',
+	   data: { "poistaTamaKuva" : forThis },
+           success: function(data){
+		//console.log(data)
+	    	window.location.reload();
+           }
+        });
+});
+
 
 
 });
