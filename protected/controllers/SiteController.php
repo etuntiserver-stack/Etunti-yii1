@@ -60,23 +60,42 @@ class SiteController extends Controller
 
 	}
 
-	public function actionUploadfromphone($dom,$tyontekija,$kohdenID)
+	public function actionUploadfromphone()
 	{
-		$model = Kohteet::model()->findbypk($kohdenID);
 
 
-	  if (!file_exists(Yii::app()->basePath."/../img/uploadedfromphone/".$dom)) {
-	  	mkdir(Yii::app()->basePath."/../img/uploadedfromphone/".$dom, 0777, true);
-	  }
+		$dom = $_POST['domain'];
+		$kohdenID = $_POST['kohdenID'];
 
-	  $uploaddir = Yii::app()->basePath.'/../img/uploadedfromphone/'.$dom.'/';
-	  $uploadfile = $uploaddir . basename($model->id.'_'.$tyontekija.'.jpg');
-	  if (move_uploaded_file($_POST['file']['tmp_name'], $uploadfile)) {
-		echo 'ok';
-	  } else {
-		echo 'Ei onnistu!';
-	  }
+		function saveImage($base64img,$dom,$kohde,$tekija){
+		    define('UPLOAD_DIR', Yii::app()->basePath."/../img/uploadedfromphone/".$dom."/");
+		    $base64img = str_replace('data:image/jpeg;base64,', '', $base64img);
+		    $data = base64_decode($base64img);
+		    $file = UPLOAD_DIR . $kohde.'_'.$tekija.'_'.time().'.jpg';
+		    
+		    if(file_put_contents($file, $data))
+			echo 'saveOk';
+		    else
+			echo 'saveError';
+		}
 
+	  	$model = Kohteet::model()->findbypk($kohdenID);
+
+	   	$criteria = new CDbCriteria();
+	    	$criteria->condition = "  
+			salasana!='' 
+			AND tekijan_email = '".$_POST['email']."' 
+			AND salasana = '".$_POST['salasana']."' 
+	    	";
+            	$ttekija = Tyontekijat::model()->find($criteria);
+
+	  	if(isset($model->id) and isset($ttekija->id)){
+			saveImage(utf8_decode($_POST['img']),$dom,$model->id,$ttekija->id);
+	     	} else {
+			echo 'Ei onnistu!';
+	     	}
+		
+		exit;
 
 	}
 
