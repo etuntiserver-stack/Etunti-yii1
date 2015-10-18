@@ -235,7 +235,9 @@
  	echo '
 	<div class="col-sm-3">
 	  <div class="btn btn-danger btn-sm poistaKuva pull-right" this="'.$file.'">X</div>
+	  <a href="../../img/uploadedfromphone/'.Yii::app()->user->domain.'/'.end($explNimi).'" target="_blank">
 	  <img src="../../img/uploadedfromphone/'.Yii::app()->user->domain.'/'.end($explNimi).'" class="img-responsive thumbnail" style="height:200px">
+	  </a>
 	</div>
 	';
 	}
