@@ -218,6 +218,25 @@
 
 <?php $this->endWidget(); ?>
 
+<br>
+
+<?php
+   echo '<div class="row">';
+	$i = 0;
+	foreach(array_reverse(glob(Yii::app()->basePath."/../img/uploadedfromphone/".Yii::app()->user->domain."/".$model->id."_*.*")) as $file) {
+	$i++;
+	$explNimi = explode("/",$file);
+ 	echo '
+	<div class="col-sm-3">
+	  <div class="btn btn-danger poistaKuvan pull-right" this="'.$file.'">X</div>
+	  <img src="../../img/uploadedfromphone/'.Yii::app()->user->domain.'/'.end($explNimi).'" class="img-responsive thumbnail">
+	</div>
+	';
+	}
+   echo '</div>';
+?>
+
+
 
 <script type="text/javascript">
 $(document).ready(function(){
