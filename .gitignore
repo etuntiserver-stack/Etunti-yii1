@@ -1,8 +1,7 @@
 assets/*
 emails/*
 tiedostot/*
-img/tekijat/*
-img/uploadedfromphone/*
+img/*
 protected/views/domainit/sql/*
 protected/runtime/*
 protected/runtime/application.log
