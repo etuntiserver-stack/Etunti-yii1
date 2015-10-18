@@ -229,7 +229,7 @@
  	echo '
 	<div class="col-sm-3">
 	  <div class="btn btn-danger poistaKuvan pull-right" this="'.$file.'">X</div>
-	  <img src="../../img/uploadedfromphone/'.Yii::app()->user->domain.'/'.end($explNimi).'" class="img-responsive thumbnail">
+	  <img src="../../img/uploadedfromphone/'.Yii::app()->user->domain.'/'.end($explNimi).'" class="img-responsive thumbnail" style="height:200px">
 	</div>
 	';
 	}
