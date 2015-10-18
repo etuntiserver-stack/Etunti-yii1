@@ -1,40 +1,119 @@
+/*
+  var domain = '';
+  var kohdenID = '';
+  var tyontekija = '38';
+  var email = '';
+  var salasana = '';
+  var my_location = '';
+  var path = '';
 
-  var urlForCamera = server + "/index.php/site/uploadfromphone&domain=" + domain;
+  function urlForCamera() 
+  { 
+	domain = document.getElementById('domain').value;
+	kohdenID = document.getElementById('kohdenID').value;
 
-var appCam = {
-    // Application Constructor
-    initialize: function() {
-        this.bindEvents();
-    },
-    bindEvents: function() {
-        document.addEventListener('deviceready', this.onDeviceReady, false);
-    },
-    onDeviceReady: function() {
-
-
-	navigator.camera.getPicture(onSuccess, onFail, { 
-	    quality: 100,
-	    destinationType: Camera.DestinationType.DATA_URL
-	});
-	 
-	function onSuccess(imageData) {
-	    alert(urlForCamera);
-	  $.post( urlForCamera, {data: imageData}, function(data) {
-	    alert("Image uploaded!");
-	  });
-	/*move_uploaded_file($_FILES["file"]["tmp_name"], '/path/to/file');*/
-	}
-	 
-	function onFail(message) {
-	    //alert('Failed because: ' + message);
-	   window.location.href='index.html';
-	}
+	  if(domain)
+	  {
+		path = server + "/index.php/site/uploadfromphone?dom=" + domain + "&tyontekija=" + tyontekija + "&kohdenID=" +kohdenID;		
+		return path;
+	  } else {
+		alert("Domaini puutuu");
+	  }
+   }
+*/
 
 
-    }
-};
-
-appCam.initialize();
+$(document).ready(function(){
 
 
+  $("#odotta").html("<img src='img/search.gif'>");
+  setTimeout(tiedot,3000); 
 
+  function tiedot(){
+
+
+	domain	= $("#domain").val();
+	email = $("#email").val();
+	salasana = $("#salasana").val();
+
+
+	if(my_location == '') my_location = $("#location").val();
+
+	if((domain != '') & (email !='') & (salasana != ''))
+	{
+		set();
+
+	} else {
+		//setTimeout(function(){document.location.href = "asetukset.html";},500);
+		$("#domainBlokki").show();
+		return false;
+ 	}
+	
+  }
+
+
+function set(){
+
+  var thisKey = '%';
+
+	$("#getListFromServer").show(370);
+        $.ajax({
+           url: url+'/imei?dom='+domain,
+	   type:'POST',
+ 	   data: { check : "osoitevaihto", my_location : my_location, thisKey : thisKey, email : email, salasana : salasana },
+           success: function(data){
+        	console.log(data);
+		//$("#result2").val(data).show();
+		if(data)
+		{
+		$("#odotta").hide();
+		}
+
+		$("#otsikko").html('<h2>Kuvien lähettäminen</h2>').show();
+		$("#getListFromServer").html("<label>Valitse kohde</label><br>" + data + "<br>");
+
+  		$("#list").change(function(){
+
+			$("#getListFromServer").hide(370);
+			$("#os").val($( "#list option:selected" ).text());
+			$("#kohdenID").val($( "#list option:selected" ).val());
+
+			if($("#kohdenID").val() !== '')
+			{
+				$("#osoiteFromBase").html("<h4>" + $( "#list option:selected" ).text()+ "</h4><br>");
+				$("#camButtons").show('slow');
+			}
+
+		});
+
+		var listSize = $('#list option').size();
+
+			$("#valitseOsoite").text("Löyty: "+(listSize-1)+" kohteita");
+
+		if(listSize > 1)
+		{
+			$("#list").show();
+		} else {
+			$("#list").hide();
+		}
+
+		$("#result").hide();
+    	},
+    		error:function (xhr, ajaxOptions, thrownError){
+        	console.log(xhr.responseText);
+		$("#result2").val(xhr.responseText).show();
+    	}
+        });
+
+ 
+}
+
+
+$("#camButton").click(function(){
+	appCam.initialize();
+});
+
+
+
+
+});
