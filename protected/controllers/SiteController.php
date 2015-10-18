@@ -95,7 +95,7 @@ class SiteController extends Controller
 			echo 'Ei onnistu!';
 	     	}
 		
-		exit;
+		exit; //exit
 
 	}
 
