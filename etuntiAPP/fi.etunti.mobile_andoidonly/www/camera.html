@@ -20,6 +20,134 @@
 
 
 
+
+<script type="text/javascript">
+
+
+
+    var pictureSource; // picture source
+    var destinationType; // sets the format of returned value 
+    var newImage;
+
+    // Wait for Cordova to connect with the device
+    document.addEventListener("deviceready", onDeviceReady, false);
+
+    // Cordova is ready to be used!
+    function onDeviceReady() {
+        pictureSource = navigator.camera.PictureSourceType;
+        destinationType = navigator.camera.DestinationType;
+    }
+
+    // Called when a photo is successfully retrieved
+    function onPhotoDataSuccess(imageURI) {
+
+  	var image = document.getElementById('smallImage');
+	image.src = "data:image/jpeg;base64," + imageURI;
+	image.style.display = 'block';
+	document.getElementById('CaptureButtons').style.display = 'none';
+	document.getElementById('submitTila').style.display = 'block';
+	newImage = imageURI;
+
+    }
+
+    // Called when a photo is successfully retrieved
+    function onPhotoURISuccess(imageURI) {
+
+  	var image = document.getElementById('smallImage');
+	image.src = "data:image/jpeg;base64," + imageURI;
+	image.style.display = 'block';
+	document.getElementById('CaptureButtons').style.display = 'none';
+	document.getElementById('submitTila').style.display = 'block';
+	newImage = imageURI;
+    }
+
+    // A button will call this function
+    function capturePhoto() {
+        // Take picture using device camera and retrieve image as base64-encoded string
+        navigator.camera.getPicture(onPhotoDataSuccess, onFail, {
+            quality : 100,
+	    encodingType: Camera.EncodingType.JPEG,
+      	    targetHeight: 1024,
+    	    targetWidth: 1024,
+            destinationType : destinationType.DATA_URL,
+	    correctOrientation: true
+        });
+    }
+
+    // A button will call this function
+    //
+    function capturePhotoEdit() {
+        // Take picture using device camera, allow edit, and retrieve image as base64-encoded string  
+        navigator.camera.getPicture(onPhotoDataSuccess, onFail, {
+            quality : 20,
+            allowEdit : true,
+            destinationType : destinationType.DATA_URL
+        });
+    }
+
+    // A button will call this function
+    function getPhoto(source) {
+        // Retrieve image file location from specified source
+        navigator.camera.getPicture(onPhotoURISuccess, onFail, {
+            quality : 60,
+	    encodingType: Camera.EncodingType.JPEG,
+      	    targetHeight: 1024,
+    	    targetWidth: 1024,
+            destinationType : destinationType.DATA_URL, //FILE_URI
+            sourceType : source
+        });
+    }
+
+    // Called if something bad happens.
+    function onFail(message) {
+        alert('Failed because: ' + message);
+    }
+    function savePhoto() {
+
+	$(document).ready(function(){
+	
+	  $("#camButtons").hide();
+	  $("#otsikko").hide();
+	  $("#osoiteFromBase").hide();
+	  $("#submitTila").hide();
+	  $("#odotta").show();
+
+
+	  var domain = document.getElementById('domain').value;
+	  var email = document.getElementById('email').value;
+	  var salasana = document.getElementById('salasana').value;
+	  var kohdenID = document.getElementById('kohdenID').value;
+	  var path = server + "/index.php/site/uploadfromphone?dom="+domain;	
+	
+
+	     $.ajax({
+	        url: path,
+		type:'POST',
+		data: { domain: domain, email : email, salasana : salasana, kohdenID : kohdenID, img : newImage },
+		contentType: "application/x-www-form-urlencoded;charset=UTF-8",
+		//dataType: 'json',
+	        success: function(data){
+			if(data == 'saveOk'){
+			$("#odotta").html('<h2>Kiitos!</h2><br>Kuvaa lähetetty onnistuneesti');
+			}
+	        	$("#result2").html("success: " + data);
+	
+	    	},
+	    		error:function (xhr, ajaxOptions, thrownError){
+	          	$("#result2").html("error: " + xhr.responseText);
+	    	}
+	     });
+
+	});
+
+    }
+
+
+
+</script>
+
+
+
         <title>ETUNTI</title>
     </head>
     <body>
@@ -35,15 +163,49 @@
      </center>
      <hr>
 
-	   <center><div id="odotta"></div></center>
-
-	    <div id="domainBlokki" style="display:none">
+	<center><div id="odotta"></div></center>
+	<div id="domainBlokki" style="display:none">
 		<div id="dm"></div>
-	    </div>
-
-     <h2>Camera</h2>
+	</div>
 
 
+     	<div id="otsikko" style="display:none"></div>
+	<br>
+     	<div id="osoiteFromBase"></div>
+
+	<div id="getListFromServer"></div>
+
+	<input type="hidden" id="os" placeholder="osoite">
+	<input type="hidden" id="kohdenID" value="0">
+
+	<div id="camButtons" style="display:none">
+
+	  <div id="CaptureButtons">
+	    <button class="btn btn-primary btn-group-justified" onclick="capturePhoto();">Capture Photo</button>
+	    <br>
+	    <button class="btn btn-primary btn-group-justified" onclick="getPhoto(pictureSource.PHOTOLIBRARY);">From
+	        Photo Library</button>
+	    <br>
+	    <button class="btn btn-primary btn-group-justified" onclick="getPhoto(pictureSource.SAVEDPHOTOALBUM);">From
+	        PhotoAlbum</button>
+	    <br>
+	  </div>
+
+	  <div id="submitTila" style="display:none">	
+	    <img style="display: none; height: 150px;" id="smallImage"
+	        src="" class="thumbnail"/>
+	    <img style="display: none;" id="largeImage" src="" />
+	
+	    <br>
+	    <button class="btn btn-primary btn-group-justified" onclick="savePhoto();">Lähetä kuvaa palvelimelle</button>
+	  </div>
+
+	</div>
+
+
+	<BR>
+	    <div id="result2"></div>
+	<BR>
 
     </div>
   </div>

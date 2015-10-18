@@ -105,7 +105,24 @@ $(document).ready(function(){
 
 
 
-  $("#footlinks").html('<footer id="footer"><div class="navbar navbar-default navbar-fixed-bottom"><div class="container"><div class="" id="footer-body">	<center><a href="#" id="home"><h1 class="glyphicon glyphicon-home"></h1></a>&nbsp;&nbsp;&nbsp;<a href="#" id="viestintaURL"><h1 class="glyphicon glyphicon-envelope form-group"></h1></a>&nbsp;&nbsp;&nbsp;<a href="#" id="tvuoro"><h1 class="glyphicon glyphicon-time form-group"></h1></a>&nbsp;&nbsp;&nbsp;<a href="#" id="tehty"><h1 class="glyphicon glyphicon-chevron-down"></h1></a>&nbsp;&nbsp;&nbsp;<a href="#" id="asetukset"><h1 class="glyphicon glyphicon-cog"></h1></a>&nbsp;&nbsp;&nbsp;<a href="#" onclick="exitFromApp()"><h1 class="glyphicon glyphicon-new-window"></h1></a>    </center></div></div></div></footer>');
+  $("#footlinks").html(
+	'<footer id="footer">'+
+	'<div class="navbar navbar-default navbar-fixed-bottom">' +
+	'<div class="container">' +
+	'<div class="" id="footer-body">' +
+	    '<center>' +
+		'<a href="#" id="home"><h2 class="glyphicon glyphicon-home"></h2></a>&nbsp;&nbsp;&nbsp;' +
+		'<a href="#" id="viestintaURL"><h2 class="glyphicon glyphicon-envelope form-group"></h2></a>&nbsp;&nbsp;&nbsp;' +
+		'<a href="#" id="tvuoro"><h2 class="glyphicon glyphicon-time form-group"></h2></a>&nbsp;&nbsp;&nbsp;' +
+		'<a href="#" id="tehty"><h2 class="glyphicon glyphicon-chevron-down"></h2></a>&nbsp;&nbsp;&nbsp;' +
+		'<a href="#" id="asetukset"><h2 class="glyphicon glyphicon-cog"></h2></a>&nbsp;&nbsp;&nbsp;' +
+		'<a href="#" id="camera"><h2 class="glyphicon glyphicon-camera"></h2></a>&nbsp;&nbsp;&nbsp;' +
+		'<a href="#" onclick="exitFromApp()"><h2 class="glyphicon glyphicon-new-window"></h2></a>' +
+	    '</center>' +
+	'</div>' +
+	'</div>' +
+	'</div>' +
+	'</footer>');
 
 
 
@@ -123,6 +140,10 @@ $(document).ready(function(){
 
   $("#tehty").click(function(){
 	window.location.href='tehty.html';
+  });
+
+  $("#camera").click(function(){
+	window.location.href='camera.html';
   });
 
   $("#asetukset").click(function(){
