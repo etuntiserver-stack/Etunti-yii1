@@ -5,11 +5,23 @@
   var my_location = '';
   var tag = '000000';
 
-  var server = "http://etunti.fi";
+  var server = "https://etunti.fi";
   var url = server+"/index.php/api/mob";
   var puh_nro = "";
   var versio = "1.70";
 
+
+/*
+  var fordm =	'<label>Domaini</label>' +
+		'<input type="text" class="form-control" id="domain">' +
+		'<label>Työntekijän sähköposti</label>' +
+		'<input type="text" class="form-control" id="email">' +
+		'<label>Työntekijän salasana</label>' +
+		'<input type="password" class="form-control" id="salasana"><br>' +
+		'<button class="btn btn-primary btn-group-justified aloita" type="button">' +
+		'<i class="glyphicon glyphicon-warning-sign"> Tallenna</i></button>';
+  dm.innerHTML += fordm;
+*/
 
 
   document.addEventListener('deviceready', this.readFile, true);
@@ -30,22 +42,40 @@
 	            console.log("Read as text");
 	            console.log(evt.target.result);
 
-	    var spFile = evt.target.result.split("//");
+	   		 var spFile = evt.target.result.split("//");
+		
+			 document.getElementById('domain').value=spFile[0];
+			 document.getElementById('email').value=spFile[1];
+			 document.getElementById('salasana').value=spFile[2];
 
-            var fordm = '<label>Domaini</label>' +
-		'<input type="text" class="form-control" id="domain" name="srch-term" id="srch-term" value="'+spFile[0]+'">' +
-		'<label>Työntekijän sähköposti</label>' +
-		'<input type="text" class="form-control" id="email" name="srch-term" id="srch-term" value="'+spFile[1]+'">' +
-		'<label>Työntekijän salasana</label>' +
-		'<input type="password" class="form-control" id="salasana" name="srch-term" id="srch-term" value="'+spFile[2]+'"><br>' +
-		'<button class="btn btn-primary btn-group-justified aloita" type="button">' +
-		'<i class="glyphicon glyphicon-warning-sign"> Tallenna</i></button>';
+		
+	        };
+	        reader.readAsText(file);
+	    }
+	    function fail(evt) {
+	        console.log(evt.target.error.code);
+	    }
+  }
 
-            	dm.innerHTML += fordm;
+  function exitFromApp()
+  {
+       navigator.app.exitApp();
+  }
+
 
 
 
 $(document).ready(function(){
+
+
+$("#dm").html('<label>Domaini</label>' +
+		'<input type="text" class="form-control" id="domain">' +
+		'<label>Työntekijän sähköposti</label>' +
+		'<input type="text" class="form-control" id="email">' +
+		'<label>Työntekijän salasana</label>' +
+		'<input type="password" class="form-control" id="salasana"><br>' +
+		'<button class="btn btn-primary btn-group-justified aloita" type="button">' +
+		'<i class="glyphicon glyphicon-warning-sign"> Tallenna</i></button>');
 
   $(".aloita").click(function(){
 	saveFile();
@@ -80,28 +110,6 @@ $(document).ready(function(){
     }
   }
 
-
-});
-
-
-		
-	        };
-	        reader.readAsText(file);
-	    }
-	    function fail(evt) {
-	        console.log(evt.target.error.code);
-	    }
-  }
-
-  function exitFromApp()
-  {
-       navigator.app.exitApp();
-  }
-
-
-
-
-$(document).ready(function(){
 
 
 

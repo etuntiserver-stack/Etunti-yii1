@@ -3,6 +3,7 @@
 <html>
     <head>
         <meta charset="utf-8" />
+	<meta http-equiv="Content-Security-Policy" content="default-src *; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval'">
         <meta name="format-detection" content="telephone=no" />
         <meta name="msapplication-tap-highlight" content="no" />
         <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height" />
@@ -43,24 +44,21 @@
     // Called when a photo is successfully retrieved
     function onPhotoDataSuccess(imageURI) {
 
-  	var image = document.getElementById('smallImage');
-	image.src = "data:image/jpeg;base64," + imageURI;
-	image.style.display = 'block';
+  	jQuery("#smallImage").attr("src", imageURI).show();
+
 	document.getElementById('CaptureButtons').style.display = 'none';
 	document.getElementById('submitTila').style.display = 'block';
-	//newImage = imageURI;
 
     }
 
     // Called when a photo is successfully retrieved
     function onPhotoURISuccess(imageURI) {
 
-  	var image = document.getElementById('smallImage');
-	image.src = "data:image/jpeg;base64," + imageURI;
-	image.style.display = 'block';
+  	jQuery("#smallImage").attr("src", imageURI).show();
+
 	document.getElementById('CaptureButtons').style.display = 'none';
 	document.getElementById('submitTila').style.display = 'block';
-	newImage = imageURI;
+
     }
 
     // A button will call this function
@@ -71,7 +69,7 @@
 	    encodingType: Camera.EncodingType.JPEG,
       	    targetHeight: 1024,
     	    targetWidth: 1024,
-            destinationType : destinationType.DATA_URL,
+            destinationType : destinationType.FILE_URI,
 	    correctOrientation: true
         });
     }
@@ -95,7 +93,7 @@
 	    encodingType: Camera.EncodingType.JPEG,
       	    targetHeight: 1024,
     	    targetWidth: 1024,
-            destinationType : destinationType.DATA_URL, //FILE_URI
+            destinationType : destinationType.FILE_URI, //FILE_URI
             sourceType : source
         });
     }
@@ -106,8 +104,34 @@
     }
     function savePhoto() {
 
-	$(document).ready(function(){
+    	var fileURI = jQuery("#smallImage").attr("src");
+	getBase64FromImageUrl(fileURI);
+
+	function getBase64FromImageUrl(url) {
+	    var img = new Image();
+
+	    img.onload = function () {
+	        var canvas = document.createElement("canvas");
+	        canvas.width =this.width;
+	        canvas.height =this.height;
 	
+	        var ctx = canvas.getContext("2d");
+	        ctx.drawImage(this, 0, 0);
+	
+	        var dataURL = canvas.toDataURL("image/jpeg");
+		setLahettaminen(dataURL.replace(/^data:image\/(png|jpeg);base64,/, ""));
+	        //console.log(dataURL.replace(/^data:image\/(png|jpg);base64,/, ""));
+	    };
+	
+	    img.src = url;
+	}
+
+
+
+	function setLahettaminen(dataIMG){
+    	console.log(dataIMG);
+	$(document).ready(function(){
+
 	  $("#camButtons").hide();
 	  $("#otsikko").hide();
 	  $("#osoiteFromBase").hide();
@@ -120,12 +144,12 @@
 	  var salasana = document.getElementById('salasana').value;
 	  var kohdenID = document.getElementById('kohdenID').value;
 	  var path = server + "/index.php/site/uploadfromphone?dom="+domain;	
-	
+
 
 	     $.ajax({
 	        url: path,
 		type:'POST',
-		data: { domain: domain, email : email, salasana : salasana, kohdenID : kohdenID, img : newImage },
+		data: { email : email, salasana : salasana, kohdenID : kohdenID, img : dataIMG },
 		contentType: "application/x-www-form-urlencoded;charset=UTF-8",
 		//dataType: 'json',
 	        success: function(data){
@@ -133,14 +157,20 @@
 			$("#odotta").html('<h2>Kiitos!</h2><br>Kuvaa lähetetty onnistuneesti');
 			}
 	        	$("#result2").html("success: " + data);
-	
+			console.log(data);
 	    	},
 	    		error:function (xhr, ajaxOptions, thrownError){
 	          	$("#result2").html("error: " + xhr.responseText);
+			console.log(data);
 	    	}
 	     });
-
 	});
+
+	}
+
+
+
+
 
     }
 
@@ -184,7 +214,7 @@
 
 	  <div id="CaptureButtons">
 	  <br>
-	    <button class="btn btn-primary btn-group-justified" onclick="capturePhoto();">Capture Photo</button>
+	    <button class="btn btn-primary btn-group-justified" onclick="capturePhoto();">Ota kuvan kamerasta</button>
 	    <br>
 	    <button class="btn btn-primary btn-group-justified" onclick="getPhoto(pictureSource.PHOTOLIBRARY);">From
 	        Photo Library</button>
