@@ -192,7 +192,7 @@ return array(
         array('api/tiedosto', 'pattern'=>'api/<model:\w+>/tiedosto', 'verb'=>'POST'),
         //array('api/update', 'pattern'=>'api/<model:\w+>/<id:\d+>', 'verb'=>'PUT'),
         //array('api/updaterow', 'pattern'=>'api/<model:\w+>/updaterow/<id:\d+>', 'verb'=>'POST'),
-       // array('api/delete', 'pattern'=>'api/<model:\w+>/<id:\d+>', 'verb'=>'DELETE'),
+        //array('api/delete', 'pattern'=>'api/<model:\w+>/<id:\d+>', 'verb'=>'DELETE'),
         //array('api/create', 'pattern'=>'api/<model:\w+>', 'verb'=>'POST'),
         // Other controllers
         '<controller:\w+>/<action:\w+>'=>'<controller>/<action>',
