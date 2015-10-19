@@ -87,7 +87,11 @@ public function actionImei($dom)
 
 
 
-
+    	if(!isset($ttekija->id))
+	{
+              	   $this->_sendResponse(200, "eiLoytyTekija//Tämän työntekijä ei löydy");
+	         exit;
+	}
 
 
 	    if(isset($_POST['check'])){
