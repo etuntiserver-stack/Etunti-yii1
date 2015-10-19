@@ -91,7 +91,7 @@ class SiteController extends Controller
 	    	";
             	$ttekija = Tyontekijat::model()->find($criteria);
 
-	  	if(isset($model->id) and isset($ttekija->id)){
+	  	if(isset($model->id) and isset($ttekija->id) and isset($_POST['img'])){
 			saveImage(utf8_decode($_POST['img']),$dom,$model->id,$ttekija->id);
 	     	} else {
 			echo 'Ei onnistu!';
