@@ -97,7 +97,7 @@ class SiteController extends Controller
 			echo 'Ei onnistu!';
 	     	}
 		//print_r($_POST);
-		echo '<br>vastaus etunti.fi';
+		//echo '<br>vastaus etunti.fi';
 		exit; //exit
 
 	}
