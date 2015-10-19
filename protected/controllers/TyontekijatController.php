@@ -90,7 +90,7 @@ class TyontekijatController extends Controller
 		{
 			$model->attributes=$_POST['Tyontekijat'];
 
-			$imei=Tyontekijat::model()->find(" imei='".$_POST['Tyontekijat']['imei']."' ");
+			$imei=Tyontekijat::model()->find(" imei='".$_POST['Tyontekijat']['imei']."' and imei!='' ");
 			if(isset($imei->imei))
 			{
 			echo Yii::t('main', 'Tämän imei on jo käytössä');
@@ -124,7 +124,7 @@ class TyontekijatController extends Controller
 
 			$model->attributes=$_POST['Tyontekijat'];
 
-			$imei=Tyontekijat::model()->find(" id!='".$model->id."' and imei='".$_POST['Tyontekijat']['imei']."' ");
+			$imei=Tyontekijat::model()->find(" id!='".$model->id."' and imei='".$_POST['Tyontekijat']['imei']."' and imei!='' ");
 			if(isset($imei->imei))
 			{
 			echo Yii::t('main', 'Tämän imei on jo käytössä');
