@@ -16,6 +16,8 @@
 
     	<script type="text/javascript" charset="utf-8" src="cordova.js"></script>
  	<script type="text/javascript" src="js/domain.js"></script>
+	<script type="text/javascript" src="js/BigInteger.min.js"></script>
+ 	<script type="text/javascript" src="js/index.js"></script>
  	<script type="text/javascript" src="js/camera.js"></script>
 
 
@@ -46,7 +48,7 @@
 	image.style.display = 'block';
 	document.getElementById('CaptureButtons').style.display = 'none';
 	document.getElementById('submitTila').style.display = 'block';
-	newImage = imageURI;
+	//newImage = imageURI;
 
     }
 
@@ -173,14 +175,15 @@
 	<br>
      	<div id="osoiteFromBase"></div>
 
+	<input type="text" class="form-control input-sm" id="os" placeholder="osoite">
 	<div id="getListFromServer"></div>
-
-	<input type="hidden" id="os" placeholder="osoite">
 	<input type="hidden" id="kohdenID" value="0">
+
 
 	<div id="camButtons" style="display:none">
 
 	  <div id="CaptureButtons">
+	  <br>
 	    <button class="btn btn-primary btn-group-justified" onclick="capturePhoto();">Capture Photo</button>
 	    <br>
 	    <button class="btn btn-primary btn-group-justified" onclick="getPhoto(pictureSource.PHOTOLIBRARY);">From
@@ -202,6 +205,13 @@
 
 	</div>
 
+
+	    <div id="tietoja" style="display:none">
+	       <label>tag</label>
+	       <input type="text" id="tagginro" class="form-control" readonly="yes">
+	       <label>gps</label>
+	       <input type="text" id="location" class="form-control" readonly="yes">
+	    </div>
 
 	<BR>
 	    <div id="result2"></div>

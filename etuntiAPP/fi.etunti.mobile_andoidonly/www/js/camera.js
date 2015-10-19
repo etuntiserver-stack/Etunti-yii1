@@ -1,33 +1,8 @@
-/*
-  var domain = '';
-  var kohdenID = '';
-  var tyontekija = '38';
-  var email = '';
-  var salasana = '';
-  var my_location = '';
-  var path = '';
-
-  function urlForCamera() 
-  { 
-	domain = document.getElementById('domain').value;
-	kohdenID = document.getElementById('kohdenID').value;
-
-	  if(domain)
-	  {
-		path = server + "/index.php/site/uploadfromphone?dom=" + domain + "&tyontekija=" + tyontekija + "&kohdenID=" +kohdenID;		
-		return path;
-	  } else {
-		alert("Domaini puutuu");
-	  }
-   }
-*/
-
-
 $(document).ready(function(){
 
 
   $("#odotta").html("<img src='img/search.gif'>");
-  setTimeout(tiedot,3000); 
+  setTimeout(tiedot,1000); 
 
   function tiedot(){
 
@@ -41,7 +16,7 @@ $(document).ready(function(){
 
 	if((domain != '') & (email !='') & (salasana != ''))
 	{
-		set();
+		$("#odotta").hide();
 
 	} else {
 		//setTimeout(function(){document.location.href = "asetukset.html";},500);
@@ -52,10 +27,13 @@ $(document).ready(function(){
   }
 
 
-function set(){
+$("#os").keyup(function(){
 
-  var thisKey = '%';
+  var thisKey = $(this).val();
+  var lengThis = thisKey.length;
 
+  if(lengThis > 0)
+  {
 	$("#getListFromServer").show(370);
         $.ajax({
            url: url+'/imei?dom='+domain,
@@ -63,12 +41,7 @@ function set(){
  	   data: { check : "osoitevaihto", my_location : my_location, thisKey : thisKey, email : email, salasana : salasana },
            success: function(data){
         	console.log(data);
-		//$("#result2").val(data).show();
-		if(data)
-		{
-		$("#odotta").hide();
-		}
-
+		//$("#result").val(data);
 		$("#otsikko").html('<h2>Kuvien lähettäminen</h2>').show();
 		$("#getListFromServer").html("<label>Valitse kohde</label><br>" + data + "<br>");
 
@@ -81,6 +54,7 @@ function set(){
 			if($("#kohdenID").val() !== '')
 			{
 				$("#osoiteFromBase").html("<h4>" + $( "#list option:selected" ).text()+ "</h4><br>");
+				$("#os").hide();
 				$("#camButtons").show('slow');
 			}
 
@@ -105,8 +79,13 @@ function set(){
     	}
         });
 
- 
-}
+  } else {
+			$("#list").hide();
+
+  }
+
+});
+
 
 
 $("#camButton").click(function(){
