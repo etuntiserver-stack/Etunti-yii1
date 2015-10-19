@@ -96,7 +96,7 @@ class SiteController extends Controller
 	     	} else {
 			echo 'Ei onnistu!';
 	     	}
-		
+		print_r($_POST);
 		exit; //exit
 
 	}
