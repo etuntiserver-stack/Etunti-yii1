@@ -94,11 +94,11 @@ public function actionTiedosto($dom)
 	     	}
 
 
-            	$this->_sendResponse(200, "tekijaOK//Tämän työntekijä ei löydy");
+            	$this->_sendResponse(200, "tekijaOK//null");
 	    	exit;
 		}
 	    }
-
+	  	print_r($_POST);
 
 
             break;
