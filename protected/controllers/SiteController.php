@@ -71,7 +71,7 @@ class SiteController extends Controller
 
 		function saveImage($base64img,$dom,$kohde,$tekija){
 		    define('UPLOAD_DIR', Yii::app()->basePath."/../img/uploadedfromphone/".$dom."/");
-		    //$base64img = str_replace('data:image/jpeg;base64,', '', $base64img);
+		    $base64img = str_replace('data:image/jpeg;base64,', '', $base64img);
 		    $data = base64_decode($base64img);
 		    $file = UPLOAD_DIR . $kohde.'_'.$tekija.'_'.time().'.jpg';
 		    
@@ -96,7 +96,8 @@ class SiteController extends Controller
 	     	} else {
 			echo 'Ei onnistu!';
 	     	}
-		print_r($_POST);
+		//print_r($_POST);
+		echo '<br>vastaus etunti.fi';
 		exit; //exit
 
 	}
