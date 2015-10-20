@@ -90,41 +90,6 @@ class SiteController extends Controller
 			echo 'Ei onnistu!';
 	     	}
 	
-/*
-		$kohdenID = $_POST['kohdenID'];
-
-		function saveImage($base64img,$dom,$kohde,$tekija){
-		    define('UPLOAD_DIR', Yii::app()->basePath."/../img/uploadedfromphone/".$dom."/");
-		    $base64img = str_replace('data:image/jpeg;base64,', '', $base64img); 
-		    $data = base64_decode($base64img);
-		    $file = UPLOAD_DIR . $kohde.'_'.$tekija.'_'.time().'.jpg';
-		    
-		    if(file_put_contents($file, $data))
-			echo 'saveOk';
-		    else
-			echo 'saveError';
-		}
-
-	  	$model = Kohteet::model()->findbypk($kohdenID);
-
-	   	$criteria = new CDbCriteria();
-	    	$criteria->condition = "  
-			salasana!='' 
-			AND tekijan_email = '".$_POST['email']."' 
-			AND salasana = '".$_POST['salasana']."' 
-	    	";
-            	$ttekija = Tyontekijat::model()->find($criteria);
-
-	  	if(isset($model->id) and isset($ttekija->id) and isset($_POST['img'])){
-			saveImage(utf8_decode($_POST['img']),$dom,$model->id,$ttekija->id);
-	     	} else {
-			echo 'Ei onnistu!';
-	     	}
-		//print_r($_POST);
-		//echo '<br>vastaus etunti.fi';
-		exit; //exit
-*/
-
 	}
 
 	public function actionHyvaksy($id,$code,$domain)

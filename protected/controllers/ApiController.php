@@ -39,45 +39,10 @@ public function actionTiedosto($dom)
     {
         case 'mob':
 
-	    if(isset($_POST['email']) and isset($_POST['salasana']))
-	    {
-	    $criteria = new CDbCriteria();
-	    $criteria->condition = " 
-			salasana!='' 
-			AND tekijan_email = '".$_POST['email']."' 
-			AND salasana = '".$_POST['salasana']."' 
-	    ";
-            $ttekija = Tyontekijat::model()->find($criteria);
-
-	    	if(empty($ttekija->id))
-	    	{
-            	$this->_sendResponse(200, "eiLoytyTekija//Tämän työntekijä ei löydy");
-	    	exit;
-	    	}
-
-//
-	    	if(isset($ttekija->id))
-	    	{
-
 	  	if (!file_exists(Yii::app()->basePath."/../img/uploadedfromphone/".$dom)) {
-	  		mkdir(Yii::app()->basePath."/../img/uploadedfromphone/".$dom, 0777, true);
-	  	}
-	
-		$kohdenID = $_POST['kohdenID'];
-
-		function saveImage($base64img,$dom,$kohde,$tekija){
-		    define('UPLOAD_DIR', Yii::app()->basePath."/../img/uploadedfromphone/".$dom."/");
-		    $base64img = str_replace('data:image/jpeg;base64,', '', $base64img); 
-		    $data = base64_decode($base64img);
-		    $file = UPLOAD_DIR . $kohde.'_'.$tekija.'_'.time().'.jpg';
-		    
-		    if(file_put_contents($file, $data))
-			echo 'saveOk';
-		    else
-			echo 'saveError';
+		  	mkdir(Yii::app()->basePath."/../img/uploadedfromphone/".$dom, 0777, true);
 		}
 
-	  	$model = Kohteet::model()->findbypk($kohdenID);
 
 	   	$criteria = new CDbCriteria();
 	    	$criteria->condition = "  
@@ -87,18 +52,19 @@ public function actionTiedosto($dom)
 	    	";
             	$ttekija = Tyontekijat::model()->find($criteria);
 
-	  	if(isset($model->id) and isset($ttekija->id) and isset($_POST['img'])){
-			saveImage(utf8_decode($_POST['img']),$dom,$model->id,$ttekija->id);
+	  	if(isset($ttekija->id)){
+
+    	 	if (move_uploaded_file($_FILES['file']['tmp_name'], Yii::app()->basePath."/../img/uploadedfromphone/".$dom."/".$_POST['kohdenID']."_".$ttekija->id."_".date("YmdHi").".jpg")) 
+		{
+        		print "saveOk";
+    		} else {
+        		print "saveError";
+    		}
+
+
 	     	} else {
 			echo 'Ei onnistu!';
 	     	}
-
-
-            	$this->_sendResponse(200, "tekijaOK//null");
-	    	exit;
-		}
-	    }
-	  	print_r($_POST);
 
 
             break;
