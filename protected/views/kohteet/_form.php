@@ -236,7 +236,7 @@
 	$tekija = '';
 	if(isset($exlEndNimi[1]))
 	{
-		$tt = Tyontekija::model()->findbypk($exlEndNimi[1]);
+		$tt = Tyontekijat::model()->findbypk($exlEndNimi[1]);
 		if(isset($tt->id))
 		$tekija = $tt->tekijan_nimi;
 	}
