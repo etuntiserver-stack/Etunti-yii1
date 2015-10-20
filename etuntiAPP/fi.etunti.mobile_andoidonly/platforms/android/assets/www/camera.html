@@ -104,32 +104,24 @@
     }
     function savePhoto() {
 
-    	var fileURI = jQuery("#smallImage").attr("src");
-	getBase64FromImageUrl(fileURI);
-
-	function getBase64FromImageUrl(url) {
-	    var img = new Image();
-
-	    img.onload = function () {
-	        var canvas = document.createElement("canvas");
-	        canvas.width =this.width;
-	        canvas.height =this.height;
-	
-	        var ctx = canvas.getContext("2d");
-	        ctx.drawImage(this, 0, 0);
-	
-	        var dataURL = canvas.toDataURL("image/jpeg");
-		setLahettaminen(dataURL.replace(/^data:image\/(png|jpeg);base64,/, ""));
-	        //console.log(dataURL.replace(/^data:image\/(png|jpg);base64,/, ""));
-	    };
-	
-	    img.src = url;
-	}
+	var imgElem = document.getElementById('smallImage');
 
 
+$("#result3").html(getBase64Image(imgElem));
 
-	function setLahettaminen(dataIMG){
-    	console.log(dataIMG);
+
+function getBase64Image(imgElem) {
+// imgElem must be on the same server otherwise a cross-origin error will be thrown "SECURITY_ERR: DOM Exception 18"
+    var canvas = document.createElement("canvas");
+    canvas.width = imgElem.clientWidth;
+    canvas.height = imgElem.clientHeight;
+    var ctx = canvas.getContext("2d");
+    ctx.drawImage(imgElem, 0, 0);
+    var dataURL = canvas.toDataURL("image/jpeg");
+    return dataURL.replace(/^data:image\/(png|jpeg);base64,/, "");
+}
+
+
 	$(document).ready(function(){
 
 	  $("#camButtons").hide();
@@ -143,14 +135,14 @@
 	  var email = document.getElementById('email').value;
 	  var salasana = document.getElementById('salasana').value;
 	  var kohdenID = document.getElementById('kohdenID').value;
-	  var path = server + "/index.php/site/uploadfromphone?dom="+domain;	
+	  var path = server + "/index.php/api/mob/tiedosto?dom="+domain;	
 
 
 	     $.ajax({
 	        url: path,
 		type:'POST',
-		data: { email : email, salasana : salasana, kohdenID : kohdenID, img : dataIMG },
-		contentType: "application/x-www-form-urlencoded;charset=UTF-8",
+		data: { email : email, salasana : salasana, kohdenID : kohdenID, img : getBase64Image(imgElem) },
+		//contentType: "application/x-www-form-urlencoded;charset=UTF-8",
 		//dataType: 'json',
 	        success: function(data){
 			if(data == 'saveOk'){
@@ -165,9 +157,6 @@
 	    	}
 	     });
 	});
-
-	}
-
 
 
 
@@ -245,6 +234,7 @@
 
 	<BR>
 	    <div id="result2"></div>
+	    <div id="result3"></div>
 	<BR>
 
     </div>
