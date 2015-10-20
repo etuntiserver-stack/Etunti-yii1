@@ -49,15 +49,22 @@
 	document.getElementById('CaptureButtons').style.display = 'none';
 	document.getElementById('submitTila').style.display = 'block';
 
+	newImage = imageURI;
     }
 
     // Called when a photo is successfully retrieved
     function onPhotoURISuccess(imageURI) {
 
   	jQuery("#smallImage").attr("src", imageURI).show();
-
+	/*
+	var smallImage = document.getElementById('smallImage');
+	smallImage.style.display = 'block';
+	smallImage.src = "data:image/jpeg;base64," + imageData;
+	*/
 	document.getElementById('CaptureButtons').style.display = 'none';
 	document.getElementById('submitTila').style.display = 'block';
+
+	newImage = imageURI;
 
     }
 
@@ -104,63 +111,58 @@
     }
     function savePhoto() {
 
-	var imgElem = document.getElementById('smallImage');
 
+	jQuery("#camButtons").hide();
+	jQuery("#otsikko").hide();
+	jQuery("#osoiteFromBase").hide();
+	jQuery("#submitTila").hide();
+	jQuery("#odotta").show();
 
-$("#result3").html(getBase64Image(imgElem));
+	var domain = document.getElementById('domain').value;
+	var email = document.getElementById('email').value;
+	var salasana = document.getElementById('salasana').value;
+	var kohdenID = document.getElementById('kohdenID').value;
+	//var server = "https://etunti.fi";
+	var path = server + "/index.php/api/mob/tiedosto?dom="+domain;
 
-
-function getBase64Image(imgElem) {
-// imgElem must be on the same server otherwise a cross-origin error will be thrown "SECURITY_ERR: DOM Exception 18"
-    var canvas = document.createElement("canvas");
-    canvas.width = imgElem.clientWidth;
-    canvas.height = imgElem.clientHeight;
-    var ctx = canvas.getContext("2d");
-    ctx.drawImage(imgElem, 0, 0);
-    var dataURL = canvas.toDataURL("image/jpeg");
-    return dataURL.replace(/^data:image\/(png|jpeg);base64,/, "");
-}
-
-
-	$(document).ready(function(){
-
-	  $("#camButtons").hide();
-	  $("#otsikko").hide();
-	  $("#osoiteFromBase").hide();
-	  $("#submitTila").hide();
-	  $("#odotta").show();
-
-
-	  var domain = document.getElementById('domain').value;
-	  var email = document.getElementById('email').value;
-	  var salasana = document.getElementById('salasana').value;
-	  var kohdenID = document.getElementById('kohdenID').value;
-	  var path = server + "/index.php/api/mob/tiedosto?dom="+domain;	
-
-
-	     $.ajax({
-	        url: path,
-		type:'POST',
-		data: { email : email, salasana : salasana, kohdenID : kohdenID, img : getBase64Image(imgElem) },
-		//contentType: "application/x-www-form-urlencoded;charset=UTF-8",
-		//dataType: 'json',
-	        success: function(data){
-			if(data == 'saveOk'){
-			$("#odotta").html('<h2>Kiitos!</h2><br>Kuvaa lähetetty onnistuneesti');
-			}
-	        	$("#result2").html("success: " + data);
-			console.log(data);
-	    	},
-	    		error:function (xhr, ajaxOptions, thrownError){
-	          	$("#result2").html("error: " + xhr.responseText);
-			console.log(data);
-	    	}
-	     });
-	});
-
-
-
-
+	var win = function (r) {
+	    console.log("Code = " + r.responseCode);
+	    console.log("Response = " + r.response);
+	    console.log("Sent = " + r.bytesSent);
+	    if(r.responseCode){
+		alert('Kiitos!\nKuvaa lähetetty onnistuneesti');
+		window.location.href='camera.html';
+	    }
+	}
+	
+	var fail = function (error) {
+	    alert("An error has occurred: Code = " + error.code);
+	    console.log("upload error source " + error.source);
+	    console.log("upload error target " + error.target);
+	
+	    document.getElementById('result2').innerHTML="An error has occurred: Code = " + error.code +
+					"upload error source " + error.source + 
+					"upload error target " + error.target;
+	
+	}
+	
+	         var options = new FileUploadOptions();
+	          options.fileKey="file";
+	          options.fileName=newImage.substr(newImage.lastIndexOf('/')+1);
+	          options.mimeType="image/jpeg";
+	
+	
+	          var params = new Object();
+	          params.kohdenID = kohdenID;
+	          params.email = email;
+	          params.salasana = salasana;
+	
+	          options.params = params;
+	          options.chunkedMode = false;
+	
+	          var ft = new FileTransfer();
+	          ft.upload(newImage, path, win, fail, options);
+	
     }
 
 
@@ -183,14 +185,14 @@ function getBase64Image(imgElem) {
      <div id="tekija"></div>
      </center>
      <hr>
+	
+	<h2>Kuvien lähettäminen</h2>
 
 	<center><div id="odotta"></div></center>
 	<div id="domainBlokki" style="display:none">
 		<div id="dm"></div>
 	</div>
 
-
-     	<div id="otsikko" style="display:none"></div>
 	<br>
      	<div id="osoiteFromBase"></div>
 
