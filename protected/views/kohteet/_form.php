@@ -242,7 +242,7 @@
 	}
  	echo '
 	<div class="col-sm-3">
-	  <div style="position:absolute" class="btn btn-danger btn-sm poistaKuva" this="'.$file.'">X</div>
+	  <div style="position:absolute;right:3px" class="btn btn-danger btn-sm poistaKuva" this="'.$file.'">X</div>
 	  <label>'.$tekija.'</label><br>
 	  <a href="../../img/uploadedfromphone/'.Yii::app()->user->domain.'/'.end($explNimi).'" target="_blank">
 	  <img src="../../img/uploadedfromphone/'.Yii::app()->user->domain.'/'.end($explNimi).'" class="img-responsive thumbnail" style="height:200px">
