@@ -66,8 +66,9 @@ class SiteController extends Controller
 	  if (!file_exists(Yii::app()->basePath."/../img/uploadedfromphone/".$dom)) {
 	  	mkdir(Yii::app()->basePath."/../img/uploadedfromphone/".$dom, 0777, true);
 	  }
-
-	print_r($_POST);
+echo 'OK';
+exit;
+	//print_r($_POST);
 	
 /*
 		$kohdenID = $_POST['kohdenID'];
