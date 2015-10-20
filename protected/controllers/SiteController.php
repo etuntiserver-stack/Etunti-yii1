@@ -63,12 +63,32 @@ class SiteController extends Controller
 	public function actionUploadfromphone($dom)
 	{
 	
-	  if (!file_exists(Yii::app()->basePath."/../img/uploadedfromphone/".$dom)) {
-	  	mkdir(Yii::app()->basePath."/../img/uploadedfromphone/".$dom, 0777, true);
-	  }
+	  	if (!file_exists(Yii::app()->basePath."/../img/uploadedfromphone/".$dom)) {
+		  	mkdir(Yii::app()->basePath."/../img/uploadedfromphone/".$dom, 0777, true);
+		}
 
-	print_r($_POST);
-	print_r($_FILES);
+
+	   	$criteria = new CDbCriteria();
+	    	$criteria->condition = "  
+			salasana!='' 
+			AND tekijan_email = '".$_POST['email']."' 
+			AND salasana = '".$_POST['salasana']."' 
+	    	";
+            	$ttekija = Tyontekijat::model()->find($criteria);
+
+	  	if(isset($ttekija->id)){
+
+    	 	if (move_uploaded_file($_FILES['file']['tmp_name'], Yii::app()->basePath."/../img/uploadedfromphone/".$dom."/".$_POST['kohdenID']."_".$_POST['kohdenID']."_".$ttekija->id."_".date("YmdHi"))) 
+		{
+        		print "saveOk";
+    		} else {
+        		print "Upload failed!";
+    		}
+
+
+	     	} else {
+			echo 'Ei onnistu!';
+	     	}
 	
 /*
 		$kohdenID = $_POST['kohdenID'];
