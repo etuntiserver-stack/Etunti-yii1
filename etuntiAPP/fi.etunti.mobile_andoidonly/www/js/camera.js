@@ -42,7 +42,6 @@ $("#os").keyup(function(){
            success: function(data){
         	console.log(data);
 		//$("#result").val(data);
-		$("#otsikko").html('<h2>Kuvien lähettäminen</h2>').show();
 		$("#getListFromServer").html("<label>Valitse kohde</label><br>" + data + "<br>");
 
   		$("#list").change(function(){
