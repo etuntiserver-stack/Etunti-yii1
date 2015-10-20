@@ -66,7 +66,10 @@ class SiteController extends Controller
 	  if (!file_exists(Yii::app()->basePath."/../img/uploadedfromphone/".$dom)) {
 	  	mkdir(Yii::app()->basePath."/../img/uploadedfromphone/".$dom, 0777, true);
 	  }
+
+	print_r($_POST);
 	
+/*
 		$kohdenID = $_POST['kohdenID'];
 
 		function saveImage($base64img,$dom,$kohde,$tekija){
@@ -99,6 +102,7 @@ class SiteController extends Controller
 		//print_r($_POST);
 		//echo '<br>vastaus etunti.fi';
 		exit; //exit
+*/
 
 	}
 
