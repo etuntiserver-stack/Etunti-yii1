@@ -219,6 +219,7 @@
 <?php $this->endWidget(); ?>
 
 <br>
+<hr>
 
 <?php
 
@@ -242,7 +243,7 @@
 	}
  	echo '
 	<div class="col-sm-3">
-	  <div style="position:absolute;right:3px" class="btn btn-danger btn-sm poistaKuva" this="'.$file.'">X</div>
+	  <div class="link poistaKuva" this="'.$file.'">'.Yii::t('main','poista').'</div>
 	  <label>'.$tekija.'</label><br>
 	  <a href="../../img/uploadedfromphone/'.Yii::app()->user->domain.'/'.end($explNimi).'" target="_blank">
 	  <img src="../../img/uploadedfromphone/'.Yii::app()->user->domain.'/'.end($explNimi).'" class="img-responsive thumbnail" style="height:200px">
