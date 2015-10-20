@@ -25,7 +25,7 @@ class SiteController extends Controller
 	{
 		return array(
 			array('allow', 
-				'actions'=>array('index','test','hyvaksy','hylkaa','uploadfromphone'),
+				'actions'=>array('index','test','hyvaksy','hylkaa'),
 				'users'=>array('*'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -58,38 +58,6 @@ class SiteController extends Controller
         $html2pdf->Output();
 
 
-	}
-
-	public function actionUploadfromphone($dom)
-	{
-	
-	  	if (!file_exists(Yii::app()->basePath."/../img/uploadedfromphone/".$dom)) {
-		  	mkdir(Yii::app()->basePath."/../img/uploadedfromphone/".$dom, 0777, true);
-		}
-
-
-	   	$criteria = new CDbCriteria();
-	    	$criteria->condition = "  
-			salasana!='' 
-			AND tekijan_email = '".$_POST['email']."' 
-			AND salasana = '".$_POST['salasana']."' 
-	    	";
-            	$ttekija = Tyontekijat::model()->find($criteria);
-
-	  	if(isset($ttekija->id)){
-
-    	 	if (move_uploaded_file($_FILES['file']['tmp_name'], Yii::app()->basePath."/../img/uploadedfromphone/".$dom."/".$_POST['kohdenID']."_".$ttekija->id."_".date("YmdHi").".jpg")) 
-		{
-        		print "saveOk";
-    		} else {
-        		print "saveError";
-    		}
-
-
-	     	} else {
-			echo 'Ei onnistu!';
-	     	}
-	
 	}
 
 	public function actionHyvaksy($id,$code,$domain)
