@@ -8,7 +8,7 @@
 <br>
 
 <div class="row">
-  <div class="col-sm-3">
+  <div class="col-sm-4">
   <fieldset>
 	<legend><?php echo Yii::t('main','TYÖT TÄNÄÄN'); ?></legend>
 <?php 
@@ -21,7 +21,7 @@
         $this->widget(
             'chartjs.widgets.ChBars', 
             array(
-                'width' => 350,
+                'width' => 370,
                 'height' => 210,
                 'htmlOptions' => array(),
 
