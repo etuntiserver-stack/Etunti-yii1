@@ -44,20 +44,19 @@ $("#os").keyup(function(){
 		//$("#result").val(data);
 		$("#getListFromServer").html("<label>Valitse kohde</label><br>" + data + "<br>");
 
-  		$("#list").change(function(){
-
-			$("#getListFromServer").hide(370);
+  		    $("#list").change(function(){
 			$("#os").val($( "#list option:selected" ).text());
 			$("#kohdenID").val($( "#list option:selected" ).val());
-
-			if($("#kohdenID").val() !== '')
+			var listObj = $( "#list option:selected" ).text();
+			if(($("#kohdenID").val() !== '') & (listObj != ''))
 			{
-				$("#osoiteFromBase").html("<h4>" + $( "#list option:selected" ).text()+ "</h4><br>");
+				$("#osoiteFromBase").html("<h4>" + listObj + "</h4><br>");
 				$("#os").hide();
 				$("#camButtons").show('slow');
+				$("#getListFromServer").remove();
+				return false;
 			}
-
-		});
+		    });
 
 		var listSize = $('#list option').size();
 
