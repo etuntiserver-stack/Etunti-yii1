@@ -40,7 +40,7 @@ class LoginController extends Controller
 			    if(isset($domainit->paketti))
 			    Yii::app()->user->setState('adminPaketti', $domainit->paketti);
 
-			    $this->redirect("/index.php/mobile/index");
+			    $this->redirect("/index.php/site/etusivu");
 			  } else {
 			    $this->redirect('/index.php/user/login');
 			  }

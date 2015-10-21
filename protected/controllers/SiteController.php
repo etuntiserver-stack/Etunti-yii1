@@ -25,6 +25,10 @@ class SiteController extends Controller
 	{
 		return array(
 			array('allow', 
+				'actions'=>array('etusivu'),
+                		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
+			),
+			array('allow', 
 				'actions'=>array('index','test','hyvaksy','hylkaa'),
 				'users'=>array('*'),
 			),
@@ -37,6 +41,28 @@ class SiteController extends Controller
 			),
 		);
 	}
+
+
+	public function isEtuntiAdmin() {
+
+		if(isset(Yii::app()->user->adminID))
+		{
+		$m = Administrators::model()->findbypk(Yii::app()->user->adminID);
+	        if($m->id == Yii::app()->user->adminID)
+	            return true;
+		else
+	            return false;
+		} else {
+	            return false;
+		}
+	}
+
+
+	public function actionEtusivu()
+	{
+		$this->render('etusivu');
+	}
+
 
 	public function actionTest()
 	{
