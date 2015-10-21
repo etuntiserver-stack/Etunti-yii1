@@ -21,7 +21,7 @@
         $this->widget(
             'chartjs.widgets.ChBars', 
             array(
-                'width' => 300,
+                'width' => 350,
                 'height' => 210,
                 'htmlOptions' => array(),
 
