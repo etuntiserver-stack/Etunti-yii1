@@ -94,10 +94,12 @@ echo '
 
 	'columns'=>array(
 		'id',
+		/*
                array(
                     'name'=>'time',
                     'value'=>'date("d.m.Y - H:i",strtotime($data->time))',                   
 		),
+		*/
 		'yrityksen_nimi',
 		'y_tunnus',
 		'yhteyshenkilo',
