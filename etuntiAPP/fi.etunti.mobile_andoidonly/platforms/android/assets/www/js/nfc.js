@@ -1,7 +1,7 @@
 
 
 
-var app = {
+var appNFC = {
  // Application Constructor
  initialize: function() {
  this.bindEvents();
@@ -15,12 +15,12 @@ var app = {
  onDeviceReady: function() {
  //app.receivedEvent('deviceready');
  nfc.addTagDiscoveredListener(
- app.onNfc, // tag successfully scanned
+ appNFC.onNfc, // tag successfully scanned
  function (status) { // listener successfully initialized
  //app.display("Tap a tag to read its id number.");
  },
  function (error) { // listener fails to initialize
- app.display("NFC reader failed to initialize " +
+ appNFC.display("NFC reader failed to initialize " +
  JSON.stringify(error));
  }
  );
@@ -29,7 +29,7 @@ var app = {
  onNfc: function(nfcEvent) {
  var tag = nfcEvent.tag;
  //app.nro(nfc.bytesToHexString(tag.id));
- app.nro(tag.id);
+ appNFC.nro(tag.id);
  },
   
  
@@ -106,4 +106,4 @@ $(document).ready(function(){
  
 };
 
-app.initialize();
+appNFC.initialize();
