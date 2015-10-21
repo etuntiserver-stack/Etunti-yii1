@@ -308,6 +308,7 @@ class MobileController extends Controller
 
 
 
+
 		  $("#Kohteet_id").on('change',function(){
 
 			var kohdenID = $("#sainkohdenID").val().split("_");
@@ -977,8 +978,9 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
         	$criteria->condition = " 
 			loppui!='' and aloitan!='' 
 			AND status='3'
-			AND kohdenID ='".$kohdenID."' 
 		";
+		if($kohdenID != 'kaikki')
+	        $criteria->addCondition (" kohdenID = '".$kohdenID."' ");
 
 		$criteria->group = "kohdenID"; 
 
