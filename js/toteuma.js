@@ -37,18 +37,20 @@ $(".uusirivi").click(function(){
 });
 
 
-$(".timepicker").keyup(function(){
+$(".al").keyup(function(){
 	lasketaanKesto();
 });
 
-$(".timepicker").blur(function(){
+$(".lp").blur(function(){
 	lasketaanKesto();
 });
 
 
 function lasketaanKesto(){
-	var hmaD = $(".al").val().split(":");
-	var hmaL = $(".lp").val().split(":");
+	var hmaD = $(".al").val().split(" ");
+	hmaD = hmaD[1].split(":");
+	var hmaL = $(".lp").val().split(" ");
+	hmaL = hmaL[1].split(":");
 
 	var secondsD = (+hmaD[0]) * 60 * 60 + (+hmaD[1]);
 	var secondsL = (+hmaL[0]) * 60 * 60 + (+hmaL[1]);

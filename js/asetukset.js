@@ -24,6 +24,27 @@
 
     });
 
+    var myDateA = new Date($("#forDatepickerAlkuPVM").val());
+    var myDateL = new Date($("#forDatepickerLoppuPVM").val());
+
+    if(myDateA)
+    {
+    $( ".datetimepickerToteumaAlkuPVM" ).datetimepicker({
+	mask:true,
+	format:'d.m.Y H:i:s',
+	defaultDate:myDateA,
+    });
+    }
+
+    if(myDateL)
+    {
+    $( ".datetimepickerToteumaLoppuPVM" ).datetimepicker({
+	mask:true,
+	format:'d.m.Y H:i:s',
+	defaultDate:myDateL,
+    });
+    }
+
 
   });
 

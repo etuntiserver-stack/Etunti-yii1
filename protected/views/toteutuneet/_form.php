@@ -15,6 +15,8 @@ $forPVM = date('d.m.Y',strtotime($s->aloitan));
 //$aloitan = date("H:i",strtotime($s->aloitan));
 //$loppui = date("H:i",strtotime($s->loppui));
 ?>
+	<input type="hidden" id="forDatepickerAlkuPVM" value="<?php echo date('Y-m-d H:i',strtotime($s->aloitan)); ?>">
+	<input type="hidden" id="forDatepickerLoppuPVM" value="<?php echo date('Y-m-d H:i',strtotime($s->loppui)); ?>">
 
 
 	<div class="modal-dialog modal-lg">
@@ -71,14 +73,13 @@ $forPVM = date('d.m.Y',strtotime($s->aloitan));
 	</div>
 
 	<div class="row">
-		<span class="text-danger small"><?php echo Yii::t('','valitse päivämäärä ja tunnit sitten muoka'); ?></span>
 		<?php echo $form->labelEx($model,'aloitan'); ?>
-		<?php echo $form->textField($model,'aloitan',array('value'=>$s->aloitan,'size'=>60,'maxlength'=>100,'class'=>'form-control datetimepicker al')); ?>
+		<?php echo $form->textField($model,'aloitan',array('value'=>$s->aloitan,'size'=>60,'maxlength'=>100,'class'=>'form-control datetimepickerToteumaAlkuPVM al')); ?>
 	</div>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'loppui'); ?>
-		<?php echo $form->textField($model,'loppui',array('value'=>$s->loppui,'size'=>60,'maxlength'=>100,'class'=>'form-control datetimepicker lp')); ?>
+		<?php echo $form->textField($model,'loppui',array('value'=>$s->loppui,'size'=>60,'maxlength'=>100,'class'=>'form-control datetimepickerToteumaLoppuPVM lp')); ?>
 	</div>
 
   </div><div class="col-sm-2">
