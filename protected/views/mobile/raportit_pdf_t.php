@@ -9,6 +9,10 @@ td,th{
 }
 </style>
 
+  <?php $asetukset=Asetukset::model()->find("id=1"); ?>
+  <img src="<?php echo $asetukset->logon_polkku; ?>" height="<?php echo $asetukset->logon_korkeus; ?>">
+  <br>
+
 <h1><?php echo Yii::t('main', 'TOTEUTUNEET'); ?></h1>
 <br>
 <table>
