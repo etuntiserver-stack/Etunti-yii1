@@ -4,19 +4,15 @@
 	$ero = 0;
 
        	$criteria = new CDbCriteria();
-	$criteria->order = " alku ASC";
+	$criteria->select = " SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppu, '%H:%i'), '%H:%i'), DATE_FORMAT(STR_TO_DATE(alku, '%H:%i'), '%H:%i')))) as l_tunnit ";
 	$criteria->condition = " 
-		tid = '".$tid."' and pvm = '".date("d.m.Y",strtotime($pvm))."' 
+		loppu !='' AND alku!=''
+		AND tid = '".$tid."' and pvm = '".date("d.m.Y",strtotime($pvm))."' 
 		AND tyoajanmerkinta NOT LIKE '%Ei lasketa%'
 	";
+	$sun = Tyovuoroot::model()->find($criteria); 
+	$getSun = $sun->l_tunnit;
 
-	$sun = Tyovuoroot::model()->findAll($criteria); 
-
-	foreach($sun as $tvVal){
-	   if($tvVal->id){
-	   $getSun += (strtotime($pvm.' '.$tvVal->loppu)-strtotime($pvm.' '.$tvVal->alku));
-	   }
-	}
 
 	if($getSun > 0){
 	$sun = $getSun;
@@ -25,50 +21,55 @@
 
 
        	$criteria = new CDbCriteria();
-	$criteria->condition = " tid = '".$tid."' 
-	and DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = '".date("Y-m-d",strtotime($pvm))."' 
-	 "; //AND kid IN (SELECT id FROM sivexkuitti)
+	$criteria->select = " 
+		SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s')))) as l_tunnit 
+	";
+	$criteria->condition = " 
+		tid = '".$tid."' 
+		and DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = '".date("Y-m-d",strtotime($pvm))."' 
+	"; //AND kid IN (SELECT id FROM sivexkuitti)
+
 	if(Yii::app()->session['Lounastauko'])
 	$criteria->addCondition (" status != '10' ");
 	if(Yii::app()->session['MATKA'])
 	$criteria->addCondition (" status != '2' ");
 
-	$tot = Toteutuneet::model()->findAll($criteria); 
+	$tot = Toteutuneet::model()->find($criteria); 
+	$getTot += $tot->l_tunnit;
 
-	foreach($tot as $tvVal){
-	   if($tvVal->id){
-	   $getTot += (strtotime($tvVal->loppui)-strtotime($tvVal->aloitan));
-	   }
-	}
 
        	$criteria = new CDbCriteria();
-	$criteria->condition = " tid = '".$tid."' 
-	and DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = '".date("Y-m-d",strtotime($pvm))."' 
-	AND id NOT IN (SELECT kid FROM sivexkuitti_repaired) ";
+	$criteria->select = " 
+		SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s')))) as l_tunnit 
+	";
+	$criteria->condition = " 
+		tid = '".$tid."' 
+		and DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = '".date("Y-m-d",strtotime($pvm))."' 
+		AND id NOT IN (SELECT kid FROM sivexkuitti_repaired) 
+	";
+
 	if(Yii::app()->session['Lounastauko'])
 	$criteria->addCondition (" status != '10' ");
 	if(Yii::app()->session['MATKA'])
 	$criteria->addCondition (" status != '2' ");
 
-	$mob = Mobile::model()->findAll($criteria); 
-
-	foreach($mob as $tvVal){
-	   if($tvVal->id){
-	   $getTot += (strtotime($tvVal->loppui)-strtotime($tvVal->aloitan));
-	   }
-	}
+	$mob = Mobile::model()->find($criteria); 
+	$getTot += $mob->l_tunnit;
 
 	if($getTot > 0){
 	$tot = $getTot;
 	echo Yii::t('main', 'Tot. ').sprint($tot).'<br>';
 	}
 
-	if($getSun > 0)
-	  $ero = $getSun-$getTot;
-	else
+	if($getSun > 0 and $getTot > $getSun)
+	{
 	  $ero = $getTot-$getSun;
-
-	echo Yii::t('main', 'Ero aika: ').sprint($ero); 
-	
+	  echo '<span class="text-success">'.Yii::t('main', 'Ero aika: ').sprint($ero).'</span>'; 
+	}
+	if($getSun > 0 and $getSun > $getTot)
+	{
+	  $ero = $getSun-$getTot;
+	  echo '<span class="text-danger">'.Yii::t('main', 'Ero aika: -').sprint($ero).'</span>'; 
+	}
 
 ?>
