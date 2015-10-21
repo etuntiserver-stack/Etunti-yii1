@@ -14,7 +14,7 @@ $this->menu=array(
 ?>
 
 <legend>
-<h1><?php echo Yii::t('main','HYVÄKSYTYT TUNNIT'); ?> <i class="glyphicon glyphicon-ok"></i></h1>
+<h1><?php echo Yii::t('main','ASIAKKAIDEN HYVÄKSYMÄT TUNNIT'); ?> <i class="glyphicon glyphicon-ok"></i></h1>
 </legend>
 
 
