@@ -1,3 +1,10 @@
+<?php 
+     $tas = array();
+   if(isset(Yii::app()->user->adminPaketti)) 
+     $tas = explode(",",Yii::app()->user->adminPaketti);
+?>
+
+
 <nav id="topNav" class="navbar" role="navigation">
   <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
@@ -45,21 +52,16 @@
 	        <li role="separator" class="divider"></li>
         	<li><?php echo CHtml::link(Yii::t('main', 'Kohteet'),array('/kohteet/admin')); ?></li>
 	        <li role="separator" class="divider"></li>
-        	<li><?php echo CHtml::link(Yii::t('main', 'Hyväksytyt tunnit'),array('/asiakasHyvaksynta/index')); ?></li>
+        	<li><?php echo CHtml::link(Yii::t('main', 'Asiakkaiden hyväksymät tunnit'),array('/asiakasHyvaksynta/index')); ?></li>
 	        <li role="separator" class="divider"></li>
         	<li><?php echo CHtml::link(Yii::t('main', 'Kartta'),array('/kohteet/googlemap')); ?></li>
 
 
-		<?php if(isset(Yii::app()->user->adminPaketti)) : ?>
-		<?php
-		 $tas = explode(",",Yii::app()->user->adminPaketti);
-		 if(in_array('4',$tas)) : 
-		?>
+		<?php if(in_array('4',$tas)) : ?>
 	        	<li role="separator" class="divider"></li>
 	        	<li><?php echo CHtml::link(Yii::t('main', 'CRM'),array('/site/index')); ?></li>
 	        	<li><?php echo CHtml::link(Yii::t('main', 'Tarjoukset'),array('/site/index')); ?></li>
 	        	<li><?php echo CHtml::link(Yii::t('main', 'Sopimukset'),array('/site/index')); ?></li>
-		<?php endif; ?>
 		<?php endif; ?>
 	
           </ul>
@@ -70,7 +72,11 @@
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?php echo Yii::t('main', 'Tunnit'); ?> <span class="caret"></span></a>
           <ul class="dropdown-menu">
         	<li><?php echo CHtml::link(Yii::t('main', 'Tunnit'),array('/mobile/index')); ?></li>
+
+		<?php if(in_array('2',$tas)) : ?>
         	<li><?php echo CHtml::link(Yii::t('main', 'Tuntien hyväksyntä'),array('/toteutuneet/index')); ?></li>
+		<?php endif; ?>
+
 	        <li role="separator" class="divider"></li>
         	<li><?php echo CHtml::link(Yii::t('main', 'Yhteenveto työntekijät'),array('/mobile/yhteenveto')); ?></li>
         	<li><?php echo CHtml::link(Yii::t('main', 'Yhteenveto kohteet'),array('/mobile/kyhteenveto')); ?></li>
@@ -104,11 +110,7 @@
 
 
 
-	<?php if(isset(Yii::app()->user->adminPaketti)) : ?>
-	<?php
-	 $tas = explode(",",Yii::app()->user->adminPaketti);
-	 if(in_array('2',$tas)) : 
-	?>
+	<?php if(in_array('2',$tas)) : ?>
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?php echo Yii::t('main', 'Työvuorot'); ?> <span class="caret"></span></a>
           <ul class="dropdown-menu">
@@ -120,14 +122,9 @@
           </ul>
         </li>
 	<?php endif; ?>
-	<?php endif; ?>
 
 
-	<?php if(isset(Yii::app()->user->adminPaketti)) : ?>
-	<?php
-	 $tas = explode(",",Yii::app()->user->adminPaketti);
-	 if(in_array('3',$tas)) : 
-	?>
+	<?php if(in_array('3',$tas)) : ?>
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?php echo Yii::t('main', 'Laskutus'); ?> <span class="caret"></span></a>
           <ul class="dropdown-menu">
@@ -136,14 +133,9 @@
           </ul>
         </li>
 	<?php endif; ?>
-	<?php endif; ?>
 
 
-	<?php if(isset(Yii::app()->user->adminPaketti)) : ?>
-	<?php
-	 $tas = explode(",",Yii::app()->user->adminPaketti);
-	 if(in_array('6',$tas)) : 
-	?>
+	<?php if(in_array('6',$tas)) : ?>
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?php echo Yii::t('main', 'Raportointi'); ?> <span class="caret"></span></a>
           <ul class="dropdown-menu">
@@ -154,7 +146,6 @@
         	<li><?php echo CHtml::link(Yii::t('main', 'Lähetetyt laskut'),array('/site/index')); ?></li>
           </ul>
         </li>
-	<?php endif; ?>
 	<?php endif; ?>
 
 
