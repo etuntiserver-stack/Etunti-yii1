@@ -88,7 +88,7 @@ class Tyosuhdet extends DB2ActiveRecord
 			'tid' => 'Tid',
 			'alku' => 'Aloitus',
 			'loppu' => 'Lopetus',
-			'vktyoaika' => 'Viikko työaika',
+			'vktyoaika' => 'Viikkotyöaika',
 			'nimike' => 'Nimike',
 			'palkkausmuoto' => 'Palkkausmuoto',
 			'tuntihinta' => 'Tuntihinta',

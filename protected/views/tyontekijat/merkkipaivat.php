@@ -12,7 +12,7 @@
   <thead>
   <tr>
   <th><?php echo Yii::t('main', 'Työntekijä'); ?></th>
-  <th><?php echo Yii::t('main', 'Syntäri'); ?></th>
+  <th><?php echo Yii::t('main', 'Syntymäpäivä'); ?></th>
   <th><?php echo Yii::t('main', 'Henkilötunnus'); ?></th>
   </tr>
   </thead>
