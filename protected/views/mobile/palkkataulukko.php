@@ -10,11 +10,29 @@ $this->breadcrumbs=array(
 ?>
 
 <legend>
-<button class="pull-right btn btn-info" data-toggle="collapse"  data-target="#haku"><?php echo Yii::t('main', 'Haku'); ?> <b class="caret"></b></button>
+<button class="pull-right btn btn-info" data-toggle="collapse"  data-target="#haku"><?php echo Yii::t('main', 'Extrat'); ?> <b class="caret"></b></button>
 <h1> <?php echo Yii::t('main', 'PALKKATAULUKKO'); ?> <i class="glyphicon glyphicon-ok"></i></h1>
 </legend>
 
 <div class="row collapse" id="haku">
+  <div class="col-md-12">
+   <br><br><br>
+   <?php
+	$ko = new Korvaukset;
+	echo $this->renderPartial('//korvaukset/_form',array('model'=>$ko)); 
+   ?>
+   <?php
+	$lt = new Lisatyotunnit;
+	echo $this->renderPartial('//lisatyotunnit/_form',array('model'=>$lt)); 
+   ?>
+   <?php
+	$en = new Ennakko;
+	echo $this->renderPartial('//ennakko/_form',array('model'=>$en)); 
+   ?>
+  </div>
+</div>
+
+<div class="row">
   <form action="#" id="yhtveto" class="form-inline" method="POST">
   <input type="hidden" name="yhtvetoform">
   <div class="col-md-12">
@@ -51,25 +69,11 @@ $this->breadcrumbs=array(
    </div>
    <!-- tulostus -->
 
-   <br><br><br>
-
-   <?php
-	$ko = new Korvaukset;
-	echo $this->renderPartial('//korvaukset/_form',array('model'=>$ko)); 
-   ?>
-   <?php
-	$lt = new Lisatyotunnit;
-	echo $this->renderPartial('//lisatyotunnit/_form',array('model'=>$lt)); 
-   ?>
-   <?php
-	$en = new Ennakko;
-	echo $this->renderPartial('//ennakko/_form',array('model'=>$en)); 
-   ?>
-
-
   </div>
-
 </div>
+
+
+
 
 <br>
 
