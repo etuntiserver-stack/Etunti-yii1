@@ -15,7 +15,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-    <?php echo CHtml::link('',array('/site/index'),array('class'=>'navbar-brand','rel'=>'home')); ?>
+    <?php echo CHtml::link('',array('/site/etusivu'),array('class'=>'navbar-brand','rel'=>'home')); ?>
     </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->
