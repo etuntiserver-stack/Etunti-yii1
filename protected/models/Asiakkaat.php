@@ -73,7 +73,7 @@ class Asiakkaat extends DB2ActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'id' => 'ID',
+			'id' => 'Asiakasnumero',
 			'time' => 'Luotu',
 			'yhteyshenkilo' => 'Yhteyshenkilö',
 			'yrityksen_nimi' => 'Yrityksen Nimi',
