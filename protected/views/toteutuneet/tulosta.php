@@ -15,6 +15,11 @@ td{
 </style>
 
 <?php if(Yii::app()->session['tekija']) : ?>
+
+  <?php $asetukset=Asetukset::model()->find("id=1"); ?>
+  <img src="<?php echo $asetukset->logon_polkku; ?>" height="<?php echo $asetukset->logon_korkeus; ?>">
+  <br>
+
   <h1><?php echo $explTekija[1]; ?></h1>
   <table>
   <thead>
