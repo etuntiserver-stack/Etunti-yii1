@@ -54,7 +54,10 @@ $('.search-form form').submit(function(){
 
 	'columns'=>array(
 		'id',
-		'time',
+               array(
+                    'name'=>'time',
+                    'value'=>'date("d.m.Y - H:i",strtotime($data->time))',                   
+		),
                array(
                     'name'=>'asiakas_id',
                     'filter'=>CHtml::dropDownList('Kohteet[asiakas_id]','',

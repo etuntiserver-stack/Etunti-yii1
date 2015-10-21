@@ -7,13 +7,14 @@ $this->breadcrumbs=array(
 	$model->id=>array('view','id'=>$model->id),
 	Yii::t('main', 'Päivitä'),
 );
-
+/*
 $this->menu=array(
 	array('label'=>'List Asiakkaat', 'url'=>array('index')),
 	array('label'=>'Create Asiakkaat', 'url'=>array('create')),
 	array('label'=>'View Asiakkaat', 'url'=>array('view', 'id'=>$model->id)),
 	array('label'=>'Manage Asiakkaat', 'url'=>array('admin')),
 );
+*/
 ?>
 
 <legend>

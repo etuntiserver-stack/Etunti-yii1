@@ -83,7 +83,8 @@ echo '
 )); ?>
 </div><!-- search-form -->
 
-<?php $this->widget('zii.widgets.grid.CGridView', array(
+<?php 
+	$this->widget('zii.widgets.grid.CGridView', array(
 	'id'=>'asiakkaat-grid',
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,
@@ -93,7 +94,10 @@ echo '
 
 	'columns'=>array(
 		'id',
-		'time',
+               array(
+                    'name'=>'time',
+                    'value'=>'date("d.m.Y - H:i",strtotime($data->time))',                   
+		),
 		'yrityksen_nimi',
 		'y_tunnus',
 		'yhteyshenkilo',
