@@ -70,7 +70,7 @@ $this->breadcrumbs=array(
       <br>
 
 
-	   <input type="submit" class="btn btn-primary pull-right">
+	   <input type="submit" class="btn btn-primary pull-right" value="<?php echo Yii::t('main', 'Luo raportti'); ?>">
 
     </form>
   </div>
@@ -129,7 +129,7 @@ $this->breadcrumbs=array(
       </div>
       <br>
 
-	   <input type="submit" class="btn btn-primary pull-right">
+	   <input type="submit" class="btn btn-primary pull-right" value="<?php echo Yii::t('main', 'Luo raportti'); ?>">
 
     </form>
   </div>

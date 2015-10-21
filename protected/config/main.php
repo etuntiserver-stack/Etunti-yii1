@@ -76,7 +76,7 @@ return array(
 	//'defaultController'=>'mobile/index',
 	// preloading 'log' component
 	'preload'=>array('chartjs'), //'log'
-	'language' => 'en',
+	'language' => 'fi',
 
   	'theme' => 'admin',
 

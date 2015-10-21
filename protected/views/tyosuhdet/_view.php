@@ -43,7 +43,7 @@ if(isset($tt['tekijan_nimi']))
 
                 </ul>
                 <div class="panel-footer">
-                    <?php echo CHtml::link(Yii::t('main', 'Muoka'), array('tyontekijat/update', 'id'=>$tt['id']),array('class'=>'btn btn-block btn-info')); ?>
+                    <?php echo CHtml::link(Yii::t('main', 'Muokkaa'), array('tyontekijat/update', 'id'=>$tt['id']),array('class'=>'btn btn-block btn-info')); ?>
                 </div>
             </div>
         </div>

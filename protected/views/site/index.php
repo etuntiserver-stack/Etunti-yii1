@@ -60,7 +60,7 @@ print_r($callpush->success);
 if(isset(Yii::app()->user->adminID))
 {
   if(isset($_SESSION['domain']))
-  echo '<h1>Domaini: '.$_SESSION['domain'].'</h1>';
+  echo '<h1>Domain: '.$_SESSION['domain'].'</h1>';
 
 for ($i = 1; $i <= 12; $i++) {
 

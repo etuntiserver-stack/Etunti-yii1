@@ -45,7 +45,7 @@
 	        <li role="separator" class="divider"></li>
         	<li><?php echo CHtml::link(Yii::t('main', 'Kohteet'),array('/kohteet/admin')); ?></li>
 	        <li role="separator" class="divider"></li>
-        	<li><?php echo CHtml::link(Yii::t('main', 'Hyväksytty tunnit'),array('/asiakasHyvaksynta/index')); ?></li>
+        	<li><?php echo CHtml::link(Yii::t('main', 'Hyväksytyt tunnit'),array('/asiakasHyvaksynta/index')); ?></li>
 	        <li role="separator" class="divider"></li>
         	<li><?php echo CHtml::link(Yii::t('main', 'Kartta'),array('/kohteet/googlemap')); ?></li>
 

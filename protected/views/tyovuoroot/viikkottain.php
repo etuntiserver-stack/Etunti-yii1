@@ -31,7 +31,7 @@ $paivat=array(
 	4=>'Torstai',
 	5=>'Perjantai',
 	6=>'Lauantai',
-	7=>'Suunnuntai',
+	7=>'Sunnuntai',
 	);
 
 $year = (isset($_GET['year'])) ? $_GET['year'] : date("Y");

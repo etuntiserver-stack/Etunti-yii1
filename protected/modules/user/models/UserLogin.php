@@ -35,10 +35,10 @@ class UserLogin extends CFormModel
 	public function attributeLabels()
 	{
 		return array(
-			'rememberMe'=>UserModule::t("Remember me next time"),
+			'rememberMe'=>UserModule::t("Muista minut"),
 			'username'=>UserModule::t("Käyttäjätunnus"),
 			'password'=>UserModule::t("Salasana"),
-			'domain'=>UserModule::t("Domaini"),
+			'domain'=>UserModule::t("Domain"),
 		);
 	}
 

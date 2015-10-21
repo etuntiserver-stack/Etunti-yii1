@@ -5,15 +5,16 @@
 $this->breadcrumbs=array(
 	'Asiakas Hyvaksyntas',
 );
-
+/*
 $this->menu=array(
 	array('label'=>'Create AsiakasHyvaksynta', 'url'=>array('create')),
 	array('label'=>'Manage AsiakasHyvaksynta', 'url'=>array('admin')),
 );
+*/
 ?>
 
 <legend>
-<h1><?php echo Yii::t('main','HYVÄKSYTTY TUNNIT'); ?> <i class="glyphicon glyphicon-ok"></i></h1>
+<h1><?php echo Yii::t('main','HYVÄKSYTYT TUNNIT'); ?> <i class="glyphicon glyphicon-ok"></i></h1>
 </legend>
 
 
@@ -45,7 +46,7 @@ $this->menu=array(
    <select name="status" class="form-control form-group input-sm">
    <option value="kaikki"><?php echo Yii::t('main','Tilanne'); ?></option>
    <option value="1"><?php echo Yii::t('main','Lähetetty'); ?></option>
-   <option value="3"><?php echo Yii::t('main','Hyväksyty'); ?></option>
+   <option value="3"><?php echo Yii::t('main','Hyväksytty'); ?></option>
    <option value="2"><?php echo Yii::t('main','Hylätty'); ?></option>
    </select> 
 
