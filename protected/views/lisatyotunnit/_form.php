@@ -8,7 +8,7 @@
         <div class="form col-md-4">
             <div class="panel panel-info">
                 <div class="panel-heading">
-                    <h4 class="text-center"><b class="glyphicon glyphicon-plus"></b> <?php echo Yii::t('main', 'LISÄTYÖTUNNIT'); ?></h4>
+                    <h4 class="text-center"><b class="glyphicon glyphicon-plus"></b> <?php echo Yii::t('main', 'YLITYÖTUNNIT'); ?></h4>
                 </div>
 
 
