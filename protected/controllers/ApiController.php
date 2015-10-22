@@ -257,6 +257,16 @@ public function actionImei($dom)
 
 	        if($_POST['check'] == 'tvuoro'){
 
+		    $tas = array();
+		    if(isset(Yii::app()->user->adminPaketti)) 
+		     	$tas = explode(",",Yii::app()->user->adminPaketti);
+
+		    if(!in_array('2',$tas))
+		    {
+		    $this->_sendResponse(200, 'Osta lisäosa työvuorojenhallinta');
+		    exit;
+		    } 
+
 		    $criteria = new CDbCriteria();
 		    $criteria->order = " DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d'),alku ASC ";
 		    $criteria->condition = " 

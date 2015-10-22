@@ -1,8 +1,11 @@
 <?php
 
     	$color = '';
-	$did = date("Ymd",strtotime($pvm));
+	$height = '';
 
+	$did = date("Ymd",strtotime($pvm));
+	if(date('N', strtotime($pvm)) == 6 or date('N', strtotime($pvm)) == 7)
+	$height = 'style="min-height:10px;"';
 
 	echo '
 	   <div class="tp row">
@@ -13,7 +16,7 @@
 	     </div>
 	   </div>';
 
-	echo '<div class="small laatikko latikkoAsetukset" pvm="'.date("d.m.Y",strtotime($pvm)).'" tid="'.$tid.'">';
+	echo '<div '.$height.' class="small laatikko latikkoAsetukset" pvm="'.date("d.m.Y",strtotime($pvm)).'" tid="'.$tid.'">';
 	
 
        	$criteria = new CDbCriteria();
