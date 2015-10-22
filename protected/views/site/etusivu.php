@@ -55,7 +55,11 @@ function num($val){
 <?php 
 	$criteria = new CDbCriteria;
 	$criteria->group="tid";	
-	$criteria->condition=" kohde!='' AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE() ";
+	$criteria->condition=" 
+		kohde!='' 
+		AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE() 
+		AND tyoajanmerkinta NOT LIKE '%Ei lasketa%'
+	";
 	$t = Tyovuoroot::model()->findAll($criteria);
 
 	$nimi = array();
@@ -63,7 +67,13 @@ function num($val){
 	foreach($t as $tekija)
 	{
 		$tnimi = Tyontekijat::model()->findbypk($tekija->tid);
-		$kohteet = Tyovuoroot::model()->findAll(" tid='".$tekija->tid."' and DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE() ");
+		$criteria = new CDbCriteria;
+		$criteria->condition="
+			tid='".$tekija->tid."' 
+			and DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE()
+			AND tyoajanmerkinta NOT LIKE '%Ei lasketa%'
+		";
+		$kohteet = Tyovuoroot::model()->findAll($criteria);
 		$k[] = (int)count($kohteet);
 		$nimi[] = $tnimi->tekijan_nimi;
 	}
@@ -72,7 +82,7 @@ function num($val){
             'chartjs.widgets.ChBars', 
             array(
                 'width' => 600,
-                'height' => 300,
+                'height' => 350,
                 'htmlOptions' => array(),
                 'labels' => $nimi,
                 'datasets' => array(
@@ -100,7 +110,9 @@ function num($val){
 	$criteria = new CDbCriteria;
 	$criteria->group="tid";	
 	$criteria->condition=" 
-		kohde!='' AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE() 
+		kohde!='' 
+		AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE() 
+		AND tyoajanmerkinta NOT LIKE '%Ei lasketa%'
 	";
 	$t = Tyovuoroot::model()->findAll($criteria);
 
@@ -118,6 +130,7 @@ function num($val){
 		$criteria->condition=" 
 			tid='".$tekija->tid."' AND kohde!='' 
 			AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE() 
+			AND tyoajanmerkinta NOT LIKE '%Ei lasketa%'
 		";
 		$tunnit = Tyovuoroot::model()->find($criteria);
 		$k[] = (int)num($tunnit->l_tunnit);
@@ -128,7 +141,7 @@ function num($val){
             'chartjs.widgets.ChBars', 
             array(
                 'width' => 600,
-                'height' => 300,
+                'height' => 350,
                 'htmlOptions' => array(),
                 'labels' => $nimi,
                 'datasets' => array(
