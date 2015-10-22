@@ -68,30 +68,8 @@
 	<label><?php echo Yii::t('main', 'Lopetusaika'); ?></label>
 	<input type="text" class="form-control timepicker" name="tto" id="tto">
   </div>
-</div>
-<br>
-<div class="row">
-  <div class="col-sm-4"><?php echo $tt; ?></div>
-  <div class="col-sm-4"><?php echo $k; ?></div>
-</div>
-<br>
-<div class="row">
   <div class="col-sm-4">
-		<?php
-        	$tal = Valikkoot::model()->findAll(" select_type='tyoajanlaatu' ", array('order' => 'select_type'));
-		echo '<select name="tyoajanlaatu" class="form-control">';
-
-		 foreach($tal as $v)
-		 {
-		   $expl1 = explode("/",$v->value);
-		   $color = (isset($expl1[1])) ? $expl1[1] : '';
-		   $value1 = (isset($expl1[0])) ? $expl1[0] : '';
-		   echo '<option style="color:'.$color.'" value="'.$v->value.'">'.$value1.'</option>';
-		 }
-		echo '</select>';
-        	?>
-  </div>
-  <div class="col-sm-4">
+	 	<label><?php echo Yii::t('main','Työajanmerkintä'); ?></label>
 		<?php
         	$tal = Valikkoot::model()->findAll(" select_type='tyoajanmerkinta' ", array('order' => 'select_type'));
 		echo '<select name="tyoajanmerkinta" class="form-control">';
@@ -107,10 +85,50 @@
         	?>
   </div>
 </div>
+<br>
+<div class="row">
+  <div class="col-sm-4"><?php echo $tt; ?></div>
+  <div class="col-sm-4"><?php echo $k; ?></div>
+</div>
+<br>
+  <!--
+<br>
+<div class="row">
+  <div class="col-sm-4">
 
+		<?php
+        	$tal = Valikkoot::model()->findAll(" select_type='tyoajanlaatu' ", array('order' => 'select_type'));
+		echo '<select name="tyoajanlaatu" class="form-control">';
 
-  <label><?php echo Yii::t('main', 'Toimenpiteet'); ?></label>
-  <textarea class="form-control tietoja" rows="3" name="tietoja" id="tietoja"></textarea>
+		 foreach($tal as $v)
+		 {
+		   $expl1 = explode("/",$v->value);
+		   $color = (isset($expl1[1])) ? $expl1[1] : '';
+		   $value1 = (isset($expl1[0])) ? $expl1[0] : '';
+		   echo '<option style="color:'.$color.'" value="'.$v->value.'">'.$value1.'</option>';
+		 }
+		echo '</select>';
+        	?>
+
+  </div>
+  <div class="col-sm-4">
+
+  </div>
+</div>
+  -->
+
+<div class="row">
+  <div class="col-sm-6">
+    <label><?php echo Yii::t('main', 'Toimenpiteet'); ?></label>
+    <textarea class="form-control" rows="3" name="tietoja"></textarea>
+  </div>
+  <div class="col-sm-6">
+    <label><?php echo Yii::t('main', 'Ohjet'); ?></label>
+
+    <textarea class="form-control tietoja" rows="3" name="tietoja" id="tietoja"></textarea>
+  </div>
+</div>
+
 
 <br>
 <div class="row">

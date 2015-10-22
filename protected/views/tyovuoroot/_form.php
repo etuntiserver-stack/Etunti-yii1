@@ -143,10 +143,19 @@ if(isset($model->id))
   </div>
 </div>
 
+<div class="row">
+  <div class="col-sm-12">
+    <div class="pull-right">
+		<?php echo Yii::t('main','Ilmoita työntekijä viestinä'); ?> 
+			<input type="checkbox" name="Tyovuoroot[PushNotify]" class="sw" id="Tyovuoroot_PushNotify">
+    </div>
+  </div>
 </div>
-	<div class="modal-footer">
-		<?php echo CHtml::Button('Sulje',array('class'=>'btn btn-default','data-dismiss'=>'modal')); ?>
-		<?php echo CHtml::submitButton($model->isNewRecord ? 'Luo' : 'Tallenna',array('class'=>'btn btn-primary submitThis')); ?>
+
+</div>
+	<div class="row modal-footer">
+		<?php echo CHtml::Button('Sulje',array('class'=>'btn btn-default btn-sm','data-dismiss'=>'modal')); ?>
+		<?php echo CHtml::submitButton($model->isNewRecord ? 'Luo' : 'Tallenna',array('class'=>'btn btn-sm btn-primary submitThis')); ?>
 	</div>		
 		</div> <!-- end modal-content -->
 	</div> <!-- end modal-dialog -->
@@ -160,6 +169,14 @@ if(isset($model->id))
 
 <script type="text/javascript">
 $(document).ready(function(){
+
+  $(".sw").bootstrapSwitch({
+	size: "mini",
+	onColor: "success",
+	offColor: "danger",
+	onText: "Kyllä",
+	offText: "Ei"
+  });
 
 	$('.submitThis').click(function(){
 		$('#tyovuoroot-form').submit();
