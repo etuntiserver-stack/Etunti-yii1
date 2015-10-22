@@ -465,6 +465,7 @@ public function actionImei($dom)
 		$kohdenID = '';
 		$get_osoite = '';
 
+		/*
 		$loc = explode("/",$_POST['my_location']);
  		if(isset($loc[0]) and isset($loc[1]) and !empty($loc[0]) and !empty($loc[1]))
 		{
@@ -490,6 +491,7 @@ public function actionImei($dom)
 		   }
 		   
 		}
+		*/
 
 		if(isset($_POST['tag']) and $_POST['tag'] != '000000')
 		{
