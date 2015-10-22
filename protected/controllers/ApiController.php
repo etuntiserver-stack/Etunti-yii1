@@ -257,11 +257,12 @@ public function actionImei($dom)
 
 	        if($_POST['check'] == 'tvuoro'){
 
-		    $tas = array();
-		    if(isset(Yii::app()->user->adminPaketti)) 
-		     	$tas = explode(",",Yii::app()->user->adminPaketti);
+		    $tas = Domainit::model()->find(" domain='".$dom."' ");
+		    $p = array();
+		    if(isset($tas->paketti)) 
+		     	$p = explode(",",$tas->paketti);
 
-		    if(!in_array('2',$tas))
+		    if(!in_array('2',$p))
 		    {
 		    $this->_sendResponse(200, 'Osta lisäosa työvuorojenhallinta');
 		    exit;
