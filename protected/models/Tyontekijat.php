@@ -97,7 +97,7 @@ public $tunnus;
 			'id' => 'ID',
 			'imei' => 'Imei',
 			'laiten_puh' => 'Laiten nro.',
-			'tekijan_nimi' => 'Etu- ja sukunimet',
+			'tekijan_nimi' => 'Etu- ja sukunimi',
 			'tekijan_henkilotunnus' => 'Henkilötunnus',
 			'tekijan_puh' => 'Puhelin',
 			'tekijan_email' => 'Sähköposti',

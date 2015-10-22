@@ -163,10 +163,10 @@ $(document).ready(function(){
 
   $(".sw").bootstrapSwitch({
 	size: "mini",
-	onColor: "danger",
-	offColor: "success",
-	onText: "Ei",
-	offText: "Kyllä"
+	onColor: "success",
+	offColor: "danger",
+	onText: "Kyllä",
+	offText: "Ei"
   });
 
   var tekijaVal = '';

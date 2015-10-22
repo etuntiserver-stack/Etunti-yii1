@@ -114,8 +114,8 @@
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?php echo Yii::t('main', 'Työvuorot'); ?> <span class="caret"></span></a>
           <ul class="dropdown-menu">
-        	<li><?php echo CHtml::link(Yii::t('main', 'Työvuorot'),array('/tyovuoroot/index')); ?></li>
-        	<li><?php echo CHtml::link(Yii::t('main', 'Viikkonäkymä'),array('/tyovuoroot/viikkottain')); ?></li>
+        	<li><?php echo CHtml::link(Yii::t('main', 'Työvuorot'),array('/tyovuoroot/index'),array('target'=>'_blank')); ?></li>
+        	<li><?php echo CHtml::link(Yii::t('main', 'Työvuorojen lähetys'),array('/tyovuoroot/viikkottain')); ?></li>
         	<li><?php echo CHtml::link(Yii::t('main', 'Kuukausinäkymä'),array('/tyovuoroot/kk')); ?></li>
 	        <li role="separator" class="divider"></li>
         	<li><?php echo CHtml::link(Yii::t('main', 'Vuosilomat'),array('/vuosilomat/index')); ?></li>
