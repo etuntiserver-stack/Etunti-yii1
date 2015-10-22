@@ -558,7 +558,10 @@ public function actionImei($dom)
 	     {
                 $mobupdate = Mob::model()->findbypk($mob->id);
 
-		if( $mobupdate->asiakas_num != $_POST['asiakas_num'] )
+		$explAsNum = explode("_",$mobupdate->asiakas_num);
+		$explAsNumPost = explode("_",$_POST['asiakas_num']);
+
+		if( isset($explAsNum[1]) and isset($explAsNumPost[1]) and $explAsNum[1] != $explAsNumPost[1] )
 		{
                 $this->_sendResponse(200, $ms."//".$mobupdate->id."//".$mobupdate->status."//".$mob->kohde_kannasta."//tagnumerror//null");
 	        exit;
