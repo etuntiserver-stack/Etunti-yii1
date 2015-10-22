@@ -313,7 +313,7 @@ public function actionImei($dom)
 		    if(isset($_POST['viesti']))
 		    $viesti .= $_POST['viesti'];
 
-		    if(isset($_POST['my_location']))
+		    if(isset($_POST['my_location']) and !empty($_POST['my_location']))
 		    {
 		    $viesti .= '<br> <a href="http://maps.google.com/maps?q='.str_replace("/",",",$_POST['my_location']).'&ll='.str_replace("/",",",$_POST['my_location']).'&z=17" target="_blank">KARTTA</a>';
 		    }
@@ -467,7 +467,7 @@ public function actionImei($dom)
 		$loc = explode("/",$_POST['my_location']);
 		$get_osoite = '';
 		$kohdenID = '';
- 		if(isset($loc[0]) and isset($loc[1]))
+ 		if(isset($loc[0]) and isset($loc[1]) and !empty($loc[0]) and !empty($loc[1]))
 		{
 		  $gps = $loc[0].",".$loc[1]; 
  
