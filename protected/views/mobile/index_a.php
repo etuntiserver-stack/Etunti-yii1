@@ -31,6 +31,7 @@
   <tr>
   <th class="col-sm-1"><?php echo Yii::t('main', 'T'); ?></th>
   <th><?php echo Yii::t('main', 'ID'); ?></th>
+  <th><?php echo Yii::t('main', 'Versio'); ?></th>
   <th><?php echo Yii::t('main', 'Päivä'); ?></th>
   <th><?php echo Yii::t('main', 'Kartta'); ?></th>
   <th class="col-sm-4"><?php echo Yii::t('main', 'Työntekijä'); ?></th>
