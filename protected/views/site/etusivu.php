@@ -72,7 +72,7 @@ function num($val){
             'chartjs.widgets.ChBars', 
             array(
                 'width' => 600,
-                'height' => 250,
+                'height' => 300,
                 'htmlOptions' => array(),
                 'labels' => $nimi,
                 'datasets' => array(
@@ -128,7 +128,7 @@ function num($val){
             'chartjs.widgets.ChBars', 
             array(
                 'width' => 600,
-                'height' => 250,
+                'height' => 300,
                 'htmlOptions' => array(),
                 'labels' => $nimi,
                 'datasets' => array(
