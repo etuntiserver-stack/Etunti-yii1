@@ -3,29 +3,28 @@ $(document).ready(function(){
 
   $("#odotta").html("<img src='img/search.gif'>");
 
-  var timer = setTimeout(tiedot,5000); 
-
+  setTimeout(tiedot,3000); 
 
 	    document.addEventListener("deviceready", onDeviceReady, false);
 	    function onDeviceReady() {
 
 	        navigator.geolocation.getCurrentPosition(onSuccess, onError);
-		
-		/*
-	        document.getElementById('imei').value = cordova.plugins.uid.IMEI;
-		if(cordova.plugins.uid.IMEI > 0)
-		document.getElementById("all").style.display = "block";
-		*/
+		//var watchID = navigator.geolocation.watchPosition(onSuccessWatch, onErrorWatch, { timeout: 30000 });
 
-		document.getElementById("all").style.display = "block";
-
+		function showAppVersion() {
+		  cordova.getAppVersion(function(version) {
+		  document.getElementById('version').innerHTML = 'version: ' +version;
+		  versio = version;
+		  });
+		}
+		showAppVersion();
 
 	    }
 	    function onSuccess(position) {
 	        document.getElementById('location').value = position.coords.latitude + '/' + position.coords.longitude;
 		document.getElementById('olenEksynyt').style.display="block";
-		clearTimeout(timer);
-		tiedot();
+		//clearTimeout(timer);
+		//tiedot();
 	    }
 	    function onError(error) {
 	        alert('code: '    + error.code    + '\n' +
@@ -34,6 +33,16 @@ $(document).ready(function(){
 
 
 
+
+  function checkTAG(){
+
+	 if($("#tagginro").val() != '')
+	    tag = $("#tagginro").val();
+	 else
+	    tag = '000000';
+
+	return tag;
+  }
 
   function tiedot(){
 
@@ -44,17 +53,14 @@ $(document).ready(function(){
 
 	if(my_location == '') my_location = $("#location").val();
 
-	 if($("#tagginro").val() != '')
-	    tag = $("#tagginro").val();
-	 else
-	    tag = '000000';
-
 	if((domain != '') & (email !='') & (salasana != ''))
 	{
+		checkTAG();
 		set();
 
 	} else {
-		setTimeout(function(){document.location.href = "asetukset.html";},500);
+		//setTimeout(function(){document.location.href = "asetukset.html";},500);
+		$("#domainBlokki").show();
 		return false;
  	}
 	
@@ -82,6 +88,7 @@ function stateFalse(){
 }
 
 $('input[name="tyo"]').on('switchChange.bootstrapSwitch', function(event, state) {
+
   console.log(state); 
   if(state == true)
   {
@@ -94,6 +101,7 @@ $('input[name="tyo"]').on('switchChange.bootstrapSwitch', function(event, state)
 });
 
 $('input[name="matka"]').on('switchChange.bootstrapSwitch', function(event, state) {
+
   console.log(state); 
   if(state == true)
   {
@@ -104,6 +112,7 @@ $('input[name="matka"]').on('switchChange.bootstrapSwitch', function(event, stat
 });
 
 $('input[name="lounas"]').on('switchChange.bootstrapSwitch', function(event, state) {
+
   console.log(state); 
   if(state == true)
   {
@@ -134,43 +143,6 @@ function allTilasetHide(){
 
 
 
-
-  function saveFile(){
-
-    document.addEventListener("deviceready", onDeviceReadyFileSave, false);
-
-    function onDeviceReadyFileSave() {
-        window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, gotFS, fail);
-    }
-
-    function gotFS(fileSystem) {
-        fileSystem.root.getFile("etunti.cfg", {create: true, exclusive: false}, gotFileEntry, fail);
-    }
-
-    function gotFileEntry(fileEntry) {
-        fileEntry.createWriter(gotFileWriter, fail);
-    }
-
-    function gotFileWriter(writer) {
-        writer.write($("#domain").val() +"//"+$("#email").val() +"//"+$("#salasana").val());
-	  window.location.href='index.html';
-       	  //set();
- 	  //checkviesti(domain);
-    }
-
-    function fail(error) {
-        console.log(error.code);
-    }
-  }
-
-
-  $(".aloita").click(function(){
-	saveFile();
-  });
-
-
-
-
 function curDateTime(){
 
   	var date = new Date();
@@ -189,8 +161,10 @@ function curDateTime(){
 
 function row(tilanne,st){
 
+   checkTAG();
    allHide();
    allTilasetHide();
+
 
    $("#odotta").html("<h1>ODOTA</h1>").fadeIn(370);
 
@@ -231,7 +205,7 @@ function row(tilanne,st){
 		salasana : salasana,
 		domain: domain,
 		imei: "ei ole",
-		asiakas_num: versio+"_"+tag,
+		asiakas_num: versio + "_" + tag,
 		puh_numero: puh_nro,
 		bluetooth_name: "0",
 		sim_serial_number: "0",
@@ -247,6 +221,7 @@ function row(tilanne,st){
 		status: st,
 		tietoja: "",
 		hyvaksytty: "0",
+		gcm_reg_id : $("#regId").text(),
 	};
 
 
@@ -264,6 +239,23 @@ function row(tilanne,st){
 		   //return false;
 		 } else {
 		   $("#result2").hide();
+		   //$("#result2").html("data: <br>" + data).show();
+		 }
+
+		 if(sp[5])
+		 {
+
+            	   var kestoBlock = '<br><div class="row">' +
+		  		  '<div class="col-sm-12">' +
+				  '  <div class="alert alert-success">' +
+				  '    <div class="card-content black-text">' +
+				  '      <center><h2>Kesto: ' + sp[5] + '</h2></center>' +
+				  '    </div>' +
+				  '  </div>' +
+				  ' </div>' +
+				  '</div>';
+
+		   $("#kesto").html(kestoBlock);
 		 }
 
 		set();
@@ -299,15 +291,17 @@ function row(tilanne,st){
 		{
 		  $("#tekija").html("<div class='alert alert-danger'>"+sp[1]+"</div>").show();
 		  $("#odotta").fadeOut(370);
+		  $("#all").hide();
+		  $("#olenEksynyt").hide();
 		  return false;
 		} 
 
-		$('#tietoja').fadeOut(370);
-		$("#odotta").hide('slow');
-		$("#domainBlokki").hide();
-		$("#result").append(sp+"\n");
+		  //$('#tietoja').fadeOut(370);
+		  $("#odotta").hide('slow');
+		  $("#domainBlokki").hide();
+		  $("#result").append(sp+"\n");
+		  $("#tekija").html(sp[5]+ '<br>' + domain);
 
-		$("#tekija").html(sp[5]+ '<br>' + domain);
 
 		if((sp[0] == '3') || (sp[0] == '2') || (sp[0] == '10')){
 		  $("#osoite").show(370);
