@@ -120,12 +120,12 @@
 <div class="row">
   <div class="col-sm-6">
     <label><?php echo Yii::t('main', 'Toimenpiteet'); ?></label>
-    <textarea class="form-control" rows="3" name="tietoja"></textarea>
+    <textarea class="form-control" rows="6" name="tietoja"></textarea>
   </div>
   <div class="col-sm-6">
     <label><?php echo Yii::t('main', 'Ohjet'); ?></label>
 
-    <textarea class="form-control tietoja" rows="3" name="tietoja" id="tietoja"></textarea>
+    <textarea class="form-control tietoja" rows="6" name="tietoja" id="tietoja"></textarea>
   </div>
 </div>
 
