@@ -13,7 +13,7 @@ function num($val){
 <br>
 
 <div class="row">
-  <div class="col-sm-4">
+  <div class="col-sm-6">
   <fieldset>
 	<legend><?php echo Yii::t('main','TYÖT TÄNÄÄN'); ?></legend>
 <?php 
@@ -49,7 +49,7 @@ function num($val){
 <br>
 
 <div class="row">
-  <div class="col-sm-12">
+  <div class="col-sm-6">
   <fieldset>
 	<legend><?php echo Yii::t('main','TYÖVUOROSUUNNITTELU KOHTEEN MÄÄRÄ'); ?></legend>
 <?php 
@@ -98,12 +98,7 @@ function num($val){
 ?>
   </fieldset>
   </div>
-</div>
-
-<br>
-
-<div class="row">
-  <div class="col-sm-12">
+  <div class="col-sm-6">
   <fieldset>
 	<legend><?php echo Yii::t('main','TYÖVUOROSUUNNITTELU TUNNIN MÄÄRÄ'); ?></legend>
 <?php 
