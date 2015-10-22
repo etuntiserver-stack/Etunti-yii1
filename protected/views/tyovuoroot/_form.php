@@ -75,6 +75,7 @@ if(isset($model->id))
 </div>
 
 <div class="row">
+<!--
   <div class="col-sm-3">
 		<?php echo $form->labelEx($model,'tyoajanlaatu'); ?>
 		<?php
@@ -97,7 +98,8 @@ if(isset($model->id))
 		echo '</select>';
         	?>
   </div>
-  <div class="col-sm-3">
+-->
+  <div class="col-sm-6">
 		<?php echo $form->labelEx($model,'tyoajanmerkinta'); ?>
 		<?php
         	$tal = Valikkoot::model()->findAll(" select_type='tyoajanmerkinta' ", array('order' => 'select_type'));
@@ -118,8 +120,6 @@ if(isset($model->id))
 		 }
 		echo '</select>';
         	?>
-  </div>
-  <div class="col-sm-3">
 
   </div>
   <div class="col-sm-6">
