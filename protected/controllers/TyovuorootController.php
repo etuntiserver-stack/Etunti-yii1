@@ -269,9 +269,22 @@ class TyovuorootController extends Controller
 	//print_r($_POST);
 	  if(isset($_POST['checktietoja']))
 	  {
-		$k = Kohteet::model()->findbypk($_POST['kohdeVal']);
-		if(isset($k->toimenpiteet))
-		echo $k->toimenpiteet;
+		$m = Kohteet::model()->findbypk($_POST['kohdeVal']);
+		$k = explode("//",$m->kenella_on_avain);
+
+		  $ohje = '';
+		if(isset($k[1]))
+		  $ohje .= Yii::t('main', 'Avain on: ')." ".$k[1]."\n";
+		if(!empty($m->avain))
+		  $ohje .= Yii::t('main', 'Avain: ')." ".$m->avain."\n\n";
+		if(!empty($m->toimenpiteet))
+		  $ohje .= "\nToimenpiteet:\n".$m->toimenpiteet;
+		if(!empty($m->tietoja))
+		  $ohje .= "\nTietoja:\n".$m->tietoja;
+		if(!empty($m->muut))
+		  $ohje .= "\nMuut:\n".$m->muut;
+		echo $ohje;
+
 		exit;
 	  }
 
@@ -318,7 +331,7 @@ class TyovuorootController extends Controller
 				$t->pvm = $pvm;
 				$t->alku = $_POST['tfrom'];
 				$t->loppu = $_POST['tto'];
-				$t->tyoajanlaatu = $_POST['tyoajanlaatu'];
+				//$t->tyoajanlaatu = $_POST['tyoajanlaatu'];
 				$t->tyoajanmerkinta = $_POST['tyoajanmerkinta'];
 				$t->tietoja = $_POST['tietoja'];
 				$t->save();
@@ -492,6 +505,8 @@ class TyovuorootController extends Controller
 			if($model->save())
 			{
 
+			  if(isset($_POST['Tyovuoroot']['PushNotify']) and $_POST['Tyovuoroot']['PushNotify'] == 'on')
+			  {
 			   $t = Tyontekijat::model()->findbypk($model->tid);
 			   $k = Kohteet::model()->findbypk($model->kohde);
 			   if(isset($k->osoite) and !empty($k->osoite))
@@ -504,7 +519,7 @@ class TyovuorootController extends Controller
 				Domainit::PushNotify($t->id,"Hei ".$t->tekijan_nimi,$pushviesti);
 
 			   }
-
+			  }
 			}
 		}
 
@@ -551,10 +566,13 @@ class TyovuorootController extends Controller
 
 		if(isset($_POST['Tyovuoroot']))
 		{
+
 			$_POST['Tyovuoroot']['pvm'] = date("d.m.Y",strtotime($_POST['Tyovuoroot']['pvm']));
 			$model->attributes=$_POST['Tyovuoroot'];
 			if($model->save()){
 
+			  if(isset($_POST['Tyovuoroot']['PushNotify']) and $_POST['Tyovuoroot']['PushNotify'] == 'on')
+			  {
 			   $k = Kohteet::model()->findbypk($model->kohde);
 			   if(isset($k->osoite) and !empty($k->osoite))
 			   {
@@ -564,9 +582,8 @@ class TyovuorootController extends Controller
 					".$model->tietoja;
 
 				Domainit::PushNotify($t->id,"Hei ".$t->tekijan_nimi,$pushviesti);
-
 			   }
-
+			  }
 			}
 		}
 
