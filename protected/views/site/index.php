@@ -1,6 +1,9 @@
 <?php
 /* @var $this SiteController */
 
+if(isset(Yii::app()->user->adminID))
+$this->redirect('index.php/site/etusivu');
+
 $this->pageTitle=Yii::app()->name;
 
 
