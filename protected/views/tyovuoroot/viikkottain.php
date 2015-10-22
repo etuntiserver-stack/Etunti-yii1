@@ -16,7 +16,7 @@ td:first-child {
 </style>
 
 <legend>
-<h1> <?php echo Yii::t('main', 'TYÖVUOROT VIIKKO'); ?> <i class="glyphicon glyphicon-th-list"></i></h1>
+<h1> <?php echo Yii::t('main', 'TYÖVUOROJEN LÄHETYS'); ?> <i class="glyphicon glyphicon-th-list"></i></h1>
 </legend>
 
 
