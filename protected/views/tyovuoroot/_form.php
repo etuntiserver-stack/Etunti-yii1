@@ -24,12 +24,17 @@ if(isset($model->id))
 
 		$k = explode("//",$m->kenella_on_avain);
 
+		  $ohje = '';
 		if(isset($k[1]))
 		  $ohje .= Yii::t('main', 'Avain on: ')." ".$k[1]."\n";
 		if(!empty($m->avain))
 		  $ohje .= Yii::t('main', 'Avain: ')." ".$m->avain."\n\n";
 		if(!empty($m->toimenpiteet))
-		  $ohje .= $m->toimenpiteet;
+		  $ohje .= "\nToimenpiteet:\n".$m->toimenpiteet;
+		if(!empty($m->tietoja))
+		  $ohje .= "\nTietoja:\n".$m->tietoja;
+		if(!empty($m->muut))
+		  $ohje .= "\nMuut:\n".$m->muut;
 
 	}
 
@@ -143,6 +148,10 @@ if(isset($model->id))
   </div>
 </div>
 
+<?php 
+$t = Tyontekijat::model()->findbypk($model->tid);
+if(!empty($t->gcm_reg_id)) :
+?>
 <div class="row">
   <div class="col-sm-12">
     <div class="pull-right">
@@ -151,6 +160,7 @@ if(isset($model->id))
     </div>
   </div>
 </div>
+<?php endif; ?>
 
 </div>
 	<div class="row modal-footer">
