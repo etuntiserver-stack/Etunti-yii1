@@ -52,7 +52,7 @@ Yii::app()->clientScript->registerPackage('bootstrapCSS');
 
 </div><!-- page -->
 
-
+<?php if($curpage != 'tyovuoroot/index') : ?>
 		<footer class="footer-distributed">
 
 			<div class="footer-right">
@@ -84,6 +84,7 @@ Yii::app()->clientScript->registerPackage('bootstrapCSS');
 			</div>
 
 		</footer>
+<?php endif; ?>
 
 </body>
 </html>
