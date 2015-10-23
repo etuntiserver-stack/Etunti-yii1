@@ -73,7 +73,7 @@
 	}
 
 	echo '</div>';
-
+	
 	if( $from == 'ajax' ){
 	?>
 	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/tvuoroot.js"></script>
