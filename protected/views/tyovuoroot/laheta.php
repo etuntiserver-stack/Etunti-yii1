@@ -30,13 +30,13 @@ td,th{
 
 <div class="form-inline">
   <form action="#" class="form-group" target="_blank" method="POST">
-    <input type="submit" class="btn btn-success" name="pdf" value="PDF">
+    <input type="submit" class="btn btn-success btn-sm" name="pdf" value="PDF">
   </form>
 
   <?php if(!empty($tt->tekijan_email)): ?>
   <form action="#" id="pdf_email" class="form-group" target="_blank" method="POST">
     <input type="hidden" name="pdf_email" value="true">
-    <button class="btn btn-success laheta">PDF >>> <?php echo $tt->tekijan_email; ?></button>
+    <button class="btn btn-success btn-sm laheta"><?php echo Yii::t('main','Lähetä').': '.$tt->tekijan_email; ?></button>
   </form>
   <?php
 	$file = $week.'_'.$year.'_'.$tid.'.pdf';
