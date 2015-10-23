@@ -61,17 +61,17 @@ else
   $kesto[$data->id] =  '';
 
 if(!empty($data->tietoja) and !empty($data->tietoja))
-  $muokattu[$data->id] =  '<span class="glyphicon glyphicon-check text-info"></span>';
+  $muokattu[$data->id] =  '<span class="glyphicon glyphicon-check"></span>';
 else
-  $muokattu[$data->id] =  '<span class="glyphicon glyphicon-arrow-down text-danger"></span>';
+  $muokattu[$data->id] =  '<span class="glyphicon glyphicon-phone"></span>';
 
 
 	if($data->status == '1')
 	$door = " <img src='".Yii::app()->request->baseUrl."/img/uborka.png' alt='aloitettu' class='img-responsive' />";
 	elseif($data->status == '3')
-	$door = " <img src='".Yii::app()->request->baseUrl."/img/ok.png' alt='valmiit' class='img-responsive' />";
+	$door = '<i class="fa fa-check text-success"></i>';
 	elseif($data->status == '2')
-	$door = " <img src='".Yii::app()->request->baseUrl."/img/bussi.jpg' alt='valmiit' class='img-responsive' />";
+	$door = '<i class="fa fa-bus"></i>';
 	elseif($data->status == '10')
 	$door = " <img src='".Yii::app()->request->baseUrl."/img/food.png' alt='lounaalla' class='img-responsive' />";
 	elseif($data->status == '7')
@@ -107,15 +107,11 @@ else
 <tr style="<?php echo $class; ?>" id="rivi_<?php echo $data->id; ?>">
 
 	<td>
-	<div class="row">
-	  <div class="col-sm-6">
 		<?php echo $door; ?>
 
 		<?php if($diff > 0) : ?>
 		<b class="text-danger"><?php echo sprint($diff); ?></b>
 		<?php endif; ?>
-	  </div>
-	</div>
 	</td>
 
 	<td><?php echo CHtml::link(CHtml::encode($data->id), array('update', 'id'=>$data->id)); ?></td>
@@ -145,11 +141,11 @@ else
 	$did = date("Ymd",strtotime($apvm[$data->id]));
 	?>
 	<td>
-	  <span class="link text-warning vietyovuoroon" pvmtid="<?php echo $did.'_'.$data->tid; ?>"><b class="glyphicon glyphicon-fullscreen"></b></span>
+	  <span class="link vietyovuoroon" pvmtid="<?php echo $did.'_'.$data->tid; ?>"><span class="glyphicon glyphicon-fullscreen"></span></span>
 	<?php  if($obtrue == true):  ?>
 
-	  <span class="link text-success" data-toggle="collapse" data-target="<?php echo '#sushow_'.$data->id; ?>">
-	  <b class="glyphicon glyphicon-sort-by-attributes-alt"></b>
+	  <span class="link" data-toggle="collapse" data-target="<?php echo '#sushow_'.$data->id; ?>">
+	  <span class="glyphicon glyphicon-sort-by-attributes-alt"></span>
 	  </a>
 
 	    <div style="position:absolute;width:300px;z-index: 2;" class="collapse" id="<?php echo 'sushow_'.$data->id; ?>">

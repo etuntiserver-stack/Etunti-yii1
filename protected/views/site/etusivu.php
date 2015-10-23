@@ -5,12 +5,15 @@ function num($val){
 	return  number_format((float)$val/3600, 2, '.', '');
 }
 
+//$this->widget('ext.tooltipster.tooltipster');
+//<a href="http://www.yiiframework.com" class="tooltipster" title="This is my link's tooltip message!">TEST</a>
 ?>
 <legend>
 <h1><?php echo Yii::t('main','ETUSIVU'); ?></h1>
 </legend>
 
 <br>
+
 
 <div class="row">
   <div class="col-sm-6">

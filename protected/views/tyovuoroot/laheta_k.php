@@ -33,13 +33,13 @@ td,th{
   <?php if(!empty($tt->tekijan_email)): ?>
   <form action="#" id="pdf_email" class="form-group" target="_blank" method="POST">
     <input type="hidden" name="pdf_email" value="true">
-    <button class="btn btn-success laheta">PDF >>> KAIKILLE</button>
+    <button class="btn btn-success btn-sm laheta">PDF >>> KAIKILLE</button>
   </form>
   <?php
 	$file = $week.'_'.$year.'_'.$tid.'.pdf';
 	$path = Yii::app()->request->baseUrl."emails/tyovuorot/".Yii::app()->user->domain;
 	if (file_exists($path.'/'.$file))
-	echo CHtml::link(Yii::t('main', ' Lähetetty'),'../../emails/tyovuorot/'.Yii::app()->user->domain.'/'.$file,array('target'=>'_blank','class'=>'btn btn-danger glyphicon glyphicon-file'));
+	echo CHtml::link(Yii::t('main', ' Lähetetty'),'../../emails/tyovuorot/'.Yii::app()->user->domain.'/'.$file,array('target'=>'_blank','class'=>'btn btn-danger btn-sm glyphicon glyphicon-file'));
 
   ?>
   <?php endif; ?>
@@ -75,7 +75,7 @@ $ids .= $tt->id.',';
 
   <form action="#" class="form-group" target="_blank" method="POST">
     <input type="hidden" name="kuka" value="<?php echo $t->tid; ?>">
-    <input type="submit" class="btn btn-success" name="pdf" value="PDF">
+    <input type="submit" class="btn btn-success btn-sm" name="pdf" value="PDF">
   </form>
 
 <table class="table">
@@ -151,7 +151,7 @@ for($day= 1; $day <= 7; $day++) {
   <form action="#" id="pdf_email" class="form-group" target="_blank" method="POST">
     <input type="hidden" name="pdf_email" value="true">
     <input type="hidden" name="kenelle" value="<?php echo $ids; ?>">
-    <button class="btn btn-success laheta">PDF >>> Sähköpostille</button>
+    <button class="btn btn-success btn-sm laheta">PDF >>> Sähköpostille</button>
   </form>
 
 
