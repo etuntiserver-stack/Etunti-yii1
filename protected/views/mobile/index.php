@@ -20,16 +20,16 @@ $this->menu=array(
 <legend>
   <div class="pull-right form-inline">
   <span class="small"><?php echo Yii::t('main', 'Ohje: '); ?></span>
-	<b class="btn btn-warning btn-sm glyphicon glyphicon-arrow-down tooltipster" title="Aloitus GPS sijainti kartalla"></b>
-	<b class="btn btn-warning btn-sm glyphicon glyphicon-arrow-up tooltipster" title="Lopetus GPS sijainti kartalla"></b>
-	<b class="btn btn-warning btn-sm glyphicon glyphicon-envelope tooltipster" title="Viestin lähettäminen"></b>
-	<b class="btn btn-warning btn-sm glyphicon glyphicon-fullscreen tooltipster" title="Hyppä työvuoroihin tämään päivään"></b>
-	<b class="btn btn-warning btn-sm glyphicon glyphicon-sort-by-attributes-alt tooltipster" title="Näytä työvuorot"></b>
-	<b class="btn btn-warning btn-sm glyphicon glyphicon-tag tooltipster" title="TAG numero"></b>
-	<b class="btn btn-warning btn-sm glyphicon glyphicon-edit tooltipster" title="Muokkaa osoitetta"></b>
-	<b class="btn btn-warning btn-sm glyphicon glyphicon-phone tooltipster" title="Alkuperäinen tieto"></b>
-	<b class="btn btn-warning btn-sm glyphicon glyphicon-check tooltipster" title="Rivi on muokkaattu"></b>
-  	<span class="btn btn-sm btn-default klo"></span>
+	<b class="btn btn-warning btn-sm fa fa-map tooltipster" title="Aloitus GPS sijainti kartalla"></b>
+	<b class="btn btn-warning btn-sm fa fa-map-o tooltipster" title="Lopetus GPS sijainti kartalla"></b>
+	<b class="btn btn-warning btn-sm fa fa-envelope tooltipster" title="Viestin lähettäminen"></b>
+	<b class="btn btn-warning btn-sm fa fa-table tooltipster" title="Hyppä työvuoroihin tämään päivään"></b>
+	<b class="btn btn-warning btn-sm fa fa-list-alt tooltipster" title="Näytä työvuorot"></b>
+	<b class="btn btn-warning btn-sm fa fa-tags tooltipster" title="TAG numero"></b>
+	<b class="btn btn-warning btn-sm fa fa-pencil-square-o tooltipster" title="Muokkaa"></b>
+	<b class="btn btn-warning btn-sm fa fa-sign-in tooltipster" title="Alkuperäinen tieto"></b>
+	<b class="btn btn-warning btn-sm fa fa-check-square-o tooltipster" title="Rivi on muokkaattu"></b>
+  	<span class="btn btn-default klo"></span>
   </div>
   <h1> 
 	<?php echo Yii::t('main', 'TUNNIT'); ?> <i class="glyphicon glyphicon-phone"></i> 

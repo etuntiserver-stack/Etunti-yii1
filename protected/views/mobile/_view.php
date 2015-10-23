@@ -27,9 +27,9 @@ if(!empty($data->my_location))
  $my_locationReal[2] = explode("/",$my_locationStart[1]);
 
  if(isset($my_locationReal[1][0]) and isset($my_locationReal[1][1]))
- $karttaA = '<a href="http://maps.google.com/maps?q='.$my_locationReal[1][0].','.$my_locationReal[1][1].'&ll='.$my_locationReal[1][0].','.$my_locationReal[1][1].'&z=17" target="_blank"><span class="glyphicon glyphicon-arrow-down"></span></a>';
+ $karttaA = '<a href="http://maps.google.com/maps?q='.$my_locationReal[1][0].','.$my_locationReal[1][1].'&ll='.$my_locationReal[1][0].','.$my_locationReal[1][1].'&z=17" target="_blank"><span class="fa fa-map"></span></a>';
  if(isset($my_locationReal[2][0]) and isset($my_locationReal[2][1]))
- $karttaL = '<a href="http://maps.google.com/maps?q='.$my_locationReal[2][0].','.$my_locationReal[2][1].'&ll='.$my_locationReal[2][0].','.$my_locationReal[2][1].'&z=17" target="_blank"><span class="glyphicon glyphicon-arrow-up"></span></a>';
+ $karttaL = '<a href="http://maps.google.com/maps?q='.$my_locationReal[2][0].','.$my_locationReal[2][1].'&ll='.$my_locationReal[2][0].','.$my_locationReal[2][1].'&z=17" target="_blank"><span class="fa fa-map-o"></span></a>';
 }
 
 if(!empty($data->loppui))
@@ -61,21 +61,21 @@ else
   $kesto[$data->id] =  '';
 
 if(!empty($data->tietoja) and !empty($data->tietoja))
-  $muokattu[$data->id] =  '<span class="glyphicon glyphicon-check"></span>';
+  $muokattu[$data->id] =  '<span class="fa fa-check-square-o"></span>';
 else
-  $muokattu[$data->id] =  '<span class="glyphicon glyphicon-phone"></span>';
+  $muokattu[$data->id] =  '<span class="fa fa-sign-in"></span>';
 
 
 	if($data->status == '1')
-	$door = '<i class="fa fa-retweet"></i>';
+	$door = '<h4><i class="fa fa-hourglass-start text-info"></i></h4>';
 	elseif($data->status == '3')
-	$door = '<i class="fa fa-check text-success"></i>';
+	$door = '<h4><i class="fa fa-check text-success"></i></h4>';
 	elseif($data->status == '2')
-	$door = '<i class="fa fa-bus"></i>';
+	$door = '<h4><i class="fa fa-bus text-info"></i></h4>';
 	elseif($data->status == '10')
-	$door = '<i class="fa fa-cutlery"></i>';
+	$door = '<h4><i class="fa fa-cutlery text-info"></i></h4>';
 	elseif($data->status == '7')
-	$door = " <img src='".Yii::app()->request->baseUrl."/img/virhe.png' alt='virhe' class='img-responsive' />";
+	$door = '<i class="fa fa-bolt"></i>';
 	else
 	$door = "";
 
@@ -131,7 +131,7 @@ else
 	  ?>
 	  </div>
 	 -->
-	  <?php echo CHtml::link(' ','/index.php/viestinta/create?tid='.$data->tid,array('target'=>'_blank','class'=>'link glyphicon glyphicon-envelope')); ?>&nbsp;
+	  <?php echo CHtml::link(' ','/index.php/viestinta/create?tid='.$data->tid,array('target'=>'_blank','class'=>'link fa fa-envelope')); ?>&nbsp;
 	  <?php echo CHtml::link($data->tekijan_nimi,'/index.php/tyontekijat/update?id='.$data->tid,array('target'=>'_blank')); ?>
 	</td>
 
@@ -141,11 +141,11 @@ else
 	$did = date("Ymd",strtotime($apvm[$data->id]));
 	?>
 	<td>
-	  <span class="link vietyovuoroon" pvmtid="<?php echo $did.'_'.$data->tid; ?>"><span class="glyphicon glyphicon-fullscreen"></span></span>
+	  <span class="link vietyovuoroon" pvmtid="<?php echo $did.'_'.$data->tid; ?>"><i class="fa fa-table"></i></span>
 	<?php  if($obtrue == true):  ?>
 
 	  <span class="link" data-toggle="collapse" data-target="<?php echo '#sushow_'.$data->id; ?>">
-	  <span class="glyphicon glyphicon-sort-by-attributes-alt"></span>
+	  <span class="fa fa-list-alt"></span>
 	  </a>
 
 	    <div style="position:absolute;width:300px;z-index: 2;" class="collapse" id="<?php echo 'sushow_'.$data->id; ?>">
@@ -160,9 +160,9 @@ else
 	<td>
 	  <span class="link" data-toggle="collapse" data-target="<?php echo '#tagshow_'.$data->id; ?>">
 	   <?php if(!empty($tag) and $tag != 000000) : ?>
-	    <b class="text-success glyphicon glyphicon-tag"></b>
+	    <b class="text-success fa fa-tags"></b>
 	   <?php else: ?>
-	    <b class="text-danger glyphicon glyphicon-tag"></b>
+	    <b class="text-danger fa fa-tags"></b>
 	   <?php endif; ?>
 	  </span>
 	  <div style="position:absolute;z-index: 2;" class="collapse" id="<?php echo 'tagshow_'.$data->id; ?>">
@@ -171,7 +171,7 @@ else
 	</td>
 
 	<td>
-	  <span class="link glyphicon glyphicon-edit openkohde" id="<?php echo 'kohttisID_'.$data->id; ?>" for="<?php echo 'kohtval_'.$data->id; ?>" data-toggle="collapse" data-target="<?php echo '#kshow_'.$data->id; ?>"></span>&nbsp;
+	  <span class="link fa fa-pencil-square-o openkohde" id="<?php echo 'kohttisID_'.$data->id; ?>" for="<?php echo 'kohtval_'.$data->id; ?>" data-toggle="collapse" data-target="<?php echo '#kshow_'.$data->id; ?>"></span>&nbsp;
 
 	  <span id="vaihto_<?php echo 'kohttisID_'.$data->id; ?>">
 	  <?php 
@@ -187,8 +187,8 @@ else
 	  </div>
 	</td>
 
-	<td width="1">
-	  <span class="link" data-toggle="collapse" id="<?php echo 'altxt_'.$data->id; ?>" data-target="<?php echo '#alshow_'.$data->id; ?>"><?php echo $at[$data->id]; ?></span>
+	<td>
+	  <span class="link fa fa-pencil-square-o nowrap" data-toggle="collapse" id="<?php echo 'altxt_'.$data->id; ?>" data-target="<?php echo '#alshow_'.$data->id; ?>"> <?php echo $at[$data->id]; ?></span>
 	  <div style="position:absolute;z-index: 2;margin-left:-100px" class="collapse" id="<?php echo 'alshow_'.$data->id; ?>">
 	    <div class="well form-inline">
 	     <?php echo '<input type="text" class="form-control form-group datetimepicker" request="aloitan" status="'.$data->status.'" id="al_'.$data->id.'" value="'.$apvm[$data->id].' '.$at[$data->id].'">'; ?>
@@ -204,10 +204,10 @@ else
 	</td>
 
 	<td width="1">
-	  <span class="link" data-toggle="collapse" id="<?php echo 'lptxt_'.$data->id; ?>" data-target="<?php echo '#ltshow_'.$data->id; ?>">
+	  <span class="link fa fa-pencil-square-o nowrap" data-toggle="collapse" id="<?php echo 'lptxt_'.$data->id; ?>" data-target="<?php echo '#ltshow_'.$data->id; ?>"> 
 	  <?php 
 	  if(empty($lt[$data->id])) 
-		echo '<b class="text-success glyphicon glyphicon-plus"></b>'; 
+		echo ' <b class="text-success glyphicon glyphicon-plus"></b>'; 
 	  else
 	 	echo $lt[$data->id]; 
 	  ?></span>
