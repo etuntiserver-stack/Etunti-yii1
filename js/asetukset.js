@@ -1,10 +1,16 @@
   $(function() {
+
     $( ".datepicker" ).datetimepicker({
 	timepicker:false,
 	//mask:true,
 	format:'d.m.Y'
     });
-
+/*
+    $( ".datepicker" ).datepicker({
+	//mask:true,
+	format:'d.m.Y',
+    });
+*/
     $( ".timepicker" ).datetimepicker({
 	datepicker:false,
 	mask:true,
