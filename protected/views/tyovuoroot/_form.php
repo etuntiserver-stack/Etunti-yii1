@@ -263,24 +263,24 @@ $(document).ready(function(){
 		  data:$(this).serialize(),
 		  type:'POST',
 		  success:function(data){
-			console.log(data);
+			//console.log(data);
 
 	  	$.ajax({
 			url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/did',
 			type:'GET',
 			data: { "pvm" : "<?php echo $model->pvm; ?>", "tid" : "<?php echo $model->tid; ?>", "from" : "ajax" },
 			  success:function(data){
-			  console.log(data);
+			  //console.log(data);
 			  $('#showres').modal('hide');
 			  $('#<?php echo date("Ymd",strtotime($model->pvm))."_".$model->tid; ?>').html(data);
-			  return false;
+			  //return false;
 			  },
 			  error:function(data){
 			  console.log(data);
 			  }
 	 	});
 
-		return false;
+		//return false;
 	   	},
 		error:function(data){
 		console.log(data);
