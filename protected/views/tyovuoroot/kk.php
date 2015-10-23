@@ -98,10 +98,11 @@ echo	'<input type=hidden id=number value='.cal_days_in_month(CAL_GREGORIAN, $mon
 	$yht += $explT[1];
 
 	$cl = "";
-	if(isset($explT[1]) and (int)$explT[1] < 3000)
+	if(isset($explT[1]) and (int)$explT[1] <= 18000)
 	$cl = "btn btn-xs btn-warning";
-	if(isset($explT[1]) and (int)$explT[1] > 4800)
+	elseif(isset($explT[1]) and (int)$explT[1] >= 28800)
 	$cl = "btn btn-xs btn-danger";
+
 
 	echo '<TD class="text-small" style="font-size:90%"><span class="'.$cl.'">'.$explT[0].'</span></TD>';
 
