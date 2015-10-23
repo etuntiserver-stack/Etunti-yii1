@@ -84,7 +84,7 @@ function num($val){
         $this->widget(
             'chartjs.widgets.ChBars', 
             array(
-                'width' => 600,
+                'width' => 570,
                 'height' => 350,
                 'htmlOptions' => array(),
                 'labels' => $nimi,
@@ -138,7 +138,7 @@ function num($val){
         $this->widget(
             'chartjs.widgets.ChBars', 
             array(
-                'width' => 600,
+                'width' => 570,
                 'height' => 350,
                 'htmlOptions' => array(),
                 'labels' => $nimi,
