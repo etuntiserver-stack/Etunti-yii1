@@ -44,9 +44,9 @@
   <?php endif; ?>
 
   <th><?php echo Yii::t('main', 'TAG'); ?></th>
-  <th class="col-sm-3"><?php echo Yii::t('main', 'Osoite/Matka'); ?></th>
-  <th><?php echo Yii::t('main', 'Aloitus'); ?></th>
-  <th><?php echo Yii::t('main', 'Lopetus'); ?></th>
+  <th class="col-sm-4"><?php echo Yii::t('main', 'Osoite/Matka'); ?></th>
+  <th class="col-sm-2"><?php echo Yii::t('main', 'Aloitus'); ?></th>
+  <th class="col-sm-2"><?php echo Yii::t('main', 'Lopetus'); ?></th>
   <th><?php echo Yii::t('main', 'Kesto'); ?></th>
   <th><center><?php echo Yii::t('main', 'M'); ?></center></th>
   <th><center><?php echo Yii::t('main', 'P'); ?></center></th>
