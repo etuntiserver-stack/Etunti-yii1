@@ -67,17 +67,9 @@ Yii::app()->clientScript->registerPackage('bootstrapCSS');
 			<div class="footer-left">
 
 				<p class="footer-links">
-					<a href="#">Home</a>
+					<?php echo CHtml::link('Etusivu',array('/site/etusivu')); ?>
 					·
-					<a href="#">Blog</a>
-					·
-					<a href="#">Pricing</a>
-					·
-					<a href="#">About</a>
-					·
-					<a href="#">Faq</a>
-					·
-					<a href="#">Contact</a>
+
 				</p>
 
 				<p>ETUNTI.FI &copy; 2015</p>
