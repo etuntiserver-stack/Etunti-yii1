@@ -73,7 +73,7 @@ else
 	elseif($data->status == '2')
 	$door = '<i class="fa fa-bus"></i>';
 	elseif($data->status == '10')
-	$door = " <img src='".Yii::app()->request->baseUrl."/img/food.png' alt='lounaalla' class='img-responsive' />";
+	$door = '<i class="fa fa-cutlery"></i>';
 	elseif($data->status == '7')
 	$door = " <img src='".Yii::app()->request->baseUrl."/img/virhe.png' alt='virhe' class='img-responsive' />";
 	else
