@@ -6,7 +6,7 @@ $this->breadcrumbs=array(
 	'Asiakkaats'=>array('index'),
 	$model->id,
 );
-
+/*
 $this->menu=array(
 	array('label'=>'List Asiakkaat', 'url'=>array('index')),
 	array('label'=>'Create Asiakkaat', 'url'=>array('create')),
@@ -14,9 +14,10 @@ $this->menu=array(
 	array('label'=>'Delete Asiakkaat', 'url'=>'#', 'linkOptions'=>array('submit'=>array('delete','id'=>$model->id),'confirm'=>'Are you sure you want to delete this item?')),
 	array('label'=>'Manage Asiakkaat', 'url'=>array('admin')),
 );
+*/
 ?>
 
-<h1>View Asiakkaat #<?php echo $model->id; ?></h1>
+<h1>Asiakkaat #<?php echo $model->id; ?></h1>
 
 <?php $this->widget('zii.widgets.CDetailView', array(
 	'data'=>$model,

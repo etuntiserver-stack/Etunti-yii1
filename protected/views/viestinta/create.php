@@ -6,11 +6,12 @@ $this->breadcrumbs=array(
 	Yii::t('main', 'Viestintä')=>array('index'),
 	Yii::t('main', 'Luominen'),
 );
-
+/*
 $this->menu=array(
 	array('label'=>'List Viestinta', 'url'=>array('index')),
 	array('label'=>'Manage Viestinta', 'url'=>array('admin')),
 );
+*/
 ?>
 
 <legend>

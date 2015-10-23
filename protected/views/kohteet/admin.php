@@ -6,12 +6,12 @@ $this->breadcrumbs=array(
 	Yii::t('main', 'Kohteet')=>array('index'),
 	Yii::t('main', 'Hallinta'),
 );
-
+/*
 $this->menu=array(
 	array('label'=>'Lista Kohteet', 'url'=>array('index')),
 	array('label'=>Yii::t('main', 'Luo kohde'), 'url'=>array('create')),
 );
-
+*/
 Yii::app()->clientScript->registerScript('search', "
 $('.search-button').click(function(){
 	$('.search-form').toggle();
