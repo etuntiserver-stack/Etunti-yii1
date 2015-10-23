@@ -79,7 +79,21 @@ $(".sw").bootstrapSwitch({
 function stateFalse(){
    if($("#os").val() == ''){
 	$('.tyo').bootstrapSwitch('state', false, true);
-	alert("Osoite puutuu!");
+
+
+
+	function alertDismissed() {
+	    $("#os").css({"border":"2px red solid"}).focus();
+	}
+
+	navigator.notification.alert(
+	    'Osoite puuttuu',            // title
+	    alertDismissed,         // callback
+	    'Huomio!',  // message
+	    'OK'                  // buttonName
+	);
+
+
   	return false;
    } else {
   	return true;

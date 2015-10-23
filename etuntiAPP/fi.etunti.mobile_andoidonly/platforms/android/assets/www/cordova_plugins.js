@@ -232,6 +232,20 @@ module.exports = [
             "cordova"
         ],
         "runs": true
+    },
+    {
+        "file": "plugins/cordova-plugin-dialogs/www/notification.js",
+        "id": "cordova-plugin-dialogs.notification",
+        "merges": [
+            "navigator.notification"
+        ]
+    },
+    {
+        "file": "plugins/cordova-plugin-dialogs/www/android/notification.js",
+        "id": "cordova-plugin-dialogs.notification_android",
+        "merges": [
+            "navigator.notification"
+        ]
     }
 ];
 module.exports.metadata = 
@@ -246,7 +260,8 @@ module.exports.metadata =
     "uk.co.whiteoctober.cordova.appversion": "0.1.7",
     "cordova-plugin-camera": "1.2.0",
     "cordova-plugin-file-transfer": "1.3.0",
-    "cordova-plugin-file": "3.0.0"
+    "cordova-plugin-file": "3.0.0",
+    "cordova-plugin-dialogs": "1.1.1"
 }
 // BOTTOM OF METADATA
 });
