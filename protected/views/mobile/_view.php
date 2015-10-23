@@ -67,7 +67,7 @@ else
 
 
 	if($data->status == '1')
-	$door = " <img src='".Yii::app()->request->baseUrl."/img/uborka.png' alt='aloitettu' class='img-responsive' />";
+	$door = '<i class="fa fa-retweet"></i>';
 	elseif($data->status == '3')
 	$door = '<i class="fa fa-check text-success"></i>';
 	elseif($data->status == '2')
