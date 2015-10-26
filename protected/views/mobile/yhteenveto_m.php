@@ -10,7 +10,7 @@ $this->breadcrumbs=array(
 ?>
 
 <legend>
-<h1> <?php echo Yii::t('main', 'YHTEENVETO MATKAT'); ?> <i class="glyphicon glyphicon-time"></i></h1>
+<h1> <?php echo Yii::t('main', 'Tuntiyhteenveto matkat'); ?> <i class="glyphicon glyphicon-time"></i></h1>
 </legend>
 
 <div class="row" id="haku">
