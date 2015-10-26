@@ -4,6 +4,12 @@
 /* @var $form CActiveForm */
 ?>
 
+<style>
+.hidd,.ashidd,.ashidd_a{
+	display:none;
+}
+</style>
+
 <div class="row form">
 
 
@@ -18,55 +24,65 @@
   <div class="col-sm-3">
 	<legend><h3><?php echo Yii::t('main', 'Asiakkaan tiedot'); ?></h3></legend>
 
-	<div class="row">
+	<div class="row tyyppi">
+		<?php echo $form->labelEx($model,'tyyppi'); ?>
+		<?php
+		$list = array('yritys'=>Yii::t('main', 'Yritys'),'henkilo'=>Yii::t('main', 'Yksityishenkilö'));
+        	echo $form->dropDownList($model, 'tyyppi', $list,
+		array('empty'=>'Valitse tyyppi','class'=>'form-control input-sm'));	
+        	?>
+		<?php echo $form->error($model,'tyyppi'); ?>
+	</div>
+
+	<div class="row yritys ashidd">
 		<?php echo $form->labelEx($model,'yrityksen_nimi'); ?>
 		<?php echo $form->textField($model,'yrityksen_nimi',array('size'=>60,'maxlength'=>100,'class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'yrityksen_nimi'); ?>
 	</div>
 
-	<div class="row">
+	<div class="row y_tunnus ashidd">
 		<?php echo $form->labelEx($model,'y_tunnus'); ?>
 		<?php echo $form->textField($model,'y_tunnus',array('size'=>60,'maxlength'=>255,'class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'y_tunnus'); ?>
 	</div>
 
-	<div class="row">
+	<div class="row nimi ashidd">
 		<?php echo $form->labelEx($model,'yhteyshenkilo'); ?>
 		<?php echo $form->textField($model,'yhteyshenkilo',array('size'=>60,'maxlength'=>100,'class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'yhteyshenkilo'); ?>
 	</div>
 
-	<div class="row">
+	<div class="row ashidd_a">
 		<?php echo $form->labelEx($model,'osoite'); ?>
 		<?php echo $form->textField($model,'osoite',array('size'=>60,'maxlength'=>255,'class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'osoite'); ?>
 	</div>
 
-	<div class="row">
+	<div class="row ashidd_a">
 		<?php echo $form->labelEx($model,'kaupunki'); ?>
 		<?php echo $form->textField($model,'kaupunki',array('size'=>60,'maxlength'=>100,'class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'kaupunki'); ?>
 	</div>
 
-	<div class="row">
+	<div class="row ashidd_a">
 		<?php echo $form->labelEx($model,'postinumero'); ?>
 		<?php echo $form->textField($model,'postinumero',array('class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'postinumero'); ?>
 	</div>
 
-	<div class="row">
+	<div class="row ashidd_a">
 		<?php echo $form->labelEx($model,'puhelin'); ?>
 		<?php echo $form->textField($model,'puhelin',array('size'=>60,'maxlength'=>100,'class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'puhelin'); ?>
 	</div>
 
-	<div class="row">
+	<div class="row ashidd_a">
 		<?php echo $form->labelEx($model,'sahkoposti'); ?>
 		<?php echo $form->textField($model,'sahkoposti',array('size'=>60,'maxlength'=>100,'class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'sahkoposti'); ?>
 	</div>
 
-	<div class="row">
+	<div class="row ashidd_a">
 		<?php echo $form->labelEx($model,'ryhma'); ?>
 		<?php
 		$list = array();
@@ -85,7 +101,7 @@
 		<?php echo $form->error($model,'ryhma'); ?>
 	</div>
 
-	<div class="row">
+	<div class="row ashidd_a">
 		<?php echo $form->labelEx($model,'aktiivinen'); ?>
 		<?php
 		$list = array(1=>Yii::t('main', 'Kyllä'),0=>Yii::t('main', 'Ei'));
@@ -158,4 +174,53 @@
 	</div>
 
 <?php $this->endWidget(); ?>
+
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+
+$("#Asiakkaat_tyyppi").each(function() {
+    var value = $(this).val();
+    if(value !== '')
+      laskutusTyyppi(value);
+    else
+      openAll();
+
+});
+
+$("#Asiakkaat_tyyppi").change(function() {
+    var value = $(this).val();
+    laskutusTyyppi(value);
+});
+
+
+function openAll(){
+
+	$(".ashidd_a").show('slow');
+	$(".ashidd").show('slow');
+
+}
+
+
+function laskutusTyyppi(value){
+
+	$(".ashidd_a").show('slow');
+    if(value == 'yritys'){
+	$(".ashidd").hide('slow');
+	$(".yritys").show('slow');
+	$(".y_tunnus").show('slow');
+	$(".nimi").show('slow');
+    }
+    if(value == 'henkilo'){
+	$(".ashidd").hide('slow');
+	$(".nimi").show('slow');
+    }
+
+}
+
+
+});
+</script>
+
 
