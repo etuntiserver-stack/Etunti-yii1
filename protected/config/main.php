@@ -215,9 +215,13 @@ return array(
                 'js'=>array(
 		    'jquery-1.11.2.min.js',
 		    'jquery-ui.min.js',
+		    'moment.js',
 		    'bootstrap-select.js',
 		    'bootstrap-switch.js',
-		    'jquery.datetimepicker.js',
+		    'moment.js',
+		    'bootstrap-datetimepicker.js',
+		    'bootstrap-datepicker.js',
+		    'bootstrap-datepicker.fi.js',
 		    'asetukset.js',
 		),
             ),
@@ -275,7 +279,7 @@ return array(
                     'bootstrap-slider.css',
 		    'jquery-ui.min.css',
                     'multiselect.css',
-		    'jquery.datetimepicker.css',
+		    'datepicker.css',
 		    'font-awesome.min.css',
                 ),
 

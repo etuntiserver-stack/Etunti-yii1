@@ -74,12 +74,12 @@ $forPVM = date('d.m.Y',strtotime($s->aloitan));
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'aloitan'); ?>
-		<?php echo $form->textField($model,'aloitan',array('value'=>$s->aloitan,'size'=>60,'maxlength'=>100,'class'=>'form-control datetimepickerToteumaAlkuPVM al')); ?>
+		<?php echo $form->textField($model,'aloitan',array('value'=>$s->aloitan,'size'=>60,'maxlength'=>100,'class'=>'form-control datetimepicker al')); ?>
 	</div>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'loppui'); ?>
-		<?php echo $form->textField($model,'loppui',array('value'=>$s->loppui,'size'=>60,'maxlength'=>100,'class'=>'form-control datetimepickerToteumaLoppuPVM lp')); ?>
+		<?php echo $form->textField($model,'loppui',array('value'=>$s->loppui,'size'=>60,'maxlength'=>100,'class'=>'form-control datetimepicker lp')); ?>
 	</div>
 
   </div><div class="col-sm-2">
@@ -94,16 +94,19 @@ $forPVM = date('d.m.Y',strtotime($s->aloitan));
 	<br>
 	<?php
 		$m = Kohteet::model()->findbypk($s->kohdenID);
-		$k = explode("//",$m->kenella_on_avain);
+		if(isset($m->kenella_on_avain))
+		{
+		  $k = explode("//",$m->kenella_on_avain);
 
-		$ohje = '';
-		if(!empty($m->toimenpiteet))
-		  $ohje .= "\n\nToimenpiteet:\n".$m->toimenpiteet;
-		if(!empty($m->tietoja))
-		  $ohje .= "\n\nTietoja:\n".$m->tietoja;
-		if(!empty($m->muut))
-		  $ohje .= "\n\nMuut:\n".$m->muut;
-		echo '<textarea class="form-control" rows="12" >'.$ohje.'</textarea>';
+		  $ohje = '';
+		  if(!empty($m->toimenpiteet))
+		    $ohje .= "\n\nToimenpiteet:\n".$m->toimenpiteet;
+		  if(!empty($m->tietoja))
+		    $ohje .= "\n\nTietoja:\n".$m->tietoja;
+		  if(!empty($m->muut))
+		    $ohje .= "\n\nMuut:\n".$m->muut;
+		  echo '<textarea class="form-control" rows="12" >'.$ohje.'</textarea>';
+		}
 	?>
 	</div>
 

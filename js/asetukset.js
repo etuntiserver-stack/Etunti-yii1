@@ -1,16 +1,27 @@
+
   $(function() {
 
-    $( ".datepicker" ).datetimepicker({
-	timepicker:false,
-	//mask:true,
-	format:'d.m.Y'
+moment.locale('fi'); 
+
+    $( ".datepicker" ).datepicker({
+	format:'yyyy-mm-dd',
+	language: 'fi'
     });
+
+    $( ".timepicker" ).datetimepicker({
+	format:'hh:mm',
+    });
+
+    $( ".datetimepicker" ).datetimepicker({
+         format : 'DD.MM.YYYY HH:mm',
+    });
+
 /*
     $( ".datepicker" ).datepicker({
 	//mask:true,
 	format:'d.m.Y',
     });
-*/
+
     $( ".timepicker" ).datetimepicker({
 	datepicker:false,
 	mask:true,
@@ -51,8 +62,9 @@
     });
     }
 
-
+*/
   });
+
 
 
 $(document).ready(function(){
