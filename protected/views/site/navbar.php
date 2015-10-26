@@ -78,9 +78,9 @@
 		<?php endif; ?>
 
 	        <li role="separator" class="divider"></li>
-        	<li><?php echo CHtml::link(Yii::t('main', 'Yhteenveto työntekijät'),array('/mobile/yhteenveto')); ?></li>
-        	<li><?php echo CHtml::link(Yii::t('main', 'Yhteenveto kohteet'),array('/mobile/kyhteenveto')); ?></li>
-        	<li><?php echo CHtml::link(Yii::t('main', 'Yhteenveto matkat'),array('/mobile/yhteenveto_m')); ?></li>
+        	<li><?php echo CHtml::link(Yii::t('main', 'Tuntiyhteenveto työntekijät'),array('/mobile/yhteenveto')); ?></li>
+        	<li><?php echo CHtml::link(Yii::t('main', 'Tuntiyhteenveto kohteet'),array('/mobile/kyhteenveto')); ?></li>
+        	<li><?php echo CHtml::link(Yii::t('main', 'Tuntiyhteenveto matkat'),array('/mobile/yhteenveto_m')); ?></li>
 	        <li role="separator" class="divider"></li>
         	<li><?php echo CHtml::link(Yii::t('main', 'Palkkataulukko'),array('/mobile/palkkataulukko')); ?></li>
 	        <li role="separator" class="divider"></li>

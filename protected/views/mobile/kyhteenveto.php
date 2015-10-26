@@ -10,7 +10,7 @@ $this->breadcrumbs=array(
 ?>
 
 <legend>
-<h1> <?php echo Yii::t('main', 'YHTEENVETO KOHTEET'); ?> <i class="glyphicon glyphicon-home"></i></h1>
+<h1> <?php echo Yii::t('main', 'Tuntiyhteenveto kohteet'); ?> <i class="glyphicon glyphicon-home"></i></h1>
 </legend>
 
 
