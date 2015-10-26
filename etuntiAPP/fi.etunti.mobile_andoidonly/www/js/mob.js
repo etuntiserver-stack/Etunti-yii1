@@ -14,6 +14,7 @@ $(document).ready(function(){
 		function showAppVersion() {
 		  cordova.getAppVersion(function(version) {
 		  document.getElementById('version').innerHTML = 'version: ' +version;
+		  versio = version;
 		  });
 		}
 		showAppVersion();
