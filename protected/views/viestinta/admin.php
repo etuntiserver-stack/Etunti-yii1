@@ -34,7 +34,6 @@ $('.search-form form').submit(function(){
 </legend>
 
 
-
 <?php echo CHtml::link('Haku','#',array('class'=>'search-button')); ?>
 <div class="search-form" style="display:none">
 <?php $this->renderPartial('_search',array(
@@ -51,16 +50,28 @@ $('.search-form form').submit(function(){
                     'itemsCssClass' => 'table table-striped table-bordered table-hover',
 
 	'columns'=>array(
-		'id',
+		//'id',
                array(
                     'name'=>'time',
                     'value'=>'date("d.m.Y - H:i",strtotime($data->time))',                   
 		),
 		//'pvm',
-		'tekija',
-		'viesti',
-		'admin',
-		'status',
+               array(
+                    'name'=>'viesti',
+                    'value'=>'$data->viesti',
+		    'type' => 'html',
+		),
+               array(
+                    'name'=>'admin',
+                    'value'=>array($this,'lahettajaMuutos'),
+		    'type' => 'html',
+		),
+               array(
+                    'name'=>'tekija',
+                    'value'=>array($this,'tekijaMuutos'),              
+		),
+
+		//'status',
 		array(
 			'class'=>'CButtonColumn',
 		),

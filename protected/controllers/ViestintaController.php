@@ -186,4 +186,38 @@ class ViestintaController extends Controller
 			Yii::app()->end();
 		}
 	}
+
+    	protected function tekijaMuutos($data,$row)
+	{ 
+		if($data->tekija != 'toimisto')
+		{
+		    $tt = Tyontekijat::model()->findbypk($data->tekija);
+		    if(isset($tt->tekijan_nimi) and !empty($tt->tekijan_nimi))
+		    $data->tekija = $tt->tekijan_nimi;
+		}
+            	return $data->tekija;
+	}
+
+    	protected function lahettajaMuutos($data,$row)
+	{ 
+
+		$expl = explode(",",$data->admin);
+		if(isset($expl[1]))
+		{
+			$mystring = $expl[0];
+			$findme   = 'tt_';
+			$pos = strpos($mystring, $findme);
+
+			    $toimistoTekija = '';
+			if ($pos === false) {
+			    $toimistoTekija = '<b>'.Yii::t('main','Järjestelmänvalvoja<br>').'</b>';
+			} else {
+			    $toimistoTekija = '<b>'.Yii::t('main','Työntekijä<br>').'</b>';
+			}
+
+			$data->admin = $toimistoTekija.$expl[1];
+		}
+            	return $data->admin;
+	}   
+
 }
