@@ -48,11 +48,11 @@ class Asiakkaat extends DB2ActiveRecord
 			//array('etunimi, sukunimi, osoite, kaupunki, postinumero, puhelin, sahkoposti, ryhma, aktiivinen', 'required'),
 			array('ryhma, aktiivinen', 'numerical', 'integerOnly'=>true),
 			array('postinumero, yhteyshenkilo, yrityksen_nimi, y_tunnus, kaupunki, puhelin, sahkoposti', 'length', 'max'=>100),
-			array('laskutus_kanava, osoite', 'length', 'max'=>255),
+			array('tyyppi, laskutus_kanava, osoite', 'length', 'max'=>255),
 			array('maksuehto, osoite', 'length', 'max'=>20),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, time, etunimi, sukunimi, osoite, kaupunki, postinumero, puhelin, sahkoposti, ryhma, aktiivinen, laskutus_kanava,maksuehto', 'safe', 'on'=>'search'),
+			array('id, time, etunimi, sukunimi, osoite, kaupunki, postinumero, puhelin, sahkoposti, ryhma, aktiivinen, laskutus_kanava,maksuehto, tyyppi', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -87,6 +87,7 @@ class Asiakkaat extends DB2ActiveRecord
 			'aktiivinen' => 'Aktiivinen',
 			'laskutus_kanava' => 'Laskutus kanava',
 			'maksuehto' => 'Maksuehto',
+			'tyyppi' => 'Asiakastyyppi',
 		);
 	}
 
@@ -116,6 +117,7 @@ class Asiakkaat extends DB2ActiveRecord
 		$criteria->compare('aktiivinen',$this->aktiivinen);
 		$criteria->compare('laskutus_kanava',$this->laskutus_kanava);
 		$criteria->compare('maksuehto',$this->maksuehto);
+		$criteria->compare('tyyppi',$this->tyyppi);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
