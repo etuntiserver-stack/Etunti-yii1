@@ -19,6 +19,24 @@
 	<?php
    }
 
+// oletus arvot
+   if(!isset(Yii::app()->session['from']) and !isset(Yii::app()->session['to']) and !isset(Yii::app()->session['Tekija'])){
+	Yii::app()->session['from'] = date("Y-m-d");
+	Yii::app()->session['to'] = date("Y-m-d",strtotime("+1 month", time()));
+
+       		$criteria = new CDbCriteria();
+        	$criteria->select = "id,tekijan_nimi";
+        	$criteria->condition = " aktiivinen = '1' ";
+		$tt = Tyontekijat::model()->findAll($criteria);
+		$tekijatOletuksena = array();
+		foreach($tt as $t)
+		$tekijatOletuksena[] = $t->id;
+
+		Yii::app()->session['Tekija'] = $tekijatOletuksena;
+
+
+   }
+
 
 
 		if(Yii::app()->request->getPost('Tekija'))
