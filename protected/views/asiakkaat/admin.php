@@ -69,7 +69,7 @@ echo '
 
 <legend>
    <div class="pull-right">
-     <?php echo CHtml::link(' +','/index.php/asiakkaat/create',array('target'=>'_blank','class'=>'btn btn-default glyphicon glyphicon-user')); ?>
+     <?php echo CHtml::link(' Lisää uusi asiakas','/index.php/asiakkaat/create',array('target'=>'_blank','class'=>'btn btn-default glyphicon glyphicon-user')); ?>
    </div>
 <h1> <?php echo Yii::t('main', 'ASIAKKAAT'); ?> <i class="glyphicon glyphicon-user"></i></h1>
 </legend>
