@@ -73,7 +73,7 @@ class Viestinta extends DB2ActiveRecord
 			'pvm' => 'Pvm',
 			'tekija' => 'Vastaanottaja',
 			'viesti' => 'Viesti',
-			'admin' => 'Kirjoittaja',
+			'admin' => 'Lähettäjä',
 		);
 	}
 
