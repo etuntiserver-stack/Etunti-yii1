@@ -68,12 +68,12 @@ $forPVM = date('d.m.Y',strtotime($model->aloitan));
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'aloitan'); ?>
-		<?php echo $form->textField($model,'aloitan',array('size'=>60,'maxlength'=>100,'class'=>'form-control datetimepickerToteumaAlkuPVM al')); ?>
+		<?php echo $form->textField($model,'aloitan',array('size'=>60,'maxlength'=>100,'class'=>'form-control datetimepicker al')); ?>
 	</div>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'loppui'); ?>
-		<?php echo $form->textField($model,'loppui',array('size'=>60,'maxlength'=>100,'class'=>'form-control datetimepickerToteumaLoppuPVM lp')); ?>
+		<?php echo $form->textField($model,'loppui',array('size'=>60,'maxlength'=>100,'class'=>'form-control datetimepicker lp')); ?>
 	</div>
 
 		<input type="hidden" name="forPVM" value="<?php echo $forPVM; ?>">
