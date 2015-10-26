@@ -69,7 +69,7 @@ class Viestinta extends DB2ActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'time' => 'Luotu',
+			'time' => 'Päivämäärä',
 			'pvm' => 'Pvm',
 			'tekija' => 'Vastaanottaja',
 			'viesti' => 'Viesti',

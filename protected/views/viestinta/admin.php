@@ -28,7 +28,7 @@ $('.search-form form').submit(function(){
 
 <legend>
    <div class="pull-right">
-     <?php echo CHtml::link(' +','/index.php/viestinta/create',array('target'=>'_blank','class'=>'btn btn-default glyphicon glyphicon-envelope')); ?>
+     <?php echo CHtml::link(' Lisää uusi viesti','/index.php/viestinta/create',array('target'=>'_blank','class'=>'btn btn-default glyphicon glyphicon-envelope')); ?>
    </div>
 <h1> <?php echo Yii::t('main', 'VIESTIT'); ?> <i class="glyphicon glyphicon-envelope"></i></h1>
 </legend>
@@ -52,7 +52,10 @@ $('.search-form form').submit(function(){
 
 	'columns'=>array(
 		'id',
-		'time',
+               array(
+                    'name'=>'time',
+                    'value'=>'date("d.m.Y - H:i",strtotime($data->time))',                   
+		),
 		//'pvm',
 		'tekija',
 		'viesti',
