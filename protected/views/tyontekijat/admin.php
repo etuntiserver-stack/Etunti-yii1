@@ -29,7 +29,7 @@ $('.search-form form').submit(function(){
 
 <legend>
    <div class="pull-right">
-     <?php echo CHtml::link(' +','/index.php/tyontekijat/create',array('target'=>'_blank','class'=>'btn btn-default glyphicon glyphicon-user')); ?>
+     <?php echo CHtml::link(' Lisää uusi työntekijä','/index.php/tyontekijat/create',array('target'=>'_blank','class'=>'btn btn-default glyphicon glyphicon-user')); ?>
    </div>
 <h1> <?php echo Yii::t('main', 'TYÖNTEKIJÄT'); ?> <i class="glyphicon glyphicon-user"></i></h1>
 </legend>
