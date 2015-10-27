@@ -95,7 +95,23 @@ $this->breadcrumbs=array(
 	$this->renderPartial('_yhteenveto',array('data'=>$data));
   }
   ?>
-
+  <tfoot>
+  <tr>
+  <th><?php echo Yii::t('main', 'Yhteensä'); ?></th>
+  <?php
+  $tas = explode(",",Yii::app()->user->adminPaketti);
+  if(in_array('2',$tas)) : 
+  ?>
+  <th></th>
+  <?php endif; ?>
+  <th></th>
+  <th></th>
+  <th></th>
+  <th></th>
+  <th></th>
+  <th></th>
+  </tr>
+  </tfoot>
   </table>
 <?php endif; ?>
 </div>
