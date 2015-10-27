@@ -39,7 +39,7 @@ $this->breadcrumbs=array(
    <a href="#" id="deselAll" class="glyphicon glyphicon-minus"></a>
    <a href="#" id="selAll" class="glyphicon glyphicon-plus"></a>
    <?php
-    $list = CHtml::listData(Mobile::model()->findAll(array('order' => 'tekijan_nimi','group'=>'tekijan_nimi')), 'tid', 'tekijan_nimi');
+    $list = CHtml::listData(Tyontekijat::model()->findAll(array('order' => 'tekijan_nimi','group'=>'tekijan_nimi')), 'id', 'tekijan_nimi');
 
     echo '<select name="Tekija[]" class="selectpicker" id="tyontekijat" multiple title="Työntekijät">';
     foreach($list as $key=>$val){
