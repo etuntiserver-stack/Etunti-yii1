@@ -162,7 +162,7 @@
           <ul class="dropdown-menu">
         	<li><?php echo CHtml::link(Yii::t('main', 'Asetukset'),array('/asetukset/update',"id"=>"1")); ?></li>
         	<li><?php echo CHtml::link(Yii::t('main', 'Järjestelmänvalvojat'),array('/administrators/admin')); ?></li>
-        	<li><?php echo CHtml::link(Yii::t('main', 'Valikkoot'),array('/valikkoot/index')); ?></li>
+        	<li><?php echo CHtml::link(Yii::t('main', 'Valikot'),array('/valikkoot/index')); ?></li>
         	<li><?php echo CHtml::link(Yii::t('main', 'Mobiili emulattori'),array('/site/mobemu')); ?></li>
           </ul>
         </li>
