@@ -114,18 +114,21 @@ td .tp{
 
    <!--<input type="text" id="totalForCut" class="form-control">-->
 
+
    <div class="row pull-right">
 	<i id="trash"></i> 
 	<i id="clear"></i> 
-	<i class="glyphicon glyphicon-download-alt btn btn-success btn-sm btn-group" id="autoInsert"></i>
-	<i class="glyphicon glyphicon-new-window btn btn-danger btn-sm btn-group" id="autoRemove"></i>
+	<div class="btn btn-default btn-sm btn-group" id="autoInsert">
+		<?php echo Yii::t('main', 'Lisää toistuvia työvuoroja'); ?></div>
+	<div class="btn btn-danger btn-sm btn-group" id="autoRemove">
+		<?php echo Yii::t('main', 'Poista toistuvia työvuoroja'); ?></div>
    </div>
 
 <div class="row">
   <form action="#" id="yhtveto" class="form-inline" method="POST">
 
-   <a href="#" id="deselAll" class="btn btn-default btn-sm glyphicon glyphicon-minus"></a>
-   <a href="#" id="selAll" class="btn btn-default btn-sm glyphicon glyphicon-plus"></a>  
+   <a href="#" id="deselAll" class="glyphicon glyphicon-minus"></a>
+   <a href="#" id="selAll" class="glyphicon glyphicon-plus"></a>
 
    <?php
    $criteria = new CDbCriteria();
@@ -133,7 +136,7 @@ td .tp{
    $criteria->condition = " aktiivinen='1' ";
 
     $list = CHtml::listData(Tyontekijat::model()->findAll($criteria), 'id', 'tekijan_nimi');
-    echo '<select name="Tekija[]" id="tyontekijat" class="selectpicker btn-sm" multiple title="Työntekijät">';
+    echo '<select name="Tekija[]" id="tyontekijat" class="selectpicker" multiple title="Työntekijät">';
     foreach($list as $key=>$val){
        if(isset(Yii::app()->session['Tekija']) and in_array($key,Yii::app()->session['Tekija']))
        	 echo '<option value="'.$key.'" selected>'.$val.'</option>';
@@ -238,10 +241,7 @@ td .tp{
 $(document).ready(function(){
 
 
-$('.selectpicker').selectpicker({
-      style: 'btn-default',
-      //size: 4
-});
+
 
 $('#deselAll').click(function(){
    $('#tyontekijat').selectpicker('deselectAll');

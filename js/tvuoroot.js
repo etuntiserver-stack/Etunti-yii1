@@ -86,8 +86,8 @@ $(".muistin").click(function() {
 
 	$(".forCopy").removeClass("forCopy").addClass("mplus glyphicon glyphicon-plus text-success");
 	$(".forCut").removeClass("forCut").addClass("mcut glyphicon glyphicon-transfer text-success");
-	$("#trash").addClass("glyphicon glyphicon-trash btn btn-danger btn-group");
-	$("#clear").addClass("glyphicon glyphicon-refresh btn btn-success btn-group");
+	$("#trash").addClass("glyphicon glyphicon-trash btn btn-danger btn-sm btn-group");
+	$("#clear").addClass("glyphicon glyphicon-refresh btn btn-success btn-sm btn-group");
 
 });
 
@@ -268,7 +268,7 @@ $("#yhtveto").on('submit',function(e){
 });
 
 $('.selectpicker').selectpicker({
-      style: 'btn-default',
+      style: 'btn-default btn-sm',
       //size: 4
   });
 
