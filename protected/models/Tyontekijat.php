@@ -113,7 +113,7 @@ public $tunnus;
 			'aktiivinen' => 'Aktiivinen',
 			'tekijan_tietoja' => 'Tietoja',
 			'tekijan_muisti' => 'Muisti',
-			'salasana' => 'Salasana',
+			'salasana' => 'Mobiilisovelluksen salasana',
 			'online_varauksen_valmina' => 'Online Varauksen Valmina',
 			'kortit' => 'Kortit',
 			'ayjasenyys' => 'Ayjasenyys',
