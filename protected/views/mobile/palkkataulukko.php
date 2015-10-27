@@ -36,12 +36,12 @@ $this->breadcrumbs=array(
   <form action="#" id="yhtveto" class="form-inline" method="POST">
   <input type="hidden" name="yhtvetoform">
   <div class="col-md-12">
-   <a href="#" id="deselAll" class="btn btn-default glyphicon glyphicon-minus"></a>
-   <a href="#" id="selAll" class="btn btn-default glyphicon glyphicon-plus"></a>
+   <a href="#" id="deselAll" class="glyphicon glyphicon-minus"></a>
+   <a href="#" id="selAll" class="glyphicon glyphicon-plus"></a>
    <?php
     $list = CHtml::listData(Mobile::model()->findAll(array('order' => 'tekijan_nimi','group'=>'tekijan_nimi')), 'tid', 'tekijan_nimi');
 
-    echo '<select name="Tekija[]" class="selectpicker" id="tyontekijat" multiple class="btn btn-default" title="Työntekijät">';
+    echo '<select name="Tekija[]" class="selectpicker" id="tyontekijat" multiple title="Työntekijät">';
     foreach($list as $key=>$val){
      if(!empty($val))
      {
@@ -54,17 +54,17 @@ $this->breadcrumbs=array(
     echo '</select>';
    ?>
    <b class="glyphicon glyphicon-calendar"></b>
-   <input type="text" name="from" id="from" class="form-control form-group datepicker" value="<?php echo Yii::app()->session['from']; ?>">
+   <input type="text" name="from" id="from" class="form-control input-sm form-group datepicker" value="<?php echo Yii::app()->session['from']; ?>">
    <b class="glyphicon glyphicon-calendar"></b>
-   <input type="text" name="to" id="to" class="form-control form-group datepicker" value="<?php echo Yii::app()->session['to']; ?>">
+   <input type="text" name="to" id="to" class="form-control input-sm form-group datepicker" value="<?php echo Yii::app()->session['to']; ?>">
 
-   <input type="submit" class="btn btn-primary" value="<?php echo Yii::t('main', 'haku'); ?>">
+   <input type="submit" class="btn btn-sm btn-primary" value="<?php echo Yii::t('main', 'haku'); ?>">
    </form>
 
    <!-- tulostus -->
    <div class="pull-right">
      <form action="#" target="_blank" method="POST">
-      <input type="submit" name="tulosta" class="btn btn-success" value="PDF">
+      <input type="submit" name="tulosta" class="btn btn-sm btn-success" value="PDF">
      </form>
    </div>
    <!-- tulostus -->
@@ -95,12 +95,56 @@ $this->breadcrumbs=array(
   </thead>
 
   <?php 
+  $tids = array();
+  $totalTp	= 0;
+  $tot_sun	=0;
+  $tp		= 0;
   foreach($model as $data)
   {
-	$this->renderPartial('_palkkataulukko',array('data'=>$data));
+	$tids[] = $data->id;
+	$tp = $this->Tp($data->id);
+	$totalTp += $tp;
+	$this->renderPartial('_palkkataulukko',array('data'=>$data,'tp'=>$tp));
   }
-  ?>
 
+	$yht[0] = 0;
+	$yht[1] = 0;
+	$yht[2] = 0;
+	$yht[3] = 0;
+	$matka = 0;
+
+  foreach($tids as $t)
+  {
+	$matka += $this->renderPartial('//mobile/tidfromtomatkat',array(
+		'from'=>Yii::app()->session['from'],
+		'to'=>Yii::app()->session['to'],
+		'tid'=>$t
+		),true);
+
+	$return = $this->toteutu($t);
+	$yht[0] += $return[0];
+	$yht[1] += $return[1];
+	$yht[2] += $return[2];
+	$yht[3] += $return[3];
+  }
+
+  if($matka != 0)
+  $matka = $this->sprint($matka).'<br>('.$this->num($matka).')';
+  ?>
+  <tfoot>
+  <tr>
+  	<th><?php echo Yii::t('main', 'Yhteensä'); ?></th>
+	<td><?php echo $totalTp; ?></td>
+	<td><?php echo $matka; ?></td>
+	<td><?php echo $this->sprint($yht[0]); ?></td>
+	<td><?php echo $this->sprint($yht[1]); ?></td>
+	<td><?php echo $this->sprint($yht[2]); ?></td>
+	<td><?php echo $this->sprint($yht[3]); ?></td>
+	<td></td>
+	<td></td>
+	<td></td>
+  </tr>
+  </tfoot>
   </table>
 <?php endif; ?>
 </div>
@@ -115,7 +159,7 @@ $(document).ready(function(){
 
 
 $('.selectpicker').selectpicker({
-      style: 'btn-default',
+      style: 'btn-default btn-sm',
       //size: 4
 });
 

@@ -2,73 +2,19 @@
 /* @var $this MobileController */
 /* @var $data Mobile */
 
-		$total_l 	= 0;
-		$total_t 	= 0;
-		$totalTp	= 0;
-		$totalIlta 	= 0;
-		$totalYo 	= 0;
-		$totalSu	= 0;
-		$tp		= 0;
-		$al		= '';
-		$lop		= '';
-		$total_sunniteltu = 0;
-		$total 		= 0;
+		$return = $this->toteutu($data->id);
 
-       		$criteria = new CDbCriteria();
-        	$criteria->select = "
-		TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s'))) as l_tunnit,
-		t.id,t.aloitan,t.loppui";
+		if($return[0] != 0)
+		$return[0] = $this->sprint($return[0]).'<br>('.$this->num($return[0]).')';
 
-        	$criteria->condition = "  tid = '".$data->id."' and aloitan !='' and loppui !='' and status=3 ";
-		if(Yii::app()->session['from'] and Yii::app()->session['to'])
-	        $criteria->addCondition ("DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."' ");
+		if($return[1] != 0)
+		$return[1] = $this->sprint($return[1]).'<br>('.$this->num($return[1]).')';
 
-		$lu = Mobile::model()->findAll($criteria);
+		if($return[2] != 0)
+		$return[2] = $this->sprint($return[2]).'<br>('.$this->num($return[2]).')';
 
-		foreach($lu as $val)
-		{
-
-			$tot = Toteutuneet::model()->find(" kid = '".$val->id."' ");
-
-			if(isset($tot['id']))
-			{
-			  $val->l_tunnit = (strtotime($tot['loppui'])-strtotime($tot['aloitan']));
-			  $al = explode(" ",$tot['aloitan']);
-			  $lop = explode(" ",$tot['loppui']);
-			} else {
-			  $al = explode(" ",$val->aloitan);
-			  $lop = explode(" ",$val->loppui);
-			}
-
-			// Toteutuneet
-			$total_l += $val->l_tunnit;
-			// Ilta
-			$totalIlta += $this->ilta($al,$lop);
-			// Yo
-			$totalYo += $this->yo($al,$lop);
-			// Suunnuntai
-			if(date('N', strtotime($al[0])) == 7)
-			$totalSu += (strtotime($lop[0]." ".$lop[1])-strtotime($al[0]." ".$al[1]));
-			// Työpäiviä
-			if($tp != $al[0])
-			{
-			  if((strtotime($lop[0]." ".$lop[1])-strtotime($al[0]." ".$al[1])) != 0)
-				$totalTp += 1;
-			}
-			$tp = $al[0];
-		}
-
-		if($total_l != 0)
-		$total = $this->sprint($total_l).'<br>('.$this->num($total_l).')';
-
-		if($totalIlta != 0)
-		$totalIlta = $this->sprint($totalIlta).'<br>('.$this->num($totalIlta).')';
-
-		if($totalYo != 0)
-		$totalYo = $this->sprint($totalYo).'<br>('.$this->num($totalYo).')';
-
-		if($totalSu != 0)
-		$totalSu = $this->sprint($totalSu).'<br>('.$this->num($totalSu).')';
+		if($return[3] != 0)
+		$return[3] = $this->sprint($return[3]).'<br>('.$this->num($return[3]).')';
 
 
 
@@ -103,12 +49,12 @@
 <tr>
 
 	<td class="tulostus_tekija"><?php echo CHtml::encode($data->tekijan_nimi); ?></td>
-	<td><?php echo $totalTp; ?></td>
+	<td><?php echo $tp; ?></td>
 	<td><?php echo $matka; ?></td>
-	<td><?php echo $total; ?></td>
-	<td><?php echo $totalIlta; ?></td>
-	<td><?php echo $totalYo; ?></td>
-	<td><?php echo $totalSu; ?></td>
+	<td><?php echo $return[0]; ?></td>
+	<td><?php echo $return[1]; ?></td>
+	<td><?php echo $return[2]; ?></td>
+	<td><?php echo $return[3]; ?></td>
 	<td><?php echo $korv; ?></td>
 	<td><?php echo $lisatt; ?></td>
 	<td><?php echo $ennakko; ?></td>
