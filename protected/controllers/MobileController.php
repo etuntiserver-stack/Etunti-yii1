@@ -795,10 +795,9 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 
 		t.*";
 
-        	//$criteria->condition = " l_loppu = '' and l_alku = '' ";
-
         	$criteria->order = "tekijan_nimi"; //"SUBSTR(LTRIM(tekijan_nimi), LOCATE(' ',LTRIM(tekijan_nimi)))"
         	$criteria->group = 'tid';
+        	$criteria->condition = " aloitan !='' and loppui !='' ";
 
 		if(Yii::app()->session['Tekija']){
 		  if(count(Yii::app()->session['Tekija']) > 1)
