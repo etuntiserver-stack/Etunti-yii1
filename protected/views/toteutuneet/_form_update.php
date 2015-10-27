@@ -68,12 +68,12 @@ $forPVM = date('d.m.Y',strtotime($model->aloitan));
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'aloitan'); ?>
-		<?php echo $form->textField($model,'aloitan',array('size'=>60,'maxlength'=>100,'class'=>'form-control datetimepicker al')); ?>
+		<?php echo $form->textField($model,'aloitan',array('size'=>60,'maxlength'=>100,'class'=>'form-control al')); ?>
 	</div>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'loppui'); ?>
-		<?php echo $form->textField($model,'loppui',array('size'=>60,'maxlength'=>100,'class'=>'form-control datetimepicker lp')); ?>
+		<?php echo $form->textField($model,'loppui',array('size'=>60,'maxlength'=>100,'class'=>'form-control lp')); ?>
 	</div>
 
 		<input type="hidden" name="forPVM" value="<?php echo $forPVM; ?>">
@@ -118,5 +118,22 @@ $forPVM = date('d.m.Y',strtotime($model->aloitan));
 	</div> <!-- end modal-dialog -->
 
 
-	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/asetukset.js"></script>
 	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/toteuma.js"></script>
+	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/jquery.mask.js"></script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+
+
+  $('.al').mask('00.00.0000 00:00',{
+        placeholder: "__.__.____ __:__"
+  });
+
+  $('.lp').mask('00.00.0000 00:00',{
+        placeholder: "__.__.____ __:__"
+  });
+
+
+});
+</script>
