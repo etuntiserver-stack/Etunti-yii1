@@ -62,11 +62,11 @@
 <div class="row">
   <div class="col-sm-4">
 	<label><?php echo Yii::t('main', 'Aloitusaika'); ?></label>
-	<input type="text" class="form-control timepicker" name="tfrom" id="tfrom">
+	<input type="text" class="form-control timeVuorot" name="tfrom" id="tfrom">
   </div>
   <div class="col-sm-4">
 	<label><?php echo Yii::t('main', 'Lopetusaika'); ?></label>
-	<input type="text" class="form-control timepicker" name="tto" id="tto">
+	<input type="text" class="form-control timeVuorot" name="tto" id="tto">
   </div>
   <div class="col-sm-4">
 	 	<label><?php echo Yii::t('main','Työajanmerkintä'); ?></label>
@@ -175,9 +175,14 @@
 
 
   <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/asetukset.js"></script>
+<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/jquery.mask.js"></script>
 
 <script type="text/javascript">
 $(document).ready(function(){
+
+  $('.timeVuorot').mask('00:00',{
+        placeholder: "__:__"
+  });
 
   $(".sw").bootstrapSwitch({
 	size: "mini",
