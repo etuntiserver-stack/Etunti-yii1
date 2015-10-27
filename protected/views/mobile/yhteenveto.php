@@ -17,8 +17,8 @@ $this->breadcrumbs=array(
   <form action="#" id="yhtveto" class="form-inline" method="POST">
   <input type="hidden" name="yhtvetoform">
   <div class="col-md-12">
-   <a href="#" id="deselAll" class="btn btn-default glyphicon glyphicon-remove-circle"></a>
-   <a href="#" id="selAll" class="btn btn-default glyphicon glyphicon-ok-circle"></a>
+   <a href="#" id="deselAll" class="glyphicon glyphicon-minus"></a>
+   <a href="#" id="selAll" class="glyphicon glyphicon-plus"></a>
    <?php
     $list = CHtml::listData(Mobile::model()->findAll(array('order' => 'tekijan_nimi','group'=>'tekijan_nimi')), 'tid', 'tekijan_nimi');
 
@@ -90,26 +90,57 @@ $this->breadcrumbs=array(
   </thead>
 
   <?php 
+  $tids = array();
+  $total_lu 	= 0;
+  $totalTp	= 0;
+  $total_sunniteltu = 0;
+  $tot_sun	=0;
+  $tp		= 0;
   foreach($model as $data)
   {
-	$this->renderPartial('_yhteenveto',array('data'=>$data));
+	$tids[] = $data->tid;
+        $total_lu += $data->l_tunnit;
+	$tp = $this->Tp($data->tid);
+	$totalTp += $tp;
+	$tot_sun = $this->renderPartial('//mobile/suunniteltu',array('id'=>$data->tid,'kohde_tid'=>'tid'),true);
+	$total_sunniteltu += $tot_sun;
+
+	$this->renderPartial('_yhteenveto',array('data'=>$data,'tp'=>$tp,'tot_sun'=>$tot_sun));
   }
+
+
+	$yht[0] = 0;
+	$yht[1] = 0;
+	$yht[2] = 0;
+	$yht[3] = 0;
+
+  foreach($tids as $t)
+  {
+	$return = $this->toteutu($t);
+	$yht[0] += $return[0];
+	$yht[1] += $return[1];
+	$yht[2] += $return[2];
+	$yht[3] += $return[3];
+  }
+
+
   ?>
   <tfoot>
   <tr>
-  <th><?php echo Yii::t('main', 'Yhteensä'); ?></th>
-  <?php
-  $tas = explode(",",Yii::app()->user->adminPaketti);
-  if(in_array('2',$tas)) : 
-  ?>
-  <th></th>
-  <?php endif; ?>
-  <th></th>
-  <th></th>
-  <th></th>
-  <th></th>
-  <th></th>
-  <th></th>
+  	<th><?php echo Yii::t('main', 'Yhteensä'); ?></th>
+	<?php
+	$tas = explode(",",Yii::app()->user->adminPaketti);
+	if(in_array('2',$tas)) {
+	echo '<td>'.$this->sprint($total_sunniteltu).'</td>';
+	}
+	?>
+
+	<td><?php echo $this->sprint($total_lu); ?></td>
+	<td><?php echo $this->sprint($yht[0]); ?></td>
+	<td><?php echo $totalTp; ?></td>
+	<td><?php echo $this->sprint($yht[1]); ?></td>
+	<td><?php echo $this->sprint($yht[2]); ?></td>
+	<td><?php echo $this->sprint($yht[3]); ?></td>
   </tr>
   </tfoot>
   </table>
@@ -126,7 +157,7 @@ $(document).ready(function(){
 
 
 $('.selectpicker').selectpicker({
-      style: 'btn-default',
+      style: 'btn-default btn-sm',
       //size: 4
 });
 
