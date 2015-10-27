@@ -1,7 +1,7 @@
 
   $(function() {
 
-moment.locale('fi'); 
+
 
     $( ".datepicker" ).datepicker({
 	format:'yyyy-mm-dd',
@@ -15,6 +15,7 @@ moment.locale('fi');
     $( ".datetimepicker" ).datetimepicker({
          format : 'DD.MM.YYYY HH:mm',
     });
+
 
 /*
     $( ".datepicker" ).datepicker({

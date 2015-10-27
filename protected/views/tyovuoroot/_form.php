@@ -67,11 +67,11 @@ if(isset($model->id))
   </div>
   <div class="col-sm-3">
 		<?php echo $form->labelEx($model,'alku'); ?>
-		<input type="text" name="Tyovuoroot[alku]" class="form-control laske timepicker" id="alku" value="<?php echo $model->alku; ?>">
+		<input type="text" name="Tyovuoroot[alku]" class="form-control laske timeVuorot" id="alku" value="<?php echo $model->alku; ?>">
   </div>
   <div class="col-sm-3">
 		<?php echo $form->labelEx($model,'loppu'); ?>
-		<input type="text" name="Tyovuoroot[loppu]" class="form-control laske timepicker" id="loppu" value="<?php echo $model->loppu; ?>">
+		<input type="text" name="Tyovuoroot[loppu]" class="form-control laske timeVuorot" id="loppu" value="<?php echo $model->loppu; ?>">
   </div>
   <div class="col-sm-3">
 		<?php echo $form->labelEx($model,'pituus'); ?>
@@ -176,9 +176,14 @@ if(!empty($t->gcm_reg_id)) :
 
 
 <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/asetukset.js"></script>
+<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/jquery.mask.js"></script>
 
 <script type="text/javascript">
 $(document).ready(function(){
+
+  $('.timeVuorot').mask('00:00',{
+        placeholder: "__:__"
+  });
 
   $(".sw").bootstrapSwitch({
 	size: "mini",
