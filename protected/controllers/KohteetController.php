@@ -223,14 +223,22 @@ class KohteetController extends Controller
 
     	protected function asiakasMuutos($data,$row)
 	{ 
+		$return = '';
 
 		    $a = Asiakkaat::model()->findbypk($data->asiakas_id);
-		    if(isset($a->yrityksen_nimi) and !empty($t->yrityksen_nimi))
-		    $data->asiakas_id = $t->yrityksen_nimi;
-		    elseif(isset($a->yhteyshenkilo) and empty($t->yrityksen_nimi) and !empty($t->yhteyshenkilo))
-		    $data->asiakas_id = $t->yhteyshenkilo;
+		    if(isset($a->yrityksen_nimi) and !empty($a->yrityksen_nimi))
+		    $return = $a->yrityksen_nimi;
+		    elseif(isset($a->yhteyshenkilo) and empty($a->yrityksen_nimi) and !empty($a->yhteyshenkilo))
+		    $return = $a->yhteyshenkilo;
+		    else
+		    $return = $data->asiakas_id;
 
-            	return $data->asiakas_id;
+		    if(isset($a->tyyppi) and !empty($a->tyyppi) and $a->tyyppi == 'henkilo')
+		    $return = '<b class="text-warning">Yhteyshenkilö</b><br>'.$return;
+		    elseif(isset($a->tyyppi) and !empty($a->tyyppi) and $a->tyyppi == 'yritys')
+		    $return = '<b class="text-success">Yritys</b><br>'.$return;
+
+            	return $return;
 	}
 
 }

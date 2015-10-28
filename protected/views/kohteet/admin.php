@@ -63,6 +63,7 @@ $('.search-form form').submit(function(){
                     'filter'=>CHtml::dropDownList('Kohteet[asiakas_id]','',
 		    CHtml::listData(Asiakkaat::model()->findAll(array('order' => "yhteyshenkilo")), 'id', 'yhteyshenkilo'),array('empty'=>'valitse','class'=>'form')),
 		    'value'=>array($this,'asiakasMuutos'),
+		    'type' => 'html',
                     
 		),
 		//'asiakas_id',
