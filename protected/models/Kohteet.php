@@ -135,7 +135,7 @@ class Kohteet extends DB2ActiveRecord
 		// should not be searched.
 
 		$criteria=new CDbCriteria;
-		$criteria->order = "osoite";
+		$criteria->order = "id DESC";
 
 		$criteria->compare('id',$this->id);
 		$criteria->compare('asiakas_id',$this->asiakas_id);
