@@ -563,7 +563,7 @@ public function actionImei($dom)
 
 		if( isset($explAsNum[1]) and isset($explAsNumPost[1]) and $explAsNum[1] != $explAsNumPost[1] )
 		{
-                $this->_sendResponse(200, $ms."//".$mobupdate->id."//".$mobupdate->status."//".$mob->kohde_kannasta."//tagnumerror//null");
+                $this->_sendResponse(200, $ms."//".$mobupdate->id."//".$mobupdate->status."//".$mob->kohde_kannasta."//tagnumerror//null//update");
 	        exit;
 		}
 
@@ -574,7 +574,7 @@ public function actionImei($dom)
 
 		$kesto = sprint(strtotime($mobupdate->loppui)-strtotime($mobupdate->aloitan));
 
-                $this->_sendResponse(200, $ms."//".$mobupdate->id."//".$mobupdate->status."//".$mob->kohde_kannasta."//null//".$kesto);
+                $this->_sendResponse(200, $ms."//".$mobupdate->id."//".$mobupdate->status."//".$mob->kohde_kannasta."//null//".$kesto."//update");
 
 	     } elseif($mob->status == 2 and $_POST['status'] == 2)
 	     {
@@ -587,7 +587,7 @@ public function actionImei($dom)
 
 		$kesto = sprint(strtotime($mobupdate->loppui)-strtotime($mobupdate->aloitan));
 
-                $this->_sendResponse(200, $ms."//".$mobupdate->id."//".$mobupdate->status."//".$mob->kohde_kannasta."//null//".$kesto);
+                $this->_sendResponse(200, $ms."//".$mobupdate->id."//".$mobupdate->status."//".$mob->kohde_kannasta."//null//".$kesto."//update");
 
 	     } elseif($mob->status == 10 and $_POST['status'] == 10)
 	     {
@@ -600,7 +600,7 @@ public function actionImei($dom)
 
 		$kesto = sprint(strtotime($mobupdate->loppui)-strtotime($mobupdate->aloitan));
 
-                $this->_sendResponse(200, $ms."//".$mobupdate->id."//".$mobupdate->status."//".$mob->kohde_kannasta."//null//".$kesto);
+                $this->_sendResponse(200, $ms."//".$mobupdate->id."//".$mobupdate->status."//".$mob->kohde_kannasta."//null//".$kesto."//update");
 
 	     } else {
 
@@ -636,7 +636,7 @@ public function actionImei($dom)
                 $mobinsert->tietoja = $_POST['tietoja'];
                 $mobinsert->aloitan = date("d.m.Y H:i:s");
                 $mobinsert->save();
-                $this->_sendResponse(200, $mobinsert->id."//".$mobinsert->kohde_kannasta);
+                $this->_sendResponse(200, $mobinsert->id."//".$mobinsert->kohde_kannasta."//new//".$mobinsert->kohdenID);
 
 	    } else {
                 $this->_sendResponse(200, "Kaikki on suljettu, ei ole mitään avoina");
