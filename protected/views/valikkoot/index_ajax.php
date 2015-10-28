@@ -62,6 +62,13 @@ echo '	<div class="row">';
        	$criteria = new CDbCriteria();
 	$criteria->order = "id DESC";
 	$criteria->group = "select_type";
+	$criteria->condition = " 
+		select_type!='tyoajanlaatu'
+		AND select_type!='AddTvuoro'
+		AND select_type!='laskun_tilanne'
+		AND select_type!='palkkaan_hinnat'
+		AND select_type!='Ruokatauko'
+	";
 	$v = Valikkoot::model()->findAll($criteria);
 
 	echo "<div class='row'>";
@@ -70,20 +77,22 @@ echo '	<div class="row">';
 	{
 
 	if($r->select_type == 'vuosilomat') $selType = 'Vuosilomat';
-	elseif($r->select_type == 'laskun_tilanne') $selType = 'laskun tilanne';
+	//elseif($r->select_type == 'laskun_tilanne') $selType = 'laskun tilanne';
+	//elseif($r->select_type == 'AddTvuoro') $selType = 'Ajan välit';
+	//elseif($r->select_type == 'tyoajanlaatu') $selType = 'Työajanlaatu';
+	//elseif($r->select_type == 'palkkaan_hinnat') $selType = 'Palkkaan hinnat';
+	//elseif($r->select_type == 'Ruokatauko') $selType = 'Ruokatauko';
+	elseif($r->select_type == 'tyoehtosopimus') $selType = 'Työehtosopimus';
 	elseif($r->select_type == 'kortit') $selType = 'Kortit';
 	elseif($r->select_type == 'online_varauksen_valmina') $selType = 'online varaus';
 	elseif($r->select_type == 'Palkkausmuoto') $selType = 'Palkkausmuoto';
-	elseif($r->select_type == 'siivous') $selType = 'SiivousTyyppi';
-	elseif($r->select_type == 'palkkaan_hinnat') $selType = 'Palkkaan hinnat';
 	elseif($r->select_type == 'tilanne') $selType = 'Tilanne';
 	elseif($r->select_type == 'aktiivinen') $selType = 'Työssä Aktiivinen';
-	elseif($r->select_type == 'tyoehtosopimus') $selType = 'Työehtosopimus';
 	elseif($r->select_type == 'tyoryhma') $selType = 'Työryhma';
-	elseif($r->select_type == 'Ruokatauko') $selType = 'Ruokatauko';
-	elseif($r->select_type == 'AddTvuoro') $selType = 'Ajan välit';
 	elseif($r->select_type == 'tyoajanmerkinta') $selType = 'Työajanmerkinta';
-	elseif($r->select_type == 'tyoajanlaatu') $selType = 'Työajanlaatu';
+	elseif($r->select_type == 'admin status') $selType = 'Oikeukset';
+	elseif($r->select_type == 'siivous') $selType = 'Siivous tyyppi';
+	elseif($r->select_type == 'asiakas_ryhma') $selType = 'Asiakasryhmä';
 	else $selType = $r->select_type;
 
 
