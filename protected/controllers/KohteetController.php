@@ -219,4 +219,18 @@ class KohteetController extends Controller
 			Yii::app()->end();
 		}
 	}
+
+
+    	protected function asiakasMuutos($data,$row)
+	{ 
+
+		    $a = Asiakkaat::model()->findbypk($data->asiakas_id);
+		    if(isset($a->yrityksen_nimi) and !empty($t->yrityksen_nimi))
+		    $data->asiakas_id = $t->yrityksen_nimi;
+		    elseif(isset($a->yhteyshenkilo) and empty($t->yrityksen_nimi) and !empty($t->yhteyshenkilo))
+		    $data->asiakas_id = $t->yhteyshenkilo;
+
+            	return $data->asiakas_id;
+	}
+
 }
