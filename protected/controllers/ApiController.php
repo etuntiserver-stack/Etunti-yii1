@@ -636,7 +636,27 @@ public function actionImei($dom)
                 $mobinsert->tietoja = $_POST['tietoja'];
                 $mobinsert->aloitan = date("d.m.Y H:i:s");
                 $mobinsert->save();
-                $this->_sendResponse(200, $mobinsert->id."//".$mobinsert->kohde_kannasta."//new//".$mobinsert->kohdenID);
+
+		// <-- Timer
+		if(isset($mobinsert->kohdenID))
+		{
+		    $criteria = new CDbCriteria();
+		    $criteria->condition = " 
+				tid = '".$ttekija->id."' and kohde = '".$mobinsert->kohdenID."'
+				and DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE()
+		    ";
+		    $loppu = '';
+	            $tvuoro = Tyovuoroot::model()->findAll($criteria);
+		    if(isset($tvuoro->id))
+		    {
+			$loppu = date("H:i",strtotime($tvuoro->loppu." +30 minutes"));
+		    }
+
+		}
+		// Timer -->
+
+
+                $this->_sendResponse(200, $mobinsert->id."//".$mobinsert->kohde_kannasta."//new//".$mobinsert->kohdenID."//".$loppu);
 
 	    } else {
                 $this->_sendResponse(200, "Kaikki on suljettu, ei ole mitään avoina");
