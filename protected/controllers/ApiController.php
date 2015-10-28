@@ -646,7 +646,7 @@ public function actionImei($dom)
 				and DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE()
 		    ";
 		    $loppu = '';
-	            $tvuoro = Tyovuoroot::model()->findAll($criteria);
+	            $tvuoro = Tyovuoroot::model()->find($criteria);
 		    if(isset($tvuoro->id))
 		    {
 			$loppu = date("H:i",strtotime($tvuoro->loppu." +30 minutes"));
