@@ -27,8 +27,8 @@
 	</div>
 
 	<div class="row">
-		<?php echo $form->label($model,'muut'); ?>
-		<?php echo $form->textField($model,'muut',array('size'=>60,'maxlength'=>255)); ?>
+		<?php echo $form->label($model,'ohjesivu'); ?>
+		<?php echo $form->textField($model,'ohjesivu',array('size'=>60,'maxlength'=>255)); ?>
 	</div>
 
 	<div class="row buttons">

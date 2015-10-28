@@ -25,7 +25,7 @@ class SiteController extends Controller
 	{
 		return array(
 			array('allow', 
-				'actions'=>array('etusivu'),
+				'actions'=>array('etusivu','ohjesivu'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('allow', 
@@ -63,6 +63,10 @@ class SiteController extends Controller
 		$this->render('etusivu');
 	}
 
+	public function actionOhjesivu()
+	{
+		$this->render('ohjesivu');
+	}
 
 	public function actionTest()
 	{

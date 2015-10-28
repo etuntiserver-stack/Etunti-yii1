@@ -161,6 +161,9 @@
           <a href="#" class="dropdown-toggle glyphicon glyphicon-cog" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> <span class="caret"></span></a>
           <ul class="dropdown-menu">
         	<li><?php echo CHtml::link(Yii::t('main', 'Asetukset'),array('/asetukset/update',"id"=>"1")); ?></li>
+	        <li role="separator" class="divider"></li>
+        	<li><?php echo CHtml::link(Yii::t('main', 'Ohjesivu'),array('/site/ohjesivu')); ?></li>
+	        <li role="separator" class="divider"></li>
         	<li><?php echo CHtml::link(Yii::t('main', 'Järjestelmänvalvojat'),array('/administrators/admin')); ?></li>
         	<li><?php echo CHtml::link(Yii::t('main', 'Valikot'),array('/valikkoot/index')); ?></li>
         	<li><?php echo CHtml::link(Yii::t('main', 'Mobiili emulattori'),array('/site/mobemu')); ?></li>

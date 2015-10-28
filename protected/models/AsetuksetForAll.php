@@ -37,12 +37,13 @@ class AsetuksetForAll extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('asetus, api_access_key, muut', 'required'),
-			array('asetus, muut', 'length', 'max'=>255),
+			array('asetus, api_access_key', 'required'),
+			array('asetus', 'length', 'max'=>255),
 			array('api_access_key', 'length', 'max'=>500),
+			array('ohjesivu', 'length', 'max'=>50000),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, asetus, api_access_key, muut', 'safe', 'on'=>'search'),
+			array('id, asetus, api_access_key, ohjesivu', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -66,7 +67,7 @@ class AsetuksetForAll extends CActiveRecord
 			'id' => 'ID',
 			'asetus' => 'Asetus',
 			'api_access_key' => 'Api Access Key',
-			'muut' => 'Muut',
+			'ohjesivu' => 'Ohjesivu',
 		);
 	}
 
@@ -84,7 +85,7 @@ class AsetuksetForAll extends CActiveRecord
 		$criteria->compare('id',$this->id);
 		$criteria->compare('asetus',$this->asetus,true);
 		$criteria->compare('api_access_key',$this->api_access_key,true);
-		$criteria->compare('muut',$this->muut,true);
+		$criteria->compare('ohjesivu',$this->ohjesivu,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
