@@ -309,8 +309,9 @@ class TyovuorootController extends Controller
 
 		  $i=0; 
 		  $var = 0;
-		  if($v == 2)
+		  if($v == 2 or $v == 4)
 		  $var = 1;
+
 
 		  while($startdate<$enddate) 
 		   {  
