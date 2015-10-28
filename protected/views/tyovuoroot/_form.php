@@ -165,7 +165,7 @@ if(!empty($t->gcm_reg_id)) :
 </div>
 	<div class="row modal-footer">
 		<?php echo CHtml::Button('Sulje',array('class'=>'btn btn-default btn-sm','data-dismiss'=>'modal')); ?>
-		<?php echo CHtml::submitButton($model->isNewRecord ? 'Luo' : 'Tallenna',array('class'=>'btn btn-sm btn-primary submitThis')); ?>
+		<?php echo CHtml::submitButton($model->isNewRecord ? 'Luo' : 'Tallenna',array('class'=>'btn btn-sm btn-primary','id'=>'submitButton')); ?>
 	</div>		
 		</div> <!-- end modal-content -->
 	</div> <!-- end modal-dialog -->
@@ -193,8 +193,9 @@ $(document).ready(function(){
 	offText: "Ei"
   });
 
-	$('.submitThis').click(function(){
+	$('#submitButton').click(function(){
 		$('#tyovuoroot-form').submit();
+		return false;
 	});
 
 	$('#tyovuoroot-form').on('submit',function(e) {
@@ -263,6 +264,7 @@ $(document).ready(function(){
 
 	} else {
 
+
 	  $.ajax({
 		  url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/create',
 		  data:$(this).serialize(),
@@ -278,7 +280,6 @@ $(document).ready(function(){
 			  //console.log(data);
 			  $('#showres').modal('hide');
 			  $('#<?php echo date("Ymd",strtotime($model->pvm))."_".$model->tid; ?>').html(data);
-			  //return false;
 			  },
 			  error:function(data){
 			  console.log(data);
@@ -293,6 +294,7 @@ $(document).ready(function(){
 	  });
 
 	}
+
 
 	e.preventDefault(); 
 	});

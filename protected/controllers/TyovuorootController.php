@@ -521,6 +521,7 @@ class TyovuorootController extends Controller
 			   }
 			  }
 			}
+		exit;
 		}
 
 		$this->renderPartial('create',array(
