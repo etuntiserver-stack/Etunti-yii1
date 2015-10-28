@@ -101,6 +101,7 @@
 	<div class="row">
 		<?php echo $form->labelEx($model,'tyoryhma'); ?>
 		<?php
+		$list = array();
       		$l = Valikkoot::model()->findAll(" select_type='tyoryhma' ",array('order' => "select_type"));
 		foreach($l as $v)
 		$list[$v->value] = $v->value;
@@ -116,7 +117,15 @@
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'tyoehtosopimus'); ?>
-		<?php echo $form->textField($model,'tyoehtosopimus',array('size'=>50,'maxlength'=>50,'class'=>'form-control input-sm')); ?>
+		<?php
+		$list = array();
+      		$l = Valikkoot::model()->findAll(" select_type='tyoehtosopimus' ",array('order' => "select_type"));
+		foreach($l as $v)
+		$list[$v->value] = $v->value;
+
+        	echo $form->dropDownList($model, 'tyoehtosopimus', $list,
+		array('empty'=>'','class'=>'form-control input-sm'));
+        	?>
 		<?php echo $form->error($model,'tyoehtosopimus'); ?>
 	</div>
 
