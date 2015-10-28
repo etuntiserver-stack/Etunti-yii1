@@ -109,6 +109,9 @@ td:hover .mplus, td:hover .mcut{
 td .tp{
 	height:20px;
 }
+td .laatikko:hover{
+	background:#ededed;
+}
 </style>
 
 
