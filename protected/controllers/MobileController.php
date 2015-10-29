@@ -1141,7 +1141,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		foreach($model as $d){
 			$kesto = 0;
 			$kesto = strtotime($d->loppui)-strtotime($d->aloitan);
-			$lu[] = $d->tekijan_nimi."//".date("d.m",strtotime($d->aloitan))."//".$kesto."//mobile_".$d->id."//".$d->asiakas_hyvaksy;
+			$lu[] = $d->tekijan_nimi."//".date("d.m",strtotime($d->aloitan))."//".$kesto."//mobile_".$d->id."//".$d->asiakas_hyvaksy."//".date("H:i",strtotime($d->aloitan))."//".date("H:i",strtotime($d->loppui));
 		}
 
 
@@ -1159,7 +1159,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		foreach($model as $d){
 			$kesto = 0;
 			$kesto = strtotime($d->loppui)-strtotime($d->aloitan);
-			$lu[] = $d->tekijan_nimi."//".date("d.m",strtotime($d->aloitan))."//".$kesto."//toteutu_".$d->id."//".$d->asiakas_hyvaksy;
+			$lu[] = $d->tekijan_nimi."//".date("d.m",strtotime($d->aloitan))."//".$kesto."//toteutu_".$d->id."//".$d->asiakas_hyvaksy."//".date("H:i",strtotime($d->aloitan))."//".date("H:i",strtotime($d->loppui));
 		}
 
 		//if(count($lu) > 0)
@@ -1187,7 +1187,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			echo 
 			'<div class="row">
 			   <div class="col-sm-6 text-right">'.$explV[0].', '.$explV[1].'</div>
-			   <div class="col-sm-6"> kesto: <b> '.$this->sprint($explV[2]).'</b> '.$asiakas_hyvaksy.'</div>
+			   <div class="col-sm-6"> '.$explV[5].'-'.$explV[6].' kesto: <b> '.$this->sprint($explV[2]).'</b> '.$asiakas_hyvaksy.'</div>
 			</div>';
 			}
 			if(isset($explV[3]))
