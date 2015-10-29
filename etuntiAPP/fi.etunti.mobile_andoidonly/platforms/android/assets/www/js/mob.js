@@ -14,6 +14,7 @@ $(document).ready(function(){
 		function showAppVersion() {
 		  cordova.getAppVersion(function(version) {
 		  document.getElementById('version').innerHTML = 'version: ' +version;
+		  versio = version;
 		  });
 		}
 		showAppVersion();
@@ -85,7 +86,6 @@ function stateFalse(){
 	function alertDismissed() {
 	    $("#os").css({"border":"2px red solid"}).focus();
 	}
-
 	navigator.notification.alert(
 	    'Osoite puuttuu',            // title
 	    alertDismissed,         // callback
@@ -246,7 +246,7 @@ function row(tilanne,st){
         	console.log(data);
 
 		var sp = data.split("//");
-		 if(sp[4] === 'tagnumerror')
+		 if((sp[4] == 'tagnumerror') & (sp[6] == 'update'))
 		 {
 		   $("#result2").html("<div class='alert alert-danger'><h3>VIRHE!!!</h3>Voit lopettaa osoitessa <b>"+sp[3]+"</b></div>").show();
 		   //return false;
@@ -255,7 +255,7 @@ function row(tilanne,st){
 		   //$("#result2").html("data: <br>" + data).show();
 		 }
 
-		 if(sp[5])
+		 if((sp[5]) & (sp[6] == 'update'))
 		 {
 
             	   var kestoBlock = '<br><div class="row">' +
@@ -270,6 +270,21 @@ function row(tilanne,st){
 
 		   $("#kesto").html(kestoBlock);
 		 }
+
+
+		 if(sp[6] == 'update')
+		 {
+			cordova.plugins.notification.local.cancel(1, function() {
+			    //alert("done");
+			});
+		 }
+
+		$("#muistaLopetta").text('');
+		if((sp[4] !== '') & (sp[2] == 'new'))
+		{
+			setTimer(sp[4],sp[5]);
+		}
+
 
 		set();
     	},
@@ -461,6 +476,8 @@ function getTyovuorotToday(domain){
 
 			$("#os").val($( "#list option:selected" ).text());
 			$("#kohdenID").val($( "#list option:selected" ).val());
+			$("#getTyovuorotToday").remove();
+			return false;
 		});
     	},
     		error:function (xhr, ajaxOptions, thrownError){
@@ -474,20 +491,41 @@ function getTyovuorotToday(domain){
 
   $("#olenEksynyt").click(function(){
 
-  var viesti = "OLEN EKSYNYT";
+	function dismissLaheta() {
+	    lahetaEksynyt();
+	}
+	navigator.notification.alert(
+	    'Lähetä GPS tiedot?',
+	    dismissLaheta,
+	    'Huomio!',  
+	    'OK'
+	);
 
-  var r = confirm("Lähetä GPS tiedot?");
-  if (r == true) {
+  });
+
+
+ function lahetaEksynyt(){
 
 	if(my_location !== '')
 	{
+
+        var viesti = "OLEN EKSYNYT";
+
         $.ajax({
            url: url+'/imei?dom='+domain,
 	   type:'POST',
  	   data: { check : "uusiviesti", viesti : viesti, my_location : my_location, email : email, salasana : salasana },
            success: function(data){
         	//console.log(data);
-		alert(data);
+
+	navigator.notification.alert(
+	    data,
+	    "",
+	    'Vastaus',  
+	    'OK'
+	);
+
+
     	},
     		error:function (xhr, ajaxOptions, thrownError){
         	console.log(xhr.responseText);
@@ -495,12 +533,49 @@ function getTyovuorotToday(domain){
     	}
         });
 	} else {
-		alert('ei löydy GPS sijainti');
+
+	navigator.notification.alert(
+	    "ei löydy GPS sijainti",
+	    "",
+	    'Vastaus',  
+	    'OK'
+	);
+
 	}
 
-   }
+ }
 
-  });
+
+    function isAndroid(){
+        return navigator.userAgent.indexOf("Android") > 0;
+    }
+
+
+ function setTimer(val,sekTo){
+
+  if(sekTo > 0)
+  {
+    var now  = new Date().getTime(),
+    _SEK_from_now = new Date(now + sekTo*1000);
+
+    cordova.plugins.notification.local.schedule({
+      id: 1,
+      text: "Muistakaa lopettaa kohde",
+      at: _SEK_from_now,
+      led: "FF0000",
+      sound: isAndroid ? 'file://sounds/bing.mp3' : 'file://sounds/beep.caf'
+    });
+
+	var kloSplit = val.split(" ");
+	if(kloSplit[1])
+	$("#muistaLopetta").html("<br><div class='alert alert-danger'>Muistakaa lopettaa sen <br><h2>klo: " + kloSplit[1] + "</h2></div>");
+  }
+
+ }
+
+
+
+
 
 
 
