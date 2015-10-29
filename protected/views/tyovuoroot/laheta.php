@@ -86,7 +86,7 @@ for($day= 1; $day <= 7; $day++) {
   {
     if($t->pvm == $date)
     {
-	$k = Kohteet::model()->findbypk($t->kohde,array("select"=>"osoite"));
+	$k = Kohteet::model()->findbypk($t->kohde,array("select"=>"osoite,avain"));
 
 	if($t->alku > 0 and $t->loppu > 0)
 	  $al = $t->alku.'-'.$t->loppu;
@@ -102,7 +102,10 @@ for($day= 1; $day <= 7; $day++) {
 	if(isset($expl2[1]) and !empty($expl2[1]))
 		$cl = 'style="color:'.$expl2[1].'"';
 	
-	echo '<span '.$cl.'>'.$al.' '.$k['osoite'].'</span><br>';
+	echo '<span '.$cl.'>'.$al.' '.$k['osoite'].'</span>';
+	if(!empty($k['avain']))
+	echo ' &nbsp;<b class="fa fa-key text-warning"></b>';
+	echo '<br>';
     }
   }
   echo '</td>';
@@ -115,14 +118,7 @@ for($day= 1; $day <= 7; $day++) {
     if($t->pvm == $date and (!empty($t->tietoja) or !empty($k['avain'])))
     {
 
-	echo '<b>'.$k['osoite'].':</b> <br>'.$t->tietoja;
-	/*
-	if(!empty($k['avain']))
-	{
-	echo '
-	<p><b>'.Yii::t('main', 'Avain: ').'</b> '.$k['avain'].'</p>';
-	}
-	*/
+	echo '<b>'.$k['osoite'].':</b> <br>'.$t->tietoja;	
 	echo '<hr>';
     }
   }
