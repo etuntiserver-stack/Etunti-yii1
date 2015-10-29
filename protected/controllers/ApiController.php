@@ -641,6 +641,7 @@ public function actionImei($dom)
 		if(isset($mobinsert->kohdenID))
 		{
 		    $criteria = new CDbCriteria();
+		    $criteria->order = "alku DESC"; 
 		    $criteria->condition = " 
 				tid = '".$ttekija->id."' and kohde = '".$mobinsert->kohdenID."'
 				and DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE()
