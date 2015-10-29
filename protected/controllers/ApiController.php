@@ -646,17 +646,19 @@ public function actionImei($dom)
 				and DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE()
 		    ";
 		    $loppu = '';
+		    $sekForSignal = '';
 	            $tvuoro = Tyovuoroot::model()->find($criteria);
 		    if(isset($tvuoro->id))
 		    {
 			$loppu = date("d.m.Y H:i",strtotime($tvuoro->pvm." ".$tvuoro->loppu));
+			$sekForSignal = strtotime($tvuoro->pvm." ".$tvuoro->loppu)-time();
 		    }
 
 		}
 		// Timer -->
 
 
-                $this->_sendResponse(200, $mobinsert->id."//".$mobinsert->kohde_kannasta."//new//".$mobinsert->kohdenID."//".$loppu);
+                $this->_sendResponse(200, $mobinsert->id."//".$mobinsert->kohde_kannasta."//new//".$mobinsert->kohdenID."//".$loppu."//".$sekForSignal);
 
 	    } else {
                 $this->_sendResponse(200, "Kaikki on suljettu, ei ole mitään avoina");
