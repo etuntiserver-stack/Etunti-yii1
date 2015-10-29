@@ -255,7 +255,7 @@ function row(tilanne,st){
 		   //$("#result2").html("data: <br>" + data).show();
 		 }
 
-		 if((sp[5]) & (sp[6] == 'update'))
+		 if((sp[5] !== '') & (sp[6] == 'update'))
 		 {
 
             	   var kestoBlock = '<br><div class="row">' +
@@ -269,6 +269,7 @@ function row(tilanne,st){
 				  '</div>';
 
 		   $("#kesto").html(kestoBlock);
+
 		 }
 
 

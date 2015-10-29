@@ -74,7 +74,7 @@ $(document).ready(function(){
 		if(sp[2] == 'ok')
 		{
 		   $('#os').val(sp[0]);
-		   $('body,html').css({"background" : "green","color":"white"});
+		   $('#os').css({"border" : "2px green solid"});
 		   $('#kohdenID').val(sp[1]);
 		   $("#camButtons").show('slow');
 		}
