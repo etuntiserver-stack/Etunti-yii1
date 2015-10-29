@@ -76,14 +76,29 @@ $body .= '
   $body .= '</table>';
 
 
-echo $body;
+		if(isset($_GET['tulosta']))
+		{
+
+	          $html2pdf = Yii::app()->ePdf->HTML2PDF('P', 'A4', 'en');
+		  $html2pdf->setDefaultFont('Arial');
+	          $html2pdf->WriteHTML($body);
+	          $html2pdf->Output();
+		exit;
+		}
+	echo $body;
 
 	$body = preg_replace('!(?:\xc2\xa0|[\pZ\s]++)++!', ' ', $body);
 	$body = json_encode($body);
-
 ?>
 
-
+   <!-- tulostus -->
+   <br>
+   <div class="pull-right">
+     <form target="_blank" method="GET">
+      <input type="submit" name="tulosta" class="btn btn-success btn-sm" value="PDF">
+     </form>
+   </div>
+   <!-- tulostus -->
 
 <br>
 <hr>
