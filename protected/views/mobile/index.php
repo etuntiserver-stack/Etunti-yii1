@@ -265,7 +265,10 @@ $fi = array(
     }
     echo '</select>';
    ?>
-   <input type="text" class="form-control input-sm form-group datepicker" name="etsi_pvm" value="<?php echo Yii::app()->session['etsi_pvm']; ?>">
+   <b class="glyphicon glyphicon-calendar"></b>
+   <input type="text" name="fromP" id="from" class="form-control form-group input-sm datepicker" value="<?php echo Yii::app()->session['fromP']; ?>">
+   <b class="glyphicon glyphicon-calendar"></b>
+   <input type="text" name="toP" id="to" class="form-control form-group input-sm datepicker" value="<?php echo Yii::app()->session['toP']; ?>">
 
      <div class="form-group input-group-btn">
         <button class="btn btn-sm btn-primary haemob" type="button"><i class="glyphicon glyphicon-search"> Hae</i></button>

@@ -310,6 +310,7 @@ class MobileController extends Controller
 
 
 
+
 		  $("#Kohteet_id").on('change',function(){
 
 			var kohdenID = $("#sainkohdenID").val().split("_");
@@ -471,13 +472,17 @@ class MobileController extends Controller
 		Yii::app()->session['etsi_kohteet'] = Yii::app()->request->getPost('etsi_kohteet');
 		}
 
-		if(isset($_POST['etsi_pvm']) and empty($_POST['etsi_pvm']))
-		unset(Yii::app()->session['etsi_pvm']);
+		if(isset($_POST['fromP']) and empty($_POST['fromP']))
+		unset(Yii::app()->session['fromP']);
 
-		if(Yii::app()->request->getPost('etsi_pvm')){
-		Yii::app()->session['etsi_pvm'] = date("Y-m-d",strtotime(Yii::app()->request->getPost('etsi_pvm')));
-		}
+		if(isset($_POST['toP']) and empty($_POST['toP']))
+		unset(Yii::app()->session['toP']);
 
+		if(Yii::app()->request->getPost('fromP'))
+		Yii::app()->session['fromP'] = date("Y-m-d",strtotime(Yii::app()->request->getPost('fromP')));
+
+		if(Yii::app()->request->getPost('toP'))
+		Yii::app()->session['toP'] = date("Y-m-d",strtotime(Yii::app()->request->getPost('toP')));
        		$criteria = new CDbCriteria();
 /*
 $criteria->order =
@@ -500,8 +505,8 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 	        $criteria->addCondition (" tekijan_nimi = '".Yii::app()->session['etsi_tekijan_nimi']."' ");
 		if(Yii::app()->session['etsi_kohteet'])
 	        $criteria->addCondition ("kohde_kannasta = '".Yii::app()->session['etsi_kohteet']."'");
-		if(Yii::app()->session['etsi_pvm'])
-	        $criteria->addCondition ("DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = '".Yii::app()->session['etsi_pvm']."' ");
+		if(Yii::app()->session['fromP'] and Yii::app()->session['toP'])
+	        $criteria->addCondition ("DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".Yii::app()->session['fromP']."' AND '".Yii::app()->session['toP']."' ");
 
 		$dataProvider=new CActiveDataProvider('Mobile', array(
 			'criteria'=>$criteria,
