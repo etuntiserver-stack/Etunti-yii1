@@ -247,6 +247,7 @@ dependencies {
     releaseCompile project(path: "CordovaLib", configuration: "release")
     compile "com.android.support:support-v13:23+"
     compile "com.google.android.gms:play-services:+"
+    compile "com.android.support:support-v4:+"
     // SUB-PROJECT DEPENDENCIES END
 }
 
