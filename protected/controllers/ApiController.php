@@ -649,7 +649,7 @@ public function actionImei($dom)
 	            $tvuoro = Tyovuoroot::model()->find($criteria);
 		    if(isset($tvuoro->id))
 		    {
-			$loppu = date("H:i",strtotime($tvuoro->loppu." +30 minutes"));
+			$loppu = date("d.m.Y H:i",strtotime($tvuoro->pvm." ".$tvuoro->loppu));
 		    }
 
 		}
