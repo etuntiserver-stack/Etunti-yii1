@@ -116,11 +116,13 @@ for($day= 1; $day <= 7; $day++) {
     {
 
 	echo '<b>'.$k['osoite'].':</b> <br>'.$t->tietoja;
+	/*
 	if(!empty($k['avain']))
 	{
 	echo '
 	<p><b>'.Yii::t('main', 'Avain: ').'</b> '.$k['avain'].'</p>';
 	}
+	*/
 	echo '<hr>';
     }
   }
