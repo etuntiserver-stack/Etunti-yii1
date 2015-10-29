@@ -16,6 +16,7 @@ $paivat=array(
 <style>
 table{
 	width: 290px;
+	font-size: 80%;
 }
 td,th{
 	padding:3px 7px;
@@ -54,6 +55,7 @@ td,th{
 
 <?php
   $criteria = new CDbCriteria();
+  $criteria->order = " alku ASC "; 
   $criteria->group = " tid "; 
   $criteria->condition = "  
   DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d')  
@@ -95,6 +97,7 @@ for($day= 1; $day <= 7; $day++) {
   echo '<td width="300">';
 
   $criteria = new CDbCriteria();
+  $criteria->order = " alku ASC "; 
   $criteria->condition = "  
   tid = '".$tt->id."'
   AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d')  

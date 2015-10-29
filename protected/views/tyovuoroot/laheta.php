@@ -16,6 +16,7 @@ $paivat=array(
 <style>
 table{
 	width: 290px;
+	font-size: 80%;
 }
 td,th{
 	padding:3px 7px;
@@ -57,6 +58,7 @@ td,th{
 
 <?php
   $criteria = new CDbCriteria();
+  $criteria->order = " alku ASC "; 
   $criteria->condition = " tid='".$tid."' AND 
   DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d')  
   BETWEEN  '".date('Y-m-d',strtotime($year ."W". $week .'1'))."' AND '".date('Y-m-d',strtotime($year ."W". $week .'7'))."' 
@@ -95,7 +97,12 @@ for($day= 1; $day <= 7; $day++) {
 	if(empty($k['osoite']) and isset($expl[0]))
 		$k['osoite'] = $expl[0];
 
-	echo $al.' '.$k['osoite'].'<br>';
+	$expl2 = explode("/",$t->tyoajanmerkinta);
+		$cl = '';
+	if(isset($expl2[1]) and !empty($expl2[1]))
+		$cl = 'style="color:'.$expl2[1].'"';
+	
+	echo '<span '.$cl.'>'.$al.' '.$k['osoite'].'</span><br>';
     }
   }
   echo '</td>';
