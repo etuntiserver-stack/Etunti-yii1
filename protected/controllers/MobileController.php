@@ -131,7 +131,7 @@ class MobileController extends Controller
 
 		       	$criteria = new CDbCriteria();
 			$criteria->select = " aloitan,loppui,tekijan_nimi,kohde_kannasta ";
-			$criteria->order = " DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') ASC ";
+			$criteria->order = " DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i') ASC ";
 			$criteria->condition = " 
 				aloitan!='' and loppui!='' 
 				AND admin!='1'
@@ -158,7 +158,7 @@ class MobileController extends Controller
 			/* lu */
 		       	$criteria = new CDbCriteria();
 			$criteria->select = " aloitan,loppui,tekijan_nimi,kohde_kannasta ";
-			$criteria->order = " DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') ASC ";
+			$criteria->order = " DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i') ASC ";
 			$criteria->condition = " aloitan!='' and loppui!='' AND id NOT IN (SELECT kid FROM sivexkuitti_repaired) ";
 
 			allCrit($criteria);
@@ -169,7 +169,7 @@ class MobileController extends Controller
 			/* tot */
 		       	$criteria = new CDbCriteria();
 			$criteria->select = " aloitan,loppui,tekijan_nimi,kohde_kannasta ";
-			$criteria->order = " DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') DESC ";
+			$criteria->order = " DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i') ASC ";
 			$criteria->condition = " aloitan!='' and loppui!='' AND id NOT IN (SELECT kid FROM sivexkuitti) ";
 
 			allCrit($criteria);
@@ -303,6 +303,7 @@ class MobileController extends Controller
 		<input type="hidden" id="sainkohdenID" value="<?php echo $_POST['thisID']; ?>">
 		<script type="text/javascript">
 		$(document).ready(function(){
+
 
 
 
