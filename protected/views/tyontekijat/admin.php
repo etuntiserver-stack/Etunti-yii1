@@ -77,10 +77,22 @@ $('.search-form form').submit(function(){
 		'online_varauksen_valmina',
 		'kortit',
 		'ayjasenyys',
-		*/
+
 		array(
 			'class'=>'CButtonColumn',
 		),
+
+		*/
+
+array(
+
+        'value' => '
+	   CHtml::link("Katso Muokkaa", Yii::app()->createUrl("tyontekijat/update",array("id"=>$data->id)))
+	',
+        'type'  => 'raw',
+	//'visible'=>Yii::app()->user->avetak,
+    ),
+
 	),
 )); ?>
 </div>

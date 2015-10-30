@@ -99,9 +99,20 @@ $('.search-form form').submit(function(){
 		'maksuehto_paiva',
 		'viivastyskorko',
 		'lasku_tiedot',
-		*/
+
 		array(
 			'class'=>'CButtonColumn',
 		),
+		*/
+
+array(
+
+        'value' => '
+	   CHtml::link("Katso Muokkaa", Yii::app()->createUrl("kohteet/update",array("id"=>$data->id)))
+	',
+        'type'  => 'raw',
+	//'visible'=>Yii::app()->user->avetak,
+    ),
+
 	),
 )); ?>

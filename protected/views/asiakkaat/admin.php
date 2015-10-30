@@ -118,9 +118,18 @@ echo '
 		'sahkoposti',
 
 		'aktiivinen',
-		*/
+
 		array(
 			'class'=>'CButtonColumn',
 		),
+		*/
+array(
+
+        'value' => '
+	   CHtml::link("Katso Muokkaa", Yii::app()->createUrl("asiakkaat/update",array("id"=>$data->id)))
+	',
+        'type'  => 'raw',
+	//'visible'=>Yii::app()->user->avetak,
+    ),
 	),
 )); ?>
