@@ -70,10 +70,10 @@ public $tunnus;
 			array('tekijan_pnumero', 'length', 'max'=>7),
 			array('ayjasenyys', 'length', 'max'=>10),
 			array('kortit, tekijan_muisti, tekijan_tietoja', 'length', 'max'=>1000),
-			array('gcm_reg_id', 'length', 'max'=>500),
+			array('gcm_reg_id, position', 'length', 'max'=>500),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, imei, laiten_puh, tekijan_nimi, tekijan_henkilotunnus, tekijan_puh, tekijan_email, tekijan_lanka_puh, tekijan_katuosoite, tekijan_pnumero, tekijan_ptoimipaikka, tyoryhma, tyoehtosopimus, tekijan_kulunvalvonta, tekijan_pankkitili, tekijan_konttori, aktiivinen, tekijan_tietoja, tekijan_muisti, salasana, online_varauksen_valmina, kortit, ayjasenyys, gcm_reg_id', 'safe', 'on'=>'search'),
+			array('id, imei, laiten_puh, tekijan_nimi, tekijan_henkilotunnus, tekijan_puh, tekijan_email, tekijan_lanka_puh, tekijan_katuosoite, tekijan_pnumero, tekijan_ptoimipaikka, tyoryhma, tyoehtosopimus, tekijan_kulunvalvonta, tekijan_pankkitili, tekijan_konttori, aktiivinen, tekijan_tietoja, tekijan_muisti, salasana, online_varauksen_valmina, kortit, ayjasenyys, gcm_reg_id, position', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -118,6 +118,7 @@ public $tunnus;
 			'kortit' => 'Kortit',
 			'ayjasenyys' => 'Ayjasenyys',
 			'gcm_reg_id'=>'Google Cloud Messaging ID',
+			'position' => 'Viimeinen sijainti',
 		);
 	}
 
@@ -168,6 +169,7 @@ public $tunnus;
 		$criteria->compare('kortit',$this->kortit,true);
 		$criteria->compare('ayjasenyys',$this->ayjasenyys,true);
 		$criteria->compare('gcm_reg_id',$this->gcm_reg_id);
+		$criteria->compare('position',$this->position);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

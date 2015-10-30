@@ -161,6 +161,8 @@ public function actionImei($dom)
 
 	        if($_POST['check'] == 'sendLocation'){
 
+		      Tyontekijat::model()->updatebypk($ttekija->id, array('position'=>$_POST['my_location']));
+
 		      $this->_sendResponse(200, $ttekija->id."//".date("d.m.Y H:i")."//".$_POST['my_location']);
 		exit;
 	        }
