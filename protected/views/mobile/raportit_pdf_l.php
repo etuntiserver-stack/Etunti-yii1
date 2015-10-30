@@ -46,9 +46,9 @@ td,th{
    echo '<td>'.date("d.m",strtotime($data->aloitan)).'</td>';
    echo '<td>'.$data->tekijan_nimi.'</td>';
    echo '<td>'.$data->kohde_kannasta.'</td>';
-   echo '<td>'.date("H:i",strtotime($data->aloitan)).'</td>';
-   echo '<td>'.date("H:i",strtotime($data->loppui)).'</td>';
-   echo '<td>'.sprint($kesto).'</td>';
+   echo '<td>'.date("H:i:s",strtotime($data->aloitan)).'</td>';
+   echo '<td>'.date("H:i:s",strtotime($data->loppui)).'</td>';
+   echo '<td>'.sprint($kesto).' <b>('.num($kesto).')</b></td>';
    echo '</tr>';
   }
   ?>
