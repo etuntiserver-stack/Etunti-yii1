@@ -105,14 +105,18 @@ $('.search-form form').submit(function(){
 		),
 		*/
 
-array(
+		array(
+		    'value'=>array($this,'onkoKuva'),
+		    'type' => 'html',
+    		),
+		array(
 
-        'value' => '
-	   CHtml::link("Katso Muokkaa", Yii::app()->createUrl("kohteet/update",array("id"=>$data->id)))
-	',
-        'type'  => 'raw',
-	//'visible'=>Yii::app()->user->avetak,
-    ),
+        		'value' => '
+	   		CHtml::link("Katso Muokkaa", Yii::app()->createUrl("kohteet/update",array("id"=>$data->id)))
+			',
+        		'type'  => 'raw',
+			//'visible'=>Yii::app()->user->avetak,
+    		),
 
 	),
 )); ?>
