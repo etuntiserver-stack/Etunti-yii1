@@ -55,15 +55,13 @@ $tilanne = Yii::t('main','Hylätty');
 	<?php echo CHtml::encode($tilanne); ?>
 	<br />
 
-	</div><div class="col-sm-3">
-
-	<h2 data-toggle="collapse" data-target="#col_<?php echo $data->id; ?>">
-	  <b class="glyphicon glyphicon-sort-by-attributes-alt"></b>
-	</h2>
-
 	</div>
 
   </div>
+
+	<div class="col-sm-offset-6" data-toggle="collapse" data-target="#col_<?php echo $data->id; ?>">
+	  <b class="fa fa-caret-square-o-down link"></b>
+	</div>
 
 	<div class="collapse" id="col_<?php echo $data->id; ?>">
 	<?php echo json_decode($data->kirjen_body); ?>
