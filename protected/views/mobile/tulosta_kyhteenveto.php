@@ -1,6 +1,7 @@
 <style>
 table{
 	//width: 150px;
+	font-size: 80%;
 }
 td,th{
 	padding:3px 7px;
@@ -46,12 +47,33 @@ td,th{
 	$lu = '0';
 	$tot = '0';
 	$suunn = '0';
-	if(isset(Yii::app()->session['mitkatKohteet']))
-	{
+	$kplyht = '0';
+
 		$suunn = $this->yhtSUUNN();
-		$lu = $this->yhtLU(Yii::app()->session['mitkatKohteet']);
-		$tot = $this->yhtTOT(Yii::app()->session['mitkatKohteet']);
-	}
+		$lu = $this->yhtLU();
+		$tot = $this->yhtTOT();
+
+
+	//kpl
+	$kpl = 0;
+	$kpl1 = 0;
+	$kpl2 = 0;
+	$cr4 = new CDbCriteria();
+	$this->totKpl($cr4,"kaikki");
+	$cr4->addCondition (" id NOT IN (SELECT kid FROM sivexkuitti_repaired) ");
+	$k = Mobile::model()->findAll($cr4);
+	foreach($k as $kk)
+	$kpl1 += $kk->count;
+
+	$cr5 = new CDbCriteria();
+	$this->totKpl($cr5,"kaikki");
+	$k = Toteutuneet::model()->findAll($cr5);
+	foreach($k as $kk)
+	$kpl2 += $kk->count;
+
+	$kplyht = $kpl1+$kpl2;
+
+
   ?>
   <tr>
   <th><?php echo Yii::t('main', 'Yhteensä'); ?></th>
@@ -60,14 +82,13 @@ td,th{
   $tas = explode(",",Yii::app()->user->adminPaketti);
   if(in_array('2',$tas)) : 
   ?>
-  <th><?php echo $this->sprint($suunn); ?></th>
+  <th>/ <?php echo Yii::t('main', 'oikeasti:'); ?><?php echo $this->sprint($suunn); ?></th>
   <?php endif; ?>
 
   <th><?php echo $this->sprint($lu); ?></th>
   <th><?php echo $this->sprint($tot); ?></th>
-  <th></th>
+  <th><?php echo $kplyht; ?></th>
   </tr>
   </tfoot>
-
   </table>
 <?php endif; ?>
