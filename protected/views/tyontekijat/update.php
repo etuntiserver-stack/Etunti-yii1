@@ -53,6 +53,15 @@ exit;
 ?>
 
 <legend>
+
+   <!-- tulostus -->
+   <div class="pull-right">
+     <form action="tulosta?id=<?php echo $model->id; ?>" target="_blank" method="POST">
+      <input type="submit" name="tulosta" class="btn btn-success btn-sm" value="PDF">
+     </form>
+   </div>
+   <!-- tulostus -->
+
 <h1><?php echo Yii::t('main', 'Työntekijä ID:'); ?> <?php echo $model->id; ?></h1>
 </legend>
 
