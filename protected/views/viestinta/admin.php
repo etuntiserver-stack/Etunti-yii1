@@ -70,10 +70,21 @@ $('.search-form form').submit(function(){
                     'name'=>'tekija',
                     'value'=>array($this,'tekijaMuutos'),              
 		),
-
+/*
 		//'status',
 		array(
 			'class'=>'CButtonColumn',
 		),
+*/
+
+array(
+
+        'value' => '
+	   CHtml::link("Katso", Yii::app()->createUrl("viestinta/view",array("id"=>$data->id)))
+	',
+        'type'  => 'raw',
+	//'visible'=>Yii::app()->user->avetak,
+    ),
+
 	),
 )); ?>
