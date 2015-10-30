@@ -241,4 +241,19 @@ class KohteetController extends Controller
             	return $return;
 	}
 
+    	protected function onkoKuva($data,$row)
+	{ 
+		$return = '';
+
+		foreach(array_reverse(glob(Yii::app()->basePath."/../img/uploadedfromphone/".Yii::app()->user->domain."/".$data->id."_*.*")) as $file) 
+		{
+			if(!empty($file))
+			{
+			$return = '<i class="fa fa-camera"></i>';
+			break;
+			}
+		}
+            	return $return;
+	}
+
 }
