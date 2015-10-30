@@ -168,7 +168,7 @@
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'ayjasenyys'); ?>
-		<?php echo $form->checkbox($model,'ayjasenyys',array('size'=>10,'maxlength'=>10,'class'=>'sw input-sm')); ?>
+		<?php echo $form->checkbox($model,'ayjasenyys',array('size'=>10,'maxlength'=>10,'class'=>'sw')); ?>
 
 		<?php echo $form->error($model,'ayjasenyys'); ?>
 	</div>
@@ -186,7 +186,7 @@
 	</div>
 
    </div>
-   <div class="col-sm-2">
+   <div class="col-sm-2 pull-right">
 	<?php if(isset($model->id)): ?>
 	<div class="row"><br>
 		<?php
@@ -235,7 +235,7 @@
 $(document).ready(function(){
 
   $(".sw").bootstrapSwitch({
-	size: "small",
+	size: "mini",
 	onColor: "success",
 	offColor: "warning",
 	onText: "Kyllä",

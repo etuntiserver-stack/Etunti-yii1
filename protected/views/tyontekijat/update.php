@@ -7,14 +7,14 @@ $this->breadcrumbs=array(
 	$model->id=>array('view','id'=>$model->id),
 	Yii::t('main', 'Päivitä'),
 );
-
+/*
 $this->menu=array(
 	array('label'=>'List Tyontekijat', 'url'=>array('index')),
 	array('label'=>'Create Tyontekijat', 'url'=>array('create')),
 	array('label'=>'View Tyontekijat', 'url'=>array('view', 'id'=>$model->id)),
 	array('label'=>'Manage Tyontekijat', 'url'=>array('admin')),
 );
-
+*/
 
 
 if(isset($_POST['uploaded']))
