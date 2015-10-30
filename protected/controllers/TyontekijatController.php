@@ -28,7 +28,7 @@ class TyontekijatController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','admin_ajax','delete','create','update','index','view','merkkipaivat'),
+				'actions'=>array('admin','admin_ajax','delete','create','update', 'index','view','merkkipaivat','tulosta'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -73,6 +73,16 @@ class TyontekijatController extends Controller
 		$this->render('view',array(
 			'model'=>$this->loadModel($id),
 		));
+	}
+
+	public function actionTulosta($id)
+	{
+			$model = Tyontekijat::model()->findbypk($id); 
+	
+		        $html2pdf = Yii::app()->ePdf->HTML2PDF('P', 'A4', 'en');
+			$html2pdf->setDefaultFont('Arial');
+		        $html2pdf->WriteHTML($this->renderPartial('tulosta_pdf', array('model' => $model),true));
+		        $html2pdf->Output();
 	}
 
 	/**

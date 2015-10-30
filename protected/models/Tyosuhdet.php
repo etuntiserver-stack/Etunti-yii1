@@ -99,12 +99,12 @@ class Tyosuhdet extends DB2ActiveRecord
 			'tuloraja_ajalle' => 'Tuloraja ajalle',
 			'perusprosentti' => 'Palkkaa varten Perusprosentti',
 			'lisaprosentti' => 'Lisäprosentti',
-			'kuukaudessa' => 'AKuukaudessa',
+			'kuukaudessa' => 'A Kuukaudessa',
 			'kahdessa_viikossa' => 'Kahdessa viikossa',
 			'viikossa' => 'Viikossa',
 			'paivassa' => 'Päivässä',
-			'atk_varten' => 'Laskennalinen tuloraja ATK-järjestelmiä varten',
-			'yksi_tuloraja' => 'BEnnakonpidätys yhden tulorajan mukaan',
+			'atk_varten' => 'Laskennallinen tuloraja ATK-järjestelmiä varten',
+			'yksi_tuloraja' => 'B Ennakonpidätys yhden tulorajan mukaan',
 		);
 	}
 
