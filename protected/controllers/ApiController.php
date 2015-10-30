@@ -159,6 +159,13 @@ public function actionImei($dom)
 
 	    if(isset($_POST['check'])){
 
+	        if($_POST['check'] == 'sendLocation'){
+
+		      $this->_sendResponse(200, $ttekija->id."//".date("d.m.Y H:i")."//".$_POST['my_location']);
+		exit;
+	        }
+
+
 	        if($_POST['check'] == 'getObjbyTag'){
 
 		  if(isset($_POST['tag']) and $_POST['tag'] != '000000')
