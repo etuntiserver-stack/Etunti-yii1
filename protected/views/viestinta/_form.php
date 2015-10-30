@@ -7,6 +7,8 @@
 $ad = Administrators::model()->findbypk(Yii::app()->user->adminID);
 if(isset($ad->adm_nimi))
   $admin = $ad->id.",".$ad->adm_nimi;
+
+
 ?>
 
 <div class="row form">
@@ -37,6 +39,11 @@ if(isset($ad->adm_nimi))
 		<?php
 		if(isset($_GET['tid']))
 		{
+
+		  $tt = Tyontekijat::model()->findbypk($_GET['tid']);
+		  if(isset($tt->tekijan_nimi))
+		  echo '<label>'.Yii::t('main','Saaja: ').' '.$tt->tekijan_nimi.'</label>';
+
 		  echo $form->hiddenField($model,'tekija',array('value'=>$_GET['tid'],'class'=>'form-control','readonly'=>'yes'));
 		} else {
 
