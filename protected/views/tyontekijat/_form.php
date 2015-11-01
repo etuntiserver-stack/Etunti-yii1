@@ -3,6 +3,22 @@
 /* @var $model Tyontekijat */
 /* @var $form CActiveForm */
 
+if(isset($model->position))
+$model->position = str_replace("/",",",trim($model->position));
+
+if(empty($model->position) and isset($model->id))
+{
+	$m = Mobile::model()->find(" tid='".$model->id."' AND my_location!='' AND my_location!='GPS disabled' ",array("order"=>"id DESC"));
+	if(isset($m->my_location))
+	{
+	  $explLoc = explode("**",$m->my_location);
+	 if(isset($explLoc[1]))
+	  $model->position = str_replace("/",",",trim($explLoc[1]));
+	 elseif(isset($explLoc[0]) and !isset($explLoc[1]))
+	  $model->position = str_replace("/",",",trim($explLoc[0]));
+	}
+}
+
 ?>
 
 <?php $form=$this->beginWidget('CActiveForm', array(
@@ -112,6 +128,13 @@
 		<?php echo $form->error($model,'tyoryhma'); ?>
 	</div>
 
+	<div class="row">
+		<?php echo $form->labelEx($model,'ayjasenyys'); ?>
+		<?php echo $form->checkbox($model,'ayjasenyys',array('size'=>10,'maxlength'=>10,'class'=>'sw')); ?>
+
+		<?php echo $form->error($model,'ayjasenyys'); ?>
+	</div>
+
    </div>
    <div class="col-sm-3">
 
@@ -184,12 +207,6 @@
 		<?php echo $form->error($model,'position'); ?>
 	</div>
 
-	<div class="row">
-		<?php echo $form->labelEx($model,'ayjasenyys'); ?>
-		<?php echo $form->checkbox($model,'ayjasenyys',array('size'=>10,'maxlength'=>10,'class'=>'sw')); ?>
-
-		<?php echo $form->error($model,'ayjasenyys'); ?>
-	</div>
 
    </div><div class="col-sm-2 pull-right">
 
@@ -206,6 +223,7 @@
 	</div>
 	<?php endif; ?>
    </div>
+
 
    </div>
 
@@ -227,6 +245,50 @@
 		<?php echo $form->textArea($model,'tekijan_muisti',array('rows'=>6, 'cols'=>50,'class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'tekijan_muisti'); ?>
 	</div>
+
+   </div><div class="col-sm-6">
+
+<label><?php echo Yii::t('','Viimeinen sijainti kartalla'); ?></label>
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      #map-canvas {
+        width: 100%;
+        height: 400px;
+      }
+    </style>
+    <script src="https://maps.googleapis.com/maps/api/js"></script>
+    <script>
+
+window.initialize = function() {
+    var Mypos = document.getElementById("Tyontekijat_position").value.split(",");
+    var myLatlng = new google.maps.LatLng(Mypos[0], Mypos[1]);
+    var mapCanvas = document.getElementById('map-canvas');
+    var mapOptions = {
+        center: myLatlng,          
+        zoom: 14,
+    }
+    var map = new google.maps.Map(mapCanvas, mapOptions);
+    var marker = new google.maps.Marker({
+      position: myLatlng,
+      map: map,
+      title:"123"
+      });
+    var latLng = marker.getPosition(); 
+    map.setCenter(latLng);
+
+  }
+
+  google.maps.event.addDomListener(window, 'load', initialize);
+
+    </script>
+  </head>
+  <body>
+    <div id="map-canvas"></div>
+  </body>
+</html>
+
 
    </div>
 </div>
