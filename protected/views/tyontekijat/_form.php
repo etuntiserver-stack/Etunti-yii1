@@ -61,9 +61,9 @@
 		<?php echo $form->error($model,'aktiivinen'); ?>
 	</div>
 
-
    </div>
    <div class="col-sm-3">
+
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'imei'); ?>
@@ -167,13 +167,6 @@
 	</div>
 
 	<div class="row">
-		<?php echo $form->labelEx($model,'ayjasenyys'); ?>
-		<?php echo $form->checkbox($model,'ayjasenyys',array('size'=>10,'maxlength'=>10,'class'=>'sw')); ?>
-
-		<?php echo $form->error($model,'ayjasenyys'); ?>
-	</div>
-
-	<div class="row">
 		<?php echo $form->labelEx($model,'salasana'); ?>
 		<?php echo $form->textField($model,'salasana',array('size'=>60,'maxlength'=>100,'class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'salasana'); ?>
@@ -191,10 +184,18 @@
 		<?php echo $form->error($model,'position'); ?>
 	</div>
 
-   </div>
-   <div class="col-sm-2 pull-right">
+	<div class="row">
+		<?php echo $form->labelEx($model,'ayjasenyys'); ?>
+		<?php echo $form->checkbox($model,'ayjasenyys',array('size'=>10,'maxlength'=>10,'class'=>'sw')); ?>
+
+		<?php echo $form->error($model,'ayjasenyys'); ?>
+	</div>
+
+   </div><div class="col-sm-2 pull-right">
+
+   <div class="row">
 	<?php if(isset($model->id)): ?>
-	<div class="row"><br>
+	<div class="row">
 		<?php
 		$filename = "../../img/tekijat/".Yii::app()->user->domain."/".$model->id.".jpg";
 		if (file_exists(Yii::app()->request->baseUrl."img/tekijat/".Yii::app()->user->domain."/".$model->id.".jpg"))
@@ -205,6 +206,10 @@
 	</div>
 	<?php endif; ?>
    </div>
+
+   </div>
+
+
 
 </div><!-- form -->
 
