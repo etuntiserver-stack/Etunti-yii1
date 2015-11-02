@@ -140,7 +140,7 @@ class TyovuorootController extends Controller
 		$saaja = $tt->tekijan_email;
 		$firma = FirmanTiedot::model()->findbypk(1);
 		if(isset($firma->sahkoposti) and !empty($firma->sahkoposti))
-		$saaja = $tt->tekijan_email.', '.$firma->sahkoposti;
+		$saaja = array($tt->tekijan_email,$firma->sahkoposti);
 
 		$mail = new YiiMailer();
 		//$mail->clearLayout();//if layout is already set in config
@@ -206,7 +206,7 @@ class TyovuorootController extends Controller
 		$saaja = $tt->tekijan_email;
 		$firma = FirmanTiedot::model()->findbypk(1);
 		if(isset($firma->sahkoposti) and !empty($firma->sahkoposti))
-		$saaja = $tt->tekijan_email.', '.$firma->sahkoposti;
+		$saaja = array($tt->tekijan_email,$firma->sahkoposti);
 
 
 		  $mail = new YiiMailer();
