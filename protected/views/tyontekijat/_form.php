@@ -19,7 +19,11 @@ if(isset($model->position) and isset($model->id)){
 
 if(empty($model->position) and isset($model->id))
 {
-	$m = Mobile::model()->find(" tid='".$model->id."' AND my_location!='' AND my_location!='GPS disabled' ",array("order"=>"id DESC"));
+	$criteria=new CDbCriteria;
+	$criteria->order = " id DESC ";
+	$criteria->condition = " tid='".$model->id."' AND my_location!='' AND my_location!='GPS disabled' ";
+	$m = Mobile::model()->find($criteria);
+
 	if(isset($m->my_location))
 	{
 	  $explLoc = explode("**",$m->my_location);
