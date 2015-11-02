@@ -202,7 +202,7 @@ td .laatikko:hover{
   	    echo '<tr>';
   		echo '<td style="background: #669999;color: white" class="text-center viikkoRivi fixed-column"><b>'.Yii::t('main', 'Viikko').' '.date("W",strtotime($date)).'</b></td>';
 		foreach($tt as $t){
-		 $vktyoaika = '--:--';
+		 $vktyoaika = '';
 		 $ts = Tyosuhdet::model()->find(" tid = '".$t->id."' ");
 		 if(isset($ts->id) and !empty($ts['vktyoaika']))
 		  $vktyoaika = $ts['vktyoaika'];
@@ -213,8 +213,16 @@ td .laatikko:hover{
 		  $vko = date("W",strtotime($date));
 		  $year = date("Y",strtotime($date));
 		  $kokoViikko = $this->renderPartial('//tyovuoroot/viikko',array('tid'=>$t->id,'viikko'=>$vko,'year'=>$year),true);
-		  echo $kokoViikko;
-		  echo '('.$vktyoaika.')';
+
+		  $cl = '';
+		  if(	str_replace(":","",$kokoViikko) > str_replace(":","",$vktyoaika)
+			and str_replace(":","",$kokoViikko) > 0
+			and str_replace(":","",$vktyoaika) > 0
+		  )
+		  $cl = 'class="btn btn-xs btn-danger"';
+
+		  echo '<span '.$cl.'>'.$kokoViikko. '('.$vktyoaika.')</span>';
+
 		  echo '</td>';
 		}
 	    echo '</tr>';
