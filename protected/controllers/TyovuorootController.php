@@ -137,11 +137,15 @@ class TyovuorootController extends Controller
 		/* file */
 		$message = Yii::t('main', 'VIIKKO').'-'.$week.'<br>'.Yii::t('main', ' Liitteenä uusi PDF-tiedosto');
 
+		$saaja = $tt->tekijan_email;
+		$firma = FirmanTiedot::model()->findbypk(1);
+		if(isset($firma->sahkoposti) and !empty($firma->sahkoposti))
+		$saaja = $tt->tekijan_email.', '.$firma->sahkoposti;
 
 		$mail = new YiiMailer();
 		//$mail->clearLayout();//if layout is already set in config
 		$mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
-		$mail->setTo($tt->tekijan_email);
+		$mail->setTo($saaja);
 		$mail->setSubject(Yii::t('main', 'TYÖVUOROT'). ' '.$tt->tekijan_nimi);
 		$mail->setBody($message);
 		$mail->setAttachment($path.'/'.$file);
@@ -199,10 +203,16 @@ class TyovuorootController extends Controller
 		  $message = Yii::t('main', 'VIIKKO').'-'.$week.'<br>'.Yii::t('main', ' Liitteenä uusi PDF-tiedosto');
 
 		
+		$saaja = $tt->tekijan_email;
+		$firma = FirmanTiedot::model()->findbypk(1);
+		if(isset($firma->sahkoposti) and !empty($firma->sahkoposti))
+		$saaja = $tt->tekijan_email.', '.$firma->sahkoposti;
+
+
 		  $mail = new YiiMailer();
 		  //$mail->clearLayout();//if layout is already set in config
 		  $mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
-		  $mail->setTo($tt->tekijan_email);
+		  $mail->setTo($saaja);
 		  $mail->setSubject(Yii::t('main', 'TYÖVUOROT'). ' '.$tt->tekijan_nimi);
 		  $mail->setBody($message);
 		  $mail->setAttachment($path.'/'.$file);
