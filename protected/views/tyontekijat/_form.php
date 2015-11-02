@@ -3,8 +3,19 @@
 /* @var $model Tyontekijat */
 /* @var $form CActiveForm */
 
-if(isset($model->position))
-$model->position = str_replace("/",",",trim($model->position));
+$position = '';
+$viimeinenAika = '';
+
+if(isset($model->position) and isset($model->id)){
+
+  $si = explode("//",trim($model->position));
+
+  	if(isset($si[0]) and !empty($si[0]))
+     	  $position = $si[0];
+
+  	if(isset($si[1]) and !empty($si[1]))
+     	  $viimeinenAika = $si[1];
+}
 
 if(empty($model->position) and isset($model->id))
 {
@@ -12,14 +23,23 @@ if(empty($model->position) and isset($model->id))
 	if(isset($m->my_location))
 	{
 	  $explLoc = explode("**",$m->my_location);
-	 if(isset($explLoc[1]))
-	  $model->position = str_replace("/",",",trim($explLoc[1]));
-	 elseif(isset($explLoc[0]) and !isset($explLoc[1]))
-	  $model->position = str_replace("/",",",trim($explLoc[0]));
+
+	    if(isset($explLoc[1]))
+ 	    {
+	   	$position = $explLoc[1];
+     	  	$viimeinenAika = $m->loppui;
+	 
+	    } elseif(isset($explLoc[0]) and !isset($explLoc[1])){
+	  	$position = $explLoc[0];
+     	  	$viimeinenAika = $m->aloitan;
+ 	    }
+	
 	}
 }
 
 ?>
+
+<input type="hidden" id="position" value="<?php echo $position; ?>">
 
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'tyontekijat-form',
@@ -252,7 +272,7 @@ if(empty($model->position) and isset($model->id))
 
    </div><div class="col-sm-6">
 
-<label><?php echo Yii::t('','Viimeinen sijainti kartalla'); ?></label>
+<label><?php echo Yii::t('','Viimeinen sijainti kartalla').' '.$viimeinenAika; ?> </label>
 <!DOCTYPE html>
 <html>
   <head>
@@ -266,7 +286,7 @@ if(empty($model->position) and isset($model->id))
     <script>
 
 window.initialize = function() {
-    var Mypos = document.getElementById("Tyontekijat_position").value.split(",");
+    var Mypos = document.getElementById("position").value.split("/");
     var myLatlng = new google.maps.LatLng(Mypos[0], Mypos[1]);
     var mapCanvas = document.getElementById('map-canvas');
     var mapOptions = {
