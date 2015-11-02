@@ -14,7 +14,7 @@ td:first-child {
 	white-space: normal;
 }
 </style>
-
+<div id="checkedLaheta"></div>
 <legend>
 <h1> <?php echo Yii::t('main', 'TYÖVUOROJEN LÄHETYS'); ?> <i class="glyphicon glyphicon-th-list"></i></h1>
 </legend>
@@ -47,7 +47,7 @@ if($week > 52) {
 <center>
 
 <div class="pull-left">
-<?php echo CHtml::link(Yii::t('main', 'Lähetä kaikille'),'/index.php/tyovuoroot/laheta_k?week='.$week.'&year='.$year.'&tulosta=false',array('target'=>'_blank','class'=>'btn btn-success'));
+<?php echo CHtml::button(Yii::t('main', 'Lähetä kaikille'),array('target'=>'_blank','class'=>'btn btn-success','id'=>'lahetaKaikkille'));
 ?>
 </div>
 
@@ -91,6 +91,7 @@ if($week > 52) {
     {
 	echo '<tr>';
 	echo '<td>'.$t->tekijan_nimi.'<BR>
+	<input type="checkbox" for="'.$t->id.'">
 	'.CHtml::link('Lähettäminen','/index.php/tyovuoroot/laheta?tid='.$t->id.'&week='.$week.'&year='.$year.'&tulosta=false',array('target'=>'_blank','class'=>'text-success'));
 
 	$file = $week.'_'.$year.'_'.$t->id.'.pdf';
@@ -119,7 +120,29 @@ if($week > 52) {
 </table>
 
 
+<script type="text/javascript">
+$(document).ready(function(){
 
+$("#lahetaKaikkille").click(function(){
+
+ setTimeout(function(){document.location.href = "laheta_k?week=<?php echo $week; ?>&year=<?php echo$year; ?>&tulosta=false&check="+checkChecked();},500);
+
+});
+
+function checkChecked() {
+    var get = '';
+    $('input[type="checkbox"]').each(function() {
+        if ($(this).is(":checked")) {
+            get += $(this).attr("for")+",";
+        }
+    });
+
+    return get; 
+}
+
+
+});
+</script>
 
 
 

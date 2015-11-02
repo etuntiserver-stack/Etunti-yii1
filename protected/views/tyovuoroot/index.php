@@ -207,7 +207,9 @@ td .laatikko:hover{
 		  $vktyoaika = $ts['vktyoaika'];
 
 		  echo '<td style="background: #669999;color: white" class="viikkoRivi text-center" id="vk_'.date("W",strtotime($date)).'_'.$t->id.'">';
-		  $this->renderPartial('//tyovuoroot/viikko',array('tid'=>$t->id,'viikko'=>date("W",strtotime($date))));
+		  $kokoViikko = '';
+		  $kokoViikko = $this->renderPartial('//tyovuoroot/viikko',array('tid'=>$t->id,'viikko'=>date("W",strtotime($date))),true);
+		  echo $kokoViikko;
 		  echo '('.$vktyoaika.')';
 		  echo '</td>';
 		}
