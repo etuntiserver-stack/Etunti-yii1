@@ -128,12 +128,6 @@ if(empty($model->position) and isset($model->id))
 		<?php echo $form->error($model,'tyoryhma'); ?>
 	</div>
 
-	<div class="row">
-		<?php echo $form->labelEx($model,'ayjasenyys'); ?>
-		<?php echo $form->checkbox($model,'ayjasenyys',array('size'=>10,'maxlength'=>10,'class'=>'sw')); ?>
-
-		<?php echo $form->error($model,'ayjasenyys'); ?>
-	</div>
 
    </div>
    <div class="col-sm-3">
@@ -196,21 +190,16 @@ if(empty($model->position) and isset($model->id))
 	</div>
 
 	<div class="row">
-		<?php echo $form->labelEx($model,'gcm_reg_id'); ?>
-		<?php echo $form->textField($model,'gcm_reg_id',array('size'=>60,'maxlength'=>500,'class'=>'form-control input-sm')); ?>
-		<?php echo $form->error($model,'gcm_reg_id'); ?>
+		<?php echo $form->labelEx($model,'ayjasenyys'); ?>
+		<?php echo $form->checkbox($model,'ayjasenyys',array('size'=>10,'maxlength'=>10,'class'=>'sw')); ?>
+
+		<?php echo $form->error($model,'ayjasenyys'); ?>
 	</div>
+
+   </div><div class="col-sm-3">
 
 	<div class="row">
-		<?php echo $form->labelEx($model,'position'); ?>
-		<?php echo $form->textField($model,'position',array('size'=>60,'maxlength'=>500,'class'=>'form-control input-sm')); ?>
-		<?php echo $form->error($model,'position'); ?>
-	</div>
-
-
-   </div><div class="col-sm-2 pull-right">
-
-   <div class="row">
+   <div class="pull-right">
 	<?php if(isset($model->id)): ?>
 	<div class="row">
 		<?php
@@ -223,6 +212,19 @@ if(empty($model->position) and isset($model->id))
 	</div>
 	<?php endif; ?>
    </div>
+	</div>
+
+	<div class="row">
+		<?php echo $form->labelEx($model,'gcm_reg_id'); ?>
+		<?php echo $form->textField($model,'gcm_reg_id',array('size'=>60,'maxlength'=>500,'class'=>'form-control input-sm')); ?>
+		<?php echo $form->error($model,'gcm_reg_id'); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->labelEx($model,'position'); ?>
+		<?php echo $form->textField($model,'position',array('size'=>60,'maxlength'=>500,'class'=>'form-control input-sm')); ?>
+		<?php echo $form->error($model,'position'); ?>
+	</div>
 
 
    </div>
@@ -230,6 +232,8 @@ if(empty($model->position) and isset($model->id))
 
 
 </div><!-- form -->
+
+<hr>
 
 <div class="row form">
    <div class="col-sm-6">
