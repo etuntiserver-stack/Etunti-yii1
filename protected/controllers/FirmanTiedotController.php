@@ -29,20 +29,39 @@ class FirmanTiedotController extends Controller
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
 				'actions'=>array('index','view'),
-				'users'=>array('*'),
+                		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
 				'actions'=>array('create','update'),
-				'users'=>array('@'),
+                		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
 				'actions'=>array('admin','delete'),
-				'users'=>array('admin'),
+                		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
 				'users'=>array('*'),
 			),
 		);
+	}
+
+	public function isEtuntiAdmin() {
+
+	$tas = '';
+	if(isset(Yii::app()->user->adminPaketti))
+	$tas = explode(",",Yii::app()->user->adminPaketti);
+
+		if(isset(Yii::app()->user->adminID) and in_array('2',$tas))
+		{
+		$m = Administrators::model()->findbypk(Yii::app()->user->adminID);
+	       	if($m->id == Yii::app()->user->adminID)
+	       	  return true;
+		else
+	       	   return false;		
+
+		} else {
+	            return false;
+		}
 	}
 
 	/**

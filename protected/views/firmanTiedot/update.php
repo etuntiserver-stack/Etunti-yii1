@@ -7,15 +7,19 @@ $this->breadcrumbs=array(
 	$model->id=>array('view','id'=>$model->id),
 	'Update',
 );
-
+/*
 $this->menu=array(
 	array('label'=>'List FirmanTiedot', 'url'=>array('index')),
 	array('label'=>'Create FirmanTiedot', 'url'=>array('create')),
 	array('label'=>'View FirmanTiedot', 'url'=>array('view', 'id'=>$model->id)),
 	array('label'=>'Manage FirmanTiedot', 'url'=>array('admin')),
 );
+*/
 ?>
 
-<h1>Update FirmanTiedot <?php echo $model->id; ?></h1>
+<legend>
+<h1><?php echo Yii::t('main','FIRMA'); ?></h1>
+</legend>
+<br>
 
 <?php echo $this->renderPartial('_form', array('model'=>$model)); ?>
