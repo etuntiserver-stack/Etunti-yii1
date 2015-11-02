@@ -152,6 +152,11 @@ if(empty($model->position) and isset($model->id))
 		<?php echo $form->error($model,'tyoryhma'); ?>
 	</div>
 
+	<div class="row">
+		<?php echo $form->labelEx($model,'tyo_toimialue'); ?>
+		<?php echo $form->textField($model,'tyo_toimialue',array('size'=>20,'maxlength'=>20,'class'=>'form-control input-sm')); ?>
+		<?php echo $form->error($model,'tyo_toimialue'); ?>
+	</div>
 
    </div>
    <div class="col-sm-3">
@@ -242,6 +247,7 @@ if(empty($model->position) and isset($model->id))
 		<?php echo $form->labelEx($model,'gcm_reg_id'); ?>
 		<?php echo $form->textField($model,'gcm_reg_id',array('size'=>60,'maxlength'=>500,'class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'gcm_reg_id'); ?>
+
 	</div>
 
 	<div class="row">
