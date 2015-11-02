@@ -73,16 +73,16 @@ class FirmanTiedot extends DB2ActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'tyonantaja' => 'Tyonantaja',
+			'tyonantaja' => 'Nimetys',
 			'osoite' => 'Osoite',
 			'postinumero' => 'Postinumero',
 			'postitoimipaikka' => 'Postitoimipaikka',
 			'puhelin' => 'Puhelin',
-			'y_tunnus' => 'Y Tunnus',
-			'sahkoposti' => 'Sahkoposti',
+			'y_tunnus' => 'Y-Tunnus',
+			'sahkoposti' => 'Sähköposti',
 			'tilinumero' => 'Tilinumero',
-			'iban' => 'Iban',
-			'bic' => 'Bic',
+			'iban' => 'IBAN',
+			'bic' => 'BIC',
 			'johtaja' => 'Johtaja',
 		);
 	}
