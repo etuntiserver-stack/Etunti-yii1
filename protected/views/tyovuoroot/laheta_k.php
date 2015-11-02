@@ -146,7 +146,15 @@ for($day= 1; $day <= 7; $day++) {
   echo '</tr>';
 
 }
+$totalWeek = $this->renderPartial('//tyovuoroot/viikko',array('tid'=>$tt->id,'viikko'=>$week),true);
 ?>
+<tfoot>
+ <tr>
+ <th></th>
+ <th><?php echo Yii::t('','Yhteensä').' '. $totalWeek; ?></th>
+ <th></th>
+ </tr>
+</tfoot>
 </table>
 <?php } ?>
 
