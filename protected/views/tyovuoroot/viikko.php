@@ -13,7 +13,7 @@
 	$criteria->addCondition (" DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%u') = '".$viikko."' ");
 
 	$tv = Tyovuoroot::model()->find($criteria); 
-	echo sprint($tv['l_tunnit']);
+	echo $this->sprint($tv['l_tunnit']);
 
 ?>
 
