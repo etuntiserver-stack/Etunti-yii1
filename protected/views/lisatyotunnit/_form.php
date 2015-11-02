@@ -39,7 +39,15 @@
 		    <li class="list-group-item">
 	<div class="row">
 		<?php echo $form->labelEx($model,'syy'); ?>
-		<?php echo $form->textField($model,'syy',array('size'=>30,'maxlength'=>255,'class'=>'form-control')); ?>
+		<?php
+		$list = array();
+      		$l = Valikkoot::model()->findAll(" select_type='YLITYÖTUNNIT' ",array('order' => "select_type"));
+		foreach($l as $v)
+		$list[$v->value] = $v->value;
+
+        	echo $form->dropDownList($model, 'syy', $list,
+		array('empty'=>'','class'=>'form-control input-sm'));
+        	?>
 		<?php echo $form->error($model,'syy'); ?>
 	</div>
                     </li>
