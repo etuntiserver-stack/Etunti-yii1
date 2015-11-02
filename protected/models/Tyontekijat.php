@@ -64,7 +64,7 @@ public $tunnus;
 			array('tekijan_nimi, aktiivinen', 'required'),
 			array('online_varauksen_valmina', 'numerical', 'integerOnly'=>true),
 			array('imei', 'length', 'max'=>100),
-			array('laiten_puh, tekijan_nimi, tekijan_katuosoite, tekijan_pankkitili, salasana', 'length', 'max'=>100),
+			array('tyo_toimialue, laiten_puh, tekijan_nimi, tekijan_katuosoite, tekijan_pankkitili, salasana', 'length', 'max'=>100),
 			array('tekijan_henkilotunnus, tekijan_puh, tekijan_lanka_puh, tyoryhma', 'length', 'max'=>20),
 			array('tekijan_email, tekijan_ptoimipaikka, tyoehtosopimus, tekijan_kulunvalvonta, tekijan_konttori, aktiivinen', 'length', 'max'=>50),
 			array('tekijan_pnumero', 'length', 'max'=>7),
@@ -73,7 +73,7 @@ public $tunnus;
 			array('gcm_reg_id, position', 'length', 'max'=>500),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, imei, laiten_puh, tekijan_nimi, tekijan_henkilotunnus, tekijan_puh, tekijan_email, tekijan_lanka_puh, tekijan_katuosoite, tekijan_pnumero, tekijan_ptoimipaikka, tyoryhma, tyoehtosopimus, tekijan_kulunvalvonta, tekijan_pankkitili, tekijan_konttori, aktiivinen, tekijan_tietoja, tekijan_muisti, salasana, online_varauksen_valmina, kortit, ayjasenyys, gcm_reg_id, position', 'safe', 'on'=>'search'),
+			array('id, imei, laiten_puh, tekijan_nimi, tekijan_henkilotunnus, tekijan_puh, tekijan_email, tekijan_lanka_puh, tekijan_katuosoite, tekijan_pnumero, tekijan_ptoimipaikka, tyoryhma, tyoehtosopimus, tekijan_kulunvalvonta, tekijan_pankkitili, tekijan_konttori, aktiivinen, tekijan_tietoja, tekijan_muisti, salasana, online_varauksen_valmina, kortit, ayjasenyys, gcm_reg_id, position, tyo_toimialue', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -119,6 +119,7 @@ public $tunnus;
 			'ayjasenyys' => 'Ayjasenyys',
 			'gcm_reg_id'=>'Google Cloud Messaging ID',
 			'position' => 'Viimeinen sijainti',
+			'tyo_toimialue' => 'Työ toimialue',
 		);
 	}
 
@@ -170,6 +171,7 @@ public $tunnus;
 		$criteria->compare('ayjasenyys',$this->ayjasenyys,true);
 		$criteria->compare('gcm_reg_id',$this->gcm_reg_id);
 		$criteria->compare('position',$this->position);
+		$criteria->compare('tyo_toimialue',$this->tyo_toimialue);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
