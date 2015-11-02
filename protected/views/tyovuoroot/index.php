@@ -215,9 +215,9 @@ td .laatikko:hover{
 		  $kokoViikko = $this->renderPartial('//tyovuoroot/viikko',array('tid'=>$t->id,'viikko'=>$vko,'year'=>$year),true);
 
 		  $cl = '';
-		  if(	str_replace(":","",$kokoViikko) > str_replace(":","",$vktyoaika)
-			and str_replace(":","",$kokoViikko) > 0
-			and str_replace(":","",$vktyoaika) > 0
+		  if(	(int)str_replace(":","",$kokoViikko) > (int)str_replace(":","",$vktyoaika)
+			and (int)str_replace(":","",$kokoViikko) > 0
+			and (int)str_replace(":","",$vktyoaika) > 0
 		  )
 		  $cl = 'class="btn btn-xs btn-danger"';
 
