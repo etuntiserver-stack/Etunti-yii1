@@ -8,9 +8,9 @@
         $criteria->condition = " 
 		tid = '".$tid."'  
 		AND tyoajanmerkinta NOT LIKE '%Ei lasketa%'
+		AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%u') = '".$viikko."'
+		AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y') = '$year'
 	";
-
-	$criteria->addCondition (" DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%u') = '".$viikko."' ");
 
 	$tv = Tyovuoroot::model()->find($criteria); 
 	echo $this->sprint($tv['l_tunnit']);
