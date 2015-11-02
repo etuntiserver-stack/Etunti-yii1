@@ -181,6 +181,7 @@ td .laatikko:hover{
 	$arrDate = array(1=>"Ma",2=>"Ti",3=>"Ke",4=>"To",5=>"Pe",6=>"La",7=>"Su");
     	for ($i = 0; $i <= $dateDiff; $i++) {
 	  $plus = "+$i day";
+	  $date = '';
 	  $date = date("d.m.Y",strtotime($from." ".$plus));
 	  $did = date("Ymd",strtotime($from." ".$plus));
 
@@ -208,7 +209,9 @@ td .laatikko:hover{
 
 		  echo '<td style="background: #669999;color: white" class="viikkoRivi text-center" id="vk_'.date("W",strtotime($date)).'_'.$t->id.'">';
 		  $kokoViikko = '';
-		  $kokoViikko = $this->renderPartial('//tyovuoroot/viikko',array('tid'=>$t->id,'viikko'=>date("W",strtotime($date))),true);
+		  $vko = '';
+		  $vko = date("W",strtotime($date));
+		  $kokoViikko = $this->renderPartial('//tyovuoroot/viikko',array('tid'=>$t->id,'viikko'=>$vko),true);
 		  echo $kokoViikko;
 		  echo '('.$vktyoaika.')';
 		  echo '</td>';
