@@ -54,6 +54,7 @@ td,th{
 <?php endif; ?>
 
 <?php
+
   $criteria = new CDbCriteria();
   $criteria->order = " alku ASC "; 
   $criteria->group = " tid "; 
@@ -61,6 +62,13 @@ td,th{
   DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d')  
   BETWEEN  '".date('Y-m-d',strtotime($year ."W". $week .'1'))."' AND '".date('Y-m-d',strtotime($year ."W". $week .'7'))."' 
   AND pvm!='' ";
+
+  if(isset($_GET['check']) and !empty($_GET['check']))
+  {
+    $trimCheck = rtrim($_GET['check'], ",");
+    $criteria->addCondition (" tid IN ($trimCheck) ");  	
+  }
+
   $tv = Tyovuoroot::model()->findAll($criteria);
 ?>
 
