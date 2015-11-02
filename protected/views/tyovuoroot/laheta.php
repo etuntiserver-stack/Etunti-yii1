@@ -128,7 +128,7 @@ for($day= 1; $day <= 7; $day++) {
 }
 
 $totalWeek = '';
-$totalWeek = $this->renderPartial('//tyovuoroot/viikko',array('tid'=>$tid,'viikko'=>$week),true);
+$totalWeek = $this->renderPartial('//tyovuoroot/viikko',array('tid'=>$tid,'viikko'=>$week,'year'=>$year),true);
 ?>
 <tfoot>
  <tr>

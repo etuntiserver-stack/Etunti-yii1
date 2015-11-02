@@ -455,7 +455,7 @@ class TyovuorootController extends Controller
 		));
 	}
 
-	public function actionViikko($tid,$viikko)
+	public function actionViikko($tid,$viikko,$year)
 	{
 
 	function sprint($val){
@@ -466,6 +466,7 @@ class TyovuorootController extends Controller
 		$this->renderPartial('viikko',array(
 			'tid'=>$tid,
 			'viikko'=>$viikko,
+			'year'=>$year,
 		));
 	}
 

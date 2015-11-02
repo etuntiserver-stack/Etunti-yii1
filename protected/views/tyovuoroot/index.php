@@ -211,7 +211,8 @@ td .laatikko:hover{
 		  $kokoViikko = '';
 		  $vko = '';
 		  $vko = date("W",strtotime($date));
-		  $kokoViikko = $this->renderPartial('//tyovuoroot/viikko',array('tid'=>$t->id,'viikko'=>$vko),true);
+		  $year = date("Y",strtotime($date));
+		  $kokoViikko = $this->renderPartial('//tyovuoroot/viikko',array('tid'=>$t->id,'viikko'=>$vko,'year'=>$year),true);
 		  echo $kokoViikko;
 		  echo '('.$vktyoaika.')';
 		  echo '</td>';
