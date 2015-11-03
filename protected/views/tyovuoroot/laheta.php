@@ -34,20 +34,31 @@ td,th{
     <input type="submit" class="btn btn-success btn-sm" name="pdf" value="PDF">
   </form>
 
-  <?php if(!empty($tt->tekijan_email)): ?>
-  <form action="#" id="pdf_email" class="form-group" target="_blank" method="POST">
-    <input type="hidden" name="pdf_email" value="true">
-    <button class="btn btn-success btn-sm laheta"><?php echo Yii::t('main','Lähetä').': '.$tt->tekijan_email; ?></button>
-  </form>
   <?php
 	$file = $week.'_'.$year.'_'.$tid.'.pdf';
 	$path = Yii::app()->request->baseUrl."emails/tyovuorot/".Yii::app()->user->domain;
 	if (file_exists($path.'/'.$file))
-	echo CHtml::link(Yii::t('main', ' Lähetetty'),'../../emails/tyovuorot/'.Yii::app()->user->domain.'/'.$file,array('target'=>'_blank','class'=>'btn btn-danger glyphicon glyphicon-file'));
+	echo CHtml::link(Yii::t('main', ' Lähetetty'),'../../emails/tyovuorot/'.Yii::app()->user->domain.'/'.$file,array('target'=>'_blank','class'=>'btn btn-sm btn-danger glyphicon glyphicon-file'));
 
   ?>
-  <?php endif; ?>
 </div>
+
+
+  <?php if(!empty($tt->tekijan_email)): ?>
+<br>
+<div class="row">
+ <div class="col-sm-5">
+  <form action="#" id="pdf_email" class="form-group" target="_blank" method="POST">
+    <input type="hidden" name="pdf_email" value="true">
+    <label><?php echo Yii::t('main','Kirjen sisältö'); ?></label>
+    <textarea name="kirjenBody" class="form-control" rows="6"></textarea>
+    <br>
+    <button class="btn btn-success btn-sm laheta"><?php echo Yii::t('main','Lähetä').': '.$tt->tekijan_email; ?></button>
+  </form>
+ </div>
+</div>
+  <?php endif; ?>
+
 <?php endif; ?>
 
 
