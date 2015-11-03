@@ -688,4 +688,33 @@ class TyovuorootController extends Controller
 			Yii::app()->end();
 		}
 	}
+
+	protected function pyhat($date){
+
+	if(
+	date("N",strtotime($date)) == 6 
+	or date("N",strtotime($date)) == 7
+	or $date == '01.01.'.date("Y")
+	or $date == '06.01.'.date("Y")
+	or $date == '03.04.'.date("Y")
+	or $date == '05.04.'.date("Y")
+	or $date == '06.04.'.date("Y")
+	//or $date == '30.04.'.date("Y")
+	or $date == '01.05.'.date("Y")
+	or $date == '14.05.'.date("Y")
+	or $date == '24.05.'.date("Y")
+	or $date == '19.06.'.date("Y")
+	or $date == '20.06.'.date("Y")
+	or $date == '31.10.'.date("Y")
+	or $date == '06.12.'.date("Y")
+	or $date == '24.12.'.date("Y")
+	or $date == '25.12.'.date("Y")
+	or $date == '26.12.'.date("Y")
+	or $date == '31.12.'.date("Y")
+	)
+	return true;
+	else
+	return false;
+
+ 	}
 }

@@ -188,10 +188,15 @@ td .laatikko:hover{
 	  $columnDate = date("N/d.m",strtotime($date));
 	  $explColDate = explode("/",$columnDate);
 
+	  $clPyhat = '';
+	  $pyhat = $this->pyhat($date);
+	  if($pyhat == true)
+	  $clPyhat = 'style="background:#FFFFCC"';
+
   	    echo '<tr>';
-  		echo '<td class="fixed-column"><b>'.$arrDate[$explColDate[0]].", ".$explColDate[1].'</b></td>';
+  		echo '<td '.$clPyhat.' class="fixed-column"><b>'.$arrDate[$explColDate[0]].", ".$explColDate[1].'</b></td>';
 		foreach($tt as $t){
-		  echo '<td id="'.$did.'_'.$t->id.'">';
+		  echo '<td '.$clPyhat.' id="'.$did.'_'.$t->id.'">';
 		  $this->renderPartial('//tyovuoroot/did',array('pvm'=>$date,'tid'=>$t->id,'from'=>'tvuoro'));
 		  echo '</td>';
 		}
