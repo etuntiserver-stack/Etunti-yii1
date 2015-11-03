@@ -23,6 +23,7 @@ $this->menu=array(
 	'data'=>$model,
 	'attributes'=>array(
 		'id',
+		'asiakasnumero',
 		'time',
 		'yrityksen_nimi',
 		'y_tunnus',
