@@ -13,6 +13,10 @@ td .latikkoAsetukset{
 td:first-child {
 	white-space: normal;
 }
+.table-responsive{
+	height: 500px;
+	overflow: auto;
+}
 </style>
 <div id="checkedLaheta"></div>
 <legend>
@@ -59,7 +63,7 @@ if($week > 52) {
 </center>
 
 <div class="table-responsive">
-<table class="table table-bordered">
+<table class="table table-bordered table-condensed">
   <tr>
   <th><?php echo Yii::t('main', 'Työntekijä'); ?></th>
   <?php
