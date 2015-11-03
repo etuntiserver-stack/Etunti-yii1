@@ -50,7 +50,7 @@ td,th{
  <div class="col-sm-5">
   <form action="#" id="pdf_email" class="form-group" target="_blank" method="POST">
     <input type="hidden" name="pdf_email" value="true">
-    <label><?php echo Yii::t('main','Kirjen sisältö'); ?></label>
+    <label><?php echo Yii::t('main','Lähetettävän viestin sisältö'); ?></label>
     <textarea name="kirjenBody" class="form-control" rows="6"></textarea>
     <br>
     <button class="btn btn-success btn-sm laheta"><?php echo Yii::t('main','Lähetä').': '.$tt->tekijan_email; ?></button>
