@@ -29,12 +29,14 @@ if(isset($model->id))
 		  $ohje .= Yii::t('main', 'Avain on: ')." ".$k[1]."\n";
 		if(!empty($m->avain))
 		  $ohje .= Yii::t('main', 'Avain: ')." ".$m->avain."\n\n";
+		if(!empty($m->aikataulu))
+		  $ohje .= "\nAikataulu: ".$m->aikataulu;
 		if(!empty($m->toimenpiteet))
-		  $ohje .= "\nToimenpiteet:\n".$m->toimenpiteet;
+		  $ohje .= "\nToimenpiteet: ".$m->toimenpiteet;
 		if(!empty($m->tietoja))
-		  $ohje .= "\nTietoja:\n".$m->tietoja;
+		  $ohje .= "\nTietoja: ".$m->tietoja;
 		if(!empty($m->muut))
-		  $ohje .= "\nMuut:\n".$m->muut;
+		  $ohje .= "\nMuut: ".$m->muut;
 
 	}
 
