@@ -58,6 +58,7 @@ if($week > 52) {
 </h2>
 </center>
 
+<div class="table-responsive">
 <table class="table table-bordered">
   <tr>
   <th><?php echo Yii::t('main', 'Työntekijä'); ?></th>
@@ -118,7 +119,7 @@ if($week > 52) {
   ?>
 
 </table>
-
+</div>
 
 <script type="text/javascript">
 $(document).ready(function(){
