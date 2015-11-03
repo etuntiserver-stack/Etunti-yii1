@@ -167,11 +167,18 @@ $totalWeek = $this->renderPartial('//tyovuoroot/viikko',array('tid'=>$tt->id,'vi
 </table>
 <?php } ?>
 
+<div class="row">
+ <div class="col-sm-5">
   <form action="#" id="pdf_email" class="form-group" target="_blank" method="POST">
     <input type="hidden" name="pdf_email" value="true">
     <input type="hidden" name="kenelle" value="<?php echo $ids; ?>">
-    <button class="btn btn-success btn-sm laheta">PDF >>> Sähköpostille</button>
+    <label><?php echo Yii::t('main','Lähetettävän viestin sisältö'); ?></label>
+    <textarea name="kirjenBody" class="form-control" rows="6"></textarea>
+    <br>
+    <button class="btn btn-success btn-sm laheta"><?php echo Yii::t('main','PDF >>> Sähköpostille'); ?></button>
   </form>
+ </div>
+</div>
 
 
 <?php if(!$tulosta) : ?>

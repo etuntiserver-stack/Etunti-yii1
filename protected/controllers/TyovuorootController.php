@@ -136,6 +136,9 @@ class TyovuorootController extends Controller
 		file_put_contents($path.'/'.$file, $content_PDF);
 		/* file */
 		$message = Yii::t('main', 'VIIKKO').'-'.$week.'<br>'.Yii::t('main', ' Liitteenä uusi PDF-tiedosto');
+		if(isset($_POST['kirjenBody']) and !empty($_POST['kirjenBody']))
+		$message .= '<br>'.str_replace("\n", "<br>", $_POST['kirjenBody']);
+		
 
 		$saaja = $tt->tekijan_email;
 		$firma = FirmanTiedot::model()->findbypk(1);
@@ -183,25 +186,26 @@ class TyovuorootController extends Controller
 		{
 		 if(!empty($key))
 		 {
-		  $tt = Tyontekijat::model()->findbypk($key);
+		$tt = Tyontekijat::model()->findbypk($key);
 
-	          $html2pdf = Yii::app()->ePdf->HTML2PDF('P', 'A4', 'en');
-		  $html2pdf->setDefaultFont('Arial');
-	          $html2pdf->WriteHTML($this->renderPartial('laheta',array('tid'=>$tt->id,'week'=>$week,'year'=>$year,'tulosta'=>true,'tt'=>$tt),true));
-         	  $content_PDF = $html2pdf->Output('my_doc.pdf', EYiiPdf::OUTPUT_TO_STRING);
+	        $html2pdf = Yii::app()->ePdf->HTML2PDF('P', 'A4', 'en');
+		$html2pdf->setDefaultFont('Arial');
+	        $html2pdf->WriteHTML($this->renderPartial('laheta',array('tid'=>$tt->id,'week'=>$week,'year'=>$year,'tulosta'=>true,'tt'=>$tt),true));
+         	$content_PDF = $html2pdf->Output('my_doc.pdf', EYiiPdf::OUTPUT_TO_STRING);
 
 
-		  /* file */
-		  $file = $week.'_'.$year.'_'.$key.'.pdf';
-		  $path = Yii::app()->request->baseUrl."emails/tyovuorot/".Yii::app()->user->domain;
+		/* file */
+		$file = $week.'_'.$year.'_'.$key.'.pdf';
+		$path = Yii::app()->request->baseUrl."emails/tyovuorot/".Yii::app()->user->domain;
 
-  		  if (!file_exists($path))
-		  	mkdir($path, 0777, true);
+  		if (!file_exists($path))
+		 	mkdir($path, 0777, true);
 
-		  file_put_contents($path.'/'.$file, $content_PDF);
-		  /* file */
-		  $message = Yii::t('main', 'VIIKKO').'-'.$week.'<br>'.Yii::t('main', ' Liitteenä uusi PDF-tiedosto');
-
+		file_put_contents($path.'/'.$file, $content_PDF);
+		/* file */
+		$message = Yii::t('main', 'VIIKKO').'-'.$week.'<br>'.Yii::t('main', ' Liitteenä uusi PDF-tiedosto');
+		if(isset($_POST['kirjenBody']) and !empty($_POST['kirjenBody']))
+		$message .= '<br>'.str_replace("\n", "<br>", $_POST['kirjenBody']);
 		
 		$saaja = $tt->tekijan_email;
 		$firma = FirmanTiedot::model()->findbypk(1);
