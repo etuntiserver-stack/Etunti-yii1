@@ -50,9 +50,10 @@ class Asiakkaat extends DB2ActiveRecord
 			array('postinumero, yhteyshenkilo, yrityksen_nimi, y_tunnus, kaupunki, puhelin, sahkoposti', 'length', 'max'=>100),
 			array('tyyppi, laskutus_kanava, osoite', 'length', 'max'=>255),
 			array('maksuehto, osoite', 'length', 'max'=>20),
+			array('asiakasnumero', 'length', 'max'=>100),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, time, etunimi, sukunimi, osoite, kaupunki, postinumero, puhelin, sahkoposti, ryhma, aktiivinen, laskutus_kanava,maksuehto, tyyppi', 'safe', 'on'=>'search'),
+			array('id, time, etunimi, sukunimi, osoite, kaupunki, postinumero, puhelin, sahkoposti, ryhma, aktiivinen, laskutus_kanava,maksuehto, tyyppi, asiakasnumero', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -73,7 +74,8 @@ class Asiakkaat extends DB2ActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'id' => 'Asiakasnumero',
+			'id' => 'ID',
+			'asiakasnumero' => 'Asiakasnumero',
 			'time' => 'Luotu',
 			'yhteyshenkilo' => 'Yhteyshenkilö',
 			'yrityksen_nimi' => 'Yrityksen Nimi',
@@ -104,6 +106,7 @@ class Asiakkaat extends DB2ActiveRecord
 		$criteria->order = "id DESC";
 
 		$criteria->compare('id',$this->id);
+		$criteria->compare('asiakasnumero',$this->asiakasnumero);
 		$criteria->compare('time',$this->time,true);
 		$criteria->compare('yhteyshenkilo',$this->yhteyshenkilo,true);
 		$criteria->compare('yrityksen_nimi',$this->yrityksen_nimi,true);

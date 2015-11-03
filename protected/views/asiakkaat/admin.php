@@ -94,6 +94,7 @@ echo '
 
 	'columns'=>array(
 		'id',
+		'asiakasnumero',
 		/*
                array(
                     'name'=>'time',

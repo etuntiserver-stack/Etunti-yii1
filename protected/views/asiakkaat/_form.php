@@ -24,6 +24,12 @@
   <div class="col-sm-3">
 	<legend><h3><?php echo Yii::t('main', 'Asiakkaan tiedot'); ?></h3></legend>
 
+	<div class="row">
+		<?php echo $form->labelEx($model,'asiakasnumero'); ?>
+		<?php echo $form->textField($model,'asiakasnumero',array('size'=>60,'maxlength'=>100,'class'=>'form-control input-sm')); ?>
+		<?php echo $form->error($model,'asiakasnumero'); ?>
+	</div>
+
 	<div class="row tyyppi">
 		<?php echo $form->labelEx($model,'tyyppi'); ?>
 		<?php
