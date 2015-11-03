@@ -5,10 +5,10 @@
 th{
 	text-align: center;
 }
-td{
-  	overflow: hidden;
+td .latikkoAsetukset{
+	width: 250px;
 	white-space: nowrap;
-	text-overflow: ellipsis;
+	min-height:70px;
 }
 td:first-child {
 	white-space: normal;
@@ -107,7 +107,7 @@ if($week > 52) {
 	  for($day= 1; $day <= 7; $day++) {
 	    $d = strtotime($year ."W". $week . $day);
 	    echo "
-	    <td><div class='small'>
+	    <td><div class='latikkoAsetukset'>
 	    ". $this->renderPartial('//tyovuoroot/did',array('pvm'=>date('d.m.Y',$d),'tid'=>$t->id,'from'=>'mobiili'),true) ."
 	    </div></td>";
 	  }

@@ -31,8 +31,8 @@
 	   $k = Kohteet::model()->findbypk($tvVal->kohde,array("select"=>"osoite,avain"));
 	   $strlen = strlen($k['osoite']);
 
-	   if($strlen > 18)
-	    $k['osoite'] = substr($k['osoite'],0,18).'..';
+	   if($strlen > 24)
+	    $k['osoite'] = substr($k['osoite'],0,24).'..';
 	   else
 	    $k['osoite'] = $k['osoite'];
 

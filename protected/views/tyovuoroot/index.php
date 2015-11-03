@@ -95,7 +95,7 @@ body{
     overflow-y: hidden;
 }
 td .latikkoAsetukset{
-	width: 220px;
+	width: 250px;
 	white-space: nowrap;
 	min-height:70px;
 }
