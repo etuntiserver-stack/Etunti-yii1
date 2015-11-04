@@ -1,0 +1,124 @@
+<?php
+$file = '<?xml-stylesheet type="text/xsl" href="../tiedostot/finvoice/Finvoice.xsl"?>
+<Finvoice Version="2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchemainstance"
+xsi:noNamespaceSchemaLocation="../tiedostot/finvoice/Finvoice.xsd">
+  <SellerPartyDetails>
+    <SellerPartyIdentifier>123456-7</SellerPartyIdentifier>
+    <SellerOrganisationName>VETEL AY</SellerOrganisationName>
+    <SellerOrganisationTaxCode>123456-7</SellerOrganisationTaxCode>
+    <SellerPostalAddressDetails>
+      <SellerStreetName></SellerStreetName>
+      <SellerTownName></SellerTownName>
+      <SellerPostCodeIdentifier></SellerPostCodeIdentifier>
+      <CountryCode>FI</CountryCode>
+      <CountryName>Finland</CountryName>
+    </SellerPostalAddressDetails>
+  </SellerPartyDetails>
+  <SellerContactPersonName>Pekka Ylimartimo</SellerContactPersonName>
+  <SellerCommunicationDetails>
+    <SellerPhoneNumberIdentifier></SellerPhoneNumberIdentifier>
+    <SellerEmailaddressIdentifier></SellerEmailaddressIdentifier>
+  </SellerCommunicationDetails>
+  <SellerInformationDetails>
+    <SellerHomeTownName></SellerHomeTownName>
+    <SellerVatRegistrationText></SellerVatRegistrationText>
+    <SellerPhoneNumber></SellerPhoneNumber>
+    <SellerFaxNumber></SellerFaxNumber>
+    <SellerCommonEmailaddressIdentifier></SellerCommonEmailaddressIdentifier>
+    <SellerWebaddressIdentifier></SellerWebaddressIdentifier>
+    <SellerFreeText></SellerFreeText>
+    <SellerAccountDetails>
+      <SellerAccountID IdentificationSchemeName="IBAN"></SellerAccountID>
+      <SellerBic IdentificationSchemeName="BIC"></SellerBic>
+    </SellerAccountDetails>
+  </SellerInformationDetails>
+  <BuyerPartyDetails>
+    <BuyerPartyIdentifier></BuyerPartyIdentifier>
+    <BuyerOrganisationName>Testi Firma</BuyerOrganisationName>
+    <BuyerOrganisationTaxCode></BuyerOrganisationTaxCode>
+    <BuyerPostalAddressDetails>
+      <BuyerStreetName>Testi Osoite</BuyerStreetName>
+      <BuyerTownName>Helsinki</BuyerTownName>
+      <BuyerPostCodeIdentifier></BuyerPostCodeIdentifier>
+      <CountryName></CountryName>
+    </BuyerPostalAddressDetails>
+  </BuyerPartyDetails>
+  <BuyerContactPersonName></BuyerContactPersonName>
+  <BuyerCommunicationDetails>
+    <BuyerPhoneNumberIdentifier></BuyerPhoneNumberIdentifier>
+    <BuyerEmailaddressIdentifier></BuyerEmailaddressIdentifier>
+  </BuyerCommunicationDetails>
+  <InvoiceDetails>
+    <InvoiceTypeCode></InvoiceTypeCode>
+    <InvoiceTypeText>LASKU</InvoiceTypeText>
+    <OriginCode></OriginCode>
+    <InvoiceNumber>1001</InvoiceNumber>
+    <InvoiceDate Format="CCYYMMDD">20130719</InvoiceDate>
+    <SellerReferenceIdentifier></SellerReferenceIdentifier>
+    <OrderIdentifier></OrderIdentifier>
+    <InvoiceTotalVatExcludedAmount AmountCurrencyIdentifier="EUR">400,00</InvoiceTotalVatExcludedAmount>
+    <InvoiceTotalVatAmount AmountCurrencyIdentifier="EUR">96,00</InvoiceTotalVatAmount>
+    <InvoiceTotalVatIncludedAmount AmountCurrencyIdentifier="EUR">496,00</InvoiceTotalVatIncludedAmount>
+    <VatSpecificationDetails>
+      <VatBaseAmount AmountCurrencyIdentifier="EUR">400,00</VatBaseAmount>
+      <VatRatePercent>24</VatRatePercent>
+      <VatRateAmount AmountCurrencyIdentifier="EUR">96,00</VatRateAmount>
+    </VatSpecificationDetails>
+    <PaymentTermsDetails>
+      <PaymentTermsFreeText></PaymentTermsFreeText>
+      <InvoiceDueDate Format="CCYYMMDD">20130802</InvoiceDueDate>
+      <PaymentOverDueFineDetails>
+        <PaymentOverDueFineFreeText></PaymentOverDueFineFreeText>
+        <PaymentOverDueFinePercent></PaymentOverDueFinePercent>
+      </PaymentOverDueFineDetails>
+    </PaymentTermsDetails>
+  </InvoiceDetails>
+  <PaymentStatusDetails>
+    <PaymentStatusCode></PaymentStatusCode>
+  </PaymentStatusDetails>
+  <VirtualBankBarcode></VirtualBankBarcode>
+  <InvoiceRow>
+    <ArticleIdentifier></ArticleIdentifier>
+    <ArticleName>Test item from API</ArticleName>
+    <DeliveredQuantity QuantityUnitCode="pcs">5</DeliveredQuantity>
+    <OrderedQuantity QuantityUnitCode="pcs">5</OrderedQuantity>
+    <UnitPriceAmount AmountCurrencyIdentifier="EUR" UnitPriceUnitCode="pcs">80,00</UnitPriceAmount>
+    <RowNormalProposedAccountIdentifier></RowNormalProposedAccountIdentifier>
+    <RowAccountDimensionText></RowAccountDimensionText>
+    <RowVatRatePercent>24,00</RowVatRatePercent>
+    <RowVatAmount AmountCurrencyIdentifier="EUR">96,00</RowVatAmount>
+    <RowVatExcludedAmount AmountCurrencyIdentifier="EUR">400,00</RowVatExcludedAmount>
+    <RowAmount AmountCurrencyIdentifier="EUR">496,00</RowAmount>
+  </InvoiceRow>
+  <SpecificationDetails />
+  <EpiDetails>
+    <EpiIdentificationDetails>
+      <EpiDate Format="CCYYMMDD">20130719</EpiDate>
+      <EpiReference></EpiReference>
+    </EpiIdentificationDetails>
+    <EpiPartyDetails>
+      <EpiBfiPartyDetails>
+        <EpiBfiIdentifier IdentificationSchemeName="BIC"></EpiBfiIdentifier>
+      </EpiBfiPartyDetails>
+      <EpiBeneficiaryPartyDetails>
+        <EpiNameAddressDetails></EpiNameAddressDetails>
+        <EpiBei></EpiBei>
+        <EpiAccountID IdentificationSchemeName="IBAN"></EpiAccountID>
+      </EpiBeneficiaryPartyDetails>
+    </EpiPartyDetails>
+    <EpiPaymentInstructionDetails>
+      <EpiPaymentInstructionId>1001</EpiPaymentInstructionId>
+      <EpiRemittanceInfoIdentifier IdentificationSchemeName="SPY"></EpiRemittanceInfoIdentifier>
+      <EpiInstructedAmount AmountCurrencyIdentifier="EUR"></EpiInstructedAmount>
+      <EpiCharge ChargeOption="SHA"></EpiCharge>
+      <EpiDateOptionDate Format="CCYYMMDD"></EpiDateOptionDate>
+    </EpiPaymentInstructionDetails>
+  </EpiDetails>
+<InvoiceUrlText>12345678+102030FK405060708091011121314156</InvoiceUrlText>
+</Finvoice>';
+
+header('Content-type: application/xml');
+header('Content-Disposition: inline; filename="report.xml"');
+@readfile($file);
+	//unlink($file);
+?>
