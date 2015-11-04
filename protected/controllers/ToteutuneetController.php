@@ -327,7 +327,7 @@ class ToteutuneetController extends Controller
 
        		$criteria = new CDbCriteria();
 
-        	//$criteria->condition = " l_loppu = '' and l_alku = '' ";
+        	$criteria->condition = " aloitan !='' and loppui !='' ";
 
         	$criteria->order = "DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'),'%Y%m%d')";
         	$criteria->group = "DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'),'%Y%m%d')";
