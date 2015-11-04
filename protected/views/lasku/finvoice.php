@@ -1,5 +1,5 @@
 <?php
-$file = '<?xml-stylesheet type="text/xsl" href="../tiedostot/finvoice/Finvoice.xsl"?>
+$xml = '<?xml-stylesheet type="text/xsl" href="../tiedostot/finvoice/Finvoice.xsl"?>
 <Finvoice Version="2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchemainstance"
 xsi:noNamespaceSchemaLocation="../tiedostot/finvoice/Finvoice.xsd">
   <SellerPartyDetails>
@@ -117,6 +117,7 @@ xsi:noNamespaceSchemaLocation="../tiedostot/finvoice/Finvoice.xsd">
 <InvoiceUrlText>12345678+102030FK405060708091011121314156</InvoiceUrlText>
 </Finvoice>';
 
+$file = file_put_contents($xml); 
 header('Content-type: application/xml');
 header('Content-Disposition: inline; filename="report.xml"');
 @readfile($file);
