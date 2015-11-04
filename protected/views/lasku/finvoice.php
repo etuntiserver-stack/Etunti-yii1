@@ -1,20 +1,21 @@
 <?php
-$xml = '<?xml-stylesheet type="text/xsl" href="../tiedostot/finvoice/Finvoice.xsl"?>
+if(isset($_POST['showLasku'])){
+$xml = '<?xml-stylesheet type="text/xsl" href="/../tiedostot/finvoice/Finvoice.xsl"?>
 <Finvoice Version="2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchemainstance"
-xsi:noNamespaceSchemaLocation="../tiedostot/finvoice/Finvoice.xsd">
+xsi:noNamespaceSchemaLocation="/../tiedostot/finvoice/Finvoice.xsd">
   <SellerPartyDetails>
-    <SellerPartyIdentifier>123456-7</SellerPartyIdentifier>
-    <SellerOrganisationName>VETEL AY</SellerOrganisationName>
-    <SellerOrganisationTaxCode>123456-7</SellerOrganisationTaxCode>
+    <SellerPartyIdentifier>'.$yritys['y_tunnus'].'</SellerPartyIdentifier>
+    <SellerOrganisationName>'.$yritys['tyonantaja'].'</SellerOrganisationName>
+    <SellerOrganisationTaxCode></SellerOrganisationTaxCode>
     <SellerPostalAddressDetails>
-      <SellerStreetName></SellerStreetName>
-      <SellerTownName></SellerTownName>
-      <SellerPostCodeIdentifier></SellerPostCodeIdentifier>
+      <SellerStreetName>'.$yritys['osoite'].'</SellerStreetName>
+      <SellerTownName>'.$yritys['postitoimipaikka'].'</SellerTownName>
+      <SellerPostCodeIdentifier>'.$yritys['postinumero'].'</SellerPostCodeIdentifier>
       <CountryCode>FI</CountryCode>
       <CountryName>Finland</CountryName>
     </SellerPostalAddressDetails>
   </SellerPartyDetails>
-  <SellerContactPersonName>Pekka Ylimartimo</SellerContactPersonName>
+  <SellerContactPersonName>'.$yritys['johtaja'].'</SellerContactPersonName>
   <SellerCommunicationDetails>
     <SellerPhoneNumberIdentifier></SellerPhoneNumberIdentifier>
     <SellerEmailaddressIdentifier></SellerEmailaddressIdentifier>
@@ -22,51 +23,51 @@ xsi:noNamespaceSchemaLocation="../tiedostot/finvoice/Finvoice.xsd">
   <SellerInformationDetails>
     <SellerHomeTownName></SellerHomeTownName>
     <SellerVatRegistrationText></SellerVatRegistrationText>
-    <SellerPhoneNumber></SellerPhoneNumber>
+    <SellerPhoneNumber>'.$yritys['puhelin'].'</SellerPhoneNumber>
     <SellerFaxNumber></SellerFaxNumber>
-    <SellerCommonEmailaddressIdentifier></SellerCommonEmailaddressIdentifier>
+    <SellerCommonEmailaddressIdentifier>'.$yritys['sahkoposti'].'</SellerCommonEmailaddressIdentifier>
     <SellerWebaddressIdentifier></SellerWebaddressIdentifier>
     <SellerFreeText></SellerFreeText>
     <SellerAccountDetails>
-      <SellerAccountID IdentificationSchemeName="IBAN"></SellerAccountID>
-      <SellerBic IdentificationSchemeName="BIC"></SellerBic>
+      <SellerAccountID IdentificationSchemeName="IBAN">'.$yritys['iban'].'</SellerAccountID>
+      <SellerBic IdentificationSchemeName="BIC">'.$yritys['bic'].'</SellerBic>
     </SellerAccountDetails>
   </SellerInformationDetails>
   <BuyerPartyDetails>
-    <BuyerPartyIdentifier></BuyerPartyIdentifier>
-    <BuyerOrganisationName>Testi Firma</BuyerOrganisationName>
+    <BuyerPartyIdentifier>'.$lasku['as_nro'].'</BuyerPartyIdentifier>
+    <BuyerOrganisationName>'.$lasku['yritys'].'</BuyerOrganisationName>
     <BuyerOrganisationTaxCode></BuyerOrganisationTaxCode>
     <BuyerPostalAddressDetails>
-      <BuyerStreetName>Testi Osoite</BuyerStreetName>
-      <BuyerTownName>Helsinki</BuyerTownName>
-      <BuyerPostCodeIdentifier></BuyerPostCodeIdentifier>
+      <BuyerStreetName>'.$lasku['osoite'].'</BuyerStreetName>
+      <BuyerTownName>'.$lasku['toimipaikka'].'</BuyerTownName>
+      <BuyerPostCodeIdentifier>'.$lasku['postinumero'].'</BuyerPostCodeIdentifier>
       <CountryName></CountryName>
     </BuyerPostalAddressDetails>
   </BuyerPartyDetails>
-  <BuyerContactPersonName></BuyerContactPersonName>
+  <BuyerContactPersonName>'.$lasku['yhteyshenkilo'].'</BuyerContactPersonName>
   <BuyerCommunicationDetails>
     <BuyerPhoneNumberIdentifier></BuyerPhoneNumberIdentifier>
-    <BuyerEmailaddressIdentifier></BuyerEmailaddressIdentifier>
+    <BuyerEmailaddressIdentifier>'.$lasku['sahkoposti'].'</BuyerEmailaddressIdentifier>
   </BuyerCommunicationDetails>
   <InvoiceDetails>
     <InvoiceTypeCode></InvoiceTypeCode>
     <InvoiceTypeText>LASKU</InvoiceTypeText>
     <OriginCode></OriginCode>
-    <InvoiceNumber>1001</InvoiceNumber>
-    <InvoiceDate Format="CCYYMMDD">20130719</InvoiceDate>
+    <InvoiceNumber>'.$lasku['id'].'</InvoiceNumber>
+    <InvoiceDate Format="CCYYMMDD">'.date("Ymd",strtotime($lasku['time'])).'</InvoiceDate>
     <SellerReferenceIdentifier></SellerReferenceIdentifier>
     <OrderIdentifier></OrderIdentifier>
-    <InvoiceTotalVatExcludedAmount AmountCurrencyIdentifier="EUR">400,00</InvoiceTotalVatExcludedAmount>
-    <InvoiceTotalVatAmount AmountCurrencyIdentifier="EUR">96,00</InvoiceTotalVatAmount>
-    <InvoiceTotalVatIncludedAmount AmountCurrencyIdentifier="EUR">496,00</InvoiceTotalVatIncludedAmount>
+    <InvoiceTotalVatExcludedAmount AmountCurrencyIdentifier="EUR">'.$lasku['yhteensa_total_veroton'].'</InvoiceTotalVatExcludedAmount>
+    <InvoiceTotalVatAmount AmountCurrencyIdentifier="EUR">'.$lasku['yhteensa_total_verot'].'</InvoiceTotalVatAmount>
+    <InvoiceTotalVatIncludedAmount AmountCurrencyIdentifier="EUR">'.$lasku['yhteensa_total'].'</InvoiceTotalVatIncludedAmount>
     <VatSpecificationDetails>
-      <VatBaseAmount AmountCurrencyIdentifier="EUR">400,00</VatBaseAmount>
+      <VatBaseAmount AmountCurrencyIdentifier="EUR">'.$lasku['maksettu_euro'].'</VatBaseAmount>
       <VatRatePercent>24</VatRatePercent>
-      <VatRateAmount AmountCurrencyIdentifier="EUR">96,00</VatRateAmount>
+      <VatRateAmount AmountCurrencyIdentifier="EUR">'.$lasku['yhteensa_total_verot'].'</VatRateAmount>
     </VatSpecificationDetails>
     <PaymentTermsDetails>
       <PaymentTermsFreeText></PaymentTermsFreeText>
-      <InvoiceDueDate Format="CCYYMMDD">20130802</InvoiceDueDate>
+      <InvoiceDueDate Format="CCYYMMDD">'.date("Ymd",strtotime($lasku['erapaiva'])).'</InvoiceDueDate>
       <PaymentOverDueFineDetails>
         <PaymentOverDueFineFreeText></PaymentOverDueFineFreeText>
         <PaymentOverDueFinePercent></PaymentOverDueFinePercent>
@@ -76,24 +77,30 @@ xsi:noNamespaceSchemaLocation="../tiedostot/finvoice/Finvoice.xsd">
   <PaymentStatusDetails>
     <PaymentStatusCode></PaymentStatusCode>
   </PaymentStatusDetails>
-  <VirtualBankBarcode></VirtualBankBarcode>
+  <VirtualBankBarcode>'.$lasku['saaja_virtualkoodi'].'</VirtualBankBarcode>';
+
+  foreach($laskunRivit as $rivi){
+  $xml .= '
   <InvoiceRow>
-    <ArticleIdentifier></ArticleIdentifier>
-    <ArticleName>Test item from API</ArticleName>
-    <DeliveredQuantity QuantityUnitCode="pcs">5</DeliveredQuantity>
-    <OrderedQuantity QuantityUnitCode="pcs">5</OrderedQuantity>
-    <UnitPriceAmount AmountCurrencyIdentifier="EUR" UnitPriceUnitCode="pcs">80,00</UnitPriceAmount>
+    <ArticleIdentifier>'.$rivi['id'].'</ArticleIdentifier>
+    <ArticleName>'.$rivi['nimike'].'</ArticleName>
+    <DeliveredQuantity QuantityUnitCode="pcs">'.$rivi['kpl'].'</DeliveredQuantity>
+    <OrderedQuantity QuantityUnitCode="pcs">'.$rivi['kpl'].'</OrderedQuantity>
+    <UnitPriceAmount AmountCurrencyIdentifier="EUR" UnitPriceUnitCode="pcs">'.$rivi['hinta'].'</UnitPriceAmount>
     <RowNormalProposedAccountIdentifier></RowNormalProposedAccountIdentifier>
     <RowAccountDimensionText></RowAccountDimensionText>
-    <RowVatRatePercent>24,00</RowVatRatePercent>
-    <RowVatAmount AmountCurrencyIdentifier="EUR">96,00</RowVatAmount>
-    <RowVatExcludedAmount AmountCurrencyIdentifier="EUR">400,00</RowVatExcludedAmount>
-    <RowAmount AmountCurrencyIdentifier="EUR">496,00</RowAmount>
-  </InvoiceRow>
+    <RowVatRatePercent>'.$rivi['alv'].',00</RowVatRatePercent>
+    <RowVatAmount AmountCurrencyIdentifier="EUR">'.str_replace(".",",",($rivi['yhteensa_alv']-$rivi['veroton'])).'</RowVatAmount>
+    <RowVatExcludedAmount AmountCurrencyIdentifier="EUR">'.str_replace(".",",",$rivi['veroton']).'</RowVatExcludedAmount>
+    <RowAmount AmountCurrencyIdentifier="EUR">'.str_replace(".",",",$rivi['yhteensa_alv']).'</RowAmount>
+  </InvoiceRow>';
+  }
+
+$xml .= '
   <SpecificationDetails />
   <EpiDetails>
     <EpiIdentificationDetails>
-      <EpiDate Format="CCYYMMDD">20130719</EpiDate>
+      <EpiDate Format="CCYYMMDD">'.date("Ymd",strtotime($lasku['erapaiva'])).'</EpiDate>
       <EpiReference></EpiReference>
     </EpiIdentificationDetails>
     <EpiPartyDetails>
@@ -117,9 +124,29 @@ xsi:noNamespaceSchemaLocation="../tiedostot/finvoice/Finvoice.xsd">
 <InvoiceUrlText>12345678+102030FK405060708091011121314156</InvoiceUrlText>
 </Finvoice>';
 
-$file = file_put_contents($xml); 
+$file = "tiedostot/finvoice/report.xml";
+file_put_contents($file, $xml); 
+
 header('Content-type: application/xml');
 header('Content-Disposition: inline; filename="report.xml"');
 @readfile($file);
-	//unlink($file);
+	unlink($file);
+}
+
+
 ?>
+
+<?php if(!isset($_POST['showLasku'])) : ?>
+<legend>
+<h1><?php echo Yii::t('main','FINVOICE'); ?></h1>
+</legend>
+
+<div class="row">
+ <div class="col-sm-3">
+   <form action="#" method="POST" target="_blank">
+   <input type="hidden" name="showLasku">
+   <input type="submit" class="btn btn-primary btn-sm" value="<?php echo Yii::t('main','Näytä finvoice'); ?>">
+   </form>
+ </div>
+</div>
+<?php endif; ?>

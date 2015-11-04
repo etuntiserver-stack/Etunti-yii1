@@ -23,11 +23,11 @@ class LaskuController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','etsikohde','etsiasiakas','etsisaaja','luoKohteista','tr_rivit','tr_rivitkk','lasku_pdf', 'finvoice'),
+				'actions'=>array('admin','delete','create','update','index','view','etsikohde','etsiasiakas', 'etsisaaja','luoKohteista','tr_rivit','tr_rivitkk','lasku_pdf', 'finvoice','tr_rivit_tyhja'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','etsikohde','etsiasiakas','etsisaaja','luoKohteista','tr_rivit','tr_rivitkk','lasku_pdf', 'finvoice'),
+				'actions'=>array('admin','delete','create','update','index','view','etsikohde','etsiasiakas', 'etsisaaja','luoKohteista','tr_rivit','tr_rivitkk','lasku_pdf', 'finvoice','tr_rivit_tyhja'),
                 		'message'=>Yii::t('main', 'Tämä TASO ei kuuluu teille'),
 			),
 			array('deny',  // deny all users
@@ -60,6 +60,11 @@ class LaskuController extends Controller
 		return  number_format((float)$val/3600, 2, '.', '');
 	}
 
+	public function actionTr_rivit_tyhja()
+	{
+		$this->renderPartial('tr_rivit_tyhja');
+	}
+
 	public function actionFinvoice($id)
 	{
 
@@ -67,6 +72,8 @@ class LaskuController extends Controller
 		$laskunRivit=LaskunRivit::model()->findAll("lid='".$id."'");
 		$asetukset=Asetukset::model()->find("id=1");
 		$firmanTiedot=FirmanTiedot::model()->find("id=1");
+
+	if(isset($_POST['showLasku'])){
 
 		$this->renderPartial('finvoice', 
 
@@ -77,6 +84,19 @@ class LaskuController extends Controller
 			'yritys'=>$firmanTiedot,
 
 			));
+
+	} else {
+
+		$this->render('finvoice', 
+
+			array(
+			'lasku'=>$lasku,
+			'asetukset'=>$asetukset,
+			'laskunRivit'=>$laskunRivit,
+			'yritys'=>$firmanTiedot,
+
+			));
+	}
 
 	}
 
@@ -321,19 +341,42 @@ class LaskuController extends Controller
 	public function actionUpdate($id)
 	{
 		$model=$this->loadModel($id);
-
+		$laskunRivit=LaskunRivit::model()->findAll("lid='".$id."'");
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
 		if(isset($_POST['Lasku']))
 		{
 			$model->attributes=$_POST['Lasku'];
-			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+			if($model->save()){
+
+			LaskunRivit::model()->deleteAll("lid='".$id."'");
+
+			foreach($_POST['tkoodi'] as $key=>$val)
+			{
+				$lr = new LaskunRivit;
+				$lr->lid	=$model->id;
+				$lr->rivi	=$key;
+				$lr->tkoodi	=$_POST['tkoodi'][$key];
+				$lr->nimike	=$_POST['nimike'][$key];
+				$lr->kpl	=$_POST['kpl'][$key];
+				$lr->yksikko	=$_POST['yksikko'][$key];
+				$lr->hinta	=$_POST['hinta'][$key];
+				$lr->alv	=$_POST['alv'][$key];
+				$lr->hinta_alv	=$_POST['hinta_alv'][$key];
+				$lr->ale	=$_POST['ale'][$key];
+				$lr->veroton	=$_POST['veroton'][$key];
+				$lr->yhteensa_alv=$_POST['yhteensa_alv'][$key];
+				$lr->save();
+			}
+
+				$this->redirect(array('lasku/admin'));
+			}
 		}
 
 		$this->render('update',array(
 			'model'=>$model,
+			'laskunRivit'=>$laskunRivit,
 		));
 	}
 
