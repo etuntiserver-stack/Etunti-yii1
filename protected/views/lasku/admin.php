@@ -6,12 +6,12 @@ $this->breadcrumbs=array(
 	Yii::t('main', 'Laskut')=>array('index'),
 	Yii::t('main', 'HALLINTA'),
 );
-
+/*
 $this->menu=array(
 	array('label'=>'List Lasku', 'url'=>array('index')),
 	array('label'=>'Create Lasku', 'url'=>array('create')),
 );
-
+*/
 Yii::app()->clientScript->registerScript('search', "
 $('.search-button').click(function(){
 	$('.search-form').toggle();
@@ -53,8 +53,8 @@ $('.search-form form').submit(function(){
 		'id',
 
 	array(
-        'header'  => 'PDF',
-        'value' => 'CHtml::link("", Yii::app()->createUrl("lasku/lasku_pdf",array("id"=>$data->id)),array("class"=>"glyphicon glyphicon-file"))',
+        'header'  => 'Finvoice',
+        'value' => 'CHtml::link("linkki", Yii::app()->createUrl("lasku/finvoice",array("id"=>$data->id)))',
         'type'  => 'raw',
     	),
 

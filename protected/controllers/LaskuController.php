@@ -23,11 +23,11 @@ class LaskuController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','etsikohde','etsiasiakas','etsisaaja','luoKohteista','tr_rivit','tr_rivitkk','lasku_pdf'),
+				'actions'=>array('admin','delete','create','update','index','view','etsikohde','etsiasiakas','etsisaaja','luoKohteista','tr_rivit','tr_rivitkk','lasku_pdf', 'finvoice'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','etsikohde','etsiasiakas','etsisaaja','luoKohteista','tr_rivit','tr_rivitkk','lasku_pdf'),
+				'actions'=>array('admin','delete','create','update','index','view','etsikohde','etsiasiakas','etsisaaja','luoKohteista','tr_rivit','tr_rivitkk','lasku_pdf', 'finvoice'),
                 		'message'=>Yii::t('main', 'Tämä TASO ei kuuluu teille'),
 			),
 			array('deny',  // deny all users
@@ -58,6 +58,26 @@ class LaskuController extends Controller
 	protected function num($val){
 	    if($val > 0)
 		return  number_format((float)$val/3600, 2, '.', '');
+	}
+
+	public function actionFinvoice($id)
+	{
+
+		$lasku=$this->loadModel($id);
+		$laskunRivit=LaskunRivit::model()->findAll("lid='".$id."'");
+		$asetukset=Asetukset::model()->find("id=1");
+		$firmanTiedot=FirmanTiedot::model()->find("id=1");
+
+		$this->renderPartial('finvoice', 
+
+			array(
+			'lasku'=>$lasku,
+			'asetukset'=>$asetukset,
+			'laskunRivit'=>$laskunRivit,
+			'yritys'=>$firmanTiedot,
+
+			));
+
 	}
 
 	public function actionLasku_pdf($id)
