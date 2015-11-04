@@ -218,7 +218,7 @@
 	<xsl:template match="Finvoice">
 		<html>
 			<head>
-				<link rel="stylesheet" type="text/css" href="Finvoice.css" />
+				<link rel="stylesheet" type="text/css" href="/../tiedostot/finvoice/Finvoice.css" />
 				<title>
 					<xsl:call-template name="OutputTitle">
 						<xsl:with-param name="invoiceTypeText" select="InvoiceDetails/InvoiceTypeText"/>
@@ -1873,6 +1873,7 @@
 								</xsl:choose>
 							</xsl:otherwise>
 						</xsl:choose>
+
 					</xsl:otherwise>
 				</xsl:choose>
 			</xsl:when>

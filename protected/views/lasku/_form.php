@@ -11,11 +11,25 @@
 	'enableAjaxValidation'=>false,
 )); ?>
 
+<?php if(isset($model->id) and $model->tyyppi == 'henkilo') : ?> 
 <style>
-.hidd,.ashidd,.ashidd_a,.tyyppi,#rivit,.subm,.kht{
+.yritys,.y_tunnus{
 	display:none;
 }
 </style>
+<?php elseif(isset($model->id) and $model->tyyppi == 'yritys') : ?> 
+<style>
+.nimi{
+	display:none;
+}
+</style>
+<?php else : ?> 
+<style>
+.hidd,.ashidd,.ashidd_a,.tyyppi,.subm,.kht{
+	display:none;
+}
+</style>
+<?php endif; ?> 
 
 	<?php echo $form->errorSummary($model); ?>
 
@@ -23,7 +37,13 @@
   <div class="col-sm-3">
   <legend><?php echo Yii::t('main', 'ASIAKAS'); ?></legend>
 
-
+	<?php if(isset($model->id)) : ?> 
+	<div class="row">
+		<?php echo $form->labelEx($model,'as_nro'); ?>
+		<?php echo $form->textField($model,'as_nro',array('size'=>60,'maxlength'=>100,'class'=>'form-control input-sm')); ?>
+		<?php echo $form->error($model,'as_nro'); ?>
+	</div>
+	<?php else : ?> 
 	<div class="row asiakas">
 		<?php echo $form->labelEx($model,'as_nro'); ?>
     		<?php 
@@ -60,6 +80,8 @@
 		?>
 		<?php echo $form->error($model,'as_nro'); ?>
 	</div>
+	<?php endif; ?> 
+
 
 	<div class="row tyyppi">
 		<?php echo $form->labelEx($model,'tyyppi'); ?>
@@ -286,7 +308,12 @@
 
 <br>
 
-<div class="row form kht">
+
+<?php if(!isset($model->id)) : ?>
+<span class="pull-right btn-sm btn btn-info" data-toggle="collapse"  data-target="#kalut"><?php echo Yii::t('main', 'Extrat'); ?> <b class="caret"></b></span>
+
+
+<div class="row form kht collapse" id="kalut">
 
     <div class="col-sm-5">
     <legend><?php echo Yii::t('main', 'TUNNIT'); ?></legend>
@@ -345,6 +372,7 @@
 
 
 </div>
+<?php endif; ?> 
 
 	<input type="hidden" class="form-control input-sm" id="kohteistaRivit" readonly><br>
 	<div id="tuntienTulos"></div>
@@ -368,8 +396,20 @@
      </TR>
 
      <tbody>
+     <?php if(!isset($model->id)) : ?> 
      <div class="tr_rivit"></div>
-     <tbody>
+     <?php else : ?>
+
+     <?php 
+	$num = 0;
+	foreach($laskunRivit as $rivi){ 
+	$num++;
+	echo $this->renderPartial("//lasku/tr_rivi_update",array('num'=>$num,'rivi'=>$rivi));
+	}
+     ?>
+
+     <?php endif; ?>  
+     </tbody>
 
      <tfoot>
      <TR>
@@ -387,6 +427,8 @@
      </TR>
      </tfoot>
 </TABLE>
+
+  <span id="uusiRivi" class="btn btn-sm btn-success"><?php echo Yii::t('main','Lisää rivi'); ?></span>
 </div>
 
 <br><br><br><br><br><br>
@@ -405,6 +447,24 @@
 <script type="text/javascript">
 $(document).ready(function(){
 
+
+$("#uusiRivi").click(function() {
+    var rivi = $("#samaRivi").html();
+    var rowCount = $('table#TableRivit tbody tr').length;
+
+        $.ajax({
+           url: location.protocol + "//" + location.host + '/index.php/lasku/tr_rivit_tyhja',
+           type: "POST",
+           data: {num : rowCount},
+           success: function(html){
+         	$("table#TableRivit tbody tr").last().after(html);
+	  	Rivi();
+           }
+        });
+
+});
+
+
 function jumpToPageBottom() {
     $('html, body').animate({scrollTop:1000}, 'slow');
     return false;
@@ -417,6 +477,8 @@ function poista(){
 	yhteensaTotal();
   });
 }
+
+Rivi();
 
 function Rivi(){
 
