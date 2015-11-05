@@ -29,7 +29,7 @@
   $m = Mobile::model()->findbypk($idKid,array("select"=>"hyvaksytty,admin"));
 
     $admin = '';
-  if($m->admin == 1)
+  if(isset($m->admin) and $m->admin == 1)
   {
     $admin = 'text-danger text-uppercase';
   }

@@ -191,5 +191,26 @@ $("#yhtveto").on('submit',function(e){
 
 
 
+$(".showKuka").click(function(){
+	
+	var thisID = $(this).attr("id").split("_");
+	var k = $(this).attr("for").split("_");
+	var from = $("#from").val();
+	var to = $("#to").val();
+
+        $.ajax({
+           url: location.protocol + "//" + location.host + '/index.php/mobile/kohdebytekija',
+           type: "GET",
+	   data: { tid : k[1], from : from, to : to },
+           success: function(data){
+		console.log(data);
+		$("#showtyo_"+thisID[1]).html(data);
+           }
+        });
+	
+
+});
+
+
 });
 </script>
