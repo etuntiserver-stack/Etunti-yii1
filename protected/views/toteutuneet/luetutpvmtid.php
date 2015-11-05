@@ -4,7 +4,7 @@
 	$did = date("Ymd",strtotime($pvm));
 
        	$criteria = new CDbCriteria();
-	$criteria->order = "DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'),'%Y%m%d')";
+	$criteria->order = "DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s') ASC";
 	$criteria->condition = " 
 		tid = '".$tid."' 
 		AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = '".date("Y-m-d",strtotime($pvm))."' 
