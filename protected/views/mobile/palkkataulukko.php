@@ -121,7 +121,7 @@ $this->breadcrumbs=array(
 		'tid'=>$t
 		),true);
 
-	$return = $this->toteutu($t);
+	$return = $this->toteutu($t,"palkkataulukko");
 	$yht[0] += $return[0];
 	$yht[1] += $return[1];
 	$yht[2] += $return[2];
