@@ -346,8 +346,8 @@ class ToteutuneetController extends Controller
 
         	//$criteria->condition = " aloitan !='' and loppui !='' ";
 
-        	$criteria->order = "DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'),'%Y%m%d')";
-        	$criteria->group = "DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'),'%Y%m%d')";
+        	$criteria->order = "DATE(DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'),'%Y-%m-%d'))";
+        	$criteria->group = "DATE(DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'),'%Y-%m-%d'))";
 
 
 		if(isset($explTekija[0]))
