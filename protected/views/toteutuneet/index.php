@@ -18,7 +18,7 @@ $this->breadcrumbs=array(
   <form action="#" id="yhtveto" class="form-inline" method="POST">
   <div class="col-md-12">
    <?php
-    $list = CHtml::listData(Tyontekijat::model()->findAll(array('order' => 'tekijan_nimi','group'=>'tekijan_nimi')), 'id', 'tekijan_nimi');
+    $list = CHtml::listData(Tyontekijat::model()->findAll(array('order' => 'tekijan_nimi')), 'id', 'tekijan_nimi');
     echo '<select name="tekija" id="nimi" class="form-control form-group input-sm">';
     $explTekija = explode("//",Yii::app()->session['tekija']);
 
