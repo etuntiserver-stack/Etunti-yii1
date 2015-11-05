@@ -99,17 +99,34 @@ class ToteutuneetController extends Controller
 
 	public function actionHyvaksy($id){
 
-		$model=Mobile::model()->findbypk($id);
+		$mob=Mobile::model()->findbypk($id);
+		$tot=Toteutuneet::model()->findbypk($id);
 		if($_POST['hyvaksy'] == 'kylla')
 		{
-		$model->hyvaksytty=$_POST['kuka'];
-		$model->save();
+		if(isset($mob->id)){
+		$mob->hyvaksytty=$_POST['kuka'];
+		$mob->save();
+		}
+
+		if(isset($tot->id)){
+		Mobile::model()->updatebypk($tot->kid,array('hyvaksytty'=>$_POST['kuka']));
+		$tot->hyvaksytty=$_POST['kuka'];
+		$tot->save();
+		}
 		}
 
 		if($_POST['hyvaksy'] == 'ei')
 		{
-		$model->hyvaksytty="";
-		$model->save();
+		if(isset($mob->id)){
+		$mob->hyvaksytty="";
+		$mob->save();
+		}
+
+		if(isset($tot->id)){
+		Mobile::model()->updatebypk($tot->kid,array('hyvaksytty'=>''));
+		$tot->hyvaksytty="";
+		$tot->save();
+		}
 		}
 	}
 

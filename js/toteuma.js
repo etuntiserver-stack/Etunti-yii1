@@ -94,6 +94,7 @@ $(".totRivi").click(function(){
            success: function(html){
 		console.log("update " + thisVal[1]);
 		$('#showres').modal().html(html);
+		return false;
            }
         });
 	}
@@ -107,6 +108,7 @@ $(".totRivi").click(function(){
            success: function(html){
 		console.log("create " + thisVal[1]);
 		$('#showres').modal().html(html);
+		return false;
            }
         });
 	}

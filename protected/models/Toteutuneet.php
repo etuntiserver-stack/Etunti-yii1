@@ -67,14 +67,14 @@ public $count;
 			//array('kid, asiakas_num, time, puh_numero, imei, bluetooth_name, sim_serial_number, subscriber_id, my_location, osoite, kohde_kannasta, kohdenID, aloitan, loppui, viesti, tekijan_nimi, tid, etaisyys, status, tietoja, tyoajanlaatu, tyoajanmerkinta', 'required'),
 			array('kid, requests, kohdenID, tid, status, admin', 'numerical', 'integerOnly'=>true),
 			array('asiakas_num, puh_numero, bluetooth_name, subscriber_id, tekijan_nimi', 'length', 'max'=>50),
-			array('imei, asiakas_hyvaksy, sim_serial_number, kohde_kannasta, tyoajanlaatu, tyoajanmerkinta', 'length', 'max'=>100),
+			array('imei, asiakas_hyvaksy, sim_serial_number, kohde_kannasta, hyvaksytty, tyoajanlaatu, tyoajanmerkinta', 'length', 'max'=>100),
 			array('my_location', 'length', 'max'=>1000),
 			array('osoite', 'length', 'max'=>255),
 			array('aloitan, loppui, etaisyys', 'length', 'max'=>20),
 			array('viesti', 'length', 'max'=>250),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, kid, asiakas_num, time, requests, puh_numero, imei, bluetooth_name, sim_serial_number, subscriber_id, my_location, osoite, kohde_kannasta, kohdenID, aloitan, loppui, viesti, tekijan_nimi, tid, etaisyys, status, tietoja, admin, tyoajanlaatu, tyoajanmerkinta', 'safe', 'on'=>'search'),
+			array('id, kid, asiakas_num, time, requests, puh_numero, imei, bluetooth_name, sim_serial_number, subscriber_id, my_location, osoite, kohde_kannasta, kohdenID, aloitan, loppui, viesti, tekijan_nimi, tid, etaisyys, status, tietoja, admin, tyoajanlaatu, tyoajanmerkinta, hyvaksytty', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -160,6 +160,7 @@ public $count;
 		$criteria->compare('admin',$this->admin);
 		$criteria->compare('tyoajanlaatu',$this->tyoajanlaatu,true);
 		$criteria->compare('tyoajanmerkinta',$this->tyoajanmerkinta,true);
+		$criteria->compare('hyvaksytty',$this->hyvaksytty,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

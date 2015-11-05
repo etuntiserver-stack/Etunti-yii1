@@ -5,8 +5,6 @@
 
 if(isset($_POST['forid'])){
   $s= Mobile::model()->findbypk($_POST['forid']);
-
-
   $model->kohde_kannasta = $s->kohde_kannasta;
 }
 
@@ -49,11 +47,22 @@ $forPVM = date('d.m.Y',strtotime($s->aloitan));
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'kohde_kannasta'); ?>
-		<?php echo $form->dropDownList($model,'kohde_kannasta', 
+		<?php 
+
+		         $opt = array($s->kohdenID=>array('selected'=>true));
+		      if($s->status == 2){
+		         $k = Kohteet::model()->find("osoite='MATKA'");
+		         $opt = array($k->id=>array('selected'=>true));
+		      } elseif($s->status == 10){
+		         $k = Kohteet::model()->find("osoite='LOUNASTAUKO'");
+		         $opt = array($k->id=>array('selected'=>true));
+		      } 
+
+		      echo $form->dropDownList($model,'kohde_kannasta', 
 			CHtml::listData(Kohteet::model()->findAll(array('order' => 'osoite ASC')), 'id', 'osoite'), 
 			    array(
                 		'class'=>'form-control',
-		                'options' => array($s->kohdenID=>array('selected'=>true)),
+		                'options' => $opt,
 			    )
 			);
 		?>
