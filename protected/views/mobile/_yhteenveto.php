@@ -3,7 +3,7 @@
 /* @var $data Mobile */
 
 
-	$return = $this->toteutu($data->tid);
+	$return = $this->toteutu($data->tid,"yhteenveto");
 ?>
 
 <tr>

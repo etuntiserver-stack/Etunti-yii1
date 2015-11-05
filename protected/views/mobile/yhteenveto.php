@@ -116,7 +116,7 @@ $this->breadcrumbs=array(
 
   foreach($tids as $t)
   {
-	$return = $this->toteutu($t);
+	$return = $this->toteutu($t,"yhteenveto");
 	$yht[0] += $return[0];
 	$yht[1] += $return[1];
 	$yht[2] += $return[2];

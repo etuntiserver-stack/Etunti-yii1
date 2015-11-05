@@ -2,7 +2,7 @@
 /* @var $this MobileController */
 /* @var $data Mobile */
 
-		$return = $this->toteutu($data->id);
+		$return = $this->toteutu($data->id,"palkkataulukko");
 
 		if($return[0] != 0)
 		$return[0] = $this->sprint($return[0]).'<br>('.$this->num($return[0]).')';
