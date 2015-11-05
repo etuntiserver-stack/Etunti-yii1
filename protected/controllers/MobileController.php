@@ -1432,11 +1432,18 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			tid = '".$tid."' and aloitan !='' and loppui !='' 
 		";
 
-		if(Yii::app()->session['Lounastauko'])
-	        $criteria->addCondition (" status != '10' ");
+		if($sivu == 'palkkataulukko')
+	        	$criteria->addCondition (" status = '3' ");
 
-		if(Yii::app()->session['MATKA'])
-	        $criteria->addCondition (" status != '2' ");
+
+		if($sivu == 'yhteenveto')
+		{
+			if(Yii::app()->session['Lounastauko'])
+		        $criteria->addCondition (" status != '10' ");
+	
+			if(Yii::app()->session['MATKA'])
+		        $criteria->addCondition (" status != '2' ");
+		}
 
 		if(Yii::app()->session['from'] and Yii::app()->session['to'])
 	        $criteria->addCondition ("DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."' ");
