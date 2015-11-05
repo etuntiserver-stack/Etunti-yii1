@@ -33,7 +33,7 @@ class MobileController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin', 'delete', 'create', 'update', 'index', 'index_a', 'view', 'updatetime', 'showkohteet', 'yhteenveto', 'kyhteenveto', 'yhteenveto_m', 'historia', 'poistaKohde', 'total_suunniteltu', 'total_toteutu', 'total_luettu', 'kesto', 'index_ajax', 'raportit', 'uusirivi', 'palkkataulukko', 'tidfromtomatkat', 'tyobykohde', 'asiakas_hyvaksyminen'),
+				'actions'=>array('admin', 'delete', 'create', 'update', 'index', 'index_a', 'view', 'updatetime', 'showkohteet', 'yhteenveto', 'kyhteenveto', 'yhteenveto_m', 'historia', 'poistaKohde', 'total_suunniteltu', 'total_toteutu', 'total_luettu', 'kesto', 'index_ajax', 'raportit', 'uusirivi', 'palkkataulukko', 'tidfromtomatkat', 'tyobykohde', 'asiakas_hyvaksyminen','kohdebytekija'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -600,6 +600,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		}
 
 	  	if(strtotime($al[0]." ".$al[1]) <= strtotime($al[0]." 18:00")
+
 		and strtotime($lop[0]." ".$lop[1]) >= strtotime($lop[0]." 23:00"))
 		{
 	   	  $strAl0 = strtotime($al[0]." 18:00");
@@ -1120,7 +1121,6 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 
 	}
 
-
 	public function actionTyobykohde($kohdenID,$from,$to)
 	{
 
@@ -1464,5 +1464,71 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		return $kaikki;
 
 	}
+
+
+	public function actionKohdebytekija($tid,$from,$to)
+	{
+
+
+       		$criteria = new CDbCriteria();
+        	$criteria->select = "
+			TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s'))) as l_tunnit,
+			aloitan,loppui,kohde_kannasta
+		";
+
+        	$criteria->condition = "  
+			tid = '".$tid."' and aloitan !='' and loppui !='' 
+			AND id NOT IN(select kid from sivexkuitti_repaired)
+			AND status=3
+		";
+        	$criteria->group = "kohde_kannasta";
+
+		$lu = Mobile::model()->findAll($criteria);
+
+		    $return = array();
+		foreach($lu as $l)
+		{
+		    $kesto = '';
+		    $kesto = $l->l_tunnit;
+		    $return[date("YdmHi",strtotime($l->aloitan))] = $l->kohde_kannasta."//".$kesto;
+		}
+
+
+       		$criteria = new CDbCriteria();
+        	$criteria->select = "
+			TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s'))) as l_tunnit,
+			aloitan,loppui,kohde_kannasta
+		";
+
+        	$criteria->condition = "  
+			tid = '".$tid."' and aloitan !='' and loppui !='' 
+			AND status=3
+		";
+        	$criteria->group = "kohde_kannasta";
+
+		$tot = Toteutuneet::model()->findAll($criteria);
+
+
+		foreach($tot as $l)
+		{
+		    $kesto = '';
+		    $kesto = $l->l_tunnit;
+		    $return[date("YdmHi",strtotime($l->aloitan))] = $l->kohde_kannasta."//".$kesto;
+		}
+
+		ksort($return);
+
+		foreach($return as $result)
+		{
+		    $expl = explode("//",$result);
+			echo 
+			'<div class="row">
+			   <div class="col-sm-6 text-right">'.$expl[0].'</div>
+			   <div class="col-sm-6">kesto: <b> '.$this->sprint($expl[1]).' ('.$this->num($expl[1]).')</b></div>
+			</div>';
+		}
+
+	}
+
 
 }
