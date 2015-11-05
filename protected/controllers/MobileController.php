@@ -1472,53 +1472,68 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 
        		$criteria = new CDbCriteria();
         	$criteria->select = "
-			TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s'))) as l_tunnit,
-			aloitan,loppui,kohde_kannasta
+			SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s')))) as l_tunnit,
+			kohde_kannasta
 		";
 
         	$criteria->condition = "  
-			tid = '".$tid."' and aloitan !='' and loppui !='' 
+			tid = '".$tid."' and aloitan!='' and loppui!=''
 			AND id NOT IN(select kid from sivexkuitti_repaired)
-			AND status=3
+			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$from."' AND '".$to."'
 		";
         	$criteria->group = "kohde_kannasta";
+
+			if(Yii::app()->session['Lounastauko'])
+		        $criteria->addCondition (" status != '10' ");
+	
+			if(Yii::app()->session['MATKA'])
+		        $criteria->addCondition (" status != '2' ");
 
 		$lu = Mobile::model()->findAll($criteria);
 
 		    $return = array();
+		    $sum = 0;
 		foreach($lu as $l)
 		{
 		    $kesto = '';
 		    $kesto = $l->l_tunnit;
-		    $return[date("YdmHi",strtotime($l->aloitan))] = $l->kohde_kannasta."//".$kesto;
+		    $sum += $l->l_tunnit;
+		    $return[] = $l->kohde_kannasta."//".$kesto;
 		}
 
 
        		$criteria = new CDbCriteria();
         	$criteria->select = "
-			TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s'))) as l_tunnit,
-			aloitan,loppui,kohde_kannasta
+			SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s')))) as t_tunnit,
+			kohde_kannasta
 		";
 
         	$criteria->condition = "  
-			tid = '".$tid."' and aloitan !='' and loppui !='' 
-			AND status=3
+			tid = '".$tid."' and aloitan!='' and loppui!=''
+			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$from."' AND '".$to."'
 		";
         	$criteria->group = "kohde_kannasta";
 
+			if(Yii::app()->session['Lounastauko'])
+		        $criteria->addCondition (" status != '10' ");
+	
+			if(Yii::app()->session['MATKA'])
+		        $criteria->addCondition (" status != '2' ");
+
 		$tot = Toteutuneet::model()->findAll($criteria);
-
-
-		foreach($tot as $l)
+		    $return2 = array();
+		foreach($tot as $t)
 		{
 		    $kesto = '';
-		    $kesto = $l->l_tunnit;
-		    $return[date("YdmHi",strtotime($l->aloitan))] = $l->kohde_kannasta."//".$kesto;
+		    $kesto = $t->t_tunnit;
+		    $sum += $t->t_tunnit;
+		    $return2[] = $t->kohde_kannasta."//".$kesto;
 		}
 
-		ksort($return);
+		$model = array_merge($return, $return2);
+		//ksort($return);
 
-		foreach($return as $result)
+		foreach($model as $result)
 		{
 		    $expl = explode("//",$result);
 			echo 
@@ -1527,6 +1542,8 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			   <div class="col-sm-6">kesto: <b> '.$this->sprint($expl[1]).' ('.$this->num($expl[1]).')</b></div>
 			</div>';
 		}
+
+		echo '<h3 class="pull-right">'.Yii::t('main','Yhteensä').' '.$this->sprint($sum).' ('.$this->num($sum).')</h3>';
 
 	}
 
