@@ -40,12 +40,56 @@ td,th{
   </thead>
 
   <?php 
+  $tids = array();
+  $totalTp	= 0;
+  $tot_sun	=0;
+  $tp		= 0;
   foreach($model as $data)
   {
-	$this->renderPartial('_palkkataulukko',array('data'=>$data));
+	$tids[] = $data->id;
+	$tp = $this->Tp($data->id);
+	$totalTp += $tp;
+	$this->renderPartial('_palkkataulukko',array('data'=>$data,'tp'=>$tp));
   }
-  ?>
 
+	$yht[0] = 0;
+	$yht[1] = 0;
+	$yht[2] = 0;
+	$yht[3] = 0;
+	$matka = 0;
+
+  foreach($tids as $t)
+  {
+	$matka += $this->renderPartial('//mobile/tidfromtomatkat',array(
+		'from'=>Yii::app()->session['from'],
+		'to'=>Yii::app()->session['to'],
+		'tid'=>$t
+		),true);
+
+	$return = $this->toteutu($t,"palkkataulukko");
+	$yht[0] += $return[0];
+	$yht[1] += $return[1];
+	$yht[2] += $return[2];
+	$yht[3] += $return[3];
+  }
+
+  if($matka != 0)
+  $matka = $this->sprint($matka).'<br>('.$this->num($matka).')';
+  ?>
+  <tfoot>
+  <tr>
+  	<th><?php echo Yii::t('main', 'Yhteensä'); ?></th>
+	<td><?php echo $totalTp; ?></td>
+	<td><?php echo $matka; ?></td>
+	<td><?php echo $this->sprint($yht[0]); ?></td>
+	<td><?php echo $this->sprint($yht[1]); ?></td>
+	<td><?php echo $this->sprint($yht[2]); ?></td>
+	<td><?php echo $this->sprint($yht[3]); ?></td>
+	<td></td>
+	<td></td>
+	<td></td>
+  </tr>
+  </tfoot>
   </table>
 <?php endif; ?>
 
