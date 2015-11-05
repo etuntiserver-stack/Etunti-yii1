@@ -350,8 +350,8 @@ class ToteutuneetController extends Controller
         	$criteria->group = "DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'),'%Y%m%d')";
 
 
-		if(isset($explTekija[0]))
-	        $criteria->addCondition (" tid = '".Yii::app()->session['tekija']."'");
+		//if(isset($explTekija[0]))
+	        //$criteria->addCondition (" tid = '".Yii::app()->session['tekija']."'");
 
 		if(Yii::app()->session['from'] and Yii::app()->session['to'])
 	        $criteria->addCondition ("DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."' ");
