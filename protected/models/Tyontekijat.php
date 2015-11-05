@@ -142,7 +142,7 @@ public $tunnus;
 		unset(Yii::app()->session['aktiivinen']);
 
 		if(Yii::app()->session['aktiivinen'])
-		$criteria->condition = " aktiivinen=0 or aktiivinen=1 ";
+		$criteria->condition = " aktiivinen=0 or aktiivinen=1 or aktiivinen=2 ";
 		else
 		$criteria->condition = " aktiivinen=1 ";
 
