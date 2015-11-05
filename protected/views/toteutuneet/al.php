@@ -49,8 +49,8 @@
   }
 
  	  $strlen = strlen($kohde);
-	   if($strlen > 18)
-	    $kohde = substr($kohde,0,18).'..';
+	   if($strlen > 22)
+	    $kohde = substr($kohde,0,22).'..';
 	   else
 	    $kohde = $kohde;
 

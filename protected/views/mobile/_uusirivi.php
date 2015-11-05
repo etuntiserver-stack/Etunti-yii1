@@ -2,6 +2,8 @@
 /* @var $this MobileController */
 /* @var $model Mobile */
 /* @var $form CActiveForm */
+
+$pvm = '';
 if(!isset($_POST['forThis']))
 {
 	exit;
@@ -67,12 +69,12 @@ $t = Tyontekijat::model()->findbypk($ex[1]);
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'aloitan'); ?>
-		<?php echo $form->textField($model,'aloitan',array('size'=>20,'maxlength'=>20,'class'=>'form-control timepicker')); ?>
+		<?php echo $form->textField($model,'aloitan',array('value'=>date("d.m.Y",strtotime($pvm)).' 00:00', 'size'=>20,'maxlength'=>20,'class'=>'form-control al')); ?>
 		<?php echo $form->error($model,'aloitan'); ?>
 	</div>
 	<div class="row">
 		<?php echo $form->labelEx($model,'loppui'); ?>
-		<?php echo $form->textField($model,'loppui',array('size'=>20,'maxlength'=>20,'class'=>'form-control timepicker')); ?>
+		<?php echo $form->textField($model,'loppui',array('value'=>date("d.m.Y",strtotime($pvm)).' 00:00','size'=>20,'maxlength'=>20,'class'=>'form-control lp')); ?>
 		<?php echo $form->error($model,'loppui'); ?>
 	</div>
 
@@ -114,7 +116,7 @@ $t = Tyontekijat::model()->findbypk($ex[1]);
 
 
 	<div class="modal-footer">
-		<?php echo CHtml::Button('Sulje',array('class'=>'btn btn-default','data-dismiss'=>'modal')); ?>
+		<span class="btn btn-default" data-dismiss="modal">Sulje</span>
 		<?php echo CHtml::Button('Tallenna',array('class'=>'btn btn-primary uusiRivi')); ?>
 	</div>		
 		</div> <!-- end modal-content -->
@@ -204,3 +206,22 @@ $t = Tyontekijat::model()->findbypk($ex[1]);
 
 
 </div><!-- form -->
+
+
+	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/jquery.mask.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+
+
+  $('.al').mask('00.00.0000 00:00',{
+        placeholder: "__.__.____ __:__"
+  });
+
+  $('.lp').mask('00.00.0000 00:00',{
+        placeholder: "__.__.____ __:__"
+  });
+
+
+});
+</script>
