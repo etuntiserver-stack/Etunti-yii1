@@ -49,7 +49,7 @@ class Asiakkaat extends DB2ActiveRecord
 			array('ryhma, aktiivinen', 'numerical', 'integerOnly'=>true),
 			array('postinumero, yhteyshenkilo, yrityksen_nimi, y_tunnus, kaupunki, puhelin, sahkoposti', 'length', 'max'=>100),
 			array('tyyppi, laskutus_kanava, osoite', 'length', 'max'=>255),
-			array('maksuehto, osoite', 'length', 'max'=>20),
+			array('maksuehto', 'length', 'max'=>20),
 			array('asiakasnumero', 'length', 'max'=>100),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.

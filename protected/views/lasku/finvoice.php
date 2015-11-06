@@ -83,7 +83,7 @@ xsi:noNamespaceSchemaLocation="/../tiedostot/finvoice/Finvoice.xsd">
   $xml .= '
   <InvoiceRow>
     <ArticleIdentifier>'.$rivi['id'].'</ArticleIdentifier>
-    <ArticleName>'.$rivi['nimike'].'</ArticleName>
+    <ArticleName>'.$rivi['tkoodi'].'</ArticleName>
     <DeliveredQuantity QuantityUnitCode="pcs">'.$rivi['kpl'].'</DeliveredQuantity>
     <OrderedQuantity QuantityUnitCode="pcs">'.$rivi['kpl'].'</OrderedQuantity>
     <UnitPriceAmount AmountCurrencyIdentifier="EUR" UnitPriceUnitCode="pcs">'.$rivi['hinta'].'</UnitPriceAmount>

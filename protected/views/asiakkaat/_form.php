@@ -136,14 +136,7 @@
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'maksuehto'); ?>
-		<?php
-		$list = array(	'14'=>14,
-				7=>7,
-				5=>5
-				);
-        	echo $form->dropDownList($model, 'maksuehto', $list,
-		array('empty'=>'Valitse','class'=>'form-control input-sm'));
-        	?>
+		<?php echo $form->textField($model,'maksuehto',array('size'=>60,'maxlength'=>100,'class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'maksuehto'); ?>
 	</div>
 	<?php endif; ?>

@@ -131,18 +131,13 @@ class LaskuController extends Controller
 */
 	}
 
-	public function actionTr_rivitkk($asiakas)
+	public function actionTr_rivitkk()
 	{
 
 		$hintaForTunti 	= $_POST['hintaForTunti'];
 		$palvelu 	= $_POST['palvelu'];
-		$from 		= $_POST['from'];
-		$to 		= $_POST['to'];
 
 		$this->renderPartial('tr_rivitkk',array(
-			'from'=>$from,
-			'to'=>$to,
-			'asiakas'=>$asiakas,
 			'palvelu'=>$palvelu,
 			'hintaForTunti'=>$hintaForTunti,
 		));
@@ -311,6 +306,7 @@ class LaskuController extends Controller
 		{
 
 			$model->attributes=$_POST['Lasku'];
+			$model->tilanne=0;
 			if($model->save()){
 
 			foreach($_POST['tkoodi'] as $key=>$val)
@@ -319,7 +315,7 @@ class LaskuController extends Controller
 				$lr->lid	=$model->id;
 				$lr->rivi	=$key;
 				$lr->tkoodi	=$_POST['tkoodi'][$key];
-				$lr->nimike	=$_POST['nimike'][$key];
+				//$lr->nimike	=$_POST['nimike'][$key];
 				$lr->kpl	=$_POST['kpl'][$key];
 				$lr->yksikko	=$_POST['yksikko'][$key];
 				$lr->hinta	=$_POST['hinta'][$key];
@@ -331,7 +327,8 @@ class LaskuController extends Controller
 				$lr->save();
 			}
 
-				$this->redirect(array('lasku/admin'));
+
+				$this->redirect(array('update','id'=>$model->id));
 			}
 		}
 
@@ -365,7 +362,7 @@ class LaskuController extends Controller
 				$lr->lid	=$model->id;
 				$lr->rivi	=$key;
 				$lr->tkoodi	=$_POST['tkoodi'][$key];
-				$lr->nimike	=$_POST['nimike'][$key];
+				//$lr->nimike	=$_POST['nimike'][$key];
 				$lr->kpl	=$_POST['kpl'][$key];
 				$lr->yksikko	=$_POST['yksikko'][$key];
 				$lr->hinta	=$_POST['hinta'][$key];

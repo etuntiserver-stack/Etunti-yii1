@@ -65,8 +65,8 @@ $('.search-form form').submit(function(){
 		'yritys',
 		'y_tunnus',
 		'nimi',
-		'as_nro',
-		'osoite',
+		//'as_nro',
+		'tilanne',
 		/*
 		'postinumero',
 		'toimipaikka',

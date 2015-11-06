@@ -43,7 +43,7 @@
 
 $html = '<style>
 html,body { 
-  width: 50px; height: 100%;
+  width: 650px; height: 100%;
   border:1px #333 solid;
   padding: 4;
   margin:4px;
@@ -201,7 +201,7 @@ embed {height:100%;width:100%}
 	$ale = '';
 
 	$html .= '<TR>';
-	$html .= '<TD style="text-align:left; white-space: nowrap;">'.$rivit->nimike.'</TD>';
+	$html .= '<TD style="text-align:left; white-space: nowrap;">'.$rivit->tkoodi.'</TD>';
 	$html .= '<TD>'.$rivit->kpl.'</TD>';
 	$html .= '<TD>'.$rivit->hinta.'</TD>';
 	$html .= '<TD>'.$rivit->alv.' %</TD>';
