@@ -14,7 +14,6 @@ if(isset($_POST['num'])){
 	?>
 	</TD>
 
-	<TD><input type="text" name="nimike[<?php echo $num; ?>]" id="nimike_<?php echo $num; ?>" class="form-control input-sm" value=""></TD>
 	<TD><input type="text" size="5" name="kpl[<?php echo $num; ?>]" id="kpl_<?php echo $num; ?>" class="onlyDigits form-control input-sm" value=""><span class="errmsg"></span></TD>
 	<TD>
 		<select type="text" name="yksikko[<?php echo $num; ?>]" id="yksikko_<?php echo $num; ?>" class="form-control input-sm">
@@ -50,11 +49,10 @@ $(".valitseTuote").change(function() {
            success: function(data){
 		var sp = data.split("//");
 
-		$("#tkoodi_"+num).val(tuoteID);
 		$("#kpl_"+num).val("1");
 
 		if(sp[0])
-		$("#nimike_"+num).val(sp[0]);
+		$("#tkoodi_"+num).val(sp[0]);
 		if(sp[1])
 		$("#hinta_"+num).val(sp[1]);
 		if(sp[3])

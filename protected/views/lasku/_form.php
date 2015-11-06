@@ -25,11 +25,16 @@
 </style>
 <?php else : ?> 
 <style>
-.hidd,.ashidd,.ashidd_a,.tyyppi,.subm,.kht{
+.hidd,.ashidd,.ashidd_a,.tyyppi{
 	display:none;
 }
 </style>
 <?php endif; ?> 
+
+<?php
+if(isset($model->id))
+echo '<input type="hidden" id="forLaskutusTyyppi" value="'.$model->laskutus.'">';
+?>
 
 	<?php echo $form->errorSummary($model); ?>
 
@@ -62,7 +67,7 @@
 		  elseif(empty($aon->yhteyshenkilo) and empty($aon->yrityksen_nimi))
 		    echo '<option value="'.$aon->id.'">nimet puutuu '.$aon->id.'</option>';
 		  else
-		    echo '<option value="'.$aon->id.'">'.$aon->yhteyshenkilo.' ID:'.$aon->id.'</option>';
+		    echo '<option value="'.$aon->id.'">'.$aon->yhteyshenkilo.'</option>';
 		} else {
 	        echo '<option></option>';
 		}
@@ -74,7 +79,7 @@
 		  elseif(empty($aa->yhteyshenkilo) and empty($aa->yrityksen_nimi))
 		    echo '<option value="'.$aa->id.'">nimet puutuu '.$aa->id.'</option>';
 		  else
-		    echo '<option value="'.$aa->id.'">'.$aa->yhteyshenkilo.' ID:'.$aa->id.'</option>';
+		    echo '<option value="'.$aa->id.'">'.$aa->yhteyshenkilo.'</option>';
 		}
 		echo '</select>';
 		?>
@@ -219,7 +224,7 @@
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'viitenumero'); ?>
-		<?php echo $form->textField($model,'viitenumero',array('size'=>60,'maxlength'=>100,'class'=>'form-control input-sm')); ?>
+		<?php echo $form->textField($model,'viitenumero',array('size'=>60,'maxlength'=>100,'class'=>'form-control input-sm','placeholder'=>'se tulee luomisen jälkeen')); ?>
 		<?php echo $form->error($model,'viitenumero'); ?>
 	</div>
 
@@ -227,6 +232,12 @@
 		<?php echo $form->labelEx($model,'viivastyskorko'); ?>
 		<?php echo $form->textField($model,'viivastyskorko',array('size'=>50,'maxlength'=>50,'class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'viivastyskorko'); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->labelEx($model,'tilanne'); ?>
+		<?php echo $form->textField($model,'tilanne',array('size'=>50,'maxlength'=>50,'class'=>'form-control input-sm','readonly'=>'yes')); ?>
+		<?php echo $form->error($model,'tilanne'); ?>
 	</div>
 
   </div><div class="col-sm-3">
@@ -309,7 +320,7 @@
 <br>
 
 
-<?php if(!isset($model->id)) : ?>
+
 <span class="pull-right btn-sm btn btn-info" data-toggle="collapse"  data-target="#kalut"><?php echo Yii::t('main', 'Extrat'); ?> <b class="caret"></b></span>
 
 
@@ -338,7 +349,7 @@
 	</div>
       </div>
       <div class="col-sm-12">
-        	<b class="btn btn-success hae"><?php echo Yii::t('main', 'Luo rivit'); ?></b>
+        	<b class="btn btn-success btn-sm hae"><?php echo Yii::t('main', 'Luo rivit'); ?></b>
       </div>
     </div>
 
@@ -346,11 +357,26 @@
     <legend><?php echo Yii::t('main', 'KUUKAUSI'); ?></legend>
       <div class="row">
 	<div class="col-sm-6">
-		<b class="glyphicon glyphicon-calendar"></b> 
-   		<input type="text" id="fromkk" class="form-control input-sm form-group datepicker" value="<?php echo date("d.m.Y",strtotime('first day of this month', time())); ?>">
+	<label><?php echo Yii::t('main', 'Kuukausi'); ?></label>
+	<?php
+	$kk = array(
+		"Tammikuu"=>"Tammikuu",
+		"Helmikuu"=>"Helmikuu",
+		"Maaliskuu"=>"Maaliskuu",
+		"Huhtikuu"=>"Huhtikuu",
+		"Toukokuu"=>"Toukokuu",
+		"Kesäkuu"=>"Kesäkuu",
+		"Heinäkuu"=>"Heinäkuu",
+		"Elokuu"=>"Elokuu",
+		"Syyskuu"=>"Syyskuu",
+		"Lokakuu"=>"Lokakuu",
+		"Marraskuu"=>"Marraskuu", 
+		"Joulukuu"=>"Joulukuu");
+	echo CHtml::dropdownList('','kk', $kk, array('empty'=>'Valitse kuukausi','class'=>'form-control input-sm','id'=>'kk'));
+	?>
 	</div><div class="col-sm-6">
-		<b class="glyphicon glyphicon-calendar"></b> 
-   		<input type="text" id="tokk" class="form-control input-sm form-group datepicker" value="<?php echo date("d.m.Y",strtotime('last day of this month', time())); ?>">
+	<label><?php echo Yii::t('main', 'Valitse vuosi'); ?></label>
+	<input type="text" id="vuosi" class="form-control input-sm" value="<?php echo date('Y'); ?>">
 	</div>
       </div>
 
@@ -366,25 +392,26 @@
 	</div>
       </div>
       <div class="col-sm-12">
-        	<b class="btn btn-success haekk"><?php echo Yii::t('main', 'Luo rivit'); ?></b>
+        	<b class="btn btn-success btn-sm haekk"><?php echo Yii::t('main', 'Luo rivit'); ?></b>
       </div>
     </div>
 
 
 </div>
-<?php endif; ?> 
+
 
 	<input type="hidden" class="form-control input-sm" id="kohteistaRivit" readonly><br>
 	<div id="tuntienTulos"></div>
 
-<div id="rivit">
+<br>
+
+<div id="rivit" class="row well">
 <h2><?php echo Yii::t('main', 'Rivit'); ?></h2>
 <TABLE class="table" id="TableRivit">
 
      <TR>
 	<TH></TH>
-	<TH class="col-sm-2">Tuote</TH>
-	<TH class="col-sm-2">Nimike</TH>
+	<TH class="col-sm-2">Tuote/Palvelu</TH>
 	<TH>Kpl</TH>
 	<TH class="col-sm-1">Yksikkö</TH>
 	<TH class="col-sm-1">Hinta</TH>
@@ -419,7 +446,6 @@
 	<TD></TD>
 	<TD></TD>
 	<TD></TD>
-	<TD></TD>
 	<TD><input type="text" class="form-control input-sm" size="10" name="Lasku[yhteensa_total_verot]" id="yhteensa_total_verot" readonly></TD>
 	<TD></TD>
 	<TD><input type="text" class="form-control input-sm" size="10" name="Lasku[yhteensa_total_veroton]" id="yhteensa_total_veroton" readonly></TD>
@@ -428,13 +454,16 @@
      </tfoot>
 </TABLE>
 
-  <span id="uusiRivi" class="btn btn-sm btn-success"><?php echo Yii::t('main','Lisää rivi'); ?></span>
+  <span id="uusiRivi" class="btn btn-sm btn-success"><?php echo Yii::t('main','+'); ?></span>
 </div>
 
 <br><br><br><br><br><br>
 
 	<div class="buttons subm">
-		<?php echo CHtml::submitButton($model->isNewRecord ? 'Luo' : 'Tallenna',array('class'=>'btn btn-primary')); ?>
+		<?php echo CHtml::submitButton($model->isNewRecord ? 'Tallenna' : 'Tallenna',array('class'=>'btn btn-sm btn-primary')); ?>
+		<a href="lasku_pdf?id=<?php echo $model->id; ?>" target="_blank" class="btn btn-sm btn-success btn-group"><?php echo Yii::t('main','Esikatselu'); ?></a>
+		<a href="#" class="btn btn-sm btn-success btn-group"><?php echo Yii::t('main','Hyväksy'); ?></a>
+		<a href="#" class="btn btn-sm btn-success btn-group"><?php echo Yii::t('main','Lähetä'); ?></a>
 	</div>
 
 <?php $this->endWidget(); ?>
@@ -446,6 +475,7 @@
 
 <script type="text/javascript">
 $(document).ready(function(){
+
 
 
 $("#uusiRivi").click(function() {
@@ -470,6 +500,7 @@ function jumpToPageBottom() {
     return false;
 }
 
+poista();
 function poista(){
   $(".poista").click(function() {
 	var forID = $(this).attr("for").split("_");
@@ -515,6 +546,8 @@ function Rivi(){
   });
 
 }
+
+  eachLaskenta();
 
 function eachLaskenta(){
 
@@ -660,43 +693,43 @@ $(".hae").click(function() {
 
 $(".haekk").click(function() {
 
-	var from = $("#fromkk").val();
-	var to = $("#tokk").val();
-	var kohteet = $(".selectpicker").val();
-	var hintaForTunti = $("#hintaForTuntikk").val();
+	var kk = $("#kk").val();
+	var vuosi = $("#vuosi").val();
 	var asiakas = $("#Lasku_as_nro").val();
-	var palvelu = $("#palvelu").val();
+	var hintaForTuntikk = $("#hintaForTuntikk").val();
+	var palvelu = $("#palvelu option:selected").text();
+	var p = kk+"-"+vuosi+" "+palvelu;
 
-	if (from  === '') 
+	if (kk  === '') 
 	{
-	     $('#fromkk').css({"border" : "2px #f14010 solid"}).focus();
+	     $('#kk').css({"border" : "2px #f14010 solid"}).focus();
 	     return false;
 	}
-	if (to  === '') 
+	if (vuosi  === '') 
 	{
-	     $('#tokk').css({"border" : "2px #f14010 solid"}).focus();
+	     $('#vuosi').css({"border" : "2px #f14010 solid"}).focus();
 	     return false;
 	}
-	if (hintaForTunti  === '') 
-	{
-	     $('#hintaForTuntikk').css({"border" : "2px #f14010 solid"}).focus();
-	     return false;
-	}
-	if (palvelu  === '') 
+	if ($("#palvelu").val()  === '') 
 	{
 	     $('#palvelu').css({"border" : "2px #f14010 solid"}).focus();
 	     return false;
 	}
+	if (hintaForTuntikk  === '') 
+	{
+	     $('#hintaForTuntikk').css({"border" : "2px #f14010 solid"}).focus();
+	     return false;
+	}
 
 
-	    $("table#TableRivit tbody .kaikkiTR").remove();
+	    //$("table#TableRivit tbody .kaikkiTR").remove();
 
 
 
 	        	$.ajax({
-		           url: 'tr_rivitkk?asiakas='+asiakas,
+		           url: 'tr_rivitkk',
 			   type: 'POST',
-			   data: { from : from, to : to, hintaForTunti : hintaForTunti, palvelu : palvelu },
+			   data: { hintaForTunti : hintaForTuntikk, palvelu : p },
 		           success: function(data){
 				//console.log(data);
 				$("table#TableRivit tbody tr").last().after(data);
@@ -826,7 +859,7 @@ $("#Lasku_laskutus").change(function() {
     laskutus(value);
 });
 
-
+laskutus($("#forLaskutusTyyppi").val())
 
 function laskutusTyyppi(value){
 
