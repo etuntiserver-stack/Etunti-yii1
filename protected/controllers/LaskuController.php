@@ -23,11 +23,11 @@ class LaskuController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','etsikohde','etsiasiakas', 'etsisaaja','luoKohteista','tr_rivit','tr_rivitkk','lasku_pdf', 'finvoice','tr_rivit_tyhja'),
+				'actions'=>array('admin','delete','create','update','index','view','etsikohde','etsiasiakas', 'etsisaaja','luoKohteista','tr_rivit','tr_rivitkk','lasku_pdf', 'finvoice','tr_rivit_tyhja','valitsetuote'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','etsikohde','etsiasiakas', 'etsisaaja','luoKohteista','tr_rivit','tr_rivitkk','lasku_pdf', 'finvoice','tr_rivit_tyhja'),
+				'actions'=>array('admin','delete','create','update','index','view','etsikohde','etsiasiakas', 'etsisaaja','luoKohteista','tr_rivit','tr_rivitkk','lasku_pdf', 'finvoice','tr_rivit_tyhja','valitsetuote'),
                 		'message'=>Yii::t('main', 'Tämä TASO ei kuuluu teille'),
 			),
 			array('deny',  // deny all users
@@ -164,6 +164,13 @@ class LaskuController extends Controller
 			'kpl'=>$kpl,
 			'lt'=>$lt,
 		));
+	}
+
+	public function actionValitsetuote()
+	{
+		$tuote = LaskutusTuotteet::model()->findbypk($_POST['tuoteID']);
+		echo $tuote->tuotenimi."//".$tuote->hinta_alv_0."//".$tuote->alv."//".$tuote->yksikko."//".$tuote->hinta_alv_sis;
+
 	}
 
 	public function actionLuoKohteista($id)

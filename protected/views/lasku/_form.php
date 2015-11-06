@@ -386,7 +386,7 @@
 	<TH class="col-sm-2">Tuote</TH>
 	<TH class="col-sm-2">Nimike</TH>
 	<TH>Kpl</TH>
-	<TH>Yksikkö</TH>
+	<TH class="col-sm-1">Yksikkö</TH>
 	<TH class="col-sm-1">Hinta</TH>
 	<TH>ALV%</TH>
 	<TH class="col-sm-1">ALV</TH>
@@ -764,14 +764,6 @@ $("#Lasku_as_nro").change(function() {
 		var sp = data.split("//");
 		$(".tyyppi").show('slow');
 
-		if(sp[8] == '1'){
-		$(".kht").show('slow');
-		$("#rivit").hide('slow');
-		}
-		if(sp[8] == '0'){
-		$(".kht").hide('slow');
-		$("#rivit").show('slow');
-		}
 
 		laskutus(sp[0]);
 		if(sp[0]){
@@ -780,6 +772,7 @@ $("#Lasku_as_nro").change(function() {
 		if(sp[1]){
 		  $("#Lasku_maksuehto").val(sp[1]);
 		}
+
 
 		if(sp[2]){
 		  var spR = sp[2].split("**");
