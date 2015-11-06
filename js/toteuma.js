@@ -206,6 +206,7 @@ $(document).ready(function(){
     }
 
 		$('#mobile-form').submit();
+		return false;
   });
 
   $('#mobile-form').on('submit',function(e) {
@@ -219,15 +220,13 @@ $(document).ready(function(){
 		  type:'POST',
 		  success:function(data){
 			console.log(data);
+		/*
 			var divID = data.split("_");
-
-		if( divID ){
-
-		blockUpdater(divID);
-
-		}
-
-		$('#showres').modal('hide');
+			if( divID )
+			blockUpdater(divID);
+			$('#showres').modal('hide');
+		*/
+		setTimeout(function(){document.location.href = "index";},500);
 		return false;
 	   	},
 		error:function(data){
