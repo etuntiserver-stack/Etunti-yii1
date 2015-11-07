@@ -2,6 +2,11 @@
 /* @var $this AsetuksetController */
 /* @var $model Asetukset */
 /* @var $form CActiveForm */
+
+
+     $tas = array();
+   if(isset(Yii::app()->user->adminPaketti)) 
+     $tas = explode(",",Yii::app()->user->adminPaketti);
 ?>
 
 <div class="row form">
@@ -38,13 +43,51 @@
 		<?php echo $form->error($model,'johtaja'); ?>
 	</div>
 
-	<div class="row buttons">
+  </div>
+</div><!-- form -->
+
+
+<?php if(in_array('3',$tas)) : ?>
+<hr>
+  <legend><h2><?php echo Yii::t('main','Laskutuksen asetukset'); ?></h2></legend>
+  <div class="row form">
+    <div class="col-sm-6">
+
+	<div class="row">
+		<?php echo $form->labelEx($model,'tilinumero'); ?>
+		<?php echo $form->textField($model,'tilinumero',array('size'=>60,'maxlength'=>100,'class'=>'form-control input-sm')); ?>
+		<?php echo $form->error($model,'tilinumero'); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->labelEx($model,'iban'); ?>
+		<?php echo $form->textField($model,'iban',array('size'=>60,'maxlength'=>100,'class'=>'form-control input-sm')); ?>
+		<?php echo $form->error($model,'iban'); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->labelEx($model,'bic'); ?>
+		<?php echo $form->textField($model,'bic',array('size'=>20,'maxlength'=>20,'class'=>'form-control input-sm')); ?>
+		<?php echo $form->error($model,'bic'); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->labelEx($model,'viivastyskorko'); ?>
+		<?php echo $form->textField($model,'viivastyskorko',array('size'=>50,'maxlength'=>50,'class'=>'form-control input-sm')); ?>
+		<?php echo $form->error($model,'viivastyskorko'); ?>
+	</div>
+
+    </div>
+  </div>
+<?php endif; ?>
+
+
+	<div class="buttons">
 		<?php echo CHtml::submitButton($model->isNewRecord ? 'Luo' : 'Tallenna',array('class'=>'btn btn-primary')); ?>
 	</div>
 
 <?php $this->endWidget(); ?>
-  </div>
-</div><!-- form -->
+
 
 <?php
 /*

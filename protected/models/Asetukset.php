@@ -42,10 +42,10 @@ class Asetukset extends DB2ActiveRecord
 			array('id,logon_polkku, logon_korkeus, johtaja', 'required'),
 			array('id, logon_korkeus', 'numerical', 'integerOnly'=>true),
 			array('paivan_uutinen, logon_polkku', 'length', 'max'=>500),
-			array('johtaja', 'length', 'max'=>100),
+			array('johtaja, viivastyskorko, tilinumero, iban, bic', 'length', 'max'=>100),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, syntyrin_emails, paivan_uutinen, logon_polkku, logon_korkeus, johtaja', 'safe', 'on'=>'search'),
+			array('id, syntyrin_emails, paivan_uutinen, logon_polkku, logon_korkeus, johtaja, viivastyskorko, tilinumero, iban, bic', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -72,6 +72,10 @@ class Asetukset extends DB2ActiveRecord
 			'logon_polkku' => 'Logon Polkku',
 			'logon_korkeus' => 'Logon Korkeus',
 			'johtaja' => 'Johtaja',
+			'tilinumero' => 'Tilinumero',
+			'iban' => 'IBAN',
+			'bic' => 'BIC',
+			'viivastyskorko' => 'Viivästyskorko %',
 		);
 	}
 
@@ -92,6 +96,10 @@ class Asetukset extends DB2ActiveRecord
 		$criteria->compare('logon_polkku',$this->logon_polkku,true);
 		$criteria->compare('logon_korkeus',$this->logon_korkeus);
 		$criteria->compare('johtaja',$this->johtaja,true);
+		$criteria->compare('tilinumero',$this->tilinumero,true);
+		$criteria->compare('iban',$this->iban,true);
+		$criteria->compare('bic',$this->bic,true);
+		$criteria->compare('viivastyskorko',$this->viivastyskorko,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

@@ -32,8 +32,17 @@
 <?php endif; ?> 
 
 <?php
-if(isset($model->id))
+if(isset($model->id)){
+echo '<input type="hidden" id="modelID" value="1">';
 echo '<input type="hidden" id="forLaskutusTyyppi" value="'.$model->laskutus.'">';
+echo '<input type="hidden" id="forTilanne" value="'.$model->tilanne.'">';
+}
+
+$firma = Asetukset::model()->findbypk(1);
+$model->yid = $firma->id;
+$model->saaja_iban = $firma->iban;
+
+
 ?>
 
 	<?php echo $form->errorSummary($model); ?>
@@ -200,7 +209,7 @@ echo '<input type="hidden" id="forLaskutusTyyppi" value="'.$model->laskutus.'">'
   <legend><?php echo Yii::t('main', 'LASKUN TIEDOT'); ?></legend>
 	<div class="row">
 		<?php echo $form->labelEx($model,'paivays'); ?>
-		<?php echo $form->textField($model,'paivays',array('value'=>date("d.m.Y"),'size'=>20,'maxlength'=>20,'class'=>'form-control input-sm datepicker')); ?>
+		<?php echo $form->textField($model,'paivays',array('value'=>date("Y-m-d"),'size'=>20,'maxlength'=>20,'class'=>'form-control input-sm datepicker')); ?>
 		<?php echo $form->error($model,'paivays'); ?>
 	</div>
 
@@ -319,14 +328,13 @@ echo '<input type="hidden" id="forLaskutusTyyppi" value="'.$model->laskutus.'">'
 
 <br>
 
-
-
-<span class="pull-right btn-sm btn btn-info" data-toggle="collapse"  data-target="#kalut"><?php echo Yii::t('main', 'Extrat'); ?> <b class="caret"></b></span>
-
+<span class="pull-right btn-sm btn btn-info" data-toggle="collapse"  data-target="#kalut"><?php echo Yii::t('main', 'Kalut'); ?> <b class="caret"></b></span>
+<br>
+<hr>
 
 <div class="row form kht collapse" id="kalut">
 
-    <div class="col-sm-5">
+    <div class="col-sm-6">
     <legend><?php echo Yii::t('main', 'TUNNIT'); ?></legend>
       <div class="row">
 	<div class="col-sm-6">
@@ -353,7 +361,7 @@ echo '<input type="hidden" id="forLaskutusTyyppi" value="'.$model->laskutus.'">'
       </div>
     </div>
 
-    <div class="col-sm-5">
+    <div class="col-sm-6">
     <legend><?php echo Yii::t('main', 'KUUKAUSI'); ?></legend>
       <div class="row">
 	<div class="col-sm-6">
@@ -405,8 +413,8 @@ echo '<input type="hidden" id="forLaskutusTyyppi" value="'.$model->laskutus.'">'
 
 <br>
 
-<div id="rivit" class="row well">
-<h2><?php echo Yii::t('main', 'Rivit'); ?></h2>
+<div id="rivit" class="row">
+<label><?php echo Yii::t('main', 'Laskun rivit'); ?></label>
 <TABLE class="table" id="TableRivit">
 
      <TR>
@@ -454,16 +462,27 @@ echo '<input type="hidden" id="forLaskutusTyyppi" value="'.$model->laskutus.'">'
      </tfoot>
 </TABLE>
 
-  <span id="uusiRivi" class="btn btn-sm btn-success"><?php echo Yii::t('main','+'); ?></span>
+  <span id="uusiRivi" class="link text-success"><?php echo Yii::t('main','Uusi rivi'); ?></span>
 </div>
 
 <br><br><br><br><br><br>
 
-	<div class="buttons subm">
+	<div class="row subm">
+		<?php if($model->tilanne != '1') : ?>
 		<?php echo CHtml::submitButton($model->isNewRecord ? 'Tallenna' : 'Tallenna',array('class'=>'btn btn-sm btn-primary')); ?>
-		<a href="lasku_pdf?id=<?php echo $model->id; ?>" target="_blank" class="btn btn-sm btn-success btn-group"><?php echo Yii::t('main','Esikatselu'); ?></a>
-		<a href="#" class="btn btn-sm btn-success btn-group"><?php echo Yii::t('main','Hyväksy'); ?></a>
-		<a href="#" class="btn btn-sm btn-success btn-group"><?php echo Yii::t('main','Lähetä'); ?></a>
+		<?php endif; ?>
+
+		<?php if(isset($model->id)) : ?>
+		<a href="lasku_pdf?id=<?php echo $model->id; ?>" target="_blank" class="btn btn-sm btn-default btn-group"><?php echo Yii::t('main','Esikatselu'); ?></a>
+
+		<?php if(isset($model->id) and $model->tilanne != '1') : ?>
+		<a href="update?id=<?php echo $model->id; ?>&tilanne=1" class="btn btn-sm btn-success btn-group"><?php echo Yii::t('main','Hyväksy'); ?></a>
+		<?php endif; ?>
+
+		<?php if(isset($model->id) and $model->tilanne == '1') : ?>
+		<a href="finvoice?id=<?php echo $model->id; ?>"target="_blank"  class="btn btn-sm btn-success btn-group"><?php echo Yii::t('main','Lähetä'); ?></a>
+		<?php endif; ?>
+		<?php endif; ?>
 	</div>
 
 <?php $this->endWidget(); ?>
@@ -476,7 +495,12 @@ echo '<input type="hidden" id="forLaskutusTyyppi" value="'.$model->laskutus.'">'
 <script type="text/javascript">
 $(document).ready(function(){
 
-
+if($("#forTilanne").val() == '1'){
+  $("input").prop("disabled", true);
+  $("select").prop("disabled", true);
+  $(".poista").remove();
+  $("#uusiRivi").remove();
+}
 
 $("#uusiRivi").click(function() {
     var rivi = $("#samaRivi").html();
@@ -838,6 +862,9 @@ $("#Lasku_as_nro").change(function() {
 		}
 		if(sp[7]){
 		    $("#Lasku_puhelin").val(sp[7])
+		}
+		if(sp[9]){
+		    $("#Lasku_erapaiva").val(sp[9])
 		}
 
            },

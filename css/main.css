@@ -23,6 +23,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#87d9ff', end
 
 }
 
+.link { cursor: pointer; }
 
 @media screen and (max-width: 1199px) {
 	#etunti-navbar, .dropdown-menu {

@@ -39,11 +39,13 @@
 
    }
 
-
+   $lasku->yhteensa_total = str_replace(".",",",$lasku->yhteensa_total);
+   $lasku->yhteensa_total_verot = str_replace(".",",",$lasku->yhteensa_total_verot);
+   $lasku->yhteensa_total_veroton = str_replace(".",",",$lasku->yhteensa_total_veroton);
 
 $html = '<style>
 html,body { 
-  width: 650px; height: 100%;
+  width: 100%; height: 100%;
   border:1px #333 solid;
   padding: 4;
   margin:4px;
@@ -56,12 +58,7 @@ html,body {
     border-collapse: collapse;
     border-spacing: 0;
 }
-TABLE{
-    border-spacing: 0;
-}
-TD{
-    padding: 0;
-}
+
 label{
   line-height: 90%;
   //font-family:  sans-serif; font-size: 9pt;
@@ -70,7 +67,8 @@ b{
   //font-size: 0em;
   //font-family: DejaVu Sans, sans-serif; 
 }
-.class10p { padding:5px 0 5px 10px; border-bottom:1px #333 solid; }
+.class10p { width:225px;padding:5px 0 5px 10px; border-bottom:1px #333 solid; }
+
 .class10pNB { padding:2px 0 2px 10px; }
 .class50p { padding:0 0 0 100px }
 .bordRight { padding:0 2%; border-right:1px #333 solid; display: inline }
@@ -96,18 +94,24 @@ embed {height:100%;width:100%}
 </style>';
 
 
-	$html .= '<TABLE width="650" height="100%">';
-	$html .= '<TR><TD valign="top">';
-
-
-	$html .= '<TABLE>';
+	$html .= '<TABLE style="width:740px">';
 	$html .= '<TR>';
-	$html .= '<TD  style="padding: 10px;"><img src="'.$asetukset->logon_polkku.'" height="'.$asetukset->logon_korkeus.'"></TD>';
-	$html .= '<TD  style="padding: 10px;"><b>'.$laskunNimetus.'</b></TD>';
+	$html .= '<TD  style="padding: 10px;width:260px"><img src="'.$asetukset->logon_polkku.'" height="'.$asetukset->logon_korkeus.'"></TD>';
+	$html .= '<TD  style="padding: 10px;"><h1>'.$laskunNimetus.'</h1></TD>';
 	$html .= '</TR>';
-	$html .= '<TR>';
+	$html .= '</TABLE>';
 
-	$html .= '<TD height="1" valign="top" style="border-top:1px #333 solid;border-bottom:1px #333 solid;border-right:1px #333 solid;">';
+
+
+
+
+
+	$html .= '<TABLE style="width:740px">';
+	$html .= '<TR>';
+	$html .= '<TD height="1" valign="top" 
+			style="width:500px;border-top:1px #333 solid;
+			border-bottom:1px #333 solid;border-right:1px #333 solid;">';
+
 	$html .= '<div style="padding:10px 20px">';
 	$html .= '<BR>';
 	$html .= '<H3 class="asiakasKirje">';
@@ -119,32 +123,32 @@ embed {height:100%;width:100%}
 	$html .= '</div>';
 	$html .= '</TD>';
 
-	$html .= '<TD style="border-top:1px #333 solid;border-bottom:1px #333 solid;">';
-	$html .= '<TABLE >';
+	$html .= '<TD style="width:240px;border-top:1px #333 solid;border-bottom:1px #333 solid;">';
+	$html .= '<TABLE>';
 
-	$html .= '<TR><TD  class="class10p">';
+	$html .= '<TR><TD class="class10p">';
 	$html .= '<label>Laskun numero</label><BR>';
-	$html .= '<b class="class50p">'.$lasku->id.'</b>';
+	$html .= '<b>'.$lasku->id.'</b>';
 	$html .= '</TD></TR>';
 
-	$html .= '<TR><TD  class="class10p">';
+	$html .= '<TR><TD class="class10p">';
 	$html .= '<label>Laskun päiväys</label><BR>';
-	$html .= '<b class="class50p">'.date("d.m.Y", strtotime($lasku->paivays)).'</b>';
+	$html .= '<b>'.date("d.m.Y", strtotime($lasku->paivays)).'</b>';
 	$html .= '</TD></TR>';
 
-	$html .= '<TR><TD  class="class10p">';
+	$html .= '<TR><TD class="class10p">';
 	$html .= '<label>Eräpäivä</label><BR>';
-	$html .= '<b class="class50p">'.date("d.m.Y", strtotime($lasku->erapaiva)).'</b>';
+	$html .= '<b>'.date("d.m.Y", strtotime($lasku->erapaiva)).'</b>';
 	$html .= '</TD></TR>';
 
-	$html .= '<TR><TD  class="class10p">';
+	$html .= '<TR><TD class="class10p">';
 	$html .= '<label>Viivästyskorko</label><BR>';
-	$html .= '<b class="class50p">'.$lasku->viivastyskorko.' %</b>';
+	$html .= '<b>'.$lasku->viivastyskorko.' %</b>';
 	$html .= '</TD></TR>';
 
-	$html .= '<TR><TD  class="class10pNB">';
+	$html .= '<TR><TD class="class10pNB">';
 	$html .= '<label>Viitenumero</label><BR>';
-	$html .= '<b class="class50p">'.$lasku->viitenumero.'</b>';
+	$html .= '<b>'.$lasku->viitenumero.'</b>';
 	$html .= '</TD></TR>';
 
 	$html .= '</TABLE>';
@@ -153,22 +157,21 @@ embed {height:100%;width:100%}
 	$html .= '</TR>';
 	$html .= '</TABLE>';
 
-	$html .= '</TD></TR>';
-	$html .= '</TABLE>';
+
 
 
 	$html .= '<BR><BR>';
 
-	$html .= '<TABLE width="650" id="tuote">';
+	$html .= '<TABLE style="width:740px" id="tuote">';
 	$html .= '<TR>';
-	$html .= '<TH style="text-align:left">Tuote</TH>';
-	$html .= '<TH>KPL</TH>';
-	$html .= '<TH>Hinta</TH>';
-	$html .= '<TH>ALV-kanta</TH>';
-	$html .= '<TH>Veroton</TH>';
-	$html .= '<TH>Ale %</TH>';
-	$html .= '<TH>ALV</TH>';
-	$html .= '<TH>Yhteensä</TH>';
+	$html .= '<TH style="text-align:left" style="width:30%">Tuote</TH>';
+	$html .= '<TH style="width:10%">KPL</TH>';
+	$html .= '<TH style="width:10%">Hinta</TH>';
+	$html .= '<TH style="width:10%">ALV%</TH>';
+	$html .= '<TH style="width:10%">Veroton</TH>';
+	$html .= '<TH style="width:10%">Ale %</TH>';
+	$html .= '<TH style="width:12%">ALV</TH>';
+	$html .= '<TH style="width:8%">Yhteensä</TH>';
 	$html .= '</TR>';
 
 
@@ -193,8 +196,7 @@ embed {height:100%;width:100%}
 	$html .= '<TD></TD>';
 	$html .= '</TR>';
 
-   foreach($laskunRivit as $rivit){
-
+   	foreach($laskunRivit as $rivit){
 	if($rivit->ale)
 	$ale = $rivit->ale.' %';
 	else
@@ -205,39 +207,33 @@ embed {height:100%;width:100%}
 	$html .= '<TD>'.$rivit->kpl.'</TD>';
 	$html .= '<TD>'.$rivit->hinta.'</TD>';
 	$html .= '<TD>'.$rivit->alv.' %</TD>';
-	$html .= '<TD>'.$rivit->veroton.'</TD>';
+	$html .= '<TD>'.str_replace(".",",",$rivit->veroton).'</TD>';
 	$html .= '<TD>'.$ale.'</TD>';
-	$html .= '<TD>'.$rivit->hinta_alv.'</TD>';
-	$html .= '<TD>'.$rivit->yhteensa_alv.'</TD>';
+	$html .= '<TD>'.str_replace(".",",",$rivit->hinta_alv).'</TD>';
+	$html .= '<TD>'.str_replace(".",",",$rivit->yhteensa_alv).'</TD>';
 	$html .= '</TR>';
-
-   }
-
+   	}
 	$html .= '</tbody>';	
 	$html .= '</TABLE>';
 
+
+
 	$html .= '<BR><BR>';
 
-	$html .= '<TABLE width="650">';
+	$html .= '<TABLE>';
 	$html .= '<TR>';
-	$html .= '<TD width="400" valign="left">';
-	  $html .= '<TABLE width="100%" class="colapse1">';
+	$html .= '<TD width="550" valign="left">';
+	  $html .= '<TABLE>';
 	  $html .= '<TR><TD align="left">Netto</TD><TD align="left">'.$lasku->yhteensa_total_veroton.' &euro;</TD></TR>';
 	  $html .= '<TR><TD align="left">Vero</TD><TD align="left">'.$lasku->yhteensa_total_verot.' &euro;</TD></TR>';
 	  $html .= '<TR><TD align="left">Brutto</TD><TD align="left">'.$lasku->yhteensa_total.' &euro;</TD></TR>';
 	  $html .= '</TABLE>';
 	$html .= '</TD>';
-	$html .= '<TD  valign="right">';
-	  $html .= '<TABLE width="100%" class="colapse1">';
-	  $html .= '<TR>';
-	  $html .= '<TD align="right">';
-	  $html .= '<H3>Yhteensä<BR>Totalt</H3>';
-	  $html .= '</TD>';
-	  $html .= '<TD align="right">';
-	  $html .= '<H3>'.$lasku->yhteensa_total.' &euro;</H3>';
-	  $html .= '</TD>';
-	  $html .= '</TR>';
-	  $html .= '</TABLE>';
+	$html .= '<TD style="text-align:right">';
+
+	  $html .= '<H3>Yhteensä ';
+	  $html .= $lasku->yhteensa_total.' &euro;</H3>';
+
 	$html .= '</TD>';
 	$html .= '</TR>';
 	$html .= '</TABLE>';
@@ -246,9 +242,18 @@ embed {height:100%;width:100%}
 
 
 
+
+
+
+
+
+
+
+	$html .= '<div style="position:absolute; bottom:10px;">';
+
 	$html .= '<TABLE width="650">';
 	$html .= '<TR>';
-	$html .= '<TD width="400" valign="top">';
+	$html .= '<TD width="390" valign="top">';
 	$html .= '<span>'.$yritys->tyonantaja.'<BR>';
 	$html .= $yritys->osoite.'<BR>';
 	$html .= $yritys->postinumero.' '.$yritys->postitoimipaikka.'</span>';
@@ -266,30 +271,29 @@ embed {height:100%;width:100%}
 
 
 	$html .= '<TABLE>';
-
 	$html .= '<TR>';
-	$html .= '<TD width="10%" height="30" valign="top" align="right" style="padding: 10px; border-top:2px #333 solid; border-bottom:2px #333 solid;border-right:2px #333 solid;">';
+	$html .= '<TD height="30" valign="top" align="right" style="width:60px;padding: 10px; border-top:2px #333 solid; border-bottom:2px #333 solid;border-right:2px #333 solid;">';
 	$html .= '<label>Saajan<BR>tilinumero<BR>Mottagarens<BR>kontonummer</label>';
 	$html .= '</TD>';
 	$html .= '<TD width="40%" valign="middle" style="padding: 10px; border-top:2px #333 solid; border-bottom:2px #333 solid;border-right:2px #333 solid;">';
-	$html .= '<b>'.$yritys->tilinumero.'</b>';
+	$html .= '<b>'.$asetukset->tilinumero.'</b>';
 	$html .= '</TD>';
-	$html .= '<TD width="60%" valign="top" style="border-top:2px #333 solid; border-bottom:2px #333 solid;">';
+	$html .= '<TD valign="top" style="width:350px;border-top:2px #333 solid; border-bottom:2px #333 solid;">';
 
 	$html .= '<TABLE width="100%" class="colapse1">';
 	$html .= '<TR><TD width="50%" height="53" valign="top" style="padding: 0 10px; line-height: 110%;">';
 	$html .= '<label>IBAN</label><BR>';
-	$html .= '<b>'.$yritys->iban.'</b>';
+	$html .= '<b>'.$asetukset->iban.'</b>';
 	$html .= '</TD><TD width="50%" height="53" valign="top" style="padding: 0 10px; line-height: 110%; border-left:2px #333 solid;">';
 	$html .= '<label>BIC</label><BR>';
-	$html .= '<b>'.$yritys->bic.'</b>';
+	$html .= '<b>'.$asetukset->bic.'</b>';
 	$html .= '</TD></TR></TABLE>';
 
 	$html .= '</TD>';
 	$html .= '</TR>';
 //
 	$html .= '<TR>';
-	$html .= '<TD width="10%" height="30" valign="top" align="right" style="padding: 10px; border-bottom:2px #333 solid;border-right:2px #333 solid;">';
+	$html .= '<TD height="30" valign="top" align="right" style="width:60px;padding: 10px; border-bottom:2px #333 solid;border-right:2px #333 solid;">';
 	$html .= '<label>Saaja<BR>Mottagare</label>';
 	$html .= '</TD>';
 	$html .= '<TD width="40%" valign="top" style="padding: 10px; border-bottom:2px #333 solid;border-right:2px #333 solid;">';
@@ -303,7 +307,7 @@ embed {height:100%;width:100%}
 	$html .= '</TR>';
 //
 	$html .= '<TR>';
-	$html .= '<TD width="10%"  height="40" valign="top" align="right" style="padding: 10px;">';
+	$html .= '<TD height="40" valign="top" align="right" style="width:60px;padding: 10px;">';
 	$html .= '<label>Maksaja<BR>Betalare</label>';
 	$html .= '</TD>';
 	$html .= '<TD width="40%" valign="top" style="padding: 10px; border-right:2px #333 solid;">';
@@ -317,7 +321,7 @@ embed {height:100%;width:100%}
 	$html .= '</TR>';
 //
 	$html .= '<TR>';
-	$html .= '<TD width="10%"  height="10" valign="top" align="right" style="padding:0 10px; border-bottom:2px #333 solid;">';
+	$html .= '<TD height="10" valign="top" align="right" style="width:60px;padding:0 10px; border-bottom:2px #333 solid;">';
 	$html .= '<label>Allekirjoitus<BR>Underskrift</label>';
 	$html .= '</TD>';
 	$html .= '<TD width="40%" valign="bottom" style="border-bottom:2px #333 solid;border-right:2px #333 solid;">';
@@ -337,7 +341,7 @@ embed {height:100%;width:100%}
 	$html .= '</TR>';
 //
 	$html .= '<TR>';
-	$html .= '<TD width="10%" valign="middle" align="right" style="padding:0 10px; border-bottom:2px #333 solid; border-right:2px #333 solid;">';
+	$html .= '<TD valign="middle" align="right" style="width:60px;padding:0 10px; border-bottom:2px #333 solid; border-right:2px #333 solid;">';
 	$html .= '<label>Tililtä nro<BR>Från konto nr</label><BR>';
 	$html .= '</TD>';
 	$html .= '<TD width="40%" valign="bottom" style="border-right:2px #333 solid; border-bottom:2px #333 solid;">';
@@ -361,7 +365,7 @@ embed {height:100%;width:100%}
 	$html .= '</div>';
 
 	$html .= '</TD>';
-	$html .= '<TD width="60%" valign="top" style="border-bottom:2px #333 solid;">';
+	$html .= '<TD valign="top" style="width:350px;border-bottom:2px #333 solid;">';
 
 	$html .= '<TABLE width="100%" class="colapse1">';
 	$html .= '<TR><TD width="50" valign="middle" style="padding:7px 10px;">';
@@ -376,6 +380,7 @@ embed {height:100%;width:100%}
 	$html .= '</TD>';
 	$html .= '</TR>';
 	$html .= '</TABLE>';
+	$html .= '</div>';
 
 
 
