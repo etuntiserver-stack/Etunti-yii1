@@ -1,5 +1,5 @@
 <?php
-if(isset($_POST['showLasku'])){
+
 $xml = '<?xml-stylesheet type="text/xsl" href="/../tiedostot/finvoice/Finvoice.xsl"?>
 <Finvoice Version="2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchemainstance"
 xsi:noNamespaceSchemaLocation="/../tiedostot/finvoice/Finvoice.xsd">
@@ -29,8 +29,8 @@ xsi:noNamespaceSchemaLocation="/../tiedostot/finvoice/Finvoice.xsd">
     <SellerWebaddressIdentifier></SellerWebaddressIdentifier>
     <SellerFreeText></SellerFreeText>
     <SellerAccountDetails>
-      <SellerAccountID IdentificationSchemeName="IBAN">'.$yritys['iban'].'</SellerAccountID>
-      <SellerBic IdentificationSchemeName="BIC">'.$yritys['bic'].'</SellerBic>
+      <SellerAccountID IdentificationSchemeName="IBAN">'.$asetukset['iban'].'</SellerAccountID>
+      <SellerBic IdentificationSchemeName="BIC">'.$asetukset['bic'].'</SellerBic>
     </SellerAccountDetails>
   </SellerInformationDetails>
   <BuyerPartyDetails>
@@ -124,6 +124,95 @@ $xml .= '
 <InvoiceUrlText>12345678+102030FK405060708091011121314156</InvoiceUrlText>
 </Finvoice>';
 
+
+
+
+
+$username = "Sivex";
+$password = "Etunti2000";
+$auth_string = $username . ":" . $password;
+
+
+$account_info_url = 'https://postita.fi/api/account_info/';
+$send_url = 'https://postita.fi/api/send/';
+
+/* First initialize curl and set some options. For more information about
+   curl with PHP refer to http://php.net/manual/en/book.curl.php */
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+curl_setopt($ch, CURLOPT_URL, $account_info_url);
+curl_setopt($ch, CURLOPT_USERPWD, $auth_string);
+curl_setopt($ch, CURLOPT_FAILONERROR, 1);
+curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+curl_setopt($ch, CURLOPT_TIMEOUT, 100);
+
+/* Getting account info */
+$account_info = curl_exec($ch);
+$account_info = json_decode($account_info, true);
+print_r($account_info);
+
+
+/* Send PDF */
+/* To send a PDF, you first need to read it and encode it to base64url.
+Check RFC 4648 section 5 for details. */
+function base64url_encode($input) {
+    return strtr(base64_encode($input), '+/', '-_');
+}
+
+$pdf = $xml;
+$pdf_b64 = base64url_encode($pdf);
+
+/* We're creating a POST request out of the pdf and job's name. */
+$data = array('job_name' => 'A letter from PHP curl API', 'pdf' => $pdf_b64);
+curl_setopt($ch, CURLOPT_URL, $send_url);
+curl_setopt($ch, CURLOPT_POST, TRUE);
+curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+curl_setopt($ch, CURLOPT_HTTPHEADER, array('Expect:')); /* lighttpd fix */
+
+/* Send the request and check for errors. */
+$send_response = curl_exec($ch);
+if (curl_errno($ch)) {
+  echo "\n\ncURL error number: " . curl_errno($ch);
+  echo "\n\ncURL error: " . curl_error($ch);
+}
+$send_response = json_decode($send_response, true);
+print_r($send_response);
+
+/* Clean up. */
+curl_close($ch);
+
+
+
+
+/*
+function base64url_encode($input) {
+    return strtr(base64_encode($input), '+/', '-_');
+}
+
+
+$send_finvoice_url = 'https://Sivex:Etunti2000@postita.fi/api/send_finvoice/';
+$pdf = $xml;
+$pdf_b64 = base64url_encode($pdf);
+
+
+$data = array('job_name' => 'A Finvoice letter from PHP API', 'pdf' => $pdf_b64);
+$data = http_build_query($data);
+$opts = array('http' => array(
+ 'method' => 'POST',
+ 'header'=> "Content-type: application/x-www-form-urlencoded\r\n",
+ 'content' => $data
+ )
+);
+
+$send_context = stream_context_create($opts);
+
+*/
+
+
+
+
+
+/*
 $file = "tiedostot/finvoice/report.xml";
 file_put_contents($file, $xml); 
 
@@ -131,22 +220,7 @@ header('Content-type: application/xml');
 header('Content-Disposition: inline; filename="report.xml"');
 @readfile($file);
 	unlink($file);
-}
 
+*/
 
 ?>
-
-<?php if(!isset($_POST['showLasku'])) : ?>
-<legend>
-<h1><?php echo Yii::t('main','FINVOICE'); ?></h1>
-</legend>
-
-<div class="row">
- <div class="col-sm-3">
-   <form action="#" method="POST" target="_blank">
-   <input type="hidden" name="showLasku">
-   <input type="submit" class="btn btn-primary btn-sm" value="<?php echo Yii::t('main','Näytä finvoice'); ?>">
-   </form>
- </div>
-</div>
-<?php endif; ?>

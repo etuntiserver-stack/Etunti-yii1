@@ -6,7 +6,7 @@ if(isset($_POST['num'])){
 ?>
 
      <TR class="kaikkiTR" id="trRivi_<?php echo $num; ?>">
-	<TD><span class="btn btn-sm btn-danger poista" for="poista_<?php echo $num; ?>">X</span></TD>
+	<TD><b class="link text-danger poista" for="poista_<?php echo $num; ?>">X</b></TD>
 	<TD>
 <input type="text" size="1" name="tkoodi[<?php echo $num; ?>]" id="tkoodi_<?php echo $num; ?>" class="for_tkoodi form-control input-sm" value="" data-toggle="collapse"  data-target="#lt_<?php echo $num; ?>">
 	<?php
@@ -125,6 +125,12 @@ function yhteensaTotal(){
 	});
 }
 
+
+  $(".poista").click(function() {
+	var forID = $(this).attr("for").split("_");
+	$("#trRivi_"+forID[1]).remove();
+	yhteensaTotal();
+  });
 
 });
 </script>

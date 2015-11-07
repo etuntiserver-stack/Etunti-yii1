@@ -45,7 +45,7 @@ class FirmanTiedot extends DB2ActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('tyonantaja, osoite, postinumero, postitoimipaikka, puhelin, y_tunnus, sahkoposti, tilinumero, iban, bic, johtaja', 'required'),
+			array('tyonantaja, osoite, postinumero, postitoimipaikka, puhelin, y_tunnus, sahkoposti, johtaja', 'required'),
 			array('tyonantaja, postinumero, postitoimipaikka, y_tunnus', 'length', 'max'=>50),
 			array('osoite, puhelin, sahkoposti, tilinumero, iban, johtaja', 'length', 'max'=>100),
 			array('bic', 'length', 'max'=>20),

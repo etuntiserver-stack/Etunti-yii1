@@ -73,7 +73,6 @@ class LaskuController extends Controller
 		$asetukset=Asetukset::model()->find("id=1");
 		$firmanTiedot=FirmanTiedot::model()->find("id=1");
 
-	if(isset($_POST['showLasku'])){
 
 		$this->renderPartial('finvoice', 
 
@@ -84,19 +83,6 @@ class LaskuController extends Controller
 			'yritys'=>$firmanTiedot,
 
 			));
-
-	} else {
-
-		$this->render('finvoice', 
-
-			array(
-			'lasku'=>$lasku,
-			'asetukset'=>$asetukset,
-			'laskunRivit'=>$laskunRivit,
-			'yritys'=>$firmanTiedot,
-
-			));
-	}
 
 	}
 
@@ -235,7 +221,7 @@ class LaskuController extends Controller
 
 	public function actionEtsisaaja($id)
 	{
-		$a = FirmanTiedot::model()->findbypk($id);
+		$a = Asetukset::model()->findbypk($id);
 		echo $a->iban;
 	}
 
@@ -256,8 +242,11 @@ class LaskuController extends Controller
 		if(isset($k[0]))
 		$kodeOn = 1;
 
+		$erapaiva = '';
+		if(!empty($a->maksuehto))
+		$erapaiva = date("Y-m-d",strtotime("+$a->maksuehto day"));
 
-		echo $a->laskutus_kanava."//".$a->maksuehto."//".$tyyppi."//".$a->osoite."//".$a->postinumero."//".$a->kaupunki."//".$a->yhteyshenkilo."//".$a->puhelin."//".$kodeOn;
+		echo $a->laskutus_kanava."//".$a->maksuehto."//".$tyyppi."//".$a->osoite."//".$a->postinumero."//".$a->kaupunki."//".$a->yhteyshenkilo."//".$a->puhelin."//".$kodeOn."//".$erapaiva;
 	}
 
 
@@ -297,6 +286,7 @@ class LaskuController extends Controller
 	public function actionCreate()
 	{
 
+
 		$model=new Lasku;
 
 		// Uncomment the following line if AJAX validation is needed
@@ -307,7 +297,25 @@ class LaskuController extends Controller
 
 			$model->attributes=$_POST['Lasku'];
 			$model->tilanne=0;
+
+		
+			// Viite
+			function Viitenumero($string) {
+			  $string = strval($string);
+			  $paino = array(7, 3, 1);
+			  $summa = 0;
+			  for($i=strlen($string)-1, $j=0; $i>=0; $i--,$j++){
+			    $summa += (int) $string[$i] * (int) $paino[$j%3];
+			  }
+			  $tarkiste = (10-($summa%10))%10;
+			  return $string.$tarkiste;
+			}
+
+			$model->viitenumero = Viitenumero($model->as_nro."0".$model->id);
+
+
 			if($model->save()){
+
 
 			foreach($_POST['tkoodi'] as $key=>$val)
 			{
@@ -349,6 +357,12 @@ class LaskuController extends Controller
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
+		if(isset($_GET['tilanne']) and $_GET['tilanne'] == '1')
+		{
+			Lasku::model()->updatebypk($id, array('tilanne'=>1));
+			$this->redirect(array('update','id'=>$model->id));
+		}
+
 		if(isset($_POST['Lasku']))
 		{
 			$model->attributes=$_POST['Lasku'];
@@ -356,6 +370,9 @@ class LaskuController extends Controller
 
 			LaskunRivit::model()->deleteAll("lid='".$id."'");
 
+
+		if(isset($_POST['tkoodi']))
+		{
 			foreach($_POST['tkoodi'] as $key=>$val)
 			{
 				$lr = new LaskunRivit;
@@ -373,8 +390,11 @@ class LaskuController extends Controller
 				$lr->yhteensa_alv=$_POST['yhteensa_alv'][$key];
 				$lr->save();
 			}
+		}
 
-				$this->redirect(array('lasku/admin'));
+
+
+				$this->redirect(array('update','id'=>$model->id));
 			}
 		}
 
