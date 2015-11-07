@@ -41,7 +41,7 @@ echo '<input type="hidden" id="forTilanne" value="'.$model->tilanne.'">';
 $firma = Asetukset::model()->findbypk(1);
 $model->yid = $firma->id;
 $model->saaja_iban = $firma->iban;
-
+$model->viivastyskorko = $firma->viivastyskorko;
 
 ?>
 
