@@ -384,7 +384,7 @@ curl_close($ch);
 
 
   $id = $_GET['id'];
-  if(isset($send_response[0]) and $send_response['status'] == 'CO'){
+  if($send_response['status'] == 'CO'){
 
 
   foreach($send_response as $k => $v ) {
