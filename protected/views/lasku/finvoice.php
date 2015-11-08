@@ -162,32 +162,49 @@ function base64url_encode($input) {
 }
 
 
-/* Send finvoice example */
-$send_finvoice_url = 'https://Sivex:Etunti2000@postita.fi/api/send_finvoice/';
-$pdf = $xml;
+		$asetukset=Asetukset::model()->find("id=1");
+		$firmanTiedot=FirmanTiedot::model()->find("id=1");
+	          $html2pdf = Yii::app()->ePdf->HTML2PDF('P', 'A4', 'en');
+		  $html2pdf->setDefaultFont('Arial');
+	          $pdf = $html2pdf->WriteHTML($this->renderPartial('lasku_pdf', 
+			array(
+			'lasku'=>$lasku,
+			'asetukset'=>$asetukset,
+			'laskunRivit'=>$laskunRivit,
+			'yritys'=>$firmanTiedot,
+			),true));
+	           $content_PDF = $html2pdf->Output('my_doc.pdf', EYiiPdf::OUTPUT_TO_STRING);
+
+
+$pdf = $content_PDF;
 $pdf_b64 = base64url_encode($pdf);
 
 /* We're creating a POST request out of the pdf and job's name. */
-$data = array('job_name' => 'A Finvoice letter from PHP API', 'pdf' => $pdf_b64);
-$data = http_build_query($data);
-$opts = array('http' => array(
- 'method' => 'POST',
- 'header'=> "Content-type: application/x-www-form-urlencoded\r\n",
- 'content' => $data
- )
-);
+$data = array('job_name' => 'A letter from PHP curl API', 'pdf' => $pdf_b64);
+curl_setopt($ch, CURLOPT_URL, $send_url);
+curl_setopt($ch, CURLOPT_POST, TRUE);
+curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+curl_setopt($ch, CURLOPT_HTTPHEADER, array('Expect:')); /* lighttpd fix */
 
-/* We need to create a new stream context using the request we made. */
-$send_context = stream_context_create($opts);
-
-/* Now we can just send the request. */
-$fp = fopen($send_finvoice_url, 'rb', false, $send_context);
-$job_info = stream_get_contents($fp);
-$job_info = json_decode($job_info, true);
+/* Send the request and check for errors. */
+$send_response = curl_exec($ch);
+if (curl_errno($ch)) {
+  echo "\n\ncURL error number: " . curl_errno($ch);
+  echo "\n\ncURL error: " . curl_error($ch);
+}
+$send_response = json_decode($send_response, true);
 
 echo '<pre>';
-print_r($job_info);
+print_r($send_response);
 echo '</pre>';
+
+
+/* Clean up. */
+curl_close($ch);
+
+
+
+
 
 
 
