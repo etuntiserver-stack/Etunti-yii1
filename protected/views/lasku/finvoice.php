@@ -162,19 +162,22 @@ function base64url_encode($input) {
 }
 
 
-		$asetukset=Asetukset::model()->find("id=1");
-		$firmanTiedot=FirmanTiedot::model()->find("id=1");
-	          $html2pdf = Yii::app()->ePdf->HTML2PDF('P', 'A4', 'en');
-		  $html2pdf->setDefaultFont('Arial');
-	          $pdf = $html2pdf->WriteHTML($this->renderPartial('lasku_pdf', 
+  $asetukset=Asetukset::model()->find("id=1");
+  $firmanTiedot=FirmanTiedot::model()->find("id=1");
+
+  $html2pdf = Yii::app()->ePdf->HTML2PDF('P', 'A4', 'en');
+  $html2pdf->setDefaultFont('Arial');
+  $html2pdf->WriteHTML($this->renderPartial('lasku_pdf', 
 			array(
 			'lasku'=>$lasku,
 			'asetukset'=>$asetukset,
 			'laskunRivit'=>$laskunRivit,
 			'yritys'=>$firmanTiedot,
 			),true));
-	           $content_PDF = $html2pdf->Output('my_doc.pdf', EYiiPdf::OUTPUT_TO_STRING);
 
+
+  //$content_PDF = $html2pdf->Output('my_doc.pdf', EYiiPdf::OUTPUT_TO_STRING);
+  $content_PDF = $xml;
 
 $pdf = $content_PDF;
 $pdf_b64 = base64url_encode($pdf);
