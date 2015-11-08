@@ -1,5 +1,4 @@
 <?php
-header('Content-type: application/json');
 
 $xml = '<?xml-stylesheet type="text/xsl" href="/../tiedostot/finvoice/Finvoice.xsl"?>
 <Finvoice Version="2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchemainstance"
@@ -168,10 +167,12 @@ $pdf_b64 = base64url_encode($pdf);
 /* We're creating a POST request out of the pdf and job's name. */
 $data = array('job_name' => 'A letter from PHP curl API', 'pdf' => $pdf_b64);
 
+$headers= array('Accept: application/json','Content-Type: application/json');
+
 curl_setopt($ch, CURLOPT_URL, $send_url);
 curl_setopt($ch, CURLOPT_POST, TRUE);
 curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-curl_setopt($ch, CURLOPT_HTTPHEADER, array('Expect:')); /* lighttpd fix */
+curl_setopt($ch, CURLOPT_HTTPHEADER, $headers); /* lighttpd fix */
 
 /* Send the request and check for errors. */
 $send_response = curl_exec($ch);
