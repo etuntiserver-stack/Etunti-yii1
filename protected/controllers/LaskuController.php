@@ -74,7 +74,7 @@ class LaskuController extends Controller
 		$firmanTiedot=FirmanTiedot::model()->find("id=1");
 
 
-		$this->render('finvoice', 
+		$this->renderPartial('finvoice', 
 
 			array(
 			'lasku'=>$lasku,
