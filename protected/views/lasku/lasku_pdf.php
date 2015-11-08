@@ -7,7 +7,7 @@
   } elseif( $lasku->laskun_nimetys == 'muistutuslasku' ){
 	$laskunNimetus = 'Muistutuslasku';
   } else {
-	$laskunNimetus = 'Lasku';
+	$laskunNimetus = 'LASKU';
   }
 
 
@@ -47,9 +47,9 @@ $html = '<style>
 html,body { 
   width: 100%; height: 100%;
   border:1px #333 solid;
-  padding: 4;
-  margin:4px;
-  //font-family: DejaVu Sans, sans-serif; font-size: 10pt;
+  //padding: 4;
+  //margin:4px;
+  font-family: DejaVu Sans, sans-serif; font-size: 10pt;
   color: #333;
   background: #ffffff;
   line-height: 85%;
@@ -84,7 +84,7 @@ TD #tuote TD{
   padding: 2px 10px;
 }
 H3{ line-height: 110% }
-.asiakasKirje{ line-height: 150%; }
+.asiakasKirje{ line-height: 120%; }
 embed {height:100%;width:100%}
 .yritysta TD { padding: 5px 20px; line-height: 100%; }
 .yritysta { 
@@ -94,10 +94,10 @@ embed {height:100%;width:100%}
 </style>';
 
 
-	$html .= '<TABLE style="width:740px">';
+	$html .= '<TABLE style="border-collapse: collapse; width:740px; height:30px;">';
 	$html .= '<TR>';
-	$html .= '<TD  style="padding: 10px;width:260px"><img src="'.$asetukset->logon_polkku.'" height="'.$asetukset->logon_korkeus.'"></TD>';
-	$html .= '<TD  style="padding: 10px;"><h1>'.$laskunNimetus.'</h1></TD>';
+	$html .= '<TD  style="width:320px; height:30px;"><img src="'.$asetukset->logon_polkku.'" height="30"></TD>';
+	$html .= '<TD  style="height:30px;"><b>'.$laskunNimetus.'</b></TD>';
 	$html .= '</TR>';
 	$html .= '</TABLE>';
 
@@ -106,20 +106,19 @@ embed {height:100%;width:100%}
 
 
 
-	$html .= '<TABLE style="width:740px">';
+	$html .= '<TABLE style="border-collapse: collapse;width:740px">';
 	$html .= '<TR>';
-	$html .= '<TD height="1" valign="top" 
+	$html .= '<TD valign="top" 
 			style="width:500px;border-top:1px #333 solid;
 			border-bottom:1px #333 solid;border-right:1px #333 solid;">';
 
-	$html .= '<div style="padding:10px 20px">';
-	$html .= '<BR>';
-	$html .= '<H3 class="asiakasKirje">';
+	$html .= '<div style="padding:0 0 0 70px">';
+	$html .= '<H4 class="asiakasKirje">';
 
 	$html .= $nimi.'<BR>';
 	$html .= $osoite.'<BR>';
 	$html .= $postinumero.' '.$toimipaikka;
-	$html .= '</H3>';
+	$html .= '</H4>';
 	$html .= '</div>';
 	$html .= '</TD>';
 
