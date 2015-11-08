@@ -476,7 +476,7 @@ $model->viivastyskorko = $firma->viivastyskorko;
 		<a href="lasku_pdf?id=<?php echo $model->id; ?>" target="_blank" class="btn btn-sm btn-default btn-group"><?php echo Yii::t('main','Esikatselu'); ?></a>
 
 		<?php if(isset($model->id) and $model->tilanne == '1') : ?>
-		<a href="finvoice?id=<?php echo $model->id; ?>&finvoice=true" target="_blank" class="btn btn-sm btn-success btn-group"><?php echo Yii::t('main','Lähetä Finvoice'); ?></a>
+		<a href="finvoice?id=<?php echo $model->id; ?>&finvoice=true" class="btn btn-sm btn-success btn-group"><?php echo Yii::t('main','Lähetä Finvoice'); ?></a>
 		<?php endif; ?>
 
 		<?php if(isset($model->id) and $model->tilanne != '1' and $model->tilanne != '2') : ?>

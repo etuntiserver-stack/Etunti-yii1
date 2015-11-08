@@ -236,6 +236,14 @@ curl_setopt($ch, CURLOPT_TIMEOUT, 100);
 $account_info = curl_exec($ch);
 $account_info = json_decode($account_info, true);
 
+    $prep = array();
+  foreach($account_info as $k => $v ) {
+    $prep[$k] = $k.":".$v;
+  }
+
+  Lasku::model()->updatebypk($id, array('response_finvoice'=>implode('//',$prep)));
+  $this->redirect(array('update','id'=>$id));
+  }
 
 echo '<pre>';
 print_r($account_info);
@@ -265,6 +273,16 @@ print_r($send_response);
 echo '</pre>';
 
 curl_close($ch);
+
+
+
+  foreach($send_response as $k => $v ) {
+    $prep[$k] = $k.":".$v;
+  }
+
+  Lasku::model()->updatebypk($id, array('response_finvoice'=>implode('//',$prep)));
+  $this->redirect(array('update','id'=>$id));
+  }
 
 
 /*
