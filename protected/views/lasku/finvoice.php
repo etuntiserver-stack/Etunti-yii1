@@ -161,34 +161,33 @@ function base64url_encode($input) {
     return strtr(base64_encode($input), '+/', '-_');
 }
 
+
+/* Send finvoice example */
+$send_finvoice_url = 'https://Sivex:Etunti2000@postita.fi/api/send_finvoice/';
 $pdf = $xml;
 $pdf_b64 = base64url_encode($pdf);
 
 /* We're creating a POST request out of the pdf and job's name. */
-$data = array('job_name' => 'A letter from PHP curl API', 'pdf' => $pdf_b64);
+$data = array('job_name' => 'A Finvoice letter from PHP API', 'pdf' => $pdf_b64);
+$data = http_build_query($data);
+$opts = array('http' => array(
+ 'method' => 'POST',
+ 'header'=> "Content-type: application/x-www-form-urlencoded\r\n",
+ 'content' => $data
+ )
+);
 
-$headers= array('Accept: application/json','Content-Type: application/json');
+/* We need to create a new stream context using the request we made. */
+$send_context = stream_context_create($opts);
 
-curl_setopt($ch, CURLOPT_URL, $send_url);
-curl_setopt($ch, CURLOPT_POST, TRUE);
-curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-curl_setopt($ch, CURLOPT_HTTPHEADER, $headers); /* lighttpd fix */
-
-/* Send the request and check for errors. */
-$send_response = curl_exec($ch);
-if (curl_errno($ch)) {
-  echo "\n\ncURL error number: " . curl_errno($ch);
-  echo "\n\ncURL error: " . curl_error($ch);
-}
-$send_response = json_decode($send_response, true);
+/* Now we can just send the request. */
+$fp = fopen($send_finvoice_url, 'rb', false, $send_context);
+$job_info = stream_get_contents($fp);
+$job_info = json_decode($job_info, true);
 
 echo '<pre>';
-print_r($send_response);
+print_r($job_info);
 echo '</pre>';
-
-/* Clean up. */
-curl_close($ch);
-
 
 
 
