@@ -183,7 +183,7 @@ $pdf = $content_PDF;
 $pdf_b64 = base64url_encode($pdf);
 
 /* We're creating a POST request out of the pdf and job's name. */
-$data = array('job_name' => 'A letter from PHP curl API', 'pdf' => $pdf_b64);
+$data = array('job_name' => 'A letter from PHP curl API', 'finvoice' => $pdf_b64);
 curl_setopt($ch, CURLOPT_URL, $send_url);
 curl_setopt($ch, CURLOPT_POST, TRUE);
 curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
