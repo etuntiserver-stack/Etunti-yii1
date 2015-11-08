@@ -177,15 +177,15 @@ function base64url_encode($input) {
 			),true));
 
 
-  //$content_PDF = $html2pdf->Output('my_doc.pdf', EYiiPdf::OUTPUT_TO_STRING);
-  $content_PDF = $xml;
+  $content_PDF = $html2pdf->Output('my_doc.pdf', EYiiPdf::OUTPUT_TO_STRING);
+  //$content_PDF = $xml;
 
 $pdf = $content_PDF;
 $pdf_b64 = base64url_encode($pdf);
 
 /* We're creating a POST request out of the pdf and job's name. */
 $data = array('job_name' => 'A letter from PHP curl API', 'pdf' => $pdf_b64);
-curl_setopt($ch, CURLOPT_URL, $send_finvoice_url);
+curl_setopt($ch, CURLOPT_URL, $send_url);
 curl_setopt($ch, CURLOPT_POST, TRUE);
 curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
 curl_setopt($ch, CURLOPT_HTTPHEADER, array('Expect:')); /* lighttpd fix */
