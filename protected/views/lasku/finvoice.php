@@ -177,8 +177,8 @@ function base64url_encode($input) {
 			),true));
 
 
-  $content_PDF = $html2pdf->Output('my_doc.pdf', EYiiPdf::OUTPUT_TO_STRING);
-  //$content_PDF = $xml;
+  //$content_PDF = $html2pdf->Output('my_doc.pdf', EYiiPdf::OUTPUT_TO_STRING);
+  $content_PDF = $xml;
 
 $pdf = $content_PDF;
 $pdf_b64 = base64url_encode($pdf);
