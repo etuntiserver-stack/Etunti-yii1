@@ -213,9 +213,6 @@ $xml .= '<EpiDetails>
 
 
 
-$file = "tiedostot/finvoice/report.xml";
-file_put_contents($file, $xml); 
-
 
 $username = "Sivex";
 $password = "Etunti2000";
@@ -286,6 +283,11 @@ curl_close($ch);
 */
 
 /*
+
+$file = "tiedostot/finvoice/report.xml";
+file_put_contents($file, $xml); 
+
+
 header('Content-type: application/xml');
 header('Content-Disposition: inline; filename="report.xml"');
 @readfile($file);
