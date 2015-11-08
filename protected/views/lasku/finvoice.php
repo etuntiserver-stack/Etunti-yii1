@@ -282,7 +282,7 @@ curl_close($ch);
 
   Lasku::model()->updatebypk($id, array('response_finvoice'=>implode('//',$prep)));
   $this->redirect(array('update','id'=>$id));
-  }
+
 
 
 /*
