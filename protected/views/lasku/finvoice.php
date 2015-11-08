@@ -363,7 +363,7 @@ print_r($account_info);
 echo '</pre>';
 
 
-$pdf = $file;
+$pdf = $xml;
 $pdf_b64 = base64url_encode($pdf);
 
 
