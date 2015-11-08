@@ -496,9 +496,10 @@ $model->viivastyskorko = $firma->viivastyskorko;
 <?php $this->endWidget(); ?>
 
 
-<?php if(isset($model->id) and $model->response != '') : ?>
 <br>
-<div class="row well">
+<div class="row">
+<?php if(isset($model->id) and $model->response != '') : ?>
+  <div class="col-sm-6 well">
 	<?php 
 	$expl = explode("//",$model->response);
 	foreach($expl as $e)
@@ -506,9 +507,20 @@ $model->viivastyskorko = $firma->viivastyskorko;
 	echo $e.'<br>'; 
 	}
 	?>
-</div>
+  </div>
 <?php endif; ?>
-
+<?php if(isset($model->id) and $model->response_finvoice != '') : ?>
+  <div class="col-sm-6 well">
+	<?php 
+	$expl = explode("//",$model->response_finvoice);
+	foreach($expl as $e)
+	{
+	echo $e.'<br>'; 
+	}
+	?>
+  </div>
+<?php endif; ?>
+</div>
 
 <script type="text/javascript">
 $(document).ready(function(){

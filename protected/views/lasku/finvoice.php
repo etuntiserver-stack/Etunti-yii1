@@ -4,6 +4,8 @@ function base64url_encode($input) {
     return strtr(base64_encode($input), '+/', '-_');
 }
 
+  $id = $_GET['id'];
+
 if(isset($_GET['finvoice'])){
 
 if($lasku['tyyppi'] == 'yritys')
@@ -401,7 +403,7 @@ curl_close($ch);
 
 
 
-  $id = $_GET['id'];
+
   if($send_response['status'] == 'CO'){
 
 
