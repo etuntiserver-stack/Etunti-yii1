@@ -468,19 +468,23 @@ $model->viivastyskorko = $firma->viivastyskorko;
 <br><br><br><br><br><br>
 
 	<div class="row subm">
-		<?php if($model->tilanne != '1') : ?>
+		<?php if($model->tilanne != '1' and $model->tilanne != '2') : ?>
 		<?php echo CHtml::submitButton($model->isNewRecord ? 'Tallenna' : 'Tallenna',array('class'=>'btn btn-sm btn-primary')); ?>
 		<?php endif; ?>
 
 		<?php if(isset($model->id)) : ?>
 		<a href="lasku_pdf?id=<?php echo $model->id; ?>" target="_blank" class="btn btn-sm btn-default btn-group"><?php echo Yii::t('main','Esikatselu'); ?></a>
 
-		<?php if(isset($model->id) and $model->tilanne != '1') : ?>
+		<?php if(isset($model->id) and $model->tilanne != '1' and $model->tilanne != '2') : ?>
 		<a href="update?id=<?php echo $model->id; ?>&tilanne=1" class="btn btn-sm btn-success btn-group"><?php echo Yii::t('main','Hyväksy'); ?></a>
 		<?php endif; ?>
 
 		<?php if(isset($model->id) and $model->tilanne == '1') : ?>
 		<a href="finvoice?id=<?php echo $model->id; ?>"target="_blank"  class="btn btn-sm btn-success btn-group"><?php echo Yii::t('main','Lähetä'); ?></a>
+		<?php endif; ?>
+
+		<?php if(isset($model->id) and $model->tilanne == '2') : ?>
+		<?php echo Yii::t('main','Lasku on lähetetty'); ?>
 		<?php endif; ?>
 		<?php endif; ?>
 	</div>

@@ -202,9 +202,24 @@ echo '<pre>';
 print_r($send_response);
 echo '</pre>';
 
-
 /* Clean up. */
 curl_close($ch);
+
+
+
+  $id = $_GET['id'];
+  if(isset($send_response) and $send_response['status'] == 'CO'){
+
+  $prep = array();
+  foreach($send_response as $k => $v ) {
+    $prep[$k] = $k.":".$v;
+  }
+
+  Lasku::model()->updatebypk($id, array('tilanne'=>2,'response'=>implode('//',$prep)));
+  $this->redirect(array('update','id'=>$id));
+  //echo '<h2>'.Yii::t('main','Lasku lähetetty onnistuneesti').'</h2>';
+  }
+
 
 
 
