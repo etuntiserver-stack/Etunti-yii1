@@ -480,7 +480,7 @@ $model->viivastyskorko = $firma->viivastyskorko;
 		<?php endif; ?>
 
 		<?php if(isset($model->id) and $model->tilanne == '1') : ?>
-		<a href="finvoice?id=<?php echo $model->id; ?>"target="_blank"  class="btn btn-sm btn-success btn-group"><?php echo Yii::t('main','Lähetä'); ?></a>
+		<a href="finvoice?id=<?php echo $model->id; ?>" class="btn btn-sm btn-success btn-group"><?php echo Yii::t('main','Lähetä'); ?></a>
 		<?php endif; ?>
 
 		<?php if(isset($model->id) and $model->tilanne == '2') : ?>
@@ -492,14 +492,24 @@ $model->viivastyskorko = $firma->viivastyskorko;
 <?php $this->endWidget(); ?>
 
 
-
-
+<?php if(isset($model->id) and $model->response != '') : ?>
+<br>
+<div class="row well">
+	<?php 
+	$expl = explode("//",$model->response);
+	foreach($expl as $e)
+	{
+	echo $e.'<br>'; 
+	}
+	?>
+</div>
+<?php endif; ?>
 
 
 <script type="text/javascript">
 $(document).ready(function(){
 
-if($("#forTilanne").val() == '1'){
+if(($("#forTilanne").val() == '1') | ($("#forTilanne").val() == '2')){
   $("input").prop("disabled", true);
   $("select").prop("disabled", true);
   $(".poista").remove();

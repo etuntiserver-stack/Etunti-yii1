@@ -151,6 +151,11 @@ curl_setopt($ch, CURLOPT_TIMEOUT, 100);
 $account_info = curl_exec($ch);
 $account_info = json_decode($account_info, true);
 
+  $prep = array();
+  foreach($account_info as $k => $v ) {
+    $prep[$k] = $k.":".$v;
+  }
+
 echo '<pre>';
 print_r($account_info);
 echo '</pre>';
@@ -210,7 +215,7 @@ curl_close($ch);
   $id = $_GET['id'];
   if(isset($send_response) and $send_response['status'] == 'CO'){
 
-  $prep = array();
+
   foreach($send_response as $k => $v ) {
     $prep[$k] = $k.":".$v;
   }
