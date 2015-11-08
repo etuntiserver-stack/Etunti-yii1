@@ -149,8 +149,10 @@ curl_setopt($ch, CURLOPT_TIMEOUT, 100);
 /* Getting account info */
 $account_info = curl_exec($ch);
 $account_info = json_decode($account_info, true);
-print_r($account_info);
 
+echo '<pre>';
+print_r($account_info);
+echo '</pre>';
 
 /* Send PDF */
 /* To send a PDF, you first need to read it and encode it to base64url.
@@ -176,7 +178,10 @@ if (curl_errno($ch)) {
   echo "\n\ncURL error: " . curl_error($ch);
 }
 $send_response = json_decode($send_response, true);
+
+echo '<pre>';
 print_r($send_response);
+echo '</pre>';
 
 /* Clean up. */
 curl_close($ch);
