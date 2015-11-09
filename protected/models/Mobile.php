@@ -133,7 +133,7 @@ public $tkohde_kannasta;
 
 		$criteria=new CDbCriteria;
 	    	$criteria->order = " 
-		DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s') 
+		DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i') 
 		AND status IN (1,2,10)
 		AND loppui='' DESC, id DESC ";
 
