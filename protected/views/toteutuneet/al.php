@@ -17,7 +17,7 @@
   if(empty($loppui))
   {
 
-    echo 'lopun ajan puutuu<br>';
+    echo 'loppuaika puutuu<br>';
 
   } else {
 

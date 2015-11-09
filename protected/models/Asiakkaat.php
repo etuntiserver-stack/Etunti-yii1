@@ -48,7 +48,7 @@ class Asiakkaat extends DB2ActiveRecord
 			//array('etunimi, sukunimi, osoite, kaupunki, postinumero, puhelin, sahkoposti, ryhma, aktiivinen', 'required'),
 			array('ryhma, aktiivinen', 'numerical', 'integerOnly'=>true),
 			array('postinumero, yhteyshenkilo, yrityksen_nimi, y_tunnus, kaupunki, puhelin, sahkoposti', 'length', 'max'=>100),
-			array('tyyppi, laskutus_kanava, osoite', 'length', 'max'=>255),
+			array('tyyppi, laskutus_kanava, osoite, verkkolaskuosoite', 'length', 'max'=>255),
 			array('maksuehto', 'length', 'max'=>20),
 			array('asiakasnumero, ovt_tunnus, valittajan_tunnus', 'length', 'max'=>100),
 			// The following rule is used by search().
@@ -92,6 +92,7 @@ class Asiakkaat extends DB2ActiveRecord
 			'tyyppi' => 'Asiakastyyppi',
 			'ovt_tunnus' => 'Yrityksen OVT-tunnus',
 			'valittajan_tunnus' => 'Operaattorin välittäjän tunnus',
+			'verkkolaskuosoite' => 'Verkkolaskuosoite',
 		);
 	}
 
@@ -125,6 +126,7 @@ class Asiakkaat extends DB2ActiveRecord
 		$criteria->compare('tyyppi',$this->tyyppi);
 		$criteria->compare('ovt_tunnus',$this->ovt_tunnus,true);
 		$criteria->compare('valittajan_tunnus',$this->valittajan_tunnus,true);
+		$criteria->compare('verkkolaskuosoite',$this->verkkolaskuosoite,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
