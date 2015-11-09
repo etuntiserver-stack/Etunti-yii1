@@ -50,10 +50,10 @@ class Asiakkaat extends DB2ActiveRecord
 			array('postinumero, yhteyshenkilo, yrityksen_nimi, y_tunnus, kaupunki, puhelin, sahkoposti', 'length', 'max'=>100),
 			array('tyyppi, laskutus_kanava, osoite', 'length', 'max'=>255),
 			array('maksuehto', 'length', 'max'=>20),
-			array('asiakasnumero', 'length', 'max'=>100),
+			array('asiakasnumero, ovt_tunnus, valittajan_tunnus', 'length', 'max'=>100),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, time, etunimi, sukunimi, osoite, kaupunki, postinumero, puhelin, sahkoposti, ryhma, aktiivinen, laskutus_kanava,maksuehto, tyyppi, asiakasnumero', 'safe', 'on'=>'search'),
+			array('id, time, etunimi, sukunimi, osoite, kaupunki, postinumero, puhelin, sahkoposti, ryhma, aktiivinen, laskutus_kanava,maksuehto, tyyppi, asiakasnumero, ovt_tunnus, valittajan_tunnus', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -90,6 +90,8 @@ class Asiakkaat extends DB2ActiveRecord
 			'laskutus_kanava' => 'Laskutus kanava',
 			'maksuehto' => 'Maksuehto',
 			'tyyppi' => 'Asiakastyyppi',
+			'ovt_tunnus' => 'Yrityksen OVT-tunnus',
+			'valittajan_tunnus' => 'Operaattorin välittäjän tunnus',
 		);
 	}
 
@@ -121,6 +123,8 @@ class Asiakkaat extends DB2ActiveRecord
 		$criteria->compare('laskutus_kanava',$this->laskutus_kanava);
 		$criteria->compare('maksuehto',$this->maksuehto);
 		$criteria->compare('tyyppi',$this->tyyppi);
+		$criteria->compare('ovt_tunnus',$this->ovt_tunnus,true);
+		$criteria->compare('valittajan_tunnus',$this->valittajan_tunnus,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

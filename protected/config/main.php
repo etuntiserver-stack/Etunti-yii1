@@ -52,7 +52,7 @@ Yii::setPathOfAlias('chartjs', dirname(__FILE__).'/../extensions/yii-chartjs');
   if(isset($_SESSION['domain']))
   $db2 = $_SESSION['domain'];
 
-  $db2_host = 'localhost';
+  $db2_host = '127.0.0.1';
   $db2_user = 'root';
   $db2_pass = '';
 

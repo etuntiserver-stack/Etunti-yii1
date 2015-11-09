@@ -135,6 +135,18 @@
 	</div>
 
 	<div class="row">
+		<?php echo $form->labelEx($model,'ovt_tunnus'); ?>
+		<?php echo $form->textField($model,'ovt_tunnus',array('class'=>'form-control input-sm')); ?>
+		<?php echo $form->error($model,'ovt_tunnus'); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->labelEx($model,'valittajan_tunnus'); ?>
+		<?php echo $form->textField($model,'valittajan_tunnus',array('class'=>'form-control input-sm')); ?>
+		<?php echo $form->error($model,'valittajan_tunnus'); ?>
+	</div>
+
+	<div class="row">
 		<?php echo $form->labelEx($model,'maksuehto'); ?>
 		<?php echo $form->textField($model,'maksuehto',array('size'=>60,'maxlength'=>100,'class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'maksuehto'); ?>
