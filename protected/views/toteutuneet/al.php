@@ -14,6 +14,12 @@
   $idKid = $explStr['8'];
   $ashyv = $explStr['9'];
 
+  if(empty($loppui))
+  {
+
+    echo 'lopun ajan puutuu<br>';
+
+  } else {
 
 	$asiakas_hyvaksy = '';
   if(isset($ashyv) and !empty($ashyv)){
@@ -71,4 +77,5 @@
 		'.$asiakas_hyvaksy.'
 	   </div>';
 
+  } // if empty loppui
 ?>
