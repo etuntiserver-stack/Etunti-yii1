@@ -525,11 +525,47 @@ $model->viivastyskorko = $firma->viivastyskorko;
 <script type="text/javascript">
 $(document).ready(function(){
 
+
+$("#lasku-form").on('submit',function(e) {
+
+    var checkAll = true;
+
+    $('table#TableRivit .for_tkoodi').each(function() {
+	var tkoodi =  $(this).val();
+
+	if(tkoodi == '')
+	{	
+	    $(this).css({"border" : "2px #f14010 solid"}).focus();
+	    checkAll = false;
+	}
+    });
+
+	if(checkAll == false)
+	    return false;
+	else
+	    return true;
+});
+
 if(($("#forTilanne").val() == '1') | ($("#forTilanne").val() == '2')){
   $("input").prop("disabled", true);
   $("select").prop("disabled", true);
   $(".poista").remove();
   $("#uusiRivi").remove();
+}
+
+if($("#modelID").val() != '1'){
+    var rivi = $("#samaRivi").html();
+    var rowCount = $('table#TableRivit tbody tr').length;
+
+        $.ajax({
+           url: location.protocol + "//" + location.host + '/index.php/lasku/tr_rivit_tyhja',
+           type: "POST",
+           data: {num : rowCount},
+           success: function(html){
+         	$("table#TableRivit tbody tr").last().after(html);
+	  	Rivi();
+           }
+        });
 }
 
 $("#uusiRivi").click(function() {
@@ -545,7 +581,6 @@ $("#uusiRivi").click(function() {
 	  	Rivi();
            }
         });
-
 });
 
 
@@ -688,7 +723,7 @@ $(".hae").click(function() {
 	} else {
 	    $("#kohteistaRivit").val(kohteet);
 
-	    $("table#TableRivit tbody .kaikkiTR").remove();
+	    //$("table#TableRivit tbody .kaikkiTR").remove();
 
 	    $.each(kohteet, function( index, value ) {
 	        $.ajax({
