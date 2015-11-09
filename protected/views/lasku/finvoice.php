@@ -28,7 +28,7 @@ $xml = '<?xml version="1.0" encoding="ISO-8859-15"?>
 <SellerPartyDetails>
 <SellerPartyIdentifier>'.$yritys['y_tunnus'].'</SellerPartyIdentifier>
 <SellerOrganisationName>'.$yritys['tyonantaja'].'</SellerOrganisationName>
-<SellerOrganisationTaxCode></SellerOrganisationTaxCode>
+<SellerOrganisationTaxCode>'.$yritys['y_tunnus'].'</SellerOrganisationTaxCode>
 <SellerOrganisationTaxCodeUrlText>http://etunti.fi</SellerOrganisationTaxCodeUrlText>
 <SellerPostalAddressDetails>
 <SellerStreetName>'.$yritys['osoite'].'</SellerStreetName>
@@ -44,7 +44,7 @@ $xml = '<?xml version="1.0" encoding="ISO-8859-15"?>
 <SellerHomeTownName>'.$yritys['postitoimipaikka'].'</SellerHomeTownName>
 <SellerPhoneNumber>'.$yritys['puhelin'].'</SellerPhoneNumber>
 <SellerFaxNumber></SellerFaxNumber>
-<SellerCommonEmailaddressIdentifier></SellerCommonEmailaddressIdentifier>
+<SellerCommonEmailaddressIdentifier>'.$yritys['sahkoposti'].'</SellerCommonEmailaddressIdentifier>
 <SellerWebaddressIdentifier></SellerWebaddressIdentifier>
 <SellerFreeText></SellerFreeText>
 <SellerAccountDetails>

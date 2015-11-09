@@ -141,6 +141,12 @@
 	</div>
 
 	<div class="row">
+		<?php echo $form->labelEx($model,'verkkolaskuosoite'); ?>
+		<?php echo $form->textField($model,'verkkolaskuosoite',array('class'=>'form-control input-sm')); ?>
+		<?php echo $form->error($model,'verkkolaskuosoite'); ?>
+	</div>
+
+	<div class="row">
 		<?php echo $form->labelEx($model,'valittajan_tunnus'); ?>
 		<?php echo $form->textField($model,'valittajan_tunnus',array('class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'valittajan_tunnus'); ?>
