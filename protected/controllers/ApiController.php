@@ -541,8 +541,19 @@ public function actionImei($dom)
 	    }
 
 
+	    $criteria = new CDbCriteria();
+	    $criteria->order = " 
+		DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s') 
+		AND status IN (1,2,10)
+		AND loppui='' DESC, id DESC ";
+	    $criteria->condition = " 
+		tid = '".$ttekija->id."' 
+		and loppui='' 
+		AND status IN (1,2,10)
+	    ";
 
-            $mob = Mob::model()->find(" tid = '".$ttekija->id."' and loppui='' order by id DESC ");
+            //$mob = Mob::model()->find(" tid = '".$ttekija->id."' and loppui='' order by id DESC ");
+            $mob = Mob::model()->find($criteria);
 
 	    if(isset($mob->id)){
 
