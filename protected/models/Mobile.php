@@ -132,7 +132,10 @@ public $tkohde_kannasta;
 		// should not be searched.
 
 		$criteria=new CDbCriteria;
-		$criteria->order = 't.id DESC';
+	    	$criteria->order = " 
+		DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s') 
+		AND status IN (1,2,10)
+		AND loppui='' DESC, id DESC ";
 
 
 		$criteria->compare('id',$this->id);
