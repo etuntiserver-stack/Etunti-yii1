@@ -364,8 +364,6 @@ function num($val){
 			$k = Kohteet::model()->findbypk($_POST['Mobile']['kohdenID']);
 			$model->attributes=$_POST['Mobile'];
 			$model->time = date("Y-m-d H:i:s",strtotime($_POST['Mobile']['aloitan']));
-			$model->aloitan = date("Y-m-d H:i:s",strtotime($_POST['Mobile']['aloitan']));
-			$model->loppui = date("Y-m-d H:i:s",strtotime($_POST['Mobile']['loppui']));
 			$model->kohde_kannasta=$k->osoite;
 			$model->admin=1;
 
