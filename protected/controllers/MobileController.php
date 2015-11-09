@@ -363,6 +363,7 @@ function num($val){
 		{
 			$k = Kohteet::model()->findbypk($_POST['Mobile']['kohdenID']);
 			$model->attributes=$_POST['Mobile'];
+			$model->time = date("Y-m-d H:i:s",strtotime($_POST['Mobile']['aloitan']));
 			$model->kohde_kannasta=$k->osoite;
 			$model->admin=1;
 
@@ -1168,6 +1169,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 
 		//if(count($lu) > 0)
 		//ksort($lu);
+
 
 
 		foreach($lu as $k=>$v)
