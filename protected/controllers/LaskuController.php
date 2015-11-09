@@ -246,7 +246,7 @@ class LaskuController extends Controller
 		if(!empty($a->maksuehto))
 		$erapaiva = date("Y-m-d",strtotime("+$a->maksuehto day"));
 
-		echo $a->laskutus_kanava."//".$a->maksuehto."//".$tyyppi."//".$a->osoite."//".$a->postinumero."//".$a->kaupunki."//".$a->yhteyshenkilo."//".$a->puhelin."//".$kodeOn."//".$erapaiva;
+		echo $a->laskutus_kanava."//".$a->maksuehto."//".$tyyppi."//".$a->osoite."//".$a->postinumero."//".$a->kaupunki."//".$a->yhteyshenkilo."//".$a->puhelin."//".$kodeOn."//".$erapaiva."//".$a->valittajan_tunnus."//".$a->verkkolaskuosoite;
 	}
 
 
@@ -304,6 +304,7 @@ class LaskuController extends Controller
 			  $string = strval($string);
 			  $paino = array(7, 3, 1);
 			  $summa = 0;
+
 			  for($i=strlen($string)-1, $j=0; $i>=0; $i--,$j++){
 			    $summa += (int) $string[$i] * (int) $paino[$j%3];
 			  }

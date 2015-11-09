@@ -931,6 +931,12 @@ $("#Lasku_as_nro").change(function() {
 		if(sp[9]){
 		    $("#Lasku_erapaiva").val(sp[9])
 		}
+		if(sp[10]){
+		    $("#Lasku_v_tunnus").val(sp[10])
+		}
+		if(sp[11]){
+		    $("#Lasku_verkkolaskuosoite").val(sp[11])
+		}
 
            },
            error: function(XMLHttpRequest, textStatus, errorThrown){
