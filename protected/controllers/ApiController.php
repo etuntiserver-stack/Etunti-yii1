@@ -470,9 +470,7 @@ public function actionImei($dom)
 	        }
 
 
-           	$mobCheck = Mob::model()->find(" tid = '".$ttekija->id."' order by id DESC ");
-		$kohdenID = '';
-		$get_osoite = '';
+
 
 		/*
 		$loc = explode("/",$_POST['my_location']);
@@ -510,9 +508,7 @@ public function actionImei($dom)
 		    {
 		      $get_osoite = $kohteet['osoite'];
 		      $kohdenID = $kohteet['id'];
-		    } else {
-		      //$this->_sendResponse(200, $mobCheck->status."//null//null//null//".$get_osoite."//".$ttekija->tekijan_nimi."//".$kohdenID."//".$_POST['tag']."//EiOleMeidanTag");
-		    }
+		    } 
 		} 
 
 
@@ -520,6 +516,19 @@ public function actionImei($dom)
 	 	 $tag = '';
 		 if(isset($_POST['tag']))
 	 	 $tag = $_POST['tag'];
+
+
+	    	$criteria = new CDbCriteria();
+	    	$criteria->order = " 
+			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i') DESC, id DESC ";
+	    	$criteria->condition = " 
+			tid = '".$ttekija->id."' 
+	    	";
+
+           	//$mobCheck = Mob::model()->find(" tid = '".$ttekija->id."' order by id DESC ");
+           	$mobCheck = Mob::model()->find($criteria);
+		$kohdenID = '';
+		$get_osoite = '';
 
 
 		  if(isset($mobCheck->id))
