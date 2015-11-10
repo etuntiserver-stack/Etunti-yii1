@@ -49,10 +49,9 @@
 
 <?php if(in_array('3',$tas)) : ?>
 <hr>
-  <legend><h2><?php echo Yii::t('main','Laskutuksen asetukset'); ?></h2></legend>
   <div class="row form">
     <div class="col-sm-6">
-
+    <legend><h2><?php echo Yii::t('main','Laskutuksen asetukset'); ?></h2></legend>
 	<div class="row">
 		<?php echo $form->labelEx($model,'tilinumero'); ?>
 		<?php echo $form->textField($model,'tilinumero',array('size'=>60,'maxlength'=>100,'class'=>'form-control input-sm')); ?>
@@ -75,6 +74,23 @@
 		<?php echo $form->labelEx($model,'viivastyskorko'); ?>
 		<?php echo $form->textField($model,'viivastyskorko',array('size'=>50,'maxlength'=>50,'class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'viivastyskorko'); ?>
+	</div>
+
+    </div><div class="col-sm-6">
+    <legend><h2><?php echo Yii::t('main','POSTITA tunnukset'); ?></h2></legend>
+
+	<div class="row">
+		<?php echo $form->labelEx($model,'postita_username'); ?>
+		<?php echo $form->textField($model,'postita_username',array('size'=>20,'maxlength'=>100,'class'=>'form-control input-sm')); ?>
+
+		<?php echo $form->error($model,'postita_username'); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->labelEx($model,'postita_password'); ?>
+		<?php echo $form->textField($model,'postita_password',array('size'=>20,'maxlength'=>100,'class'=>'form-control input-sm')); ?>
+
+		<?php echo $form->error($model,'postita_password'); ?>
 	</div>
 
     </div>
