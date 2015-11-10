@@ -56,7 +56,28 @@ public function actionTiedosto($dom)
 
     	 	if (move_uploaded_file($_FILES['file']['tmp_name'], Yii::app()->basePath."/../img/uploadedfromphone/".$dom."/".$_POST['kohdenID']."_".$ttekija->id."_".date("YmdHi").".jpg")) 
 		{
-        		print "saveOk";
+
+
+
+		$firma = FirmanTiedot::model()->findbypk(1);
+		if(isset($firma->sahkoposti) and !empty($firma->sahkoposti))
+		{
+		$k = Kohteet::model()->findbypk($_POST['kohdenID']);
+		$message = Yii::t('main', 'Hei. <br> Valokuva on saapunut kohteista: ').$k->osoite;
+
+		$mail = new YiiMailer();
+		$mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
+		$mail->setTo("laptopsr@gmail.com"); //$firma->sahkoposti
+		$mail->setSubject(Yii::t('main', 'Uusi valokuva kohteista. Lähettäjä: '). ' '.$ttekija->tekijan_nimi);
+		$mail->setBody($message);
+		$mail->setAttachment(Yii::app()->basePath."/../img/uploadedfromphone/".$dom."/".$_POST['kohdenID']."_".$ttekija->id."_".date("YmdHi").".jpg");
+		$mail->send();
+
+        	print "saveOk";
+		}
+
+
+
     		} else {
         		print "saveError";
     		}
@@ -591,6 +612,7 @@ public function actionImei($dom)
 		$explAsNumPost = explode("_",$_POST['asiakas_num']);
 
 		if( isset($explAsNum[1]) and isset($explAsNumPost[1]) and $explAsNum[1] != $explAsNumPost[1] )
+
 		{
                 $this->_sendResponse(200, $ms."//".$mobupdate->id."//".$mobupdate->status."//".$mob->kohde_kannasta."//tagnumerror//null//update");
 	        exit;
