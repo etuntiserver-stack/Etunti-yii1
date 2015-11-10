@@ -28,7 +28,6 @@ $forPVM = date('d.m.Y',strtotime($model->aloitan));
 
 
 <div class="row form">
-  <div class="col-sm-3">
 
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'toteutuneet-form-upd',
@@ -40,6 +39,15 @@ $forPVM = date('d.m.Y',strtotime($model->aloitan));
 		<?php echo $form->hiddenField($model,'kid'); ?>
 		<?php echo $form->hiddenField($model,'tid'); ?>
 
+  <div class="col-sm-12">
+	<div class="row">
+		<?php echo $form->labelEx($model,'tietoja'); ?>
+		<?php echo $form->textarea($model,'tietoja',array('rows'=>4,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'tietoja'); ?>
+	</div>
+  </div>
+
+  <div class="col-sm-3">
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'kohde_kannasta'); ?>
@@ -85,10 +93,10 @@ $forPVM = date('d.m.Y',strtotime($model->aloitan));
 	</div>
 
 
-  </div><div class="col-sm-6">
+  </div><div class="col-sm-7">
 
 	<div class="row">
-	<br>
+	<label><?php echo Yii::t('main','Kohteen tiedot'); ?></label>
 	<?php
 		$m = Kohteet::model()->findbypk($model->kohdenID);
 		$k = explode("//",$m->kenella_on_avain);
@@ -104,10 +112,12 @@ $forPVM = date('d.m.Y',strtotime($model->aloitan));
 	?>
 	</div>
 
-<?php $this->endWidget(); ?>
 
   </div>
 </div><!-- form -->
+
+<?php $this->endWidget(); ?>
+
 
 
 	<div class="modal-footer">

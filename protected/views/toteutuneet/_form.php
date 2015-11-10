@@ -32,7 +32,7 @@ $forPVM = date('d.m.Y',strtotime($s->aloitan));
 
 
 <div class="row form">
-  <div class="col-sm-3">
+
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'toteutuneet-form',
 	'enableAjaxValidation'=>false,
@@ -45,6 +45,17 @@ $forPVM = date('d.m.Y',strtotime($s->aloitan));
 		<?php echo $form->hiddenField($model,'tekijan_nimi',array('value'=>$s->tekijan_nimi)); ?>
 
 
+
+  <div class="col-sm-12">
+	<div class="row">
+		<?php echo $form->labelEx($model,'tietoja'); ?>
+		<?php echo $form->textarea($model,'tietoja',array('rows'=>4,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'tietoja'); ?>
+	</div>
+  </div>
+
+
+  <div class="col-sm-3">
 	<div class="row">
 		<?php echo $form->labelEx($model,'kohde_kannasta'); ?>
 		<?php 
@@ -97,10 +108,10 @@ $forPVM = date('d.m.Y',strtotime($s->aloitan));
 		<div id="kesto"><?php echo $kesto; ?></div>
 	</div>
 
-  </div><div class="col-sm-6">
+  </div><div class="col-sm-7">
 
 	<div class="row">
-	<br>
+	<label><?php echo Yii::t('main','Kohteen tiedot'); ?></label>
 	<?php
 		$m = Kohteet::model()->findbypk($s->kohdenID);
 		if(isset($m->kenella_on_avain))
@@ -118,12 +129,16 @@ $forPVM = date('d.m.Y',strtotime($s->aloitan));
 		}
 	?>
 	</div>
+  </div>
+</div><!-- form -->
+
+
 
 <?php $this->endWidget(); ?>
 
 
-  </div>
-</div><!-- form -->
+
+
 
 	<div class="modal-footer">
 		<span class="btn btn-default" data-dismiss="modal">Sulje</span>
