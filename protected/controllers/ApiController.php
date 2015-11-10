@@ -58,33 +58,28 @@ public function actionTiedosto($dom)
 		{
 
 
-
 		$firma = FirmanTiedot::model()->findbypk(1);
 		if(isset($firma->sahkoposti) and !empty($firma->sahkoposti))
 		{
 		$k = Kohteet::model()->findbypk($_POST['kohdenID']);
-		$message = Yii::t('main', 'Hei. <br> Valokuva on saapunut kohteista: ').$k->osoite;
-
-		$mail = new YiiMailer();
-		$mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
-		$mail->setTo("laptopsr@gmail.com"); //$firma->sahkoposti
-		$mail->setSubject(Yii::t('main', 'Uusi valokuva kohteista. Lähettäjä: '). ' '.$ttekija->tekijan_nimi);
-		$mail->setBody($message);
-		$mail->setAttachment(Yii::app()->basePath."/../img/uploadedfromphone/".$dom."/".$_POST['kohdenID']."_".$ttekija->id."_".date("YmdHi").".jpg");
-		$mail->send();
-
-        	print "saveOk";
+		$message = Yii::t('main', 'Hei. Valokuva on saapunut kohteista: ').$k->osoite;
+		mail($firma->sahkoposti,Yii::t('main', 'Uusi valokuva kohteista. Lähettäjä: '). ' '.$ttekija->tekijan_nimi,$message);
 		}
 
+        	$this->_sendResponse(200, "saveOK");
 
 
     		} else {
-        		print "saveError";
+
+        	$this->_sendResponse(200, "saveError");
+
     		}
 
 
 	     	} else {
-			echo 'Ei onnistu!';
+
+        	$this->_sendResponse(200, "Ei onnistu!");
+
 	     	}
 
 
