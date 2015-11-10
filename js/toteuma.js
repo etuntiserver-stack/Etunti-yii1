@@ -253,14 +253,12 @@ $(document).ready(function(){
 		  data:$(this).serialize(),
 		  type:'POST',
 		  success:function(data){
-			//console.log(data);
+			console.log(data);
 			var divID = data.split("_");
 
-		if( divID ){
-
+		if( divID )
 		blockUpdater(divID);
 
-		}
 
 		$('#showres').modal('hide');
 		return false;

@@ -213,7 +213,6 @@ class ToteutuneetController extends Controller
 			$model->kohdenID=$k->id;			
 			$model->kohde_kannasta=$k->osoite;
 
-
 			if($model->save()){
 			   $did = date("Ymd",strtotime($model->aloitan));
 			   echo $did."_".$model->tid;
