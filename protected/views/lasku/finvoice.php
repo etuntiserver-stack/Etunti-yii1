@@ -281,7 +281,9 @@ curl_close($ch);
   }
 
 
-} //if pass
+} else { 
+	echo 'POSTITA tunnukset ei löydy';
+} //if /pass
 
 
 /*
@@ -393,6 +395,8 @@ curl_close($ch);
 
   }
 
+} else { 
+	echo 'POSTITA tunnukset ei löydy';
 } //if /pass
 
 }
