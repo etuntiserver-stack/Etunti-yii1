@@ -213,16 +213,16 @@ $xml .= '<EpiDetails>
 
 
 
-
-$username = "Sivex";
-$password = "Etunti2000";
+if(!empty($asetukset['postita_username']) and !empty($asetukset['postita_password']))
+{
+$username = $asetukset['postita_username'];
+$password = $asetukset['postita_password'];
 $auth_string = $username . ":" . $password;
 
 
 $account_info_url = 'https://postita.fi/api/account_info/';
 $send_url = 'https://postita.fi/api/send/';
-$send_finvoice_url = 'https://Sivex:Etunti2000@postita.fi/api/send_finvoice/';
-
+$send_finvoice_url = 'https://'.$auth_string.'@postita.fi/api/send_finvoice/';
 
 $ch = curl_init();
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -232,10 +232,8 @@ curl_setopt($ch, CURLOPT_FAILONERROR, 1);
 curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
 curl_setopt($ch, CURLOPT_TIMEOUT, 100);
 
-
 $account_info = curl_exec($ch);
 $account_info = json_decode($account_info, true);
-
 
   $prep = array();
   if(isset($account_info[0]))
@@ -249,17 +247,14 @@ echo '<pre>';
 print_r($account_info);
 echo '</pre>';
 
-
 $pdf = $xml;
 $pdf_b64 = base64url_encode($pdf);
-
 
 $data = array('job_name' => 'A letter from PHP curl API', 'pdf' => $pdf_b64);
 curl_setopt($ch, CURLOPT_URL, $send_finvoice_url);
 curl_setopt($ch, CURLOPT_POST, TRUE);
 curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
 curl_setopt($ch, CURLOPT_HTTPHEADER, array('Expect:')); 
-
 
 $send_response = curl_exec($ch);
 if (curl_errno($ch)) {
@@ -274,8 +269,6 @@ echo '</pre>';
 
 curl_close($ch);
 
-
-
   if(isset($send_response[0]['status']) and $send_response[0]['status'] == 'CO')
   {
 
@@ -288,25 +281,8 @@ curl_close($ch);
   }
 
 
-  //Lasku::model()->updatebypk($id, array('response_finvoice'=>'info tahaan')));
-  //$this->redirect(array('update','id'=>$id));
+} //if pass
 
-
-
-/*
-  $id = $_GET['id'];
-  if(isset($send_response) and $send_response['status'] == 'CO'){
-
-
-  foreach($send_response as $k => $v ) {
-    $prep[$k] = $k.":".$v;
-  }
-
-  Lasku::model()->updatebypk($id, array('tilanne'=>2,'response'=>implode('//',$prep)));
-  $this->redirect(array('update','id'=>$id));
-  //echo '<h2>'.Yii::t('main','Lasku lähetetty onnistuneesti').'</h2>';
-  }
-*/
 
 /*
 
@@ -329,14 +305,16 @@ header('Content-Disposition: inline; filename="report.xml"');
 
 if(isset($_GET['pdf'])){
 
-$username = "Sivex";
-$password = "Etunti2000";
+if(!empty($asetukset['postita_username']) and !empty($asetukset['postita_password']))
+{
+$username = $asetukset['postita_username'];
+$password = $asetukset['postita_password'];
 $auth_string = $username . ":" . $password;
 
 
 $account_info_url = 'https://postita.fi/api/account_info/';
 $send_url = 'https://postita.fi/api/send/';
-$send_finvoice_url = 'https://Sivex:Etunti2000@postita.fi/api/send_finvoice/';
+$send_finvoice_url = 'https://'.$auth_string.'@postita.fi/api/send_finvoice/';
 
 /* First initialize curl and set some options. For more information about
    curl with PHP refer to http://php.net/manual/en/book.curl.php */
@@ -380,19 +358,16 @@ echo '</pre>';
 
 
   $content_PDF = $html2pdf->Output('my_doc.pdf', EYiiPdf::OUTPUT_TO_STRING);
-  //$content_PDF = $xml;
 
 $pdf = $content_PDF;
 $pdf_b64 = base64url_encode($pdf);
 
-/* We're creating a POST request out of the pdf and job's name. */
 $data = array('job_name' => 'A letter from PHP curl API', 'pdf' => $pdf_b64);
 curl_setopt($ch, CURLOPT_URL, $send_url);
 curl_setopt($ch, CURLOPT_POST, TRUE);
 curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-curl_setopt($ch, CURLOPT_HTTPHEADER, array('Expect:')); /* lighttpd fix */
+curl_setopt($ch, CURLOPT_HTTPHEADER, array('Expect:')); 
 
-/* Send the request and check for errors. */
 $send_response = curl_exec($ch);
 if (curl_errno($ch)) {
   echo "\n\ncURL error number: " . curl_errno($ch);
@@ -404,10 +379,7 @@ echo '<pre>';
 print_r($send_response);
 echo '</pre>';
 
-/* Clean up. */
 curl_close($ch);
-
-
 
 
   if($send_response['status'] == 'CO')
@@ -421,37 +393,9 @@ curl_close($ch);
 
   }
 
+} //if /pass
+
 }
-
-
-
-
-
-
-/*
-function base64url_encode($input) {
-    return strtr(base64_encode($input), '+/', '-_');
-}
-
-
-$send_finvoice_url = 'https://Sivex:Etunti2000@postita.fi/api/send_finvoice/';
-$pdf = $xml;
-$pdf_b64 = base64url_encode($pdf);
-
-
-$data = array('job_name' => 'A Finvoice letter from PHP API', 'pdf' => $pdf_b64);
-$data = http_build_query($data);
-$opts = array('http' => array(
- 'method' => 'POST',
- 'header'=> "Content-type: application/x-www-form-urlencoded\r\n",
- 'content' => $data
- )
-);
-
-$send_context = stream_context_create($opts);
-
-*/
-
 
 
 
