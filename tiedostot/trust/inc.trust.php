@@ -59,7 +59,7 @@ function commitTransfer ($xml) {
 
     /* Lisää merkistökoodaus dokumentin alkuun */
     if (substr ($xml, 0, 5) != '<?xml') {
-        $xml = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?>\n" . $xml;
+        $xml = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n" . $xml;
     }
 
     /* Lähetä ja siirrä dataa */

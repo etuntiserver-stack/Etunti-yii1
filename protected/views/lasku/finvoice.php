@@ -79,7 +79,7 @@ $xml = encodeXml (array(
                 "evoice" => "", # verkkolaskuosoite
                 "evoiceint" => "", # välittäjän tunnus
                 "overdueinterest" => "", # korkopros: tyhjä = oletus
-                "billnum" => $lasku['id'].'972', # laskun numero
+                "billnum" => $lasku['id'].'9725', # laskun numero
                 //"billcode" => "Heikki Henkilö", # tilitysviite tai viesti
                // "ourcode" => "Myyjän viite",
                // "yourcode" => "Asiakkaan viite",
