@@ -1,6 +1,6 @@
 <?php
 
-/* K‰ytett‰v‰ palvelin */
+/* K√§ytett√§v√§ palvelin */
 global $TRUSTPOINT;
 $TRUSTPOINT = "https://beta2.trustpoint.fi"; // Kehitys
 #$TRUSTPOINT = "https://www.trustpoint.fi"; // Tuotanto
@@ -30,17 +30,17 @@ function getTransferKey ($cid, $apicode, $ownref = '') {
 }
 
 /**
-* L‰het‰ XML-muotoinen lasku TrustPoint-palveluun.
+* L√§het√§ XML-muotoinen lasku TrustPoint-palveluun.
 *
 * Esimerkki:
 *
-*     // L‰het‰ XML-lasku
+*     // L√§het√§ XML-lasku
 *     $res = commitTransfer ($xml);
 *
 *     // Tulkitse palvelimen palauttama XML-dokumentti
 *     $doc = parseXml ($res);
 *
-*     // Tulosta hyv‰ksyttyjen laskujen lasku- ja teht‰v‰numerot
+*     // Tulosta hyv√§ksyttyjen laskujen lasku- ja teht√§v√§numerot
 *     for ($i = 0; $i < count ($doc->row); $i++) {
 *         if ($doc->row[$i]->accepted == '1') {
 *             echo 'accept billnum ' . $doc->row[$i]->billnum
@@ -57,12 +57,12 @@ function getTransferKey ($cid, $apicode, $ownref = '') {
 function commitTransfer ($xml) {
     global $TRUSTPOINT;
 
-    /* Lis‰‰ merkistˆkoodaus dokumentin alkuun */
+    /* Lis√§√§ merkist√∂koodaus dokumentin alkuun */
     if (substr ($xml, 0, 5) != '<?xml') {
         $xml = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n" . $xml;
     }
 
-    /* L‰het‰ ja siirr‰ dataa */
+    /* L√§het√§ ja siirr√§ dataa */
     $res = httpPost ($TRUSTPOINT . '/API/committransfer.php',
         array(
             'datastream' => $xml
@@ -71,11 +71,11 @@ function commitTransfer ($xml) {
 }
 
 /**
-* L‰het‰ HTTP POST pyyntˆ palvelimelle.
+* L√§het√§ HTTP POST pyynt√∂ palvelimelle.
 *
 * Esimerkki:
 *
-*     // L‰het‰ cid ja apicode muuttujat ja palauta serverin antama data
+*     // L√§het√§ cid ja apicode muuttujat ja palauta serverin antama data
 *     $text = httpPost ('https://www.trustpoint.fi/API/requirekey.php',
 *         array(
 *             'cid' => $cid,
@@ -83,29 +83,29 @@ function commitTransfer ($xml) {
 *         ));
 *
 * @param string $url Palvelimen URL-osoite
-* @param array $fields L‰hetett‰v‰t argumenttit
-* @return string Palvelimen l‰hett‰m‰ k‰sittelem‰tˆn data
+* @param array $fields L√§hetett√§v√§t argumenttit
+* @return string Palvelimen l√§hett√§m√§ k√§sittelem√§t√∂n data
 */
 function httpPost ($url, $args) {
     /* Alusta istunto */
     $ch = curl_init ($url);
 
-    /* L‰het‰ dataa HTTP POST muodossa */
+    /* L√§het√§ dataa HTTP POST muodossa */
     curl_setopt ($ch, CURLOPT_POST, 1);
 
     /*
-    * V‰lit‰ kent‰t palvelimelle.  Huomaa, ett‰ @-merkki arvon alussa
-    * tarkoittaa, ett‰ @-merkki‰ seuraava tiedostonimi siirret‰‰n
-    * palvelimelle!  Jos t‰m‰ ei ole tarkoitus, pid‰ huoli siit‰, ett‰
-    * yksik‰‰n argumentti ei ala @-merkill‰.
+    * V√§lit√§ kent√§t palvelimelle.  Huomaa, ett√§ @-merkki arvon alussa
+    * tarkoittaa, ett√§ @-merkki√§ seuraava tiedostonimi siirret√§√§n
+    * palvelimelle!  Jos t√§m√§ ei ole tarkoitus, pid√§ huoli siit√§, ett√§
+    * yksik√§√§n argumentti ei ala @-merkill√§.
     */
     curl_setopt ($ch, CURLOPT_POSTFIELDS, $args);
 
-    /* curl_exec() palauttaa vain palvelimen l‰hett‰m‰n datan */
+    /* curl_exec() palauttaa vain palvelimen l√§hett√§m√§n datan */
     curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1);
     curl_setopt ($ch, CURLOPT_HEADER, 0);
 
-    /* L‰het‰ ja vastaanota dataa */
+    /* L√§het√§ ja vastaanota dataa */
     $output = curl_exec ($ch);
     curl_close ($ch);
     return $output;
@@ -139,12 +139,12 @@ function parseXml ($xml) {
 *     ));
 *
 * @param any $value Merkkijono, numero tai taulukko
-* @param int $indent Sisennyksen m‰‰r‰ (valinnainen)
+* @param int $indent Sisennyksen m√§√§r√§ (valinnainen)
 * @return string Muuttujan arvo XML-merkkijonona
 */
 function encodeXml ($value, $indent = 0) {
     if (is_null ($value)) {
-        /* Tyhj‰ arvo */
+        /* Tyhj√§ arvo */
         $text = "";
     } else if (is_string ($value)) {
         /* Merkkijono */
@@ -156,7 +156,7 @@ function encodeXml ($value, $indent = 0) {
         /* Indeksoitu taulukko */
         $text = encodeXmlArray ($value, $indent);
     } else if (is_bool ($value)) {
-        /* Tosi/ep‰tosi arvo */
+        /* Tosi/ep√§tosi arvo */
         $text = (($value) ? "true" : "false");
     } else if (is_int ($value)  ||  is_double ($value)) {
         /* Kokonais- tai liukuluku */
@@ -174,7 +174,7 @@ function encodeXml ($value, $indent = 0) {
 * Muuta assosiatiivinen taulukko XML-muotoon.
 *
 * @param array $arr
-* @param int $indent Sisennyksen m‰‰r‰ (valinnainen)
+* @param int $indent Sisennyksen m√§√§r√§ (valinnainen)
 * @return string Muuttujan arvo XML-merkkijonona
 */
 function encodeXmlAssoc ($arr, $indent = 0) {
@@ -203,7 +203,7 @@ function encodeXmlAssoc ($arr, $indent = 0) {
 * Muuta indeksoitu taulukko XML-muotoon.
 *
 * @param array $arr
-* @param int $indent Sisennyksen m‰‰r‰ (valinnainen)
+* @param int $indent Sisennyksen m√§√§r√§ (valinnainen)
 * @return string Muuttujan arvo XML-merkkijonona
 */
 function encodeXmlArray ($arr, $indent = 0) {
@@ -218,7 +218,7 @@ function encodeXmlArray ($arr, $indent = 0) {
 * Muuta merkkijono XML-muotoon.
 *
 * @param array $arr
-* @param int $indent Sisennyksen m‰‰r‰ (valinnainen)
+* @param int $indent Sisennyksen m√§√§r√§ (valinnainen)
 * @return string Muuttujan arvo XML-merkkijonona
 */
 function encodeXmlString ($value) {

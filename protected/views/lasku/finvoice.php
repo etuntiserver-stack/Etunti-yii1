@@ -3,7 +3,6 @@
 
 if(isset($_GET['finvoiceTrust'])){
 
-
  require_once ('tiedostot/trust/inc.trust.php');
 
 
@@ -79,43 +78,40 @@ $xml = encodeXml (array(
                 "evoice" => "", # verkkolaskuosoite
                 "evoiceint" => "", # välittäjän tunnus
                 "overdueinterest" => "", # korkopros: tyhjä = oletus
-                "billnum" => $lasku['id'].'9725', # laskun numero
+                "billnum" => $lasku['id'].'979215', # laskun numero
                 //"billcode" => "Heikki Henkilö", # tilitysviite tai viesti
                // "ourcode" => "Myyjän viite",
                // "yourcode" => "Asiakkaan viite",
-                "email" => "", # 1.email osoite
+                "email" => $yritys['sahkoposti'], # 1.email osoite
                 "email2" => "", # 2.email osoite
-                "salesman" => "MM", # vapaavalintainen myyjän tunniste
-                "salesmanname" => "Masa Myyjä", # myyjän nimi
+                //"salesman" => "MM", # vapaavalintainen myyjän tunniste
+                //"salesmanname" => "Masa Myyjä", # myyjän nimi
                 "checkbillnum" => 1, # 1=tarkista laskunumero, 0=ei
                 "language" => "fin", # laskun kieli
-                "freetext" => "
-Suuri kiitos tilauksesta!
-
-Huomaa muuttunut tilinumero 1.1.2012 alkaen.
-",
+                "freetext" => "",
                 "sendtype" => "post", # laskun lähetystapa
                 "cashbill" => 0, # 0 = ei käteiskuitti
                 "sensible" => 0, # 0 = lähetä muistutus automaattisesti
-                "ownref" => "x123", # sisäinen viite
-                "ordernumber" => "10232", # tilausnumero
+                //"ownref" => "x123", # sisäinen viite
+                //"ordernumber" => "10232", # tilausnumero
                 "negvat" => 0, # 0 = ei käänteistä alvia
                 "postclass" => 1, # 1 = postitus 1.luokassa
                 "color" => 0, # 0 = mustavalko
-                "model" => "Malli tai merkki",
+                //"model" => "Malli tai merkki",
                 "printoperator" => "enfo", # tulostusoperaattori
                 "billtemplate" => "CUSTOM", # laskupohja
                 "collectionprocess" => "AUTO", # saatavan laji
 
-                "voucherbatch" => "43", # tositelaji
-                "vouchernum" => "202132", # tositenumero
-                "period" => "2013-11-01", # mille kuukaudelle kohdistuu
-                "vatperiod" => "2013-11-01", # mille kuukaudella alv kohdistuu
+                //"voucherbatch" => "43", # tositelaji
+                //"vouchernum" => "202132", # tositenumero
+                //"period" => "2013-11-01", # mille kuukaudelle kohdistuu
+                //"vatperiod" => "2013-11-01", # mille kuukaudella alv kohdistuu
 
-                "netamount" => 112.00, # veroton hinta yhteensä
-                "vatamount" => 26.88, # veron määrä yhteensä
-                "totalamount" => 138.88, # verollinen loppusumma
+                "netamount" => $lasku['yhteensa_total_veroton'], # veroton hinta yhteensä
+                "vatamount" => $lasku['yhteensa_total_verot'], # veron määrä yhteensä
+                "totalamount" => $lasku['yhteensa_total'], # verollinen loppusumma
 
+/*
                 # Lisäosoitteet
                 "addaddress" => array(
                     array(
@@ -137,6 +133,7 @@ Huomaa muuttunut tilinumero 1.1.2012 alkaen.
                         "addresstype" => 3, # 3 = laskutusosoite
                     ),
                 ),
+*/
 
                 # Myytävät tuotteet
                 "payrow" => $rowsArray,
@@ -145,9 +142,9 @@ Huomaa muuttunut tilinumero 1.1.2012 alkaen.
                 "taxrow" => array(
                     array(
                         "taxpr" => 24.0,
-                        "netamount" => 112.00,
-                        "vatamount" => 26.88,
-                        "totalamount" => 138.88
+                        "netamount" => $lasku['yhteensa_total_veroton'],
+                        "vatamount" => $lasku['yhteensa_total_verot'],
+                        "totalamount" => $lasku['yhteensa_total']
                     )
                 ),
 /*
@@ -158,7 +155,7 @@ Huomaa muuttunut tilinumero 1.1.2012 alkaen.
                     )
                 ),
 */
-
+/*
                 # laskun tiliöinti
                 "accountrow" => array(
                     array(
@@ -202,6 +199,7 @@ Huomaa muuttunut tilinumero 1.1.2012 alkaen.
                         "desc" => "Heikki Henkilö"
                     )
                 ),
+*/
 
                 # Kassa-alennus
                 "cashdiscountrow" => $cashdiscountrow,
