@@ -3,7 +3,51 @@
 
 if(isset($_GET['finvoiceTrust'])){
 
-require_once ('/../../tiedostot/trust/inc.trust.php');
+
+ require_once ('tiedostot/trust/inc.trust.php');
+
+
+   $rowsArray = array();
+     foreach($laskunRivit as $rivi){
+        $rowsArray[] =  array(
+                        "productid" => $rivi->id, # tuotenro
+                        "desc" => $rivi->tkoodi,
+                        "freetext" => "",
+                        "count" => $rivi->kpl, # määrä
+                        "amount" => $rivi->hinta, # yksikköhinta
+                        "totalitemprice" => $rivi->yhteensa_alv, # verollinen yksikköhinta
+                        "taxpr" => $rivi->alv, # alv-prosentti
+                        "discount" => $rivi->ale, # alennusprosentti
+                        "itemtype" => $rivi->yksikko, # yksikkö
+                        "netamount" => $rivi->veroton, # veroton summa
+                        "vatamount" => $rivi->hinta_alv, # veron määrä
+                        "totalamount" => $rivi->yhteensa_alv, # verollinen summa
+                        "salesman" => "", # Myyjä
+                        //"startdate" => "2013-01-01", # ajankohta
+                        //"enddate" => "2015-12-31",
+                        //"eancode" => "" # EAN-viivakoodi
+                    );
+      }
+
+
+
+if($lasku['tyyppi'] == 'yritys')
+$BuyerOrganisationName = $lasku['yritys'];
+if($lasku['tyyppi'] == 'henkilo')
+$BuyerOrganisationName = $lasku['nimi'];
+
+if($lasku['tyyppi'] == 'yritys'){
+$person = $lasku['yhteyshenkilo'];
+$customertype = 1;
+}
+if($lasku['tyyppi'] == 'henkilo'){
+$person = $lasku['nimi'];
+$customertype = 2;
+}
+
+$cashdiscountrow = array();
+
+
 
 /* Hae siirtoavain (korvaa cid ja apicode omillasi) */
 $transferkey = getTransferKey ('1008168', 'kvrj44mqp9');
@@ -17,28 +61,28 @@ $xml = encodeXml (array(
         'transferkey' => $transferkey,
         'dataset' => array(
             array(
-                "custnum" => 10232, # asiakasnumero
-                "addressaddline1" => "Kuopion edunvalvontatoimisto",
-                "person" => "Heikki Henkilö",
-                "company" => "", # yrityksen nimi
-                "addressaddline2" => "Edunvalvoja Essi Vuori",
-                "address" => "Satamakatu 123", # katuosoite
-                "postcode" => "70101",
-                "city" => "KUOPIO",
+                "custnum" => $lasku['as_nro'], # asiakasnumero
+                "addressaddline1" => $lasku['osoite'],
+                "person" => $person,
+                "company" => $lasku['yritys'], # yrityksen nimi
+                //"addressaddline2" => "Edunvalvoja Essi Vuori",
+                "address" => $lasku['osoite'], # katuosoite
+                "postcode" => $lasku['postinumero'],
+                "city" => $lasku['toimipaikka'],
                 "addresscountry" => "FIN",
-                "customertype" => 2, # asiakastyyppi: 2=kuluttaja
+                "customertype" => $customertype, # asiakastyyppi: 2=kuluttaja
                 "jobtype" => 0, # tehtävän tyyppi: 0 = lasku
-                "paydate" => "2013-11-30", # eräpäivä
-                "billdate" => "2013-11-01", # laskun päiväys
-                "govid" => "111111-111C", # y-tunnus tai hetu
+                "paydate" => $lasku['erapaiva'], # eräpäivä
+                "billdate" => $lasku['paivays'], # laskun päiväys
+                "govid" => $lasku['y_tunnus'], # y-tunnus tai hetu
                 "vatid" => "", # alv-tunniste
                 "evoice" => "", # verkkolaskuosoite
                 "evoiceint" => "", # välittäjän tunnus
                 "overdueinterest" => "", # korkopros: tyhjä = oletus
-                "billnum" => "137", # laskun numero
-                "billcode" => "Heikki Henkilö", # tilitysviite tai viesti
-                "ourcode" => "Myyjän viite",
-                "yourcode" => "Asiakkaan viite",
+                "billnum" => $lasku['id'].'972', # laskun numero
+                //"billcode" => "Heikki Henkilö", # tilitysviite tai viesti
+               // "ourcode" => "Myyjän viite",
+               // "yourcode" => "Asiakkaan viite",
                 "email" => "", # 1.email osoite
                 "email2" => "", # 2.email osoite
                 "salesman" => "MM", # vapaavalintainen myyjän tunniste
@@ -95,48 +139,7 @@ Huomaa muuttunut tilinumero 1.1.2012 alkaen.
                 ),
 
                 # Myytävät tuotteet
-                "payrow" => array(
-                    array(
-                        "productid" => "T001", # tuotenro
-                        "desc" => "Rupi-webhotelli", # tuotteen nimi
-                        "freetext" => 
-                        "Ominaisuudet:
-- 500 Mt kotisivutilaa
-- 5 Gt/kk siirtokaistaa
-- 10 kpl sähköposteja", # tuotteen kuvaus
-                        "count" => 1.0, # määrä
-                        "amount" => 120.00, # yksikköhinta
-                        "totalitemprice" => 147.60, # verollinen yksikköhinta
-                        "taxpr" => 24.0, # alv-prosentti
-                        "discount" => 0, # alennusprosentti
-                        "itemtype" => "kpl", # yksikkö
-                        "netamount" => 100.00, # veroton summa
-                        "vatamount" => 24.00, # veron määrä
-                        "totalamount" => 124.60, # verollinen summa
-                        "salesman" => "MM", # Myyjäkoodi
-                        "startdate" => "2013-01-01", # ajankohta
-                        "enddate" => "2013-12-31",
-                        "eancode" => "5901234123457" # EAN-viivakoodi
-                    ),
-                    array(
-                        "productid" => "T002", # tuotenro
-                        "desc" => "Fi-verkkotunnus",
-                        "freetext" => "",
-                        "count" => 1.0, # määrä
-                        "amount" => 12.00, # yksikköhinta
-                        "totalitemprice" => 14.88, # verollinen yksikköhinta
-                        "taxpr" => 24.0, # alv-prosentti
-                        "discount" => 0, # alennusprosentti
-                        "itemtype" => "kpl", # yksikkö
-                        "netamount" => 12.00, # veroton summa
-                        "vatamount" => 2.88, # veron määrä
-                        "totalamount" => 14.88, # verollinen summa
-                        "salesman" => "", # Myyjä
-                        "startdate" => "2013-01-01", # ajankohta
-                        "enddate" => "2015-12-31",
-                        "eancode" => "" # EAN-viivakoodi
-                    )
-                ),
+                "payrow" => $rowsArray,
 
                 # alv-erittely (tässä vain yksi rivi)
                 "taxrow" => array(
@@ -201,12 +204,7 @@ Huomaa muuttunut tilinumero 1.1.2012 alkaen.
                 ),
 
                 # Kassa-alennus
-                "cashdiscountrow" => array(
-                    "discountdate" => "2013-11-10",
-                    "discountpercent" => "2",
-                    "discountamount" => 2.77,
-                    "discountfreetext" => "10 pv -2%"
-                )
+                "cashdiscountrow" => $cashdiscountrow,
             )
         )
     )
@@ -219,7 +217,7 @@ $res = commitTransfer ($xml);
 
 /* Tulosta vastausviesti */
 echo "------ receive ------\n";
-echo '<textarea style="width:100%;height: 400px;">'.$res.'</textarea>';
+//echo '<textarea class="form-control" rows="20">'.$res.'</textarea>';
 echo "\n";
 
 /* Tulkitse palvelimen vastausviesti */
@@ -230,10 +228,10 @@ echo "------ parse ------\n";
 for ($i = 0; $i < count ($doc->row); $i++) {
     if ($doc->row[$i]->accepted == '1') {
         echo 'accept billnum ' . $doc->row[$i]->billnum
-            . ' jobid ' . $doc->row[$i]->jobid . "\n";
+            . ' jobid ' . $doc->row[$i]->jobid . "<br>";
     } else {
         echo 'reject billnum ' . $doc->row[$i]->billnum
-            . ' error ' . utf8_decode ($doc->row[$i]->error) . "\n";
+            . ' error ' . utf8_decode ($doc->row[$i]->error) . "<br>";
     }
 }
 
