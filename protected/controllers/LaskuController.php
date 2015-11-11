@@ -298,7 +298,9 @@ class LaskuController extends Controller
 			$model->attributes=$_POST['Lasku'];
 			$model->tilanne=0;
 
-		
+			if($model->save()){
+
+
 			// Viite
 			function Viitenumero($string) {
 			  $string = strval($string);
@@ -312,11 +314,9 @@ class LaskuController extends Controller
 			  return $string.$tarkiste;
 			}
 
-			$model->viitenumero = Viitenumero($model->as_nro."0".$model->id);
 
-
-			if($model->save()){
-
+			$viite = Viitenumero($model->as_nro."00".$model->id);
+			Lasku::model()->updatebypk($model->id, array('viitenumero'=>$viite));
 
 			foreach($_POST['tkoodi'] as $key=>$val)
 			{
