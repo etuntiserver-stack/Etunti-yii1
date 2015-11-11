@@ -171,7 +171,7 @@ class LaskuController extends Controller
 		BETWEEN 
 		'".date("Y-m-d",strtotime($_POST['from']))."' AND '".date("Y-m-d",strtotime($_POST['to']))."'
 		AND status='3'
-		AND id NOT IN (SELECT kid FROM sivexkuitti) ";
+		";
 		$tot = Toteutuneet::model()->find($criteria); 
 	
 	
@@ -210,8 +210,8 @@ class LaskuController extends Controller
 	</script>
 	<?php
 		$k = Kohteet::model()->findAll(" asiakas_id='".$id."' ");
-		$body = '<b class="glyphicon glyphicon-home"></b>
-		<select id="kohteet" class="selectpicker" multiple title="Valitse kohteet">';
+		$body = '<b class="glyphicon glyphicon-home"></b><br>
+		<select id="kohteet" class="selectpicker input-sm" multiple title="Valitse kohteet">';
 		foreach($k as $a)
 		$body .= '<option value="'.$a->id.'">'.$a->osoite.'</option>';
 		$body .= '</select>';

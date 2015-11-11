@@ -339,10 +339,10 @@ $model->viivastyskorko = $firma->viivastyskorko;
       <div class="row">
 	<div class="col-sm-6">
 		<b class="glyphicon glyphicon-calendar"></b> 
-   		<input type="text" id="from" class="form-control input-sm form-group datepicker" value="<?php echo date("d.m.Y",strtotime('first day of this month', time())); ?>">
+   		<input type="text" id="from" class="form-control input-sm form-group datepicker" value="<?php echo date("Y-m-d",strtotime('first day of this month', time())); ?>">
 	</div><div class="col-sm-6">
 		<b class="glyphicon glyphicon-calendar"></b> 
-   		<input type="text" id="to" class="form-control input-sm form-group datepicker" value="<?php echo date("d.m.Y",strtotime('last day of this month', time())); ?>">
+   		<input type="text" id="to" class="form-control input-sm form-group datepicker" value="<?php echo date("Y-m-d",strtotime('last day of this month', time())); ?>">
 	</div>
       </div>
 
@@ -726,6 +726,7 @@ $(".hae").click(function() {
 	    //$("table#TableRivit tbody .kaikkiTR").remove();
 
 	    $.each(kohteet, function( index, value ) {
+
 	        $.ajax({
 	           url: 'luoKohteista?id='+value,
 		   type: 'POST',
@@ -742,9 +743,9 @@ $(".hae").click(function() {
 
 			if(tunnit > 0)
 			{
-
+			
 	        	$.ajax({
-		           url: 'tr_rivit?num='+index+'&id='+value,
+		           url: 'tr_rivit?num='+value+'&id='+value,
 			   type: 'POST',
 			   data: { from : from, to : to, kpl : tunnit, lt : lt },
 		           success: function(data){

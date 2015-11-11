@@ -163,7 +163,7 @@ embed {height:100%;width:100%}
 
 	$html .= '<TABLE style="width:740px" id="tuote">';
 	$html .= '<TR>';
-	$html .= '<TH style="text-align:left" style="width:30%">Tuote</TH>';
+	$html .= '<TH style="text-align:left" >Tuote</TH>';
 	$html .= '<TH style="width:10%">KPL</TH>';
 	$html .= '<TH style="width:10%">Hinta</TH>';
 	$html .= '<TH style="width:10%">ALV%</TH>';
@@ -202,7 +202,7 @@ embed {height:100%;width:100%}
 	$ale = '';
 
 	$html .= '<TR>';
-	$html .= '<TD style="text-align:left; white-space: nowrap;">'.$rivit->tkoodi.'</TD>';
+	$html .= '<TD style="text-align:left;">'.$rivit->tkoodi.'</TD>';
 	$html .= '<TD>'.$rivit->kpl.'</TD>';
 	$html .= '<TD>'.$rivit->hinta.'</TD>';
 	$html .= '<TD>'.$rivit->alv.' %</TD>';
