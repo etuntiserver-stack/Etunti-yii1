@@ -174,7 +174,7 @@ $model->viivastyskorko = $firma->viivastyskorko;
 		<?php echo $form->textField($model,'sahkoposti',array('size'=>60,'maxlength'=>100,'class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'sahkoposti'); ?>
 	</div>
-
+<!--
 	<div class="row verkkolaskuosoite hidd">
 		<?php echo $form->labelEx($model,'verkkolaskuosoite'); ?>
 		<?php echo $form->textField($model,'verkkolaskuosoite',array('size'=>60,'maxlength'=>255,'class'=>'form-control input-sm')); ?>
@@ -186,7 +186,7 @@ $model->viivastyskorko = $firma->viivastyskorko;
 		<?php echo $form->textField($model,'v_tunnus',array('size'=>60,'maxlength'=>100,'class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'v_tunnus'); ?>
 	</div>
-
+-->
 	<div class="row yhteyshenkilo hidd">
 		<?php echo $form->labelEx($model,'yhteyshenkilo'); ?>
 		<?php echo $form->textField($model,'yhteyshenkilo',array('size'=>60,'maxlength'=>100,'class'=>'form-control input-sm')); ?>
