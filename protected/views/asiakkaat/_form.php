@@ -3,9 +3,13 @@
 /* @var $model Asiakkaat */
 /* @var $form CActiveForm */
 
+$asiakasnumero = '';
+if(!isset($model->id)){
 $nextnum = Asiakkaat::model()->find(array('order'=>'id DESC'));
-$asiakasnumero = $nextnum->id+1;
-
+$asiakasnumero = 'nro. '.($model->id+1).' on vapaa';
+} else {
+$asiakasnumero = 'voidaan käyttää oleva ID numero';
+}
 ?>
 
 <style>
@@ -29,8 +33,8 @@ $asiakasnumero = $nextnum->id+1;
 	<legend><h3><?php echo Yii::t('main', 'Asiakkaan tiedot'); ?></h3></legend>
 
 	<div class="row">
-		<?php echo $form->labelEx($model,'asiakasnumero'); ?>
-		<?php echo $form->textField($model,'asiakasnumero',array('placeholder'=>'nro. '.$asiakasnumero.' on vapaa','size'=>60,'maxlength'=>100,'class'=>'form-control input-sm')); ?>
+		<?php echo $form->labelEx($model,'asiakasnumero').$asiakasnumero; ?>
+		<?php echo $form->textField($model,'asiakasnumero',array('size'=>60,'maxlength'=>100,'class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'asiakasnumero'); ?>
 	</div>
 
@@ -215,9 +219,7 @@ $("#Asiakkaat_tyyppi").change(function() {
     laskutusTyyppi(value);
 });
 
-		  $("input").prop("disabled", true);
-		  $("select").prop("disabled", true);
-		  $("#Asiakkaat_asiakasnumero").prop("disabled", false);
+
 
 $("#Asiakkaat_asiakasnumero").keyup(function() {
     var checkLastAsiakasID = $(this).val();

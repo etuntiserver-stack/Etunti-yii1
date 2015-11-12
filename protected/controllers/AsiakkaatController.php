@@ -54,7 +54,7 @@ class AsiakkaatController extends Controller
 	public function actionCheckLastAsiakasID()
 	{
 		$check = 0;
-		$model=Asiakkaat::model()->findbypk($_POST['checkLastAsiakasID']);
+		$model=Asiakkaat::model()->find(" asiakasnumero='".$_POST['checkLastAsiakasID']."' ");
 		if(isset($model->id))
 		$check = 1;
 
