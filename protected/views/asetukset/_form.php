@@ -10,7 +10,7 @@
 ?>
 
 <div class="row form">
-  <div class="col-sm-6">
+  <div class="col-sm-4">
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'asetukset-form',
 	'enableAjaxValidation'=>false,
@@ -50,7 +50,7 @@
 <?php if(in_array('3',$tas)) : ?>
 <hr>
   <div class="row form">
-    <div class="col-sm-6">
+    <div class="col-sm-4">
     <legend><h2><?php echo Yii::t('main','Laskutuksen asetukset'); ?></h2></legend>
 	<div class="row">
 		<?php echo $form->labelEx($model,'tilinumero'); ?>
@@ -76,8 +76,8 @@
 		<?php echo $form->error($model,'viivastyskorko'); ?>
 	</div>
 
-    </div><div class="col-sm-6">
-    <legend><h2><?php echo Yii::t('main','POSTITA tunnukset'); ?></h2></legend>
+    </div><div class="col-sm-4">
+    <legend><h2><?php echo Yii::t('main','POSTITA.FI tunnukset'); ?></h2></legend>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'postita_username'); ?>
@@ -91,6 +91,23 @@
 		<?php echo $form->textField($model,'postita_password',array('size'=>20,'maxlength'=>100,'class'=>'form-control input-sm')); ?>
 
 		<?php echo $form->error($model,'postita_password'); ?>
+	</div>
+
+    </div><div class="col-sm-4">
+    <legend><h2><?php echo Yii::t('main','TRUST.FI tunnukset'); ?></h2></legend>
+
+	<div class="row">
+		<?php echo $form->labelEx($model,'trust_cid'); ?>
+		<?php echo $form->textField($model,'trust_cid',array('size'=>20,'maxlength'=>100,'class'=>'form-control input-sm')); ?>
+
+		<?php echo $form->error($model,'trust_cid'); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->labelEx($model,'trust_api'); ?>
+		<?php echo $form->textField($model,'trust_api',array('size'=>20,'maxlength'=>100,'class'=>'form-control input-sm')); ?>
+
+		<?php echo $form->error($model,'trust_api'); ?>
 	</div>
 
     </div>

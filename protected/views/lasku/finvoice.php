@@ -1,7 +1,10 @@
 <?php
-
+  $id = $_GET['id'];
 
 if(isset($_GET['finvoiceTrust'])){
+
+ $cid = $asetukset['trust_cid'];
+ $api = $asetukset['trust_api'];
 
  require_once ('tiedostot/trust/inc.trust.php');
 
@@ -49,7 +52,7 @@ $cashdiscountrow = array();
 
 
 /* Hae siirtoavain (korvaa cid ja apicode omillasi) */
-$transferkey = getTransferKey ('1008168', 'kvrj44mqp9');
+$transferkey = getTransferKey ($cid, $api);
 if (!$transferkey) {
     die ("Kirjautuminen epäonnistui\n");
 }
@@ -80,7 +83,7 @@ $xml = encodeXml (array(
                 "overdueinterest" => "", # korkopros: tyhjä = oletus
                 "billnum" => $lasku['id'].'979215', # laskun numero
                 //"billcode" => "Heikki Henkilö", # tilitysviite tai viesti
-               // "ourcode" => "Myyjän viite",
+                "ourcode" => $lasku['viitenumero'],
                // "yourcode" => "Asiakkaan viite",
                 "email" => $yritys['sahkoposti'], # 1.email osoite
                 "email2" => "", # 2.email osoite
@@ -227,11 +230,18 @@ for ($i = 0; $i < count ($doc->row); $i++) {
     if ($doc->row[$i]->accepted == '1') {
         echo 'accept billnum ' . $doc->row[$i]->billnum
             . ' jobid ' . $doc->row[$i]->jobid . "<br>";
+
+     	Lasku::model()->updatebypk($id, array('tilanne'=>2));
+	$this->redirect(array('update','id'=>$id));
+	break;
+
     } else {
         echo 'reject billnum ' . $doc->row[$i]->billnum
             . ' error ' . utf8_decode ($doc->row[$i]->error) . "<br>";
     }
 }
+
+
 
 }
 
@@ -252,7 +262,7 @@ function base64url_encode($input) {
     return strtr(base64_encode($input), '+/', '-_');
 }
 
-  $id = $_GET['id'];
+
 
 if(isset($_GET['finvoice'])){
 

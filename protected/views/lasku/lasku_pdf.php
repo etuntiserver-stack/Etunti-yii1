@@ -163,7 +163,7 @@ embed {height:100%;width:100%}
 
 	$html .= '<TABLE style="width:740px" id="tuote">';
 	$html .= '<TR>';
-	$html .= '<TH style="text-align:left" >Tuote</TH>';
+	$html .= '<TH style="text-align:left;width:32%" >Tuote</TH>';
 	$html .= '<TH style="width:10%">KPL</TH>';
 	$html .= '<TH style="width:10%">Hinta</TH>';
 	$html .= '<TH style="width:10%">ALV%</TH>';
@@ -184,16 +184,6 @@ embed {height:100%;width:100%}
 */
 
 
-	$html .= '<TR>';
-	$html .= '<TD style="height:10px"></TD>';
-	$html .= '<TD></TD>';
-	$html .= '<TD></TD>';
-	$html .= '<TD></TD>';
-	$html .= '<TD></TD>';
-	$html .= '<TD></TD>';
-	$html .= '<TD></TD>';
-	$html .= '<TD></TD>';
-	$html .= '</TR>';
 
    	foreach($laskunRivit as $rivit){
 	if($rivit->ale)
