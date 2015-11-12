@@ -513,7 +513,7 @@ $model->viivastyskorko = $firma->viivastyskorko;
 	?>
   </div>
 <?php endif; ?>
-<?php if(isset($model->id) and $model->response_finvoice != '') : ?>
+<?php if(isset($model->id) and $model->response_finvoice != '' and $model->trust_jobid == '') : ?>
   <div class="col-sm-6 well">
 	<?php 
 	$expl = explode("//",$model->response_finvoice);
@@ -522,6 +522,11 @@ $model->viivastyskorko = $firma->viivastyskorko;
 	echo $e.'<br>'; 
 	}
 	?>
+  </div>
+<?php endif; ?>
+<?php if(isset($model->id) and $model->response_finvoice != '' and $model->trust_jobid != '') : ?>
+  <div class="col-sm-6">
+	<textarea class="form-control" rows="10"><?php echo $model->response_finvoice; ?></textarea>
   </div>
 <?php endif; ?>
 </div>

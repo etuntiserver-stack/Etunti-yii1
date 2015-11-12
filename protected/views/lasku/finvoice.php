@@ -231,7 +231,7 @@ for ($i = 0; $i < count ($doc->row); $i++) {
         echo 'accept billnum ' . $doc->row[$i]->billnum
             . ' jobid ' . $doc->row[$i]->jobid . "<br>";
 
-     	Lasku::model()->updatebypk($id, array('tilanne'=>2,'trust_jobid'=>$doc->row[$i]->jobid));
+     	Lasku::model()->updatebypk($id, array('tilanne'=>2,'response_finvoice'=>$res,'trust_jobid'=>$doc->row[$i]->jobid));
 	$this->redirect(array('update','id'=>$id));
 	break;
 
