@@ -7,14 +7,12 @@ $this->breadcrumbs=array(
 	$model->id=>array('view','id'=>$model->id),
 	'Update',
 );
-/*
+
+if(isset($model->id) and $model->tilanne == '1'){
 $this->menu=array(
-	array('label'=>'List Lasku', 'url'=>array('index')),
-	array('label'=>'Create Lasku', 'url'=>array('create')),
-	array('label'=>'View Lasku', 'url'=>array('view', 'id'=>$model->id)),
-	array('label'=>'Manage Lasku', 'url'=>array('admin')),
+	array('label'=>'Laskun mitätöinti', 'url'=>'#', 'linkOptions'=>array('submit'=>array('delete','id'=>$model->id),'confirm'=>'Are you sure you want to delete this item?')),
 );
-*/
+}
 ?>
 
 <legend>
