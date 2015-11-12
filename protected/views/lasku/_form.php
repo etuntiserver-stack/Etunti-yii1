@@ -36,6 +36,8 @@ if(isset($model->id)){
 echo '<input type="hidden" id="modelID" value="1">';
 echo '<input type="hidden" id="forLaskutusTyyppi" value="'.$model->laskutus.'">';
 echo '<input type="hidden" id="forTilanne" value="'.$model->tilanne.'">';
+} else {
+echo '<input type="hidden" id="forTilanne" value="0">';
 }
 
 $firma = Asetukset::model()->findbypk(1);
@@ -468,7 +470,7 @@ $model->viivastyskorko = $firma->viivastyskorko;
 <br><br><br><br><br><br>
 
 	<div class="row subm">
-		<?php if($model->tilanne != '1' and $model->tilanne != '2') : ?>
+		<?php if(!isset($model->id) or $model->tilanne == '0') : ?>
 		<?php echo CHtml::submitButton($model->isNewRecord ? 'Tallenna' : 'Tallenna',array('class'=>'btn btn-sm btn-primary')); ?>
 		<?php endif; ?>
 
@@ -479,7 +481,7 @@ $model->viivastyskorko = $firma->viivastyskorko;
 		<a href="finvoice?id=<?php echo $model->id; ?>&finvoice=true" class="btn btn-sm btn-success btn-group"><?php echo Yii::t('main','Lähetä finvoice (POSTITA.FI)'); ?></a>
 		<?php endif; ?>
 
-		<?php if(isset($model->id) and $model->tilanne != '1' and $model->tilanne != '2') : ?>
+		<?php if(isset($model->id) and $model->tilanne == '0') : ?>
 		<a href="update?id=<?php echo $model->id; ?>&tilanne=1" class="btn btn-sm btn-success btn-group"><?php echo Yii::t('main','Hyväksy'); ?></a>
 		<?php endif; ?>
 
@@ -491,9 +493,18 @@ $model->viivastyskorko = $firma->viivastyskorko;
 		<a href="finvoice?id=<?php echo $model->id; ?>&finvoiceTrust=true" class="btn btn-sm btn-success btn-group"><?php echo Yii::t('main','Lähetä finvoice (TRUST.FI)'); ?></a>
 		<?php endif; ?>
 
+		<?php if(isset($model->id) and $model->tilanne == '1') : ?>
+		<a href="finvoice?id=<?php echo $model->id; ?>&merkitseMaksetuksi=true" class="btn btn-sm btn-primary btn-group"><?php echo Yii::t('main','Merkitse maksetuksi'); ?></a>
+		<?php endif; ?>
+
 		<?php if(isset($model->id) and $model->tilanne == '2') : ?>
 		<?php echo Yii::t('main','Lasku on lähetetty'); ?>
 		<?php endif; ?>
+
+		<?php if(isset($model->id) and $model->tilanne == '3') : ?>
+		<?php echo Yii::t('main','Lasku maksettu'); ?>
+		<?php endif; ?>
+
 		<?php endif; ?>
 	</div>
 
@@ -555,7 +566,7 @@ $("#lasku-form").on('submit',function(e) {
 	    return true;
 });
 
-if(($("#forTilanne").val() == '1') | ($("#forTilanne").val() == '2')){
+if(($("#forTilanne").val() != '0')){
   $("input").prop("disabled", true);
   $("select").prop("disabled", true);
   $(".poista").remove();

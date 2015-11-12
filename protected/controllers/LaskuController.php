@@ -497,6 +497,8 @@ class LaskuController extends Controller
 		    $tilanne = 'Hyväksytty';
 		if($data->tilanne == 2)
 		    $tilanne = 'Lähetetty';
+		if($data->tilanne == 3)
+		    $tilanne = 'Maksettu';
 
             	return $tilanne;
 	}
