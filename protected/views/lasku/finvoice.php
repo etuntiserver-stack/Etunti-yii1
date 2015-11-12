@@ -1,6 +1,13 @@
 <?php
   $id = $_GET['id'];
 
+
+
+if(isset($_GET['merkitseMaksetuksi'])){
+     	Lasku::model()->updatebypk($id, array('tilanne'=>3));
+	$this->redirect(array('update','id'=>$id));
+}
+
 if(isset($_GET['finvoiceTrust'])){
 
  $cid = $asetukset['trust_cid'];
