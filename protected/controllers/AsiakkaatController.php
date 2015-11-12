@@ -28,7 +28,7 @@ class AsiakkaatController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view'),
+				'actions'=>array('admin','delete','create','update','index','view', 'checkLastAsiakasID'),
                 		//'expression'=>"Yii::app()->user->username == 'roman'",
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
@@ -50,6 +50,16 @@ class AsiakkaatController extends Controller
 		}
 	}
 
+
+	public function actionCheckLastAsiakasID()
+	{
+		$check = 0;
+		$model=Asiakkaat::model()->findbypk($_POST['checkLastAsiakasID']);
+		if(isset($model->id))
+		$check = 1;
+
+		echo $check;
+	}
 
 	public function actionView($id)
 	{
