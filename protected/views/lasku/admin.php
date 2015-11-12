@@ -111,8 +111,18 @@ $('.search-form form').submit(function(){
 		'hyvityslasku',
 		'laskun_nimetys',
 		*/
+		/*
 		array(
 			'class'=>'CButtonColumn',
 		),
+		*/
+array(
+
+        'value' => '
+	   CHtml::link("Katso", Yii::app()->createUrl("lasku/update",array("id"=>$data->id)))
+	',
+        'type'  => 'raw',
+	//'visible'=>Yii::app()->user->avetak,
+    ),
 	),
 )); ?>
