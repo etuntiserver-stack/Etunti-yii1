@@ -486,4 +486,18 @@ class LaskuController extends Controller
 
             	return $job_id;
 	}
+
+    	protected function tilanneCheck($data,$row)
+	{ 
+		    $tilanne = '';
+
+		if($data->tilanne == 0)
+		    $tilanne = 'Luotu';
+		if($data->tilanne == 1)
+		    $tilanne = 'Hyväksytty';
+		if($data->tilanne == 2)
+		    $tilanne = 'Lähetetty';
+
+            	return $tilanne;
+	}
 }

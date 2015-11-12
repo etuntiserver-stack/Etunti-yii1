@@ -47,31 +47,35 @@ $('.search-form form').submit(function(){
 	'filter'=>$model,
 
                     'pagerCssClass' => 'dataTables_paginate paging_bootstrap',
-                    'itemsCssClass' => 'table table-striped table-bordered table-hover',
+                    'itemsCssClass' => 'table small table-striped table-bordered table-hover',
 
 	'columns'=>array(
 		'id',
 
 	array(
-        'header'  => 'Asianro Postita/Trust',
+        'header'  => 'Asianro',
         'value'=>array($this,'asianro'),
 	'type' => 'html',
-    	),
-	array(
-        'header'  => 'Finvoice',
-        'value' => 'CHtml::link("linkki", Yii::app()->createUrl("lasku/finvoice",array("id"=>$data->id)))',
-        'type'  => 'raw',
     	),
 
 		//'lid',
 		//'yid',
-		'time',
+               array(
+                    'name'=>'time',
+                    'value'=>'date("d.m.Y - H:i",strtotime($data->time))',                   
+		),
 		//'tyyppi',
 		'yritys',
 		'y_tunnus',
+		'osoite',
 		'nimi',
+		'yhteyshenkilo',
 		//'as_nro',
-		'tilanne',
+	array(
+        'header'  => 'Tilanne',
+        'value'=>array($this,'tilanneCheck'),
+	'type' => 'html',
+    	),
 		/*
 		'postinumero',
 		'toimipaikka',
@@ -79,7 +83,7 @@ $('.search-form form').submit(function(){
 		'sahkoposti',
 		'verkkolaskuosoite',
 		'v_tunnus',
-		'yhteyshenkilo',
+
 		'nimitarkenne',
 		'puhelin',
 		't_yritys',
