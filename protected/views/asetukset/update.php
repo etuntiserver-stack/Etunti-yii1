@@ -40,14 +40,14 @@ exit;
 
 
 <div class="row">
-  <div class="col-sm-6">
+
   <legend>
   <h2><?php echo Yii::t('main', 'ASETUKSET'); ?> <i class="glyphicon glyphicon-phone"></i></h2>
   </legend>
 
 	<?php echo $this->renderPartial('_form', array('model'=>$model)); ?>
 
-  </div><div class="col-sm-6">
+
   <legend>
   <h2><?php echo Yii::t('main', 'TIEDOSTOT'); ?> <i class="glyphicon glyphicon-phone"></i></h2>
   </legend>
@@ -65,7 +65,7 @@ exit;
 	$kuvat[$i] = $file;
 	}
 ?>
-  </div>
+
 </div>
 
 

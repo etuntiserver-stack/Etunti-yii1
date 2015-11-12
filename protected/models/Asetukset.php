@@ -42,10 +42,10 @@ class Asetukset extends DB2ActiveRecord
 			array('id,logon_polkku, logon_korkeus, johtaja', 'required'),
 			array('id, logon_korkeus', 'numerical', 'integerOnly'=>true),
 			array('paivan_uutinen, logon_polkku', 'length', 'max'=>500),
-			array('johtaja, viivastyskorko, tilinumero, iban, bic, , postita_username, postita_password', 'length', 'max'=>100),
+			array('johtaja, viivastyskorko, tilinumero, iban, bic, , postita_username, postita_password, trust_cid, trust_api', 'length', 'max'=>100),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, syntyrin_emails, paivan_uutinen, logon_polkku, logon_korkeus, johtaja, viivastyskorko, tilinumero, iban, bic', 'safe', 'on'=>'search'),
+			array('id, syntyrin_emails, paivan_uutinen, logon_polkku, logon_korkeus, johtaja, viivastyskorko, tilinumero, iban, bic, trust_cid, trust_api', 'safe', 'on'=>'search'),
 		);
 	}
 
