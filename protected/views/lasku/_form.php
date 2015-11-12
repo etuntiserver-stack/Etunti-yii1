@@ -72,11 +72,11 @@ $model->viivastyskorko = $firma->viivastyskorko;
 		{
         	  $aon = Asiakkaat::model()->findbypk($model->asiakas_id);
 		  if(!empty($aa->yrityksen_nimi))
-		    echo '<option value="'.$aon->id.'">'.$aon->yrityksen_nimi.'</option>';
+		    echo '<option value="'.$aon->asiakasnumero.'">'.$aon->yrityksen_nimi.'</option>';
 		  elseif(empty($aon->yhteyshenkilo) and empty($aon->yrityksen_nimi))
-		    echo '<option value="'.$aon->id.'">nimet puutuu '.$aon->id.'</option>';
+		    echo '<option value="'.$aon->asiakasnumero.'">nimet puutuu '.$aon->id.'</option>';
 		  else
-		    echo '<option value="'.$aon->id.'">'.$aon->yhteyshenkilo.'</option>';
+		    echo '<option value="'.$aon->asiakasnumero.'">'.$aon->yhteyshenkilo.'</option>';
 		} else {
 	        echo '<option></option>';
 		}
@@ -84,11 +84,11 @@ $model->viivastyskorko = $firma->viivastyskorko;
 		foreach($a as $aa)
 		{
 		  if(!empty($aa->yrityksen_nimi))
-		    echo '<option value="'.$aa->id.'">'.$aa->yrityksen_nimi.'</option>';
+		    echo '<option value="'.$aa->asiakasnumero.'">'.$aa->yrityksen_nimi.'</option>';
 		  elseif(empty($aa->yhteyshenkilo) and empty($aa->yrityksen_nimi))
-		    echo '<option value="'.$aa->id.'">nimet puutuu '.$aa->id.'</option>';
+		    echo '<option value="'.$aa->asiakasnumero.'">nimet puutuu '.$aa->id.'</option>';
 		  else
-		    echo '<option value="'.$aa->id.'">'.$aa->yhteyshenkilo.'</option>';
+		    echo '<option value="'.$aa->asiakasnumero.'">'.$aa->yhteyshenkilo.'</option>';
 		}
 		echo '</select>';
 		?>
@@ -871,6 +871,11 @@ $("#Lasku_yid").change(function() {
 $("#Lasku_as_nro").change(function() {
 
     var asiakas = $(this).val();
+    if(!asiakas)
+    {
+	alert("Asiakasnumero puuttuu");
+	return false;
+    }
 
         $.ajax({
            url: 'etsikohde?id='+asiakas,

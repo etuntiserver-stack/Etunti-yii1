@@ -228,7 +228,7 @@ class LaskuController extends Controller
 	public function actionEtsiasiakas($id)
 	{
 
-		$a = Asiakkaat::model()->findbypk($id);
+		$a = Asiakkaat::model()->find(" asiakasnumero='".$id."' ");
 		$k = Kohteet::model()->findAll(" asiakas_id='".$id."' ");
 
 		$tyyppi = '';

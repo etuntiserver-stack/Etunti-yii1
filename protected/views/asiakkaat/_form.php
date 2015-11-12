@@ -2,6 +2,10 @@
 /* @var $this AsiakkaatController */
 /* @var $model Asiakkaat */
 /* @var $form CActiveForm */
+
+$nextnum = Asiakkaat::model()->find(array('order'=>'id DESC'));
+$asiakasnumero = $nextnum->id+1;
+
 ?>
 
 <style>
@@ -26,7 +30,7 @@
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'asiakasnumero'); ?>
-		<?php echo $form->textField($model,'asiakasnumero',array('size'=>60,'maxlength'=>100,'class'=>'form-control input-sm')); ?>
+		<?php echo $form->textField($model,'asiakasnumero',array('value'=>$asiakasnumero,'size'=>60,'maxlength'=>100,'class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'asiakasnumero'); ?>
 	</div>
 
@@ -211,6 +215,26 @@ $("#Asiakkaat_tyyppi").change(function() {
     laskutusTyyppi(value);
 });
 
+$("#Asiakkaat_asiakasnumero").keyup(function() {
+    var checkLastAsiakasID = $(this).val();
+        $.ajax({
+           url: "checkLastAsiakasID",
+	   type:'POST',
+	   data: { "checkLastAsiakasID" : checkLastAsiakasID },
+           success: function(data){
+		console.log(data)
+		if(parseInt(data) == 1)
+		{
+		  $("input").prop("disabled", true);
+		  $("select").prop("disabled", true);
+		  $("#Asiakkaat_asiakasnumero").prop("disabled", false);
+		} else {
+		  $("input").prop("disabled", false);
+		  $("select").prop("disabled", false);
+		}
+           }
+        });
+});
 
 function openAll(){
 
