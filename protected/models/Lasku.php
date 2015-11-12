@@ -112,7 +112,7 @@ class Lasku extends DB2ActiveRecord
 			'id' => 'ID',
 			'lid' => 'Lid',
 			'yid' => 'Saaja',
-			'time' => 'Time',
+			'time' => 'Luotu',
 			'tyyppi' => 'Tyyppi',
 			'yritys' => 'Yritys',
 			'y_tunnus' => 'Y Tunnus',
