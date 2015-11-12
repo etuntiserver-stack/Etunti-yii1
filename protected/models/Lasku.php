@@ -80,7 +80,7 @@ class Lasku extends DB2ActiveRecord
 		return array(
 			array('yid, tyyppi, as_nro, osoite, postinumero, toimipaikka, laskutus, paivays, erapaiva, maksuehto, toimitusosoite', 'required'),
 			array('lid, yid, as_nro', 'numerical', 'integerOnly'=>true),
-			array('tyyppi, yritys, nimi, sahkoposti, v_tunnus, yhteyshenkilo, nimitarkenne, t_yritys, t_nimi, t_osoite, t_toimipaikka, t_sahkoposti, toimitusosoite, viitenumero, saaja_iban, maksettu_euro, laskun_nimetys', 'length', 'max'=>100),
+			array('tyyppi, yritys, nimi, sahkoposti, v_tunnus, yhteyshenkilo, nimitarkenne, t_yritys, t_nimi, t_osoite, t_toimipaikka, t_sahkoposti, toimitusosoite, viitenumero, saaja_iban, maksettu_euro, laskun_nimetys, postita_jobid, trust_jobid', 'length', 'max'=>100),
 			array('y_tunnus, toimipaikka, laskutus, puhelin, t_y_tunnus, t_puhelin, viivastyskorko, tilanne', 'length', 'max'=>50),
 			array('osoite, verkkolaskuosoite, saaja_virtualkoodi', 'length', 'max'=>255),
 			array('postinumero, t_postinumero', 'length', 'max'=>10),

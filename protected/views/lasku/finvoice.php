@@ -231,7 +231,7 @@ for ($i = 0; $i < count ($doc->row); $i++) {
         echo 'accept billnum ' . $doc->row[$i]->billnum
             . ' jobid ' . $doc->row[$i]->jobid . "<br>";
 
-     	Lasku::model()->updatebypk($id, array('tilanne'=>2));
+     	Lasku::model()->updatebypk($id, array('tilanne'=>2,'trust_jobid'=>$doc->row[$i]->jobid));
 	$this->redirect(array('update','id'=>$id));
 	break;
 
@@ -527,10 +527,13 @@ curl_close($ch);
   if(isset($send_response[0]['status']) and $send_response[0]['status'] == 'CO')
   {
 
+       $job_id = '';
      foreach($send_response[0] as $k => $v ) {
        $prep[$k] = $k.":".$v;
+       if($k == 'id')
+       $job_id = $v;
      }
-     Lasku::model()->updatebypk($id, array('tilanne'=>2,'response_finvoice'=>implode('//',$prep)));
+     Lasku::model()->updatebypk($id, array('tilanne'=>2,'response_finvoice'=>implode('//',$prep),'postita_jobid'=>$job_id));
      $this->redirect(array('update','id'=>$id));
 
   }
@@ -641,11 +644,13 @@ curl_close($ch);
 
   if($send_response['status'] == 'CO')
   {
-
+       $job_id = '';
      foreach($send_response as $k => $v ) {
        $prep[$k] = $k.":".$v;
+       if($k == 'id')
+       $job_id = $v;
      }
-     Lasku::model()->updatebypk($id, array('tilanne'=>2,'response'=>implode('//',$prep)));
+     Lasku::model()->updatebypk($id, array('tilanne'=>2,'response'=>implode('//',$prep),'postita_jobid'=>$job_id));
      $this->redirect(array('update','id'=>$id));
 
   }
