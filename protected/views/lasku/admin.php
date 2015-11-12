@@ -53,6 +53,11 @@ $('.search-form form').submit(function(){
 		'id',
 
 	array(
+        'header'  => 'Asianro Postita/Trust',
+        'value'=>array($this,'asianro'),
+	'type' => 'html',
+    	),
+	array(
         'header'  => 'Finvoice',
         'value' => 'CHtml::link("linkki", Yii::app()->createUrl("lasku/finvoice",array("id"=>$data->id)))',
         'type'  => 'raw',
@@ -61,7 +66,7 @@ $('.search-form form').submit(function(){
 		//'lid',
 		//'yid',
 		'time',
-		'tyyppi',
+		//'tyyppi',
 		'yritys',
 		'y_tunnus',
 		'nimi',

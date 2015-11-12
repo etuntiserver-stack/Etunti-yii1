@@ -473,4 +473,17 @@ class LaskuController extends Controller
 			Yii::app()->end();
 		}
 	}
+
+    	protected function asianro($data,$row)
+	{ 
+		    $job_id = '';
+
+		if($data->postita_jobid != '')
+		    $job_id = 'Postita ID:<br>'.$data->postita_jobid;
+
+		if($data->trust_jobid != '')
+		    $job_id = 'Trust ID:<br>'.$data->trust_jobid;
+
+            	return $job_id;
+	}
 }
