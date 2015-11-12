@@ -30,7 +30,7 @@ $asiakasnumero = $nextnum->id+1;
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'asiakasnumero'); ?>
-		<?php echo $form->textField($model,'asiakasnumero',array('value'=>$asiakasnumero,'size'=>60,'maxlength'=>100,'class'=>'form-control input-sm')); ?>
+		<?php echo $form->textField($model,'asiakasnumero',array('placeholder'=>'nro. '.$asiakasnumero.' on vapaa','size'=>60,'maxlength'=>100,'class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'asiakasnumero'); ?>
 	</div>
 
@@ -214,6 +214,10 @@ $("#Asiakkaat_tyyppi").change(function() {
     var value = $(this).val();
     laskutusTyyppi(value);
 });
+
+		  $("input").prop("disabled", true);
+		  $("select").prop("disabled", true);
+		  $("#Asiakkaat_asiakasnumero").prop("disabled", false);
 
 $("#Asiakkaat_asiakasnumero").keyup(function() {
     var checkLastAsiakasID = $(this).val();
