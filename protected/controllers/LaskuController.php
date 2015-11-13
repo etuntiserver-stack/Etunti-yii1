@@ -197,7 +197,7 @@ class LaskuController extends Controller
 	<script type="text/javascript">
  	  $(document).ready(function(){
 		$('.selectpicker').selectpicker({
-		      style: 'btn-default',
+		      style: 'btn-default btn-sm',
 		      //size: 4
 		});
 		/*
@@ -443,17 +443,15 @@ class LaskuController extends Controller
 	$cid = $asetukset['trust_cid'];
 	$api = $asetukset['trust_api'];
 	
+	// <-- Trust
 	$ch = curl_init();
 	$data = array('cid'=>$cid, 'apicode'=>$api);
-	
 	curl_setopt($ch, CURLOPT_URL, 'https://beta2.trustpoint.fi/API/statusupdates.php');
     	curl_setopt($ch, CURLOPT_HEADER, 0);
     	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 	curl_setopt($ch, CURLOPT_POST, TRUE);
 	curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
 	
-
-
     	$rss = curl_exec($ch);
     	curl_close($ch);
 	if($xml = simplexml_load_string($rss, 'SimpleXMLElement', LIBXML_NOCDATA))
@@ -472,6 +470,8 @@ class LaskuController extends Controller
 	  }
 	 }
 	}
+	// Trust -->
+
 		$model=new Lasku('search');
 		$model->unsetAttributes();  // clear any default values
 		if(isset($_GET['Lasku']))
