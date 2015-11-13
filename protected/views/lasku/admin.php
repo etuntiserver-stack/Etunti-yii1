@@ -77,6 +77,11 @@ $('.search-form form').submit(function(){
         'value'=>array($this,'tilanneCheck'),
 	'type' => 'html',
     	),
+	array(
+        'header'  => 'Tapahtuma pvm',
+        'value'=>array($this,'tapahtumapvm'),
+	'type' => 'html',
+    	),
 		'yhteensa_total',
 		/*
 		'postinumero',
