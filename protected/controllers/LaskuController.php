@@ -209,7 +209,8 @@ class LaskuController extends Controller
 	  });
 	</script>
 	<?php
-		$k = Kohteet::model()->findAll(" asiakas_id='".$id."' ");
+		$a = Asiakkaat::model()->find(" asiakasnumero='".$id."' ");
+		$k = Kohteet::model()->findAll(" asiakas_id='".$a->id."' ");
 		$body = '<b class="glyphicon glyphicon-home"></b><br>
 		<select id="kohteet" class="selectpicker input-sm" multiple title="Valitse kohteet">';
 		foreach($k as $a)
