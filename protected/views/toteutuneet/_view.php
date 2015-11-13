@@ -1,10 +1,18 @@
 <?php
 
-$did = date("Ymd",strtotime($data->aloitan));
+  $arrDate = array(1=>"Ma",2=>"Ti",3=>"Ke",4=>"To",5=>"Pe",6=>"La",7=>"Su");
+  $columnDate = date("N/d.m",strtotime($data->aloitan));
+  $explColDate = explode("/",$columnDate);
+
+  $did = date("Ymd",strtotime($data->aloitan));
 ?>
 <TR>
 
-	<td><?php echo CHtml::encode(date("d.m.Y",strtotime($data->aloitan))); ?></td>
+	<td>
+	<?php 
+		echo $arrDate[$explColDate[0]].', '.CHtml::encode(date("d.m.Y",strtotime($data->aloitan))); 
+	?>
+	</td>
 
 	<!-- adminPaketti -->
 	<?php
