@@ -531,16 +531,8 @@ class LaskuController extends Controller
 		if(isset($l['id']))
 		{
 		    $trustexpl = explode("//",$data->response_finvoice);
-		    foreach($trustexpl as $t)
-		    { 
-			$expl = array();
-			$expl = explode(":",$t);
-			if(trim($expl[0]) == 'statustext' and isset($expl[1]))
-			{
-				$trustStr = $expl[1];
-				break;
-			}
-		    }
+		    if(isset($trustexpl[4]))
+		    $trustStr = str_replace("statustext:","",$trustexpl[4]);
 		    $trust = true;
 		}
 
@@ -560,4 +552,33 @@ class LaskuController extends Controller
 
             	return $tilanne;
 	}
+
+
+    	protected function tapahtumapvm($data,$row)
+	{ 
+		//Trust
+		    $trust = false;
+		    $trustStr = '';
+		$l = Lasku::model()->find(" trust_jobid!='' and  trust_jobid='".trim($data->trust_jobid)."' ");
+		if(isset($l['id']))
+		{
+		    $trustexpl = explode("//",$data->response_finvoice);
+		    if(isset($trustexpl[0]))
+		    {
+		    $trustStr = str_replace("statustime:","",$trustexpl[0]);
+		    $trustStr = date("d.m H:i",strtotime($trustStr));
+		    $trust = true;
+		    }
+		}
+
+
+		    $tilanne = '';
+
+		if($trust == true)
+		    $tilanne = $trustStr;
+
+            	return $tilanne;
+	}
+
+
 }
