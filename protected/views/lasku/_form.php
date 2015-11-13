@@ -493,16 +493,28 @@ $model->viivastyskorko = $firma->viivastyskorko;
 		<a href="finvoice?id=<?php echo $model->id; ?>&finvoiceTrust=true" class="btn btn-sm btn-success btn-group"><?php echo Yii::t('main','Lähetä finvoice (TRUST.FI)'); ?></a>
 		<?php endif; ?>
 
-		<?php if(isset($model->id) and $model->tilanne == '1') : ?>
+		<hr>
+
+		<?php if(isset($model->id) and $model->tilanne != '3') : ?>
 		<a href="finvoice?id=<?php echo $model->id; ?>&merkitseMaksetuksi=true" class="btn btn-sm btn-primary btn-group"><?php echo Yii::t('main','Merkitse maksetuksi'); ?></a>
 		<?php endif; ?>
 
+		<?php if(isset($model->id) and $model->tilanne != '3') : ?>
+		<a href="finvoice?id=<?php echo $model->id; ?>&lahetaMuistutus=true" class="btn btn-sm btn-primary btn-group"><?php echo Yii::t('main','Lähetä muistutus (suunnittelemassa)'); ?></a>
+		<?php endif; ?>
+
+		<?php if(isset($model->id) and $model->tilanne != '3') : ?>
+		<a href="finvoice?id=<?php echo $model->id; ?>&lahetaPerintaan=true" class="btn btn-sm btn-primary btn-group"><?php echo Yii::t('main','Lähetä perintään (suunnittelemassa)'); ?></a>
+		<?php endif; ?>
+
+
+
 		<?php if(isset($model->id) and $model->tilanne == '2') : ?>
-		<?php echo Yii::t('main','Lasku on lähetetty'); ?>
+		<h2><?php echo Yii::t('main','Lasku on lähetetty'); ?></h2>
 		<?php endif; ?>
 
 		<?php if(isset($model->id) and $model->tilanne == '3') : ?>
-		<?php echo Yii::t('main','Lasku maksettu'); ?>
+		<h2><?php echo Yii::t('main','Lasku maksettu'); ?></h2>
 		<?php endif; ?>
 
 		<?php endif; ?>
