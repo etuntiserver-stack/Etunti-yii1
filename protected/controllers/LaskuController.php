@@ -446,31 +446,27 @@ class LaskuController extends Controller
 	$data = array('cid'=>$cid, 'apicode'=>$api);
 	
 	curl_setopt($ch, CURLOPT_URL, 'https://beta2.trustpoint.fi/API/statusupdates.php');
+    	curl_setopt($ch, CURLOPT_HEADER, 0);
+    	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 	curl_setopt($ch, CURLOPT_POST, TRUE);
 	curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
 	
-	$data = curl_exec($ch);
-	libxml_use_internal_errors(true);
-	$sxe = simplexml_load_string($data);
-	
-	if ($sxe === false) {
-	    /*
-	    echo "Failed loading XML\n";
-	    foreach(libxml_get_errors() as $error) {
-		        echo "\t", $error->message;
-	    }
-	    */
-	} else {
-	
-	  $result = new SimpleXMLElement($data);
-	  foreach ($result as $r) {
+
+
+    	$rss = curl_exec($ch);
+    	curl_close($ch);
+	$xml = simplexml_load_string($rss, 'SimpleXMLElement', LIBXML_NOCDATA);
+
+	if($xml->commonerror != 'No statusupdates')
+	{
+	  foreach ($xml as $r) {
 		$str = '';
 	    	$str = 'statustime:'.$r->statustime.'//jobid:'.$r->jobid.'//billnum:'.$r->billnum.'//statusref:'.$r->statusref.'//	statustext:'.$r->statustext.'//statuscode:'.$r->statuscode;
 	
-		$l = Lasku::model()->find(" trust_jobid='".$r->jobid."' ");
-		if(isset($l->id))
+		$l = Lasku::model()->find(" trust_jobid='".trim($r->jobid)."' ");
+		if(isset($l['id']))
 		{
-	     	    Lasku::model()->updatebypk($l->id, array('tilanne'=>$r->statuscode,'response_finvoice'=>$str));
+	     	    Lasku::model()->updatebypk($l['id'], array('tilanne'=>$r->statuscode,'response_finvoice'=>$str));
 		}
 	  }
 	}
@@ -528,16 +524,27 @@ class LaskuController extends Controller
 
     	protected function tilanneCheck($data,$row)
 	{ 
+		//Trust
+		    $trust = false;
+		    $trustStr = '';
+		$l = Lasku::model()->find(" trust_jobid='".trim($data->trust_jobid)."' ");
+		if(isset($l['id']))
+		{
+		    $trustStr = str_replace("//","<br>", $data->response_finvoice);
+		    $trust = true;
+		}
 		    $tilanne = '';
 
 		if($data->tilanne == 0)
 		    $tilanne = 'Luotu';
-		if($data->tilanne == 1)
+		elseif($data->tilanne == 1)
 		    $tilanne = 'Hyväksytty';
-		if($data->tilanne == 2)
+		elseif($data->tilanne == 2)
 		    $tilanne = 'Lähetetty';
-		if($data->tilanne == 3)
+		elseif($data->tilanne == 3)
 		    $tilanne = 'Maksettu';
+		elseif($trust == true)
+		    $tilanne = $trustStr;
 
             	return $tilanne;
 	}

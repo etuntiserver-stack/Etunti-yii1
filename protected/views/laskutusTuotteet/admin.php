@@ -6,12 +6,12 @@ $this->breadcrumbs=array(
 	'Laskutus Tuotteets'=>array('index'),
 	'Manage',
 );
-
+/*
 $this->menu=array(
 	array('label'=>'List LaskutusTuotteet', 'url'=>array('index')),
 	array('label'=>'Create LaskutusTuotteet', 'url'=>array('create')),
 );
-
+*/
 Yii::app()->clientScript->registerScript('search', "
 $('.search-button').click(function(){
 	$('.search-form').toggle();
