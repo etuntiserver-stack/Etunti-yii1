@@ -908,7 +908,7 @@ $("#Lasku_as_nro").change(function() {
         $.ajax({
            url: 'etsikohde?id='+asiakas,
            success: function(data){
-               	//console.log(data);
+               	console.log(data);
 		$("#getkohde").html(data);
            },
            error: function(XMLHttpRequest, textStatus, errorThrown){
