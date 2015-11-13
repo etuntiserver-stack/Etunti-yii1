@@ -77,6 +77,7 @@ $('.search-form form').submit(function(){
         'value'=>array($this,'tilanneCheck'),
 	'type' => 'html',
     	),
+		'yhteensa_total',
 		/*
 		'postinumero',
 		'toimipaikka',
@@ -104,7 +105,7 @@ $('.search-form form').submit(function(){
 		'viivastyskorko',
 		'yhteensa_total_verot',
 		'yhteensa_total_veroton',
-		'yhteensa_total',
+
 		'saaja_iban',
 		'saaja_virtualkoodi',
 		'tilanne',

@@ -455,13 +455,13 @@ class LaskuController extends Controller
 
     	$rss = curl_exec($ch);
     	curl_close($ch);
-	$xml = simplexml_load_string($rss, 'SimpleXMLElement', LIBXML_NOCDATA);
-
-	if($xml->commonerror != 'No statusupdates')
+	if($xml = simplexml_load_string($rss, 'SimpleXMLElement', LIBXML_NOCDATA))
 	{
+	 if($xml->commonerror != 'No statusupdates')
+	 {
 	  foreach ($xml as $r) {
 		$str = '';
-	    	$str = 'statustime:'.$r->statustime.'//jobid:'.$r->jobid.'//billnum:'.$r->billnum.'//statusref:'.$r->statusref.'//	statustext:'.$r->statustext.'//statuscode:'.$r->statuscode;
+	    	$str = 'statustime:'.trim($r->statustime).'//jobid:'.trim($r->jobid).'//billnum:'.trim($r->billnum).'//statusref:'.trim($r->statusref).'//statustext:'.trim($r->statustext).'//statuscode:'.trim($r->statuscode);
 	
 		$l = Lasku::model()->find(" trust_jobid='".trim($r->jobid)."' ");
 		if(isset($l['id']))
@@ -469,8 +469,8 @@ class LaskuController extends Controller
 	     	    Lasku::model()->updatebypk($l['id'], array('tilanne'=>$r->statuscode,'response_finvoice'=>$str));
 		}
 	  }
+	 }
 	}
-	
 		$model=new Lasku('search');
 		$model->unsetAttributes();  // clear any default values
 		if(isset($_GET['Lasku']))
@@ -530,9 +530,21 @@ class LaskuController extends Controller
 		$l = Lasku::model()->find(" trust_jobid='".trim($data->trust_jobid)."' ");
 		if(isset($l['id']))
 		{
-		    $trustStr = str_replace("//","<br>", $data->response_finvoice);
+		    $trustexpl = explode("//",$data->response_finvoice);
+		    foreach($trustexpl as $t)
+		    { 
+			$expl = array();
+			$expl = explode(":",$t);
+			if(trim($expl[0]) == 'statustext' and isset($expl[1]))
+			{
+				$trustStr = $expl[1];
+				break;
+			}
+		    }
 		    $trust = true;
 		}
+
+
 		    $tilanne = '';
 
 		if($data->tilanne == 0)
