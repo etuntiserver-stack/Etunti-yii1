@@ -436,6 +436,45 @@ class LaskuController extends Controller
 	 */
 	public function actionAdmin()
 	{
+
+
+	$asetukset=Asetukset::model()->find("id=1");
+	$cid = $asetukset['trust_cid'];
+	$api = $asetukset['trust_api'];
+	
+	$ch = curl_init();
+	$data = array('cid'=>$cid, 'apicode'=>$api);
+	
+	curl_setopt($ch, CURLOPT_URL, 'https://beta2.trustpoint.fi/API/statusupdates.php');
+	curl_setopt($ch, CURLOPT_POST, TRUE);
+	curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+	
+	$data = curl_exec($ch);
+	libxml_use_internal_errors(true);
+	$sxe = simplexml_load_string($data);
+	
+	if ($sxe === false) {
+	    /*
+	    echo "Failed loading XML\n";
+	    foreach(libxml_get_errors() as $error) {
+		        echo "\t", $error->message;
+	    }
+	    */
+	} else {
+	
+	  $result = new SimpleXMLElement($data);
+	  foreach ($result as $r) {
+		$str = '';
+	    	$str = 'statustime:'.$r->statustime.'//jobid:'.$r->jobid.'//billnum:'.$r->billnum.'//statusref:'.$r->statusref.'//	statustext:'.$r->statustext.'//statuscode:'.$r->statuscode;
+	
+		$l = Lasku::model()->find(" trust_jobid='".$r->jobid."' ");
+		if(isset($l->id))
+		{
+	     	    Lasku::model()->updatebypk($l->id, array('tilanne'=>$r->statuscode,'response_finvoice'=>$str));
+		}
+	  }
+	}
+	
 		$model=new Lasku('search');
 		$model->unsetAttributes();  // clear any default values
 		if(isset($_GET['Lasku']))
