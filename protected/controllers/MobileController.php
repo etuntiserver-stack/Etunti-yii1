@@ -1135,7 +1135,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		$fromTo = " DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$from."' AND '".$to."' ";
 
        		$criteria = new CDbCriteria();
-        	$criteria->select = "id,tekijan_nimi,aloitan,loppui,asiakas_hyvaksy";
+        	$criteria->select = "id,tekijan_nimi,aloitan,loppui,asiakas_hyvaksy,osoite";
         	$criteria->order = "kohde_kannasta";
         	//$criteria->group = "kohde_kannasta";
         	$criteria->condition = "
@@ -1154,12 +1154,12 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		  $d->aloitan = date("d.m.Y H:i",strtotime($d->aloitan));
 
 			$kesto = strtotime($d->loppui)-strtotime($d->aloitan);
-			$lu[] = $d->tekijan_nimi."//".date("d.m",strtotime($d->aloitan))."//".$kesto."//mobile_".$d->id."//".$d->asiakas_hyvaksy."//".date("H:i",strtotime($d->aloitan))."//".date("H:i",strtotime($d->loppui));
+			$lu[] = $d->tekijan_nimi."//".date("d.m",strtotime($d->aloitan))."//".$kesto."//mobile_".$d->id."//".$d->asiakas_hyvaksy."//".date("H:i",strtotime($d->aloitan))."//".date("H:i",strtotime($d->loppui))."//";
 		}
 
 
        		$criteria = new CDbCriteria();
-        	$criteria->select = "id,tekijan_nimi,aloitan,loppui,asiakas_hyvaksy";
+        	$criteria->select = "id,tekijan_nimi,aloitan,loppui,asiakas_hyvaksy,osoite";
         	$criteria->order = "kohde_kannasta";
         	//$criteria->group = "kohde_kannasta";
         	$criteria->condition = "
@@ -1175,7 +1175,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		  $d->loppui = date("d.m.Y H:i",strtotime($d->loppui));
 		  $d->aloitan = date("d.m.Y H:i",strtotime($d->aloitan));
 			$kesto = strtotime($d->loppui)-strtotime($d->aloitan);
-			$lu[] = $d->tekijan_nimi."//".date("d.m",strtotime($d->aloitan))."//".$kesto."//toteutu_".$d->id."//".$d->asiakas_hyvaksy."//".date("H:i",strtotime($d->aloitan))."//".date("H:i",strtotime($d->loppui));
+			$lu[] = $d->tekijan_nimi."//".date("d.m",strtotime($d->aloitan))."//".$kesto."//toteutu_".$d->id."//".$d->asiakas_hyvaksy."//".date("H:i",strtotime($d->aloitan))."//".date("H:i",strtotime($d->loppui))."//".$d->osoite;
 		}
 
 		//if(count($lu) > 0)
@@ -1201,9 +1201,13 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			if(isset($explV[0]) and isset($explV[1]) and isset($explV[2]))
 			{
 
+			$kertaosoite = '';
+			if(isset($explV[7]) and !empty($explV[7]))
+			$kertaosoite = ' ('.trim($explV[7]).') ';
+
 			echo 
 			'<div class="row">
-			   <div class="col-sm-6 text-right">'.$explV[0].', '.$explV[1].'</div>
+			   <div class="col-sm-6 text-right">'.$explV[0].$kertaosoite.', '.$explV[1].'</div>
 			   <div class="col-sm-6"> '.$explV[5].'-'.$explV[6].' kesto: <b> '.$this->sprint($explV[2]).'</b> '.$asiakas_hyvaksy.'</div>
 			</div>';
 			}

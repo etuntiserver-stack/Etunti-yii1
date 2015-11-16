@@ -54,13 +54,13 @@ $forPVM = date('d.m.Y',strtotime($s->aloitan));
   <div class="col-sm-12">
 	<div class="row">
 		<?php echo $form->labelEx($model,'tietoja'); ?>
-		<?php echo $form->textarea($model,'tietoja',array('rows'=>4,'class'=>'form-control')); ?>
+		<?php echo $form->textarea($model,'tietoja',array('rows'=>4,'class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'tietoja'); ?>
 	</div>
   </div>
 
 
-  <div class="col-sm-3">
+  <div class="col-sm-4">
 	<div class="row">
 		<?php echo $form->labelEx($model,'kohde_kannasta'); ?>
 		<?php 
@@ -77,12 +77,18 @@ $forPVM = date('d.m.Y',strtotime($s->aloitan));
 		      echo $form->dropDownList($model,'kohde_kannasta', 
 			CHtml::listData(Kohteet::model()->findAll(array('order' => 'osoite ASC')), 'id', 'osoite'), 
 			    array(
-                		'class'=>'form-control',
+                		'class'=>'form-control input-sm',
 		                'options' => $opt,
 			    )
 			);
 		?>
 		<?php echo $form->error($model,'kohde_kannasta'); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->labelEx($model,'osoite'); ?>
+		<?php echo $form->textField($model,'osoite',array('class'=>'form-control input-sm')); ?>
+		<?php echo $form->error($model,'osoite'); ?>
 	</div>
 
 	<div class="row">
@@ -92,28 +98,24 @@ $forPVM = date('d.m.Y',strtotime($s->aloitan));
 		      //array_unshift($list, $list[$s->status]);
 		      echo $form->dropDownList($model,'status', 
 			 	$list, 
-				array('options' => array($s->status=>array('selected'=>true)),'class'=>'form-control'));
+				array('options' => array($s->status=>array('selected'=>true)),'class'=>'form-control input-sm'));
 		?>
 		<?php echo $form->error($model,'status'); ?>
 	</div>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'aloitan'); ?>
-		<?php echo $form->textField($model,'aloitan',array('value'=>$s->aloitan,'size'=>60,'maxlength'=>100,'class'=>'form-control al')); ?>
+		<?php echo $form->textField($model,'aloitan',array('value'=>$s->aloitan,'size'=>60,'maxlength'=>100,'class'=>'form-control input-sm al')); ?>
 	</div>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'loppui'); ?>
-		<?php echo $form->textField($model,'loppui',array('value'=>$s->loppui,'size'=>60,'maxlength'=>100,'class'=>'form-control lp')); ?>
+		<?php echo $form->textField($model,'loppui',array('value'=>$s->loppui,'size'=>60,'maxlength'=>100,'class'=>'form-control input-sm lp')); ?>
 	</div>
 
-  </div><div class="col-sm-2">
 
-	<div class="row">
-		<div id="kesto"><?php echo $kesto; ?></div>
-	</div>
 
-  </div><div class="col-sm-7">
+  </div><div class="col-sm-8">
 
 	<div class="row">
 	<label><?php echo Yii::t('main','Kohteen tiedot'); ?></label>
@@ -130,10 +132,15 @@ $forPVM = date('d.m.Y',strtotime($s->aloitan));
 		    $ohje .= "\n\nTietoja:\n".$m->tietoja;
 		  if(!empty($m->muut))
 		    $ohje .= "\n\nMuut:\n".$m->muut;
-		  echo '<textarea class="form-control" rows="12" >'.$ohje.'</textarea>';
+		  echo '<textarea class="form-control input-sm" rows="12" >'.$ohje.'</textarea>';
 		}
 	?>
 	</div>
+
+	<div class="row">
+		<div id="kesto"><?php echo $kesto; ?></div>
+	</div>
+
   </div>
 </div><!-- form -->
 
@@ -181,20 +188,20 @@ $(document).ready(function(){
 <!--
 	<div class="row">
 		<?php echo $form->labelEx($model,'tyoajanlaatu'); ?>
-		<?php echo $form->textField($model,'tyoajanlaatu',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
+		<?php echo $form->textField($model,'tyoajanlaatu',array('size'=>60,'maxlength'=>100,'class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'tyoajanlaatu'); ?>
 	</div>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'tyoajanmerkinta'); ?>
-		<?php echo $form->textField($model,'tyoajanmerkinta',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
+		<?php echo $form->textField($model,'tyoajanmerkinta',array('size'=>60,'maxlength'=>100,'class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'tyoajanmerkinta'); ?>
 	</div>
 
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'tietoja'); ?>
-		<?php echo $form->textArea($model,'tietoja',array('rows'=>6, 'cols'=>50,'value'=>$s->tietoja,'class'=>'form-control')); ?>
+		<?php echo $form->textArea($model,'tietoja',array('rows'=>6, 'cols'=>50,'value'=>$s->tietoja,'class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'tietoja'); ?>
 	</div>
 -->

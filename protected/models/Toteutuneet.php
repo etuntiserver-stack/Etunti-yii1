@@ -106,7 +106,7 @@ public $count;
 			'sim_serial_number' => 'Sim Serial Number',
 			'subscriber_id' => 'Subscriber',
 			'my_location' => 'My Location',
-			'osoite' => 'Osoite',
+			'osoite' => 'Kerta osoite',
 			'kohde_kannasta' => 'Osoite',
 			'kohdenID' => 'Kohden',
 			'aloitan' => 'Aloitus',
