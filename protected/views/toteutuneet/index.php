@@ -9,6 +9,10 @@ $this->breadcrumbs=array(
 
 ?>
 
+
+
+
+
 <legend>
 <h1> <?php echo Yii::t('main', 'TUNTIEN HYVÄKSYNTÄ'); ?> <i class="glyphicon glyphicon-time"></i></h1>
 </legend>
@@ -131,10 +135,11 @@ $this->breadcrumbs=array(
 	<?php Yii::app()->clientScript->registerPackage('tyovuoroot'); ?>
 	<?php Yii::app()->clientScript->registerPackage('toteuma'); ?>
 
-
+	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/totrivi_poista.js"></script>
 
 <script type="text/javascript">
 $(document).ready(function(){
+
 
 $("#yhtveto").on('submit',function(e){
 
