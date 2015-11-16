@@ -1523,7 +1523,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		    $kesto = '';
 		    $kesto = $l->l_tunnit;
 		    $sum += $l->l_tunnit;
-		    $return[] = $l->kohde_kannasta."//".$kesto."//".$l->count;
+		    $return[] = $l->kohde_kannasta."//".$kesto."//".$l->count."//";
 		}
 
 
@@ -1553,7 +1553,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		    $kesto = '';
 		    $kesto = $t->t_tunnit;
 		    $sum += $t->t_tunnit;
-		    $return2[] = $t->kohde_kannasta."//".$kesto."//".$t->count;
+		    $return2[] = $t->kohde_kannasta."//".$kesto."//".$t->count."//muokattu";
 		}
 
 		$model = array_merge($return, $return2);
@@ -1562,9 +1562,14 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		foreach($model as $result)
 		{
 		    $expl = explode("//",$result);
+
+		    $muokattu = '';
+		    if(!empty($expl[3]) and $expl[3] == 'muokattu')
+		    $muokattu = 'text-danger';
+
 			echo 
 			'<div class="row">
-			   <div class="col-sm-6 text-right">'.$expl[0].'</div>
+			   <div class="col-sm-6 text-right '.$muokattu.'">'.$expl[0].'</div>
 			   <div class="col-sm-6">kesto: <b> '.$this->sprint($expl[1]).' ('.$this->num($expl[1]).')</b>, kerta: '.$expl[2].'</div>
 			</div>';
 		}
