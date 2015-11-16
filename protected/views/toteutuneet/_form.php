@@ -8,13 +8,15 @@ if(isset($_POST['forid'])){
   $model->kohde_kannasta = $s->kohde_kannasta;
 }
 
+	  $s->loppui = date("d.m.Y H:i",strtotime($s->loppui));
+	  $s->aloitan = date("d.m.Y H:i",strtotime($s->aloitan));
+
 $kesto = '<h1>'.$this->sprint(strtotime($s->loppui)-strtotime($s->aloitan)).'</h1>';
 $forPVM = date('d.m.Y',strtotime($s->aloitan));
 //$aloitan = date("H:i",strtotime($s->aloitan));
 //$loppui = date("H:i",strtotime($s->loppui));
 
-	  $s->loppui = date("Y-m-d H:i",strtotime($s->loppui));
-	  $s->aloitan = date("Y-m-d H:i",strtotime($s->aloitan));
+
 ?>
 	<input type="hidden" id="forDatepickerAlkuPVM" value="<?php echo date('Y-m-d H:i',strtotime($s->aloitan)); ?>">
 	<input type="hidden" id="forDatepickerLoppuPVM" value="<?php echo date('Y-m-d H:i',strtotime($s->loppui)); ?>">
