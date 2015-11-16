@@ -3,14 +3,15 @@
 /* @var $model Toteutuneet */
 /* @var $form CActiveForm */
 
+	  $model->loppui = date("d.m.Y H:i",strtotime($model->loppui));
+	  $model->aloitan = date("d.m.Y H:i",strtotime($model->aloitan));
 
 $kesto = '<h1>'.$this->sprint(strtotime($model->loppui)-strtotime($model->aloitan)).'</h1>';
 $forPVM = date('d.m.Y',strtotime($model->aloitan));
 //$model->aloitan = date("H:i",strtotime($model->aloitan));
 //$model->loppui = date("H:i",strtotime($model->loppui));
 
-	  $model->loppui = date("Y-m-d H:i",strtotime($model->loppui));
-	  $model->aloitan = date("Y-m-d H:i",strtotime($model->aloitan));
+
 ?>
 
 	<input type="hidden" id="forDatepickerAlkuPVM" value="<?php echo date('Y-m-d H:i',strtotime($model->aloitan)); ?>">
