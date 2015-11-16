@@ -46,6 +46,8 @@
     $chk[$rivi] = 'checked';
   }
 
+    $mod = '';
+
   if(isset($muutos) and $muutos == true){
     $mod = 'update';
     $ap = ' <i class="link text-danger poistaTot" rivi="'.$rivi.'" for="'.$did.'_'.$tid.'">AP</i>';
