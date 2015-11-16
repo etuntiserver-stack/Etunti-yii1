@@ -21,6 +21,10 @@
 
 	foreach($lu as $tvVal){
 	   if($tvVal->id){
+
+	  $tvVal->loppui = date("Y-m-d H:i",strtotime($tvVal->loppui));
+	  $tvVal->aloitan = date("Y-m-d H:i",strtotime($tvVal->aloitan));
+
 	   if(!empty($tvVal->aloitan) and !empty($tvVal->loppui))
 	   $tun += strtotime($tvVal->loppui)-strtotime($tvVal->aloitan);
 	   }
@@ -49,6 +53,10 @@
 	foreach($lu as $tvVal){
 	   if($tvVal->id){
 	   if(!empty($tvVal->aloitan) and !empty($tvVal->loppui))
+
+	  $tvVal->loppui = date("Y-m-d H:i",strtotime($tvVal->loppui));
+	  $tvVal->aloitan = date("Y-m-d H:i",strtotime($tvVal->aloitan));
+
 	   $tun += strtotime($tvVal->loppui)-strtotime($tvVal->aloitan);
 	   }
 	}
