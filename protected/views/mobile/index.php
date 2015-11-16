@@ -231,8 +231,7 @@ $fi = array(
    <form id="mobForm" action="#" class="form-inline" method="POST">
    <input type="hidden" name="mob_hae">
    <?php
-    $model=new Mobile;
-    $list = CHtml::listData(Mobile::model()->findAll(array('group' => 'tekijan_nimi','order' => 'tekijan_nimi')), 'tekijan_nimi', 'tekijan_nimi');
+    $list = CHtml::listData(Tyontekijat::model()->findAll("aktiivinen=1",array('order' => 'tekijan_nimi')), 'tekijan_nimi', 'tekijan_nimi');
 
     echo '<select class="form-control input-sm form-group" name="etsi_tekijan_nimi">';
     if(Yii::app()->session['etsi_tekijan_nimi'])
@@ -249,7 +248,6 @@ $fi = array(
    ?>
 
    <?php
-    $model=new Mobile;
     $list = CHtml::listData(Mobile::model()->findAll(array('group' => 'kohdenID','order' => 'kohde_kannasta')), 'kohde_kannasta', 'kohde_kannasta');
 
     echo '<select class="form-control input-sm form-group" name="etsi_kohteet">';
