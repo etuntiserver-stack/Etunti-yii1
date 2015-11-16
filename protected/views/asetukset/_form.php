@@ -76,6 +76,15 @@
 		<?php echo $form->error($model,'viivastyskorko'); ?>
 	</div>
 
+	<div class="row">
+		<?php echo $form->labelEx($model,'palvelu_tyyppi'); ?>
+		<?php 
+        	$tal = array(1=>'POSTITA',2=>'TRUST');
+		echo $form->dropDownList($model,'palvelu_tyyppi', $tal, 
+		array('empty'=>'Valitse palvelu','class'=>'form-control input-sm','id'=>'osoite')) ?>
+		<?php echo $form->error($model,'palvelu_tyyppi'); ?>
+	</div>
+
     </div><div class="col-sm-4">
     <legend><h2><?php echo Yii::t('main','POSTITA.FI tunnukset'); ?></h2></legend>
 

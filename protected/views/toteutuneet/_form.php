@@ -12,6 +12,9 @@ $kesto = '<h1>'.$this->sprint(strtotime($s->loppui)-strtotime($s->aloitan)).'</h
 $forPVM = date('d.m.Y',strtotime($s->aloitan));
 //$aloitan = date("H:i",strtotime($s->aloitan));
 //$loppui = date("H:i",strtotime($s->loppui));
+
+	  $s->loppui = date("Y-m-d H:i",strtotime($s->loppui));
+	  $s->aloitan = date("Y-m-d H:i",strtotime($s->aloitan));
 ?>
 	<input type="hidden" id="forDatepickerAlkuPVM" value="<?php echo date('Y-m-d H:i',strtotime($s->aloitan)); ?>">
 	<input type="hidden" id="forDatepickerLoppuPVM" value="<?php echo date('Y-m-d H:i',strtotime($s->loppui)); ?>">

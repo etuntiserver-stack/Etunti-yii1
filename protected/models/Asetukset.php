@@ -40,12 +40,12 @@ class Asetukset extends DB2ActiveRecord
 		// will receive user inputs.
 		return array(
 			array('id,logon_polkku, logon_korkeus, johtaja', 'required'),
-			array('id, logon_korkeus', 'numerical', 'integerOnly'=>true),
+			array('id, logon_korkeus, palvelu_tyyppi', 'numerical', 'integerOnly'=>true),
 			array('paivan_uutinen, logon_polkku', 'length', 'max'=>500),
 			array('johtaja, viivastyskorko, tilinumero, iban, bic, , postita_username, postita_password, trust_cid, trust_api', 'length', 'max'=>100),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, syntyrin_emails, paivan_uutinen, logon_polkku, logon_korkeus, johtaja, viivastyskorko, tilinumero, iban, bic, trust_cid, trust_api', 'safe', 'on'=>'search'),
+			array('id, syntyrin_emails, paivan_uutinen, logon_polkku, logon_korkeus, johtaja, viivastyskorko, tilinumero, iban, bic, trust_cid, trust_api, palvelu_tyyppi', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -78,6 +78,7 @@ class Asetukset extends DB2ActiveRecord
 			'viivastyskorko' => 'Viivästyskorko %',
 			'postita_username' => 'Postita username',
 			'postita_password' => 'Postita password',
+			'palvelu_tyyppi' => 'Palvelu tyyppi',
 		);
 	}
 
@@ -102,6 +103,7 @@ class Asetukset extends DB2ActiveRecord
 		$criteria->compare('iban',$this->iban,true);
 		$criteria->compare('bic',$this->bic,true);
 		$criteria->compare('viivastyskorko',$this->viivastyskorko,true);
+		$criteria->compare('palvelu_tyyppi',$this->palvelu_tyyppi);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

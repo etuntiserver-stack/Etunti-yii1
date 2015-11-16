@@ -39,6 +39,8 @@ td,th{
   else
     $kohde = $data->kohde_kannasta;
   */
+  $data->loppui = date("Y-m-d H:i",strtotime($data->loppui));
+  $data->aloitan = date("Y-m-d H:i",strtotime($data->aloitan));
   
   $kesto = strtotime($data->loppui)-strtotime($data->aloitan);
   $kkesto += $kesto;
@@ -46,8 +48,8 @@ td,th{
    echo '<td>'.date("d.m",strtotime($data->aloitan)).'</td>';
    echo '<td>'.$data->tekijan_nimi.'</td>';
    echo '<td>'.$data->kohde_kannasta.'</td>';
-   echo '<td>'.date("H:i:s",strtotime($data->aloitan)).'</td>';
-   echo '<td>'.date("H:i:s",strtotime($data->loppui)).'</td>';
+   echo '<td>'.date("H:i",strtotime($data->aloitan)).'</td>';
+   echo '<td>'.date("H:i",strtotime($data->loppui)).'</td>';
    echo '<td>'.sprint($kesto).' <b>('.num($kesto).')</b></td>';
    echo '</tr>';
   }
