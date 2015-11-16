@@ -1412,6 +1412,10 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		$lu = Mobile::model()->findAll($criteria);
 		foreach($lu as $l)
 		{
+
+		  $l->loppui = date("d.m.Y H:i",strtotime($l->loppui));
+		  $l->aloitan = date("d.m.Y H:i",strtotime($l->aloitan));
+
 		    $l->l_tunnit = (strtotime($l->loppui)-strtotime($l->aloitan));
 		    $al = explode(" ",$l->aloitan);
 		    $lop = explode(" ",$l->loppui);
@@ -1451,6 +1455,10 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		$tot = Toteutuneet::model()->findAll($criteria);
 		foreach($tot as $l)
 		{
+
+		  $l->loppui = date("d.m.Y H:i",strtotime($l->loppui));
+		  $l->aloitan = date("d.m.Y H:i",strtotime($l->aloitan));
+
 		    $l->l_tunnit = (strtotime($l->loppui)-strtotime($l->aloitan));
 		    $al = explode(" ",$l->aloitan);
 		    $lop = explode(" ",$l->loppui);
