@@ -78,7 +78,7 @@ $this->breadcrumbs=array(
 <br>
 
 <?php if(Yii::app()->session['from'] and Yii::app()->session['to']) : ?>
-  <table class="table table-striped table-bordered">
+  <table class="table table-striped table-bordered small">
   <thead>
   <tr>
   <th><?php echo Yii::t('main', 'Työntekijä'); ?></th>
