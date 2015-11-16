@@ -1496,7 +1496,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 
 
        		$criteria = new CDbCriteria();
-        	$criteria->select = "
+        	$criteria->select = "COUNT(*) as count,
 			SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit,
 			kohde_kannasta
 		";
@@ -1523,12 +1523,12 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		    $kesto = '';
 		    $kesto = $l->l_tunnit;
 		    $sum += $l->l_tunnit;
-		    $return[] = $l->kohde_kannasta."//".$kesto;
+		    $return[] = $l->kohde_kannasta."//".$kesto."//".$l->count;
 		}
 
 
        		$criteria = new CDbCriteria();
-        	$criteria->select = "
+        	$criteria->select = "COUNT(*) as count, 
 			SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as t_tunnit,
 			kohde_kannasta
 		";
@@ -1547,12 +1547,13 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 
 		$tot = Toteutuneet::model()->findAll($criteria);
 		    $return2 = array();
+
 		foreach($tot as $t)
 		{
 		    $kesto = '';
 		    $kesto = $t->t_tunnit;
 		    $sum += $t->t_tunnit;
-		    $return2[] = $t->kohde_kannasta."//".$kesto;
+		    $return2[] = $t->kohde_kannasta."//".$kesto."//".$t->count;
 		}
 
 		$model = array_merge($return, $return2);
@@ -1564,7 +1565,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			echo 
 			'<div class="row">
 			   <div class="col-sm-6 text-right">'.$expl[0].'</div>
-			   <div class="col-sm-6">kesto: <b> '.$this->sprint($expl[1]).' ('.$this->num($expl[1]).')</b></div>
+			   <div class="col-sm-6">kesto: <b> '.$this->sprint($expl[1]).' ('.$this->num($expl[1]).')</b>, kerta: '.$expl[2].'</div>
 			</div>';
 		}
 
