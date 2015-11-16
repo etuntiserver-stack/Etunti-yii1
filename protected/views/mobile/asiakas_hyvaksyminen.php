@@ -46,6 +46,10 @@ $body .= '
 		$str = Toteutuneet::model()->findbypk($explV[1]);
 
 	$kesto = 0;
+
+	  $str['loppui'] = date("d.m.Y H:i",strtotime($str['loppui']));
+	  $str['aloitan'] = date("d.m.Y H:i",strtotime($str['aloitan'])
+
 	$kesto = strtotime($str['loppui'])-strtotime($str['aloitan']);
 	$yht += strtotime($str['loppui'])-strtotime($str['aloitan']);
 
