@@ -1,5 +1,6 @@
 <?php
-
+//echo $thisSunday = date('Y-m-d',strtotime('sunday this week'));
+/*
 $username = 'Sivex';
 $password = 'Etunti2000';
 $auth_string = $username . ":" . $password;
@@ -42,4 +43,5 @@ print_r($send_response);
 echo '</pre>';
 
 curl_close($ch);
+*/
 ?>
