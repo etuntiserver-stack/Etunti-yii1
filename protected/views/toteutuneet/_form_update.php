@@ -46,24 +46,30 @@ $forPVM = date('d.m.Y',strtotime($model->aloitan));
   <div class="col-sm-12">
 	<div class="row">
 		<?php echo $form->labelEx($model,'tietoja'); ?>
-		<?php echo $form->textarea($model,'tietoja',array('rows'=>4,'class'=>'form-control')); ?>
+		<?php echo $form->textarea($model,'tietoja',array('rows'=>4,'class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'tietoja'); ?>
 	</div>
   </div>
 
-  <div class="col-sm-3">
+  <div class="col-sm-4">
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'kohde_kannasta'); ?>
 		<?php echo $form->dropDownList($model,'kohde_kannasta', 
 			CHtml::listData(Kohteet::model()->findAll(array('order' => 'osoite ASC')), 'id', 'osoite'), 
 			    array(
-                		'class'=>'form-control',
+                		'class'=>'form-control input-sm',
 		                'options' => array($model->kohdenID=>array('selected'=>true)),
 			    )
 			);
 		?>
 		<?php echo $form->error($model,'kohde_kannasta'); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->labelEx($model,'osoite'); ?>
+		<?php echo $form->textField($model,'osoite',array('class'=>'form-control input-sm')); ?>
+		<?php echo $form->error($model,'osoite'); ?>
 	</div>
 
 	<div class="row">
@@ -73,31 +79,25 @@ $forPVM = date('d.m.Y',strtotime($model->aloitan));
 		      //array_unshift($list, $list[$s->status]);
 		      echo $form->dropDownList($model,'status', 
 			 	$list, 
-				array('options' => array($model->status=>array('selected'=>true)),'class'=>'form-control'));
+				array('options' => array($model->status=>array('selected'=>true)),'class'=>'form-control input-sm'));
 		?>
 		<?php echo $form->error($model,'status'); ?>
 	</div>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'aloitan'); ?>
-		<?php echo $form->textField($model,'aloitan',array('size'=>60,'maxlength'=>100,'class'=>'form-control al')); ?>
+		<?php echo $form->textField($model,'aloitan',array('size'=>60,'maxlength'=>100,'class'=>'form-control input-sm al')); ?>
 	</div>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'loppui'); ?>
-		<?php echo $form->textField($model,'loppui',array('size'=>60,'maxlength'=>100,'class'=>'form-control lp')); ?>
+		<?php echo $form->textField($model,'loppui',array('size'=>60,'maxlength'=>100,'class'=>'form-control input-sm lp')); ?>
 	</div>
 
 		<input type="hidden" name="forPVM" value="<?php echo $forPVM; ?>">
 
-  </div><div class="col-sm-2">
 
-	<div class="row">
-		<div id="kesto"><?php echo $kesto; ?></div>
-	</div>
-
-
-  </div><div class="col-sm-7">
+  </div><div class="col-sm-8">
 
 	<div class="row">
 	<label><?php echo Yii::t('main','Kohteen tiedot'); ?></label>
@@ -112,10 +112,13 @@ $forPVM = date('d.m.Y',strtotime($model->aloitan));
 		  $ohje .= "\n\nTietoja:\n".$m->tietoja;
 		if(!empty($m->muut))
 		  $ohje .= "\n\nMuut:\n".$m->muut;
-		echo '<textarea class="form-control" rows="12">'.$ohje.'</textarea>';
+		echo '<textarea class="form-control input-sm" rows="12">'.$ohje.'</textarea>';
 	?>
 	</div>
 
+	<div class="row">
+		<div id="kesto"><?php echo $kesto; ?></div>
+	</div>
 
   </div>
 </div><!-- form -->
