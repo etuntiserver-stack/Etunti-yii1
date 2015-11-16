@@ -293,12 +293,14 @@ public function actionImei($dom)
 		    exit;
 		    } 
 
+		    $thisSunday = date('Y-m-d',strtotime('sunday this week'));
+
 		    $criteria = new CDbCriteria();
 		    $criteria->order = " DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d'),alku ASC ";
 		    $criteria->condition = " 
 				tid = '".$ttekija->id."' 
 				and DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') 
-				BETWEEN CURDATE() AND DATE_ADD(CURDATE() , INTERVAL 1 WEEK)
+				BETWEEN CURDATE() AND '".$thisSunday."'
 		    ";
 	            $tvuoro = Tyovuoroot::model()->findAll($criteria);
 
