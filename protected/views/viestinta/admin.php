@@ -47,7 +47,7 @@ $('.search-form form').submit(function(){
 	'filter'=>$model,
 
                     'pagerCssClass' => 'dataTables_paginate paging_bootstrap',
-                    'itemsCssClass' => 'table table-striped table-bordered table-hover',
+                    'itemsCssClass' => 'table table-striped small table-bordered table-hover',
 
 	'columns'=>array(
 		//'id',

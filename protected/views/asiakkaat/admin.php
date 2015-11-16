@@ -90,7 +90,7 @@ echo '
 	'filter'=>$model,
 
         'pagerCssClass' => 'dataTables_paginate paging_bootstrap',
-        'itemsCssClass' => 'table table-striped table-hover',
+        'itemsCssClass' => 'table table-striped small table-hover',
 
 	'columns'=>array(
 		'id',
@@ -127,7 +127,7 @@ echo '
 array(
 
         'value' => '
-	   CHtml::link("Katso Muokkaa", Yii::app()->createUrl("asiakkaat/update",array("id"=>$data->id)))
+	   CHtml::link("Katso", Yii::app()->createUrl("asiakkaat/update",array("id"=>$data->id)))
 	',
         'type'  => 'raw',
 	//'visible'=>Yii::app()->user->avetak,

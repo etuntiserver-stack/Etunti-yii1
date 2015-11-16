@@ -49,7 +49,7 @@ $('.search-form form').submit(function(){
 	'filter'=>$model,
 
                     'pagerCssClass' => 'dataTables_paginate paging_bootstrap',
-                    'itemsCssClass' => 'table table-striped table-hover',
+                    'itemsCssClass' => 'table table-striped small table-hover',
 
 
 	'columns'=>array(
@@ -112,7 +112,7 @@ $('.search-form form').submit(function(){
 		array(
 
         		'value' => '
-	   		CHtml::link("Katso Muokkaa", Yii::app()->createUrl("kohteet/update",array("id"=>$data->id)))
+	   		CHtml::link("Katso", Yii::app()->createUrl("kohteet/update",array("id"=>$data->id)))
 			',
         		'type'  => 'raw',
 			//'visible'=>Yii::app()->user->avetak,

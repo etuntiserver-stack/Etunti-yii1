@@ -17,8 +17,8 @@ $this->breadcrumbs=array(
   <form action="#" id="yhtveto" class="form-inline" method="POST">
   <input type="hidden" name="yhtvetoform">
   <div class="col-md-12">
-   <a href="#" id="deselAll" class="btn btn-default glyphicon glyphicon-remove-circle"></a>
-   <a href="#" id="selAll" class="btn btn-default glyphicon glyphicon-ok-circle"></a>
+   <a href="#" id="deselAll" class="glyphicon glyphicon-minus"></a>
+   <a href="#" id="selAll" class="glyphicon glyphicon-plus"></a>
    <?php
     $list = CHtml::listData(Mobile::model()->findAll(array('order' => 'tekijan_nimi','group'=>'tekijan_nimi')), 'tid', 'tekijan_nimi');
 
@@ -106,7 +106,7 @@ $(document).ready(function(){
 
 
 $('.selectpicker').selectpicker({
-      style: 'btn-default',
+      style: 'btn-default btn-sm',
       //size: 4
 });
 

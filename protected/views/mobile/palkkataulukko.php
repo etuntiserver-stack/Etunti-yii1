@@ -10,7 +10,7 @@ $this->breadcrumbs=array(
 ?>
 
 <legend>
-<button class="pull-right btn btn-info" data-toggle="collapse"  data-target="#haku"><?php echo Yii::t('main', 'Extrat'); ?> <b class="caret"></b></button>
+<button class="pull-right btn btn-info btn-sm" data-toggle="collapse"  data-target="#haku"><?php echo Yii::t('main', 'Extrat'); ?> <b class="caret"></b></button>
 <h1> <?php echo Yii::t('main', 'PALKKATAULUKKO'); ?> <i class="glyphicon glyphicon-ok"></i></h1>
 </legend>
 
