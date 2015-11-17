@@ -11,7 +11,10 @@
 	<td>
 		<b class="link fa fa-caret-square-o-down showKuka text-danger" data-toggle="collapse" id="<?php echo 'tid_'.$data->tid; ?>" for="<?php echo 'tid_'.$data->tid; ?>" data-target="<?php echo '#tyotShow_'.$data->tid; ?>"></b>&nbsp;
 
-		<?php echo CHtml::encode($data->tekijan_nimi); ?>
+		<?php 
+			$tnimi = Tyontekijat::model()->findbypk($data->tid); 
+			echo $tnimi->tekijan_nimi;
+		?>
 
 		<div class="collapse col-sm-offset-1" id="<?php echo 'tyotShow_'.$data->tid; ?>">
 		<br>
