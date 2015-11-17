@@ -40,10 +40,10 @@ echo '<input type="hidden" id="forTilanne" value="'.$model->tilanne.'">';
 echo '<input type="hidden" id="forTilanne" value="0">';
 }
 
-$firma = Asetukset::model()->findbypk(1);
-$model->yid = $firma->id;
-$model->saaja_iban = $firma->iban;
-$model->viivastyskorko = $firma->viivastyskorko;
+$asetukset = Asetukset::model()->findbypk(1);
+$model->yid = $asetukset->id;
+$model->saaja_iban = $asetukset->iban;
+$model->viivastyskorko = $asetukset->viivastyskorko;
 
 ?>
 
@@ -330,7 +330,7 @@ $model->viivastyskorko = $firma->viivastyskorko;
 
 <br>
 
-<span class="pull-right btn-sm btn btn-info" data-toggle="collapse"  data-target="#kalut"><?php echo Yii::t('main', 'Kalut'); ?> <b class="caret"></b></span>
+<span class="pull-right btn-sm btn btn-info" data-toggle="collapse"  data-target="#kalut"><?php echo Yii::t('main', 'Työkalut'); ?> <b class="caret"></b></span>
 <br>
 <hr>
 
@@ -477,7 +477,7 @@ $model->viivastyskorko = $firma->viivastyskorko;
 		<?php if(isset($model->id)) : ?>
 		<a href="lasku_pdf?id=<?php echo $model->id; ?>" target="_blank" class="btn btn-sm btn-default btn-group"><?php echo Yii::t('main','Esikatselu'); ?></a>
 
-		<?php if(isset($model->id) and $model->tilanne == '1') : ?>
+		<?php if(isset($model->id) and $model->tilanne == '1'  and $asetukset->palvelu_tyyppi == 1) : ?>
 		<a href="finvoice?id=<?php echo $model->id; ?>&finvoice=true" class="btn btn-sm btn-success btn-group"><?php echo Yii::t('main','Lähetä finvoice (POSTITA.FI)'); ?></a>
 		<?php endif; ?>
 
@@ -485,11 +485,11 @@ $model->viivastyskorko = $firma->viivastyskorko;
 		<a href="update?id=<?php echo $model->id; ?>&tilanne=1" class="btn btn-sm btn-success btn-group"><?php echo Yii::t('main','Hyväksy'); ?></a>
 		<?php endif; ?>
 
-		<?php if(isset($model->id) and $model->tilanne == '1') : ?>
+		<?php if(isset($model->id) and $model->tilanne == '1'  and $asetukset->palvelu_tyyppi == 1) : ?>
 		<a href="finvoice?id=<?php echo $model->id; ?>&pdf=true" class="btn btn-sm btn-success btn-group"><?php echo Yii::t('main','Lähetä PDF (POSTITA.FI)'); ?></a>
 		<?php endif; ?>
 
-		<?php if(isset($model->id) and $model->tilanne == '1') : ?>
+		<?php if(isset($model->id) and $model->tilanne == '1' and $asetukset->palvelu_tyyppi == 2) : ?>
 		<a href="finvoice?id=<?php echo $model->id; ?>&finvoiceTrust=true" class="btn btn-sm btn-success btn-group"><?php echo Yii::t('main','Lähetä finvoice (TRUST.FI)'); ?></a>
 		<?php endif; ?>
 

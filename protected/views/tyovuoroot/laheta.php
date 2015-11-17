@@ -64,6 +64,7 @@ td,th{
 
 <?php if($tulosta) : ?>
 <h1> <?php echo Yii::t('main', 'TYÖVUOROT'). ' '.Yii::t('main', 'VIIKKO').'-'.$week; ?></h1>
+<?php echo Yii::t('main', 'Tulostettu '). ' '.date("d.m.Y H:i"); ?>
 <h3><?php echo $tt->tekijan_nimi.', ',date('d.m.Y',strtotime($year ."W". $week .'1')).' - '.date('d.m.Y',strtotime($year ."W". $week .'7')); ?></h3>
 <?php endif; ?>
 
