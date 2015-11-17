@@ -26,7 +26,12 @@
 
 <tr>
 
-	<td><?php echo CHtml::encode($data->tekijan_nimi); ?></td>
+	<td>
+		<?php 
+			$tnimi = Tyontekijat::model()->findbypk($data->tid); 
+			echo $tnimi->tekijan_nimi;
+		?>
+	</td>
 	<td><?php echo $this->sprint($data->l_tunnit); ?></td>
 	<td><?php echo $this->sprint($totatl_t); ?></td>
 <?php
