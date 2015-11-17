@@ -13,10 +13,16 @@
   $kesto = $explStr['7'];
   $idKid = $explStr['8'];
   $ashyv = $explStr['9'];
+  $tietoja = $explStr['10'];
+
+     $riviTietoja = '';
+  if(!empty($tietoja) and isset($_POST['tulosta']))
+  {
+     $riviTietoja = '<br><br>&nbsp;&nbsp;&nbsp;<b>'.Yii::t('main','Tietoja: ').'</b> '.$tietoja.'<hr>';
+  }
 
   if(empty($loppui))
   {
-
     echo 'loppuaika puutuu<br>';
 
   } else {
@@ -48,7 +54,7 @@
 
     $mod = '';
 
-  if(isset($muutos) and $muutos == true){
+  if(isset($muutos) and $muutos == true  and !isset($_POST['tulosta'])){
     $mod = 'update';
     $ap = ' <i class="link text-danger poistaTot" rivi="'.$rivi.'" for="'.$did.'_'.$tid.'">AP</i>';
   } else {
@@ -77,6 +83,7 @@
 			'.$ap.'
 		</span>
 		'.$asiakas_hyvaksy.'
+		'.$riviTietoja.'
 	   </div>';
 
   } // if empty loppui
