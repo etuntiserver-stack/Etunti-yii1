@@ -7,13 +7,40 @@
     <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
     <title>Sivex OY XML kohteet</title>
 
-    <script src="https://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAACHCJdlgAEGcD_flKUFEmVhT2yXp_ZAY8_ufC3CFXhHIE1NvwkxTeukKcKHF3ezmjTB0q6gzSBmoIUQ" type="text/javascript"></script>
+    <script src="https://maps.google.com/maps?file=api&amp;v=2&amp;key=AIzaSyDxP-DS_aQzY8LILgWQccV3H26XrD3yvlE" type="text/javascript"></script>
  
+<?php
+$center = '';
+$valCenter = '';
+if(isset($_GET['center'])){
+	$valCenter = $_GET['center'];
+	$cityclean = str_replace (" ", "+", $_GET['center']);
+	$json_url = 'http://maps.googleapis.com/maps/api/geocode/json?address='.$cityclean.'&language=fi&sensor=true';
+	$json = file_get_contents($json_url);
+	$obj = json_decode($json);
+	$get_osoite = $obj->results[0]->geometry->location->lat.",".$obj->results[0]->geometry->location->lng;
+	$center = $get_osoite;
+}
+?>
+
 
     <script type="text/javascript">
     //<![CDATA[
 
-
+  function codeAddress() {
+    var address = document.getElementById("kivikonkaari").value;
+    geocoder.geocode( { 'address': address}, function(results, status) {
+      if (status == google.maps.GeocoderStatus.OK) {
+        map.setCenter(results[0].geometry.location);
+        var marker = new google.maps.Marker({
+            map: map,
+            position: results[0].geometry.location
+        });
+      } else {
+        alert("Geocode was not successful for the following reason: " + status);
+      }
+    });
+  }
 
     var iconBlue = new GIcon(); 
     iconBlue.image = 'http://labs.google.com/ridefinder/images/mm_20_blue.png';
@@ -50,7 +77,13 @@
         map.addControl(new GSmallMapControl());
         map.addControl(new GMapTypeControl());
 
+        var centerUusi = "<?php echo $center; ?>".split(",");
+if(!centerUusi[0]){
         map.setCenter(new GLatLng(60.2480743,24.9263055), 11);
+} else {
+        map.setCenter(new GLatLng(centerUusi[0],centerUusi[1]), 15);
+//alert(centerUusi)
+}
 
 
 
@@ -86,9 +119,17 @@
   <body onload="load()" onunload="GUnload()">
 
   <legend>
+  <div class="pull-right">
+    <form class="form-inline" method="GET">
+    <input type="text" class="form-control input-sm form-group" name="center" placeholder="Osoite" value="<?php echo $valCenter; ?>">
+    <span class="form-group input-group-btn">
+    <input type="submit"  class="btn btn-sm btn-primary" value="ok">
+    </span>
+    </form>
+  </div>
   <h1> <?php echo Yii::t('main', 'KOHTEET KARTALLA'); ?> <i class="glyphicon glyphicon-home"></i></h1>
   </legend>
-  <div id="map" style="width: 100%; height: 70%"></div>
+  <div id="map" style="width: 100%; height: 64%"></div>
 
   </body>
 </html>
