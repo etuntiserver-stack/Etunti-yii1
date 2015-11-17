@@ -8,6 +8,7 @@
 <style>
 table{
 	width: 280px;
+	font-size:80%;	
 }
 td{
 	padding: 3px 7px;
