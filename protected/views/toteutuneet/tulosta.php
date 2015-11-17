@@ -10,9 +10,12 @@ table{
 	width: 280px;
 	font-size:80%;	
 }
+
 td{
-	padding: 3px 7px;
+	padding: 2px 5px;
 	border:1px #333 solid;
+	white-space: nowrap;
+	min-height:70px;
 }
 </style>
 
