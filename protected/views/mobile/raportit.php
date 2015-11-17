@@ -31,9 +31,8 @@ $this->breadcrumbs=array(
       	<?php
 	$criteriaT = new CDbCriteria();
 	$criteriaT->order = " tekijan_nimi ";
-	$criteriaT->group = " tekijan_nimi ";
 
-	   $list = CHtml::listData(Mobile::model()->findAll($criteriaT), 'tid', 'tekijan_nimi');
+	   $list = CHtml::listData(Tyontekijat::model()->findAll($criteriaT), 'id', 'tekijan_nimi');
 	   echo '<select name="tekija" id="nimi" class="form-control">';
 	   echo '<option value="kaikki">'.Yii::t('main', 'Kaikki työntekijät').'</option>';
 
@@ -93,7 +92,7 @@ $this->breadcrumbs=array(
       <div class="row">
        <div class="col-sm-6">
       	<?php
-	   $list = CHtml::listData(Mobile::model()->findAll($criteriaT), 'tid', 'tekijan_nimi');
+	   $list = CHtml::listData(Tyontekijat::model()->findAll($criteriaT), 'id', 'tekijan_nimi');
 	   echo '<select name="tekija" id="nimi" class="form-control">';
 	   echo '<option value="kaikki">'.Yii::t('main', 'Kaikki työntekijät').'</option>';
 

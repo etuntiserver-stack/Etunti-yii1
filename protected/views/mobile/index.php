@@ -231,18 +231,25 @@ $fi = array(
    <form id="mobForm" action="#" class="form-inline" method="POST">
    <input type="hidden" name="mob_hae">
    <?php
-    $list = CHtml::listData(Tyontekijat::model()->findAll("aktiivinen=1",array('order' => 'tekijan_nimi')), 'tekijan_nimi', 'tekijan_nimi');
+    $criteria = new CDbCriteria();
+    $criteria->order = " tekijan_nimi ASC ";
+    $criteria->condition = " aktiivinen=1 ";
+    $model = Tyontekijat::model()->findAll($criteria);
+    $list = CHtml::listData($model, 'id', 'tekijan_nimi');
 
-    echo '<select class="form-control input-sm form-group" name="etsi_tekijan_nimi">';
-    if(Yii::app()->session['etsi_tekijan_nimi'])
-       echo '<option value="'.Yii::app()->session['etsi_tekijan_nimi'].'">'.Yii::app()->session['etsi_tekijan_nimi'].'</option>';
-    else
+    echo '<select class="form-control input-sm form-group" name="tekija">';
+    if(Yii::app()->session['tekija'])
+    {
+       $tekija = Tyontekijat::model()->findbypk(Yii::app()->session['tekija']);
+       echo '<option value="'.$tekija->id.'">'.$tekija->tekijan_nimi.'</option>';
+    } else {
        echo '<option value="kaikki">'.Yii::t('main', 'Työntekijät').'</option>';
+    }
 
        echo '<option value="kaikki">Kaikki</option>';
 
-    foreach($list as $val){
-    echo '<option value="'.$val.'">'.$val.'</option>';
+    foreach($list as $key=>$val){
+    echo '<option value="'.$key.'">'.$val.'</option>';
     }
     echo '</select>';
    ?>

@@ -25,6 +25,7 @@
 	Yii::app()->session['to'] = date("Y-m-d",strtotime("+1 month", time()));
 
        		$criteria = new CDbCriteria();
+        	$criteria->order = "tekijan_nimi";
         	$criteria->select = "id,tekijan_nimi";
         	$criteria->condition = " aktiivinen = '1' ";
 		$tt = Tyontekijat::model()->findAll($criteria);
@@ -43,6 +44,7 @@
 		Yii::app()->session['Tekija'] = Yii::app()->request->getPost('Tekija');
 
        		$criteria = new CDbCriteria();
+        	$criteria->order = "tekijan_nimi";
         	$criteria->select = "id,tekijan_nimi";
         	$criteria->condition = " aktiivinen = '1' ";
 
@@ -95,7 +97,7 @@ body{
     overflow-y: hidden;
 }
 td .latikkoAsetukset{
-	width: 250px;
+	width: 320px;
 	white-space: nowrap;
 	min-height:70px;
 }
