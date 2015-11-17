@@ -96,7 +96,7 @@ public $tunnus;
 		return array(
 			'id' => 'ID',
 			'imei' => 'Imei',
-			'laiten_puh' => 'Laiten nro.',
+			'laiten_puh' => 'Laitenumero',
 			'tekijan_nimi' => 'Etu- ja sukunimi',
 			'tekijan_henkilotunnus' => 'Henkilötunnus',
 			'tekijan_puh' => 'Puhelin',
@@ -114,12 +114,12 @@ public $tunnus;
 			'tekijan_tietoja' => 'Tietoja',
 			'tekijan_muisti' => 'Muisti',
 			'salasana' => 'Mobiilisovelluksen salasana',
-			'online_varauksen_valmina' => 'Online Varauksen Valmina',
+			'online_varauksen_valmina' => 'Valmius onlinevaraukseen',
 			'kortit' => 'Kortit',
 			'ayjasenyys' => 'Ayjasenyys',
 			'gcm_reg_id'=>'Google Cloud Messaging ID',
 			'position' => 'Viimeinen sijainti',
-			'tyo_toimialue' => 'Työ toimialue',
+			'tyo_toimialue' => 'Toimialue',
 		);
 	}
 

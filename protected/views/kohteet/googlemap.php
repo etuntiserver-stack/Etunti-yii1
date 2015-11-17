@@ -86,7 +86,7 @@
   <body onload="load()" onunload="GUnload()">
 
   <legend>
-  <h1> <?php echo Yii::t('main', 'KOHTEET KARTAALLA'); ?> <i class="glyphicon glyphicon-home"></i></h1>
+  <h1> <?php echo Yii::t('main', 'KOHTEET KARTALLA'); ?> <i class="glyphicon glyphicon-home"></i></h1>
   </legend>
   <div id="map" style="width: 100%; height: 70%"></div>
 
