@@ -769,8 +769,8 @@ $(".hae").click(function() {
 
 			if(tunnit == 0)
 			{
-				$("#tuntienTulos").addClass("alert alert-danger").html('<h2>Ei löydy tuntia</h2>');
-				$("#rivit").hide('slow');
+				$("#tuntienTulos").addClass("alert alert-danger").html('<b>Ei löydy tuntia</b>');
+				//$("#rivit").hide('slow');
 			}
 
 			if(tunnit > 0)
