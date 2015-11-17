@@ -53,12 +53,11 @@ echo	'<input type=hidden id=number value='.cal_days_in_month(CAL_GREGORIAN, $mon
 
 
 <legend>
-<button class="pull-right btn btn-info" data-toggle="collapse"  data-target="#haku"><?php echo Yii::t('main', 'Haku'); ?> <b class="caret"></b></button>
 <h1> <?php echo Yii::t('main', 'TOTEUTUNEET KK'); ?> <i class="glyphicon glyphicon-time"></i></h1>
 </legend>
 
 
-<div class="row collapse" id="haku">
+<div class="row" id="haku">
     <div class="col-sm-12 form-inline">
        	<b class="form-control form-group"><a href="kk?pvm=<?php echo $previous; ?>">
 	  <<</a> <?php echo $months[$month].' '.$year; ?> <a href="kk?pvm=<?php echo $next; ?>">>></a>

@@ -18,7 +18,7 @@ function num($val){
 <div class="row">
   <div class="col-sm-6">
   <fieldset>
-	<legend><?php echo Yii::t('main','TYÖT TÄNÄÄN'); ?></legend>
+	<legend><?php echo Yii::t('main','Tämä päivä'); ?></legend>
 <?php 
 	$a1 = Mobile::model()->findAll(" DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE() and status=1",array('select'=>'id'));
 	$a = Mobile::model()->findAll(" DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE() and status=3",array('select'=>'id'));	
@@ -33,7 +33,7 @@ function num($val){
                 'height' => 200,
                 'htmlOptions' => array(),
 
-                'labels' => array(Yii::t('main','Aloitettu työt'),Yii::t('main','Lopetut työt'),Yii::t('main','Matkat'),Yii::t('main','Lounaat')),
+                'labels' => array(Yii::t('main','Aloitetut työt'),Yii::t('main','Lopetut työt'),Yii::t('main','Matkat'),Yii::t('main','Lounaat')),
                 'datasets' => array(
                     array(
                         "fillColor" => "#cecece",
@@ -54,7 +54,7 @@ function num($val){
 <div class="row">
   <div class="col-sm-6">
   <fieldset>
-	<legend><?php echo Yii::t('main','TYÖVUOROSUUNNITTELU KOHTEEN MÄÄRÄ'); ?></legend>
+	<legend><?php echo Yii::t('main','Suunnitellut kohteet'); ?></legend>
 <?php 
 	$criteria = new CDbCriteria;
 	$criteria->group="tid";	
@@ -103,7 +103,7 @@ function num($val){
   </div>
   <div class="col-sm-6">
   <fieldset>
-	<legend><?php echo Yii::t('main','TYÖVUOROSUUNNITTELU TUNNIN MÄÄRÄ'); ?></legend>
+	<legend><?php echo Yii::t('main','Suunnitellut työtunnit'); ?></legend>
 <?php 
 	$criteria = new CDbCriteria;
 	$criteria->group="tid";	

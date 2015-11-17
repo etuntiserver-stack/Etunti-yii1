@@ -5,7 +5,7 @@
 
 	if(isset($vi[0]->id) and !empty($vi[0]->id))
 	{
-	echo '<h2>'.Yii::t('main','Vastaamattomia viestiä').'</h2>';
+	echo '<h2>'.Yii::t('main','Vastaamattomat viestit').'</h2>';
 	echo '<div class="row">';
 	
 	   foreach($vi as $v)

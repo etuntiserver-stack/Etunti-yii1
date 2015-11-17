@@ -23,12 +23,12 @@ $this->menu=array(
 	<b class="btn btn-warning btn-sm fa fa-map tooltipster" title="Aloitus GPS sijainti kartalla"></b>
 	<b class="btn btn-warning btn-sm fa fa-map-o tooltipster" title="Lopetus GPS sijainti kartalla"></b>
 	<b class="btn btn-warning btn-sm fa fa-envelope tooltipster" title="Viestin lähettäminen"></b>
-	<b class="btn btn-warning btn-sm fa fa-table tooltipster" title="Hyppä työvuoroihin tämään päivään"></b>
+	<b class="btn btn-warning btn-sm fa fa-table tooltipster" title="Siirry tämän päivän työvuoroihin"></b>
 	<b class="btn btn-warning btn-sm fa fa-list-alt tooltipster" title="Näytä työvuorot"></b>
 	<b class="btn btn-warning btn-sm fa fa-tags tooltipster" title="TAG numero"></b>
 	<b class="btn btn-warning btn-sm fa fa-pencil-square-o tooltipster" title="Muokkaa"></b>
 	<b class="btn btn-warning btn-sm fa fa-sign-in tooltipster" title="Alkuperäinen tieto"></b>
-	<b class="btn btn-warning btn-sm fa fa-check-square-o tooltipster" title="Rivi on muokkaattu"></b>
+	<b class="btn btn-warning btn-sm fa fa-check-square-o tooltipster" title="Rivi on muokattu"></b>
   	<span class="btn btn-default klo"></span>
   </div>
   <h1> 
