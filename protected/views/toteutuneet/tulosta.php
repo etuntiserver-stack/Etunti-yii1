@@ -7,9 +7,10 @@
 
 <style>
 table{
-	width: 290px;
+	width: 280px;
 }
 td{
+	padding: 3px 7px;
 	border:1px #333 solid;
 }
 </style>
