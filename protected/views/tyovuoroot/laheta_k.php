@@ -113,6 +113,7 @@ for($day= 1; $day <= 7; $day++) {
   AND pvm!='' ";
   $tv = Tyovuoroot::model()->findAll($criteria);
 
+  $yht = 0;
   foreach($tv as $t)
   {
     if($t->pvm == $date)
@@ -120,9 +121,15 @@ for($day= 1; $day <= 7; $day++) {
 	$k = Kohteet::model()->findbypk($t->kohde,array("select"=>"osoite,avain"));
 
 	if($t->alku > 0 and $t->loppu > 0)
+	{
 	  $al = $t->alku.'-'.$t->loppu;
-	else
+
+	  if(strpos($t->tyoajanmerkinta,'Ei lasketa') === false)
+	  $yht += strtotime($t->loppu)-strtotime($t->alku);
+
+	} else {
 	  $al = '';
+ 	}
 
 	$expl = explode("/",$t->tyoajanlaatu);
 	if(empty($k['osoite']) and isset($expl[0]))
@@ -135,6 +142,9 @@ for($day= 1; $day <= 7; $day++) {
 
     }
   }
+  if($yht > 0)
+  echo '<h4>'.Yii::t('main','Yhteensä: ').$this->sprint($yht).'</h4>';
+
   echo '</td>';
 
   echo '<td width="300">';
