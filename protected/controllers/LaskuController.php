@@ -71,7 +71,7 @@ class LaskuController extends Controller
 		$lasku = $this->loadModel($id);
 		$model=new Lasku;
 		$model->attributes=$lasku->attributes;
-		$model->hyvityslasku=1;
+		$model->hyvityslasku=$lasku->id;
 		$model->laskun_nimetys="Hyvityslasku";
 		$model->yhteensa_total='-'.$lasku->yhteensa_total;
 		if($model->save()){

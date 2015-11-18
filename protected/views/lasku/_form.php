@@ -490,11 +490,15 @@ $model->viivastyskorko = $asetukset->viivastyskorko;
 		<a href="hyvityslasku?id=<?php echo $model->id; ?>" class="btn btn-sm btn-success btn-group"><?php echo Yii::t('main','Hyvityslasku'); ?></a>
 		<?php endif; ?>
 
+		<?php if(isset($model->id) and $model->laskun_nimetys == "Hyvityslasku") : ?>
+		<a href="finvoice?id=<?php echo $model->id; ?>&hyvityslasku=true&refundtojobid=<?php echo $model->trust_jobid; ?>" class="btn btn-sm btn-success btn-group"><?php echo Yii::t('main','Lähetä Hyvityslasku (TRUST.FI)'); ?></a>
+		<?php endif; ?>
+
 		<?php if(isset($model->id) and $model->tilanne == '1'  and $asetukset->palvelu_tyyppi == 1) : ?>
 		<a href="finvoice?id=<?php echo $model->id; ?>&pdf=true" class="btn btn-sm btn-success btn-group"><?php echo Yii::t('main','Lähetä PDF (POSTITA.FI)'); ?></a>
 		<?php endif; ?>
 
-		<?php if(isset($model->id) and $model->tilanne == '1' and $asetukset->palvelu_tyyppi == 2) : ?>
+		<?php if(isset($model->id) and $model->tilanne == '1' and $asetukset->palvelu_tyyppi == 2 and $model->laskun_nimetys != "Hyvityslasku") : ?>
 		<a href="finvoice?id=<?php echo $model->id; ?>&finvoiceTrust=true" class="btn btn-sm btn-success btn-group"><?php echo Yii::t('main','Lähetä finvoice (TRUST.FI)'); ?></a>
 		<?php endif; ?>
 
