@@ -18,6 +18,10 @@ if(isset($_GET['finvoiceTrust']) or isset($_GET['hyvityslasku'])){
 
    $rowsArray = array();
      foreach($laskunRivit as $rivi){
+
+	if(isset($_GET['hyvityslasku']) and isset($_GET['refundtojobid']) and !empty($_GET['refundtojobid']))
+	$rivi->kpl = '-'.$rivi->kpl;
+
         $rowsArray[] =  array(
                         "productid" => $rivi->id, # tuotenro
                         "desc" => $rivi->tkoodi,
