@@ -465,7 +465,7 @@ class LaskuController extends Controller
 		$l = Lasku::model()->find(" trust_jobid='".trim($r->jobid)."' ");
 		if(isset($l['id']))
 		{
-	     	    Lasku::model()->updatebypk($l['id'], array('response_finvoice'=>$str));
+	     	    Lasku::model()->updatebypk($l['id'], array('tilanne'=>$r->statuscode,'response_finvoice'=>$str));
 		}
 	  }
 	 }
