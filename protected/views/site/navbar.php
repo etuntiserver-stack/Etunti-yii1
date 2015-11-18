@@ -51,6 +51,7 @@
         	<li><?php echo CHtml::link(Yii::t('main', 'Asiakkaat'),array('/asiakkaat/admin')); ?></li>
 	        <li role="separator" class="divider"></li>
         	<li><?php echo CHtml::link(Yii::t('main', 'Kohteet'),array('/kohteet/admin')); ?></li>
+        	<li><?php echo CHtml::link(Yii::t('main', 'Avaimet'),array('/kohteet/avaimet')); ?></li>
 	        <li role="separator" class="divider"></li>
         	<li><?php echo CHtml::link(Yii::t('main', 'Asiakkaiden hyväksymät tunnit'),array('/asiakasHyvaksynta/index')); ?></li>
 	        <li role="separator" class="divider"></li>
