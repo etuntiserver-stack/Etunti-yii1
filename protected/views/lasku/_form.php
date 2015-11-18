@@ -36,6 +36,7 @@ if(isset($model->id)){
 echo '<input type="hidden" id="modelID" value="1">';
 echo '<input type="hidden" id="forLaskutusTyyppi" value="'.$model->laskutus.'">';
 echo '<input type="hidden" id="forTilanne" value="'.$model->tilanne.'">';
+echo '<input type="hidden" id="responseFinvoice" value="'.$model->response_finvoice.'">';
 } else {
 echo '<input type="hidden" id="forTilanne" value="0">';
 }
@@ -481,7 +482,7 @@ $model->viivastyskorko = $asetukset->viivastyskorko;
 		<a href="finvoice?id=<?php echo $model->id; ?>&finvoice=true" class="btn btn-sm btn-success btn-group"><?php echo Yii::t('main','Lähetä finvoice (POSTITA.FI)'); ?></a>
 		<?php endif; ?>
 
-		<?php if(isset($model->id) and $model->tilanne == '0') : ?>
+		<?php if(isset($model->id) and $model->tilanne == '0' and $model->response_finvoice == '') : ?>
 		<a href="update?id=<?php echo $model->id; ?>&tilanne=1" class="btn btn-sm btn-success btn-group"><?php echo Yii::t('main','Hyväksy'); ?></a>
 		<?php endif; ?>
 
@@ -578,7 +579,7 @@ $("#lasku-form").on('submit',function(e) {
 	    return true;
 });
 
-if(($("#forTilanne").val() != '0')){
+if(($("#forTilanne").val() != '0') | $("#responseFinvoice").val() !== ''){
   $("input").prop("disabled", true);
   $("select").prop("disabled", true);
   $(".poista").remove();

@@ -540,7 +540,7 @@ class LaskuController extends Controller
 
 		    $tilanne = '';
 
-		if($data->tilanne == 0)
+		if($data->tilanne == 0 and $data->response_finvoice == '')
 		    $tilanne = 'Luotu';
 		elseif($data->tilanne == 1)
 		    $tilanne = 'Hyväksytty';
