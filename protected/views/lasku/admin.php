@@ -83,6 +83,7 @@ $('.search-form form').submit(function(){
 	'type' => 'html',
     	),
 		'yhteensa_total',
+		'laskun_nimetys',
 		/*
 		'postinumero',
 		'toimipaikka',
