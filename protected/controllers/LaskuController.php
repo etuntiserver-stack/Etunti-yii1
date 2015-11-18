@@ -23,11 +23,11 @@ class LaskuController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','etsikohde','etsiasiakas', 'etsisaaja','luoKohteista','tr_rivit','tr_rivitkk','lasku_pdf', 'finvoice','tr_rivit_tyhja','valitsetuote'),
+				'actions'=>array('admin','delete','create','update','index','view','etsikohde','etsiasiakas', 'etsisaaja','luoKohteista','tr_rivit', 'tr_rivitkk','lasku_pdf', 'finvoice','tr_rivit_tyhja','valitsetuote', 'hyvityslasku'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','etsikohde','etsiasiakas', 'etsisaaja','luoKohteista','tr_rivit','tr_rivitkk','lasku_pdf', 'finvoice','tr_rivit_tyhja','valitsetuote'),
+				'actions'=>array('admin','delete','create','update','index','view','etsikohde','etsiasiakas', 'etsisaaja','luoKohteista','tr_rivit','tr_rivitkk','lasku_pdf', 'finvoice','tr_rivit_tyhja','valitsetuote', 'hyvityslasku'),
                 		'message'=>Yii::t('main', 'Tämä TASO ei kuuluu teille'),
 			),
 			array('deny',  // deny all users
@@ -63,6 +63,31 @@ class LaskuController extends Controller
 	public function actionTr_rivit_tyhja()
 	{
 		$this->renderPartial('tr_rivit_tyhja');
+	}
+
+
+	public function actionHyvityslasku($id)
+	{
+		$lasku = $this->loadModel($id);
+		$model=new Lasku;
+		$model->attributes=$lasku->attributes;
+		$model->hyvityslasku=1;
+		$model->laskun_nimetys="Hyvityslasku";
+		$model->yhteensa_total='-'.$lasku->yhteensa_total;
+		if($model->save()){
+
+		$laskunRivit=LaskunRivit::model()->findAll("lid='".$lasku->id."'");
+		foreach($laskunRivit as $rivit)
+		{
+		$lm=new LaskunRivit;
+		$lm->attributes=$rivit->attributes;
+		$lm->lid=$model->id;
+		$lm->save();
+		}
+
+		$this->redirect(array('update','id'=>$model->id));
+
+		}
 	}
 
 	public function actionFinvoice($id)
@@ -298,7 +323,7 @@ class LaskuController extends Controller
 
 			$model->attributes=$_POST['Lasku'];
 			$model->tilanne=0;
-
+			$model->laskun_nimetys="Lasku";
 			if($model->save()){
 
 

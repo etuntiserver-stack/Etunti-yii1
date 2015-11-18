@@ -486,6 +486,10 @@ $model->viivastyskorko = $asetukset->viivastyskorko;
 		<a href="update?id=<?php echo $model->id; ?>&tilanne=1" class="btn btn-sm btn-success btn-group"><?php echo Yii::t('main','Hyväksy'); ?></a>
 		<?php endif; ?>
 
+		<?php if(isset($model->id) and $model->laskun_nimetys != "Hyvityslasku") : ?>
+		<a href="hyvityslasku?id=<?php echo $model->id; ?>" class="btn btn-sm btn-success btn-group"><?php echo Yii::t('main','Hyvityslasku'); ?></a>
+		<?php endif; ?>
+
 		<?php if(isset($model->id) and $model->tilanne == '1'  and $asetukset->palvelu_tyyppi == 1) : ?>
 		<a href="finvoice?id=<?php echo $model->id; ?>&pdf=true" class="btn btn-sm btn-success btn-group"><?php echo Yii::t('main','Lähetä PDF (POSTITA.FI)'); ?></a>
 		<?php endif; ?>
@@ -579,7 +583,7 @@ $("#lasku-form").on('submit',function(e) {
 	    return true;
 });
 
-if(($("#forTilanne").val() != '0') | $("#responseFinvoice").val() !== ''){
+if(($("#forTilanne").val() != '0') & $("#responseFinvoice").val() !== ''){
   $("input").prop("disabled", true);
   $("select").prop("disabled", true);
   $(".poista").remove();
