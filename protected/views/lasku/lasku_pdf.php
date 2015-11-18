@@ -1,14 +1,8 @@
 <?php
 
 
+   $laskunNimetus = $lasku->laskun_nimetys;
 
-  if( $lasku->laskun_nimetys == 'hyvityslasku' ){
-	$laskunNimetus = 'Hyvityslasku';
-  } elseif( $lasku->laskun_nimetys == 'muistutuslasku' ){
-	$laskunNimetus = 'Muistutuslasku';
-  } else {
-	$laskunNimetus = 'LASKU';
-  }
 
 
    if($lasku->toimitusosoite == '0'){
