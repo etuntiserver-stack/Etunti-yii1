@@ -151,7 +151,7 @@ class Lasku extends DB2ActiveRecord
 			'tilanne' => 'Tilanne',
 			'maksettu_euro' => 'Maksettu Euro',
 			'hyvityslasku' => 'Hyvityslasku',
-			'laskun_nimetys' => 'Laskun Nimetys',
+			'laskun_nimetys' => 'Laskun tyyppi',
 			'response' => 'Response',
 			'response_finvoice' => 'Response Finvoice',
 		);

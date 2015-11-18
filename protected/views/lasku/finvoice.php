@@ -60,9 +60,9 @@ $customertype = 2;
 
 $cashdiscountrow = array();
 
-$refundtojobid = array();
+$refundtojobid = '';
 if(isset($_GET['refundtojobid']) and !empty($_GET['refundtojobid']))
-$refundtojobid = array("refundtojobid" => $_GET['refundtojobid']);
+$refundtojobid = $_GET['refundtojobid'];
 
 if(isset($_GET['refundtojobid']) and empty($_GET['refundtojobid']))
 {
@@ -83,7 +83,7 @@ $xml = encodeXml (array(
         'transferkey' => $transferkey,
         'dataset' => array(
             array(
-                $refundtojobid,
+		"refundtojobid" => $refundtojobid,
                 "custnum" => $lasku['as_nro'], # asiakasnumero
                 "addressaddline1" => $lasku['osoite'],
                 "person" => $person,
