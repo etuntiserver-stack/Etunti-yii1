@@ -8,7 +8,7 @@ if(isset($_GET['merkitseMaksetuksi'])){
 	$this->redirect(array('update','id'=>$id));
 }
 
-if(isset($_GET['finvoiceTrust'])){
+if(isset($_GET['finvoiceTrust']) or isset($_GET['hyvityslasku'])){
 
  $cid = $asetukset['trust_cid'];
  $api = $asetukset['trust_api'];
@@ -18,6 +18,10 @@ if(isset($_GET['finvoiceTrust'])){
 
    $rowsArray = array();
      foreach($laskunRivit as $rivi){
+
+	if(isset($_GET['hyvityslasku']) and isset($_GET['refundtojobid']) and !empty($_GET['refundtojobid']))
+	$rivi->kpl = '-'.$rivi->kpl;
+
         $rowsArray[] =  array(
                         "productid" => $rivi->id, # tuotenro
                         "desc" => $rivi->tkoodi,
@@ -56,6 +60,15 @@ $customertype = 2;
 
 $cashdiscountrow = array();
 
+$refundtojobid = array();
+if(isset($_GET['refundtojobid']) and !empty($_GET['refundtojobid']))
+$refundtojobid = array("refundtojobid" => $_GET['refundtojobid']);
+
+if(isset($_GET['refundtojobid']) and empty($_GET['refundtojobid']))
+{
+echo 'refundtojobid puutuu';
+exit;
+}
 
 
 /* Hae siirtoavain (korvaa cid ja apicode omillasi) */
@@ -70,6 +83,7 @@ $xml = encodeXml (array(
         'transferkey' => $transferkey,
         'dataset' => array(
             array(
+                $refundtojobid,
                 "custnum" => $lasku['as_nro'], # asiakasnumero
                 "addressaddline1" => $lasku['osoite'],
                 "person" => $person,
