@@ -56,10 +56,10 @@ function getTransferKey ($cid, $apicode, $ownref = '') {
 */
 function commitTransfer ($xml) {
     global $TRUSTPOINT;
-
+header('Content-Type: text/html; charset=iso-8859-1');
     /* Lisää merkistökoodaus dokumentin alkuun */
     if (substr ($xml, 0, 5) != '<?xml') {
-        $xml = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n" . $xml;
+        $xml = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?>\n" . $xml;
     }
 
     /* Lähetä ja siirrä dataa */
