@@ -599,7 +599,7 @@ $("#lasku-form").on('submit',function(e) {
 	    return true;
 });
 
-if(($("#trust_jobid").val() !== '') || ($("#postita_jobid").val() !== '')){
+if($("#trust_jobid").val() | $("#postita_jobid").val()){
   $("input").prop("disabled", true);
   $("select").prop("disabled", true);
   $(".poista").remove();
