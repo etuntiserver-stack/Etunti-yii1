@@ -36,7 +36,8 @@ if(isset($model->id)){
 echo '<input type="hidden" id="modelID" value="1">';
 echo '<input type="hidden" id="forLaskutusTyyppi" value="'.$model->laskutus.'">';
 echo '<input type="hidden" id="forTilanne" value="'.$model->tilanne.'">';
-echo '<input type="hidden" id="responseFinvoice" value="'.$model->response_finvoice.'">';
+echo '<input type="hidden" id="trust_jobid" value="'.$model->trust_jobid.'">';
+echo '<input type="hidden" id="postita_jobid" value="'.$model->postita_jobid.'">';
 } else {
 echo '<input type="hidden" id="forTilanne" value="0">';
 }
@@ -486,15 +487,26 @@ $model->viivastyskorko = $asetukset->viivastyskorko;
 		<a href="update?id=<?php echo $model->id; ?>&tilanne=1" class="btn btn-sm btn-success btn-group"><?php echo Yii::t('main','Hyväksy'); ?></a>
 		<?php endif; ?>
 
-		<?php if(isset($model->id) and $model->laskun_nimetys != "Hyvityslasku") : ?>
+		<?php if(isset($model->id) 
+			and $model->laskun_nimetys != "Hyvityslasku" 
+			and $asetukset->palvelu_tyyppi == 2
+			and $model->trust_jobid != ''
+			)
+		: ?>
 		<a href="hyvityslasku?id=<?php echo $model->id; ?>" class="btn btn-sm btn-success btn-group"><?php echo Yii::t('main','Hyvityslasku'); ?></a>
 		<?php endif; ?>
 
-		<?php if(isset($model->id) and $model->laskun_nimetys == "Hyvityslasku") : ?>
+		<?php if(isset($model->id) 
+			and $model->laskun_nimetys == "Hyvityslasku"
+			and $asetukset->palvelu_tyyppi == 2
+			and $model->tilanne != 98
+			and $model->trust_jobid != ''
+			) 
+		: ?>
 		<a href="finvoice?id=<?php echo $model->id; ?>&hyvityslasku=true&refundtojobid=<?php echo $model->trust_jobid; ?>" class="btn btn-sm btn-success btn-group"><?php echo Yii::t('main','Lähetä Hyvityslasku (TRUST.FI)'); ?></a>
 		<?php endif; ?>
 
-		<?php if(isset($model->id) and $model->tilanne == '1'  and $asetukset->palvelu_tyyppi == 1) : ?>
+		<?php if(isset($model->id) and $model->tilanne == '1' and $asetukset->palvelu_tyyppi == 1) : ?>
 		<a href="finvoice?id=<?php echo $model->id; ?>&pdf=true" class="btn btn-sm btn-success btn-group"><?php echo Yii::t('main','Lähetä PDF (POSTITA.FI)'); ?></a>
 		<?php endif; ?>
 
@@ -587,7 +599,7 @@ $("#lasku-form").on('submit',function(e) {
 	    return true;
 });
 
-if(($("#forTilanne").val() != '0') & $("#responseFinvoice").val() !== ''){
+if(($("#trust_jobid").val() !== '') || ($("#postita_jobid").val() !== '')){
   $("input").prop("disabled", true);
   $("select").prop("disabled", true);
   $(".poista").remove();
