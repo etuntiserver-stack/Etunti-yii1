@@ -70,6 +70,14 @@ echo 'refundtojobid puutuu';
 exit;
 }
 
+$sendtype = '';
+if($lasku['laskutus'] == 'posti')
+$sendtype = 'post';
+if($lasku['laskutus'] == 'verkkolasku')
+$sendtype = 'evoice';
+if($lasku['laskutus'] == 'sahkoposti')
+$sendtype = 'email';
+
 
 /* Hae siirtoavain (korvaa cid ja apicode omillasi) */
 $transferkey = getTransferKey ($cid, $api);
@@ -113,7 +121,7 @@ $xml = encodeXml (array(
                 "checkbillnum" => 1, # 1=tarkista laskunumero, 0=ei
                 "language" => "fin", # laskun kieli
                 "freetext" => "",
-                "sendtype" => "post", # laskun lähetystapa
+                "sendtype" => $sendtype, # laskun lähetystapa
                 "cashbill" => 0, # 0 = ei käteiskuitti
                 "sensible" => 0, # 0 = lähetä muistutus automaattisesti
                 //"ownref" => "x123", # sisäinen viite
