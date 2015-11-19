@@ -12,7 +12,7 @@ $paivat=array(
 	);
 
 ?>
-
+<?php if($tulosta != 'lista') : ?>
 <style>
 table{
 	width: 290px;
@@ -23,6 +23,21 @@ td,th{
 	border:1px #333 solid;
 }
 </style>
+<?php endif; ?>
+
+<?php if($tulosta == 'lista') : ?>
+<style>
+table{
+	width: 100%;
+	font-size: 80%;
+}
+td,th{
+	padding:3px 7px;
+	border:1px #333 solid;
+}
+</style>
+<?php endif; ?>
+
 
 <?php if(!$tulosta) : ?>
 <legend>
@@ -83,10 +98,12 @@ $ids .= $tt->id.',';
 ?>
 <h2><?php echo $tt->tekijan_nimi; ?></h2>
 
+<?php if($tulosta != 'lista') : ?>
   <form action="#" class="form-group" target="_blank" method="POST">
     <input type="hidden" name="kuka" value="<?php echo $t->tid; ?>">
     <input type="submit" class="btn btn-success btn-sm" name="pdf" value="PDF">
   </form>
+<?php endif; ?>
 
 <table class="table">
 <tr>
@@ -177,6 +194,7 @@ $totalWeek = $this->renderPartial('//tyovuoroot/viikko',array('tid'=>$tt->id,'vi
 </table>
 <?php } ?>
 
+<?php if($tulosta != 'lista') : ?>
 <div class="row">
  <div class="col-sm-5">
   <form action="#" id="pdf_email" class="form-group" target="_blank" method="POST">
@@ -189,6 +207,7 @@ $totalWeek = $this->renderPartial('//tyovuoroot/viikko',array('tid'=>$tt->id,'vi
   </form>
  </div>
 </div>
+<?php endif; ?>
 
 
 <?php if(!$tulosta) : ?>
