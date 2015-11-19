@@ -38,7 +38,7 @@ td,th{
 	$file = $week.'_'.$year.'_'.$tid.'.pdf';
 	$path = Yii::app()->request->baseUrl."emails/tyovuorot/".Yii::app()->user->domain;
 	if (file_exists($path.'/'.$file))
-	echo CHtml::link(Yii::t('main', ' Lähetetty'),'../../emails/tyovuorot/'.Yii::app()->user->domain.'/'.$file,array('target'=>'_blank','class'=>'btn btn-sm btn-danger glyphicon glyphicon-file'));
+	echo CHtml::link(Yii::t('main', 'Lähetetty'),'../../emails/tyovuorot/'.Yii::app()->user->domain.'/'.$file,array('target'=>'_blank','class'=>'btn btn-sm btn-danger'));
 
   ?>
 </div>
@@ -46,17 +46,51 @@ td,th{
 
   <?php if(!empty($tt->tekijan_email)): ?>
 <br>
+
+  <form action="#" id="pdf_email" class="form-group" target="_blank" method="POST">
 <div class="row">
  <div class="col-sm-5">
-  <form action="#" id="pdf_email" class="form-group" target="_blank" method="POST">
+
     <input type="hidden" name="pdf_email" value="true">
     <label><?php echo Yii::t('main','Lähetettävän viestin sisältö'); ?></label>
     <textarea name="kirjenBody" class="form-control" rows="6"></textarea>
     <br>
-    <button class="btn btn-success btn-sm laheta"><?php echo Yii::t('main','Lähetä').': '.$tt->tekijan_email; ?></button>
-  </form>
+
  </div>
 </div>
+
+<div class="row">
+  <div class="col-sm-12">
+  <label><?php echo Yii::t('main', 'Ma'); ?></label>
+  <input type="checkbox" class="sw" name="P[1]" id="ma" value="1" checked>
+
+  <label><?php echo Yii::t('main', 'Ti'); ?></label>
+  <input type="checkbox" class="sw" name="P[2]" id="ti" value="2" checked>
+
+  <label><?php echo Yii::t('main', 'Ke'); ?></label>
+  <input type="checkbox" class="sw" name="P[3]" id="ke" value="3" checked>
+
+  <label><?php echo Yii::t('main', 'To'); ?></label>
+  <input type="checkbox" class="sw" name="P[4]" id="to" value="4" checked>
+
+  <label><?php echo Yii::t('main', 'Pe'); ?></label>
+  <input type="checkbox" class="sw" name="P[5]" id="pe" value="5" checked>
+
+  <label><?php echo Yii::t('main', 'La'); ?></label>
+  <input type="checkbox" class="sw" name="P[6]" id="la" value="6" checked>
+
+  <label><?php echo Yii::t('main', 'Su'); ?></label>
+  <input type="checkbox" class="sw" name="P[0]" id="su" value="0" checked>
+
+  </div>
+</div>
+
+<br>
+    <button class="btn btn-success btn-sm laheta"><?php echo Yii::t('main','Lähetä').': '.$tt->tekijan_email; ?></button>
+  </form>
+
+<br>
+
   <?php endif; ?>
 
 <?php endif; ?>
@@ -74,7 +108,11 @@ td,th{
   $criteria->condition = " tid='".$tid."' AND 
   DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d')  
   BETWEEN  '".date('Y-m-d',strtotime($year ."W". $week .'1'))."' AND '".date('Y-m-d',strtotime($year ."W". $week .'7'))."' 
-  AND pvm!='' ";
+  AND pvm!='' 
+  ";
+  if(isset($_POST['P']))
+  $criteria->Addcondition ( " DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%w') IN (".implode(",",$_POST['P']).") ");
+
   $tv = Tyovuoroot::model()->findAll($criteria);
 ?>
 
@@ -167,6 +205,16 @@ $totalWeek = $this->renderPartial('//tyovuoroot/viikko',array('tid'=>$tid,'viikk
 <?php if(!$tulosta) : ?>
 <script type="text/javascript">
 $(document).ready(function(){
+
+
+  $(".sw").bootstrapSwitch({
+	size: "mini",
+	onColor: "success",
+	offColor: "danger",
+	onText: "Kyllä",
+	offText: "Ei"
+  });
+
 
 $(".laheta").click(function(){
         var r=confirm("Oletko varmaa?")
