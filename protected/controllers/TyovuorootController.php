@@ -126,8 +126,7 @@ class TyovuorootController extends Controller
 	          $html2pdf->WriteHTML($this->renderPartial('laheta',array('tid'=>$tid,'week'=>$week,'year'=>$year,'tulosta'=>true,'tt'=>$tt),true));
          	  $content_PDF = $html2pdf->Output('my_doc.pdf', EYiiPdf::OUTPUT_TO_STRING);
 
-$this->render('laheta',array('tid'=>$tid,'week'=>$week,'year'=>$year,'tulosta'=>true,'tt'=>$tt));
-exit;
+
 		/* file */
 		$file = $week.'_'.$year.'_'.$tid.'.pdf';
 		$path = Yii::app()->request->baseUrl."emails/tyovuorot/".Yii::app()->user->domain;
