@@ -237,10 +237,11 @@ $fi = array(
     $model = Tyontekijat::model()->findAll($criteria);
     $list = CHtml::listData($model, 'id', 'tekijan_nimi');
 
-    echo '<select class="form-control input-sm form-group" name="tekija">';
-    if(Yii::app()->session['tekija'])
+    echo '<select class="form-control input-sm form-group" name="tekijaPaaSivulla">';
+    if(Yii::app()->session['tekijaPaaSivulla'])
     {
-       $tekija = Tyontekijat::model()->findbypk(Yii::app()->session['tekija']);
+       $tekija = Tyontekijat::model()->findbypk(Yii::app()->session['tekijaPaaSivulla']);
+       if(isset($tekija->tekijan_nimi))
        echo '<option value="'.$tekija->id.'">'.$tekija->tekijan_nimi.'</option>';
     } else {
        echo '<option value="kaikki">'.Yii::t('main', 'Työntekijät').'</option>';

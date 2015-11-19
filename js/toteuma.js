@@ -1,10 +1,6 @@
 $(document).ready(function(){
 
 
-$("#Mobile_kohde_kannasta").change(function(){
-	var kohdenID = $(this).val();
-	$("#Mobile_kohdenID").val(kohdenID);
-});
 
 
 
@@ -19,6 +15,7 @@ $(".uusirivi").click(function(){
            success: function(data){
 		//console.log(data);
 		$('#showres').modal().html(data);
+		return false;
            }
         });
 
@@ -137,7 +134,7 @@ $(document).ready(function(){
 		  data:$(this).serialize(),
 		  type:'POST',
 		  success:function(data){
-			console.log(data);
+			//console.log(data);
 		/*
 			var divID = data.split("_");
 			if( divID )
@@ -171,15 +168,16 @@ $(document).ready(function(){
 		  data:$(this).serialize(),
 		  type:'POST',
 		  success:function(data){
-			console.log(data);
+
 			var divID = data.split("_");
+			console.log(divID);
 
 		if( divID )
 		blockUpdater(divID);
 
 
 		$('#showres').modal('hide');
-		return false;
+		//return false;
 	   	},
 		error:function(data){
 		console.log(data);
@@ -206,8 +204,9 @@ $(document).ready(function(){
 		  data:$(this).serialize(),
 		  type:'POST',
 		  success:function(data){
-			console.log(data);
+
 			var divID = data.split("_");
+			console.log(divID);
 
 		if( divID ){
 
@@ -216,7 +215,7 @@ $(document).ready(function(){
 		}
 
 		$('#showres').modal('hide');
-		return false;
+		//return false;
 	   	},
 		error:function(data){
 		console.log(data);
@@ -252,7 +251,7 @@ $(document).ready(function(){
 			type:'GET',
 			data: { "pvm" : divID[0], "tid" : divID[1], "from" : "ajax" },
 			  success:function(data){
-			  console.log(data);
+			  //console.log(data);
 
 			  $('#'+divID[0]+'_'+divID[1]).html(data);
 			  },
@@ -266,7 +265,7 @@ $(document).ready(function(){
 			type:'GET',
 			data: { "pvm" : divID[0], "tid" : divID[1], "from" : "ajax" },
 			  success:function(data){
-			  console.log(data);
+			  //console.log(data);
 
 			  $('#yht_'+divID[0]+'_'+divID[1]).html(data);
 			  },

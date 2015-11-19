@@ -87,6 +87,7 @@ $did = date("Ymd",strtotime($pvm));
 	if( $from == 'ajax' ){
 	?>
 	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/totrivi_poista.js"></script>
+	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/toteuma.js"></script>
 	<?php
 	}
 ?>
