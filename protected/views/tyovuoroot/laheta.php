@@ -47,7 +47,7 @@ td,th{
   <?php if(!empty($tt->tekijan_email)): ?>
 <br>
 
-  <form action="#" id="pdf_email" class="form-group" target="_blank" method="POST">
+  <form action="#" id="pdf_email" class="form-group" method="POST">
 <div class="row">
  <div class="col-sm-5">
 
