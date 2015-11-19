@@ -11,32 +11,40 @@
 
 <p>Huomautan kohteliaimmin, että kirjanpitomme mukaan emme ole saaneet suoritusta tähän päivään mennessä oheiseen laskuumme:</p>
 
-<table style="border-collapse: collapse; width:740px; height:30px;">
+<table style="border-collapse: collapse; width:740px;">
 <tr>
-  <th>Lasku nro</th><th>Pvm.</th><th>Eräpäivä</th><th>€/ pääoma</th><th>Toimeksiantonne</th>
+  <th style="width:20%">Lasku nro</th>
+  <th style="width:20%">Pvm.</th>
+  <th style="width:20%">Eräpäivä</th>
+  <th style="width:20%">€/ pääoma</th>
+  <th style="width:20%">Toimeksiantonne</th>
 </tr>
 <tr>
-  <td>'.$lasku['id'].'</td><td></td><td></td><td></td><td></td>
+  <td>'.$lasku['id'].'</td>
+  <td>'.$lasku['paivays'].'</td>
+  <td>'.$lasku['erapaiva'].'</td>
+  <td>'.$lasku['yhteensa_total'].'</td>
+  <td></td>
 </tr>
 </table>
 
 
 
-Pyydämme Teitä maksamaan erääntyneen saatavamme:
+<p>Pyydämme Teitä maksamaan erääntyneen saatavamme:</p>
 
-1. saatavamme määrän:	1000,00 €
-2. huomautuskulut:	10,00 €
-3. viivästyskorkoa (10% eräpv. - 1.2.2001)	100,00 €
+1. saatavamme määrän:	'.number_format($lasku['yhteensa_total'], 2, ',', ' ').' €<br>
+2. huomautuskulut:	10,00 €<br>
+3. viivästyskorkoa (10% eräpv. - 1.2.2001)	100,00 €<br>
 
-eli yhteensä	1.110,00 €
+<p>eli yhteensä	'.number_format($lasku['yhteensa_total']+10, 2, ',', ' ').' €</p>
 
-Saatavamme tulee suorittaa Perivä Yritys Oy:n tilille, Ålandsban¬ken 0000-0000, viimeistään 8.2.2001.
+Saatavamme tulee suorittaa Perivä Yritys Oy:n tilille, Ålandsban¬ken 0000-0000, viimeistään 8.2.2001.<br>
 
-Maksumuistutuksemme on aiheeton, mikäli olette jo maksaneet laskumme.
+Maksumuistutuksemme on aiheeton, mikäli olette jo maksaneet laskumme.<br>
 
-Mikäli Teillä on huomautettavaa laskumme johdosta, ottanette yhteyttä alle-kirjoittaneeseen viimeistään 8.2.2001. Muussa tapauksessa katsomme, että Teillä ei ole huomautettavaa saatavamme johdosta.
+<p>Mikäli Teillä on huomautettavaa laskumme johdosta, ottanette yhteyttä alle-kirjoittaneeseen viimeistään 8.2.2001. Muussa tapauksessa katsomme, että Teillä ei ole huomautettavaa saatavamme johdosta.</p>
 
-Kohteliaimmin
+<p>Kohteliaimmin</p>
 
 ';
    }
