@@ -120,12 +120,14 @@ class TyovuorootController extends Controller
 		} elseif(Yii::app()->request->getPost('pdf_email'))
 		{
 
+
 	          $html2pdf = Yii::app()->ePdf->HTML2PDF('P', 'A4', 'en');
 		  $html2pdf->setDefaultFont('Arial');
 	          $html2pdf->WriteHTML($this->renderPartial('laheta',array('tid'=>$tid,'week'=>$week,'year'=>$year,'tulosta'=>true,'tt'=>$tt),true));
          	  $content_PDF = $html2pdf->Output('my_doc.pdf', EYiiPdf::OUTPUT_TO_STRING);
 
-
+$this->render('laheta',array('tid'=>$tid,'week'=>$week,'year'=>$year,'tulosta'=>true,'tt'=>$tt));
+exit;
 		/* file */
 		$file = $week.'_'.$year.'_'.$tid.'.pdf';
 		$path = Yii::app()->request->baseUrl."emails/tyovuorot/".Yii::app()->user->domain;
@@ -221,12 +223,37 @@ class TyovuorootController extends Controller
 		 }
 		}
 
+
+
+
+
 		// firmalle kaikki
 		$firma = FirmanTiedot::model()->findbypk(1);
 		if(isset($firma->sahkoposti) and !empty($firma->sahkoposti))
 		{
 		$saaja = $firma->sahkoposti;
-		$message = $this->renderPartial('laheta_k',array('week'=>$week,'year'=>$year,'tulosta'=>'lista'),true);
+
+
+
+	        $html2pdf = Yii::app()->ePdf->HTML2PDF('P', 'A4', 'en');
+		$html2pdf->setDefaultFont('Arial');
+	        $html2pdf->WriteHTML($this->renderPartial('laheta_k',array('week'=>$week,'year'=>$year,'tulosta'=>'lista'),true));
+         	$content_PDF = $html2pdf->Output('my_doc.pdf', EYiiPdf::OUTPUT_TO_STRING);
+
+		// file 
+		$file = $week.'_'.$year.'_'.$key.'_toimisto.pdf';
+		$path = Yii::app()->request->baseUrl."emails/tyovuorot/".Yii::app()->user->domain;
+
+  		if (!file_exists($path))
+		 	mkdir($path, 0777, true);
+
+		file_put_contents($path.'/'.$file, $content_PDF);
+
+
+		$message = Yii::t('main', 'VIIKKO').'-'.$week.'<br>'.Yii::t('main', ' Liitteenä uusi PDF-tiedosto');
+		if(isset($_POST['kirjenBody']) and !empty($_POST['kirjenBody']))
+		$message .= '<br>'.str_replace("\n", "<br>", $_POST['kirjenBody']);
+
 
 		  $mail = new YiiMailer();
 		  //$mail->clearLayout();//if layout is already set in config
@@ -234,9 +261,15 @@ class TyovuorootController extends Controller
 		  $mail->setTo($saaja);
 		  $mail->setSubject(Yii::t('main', 'TYÖVUOROT ').$week.'-'.$year);
 		  $mail->setBody($message);
+		  $mail->setAttachment($path.'/'.$file);
 		  $mail->send();
 		}
 		//
+
+
+
+
+
 
 		  $this->redirect('viikkottain');
 
