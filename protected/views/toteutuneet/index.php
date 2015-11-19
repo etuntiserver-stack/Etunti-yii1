@@ -141,6 +141,7 @@ $this->breadcrumbs=array(
 $(document).ready(function(){
 
 
+
 $("#yhtveto").on('submit',function(e){
 
   var from = $("#from").val();

@@ -382,7 +382,7 @@ function num($val){
 		$this->renderPartial('_uusirivi',array(
 			'model'=>$model,
 		));
-
+	
 	}
 
 	public function actionCreate()
@@ -470,10 +470,10 @@ function num($val){
 	}
 
 
-		if(Yii::app()->request->getPost('tekija') == 'kaikki')
-		unset(Yii::app()->session['tekija']);
-		if(Yii::app()->request->getPost('tekija') and Yii::app()->request->getPost('tekija') != 'kaikki'){
-		Yii::app()->session['tekija'] = Yii::app()->request->getPost('tekija');
+		if(Yii::app()->request->getPost('tekijaPaaSivulla') == 'kaikki')
+		unset(Yii::app()->session['tekijaPaaSivulla']);
+		if(Yii::app()->request->getPost('tekijaPaaSivulla') and Yii::app()->request->getPost('tekijaPaaSivulla') != 'kaikki'){
+		Yii::app()->session['tekijaPaaSivulla'] = Yii::app()->request->getPost('tekijaPaaSivulla');
 		}
 
 		if(Yii::app()->request->getPost('etsi_kohteet') == 'kaikki')
@@ -511,8 +511,8 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 
 	        $criteria->condition = " admin!=1 ";
 
-		if(Yii::app()->session['tekija'])
-	        $criteria->addCondition (" tid = '".Yii::app()->session['tekija']."' ");
+		if(Yii::app()->session['tekijaPaaSivulla'])
+	        $criteria->addCondition (" tid = '".Yii::app()->session['tekijaPaaSivulla']."' ");
 		if(Yii::app()->session['etsi_kohteet'])
 	        $criteria->addCondition ("kohde_kannasta = '".Yii::app()->session['etsi_kohteet']."'");
 		if(Yii::app()->session['fromP'] and Yii::app()->session['toP'])
