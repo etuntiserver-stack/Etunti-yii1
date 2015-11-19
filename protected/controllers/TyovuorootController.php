@@ -182,6 +182,7 @@ class TyovuorootController extends Controller
 
 		$kenelle = explode(",",Yii::app()->request->getPost('kenelle'));
 
+
 		foreach($kenelle as $key)
 		{
 		 if(!empty($key))
@@ -194,7 +195,7 @@ class TyovuorootController extends Controller
          	$content_PDF = $html2pdf->Output('my_doc.pdf', EYiiPdf::OUTPUT_TO_STRING);
 
 
-		/* file */
+		// file 
 		$file = $week.'_'.$year.'_'.$key.'.pdf';
 		$path = Yii::app()->request->baseUrl."emails/tyovuorot/".Yii::app()->user->domain;
 
@@ -202,21 +203,16 @@ class TyovuorootController extends Controller
 		 	mkdir($path, 0777, true);
 
 		file_put_contents($path.'/'.$file, $content_PDF);
-		/* file */
+		// file 
 		$message = Yii::t('main', 'VIIKKO').'-'.$week.'<br>'.Yii::t('main', ' Liitteenä uusi PDF-tiedosto');
 		if(isset($_POST['kirjenBody']) and !empty($_POST['kirjenBody']))
 		$message .= '<br>'.str_replace("\n", "<br>", $_POST['kirjenBody']);
 		
-		$saaja = $tt->tekijan_email;
-		$firma = FirmanTiedot::model()->findbypk(1);
-		if(isset($firma->sahkoposti) and !empty($firma->sahkoposti))
-		$saaja = array($tt->tekijan_email,$firma->sahkoposti);
-
 
 		  $mail = new YiiMailer();
 		  //$mail->clearLayout();//if layout is already set in config
 		  $mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
-		  $mail->setTo($saaja);
+		  $mail->setTo($tt->tekijan_email);
 		  $mail->setSubject(Yii::t('main', 'TYÖVUOROT'). ' '.$tt->tekijan_nimi);
 		  $mail->setBody($message);
 		  $mail->setAttachment($path.'/'.$file);
@@ -224,6 +220,23 @@ class TyovuorootController extends Controller
 		
 		 }
 		}
+
+		// firmalle kaikki
+		$firma = FirmanTiedot::model()->findbypk(1);
+		if(isset($firma->sahkoposti) and !empty($firma->sahkoposti))
+		{
+		$saaja = $firma->sahkoposti;
+		$message = $this->renderPartial('laheta_k',array('week'=>$week,'year'=>$year,'tulosta'=>'lista'),true);
+
+		  $mail = new YiiMailer();
+		  //$mail->clearLayout();//if layout is already set in config
+		  $mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
+		  $mail->setTo($saaja);
+		  $mail->setSubject(Yii::t('main', 'TYÖVUOROT ').$week.'-'.$year);
+		  $mail->setBody($message);
+		  $mail->send();
+		}
+		//
 
 		  $this->redirect('viikkottain');
 
