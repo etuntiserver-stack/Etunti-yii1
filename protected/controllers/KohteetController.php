@@ -52,12 +52,37 @@ class KohteetController extends Controller
 	public function actionAvaimet()
 	{
 
+
+		if(Yii::app()->request->getPost('Tekija'))
+		Yii::app()->session['Tekija'] = Yii::app()->request->getPost('Tekija');
+
 	       	$criteria = new CDbCriteria();
 		$criteria->condition = "aktiivinen=1";
+
+		if(Yii::app()->session['Tekija']){
+		  if(count(Yii::app()->session['Tekija']) > 1)
+		    $ids = implode(",",Yii::app()->session['Tekija']);
+		  else
+		    $ids = Yii::app()->session['Tekija'][0];
+
+	        $criteria->addCondition ('id IN ('.$ids.') ');
+		}
+
+
 		$model = Tyontekijat::model()->findAll($criteria);
+
+		if(Yii::app()->request->getPost('tulosta'))
+		{
+	          $html2pdf = Yii::app()->ePdf->HTML2PDF('P', 'A4', 'en');
+		  $html2pdf->setDefaultFont('Arial');
+	          $html2pdf->WriteHTML($this->renderPartial('avaimet', array('model' => $model),true));
+	          $html2pdf->Output();
+		} else {
 		$this->render('avaimet',array(
 			'model'=>$model,
 		));
+		}
+
 	}
 
 	public function actionGooglemap()
