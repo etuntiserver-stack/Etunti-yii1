@@ -3,7 +3,43 @@
 
    $laskunNimetus = $lasku->laskun_nimetys;
 
+   $mmtext = '';
+   if(isset($_GET['muistutuslasku'])){
+   $laskunNimetus = 'Muistutuslasku';
+   $mmtext = '
+<h1>MAKSUMUISTUTUS</h1>
 
+<p>Huomautan kohteliaimmin, että kirjanpitomme mukaan emme ole saaneet suoritusta tähän päivään mennessä oheiseen laskuumme:</p>
+
+<table style="border-collapse: collapse; width:740px; height:30px;">
+<tr>
+  <th>Lasku nro</th><th>Pvm.</th><th>Eräpäivä</th><th>€/ pääoma</th><th>Toimeksiantonne</th>
+</tr>
+<tr>
+  <td>'.$lasku['id'].'</td><td></td><td></td><td></td><td></td>
+</tr>
+</table>
+
+
+
+Pyydämme Teitä maksamaan erääntyneen saatavamme:
+
+1. saatavamme määrän:	1000,00 €
+2. huomautuskulut:	10,00 €
+3. viivästyskorkoa (10% eräpv. - 1.2.2001)	100,00 €
+
+eli yhteensä	1.110,00 €
+
+Saatavamme tulee suorittaa Perivä Yritys Oy:n tilille, Ålandsban¬ken 0000-0000, viimeistään 8.2.2001.
+
+Maksumuistutuksemme on aiheeton, mikäli olette jo maksaneet laskumme.
+
+Mikäli Teillä on huomautettavaa laskumme johdosta, ottanette yhteyttä alle-kirjoittaneeseen viimeistään 8.2.2001. Muussa tapauksessa katsomme, että Teillä ei ole huomautettavaa saatavamme johdosta.
+
+Kohteliaimmin
+
+';
+   }
 
    if($lasku->toimitusosoite == '0'){
 
@@ -117,6 +153,8 @@ embed {height:100%;width:100%}
 	$html .= '</TD>';
 
 	$html .= '<TD style="width:240px;border-top:1px #333 solid;border-bottom:1px #333 solid;">';
+
+	if(!isset($_GET['muistutuslasku'])){
 	$html .= '<TABLE>';
 
 	$html .= '<TR><TD class="class10p">';
@@ -145,6 +183,7 @@ embed {height:100%;width:100%}
 	$html .= '</TD></TR>';
 
 	$html .= '</TABLE>';
+	}
 	$html .= '</TD>';
 
 	$html .= '</TR>';
@@ -154,6 +193,8 @@ embed {height:100%;width:100%}
 
 
 	$html .= '<BR><BR>';
+
+	if(!isset($_GET['muistutuslasku'])){
 
 	$html .= '<TABLE style="width:740px" id="tuote">';
 	$html .= '<TR>';
@@ -220,10 +261,11 @@ embed {height:100%;width:100%}
 	$html .= '</TD>';
 	$html .= '</TR>';
 	$html .= '</TABLE>';
+	} // muistutuslasku
 
 
-
-
+	if(isset($_GET['muistutuslasku']))
+	$html .= $mmtext;
 
 
 
