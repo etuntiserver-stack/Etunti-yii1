@@ -478,6 +478,7 @@ $model->viivastyskorko = $asetukset->viivastyskorko;
 
 		<?php if(isset($model->id)) : ?>
 		<a href="lasku_pdf?id=<?php echo $model->id; ?>" target="_blank" class="btn btn-sm btn-default btn-group"><?php echo Yii::t('main','Esikatselu'); ?></a>
+		<a href="lasku_pdf?id=<?php echo $model->id; ?>&muistutuslasku=true" target="_blank" class="btn btn-sm btn-default btn-group"><?php echo Yii::t('main','Esikatselu muistutuslasku'); ?></a>
 
 		<?php if(isset($model->id) and $model->tilanne == '1'  and $asetukset->palvelu_tyyppi == 1) : ?>
 		<a href="finvoice?id=<?php echo $model->id; ?>&finvoice=true" class="btn btn-sm btn-success btn-group"><?php echo Yii::t('main','Lähetä finvoice (POSTITA.FI)'); ?></a>
