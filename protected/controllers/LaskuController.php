@@ -497,6 +497,13 @@ class LaskuController extends Controller
 		{
 		    $tapahtumapvm = date("Y-m-d H:i:s",strtotime(trim($r->statustime)));
 	     	    Lasku::model()->updatebypk($l['id'], array('tilanne'=>$r->statuscode,'response_finvoice'=>$str,'tapahtumapvm'=>$tapahtumapvm));
+		    $historia = new LaskuHistoria;
+		    $historia->lid = $l['id'];
+		    $historia->status = $str;
+		    $historia->palvelu = "trust";
+		    $historia->yht_euro = $l['yhteensa_total'];
+		    $historia->save();
+
 		}
 	  }
 	 }
