@@ -64,6 +64,7 @@ td,th{
     <th></th>
     <th></th>
     <th></th>
+    <th></th>
     <th><?php echo sprint($kkesto); ?> <b>(<?php echo num($kkesto); ?>)</b></th>
     <th></th>
   </tr>

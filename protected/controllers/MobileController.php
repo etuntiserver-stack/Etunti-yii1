@@ -135,7 +135,7 @@ function num($val){
 			allSess();
 
 		       	$criteria = new CDbCriteria();
-			$criteria->select = " aloitan,loppui,tekijan_nimi,kohde_kannasta ";
+			$criteria->select = " aloitan,loppui,tekijan_nimi,kohde_kannasta,viesti ";
 			$criteria->order = " DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i') ASC ";
 			$criteria->condition = " 
 				aloitan!='' and loppui!='' 
@@ -162,7 +162,7 @@ function num($val){
 
 			/* lu */
 		       	$criteria = new CDbCriteria();
-			$criteria->select = " aloitan,loppui,tekijan_nimi,kohde_kannasta ";
+			$criteria->select = " aloitan,loppui,tekijan_nimi,kohde_kannasta,viesti ";
 			$criteria->order = " DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i') ASC ";
 			$criteria->condition = " aloitan!='' and loppui!='' AND id NOT IN (SELECT kid FROM sivexkuitti_repaired) ";
 
