@@ -595,8 +595,10 @@ class LaskuController extends Controller
 		    if(isset($trustexpl[0]))
 		    {
 		    $trustStr = str_replace("statustime:","",$trustexpl[0]);
+			Lasku::model()->updatebypk($l->id,array('tapahtumapvm'=>date("Y-m-d H:i:s",strtotime($trustStr))));
 		    $trustStr = date("d.m H:i",strtotime($trustStr));
 		    $trust = true;
+
 		    }
 		}
 
