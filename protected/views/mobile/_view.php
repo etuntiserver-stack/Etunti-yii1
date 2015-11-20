@@ -67,13 +67,13 @@ else
 
 
 	if($data->status == '1')
-	$door = '<h4><i class="fa fa-hourglass-start text-info"></i></h4>';
+	$door = '<b><i class="fa fa-hourglass-start text-info"></i></b>';
 	elseif($data->status == '3')
-	$door = '<h4><i class="fa fa-check text-success"></i></h4>';
+	$door = '<b><i class="fa fa-check text-success"></i></b>';
 	elseif($data->status == '2')
-	$door = '<h4><i class="fa fa-bus text-info"></i></h4>';
+	$door = '<b><i class="fa fa-bus text-info"></i></b>';
 	elseif($data->status == '10')
-	$door = '<h4><i class="fa fa-cutlery text-info"></i></h4>';
+	$door = '<b><i class="fa fa-cutlery text-info"></i></b>';
 	elseif($data->status == '7')
 	$door = '<i class="fa fa-bolt"></i>';
 	else
