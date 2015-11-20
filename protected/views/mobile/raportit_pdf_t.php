@@ -26,6 +26,7 @@ td,th{
     <th><?php echo Yii::t('main', 'Aloitus'); ?></th>
     <th><?php echo Yii::t('main', 'Lopetus'); ?></th>
     <th><?php echo Yii::t('main', 'Kesto'); ?></th>
+    <th><?php echo Yii::t('main', 'Viesti'); ?></th>
   </tr>
   </thead>
   <tbody>
@@ -52,6 +53,7 @@ td,th{
    echo '<td>'.date("H:i",strtotime($data->aloitan)).'</td>';
    echo '<td>'.date("H:i",strtotime($data->loppui)).'</td>';
    echo '<td>'.sprint($kesto).' <b>('.num($kesto).')</b></td>';
+   echo '<td>'.$data->viesti.'</td>';
    echo '</tr>';
   }
   ?>
@@ -62,8 +64,8 @@ td,th{
     <th></th>
     <th></th>
     <th></th>
-    <th></th>
     <th><?php echo sprint($kkesto); ?> <b>(<?php echo num($kkesto); ?>)</b></th>
+    <th></th>
   </tr>
   </tfoot>
 </table>
