@@ -11,17 +11,6 @@
   var versio = "1.70";
 
 
-/*
-  var fordm =	'<label>Domaini</label>' +
-		'<input type="text" class="form-control" id="domain">' +
-		'<label>Työntekijän sähköposti</label>' +
-		'<input type="text" class="form-control" id="email">' +
-		'<label>Työntekijän salasana</label>' +
-		'<input type="password" class="form-control" id="salasana"><br>' +
-		'<button class="btn btn-primary btn-group-justified aloita" type="button">' +
-		'<i class="glyphicon glyphicon-warning-sign"> Tallenna</i></button>';
-  dm.innerHTML += fordm;
-*/
 
 
   document.addEventListener('deviceready', this.readFile, true);
@@ -41,6 +30,20 @@
 	        reader.onloadend = function(evt) {
 	            console.log("Read as text");
 	            console.log(evt.target.result);
+
+
+
+/*
+  var fordm =	'<label>Domain</label>' +
+		'<input type="text" class="form-control" id="domain">' +
+		'<label>Työntekijän sähköposti</label>' +
+		'<input type="text" class="form-control" id="email">' +
+		'<label>Työntekijän salasana</label>' +
+		'<input type="password" class="form-control" id="salasana"><br>' +
+		'<button class="btn btn-primary btn-group-justified aloita" type="button">' +
+		'<i class="glyphicon glyphicon-warning-sign"> Tallenna</i></button>';
+  dm.innerHTML += fordm;
+*/
 
 	   		 var spFile = evt.target.result.split("//");
 		
@@ -68,7 +71,7 @@
 $(document).ready(function(){
 
 
-$("#dm").html('<label>Domaini</label>' +
+$("#dm").html('<label>Domain</label>' +
 		'<input type="text" class="form-control" id="domain">' +
 		'<label>Työntekijän sähköposti</label>' +
 		'<input type="text" class="form-control" id="email">' +

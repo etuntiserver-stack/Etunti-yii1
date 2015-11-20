@@ -230,6 +230,10 @@ function row(tilanne,st){
 	var lp 	= curDateTime();
    }
 
+   if($("#lyhytviesti").val() !== '')
+   viesti = $("#lyhytviesti").val();
+   else
+   viesti = "xxx";
 
    	var postData = {
 		email : email,
@@ -247,7 +251,7 @@ function row(tilanne,st){
 		kohdenID: $("#kohdenID").val(),
 		aloitan: al,
 		loppui: lp,
-		viesti: "xxx",
+		viesti: viesti,
 		etaisyys: "0",
 		status: st,
 		tietoja: "",
@@ -280,7 +284,7 @@ function row(tilanne,st){
 		  		  '<div class="col-sm-12">' +
 				  '  <div class="alert alert-success">' +
 				  '    <div class="card-content black-text">' +
-				  '      <center><h2>Kesto: ' + sp[5] + '</h2></center>' +
+				  '      <center><b>Kesto: ' + sp[5] + '</b></center>' +
 				  '    </div>' +
 				  '  </div>' +
 				  ' </div>' +
@@ -378,8 +382,8 @@ function row(tilanne,st){
 		}
 
 
-		$("#os").val(sp[4]);
-		$("#kohdenID").val(sp[6]);
+		//$("#os").val(sp[4]);
+		//$("#kohdenID").val(sp[6]);
 
 		$("#result").hide();
     	},
