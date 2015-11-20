@@ -467,11 +467,13 @@ class LaskuController extends Controller
 	{
 
 
-	$asetukset=Asetukset::model()->find("id=1");
-	$cid = $asetukset['trust_cid'];
-	$api = $asetukset['trust_api'];
+	$asetukset=Asetukset::model()->findbypk(1);
 	
 	// <-- Trust
+	if($asetukset->palvelu_tyyppi == 2)
+	{
+	$cid = $asetukset['trust_cid'];
+	$api = $asetukset['trust_api'];
 	$ch = curl_init();
 	$data = array('cid'=>$cid, 'apicode'=>$api);
 	curl_setopt($ch, CURLOPT_URL, 'https://beta2.trustpoint.fi/API/statusupdates.php');
@@ -493,12 +495,16 @@ class LaskuController extends Controller
 		$l = Lasku::model()->find(" trust_jobid='".trim($r->jobid)."' ");
 		if(isset($l['id']))
 		{
-	     	    Lasku::model()->updatebypk($l['id'], array('tilanne'=>$r->statuscode,'response_finvoice'=>$str));
+		    $tapahtumapvm = date("Y-m-d H:i:s",strtotime(trim($r->statustime)));
+	     	    Lasku::model()->updatebypk($l['id'], array('tilanne'=>$r->statuscode,'response_finvoice'=>$str,'tapahtumapvm'=>$tapahtumapvm));
 		}
 	  }
 	 }
 	}
+	}
 	// Trust -->
+
+
 
 		$model=new Lasku('search');
 		$model->unsetAttributes();  // clear any default values
@@ -583,33 +589,6 @@ class LaskuController extends Controller
 	}
 
 
-    	protected function tapahtumapvm($data,$row)
-	{ 
-		//Trust
-		    $trust = false;
-		    $trustStr = '';
-		$l = Lasku::model()->find(" trust_jobid!='' and  trust_jobid='".trim($data->trust_jobid)."' ");
-		if(isset($l['id']))
-		{
-		    $trustexpl = explode("//",$data->response_finvoice);
-		    if(isset($trustexpl[0]))
-		    {
-		    $trustStr = str_replace("statustime:","",$trustexpl[0]);
-			Lasku::model()->updatebypk($l->id,array('tapahtumapvm'=>date("Y-m-d H:i:s",strtotime($trustStr))));
-		    $trustStr = date("d.m H:i",strtotime($trustStr));
-		    $trust = true;
-
-		    }
-		}
-
-
-		    $tilanne = '';
-
-		if($trust == true)
-		    $tilanne = $trustStr;
-
-            	return $tilanne;
-	}
 
 
 }
