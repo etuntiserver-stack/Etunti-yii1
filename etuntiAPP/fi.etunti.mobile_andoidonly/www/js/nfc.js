@@ -1,5 +1,40 @@
 
 
+  document.addEventListener('deviceready', this.readFile, true);
+  function readFile() {
+        window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, gotFS, fail);
+	    function gotFS(fileSystem) {
+	        fileSystem.root.getFile("etunti.cfg", null, gotFileEntry, fail);
+	    }
+	    function gotFileEntry(fileEntry) {
+	        fileEntry.file(gotFile, fail);
+	    }
+	    function gotFile(file){
+	        readAsText(file);
+	    }	
+	    function readAsText(file) {
+	        var reader = new FileReader();
+	        reader.onloadend = function(evt) {
+	            console.log("Read as text");
+	            console.log(evt.target.result);
+		
+
+	   		 var spFile = evt.target.result.split("//");
+		
+			 document.getElementById('domain').value=spFile[0];
+			 document.getElementById('email').value=spFile[1];
+			 document.getElementById('salasana').value=spFile[2];
+
+			 appNFC.initialize();
+
+	        };
+	        reader.readAsText(file);
+	    }
+	    function fail(evt) {
+	        console.log(evt.target.error.code);
+	    }
+  }
+
 
 var appNFC = {
  // Application Constructor
@@ -55,26 +90,28 @@ var appNFC = {
    }
 
    	document.getElementById('tagginro').value = toDec(ms);
+	tag = toDec(ms);
 
 
 $(document).ready(function(){
 
+
 	var domain = document.getElementById('domain').value;
 	var email = document.getElementById('email').value;
 	var salasana = document.getElementById('salasana').value;
+	var tag = document.getElementById('tagginro').value;
 
         $.ajax({
            url: url+'/imei?dom='+domain,
 	   type:'POST',
- 	   data: { check : "getObjbyTag", tag : $('#tagginro').val(),  email : email, salasana : salasana },
+ 	   data: { check : "getObjbyTag", tag : tag,  email : email, salasana : salasana },
            success: function(data){
         	console.log(data);
 		//$("#result2").html(data).show();
 		var sp = data.split("//");
 		if(sp[2] == 'ok')
 		{
-		   $('#os').val(sp[0]);
-		   $('#os').css({"border" : "2px green solid"});
+		   $('#os').val(sp[0]).css({"border" : "2px green solid"});
 		   $('#kohdenID').val(sp[1]);
 		   $("#camButtons").show('slow');
 		}
@@ -106,4 +143,4 @@ $(document).ready(function(){
  
 };
 
-appNFC.initialize();
+
