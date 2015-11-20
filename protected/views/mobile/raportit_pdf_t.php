@@ -46,6 +46,11 @@ td,th{
 
   $kesto = strtotime($data->loppui)-strtotime($data->aloitan);
   $kkesto += $kesto;
+
+  $viesti = '';
+  if($data->viesti != '' and $data->viesti != 'xxx')
+  $viesti = $data->viesti;
+
    echo  '<tr>';
    echo '<td>'.date("d.m",strtotime($data->aloitan)).'</td>';
    echo '<td>'.$data->tekijan_nimi.'</td>';
@@ -53,7 +58,7 @@ td,th{
    echo '<td>'.date("H:i",strtotime($data->aloitan)).'</td>';
    echo '<td>'.date("H:i",strtotime($data->loppui)).'</td>';
    echo '<td>'.sprint($kesto).' <b>('.num($kesto).')</b></td>';
-   echo '<td>'.$data->viesti.'</td>';
+   echo '<td>'.$viesti.'</td>';
    echo '</tr>';
   }
   ?>
