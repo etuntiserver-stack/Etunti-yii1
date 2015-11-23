@@ -53,6 +53,7 @@ $('.search-form form').submit(function(){
 
 	'columns'=>array(
 		'id',
+		'laskunumero',
 
 	array(
         'header'  => 'Asianro',
@@ -67,10 +68,10 @@ $('.search-form form').submit(function(){
                     'value'=>'date("d.m.Y - H:i",strtotime($data->time))',                   
 		),
 		//'tyyppi',
-		'yritys',
-		'y_tunnus',
+		//'yritys',
+		//'y_tunnus',
 		'osoite',
-		'nimi',
+		//'nimi',
 		'yhteyshenkilo',
 		//'as_nro',
 	array(
