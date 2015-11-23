@@ -16,6 +16,10 @@
 		if($return[3] != 0)
 		$return[3] = $this->sprint($return[3]).'<br>('.$this->num($return[3]).')';
 
+		$matkaIlta = $this->matkaIlta($data->id);
+		if($matkaIlta != 0)
+		$matkaIlta = '<br><b>Matkat</b>:<br>'.$this->sprint($matkaIlta).'<br>('.$this->num($matkaIlta).')';
+
 
 
   $matka = $this->renderPartial('//mobile/tidfromtomatkat',array(
@@ -52,7 +56,7 @@
 	<td><?php echo $tp; ?></td>
 	<td><?php echo $matka; ?></td>
 	<td><?php echo $return[0]; ?></td>
-	<td><?php echo $return[1]; ?></td>
+	<td><?php echo $return[1].$matkaIlta; ?></td>
 	<td><?php echo $return[2]; ?></td>
 	<td><?php echo $return[3]; ?></td>
 	<td><?php echo $korv; ?></td>

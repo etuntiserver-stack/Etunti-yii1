@@ -1413,12 +1413,9 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			AND id NOT IN(select kid from sivexkuitti_repaired)
 		";
 
-		if($sivu == 'palkkataulukko'){
-		    if(isset($_POST['iltaTyoMatka']) and $_POST['iltaTyoMatka'] == 'ILTA, vain työt')
+		if($sivu == 'palkkataulukko')
 	        	$criteria->addCondition (" status = '3' ");
-		    elseif(isset($_POST['iltaTyoMatka']) and $_POST['iltaTyoMatka'] == 'ILTA, työt+matkat')
-	        	$criteria->addCondition (" status='3' or status='2' ");
-		}
+
 
 		if($sivu == 'yhteenveto')
 		{
@@ -1459,12 +1456,8 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			tid = '".$tid."' and aloitan !='' and loppui !='' 
 		";
 
-		if($sivu == 'palkkataulukko'){
-		    if(isset($_POST['iltaTyoMatka']) and $_POST['iltaTyoMatka'] == 'ILTA, vain työt')
+		if($sivu == 'palkkataulukko')
 	        	$criteria->addCondition (" status = '3' ");
-		    elseif(isset($_POST['iltaTyoMatka']) and $_POST['iltaTyoMatka'] == 'ILTA, työt+matkat')
-	        	$criteria->addCondition (" status='3' or status='2' ");
-		}
 
 
 		if($sivu == 'yhteenveto')
@@ -1501,6 +1494,79 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		return $kaikki;
 
 	}
+
+
+
+	public function matkaIlta($tid)
+	{
+
+
+		$totalIlta 	= 0;
+
+
+       		$criteria = new CDbCriteria();
+        	$criteria->select = "
+		TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'))) as l_tunnit,aloitan,loppui
+		";
+
+        	$criteria->condition = "  
+			tid = '".$tid."' and aloitan !='' and loppui !='' 
+			AND id NOT IN(select kid from sivexkuitti_repaired)
+			AND status = '2'
+		";
+
+
+		if(Yii::app()->session['from'] and Yii::app()->session['to'])
+	        $criteria->addCondition ("DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."' ");
+
+		$lu = Mobile::model()->findAll($criteria);
+		foreach($lu as $l)
+		{
+
+		  $l->loppui = date("d.m.Y H:i",strtotime($l->loppui));
+		  $l->aloitan = date("d.m.Y H:i",strtotime($l->aloitan));
+
+		    $l->l_tunnit = (strtotime($l->loppui)-strtotime($l->aloitan));
+		    $al = explode(" ",$l->aloitan);
+		    $lop = explode(" ",$l->loppui);
+		    $totalIlta += $this->ilta($al,$lop);
+		}
+		/* ////////////////////////// */
+
+       		$criteria = new CDbCriteria();
+        	$criteria->select = "
+		TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'))) as l_tunnit,aloitan,loppui 
+		";
+
+        	$criteria->condition = "  
+			tid = '".$tid."' and aloitan !='' and loppui !='' 
+			AND status = '2'
+		";
+
+
+		if(Yii::app()->session['from'] and Yii::app()->session['to'])
+	        $criteria->addCondition ("DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."' ");
+
+		$tot = Toteutuneet::model()->findAll($criteria);
+		foreach($tot as $l)
+		{
+
+		  $l->loppui = date("d.m.Y H:i",strtotime($l->loppui));
+		  $l->aloitan = date("d.m.Y H:i",strtotime($l->aloitan));
+
+		    $l->l_tunnit = (strtotime($l->loppui)-strtotime($l->aloitan));
+		    $al = explode(" ",$l->aloitan);
+		    $lop = explode(" ",$l->loppui);
+		    $totalIlta += $this->ilta($al,$lop);
+
+		}
+
+
+		return $totalIlta;
+
+	}
+
+
 
 
 	public function actionKohdebytekija($tid,$from,$to)
