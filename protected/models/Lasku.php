@@ -79,7 +79,7 @@ class Lasku extends DB2ActiveRecord
 		// will receive user inputs.
 		return array(
 			array('yid, tyyppi, as_nro, osoite, postinumero, toimipaikka, laskutus, paivays, erapaiva, maksuehto, toimitusosoite', 'required'),
-			array('lid, yid, as_nro', 'numerical', 'integerOnly'=>true),
+			array('lid, yid, as_nro, laskunumero', 'numerical', 'integerOnly'=>true),
 			array('tyyppi, yritys, nimi, sahkoposti, v_tunnus, yhteyshenkilo, nimitarkenne, t_yritys, t_nimi, t_osoite, t_toimipaikka, t_sahkoposti, toimitusosoite, viitenumero, saaja_iban, maksettu_euro, laskun_nimetys, postita_jobid, trust_jobid', 'length', 'max'=>100),
 			array('y_tunnus, toimipaikka, laskutus, puhelin, t_y_tunnus, t_puhelin, viivastyskorko, tilanne, tapahtumapvm', 'length', 'max'=>50),
 			array('osoite, verkkolaskuosoite, saaja_virtualkoodi', 'length', 'max'=>255),
@@ -110,6 +110,7 @@ class Lasku extends DB2ActiveRecord
 	{
 		return array(
 			'id' => 'ID',
+			'laskunumero' => 'Laskunumero',
 			'lid' => 'Lid',
 			'yid' => 'Saaja',
 			'time' => 'Luotu',
@@ -171,6 +172,7 @@ class Lasku extends DB2ActiveRecord
 		$criteria->order = "id DESC";
 
 		$criteria->compare('id',$this->id);
+		$criteria->compare('laskunumero',$this->laskunumero);
 		$criteria->compare('lid',$this->lid);
 		$criteria->compare('yid',$this->yid);
 		$criteria->compare('time',$this->time,true);

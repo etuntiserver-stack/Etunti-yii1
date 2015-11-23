@@ -1413,9 +1413,12 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			AND id NOT IN(select kid from sivexkuitti_repaired)
 		";
 
-		if($sivu == 'palkkataulukko')
+		if($sivu == 'palkkataulukko'){
+		    if(isset($_POST['iltaTyoMatka']) and $_POST['iltaTyoMatka'] == 'ILTA, vain työt')
 	        	$criteria->addCondition (" status = '3' ");
-
+		    elseif(isset($_POST['iltaTyoMatka']) and $_POST['iltaTyoMatka'] == 'ILTA, työt+matkat')
+	        	$criteria->addCondition (" status='3' or status='2' ");
+		}
 
 		if($sivu == 'yhteenveto')
 		{
@@ -1456,8 +1459,12 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			tid = '".$tid."' and aloitan !='' and loppui !='' 
 		";
 
-		if($sivu == 'palkkataulukko')
+		if($sivu == 'palkkataulukko'){
+		    if(isset($_POST['iltaTyoMatka']) and $_POST['iltaTyoMatka'] == 'vainTyo')
 	        	$criteria->addCondition (" status = '3' ");
+		    if(isset($_POST['iltaTyoMatka']) and $_POST['iltaTyoMatka'] == 'tyotMatkat')
+	        	$criteria->addCondition (" status='3' and status='2' ");
+		}
 
 
 		if($sivu == 'yhteenveto')

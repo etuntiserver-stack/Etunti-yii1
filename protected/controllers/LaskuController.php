@@ -321,10 +321,9 @@ class LaskuController extends Controller
 		if(isset($_POST['Lasku']))
 		{
 
-			$vm = Lasku::model()->find(array('order'=>'id DESC'));
+			//$vm = Lasku::model()->find(array('order'=>'id DESC'));
 
 			$model->attributes=$_POST['Lasku'];
-			$model->id=$vm->id+1;
 			$model->tilanne=0;
 			$model->laskun_nimetys="Lasku";
 			if($model->save()){

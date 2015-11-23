@@ -62,6 +62,22 @@ $model->viivastyskorko = $asetukset->viivastyskorko;
 		<?php echo $form->error($model,'as_nro'); ?>
 	</div>
 	<?php else : ?> 
+	<?php
+       		$criteria = new CDbCriteria();
+       		$criteria->order = "laskunumero DESC";
+       		$criteria->condition = "laskunumero!='0'";
+		$ln = '';
+		$vm = Lasku::model()->find($criteria);
+		if(isset($vm->id))
+		$ln = $vm->laskunumero+1;
+	?>
+	<div class="row">
+		<?php echo $form->labelEx($model,'laskunumero'); ?>
+		<?php echo $form->textField($model,'laskunumero',array('value'=>$ln,'size'=>60,'maxlength'=>11,'class'=>'form-control input-sm')); ?>
+		<?php echo $form->error($model,'laskunumero'); ?>
+	</div>
+
+
 	<div class="row asiakas">
 		<?php echo $form->labelEx($model,'as_nro'); ?>
     		<?php 
