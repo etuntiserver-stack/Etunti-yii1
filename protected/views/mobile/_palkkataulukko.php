@@ -16,6 +16,7 @@
 		if($return[3] != 0)
 		$return[3] = $this->sprint($return[3]).'<br>('.$this->num($return[3]).')';
 
+		$matkaIlta = 0;
 		$matkaIlta = $this->matkaIlta($data->id);
 		if($matkaIlta != 0)
 		$matkaIlta = '<br><b>Matkat</b>:<br>'.$this->sprint($matkaIlta).'<br>('.$this->num($matkaIlta).')';
