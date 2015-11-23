@@ -143,7 +143,7 @@ $this->breadcrumbs=array(
   	<th><?php echo Yii::t('main', 'Yhteensä'); ?></th>
 	<td><?php echo $totalTp; ?></td>
 	<td><?php echo $matka; ?></td>
-	<td><?php echo $this->sprint($yht[0]); ?></td>
+	<td><?php echo $this->sprint($yht[0]).'<br>('.$this->num($yht[0]).')'; ?></td>
 	<td><?php echo '<br><b>Työt</b>:<br>'.$this->sprint($yht[1]).'<br>('.$this->num($yht[1]).')'.$matkaIlta; ?></td>
 	<td><?php echo $this->sprint($yht[2]); ?></td>
 	<td><?php echo $this->sprint($yht[3]); ?></td>
