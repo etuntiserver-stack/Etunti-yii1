@@ -261,6 +261,16 @@ for ($i = 0; $i < count ($doc->row); $i++) {
             . ' jobid ' . $doc->row[$i]->jobid . "<br>";
 
      	Lasku::model()->updatebypk($id, array('tilanne'=>2,'trust_jobid'=>$doc->row[$i]->jobid));
+
+		    // Lasku historia
+		    $l = Lasku::model()->findbypk($id);
+		    $historia = new LaskuHistoria;
+		    $historia->lid = $id;
+		    $historia->status = "Lasku//lähetetty//jobid:".$doc->row[$i]->jobid;
+		    $historia->palvelu = "trust";
+		    $historia->yht_euro = $l->yhteensa_total;
+		    $historia->save();
+
 	$this->redirect(array('update','id'=>$id));
 	break;
 
@@ -563,6 +573,16 @@ curl_close($ch);
        $job_id = $v;
      }
      Lasku::model()->updatebypk($id, array('tilanne'=>2,'response_finvoice'=>implode('//',$prep),'postita_jobid'=>$job_id));
+
+		    // Lasku historia
+		    $l = Lasku::model()->findbypk($id);
+		    $historia = new LaskuHistoria;
+		    $historia->lid = $id;
+		    $historia->status = "Finvoice//lähetetty//jobid:".$job_id;
+		    $historia->palvelu = "postita";
+		    $historia->yht_euro = $l->yhteensa_total;
+		    $historia->save();
+
      $this->redirect(array('update','id'=>$id));
 
   }
@@ -680,6 +700,16 @@ curl_close($ch);
        $job_id = $v;
      }
      Lasku::model()->updatebypk($id, array('tilanne'=>2,'response'=>implode('//',$prep),'postita_jobid'=>$job_id));
+
+		    // Lasku historia
+		    $l = Lasku::model()->findbypk($id);
+		    $historia = new LaskuHistoria;
+		    $historia->lid = $id;
+		    $historia->status = "PDF//lähetetty//jobid:".$job_id;
+		    $historia->palvelu = "postita";
+		    $historia->yht_euro = $l->yhteensa_total;
+		    $historia->save();
+
      $this->redirect(array('update','id'=>$id));
 
   }

@@ -46,10 +46,11 @@ $('.search-form form').submit(function(){
                     'itemsCssClass' => 'table small table-striped table-bordered table-hover',
 
 	'columns'=>array(
-		'id',
+		//'id',
 		'lid',
 		'time',
 		'status',
+		'palvelu',
 		'yht_euro',
 		/*
 		array(
