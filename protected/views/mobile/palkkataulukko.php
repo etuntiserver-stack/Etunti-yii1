@@ -59,14 +59,6 @@ $this->breadcrumbs=array(
    <b class="glyphicon glyphicon-calendar"></b>
    <input type="text" name="to" id="to" class="form-control input-sm form-group datepicker" value="<?php echo Yii::app()->session['to']; ?>">
 
-   <select name="iltaTyoMatka" class="form-control input-sm form-group">
-   <?php if(isset($_POST['iltaTyoMatka'])) : ?>
-   <option value="<?php echo $_POST['iltaTyoMatka']; ?>"><?php echo $_POST['iltaTyoMatka']; ?></option>
-   <?php endif; ?>
-   <option value="<?php echo Yii::t('main','ILTA, työt+matkat'); ?>"><?php echo Yii::t('main','ILTA, työt+matkat'); ?></option>
-   <option value="<?php echo Yii::t('main','ILTA, vain työt'); ?>"><?php echo Yii::t('main','ILTA, vain työt'); ?></option>
-   </select>
-
    <input type="submit" class="btn btn-sm btn-primary" value="<?php echo Yii::t('main', 'haku'); ?>">
    </form>
 
