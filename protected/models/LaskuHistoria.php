@@ -66,8 +66,8 @@ class LaskuHistoria extends DB2ActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'lid' => 'Lid',
-			'time' => 'Time',
+			'lid' => 'Lasku id',
+			'time' => 'Tapahtuma pvm',
 			'status' => 'Status',
 			'yht_euro' => 'Yht Euro',
 			'palvelu' => 'Palvelu',

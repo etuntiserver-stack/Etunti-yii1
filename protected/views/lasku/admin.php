@@ -29,7 +29,8 @@ $('.search-form form').submit(function(){
 
 <legend>
    <div class="pull-right">
-     <?php echo CHtml::link(' +','/index.php/lasku/create',array('class'=>'btn btn-default glyphicon glyphicon-barcode')); ?>
+     <?php echo CHtml::link('Historia kanta','/index.php/laskuHistoria/admin',array('class'=>'btn btn-default btn-sm')); ?>
+     <?php echo CHtml::link(' +','/index.php/lasku/create',array('class'=>'btn btn-default btn-sm glyphicon glyphicon-barcode')); ?>
    </div>
 <h1> <?php echo Yii::t('main', 'LASKUT'); ?> <i class="glyphicon glyphicon-barcode"></i></h1>
 </legend>

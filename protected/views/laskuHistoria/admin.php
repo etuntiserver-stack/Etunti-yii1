@@ -6,12 +6,12 @@ $this->breadcrumbs=array(
 	'Lasku Historias'=>array('index'),
 	'Manage',
 );
-
+/*
 $this->menu=array(
 	array('label'=>'List LaskuHistoria', 'url'=>array('index')),
 	array('label'=>'Create LaskuHistoria', 'url'=>array('create')),
 );
-
+*/
 Yii::app()->clientScript->registerScript('search', "
 $('.search-button').click(function(){
 	$('.search-form').toggle();
@@ -25,15 +25,12 @@ $('.search-form form').submit(function(){
 });
 ");
 ?>
+<legend>
+<h1><?php echo Yii::t('main','Lasku historia'); ?></h1>
+</legend>
 
-<h1>Manage Lasku Historias</h1>
 
-<p>
-You may optionally enter a comparison operator (<b>&lt;</b>, <b>&lt;=</b>, <b>&gt;</b>, <b>&gt;=</b>, <b>&lt;&gt;</b>
-or <b>=</b>) at the beginning of each of your search values to specify how the comparison should be done.
-</p>
-
-<?php echo CHtml::link('Advanced Search','#',array('class'=>'search-button')); ?>
+<?php echo CHtml::link('Haku','#',array('class'=>'search-button')); ?>
 <div class="search-form" style="display:none">
 <?php $this->renderPartial('_search',array(
 	'model'=>$model,
@@ -44,14 +41,29 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 	'id'=>'lasku-historia-grid',
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,
+
+                    'pagerCssClass' => 'dataTables_paginate paging_bootstrap',
+                    'itemsCssClass' => 'table small table-striped table-bordered table-hover',
+
 	'columns'=>array(
-		'id',
+		//'id',
 		'lid',
 		'time',
 		'status',
+		'palvelu',
 		'yht_euro',
+		/*
 		array(
 			'class'=>'CButtonColumn',
 		),
+		*/
+array(
+
+        'value' => '
+	   CHtml::link("Katso", Yii::app()->createUrl("laskuHistoria/update",array("id"=>$data->id)))
+	',
+        'type'  => 'raw',
+	//'visible'=>Yii::app()->user->avetak,
+    ),
 	),
 )); ?>

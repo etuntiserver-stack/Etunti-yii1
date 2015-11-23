@@ -366,6 +366,15 @@ class LaskuController extends Controller
 			}
 
 
+		    // Lasku historia
+		    $historia = new LaskuHistoria;
+		    $historia->lid = $model->id;
+		    $historia->status = "Lasku luotu";
+		    $historia->palvelu = "local";
+		    $historia->yht_euro = $model->yhteensa_total;
+		    $historia->save();
+
+
 				$this->redirect(array('update','id'=>$model->id));
 			}
 		}
