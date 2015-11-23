@@ -113,6 +113,7 @@ $this->breadcrumbs=array(
 	$yht[2] = 0;
 	$yht[3] = 0;
 	$matka = 0;
+	$matkaIlta = 0;
 
   foreach($tids as $t)
   {
@@ -121,6 +122,9 @@ $this->breadcrumbs=array(
 		'to'=>Yii::app()->session['to'],
 		'tid'=>$t
 		),true);
+
+
+	$matkaIlta += $this->matkaIlta($t);
 
 	$return = $this->toteutu($t,"palkkataulukko");
 	$yht[0] += $return[0];
@@ -131,6 +135,8 @@ $this->breadcrumbs=array(
 
   if($matka != 0)
   $matka = $this->sprint($matka).'<br>('.$this->num($matka).')';
+  if($matkaIlta != 0)
+  $matkaIlta = '<br><b>Matkat</b>:<br>'.$this->sprint($matkaIlta).'<br>('.$this->num($matkaIlta).')';
   ?>
   <tfoot>
   <tr>
@@ -138,7 +144,7 @@ $this->breadcrumbs=array(
 	<td><?php echo $totalTp; ?></td>
 	<td><?php echo $matka; ?></td>
 	<td><?php echo $this->sprint($yht[0]); ?></td>
-	<td><?php echo $this->sprint($yht[1]); ?></td>
+	<td><?php echo '<br><b>Työt</b>:<br>'.$this->sprint($yht[1]).'<br>('.$this->num($yht[1]).')'.$matkaIlta; ?></td>
 	<td><?php echo $this->sprint($yht[2]); ?></td>
 	<td><?php echo $this->sprint($yht[3]); ?></td>
 	<td></td>
