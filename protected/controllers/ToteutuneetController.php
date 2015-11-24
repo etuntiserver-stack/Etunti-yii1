@@ -491,7 +491,7 @@ class ToteutuneetController extends Controller
         	$criteria->condition = "  
 			tid = '".$tid."' and aloitan !='' and loppui !='' 
 			AND id NOT IN(select kid from sivexkuitti_repaired)
-			AND status = '3'
+			AND status = '3' OR status = '2'
 		";
 
 
@@ -519,7 +519,7 @@ class ToteutuneetController extends Controller
 
         	$criteria->condition = "  
 			tid = '".$tid."' and aloitan !='' and loppui !='' 
-			AND status = '3'
+			AND status = '3' OR status = '2'
 		";
 
 
