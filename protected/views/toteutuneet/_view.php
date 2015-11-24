@@ -1,5 +1,5 @@
 <?php
-
+/*
   $arrDate = array(1=>"Ma",2=>"Ti",3=>"Ke",4=>"To",5=>"Pe",6=>"La",7=>"Su");
   $columnDate = date("N/d.m",strtotime($data->aloitan));
   $explColDate = explode("/",$columnDate);
@@ -31,3 +31,7 @@
 
 
 </TR>
+
+<?php
+*/
+?>
