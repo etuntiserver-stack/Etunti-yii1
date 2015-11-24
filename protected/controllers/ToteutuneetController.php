@@ -66,6 +66,11 @@ class ToteutuneetController extends Controller
 		return sprintf('%02d:%02d', $val/3600, ($val % 3600)/60);
 	}
 
+	protected function num($val){
+	    if($val > 0)
+		return  number_format((float)$val/3600, 2, '.', '');
+	}
+
 	public function actionKk()
 	{
 

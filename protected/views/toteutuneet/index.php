@@ -189,10 +189,10 @@ function dateDiff($start, $end) {
 		
 		  $totalLu = '';
 		  $totalLu = $this->yhtLuWeek($explTekija[0],$vko,$year);
-		  echo '<td style="background: #669999;color: white" class="text-center small">'.$this->sprint($totalLu).'</td>';
+		  echo '<td style="background: #669999;color: white" class="text-center small">'.$this->sprint($totalLu).' ('.$this->num($totalLu).')</td>';
 		  $totalTot = '';
 		  $totalTot = $this->yhtTOtWeek($explTekija[0],$vko,$year);
-		  echo '<td style="background: #669999;color: white" class="text-center small">'.$this->sprint($totalTot).'</td>';
+		  echo '<td style="background: #669999;color: white" class="text-center small">'.$this->sprint($totalTot).' ('.$this->num($totalTot).')</td>';
 		  echo '<td style="background: #669999;color: white" class="text-center small"></td>';
 		  echo '<td style="background: #669999;color: white" class="text-center small"></td>';
 		  echo '<td style="background: #669999;color: white" class="text-center small"></td>';
