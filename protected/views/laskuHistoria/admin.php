@@ -49,7 +49,12 @@ $('.search-form form').submit(function(){
 		//'id',
 		'lid',
 		'time',
-		'status',
+
+	array(
+        'name'  => 'status',
+        'value'=>array($this,'statusMuutos'),
+	'type' => 'html',
+    	),
 		'palvelu',
 		'yht_euro',
 		/*

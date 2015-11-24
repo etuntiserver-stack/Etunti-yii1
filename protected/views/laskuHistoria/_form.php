@@ -4,8 +4,8 @@
 /* @var $form CActiveForm */
 ?>
 
-<div class="form">
-
+<div class="row form">
+<div class="col-sm-3">
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'lasku-historia-form',
 	'enableAjaxValidation'=>false,
@@ -23,26 +23,32 @@
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'time'); ?>
-		<?php echo $form->textField($model,'time'); ?>
+		<?php echo $form->textField($model,'time', array('class'=>'form-control')); ?>
 		<?php echo $form->error($model,'time'); ?>
 	</div>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'status'); ?>
-		<?php echo $form->textField($model,'status',array('size'=>60,'maxlength'=>255)); ?>
+		<?php echo $form->textField($model,'status',array('size'=>60,'maxlength'=>255,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'status'); ?>
 	</div>
 
 	<div class="row">
+		<?php echo $form->labelEx($model,'palvelu'); ?>
+		<?php echo $form->textField($model,'palvelu', array('class'=>'form-control')); ?>
+		<?php echo $form->error($model,'palvelu'); ?>
+	</div>
+
+	<div class="row">
 		<?php echo $form->labelEx($model,'yht_euro'); ?>
-		<?php echo $form->textField($model,'yht_euro',array('size'=>50,'maxlength'=>50)); ?>
+		<?php echo $form->textField($model,'yht_euro',array('size'=>50,'maxlength'=>50,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'yht_euro'); ?>
 	</div>
 
 	<div class="row buttons">
-		<?php echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save'); ?>
+		<?php echo CHtml::submitButton($model->isNewRecord ? 'Luo' : 'Tallenna',array('class'=>'btn btn-primary btn-sm')); ?>
 	</div>
 
 <?php $this->endWidget(); ?>
-
+</div>
 </div><!-- form -->
