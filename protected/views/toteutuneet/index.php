@@ -131,7 +131,7 @@ function dateDiff($start, $end) {
 
     echo '
     <tr>
-  	<td width=1 class="small">'.$arrDate[$explColDate[0]].', '.$date.'</td>';
+  	<td width=1 class="small">'.$arrDate[$explColDate[0]].'<br>'.date("d.m",strtotime($date)).'</td>';
   
     $tas = explode(",",Yii::app()->user->adminPaketti);
     if(in_array('2',$tas)) 
