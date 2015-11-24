@@ -491,11 +491,10 @@ class ToteutuneetController extends Controller
         	$criteria->condition = "  
 			tid = '".$tid."' and aloitan !='' and loppui !='' 
 			AND id NOT IN(select kid from sivexkuitti_repaired)
-			AND status = '3' OR status = '2'
+			AND (status = '3' OR status = '2')
 		";
 
 
-		if(Yii::app()->session['from'] and Yii::app()->session['to'])
 	        $criteria->addCondition ("DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = '".$pvm."' ");
 
 		$lu = Mobile::model()->findAll($criteria);
@@ -519,11 +518,9 @@ class ToteutuneetController extends Controller
 
         	$criteria->condition = "  
 			tid = '".$tid."' and aloitan !='' and loppui !='' 
-			AND status = '3' OR status = '2'
+			AND (status = '3' OR status = '2')
 		";
 
-
-		if(Yii::app()->session['from'] and Yii::app()->session['to'])
 	        $criteria->addCondition ("DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = '".$pvm."' ");
 
 		$tot = Toteutuneet::model()->findAll($criteria);
