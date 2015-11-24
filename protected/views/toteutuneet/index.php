@@ -117,6 +117,9 @@ function dateDiff($start, $end) {
   $arrDate = array(1=>"Ma",2=>"Ti",3=>"Ke",4=>"To",5=>"Pe",6=>"La",7=>"Su");
   $yhtMatka = 0;
   $yhtIlta = 0;
+  $yhtMatkaWeek = 0;
+  $yhtIltaWeek = 0;
+  $viikkoBreak = '';
 
   for ($i = 0; $i <= $dateDiff; $i++) 
   {
@@ -155,51 +158,20 @@ function dateDiff($start, $end) {
     $tyoIlta = $this->tyoIlta($explTekija[0],date("Y-m-d",strtotime($date)));
     $yhtIlta += $tyoIlta;
     echo '<td>'.$this->sprint($tyoIlta).'</td>';
+
+
+    if($viikkoBreak == false){
+       $yhtMatkaWeek += $matka;
+       $yhtIltaWeek += $tyoIlta;
+    } else {
+       $yhtMatkaWeek = 0;
+       $yhtIltaWeek = 0;
+    }
+    $viikkoBreak = false;
+
     echo '</tr>';
 
-
-
-	    if(date('N', strtotime($date)) == 7)
-	    {
-  	    echo '<tr>';
-  		echo '<td style="background: #669999;color: white" class="text-center viikkoRivi small"><b>'.Yii::t('main', 'Viikko').' '.date("W",strtotime($date)).'</b></td>';
-
-		 $vktyoaika = '';
-		 $ts = Tyosuhdet::model()->find(" tid = '".$explTekija[0]."' ");
-		 if(isset($ts->id) and !empty($ts['vktyoaika']))
-		  $vktyoaika = $ts['vktyoaika'];
-
-		  echo '<td style="background: #669999;color: white" class="viikkoRivi text-center small" id="vk_'.date("W",strtotime($date)).'_'.$explTekija[0].'">';
-		  $kokoViikko = '';
-		  $vko = '';
-		  $vko = date("W",strtotime($date));
-		  $year = date("Y",strtotime($date));
-		  $kokoViikko = $this->renderPartial('//tyovuoroot/viikko',array('tid'=>$explTekija[0],'viikko'=>$vko,'year'=>$year),true);
-
-		  $cl = '';
-		  if(	(int)str_replace(":","",$kokoViikko) > (int)str_replace(":","",$vktyoaika)
-			and (int)str_replace(":","",$kokoViikko) > 0
-			and (int)str_replace(":","",$vktyoaika) > 0
-		  )
-		  $cl = 'class="btn btn-xs btn-danger"';
-
-		  echo '<span '.$cl.'>'.$kokoViikko. '('.$vktyoaika.')</span>';
-
-		  echo '</td>';
-		
-		  $totalLu = '';
-		  $totalLu = $this->yhtLuWeek($explTekija[0],$vko,$year);
-		  echo '<td style="background: #669999;color: white" class="text-center small">'.$this->sprint($totalLu).' ('.$this->num($totalLu).')</td>';
-		  $totalTot = '';
-		  $totalTot = $this->yhtTOtWeek($explTekija[0],$vko,$year);
-		  echo '<td style="background: #669999;color: white" class="text-center small">'.$this->sprint($totalTot).' ('.$this->num($totalTot).')</td>';
-		  echo '<td style="background: #669999;color: white" class="text-center small"></td>';
-		  echo '<td style="background: #669999;color: white" class="text-center small"></td>';
-		  echo '<td style="background: #669999;color: white" class="text-center small"></td>';
-
-
-	    echo '</tr>';
-	    }
+    echo $this->viikkonLoppu($date,$explTekija[0],$yhtMatkaWeek,$yhtIltaWeek,$viikkoBreak);
 
   }
   ?>
