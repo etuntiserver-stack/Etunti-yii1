@@ -28,7 +28,7 @@ class LaskuHistoriaController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view'),
+				'actions'=>array('index','view','paivakirja'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
@@ -144,6 +144,15 @@ class LaskuHistoriaController extends Controller
 	{
 		$dataProvider=new CActiveDataProvider('LaskuHistoria');
 		$this->render('index',array(
+			'dataProvider'=>$dataProvider,
+		));
+	}
+
+
+	public function actionPaivakirja()
+	{
+		$dataProvider=new CActiveDataProvider('LaskuHistoria');
+		$this->render('paivakirja',array(
 			'dataProvider'=>$dataProvider,
 		));
 	}
