@@ -565,6 +565,12 @@ class ToteutuneetController extends Controller
 			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y') = '$year'
 		";
 
+		if(Yii::app()->session['Lounastauko'])
+	        $criteria->addCondition (" status != '10' ");
+
+		if(Yii::app()->session['MATKA'])
+	        $criteria->addCondition (" status != '2' ");
+
 		return $criteria;
 	}
 
