@@ -341,6 +341,7 @@ class ToteutuneetController extends Controller
 		if(Yii::app()->request->getPost('to'))
 		Yii::app()->session['to'] = date("Y-m-d",strtotime(Yii::app()->request->getPost('to')));
 
+/*
        		$criteria = new CDbCriteria();
 
         	//$criteria->condition = " aloitan !='' and loppui !='' ";
@@ -356,23 +357,20 @@ class ToteutuneetController extends Controller
 	        $criteria->addCondition ("DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."' ");
 
 
-		$dataProvider=new CActiveDataProvider('Mobile', array(
-			'criteria'=>$criteria,
-			'pagination'=>false
-		));
-
-
-
-		if(Yii::app()->request->getPost('tulosta'))
+		//$model = Mobile::model()->findAll($criteria);
+*/
+		if(isset($_POST['tulosta']))
 		{
-		  $model = Mobile::model()->findAll($criteria);
+
 	          $html2pdf = Yii::app()->ePdf->HTML2PDF('L', 'A4', 'en');
 		  $html2pdf->setDefaultFont('Arial');
-	          $html2pdf->WriteHTML($this->renderPartial('tulosta', array('model' => $model),true));
+	          $html2pdf->WriteHTML($this->renderPartial('tulosta',array(),true));
 	          $html2pdf->Output();
+
+
 		} else {
 		  //$dataProvider->pagination->pageSize = 50;
-		  $this->render('index', array('dataProvider' => $dataProvider));
+		  $this->render('index');
 		}
 		
 	}
@@ -420,4 +418,132 @@ class ToteutuneetController extends Controller
 			Yii::app()->end();
 		}
 	}
+
+
+
+	protected function ilta($al,$lop){
+
+		$totalIlta = 0;
+
+	    if($al[0] == $lop[0])
+	    {
+
+	  	if(strtotime($al[0]." ".$al[1]) > strtotime($al[0]." 18:00")
+		and strtotime($lop[0]." ".$lop[1]) <= strtotime($lop[0]." 23:00"))
+		{
+	   	  $strAl0 = strtotime($al[0]." ".$al[1]);
+	   	  $strLop0 = strtotime($lop[0]." ".$lop[1]);
+
+	 	  $str = ($strLop0-$strAl0);
+	      	  $totalIlta += $str;
+		}
+
+	  	if(strtotime($al[0]." ".$al[1]) <= strtotime($al[0]." 18:00")
+		and strtotime($lop[0]." ".$lop[1]) <= strtotime($lop[0]." 23:00")
+		and strtotime($lop[0]." ".$lop[1]) >= strtotime($lop[0]." 18:00"))
+		{
+	   	  $strAl0 = strtotime($al[0]." 18:00");
+	   	  $strLop0 = strtotime($lop[0]." ".$lop[1]);
+
+	 	  $str = ($strLop0-$strAl0);
+	      	  $totalIlta += $str;
+		}
+
+	  	if(strtotime($al[0]." ".$al[1]) <= strtotime($al[0]." 18:00")
+
+		and strtotime($lop[0]." ".$lop[1]) >= strtotime($lop[0]." 23:00"))
+		{
+	   	  $strAl0 = strtotime($al[0]." 18:00");
+	   	  $strLop0 = strtotime($lop[0]." 23:00");
+
+	 	  $str = ($strLop0-$strAl0);
+	      	  $totalIlta += $str;
+		}
+
+	  	if(strtotime($al[0]." ".$al[1]) >= strtotime($al[0]." 18:00")
+		and strtotime($lop[0]." ".$lop[1]) >= strtotime($lop[0]." 23:00"))
+		{
+	   	  $strAl0 = strtotime($al[0]." ".$al[1]);
+	   	  $strLop0 = strtotime($lop[0]." 23:00");
+
+	 	  $str = ($strLop0-$strAl0);
+
+	      	  $totalIlta += $str;
+		}
+
+	    }
+
+		return $totalIlta;
+	}
+
+
+
+	protected function tyoIlta($tid,$pvm)
+	{
+
+		$totalIlta 	= 0;
+
+       		$criteria = new CDbCriteria();
+        	$criteria->select = "
+		TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'))) as l_tunnit,aloitan,loppui
+		";
+
+        	$criteria->condition = "  
+			tid = '".$tid."' and aloitan !='' and loppui !='' 
+			AND id NOT IN(select kid from sivexkuitti_repaired)
+			AND status = '3'
+		";
+
+
+		if(Yii::app()->session['from'] and Yii::app()->session['to'])
+	        $criteria->addCondition ("DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = '".$pvm."' ");
+
+		$lu = Mobile::model()->findAll($criteria);
+		foreach($lu as $l)
+		{
+
+		  $l->loppui = date("d.m.Y H:i",strtotime($l->loppui));
+		  $l->aloitan = date("d.m.Y H:i",strtotime($l->aloitan));
+
+		    $l->l_tunnit = (strtotime($l->loppui)-strtotime($l->aloitan));
+		    $al = explode(" ",$l->aloitan);
+		    $lop = explode(" ",$l->loppui);
+		    $totalIlta += $this->ilta($al,$lop);
+		}
+		/* ////////////////////////// */
+
+       		$criteria = new CDbCriteria();
+        	$criteria->select = "
+		TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'))) as l_tunnit,aloitan,loppui 
+		";
+
+        	$criteria->condition = "  
+			tid = '".$tid."' and aloitan !='' and loppui !='' 
+			AND status = '3'
+		";
+
+
+		if(Yii::app()->session['from'] and Yii::app()->session['to'])
+	        $criteria->addCondition ("DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = '".$pvm."' ");
+
+		$tot = Toteutuneet::model()->findAll($criteria);
+		foreach($tot as $l)
+		{
+
+		  $l->loppui = date("d.m.Y H:i",strtotime($l->loppui));
+		  $l->aloitan = date("d.m.Y H:i",strtotime($l->aloitan));
+
+		    $l->l_tunnit = (strtotime($l->loppui)-strtotime($l->aloitan));
+		    $al = explode(" ",$l->aloitan);
+		    $lop = explode(" ",$l->loppui);
+		    $totalIlta += $this->ilta($al,$lop);
+
+		}
+
+
+		return $totalIlta;
+
+	}
+
+
 }
