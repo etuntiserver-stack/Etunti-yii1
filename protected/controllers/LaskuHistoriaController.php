@@ -190,4 +190,20 @@ class LaskuHistoriaController extends Controller
 			Yii::app()->end();
 		}
 	}
+
+
+   	protected function statusMuutos($data,$row)
+	{ 
+
+		if($data->palvelu == 'trust')
+		{
+		   $expl = explode("//",$data->status);
+		   if(count($expl) > 0)
+		     foreach($expl as $e)
+			echo $e.'<br>';
+		}
+
+	}
+
+
 }
