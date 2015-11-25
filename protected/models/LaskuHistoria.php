@@ -40,7 +40,7 @@ class LaskuHistoria extends DB2ActiveRecord
 		return array(
 			//array('lid, time, status, yht_euro', 'required'),
 			array('lid', 'numerical', 'integerOnly'=>true),
-			array('status', 'length', 'max'=>255),
+			array('status', 'length', 'max'=>2000),
 			array('yht_euro, palvelu', 'length', 'max'=>50),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.

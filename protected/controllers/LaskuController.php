@@ -496,9 +496,9 @@ class LaskuController extends Controller
 	if($xml = simplexml_load_string($rss, 'SimpleXMLElement', LIBXML_NOCDATA))
 	{
 
-echo '<pre>';
-print_r($xml);
-echo '</pre>';
+echo '<textarea class="form-control" rows="10">';
+print_r($rss);
+echo '</textarea>';
 
 	 if($xml->commonerror != 'No statusupdates')
 	 {
@@ -515,7 +515,7 @@ echo '</pre>';
 		    // Lasku historia
 		    $historia = new LaskuHistoria;
 		    $historia->lid = $l['id'];
-		    $historia->status = $str;
+		    $historia->status = $rss;
 		    $historia->palvelu = "trust";
 		    $historia->yht_euro = $l['yhteensa_total'];
 		    $historia->save();
