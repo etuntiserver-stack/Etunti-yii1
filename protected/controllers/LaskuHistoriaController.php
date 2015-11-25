@@ -97,7 +97,7 @@ class LaskuHistoriaController extends Controller
 
 		if(isset($_POST['pvm']))
 		{
-		$criteria->Addcondition(" time<'".date("Y-m-d H:i:s",strtotime($_POST['pvm']))."' "); 		
+		$criteria->Addcondition(" time < '".date("Y-m-d H:i:s",strtotime($_POST['pvm']))."' "); 		
 		}
 
 		$model= LaskuHistoria::model()->findAll($criteria);
