@@ -23,11 +23,11 @@ class LaskuController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','etsikohde','etsiasiakas', 'etsisaaja','luoKohteista','tr_rivit', 'tr_rivitkk','lasku_pdf', 'finvoice','tr_rivit_tyhja','valitsetuote', 'hyvityslasku' ,'avoimet'),
+				'actions'=>array('admin','delete','create','update','index','view','etsikohde','etsiasiakas', 'etsisaaja','luoKohteista','tr_rivit', 'tr_rivitkk','lasku_pdf', 'finvoice','tr_rivit_tyhja','valitsetuote', 'hyvityslasku'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','etsikohde','etsiasiakas', 'etsisaaja','luoKohteista','tr_rivit','tr_rivitkk','lasku_pdf', 'finvoice','tr_rivit_tyhja','valitsetuote', 'hyvityslasku', 'avoimet'),
+				'actions'=>array('admin','delete','create','update','index','view','etsikohde','etsiasiakas', 'etsisaaja','luoKohteista','tr_rivit','tr_rivitkk','lasku_pdf', 'finvoice','tr_rivit_tyhja','valitsetuote', 'hyvityslasku'),
                 		'message'=>Yii::t('main', 'Tämä TASO ei kuuluu teille'),
 			),
 			array('deny',  // deny all users
@@ -58,20 +58,6 @@ class LaskuController extends Controller
 	protected function num($val){
 	    if($val > 0)
 		return  number_format((float)$val/3600, 2, '.', '');
-	}
-
-	public function actionAvoimet()
-	{
-
-		$model=new Lasku('avoimet');
-		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['Lasku']))
-			$model->attributes=$_GET['Lasku'];
-
-		$this->render('avoimet',array(
-			'model'=>$model,
-		));
-
 	}
 
 	public function actionTr_rivit_tyhja()
@@ -526,10 +512,12 @@ echo '</textarea>';
 		    $tapahtumapvm = date("Y-m-d H:i:s",strtotime(trim($r->statustime)));
 	     	    Lasku::model()->updatebypk($l['id'], array('tilanne'=>$r->statuscode,'response_finvoice'=>$rss,'tapahtumapvm'=>$tapahtumapvm));
 
-		    // Lasku historia
+		    // Lasku historia 
 		    $historia = new LaskuHistoria;
+		    $historia->time = $tapahtumapvm;
 		    $historia->lid = $l['id'];
 		    $historia->status = $rss;
+		    $historia->trust_statuscode = $r->statuscode;
 		    $historia->palvelu = "trust";
 		    $historia->yht_euro = $l['yhteensa_total'];
 		    $historia->save();

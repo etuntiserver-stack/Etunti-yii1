@@ -42,9 +42,10 @@ class LaskuHistoria extends DB2ActiveRecord
 			array('lid', 'numerical', 'integerOnly'=>true),
 			array('status', 'length', 'max'=>2000),
 			array('yht_euro, palvelu', 'length', 'max'=>50),
+			array('trust_statuscode', 'length', 'max'=>100),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, lid, time, status, yht_euro', 'safe', 'on'=>'search'),
+			array('id, lid, time, status, yht_euro, trust_statuscode', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -68,9 +69,10 @@ class LaskuHistoria extends DB2ActiveRecord
 			'id' => 'ID',
 			'lid' => 'Lasku id',
 			'time' => 'Tapahtuma pvm',
-			'status' => 'Status',
+			'status' => 'Response',
 			'yht_euro' => 'Yht Euro',
 			'palvelu' => 'Palvelu',
+			'trust_statuscode'=>'Trust statuscode'
 		);
 	}
 
@@ -92,6 +94,39 @@ class LaskuHistoria extends DB2ActiveRecord
 		$criteria->compare('status',$this->status,true);
 		$criteria->compare('yht_euro',$this->yht_euro,true);
 		$criteria->compare('palvelu',$this->palvelu,true);
+		$criteria->compare('trust_statuscode',$this->trust_statuscode);
+
+		return new CActiveDataProvider($this, array(
+			'criteria'=>$criteria,
+		));
+	}
+
+
+	public function avoimet()
+	{
+		// Warning: Please modify the following code to remove attributes that
+		// should not be searched.
+
+		$criteria=new CDbCriteria;
+
+		$criteria->order = "time DESC";
+
+	$asetukset = Asetukset::model()->findbypk(1);
+	if($asetukset->palvelu_tyyppi == 2)
+	{
+		$criteria->condition = " 
+			trust_statuscode!='101'
+		";
+	}
+
+
+		$criteria->compare('id',$this->id);
+		$criteria->compare('lid',$this->lid);
+		$criteria->compare('time',$this->time,true);
+		$criteria->compare('status',$this->status,true);
+		$criteria->compare('yht_euro',$this->yht_euro,true);
+		$criteria->compare('palvelu',$this->palvelu,true);
+		$criteria->compare('trust_statuscode',$this->trust_statuscode);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

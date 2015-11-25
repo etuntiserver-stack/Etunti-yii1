@@ -28,7 +28,7 @@ class LaskuHistoriaController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view','paivakirja'),
+				'actions'=>array('index','view','paivakirja', 'avoimet'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
@@ -74,6 +74,20 @@ class LaskuHistoriaController extends Controller
 		$this->render('view',array(
 			'model'=>$this->loadModel($id),
 		));
+	}
+
+	public function actionAvoimet()
+	{
+
+		$model=new LaskuHistoria('avoimet');
+		$model->unsetAttributes();  // clear any default values
+		if(isset($_GET['LaskuHistoria']))
+			$model->attributes=$_GET['LaskuHistoria'];
+
+		$this->render('avoimet',array(
+			'model'=>$model,
+		));
+
 	}
 
 	/**
