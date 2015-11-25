@@ -20,7 +20,7 @@
   <th style="width:20%">Toimeksiantonne</th>
 </tr>
 <tr>
-  <td>'.$lasku['id'].'</td>
+  <td>'.$lasku['laskunumero'].'</td>
   <td>'.$lasku['paivays'].'</td>
   <td>'.$lasku['erapaiva'].'</td>
   <td>'.$lasku['yhteensa_total'].'</td>

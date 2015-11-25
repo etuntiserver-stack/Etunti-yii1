@@ -110,7 +110,7 @@ $xml = encodeXml (array(
                 "evoice" => "", # verkkolaskuosoite
                 "evoiceint" => "", # välittäjän tunnus
                 "overdueinterest" => "", # korkopros: tyhjä = oletus
-                "billnum" => $lasku['id'], # laskun numero
+                "billnum" => $lasku['laskunumero'], # laskun numero
                 "billcode" => $lasku['viitenumero'], # tilitysviite tai viesti
                 //"ourcode" => $lasku['viitenumero'],
                // "yourcode" => "Asiakkaan viite",
@@ -411,7 +411,7 @@ $xml = '<?xml version="1.0" encoding="UTF-8"?>
 <InvoiceTypeCode>INV01</InvoiceTypeCode>
 <InvoiceTypeText>LASKU</InvoiceTypeText>
 <OriginCode>Original</OriginCode>
-<InvoiceNumber>'.$lasku['id'].'</InvoiceNumber>
+<InvoiceNumber>'.$lasku['laskunumero'].'</InvoiceNumber>
 <InvoiceDate Format="CCYYMMDD">'.date("Ymd",strtotime($lasku['paivays'])).'</InvoiceDate>
 <SellerReferenceIdentifier></SellerReferenceIdentifier>
 <OrderIdentifier></OrderIdentifier>
