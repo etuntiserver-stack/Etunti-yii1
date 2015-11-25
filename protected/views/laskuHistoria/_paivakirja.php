@@ -29,5 +29,7 @@ $l = Lasku::model()->findbypk($data->lid);
 	<?php echo CHtml::encode($nimi); ?>
 	</td>
 
-
+	<td>
+	<?php echo CHtml::encode($data->palvelu); ?>
+	</td>
 </tr>
