@@ -167,7 +167,7 @@ embed {height:100%;width:100%}
 
 	$html .= '<TR><TD class="class10p">';
 	$html .= '<label>Laskun numero</label><BR>';
-	$html .= '<b>'.$lasku->id.'</b>';
+	$html .= '<b>'.$lasku->laskunumero.'</b>';
 	$html .= '</TD></TR>';
 
 	$html .= '<TR><TD class="class10p">';
