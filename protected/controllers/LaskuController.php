@@ -496,15 +496,15 @@ class LaskuController extends Controller
 	if($xml = simplexml_load_string($rss, 'SimpleXMLElement', LIBXML_NOCDATA))
 	{
 
-echo '<pre>';
-print_r($xml);
-echo '</pre>';
+echo '<textarea class="form-control" rows="10">';
+print_r($rss);
+echo '</textarea>';
 
 	 if($xml->commonerror != 'No statusupdates')
 	 {
 	  foreach ($xml as $r) {
 		$str = '';
-	    	$str = 'statustime:'.trim($r->statustime).'//jobid:'.trim($r->jobid).'//billnum:'.trim($r->billnum).'//statusref:'.trim($r->statusref).'//statustext:'.trim($r->statustext).'//statuscode:'.trim($r->statuscode).'//statusid:'.trim($r->statusid).'//paydate:'.trim($r->paydate).'//paydate:'.trim($r->amount).'//statustype:'.trim($r->statustype);
+	    	$str = 'statustime:'.trim($r->statustime).'//jobid:'.trim($r->jobid).'//billnum:'.trim($r->billnum).'//statusref:'.trim($r->statusref).'//statustext:'.trim($r->statustext).'//statuscode:'.trim($r->statuscode).'//statusid:'.trim($r->statusid).'//paydate:'.trim($r->paydate).'//amount:'.trim($r->amount).'//statustype:'.trim($r->statustype);
 	
 		$l = Lasku::model()->find(" trust_jobid='".trim($r->jobid)."' ");
 		if(isset($l['id']))
@@ -515,7 +515,7 @@ echo '</pre>';
 		    // Lasku historia
 		    $historia = new LaskuHistoria;
 		    $historia->lid = $l['id'];
-		    $historia->status = $str;
+		    $historia->status = $rss;
 		    $historia->palvelu = "trust";
 		    $historia->yht_euro = $l['yhteensa_total'];
 		    $historia->save();
