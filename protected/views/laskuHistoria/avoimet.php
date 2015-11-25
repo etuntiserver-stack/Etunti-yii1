@@ -26,7 +26,15 @@ $palvelu = 'TRUST';
 <h1> <?php echo Yii::t('main', 'Avoimet laskut ').$palvelu; ?> <i class="glyphicon glyphicon-barcode"></i></h1>
 </legend>
 
-
+<div class="row">
+  <div class="col-sm-12">
+    <form action="#" class="form-inline" method="POST">
+	<input type="text" class="datetimepicker form-control input-sm" name="pvm">
+	<input type="submit" class="brn btn-primary btn-sm" value="Hae">
+    </form>
+  </div>
+</div>
+<br>
 
 <?php 
 
