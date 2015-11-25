@@ -44,7 +44,7 @@ $palvelu = 'TRUST';
 	array(
         'name'  => 'status',
         'value'=>array($this,'statusMuutos'),
-	'type' => 'html',
+	//'type' => 'raw',
     	),
 		'palvelu',
 		'yht_euro',
