@@ -2,7 +2,7 @@
 
 /* Käytettävä palvelin */
 global $TRUSTPOINT;
-$TRUSTPOINT = "https://beta2.trustpoint.fi"; // Kehitys
+$TRUSTPOINT = "https://www.trustpoint.fi"; // Kehitys
 #$TRUSTPOINT = "https://www.trustpoint.fi"; // Tuotanto
 
 /**
