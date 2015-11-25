@@ -102,34 +102,5 @@ class LaskuHistoria extends DB2ActiveRecord
 	}
 
 
-	public function avoimet()
-	{
-		// Warning: Please modify the following code to remove attributes that
-		// should not be searched.
 
-		$criteria=new CDbCriteria;
-
-		$criteria->order = "time DESC";
-
-	$asetukset = Asetukset::model()->findbypk(1);
-	if($asetukset->palvelu_tyyppi == 2)
-	{
-		$criteria->condition = " 
-			trust_statuscode!='101'
-		";
-	}
-
-
-		$criteria->compare('id',$this->id);
-		$criteria->compare('lid',$this->lid);
-		$criteria->compare('time',$this->time,true);
-		$criteria->compare('status',$this->status,true);
-		$criteria->compare('yht_euro',$this->yht_euro,true);
-		$criteria->compare('palvelu',$this->palvelu,true);
-		$criteria->compare('trust_statuscode',$this->trust_statuscode);
-
-		return new CActiveDataProvider($this, array(
-			'criteria'=>$criteria,
-		));
-	}
 }

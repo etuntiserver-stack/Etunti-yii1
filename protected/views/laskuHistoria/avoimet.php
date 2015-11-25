@@ -28,39 +28,10 @@ $palvelu = 'TRUST';
 
 
 
-<?php $this->widget('zii.widgets.grid.CGridView', array(
-	'id'=>'lasku-historia-grid',
-	'dataProvider'=>$model->search(),
-	'filter'=>$model,
+<?php 
 
-                    'pagerCssClass' => 'dataTables_paginate paging_bootstrap',
-                    'itemsCssClass' => 'table small table-striped table-bordered table-hover',
-
-	'columns'=>array(
-		//'id',
-		'lid',
-		'time',
-
-	array(
-        'name'  => 'status',
-        'value'=>array($this,'statusMuutos'),
-	'type' => 'html',
-    	),
-		'palvelu',
-		'yht_euro',
-		'trust_statuscode',
-		/*
-		array(
-			'class'=>'CButtonColumn',
-		),
-		*/
-array(
-
-        'value' => '
-	   CHtml::link("Katso", Yii::app()->createUrl("laskuHistoria/update",array("id"=>$data->id)))
-	',
-        'type'  => 'raw',
-	//'visible'=>Yii::app()->user->avetak,
-    ),
-	),
-)); ?>
+  foreach($model as $data)
+  {
+	echo 'Lasku id:'.$data->lid.' '.$data->trust_statuscode.'<br>';
+  }
+?>
