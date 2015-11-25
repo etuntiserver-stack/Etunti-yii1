@@ -492,13 +492,14 @@ class LaskuController extends Controller
 	
     	$rss = curl_exec($ch);
 
-echo '<pre>';
-print_r($rss);
-echo '</pre>';
-
     	curl_close($ch);
 	if($xml = simplexml_load_string($rss, 'SimpleXMLElement', LIBXML_NOCDATA))
 	{
+
+echo '<pre>';
+print_r($xml);
+echo '</pre>';
+
 	 if($xml->commonerror != 'No statusupdates')
 	 {
 	  foreach ($xml as $r) {
