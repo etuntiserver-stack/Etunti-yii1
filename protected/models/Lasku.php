@@ -78,7 +78,7 @@ class Lasku extends DB2ActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('yid, tyyppi, as_nro, osoite, postinumero, toimipaikka, laskutus, paivays, erapaiva, maksuehto, toimitusosoite', 'required'),
+			array('yid, tyyppi, as_nro, osoite, postinumero, toimipaikka, laskutus, paivays, erapaiva, maksuehto, toimitusosoite, laskunumero', 'required'),
 			array('lid, yid, as_nro, laskunumero', 'numerical', 'integerOnly'=>true),
 			array('tyyppi, yritys, nimi, sahkoposti, v_tunnus, yhteyshenkilo, nimitarkenne, t_yritys, t_nimi, t_osoite, t_toimipaikka, t_sahkoposti, toimitusosoite, viitenumero, saaja_iban, maksettu_euro, laskun_nimetys, postita_jobid, trust_jobid', 'length', 'max'=>100),
 			array('y_tunnus, toimipaikka, laskutus, puhelin, t_y_tunnus, t_puhelin, viivastyskorko, tilanne, tapahtumapvm', 'length', 'max'=>50),
@@ -223,4 +223,78 @@ class Lasku extends DB2ActiveRecord
 			'criteria'=>$criteria,
 		));
 	}
+
+
+
+	public function avoimet()
+	{
+		// Warning: Please modify the following code to remove attributes that
+		// should not be searched.
+
+		$criteria=new CDbCriteria;
+		$criteria->order = "tapahtumapvm DESC";
+
+	$asetukset = Asetukset::model()->findbypk(1);
+	if($asetukset->palvelu_tyyppi == 2)
+	{
+		$criteria->condition = " 
+			trust_jobid!=''
+			AND tilanne!='101'
+		";
+	}
+
+		$criteria->compare('id',$this->id);
+		$criteria->compare('laskunumero',$this->laskunumero);
+		$criteria->compare('lid',$this->lid);
+		$criteria->compare('yid',$this->yid);
+		$criteria->compare('time',$this->time,true);
+		$criteria->compare('tyyppi',$this->tyyppi,true);
+		$criteria->compare('yritys',$this->yritys,true);
+		$criteria->compare('y_tunnus',$this->y_tunnus,true);
+		$criteria->compare('nimi',$this->nimi,true);
+		$criteria->compare('as_nro',$this->as_nro);
+		$criteria->compare('osoite',$this->osoite,true);
+		$criteria->compare('postinumero',$this->postinumero,true);
+		$criteria->compare('toimipaikka',$this->toimipaikka,true);
+		$criteria->compare('laskutus',$this->laskutus,true);
+		$criteria->compare('sahkoposti',$this->sahkoposti,true);
+		$criteria->compare('verkkolaskuosoite',$this->verkkolaskuosoite,true);
+		$criteria->compare('v_tunnus',$this->v_tunnus,true);
+		$criteria->compare('yhteyshenkilo',$this->yhteyshenkilo,true);
+		$criteria->compare('nimitarkenne',$this->nimitarkenne,true);
+		$criteria->compare('puhelin',$this->puhelin,true);
+		$criteria->compare('t_yritys',$this->t_yritys,true);
+		$criteria->compare('t_y_tunnus',$this->t_y_tunnus,true);
+		$criteria->compare('t_nimi',$this->t_nimi,true);
+		$criteria->compare('t_osoite',$this->t_osoite,true);
+		$criteria->compare('t_postinumero',$this->t_postinumero,true);
+		$criteria->compare('t_toimipaikka',$this->t_toimipaikka,true);
+		$criteria->compare('t_puhelin',$this->t_puhelin,true);
+		$criteria->compare('t_sahkoposti',$this->t_sahkoposti,true);
+		$criteria->compare('toimitusosoite',$this->toimitusosoite,true);
+		$criteria->compare('paivays',$this->paivays,true);
+		$criteria->compare('erapaiva',$this->erapaiva,true);
+		$criteria->compare('toimituspaiva',$this->toimituspaiva,true);
+		$criteria->compare('maksuehto',$this->maksuehto,true);
+		$criteria->compare('viitenumero',$this->viitenumero,true);
+		$criteria->compare('viivastyskorko',$this->viivastyskorko,true);
+		$criteria->compare('yhteensa_total_verot',$this->yhteensa_total_verot,true);
+		$criteria->compare('yhteensa_total_veroton',$this->yhteensa_total_veroton,true);
+		$criteria->compare('yhteensa_total',$this->yhteensa_total,true);
+		$criteria->compare('saaja_iban',$this->saaja_iban,true);
+		$criteria->compare('saaja_virtualkoodi',$this->saaja_virtualkoodi,true);
+		$criteria->compare('tilanne',$this->tilanne,true);
+		$criteria->compare('maksettu_euro',$this->maksettu_euro,true);
+		$criteria->compare('hyvityslasku',$this->hyvityslasku,true);
+		$criteria->compare('laskun_nimetys',$this->laskun_nimetys,true);
+		$criteria->compare('response',$this->response,true);
+		$criteria->compare('response_finvoice',$this->response_finvoice,true);
+		$criteria->compare('tapahtumapvm',$this->tapahtumapvm,true);
+
+		return new CActiveDataProvider($this, array(
+			'criteria'=>$criteria,
+		));
+	}
+
+
 }

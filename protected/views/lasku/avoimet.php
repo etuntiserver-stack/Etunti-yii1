@@ -1,18 +1,6 @@
 <?php
-/* @var $this LaskuController */
-/* @var $model Lasku */
 
-$this->breadcrumbs=array(
-	Yii::t('main', 'Laskut')=>array('index'),
-	Yii::t('main', 'HALLINTA'),
-);
-/*
-$this->menu=array(
-	array('label'=>'List Lasku', 'url'=>array('index')),
-	array('label'=>'Create Lasku', 'url'=>array('create')),
-);
-*/
-Yii::app()->clientScript->registerScript('search', "
+Yii::app()->clientScript->registerScript('avoimet', "
 $('.search-button').click(function(){
 	$('.search-form').toggle();
 	return false;
@@ -25,36 +13,31 @@ $('.search-form form').submit(function(){
 });
 ");
 
+$asetukset = Asetukset::model()->findbypk(1);
+$palvelu = '';
+if($asetukset->palvelu_tyyppi == 1)
+$palvelu = 'POSTITA';
+if($asetukset->palvelu_tyyppi == 2)
+$palvelu = 'TRUST';
+
 ?>
 
 <legend>
-   <div class="pull-right">
-     <?php echo CHtml::link('Avoimet laskut','/index.php/lasku/avoimet',array('class'=>'btn btn-primary btn-sm')); ?>
-     <?php echo CHtml::link('Lasku historia','/index.php/laskuHistoria/admin',array('class'=>'btn btn-default btn-sm')); ?>
-     <!--<?php echo CHtml::link('Laskupäiväkirja','/index.php/laskuHistoria/paivakirja',array('class'=>'btn btn-default btn-sm')); ?>-->
-     <?php echo CHtml::link('Uusi lasku','/index.php/lasku/create',array('class'=>'btn btn-success btn-sm')); ?>
-   </div>
-<h1> <?php echo Yii::t('main', 'LASKUT'); ?> <i class="glyphicon glyphicon-barcode"></i></h1>
+<h1> <?php echo Yii::t('main', 'Avoimet laskut ').$palvelu; ?> <i class="glyphicon glyphicon-barcode"></i></h1>
 </legend>
 
 
-<?php echo CHtml::link('Haku','#',array('class'=>'search-button')); ?>
-<div class="search-form" style="display:none">
-<?php $this->renderPartial('_search',array(
-	'model'=>$model,
-)); ?>
-</div><!-- search-form -->
 
 <?php $this->widget('zii.widgets.grid.CGridView', array(
 	'id'=>'lasku-grid',
-	'dataProvider'=>$model->search(),
+	'dataProvider'=>$model->avoimet(),
 	'filter'=>$model,
 
                     'pagerCssClass' => 'dataTables_paginate paging_bootstrap',
                     'itemsCssClass' => 'table small table-striped table-bordered table-hover',
 
 	'columns'=>array(
-		'id',
+		//'id',
 		'laskunumero',
 
 	array(
@@ -66,8 +49,8 @@ $('.search-form form').submit(function(){
 		//'lid',
 		//'yid',
                array(
-                    'name'=>'time',
-                    'value'=>'date("d.m.Y - H:i",strtotime($data->time))',                   
+	            'header'  => 'Tapahtuma pvm',
+                    'value'=>'date("d.m.Y H:i",strtotime($data->tapahtumapvm))',                   
 		),
 		//'tyyppi',
 		//'yritys',
@@ -81,8 +64,8 @@ $('.search-form form').submit(function(){
         'value'=>array($this,'tilanneCheck'),
 	'type' => 'html',
     	),
-
-		'tapahtumapvm',
+		'tilanne',
+		//'tapahtumapvm',
 		'yhteensa_total',
 		'laskun_nimetys',
 		/*
