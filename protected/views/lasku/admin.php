@@ -29,7 +29,7 @@ $('.search-form form').submit(function(){
 
 <legend>
    <div class="pull-right">
-     <?php echo CHtml::link('Avoimet laskut','/index.php/lasku/avoimet',array('class'=>'btn btn-primary btn-sm')); ?>
+     <?php echo CHtml::link('Avoimet laskut','/index.php/laskuHistoria/avoimet',array('class'=>'btn btn-primary btn-sm')); ?>
      <?php echo CHtml::link('Lasku historia','/index.php/laskuHistoria/admin',array('class'=>'btn btn-default btn-sm')); ?>
      <!--<?php echo CHtml::link('Laskupäiväkirja','/index.php/laskuHistoria/paivakirja',array('class'=>'btn btn-default btn-sm')); ?>-->
      <?php echo CHtml::link('Uusi lasku','/index.php/lasku/create',array('class'=>'btn btn-success btn-sm')); ?>
