@@ -86,11 +86,12 @@ class LaskuHistoriaController extends Controller
 		if($asetukset->palvelu_tyyppi == 2)
 		{
 		$criteria->condition = " 
-			trust_statuscode='101'
+			trust_statuscode!=''
+			AND trust_statuscode!='101'
 		";
 		}
 
-		$model= LaskuHistoria::model()->findAll();
+		$model= LaskuHistoria::model()->findAll($criteria);
 		$this->render('avoimet',array(
 			'model'=>$model,
 		));

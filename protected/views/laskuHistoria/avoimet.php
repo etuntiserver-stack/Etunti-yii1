@@ -32,6 +32,6 @@ $palvelu = 'TRUST';
 
   foreach($model as $data)
   {
-	echo 'Lasku id:'.$data->lid.' '.$data->trust_statuscode.'<br>';
+	echo 'Tapahtuma pvm:'.$data->time.' - Lasku id:'.$data->lid.', statuscode: '.$data->trust_statuscode.'<br>';
   }
 ?>
