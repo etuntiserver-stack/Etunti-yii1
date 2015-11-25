@@ -79,11 +79,18 @@ class LaskuHistoriaController extends Controller
 	public function actionAvoimet()
 	{
 
-		$model=new LaskuHistoria('avoimet');
-		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['LaskuHistoria']))
-			$model->attributes=$_GET['LaskuHistoria'];
+		$criteria=new CDbCriteria;
+		$criteria->order = "time DESC";
 
+		$asetukset = Asetukset::model()->findbypk(1);
+		if($asetukset->palvelu_tyyppi == 2)
+		{
+		$criteria->condition = " 
+			trust_statuscode='101'
+		";
+		}
+
+		$model= LaskuHistoria::model()->findAll();
 		$this->render('avoimet',array(
 			'model'=>$model,
 		));
