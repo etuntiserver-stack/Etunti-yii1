@@ -83,13 +83,17 @@ class LaskuHistoriaController extends Controller
 		$criteria->order = "time DESC";
 
 		$asetukset = Asetukset::model()->findbypk(1);
+
+		// <-- TRUST
 		if($asetukset->palvelu_tyyppi == 2)
 		{
+		$criteria->group = "lid"; 
 		$criteria->condition = " 
 			trust_statuscode!=''
-			AND trust_statuscode!='101'
+			AND lid NOT IN (select lid from lasku_historia where trust_statuscode='101')
 		";
 		}
+		// TRUST -->
 
 		if(isset($_POST['pvm']))
 		{
