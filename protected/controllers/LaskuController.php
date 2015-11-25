@@ -491,6 +491,11 @@ class LaskuController extends Controller
 	curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
 	
     	$rss = curl_exec($ch);
+
+echo '<pre>';
+print_r($rss);
+echo '</pre>';
+
     	curl_close($ch);
 	if($xml = simplexml_load_string($rss, 'SimpleXMLElement', LIBXML_NOCDATA))
 	{
@@ -604,6 +609,7 @@ class LaskuController extends Controller
 
             	return $tilanne;
 	}
+
 
 
 

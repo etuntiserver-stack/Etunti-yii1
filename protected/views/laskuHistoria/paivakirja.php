@@ -13,7 +13,7 @@ $this->menu=array(
 ?>
 
 <legend>
-<h1><?php echo Yii::t('main','Laskupäiväkirja (MR)'); ?></h1>
+<h1><?php echo Yii::t('main','Laskupäiväkirja'); ?></h1>
 </legend>
 
 
@@ -23,6 +23,7 @@ $this->menu=array(
   <th><?php echo Yii::t('main','Laskupvm'); ?></th>
   <th><?php echo Yii::t('main','Yhteensä'); ?></th>
   <th><?php echo Yii::t('main','Asiakas'); ?></th>
+  <th><?php echo Yii::t('main','Palvelu'); ?></th>
  </tr>
 <?php $this->widget('zii.widgets.CListView', array(
 	'dataProvider'=>$dataProvider,
