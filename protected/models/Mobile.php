@@ -66,7 +66,7 @@ public $tkohde_kannasta;
 		// will receive user inputs.
 		return array(
 			//array('asiakas_num, osoite, kohde_kannasta, kohdenID, aloitan, loppui, viesti, tekijan_nimi, tid, etaisyys, status, tietoja, hyvaksytty', 'required'),
-			array('requests, kohdenID, tid, status, admin', 'numerical', 'integerOnly'=>true),
+			array('requests, kohdenID, tid, status, admin, sairaus', 'numerical', 'integerOnly'=>true),
 			array('asiakas_num, puh_numero, bluetooth_name, subscriber_id, tekijan_nimi', 'length', 'max'=>50),
 			array('domain, asiakas_hyvaksy, imei, sim_serial_number, kohde_kannasta, hyvaksytty', 'length', 'max'=>100),
 			array('my_location, tietoja', 'length', 'max'=>1000),
@@ -75,7 +75,7 @@ public $tkohde_kannasta;
 			array('viesti', 'length', 'max'=>250),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, asiakas_num, time, requests, puh_numero, imei, bluetooth_name, sim_serial_number, subscriber_id, my_location, osoite, kohde_kannasta, kohdenID, aloitan, loppui, viesti, tekijan_nimi, tid, etaisyys, status, tietoja, admin, hyvaksytty, domain', 'safe', 'on'=>'search'),
+			array('id, asiakas_num, time, requests, puh_numero, imei, bluetooth_name, sim_serial_number, subscriber_id, my_location, osoite, kohde_kannasta, kohdenID, aloitan, loppui, viesti, tekijan_nimi, tid, etaisyys, status, tietoja, admin, hyvaksytty, domain, sairaus', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -119,6 +119,7 @@ public $tkohde_kannasta;
 			'tietoja' => 'Historia muutoksesta',
 			'admin' => 'Admin',
 			'hyvaksytty' => 'Hyvaksytty',
+			'sairaus'=>'Sairaus',
 		);
 	}
 
@@ -161,6 +162,7 @@ public $tkohde_kannasta;
 		$criteria->compare('tietoja',$this->tietoja,true);
 		$criteria->compare('admin',$this->admin);
 		$criteria->compare('hyvaksytty',$this->hyvaksytty,true);
+		$criteria->compare('sairaus',$this->sairaus,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

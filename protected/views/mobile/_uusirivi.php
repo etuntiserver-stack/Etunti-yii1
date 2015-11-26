@@ -108,6 +108,15 @@ $t = Tyontekijat::model()->findbypk($ex[1]);
 		<?php echo $form->error($model,'kohdenID'); ?>
 	</div>
 
+	<div class="row">
+		<?php echo $form->labelEx($model,'sairaus'); ?>
+		<?php 
+        	$tal = array(1=>'Palkaton',2=>'Palkallinen');
+		echo $form->dropDownList($model,'sairaus', $tal, 
+		array('empty'=>'Valitse','class'=>'form-control input-sm')) ?>
+		<?php echo $form->error($model,'sairaus'); ?>
+	</div>
+
     </div>
   </div>
   <?php endif; ?>
