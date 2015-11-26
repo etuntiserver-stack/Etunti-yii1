@@ -94,6 +94,15 @@ $forPVM = date('d.m.Y',strtotime($model->aloitan));
 		<?php echo $form->textField($model,'loppui',array('size'=>60,'maxlength'=>100,'class'=>'form-control input-sm lp')); ?>
 	</div>
 
+	<div class="row">
+		<?php echo $form->labelEx($model,'sairaus'); ?>
+		<?php 
+        	$tal = array(1=>'Palkaton',2=>'Palkallinen');
+		echo $form->dropDownList($model,'sairaus', $tal, 
+		array('empty'=>'Valitse','class'=>'form-control input-sm')) ?>
+		<?php echo $form->error($model,'sairaus'); ?>
+	</div>
+
 		<input type="hidden" name="forPVM" value="<?php echo $forPVM; ?>">
 
 
