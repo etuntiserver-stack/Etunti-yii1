@@ -16,7 +16,7 @@ $this->menu=array(
 ?>
 
 <legend>
-<h1> <?php echo $model->laskun_nimetys; ?> <?php echo $model->id; ?> <i class="glyphicon glyphicon-barcode"></i></h1>
+<h1> <?php echo $model->laskun_nimetys; ?> <?php echo $model->laskunumero; ?> <i class="glyphicon glyphicon-barcode"></i></h1>
 </legend>
 
 

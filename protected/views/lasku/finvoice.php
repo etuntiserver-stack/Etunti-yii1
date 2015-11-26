@@ -12,6 +12,7 @@ if(isset($_GET['finvoiceTrust']) or isset($_GET['hyvityslasku'])){
 
  $cid = $asetukset['trust_cid'];
  $api = $asetukset['trust_api'];
+ $trust_url = $asetukset['trust_url'];
 
  require_once ('tiedostot/trust/inc.trust.php');
 

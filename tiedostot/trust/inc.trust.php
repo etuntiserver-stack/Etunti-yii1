@@ -2,7 +2,7 @@
 
 /* Käytettävä palvelin */
 global $TRUSTPOINT;
-$TRUSTPOINT = "https://www.trustpoint.fi"; // Kehitys
+$TRUSTPOINT = $trust_url; // Kehitys
 #$TRUSTPOINT = "https://www.trustpoint.fi"; // Tuotanto
 
 /**

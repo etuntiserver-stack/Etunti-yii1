@@ -54,7 +54,7 @@ $('.search-form form').submit(function(){
                     'itemsCssClass' => 'table small table-striped table-bordered table-hover',
 
 	'columns'=>array(
-		'id',
+		//'id',
 		'laskunumero',
 
 	array(
