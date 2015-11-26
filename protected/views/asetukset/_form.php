@@ -106,6 +106,13 @@
     <legend><h2><?php echo Yii::t('main','TRUST.FI tunnukset'); ?></h2></legend>
 
 	<div class="row">
+		<?php echo $form->labelEx($model,'trust_url'); ?>
+		<?php echo $form->textField($model,'trust_url',array('size'=>20,'maxlength'=>255,'class'=>'form-control input-sm')); ?>
+
+		<?php echo $form->error($model,'trust_url'); ?>
+	</div>
+
+	<div class="row">
 		<?php echo $form->labelEx($model,'trust_cid'); ?>
 		<?php echo $form->textField($model,'trust_cid',array('size'=>20,'maxlength'=>100,'class'=>'form-control input-sm')); ?>
 

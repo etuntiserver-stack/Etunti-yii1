@@ -482,9 +482,11 @@ class LaskuController extends Controller
 	{
 	$cid = $asetukset['trust_cid'];
 	$api = $asetukset['trust_api'];
+	$trust_url = $asetukset['trust_url'];
+
 	$ch = curl_init();
 	$data = array('cid'=>$cid, 'apicode'=>$api);
-	curl_setopt($ch, CURLOPT_URL, 'https://beta2.trustpoint.fi/API/statusupdates.php');
+	curl_setopt($ch, CURLOPT_URL, $trust_url.'/API/statusupdates.php');
     	curl_setopt($ch, CURLOPT_HEADER, 0);
     	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 	curl_setopt($ch, CURLOPT_POST, TRUE);
