@@ -79,7 +79,7 @@
 	<div class="row">
 		<?php echo $form->labelEx($model,'palvelu_tyyppi'); ?>
 		<?php 
-        	$tal = array(1=>'POSTITA',2=>'TRUST');
+        	$tal = array(1=>'POSTITA',2=>'TRUST',3=>'MANUAL');
 		echo $form->dropDownList($model,'palvelu_tyyppi', $tal, 
 		array('empty'=>'Valitse palvelu','class'=>'form-control input-sm','id'=>'osoite')) ?>
 		<?php echo $form->error($model,'palvelu_tyyppi'); ?>
