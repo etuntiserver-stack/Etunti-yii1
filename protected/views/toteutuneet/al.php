@@ -14,12 +14,17 @@
   $idKid = $explStr['8'];
   $ashyv = $explStr['9'];
   $tietoja = $explStr['10'];
+  $sairaus = $explStr['11'];
 
      $riviTietoja = '';
   if(!empty($tietoja) and isset($_POST['tulosta']))
-  {
      $riviTietoja = '<br><br>&nbsp;&nbsp;&nbsp;<b>'.Yii::t('main','Tietoja: ').'</b> '.$tietoja.'<hr>';
-  }
+
+     $spl = '';
+  if($sairaus == '1')
+     $spl = '<span style="color:red" class="small"> (SPL)</span>';
+  if($sairaus == '2')
+     $spl = '<span style="color:red" class="small"> (SL)</span>';
 
   if(empty($loppui))
   {
@@ -79,7 +84,7 @@
 		<span class="form-group">
 			<input type="checkbox" class="chckbxHyvaksynta" id="hyv_'.$rivi.'" '.$chk[$rivi].' kuka="'.Yii::app()->user->username.'///'.date('d.m.Y').'">&nbsp; 
 		</span><span class="form-group">
-			<i class="form-group link totRivi '.$admin.'" mod="'.$mod.'" id="tot_'.$rivi.'">'.$al.' '.$kohde.'</i>
+			<i class="form-group link totRivi '.$admin.'" mod="'.$mod.'" id="tot_'.$rivi.'">'.$al.$spl.' '.$kohde.'</i>
 			'.$ap.'
 		</span>
 		'.$asiakas_hyvaksy.'

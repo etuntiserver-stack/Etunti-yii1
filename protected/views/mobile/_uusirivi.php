@@ -55,13 +55,13 @@ $t = Tyontekijat::model()->findbypk($ex[1]);
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'tid'); ?>
-		<?php echo $form->textField($model,'tid',array('value'=>$t->id,'class'=>'form-control','readonly'=>'yes')); ?>
+		<?php echo $form->textField($model,'tid',array('value'=>$t->id,'class'=>'form-control input-sm','readonly'=>'yes')); ?>
 		<?php echo $form->error($model,'tid'); ?>
 	</div>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'tekijan_nimi'); ?>
-		<?php echo $form->textField($model,'tekijan_nimi',array('value'=>$t->tekijan_nimi,'class'=>'form-control','readonly'=>'yes')); ?>
+		<?php echo $form->textField($model,'tekijan_nimi',array('value'=>$t->tekijan_nimi,'class'=>'form-control input-sm','readonly'=>'yes')); ?>
 		<?php echo $form->error($model,'tekijan_nimi'); ?>
 	</div>
 
@@ -69,12 +69,12 @@ $t = Tyontekijat::model()->findbypk($ex[1]);
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'aloitan'); ?>
-		<?php echo $form->textField($model,'aloitan',array('value'=>date("d.m.Y",strtotime($pvm)).' 00:00', 'size'=>20,'maxlength'=>20,'class'=>'form-control al')); ?>
+		<?php echo $form->textField($model,'aloitan',array('value'=>date("d.m.Y",strtotime($pvm)).' 00:00', 'size'=>20,'maxlength'=>20,'class'=>'form-control input-sm al')); ?>
 		<?php echo $form->error($model,'aloitan'); ?>
 	</div>
 	<div class="row">
 		<?php echo $form->labelEx($model,'loppui'); ?>
-		<?php echo $form->textField($model,'loppui',array('value'=>date("d.m.Y",strtotime($pvm)).' 00:00','size'=>20,'maxlength'=>20,'class'=>'form-control lp')); ?>
+		<?php echo $form->textField($model,'loppui',array('value'=>date("d.m.Y",strtotime($pvm)).' 00:00','size'=>20,'maxlength'=>20,'class'=>'form-control input-sm lp')); ?>
 		<?php echo $form->error($model,'loppui'); ?>
 	</div>
 
@@ -84,7 +84,7 @@ $t = Tyontekijat::model()->findbypk($ex[1]);
 		<?php echo $form->labelEx($model,'kohde_kannasta'); ?>
 		<?php echo $form->dropDownList($model,'kohde_kannasta', 
 			CHtml::listData(Kohteet::model()->findAll(array('order' => 'osoite ASC')), 'id', 'osoite'), 
-			array('empty'=>Yii::t('main','Valitse kohde'),'class'=>'form-control')); ?>
+			array('empty'=>Yii::t('main','Valitse kohde'),'class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'kohde_kannasta'); ?>
 	</div>
 
@@ -95,7 +95,7 @@ $t = Tyontekijat::model()->findbypk($ex[1]);
 		      //array_unshift($list, $list[$s->status]);
 		      echo $form->dropDownList($model,'status', 
 			 	$list, 
-				array('empty'=>Yii::t('main','Valitse tilanne'),'class'=>'form-control'));
+				array('empty'=>Yii::t('main','Valitse tilanne'),'class'=>'form-control input-sm'));
 		?>
 		<?php echo $form->error($model,'status'); ?>
 	</div>
@@ -104,7 +104,7 @@ $t = Tyontekijat::model()->findbypk($ex[1]);
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'kohdenID'); ?>
-		<?php echo $form->textField($model,'kohdenID',array('size'=>20,'maxlength'=>20,'class'=>'form-control','readonly'=>'yes')); ?>
+		<?php echo $form->textField($model,'kohdenID',array('size'=>20,'maxlength'=>20,'class'=>'form-control input-sm','readonly'=>'yes')); ?>
 		<?php echo $form->error($model,'kohdenID'); ?>
 	</div>
 
