@@ -272,7 +272,7 @@ for ($i = 0; $i < count ($doc->row); $i++) {
 		    $historia->yht_euro = $l->yhteensa_total;
 		    $historia->save();
 
-	$this->redirect(array('update','id'=>$id));
+	$this->redirect(array('admin'));
 	break;
 
     } else {
