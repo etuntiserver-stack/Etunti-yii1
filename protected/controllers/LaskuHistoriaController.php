@@ -234,12 +234,18 @@ class LaskuHistoriaController extends Controller
 
    	protected function statusMuutos($data,$row)
 	{ 
-
-		if($data->palvelu == 'trust')
+		$str = $data->status;
+		libxml_use_internal_errors(true);
+		$sxe = simplexml_load_string($data->status);
+		if ($sxe) 
 		{
-		   return $data->status;
+		$str = '';
+		echo '<pre>';
+		print_r($sxe->status[0]);
+		echo '</pre>';
 		}
 
+		return $str;
 	}
 
 
