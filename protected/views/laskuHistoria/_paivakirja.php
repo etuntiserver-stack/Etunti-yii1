@@ -2,36 +2,31 @@
 /* @var $this LaskuHistoriaController */
 /* @var $data LaskuHistoria */
 
-$l = Lasku::model()->findbypk($data->lid);
 $nimi = '';
-if(isset($l->id))
-{
-   if($l->tyyppi == 'henkilo')
-	$nimi = $l->nimi;
-   if($l->tyyppi == 'yritys')
-	$nimi = $l->yritys;
-}
+
+   if($data->tyyppi == 'henkilo')
+	$nimi = $data->nimi;
+   if($data->tyyppi == 'yritys')
+	$nimi = $data->yritys;
+
 ?>
 
 <tr>
 
 	<td>
-	<?php echo CHtml::encode($data->id); ?>
+	<?php echo CHtml::encode($data->laskunumero); ?>
 	</td>
 
 	<td>
-	<?php echo date("d.m.Y H:i",strtotime($data->time)); ?>
+	<?php echo date("d.m.Y",strtotime($data->paivays)); ?>
 	</td>
 
 	<td>
-	<?php echo CHtml::encode($data->yht_euro); ?>
+	<?php echo CHtml::encode($data->yhteensa_total); ?>
 	</td>
 
 	<td>
 	<?php echo CHtml::encode($nimi); ?>
 	</td>
 
-	<td>
-	<?php echo CHtml::encode($data->palvelu); ?>
-	</td>
 </tr>
