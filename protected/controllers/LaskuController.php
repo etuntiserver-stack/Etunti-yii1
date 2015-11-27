@@ -499,12 +499,13 @@ class LaskuController extends Controller
 	if($xml = simplexml_load_string($rss, 'SimpleXMLElement', LIBXML_NOCDATA))
 	{
 
+	 if($xml->commonerror != 'No statusupdates')
+	 {
+
 echo '<textarea class="form-control" rows="10">';
 print_r($rss);
 echo '</textarea>';
 
-	 if($xml->commonerror != 'No statusupdates')
-	 {
 	  foreach ($xml as $r) {
 		$str = '';
 	    	$str = 'statustime:'.trim($r->statustime).'//jobid:'.trim($r->jobid).'//billnum:'.trim($r->billnum).'//statusref:'.trim($r->statusref).'//statustext:'.trim($r->statustext).'//statuscode:'.trim($r->statuscode).'//statusid:'.trim($r->statusid).'//paydate:'.trim($r->paydate).'//amount:'.trim($r->amount).'//statustype:'.trim($r->statustype);
