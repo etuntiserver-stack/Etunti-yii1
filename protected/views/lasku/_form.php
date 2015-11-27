@@ -537,7 +537,12 @@ $model->viivastyskorko = $asetukset->viivastyskorko;
 		<a href="finvoice?id=<?php echo $model->id; ?>&pdf=true&muistutuslasku=true" class="btn btn-sm btn-success btn-group"><?php echo Yii::t('main','Lähetä muistutuslasku (POSTITA.FI)'); ?></a>
 		<?php endif; ?>
 
-		<?php if(isset($model->id) and empty($model->trust_jobid) and $asetukset->palvelu_tyyppi == 2 and $model->laskun_nimetys != "Hyvityslasku") : ?>
+		<?php if(isset($model->id) 
+			and $model->tilanne == 1 
+			and empty($model->trust_jobid) 
+			and $asetukset->palvelu_tyyppi == 2 
+			and $model->laskun_nimetys != "Hyvityslasku") 
+		: ?>
 		<a href="finvoice?id=<?php echo $model->id; ?>&finvoiceTrust=true" class="btn btn-sm btn-success btn-group"><?php echo Yii::t('main','Lähetä finvoice (TRUST.FI)'); ?></a>
 		<?php endif; ?>
 
