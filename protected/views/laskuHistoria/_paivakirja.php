@@ -3,12 +3,14 @@
 /* @var $data LaskuHistoria */
 
 $l = Lasku::model()->findbypk($data->lid);
-
-	$nimi = '';
+$nimi = '';
+if(isset($l->id))
+{
    if($l->tyyppi == 'henkilo')
 	$nimi = $l->nimi;
    if($l->tyyppi == 'yritys')
 	$nimi = $l->yritys;
+}
 ?>
 
 <tr>
