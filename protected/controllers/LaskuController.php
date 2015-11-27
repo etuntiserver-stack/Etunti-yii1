@@ -375,6 +375,7 @@ class LaskuController extends Controller
 
 
 				$this->redirect(array('update','id'=>$model->id));
+				//$this->redirect(array('admin'));
 			}
 		}
 
