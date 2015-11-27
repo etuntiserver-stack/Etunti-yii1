@@ -494,22 +494,35 @@ class LaskuController extends Controller
 	curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
 	
     	$rss = curl_exec($ch);
-
     	curl_close($ch);
+
 	if($xml = simplexml_load_string($rss, 'SimpleXMLElement', LIBXML_NOCDATA))
 	{
 
 	 if($xml->commonerror != 'No statusupdates')
 	 {
 
+		libxml_use_internal_errors(true);
+		$sxe = simplexml_load_string($rss);
+		if ($sxe) 
+		{
+
 echo '<textarea class="form-control" rows="10">';
 print_r($rss);
 echo '</textarea>';
 
-	  foreach ($xml as $r) {
+	  	foreach ($sxe->status as $r) {
+/*
+echo '<textarea class="form-control" rows="10">';
+print_r(json_encode($r));
+echo '</textarea>';
+exit;
+*/
+
 		$str = '';
 	    	$str = 'statustime:'.trim($r->statustime).'//jobid:'.trim($r->jobid).'//billnum:'.trim($r->billnum).'//statusref:'.trim($r->statusref).'//statustext:'.trim($r->statustext).'//statuscode:'.trim($r->statuscode).'//statusid:'.trim($r->statusid).'//paydate:'.trim($r->paydate).'//amount:'.trim($r->amount).'//statustype:'.trim($r->statustype);
 	
+
 		$l = Lasku::model()->find(" trust_jobid='".trim($r->jobid)."' ");
 		if(isset($l['id']))
 		{
@@ -520,14 +533,20 @@ echo '</textarea>';
 		    $historia = new LaskuHistoria;
 		    $historia->time = $tapahtumapvm;
 		    $historia->lid = $l['id'];
-		    $historia->status = $rss;
+		    $historia->status = json_encode($r);
 		    $historia->trust_statuscode = $r->statuscode;
 		    $historia->palvelu = "trust";
 		    $historia->yht_euro = $l['yhteensa_total'];
 		    $historia->save();
 
 		}
-	  }
+
+
+		}
+
+		}
+
+
 
 
 	 }
@@ -600,13 +619,14 @@ echo '</textarea>';
        		$criteria->order = " id DESC ";
        		$criteria->condition = " lid='".$data->id."' ";
 		$l = LaskuHistoria::model()->find($criteria);
+
 		if(isset($l->id))
 		{
 
-		libxml_use_internal_errors(true);
-		$sxe = simplexml_load_string($l->status);
-		  if ($sxe) {
-		   $trustStr = $sxe->status->statustext;
+		$json = json_decode($l->status, true);
+
+		  if(isset($json['statustext']) and !empty($json['statustext'])){
+		   $trustStr = $json['statustext'];
 		   $trust = true;
 		  }
 

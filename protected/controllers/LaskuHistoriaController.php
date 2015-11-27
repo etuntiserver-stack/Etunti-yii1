@@ -235,14 +235,14 @@ class LaskuHistoriaController extends Controller
    	protected function statusMuutos($data,$row)
 	{ 
 		$str = $data->status;
-		libxml_use_internal_errors(true);
-		$sxe = simplexml_load_string($data->status);
-		if ($sxe) 
+
+		$json = json_decode($data->status, true);
+		if($json) 
 		{
-		$str = '';
-		echo '<pre>';
-		print_r($sxe->status[0]);
-		echo '</pre>';
+		    $str = '';
+		    echo '<pre>';
+		    print_r($json);
+		    echo '</pre>';
 		}
 
 		return $str;
