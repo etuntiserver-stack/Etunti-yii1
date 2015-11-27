@@ -5,19 +5,19 @@
 ?>
 
 <div class="row form">
-<div class="col-sm-3">
+<div class="col-sm-4">
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'lasku-historia-form',
 	'enableAjaxValidation'=>false,
 )); ?>
 
-	<p class="note">Fields with <span class="required">*</span> are required.</p>
+
 
 	<?php echo $form->errorSummary($model); ?>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'lid'); ?>
-		<?php echo $form->textField($model,'lid'); ?>
+		<?php echo $form->textField($model,'lid', array('class'=>'form-control')); ?>
 		<?php echo $form->error($model,'lid'); ?>
 	</div>
 
@@ -29,7 +29,7 @@
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'status'); ?>
-		<?php echo $form->textField($model,'status',array('size'=>60,'maxlength'=>255,'class'=>'form-control')); ?>
+		<?php echo $form->textarea($model,'status',array('rows'=>6,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'status'); ?>
 	</div>
 

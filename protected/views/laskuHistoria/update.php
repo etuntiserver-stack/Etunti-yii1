@@ -15,7 +15,8 @@ $this->menu=array(
 	array('label'=>'Manage LaskuHistoria', 'url'=>array('admin')),
 );
 ?>
-
-<h1>Update LaskuHistoria <?php echo $model->id; ?></h1>
+<legend>
+<h1><?php echo Yii::t('main','Katso/Muokka lasku historia'); ?> <?php echo $model->id; ?></h1>
+</legend>
 
 <?php echo $this->renderPartial('_form', array('model'=>$model)); ?>
