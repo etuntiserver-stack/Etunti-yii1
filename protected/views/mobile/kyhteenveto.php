@@ -1,4 +1,3 @@
-<div class="row">
 <?php
 /* @var $this MobileController */
 /* @var $dataProvider CActiveDataProvider */
@@ -154,7 +153,7 @@ $this->breadcrumbs=array(
 
   </table>
 <?php endif; ?>
-</div>
+
 
 	<div id="showres" class="modal fade" tabindex="-1" role="dialog"></div>
 
