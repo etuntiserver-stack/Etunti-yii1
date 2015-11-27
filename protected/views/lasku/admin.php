@@ -29,10 +29,24 @@ $('.search-form form').submit(function(){
 
 <legend>
    <div class="pull-right">
-     <?php echo CHtml::link('Avoimet laskut','/index.php/laskuHistoria/avoimet',array('class'=>'btn btn-primary btn-sm')); ?>
-     <?php echo CHtml::link('Lasku historia','/index.php/laskuHistoria/admin',array('class'=>'btn btn-default btn-sm')); ?>
+
+   <div class="form-inline">
+     <select class="form-control input-sm" id="raportit">
+     <option><?php echo Yii::t('main','Raportit'); ?></option>
+     <option value="../laskuHistoria/avoimet"><?php echo Yii::t('main','Avoimet laskut'); ?></option>
+     <option value="../laskuHistoria/paivakirja"><?php echo Yii::t('main','Lasku päiväkirjа'); ?></option>
+     <option><?php echo Yii::t('main','Lasku pääkirja'); ?></option>
+     <option><?php echo Yii::t('main','Maksu päiväkirjа'); ?></option>
+     <option><?php echo Yii::t('main','Maksu pääkirja'); ?></option>
+     <option><?php echo Yii::t('main','ALV lista'); ?></option>
+     <option value="../laskuHistoria/admin"><?php echo Yii::t('main','Lasku historia'); ?></option>
+     </select>
+     <button class="btn btn-primary btn-sm" id="haeRaportti"><?php echo Yii::t('main','Hae'); ?></button>
+
      <!--<?php echo CHtml::link('Laskupäiväkirja','/index.php/laskuHistoria/paivakirja',array('class'=>'btn btn-default btn-sm')); ?>-->
      <?php echo CHtml::link('Uusi lasku','/index.php/lasku/create',array('class'=>'btn btn-success btn-sm')); ?>
+
+   </div>
    </div>
 <h1> <?php echo Yii::t('main', 'LASKUT'); ?> <i class="glyphicon glyphicon-barcode"></i></h1>
 </legend>
@@ -135,3 +149,14 @@ array(
     ),
 	),
 )); ?>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+
+$("#haeRaportti").click(function() {
+	window.location.href=$("#raportit").val();
+});
+
+});
+</script>
