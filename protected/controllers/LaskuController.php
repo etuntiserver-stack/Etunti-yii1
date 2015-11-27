@@ -512,7 +512,7 @@ echo '</textarea>';
 		if(isset($l['id']))
 		{
 		    $tapahtumapvm = date("Y-m-d H:i:s",strtotime(trim($r->statustime)));
-	     	    Lasku::model()->updatebypk($l['id'], array('tilanne'=>$r->statuscode,'response_finvoice'=>$rss,'tapahtumapvm'=>$tapahtumapvm));
+	     	    Lasku::model()->updatebypk($l['id'], array('laskunumero'=>$r->billnum,'tilanne'=>$r->statuscode,'response_finvoice'=>$rss,'tapahtumapvm'=>$tapahtumapvm));
 
 		    // Lasku historia 
 		    $historia = new LaskuHistoria;
