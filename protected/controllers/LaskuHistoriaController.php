@@ -182,9 +182,12 @@ class LaskuHistoriaController extends Controller
 
 	public function actionPaivakirja()
 	{
-		$dataProvider=new CActiveDataProvider('LaskuHistoria');
+
+       		$criteria = new CDbCriteria();
+       		$criteria->condition = "";
+		$model = Lasku::model()->findAll($criteria);
 		$this->render('paivakirja',array(
-			'dataProvider'=>$dataProvider,
+			'model'=>$model,
 		));
 	}
 
