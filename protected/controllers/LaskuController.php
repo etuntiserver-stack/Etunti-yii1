@@ -513,7 +513,7 @@ echo '</textarea>';
 		if(isset($l['id']))
 		{
 		    $tapahtumapvm = date("Y-m-d H:i:s",strtotime(trim($r->statustime)));
-	     	    Lasku::model()->updatebypk($l['id'], array('laskunumero'=>$r->billnum,'tilanne'=>$r->statuscode,'response_finvoice'=>$rss,'tapahtumapvm'=>$tapahtumapvm));
+	     	    Lasku::model()->updatebypk($l['id'], array('laskunumero'=>$r->billnum,'tilanne'=>$r->statuscode,'response_finvoice'=>$str,'tapahtumapvm'=>$tapahtumapvm));
 
 		    // Lasku historia 
 		    $historia = new LaskuHistoria;
@@ -588,15 +588,25 @@ echo '</textarea>';
     	protected function tilanneCheck($data,$row)
 	{ 
 		//Trust
-		    $trust = false;
-		    $trustStr = '';
-		$l = Lasku::model()->find(" trust_jobid='".trim($data->trust_jobid)."' ");
-		if(isset($l['id']))
+		$trust = false;
+		$trustStr = '';
+		$xml = array();
+
+       		$criteria = new CDbCriteria();
+       		$criteria->select = " id,status ";
+       		$criteria->order = " id DESC ";
+       		$criteria->condition = " lid='".$data->id."' ";
+		$l = LaskuHistoria::model()->find($criteria);
+		if(isset($l->id))
 		{
-		    $trustexpl = explode("//",$data->response_finvoice);
-		    if(isset($trustexpl[4]))
-		    $trustStr = str_replace("statustext:","",$trustexpl[4]);
-		    $trust = true;
+
+		libxml_use_internal_errors(true);
+		$sxe = simplexml_load_string($l->status);
+		  if ($sxe) {
+		   $trustStr = $sxe->status->statustext;
+		   $trust = true;
+		  }
+
 		}
 
 
@@ -604,7 +614,7 @@ echo '</textarea>';
 
 		if($data->tilanne == 0 and $data->response_finvoice == '')
 		    $tilanne = 'Luotu';
-		elseif($data->tilanne == 1)
+		elseif($data->tilanne == 1 and $trust == false)
 		    $tilanne = 'Hyväksytty';
 		elseif($data->tilanne == 2)
 		    $tilanne = 'Lähetetty';
