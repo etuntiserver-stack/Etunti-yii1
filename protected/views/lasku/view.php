@@ -64,5 +64,8 @@ $this->menu=array(
 		'maksettu_euro',
 		'hyvityslasku',
 		'laskun_nimetys',
+		'response',
+		'response_finvoice',
+		'tapahtumapvm',
 	),
 )); ?>
