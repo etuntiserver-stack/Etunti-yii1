@@ -22,11 +22,11 @@ $nimi = '';
 	</td>
 
 	<td>
-	<?php echo CHtml::encode($data->yhteensa_total); ?>
+	<?php echo number_format($data->yhteensa_total, 2, ',', ' '); ?>
 	</td>
 
 	<td>
-	<?php echo CHtml::encode($saldo); ?>
+	<?php echo number_format($saldo, 2, ',', ' '); ?>+
 	</td>
 
 	<td>

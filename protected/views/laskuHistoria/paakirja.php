@@ -85,6 +85,7 @@ th{
  {
 	$saldo += $data->yhteensa_total;
 	$this->renderPartial('_paakirja',array('data'=>$data, 'saldo'=>$saldo));
+
  }
  ?>
 </table>
