@@ -559,16 +559,23 @@ curl_close($ch);
   {
 
        $job_id = '';
+       $created = '';
+
      foreach($send_response[0] as $k => $v ) {
        $prep[$k] = $k.":".$v;
        if($k == 'id')
        $job_id = $v;
+       if($k == 'created')
+       $created = $v;
      }
-     Lasku::model()->updatebypk($id, array('tilanne'=>2,'response_finvoice'=>$resultJson,'postita_jobid'=>$job_id));
+
+     $tapahtumapvm = date("Y-m-d H:i:s",strtotime(trim($created)));
+     Lasku::model()->updatebypk($id, array('tilanne'=>2,'response_finvoice'=>$resultJson,'postita_jobid'=>$job_id,'tapahtumapvm'=>$tapahtumapvm));
 
 		    // Lasku historia
 		    $l = Lasku::model()->findbypk($id);
 		    $historia = new LaskuHistoria;
+		    $historia->time = $tapahtumapvm;
 		    $historia->lid = $id;
 		    $historia->status = $resultJson;
 		    $historia->palvelu = "postita";
@@ -663,7 +670,7 @@ curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
 curl_setopt($ch, CURLOPT_HTTPHEADER, array('Expect:')); 
 
 $send_response = curl_exec($ch);
-$resultJson = json_encode($send_response, JSON_HEX_TAG);
+$resultJson = json_encode($send_response);
 
 if (curl_errno($ch)) {
   echo "\n\ncURL error number: " . curl_errno($ch);
@@ -681,16 +688,21 @@ curl_close($ch);
   if($send_response['status'] == 'CO')
   {
        $job_id = '';
+       $created = '';
      foreach($send_response as $k => $v ) {
        $prep[$k] = $k.":".$v;
        if($k == 'id')
        $job_id = $v;
+       if($k == 'created')
+       $created = $v;
      }
-     Lasku::model()->updatebypk($id, array('tilanne'=>2,'response'=>$resultJson,'postita_jobid'=>$job_id));
+     $tapahtumapvm = date("Y-m-d H:i:s",strtotime(trim($created)));
+     Lasku::model()->updatebypk($id, array('tilanne'=>2,'response'=>$resultJson,'postita_jobid'=>$job_id,'tapahtumapvm'=>$tapahtumapvm));
 
 		    // Lasku historia
 		    $l = Lasku::model()->findbypk($id);
 		    $historia = new LaskuHistoria;
+		    $historia->time = $tapahtumapvm;
 		    $historia->lid = $id;
 		    $historia->status = $resultJson;
 		    $historia->palvelu = "postita";
