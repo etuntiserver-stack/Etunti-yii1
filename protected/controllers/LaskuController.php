@@ -645,12 +645,13 @@ exit;
 		if(isset($l->palvelu) and $l->palvelu == 'postita')
 		{
 
-		$json = $l->status;
-/*
+		$json = json_decode($l->status, true);
+
+
 echo '<pre>';
 print_r($json);
 echo '</pre>';
-*/
+
 		  if(isset($json['statustext']) and !empty($json['statustext'])){
 		   $postitaStr = $json['statustext'];
 		   $postita = true;
