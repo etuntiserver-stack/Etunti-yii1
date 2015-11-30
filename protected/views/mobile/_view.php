@@ -55,10 +55,13 @@ if(!empty($data->loppui)){
  $lpvm[$data->id] = '';
 }
 
-if(!empty($data->loppui) and !empty($data->aloitan))
+if(!empty($data->loppui) and !empty($data->aloitan)){
+  $data->loppui = date("d.m.Y H:i",strtotime($data->loppui));
+  $data->aloitan = date("d.m.Y H:i",strtotime($data->aloitan));
   $kesto[$data->id] =  strtotime($data->loppui) - strtotime($data->aloitan);
-else
+} else {
   $kesto[$data->id] =  '';
+}
 
 if(!empty($data->tietoja) and !empty($data->tietoja))
   $muokattu[$data->id] =  '<span class="fa fa-check-square-o"></span>';
