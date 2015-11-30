@@ -640,20 +640,18 @@ exit;
 		// <-- Postita
 		$postita = false;
 		$postitaStr = '';
-		$xml = array();
 
 		if(isset($l->palvelu) and $l->palvelu == 'postita')
 		{
 
 		$json = json_decode($l->status, true);
+		$json = str_replace("{","",$json);
+		$json = str_replace("}","",$json);
+		$json = explode(", ",$json);
+		$json = str_replace('"','',$json);
 
-
-echo '<pre>';
-print_r($json);
-echo '</pre>';
-
-		  if(isset($json['statustext']) and !empty($json['statustext'])){
-		   $postitaStr = $json['statustext'];
+		  if(isset($json['0']) and $json['0'] == 'status: CO'){
+		   $postitaStr = 'Vastaanotettu ja lähetetty';
 		   $postita = true;
 		  }
 
@@ -668,12 +666,14 @@ echo '</pre>';
 		    $tilanne = 'Luotu';
 		elseif($data->tilanne == 1 and $trust == false)
 		    $tilanne = 'Hyväksytty';
-		elseif($data->tilanne == 2)
+		elseif($data->tilanne == 2 and $postita == false and $trust == false)
 		    $tilanne = 'Lähetetty';
 		elseif($data->tilanne == 3)
 		    $tilanne = 'Maksettu';
 		elseif($trust == true)
 		    $tilanne = $trustStr;
+		elseif($postita == true)
+		    $tilanne = $postitaStr;
 
             	return $tilanne;
 	}
