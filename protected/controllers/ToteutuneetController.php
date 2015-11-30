@@ -177,8 +177,11 @@ class ToteutuneetController extends Controller
 
 	public function actionDeletebyajax()
 	{
+		$model = Toteutuneet::model()->findbypk($_POST['id']);
 		Toteutuneet::model()->deletebypk($_POST['id']);
 
+		$m = Mobile::model()->findbypk($model->kid);
+		Mobile::model()->updatebypk($m->id, array('tietoja'=>$m->tietoja."\n".Yii::app()->user->nimi." (".date("d.m.Y H:i")."):\nMuutokset poistettu"));
 	}
 
 	/**
