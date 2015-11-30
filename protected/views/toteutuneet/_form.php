@@ -130,13 +130,12 @@ $forPVM = date('d.m.Y',strtotime($s->aloitan));
 	<label><?php echo Yii::t('main','Kohteen tiedot'); ?></label>
 	<?php
 	$m = Kohteet::model()->findbypk($s->kohdenID);
-		
+	$ohje = '';
 	if(isset($m->id))
 	{
 
 		$k = explode("//",$m->kenella_on_avain);
 
-		  $ohje = '';
 		if(isset($k[1]))
 		  $ohje .= Yii::t('main', 'Avain on: ')." ".$k[1]."\n";
 		if(!empty($m->avain))
