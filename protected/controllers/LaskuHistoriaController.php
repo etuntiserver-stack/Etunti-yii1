@@ -330,14 +330,33 @@ class LaskuHistoriaController extends Controller
 	{ 
 		$str = $data->status;
 
-		$json = json_decode($data->status, true);
-		if($json) 
+		// <-- Trust
+		if(isset($data->palvelu) and $data->palvelu == 'trust') 
 		{
+		    $json = json_decode($data->status, true);
 		    $str = '';
 		    echo '<pre>';
 		    print_r($json);
 		    echo '</pre>';
 		}
+		// Trust -->
+
+
+		// <-- Postita
+		if(isset($data->palvelu) and $data->palvelu == 'postita') 
+		{
+		    $json = json_decode($data->status, true);
+		    $json = str_replace("{","",$json);
+		    $json = str_replace("}","",$json);
+		    $json = explode(", ",$json);
+		    $json = str_replace('"','',$json);
+
+		    $str = '';
+		    echo '<pre>';
+		    print_r($json);
+		    echo '</pre>';
+		}
+		// Postita -->
 
 		return $str;
 	}
