@@ -30,7 +30,7 @@ th{
 }
 </style>
 <div style="text-align: center">
-<h1><?php echo Yii::t('main','Maksupäiväkirja'); ?></h1>
+<h1><?php echo Yii::t('main','Laskupääkirja'); ?></h1>
 <br>
 <?php echo $yritys.date("d.m.Y",strtotime(Yii::app()->session['from'])).' - '.date("d.m.Y",strtotime(Yii::app()->session['to'])); ?>
 </div>
@@ -46,7 +46,7 @@ th{
      </form>
    </div>
    <!-- tulostus -->
-<h1><?php echo Yii::t('main','Maksupäiväkirja'); ?></h1>
+<h1><?php echo Yii::t('main','Laskupääkirja'); ?></h1>
 </legend>
 
 <br>
@@ -75,13 +75,16 @@ th{
  <tr>
   <th><?php echo Yii::t('main','Laskunro'); ?></th>
   <th><?php echo Yii::t('main','Laskupvm'); ?></th>
-  <th><?php echo Yii::t('main','Yhteensä'); ?></th>
+  <th><?php echo Yii::t('main','Debet'); ?></th>
+  <th><?php echo Yii::t('main','Saldo'); ?></th>
   <th><?php echo Yii::t('main','Asiakas'); ?></th>
  </tr>
  <?php 
+	$saldo = '';
  foreach($model as $data)
  {
-	$this->renderPartial('_maksu_paivakirja',array('data'=>$data));
+	$saldo += $data->yhteensa_total;
+	$this->renderPartial('_paakirja',array('data'=>$data, 'saldo'=>$saldo));
  }
  ?>
 </table>
