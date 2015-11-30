@@ -190,6 +190,7 @@ class LaskuHistoriaController extends Controller
 		Yii::app()->session['to'] = date("Y-m-d",strtotime(Yii::app()->request->getPost('to')));
 
        		$criteria = new CDbCriteria();
+       		$criteria->order = " paivays DESC ";
        		$criteria->condition = "";
 
 		if(Yii::app()->session['from'] and Yii::app()->session['to'])
@@ -224,6 +225,7 @@ class LaskuHistoriaController extends Controller
 		Yii::app()->session['to'] = date("Y-m-d",strtotime(Yii::app()->request->getPost('to')));
 
        		$criteria = new CDbCriteria();
+       		$criteria->order = " paivays DESC ";
        		$criteria->condition = "";
 
 		if(Yii::app()->session['from'] and Yii::app()->session['to'])
@@ -257,8 +259,9 @@ class LaskuHistoriaController extends Controller
 		Yii::app()->session['to'] = date("Y-m-d",strtotime(Yii::app()->request->getPost('to')));
 
        		$criteria = new CDbCriteria();
+       		$criteria->order = " paivays DESC ";
        		$criteria->condition = "
-			lid IN (select lid from lasku_historia where trust_statuscode='101')
+			id IN (select lid from lasku_historia where trust_statuscode='101')
 		";
 
 		if(Yii::app()->session['from'] and Yii::app()->session['to'])
