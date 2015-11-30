@@ -663,7 +663,7 @@ curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
 curl_setopt($ch, CURLOPT_HTTPHEADER, array('Expect:')); 
 
 $send_response = curl_exec($ch);
-$resultJson = json_encode($send_response);
+$resultJson = json_encode($send_response, JSON_HEX_QUOT);
 
 if (curl_errno($ch)) {
   echo "\n\ncURL error number: " . curl_errno($ch);

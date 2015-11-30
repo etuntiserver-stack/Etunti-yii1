@@ -622,7 +622,7 @@ exit;
 		$trustStr = '';
 		$xml = array();
 
-		if($l->palvelu == 'trust')
+		if(isset($l->palvelu) and $l->palvelu == 'trust')
 		{
 
 		$json = json_decode($l->status, true);
@@ -642,13 +642,15 @@ exit;
 		$postitaStr = '';
 		$xml = array();
 
-		if($l->palvelu == 'postita')
+		if(isset($l->palvelu) and $l->palvelu == 'postita')
 		{
 
-		$json = json_decode($l->status, true);
+		$json = $l->status;
+/*
 echo '<pre>';
 print_r($json);
 echo '</pre>';
+*/
 		  if(isset($json['statustext']) and !empty($json['statustext'])){
 		   $postitaStr = $json['statustext'];
 		   $postita = true;
