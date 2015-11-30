@@ -530,17 +530,6 @@ curl_setopt($ch, CURLOPT_TIMEOUT, 100);
 $account_info = curl_exec($ch);
 $account_info = json_decode($account_info, true);
 
-  $prep = array();
-  if(isset($account_info[0]))
-  {
-    foreach($account_info as $k => $v ) {
-      $prep[$k] = $k.":".$v;
-    }
-  }
-
-echo '<pre>';
-print_r($account_info);
-echo '</pre>';
 
 $pdf = $xml;
 $pdf_b64 = base64url_encode($pdf);
@@ -552,6 +541,8 @@ curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
 curl_setopt($ch, CURLOPT_HTTPHEADER, array('Expect:')); 
 
 $send_response = curl_exec($ch);
+$resultJson = json_encode($send_response);
+
 if (curl_errno($ch)) {
   echo "\n\ncURL error number: " . curl_errno($ch);
   echo "\n\ncURL error: " . curl_error($ch);
@@ -573,18 +564,18 @@ curl_close($ch);
        if($k == 'id')
        $job_id = $v;
      }
-     Lasku::model()->updatebypk($id, array('tilanne'=>2,'response_finvoice'=>implode('//',$prep),'postita_jobid'=>$job_id));
+     Lasku::model()->updatebypk($id, array('tilanne'=>2,'response_finvoice'=>$resultJson,'postita_jobid'=>$job_id));
 
 		    // Lasku historia
 		    $l = Lasku::model()->findbypk($id);
 		    $historia = new LaskuHistoria;
 		    $historia->lid = $id;
-		    $historia->status = "Finvoice//lähetetty//jobid:".$job_id;
+		    $historia->status = $resultJson;
 		    $historia->palvelu = "postita";
 		    $historia->yht_euro = $l->yhteensa_total;
 		    $historia->save();
 
-     $this->redirect(array('update','id'=>$id));
+     $this->redirect(array('admin'));
 
   }
 
@@ -640,13 +631,6 @@ curl_setopt($ch, CURLOPT_TIMEOUT, 100);
 $account_info = curl_exec($ch);
 $account_info = json_decode($account_info, true);
 
-  $prep = array();
-  if(isset($account_info[0]))
-  {
-    foreach($account_info as $k => $v ) {
-      $prep[$k] = $k.":".$v;
-    }
-  }
 
 echo '<pre>';
 print_r($account_info);
@@ -679,6 +663,8 @@ curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
 curl_setopt($ch, CURLOPT_HTTPHEADER, array('Expect:')); 
 
 $send_response = curl_exec($ch);
+$resultJson = json_encode($send_response);
+
 if (curl_errno($ch)) {
   echo "\n\ncURL error number: " . curl_errno($ch);
   echo "\n\ncURL error: " . curl_error($ch);
@@ -700,18 +686,18 @@ curl_close($ch);
        if($k == 'id')
        $job_id = $v;
      }
-     Lasku::model()->updatebypk($id, array('tilanne'=>2,'response'=>implode('//',$prep),'postita_jobid'=>$job_id));
+     Lasku::model()->updatebypk($id, array('tilanne'=>2,'response'=>$resultJson,'postita_jobid'=>$job_id));
 
 		    // Lasku historia
 		    $l = Lasku::model()->findbypk($id);
 		    $historia = new LaskuHistoria;
 		    $historia->lid = $id;
-		    $historia->status = "PDF//lähetetty//jobid:".$job_id;
+		    $historia->status = $resultJson;
 		    $historia->palvelu = "postita";
 		    $historia->yht_euro = $l->yhteensa_total;
 		    $historia->save();
 
-     $this->redirect(array('update','id'=>$id));
+     $this->redirect(array('admin'));
 
   }
 

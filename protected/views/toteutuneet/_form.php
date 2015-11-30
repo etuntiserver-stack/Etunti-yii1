@@ -129,21 +129,30 @@ $forPVM = date('d.m.Y',strtotime($s->aloitan));
 	<div class="row">
 	<label><?php echo Yii::t('main','Kohteen tiedot'); ?></label>
 	<?php
-		$m = Kohteet::model()->findbypk($s->kohdenID);
-		if(isset($m->kenella_on_avain))
-		{
-		  $k = explode("//",$m->kenella_on_avain);
+	$m = Kohteet::model()->findbypk($s->kohdenID);
+		
+	if(isset($m->id))
+	{
+
+		$k = explode("//",$m->kenella_on_avain);
 
 		  $ohje = '';
-		  if(!empty($m->toimenpiteet))
-		    $ohje .= "\n\nToimenpiteet:\n".$m->toimenpiteet;
-		  if(!empty($m->tietoja))
-		    $ohje .= "\n\nTietoja:\n".$m->tietoja;
-		  if(!empty($m->muut))
-		    $ohje .= "\n\nMuut:\n".$m->muut;
-		  echo '<textarea class="form-control input-sm" rows="12" >'.$ohje.'</textarea>';
-		}
+		if(isset($k[1]))
+		  $ohje .= Yii::t('main', 'Avain on: ')." ".$k[1]."\n";
+		if(!empty($m->avain))
+		  $ohje .= Yii::t('main', 'Avain: ')." ".$m->avain."\n\n";
+		if(!empty($m->aikataulu))
+		  $ohje .= "\nAikataulu: ".$m->aikataulu;
+		if(!empty($m->toimenpiteet))
+		  $ohje .= "\nToimenpiteet: ".$m->toimenpiteet;
+		if(!empty($m->tietoja))
+		  $ohje .= "\nTietoja: ".$m->tietoja;
+		if(!empty($m->muut))
+		  $ohje .= "\nMuut: ".$m->muut;
+
+	}
 	?>
+	<textarea class="form-control input-sm" rows="12" ><?php echo $ohje; ?></textarea>
 	</div>
 
 	<div class="row">
