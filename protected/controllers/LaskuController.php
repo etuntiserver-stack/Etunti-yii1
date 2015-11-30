@@ -609,18 +609,20 @@ exit;
 
     	protected function tilanneCheck($data,$row)
 	{ 
-		//Trust
-		$trust = false;
-		$trustStr = '';
-		$xml = array();
 
        		$criteria = new CDbCriteria();
-       		$criteria->select = " id,status ";
+       		$criteria->select = " palvelu,id,status ";
        		$criteria->order = " id DESC ";
        		$criteria->condition = " lid='".$data->id."' ";
 		$l = LaskuHistoria::model()->find($criteria);
 
-		if(isset($l->id))
+
+		// <-- Trust
+		$trust = false;
+		$trustStr = '';
+		$xml = array();
+
+		if($l->palvelu == 'trust')
 		{
 
 		$json = json_decode($l->status, true);
@@ -631,6 +633,30 @@ exit;
 		  }
 
 		}
+		//  Trust -->
+
+
+
+		// <-- Postita
+		$postita = false;
+		$postitaStr = '';
+		$xml = array();
+
+		if($l->palvelu == 'postita')
+		{
+
+		$json = json_decode($l->status, true);
+echo '<pre>';
+print_r($json);
+echo '</pre>';
+		  if(isset($json['statustext']) and !empty($json['statustext'])){
+		   $postitaStr = $json['statustext'];
+		   $postita = true;
+		  }
+
+		}
+		//  Postita -->
+
 
 
 		    $tilanne = '';
