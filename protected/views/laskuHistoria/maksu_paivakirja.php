@@ -30,7 +30,7 @@ th{
 }
 </style>
 <div style="text-align: center">
-<h1><?php echo Yii::t('main','Laskupäiväkirja'); ?></h1>
+<h1><?php echo Yii::t('main','Maksuäiväkirja'); ?></h1>
 <br>
 <?php echo $yritys.date("d.m.Y",strtotime(Yii::app()->session['from'])).' - '.date("d.m.Y",strtotime(Yii::app()->session['to'])); ?>
 </div>
@@ -46,7 +46,7 @@ th{
      </form>
    </div>
    <!-- tulostus -->
-<h1><?php echo Yii::t('main','Laskupäiväkirja'); ?></h1>
+<h1><?php echo Yii::t('main','Maksuäiväkirja'); ?></h1>
 </legend>
 
 <br>
@@ -81,7 +81,7 @@ th{
  <?php 
  foreach($model as $data)
  {
-	$this->renderPartial('_paivakirja',array('data'=>$data));
+	$this->renderPartial('_maksu_paivakirja',array('data'=>$data));
  }
  ?>
 </table>

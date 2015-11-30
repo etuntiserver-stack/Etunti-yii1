@@ -37,7 +37,7 @@ $('.search-form form').submit(function(){
      <option value="../laskuHistoria/paivakirja"><?php echo Yii::t('main','Lasku päiväkirjа'); ?></option>
      <option><?php echo Yii::t('main','Lasku pääkirja'); ?></option>
      <option><?php echo Yii::t('main','Maksu päiväkirjа'); ?></option>
-     <option><?php echo Yii::t('main','Maksu pääkirja'); ?></option>
+     <option value="../laskuHistoria/maksu_paivakirja"><?php echo Yii::t('main','Maksu pääkirja'); ?></option>
      <option><?php echo Yii::t('main','ALV lista'); ?></option>
      <option value="../laskuHistoria/admin"><?php echo Yii::t('main','Lasku historia'); ?></option>
      </select>

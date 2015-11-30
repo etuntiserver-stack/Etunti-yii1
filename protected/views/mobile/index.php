@@ -255,22 +255,8 @@ $fi = array(
     echo '</select>';
    ?>
 
-   <?php
-    $list = CHtml::listData(Mobile::model()->findAll(array('group' => 'kohdenID','order' => 'kohde_kannasta')), 'kohde_kannasta', 'kohde_kannasta');
+   <input type="text" class="form-control input-sm form-group" name="etsi_kohteet" value="<?php echo Yii::app()->session['etsi_kohteet']; ?>" placeholder="osoite">
 
-    echo '<select class="form-control input-sm form-group" name="etsi_kohteet">';
-    if(Yii::app()->session['etsi_kohteet'])
-       echo '<option value="'.Yii::app()->session['etsi_kohteet'].'">'.Yii::app()->session['etsi_kohteet'].'</option>';
-    else
-       echo '<option value="kaikki">'.Yii::t('main', 'Kohteet').'</option>';
-
-       echo '<option value="kaikki">Kaikki</option>';
-
-    foreach($list as $val){
-    echo '<option value="'.$val.'">'.$val.'</option>';
-    }
-    echo '</select>';
-   ?>
    <b class="glyphicon glyphicon-calendar"></b>
    <input type="text" name="fromP" id="from" class="form-control form-group input-sm datepicker" value="<?php echo Yii::app()->session['fromP']; ?>">
    <b class="glyphicon glyphicon-calendar"></b>

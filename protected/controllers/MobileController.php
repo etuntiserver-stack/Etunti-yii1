@@ -476,9 +476,9 @@ function num($val){
 		Yii::app()->session['tekijaPaaSivulla'] = Yii::app()->request->getPost('tekijaPaaSivulla');
 		}
 
-		if(Yii::app()->request->getPost('etsi_kohteet') == 'kaikki')
+		if(isset($_POST['mob_hae']) and Yii::app()->request->getPost('etsi_kohteet') == '')
 		unset(Yii::app()->session['etsi_kohteet']);
-		if(Yii::app()->request->getPost('etsi_kohteet') and Yii::app()->request->getPost('etsi_kohteet') != 'kaikki'){
+		if(isset($_POST['mob_hae']) and Yii::app()->request->getPost('etsi_kohteet')){
 		Yii::app()->session['etsi_kohteet'] = Yii::app()->request->getPost('etsi_kohteet');
 		}
 
@@ -514,7 +514,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		if(Yii::app()->session['tekijaPaaSivulla'])
 	        $criteria->addCondition (" tid = '".Yii::app()->session['tekijaPaaSivulla']."' ");
 		if(Yii::app()->session['etsi_kohteet'])
-	        $criteria->addCondition ("kohde_kannasta = '".Yii::app()->session['etsi_kohteet']."'");
+	        $criteria->addCondition (" kohde_kannasta LIKE '%".Yii::app()->session['etsi_kohteet']."%' ");
 		if(Yii::app()->session['fromP'] and Yii::app()->session['toP'])
 	        $criteria->addCondition ("DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".Yii::app()->session['fromP']."' AND '".Yii::app()->session['toP']."' ");
 
