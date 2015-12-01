@@ -13,33 +13,65 @@ $('.search-form form').submit(function(){
 });
 ");
 
-$asetukset = Asetukset::model()->findbypk(1);
-$palvelu = '';
-if($asetukset->palvelu_tyyppi == 1)
-$palvelu = 'POSTITA';
-if($asetukset->palvelu_tyyppi == 2)
-$palvelu = 'TRUST';
-
 ?>
+<?php if(isset($_POST['tulosta'])) : ?>
+<?php
+ $yritys = '';
+ $f = FirmanTiedot::model()->findbypk(1);
+ if(!empty($f->tyonantaja))
+ $yritys = $f->tyonantaja.', ';
+?>
+<style>
+table{
+	width: 200px;
+	font-size: 80%;
+}
+th{
+	width: 100%;	
+	padding:3px 7px;
+}
+</style>
+<?php endif; ?>
 
 <legend>
 <h1> <?php echo Yii::t('main', 'Avoimet laskut ').$palvelu; ?> <i class="glyphicon glyphicon-barcode"></i></h1>
 </legend>
 
-<div class="row">
-  <div class="col-sm-12">
-    <form action="#" class="form-inline" method="POST">
-	<input type="text" class="datetimepicker form-control input-sm" name="pvm">
-	<input type="submit" class="brn btn-primary btn-sm" value="Hae">
-    </form>
-  </div>
-</div>
 <br>
 
-<?php 
+<?php if(!isset($_POST['tulosta'])) : ?>
+<div class="row">
+ <div class="col-md-12">
 
-  foreach($model as $data)
-  {
-	echo 'Tapahtuma pvm:'.$data->time.' - Lasku id:'.$data->lid.', statuscode: '.$data->trust_statuscode.'<br>';
-  }
-?>
+  <form action="#" class="form-inline" method="POST">
+   <b class="glyphicon glyphicon-calendar"></b>
+   <input type="text" name="from" id="from" class="form-control form-group input-sm datepicker" value="<?php echo Yii::app()->session['from']; ?>">
+   <b class="glyphicon glyphicon-calendar"></b>
+   <input type="text" name="to" id="to" class="form-control form-group input-sm datepicker" value="<?php echo Yii::app()->session['to']; ?>">
+
+   <div class="form-group input-group-btn">
+      <input type="submit" class="btn btn-primary btn-sm" value="<?php echo Yii::t('main', 'Hae'); ?>">
+   </div>
+   </form>
+
+ </div>
+</div>
+<br>
+<?php endif; ?>
+
+
+
+<table class="table table-bordered table-striped">
+ <tr>
+  <th><?php echo Yii::t('main','Laskunro'); ?></th>
+  <th><?php echo Yii::t('main','Laskupvm'); ?></th>
+  <th><?php echo Yii::t('main','Yhteensä'); ?></th>
+  <th><?php echo Yii::t('main','Asiakas'); ?></th>
+ </tr>
+ <?php 
+ foreach($model as $data)
+ {
+	$this->renderPartial('_avoimet',array('data'=>$data));
+ }
+ ?>
+</table>
