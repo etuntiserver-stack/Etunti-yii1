@@ -31,7 +31,7 @@ if(isset($ad->adm_nimi))
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'admin'); ?>
-		<?php echo $form->textField($model,'admin',array('value'=>$admin,'class'=>'form-control','readonly'=>'yes')); ?>
+		<?php echo $form->textField($model,'admin',array('value'=>$admin,'class'=>'form-control input-sm','readonly'=>'yes')); ?>
 		<?php echo $form->error($model,'admin'); ?>
 	</div>
 
@@ -44,12 +44,12 @@ if(isset($ad->adm_nimi))
 		  if(isset($tt->tekijan_nimi))
 		  echo '<label>'.Yii::t('main','Saaja: ').' '.$tt->tekijan_nimi.'</label>';
 
-		  echo $form->hiddenField($model,'tekija',array('value'=>$_GET['tid'],'class'=>'form-control','readonly'=>'yes'));
+		  echo $form->hiddenField($model,'tekija',array('value'=>$_GET['tid'],'class'=>'form-control input-sm','readonly'=>'yes'));
 		} else {
 
 		  echo $form->labelEx($model,'tekija');
         	  $list = CHtml::listData(Tyontekijat::model()->findAll(array('order' => 'tekijan_nimi')), 'id', 'tekijan_nimi');
-        	  echo $form->dropDownList($model, 'tekija', $list,array('class'=>'form-control'));
+        	  echo $form->dropDownList($model, 'tekija', $list,array('class'=>'form-control input-sm'));
 		}
         	?>
 		<?php echo $form->error($model,'tekija'); ?>
@@ -57,7 +57,7 @@ if(isset($ad->adm_nimi))
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'viesti'); ?>
-		<?php echo $form->textArea($model,'viesti',array('rows'=>6, 'cols'=>50,'class'=>'form-control')); ?>
+		<?php echo $form->textArea($model,'viesti',array('rows'=>6, 'cols'=>50,'class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'viesti'); ?>
 	</div>
 
