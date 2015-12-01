@@ -63,7 +63,7 @@ if(isset($ad->adm_nimi))
 
 	<?php if(!empty($ad->adm_email)): ?>
 	<div class="row buttons">
-		<?php echo CHtml::submitButton($model->isNewRecord ? 'Tallenna' : 'Luo',array('class'=>'btn btn-primary')); ?>
+		<?php echo CHtml::submitButton($model->isNewRecord ? 'LÄHETÄ' : 'Luo',array('class'=>'btn btn-sm btn-success')); ?>
 	</div>
 	<?php endif; 
 	} 
