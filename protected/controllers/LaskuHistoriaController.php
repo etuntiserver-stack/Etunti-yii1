@@ -79,31 +79,52 @@ class LaskuHistoriaController extends Controller
 	public function actionAvoimet()
 	{
 
-		$criteria=new CDbCriteria;
-		$criteria->order = "time DESC";
-
 		$asetukset = Asetukset::model()->findbypk(1);
-
-		// <-- TRUST
+		$palvelu = '';
+		if($asetukset->palvelu_tyyppi == 1)
+		$palvelu = 'POSTITA';
 		if($asetukset->palvelu_tyyppi == 2)
-		{
-		$criteria->group = "lid"; 
-		$criteria->condition = " 
-			trust_statuscode!=''
-			AND lid NOT IN (select lid from lasku_historia where trust_statuscode='101')
-		";
-		}
-		// TRUST -->
+		$palvelu = 'TRUST';
 
-		if(isset($_POST['pvm']))
-		{
-		$criteria->Addcondition(" time < '".date("Y-m-d H:i:s",strtotime($_POST['pvm']))."' "); 		
-		}
 
-		$model= LaskuHistoria::model()->findAll($criteria);
+		if(Yii::app()->request->getPost('from'))
+		Yii::app()->session['from'] = date("Y-m-d",strtotime(Yii::app()->request->getPost('from')));
+	
+		if(Yii::app()->request->getPost('to'))
+		Yii::app()->session['to'] = date("Y-m-d",strtotime(Yii::app()->request->getPost('to')));
+
+       		$criteria = new CDbCriteria();
+       		$criteria->order = " paivays DESC ";
+       		$criteria->condition = "";
+
+
+		// <-- Trust
+		if($palvelu == 'TRUST')
+       		$criteria->Addcondition ( "
+			id NOT IN (select lid from lasku_historia where trust_statuscode='101')
+		");
+		// <-- Trust
+
+		if(Yii::app()->session['from'] and Yii::app()->session['to'])
+        	$criteria->addCondition ("DATE(paivays) BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."' ");
+
+		$model = Lasku::model()->findAll($criteria);
+
+		if(isset($_POST['tulosta']))
+		{
+	          $html2pdf = Yii::app()->ePdf->HTML2PDF('P', 'A4', 'en');
+		  $html2pdf->setDefaultFont('Arial');
+	          $html2pdf->WriteHTML($this->renderPartial('avoimet',array('model'=>$model,'palvelu'=>$palvelu), true));
+	          $html2pdf->Output();
+
+		} else {
+
 		$this->render('avoimet',array(
 			'model'=>$model,
+			'palvelu'=>$palvelu
 		));
+
+		}
 
 	}
 
