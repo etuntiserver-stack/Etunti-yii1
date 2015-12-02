@@ -6,11 +6,12 @@ $this->breadcrumbs=array(
 	'Laskutus Tuotteets'=>array('index'),
 	'Create',
 );
-
+/*
 $this->menu=array(
 	array('label'=>'List LaskutusTuotteet', 'url'=>array('index')),
 	array('label'=>'Manage LaskutusTuotteet', 'url'=>array('admin')),
 );
+*/
 ?>
 
 <legend>
