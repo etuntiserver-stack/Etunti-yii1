@@ -108,8 +108,8 @@ $xml = encodeXml (array(
                 "billdate" => $lasku['paivays'], # laskun päiväys
                 "govid" => $lasku['y_tunnus'], # y-tunnus tai hetu
                 "vatid" => "", # alv-tunniste
-                "evoice" => "", # verkkolaskuosoite
-                "evoiceint" => "", # välittäjän tunnus
+                //"evoice" => "", # verkkolaskuosoite
+                //"evoiceint" => "", # välittäjän tunnus
                 "overdueinterest" => "", # korkopros: tyhjä = oletus
                 //"billnum" => $lasku['laskunumero'], # laskun numero
                 //"billcode" => $lasku['viitenumero'], # tilitysviite tai viesti
