@@ -308,6 +308,8 @@ function row(tilanne,st){
 			setTimer(sp[4],sp[5]);
 		}
 
+		// reset tag nollaksi
+		$("#tagginro").val('');
 
 		set();
     	},
