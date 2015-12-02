@@ -75,8 +75,8 @@ $sendtype = '';
 if($lasku['laskutus'] == 'posti')
 $sendtype = 'post';
 if($lasku['laskutus'] == 'verkkolasku'){
-  $evoice = '';
-  $evoiceint = '';
+  $evoice = $lasku['verkkolaskuosoite'];
+  $evoiceint = $lasku['v_tunnus'];
   $sendtype = 'evoice';
 }
 if($lasku['laskutus'] == 'sahkoposti')
