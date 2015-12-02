@@ -1,5 +1,8 @@
 <?php
 
+  if(Yii::app()->request->getPost('idVaiNimi'))
+  Yii::app()->session['idVaiNimi'] = Yii::app()->request->getPost('idVaiNimi');
+
   if(Yii::app()->request->getPost('ids'))
   Yii::app()->session['idsToSahkoposti'] = explode(",",Yii::app()->request->getPost('ids'));
 
@@ -27,8 +30,16 @@ $body .= '
 
   <h1>'.$k->osoite.', '.Yii::app()->session['fromPosti'].'-'.Yii::app()->session['toPosti'].'</h1>
   <table cellspacing="0" cellpadding="10" border="1" style="color:#666;font:13px Arial;line-height:1.4em;width:100%;">
-  <tr>
-  <th style="padding: 3px 7px">'.Yii::t('main','Työntekijä ID').'</th>
+  <tr>';
+
+if(isset(Yii::app()->session['idVaiNimi']) and Yii::app()->session['idVaiNimi'] == 'idMukaan')
+  $body .= '<th style="padding: 3px 7px">'.Yii::t('main','Työntekijä ID').'</th>';
+elseif(isset(Yii::app()->session['idVaiNimi']) and Yii::app()->session['idVaiNimi'] == 'nimenMukaan')
+  $body .= '<th style="padding: 3px 7px">'.Yii::t('main','Työntekijä').'</th>';
+else
+  $body .= '<th style="padding: 3px 7px">'.Yii::t('main','Työntekijä ID').'</th>';
+
+$body .= '
   <th style="padding: 3px 7px">'.Yii::t('main','Kohde').'</th>
   <th style="padding: 3px 7px">'.Yii::t('main','Päivämäärä').'</th>
   <th style="padding: 3px 7px">'.Yii::t('main','Ajaat').'</th>
@@ -54,8 +65,18 @@ $body .= '
 	$yht += strtotime($str['loppui'])-strtotime($str['aloitan']);
 
 	$body .= 
-	'<tr>
-		<td style="padding: 3px 7px">'.$str['tid'].'</td>
+	'<tr>';
+
+//
+if(isset(Yii::app()->session['idVaiNimi']) and Yii::app()->session['idVaiNimi'] == 'idMukaan')
+	$body .= '<td style="padding: 3px 7px">'.$str['tid'].'</td>';
+elseif(isset(Yii::app()->session['idVaiNimi']) and Yii::app()->session['idVaiNimi'] == 'nimenMukaan')
+	$body .= '<td style="padding: 3px 7px">'.$str['tekijan_nimi'].'</td>';
+else
+	$body .= '<td style="padding: 3px 7px">'.$str['tid'].'</td>';
+//
+
+	$body .= '
 		<td style="padding: 3px 7px">'.$str['kohde_kannasta'].'</td>
 		<td style="padding: 3px 7px">'.date("d.m",strtotime($str['aloitan'])).'</td>
 		<td style="padding: 3px 7px">
@@ -103,6 +124,21 @@ $body .= '
      </form>
    </div>
    <!-- tulostus -->
+
+
+<div class="row">
+ <div class="col-sm-4">
+   <form action="#" class="form-inline" method="POST">
+	<select name="idVaiNimi" class="form-control input-sm form-group">
+	<option value="idMukaan"><?php echo Yii::t('main','ID mukaan'); ?></option>
+	<option value="nimenMukaan"><?php echo Yii::t('main','Työntekijän nimen  mukaan'); ?></option>
+	</select>
+	<span class="form-group input-group-btn">
+	<input type="submit" class="btn btn-sm btn-success" value="<?php echo Yii::t('main','Päivitä'); ?>">
+	</span>
+   </form>
+ </div>
+</div>
 
 <br>
 <hr>
