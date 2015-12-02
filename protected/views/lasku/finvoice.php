@@ -71,16 +71,21 @@ echo 'refundtojobid puutuu';
 exit;
 }
 
-$sendtype = '';
+  $sendtype = '';
+  $evoice = '';
+  $evoiceint = '';
+
 if($lasku['laskutus'] == 'posti')
-$sendtype = 'post';
+  $sendtype = 'post';
+
 if($lasku['laskutus'] == 'verkkolasku'){
   $evoice = $lasku['verkkolaskuosoite'];
   $evoiceint = $lasku['v_tunnus'];
   $sendtype = 'evoice';
 }
+
 if($lasku['laskutus'] == 'sahkoposti')
-$sendtype = 'email';
+  $sendtype = 'email';
 
 
 
