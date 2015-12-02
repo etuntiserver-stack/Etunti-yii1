@@ -27,6 +27,9 @@ $('.search-form form').submit(function(){
 ?>
 
 <legend>
+<div class="pull-right">
+<?php echo CHtml::link('Uusi tuote/palvelu','/index.php/laskutusTuotteet/create',array('class'=>'btn btn-success btn-sm')); ?>
+</div>
 <h1> <?php echo Yii::t('main', 'TUOTEET JA PALVELUT'); ?> <i class="glyphicon glyphicon-barcode"></i></h1>
 </legend>
 
@@ -42,6 +45,10 @@ $('.search-form form').submit(function(){
 	'id'=>'laskutus-tuotteet-grid',
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,
+
+                    'pagerCssClass' => 'dataTables_paginate paging_bootstrap',
+                    'itemsCssClass' => 'table small table-striped table-bordered table-hover',
+
 	'columns'=>array(
 		'id',
 		'time',
