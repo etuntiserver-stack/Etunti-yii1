@@ -74,10 +74,14 @@ exit;
 $sendtype = '';
 if($lasku['laskutus'] == 'posti')
 $sendtype = 'post';
-if($lasku['laskutus'] == 'verkkolasku')
-$sendtype = 'evoice';
+if($lasku['laskutus'] == 'verkkolasku'){
+  $evoice = '';
+  $evoiceint = '';
+  $sendtype = 'evoice';
+}
 if($lasku['laskutus'] == 'sahkoposti')
 $sendtype = 'email';
+
 
 
 /* Hae siirtoavain (korvaa cid ja apicode omillasi) */
@@ -108,8 +112,8 @@ $xml = encodeXml (array(
                 "billdate" => $lasku['paivays'], # laskun päiväys
                 "govid" => $lasku['y_tunnus'], # y-tunnus tai hetu
                 "vatid" => "", # alv-tunniste
-                //"evoice" => "", # verkkolaskuosoite
-                //"evoiceint" => "", # välittäjän tunnus
+                "evoice" => $evoice, # verkkolaskuosoite
+                "evoiceint" => $evoiceint, # välittäjän tunnus
                 "overdueinterest" => "", # korkopros: tyhjä = oletus
                 //"billnum" => $lasku['laskunumero'], # laskun numero
                 //"billcode" => $lasku['viitenumero'], # tilitysviite tai viesti
