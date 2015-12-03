@@ -301,10 +301,10 @@ class LaskuController extends Controller
 	protected function alv($row){
 		$body = '';
 		if($row)
-		$body .= '<option value="'.$row.'">'.$row.' %</option>';
-		$body .= '<option value="24">24 %</option>';
+		$body .= '<option value="'.$row.'">'.$row.'</option>';
+		$body .= '<option value="24">24</option>';
 		for ($i = 0; $i <= 24 ; $i++) {
-		    $body .= '<option value='.$i.'>'.$i.' %</option>';
+		    $body .= '<option value='.$i.'>'.$i.'</option>';
 		}
 		return $body;
 	}

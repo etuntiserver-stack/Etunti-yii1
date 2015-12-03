@@ -70,6 +70,8 @@ class Kohteet extends DB2ActiveRecord
 			array('ryhma, viivastyskorko', 'length', 'max'=>10),
 			array('avain, lasku_tiedot', 'length', 'max'=>255),
 			array('siivous, etu_suku_nimet', 'length', 'max'=>100),
+			array('hinta_tyyppi', 'length', 'max'=>50),
+			array('hinta', 'length', 'max'=>10),
 			array('aikataulu, hinnoittelu, muut, toimenpiteet, tietoja', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
@@ -122,6 +124,8 @@ class Kohteet extends DB2ActiveRecord
 			'maksuehto_paiva' => 'Maksuehto Paiva',
 			'viivastyskorko' => 'Viivästyskorko',
 			'lasku_tiedot' => 'Lasku Tiedot',
+			'hinta_tyyppi'=>'Hinta tyyppi',
+			'hinta'=>'Hinta',
 		);
 	}
 
@@ -165,6 +169,8 @@ class Kohteet extends DB2ActiveRecord
 		$criteria->compare('maksuehto_paiva',$this->maksuehto_paiva);
 		$criteria->compare('viivastyskorko',$this->viivastyskorko,true);
 		$criteria->compare('lasku_tiedot',$this->lasku_tiedot,true);
+		$criteria->compare('hinta_tyyppi',$this->hinta_tyyppi,true);
+		$criteria->compare('hinta',$this->hinta,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
