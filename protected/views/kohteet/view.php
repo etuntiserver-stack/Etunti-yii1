@@ -15,9 +15,14 @@ $this->menu=array(
 	array('label'=>'Manage Kohteet', 'url'=>array('admin')),
 );
 */
-?>
 
-<h1>Kohteet #<?php echo $model->id; ?></h1>
+$this->menu=array(
+	array('label'=>'Poista kohde', 'url'=>'#', 'linkOptions'=>array('submit'=>array('delete','id'=>$model->id),'confirm'=>'Are you sure you want to delete this item?')),
+);
+?>
+<legend>
+<h1><?php echo Yii::t('main','Kohde'); ?> #<?php echo $model->id; ?></h1>
+</legend>
 
 <?php $this->widget('zii.widgets.CDetailView', array(
 	'data'=>$model,
