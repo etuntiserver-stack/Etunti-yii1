@@ -1,22 +1,36 @@
 <?php
 	$k = Kohteet::model()->findbypk($kohde);
-	$ltr = LaskutusTuotteet::model()->findbypk($lt)
+	if(isset($k->asiakas_id))
+	{
+	$a = Asiakkaat::model()->findbypk($k->asiakas_id);
+	} else {
+	echo 'asiakas_id puutuu';
+	exit;
+	}
+
+	$osoite = '';
+	if($onkokohde == 'onkohde')
+	$osoite = $k->osoite;
+	if($onkokohde == 'eikohde'){
+	$a = Asiakkaat::model()->findbypk($kohde);
+	$osoite = $a->osoite;
+	}
 ?>
 
      <TR class="kaikkiTR" id="trRivi_<?php echo $num; ?>">
 	<TD><b class="link text-danger poista" for="poista_<?php echo $num; ?>">X</b></TD>
-	<TD><input type="text" size="1" name="tkoodi[<?php echo $num; ?>]" id="tkoodi_<?php echo $num; ?>" class="for_tkoodi form-control input-sm" value="<?php echo $k->osoite.'<br>'.date('d.m',strtotime($_POST['from'])).'-'.date('d.m',strtotime($_POST['to'])); ?>"></TD>
+	<TD><input type="text" size="1" name="tkoodi[<?php echo $num; ?>]" id="tkoodi_<?php echo $num; ?>" class="for_tkoodi form-control input-sm" value="<?php echo $osoite.' '.date('d.m',strtotime($_POST['from'])).'-'.date('d.m',strtotime($_POST['to'])); ?>"></TD>
 	<TD><input type="text" size="5" name="kpl[<?php echo $num; ?>]" id="kpl_<?php echo $num; ?>" class="onlyDigits form-control input-sm" value="<?php echo $kpl; ?>"><span class="errmsg"></span></TD>
 	<TD>
 		<select type="text" name="yksikko[<?php echo $num; ?>]" id="yksikko_<?php echo $num; ?>" class="form-control input-sm">
-		<option value="<?php echo $ltr->yksikko; ?>"><?php echo $ltr->yksikko; ?></option>
+		<option value="<?php echo $yksikko; ?>"><?php echo $yksikko; ?></option>
 		<?php echo $this->yksikkot(null); ?>
 		</select>
 	</TD>
-	<TD><input type="text" size="10" name="hinta[<?php echo $num; ?>]" id="hinta_<?php echo $num; ?>" class="onlyDigits form-control input-sm" value="<?php echo $ltr->hinta_alv_0; ?>"><span class="errmsg"></span></TD>
+	<TD><input type="text" size="10" name="hinta[<?php echo $num; ?>]" id="hinta_<?php echo $num; ?>" class="onlyDigits form-control input-sm" value="<?php echo $hinta; ?>"><span class="errmsg"></span></TD>
 	<TD>
 		<select type="text" name="alv[<?php echo $num; ?>]" id="alv_<?php echo $num; ?>" class="form-control input-sm">
-		<option value="<?php echo $ltr->alv; ?>"><?php echo $ltr->alv; ?></option>
+		<option value="<?php echo $a->alv; ?>"><?php echo $a->alv; ?></option>
 		<?php echo $this->alv(null); ?>
 		</select>
 	</TD>

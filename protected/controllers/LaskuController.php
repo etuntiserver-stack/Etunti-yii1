@@ -23,11 +23,11 @@ class LaskuController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','etsikohde','etsiasiakas', 'etsisaaja','luoKohteista','tr_rivit', 'tr_rivitkk','lasku_pdf', 'finvoice','tr_rivit_tyhja','valitsetuote', 'hyvityslasku'),
+				'actions'=>array('admin','delete','create','update','index','view','etsikohde','etsiasiakas', 'etsisaaja','luoKohteista', 'luoAsiakaasta', 'tr_rivit', 'tr_rivitkk','lasku_pdf', 'finvoice','tr_rivit_tyhja','valitsetuote', 'hyvityslasku'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','etsikohde','etsiasiakas', 'etsisaaja','luoKohteista','tr_rivit','tr_rivitkk','lasku_pdf', 'finvoice','tr_rivit_tyhja','valitsetuote', 'hyvityslasku'),
+				'actions'=>array('admin','delete','create','update','index','view','etsikohde','etsiasiakas', 'etsisaaja','luoKohteista', 'luoAsiakaasta', 'tr_rivit','tr_rivitkk','lasku_pdf', 'finvoice','tr_rivit_tyhja','valitsetuote', 'hyvityslasku'),
                 		'message'=>Yii::t('main', 'Tämä TASO ei kuuluu teille'),
 			),
 			array('deny',  // deny all users
@@ -142,25 +142,40 @@ class LaskuController extends Controller
 */
 	}
 
-	public function actionTr_rivitkk()
+/*
+	public function actionTr_rivitkk($id)
 	{
 
-		$hintaForTunti 	= $_POST['hintaForTunti'];
-		$palvelu 	= $_POST['palvelu'];
-
-		$this->renderPartial('tr_rivitkk',array(
-			'palvelu'=>$palvelu,
-			'hintaForTunti'=>$hintaForTunti,
-		));
-	}
-
-	public function actionTr_rivit($num,$id)
-	{
-
+		$num 		= $_POST['num'];
 		$kpl 		= $_POST['kpl'];
-		$lt 		= $_POST['lt'];
 		$from 		= $_POST['from'];
 		$to 		= $_POST['to'];
+		$hinta 		= $_POST['hinta'];
+		$yksikko 	= $_POST['yksikko'];
+
+		$this->renderPartial('tr_rivitkk',array(
+			'from'=>$from,
+			'to'=>$to,
+			'num'=>$num,
+			'kohde'=>$id,
+			'kpl'=>$kpl,
+			'hinta'=>$hinta,
+			'yksikko'=>$yksikko,
+		));
+
+	}
+*/
+
+	public function actionTr_rivit($id)
+	{
+
+		$num 		= $_POST['num'];
+		$kpl 		= $_POST['kpl'];
+		$from 		= $_POST['from'];
+		$to 		= $_POST['to'];
+		$hinta 		= $_POST['hinta'];
+		$yksikko 	= $_POST['yksikko'];
+		$onkokohde 	= $_POST['onkokohde'];
 
 		$this->renderPartial('tr_rivit',array(
 			'from'=>$from,
@@ -168,7 +183,9 @@ class LaskuController extends Controller
 			'num'=>$num,
 			'kohde'=>$id,
 			'kpl'=>$kpl,
-			'lt'=>$lt,
+			'hinta'=>$hinta,
+			'yksikko'=>$yksikko,
+			'onkokohde'=>$onkokohde,
 		));
 	}
 
@@ -179,6 +196,11 @@ class LaskuController extends Controller
 
 	}
 
+	public function actionluoAsiakaasta($id)
+	{
+		echo 1;
+	}
+
 	public function actionLuoKohteista($id)
 	{
 
@@ -187,11 +209,13 @@ class LaskuController extends Controller
 		return  number_format((float)$val/3600, 2, '.', '');
 	}
 
+		$explID = explode("//",$id);
+
        		$criteria = new CDbCriteria();
 		$criteria->select = "
 		SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as t_tunnit ";
 		$criteria->condition = " 
-		kohdenID = '".$id."'
+		kohdenID = '".$explID[0]."'
 		and DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
 		BETWEEN 
 		'".date("Y-m-d",strtotime($_POST['from']))."' AND '".date("Y-m-d",strtotime($_POST['to']))."'
@@ -204,7 +228,7 @@ class LaskuController extends Controller
 		$criteria->select = "
 		SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit ";
 		$criteria->condition = "
-		kohdenID = '".$id."'
+		kohdenID = '".$explID[0]."'
 		and DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
 		BETWEEN 
 		'".date("Y-m-d",strtotime($_POST['from']))."' AND '".date("Y-m-d",strtotime($_POST['to']))."'
@@ -216,13 +240,13 @@ class LaskuController extends Controller
 
 	}
 
-	public function actionEtsikohde($id)
+	public function actionEtsikohde($id, $tuntiTaiKk)
 	{
 	?>
 	<script type="text/javascript">
  	  $(document).ready(function(){
 		$('.selectpicker').selectpicker({
-		      style: 'btn-default btn-sm',
+		      style: '',
 		      //size: 4
 		});
 		/*
@@ -234,14 +258,40 @@ class LaskuController extends Controller
 	  });
 	</script>
 	<?php
-		$a = Asiakkaat::model()->find(" asiakasnumero='".$id."' ");
-		$k = Kohteet::model()->findAll(" asiakas_id='".$a->id."' ");
+       		$criteria = new CDbCriteria();
+       		$criteria->condition = " asiakasnumero='".$id."' ";
+		$a = Asiakkaat::model()->find($criteria);
+
+       		$criteria = new CDbCriteria();
+       		$criteria->condition = " asiakas_id='".$a->id."' AND hinta_tyyppi='".$tuntiTaiKk."' AND hinta!='' ";
+		$k = Kohteet::model()->findAll($criteria);
+
+		if($tuntiTaiKk == 1)
+		$yksikko = 'h';
+		if($tuntiTaiKk == 2)
+		$yksikko = 'kk';
+
 		$body = '<b class="glyphicon glyphicon-home"></b><br>
-		<select id="kohteet" class="selectpicker input-sm" multiple title="Valitse kohteet">';
+		<select id="kohteet" class="selectpicker '.$yksikko.' form-control input-sm" multiple title="Valitse kohteet">';
+		$thisTrue = false;
+		$onkoKohdeMaaritetty = false;
 		foreach($k as $a)
-		$body .= '<option value="'.$a->id.'">'.$a->osoite.'</option>';
+		{
+		$thisTrue = true;
+		$onkoKohdeMaaritetty = true;
+		$body .= '<option value="'.$a->id.'//'.$a->hinta.'//'.$yksikko.'//onkohde">'.$a->osoite.' ( '.$a->hinta.'&euro;/'.$yksikko.' )</option>';
+		}
+		// jos kohde ei ole maariteltu, kokeilemme asiakasta ota tietoja
+		if($thisTrue == false and isset($a->id) and $tuntiTaiKk == $a->hinta_tyyppi)
+		{
+		$thisTrue = true;
+		$onkoKohdeMaaritetty = false;
+		$body .= '<option value="'.$a->id.'//'.$a->hinta.'//'.$yksikko.'//eikohde">'.$a->osoite.' ( '.$a->hinta.'&euro;/'.$yksikko.' )</option>';
+		}
 		$body .= '</select>';
-		echo $body;
+
+
+		echo $body.'***'.$thisTrue;
 	}
 
 

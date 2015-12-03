@@ -108,7 +108,7 @@
 	<div class="row">
 		<?php echo $form->labelEx($model,'hinta_tyyppi'); ?>
 		<?php
-		$list = array(0=>'tunti',1=>'kk');
+		$list = array(1=>'tunti',2=>'kk');
         	echo $form->dropDownList($model, 'hinta_tyyppi', $list,
 		array('empty'=>'Valitse tyyppi','class'=>'form-control input-sm'));	
         	?>
