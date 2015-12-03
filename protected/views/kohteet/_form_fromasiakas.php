@@ -2,6 +2,10 @@
 /* @var $this KohteetController */
 /* @var $model Kohteet */
 /* @var $form CActiveForm */
+
+     $tas = array();
+   if(isset(Yii::app()->user->adminPaketti)) 
+     $tas = explode(",",Yii::app()->user->adminPaketti);
 ?>
 
 <div class="row form">
@@ -81,6 +85,27 @@
 		<?php echo $form->textField($model,'toimipaikka',array('size'=>20,'maxlength'=>20,'class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'toimipaikka'); ?>
 	</div>
+
+
+	<?php if(in_array('3',$tas)) : ?>
+	<legend><?php echo Yii::t('main','Laskutus'); ?></legend>
+
+	<div class="row">
+		<?php echo $form->labelEx($model,'hinta_tyyppi'); ?>
+		<?php
+		$list = array(0=>'tunti',1=>'kk');
+        	echo $form->dropDownList($model, 'hinta_tyyppi', $list,
+		array('empty'=>'Valitse tyyppi','class'=>'form-control input-sm'));	
+        	?>
+		<?php echo $form->error($model,'hinta_tyyppi'); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->labelEx($model,'hinta'); ?>
+		<?php echo $form->textField($model,'hinta',array('size'=>10,'maxlength'=>100,'class'=>'form-control input-sm')); ?>
+		<?php echo $form->error($model,'hinta'); ?>
+	</div>
+	<?php endif; ?>
 
   </div><div class="col-sm-3">
 

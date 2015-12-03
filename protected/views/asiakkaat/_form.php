@@ -11,6 +11,9 @@ $asiakasnumero = 'nro. '.($model->id+1).' on vapaa';
 $asiakasnumero = 'voidaan käyttää oleva ID numero';
 }
 */
+     $tas = array();
+   if(isset(Yii::app()->user->adminPaketti)) 
+     $tas = explode(",",Yii::app()->user->adminPaketti);
 ?>
 
 <style>
@@ -126,8 +129,12 @@ $asiakasnumero = 'voidaan käyttää oleva ID numero';
 		<?php echo $form->error($model,'aktiivinen'); ?>
 	</div>
 
-  </div><div class="col-sm-3">
-	<?php if(isset($model->id)): ?>
+  </div>
+
+<?php if(isset($model->id)): ?>
+  <?php if(in_array('3',$tas)) : ?>
+<div class="col-sm-3">
+	
 	<legend><h3><?php echo Yii::t('main', 'Laskutus tiedot'); ?></h3></legend>
 
 	<div class="row">
@@ -166,9 +173,43 @@ $asiakasnumero = 'voidaan käyttää oleva ID numero';
 		<?php echo $form->textField($model,'maksuehto',array('size'=>60,'maxlength'=>100,'class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'maksuehto'); ?>
 	</div>
-	<?php endif; ?>
 
-  </div><div class="col-sm-4">
+	<div class="row">
+		<?php echo $form->labelEx($model,'alv'); ?>
+		<?php
+		$list = array();
+		for ($i = 0; $i <= 36 ; $i++) {
+		    $list[$i] = $i;
+		}
+
+        	echo $form->dropDownList($model, 'alv', $list,
+		array('empty'=>'Valitse','class'=>'form-control input-sm',
+		'options' => array('24'=>array('selected'=>true))
+		));
+        	?>
+		<?php echo $form->error($model,'alv'); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->labelEx($model,'hinta_tyyppi'); ?>
+		<?php
+		$list = array(0=>'tunti',1=>'kk');
+        	echo $form->dropDownList($model, 'hinta_tyyppi', $list,
+		array('empty'=>'Valitse tyyppi','class'=>'form-control input-sm'));	
+        	?>
+		<?php echo $form->error($model,'hinta_tyyppi'); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->labelEx($model,'hinta'); ?>
+		<?php echo $form->textField($model,'hinta',array('size'=>10,'maxlength'=>100,'class'=>'form-control input-sm')); ?>
+		<?php echo $form->error($model,'hinta'); ?>
+	</div>
+  </div>
+  <?php endif; ?>
+<?php endif; ?>
+
+<div class="col-sm-4">
 
 	<?php if(isset($model->id)): ?>
 	<legend><h3><?php echo Yii::t('main', 'Asiakkaaseen liittyviä kohteita'); ?></h3></legend>
@@ -250,6 +291,7 @@ function openAll(){
 
 
 }
+
 
 
 function laskutusTyyppi(value){
