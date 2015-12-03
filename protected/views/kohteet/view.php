@@ -15,6 +15,10 @@ $this->menu=array(
 	array('label'=>'Manage Kohteet', 'url'=>array('admin')),
 );
 */
+
+$this->menu=array(
+	array('label'=>'Poista kohde', 'url'=>'#', 'linkOptions'=>array('submit'=>array('delete','id'=>$model->id),'confirm'=>'Are you sure you want to delete this item?')),
+);
 ?>
 
 <h1>Kohteet #<?php echo $model->id; ?></h1>
