@@ -1,4 +1,5 @@
 <?php
+/*
 	//$a = Asiakkaat::model()->findbypk($kohde);
 	$num = 0;
 ?>
@@ -24,3 +25,6 @@
 	<TD><input class="yhteensa_total_veroton form-control input-sm" type="text" size="10" name="veroton[<?php echo $num; ?>]" id="veroton_<?php echo $num; ?>" value="0.00" readonly></TD>
 	<TD><input class="yhteensa_total form-control input-sm" type="text" size="10" name="yhteensa_alv[<?php echo $num; ?>]" id="yhteensa_alv_<?php echo $num; ?>" value="0.00" readonly></TD>
      </TR>
+
+*/
+?>

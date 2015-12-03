@@ -13,19 +13,19 @@
 
 <?php if(isset($model->id) and $model->tyyppi == 'henkilo') : ?> 
 <style>
-.yritys,.y_tunnus{
+.yritys,.y_tunnus, #kalut{
 	display:none;
 }
 </style>
 <?php elseif(isset($model->id) and $model->tyyppi == 'yritys') : ?> 
 <style>
-.nimi{
+.nimi, #kalut{
 	display:none;
 }
 </style>
 <?php else : ?> 
 <style>
-.hidd,.ashidd,.ashidd_a,.tyyppi{
+.hidd,.ashidd,.ashidd_a,.tyyppi, #kalut{
 	display:none;
 }
 </style>
@@ -350,82 +350,62 @@ $model->viivastyskorko = $asetukset->viivastyskorko;
 
 <br>
 
-<span class="pull-right btn-sm btn btn-info" data-toggle="collapse"  data-target="#kalut"><?php echo Yii::t('main', 'Työkalut'); ?> <b class="caret"></b></span>
+<!--<span class="pull-right btn-sm btn btn-info" data-toggle="collapse"  data-target="#kalut"><?php echo Yii::t('main', 'Työkalut'); ?> <b class="caret"></b></span>
 <br>
-<hr>
+-->
+<br>
 
-<div class="row form kht collapse" id="kalut">
+<div class="row form kht" id="kalut">
 
-    <div class="col-sm-6">
+<div id="tuntiKalut">
+    <div class="col-sm-5">
     <legend><?php echo Yii::t('main', 'TUNNIT'); ?></legend>
       <div class="row">
 	<div class="col-sm-6">
 		<b class="glyphicon glyphicon-calendar"></b> 
-   		<input type="text" id="from" class="form-control input-sm form-group datepicker" value="<?php echo date("Y-m-d",strtotime('first day of this month', time())); ?>">
+   		<input type="text" id="from" class="form-control input-sm form-group datepicker" value="<?php echo date('Y-m-d',strtotime('first day of last month', time())); ?>">
 	</div><div class="col-sm-6">
 		<b class="glyphicon glyphicon-calendar"></b> 
-   		<input type="text" id="to" class="form-control input-sm form-group datepicker" value="<?php echo date("Y-m-d",strtotime('last day of this month', time())); ?>">
+   		<input type="text" id="to" class="form-control input-sm form-group datepicker" value="<?php echo date('Y-m-d',strtotime('last day of last month', time())); ?>">
 	</div>
       </div>
 
       <div class="row">
 	<div class="col-sm-6">
-		<b class="glyphicon glyphicon-th-list"></b>
-		<?php
-		echo CHtml::dropdownList('','palvelu', CHtml::listData(LaskutusTuotteet::model()->findAll(), 'id', 'tuotenimi'), array('empty'=>'Valitse palvelu','class'=>'form-control input-sm','id'=>'lt'));
-		?>
-	</div><div class="col-sm-6">
-		<div id="getkohde" class="form-group"></div>
+		<div id="getkohdeT" class="form-group"></div>
 	</div>
       </div>
       <div class="col-sm-12">
-        	<b class="btn btn-success btn-sm hae"><?php echo Yii::t('main', 'Luo rivit'); ?></b>
+        	<b class="btn btn-success btn-sm luoRiviTunti"><?php echo Yii::t('main', 'Luo rivit'); ?></b>
       </div>
     </div>
+</div>
 
-    <div class="col-sm-6">
+
+<div id="kkKalut">
+    <div class="col-sm-5">
     <legend><?php echo Yii::t('main', 'KUUKAUSI'); ?></legend>
+ 
       <div class="row">
 	<div class="col-sm-6">
-	<label><?php echo Yii::t('main', 'Kuukausi'); ?></label>
-	<?php
-	$kk = array(
-		"Tammikuu"=>"Tammikuu",
-		"Helmikuu"=>"Helmikuu",
-		"Maaliskuu"=>"Maaliskuu",
-		"Huhtikuu"=>"Huhtikuu",
-		"Toukokuu"=>"Toukokuu",
-		"Kesäkuu"=>"Kesäkuu",
-		"Heinäkuu"=>"Heinäkuu",
-		"Elokuu"=>"Elokuu",
-		"Syyskuu"=>"Syyskuu",
-		"Lokakuu"=>"Lokakuu",
-		"Marraskuu"=>"Marraskuu", 
-		"Joulukuu"=>"Joulukuu");
-	echo CHtml::dropdownList('','kk', $kk, array('empty'=>'Valitse kuukausi','class'=>'form-control input-sm','id'=>'kk'));
-	?>
+		<b class="glyphicon glyphicon-calendar"></b> 
+   		<input type="text" id="fromkk" class="form-control input-sm form-group datepicker" value="<?php echo date('Y-m-d',strtotime('first day of last month', time())); ?>">
 	</div><div class="col-sm-6">
-	<label><?php echo Yii::t('main', 'Valitse vuosi'); ?></label>
-	<input type="text" id="vuosi" class="form-control input-sm" value="<?php echo date('Y'); ?>">
+		<b class="glyphicon glyphicon-calendar"></b> 
+   		<input type="text" id="tokk" class="form-control input-sm form-group datepicker" value="<?php echo date('Y-m-d',strtotime('last day of last month', time())); ?>">
 	</div>
       </div>
 
-      <div class="row">
+       <div class="row">
 	<div class="col-sm-6">
-		<b class="glyphicon glyphicon-euro"></b> 
-		<input type="text" id="hintaForTuntikk" class="form-control input-sm form-group" placeholder="syötä kk hinta">
-	</div><div class="col-sm-6">
-		<b class="glyphicon glyphicon-th-list"></b>
-		<?php
-		echo CHtml::dropdownList('','palvelu', CHtml::listData(LaskutusTuotteet::model()->findAll(), 'tuotenimi', 'tuotenimi'), array('empty'=>'Valitse palvelu','class'=>'form-control input-sm','id'=>'palvelu'));
-		?>
+		<div id="getkohdeKk" class="form-group"></div>
 	</div>
       </div>
       <div class="col-sm-12">
-        	<b class="btn btn-success btn-sm haekk"><?php echo Yii::t('main', 'Luo rivit'); ?></b>
+        	<b class="btn btn-success btn-sm luoRiviKk"><?php echo Yii::t('main', 'Luo rivit'); ?></b>
       </div>
     </div>
-
+</div>
 
 </div>
 
@@ -778,12 +758,12 @@ function yhteensaTotal(){
 }
 
 
-$(".hae").click(function() {
+$(".luoRiviTunti").click(function() {
 
 	var from = $("#from").val();
 	var to = $("#to").val();
-	var kohteet = $(".selectpicker").val();
-	var lt = $("#lt").val();
+	var kohteet = $(".selectpicker.h").val();
+
 
 	if (from  === '') 
 	{
@@ -795,31 +775,69 @@ $(".hae").click(function() {
 	     $('#to').css({"border" : "2px #f14010 solid"}).focus();
 	     return false;
 	}
-	if (lt  === '') 
+	if (!kohteet) 
+	{ 
+	    alert('Valitse kohde')
+	    return false;
+
+	} 
+
+	    pyyntoRiville(kohteet,from,to);
+});
+
+
+
+$(".luoRiviKk").click(function() {
+
+	var from = $("#fromkk").val();
+	var to = $("#tokk").val();
+	var kohteet = $(".selectpicker.kk").val();
+
+
+	if (from  === '') 
 	{
-	     $('#hintaForTunti').css({"border" : "2px #f14010 solid"}).focus();
+	     $('#fromkk').css({"border" : "2px #f14010 solid"}).focus();
+	     return false;
+	}
+	if (to  === '') 
+	{
+	     $('#tokk').css({"border" : "2px #f14010 solid"}).focus();
 	     return false;
 	}
 	if (!kohteet) 
-	{
-	    $('.filter-option').css({"color" : "red"}).focus();
+	{ 
+	    alert('Valitse kohde')
 	    return false;
 
-	} else {
-	    $("#kohteistaRivit").val(kohteet);
+	} 
 
-	    //$("table#TableRivit tbody .kaikkiTR").remove();
+	    pyyntoRiville(kohteet,from,to);
+
+});
+
+
+function pyyntoRiville(kohteet,from,to){
+
+	var spH = '';
 
 	    $.each(kohteet, function( index, value ) {
 
+	    spH = value.split("//");
+	    if(spH[3] == 'onkohde')
+	    var mistaLuo = 'luoKohteista';
+
+	    if(spH[3] == 'eikohde')
+	    var mistaLuo = 'luoAsiakaasta';
+
+
 	        $.ajax({
-	           url: 'luoKohteista?id='+value,
+	           url: mistaLuo+'?id='+value,
 		   type: 'POST',
 		   data: { from : from, to : to },
 	           success: function(data){
 	               	console.log(data);
-			var tunnit = data;
-
+			var tunnit = data;			
+			var num = 0;
 			if(tunnit == 0)
 			{
 				$("#tuntienTulos").addClass("alert alert-danger").html('<b>Ei löydy tuntia</b>');
@@ -828,11 +846,12 @@ $(".hae").click(function() {
 
 			if(tunnit > 0)
 			{
+			num = $("table#TableRivit tbody tr").length+index;
 			
 	        	$.ajax({
-		           url: 'tr_rivit?num='+value+'&id='+value,
+		           url: 'tr_rivit?id='+spH[0],
 			   type: 'POST',
-			   data: { from : from, to : to, kpl : tunnit, lt : lt },
+			   data: { num : num, from : from, to : to, kpl : tunnit, hinta : spH[1], yksikko : spH[2], onkokohde : spH[3] },
 		           success: function(data){
 				//console.log(data);
 				$("table#TableRivit tbody tr").last().after(data);
@@ -847,7 +866,7 @@ $(".hae").click(function() {
 		               	console.log(XMLHttpRequest);
 			   }
 		        });
-
+			spH = '';
 			}
 	
 	           },
@@ -859,74 +878,8 @@ $(".hae").click(function() {
 
 	    
 	    jumpToPageBottom();
-	   
-	}
 
-});
-
-
-
-$(".haekk").click(function() {
-
-	var kk = $("#kk").val();
-	var vuosi = $("#vuosi").val();
-	var asiakas = $("#Lasku_as_nro").val();
-	var hintaForTuntikk = $("#hintaForTuntikk").val();
-	var palvelu = $("#palvelu option:selected").text();
-	var p = kk+"-"+vuosi+" "+palvelu;
-
-	if (kk  === '') 
-	{
-	     $('#kk').css({"border" : "2px #f14010 solid"}).focus();
-	     return false;
-	}
-	if (vuosi  === '') 
-	{
-	     $('#vuosi').css({"border" : "2px #f14010 solid"}).focus();
-	     return false;
-	}
-	if ($("#palvelu").val()  === '') 
-	{
-	     $('#palvelu').css({"border" : "2px #f14010 solid"}).focus();
-	     return false;
-	}
-	if (hintaForTuntikk  === '') 
-	{
-	     $('#hintaForTuntikk').css({"border" : "2px #f14010 solid"}).focus();
-	     return false;
-	}
-
-
-	    //$("table#TableRivit tbody .kaikkiTR").remove();
-
-
-
-	        	$.ajax({
-		           url: 'tr_rivitkk',
-			   type: 'POST',
-			   data: { hintaForTunti : hintaForTuntikk, palvelu : p },
-		           success: function(data){
-				//console.log(data);
-				$("table#TableRivit tbody tr").last().after(data);
-				poista();
-				eachLaskenta();
-				Rivi();
-				$("#tuntienTulos").removeClass("alert alert-danger").html('');
-				$("#rivit").show('slow');
-				$(".subm").show('slow');
-		           },
-		           error: function(XMLHttpRequest, textStatus, errorThrown){
-		               	console.log(XMLHttpRequest);
-			   }
-		        });
-
-	    
-	    jumpToPageBottom();
-	   
-
-
-});
-
+}
 
 $("#Lasku_yid").change(function() {
 
@@ -957,12 +910,46 @@ $("#Lasku_as_nro").change(function() {
 	alert("Asiakasnumero puuttuu");
 	return false;
     }
+	
+	$("#kalut").show('slow');
+	var spdata = '';
 
         $.ajax({
-           url: 'etsikohde?id='+asiakas,
+           url: 'etsikohde?id='+asiakas+'&tuntiTaiKk=1',
            success: function(data){
-               	console.log(data);
-		$("#getkohde").html(data);
+		spdata = data.split("***");
+               	console.log(spdata);
+
+		if(spdata[1] == true)
+		{
+		$("#getkohdeT").html(spdata[0]);
+		$("#tuntiKalut").show();
+		} else {
+		$("#tuntiKalut").hide();
+		}
+
+		spdata = '';
+           },
+           error: function(XMLHttpRequest, textStatus, errorThrown){
+               	console.log(XMLHttpRequest);
+	   }
+        });
+
+        $.ajax({
+           url: 'etsikohde?id='+asiakas+'&tuntiTaiKk=2',
+           success: function(data){
+		spdata = data.split("***");
+               	console.log(spdata);
+
+		if(spdata[1] == true)
+		{
+		$("#getkohdeKk").html(spdata[0]);
+		$("#kkKalut").show();
+		} else {
+		$("#kkKalut").hide();
+		}
+
+		spdata = '';
            },
            error: function(XMLHttpRequest, textStatus, errorThrown){
                	console.log(XMLHttpRequest);
