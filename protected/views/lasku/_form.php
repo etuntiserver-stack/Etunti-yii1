@@ -818,7 +818,7 @@ $(".luoRiviKk").click(function() {
 
 function pyyntoRiville(kohteet,from,to){
 
-
+	    $("#trRivi_1").remove();
 
 	    $.each(kohteet, function( index, value ) {
 
