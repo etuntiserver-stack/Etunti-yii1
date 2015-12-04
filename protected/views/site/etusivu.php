@@ -1,6 +1,8 @@
 <?php
-ini_set('session.gc_maxlifetime', 86400);
+ini_set('session.gc_maxlifetime',12*60*60);
+ini_set('session.cookie_lifetime',12*60*60);
 
+//phpinfo();
 function num($val){
     if($val > 0)
 	return  number_format((float)$val/3600, 2, '.', '');
