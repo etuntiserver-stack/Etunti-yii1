@@ -70,13 +70,14 @@ $('.search-form form').submit(function(){
 	'columns'=>array(
 		//'id',
 		'laskunumero',
-
+/*
 	array(
         'header'  => 'Asianro',
         'value'=>array($this,'asianro'),
 	'type' => 'html',
     	),
-
+*/
+		'viitenumero',
 		//'lid',
 		//'yid',
                array(
@@ -86,9 +87,9 @@ $('.search-form form').submit(function(){
 		//'tyyppi',
 		//'yritys',
 		//'y_tunnus',
-		'osoite',
+		//'osoite',
 		//'nimi',
-		'yhteyshenkilo',
+		//'yhteyshenkilo',
 		//'as_nro',
 	array(
         'header'  => 'Tilanne',
@@ -122,7 +123,6 @@ $('.search-form form').submit(function(){
 		'erapaiva',
 		'toimituspaiva',
 		'maksuehto',
-		'viitenumero',
 		'viivastyskorko',
 		'yhteensa_total_verot',
 		'yhteensa_total_veroton',

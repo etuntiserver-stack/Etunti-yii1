@@ -121,7 +121,7 @@ $xml = encodeXml (array(
                 "evoiceint" => $evoiceint, # välittäjän tunnus
                 "overdueinterest" => "", # korkopros: tyhjä = oletus
                 //"billnum" => $lasku['laskunumero'], # laskun numero
-                //"billcode" => $lasku['viitenumero'], # tilitysviite tai viesti
+                "billcode" => "", # tilitysviite tai viesti
                 //"ourcode" => $lasku['viitenumero'],
                // "yourcode" => "Asiakkaan viite",
                 "email" => $lasku['sahkoposti'], # 1.email osoite
@@ -270,7 +270,7 @@ for ($i = 0; $i < count ($doc->row); $i++) {
         echo 'accept billnum ' . $doc->row[$i]->billnum
             . ' jobid ' . $doc->row[$i]->jobid . "<br>";
 
-     	Lasku::model()->updatebypk($id, array('tilanne'=>2,'trust_jobid'=>$doc->row[$i]->jobid));
+     	Lasku::model()->updatebypk($id, array('tilanne'=>2,'trust_jobid'=>$doc->row[$i]->jobid,'viitenumero'=>$doc->row[$i]->reference));
 
 		    // Lasku historia
 		    $l = Lasku::model()->findbypk($id);
