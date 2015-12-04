@@ -63,7 +63,7 @@ $model->viivastyskorko = $asetukset->viivastyskorko;
 	</div>
 	<?php else : ?> 
 
-	<?php if($asetukset->palvelu_tyyppi != 2) : ?> 
+
 	<?php
        		$criteria = new CDbCriteria();
        		$criteria->order = "laskunumero DESC";
@@ -78,7 +78,7 @@ $model->viivastyskorko = $asetukset->viivastyskorko;
 		<?php echo $form->textField($model,'laskunumero',array('value'=>$ln,'size'=>60,'maxlength'=>11,'class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'laskunumero'); ?>
 	</div>
-	<?php endif; ?> 
+
 
 	<div class="row asiakas">
 		<?php echo $form->labelEx($model,'as_nro'); ?>
