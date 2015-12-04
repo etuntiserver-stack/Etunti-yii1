@@ -1,11 +1,11 @@
 <?php
 
   $criteria = new CDbCriteria();
-  $criteria->order = " DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') DESC ";
+  $criteria->order = " pvm DESC ";
   $criteria->condition = 
 	" 
 	tid='".$tid."'
-	AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') 
+	AND pvm
 	BETWEEN '$from' AND '$to' 
 	";
 
