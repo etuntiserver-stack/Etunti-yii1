@@ -209,13 +209,13 @@ class LaskuController extends Controller
 		return  number_format((float)$val/3600, 2, '.', '');
 	}
 
-		$explID = explode("//",$id);
+
 
        		$criteria = new CDbCriteria();
 		$criteria->select = "
 		SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as t_tunnit ";
 		$criteria->condition = " 
-		kohdenID = '".$explID[0]."'
+		kohdenID = '".$id."'
 		and DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
 		BETWEEN 
 		'".date("Y-m-d",strtotime($_POST['from']))."' AND '".date("Y-m-d",strtotime($_POST['to']))."'
@@ -228,7 +228,7 @@ class LaskuController extends Controller
 		$criteria->select = "
 		SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit ";
 		$criteria->condition = "
-		kohdenID = '".$explID[0]."'
+		kohdenID = '".$id."'
 		and DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
 		BETWEEN 
 		'".date("Y-m-d",strtotime($_POST['from']))."' AND '".date("Y-m-d",strtotime($_POST['to']))."'
@@ -260,11 +260,7 @@ class LaskuController extends Controller
 	<?php
        		$criteria = new CDbCriteria();
        		$criteria->condition = " asiakasnumero='".$id."' ";
-		$a = Asiakkaat::model()->find($criteria);
-
-       		$criteria = new CDbCriteria();
-       		$criteria->condition = " asiakas_id='".$a->id."' AND hinta_tyyppi='".$tuntiTaiKk."' AND hinta!='' ";
-		$k = Kohteet::model()->findAll($criteria);
+		$as = Asiakkaat::model()->find($criteria);
 
 		if($tuntiTaiKk == 1)
 		$yksikko = 'h';
@@ -275,18 +271,44 @@ class LaskuController extends Controller
 		<select id="kohteet" class="selectpicker '.$yksikko.' form-control input-sm" multiple title="Valitse kohteet">';
 		$thisTrue = false;
 		$onkoKohdeMaaritetty = false;
+
+
+       		$criteria = new CDbCriteria();
+       		$criteria->condition = " 
+			asiakas_id='".$as->id."' 
+			AND hinta_tyyppi='".$tuntiTaiKk."' AND hinta!=''
+		";
+		$k = Kohteet::model()->findAll($criteria);
 		foreach($k as $a)
 		{
 		$thisTrue = true;
 		$onkoKohdeMaaritetty = true;
 		$body .= '<option value="'.$a->id.'//'.$a->hinta.'//'.$yksikko.'//onkohde">'.$a->osoite.' ( '.$a->hinta.'&euro;/'.$yksikko.' )</option>';
 		}
+
+
+       		$criteria = new CDbCriteria();
+       		$criteria->condition = " 
+			asiakas_id='".$as->id."' 
+			AND hinta_tyyppi!='".$tuntiTaiKk."' AND hinta=''
+		";
+		$k = Kohteet::model()->findAll($criteria);
+		foreach($k as $a)
+		{
+		$thisTrue = true;
+		$onkoKohdeMaaritetty = true;
+		$body .= '<option value="'.$a->id.'//'.$as->hinta.'//'.$yksikko.'//onkohde">'.$a->osoite.' ( '.$as->hinta.'&euro;/'.$yksikko.' )</option>';
+		}
+
+
+
+
 		// jos kohde ei ole maariteltu, kokeilemme asiakasta ota tietoja
-		if($thisTrue == false and isset($a->id) and $tuntiTaiKk == $a->hinta_tyyppi)
+		if($thisTrue == false and isset($as->id) and $tuntiTaiKk == $as->hinta_tyyppi)
 		{
 		$thisTrue = true;
 		$onkoKohdeMaaritetty = false;
-		$body .= '<option value="'.$a->id.'//'.$a->hinta.'//'.$yksikko.'//eikohde">'.$a->osoite.' ( '.$a->hinta.'&euro;/'.$yksikko.' )</option>';
+		$body .= '<option value="'.$as->id.'//'.$as->hinta.'//'.$yksikko.'//eikohde">'.$as->osoite.' ( '.$as->hinta.'&euro;/'.$yksikko.' )</option>';
 		}
 		$body .= '</select>';
 

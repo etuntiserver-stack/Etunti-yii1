@@ -818,11 +818,11 @@ $(".luoRiviKk").click(function() {
 
 function pyyntoRiville(kohteet,from,to){
 
-	var spH = '';
+
 
 	    $.each(kohteet, function( index, value ) {
 
-	    spH = value.split("//");
+	    var spH = value.split("//");
 	    if(spH[3] == 'onkohde')
 	    var mistaLuo = 'luoKohteista';
 
@@ -831,7 +831,7 @@ function pyyntoRiville(kohteet,from,to){
 
 
 	        $.ajax({
-	           url: mistaLuo+'?id='+value,
+	           url: mistaLuo+'?id='+spH[0],
 		   type: 'POST',
 		   data: { from : from, to : to },
 	           success: function(data){
@@ -853,7 +853,7 @@ function pyyntoRiville(kohteet,from,to){
 			   type: 'POST',
 			   data: { num : num, from : from, to : to, kpl : tunnit, hinta : spH[1], yksikko : spH[2], onkokohde : spH[3] },
 		           success: function(data){
-				//console.log(data);
+				console.log(value);
 				$("table#TableRivit tbody tr").last().after(data);
 				poista();
 				eachLaskenta();
@@ -866,7 +866,7 @@ function pyyntoRiville(kohteet,from,to){
 		               	console.log(XMLHttpRequest);
 			   }
 		        });
-			spH = '';
+
 			}
 	
 	           },
@@ -918,7 +918,7 @@ $("#Lasku_as_nro").change(function() {
            url: 'etsikohde?id='+asiakas+'&tuntiTaiKk=1',
            success: function(data){
 		spdata = data.split("***");
-               	console.log(spdata);
+               	console.log(spdata[2]);
 
 		if(spdata[1] == true)
 		{
