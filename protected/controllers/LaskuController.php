@@ -556,11 +556,11 @@ class LaskuController extends Controller
 		$sxe = simplexml_load_string($rss);
 		if ($sxe) 
 		{
-
+/*
 echo '<textarea class="form-control" rows="10">';
 print_r($rss);
 echo '</textarea>';
-
+*/
 	  	foreach ($sxe->status as $r) {
 /*
 echo '<textarea class="form-control" rows="10">';
