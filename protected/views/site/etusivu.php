@@ -1,9 +1,13 @@
 <?php
-
+ini_set('session.gc_maxlifetime', 86400);
+phpinfo();
 function num($val){
     if($val > 0)
 	return  number_format((float)$val/3600, 2, '.', '');
 }
+
+
+
 
 //$this->widget('ext.tooltipster.tooltipster');
 //<a href="http://www.yiiframework.com" class="tooltipster" title="This is my link's tooltip message!">TEST</a>
