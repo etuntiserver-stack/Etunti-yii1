@@ -132,6 +132,11 @@ class AsiakasHyvaksyntaController extends Controller
 	public function actionIndex()
 	{
 
+		if(isset($_POST['hyvaksytunnit']) and empty($_POST['from']))
+		unset(Yii::app()->session['from']);
+		if(isset($_POST['hyvaksytunnit']) and empty($_POST['to']))
+		unset(Yii::app()->session['to']);
+
 		if(Yii::app()->request->getPost('from'))
 		Yii::app()->session['from'] = date("Y-m-d",strtotime(Yii::app()->request->getPost('from')));
 
@@ -145,11 +150,11 @@ class AsiakasHyvaksyntaController extends Controller
 		if(isset($_POST['asiakas']) and $_POST['asiakas'] != 'kaikki')
 	        $criteria->addCondition (" asiakas_id = '".$_POST['asiakas']."'");
 		
-		if(isset($_POST['status']) and $_POST['status'] != 'status')
+		if(isset($_POST['status']) and $_POST['status'] != 'kaikki')
 	        $criteria->addCondition (" status = '".$_POST['status']."'");
 
 		if(Yii::app()->session['from'] and Yii::app()->session['to'])
-	        $criteria->addCondition (" time BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."' ");
+	        $criteria->addCondition (" DATE(time) BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."' ");
 
 		$dataProvider=new CActiveDataProvider('AsiakasHyvaksynta', array(
 			'criteria'=>$criteria,
