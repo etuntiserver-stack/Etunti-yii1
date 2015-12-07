@@ -242,6 +242,30 @@ $model->viivastyskorko = $asetukset->viivastyskorko;
 	</div>
 
 	<div class="row">
+		<?php echo $form->labelEx($model,'muistutuslasku_auto'); ?>
+		<?php
+		$list = array(	'0'=>Yii::t('main','Kyllä'),
+				'1'=>Yii::t('main','Ei')
+				);
+        	echo $form->dropDownList($model, 'muistutuslasku_auto', $list,
+		array('class'=>'form-control input-sm'));
+        	?>
+		<?php echo $form->error($model,'muistutuslasku_auto'); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->labelEx($model,'kirjeenluokka'); ?>
+		<?php
+		$list = array(	'1'=>Yii::t('main','Luokka 1'),
+				'2'=>Yii::t('main','Luokka 2')
+				);
+        	echo $form->dropDownList($model, 'kirjeenluokka', $list,
+		array('class'=>'form-control input-sm'));
+        	?>
+		<?php echo $form->error($model,'kirjeenluokka'); ?>
+	</div>
+
+	<div class="row">
 		<?php echo $form->labelEx($model,'toimituspaiva'); ?>
 		<?php echo $form->textField($model,'toimituspaiva',array('size'=>20,'maxlength'=>20,'class'=>'form-control input-sm datepicker')); ?>
 		<?php echo $form->error($model,'toimituspaiva'); ?>
@@ -1014,6 +1038,12 @@ $("#Lasku_as_nro").change(function() {
 		}
 		if(sp[11]){
 		    $("#Lasku_verkkolaskuosoite").val(sp[11])
+		}
+		if(sp[12]){
+		    $("#Lasku_muistutuslasku_auto option[value="+sp[12]+"]").attr('selected','selected');
+		}
+		if(sp[13]){
+		    $("#Lasku_kirjeenluokka option[value="+sp[13]+"]").attr('selected','selected');
 		}
 
            },

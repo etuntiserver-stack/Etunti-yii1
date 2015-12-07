@@ -129,6 +129,14 @@ $asiakasnumero = 'voidaan käyttää oleva ID numero';
 		<?php echo $form->error($model,'aktiivinen'); ?>
 	</div>
 
+	<div class="row ashidd_a">
+		<?php echo $form->labelEx($model,'myyja'); ?>
+		<?php echo $form->dropDownList($model, 'myyja', CHtml::listData(Administrators::model()->findAll(), 'id', 'adm_nimi'), 
+		array('empty'=>'Valitse', 'class'=>'form-control input-sm')); 
+		?>
+		<?php echo $form->error($model,'myyja'); ?>
+	</div>
+
   </div>
 
 <?php if(isset($model->id)): ?>
@@ -148,6 +156,30 @@ $asiakasnumero = 'voidaan käyttää oleva ID numero';
 		array('empty'=>'Valitse','class'=>'form-control input-sm'));
         	?>
 		<?php echo $form->error($model,'laskutus_kanava'); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->labelEx($model,'kirjeenluokka'); ?>
+		<?php
+		$list = array(	'1'=>Yii::t('main','Luokka 1'),
+				'2'=>Yii::t('main','Luokka 2')
+				);
+        	echo $form->dropDownList($model, 'kirjeenluokka', $list,
+		array('empty'=>'Valitse','class'=>'form-control input-sm'));
+        	?>
+		<?php echo $form->error($model,'kirjeenluokka'); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->labelEx($model,'muistutuslasku_auto'); ?>
+		<?php
+		$list = array(	'0'=>Yii::t('main','Kyllä'),
+				'1'=>Yii::t('main','Ei')
+				);
+        	echo $form->dropDownList($model, 'muistutuslasku_auto', $list,
+		array('class'=>'form-control input-sm'));
+        	?>
+		<?php echo $form->error($model,'muistutuslasku_auto'); ?>
 	</div>
 
 	<div class="row">

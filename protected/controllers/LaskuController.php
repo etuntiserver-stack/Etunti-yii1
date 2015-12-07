@@ -344,7 +344,7 @@ class LaskuController extends Controller
 		if(!empty($a->maksuehto))
 		$erapaiva = date("Y-m-d",strtotime("+$a->maksuehto day"));
 
-		echo $a->laskutus_kanava."//".$a->maksuehto."//".$tyyppi."//".$a->osoite."//".$a->postinumero."//".$a->kaupunki."//".$a->yhteyshenkilo."//".$a->puhelin."//".$kodeOn."//".$erapaiva."//".$a->valittajan_tunnus."//".$a->verkkolaskuosoite;
+		echo $a->laskutus_kanava."//".$a->maksuehto."//".$tyyppi."//".$a->osoite."//".$a->postinumero."//".$a->kaupunki."//".$a->yhteyshenkilo."//".$a->puhelin."//".$kodeOn."//".$erapaiva."//".$a->valittajan_tunnus."//".$a->verkkolaskuosoite."//".$a->muistutuslasku_auto."//".$a->kirjeenluokka;
 	}
 
 
@@ -416,7 +416,7 @@ class LaskuController extends Controller
 
 
 			$viite = Viitenumero($model->as_nro."00".$model->id);
-			Lasku::model()->updatebypk($model->id, array('viitenumero'=>$viite));
+			Lasku::model()->updatebypk($model->id, array('viitenumero'=>$viite, 'laskunumero'=>$model->id));
 
 			foreach($_POST['tkoodi'] as $key=>$val)
 			{
