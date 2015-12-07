@@ -139,6 +139,11 @@ return array(
 	// application components
 	'components'=>array(
 
+   'session' => array(
+      'class' => 'CDbHttpSession',
+      'timeout' => 1,
+   ),
+
 /* pdf */
     'ePdf' => array(
         'class'         => 'ext.yii-pdf.EYiiPdf',
