@@ -77,7 +77,7 @@ if(isset($model->id))
   </div>
   <div class="col-sm-3">
 		<?php echo $form->labelEx($model,'pituus'); ?>
-		<input type="text" name="Tyovuoroot[pituus]" id="pituus" class="form-control" value="<?php echo $model->pituus; ?>">
+		<input type="text" name="Tyovuoroot[pituus]" id="pituus" class="form-control timeVuorot" value="<?php echo $model->pituus; ?>">
   </div>
 </div>
 
