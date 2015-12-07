@@ -87,7 +87,11 @@ class LaskuController extends Controller
 
 		$this->redirect(array('update','id'=>$model->id));
 
+		} else {
+		var_dump($model->getErrors());
 		}
+
+
 	}
 
 	public function actionFinvoice($id)

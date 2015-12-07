@@ -46,6 +46,7 @@ class Asiakkaat extends DB2ActiveRecord
 		// will receive user inputs.
 		return array(
 			array('tyyppi, postinumero, osoite, puhelin, sahkoposti', 'required'),
+                        array('asiakasnumero','unique', 'message'=>'Tämä asiakasnumero on jo olemassa!'),
 			//array('etunimi, sukunimi, osoite, kaupunki, postinumero, puhelin, sahkoposti, ryhma, aktiivinen', 'required'),
 			array('kirjeenluokka, muistutuslasku_auto, ryhma, aktiivinen', 'numerical', 'integerOnly'=>true),
 			array('myyja, postinumero, yhteyshenkilo, yrityksen_nimi, y_tunnus, kaupunki, puhelin, sahkoposti', 'length', 'max'=>100),
