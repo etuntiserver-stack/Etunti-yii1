@@ -350,8 +350,13 @@ $(".poistaKuva").click(function(){
             return false;
     }
 
+        $lat = '';
+        $lng = '';
+
     	$coordinates = getlatlong($model->osoite);
+	if(isset($coordinates->results[0]->geometry->location->lat))
         $lat = $coordinates->results[0]->geometry->location->lat;
+	if(isset($coordinates->results[0]->geometry->location->lng))
         $lng = $coordinates->results[0]->geometry->location->lng;
 
     	//print_r($coordinates);
