@@ -337,7 +337,78 @@ $(".poistaKuva").click(function(){
 </script>
 
 
-<?php /*
+<?php
+
+    function getlatlong($address)
+    {
+        $url = 'http://maps.googleapis.com/maps/api/geocode/json?address=' . urlencode($address) . '&sensor=true';
+        $json = @file_get_contents($url);
+        $data = json_decode($json);
+        if ($data->status == "OK")
+            return $data;
+        else
+            return false;
+    }
+
+    	$coordinates = getlatlong($model->osoite);
+        $lat = $coordinates->results[0]->geometry->location->lat;
+        $lng = $coordinates->results[0]->geometry->location->lng;
+
+    	//print_r($coordinates);
+
+?>
+
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      #map-canvas {
+        width: 100%;
+        height: 400px;
+      }
+    </style>
+    <script src="https://maps.googleapis.com/maps/api/js"></script>
+    <script>
+
+window.initialize = function() {
+    var lat = "<?php echo $lat; ?>";
+    var lng = "<?php echo $lng; ?>";
+
+    var sijainti = document.getElementById('Kohteet_gps_sijainti').value;
+    if(sijainti == '')
+    document.getElementById('Kohteet_gps_sijainti').value="<?php echo $lat; ?>,<?php echo $lng; ?>";
+
+    var myLatlng = new google.maps.LatLng(lat, lng);
+    var mapCanvas = document.getElementById('map-canvas');
+    var mapOptions = {
+        center: myLatlng,          
+        zoom: 14,
+    }
+    var map = new google.maps.Map(mapCanvas, mapOptions);
+    var marker = new google.maps.Marker({
+      position: myLatlng,
+      map: map,
+      title:"123"
+      });
+    var latLng = marker.getPosition(); 
+    map.setCenter(latLng);
+
+  }
+
+  google.maps.event.addDomListener(window, 'load', initialize);
+
+    </script>
+  </head>
+  <body>
+    <div id="map-canvas"></div>
+  </body>
+</html>
+
+
+
+<?php
+ /*
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'tyoryhma'); ?>
