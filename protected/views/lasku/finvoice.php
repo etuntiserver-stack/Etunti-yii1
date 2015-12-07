@@ -87,7 +87,13 @@ if($lasku['laskutus'] == 'verkkolasku'){
 if($lasku['laskutus'] == 'sahkoposti')
   $sendtype = 'email';
 
+  $sensible = 0;
+if($lasku['muistutuslasku_auto'] != $sensible)
+  $sensible = $lasku['muistutuslasku_auto'];
 
+  $postclass = 1;
+if($lasku['kirjeenluokka'] != $postclass)
+  $postclass = $lasku['kirjeenluokka'];
 
 /* Hae siirtoavain (korvaa cid ja apicode omillasi) */
 $transferkey = getTransferKey ($cid, $api);
@@ -133,11 +139,11 @@ $xml = encodeXml (array(
                 "freetext" => "",
                 "sendtype" => $sendtype, # laskun lähetystapa
                 "cashbill" => 0, # 0 = ei käteiskuitti
-                "sensible" => 0, # 0 = lähetä muistutus automaattisesti
+                "sensible" => $sensible, # 0 = lähetä muistutus automaattisesti
                 //"ownref" => "x123", # sisäinen viite
                 //"ordernumber" => "10232", # tilausnumero
                 "negvat" => 0, # 0 = ei käänteistä alvia
-                "postclass" => 1, # 1 = postitus 1.luokassa
+                "postclass" => $postclass, # 1 = postitus 1.luokassa
                 "color" => 0, # 0 = mustavalko
                 //"model" => "Malli tai merkki",
                 "printoperator" => "enfo", # tulostusoperaattori
@@ -207,6 +213,7 @@ $xml = encodeXml (array(
                         "vatamount" => 0,
                         "netamount" => 100.00,
                         "debit" => null,
+
                         "credit" => 100.00,
                         "desc" => "Rupi-webhotelli"
                     ),
