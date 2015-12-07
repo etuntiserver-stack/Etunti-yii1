@@ -5,6 +5,7 @@ $did = date("Ymd",strtotime($pvm));
 
 	$muutos = false;
 	$tun = 0;
+	$get = array();
 
        	$criteria = new CDbCriteria();
 	$criteria->condition = " tid = '".$tid."' 
@@ -21,7 +22,7 @@ $did = date("Ymd",strtotime($pvm));
 	   if($tvVal->id){
 	   $muutos = true;
 
-	   $get[strtotime($tvVal->aloitan)] = $tvVal->id."//".$tvVal->aloitan."//".$tvVal->loppui."//".$tvVal->kohde_kannasta."//".$did."//".$tid."//".$muutos."//".(strtotime($tvVal->loppui)-strtotime($tvVal->aloitan))."//".$tvVal->kid."//".$tvVal->asiakas_hyvaksy."//".$tvVal->tietoja."//".$tvVal->sairaus;
+	   $get[strtotime($tvVal->loppui)] = $tvVal->id."//".$tvVal->aloitan."//".$tvVal->loppui."//".$tvVal->kohde_kannasta."//".$did."//".$tid."//".$muutos."//".(strtotime($tvVal->loppui)-strtotime($tvVal->aloitan))."//".$tvVal->kid."//".$tvVal->asiakas_hyvaksy."//".$tvVal->tietoja."//".$tvVal->sairaus;
 
 	  $tvVal->loppui = date("Y-m-d H:i",strtotime($tvVal->loppui));
 	  $tvVal->aloitan = date("Y-m-d H:i",strtotime($tvVal->aloitan));
@@ -47,7 +48,7 @@ $did = date("Ymd",strtotime($pvm));
 	   if($tvVal->id){
 	   $muutos = false;
 
-	   $get[strtotime($tvVal->aloitan)] = $tvVal->id."//".$tvVal->aloitan."//".$tvVal->loppui."//".$tvVal->kohde_kannasta."//".$did."//".$tid."//".$muutos."//".(strtotime($tvVal->loppui)-strtotime($tvVal->aloitan))."//".$tvVal->id."//".$tvVal->asiakas_hyvaksy."////".$tvVal->sairaus;
+	   $get[strtotime($tvVal->loppui)] = $tvVal->id."//".$tvVal->aloitan."//".$tvVal->loppui."//".$tvVal->kohde_kannasta."//".$did."//".$tid."//".$muutos."//".(strtotime($tvVal->loppui)-strtotime($tvVal->aloitan))."//".$tvVal->id."//".$tvVal->asiakas_hyvaksy."////".$tvVal->sairaus;
 
 
 	  $tvVal->loppui = date("Y-m-d H:i",strtotime($tvVal->loppui));
@@ -64,17 +65,16 @@ $did = date("Ymd",strtotime($pvm));
 
 	} else {
 
-		if(isset($get) and count($get) > 0)
-		{
+		//if(isset($get) and count($get) > 0)
+		//{
 		   ksort($get);
-	
-		   foreach($get as $v)
+		   foreach($get as $v){
 		      $this->renderPartial('al',array('str'=>$v));
-	
-		} else {
+		   }
+		//} else {
 	
 		      //$this->renderPartial('al',array('str'=>$get[strtotime($tvVal->aloitan)]));
-		}
+		//}
 
 	}
 	
