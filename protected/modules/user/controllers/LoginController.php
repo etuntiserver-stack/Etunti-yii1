@@ -36,6 +36,7 @@ class LoginController extends Controller
 			    Yii::app()->user->setState('domain', $_POST['UserLogin']['domain']);
 
 
+
 			    $domainit=Domainit::model()->find(" domain = '".$_POST['UserLogin']['domain']."' ");
 			    if(isset($domainit->paketti))
 			    Yii::app()->user->setState('adminPaketti', $domainit->paketti);
