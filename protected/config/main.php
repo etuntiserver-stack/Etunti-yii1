@@ -139,12 +139,9 @@ return array(
 	// application components
 	'components'=>array(
 
-   'session' => array(
-      'cookieParams' => array(
-         'lifetime' => 86400,
-         'timeout' => 3600*4,
-      ),
-   ),
+'session' => array(
+    'timeout' => 28800,
+),
 
 /* pdf */
     'ePdf' => array(
