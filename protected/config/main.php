@@ -140,7 +140,10 @@ return array(
 	'components'=>array(
 
    'session' => array(
-      'timeout' => 300,
+      'cookieParams' => array(
+         'lifetime' => 86400,
+         'timeout' => 3600*4,
+      ),
    ),
 
 /* pdf */
