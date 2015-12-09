@@ -2,7 +2,11 @@
 /* @var $this MobileController */
 /* @var $data Mobile */
 
+		$matka = '';
+		$sum = '';
+
 		$return = $this->toteutu($data->id,"palkkataulukko");
+		$sum = $return[0]+$return[1]+$this->matkaIlta($data->id);
 
 		if($return[0] != 0)
 		$return[0] = $this->sprint($return[0]).'<br>('.$this->num($return[0]).')';
@@ -27,14 +31,15 @@
 
 
 
-  $matka = $this->renderPartial('//mobile/tidfromtomatkat',array(
+
+  $matkaM = $this->renderPartial('//mobile/tidfromtomatkat',array(
 		'from'=>Yii::app()->session['from'],
 		'to'=>Yii::app()->session['to'],
 		'tid'=>$data->id
 		),true);
 
-		if($matka != 0)
-		$matka = $this->sprint($matka).'<br>('.$this->num($matka).')';
+		if($matkaM != 0)
+		$matka = $this->sprint($matkaM).'<br>('.$this->num($matkaM).')';
 
   $lisatt = $this->renderPartial('//lisatyotunnit/tidfromto',array(
 		'from'=>Yii::app()->session['from'],
@@ -53,6 +58,10 @@
 		'to'=>Yii::app()->session['to'],
 		'tid'=>$data->id
 		),true);
+
+
+		$sum = $matkaM+$sum;
+		$sum = $this->num($sum);
 ?>
 
 <tr>
@@ -62,6 +71,7 @@
 	<td><?php echo $matka; ?></td>
 	<td><?php echo $return[0]; ?></td>
 	<td><?php echo $return[1].$matkaIlta; ?></td>
+	<td><?php echo $sum; ?></td>
 	<td><?php echo $return[2]; ?></td>
 	<td><?php echo $return[3]; ?></td>
 	<td><?php echo $korv; ?></td>
