@@ -64,8 +64,8 @@
 
 
 		$sum = $matkaM+$sum;
-		$sum = $this->num($sum);
-		$sumI = $this->num($sumI);
+		$sum = $this->sprint($sum).'<br>('.$this->num($sum).')';
+		$sumI = $this->sprint($sumI).'<br>('.$this->num($sumI).')';
 ?>
 
 <tr>
