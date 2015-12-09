@@ -324,6 +324,13 @@ $model->viivastyskorko = $asetukset->viivastyskorko;
 		<?php echo $form->textField($model,'viitemme',array('size'=>60,'maxlength'=>255,'class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'viitemme'); ?>
 	</div>
+
+	<div class="row">
+		<?php echo $form->labelEx($model,'freetext'); ?>
+		<?php echo $form->textarea($model,'freetext',array('size'=>60,'maxlength'=>255,'class'=>'form-control input-sm')); ?>
+		<?php echo $form->error($model,'freetext'); ?>
+	</div>
+
   </div>
 </div>
 
