@@ -35,7 +35,7 @@
 		if(isset($model->asiakas_id) and !empty($model->asiakas_id))
 		{
         	  $aon = Asiakkaat::model()->findbypk($model->asiakas_id);
-		  if(!empty($aa->yrityksen_nimi))
+		  if(!empty($aon->yrityksen_nimi))
 		    echo '<option value="'.$aon->id.'">'.$aon->yrityksen_nimi.'</option>';
 		  elseif(empty($aon->yhteyshenkilo) and empty($aon->yrityksen_nimi))
 		    echo '<option value="'.$aon->id.'">nimet puutuu '.$aon->id.'</option>';

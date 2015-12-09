@@ -84,7 +84,7 @@ $asiakasnumero = 'voidaan käyttää oleva ID numero';
 
 	<div class="row ashidd_a">
 		<?php echo $form->labelEx($model,'postinumero'); ?>
-		<?php echo $form->textField($model,'postinumero',array('class'=>'form-control input-sm')); ?>
+		<?php echo $form->textField($model,'postinumero',array('class'=>'form-control input-sm','maxlength'=>5)); ?>
 		<?php echo $form->error($model,'postinumero'); ?>
 	</div>
 

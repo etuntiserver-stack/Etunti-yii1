@@ -83,7 +83,7 @@ class Lasku extends DB2ActiveRecord
 			array('kirjeenluokka, muistutuslasku_auto, lid, yid, as_nro, laskunumero', 'numerical', 'integerOnly'=>true),
 			array('tyyppi, yritys, nimi, sahkoposti, v_tunnus, yhteyshenkilo, nimitarkenne, t_yritys, t_nimi, t_osoite, t_toimipaikka, t_sahkoposti, toimitusosoite, viitenumero, saaja_iban, maksettu_euro, laskun_nimetys, postita_jobid, trust_jobid', 'length', 'max'=>100),
 			array('y_tunnus, toimipaikka, laskutus, puhelin, t_y_tunnus, t_puhelin, viivastyskorko, tilanne, tapahtumapvm', 'length', 'max'=>50),
-			array('osoite, verkkolaskuosoite, saaja_virtualkoodi', 'length', 'max'=>255),
+			array('viitenne, viitemme, osoite, verkkolaskuosoite, saaja_virtualkoodi', 'length', 'max'=>255),
 			array('postinumero, t_postinumero', 'length', 'max'=>10),
 			array('paivays, erapaiva, toimituspaiva, maksuehto, yhteensa_total_verot, yhteensa_total_veroton, yhteensa_total, hyvityslasku', 'length', 'max'=>20),
 			array('response, response_finvoice', 'length', 'max'=>5000),
@@ -159,6 +159,8 @@ class Lasku extends DB2ActiveRecord
 			'tapahtumapvm' => 'Tapahtuma pvm',
 			'muistutuslasku_auto'=>'Muistutuslasku automaatiseesti',
 			'kirjeenluokka'=>'Kirjeenluokka',
+			'viitenne'=>'Viitenne',
+			'viitemme'=>'Viitemme',
 		);
 	}
 
@@ -223,6 +225,8 @@ class Lasku extends DB2ActiveRecord
 		$criteria->compare('tapahtumapvm',$this->tapahtumapvm,true);
 		$criteria->compare('muistutuslasku_auto',$this->muistutuslasku_auto,true);
 		$criteria->compare('kirjeenluokka',$this->kirjeenluokka,true);
+		$criteria->compare('viitenne',$this->viitenne,true);
+		$criteria->compare('viitemme',$this->viitemme,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
