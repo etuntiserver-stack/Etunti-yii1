@@ -31,6 +31,7 @@ td,th{
   <th><?php echo Yii::t('main', 'Matkat'); ?></th>
   <th><?php echo Yii::t('main', 'Työtunnit'); ?></th>
   <th><?php echo Yii::t('main', 'Ilta'); ?></th>
+  <th><?php echo Yii::t('main', 'Sum'); ?></th>
   <th><?php echo Yii::t('main', 'Yö'); ?></th>
   <th><?php echo Yii::t('main', 'Su'); ?></th>
   <th><?php echo Yii::t('main', 'Korvaus'); ?></th>
