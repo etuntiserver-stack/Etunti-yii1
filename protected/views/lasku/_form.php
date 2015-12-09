@@ -45,6 +45,7 @@ echo '<input type="hidden" id="forTilanne" value="0">';
 $asetukset = Asetukset::model()->findbypk(1);
 $model->yid = $asetukset->id;
 $model->saaja_iban = $asetukset->iban;
+if(empty($model->viivastyskorko))
 $model->viivastyskorko = $asetukset->viivastyskorko;
 
 ?>
