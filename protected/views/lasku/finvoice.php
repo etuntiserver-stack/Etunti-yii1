@@ -95,6 +95,10 @@ if($lasku['muistutuslasku_auto'] != $sensible)
 if($lasku['kirjeenluokka'] != $postclass)
   $postclass = $lasku['kirjeenluokka'];
 
+
+
+
+
 /* Hae siirtoavain (korvaa cid ja apicode omillasi) */
 $transferkey = getTransferKey ($cid, $api);
 if (!$transferkey) {
@@ -125,7 +129,7 @@ $xml = encodeXml (array(
                 "vatid" => "", # alv-tunniste
                 "evoice" => $evoice, # verkkolaskuosoite
                 "evoiceint" => $evoiceint, # välittäjän tunnus
-                "overdueinterest" => "", # korkopros: tyhjä = oletus
+                "overdueinterest" => $lasku['viivastyskorko'], # korkopros: tyhjä = oletus
                 //"billnum" => $lasku['laskunumero'], # laskun numero
                 "billcode" => "", # tilitysviite tai viesti
                 "ourcode" => $lasku['viitemme'],
