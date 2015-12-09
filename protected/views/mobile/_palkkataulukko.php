@@ -4,9 +4,12 @@
 
 		$matka = '';
 		$sum = '';
+		$sumI = '';
 
 		$return = $this->toteutu($data->id,"palkkataulukko");
-		$sum = $return[0]+$return[1]+$this->matkaIlta($data->id);
+
+		$sum = $return[0];
+		$sumI = $return[1]+$return[2]+$this->matkaIlta($data->id);
 
 		if($return[0] != 0)
 		$return[0] = $this->sprint($return[0]).'<br>('.$this->num($return[0]).')';
@@ -62,6 +65,7 @@
 
 		$sum = $matkaM+$sum;
 		$sum = $this->num($sum);
+		$sumI = $this->num($sumI);
 ?>
 
 <tr>
@@ -70,8 +74,9 @@
 	<td><?php echo $tp; ?></td>
 	<td><?php echo $matka; ?></td>
 	<td><?php echo $return[0]; ?></td>
-	<td><?php echo $return[1].$matkaIlta; ?></td>
 	<td><?php echo $sum; ?></td>
+	<td><?php echo $return[1].$matkaIlta; ?></td>
+	<td><?php echo $sumI; ?></td>
 	<td><?php echo $return[2]; ?></td>
 	<td><?php echo $return[3]; ?></td>
 	<td><?php echo $korv; ?></td>
