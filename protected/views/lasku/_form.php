@@ -617,7 +617,7 @@ $model->viivastyskorko = $asetukset->viivastyskorko;
   </div>
 <?php endif; ?>
 
-<?php/* if(isset($model->id) and $model->response_finvoice != '' and $model->trust_jobid != '') : ?>
+<?php /* if(isset($model->id) and $model->response_finvoice != '' and $model->trust_jobid != '') : ?>
   <div class="col-sm-6">
 	<textarea class="form-control" rows="10"><?php echo $model->response_finvoice; ?></textarea>
   </div>
