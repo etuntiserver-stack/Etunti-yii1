@@ -45,7 +45,7 @@ class Asiakkaat extends DB2ActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('tyyppi, postinumero, osoite, puhelin, sahkoposti', 'required'),
+			array('tyyppi, postinumero, osoite, puhelin', 'required'),
                         array('asiakasnumero','unique', 'message'=>'Tämä asiakasnumero on jo olemassa!'),
 			//array('etunimi, sukunimi, osoite, kaupunki, postinumero, puhelin, sahkoposti, ryhma, aktiivinen', 'required'),
 			array('kirjeenluokka, muistutuslasku_auto, ryhma, aktiivinen', 'numerical', 'integerOnly'=>true),

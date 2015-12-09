@@ -40,6 +40,7 @@ $('.search-form form').submit(function(){
      <option value="../laskuHistoria/maksu_paakirja"><?php echo Yii::t('main','Maksu pääkirja'); ?></option>
      <option><?php echo Yii::t('main','ALV lista'); ?></option>
      <option value="../laskuHistoria/admin"><?php echo Yii::t('main','Lasku historia'); ?></option>
+     <option value="../laskuHistoria/reskontraluettelo"><?php echo Yii::t('main','Reskontraluettelo'); ?></option>
      </select>
      <button class="btn btn-primary btn-sm" id="haeRaportti"><?php echo Yii::t('main','Hae'); ?></button>
 

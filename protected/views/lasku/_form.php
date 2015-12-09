@@ -313,6 +313,17 @@ $model->viivastyskorko = $asetukset->viivastyskorko;
 		<?php echo $form->error($model,'saaja_iban'); ?>
 	</div>
 
+	<div class="row">
+		<?php echo $form->labelEx($model,'viitenne'); ?>
+		<?php echo $form->textField($model,'viitenne',array('size'=>60,'maxlength'=>255,'class'=>'form-control input-sm')); ?>
+		<?php echo $form->error($model,'viitenne'); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->labelEx($model,'viitemme'); ?>
+		<?php echo $form->textField($model,'viitemme',array('size'=>60,'maxlength'=>255,'class'=>'form-control input-sm')); ?>
+		<?php echo $form->error($model,'viitemme'); ?>
+	</div>
   </div>
 </div>
 
@@ -729,6 +740,8 @@ function Rivi(){
   eachLaskenta();
 
 function eachLaskenta(){
+
+
 
   $("#rivit input").each(function() {
 

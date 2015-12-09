@@ -128,8 +128,8 @@ $xml = encodeXml (array(
                 "overdueinterest" => "", # korkopros: tyhjä = oletus
                 //"billnum" => $lasku['laskunumero'], # laskun numero
                 "billcode" => "", # tilitysviite tai viesti
-                //"ourcode" => $lasku['viitenumero'],
-               // "yourcode" => "Asiakkaan viite",
+                "ourcode" => $lasku['viitemme'],
+                "yourcode" => $lasku['viitenne'],
                 "email" => $lasku['sahkoposti'], # 1.email osoite
                 "email2" => "", # 2.email osoite
                 //"salesman" => "MM", # vapaavalintainen myyjän tunniste
