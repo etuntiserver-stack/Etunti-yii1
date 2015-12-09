@@ -83,13 +83,13 @@ class Lasku extends DB2ActiveRecord
 			array('kirjeenluokka, muistutuslasku_auto, lid, yid, as_nro, laskunumero', 'numerical', 'integerOnly'=>true),
 			array('tyyppi, yritys, nimi, sahkoposti, v_tunnus, yhteyshenkilo, nimitarkenne, t_yritys, t_nimi, t_osoite, t_toimipaikka, t_sahkoposti, toimitusosoite, viitenumero, saaja_iban, maksettu_euro, laskun_nimetys, postita_jobid, trust_jobid', 'length', 'max'=>100),
 			array('y_tunnus, toimipaikka, laskutus, puhelin, t_y_tunnus, t_puhelin, viivastyskorko, tilanne, tapahtumapvm', 'length', 'max'=>50),
-			array('viitenne, viitemme, osoite, verkkolaskuosoite, saaja_virtualkoodi', 'length', 'max'=>255),
+			array('freetext, viitenne, viitemme, osoite, verkkolaskuosoite, saaja_virtualkoodi', 'length', 'max'=>255),
 			array('postinumero, t_postinumero', 'length', 'max'=>10),
 			array('paivays, erapaiva, toimituspaiva, maksuehto, yhteensa_total_verot, yhteensa_total_veroton, yhteensa_total, hyvityslasku', 'length', 'max'=>20),
 			array('response, response_finvoice', 'length', 'max'=>5000),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, lid, yid, time, tyyppi, yritys, y_tunnus, nimi, as_nro, osoite, postinumero, toimipaikka, laskutus, sahkoposti, verkkolaskuosoite, v_tunnus, yhteyshenkilo, nimitarkenne, puhelin, t_yritys, t_y_tunnus, t_nimi, t_osoite, t_postinumero, t_toimipaikka, t_puhelin, t_sahkoposti, toimitusosoite, paivays, erapaiva, toimituspaiva, maksuehto, viitenumero, viivastyskorko, yhteensa_total_verot, yhteensa_total_veroton, yhteensa_total, saaja_iban, saaja_virtualkoodi, tilanne, maksettu_euro, hyvityslasku, laskun_nimetys, response, response_finvoice, tapahtumapvm, kirjeenluokka, muistutuslasku_auto', 'safe', 'on'=>'search'),
+			array('id, lid, yid, time, tyyppi, yritys, y_tunnus, nimi, as_nro, osoite, postinumero, toimipaikka, laskutus, sahkoposti, verkkolaskuosoite, v_tunnus, yhteyshenkilo, nimitarkenne, puhelin, t_yritys, t_y_tunnus, t_nimi, t_osoite, t_postinumero, t_toimipaikka, t_puhelin, t_sahkoposti, toimitusosoite, paivays, erapaiva, toimituspaiva, maksuehto, viitenumero, viivastyskorko, yhteensa_total_verot, yhteensa_total_veroton, yhteensa_total, saaja_iban, saaja_virtualkoodi, tilanne, maksettu_euro, hyvityslasku, laskun_nimetys, response, response_finvoice, tapahtumapvm, kirjeenluokka, muistutuslasku_auto, freetext, viitenne, viitemme', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -161,6 +161,7 @@ class Lasku extends DB2ActiveRecord
 			'kirjeenluokka'=>'Kirjeenluokka',
 			'viitenne'=>'Viitenne',
 			'viitemme'=>'Viitemme',
+			'freetext'=>'Viesti',
 		);
 	}
 
@@ -227,6 +228,7 @@ class Lasku extends DB2ActiveRecord
 		$criteria->compare('kirjeenluokka',$this->kirjeenluokka,true);
 		$criteria->compare('viitenne',$this->viitenne,true);
 		$criteria->compare('viitemme',$this->viitemme,true);
+		$criteria->compare('freetext',$this->freetext,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
