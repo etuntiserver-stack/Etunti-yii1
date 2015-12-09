@@ -28,7 +28,7 @@ class LaskuHistoriaController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view','paivakirja', 'avoimet', 'maksu_paivakirja', 'paakirja'),
+				'actions'=>array('index','view','paivakirja', 'avoimet', 'maksu_paivakirja', 'paakirja', 'maksu_paakirja'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
@@ -264,6 +264,43 @@ class LaskuHistoriaController extends Controller
 		} else {
 
 		$this->render('paakirja',array(
+			'model'=>$model,
+		));
+
+		}
+	}
+
+	public function actionMaksu_paakirja()
+	{
+
+		if(Yii::app()->request->getPost('from'))
+		Yii::app()->session['from'] = date("Y-m-d",strtotime(Yii::app()->request->getPost('from')));
+	
+		if(Yii::app()->request->getPost('to'))
+		Yii::app()->session['to'] = date("Y-m-d",strtotime(Yii::app()->request->getPost('to')));
+
+       		$criteria = new CDbCriteria();
+       		$criteria->order = " paivays DESC ";
+       		$criteria->condition = "
+			id IN (select lid from lasku_historia where trust_statuscode='101')
+
+		";
+
+		if(Yii::app()->session['from'] and Yii::app()->session['to'])
+        	$criteria->addCondition ("DATE(paivays) BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."' ");
+
+		$model = Lasku::model()->findAll($criteria);
+
+		if(isset($_POST['tulosta']))
+		{
+	          $html2pdf = Yii::app()->ePdf->HTML2PDF('P', 'A4', 'en');
+		  $html2pdf->setDefaultFont('Arial');
+	          $html2pdf->WriteHTML($this->renderPartial('maksu_paakirja',array('model'=>$model), true));
+	          $html2pdf->Output();
+
+		} else {
+
+		$this->render('maksu_paakirja',array(
 			'model'=>$model,
 		));
 
