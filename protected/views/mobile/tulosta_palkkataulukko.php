@@ -92,7 +92,7 @@ td,th{
   if($matka != 0)
   $matka = $this->sprint($matka).'<br>('.$this->num($matka).')';
   if($matkaIlta != 0)
-  $matkaIlta = '<b>Matkat</b>:<br>'.$this->num($matkaIlta);
+  $matkaIlta = '<br><b>Matkat</b>:<br>'.$this->num($matkaIlta);
   ?>
   <tfoot>
   <tr>

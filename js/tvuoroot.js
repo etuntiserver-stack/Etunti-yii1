@@ -1,5 +1,6 @@
 $(document).ready(function(){
 
+$("#showres").draggable();
 
 $("#autoInsert").click(function(){
 
