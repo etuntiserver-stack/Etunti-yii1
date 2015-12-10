@@ -82,6 +82,7 @@
 	<td><?php echo $return[3]; ?></td>
 	<td><?php echo $this->num($sl); ?></td>
 	<td><?php echo $spl; ?></td>
+	<td><?php echo $this->num($ls); ?></td>
 	<td><?php echo $korv; ?></td>
 	<td><?php echo $lisatt; ?></td>
 	<td><?php echo $ennakko; ?></td>

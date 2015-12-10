@@ -97,7 +97,7 @@ $forPVM = date('d.m.Y',strtotime($model->aloitan));
 	<div class="row">
 		<?php echo $form->labelEx($model,'sairaus'); ?>
 		<?php 
-        	$tal = array(1=>'Palkaton',2=>'Palkallinen');
+        	$tal = array(1=>'Palkaton',2=>'Palkallinen',3=>'Lapsi sairaus');
 		echo $form->dropDownList($model,'sairaus', $tal, 
 		array('empty'=>'Valitse','class'=>'form-control input-sm')) ?>
 		<?php echo $form->error($model,'sairaus'); ?>
