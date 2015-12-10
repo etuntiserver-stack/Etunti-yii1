@@ -33,7 +33,7 @@ class MobileController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin', 'delete', 'create', 'update', 'index', 'index_a', 'view', 'updatetime', 'showkohteet', 'yhteenveto', 'kyhteenveto', 'yhteenveto_m', 'historia', 'poistaKohde', 'total_suunniteltu', 'total_toteutu', 'total_luettu', 'kesto', 'index_ajax', 'raportit', 'uusirivi', 'palkkataulukko', 'tidfromtomatkat', 'tyobykohde', 'asiakas_hyvaksyminen', 'kohdebytekija' ,'kyhteenveto_tuntemattomat'),
+				'actions'=>array('admin', 'delete', 'create', 'update', 'index', 'index_a', 'view', 'updatetime', 'showkohteet', 'yhteenveto', 'kyhteenveto', 'yhteenveto_m', 'historia', 'poistaKohde', 'total_suunniteltu', 'total_toteutu', 'total_luettu', 'kesto', 'index_ajax', 'raportit', 'uusirivi', 'palkkataulukko', 'tidfromtomatkat', 'tidfromtoSL', 'tidfromtoSPL', 'tyobykohde', 'asiakas_hyvaksyminen', 'kohdebytekija' ,'kyhteenveto_tuntemattomat'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -703,6 +703,96 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		));
 	}
 
+	protected function TidfromtoSL($from,$to,$tid)
+	{
+
+		$result = '';
+
+       		$criteria = new CDbCriteria();
+        	$criteria->select = "
+			SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
+			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit
+		";
+
+	        $criteria->condition = " 
+			aloitan!='' AND loppui!=''
+			AND tid='".$tid."'
+			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
+			BETWEEN '".$from."' AND '".$to."'
+			AND sairaus='2'
+			AND id NOT IN (SELECT kid FROM sivexkuitti_repaired)
+		";
+
+
+		$lu = Mobile::model()->find($criteria);
+
+
+       		$criteria = new CDbCriteria();
+        	$criteria->select = "
+			SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
+			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit
+		";
+
+	        $criteria->condition = " 
+			aloitan!='' AND loppui!=''
+			AND tid='".$tid."'
+			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
+			BETWEEN '".$from."' AND '".$to."'
+			AND sairaus='2'
+		";
+
+
+		$tot = Toteutuneet::model()->find($criteria);
+
+		if(isset($lu->l_tunnit))
+		$result = $lu->l_tunnit;
+
+		if(isset($tot->l_tunnit))
+		$result = $result+$tot->l_tunnit;
+
+
+		return $result;
+	}
+
+
+	protected function TidfromtoSPL($from,$to,$tid)
+	{
+
+		$result = '';
+
+       		$criteria = new CDbCriteria();
+        	$criteria->select = "COUNT(*) as count";
+
+	        $criteria->condition = "
+			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
+			BETWEEN '".$from."' AND '".$to."' 
+			AND tid='".$tid."'
+			AND sairaus='1'
+			AND id NOT IN (SELECT kid FROM sivexkuitti_repaired)
+		";
+
+		$lu = Mobile::model()->find($criteria);
+
+       		$criteria = new CDbCriteria();
+        	$criteria->select = "COUNT(*) as count";
+
+	        $criteria->condition = "
+			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
+			BETWEEN '".$from."' AND '".$to."' 
+			AND tid='".$tid."'
+			AND sairaus='1'
+		";
+
+		$tot = Toteutuneet::model()->find($criteria);
+
+		if(isset($lu->count))
+		$result = $lu->count;
+
+		if(isset($tot->count))
+		$result = $result+$tot->count;
+
+		return $result;
+	}
 
 	public function actionPalkkataulukko()
 	{
