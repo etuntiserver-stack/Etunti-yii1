@@ -139,6 +139,10 @@ return array(
 	// application components
 	'components'=>array(
 
+        'session' => array(
+                'timeout' => 3600,
+        ),
+
 /* pdf */
     'ePdf' => array(
         'class'         => 'ext.yii-pdf.EYiiPdf',
