@@ -29,7 +29,7 @@
 		$matkaIlta = 0;
 		$matkaIlta = $this->matkaIlta($data->id);
 		if($matkaIlta != 0)
-		$matkaIlta = '<b>Matkat</b>:<br>'.$this->num($matkaIlta);
+		$matkaIlta = '<br><b>Matkat</b>:<br>'.$this->num($matkaIlta);
 	        else
 		$matkaIlta = '';
 
