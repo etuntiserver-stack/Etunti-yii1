@@ -105,8 +105,8 @@ $(document).ready(function(){
 	//size: "large",
 	onColor: "warning",
 	offColor: "success",
-	onText: "Aktiiviset",
-	offText: "Kaikki"
+	onText: "Kaikki",
+	offText: "Aktiiviset"
   });
 
 $('input[name="aktiivinen"]').bootstrapSwitch('state', true, true);
@@ -122,8 +122,8 @@ $(document).ready(function(){
 	//size: "large",
 	onColor: "warning",
 	offColor: "success",
-	onText: "Aktiiviset",
-	offText: "Kaikki"
+	onText: "Kaikki",
+	offText: "Aktiiviset"
   });
 
 
