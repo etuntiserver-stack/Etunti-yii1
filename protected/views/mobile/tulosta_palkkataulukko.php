@@ -26,15 +26,17 @@ td,th{
   <table>
   <thead>
   <tr>
-  <th class="tulostus_tekija"><?php echo Yii::t('main', 'Työntekijä'); ?></th>
+  <th><?php echo Yii::t('main', 'Työntekijä'); ?></th>
   <th><?php echo Yii::t('main', 'Työpäiviä'); ?></th>
   <th><?php echo Yii::t('main', 'Matkat'); ?></th>
   <th><?php echo Yii::t('main', 'Työtunnit'); ?></th>
-  <th><?php echo Yii::t('main', 'matka+<br>tunnit'); ?></th>
+  <th><?php echo Yii::t('main', 'matka+<br>tunnit yht'); ?></th>
   <th><?php echo Yii::t('main', 'Ilta'); ?></th>
-  <th><?php echo Yii::t('main', 'iltamatka+<br>iltatunnit'); ?></th>
+  <th><?php echo Yii::t('main', 'iltamatka+<br>iltatunnit yht'); ?></th>
   <th><?php echo Yii::t('main', 'Yö'); ?></th>
   <th><?php echo Yii::t('main', 'Su'); ?></th>
+  <th><?php echo Yii::t('main', 'SL'); ?></th>
+  <th><?php echo Yii::t('main', 'SPL<br>Pvm'); ?></th>
   <th><?php echo Yii::t('main', 'Korvaus'); ?></th>
   <th><?php echo Yii::t('main', 'Lisätyötunnit'); ?></th>
   <th><?php echo Yii::t('main', 'Ennakko'); ?></th>
@@ -46,12 +48,21 @@ td,th{
   $totalTp	= 0;
   $tot_sun	=0;
   $tp		= 0;
+  $sl 		= 0;
+  $spl 		= 0;
+  $slYht	= 0;
+  $splYht	= 0;
   foreach($model as $data)
   {
 	$tids[] = $data->id;
 	$tp = $this->Tp($data->id);
 	$totalTp += $tp;
-	$this->renderPartial('_palkkataulukko',array('data'=>$data,'tp'=>$tp));
+  	$sl = $this->TidfromtoSL(Yii::app()->session['from'],Yii::app()->session['to'],$data->id);
+	$slYht += $sl;
+  	$spl = $this->TidfromtoSPL(Yii::app()->session['from'],Yii::app()->session['to'],$data->id);
+	$splYht += $spl;
+	$totalTp += $tp;
+	$this->renderPartial('_palkkataulukko',array('data'=>$data,'tp'=>$tp,'sl'=>$sl,'spl'=>$spl));
   }
 
 	$yht[0] = 0;
@@ -59,6 +70,7 @@ td,th{
 	$yht[2] = 0;
 	$yht[3] = 0;
 	$matka = 0;
+	$matkaIlta = 0;
 
   foreach($tids as $t)
   {
@@ -67,6 +79,8 @@ td,th{
 		'to'=>Yii::app()->session['to'],
 		'tid'=>$t
 		),true);
+
+	$matkaIlta += $this->matkaIlta($t);
 
 	$return = $this->toteutu($t,"palkkataulukko");
 	$yht[0] += $return[0];
@@ -77,16 +91,22 @@ td,th{
 
   if($matka != 0)
   $matka = $this->sprint($matka).'<br>('.$this->num($matka).')';
+  if($matkaIlta != 0)
+  $matkaIlta = '<b>Matkat</b>:<br>'.$this->num($matkaIlta);
   ?>
   <tfoot>
   <tr>
   	<th><?php echo Yii::t('main', 'Yhteensä'); ?></th>
 	<td><?php echo $totalTp; ?></td>
 	<td><?php echo $matka; ?></td>
-	<td><?php echo $this->sprint($yht[0]); ?></td>
-	<td><?php echo $this->sprint($yht[1]); ?></td>
+	<td><?php echo $this->num($yht[0]); ?></td>
+	<td><?php echo '<b>Työt</b>:<br>'.$this->num($yht[1]).$matkaIlta; ?></td>
 	<td><?php echo $this->sprint($yht[2]); ?></td>
 	<td><?php echo $this->sprint($yht[3]); ?></td>
+	<td></td>
+	<td></td>
+	<td><?php echo $this->num($slYht); ?></td>
+	<td><?php echo $splYht; ?></td>
 	<td></td>
 	<td></td>
 	<td></td>
