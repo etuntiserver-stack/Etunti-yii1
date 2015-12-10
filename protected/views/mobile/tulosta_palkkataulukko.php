@@ -2,6 +2,7 @@
 <style>
 table{
 	width: 290px;
+	font-size:65%;
 }
 td,th{
 	padding:3px 7px;
@@ -37,6 +38,7 @@ td,th{
   <th><?php echo Yii::t('main', 'Su'); ?></th>
   <th><?php echo Yii::t('main', 'SL'); ?></th>
   <th><?php echo Yii::t('main', 'SPL<br>Pvm'); ?></th>
+  <th><?php echo Yii::t('main', 'LS'); ?></th>
   <th><?php echo Yii::t('main', 'Korvaus'); ?></th>
   <th><?php echo Yii::t('main', 'Lisätyötunnit'); ?></th>
   <th><?php echo Yii::t('main', 'Ennakko'); ?></th>
@@ -49,20 +51,23 @@ td,th{
   $tot_sun	=0;
   $tp		= 0;
   $sl 		= 0;
+  $ls 		= 0;
   $spl 		= 0;
   $slYht	= 0;
   $splYht	= 0;
+  $lsYht	= 0;
   foreach($model as $data)
   {
 	$tids[] = $data->id;
 	$tp = $this->Tp($data->id);
-	$totalTp += $tp;
   	$sl = $this->TidfromtoSL(Yii::app()->session['from'],Yii::app()->session['to'],$data->id);
 	$slYht += $sl;
+  	$ls = $this->TidfromtoLS(Yii::app()->session['from'],Yii::app()->session['to'],$data->id);
+	$lsYht += $ls;
   	$spl = $this->TidfromtoSPL(Yii::app()->session['from'],Yii::app()->session['to'],$data->id);
 	$splYht += $spl;
 	$totalTp += $tp;
-	$this->renderPartial('_palkkataulukko',array('data'=>$data,'tp'=>$tp,'sl'=>$sl,'spl'=>$spl));
+	$this->renderPartial('_palkkataulukko',array('data'=>$data,'tp'=>$tp,'sl'=>$sl,'spl'=>$spl,'ls'=>$ls,));
   }
 
 	$yht[0] = 0;
@@ -79,6 +84,7 @@ td,th{
 		'to'=>Yii::app()->session['to'],
 		'tid'=>$t
 		),true);
+
 
 	$matkaIlta += $this->matkaIlta($t);
 
@@ -107,6 +113,7 @@ td,th{
 	<td></td>
 	<td><?php echo $this->num($slYht); ?></td>
 	<td><?php echo $splYht; ?></td>
+	<td><?php echo $this->num($lsYht); ?></td>
 	<td></td>
 	<td></td>
 	<td></td>

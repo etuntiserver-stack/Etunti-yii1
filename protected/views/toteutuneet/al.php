@@ -23,8 +23,10 @@
      $spl = '';
   if($sairaus == '1')
      $spl = '<span style="color:red" class="small"> (SPL)</span>';
-  if($sairaus == '2')
+  elseif($sairaus == '2')
      $spl = '<span style="color:red" class="small"> (SL)</span>';
+  elseif($sairaus == '3')
+     $spl = '<span style="color:red" class="small"> (LS)</span>';
 
   if(empty($loppui))
   {
