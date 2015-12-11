@@ -624,12 +624,17 @@ exit;
 		    $historia->palvelu = "trust";
 		    $historia->paydate = $paydate;
 
-		    $lh = LaskuHistoria::model()->find("lid='".$l['id']."'",array('order'=>'id DESC'));
-		    if(!isset($lh->id))
-		    $historia->yht_euro = $l['yhteensa_total'];
-		    else
- 		      if($lh->yht_euro > 0)
+
+	    	    $criteria = new CDbCriteria();
+	    	    $criteria->order = "id DESC";
+	    	    $criteria->condition = " lid='".$l['id']."' ";
+		    $lh = LaskuHistoria::model()->find($criteria));
+		    if(isset($lh->id))
+		    {
 		    	$historia->yht_euro = $lh->yht_euro-$amount;
+		    } else {
+		    	$historia->yht_euro = $l['yhteensa_total'];
+		    }
 
 		    $historia->amount = $amount;
 		    $historia->save();
