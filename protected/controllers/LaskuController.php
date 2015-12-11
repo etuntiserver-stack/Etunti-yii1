@@ -628,7 +628,8 @@ exit;
 		    if(!isset($lh->id))
 		    $historia->yhteensa_total = $l['yhteensa_total'];
 		    else
-		    $historia->yhteensa_total = $lh->yhteensa_total-$amount;
+ 		      if($lh->yhteensa_total > 0)
+		    	$historia->yhteensa_total = $lh->yhteensa_total-$amount;
 
 		    $historia->amount = $amount;
 		    $historia->save();
