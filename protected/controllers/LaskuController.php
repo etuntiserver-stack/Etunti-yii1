@@ -626,10 +626,10 @@ exit;
 
 		    $lh = LaskuHistoria::model()->find("lid='".$l['id']."'",array('order'=>'id DESC'));
 		    if(!isset($lh->id))
-		    $historia->yhteensa_total = $l['yhteensa_total'];
+		    $historia->yht_euro = $l['yhteensa_total'];
 		    else
- 		      if($lh->yhteensa_total > 0)
-		    	$historia->yhteensa_total = $lh->yhteensa_total-$amount;
+ 		      if($lh->yht_euro > 0)
+		    	$historia->yht_euro = $lh->yht_euro-$amount;
 
 		    $historia->amount = $amount;
 		    $historia->save();
