@@ -82,33 +82,37 @@ class LaskuHistoriaController extends Controller
 		$asetukset = Asetukset::model()->findbypk(1);
 		$palvelu = '';
 		if($asetukset->palvelu_tyyppi == 1)
-		$palvelu = 'POSTITA';
+		$palvelu = 'postita';
 		if($asetukset->palvelu_tyyppi == 2)
-		$palvelu = 'TRUST';
+		$palvelu = 'trust';
 
+		if(isset($_POST['avoimet']) and empty($_POST['from']))
+		unset(Yii::app()->session['from']);
+		if(isset($_POST['avoimet']) and empty($_POST['to']))
+		unset(Yii::app()->session['to']);
 
 		if(Yii::app()->request->getPost('from'))
-		Yii::app()->session['from'] = date("Y-m-d",strtotime(Yii::app()->request->getPost('from')));
+		Yii::app()->session['from'] = date("Y-m-d H:i",strtotime(Yii::app()->request->getPost('from')));
 	
 		if(Yii::app()->request->getPost('to'))
-		Yii::app()->session['to'] = date("Y-m-d",strtotime(Yii::app()->request->getPost('to')));
+		Yii::app()->session['to'] = date("Y-m-d H:i",strtotime(Yii::app()->request->getPost('to')));
 
        		$criteria = new CDbCriteria();
-       		$criteria->order = " paivays DESC ";
-       		$criteria->condition = "";
-
+       		$criteria->order = " time DESC ";
 
 		// <-- Trust
-		if($palvelu == 'TRUST')
-       		$criteria->Addcondition ( "
-			id NOT IN (select lid from lasku_historia where trust_statuscode='101')
-		");
+       		$criteria->condition = "
+			palvelu='".$palvelu."'
+			AND trust_statuscode!='101'
+			AND trust_statuscode='0'
+		";
 		// <-- Trust
+       		//$criteria->group = "lid";
 
 		if(Yii::app()->session['from'] and Yii::app()->session['to'])
-        	$criteria->addCondition ("DATE(paivays) BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."' ");
+        	$criteria->addCondition ("time BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."' ");
 
-		$model = Lasku::model()->findAll($criteria);
+		$model = LaskuHistoria::model()->findAll($criteria);
 
 		if(isset($_POST['tulosta']))
 		{

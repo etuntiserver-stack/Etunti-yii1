@@ -612,7 +612,7 @@ exit;
 		    $historia->status = json_encode($r);
 		    $historia->trust_statuscode = $r->statuscode;
 		    $historia->palvelu = "trust";
-		    $historia->yht_euro = $l['yhteensa_total'];
+		    $historia->yht_euro = $r->amount;
 		    $historia->save();
 
 		}

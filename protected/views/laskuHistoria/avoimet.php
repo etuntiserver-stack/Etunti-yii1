@@ -44,10 +44,12 @@ th{
  <div class="col-md-12">
 
   <form action="#" class="form-inline" method="POST">
+  <input type="hidden" name="avoimet">
+
    <b class="glyphicon glyphicon-calendar"></b>
-   <input type="text" name="from" id="from" class="form-control form-group input-sm datepicker" value="<?php echo Yii::app()->session['from']; ?>">
+   <input type="text" name="from" id="from" class="form-control form-group input-sm datetimepicker2" value="<?php echo Yii::app()->session['from']; ?>">
    <b class="glyphicon glyphicon-calendar"></b>
-   <input type="text" name="to" id="to" class="form-control form-group input-sm datepicker" value="<?php echo Yii::app()->session['to']; ?>">
+   <input type="text" name="to" id="to" class="form-control form-group input-sm datetimepicker2" value="<?php echo Yii::app()->session['to']; ?>">
 
    <div class="form-group input-group-btn">
       <input type="submit" class="btn btn-primary btn-sm" value="<?php echo Yii::t('main', 'Hae'); ?>">
@@ -61,10 +63,11 @@ th{
 
 
 
-<table class="table table-bordered table-striped">
+<table class="table table-bordered table-striped small">
  <tr>
   <th><?php echo Yii::t('main','Laskunro'); ?></th>
-  <th><?php echo Yii::t('main','Laskupvm'); ?></th>
+  <th><?php echo Yii::t('main','Status'); ?></th>
+  <th><?php echo Yii::t('main','Tapahtuma pvm'); ?></th>
   <th><?php echo Yii::t('main','Yhteensä'); ?></th>
   <th><?php echo Yii::t('main','Asiakas'); ?></th>
  </tr>

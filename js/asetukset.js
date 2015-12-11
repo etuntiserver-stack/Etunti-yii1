@@ -16,6 +16,10 @@
          format : 'DD.MM.YYYY HH:mm',
     });
 
+    $( ".datetimepicker2" ).datetimepicker({
+         format : 'YYYY.MM.DD HH:mm',
+    });
+
 
 /*
     $( ".datepicker" ).datepicker({
