@@ -631,7 +631,10 @@ exit;
 		    $lh = LaskuHistoria::model()->find($criteria);
 		    if(isset($lh->id))
 		    {
-		    	$historia->yht_euro = $lh->yht_euro-$amount;
+			$amount = str_replace(",",".",$amount);
+			$lh->yht_euro = str_replace(",",".",$lh->yht_euro);
+
+		    	$historia->yht_euro = (float)$lh->yht_euro-(float)$amount;
 		    } else {
 		    	$historia->yht_euro = $l['yhteensa_total'];
 		    }
