@@ -609,12 +609,11 @@ exit;
 		    if(isset($r->paydate) and !empty($r->paydate))
 		    $paydate = $r->paydate;
 
-		    $amount = '';
+		    $amount = 0;
+		    $yhteensa_total = '';
 		    if(isset($r->amount) and !empty($r->amount))
-		    {
 		    $amount = $r->amount;
-		    $yhteensa_total = $l['yhteensa_total']-$r->amount;
-		    }
+
 
 		    // Lasku historia 
 		    $historia = new LaskuHistoria;
@@ -623,10 +622,17 @@ exit;
 		    $historia->status = json_encode($r);
 		    $historia->trust_statuscode = $r->statuscode;
 		    $historia->palvelu = "trust";
-		    $historia->yht_euro = $yhteensa_total;
 		    $historia->paydate = $paydate;
+
+		    $lh = LaskuHistoria::model()->find("lid='".$l['id']."'",array('order'=>'id DESC'));
+		    if(!isset($lh->id))
+		    $historia->yhteensa_total = $l['yhteensa_total'];
+		    else
+		    $historia->yhteensa_total = $lh->yhteensa_total-$amount;
+
 		    $historia->amount = $amount;
 		    $historia->save();
+
 
 		}
 
