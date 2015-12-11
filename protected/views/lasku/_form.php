@@ -416,6 +416,12 @@ $model->viivastyskorko = $asetukset->viivastyskorko;
       <div class="row">
 	<div class="col-sm-6">
 		<div id="getkohdeT" class="form-group"></div>
+	</div><div class="col-sm-6">
+	<br>
+	<?php
+	echo CHtml::dropdownList('tuntipalvelu','palvelu', CHtml::listData(LaskutusTuotteet::model()->findAll(), 'tuotenimi', 'tuotenimi'), 
+	array('empty'=>'Valitse tuote/palvelu','class'=>'form-control valitseTuote input-sm'));
+	?>
 	</div>
       </div>
       <div class="col-sm-12">
@@ -442,6 +448,12 @@ $model->viivastyskorko = $asetukset->viivastyskorko;
        <div class="row">
 	<div class="col-sm-6">
 		<div id="getkohdeKk" class="form-group"></div>
+	</div><div class="col-sm-6">
+	<br>
+	<?php
+	echo CHtml::dropdownList('kkpalvelu','palvelu', CHtml::listData(LaskutusTuotteet::model()->findAll(), 'tuotenimi', 'tuotenimi'), 
+	array('empty'=>'Valitse tuote/palvelu','class'=>'form-control valitseTuote input-sm'));
+	?>
 	</div>
       </div>
       <div class="col-sm-12">
@@ -809,7 +821,7 @@ $(".luoRiviTunti").click(function() {
 	var from = $("#from").val();
 	var to = $("#to").val();
 	var kohteet = $(".selectpicker.h").val();
-
+	var tuotePalvelu = $("#tuntipalvelu").val();
 
 	if (from  === '') 
 	{
@@ -828,7 +840,7 @@ $(".luoRiviTunti").click(function() {
 
 	} 
 
-	    pyyntoRiville(kohteet,from,to);
+	    pyyntoRiville(kohteet,from,to,tuotePalvelu);
 });
 
 
@@ -838,6 +850,7 @@ $(".luoRiviKk").click(function() {
 	var from = $("#fromkk").val();
 	var to = $("#tokk").val();
 	var kohteet = $(".selectpicker.kk").val();
+	var tuotePalvelu = $("#kkpalvelu").val();
 
 
 	if (from  === '') 
@@ -857,12 +870,12 @@ $(".luoRiviKk").click(function() {
 
 	} 
 
-	    pyyntoRiville(kohteet,from,to);
+	    pyyntoRiville(kohteet,from,to,tuotePalvelu);
 
 });
 
 
-function pyyntoRiville(kohteet,from,to){
+function pyyntoRiville(kohteet,from,to,tuotePalvelu){
 
 	    $("#trRivi_1").remove();
 
@@ -897,7 +910,7 @@ function pyyntoRiville(kohteet,from,to){
 	        	$.ajax({
 		           url: 'tr_rivit?id='+spH[0],
 			   type: 'POST',
-			   data: { num : num, from : from, to : to, kpl : tunnit, hinta : spH[1], yksikko : spH[2], onkokohde : spH[3] },
+			   data: { num : num, from : from, to : to, kpl : tunnit, hinta : spH[1], yksikko : spH[2], onkokohde : spH[3], tuotePalvelu : tuotePalvelu },
 		           success: function(data){
 				console.log(value);
 				$("table#TableRivit tbody tr").last().after(data);

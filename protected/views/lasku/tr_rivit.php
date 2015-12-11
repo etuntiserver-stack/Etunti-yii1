@@ -15,6 +15,12 @@
 	$a = Asiakkaat::model()->findbypk($kohde);
 	$osoite = $a->osoite;
 	}
+
+	$tuotePalvelu = '';
+	if(isset($_POST['tuotePalvelu']) and !empty($_POST['tuotePalvelu']))
+	$tuotePalvelu = $_POST['tuotePalvelu'].', ';
+
+	$osoite = $tuotePalvelu.$osoite;
 ?>
 
      <TR class="kaikkiTR" id="trRivi_<?php echo $num; ?>">

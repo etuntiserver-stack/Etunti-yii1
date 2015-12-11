@@ -250,7 +250,7 @@ class LaskuController extends Controller
 	<script type="text/javascript">
  	  $(document).ready(function(){
 		$('.selectpicker').selectpicker({
-		      style: '',
+		      style: 'btn btn-sm btn-default',
 		      //size: 4
 		});
 		/*
