@@ -23,6 +23,14 @@
 	</td>
 
 	<td>
+	<?php echo $data->paydate; ?>
+	</td>
+
+	<td>
+	<?php echo $data->amount; ?>
+	</td>
+
+	<td>
 	<?php echo date("d.m.Y H:i:s",strtotime($data->time)); ?>
 	</td>
 

@@ -41,11 +41,11 @@ class LaskuHistoria extends DB2ActiveRecord
 			//array('lid, time, status, yht_euro', 'required'),
 			array('lid', 'numerical', 'integerOnly'=>true),
 			array('status', 'length', 'max'=>2000),
-			array('yht_euro, palvelu', 'length', 'max'=>50),
+			array('paydate, amount, yht_euro, palvelu', 'length', 'max'=>50),
 			array('trust_statuscode', 'length', 'max'=>100),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, lid, time, status, yht_euro, trust_statuscode', 'safe', 'on'=>'search'),
+			array('id, lid, time, status, yht_euro, trust_statuscode, paydate, amount', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -72,7 +72,9 @@ class LaskuHistoria extends DB2ActiveRecord
 			'status' => 'Response',
 			'yht_euro' => 'Yht Euro',
 			'palvelu' => 'Palvelu',
-			'trust_statuscode'=>'Trust statuscode'
+			'trust_statuscode'=>'Trust statuscode',
+			'paydate' => 'Paydate',
+			'amount' => 'Amount',
 		);
 	}
 
@@ -95,6 +97,8 @@ class LaskuHistoria extends DB2ActiveRecord
 		$criteria->compare('yht_euro',$this->yht_euro,true);
 		$criteria->compare('palvelu',$this->palvelu,true);
 		$criteria->compare('trust_statuscode',$this->trust_statuscode);
+		$criteria->compare('paydate',$this->paydate,true);
+		$criteria->compare('amount',$this->amount,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
