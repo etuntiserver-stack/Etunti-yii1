@@ -104,7 +104,7 @@ class LaskuHistoriaController extends Controller
        		$criteria->condition = "
 			palvelu='".$palvelu."'
 			AND trust_statuscode!='101'
-			AND trust_statuscode='0'
+			
 		";
 		// <-- Trust
        		//$criteria->group = "lid";
