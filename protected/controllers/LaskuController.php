@@ -628,7 +628,7 @@ exit;
 	    	    $criteria = new CDbCriteria();
 	    	    $criteria->order = "id DESC";
 	    	    $criteria->condition = " lid='".$l['id']."' ";
-		    $lh = LaskuHistoria::model()->find($criteria));
+		    $lh = LaskuHistoria::model()->find($criteria);
 		    if(isset($lh->id))
 		    {
 		    	$historia->yht_euro = $lh->yht_euro-$amount;
