@@ -605,6 +605,10 @@ exit;
 		    $tapahtumapvm = date("Y-m-d H:i:s",strtotime(trim($r->statustime)));
 	     	    Lasku::model()->updatebypk($l['id'], array('laskunumero'=>$r->billnum,'tilanne'=>$r->statuscode,'response_finvoice'=>$str,'tapahtumapvm'=>$tapahtumapvm));
 
+		    $amount = $l['yhteensa_total'];
+		    if(isset($r->amount) and !empty($r->amount))
+		    $amount = $r->amount;
+
 		    // Lasku historia 
 		    $historia = new LaskuHistoria;
 		    $historia->time = $tapahtumapvm;
@@ -612,7 +616,7 @@ exit;
 		    $historia->status = json_encode($r);
 		    $historia->trust_statuscode = $r->statuscode;
 		    $historia->palvelu = "trust";
-		    $historia->yht_euro = $r->amount;
+		    $historia->yht_euro = $amount;
 		    $historia->save();
 
 		}
