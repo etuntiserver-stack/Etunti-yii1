@@ -27,7 +27,7 @@
 	</td>
 
 	<td>
-	<?php echo $data->amount; ?>
+	<?php echo number_format($data->amount, 2, ',', ' '); ?>
 	</td>
 
 	<td>
