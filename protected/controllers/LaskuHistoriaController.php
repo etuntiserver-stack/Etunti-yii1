@@ -98,7 +98,7 @@ class LaskuHistoriaController extends Controller
 		Yii::app()->session['to'] = date("Y-m-d H:i",strtotime(Yii::app()->request->getPost('to')));
 
        		$criteria = new CDbCriteria();
-       		$criteria->order = " time DESC ";
+       		$criteria->order = " id DESC ";
 
 		// <-- Trust
        		$criteria->condition = "

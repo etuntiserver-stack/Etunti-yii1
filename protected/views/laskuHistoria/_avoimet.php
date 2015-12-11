@@ -15,7 +15,7 @@
 <tr>
 
 	<td>
-	<?php echo CHtml::encode($l->laskunumero).', '.$l->id; ?>
+	<?php echo CHtml::encode($l->laskunumero).', '.$l->id.', '.$data->id; ?>
 	</td>
 
 	<td>
@@ -35,7 +35,7 @@
 	</td>
 
 	<td>
-	<?php echo number_format($l->yhteensa_total, 2, ',', ' '); ?>
+	<?php echo number_format($data->yht_euro, 2, ',', ' '); ?>
 	</td>
 
 	<td>
