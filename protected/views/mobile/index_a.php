@@ -1,4 +1,4 @@
-  <?php
+<?php
        	$criteria = new CDbCriteria();
 	$criteria->condition = " status=0 AND tekija='toimisto' ";
 	$vi = Viestinta::model()->findAll($criteria);
@@ -24,7 +24,7 @@
 	   }
 	echo '</div>';
 	}
-  ?>
+?>
 
   <table class="table table-striped" id="mobileTable">
   <thead>

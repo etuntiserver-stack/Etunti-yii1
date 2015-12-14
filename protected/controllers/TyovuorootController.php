@@ -743,7 +743,7 @@ class TyovuorootController extends Controller
 	$dateMonth = '';
 	$pyh = array();
 
-	$dateMonth = date("d.m",strtotime($date));
+	$dateMonth = date("d.m.Y",strtotime($date));
 	$asetukset = Asetukset::model()->findbypk(1);
 	$pyh = explode("\n",$asetukset->pyhapaivat);
 
