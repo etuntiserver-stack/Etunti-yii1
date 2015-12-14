@@ -82,7 +82,7 @@ class Asetukset extends DB2ActiveRecord
 			'postita_password' => 'Postita password',
 			'palvelu_tyyppi' => 'Palvelu tyyppi',
 			'trust_url'=>'Trust URL',
-			'pyhapaivat'=>'Viralliset pyhäpäivät / pp.kk',
+			'pyhapaivat'=>'Viralliset pyhäpäivät / pp.kk.vvvv',
 		);
 	}
 
