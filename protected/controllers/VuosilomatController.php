@@ -173,35 +173,6 @@ class VuosilomatController extends Controller
 	{
 
 
-	function pyhat($thisDate,$date){
-
-		if(date("N",strtotime($thisDate)) == 7
-			or $date == '1.1'
-			or $date == '6.1'
-			or $date == '3.4'
-			or $date == '5.4'
-			or $date == '6.4'
-			//or $date == '30.04'
-			or $date == '1.5'
-			or $date == '14.5'
-			or $date == '24.5'
-			or $date == '19.6'
-			or $date == '20.6'
-			or $date == '31.10'
-			or $date == '6.12'
-			or $date == '24.12'
-			or $date == '25.12'
-			or $date == '26.12'
-			or $date == '31.12'
-			) {
-			return true;
-			} else {
-			return false;
-			}
-		
-	}
-
-
 		$dataProvider=new CActiveDataProvider('Vuosilomat');
 		$this->render('index',array(
 			'dataProvider'=>$dataProvider,
@@ -250,4 +221,38 @@ class VuosilomatController extends Controller
 			Yii::app()->end();
 		}
 	}
+
+
+	protected function pyhat($date){
+
+	$dateMonth = '';
+	$dateMonth = date("d.m",strtotime($date));
+
+	if(
+	date("N",strtotime($date)) == 6 
+	or date("N",strtotime($date)) == 7
+	or $dateMonth == '01.01'
+	or $dateMonth == '06.01'
+	or $dateMonth == '03.04'
+	or $dateMonth == '05.04'
+	or $dateMonth == '06.04'
+	//or $date == '30.04.'.date("Y")
+	or $dateMonth == '01.05'
+	or $dateMonth == '14.05'
+	or $dateMonth == '24.05'
+	or $dateMonth == '19.06'
+	or $dateMonth == '20.06'
+	or $dateMonth == '31.10'
+	or $dateMonth == '06.12'
+	or $dateMonth == '24.12'
+	or $dateMonth == '25.12'
+	or $dateMonth == '26.12'
+	//or $date == '31.12.'.date("Y")
+	)
+	return true;
+	else
+	return false;
+
+ 	}
+
 }

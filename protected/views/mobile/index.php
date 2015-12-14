@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row small">
 <?php
 /* @var $this MobileController */
 /* @var $dataProvider CActiveDataProvider */
@@ -18,8 +18,8 @@ $this->menu=array(
 
 
 <legend>
-  <div class="pull-right form-inline">
-  <span class="small"><?php echo Yii::t('main', 'Ohje: '); ?></span>
+  <div class="pull-right form-inline small">
+  <span><?php echo Yii::t('main', 'Ohje: '); ?></span>
 	<b class="btn btn-warning btn-sm fa fa-map tooltipster" title="Aloitus GPS sijainti kartalla"></b>
 	<b class="btn btn-warning btn-sm fa fa-map-o tooltipster" title="Lopetus GPS sijainti kartalla"></b>
 	<b class="btn btn-warning btn-sm fa fa-envelope tooltipster" title="Viestin lähettäminen"></b>
@@ -225,7 +225,7 @@ $fi = array(
 
    <div class="pull-right">
      <?php echo CHtml::link(' +','/index.php/tyontekijat/create',array('target'=>'_blank','class'=>'btn btn-sm btn-default glyphicon glyphicon-user')); ?>
-     <?php echo CHtml::link(' +','/index.php/kohteet/create',array('target'=>'_blank','class'=>'btn btn-sm btn-default glyphicon glyphicon-home')); ?>
+     <?php echo CHtml::link(' +','/index.php/asiakkaat/create',array('target'=>'_blank','class'=>'btn btn-sm btn-default glyphicon glyphicon-home')); ?>
    </div>
 
    <form id="mobForm" action="#" class="form-inline" method="POST">
