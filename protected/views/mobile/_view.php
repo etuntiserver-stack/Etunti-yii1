@@ -100,10 +100,13 @@ else
 
   $class 	= '';
   $diff 	= 0;
-  if(date('Y-m-d H:i:s', strtotime($data->aloitan.'+4 hour')) < date('Y-m-d H:i:s') and empty($data->loppui))
+  if(date('Y-m-d H:i', strtotime($data->aloitan.'+4 hour')) < date('Y-m-d H:i') and empty($data->loppui))
   {
-  	$diff = strtotime(date('Y-m-d H:i:s'))-strtotime($data->aloitan);
+  	$diff = strtotime(date('Y-m-d H:i'))-strtotime($data->aloitan);
   	$class = 'border:2px red solid;';
+  } elseif(empty($data->loppui)) {
+  	$diff = strtotime(date('Y-m-d H:i'))-strtotime($data->aloitan);
+  	$class = '';
   }
 ?>
 
@@ -113,7 +116,7 @@ else
 		<?php echo $door; ?>
 
 		<?php if($diff > 0) : ?>
-		<b class="text-danger"><?php echo sprint($diff); ?></b>
+		&nbsp;<b><?php echo sprint($diff); ?></b>
 		<?php endif; ?>
 	</td>
 
