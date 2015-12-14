@@ -101,7 +101,11 @@ $('.search-form form').submit(function(){
     	),
 
 		'tapahtumapvm',
-		'yhteensa_total',
+	array(
+	'name'=>'yhteensa_total',
+        'value'=>'number_format($data->yhteensa_total, 2, ",", " ")',
+    	),
+		
 		'laskun_nimetys',
 		/*
 		'postinumero',
