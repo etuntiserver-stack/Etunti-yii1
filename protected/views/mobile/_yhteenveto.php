@@ -8,7 +8,7 @@
 
 <tr>
 
-	<td>
+	<td width="100" class="col-sm-5">
 		<b class="link fa fa-caret-square-o-down showKuka text-danger" data-toggle="collapse" id="<?php echo 'tid_'.$data->tid; ?>" for="<?php echo 'tid_'.$data->tid; ?>" data-target="<?php echo '#tyotShow_'.$data->tid; ?>"></b>&nbsp;
 
 		<?php 

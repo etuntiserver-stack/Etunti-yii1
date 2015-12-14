@@ -5,8 +5,7 @@ table{
 }
 td,th{
 	padding:3px 7px;
-	border-right:1px #333 solid;
-	border-bottom:1px #333 solid;
+	border:1px #333 solid;
 }
 </style>
 
@@ -15,7 +14,11 @@ td,th{
   <br>
 
 <h1><?php echo Yii::t('main', 'LUETUT'); ?></h1>
+
+<?php if(isset(Yii::app()->session['from']) and isset(Yii::app()->session['to'])) : ?>
 <p><?php echo date("d.m.Y",strtotime(Yii::app()->session['from'])).'-'.date("d.m.Y",strtotime(Yii::app()->session['to'])); ?></p>
+<?php endif; ?>
+
 <br>
 <table>
   <thead>
@@ -26,7 +29,7 @@ td,th{
     <th><?php echo Yii::t('main', 'Aloitus'); ?></th>
     <th><?php echo Yii::t('main', 'Lopetus'); ?></th>
     <th><?php echo Yii::t('main', 'Kesto'); ?></th>
-    <th><?php echo Yii::t('main', 'Viesti'); ?></th>
+    <th width="170"><?php echo Yii::t('main', 'Viesti'); ?></th>
   </tr>
   </thead>
   <tbody>
@@ -57,7 +60,7 @@ td,th{
    echo '<td>'.date("H:i",strtotime($data->aloitan)).'</td>';
    echo '<td>'.date("H:i",strtotime($data->loppui)).'</td>';
    echo '<td>'.sprint($kesto).' <b>('.num($kesto).')</b></td>';
-   echo '<td>'.$viesti.'</td>';
+   echo '<td width="170">'.$viesti.'</td>';
    echo '</tr>';
   }
   ?>
