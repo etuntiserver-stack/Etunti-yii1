@@ -226,28 +226,16 @@ class VuosilomatController extends Controller
 	protected function pyhat($date){
 
 	$dateMonth = '';
+	$pyh = array();
+
 	$dateMonth = date("d.m",strtotime($date));
+	$asetukset = Asetukset::model()->findbypk(1);
+	$pyh = explode("\n",$asetukset->pyhapaivat);
 
 	if(
-	date("N",strtotime($date)) == 6 
-	or date("N",strtotime($date)) == 7
-	or $dateMonth == '01.01'
-	or $dateMonth == '06.01'
-	or $dateMonth == '03.04'
-	or $dateMonth == '05.04'
-	or $dateMonth == '06.04'
-	//or $date == '30.04.'.date("Y")
-	or $dateMonth == '01.05'
-	or $dateMonth == '14.05'
-	or $dateMonth == '24.05'
-	or $dateMonth == '19.06'
-	or $dateMonth == '20.06'
-	or $dateMonth == '31.10'
-	or $dateMonth == '06.12'
-	or $dateMonth == '24.12'
-	or $dateMonth == '25.12'
-	or $dateMonth == '26.12'
-	//or $date == '31.12.'.date("Y")
+	   date("N",strtotime($date)) == 6 
+	   or date("N",strtotime($date)) == 7
+	   or strstr($asetukset->pyhapaivat, $dateMonth)
 	)
 	return true;
 	else
