@@ -132,8 +132,8 @@ echo	'<input type=hidden id=number value='.cal_days_in_month(CAL_GREGORIAN, $mon
 
     echo '
     <div class="form-inline">
-	<input type=radio name="valikko" class="valikko form-group" value="'.$expl[0].'//'.$expl[2].'//'.$expl[1].'" '.$checked.'> 
-	<span '.$back.' class="btn btn-xs btn-group">'.$expl[0].'</span>  '.$expl[1].'
+	<input type=radio name="valikko" class="valikko" value="'.$expl[0].'//'.$expl[2].'//'.$expl[1].'" '.$checked.'> 
+	<span '.$back.' class="col-sm-1 btn btn-xs btn-group btn-group-justified">'.$expl[0].'</span>  '.$expl[1].'
     </div>';
   }
  ?>
