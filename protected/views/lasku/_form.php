@@ -908,15 +908,19 @@ function pyyntoRiville(kohteet,from,to,tuotePalvelu,tuntiVaiKk){
 			num = $("table#TableRivit tbody tr").length+index;
 			
 			var kpl = 0;
-			if(tuntiVaiKk == "kk")
+			var yksikko = 0;
+			if(tuntiVaiKk == "kk"){
+			  yksikko = 'kk';
 			  kpl = '1';
-			else
+			} else {
+			  yksikko = spH[2];
 			  kpl = tunnit;
+			}
 
 	        	$.ajax({
 		           url: 'tr_rivit?id='+spH[0],
 			   type: 'POST',
-			   data: { num : num, from : from, to : to, kpl : kpl, hinta : spH[1], yksikko : spH[2], onkokohde : spH[3], tuotePalvelu : tuotePalvelu },
+			   data: { num : num, from : from, to : to, kpl : kpl, hinta : spH[1], yksikko : yksikko, onkokohde : spH[3], tuotePalvelu : tuotePalvelu },
 		           success: function(data){
 				console.log(value);
 				$("table#TableRivit tbody tr").last().after(data);
