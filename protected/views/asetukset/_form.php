@@ -10,7 +10,7 @@
 ?>
 
 <div class="row form">
-  <div class="col-sm-4">
+
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'asetukset-form',
 	'enableAjaxValidation'=>false,
@@ -24,6 +24,7 @@
 		<?php echo $form->hiddenField($model,'id'); ?>
 		<?php echo $form->error($model,'id'); ?>
 
+  <div class="col-sm-4">
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'logon_polkku'); ?>
@@ -41,6 +42,14 @@
 		<?php echo $form->labelEx($model,'johtaja'); ?>
 		<?php echo $form->textField($model,'johtaja',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'johtaja'); ?>
+	</div>
+
+  </div><div class="col-sm-4">
+
+	<div class="row">
+		<?php echo $form->labelEx($model,'pyhapaivat'); ?>
+		<?php echo $form->textarea($model,'pyhapaivat',array('rows'=>8,'maxlength'=>3000,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'pyhapaivat'); ?>
 	</div>
 
   </div>
