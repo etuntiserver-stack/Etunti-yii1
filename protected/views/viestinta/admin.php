@@ -80,7 +80,7 @@ $('.search-form form').submit(function(){
 array(
 
         'value' => '
-	   CHtml::link("Katso", Yii::app()->createUrl("viestinta/view",array("id"=>$data->id)))
+	   CHtml::link("", Yii::app()->createUrl("viestinta/view",array("id"=>$data->id)),array("class"=>"fa fa-pencil-square-o"))
 	',
         'type'  => 'raw',
 	//'visible'=>Yii::app()->user->avetak,

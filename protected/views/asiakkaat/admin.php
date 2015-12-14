@@ -127,7 +127,7 @@ echo '
 array(
 
         'value' => '
-	   CHtml::link("Katso", Yii::app()->createUrl("asiakkaat/update",array("id"=>$data->id)))
+	   CHtml::link("", Yii::app()->createUrl("asiakkaat/update",array("id"=>$data->id)),array("class"=>"fa fa-pencil-square-o"))
 	',
         'type'  => 'raw',
 	//'visible'=>Yii::app()->user->avetak,
