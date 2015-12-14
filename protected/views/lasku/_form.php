@@ -840,7 +840,7 @@ $(".luoRiviTunti").click(function() {
 
 	} 
 
-	    pyyntoRiville(kohteet,from,to,tuotePalvelu);
+	    pyyntoRiville(kohteet,from,to,tuotePalvelu,"tunti");
 });
 
 
@@ -870,12 +870,12 @@ $(".luoRiviKk").click(function() {
 
 	} 
 
-	    pyyntoRiville(kohteet,from,to,tuotePalvelu);
+	    pyyntoRiville(kohteet,from,to,tuotePalvelu,"kk");
 
 });
 
 
-function pyyntoRiville(kohteet,from,to,tuotePalvelu){
+function pyyntoRiville(kohteet,from,to,tuotePalvelu,tuntiVaiKk){
 
 	    $("#trRivi_1").remove();
 
@@ -897,20 +897,26 @@ function pyyntoRiville(kohteet,from,to,tuotePalvelu){
 	               	console.log(data);
 			var tunnit = data;			
 			var num = 0;
-			if(tunnit == 0)
+			if((tunnit == 0) && (tuntiVaiKk == "tunti"))
 			{
 				$("#tuntienTulos").addClass("alert alert-danger").html('<b>Ei löydy tuntia</b>');
 				//$("#rivit").hide('slow');
 			}
 
-			if(tunnit > 0)
+			if((tunnit > 0) || (tuntiVaiKk == "kk"))
 			{
 			num = $("table#TableRivit tbody tr").length+index;
 			
+			var kpl = 0;
+			if(tuntiVaiKk == "kk")
+			  kpl = '1';
+			else
+			  kpl = tunnit;
+
 	        	$.ajax({
 		           url: 'tr_rivit?id='+spH[0],
 			   type: 'POST',
-			   data: { num : num, from : from, to : to, kpl : tunnit, hinta : spH[1], yksikko : spH[2], onkokohde : spH[3], tuotePalvelu : tuotePalvelu },
+			   data: { num : num, from : from, to : to, kpl : kpl, hinta : spH[1], yksikko : spH[2], onkokohde : spH[3], tuotePalvelu : tuotePalvelu },
 		           success: function(data){
 				console.log(value);
 				$("table#TableRivit tbody tr").last().after(data);
