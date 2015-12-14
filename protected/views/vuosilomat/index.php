@@ -105,7 +105,7 @@ echo	'<input type=hidden id=number value='.cal_days_in_month(CAL_GREGORIAN, $mon
 	$id = 'new';
      }
 
-     if(pyhat($thisDate,$date))
+     if($this->pyhat($thisDate))
      {
        echo '<TD id="riv_'.$thisDate.$v->id.'" class="muokka viikkonloppu" method="'.$id.'" thisDate='.$thisDate.' thisTid='.$v->id.'>'.$st0.'</TD>';
      } else {
