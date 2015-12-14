@@ -26,7 +26,7 @@
 	}
   ?>
 
-  <table class="table table-striped small" id="mobileTable">
+  <table class="table table-striped" id="mobileTable">
   <thead>
   <tr>
   <th class="col-sm-1"><?php echo Yii::t('main', 'T'); ?></th>
