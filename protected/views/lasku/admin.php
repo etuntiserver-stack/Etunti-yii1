@@ -53,7 +53,9 @@ $('.search-form form').submit(function(){
 </legend>
 
 
-<?php echo CHtml::link('Haku','#',array('class'=>'search-button')); ?>
+<?php echo CHtml::link('Haku','#',array('class'=>'search-button')); ?> 
+<?php echo CHtml::link(' YRITYSHAKU','https://tietopalvelu.ytj.fi/yrityshaku.aspx?kielikoodi=1',array('target'=>'_blank','class'=>'link')); ?>
+
 <div class="search-form" style="display:none">
 <?php $this->renderPartial('_search',array(
 	'model'=>$model,

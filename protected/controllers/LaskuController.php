@@ -379,7 +379,7 @@ class LaskuController extends Controller
 		if($row)
 		$body .= '<option value="'.$row.'">'.$row.'</option>';
 		$body .= '<option value="24">24</option>';
-		for ($i = 0; $i <= 24 ; $i++) {
+		for ($i = 0; $i <= 100 ; $i++) {
 		    $body .= '<option value='.$i.'>'.$i.'</option>';
 		}
 		return $body;
