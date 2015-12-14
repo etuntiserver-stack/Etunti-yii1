@@ -113,7 +113,7 @@ $xml = encodeXml (array(
             array(
 		"refundtojobid" => $refundtojobid,
                 "custnum" => $lasku['as_nro'], # asiakasnumero
-                "addressaddline1" => $lasku['osoite'],
+                //"addressaddline1" => $lasku['osoite'],
                 "person" => $person,
                 "company" => $lasku['yritys'], # yrityksen nimi
                 //"addressaddline2" => "Edunvalvoja Essi Vuori",
