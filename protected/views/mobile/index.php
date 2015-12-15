@@ -232,10 +232,10 @@ $fi = array(
 	$criteria = new CDbCriteria;
 	$criteria->order = " id DESC "; 
 	$criteria->condition=" 
-		TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')) > 36000
+		TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'))) > 36000
 		OR 
 		(
-		TIMEDIFF(NOW(), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')) > 36000
+		TIME_TO_SEC(TIMEDIFF(NOW(), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'))) > 36000
 		AND loppui=''
 		)
 	";
