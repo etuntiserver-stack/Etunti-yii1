@@ -94,7 +94,7 @@ $fi = array(
 			</div>
 		</div>
 
-  <div class="col-sm-3">
+  <div class="col-sm-2">
 <?php 
 	$crsun = new CDbCriteria();
 	$crsun->select = "  COUNT(*) as count ";
@@ -113,7 +113,7 @@ $fi = array(
         $this->widget(
             'chartjs.widgets.ChDoughnut', 
             array(
-                'width' => 250,
+                'width' => 130,
                 'height' => 175,
                 'htmlOptions' => array(),
                 'drawLabels' => true,
@@ -139,7 +139,7 @@ $fi = array(
         ); 
     ?>
 
-  </div><div class="col-sm-3">
+  </div><div class="col-sm-2">
 
 <?php 
 
@@ -164,7 +164,7 @@ $fi = array(
             $this->widget(
                 'chartjs.widgets.ChDoughnut', 
                 array(
-                    'width' => 250,
+                    'width' => 130,
                     'height' => 175,
                     'htmlOptions' => array(),
                     'drawLabels' => true,
@@ -186,7 +186,7 @@ $fi = array(
     ?>
 
 
-  </div><div class="col-sm-3">
+  </div><div class="col-sm-2">
 
 <?php 
 
@@ -198,7 +198,7 @@ $fi = array(
         $this->widget(
             'chartjs.widgets.ChBars', 
             array(
-                'width' => 250,
+                'width' => 210,
                 'height' => 210,
                 'htmlOptions' => array(),
 
@@ -214,7 +214,45 @@ $fi = array(
             )
         ); 
     ?>
+    <?php
+	$criteria = new CDbCriteria;
+	$criteria->group="tid";	
+	$criteria->condition=" 
+		kohde!='' 
+		AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE() 
+		AND tyoajanmerkinta NOT LIKE '%Ei lasketa%'
+	";
+	$t = Tyovuoroot::model()->findAll($criteria);
 
+    ?>
+  </div><div class="col-sm-4">
+   <div style="height:210px; overflow: auto; overflow-x: hidden;padding:0 10px;">
+   <legend><?php echo Yii::t('main', 'Yli 10 tunti rivit'); ?></legend>
+   <?php
+	$criteria = new CDbCriteria;
+	$criteria->order = " id DESC "; 
+	$criteria->condition=" 
+		TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')) > 36000
+		OR 
+		(
+		TIMEDIFF(NOW(), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')) > 36000
+		AND loppui=''
+		)
+	";
+	$yli10 = Mobile::model()->findAll($criteria);
+	foreach($yli10 as $data)
+	{
+	  echo 
+	  '
+	   <div class="row">
+	    <div class="col-sm-12">
+	    '.$data->id.' ('.date("d.m",strtotime($data->aloitan)).')&nbsp;&nbsp'.$data->tekijan_nimi.'
+	    </div>
+	   </div>
+	  ';
+	}
+   ?>
+   </div>
   </div>
 </div>
 
