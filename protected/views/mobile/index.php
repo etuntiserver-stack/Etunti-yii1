@@ -242,11 +242,27 @@ $fi = array(
 	$yli10 = Mobile::model()->findAll($criteria);
 	foreach($yli10 as $data)
 	{
+
+  $kesto =  '';
+
+if(!empty($data->loppui) and !empty($data->aloitan)){
+  $data->loppui = date("d.m.Y H:i",strtotime($data->loppui));
+  $data->aloitan = date("d.m.Y H:i",strtotime($data->aloitan));
+  $kesto =  strtotime($data->loppui) - strtotime($data->aloitan);
+} 
 	  echo 
 	  '
 	   <div class="row">
 	    <div class="col-sm-12">
-	    '.$data->id.' ('.date("d.m",strtotime($data->aloitan)).')&nbsp;&nbsp'.$data->tekijan_nimi.'
+		<div class="col-sm-2">
+	    	  <b>'.$data->id.'</b> 
+		</div><div class="col-sm-2">
+			('.date("d.m",strtotime($data->aloitan)).')
+		</div><div class="col-sm-6">
+			'.$data->tekijan_nimi.'
+		</div><div class="col-sm-2 text-danger">
+			'.$this->sprint($kesto).'
+		</div>
 	    </div>
 	   </div>
 	  ';
