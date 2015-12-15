@@ -267,11 +267,11 @@ if(!empty($data->loppui) and !empty($data->aloitan)){
 	  '
 	   <div class="row">
 	    <div class="col-sm-12">
-		<div class="col-sm-2">
-	    	  <b>'.$data->id.'</b> 
+		<div class="col-sm-3">
+	    	  <b>ID: '.$data->id.'</b> 
 		</div><div class="col-sm-2">
 			('.date("d.m",strtotime($data->aloitan)).')
-		</div><div class="col-sm-6">
+		</div><div class="col-sm-5">
 			'.$data->tekijan_nimi.'
 		</div><div class="col-sm-2 text-danger">
 			'.$this->sprint($kesto).'
