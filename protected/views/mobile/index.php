@@ -94,7 +94,7 @@ $fi = array(
 			</div>
 		</div>
 
-  <div class="col-sm-2">
+  <div class="col-sm-3">
 <?php 
 	$crsun = new CDbCriteria();
 	$crsun->select = "  COUNT(*) as count ";
@@ -113,7 +113,7 @@ $fi = array(
         $this->widget(
             'chartjs.widgets.ChDoughnut', 
             array(
-                'width' => 130,
+                'width' => 170,
                 'height' => 175,
                 'htmlOptions' => array(),
                 'drawLabels' => true,
@@ -139,10 +139,11 @@ $fi = array(
         ); 
     ?>
 
-  </div><div class="col-sm-2">
+  </div>
 
 <?php 
-
+/*
+<div class="col-sm-2">
 	$crsop = new CDbCriteria();
 	$crsop->select = "  COUNT(*) as count ";
 	$crsop->condition = " 
@@ -183,10 +184,13 @@ $fi = array(
                     'options' => array()
                 )
             ); 
+
+</div>
+*/
     ?>
 
 
-  </div><div class="col-sm-2">
+  <div class="col-sm-3">
 
 <?php 
 
@@ -196,20 +200,29 @@ $fi = array(
 
 
         $this->widget(
-            'chartjs.widgets.ChBars', 
+            'chartjs.widgets.ChDoughnut', 
             array(
-                'width' => 210,
-                'height' => 210,
+                'width' => 170,
+                'height' => 175,
                 'htmlOptions' => array(),
-
-                'labels' => array(Yii::t('main','Työt'),Yii::t('main','Matkat'),Yii::t('main','Lounaat')),
-                'datasets' => array(
-                    array(
-                        "fillColor" => "#cecece",
-                        "strokeColor" => "#8cc152",
-                        "data" => array((int)count($a),(int)count($m),(int)count($l))
-                    )       
-                ),
+                    'drawLabels' => true,
+                    'datasets' => array(
+                        array(
+                            "value" => (int)count($a),
+                            "color" => "#8cc152",
+                            "label" => Yii::t('main','Työt')
+                        ),
+                        array(
+                            "value" => (int)count($m),
+                            "color" => "#cecece",
+                            "label" => Yii::t('main','Matkat')
+                        ),
+                    	array(
+                            "value" => (int)count($l),
+                            "color" => "#ebebcb",
+                            "label" => Yii::t('main','Lounaat')
+                    	),
+                    ),
                 'options' => array()
             )
         ); 
