@@ -718,24 +718,26 @@ exit;
        		$criteria->select = " palvelu,id,status ";
        		$criteria->order = " id DESC ";
        		$criteria->condition = " lid='".$data->id."' ";
-		$l = LaskuHistoria::model()->find($criteria);
+		$l = LaskuHistoria::model()->findAll($criteria);
 
 
 		// <-- Trust
 		$trust = false;
 		$trustStr = '';
 		$xml = array();
-
-		if(isset($l->palvelu) and $l->palvelu == 'trust')
+		foreach($l as $d)
 		{
+		  if(isset($d->palvelu) and $d->palvelu == 'trust')
+		  {
 
-		$json = json_decode($l->status, true);
+		    $json = json_decode($d->status, true);
 
-		  if(isset($json['statustext']) and !empty($json['statustext'])){
-		   $trustStr = $json['statustext'];
-		   $trust = true;
+		    if(isset($json['statustext']) and !empty($json['statustext'])){
+		      $trustStr .= $json['statustext'].'<hr>';
+		      $trust = true;
+		    }
+
 		  }
-
 		}
 		//  Trust -->
 
@@ -782,6 +784,22 @@ exit;
             	return $tilanne;
 	}
 
+
+    	protected function avoinnaCheck($data,$row)
+	{ 
+
+       		$criteria = new CDbCriteria();
+       		$criteria->select = " yht_euro ";
+       		$criteria->order = " id DESC ";
+       		$criteria->condition = " lid='".$data->id."' AND yht_euro!='' ";
+		$l = LaskuHistoria::model()->find($criteria);
+
+		$yht_euro = $data->yhteensa_total;
+		if(isset($l->yht_euro))
+		$yht_euro = $l->yht_euro;
+
+            	return $yht_euro;
+	}
 
 
 

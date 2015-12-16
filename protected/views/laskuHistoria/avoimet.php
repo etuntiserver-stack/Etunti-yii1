@@ -47,9 +47,9 @@ th{
   <input type="hidden" name="avoimet">
 
    <b class="glyphicon glyphicon-calendar"></b>
-   <input type="text" name="from" id="from" class="form-control form-group input-sm datetimepicker2" value="<?php echo Yii::app()->session['from']; ?>">
+   <input type="text" name="from" id="from" class="form-control form-group input-sm datepicker" value="<?php echo Yii::app()->session['from']; ?>">
    <b class="glyphicon glyphicon-calendar"></b>
-   <input type="text" name="to" id="to" class="form-control form-group input-sm datetimepicker2" value="<?php echo Yii::app()->session['to']; ?>">
+   <input type="text" name="to" id="to" class="form-control form-group input-sm datepicker" value="<?php echo Yii::app()->session['to']; ?>">
 
    <div class="form-group input-group-btn">
       <input type="submit" class="btn btn-primary btn-sm" value="<?php echo Yii::t('main', 'Hae'); ?>">
