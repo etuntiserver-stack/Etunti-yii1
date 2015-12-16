@@ -98,24 +98,24 @@ class LaskuHistoriaController extends Controller
 		Yii::app()->session['to'] = date("Y-m-d",strtotime(Yii::app()->request->getPost('to')));
 
        		$criteria = new CDbCriteria();
-       		$criteria->order = " id DESC ";
+       		//$criteria->select = " ,t.* ";
+       		$criteria->order = " lid DESC ";
 
 		// <-- Trust
        		$criteria->condition = "
-			palvelu='".$palvelu."'
-			AND trust_statuscode!='101'
-			
+			palvelu='".$palvelu."'		
 		";
+		//AND trust_statuscode!='101'
 		// <-- Trust
-       		//$criteria->group = "lid";
+       		//$criteria->group = " lid ";
 
 		if(Yii::app()->session['from'] and Yii::app()->session['to'])
         	$criteria->addCondition ("time BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."' ");
 
-		$model = LaskuHistoria::model()->findAll($criteria);
 
 		if(isset($_POST['tulosta']))
 		{
+		  $model = LaskuHistoria::model()->findAll($criteria);
 	          $html2pdf = Yii::app()->ePdf->HTML2PDF('P', 'A4', 'en');
 		  $html2pdf->setDefaultFont('Arial');
 	          $html2pdf->WriteHTML($this->renderPartial('avoimet',array('model'=>$model,'palvelu'=>$palvelu), true));
@@ -123,8 +123,9 @@ class LaskuHistoriaController extends Controller
 
 		} else {
 
+		$dataProvider=new CActiveDataProvider('LaskuHistoria',array('criteria'=>$criteria));
 		$this->render('avoimet',array(
-			'model'=>$model,
+			'dataProvider'=>$dataProvider,
 			'palvelu'=>$palvelu
 		));
 

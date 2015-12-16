@@ -74,9 +74,9 @@ th{
   <th><?php echo Yii::t('main','Asiakas'); ?></th>
  </tr>
  <?php 
- foreach($model as $data)
- {
-	$this->renderPartial('_avoimet',array('data'=>$data));
- }
+ $this->widget('zii.widgets.CListView', array(
+	'dataProvider'=>$dataProvider,
+	'itemView'=>'_avoimet',
+)); 
  ?>
 </table>

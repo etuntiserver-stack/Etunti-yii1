@@ -15,7 +15,7 @@
 <tr>
 
 	<td>
-	<?php echo CHtml::encode($l->laskunumero).', '.$l->id.', '.$data->id; ?>
+	<?php echo CHtml::encode($l->laskunumero).', Lid:'.$l->id; ?>
 	</td>
 
 	<td>
