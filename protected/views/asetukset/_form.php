@@ -52,6 +52,14 @@
 		<?php echo $form->error($model,'pyhapaivat'); ?>
 	</div>
 
+  </div><div class="col-sm-4">
+
+	<div class="row">
+		<?php echo $form->labelEx($model,'erikoislauantai'); ?>
+		<?php echo $form->textarea($model,'erikoislauantai',array('rows'=>8,'maxlength'=>3000,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'erikoislauantai'); ?>
+	</div>
+
   </div>
 </div><!-- form -->
 
