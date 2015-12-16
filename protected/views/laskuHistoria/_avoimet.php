@@ -2,44 +2,51 @@
 /* @var $this LaskuHistoriaController */
 /* @var $data LaskuHistoria */
 
-  $l = Lasku::model()->findbypk($data->lid);
+   $criteria = new CDbCriteria();
+   $criteria->order = " time DESC ";
+   $criteria->condition = " lid='".$data->id."' ";
+  $lh = LaskuHistoria::model()->find($criteria);
+
+  $trust_statuscode = '';
+  if(isset($lh->trust_statuscode))
+  $trust_statuscode = $lh->trust_statuscode;
 
 	$nimi = '';
-   if($l->tyyppi == 'henkilo')
-	$nimi = $l->nimi;
-   if($l->tyyppi == 'yritys')
-	$nimi = $l->yritys;
+   if($data->tyyppi == 'henkilo')
+	$nimi = $data->nimi;
+   if($data->tyyppi == 'yritys')
+	$nimi = $data->yritys;
 
 ?>
 
 <tr>
 
 	<td>
-	<?php echo CHtml::encode($l->laskunumero).', Lid:'.$l->id; ?>
+	<?php echo CHtml::encode($data->laskunumero).', id:'.$data->id; ?>
 	</td>
 
 	<td>
-	<?php echo $data->trust_statuscode; ?>
+	<?php echo $trust_statuscode; ?>
 	</td>
 
 	<td>
-	<?php echo $data->paydate; ?>
+	<?php //echo $data->paydate; ?>
 	</td>
 
 	<td>
-	<?php echo $data->amount; ?>
+	<?php //echo $data->amount; ?>
 	</td>
 
 	<td>
-	<?php echo date("d.m.Y H:i:s",strtotime($data->time)); ?>
+	<?php //echo date("d.m.Y H:i:s",strtotime($data->time)); ?>
 	</td>
 
 	<td>
-	<?php echo number_format($data->yht_euro, 2, ',', ' '); ?>
+	<?php //echo number_format($data->yht_euro, 2, ',', ' '); ?>
 	</td>
 
 	<td>
-	<?php echo CHtml::encode($l->as_nro.' '.$nimi); ?>
+	<?php echo CHtml::encode($data->as_nro.' '.$nimi); ?>
 	</td>
 
 </tr>
