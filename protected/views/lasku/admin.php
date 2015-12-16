@@ -105,6 +105,13 @@ $('.search-form form').submit(function(){
 	'name'=>'yhteensa_total',
         'value'=>'number_format($data->yhteensa_total, 2, ",", " ")',
     	),
+
+	array(
+        'header'  => 'Avoinna',
+        'value'=>array($this,'avoinnaCheck'),
+	'type' => 'html',
+    	),
+
 		
 		'laskun_nimetys',
 		/*

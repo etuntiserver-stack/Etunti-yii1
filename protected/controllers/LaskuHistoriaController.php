@@ -92,10 +92,10 @@ class LaskuHistoriaController extends Controller
 		unset(Yii::app()->session['to']);
 
 		if(Yii::app()->request->getPost('from'))
-		Yii::app()->session['from'] = date("Y-m-d H:i",strtotime(Yii::app()->request->getPost('from')));
-	
+		Yii::app()->session['from'] = date("Y-m-d",strtotime(Yii::app()->request->getPost('from')));
+
 		if(Yii::app()->request->getPost('to'))
-		Yii::app()->session['to'] = date("Y-m-d H:i",strtotime(Yii::app()->request->getPost('to')));
+		Yii::app()->session['to'] = date("Y-m-d",strtotime(Yii::app()->request->getPost('to')));
 
        		$criteria = new CDbCriteria();
        		$criteria->order = " id DESC ";
