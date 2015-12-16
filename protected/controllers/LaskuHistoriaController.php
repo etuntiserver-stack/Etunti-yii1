@@ -103,15 +103,19 @@ class LaskuHistoriaController extends Controller
 
 		// <-- Trust
        		$criteria->condition = "
-			palvelu='".$palvelu."'		
+			palvelu='".$palvelu."'
+
 		";
-		//AND trust_statuscode!='101'
+//			AND trust_statuscode!='101'		
 		// <-- Trust
        		//$criteria->group = " lid ";
 
-		if(Yii::app()->session['from'] and Yii::app()->session['to'])
-        	$criteria->addCondition ("time BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."' ");
-
+		if(Yii::app()->session['from'])
+		{
+        	$criteria->addCondition (" 
+			id NOT IN (SELECT id FROM lasku_historia WHERE time < '".Yii::app()->session['from']."' AND trust_statuscode='101')
+		");
+		}
 
 		if(isset($_POST['tulosta']))
 		{
