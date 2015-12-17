@@ -293,14 +293,24 @@ public function actionImei($dom)
 		    exit;
 		    } 
 
-		    $thisSunday = date('Y-m-d',strtotime('sunday this week'));
+		    $asetukset = Asetukset::model()->findbypk(1);
+
+		    if(isset($asetukset->sovellus_tyovuorot) and $asetukset->sovellus_tyovuorot == '1')
+		    $aikaVali = date('Y-m-d',strtotime('sunday this week'));
+		    elseif(isset($asetukset->sovellus_tyovuorot) and $asetukset->sovellus_tyovuorot == '2')
+		    $aikaVali = date('Y-m-d',strtotime('+7 day'));
+		    elseif(isset($asetukset->sovellus_tyovuorot) and $asetukset->sovellus_tyovuorot == '3')
+		    $aikaVali = date('Y-m-d',strtotime('+14 day'));
+		    else
+		    $aikaVali = date('Y-m-d',strtotime('sunday this week'));
+
 
 		    $criteria = new CDbCriteria();
 		    $criteria->order = " DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d'),alku ASC ";
 		    $criteria->condition = " 
 				tid = '".$ttekija->id."' 
 				and DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') 
-				BETWEEN CURDATE() AND '".$thisSunday."'
+				BETWEEN CURDATE() AND '".$aikaVali."'
 		    ";
 	            $tvuoro = Tyovuoroot::model()->findAll($criteria);
 
@@ -310,7 +320,7 @@ public function actionImei($dom)
 		    exit;
 		    }
 
-		    $sel = '<h2>Viikon työvuorot</h2>';
+		    $sel = '<h2>Työvuorot</h2>';
 		    $osoite = '';
 		    foreach($tvuoro as $val)
 		    {
