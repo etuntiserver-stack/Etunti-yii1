@@ -152,7 +152,7 @@
 
 
 	<?php endif; ?>
-
+	<li><a style="color:white;"><?php if(isset(Yii::app()->user->adminStatus)) echo 'Status:'.Yii::app()->user->adminStatus; ?></a></li>
       </ul>
 
       <ul class="nav navbar-nav navbar-right">
@@ -173,7 +173,6 @@
           </ul>
         </li>
 	<?php endif; ?>
-
         <li class="dropdown">
           <a href="#" class="dropdown-toggle glyphicon glyphicon-user" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?php echo Yii::t('main', ''); ?> <span class="caret"></span></a>
           <ul class="dropdown-menu">
