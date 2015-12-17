@@ -148,6 +148,30 @@
 <?php endif; ?>
 
 
+<hr>
+  <div class="row form">
+   <div class="col-sm-4">
+    <legend><h2><?php echo Yii::t('main','SOVELLUS'); ?></h2></legend>
+
+	<div class="row">
+		<?php echo $form->labelEx($model,'sovellus_tyovuorot'); ?>
+		<?php 
+        	$tal = array(
+			1=>'Vain tämä viikko suunnuntai asti',
+			2=>'Tästä päivä alkaen +7pv',
+			3=>'Tästä päivä alkaen +14pv'
+		);
+		echo $form->dropDownList($model,'sovellus_tyovuorot', $tal, 
+		array('class'=>'form-control input-sm')) ?>
+		<?php echo $form->error($model,'sovellus_tyovuorot'); ?>
+	</div>
+
+   </div>
+  </div>
+
+
+<br>
+<br>
 	<div class="buttons">
 		<?php echo CHtml::submitButton($model->isNewRecord ? 'Luo' : 'Tallenna',array('class'=>'btn btn-primary')); ?>
 	</div>
