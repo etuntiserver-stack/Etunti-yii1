@@ -29,13 +29,15 @@
 
 	 if(isset($tvVal))
 	 {
-	   $osoite = $tvVal->kohteet->osoite;
-	   $strlen = strlen($tvVal->kohteet->osoite);
+	   $osoite = '';
+	   if(isset($tvVal->kohteet->osoite))
+	   $osoite = $tvVal->kohteet->osoite;//
+
+	   $strlen = strlen($osoite);
 
 	   if($strlen > 35)
 	    $osoite = substr($osoite,0,35).'..';
-	   else
-	    $osoite = $tvVal->kohteet->osoite;
+
 
 	   if($tvVal->alku > 0 and $tvVal->loppu > 0)
 	    $al = $tvVal->alku.'-'.$tvVal->loppu;
@@ -43,11 +45,11 @@
 	    $al = '';
 
 
-	 if(!empty($tvVal->tyoajanlaatu) and empty($k['osoite']))
+	 if(!empty($tvVal->tyoajanlaatu) and empty($osoite))
 	 {
 	    $expl1 = explode("/",$tvVal->tyoajanlaatu);
 	    $color = (isset($expl1[1])) ? $expl1[1] : '';
-	    $k['osoite'] = (isset($expl1[0])) ? $expl1[0] : '';
+	    $osoite = (isset($expl1[0])) ? $expl1[0] : '';
 	 } else {
 	    $color = '';
 	 }
