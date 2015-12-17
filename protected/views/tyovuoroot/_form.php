@@ -167,7 +167,10 @@ if(!empty($t->gcm_reg_id)) :
 </div>
 	<div class="row modal-footer">
 		<?php echo CHtml::Button('Sulje',array('class'=>'btn btn-default btn-sm','data-dismiss'=>'modal')); ?>
-		<?php echo CHtml::submitButton($model->isNewRecord ? 'Luo' : 'Tallenna',array('class'=>'btn btn-sm btn-primary','id'=>'submitButton')); ?>
+		<?php 
+		if(Yii::app()->user->adminStatus != 2)
+		echo CHtml::submitButton($model->isNewRecord ? 'Luo' : 'Tallenna',array('class'=>'btn btn-sm btn-primary','id'=>'submitButton')); 
+		?>
 	</div>		
 		</div> <!-- end modal-content -->
 	</div> <!-- end modal-dialog -->
