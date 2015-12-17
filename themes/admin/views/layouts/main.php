@@ -42,9 +42,15 @@ Yii::app()->clientScript->registerPackage('bootstrapCSS');
 
 <body>
 
-<?php // if(isset(Yii::app()->user->adminID) or Yii::app()->User->isAdmin()) : ?>
+<?php if(
+	isset(Yii::app()->user->adminStatus) 
+	and Yii::app()->user->adminStatus == 2 
+	and $curpage == 'tyovuoroot/index')
+ : ?>
+	<?php echo ''; ?>
+<?php  else : ?>
 	<?php echo $this->renderPartial('//site/navbar'); ?>
-<?php // endif; ?>
+<?php  endif; ?>
 
 <div class="container-fluid">
 
