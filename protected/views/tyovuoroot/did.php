@@ -21,6 +21,7 @@
 
        	$criteria = new CDbCriteria();
 	$criteria->order = " alku ASC";
+	$criteria->with=array('kohteet');
 	$criteria->condition = " tid = '".$tid."' and pvm = '".date("d.m.Y",strtotime($pvm))."' ";
 	$tv = Tyovuoroot::model()->findAll($criteria); 
 	foreach($tv as $tvVal)
@@ -28,13 +29,13 @@
 
 	 if(isset($tvVal))
 	 {
-	   $k = Kohteet::model()->findbypk($tvVal->kohde,array("select"=>"osoite,avain"));
-	   $strlen = strlen($k['osoite']);
+	   $osoite = $tvVal->kohteet->osoite;
+	   $strlen = strlen($tvVal->kohteet->osoite);
 
 	   if($strlen > 35)
-	    $k['osoite'] = substr($k['osoite'],0,35).'..';
+	    $osoite = substr($osoite,0,35).'..';
 	   else
-	    $k['osoite'] = $k['osoite'];
+	    $osoite = $tvVal->kohteet->osoite;
 
 	   if($tvVal->alku > 0 and $tvVal->loppu > 0)
 	    $al = $tvVal->alku.'-'.$tvVal->loppu;
@@ -63,9 +64,14 @@
 	   echo '<div id="'.$tvVal->id.'_'.$did.'_'.$tid.'" class="fullRivi" style="color:'.$color.'">';
 	   if( $from != 'mobiili' )
 	   echo '<a href=# class="text-danger glyphicon glyphicon-paste muistin" for="'.$tvVal->id.'_'.$did.'_'.$tid.'"></a>';
-	   echo '&nbsp;<span class="link tv_edit" id="tv_'.$tvVal->id.'">'.$al.' '.$k['osoite'].'</span>';
-	   if(!empty($k['avain']))
+	   echo '&nbsp;<span class="link tv_edit" id="tv_'.$tvVal->id.'">'.$al.' '.$osoite.'</span>';
+
+	   if(!empty($tvVal->kohteet->avain))
 	   echo ' <b class="fa fa-key text-warning pull-right"></b>';
+
+	   if(!empty($tvVal->tietoja))
+	   echo ' <b class="fa fa-file-text-o text-warning pull-right" title="Tietoja"></b>';
+
 	   echo '<br>
 	   </div>';
 
