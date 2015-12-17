@@ -31,7 +31,7 @@
 	 {
 	   $osoite = '';
 	   if(isset($tvVal->kohteet->osoite))
-	   $osoite = $tvVal->kohteet->osoite;
+	   $osoite = $tvVal->kohteet->osoite;//
 
 	   $strlen = strlen($osoite);
 
