@@ -106,7 +106,7 @@ class Kohteet extends DB2ActiveRecord
 			'katuosoite' => 'Katuosoite',
 			'kaupunki' => 'Kaupunki',
 			'toimipaikka' => 'Toimipaikka',
-			'pnumero' => 'Postitoimipaikka',
+			'pnumero' => 'Postinumero',
 			'email' => 'Sähköposti',
 			'aikataulu' => 'Aikataulu',
 			'hinnoittelu' => 'Hinnoittelu',

@@ -13,19 +13,19 @@
 
 <?php if(isset($model->id) and $model->tyyppi == 'henkilo') : ?> 
 <style>
-.yritys,.y_tunnus, #kalut{
+.yritys,.y_tunnus, #kalut, .toimitus{
 	display:none;
 }
 </style>
 <?php elseif(isset($model->id) and $model->tyyppi == 'yritys') : ?> 
 <style>
-.nimi, #kalut{
+.nimi, #kalut, .toimitus{
 	display:none;
 }
 </style>
 <?php else : ?> 
 <style>
-.hidd,.ashidd,.ashidd_a,.tyyppi, #kalut{
+.hidd,.ashidd,.ashidd_a,.tyyppi, #kalut, .toimitus{
 	display:none;
 }
 </style>
@@ -174,6 +174,54 @@ $model->viivastyskorko = $asetukset->viivastyskorko;
 		array('class'=>'form-control input-sm'));
         	?>
 		<?php echo $form->error($model,'toimitusosoite'); ?>
+	</div>
+
+	<div class="row toimitus">
+		<?php echo $form->labelEx($model,'t_yritys'); ?>
+		<?php echo $form->textField($model,'t_yritys',array('size'=>60,'maxlength'=>100,'class'=>'form-control input-sm')); ?>
+		<?php echo $form->error($model,'t_yritys'); ?>
+	</div>
+
+	<div class="row toimitus">
+		<?php echo $form->labelEx($model,'t_y_tunnus'); ?>
+		<?php echo $form->textField($model,'t_y_tunnus',array('size'=>60,'maxlength'=>100,'class'=>'form-control input-sm')); ?>
+		<?php echo $form->error($model,'t_y_tunnus'); ?>
+	</div>
+
+	<div class="row toimitus">
+		<?php echo $form->labelEx($model,'t_nimi'); ?>
+		<?php echo $form->textField($model,'t_nimi',array('size'=>60,'maxlength'=>100,'class'=>'form-control input-sm')); ?>
+		<?php echo $form->error($model,'t_nimi'); ?>
+	</div>
+
+	<div class="row toimitus">
+		<?php echo $form->labelEx($model,'t_osoite'); ?>
+		<?php echo $form->textField($model,'t_osoite',array('size'=>60,'maxlength'=>100,'class'=>'form-control input-sm')); ?>
+		<?php echo $form->error($model,'t_osoite'); ?>
+	</div>
+
+	<div class="row toimitus">
+		<?php echo $form->labelEx($model,'t_postinumero'); ?>
+		<?php echo $form->textField($model,'t_postinumero',array('size'=>60,'maxlength'=>100,'class'=>'form-control input-sm')); ?>
+		<?php echo $form->error($model,'t_postinumero'); ?>
+	</div>
+
+	<div class="row toimitus">
+		<?php echo $form->labelEx($model,'t_toimipaikka'); ?>
+		<?php echo $form->textField($model,'t_toimipaikka',array('size'=>60,'maxlength'=>100,'class'=>'form-control input-sm')); ?>
+		<?php echo $form->error($model,'t_toimipaikka'); ?>
+	</div>
+
+	<div class="row toimitus">
+		<?php echo $form->labelEx($model,'t_puhelin'); ?>
+		<?php echo $form->textField($model,'t_puhelin',array('size'=>60,'maxlength'=>50,'class'=>'form-control input-sm')); ?>
+		<?php echo $form->error($model,'t_puhelin'); ?>
+	</div>
+
+	<div class="row toimitus">
+		<?php echo $form->labelEx($model,'t_sahkoposti'); ?>
+		<?php echo $form->textField($model,'t_sahkoposti',array('size'=>60,'maxlength'=>100,'class'=>'form-control input-sm')); ?>
+		<?php echo $form->error($model,'t_sahkoposti'); ?>
 	</div>
 
   </div><div class="col-sm-3">
@@ -1149,6 +1197,18 @@ function laskutus(value){
     }
 
 }
+
+
+$("#Lasku_toimitusosoite").change(function() {
+    var toimitusosoite = $(this).val();
+    if(toimitusosoite == 1){
+	$(".toimitus").show('slow');
+    }
+    if(toimitusosoite == 0){
+	$(".toimitus").hide('slow');
+    }
+});
+
 
 
 });
