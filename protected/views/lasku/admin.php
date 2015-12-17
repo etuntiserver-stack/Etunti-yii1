@@ -168,6 +168,7 @@ array(
 <script type="text/javascript">
 $(document).ready(function(){
 
+
 $("#haeRaportti").click(function() {
 	window.location.href=$("#raportit").val();
 });

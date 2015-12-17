@@ -725,6 +725,9 @@ exit;
 		$trust = false;
 		$trustStr = '';
 		$xml = array();
+		$bd = '';
+		$bd .= '<div class="pull-right btn btn-info btn-xs" data-toggle="collapse" data-target="#haku_'.$data->id.'">'.Yii::t('main', 'historia').' <b class="caret"></b></div><br>';
+		$bd .= '<div class="collapse" id="haku_'.$data->id.'">';
 		foreach($l as $d)
 		{
 		  if(isset($d->palvelu) and $d->palvelu == 'trust')
@@ -733,11 +736,20 @@ exit;
 		    $json = json_decode($d->status, true);
 
 		    if(isset($json['statustext']) and !empty($json['statustext'])){
-		      $trustStr .= $json['statustext'].'<hr>';
+		      if($trust == false)
+		      echo '<b>'.$json['statustime'].'</b><br> <span id="first_'.$data->id.'">'.$json['statustext'].'</span><hr>';
+		      if($trust == true)
+		      $bd .= '<b>'.$json['statustime'].'</b><br> '.$json['statustext'].'<hr>';
+
 		      $trust = true;
 		    }
 
 		  }
+		}
+		if($trust == true)
+		{
+		$bd .= '</div>';
+		echo $bd;
 		}
 		//  Trust -->
 
@@ -776,8 +788,6 @@ exit;
 		    $tilanne = 'Lähetetty';
 		elseif($data->tilanne == 3)
 		    $tilanne = 'Maksettu';
-		elseif($trust == true)
-		    $tilanne = $trustStr;
 		elseif($postita == true)
 		    $tilanne = $postitaStr;
 
