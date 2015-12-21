@@ -2,6 +2,15 @@
      $tas = array();
    if(isset(Yii::app()->user->adminPaketti)) 
      $tas = explode(",",Yii::app()->user->adminPaketti);
+
+
+  $img = "";
+  if(file_exists(Yii::app()->baseUrl.'/img/admins/'.Yii::app()->user->domain.'/'.Yii::app()->user->id.".jpg") 
+	and isset(Yii::app()->user->id))
+  {
+  $img = Yii::app()->baseUrl.'/img/admins/'.Yii::app()->user->domain.'/'.Yii::app()->user->id.".jpg";
+  }
+
 ?>
 
   <!-- For Demo Purposes - Theme Settings Pane -->
@@ -226,23 +235,67 @@
         </li>
         <li class="dropdown menu-merge">
           <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-            <span class="flag-xs flag-us"></span> FI
+            <span class=""></span> FI
           </a>
           <ul class="dropdown-menu pv5 animated animated-short flipInX" role="menu">
             <li>
               <a href="javascript:void(0);">
-                <span class="flag-xs flag-ee mr10"></span> Eesti </a>
+                <span class="mr10"></span> Eesti </a>
             </li>
           </ul>
         </li>
+
+
         <li class="menu-divider hidden-xs">
           <i class="fa fa-circle"></i>
         </li>
         <li class="dropdown menu-merge">
-          <a href="#" class="dropdown-toggle fw600 p15" data-toggle="dropdown"> <img src="<?php echo Yii::app()->request->baseUrl; ?>/assets_etunti/assets/img/avatars/1.jpg" alt="avatar" class="mw30 br64 mr15"> <?php echo Yii::app()->user->nimi; ?>
+          <a href="#" class="dropdown-toggle " data-toggle="dropdown"> 
+		 <?php echo Yii::t('main','Asetukset'); ?>
             <span class="caret caret-tp hidden-xs"></span>
           </a>
           <ul class="dropdown-menu list-group dropdown-persist w250" role="menu">
+            <li class="list-group-item">
+              <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/asetukser/update?id=1" class="animated animated-short fadeInUp">
+                <span class="fa fa-gear"></span> <?php echo Yii::t('main','Asetukset'); ?> </a>
+            </li>
+            <li class="list-group-item">
+              <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/firmanTiedot/update?id=1" class="animated animated-short fadeInUp">
+                <span class="fa fa-gear"></span> <?php echo Yii::t('main','Firma'); ?> </a>
+            </li>
+            <li class="list-group-item">
+              <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/site/ohjesivu" class="animated animated-short fadeInUp">
+                <span class="fa fa-gear"></span> <?php echo Yii::t('main','Ohjesivu'); ?> </a>
+            </li>
+            <li class="list-group-item">
+              <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/administrators/admin" class="animated animated-short fadeInUp">
+                <span class="fa fa-gear"></span> <?php echo Yii::t('main','Järjestelmänvalvojat'); ?> </a>
+            </li>
+            <li class="list-group-item">
+              <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/valikkoot/index" class="animated animated-short fadeInUp">
+                <span class="fa fa-gear"></span> <?php echo Yii::t('main','Valikot'); ?> </a>
+            </li>
+            <li class="list-group-item">
+              <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/site/mobemu" class="animated animated-short fadeInUp">
+                <span class="fa fa-gear"></span> <?php echo Yii::t('main','Mobiili emulattori'); ?> </a>
+            </li>
+          </ul>
+        </li>
+        <li id="toggle_sidemenu_t">  
+        		<span class="fa fa-caret-up"></span>
+        </li>
+
+
+        <li class="menu-divider hidden-xs">
+          <i class="fa fa-circle"></i>
+        </li>
+        <li class="dropdown menu-merge">
+          <a href="#" class="dropdown-toggle fw600 p15" data-toggle="dropdown"> <img src="<?php echo $img; ?>" alt="avatar" class="mw30 br64 mr15"> <?php echo Yii::app()->user->nimi; ?>
+            <span class="caret caret-tp hidden-xs"></span>
+          </a>
+          <ul class="dropdown-menu list-group dropdown-persist w250" role="menu">
+
+	 <!--
             <li class="dropdown-header clearfix">
               <div class="pull-left ml10">
                 <select id="user-status">
@@ -277,12 +330,13 @@
                 <span class="label label-warning">6</span>
               </a>
             </li>
+	-->
             <li class="list-group-item">
-              <a href="#" class="animated animated-short fadeInUp">
-                <span class="fa fa-gear"></span> Account Settings </a>
+              <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/administrators/update?id=<?php echo Yii::app()->user->id; ?>" class="animated animated-short fadeInUp">
+                <span class="fa fa-gear"></span> <?php echo Yii::t('main','Tunnuksen asetukset'); ?> </a>
             </li>
             <li class="list-group-item">
-              <a href="#" class="animated animated-short fadeInUp">
+              <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/user/logout" class="animated animated-short fadeInUp">
                 <span class="fa fa-power-off"></span> Logout </a>
             </li>
           </ul>
@@ -290,6 +344,9 @@
         <li id="toggle_sidemenu_t">  
         		<span class="fa fa-caret-up"></span>
         </li>
+
+
+
       </ul>
 
     </header>
@@ -310,25 +367,128 @@
               <span class="sidebar-title"><?php echo Yii::t('main', 'ETUSIVU'); ?></span>
             </a>
           </li>
+
+
+
           <li>
-            <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/mobile/index">
-              <span class="glyphicon glyphicon-home"></span>
-              <span class="sidebar-title"><?php echo Yii::t('main', 'Tunnit'); ?></span>
-            </a>
-          </li>
-          <li>
-            <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/asiakkaat/admin">
-              <span class="glyphicon glyphicon-home"></span>
+            <a class="accordion-toggle" href="#">
+              <span class="fa fa-calendar"></span>
               <span class="sidebar-title"><?php echo Yii::t('main', 'Asiakkaat'); ?></span>
+              <span class="caret"></span>
             </a>
-          </li>
-          <li>
-            <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/kohteet/admin">
-              <span class="glyphicon glyphicon-home"></span>
-              <span class="sidebar-title"><?php echo Yii::t('main', 'Kohteet'); ?></span>
-            </a>
+            <ul class="nav sub-nav">
+              <li>
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/asiakkaat/admin">
+                  <span class="fa fa-cube"></span> <?php echo Yii::t('main', 'Asiakkaat'); ?></a>
+              </li>
+              <li>
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/kohteet/admin">
+                  <span class="fa fa-cube"></span> <?php echo Yii::t('main', 'Kohteet'); ?></a>
+              </li>
+              <li>
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/kohteet/avaimet">
+                  <span class="fa fa-cube"></span> <?php echo Yii::t('main', 'Avaimet'); ?></a>
+              </li>
+              <li>
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/asiakasHyvaksynta/index">
+                  <span class="fa fa-cube"></span> <?php echo Yii::t('main', 'Asiakkaiden hyväksymät tunnit'); ?></a>
+              </li>
+              <li>
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/kohteet/googlemap">
+                  <span class="fa fa-cube"></span> <?php echo Yii::t('main', 'Kartta'); ?></a>
+              </li>
+            </ul>
           </li>
 
+
+
+          <li>
+            <a class="accordion-toggle" href="#">
+              <span class="fa fa-calendar"></span>
+              <span class="sidebar-title"><?php echo Yii::t('main', 'Tunnit'); ?></span>
+              <span class="caret"></span>
+            </a>
+            <ul class="nav sub-nav">
+              <li>
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/mobile/index">
+                  <span class="fa fa-cube"></span> <?php echo Yii::t('main', 'Tunnit'); ?></a>
+              </li>
+              <li>
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/toteutuneet/index">
+                  <span class="fa fa-cube"></span> <?php echo Yii::t('main', 'Tuntien hyväksyntä'); ?></a>
+              </li>
+              <li>
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/mobile/yhteenveto">
+                  <span class="fa fa-cube"></span> <?php echo Yii::t('main', 'Tuntiyhteenveto työntekijät'); ?></a>
+              </li>
+              <li>
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/mobile/kyhteenveto">
+                  <span class="fa fa-cube"></span> <?php echo Yii::t('main', 'Tuntiyhteenveto kohteet'); ?></a>
+              </li>
+              <li>
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/mobile/kyhteenveto_tuntemattomat">
+                  <span class="fa fa-cube"></span> <?php echo Yii::t('main', 'Tuntiyhteenveto kohteet tuntemattomat'); ?></a>
+              </li>
+              <li>
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/mobile/yhteenveto_m">
+                  <span class="fa fa-cube"></span> <?php echo Yii::t('main', 'Tuntiyhteenveto matkat'); ?></a>
+              </li>
+              <li>
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/mobile/palkkataulukko">
+                  <span class="fa fa-cube"></span> <?php echo Yii::t('main', 'Palkkataulukko'); ?></a>
+              </li>
+              <li>
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/toteutuneet/kk">
+                  <span class="fa fa-cube"></span> <?php echo Yii::t('main', 'Kuukauden tunnit'); ?></a>
+              </li>
+              <li>
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/mobile/raportit">
+                  <span class="fa fa-cube"></span> <?php echo Yii::t('main', 'Raportit tunneista'); ?></a>
+              </li>
+            </ul>
+          </li>
+
+
+
+          <li>
+            <a class="accordion-toggle" href="#">
+              <span class="fa fa-calendar"></span>
+              <span class="sidebar-title"><?php echo Yii::t('main', 'Työntekijät'); ?></span>
+              <span class="caret"></span>
+            </a>
+            <ul class="nav sub-nav">
+              <li>
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/tyontekijat/admin">
+                  <span class="fa fa-cube"></span> <?php echo Yii::t('main', 'Työntekijät'); ?></a>
+              </li>
+              <li>
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/tyosuhdet/index">
+                  <span class="fa fa-cube"></span> <?php echo Yii::t('main', 'Työsuhdelomake'); ?></a>
+              </li>
+              <li>
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/tyontekijat/merkkipaivat">
+                  <span class="fa fa-cube"></span> <?php echo Yii::t('main', 'Merkkipäivät'); ?></a>
+              </li>
+            </ul>
+          </li>
+
+
+
+          <li>
+            <a class="accordion-toggle" href="#">
+              <span class="fa fa-calendar"></span>
+              <span class="sidebar-title"><?php echo Yii::t('main', 'Viestintä'); ?></span>
+              <span class="caret"></span>
+            </a>
+            <ul class="nav sub-nav">
+              <li>
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/viestinta/admin">
+                  <span class="fa fa-cube"></span> <?php echo Yii::t('main', 'Viestit'); ?></a>
+              </li>
+            </ul>
+          </li>
+
+	<?php if(in_array('2',$tas)) : ?>
           <li>
             <a class="accordion-toggle" href="#">
               <span class="fa fa-calendar"></span>
@@ -354,6 +514,29 @@
               </li>
             </ul>
           </li>
+	<?php endif; ?>
+
+	<?php if(in_array('3',$tas)) : ?>
+          <li>
+            <a class="accordion-toggle" href="#">
+              <span class="fa fa-calendar"></span>
+              <span class="sidebar-title"><?php echo Yii::t('main', 'Laskutus'); ?></span>
+              <span class="caret"></span>
+            </a>
+            <ul class="nav sub-nav">
+              <li>
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/lasku/admin">
+                  <span class="fa fa-cube"></span> <?php echo Yii::t('main', 'Laskut'); ?></a>
+              </li>
+              <li>
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/LaskutusTuotteet/admin">
+                  <span class="fa fa-cube"></span> <?php echo Yii::t('main', 'Tuotteet ja palvelut'); ?></a>
+              </li>
+            </ul>
+          </li>
+	<?php endif; ?>
+
+
             </ul>
           </li>
 

@@ -1,6 +1,7 @@
 assets/*
 emails/*
 tiedostot/tekijat/*
+tiedostot/admins/*
 img/*
 protected/views/domainit/sql/*
 protected/runtime/*
