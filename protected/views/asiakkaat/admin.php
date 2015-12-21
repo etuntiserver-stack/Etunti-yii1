@@ -110,7 +110,7 @@ echo '
                array(
                     'name'=>'ryhma',
                     'filter'=>CHtml::dropDownList('Asiakkaat[ryhma]','',
-		    CHtml::listData(Valikkoot::model()->findAll(" select_type='asiakas_ryhma' ",array('order' => "select_type")), 'id', 'value'),array('empty'=>'valitse','class'=>'form-control')),
+		    CHtml::listData(Valikkoot::model()->findAll(" select_type='asiakas_ryhma' ",array('order' => "select_type")), 'id', 'value'),array('empty'=>'valitse')),
                     
 		),
 		/*
