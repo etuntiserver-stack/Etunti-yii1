@@ -22,7 +22,7 @@ $asiakasnumero = 'voidaan käyttää oleva ID numero';
 }
 </style>
 
-<div class="row form">
+<div class="row">
 
 
 <?php $form=$this->beginWidget('CActiveForm', array(
@@ -36,13 +36,13 @@ $asiakasnumero = 'voidaan käyttää oleva ID numero';
   <div class="col-sm-3">
 	<legend><h3><?php echo Yii::t('main', 'Asiakkaan tiedot'); ?></h3></legend>
 
-	<div class="row">
+	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'asiakasnumero'); ?>
 		<?php echo $form->textField($model,'asiakasnumero',array('size'=>60,'maxlength'=>100,'class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'asiakasnumero'); ?>
 	</div>
 
-	<div class="row tyyppi">
+	<div class="section fill mb5 tyyppi">
 		<?php echo $form->labelEx($model,'tyyppi'); ?>
 		<?php
 		$list = array('yritys'=>Yii::t('main', 'Yritys'),'henkilo'=>Yii::t('main', 'Yksityishenkilö'));
@@ -52,55 +52,55 @@ $asiakasnumero = 'voidaan käyttää oleva ID numero';
 		<?php echo $form->error($model,'tyyppi'); ?>
 	</div>
 
-	<div class="row yritys ashidd">
+	<div class="section fill mb5 yritys ashidd">
 		<?php echo $form->labelEx($model,'yrityksen_nimi'); ?>
 		<?php echo $form->textField($model,'yrityksen_nimi',array('size'=>60,'maxlength'=>100,'class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'yrityksen_nimi'); ?>
 	</div>
 
-	<div class="row y_tunnus ashidd">
+	<div class="section fill mb5 y_tunnus ashidd">
 		<?php echo $form->labelEx($model,'y_tunnus'); ?>
 		<?php echo $form->textField($model,'y_tunnus',array('size'=>60,'maxlength'=>255,'class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'y_tunnus'); ?>
 	</div>
 
-	<div class="row nimi ashidd">
+	<div class="section fill mb5 nimi ashidd">
 		<?php echo $form->labelEx($model,'yhteyshenkilo'); ?>
 		<?php echo $form->textField($model,'yhteyshenkilo',array('size'=>60,'maxlength'=>100,'class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'yhteyshenkilo'); ?>
 	</div>
 
-	<div class="row ashidd_a">
+	<div class="section fill mb5 ashidd_a">
 		<?php echo $form->labelEx($model,'osoite'); ?>
 		<?php echo $form->textField($model,'osoite',array('size'=>60,'maxlength'=>255,'class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'osoite'); ?>
 	</div>
 
-	<div class="row ashidd_a">
+	<div class="section fill mb5 ashidd_a">
 		<?php echo $form->labelEx($model,'kaupunki'); ?>
 		<?php echo $form->textField($model,'kaupunki',array('size'=>60,'maxlength'=>100,'class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'kaupunki'); ?>
 	</div>
 
-	<div class="row ashidd_a">
+	<div class="section fill mb5 ashidd_a">
 		<?php echo $form->labelEx($model,'postinumero'); ?>
 		<?php echo $form->textField($model,'postinumero',array('class'=>'form-control input-sm','maxlength'=>5)); ?>
 		<?php echo $form->error($model,'postinumero'); ?>
 	</div>
 
-	<div class="row ashidd_a">
+	<div class="section fill mb5 ashidd_a">
 		<?php echo $form->labelEx($model,'puhelin'); ?>
 		<?php echo $form->textField($model,'puhelin',array('size'=>60,'maxlength'=>100,'class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'puhelin'); ?>
 	</div>
 
-	<div class="row ashidd_a">
+	<div class="section fill mb5 ashidd_a">
 		<?php echo $form->labelEx($model,'sahkoposti'); ?>
 		<?php echo $form->textField($model,'sahkoposti',array('size'=>60,'maxlength'=>100,'class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'sahkoposti'); ?>
 	</div>
 
-	<div class="row ashidd_a">
+	<div class="section fill mb5 ashidd_a">
 		<?php echo $form->labelEx($model,'ryhma'); ?>
 		<?php
 		$list = array();
@@ -119,7 +119,7 @@ $asiakasnumero = 'voidaan käyttää oleva ID numero';
 		<?php echo $form->error($model,'ryhma'); ?>
 	</div>
 
-	<div class="row ashidd_a">
+	<div class="section fill mb5 ashidd_a">
 		<?php echo $form->labelEx($model,'aktiivinen'); ?>
 		<?php
 		$list = array(1=>Yii::t('main', 'Kyllä'),0=>Yii::t('main', 'Ei'));
@@ -129,7 +129,7 @@ $asiakasnumero = 'voidaan käyttää oleva ID numero';
 		<?php echo $form->error($model,'aktiivinen'); ?>
 	</div>
 
-	<div class="row ashidd_a">
+	<div class="section fill mb5 ashidd_a">
 		<?php echo $form->labelEx($model,'myyja'); ?>
 		<?php echo $form->dropDownList($model, 'myyja', CHtml::listData(Administrators::model()->findAll(), 'id', 'adm_nimi'), 
 		array('empty'=>'Valitse', 'class'=>'form-control input-sm')); 
@@ -145,7 +145,7 @@ $asiakasnumero = 'voidaan käyttää oleva ID numero';
 	
 	<legend><h3><?php echo Yii::t('main', 'Laskutus tiedot'); ?></h3></legend>
 
-	<div class="row">
+	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'laskutus_kanava'); ?>
 		<?php
 		$list = array(	'posti'=>Yii::t('main','Posti'),
@@ -158,7 +158,7 @@ $asiakasnumero = 'voidaan käyttää oleva ID numero';
 		<?php echo $form->error($model,'laskutus_kanava'); ?>
 	</div>
 
-	<div class="row">
+	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'kirjeenluokka'); ?>
 		<?php
 		$list = array(	'1'=>Yii::t('main','Luokka 1'),
@@ -170,7 +170,7 @@ $asiakasnumero = 'voidaan käyttää oleva ID numero';
 		<?php echo $form->error($model,'kirjeenluokka'); ?>
 	</div>
 
-	<div class="row">
+	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'muistutuslasku_auto'); ?>
 		<?php
 		$list = array(	'0'=>Yii::t('main','Kyllä'),
@@ -182,31 +182,31 @@ $asiakasnumero = 'voidaan käyttää oleva ID numero';
 		<?php echo $form->error($model,'muistutuslasku_auto'); ?>
 	</div>
 
-	<div class="row">
+	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'ovt_tunnus'); ?>
 		<?php echo $form->textField($model,'ovt_tunnus',array('class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'ovt_tunnus'); ?>
 	</div>
 
-	<div class="row">
+	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'verkkolaskuosoite'); ?>
 		<?php echo $form->textField($model,'verkkolaskuosoite',array('class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'verkkolaskuosoite'); ?>
 	</div>
 
-	<div class="row">
+	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'valittajan_tunnus'); ?>
 		<?php echo $form->textField($model,'valittajan_tunnus',array('class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'valittajan_tunnus'); ?>
 	</div>
 
-	<div class="row">
+	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'maksuehto'); ?>
 		<?php echo $form->textField($model,'maksuehto',array('size'=>60,'maxlength'=>100,'class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'maksuehto'); ?>
 	</div>
 
-	<div class="row">
+	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'alv'); ?>
 		<?php
 		$list = array();
@@ -222,7 +222,7 @@ $asiakasnumero = 'voidaan käyttää oleva ID numero';
 		<?php echo $form->error($model,'alv'); ?>
 	</div>
 
-	<div class="row">
+	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'hinta_tyyppi'); ?>
 		<?php
 		$list = array(1=>'tunti',2=>'kk');
@@ -232,7 +232,7 @@ $asiakasnumero = 'voidaan käyttää oleva ID numero';
 		<?php echo $form->error($model,'hinta_tyyppi'); ?>
 	</div>
 
-	<div class="row">
+	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'hinta'); ?>
 		<?php echo $form->textField($model,'hinta',array('size'=>10,'maxlength'=>100,'class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'hinta'); ?>
@@ -246,17 +246,17 @@ $asiakasnumero = 'voidaan käyttää oleva ID numero';
 	<?php if(isset($model->id)): ?>
 	<legend><h3><?php echo Yii::t('main', 'Asiakkaaseen liittyviä kohteita'); ?></h3></legend>
 
-	<div class="row">
+	<div class="section fill mb5">
 		<label><?php echo Yii::t('main', 'Luo kohde'); ?></label>
 		<?php echo CHtml::link(' +','/index.php/kohteet/createfromasiakas?id='.$model->id,array('class'=>'btn btn-default glyphicon glyphicon-home')); ?>
 	</div>
 
-	<div class="row">		
+	<div class="section fill mb5">		
 		<?php
 		$k = Kohteet::model()->findAll("asiakas_id='".$model->id."'");
         	foreach($k as $v)
 		{
-		   echo '<div class="row">
+		   echo '<div class="section fill mb5">
 		   <h3 class="glyphicon glyphicon-home"></h3>&nbsp;&nbsp;&nbsp; 
 		   '.CHtml::link($v->osoite,'/index.php/kohteet/update?id='.$v->id,array('class'=>'link')).'	       	  
 		   </div>';
@@ -267,11 +267,14 @@ $asiakasnumero = 'voidaan käyttää oleva ID numero';
 
   </div>
 </div><!-- form -->
+<br>
 
-	<div class="buttons">
+	<div class="section">
 		<?php echo CHtml::submitButton($model->isNewRecord ? 'Luo' : 'Tallenna',array('class'=>'btn btn-primary')); ?>
 	</div>
 
+  </div>
+</div>
 <?php $this->endWidget(); ?>
 
 
