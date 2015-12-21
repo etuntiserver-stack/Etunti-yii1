@@ -5,7 +5,7 @@
 ?>
 
 <div class="row form">
-  <div class="col-sm-3">
+  <div class="col-sm-4">
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'administrators-form',
 	'enableAjaxValidation'=>false,
@@ -65,4 +65,4 @@
 
 <?php $this->endWidget(); ?>
   </div>
-</div><!-- form -->
+
