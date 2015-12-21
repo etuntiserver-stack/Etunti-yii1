@@ -33,15 +33,15 @@ $('.search-form form').submit(function(){
 )); ?>
 </div><!-- search-form -->
 
+<div class="row">
+	<h3><?php echo Yii::t('main', 'KOHTEET'); ?> <i class="glyphicon glyphicon-home"></i> 
+	| <?php echo CHtml::link('Haku','#',array('class'=>'search-button')); ?>
+	| <?php echo CHtml::link('Lisää uusi kohde','/index.php/kohteet/create',array('class'=>'')); ?>
+   	</h3>
+</div>
 
-<div class="row small">
-        <div class="panel panel-primary">
-            <div class="panel-heading">
-                <h3 class="panel-title"><?php echo Yii::t('main', 'KOHTEET'); ?> <i class="glyphicon glyphicon-home"></i> 
-		 | <?php echo CHtml::link('Haku','#',array('class'=>'search-button')); ?>
-		 | <?php echo CHtml::link('Lisää uusi kohde','/index.php/kohteet/create',array('target'=>'_blank','class'=>'')); ?>
-		</h3>
-            </div>
+
+<div class="row">
 
 <?php $this->widget('zii.widgets.grid.CGridView', array(
 	'id'=>'kohteet-grid',
@@ -60,11 +60,13 @@ $('.search-form form').submit(function(){
                     'name'=>'id',
                     'filter'=>CHtml::textField('Kohteet[id]','',array('class'=>'form-control input-sm')),
 		),
+/*
                array(
                     'name'=>'time',
                     'filter'=>CHtml::textField('Kohteet[time]','',array('class'=>'form-control input-sm')),
                     'value'=>'date("d.m.Y - H:i",strtotime($data->time))',                   
 		),
+*/
                array(
                     'name'=>'asiakas_id',
                     'filter'=>CHtml::dropDownList('Kohteet[asiakas_id]','',
@@ -147,6 +149,4 @@ $('.search-form form').submit(function(){
 	),
 )); ?>
 
-        </div>
-    </div>
 </div>

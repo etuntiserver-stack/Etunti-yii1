@@ -65,29 +65,32 @@ echo '
 ?>
 
 
-
-
-<legend>
-   <div class="pull-right">
-     <?php echo CHtml::link(' Lisää uusi asiakas','/index.php/asiakkaat/create',array('target'=>'_blank','class'=>'btn btn-default glyphicon glyphicon-user')); ?>
-   </div>
-<h1> <?php echo Yii::t('main', 'ASIAKKAAT'); ?> <i class="glyphicon glyphicon-user"></i></h1>
-</legend>
-
-
-
-<?php echo CHtml::link('Haku','#',array('class'=>'search-button')); ?>
 <div class="search-form" style="display:none">
 <?php $this->renderPartial('_search',array(
 	'model'=>$model,
 )); ?>
 </div><!-- search-form -->
 
+
+<div class="row">
+	<h3><?php echo Yii::t('main', 'ASIAKKAAT'); ?> <i class="glyphicon glyphicon-user"></i> 
+	| <?php echo CHtml::link('Haku','#',array('class'=>'search-button')); ?>
+	| <?php echo CHtml::link('Lisää uusi asiakas','/index.php/asiakkaat/create',array('class'=>'')); ?>
+   	</h3>
+</div>
+
+
+<div class="row">
+
+
 <?php 
 	$this->widget('zii.widgets.grid.CGridView', array(
 	'id'=>'asiakkaat-grid',
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,
+
+	'pager' => array('cssFile' => Yii::app()->baseUrl . '/css/gridViewStyle/gridView.css'),
+	'cssFile' => Yii::app()->baseUrl . '/css/gridViewStyle/gridView.css',
 
         'pagerCssClass' => 'dataTables_paginate paging_bootstrap',
         'itemsCssClass' => 'table table-striped small table-hover',
@@ -134,3 +137,5 @@ array(
     ),
 	),
 )); ?>
+
+</div>
