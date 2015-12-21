@@ -26,16 +26,7 @@ $('.search-form form').submit(function(){
 ");
 ?>
 
-<legend>
-   <div class="pull-right">
-     <?php echo CHtml::link(' Lisää uusi kohde','/index.php/kohteet/create',array('target'=>'_blank','class'=>'btn btn-default glyphicon glyphicon-home')); ?>
-   </div>
-<h1> <?php echo Yii::t('main', 'KOHTEET'); ?> <i class="glyphicon glyphicon-home"></i></h1>
-</legend>
 
-
-
-<?php echo CHtml::link('Haku','#',array('class'=>'search-button')); ?>
 <div class="search-form" style="display:none">
 <?php $this->renderPartial('_search',array(
 	'model'=>$model,
@@ -43,40 +34,75 @@ $('.search-form form').submit(function(){
 </div><!-- search-form -->
 
 
+<div class="row small">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title"><?php echo Yii::t('main', 'KOHTEET'); ?> <i class="glyphicon glyphicon-home"></i> 
+		 | <?php echo CHtml::link('Haku','#',array('class'=>'search-button')); ?>
+		 | <?php echo CHtml::link('Lisää uusi kohde','/index.php/kohteet/create',array('target'=>'_blank','class'=>'')); ?>
+		</h3>
+            </div>
+
 <?php $this->widget('zii.widgets.grid.CGridView', array(
 	'id'=>'kohteet-grid',
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,
 
-                    'pagerCssClass' => 'dataTables_paginate paging_bootstrap',
-                    'itemsCssClass' => 'table table-striped small table-hover',
+	'pager' => array('cssFile' => Yii::app()->baseUrl . '/css/gridViewStyle/gridView.css'),
+	'cssFile' => Yii::app()->baseUrl . '/css/gridViewStyle/gridView.css',
+
+        'pagerCssClass' => 'dataTables_paginate paging_bootstrap',
+        'itemsCssClass' => 'table table-striped small table-hover',
 
 
 	'columns'=>array(
-		'id',
+               array(
+                    'name'=>'id',
+                    'filter'=>CHtml::textField('Kohteet[id]','',array('class'=>'form-control input-sm')),
+		),
                array(
                     'name'=>'time',
+                    'filter'=>CHtml::textField('Kohteet[time]','',array('class'=>'form-control input-sm')),
                     'value'=>'date("d.m.Y - H:i",strtotime($data->time))',                   
 		),
                array(
                     'name'=>'asiakas_id',
                     'filter'=>CHtml::dropDownList('Kohteet[asiakas_id]','',
-		    CHtml::listData(Asiakkaat::model()->findAll(array('order' => "yhteyshenkilo")), 'id', 'yhteyshenkilo'),array('empty'=>'valitse','class'=>'form')),
+		    CHtml::listData(Asiakkaat::model()->findAll(array('order' => "yhteyshenkilo")), 'id', 'yhteyshenkilo'),array('empty'=>'valitse','class'=>'form-control input-sm')),
 		    'value'=>array($this,'asiakasMuutos'),
 		    'type' => 'html',
                     
 		),
 		//'asiakas_id',
-		'etu_suku_nimet',
-		'tag_id',
+               array(
+                    'name'=>'etu_suku_nimet',
+                    'filter'=>CHtml::textField('Kohteet[etu_suku_nimet]','',array('class'=>'form-control input-sm')),
+		),
+
 		//'gps_sijainti',
 		//'lyhenne',
-		'osoite',
+               array(
+                    'name'=>'tag_id',
+                    'filter'=>CHtml::textField('Kohteet[tag_id]','',array('class'=>'form-control input-sm')),
+		),
 		//'kaupunki',
-		'email',
-		'puh_nro',
+               array(
+                    'name'=>'osoite',
+                    'filter'=>CHtml::textField('Kohteet[osoite]','',array('class'=>'form-control input-sm')),
+		),
+               array(
+                    'name'=>'email',
+                    'filter'=>CHtml::textField('Kohteet[email]','',array('class'=>'form-control input-sm')),
+		),
+               array(
+                    'name'=>'puh_nro',
+                    'filter'=>CHtml::textField('Kohteet[puh_nro]','',array('class'=>'form-control input-sm')),
+		),
+               array(
+                    'name'=>'avain',
+                    'filter'=>CHtml::textField('Kohteet[avain]','',array('class'=>'form-control input-sm')),
+		),
 		//'tietoja',
-		'avain',
 		/*
 		'katuosoite',
 
@@ -120,3 +146,7 @@ $('.search-form form').submit(function(){
 
 	),
 )); ?>
+
+        </div>
+    </div>
+</div>

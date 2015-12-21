@@ -184,6 +184,8 @@
 	    } 
 	    ?>
 	    <?php endif; ?>
+        	<li><?php echo CHtml::link(Yii::t('main', 'Teema "ETUNTI"'),array('/site/etusivu?theme=etunti')); ?></li>
+        	<li><?php echo CHtml::link(Yii::t('main', 'Teema "PERUS"'),array('/site/etusivu?theme=admin')); ?></li>
           </ul>
         </li>
 

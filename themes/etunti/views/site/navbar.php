@@ -1,0 +1,616 @@
+<?php 
+     $tas = array();
+   if(isset(Yii::app()->user->adminPaketti)) 
+     $tas = explode(",",Yii::app()->user->adminPaketti);
+?>
+
+  <!-- For Demo Purposes - Theme Settings Pane -->
+  <div id="skin-toolbox">
+    <div class="panel">
+      <div class="panel-heading">
+        <span class="panel-icon">
+          <i class="fa fa-gear text-primary"></i>
+        </span>
+        <span class="panel-title"> Theme Options</span>
+      </div>
+      <div class="panel-body pn">
+        <ul class="nav nav-list nav-list-sm pl15 pt10" role="tablist">
+          <li class="active">
+            <a href="#toolbox-header" role="tab" data-toggle="tab">Navbar</a>
+          </li>
+          <li>
+            <a href="#toolbox-sidebar" role="tab" data-toggle="tab">Sidebar</a>
+          </li>
+          <li>
+            <a href="#toolbox-settings" role="tab" data-toggle="tab">Misc</a>
+          </li>
+        </ul>
+        <div class="tab-content p20 ptn pb15">
+          <div role="tabpanel" class="tab-pane active" id="toolbox-header">
+            <form id="toolbox-header-skin">
+              <h4 class="mv20">Header Skins</h4>
+              <div class="skin-toolbox-swatches">
+                <div class="checkbox-custom checkbox-disabled fill mb5">
+                  <input type="radio" name="headerSkin" id="headerSkin8" checked value="">
+                  <label for="headerSkin8">Light</label>
+                </div>
+                <div class="checkbox-custom fill checkbox-primary mb5">
+                  <input type="radio" name="headerSkin" id="headerSkin1" value="bg-primary">
+                  <label for="headerSkin1">Primary</label>
+                </div>
+                <div class="checkbox-custom fill checkbox-info mb5">
+                  <input type="radio" name="headerSkin" id="headerSkin3" value="bg-info">
+                  <label for="headerSkin3">Info</label>
+                </div>
+                <div class="checkbox-custom fill checkbox-warning mb5">
+                  <input type="radio" name="headerSkin" id="headerSkin4" value="bg-warning">
+                  <label for="headerSkin4">Warning</label>
+                </div>
+                <div class="checkbox-custom fill checkbox-danger mb5">
+                  <input type="radio" name="headerSkin" id="headerSkin5" value="bg-danger">
+                  <label for="headerSkin5">Danger</label>
+                </div>
+                <div class="checkbox-custom fill checkbox-alert mb5">
+                  <input type="radio" name="headerSkin" id="headerSkin6" value="bg-alert">
+                  <label for="headerSkin6">Alert</label>
+                </div>
+                <div class="checkbox-custom fill checkbox-system mb5">
+                  <input type="radio" name="headerSkin" id="headerSkin7" value="bg-system">
+                  <label for="headerSkin7">System</label>
+                </div>
+                <div class="checkbox-custom fill checkbox-success mb5">
+                  <input type="radio" name="headerSkin" id="headerSkin2" value="bg-success">
+                  <label for="headerSkin2">Success</label>
+                </div>
+                <div class="checkbox-custom fill mb5">
+                  <input type="radio" name="headerSkin" id="headerSkin9" value="bg-dark">
+                  <label for="headerSkin9">Dark</label>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div role="tabpanel" class="tab-pane" id="toolbox-sidebar">
+            <form id="toolbox-sidebar-skin">
+              <h4 class="mv20">Sidebar Skins</h4>
+              <div class="skin-toolbox-swatches">
+                <div class="checkbox-custom fill mb5">
+                  <input type="radio" name="sidebarSkin" checked id="sidebarSkin3" value="">
+                  <label for="sidebarSkin3">Dark</label>
+                </div>
+                <div class="checkbox-custom fill checkbox-disabled mb5">
+                  <input type="radio" name="sidebarSkin" id="sidebarSkin1" value="sidebar-light">
+                  <label for="sidebarSkin1">Light</label>
+                </div>
+                <div class="checkbox-custom fill checkbox-light mb5">
+                  <input type="radio" name="sidebarSkin" id="sidebarSkin2" value="sidebar-light light">
+                  <label for="sidebarSkin2">Lighter</label>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div role="tabpanel" class="tab-pane" id="toolbox-settings">
+            <form id="toolbox-settings-misc">
+              <h4 class="mv20 mtn">Layout Options</h4>
+              <div class="form-group">
+                <div class="checkbox-custom fill mb5">
+                  <input type="checkbox" checked="" id="header-option">
+                  <label for="header-option">Fixed Header</label>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="checkbox-custom fill mb5">
+                  <input type="checkbox" checked="" id="sidebar-option">
+                  <label for="sidebar-option">Fixed Sidebar</label>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="checkbox-custom fill mb5">
+                  <input type="checkbox" id="breadcrumb-option">
+                  <label for="breadcrumb-option">Fixed Breadcrumbs</label>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="checkbox-custom fill mb5">
+                  <input type="checkbox" id="breadcrumb-hidden">
+                  <label for="breadcrumb-hidden">Hide Breadcrumbs</label>
+                </div>
+              </div>
+              <h4 class="mv20">Layout Options</h4>
+              <div class="form-group">
+                <div class="radio-custom mb5">
+                  <input type="radio" id="fullwidth-option" checked name="layout-option">
+                  <label for="fullwidth-option">Fullwidth Layout</label>
+                </div>
+              </div>
+              <div class="form-group mb20">
+                <div class="radio-custom radio-disabled mb5">
+                  <input type="radio" id="boxed-option" name="layout-option" disabled>
+                  <label for="boxed-option">Boxed Layout
+                    <b class="text-muted">(Coming Soon)</b>
+                  </label>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="form-group mn br-t p15">
+          <a href="#" id="clearLocalStorage" class="btn btn-primary btn-block pb10 pt10">Clear LocalStorage</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- End: Theme Settings Pane -->
+
+
+       
+  <!-- Start: Header -->
+    <header class="navbar navbar-fixed-top navbar-shadow">
+
+      <div class="navbar-branding">
+        <a class="navbar-brand" href="<?php echo Yii::app()->request->baseUrl; ?>/index.php?site/index">
+	<img src="/../img/logo.png" height="40" style="margin-top:3px;">
+        </a>
+        <span id="toggle_sidemenu_l" class="ad ad-lines"></span>
+      </div>
+      <ul class="nav navbar-nav navbar-left">
+        <li>
+          <a class="sidebar-menu-toggle hidden" href="#">
+            <span class="ad ad-ruby fs18"></span>
+          </a>
+        </li>
+        <li>
+          <a class="topbar-menu-toggle" href="#">
+            <span class="ad ad-wand fs16"></span>
+          </a>
+        </li>
+        <li class="hidden-xs">
+          <a class="request-fullscreen toggle-active" href="#">
+            <span class="ad ad-screen-full fs18"></span>
+          </a>
+        </li>
+      </ul>
+      <form class="navbar-form navbar-left navbar-search" role="search">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search..." value="Search...">
+        </div>
+      </form>
+
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown menu-merge">
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+            <span class="ad ad-radio-tower fs18"></span>
+          </a>
+          <ul class="dropdown-menu media-list w350 animated animated-shorter fadeIn" role="menu">
+            <li class="dropdown-header">
+              <span class="dropdown-title"> Notifications</span>
+              <span class="label label-warning">12</span>
+            </li>
+            <li class="media">
+              <a class="media-left" href="#"> <img src="<?php echo Yii::app()->request->baseUrl; ?>/assets_etunti/assets/img/avatars/5.jpg" class="mw40" alt="avatar"> </a>
+              <div class="media-body">
+                <h5 class="media-heading">Article
+                  <small class="text-muted">- 08/16/22</small>
+                </h5> Last Updated 36 days ago by
+                <a class="text-system" href="#"> Max </a>
+              </div>
+            </li>
+            <li class="media">
+              <a class="media-left" href="#"> <img src="<?php echo Yii::app()->request->baseUrl; ?>/assets_etunti/assets/img/avatars/2.jpg" class="mw40" alt="avatar"> </a>
+              <div class="media-body">
+                <h5 class="media-heading mv5">Article
+                  <small> - 08/16/22</small>
+                </h5>
+                Last Updated 36 days ago by
+                <a class="text-system" href="#"> Max </a>
+              </div>
+            </li>
+            <li class="media">
+              <a class="media-left" href="#"> <img src="<?php echo Yii::app()->request->baseUrl; ?>/assets_etunti/assets/img/avatars/3.jpg" class="mw40" alt="avatar"> </a>
+              <div class="media-body">
+                <h5 class="media-heading">Article
+                  <small class="text-muted">- 08/16/22</small>
+                </h5> Last Updated 36 days ago by
+                <a class="text-system" href="#"> Max </a>
+              </div>
+            </li>
+            <li class="media">
+              <a class="media-left" href="#"> <img src="<?php echo Yii::app()->request->baseUrl; ?>/assets_etunti/assets/img/avatars/4.jpg" class="mw40" alt="avatar"> </a>
+              <div class="media-body">
+                <h5 class="media-heading mv5">Article
+                  <small class="text-muted">- 08/16/22</small>
+                </h5> Last Updated 36 days ago by
+                <a class="text-system" href="#"> Max </a>
+              </div>
+            </li>
+          </ul>
+        </li>
+        <li class="dropdown menu-merge">
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+            <span class="flag-xs flag-us"></span> FI
+          </a>
+          <ul class="dropdown-menu pv5 animated animated-short flipInX" role="menu">
+            <li>
+              <a href="javascript:void(0);">
+                <span class="flag-xs flag-ee mr10"></span> Eesti </a>
+            </li>
+          </ul>
+        </li>
+        <li class="menu-divider hidden-xs">
+          <i class="fa fa-circle"></i>
+        </li>
+        <li class="dropdown menu-merge">
+          <a href="#" class="dropdown-toggle fw600 p15" data-toggle="dropdown"> <img src="<?php echo Yii::app()->request->baseUrl; ?>/assets_etunti/assets/img/avatars/1.jpg" alt="avatar" class="mw30 br64 mr15"> <?php echo Yii::app()->user->nimi; ?>
+            <span class="caret caret-tp hidden-xs"></span>
+          </a>
+          <ul class="dropdown-menu list-group dropdown-persist w250" role="menu">
+            <li class="dropdown-header clearfix">
+              <div class="pull-left ml10">
+                <select id="user-status">
+                  <optgroup label="Current Status:">
+                    <option value="1-1">Away</option>
+                    <option value="1-2">Offline</option>
+                    <option value="1-3" selected="selected">Online</option>
+                  </optgroup>
+                </select>
+              </div>
+
+              <div class="pull-right mr10">
+                <select id="user-role">
+                  <optgroup label="Logged in As:">
+                    <option value="1-1">Client</option>
+                    <option value="1-2">Editor</option>
+                    <option value="1-3" selected="selected">Admin</option>
+                  </optgroup>
+                </select>
+              </div>
+
+            </li>
+            <li class="list-group-item">
+              <a href="#" class="animated animated-short fadeInUp">
+                <span class="fa fa-envelope"></span> Messages
+                <span class="label label-warning">2</span>
+              </a>
+            </li>
+            <li class="list-group-item">
+              <a href="#" class="animated animated-short fadeInUp">
+                <span class="fa fa-user"></span> Friends
+                <span class="label label-warning">6</span>
+              </a>
+            </li>
+            <li class="list-group-item">
+              <a href="#" class="animated animated-short fadeInUp">
+                <span class="fa fa-gear"></span> Account Settings </a>
+            </li>
+            <li class="list-group-item">
+              <a href="#" class="animated animated-short fadeInUp">
+                <span class="fa fa-power-off"></span> Logout </a>
+            </li>
+          </ul>
+        </li>
+        <li id="toggle_sidemenu_t">  
+        		<span class="fa fa-caret-up"></span>
+        </li>
+      </ul>
+
+    </header>
+    <!-- End: Header -->
+
+    <!-- Start: Sidebar -->
+    <aside id="sidebar_left" class="">
+
+      <!-- Start: Sidebar Left Content -->
+      <div class="sidebar-left-content nano-content">
+
+        <!-- Start: Sidebar Menu -->
+        <ul class="nav sidebar-menu">
+
+          <li>
+            <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/site/etusivu">
+              <span class="glyphicon glyphicon-home"></span>
+              <span class="sidebar-title"><?php echo Yii::t('main', 'ETUSIVU'); ?></span>
+            </a>
+          </li>
+          <li>
+            <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/mobile/index">
+              <span class="glyphicon glyphicon-home"></span>
+              <span class="sidebar-title"><?php echo Yii::t('main', 'Tunnit'); ?></span>
+            </a>
+          </li>
+          <li>
+            <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/asiakkaat/admin">
+              <span class="glyphicon glyphicon-home"></span>
+              <span class="sidebar-title"><?php echo Yii::t('main', 'Asiakkaat'); ?></span>
+            </a>
+          </li>
+          <li>
+            <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/kohteet/admin">
+              <span class="glyphicon glyphicon-home"></span>
+              <span class="sidebar-title"><?php echo Yii::t('main', 'Kohteet'); ?></span>
+            </a>
+          </li>
+
+          <li>
+            <a class="accordion-toggle" href="#">
+              <span class="fa fa-calendar"></span>
+              <span class="sidebar-title"><?php echo Yii::t('main', 'Työvuorot'); ?></span>
+              <span class="caret"></span>
+            </a>
+            <ul class="nav sub-nav">
+              <li>
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/tyovuoroot/index" target="_blank">
+                  <span class="fa fa-cube"></span> <?php echo Yii::t('main', 'Työvuorot'); ?></a>
+              </li>
+              <li>
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/tyovuoroot/viikkottain">
+                  <span class="fa fa-cube"></span> <?php echo Yii::t('main', 'Työvuorojen lähetys'); ?></a>
+              </li>
+              <li>
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/tyovuoroot/kk">
+                  <span class="fa fa-cube"></span> <?php echo Yii::t('main', 'Kuukausinäkymä'); ?></a>
+              </li>
+              <li>
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/vuosilomat/index">
+                  <span class="fa fa-cube"></span> <?php echo Yii::t('main', 'Vuosilomat'); ?></a>
+              </li>
+            </ul>
+          </li>
+            </ul>
+          </li>
+
+        </ul>
+        <!-- End: Sidebar Menu -->
+
+      </div>
+      <!-- End: Sidebar Left Content -->
+
+    </aside>
+
+    <!-- Start: Content-Wrapper -->
+    <section id="content_wrapper">
+
+      <!-- Start: Topbar-Dropdown -->
+      <div id="topbar-dropmenu">
+        <div class="topbar-menu row">
+          <div class="col-xs-4 col-sm-2">
+            <a href="#" class="metro-tile">
+              <span class="metro-icon glyphicon glyphicon-inbox"></span>
+              <p class="metro-title">Messages</p>
+            </a>
+          </div>
+          <div class="col-xs-4 col-sm-2">
+            <a href="#" class="metro-tile">
+              <span class="metro-icon glyphicon glyphicon-user"></span>
+              <p class="metro-title">Users</p>
+            </a>
+          </div>
+          <div class="col-xs-4 col-sm-2">
+            <a href="#" class="metro-tile">
+              <span class="metro-icon glyphicon glyphicon-headphones"></span>
+              <p class="metro-title">Support</p>
+            </a>
+          </div>
+          <div class="col-xs-4 col-sm-2">
+            <a href="#" class="metro-tile">
+              <span class="metro-icon fa fa-gears"></span>
+              <p class="metro-title">Settings</p>
+            </a>
+          </div>
+          <div class="col-xs-4 col-sm-2">
+            <a href="#" class="metro-tile">
+              <span class="metro-icon glyphicon glyphicon-facetime-video"></span>
+              <p class="metro-title">Videos</p>
+            </a>
+          </div>
+          <div class="col-xs-4 col-sm-2">
+            <a href="#" class="metro-tile">
+              <span class="metro-icon glyphicon glyphicon-picture"></span>
+              <p class="metro-title">Pictures</p>
+            </a>
+          </div>
+        </div>
+      </div>
+      <!-- End: Topbar-Dropdown -->
+
+      <!-- Start: Topbar -->
+      <header id="topbar" class="hidden">
+        <div class="topbar-left">
+          <ol class="breadcrumb">
+            <li class="crumb-active">
+              <a href="dashboard.html">Dashboard</a>
+            </li>
+            <li class="crumb-icon">
+              <a href="dashboard.html">
+                <span class="glyphicon glyphicon-home"></span>
+              </a>
+            </li>
+            <li class="crumb-link">
+              <a href="dashboard.html">Home</a>
+            </li>
+            <li class="crumb-trail">Dashboard</li>
+          </ol>
+        </div>
+        <div class="topbar-right">
+          <div class="ib topbar-dropdown">
+            <label for="topbar-multiple" class="control-label pr10 fs11 text-muted">Reporting Period</label>
+            <select id="topbar-multiple" class="hidden">
+              <optgroup label="Filter By:">
+                <option value="1-1">Last 30 Days</option>
+                <option value="1-2" selected="selected">Last 60 Days</option>
+                <option value="1-3">Last Year</option>
+              </optgroup>
+            </select>
+          </div>
+          <div class="ml15 ib va-m" id="toggle_sidemenu_r">
+            <a href="#" class="pl5">
+              <i class="fa fa-sign-in fs22 text-primary"></i>
+              <span class="badge badge-hero badge-danger">3</span>
+            </a>
+          </div>
+        </div>
+      </header>
+      <!-- End: Topbar -->
+
+
+
+  <!-- BEGIN: PAGE SCRIPTS -->
+
+  <!-- jQuery -->
+  <script src="<?php echo Yii::app()->request->baseUrl; ?>/assets_etunti/vendor/jquery/jquery-1.11.1.min.js"></script>
+  <script src="<?php echo Yii::app()->request->baseUrl; ?>/assets_etunti/vendor/jquery/jquery_ui/jquery-ui.min.js"></script>
+
+  <!-- HighCharts Plugin -->
+  <script src="<?php echo Yii::app()->request->baseUrl; ?>/assets_etunti/vendor/plugins/highcharts/highcharts.js"></script>
+
+  <!-- Sparklines Plugin -->
+  <script src="<?php echo Yii::app()->request->baseUrl; ?>/assets_etunti/vendor/plugins/sparkline/jquery.sparkline.min.js"></script>
+
+  <!-- Simple Circles Plugin -->
+  <script src="<?php echo Yii::app()->request->baseUrl; ?>/assets_etunti/vendor/plugins/circles/circles.js"></script>
+
+  <!-- JvectorMap Plugin + US Map (more maps in plugin/assets folder) -->
+  <script src="<?php echo Yii::app()->request->baseUrl; ?>/assets_etunti/vendor/plugins/jvectormap/jquery.jvectormap.min.js"></script>
+  <script src="<?php echo Yii::app()->request->baseUrl; ?>/assets_etunti/vendor/plugins/jvectormap/assets/jquery-jvectormap-us-lcc-en.js"></script> 
+
+  <!-- Theme Javascript -->
+  <script src="<?php echo Yii::app()->request->baseUrl; ?>/assets_etunti/assets/js/utility/utility.js"></script>
+  <script src="<?php echo Yii::app()->request->baseUrl; ?>/assets_etunti/assets/js/demo/demo.js"></script>
+  <script src="<?php echo Yii::app()->request->baseUrl; ?>/assets_etunti/assets/js/main.js"></script>
+
+  <!-- Widget Javascript -->
+  <script src="<?php echo Yii::app()->request->baseUrl; ?>/assets_etunti/assets/js/demo/widgets.js"></script>
+  <script type="text/javascript">
+  jQuery(document).ready(function() {
+
+    "use strict";
+
+    // Init Theme Core      
+    Core.init();
+
+    // Init Demo JS
+    Demo.init();
+
+    // Init Widget Demo JS
+    // demoHighCharts.init();
+
+    // Because we are using Admin Panels we use the OnFinish 
+    // callback to activate the demoWidgets. It's smoother if
+    // we let the panels be moved and organized before 
+    // filling them with content from various plugins
+
+    // Init plugins used on this page
+    // HighCharts, JvectorMap, Admin Panels
+
+    // Init Admin Panels on widgets inside the ".admin-panels" container
+    $('.admin-panels').adminpanel({
+      grid: '.admin-grid',
+      draggable: true,
+      preserveGrid: true,
+      mobile: false,
+      onStart: function() {
+        // Do something before AdminPanels runs
+      },
+      onFinish: function() {
+        $('.admin-panels').addClass('animated fadeIn').removeClass('fade-onload');
+
+        // Init the rest of the plugins now that the panels
+        // have had a chance to be moved and organized.
+        // It's less taxing to organize empty panels
+        demoHighCharts.init();
+        runVectorMaps(); // function below
+      },
+      onSave: function() {
+        $(window).trigger('resize');
+      }
+    });
+
+    // Widget VectorMap
+    function runVectorMaps() {
+
+      // Jvector Map Plugin
+      var runJvectorMap = function() {
+        // Data set
+        var mapData = [900, 700, 350, 500];
+        // Init Jvector Map
+        $('#WidgetMap').vectorMap({
+          map: 'us_lcc_en',
+          //regionsSelectable: true,
+          backgroundColor: 'transparent',
+          series: {
+            markers: [{
+              attribute: 'r',
+              scale: [3, 7],
+              values: mapData
+            }]
+          },
+          regionStyle: {
+            initial: {
+              fill: '#E5E5E5'
+            },
+            hover: {
+              "fill-opacity": 0.3
+            }
+          },
+          markers: [{
+            latLng: [37.78, -122.41],
+            name: 'San Francisco,CA'
+          }, {
+            latLng: [36.73, -103.98],
+            name: 'Texas,TX'
+          }, {
+            latLng: [38.62, -90.19],
+            name: 'St. Louis,MO'
+          }, {
+            latLng: [40.67, -73.94],
+            name: 'New York City,NY'
+          }],
+          markerStyle: {
+            initial: {
+              fill: '#a288d5',
+              stroke: '#b49ae0',
+              "fill-opacity": 1,
+              "stroke-width": 10,
+              "stroke-opacity": 0.3,
+              r: 3
+            },
+            hover: {
+              stroke: 'black',
+              "stroke-width": 2
+            },
+            selected: {
+              fill: 'blue'
+            },
+            selectedHover: {}
+          },
+        });
+        // Manual code to alter the Vector map plugin to 
+        // allow for individual coloring of countries
+        var states = ['US-CA', 'US-TX', 'US-MO',
+          'US-NY'
+        ];
+        var colors = [bgWarningLr, bgPrimaryLr, bgInfoLr, bgAlertLr];
+        var colors2 = [bgWarning, bgPrimary, bgInfo, bgAlert];
+        $.each(states, function(i, e) {
+          $("#WidgetMap path[data-code=" + e + "]").css({
+            fill: colors[i]
+          });
+        });
+        $('#WidgetMap').find('.jvectormap-marker')
+          .each(function(i, e) {
+            $(e).css({
+              fill: colors2[i],
+              stroke: colors2[i]
+            });
+          });
+      }
+
+      if ($('#WidgetMap').length) {
+        runJvectorMap();
+      }
+    }
+
+
+
+  });
+  </script>
+
+  <!-- END: PAGE SCRIPTS -->
