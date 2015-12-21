@@ -148,7 +148,7 @@
 
       <div class="navbar-branding">
         <a class="navbar-brand" href="<?php echo Yii::app()->request->baseUrl; ?>/index.php?site/index">
-	<img src="/../img/logo.png" height="40">
+	<img src="/../img/logo.png" height="40" style="margin-top:3px;">
         </a>
         <span id="toggle_sidemenu_l" class="ad ad-lines"></span>
       </div>
