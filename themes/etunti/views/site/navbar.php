@@ -4,8 +4,8 @@
      $tas = explode(",",Yii::app()->user->adminPaketti);
 
 
-  $img = "";
-  if(file_exists(Yii::app()->baseUrl.'/img/admins/'.Yii::app()->user->domain.'/'.Yii::app()->user->id.".jpg") 
+  $img = Yii::app()->baseUrl.'/img/admins/noname.jpg';
+  if(file_exists('img/admins/'.Yii::app()->user->domain.'/'.Yii::app()->user->id.".jpg") 
 	and isset(Yii::app()->user->id))
   {
   $img = Yii::app()->baseUrl.'/img/admins/'.Yii::app()->user->domain.'/'.Yii::app()->user->id.".jpg";
