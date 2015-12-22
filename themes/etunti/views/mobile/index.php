@@ -1,4 +1,3 @@
-<div class="row small">
 <?php
 /* @var $this MobileController */
 /* @var $dataProvider CActiveDataProvider */
@@ -6,49 +5,37 @@
 $this->breadcrumbs=array(
 	Yii::t('main', 'Luetut kohteet'),
 );
-/*
-$this->menu=array(
-	//array('label'=>'Create Mobile', 'url'=>array('create')),
-	array('label'=>'Luetut Hallinta', 'url'=>array('admin')),
-);
-*/
+
 
 	$this->widget('ext.tooltipster.tooltipster');
 ?>
-
-
-<legend>
-  <div class="pull-right form-inline small">
-  <span><?php echo Yii::t('main', 'Ohje: '); ?></span>
-	<b class="btn btn-warning btn-sm fa fa-map tooltipster" title="Aloitus GPS sijainti kartalla"></b>
-	<b class="btn btn-warning btn-sm fa fa-map-o tooltipster" title="Lopetus GPS sijainti kartalla"></b>
-	<b class="btn btn-warning btn-sm fa fa-envelope tooltipster" title="Viestin lähettäminen"></b>
-	<b class="btn btn-warning btn-sm fa fa-table tooltipster" title="Siirry tämän päivän työvuoroihin"></b>
-	<b class="btn btn-warning btn-sm fa fa-list-alt tooltipster" title="Näytä työvuorot"></b>
-	<b class="btn btn-warning btn-sm fa fa-tags tooltipster" title="TAG numero"></b>
-	<b class="btn btn-warning btn-sm fa fa-pencil-square-o tooltipster" title="Muokkaa"></b>
-	<b class="btn btn-warning btn-sm fa fa-sign-in tooltipster" title="Alkuperäinen tieto"></b>
-	<b class="btn btn-warning btn-sm fa fa-check-square-o tooltipster" title="Rivi on muokattu"></b>
-  	<span class="btn btn-default klo"></span>
-  </div>
-  <h1> 
-	<?php echo Yii::t('main', 'TUNNIT'); ?> <i class="glyphicon glyphicon-phone"></i> 
-  </h1>
-</legend>
-
 <br>
 
 
- <div class="row" id="haku">
-   <div class="col-sm-12">
 
-   <div class="pull-right">
-     <?php echo CHtml::link(' +','/index.php/tyontekijat/create',array('target'=>'_blank','class'=>'btn btn-sm btn-default glyphicon glyphicon-user')); ?>
-     <?php echo CHtml::link(' +','/index.php/asiakkaat/create',array('target'=>'_blank','class'=>'btn btn-sm btn-default glyphicon glyphicon-home')); ?>
-   </div>
+        <!-- begin: .tray-center -->
+        <div class="tray-center">
 
-   <form id="mobForm" action="#" class="form-inline" method="POST">
-   <input type="hidden" name="mob_hae">
+
+              <h2> <i class="glyphicon glyphicon-phone"></i> <?php echo Yii::t('main', 'TUNNIT'); ?> <span class="klo"></span></h2>
+
+
+
+   	    <form id="mobForm" action="#" class="form-inline" method="POST">
+   	    <input type="hidden" name="mob_hae">
+
+            <div class="admin-form">
+              <div class="panel heading-border">
+                <div class="panel-body bg-light">
+
+                    <!-- Input Icons -->
+                    <div class="row">
+
+                      <div class="col-md-3">
+                        <div class="section">
+                          <label class="field select">
+
+
    <?php
     $criteria = new CDbCriteria();
     $criteria->order = " tekijan_nimi ASC ";
@@ -56,7 +43,7 @@ $this->menu=array(
     $model = Tyontekijat::model()->findAll($criteria);
     $list = CHtml::listData($model, 'id', 'tekijan_nimi');
 
-    echo '<select class="form-control input-sm form-group" name="tekijaPaaSivulla">';
+    echo '<select class="gui-input" name="tekijaPaaSivulla">';
     if(Yii::app()->session['tekijaPaaSivulla'])
     {
        $tekija = Tyontekijat::model()->findbypk(Yii::app()->session['tekijaPaaSivulla']);
@@ -70,43 +57,79 @@ $this->menu=array(
 
     foreach($list as $key=>$val){
     echo '<option value="'.$key.'">'.$val.'</option>';
+
     }
     echo '</select>';
    ?>
 
-   <input type="text" class="form-control input-sm form-group" name="etsi_kohteet" value="<?php echo Yii::app()->session['etsi_kohteet']; ?>" placeholder="osoite">
+                            <i class="arrow double"></i>
+                            </label>
+                          </label>
+                        </div>
+                      </div>
+                      <div class="col-md-3">
+                        <div class="section">
+                          <label class="field prepend-icon">
 
-   <b class="glyphicon glyphicon-calendar"></b>
-   <input type="text" name="fromP" id="from" class="form-control form-group input-sm datepicker" value="<?php echo Yii::app()->session['fromP']; ?>">
-   <b class="glyphicon glyphicon-calendar"></b>
-   <input type="text" name="toP" id="to" class="form-control form-group input-sm datepicker" value="<?php echo Yii::app()->session['toP']; ?>">
+   			    <input type="text" class="gui-input" name="etsi_kohteet" value="<?php echo Yii::app()->session['etsi_kohteet']; ?>" placeholder="Osoite">
 
-     <div class="form-group input-group-btn">
-        <button class="btn btn-sm btn-primary haemob" type="button"><i class="glyphicon glyphicon-search"> Hae</i></button>
-     </div>
-   </div>
-  </form>
- </div>
-<br>
+                            <label for="firstname" class="field-icon">
+                              <i class="fa fa-user"></i>
+                            </label>
+                          </label>
+                        </div>
+                      </div>
+                      <div class="col-md-3">
+                        <div class="section">
+                          <label class="field prepend-icon">
 
+   			    <input type="text" name="fromP" id="from" class="gui-input datepicker" value="<?php echo Yii::app()->session['fromP']; ?>">
+                            <label for="firstname" class="field-icon">
+                              <i class="fa fa-calendar"></i>
+                            </label>
+                          </label>
+                        </div>
+                      </div>
+                      <div class="col-md-3">
+                        <div class="section">
+                          <label class="field prepend-icon">
 
+   			    <input type="text" name="toP" id="to" class="gui-input datepicker" value="<?php echo Yii::app()->session['toP']; ?>">
+                            <label for="firstname" class="field-icon">
+                              <i class="fa fa-calendar"></i>
+                            </label>
+                          </label>
+                        </div>
+                      </div>
 
-<!--
-  <div class="row">
-   <div class="col-sm-4">
-        <div class="input-group">
-            <input type="text" class="form-control hakusana" placeholder="Hakusana" name="srch-term" id="srch-term" value="<?php echo Yii::app()->session['hakusana']; ?>">
-            <div class="input-group-btn">
-                <button class="btn btn-primary hae" type="button"><i class="glyphicon glyphicon-search"> Hae</i></button>
+                    </div>
+
+		    <center>
+        	     <button class="btn btn-sm btn-primary haemob" type="button"><i class="glyphicon glyphicon-search"> </i> Hae</button>
+		    </center>
+
+                </div>
+              </div>
             </div>
+
+	    </form>
+
+
+        <!-- loppu: .tray-center -->
         </div>
+
+
+
+
+
+
+  <div class="panel heading-border">
+   <div class="panel-body">
+    <div id="tb" class="table-responsive"></div>
    </div>
   </div>
--->
 
-  <div id="tb" class="table-responsive"></div>
 
-</div>
 
 
   <input type="hidden" id="dataChange" >
