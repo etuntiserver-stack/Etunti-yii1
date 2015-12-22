@@ -38,15 +38,20 @@ $paivat=array(
 	7=>'Sunnuntai',
 	);
 
+$wkMaara = 53;
+
 $year = (isset($_GET['year'])) ? $_GET['year'] : date("Y");
 $week = (isset($_GET['week'])) ? $_GET['week'] : date('W');
-if($week > 52) {
+
+if($week > $wkMaara) {
     $year++;
     $week = 1;
 } elseif($week < 1) {
     $year--;
-    $week = 52;
+    $week = $wkMaara;
 }
+
+    $week = sprintf("%02d", $week);
 ?>
 <center>
 
@@ -56,9 +61,9 @@ if($week > 52) {
 </div>
 
 <h2>
-  <a href="<?php echo $_SERVER['PHP_SELF'].'?week='.($week == 1 ? 52 : $week -1).'&year='.($week == 1 ? $year - 1 : $year); ?>"><<</a> 
-  <?php echo date('d.m.Y',strtotime($year ."W". $week .'1')).' - '.date('d.m.Y',strtotime($year ."W". $week .'7')); ?>
-  <a href="<?php echo $_SERVER['PHP_SELF'].'?week='.($week == 52 ? 1 : 1 + $week).'&year='.($week == 52 ? 1 + $year : $year); ?>">>></a> 
+  <a href="<?php echo $_SERVER['PHP_SELF'].'?week='.($week == 1 ? $wkMaara : $week -1).'&year='.($week == 1 ? $year - 1 : $year); ?>"><<</a> 
+  <?php echo date('d.m.Y',strtotime($year ."W".$week .'1')).' - '.date('d.m.Y',strtotime($year ."W". $week .'7')); ?>
+  <a href="<?php echo $_SERVER['PHP_SELF'].'?week='.($week == $wkMaara ? 1 : 1 + $week).'&year='.($week == $wkMaara ? 1 + $year : $year); ?>">>></a> 
 </h2>
 </center>
 

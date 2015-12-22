@@ -12,8 +12,8 @@ $curpage .= '/'.Yii::app()->getController()->getAction()->controller->action->id
 <head>
   <!-- Meta, title, CSS, favicons, etc. -->
   <meta charset="utf-8">
-  <title>AdminDesigns - A Responsive HTML5 Admin UI Framework</title>
-  <meta name="keywords" content="HTML5 Bootstrap 3 Admin Template UI Theme" />
+  <title>ETUNTI</title>
+  <meta name="keywords" content="etunti" />
   <meta name="description" content="AdminDesigns - A Responsive HTML5 Admin UI Framework">
   <meta name="author" content="AdminDesigns">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -43,6 +43,7 @@ $curpage .= '/'.Yii::app()->getController()->getAction()->controller->action->id
 
 
 <?php 
+Yii::app()->clientScript->registerPackage('bootstrapCSS');
 /*
 Yii::app()->clientScript->registerPackage('jquery');
 Yii::app()->clientScript->registerPackage('bootstrapJS');
@@ -56,7 +57,7 @@ Yii::app()->clientScript->registerPackage('bootstrapCSS');
 	<title><?php echo CHtml::encode($this->pageTitle); ?></title>
 </head>
 
-<body>
+<body class="sb-l-o sb-r-c onload-check sb-l-m sb-l-disable-animation">
 
 <?php if($curpage == 'tyovuoroot/index') : ?>
 	<?php echo ''; ?>

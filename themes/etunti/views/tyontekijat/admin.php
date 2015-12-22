@@ -2,16 +2,6 @@
 /* @var $this TyontekijatController */
 /* @var $model Tyontekijat */
 
-$this->breadcrumbs=array(
-	'Työntekijät'=>array('index'),
-	Yii::t('main', 'Hallinta'),
-);
-/*
-$this->menu=array(
-	array('label'=>Yii::t('main', 'Lista työntekijä'), 'url'=>array('index')),
-	array('label'=>Yii::t('main', 'Luo työntekijä'), 'url'=>array('create')),
-);
-*/
 Yii::app()->clientScript->registerScript('search', "
 $('.search-button').click(function(){
 	$('.search-form').toggle();
@@ -25,22 +15,26 @@ $('.search-form form').submit(function(){
 });
 ");
 ?>
+<br>
+
+<div class="search-form" style="display:none">
+<?php $this->renderPartial('_search',array(
+	'model'=>$model,
+)); ?>
+</div><!-- search-form -->
 
 <div class="row">
-  <div class="col-sm-3">
-    <input type="checkbox" name="aktiivinen" class="sw">
-  </div>
-</div>
-
-<div class="row">
-	<h3><?php echo Yii::t('main', 'TYÖNTEKIJÄT'); ?> <i class="glyphicon glyphicon-envelope"></i> 
-	| <?php echo CHtml::link('Haku','#',array('class'=>'search-button')); ?>
-	| <?php echo CHtml::link('Lisää uusi työntekijä','/index.php/tyontekijat/create',array('class'=>'')); ?>
+	<h3> <i class="fa fa-male"></i> <?php echo Yii::t('main', 'TYÖNTEKIJÄT'); ?>  
+	 <?php echo CHtml::link('','#',array('class'=>'btn btn-primary search-button fa fa-search')); ?>
+	 <?php echo CHtml::link('','/index.php/tyontekijat/create',array('class'=>'btn btn-primary fa fa-user-plus')); ?> 
+	 <input type="checkbox" name="aktiivinen" class="sw">
    	</h3>
 </div>
 
 
 <div class="row">
+  <div class="panel heading-border">
+   <div class="panel-body">
 
 <div id="adminTable">
 <?php $this->widget('zii.widgets.grid.CGridView', array(
@@ -48,47 +42,18 @@ $('.search-form form').submit(function(){
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,
 
-	'pager' => array('cssFile' => Yii::app()->baseUrl . '/css/gridViewStyle/gridView.css'),
-	'cssFile' => Yii::app()->baseUrl . '/css/gridViewStyle/gridView.css',
 
         'pagerCssClass' => 'dataTables_paginate paging_bootstrap',
-        'itemsCssClass' => 'table table-striped small table-hover',
+        'itemsCssClass' => 'table table-hover',
 
 
 	'columns'=>array(
 		'id',
 		'imei',
-		//'laiten_puh',
 		'tekijan_nimi',
-		//'tekijan_henkilotunnus',
 		'tekijan_puh',
 		'tekijan_email',
 		'tyoryhma',
-		//'aktiivinen',
-		/*
-
-		'tekijan_lanka_puh',
-		'tekijan_katuosoite',
-		'tekijan_pnumero',
-		'tekijan_ptoimipaikka',
-
-		'tyoehtosopimus',
-		'tekijan_kulunvalvonta',
-		'tekijan_pankkitili',
-		'tekijan_konttori',
-
-		'tekijan_tietoja',
-		'tekijan_muisti',
-		'salasana',
-		'online_varauksen_valmina',
-		'kortit',
-		'ayjasenyys',
-
-		array(
-			'class'=>'CButtonColumn',
-		),
-
-		*/
 
 array(
 
@@ -102,6 +67,9 @@ array(
 	),
 )); ?>
 </div>
+
+   </div>
+ </div>
 </div>
 
 <?php if(Yii::app()->session['aktiivinen']) : ?>
@@ -109,9 +77,9 @@ array(
 $(document).ready(function(){
 
   $(".sw").bootstrapSwitch({
-	size: "small",
+	//size: "small",
 	onColor: "warning",
-	offColor: "success",
+	offColor: "primary",
 	onText: "Kaikki",
 	offText: "Aktiiviset"
   });
@@ -126,9 +94,9 @@ $('input[name="aktiivinen"]').bootstrapSwitch('state', true, true);
 $(document).ready(function(){
 
   $(".sw").bootstrapSwitch({
-	size: "small",
+	//size: "small",
 	onColor: "warning",
-	offColor: "success",
+	offColor: "primary",
 	onText: "Kaikki",
 	offText: "Aktiiviset"
   });

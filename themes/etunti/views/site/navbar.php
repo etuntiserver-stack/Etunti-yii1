@@ -363,7 +363,7 @@
 
           <li>
             <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/site/etusivu">
-              <span class="glyphicon glyphicon-home"></span>
+              <span class="fa fa-home"></span>
               <span class="sidebar-title"><?php echo Yii::t('main', 'ETUSIVU'); ?></span>
             </a>
           </li>
@@ -372,7 +372,7 @@
 
           <li>
             <a class="accordion-toggle" href="#">
-              <span class="fa fa-calendar"></span>
+              <span class="fa fa-user"></span>
               <span class="sidebar-title"><?php echo Yii::t('main', 'Asiakkaat'); ?></span>
               <span class="caret"></span>
             </a>
@@ -404,7 +404,7 @@
 
           <li>
             <a class="accordion-toggle" href="#">
-              <span class="fa fa-calendar"></span>
+              <span class="fa fa-mobile"></span>
               <span class="sidebar-title"><?php echo Yii::t('main', 'Tunnit'); ?></span>
               <span class="caret"></span>
             </a>
@@ -452,7 +452,7 @@
 
           <li>
             <a class="accordion-toggle" href="#">
-              <span class="fa fa-calendar"></span>
+              <span class="fa fa-male"></span>
               <span class="sidebar-title"><?php echo Yii::t('main', 'Työntekijät'); ?></span>
               <span class="caret"></span>
             </a>
@@ -476,7 +476,7 @@
 
           <li>
             <a class="accordion-toggle" href="#">
-              <span class="fa fa-calendar"></span>
+              <span class="fa fa-envelope"></span>
               <span class="sidebar-title"><?php echo Yii::t('main', 'Viestintä'); ?></span>
               <span class="caret"></span>
             </a>
@@ -491,7 +491,7 @@
 	<?php if(in_array('2',$tas)) : ?>
           <li>
             <a class="accordion-toggle" href="#">
-              <span class="fa fa-calendar"></span>
+              <span class="fa fa-clock-o"></span>
               <span class="sidebar-title"><?php echo Yii::t('main', 'Työvuorot'); ?></span>
               <span class="caret"></span>
             </a>
@@ -519,7 +519,7 @@
 	<?php if(in_array('3',$tas)) : ?>
           <li>
             <a class="accordion-toggle" href="#">
-              <span class="fa fa-calendar"></span>
+              <span class="fa fa-briefcase"></span>
               <span class="sidebar-title"><?php echo Yii::t('main', 'Laskutus'); ?></span>
               <span class="caret"></span>
             </a>
@@ -638,8 +638,7 @@
   <!-- BEGIN: PAGE SCRIPTS -->
 
   <!-- jQuery -->
-  <script src="<?php echo Yii::app()->request->baseUrl; ?>/assets_etunti/vendor/jquery/jquery-1.11.1.min.js"></script>
-  <script src="<?php echo Yii::app()->request->baseUrl; ?>/assets_etunti/vendor/jquery/jquery_ui/jquery-ui.min.js"></script>
+
 
   <!-- HighCharts Plugin -->
   <script src="<?php echo Yii::app()->request->baseUrl; ?>/assets_etunti/vendor/plugins/highcharts/highcharts.js"></script>
