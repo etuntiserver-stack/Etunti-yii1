@@ -3,7 +3,32 @@
 /* @var $data Asiakkaat */
 ?>
 
-<div class="view">
+<tr>
+	<td>
+		<?php echo $this->asiakasMuutosTheme($data->id); ?>
+	</td>
+	<td>
+		<?php echo $this->asiakasMuutosTheme($data->osoite); ?>
+	</td>
+	<td>
+		<?php echo $this->asiakasMuutosTheme($data->yhteyshenkilo); ?>
+	</td>
+	<td>
+		<?php echo $this->asiakasMuutosTheme($data->postinumero); ?>
+	</td>
+	<td>
+		<?php echo $this->asiakasMuutosTheme($data->puhelin); ?>
+	</td>
+	<td>
+		<?php echo $this->asiakasMuutosTheme($data->sahkoposti); ?>
+	</td>
+	<td>
+		<?php echo $this->asiakasMuutosTheme($data->tyyppi); ?>
+	</td>
+</tr>
+
+<?php
+/*
 
 	<b><?php echo CHtml::encode($data->getAttributeLabel('id')); ?>:</b>
 	<?php echo CHtml::link(CHtml::encode($data->id), array('view', 'id'=>$data->id)); ?>
@@ -52,4 +77,4 @@
 
 	*/ ?>
 
-</div>
+

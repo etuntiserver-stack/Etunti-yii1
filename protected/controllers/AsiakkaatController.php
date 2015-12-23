@@ -133,10 +133,31 @@ class AsiakkaatController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$dataProvider=new CActiveDataProvider('Asiakkaat');
-		$this->render('index',array(
-			'dataProvider'=>$dataProvider,
+       		$criteria = new CDbCriteria();
+	        $criteria->order = "  id DESC ";
+
+		if(isset($_POST['osoite']) and !empty($_POST['osoite']))
+	        $criteria->addCondition (" id='".$_POST['osoite']."' ");
+
+		if(isset($_POST['yhteyshenkilo']) and !empty(trim($_POST['yhteyshenkilo'])))
+	        $criteria->addCondition (" yhteyshenkilo LIKE '%".$_POST['yhteyshenkilo']."%' ");
+
+		if(isset($_POST['puhelin']) and !empty(trim($_POST['puhelin'])))
+	        $criteria->addCondition (" puhelin LIKE '%".$_POST['puhelin']."%' ");
+
+		if(isset($_POST['postinumero']) and !empty(trim($_POST['postinumero'])))
+	        $criteria->addCondition (" postinumero LIKE '%".$_POST['postinumero']."%' ");
+
+		if(isset($_POST['sahkoposti']) and !empty(trim($_POST['sahkoposti'])))
+	        $criteria->addCondition (" sahkoposti LIKE '%".$_POST['sahkoposti']."%' ");
+
+		$dataProvider=new CActiveDataProvider('Asiakkaat', array(
+			'criteria'=>$criteria,
+			//'pagination'=>false
 		));
+
+		$dataProvider->pagination->pageSize = 50;
+		$this->render('index', array('dataProvider' => $dataProvider));
 	}
 
 	/**
@@ -181,4 +202,26 @@ class AsiakkaatController extends Controller
 			Yii::app()->end();
 		}
 	}
+
+
+    	protected function asiakasMuutosTheme($as)
+	{ 
+		$return = '';
+
+		    $a = Asiakkaat::model()->findbypk($as);
+		    if(isset($a->yrityksen_nimi) and !empty($a->yrityksen_nimi))
+		    $return = $a->yrityksen_nimi;
+		    elseif(isset($a->yhteyshenkilo) and empty($a->yrityksen_nimi) and !empty($a->yhteyshenkilo))
+		    $return = $a->yhteyshenkilo;
+		    else
+		    $return = $as;
+
+		    if(isset($a->tyyppi) and !empty($a->tyyppi) and $a->tyyppi == 'henkilo')
+		    $return = '<b class="text-warning">Yhteyshenkilö</b><br>'.$return;
+		    elseif(isset($a->tyyppi) and !empty($a->tyyppi) and $a->tyyppi == 'yritys')
+		    $return = '<b class="text-success">Yritys</b><br>'.$return;
+
+            	return $return;
+	}
+
 }
