@@ -386,7 +386,7 @@
                   <span class="fa fa-cube"></span> <?php echo Yii::t('main', 'Asiakkaat'); ?></a>
               </li>
               <li>
-                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/kohteet/admin">
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/kohteet/index">
                   <span class="fa fa-cube"></span> <?php echo Yii::t('main', 'Kohteet'); ?></a>
               </li>
               <li>
@@ -571,9 +571,9 @@
       <div id="topbar-dropmenu">
         <div class="topbar-menu row">
           <div class="col-xs-4 col-sm-2">
-            <a href="#" class="metro-tile">
+            <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/viestinta/admin" class="metro-tile">
               <span class="metro-icon glyphicon glyphicon-inbox"></span>
-              <p class="metro-title">Messages</p>
+              <p class="metro-title"><?php echo Yii::t('main', 'Viestit'); ?></p>
             </a>
           </div>
           <div class="col-xs-4 col-sm-2">

@@ -207,10 +207,32 @@ class KohteetController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$dataProvider=new CActiveDataProvider('Kohteet');
-		$this->render('index',array(
-			'dataProvider'=>$dataProvider,
+
+       		$criteria = new CDbCriteria();
+	        $criteria->order = "  id DESC ";
+
+		if(isset($_POST['osoite']) and !empty($_POST['osoite']))
+	        $criteria->addCondition (" id='".$_POST['osoite']."' ");
+
+		if(isset($_POST['nimi']) and !empty(trim($_POST['nimi'])))
+	        $criteria->addCondition (" etu_suku_nimet LIKE '%".$_POST['nimi']."%' ");
+
+		if(isset($_POST['tag']) and !empty(trim($_POST['tag'])))
+	        $criteria->addCondition (" tag_id LIKE '%".$_POST['tag']."%' ");
+
+		if(isset($_POST['avain']) and !empty(trim($_POST['avain'])))
+	        $criteria->addCondition (" avain LIKE '%".$_POST['avain']."%' ");
+
+		if(isset($_POST['sahkoposti']) and !empty(trim($_POST['sahkoposti'])))
+	        $criteria->addCondition (" email LIKE '%".$_POST['sahkoposti']."%' ");
+
+		$dataProvider=new CActiveDataProvider('Kohteet', array(
+			'criteria'=>$criteria,
+			//'pagination'=>false
 		));
+
+		$dataProvider->pagination->pageSize = 50;
+		$this->render('index', array('dataProvider' => $dataProvider));
 	}
 
 	/**
@@ -268,6 +290,26 @@ class KohteetController extends Controller
 		    $return = $a->yhteyshenkilo;
 		    else
 		    $return = $data->asiakas_id;
+
+		    if(isset($a->tyyppi) and !empty($a->tyyppi) and $a->tyyppi == 'henkilo')
+		    $return = '<b class="text-warning">Yhteyshenkilö</b><br>'.$return;
+		    elseif(isset($a->tyyppi) and !empty($a->tyyppi) and $a->tyyppi == 'yritys')
+		    $return = '<b class="text-success">Yritys</b><br>'.$return;
+
+            	return $return;
+	}
+
+    	protected function asiakasMuutosTheme($as)
+	{ 
+		$return = '';
+
+		    $a = Asiakkaat::model()->findbypk($as);
+		    if(isset($a->yrityksen_nimi) and !empty($a->yrityksen_nimi))
+		    $return = $a->yrityksen_nimi;
+		    elseif(isset($a->yhteyshenkilo) and empty($a->yrityksen_nimi) and !empty($a->yhteyshenkilo))
+		    $return = $a->yhteyshenkilo;
+		    else
+		    $return = $as;
 
 		    if(isset($a->tyyppi) and !empty($a->tyyppi) and $a->tyyppi == 'henkilo')
 		    $return = '<b class="text-warning">Yhteyshenkilö</b><br>'.$return;

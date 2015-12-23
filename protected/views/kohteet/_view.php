@@ -3,33 +3,29 @@
 /* @var $data Kohteet */
 ?>
 
-        <div class="col-md-4">
-            <div class="panel panel-info">
-                <div class="panel-heading">
-                    <h4 class="text-center"><?php echo Yii::t('main', 'Kohde').': '.$data->id; ?></h4>
-                </div>
-                <div class="panel-body text-center">
-                    <p class="lead">
-                        <strong><?php echo $data->osoite; ?></strong>
-                    </p>
-                </div>
-                <ul class="list-group list-group-flush text-center">
-                    <li class="list-group-item minheight">
-			<b><?php echo CHtml::encode($data->getAttributeLabel('kaupunki')); ?>:</b>
-			<?php echo CHtml::encode($data->kaupunki); ?>
-                    </li>
-                    <li class="list-group-item minheight">
-			<b><?php echo CHtml::encode($data->getAttributeLabel('pnumero')); ?>:</b>
-			<?php echo CHtml::encode($data->pnumero); ?>
-                    </li>
-                    <li class="list-group-item minheight">
-			<b><?php echo CHtml::encode($data->getAttributeLabel('email')); ?>:</b>
-			<?php echo CHtml::encode($data->email); ?>
-                    </li>
-                </ul>
-            </div>
-        </div>
-
+<tr>
+	<td>
+		<?php echo $this->asiakasMuutosTheme($data->asiakas_id); ?>
+	</td>
+	<td>
+		<?php echo $this->asiakasMuutosTheme($data->etu_suku_nimet); ?>
+	</td>
+	<td>
+		<?php echo $this->asiakasMuutosTheme($data->tag_id); ?>
+	</td>
+	<td>
+		<?php echo $this->asiakasMuutosTheme($data->osoite); ?>
+	</td>
+	<td>
+		<?php echo $this->asiakasMuutosTheme($data->email); ?>
+	</td>
+	<td>
+		<?php echo $this->asiakasMuutosTheme($data->puh_nro); ?>
+	</td>
+	<td>
+		<?php echo $this->asiakasMuutosTheme($data->avain); ?>
+	</td>
+</tr>
 
 
 
