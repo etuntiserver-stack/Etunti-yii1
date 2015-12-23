@@ -15,6 +15,11 @@ $this->menu=array(
 	array('label'=>'Manage Asiakkaat', 'url'=>array('admin')),
 );
 */
+
+$this->menu=array(
+	array('label'=>'Poista asiakas', 'url'=>'#', 'linkOptions'=>array('submit'=>array('delete','id'=>$model->id),'confirm'=>'Are you sure you want to delete this item?')),
+
+);
 ?>
 
 <h1>Asiakkaat #<?php echo $model->id; ?></h1>
