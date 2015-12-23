@@ -279,6 +279,10 @@
               <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/site/mobemu" class="animated animated-short fadeInUp">
                 <span class="fa fa-gear"></span> <?php echo Yii::t('main','Mobiili emulattori'); ?> </a>
             </li>
+            <li class="list-group-item">
+              <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/site/etusivu_esimerki" class="animated animated-short fadeInUp">
+                <span class="fa fa-gear"></span> <?php echo Yii::t('main','Etusivun esimerki'); ?> </a>
+            </li>
           </ul>
         </li>
         <li id="toggle_sidemenu_t">  
@@ -417,6 +421,15 @@
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/toteutuneet/index">
                   <span class="fa fa-cube"></span> <?php echo Yii::t('main', 'Tuntien hyväksyntä'); ?></a>
               </li>
+
+
+          <li>
+            <a class="accordion-toggle" href="#">
+              <span class="fa fa-bars"></span>
+              <span><?php echo Yii::t('main', 'Yhteenvedot'); ?></span>
+              <span class="caret"></span>
+            </a>
+            <ul class="nav sub-nav">
               <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/mobile/yhteenveto">
                   <span class="fa fa-cube"></span> <?php echo Yii::t('main', 'Tuntiyhteenveto työntekijät'); ?></a>
@@ -433,6 +446,9 @@
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/mobile/yhteenveto_m">
                   <span class="fa fa-cube"></span> <?php echo Yii::t('main', 'Tuntiyhteenveto matkat'); ?></a>
               </li>
+            </ul>
+          </li>
+
               <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/mobile/palkkataulukko">
                   <span class="fa fa-cube"></span> <?php echo Yii::t('main', 'Palkkataulukko'); ?></a>
