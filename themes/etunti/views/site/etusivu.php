@@ -23,12 +23,27 @@
             <div class="panel bg-info light of-h mb10">
               <div class="pn pl20 p5">
                 <div class="icon-bg">
-                  <i class="fa fa-twitter"></i>
+                  <i class="fa fa-clock-o"></i>
                 </div>
                 <h2 class="mt15 lh15">
-                  <b>348</b>
+		<?php
+		$criteria = new CDbCriteria;
+		$criteria->select="
+			SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
+			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit
+		";	
+		$criteria->condition=" 
+			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE() and status=3
+		";
+		$a = Mobile::model()->find($criteria);
+		  $tehdyht = '00:00';
+		if(isset($a->l_tunnit))
+		  $tehdyht = $this->sprint($a->l_tunnit);
+
+                  echo '<b>'.$tehdyht.'</b>';
+		?>
                 </h2>
-                <h5 class="text-muted">Tweets</h5>
+                <h5 class="text-muted"><?php echo Yii::t('main','Tehdyt tunnit tänään'); ?></h5>
               </div>
             </div>
           </div>
