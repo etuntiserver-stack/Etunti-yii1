@@ -25,8 +25,8 @@ $('.search-form form').submit(function(){
 
 <div class="row">
 	<h3><?php echo Yii::t('main', 'KOHTEET'); ?> <i class="glyphicon glyphicon-home"></i> 
-	| <?php echo CHtml::link('Haku','#',array('class'=>'search-button')); ?>
-	| <?php echo CHtml::link('Lisää uusi kohde','/index.php/kohteet/create',array('class'=>'')); ?>
+	<?php echo CHtml::link('','#',array('class'=>'search-button btn btn-primary fa fa-search')); ?>
+	<?php echo CHtml::link('','/index.php/kohteet/create',array('class'=>'btn btn-primary fa fa-plus')); ?>
    	</h3>
 </div>
 

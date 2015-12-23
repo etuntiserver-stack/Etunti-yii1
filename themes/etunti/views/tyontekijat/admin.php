@@ -24,7 +24,7 @@ $('.search-form form').submit(function(){
 </div><!-- search-form -->
 
 <div class="row">
-	<h3> <i class="fa fa-male"></i> <?php echo Yii::t('main', 'TYÖNTEKIJÄT'); ?>  
+	<h3> <?php echo Yii::t('main', 'TYÖNTEKIJÄT'); ?>  
 	 <?php echo CHtml::link('','#',array('class'=>'btn btn-primary search-button fa fa-search')); ?>
 	 <?php echo CHtml::link('','/index.php/tyontekijat/create',array('class'=>'btn btn-primary fa fa-user-plus')); ?> 
 	 <input type="checkbox" name="aktiivinen" class="sw">
