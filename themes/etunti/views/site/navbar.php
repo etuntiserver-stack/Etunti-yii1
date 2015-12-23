@@ -382,7 +382,7 @@
             </a>
             <ul class="nav sub-nav">
               <li>
-                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/asiakkaat/admin">
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/asiakkaat/index">
                   <span class="fa fa-cube"></span> <?php echo Yii::t('main', 'Asiakkaat'); ?></a>
               </li>
               <li>

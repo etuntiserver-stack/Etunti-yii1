@@ -20,6 +20,10 @@ var demoHighCharts = function () {
             // Column Charts
             var demoHighColumns = function() {
 
+	    var suunnittelut = [parseInt($('#tanaan_sun').val())];
+	    var al = [parseInt($('#tanaan_al').val())];
+	    var tehdyt = [parseInt($('#tanaan_tehdyt').val())];
+
                  var column1 = $('#high-column');
 
                  if (column1.length) {
@@ -63,7 +67,7 @@ var demoHighCharts = function () {
                         tooltip: {
                             headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
                             pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                                '<td style="padding:0"><b>{point.y:.1f} mm</b></td></tr>',
+                                '<td style="padding:0"><b>{point.y:.1f} kpl</b></td></tr>',
                             footerFormat: '</table>',
                             shared: true,
                             useHTML: true
@@ -76,21 +80,20 @@ var demoHighCharts = function () {
                             }
                         },
                         series: [{
-                            name: 'Behance',
-                            data: [30]
+                            name: 'Suunnittelut',
+                            data: suunnittelut
                         }, {
-                            name: 'Twitter',
-                            data: [60]
+                            name: 'Käynnissä',
+                            data: al
                         }, {
-                            name: 'Facebook',
-                            data: [90]
-                        }, {
-                            name: 'Dribble',
-                            data: [120]
+                            name: 'Tehdyt',
+                            data: tehdyt
                         }]
                     });
                  }
-                    
+
+
+
                  var column2 = $('#high-column2');
                  
                  if (column2.length) {
