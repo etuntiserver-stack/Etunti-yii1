@@ -72,12 +72,15 @@ if($week > $wkMaara) {
   <tr>
   <th><?php echo Yii::t('main', 'Työntekijä'); ?></th>
   <?php
+/*
   if($week < 10) {
-    $week = '0'. $week;
+    $week = ($week/10)*10;
   }
+*/
+
   for($day= 1; $day <= 7; $day++) {
     $d = strtotime($year ."W". $week . $day);
-    echo "<th>". $paivat[date('N', $d)] ."<br>". date('d.m', $d) ."</th>";
+    echo "<th>". $paivat[date('N', sprintf("%02d", $d))] ."<br>". date('d.m', $d) ."</th>";
   }
   ?>
   </tr>
@@ -90,17 +93,22 @@ if($week > $wkMaara) {
 
   foreach($tt as $t)
   {
+  $week = sprintf("%02d", $week);
+  $dataByWeek = '';
+  $dataByWeek = date('Y-m-d',strtotime($year ."W". $week));
   $criteria = new CDbCriteria();
   $criteria->condition = " tid='".$t->id."' AND 
   DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d')  
-  BETWEEN  '".date('Y-m-d',strtotime($year ."W". $week .'1'))."' AND '".date('Y-m-d',strtotime($year ."W". $week .'7'))."' 
+  BETWEEN  '".date('Y-m-d',strtotime($dataByWeek." this monday"))."' AND '".date('Y-m-d',strtotime($dataByWeek." this sunday"))."' 
   AND pvm!='' ";
   $tv = Tyovuoroot::model()->findAll($criteria);
+
+  //echo date('Y-m-d',strtotime($dataByWeek." this sunday")).'<br>';
 
     if(count($tv) > 0)
     {
 	echo '<tr>';
-	echo '<td>'.$t->tekijan_nimi.'<BR>
+	echo '<td>'.$t->tekijan_nimi.' '.date('Y-m-d',strtotime($year ."W". $week)).' '.$week.'<BR>
 	<input type="checkbox" for="'.$t->id.'">
 	'.CHtml::link('Lähettäminen','/index.php/tyovuoroot/laheta?tid='.$t->id.'&week='.$week.'&year='.$year.'&tulosta=false',array('target'=>'_blank','class'=>'text-success'));
 
@@ -111,13 +119,11 @@ if($week > $wkMaara) {
 
 	echo '</td>';
 
-	  if($week < 10) {
-	    $week = '0'. $week;
-	  }
+
 	  for($day= 1; $day <= 7; $day++) {
 	    $d = strtotime($year ."W". $week . $day);
 	    echo "
-	    <td><div class='latikkoAsetukset'>
+	    <td><div class='latikkoAsetukset'><b>".date('d.m.Y',$d)."</b><br>
 	    ". $this->renderPartial('//tyovuoroot/did',array('pvm'=>date('d.m.Y',$d),'tid'=>$t->id,'from'=>'mobiili'),true) ."
 	    </div></td>";
 	  }

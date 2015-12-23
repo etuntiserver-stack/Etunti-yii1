@@ -31,7 +31,7 @@ $this->breadcrumbs=array(
                     <!-- Input Icons -->
                     <div class="row">
 
-                      <div class="col-md-3">
+                      <div class="col-md-2">
                         <div class="section">
                           <label class="field select">
 
@@ -67,7 +67,7 @@ $this->breadcrumbs=array(
                           </label>
                         </div>
                       </div>
-                      <div class="col-md-3">
+                      <div class="col-md-2">
                         <div class="section">
                           <label class="field prepend-icon">
 
@@ -79,7 +79,7 @@ $this->breadcrumbs=array(
                           </label>
                         </div>
                       </div>
-                      <div class="col-md-3">
+                      <div class="col-md-2">
                         <div class="section">
                           <label class="field prepend-icon">
 
@@ -90,7 +90,7 @@ $this->breadcrumbs=array(
                           </label>
                         </div>
                       </div>
-                      <div class="col-md-3">
+                      <div class="col-md-2">
                         <div class="section">
                           <label class="field prepend-icon">
 
@@ -102,11 +102,28 @@ $this->breadcrumbs=array(
                         </div>
                       </div>
 
+                      <div class="col-md-2">
+                        <div class="section">
+                          <label class="field select">
+			    <select name="tilanne" class="gui-input">
+			     <option>Tilanne</option>
+			     <option>Työt</option>
+			     <option>Matkat</option>
+			     <option>Lounastauko</option>
+			    </select>
+                            <i class="arrow double"></i>
+                            </label>
+                          </label>
+                        </div>
+                      </div>
+
+                      <div class="col-md-2">
+        	        <button class="btn btn-primary btn-lg haemob btn-block" type="button"><i class="glyphicon glyphicon-search"> </i> Hae</button>
+		      </div>
+
                     </div>
 
-		    <center>
-        	     <button class="btn btn-sm btn-primary haemob" type="button"><i class="glyphicon glyphicon-search"> </i> Hae</button>
-		    </center>
+
 
                 </div>
               </div>
