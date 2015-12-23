@@ -57,6 +57,11 @@ class SiteController extends Controller
 		}
 	}
 
+	function protected sprint($val){
+	    if($val > 0)
+		return sprintf('%02d:%02d', $val/3600, ($val % 3600)/60);
+	}
+
 
 	public function actionEtusivu()
 	{
