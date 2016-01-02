@@ -230,6 +230,9 @@ class VuosilomatController extends Controller
 
 	$dateMonth = date("d.m.Y",strtotime($date));
 	$asetukset = Asetukset::model()->findbypk(1);
+
+	if(isset($asetukset->pyhapaivat))
+	{
 	$pyh = explode("\n",$asetukset->pyhapaivat);
 
 	if(
@@ -240,7 +243,8 @@ class VuosilomatController extends Controller
 	return true;
 	else
 	return false;
-
  	}
+
+	}
 
 }
