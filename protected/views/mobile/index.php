@@ -42,18 +42,18 @@ $this->menu=array(
 
 <?php
 $months=array(
-	1=>'Tammikuu',
-	2=>'Helmikuu',
-	3=>'Maaliskuu',
-	4=>'Huhtikuu',
-	5=>'Toukokuu',
-	6=>'Kesäkuu',
-	7=>'Heinäkuu',
-	8=>'Elokuu',
-	9=>'Syyskuu',
-	10=>'Lokakuu',
-	11=>'Marraskuu',
-	12=>'Joulukuu',
+	'01'=>'Tammikuu',
+	'02'=>'Helmikuu',
+	'03'=>'Maaliskuu',
+	'04'=>'Huhtikuu',
+	'05'=>'Toukokuu',
+	'06'=>'Kesäkuu',
+	'07'=>'Heinäkuu',
+	'08'=>'Elokuu',
+	'09'=>'Syyskuu',
+	'10'=>'Lokakuu',
+	'11'=>'Marraskuu',
+	'12'=>'Joulukuu',
 	);
 
 $date = date("l");
