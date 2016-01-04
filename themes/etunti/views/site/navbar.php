@@ -256,7 +256,7 @@
           </a>
           <ul class="dropdown-menu list-group dropdown-persist w250" role="menu">
             <li class="list-group-item">
-              <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/asetukser/update?id=1" class="animated animated-short fadeInUp">
+              <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/asetukset/update?id=1" class="animated animated-short fadeInUp">
                 <span class="fa fa-gear"></span> <?php echo Yii::t('main','Asetukset'); ?> </a>
             </li>
             <li class="list-group-item">
@@ -571,39 +571,39 @@
       <div id="topbar-dropmenu">
         <div class="topbar-menu row">
           <div class="col-xs-4 col-sm-2">
-            <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/viestinta/admin" class="metro-tile">
-              <span class="metro-icon glyphicon glyphicon-inbox"></span>
-              <p class="metro-title"><?php echo Yii::t('main', 'Viestit'); ?></p>
+            <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/mobile/index" class="metro-tile">
+              <span class="metro-icon glyphicon glyphicon-phone"></span>
+              <p class="metro-title"><?php echo Yii::t('main', 'TUNNIT'); ?></p>
             </a>
           </div>
           <div class="col-xs-4 col-sm-2">
-            <a href="#" class="metro-tile">
+            <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/tyontekijat/index" class="metro-tile">
+              <span class="metro-icon fa fa-male"></span>
+              <p class="metro-title"><?php echo Yii::t('main', 'TYÖNTEKIJÄT'); ?></p>
+            </a>
+          </div>
+          <div class="col-xs-4 col-sm-2">
+            <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/asiakkaat/index" class="metro-tile">
               <span class="metro-icon glyphicon glyphicon-user"></span>
-              <p class="metro-title">Users</p>
+              <p class="metro-title"><?php echo Yii::t('main', 'ASIAKKAAT'); ?></p>
             </a>
           </div>
           <div class="col-xs-4 col-sm-2">
-            <a href="#" class="metro-tile">
-              <span class="metro-icon glyphicon glyphicon-headphones"></span>
-              <p class="metro-title">Support</p>
+            <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/kohteet/index" class="metro-tile">
+              <span class="metro-icon glyphicon glyphicon-home"></span>
+              <p class="metro-title"><?php echo Yii::t('main', 'KOHTEET'); ?></p>
             </a>
           </div>
           <div class="col-xs-4 col-sm-2">
-            <a href="#" class="metro-tile">
+            <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/viestinta/index" class="metro-tile">
+              <span class="metro-icon glyphicon glyphicon-envelope"></span>
+              <p class="metro-title"><?php echo Yii::t('main', 'VIESTIT'); ?></p>
+            </a>
+          </div>
+          <div class="col-xs-4 col-sm-2">
+            <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/asetukset/update?id=1" class="metro-tile">
               <span class="metro-icon fa fa-gears"></span>
-              <p class="metro-title">Settings</p>
-            </a>
-          </div>
-          <div class="col-xs-4 col-sm-2">
-            <a href="#" class="metro-tile">
-              <span class="metro-icon glyphicon glyphicon-facetime-video"></span>
-              <p class="metro-title">Videos</p>
-            </a>
-          </div>
-          <div class="col-xs-4 col-sm-2">
-            <a href="#" class="metro-tile">
-              <span class="metro-icon glyphicon glyphicon-picture"></span>
-              <p class="metro-title">Pictures</p>
+              <p class="metro-title"><?php echo Yii::t('main', 'ASETUKSET'); ?></p>
             </a>
           </div>
         </div>
