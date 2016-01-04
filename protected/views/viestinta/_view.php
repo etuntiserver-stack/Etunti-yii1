@@ -3,6 +3,29 @@
 /* @var $data Viestinta */
 ?>
 
+
+<tr>
+	<td>
+		<?php echo date("d.m.Y  H:i",strtotime($data->time)); ?>
+	</td>
+	<td>
+		<?php echo $data->viesti; ?>
+	</td>
+	<td>
+		<?php echo $this->lahettajaMuutosTheme($data->admin); ?>
+	</td>
+	<td>
+		<?php echo $this->tekijaMuutosTheme($data->tekija); ?>
+	</td>
+
+</tr>
+
+
+
+<?php
+/*
+
+
 <div class="view">
 
 	<b><?php echo CHtml::encode($data->getAttributeLabel('id')); ?>:</b>
@@ -31,3 +54,5 @@
 
 
 </div>
+*/
+?>

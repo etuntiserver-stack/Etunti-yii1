@@ -42,7 +42,7 @@ class Korvaukset extends DB2ActiveRecord
 			array('tid, pvm, syy, korvaus', 'required'),
 			array('tid', 'numerical', 'integerOnly'=>true),
 			array('pvm', 'length', 'max'=>20),
-			array('syy', 'length', 'max'=>255),
+			array('syy', 'length', 'max'=>1000),
 			array('korvaus', 'length', 'max'=>10),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
