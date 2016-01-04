@@ -3,6 +3,38 @@
 /* @var $data Tyontekijat */
 ?>
 
+
+<?php
+/* @var $this AsiakkaatController */
+/* @var $data Asiakkaat */
+?>
+
+<tr>
+	<td>
+		<?php echo $data->tekijan_nimi; ?>
+	</td>
+	<td>
+		<?php echo $data->laiten_puh; ?>
+	</td>
+	<td>
+		<?php echo $data->tekijan_puh; ?>
+	</td>
+	<td>
+		<?php echo $data->tekijan_email; ?>
+	</td>
+	<td>
+		<?php echo $data->tekijan_katuosoite; ?>
+	</td>
+	<td>
+		<?php echo $data->tyoryhma; ?>
+	</td>
+</tr>
+
+
+<?php
+/*
+?>
+
 <div class="well col-sm-3">
 
 	<b><?php echo CHtml::encode($data->getAttributeLabel('id')); ?>:</b>

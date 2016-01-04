@@ -9,6 +9,7 @@
 .animated-waypoint {
   opacity: 0;
 }
+.link{ cursor: pointer }
 .sparkline-delay {
   position: absolute;
   bottom: 0;
@@ -8259,6 +8260,7 @@ h6 small,
 .h1 small,
 .h2 small,
 .h3 small,
+
 .h4 small,
 .h5 small,
 .h6 small,
@@ -20025,6 +20027,7 @@ body.sb-l-m.mobile-view .nano > .nano-pane {
 #sidebar_right .panel-tabs li:first-child a {
   border-left: 1px solid transparent;
 }
+
 /*===============================================
   C. Nano Sidebar Scroller Settings
 ================================================= */

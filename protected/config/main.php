@@ -288,7 +288,6 @@ return array(
                     'bootstrap-switch.css',
                     'bootstrap-select.min.css',
                     'bootstrap-slider.css',
-		    'jquery-ui.min.css',
                     'multiselect.css',
 		    'datepicker.css',
 		    'font-awesome.min.css',

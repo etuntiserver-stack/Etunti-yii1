@@ -175,10 +175,28 @@ class TyontekijatController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$dataProvider=new CActiveDataProvider('Tyontekijat');
-		$this->render('index',array(
-			'dataProvider'=>$dataProvider,
+       		$criteria = new CDbCriteria();
+	        $criteria->order = "  id DESC ";
+
+		if(isset($_POST['osoite']) and !empty($_POST['osoite']))
+	        $criteria->addCondition (" tekijan_katuosoite LIKE '%".$_POST['osoite']."%' ");
+
+		if(isset($_POST['nimi']) and !empty(trim($_POST['nimi'])))
+	        $criteria->addCondition (" tekijan_nimi LIKE '%".$_POST['nimi']."%' ");
+
+		if(isset($_POST['puhelin']) and !empty(trim($_POST['puhelin'])))
+	        $criteria->addCondition (" laiten_puh LIKE '%".$_POST['puhelin']."%' OR tekijan_puh LIKE '%".$_POST['puhelin']."%' ");
+
+		if(isset($_POST['sahkoposti']) and !empty(trim($_POST['sahkoposti'])))
+	        $criteria->addCondition (" tekijan_email LIKE '%".$_POST['sahkoposti']."%' ");
+
+		$dataProvider=new CActiveDataProvider('Tyontekijat', array(
+			'criteria'=>$criteria,
+			//'pagination'=>false
 		));
+
+		$dataProvider->pagination->pageSize = 50;
+		$this->render('index', array('dataProvider' => $dataProvider));
 	}
 
 	/**
