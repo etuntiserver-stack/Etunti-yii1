@@ -39,7 +39,7 @@
                     <li class="list-group-item">
 	<div class="row">
 		<?php echo $form->labelEx($model,'syy'); ?>
-		<?php echo $form->textField($model,'syy',array('size'=>30,'maxlength'=>100,'class'=>'form-control')); ?>
+		<?php echo $form->textField($model,'syy',array('size'=>30,'maxlength'=>1000,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'syy'); ?>
 	</div>
                     </li>
