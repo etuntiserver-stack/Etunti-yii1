@@ -138,10 +138,23 @@ class ViestintaController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$dataProvider=new CActiveDataProvider('Viestinta');
-		$this->render('index',array(
-			'dataProvider'=>$dataProvider,
+       		$criteria = new CDbCriteria();
+	        $criteria->order = "  id DESC ";
+
+		if(isset($_POST['pvm']) and !empty($_POST['pvm']))
+	        $criteria->addCondition (" DATE(time) = '".$_POST['pvm']."' ");
+
+		if(isset($_POST['sisalto']) and !empty(trim($_POST['sisalto'])))
+	        $criteria->addCondition (" viesti LIKE '%".$_POST['sisalto']."%' ");
+
+
+		$dataProvider=new CActiveDataProvider('Viestinta', array(
+			'criteria'=>$criteria,
+			//'pagination'=>false
 		));
+
+		$dataProvider->pagination->pageSize = 50;
+		$this->render('index', array('dataProvider' => $dataProvider));
 	}
 
 	/**
@@ -219,5 +232,41 @@ class ViestintaController extends Controller
 		}
             	return $data->admin;
 	}   
+
+
+
+    	protected function lahettajaMuutosTheme($admin)
+	{ 
+
+		$expl = explode(",",$admin);
+		if(isset($expl[1]))
+		{
+			$mystring = $expl[0];
+			$findme   = 'tt_';
+			$pos = strpos($mystring, $findme);
+
+			    $toimistoTekija = '';
+			if ($pos === false) {
+			    $toimistoTekija = '<b>'.Yii::t('main','Järjestelmänvalvoja<br>').'</b>';
+			} else {
+			    $toimistoTekija = '<b>'.Yii::t('main','Työntekijä<br>').'</b>';
+			}
+
+			$admin = $toimistoTekija.$expl[1];
+		}
+            	return $admin;
+	}  
+
+
+    	protected function tekijaMuutosTheme($tekija)
+	{ 
+		if($tekija != 'toimisto')
+		{
+		    $tt = Tyontekijat::model()->findbypk($tekija);
+		    if(isset($tt->tekijan_nimi) and !empty($tt->tekijan_nimi))
+		    $tekija = $tt->tekijan_nimi;
+		}
+            	return $tekija;
+	}
 
 }
