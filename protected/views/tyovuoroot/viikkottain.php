@@ -53,19 +53,22 @@ if($week > $wkMaara) {
 
     $week = sprintf("%02d", $week);
 ?>
-<center>
-
-<div class="pull-left">
+<div class="row">
+<div class="col-sm-3">
 <?php echo CHtml::button(Yii::t('main', 'Lähetä kaikille'),array('target'=>'_blank','class'=>'btn btn-success','id'=>'lahetaKaikkille'));
 ?>
 </div>
-
+<div class="col-sm-offset-4">
 <h2>
   <a href="<?php echo $_SERVER['PHP_SELF'].'?week='.($week == 1 ? $wkMaara : $week -1).'&year='.($week == 1 ? $year - 1 : $year); ?>"><<</a> 
   <?php echo date('d.m.Y',strtotime($year ."W".$week .'1')).' - '.date('d.m.Y',strtotime($year ."W". $week .'7')); ?>
   <a href="<?php echo $_SERVER['PHP_SELF'].'?week='.($week == $wkMaara ? 1 : 1 + $week).'&year='.($week == $wkMaara ? 1 + $year : $year); ?>">>></a> 
 </h2>
-</center>
+</div>
+</div>
+
+
+
 
 <div class="table-responsive">
 <table class="table table-bordered table-condensed">

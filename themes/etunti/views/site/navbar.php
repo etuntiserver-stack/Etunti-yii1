@@ -474,7 +474,7 @@
             </a>
             <ul class="nav sub-nav">
               <li>
-                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/tyontekijat/admin">
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/tyontekijat/index">
                   <span class="fa fa-cube"></span> <?php echo Yii::t('main', 'Työntekijät'); ?></a>
               </li>
               <li>
@@ -653,6 +653,7 @@
 
   <!-- BEGIN: PAGE SCRIPTS -->
 
+  <script src="<?php echo Yii::app()->request->baseUrl; ?>/assets_etunti/vendor/jquery/jquery_ui/jquery-ui.min.js"></script>
   <!-- jQuery -->
 
 
