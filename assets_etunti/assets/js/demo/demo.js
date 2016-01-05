@@ -11,6 +11,7 @@ var Demo = function() {
   var runDemoForms = function() {
 
     // Prevents directory response when submitting a demo form
+    /*
     $('.admin-form').on('submit', function(e) {
 
       if ($('body.timeline-page').length || $('body.admin-validation-page').length) {
@@ -20,6 +21,7 @@ var Demo = function() {
       alert('Your form has submitted!');
       return false;
     });
+    */
 
     // give file-upload preview onclick functionality
     var fileUpload = $('.fileupload-preview');
