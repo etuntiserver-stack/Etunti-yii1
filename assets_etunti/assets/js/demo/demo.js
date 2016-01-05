@@ -335,7 +335,7 @@ var Demo = function() {
       // Sidebar Skin Switcher
       $('#toolbox-sidebar-skin input').on('click', function() {
         var Val = $(this).val();
-
+alert(Val)
         // Swap Sidebar Skin
         Sidebar.removeClass(sidebarSkins).addClass(Val);
 

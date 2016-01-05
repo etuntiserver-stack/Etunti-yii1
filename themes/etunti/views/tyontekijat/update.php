@@ -1,21 +1,4 @@
 <?php
-/* @var $this TyontekijatController */
-/* @var $model Tyontekijat */
-
-$this->breadcrumbs=array(
-	Yii::t('main', 'Työntekijä')=>array('index'),
-	$model->id=>array('view','id'=>$model->id),
-	Yii::t('main', 'Päivitä'),
-);
-/*
-$this->menu=array(
-	array('label'=>'List Tyontekijat', 'url'=>array('index')),
-	array('label'=>'Create Tyontekijat', 'url'=>array('create')),
-	array('label'=>'View Tyontekijat', 'url'=>array('view', 'id'=>$model->id)),
-	array('label'=>'Manage Tyontekijat', 'url'=>array('admin')),
-);
-*/
-
 
 if(isset($_POST['uploaded']))
 {
@@ -52,7 +35,9 @@ exit;
 }
 ?>
 
-<legend>
+
+        <!-- begin: .tray-center -->
+        <div class="tray-center">
 
    <!-- tulostus -->
    <div class="pull-right">
@@ -62,10 +47,25 @@ exit;
    </div>
    <!-- tulostus -->
 
-<h1><?php echo Yii::t('main', 'Työntekijä ID:'); ?> <?php echo $model->id; ?></h1>
-</legend>
+	   <h2> <i class="fa fa-male"></i> <?php echo Yii::t('main', 'TYÖNTEKIJÄ')." ID# ".$model->id; ?> </h2>
 
-<?php echo $this->renderPartial('_form', array('model'=>$model)); ?>
+
+            <div class="admin-form">
+              <div class="panel heading-border">
+                <div class="panel-body bg-light">
+                 <div class="row">
+		  <?php echo $this->renderPartial('_form', array('model'=>$model)); ?>
+                 </div>
+                </div>
+              </div>
+            </div>
+
+        <!-- loppu: .tray-center -->
+        </div>
+
+
+
+
 
 
 <hr>
@@ -121,6 +121,15 @@ exit;
 <br>
 
 
+        <!-- begin: .tray-center -->
+        <div class="tray-center">
+
+
+            <div class="admin-form">
+              <div class="panel heading-border">
+                <div class="panel-body bg-light">
+
+
 <div class="row">
   <div class="col-sm-12">
 	<?php 
@@ -159,6 +168,15 @@ exit;
 	?>
   </div>
 </div>
+
+
+                </div>
+              </div>
+            </div>
+
+        <!-- loppu: .tray-center -->
+        </div>
+
 
 
 
