@@ -16,7 +16,7 @@ $this->breadcrumbs=array(
         <div class="tray-center">
 
 
-              <h2> <i class="glyphicon glyphicon-time"></i> <?php echo Yii::t('main', 'TUNTIYHTEENVETO MATKAT'); ?> 
+              <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-time"></i> <?php echo Yii::t('main', 'TUNTIYHTEENVETO MATKAT'); ?> 
    <!-- tulostus -->
    <div class="pull-right">
      <form action="#" target="_blank" method="POST">
@@ -116,7 +116,7 @@ $this->breadcrumbs=array(
                       </div>
 
                       <div class="col-md-2">
-        	        <button class="btn btn-primary btn-lg haemob btn-block" type="button"><i class="glyphicon glyphicon-search"> </i> Hae</button>
+        	        <button class="btn btn-primary btn-lg haemob btn-block myBgColors" type="button"><i class="glyphicon glyphicon-search"> </i> Hae</button>
 		      </div>
 
                     </div>
@@ -144,7 +144,7 @@ $this->breadcrumbs=array(
 
 
   <table class="table table-striped">
-  <thead>
+  <thead class="myBgColors">
   <tr>
   <th><?php echo Yii::t('main', 'Työntekijä'); ?></th>
   <th><?php echo Yii::t('main', 'Luetut'); ?></th>

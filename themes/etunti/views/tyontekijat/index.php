@@ -9,7 +9,7 @@
         <div class="tray-center">
 
 
-              <h2> <i class="glyphicon glyphicon-home"></i> <?php echo Yii::t('main', 'TYÖNTEKIJÄT'); ?> 
+              <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-home"></i> <?php echo Yii::t('main', 'TYÖNTEKIJÄT'); ?> 
 		<?php echo CHtml::link('','/index.php/tyontekijat/create',array('class'=>'btn btn-default fa fa-plus')); ?></h2>
 
 
@@ -73,7 +73,7 @@
                       </div>
 
                       <div class="col-md-2">
-        	        <button class="btn btn-primary btn-lg haemob btn-block" type="button"><i class="glyphicon glyphicon-search"> </i> Hae</button>
+        	        <button class="btn btn-primary btn-lg haemob btn-block myBgColors" type="button"><i class="glyphicon glyphicon-search"> </i> Hae</button>
 		      </div>
 
                     </div>
@@ -95,7 +95,7 @@
    <div class="panel-body">
 
   <table class="table table-striped" id="mobileTable">
-  <thead>
+  <thead class="myBgColors">
   <tr>
   <th><?php echo Yii::t('main', 'Nimi'); ?></th>
   <th><?php echo Yii::t('main', 'Työpuhelin'); ?></th>

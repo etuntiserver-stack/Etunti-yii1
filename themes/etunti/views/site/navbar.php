@@ -12,7 +12,7 @@
   }
 
 ?>
-
+  
   <!-- For Demo Purposes - Theme Settings Pane -->
   <div id="skin-toolbox">
     <div class="panel">
@@ -729,6 +729,7 @@
         // Data set
         var mapData = [900, 700, 350, 500];
         // Init Jvector Map
+
         $('#WidgetMap').vectorMap({
           map: 'us_lcc_en',
           //regionsSelectable: true,

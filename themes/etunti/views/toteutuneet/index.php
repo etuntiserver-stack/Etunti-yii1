@@ -14,7 +14,7 @@ $this->breadcrumbs=array(
         <div class="tray-center">
 
 
-              <h2> <i class="glyphicon glyphicon-time"></i> <?php echo Yii::t('main', 'TUNTIEN HYVÄKSYNTÄ'); ?> 
+              <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-time"></i> <?php echo Yii::t('main', 'TUNTIEN HYVÄKSYNTÄ'); ?> 
    <!-- tulostus -->
    <div class="pull-right">
      <form action="#" target="_blank" method="POST">
@@ -112,7 +112,7 @@ $this->breadcrumbs=array(
                       </div>
 
                       <div class="col-md-2">
-        	        <button class="btn btn-primary btn-lg haemob btn-block" type="button"><i class="glyphicon glyphicon-search"> </i> Hae</button>
+        	        <button class="btn btn-primary btn-lg haemob btn-block myBgColors" type="button"><i class="glyphicon glyphicon-search"> </i> Hae</button>
 		      </div>
 
                     </div>
@@ -156,7 +156,7 @@ function dateDiff($start, $end) {
    <div class="panel-body">
 
   <table class="table table-striped">
-  <thead>
+  <thead class="myBgColors">
   <tr>
   <th width=1><?php echo Yii::t('main', 'Pvm'); ?></th>
 
