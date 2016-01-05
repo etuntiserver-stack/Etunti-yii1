@@ -143,7 +143,7 @@ class TyontekijatController extends Controller
 
 			if(isset($_POST['kortit'])) $model->kortit = implode("##***",$_POST['kortit']);
 			if($model->save())
-				$this->redirect(array('admin'));
+				$this->redirect(array('view','id'=>$model->id));
 		}
 
 		$this->render('update',array(

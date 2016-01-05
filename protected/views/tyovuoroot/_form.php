@@ -69,7 +69,7 @@ if(isset($model->id))
   </div>
   <div class="col-sm-3">
 		<?php echo $form->labelEx($model,'alku'); ?>
-		<input type="text" name="Tyovuoroot[alku]" class="form-control laske timeVuorot" id="alku" value="<?php echo $model->alku; ?>">
+		<input type="text" name="Tyovuoroot[alku]" class="form-control laske timeVuorot" id="alku" value="<?php echo $model->alku; ?>" autofocus>
   </div>
   <div class="col-sm-3">
 		<?php echo $form->labelEx($model,'loppu'); ?>
