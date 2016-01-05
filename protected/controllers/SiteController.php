@@ -25,7 +25,7 @@ class SiteController extends Controller
 	{
 		return array(
 			array('allow', 
-				'actions'=>array('etusivu','ohjesivu','etusivu_esimerki'),
+				'actions'=>array('etusivu','ohjesivu','etusivu_esimerki', 'change_color'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('allow', 
@@ -62,6 +62,11 @@ class SiteController extends Controller
 		return sprintf('%02d:%02d', $val/3600, ($val % 3600)/60);
 	}
 
+
+	public function actionChange_color()
+	{
+		//Yii::app()->user->setState('myBgColors', $_POST['myBgColors']);
+	}
 
 	public function actionEtusivu()
 	{

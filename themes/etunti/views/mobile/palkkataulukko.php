@@ -16,7 +16,7 @@ $this->breadcrumbs=array(
         <div class="tray-center">
 
 
-              <h2> <i class="glyphicon glyphicon-ok"></i> <?php echo Yii::t('main', 'PALKKATAULUKKO'); ?> 
+              <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-ok"></i> <?php echo Yii::t('main', 'PALKKATAULUKKO'); ?> 
    <!-- tulostus -->
    <div class="pull-right">
     <div class="form-inline">
@@ -100,7 +100,7 @@ $this->breadcrumbs=array(
                       </div>
 
                       <div class="col-md-2  col-md-offset-3">
-        	        <button class="btn btn-primary btn-lg haemob btn-block" type="button"><i class="glyphicon glyphicon-search"> </i> Hae</button>
+        	        <button class="btn btn-primary btn-lg haemob btn-block myBgColors" type="button"><i class="glyphicon glyphicon-search"> </i> Hae</button>
 		      </div>
 
                     </div>
@@ -148,7 +148,7 @@ $this->breadcrumbs=array(
 
 
   <table class="table table-striped table-bordered small">
-  <thead>
+  <thead class="myBgColors">
   <tr>
   <th><?php echo Yii::t('main', 'Työntekijä'); ?></th>
   <th><?php echo Yii::t('main', 'Työpäiviä'); ?></th>

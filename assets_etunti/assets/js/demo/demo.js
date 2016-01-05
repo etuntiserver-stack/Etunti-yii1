@@ -230,6 +230,9 @@ var Demo = function() {
         var settingsParse = JSON.parse(themeGet);
         settingsObj = settingsParse;
 
+	$('.myBgColors').removeClass(headerSkins);
+	$('.myBgColors').addClass(settingsObj['headerSkin']);
+
         $.each(settingsParse, function(i, e) {
           switch (i) {
             case 'headerSkin':
@@ -330,12 +333,18 @@ var Demo = function() {
         settingsObj['headerSkin'] = Val;
         localStorage.setItem(themeKey, JSON.stringify(settingsObj));
 
+
+	$('.myBgColors').removeClass(headerSkins);
+	$('.myBgColors').addClass(Val);
+
+
+
       });
 
       // Sidebar Skin Switcher
       $('#toolbox-sidebar-skin input').on('click', function() {
         var Val = $(this).val();
-alert(Val)
+
         // Swap Sidebar Skin
         Sidebar.removeClass(sidebarSkins).addClass(Val);
 

@@ -1,15 +1,12 @@
 <?php
-/* @var $this KohteetController */
-/* @var $dataProvider CActiveDataProvider */
 
 ?>
-
 
         <!-- begin: .tray-center -->
         <div class="tray-center">
 
 
-              <h2> <i class="glyphicon glyphicon-home"></i> <?php echo Yii::t('main', 'ASIAKKAAT'); ?> 
+              <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-home"></i> <?php echo Yii::t('main', 'ASIAKKAAT'); ?> 
 		<?php echo CHtml::link('','/index.php/asiakkaat/create',array('class'=>'btn btn-default fa fa-plus')); ?></h2>
 
 
@@ -19,7 +16,7 @@
 
             <div class="admin-form">
               <div class="panel heading-border">
-                <div class="panel-body bg-light">
+                <div class="panel-body">
 
                     <!-- Input Icons -->
                     <div class="row">
@@ -107,7 +104,7 @@
                       </div>
 
                       <div class="col-md-2">
-        	        <button class="btn btn-primary btn-lg haemob btn-block" type="button"><i class="glyphicon glyphicon-search"> </i> Hae</button>
+        	        <button class="btn btn-primary btn-lg haemob btn-block myBgColors" type="button"><i class="glyphicon glyphicon-search"> </i> Hae</button>
 		      </div>
 
                     </div>
@@ -129,7 +126,7 @@
    <div class="panel-body">
 
   <table class="table table-striped" id="mobileTable">
-  <thead>
+  <thead class="myBgColors">
   <tr>
   <th><?php echo Yii::t('main', 'Asiakas'); ?></th>
   <th><?php echo Yii::t('main', 'Osoite'); ?></th>

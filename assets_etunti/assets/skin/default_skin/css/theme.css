@@ -305,6 +305,7 @@ Copyright (c) 2014 Daniel Eden
     -webkit-transform: perspective(400px) rotate3d(1, 0, 0, 90deg);
     transform: perspective(400px) rotate3d(1, 0, 0, 90deg);
     transition-timing-function: ease-in;
+
     opacity: 0;
   }
   40% {
@@ -18242,6 +18243,7 @@ body.sb-top #toggle_sidemenu_t {
     z-index: 1040;
     opacity: 1 !important;
     visibility: visible;
+
     top: 0;
     color: #666 !important;
     border-bottom: 0;
@@ -24467,7 +24469,7 @@ body.timeline-page .panel-clone {
   z-index: 999;
   overflow: visible !important;
   position: fixed;
-  top: 120px;
+  bottom: 10px;
   right: -230px;
   width: 230px;
   -webkit-transition: right 0.1s ease-in-out;

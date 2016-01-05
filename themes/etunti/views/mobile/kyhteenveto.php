@@ -15,7 +15,7 @@ $this->breadcrumbs=array(
         <div class="tray-center">
 
 
-              <h2> <i class="glyphicon glyphicon-home"></i> <?php echo Yii::t('main', 'TUNTIYHTEENVETO KOHTEET'); ?> 
+              <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-home"></i> <?php echo Yii::t('main', 'TUNTIYHTEENVETO KOHTEET'); ?> 
    <!-- tulostus -->
    <div class="pull-right">
      <form action="#" target="_blank" method="POST">
@@ -64,7 +64,7 @@ $this->breadcrumbs=array(
                       </div>
 
                       <div class="col-md-2 col-md-offset-6">
-        	        <button class="btn btn-primary btn-lg haemob btn-block" type="button"><i class="glyphicon glyphicon-search"> </i> Hae</button>
+        	        <button class="btn btn-primary btn-lg haemob btn-block myBgColors" type="button"><i class="glyphicon glyphicon-search"> </i> Hae</button>
 		      </div>
 
                     </div>
@@ -93,7 +93,7 @@ $this->breadcrumbs=array(
    <div class="panel-body">
 
   <table class="table table-striped small">
-  <thead>
+  <thead class="myBgColors">
   <tr>
   <th><?php echo Yii::t('main', 'Osoite'); ?></th>
 

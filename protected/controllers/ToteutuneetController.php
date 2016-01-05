@@ -615,14 +615,14 @@ class ToteutuneetController extends Controller
 	    if(date('N', strtotime($date)) == 7)
 	    {
   	    echo '<tr>';
-  		echo '<td style="background: #669999;color: white" class="text-center viikkoRivi small"><b>'.Yii::t('main', 'Viikko').' '.date("W",strtotime($date)).'</b></td>';
+  		echo '<td style="background: #669999;color: white" class="text-center viikkoRivi small myBgColors"><b>'.Yii::t('main', 'Viikko').' '.date("W",strtotime($date)).'</b></td>';
 
 		 $vktyoaika = '';
 		 $ts = Tyosuhdet::model()->find(" tid = '".$tid."' ");
 		 if(isset($ts->id) and !empty($ts['vktyoaika']))
 		  $vktyoaika = $ts['vktyoaika'];
 
-		  echo '<td style="background: #669999;color: white; text-align:center" class="viikkoRivi small" id="vk_'.date("W",strtotime($date)).'_'.$tid.'">';
+		  echo '<td style="background: #669999;color: white; text-align:center" class="viikkoRivi small myBgColors" id="vk_'.date("W",strtotime($date)).'_'.$tid.'">';
 		  $kokoViikko = '';
 		  $vko = '';
 		  $vko = date("W",strtotime($date));
@@ -642,13 +642,13 @@ class ToteutuneetController extends Controller
 		
 		  $totalLu = '';
 		  $totalLu = $this->yhtLuWeek($tid,$vko,$year);
-		  echo '<td style="background: #669999;color: white; text-align:center" class="small">'.$this->sprint($totalLu).'<br>('.$this->num($totalLu).')</td>';
+		  echo '<td style="background: #669999;color: white; text-align:center" class="small myBgColors">'.$this->sprint($totalLu).'<br>('.$this->num($totalLu).')</td>';
 		  $totalTot = '';
 		  $totalTot = $this->yhtTOtWeek($tid,$vko,$year);
-		  echo '<td style="background: #669999;color: white; text-align:center" class="small">'.$this->sprint($totalTot).'<br>('.$this->num($totalTot).')</td>';
-		  echo '<td style="background: #669999;color: white; text-align:center" class="small"></td>';
-		  echo '<td style="background: #669999;color: white; text-align:center" class="small">'.$this->sprint($yhtMatkaWeek).'<br>('.$this->num($yhtMatkaWeek).')</td>';
-		  echo '<td style="background: #669999;color: white; text-align:center" class="small">'.$this->sprint($yhtIltaWeek).'<br>('.$this->num($yhtIltaWeek).')</td>';
+		  echo '<td style="background: #669999;color: white; text-align:center" class="small myBgColors">'.$this->sprint($totalTot).'<br>('.$this->num($totalTot).')</td>';
+		  echo '<td style="background: #669999;color: white; text-align:center" class="small myBgColors"></td>';
+		  echo '<td style="background: #669999;color: white; text-align:center" class="small myBgColors">'.$this->sprint($yhtMatkaWeek).'<br>('.$this->num($yhtMatkaWeek).')</td>';
+		  echo '<td style="background: #669999;color: white; text-align:center" class="small myBgColors">'.$this->sprint($yhtIltaWeek).'<br>('.$this->num($yhtIltaWeek).')</td>';
 
 	    echo '</tr>';
 	    $viikkoBreak = true;
