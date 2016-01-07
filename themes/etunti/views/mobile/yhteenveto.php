@@ -14,8 +14,6 @@ $this->breadcrumbs=array(
         <!-- begin: .tray-center -->
         <div class="tray-center">
 
-
-              <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-time"></i> <?php echo Yii::t('main', 'TUNTIYHTEENVETO TYÖNTEKIJÄT'); ?> 
    <!-- tulostus -->
    <div class="pull-right">
      <form action="#" target="_blank" method="POST">
@@ -23,6 +21,9 @@ $this->breadcrumbs=array(
      </form>
    </div>
    <!-- tulostus -->
+
+              <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-time"></i> <?php echo Yii::t('main', 'TUNTIYHTEENVETO TYÖNTEKIJÄT'); ?> 
+
 		</h2>
 
 

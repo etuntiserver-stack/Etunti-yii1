@@ -125,10 +125,26 @@ class AdministratorsController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$dataProvider=new CActiveDataProvider('Administrators');
-		$this->render('index',array(
-			'dataProvider'=>$dataProvider,
+       		$criteria = new CDbCriteria();
+	        $criteria->order = "  id DESC ";
+
+
+		if(isset($_POST['adm_login']) and !empty(trim($_POST['adm_login'])))
+	        $criteria->addCondition (" adm_login LIKE '%".$_POST['adm_login']."%' ");
+
+		if(isset($_POST['adm_nimi']) and !empty(trim($_POST['adm_nimi'])))
+	        $criteria->addCondition (" adm_nimi LIKE '%".$_POST['adm_nimi']."%' ");
+
+		if(isset($_POST['adm_email']) and !empty(trim($_POST['adm_email'])))
+	        $criteria->addCondition (" adm_email LIKE '%".$_POST['adm_email']."%' ");
+
+		$dataProvider=new CActiveDataProvider('Administrators', array(
+			'criteria'=>$criteria,
+			//'pagination'=>false
 		));
+
+		$dataProvider->pagination->pageSize = 50;
+		$this->render('index', array('dataProvider' => $dataProvider));
 	}
 
 	/**
