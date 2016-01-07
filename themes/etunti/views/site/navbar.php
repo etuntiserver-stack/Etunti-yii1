@@ -268,7 +268,7 @@
                 <span class="fa fa-gear"></span> <?php echo Yii::t('main','Ohjesivu'); ?> </a>
             </li>
             <li class="list-group-item">
-              <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/administrators/admin" class="animated animated-short fadeInUp">
+              <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/administrators/index" class="animated animated-short fadeInUp">
                 <span class="fa fa-gear"></span> <?php echo Yii::t('main','Järjestelmänvalvojat'); ?> </a>
             </li>
             <li class="list-group-item">

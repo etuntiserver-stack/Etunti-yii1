@@ -42,7 +42,7 @@ exit;
    <!-- tulostus -->
    <div class="pull-right">
      <form action="tulosta?id=<?php echo $model->id; ?>" target="_blank" method="POST">
-      <input type="submit" name="tulosta" class="btn btn-success btn-sm" value="PDF">
+      <input type="submit" name="tulosta" class="btn btn-success btn-sm myBgColors" value="PDF">
      </form>
    </div>
    <!-- tulostus -->
@@ -79,7 +79,7 @@ exit;
   <form id="uploadimage" action="#" class="form-input" method="post" enctype="multipart/form-data">
    <input type="hidden" name="uploaded" value="true" />
    <input type="file" name="file" id="i_file" data-icon="false" data-buttonText="Etsi kuvaa" class="form-group" />
-   <input type="submit" value="Lataa" class="btn btn-primary btn-group" id="kuvaUP" /></button>
+   <input type="submit" value="Lataa" class="btn btn-primary btn-group myBgColors" id="kuvaUP" /></button>
   </form>
  </div>
 </div>
@@ -90,7 +90,7 @@ exit;
   <form id="uploadimage" action="#" class="form-input" method="post" enctype="multipart/form-data">
    <input type="hidden" name="uploaded_t" value="true" />
    <input type="file" name="file" id="t_file" data-icon="false" data-buttonText="Etsi kuvaa" class="form-group" />
-   <input type="submit" value="Lataa" class="btn btn-primary btn-group" id="tiedostoUP" /></button>
+   <input type="submit" value="Lataa" class="btn btn-primary btn-group myBgColors" id="tiedostoUP" /></button>
   </form>
  </div>
 
