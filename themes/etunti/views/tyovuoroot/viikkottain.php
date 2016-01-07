@@ -26,7 +26,7 @@ td:first-child {
         <div class="tray-center">
 
 
-              <h2> <i class="glyphicon glyphicon-th-list"></i> <?php echo Yii::t('main', 'TYÖVUOROJEN LÄHETYS'); ?></h2>
+              <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-th-list"></i> <?php echo Yii::t('main', 'TYÖVUOROJEN LÄHETYS'); ?></h2>
 
         <!-- loppu: .tray-center -->
         </div>
@@ -67,7 +67,7 @@ if($week > $wkMaara) {
 ?>
 <div class="row">
 <div class="col-sm-3">
-<?php echo CHtml::button(Yii::t('main', 'Lähetä kaikille'),array('target'=>'_blank','class'=>'btn btn-success','id'=>'lahetaKaikkille'));
+<?php echo CHtml::button(Yii::t('main', 'Lähetä kaikille'),array('target'=>'_blank','class'=>'btn btn-success myBgColors','id'=>'lahetaKaikkille'));
 ?>
 </div>
 <div class="col-sm-offset-4">
@@ -84,6 +84,7 @@ if($week > $wkMaara) {
 
 <div class="table-responsive" id="lahetysTable">
 <table class="table table-bordered table-condensed small">
+  <thead class="myBgColors">
   <tr>
   <th><?php echo Yii::t('main', 'Työntekijä'); ?></th>
   <?php
@@ -99,7 +100,7 @@ if($week > $wkMaara) {
   }
   ?>
   </tr>
-
+  </thead>
   <?php
   $criteria = new CDbCriteria();
   $criteria->order = " tekijan_nimi ";
