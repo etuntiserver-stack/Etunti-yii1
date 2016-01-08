@@ -226,7 +226,7 @@ class SiteController extends Controller
 
         	$criteria->condition = "  
 			aloitan !='' and loppui !='' and status ='3'
-			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%m%Y'), '%Y%m') = '".$month."'
+			AND EXTRACT(YEAR_MONTH FROM DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y.%m.%d'))  = '".$month."'
 			AND id NOT IN(select kid from sivexkuitti_repaired)
 		";
 
@@ -249,7 +249,7 @@ class SiteController extends Controller
 
         	$criteria->condition = "  
 			aloitan !='' and loppui !='' and status ='3'
-			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%m%Y'), '%Y%m') = '".$month."'
+			AND EXTRACT(YEAR_MONTH FROM DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y.%m.%d'))  = '".$month."'
 		";
 
 		$tot = Toteutuneet::model()->findAll($criteria);

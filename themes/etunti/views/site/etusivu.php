@@ -31,7 +31,11 @@ $months=array(
                   <i class="fa fa-calendar"></i>
                 </div>
                 <h2 class="mt15 lh15">
-                  <b><?php echo $this->toteutuThisMonth(date("Ym")); ?></b>
+                  <b>	<?php 
+			$kktunnint = $this->toteutuThisMonth(date("Ym"));
+			echo $this->sprint($kktunnint); 
+			?>
+		  </b>
                 </h2>
                 <h5 class="text-muted"><?php echo $months[date("m")]; ?> toteuma</h5>
               </div>
