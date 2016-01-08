@@ -119,14 +119,14 @@ $this->breadcrumbs=array(
 	$kpl1 = 0;
 	$kpl2 = 0;
 	$cr4 = new CDbCriteria();
-	$this->totKpl($cr4,"kaikki");
+	$this->totKpl($cr4,"kaikki",$from,$to);
 	$cr4->addCondition (" id NOT IN (SELECT kid FROM sivexkuitti_repaired) ");
 	$k = Mobile::model()->findAll($cr4);
 	foreach($k as $kk)
 	$kpl1 += $kk->count;
 
 	$cr5 = new CDbCriteria();
-	$this->totKpl($cr5,"kaikki");
+	$this->totKpl($cr5,"kaikki",$from,$to);
 	$k = Toteutuneet::model()->findAll($cr5);
 	foreach($k as $kk)
 	$kpl2 += $kk->count;

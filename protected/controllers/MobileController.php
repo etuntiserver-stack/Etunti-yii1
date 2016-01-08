@@ -1164,7 +1164,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 	}
 
 
-	protected function totKpl($criteria,$kohdenID){
+	protected function totKpl($criteria,$kohdenID,$from,$to){
 
 
         	$criteria->select = " COUNT(*) as count	";
@@ -1172,25 +1172,20 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
         	$criteria->condition = " 
 			loppui!='' and aloitan!='' 
 			AND status='3'
+			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
+			BETWEEN '".$from."' AND '".$to."' 
 		";
 		if($kohdenID != 'kaikki')
 	        $criteria->addCondition (" kohdenID = '".$kohdenID."' ");
 
 		$criteria->group = "kohdenID"; 
 
-		if(Yii::app()->session['from'] and Yii::app()->session['to'])
-	        $criteria->addCondition (" 
-
-			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
-			BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."' 
-
-		");
 
 		return $criteria;
 	}
 
 
-	protected function totLu($criteria,$kohdenID){
+	protected function totLu($criteria,$kohdenID,$from,$to){
 
 
         	$criteria->select = "
@@ -1202,15 +1197,9 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			loppui!='' and aloitan!='' 
 			AND status='3'
 			AND kohdenID ='".$kohdenID."' 
+			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
+			BETWEEN '".$from."' AND '".$to."' 
 		";
-
-		if(Yii::app()->session['from'] and Yii::app()->session['to'])
-	        $criteria->addCondition (" 
-
-			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
-			BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."' 
-
-		");
 
 		return $criteria;
 	}
