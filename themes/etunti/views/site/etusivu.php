@@ -1,4 +1,22 @@
+<?php
 
+$months=array(
+	'01'=>'Tammikuu',
+	'02'=>'Helmikuu',
+	'03'=>'Maaliskuu',
+	'04'=>'Huhtikuu',
+	'05'=>'Toukokuu',
+	'06'=>'Kesäkuu',
+	'07'=>'Heinäkuu',
+	'08'=>'Elokuu',
+	'09'=>'Syyskuu',
+	'10'=>'Lokakuu',
+	'11'=>'Marraskuu',
+	'12'=>'Joulukuu',
+	);
+
+
+?>
 
 
       <!-- Begin: Content -->
@@ -10,12 +28,12 @@
             <div class="panel bg-alert light of-h mb10">
               <div class="pn pl20 p5">
                 <div class="icon-bg">
-                  <i class="fa fa-comments-o"></i>
+                  <i class="fa fa-calendar"></i>
                 </div>
                 <h2 class="mt15 lh15">
-                  <b>523</b>
+                  <b><?php echo $this->toteutuThisMonth(date("Ym")); ?></b>
                 </h2>
-                <h5 class="text-muted">Comments</h5>
+                <h5 class="text-muted"><?php echo $months[date("m")]; ?> toteuma</h5>
               </div>
             </div>
           </div>

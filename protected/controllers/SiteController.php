@@ -212,4 +212,59 @@ class SiteController extends Controller
 		Yii::app()->user->logout();
 		$this->redirect(Yii::app()->homeUrl);
 	}
+
+
+	public function toteutuThisMonth($k)
+	{
+		$month = $k;
+		$total_l = 0;
+
+       		$criteria = new CDbCriteria();
+        	$criteria->select = "
+		TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'))) as l_tunnit,aloitan,loppui
+		";
+
+        	$criteria->condition = "  
+			aloitan !='' and loppui !='' and status ='3'
+			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%m%Y'), '%Y%m') = '".$month."'
+			AND id NOT IN(select kid from sivexkuitti_repaired)
+		";
+
+		$lu = Mobile::model()->findAll($criteria);
+		foreach($lu as $l)
+		{
+
+		    $l->loppui = date("d.m.Y H:i",strtotime($l->loppui));
+		    $l->aloitan = date("d.m.Y H:i",strtotime($l->aloitan));
+
+		    $l->l_tunnit = (strtotime($l->loppui)-strtotime($l->aloitan));
+		    $total_l += $l->l_tunnit;
+		}
+		/* ////////////////////////// */
+
+       		$criteria = new CDbCriteria();
+        	$criteria->select = "
+		TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'))) as l_tunnit,aloitan,loppui 
+		";
+
+        	$criteria->condition = "  
+			aloitan !='' and loppui !='' and status ='3'
+			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%m%Y'), '%Y%m') = '".$month."'
+		";
+
+		$tot = Toteutuneet::model()->findAll($criteria);
+		foreach($tot as $l)
+		{
+
+		    $l->loppui = date("d.m.Y H:i",strtotime($l->loppui));
+		    $l->aloitan = date("d.m.Y H:i",strtotime($l->aloitan));
+
+		    $l->l_tunnit = (strtotime($l->loppui)-strtotime($l->aloitan));
+		    $total_l += $l->l_tunnit;
+		}
+
+
+		return $total_l;
+
+	}
 }
