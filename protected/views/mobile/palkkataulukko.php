@@ -55,9 +55,9 @@ $this->breadcrumbs=array(
    ?>
 	
    <b class="glyphicon glyphicon-calendar"></b>
-   <input type="text" name="from" id="from" class="form-control input-sm form-group datepicker" value="<?php echo Yii::app()->session['from']; ?>">
+   <input type="text" name="from" id="from" class="form-control input-sm form-group datepicker" value="<?php echo $from; ?>">
    <b class="glyphicon glyphicon-calendar"></b>
-   <input type="text" name="to" id="to" class="form-control input-sm form-group datepicker" value="<?php echo Yii::app()->session['to']; ?>">
+   <input type="text" name="to" id="to" class="form-control input-sm form-group datepicker" value="<?php echo $to; ?>">
 
    <input type="submit" class="btn btn-sm btn-primary" value="<?php echo Yii::t('main', 'haku'); ?>">
    </form>
@@ -78,7 +78,7 @@ $this->breadcrumbs=array(
 
 <br>
 
-<?php if(Yii::app()->session['from'] and Yii::app()->session['to']) : ?>
+<?php if($from and $to) : ?>
   <table class="table table-striped table-bordered small">
   <thead>
   <tr>
@@ -114,15 +114,15 @@ $this->breadcrumbs=array(
   foreach($model as $data)
   {
 	$tids[] = $data->id;
-	$tp = $this->Tp($data->id);
-  	$sl = $this->TidfromtoSL(Yii::app()->session['from'],Yii::app()->session['to'],$data->id);
+	$tp = $this->Tp($data->id,$from,$to);
+  	$sl = $this->TidfromtoSL($from,$to,$data->id);
 	$slYht += $sl;
-  	$ls = $this->TidfromtoLS(Yii::app()->session['from'],Yii::app()->session['to'],$data->id);
+  	$ls = $this->TidfromtoLS($from,$to,$data->id);
 	$lsYht += $ls;
-  	$spl = $this->TidfromtoSPL(Yii::app()->session['from'],Yii::app()->session['to'],$data->id);
+  	$spl = $this->TidfromtoSPL($from,$to,$data->id);
 	$splYht += $spl;
 	$totalTp += $tp;
-	$this->renderPartial('_palkkataulukko',array('data'=>$data,'tp'=>$tp,'sl'=>$sl,'spl'=>$spl,'ls'=>$ls,));
+	$this->renderPartial('_palkkataulukko',array('data'=>$data,'tp'=>$tp,'sl'=>$sl,'spl'=>$spl,'ls'=>$ls,'from'=>$from,'to'=>$to));
   }
 
 	$yht[0] = 0;
@@ -135,15 +135,15 @@ $this->breadcrumbs=array(
   foreach($tids as $t)
   {
 	$matka += $this->renderPartial('//mobile/tidfromtomatkat',array(
-		'from'=>Yii::app()->session['from'],
-		'to'=>Yii::app()->session['to'],
+		'from'=>$from,
+		'to'=>$to,
 		'tid'=>$t
 		),true);
 
 
-	$matkaIlta += $this->matkaIlta($t);
+	$matkaIlta += $this->matkaIlta($t,$from,$to);
 
-	$return = $this->toteutu($t,"palkkataulukko");
+	$return = $this->toteutu($t,"palkkataulukko",$from,$to);
 	$yht[0] += $return[0];
 	$yht[1] += $return[1];
 	$yht[2] += $return[2];
