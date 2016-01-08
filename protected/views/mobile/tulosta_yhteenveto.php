@@ -15,9 +15,9 @@ td,th{
   <br>
 
 <h1> <?php echo Yii::t('main', 'YHTEENVETO TUNNIT'); ?></h1>
-<h3><?php echo date("d.m.Y",strtotime(Yii::app()->session['from']))." - ".date("d.m.Y",strtotime(Yii::app()->session['to'])); ?></h3>
+<h3><?php echo date("d.m.Y",strtotime($from))." - ".date("d.m.Y",strtotime($to)); ?></h3>
 
-<?php if(Yii::app()->session['from'] and Yii::app()->session['to']) : ?>
+
   <table>
   <thead>
   <tr>
@@ -88,8 +88,7 @@ td,th{
 		if(Yii::app()->session['MATKA'])
 	        $criteria->addCondition (" status != '2' ");
 
-		if(Yii::app()->session['from'] and Yii::app()->session['to'])
-	        $criteria->addCondition ("DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."' ");
+	        $criteria->addCondition ("DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$from."' AND '".$to."' ");
 
 		$lu = Mobile::model()->findAll($criteria);
 		foreach($lu as $l)
@@ -120,8 +119,7 @@ td,th{
 		if(Yii::app()->session['MATKA'])
 	        $criteria->addCondition (" status != '2' ");
 
-		if(Yii::app()->session['from'] and Yii::app()->session['to'])
-	        $criteria->addCondition ("DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."' ");
+	        $criteria->addCondition ("DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$from."' AND '".$to."' ");
 
 		$tot = Toteutuneet::model()->findAll($criteria);
 		foreach($tot as $l)
@@ -158,7 +156,7 @@ td,th{
   </tr>
   </tfoot>
   </table>
-<?php endif; ?>
+
 
 
 

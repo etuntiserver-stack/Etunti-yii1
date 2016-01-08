@@ -94,7 +94,7 @@ $this->breadcrumbs=array(
                         <div class="section">
                           <label class="field prepend-icon">
 
-	   <input type="text" name="from" id="from" class="gui-input datepicker" value="<?php echo Yii::app()->session['from']; ?>">
+	   <input type="text" name="from" id="from" class="gui-input datepicker" value="<?php echo $from; ?>">
 
                             <label for="firstname" class="field-icon">
                               <i class="glyphicon glyphicon-calendar"></i>
@@ -107,7 +107,7 @@ $this->breadcrumbs=array(
                         <div class="section">
                           <label class="field prepend-icon">
 
-   	   <input type="text" name="to" id="to" class="gui-input datepicker" value="<?php echo Yii::app()->session['to']; ?>">
+   	   <input type="text" name="to" id="to" class="gui-input datepicker" value="<?php echo $to; ?>">
 
                             <label for="firstname" class="field-icon">
                               <i class="glyphicon glyphicon-calendar"></i>
@@ -139,7 +139,7 @@ $this->breadcrumbs=array(
 
 
 
-<?php if(Yii::app()->session['from'] and Yii::app()->session['to']) : ?>
+
 
   <div class="panel heading-border">
    <div class="panel-body">
@@ -176,12 +176,12 @@ $this->breadcrumbs=array(
   {
 	$tids[] = $data->tid;
         $total_lu += $data->l_tunnit;
-	$tp = $this->Tp($data->tid);
+	$tp = $this->Tp($data->tid,$from,$to);
 	$totalTp += $tp;
 	$tot_sun = $this->renderPartial('//mobile/suunniteltu',array('id'=>$data->tid,'kohde_tid'=>'tid'),true);
 	$total_sunniteltu += $tot_sun;
 
-	$this->renderPartial('_yhteenveto',array('data'=>$data,'tp'=>$tp,'tot_sun'=>$tot_sun));
+	$this->renderPartial('_yhteenveto',array('data'=>$data,'tp'=>$tp,'tot_sun'=>$tot_sun,'from'=>$from,'to'=>$to));
   }
 
 
@@ -192,7 +192,8 @@ $this->breadcrumbs=array(
 
   foreach($tids as $t)
   {
-	$return = $this->toteutu($t,"yhteenveto");
+	$return = '';
+	$return = $this->toteutu($t,"yhteenveto",$from,$to);
 	$yht[0] += $return[0];
 	$yht[1] += $return[1];
 	$yht[2] += $return[2];
@@ -224,7 +225,7 @@ $this->breadcrumbs=array(
    </div>
   </div>
 
-<?php endif; ?>
+
 </div>
 
 	<div id="showres" class="modal fade" tabindex="-1" role="dialog"></div>

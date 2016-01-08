@@ -200,12 +200,14 @@ function num($val){
 	}
 
 
-	public function actionTotal_suunniteltu($id,$kohde_tid)
+	public function actionTotal_suunniteltu($id,$kohde_tid,$from,$to)
 	{
 
 		$this->renderPartial('suunniteltu',array(
 			'id'=>$id,
 			'kohde_tid'=>$kohde_tid,
+			'from'=>$from,
+			'to'=>$to,
 		));
 
 	}
@@ -860,11 +862,13 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		if(Yii::app()->request->getPost('Tekija'))
 		Yii::app()->session['Tekija'] = Yii::app()->request->getPost('Tekija');
 
-		if(Yii::app()->request->getPost('from'))
-		Yii::app()->session['from'] = date("Y-m-d",strtotime(Yii::app()->request->getPost('from')));
+		$from = date("Y-m-d");
+		$to = date("Y-m-d");
 
-		if(Yii::app()->request->getPost('to'))
-		Yii::app()->session['to'] = date("Y-m-d",strtotime(Yii::app()->request->getPost('to')));
+		if(isset($_POST['from']) and isset($_POST['to'])){
+		$from 	= $_POST['from'];
+		$to 	= $_POST['to'];
+		}
 		
 
        		$criteria = new CDbCriteria();
@@ -880,39 +884,45 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 	        $criteria->addCondition ('id IN ('.$ids.') ');
 		}
 
-
+/*
 		$dataProvider=new CActiveDataProvider('Mobile', array(
 			'criteria'=>$criteria,
 			'pagination'=>false
 		));
-
-		  $model = Tyontekijat::model()->findAll($criteria);
+*/
+		$model = Tyontekijat::model()->findAll($criteria);
 
 		if(Yii::app()->request->getPost('tulosta'))
 		{
 	          $html2pdf = Yii::app()->ePdf->HTML2PDF('L', 'A4', 'en');
 		  $html2pdf->setDefaultFont('Arial');
-	          $html2pdf->WriteHTML($this->renderPartial('tulosta_palkkataulukko', array('model' => $model),true));
+	          $html2pdf->WriteHTML($this->renderPartial('tulosta_palkkataulukko', array(
+			'model' => $model,
+			'from' => $from,
+			'to' => $to
+		  ),true));
 	          $html2pdf->Output();
 		} else {
 		  //$dataProvider->pagination->pageSize = 50;
-		  $this->render('palkkataulukko', array('model' => $model));
+		  $this->render('palkkataulukko', array(
+			'model' => $model,
+			'from' => $from,
+			'to' => $to
+		  ));
 		}
 	}
 
-	protected function TP($tid){
+	protected function TP($tid,$from,$to){
 
        		$criteria = new CDbCriteria();
+        	$criteria->select = "id";
         	$criteria->group = "DATE(DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d'))";
 
-		if(Yii::app()->session['from'] and Yii::app()->session['to'])
-		{
 	        $criteria->condition = "
 			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
-			BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."' 
+			BETWEEN '".$from."' AND '".$to."' 
 			AND tid='".$tid."'
 		";
-		}
 
 		$model = Mobile::model()->findAll($criteria);
 		return count($model);
@@ -944,24 +954,34 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		  }
 		}
 
-
+/*
 		if(Yii::app()->request->getPost('from'))
 		Yii::app()->session['from'] = date("Y-m-d",strtotime(Yii::app()->request->getPost('from')));
 
 		if(Yii::app()->request->getPost('to'))
 		Yii::app()->session['to'] = date("Y-m-d",strtotime(Yii::app()->request->getPost('to')));
-		
+*/		
+
+		$from = date("Y-m-d");
+		$to = date("Y-m-d");
+
+		if(isset($_POST['from']) and isset($_POST['to'])){
+		$from 	= $_POST['from'];
+		$to 	= $_POST['to'];
+		}
+
 
        		$criteria = new CDbCriteria();
         	$criteria->select = "
-
-		SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit,
-
-		t.*";
+		SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit,tid
+		";
 
         	$criteria->order = "tekijan_nimi"; //"SUBSTR(LTRIM(tekijan_nimi), LOCATE(' ',LTRIM(tekijan_nimi)))"
         	$criteria->group = 'tid';
-        	$criteria->condition = " aloitan !='' and loppui !='' ";
+        	$criteria->condition = " 
+			aloitan !='' and loppui !='' 
+			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$from."' AND '".$to."' 
+		";
 
 		if(Yii::app()->session['Tekija']){
 		  if(count(Yii::app()->session['Tekija']) > 1)
@@ -978,25 +998,34 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		if(Yii::app()->session['MATKA'])
 	        $criteria->addCondition (" status != '2' ");
 
-		if(Yii::app()->session['from'] and Yii::app()->session['to'])
-	        $criteria->addCondition ("DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."' ");
 
+
+		/*
 		$dataProvider=new CActiveDataProvider('Mobile', array(
 			'criteria'=>$criteria,
 			'pagination'=>false
 		));
-
-		  $model = Mobile::model()->findAll($criteria);
+		*/
+		$model = Mobile::model()->findAll($criteria);
 
 		if(Yii::app()->request->getPost('tulosta'))
 		{
 	          $html2pdf = Yii::app()->ePdf->HTML2PDF('P', 'A4', 'en');
 		  $html2pdf->setDefaultFont('Arial');
-	          $html2pdf->WriteHTML($this->renderPartial('tulosta_yhteenveto', array('model' => $model),true));
+	          $html2pdf->WriteHTML($this->renderPartial('tulosta_yhteenveto', array(
+			'model' => $model,
+			'from' => $from,
+			'to' => $to
+		  ),true));
+
 	          $html2pdf->Output();
 		} else {
 		  //$dataProvider->pagination->pageSize = 50;
-		  $this->render('yhteenveto', array('model' => $model));
+		  $this->render('yhteenveto', array(
+			'model' => $model,
+			'from' => $from,
+			'to' => $to
+		  ));
 		}
 	}
 
@@ -1592,7 +1621,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 	}
 
 
-	public function toteutu($tid,$sivu)
+	public function toteutu($tid,$sivu,$from,$to)
 	{
 
 		$total_l 	= 0;
@@ -1627,8 +1656,8 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		        $criteria->addCondition (" status != '2' ");
 		}
 
-		if(Yii::app()->session['from'] and Yii::app()->session['to'])
-	        $criteria->addCondition ("DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."' ");
+
+	        $criteria->addCondition ("DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$from."' AND '".$to."' ");
 
 		$lu = Mobile::model()->findAll($criteria);
 		foreach($lu as $l)
@@ -1670,8 +1699,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		        $criteria->addCondition (" status != '2' ");
 		}
 
-		if(Yii::app()->session['from'] and Yii::app()->session['to'])
-	        $criteria->addCondition ("DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."' ");
+	        $criteria->addCondition ("DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$from."' AND '".$to."' ");
 
 		$tot = Toteutuneet::model()->findAll($criteria);
 		foreach($tot as $l)
@@ -1698,7 +1726,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 
 
 
-	public function matkaIlta($tid)
+	public function matkaIlta($tid,$from,$to)
 	{
 
 
@@ -1714,11 +1742,10 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			tid = '".$tid."' and aloitan !='' and loppui !='' 
 			AND id NOT IN(select kid from sivexkuitti_repaired)
 			AND status = '2'
+			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$from."' AND '".$to."'
 		";
 
 
-		if(Yii::app()->session['from'] and Yii::app()->session['to'])
-	        $criteria->addCondition ("DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."' ");
 
 		$lu = Mobile::model()->findAll($criteria);
 		foreach($lu as $l)
@@ -1742,12 +1769,9 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
         	$criteria->condition = "  
 			tid = '".$tid."' and aloitan !='' and loppui !='' 
 			AND status = '2'
+			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$from."' AND '".$to."'
 		";
 
-
-
-		if(Yii::app()->session['from'] and Yii::app()->session['to'])
-	        $criteria->addCondition ("DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."' ");
 
 		$tot = Toteutuneet::model()->findAll($criteria);
 		foreach($tot as $l)

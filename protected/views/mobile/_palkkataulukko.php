@@ -2,15 +2,19 @@
 /* @var $this MobileController */
 /* @var $data Mobile */
 
-		$matka = '';
-		$sum = '';
-		$sumI = '';
+		$matka 	= '';
+		$matkaM = '';
+		$sum 	= '';
+		$sumI 	= '';
+		$korv 	= '';
+		$lisatt	= '';
+		$ennakko= '';
 
 
-		$return = $this->toteutu($data->id,"palkkataulukko");
+		$return = $this->toteutu($data->id,"palkkataulukko",$from,$to);
 
 		$sum = $return[0];
-		$sumI = $return[1]+$return[2]+$this->matkaIlta($data->id);
+		$sumI = $return[1]+$return[2]+$this->matkaIlta($data->id,$from,$to);
 
 		if($return[0] != 0)
 		$return[0] = $this->num($return[0]);
@@ -27,7 +31,7 @@
 		$return[3] = $this->num($return[3]);
 
 		$matkaIlta = 0;
-		$matkaIlta = $this->matkaIlta($data->id);
+		$matkaIlta = $this->matkaIlta($data->id,$from,$to);
 		if($matkaIlta != 0)
 		$matkaIlta = '<br><b>Matkat</b>:<br>'.$this->num($matkaIlta);
 	        else
@@ -37,8 +41,8 @@
 
 
   $matkaM = $this->renderPartial('//mobile/tidfromtomatkat',array(
-		'from'=>Yii::app()->session['from'],
-		'to'=>Yii::app()->session['to'],
+		'from'=>$from,
+		'to'=>$to,
 		'tid'=>$data->id
 		),true);
 
@@ -46,20 +50,20 @@
 		$matka = $this->sprint($matkaM).'<br>('.$this->num($matkaM).')';
 
   $lisatt = $this->renderPartial('//lisatyotunnit/tidfromto',array(
-		'from'=>Yii::app()->session['from'],
-		'to'=>Yii::app()->session['to'],
+		'from'=>$from,
+		'to'=>$to,
 		'tid'=>$data->id
 		),true);
 
   $korv = $this->renderPartial('//korvaukset/tidfromto',array(
-		'from'=>Yii::app()->session['from'],
-		'to'=>Yii::app()->session['to'],
+		'from'=>$from,
+		'to'=>$to,
 		'tid'=>$data->id
 		),true);
 
   $ennakko = $this->renderPartial('//ennakko/tidfromto',array(
-		'from'=>Yii::app()->session['from'],
-		'to'=>Yii::app()->session['to'],
+		'from'=>$from,
+		'to'=>$to,
 		'tid'=>$data->id
 		),true);
 
