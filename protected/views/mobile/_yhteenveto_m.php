@@ -14,11 +14,11 @@
 		$total_sunniteltu = 0;
 
        		$criteria = new CDbCriteria();
-		$this->luMatka($criteria,$data->tid,Yii::app()->session['from'],Yii::app()->session['to']);
+		$this->luMatka($criteria,$data->tid,$from,$to);
 
 		$lu = Mobile::model()->find($criteria);
 
-		$this->totMatka($criteria,$data->tid,Yii::app()->session['from'],Yii::app()->session['to']);
+		$this->totMatka($criteria,$data->tid,$from,$to);
 		$tot = Toteutuneet::model()->find($criteria);
 	
 		$totatl_t = $lu->l_tunnit+$tot->l_tunnit;

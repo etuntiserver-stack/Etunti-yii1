@@ -35,9 +35,9 @@ $this->breadcrumbs=array(
     echo '</select>';
    ?>
    <b class="glyphicon glyphicon-calendar"></b>
-   <input type="text" name="from" id="from" class="form-control form-group input-sm datepicker" value="<?php echo Yii::app()->session['from']; ?>">
+   <input type="text" name="from" id="from" class="form-control form-group input-sm datepicker" value="<?php echo $from; ?>">
    <b class="glyphicon glyphicon-calendar"></b>
-   <input type="text" name="to" id="to" class="form-control form-group input-sm datepicker" value="<?php echo Yii::app()->session['to']; ?>">
+   <input type="text" name="to" id="to" class="form-control form-group input-sm datepicker" value="<?php echo $to; ?>">
 
    <input type="submit" class="btn btn-primary btn-sm" value="<?php echo Yii::t('main', 'haku'); ?>">
    </form>
@@ -55,7 +55,7 @@ $this->breadcrumbs=array(
 
 <br>
 
-<?php if(Yii::app()->session['from'] and Yii::app()->session['to']) : ?>
+<?php if($from and $to) : ?>
   <table class="table table-striped table-bordered">
   <thead>
   <tr>
@@ -75,7 +75,7 @@ $this->breadcrumbs=array(
 
   <?php 
   foreach($model as $data){
-	$this->renderPartial('_yhteenveto_m',array('data'=>$data));
+	$this->renderPartial('_yhteenveto_m',array('data'=>$data,'from'=>$from,'to'=>$to));
   }
   ?>
   <tfoot>
@@ -83,8 +83,8 @@ $this->breadcrumbs=array(
 	$lu = '0';
 	$tot = '0';
 
-		$lu = $this->yhtLUmatka();
-		$tot = $this->yhtTOTmatka();
+		$lu = $this->yhtLUmatka($from,$to);
+		$tot = $this->yhtTOTmatka($from,$to);
   ?>
   <tr>
   <th><?php echo Yii::t('main', 'Yhteensä'); ?></th>

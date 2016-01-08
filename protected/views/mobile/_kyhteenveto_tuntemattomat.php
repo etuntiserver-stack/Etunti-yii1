@@ -10,7 +10,8 @@
 	<td><?php echo $data->tekijan_nimi; ?></td>
 	<td><?php echo date("d.m", strtotime($data->aloitan)).
 	', '.date("H:i", strtotime($data->aloitan)).'-'.date("H:i", strtotime($data->loppui));
-	?></td>
+	?>
+	</td>
 	<td><?php echo $this->sprint($data->l_tunnit); ?></td>
 
 </tr>
