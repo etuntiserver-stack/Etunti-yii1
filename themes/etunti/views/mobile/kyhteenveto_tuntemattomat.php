@@ -34,7 +34,7 @@ $this->breadcrumbs=array(
                         <div class="section">
                           <label class="field prepend-icon">
 
-	   <input type="text" name="from" id="from" class="gui-input datepicker" value="<?php echo Yii::app()->session['from']; ?>">
+	   <input type="text" name="from" id="from" class="gui-input datepicker" value="<?php echo $from; ?>">
 
                             <label for="firstname" class="field-icon">
                               <i class="glyphicon glyphicon-calendar"></i>
@@ -47,7 +47,7 @@ $this->breadcrumbs=array(
                         <div class="section">
                           <label class="field prepend-icon">
 
-   	   <input type="text" name="to" id="to" class="gui-input datepicker" value="<?php echo Yii::app()->session['to']; ?>">
+   	   <input type="text" name="to" id="to" class="gui-input datepicker" value="<?php echo $to; ?>">
 
                             <label for="firstname" class="field-icon">
                               <i class="glyphicon glyphicon-calendar"></i>
@@ -82,7 +82,7 @@ $this->breadcrumbs=array(
 
 
 
-<?php if(Yii::app()->session['from'] and Yii::app()->session['to']) : ?>
+<?php if($from and $to) : ?>
   <div class="panel heading-border">
    <div class="panel-body">
 
@@ -113,8 +113,8 @@ $this->breadcrumbs=array(
 
 	<div id="showres" class="modal fade" tabindex="-1" role="dialog"></div>
 
-	<input type="hidden" id="from" value="<?php echo Yii::app()->session['from']; ?>">
-	<input type="hidden" id="to" value="<?php echo Yii::app()->session['to']; ?>">
+	<input type="hidden" id="from" value="<?php echo $from; ?>">
+	<input type="hidden" id="to" value="<?php echo $to; ?>">
 
 
 <script type="text/javascript">

@@ -109,9 +109,9 @@ $this->breadcrumbs=array(
 	$suunn = '0';
 	$kplyht = '0';
 
-		$suunn = $this->yhtSUUNN();
-		$lu = $this->yhtLU();
-		$tot = $this->yhtTOT();
+		$suunn = $this->yhtSUUNN($from,$to);
+		$lu = $this->yhtLU($from,$to);
+		$tot = $this->yhtTOT($from,$to);
 
 
 	//kpl
