@@ -7,17 +7,17 @@
 	$total_sunniteltu = 0;
 
 	$cr1 = new CDbCriteria();
-	$this->totLu($cr1,$kohdenID);
+	$this->totLu($cr1,$kohdenID,$from,$to);
 	$lu = Mobile::model()->find($cr1);
 
 	// tot
 	$cr2 = new CDbCriteria();
-	$this->totLu($cr2,$kohdenID);
+	$this->totLu($cr2,$kohdenID,$from,$to);
 	$cr2->addCondition (" id NOT IN (SELECT kid FROM sivexkuitti_repaired) ");
 	$tot1 = Mobile::model()->find($cr2);
 
 	$cr3 = new CDbCriteria();
-	$this->totLu($cr3,$kohdenID);
+	$this->totLu($cr3,$kohdenID,$from,$to);
 	$tot2 = Toteutuneet::model()->find($cr3);
 
 	//kpl
@@ -25,7 +25,7 @@
 	$kpl1 = 0;
 	$kpl2 = 0;
 	$cr4 = new CDbCriteria();
-	$this->totKpl($cr4,$kohdenID);
+	$this->totKpl($cr4,$kohdenID,$from,$to);
 	$cr4->addCondition (" id NOT IN (SELECT kid FROM sivexkuitti_repaired) ");
 	$k = Mobile::model()->find($cr4);
 
@@ -33,7 +33,7 @@
 	$kpl1 += $k->count;
 
 	$cr5 = new CDbCriteria();
-	$this->totKpl($cr5,$kohdenID);
+	$this->totKpl($cr5,$kohdenID,$from,$to);
 	$k = Toteutuneet::model()->find($cr5);
 
 	if(isset($k->count))
