@@ -59,7 +59,7 @@
 	<?php
 	$tas = explode(",",Yii::app()->user->adminPaketti);
 	if(in_array('2',$tas)) {
-	$total_sunniteltu = $this->renderPartial('//mobile/suunniteltu',array('id'=>$kohdenID,'kohde_tid'=>'kohde'),true);
+	$total_sunniteltu = $this->renderPartial('//mobile/suunniteltu',array('id'=>$kohdenID,'kohde_tid'=>'kohde','from'=>$from,'to'=>$to),true);
 	echo '<td>'.$this->sprint($total_sunniteltu).'</td>';
 	}
 	?>

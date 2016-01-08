@@ -1422,11 +1422,13 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		if(Yii::app()->request->getPost('kohteet') and Yii::app()->request->getPost('kohteet') != 'kaikki')
 		Yii::app()->session['kohteet'] = Yii::app()->request->getPost('kohteet');
 
-		if(Yii::app()->request->getPost('from'))
-		Yii::app()->session['from'] = date("Y-m-d",strtotime(Yii::app()->request->getPost('from')));
+		$from = date("Y-m-d");
+		$to = date("Y-m-d");
 
-		if(Yii::app()->request->getPost('to'))
-		Yii::app()->session['to'] = date("Y-m-d",strtotime(Yii::app()->request->getPost('to')));
+		if(isset($_POST['from']) and isset($_POST['to'])){
+		$from 	= $_POST['from'];
+		$to 	= $_POST['to'];
+		}
 
 
 
@@ -1439,26 +1441,31 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			aloitan!='' AND loppui!=''
 			AND kohdenID=''
 			AND status='3'
-			AND id NOT IN (select kid from sivexkuitti_repaired) 			
+			AND id NOT IN (select kid from sivexkuitti_repaired) 
+			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$from."' AND '".$to."' 			
 		";
 
-		if(Yii::app()->session['from'] and Yii::app()->session['to'])
-	        $criteria->addCondition ("DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."' ");
 
 		$model = Mobile::model()->findAll($criteria);
-
-
 
 		if(Yii::app()->request->getPost('tulosta'))
 		{
 
 	          $html2pdf = Yii::app()->ePdf->HTML2PDF('P', 'A4', 'en');
 		  $html2pdf->setDefaultFont('Arial');
-	          $html2pdf->WriteHTML($this->renderPartial('tulosta_kyhteenveto', array('model' => $model),true));
+	          $html2pdf->WriteHTML($this->renderPartial('tulosta_kyhteenveto', array(
+			'model' => $model,
+			'from' => $from,
+			'to' => $to
+		  ),true));
 	          $html2pdf->Output();
 		} else {
 		  //$dataProvider->pagination->pageSize = 50;
-		  $this->render('kyhteenveto_tuntemattomat', array('model' => $model));
+		  $this->render('kyhteenveto_tuntemattomat', array(
+			'model' => $model,
+			'from' => $from,
+			'to' => $to
+		  ));
 		}
 	}
 
@@ -1473,16 +1480,17 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 
 		if(Yii::app()->request->getPost('kohteet') and Yii::app()->request->getPost('kohteet') != 'kaikki')
 		Yii::app()->session['kohteet'] = Yii::app()->request->getPost('kohteet');
-
-		if(Yii::app()->request->getPost('from'))
-		Yii::app()->session['from'] = date("Y-m-d",strtotime(Yii::app()->request->getPost('from')));
-
-		if(Yii::app()->request->getPost('to'))
-		Yii::app()->session['to'] = date("Y-m-d",strtotime(Yii::app()->request->getPost('to')));
 		
 		if(Yii::app()->request->getPost('mitkatKohteet'))
 		Yii::app()->session['mitkatKohteet'] = Yii::app()->request->getPost('mitkatKohteet');
 
+		$from = date("Y-m-d");
+		$to = date("Y-m-d");
+
+		if(isset($_POST['from']) and isset($_POST['to'])){
+		$from 	= $_POST['from'];
+		$to 	= $_POST['to'];
+		}
 
 
        		$criteria = new CDbCriteria();
@@ -1493,10 +1501,9 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			id NOT IN (select kid from sivexkuitti_repaired) 
 			AND status='3'
 			AND kohdenID!=''
+			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$from."' AND '".$to."' 
 		";
 
-		if(Yii::app()->session['from'] and Yii::app()->session['to'])
-	        $criteria->addCondition ("DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."' ");
 
 		$model = Mobile::model()->findAll($criteria);
 		$lu = array();
@@ -1515,10 +1522,9 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			id NOT IN (select kid from sivexkuitti_repaired) 
 			AND status='3'
 			AND kohdenID!=''
+			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$from."' AND '".$to."' 
 		";
 
-		if(Yii::app()->session['from'] and Yii::app()->session['to'])
-	        $criteria->addCondition ("DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."' ");
 
 		$model = Toteutuneet::model()->findAll($criteria);
 		foreach($model as $d){
@@ -1534,11 +1540,19 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 
 	          $html2pdf = Yii::app()->ePdf->HTML2PDF('P', 'A4', 'en');
 		  $html2pdf->setDefaultFont('Arial');
-	          $html2pdf->WriteHTML($this->renderPartial('tulosta_kyhteenveto', array('lu' => $lu),true));
+	          $html2pdf->WriteHTML($this->renderPartial('tulosta_kyhteenveto', array(
+			'lu' => $lu,
+			'from' => $from,
+			'to' => $to
+		  ),true));
 	          $html2pdf->Output();
 		} else {
 		  //$dataProvider->pagination->pageSize = 50;
-		  $this->render('kyhteenveto', array('lu' => $lu));
+		  $this->render('kyhteenveto', array(
+			'lu' => $lu,
+			'from' => $from,
+			'to' => $to
+		  ));
 		}
 	}
 
