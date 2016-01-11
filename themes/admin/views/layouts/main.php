@@ -33,6 +33,8 @@ Yii::app()->clientScript->registerPackage('jquery');
 Yii::app()->clientScript->registerPackage('bootstrapJS');
 Yii::app()->clientScript->registerPackage('bootstrapCSS');
 
+if(isset(Yii::app()->user->nimi))
+{
   /* online */
   $criteria = new CDbCriteria();
   $criteria->condition = " time < '".(time()-600)."' ";
@@ -54,6 +56,7 @@ Yii::app()->clientScript->registerPackage('bootstrapCSS');
   $online->save();
   }
   /* online */
+}
 ?>
 
 <?php // endif; ?>
