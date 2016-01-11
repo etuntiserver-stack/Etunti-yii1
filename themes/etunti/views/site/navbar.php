@@ -5,7 +5,7 @@
 
 
   $img = Yii::app()->baseUrl.'/img/noname.jpg';
-  if(file_exists('img/admins/'.Yii::app()->user->domain.'/'.Yii::app()->user->id.".jpg") 
+  if(isset(Yii::app()->user->domain) and file_exists('img/admins/'.Yii::app()->user->domain.'/'.Yii::app()->user->id.".jpg") 
 	and isset(Yii::app()->user->id))
   {
   $img = Yii::app()->baseUrl.'/img/admins/'.Yii::app()->user->domain.'/'.Yii::app()->user->id.".jpg";
@@ -294,7 +294,7 @@
           <i class="fa fa-circle"></i>
         </li>
         <li class="dropdown menu-merge">
-          <a href="#" class="dropdown-toggle fw600 p15" data-toggle="dropdown"> <img src="<?php echo $img; ?>" alt="avatar" class="mw30 br64 mr15"> <?php echo Yii::app()->user->nimi; ?>
+          <a href="#" class="dropdown-toggle fw600 p15" data-toggle="dropdown"> <img src="<?php echo $img; ?>" alt="avatar" class="mw30 br64 mr15"> <?php if(isset(Yii::app()->user->nimi)) echo Yii::app()->user->nimi; ?>
             <span class="caret caret-tp hidden-xs"></span>
           </a>
           <ul class="dropdown-menu list-group dropdown-persist w250" role="menu">
