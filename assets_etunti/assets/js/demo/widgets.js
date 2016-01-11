@@ -520,6 +520,7 @@ var demoHighCharts = function () {
             var demoHighPies = function() { 
 
                 var pie1 = $('#high-pie');
+                var pieParasSiivoja = JSON.parse($('#pieParasSiivoja').text());
                  
                 if (pie1.length) {
 
@@ -559,16 +560,7 @@ var demoHighCharts = function () {
                         series: [{
                             type: 'pie',
                             name: 'Browser share',
-                            data: [
-                                ['Firefox', 35.0],
-                                ['IE', 36.8], {
-                                    name: 'Chrome',
-                                    y: 15.8,
-                                    sliced: true,
-                                    selected: true
-                                },
-                                ['Safari', 18.5],
-                            ]
+                            data: pieParasSiivoja
                         }]
                     });
                 }
