@@ -216,6 +216,39 @@ echo '
 
             <div class="col-md-6 col-lg-4 admin-grid">
 
+
+              <!-- Circle Stats -->
+              <div class="panel" id="p5">
+                <div class="panel-heading">
+                  <span class="panel-title"><?php echo $months[date("m")]; ?> toimialat</span>
+                </div>
+                <div class="panel-body">
+                  <div class="mb20 text-right">
+                    <span class="fs11 text-muted ml10">
+                      <i class="fa fa-circle text-primary fs12 pr5"></i> Helsinki</span>
+                    <span class="fs11 text-muted ml10">
+                      <i class="fa fa-circle text-info fs12 pr5"></i> Espoo</span>
+                    <span class="fs11 text-muted ml10">
+                      <i class="fa fa-circle text-warning fs12 pr5"></i> Vantaa</span>
+                  </div>
+		  <br><br>
+                  <div class="row">
+                    <div class="col-xs-4 text-center">
+			<?php 
+			$hesari = $this->toteutuThisMonthByCity(date("Ym"), "helsinki");
+			?>
+                      <div class="info-circle" id="c1" value="<?php echo $hesari; ?>" data-circle-color="primary"></div>
+                    </div>
+                    <div class="col-xs-4">
+                      <div class="info-circle" id="c2" value="30" data-circle-color="info"></div>
+                    </div>
+                    <div class="col-xs-4">
+                      <div class="info-circle" id="c3" value="55" data-circle-color="warning"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
               <!-- Bar Graph -->
               <div class="panel" id="p12">
                 <div class="panel-heading">
@@ -230,36 +263,6 @@ echo '
                 </div>
                 <div class="panel-body pn">
                   <div id="high-bars" style="width: 100%; height: 140px; margin: 0 auto"></div>
-                </div>
-              </div>
-
-
-
-              <!-- Circle Stats -->
-              <div class="panel" id="p5">
-                <div class="panel-heading">
-                  <span class="panel-title">Circulars</span>
-                </div>
-                <div class="panel-body">
-                  <div class="mb20 text-right">
-                    <span class="fs11 text-muted ml10">
-                      <i class="fa fa-circle text-primary fs12 pr5"></i> Facebook</span>
-                    <span class="fs11 text-muted ml10">
-                      <i class="fa fa-circle text-info fs12 pr5"></i> Twitter</span>
-                    <span class="fs11 text-muted ml10">
-                      <i class="fa fa-circle text-warning fs12 pr5"></i> Google+</span>
-                  </div>
-                  <div class="row">
-                    <div class="col-xs-4 text-center">
-                      <div class="info-circle" id="c1" value="80" data-circle-color="primary"></div>
-                    </div>
-                    <div class="col-xs-4">
-                      <div class="info-circle" id="c2" value="30" data-circle-color="info"></div>
-                    </div>
-                    <div class="col-xs-4">
-                      <div class="info-circle" id="c3" value="55" data-circle-color="warning"></div>
-                    </div>
-                  </div>
                 </div>
               </div>
 
@@ -295,7 +298,7 @@ echo '
 			{
 			  echo '
 			  <tr>
-			   <td>'.date("d.m H:i:s",$data->time).'</td>
+			   <td>'.date("H:i",$data->time).'</td>
 			   <td>'.$data->user.'</td>
 			  </tr>
 			  ';

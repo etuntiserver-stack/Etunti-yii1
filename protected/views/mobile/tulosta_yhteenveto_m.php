@@ -1,6 +1,7 @@
 
 <style>
 table{
+	font-size: 80%;
 	width: 290px;
 }
 td,th{
@@ -14,9 +15,9 @@ td,th{
   <br>
 
 <h1> <?php echo Yii::t('main', 'YHTEENVETO MATKAT'); ?></h1>
-<h3><?php echo date("d.m.Y",strtotime(Yii::app()->session['from']))." - ".date("d.m.Y",strtotime(Yii::app()->session['to'])); ?></h3>
+<h3><?php echo date("d.m.Y",strtotime($from))." - ".date("d.m.Y",strtotime($to)); ?></h3>
 
-<?php if(Yii::app()->session['from'] and Yii::app()->session['to']) : ?>
+<?php if($from and $to) : ?>
   <table>
   <thead>
   <tr>
@@ -38,7 +39,7 @@ td,th{
   <?php 
   foreach($model as $data)
   {
-	$this->renderPartial('_yhteenveto_m',array('data'=>$data));
+	$this->renderPartial('_yhteenveto_m',array('data'=>$data,'from'=>$from,'to'=>$to));
   }
   ?>
   </tbody>
@@ -47,8 +48,8 @@ td,th{
 	$lu = '0';
 	$tot = '0';
 
-		$lu = $this->yhtLUmatka();
-		$tot = $this->yhtTOTmatka();
+		$lu = $this->yhtLUmatka($from,$to);
+		$tot = $this->yhtTOTmatka($from,$to);
   ?>
   <tr>
   <th><?php echo Yii::t('main', 'Yhteensä'); ?></th>

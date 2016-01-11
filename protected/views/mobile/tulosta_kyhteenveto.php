@@ -14,9 +14,9 @@ td,th{
   <br>
 
 <h1> <?php echo Yii::t('main', 'YHTEENVETO KOHTEET'); ?></h1>
-<h3><?php echo date("d.m.Y",strtotime(Yii::app()->session['from']))." - ".date("d.m.Y",strtotime(Yii::app()->session['to'])); ?></h3>
+<h3><?php echo date("d.m.Y",strtotime($from))." - ".date("d.m.Y",strtotime($to)); ?></h3>
 
-<?php if(Yii::app()->session['from'] and Yii::app()->session['to']) : ?>
+<?php if($from and $to) : ?>
   <table>
   <thead>
   <tr>
@@ -38,7 +38,7 @@ td,th{
   <tbody>
   <?php 
   foreach($lu as $key=>$val)
-	$this->renderPartial('_kyhteenveto',array('kohde_kannasta'=>$key,'kohdenID'=>$val));
+	$this->renderPartial('_kyhteenveto',array('kohde_kannasta'=>$key,'kohdenID'=>$val,'from'=>$from,'to'=>$to));
   ?>
   </tbody>
 
@@ -49,9 +49,9 @@ td,th{
 	$suunn = '0';
 	$kplyht = '0';
 
-		$suunn = $this->yhtSUUNN();
-		$lu = $this->yhtLU();
-		$tot = $this->yhtTOT();
+		$suunn = $this->yhtSUUNN($from,$to);
+		$lu = $this->yhtLU($from,$to);
+		$tot = $this->yhtTOT($from,$to);
 
 
 	//kpl
@@ -59,14 +59,14 @@ td,th{
 	$kpl1 = 0;
 	$kpl2 = 0;
 	$cr4 = new CDbCriteria();
-	$this->totKpl($cr4,"kaikki");
+	$this->totKpl($cr4,"kaikki",$from,$to);
 	$cr4->addCondition (" id NOT IN (SELECT kid FROM sivexkuitti_repaired) ");
 	$k = Mobile::model()->findAll($cr4);
 	foreach($k as $kk)
 	$kpl1 += $kk->count;
 
 	$cr5 = new CDbCriteria();
-	$this->totKpl($cr5,"kaikki");
+	$this->totKpl($cr5,"kaikki",$from,$to);
 	$k = Toteutuneet::model()->findAll($cr5);
 	foreach($k as $kk)
 	$kpl2 += $kk->count;

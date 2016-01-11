@@ -17,6 +17,8 @@ $this->breadcrumbs=array(
    <!-- tulostus -->
    <div class="pull-right">
      <form action="#" target="_blank" method="POST">
+      <input type="hidden" name="from" value="<?php echo $from; ?>">
+      <input type="hidden" name="to" value="<?php echo $to; ?>">
       <input type="submit" name="tulosta" class="btn btn-success btn-sm" value="PDF">
      </form>
    </div>
