@@ -278,7 +278,17 @@ var demoHighCharts = function () {
             var demoHighBars = function() {
 
                  var bars1 = $('#high-bars');
-                 
+                 var month1 = $('#month1').val();
+                 var month2 = $('#month2').val();
+
+                 var hesari1 = parseInt($('#hesari1').val());
+                 var hesari2 = parseInt($('#hesari2').val());
+                 var espoo1 = parseInt($('#espoo1').val());
+                 var espoo2 = parseInt($('#espoo2').val());
+                 var vantaa1 = parseInt($('#vantaa1').val());
+                 var vantaa2 = parseInt($('#vantaa2').val());
+
+
                  if (bars1.length) {
 
                     // Bar Chart 1
@@ -306,7 +316,7 @@ var demoHighCharts = function () {
                             lineColor: '#EEE',
                             tickColor: '#EEE',
                             offset: 1,
-                            categories: ['TV', 'Radio'],
+                            categories: [month1, month2],
                             title: {
                                 text: null
                             },
@@ -326,23 +336,23 @@ var demoHighCharts = function () {
                             }
                         },
                         tooltip: {
-                            valueSuffix: ' millions'
+                            valueSuffix: ' eri osoitetta'
                         },
                         plotOptions: {
                             bar: {}
                         },
                         series: [{
                             id: 0,
-                            name: 'Viewers',
-                            data: [100, 100]
+                            name: 'Helsinki',
+                            data: [hesari1, hesari2]
                         }, {
                             id: 1,
-                            name: 'Women',
-                            data: [36, 55]
+                            name: 'Espoo',
+                            data: [espoo1, espoo2]
                         }, {
                             id: 2,
-                            name: 'Men',
-                            data: [65, 45]
+                            name: 'Vantaa',
+                            data: [vantaa1, vantaa2]
                         }]
                     });
                 }

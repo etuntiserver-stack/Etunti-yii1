@@ -218,41 +218,64 @@ echo '
 
 
               <!-- Circle Stats -->
+
               <div class="panel" id="p5">
                 <div class="panel-heading">
-                  <span class="panel-title"><?php echo $months[date("m")]; ?> toimialat</span>
+                  <span class="panel-title">Tilat tänään</span>
                 </div>
                 <div class="panel-body">
                   <div class="mb20 text-right">
                     <span class="fs11 text-muted ml10">
-                      <i class="fa fa-circle text-primary fs12 pr5"></i> Helsinki</span>
+                      <i class="fa fa-circle text-primary fs12 pr5"></i> Työt</span>
                     <span class="fs11 text-muted ml10">
-                      <i class="fa fa-circle text-info fs12 pr5"></i> Espoo</span>
+                      <i class="fa fa-circle text-info fs12 pr5"></i> Matkat</span>
                     <span class="fs11 text-muted ml10">
-                      <i class="fa fa-circle text-warning fs12 pr5"></i> Vantaa</span>
+                      <i class="fa fa-circle text-warning fs12 pr5"></i> Lounaat</span>
                   </div>
 		  <br><br>
                   <div class="row">
                     <div class="col-xs-4 text-center">
 			<?php 
-			$hesari = $this->toteutuThisMonthByCity(date("Ym"), "helsinki");
+			$tyot = $this->tilatTanaan(3);
+			$matkat = $this->tilatTanaan(2);
+			$lounaat = $this->tilatTanaan(10);
 			?>
-                      <div class="info-circle" id="c1" value="<?php echo $hesari; ?>" data-circle-color="primary"></div>
+                      <div class="info-circle" id="c1" value="<?php echo (int)$tyot; ?>" data-circle-color="primary"></div>
                     </div>
                     <div class="col-xs-4">
-                      <div class="info-circle" id="c2" value="30" data-circle-color="info"></div>
+                      <div class="info-circle" id="c2" value="<?php echo (int)$matkat; ?>" data-circle-color="info"></div>
                     </div>
                     <div class="col-xs-4">
-                      <div class="info-circle" id="c3" value="55" data-circle-color="warning"></div>
+                      <div class="info-circle" id="c3" value="<?php echo (int)$lounaat; ?>" data-circle-color="warning"></div>
                     </div>
                   </div>
                 </div>
               </div>
 
+
+
               <!-- Bar Graph -->
               <div class="panel" id="p12">
                 <div class="panel-heading">
-                  <span class="panel-title">Bar Graph</span>
+                  <span class="panel-title">Toimialat</span>
+		  <?php 
+		    $month1 = $months[date("m")];
+		    $month2 = $months[date("m",strtotime("-1 month"))];
+		    $hesari1 = $this->toteutuThisMonthByCity(date("Ym"), "helsinki"); 
+		    $hesari2 = $this->toteutuThisMonthByCity(date("Ym",strtotime("-1 month")), "helsinki"); 
+		    $espoo1 = $this->toteutuThisMonthByCity(date("Ym"), "espoo"); 
+		    $espoo2 = $this->toteutuThisMonthByCity(date("Ym",strtotime("-1 month")), "espoo");
+		    $vantaa1 = $this->toteutuThisMonthByCity(date("Ym"), "vantaa"); 
+		    $vantaa2 = $this->toteutuThisMonthByCity(date("Ym",strtotime("-1 month")), "vantaa");
+		  ?>
+                  <input type="hidden" id="month1" value="<?php echo $month1; ?>">
+                  <input type="hidden" id="month2" value="<?php echo $month2; ?>">
+                  <input type="hidden" id="hesari1" value="<?php echo $hesari1; ?>">
+                  <input type="hidden" id="hesari2" value="<?php echo $hesari2; ?>">
+                  <input type="hidden" id="espoo1" value="<?php echo $espoo1; ?>">
+                  <input type="hidden" id="espoo2" value="<?php echo $espoo2; ?>">
+                  <input type="hidden" id="vantaa1" value="<?php echo $vantaa1; ?>">
+                  <input type="hidden" id="vantaa2" value="<?php echo $vantaa2; ?>">
                 </div>
                 <div class="panel-menu">
                   <div class="chart-legend" data-chart-id="#high-bars">
