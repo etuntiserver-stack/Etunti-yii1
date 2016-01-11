@@ -280,50 +280,78 @@ class SiteController extends Controller
 		$total_l = 0;
 
        		$criteria = new CDbCriteria();
-        	$criteria->select = "
-		TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'))) as l_tunnit,aloitan,loppui
-
-		";
-
+		$criteria->with=array('kohteet');
+        	$criteria->select = " COUNT(*) as count";
+        	$criteria->group = " kohdenID ";
         	$criteria->condition = "  
 			aloitan !='' and loppui !='' and status ='3'
 			AND EXTRACT(YEAR_MONTH FROM DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y.%m.%d'))  = '".$month."'
-
-			AND id NOT IN(select kid from sivexkuitti_repaired)
+			AND t.id NOT IN(select kid from sivexkuitti_repaired)
+			AND kohteet.kaupunki LIKE '%".$city."%'
 		";
 
 		$lu = Mobile::model()->findAll($criteria);
 		foreach($lu as $l)
 		{
-
-		    $l->loppui = date("d.m.Y H:i",strtotime($l->loppui));
-		    $l->aloitan = date("d.m.Y H:i",strtotime($l->aloitan));
-
-		    $l->l_tunnit = (strtotime($l->loppui)-strtotime($l->aloitan));
-		    $total_l += $l->l_tunnit;
+		    $total_l += $l->count;
 		}
 		/* ////////////////////////// */
 
        		$criteria = new CDbCriteria();
-        	$criteria->select = "
-		TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'))) as l_tunnit,aloitan,loppui 
-
-		";
-
+		$criteria->with=array('kohteet');
+        	$criteria->select = " COUNT(*) as count";
+        	$criteria->group = " kohdenID ";
         	$criteria->condition = "  
 			aloitan !='' and loppui !='' and status ='3'
 			AND EXTRACT(YEAR_MONTH FROM DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y.%m.%d'))  = '".$month."'
+			AND kohteet.kaupunki LIKE '%".$city."%'
 		";
 
 		$tot = Toteutuneet::model()->findAll($criteria);
 		foreach($tot as $l)
 		{
+		    $total_l += $l->count;
+		}
 
-		    $l->loppui = date("d.m.Y H:i",strtotime($l->loppui));
-		    $l->aloitan = date("d.m.Y H:i",strtotime($l->aloitan));
 
-		    $l->l_tunnit = (strtotime($l->loppui)-strtotime($l->aloitan));
-		    $total_l += $l->l_tunnit;
+		return $total_l;
+
+	}
+
+
+
+	public function tilatTanaan($tila)
+	{
+		$total_l = 0;
+
+       		$criteria = new CDbCriteria();
+        	$criteria->select = " COUNT(*) as count";
+        	$criteria->group = " status ";
+        	$criteria->condition = "  
+			aloitan !='' and loppui !='' and status ='".$tila."'
+			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d')  = CURDATE()
+			AND t.id NOT IN(select kid from sivexkuitti_repaired)
+		";
+
+		$lu = Mobile::model()->findAll($criteria);
+		foreach($lu as $l)
+		{
+		    $total_l += $l->count;
+		}
+		/* ////////////////////////// */
+
+       		$criteria = new CDbCriteria();
+        	$criteria->select = " COUNT(*) as count";
+        	$criteria->group = " status ";
+        	$criteria->condition = "  
+			aloitan !='' and loppui !='' and status ='".$tila."'
+			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d')  = CURDATE()
+		";
+
+		$tot = Toteutuneet::model()->findAll($criteria);
+		foreach($tot as $l)
+		{
+		    $total_l += $l->count;
 		}
 
 
