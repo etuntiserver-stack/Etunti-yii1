@@ -1,4 +1,5 @@
 <?php 
+
      $tas = array();
    if(isset(Yii::app()->user->adminPaketti)) 
      $tas = explode(",",Yii::app()->user->adminPaketti);
