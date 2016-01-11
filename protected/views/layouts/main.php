@@ -20,6 +20,30 @@
 Yii::app()->clientScript->registerPackage('jquery');
 Yii::app()->clientScript->registerPackage('bootstrapJS');
 Yii::app()->clientScript->registerPackage('bootstrapCSS');
+
+
+  /* online */
+  $criteria = new CDbCriteria();
+  $criteria->condition = " time < '".(time()-600)."' ";
+  UsersOnline::model()->deleteAll($criteria);
+
+  $criteria = new CDbCriteria();
+  $criteria->condition = " user ='".Yii::app()->user->nimi."' ";
+  $uo = UsersOnline::model()->find($criteria);
+  
+  if(isset($uo->id))
+  {
+  UsersOnline::model()->updatebypk($uo->id,array('time'=>time()));
+  } else {
+  $online = new UsersOnline();
+  $online->time = time();
+  $online->ip = CHttpRequest::getUserHostAddress();;
+  $online->session = Yii::app()->getSession()->getSessionId();
+  $online->user = Yii::app()->user->nimi;
+  $online->save();
+  }
+  /* online */
+
 ?>
 
 

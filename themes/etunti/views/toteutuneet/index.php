@@ -246,7 +246,7 @@ function dateDiff($start, $end) {
   <?php
   $tas = explode(",",Yii::app()->user->adminPaketti);
   if(in_array('2',$tas) and isset($explTekija[0])){
-  $total_sunniteltu = $this->renderPartial('//mobile/suunniteltu',array('id'=>$explTekija[0],'kohde_tid'=>'tid'),true);
+  $total_sunniteltu = $this->renderPartial('//mobile/suunniteltu',array('id'=>$explTekija[0],'kohde_tid'=>'tid','from'=>Yii::app()->session['from'], 'to'=>Yii::app()->session['to']),true);
   echo '<th><center>'.sprint($total_sunniteltu).'</center></th>';
   }
   ?>
