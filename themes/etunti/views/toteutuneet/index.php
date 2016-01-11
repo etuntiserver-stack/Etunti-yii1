@@ -42,7 +42,10 @@ $this->breadcrumbs=array(
                           <label class="field select">
 
    <?php
-    $list = CHtml::listData(Tyontekijat::model()->findAll(array('order' => 'tekijan_nimi')), 'id', 'tekijan_nimi');
+    $criteria = new CDbCriteria();
+    $criteria->order = " tekijan_nimi ";
+    $criteria->condition = " aktiivinen=1 ";
+    $list = CHtml::listData(Tyontekijat::model()->findAll($criteria), 'id', 'tekijan_nimi');
     echo '<select name="tekija" id="nimi" class="gui-input">';
     $explTekija = explode("//",Yii::app()->session['tekija']);
 
