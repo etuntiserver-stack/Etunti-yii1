@@ -1,6 +1,7 @@
 
 <style>
 table{
+	font-size: 80%;
 	width: 290px;
 	font-size: 80%;
 }
@@ -50,12 +51,12 @@ td,th{
   {
 	$tids[] = $data->tid;
         $total_lu += $data->l_tunnit;
-	$tp = $this->Tp($data->tid);
+	$tp = $this->Tp($data->tid,$from,$to);
 	$totalTp += $tp;
-	$tot_sun = $this->renderPartial('//mobile/suunniteltu',array('id'=>$data->tid,'kohde_tid'=>'tid'),true);
+	$tot_sun = $this->renderPartial('//mobile/suunniteltu',array('id'=>$data->tid,'kohde_tid'=>'tid','from'=>$from,'to'=>$to),true);
 	$total_sunniteltu += $tot_sun;
 
-	$this->renderPartial('_yhteenveto',array('data'=>$data,'tp'=>$tp,'tot_sun'=>$tot_sun));
+	$this->renderPartial('_yhteenveto',array('data'=>$data,'tp'=>$tp,'tot_sun'=>$tot_sun,'from'=>$from,'to'=>$to));
   }
 
 
