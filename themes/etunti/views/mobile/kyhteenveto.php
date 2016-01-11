@@ -114,7 +114,7 @@ $this->breadcrumbs=array(
 
   <?php 
   foreach($lu as $key=>$val)
-	$this->renderPartial('_kyhteenveto',array('kohde_kannasta'=>$key,'kohdenID'=>$val));
+	$this->renderPartial('_kyhteenveto',array('kohde_kannasta'=>$key,'kohdenID'=>$val,'from'=>$from,'to'=>$to));
   ?>
 
   <tfoot>

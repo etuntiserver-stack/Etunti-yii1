@@ -1,4 +1,6 @@
 <?php
+if(!isset(Yii::app()->user->adminID))
+$this->redirect(Yii::app()->baseUrl.'/index.php/user/login');
 
 $months=array(
 	'01'=>'Tammikuu',
