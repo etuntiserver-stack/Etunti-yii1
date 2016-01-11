@@ -356,6 +356,48 @@ class SiteController extends Controller
 
 
 		return $total_l;
+	}
+
+	public function parasSiivojaTanaan()
+	{
+		$total_l = array();
+
+       		$criteria = new CDbCriteria();
+        	$criteria->select = " COUNT(*) as count,tekijan_nimi";
+        	$criteria->order = " COUNT(*) LIMIT 4 ";
+        	$criteria->group = " tid ";
+        	$criteria->condition = "  
+			aloitan !='' and loppui !='' and status ='3'
+			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d')  = CURDATE()
+			AND t.id NOT IN(select kid from sivexkuitti_repaired)
+		";
+
+		$lu = Mobile::model()->findAll($criteria);
+		foreach($lu as $l)
+		{
+		    $total_l[] = array($l->tekijan_nimi,(int)$l->count);
+		}
+		/* ////////////////////////// */
+
+       		$criteria = new CDbCriteria();
+        	$criteria->select = " COUNT(*) as count,tekijan_nimi";
+        	$criteria->order = " COUNT(*) LIMIT 4 ";
+        	$criteria->group = " tid ";
+        	$criteria->condition = "  
+			aloitan !='' and loppui !='' and status ='3'
+			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d')  = CURDATE()
+		";
+
+		$tot = Toteutuneet::model()->findAll($criteria);
+		foreach($tot as $l)
+		{
+		    $total_l[] = array($l->tekijan_nimi,(int)$l->count);
+		}
+
+
+		return $total_l;
 
 	}
+
+
 }
