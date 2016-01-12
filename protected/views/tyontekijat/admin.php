@@ -25,12 +25,13 @@ $('.search-form form').submit(function(){
 });
 ");
 ?>
-
+<!--
 <div class="row">
   <div class="col-sm-3">
     <input type="checkbox" name="aktiivinen" class="sw">
   </div>
 </div>
+-->
 
 <div class="row">
 	<h3><?php echo Yii::t('main', 'TYÖNTEKIJÄT'); ?> <i class="glyphicon glyphicon-envelope"></i> 
