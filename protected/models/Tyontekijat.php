@@ -140,12 +140,12 @@ public $tunnus;
 		Yii::app()->session['aktiivinen'] = true;
 		if(Yii::app()->request->getPost('aktiivinen') == 'no')
 		unset(Yii::app()->session['aktiivinen']);
-
+/*
 		if(Yii::app()->session['aktiivinen'])
 		$criteria->condition = " aktiivinen=0 or aktiivinen=1 or aktiivinen=2 ";
 		else
 		$criteria->condition = " aktiivinen=1 ";
-
+*/
 		$criteria->compare('id',$this->id);
 		$criteria->compare('imei',$this->imei,true);
 		$criteria->compare('laiten_puh',$this->laiten_puh,true);
