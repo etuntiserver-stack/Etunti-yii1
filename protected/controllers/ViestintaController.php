@@ -29,7 +29,7 @@ class ViestintaController extends Controller
 		return array(
 
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','vastaanotettu'),
+				'actions'=>array('admin','delete','create','update','index','view','vastaanotettu', 'get_viestit'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -53,6 +53,51 @@ class ViestintaController extends Controller
 		} else {
 	            return false;
 		}
+	}
+
+
+	public function actionGet_viestit()
+	{
+
+		$return = '';
+
+       		$criteria = new CDbCriteria();
+        	$criteria->order = " id DESC LIMIT 5";
+        	$criteria->condition = " tekija='toimisto'";
+
+		$model = Viestinta::model()->findAll($criteria);
+
+		foreach($model as $data)
+		{
+		$id = '';
+		$expl = explode(",",$data->admin);
+		if(isset($expl[0]))
+		$id = str_replace("tt_", "", $expl[0]);
+
+		if(!empty($id) and isset($expl[1]))
+		{
+		   $src = '';
+		$filename = Yii::app()->request->baseUrl."/img/tekijat/".Yii::app()->user->domain."/".$id.".jpg";
+		if (file_exists(Yii::app()->request->baseUrl."img/tekijat/".Yii::app()->user->domain."/".$id.".jpg"))
+		   $src =  $filename;
+		else
+		   $src = Yii::app()->request->baseUrl.'/img/tekijat/noname.jpg';
+
+		$return .= '
+            <li class="media">
+              <a class="media-left" href="#"> <img src="'.$src.'" class="mw40" alt="avatar"> </a>
+              <div class="media-body">
+                <h5 class="media-heading">'.Yii::t('main','Viesti').'
+                  <small class="text-muted">- '.date("d.m.Y",strtotime($data->time)).'</small>
+                </h5> '.$data->viesti.'
+                <a class="text-system" href="'.Yii::app()->request->baseUrl.'/index.php/tyontekijat/update?id='.$id.'"> '.$expl[1].' </a>
+              </div>
+            </li>';
+		}
+		}
+
+		echo json_encode($return);
+
 	}
 
 

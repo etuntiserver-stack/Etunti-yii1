@@ -60,7 +60,7 @@ $months=array(
 		";
 		$a = Mobile::model()->find($criteria);
 		  $tehdyht = '00:00';
-		if(isset($a->l_tunnit))
+		if(isset($a->l_tunnit) and $a->l_tunnit > 0)
 		  $tehdyht = $this->sprint($a->l_tunnit);
 
                   echo '<b>'.$tehdyht.'</b>';

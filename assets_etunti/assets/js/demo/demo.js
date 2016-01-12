@@ -53,6 +53,19 @@ var Demo = function() {
   // Demo AdminForm Functions
   var runDemoSourceCode = function() {
 
+$("#notiFyClick").click(function(){
+
+        $.ajax({
+           url: location.protocol + "//" + location.host + '/index.php/viestinta/get_viestit',
+           success: function(data){
+		//alert(data);
+		$('#viestiGet').replaceWith(JSON.parse(data));
+           }
+        });
+});
+
+
+
     var bsElement = $(".bs-component");
 
     if (bsElement.length) {
