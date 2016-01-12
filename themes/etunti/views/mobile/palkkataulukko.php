@@ -16,7 +16,7 @@ $this->breadcrumbs=array(
         <div class="tray-center">
 
 
-              <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-ok"></i> <?php echo Yii::t('main', 'PALKKATAULUKKO'); ?> 
+              <h2 class="myBgColors p10"> <i class="fa fa-eur"></i> <?php echo Yii::t('main', 'PALKKATAULUKKO'); ?> 
    <!-- tulostus -->
    <div class="pull-right">
     <div class="form-inline">

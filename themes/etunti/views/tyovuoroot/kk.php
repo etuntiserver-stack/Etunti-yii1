@@ -56,7 +56,7 @@ echo	'<input type=hidden id=number value='.cal_days_in_month(CAL_GREGORIAN, $mon
         <div class="tray-center">
 
 
-              <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-time"></i> <?php echo Yii::t('main', 'KUUKAUSINÄKYMÄ'); ?> </h2>
+              <h2 class="myBgColors p10"> <i class="fa fa-calendar-o"></i> <?php echo Yii::t('main', 'KUUKAUSINÄKYMÄ'); ?> </h2>
 
         <!-- loppu: .tray-center -->
         </div>
