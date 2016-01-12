@@ -158,7 +158,7 @@
 
       <div class="navbar-branding">
         <a class="navbar-brand" href="<?php echo Yii::app()->request->baseUrl; ?>/index.php?site/index">
-	<img src="/../img/logo.png" height="40" style="margin-top:3px;">
+	<img src="/../img/logo.png" height="40">
         </a>
         <span id="toggle_sidemenu_l" class="ad ad-lines"></span>
       </div>
@@ -236,12 +236,26 @@
         </li>
         <li class="dropdown menu-merge">
           <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-            <span class=""></span> FI
+             <span class=""></span> 
+		<?php
+		$lang = 'fi';
+		if(isset($_SESSION['lang']) and !empty($_SESSION['lang']))
+  		$lang = $_SESSION['lang'];
+		echo strtoupper ($lang);
+		?>
           </a>
           <ul class="dropdown-menu pv5 animated animated-short flipInX" role="menu">
             <li>
-              <a href="javascript:void(0);">
+              <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/site/etusivu?lang=fi">
+                <span class="mr10"></span> Suomi </a>
+            </li>
+            <li>
+              <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/site/etusivu?lang=ee">
                 <span class="mr10"></span> Eesti </a>
+            </li>
+            <li>
+              <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/site/etusivu?lang=en">
+                <span class="mr10"></span> English </a>
             </li>
           </ul>
         </li>
@@ -384,23 +398,23 @@
             <ul class="nav sub-nav">
               <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/asiakkaat/index">
-                  <span class="fa fa-cube"></span> <?php echo Yii::t('main', 'Asiakkaat'); ?></a>
+                  <span class="glyphicon glyphicon-home"></span> <?php echo Yii::t('main', 'Asiakkaat'); ?></a>
               </li>
               <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/kohteet/index">
-                  <span class="fa fa-cube"></span> <?php echo Yii::t('main', 'Kohteet'); ?></a>
+                  <span class="glyphicon glyphicon-home"></span> <?php echo Yii::t('main', 'Kohteet'); ?></a>
               </li>
               <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/kohteet/avaimet">
-                  <span class="fa fa-cube"></span> <?php echo Yii::t('main', 'Avaimet'); ?></a>
+                  <span class="fa fa-key"></span> <?php echo Yii::t('main', 'Avaimet'); ?></a>
               </li>
               <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/asiakasHyvaksynta/index">
-                  <span class="fa fa-cube"></span> <?php echo Yii::t('main', 'Asiakkaiden hyväksymät tunnit'); ?></a>
+                  <span class="glyphicon glyphicon-ok"></span> <?php echo Yii::t('main', 'Hyväksymät tunnit'); ?></a>
               </li>
               <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/kohteet/googlemap">
-                  <span class="fa fa-cube"></span> <?php echo Yii::t('main', 'Kartta'); ?></a>
+                  <span class="fa fa-map"></span> <?php echo Yii::t('main', 'Kartta'); ?></a>
               </li>
             </ul>
           </li>
@@ -416,11 +430,11 @@
             <ul class="nav sub-nav">
               <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/mobile/index">
-                  <span class="fa fa-cube"></span> <?php echo Yii::t('main', 'Tunnit'); ?></a>
+                  <span class="glyphicon glyphicon-phone"></span> <?php echo Yii::t('main', 'Tunnit'); ?></a>
               </li>
               <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/toteutuneet/index">
-                  <span class="fa fa-cube"></span> <?php echo Yii::t('main', 'Tuntien hyväksyntä'); ?></a>
+                  <span class="glyphicon glyphicon-time"></span> <?php echo Yii::t('main', 'Tuntien hyväksyntä'); ?></a>
               </li>
 
 
@@ -433,34 +447,34 @@
             <ul class="nav sub-nav">
               <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/mobile/yhteenveto">
-                  <span class="fa fa-cube"></span> <?php echo Yii::t('main', 'Tuntiyhteenveto työntekijät'); ?></a>
+                  <span class="glyphicon glyphicon-time"></span> <?php echo Yii::t('main', 'Tuntiyhteenveto työntekijät'); ?></a>
               </li>
               <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/mobile/kyhteenveto">
-                  <span class="fa fa-cube"></span> <?php echo Yii::t('main', 'Tuntiyhteenveto kohteet'); ?></a>
+                  <span class="glyphicon glyphicon-time"></span> <?php echo Yii::t('main', 'Tuntiyhteenveto kohteet'); ?></a>
               </li>
               <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/mobile/kyhteenveto_tuntemattomat">
-                  <span class="fa fa-cube"></span> <?php echo Yii::t('main', 'Tuntiyhteenveto kohteet tuntemattomat'); ?></a>
+                  <span class="glyphicon glyphicon-time"></span> <?php echo Yii::t('main', 'Tuntiyhteenveto kohteet tuntemattomat'); ?></a>
               </li>
               <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/mobile/yhteenveto_m">
-                  <span class="fa fa-cube"></span> <?php echo Yii::t('main', 'Tuntiyhteenveto matkat'); ?></a>
+                  <span class="glyphicon glyphicon-time"></span> <?php echo Yii::t('main', 'Tuntiyhteenveto matkat'); ?></a>
               </li>
             </ul>
           </li>
 
               <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/mobile/palkkataulukko">
-                  <span class="fa fa-cube"></span> <?php echo Yii::t('main', 'Palkkataulukko'); ?></a>
+                  <span class="fa fa-eur"></span> <?php echo Yii::t('main', 'Palkkataulukko'); ?></a>
               </li>
               <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/toteutuneet/kk">
-                  <span class="fa fa-cube"></span> <?php echo Yii::t('main', 'Kuukauden tunnit'); ?></a>
+                  <span class="fa fa-calendar-check-o"></span> <?php echo Yii::t('main', 'Kuukauden tunnit'); ?></a>
               </li>
               <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/mobile/raportit">
-                  <span class="fa fa-cube"></span> <?php echo Yii::t('main', 'Raportit tunneista'); ?></a>
+                  <span class="fa fa-th-list"></span> <?php echo Yii::t('main', 'Raportit tunneista'); ?></a>
               </li>
             </ul>
           </li>
@@ -476,15 +490,15 @@
             <ul class="nav sub-nav">
               <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/tyontekijat/index">
-                  <span class="fa fa-cube"></span> <?php echo Yii::t('main', 'Työntekijät'); ?></a>
+                  <span class="fa fa-male"></span> <?php echo Yii::t('main', 'Työntekijät'); ?></a>
               </li>
               <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/tyosuhdet/index">
-                  <span class="fa fa-cube"></span> <?php echo Yii::t('main', 'Työsuhdelomake'); ?></a>
+                  <span class="fa fa-list"></span> <?php echo Yii::t('main', 'Työsuhdelomake'); ?></a>
               </li>
               <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/tyontekijat/merkkipaivat">
-                  <span class="fa fa-cube"></span> <?php echo Yii::t('main', 'Merkkipäivät'); ?></a>
+                  <span class="fa fa-indent"></span> <?php echo Yii::t('main', 'Merkkipäivät'); ?></a>
               </li>
             </ul>
           </li>
@@ -500,7 +514,7 @@
             <ul class="nav sub-nav">
               <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/viestinta/index">
-                  <span class="fa fa-cube"></span> <?php echo Yii::t('main', 'Viestit'); ?></a>
+                  <span class="glyphicon glyphicon-envelope"></span> <?php echo Yii::t('main', 'Viestit'); ?></a>
               </li>
             </ul>
           </li>
@@ -515,19 +529,19 @@
             <ul class="nav sub-nav">
               <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/tyovuoroot/index" target="_blank">
-                  <span class="fa fa-cube"></span> <?php echo Yii::t('main', 'Työvuorot'); ?></a>
+                  <span class="fa fa-clock-o"></span> <?php echo Yii::t('main', 'Työvuorot'); ?></a>
               </li>
               <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/tyovuoroot/viikkottain">
-                  <span class="fa fa-cube"></span> <?php echo Yii::t('main', 'Työvuorojen lähetys'); ?></a>
+                  <span class="fa fa-paper-plane"></span> <?php echo Yii::t('main', 'Työvuorojen lähetys'); ?></a>
               </li>
               <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/tyovuoroot/kk">
-                  <span class="fa fa-cube"></span> <?php echo Yii::t('main', 'Kuukausinäkymä'); ?></a>
+                  <span class="fa fa-calendar-o"></span> <?php echo Yii::t('main', 'Kuukausinäkymä'); ?></a>
               </li>
               <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/vuosilomat/index">
-                  <span class="fa fa-cube"></span> <?php echo Yii::t('main', 'Vuosilomat'); ?></a>
+                  <span class="fa fa-table"></span> <?php echo Yii::t('main', 'Vuosilomat'); ?></a>
               </li>
             </ul>
           </li>
@@ -536,18 +550,18 @@
 	<?php if(in_array('3',$tas)) : ?>
           <li>
             <a class="accordion-toggle" href="#">
-              <span class="fa fa-briefcase"></span>
+              <span class="glyphicon glyphicon-barcode"></span>
               <span class="sidebar-title"><?php echo Yii::t('main', 'Laskutus'); ?></span>
               <span class="caret"></span>
             </a>
             <ul class="nav sub-nav">
               <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/lasku/admin">
-                  <span class="fa fa-cube"></span> <?php echo Yii::t('main', 'Laskut'); ?></a>
+                  <span class="glyphicon glyphicon-barcode"></span> <?php echo Yii::t('main', 'Laskut'); ?></a>
               </li>
               <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/LaskutusTuotteet/admin">
-                  <span class="fa fa-cube"></span> <?php echo Yii::t('main', 'Tuotteet ja palvelut'); ?></a>
+                  <span class="fa fa-shopping-cart"></span> <?php echo Yii::t('main', 'Tuotteet ja palvelut'); ?></a>
               </li>
             </ul>
           </li>
@@ -728,6 +742,7 @@
       // Jvector Map Plugin
       var runJvectorMap = function() {
         // Data set
+
         var mapData = [900, 700, 350, 500];
         // Init Jvector Map
 

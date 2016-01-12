@@ -26,7 +26,7 @@ td:first-child {
         <div class="tray-center">
 
 
-              <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-th-list"></i> <?php echo Yii::t('main', 'TYÖVUOROJEN LÄHETYS'); ?></h2>
+              <h2 class="myBgColors p10"> <i class="fa fa-paper-plane"></i> <?php echo Yii::t('main', 'TYÖVUOROJEN LÄHETYS'); ?></h2>
 
         <!-- loppu: .tray-center -->
         </div>

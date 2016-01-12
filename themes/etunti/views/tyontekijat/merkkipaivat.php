@@ -6,7 +6,7 @@
         <div class="tray-center">
 
 
-              <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-user"></i> <?php echo Yii::t('main', 'MERKKIPÄIVÄT'); ?> </h2>
+              <h2 class="myBgColors p10"> <i class="fa fa-indent"></i> <?php echo Yii::t('main', 'MERKKIPÄIVÄT'); ?> </h2>
 
         <!-- loppu: .tray-center -->
         </div>

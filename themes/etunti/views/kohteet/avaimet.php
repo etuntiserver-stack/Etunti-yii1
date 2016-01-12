@@ -23,7 +23,6 @@ legend{  padding: 3px 7px; }
         <div class="tray-center">
 
 
-              <h2> <i class="fa fa-key"></i> <?php echo Yii::t('main', 'AVAIMET'); ?> 
    <!-- tulostus -->
    <div class="pull-right">
      <form action="#" target="_blank" method="POST">
@@ -31,6 +30,7 @@ legend{  padding: 3px 7px; }
      </form>
    </div>
    <!-- tulostus -->
+              <h2 class="myBgColors p10"> <i class="fa fa-key"></i> <?php echo Yii::t('main', 'AVAIMET'); ?> 
 		</h2>
 
 
@@ -78,7 +78,7 @@ legend{  padding: 3px 7px; }
                       </div>
 
                       <div class="col-md-2 col-md-offset-7">
-        	        <button class="btn btn-primary btn-lg haemob btn-block" type="button"><i class="glyphicon glyphicon-search"> </i> Hae</button>
+        	        <button class="btn btn-primary btn-lg haemob btn-block myBgColors" type="button"><i class="glyphicon glyphicon-search"> </i> Hae</button>
 		      </div>
 
                     </div>
@@ -105,7 +105,7 @@ legend{  padding: 3px 7px; }
    <div class="panel-body">
 
 <table class="table table-stripped">
-<thead>
+<thead class="myBgColors">
  <tr>
   <th><?php echo Yii::t('main','Työntekijä'); ?></th>
   <th><?php echo Yii::t('main','Avain'); ?></th>

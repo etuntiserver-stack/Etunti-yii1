@@ -23,6 +23,8 @@ Yii::setPathOfAlias('chartjs', dirname(__FILE__).'/../extensions/yii-chartjs');
 
 
 //var_dump($_SERVER);
+	if(isset($_GET['lang']))
+  	$_SESSION['lang'] = $_GET['lang'];
 
 	if(isset($_GET['dom']))
   	$_SESSION['domain'] = $_GET['dom'];
@@ -39,6 +41,10 @@ Yii::setPathOfAlias('chartjs', dirname(__FILE__).'/../extensions/yii-chartjs');
 	$theme = 'admin';
 	if(isset($_SESSION['theme']) and !empty($_SESSION['theme']))
   	$theme = $_SESSION['theme'];
+
+	$lang = 'fi';
+	if(isset($_SESSION['lang']) and !empty($_SESSION['lang']))
+  	$lang = $_SESSION['lang'];
 
 
 //header("Access-Control-Allow-Origin: *");
@@ -83,7 +89,7 @@ return array(
 	//'defaultController'=>'mobile/index',
 	// preloading 'log' component
 	'preload'=>array('chartjs'), //'log'
-	'language' => 'fi',
+	'language' => $lang,
 
   	'theme' => $theme,
 

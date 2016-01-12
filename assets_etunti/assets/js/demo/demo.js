@@ -232,6 +232,7 @@ var Demo = function() {
 
 	$('.myBgColors').removeClass(headerSkins);
 	$('.myBgColors').addClass(settingsObj['headerSkin']);
+	//$('div.admin-form > .heading-border').css({"background-color" : "#000"});
 
         $.each(settingsParse, function(i, e) {
           switch (i) {
