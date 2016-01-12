@@ -193,45 +193,56 @@
           <ul class="dropdown-menu media-list w350 animated animated-shorter fadeIn" role="menu">
             <li class="dropdown-header">
               <span class="dropdown-title"> Notifications</span>
-              <span class="label label-warning">12</span>
+              <span class="label label-warning">5</span>
             </li>
+
+	    	<?php  
+
+	function lastNotifY()
+	{
+		$return = '';
+
+       		$criteria = new CDbCriteria();
+        	$criteria->order = " id DESC LIMIT 5";
+        	$criteria->condition = " tekija='toimisto'";
+
+		$model = Viestinta::model()->findAll($criteria);
+
+		foreach($model as $data)
+		{
+		$id = '';
+		$expl = explode(",",$data->admin);
+		if(isset($expl[0]))
+		$id = str_replace("tt_", "", $expl[0]);
+
+		if(!empty($id) and isset($expl[1]))
+		{
+		   $src = '';
+		$filename = Yii::app()->request->baseUrl."/img/tekijat/".Yii::app()->user->domain."/".$id.".jpg";
+		if (file_exists(Yii::app()->request->baseUrl."img/tekijat/".Yii::app()->user->domain."/".$id.".jpg"))
+		   $src =  $filename;
+		else
+		   $src = Yii::app()->request->baseUrl.'/img/tekijat/noname.jpg';
+
+		$return .= '
             <li class="media">
-              <a class="media-left" href="#"> <img src="<?php echo Yii::app()->request->baseUrl; ?>/assets_etunti/assets/img/avatars/5.jpg" class="mw40" alt="avatar"> </a>
+              <a class="media-left" href="#"> <img src="'.$src.'" class="mw40" alt="avatar"> </a>
               <div class="media-body">
-                <h5 class="media-heading">Article
-                  <small class="text-muted">- 08/16/22</small>
-                </h5> Last Updated 36 days ago by
-                <a class="text-system" href="#"> Max </a>
+                <h5 class="media-heading">'.Yii::t('main','Viesti').'
+                  <small class="text-muted">- '.date("d.m.Y",strtotime($data->time)).'</small>
+                </h5> '.$data->viesti.'
+                <a class="text-system" href="'.Yii::app()->request->baseUrl.'/index.php/tyontekijat/update?id='.$id.'"> '.$expl[1].' </a>
               </div>
-            </li>
-            <li class="media">
-              <a class="media-left" href="#"> <img src="<?php echo Yii::app()->request->baseUrl; ?>/assets_etunti/assets/img/avatars/2.jpg" class="mw40" alt="avatar"> </a>
-              <div class="media-body">
-                <h5 class="media-heading mv5">Article
-                  <small> - 08/16/22</small>
-                </h5>
-                Last Updated 36 days ago by
-                <a class="text-system" href="#"> Max </a>
-              </div>
-            </li>
-            <li class="media">
-              <a class="media-left" href="#"> <img src="<?php echo Yii::app()->request->baseUrl; ?>/assets_etunti/assets/img/avatars/3.jpg" class="mw40" alt="avatar"> </a>
-              <div class="media-body">
-                <h5 class="media-heading">Article
-                  <small class="text-muted">- 08/16/22</small>
-                </h5> Last Updated 36 days ago by
-                <a class="text-system" href="#"> Max </a>
-              </div>
-            </li>
-            <li class="media">
-              <a class="media-left" href="#"> <img src="<?php echo Yii::app()->request->baseUrl; ?>/assets_etunti/assets/img/avatars/4.jpg" class="mw40" alt="avatar"> </a>
-              <div class="media-body">
-                <h5 class="media-heading mv5">Article
-                  <small class="text-muted">- 08/16/22</small>
-                </h5> Last Updated 36 days ago by
-                <a class="text-system" href="#"> Max </a>
-              </div>
-            </li>
+            </li>';
+		}
+		}
+
+		return $return;
+
+	}
+
+		echo lastNotifY(); 
+		?>
           </ul>
         </li>
         <li class="dropdown menu-merge">

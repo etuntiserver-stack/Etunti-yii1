@@ -367,8 +367,7 @@ class SiteController extends Controller
         	$criteria->order = " COUNT(*) LIMIT 4 ";
         	$criteria->group = " tid ";
         	$criteria->condition = "  
-			aloitan !='' and loppui !='' and status ='3'
-			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d')  = CURDATE()
+			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d')  = CURDATE()
 			AND t.id NOT IN(select kid from sivexkuitti_repaired)
 		";
 
@@ -384,8 +383,7 @@ class SiteController extends Controller
         	$criteria->order = " COUNT(*) LIMIT 4 ";
         	$criteria->group = " tid ";
         	$criteria->condition = "  
-			aloitan !='' and loppui !='' and status ='3'
-			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d')  = CURDATE()
+			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d')  = CURDATE()
 		";
 
 		$tot = Toteutuneet::model()->findAll($criteria);
@@ -398,6 +396,9 @@ class SiteController extends Controller
 		return $total_l;
 
 	}
+
+
+
 
 
 }
