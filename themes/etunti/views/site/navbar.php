@@ -179,70 +179,25 @@
           </a>
         </li>
       </ul>
+<!--
       <form class="navbar-form navbar-left navbar-search" role="search">
         <div class="form-group">
-          <input type="text" class="form-control" placeholder="Search..." value="Search...">
+          <input type="text" class="form-control" placeholder="Haku...">
         </div>
       </form>
-
+-->
       <ul class="nav navbar-nav navbar-right">
         <li class="dropdown menu-merge">
           <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-            <span class="ad ad-radio-tower fs18"></span>
+            <span class="ad ad-radio-tower fs18" id="notiFyClick"></span>
           </a>
           <ul class="dropdown-menu media-list w350 animated animated-shorter fadeIn" role="menu">
             <li class="dropdown-header">
               <span class="dropdown-title"> Notifications</span>
               <span class="label label-warning">5</span>
             </li>
-
-	    	<?php  
-
-	function lastNotifY()
-	{
-		$return = '';
-
-       		$criteria = new CDbCriteria();
-        	$criteria->order = " id DESC LIMIT 5";
-        	$criteria->condition = " tekija='toimisto'";
-
-		$model = Viestinta::model()->findAll($criteria);
-
-		foreach($model as $data)
-		{
-		$id = '';
-		$expl = explode(",",$data->admin);
-		if(isset($expl[0]))
-		$id = str_replace("tt_", "", $expl[0]);
-
-		if(!empty($id) and isset($expl[1]))
-		{
-		   $src = '';
-		$filename = Yii::app()->request->baseUrl."/img/tekijat/".Yii::app()->user->domain."/".$id.".jpg";
-		if (file_exists(Yii::app()->request->baseUrl."img/tekijat/".Yii::app()->user->domain."/".$id.".jpg"))
-		   $src =  $filename;
-		else
-		   $src = Yii::app()->request->baseUrl.'/img/tekijat/noname.jpg';
-
-		$return .= '
-            <li class="media">
-              <a class="media-left" href="#"> <img src="'.$src.'" class="mw40" alt="avatar"> </a>
-              <div class="media-body">
-                <h5 class="media-heading">'.Yii::t('main','Viesti').'
-                  <small class="text-muted">- '.date("d.m.Y",strtotime($data->time)).'</small>
-                </h5> '.$data->viesti.'
-                <a class="text-system" href="'.Yii::app()->request->baseUrl.'/index.php/tyontekijat/update?id='.$id.'"> '.$expl[1].' </a>
-              </div>
-            </li>';
-		}
-		}
-
-		return $return;
-
-	}
-
-		echo lastNotifY(); 
-		?>
+	    <get id="viestiGet"></get>
+	    	
           </ul>
         </li>
         <li class="dropdown menu-merge">

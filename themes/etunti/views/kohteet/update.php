@@ -1,5 +1,7 @@
 <?php
-
+$this->menu=array(
+	array('label'=>'Poista kohde', 'url'=>'#', 'linkOptions'=>array('submit'=>array('delete','id'=>$model->id),'confirm'=>'Oletko varmaa?')),
+);
 ?>
 
         <!-- begin: .tray-center -->
