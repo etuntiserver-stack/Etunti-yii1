@@ -306,7 +306,7 @@ $(function () {
 
     var onResize = function () {
         var oSettings = dataTable.fnSettings();
-        oSettings.oScroll.sY = tableHeight()-230; 
+        oSettings.oScroll.sY = tableHeight()-120; 
         dataTable.fnDraw();
     };
 
