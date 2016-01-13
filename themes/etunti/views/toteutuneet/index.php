@@ -52,7 +52,7 @@ $this->breadcrumbs=array(
     if(isset($explTekija[0]) and isset($explTekija[1])){
        echo '<option value="'.$explTekija[0].'//'.$explTekija[1].'">'.$explTekija[1].'</option>';
     } else {
-       echo '<option>'.Yii::t('main', 'Työntekijät').'</option>';
+       echo '<option value="">'.Yii::t('main', 'Työntekijät').'</option>';
     }
 
     foreach($list as $key=>$val){
@@ -309,10 +309,11 @@ $("#yhtveto").on('submit',function(e){
         $('#to').css({"border" : "2px #f14010 solid"}).focus();
         return false;
     }
-    if (nimi  === '') {
+    if (!nimi) {
         $('#nimi').css({"border" : "2px #f14010 solid"}).focus();
         return false;
     }
+
 
 });
 
