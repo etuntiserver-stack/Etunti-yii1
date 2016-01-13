@@ -402,7 +402,7 @@ echo '
 			  echo '
                       <tr>
                         <td>
-                          <span class="fa fa-hourglass-start"></span> '.$data->kohde_kannasta.'</td>
+                          <span class=""></span> '.$data->kohde_kannasta.'</td>
                         <td>'.$this->sprint($kesto).'</td>
                       </tr>
 			  ';
