@@ -522,7 +522,7 @@
             </a>
             <ul class="nav sub-nav">
               <li>
-                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/lasku/admin">
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/lasku/index">
                   <span class="glyphicon glyphicon-barcode"></span> <?php echo Yii::t('main', 'Laskut'); ?></a>
               </li>
               <li>
