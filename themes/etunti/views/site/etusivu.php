@@ -74,12 +74,28 @@ $months=array(
             <div class="panel bg-danger light of-h mb10">
               <div class="pn pl20 p5">
                 <div class="icon-bg">
-                  <i class="fa fa-bar-chart-o"></i>
+                  <i class="fa fa-table"></i>
                 </div>
+		<?php
+		$criteria = new CDbCriteria();
+        	$criteria->select = "
+			SUM(TIME_TO_SEC(TIMEDIFF(loppu, alku))) as l_tunnit
+		";
+        	$criteria->condition = " 
+			loppu!='' and alku!='' 
+			AND tyoajanmerkinta NOT LIKE '%Ei lasketa%'
+			AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE()
+		";
+	  	$su = Tyovuoroot::model()->find($criteria);
+		  $suunniteltu = '00:00';
+		if(isset($su->l_tunnit) and $su->l_tunnit > 0)
+		  $suunniteltu = $this->sprint($su->l_tunnit);
+		?>
+
                 <h2 class="mt15 lh15">
-                  <b>267</b>
+                  <b><?php echo $suunniteltu; ?></b>
                 </h2>
-                <h5 class="text-muted">Reach</h5>
+                <h5 class="text-muted">Suunniteltu tänään</h5>
               </div>
             </div>
           </div>
@@ -89,10 +105,22 @@ $months=array(
                 <div class="icon-bg">
                   <i class="fa fa-envelope"></i>
                 </div>
+		<?php
+		$criteria = new CDbCriteria();
+        	$criteria->select = " COUNT(*) as count ";
+        	$criteria->condition = " 
+			DATE(time) = CURDATE()
+			AND tekija='toimisto'
+		";
+	  	$v = Viestinta::model()->find($criteria);
+		  $viestit = '0';
+		if(isset($v->count) and $v->count > 0)
+		  $viestit = (int)$v->count;
+		?>
                 <h2 class="mt15 lh15">
-                  <b>714</b>
+                  <b><?php echo $viestit; ?></b>
                 </h2>
-                <h5 class="text-muted">Comments</h5>
+                <h5 class="text-muted">Viestit tänään</h5>
               </div>
             </div>
           </div>
@@ -359,7 +387,7 @@ echo '
        		    $criteria = new CDbCriteria();
        		    $criteria->select = " aloitan,loppui,kohde_kannasta  ";
        		    $criteria->order = " id DESC  ";
-       		    $criteria->group = "kohdenID";
+       		    $criteria->group = "kohde_kannasta";
        		    $criteria->condition = "status=1";
 		    $m = Mobile::model()->findAll($criteria);
 		    if(isset($m[0]))
