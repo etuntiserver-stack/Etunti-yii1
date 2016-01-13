@@ -364,7 +364,7 @@ class SiteController extends Controller
 
        		$criteria = new CDbCriteria();
         	$criteria->select = " COUNT(*) as count,tekijan_nimi";
-        	$criteria->order = " COUNT(*) LIMIT 4 ";
+        	$criteria->order = " tekijan_nimi ";
         	$criteria->group = " tid ";
         	$criteria->condition = "  
 			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d')  = CURDATE()
