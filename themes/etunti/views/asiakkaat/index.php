@@ -160,10 +160,9 @@
   </div>
 
 
-
-
 <script type="text/javascript">
 $(document).ready(function(){
+
 
 $(".haemob").click(function(){
 	$("#mobForm").submit();

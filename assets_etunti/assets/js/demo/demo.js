@@ -245,7 +245,8 @@ $("#notiFyClick").click(function(){
 
 	$('.myBgColors').removeClass(headerSkins);
 	$('.myBgColors').addClass(settingsObj['headerSkin']);
-	//$('div.admin-form > .heading-border').css({"background-color" : "#000"});
+	var backgroundColor = $('.myBgColors').css('backgroundColor');
+	$('head').append('<style>.admin-form .heading-border:before{background-color: '+backgroundColor+';}</style>');
 
         $.each(settingsParse, function(i, e) {
           switch (i) {
@@ -350,7 +351,8 @@ $("#notiFyClick").click(function(){
 
 	$('.myBgColors').removeClass(headerSkins);
 	$('.myBgColors').addClass(Val);
-
+	var backgroundColor = $('.myBgColors').css('backgroundColor');
+	$('head').append('<style>.admin-form .heading-border:before{background-color: '+backgroundColor+';}</style>');
 
 
       });
