@@ -338,8 +338,63 @@ echo '
                 </div>
               </div>
 
+
+
+              <!-- Country List -->
+              <div class="panel" id="p16">
+                <div class="panel-heading">
+                  <span class="panel-title">Avoimet kohteet</span>
+                </div>
+                <div class="panel-body pn">
+                  <table class="table mbn tc-med-1 tc-bold-last">
+                    <thead>
+                      <tr class="hidden">
+                        <th>#</th>
+                        <th>First Name</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+
+		    <?php
+       		    $criteria = new CDbCriteria();
+       		    $criteria->select = " aloitan,loppui,kohde_kannasta  ";
+       		    $criteria->order = " id DESC  ";
+       		    $criteria->group = "kohdenID";
+       		    $criteria->condition = "status=1";
+		    $m = Mobile::model()->findAll($criteria);
+		    if(isset($m[0]))
+		    {
+			foreach($m as $data)
+			{
+
+ 			  $data->loppui = date("d.m.Y H:i",time());
+			  $data->aloitan = date("d.m.Y H:i",strtotime($data->aloitan));
+			  $kesto =  strtotime($data->loppui) - strtotime($data->aloitan);
+
+			  echo '
+                      <tr>
+                        <td>
+                          <span class="fa fa-hourglass-start"></span> '.$data->kohde_kannasta.'</td>
+                        <td>'.$this->sprint($kesto).'</td>
+                      </tr>
+			  ';
+			}
+	
+		    }
+		    ?>
+
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+
             </div>
             <!-- end: .col-md-3-->
+
+
+
+
 
           </div>
           <!-- end: .row -->

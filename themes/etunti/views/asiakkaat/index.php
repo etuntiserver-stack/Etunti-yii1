@@ -1,5 +1,5 @@
 <?php
-header("Location: /index.php/user/login");
+
 ?>
 
         <!-- begin: .tray-center -->
