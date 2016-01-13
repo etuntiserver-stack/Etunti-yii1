@@ -24,8 +24,7 @@ class DB2ActiveRecord extends CActiveRecord {
             else
                 throw new CDbException(Yii::t('yii','Active Record requires a "db" CDbConnection application component.'));
 	  } catch (Exception $e) {
-    		header("Location: index.php?r=user/login&return=filed");
-    		exit;
+		$this->redirect('index.php/user/login');
 	  }
         }
     }

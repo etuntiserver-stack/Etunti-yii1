@@ -539,10 +539,23 @@ class LaskuController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$dataProvider=new CActiveDataProvider('Lasku');
-		$this->render('index',array(
-			'dataProvider'=>$dataProvider,
+       		$criteria = new CDbCriteria();
+	        $criteria->order = "  id DESC ";
+
+		if(isset($_POST['laskunumero']) and !empty(trim($_POST['laskunumero'])))
+	        $criteria->addCondition (" laskunumero LIKE '%".$_POST['laskunumero']."%' ");
+
+		if(isset($_POST['viitenumero']) and !empty(trim($_POST['viitenumero'])))
+	        $criteria->addCondition (" viitenumero LIKE '%".$_POST['viitenumero']."%' ");
+
+	
+		$dataProvider=new CActiveDataProvider('Lasku', array(
+			'criteria'=>$criteria,
+			//'pagination'=>false
 		));
+
+		$dataProvider->pagination->pageSize = 50;
+		$this->render('index', array('dataProvider' => $dataProvider));
 	}
 
 	/**
