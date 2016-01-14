@@ -49,7 +49,7 @@ echo	'<input type=hidden id=Year value='.$year.'>';
 echo	'<input type=hidden id=number value='.cal_days_in_month(CAL_GREGORIAN, $month, $year).'>'; 
 ?>
 
-<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/verkko.css" />
+
 
 
 
@@ -89,12 +89,18 @@ echo	'<input type=hidden id=number value='.cal_days_in_month(CAL_GREGORIAN, $mon
 <br>
 
 
-<div id="taulukkoPaa">
+            <div class="admin-form">
+              <div class="panel heading-border">
+                <div class="panel-body bg-light">
+                 <div class="row">
 
-  <TABLE id="verkko" class="">
+
+<div class="table-responsive" id="taulukkoPaa">
+
+  <TABLE id="verkko" class="table table-bordered">
   <?php 
 
-  echo '<TR>';
+  echo '<thead class="myBgColors"><TR>';
   echo '<TH>Nimi</TH>';
 
    for ($i = 1; $i <= $number; $i++) 
@@ -102,7 +108,7 @@ echo	'<input type=hidden id=number value='.cal_days_in_month(CAL_GREGORIAN, $mon
      echo '<TH>'.$i.'</TH>';
    }
      echo '<TH>Yht.</TH>';
-  echo '</TR>';
+  echo '</TR></thead>';
   $t = Tyontekijat::model()->findAll(" aktiivinen = '1' ");
   foreach($t as $v)
   {
@@ -131,6 +137,10 @@ echo	'<input type=hidden id=number value='.cal_days_in_month(CAL_GREGORIAN, $mon
 </div>
 
 
+                 </div>
+                </div>
+              </div>
+            </div>
 <script type="text/javascript">
 $(document).ready(function(){
 
