@@ -102,9 +102,16 @@ class AsetuksetController extends Controller
 	public function actionUpdate($id)
 	{
 		$model=$this->loadModel($id);
-
+		$f = FirmanTiedot::model()->findbypk(1);
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
+
+		if(isset($_POST['FirmanTiedot']))
+		{
+			$f->attributes=$_POST['FirmanTiedot'];
+			$f->save();
+
+		}
 
 		if(isset($_POST['Asetukset']))
 		{
@@ -115,6 +122,7 @@ class AsetuksetController extends Controller
 
 		$this->render('update',array(
 			'model'=>$model,
+			'f'=>$f,
 		));
 	}
 

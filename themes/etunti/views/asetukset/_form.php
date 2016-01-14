@@ -26,19 +26,19 @@
 
   <div class="col-sm-4">
 
-	<div class="section">
+	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'logon_polkku'); ?>
 		<?php echo $form->textField($model,'logon_polkku',array('size'=>60,'maxlength'=>500,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'logon_polkku'); ?>
 	</div>
 
-	<div class="section">
+	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'logon_korkeus'); ?>
 		<?php echo $form->textField($model,'logon_korkeus',array('class'=>'form-control')); ?>
 		<?php echo $form->error($model,'logon_korkeus'); ?>
 	</div>
 
-	<div class="section">
+	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'johtaja'); ?>
 		<?php echo $form->textField($model,'johtaja',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'johtaja'); ?>
@@ -46,7 +46,7 @@
 
   </div><div class="col-sm-4">
 
-	<div class="section">
+	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'pyhapaivat'); ?>
 		<?php echo $form->textarea($model,'pyhapaivat',array('rows'=>8,'maxlength'=>3000,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'pyhapaivat'); ?>
@@ -54,7 +54,7 @@
 
   </div><div class="col-sm-4">
 
-	<div class="section">
+	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'erikoislauantai'); ?>
 		<?php echo $form->textarea($model,'erikoislauantai',array('rows'=>8,'maxlength'=>3000,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'erikoislauantai'); ?>
@@ -69,52 +69,52 @@
   <div class="row form">
     <div class="col-sm-4">
     <legend><h2><?php echo Yii::t('main','Laskutuksen asetukset'); ?></h2></legend>
-	<div class="section">
+	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'tilinumero'); ?>
-		<?php echo $form->textField($model,'tilinumero',array('size'=>60,'maxlength'=>100,'class'=>'form-control input-sm')); ?>
+		<?php echo $form->textField($model,'tilinumero',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'tilinumero'); ?>
 	</div>
 
-	<div class="section">
+	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'iban'); ?>
-		<?php echo $form->textField($model,'iban',array('size'=>60,'maxlength'=>100,'class'=>'form-control input-sm')); ?>
+		<?php echo $form->textField($model,'iban',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'iban'); ?>
 	</div>
 
-	<div class="section">
+	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'bic'); ?>
-		<?php echo $form->textField($model,'bic',array('size'=>20,'maxlength'=>20,'class'=>'form-control input-sm')); ?>
+		<?php echo $form->textField($model,'bic',array('size'=>20,'maxlength'=>20,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'bic'); ?>
 	</div>
 
-	<div class="section">
+	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'viivastyskorko'); ?>
-		<?php echo $form->textField($model,'viivastyskorko',array('size'=>50,'maxlength'=>50,'class'=>'form-control input-sm')); ?>
+		<?php echo $form->textField($model,'viivastyskorko',array('size'=>50,'maxlength'=>50,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'viivastyskorko'); ?>
 	</div>
 
-	<div class="section">
+	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'palvelu_tyyppi'); ?>
 		<?php 
         	$tal = array(1=>'POSTITA',2=>'TRUST',3=>'MANUAL');
 		echo $form->dropDownList($model,'palvelu_tyyppi', $tal, 
-		array('empty'=>'Valitse palvelu','class'=>'form-control input-sm','id'=>'osoite')) ?>
+		array('empty'=>'Valitse palvelu','class'=>'form-control','id'=>'osoite')) ?>
 		<?php echo $form->error($model,'palvelu_tyyppi'); ?>
 	</div>
 
     </div><div class="col-sm-4">
     <legend><h2><?php echo Yii::t('main','POSTITA.FI tunnukset'); ?></h2></legend>
 
-	<div class="section">
+	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'postita_username'); ?>
-		<?php echo $form->textField($model,'postita_username',array('size'=>20,'maxlength'=>100,'class'=>'form-control input-sm')); ?>
+		<?php echo $form->textField($model,'postita_username',array('size'=>20,'maxlength'=>100,'class'=>'form-control')); ?>
 
 		<?php echo $form->error($model,'postita_username'); ?>
 	</div>
 
-	<div class="section">
+	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'postita_password'); ?>
-		<?php echo $form->textField($model,'postita_password',array('size'=>20,'maxlength'=>100,'class'=>'form-control input-sm')); ?>
+		<?php echo $form->textField($model,'postita_password',array('size'=>20,'maxlength'=>100,'class'=>'form-control')); ?>
 
 		<?php echo $form->error($model,'postita_password'); ?>
 	</div>
@@ -122,23 +122,23 @@
     </div><div class="col-sm-4">
     <legend><h2><?php echo Yii::t('main','TRUST.FI tunnukset'); ?></h2></legend>
 
-	<div class="section">
+	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'trust_url'); ?>
-		<?php echo $form->textField($model,'trust_url',array('size'=>20,'maxlength'=>255,'class'=>'form-control input-sm')); ?>
+		<?php echo $form->textField($model,'trust_url',array('size'=>20,'maxlength'=>255,'class'=>'form-control')); ?>
 
 		<?php echo $form->error($model,'trust_url'); ?>
 	</div>
 
-	<div class="section">
+	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'trust_cid'); ?>
-		<?php echo $form->textField($model,'trust_cid',array('size'=>20,'maxlength'=>100,'class'=>'form-control input-sm')); ?>
+		<?php echo $form->textField($model,'trust_cid',array('size'=>20,'maxlength'=>100,'class'=>'form-control')); ?>
 
 		<?php echo $form->error($model,'trust_cid'); ?>
 	</div>
 
-	<div class="section">
+	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'trust_api'); ?>
-		<?php echo $form->textField($model,'trust_api',array('size'=>20,'maxlength'=>100,'class'=>'form-control input-sm')); ?>
+		<?php echo $form->textField($model,'trust_api',array('size'=>20,'maxlength'=>100,'class'=>'form-control')); ?>
 
 		<?php echo $form->error($model,'trust_api'); ?>
 	</div>
@@ -153,7 +153,7 @@
    <div class="col-sm-4">
     <legend><h2><?php echo Yii::t('main','SOVELLUS'); ?></h2></legend>
 
-	<div class="section">
+	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'sovellus_tyovuorot'); ?>
 		<?php 
         	$tal = array(
@@ -162,7 +162,7 @@
 			3=>'Tästä päivä alkaen +14pv'
 		);
 		echo $form->dropDownList($model,'sovellus_tyovuorot', $tal, 
-		array('class'=>'form-control input-sm')) ?>
+		array('class'=>'form-control')) ?>
 		<?php echo $form->error($model,'sovellus_tyovuorot'); ?>
 	</div>
 
@@ -181,13 +181,13 @@
 
 <?php
 /*
-	<div class="section">
+	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'syntyrin_emails'); ?>
 		<?php echo $form->textArea($model,'syntyrin_emails',array('rows'=>6, 'cols'=>50,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'syntyrin_emails'); ?>
 	</div>
 
-	<div class="section">
+	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'paivan_uutinen'); ?>
 		<?php echo $form->textField($model,'paivan_uutinen',array('size'=>60,'maxlength'=>500,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'paivan_uutinen'); ?>
