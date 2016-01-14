@@ -45,6 +45,18 @@ class TasotController extends Controller
 		);
 	}
 
+        public function init()
+        {
+
+                if (Yii::app()->user->isAdmin())
+		{
+                        Yii::app()->theme = 'admin';
+                } else {
+                        Yii::app()->theme = 'classic';
+		}
+                parent::init();
+        }
+
 	/**
 	 * Displays a particular model.
 	 * @param integer $id the ID of the model to be displayed

@@ -46,7 +46,17 @@ class DomainitController extends Controller
 	}
 
 	
+        public function init()
+        {
 
+                if (Yii::app()->user->isAdmin())
+		{
+                        Yii::app()->theme = 'admin';
+                } else {
+                        Yii::app()->theme = 'classic';
+		}
+                parent::init();
+        }
 
 	public function actionDomaini_seuranta()
 	{
