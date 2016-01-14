@@ -1,7 +1,12 @@
 <?php
 $curpage = Yii::app()->getController()->getAction()->controller->id;
 $curpage .= '/'.Yii::app()->getController()->getAction()->controller->action->id;
-//echo $curpage;
+
+if ((! isset($_SERVER['HTTPS']) or $_SERVER['HTTPS'] == 'off') and ($_SERVER['REMOTE_ADDR'] != '::1' and $_SERVER['REMOTE_ADDR'] != '127.0.0.1')) {
+    $redirect_url = "https://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+    header("Location: $redirect_url");
+    exit();
+}
 ?>
 
 <?php if($curpage != 'kohteet/googlemap') : ?>
