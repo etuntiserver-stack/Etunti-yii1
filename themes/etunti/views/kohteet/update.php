@@ -7,7 +7,7 @@ $this->menu=array(
         <!-- begin: .tray-center -->
         <div class="tray-center">
 
-	   <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-home"></i> <?php echo Yii::t('main', 'KOHDE')." ID# ".$model->id; ?> </h2>
+	   <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-home"></i> <?php echo $model->osoite; ?> </h2>
 
 
             <div class="admin-form">
