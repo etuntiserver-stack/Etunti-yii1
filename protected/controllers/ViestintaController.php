@@ -55,6 +55,18 @@ class ViestintaController extends Controller
 		}
 	}
 
+        public function init()
+        {
+
+                if (Yii::app()->controller->isEtuntiAdmin() and !isset(Yii::app()->user->user_theme)) {
+                        Yii::app()->theme = 'etunti';
+                } elseif (Yii::app()->controller->isEtuntiAdmin() and isset(Yii::app()->user->user_theme)) {
+                        Yii::app()->theme = Yii::app()->user->user_theme;
+                } else {
+                        Yii::app()->theme = 'classic';
+                }
+                parent::init();
+        }
 
 	public function actionGet_viestit()
 	{
