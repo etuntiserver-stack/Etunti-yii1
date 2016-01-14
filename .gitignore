@@ -8,7 +8,6 @@ protected/runtime/*
 protected/runtime/application.log
 !protected/runtime/.gitignore
 protected/data/*.db
-themes/classic/views/
 protected/config/*
 .DS_Store
 etuntiAPP/.DS_Store
