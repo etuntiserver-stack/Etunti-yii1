@@ -57,6 +57,19 @@ class SiteController extends Controller
 		}
 	}
 
+        public function init()
+        {
+
+                if (Yii::app()->controller->isEtuntiAdmin() and !isset(Yii::app()->user->user_theme)) {
+                        Yii::app()->theme = 'etunti';
+                } elseif (Yii::app()->controller->isEtuntiAdmin() and isset(Yii::app()->user->user_theme)) {
+                        Yii::app()->theme = Yii::app()->user->user_theme;
+                } else {
+                        Yii::app()->theme = 'classic';
+                }
+                parent::init();
+        }
+
 	protected function sprint($val){
 	    if($val > 0)
 		return sprintf('%02d:%02d', $val/3600, ($val % 3600)/60);
@@ -75,7 +88,13 @@ class SiteController extends Controller
 
 	public function actionEtusivu()
 	{
+		if(isset($_GET['theme']))
+		{
+		  Yii::app()->user->setState('user_theme',$_GET['theme']);
+		  $this->redirect('/index.php/site/etusivu');
+		}
 		$this->render('etusivu');
+
 	}
 
 	public function actionEtusivu_esimerki()
@@ -136,12 +155,14 @@ class SiteController extends Controller
 
 	public function actionIndex()
 	{
+
 		//if(isset(Yii::app()->user->adminID))
 			$this->render('index');
 		//else
 			//$this->render('start');
 
 	}
+
 
 	/**
 	 * This is the action to handle external exceptions.

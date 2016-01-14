@@ -35,13 +35,6 @@ Yii::setPathOfAlias('chartjs', dirname(__FILE__).'/../extensions/yii-chartjs');
 	if(isset($_POST['domain']))
   	$_SESSION['domain'] = $_POST['domain'];
 
-	if(isset($_GET['theme']))
-  	$_SESSION['theme'] = $_GET['theme'];
-
-	$theme = 'admin';
-	if(isset($_SESSION['theme']) and !empty($_SESSION['theme']))
-  	$theme = $_SESSION['theme'];
-
 	$lang = 'fi';
 	if(isset($_SESSION['lang']) and !empty($_SESSION['lang']))
   	$lang = $_SESSION['lang'];
@@ -91,7 +84,7 @@ return array(
 	'preload'=>array('chartjs'), //'log'
 	'language' => $lang,
 
-  	'theme' => $theme,
+  	//'theme' => $theme,
 
 	'import'=>array(
         'application.models.*',
