@@ -25,6 +25,10 @@ class SiteController extends Controller
 	{
 		return array(
 			array('allow', 
+				'actions'=>array('lomake_tarjouspyynto'),
+				'users'=>array('*'),
+			),
+			array('allow', 
 				'actions'=>array('etusivu','ohjesivu','etusivu_esimerki', 'change_color'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
@@ -95,6 +99,11 @@ class SiteController extends Controller
 		}
 		$this->render('etusivu');
 
+	}
+
+	public function actionLomake_tarjouspyynto()
+	{
+		$this->render('lomake_tarjouspyynto');
 	}
 
 	public function actionEtusivu_esimerki()
