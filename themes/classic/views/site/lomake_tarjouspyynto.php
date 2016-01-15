@@ -172,6 +172,7 @@ public function csv_save()
 
 public function email()
 {
+
 	foreach ($this->asetukset['email'] as $key1 => $value1) {
 		$headers = "From: {$value1['lahettaja']}\r\n";
 		$headers .= "BCC: {$value1['kopio']}\r\n";
@@ -236,7 +237,7 @@ public function tulosta_kentat()
 	}
 
 
-	print "<form method=\"post\" name=\"lomake\" action=\"#\" id=\"{$this->asetukset['nimi']}\" class=\"lomake $FORM_class\">";
+	print "<form method=\"post\" name=\"lomake\" action=\"index.php/site/lomake_tarjouspyynto\" id=\"{$this->asetukset['nimi']}\" class=\"lomake $FORM_class\">";
 	foreach ($this->kentat as $key => $value) {
 			//yleiset
 			$LABEL_class = isset($this->asetukset['LABEL_CLASS']) ? $this->asetukset['LABEL_CLASS'] : "";
