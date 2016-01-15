@@ -74,7 +74,7 @@
                     <!-- Logo-->
                     <div class="col-md-3">
                         <div class="logo">
-                            <a href="index.html" title="Return Home">
+                            <a href="index.php" title="Return Home">
                                 <img src="<?php echo Yii::app()->request->baseUrl; ?>/assets_classic/img/logo.png" alt="Logo" class="logo_img">
                             </a>
                         </div>
