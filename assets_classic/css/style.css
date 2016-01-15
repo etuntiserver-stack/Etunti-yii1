@@ -120,7 +120,7 @@ body{
 	color: #777;
 	-webkit-font-smoothing: antialiased;
 	font-weight: normal;
-	background: url("../img/bg-theme/1.png");
+	background: #fff;
 }
 h1, h2, h3, h4, h5, h6 {
 	padding: 5px 0 15px 0;

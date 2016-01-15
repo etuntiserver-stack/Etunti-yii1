@@ -141,6 +141,8 @@ echo	'<input type=hidden id=number value='.cal_days_in_month(CAL_GREGORIAN, $mon
                 </div>
               </div>
             </div>
+
+
 <script type="text/javascript">
 $(document).ready(function(){
 
