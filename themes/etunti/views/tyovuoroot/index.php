@@ -1,9 +1,5 @@
 <?php
 
-Yii::app()->clientScript->registerPackage('jquery');
-Yii::app()->clientScript->registerPackage('bootstrapJS');
-Yii::app()->clientScript->registerPackage('bootstrapCSS');
-
 
 /* @var $this TyovuorootController */
 /* @var $dataProvider CActiveDataProvider */
@@ -125,6 +121,18 @@ td .laatikko:hover{
 
    <!--<input type="text" id="totalForCut" class="form-control">-->
 
+        <!-- begin: .tray-center -->
+        <div class="tray-center">
+
+	   <?php echo CHtml::link('','/index.php/tyovuoroot/index?tyovuorot=fullscreen',array('class'=>'pull-right btn btn-primary myBgColors btn-sm ad ad-screen-full')); ?>
+	   <h2 class="myBgColors p5"> <i class="fa fa-table"></i> <?php echo Yii::t('main','Työvuorot'); ?> </h2>
+
+            <div class="admin-form">
+              <div class="panel heading-border">
+                <div class="panel-body bg-light">
+                 <div class="row">
+
+
 
    <div class="row pull-right">
 	<i id="trash"></i> 
@@ -147,7 +155,7 @@ td .laatikko:hover{
    $criteria->condition = " aktiivinen='1' ";
 
     $list = CHtml::listData(Tyontekijat::model()->findAll($criteria), 'id', 'tekijan_nimi');
-    echo '<select name="Tekija[]" id="tyontekijat" class="selectpicker" multiple title="Työntekijät">';
+    echo '<select name="Tekija[]" id="tyontekijat" class="mult" multiple title="Työntekijät">';
     foreach($list as $key=>$val){
        if(isset(Yii::app()->session['Tekija']) and in_array($key,Yii::app()->session['Tekija']))
        	 echo '<option value="'.$key.'" selected>'.$val.'</option>';
@@ -166,13 +174,25 @@ td .laatikko:hover{
 
 </div>
 
+                 </div>
+                </div>
+              </div>
+            </div>
 
-<br>
+        <!-- loppu: .tray-center -->
+        </div>
+
 
 <?php if(!empty($from) and !empty($to) and count(Yii::app()->session['Tekija']) > 0 and Yii::app()->session['Tekija'][0] != 0) : ?>
-<div class="row tvuoro">
+
+            <div class="admin-form">
+              <div class="panel heading-border">
+                <div class="panel-body bg-light">
+                 <div class="row">
+
+<div class="tvuoro table-responsive">
   <table class="table table-striped table-condensed table-bordered">
-     <thead>
+     <thead class="">
      <tr>
      <th></th>
         <?php 
@@ -213,14 +233,14 @@ td .laatikko:hover{
 	    if(date('N', strtotime($date)) == 7)
 	    {
   	    echo '<tr>';
-  		echo '<td style="background: #669999;color: white" class="text-center viikkoRivi fixed-column"><b>'.Yii::t('main', 'Viikko').' '.date("W",strtotime($date)).'</b></td>';
+  		echo '<td style="background: #669999;color: white" class="text-center viikkoRivi myBgColors fixed-column"><b>'.Yii::t('main', 'Viikko').' '.date("W",strtotime($date)).'</b></td>';
 		foreach($tt as $t){
 		 $vktyoaika = '';
 		 $ts = Tyosuhdet::model()->find(" tid = '".$t->id."' ");
 		 if(isset($ts->id) and !empty($ts['vktyoaika']))
 		  $vktyoaika = $ts['vktyoaika'];
 
-		  echo '<td style="background: #669999;color: white" class="viikkoRivi text-center" id="vk_'.date("W",strtotime($date)).'_'.$t->id.'">';
+		  echo '<td style="background: #669999;color: white" class="viikkoRivi myBgColors text-center" id="vk_'.date("W",strtotime($date)).'_'.$t->id.'">';
 		  $kokoViikko = '';
 		  $vko = '';
 		  $vko = date("W",strtotime($date));
@@ -247,9 +267,9 @@ td .laatikko:hover{
      <tfoot>
         <?php
   	    echo '<tr>';
-  		echo '<td style="background: #669999;color: white" class="text-center viikkoRivi fixed-column"></td>';
+  		echo '<td style="background: #669999;color: white" class="text-center viikkoRivi myBgColors fixed-column"></td>';
 		foreach($tt as $t){
-		  echo '<td style="background: #669999;color: white" class="text-center viikkoRivi fromto_'.$t->id.'" />';
+		  echo '<td style="background: #669999;color: white" class="text-center viikkoRivi myBgColors fromto_'.$t->id.'" />';
 		  $this->renderPartial('//tyovuoroot/fromto',array('tid'=>$t->id));
 		  echo '</td>';
 		}
@@ -258,9 +278,18 @@ td .laatikko:hover{
      </tfoot>
   </table>
 </div>
+
+                 </div>
+                </div>
+              </div>
+            </div>
+
+
 <?php endif; ?>
 
 
+
+	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/bootstrap.modal.js"></script>
 
 	<div id="showres" class="modal fade" tabindex="-1" role="dialog"></div>
 	<?php Yii::app()->clientScript->registerPackage('fixedTable'); ?>
@@ -270,7 +299,10 @@ td .laatikko:hover{
 <script type="text/javascript">
 $(document).ready(function(){
 
-
+$('.mult').selectpicker({
+      style: 'gui-input',
+      //size: 4
+  });
 
 
 $('#deselAll').click(function(){
@@ -306,7 +338,7 @@ $(function () {
 
     var onResize = function () {
         var oSettings = dataTable.fnSettings();
-        oSettings.oScroll.sY = tableHeight()-120; 
+        oSettings.oScroll.sY = tableHeight()-340; 
         dataTable.fnDraw();
     };
 

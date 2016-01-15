@@ -97,11 +97,13 @@ if(isset(Yii::app()->user->nimi))
 
 <body class="sb-l-o sb-r-c onload-check sb-l-m sb-l-disable-animation">
 
-<?php if($curpage == 'tyovuoroot/index') : ?>
+<?php  if($curpage == 'tyovuoroot/index' and isset($_GET['tyovuorot']) and $_GET['tyovuorot'] == 'fullscreen') : ?>
 	<?php echo ''; ?>
 <?php  else : ?>
 	<?php echo $this->renderPartial('//site/navbar'); ?>
 <?php  endif; ?>
+
+
 
 <div class="container-fluid">
 
