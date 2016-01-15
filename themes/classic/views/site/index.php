@@ -673,22 +673,16 @@ $kysymykset[] = array(
         <!-- footer Center-->
         <footer class="footer-center">
             <div class="container-fluid">
+
                 <!-- Info Top - Footer Center-->
+
                 <div class="row">
                    <div class="col-md-3 col-xs-6 item-center">
-                        <h3>020 236 5899</h3>
+                        <h3>+358 40 761 4366</h3>
 
                         <a href="#">
                         <i class="fa fa-phone"></i>
                         <h4>Soita</h4>
-                        </a>
-                   </div>
-                   <div class="col-md-3 col-xs-6 item-center">
-                        <h3><a href="#">Myynti</a></h3>
-
-                        <a href="#">
-                        <i class="fa fa-comment"></i>
-                        <h4>Live Chat</h4>
                         </a>
                    </div>
                    <div class="col-md-3 col-xs-6 item-center">
@@ -699,13 +693,20 @@ $kysymykset[] = array(
                         <h4>Lähetä viesti</h4>
                         </a>
                    </div>
+<!--
+                   <div class="col-md-3 col-xs-6 item-center">
+                        <h3><a href="#">Myynti</a></h3>
+
+                        <a href="#">
+                        <i class="fa fa-comment"></i>
+                        <h4>Live Chat</h4>
+                        </a>
+                   </div>
                    <div class="col-md-3 col-xs-6 item-center">
                         <h3>Some</h3>
-                                                <!-- Menu-->
+
                         <ul class="social">
-                            <!-- <li data-toggle="tooltip" title data-original-title="Facebook">
-                                <a href="#" target="_blank"><i class="fa fa-facebook"></i></a>
-                            </li> -->
+
                             <li data-toggle="tooltip" title data-original-title="Twitter">
                                 <a href="#" target="_blank"><i class="fa fa-twitter"></i></a>
                             </li>
@@ -713,9 +714,11 @@ $kysymykset[] = array(
                                 <a href="#" target="_blank"><i class="fa fa-youtube"></i></a>
                             </li>
                         </ul>
-                        <!-- End Menu-->
-                   </div>
+
+
+-->
                 </div>
+
                 <!-- End Info Top - Footer Center-->
 
 
@@ -724,6 +727,7 @@ $kysymykset[] = array(
         <!-- End footer Center-->
 
         <!-- footer bottom-->
+
         <footer class="footer-bottom">
             <div class="container">
                <div class="row">
