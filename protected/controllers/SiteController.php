@@ -25,7 +25,7 @@ class SiteController extends Controller
 	{
 		return array(
 			array('allow', 
-				'actions'=>array('lomake_tarjouspyynto'),
+				'actions'=>array('lomake_tarjouspyynto', 'lomake_testiryhma'),
 				'users'=>array('*'),
 			),
 			array('allow', 
@@ -99,6 +99,11 @@ class SiteController extends Controller
 		}
 		$this->render('etusivu');
 
+	}
+
+	public function actionLomake_testiryhma()
+	{
+		$this->render('lomake_testiryhma');
 	}
 
 	public function actionLomake_tarjouspyynto()

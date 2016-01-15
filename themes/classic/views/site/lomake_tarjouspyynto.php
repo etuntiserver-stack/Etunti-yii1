@@ -1,4 +1,6 @@
 <?php
+error_reporting(E_ALL ^ ( E_NOTICE | E_WARNING | E_DEPRECATED | E_STRICT));
+
 // TYPE-kentän valuet: text, email, number, textarea, select, hidden, submit, checkbox, radio
 // validointi tulee tämän mukaan
 
@@ -390,4 +392,4 @@ $kentat[] = array(
 );
 
 $tarjouspyynto = new lomake($kentat, $asetukset);
-//$tarjouspyynto->form();
+$tarjouspyynto->form();
