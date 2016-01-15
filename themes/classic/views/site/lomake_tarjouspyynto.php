@@ -325,7 +325,7 @@ $asetukset = array(
     'URL' => __FILE__,
 );
 $asetukset['email'][] = array(
-    'osoite' => 'tuki@etunti.fi',
+    'osoite' => 'veiko.poldkivi@etunti.fi',
     'kopio' => '',
     'otsikko' => 'tarjouspyynto: [Nimi]',
     'lahettaja' => '',
