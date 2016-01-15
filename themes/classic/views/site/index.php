@@ -657,6 +657,7 @@ $kysymykset[] = array(
                             </form> -->
                         </div>
                         <div class="col-md-6 col-sm-7">
+			  <?php $this->renderPartial('/site/lomake_testiryhma'); ?>
                           <?php //include Yii::app()->request->baseUrl.'/assets_classic/inc/lomake_testiryhma.php'; ?>
                           <?php //include 'inc/test.php'; ?>
                         </div>
