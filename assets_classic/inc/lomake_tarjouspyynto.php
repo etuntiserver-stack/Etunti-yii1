@@ -80,4 +80,4 @@ $kentat[] = array(
 );
 
 $tarjouspyynto = new lomake($kentat, $asetukset);
-$tarjouspyynto->form();
+//$tarjouspyynto->form();
