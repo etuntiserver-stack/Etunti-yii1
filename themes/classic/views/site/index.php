@@ -48,10 +48,10 @@
                     <!-- Login-->
                     <div class="col-sm-5 col-md-4">
                         <h4>Kirjaudu</h4>
-                        <form>
-                            <input type="text" placeholder="Domain" required>
-                            <input type="text" placeholder="Käyttäjätunnus" required>
-                            <input type="password" placeholder="Salasana" required>
+                        <form action="index.php/user/login" method="POST">
+                            <input type="text" name="UserLogin[domain]" placeholder="Domain" required>
+                            <input type="text" name="UserLogin[username]" placeholder="Käyttäjätunnus" required>
+                            <input type="password" name="UserLogin[password]" placeholder="Salasana" required>
                             <input type="submit" class="btn btn-lg" value="Kirjaudu">
                         </form>
                     </div>
