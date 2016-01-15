@@ -49,7 +49,6 @@ echo	'<input type=hidden id=Year value='.$year.'>';
 echo	'<input type=hidden id=number value='.cal_days_in_month(CAL_GREGORIAN, $month, $year).'>'; 
 ?>
 
-<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/verkko.css" />
 
 
         <!-- begin: .tray-center -->
@@ -79,7 +78,14 @@ echo	'<input type=hidden id=number value='.cal_days_in_month(CAL_GREGORIAN, $mon
 
 <div class="row">
  <div class="col-sm-10">
-  <TABLE id="verkko" class="">
+
+            <div class="admin-form">
+              <div class="panel heading-border">
+                <div class="panel-body bg-light">
+                 <div class="row">
+
+<div class="table-responsive">
+  <TABLE id="verkko" class="table table-bordered">
   <?php 
   echo '<TR>';
   echo '<TH>Nimi</TH>';
@@ -117,7 +123,7 @@ echo	'<input type=hidden id=number value='.cal_days_in_month(CAL_GREGORIAN, $mon
 
      if($this->pyhat($thisDate))
      {
-       echo '<TD id="riv_'.$thisDate.$v->id.'" class="muokka viikkonloppu" method="'.$id.'" thisDate='.$thisDate.' thisTid='.$v->id.'>'.$st0.'</TD>';
+       echo '<TD id="riv_'.$thisDate.$v->id.'" class="muokka myBgColors" method="'.$id.'" thisDate='.$thisDate.' thisTid='.$v->id.'>'.$st0.'</TD>';
      } else {
        echo '<TD id="riv_'.$thisDate.$v->id.'" '.$style.' class="muokka" method="'.$id.'" thisDate='.$thisDate.' thisTid='.$v->id.'>'.$st0.'</TD>';
      }
@@ -127,6 +133,12 @@ echo	'<input type=hidden id=number value='.cal_days_in_month(CAL_GREGORIAN, $mon
   }
   ?>
   </TABLE>
+</div>
+
+                 </div>
+                </div>
+              </div>
+            </div>
 
  </div>
  <div class="col-sm-2">
@@ -143,7 +155,7 @@ echo	'<input type=hidden id=number value='.cal_days_in_month(CAL_GREGORIAN, $mon
     echo '
     <div class="form-inline valikot">
 	<input type=radio name="valikko" class="valikko" value="'.$expl[0].'//'.$expl[2].'//'.$expl[1].'" '.$checked.'> 
-	<span '.$back.' class="col-sm-1 btn btn-xs btn-group btn-group-justified">'.$expl[0].'</span>  '.$expl[1].'
+	<span class="col-sm-1 btn btn-xs btn-group btn-primary btn-group-justified myBgColors">'.$expl[0].'</span>  '.$expl[1].'
     </div>';
   }
  ?>

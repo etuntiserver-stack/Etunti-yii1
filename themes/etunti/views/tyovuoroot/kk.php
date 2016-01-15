@@ -49,7 +49,6 @@ echo	'<input type=hidden id=Year value='.$year.'>';
 echo	'<input type=hidden id=number value='.cal_days_in_month(CAL_GREGORIAN, $month, $year).'>'; 
 ?>
 
-<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/verkko.css" />
 
 
         <!-- begin: .tray-center -->
@@ -74,9 +73,14 @@ echo	'<input type=hidden id=number value='.cal_days_in_month(CAL_GREGORIAN, $mon
 <br>
 
 
-<div id="taulukkoPaa">
+            <div class="admin-form">
+              <div class="panel heading-border">
+                <div class="panel-body bg-light">
+                 <div class="row">
 
-  <TABLE id="verkko" class="">
+
+<div class="table-responsive" id="taulukkoPaa">
+  <TABLE id="verkko" class="table table-bordered">
   <?php 
 
   echo '<TR>';
@@ -120,5 +124,12 @@ echo	'<input type=hidden id=number value='.cal_days_in_month(CAL_GREGORIAN, $mon
   }
   ?>
   </TABLE>
-
 </div>
+
+
+                 </div>
+                </div>
+              </div>
+            </div>
+
+
