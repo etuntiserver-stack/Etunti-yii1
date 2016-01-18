@@ -18,9 +18,9 @@
 .tb .col10{ width: 7%; }
 .tb .col11{ width: 7%; }
 .tb .col12{ width: 7%; }
-.tb .col13{ width: 24%; text-align: left; }
-.tb .col14{ width: 24%; text-align: left; }
-.tb .col15{ width: 24%; text-align: left; }
+.tb .col13{ width: 23%; text-align: left; }
+.tb .col14{ width: 23%; text-align: left; }
+.tb .col15{ width: 23%; text-align: left; }
 </style>
 
 
