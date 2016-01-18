@@ -13,7 +13,6 @@
   foreach($m as $v)
   {
 	echo 
-	'<div class="well small">'.
 		$v->getAttributeLabel('pvm').': '.$v->pvm.'<br>'.
 		$v->getAttributeLabel('syy').': '.$v->syy.'<br>'.
 		$v->getAttributeLabel('korvaus').': '.$v->korvaus.'<br>';
@@ -25,7 +24,6 @@
 	  	'confirm' => 'Oletko varmaa?')
 	  );
 	}
-	echo '</div>';
 
 	if($v->id)
 	echo '<hr>';
