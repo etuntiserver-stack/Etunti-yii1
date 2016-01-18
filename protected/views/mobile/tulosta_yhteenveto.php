@@ -7,12 +7,12 @@
 
 .tb .col1{ width: 28%; text-align: left; }
 .tb .col2{ width: 10%; }
-.tb .col3{ width: 10%; }
-.tb .col4{ width: 10%; }
-.tb .col5{ width: 10%; }
-.tb .col6{ width: 10%; }
-.tb .col7{ width: 10%; }
-.tb .col8{ width: 10%; }
+.tb .col3{ width: 7%; }
+.tb .col4{ width: 7%; }
+.tb .col5{ width: 7%; }
+.tb .col6{ width: 7%; }
+.tb .col7{ width: 7%; }
+.tb .col8{ width: 7%; }
 </style>
 
 <table id="ylataulu">
