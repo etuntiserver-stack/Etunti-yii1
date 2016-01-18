@@ -44,7 +44,7 @@
 
 <tr>
 
-	<td>
+	<td class="col1">
 		<b class="link fa fa-caret-square-o-down showKuka text-danger" data-toggle="collapse" id="<?php echo 'kohde_'.$kohdenID; ?>" for="<?php echo 'kohde_'.$kohdenID; ?>" data-target="<?php echo '#kohdeshow_'.$kohdenID; ?>"></b>&nbsp;
 
 		<?php echo CHtml::encode($kohde_kannasta); ?>
@@ -60,13 +60,13 @@
 	$tas = explode(",",Yii::app()->user->adminPaketti);
 	if(in_array('2',$tas)) {
 	$total_sunniteltu = $this->renderPartial('//mobile/suunniteltu',array('id'=>$kohdenID,'kohde_tid'=>'kohde','from'=>$from,'to'=>$to),true);
-	echo '<td>'.$this->sprint($total_sunniteltu).'</td>';
+	echo '<td class="col2">'.$this->sprint($total_sunniteltu).'</td>';
 	}
 	?>
 
-	<td><?php echo $this->sprint($lu->l_tunnit); ?></td>
-	<td><?php echo $this->sprint($tot1->l_tunnit+$tot2->l_tunnit); ?></td>
-	<td><?php echo $kpl; ?></td>
+	<td class="col3"><?php echo $this->sprint($lu->l_tunnit); ?></td>
+	<td class="col4"><?php echo $this->sprint($tot1->l_tunnit+$tot2->l_tunnit); ?></td>
+	<td class="col5"><?php echo $kpl; ?></td>
 
 </tr>
 

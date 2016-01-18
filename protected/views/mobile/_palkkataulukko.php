@@ -75,21 +75,21 @@
 
 <tr>
 
-	<td class="tulostus_tekija"><?php echo CHtml::encode($data->tekijan_nimi); ?></td>
-	<td><?php echo $tp; ?></td>
-	<td><?php echo $matka; ?></td>
-	<td><?php echo $return[0]; ?></td>
-	<td><?php echo $sum; ?></td>
-	<td><?php echo $return[1].$matkaIlta; ?></td>
-	<td><?php echo $sumI; ?></td>
-	<td><?php echo $return[2]; ?></td>
-	<td><?php echo $return[3]; ?></td>
-	<td><?php echo $this->num($sl); ?></td>
-	<td><?php echo $spl; ?></td>
-	<td><?php echo $this->num($ls); ?></td>
-	<td><?php echo $korv; ?></td>
-	<td><?php echo $lisatt; ?></td>
-	<td><?php echo $ennakko; ?></td>
+	<td class="tulostus_tekija col1"><?php echo CHtml::encode($data->tekijan_nimi); ?></td>
+	<td class="col2"><?php echo $tp; ?></td>
+	<td class="col3"><?php echo $matka; ?></td>
+	<td class="col4"><?php echo $return[0]; ?></td>
+	<td class="col5"><?php echo $sum; ?></td>
+	<td class="col6"><?php echo $return[1].$matkaIlta; ?></td>
+	<td class="col7"><?php echo $sumI; ?></td>
+	<td class="col8"><?php echo $return[2]; ?></td>
+	<td class="col9"><?php echo $return[3]; ?></td>
+	<td class="col10"><?php echo $this->num($sl); ?></td>
+	<td class="col11"><?php echo $spl; ?></td>
+	<td class="col12"><?php echo $this->num($ls); ?></td>
+	<td class="col13"><?php echo $korv; ?></td>
+	<td class="col14"><?php echo $lisatt; ?></td>
+	<td class="col15"><?php echo $ennakko; ?></td>
 </tr>
 
 	

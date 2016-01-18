@@ -11,18 +11,16 @@ $this->breadcrumbs=array(
 
               <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-th-list"></i> <?php echo Yii::t('main', 'RAPORTIT'); ?> 
 	      </h2>
+	      <br><br><br><br>
+          <div class="row">
+
+            <div class="admin-form col-sm-6">
+              <div class="panel heading-border">
+		<h3 class="p10"><?php echo Yii::t('main', 'Luetut'); ?></h3>
+                <div class="panel-body bg-light">
+                 <div class="row">
 
 
-        <!-- loppu: .tray-center -->
-        </div>
-
-
-
-<br>
-
-<div class="row">
-  <div class="well col-sm-4 col-sm-offset-1 myBgColors">
-    <legend class="myBgColors p10"><?php echo Yii::t('main', 'Luetut'); ?></legend>
     <form action="#" target="_blank" method=POST>
     <input type="hidden" name="method" value="luetut">
 
@@ -82,10 +80,21 @@ $this->breadcrumbs=array(
 	   <input type="submit" class="btn btn-primary pull-right myBgColors" value="<?php echo Yii::t('main', 'Luo raportti'); ?>">
 
     </form>
-  </div>
 
-  <div class="well col-sm-4 col-sm-offset-1">
-    <legend class="myBgColors p10"><?php echo Yii::t('main', 'Toteutuneet'); ?></legend>
+                 </div>
+                </div>
+              </div>
+            </div>
+
+
+
+            <div class="admin-form col-sm-6">
+              <div class="panel heading-border">
+		<h3 class="p10"><?php echo Yii::t('main', 'Toteutuneet'); ?></h3>
+                <div class="panel-body bg-light">
+                 <div class="row">
+
+
     <form action="#" target="_blank" method=POST>
     <input type="hidden" name="method" value="toteutuneet">
 
@@ -141,5 +150,30 @@ $this->breadcrumbs=array(
 	   <input type="submit" class="btn btn-primary pull-right myBgColors" value="<?php echo Yii::t('main', 'Luo raportti'); ?>">
 
     </form>
-  </div>
-</div>
+
+
+                 </div>
+                </div>
+              </div>
+            </div>
+
+
+	  </div><!--row-->
+
+
+
+        <!-- loppu: .tray-center -->
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,39 +1,56 @@
-
+<?php ?>
+<link rel="stylesheet" type="text/css" href="css/pdf_table.css">
 <style>
-table{
-	width: 290px;
-	font-size:65%;
+#ylataulu{
+	width: 1060px;
 }
-td,th{
-	padding:3px 7px;
-	border:1px #333 solid;
-}
-.well{
-	width:150px;
-}
-.tulostus_tekija{
-	width:100px;
-}
+
+
+.tb .col1{ width: 20%; }
+.tb .col2{ width: 7%; }
+.tb .col3{ width: 7%; }
+.tb .col4{ width: 7%; }
+.tb .col5{ width: 7%; }
+.tb .col6{ width: 7%; }
+.tb .col7{ width: 7%; }
+.tb .col8{ width: 7%; }
+.tb .col9{ width: 7%; }
+.tb .col10{ width: 7%; }
+.tb .col11{ width: 7%; }
+.tb .col12{ width: 7%; }
+.tb .col13{ width: 24%; text-align: left; }
+.tb .col14{ width: 24%; text-align: left; }
+.tb .col15{ width: 24%; text-align: left; }
 </style>
 
+
+<table id="ylataulu">
+ <tr><td style="width:80%">
   <?php $asetukset=Asetukset::model()->find("id=1"); ?>
   <img src="<?php echo $asetukset->logon_polkku; ?>" height="<?php echo $asetukset->logon_korkeus; ?>">
-  <br>
+ </td><td valign="right" style="width:20%">
+  <?php echo Yii::t('main', 'Palkkataulukko'); ?>
+  <?php if(isset($from) and isset($to)) : ?>
+    <?php echo date("d.m.Y",strtotime($from)).'-'.date("d.m.Y",strtotime($to)); ?>
+  <?php endif; ?>
+ </td>
+ </tr>
+</table>
 
-<h1> <?php echo Yii::t('main', 'PALKKATAULUKKO'); ?></h1>
-<h3><?php echo date("d.m.Y",strtotime(Yii::app()->session['from']))." - ".date("d.m.Y",strtotime(Yii::app()->session['to'])); ?></h3>
+<br>
 
-<?php if(Yii::app()->session['from'] and Yii::app()->session['to']) : ?>
+<?php if($from and $to) : ?>
+<div class="tb">
   <table>
   <thead>
   <tr>
   <th><?php echo Yii::t('main', 'Työntekijä'); ?></th>
-  <th><?php echo Yii::t('main', 'Työpäiviä'); ?></th>
-  <th><?php echo Yii::t('main', 'Matkat'); ?></th>
-  <th><?php echo Yii::t('main', 'Työtunnit'); ?></th>
-  <th><?php echo Yii::t('main', 'matka+<br>tunnit yht'); ?></th>
+  <th><?php echo Yii::t('main', 'TP'); ?></th>
+  <th><?php echo Yii::t('main', 'M'); ?></th>
+  <th><?php echo Yii::t('main', 'T'); ?></th>
+  <th><?php echo Yii::t('main', 'M+<br>T yht'); ?></th>
   <th><?php echo Yii::t('main', 'Ilta'); ?></th>
-  <th><?php echo Yii::t('main', 'iltamatka+<br>iltatunnit yht'); ?></th>
+  <th><?php echo Yii::t('main', 'Im+<br>It yht'); ?></th>
   <th><?php echo Yii::t('main', 'Yö'); ?></th>
   <th><?php echo Yii::t('main', 'Su'); ?></th>
   <th><?php echo Yii::t('main', 'SL'); ?></th>
@@ -59,15 +76,15 @@ td,th{
   foreach($model as $data)
   {
 	$tids[] = $data->id;
-	$tp = $this->Tp($data->id);
-  	$sl = $this->TidfromtoSL(Yii::app()->session['from'],Yii::app()->session['to'],$data->id);
+	$tp = $this->Tp($data->id,$from,$to);
+  	$sl = $this->TidfromtoSL($from,$to,$data->id);
 	$slYht += $sl;
-  	$ls = $this->TidfromtoLS(Yii::app()->session['from'],Yii::app()->session['to'],$data->id);
+  	$ls = $this->TidfromtoLS($from,$to,$data->id);
 	$lsYht += $ls;
-  	$spl = $this->TidfromtoSPL(Yii::app()->session['from'],Yii::app()->session['to'],$data->id);
+  	$spl = $this->TidfromtoSPL($from,$to,$data->id);
 	$splYht += $spl;
 	$totalTp += $tp;
-	$this->renderPartial('_palkkataulukko',array('data'=>$data,'tp'=>$tp,'sl'=>$sl,'spl'=>$spl,'ls'=>$ls,));
+	$this->renderPartial('_palkkataulukko',array('data'=>$data,'tp'=>$tp,'sl'=>$sl,'spl'=>$spl,'ls'=>$ls,'from'=>$from,'to'=>$to));
   }
 
 	$yht[0] = 0;
@@ -80,15 +97,15 @@ td,th{
   foreach($tids as $t)
   {
 	$matka += $this->renderPartial('//mobile/tidfromtomatkat',array(
-		'from'=>Yii::app()->session['from'],
-		'to'=>Yii::app()->session['to'],
+		'from'=>$from,
+		'to'=>$to,
 		'tid'=>$t
 		),true);
 
 
-	$matkaIlta += $this->matkaIlta($t);
+	$matkaIlta += $this->matkaIlta($t,$from,$to);
 
-	$return = $this->toteutu($t,"palkkataulukko");
+	$return = $this->toteutu($t,"palkkataulukko",$from,$to);
 	$yht[0] += $return[0];
 	$yht[1] += $return[1];
 	$yht[2] += $return[2];
@@ -120,6 +137,7 @@ td,th{
   </tr>
   </tfoot>
   </table>
+</div>
 <?php endif; ?>
 
 

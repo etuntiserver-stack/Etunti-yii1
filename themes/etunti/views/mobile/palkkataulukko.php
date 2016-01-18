@@ -21,9 +21,11 @@ $this->breadcrumbs=array(
    <div class="pull-right">
     <div class="form-inline">
      <form action="#" target="_blank" class="form-group" method="POST">
-      <input type="submit" name="tulosta" class="btn btn-success btn-sm" value="PDF">
+      <input type="hidden" name="from" value="<?php echo $from; ?>">
+      <input type="hidden" name="to" value="<?php echo $to; ?>">
+      <input type="submit" name="tulosta" class="btn btn-primary btn-sm myBgColors" value="PDF">
      </form>
-     <button class="btn btn-info btn-sm btn-group" data-toggle="collapse"  data-target="#haku"><?php echo Yii::t('main', 'Extrat'); ?> <b class="caret"></b></button>
+     <button class="btn btn-primary btn-sm btn-group myBgColors" data-toggle="collapse"  data-target="#haku"><?php echo Yii::t('main', 'Extrat'); ?> <b class="caret"></b></button>
     </div>
    </div>
    <!-- tulostus -->
@@ -142,12 +144,16 @@ $this->breadcrumbs=array(
   </div>
 </div>
 
-<br>
+<?php if(isset($_POST['Tekija']) and $from and $to) : ?>
 
-<?php if($from and $to) : ?>
+            <div class="admin-form">
+              <div class="panel heading-border">
+                <div class="panel-body bg-light">
+                 <div class="row">
 
+<div class="table-responsive">
 
-  <table class="table table-striped table-bordered small">
+  <table class="table table-bordered small">
   <thead class="myBgColors">
   <tr>
   <th><?php echo Yii::t('main', 'Työntekijä'); ?></th>
@@ -243,6 +249,13 @@ $this->breadcrumbs=array(
   </tr>
   </tfoot>
   </table>
+</div>
+
+
+                 </div>
+                </div>
+              </div>
+            </div>
 
 
 <?php endif; ?>

@@ -1,25 +1,22 @@
-<style>
-table{
-	width: 100%;
-	font-size:80%;
-}
-td,th{
-	padding:3px 7px;
-	border:1px #333 solid;
-}
-</style>
+<?php /* ?>
+<link rel="stylesheet" type="text/css" href="css/pdf_table.css">
 
+<table style="width:665px">
+ <tr><td style="width:80%">
   <?php $asetukset=Asetukset::model()->find("id=1"); ?>
   <img src="<?php echo $asetukset->logon_polkku; ?>" height="<?php echo $asetukset->logon_korkeus; ?>">
-  <br>
-
-<h1><?php echo Yii::t('main', 'TOTEUTUNEET'); ?></h1>
-
-<?php if(isset(Yii::app()->session['from']) and isset(Yii::app()->session['to'])) : ?>
-<p><?php echo date("d.m.Y",strtotime(Yii::app()->session['from'])).'-'.date("d.m.Y",strtotime(Yii::app()->session['to'])); ?></p>
-<?php endif; ?>
+ </td><td valign="right" style="width:20%">
+  <?php echo Yii::t('main', 'Toteutuneet'); ?>
+  <?php if(isset(Yii::app()->session['from']) and isset(Yii::app()->session['to'])) : ?>
+    <?php echo date("d.m.Y",strtotime(Yii::app()->session['from'])).'-'.date("d.m.Y",strtotime(Yii::app()->session['to'])); ?>
+  <?php endif; ?>
+ </td>
+ </tr>
+</table>
 
 <br>
+
+<div class="tb">
 <table>
   <thead>
   <tr>
@@ -29,24 +26,17 @@ td,th{
     <th><?php echo Yii::t('main', 'Aloitus'); ?></th>
     <th><?php echo Yii::t('main', 'Lopetus'); ?></th>
     <th><?php echo Yii::t('main', 'Kesto'); ?></th>
-    <th width="170"><?php echo Yii::t('main', 'Viesti'); ?></th>
+    <th><?php echo Yii::t('main', 'Viesti'); ?></th>
   </tr>
   </thead>
   <tbody>
   <?php
   $kkesto = 0;
   foreach($model as $data){
-  /*
-  $strlen = strlen($data->kohde_kannasta);
-  if($strlen > 20)
-    $kohde = substr($data->kohde_kannasta,0,20).'..';
-  else
-    $kohde = $data->kohde_kannasta;
-  */
-  
+
   $data->loppui = date("Y-m-d H:i",strtotime($data->loppui));
   $data->aloitan = date("Y-m-d H:i",strtotime($data->aloitan));
-
+  
   $kesto = strtotime($data->loppui)-strtotime($data->aloitan);
   $kkesto += $kesto;
 
@@ -55,13 +45,13 @@ td,th{
   $viesti = $data->viesti;
 
    echo  '<tr>';
-   echo '<td>'.date("d.m",strtotime($data->aloitan)).'</td>';
-   echo '<td>'.$data->tekijan_nimi.'</td>';
-   echo '<td>'.$data->kohde_kannasta.'</td>';
-   echo '<td>'.date("H:i",strtotime($data->aloitan)).'</td>';
-   echo '<td>'.date("H:i",strtotime($data->loppui)).'</td>';
-   echo '<td>'.sprint($kesto).' <b>('.num($kesto).')</b></td>';
-   echo '<td width="170">'.$viesti.'</td>';
+   echo '<td style="width:5%">'.date("d.m",strtotime($data->aloitan)).'</td>';
+   echo '<td style="width:20%">'.$data->tekijan_nimi.'</td>';
+   echo '<td style="width:34%">'.$data->kohde_kannasta.'</td>';
+   echo '<td style="width:5%">'.date("H:i",strtotime($data->aloitan)).'</td>';
+   echo '<td style="width:5%">'.date("H:i",strtotime($data->loppui)).'</td>';
+   echo '<td style="width:5%">'.sprint($kesto).' <b>('.num($kesto).')</b></td>';
+   echo '<td style="width:27%">'.$viesti.'</td>';
    echo '</tr>';
   }
   ?>
@@ -78,3 +68,5 @@ td,th{
   </tr>
   </tfoot>
 </table>
+</div>
+<?php */ ?>

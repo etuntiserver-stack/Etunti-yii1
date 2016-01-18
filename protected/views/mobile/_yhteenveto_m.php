@@ -26,22 +26,15 @@
 
 <tr>
 
-	<td>
+	<td class="col1">
 		<?php 
 			$tnimi = Tyontekijat::model()->findbypk($data->tid); 
 			echo $tnimi->tekijan_nimi;
 		?>
 	</td>
-	<td><?php echo $this->sprint($data->l_tunnit); ?></td>
-	<td><?php echo $this->sprint($totatl_t); ?></td>
-<?php
-/*
-	<td><?php echo $totalTp; ?></td>
-	<td><?php echo $this->sprint($totalIlta); ?></td>
-	<td><?php echo $this->sprint($totalYo); ?></td>
-	<td><?php echo $this->sprint($totalSu); ?></td>
-*/
-?>
+	<td class="col2"><?php echo $this->sprint($data->l_tunnit); ?></td>
+	<td class="col3"><?php echo $this->sprint($totatl_t); ?></td>
+
 </tr>
 
 	

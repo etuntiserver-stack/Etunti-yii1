@@ -1,24 +1,37 @@
-
+<?php ?>
+<link rel="stylesheet" type="text/css" href="css/pdf_table.css">
 <style>
-table{
-	font-size: 80%;
-	width: 290px;
-	font-size: 80%;
+#ylataulu{
+	width: 710px;
 }
-td,th{
-	padding:3px 7px;
-	border:1px #333 solid;
-}
+
+.tb .col1{ width: 28%; text-align: left; }
+.tb .col2{ width: 10%; }
+.tb .col3{ width: 10%; }
+.tb .col4{ width: 10%; }
+.tb .col5{ width: 10%; }
+.tb .col6{ width: 10%; }
+.tb .col7{ width: 10%; }
+.tb .col8{ width: 10%; }
 </style>
 
+<table id="ylataulu">
+ <tr><td>
   <?php $asetukset=Asetukset::model()->find("id=1"); ?>
   <img src="<?php echo $asetukset->logon_polkku; ?>" height="<?php echo $asetukset->logon_korkeus; ?>">
-  <br>
+ </td><td valign="right" style="width:20%">
+  <?php echo Yii::t('main', 'Yhteenveto tunnit'); ?>
+  <?php if(isset($from) and isset($to)) : ?>
+    <?php echo date("d.m.Y",strtotime($from)).'-'.date("d.m.Y",strtotime($to)); ?>
+  <?php endif; ?>
+ </td>
+ </tr>
+</table>
 
-<h1> <?php echo Yii::t('main', 'YHTEENVETO TUNNIT'); ?></h1>
-<h3><?php echo date("d.m.Y",strtotime($from))." - ".date("d.m.Y",strtotime($to)); ?></h3>
+<br>
 
 
+<div class="tb">
   <table>
   <thead>
   <tr>
@@ -157,7 +170,7 @@ td,th{
   </tr>
   </tfoot>
   </table>
-
+</div>
 
 
 
