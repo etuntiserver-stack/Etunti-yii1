@@ -92,6 +92,10 @@ class SiteController extends Controller
 
 	public function actionEtusivu()
 	{
+
+		if(isset($_POST['currentBody']))
+		Yii::app()->user->setState('currentBody',$_POST['currentBody']);
+		
 		if(isset($_GET['theme']))
 		{
 		  Yii::app()->user->setState('user_theme',$_GET['theme']);
