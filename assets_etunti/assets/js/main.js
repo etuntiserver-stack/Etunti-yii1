@@ -59,6 +59,24 @@ var Core = function(options) {
          // Toggle sidebar state(open/close)
          Body.toggleClass(options.collapse).removeClass('sb-r-o').addClass('sb-r-c');
          triggerResize();
+
+	/* ROMAN */
+	 var currentBody = $('body').attr("class");
+	 $.ajax({
+	   url: location.protocol + "//" + location.host + '/index.php/site/etusivu',
+	   data: { currentBody : currentBody },
+	   type:'POST',
+	   success:function(data){
+		//alert(data)
+	   },
+	   error:function(data){
+	  	console.log(data); 
+	   }
+	 });
+	/* ROMAN */
+
+
+
       };
 
       // SideBar Right Toggle Function

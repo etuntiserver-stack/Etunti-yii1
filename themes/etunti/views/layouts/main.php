@@ -95,7 +95,7 @@ if(isset(Yii::app()->user->nimi))
 	<title><?php echo CHtml::encode($this->pageTitle); ?></title>
 </head>
 
-<body class="sb-l-o sb-r-c onload-check sb-l-m sb-l-disable-animation">
+<body class="<?php if(isset(Yii::app()->user->currentBody)) echo Yii::app()->user->currentBody; ?>">
 
 <?php  if($curpage == 'tyovuoroot/index' and isset($_GET['tyovuorot']) and $_GET['tyovuorot'] == 'fullscreen') : ?>
 	<?php echo ''; ?>
