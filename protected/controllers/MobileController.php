@@ -33,7 +33,7 @@ class MobileController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin', 'delete', 'create', 'update', 'index', 'index_a', 'view', 'updatetime', 'showkohteet', 'yhteenveto', 'kyhteenveto', 'yhteenveto_m', 'historia', 'poistaKohde', 'total_suunniteltu', 'total_toteutu', 'total_luettu', 'kesto', 'index_ajax', 'raportit', 'uusirivi', 'palkkataulukko', 'tidfromtomatkat', 'tidfromtoSL', 'tidfromtoSPL', 'tyobykohde', 'asiakas_hyvaksyminen', 'kohdebytekija' ,'kyhteenveto_tuntemattomat'),
+				'actions'=>array('admin', 'delete', 'create', 'update', 'index', 'index_a', 'view', 'updatetime', 'showkohteet', 'yhteenveto', 'kyhteenveto', 'yhteenveto_m', 'historia', 'poistaKohde', 'total_suunniteltu', 'total_toteutu', 'total_luettu', 'kesto', 'index_ajax', 'raportit', 'uusirivi', 'palkkataulukko', 'tidfromtomatkat', 'tidfromtoSL', 'tidfromtoSPL', 'tyobykohde', 'asiakas_hyvaksyminen', 'kohdebytekija' ,'kyhteenveto_tuntemattomat', 'laskutettu'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -474,6 +474,55 @@ function num($val){
 		$this->loadModel($_POST['id'])->delete();
 		Toteutuneet::model()->deleteAll(" kid='".$_POST['id']."' ");
 	}
+
+
+
+
+	public function actionLaskutettu()
+	{
+
+		if(isset($_POST['ajax']) and isset($_POST['id']))
+		{
+		Mobile::model()->updatebypk($_POST['id'], array('laskutettu'=>$_POST['las']));
+		echo $_POST['id']." ".$_POST['las'];
+		exit;
+		}
+
+
+       		$criteria = new CDbCriteria();
+        	$criteria->order = " 
+		DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i') < DATE_ADD(NOW(), interval 4 hour) AND status IN (1,2,10) AND loppui='' DESC, 
+		time and status IN (1,2,10) AND loppui='' DESC, 
+		time DESC ";
+
+	        $criteria->condition = " admin!=1 AND status=3 ";
+
+		if(isset($_POST['tekijaPaaSivulla']) and !empty($_POST['tekijaPaaSivulla']))
+	        $criteria->addCondition (" tid = '".$_POST['tekijaPaaSivulla']."' ");
+
+		if(isset($_POST['etsi_kohteet']) and !empty($_POST['etsi_kohteet']))
+	        $criteria->addCondition (" kohde_kannasta LIKE '%".$_POST['etsi_kohteet']."%' ");
+
+		if(isset($_POST['fromP']) and isset($_POST['toP']) and !empty($_POST['fromP']) and !empty($_POST['toP']))
+	        $criteria->addCondition ("DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$_POST['fromP']."' AND '".$_POST['toP']."' ");
+
+		if(isset($_POST['laskutettu']) and $_POST['laskutettu'] == '1')
+	        $criteria->addCondition (" laskutettu = '1' ");
+
+		if(isset($_POST['laskutettu']) and $_POST['laskutettu'] == '0')
+	        $criteria->addCondition (" laskutettu = '0' ");
+
+
+		$dataProvider=new CActiveDataProvider('Mobile', array(
+			'criteria'=>$criteria,
+			//'pagination'=>false
+		));
+
+		$dataProvider->pagination->pageSize = 50;
+
+		$this->render('laskutettu', array('dataProvider' => $dataProvider));
+	}
+
 
 
 	public function actionIndex()
