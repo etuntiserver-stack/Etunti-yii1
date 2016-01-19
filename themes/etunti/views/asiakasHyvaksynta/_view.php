@@ -26,7 +26,7 @@ $tilanne = '';
 if($data->status == 1)
 $tilanne = Yii::t('main','Lähetetty');
 elseif($data->status == 3)
-$tilanne = Yii::t('main','Hyväksyty');
+$tilanne = Yii::t('main','Hyväksytty');
 elseif($data->status == 2)
 $tilanne = Yii::t('main','Hylätty');
 ?>

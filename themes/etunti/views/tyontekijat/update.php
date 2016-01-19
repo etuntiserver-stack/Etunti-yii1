@@ -39,13 +39,24 @@ exit;
         <!-- begin: .tray-center -->
         <div class="tray-center">
 
-   <!-- tulostus -->
-   <div class="pull-right">
-     <form action="tulosta?id=<?php echo $model->id; ?>" target="_blank" method="POST">
-      <input type="submit" name="tulosta" class="btn btn-success btn-sm myBgColors" value="PDF">
-     </form>
-   </div>
-   <!-- tulostus -->
+	   <div class="pull-right">
+	    <div class="form-inline">
+	     <?php      
+ 		echo CHtml::link("poista", '#', array(
+		'submit'=>array('delete', "id"=>$model->id), 
+		'confirm' => 'Haluatko varmaasti poistaa?',
+		'class'=>'btn btn-primary btn-group btn-sm myBgColors'
+		));
+	     ?>
+
+  	     <!-- tulostus -->
+     	      <form action="tulosta?id=<?php echo $model->id; ?>" class="form-group" target="_blank" method="POST">
+      	      <input type="submit" name="tulosta" class="btn btn-success btn-sm myBgColors" value="PDF">
+     	      </form>
+  	     <!-- tulostus -->
+	    </div>
+           </div>
+
 
 	   <h2 class="myBgColors p10"> <i class="fa fa-male"></i> <?php echo $model->tekijan_nimi; ?> </h2>
 

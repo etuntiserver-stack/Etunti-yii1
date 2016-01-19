@@ -1,12 +1,19 @@
 <?php
-$this->menu=array(
-	array('label'=>'Poista kohde', 'url'=>'#', 'linkOptions'=>array('submit'=>array('delete','id'=>$model->id),'confirm'=>'Oletko varmaa?')),
-);
+
 ?>
 
         <!-- begin: .tray-center -->
         <div class="tray-center">
 
+	   <div class="pull-right">
+	   <?php      
+ 		echo CHtml::link("poista", '#', array(
+		'submit'=>array('delete', "id"=>$model->id), 
+		'confirm' => 'Haluatko varmaasti poistaa?',
+		'class'=>'btn btn-primary myBgColors'
+		));
+	   ?>
+	   </div>
 	   <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-home"></i> <?php echo $model->osoite; ?> </h2>
 
 

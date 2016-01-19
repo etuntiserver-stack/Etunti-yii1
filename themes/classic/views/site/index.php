@@ -686,7 +686,7 @@ $kysymykset[] = array(
                         </a>
                    </div>
                    <div class="col-md-3 col-xs-6 item-center">
-                        <h3><a href="mailto:myynti@etunti.fi">myynti@etunti.fi</a></h3>
+                        <h3><a href="mailto:myynti@etunti.fi">veiko.poldkivi@etunti.fi</a></h3>
 
                        <a href="#">
                         <i class="fa fa-envelope"></i>
