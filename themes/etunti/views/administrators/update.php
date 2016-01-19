@@ -12,7 +12,7 @@ if(isset($_POST['uploaded']))
   $uploaddir = Yii::app()->basePath.'/../img/admins/'.Yii::app()->user->domain.'/';
   $uploadfile = $uploaddir . basename($model->id.'.jpg');
   if (move_uploaded_file($_FILES['file']['tmp_name'], $uploadfile)) {
-     echo "";
+     $this->redirect(Yii::app()->request->urlReferrer);
   } 
 }
 
@@ -37,54 +37,37 @@ if(isset($_POST['uploaded']))
   		  </div>
 
 
-                 </div>
-                </div>
-              </div>
-            </div>
-
-        <!-- loppu: .tray-center -->
-        </div>
 
 
 
-
-<div class="pull-right">
- <div class="kuva form-inline">
-  <label><?php echo Yii::t('main', 'Järjestelmävalvojan kuva'); ?></label>
+<div class="row">
+ <br>
+ <div class="admin-form col-sm-5">
   <form id="uploadimage" action="#" class="form-input" method="post" enctype="multipart/form-data">
-   <input type="hidden" name="uploaded" value="true" />
-   <input type="file" name="file" id="i_file" data-icon="false" data-buttonText="Etsi kuvaa" class="form-group" />
-   <input type="submit" value="Lataa" class="btn btn-primary btn-group" id="kuvaUP" /></button>
+     <div class="section input-group">
+       <label class="field prepend-icon append-button file">
+         <span class="button"><?php echo Yii::t('main', 'Valitse kuva'); ?></span>
+         <input type="file" class="gui-file" name="file" id="i_file" onChange="document.getElementById('uploader1').value = this.value;">
+         <input type="text" class="gui-input" name="uploaded" id="uploader1" placeholder="Valitse tiedosto..">
+         <label class="field-icon">
+          <i class="fa fa-upload"></i>
+         </label>
+       </label>
+	<span class="input-group-btn">
+          <input type="submit" value="Lataa" class="btn btn-primary btn-group myBgColors" />
+	</span>
+    </div>
   </form>
  </div>
 </div>
 
 
-                      <div class="col-md-6">
-                        <div class="section">
-                          <label class="field prepend-icon append-button file">
-                            <span class="button">Choose File</span>
-                            <input type="file" class="gui-file" name="file1" id="file1" onChange="document.getElementById('uploader1').value = this.value;">
-                            <input type="text" class="gui-input" id="uploader1" placeholder="Please Select A File">
-                            <label class="field-icon">
-                              <i class="fa fa-upload"></i>
-                            </label>
-                          </label>
-                        </div>
-                      </div>
+                 </div>
+                </div>
+              </div>
+            </div>
 
 
+        <!-- loppu: .tray-center -->
+        </div>
 
-
-
-<script type="text/javascript">
-$(document).ready(function(){
-
-
-  $("#i_file").filestyle({
-	buttonText: "Etsi kuva"
-  });
-
-
-});
-</script>
