@@ -2,17 +2,6 @@
 /* @var $this AdministratorsController */
 /* @var $model Administrators */
 
-$this->breadcrumbs=array(
-	Yii::t('main', 'Administrators')=>array('index'),
-	$model->id=>array('view','id'=>$model->id),
-	Yii::t('main', 'Päivitä'),
-);
-
-$this->menu=array(
-	array('label'=>'Hallinta', 'url'=>array('admin')),
-);
-
-
 if(isset($_POST['uploaded']))
 {
 
@@ -33,16 +22,31 @@ if(isset($_POST['uploaded']))
         <!-- begin: .tray-center -->
         <div class="tray-center">
 
-	   <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-user"></i> <?php echo Yii::t('main', 'JÄRJESTELMÄNVALVOJA PÄIVÄYS')." ID# ".$model->id; ?> </h2>
+	   <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-user"></i> <?php echo $model->adm_nimi; ?> </h2>
 
+            <div class="admin-form">
+              <div class="panel heading-border">
+                <div class="panel-body bg-light">
+                 <div class="row">
+
+		  <div class="col-sm-3">
+		  <?php echo $this->renderPartial('_form', array('model'=>$model)); ?>
+		  </div><div class="col-sm-4">
+    		  <br>
+    		  <img src="<?php echo Yii::app()->baseUrl.'/img/admins/'.Yii::app()->user->domain.'/'.$model->id; ?>.jpg" class="img-thumbnail">
+  		  </div>
+
+
+                 </div>
+                </div>
+              </div>
+            </div>
 
         <!-- loppu: .tray-center -->
         </div>
 
 
 
-<div class="row">
- <div class="col-sm-12">
 
 <div class="pull-right">
  <div class="kuva form-inline">
@@ -55,18 +59,22 @@ if(isset($_POST['uploaded']))
  </div>
 </div>
 
- </div>
-</div>
+
+                      <div class="col-md-6">
+                        <div class="section">
+                          <label class="field prepend-icon append-button file">
+                            <span class="button">Choose File</span>
+                            <input type="file" class="gui-file" name="file1" id="file1" onChange="document.getElementById('uploader1').value = this.value;">
+                            <input type="text" class="gui-input" id="uploader1" placeholder="Please Select A File">
+                            <label class="field-icon">
+                              <i class="fa fa-upload"></i>
+                            </label>
+                          </label>
+                        </div>
+                      </div>
 
 
-<?php echo $this->renderPartial('_form', array('model'=>$model)); ?>
 
-  <div class="col-sm-8">
-   <div class="col-sm-3">
-    <img src="<?php echo Yii::app()->baseUrl.'/img/admins/'.Yii::app()->user->domain.'/'.$model->id; ?>.jpg" class="thumbnail">
-   </div>
-  </div>
-</div><!-- form -->
 
 
 <script type="text/javascript">

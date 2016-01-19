@@ -148,7 +148,7 @@ public function actionImei($dom)
 
 	    	if(empty($ttekija->id))
 	    	{
-              	   $this->_sendResponse(200, "eiLoytyTekija//Tämän työntekijä ei löydy");
+              	   $this->_sendResponse(200, "eiLoytyTekija//Työntekijää ei löydy");
 	         exit;
 	    	}
 
@@ -168,7 +168,7 @@ public function actionImei($dom)
 
     	if(!isset($ttekija->id))
 	{
-              	   $this->_sendResponse(200, "eiLoytyTekija//Tämän työntekijä ei löydy");
+              	   $this->_sendResponse(200, "eiLoytyTekija//Työntekijää ei löydy");
 	         exit;
 	}
 
