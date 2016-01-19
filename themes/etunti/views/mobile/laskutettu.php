@@ -188,8 +188,16 @@ $(".haemob").click(function(){
 });
 
 
+  $(".chckbxHyvaksynta").bootstrapSwitch({
+	size: "mini",
+	//onColor: "success",
+	//offColor: "warning",
+	onText: "Kyllä",
+	offText: "Ei"
+  });
 
-$(".chckbxHyvaksynta").click(function(){
+
+$('.chckbxHyvaksynta').on('switchChange.bootstrapSwitch', function(event, state) {
   $(this).each(function() {
       var label = $(this).prop("checked");
       var thisID = $(this).attr("id").split("_");
@@ -215,6 +223,10 @@ $(".chckbxHyvaksynta").click(function(){
       }
   });
 });
+
+
+
+
 
 });
 </script>
