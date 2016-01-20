@@ -111,4 +111,9 @@ h1 {
 
 #footer-body{
   background: #FE6804;
+  color: #fff;
+}
+
+#footer-body a{
+  color: #fff;
 }
