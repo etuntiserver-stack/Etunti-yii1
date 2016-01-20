@@ -1,23 +1,41 @@
-<?php
+<?php ?>
+<link rel="stylesheet" type="text/css" href="css/pdf_table.css">
+<style>
+#ylataulu{
+	width: 710px;
+}
 
+.tb .col1{ width: 3%; text-align: left; }
+.tb .col2{ width: 42%; text-align: left;}
+.tb .col3{ width: 42%; text-align: left;}
+.tb .col4{ width: 42%; text-align: left;}
+.tb .col5{ width: 3%; }
+.tb .col6{ width: 3%; }
+.tb .col6{ width: 3%; }
+
+</style>
+
+<table id="ylataulu">
+ <tr><td>
+  <?php $asetukset=Asetukset::model()->find("id=1"); ?>
+  <img src="<?php echo $asetukset->logon_polkku; ?>" height="<?php echo $asetukset->logon_korkeus; ?>">
+ </td><td valign="right" style="width:20%">
+  <?php echo Yii::t('main', 'Yhteenveto tunnit'); ?>
+  <?php if(isset($from) and isset($to)) : ?>
+    <?php echo date("d.m.Y",strtotime($from)).'-'.date("d.m.Y",strtotime($to)); ?>
+  <?php endif; ?>
+ </td>
+ </tr>
+</table>
+
+<br>
+
+
+
+<?php
     if(Yii::app()->session['tekija'])
        $explTekija = explode("//",Yii::app()->session['tekija']);
-
 ?>
-
-<style>
-table{
-	width: 280px;
-	font-size:70%;	
-}
-
-td{
-	padding: 2px 5px;
-	border:1px #333 solid;
-	white-space: nowrap;
-	min-height:70px;
-}
-</style>
 
 <?php if(Yii::app()->session['tekija']) : ?>
 <?php
@@ -29,21 +47,16 @@ function dateDiff($start, $end) {
   return round($diff / 86400);
 }
 
-		if(isset(Yii::app()->session['from']))
-		$from = date("d.m.Y",strtotime(Yii::app()->session['from']));
-		if(isset(Yii::app()->session['to']))
-		$to = date("d.m.Y",strtotime(Yii::app()->session['to']));
+		if(isset($from))
+		$from2 = date("d.m.Y",strtotime($from));
+		if(isset($to))
+		$to2 = date("d.m.Y",strtotime($to));
 
-		$dateDiff = dateDiff($from, $to);
+		$dateDiff = dateDiff($from2, $to2);
 ?>
 
-  <?php $asetukset=Asetukset::model()->find("id=1"); ?>
-  <img src="<?php echo $asetukset->logon_polkku; ?>" height="<?php echo $asetukset->logon_korkeus; ?>">
-  <br>
 
-  <h1><?php echo $explTekija[1]; ?></h1>
-
-
+<div class="tb">
   <table>
   <thead>
   <tr>
@@ -78,7 +91,7 @@ function dateDiff($start, $end) {
   
     $plus = "+$i day";
     $date = '';
-    $date = date("d.m.Y",strtotime($from." ".$plus));
+    $date = date("d.m.Y",strtotime($from2." ".$plus));
 
     $columnDate = date("N/d.m",strtotime($date));
     $explColDate = explode("/",$columnDate);
@@ -86,16 +99,16 @@ function dateDiff($start, $end) {
 
     echo '
     <tr>
-  	<td>'.$arrDate[$explColDate[0]].'<br> '.date("d.m",strtotime($date)).'</td>';
+  	<td class="col1">'.$arrDate[$explColDate[0]].'<br> '.date("d.m",strtotime($date)).'</td>';
   
     $tas = explode(",",Yii::app()->user->adminPaketti);
     if(in_array('2',$tas)) 
-    echo '<td >'.$this->renderPartial('//tyovuoroot/did',array('pvm'=>$date,'tid'=>$explTekija[0],'from'=>'mobiili'),true).'</td>';
+    echo '<td class="col2">'.$this->renderPartial('//tyovuoroot/did',array('pvm'=>$date,'tid'=>$explTekija[0],'from'=>'mobiili'),true).'</td>';
 
     echo '
-  	<td >'.$this->renderPartial('luetutpvmtid',array('pvm'=>$date,'tid'=>$explTekija[0],'from'=>'mobiili'),true).'</td>
-  	<td  id="'.$did.'_'.$explTekija[0].'">'.$this->renderPartial('totpvmtid',array('pvm'=>$date,'tid'=>$explTekija[0],'from'=>'mobiili'),true).'</td>
-  	<td id="yht_'.$did.'_'.$explTekija[0].'">'.$this->renderPartial('yhteensapvm',array('pvm'=>date("Y-m-d",strtotime($date)),'tid'=>$explTekija[0],'from'=>'mobiili'),true).'</td>';
+  	<td class="col3">'.$this->renderPartial('luetutpvmtid',array('pvm'=>$date,'tid'=>$explTekija[0],'from'=>'mobiili'),true).'</td>
+  	<td class="col4" id="'.$did.'_'.$explTekija[0].'">'.$this->renderPartial('totpvmtid',array('pvm'=>$date,'tid'=>$explTekija[0],'from'=>'mobiili'),true).'</td>
+  	<td class="col5" id="yht_'.$did.'_'.$explTekija[0].'">'.$this->renderPartial('yhteensapvm',array('pvm'=>date("Y-m-d",strtotime($date)),'tid'=>$explTekija[0],'from'=>'mobiili'),true).'</td>';
 
     $matka = '';
     $matka = $this->renderPartial('//mobile/tidfromtomatkat',array(
@@ -104,12 +117,12 @@ function dateDiff($start, $end) {
 		'tid'=>$explTekija[0]
 		),true);
     $yhtMatka += $matka;
-    echo '<td>'.$this->sprint($matka).'</td>';
+    echo '<td class="col6">'.$this->sprint($matka).'</td>';
 
     $tyoIlta = '';
     $tyoIlta = $this->tyoIlta($explTekija[0],date("Y-m-d",strtotime($date)));
     $yhtIlta += $tyoIlta;
-    echo '<td>'.$this->sprint($tyoIlta).'</td>';
+    echo '<td class="col7">'.$this->sprint($tyoIlta).'</td>';
 
     if($viikkoBreak == false){
        $yhtMatkaWeek += $matka;
@@ -135,7 +148,7 @@ function dateDiff($start, $end) {
     echo '<td>'.Yii::t('main', 'Yhteensä').'</td>';
     $tas = explode(",",Yii::app()->user->adminPaketti);
     if(in_array('2',$tas))
-    echo '<td>'.sprint($this->renderPartial('//mobile/suunniteltu',array('id'=>$explTekija[0],'kohde_tid'=>'tid'),true)).'</td>';
+    echo '<td>'.sprint($this->renderPartial('//mobile/suunniteltu',array('id'=>$explTekija[0],'kohde_tid'=>'tid','from'=>$from, 'to'=>$to),true)).'</td>';
     echo '<td>'.sprint($this->renderPartial('//mobile/total_luettu',array('tid'=>$explTekija[0]),true)).'</td>';
     echo '<td>'.sprint($this->renderPartial('//mobile/total_toteutu',array('tid'=>$explTekija[0]),true)).'</td>';
     echo '<td></td>';
@@ -146,5 +159,6 @@ function dateDiff($start, $end) {
   </tfoot>
 
   </table>
+</div>
 <?php endif; ?>
 

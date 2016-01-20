@@ -5,7 +5,7 @@
 	width: 710px;
 }
 
-.tb .col1{ width: 28%; text-align: left; }
+.tb .col1{ width: 3%; text-align: left; }
 .tb .col2{ width: 10%; }
 .tb .col3{ width: 7%; }
 .tb .col4{ width: 7%; }
