@@ -200,13 +200,15 @@ $(".haemob").click(function(){
 $('.chckbxHyvaksynta').on('switchChange.bootstrapSwitch', function(event, state) {
   $(this).each(function() {
       var label = $(this).prop("checked");
+      var tot = $(this).attr("tot");
       var thisID = $(this).attr("id").split("_");
+
       if(label)
       {
         $.ajax({
            url: location.protocol + "//" + location.host + '/index.php/mobile/laskutettu',
            type: "POST",
-	   data: { id : thisID[1], ajax : "true", las : "1" },
+	   data: { id : thisID[1], ajax : "true", las : "1", tot : tot },
            success: function(data){
 		console.log(data);
            }
@@ -215,12 +217,13 @@ $('.chckbxHyvaksynta').on('switchChange.bootstrapSwitch', function(event, state)
         $.ajax({
            url: location.protocol + "//" + location.host + '/index.php/mobile/laskutettu',
            type: "POST",
-	   data: { id : thisID[1], ajax : "true", las : "0" },
+	   data: { id : thisID[1], ajax : "true", las : "0", tot : tot },
            success: function(data){
 		console.log(data);
            }
         });
       }
+
   });
 });
 

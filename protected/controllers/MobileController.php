@@ -483,9 +483,13 @@ function num($val){
 
 		if(isset($_POST['ajax']) and isset($_POST['id']))
 		{
-		Mobile::model()->updatebypk($_POST['id'], array('laskutettu'=>$_POST['las']));
-		echo $_POST['id']." ".$_POST['las'];
-		exit;
+ 			if(isset($_POST['tot']) and $_POST['tot'] == '1')
+			  Toteutuneet::model()->updatebypk($_POST['id'], array('laskutettu'=>$_POST['las']));
+			else
+			  Mobile::model()->updatebypk($_POST['id'], array('laskutettu'=>$_POST['las']));
+
+			  echo $_POST['id']." ".$_POST['las'];
+			  exit;
 		}
 
 
