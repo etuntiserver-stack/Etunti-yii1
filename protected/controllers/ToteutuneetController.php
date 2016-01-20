@@ -379,18 +379,27 @@ class ToteutuneetController extends Controller
 
 		//$model = Mobile::model()->findAll($criteria);
 */
+
+		$from = '';
+		$to = '';
+		if(isset(Yii::app()->session['from']))
+		$from = Yii::app()->session['from'];
+
+		if(isset(Yii::app()->session['to']))
+		$to = Yii::app()->session['to'];
+
 		if(isset($_POST['tulosta']))
 		{
 
 	          $html2pdf = Yii::app()->ePdf->HTML2PDF('L', 'A4', 'en');
 		  $html2pdf->setDefaultFont('Arial');
-	          $html2pdf->WriteHTML($this->renderPartial('tulosta',array(),true));
+	          $html2pdf->WriteHTML($this->renderPartial('tulosta',array('from'=>$from,'to'=>$to),true));
 	          $html2pdf->Output();
 
 
 		} else {
 		  //$dataProvider->pagination->pageSize = 50;
-		  $this->render('index');
+		  $this->render('index',array('from'=>$from,'to'=>$to));
 		}
 		
 	}
