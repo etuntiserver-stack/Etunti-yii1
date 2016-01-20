@@ -4,7 +4,7 @@
 #ylataulu{
 	width: 710px;
 }
-
+.tb table .chckbxHyvaksynta{ display:none }
 .tb .col1{ width: 3%; text-align: left; }
 .tb .col2{ width: 42%; text-align: left;}
 .tb .col3{ width: 42%; text-align: left;}
@@ -12,7 +12,7 @@
 .tb .col5{ width: 3%; }
 .tb .col6{ width: 3%; }
 .tb .col6{ width: 3%; }
-
+input[type="checkbox"]{ display:none }
 </style>
 
 <table id="ylataulu">

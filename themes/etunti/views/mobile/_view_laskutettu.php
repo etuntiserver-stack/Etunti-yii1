@@ -2,6 +2,14 @@
 /* @var $this MobileController */
 /* @var $data Mobile */
 
+// onko toteumassa
+  $toteutuneet = false;
+  $tot = Toteutuneet::model()->find(" kid='".$data->id."' ");
+   if(isset($tot->id))
+   {
+      $toteutuneet = true;
+      $data = $tot;
+   }
 
  $karttaA = '';
  $karttaL = '';
@@ -175,7 +183,7 @@ else
 
 	<td><span id="kesto_<?php echo $data->id; ?>"><?php echo $this->sprint($kesto[$data->id]); ?></span></td>
 	<td><center>
-	    <input type="checkbox" class="chckbxHyvaksynta" id="laskutettu_<?php echo $data->id; ?>" <?php echo $laskutettu; ?>> 
+	    <input type="checkbox" class="chckbxHyvaksynta" id="laskutettu_<?php echo $data->id; ?>" <?php echo $laskutettu; ?> tot="<?php echo $toteutuneet; ?>"> 
 	    </center>
 	</td>
 
