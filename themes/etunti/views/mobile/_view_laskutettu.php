@@ -104,7 +104,7 @@ else
 
 <tr style="<?php echo $class; ?>" id="rivi_<?php echo $data->id; ?>">
 
-
+	<td><b><?php echo $data->id; ?></b></td>
 	<td><b><?php echo CHtml::encode(date("d.m",strtotime($data->aloitan))); ?></b></td>
 	<td><?php echo $karttaA." ".$karttaL; ?></td>
 
@@ -113,9 +113,12 @@ else
 	</td>
 
 	<td>
+	  <?php if(!$toteutuneet) : ?> 
 	  <span class="link fa fa-pencil-square-o openkohde" id="<?php echo 'kohttisID_'.$data->id; ?>" for="<?php echo 'kohtval_'.$data->id; ?>" data-toggle="collapse" data-target="<?php echo '#kshow_'.$data->id; ?>"></span>&nbsp;
 
 	  <span id="vaihto_<?php echo 'kohttisID_'.$data->id; ?>">
+	  <?php endif; ?> 
+
 	  <?php 
 	  if(!empty($data->kohdenID))
 		echo CHtml::link($data->kohde_kannasta,'/index.php/kohteet/update?id='.$data->kohdenID,array('target'=>'_blank','class'=>'text-success')); 
@@ -132,7 +135,12 @@ else
 	<td><?php echo $data->viesti; ?></td>
 
 	<td>
+	  <?php if(!$toteutuneet) : ?> 
 	  <span class="link fa fa-pencil-square-o nowrap" data-toggle="collapse" id="<?php echo 'altxt_'.$data->id; ?>" data-target="<?php echo '#alshow_'.$data->id; ?>"> <?php echo $at[$data->id]; ?></span>
+	  <?php else : ?> 
+	  <?php echo $at[$data->id]; ?>
+	  <?php endif; ?> 
+
 	  <div style="position:absolute;z-index: 2;margin-left:-100px" class="collapse" id="<?php echo 'alshow_'.$data->id; ?>">
 	    <div class="well form-inline">
 	     <?php echo '<input type="text" class="form-control form-group datetimepicker" request="aloitan" status="'.$data->status.'" id="al_'.$data->id.'" value="'.$apvm[$data->id].' '.$at[$data->id].'">'; ?>
@@ -148,13 +156,18 @@ else
 	</td>
 
 	<td>
+
+	  <?php if(!$toteutuneet) : ?> 
 	  <span class="link fa fa-pencil-square-o nowrap" data-toggle="collapse" id="<?php echo 'lptxt_'.$data->id; ?>" data-target="<?php echo '#ltshow_'.$data->id; ?>"> 
+	  <?php endif; ?> 
+
 	  <?php 
 	  if(empty($lt[$data->id])) 
 		echo ' <b class="text-success glyphicon glyphicon-plus"></b>'; 
 	  else
 	 	echo $lt[$data->id]; 
 	  ?></span>
+
 
 	  <div style="position:absolute;z-index: 2;margin-left:-100px" class="collapse" id="<?php echo 'ltshow_'.$data->id; ?>">
 	    <div class="well form-inline">

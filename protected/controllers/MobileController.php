@@ -329,14 +329,6 @@ function num($val){
 		$(document).ready(function(){
 
 
-
-
-
-
-
-
-
-
 		  $("#Kohteet_id").on('change',function(){
 
 			var kohdenID = $("#sainkohdenID").val().split("_");
@@ -350,6 +342,7 @@ function num($val){
 		           type: "POST",
 		           data: Mobile,
 		           success: function(html){
+				//console.log(html);
 				$("#vaihto_kohttisID_"+kohdenID[1]).addClass("text-success").text(thisText);
 				//alert(thisText)
 		           }
@@ -451,7 +444,12 @@ function num($val){
 			if(isset($_POST['Mobile']['kohde_kannasta']))
 			$model->tietoja=$tietoja.Yii::app()->user->nimi." (".date("d.m.Y H:i")."):\nTilanne-Kohteen muutos, vanha-".$vanha_kohde_kannasta.", uusi-".$_POST['Mobile']['kohde_kannasta'];
 
-			$model->save();
+			if(!$model->save())
+			{
+			   var_dump($model->getErrors());
+			   exit;
+			}
+
 		}
 
 		$this->render('update',array(

@@ -22,6 +22,7 @@ $forPVM = date('d.m.Y',strtotime($s->aloitan));
 	<input type="hidden" id="forDatepickerLoppuPVM" value="<?php echo date('Y-m-d H:i',strtotime($s->loppui)); ?>">
 
 
+
 	<div class="modal-dialog modal-lg">
 	    <div class="modal-content">
 		<div class="modal-header">
@@ -48,6 +49,7 @@ $forPVM = date('d.m.Y',strtotime($s->aloitan));
 		<?php echo $form->hiddenField($model,'kid',array('value'=>$s->id)); ?>
 		<?php echo $form->hiddenField($model,'tid',array('value'=>$s->tid)); ?>
 		<?php echo $form->hiddenField($model,'tekijan_nimi',array('value'=>$s->tekijan_nimi)); ?>
+		<?php echo $form->hiddenField($model,'viesti',array('value'=>$s->viesti)); ?>
 
 
 

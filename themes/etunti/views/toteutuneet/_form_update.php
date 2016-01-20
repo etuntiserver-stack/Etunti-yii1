@@ -42,6 +42,8 @@ $forPVM = date('d.m.Y',strtotime($model->aloitan));
 		<?php echo $form->hiddenField($model,'id'); ?>
 		<?php echo $form->hiddenField($model,'kid'); ?>
 		<?php echo $form->hiddenField($model,'tid'); ?>
+		<?php echo $form->hiddenField($model,'viesti'); ?>
+
 
   <div class="col-sm-12">
 	<div class="section">

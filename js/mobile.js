@@ -81,7 +81,7 @@ $(".openkohde").click(function(){
 	var thisID = $(this).attr("id");
 	var forid = $(this).attr("for");
 	var riviid = $(this).attr("for").split("_");
-	
+
         $.ajax({
            url: 'showkohteet',
            type: "POST",

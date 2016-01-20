@@ -117,7 +117,7 @@
 
                     </div>
 
-
+		Vihreät laatikkot ei voidaan muokata, koska "Tunnin hyväksyntä" sivulla oli tehtty muutokset.
 
                 </div>
               </div>
@@ -139,6 +139,7 @@
   <table class="table table-striped" id="mobileTable">
   <thead class="myBgColors">
   <tr>
+  <th><?php echo Yii::t('main', 'ID'); ?></th>
   <th><?php echo Yii::t('main', 'Päivä'); ?></th>
   <th><?php echo Yii::t('main', 'Kartta'); ?></th>
   <th><?php echo Yii::t('main', 'Työntekijä'); ?></th>
@@ -177,7 +178,7 @@
 
   <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/mobile.js"></script>
   <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/asetukset.js"></script>
-
+  <input type="hidden" id="dataChange" >
 
 <script type="text/javascript">
 $(document).ready(function(){
