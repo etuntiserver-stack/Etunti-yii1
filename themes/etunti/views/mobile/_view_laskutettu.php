@@ -83,24 +83,13 @@ else
 	$objcts = '';
 	$osoite = '';
 
-	// <-- adminPaketti
-	$obtrue = false;
-	$tas = explode(",",Yii::app()->user->adminPaketti);
-
-	if(in_array('2',$tas) and isset($data->tid) and !empty($apvmForSu[$data->id]))
- 	{
-	  $su = Tyovuoroot::model()->find(" tid='".$data->tid."' and pvm='".$apvmForSu[$data->id]."' ");
-	  if(isset($su['id']))
-	  $obtrue = true;
-	}
-	// <-- adminPaketti 
 
   $class 	= '';
   $diff 	= 0;
-  if(date('Y-m-d H:i', strtotime($data->aloitan.'+4 hour')) < date('Y-m-d H:i') and empty($data->loppui))
+  if($toteutuneet)
   {
   	$diff = strtotime(date('Y-m-d H:i'))-strtotime($data->aloitan);
-  	$class = 'border:2px red solid;';
+  	$class = 'border:2px green solid;';
   } elseif(empty($data->loppui)) {
   	$diff = strtotime(date('Y-m-d H:i'))-strtotime($data->aloitan);
   	$class = '';
