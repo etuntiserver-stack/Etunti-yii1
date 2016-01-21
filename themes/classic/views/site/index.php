@@ -261,7 +261,7 @@ tyypilliset ongelmat. Yhden ohjelman avulla pyörität yritystoimintaasi ennenn�
                             <li>Säästät 20 - 50 % yrityksesi henkilöstökuluissa</li>
                             <li>Työvuoro-ohjelmalla säästät työaikaasi 10 – 20 % ja kirjaat toistuvat työvuorot helposti</li>
                             <li>CRM -asiakuudenhallintajärjestelmän avulla hoidat asiakassuhdetta tehokkaasti</li>
-                            <li>Manager -raportointityökalulla kasvatat liikevaihtoasi jopa 5 % vuodessa</li>
+                            <li>Manager -raportointityökalulla kasvatat liikevoittoasi jopa 5 % vuodessa</li>
                             <li>Laskutusohjelmalla säästät jopa 2 työpäivää kuukaudessa</li>
                             <li>Online -varauskalenterin avulla saat lisää myyntiä vaivattomasti</li>
                         </ul>
