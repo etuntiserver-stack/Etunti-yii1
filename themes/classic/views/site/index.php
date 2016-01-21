@@ -707,7 +707,7 @@ Toimi nopeasti, sillä paikkoja on rajoitetusti!</p></p>
                 <!-- Info Top - Footer Center-->
 
                 <div class="row">
-                   <div class="col-md-3 col-xs-6 item-center">
+                   <div class="col-md-3 col-sm-6 item-center">
                         <h3>+358 40 761 4366</h3>
 
                         <a href="#">
@@ -715,7 +715,7 @@ Toimi nopeasti, sillä paikkoja on rajoitetusti!</p></p>
                         <h4>Soita</h4>
                         </a>
                    </div>
-                   <div class="col-md-3 col-xs-6 item-center col-xs-offset-2">
+                   <div class="col-md-3 col-sm-6 item-center col-sm-offset-2">
                         <h3><a href="mailto:myynti@etunti.fi">veiko.poldkivi@etunti.fi</a></h3>
 
                        <a href="#">
@@ -725,7 +725,7 @@ Toimi nopeasti, sillä paikkoja on rajoitetusti!</p></p>
                    </div>
 
 
-                   <div class="col-md-3 col-xs-6 item-center col-xs-offset-1">
+                   <div class="col-md-3 col-sm-6 item-center col-xs-offset-1">
                         <div class="logo">
 			<br><br><br>
                             <a href="index.php" title="Return Home">
