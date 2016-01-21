@@ -238,7 +238,7 @@
 Etunti on monipuolinen ja kattava ohjelma, jonka avulla
 yritystoimintaa on helppo hallita, organisoida ja kehittää. Ohjelma toimii mobiilissa ja on vaivatonta 
 käyttää. Etunnin avulla helpotat huomattavasti yrityksen liiketoimintaa, säästät aikaa ja parannat samalla 
-tuottavuutta sekä palveluita. 
+tuottavuutta sekä kehität palveluita. 
 </p>
 <p>
 Etunnin perus- ja lisätyökalut ovat suunniteltu ratkaisemaan puhdistusalan 
@@ -300,7 +300,7 @@ p. 040 761 4366
                                     <h4>Työajanseuranta liikkuvalle työlle ja mobiilisovellus</h4>
                                   </div>
                                   <div class="modal-body">
-                                     <p>Seuraa reaaliajassa, missä työntekijäsi liikkuvat. Työntekijäsi kuittaavat tehdyt työt ja käytetyt matka-ajat helposti kännykällä. Työtunnit kirjataan ja lasketaan oikein, eikä manuaalisia tuntiraportteja enää tarvita.
+                                     <p>Seuraa reaaliajassa, missä työntekijäsi liikkuvat. Työntekijäsi kuittaavat tehdyt työt ja käytetyt matka-ajat helposti kännykällä. Työtunnit kirjataan ja lasketaan oikein, eikä manuaalisia tuntiraportteja tarvita enää.
                                     <br><br>
                                     Voit lähettää viestejä ja ohjeita työntekijällesi ja hyväksyttää tehdyt tunnit asiakkaalla sähköisesti.</p>
                                   </div>
@@ -374,7 +374,7 @@ p. 040 761 4366
                                     <h4>Asiakkuuksien hallinta</h4>
                                   </div>
                                   <div class="modal-body">
-                                    <p>Hallitset tarjouksia, sopimuksia ja työnkuvauksia samassa paikassa. Lähetät sopimukset asiakkaalle hyväksyttäväksi suoraan sovelluksesta. Asiakkaasi voivat tarkastella työvuoroja, laskuja ja sopimukseen liittyviä asioita Etunti CRM -työkalun avulla. Lisäksi lähetät helposti verkkokirjeitä ja mainoksia tarjouksista ja palveluista.</p>
+                                    <p>Hallitset tarjouksia, sopimuksia ja työnkuvauksia samassa paikassa. Lähetät sopimukset asiakkaalle hyväksyttäväksi suoraan sovelluksesta. Asiakkaasi voivat tarkastella työvuoroja, laskuja ja sopimukseen liittyviä asioita Etunti CRM -työkalun avulla. Lisäksi lähetät helposti verkkokirjeitä ja mainoksia palveluista.</p>
                                   </div>
                                   <div class="modal-footer">
                                     <button type="button" class="btn btn-default" data-dismiss="modal">Sulje</button>
@@ -403,7 +403,7 @@ p. 040 761 4366
                                     <h4>Raportointi ja seuranta</h4>
                                   </div>
                                   <div class="modal-body">
-                                    <p>Puutuuko yritykseltäsi nopea ja selkeä tilannekuva toteutuneista työ- ja matkatunneista, liikevaihdosta, työn ja työntekijän tai asiakkaiden tuottavuudesta? Etunti Managerilla saat nopeasti kuvan yrityksesi tuottavuudesta. Täsmällinen tieto ja oikeat päätökset oikeaan aikaan kasvattaa yrityksesi liikevoittoa jopa 5 % vuodessa.<br>
+                                    <p>Puutuuko yritykseltäsi nopea ja selkeä tilannekuva toteutuneista työ- ja matkatunneista, liikevaihdosta, työn, työntekijän tai asiakkaiden tuottavuudesta? Etunti Managerilla saat nopeasti kuvan yrityksesi tuottavuudesta. Täsmällinen tieto ja oikeat päätökset oikeaan aikaan kasvattaa yrityksesi liikevoittoa jopa 5 % vuodessa.<br>
 
 				    Etunti Manager on työnjohdon raportointi- ja seurantatyökalu.
 					<br></p>
@@ -434,10 +434,10 @@ p. 040 761 4366
                                   <div class="modal-header">
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                                     <h3>Etunti Laskutus</h3>
-                                    <h4>Etunti Laskutus on markkinoiden paras siivousalan yrityksille suunnattu laskutusohjelma.</h4>
+                                    <h4>Tehokas laskutusohjelma.</h4>
                                   </div>
                                   <div class="modal-body">
-                                    <p>Lähetä toteutuneista työtunneista muodostettavat laskut suoraan asiakkaille verkkolaskuina tai sähköpostiin. Tarkista avoimet saatavat ja tee maksumuistutukset helpommin kuin koskaan aikaisemmin. Etunti Laskutus on markkinoiden paras siivousalan yrityksille suunnattu laskutusohjelma. Säästä laskuttajan työajasta jopa kahden työpäivän tunnit kuukausittain.</p>
+                                    <p>Etunti Laskutus on markkinoiden paras siivousalan yrityksille suunnattu laskutusohjelma. Lähetät toteutuneista työtunneista muodostettavat laskut suoraan asiakkaille verkkolaskuina tai sähköpostiin. Tarkistat avoimet saatavat ja teet maksumuistutukset helpommin kuin koskaan aikaisemmin. Säästät laskuttajan työajasta jopa kahden työpäivän tunnit kuukausittain.</p>
                                   </div>
                                   <div class="modal-footer">
                                     <button type="button" class="btn btn-default" data-dismiss="modal">Sulje</button>
@@ -451,7 +451,7 @@ p. 040 761 4366
                             <div class="boxes-info etuntibox margin-top0">
                                 <div class="cont">
                                 <h3>Etunti Online</h3>
-                                <h5>Online-varauskalenteri ja tilaus</h5>
+                                <h5>Online -varauskalenteri ja tilaus</h5>
                                 <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target=".online">Tutustu</button>
                                 <div class="check"><div class="checkbox"><i class="fa fa-check"></i></div></div>
                                 </div>
@@ -531,15 +531,14 @@ p. 040 761 4366
                               Testaa, miten Etunti -ohjelma tehostaisi yrityksesi työnkulkua ja toisi liiketoimintaan lisäpotkua.
                             </p>
                             <p>
-                             Testerin avulla tunnistat yritystoimintasi mahdolliset kehityskohteet ja saat ratkaisuehdotuksen heti.
+                             Testerin avulla tunnistat yritystoimintasi mahdolliset kehityskohteet ja saat testillä ratkaisuehdotuksen heti.
                             </p>
 
                         </div>
                         <div class="col-md-5 col-md-offset-1">
-                        <p>Tee testi. Vastauksen saat heti.</p>
                             <div class="">
 
-                            <button type="button"  class="btn btn-xl btn-primary" role="button" data-toggle="modal" data-target=".testeri-modal">TESTAA</button>
+                            <button type="button"  class="btn btn-xl btn-primary" role="button" data-toggle="modal" data-target=".testeri-modal">TEE TESTI</button>
                             </div>
                         </div>
                     </div>
@@ -627,6 +626,7 @@ $kysymykset[] = array(
       <div class="modal-footer">
         <div class="testerintulos"></div>
         <button type="button" class="btn btn-lg btn-primary">Näytä tulos</button>
+        <a href="#" class="btn btn-lg btn-default tarjouspyynto" data-toggle="modal" data-target=".pyydatarjous_lomake">Lähetä tulos sähköpostiini</a>
         <a href="#" class="btn btn-lg btn-default tarjouspyynto" data-toggle="modal" data-target=".pyydatarjous_lomake">Pyydä tarjous</a>
       </div>
     </div><!-- /.modal-content -->
