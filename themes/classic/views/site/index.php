@@ -146,7 +146,7 @@
                             data-splitin="none"
                             data-splitout="none"
                             data-easing="easeOutExpo"
-                            style="font-size: 20px;">työajan hallintaan. Kehitetty siivousyrityksen työntekijöille ja esimiehille.
+                            style="font-size: 20px;"><br>Kehitetty työnajan hallintaan puhdistusalan työntekijöille ja esimiehille.
                         </div>
 
                     </li>
@@ -158,14 +158,18 @@
                         <img src="<?php echo Yii::app()->request->baseUrl; ?>/assets_classic/img/slides/header0.jpg"  alt="slidebg1"  data-bgposition="left center" data-kenburns="on" data-duration="10000" data-ease="Linear.easeNone" data-bgfit="130" data-bgfitend="100" data-bgpositionend="right center">
 
                         <!-- LAYER NR. 1 -->
-                        <div class="tp-caption large_text boxi lft stl"
-                            data-x="60"
-                            data-y="160"
-                            data-speed="300"
-                            data-start="800"
-                            data-splitin="none"
+                        <div class="tp-caption large_text lft boxi"
+                            data-x="55"
+                            data-y="150"
+                            data-speed="100"
+                            data-start="500"
+                            data-easing="Power4.easeOut"
+                            data-splitin="chars"
                             data-splitout="none"
-                            data-easing="easeOutExpo">Kehitetty tehostamaan
+                            data-elementdelay="0.1"
+                            data-endelementdelay="0.1"
+                            data-endspeed="300"
+                            style="z-index: 5; max-width: 700px; width:50%; line-height: 60px; max-height: auto; white-space: normal;">Kehitetty tehostamaan
                         </div>
 
                         <!-- LAYER NR. 2 -->
@@ -188,7 +192,7 @@
                             data-splitin="none"
                             data-splitout="none"
                             data-easing="easeOutExpo"
-                            style="font-size: 20px;">yhteistyössä siivousalan ammattilaisten kanssa.
+                            style="font-size: 20px;"><br>Suunniteltu yhteistyössä  puhdistusalan ammattilaisten kanssa.
                         </div>
 
                     </li>
@@ -228,23 +232,41 @@
                     <!-- End Titles Heading -->
                     <div class="row">
                         <div class="col-md-8 col-md-offset-2 lead">
-                            <p>
-                            Etunnin avulla pidät kaikki yrityksesi toiminnot ajan tasalla helposti. Kattavalla työnhallintaratkaisulla parannat palveluitasi, lisäät työntekijöitesi ja asiakkaitesi keskinäistä luottamusta ja tehostat liiketoimintaasi.
-                            </p>
-                            <p class="">
-                            Ei enää kirjautumisia useisiin eri ohjelmistoihin, epäselvyyksiä työtunneissa tai unohdettuja asiakaskäyntejä!</p>
+                        
+<div class="text-center">
+<p>
+Etunti on monipuolinen ja kattava ohjelma, jonka avulla
+yritystoimintaa on helppo hallita, organisoida ja kehittää. Ohjelma toimii mobiilissa ja on vaivatonta 
+käyttää. Etunnin avulla helpotat huomattavasti yrityksen liiketoimintaa, säästät aikaa ja parannat samalla 
+tuottavuutta sekä palveluita. 
+</p>
+<p>
+Etunnin perus- ja lisätyökalut ovat suunniteltu ratkaisemaan puhdistusalan 
+tyypilliset ongelmat. Yhden ohjelman avulla pyörität yritystoimintaasi ennennäkemättömän helposti. </p>
+
+<p>
+                        <h1 class="title-subtitle text-center">
+                            <span>
+                              Etunti on yritystoiminnan herätyskello!
+                            </span>
+                        </h1>
+
+</p>
+</div>
+                        <hr>
+
                         <h2 class="title-subtitle text-center">Miksi Etunti on paras?
                         </h2>
                         <ul class="stars">
-                            <li>Säästät 20-50 % yrityksesi henkilöstökuluja</li>
-                            <li>Laskutusohjelman avulla säästät jopa 2 työpäivää laskuttajan työajasta kuukausittain</li>
-                            <li>Online siivousvarauskalenterin avulla lisäät myyntiä</li>
-                            <li>CRM asiakuudenhallintajärjestelmän avulla lisäät asiakasuskollisuutta</li>
-                            <li>Edistyksellisellä suositustyökalulla saat lisämyyntiä</li>
-                            <li>Manager-raportointityökalulla kasvatat liikevaihtoasi jopa 5 % vuodessa</li>
+                            <li>Säästät 20 - 50 % yrityksesi henkilöstökuluissa</li>
+                            <li>Työvuoro-ohjelmalla säästät työaikaasi 10 – 20 % ja kirjaat toistuvat työvuorot helposti</li>
+                            <li>CRM asiakuudenhallintajärjestelmän avulla hoidat asiakassuhdetta tehokkaasti</li>
+                            <li>Manager -raportointityökalulla kasvatat liikevaihtoasi jopa 5 % vuodessa</li>
+                            <li>Laskutusohjelmalla säästät jopa 2 työpäivää kuukaudessa</li>
+                            <li>Online varauskalenterin avulla saat lisää myyntiä vaivattomasti</li>
                         </ul>
                         <br>
-                        <h3>OTA YHTEYTTÄ JA HANKI YRITYKSELLESI ETUNTI.FI -OHJELMA:</h3>
+                        <h3>Hanki yrityksellesi Etunti -ohjelma.<br>Ota yhteyttä:</h3>
                         <p>Veiko Põldkivi<br>
 email: etunimi.sukunimi@etunti.fi<br>
 p. 040 761 4366
@@ -262,8 +284,8 @@ p. 040 761 4366
                         <div class="col-md-6 col-sm-8 col-md-offset-3 col-sm-offset-2">
                             <div class="boxes-info etuntibox etuntibox-iso selected pakollinen">
                                 <div class="cont">
-                                <h3>Etunti mobiilityökalu</h3>
-                                <h5>Työajanseuranta liikkuvalle työlle + Mobiilisovellus</h5>
+                                <h3>Etunti Mobiili</h3>
+                                <h5>Työajanseuranta liikkuvalle työlle ja Mobiilisovellus</h5>
                                 <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target=".e-mobiili">Tutustu</button>
                                 <div class="check"><div class="checkbox"><i class="fa fa-check"></i></div></div>
                                 </div>
@@ -274,13 +296,13 @@ p. 040 761 4366
                                 <div class="modal-content">
                                   <div class="modal-header">
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                    <h3>Etunti mobiilityökalu</h3>
-                                    <h4>Työajanseuranta liikkuvalle työlle ja Mobiilisovellus</h4>
+                                    <h3>Etunti Mobiilityökalu</h3>
+                                    <h4>Työajanseuranta liikkuvalle työlle ja mobiilisovellus</h4>
                                   </div>
                                   <div class="modal-body">
-                                     <p>Etunti seuraa reaaliajassa, missä työntekijäsi liikkuvat. Työntekijäsi kuittaavat tehdyt työt ja käytetyt matka-ajat helposti kännykällä. Työtunnit kirjataan ja lasketaan oikein, eikä manuaalisia tuntiraportteja enää tarvita.
+                                     <p>Seuraa reaaliajassa, missä työntekijäsi liikkuvat. Työntekijäsi kuittaavat tehdyt työt ja käytetyt matka-ajat helposti kännykällä. Työtunnit kirjataan ja lasketaan oikein, eikä manuaalisia tuntiraportteja enää tarvita.
                                     <br><br>
-                                    Voit lähettää viestejä ja ohjeita työntekijällesi ja hyväksyttää tehdyt tunnit asiakkaalla sähköisesti. Lisämoduuleilla voit virittää oman Etuntisi säästämään aikaa ja rahaa.</p>
+                                    Voit lähettää viestejä ja ohjeita työntekijällesi ja hyväksyttää tehdyt tunnit asiakkaalla sähköisesti.</p>
                                   </div>
                                   <div class="modal-footer">
                                     <button type="button" class="btn btn-default" data-dismiss="modal">Sulje</button>
@@ -320,11 +342,11 @@ p. 040 761 4366
                                 <div class="modal-content">
                                   <div class="modal-header">
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                    <h3>Työvuorokalenteri</h3>
+                                    <h3>Etunti Työvuoro</h3>
                                     <h4>Työvuorojen suunnittelu</h4>
                                   </div>
                                   <div class="modal-body">
-                                    <p>Lähetä työvuorot työntekijälle matkapuhelimeen yhdellä klikkauksella suoraan työvuorolistalta.</p>
+                                    <p>Säästät työaikaasi, kun voit lähettää työvuorot työntekijöille suoraan heidän matkapuhelimeensa yhdellä klikkauksella. Pystyt tekemään toistuvat työvuorot kätevästi eteenpäin, jolloin jokaista työvuoroa ei tarvitse erikseen kirjoittaa. Työvuorot eivät unohdu ja asiakkaat saavat tilaamansa palvelun.</p>
                                   </div>
                                   <div class="modal-footer">
                                     <button type="button" class="btn btn-default" data-dismiss="modal">Sulje</button>
@@ -352,7 +374,7 @@ p. 040 761 4366
                                     <h4>Asiakkuuksien hallinta</h4>
                                   </div>
                                   <div class="modal-body">
-                                    <p>Hallitse tarjouksia, sopimuksia ja työnkuvauksia samassa paikassa. Lähetä sopimukset asiakkaalle hyväksyttäväksi suoraan sovelluksesta. Asiakkaasi voivat tarkastella työvuoroja, laskuja ja sopimukseen liittyviä asioita Etunti CRM -työkalun avulla. Lisäksi lähetä helposti verkkokirjeitä ja mainoksia tarjouksista ja palveluista.</p>
+                                    <p>Hallitset tarjouksia, sopimuksia ja työnkuvauksia samassa paikassa. Lähetät sopimukset asiakkaalle hyväksyttäväksi suoraan sovelluksesta. Asiakkaasi voivat tarkastella työvuoroja, laskuja ja sopimukseen liittyviä asioita Etunti CRM -työkalun avulla. Lisäksi lähetät helposti verkkokirjeitä ja mainoksia tarjouksista ja palveluista.</p>
                                   </div>
                                   <div class="modal-footer">
                                     <button type="button" class="btn btn-default" data-dismiss="modal">Sulje</button>
@@ -378,10 +400,15 @@ p. 040 761 4366
                                   <div class="modal-header">
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                                     <h3>Etunti Manager</h3>
-                                    <h4>Työnjohdon raportointi- ja seurantatyökalu</h4>
+                                    <h4>Raportointi ja seuranta</h4>
                                   </div>
                                   <div class="modal-body">
-                                    <p>Puutuuko yritykseltäsi nopea ja selkeä tilannekuva toteutuneista työ- ja matkatunneista, liikevaihdosta, työn- ja työntekijän tai asiakkaiden tuottavuudesta? Etunti Managerilla saat nopeasti kuvan yrityksesi tuottavuudesta. Täsmällinen tieto, oikeat päätökset oikeaan aikaan- ja kasvatat yrityksesi liikevoittoa jopa 5 % vuodessa.<br><br></p>
+                                    <p>Puutuuko yritykseltäsi nopea ja selkeä tilannekuva toteutuneista työ- ja matkatunneista, liikevaihdosta, työn- ja työntekijän tai asiakkaiden tuottavuudesta? Etunti Managerilla saat nopeasti kuvan yrityksesi tuottavuudesta. Täsmällinen tieto, oikeat päätökset oikeaan aikaan- ja kasvatat yrityksesi liikevoittoa jopa 5 % vuodessa.<br>
+
+				    Etunti Manager on työnjohdon raportointi- ja seurantatyökalu.
+					<br></p>
+
+
                                   </div>
                                   <div class="modal-footer">
                                     <button type="button" class="btn btn-default" data-dismiss="modal">Sulje</button>
@@ -436,10 +463,10 @@ p. 040 761 4366
                                   <div class="modal-header">
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                                     <h3>Etunti Online</h3>
-                                    <h4>Online-varauskalenteri ja tilaus</h4>
+                                    <h4>Online -varauskalenteri ja -tilaus</h4>
                                   </div>
                                   <div class="modal-body">
-                                    <p>Ota käyttöösi markkinoiden paras muokattavissa oleva varauskalenteri, jonka integroimme suoraan kotisivuillesi. Se toimii saumattomasti yhteen muiden Etunti -ohjelman työkalujen kanssa. Tee lisämyynti Online –varauskalenterin avulla helpommaksi ja nopeammaksi kuin kilpailijasi.</p>
+                                    <p>Saat käyttöösi markkinoiden parhaan muokattavissa olevan varauskalenterin, jonka yhdistämme suoraan kotisivuillesi. Se toimii saumattomasti yhteen muiden Etunti -ohjelman työkalujen kanssa. Teet lisämyyntiä Online –varauskalenterin avulla helpommaksi ja nopeammaksi kuin kilpailijasi.</p>
                                   </div>
                                   <div class="modal-footer">
                                     <button type="button" class="btn btn-default" data-dismiss="modal">Sulje</button>
@@ -501,10 +528,10 @@ p. 040 761 4366
                     <div class="row">
                         <div class="col-md-6">
                             <p>
-                              Testaa, kuinka Etunti tehostaisi työnkulkuasi ja toisi lisäpotkua liiketoimintaasi.
+                              Testaa, miten Etunti -ohjelma tehostaisi yrityksesi työnkulkua ja toisi liiketoimintaan lisäpotkua.
                             </p>
                             <p>
-                             Testerin avulla tunnistat yritystoimintasi mahdollisia pullonkauloja ja saat juuri sinun yrityksellesi sopivan ratkaisuehdotuksen, jolla teet lisää rahaa.
+                             Testerin avulla tunnistat yritystoimintasi mahdolliset kehityskohteet ja saat ratkaisuehdotuksen heti.
                             </p>
 
                         </div>
@@ -635,15 +662,18 @@ $kysymykset[] = array(
                         <div class="titles-heading">
                         <h2>Liity testiryhmään
                             <span>
-                              <i class="fa fa-cogs"></i>
+                              <i class="fa fa-star"></i>
                               Vaikuta sovelluksen kehitykseen korvauksen kera
-                              <i class="fa fa-cogs"></i>
+                              <i class="fa fa-star"></i>
                             </span>
                         </h2>
                         </div>
                     <div class="row">
                         <div class="col-md-6 col-sm-5 padding-bottom">
-                            <p>Etsimme vielä muutamia pilottiasiakkaita osallistumaan Etunti- sovelluksen viimeistelyyn. Jos olet idearikas ja peloton pilotti, ota yhteyttä. Saat mukanaolostasi 500 € ja Etunti- sovelluksen käyttöösi veloituksetta kolmeksi kuukaudeksi. Toimi nopeasti, sillä paikkoja on rajoitetusti!</p>
+                            <p>Etsimme vielä muutamia pilottiasiakkaita osallistumaan Etunti- ohjelman viimeistelyyn. Saat aktiivisesta mukanaolostasi 500 € ja Etunti -ohjelman käyttöösi veloituksetta kolmeksi kuukaudeksi. 
+<p>Jos olet idearikas ja peloton pilotti, ota yhteyttä. 
+<br>
+Toimi nopeasti, sillä paikkoja on rajoitetusti!</p></p>
 <!--                             <form id="newsletterForm" action="php/mailchip/newsletter-subscribe.php">
                                 <div class="input-group input-group-lg">
                                     <span class="input-group-addon">
@@ -685,7 +715,7 @@ $kysymykset[] = array(
                         <h4>Soita</h4>
                         </a>
                    </div>
-                   <div class="col-md-3 col-xs-6 item-center">
+                   <div class="col-md-3 col-xs-6 item-center col-xs-offset-2">
                         <h3><a href="mailto:myynti@etunti.fi">veiko.poldkivi@etunti.fi</a></h3>
 
                        <a href="#">
@@ -693,6 +723,18 @@ $kysymykset[] = array(
                         <h4>Lähetä viesti</h4>
                         </a>
                    </div>
+
+
+                   <div class="col-md-3 col-xs-6 item-center col-xs-offset-1">
+                        <div class="logo">
+			<br><br><br>
+                            <a href="index.php" title="Return Home">
+                                <img src="<?php echo Yii::app()->request->baseUrl; ?>/img/logo.png" alt="Logo" class="logo_img">
+                            </a>
+                        </div>
+                   </div>
+
+
 <!--
                    <div class="col-md-3 col-xs-6 item-center">
                         <h3><a href="#">Myynti</a></h3>
