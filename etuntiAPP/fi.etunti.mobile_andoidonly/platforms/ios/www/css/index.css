@@ -37,7 +37,7 @@ body {
 }
 
 .logo{
-    height: 40px;
+    height: 60px;
 }
 
 /* Portrait layout (default) */
@@ -109,6 +109,11 @@ h1 {
     -webkit-animation:fade 3000ms infinite;
 }
 
+#footer{
+  background: #FE6804;
+  color: #fff;
+}
+
 #footer-body{
   background: #FE6804;
   color: #fff;
@@ -116,4 +121,8 @@ h1 {
 
 #footer-body a{
   color: #fff;
+}
+
+#odotta img{
+  width: 240px;
 }

@@ -1,7 +1,7 @@
 $(document).ready(function(){
 
 
-  $("#odotta").html("<img src='img/search.gif'>");
+  $("#odotta").html("<img src='img/icon.png'>");
 
   setTimeout(tiedot,3000); 
 
@@ -14,7 +14,7 @@ $(document).ready(function(){
 		}, this);
 		*/
 
-	        navigator.geolocation.getCurrentPosition(onSuccess, onError);
+	  navigator.geolocation.getCurrentPosition(onSuccess, onError);
 		navigator.geolocation.watchPosition(onSuccessWatch, onErrorWatch, { timeout: 30000, enableHighAccuracy: false });
 
 		function showAppVersion() {
