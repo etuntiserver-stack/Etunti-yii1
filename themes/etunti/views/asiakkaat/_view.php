@@ -5,25 +5,25 @@
 
 <tr>
 	<td>
-		<?php echo $this->asiakasMuutosTheme($data->id); ?>
+		<?php echo $data->id; ?>
 	</td>
 	<td>
-		<?php echo $this->asiakasMuutosTheme($data->osoite); ?>
+		<?php echo $data->osoite; ?>
 	</td>
 	<td>
 		<?php echo $this->asiakasMuutosTheme($data->yhteyshenkilo); ?>
 	</td>
 	<td>
-		<?php echo $this->asiakasMuutosTheme($data->postinumero); ?>
+		<?php echo $data->postinumero; ?>
 	</td>
 	<td>
-		<?php echo $this->asiakasMuutosTheme($data->puhelin); ?>
+		<?php echo $data->puhelin; ?>
 	</td>
 	<td>
-		<?php echo $this->asiakasMuutosTheme($data->sahkoposti); ?>
+		<?php echo $data->sahkoposti; ?>
 	</td>
 	<td>
-		<?php echo $this->asiakasMuutosTheme($data->tyyppi); ?>
+		<?php echo $data->tyyppi; ?>
 	</td>
 	<td>
 		<?php echo CHtml::link('', array('update', 'id'=>$data->id), array('class'=>'fa fa-pencil-square-o')); ?>

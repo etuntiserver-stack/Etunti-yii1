@@ -41,7 +41,7 @@
                 <div class="row">
                 <div class="col-sm-7 col-md-8 padding-bottom">
                         <h4>Tuki</h4>
-                        <p><i class="fa fa-phone"></i> <a href="#">020 236 5899</a></p>
+                        <p><i class="fa fa-phone"></i> <a href="#">+358 40 7614 366</a></p>
                         <p><i class="fa fa-envelope"></i> <a href="mailto:tuki@etunti.fi">tuki@etunti.fi</a></p>
 
                    </div>
