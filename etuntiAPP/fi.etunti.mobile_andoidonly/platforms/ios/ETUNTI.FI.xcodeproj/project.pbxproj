@@ -5,7 +5,6 @@
 	};
 	objectVersion = 46;
 	objects = {
-
 /* Begin PBXBuildFile section */
 		0E89D118481D47D9ACBBF638 /* UIApplication+APPLocalNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = 318293EC0D064EC58D75E9D8 /* UIApplication+APPLocalNotification.m */; };
 		0F652C291CAF4FAABEA8F422 /* CDVDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C7572C8CD0346888DE7A3A1 /* CDVDevice.m */; };

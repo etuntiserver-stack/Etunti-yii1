@@ -2,7 +2,7 @@ $(document).ready(function(){
 
 
 
-  $("#odotta").html("<img src='img/search.gif'>");
+  $("#odotta").html("<img src='img/icon.png''>");
 
   setTimeout(tiedot,1000);
 

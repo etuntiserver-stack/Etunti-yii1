@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="fi.etunti.push" version="0.0.37" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="fi.etunti.push" version="0.0.38" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <preference name="AllowInlineMediaPlayback" value="false" />
     <preference name="BackupWebStorage" value="cloud" />
     <preference name="DisallowOverscroll" value="false" />
@@ -52,10 +52,10 @@
     <allow-intent href="itms-apps:*" />
     <name>ETUNTI.FI</name>
     <description>
-        A sample Apache Cordova application that responds to the deviceready event.
+      Markkinoiden paras MOBIILITYÖKALU.Kehitetty työnajan hallintaan puhdistusalan työntekijöille ja esimiehille.
     </description>
-    <author email="dev@cordova.apache.org" href="http://cordova.io">
-        Apache Cordova Team
+    <author email="tuki@etunti.fi" href="http://etunti.fi">
+      Etunti DevTeam!
     </author>
     <content src="index.html" />
     <access origin="*" />
