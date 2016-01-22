@@ -20,13 +20,7 @@
   if(!empty($tietoja) and isset($_POST['tulosta']))
      $riviTietoja = '<br><br>&nbsp;&nbsp;&nbsp;<b>'.Yii::t('main','Tietoja: ').'</b> '.$tietoja.'<hr>';
 
-     $spl = '';
-  if($sairaus == '1')
-     $spl = '<span style="color:red" class="small"> (SPL)</span>';
-  elseif($sairaus == '2')
-     $spl = '<span style="color:red" class="small"> (SL)</span>';
-  elseif($sairaus == '3')
-     $spl = '<span style="color:red" class="small"> (LS)</span>';
+  $spl = $this->sairausMerkki($sairaus);
 
   if(empty($loppui))
   {

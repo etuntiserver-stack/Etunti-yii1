@@ -678,4 +678,19 @@ class ToteutuneetController extends Controller
 	}
 
 
+	protected function sairausMerkki($val)
+	{
+	     $spl = '';
+	  if($val == '1')
+	     $spl = '<span style="color:red" class="small"> (SPL)</span>';
+	  elseif($val == '2')
+	     $spl = '<span style="color:red" class="small"> (SL)</span>';
+	  elseif($val == '3')
+	     $spl = '<span style="color:red" class="small"> (LS)</span>';
+	
+	  return $spl;
+	}
+
+
+
 }
