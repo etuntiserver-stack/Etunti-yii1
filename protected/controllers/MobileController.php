@@ -329,14 +329,6 @@ function num($val){
 		$(document).ready(function(){
 
 
-
-
-
-
-
-
-
-
 		  $("#Kohteet_id").on('change',function(){
 
 			var kohdenID = $("#sainkohdenID").val().split("_");
@@ -350,6 +342,7 @@ function num($val){
 		           type: "POST",
 		           data: Mobile,
 		           success: function(html){
+				//console.log(html);
 				$("#vaihto_kohttisID_"+kohdenID[1]).addClass("text-success").text(thisText);
 				//alert(thisText)
 		           }
@@ -451,7 +444,12 @@ function num($val){
 			if(isset($_POST['Mobile']['kohde_kannasta']))
 			$model->tietoja=$tietoja.Yii::app()->user->nimi." (".date("d.m.Y H:i")."):\nTilanne-Kohteen muutos, vanha-".$vanha_kohde_kannasta.", uusi-".$_POST['Mobile']['kohde_kannasta'];
 
-			$model->save();
+			if(!$model->save())
+			{
+			   var_dump($model->getErrors());
+			   exit;
+			}
+
 		}
 
 		$this->render('update',array(
@@ -1363,7 +1361,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		$fromTo = " DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$from."' AND '".$to."' ";
 
        		$criteria = new CDbCriteria();
-        	$criteria->select = "id,tekijan_nimi,aloitan,loppui,asiakas_hyvaksy,osoite";
+        	$criteria->select = "id,tekijan_nimi,aloitan,loppui,asiakas_hyvaksy,osoite,sairaus";
         	$criteria->order = "kohde_kannasta";
         	//$criteria->group = "kohde_kannasta";
         	$criteria->condition = "
@@ -1382,12 +1380,12 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		  $d->aloitan = date("d.m.Y H:i",strtotime($d->aloitan));
 
 			$kesto = strtotime($d->loppui)-strtotime($d->aloitan);
-			$lu[] = $d->tekijan_nimi."//".date("d.m",strtotime($d->aloitan))."//".$kesto."//mobile_".$d->id."//".$d->asiakas_hyvaksy."//".date("H:i",strtotime($d->aloitan))."//".date("H:i",strtotime($d->loppui))."////";
+			$lu[] = $d->tekijan_nimi."//".date("d.m",strtotime($d->aloitan))."//".$kesto."//mobile_".$d->id."//".$d->asiakas_hyvaksy."//".date("H:i",strtotime($d->aloitan))."//".date("H:i",strtotime($d->loppui))."//////".$d->sairaus;
 		}
 
 
        		$criteria = new CDbCriteria();
-        	$criteria->select = "id,tekijan_nimi,aloitan,loppui,asiakas_hyvaksy,osoite,tietoja";
+        	$criteria->select = "id,tekijan_nimi,aloitan,loppui,asiakas_hyvaksy,osoite,tietoja,sairaus";
         	$criteria->order = "kohde_kannasta";
         	//$criteria->group = "kohde_kannasta";
         	$criteria->condition = "
@@ -1403,7 +1401,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		  $d->loppui = date("d.m.Y H:i",strtotime($d->loppui));
 		  $d->aloitan = date("d.m.Y H:i",strtotime($d->aloitan));
 			$kesto = strtotime($d->loppui)-strtotime($d->aloitan);
-			$lu[] = $d->tekijan_nimi."//".date("d.m",strtotime($d->aloitan))."//".$kesto."//toteutu_".$d->id."//".$d->asiakas_hyvaksy."//".date("H:i",strtotime($d->aloitan))."//".date("H:i",strtotime($d->loppui))."//".$d->osoite."//".$d->tietoja;
+			$lu[] = $d->tekijan_nimi."//".date("d.m",strtotime($d->aloitan))."//".$kesto."//toteutu_".$d->id."//".$d->asiakas_hyvaksy."//".date("H:i",strtotime($d->aloitan))."//".date("H:i",strtotime($d->loppui))."//".$d->osoite."//".$d->tietoja."//".$d->sairaus;
 		}
 
 		//if(count($lu) > 0)
@@ -1437,9 +1435,11 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			if(isset($explV[7]) and !empty($explV[8]))
 			$tietoja = trim($explV[8]).'<hr>';
 
+			$spl = $this->sairausMerkki($explV[9]);
+
 			echo 
 			'<div class="row">
-			   <div class="col-sm-6 text-right">'.$explV[0].$kertaosoite.', '.$explV[1].'</div>
+			   <div class="col-sm-6 text-right">'.$explV[0].$kertaosoite.$spl.', '.$explV[1].'</div>
 			   <div class="col-sm-6"> '.$explV[5].'-'.$explV[6].' kesto: <b> '.$this->sprint($explV[2]).'</b> '.$asiakas_hyvaksy.'</div>
 			'.$tietoja.'
 			</div>';
@@ -1947,5 +1947,19 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 
 	}
 
+
+
+	protected function sairausMerkki($val)
+	{
+	     $spl = '';
+	  if($val == '1')
+	     $spl = '<span style="color:red" class="small"> (SPL)</span>';
+	  elseif($val == '2')
+	     $spl = '<span style="color:red" class="small"> (SL)</span>';
+	  elseif($val == '3')
+	     $spl = '<span style="color:red" class="small"> (LS)</span>';
+	
+	  return $spl;
+	}
 
 }

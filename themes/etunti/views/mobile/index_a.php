@@ -35,6 +35,15 @@
   <th><?php echo Yii::t('main', 'Päivä'); ?></th>
   <th><?php echo Yii::t('main', 'Kartta'); ?></th>
   <th class="col-sm-4"><?php echo Yii::t('main', 'Työntekijä'); ?></th>
+
+  <?php
+  $tas = explode(",",Yii::app()->user->adminPaketti);
+  if(in_array('2',$tas)) : 
+  ?>
+  <th><?php echo Yii::t('main', 'Työvuoroot'); ?></th>
+  <?php endif; ?>
+
+
   <th><?php echo Yii::t('main', 'TAG'); ?></th>
   <th class="col-sm-4"><?php echo Yii::t('main', 'Osoite/Matka'); ?></th>
   <th class="col-sm-2"><?php echo Yii::t('main', 'Aloitus'); ?></th>
