@@ -141,6 +141,28 @@ else
 	  <?php echo CHtml::link($data->tekijan_nimi,'/index.php/tyontekijat/update?id='.$data->tid,array('target'=>'_blank')); ?>
 	</td>
 
+	<!-- adminPaketti -->
+	<?php if(in_array('2',$tas)) : ?>
+	<?php
+	$did = date("Ymd",strtotime($apvm[$data->id]));
+	?>
+	<td>
+	  <span class="link vietyovuoroon" pvmtid="<?php echo $did.'_'.$data->tid; ?>"><i class="fa fa-table"></i></span>
+	<?php  if($obtrue == true):  ?>
+
+	  <span class="link" data-toggle="collapse" data-target="<?php echo '#sushow_'.$data->id; ?>">
+	  <span class="fa fa-list-alt"></span>
+	  </a>
+
+	    <div style="position:absolute;width:300px;z-index: 2;" class="collapse" id="<?php echo 'sushow_'.$data->id; ?>">
+	    <div class="alert alert-info" style=""><?php $this->renderPartial('//tyovuoroot/did',array('pvm'=>$data->aloitan,'tid'=>$data->tid,'from'=>'mobiili')); ?></div>
+	    </div>
+
+	<?php endif; ?>
+	</td>
+	<?php endif; ?>
+	<!-- adminPaketti -->
+
 
 	<td>
 	  <span class="link" data-toggle="collapse" data-target="<?php echo '#tagshow_'.$data->id; ?>">
