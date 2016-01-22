@@ -460,7 +460,7 @@
             </a>
             <ul class="nav sub-nav">
               <li>
-                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/tyovuoroot/index">
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/tyovuoroot/index" target="_blank">
                   <span class="fa fa-clock-o"></span> <?php echo Yii::t('main', 'Työvuorot'); ?></a>
               </li>
               <li>
