@@ -300,7 +300,7 @@ p. 040 761 4366
                                     <h4>Työajanseuranta liikkuvalle työlle ja mobiilisovellus</h4>
                                   </div>
                                   <div class="modal-body">
-                                     <p>Seuraa reaaliajassa, missä työntekijäsi liikkuvat. Työntekijäsi kuittaavat tehdyt työt ja käytetyt matka-ajat helposti kännykällä. Työtunnit kirjataan ja lasketaan oikein, eikä manuaalisia tuntiraportteja tarvita enää.
+                                     <p>Työntekijäsi kuittaavat tehdyt työt ja käytetyt matka-ajat helposti kännykällä. Työtunnit kirjataan ja lasketaan oikein, eikä manuaalisia tuntiraportteja enää tarvita ja seuraat reaaliajassa missä työntekijäsi liikkuvat.
                                     <br><br>
                                     Voit lähettää viestejä ja ohjeita työntekijällesi ja hyväksyttää tehdyt tunnit asiakkaalla sähköisesti.</p>
                                   </div>
@@ -403,7 +403,7 @@ p. 040 761 4366
                                     <h4>Raportointi ja seuranta</h4>
                                   </div>
                                   <div class="modal-body">
-                                    <p>Puutuuko yritykseltäsi nopea ja selkeä tilannekuva toteutuneista työ- ja matkatunneista, liikevaihdosta, työn, työntekijän tai asiakkaiden tuottavuudesta? Etunti Managerilla saat nopeasti kuvan yrityksesi tuottavuudesta. Täsmällinen tieto ja oikeat päätökset oikeaan aikaan kasvattaa yrityksesi liikevoittoa jopa 5 % vuodessa.<br>
+                                    <p>Puuttuuko yritykseltäsi nopea ja selkeä tilannekuva toteutuneista työ- ja matkatunneista, liikevaihdosta, työn, työntekijän tai asiakkaiden tuottavuudesta? Etunti Managerilla saat nopeasti kuvan yrityksesi tuottavuudesta. Täsmällinen tieto ja oikeat päätökset oikeaan aikaan kasvattaa yrityksesi liikevoittoa jopa 5 % vuodessa.<br>
 
 				    Etunti Manager on työnjohdon raportointi- ja seurantatyökalu.
 					<br></p>
@@ -434,7 +434,7 @@ p. 040 761 4366
                                   <div class="modal-header">
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                                     <h3>Etunti Laskutus</h3>
-                                    <h4>Tehokas laskutusohjelma.</h4>
+                                    <h4>Tehokas laskutusohjelma</h4>
                                   </div>
                                   <div class="modal-body">
                                     <p>Etunti Laskutus on markkinoiden paras siivousalan yrityksille suunnattu laskutusohjelma. Lähetät toteutuneista työtunneista muodostettavat laskut suoraan asiakkaille verkkolaskuina tai sähköpostiin. Tarkistat avoimet saatavat ja teet maksumuistutukset helpommin kuin koskaan aikaisemmin. Säästät laskuttajan työajasta jopa kahden työpäivän tunnit kuukausittain.</p>
@@ -451,7 +451,7 @@ p. 040 761 4366
                             <div class="boxes-info etuntibox margin-top0">
                                 <div class="cont">
                                 <h3>Etunti Online</h3>
-                                <h5>Online -varauskalenteri ja tilaus</h5>
+                                <h5>Online -varauskalenteri ja -tilaus</h5>
                                 <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target=".online">Tutustu</button>
                                 <div class="check"><div class="checkbox"><i class="fa fa-check"></i></div></div>
                                 </div>
@@ -554,33 +554,33 @@ $kysymykset = array();
 $kysymykset[] = array(
 'kysymys' => 'Tiedätkö tarkkaan työntekijöidesi sijainnin?',
 'haluttu_valinta' => 'kylla',
-'vastaus' => 'Hyvä juttu! Pystyt näinollen seuraamaan työntekijöitä ja tiedät heidän tuottavuuden. Saat tietoosi työhön käytetyn tarkan ajan ja maksat palkkaa vain tehdystä työstä. Onko työntekijöiden seuraaminen reaaliaikaista ja onko sijaintitieto luotettavaa? Etunti – ohjelman avulla saat työntekijän tarkan sijainnin, jolloin näet luotettavasti onko hän ollut oikeaan aikaan, oikeassa paikassa ja oikean ajan. Saat tehdyt tunnit heti ja voit lähettää ne helposti suoraan palkanlaskentaan.',
+'vastaus' => 'Hyvä juttu! Pystyt näin ollen seuraamaan työntekijöitä ja tiedät heidän tuottavuuden. Saat tietoosi työhön käytetyn tarkan ajan ja maksat palkkaa vain tehdystä työstä. Onko työntekijöiden seuraaminen reaaliaikaista ja onko sijaintitieto luotettavaa? Etunti – ohjelman avulla saat työntekijän tarkan sijainnin, jolloin näet luotettavasti onko hän ollut oikeaan aikaan, oikeassa paikassa ja oikean ajan. Saat tehdyt tunnit heti ja voit lähettää ne helposti suoraan palkanlaskentaan.',
 'moduli' => '',
 );
 
 $kysymykset[] = array(
 'kysymys' => 'Joudutko syöttämään työntekijä- ja asiakastietoja sekä työnkuvauksia useaan paikkaan?',
 'haluttu_valinta' => 'kylla',
-'vastaus' => 'Kuulostaa siltä, että yrityksen eri tiedot ovat hyvin sekaisin ja järjestystä on vaikea pitää yllä. Saattaa olla, että käytätte liikaa arvokasta työaikaa tietojen etsimiseen ja moni pienempi asia katoaa kokonaan. Mitä useammassa paikassa tiedot ovat, niin sitä vaikeampaa yritystoiminnan organisointi on ja yrityksestä ei saa irti parasta tuottoa. Sinun onneksi meillä on tarjota Etunti – ohjelma helpottamaan liiketoimintaanne. Etunti – ohjelman avulla pidät kaikki tiedot yhdessä luotettavassa paikassa ja organisoit yrityksen toimintaa aivan uudella tavalla. Voit valita eri työkaluja yrityksen tarpeisiin ja saada merkittäviä säästöjä joka kuukausi.',
+'vastaus' => 'Kuulostaa siltä, että yrityksen eri tiedot ovat hyvin sekaisin ja järjestystä on vaikea  ylläpitää. Saattaa olla, että käytätte liikaa arvokasta työaikaa tietojen etsimiseen ja moni pienempi asia katoaa kokonaan. Mitä useammassa paikassa tiedot ovat, niin sitä vaikeampaa yritystoiminnan organisointi on ja yrityksestä ei saa irti parasta tuottoa. Sinun onneksi meillä on tarjota Etunti – ohjelma helpottamaan liiketoimintaanne. Etunti – ohjelman avulla pidät kaikki tiedot yhdessä luotettavassa paikassa ja organisoit yrityksen toimintaa aivan uudella tavalla. Voit valita eri työkaluja yrityksen tarpeisiin ja saada merkittäviä säästöjä joka kuukausi.',
 'moduli' => '',
 );
 $kysymykset[] = array(
 'kysymys' => 'Vievätkö työpisteiden väliset siirtymäajat mielestäsi liikaa liiketoimintasi kannattavuutta?',
 'haluttu_valinta' => 'kylla',
-'vastaus' => 'Työnorganisointi kaipaa selvästi tehostusta. Siirtymäajat ovat pakollisia ja yritykselle menoja tuottavia, mutta kohteet voidaan suunnitella aina siten, että siirtymäajat ovat minimimittaisia. Siirtymäaikojen ollessa lyhyet, niin työntekijät kerkeävät käymään useammassa kohteessa saman päivän aikana. Etunti Manager – työkalun ansiosta näet yrityksesi tuottavuuden, matkoihin käytetyn ajan ja muuta tietoa yrityksestä ja näet missä asioissa yritys voi vielä kehittyä lisää.',
+'vastaus' => 'Työnorganisointi kaipaa selvästi tehostusta. Siirtymäajat ovat pakollisia ja yritykselle menoja tuottavia, mutta kohteet voidaan suunnitella aina siten, että siirtymäajat ovat minimimittaisia. Siirtymäaikojen ollessa lyhyet työntekijät kerkeävät käymään useammassa kohteessa saman päivän aikana. Etunti Manager – työkalun ansiosta näet yrityksesi tuottavuuden, matkoihin käytetyn ajan ja muuta tietoa yrityksestä sekä näet myös missä asioissa yritys voi vielä lisäkehittyä.',
 'moduli' => '',
 );
 $kysymykset[] = array(
 'kysymys' => 'Tiedätkö myynnin kannattavuus- ja talousluvut reaaliaikaisesti?',
 'haluttu_valinta' => 'kylla',
-'vastaus' => 'Hienoa! Näin tiedät millä tasolla yrityksesi on ja mitkä asiat kaipaavat kehitystä. Pystytkö näkemään helposti kaiken tiedon yrityksestäsi? Etunti Manager – työkalun ansiosta näet yrityksesi tuottavuuden, matkoihin käytetyn ajan, toteutuneet työtunnit ja työntekijän tuottavuuden sekä saat tehtyä raportteja, jolla huomaat helposti, jos liiketoimintasi kaipaa parantelua.',
+'vastaus' => 'Hienoa! Tiedät millä tasolla yrityksesi on ja mitkä asiat kaipaavat kehitystä. Pystytkö näkemään helposti kaiken tiedon yrityksestäsi? Etunti Manager – työkalun ansiosta näet yrityksesi tuottavuuden, matkoihin käytetyn ajan, toteutuneet työtunnit ja työntekijän tuottavuuden sekä saat tehtyä raportteja, jolla huomaat helposti, jos liiketoimintasi kaipaa parantelua.',
 'moduli' => '',
 );
 $kysymykset[] = array(
 'kysymys' => 'Pystytkö lähettämään asiakkaallesi helposti ja vaivattomasti markkinointikirjeitä ja sopimuksia?',
 'haluttu_valinta' => 'kylla',
 'vastaus' => 'Hyvä asia! Ilman asiakkaita ei yritys pyöri ja hyvä, jos voit viestittää asiakkaille helposti ja
-vaivattomasti. Entä näkevätkö asiakkaat helposti työvuoroja, sopimuksia ja laskuja? Etunti CRM – työkalulla lähetät helposti uutiskirjeitä, sopimuksia ja tarjouksia sähköisesti asiakkaalle ja samalla asiakkaat näkevät omat tietonsa CRM:n kautta. Ohjelman ansiosta sinun ei tarvitse enää ajaa asiakaskäynnille sopimusten ja tarjousten takia, vaan voi lähettää ne heti asiakkaan luettavaksi ja hyväksyttäväksi. Säästät aikaa, rahaa ja hermoja, kun ei tarvitse enää istua turhaan ratin takana.',
+vaivattomasti. Entä näkevätkö asiakkaat helposti työvuoroja, sopimuksia ja laskuja? Etunti CRM – työkalulla lähetät helposti uutiskirjeitä, sopimuksia ja tarjouksia sähköisesti asiakkaalle ja samalla asiakkaat näkevät omat tietonsa CRM:n kautta. Ohjelman ansiosta sinun ei tarvitse enää ajaa asiakaskäynnille sopimusten ja tarjousten takia, vaan voi lähettää ne heti asiakkaan luettavaksi ja hyväksyttäväksi. Säästät aikaa ja rahaa.',
 'moduli' => '',
 );
 $kysymykset[] = array(
