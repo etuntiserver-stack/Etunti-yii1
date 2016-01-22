@@ -56,7 +56,7 @@ function set(){
 		    	var vastaus = $("#vastaus_"+thisID).val();
 
 		    if (vastaus  === '') {
-		        $("#vastaus_"+thisID).css({"border" : "2px #f14010 solid"}).focus();
+		        $("#vastaus_"+thisID).css({"border" : "2px blue solid"}).focus();
 		        return false;
 		    }
 
@@ -90,7 +90,7 @@ $(".lahetaToimistoon").click(function(){
 
   var viesti = $("#toimistoon").val();
   if (viesti  === '') {
-        $('#toimistoon').css({"border" : "2px #f14010 solid"}).focus();
+        $('#toimistoon').css({"border" : "2px blue solid"}).focus();
         return false;
   }
 

@@ -127,3 +127,13 @@ h1 {
 #odotta img{
   width: 240px;
 }
+
+#viestit{
+  background: none;
+  
+}
+
+.well{
+  background-color: #ffffff;
+  border: 1px solid blue;
+}
