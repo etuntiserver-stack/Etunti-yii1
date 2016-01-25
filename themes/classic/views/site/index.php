@@ -725,7 +725,7 @@ Toimi nopeasti, sillä paikkoja on rajoitetusti!</p></p>
                    </div>
 
 
-                   <div class="col-md-3 col-sm-6 item-center col-xs-offset-1">
+                   <div class="col-lg-3 col-lg-6 item-center col-lg-offset-1">
                         <div class="logo">
 			<br><br><br>
                             <a href="index.php" title="Return Home">
