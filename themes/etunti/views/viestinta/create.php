@@ -1,21 +1,24 @@
 <?php
-/* @var $this ViestintaController */
-/* @var $model Viestinta */
 
-$this->breadcrumbs=array(
-	Yii::t('main', 'Viestintä')=>array('index'),
-	Yii::t('main', 'Luominen'),
-);
-/*
-$this->menu=array(
-	array('label'=>'List Viestinta', 'url'=>array('index')),
-	array('label'=>'Manage Viestinta', 'url'=>array('admin')),
-);
-*/
 ?>
 
-<legend>
-<h1> <?php echo Yii::t('main', 'Lähetä viesti mobiilisovellukseen'); ?> <i class="glyphicon glyphicon-envelope"></i></h1>
-</legend>
+        <!-- begin: .tray-center -->
+        <div class="tray-center">
 
-<?php echo $this->renderPartial('_form', array('model'=>$model)); ?>
+	   <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-envelope"></i> <?php echo Yii::t('main', 'Lähetä viesti mobiilisovellukseen'); ?> </h2>
+
+            <div class="admin-form">
+              <div class="panel heading-border">
+                <div class="panel-body bg-light">
+                 <div class="row">
+
+		  <?php echo $this->renderPartial('_form', array('model'=>$model)); ?>
+
+                 </div>
+                </div>
+              </div>
+            </div>
+
+
+        <!-- loppu: .tray-center -->
+        </div>
