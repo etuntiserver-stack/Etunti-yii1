@@ -1,18 +1,27 @@
 <?php
-/* @var $this AdministratorsController */
-/* @var $model Administrators */
 
-$this->breadcrumbs=array(
-	'Administrators'=>array('index'),
-	'Create',
-);
-
-$this->menu=array(
-	array('label'=>'List Administrators', 'url'=>array('index')),
-	array('label'=>'Manage Administrators', 'url'=>array('admin')),
-);
 ?>
 
-<h1>Create Administrators</h1>
+        <!-- begin: .tray-center -->
+        <div class="tray-center">
 
-<?php echo $this->renderPartial('_form', array('model'=>$model)); ?>
+	   <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-user"></i> <?php echo Yii::t('main', 'Luo järjestelmävalvoja'); ?> </h2>
+
+            <div class="admin-form">
+              <div class="panel heading-border">
+                <div class="panel-body bg-light">
+                 <div class="row">
+
+		  <div class="col-sm-3">
+		  <?php echo $this->renderPartial('_form', array('model'=>$model)); ?>
+		  </div>
+
+                 </div>
+                </div>
+              </div>
+            </div>
+
+
+        <!-- loppu: .tray-center -->
+        </div>
+

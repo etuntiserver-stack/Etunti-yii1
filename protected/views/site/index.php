@@ -1,8 +1,21 @@
 <?php
 /* @var $this SiteController */
 
+if(isset($_GET['sendTest']))
+{
+		$mail = new YiiMailer();
+		//$mail->clearLayout();//if layout is already set in config
+		$mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
+		$mail->setTo('laptopsr@gmail.com');
+		$mail->setSubject(Yii::t('main', 'TYÖVUOROT'));
+		$mail->setBody("test");
+		$mail->send();
+echo 'test sendmail';
+exit;
+}
+
 if(isset(Yii::app()->user->adminID))
-$this->redirect('index.php/site/etusivu');
+$this->redirect(Yii::app()->request->baseUrl.'/index.php/site/etusivu');
 
 $this->pageTitle=Yii::app()->name;
 

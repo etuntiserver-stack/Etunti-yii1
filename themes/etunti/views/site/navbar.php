@@ -284,7 +284,7 @@
             </li>
             <li class="list-group-item">
               <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/user/logout" class="animated animated-short fadeInUp">
-                <span class="fa fa-power-off"></span> Logout </a>
+                <span class="fa fa-power-off"></span> <?php echo Yii::t('main','Kirjaudu ulos'); ?> </a>
             </li>
           </ul>
         </li>
