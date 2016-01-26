@@ -649,10 +649,9 @@ public function actionImei($dom)
 		$vanhaViesti = '';
 		if($mobupdate->viesti != '')
 		$vanhaViesti = $mobupdate->viesti."\n";
-                $mobupdate->viesti = $vanhaViesti.$_POST['viesti'];
+                $mobupdate->viesti = $vanhaViesti.$_POST['kohde_kannasta']." - ".$_POST['viesti'];
 
                 $mobupdate->my_location = $mobupdate->my_location."**".$_POST['my_location'];
-                $mobupdate->viesti = $mobupdate->viesti."/".$_POST['kohde_kannasta'];
                 $mobupdate->save();
 
 		$kesto = sprint(strtotime($mobupdate->loppui)-strtotime($mobupdate->aloitan));
@@ -668,10 +667,9 @@ public function actionImei($dom)
 		$vanhaViesti = '';
 		if($mobupdate->viesti != '')
 		$vanhaViesti = $mobupdate->viesti."\n";
-                $mobupdate->viesti = $vanhaViesti.$_POST['viesti'];
+                $mobupdate->viesti = $vanhaViesti.$_POST['kohde_kannasta']." - ".$_POST['viesti'];
 
                 $mobupdate->my_location = $mobupdate->my_location."**".$_POST['my_location'];
-                $mobupdate->viesti = $mobupdate->viesti."/".$_POST['kohde_kannasta'];
                 $mobupdate->save();
 
 		$kesto = sprint(strtotime($mobupdate->loppui)-strtotime($mobupdate->aloitan));
