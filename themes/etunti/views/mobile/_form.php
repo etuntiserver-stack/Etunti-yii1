@@ -71,6 +71,7 @@ if(isset($model->tietoja))
                     </li>
                     <li class="list-group-item"  style="height:172px">
                         <?php echo $form->labelEx($model,'viesti'); ?>
+			<br>
                         <strong><?php echo str_replace("\n","<br>",$model->viesti); ?></strong>
                     </li>
                 </ul>
@@ -102,6 +103,7 @@ if(isset($model->tietoja))
                     </li>
                     <li class="list-group-item"  style="height:172px">
                         <?php echo $form->labelEx($model,'viesti'); ?>
+			<br>
                         <strong><?php echo str_replace("\n","<br>",$model->viesti); ?></strong>
                     </li>
                 </ul>
