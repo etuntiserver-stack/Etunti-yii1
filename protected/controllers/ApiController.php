@@ -627,6 +627,7 @@ public function actionImei($dom)
 
                 $mobupdate->loppui = date("d.m.Y H:i:s");
                 $mobupdate->status = 3;
+                $mobupdate->viesti = $mobupdate->viesti."//".$_POST['viesti'];
                 $mobupdate->my_location = $mobupdate->my_location."**".$_POST['my_location'];
                 $mobupdate->save();
 
@@ -639,6 +640,7 @@ public function actionImei($dom)
                 $mobupdate = Mob::model()->findbypk($mob->id);
                 $mobupdate->loppui = date("d.m.Y H:i:s");
                 $mobupdate->status = 2;
+                $mobupdate->viesti = $mobupdate->viesti."//".$_POST['viesti'];
                 $mobupdate->my_location = $mobupdate->my_location."**".$_POST['my_location'];
                 $mobupdate->viesti = $mobupdate->viesti."/".$_POST['kohde_kannasta'];
                 $mobupdate->save();
@@ -652,6 +654,7 @@ public function actionImei($dom)
                 $mobupdate = Mob::model()->findbypk($mob->id);
                 $mobupdate->loppui = date("d.m.Y H:i:s");
                 $mobupdate->status = 10;
+                $mobupdate->viesti = $mobupdate->viesti."//".$_POST['viesti'];
                 $mobupdate->my_location = $mobupdate->my_location."**".$_POST['my_location'];
                 $mobupdate->viesti = $mobupdate->viesti."/".$_POST['kohde_kannasta'];
                 $mobupdate->save();
