@@ -6,7 +6,7 @@ if(isset($_GET['sendTest']))
 		$mail = new YiiMailer();
 		//$mail->clearLayout();//if layout is already set in config
 		$mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
-		$mail->setTo('laptopsr@gmail.com');
+		$mail->setTo('daniel@hostingpalvelu.fi');
 		$mail->setSubject(Yii::t('main', 'TYÖVUOROT'));
 		$mail->setBody("test");
 		$mail->send();
