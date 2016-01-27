@@ -555,21 +555,15 @@ $kysymykset[] = array(
 'kysymys' => 'Tiedätkö tarkkaan työntekijöidesi sijainnin?',
 'haluttu_valinta' => 'kylla',
 'vastaus' => 'Hyvä juttu! Pystyt näin ollen seuraamaan työntekijöitä ja tiedät heidän tuottavuuden. Saat tietoosi työhön käytetyn tarkan ajan ja maksat palkkaa vain tehdystä työstä. Onko työntekijöiden seuraaminen reaaliaikaista ja onko sijaintitieto luotettavaa? Etunti – ohjelman avulla saat työntekijän tarkan sijainnin, jolloin näet luotettavasti onko hän ollut oikeaan aikaan, oikeassa paikassa ja oikean ajan. Saat tehdyt tunnit heti ja voit lähettää ne helposti suoraan palkanlaskentaan.',
+'vastaus2' => 'Ei vastaus',
 'moduli' => '',
 );
-
-$kysymykset[] = array(
-'kysymys' => 'Tiedätkö tarkkaan työntekijöidesi sijainnin?',
-'haluttu_valinta' => 'ei',
-'vastaus' => 'ei ei',
-'moduli' => '',
-);
-
 
 $kysymykset[] = array(
 'kysymys' => 'Joudutko syöttämään työntekijä- ja asiakastietoja sekä työnkuvauksia useaan paikkaan?',
 'haluttu_valinta' => 'kylla',
 'vastaus' => 'Kuulostaa siltä, että yrityksen eri tiedot ovat hyvin sekaisin ja järjestystä on vaikea  ylläpitää. Saattaa olla, että käytätte liikaa arvokasta työaikaa tietojen etsimiseen ja moni pienempi asia katoaa kokonaan. Mitä useammassa paikassa tiedot ovat, niin sitä vaikeampaa yritystoiminnan organisointi on ja yrityksestä ei saa irti parasta tuottoa. Sinun onneksi meillä on tarjota Etunti – ohjelma helpottamaan liiketoimintaanne. Etunti – ohjelman avulla pidät kaikki tiedot yhdessä luotettavassa paikassa ja organisoit yrityksen toimintaa aivan uudella tavalla. Voit valita eri työkaluja yrityksen tarpeisiin ja saada merkittäviä säästöjä joka kuukausi.',
+'vastaus2' => 'Ei vastaus',
 'moduli' => '',
 );
 $kysymykset[] = array(
@@ -582,6 +576,7 @@ $kysymykset[] = array(
 'kysymys' => 'Tiedätkö myynnin kannattavuus- ja talousluvut reaaliaikaisesti?',
 'haluttu_valinta' => 'kylla',
 'vastaus' => 'Hienoa! Tiedät millä tasolla yrityksesi on ja mitkä asiat kaipaavat kehitystä. Pystytkö näkemään helposti kaiken tiedon yrityksestäsi? Etunti Manager – työkalun ansiosta näet yrityksesi tuottavuuden, matkoihin käytetyn ajan, toteutuneet työtunnit ja työntekijän tuottavuuden sekä saat tehtyä raportteja, jolla huomaat helposti, jos liiketoimintasi kaipaa parantelua.',
+'vastaus2' => 'Ei vastaus',
 'moduli' => '',
 );
 $kysymykset[] = array(
@@ -589,18 +584,21 @@ $kysymykset[] = array(
 'haluttu_valinta' => 'kylla',
 'vastaus' => 'Hyvä asia! Ilman asiakkaita ei yritys pyöri ja hyvä, jos voit viestittää asiakkaille helposti ja
 vaivattomasti. Entä näkevätkö asiakkaat helposti työvuoroja, sopimuksia ja laskuja? Etunti CRM – työkalulla lähetät helposti uutiskirjeitä, sopimuksia ja tarjouksia sähköisesti asiakkaalle ja samalla asiakkaat näkevät omat tietonsa CRM:n kautta. Ohjelman ansiosta sinun ei tarvitse enää ajaa asiakaskäynnille sopimusten ja tarjousten takia, vaan voi lähettää ne heti asiakkaan luettavaksi ja hyväksyttäväksi. Säästät aikaa ja rahaa.',
+'vastaus2' => 'Ei vastaus',
 'moduli' => '',
 );
 $kysymykset[] = array(
 'kysymys' => 'Viekö laskujen muodostaminen ja lähettäminen suhteettomasti aikaa?',
 'haluttu_valinta' => 'kylla',
 'vastaus' => 'Oletko laskuja laittaessa ikinä miettinyt, että kunpa tämänkin voisi tehdä vain napin painalluksella? Tämä on nyt mahdollista! Etunti Laskutus – ohjelmalla laskut voi lähettää sähköisesti suoraan asiakkaalle ja samalla ohjelmalla näet onko kaikki laskut maksettu. Helposti lähetät maksumuistutuksia samalla ohjelmalla. Ei enää erillistä kirjautumista pankin sivuille ja laskupinon selaamista, vaan kaikki näkyy järjestyksessä yhdestä paikasta. Näin säästät jopa kaksi kokonaista työpäivää kuukaudessa.',
+'vastaus2' => 'Ei vastaus',
 'moduli' => '',
 );
 $kysymykset[] = array(
 'kysymys' => 'Pystyykö asiakkaasi varaamaan vaivattomasti kalenterista puhdistuspalveluja?',
 'haluttu_valinta' => 'kylla',
 'vastaus' => 'Onneksi olkoon, harvalla on tällainen palvelu käytössä. Online varaaminen on nykypäivää ja sen suosio kasvaa jatkuvasti. Onko sinun yrityksesi varauspalvelu asiakkaalle helppo ja selkeä? Saako asiakas varattua siivoojan vaikka samalle päivälle? Jos vastasit vielä kyllä, niin yrityksesi on hyvin ajan tasalla. Etunti Online – ohjelma tarjoaa kotisivuusi asennettavan ajanvarausjärjestelmän, jolla asiakkaat voivat varata nopeasti puhdistuspalveluja ja ohjelma toimii hyvin yhteen muiden Etunti – työkalujen kanssa.',
+'vastaus2' => 'Ei vastaus',
 'moduli' => '',
 );
 
@@ -624,7 +622,8 @@ $kysymykset[] = array(
                     <div class=\"checkbox kylla\"><i class=\"fa fa-check\"></i></div>
                     <div class=\"checkbox ei\"><i class=\"fa fa-check\"></i></div>
                 </div>
-                <div class=\"vastaus\">{$value['vastaus']}</div>
+                <div class=\"vastaus\" style='display:none'>{$value['vastaus']}</div>
+                <div class=\"vastaus2\" style='display:none'>{$value['vastaus2']}</div>
                 </li>";
             }
          ?>
@@ -634,7 +633,7 @@ $kysymykset[] = array(
       <div class="modal-footer">
         <div class="testerintulos"></div>
         <button type="button" class="btn btn-lg btn-primary">Näytä tulos</button>
-        <a href="#" class="btn btn-lg btn-default tarjouspyynto" data-toggle="modal" data-target=".pyydatarjous_lomake">Lähetä tulos sähköpostiini</a>
+        <!--<a href="#" class="btn btn-lg btn-default tarjouspyynto" data-toggle="modal" data-target=".pyydatarjous_lomake">Lähetä tulos sähköpostiini</a>-->
         <a href="#" class="btn btn-lg btn-default tarjouspyynto" data-toggle="modal" data-target=".pyydatarjous_lomake">Pyydä tarjous</a>
       </div>
     </div><!-- /.modal-content -->

@@ -12,7 +12,7 @@ $asetukset = array(
     'URL' => __FILE__,
 );
 $asetukset['email'][] = array(
-    'osoite' => 'veiko.poldkivi@etunti.fi',
+    'osoite' => 'laptopsr@gmail.com',//veiko.poldkivi@etunti.fi
     'kopio' => '',
     'otsikko' => 'Testiryhmään: [Nimi]',
     'lahettaja' => '',

@@ -3078,14 +3078,14 @@ text-shadow:1px 1px 1px #fff;
 .testeri-modal{
     color: #333;
 }
-.testeri-modal .vastaus{
+.testeri-modal .vastaus, .testeri-modal .vastaus2{
     display: none;
     padding: 8px 15px;
     /*background: #F76900;*/
     color: #F76900;
     /*color: #fff;*/
 }
-.testeri-modal.tulos .show-vastaus .vastaus{
+.testeri-modal.tulos .show-vastaus .vastaus, .testeri-modal.tulos .show-vastaus .vastaus2{
     display: block;
 }
 input:focus::-webkit-input-placeholder { color:transparent; }
