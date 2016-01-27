@@ -15,7 +15,7 @@ $asetukset['email'][] = array(
     'osoite' => 'laptopsr@gmail.com',//veiko.poldkivi@etunti.fi
     'kopio' => '',
     'otsikko' => 'Testiryhmään: [Nimi]',
-    'lahettaja' => '',
+    'lahettaja' => 'info@etunti.fi',
     'viesti' => 'VIESTI yritys: [yritys] <br>
     [kentat]
     ',

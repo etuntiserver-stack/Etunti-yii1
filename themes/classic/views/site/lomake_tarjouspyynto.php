@@ -174,9 +174,12 @@ public function email()
 {
 
 	foreach ($this->asetukset['email'] as $key1 => $value1) {
+		
+		$headers = "From: {$value1['lahettaja']}\r\n" .
+			    "Reply-To: {$value1['lahettaja']}" . "\r\n" .
+			    "X-Mailer: PHP/" . phpversion();
 		/*
-		$headers = "From: {$value1['lahettaja']}\r\n";
-		$headers .= "BCC: {$value1['kopio']}\r\n";
+		//$headers .= "BCC: {$value1['kopio']}\r\n";
 		$headers .= "MIME-Version: 1.0\r\n";
 		$headers .= "Content-Type: text/html; charset=utf-8\r\n";
 		$headers .= "Content-language: FI\r\n";
@@ -207,17 +210,7 @@ public function email()
 		  </body>
 		</html>";
 		if(!empty($value1['osoite'])){
-			//mail ($value1['osoite'], $otsikko, $viesti, $headers);
-
-
-	          $mail = new YiiMailer();
-		  //$mail->clearLayout();//if layout is already set in config
-		  $mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
-		  $mail->setTo($value1['osoite']);
-		  $mail->setSubject($otsikko);
-		  $mail->setBody($viesti);
-		  $mail->send();
-
+			mail ($value1['osoite'], $otsikko, $viesti, $headers);
 		}else
 		{
 		echo "<h3>$otsikko</h3>";
@@ -341,7 +334,7 @@ $asetukset['email'][] = array(
     'osoite' => 'laptopsr@gmail.com',//veiko.poldkivi@etunti.fi
     'kopio' => '',
     'otsikko' => 'tarjouspyynto: [Nimi]',
-    'lahettaja' => 'tuki@etunti.fi',
+    'lahettaja' => 'info@etunti.fi',
     'viesti' => '[kentat]',
 );
 // $asetukset['email'][] = array(
