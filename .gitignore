@@ -11,8 +11,6 @@ protected/data/*.db
 protected/config/*
 .DS_Store
 etuntiAPP/.DS_Store
-etuntiAPP/etunti.zip
-etuntiAPP/etunti/.DS_Store
-etuntiAPP/etunti/www/.DS_Store
+etuntiAPP/EtuntiAPP/platforms/*
 error_log
 themes/roker/js/twitter/*
