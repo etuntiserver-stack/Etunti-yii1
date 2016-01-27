@@ -653,7 +653,7 @@ $kysymykset[] = array(
                                     </span>
                                     <input class="form-control" placeholder="Sähköpostiosoite" name="email"  type="email" required="required">
                                     <span class="input-group-btn">
-                                        <button class="btn btn-primary" type="submit" name="subscribe" >Lähtä</button>
+                                        <button class="btn btn-primary" type="submit" name="subscribe" >Lähetä</button>
                                     </span>
                                 </div>
                             </form>
