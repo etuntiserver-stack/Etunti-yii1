@@ -329,9 +329,14 @@ public function actionImei($dom)
 
 		      $sel .= '<div class="well">
 				  <b>'.$val->pvm.'</b><br>
-				  <b><span class="text">'.$val->alku.'-'.$val->loppu.' '.$osoite.'</span></b>
+				  <b><span class="text">'.$val->alku.'-'.$val->loppu.' '.$osoite.'</span></b>';
+		      if(!empty($val->tietoja))
+		      {
+		      $sel .= '
 				  <hr>
-				  <div class="text-small">'.$val->tietoja.'</div>
+				  <div class="text-small">'.$val->tietoja.'</div>';
+		      }
+		      $sel .= '
 				</div>';
 		    }
 
