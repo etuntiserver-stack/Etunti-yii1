@@ -555,7 +555,7 @@ $kysymykset[] = array(
 'kysymys' => 'Tiedätkö tarkkaan työntekijöidesi sijainnin?',
 'haluttu_valinta' => 'kylla',
 'vastaus' => 'Hyvä juttu! Pystyt näin ollen seuraamaan työntekijöitä ja tiedät heidän tuottavuuden. Saat tietoosi työhön käytetyn tarkan ajan ja maksat palkkaa vain tehdystä työstä. Onko työntekijöiden seuraaminen reaaliaikaista ja onko sijaintitieto luotettavaa? Etunti – ohjelman avulla saat työntekijän tarkan sijainnin, jolloin näet luotettavasti onko hän ollut oikeaan aikaan, oikeassa paikassa ja oikean ajan. Saat tehdyt tunnit heti ja voit lähettää ne helposti suoraan palkanlaskentaan.',
-'vastaus2' => 'Ei vastaus',
+'vastaus2' => 'Monella muullakin yrityksellä on sama ongelma, mutta onneksi ongelma on ratkaistavissa! Työnantajalla on oikeus tietää missä työntekijät ovat? Tekevätkö he työtä määrätyn ajan? Missä yrityksen autolla ajetaan? Saattaa olla, että maksat työntekijöille täyttä päivää, mutta todellisuudessa he eivät ehkä tee sitä ja etkä voi olla asiasta mitenkään varma. Työntekijöiden seuranta parantaa yrityksen liiketoimintaa huomattavasti, kun työntekijöiden työnkulun seurantaan on panostettu. Ohjelmasta saa myös selville, missä yrityksen autolla ajetaan. Etunti – ohjelmalla työ tehostuu ja maksat työntekijöille tehdystä työstä.',
 'moduli' => '',
 );
 
@@ -563,20 +563,21 @@ $kysymykset[] = array(
 'kysymys' => 'Joudutko syöttämään työntekijä- ja asiakastietoja sekä työnkuvauksia useaan paikkaan?',
 'haluttu_valinta' => 'kylla',
 'vastaus' => 'Kuulostaa siltä, että yrityksen eri tiedot ovat hyvin sekaisin ja järjestystä on vaikea  ylläpitää. Saattaa olla, että käytätte liikaa arvokasta työaikaa tietojen etsimiseen ja moni pienempi asia katoaa kokonaan. Mitä useammassa paikassa tiedot ovat, niin sitä vaikeampaa yritystoiminnan organisointi on ja yrityksestä ei saa irti parasta tuottoa. Sinun onneksi meillä on tarjota Etunti – ohjelma helpottamaan liiketoimintaanne. Etunti – ohjelman avulla pidät kaikki tiedot yhdessä luotettavassa paikassa ja organisoit yrityksen toimintaa aivan uudella tavalla. Voit valita eri työkaluja yrityksen tarpeisiin ja saada merkittäviä säästöjä joka kuukausi.',
-'vastaus2' => 'Ei vastaus',
+'vastaus2' => ' Hienoa! Säästät huomattavasti aikaa ja vaivaa, kun kaikki tiedot ovat yhdessä paikassa ja ne eivät mene sekaisin eikä tietoja unohdu. Kannattaa miettiä onko ohjelma luotettava, johon kirjaat kaikki tiedot? Ovatko yksittäiset tiedot helposti löydettävissä? Onko tiedot organisoitu loogisesti? Vaikka tiedot löytyvät yhdestä paikasta, niin ne saattavat olla epäselvästi esillä tai niistä puuttuu yhtenäisyys, jolloin uusia tietoja on vaikea lisätä, kun ei ole selkeää kuvaa, miten tiedot kirjataan. Etunti – ohjelmassa kaikki tiedot ovat samassa paikassa ja hyvässä järjestyksessä. Tietojen lisääminen ja poistaminen on helppoa, ja tietojen käsittelyn lisäksi voi tehdä monia muita asioita samassa ohjelmassa.',
 'moduli' => '',
 );
 $kysymykset[] = array(
 'kysymys' => 'Vievätkö työpisteiden väliset siirtymäajat mielestäsi liikaa liiketoimintasi kannattavuutta?',
 'haluttu_valinta' => 'kylla',
 'vastaus' => 'Työnorganisointi kaipaa selvästi tehostusta. Siirtymäajat ovat pakollisia ja yritykselle menoja tuottavia, mutta kohteet voidaan suunnitella aina siten, että siirtymäajat ovat minimimittaisia. Siirtymäaikojen ollessa lyhyet työntekijät kerkeävät käymään useammassa kohteessa saman päivän aikana. Etunti Manager – työkalun ansiosta näet yrityksesi tuottavuuden, matkoihin käytetyn ajan ja muuta tietoa yrityksestä sekä näet myös missä asioissa yritys voi vielä lisäkehittyä.',
+'vastaus2' => 'Erinomaista! Siirtymäajoista tulee vain yritykselle menoja, koska niitä ei voi asiakkailta veloittaa, joten on hyvä, jos siirtymäajat ovat mahdollisimman lyhyet. Tehokkaat siirtymäajat eivät kuitenkaan takaa yrityksen menestymistä, vaikka se itsessään onkin hyvä saavutus. Kannattaa tarkastaa onko yrityksen muutkin toiminnot tehokkaita. Onko laskujen lähettäminen ja rahaliikenteen seuranta tehokasta myös? Esimerkiksi Etunti Laskutus – työkalu tehostaa yrityksen rahaliikennettä. Tutustu tarkemmin Etunti – ohjelmaan ja sen tuomiin etuihin, joilla saat kaiken hyödyn irti omasta liiketoiminnastasi! Me autamme myös tässä selvitystyössä. Ota rohkeasti yhteyttä ja haasta!',
 'moduli' => '',
 );
 $kysymykset[] = array(
 'kysymys' => 'Tiedätkö myynnin kannattavuus- ja talousluvut reaaliaikaisesti?',
 'haluttu_valinta' => 'kylla',
 'vastaus' => 'Hienoa! Tiedät millä tasolla yrityksesi on ja mitkä asiat kaipaavat kehitystä. Pystytkö näkemään helposti kaiken tiedon yrityksestäsi? Etunti Manager – työkalun ansiosta näet yrityksesi tuottavuuden, matkoihin käytetyn ajan, toteutuneet työtunnit ja työntekijän tuottavuuden sekä saat tehtyä raportteja, jolla huomaat helposti, jos liiketoimintasi kaipaa parantelua.',
-'vastaus2' => 'Ei vastaus',
+'vastaus2' => 'Yritykselle tärkeiden tietojen saaminen reaaliaikaisesti auttaa tiedostamaan yrityksen toiminnan tason. Raporteista näkyy käytetäänkö esimerkiksi matkoihin liikaa aikaa suhteessa työmäärään tai onko joku kustannus alkanut muuttua yllättäen. Kun yrityksen toiminnan muutoksen näkee reaaliajassa, niin niihin pystytään reagoimaan nopeammin. Suosittelemme yrityksellenne työkaluksi Etunti Manager -työkalua, jolla kaikki yrityksen tiedot ovat heti saatavillasi.',
 'moduli' => '',
 );
 $kysymykset[] = array(
@@ -584,21 +585,21 @@ $kysymykset[] = array(
 'haluttu_valinta' => 'kylla',
 'vastaus' => 'Hyvä asia! Ilman asiakkaita ei yritys pyöri ja hyvä, jos voit viestittää asiakkaille helposti ja
 vaivattomasti. Entä näkevätkö asiakkaat helposti työvuoroja, sopimuksia ja laskuja? Etunti CRM – työkalulla lähetät helposti uutiskirjeitä, sopimuksia ja tarjouksia sähköisesti asiakkaalle ja samalla asiakkaat näkevät omat tietonsa CRM:n kautta. Ohjelman ansiosta sinun ei tarvitse enää ajaa asiakaskäynnille sopimusten ja tarjousten takia, vaan voi lähettää ne heti asiakkaan luettavaksi ja hyväksyttäväksi. Säästät aikaa ja rahaa.',
-'vastaus2' => 'Ei vastaus',
+'vastaus2' => ' Vaikuttaa siltä, että kulutat liikaa aikaasi markkinointikirjeiden ja sopimusten kanssa ja saatat istua pitkiäkin aikoja autossa, kun olet matkalla asiakkaan luokse sopimuksen kanssa. Voisit käyttää kaiken tuon ajan paremminkin, jos lähettäisit sopimukset, markkinointikirjeet ja muun yritysviestinnän suoraan asiakkaalle yhdellä klikkauksella. Etunti CRM -työkalu on juuri tätä varten kehitetty ja se sopii hyvin yritystoimintasi tarpeisiin. Sen lisäksi, että sinä saat asiakkaille lähetettyä kaiken tarvittavan vaivattomasti, niin asiakkaat näkevät omat tietonsa ja he voivat tarkastella mm. sopimuksia ja työtunteja.',
 'moduli' => '',
 );
 $kysymykset[] = array(
 'kysymys' => 'Viekö laskujen muodostaminen ja lähettäminen suhteettomasti aikaa?',
 'haluttu_valinta' => 'kylla',
 'vastaus' => 'Oletko laskuja laittaessa ikinä miettinyt, että kunpa tämänkin voisi tehdä vain napin painalluksella? Tämä on nyt mahdollista! Etunti Laskutus – ohjelmalla laskut voi lähettää sähköisesti suoraan asiakkaalle ja samalla ohjelmalla näet onko kaikki laskut maksettu. Helposti lähetät maksumuistutuksia samalla ohjelmalla. Ei enää erillistä kirjautumista pankin sivuille ja laskupinon selaamista, vaan kaikki näkyy järjestyksessä yhdestä paikasta. Näin säästät jopa kaksi kokonaista työpäivää kuukaudessa.',
-'vastaus2' => 'Ei vastaus',
+'vastaus2' => 'Erinomaista, jos yrityksessä laskut liikkuvat tehokkaasti eteenpäin. Tehokkaan laskujen lähettämisen lisäksi sinun tulisi pystyä seuraamaan helposti saatavia ja lähettää maksumuistutuksia. Jos näin ei ole, niin Etunti Laskutus – työkalu on yritystäsi varten. Sillä lähetät sähköisesti laskut nopeasti asiakkaille ja seuraat saapuvia maksuja ja lähetät maksumuistutuksia. Ohjelman avulla et tarvitse enää tuskailla pankin tai laskupinon kanssa.',
 'moduli' => '',
 );
 $kysymykset[] = array(
 'kysymys' => 'Pystyykö asiakkaasi varaamaan vaivattomasti kalenterista puhdistuspalveluja?',
 'haluttu_valinta' => 'kylla',
 'vastaus' => 'Onneksi olkoon, harvalla on tällainen palvelu käytössä. Online varaaminen on nykypäivää ja sen suosio kasvaa jatkuvasti. Onko sinun yrityksesi varauspalvelu asiakkaalle helppo ja selkeä? Saako asiakas varattua siivoojan vaikka samalle päivälle? Jos vastasit vielä kyllä, niin yrityksesi on hyvin ajan tasalla. Etunti Online – ohjelma tarjoaa kotisivuusi asennettavan ajanvarausjärjestelmän, jolla asiakkaat voivat varata nopeasti puhdistuspalveluja ja ohjelma toimii hyvin yhteen muiden Etunti – työkalujen kanssa.',
-'vastaus2' => 'Ei vastaus',
+'vastaus2' => 'Online varaus on tätä päivää ja hyvänä kilpailuetuna puhdistusalalla on online -varausjärjestelmä, jonka saat kätevästi Etunti Online – työkalun avulla. Online – työkalu asennetaan yrityksen kotisivulle ja asiakkaat voivat varata puhdistuspalveluita helposti ja nopeasti jopa samalle päivälle. Varausjärjestelmää tehostamalla säästät kuluissa, samalla tehostat yrityksen toimintaa ja kasvatat liikevaihtoa.',
 'moduli' => '',
 );
 
