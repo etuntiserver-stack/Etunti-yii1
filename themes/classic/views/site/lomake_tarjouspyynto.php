@@ -329,7 +329,7 @@ $asetukset['email'][] = array(
     'osoite' => 'laptopsr@gmail.com',//veiko.poldkivi@etunti.fi
     'kopio' => '',
     'otsikko' => 'tarjouspyynto: [Nimi]',
-    'lahettaja' => '',
+    'lahettaja' => 'tuki@etunti.fi',
     'viesti' => '[kentat]',
 );
 // $asetukset['email'][] = array(
