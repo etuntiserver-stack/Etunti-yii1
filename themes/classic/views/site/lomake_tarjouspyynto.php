@@ -174,11 +174,13 @@ public function email()
 {
 
 	foreach ($this->asetukset['email'] as $key1 => $value1) {
+		/*
 		$headers = "From: {$value1['lahettaja']}\r\n";
 		$headers .= "BCC: {$value1['kopio']}\r\n";
 		$headers .= "MIME-Version: 1.0\r\n";
 		$headers .= "Content-Type: text/html; charset=utf-8\r\n";
 		$headers .= "Content-language: FI\r\n";
+		*/
 
 		$style1 = "color:#3399CC; font-family: Arial,Helvetica; font-size:15px; line-height:22px";
 		$style2 = "color:#000; font-family: Arial,Helvetica; font-size:15px; line-height:22px";
@@ -205,7 +207,17 @@ public function email()
 		  </body>
 		</html>";
 		if(!empty($value1['osoite'])){
-			mail ($value1['osoite'], $otsikko, $viesti, $headers);
+			//mail ($value1['osoite'], $otsikko, $viesti, $headers);
+
+
+	          $mail = new YiiMailer();
+		  //$mail->clearLayout();//if layout is already set in config
+		  $mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
+		  $mail->setTo($value1['osoite']);
+		  $mail->setSubject($otsikko);
+		  $mail->setBody($viesti);
+		  $mail->send();
+
 		}else
 		{
 		echo "<h3>$otsikko</h3>";
