@@ -559,6 +559,14 @@ $kysymykset[] = array(
 );
 
 $kysymykset[] = array(
+'kysymys' => 'Tiedätkö tarkkaan työntekijöidesi sijainnin?',
+'haluttu_valinta' => 'ei',
+'vastaus' => 'ei ei',
+'moduli' => '',
+);
+
+
+$kysymykset[] = array(
 'kysymys' => 'Joudutko syöttämään työntekijä- ja asiakastietoja sekä työnkuvauksia useaan paikkaan?',
 'haluttu_valinta' => 'kylla',
 'vastaus' => 'Kuulostaa siltä, että yrityksen eri tiedot ovat hyvin sekaisin ja järjestystä on vaikea  ylläpitää. Saattaa olla, että käytätte liikaa arvokasta työaikaa tietojen etsimiseen ja moni pienempi asia katoaa kokonaan. Mitä useammassa paikassa tiedot ovat, niin sitä vaikeampaa yritystoiminnan organisointi on ja yrityksestä ei saa irti parasta tuottoa. Sinun onneksi meillä on tarjota Etunti – ohjelma helpottamaan liiketoimintaanne. Etunti – ohjelman avulla pidät kaikki tiedot yhdessä luotettavassa paikassa ja organisoit yrityksen toimintaa aivan uudella tavalla. Voit valita eri työkaluja yrityksen tarpeisiin ja saada merkittäviä säästöjä joka kuukausi.',

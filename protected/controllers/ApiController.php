@@ -264,9 +264,8 @@ public function actionImei($dom)
 		    }
 
 		    $sel = '';
-		    $sel .= '<label>'.Yii::t('main','Valitse kohde työvuorosta').'</label><br>';
 		    $sel .= '<select id="list" class="form-control">';
-		    $sel .= '<option id="valitseOsoite">Valitse osoite</option>';
+		    $sel .= '<option>'.Yii::t('main','Valitse kohde työvuorosta').'</option>';
 		    foreach($tvuoro as $val){
 			$k = Kohteet::model()->findbypk($val->kohde);
 			if(isset($k->osoite))
