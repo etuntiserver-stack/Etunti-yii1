@@ -273,6 +273,7 @@ $(document).ready(function($) {
         }
     });
 
+
     $('.testeri-modal button').click(function(event) {
         testeri();
     });
@@ -304,8 +305,12 @@ function testeri (argument) {
         }
         if ($(this).find('.selected').hasClass('kylla')) {
             vastaus = 'kylla';
+	    $(this).find('.vastaus').show(370);
+	    $(this).find('.vastaus2').hide(370);
         }else{
             vastaus = 'ei';
+	    $(this).find('.vastaus').hide(370);
+	    $(this).find('.vastaus2').show(370);
         }
         if ($(this).hasClass(vastaus)) {
             kysymykeset_oikein++ ;
