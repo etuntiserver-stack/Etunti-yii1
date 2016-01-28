@@ -112,7 +112,7 @@ class SiteController extends Controller
 
 	public function actionLomake_tarjouspyynto()
 	{
-		$this->render('lomake_tarjouspyynto');
+		$this->renderPartial('lomake_tarjouspyynto');
 	}
 
 	public function actionEtusivu_esimerki()

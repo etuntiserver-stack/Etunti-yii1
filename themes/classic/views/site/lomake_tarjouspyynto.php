@@ -147,7 +147,15 @@ public function kasittely()
 		echo "<div class='kiitos'><h2>{$this->asetukset['kiitos']}</h2></div>";
 
 		} else {
-			echo "<div class='huom'>{$this->asetukset['error']}</div>";
+
+			//echo "<div class='huom'>{$this->asetukset['error']}</div>";
+
+		$this->print_form = FALSE;
+		$this->email();
+		$this->csv_save();
+		echo "<div class='kiitos'><h2>{$this->asetukset['kiitos']}</h2></div>";
+
+
 		}
 	}
 
