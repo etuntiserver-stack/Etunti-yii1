@@ -148,14 +148,14 @@ else
 	<input type="hidden" name="laheta" value="true">
 	<input type="hidden" name="asiakas_id" class="form-control" value="<?php echo $asiakas_id; ?>">
 	<input type="hidden" name="status" class="form-control" value="1">
-	<textarea name="ids" class="form-control" rows="4" style="display:none"><?php echo Yii::app()->request->getPost('ids'); ?></textarea>
+	<textarea name="ids" class="form-control" rows="4" style="display:none"><?php echo implode(",",Yii::app()->session['idsToSahkoposti']); ?></textarea>
 
 	<label><?php echo Yii::t('main','Otsikko '); ?></label>
 	<input type="text" name="otsikko" class="form-control" value="<?php echo Yii::t('main','Tuntien hyväksyntä'); ?>">
 	<label><?php echo Yii::t('main','Saaja '); ?></label>
 	<input type="text" name="sahkoposti" class="form-control" value="<?php echo $a->sahkoposti; ?>">
 	<textarea name="kirjen_body" class="form-control" rows="4" style="display:none"><?php echo $body; ?></textarea>
-
+	<br>
 	<input type="submit" class="btn btn-sm btn-success" value="<?php echo Yii::t('main','Lähetä '); ?>">
    </form>
  </div>
