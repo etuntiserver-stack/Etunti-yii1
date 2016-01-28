@@ -1450,7 +1450,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 
 		echo '<br>';
 		echo '<div class="pull-right">';
-		echo '<form action="asiakas_hyvaksyminen" method="POST" target="_blank">';
+		echo '<form action="asiakas_hyvaksyminen" method="POST">';
 		echo '<input type="hidden" name="fromPosti" value="'.$from.'">';
 		echo '<input type="hidden" name="toPosti" value="'.$to.'">';
 		echo '<input type="hidden" name="ids" value="'.implode(",",$ids).'">';
