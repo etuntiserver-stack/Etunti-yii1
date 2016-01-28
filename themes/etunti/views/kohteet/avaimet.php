@@ -52,13 +52,18 @@ legend{  padding: 3px 7px; }
 
 
    <?php
-    $list = CHtml::listData(Mobile::model()->findAll(array('order' => 'tekijan_nimi','group'=>'tekijan_nimi')), 'tid', 'tekijan_nimi');
+    $criteria = new CDbCriteria();
+    $criteria->order = "tekijan_nimi";
+    $criteria->condition = "aktiivinen=1";
+    $m = Tyontekijat::model()->findAll($criteria);
+
+    $list = CHtml::listData($m, 'id', 'tekijan_nimi');
 
     echo '<select name="Tekija[]" class="mult" id="tyontekijat" multiple title="Työntekijät">';
     foreach($list as $key=>$val){
      if(!empty($val))
      {
-       if(isset(Yii::app()->session['Tekija']) and in_array($key,Yii::app()->session['Tekija']))
+       if(isset($_POST['Tekija']) and in_array($key,$_POST['Tekija']))
        	 echo '<option value="'.$key.'" selected>'.$val.'</option>';
        else
        	 echo '<option value="'.$key.'">'.$val.'</option>';
@@ -76,8 +81,20 @@ legend{  padding: 3px 7px; }
 
                         </div>
                       </div>
+                      <div class="col-md-2">
+                        <div class="section">
+                          <label class="field prepend-icon">
 
-                      <div class="col-md-2 col-md-offset-7">
+   			    <input type="text" class="gui-input" name="avain" value="<?php if(isset($_POST['avain'])) echo $_POST['avain']; ?>" placeholder="Avain">
+
+                            <label for="firstname" class="field-icon">
+                              <i class="fa fa-key"></i>
+                            </label>
+                          </label>
+                        </div>
+                      </div>
+
+                      <div class="col-md-2 col-md-offset-5">
         	        <button class="btn btn-primary btn-lg haemob btn-block myBgColors" type="button"><i class="glyphicon glyphicon-search"> </i> Hae</button>
 		      </div>
 

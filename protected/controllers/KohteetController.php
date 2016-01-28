@@ -66,19 +66,23 @@ class KohteetController extends Controller
 	{
 
 
-		if(Yii::app()->request->getPost('Tekija'))
-		Yii::app()->session['Tekija'] = Yii::app()->request->getPost('Tekija');
 
 	       	$criteria = new CDbCriteria();
 		$criteria->condition = "aktiivinen=1";
 
-		if(Yii::app()->session['Tekija']){
-		  if(count(Yii::app()->session['Tekija']) > 1)
-		    $ids = implode(",",Yii::app()->session['Tekija']);
+		if(isset($_POST['Tekija'])){
+		  if(count($_POST['Tekija']) > 1)
+		    $ids = implode(",",$_POST['Tekija']);
 		  else
-		    $ids = Yii::app()->session['Tekija'][0];
+		    $ids = $_POST['Tekija'][0];
 
 	        $criteria->addCondition ('id IN ('.$ids.') ');
+		}
+
+		if(isset($_POST['avain']) and !empty($_POST['avain'])){
+	        $criteria->addCondition (' id IN (SELECT SUBSTRING_INDEX(kenella_on_avain, "//", 1) FROM sivex_kohdet
+			WHERE avain LIKE "%'.$_POST['avain'].'%"
+		) ');
 		}
 
 

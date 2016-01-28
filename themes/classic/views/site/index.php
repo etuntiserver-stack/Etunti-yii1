@@ -242,7 +242,7 @@ tuottavuutta sekä kehität palveluita.
 </p>
 <p>
 Etunnin perus- ja lisätyökalut ovat suunniteltu ratkaisemaan puhdistusalan 
-tyypilliset ongelmat. Yhden ohjelman avulla pyörität yritystoimintaasi ennennäkemättömän helposti. </p>
+tyypilliset ongelmat. Yhden ohjelman avulla pyörität yritystoimintaasi ennen näkemättömän helposti. </p>
 
 <p>
                         <h1 class="title-subtitle text-center">
