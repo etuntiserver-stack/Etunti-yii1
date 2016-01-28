@@ -1886,13 +1886,23 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		$lu = Mobile::model()->findAll($criteria);
 
 		    $return = array();
+		    $ks = array();
+		    $c = array();
 		    $sum = 0;
-		foreach($lu as $l)
+
+		foreach($lu as $t)
 		{
 		    $kesto = '';
-		    $kesto = $l->l_tunnit;
-		    $sum += $l->l_tunnit;
-		    $return[] = $l->kohde_kannasta."//".$kesto."//".$l->count."//";
+		    $kesto = $t->l_tunnit;
+		    $sum += $t->l_tunnit;
+
+		    if(!isset($ks[$t->kohde_kannasta])) { $ks[$t->kohde_kannasta] = 0; }
+		    $ks[$t->kohde_kannasta] += $t->l_tunnit;
+
+		    if(!isset($c[$t->kohde_kannasta])) { $c[$t->kohde_kannasta] = 0; }
+		    $c[$t->kohde_kannasta] += 1;
+
+		    $return[$t->kohde_kannasta] = array($t->kohde_kannasta, $t->count, null);
 		}
 
 
@@ -1922,25 +1932,33 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		    $kesto = '';
 		    $kesto = $t->t_tunnit;
 		    $sum += $t->t_tunnit;
-		    $return2[] = $t->kohde_kannasta."//".$kesto."//".$t->count."//muokattu";
+
+		    if(!isset($ks[$t->kohde_kannasta])) { $ks[$t->kohde_kannasta] = 0; }
+		    $ks[$t->kohde_kannasta] += $t->t_tunnit;
+
+		    if(!isset($c[$t->kohde_kannasta])) { $c[$t->kohde_kannasta] = 0; }
+		    $c[$t->kohde_kannasta] += 1;
+
+		    $return[$t->kohde_kannasta] = array($t->kohde_kannasta, $t->count, 'muokattu');
 		}
 
-		$model = array_merge($return, $return2);
+		$model = $return;
 		//ksort($return);
+		//array_sum($ks);
 
-		foreach($model as $result)
+		foreach($model as $k=>$result)
 		{
-		    $expl = explode("//",$result);
 
 		    $muokattu = '';
-		    if(!empty($expl[3]) and $expl[3] == 'muokattu')
+		    if($result[2] == 'muokattu')
 		    $muokattu = 'text-danger';
 
 			echo 
 			'<div class="row">
-			   <div class="col-sm-6 text-right '.$muokattu.'">'.$expl[0].'</div>
-			   <div class="col-sm-6">kesto: <b> '.$this->sprint($expl[1]).' ('.$this->num($expl[1]).')</b>, kerta: '.$expl[2].'</div>
+			   <div class="col-sm-6 text-right '.$muokattu.'">'.$result[0].'</div>
+			   <div class="col-sm-6">kesto: <b> '.$this->sprint($ks[$k]).' ('.$this->num($ks[$k]).')</b>, kerta: '.$c[$k].'</div>
 			</div>';
+
 		}
 
 		echo '<h3 class="pull-right">'.Yii::t('main','Yhteensä').' '.$this->sprint($sum).' ('.$this->num($sum).')</h3>';
