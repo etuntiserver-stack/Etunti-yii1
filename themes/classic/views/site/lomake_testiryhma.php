@@ -2,9 +2,10 @@
 
 
 $asetukset = array(
-    'nimi' => 'testiryhma',
+    'nimi' => 'tarjouspyynto',
     'kiitos' => 'Kiitos',
     'error' => 'Huom! Tarkista, että täytit kaikki kentät oikein.',
+    'AJAX' => TRUE,
     'LABEL_CLASS' => 'col-sm-5 control-label',
     'FIELD_CLASS' => 'col-sm-7',
     'GROUP_CLASS' => 'form-group',
@@ -14,11 +15,9 @@ $asetukset = array(
 $asetukset['email'][] = array(
     'osoite' => 'veiko.poldkivi@etunti.fi',//veiko.poldkivi@etunti.fi
     'kopio' => '',
-    'otsikko' => 'Testiryhmään: [Nimi]',
+    'otsikko' => 'tarjouspyynto: [Nimi]',
     'lahettaja' => 'info@etunti.fi',
-    'viesti' => 'VIESTI yritys: [yritys] <br>
-    [kentat]
-    ',
+    'viesti' => '[kentat]',
 );
 // $asetukset['email'][] = array(
 //     'osoite' => '',

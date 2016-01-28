@@ -50,6 +50,7 @@ jQuery(document).ready(function(){
                   //url: 'inc/lomake/lomake_class.php',
                   data: form.serialize()
                 }).done(function(data) {
+		  //console.log(data)
                   // Optionally alert the user of success here...
                   form.closest('div').html(data);
                   //console.log(data);
