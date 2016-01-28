@@ -45,6 +45,16 @@
   dm.innerHTML += fordm;
 */
 
+			/*
+			 if(device.platform == 'Android')
+			    server = "http://etunti.fi";
+			 else
+			    server = "https://etunti.fi";
+		
+			 url = server+"/index.php/api/mob";
+			*/
+
+
 	   		 var spFile = evt.target.result.split("//");
 		
 			 document.getElementById('domain').value=spFile[0];

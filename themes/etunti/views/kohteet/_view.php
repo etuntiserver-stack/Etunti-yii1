@@ -5,25 +5,25 @@
 
 <tr>
 	<td>
-		<?php echo $this->asiakasMuutosTheme($data->asiakas_id); ?>
+		<?php echo $data->asiakas_id; ?>
 	</td>
 	<td>
-		<?php echo $this->asiakasMuutosTheme($data->etu_suku_nimet); ?>
+		<?php echo $data->etu_suku_nimet; ?>
 	</td>
 	<td>
-		<?php echo $this->asiakasMuutosTheme($data->tag_id); ?>
+		<?php echo $data->tag_id; ?>
 	</td>
 	<td>
-		<?php echo $this->asiakasMuutosTheme($data->osoite); ?>
+		<?php echo $data->osoite; ?>
 	</td>
 	<td>
-		<?php echo $this->asiakasMuutosTheme($data->email); ?>
+		<?php echo $data->email; ?>
 	</td>
 	<td>
-		<?php echo $this->asiakasMuutosTheme($data->puh_nro); ?>
+		<?php echo $data->puh_nro; ?>
 	</td>
 	<td>
-		<?php echo $this->asiakasMuutosTheme($data->avain); ?>
+		<?php echo $data->avain; ?>
 	</td>
 	<td>
 		<?php echo CHtml::link('', array('update', 'id'=>$data->id), array('class'=>'fa fa-pencil-square-o')); ?>
