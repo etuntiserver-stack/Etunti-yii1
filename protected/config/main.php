@@ -228,7 +228,6 @@ return array(
 		    'moment.js',
 		    'bootstrap-select.js',
 		    'bootstrap-switch.js',
-		    'moment.js',
 		    'bootstrap-datetimepicker.js',
 		    'bootstrap-datepicker.js',
 		    'bootstrap-datepicker.fi.js',

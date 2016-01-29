@@ -797,8 +797,12 @@ Toimi nopeasti, sillä paikkoja on rajoitetusti!</p></p>
     <!-- End layout-->
 
     <!-- ======================= JQuery libs =========================== -->
+<?php
+/*
     <!-- jQuery local-->
     <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/assets_classic/js/jquery.js"></script>
+*/
+?>
     <!--Nav-->
      <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/assets_classic/js/nav/tinynav.js"></script>
 
@@ -807,7 +811,7 @@ Toimi nopeasti, sillä paikkoja on rajoitetusti!</p></p>
     <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/assets_classic/js/totop/jquery.ui.totop.js" ></script>
     <!--Slide Revolution-->
     <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/assets_classic/js/rs-plugin/js/jquery.themepunch.tools.min.js" ></script>
-    <script type='text/javascript' src='<?php echo Yii::app()->request->baseUrl; ?>/assets_classic/js/rs-plugin/js/jquery.themepunch.revolution.min.js'></script>
+    <script type='text/javascript' src="<?php echo Yii::app()->request->baseUrl; ?>/assets_classic/js/rs-plugin/js/jquery.themepunch.revolution.min.js"></script>
     <!--Ligbox-->
     <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/assets_classic/js/fancybox/jquery.fancybox.js"></script>
     <!-- carousel.js-->
