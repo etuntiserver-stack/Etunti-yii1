@@ -104,8 +104,11 @@ class KohteetController extends Controller
 
 	public function actionGooglemap()
 	{
-
+		if(isset($_GET['nomenu'])){
+		$this->renderPartial('googlemap');
+		} else {
 		$this->render('googlemap');
+		}
 	}
 
 	public function actionGooglemap_k()

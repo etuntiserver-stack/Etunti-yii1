@@ -421,11 +421,15 @@ echo '
             <!-- end: .col-md-3-->
 
 
-
-
-
           </div>
           <!-- end: .row -->
+	
+
+	<div class="row">
+	 <iframe src="<?php echo Yii::app()->request->baseUrl; ?>/index.php/kohteet/googlemap?nomenu" scrolling="no" style="width: 100%; height: 700px; border: none"></iframe>
+	</div>
+
+
 
         </div>
 
@@ -433,6 +437,7 @@ echo '
       <!-- End: Content -->
 
       <!-- Begin: Page Footer -->
+<!--
       <footer id="content-footer">
         <div class="row">
           <div class="col-md-6">
@@ -446,6 +451,7 @@ echo '
           </div>
         </div>
       </footer>
+-->
       <!-- End: Page Footer -->
 
     </section>
