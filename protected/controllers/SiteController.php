@@ -151,7 +151,7 @@ class SiteController extends Controller
 	{
 
 		$model = AsiakasHyvaksynta::model()->find(" id='".$id."' and code='".$code."' ");
-
+echo $model->id;
 		$this->render('hyvaksy', array(
 			'model' => $model,
 		));
