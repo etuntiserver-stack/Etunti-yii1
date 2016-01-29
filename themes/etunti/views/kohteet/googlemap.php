@@ -2,7 +2,7 @@
 
 
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns="https://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
     <title>Sivex OY XML kohteet</title>
@@ -15,7 +15,7 @@ $valCenter = '';
 if(isset($_GET['center'])){
 	$valCenter = $_GET['center'];
 	$cityclean = str_replace (" ", "+", $_GET['center']);
-	$json_url = 'http://maps.googleapis.com/maps/api/geocode/json?address='.$cityclean.'&language=fi&sensor=true';
+	$json_url = 'https://maps.googleapis.com/maps/api/geocode/json?address='.$cityclean.'&language=fi&sensor=true';
 	$json = file_get_contents($json_url);
 	$obj = json_decode($json);
 	$get_osoite = $obj->results[0]->geometry->location->lat.",".$obj->results[0]->geometry->location->lng;
@@ -43,24 +43,24 @@ if(isset($_GET['center'])){
   }
 
     var iconBlue = new GIcon(); 
-    iconBlue.image = 'http://labs.google.com/ridefinder/images/mm_20_blue.png';
-    iconBlue.shadow = 'http://labs.google.com/ridefinder/images/mm_20_shadow.png';
+    iconBlue.image = 'https://labs.google.com/ridefinder/images/mm_20_blue.png';
+    iconBlue.shadow = 'https://labs.google.com/ridefinder/images/mm_20_shadow.png';
     iconBlue.iconSize = new GSize(12, 20);
     iconBlue.shadowSize = new GSize(22, 20);
     iconBlue.iconAnchor = new GPoint(6, 20);
     iconBlue.infoWindowAnchor = new GPoint(5, 1);
  
     var iconRed = new GIcon(); 
-    iconRed.image = 'http://labs.google.com/ridefinder/images/mm_20_red.png';
-    iconRed.shadow = 'http://labs.google.com/ridefinder/images/mm_20_shadow.png';
+    iconRed.image = 'https://labs.google.com/ridefinder/images/mm_20_red.png';
+    iconRed.shadow = 'https://labs.google.com/ridefinder/images/mm_20_shadow.png';
     iconRed.iconSize = new GSize(12, 20);
     iconRed.shadowSize = new GSize(22, 20);
     iconRed.iconAnchor = new GPoint(6, 20);
     iconRed.infoWindowAnchor = new GPoint(5, 1);
  
     var iconGreen = new GIcon(); 
-    iconGreen.image = 'http://labs.google.com/ridefinder/images/mm_20_green.png';
-    iconGreen.shadow = 'http://labs.google.com/ridefinder/images/mm_20_shadow.png';
+    iconGreen.image = 'https://labs.google.com/ridefinder/images/mm_20_green.png';
+    iconGreen.shadow = 'https://labs.google.com/ridefinder/images/mm_20_shadow.png';
     iconGreen.iconSize = new GSize(12, 20);
     iconGreen.shadowSize = new GSize(22, 20);
     iconGreen.iconAnchor = new GPoint(6, 20);
