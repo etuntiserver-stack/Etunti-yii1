@@ -2,14 +2,6 @@
 /* @var $this AdministratorsController */
 /* @var $dataProvider CActiveDataProvider */
 
-$this->breadcrumbs=array(
-	'Administrators',
-);
-
-$this->menu=array(
-	array('label'=>'Luo uusi', 'url'=>array('create')),
-	array('label'=>'Hallinta', 'url'=>array('admin')),
-);
 ?>
 
 

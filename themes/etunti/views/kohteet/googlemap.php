@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
 
 
 
@@ -87,7 +87,7 @@ if(!centerUusi[0]){
 
 
 
-        GDownloadUrl("googlemap_k", function(data) {
+        GDownloadUrl(location.protocol + "//" + location.host + "/index.php/kohteet/googlemap_k", function(data) {
           var xml = GXml.parse(data);
           var markers = xml.documentElement.getElementsByTagName("marker");
           for (var i = 0; i < markers.length; i++) {
@@ -119,6 +119,7 @@ if(!centerUusi[0]){
   <body onload="load()" onunload="GUnload()">
 
         <!-- begin: .tray-center -->
+<?php if(!isset($_GET['nomenu'])) : ?>
         <div class="tray-center">
 
   <div class="pull-right">
@@ -134,9 +135,9 @@ if(!centerUusi[0]){
 
         <!-- loppu: .tray-center -->
         </div>
+<?php endif; ?>
 
-
-  <div id="map" style="width: 100%; height: 64%"></div>
+  <div id="map" style="width: 100%; height: 100%"></div>
 
   </body>
 </html>
