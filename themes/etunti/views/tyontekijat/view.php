@@ -1,16 +1,11 @@
 <?php
-/* @var $this TyontekijatController */
-/* @var $model Tyontekijat */
 
-$this->menu=array(
-	array('label'=>'Delete Tyontekijat', 'url'=>'#', 'linkOptions'=>array('submit'=>array('delete','id'=>$model->id),'confirm'=>'Are you sure you want to delete this item?')),
-);
 ?>
 
         <!-- begin: .tray-center -->
         <div class="tray-center">
 
-	   <h2> <i class="fa fa-male"></i> <?php echo Yii::t('main', 'TYÖNTEKIJÄ')." ID# ".$model->id; ?> </h2>
+	   <h2 class="myBgColors p10"> <i class="fa fa-male"></i> <?php echo Yii::t('main', 'TYÖNTEKIJÄ')." ".$model->tekijan_nimi; ?> </h2>
 
 
             <div class="admin-form">

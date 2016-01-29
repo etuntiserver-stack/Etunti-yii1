@@ -1,25 +1,21 @@
 <?php
-/* @var $this AdministratorsController */
-/* @var $model Administrators */
 
-$this->breadcrumbs=array(
-	'Administrators'=>array('index'),
-	$model->id,
-);
-
-$this->menu=array(
-	array('label'=>'List Administrators', 'url'=>array('index')),
-	array('label'=>'Create Administrators', 'url'=>array('create')),
-	array('label'=>'Update Administrators', 'url'=>array('update', 'id'=>$model->id)),
-	array('label'=>'Delete Administrators', 'url'=>'#', 'linkOptions'=>array('submit'=>array('delete','id'=>$model->id),'confirm'=>'Are you sure you want to delete this item?')),
-	array('label'=>'Manage Administrators', 'url'=>array('admin')),
-);
 ?>
 
-<h1>View Administrators #<?php echo $model->id; ?></h1>
+        <!-- begin: .tray-center -->
+        <div class="tray-center">
+
+	   <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-home"></i> <?php echo Yii::t('main', 'Järjestelmänvalvoja')." ".$model->adm_nimi; ?> </h2>
+
+
+            <div class="admin-form">
+              <div class="panel heading-border">
+                <div class="panel-body bg-light">
+                 <div class="row">
 
 <?php $this->widget('zii.widgets.CDetailView', array(
 	'data'=>$model,
+	'cssFile' => Yii::app()->request->baseUrl.'/css/profile.css',
 	'attributes'=>array(
 		'id',
 		'adm_login',
@@ -29,3 +25,11 @@ $this->menu=array(
 		'status',
 	),
 )); ?>
+
+                 </div>
+                </div>
+              </div>
+            </div>
+
+        <!-- loppu: .tray-center -->
+        </div>

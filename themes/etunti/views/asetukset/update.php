@@ -65,6 +65,21 @@ exit;
               </div>
             </div>
 
+            <div class="admin-form">
+              <div class="panel heading-border">
+		<h2 class="p15"><?php echo Yii::t('main','Kehitys');?></h2>
+                <div class="panel-body bg-light">
+                 <div class="row">
+		<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/site/etusivu?theme=admin" class="animated animated-short fadeInUp"><span class="fa fa-gear"></span> <?php echo Yii::t('main','Perus teema'); ?> </a> |  
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/site/etusivu_esimerki" class="animated animated-short fadeInUp"><span class="fa fa-gear"></span> <?php echo Yii::t('main','Etusivun esimerki'); ?> </a> | 
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/site/mobemu" class="animated animated-short fadeInUp"><span class="fa fa-gear"></span> <?php echo Yii::t('main','Mobiili emulattori'); ?> </a> | 
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/valikkoot/index" class="animated animated-short fadeInUp"><span class="fa fa-gear"></span> <?php echo Yii::t('main','Valikot'); ?> </a>
+                 </div>
+                </div>
+              </div>
+            </div>
+
+
         <!-- loppu: .tray-center -->
         </div>
 
