@@ -149,6 +149,7 @@ class SiteController extends Controller
 
 	public function actionHyvaksy($id,$code,$domain)
 	{
+
 		$model = AsiakasHyvaksynta::model()->find(" id='".$id."' and code='".$code."' ");
 
 		$this->render('hyvaksy', array(

@@ -26,21 +26,20 @@
 	}
 
 
-  //AsiakasHyvaksynta::model()->updatebypk($model['id'], array('code'=>'','status'=>3));
+  AsiakasHyvaksynta::model()->updatebypk($model['id'], array('code'=>'','status'=>3));
   ?>
-
+<center>
+<br><br>
         <!-- begin: .tray-center -->
         <div class="tray-center">
-
-	   <h2 class="myBgColors p10"> <i class="fa fa-gear"></i> <?php echo Yii::t('main', 'ASETUKSET'); ?> </h2>
 
 
             <div class="admin-form">
               <div class="panel heading-border">
-		<h2 class="p15">Test</h2>
+		<h2 class="p15">Olet hyväksynyt tunteja.</h2>
                 <div class="panel-body bg-light">
                  <div class="row">
-		  <h1>Kiitos</h1>
+		  <p><?php echo Yii::t('main', 'Kiitos!'); ?></p>
                  </div>
                 </div>
               </div>
@@ -48,9 +47,10 @@
 
         <!-- loppu: .tray-center -->
         </div>
-
+</center>
 
   <?php
 
   }
 ?>
+
