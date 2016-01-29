@@ -564,7 +564,7 @@ function num($val){
 		if(Yii::app()->request->getPost('toP'))
 		Yii::app()->session['toP'] = date("Y-m-d",strtotime(Yii::app()->request->getPost('toP')));
 
-		if(Yii::app()->request->getPost('tunni_status'))
+		if(Yii::app()->request->getPost('tunni_status') and Yii::app()->request->getPost('tunni_status') != 'kaikki')
 		Yii::app()->session['tunni_status'] = Yii::app()->request->getPost('tunni_status');
 
        		$criteria = new CDbCriteria();
