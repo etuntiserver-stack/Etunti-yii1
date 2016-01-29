@@ -42,6 +42,7 @@
                 <div class="col-sm-7 col-md-8 padding-bottom">
                         <h4>Tuki</h4>
                         <p><i class="fa fa-phone"></i> <a href="#">+358 40 7614 366</a></p>
+                        <p><a href="#">Tukinumero vastaa 9 - 17</a></p>
                         <p><i class="fa fa-envelope"></i> <a href="mailto:tuki@etunti.fi">tuki@etunti.fi</a></p>
 
                    </div>
@@ -713,8 +714,19 @@ Toimi nopeasti, sillä paikkoja on rajoitetusti!</p></p>
             <div class="container-fluid">
 
                 <!-- Info Top - Footer Center-->
-
+<style>
+.img-thumbnail{
+	margin-top : 5px;
+	box-radius: 0;
+	box-radius: 0;
+	padding : 0;
+}
+</style>
                 <div class="row">
+                   <div class="col-lg-3">
+                                <img src="<?php echo Yii::app()->request->baseUrl; ?>/img/veikokuva.jpg" class="img-thumbnail">
+                   </div>
+
                    <div class="col-lg-3 col-lg-6 item-center">
                         <h3>+358 40 761 4366</h3>
 
@@ -723,17 +735,17 @@ Toimi nopeasti, sillä paikkoja on rajoitetusti!</p></p>
                         <h4>Soita</h4>
                         </a>
                    </div>
-                   <div class="col-lg-3 col-lg-6 item-center col-lg-offset-2">
-                        <h3><a href="mailto:myynti@etunti.fi">veiko.poldkivi@etunti.fi</a></h3>
+
+                   <div class="col-lg-3 col-lg-6 item-center">
+                        <h3><a href="mailto:veiko.poldkivi@etunti.fi">veiko.poldkivi@etunti.fi</a></h3>
 
                        <a href="#">
                         <i class="fa fa-envelope"></i>
-                        <h4>Lähetä viesti</h4>
+                        <h3><a href="mailto:veiko.poldkivi@etunti.fi">Lähetä viesti</a></h3>
                         </a>
                    </div>
 
-
-                   <div class="col-lg-3 col-lg-6 item-center col-lg-offset-1">
+                   <div class="col-lg-3 col-lg-6 item-center">
                         <div class="logo">
 			<br><br><br>
                             <a href="index.php" title="Return Home">
