@@ -51,6 +51,29 @@
 
   <?php
 
+  } else {
+  ?>
+<center>
+<br><br>
+        <!-- begin: .tray-center -->
+        <div class="tray-center">
+
+
+            <div class="admin-form">
+              <div class="panel heading-border">
+		<h2 class="p15">Tervetuloa.</h2>
+                <div class="panel-body bg-light">
+                 <div class="row">
+		  <p><?php echo Yii::t('main', 'Kiitos!'); ?></p>
+                 </div>
+                </div>
+              </div>
+            </div>
+
+        <!-- loppu: .tray-center -->
+        </div>
+</center>
+  <?php
   }
 ?>
 
