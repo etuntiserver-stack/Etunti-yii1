@@ -102,14 +102,15 @@ $this->breadcrumbs=array(
                         </div>
                       </div>
 
+		<input type="hidden" id="tunni_status" value="<?php if(isset(Yii::app()->session['tunni_status'])) echo Yii::app()->session['tunni_status']; ?>">
                       <div class="col-md-2">
                         <div class="section">
                           <label class="field select">
-			    <select name="tilanne" class="gui-input">
-			     <option>Tilanne</option>
-			     <option>Työt</option>
-			     <option>Matkat</option>
-			     <option>Lounastauko</option>
+			    <select name="tunni_status" id="tunni_status_select" class="gui-input">
+			     <option value="kaikki">Kaikki</option>
+			     <option value="3">Työt</option>
+			     <option value="2">Matkat</option>
+			     <option value="10">Lounastauko</option>
 			    </select>
                             <i class="arrow double"></i>
                             </label>
@@ -256,6 +257,8 @@ function tableAjax(){
     }
     setInterval(updateRivi, "5000");
 
+   if($('#tunni_status').val())
+   $('#tunni_status_select').val($('#tunni_status').val());
 
 });
 </script>

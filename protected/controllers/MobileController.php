@@ -554,12 +554,22 @@ function num($val){
 		if(isset($_POST['toP']) and empty($_POST['toP']))
 		unset(Yii::app()->session['toP']);
 
+		if(isset($_POST['tunni_status']) and $_POST['tunni_status'] == 'kaikki')
+		unset(Yii::app()->session['tunni_status']);
+
+
 		if(Yii::app()->request->getPost('fromP'))
 		Yii::app()->session['fromP'] = date("Y-m-d",strtotime(Yii::app()->request->getPost('fromP')));
 
 		if(Yii::app()->request->getPost('toP'))
 		Yii::app()->session['toP'] = date("Y-m-d",strtotime(Yii::app()->request->getPost('toP')));
+
+		if(Yii::app()->request->getPost('tunni_status'))
+		Yii::app()->session['tunni_status'] = Yii::app()->request->getPost('tunni_status');
+
        		$criteria = new CDbCriteria();
+
+
 /*
 $criteria->order =
 "    	  case 
@@ -583,6 +593,8 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 	        $criteria->addCondition (" kohde_kannasta LIKE '%".Yii::app()->session['etsi_kohteet']."%' ");
 		if(Yii::app()->session['fromP'] and Yii::app()->session['toP'])
 	        $criteria->addCondition ("DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".Yii::app()->session['fromP']."' AND '".Yii::app()->session['toP']."' ");
+		if(Yii::app()->session['tunni_status'])
+	        $criteria->addCondition (" status = '".Yii::app()->session['tunni_status']."' ");
 
 		$dataProvider=new CActiveDataProvider('Mobile', array(
 			'criteria'=>$criteria,
@@ -2035,6 +2047,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		{
 		    $return += $l->l_tunnit;
 		}
+
 		/* ////////////////////////// */
 
        		$criteria = new CDbCriteria();
