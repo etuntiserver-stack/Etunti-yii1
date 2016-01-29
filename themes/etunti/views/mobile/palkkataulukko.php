@@ -165,6 +165,8 @@ $this->breadcrumbs=array(
   <th><?php echo Yii::t('main', 'iltamatka+<br>iltatunnit yht'); ?></th>
   <th><?php echo Yii::t('main', 'Yö'); ?></th>
   <th><?php echo Yii::t('main', 'Su'); ?></th>
+  <th><?php echo Yii::t('main', 'PY'); ?></th>
+  <th><?php echo Yii::t('main', 'EL'); ?></th>
   <th><?php echo Yii::t('main', 'SL'); ?></th>
   <th><?php echo Yii::t('main', 'SPL<br>Pvm'); ?></th>
   <th><?php echo Yii::t('main', 'LS'); ?></th>
@@ -185,6 +187,8 @@ $this->breadcrumbs=array(
   $slYht	= 0;
   $splYht	= 0;
   $lsYht	= 0;
+  $pyhatYht	= 0;
+  $elYht	= 0;
   foreach($model as $data)
   {
 	$tids[] = $data->id;
@@ -196,7 +200,22 @@ $this->breadcrumbs=array(
   	$spl = $this->TidfromtoSPL($from,$to,$data->id);
 	$splYht += $spl;
 	$totalTp += $tp;
-	$this->renderPartial('_palkkataulukko',array('data'=>$data,'tp'=>$tp,'sl'=>$sl,'spl'=>$spl,'ls'=>$ls,'from'=>$from,'to'=>$to));
+  	$pyhat = $this->pyhapaivat($data->id,$from,$to,"pyhat");
+	$pyhatYht += $pyhat;
+  	$el = $this->pyhapaivat($data->id,$from,$to,"el");
+	$elYht += $el;
+
+	$this->renderPartial('_palkkataulukko',array(
+			'data'=>$data,
+			'tp'=>$tp,
+			'sl'=>$sl,
+			'spl'=>$spl,
+			'ls'=>$ls,
+			'from'=>$from,
+			'to'=>$to,
+			'pyhat'=>$pyhat,
+			'el'=>$el,
+	));
   }
 
 	$yht[0] = 0;
@@ -240,6 +259,8 @@ $this->breadcrumbs=array(
 	<td><?php echo $this->sprint($yht[3]); ?></td>
 	<td></td>
 	<td></td>
+	<td><?php echo $this->num($pyhatYht); ?></td>
+	<td><?php echo $this->num($elYht); ?></td>
 	<td><?php echo $this->num($slYht); ?></td>
 	<td><?php echo $splYht; ?></td>
 	<td><?php echo $this->num($lsYht); ?></td>

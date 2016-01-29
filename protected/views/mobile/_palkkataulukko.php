@@ -71,6 +71,7 @@
 		$sum = $matkaM+$sum;
 		$sum = $this->num($sum);
 		$sumI = $this->num($sumI);
+
 ?>
 
 <tr>
@@ -84,6 +85,8 @@
 	<td class="col7"><?php echo $sumI; ?></td>
 	<td class="col8"><?php echo $return[2]; ?></td>
 	<td class="col9"><?php echo $return[3]; ?></td>
+	<td class="col10"><?php echo $this->num($pyhat); ?></td>
+	<td class="col10"><?php echo $this->num($el); ?></td>
 	<td class="col10"><?php echo $this->num($sl); ?></td>
 	<td class="col11"><?php echo $spl; ?></td>
 	<td class="col12"><?php echo $this->num($ls); ?></td>

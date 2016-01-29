@@ -6,7 +6,7 @@
 }
 
 
-.tb .col1{ width: 20%; }
+.tb .col1{ width: 10%; }
 .tb .col2{ width: 7%; }
 .tb .col3{ width: 7%; }
 .tb .col4{ width: 7%; }
@@ -18,9 +18,9 @@
 .tb .col10{ width: 7%; }
 .tb .col11{ width: 7%; }
 .tb .col12{ width: 7%; }
-.tb .col13{ width: 23%; text-align: left; }
-.tb .col14{ width: 23%; text-align: left; }
-.tb .col15{ width: 23%; text-align: left; }
+.tb .col13{ width: 20%; text-align: left; }
+.tb .col14{ width: 20%; text-align: left; }
+.tb .col15{ width: 20%; text-align: left; }
 </style>
 
 
@@ -45,14 +45,16 @@
   <thead>
   <tr>
   <th><?php echo Yii::t('main', 'Työntekijä'); ?></th>
-  <th><?php echo Yii::t('main', 'TP'); ?></th>
-  <th><?php echo Yii::t('main', 'M'); ?></th>
-  <th><?php echo Yii::t('main', 'T'); ?></th>
+  <th><?php echo Yii::t('main', 'Työpäiviä'); ?></th>
+  <th><?php echo Yii::t('main', 'Matkat'); ?></th>
+  <th><?php echo Yii::t('main', 'Työtunnit'); ?></th>
   <th><?php echo Yii::t('main', 'M+<br>T yht'); ?></th>
   <th><?php echo Yii::t('main', 'Ilta'); ?></th>
-  <th><?php echo Yii::t('main', 'Im+<br>It yht'); ?></th>
+  <th><?php echo Yii::t('main', 'ilta M+<br>ilta T yht'); ?></th>
   <th><?php echo Yii::t('main', 'Yö'); ?></th>
   <th><?php echo Yii::t('main', 'Su'); ?></th>
+  <th><?php echo Yii::t('main', 'PY'); ?></th>
+  <th><?php echo Yii::t('main', 'EL'); ?></th>
   <th><?php echo Yii::t('main', 'SL'); ?></th>
   <th><?php echo Yii::t('main', 'SPL<br>Pvm'); ?></th>
   <th><?php echo Yii::t('main', 'LS'); ?></th>
@@ -65,7 +67,7 @@
   <?php 
   $tids = array();
   $totalTp	= 0;
-  $tot_sun	=0;
+  $tot_sun	= 0;
   $tp		= 0;
   $sl 		= 0;
   $ls 		= 0;
@@ -73,6 +75,8 @@
   $slYht	= 0;
   $splYht	= 0;
   $lsYht	= 0;
+  $pyhatYht	= 0;
+  $elYht	= 0;
   foreach($model as $data)
   {
 	$tids[] = $data->id;
@@ -84,7 +88,22 @@
   	$spl = $this->TidfromtoSPL($from,$to,$data->id);
 	$splYht += $spl;
 	$totalTp += $tp;
-	$this->renderPartial('_palkkataulukko',array('data'=>$data,'tp'=>$tp,'sl'=>$sl,'spl'=>$spl,'ls'=>$ls,'from'=>$from,'to'=>$to));
+  	$pyhat = $this->pyhapaivat($data->id,$from,$to,"pyhat");
+	$pyhatYht += $pyhat;
+  	$el = $this->pyhapaivat($data->id,$from,$to,"el");
+	$elYht += $el;
+
+	$this->renderPartial('_palkkataulukko',array(
+			'data'=>$data,
+			'tp'=>$tp,
+			'sl'=>$sl,
+			'spl'=>$spl,
+			'ls'=>$ls,
+			'from'=>$from,
+			'to'=>$to,
+			'pyhat'=>$pyhat,
+			'el'=>$el,
+	));
   }
 
 	$yht[0] = 0;
@@ -128,6 +147,8 @@
 	<td><?php echo $this->sprint($yht[3]); ?></td>
 	<td></td>
 	<td></td>
+	<td><?php echo $this->num($pyhatYht); ?></td>
+	<td><?php echo $this->num($elYht); ?></td>
 	<td><?php echo $this->num($slYht); ?></td>
 	<td><?php echo $splYht; ?></td>
 	<td><?php echo $this->num($lsYht); ?></td>

@@ -1980,4 +1980,85 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 	  return $spl;
 	}
 
+
+
+	public function pyhapaivat($tid,$from,$to,$m)
+	{
+
+		$pvmSTR = '';
+
+		$asetukset = Asetukset::model()->findbypk(1);
+		if($m == "pyhat")
+		$pvms = explode("\n",$asetukset->pyhapaivat);
+		elseif($m == "el")
+		$pvms = explode("\n",$asetukset->erikoislauantai);
+
+		$pget = array(0);
+		if(isset($pvms[0]))
+		{
+		  foreach($pvms as $p)
+		  {
+		    if(date("Y-m-d",strtotime($p)) > $from and date("Y-m-d",strtotime($p)) < $to)
+		    {
+		      $prepair = date("Y-m-d",strtotime($p));
+		      $pget[$prepair] = $prepair;
+		    }
+		  }
+		}
+		if(isset($pget[0]))
+		{
+		unset($pget[0]);
+		$pvmSTR = "DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d')='".implode("' OR DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d')='",$pget)."'";
+		}
+
+		if(!empty($pvmSTR))
+		$pvmSTR = " AND ($pvmSTR) ";
+
+		$return 	= 0;
+
+       		$criteria = new CDbCriteria();
+        	$criteria->select = "
+		SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit
+		";
+
+        	$criteria->condition = "  
+			tid = '".$tid."' and aloitan !='' and loppui !='' 
+			AND id NOT IN(select kid from sivexkuitti_repaired)
+			AND (status='2' OR status='3')
+			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$from."' AND '".$to."'
+			$pvmSTR
+		";
+
+
+		$lu = Mobile::model()->findAll($criteria);
+		foreach($lu as $l)
+		{
+		    $return += $l->l_tunnit;
+		}
+		/* ////////////////////////// */
+
+       		$criteria = new CDbCriteria();
+        	$criteria->select = "
+		SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit,aloitan,loppui 
+		";
+
+        	$criteria->condition = "  
+			tid = '".$tid."' and aloitan !='' and loppui !='' 
+			AND (status='2' OR status='3')
+			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$from."' AND '".$to."'
+			$pvmSTR
+		";
+
+
+		$tot = Toteutuneet::model()->findAll($criteria);
+		foreach($tot as $l)
+		{
+		    $return += $l->l_tunnit;
+		}
+
+
+		return $return;
+
+	}
+
 }
