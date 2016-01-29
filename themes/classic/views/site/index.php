@@ -724,7 +724,7 @@ Toimi nopeasti, sillä paikkoja on rajoitetusti!</p></p>
 </style>
                 <div class="row">
                    <div class="col-lg-3">
-                                <img src="<?php echo Yii::app()->request->baseUrl; ?>/img/veikokuva.jpg" class="img-thumbnail">
+                                <img src="img/veikokuva.jpg" class="img-thumbnail">
                    </div>
 
                    <div class="col-lg-3 col-lg-6 item-center">
