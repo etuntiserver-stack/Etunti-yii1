@@ -1,15 +1,11 @@
 <?php
 
-$this->menu=array(
-	array('label'=>'Poista asiakas', 'url'=>'#', 'linkOptions'=>array('submit'=>array('delete','id'=>$model->id),'confirm'=>'Are you sure you want to delete this item?')),
-
-);
 ?>
 
         <!-- begin: .tray-center -->
         <div class="tray-center">
 
-	   <h2> <i class="glyphicon glyphicon-home"></i> <?php echo Yii::t('main', 'ASIAKAS')." ID# ".$model->id; ?> </h2>
+	   <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-home"></i> <?php echo Yii::t('main', 'ASIAKAS')." ID# ".$model->id; ?> </h2>
 
 
             <div class="admin-form">
