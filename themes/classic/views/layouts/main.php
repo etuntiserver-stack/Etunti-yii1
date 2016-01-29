@@ -193,7 +193,7 @@ if (
 
                         <a href="#">
                         <i class="fa fa-phone"></i>
-                        <h4>Soita</h4>
+                        <h3>Soita</h3>
                         </a>
                    </div>
 
