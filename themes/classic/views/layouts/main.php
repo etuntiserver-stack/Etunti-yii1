@@ -198,11 +198,11 @@ if (
                    </div>
 
                    <div class="col-lg-3 col-lg-6 item-center">
-                        <h3><a href="mailto:veiko.poldkivi@etunti.fi">veiko.poldkivi@etunti.fi</a></h3>
+                        <h3><a href="mailto:info@etunti.fi">info@etunti.fi</a></h3>
 
                        <a href="#">
                         <i class="fa fa-envelope"></i>
-                        <h3><a href="mailto:veiko.poldkivi@etunti.fi">Lähetä viesti</a></h3>
+                        <h3><a href="mailto:info@etunti.fi">Lähetä viesti</a></h3>
                         </a>
                    </div>
 
