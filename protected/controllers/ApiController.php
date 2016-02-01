@@ -423,7 +423,7 @@ public function actionImei($dom)
   			$admin = $val->admin;
 
 		     	$sel .= '<div class="well">
-				  '.$cl.'<br>
+				  <p>'.$cl.' <b>Keskustelu nro.: '.$val->id.'</b></p>
 				  <span class="text" id="text_'.$val->id.'">'.str_replace("\n","<br>",$val->viesti).'</span><br>';
 
 				  if(isset($exAdmin[0]) and !empty($exAdmin[0])){
