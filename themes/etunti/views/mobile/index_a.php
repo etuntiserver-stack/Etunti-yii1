@@ -10,14 +10,12 @@
 	
 	   foreach($vi as $v)
 	   {
-		$exAdm = explode(",",$v->admin);
 
 	   	echo '<div class="col-sm-4" id="v_'.$v->id.'">';
 	   	echo '<div class="well">';
-		if(isset($exAdm[1]))
-		echo '<b>'.date("d.m H:i",strtotime($v->time)).', '.$exAdm[1].'</b><br>';
-		echo $v->viesti;
-		echo '
+
+		echo '<span>'.str_replace("\n","<br>",$v->viesti).'
+
 		<div class="row">
 	 	 <div class="pull-right">
 		  '.CHtml::link("Vasta", Yii::app()->request->baseUrl.'/index.php/viestinta/update?id='.$v->id, array('class'=>'btn btn-xs btn-primary')).'
