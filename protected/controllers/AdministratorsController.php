@@ -79,7 +79,7 @@ class AdministratorsController extends Controller
 		$model=new Administrators;
 
 		// Uncomment the following line if AJAX validation is needed
-		// $this->performAjaxValidation($model);
+		$this->performAjaxValidation($model);
 
 		if(isset($_POST['Administrators']))
 		{
@@ -104,11 +104,14 @@ class AdministratorsController extends Controller
 		$model=$this->loadModel($id);
 
 		// Uncomment the following line if AJAX validation is needed
-		// $this->performAjaxValidation($model);
+		$this->performAjaxValidation($model);
 
 		if(isset($_POST['Administrators']))
 		{
+
+			if($model->adm_salasana != $_POST['Administrators']['adm_salasana'])
 			$_POST['Administrators']['adm_salasana']=md5($_POST['Administrators']['adm_salasana']);
+
 			$model->attributes=$_POST['Administrators'];
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));

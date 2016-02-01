@@ -371,7 +371,7 @@ public function actionImei($dom)
 	        if($_POST['check'] == 'checkviesti'){
 
 		    $criteria = new CDbCriteria();
-		    $criteria->order = " id DESC ";
+		    $criteria->order = " id DESC,status = '0' DESC LIMIT 20";
 		    $criteria->condition = " tekija = '".$ttekija->id."' and status = '0' ";
 	            $viestinta = Viestinta::model()->findAll($criteria);
 

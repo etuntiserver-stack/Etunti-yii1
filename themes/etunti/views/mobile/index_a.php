@@ -12,13 +12,15 @@
 	   {
 		$exAdm = explode(",",$v->admin);
 
-	   	echo '<div class="col-sm-12" id="v_'.$v->id.'">';
-		echo '<div class="link pull-right col-sm-1 vastaanotettu" for="v_'.$v->id.'">'.Yii::t('main','Vastaanotto').'</div>';
-	   	echo '<div class="alert alert-danger">';
-		echo 'ID: '.$v->id.'<br>';
+	   	echo '<div class="col-sm-4" id="v_'.$v->id.'">';
+	   	echo '<div class="well">';
 		if(isset($exAdm[1]))
-		echo '<b>'.date("d.m H:i",strtotime($v->time)).'<br>'.$exAdm[1].'</b><hr>';
+		echo '<b>'.date("d.m H:i",strtotime($v->time)).', '.$exAdm[1].'</b><br>';
 		echo $v->viesti;
+		echo '
+		<div class="row">
+		<div class="btn btn-xs btn-default pull-right vastaanotettu" for="v_'.$v->id.'">'.Yii::t('main','Sulje').'</div>
+		</div>';
 		echo '</div>';
 		echo '</div>';
 	   }

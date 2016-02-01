@@ -1,21 +1,31 @@
 <?php
-/* @var $this ViestintaController */
-/* @var $model Viestinta */
 
-$this->breadcrumbs=array(
-	Yii::t('main', 'Viestintä')=>array('index'),
-	$model->id=>array('view','id'=>$model->id),
-	Yii::t('main', 'Päivitä'),
-);
-
-$this->menu=array(
-	array('label'=>'List Viestinta', 'url'=>array('index')),
-	array('label'=>'Create Viestinta', 'url'=>array('create')),
-	array('label'=>'View Viestinta', 'url'=>array('view', 'id'=>$model->id)),
-	array('label'=>'Manage Viestinta', 'url'=>array('admin')),
-);
 ?>
 
-<h1><?php echo Yii::t('main', 'Päivitä viesti'); ?> <?php echo $model->id; ?></h1>
+        <!-- begin: .tray-center -->
+        <div class="tray-center">
 
-<?php echo $this->renderPartial('_form', array('model'=>$model)); ?>
+	   <div class="pull-right">
+	   <?php      
+ 		echo CHtml::link("poista", '#', array(
+		'submit'=>array('delete', "id"=>$model->id), 
+		'confirm' => 'Haluatko varmaasti poistaa?',
+		'class'=>'btn btn-primary myBgColors'
+		));
+	   ?>
+	   </div>
+	   <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-user"></i> <?php echo Yii::t('main','Jatka keskustelu'); ?> </h2>
+
+
+            <div class="admin-form">
+              <div class="panel heading-border">
+                <div class="panel-body bg-light">
+                 <div class="row">
+		  <?php echo $this->renderPartial('_form', array('model'=>$model)); ?>
+                 </div>
+                </div>
+              </div>
+            </div>
+
+        <!-- loppu: .tray-center -->
+        </div>

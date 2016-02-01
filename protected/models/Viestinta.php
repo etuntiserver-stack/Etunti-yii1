@@ -14,6 +14,8 @@
 class Viestinta extends DB2ActiveRecord
 {
 public $count;
+public $edellinen_viesti;
+
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
@@ -75,6 +77,7 @@ public $count;
 			'tekija' => 'Vastaanottaja',
 			'viesti' => 'Viesti',
 			'admin' => 'Lähettäjä',
+			'edellinen_viesti'=>'Viimeiset viestit',
 		);
 	}
 

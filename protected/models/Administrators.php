@@ -39,7 +39,7 @@ class Administrators extends DB2ActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('adm_login, adm_salasana, adm_email, adm_nimi, status', 'required'),
+			array('adm_login, adm_salasana, adm_email, adm_nimi', 'required'),
 			array('status', 'numerical', 'integerOnly'=>true),
 			array('adm_login, adm_salasana, adm_email, adm_nimi', 'length', 'max'=>100),
 			// The following rule is used by search().
