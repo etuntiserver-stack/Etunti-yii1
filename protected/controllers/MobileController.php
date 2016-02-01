@@ -1178,6 +1178,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		t.*
 		";
 
+
         	//$criteria->condition = " l_loppu = '' and l_alku = '' ";
 
         	$criteria->order = "tekijan_nimi"; //"SUBSTR(LTRIM(tekijan_nimi), LOCATE(' ',LTRIM(tekijan_nimi)))"
@@ -2010,7 +2011,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		{
 		  foreach($pvms as $p)
 		  {
-		    if(date("Y-m-d",strtotime($p)) > $from and date("Y-m-d",strtotime($p)) < $to)
+		    if(date("Y-m-d",strtotime($p)) >= $from and date("Y-m-d",strtotime($p)) <= $to)
 		    {
 		      $prepair = date("Y-m-d",strtotime($p));
 		      $pget[$prepair] = $prepair;
