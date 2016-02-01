@@ -46,6 +46,10 @@ if(isset($ad->adm_nimi))
 		  if(isset($model->id))
 		  {
 
+
+		  preg_match('/tt_(.*?),/', $model->admin, $matches);
+		  if(isset($matches[1])) $model->tekija = $matches[1];
+
 		  echo $form->labelEx($model,'tekija');
         	  $list = CHtml::listData(Tyontekijat::model()->findAll(array('order' => 'tekijan_nimi')), 'id', 'tekijan_nimi');
         	  echo $form->dropDownList($model, 'tekija', $list,
