@@ -14,7 +14,7 @@
 	   	echo '<div class="col-sm-4" id="v_'.$v->id.'">';
 	   	echo '<div class="well">';
 
-		echo '<span>'.str_replace("\n","<br>",$v->viesti).'
+		echo '<span>'.str_replace("\n","<br>",$v->viesti).'</span>
 
 		<div class="row">
 	 	 <div class="pull-right">
