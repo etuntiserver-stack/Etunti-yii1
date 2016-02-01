@@ -83,8 +83,8 @@ if(isset($ad->adm_nimi))
 
 	<div class="section fill mb5">
 		<?php  echo $form->hiddenField($model,'edellinen_viesti',array('value'=>$model->viesti,'rows'=>6, 'cols'=>50,'class'=>'form-control')); ?>
-		<?php echo $form->labelEx($model,'edellinen_viesti'); ?><br>
-		<?php echo str_replace("\n","<br>",$model->viesti); ?>
+		<?php echo $form->labelEx($model,'edellinen_viesti'); ?><br><br>
+		<p><?php echo str_replace("\n","<br>",$model->viesti); ?></p>
 		<?php echo $form->error($model,'edellinen_viesti'); ?>
 	</div>
 

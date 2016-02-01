@@ -354,12 +354,14 @@ public function actionImei($dom)
 		    if(isset($_POST['viesti']))
 		    $viesti .= $_POST['viesti'];
 
+		    /*
 		    if(isset($_POST['my_location']) and !empty($_POST['my_location']))
 		    {
 		    $viesti .= '<br> <a href="http://maps.google.com/maps?q='.str_replace("/",",",$_POST['my_location']).'&ll='.str_replace("/",",",$_POST['my_location']).'&z=17" target="_blank">KARTTA</a>';
 		    }
+		    */
 
-		    $model->viesti = $viesti;
+		    $model->viesti = date("d.m H:i").", ".$ttekija->tekijan_nimi.": ".$viesti;
 
 		    if($model->save())
 		       $this->_sendResponse(200, "Viestisi vastaanotettu");
