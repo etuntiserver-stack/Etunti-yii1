@@ -49,7 +49,7 @@ if(isset($ad->adm_nimi))
 		  echo $form->labelEx($model,'tekija');
         	  $list = CHtml::listData(Tyontekijat::model()->findAll(array('order' => 'tekijan_nimi')), 'id', 'tekijan_nimi');
         	  echo $form->dropDownList($model, 'tekija', $list,
-			array('class'=>'form-control','disabled'=>'yes'));
+			array('class'=>'form-control','readonly'=>'yes'));
 		  } else {
 		  echo $form->labelEx($model,'tekija');
         	  $list = CHtml::listData(Tyontekijat::model()->findAll(array('order' => 'tekijan_nimi')), 'id', 'tekijan_nimi');
