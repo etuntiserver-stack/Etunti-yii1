@@ -455,7 +455,7 @@ public function actionImei($dom)
 		    $tekija = Tyontekijat::model()->findbypk($viestinta->tekija);
 
 
-	            $viestinta->viesti = $viestinta->viesti."\n<b>".date("d.m").", ".$tekija->tekijan_nimi.":</b> ".$_POST['vastText'];
+	            $viestinta->viesti = $viestinta->viesti."\n".date("d.m").", ".$tekija->tekijan_nimi.": ".$_POST['vastText'];
 	            $viestinta->save();
 		    // lahetta sahkopostiin
 		    $admin = '';
@@ -474,7 +474,7 @@ public function actionImei($dom)
 				$headers="From: $tekija->tekijan_nimi <no_replay@etunti.fi>\r\n".
 					"Reply-To: no_replay@etunti.fi\r\n".
 					"MIME-Version: 1.0\r\n".
-					"Content-type: text/plain; charset=UTF-8";
+					"Content-type: text/html; charset=UTF-8";
 
 				if(mail($adm->adm_email,$subject,$viestinta->viesti,$headers)){
 				   $sending = 'ok';
