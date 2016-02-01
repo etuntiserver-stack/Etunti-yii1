@@ -87,6 +87,7 @@ function set(){
 	           success: function(data){
 	        	console.log(data);
 			$("#text_"+thisID).html(data.replace(/\n/g, "<br />"));
+			$("#vastaus_"+thisID).val('');
 	    	  },
 	    		error:function (xhr, ajaxOptions, thrownError){
 	        	console.log(xhr.responseText);
