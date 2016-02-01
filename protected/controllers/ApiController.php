@@ -406,6 +406,7 @@ public function actionImei($dom)
 		    $sel = '';
 		    $cl = '';
 		    $admin = '';
+	     	    $sel .= '<div class="row">';
 		    foreach($viestinta as $val)
 		    {
 		      if($val->status == '0')
@@ -419,8 +420,7 @@ public function actionImei($dom)
 		      else
   			$admin = $val->admin;
 
-		     	$sel .= '<div class="row">
-				  <div class="'.$cl.'">
+		     	$sel .= '<div class="'.$cl.'">
 				  '.$admin.'<br>
 				  '.$val->pvm.'<hr>
 				  <span class="text" id="text_'.$val->id.'">'.str_replace("\n","<br>",$val->viesti).'</span><br>';
@@ -436,13 +436,13 @@ public function actionImei($dom)
 			              </div>
 			            </div>
 
-			           </div>
+
 			  	  </div>
 				  ';
 				  }
 
-			$sel .= '</div>';
 		    }
+		    $sel .= '</div>';
 		    Viestinta::model()->updateAll(array('status'=>1),'tekija="'.$ttekija->id.'"');
 
 		    $this->_sendResponse(200, $sel);
