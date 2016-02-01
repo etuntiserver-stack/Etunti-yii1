@@ -205,6 +205,9 @@ class ViestintaController extends Controller
        		$criteria = new CDbCriteria();
 	        $criteria->order = "  id DESC ";
 
+		if(isset($_POST['id']) and !empty($_POST['id']))
+	        $criteria->addCondition (" id = '".$_POST['id']."' ");
+
 		if(isset($_POST['pvm']) and !empty($_POST['pvm']))
 	        $criteria->addCondition (" DATE(time) = '".$_POST['pvm']."' ");
 

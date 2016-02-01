@@ -37,7 +37,20 @@
                           </label>
                         </div>
                       </div>
-                      <div class="col-md-8">
+
+                      <div class="col-md-2">
+                        <div class="section">
+                          <label class="field prepend-icon">
+
+   			    <input type="text" name="id"  class="gui-input" value="<?php if(isset($_POST['id'])) echo $_POST['id']; ?>" placeholder="<?php echo Yii::t('main', 'Keskustelu nro..'); ?>..">
+                            <label for="firstname" class="field-icon">
+                              <i class="fa fa-file-text-o"></i>
+                            </label>
+                          </label>
+                        </div>
+                      </div>
+
+                      <div class="col-md-6">
                         <div class="section">
                           <label class="field prepend-icon">
 
