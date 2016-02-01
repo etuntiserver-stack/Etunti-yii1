@@ -139,7 +139,7 @@ class ViestintaController extends Controller
 		if(isset($_POST['Viestinta']))
 		{
 			$model->attributes=$_POST['Viestinta'];
-			$model->viesti=date("d.m").", ".Yii::app()->user->nimi.":</b> ".$_POST['Viestinta']['viesti'];
+			$model->viesti="<b>".date("d.m").", ".Yii::app()->user->nimi.":</b> ".$_POST['Viestinta']['viesti'];
 			if($model->save()){
 
 			Domainit::PushNotify($model->tekija,"ETUNTI",$model->viesti);
