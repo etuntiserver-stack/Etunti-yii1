@@ -406,7 +406,7 @@ public function actionImei($dom)
 		    $sel = '';
 		    $cl = '';
 		    $admin = '';
-	     	    $sel .= '<div class="row">';
+
 		    foreach($viestinta as $val)
 		    {
 		      if($val->status == '0')
@@ -442,7 +442,7 @@ public function actionImei($dom)
 				  }
 
 		    }
-		    $sel .= '</div>';
+
 		    Viestinta::model()->updateAll(array('status'=>1),'tekija="'.$ttekija->id.'"');
 
 		    $this->_sendResponse(200, $sel);
