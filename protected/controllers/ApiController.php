@@ -455,7 +455,7 @@ public function actionImei($dom)
 		    $tekija = Tyontekijat::model()->findbypk($viestinta->tekija);
 
 
-	            $viestinta->viesti = $viestinta->viesti."\n".date("d.m").", ".$tekija->tekijan_nimi.": ".$_POST['vastText'];
+	            $viestinta->viesti = $viestinta->viesti."\n".date("d.m H:i").", ".$tekija->tekijan_nimi.": ".$_POST['vastText'];
 	            $viestinta->save();
 		    // lahetta sahkopostiin
 		    $admin = '';

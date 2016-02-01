@@ -177,8 +177,8 @@ tyypilliset ongelmat. Yhden ohjelman avulla pyörität yritystoimintaasi ennen n
                         </ul>
                         <br>
                         <h3>Hanki yrityksellesi Etunti -ohjelma.<br>Ota yhteyttä:</h3>
-                        <p>Veiko Põldkivi<br>
-email: etunimi.sukunimi@etunti.fi<br>
+                        <p>
+info@etunti.fi<br>
 p. 040 761 4366
 </p>
                         </div>
