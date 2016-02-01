@@ -7,7 +7,7 @@
 
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'administrators-form',
-	'enableAjaxValidation'=>false,
+	'enableAjaxValidation'=>true,
 )); ?>
 
 
@@ -21,7 +21,7 @@
 
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'adm_salasana'); ?>
-		<?php echo $form->textField($model,'adm_salasana',array('value'=>'','size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
+		<?php echo $form->passwordField($model,'adm_salasana',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'adm_salasana'); ?>
 	</div>
 

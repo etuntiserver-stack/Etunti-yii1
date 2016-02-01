@@ -167,8 +167,14 @@ class ViestintaController extends Controller
 		if(isset($_POST['Viestinta']))
 		{
 			$model->attributes=$_POST['Viestinta'];
-			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+			$model->viesti=$_POST['Viestinta']['edellinen_viesti']."\n".date("d.m.Y")." ".Yii::app()->user->nimi.": ".$_POST['Viestinta']['viesti'];
+			$model->status=0;
+			if($model->save()){
+
+			Domainit::PushNotify($model->tekija,"ETUNTI",$model->viesti);
+			$this->redirect(array('view','id'=>$model->id));
+
+			}
 		}
 
 		$this->render('update',array(
