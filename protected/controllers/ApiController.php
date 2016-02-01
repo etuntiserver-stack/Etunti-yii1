@@ -451,8 +451,10 @@ public function actionImei($dom)
 
 	        if($_POST['check'] == 'vastaus' and isset($_POST['viestinID'])){
 
+		    $tekija = Tyontekijat::model()->findbypk($viestinta->tekija);
+
 	            $viestinta = Viestinta::model()->findbypk($_POST['viestinID']);
-	            $viestinta->viesti = $viestinta->viesti."\nVastaus: ".$_POST['vastText'];
+	            $viestinta->viesti = $viestinta->viesti."\n<b>".date("d.m").", ".$tekija->tekijan_nimi.":</b> ".$_POST['vastText'];
 	            $viestinta->save();
 		    // lahetta sahkopostiin
 		    $admin = '';
@@ -464,7 +466,7 @@ public function actionImei($dom)
 	            $adm = Administrators::model()->findbypk($admin);
 		      if(isset($adm->adm_email) and !empty($adm->adm_email))
 		      {
-			$tekija = Tyontekijat::model()->findbypk($viestinta->tekija);
+
 			
 				$name='=?UTF-8?B?'.base64_encode($viestinta->id).'?=';
 				$subject='=?UTF-8?B?'.base64_encode("Työntekijä ".$tekija->tekijan_nimi." vastaa").'?=';
