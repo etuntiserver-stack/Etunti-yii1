@@ -9,7 +9,7 @@
 		<?php echo date("d.m.Y  H:i",strtotime($data->time)); ?>
 	</td>
 	<td>
-		<?php echo $data->viesti; ?>
+		<?php echo str_replace("\n","<br>",$data->viesti); ?>
 	</td>
 	<td>
 		<?php echo $this->lahettajaMuutosTheme($data->admin); ?>

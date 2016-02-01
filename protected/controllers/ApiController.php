@@ -451,9 +451,10 @@ public function actionImei($dom)
 
 	        if($_POST['check'] == 'vastaus' and isset($_POST['viestinID'])){
 
+	            $viestinta = Viestinta::model()->findbypk($_POST['viestinID']);
 		    $tekija = Tyontekijat::model()->findbypk($viestinta->tekija);
 
-	            $viestinta = Viestinta::model()->findbypk($_POST['viestinID']);
+
 	            $viestinta->viesti = $viestinta->viesti."\n<b>".date("d.m").", ".$tekija->tekijan_nimi.":</b> ".$_POST['vastText'];
 	            $viestinta->save();
 		    // lahetta sahkopostiin
