@@ -410,9 +410,9 @@ public function actionImei($dom)
 		    foreach($viestinta as $val)
 		    {
 		      if($val->status == '0')
-  			$cl = 'alert alert-danger';
+  			$cl = ' <span class="btn btn-xs btn-success">Uusi</span>';
 		      else
-  			$cl = 'well';
+  			$cl = '';
 
 		      $exAdmin = explode(",",$val->admin);
 		      if(isset($exAdmin[1]))
@@ -420,8 +420,8 @@ public function actionImei($dom)
 		      else
   			$admin = $val->admin;
 
-		     	$sel .= '<div class="'.$cl.'">
-				  '.$admin.'<br>
+		     	$sel .= '<div class="well">
+				  '.$admin.$cl.'<br>
 				  '.$val->pvm.'<hr>
 				  <span class="text" id="text_'.$val->id.'">'.str_replace("\n","<br>",$val->viesti).'</span><br>';
 
