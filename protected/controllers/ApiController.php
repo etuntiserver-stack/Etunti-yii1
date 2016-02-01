@@ -421,9 +421,8 @@ public function actionImei($dom)
   			$admin = $val->admin;
 
 		     	$sel .= '<div class="well">
-				  '.$admin.$cl.'<br>
-				  '.$val->pvm.'<hr>
-				  <span class="text" id="text_'.$val->id.'">'.str_replace("\n","<br>",$val->viesti).'</span><br>';
+				  '.$cl.'<br>
+				  <span class="text" id="text_'.$val->id.'"><b>'.date("d.m.Y",strtotime($val->pvm)).'</b> '.$admin.': '.str_replace("\n","<br>",$val->viesti).'</span><br>';
 
 				  if(isset($exAdmin[0]) and !empty($exAdmin[0])){
 				  $sel .= '
