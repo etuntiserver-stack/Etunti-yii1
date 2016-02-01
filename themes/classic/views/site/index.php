@@ -542,7 +542,7 @@ $kysymykset[] = array(
         </ul>
       </div>
       <div class="modal-footer">
-        <div class="testerintulos"></div>
+        <!--<div class="testerintulos"></div>-->
         <button type="button" class="btn btn-lg btn-primary">Näytä tulos</button>
         <!--<a href="#" class="btn btn-lg btn-default tarjouspyynto" data-toggle="modal" data-target=".pyydatarjous_lomake">Lähetä tulos sähköpostiini</a>-->
         <a href="#" class="btn btn-lg btn-default tarjouspyynto" data-toggle="modal" data-target=".pyydatarjous_lomake">Pyydä tarjous</a>

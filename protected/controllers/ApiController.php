@@ -476,7 +476,7 @@ public function actionImei($dom)
 					"MIME-Version: 1.0\r\n".
 					"Content-type: text/html; charset=UTF-8";
 
-				if(mail($adm->adm_email,$subject,$viestinta->viesti,$headers)){
+				if(mail($adm->adm_email,$subject,str_replace("\n","<br>",$viestinta->viesti),$headers)){
 				   $sending = 'ok';
 				} else {
 				   $this->_sendResponse(200, 'Mail send ERROR');
