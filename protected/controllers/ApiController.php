@@ -419,7 +419,8 @@ public function actionImei($dom)
 		      else
   			$admin = $val->admin;
 
-		     	$sel .= '<div class="'.$cl.'">
+		     	$sel .= '<div class="row">
+				  <div class="'.$cl.'">
 				  '.$admin.'<br>
 				  '.$val->pvm.'<hr>
 				  <span class="text" id="text_'.$val->id.'">'.str_replace("\n","<br>",$val->viesti).'</span><br>';
@@ -427,15 +428,16 @@ public function actionImei($dom)
 				  if(isset($exAdmin[0]) and !empty($exAdmin[0])){
 				  $sel .= '
 				  <br>
-				  <div class="col-sm-12">
+
             			    <div class="input-group">
 			              <input type="text" class="form-control form-input" id="vastaus_'.$val->id.'">
 			              <div class="input-group-btn">
 			                <button class="viesti btn btn-primary btn-group" id="'.$val->id.'">vastaus</button>
 			              </div>
 			            </div>
-			          </div>
-			  	  <br><br>
+
+			           </div>
+			  	  </div>
 				  ';
 				  }
 
