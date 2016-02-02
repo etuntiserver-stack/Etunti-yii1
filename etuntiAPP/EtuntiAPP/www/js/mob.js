@@ -501,7 +501,7 @@ $("#os").keyup(function(){
 
 /* check messages */
 function checkviesti(domain){
-alert(domain)
+
         $.ajax({
            url: url+'/imei?dom='+domain,
 	   type:'POST',

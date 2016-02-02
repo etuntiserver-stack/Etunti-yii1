@@ -393,7 +393,7 @@ public function actionImei($dom)
 		  		  <div class="col-sm-12">
 				    <div class="well">
 				      <div class="card-content black-text">
-				        <center><a href="viestinta.html"><h2 class="glyphicon glyphicon-envelope form-group"></h2></a>&nbsp;<b>Sinulla on lukematon viesti</b></center>
+				        <center><a href="viestinta.html"><h2 class="glyphicon glyphicon-envelope form-group"></h2>&nbsp;&nbsp;&nbsp;<b>Sinulla on lukematon viesti</b></a></center>
 				      </div>
 				    </div>
 				   </div>
