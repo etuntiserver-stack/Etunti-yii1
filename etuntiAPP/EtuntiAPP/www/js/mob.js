@@ -345,7 +345,6 @@ setTimeout(function() {
 
     function set() {
 
- 	checkviesti(domain);
 	getTyovuorotToday(domain);
 
         $.ajax({
@@ -498,6 +497,7 @@ $("#os").keyup(function(){
 });
 
 
+ 	checkviesti(domain);
 
 /* check messages */
 function checkviesti(domain){
@@ -509,12 +509,9 @@ function checkviesti(domain){
            success: function(data){
         	//console.log(data);
 		//$("#result2").html(data).show();
-		if(parseInt(data) > 0)
-		{
-		  $("#viestintaURL").addClass("text-danger");
-		} else {
-		  $("#viestintaURL").removeClass("text-danger");
-		}
+		var sp = data.split('//');
+		if((parseInt(sp[0]) > 0) && (sp[1] !== ''))
+		   $("#josOnViesti").html(sp[1]);
     	},
     		error:function (xhr, ajaxOptions, thrownError){
         	//console.log(xhr.responseText);
