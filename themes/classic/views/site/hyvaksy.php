@@ -1,8 +1,8 @@
 <?php
 
-  if(isset($model['id']))
+  if(isset($model->id))
   {
-	$ids = explode(",",$model['ids']);
+	$ids = explode(",",$model->ids);
 	foreach($ids as $val)
 	{
 	    $explVal = explode("_", $val);
@@ -26,31 +26,63 @@
 	}
 
 
-  AsiakasHyvaksynta::model()->updatebypk($model['id'], array('code'=>'','status'=>3));
+  //AsiakasHyvaksynta::model()->updatebypk($model->id, array('code'=>'','status'=>3));
 
-  } else {
   ?>
-<center>
-<br><br>
-        <!-- begin: .tray-center -->
-        <div class="tray-center">
 
 
-            <div class="admin-form">
-              <div class="panel heading-border">
-		<h2 class="p15">Olet hyväksynyt tunteja.</h2>
-                <div class="panel-body bg-light">
-                 <div class="row">
-		  <p><?php echo Yii::t('main', 'Kiitos!'); ?></p>
-                 </div>
+        <!-- Header-->
+        <header>
+            <!-- Container-->
+            <div class="container">
+                <!-- Row-->
+                <div class="row">
+                    <!-- Logo-->
+                    <div class="col-md-3">
+                        <div class="logo">
+  			<?php $asetukset=Asetukset::model()->find("id=1"); ?>
+  			<img src="<?php echo $asetukset->logon_polkku; ?>" height="<?php echo $asetukset->logon_korkeus; ?>">
+                        </div>
+                    </div>
+                    <!-- End Logo-->
+
+                    <!-- Nav-->
+                    <div class="col-md-9 slogan">
+                        <!--Voita siivousalan haasteet-->
+                    </div>
+                    <!-- End Nav-->
                 </div>
-              </div>
+                <!-- End Row-->
             </div>
+            <!-- End Container-->
+        </header>
+        <!-- End Header-->
 
-        <!-- loppu: .tray-center -->
-        </div>
-</center>
+
+
+
+        <!-- Services -->
+        <section class="esittely">
+            <div class="paddings">
+                <div class="container">
+                    <!-- Icon Big -->
+                    <!-- End Icon Big -->
+                        <h1 class="title-subtitle text-center">Olet hyväksynyt tunteja.
+                            <span>
+                              Kiitos.
+                            </span>
+                        </h1>
+                        <hr>
+                    <!-- End Titles Heading -->
+
+                </div>
+                <!-- End Container-->
+            </div>
+        </section>        <!-- Services -->
+
   <?php
+  
+
   }
 ?>
 
