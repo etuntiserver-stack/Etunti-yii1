@@ -29,7 +29,7 @@ class SiteController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', 
-				'actions'=>array('etusivu','ohjesivu','etusivu_esimerki', 'change_color'),
+				'actions'=>array('etusivu','ohjesivu','etusivu_esimerki', 'change_color', 'valiko', 'valiko_ajax'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('allow', 
@@ -82,6 +82,42 @@ class SiteController extends Controller
 	protected function num($val){
 	    if($val > 0)
 		return  number_format((float)$val/3600, 2, '.', '');
+	}
+
+
+	public function actionValiko()
+	{
+
+	
+$mod = '
+	<input type="hidden" id="select_type" value="'.$_POST['select_type'].'">
+	<div id="result"></div>';
+
+
+$mod .= '
+<script type="text/javascript">
+$(document).ready(function(){
+
+
+        $.ajax({
+           url: location.protocol + "//" + location.host + "/index.php/site/valiko_ajax",
+           type: "POST",
+           data: { "select_type" : $("#select_type").val() },
+           success: function(data){
+		console.log(data);
+		$("#result").html(data);
+           }
+        });
+
+});
+</script>';
+			
+		echo json_encode($mod);
+	}
+
+	public function actionValiko_ajax()
+	{
+		$this->renderPartial('valiko_ajax');
 	}
 
 

@@ -213,13 +213,7 @@ $(".poistaTiedosto").click(function(){
 });
 
 
-  $("#i_file").filestyle({
-	buttonText: "Etsi kuva"
-  });
 
-  $("#t_file").filestyle({
-	buttonText: "Etsi tiedosto"
-  });
 
 });
 </script>
