@@ -138,8 +138,8 @@ if(empty($model->position) and isset($model->id))
 		<?php echo $form->error($model,'online_varauksen_valmina'); ?>
 	</div>
 
-	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'tyoryhma'); ?>
+	<div class="section fill mb5 form-inline">
+		<br>
 		<?php
 		$list = array();
       		$l = Valikkoot::model()->findAll(" select_type='tyoryhma' ",array('order' => "select_type"));
@@ -147,8 +147,9 @@ if(empty($model->position) and isset($model->id))
 		$list[$v->value] = $v->value;
 
         	echo $form->dropDownList($model, 'tyoryhma', $list,
-		array('empty'=>'','class'=>'form-control'));
+		array('empty'=>'','class'=>'form-control form-group'));
         	?>
+		<span class="btn btn-primary myBgColors muokaValiko" for="tyoryhma"><i class="fa fa-pencil-square-o"></i></span>
 		<?php echo $form->error($model,'tyoryhma'); ?>
 	</div>
 
@@ -187,13 +188,13 @@ if(empty($model->position) and isset($model->id))
 		<?php echo $form->error($model,'tekijan_konttori'); ?>
 	</div>
 
-	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'kortit'); ?>
+	<div class="section fill mb5 form-inline row">
+		<br>
 		<?php
 		$a = Valikkoot::model()->findAll(" select_type='kortit' ");
 		$check = explode("##***",$model->kortit);
 
-		echo '<select name="kortit[]" class="selectpicker form-control" multiple title="Valitse">';
+		echo '<select name="kortit[]" class="selectpicker col-sm-9" multiple title="Valitse">';
 		  foreach($a as $val){
 		    	$on = false;
 		   foreach($check as $c)
@@ -209,6 +210,7 @@ if(empty($model->position) and isset($model->id))
 		  }
 		echo '</select>';
 		?>
+		<span class="btn btn-primary myBgColors muokaValiko" for="kortit"><i class="fa fa-pencil-square-o"></i></span>
 		<?php echo $form->error($model,'kortit'); ?>
 	</div>
 
@@ -337,9 +339,27 @@ window.initialize = function() {
 <?php $this->endWidget(); ?>
 
 
+	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/bootstrap.modal.js"></script>
+	<div id="showres" class="modal fade" tabindex="-1" role="dialog"></div>
+
 
 <script type="text/javascript">
 $(document).ready(function(){
+
+/* valikot */
+$(".muokaValiko").click(function() {
+    var thisFor = $(this).attr("for");
+        $.ajax({
+           url: location.protocol + "//" + location.host + "/index.php/site/valiko",
+	   type:'POST',
+	   data: { "select_type" : thisFor },
+           success: function(data){
+		//console.log(data);
+		$('#showres').modal().html(JSON.parse(data));
+           }
+        });
+});
+/* valikot */
 
   $(".sw").bootstrapSwitch({
 	size: "small",

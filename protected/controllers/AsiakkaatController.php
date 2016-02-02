@@ -63,6 +63,8 @@ class AsiakkaatController extends Controller
                 parent::init();
         }
 
+
+
 	public function actionCheckLastAsiakasID()
 	{
 		$check = 0;

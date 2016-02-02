@@ -77,6 +77,18 @@ $asiakasnumero = 'voidaan käyttää oleva ID numero';
 	</div>
 
 	<div class="section fill mb5 ashidd_a">
+
+		<?php echo $form->labelEx($model,'myyja'); ?>
+		<?php echo $form->dropDownList($model, 'myyja', CHtml::listData(Administrators::model()->findAll(), 'id', 'adm_nimi'), 
+		array('empty'=>'Valitse', 'class'=>'form-control')); 
+		?>
+		<?php echo $form->error($model,'myyja'); ?>
+	</div>
+
+  </div><div class="col-sm-3">
+	<legend><h3><?php echo Yii::t('main', 'Asiakkaan tiedot'); ?></h3></legend>
+
+	<div class="section fill mb5 ashidd_a">
 		<?php echo $form->labelEx($model,'kaupunki'); ?>
 		<?php echo $form->textField($model,'kaupunki',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'kaupunki'); ?>
@@ -100,8 +112,8 @@ $asiakasnumero = 'voidaan käyttää oleva ID numero';
 		<?php echo $form->error($model,'sahkoposti'); ?>
 	</div>
 
-	<div class="section fill mb5 ashidd_a">
-		<?php echo $form->labelEx($model,'ryhma'); ?>
+	<div class="section fill mb5 ashidd_a form-inline">
+		<br>
 		<?php
 		$list = array();
       		$l = Valikkoot::model()->findAll(" select_type='asiakas_ryhma' ",array('order' => "select_type"));
@@ -111,11 +123,13 @@ $asiakasnumero = 'voidaan käyttää oleva ID numero';
 		if(count($list) > 0)
 		{
         	echo $form->dropDownList($model, 'ryhma', $list,
-		array('empty'=>'Valitse ryhmä','class'=>'form-control'));
+		array('empty'=>'Valitse ryhmä','class'=>'form-control form-group'));
 		} else {
 		echo 'Luo Valikko tietokannassa "Select Type = asiakas_ryhma"';
 		}		
         	?>
+		<span class="btn btn-primary myBgColors muokaValiko" for="asiakas_ryhma"><i class="fa fa-pencil-square-o"></i></span>
+
 		<?php echo $form->error($model,'ryhma'); ?>
 	</div>
 
@@ -129,13 +143,6 @@ $asiakasnumero = 'voidaan käyttää oleva ID numero';
 		<?php echo $form->error($model,'aktiivinen'); ?>
 	</div>
 
-	<div class="section fill mb5 ashidd_a">
-		<?php echo $form->labelEx($model,'myyja'); ?>
-		<?php echo $form->dropDownList($model, 'myyja', CHtml::listData(Administrators::model()->findAll(), 'id', 'adm_nimi'), 
-		array('empty'=>'Valitse', 'class'=>'form-control')); 
-		?>
-		<?php echo $form->error($model,'myyja'); ?>
-	</div>
 
   </div>
 
@@ -277,9 +284,27 @@ $asiakasnumero = 'voidaan käyttää oleva ID numero';
 <?php $this->endWidget(); ?>
 
 
+	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/bootstrap.modal.js"></script>
+	<div id="showres" class="modal fade" tabindex="-1" role="dialog"></div>
+
 
 <script type="text/javascript">
 $(document).ready(function(){
+
+/* valikot */
+$(".muokaValiko").click(function() {
+    var thisFor = $(this).attr("for");
+        $.ajax({
+           url: location.protocol + "//" + location.host + "/index.php/site/valiko",
+	   type:'POST',
+	   data: { "select_type" : thisFor },
+           success: function(data){
+		//console.log(data);
+		$('#showres').modal().html(JSON.parse(data));
+           }
+        });
+});
+/* valikot */
 
 $("#Asiakkaat_tyyppi").each(function() {
     var value = $(this).val();
