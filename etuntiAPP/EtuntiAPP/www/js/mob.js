@@ -74,7 +74,7 @@ $(document).ready(function(){
 	{
 		checkTAG();
 		set();
-
+	 	checkviesti(domain);
 	} else {
 		//setTimeout(function(){document.location.href = "asetukset.html";},500);
 		$("#domainBlokki").show();
@@ -497,11 +497,11 @@ $("#os").keyup(function(){
 });
 
 
- 	checkviesti(domain);
+
 
 /* check messages */
 function checkviesti(domain){
-
+alert(domain)
         $.ajax({
            url: url+'/imei?dom='+domain,
 	   type:'POST',

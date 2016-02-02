@@ -391,9 +391,9 @@ public function actionImei($dom)
 
 				$on = '<br><div class="row">
 		  		  <div class="col-sm-12">
-				    <div class="alert alert-success">
+				    <div class="well">
 				      <div class="card-content black-text">
-				        <center><b>Sinulla on lukematon viesti</b></center>
+				        <center><a href="viestinta.html"><h2 class="glyphicon glyphicon-envelope form-group"></h2></a>&nbsp;<b>Sinulla on lukematon viesti</b></center>
 				      </div>
 				    </div>
 				   </div>
