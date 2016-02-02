@@ -774,11 +774,13 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 
 	public function actionTidfromtomatkat($from,$to,$tid)
 	{
+	/*
 		$this->renderPartial('palkkataulukko', array(
 		'from'=>$from,
 		'to'=>$to,
 		'tid'=>$tid
 		));
+	*/
 	}
 
 	protected function TidfromtoSL($from,$to,$tid)
@@ -948,6 +950,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		
 
        		$criteria = new CDbCriteria();
+		$criteria->select = " id,tekijan_nimi ";
         	$criteria->order = " tekijan_nimi "; //SUBSTR(LTRIM(tekijan_nimi), LOCATE(' ',LTRIM(tekijan_nimi)))
         	$criteria->condition = " aktiivinen=1 "; 
 
@@ -1177,6 +1180,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit,
 		t.*
 		";
+
 
 
         	//$criteria->condition = " l_loppu = '' and l_alku = '' ";

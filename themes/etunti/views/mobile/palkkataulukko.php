@@ -162,7 +162,7 @@ $this->breadcrumbs=array(
   <th><?php echo Yii::t('main', 'Työtunnit'); ?></th>
   <th><?php echo Yii::t('main', 'matka+<br>tunnit yht'); ?></th>
   <th><?php echo Yii::t('main', 'Ilta'); ?></th>
-  <th><?php echo Yii::t('main', 'iltamatka+<br>iltatunnit yht'); ?></th>
+  <th><?php echo Yii::t('main', 'Iltamatka+<br>Iltatunnit yht'); ?></th>
   <th><?php echo Yii::t('main', 'Yö'); ?></th>
   <th><?php echo Yii::t('main', 'Su'); ?></th>
   <th><?php echo Yii::t('main', 'PY'); ?></th>
@@ -189,6 +189,15 @@ $this->breadcrumbs=array(
   $lsYht	= 0;
   $pyhatYht	= 0;
   $elYht	= 0;
+  $matkaYht	= 0;
+  $yht[0] 	= 0;
+  $yht[1] 	= 0;
+  $yht[2] 	= 0;
+  $yht[3] 	= 0;
+  $mPlusTYht	= 0;
+  $matkaIltaYht = 0;
+  $iltaMatkaPlusIltatunnitYht = 0;
+
   foreach($model as $data)
   {
 	$tids[] = $data->id;
@@ -205,8 +214,35 @@ $this->breadcrumbs=array(
   	$el = $this->pyhapaivat($data->id,$from,$to,"el");
 	$elYht += $el;
 
+	$m = $this->renderPartial('//mobile/tidfromtomatkat',array(
+		'from'=>$from,
+		'to'=>$to,
+		'tid'=>$data->id
+		),true);
+	$matkaYht += $m;
+
+	$return = $this->toteutu($data->id,"palkkataulukko",$from,$to);
+	$mPlusTYht += $return[0]+$m;
+
+	$matkaIlta = $this->matkaIlta($data->id,$from,$to);
+	$matkaIltaYht += $matkaIlta;
+
+	$iltaMatkaPlusIltatunnit = 0;
+	$iltaMatkaPlusIltatunnit = $return[1]+$return[2]+$matkaIlta;
+	$iltaMatkaPlusIltatunnitYht += $iltaMatkaPlusIltatunnit;
+
+	$yht[0] += $return[0];
+	$yht[1] += $return[1];
+	$yht[2] += $return[2];
+	$yht[3] += $return[3];
+
+
 	$this->renderPartial('_palkkataulukko',array(
 			'data'=>$data,
+			'return'=>$return,
+			'matka'=>$m,
+			'matkaIlta'=>$matkaIlta,
+			'iltaMatkaPlusIltatunnit'=>$iltaMatkaPlusIltatunnit,
 			'tp'=>$tp,
 			'sl'=>$sl,
 			'spl'=>$spl,
@@ -218,47 +254,26 @@ $this->breadcrumbs=array(
 	));
   }
 
-	$yht[0] = 0;
-	$yht[1] = 0;
-	$yht[2] = 0;
-	$yht[3] = 0;
-	$matka = 0;
-	$matkaIlta = 0;
-
-  foreach($tids as $t)
-  {
-	$matka += $this->renderPartial('//mobile/tidfromtomatkat',array(
-		'from'=>$from,
-		'to'=>$to,
-		'tid'=>$t
-		),true);
 
 
-	$matkaIlta += $this->matkaIlta($t,$from,$to);
 
-	$return = $this->toteutu($t,"palkkataulukko",$from,$to);
-	$yht[0] += $return[0];
-	$yht[1] += $return[1];
-	$yht[2] += $return[2];
-	$yht[3] += $return[3];
-  }
 
-  if($matka != 0)
-  $matka = $this->sprint($matka).'<br>('.$this->num($matka).')';
-  if($matkaIlta != 0)
-  $matkaIlta = '<br><b>Matkat</b>:<br>'.$this->num($matkaIlta);
+
+
+  if($matkaIltaYht != 0)
+  $matkaIltaYht = '<br><b>Matkat</b>:<br>'.$this->num($matkaIltaYht);
   ?>
   <tfoot>
   <tr>
   	<th><?php echo Yii::t('main', 'Yhteensä'); ?></th>
 	<td><?php echo $totalTp; ?></td>
-	<td><?php echo $matka; ?></td>
+	<td><?php echo $this->num($matkaYht); ?></td>
 	<td><?php echo $this->num($yht[0]); ?></td>
-	<td><?php echo '<b>Työt</b>:<br>'.$this->num($yht[1]).$matkaIlta; ?></td>
-	<td><?php echo $this->sprint($yht[2]); ?></td>
-	<td><?php echo $this->sprint($yht[3]); ?></td>
-	<td></td>
-	<td></td>
+	<td><?php echo $this->num($mPlusTYht); ?></td>
+	<td><?php echo '<b>Työt</b>:<br>'.$this->num($yht[1]).$matkaIltaYht; ?></td>
+	<td><?php echo $this->num($iltaMatkaPlusIltatunnitYht); ?></td>
+	<td><?php echo $this->num($yht[2]); ?></td>
+	<td><?php echo $this->num($yht[3]); ?></td>
 	<td><?php echo $this->num($pyhatYht); ?></td>
 	<td><?php echo $this->num($elYht); ?></td>
 	<td><?php echo $this->num($slYht); ?></td>
