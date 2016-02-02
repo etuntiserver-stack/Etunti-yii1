@@ -43,24 +43,24 @@ if(isset($_GET['center'])){
   }
 
     var iconBlue = new GIcon(); 
-    iconBlue.image = 'http://labs.google.com/ridefinder/images/mm_20_blue.png';
-    iconBlue.shadow = 'http://labs.google.com/ridefinder/images/mm_20_shadow.png';
+    iconBlue.image = '/img/mm_20_blue.png';
+    iconBlue.shadow = '/img/mm_20_shadow.png';
     iconBlue.iconSize = new GSize(12, 20);
     iconBlue.shadowSize = new GSize(22, 20);
     iconBlue.iconAnchor = new GPoint(6, 20);
     iconBlue.infoWindowAnchor = new GPoint(5, 1);
  
     var iconRed = new GIcon(); 
-    iconRed.image = 'http://labs.google.com/ridefinder/images/mm_20_red.png';
-    iconRed.shadow = 'http://labs.google.com/ridefinder/images/mm_20_shadow.png';
+    iconRed.image = '/img/mm_20_red.png';
+    iconRed.shadow = '/img/mm_20_shadow.png';
     iconRed.iconSize = new GSize(12, 20);
     iconRed.shadowSize = new GSize(22, 20);
     iconRed.iconAnchor = new GPoint(6, 20);
     iconRed.infoWindowAnchor = new GPoint(5, 1);
  
     var iconGreen = new GIcon(); 
-    iconGreen.image = 'http://labs.google.com/ridefinder/images/mm_20_green.png';
-    iconGreen.shadow = 'http://labs.google.com/ridefinder/images/mm_20_shadow.png';
+    iconGreen.image = '/img/mm_20_green.png';
+    iconGreen.shadow = '/img/mm_20_shadow.png';
     iconGreen.iconSize = new GSize(12, 20);
     iconGreen.shadowSize = new GSize(22, 20);
     iconGreen.iconAnchor = new GPoint(6, 20);
