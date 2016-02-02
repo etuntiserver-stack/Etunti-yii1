@@ -383,11 +383,27 @@ public function actionImei($dom)
 		    exit;
 		    }
 
-		    $sel = '0';
+		    $sel = 0;
 		    foreach($viestinta as $count)
 		    $sel += 1;
 
-		    $this->_sendResponse(200, $sel);
+		    if($sel > 0){ 
+
+				$on = '<br><div class="row">
+		  		  <div class="col-sm-12">
+				    <div class="alert alert-success">
+				      <div class="card-content black-text">
+				        <center><b>Sinulla on lukematon viesti</b></center>
+				      </div>
+				    </div>
+				   </div>
+				  </div>';
+
+		    } else { 
+  		      $on = '';
+		    }
+
+		    $this->_sendResponse(200, $sel."//".$on);
 		exit;
 	        }
 
