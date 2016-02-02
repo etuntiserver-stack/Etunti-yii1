@@ -229,10 +229,18 @@ class KohteetController extends Controller
 	{
 
        		$criteria = new CDbCriteria();
-	        $criteria->order = "  id DESC ";
+	        $criteria->order = " id DESC ";
+
 
 		if(isset($_POST['osoite']) and !empty($_POST['osoite']))
 	        $criteria->addCondition (" id='".$_POST['osoite']."' ");
+
+		if(isset($_POST['aktiivinen']) and $_POST['aktiivinen'] != 'kaikki')
+	        $criteria->addCondition (" asiakas_id IN ( SELECT id FROM asiakkaat WHERE aktiivinen='".(int)$_POST['aktiivinen']."' ) ");
+		elseif(isset($_POST['aktiivinen']) and $_POST['aktiivinen'] == 'kaikki')
+	        $criteria->addCondition (" asiakas_id IN ( SELECT id FROM asiakkaat WHERE aktiivinen=1 OR aktiivinen=0 ) ");
+		else
+	        $criteria->addCondition (" asiakas_id IN ( SELECT id FROM asiakkaat WHERE aktiivinen='1' ) ");
 
 		if(isset($_POST['nimi']) and !empty(trim($_POST['nimi'])))
 	        $criteria->addCondition (" etu_suku_nimet LIKE '%".$_POST['nimi']."%' ");

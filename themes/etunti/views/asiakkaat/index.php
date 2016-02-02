@@ -56,6 +56,26 @@
                           </label>
                         </div>
                       </div>
+
+		      <?php if(isset($_POST['aktiivinen'])) echo '<input type="hidden" id="akt" value="'.$_POST['aktiivinen'].'">'; ?>
+                      <div class="col-md-2">
+                        <div class="section">
+                          <label class="field select">
+
+
+			   <select class="gui-input" name="aktiivinen" id="aktiivinen">
+       				<option value="1">Aktiiviset</option>
+       				<option value="0">Passiviset</option>
+       				<option value="kaikki">Kaikki</option>
+			   </select>
+
+
+                            <i class="arrow double"></i>
+                            </label>
+                          </label>
+                        </div>
+                      </div>
+
                       <div class="col-md-2">
                         <div class="section">
                           <label class="field prepend-icon">
@@ -75,17 +95,6 @@
    			    <input type="text" name="puhelin"  class="gui-input" value="<?php if(isset($_POST['puhelin'])) echo $_POST['puhelin']; ?>" placeholder="Puhelin">
                             <label for="firstname" class="field-icon">
                               <i class="fa fa-phone"></i>
-                            </label>
-                          </label>
-                        </div>
-                      </div>
-                      <div class="col-md-2">
-                        <div class="section">
-                          <label class="field prepend-icon">
-
-   			    <input type="text" name="postinumero" class="gui-input" value="<?php if(isset($_POST['postinumero'])) echo $_POST['postinumero']; ?>" placeholder="Postinumero">
-                            <label for="firstname" class="field-icon">
-                              <i class="fa fa-home"></i>
                             </label>
                           </label>
                         </div>
@@ -157,7 +166,7 @@
 
   )); ?>
   </table>
-</div>:
+</div>
 
    </div>
   </div>
@@ -165,6 +174,11 @@
 
 <script type="text/javascript">
 $(document).ready(function(){
+
+if($("#akt").val())
+$("#aktiivinen").val($("#akt").val());
+else
+$("#aktiivinen").val(1);
 
 
 $(".haemob").click(function(){

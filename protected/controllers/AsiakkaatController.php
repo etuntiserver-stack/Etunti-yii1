@@ -152,14 +152,18 @@ class AsiakkaatController extends Controller
 		if(isset($_POST['osoite']) and !empty($_POST['osoite']))
 	        $criteria->addCondition (" id='".$_POST['osoite']."' ");
 
+		if(isset($_POST['aktiivinen']) and $_POST['aktiivinen'] != 'kaikki')
+	        $criteria->addCondition (" aktiivinen ='".(int)$_POST['aktiivinen']."' ");
+		elseif(isset($_POST['aktiivinen']) and $_POST['aktiivinen'] == 'kaikki')
+	        $criteria->addCondition (" (aktiivinen=1 OR aktiivinen=0) ");
+		else
+	        $criteria->addCondition (" aktiivinen=1 ");
+
 		if(isset($_POST['yhteyshenkilo']) and !empty(trim($_POST['yhteyshenkilo'])))
 	        $criteria->addCondition (" yhteyshenkilo LIKE '%".$_POST['yhteyshenkilo']."%' ");
 
 		if(isset($_POST['puhelin']) and !empty(trim($_POST['puhelin'])))
 	        $criteria->addCondition (" puhelin LIKE '%".$_POST['puhelin']."%' ");
-
-		if(isset($_POST['postinumero']) and !empty(trim($_POST['postinumero'])))
-	        $criteria->addCondition (" postinumero LIKE '%".$_POST['postinumero']."%' ");
 
 		if(isset($_POST['sahkoposti']) and !empty(trim($_POST['sahkoposti'])))
 	        $criteria->addCondition (" sahkoposti LIKE '%".$_POST['sahkoposti']."%' ");
