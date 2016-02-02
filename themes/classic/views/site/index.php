@@ -2,6 +2,75 @@
 
 
 
+    <!--Preloader-->
+    <div class="preloader">
+        <div class="status">&nbsp;</div>
+    </div>
+    <!--End Preloader-->
+
+    <!-- layout-->
+    <div id="layout" class="layout-wide">
+        <!-- Login Client -->
+        <div class="jBar">
+            <div class="container">
+                <div class="row">
+                <div class="col-sm-7 col-md-8 padding-bottom">
+                        <h4>Tuki</h4>
+                        <p><i class="fa fa-phone"></i> <a href="#">+358 40 7614 366</a></p>
+                        <p><a href="#">Tukinumero vastaa 9 - 17</a></p>
+                        <p><i class="fa fa-envelope"></i> <a href="mailto:tuki@etunti.fi">tuki@etunti.fi</a></p>
+
+                   </div>
+                    <!-- Login-->
+                    <div class="col-sm-5 col-md-4">
+                        <h4>Kirjaudu</h4>
+                        <form action="index.php/user/login" method="POST">
+                            <input type="text" name="UserLogin[domain]" placeholder="Domain" required>
+                            <input type="text" name="UserLogin[username]" placeholder="Käyttäjätunnus" required>
+                            <input type="password" name="UserLogin[password]" placeholder="Salasana" required>
+                            <input type="submit" class="btn btn-lg" value="Kirjaudu">
+                        </form>
+                    </div>
+                    <!-- ENd Login-->
+
+                    <span class="jTrigger downarrow"><i class="fa fa-minus"></i></span>
+                </div>
+            </div>
+        </div>
+        <span class="jRibbon jTrigger up" title="Login">KIRJAUDU <i class="fa fa-plus"></i></span>
+        <div class="line"></div>
+        <!-- End Login Client -->
+
+        <!-- Header-->
+        <header>
+            <!-- Container-->
+            <div class="container">
+                <!-- Row-->
+                <div class="row">
+                    <!-- Logo-->
+                    <div class="col-md-3">
+                        <div class="logo">
+                            <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php" title="Return Home">
+                                <img src="<?php echo Yii::app()->request->baseUrl; ?>/assets_classic/img/logo.png" alt="Logo" class="logo_img">
+                            </a>
+                        </div>
+                    </div>
+                    <!-- End Logo-->
+
+                    <!-- Nav-->
+                    <div class="col-md-9 slogan">
+                        Voita siivousalan haasteet
+                    </div>
+                    <!-- End Nav-->
+                </div>
+                <!-- End Row-->
+            </div>
+            <!-- End Container-->
+        </header>
+        <!-- End Header-->
+
+
+
 
 
         <!-- Slide Section-->
@@ -617,6 +686,104 @@ Toimi nopeasti, sillä paikkoja on rajoitetusti!</p></p>
 
 
 
+        <!-- footer Center-->
+        <footer class="footer-center">
+            <div class="container-fluid">
+
+                <!-- Info Top - Footer Center-->
+<style>
+.img-thumbnail{
+	margin-top : 5px;
+	box-radius: 0;
+	box-radius: 0;
+	padding : 0;
+}
+</style>
+                <div class="row">
+                   <div class="col-lg-3">
+                                <img src="<?php echo Yii::app()->request->baseUrl; ?>/img/veikokuva.jpg" class="img-thumbnail">
+                   </div>
+
+                   <div class="col-lg-3 col-lg-6 item-center">
+                        <h3>+358 40 761 4366</h3>
+
+                        <a href="#">
+                        <i class="fa fa-phone"></i>
+                        <h3>Soita</h3>
+                        </a>
+                   </div>
+
+                   <div class="col-lg-3 col-lg-6 item-center">
+                        <h3><a href="mailto:info@etunti.fi">info@etunti.fi</a></h3>
+
+                       <a href="#">
+                        <i class="fa fa-envelope"></i>
+                        <h3><a href="mailto:info@etunti.fi">Lähetä viesti</a></h3>
+                        </a>
+                   </div>
+
+                   <div class="col-lg-3 col-lg-6 item-center">
+                        <div class="logo">
+			<br><br><br>
+                            <a href="index.php" title="Return Home">
+                                <img src="<?php echo Yii::app()->request->baseUrl; ?>/img/logo.png" alt="Logo" class="logo_img">
+                            </a>
+                        </div>
+                   </div>
+
+
+<!--
+                   <div class="col-md-3 col-xs-6 item-center">
+                        <h3><a href="#">Myynti</a></h3>
+
+                        <a href="#">
+                        <i class="fa fa-comment"></i>
+                        <h4>Live Chat</h4>
+                        </a>
+                   </div>
+                   <div class="col-md-3 col-xs-6 item-center">
+                        <h3>Some</h3>
+
+                        <ul class="social">
+
+                            <li data-toggle="tooltip" title data-original-title="Twitter">
+                                <a href="#" target="_blank"><i class="fa fa-twitter"></i></a>
+                            </li>
+                            <li data-toggle="tooltip" title data-original-title="Youtube">
+                                <a href="#" target="_blank"><i class="fa fa-youtube"></i></a>
+                            </li>
+                        </ul>
+
+
+-->
+                </div>
+
+                <!-- End Info Top - Footer Center-->
+
+
+            </div>
+        </footer>
+        <!-- End footer Center-->
+
+        <!-- footer bottom-->
+
+        <footer class="footer-bottom">
+            <div class="container">
+               <div class="row">
+
+                    <!-- Nav-->
+
+                               <p class="text-center">&copy; 2015 Etunti</p>
+
+                    <!-- End Nav-->
+
+               </div>
+
+            </div>
+        </footer>
+        <!-- End footer bottom-->
+    </div>
+    <!-- End layout-->
 
 
 
