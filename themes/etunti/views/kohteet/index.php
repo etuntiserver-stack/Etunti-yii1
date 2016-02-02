@@ -58,7 +58,27 @@
                             </label>
                           </label>
                         </div>
+
+		      <?php if(isset($_POST['aktiivinen'])) echo '<input type="hidden" id="akt" value="'.$_POST['aktiivinen'].'">'; ?>
+                        <div class="section">
+                          <label class="field select">
+
+
+			   <select class="gui-input" name="aktiivinen" id="aktiivinen">
+       				<option value="1">Aktiiviset</option>
+       				<option value="0">Passiviset</option>
+       				<option value="kaikki">Kaikki</option>
+			   </select>
+
+
+                            <i class="arrow double"></i>
+                            </label>
+                          </label>
+                        </div>
+
                       </div>
+
+
                       <div class="col-md-2">
                         <div class="section">
                           <label class="field prepend-icon">
@@ -167,6 +187,11 @@
 
 <script type="text/javascript">
 $(document).ready(function(){
+
+if($("#akt").val())
+$("#aktiivinen").val($("#akt").val());
+else
+$("#aktiivinen").val(1);
 
 $(".haemob").click(function(){
 	$("#mobForm").submit();
