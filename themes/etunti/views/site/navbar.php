@@ -321,10 +321,6 @@
                   <span class="fa fa-key"></span> <?php echo Yii::t('main', 'Avaimet'); ?></a>
               </li>
               <li>
-                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/asiakasHyvaksynta/index">
-                  <span class="glyphicon glyphicon-ok"></span> <?php echo Yii::t('main', 'Hyväksymät tunnit'); ?></a>
-              </li>
-              <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/kohteet/googlemap">
                   <span class="fa fa-map"></span> <?php echo Yii::t('main', 'Kartta'); ?></a>
               </li>
@@ -351,6 +347,10 @@
               <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/mobile/kyhteenveto">
                   <span class="glyphicon glyphicon-time"></span> <?php echo Yii::t('main', 'Lähetä hyväksyttäväksi'); ?></a>
+              </li>
+              <li>
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/asiakasHyvaksynta/index">
+                  <span class="glyphicon glyphicon-ok"></span> <?php echo Yii::t('main', 'Asiakkaiden hyväksymät tunnit'); ?></a>
               </li>
 	      <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/mobile/laskutettu">
