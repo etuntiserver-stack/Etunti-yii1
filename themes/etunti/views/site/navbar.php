@@ -364,7 +364,10 @@
             </ul>
           </li>
 
-
+              <li>
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/toteutuneet/kk">
+                  <span class="fa fa-calendar-check-o"></span> <?php echo Yii::t('main', 'Tuntien toteuma'); ?></a>
+              </li>
 
 	      <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/mobile/laskutettu">
@@ -401,10 +404,6 @@
               <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/mobile/palkkataulukko">
                   <span class="fa fa-eur"></span> <?php echo Yii::t('main', 'Palkkataulukko'); ?></a>
-              </li>
-              <li>
-                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/toteutuneet/kk">
-                  <span class="fa fa-calendar-check-o"></span> <?php echo Yii::t('main', 'Kuukauden tunnit'); ?></a>
               </li>
               <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/mobile/raportit">
