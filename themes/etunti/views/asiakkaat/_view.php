@@ -5,7 +5,7 @@
 
 <tr>
 	<td>
-		<?php echo $data->id; ?>
+		<?php echo $data->yrityksen_nimi; ?>
 	</td>
 	<td>
 		<?php echo $data->osoite; ?>
