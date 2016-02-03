@@ -88,6 +88,8 @@ if(empty($model->position) and isset($model->id))
 
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'aktiivinen'); ?>
+
+	   <div class="form-inline">
 		<?php 
 		$a = Valikkoot::model()->findAll(" select_type='aktiivinen' ");
         	$tal = '';
@@ -97,7 +99,10 @@ if(empty($model->position) and isset($model->id))
 		}
 
 		echo $form->dropDownList($model,'aktiivinen', $tal, 
-		array('class'=>'form-control','id'=>'osoite')) ?>
+		array('class'=>'form-control input-group','id'=>'osoite')) ?>
+		<span class="btn btn-primary myBgColors muokaValiko" for="aktiivinen"><i class="fa fa-pencil-square-o"></i></span>
+	   </div>
+
 		<?php echo $form->error($model,'aktiivinen'); ?>
 	</div>
 
@@ -138,8 +143,10 @@ if(empty($model->position) and isset($model->id))
 		<?php echo $form->error($model,'online_varauksen_valmina'); ?>
 	</div>
 
-	<div class="section fill mb5 form-inline">
-		<br>
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'tyoryhma'); ?>
+
+	   <div class="form-inline">
 		<?php
 		$list = array();
       		$l = Valikkoot::model()->findAll(" select_type='tyoryhma' ",array('order' => "select_type"));
@@ -150,6 +157,8 @@ if(empty($model->position) and isset($model->id))
 		array('empty'=>'','class'=>'form-control form-group'));
         	?>
 		<span class="btn btn-primary myBgColors muokaValiko" for="tyoryhma"><i class="fa fa-pencil-square-o"></i></span>
+	   </div>
+
 		<?php echo $form->error($model,'tyoryhma'); ?>
 	</div>
 
@@ -188,8 +197,10 @@ if(empty($model->position) and isset($model->id))
 		<?php echo $form->error($model,'tekijan_konttori'); ?>
 	</div>
 
-	<div class="section fill mb5 form-inline row">
-		<br>
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'kortit'); ?>
+
+	   <div class="row form-inline">
 		<?php
 		$a = Valikkoot::model()->findAll(" select_type='kortit' ");
 		$check = explode("##***",$model->kortit);
@@ -211,6 +222,8 @@ if(empty($model->position) and isset($model->id))
 		echo '</select>';
 		?>
 		<span class="btn btn-primary myBgColors muokaValiko" for="kortit"><i class="fa fa-pencil-square-o"></i></span>
+	   </div>
+
 		<?php echo $form->error($model,'kortit'); ?>
 	</div>
 
