@@ -161,7 +161,7 @@ function num($val){
 	
 		        $html2pdf = Yii::app()->ePdf->HTML2PDF('P', 'A4', 'en');
 			$html2pdf->setDefaultFont('Arial');
-		        $html2pdf->WriteHTML($this->renderPartial('raportit_pdf_l', array('model' => $model, 'tyyppi' => 'Toteutuneet'),true));
+		        $html2pdf->WriteHTML($this->renderPartial('raportit_pdf_l', array('model' => $model, 'tyyppi' => 'Luetut'),true));
 		        $html2pdf->Output();
 
 		  }
@@ -197,7 +197,7 @@ function num($val){
 
 		        $html2pdf = Yii::app()->ePdf->HTML2PDF('P', 'A4', 'en');
 			$html2pdf->setDefaultFont('Arial');
-		        $html2pdf->WriteHTML($this->renderPartial('raportit_pdf_l', array('model' => $model, 'tyyppi' => 'Luetut'),true));
+		        $html2pdf->WriteHTML($this->renderPartial('raportit_pdf_l', array('model' => $model, 'tyyppi' => 'Toteutuneet'),true));
 		        $html2pdf->Output();
 
 		  }

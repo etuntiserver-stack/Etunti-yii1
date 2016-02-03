@@ -26,9 +26,25 @@ $this->breadcrumbs=array(
 
       <div class="row">
        <div class="col-sm-6">
-        <input type="text" name="from" id="from" class="form-control datepicker" value="<?php echo Yii::app()->session['from']; ?>">
+
+                          <label class="field prepend-icon">
+
+   			    <input type="text" name="from" id="from" class="gui-input datepicker" value="<?php echo Yii::app()->session['from']; ?>">
+                            <label for="firstname" class="field-icon">
+                              <i class="fa fa-calendar"></i>
+                            </label>
+                          </label>
+
        </div><div class="col-sm-6">
-        <input type="text" name="to" id="to" class="form-control datepicker" value="<?php echo Yii::app()->session['to']; ?>">
+
+                          <label class="field prepend-icon">
+
+   			    <input type="text" name="to" id="to" class="gui-input datepicker" value="<?php echo Yii::app()->session['to']; ?>">
+                            <label for="firstname" class="field-icon">
+                              <i class="fa fa-calendar"></i>
+                            </label>
+                          </label>
+
        </div>
       </div>
 
@@ -100,9 +116,23 @@ $this->breadcrumbs=array(
 
       <div class="row">
        <div class="col-sm-6">
-        <input type="text" name="from" id="from" class="form-control datepicker" value="<?php echo Yii::app()->session['from']; ?>">
+                          <label class="field prepend-icon">
+
+   			    <input type="text" name="from" id="from" class="gui-input datepicker" value="<?php echo Yii::app()->session['from']; ?>">
+                            <label for="firstname" class="field-icon">
+                              <i class="fa fa-calendar"></i>
+                            </label>
+                          </label>
+
        </div><div class="col-sm-6">
-        <input type="text" name="to" id="to" class="form-control datepicker" value="<?php echo Yii::app()->session['to']; ?>">
+
+                          <label class="field prepend-icon">
+
+   			    <input type="text" name="to" id="to" class="gui-input datepicker" value="<?php echo Yii::app()->session['to']; ?>">
+                            <label for="firstname" class="field-icon">
+                              <i class="fa fa-calendar"></i>
+                            </label>
+                          </label>
        </div>
       </div>
 
