@@ -71,7 +71,7 @@ class Asetukset extends DB2ActiveRecord
 			'id' => 'ID',
 			'syntyrin_emails' => 'Syntyrin Emails',
 			'paivan_uutinen' => 'Paivan Uutinen',
-			'logon_polkku' => 'Logon Polkku',
+			'logon_polkku' => 'Logo',
 			'logon_korkeus' => 'Logon Korkeus',
 			'johtaja' => 'Johtaja',
 			'tilinumero' => 'Tilinumero',

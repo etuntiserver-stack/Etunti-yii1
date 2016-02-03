@@ -143,7 +143,7 @@ class ViestintaController extends Controller
 			if($model->save()){
 
 			Domainit::PushNotify($model->tekija,"ETUNTI",$model->viesti);
-			$this->redirect(array('view','id'=>$model->id));
+			$this->redirect(array('index'));
 
 			}
 		}
@@ -173,7 +173,7 @@ class ViestintaController extends Controller
 			if($model->save()){
 
 			Domainit::PushNotify($model->tekija,"ETUNTI",$model->viesti);
-			$this->redirect(array('view','id'=>$model->id));
+			$this->redirect(array('index'));
 
 			}
 		}
@@ -292,6 +292,7 @@ class ViestintaController extends Controller
 			if ($pos === false) {
 			    $toimistoTekija = '<b>'.Yii::t('main','Järjestelmänvalvoja<br>').'</b>';
 			} else {
+
 			    $toimistoTekija = '<b>'.Yii::t('main','Työntekijä<br>').'</b>';
 			}
 
