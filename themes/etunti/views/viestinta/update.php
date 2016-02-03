@@ -14,7 +14,7 @@
 		));
 	   ?>
 	   </div>
-	   <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-user"></i> <?php echo Yii::t('main','Jatka keskustelu'); ?> </h2>
+	   <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-user"></i> <?php echo Yii::t('main','Keskustelu'); ?> </h2>
 
 
             <div class="admin-form">
