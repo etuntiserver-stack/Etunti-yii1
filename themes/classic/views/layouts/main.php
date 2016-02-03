@@ -13,6 +13,8 @@
         <link type="text/css" media="screen" rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/assets_classic/inc/lomake/lomake.css?v=2" />
         <script src="<?php echo Yii::app()->request->baseUrl; ?>/assets_classic/js/modernizr.js"></script>
 
+	<link rel="shortcut icon" href="<?php echo Yii::app()->request->baseUrl; ?>/img/favicon.ico">
+
         <!-- styles for IE -->
         <!--[if lte IE 8]>
             <link rel="stylesheet" href="../css/ie/ie.css" type="text/css" media="screen" />
