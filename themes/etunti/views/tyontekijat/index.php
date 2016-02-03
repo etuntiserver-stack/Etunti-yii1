@@ -1,7 +1,6 @@
 <?php
 /* @var $this KohteetController */
 /* @var $dataProvider CActiveDataProvider */
-
 ?>
 
 
@@ -24,8 +23,33 @@
                     <!-- Input Icons -->
                     <div class="row">
 
+                      <div class="col-md-2">
+                        <div class="section">
+                          <label class="field select">
 
-                      <div class="col-md-3">
+		<?php 
+		$a = Valikkoot::model()->findAll(" select_type='aktiivinen' ");
+        	$tal = '';
+		foreach($a as $v){
+		$exV = explode("/",$v->value);
+		   $tal[$exV[1]] = $exV[0];
+		}
+		$selectedValues = 1;
+		if(isset($_POST['aktiivinen']))
+		$selectedValues = array($_POST['aktiivinen']=> Array('selected' => 'selected'));
+
+		echo CHtml::dropDownList('aktiivinen','aktiivinen', $tal, 
+		array('class'=>'gui-input','options' => $selectedValues)) 
+		?>
+
+                            <i class="arrow double"></i>
+                            </label>
+                          </label>
+                        </div>
+                      </div>
+
+
+                      <div class="col-md-2">
                         <div class="section">
                           <label class="field prepend-icon">
 
@@ -60,7 +84,7 @@
                         </div>
                       </div>
 
-                      <div class="col-md-3">
+                      <div class="col-md-2">
                         <div class="section">
                           <label class="field prepend-icon">
 

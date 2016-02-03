@@ -190,6 +190,11 @@ class TyontekijatController extends Controller
        		$criteria = new CDbCriteria();
 	        $criteria->order = "  id DESC ";
 
+		if(isset($_POST['aktiivinen']) and $_POST['aktiivinen'] != 'kaikki')
+	        $criteria->addCondition (" aktiivinen ='".(int)$_POST['aktiivinen']."' ");
+		else
+	        $criteria->addCondition (" aktiivinen=1 ");
+
 		if(isset($_POST['osoite']) and !empty($_POST['osoite']))
 	        $criteria->addCondition (" tekijan_katuosoite LIKE '%".$_POST['osoite']."%' ");
 
