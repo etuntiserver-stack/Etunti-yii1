@@ -347,7 +347,12 @@
               <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/toteutuneet/index">
                   <span class="glyphicon glyphicon-time"></span> <?php echo Yii::t('main', 'Tuntien hyväksyntä'); ?></a>
-              </li>              <li>
+              </li>       
+              <li>
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/mobile/kyhteenveto">
+                  <span class="glyphicon glyphicon-time"></span> <?php echo Yii::t('main', 'Lähetä hyväksyttäväksi'); ?></a>
+              </li>
+	      <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/mobile/laskutettu">
                   <span class="glyphicon glyphicon-phone"></span> <?php echo Yii::t('main', 'Laskutettavat kohteet'); ?></a>
               </li>
