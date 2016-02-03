@@ -246,6 +246,9 @@ $("#notiFyClick").click(function(){
 	$('.myBgColors').removeClass(headerSkins);
 	$('.myBgColors').addClass(settingsObj['headerSkin']);
 	var backgroundColor = $('.myBgColors').css('backgroundColor');
+
+
+
 	$('head').append('<style>.admin-form .heading-border:before{background-color: '+backgroundColor+';}</style>');
 
         $.each(settingsParse, function(i, e) {
@@ -330,6 +333,9 @@ $("#notiFyClick").click(function(){
               }
               break;
           }
+
+		if(settingsObj['headerSkin'] == '')
+		$('.navbar-branding').addClass('bg-dark');
         });
 
       })();
@@ -351,6 +357,10 @@ $("#notiFyClick").click(function(){
 
 	$('.myBgColors').removeClass(headerSkins);
 	$('.myBgColors').addClass(Val);
+
+		if(Val == '')
+		$('.navbar-branding').addClass('bg-dark');
+
 	var backgroundColor = $('.myBgColors').css('backgroundColor');
 	$('head').append('<style>.admin-form .heading-border:before{background-color: '+backgroundColor+';}</style>');
 
