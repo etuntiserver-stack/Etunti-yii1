@@ -134,10 +134,12 @@ legend{  padding: 3px 7px; }
   {
     $k = Kohteet::model()->findAll(" SUBSTRING_INDEX(kenella_on_avain, '//', 1) = '".$data->id."' ");
 	$avaimet = '';
+    $i = 0;
     foreach($k as $kohde)
     {
+    $i++;
 	$avaimet .= '<div class="row">
-			<div class="col-sm-6">'.$kohde->osoite.'</div>
+			<div class="col-sm-6">'.$i.'. '.$kohde->osoite.'</div>
 			<div class="col-sm-6"><b>'.$kohde->avain.'</b></div>
 		     </div>';
     }
