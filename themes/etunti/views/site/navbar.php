@@ -340,6 +340,15 @@
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/mobile/index">
                   <span class="glyphicon glyphicon-phone"></span> <?php echo Yii::t('main', 'Tunnit'); ?></a>
               </li>
+
+
+          <li>
+            <a class="accordion-toggle" href="#">
+              <span class="fa fa-bars"></span>
+              <span><?php echo Yii::t('main', 'Tuntien hyväksyntä'); ?></span>
+              <span class="caret"></span>
+            </a>
+            <ul class="nav sub-nav">
               <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/toteutuneet/index">
                   <span class="glyphicon glyphicon-time"></span> <?php echo Yii::t('main', 'Tuntien hyväksyntä'); ?></a>
@@ -352,6 +361,11 @@
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/asiakasHyvaksynta/index">
                   <span class="glyphicon glyphicon-ok"></span> <?php echo Yii::t('main', 'Asiakkaiden hyväksymät tunnit'); ?></a>
               </li>
+            </ul>
+          </li>
+
+
+
 	      <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/mobile/laskutettu">
                   <span class="glyphicon glyphicon-phone"></span> <?php echo Yii::t('main', 'Laskutettavat kohteet'); ?></a>
