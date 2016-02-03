@@ -103,7 +103,7 @@
                       </div>
 
                       <div class="col-md-2">
-        	        <button class="btn btn-primary btn-lg haemob btn-block myBgColors" type="button"><i class="glyphicon glyphicon-search"> </i> Hae</button>
+        	        <input type="submit" class="btn btn-primary btn-lg haemob btn-block myBgColors" value="Hae">
 		      </div>
 
                     </div>
