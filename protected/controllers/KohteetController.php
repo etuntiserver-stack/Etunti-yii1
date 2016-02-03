@@ -233,7 +233,7 @@ class KohteetController extends Controller
 
 
 		if(isset($_POST['osoite']) and !empty($_POST['osoite']))
-	        $criteria->addCondition (" id='".$_POST['osoite']."' ");
+	        $criteria->addCondition (" osoite LIKE '%".$_POST['osoite']."%' ");
 
 		if(isset($_POST['aktiivinen']) and $_POST['aktiivinen'] != 'kaikki')
 	        $criteria->addCondition (" asiakas_id IN ( SELECT id FROM asiakkaat WHERE aktiivinen='".(int)$_POST['aktiivinen']."' ) ");

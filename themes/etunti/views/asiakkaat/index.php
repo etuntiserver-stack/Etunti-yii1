@@ -22,39 +22,29 @@
                     <div class="row">
 
                       <div class="col-md-2">
+
                         <div class="section">
-                          <label class="field select">
+                          <label class="field prepend-icon">
 
+   			    <input type="text" class="gui-input" name="osoite" value="<?php if(isset($_POST['osoite'])) echo $_POST['osoite']; ?>" placeholder="Osoite..">
 
-   <?php
-    $criteria = new CDbCriteria();
-    $criteria->order = " osoite ASC ";
-    $model = Kohteet::model()->findAll($criteria);
-    $list = CHtml::listData($model, 'id', 'osoite');
-
-    echo '<select class="gui-input" name="osoite">';
-    if(isset($_POST['osoite']))
-    {
-       $k = Kohteet::model()->findbypk($_POST['osoite']);
-       if(isset($k->id))
-       echo '<option value="'.$k->id.'">'.$k->osoite.'</option>';
-    } else {
-       echo '<option value="">'.Yii::t('main', 'Osoite').'</option>';
-    }
-
-       echo '<option value="">Kaikki</option>';
-
-    foreach($list as $key=>$val){
-    echo '<option value="'.$key.'">'.$val.'</option>';
-
-    }
-    echo '</select>';
-   ?>
-
-                            <i class="arrow double"></i>
+                            <label for="firstname" class="field-icon">
+                              <i class="fa fa-user"></i>
                             </label>
                           </label>
                         </div>
+
+                        <div class="section">
+                          <label class="field prepend-icon">
+
+   			    <input type="text" class="gui-input" name="yrityksen_nimi" value="<?php if(isset($_POST['yrityksen_nimi'])) echo $_POST['yrityksen_nimi']; ?>" placeholder="Yritys..">
+
+                            <label for="firstname" class="field-icon">
+                              <i class="fa fa-user"></i>
+                            </label>
+                          </label>
+                        </div>
+
                       </div>
 
 		      <?php if(isset($_POST['aktiivinen'])) echo '<input type="hidden" id="akt" value="'.$_POST['aktiivinen'].'">'; ?>

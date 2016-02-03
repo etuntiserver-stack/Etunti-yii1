@@ -152,7 +152,7 @@ class AsiakkaatController extends Controller
 	        $criteria->order = "  id DESC ";
 
 		if(isset($_POST['osoite']) and !empty($_POST['osoite']))
-	        $criteria->addCondition (" id='".$_POST['osoite']."' ");
+	        $criteria->addCondition (" osoite LIKE '%".$_POST['osoite']."%' ");
 
 		if(isset($_POST['aktiivinen']) and $_POST['aktiivinen'] != 'kaikki')
 	        $criteria->addCondition (" aktiivinen ='".(int)$_POST['aktiivinen']."' ");
@@ -160,6 +160,9 @@ class AsiakkaatController extends Controller
 	        $criteria->addCondition (" (aktiivinen=1 OR aktiivinen=0) ");
 		else
 	        $criteria->addCondition (" aktiivinen=1 ");
+
+		if(isset($_POST['yrityksen_nimi']) and !empty(trim($_POST['yrityksen_nimi'])))
+	        $criteria->addCondition (" yrityksen_nimi LIKE '%".$_POST['yrityksen_nimi']."%' ");
 
 		if(isset($_POST['yhteyshenkilo']) and !empty(trim($_POST['yhteyshenkilo'])))
 	        $criteria->addCondition (" yhteyshenkilo LIKE '%".$_POST['yhteyshenkilo']."%' ");
