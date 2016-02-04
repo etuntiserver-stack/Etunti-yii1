@@ -28,7 +28,7 @@ class TyovuorootController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','updatetime','showohje','did','muisti','operatio','viikko','fromto','autoinsert','autoremove','viikkottain','laheta','kk','pvmtid','laheta_k'),
+				'actions'=>array('admin','delete','create','update','index','view','updatetime','showohje','did','muisti','operatio','viikko','fromto','autoinsert','autoremove','viikkottain', 'viikkottain_pdf', 'laheta','kk','pvmtid','laheta_k'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny', // allow admin user to perform 'admin' and 'delete' actions
@@ -293,7 +293,15 @@ class TyovuorootController extends Controller
 	}
 	public function actionViikkottain() {
 
-		$this->render('viikkottain');
+		if(Yii::app()->request->getPost('tulosta'))
+		{
+	          $html2pdf = Yii::app()->ePdf->HTML2PDF('L', 'A4', 'en');
+		  $html2pdf->setDefaultFont('Arial');
+	          $html2pdf->WriteHTML($this->renderPartial('viikkottain_pdf',array('no'=>'ei mitaan'),true));
+	          $html2pdf->Output();
+		} else {
+		  $this->render('viikkottain');
+		}
 	}
 
 	public function actionOperatio()
@@ -511,13 +519,14 @@ class TyovuorootController extends Controller
 		));
 	}
 
-	public function actionDid($pvm,$tid,$from)
+	public function actionDid($pvm,$tid,$from,$tietoja)
 	{
-
+		if(isset($tietoja)) $tietoja = 1; else $tietoja = 0;
 		$this->renderPartial('did',array(
 			'pvm'=>$pvm,
 			'tid'=>$tid,
 			'from'=>$from,
+			'tietoja'=>$tietoja,
 		));
 	}
 

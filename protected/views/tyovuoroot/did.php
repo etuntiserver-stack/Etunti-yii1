@@ -34,9 +34,11 @@
 	   $osoite = $tvVal->kohteet->osoite;//
 
 	   $strlen = strlen($osoite);
+	   $scount = 35;
+	   if(isset($tietoja) and $tietoja == 1) $scount = 27;
 
-	   if($strlen > 35)
-	    $osoite = substr($osoite,0,35).'..';
+	   if($strlen > $scount)
+	    $osoite = substr($osoite,0,$scount).'..';
 
 
 	   if($tvVal->alku > 0 and $tvVal->loppu > 0)
@@ -73,6 +75,9 @@
 
 	   if(!empty($tvVal->tietoja))
 	   echo ' <b class="fa fa-file-text-o text-warning pull-right" title="Tietoja"></b>';
+
+	   if(!empty($tvVal->tietoja) and isset($tietoja) and $tietoja == 1)
+	   echo '<p><span style="color: blue; border: 1px #333 solid">'.str_replace("\n","<br>",$tvVal->tietoja).'</span></p>';
 
 	   echo '<br>
 	   </div>';
