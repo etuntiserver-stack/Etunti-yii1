@@ -39,11 +39,14 @@
 
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'status'); ?>
+
+	   <div class="form-inline">
 		<?php 
 		$a = Valikkoot::model()->findAll(" select_type='admin status' ");
-        	$tal = '';
+        	$tal = array();
 		foreach($a as $v){
 		$exV = explode("/",$v->value);
+		   if(isset($exV[1]))
 		   $tal[$exV[1]] = $exV[0];
 		}
 
@@ -54,6 +57,8 @@
 			echo $form->textField($model,'status',array('size'=>60,'maxlength'=>1,'class'=>'form-control'));
 		}
 		?>
+		<span class="btn btn-primary myBgColors muokaValiko" for="admin status"><i class="fa fa-pencil-square-o"></i></span>
+	   </div>
 		<?php echo $form->error($model,'status'); ?>
 	</div>
 
@@ -65,4 +70,31 @@
 
 <?php $this->endWidget(); ?>
 
+
+
+	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/bootstrap.modal.js"></script>
+	<div id="showres" class="modal fade" tabindex="-1" role="dialog"></div>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+
+/* valikot */
+$(".muokaValiko").click(function() {
+    var thisFor = $(this).attr("for");
+        $.ajax({
+           url: location.protocol + "//" + location.host + "/index.php/site/valiko",
+	   type:'POST',
+	   data: { "select_type" : thisFor },
+           success: function(data){
+		//console.log(data);
+		$('#showres').modal().html(JSON.parse(data));
+           }
+        });
+});
+/* valikot */
+
+
+});
+</script>
 

@@ -5,6 +5,10 @@
         <!-- begin: .tray-center -->
         <div class="tray-center">
 
+	   <?php     
+		$site = Yii::app()->createController('Site');
+		$site[0]->oikeudet($model->id,'noDelete');
+	   ?>
 	   <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-user"></i> <?php echo Yii::t('main', 'LUO ASIAKAS'); ?> </h2>
 
 

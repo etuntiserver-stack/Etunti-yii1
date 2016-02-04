@@ -22,6 +22,12 @@ if(isset($_POST['uploaded']))
         <!-- begin: .tray-center -->
         <div class="tray-center">
 
+	   <div class="pull-right">
+	   <?php     
+		$site = Yii::app()->createController('Site');
+		$site[0]->oikeudet($model->id,null);
+	   ?>
+	   </div>
 	   <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-user"></i> <?php echo $model->adm_nimi; ?> </h2>
 
             <div class="admin-form">

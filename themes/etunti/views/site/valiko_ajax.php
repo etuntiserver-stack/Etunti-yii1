@@ -60,16 +60,45 @@
 
 	<input type="hidden" id="select_type" value="'.$_POST['select_type'].'">
 
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">'.$selType.'</h4>
+        <h4 class="modal-title">'.Yii::t('main','Alasvetovalikon hallinta').'</h4>
       </div>
       <div class="modal-body">
+       <div class="row">
+       <div class="col-sm-5">
+	<br>
+	<legend>'.$selType.'</legend>';
+
+	if($_POST['select_type'] == 'vuosilomat')
+	{
+	$mod .= '
+	<label>Malli:</label>  <br><br>
+		<p>Merkki/Teksti/Html vääri</p>
+		<p>V/Vapaa/#006da9</p>
+		<p>tai V/Vapaa/blue</p>
+	';
+	} elseif($_POST['select_type'] == 'admin status')
+	{
+	$mod .= '
+	<label>Malli:</label>  <br><br>
+		<p>Ryhmän nimetys/arvo(ei saa muuttaa)</p>
+		<p><b>1:</b> Saa poista.</p>
+		<p><b>2:</b> Saa muokata. Ei saa poista.</p>
+		<p><b>3:</b> Ei saa poista, muokata, luoda.</p>
+		<p><b>4:</b> Ei käytettävissä.</p>
+		<p><b>5:</b> Ei käytettävissä.</p>
+		<p><b>6:</b> Ei käytettävissä.</p>
+	';
+	}
+
+	$mod .= '
+       </div><div class="col-sm-7">
         <p><center>';
 
-
+	   if(Yii::app()->user->adminStatus == 1){
 
 	       	$criteria = new CDbCriteria();
 		$criteria->select = " value,id,select_type ";
@@ -87,9 +116,9 @@
 		$mod .= '
 		<div class="row" id="rivi_'.$u->id.'">
 		  <div class="form-inline">
-			<input type="text" class="input-sm form-control form-group '.$success.'" value="'.$u->value.'" id="m_'.$u->id.'">
-			<input type="button" class="btn btn-sm btn-warning muokka" for="m_'.$u->id.'" id="'.$u->id.'" value="M"></button>
-			<input type="button" class="btn btn-sm btn-danger deleteFromSelect" id="poista_'.$u->id.'" select_type="'.$u->select_type.'" value="X"></button>
+			<input type="text" class="form-control form-group '.$success.'" value="'.$u->value.'" id="m_'.$u->id.'">
+			<input type="button" class="btn btn-warning muokka" for="m_'.$u->id.'" id="'.$u->id.'" value="Tallenna"></button>
+			<input type="button" class="btn btn-danger deleteFromSelect" id="poista_'.$u->id.'" select_type="'.$u->select_type.'" value="X"></button>
 		  </div>
 		</div>
 		';
@@ -98,17 +127,23 @@
 		$mod .= '<BR>
 		<div class="row">
 		  <div class="form-inline">
-			<input type="text" class="form-control input-sm form-group" id="u_'.$r->id.'">
-			<button class="btn btn-success btn-sm form-group uusi" tyyppi="'.$r->select_type.'" for="u_'.$r->id.'">uusi</button>
+			<input type="text" class="form-control form-group" id="u_'.$r->id.'">
+			<button class="btn btn-success form-group uusi" tyyppi="'.$r->select_type.'" for="u_'.$r->id.'">uusi</button>
 		  </div>
 		</div>';
 
+	} else {
+	$mod .= 'Sinulla ei ole tämän sivun saantiin tarvittavaa oikeutta.';
+	}
+
 	$mod .= '
 	</center></p>
+       </div>
+       </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Sulje</button>
-        <button type="button" class="btn btn-primary tallenna">Tallenna</button>
+        <button type="button" class="btn btn-primary tallenna">Päivitä sivua</button>
 
       </div>
     </div><!-- /.modal-content -->

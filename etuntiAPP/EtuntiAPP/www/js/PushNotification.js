@@ -53,7 +53,7 @@ var appPush = {
             var cards = document.getElementById("cards");
             var push = '<br><div class="row">' +
 		  		  '<div class="col-sm-12">' +
-				  '  <div class="alert alert-danger">' +
+				  '  <div class="alert alert-success">' +
 				  '    <div class="card-content black-text">' +
 				  '      <span class="card-title black-text">' + data.title + '</span>' +
 				  '      <p>' + data.message.replace(/\n/g,"<br>") + '</p>' +

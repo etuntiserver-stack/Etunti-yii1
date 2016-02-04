@@ -41,17 +41,14 @@ exit;
 
 	   <div class="pull-right">
 	    <div class="form-inline">
-	     <?php      
- 		echo CHtml::link("poista", '#', array(
-		'submit'=>array('delete', "id"=>$model->id), 
-		'confirm' => 'Haluatko varmaasti poistaa?',
-		'class'=>'btn btn-primary btn-group btn-sm myBgColors'
-		));
-	     ?>
+	   <?php     
+		$site = Yii::app()->createController('Site');
+		$site[0]->oikeudet($model->id,null);
+	   ?>
 
   	     <!-- tulostus -->
      	      <form action="tulosta?id=<?php echo $model->id; ?>" class="form-group" target="_blank" method="POST">
-      	      <input type="submit" name="tulosta" class="btn btn-success btn-sm myBgColors" value="PDF">
+      	      <input type="submit" name="tulosta" class="btn btn-success myBgColors" value="PDF">
      	      </form>
   	     <!-- tulostus -->
 	    </div>

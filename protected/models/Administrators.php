@@ -70,7 +70,7 @@ class Administrators extends DB2ActiveRecord
 			'adm_salasana' => 'Uusi salasana',
 			'adm_email' => 'Sähköposti',
 			'adm_nimi' => 'Nimi',
-			'status' => 'Status',
+			'status' => 'Ryhmä',
 		);
 	}
 

@@ -11,12 +11,9 @@ $head = $model->osoite;
         <div class="tray-center">
 
 	   <div class="pull-right">
-	   <?php      
- 		echo CHtml::link("poista", '#', array(
-		'submit'=>array('delete', "id"=>$model->id), 
-		'confirm' => 'Haluatko varmaasti poistaa?',
-		'class'=>'btn btn-primary myBgColors'
-		));
+	   <?php     
+		$site = Yii::app()->createController('Site');
+		$site[0]->oikeudet($model->id,null);
 	   ?>
 	   </div>
 	   <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-user"></i> <?php echo $head; ?> </h2>

@@ -474,7 +474,33 @@ $(document).ready(function(){
 	}
 
 
+	protected function oikeudet($id,$sivu)
+	{
+		$return = '';
 
+	   if(Yii::app()->user->adminStatus == 1 and $sivu != 'noDelete'){
+
+ 		$return .= CHtml::link("poista", '#', array(
+		'submit'=>array('delete', "id"=>$id), 
+		'confirm' => 'Haluatko varmaasti poistaa?',
+		'class'=>'btn btn-primary myBgColors'
+		));
+
+	   } elseif(Yii::app()->user->adminStatus == 2){
+
+	   } elseif(Yii::app()->user->adminStatus == 3){
+	   
+	     $return .= '
+		<script type="text/javascript">
+		$(document).ready(function(){
+		   $(":input").prop("disabled", true);	
+		});
+		</script>';
+
+	   }
+
+		echo $return;
+	}
 
 
 
