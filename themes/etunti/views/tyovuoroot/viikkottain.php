@@ -25,6 +25,13 @@ td:first-child {
         <!-- begin: .tray-center -->
         <div class="tray-center">
 
+   <!-- tulostus -->
+   <div class="pull-right">
+     <form action="#" target="_blank" method="POST">
+      <input type="submit" name="tulosta" class="btn btn-primary btn-sm myBgColors" value="PDF">
+     </form>
+   </div>
+   <!-- tulostus -->
 
               <h2 class="myBgColors p10"> <i class="fa fa-paper-plane"></i> <?php echo Yii::t('main', 'TYÖVUOROJEN LÄHETYS'); ?></h2>
 
