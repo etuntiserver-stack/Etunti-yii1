@@ -142,14 +142,18 @@
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'siivous'); ?>
 
+	   <div class="form-inline">
 		<?php
+		$list = array();
       		$l = Valikkoot::model()->findAll(" select_type='siivous' ",array('order' => "select_type"));
 		foreach($l as $v)
 		$list[$v->id."//".$v->value] = $v->value;
 
         	echo $form->dropDownList($model, 'siivous', $list,
-		array('empty'=>'','class'=>'form-control'));
+		array('empty'=>'','class'=>'form-control form-group'));
         	?>
+		<span class="btn btn-primary myBgColors muokaValiko" for="siivous"><i class="fa fa-pencil-square-o"></i></span>
+	   </div>
 
 		<?php echo $form->error($model,'siivous'); ?>
 	</div>
@@ -187,6 +191,7 @@
 
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'ryhma'); ?>
+	   <div class="form-inline">
 		<?php
 		$list = array();
       		$l = Valikkoot::model()->findAll(" select_type='asiakas_ryhma' ",array('order' => "select_type"));
@@ -201,6 +206,9 @@
 		echo 'Luo Valikko tietokannassa "Select Type = asiakas_ryhma"';
 		}		
         	?>
+		<span class="btn btn-primary myBgColors muokaValiko" for="asiakas_ryhma"><i class="fa fa-pencil-square-o"></i></span>
+	   </div>
+
 		<?php echo $form->error($model,'ryhma'); ?>
 	</div>
 
@@ -415,40 +423,31 @@ window.initialize = function() {
 
 
 
-<?php
- /*
-
-	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'tyoryhma'); ?>
-		<?php echo $form->textField($model,'tyoryhma',array('size'=>20,'maxlength'=>20,'class'=>'form-control')); ?>
-		<?php echo $form->error($model,'tyoryhma'); ?>
-	</div>
-
-	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'ryhma'); ?>
-		<?php echo $form->textField($model,'ryhma',array('size'=>10,'maxlength'=>10,'class'=>'form-control')); ?>
-		<?php echo $form->error($model,'ryhma'); ?>
-	</div>
+	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/bootstrap.modal.js"></script>
+	<div id="showres" class="modal fade" tabindex="-1" role="dialog"></div>
 
 
-	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'maksuehto_paiva'); ?>
-		<?php echo $form->textField($model,'maksuehto_paiva',array('class'=>'form-control')); ?>
-		<?php echo $form->error($model,'maksuehto_paiva'); ?>
-	</div>
+<script type="text/javascript">
+$(document).ready(function(){
 
-	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'viivastyskorko'); ?>
-		<?php echo $form->textField($model,'viivastyskorko',array('size'=>10,'maxlength'=>10,'class'=>'form-control')); ?>
-		<?php echo $form->error($model,'viivastyskorko'); ?>
-	</div>
+/* valikot */
+$(".muokaValiko").click(function() {
+    var thisFor = $(this).attr("for");
+        $.ajax({
+           url: location.protocol + "//" + location.host + "/index.php/site/valiko",
+	   type:'POST',
+	   data: { "select_type" : thisFor },
+           success: function(data){
+		//console.log(data);
+		$('#showres').modal().html(JSON.parse(data));
+           }
+        });
+});
+/* valikot */
 
-	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'lasku_tiedot'); ?>
-		<?php echo $form->textField($model,'lasku_tiedot',array('size'=>60,'maxlength'=>255,'class'=>'form-control')); ?>
-		<?php echo $form->error($model,'lasku_tiedot'); ?>
-	</div>
-*/
-?>  
+
+});
+</script>
+
 
 

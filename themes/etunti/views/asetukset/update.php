@@ -40,6 +40,12 @@ exit;
         <!-- begin: .tray-center -->
         <div class="tray-center">
 
+	   <div class="pull-right">
+	   <?php     
+		$site = Yii::app()->createController('Site');
+		$site[0]->oikeudet($model->id,'noDelete');
+	   ?>
+	   </div>
 	   <h2 class="myBgColors p10"> <i class="fa fa-gear"></i> <?php echo Yii::t('main', 'ASETUKSET'); ?> </h2>
 
 
@@ -56,6 +62,12 @@ exit;
 
             <div class="admin-form">
               <div class="panel heading-border">
+	   <div class="pull-right">
+	   <?php     
+		$site = Yii::app()->createController('Site');
+		$site[0]->oikeudet($model->id,'noDelete');
+	   ?>
+	   </div>
 		<h2 class="p15"><?php echo Yii::t('main','Järjestelmän asetukset');?></h2>
                 <div class="panel-body bg-light">
                  <div class="row">

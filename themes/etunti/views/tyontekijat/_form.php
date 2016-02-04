@@ -99,7 +99,7 @@ if(empty($model->position) and isset($model->id))
 		}
 
 		echo $form->dropDownList($model,'aktiivinen', $tal, 
-		array('class'=>'form-control input-group','id'=>'osoite')) ?>
+		array('class'=>'form-control form-group')) ?>
 		<span class="btn btn-primary myBgColors muokaValiko" for="aktiivinen"><i class="fa fa-pencil-square-o"></i></span>
 	   </div>
 

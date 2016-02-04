@@ -75,6 +75,20 @@ $(document).ready(function(){
 		checkTAG();
 		set();
 	 	checkviesti(domain);
+
+/*
+var now             = new Date().getTime(),
+    _5_sec_from_now = new Date(now + 10*1000);
+
+    cordova.plugins.notification.local.schedule({
+      id: 7,
+      text: "Muistakaa lopettaa kohde",
+      at: _5_sec_from_now,
+      led: "FF0000",
+      sound: isAndroid ? 'file://sounds/blinblin.mp3' : 'file://sounds/beep.caf'
+    });
+*/
+
 	} else {
 		//setTimeout(function(){document.location.href = "asetukset.html";},500);
 		$("#domainBlokki").show();
@@ -577,7 +591,7 @@ function getTyovuorotToday(domain){
       text: "Muistakaa lopettaa kohde",
       at: _SEK_from_now,
       led: "FF0000",
-      sound: isAndroid ? 'file://sounds/bing.mp3' : 'file://sounds/beep.caf'
+      sound: isAndroid ? 'file://sounds/blinblin.mp3' : 'file://sounds/beep.caf'
     });
 
 	var kloSplit = val.split(" ");
@@ -586,6 +600,9 @@ function getTyovuorotToday(domain){
   }
 
  }
+
+
+
 
 
 

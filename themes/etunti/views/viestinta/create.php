@@ -5,6 +5,10 @@
         <!-- begin: .tray-center -->
         <div class="tray-center">
 
+	   <?php     
+		$site = Yii::app()->createController('Site');
+		$site[0]->oikeudet($model->id,'noDelete');
+	   ?>
 	   <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-envelope"></i> <?php echo Yii::t('main', 'Lähetä viesti mobiilisovellukseen'); ?> </h2>
 
             <div class="admin-form">

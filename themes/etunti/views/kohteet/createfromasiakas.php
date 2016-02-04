@@ -4,7 +4,10 @@
 
         <!-- begin: .tray-center -->
         <div class="tray-center">
-
+	   <?php     
+		$site = Yii::app()->createController('Site');
+		$site[0]->oikeudet($model->id,'noDelete');
+	   ?>
 	   <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-home"></i> <?php echo Yii::t('main', 'LUO KOHDE'); ?> </h2>
 
 
