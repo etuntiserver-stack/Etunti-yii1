@@ -519,7 +519,7 @@ class TyovuorootController extends Controller
 		));
 	}
 
-	public function actionDid($pvm,$tid,$from,$tietoja)
+	public function actionDid($pvm,$tid,$from)
 	{
 		if(isset($tietoja)) $tietoja = 1; else $tietoja = 0;
 		$this->renderPartial('did',array(
