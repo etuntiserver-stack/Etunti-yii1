@@ -334,8 +334,12 @@ $("#notiFyClick").click(function(){
               break;
           }
 
-		if(settingsObj['headerSkin'] == '')
+	  if(settingsObj['headerSkin'] == '')
+	  {
+		$('.ad-lines').css({"color":"white"});
 		$('.navbar-branding').addClass('bg-dark');
+	  }
+
         });
 
       })();
