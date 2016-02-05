@@ -32,7 +32,7 @@
   <table class="table table-striped" id="mobileTable">
   <thead class="myBgColors">
   <tr>
-  <th class="col-sm-1"><?php echo Yii::t('main', 'T'); ?></th>
+  <th><?php echo Yii::t('main', 'T'); ?></th>
   <th><?php echo Yii::t('main', 'ID'); ?></th>
   <th><?php echo Yii::t('main', 'Versio'); ?></th>
   <th><?php echo Yii::t('main', 'Päivä'); ?></th>
