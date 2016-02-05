@@ -9,6 +9,12 @@
 .animated-waypoint {
   opacity: 0;
 }
+
+#mobileTable td a{
+	color: #666666;
+}
+
+
 .link{ cursor: pointer }
 .sparkline-delay {
   position: absolute;
@@ -305,6 +311,7 @@ Copyright (c) 2014 Daniel Eden
     -webkit-transform: perspective(400px) rotate3d(1, 0, 0, 90deg);
     transform: perspective(400px) rotate3d(1, 0, 0, 90deg);
     transition-timing-function: ease-in;
+
 
 
 
@@ -2736,6 +2743,7 @@ Copyright (c) 2014 Daniel Eden
 .fa-instagram:before {
   content: "\f16d";
 }
+
 .fa-flickr:before {
   content: "\f16e";
 }
@@ -3240,6 +3248,7 @@ Copyright (c) 2014 Daniel Eden
   content: "\f217";
 }
 .fa-cart-arrow-down:before {
+
   content: "\f218";
 }
 .fa-diamond:before {
@@ -8262,6 +8271,7 @@ h3 small,
 h4 small,
 h5 small,
 h6 small,
+
 .h1 small,
 .h2 small,
 .h3 small,
