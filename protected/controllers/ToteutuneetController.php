@@ -361,6 +361,10 @@ class ToteutuneetController extends Controller
 		if(Yii::app()->request->getPost('to'))
 		Yii::app()->session['to'] = date("Y-m-d",strtotime(Yii::app()->request->getPost('to')));
 
+		$tekija = '';
+		if(isset($explTekija[1]))
+		$tekija = $explTekija[1];
+
 /*
        		$criteria = new CDbCriteria();
 
@@ -393,7 +397,7 @@ class ToteutuneetController extends Controller
 
 	          $html2pdf = Yii::app()->ePdf->HTML2PDF('L', 'A4', 'en');
 		  $html2pdf->setDefaultFont('Arial');
-	          $html2pdf->WriteHTML($this->renderPartial('tulosta',array('from'=>$from,'to'=>$to),true));
+	          $html2pdf->WriteHTML($this->renderPartial('tulosta',array('from'=>$from,'to'=>$to,'tekija'=>$tekija),true));
 	          $html2pdf->Output();
 
 

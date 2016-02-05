@@ -5,13 +5,13 @@
 	width: 710px;
 }
 .tb table .chckbxHyvaksynta{ display:none }
-.tb .col1{ width: 3%; text-align: left; }
-.tb .col2{ width: 42%; text-align: left;}
-.tb .col3{ width: 42%; text-align: left;}
-.tb .col4{ width: 42%; text-align: left;}
-.tb .col5{ width: 3%; }
-.tb .col6{ width: 3%; }
-.tb .col6{ width: 3%; }
+.tb .col1{ width: 5%; text-align: left; }
+.tb .col2{ width: 43%; text-align: left;}
+.tb .col3{ width: 43%; text-align: left;}
+.tb .col4{ width: 43%; text-align: left;}
+.tb .col5{ width: 10%; }
+.tb .col6{ width: 9%; }
+.tb .col7{ width: 9%; }
 input[type="checkbox"]{ display:none }
 </style>
 
@@ -22,7 +22,7 @@ input[type="checkbox"]{ display:none }
  </td><td valign="right" style="width:20%">
   <?php echo Yii::t('main', 'Yhteenveto tunnit'); ?>
   <?php if(isset($from) and isset($to)) : ?>
-    <?php echo date("d.m.Y",strtotime($from)).'-'.date("d.m.Y",strtotime($to)); ?>
+    <?php echo $tekija.", ".date("d.m.Y",strtotime($from)).'-'.date("d.m.Y",strtotime($to)); ?>
   <?php endif; ?>
  </td>
  </tr>
