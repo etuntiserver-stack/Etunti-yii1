@@ -189,6 +189,71 @@
       </form>
 -->
       <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown menu-merge">
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+            <span class="ad ad-radio-tower fs18" id="notiFyClick"></span>
+          </a>
+          <ul class="dropdown-menu media-list w350 animated animated-shorter fadeIn" role="menu">
+            <li class="dropdown-header">
+              <span class="dropdown-title"> Notifications</span>
+              <span class="label label-warning">5</span>
+            </li>
+	    <get id="viestiGet"></get>
+	    	
+          </ul>
+        </li>
+        <li class="dropdown menu-merge">
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+             <span class=""></span> 
+		<?php
+		$lang = 'fi';
+		if(isset($_SESSION['lang']) and !empty($_SESSION['lang']))
+  		$lang = $_SESSION['lang'];
+		echo strtoupper ($lang);
+		?>
+          </a>
+          <ul class="dropdown-menu pv5 animated animated-short flipInX" role="menu">
+            <li>
+              <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/site/etusivu?lang=fi">
+                <span class="mr10"></span> Suomi </a>
+            </li>
+            <li>
+              <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/site/etusivu?lang=ee">
+                <span class="mr10"></span> Eesti </a>
+            </li>
+            <li>
+              <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/site/etusivu?lang=en">
+                <span class="mr10"></span> English </a>
+            </li>
+          </ul>
+        </li>
+
+
+        <li class="menu-divider hidden-xs">
+          <i class="fa fa-circle"></i>
+        </li>
+        <li class="dropdown menu-merge">
+          <a href="#" class="dropdown-toggle " data-toggle="dropdown"> 
+		 <?php echo Yii::t('main','Asetukset'); ?>
+            <span class="caret caret-tp hidden-xs"></span>
+          </a>
+          <ul class="dropdown-menu list-group dropdown-persist w250" role="menu">
+            <li class="list-group-item">
+              <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/asetukset/update?id=1" class="animated animated-short fadeInUp">
+                <span class="fa fa-gear"></span> <?php echo Yii::t('main','Asetukset'); ?> </a>
+            </li>
+            <li class="list-group-item">
+              <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/administrators/index" class="animated animated-short fadeInUp">
+                <span class="fa fa-gear"></span> <?php echo Yii::t('main','Järjestelmänvalvojat'); ?> </a>
+            </li>
+            <li class="list-group-item">
+              <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/site/ohjesivu" class="animated animated-short fadeInUp">
+                <span class="fa fa-gear"></span> <?php echo Yii::t('main','Ohjeet'); ?> </a>
+            </li>
+          </ul>
+        </li>
+
+
 
         <li class="dropdown menu-merge">
           <a class="dropdown-toggle" data-toggle="dropdown" href="#">
@@ -205,7 +270,7 @@
       </div>
       <div class="panel-body pn">
 
-        <div class="">
+        <div class="text-dark">
           <div class="col-sm-6">
             <form id="toolbox-header-skin">
               <h4 class="mv20">Header Skins</h4>
@@ -285,69 +350,6 @@
 
 
 
-        <li class="dropdown menu-merge">
-          <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-            <span class="ad ad-radio-tower fs18" id="notiFyClick"></span>
-          </a>
-          <ul class="dropdown-menu media-list w350 animated animated-shorter fadeIn" role="menu">
-            <li class="dropdown-header">
-              <span class="dropdown-title"> Notifications</span>
-              <span class="label label-warning">5</span>
-            </li>
-	    <get id="viestiGet"></get>
-	    	
-          </ul>
-        </li>
-        <li class="dropdown menu-merge">
-          <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-             <span class=""></span> 
-		<?php
-		$lang = 'fi';
-		if(isset($_SESSION['lang']) and !empty($_SESSION['lang']))
-  		$lang = $_SESSION['lang'];
-		echo strtoupper ($lang);
-		?>
-          </a>
-          <ul class="dropdown-menu pv5 animated animated-short flipInX" role="menu">
-            <li>
-              <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/site/etusivu?lang=fi">
-                <span class="mr10"></span> Suomi </a>
-            </li>
-            <li>
-              <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/site/etusivu?lang=ee">
-                <span class="mr10"></span> Eesti </a>
-            </li>
-            <li>
-              <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/site/etusivu?lang=en">
-                <span class="mr10"></span> English </a>
-            </li>
-          </ul>
-        </li>
-
-
-        <li class="menu-divider hidden-xs">
-          <i class="fa fa-circle"></i>
-        </li>
-        <li class="dropdown menu-merge">
-          <a href="#" class="dropdown-toggle " data-toggle="dropdown"> 
-		 <?php echo Yii::t('main','Asetukset'); ?>
-            <span class="caret caret-tp hidden-xs"></span>
-          </a>
-          <ul class="dropdown-menu list-group dropdown-persist w250" role="menu">
-            <li class="list-group-item">
-              <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/asetukset/update?id=1" class="animated animated-short fadeInUp">
-                <span class="fa fa-gear"></span> <?php echo Yii::t('main','Asetukset'); ?> </a>
-            </li>
-            <li class="list-group-item">
-              <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/administrators/index" class="animated animated-short fadeInUp">
-                <span class="fa fa-gear"></span> <?php echo Yii::t('main','Järjestelmänvalvojat'); ?> </a>
-            </li>
-            <li class="list-group-item">
-              <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/site/ohjesivu" class="animated animated-short fadeInUp">
-                <span class="fa fa-gear"></span> <?php echo Yii::t('main','Ohjeet'); ?> </a>
-            </li>
-          </ul>
-        </li>
         <li id="toggle_sidemenu_t">  
         		<span class="fa fa-caret-up"></span>
         </li>
