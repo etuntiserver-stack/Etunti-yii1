@@ -192,7 +192,7 @@
 
         <li class="dropdown menu-merge">
           <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-             <span class="">Tausteet</span> 
+             <span class="fa fa-eyedropper"></span> 
 
 	  </a>
           <ul class="dropdown-menu pv5 animated animated-short flipInX" role="menu">
@@ -202,13 +202,11 @@
     <div class="panel">
       <div class="panel-heading">
 
-	<a href="#" id="clearLocalStorage" class="btn btn-primary">Clear LocalStorage</a>
-
       </div>
-      <div class="panel-body pn myBgColors">
+      <div class="panel-body pn">
 
         <div class="">
-          <div class="col-sm-4">
+          <div class="col-sm-6">
             <form id="toolbox-header-skin">
               <h4 class="mv20">Header Skins</h4>
               <div class="skin-toolbox-swatches">
@@ -251,7 +249,7 @@
               </div>
             </form>
           </div>
-          <div class="col-sm-4">
+          <div class="col-sm-6">
             <form id="toolbox-sidebar-skin">
               <h4 class="mv20">Sidebar Skins</h4>
               <div class="skin-toolbox-swatches">
@@ -270,53 +268,12 @@
               </div>
             </form>
           </div>
-          <div class="col-sm-4">
-            <form id="toolbox-settings-misc">
-              <h4 class="mv20 mtn">Layout Options</h4>
-              <div class="form-group">
-                <div class="checkbox-custom fill mb5">
-                  <input type="checkbox" checked="" id="header-option">
-                  <label for="header-option">Fixed Header</label>
-                </div>
-              </div>
-              <div class="form-group">
-                <div class="checkbox-custom fill mb5">
-                  <input type="checkbox" checked="" id="sidebar-option">
-                  <label for="sidebar-option">Fixed Sidebar</label>
-                </div>
-              </div>
-              <div class="form-group">
-                <div class="checkbox-custom fill mb5">
-                  <input type="checkbox" id="breadcrumb-option">
-                  <label for="breadcrumb-option">Fixed Breadcrumbs</label>
-                </div>
-              </div>
-              <div class="form-group">
-                <div class="checkbox-custom fill mb5">
-                  <input type="checkbox" id="breadcrumb-hidden">
-                  <label for="breadcrumb-hidden">Hide Breadcrumbs</label>
-                </div>
-              </div>
-              <h4 class="mv20">Layout Options</h4>
-              <div class="form-group">
-                <div class="radio-custom mb5">
-                  <input type="radio" id="fullwidth-option" checked name="layout-option">
-                  <label for="fullwidth-option">Fullwidth Layout</label>
-                </div>
-              </div>
-              <div class="form-group mb20">
-                <div class="radio-custom radio-disabled mb5">
-                  <input type="radio" id="boxed-option" name="layout-option" disabled>
-                  <label for="boxed-option">Boxed Layout
-                    <b class="text-muted">(Coming Soon)</b>
-                  </label>
-                </div>
-              </div>
-            </form>
-          </div>
         </div>
 
       </div>
+
+	<a href="#" id="clearLocalStorage" class="btn btn-primary btn-block">Clear LocalStorage</a>
+
     </div>
   </div>
 
