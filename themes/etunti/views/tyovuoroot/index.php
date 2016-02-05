@@ -219,7 +219,7 @@ td .laatikko:hover{
 	  $clPyhat = '';
 	  $pyhat = $this->pyhat($date);
 	  if($pyhat == true)
-	  $clPyhat = 'style="background:#FFFFCC"';
+	  $clPyhat = 'style="background:#ddd"';
 
   	    echo '<tr>';
   		echo '<td '.$clPyhat.' class="fixed-column"><b>'.$arrDate[$explColDate[0]].", ".$explColDate[1].'</b></td>';
@@ -232,15 +232,15 @@ td .laatikko:hover{
 
 	    if(date('N', strtotime($date)) == 7)
 	    {
-  	    echo '<tr>';
-  		echo '<td style="background: #669999;color: white" class="text-center viikkoRivi myBgColors fixed-column"><b>'.Yii::t('main', 'Viikko').' '.date("W",strtotime($date)).'</b></td>';
+  	    echo '<tr class="myBgColors">';
+  		echo '<td class="text-center viikkoRivi fixed-column"><b>'.Yii::t('main', 'Viikko').' '.date("W",strtotime($date)).'</b></td>';
 		foreach($tt as $t){
 		 $vktyoaika = '';
 		 $ts = Tyosuhdet::model()->find(" tid = '".$t->id."' ");
 		 if(isset($ts->id) and !empty($ts['vktyoaika']))
 		  $vktyoaika = $ts['vktyoaika'];
 
-		  echo '<td style="background: #669999;color: white" class="viikkoRivi myBgColors text-center" id="vk_'.date("W",strtotime($date)).'_'.$t->id.'">';
+		  echo '<td class="viikkoRivi text-center" id="vk_'.date("W",strtotime($date)).'_'.$t->id.'">';
 		  $kokoViikko = '';
 		  $vko = '';
 		  $vko = date("W",strtotime($date));
@@ -266,10 +266,10 @@ td .laatikko:hover{
      </tbody>
      <tfoot>
         <?php
-  	    echo '<tr>';
-  		echo '<td style="background: #669999;color: white" class="text-center viikkoRivi myBgColors fixed-column"></td>';
+  	    echo '<tr class="myBgColors">';
+  		echo '<td class="text-center viikkoRivi fixed-column"></td>';
 		foreach($tt as $t){
-		  echo '<td style="background: #669999;color: white" class="text-center viikkoRivi myBgColors fromto_'.$t->id.'" />';
+		  echo '<td class="text-center viikkoRivi myBgColors fromto_'.$t->id.'" />';
 		  $this->renderPartial('//tyovuoroot/fromto',array('tid'=>$t->id));
 		  echo '</td>';
 		}
