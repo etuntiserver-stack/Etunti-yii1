@@ -24493,14 +24493,9 @@ body.timeline-page .panel-clone {
   right: 0;
 }
 #skin-toolbox .panel-heading {
-  cursor: pointer;
-  margin-right: 30px;
-  border: 1px solid #DDD;
-  width: 474px;
-  height: 47px;
-  line-height: 42px;
-  right: 44px;
-  font-size: 14px;
+
+  width: 274px;
+
 }
 #skin-toolbox .panel-heading .panel-title {
   //padding-left: 40px;
