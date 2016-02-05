@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="utf-8">
-        <title>etunti</title>
+        <title>Etunti - voita siivousalan haasteet</title>
         <meta name="keywords" content="HTML5 Template" />
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
