@@ -1,21 +1,26 @@
 <?php
-/* @var $this LaskutusTuotteetController */
-/* @var $model LaskutusTuotteet */
 
-$this->breadcrumbs=array(
-	'Laskutus Tuotteets'=>array('index'),
-	'Create',
-);
-/*
-$this->menu=array(
-	array('label'=>'List LaskutusTuotteet', 'url'=>array('index')),
-	array('label'=>'Manage LaskutusTuotteet', 'url'=>array('admin')),
-);
-*/
 ?>
 
-<legend>
-<h1> <?php echo Yii::t('main', 'LUO LASKU TUOTE'); ?> <i class="glyphicon glyphicon-barcode"></i></h1>
-</legend>
+        <!-- begin: .tray-center -->
+        <div class="tray-center">
 
-<?php echo $this->renderPartial('_form', array('model'=>$model)); ?>
+	   <?php     
+		$site = Yii::app()->createController('Site');
+		$site[0]->oikeudet($model->id,'noDelete');
+	   ?>
+	   <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-barcode"></i> <?php echo Yii::t('main', 'Luo lasku tuote'); ?> </h2>
+
+
+            <div class="admin-form">
+              <div class="panel heading-border">
+                <div class="panel-body bg-light">
+                 <div class="row">
+		  <?php echo $this->renderPartial('_form', array('model'=>$model)); ?>
+                 </div>
+                </div>
+              </div>
+            </div>
+
+        <!-- loppu: .tray-center -->
+        </div>

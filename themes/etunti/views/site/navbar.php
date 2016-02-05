@@ -589,7 +589,7 @@
                   <span class="glyphicon glyphicon-barcode"></span> <?php echo Yii::t('main', 'Laskut'); ?></a>
               </li>
               <li>
-                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/LaskutusTuotteet/admin">
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/LaskutusTuotteet/index">
                   <span class="fa fa-shopping-cart"></span> <?php echo Yii::t('main', 'Tuotteet ja palvelut'); ?></a>
               </li>
             </ul>
