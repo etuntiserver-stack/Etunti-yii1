@@ -358,8 +358,11 @@ $("#notiFyClick").click(function(){
 	$('.myBgColors').removeClass(headerSkins);
 	$('.myBgColors').addClass(Val);
 
-		if(Val == '')
+	if(Val == '')
+	{
+		$('.ad-lines').css({"color":"white"});
 		$('.navbar-branding').addClass('bg-dark');
+	}
 
 	var backgroundColor = $('.myBgColors').css('backgroundColor');
 	$('head').append('<style>.admin-form .heading-border:before{background-color: '+backgroundColor+';}</style>');
