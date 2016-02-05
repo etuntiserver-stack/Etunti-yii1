@@ -23,7 +23,7 @@
                     <div class="row">
 
 
-                      <div class="col-md-2">
+                      <div class="col-sm-12">
                         <div class="section">
                           <label class="field prepend-icon">
 

@@ -47,13 +47,13 @@
 		<?php echo $form->error($model,'puhelin'); ?>
 	</div>
 
+  </div><div class="col-sm-3">
+
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'y_tunnus'); ?>
 		<?php echo $form->textField($model,'y_tunnus',array('size'=>50,'maxlength'=>50,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'y_tunnus'); ?>
 	</div>
-
-  </div><div class="col-sm-3">
 
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'sahkoposti'); ?>
@@ -78,12 +78,16 @@
 		<?php echo $form->textField($model,'bic',array('size'=>20,'maxlength'=>20,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'bic'); ?>
 	</div>
--->
+
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'johtaja'); ?>
 		<?php echo $form->textField($model,'johtaja',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'johtaja'); ?>
 	</div>
+-->
+
+ </div>
+</div><!-- form -->
 
 <br>
 
@@ -92,5 +96,4 @@
 	</div>
 
 <?php $this->endWidget(); ?>
- </div>
-</div><!-- form -->
+
