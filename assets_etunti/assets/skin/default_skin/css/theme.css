@@ -307,6 +307,7 @@ Copyright (c) 2014 Daniel Eden
     transition-timing-function: ease-in;
 
 
+
     opacity: 0;
   }
   40% {
@@ -4353,6 +4354,7 @@ fieldset[disabled] .fc button.active {
   border-top-right-radius: 1px;
   border-bottom-right-radius: 1px;
 }
+
 /* icons in buttons */
 .fc button .fc-icon {
   position: relative;
@@ -11986,6 +11988,7 @@ fieldset[disabled] .navbar-inverse .btn-link:focus {
 .pager {
   padding-left: 0;
   margin: 19px 0;
+
   list-style: none;
   text-align: center;
 }
@@ -18911,6 +18914,7 @@ body.tray-rescale .tray-right:hover {
   position: absolute;
   right: 13px;
   top: -2px;
+
 }
 /* Sidebar-Menu Top Level - Label */
 .sidebar-menu li > a > .sidebar-title-tray .label {
@@ -23379,6 +23383,7 @@ div.switch.switch-dark input:checked + label {
 .table-hover > tbody > tr.dark:hover > td,
 .table-hover > tbody > tr:hover > .dark,
 .table-hover > tbody > tr.dark:hover > th {
+
   background-color: #c8cbd6;
 }
 /* TEXT COLOR CONTEXTUALS
@@ -24476,10 +24481,10 @@ body.timeline-page .panel-clone {
 #skin-toolbox {
   z-index: 999;
   overflow: visible !important;
-  position: fixed;
+  //position: fixed;
   bottom: 10px;
-  right: -230px;
-  width: 230px;
+  //right: -230px;
+  //width: 230px;
   -webkit-transition: right 0.1s ease-in-out;
   -moz-transition: right 0.1s ease-in-out;
   transition: right 0.1s ease-in-out;
@@ -24491,14 +24496,14 @@ body.timeline-page .panel-clone {
   cursor: pointer;
   margin-right: 30px;
   border: 1px solid #DDD;
-  width: 274px;
+  width: 474px;
   height: 47px;
   line-height: 42px;
   right: 44px;
   font-size: 14px;
 }
 #skin-toolbox .panel-heading .panel-title {
-  padding-left: 40px;
+  //padding-left: 40px;
 }
 #skin-toolbox .panel-body {
   border: 1px solid #DDD;
