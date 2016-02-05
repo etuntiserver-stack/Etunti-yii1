@@ -295,7 +295,7 @@
           <li>
             <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/site/etusivu">
               <span class="fa fa-home"></span>
-              <span class="sidebar-title"><?php echo Yii::t('main', 'ETUSIVU'); ?></span>
+              <span class="sidebar-title"><?php echo Yii::t('main', 'Etusivu'); ?></span>
             </a>
           </li>
 
