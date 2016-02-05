@@ -364,6 +364,7 @@ $("#notiFyClick").click(function(){
 
 	if(Val == '')
 	{
+		$('#skin-toolbox').css({"color":"#333333"});
 		$('.ad-lines').css({"color":"white"});
 		$('.navbar-branding').css({"background":"#888888"});
 	}
