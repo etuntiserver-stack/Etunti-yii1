@@ -337,7 +337,7 @@ $("#notiFyClick").click(function(){
 	  if(settingsObj['headerSkin'] == '')
 	  {
 		$('.ad-lines').css({"color":"white"});
-		$('.navbar-branding').addClass('bg-dark');
+		$('.navbar-branding').css({"background":"#888888"});
 	  }
 
         });
@@ -365,7 +365,7 @@ $("#notiFyClick").click(function(){
 	if(Val == '')
 	{
 		$('.ad-lines').css({"color":"white"});
-		$('.navbar-branding').addClass('bg-dark');
+		$('.navbar-branding').css({"background":"#888888"});
 	}
 
 	var backgroundColor = $('.myBgColors').css('backgroundColor');
