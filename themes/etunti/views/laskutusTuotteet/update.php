@@ -1,22 +1,28 @@
 <?php
-/* @var $this LaskutusTuotteetController */
-/* @var $model LaskutusTuotteet */
 
-$this->breadcrumbs=array(
-	'Laskutus Tuotteets'=>array('index'),
-	$model->id=>array('view','id'=>$model->id),
-	'Update',
-);
-/*
-$this->menu=array(
-	array('label'=>'List LaskutusTuotteet', 'url'=>array('index')),
-	array('label'=>'Create LaskutusTuotteet', 'url'=>array('create')),
-	array('label'=>'View LaskutusTuotteet', 'url'=>array('view', 'id'=>$model->id)),
-	array('label'=>'Manage LaskutusTuotteet', 'url'=>array('admin')),
-);
-*/
 ?>
 
-<h1><?php echo Yii::t('main', 'PÄIVITÄ TUOTE/PALVELU'); ?>  <?php echo $model->id; ?></h1>
+        <!-- begin: .tray-center -->
+        <div class="tray-center">
 
-<?php echo $this->renderPartial('_form', array('model'=>$model)); ?>
+	   <div class="pull-right">
+	   <?php     
+		$site = Yii::app()->createController('Site');
+		$site[0]->oikeudet($model->id,null);
+	   ?>
+	   </div>
+	   <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-barcode"></i> <?php echo $model->tuotenimi; ?> </h2>
+
+
+            <div class="admin-form">
+              <div class="panel heading-border">
+                <div class="panel-body bg-light">
+                 <div class="row">
+		  <?php echo $this->renderPartial('_form', array('model'=>$model)); ?>
+                 </div>
+                </div>
+              </div>
+            </div>
+
+        <!-- loppu: .tray-center -->
+        </div>

@@ -142,10 +142,35 @@ class LaskutusTuotteetController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$dataProvider=new CActiveDataProvider('LaskutusTuotteet');
-		$this->render('index',array(
-			'dataProvider'=>$dataProvider,
+
+
+       		$criteria = new CDbCriteria();
+	        $criteria->order = " id DESC ";
+
+
+		if(isset($_POST['tuotenimi']) and !empty($_POST['tuotenimi']))
+	        $criteria->addCondition (" tuotenimi LIKE '%".$_POST['tuotenimi']."%' ");
+
+		if(isset($_POST['hinta_alv_0']) and !empty(trim($_POST['hinta_alv_0'])))
+	        $criteria->addCondition (" hinta_alv_0 LIKE '%".$_POST['hinta_alv_0']."%' ");
+
+		if(isset($_POST['hinta_alv_sis']) and !empty(trim($_POST['hinta_alv_sis'])))
+	        $criteria->addCondition (" hinta_alv_sis LIKE '%".$_POST['hinta_alv_sis']."%' ");
+
+		if(isset($_POST['alv']) and !empty(trim($_POST['alv'])))
+	        $criteria->addCondition (" alv LIKE '%".$_POST['alv']."%' ");
+
+		if(isset($_POST['yksikko']) and !empty(trim($_POST['yksikko'])))
+	        $criteria->addCondition (" yksikko LIKE '%".$_POST['yksikko']."%' ");
+
+		$dataProvider=new CActiveDataProvider('LaskutusTuotteet', array(
+			'criteria'=>$criteria,
+			//'pagination'=>false
 		));
+
+		$dataProvider->pagination->pageSize = 50;
+		$this->render('index', array('dataProvider' => $dataProvider));
+
 	}
 
 	/**
