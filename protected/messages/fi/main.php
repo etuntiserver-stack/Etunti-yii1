@@ -3,7 +3,8 @@
 
 return array(
 	'TilaamisenJalkeen' => 'Tilaamisen jälkeen saat ohjelman kuukaudeksi ilmaiseksi!',
-	//'Mobiili'=>'Mobiili toteuma',
+	'Header Skins'=>'Yläpalkki',
+	'Sidebar Skins'=>'Sivepalkki',
 	);
 
 ?>

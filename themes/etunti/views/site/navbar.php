@@ -273,7 +273,7 @@
         <div class="text-dark">
           <div class="col-sm-6">
             <form id="toolbox-header-skin">
-              <h4 class="mv20">Header Skins</h4>
+              <h4 class="mv20"><?php echo Yii::t('main','Header Skins'); ?></h4>
               <div class="skin-toolbox-swatches">
                 <div class="checkbox-custom checkbox-disabled fill mb5">
                   <input type="radio" name="headerSkin" id="headerSkin8" checked value="">
@@ -316,7 +316,7 @@
           </div>
           <div class="col-sm-6">
             <form id="toolbox-sidebar-skin">
-              <h4 class="mv20">Sidebar Skins</h4>
+              <h4 class="mv20"><?php echo Yii::t('main','Sidebar Skins'); ?></h4>
               <div class="skin-toolbox-swatches">
                 <div class="checkbox-custom fill mb5">
                   <input type="radio" name="sidebarSkin" checked id="sidebarSkin3" value="">
@@ -336,9 +336,6 @@
         </div>
 
       </div>
-
-	<a href="#" id="clearLocalStorage" class="btn btn-primary btn-block">Clear LocalStorage</a>
-
     </div>
   </div>
 
