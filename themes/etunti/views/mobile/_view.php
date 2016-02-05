@@ -112,11 +112,11 @@ else
 
 <tr style="<?php echo $class; ?>" id="rivi_<?php echo $data->id; ?>">
 
-	<td>
+	<td style="white-space: nowrap">
 		<?php echo $door; ?>
 
 		<?php if($diff > 0) : ?>
-		&nbsp;<b><?php echo sprint($diff); ?></b>
+		 <b><?php echo sprint($diff); ?></b>
 		<?php endif; ?>
 	</td>
 
