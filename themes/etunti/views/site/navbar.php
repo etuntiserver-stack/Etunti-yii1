@@ -592,6 +592,47 @@
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/LaskutusTuotteet/index">
                   <span class="fa fa-shopping-cart"></span> <?php echo Yii::t('main', 'Tuotteet ja palvelut'); ?></a>
               </li>
+
+          <li>
+            <a class="accordion-toggle" href="#">
+              <span class="fa fa-bars"></span>
+              <span><?php echo Yii::t('main', 'Raportit'); ?></span>
+              <span class="caret"></span>
+            </a>
+            <ul class="nav sub-nav">
+              <li>
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/laskuHistoria/avoimet">
+                  <span class="glyphicon glyphicon-time"></span> <?php echo Yii::t('main', 'Avoimet laskut'); ?></a>
+              </li>
+              <li>
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/laskuHistoria/paivakirja">
+                  <span class="glyphicon glyphicon-time"></span> <?php echo Yii::t('main', 'Lasku päiväkirjа'); ?></a>
+              </li>
+              <li>
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/laskuHistoria/paakirja">
+                  <span class="glyphicon glyphicon-time"></span> <?php echo Yii::t('main', 'Lasku pääkirja'); ?></a>
+              </li>
+              <li>
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/laskuHistoria/maksu_paivakirja">
+                  <span class="glyphicon glyphicon-time"></span> <?php echo Yii::t('main', 'Maksu päiväkirjа'); ?></a>
+              </li>
+              <li>
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/laskuHistoria/maksu_paakirja">
+                  <span class="glyphicon glyphicon-time"></span> <?php echo Yii::t('main', 'Maksu pääkirja'); ?></a>
+              </li>
+            </ul>
+          </li>
+
+
+              <li>
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/laskuHistoria/admin">
+                  <span class="glyphicon glyphicon-barcode"></span> <?php echo Yii::t('main', 'Lasku historia'); ?></a>
+              </li>
+              <li>
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/laskuHistoria/reskontraluettelo">
+                  <span class="fa fa-shopping-cart"></span> <?php echo Yii::t('main', 'Reskontraluettelo'); ?></a>
+              </li>
+
             </ul>
           </li>
 	<?php endif; ?>

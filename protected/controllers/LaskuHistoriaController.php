@@ -99,16 +99,7 @@ class LaskuHistoriaController extends Controller
 		if($asetukset->palvelu_tyyppi == 2)
 		$palvelu = 'trust';
 
-		if(isset($_POST['avoimet']) and empty($_POST['from']))
-		unset(Yii::app()->session['from']);
-		if(isset($_POST['avoimet']) and empty($_POST['to']))
-		unset(Yii::app()->session['to']);
 
-		if(Yii::app()->request->getPost('from'))
-		Yii::app()->session['from'] = date("Y-m-d",strtotime(Yii::app()->request->getPost('from')));
-
-		if(Yii::app()->request->getPost('to'))
-		Yii::app()->session['to'] = date("Y-m-d",strtotime(Yii::app()->request->getPost('to')));
 
        		$criteria = new CDbCriteria();
        		//$criteria->select = " ,t.* ";
@@ -123,10 +114,12 @@ class LaskuHistoriaController extends Controller
 		// <-- Trust
        		//$criteria->group = " lid ";
 
-		if(Yii::app()->session['from'])
+		if(Yii::app()->request->getPost('from'))
 		{
         	$criteria->addCondition (" 
-			id IN ( SELECT lid FROM lasku_historia WHERE  time > '".Yii::app()->session['from']."' AND trust_statuscode!='101' )
+			id IN ( SELECT lid FROM lasku_historia 
+			WHERE  time > '".date("Y-m-d",strtotime(Yii::app()->request->getPost('from')))."' 
+			AND trust_statuscode!='101' )
 			
 		");
 		}
