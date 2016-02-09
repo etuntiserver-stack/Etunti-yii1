@@ -52,25 +52,6 @@
 		      </div>
                     </div>
 
-
-
-
-
-   <div class="form-inline">
-     <select class="form-control" id="raportit">
-     <option><?php echo Yii::t('main','Raportit'); ?></option>
-     <option value="../laskuHistoria/avoimet"><?php echo Yii::t('main','Avoimet laskut'); ?></option>
-     <option value="../laskuHistoria/paivakirja"><?php echo Yii::t('main','Lasku päiväkirjа'); ?></option>
-     <option value="../laskuHistoria/paakirja"><?php echo Yii::t('main','Lasku pääkirja'); ?></option>
-     <option value="../laskuHistoria/maksu_paivakirja"><?php echo Yii::t('main','Maksu päiväkirjа'); ?></option>
-     <option value="../laskuHistoria/maksu_paakirja"><?php echo Yii::t('main','Maksu pääkirja'); ?></option>
-     <option><?php echo Yii::t('main','ALV lista'); ?></option>
-     <option value="../laskuHistoria/admin"><?php echo Yii::t('main','Lasku historia'); ?></option>
-     <option value="../laskuHistoria/reskontraluettelo"><?php echo Yii::t('main','Reskontraluettelo'); ?></option>
-     </select>
-     <button class="btn btn-primary myBgColors" id="haeRaportti"><?php echo Yii::t('main','Hae'); ?></button>
-   </div>
-
                 </div>
               </div>
             </div>
@@ -128,10 +109,6 @@ $(document).ready(function(){
 
 $(".haemob").click(function(){
 	$("#mobForm").submit();
-});
-
-$("#haeRaportti").click(function() {
-	window.location.href=$("#raportit").val();
 });
 
 });
