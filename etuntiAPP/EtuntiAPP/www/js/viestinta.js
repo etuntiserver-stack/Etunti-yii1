@@ -154,7 +154,7 @@ $(".lahetaToimistoon").click(function(){
         $.ajax({
            url: url+'/imei?dom='+domain,
 	   type:'POST',
- 	   data: { check : "uusiviesti", viesti : viesti, my_location : my_location, email : email, salasana : salasana },
+ 	   data: { check : "oleneksynyt", viesti : viesti, my_location : my_location, email : email, salasana : salasana },
            success: function(data){
         	//console.log(data);
 
