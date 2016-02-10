@@ -274,31 +274,27 @@ class LaskuHistoriaController extends Controller
 	public function actionReskontraluettelo()
 	{
 
-		if(isset($_POST['formResko']) and empty($_POST['from']))
-		unset(Yii::app()->session['from']);
-		if(isset($_POST['formResko']) and empty($_POST['to']))
-		unset(Yii::app()->session['to']);
-
-		if(Yii::app()->request->getPost('asiakasLaskulle'))
-		Yii::app()->session['asiakasLaskulle'] = Yii::app()->request->getPost('asiakasLaskulle');
-
-		if(Yii::app()->request->getPost('from'))
-		Yii::app()->session['from'] = date("Y-m-d",strtotime(Yii::app()->request->getPost('from')));
-	
-		if(Yii::app()->request->getPost('to'))
-		Yii::app()->session['to'] = date("Y-m-d",strtotime(Yii::app()->request->getPost('to')));
 
        		$criteria = new CDbCriteria();
        		$criteria->order = " paivays DESC ";
 
-		$asiakasLaskulle = "";
-		if(Yii::app()->session['asiakasLaskulle'])
-		$asiakasLaskulle = Yii::app()->session['asiakasLaskulle'];
 
-       		$criteria->condition = " as_nro='".$asiakasLaskulle."' ";
+		if(Yii::app()->request->getPost('asiakasLaskulle'))
+       		$criteria->addCondition ( " as_nro='".Yii::app()->request->getPost('asiakasLaskulle')."' " );
 
-		if(Yii::app()->session['from'] and Yii::app()->session['to'])
-        	$criteria->addCondition ("DATE(paivays) BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."' ");
+		$from = date("Y-m-d");
+		$to = date("Y-m-d");
+
+		if(isset($_POST['from']) and isset($_POST['to'])){
+		$from 	= date("Y-m-d",strtotime($_POST['from']));
+		$to 	= date("Y-m-d",strtotime($_POST['to']));
+		}
+
+
+        	$criteria->addCondition ("DATE(paivays) BETWEEN 
+			'".$from."' AND '".$to."' 
+		");
+
 
 		$model = Lasku::model()->findAll($criteria);
 
@@ -306,13 +302,19 @@ class LaskuHistoriaController extends Controller
 		{
 	          $html2pdf = Yii::app()->ePdf->HTML2PDF('P', 'A4', 'en');
 		  $html2pdf->setDefaultFont('Arial');
-	          $html2pdf->WriteHTML($this->renderPartial('reskontraluettelo',array('model'=>$model), true));
+	          $html2pdf->WriteHTML($this->renderPartial('reskontraluettelo',array(
+			'model'=>$model,
+			'from'=>$from,
+			'to'=>$to
+		  ), true));
 	          $html2pdf->Output();
 
 		} else {
 
 		$this->render('reskontraluettelo',array(
 			'model'=>$model,
+			'from'=>$from,
+			'to'=>$to,
 		));
 
 		}
