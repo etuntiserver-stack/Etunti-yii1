@@ -449,7 +449,11 @@ $model->viivastyskorko = $asetukset->viivastyskorko;
 <div class="row form kht" id="kalut">
 
 <div id="tuntiKalut">
-    <div class="col-sm-5">
+    <div class="col-sm-6">
+
+  <div class="panel heading-border">
+   <div class="panel-body">
+
     <legend><?php echo Yii::t('main', 'TUNNIT'); ?></legend>
       <div class="section fill mb5">
 	<div class="col-sm-6">
@@ -475,12 +479,22 @@ $model->viivastyskorko = $asetukset->viivastyskorko;
       <div class="col-sm-12">
         	<b class="btn btn-success  luoRiviTunti"><?php echo Yii::t('main', 'Luo rivit'); ?></b>
       </div>
+
+   </div>
+  </div>
+
     </div>
 </div>
 
 
+
+
 <div id="kkKalut">
-    <div class="col-sm-5">
+    <div class="col-sm-6">
+
+  <div class="panel heading-border">
+   <div class="panel-body">
+
     <legend><?php echo Yii::t('main', 'KUUKAUSI'); ?></legend>
  
       <div class="section fill mb5">
@@ -507,6 +521,10 @@ $model->viivastyskorko = $asetukset->viivastyskorko;
       <div class="col-sm-12">
         	<b class="btn btn-success  luoRiviKk"><?php echo Yii::t('main', 'Luo rivit'); ?></b>
       </div>
+
+   </div>
+  </div>
+
     </div>
 </div>
 
@@ -518,12 +536,12 @@ $model->viivastyskorko = $asetukset->viivastyskorko;
 
 <br>
 
-<div id="rivit" class="row">
-<label><?php echo Yii::t('main', 'Laskun rivit'); ?></label>
-<TABLE class="table" id="TableRivit">
+<div id="rivit" class="table-responsive">
+<TABLE class="table well" id="TableRivit">
 
      <TR>
-	<TH></TH>
+     <thead class="myBgColors">
+	<TH><span id="uusiRivi" class="link" style="font-size: 150%;"><i class="fa fa-plus-square"></i></span></TH>
 	<TH class="col-sm-2">Tuote/Palvelu</TH>
 	<TH>Kpl</TH>
 	<TH class="col-sm-1">Yksikkö</TH>
@@ -533,6 +551,7 @@ $model->viivastyskorko = $asetukset->viivastyskorko;
 	<TH class="col-sm-1">Ale%</TH>
 	<TH>Veroton</TH>
 	<TH>Yhteensä</TH>
+     </thead>
      </TR>
 
      <tbody>
@@ -566,9 +585,9 @@ $model->viivastyskorko = $asetukset->viivastyskorko;
      </TR>
      </tfoot>
 </TABLE>
-
-  <span id="uusiRivi" class="link text-success"><?php echo Yii::t('main','Uusi rivi'); ?></span>
 </div>
+
+  
 
 <br><br><br><br><br><br>
 

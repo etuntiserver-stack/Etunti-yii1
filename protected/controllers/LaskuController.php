@@ -263,15 +263,9 @@ class LaskuController extends Controller
 	<script type="text/javascript">
  	  $(document).ready(function(){
 		$('.selectpicker').selectpicker({
-		      style: 'btn btn-sm btn-default',
+		      //style: 'btn btn-default',
 		      //size: 4
 		});
-		/*
-		$('.selectpicker').on('change', function(){
-			$(".tyyppi").show('slow');
-			$("#kohteistaRivit").val($(this).val());
-		});
-		*/
 	  });
 	</script>
 	<?php
@@ -285,7 +279,7 @@ class LaskuController extends Controller
 		$yksikko = 'kk';
 
 		$body = '<b class="glyphicon glyphicon-home"></b><br>
-		<select id="kohteet" class="selectpicker '.$yksikko.' form-control input-sm" multiple title="Valitse kohteet">';
+		<select id="kohteet" class="selectpicker '.$yksikko.'" multiple title="Valitse kohteet">';
 		$thisTrue = false;
 		$onkoKohdeMaaritetty = false;
 
