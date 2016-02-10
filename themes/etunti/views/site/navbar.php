@@ -592,6 +592,10 @@
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/LaskutusTuotteet/index">
                   <span class="fa fa-shopping-cart"></span> <?php echo Yii::t('main', 'Tuotteet ja palvelut'); ?></a>
               </li>
+              <li>
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/laskuHistoria/avoimet">
+                  <span class="glyphicon glyphicon-time"></span> <?php echo Yii::t('main', 'Avoimet laskut'); ?></a>
+              </li>
 
           <li>
             <a class="accordion-toggle" href="#">
@@ -600,10 +604,6 @@
               <span class="caret"></span>
             </a>
             <ul class="nav sub-nav">
-              <li>
-                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/laskuHistoria/avoimet">
-                  <span class="glyphicon glyphicon-time"></span> <?php echo Yii::t('main', 'Avoimet laskut'); ?></a>
-              </li>
               <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/laskuHistoria/paivakirja">
                   <span class="glyphicon glyphicon-time"></span> <?php echo Yii::t('main', 'Lasku päiväkirjа'); ?></a>

@@ -752,7 +752,7 @@ exit;
 		$trustStr = '';
 		$xml = array();
 		$bd = '';
-		$bd .= '<div class="pull-right btn btn-info btn-xs" data-toggle="collapse" data-target="#haku_'.$data->id.'">'.Yii::t('main', 'historia').' <b class="caret"></b></div><br>';
+		$bd .= '<div class="pull-right btn btn-info btn-xs" data-toggle="collapse" data-target="#haku_'.$data->id.'">'.Yii::t('main', 'historia').' <b class="caret"></b></div>';
 		$bd .= '<div class="collapse" id="haku_'.$data->id.'">';
 		foreach($l as $d)
 		{
@@ -761,11 +761,11 @@ exit;
 
 		    $json = json_decode($d->status, true);
 
-		    if(isset($json['statustext']) and !empty($json['statustext'])){
+		    if(isset($json['statustext']) and !empty($json['statustext']) and $json['statustext'] != 1){
 		      if($trust == false)
-		      echo '<b>'.$json['statustime'].'</b><br> <span id="first_'.$data->id.'">'.$json['statustext'].'</span><hr>';
+		      echo '<b>'.date("d.m.Y",strtotime($json['statustime'])).'</b><br> <span id="first_'.$data->id.'">'.$json['statustext'].'</span>';
 		      if($trust == true)
-		      $bd .= '<b>'.$json['statustime'].'</b><br> '.$json['statustext'].'<hr>';
+		      $bd .= '<div class="well"><b>'.date("d.m.Y",strtotime($json['statustime'])).'</b><br> '.$json['statustext'].'</div>';
 
 		      $trust = true;
 		    }
