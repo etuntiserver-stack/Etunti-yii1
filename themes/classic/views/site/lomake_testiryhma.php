@@ -13,7 +13,7 @@ $asetukset = array(
     'URL' => __FILE__,
 );
 $asetukset['email'][] = array(
-    'osoite' => 'info@etunti.fi',//veiko.poldkivi@etunti.fi
+    'osoite' => 'roman.sizov@etunti.fi',//veiko.poldkivi@etunti.fi
     'kopio' => '',
     'otsikko' => 'tarjouspyynto: [Nimi]',
     'lahettaja' => 'info@etunti.fi',
