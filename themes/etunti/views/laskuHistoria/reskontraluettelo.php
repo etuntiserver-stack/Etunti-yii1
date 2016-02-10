@@ -1,16 +1,6 @@
 <?php
 /* @var $this LaskuHistoriaController */
 /* @var $dataProvider CActiveDataProvider */
-
-$this->breadcrumbs=array(
-	'Lasku Historias',
-);
-/*
-$this->menu=array(
-	array('label'=>'Create LaskuHistoria', 'url'=>array('create')),
-	array('label'=>'Manage LaskuHistoria', 'url'=>array('admin')),
-);
-*/
 ?>
 <?php if(isset($_POST['tulosta'])) : ?>
 <?php
@@ -32,30 +22,45 @@ th{
 <div style="text-align: center">
 <h1><?php echo Yii::t('main','Reskontraluettelo'); ?></h1>
 <br>
-<?php echo $yritys.date("d.m.Y",strtotime(Yii::app()->session['from'])).' - '.date("d.m.Y",strtotime(Yii::app()->session['to'])); ?>
+<?php echo $yritys.date("d.m.Y",strtotime($from)).' - '.date("d.m.Y",strtotime($to)); ?>
 </div>
 <hr>
 <?php endif; ?>
 
 <?php if(!isset($_POST['tulosta'])) : ?>
-<legend>
+
+
+        <!-- begin: .tray-center -->
+        <div class="tray-center">
+
    <!-- tulostus -->
    <div class="pull-right">
      <form action="#" target="_blank" method="POST">
-      <input type="submit" name="tulosta" class="btn btn-success btn-sm" value="PDF">
+      <input type="hidden" name="from" value="<?php echo $from; ?>">
+      <input type="hidden" name="to" value="<?php echo $to; ?>">
+      <input type="submit" name="tulosta" class="btn btn-primary myBgColors btn-sm" value="PDF">
      </form>
    </div>
    <!-- tulostus -->
-<h1><?php echo Yii::t('main','Reskontraluettelo'); ?></h1>
-</legend>
 
-<br>
+              <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-barcode"></i> <?php echo Yii::t('main','Reskontraluettelo'); ?></h2>
 
-<div class="row">
- <div class="col-md-12">
 
-  <form action="#" class="form-inline" method="POST">
-  <input type="hidden" name="formResko">
+
+   	    <form id="mobForm" action="#" class="form-inline" method="POST">
+   	    <input type="hidden" name="mob_hae">
+
+            <div class="admin-form">
+              <div class="panel heading-border">
+                <div class="panel-body bg-light">
+
+                    <!-- Input Icons -->
+                    <div class="row">
+
+                      <div class="col-md-2">
+                        <div class="section">
+                          <label class="field select">
+
 
     		<?php 
        		$criteria = new CDbCriteria();
@@ -63,11 +68,11 @@ th{
 		$criteria->order = " yhteyshenkilo ";
 
         	$a = Asiakkaat::model()->findAll($criteria);
-		echo '<select name="asiakasLaskulle" class="form-control input-sm">';
+		echo '<select name="asiakasLaskulle" class="gui-input">';
 
-		if(isset(Yii::app()->session['asiakasLaskulle']) and !empty(Yii::app()->session['asiakasLaskulle']))
+		if(isset($_POST['asiakasLaskulle']) and !empty($_POST['asiakasLaskulle']))
 		{
-        	  $aon = Asiakkaat::model()->findbypk(Yii::app()->session['asiakasLaskulle']);
+        	  $aon = Asiakkaat::model()->findbypk($_POST['asiakasLaskulle']);
 		  if(!empty($aon->yrityksen_nimi))
 		    echo '<option value="'.$aon->id.'">'.$aon->yrityksen_nimi.'</option>';
 		  elseif(empty($aon->yhteyshenkilo) and empty($aon->yrityksen_nimi))
@@ -90,30 +95,81 @@ th{
 		echo '</select>';
 		?>
 
+                            <i class="arrow double"></i>
+                            </label>
+                          </label>
+                        </div>
+                      </div>
 
-   <b class="glyphicon glyphicon-calendar"></b>
-   <input type="text" name="from" id="from" class="form-control form-group input-sm datepicker" value="<?php echo Yii::app()->session['from']; ?>">
-   <b class="glyphicon glyphicon-calendar"></b>
-   <input type="text" name="to" id="to" class="form-control form-group input-sm datepicker" value="<?php echo Yii::app()->session['to']; ?>">
 
-   <div class="form-group input-group-btn">
-      <input type="submit" class="btn btn-primary btn-sm" value="<?php echo Yii::t('main', 'Hae'); ?>">
-   </div>
-   </form>
+                      <div class="col-md-2">
+                        <div class="section">
+                          <label class="field prepend-icon">
 
- </div>
-</div>
+   			    <input type="text" class="gui-input datepicker" name="from" value="<?php echo $from; ?>" >
+
+                            <label for="firstname" class="field-icon">
+                              <i class="fa fa-calendar"></i>
+                            </label>
+                          </label>
+                        </div>
+                      </div>
+                      <div class="col-md-2">
+                        <div class="section">
+                          <label class="field prepend-icon">
+
+   			    <input type="text" class="gui-input datepicker" name="to" value="<?php echo $to; ?>" >
+
+                            <label for="firstname" class="field-icon">
+                              <i class="fa fa-calendar"></i>
+                            </label>
+                          </label>
+                        </div>
+                      </div>
+
+                      <div class="col-md-2 col-sm-offset-4">
+        	        <input type="submit" class="btn btn-primary btn-lg haemob btn-block myBgColors" value="Hae">
+		      </div>
+
+                    </div>
+
+
+
+                </div>
+              </div>
+            </div>
+
+	    </form>
+
+
+        <!-- loppu: .tray-center -->
+        </div>
+
+
+
 <br>
 <?php endif; ?>
 
 
+  <div class="panel heading-border">
+   <div class="panel-body">
+
 <table class="table table-bordered table-striped">
  <tr>
+<?php if(!isset($_POST['tulosta'])) : ?>
+ <thead class="myBgColors">
+<?php endif; ?>
+
   <th><?php echo Yii::t('main','Laskunro'); ?></th>
   <th><?php echo Yii::t('main','Laskupvm'); ?></th>
   <th><?php echo Yii::t('main','Suorituksen numero'); ?></th>
   <th><?php echo Yii::t('main','Suorituksen summa'); ?></th>
   <th><?php echo Yii::t('main','Avoina'); ?></th>
+
+<?php if(!isset($_POST['tulosta'])) : ?>
+ </thead>
+<?php endif; ?>
+
  </tr>
  <?php 
 	$saldo = '';
@@ -125,4 +181,7 @@ th{
  }
  ?>
 </table>
+
+   </div>
+  </div>
 
