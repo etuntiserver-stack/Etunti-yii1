@@ -3,27 +3,41 @@
 /* @var $data LaskuHistoria */
 ?>
 
-<div class="view">
+<tr>
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('id')); ?>:</b>
-	<?php echo CHtml::link(CHtml::encode($data->id), array('view', 'id'=>$data->id)); ?>
-	<br />
+	<td>
+	<?php echo $data->lid; ?>
+	</td>
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('lid')); ?>:</b>
-	<?php echo CHtml::encode($data->lid); ?>
-	<br />
+	<td>
+	<?php echo date("d.m.Y H:i",strtotime($data->time)); ?>
+	</td>
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('time')); ?>:</b>
-	<?php echo CHtml::encode($data->time); ?>
-	<br />
+	<td>
+	<?php
+		// <-- Trust
+		if(isset($data->palvelu) and $data->palvelu == 'trust') 
+		{
+		    $json = json_decode($data->status, true);
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('status')); ?>:</b>
-	<?php echo CHtml::encode($data->status); ?>
-	<br />
+		    echo '<pre>';
+		    print_r($json);
+		    echo '</pre>';
+		}
+		// Trust -->
+	?>
+	</td>
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('yht_euro')); ?>:</b>
-	<?php echo CHtml::encode($data->yht_euro); ?>
-	<br />
+	<td>
+	<?php echo $data->palvelu; ?>
+	</td>
 
+	<td>
+	<?php echo $data->yht_euro; ?>
+	</td>
 
-</div>
+	<td>
+		<?php echo CHtml::link('', array('update', 'id'=>$data->id), array('class'=>'fa fa-pencil-square-o')); ?>
+	</td>
+
+</tr>

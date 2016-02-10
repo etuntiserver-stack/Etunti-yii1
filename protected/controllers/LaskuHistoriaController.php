@@ -114,11 +114,17 @@ class LaskuHistoriaController extends Controller
 		// <-- Trust
        		//$criteria->group = " lid ";
 
+		$pvm = '';
+		if(isset($_POST['from']))
+		$pvm = date("Y-m-d",strtotime($_POST['from']));
+		else
+		$pvm = date("Y-m-d");
+
 		if(Yii::app()->request->getPost('from'))
 		{
         	$criteria->addCondition (" 
 			id IN ( SELECT lid FROM lasku_historia 
-			WHERE  time > '".date("Y-m-d",strtotime(Yii::app()->request->getPost('from')))."' 
+			WHERE  time > '".$pvm."' 
 			AND trust_statuscode!='101' )
 			
 		");
@@ -137,7 +143,8 @@ class LaskuHistoriaController extends Controller
 		$dataProvider=new CActiveDataProvider('Lasku',array('criteria'=>$criteria));
 		$this->render('avoimet',array(
 			'dataProvider'=>$dataProvider,
-			'palvelu'=>$palvelu
+			'palvelu'=>$palvelu,
+			'pvm'=>$pvm
 		));
 
 		}
@@ -210,10 +217,21 @@ class LaskuHistoriaController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$dataProvider=new CActiveDataProvider('LaskuHistoria');
-		$this->render('index',array(
-			'dataProvider'=>$dataProvider,
+
+       		$criteria = new CDbCriteria();
+	        $criteria->order = "  id DESC ";
+
+		if(isset($_POST['lid']) and !empty(trim($_POST['lid'])))
+	        $criteria->addCondition (" lid LIKE '%".$_POST['lid']."%' ");
+	
+		$dataProvider=new CActiveDataProvider('LaskuHistoria', array(
+			'criteria'=>$criteria,
+			//'pagination'=>false
 		));
+
+		$dataProvider->pagination->pageSize = 50;
+		$this->render('index', array('dataProvider' => $dataProvider));
+
 	}
 
 
