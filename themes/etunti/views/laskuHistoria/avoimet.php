@@ -42,7 +42,7 @@ th{
         <div class="tray-center">
 
 
-              <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-barcode"></i> <?php echo Yii::t('main', 'Avoimet laskut ').$palvelu; ?></h2>
+              <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-barcode"></i> <?php echo Yii::t('main', 'Avoimet laskut '); ?></h2>
 
 
 
@@ -88,22 +88,41 @@ th{
 <?php endif; ?>
 
 
-
-
+<?php if(Yii::app()->request->getPost('from')) : ?>
+  <div class="panel heading-border">
+   <div class="panel-body">
 
 <table class="table table-bordered table-striped small">
  <tr>
-  <th><?php echo Yii::t('main','Laskunro'); ?></th>
-  <th><?php echo Yii::t('main','Status'); ?></th>
-  <th><?php echo Yii::t('main','Amount'); ?></th>
-  <th><?php echo Yii::t('main','Tapahtuma pvm'); ?></th>
-  <th><?php echo Yii::t('main','Yhteensä'); ?></th>
+  <thead class="myBgColors">
   <th><?php echo Yii::t('main','Asiakas'); ?></th>
+  <th><?php echo Yii::t('main','Laskunro'); ?></th>
+  <th><?php echo Yii::t('main','Viimeinen tapahtuma'); ?></th>
+  <th><?php echo Yii::t('main','Viitenumero'); ?></th>
+  <th><?php echo Yii::t('main','Yhteensä'); ?></th>
+  </thead>
  </tr>
  <?php 
  $this->widget('zii.widgets.CListView', array(
 	'dataProvider'=>$dataProvider,
 	'itemView'=>'_avoimet',
+  	'template'=>'{items}<table class="table table-striped table-condensed"></table><br/>{pager}',
+
+
+	'pager' => array(
+           'firstPageLabel'=>'<<',
+           'prevPageLabel'=>'< Edellinen',
+           'nextPageLabel'=>'Seuraava >',
+           'lastPageLabel'=>'>>',
+           //'maxButtonCount'=>'10',
+           'header'=>'<h3>Siirry sivulle:</h3>',
+           'cssFile'=>false,
+       ), 
 )); 
  ?>
 </table>
+
+   </div>
+  </div>
+<?php endif; ?>
+

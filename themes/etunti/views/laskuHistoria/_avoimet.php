@@ -2,14 +2,12 @@
 /* @var $this LaskuHistoriaController */
 /* @var $data LaskuHistoria */
 
-   $criteria = new CDbCriteria();
-   $criteria->order = " time DESC ";
-   $criteria->condition = " lid='".$data->id."' ";
-  $lh = LaskuHistoria::model()->find($criteria);
+       		$criteria = new CDbCriteria();
+       		$criteria->select = " palvelu,id,status ";
+       		$criteria->order = " id DESC ";
+       		$criteria->condition = " lid='".$data->id."' ";
+		$l = LaskuHistoria::model()->find($criteria);
 
-  $trust_statuscode = '';
-  if(isset($lh->trust_statuscode))
-  $trust_statuscode = $lh->trust_statuscode;
 
 	$nimi = '';
    if($data->tyyppi == 'henkilo')
@@ -22,27 +20,38 @@
 <tr>
 
 	<td>
-	<?php echo CHtml::encode($data->laskunumero).', id:'.$data->id; ?>
+	<?php echo CHtml::encode($nimi); ?>
 	</td>
 
 	<td>
-	<?php echo $trust_statuscode; ?>
+	<?php echo CHtml::encode($data->laskunumero); ?>
 	</td>
 
 	<td>
-	<?php //echo $data->amount; ?>
+	<?php 
+
+		  if(isset($l->palvelu) and $l->palvelu == 'trust')
+		  {
+
+		    $json = json_decode($l->status, true);
+
+		    if(isset($json['statustext']) and !empty($json['statustext']))
+		    {
+		      	echo '<b>'.date("d.m.Y H:i",strtotime($json['statustime'])).'</b><br> '.$json['statustext'];
+		    }
+
+		  }
+
+	?>
 	</td>
 
 	<td>
-	<?php //echo date("d.m.Y H:i:s",strtotime($data->time)); ?>
+	<?php echo $data->viitenumero; ?>
 	</td>
 
 	<td>
-	<?php //echo number_format($data->yht_euro, 2, ',', ' '); ?>
+		<?php echo number_format($data->yhteensa_total, 2, ",", " "); ?>
 	</td>
 
-	<td>
-	<?php echo CHtml::encode($data->as_nro.' '.$nimi); ?>
-	</td>
 
 </tr>
