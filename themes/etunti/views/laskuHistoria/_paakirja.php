@@ -12,6 +12,9 @@ $nimi = '';
 ?>
 
 <tr>
+	<td>
+	<?php echo CHtml::encode($nimi); ?>
+	</td>
 
 	<td>
 	<?php echo CHtml::encode($data->laskunumero); ?>
@@ -29,8 +32,5 @@ $nimi = '';
 	<?php echo number_format($saldo, 2, ',', ' '); ?>+
 	</td>
 
-	<td>
-	<?php echo CHtml::encode($data->as_nro.' '.$nimi); ?>
-	</td>
 
 </tr>

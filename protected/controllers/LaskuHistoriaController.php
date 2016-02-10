@@ -238,18 +238,18 @@ class LaskuHistoriaController extends Controller
 	public function actionPaivakirja()
 	{
 
-		if(Yii::app()->request->getPost('from'))
-		Yii::app()->session['from'] = date("Y-m-d",strtotime(Yii::app()->request->getPost('from')));
-	
-		if(Yii::app()->request->getPost('to'))
-		Yii::app()->session['to'] = date("Y-m-d",strtotime(Yii::app()->request->getPost('to')));
-
        		$criteria = new CDbCriteria();
        		$criteria->order = " paivays DESC ";
-       		$criteria->condition = "";
 
-		if(Yii::app()->session['from'] and Yii::app()->session['to'])
-        	$criteria->addCondition ("DATE(paivays) BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."' ");
+		$from = date("Y-m-d");
+		$to = date("Y-m-d");
+
+		if(isset($_POST['from']) and isset($_POST['to'])){
+		$from 	= date("Y-m-d",strtotime($_POST['from']));
+		$to 	= date("Y-m-d",strtotime($_POST['to']));
+		}
+
+        	$criteria->addCondition ("DATE(paivays) BETWEEN '".$from."' AND '".$to."' ");
 
 		$model = Lasku::model()->findAll($criteria);
 
@@ -257,13 +257,19 @@ class LaskuHistoriaController extends Controller
 		{
 	          $html2pdf = Yii::app()->ePdf->HTML2PDF('P', 'A4', 'en');
 		  $html2pdf->setDefaultFont('Arial');
-	          $html2pdf->WriteHTML($this->renderPartial('paivakirja',array('model'=>$model), true));
+	          $html2pdf->WriteHTML($this->renderPartial('paivakirja',array(
+			'model'=>$model,
+			'from'=>$from,
+			'to'=>$to,
+		  ), true));
 	          $html2pdf->Output();
 
 		} else {
 
 		$this->render('paivakirja',array(
 			'model'=>$model,
+			'from'=>$from,
+			'to'=>$to,
 		));
 
 		}
@@ -324,18 +330,18 @@ class LaskuHistoriaController extends Controller
 	public function actionPaakirja()
 	{
 
-		if(Yii::app()->request->getPost('from'))
-		Yii::app()->session['from'] = date("Y-m-d",strtotime(Yii::app()->request->getPost('from')));
-	
-		if(Yii::app()->request->getPost('to'))
-		Yii::app()->session['to'] = date("Y-m-d",strtotime(Yii::app()->request->getPost('to')));
-
        		$criteria = new CDbCriteria();
        		$criteria->order = " paivays DESC ";
-       		$criteria->condition = "";
 
-		if(Yii::app()->session['from'] and Yii::app()->session['to'])
-        	$criteria->addCondition ("DATE(paivays) BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."' ");
+		$from = date("Y-m-d");
+		$to = date("Y-m-d");
+
+		if(isset($_POST['from']) and isset($_POST['to'])){
+		$from 	= date("Y-m-d",strtotime($_POST['from']));
+		$to 	= date("Y-m-d",strtotime($_POST['to']));
+		}
+
+        	$criteria->addCondition ("DATE(paivays) BETWEEN '".$from."' AND '".$to."' ");
 
 		$model = Lasku::model()->findAll($criteria);
 
@@ -343,13 +349,19 @@ class LaskuHistoriaController extends Controller
 		{
 	          $html2pdf = Yii::app()->ePdf->HTML2PDF('P', 'A4', 'en');
 		  $html2pdf->setDefaultFont('Arial');
-	          $html2pdf->WriteHTML($this->renderPartial('paakirja',array('model'=>$model), true));
+	          $html2pdf->WriteHTML($this->renderPartial('paakirja',array(
+			'model'=>$model,
+			'from'=>$from,
+			'to'=>$to,
+		  ), true));
 	          $html2pdf->Output();
 
 		} else {
 
 		$this->render('paakirja',array(
 			'model'=>$model,
+			'from'=>$from,
+			'to'=>$to,
 		));
 
 		}
@@ -358,11 +370,6 @@ class LaskuHistoriaController extends Controller
 	public function actionMaksu_paakirja()
 	{
 
-		if(Yii::app()->request->getPost('from'))
-		Yii::app()->session['from'] = date("Y-m-d",strtotime(Yii::app()->request->getPost('from')));
-	
-		if(Yii::app()->request->getPost('to'))
-		Yii::app()->session['to'] = date("Y-m-d",strtotime(Yii::app()->request->getPost('to')));
 
        		$criteria = new CDbCriteria();
        		$criteria->order = " paivays DESC ";
@@ -371,8 +378,15 @@ class LaskuHistoriaController extends Controller
 
 		";
 
-		if(Yii::app()->session['from'] and Yii::app()->session['to'])
-        	$criteria->addCondition ("DATE(paivays) BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."' ");
+		$from = date("Y-m-d");
+		$to = date("Y-m-d");
+
+		if(isset($_POST['from']) and isset($_POST['to'])){
+		$from 	= date("Y-m-d",strtotime($_POST['from']));
+		$to 	= date("Y-m-d",strtotime($_POST['to']));
+		}
+
+        	$criteria->addCondition ("DATE(paivays) BETWEEN '".$from."' AND '".$to."' ");
 
 		$model = Lasku::model()->findAll($criteria);
 
@@ -380,13 +394,19 @@ class LaskuHistoriaController extends Controller
 		{
 	          $html2pdf = Yii::app()->ePdf->HTML2PDF('P', 'A4', 'en');
 		  $html2pdf->setDefaultFont('Arial');
-	          $html2pdf->WriteHTML($this->renderPartial('maksu_paakirja',array('model'=>$model), true));
+	          $html2pdf->WriteHTML($this->renderPartial('maksu_paakirja',array(
+			'model'=>$model,
+			'from'=>$from,
+			'to'=>$to,
+		  ), true));
 	          $html2pdf->Output();
 
 		} else {
 
 		$this->render('maksu_paakirja',array(
 			'model'=>$model,
+			'from'=>$from,
+			'to'=>$to,
 		));
 
 		}
@@ -395,11 +415,6 @@ class LaskuHistoriaController extends Controller
 	public function actionMaksu_paivakirja()
 	{
 
-		if(Yii::app()->request->getPost('from'))
-		Yii::app()->session['from'] = date("Y-m-d",strtotime(Yii::app()->request->getPost('from')));
-	
-		if(Yii::app()->request->getPost('to'))
-		Yii::app()->session['to'] = date("Y-m-d",strtotime(Yii::app()->request->getPost('to')));
 
        		$criteria = new CDbCriteria();
        		$criteria->order = " paivays DESC ";
@@ -407,8 +422,15 @@ class LaskuHistoriaController extends Controller
 			id IN (select lid from lasku_historia where trust_statuscode='101')
 		";
 
-		if(Yii::app()->session['from'] and Yii::app()->session['to'])
-        	$criteria->addCondition ("DATE(paivays) BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."' ");
+		$from = date("Y-m-d");
+		$to = date("Y-m-d");
+
+		if(isset($_POST['from']) and isset($_POST['to'])){
+		$from 	= date("Y-m-d",strtotime($_POST['from']));
+		$to 	= date("Y-m-d",strtotime($_POST['to']));
+		}
+
+        	$criteria->addCondition ("DATE(paivays) BETWEEN '".$from."' AND '".$to."' ");
 
 		$model = Lasku::model()->findAll($criteria);
 
@@ -416,13 +438,19 @@ class LaskuHistoriaController extends Controller
 		{
 	          $html2pdf = Yii::app()->ePdf->HTML2PDF('P', 'A4', 'en');
 		  $html2pdf->setDefaultFont('Arial');
-	          $html2pdf->WriteHTML($this->renderPartial('maksu_paivakirja',array('model'=>$model), true));
+	          $html2pdf->WriteHTML($this->renderPartial('maksu_paivakirja',array(
+			'model'=>$model,
+			'from'=>$from,
+			'to'=>$to,
+		  ), true));
 	          $html2pdf->Output();
 
 		} else {
 
 		$this->render('maksu_paivakirja',array(
 			'model'=>$model,
+			'from'=>$from,
+			'to'=>$to,
 		));
 
 		}
