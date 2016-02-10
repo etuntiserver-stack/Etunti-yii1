@@ -95,7 +95,6 @@ th{
  <tr>
   <th><?php echo Yii::t('main','Laskunro'); ?></th>
   <th><?php echo Yii::t('main','Status'); ?></th>
-  <th><?php echo Yii::t('main','Paydate'); ?></th>
   <th><?php echo Yii::t('main','Amount'); ?></th>
   <th><?php echo Yii::t('main','Tapahtuma pvm'); ?></th>
   <th><?php echo Yii::t('main','Yhteensä'); ?></th>
