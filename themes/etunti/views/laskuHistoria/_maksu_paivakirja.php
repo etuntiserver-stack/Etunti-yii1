@@ -14,6 +14,10 @@ $nimi = '';
 <tr>
 
 	<td>
+	<?php echo CHtml::encode($nimi); ?>
+	</td>
+
+	<td>
 	<?php echo CHtml::encode($data->laskunumero); ?>
 	</td>
 
@@ -25,8 +29,5 @@ $nimi = '';
 	<?php echo number_format($data->yhteensa_total, 2, ',', ' '); ?>
 	</td>
 
-	<td>
-	<?php echo CHtml::encode($data->as_nro.' '.$nimi); ?>
-	</td>
 
 </tr>
