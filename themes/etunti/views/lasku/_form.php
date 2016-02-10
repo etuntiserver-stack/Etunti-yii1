@@ -678,37 +678,7 @@ $model->viivastyskorko = $asetukset->viivastyskorko;
 <?php $this->endWidget(); ?>
 
 
-<br>
-<div class="row">
-<?php if(isset($model->id) and $model->response != '') : ?>
-  <div class="col-sm-6 well">
-	<?php 
-	$expl = explode("//",$model->response);
-	foreach($expl as $e)
-	{
-	echo $e.'<br>'; 
-	}
-	?>
-  </div>
-<?php endif; ?>
-<?php if(isset($model->id) and $model->response_finvoice != '' and $model->trust_jobid == '') : ?>
-  <div class="col-sm-6 well">
-	<?php 
-	$expl = explode("//",$model->response_finvoice);
-	foreach($expl as $e)
-	{
-	echo $e.'<br>'; 
-	}
-	?>
-  </div>
-<?php endif; ?>
 
-<?php /* if(isset($model->id) and $model->response_finvoice != '' and $model->trust_jobid != '') : ?>
-  <div class="col-sm-6">
-	<textarea class="form-control" rows="10"><?php echo $model->response_finvoice; ?></textarea>
-  </div>
-<?php endif; */?>
-</div>
 
 <script type="text/javascript">
 $(document).ready(function(){
