@@ -30,10 +30,6 @@
 	</td>
 
 	<td>
-	<?php //echo $data->paydate; ?>
-	</td>
-
-	<td>
 	<?php //echo $data->amount; ?>
 	</td>
 
