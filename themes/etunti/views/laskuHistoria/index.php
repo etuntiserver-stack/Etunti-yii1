@@ -57,6 +57,7 @@
   <div class="panel heading-border">
    <div class="panel-body">
 
+<div class="table-responsive">
 <table class="table table-bordered table-striped small">
  <tr>
   <thead class="myBgColors">
@@ -85,6 +86,7 @@
        ), 
 )); ?>
 </table>
+</div>
 
    </div>
   </div>

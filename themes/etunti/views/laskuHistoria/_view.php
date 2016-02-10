@@ -25,6 +25,17 @@
 		    echo '</pre>';
 		}
 		// Trust -->
+
+		// <-- Postita
+		if(isset($data->palvelu) and $data->palvelu == 'postita') 
+		{
+		    $json = json_decode($data->status, true);
+
+		    echo '<pre>';
+		    echo str_replace(",","<br>",$json);
+		    echo '</pre>';
+		}
+		// Postita -->
 	?>
 	</td>
 
