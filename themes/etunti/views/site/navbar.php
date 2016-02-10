@@ -625,7 +625,7 @@
 
 
               <li>
-                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/laskuHistoria/admin">
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/laskuHistoria/index">
                   <span class="glyphicon glyphicon-barcode"></span> <?php echo Yii::t('main', 'Lasku historia'); ?></a>
               </li>
               <li>

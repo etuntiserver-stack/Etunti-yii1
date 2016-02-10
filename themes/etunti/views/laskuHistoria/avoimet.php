@@ -60,7 +60,7 @@ th{
                         <div class="section">
                           <label class="field prepend-icon">
 
-   			    <input type="text" name="from" id="from" class="gui-input datepicker" value="<?php if(isset($_POST['from'])) echo $_POST['from']; ?>">
+   			    <input type="text" name="from" id="from" class="gui-input datepicker" value="<?php echo $pvm; ?>">
                             <label for="firstname" class="field-icon">
                               <i class="fa fa-calendar"></i>
                             </label>
