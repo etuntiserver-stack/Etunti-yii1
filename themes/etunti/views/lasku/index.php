@@ -8,7 +8,7 @@
 
 
 
-              <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-barcode"></i> <?php echo Yii::t('main', 'LASKU'); ?> 
+              <h2 class="myBgColors p10"> <i class="fa fa-barcode"></i> <?php echo Yii::t('main', 'LASKU'); ?> 
 		<?php echo CHtml::link('','/index.php/lasku/create',array('class'=>'btn btn-default fa fa-plus')); ?></h2>
 
 
