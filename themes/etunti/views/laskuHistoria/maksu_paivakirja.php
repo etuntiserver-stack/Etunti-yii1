@@ -53,7 +53,7 @@ th{
    <!-- tulostus -->
 
 
-              <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-barcode"></i> <?php echo Yii::t('main', 'Maksupäiväkirja'); ?></h2>
+              <h2 class="myBgColors p10"> <i class="fa fa-barcode"></i> <?php echo Yii::t('main', 'Maksupäiväkirja'); ?></h2>
 
 
 
@@ -123,6 +123,7 @@ th{
  <thead class="myBgColors">
 <?php endif; ?>
 
+  <th><?php echo Yii::t('main','Asiakas nro'); ?></th>
   <th><?php echo Yii::t('main','Asiakas'); ?></th>
   <th><?php echo Yii::t('main','Laskunro'); ?></th>
   <th><?php echo Yii::t('main','Laskupvm'); ?></th>

@@ -8,7 +8,7 @@
         <div class="tray-center">
 
 
-              <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-home"></i> <?php echo Yii::t('main', 'TYÖNTEKIJÄT'); ?> 
+              <h2 class="myBgColors p10"> <i class="fa fa-male"></i> <?php echo Yii::t('main', 'TYÖNTEKIJÄT'); ?> 
 		<?php echo CHtml::link('','/index.php/tyontekijat/create',array('class'=>'btn btn-default fa fa-plus')); ?></h2>
 
 

@@ -42,7 +42,7 @@ th{
         <div class="tray-center">
 
 
-              <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-barcode"></i> <?php echo Yii::t('main', 'Avoimet laskut '); ?></h2>
+              <h2 class="myBgColors p10"> <i class="fa fa-barcode"></i> <?php echo Yii::t('main', 'Avoimet laskut '); ?></h2>
 
 
 
@@ -100,6 +100,7 @@ th{
   <th><?php echo Yii::t('main','Viimeinen tapahtuma'); ?></th>
   <th><?php echo Yii::t('main','Viitenumero'); ?></th>
   <th><?php echo Yii::t('main','Yhteensä'); ?></th>
+  <th><?php echo Yii::t('main','Palvelu'); ?></th>
   </thead>
  </tr>
  <?php 

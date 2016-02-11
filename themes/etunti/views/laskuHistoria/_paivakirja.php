@@ -14,6 +14,10 @@ $nimi = '';
 <tr>
 
 	<td>
+	<?php echo CHtml::encode($data->as_nro); ?>
+	</td>
+
+	<td>
 	<?php echo CHtml::encode($nimi); ?>
 	</td>
 
