@@ -180,6 +180,10 @@
             <span class="ad ad-screen-full fs18"></span>
           </a>
         </li>
+            <li>
+              <a href="#">
+                <span class="mr10"></span> <?php echo strtoupper(Yii::app()->user->domain); ?> </a>
+            </li>
       </ul>
 <!--
       <form class="navbar-form navbar-left navbar-search" role="search">
