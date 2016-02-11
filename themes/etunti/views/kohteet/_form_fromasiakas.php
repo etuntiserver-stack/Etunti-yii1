@@ -103,7 +103,7 @@
 
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'hinta'); ?>
-		<?php echo $form->textField($model,'hinta',array('size'=>10,'maxlength'=>100,'class'=>'form-control')); ?>
+		<?php echo $form->numberField($model,'hinta',array('size'=>10,'maxlength'=>100,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'hinta'); ?>
 	</div>
 	<?php endif; ?>
