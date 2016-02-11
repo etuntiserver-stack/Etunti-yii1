@@ -259,16 +259,7 @@ class LaskuController extends Controller
 
 	public function actionEtsikohde($id, $tuntiTaiKk)
 	{
-	?>
-	<script type="text/javascript">
- 	  $(document).ready(function(){
-		$('.selectpicker').selectpicker({
-		      //style: 'btn btn-default',
-		      //size: 4
-		});
-	  });
-	</script>
-	<?php
+
        		$criteria = new CDbCriteria();
        		$criteria->condition = " asiakasnumero='".$id."' ";
 		$as = Asiakkaat::model()->find($criteria);
@@ -279,7 +270,7 @@ class LaskuController extends Controller
 		$yksikko = 'kk';
 
 		$body = '<b class="glyphicon glyphicon-home"></b><br>
-		<select id="kohteet" class="selectpicker '.$yksikko.'" multiple title="Valitse kohteet">';
+		<select class="kohteet selectpicker '.$yksikko.'" multiple title="Valitse kohteet">';
 		$thisTrue = false;
 		$onkoKohdeMaaritetty = false;
 
@@ -287,7 +278,7 @@ class LaskuController extends Controller
        		$criteria = new CDbCriteria();
        		$criteria->condition = " 
 			asiakas_id='".$as->id."' 
-			AND hinta_tyyppi='".$tuntiTaiKk."' AND hinta!=''
+			AND hinta_tyyppi='".$tuntiTaiKk."' AND (hinta!='' or hinta!='0')
 		";
 		$k = Kohteet::model()->findAll($criteria);
 		foreach($k as $a)
@@ -301,7 +292,7 @@ class LaskuController extends Controller
        		$criteria = new CDbCriteria();
        		$criteria->condition = " 
 			asiakas_id='".$as->id."' 
-			AND hinta_tyyppi!='".$tuntiTaiKk."' AND hinta=''
+			AND hinta_tyyppi='".$tuntiTaiKk."' AND (hinta='' or hinta='0')
 		";
 		$k = Kohteet::model()->findAll($criteria);
 		foreach($k as $a)
@@ -315,16 +306,39 @@ class LaskuController extends Controller
 
 
 		// jos kohde ei ole maariteltu, kokeilemme asiakasta ota tietoja
-		if($thisTrue == false and isset($as->id) and $tuntiTaiKk == $as->hinta_tyyppi)
+		if(
+			isset($as->id) and $tuntiTaiKk == $as->hinta_tyyppi 
+			and $as->hinta != '' and $as->hinta > 0
+		)
 		{
+
+	
+		if($thisTrue == false)
+		{
+       		$criteria = new CDbCriteria();
+       		$criteria->condition = " 
+			asiakas_id='".$as->id."' 
+			AND hinta_tyyppi!='".$tuntiTaiKk."' AND (hinta='' or hinta='0')
+		";
+		$k = Kohteet::model()->findAll($criteria);
+		foreach($k as $a)
+		{
+		$thisTrue = true;
+		$onkoKohdeMaaritetty = true;
+		$body .= '<option value="'.$a->id.'//'.$as->hinta.'//'.$yksikko.'//onkohde">'.$a->osoite.' ( '.$as->hinta.'&euro;/'.$yksikko.' )</option>';
+		}
+
+		} else {
 		$thisTrue = true;
 		$onkoKohdeMaaritetty = false;
 		$body .= '<option value="'.$as->id.'//'.$as->hinta.'//'.$yksikko.'//eikohde">'.$as->osoite.' ( '.$as->hinta.'&euro;/'.$yksikko.' )</option>';
 		}
+
+		}
 		$body .= '</select>';
 
 
-		echo $body.'***'.$thisTrue;
+		echo json_encode($body.'***'.$thisTrue);
 	}
 
 

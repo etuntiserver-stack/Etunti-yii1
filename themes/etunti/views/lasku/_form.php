@@ -537,20 +537,20 @@ $model->viivastyskorko = $asetukset->viivastyskorko;
 <br>
 
 <div id="rivit" class="table-responsive">
-<TABLE class="table well" id="TableRivit">
+<TABLE class="well" id="TableRivit">
 
      <TR>
      <thead class="myBgColors">
-	<TH><span id="uusiRivi" class="link" style="font-size: 150%;"><i class="fa fa-plus-square"></i></span></TH>
+	<TH style="width:1%"><span id="uusiRivi" class="link" style="font-size: 150%;"><i class="fa fa-plus-square"></i></span></TH>
 	<TH class="col-sm-2">Tuote/Palvelu</TH>
-	<TH>Kpl</TH>
+	<TH class="col-sm-1">Kpl</TH>
 	<TH class="col-sm-1">Yksikkö</TH>
 	<TH class="col-sm-1">Hinta</TH>
-	<TH>ALV%</TH>
+	<TH class="col-sm-1">ALV%</TH>
 	<TH class="col-sm-1">ALV</TH>
 	<TH class="col-sm-1">Ale%</TH>
-	<TH>Veroton</TH>
-	<TH>Yhteensä</TH>
+	<TH class="col-sm-1">Veroton</TH>
+	<TH class="col-sm-1">Yhteensä</TH>
      </thead>
      </TR>
 
@@ -747,6 +747,44 @@ function jumpToPageBottom() {
     return false;
 }
 
+
+
+function valitseTuote(){
+
+$("table#TableRivit .valitseTuote").change(function() {
+    var tuoteID = $(this).val();
+    var num = $(this).attr("num");
+
+        $.ajax({
+           url: location.protocol + "//" + location.host + '/index.php/lasku/valitsetuote',
+           type: "POST",
+           data: { tuoteID : tuoteID },
+           success: function(data){
+		var sp = data.split("//");
+
+		$("#kpl_"+num).val("1");
+
+		if(sp[0])
+		$("#tkoodi_"+num).val(sp[0]);
+		if(sp[1])
+		$("#hinta_"+num).val(sp[1]);
+		if(sp[3])
+		$("#yksikko_"+num+" option[value="+sp[3]+"]").attr('selected','selected');
+		if(sp[2])
+		$("#alv_"+num+" option[value="+sp[2]+"]").attr('selected','selected');
+
+		eachLaskenta();
+		$("#lt_"+num).hide();
+		console.log(data)
+           }
+        });
+
+});
+
+	poista();
+}
+
+
 poista();
 function poista(){
   $(".poista").click(function() {
@@ -756,40 +794,23 @@ function poista(){
   });
 }
 
-Rivi();
 
+Rivi();
 function Rivi(){
 
+  valitseTuote();
 
-  $("#rivit input").keyup(function() {
+  $(".onlyDigits ").attr('type', 'number');
 
-	var inputKenta = $(this).attr("id").split("_");
-	var hinta_alv_0 = $("#hinta_"+inputKenta[1]).val();
-	var alv = $("#alv_"+inputKenta[1]).val();
-	var kpl = $("#kpl_"+inputKenta[1]).val();
-	var ale = $("#ale_"+inputKenta[1]).val();
-
-	var laske = parseFloat(((hinta_alv_0*kpl)/100*alv), 10);
-	var laskeAleY = parseFloat((($("#yhteensa_alv_"+inputKenta[1]).val())/100*ale), 10);
-	var laskeAleV = parseFloat((($("#veroton_"+inputKenta[1]).val())/100*ale), 10);
-
-	var veroton = parseFloat(hinta_alv_0, 10)*kpl;
-	yhteensa = laske+veroton;
-
-	$("#hinta_alv_"+inputKenta[1]).val((laske).toFixed(2));
-
-	if(veroton-laskeAleV > 0)
-	  $("#veroton_"+inputKenta[1]).val((veroton-laskeAleV).toFixed(2));
-	else
-	  $("#veroton_"+inputKenta[1]).val('0.00');
-
-	if(yhteensa-laskeAleY > 0)
-	  $("#yhteensa_alv_"+inputKenta[1]).val((yhteensa-laskeAleY).toFixed(2));
-	else
-	  $("#yhteensa_alv_"+inputKenta[1]).val('0.00');
-
+  $('#rivit input[type="number"]').keyup(function() {
+  	eachLaskenta();
     	yhteensaTotal();
 
+  });
+
+  $('.for_tkoodi').keyup(function(){
+	var forID = $(this).attr("id").split("_");
+	$('#lt_'+forID[1]).hide();
   });
 
 }
@@ -797,8 +818,6 @@ function Rivi(){
   eachLaskenta();
 
 function eachLaskenta(){
-
-
 
   $("#rivit input").each(function() {
 
@@ -914,7 +933,7 @@ $(".luoRiviKk").click(function() {
 
 function pyyntoRiville(kohteet,from,to,tuotePalvelu,tuntiVaiKk){
 
-	    $("#trRivi_1").remove();
+	    //$("#trRivi_1").remove();
 
 	    $.each(kohteet, function( index, value ) {
 
@@ -1018,23 +1037,22 @@ $("#Lasku_as_nro").change(function() {
     }
 	
 	$("#kalut").show('slow');
-	var spdata = '';
 
         $.ajax({
            url: 'etsikohde?id='+asiakas+'&tuntiTaiKk=1',
            success: function(data){
-		spdata = data.split("***");
-               	console.log(spdata[2]);
+		var spdata = JSON.parse(data).split("***");
+               	console.log(JSON.parse(data)+" asiakas:"+asiakas);
 
 		if(spdata[1] == true)
 		{
 		$("#getkohdeT").html(spdata[0]);
+		$('.selectpicker').selectpicker();
 		$("#tuntiKalut").show();
 		} else {
 		$("#tuntiKalut").hide();
 		}
 
-		spdata = '';
            },
            error: function(XMLHttpRequest, textStatus, errorThrown){
                	console.log(XMLHttpRequest);
@@ -1044,18 +1062,18 @@ $("#Lasku_as_nro").change(function() {
         $.ajax({
            url: 'etsikohde?id='+asiakas+'&tuntiTaiKk=2',
            success: function(data){
-		spdata = data.split("***");
-               	console.log(spdata);
+               	console.log(JSON.parse(data)+" asiakas:"+asiakas);
+		var spdata = JSON.parse(data).split("***");
 
 		if(spdata[1] == true)
 		{
 		$("#getkohdeKk").html(spdata[0]);
+		$('.selectpicker').selectpicker();
 		$("#kkKalut").show();
 		} else {
 		$("#kkKalut").hide();
 		}
 
-		spdata = '';
            },
            error: function(XMLHttpRequest, textStatus, errorThrown){
                	console.log(XMLHttpRequest);
@@ -1066,7 +1084,7 @@ $("#Lasku_as_nro").change(function() {
         $.ajax({
            url: 'etsiasiakas?id='+asiakas,
            success: function(data){
-               	console.log(data);
+               	//console.log(data);
 		var sp = data.split("//");
 		$(".tyyppi").show('slow');
 
@@ -1200,88 +1218,10 @@ $("#Lasku_toimitusosoite").change(function() {
 
 
 
+
 });
 </script>
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<?php
-/*
-	<div class="row">
-		<?php echo $form->labelEx($model,'lid'); ?>
-		<?php echo $form->textField($model,'lid'); ?>
-		<?php echo $form->error($model,'lid'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'saaja_virtualkoodi'); ?>
-		<?php echo $form->textField($model,'saaja_virtualkoodi',array('size'=>60,'maxlength'=>255,'class'=>'form-control')); ?>
-		<?php echo $form->error($model,'saaja_virtualkoodi'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'time'); ?>
-		<?php echo $form->textField($model,'time'); ?>
-		<?php echo $form->error($model,'time'); ?>
-	</div>
-
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'maksettu_euro'); ?>
-		<?php echo $form->textField($model,'maksettu_euro',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
-		<?php echo $form->error($model,'maksettu_euro'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'hyvityslasku'); ?>
-		<?php echo $form->textField($model,'hyvityslasku',array('size'=>20,'maxlength'=>20,'class'=>'form-control')); ?>
-		<?php echo $form->error($model,'hyvityslasku'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'laskun_nimetys'); ?>
-		<?php echo $form->textField($model,'laskun_nimetys',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
-		<?php echo $form->error($model,'laskun_nimetys'); ?>
-	</div>
-
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'yhteensa_total_verot'); ?>
-		<?php echo $form->textField($model,'yhteensa_total_verot',array('size'=>20,'maxlength'=>20,'class'=>'form-control')); ?>
-		<?php echo $form->error($model,'yhteensa_total_verot'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'yhteensa_total_veroton'); ?>
-		<?php echo $form->textField($model,'yhteensa_total_veroton',array('size'=>20,'maxlength'=>20,'class'=>'form-control')); ?>
-		<?php echo $form->error($model,'yhteensa_total_veroton'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'yhteensa_total'); ?>
-		<?php echo $form->textField($model,'yhteensa_total',array('size'=>20,'maxlength'=>20,'class'=>'form-control')); ?>
-		<?php echo $form->error($model,'yhteensa_total'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'tilanne'); ?>
-		<?php echo $form->textField($model,'tilanne',array('size'=>50,'maxlength'=>50,'class'=>'form-control')); ?>
-		<?php echo $form->error($model,'tilanne'); ?>
-	</div>
-*/
-?>
 
