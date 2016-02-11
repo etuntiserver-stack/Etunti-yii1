@@ -50,12 +50,11 @@
 	</td>
 
 	<td>
-	<?php echo CHtml::encode($l->palvelu); ?>
-	</td>
-
-	<td>
 		<?php echo number_format($data->yhteensa_total, 2, ",", " "); ?>
 	</td>
 
 
+	<td>
+	<?php echo CHtml::encode($l->palvelu); ?>
+	</td>
 </tr>
