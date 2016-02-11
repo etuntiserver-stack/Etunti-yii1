@@ -20,9 +20,21 @@
 		{
 		    $json = json_decode($data->status, true);
 
-		    echo '<pre>';
-		    print_r($json);
-		    echo '</pre>';
+		    if(count($json) > 0)
+		    {
+		      foreach($json as $key=>$value)
+		      {
+			   if(is_array($value))
+			   {
+				foreach($value as $k=>$v)
+				echo "&nbsp;".$k.": ".$v."<br>";
+
+			   } else {
+				echo $key.": ".$value."<br>";
+			   }
+		      }
+ 		    }
+
 		}
 		// Trust -->
 
@@ -31,9 +43,13 @@
 		{
 		    $json = json_decode($data->status, true);
 
-		    echo '<pre>';
-		    echo str_replace(",","<br>",$json);
-		    echo '</pre>';
+		    $str = str_replace(",","<br>",$json);
+		    $str = str_replace('"',"",$str);
+		    $str = str_replace('[{',"",$str);
+		    $str = str_replace('}]',"",$str);
+
+		    echo $str;
+
 		}
 		// Postita -->
 	?>

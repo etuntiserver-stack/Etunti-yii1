@@ -43,7 +43,7 @@ th{
    </div>
    <!-- tulostus -->
 
-              <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-barcode"></i> <?php echo Yii::t('main','Reskontraluettelo'); ?></h2>
+              <h2 class="myBgColors p10"> <i class="fa fa-barcode"></i> <?php echo Yii::t('main','Reskontraluettelo'); ?></h2>
 
 
 
@@ -164,7 +164,7 @@ th{
   <th><?php echo Yii::t('main','Laskupvm'); ?></th>
   <th><?php echo Yii::t('main','Suorituksen numero'); ?></th>
   <th><?php echo Yii::t('main','Suorituksen summa'); ?></th>
-  <th><?php echo Yii::t('main','Avoina'); ?></th>
+  <th><?php echo Yii::t('main','Avoinna'); ?></th>
 
 <?php if(!isset($_POST['tulosta'])) : ?>
  </thead>
