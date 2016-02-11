@@ -336,6 +336,8 @@ $BuyerContactPersonName = $lasku['yhteyshenkilo'];
 if($lasku['tyyppi'] == 'henkilo')
 $BuyerContactPersonName = $lasku['nimi'];
 
+
+
 $xml = '<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE Finvoice SYSTEM "Finvoice.dtd">
 <?xml-stylesheet type="text/xsl" href="Finvoice.xsl"?>
@@ -367,8 +369,8 @@ $xml = '<?xml version="1.0" encoding="UTF-8"?>
 <SellerBic IdentificationSchemeName="BIC">'.$asetukset['bic'].'</SellerBic>
 </SellerAccountDetails>
 <InvoiceRecipientDetails>
-<InvoiceRecipientAddress>'.$lasku['osoite'].'</InvoiceRecipientAddress>
-<InvoiceRecipientIntermediatorAddress></InvoiceRecipientIntermediatorAddress>
+<InvoiceRecipientAddress>'.$lasku['verkkolaskuosoite'].'</InvoiceRecipientAddress>
+<InvoiceRecipientIntermediatorAddress>'.$lasku['v_tunnus'].'</InvoiceRecipientIntermediatorAddress>
 </InvoiceRecipientDetails>
 </SellerInformationDetails>
 <InvoiceSenderPartyDetails>
