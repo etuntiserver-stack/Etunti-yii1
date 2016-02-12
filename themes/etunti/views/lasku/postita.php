@@ -30,7 +30,6 @@ curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
 curl_setopt($ch, CURLOPT_TIMEOUT, 100);
 
 $account_info = curl_exec($ch);
-$account_info = json_decode($account_info, true);
 
 if (curl_errno($ch)) {
   echo "\n\ncURL error number: " . curl_errno($ch);
