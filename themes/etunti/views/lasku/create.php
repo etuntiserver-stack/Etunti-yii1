@@ -9,7 +9,7 @@ $this->menu=array(
         <!-- begin: .tray-center -->
         <div class="tray-center">
 
-	   <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-barcode"></i> <?php echo Yii::t('main', 'LUO LASKU'); ?> </h2>
+	   <h2 class="myBgColors p10"> <i class="fa fa-barcode"></i> <?php echo Yii::t('main', 'LUO LASKU'); ?> </h2>
 
 
             <div class="admin-form">

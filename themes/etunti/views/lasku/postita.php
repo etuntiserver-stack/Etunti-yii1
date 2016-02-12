@@ -12,16 +12,19 @@
 <br><br>
 <?php
 
+
+  $username = $asetukset['postita_username'];
+  $password = $asetukset['postita_password'];
+  $auth_string = $username . ":" . $password;
+
+$ch = curl_init();
+/*
   foreach($lasku as $l)
   {
 	echo $l->postita_jobid.'<br>';
 
-$username = $asetukset['postita_username'];
-$password = $asetukset['postita_password'];
-$auth_string = $username . ":" . $password;
+$url = 'https://postita.fi/api/job_info/'.(int)$l->postita_jobid;
 
-$url = 'https://postita.fi/api/job_info/'.$l->postita_jobid;
-$ch = curl_init();
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 curl_setopt($ch, CURLOPT_URL, $url);
 curl_setopt($ch, CURLOPT_USERPWD, $auth_string);
@@ -30,18 +33,36 @@ curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
 curl_setopt($ch, CURLOPT_TIMEOUT, 100);
 
 $account_info = curl_exec($ch);
-
-if (curl_errno($ch)) {
-  echo "\n\ncURL error number: " . curl_errno($ch);
-  echo "\n\ncURL error: " . curl_error($ch);
-}
-$response = json_decode($account_info, true);
+$account_info = json_decode($account_info, true);
 
 echo '<pre>';
-print_r($response);
+print_r($account_info);
+echo '</pre>';
+
+
+  }
+*/
+
+
+$url = 'https://postita.fi/api/job_list/';
+
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+curl_setopt($ch, CURLOPT_URL, $url);
+curl_setopt($ch, CURLOPT_USERPWD, $auth_string);
+curl_setopt($ch, CURLOPT_FAILONERROR, 1);
+curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+curl_setopt($ch, CURLOPT_TIMEOUT, 100);
+
+$account_info = curl_exec($ch);
+$account_info = json_decode($account_info, true);
+
+echo '<pre>';
+print_r($account_info);
 echo '</pre>';
 curl_close($ch);
 
-  }
+
+
+
 
 ?>

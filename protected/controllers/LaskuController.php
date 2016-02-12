@@ -773,7 +773,7 @@ exit;
        		$criteria->order = " id DESC ";
        		$criteria->condition = " lid='".$data->id."' ";
 		$l = LaskuHistoria::model()->findAll($criteria);
-
+		$tilanne = '';
 
 		// <-- Trust
 		$trust = false;
@@ -813,17 +813,26 @@ exit;
 		$postita = false;
 		$postitaStr = '';
 
+       		$criteria = new CDbCriteria();
+       		$criteria->select = " palvelu,postita_statuscode ";
+       		$criteria->order = " id DESC ";
+       		$criteria->condition = " lid='".$data->id."' ";
+		$l = LaskuHistoria::model()->find($criteria);
+
 		if(isset($l->palvelu) and $l->palvelu == 'postita')
 		{
 
-		$json = json_decode($l->status, true);
-		$json = str_replace("{","",$json);
-		$json = str_replace("}","",$json);
-		$json = explode(", ",$json);
-		$json = str_replace('"','',$json);
-
-		  if(isset($json['0']) and $json['0'] == 'status: CO'){
-		   $postitaStr = 'Vastaanotettu ja lähetetty';
+		  if($l->postita_statuscode == 'NE'){
+		   $postitaStr = 'Lasku on vielä vahvistettava';
+		   $postita = true;
+		  } elseif($l->postita_statuscode == 'CO'){
+		   $postitaStr = 'Odottaa lähetystä';
+		   $postita = true;
+		  } elseif($l->postita_statuscode == 'SE'){
+		   $postitaStr = 'Lasku lähetetty';
+		   $postita = true;
+		  } elseif($l->postita_statuscode == 'POISTETTU'){
+		   $postitaStr = 'Lasku poistettu POSTITA.FI:sta';
 		   $postita = true;
 		  }
 
@@ -832,7 +841,7 @@ exit;
 
 
 
-		    $tilanne = '';
+		   
 
 		if($data->tilanne == 0 and $data->response_finvoice == '')
 		    $tilanne = 'Luotu';
