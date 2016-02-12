@@ -23,7 +23,7 @@ class LaskuController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','etsikohde','etsiasiakas', 'etsisaaja','luoKohteista', 'luoAsiakaasta', 'tr_rivit', 'tr_rivitkk','lasku_pdf', 'finvoice','tr_rivit_tyhja','valitsetuote', 'hyvityslasku'),
+				'actions'=>array('admin','delete','create','update','index','view','etsikohde','etsiasiakas', 'etsisaaja','luoKohteista', 'luoAsiakaasta', 'tr_rivit', 'tr_rivitkk','lasku_pdf', 'finvoice', 'postita', 'tr_rivit_tyhja','valitsetuote', 'hyvityslasku'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny', // allow admin user to perform 'admin' and 'delete' actions
@@ -104,6 +104,26 @@ class LaskuController extends Controller
 		var_dump($model->getErrors());
 		}
 
+
+	}
+
+	public function actionPostita()
+	{
+       		$criteria = new CDbCriteria();
+       		$criteria->condition = " postita_jobid!='' ";
+		$lasku = Lasku::model()->findAll($criteria);
+		$asetukset=Asetukset::model()->find("id=1");
+		$firmanTiedot=FirmanTiedot::model()->find("id=1");
+
+
+		$this->render('postita', 
+
+			array(
+			'lasku'=>$lasku,
+			'asetukset'=>$asetukset,
+			'yritys'=>$firmanTiedot,
+
+			));
 
 	}
 
