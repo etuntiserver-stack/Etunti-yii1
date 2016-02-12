@@ -730,7 +730,7 @@ curl_close($ch);
 		    $historia->time = $tapahtumapvm;
 		    $historia->lid = $id;
 		    $historia->status = $resultJson;
-		    $historia->postita_statuscode = $send_response[0]['status'];
+		    $historia->postita_statuscode = $send_response['status'];
 		    $historia->palvelu = "postita";
 		    $historia->yht_euro = $l->yhteensa_total;
 		    $historia->save();
