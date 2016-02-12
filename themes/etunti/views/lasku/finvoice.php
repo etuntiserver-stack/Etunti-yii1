@@ -1,4 +1,6 @@
 <?php
+
+if(isset($_GET['id']))
   $id = $_GET['id'];
 
 
@@ -324,7 +326,7 @@ function base64url_encode($input) {
 
 
 
-if(isset($_GET['finvoice'])){
+if(isset($_GET['laskutus']) and $_GET['laskutus'] == 'verkkolasku'){
 
 if($lasku['tyyppi'] == 'yritys')
 $BuyerOrganisationName = $lasku['yritys'];
@@ -556,7 +558,7 @@ $account_info = json_decode($account_info, true);
 $pdf = $xml;
 $pdf_b64 = base64url_encode($pdf);
 
-$data = array('job_name' => 'Verkkolasku', 'pdf' => $pdf_b64);
+$data = array('job_name' => 'Verkkolasku', 'confirm' => false, 'pdf' => $pdf_b64);
 curl_setopt($ch, CURLOPT_URL, $send_finvoice_url);
 curl_setopt($ch, CURLOPT_POST, TRUE);
 curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
@@ -577,7 +579,7 @@ echo '</pre>';
 
 curl_close($ch);
 
-  if(isset($send_response[0]['status']) and $send_response[0]['status'] == 'CO')
+  if(isset($send_response[0]['status']) and $send_response[0]['status'] == 'NE')
   {
 
        $job_id = '';
@@ -600,11 +602,12 @@ curl_close($ch);
 		    $historia->time = $tapahtumapvm;
 		    $historia->lid = $id;
 		    $historia->status = $resultJson;
+		    $historia->postita_statuscode = $send_response[0]['status'];
 		    $historia->palvelu = "postita";
 		    $historia->yht_euro = $l->yhteensa_total;
 		    $historia->save();
 
-     $this->redirect(array('index'));
+     		    $this->redirect(array('update','id'=>$id));
 
   }
 
@@ -633,7 +636,7 @@ header('Content-Disposition: inline; filename="report.xml"');
 
 
 
-if(isset($_GET['pdf'])){
+if(isset($_GET['laskutus']) and $_GET['laskutus'] == 'posti'){
 
 if(!empty($asetukset['postita_username']) and !empty($asetukset['postita_password']))
 {
@@ -685,7 +688,7 @@ echo '</pre>';
 $pdf = $content_PDF;
 $pdf_b64 = base64url_encode($pdf);
 
-$data = array('job_name' => 'PDF muoto', 'pdf' => $pdf_b64);
+$data = array('job_name' => 'PDF muoto', 'confirm' => false, 'pdf' => $pdf_b64);
 curl_setopt($ch, CURLOPT_URL, $send_url);
 curl_setopt($ch, CURLOPT_POST, TRUE);
 curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
@@ -707,7 +710,7 @@ echo '</pre>';
 curl_close($ch);
 
 
-  if($send_response['status'] == 'CO')
+  if($send_response['status'] == 'NE')
   {
        $job_id = '';
        $created = '';
@@ -727,11 +730,12 @@ curl_close($ch);
 		    $historia->time = $tapahtumapvm;
 		    $historia->lid = $id;
 		    $historia->status = $resultJson;
+		    $historia->postita_statuscode = $send_response[0]['status'];
 		    $historia->palvelu = "postita";
 		    $historia->yht_euro = $l->yhteensa_total;
 		    $historia->save();
 
-     $this->redirect(array('index'));
+     		    $this->redirect(array('update','id'=>$id));
 
   }
 
@@ -743,7 +747,116 @@ curl_close($ch);
 
 
 
+// vahvistus
+if(isset($_GET['vahvistus'])){
 
+$username = $asetukset['postita_username'];
+$password = $asetukset['postita_password'];
+$auth_string = $username . ":" . $password;
+$url = 'https://postita.fi/api/confirm/'.(int)$_GET['vahvistus'];
+
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+curl_setopt($ch, CURLOPT_URL, $url);
+curl_setopt($ch, CURLOPT_USERPWD, $auth_string);
+curl_setopt($ch, CURLOPT_FAILONERROR, 1);
+curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+curl_setopt($ch, CURLOPT_TIMEOUT, 100);
+
+$send_response = curl_exec($ch);
+$resultJson = json_encode($send_response);
+
+if (curl_errno($ch)) {
+  echo "\n\ncURL error number: " . curl_errno($ch);
+  echo "\n\ncURL error: " . curl_error($ch);
+}
+$send_response = json_decode($send_response, true);
+
+echo '<pre>';
+print_r($send_response);
+echo '</pre>';
+
+
+  if($send_response['status'] == 'CO')
+  {
+       $job_id = '';
+       $created = '';
+     foreach($send_response as $k => $v ) {
+       $prep[$k] = $k.":".$v;
+       if($k == 'id')
+       $job_id = $v;
+       if($k == 'created')
+       $created = $v;
+     }
+     $tapahtumapvm = date("Y-m-d H:i:s",strtotime(trim($created)));
+     Lasku::model()->updatebypk($id, array('tapahtumapvm'=>$tapahtumapvm));
+
+		    // Lasku historia
+		    $l = Lasku::model()->findbypk($id);
+		    $historia = new LaskuHistoria;
+		    $historia->time = $tapahtumapvm;
+		    $historia->lid = $id;
+		    $historia->status = $resultJson;
+		    $historia->postita_statuscode = $send_response['status'];
+		    $historia->palvelu = "postita";
+		    $historia->yht_euro = $l->yhteensa_total;
+		    $historia->save();
+
+     		    $this->redirect(array('update','id'=>$id));
+
+  }
+
+}
+
+
+// peruutus
+if(isset($_GET['delete'])){
+
+$username = $asetukset['postita_username'];
+$password = $asetukset['postita_password'];
+$auth_string = $username . ":" . $password;
+$url = 'https://postita.fi/api/delete/'.(int)$_GET['delete'];
+
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+curl_setopt($ch, CURLOPT_URL, $url);
+curl_setopt($ch, CURLOPT_USERPWD, $auth_string);
+curl_setopt($ch, CURLOPT_FAILONERROR, 1);
+curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+curl_setopt($ch, CURLOPT_TIMEOUT, 100);
+
+$send_response = curl_exec($ch);
+$resultJson = json_encode($send_response);
+
+if (curl_errno($ch)) {
+  echo "\n\ncURL error number: " . curl_errno($ch);
+  echo "\n\ncURL error: " . curl_error($ch);
+}
+$send_response = json_decode($send_response, true);
+
+echo '<pre>';
+print_r($send_response);
+echo '</pre>';
+
+
+     $tapahtumapvm = date("Y-m-d H:i:s");
+     Lasku::model()->updatebypk($id, array('tapahtumapvm'=>$tapahtumapvm));
+
+		    // Lasku historia
+		    $l = Lasku::model()->findbypk($id);
+		    $historia = new LaskuHistoria;
+		    $historia->time = $tapahtumapvm;
+		    $historia->lid = $id;
+		    $historia->status = 'POISTETTU';
+		    $historia->postita_statuscode = 'POISTETTU';
+		    $historia->palvelu = "postita";
+		    $historia->yht_euro = $l->yhteensa_total;
+		    $historia->save();
+
+     		    $this->redirect(array('update','id'=>$id));
+
+
+}
 
 
 ?>

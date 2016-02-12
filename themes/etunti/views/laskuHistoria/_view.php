@@ -41,12 +41,17 @@
 		// <-- Postita
 		if(isset($data->palvelu) and $data->palvelu == 'postita') 
 		{
-		    $json = json_decode($data->status, true);
+
+		    if($json = json_decode($data->status, true)){
 
 		    $str = str_replace(",","<br>",$json);
 		    $str = str_replace('"',"",$str);
 		    $str = str_replace('[{',"",$str);
 		    $str = str_replace('}]',"",$str);
+
+		    } else {
+		    $str = $data->status;
+		    }
 
 		    echo $str;
 
