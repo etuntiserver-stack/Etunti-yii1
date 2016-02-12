@@ -443,7 +443,7 @@ $xml = '<?xml version="1.0" encoding="UTF-8"?>
 <InvoiceTotalVatIncludedAmount AmountCurrencyIdentifier="EUR">'.str_replace(".",",",$lasku['yhteensa_total']).'</InvoiceTotalVatIncludedAmount>
 <VatSpecificationDetails>
 <VatBaseAmount AmountCurrencyIdentifier="EUR">'.str_replace(".",",",$lasku['yhteensa_total_veroton']).'</VatBaseAmount>
-<VatRatePercent>22</VatRatePercent>
+<VatRatePercent>24</VatRatePercent>
 <VatRateAmount AmountCurrencyIdentifier="EUR">'.str_replace(".",",",$lasku['yhteensa_total_verot']).'</VatRateAmount>
 </VatSpecificationDetails>
 <PaymentTermsDetails>
@@ -462,7 +462,7 @@ $xml = '<?xml version="1.0" encoding="UTF-8"?>
 <PaymentStatusDetails>
 <PaymentStatusCode>PARTLYPAID</PaymentStatusCode>
 </PaymentStatusDetails>
-<VirtualBankBarcode>257800750155447003352980000000000000200448604122900008</VirtualBankBarcode>';
+<VirtualBankBarcode></VirtualBankBarcode>';
 
 foreach($laskunRivit as $rivi){
 $xml .= '<InvoiceRow>
@@ -492,7 +492,7 @@ $xml .= '<InvoiceRow>
 <RowShortProposedAccountIdentifier></RowShortProposedAccountIdentifier>
 <RowNormalProposedAccountIdentifier></RowNormalProposedAccountIdentifier>
 <RowFreeText></RowFreeText>
-<RowVatRatePercent></RowVatRatePercent>
+<RowVatRatePercent>'.$rivi['alv'].'</RowVatRatePercent>
 <RowVatAmount AmountCurrencyIdentifier="EUR">'.str_replace(".",",",($rivi['yhteensa_alv']-$rivi['veroton'])).'</RowVatAmount>
 <RowVatExcludedAmount AmountCurrencyIdentifier="EUR">'.str_replace(".",",",$rivi['veroton']).'</RowVatExcludedAmount>
 <RowAmount AmountCurrencyIdentifier="EUR">'.str_replace(".",",",$rivi['yhteensa_alv']).'</RowAmount>
@@ -556,7 +556,7 @@ $account_info = json_decode($account_info, true);
 $pdf = $xml;
 $pdf_b64 = base64url_encode($pdf);
 
-$data = array('job_name' => 'A letter from PHP curl API', 'pdf' => $pdf_b64);
+$data = array('job_name' => 'Verkkolasku', 'pdf' => $pdf_b64);
 curl_setopt($ch, CURLOPT_URL, $send_finvoice_url);
 curl_setopt($ch, CURLOPT_POST, TRUE);
 curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
@@ -685,7 +685,7 @@ echo '</pre>';
 $pdf = $content_PDF;
 $pdf_b64 = base64url_encode($pdf);
 
-$data = array('job_name' => 'A letter from PHP curl API', 'pdf' => $pdf_b64);
+$data = array('job_name' => 'PDF muoto', 'pdf' => $pdf_b64);
 curl_setopt($ch, CURLOPT_URL, $send_url);
 curl_setopt($ch, CURLOPT_POST, TRUE);
 curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
