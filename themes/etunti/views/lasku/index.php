@@ -1,4 +1,5 @@
 <?php
+	//$asetukset=Asetukset::model()->findbypk(1);
 
 ?>
 

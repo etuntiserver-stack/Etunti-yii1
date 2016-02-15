@@ -23,7 +23,7 @@ class LaskuController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','etsikohde','etsiasiakas', 'etsisaaja','luoKohteista', 'luoAsiakaasta', 'tr_rivit', 'tr_rivitkk','lasku_pdf', 'finvoice', 'postita', 'tr_rivit_tyhja','valitsetuote', 'hyvityslasku'),
+				'actions'=>array('admin','delete','create','update','index','view','etsikohde','etsiasiakas', 'etsisaaja','luoKohteista', 'luoAsiakaasta', 'tr_rivit', 'tr_rivitkk','lasku_pdf', 'finvoice', 'postita', 'tr_rivit_tyhja','valitsetuote', 'hyvityslasku', 'postita_pdf'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny', // allow admin user to perform 'admin' and 'delete' actions
@@ -580,34 +580,134 @@ class LaskuController extends Controller
 	 */
 	public function actionIndex()
 	{
-       		$criteria = new CDbCriteria();
-	        $criteria->order = "  id DESC ";
 
-		if(isset($_POST['laskunumero']) and !empty(trim($_POST['laskunumero'])))
-	        $criteria->addCondition (" laskunumero LIKE '%".$_POST['laskunumero']."%' ");
-
-		if(isset($_POST['viitenumero']) and !empty(trim($_POST['viitenumero'])))
-	        $criteria->addCondition (" viitenumero LIKE '%".$_POST['viitenumero']."%' ");
-
-	
-		$dataProvider=new CActiveDataProvider('Lasku', array(
-			'criteria'=>$criteria,
-			//'pagination'=>false
-		));
-
-		$dataProvider->pagination->pageSize = 50;
-		$this->render('index', array('dataProvider' => $dataProvider));
-	}
-
-	/**
-	 * Manages all models.
-	 */
-	public function actionAdmin()
-	{
 
 
 	$asetukset=Asetukset::model()->findbypk(1);
 	
+
+
+
+	// <-- Postita
+	if($asetukset->palvelu_tyyppi == 1)
+	{
+
+
+	$username = $asetukset->postita_username;
+	$password = $asetukset->postita_password;
+	$auth_string = $username . ":" . $password;
+
+
+
+		$url = 'https://postita.fi/api/job_list';
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($ch, CURLOPT_URL, $url);
+		curl_setopt($ch, CURLOPT_USERPWD, $auth_string);
+		curl_setopt($ch, CURLOPT_FAILONERROR, 1);
+		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+		curl_setopt($ch, CURLOPT_TIMEOUT, 100);
+
+		$send_response = curl_exec($ch);
+		curl_close($ch);
+
+		$resultJson = json_encode($send_response);
+		$job_ids = array();
+		$postita_statuscode = array();
+		$send_response = json_decode($send_response, true);
+		if(isset($send_response[0]))
+		{
+		     foreach($send_response as $k => $v ) {
+		       if($v['id'])
+		       {
+		          $job_ids[] = $v['id'];
+		          $postita_statuscode[$v['id']] = $v['status'];
+		       }
+		     }
+		}
+		/*
+		echo '<pre>';
+		print_r($postita_statuscode);
+		echo '</pre>';
+		*/
+
+		$ids = implode(",",$job_ids);
+		$criteria = new CDbCriteria();
+	    	$criteria->order = " id DESC ";
+	    	//$criteria->group = " lid ";
+	    	$criteria->condition = " 
+			id IN (SELECT MAX(id) FROM lasku_historia GROUP BY lid )
+			AND lid IN (SELECT id FROM laskut where postita_jobid IN ($ids) ) 
+		";
+		$lh=LaskuHistoria::model()->findAll($criteria);
+
+		$ch = curl_init();
+		foreach($lh as $h)
+		{
+
+		$l = Lasku::model()->findbypk($h->lid);
+
+		if(
+			isset($l->postita_jobid) 
+			and isset($postita_statuscode[$l->postita_jobid]) 
+			and $postita_statuscode[$l->postita_jobid] != $h->postita_statuscode
+		)
+		{
+
+		$url = 'https://postita.fi/api/job_info/'.(int)$l->postita_jobid;
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($ch, CURLOPT_URL, $url);
+		curl_setopt($ch, CURLOPT_USERPWD, $auth_string);
+		curl_setopt($ch, CURLOPT_FAILONERROR, 1);
+		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+		curl_setopt($ch, CURLOPT_TIMEOUT, 100);
+		
+		$send_response = curl_exec($ch);
+		$resultJson = json_encode($send_response);
+		$send_response = json_decode($send_response, true);
+		/*
+		echo '<pre>';
+		print_r($send_response);
+		echo '</pre>';
+		*/
+
+		  if(isset($send_response['status']))
+		  {
+		       $job_id = '';
+		       $created = '';
+		     foreach($send_response as $k => $v ) {
+		       $prep[$k] = $k.":".$v;
+		       if($k == 'id')
+		       $job_id = $v;
+		       if($k == 'created')
+		       $created = $v;
+		     }
+		     $tapahtumapvm = date("Y-m-d H:i:s",strtotime(trim($created)));
+		     Lasku::model()->updatebypk($l->id, array('tapahtumapvm'=>$tapahtumapvm));
+		
+				    // Lasku historia
+		    $historia = new LaskuHistoria;
+		    $historia->time = $tapahtumapvm;
+		    $historia->lid = $l->id;
+		    $historia->status = $resultJson;
+		    $historia->postita_statuscode = $send_response['status'];
+		    $historia->palvelu = "postita";
+		    $historia->yht_euro = $l->yhteensa_total;
+		    $historia->save();
+		  }
+
+
+
+		} // (isset($l->postita_jobid))
+		} // foreach
+		curl_close($ch);
+
+
+	}
+	// Postita -->
+
+
+
 	// <-- Trust
 	if($asetukset->palvelu_tyyppi == 2)
 	{
@@ -637,6 +737,7 @@ class LaskuController extends Controller
 		if ($sxe) 
 		{
 /*
+
 echo '<textarea class="form-control" rows="10">';
 print_r($rss);
 echo '</textarea>';
@@ -712,6 +813,36 @@ exit;
 	}
 	// Trust -->
 
+
+
+       		$criteria = new CDbCriteria();
+	        $criteria->order = "  id DESC ";
+
+		if(isset($_POST['laskunumero']) and !empty(trim($_POST['laskunumero'])))
+	        $criteria->addCondition (" laskunumero LIKE '%".$_POST['laskunumero']."%' ");
+
+		if(isset($_POST['viitenumero']) and !empty(trim($_POST['viitenumero'])))
+	        $criteria->addCondition (" viitenumero LIKE '%".$_POST['viitenumero']."%' ");
+
+	
+		$dataProvider=new CActiveDataProvider('Lasku', array(
+			'criteria'=>$criteria,
+			//'pagination'=>false
+		));
+
+		$dataProvider->pagination->pageSize = 50;
+		$this->render('index', array('dataProvider' => $dataProvider));
+	}
+
+
+	public function actionPostita_pdf($id)
+	{
+		$this->renderPartial('postita_pdf',array('id'=>$id));
+	}
+
+
+	public function actionAdmin()
+	{
 
 
 		$model=new Lasku('search');
@@ -830,6 +961,9 @@ exit;
 		   $postita = true;
 		  } elseif($l->postita_statuscode == 'SE'){
 		   $postitaStr = 'Lasku lähetetty';
+		   $postita = true;
+		  } elseif($l->postita_statuscode == 'CA'){
+		   $postitaStr = 'Lasku peruutettu';
 		   $postita = true;
 		  } elseif($l->postita_statuscode == 'POISTETTU'){
 		   $postitaStr = 'Lasku poistettu POSTITA.FI:sta';

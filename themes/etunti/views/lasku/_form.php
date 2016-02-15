@@ -641,6 +641,15 @@ $model->viivastyskorko = $asetukset->viivastyskorko;
   }
   ?>
 
+  <?php 
+  if(isset($model->id) 
+	and file_exists(Yii::app()->basePath."/../tiedostot/laskut/".Yii::app()->user->domain.'/'.$model->id.'.pdf')
+  ){
+  echo '<a href="postita_pdf?id='.$model->id.'" class="btn btn-success btn-group myBgColors">'.Yii::t('main','PDF').'</a>';
+  }
+  ?>
+
+
 
 		<?php if(isset($model->id) and $model->tilanne == '0' and $asetukset->palvelu_tyyppi == 2) : ?>
 		<a href="update?id=<?php echo $model->id; ?>&tilanne=1" class="btn  btn-success btn-group myBgColors"><?php echo Yii::t('main','Hyväksy'); ?></a>
