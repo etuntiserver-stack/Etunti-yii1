@@ -6,9 +6,26 @@ if(isset($_GET['id']))
 
 
 if(isset($_GET['merkitseMaksetuksi'])){
-     	Lasku::model()->updatebypk($id, array('tilanne'=>3));
+
+     $tapahtumapvm = date("Y-m-d H:i:s");
+     Lasku::model()->updatebypk($id, array('tilanne'=>3,'tapahtumapvm'=>$tapahtumapvm));
+
+		    // Lasku historia
+		    $l = Lasku::model()->findbypk($id);
+		    $historia = new LaskuHistoria;
+		    $historia->time = $tapahtumapvm;
+		    $historia->lid = $id;
+		    $historia->status = 'MAKSETTU';
+		    $historia->palvelu = "local";
+		    $historia->yht_euro = $l->yhteensa_total;
+		    $historia->save();
+
 	$this->redirect(array('update','id'=>$id));
 }
+
+
+
+
 
 if(isset($_GET['finvoiceTrust']) or isset($_GET['hyvityslasku'])){
 
@@ -341,9 +358,7 @@ $BuyerContactPersonName = $lasku['nimi'];
 
 
 $xml = '<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE Finvoice SYSTEM "Finvoice.dtd">
-<?xml-stylesheet type="text/xsl" href="Finvoice.xsl"?>
-<Finvoice Version="1.2">
+<Finvoice Version="1.3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Finvoice.xsd">
 <SellerPartyDetails>
 <SellerPartyIdentifier>'.$yritys['y_tunnus'].'</SellerPartyIdentifier>
 <SellerOrganisationName>'.$yritys['tyonantaja'].'</SellerOrganisationName>
@@ -426,6 +441,7 @@ $xml = '<?xml version="1.0" encoding="UTF-8"?>
 <DelivererIdentifier></DelivererIdentifier>
 <DelivererName></DelivererName>
 <DelivererCountryCode></DelivererCountryCode>
+
 <DelivererCountryName></DelivererCountryName>
 <ManufacturerIdentifier></ManufacturerIdentifier>
 <ManufacturerName></ManufacturerName>
@@ -530,7 +546,8 @@ $xml .= '<EpiDetails>
 </Finvoice>';
 
 
-
+//echo $xml;
+//exit;
 
 if(!empty($asetukset['postita_username']) and !empty($asetukset['postita_password']))
 {
@@ -555,7 +572,7 @@ $account_info = curl_exec($ch);
 $account_info = json_decode($account_info, true);
 
 
-$pdf = $xml;
+$pdf = trim($xml);
 $pdf_b64 = base64url_encode($pdf);
 
 $data = array('job_name' => 'Verkkolasku', 'confirm' => false, 'pdf' => $pdf_b64);
@@ -606,6 +623,29 @@ curl_close($ch);
 		    $historia->palvelu = "postita";
 		    $historia->yht_euro = $l->yhteensa_total;
 		    $historia->save();
+
+
+  	if (!file_exists(Yii::app()->basePath."/../tiedostot/laskut/".Yii::app()->user->domain)) {
+  		mkdir(Yii::app()->basePath."/../tiedostot/laskut/".Yii::app()->user->domain, 0777, true);
+  	}
+
+	$url = 'https://postita.fi/api/job_pdf/'.(int)$job_id;
+	$ch = curl_init();
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+	curl_setopt($ch, CURLOPT_URL, $url);
+	curl_setopt($ch, CURLOPT_USERPWD, $auth_string);
+	curl_setopt($ch, CURLOPT_FAILONERROR, 1);
+	curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+	curl_setopt($ch, CURLOPT_TIMEOUT, 100);
+	
+	$content = curl_exec($ch);
+	curl_close($ch);
+	
+	$base64 = $content;
+	$binary = $base64;
+	$putPath = Yii::app()->basePath."/../tiedostot/laskut/".Yii::app()->user->domain;
+	file_put_contents($putPath.'/'.$id.'.pdf', $binary);
+
 
      		    $this->redirect(array('update','id'=>$id));
 
@@ -735,6 +775,30 @@ curl_close($ch);
 		    $historia->yht_euro = $l->yhteensa_total;
 		    $historia->save();
 
+
+  	if (!file_exists(Yii::app()->basePath."/../tiedostot/laskut/".Yii::app()->user->domain)) {
+  		mkdir(Yii::app()->basePath."/../tiedostot/laskut/".Yii::app()->user->domain, 0777, true);
+  	}
+
+	$url = 'https://postita.fi/api/job_pdf/'.(int)$job_id;
+	$ch = curl_init();
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+	curl_setopt($ch, CURLOPT_URL, $url);
+	curl_setopt($ch, CURLOPT_USERPWD, $auth_string);
+	curl_setopt($ch, CURLOPT_FAILONERROR, 1);
+	curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+	curl_setopt($ch, CURLOPT_TIMEOUT, 100);
+	
+	$content = curl_exec($ch);
+	curl_close($ch);
+	
+	$base64 = $content;
+	$binary = $base64;
+	$putPath = Yii::app()->basePath."/../tiedostot/laskut/".Yii::app()->user->domain;
+	file_put_contents($putPath.'/'.$id.'.pdf', $binary);
+
+
+
      		    $this->redirect(array('update','id'=>$id));
 
   }
@@ -775,7 +839,7 @@ $send_response = json_decode($send_response, true);
 echo '<pre>';
 print_r($send_response);
 echo '</pre>';
-
+curl_close($ch);
 
   if($send_response['status'] == 'CO')
   {
@@ -809,7 +873,7 @@ echo '</pre>';
 }
 
 
-// peruutus
+// poitaminen
 if(isset($_GET['delete'])){
 
 $username = $asetukset['postita_username'];
@@ -837,7 +901,7 @@ $send_response = json_decode($send_response, true);
 echo '<pre>';
 print_r($send_response);
 echo '</pre>';
-
+curl_close($ch);
 
      $tapahtumapvm = date("Y-m-d H:i:s");
      Lasku::model()->updatebypk($id, array('tapahtumapvm'=>$tapahtumapvm));
@@ -857,6 +921,10 @@ echo '</pre>';
 
 
 }
+
+
+
+
 
 
 ?>
