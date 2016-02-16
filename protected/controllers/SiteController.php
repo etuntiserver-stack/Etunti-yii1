@@ -211,7 +211,6 @@ $(document).ready(function(){
 		}
 	
 		AsiakasHyvaksynta::model()->updatebypk($model['id'], array('code'=>'','status'=>3));
-
 		$asia = true;
 
 		} else {
