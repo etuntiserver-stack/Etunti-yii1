@@ -192,8 +192,37 @@ $(document).ready(function(){
        		$criteria->condition = " status=1 AND id='".$id."' AND code='".trim($code)."' ";
 		$model = AsiakasHyvaksynta::model()->find($criteria);
 
+		if(isset($model->id))
+		{
+
+		$ids = explode(",",$model->ids);
+		foreach($ids as $val)
+		{
+		    $explVal = explode("_", $val);
+		    if(isset($explVal[1]))
+		    {
+			if($explVal[0] == 'mobile') 
+			   Mobile::model()->updatebypk($explVal[1], array('asiakas_hyvaksy'=>'1_'.date("d.m.Y")));
+	
+			if($explVal[0] == 'toteutu')
+			   Toteutuneet::model()->updatebypk($explVal[1], array('asiakas_hyvaksy'=>'1_'.date("d.m.Y")));
+		    }
+	
+		}
+	
+		AsiakasHyvaksynta::model()->updatebypk($model->id, array('code'=>'','status'=>3));
+
+		$asia = true;
+
+		} else {
+
+		$asia = false;
+
+		}
+
+
 		$this->render('hyvaksy', array(
-			'model' => $model,
+			'asia' => $asia,
 		));
 	}
 
