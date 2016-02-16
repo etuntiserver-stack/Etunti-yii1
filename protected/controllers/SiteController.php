@@ -192,10 +192,10 @@ $(document).ready(function(){
        		$criteria->condition = " status=1 AND id='".$id."' AND code='".trim($code)."' ";
 		$model = AsiakasHyvaksynta::model()->find($criteria);
 
-		if(isset($model->id))
+		if(isset($model['id']))
 		{
 
-		$ids = explode(",",$model->ids);
+		$ids = explode(",",$model['ids']);
 		foreach($ids as $val)
 		{
 		    $explVal = explode("_", $val);
@@ -210,11 +210,7 @@ $(document).ready(function(){
 	
 		}
 	
-		$m=AsiakasHyvaksynta::model()->findbypk($model->id);
-		$m->attributes=$model->attributes;
-		$m->status=3;
-		$m->code=1;
-		$m->save();
+		AsiakasHyvaksynta::model()->updatebypk($model['id'], array('code'=>'','status'=>3));
 
 		$asia = true;
 
