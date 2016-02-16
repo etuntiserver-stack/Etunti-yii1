@@ -186,7 +186,11 @@ $(document).ready(function(){
 	public function actionHyvaksy($id,$code,$domain)
 	{
 
-		$model = AsiakasHyvaksynta::model()->find(" id='".$id."' and code='".$code."' ");
+		Yii::app()->theme = 'classic';
+
+       		$criteria = new CDbCriteria();
+       		$criteria->condition = " id='".$id."' and code='".$code."' ";
+		$model = AsiakasHyvaksynta::model()->find($criteria);
 
 		$this->render('hyvaksy', array(
 			'model' => $model,
@@ -195,6 +199,8 @@ $(document).ready(function(){
 
 	public function actionHylkaa($id,$code,$domain)
 	{
+
+		Yii::app()->theme = 'classic';
 
 		$this->render('hylkaa', array(
 			'id' => $id,
