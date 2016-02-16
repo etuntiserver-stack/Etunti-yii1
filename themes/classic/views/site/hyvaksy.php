@@ -28,7 +28,7 @@
 <?php
   if($asia == true)
   {
-
+echo 'ok';
 echo '
         <section class="esittely">
             <div class="paddings">
@@ -52,7 +52,7 @@ echo '
 
 
   } else {
-
+echo 'err';
 echo '
         <section class="esittely">
             <div class="paddings">
