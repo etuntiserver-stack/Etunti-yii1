@@ -26,30 +26,6 @@
         <!-- End Header-->
 
 <?php
-  if(isset($model->id))
-  {
-
-  echo '
-        <section class="esittely">
-            <div class="paddings">
-                <div class="container">
-                    <!-- Icon Big -->
-                    <!-- End Icon Big -->
-                        <h1 class="title-subtitle text-center">Olet hyväksynyt tunteja.
-                            <span>
-                              Kiitos.
-                            </span>
-                        </h1>
-                        <hr>
-                    <!-- End Titles Heading -->
-
-                </div>
-                <!-- End Container-->
-            </div>
-        </section>        
-  ';
-
-  }
 
   if(isset($model->id))
   {
@@ -77,7 +53,31 @@
 
 	}
   
-  AsiakasHyvaksynta::model()->updatebypk($model->id, array('code'=>'','status'=>3));
+     	if(AsiakasHyvaksynta::model()->updatebypk($model->id, array('code'=>'','status'=>3)))
+	{
+
+  echo '
+        <section class="esittely">
+            <div class="paddings">
+                <div class="container">
+                    <!-- Icon Big -->
+                    <!-- End Icon Big -->
+                        <h1 class="title-subtitle text-center">Olet hyväksynyt tunteja.
+                            <span>
+                              Kiitos.
+                            </span>
+                        </h1>
+                        <hr>
+                    <!-- End Titles Heading -->
+
+                </div>
+                <!-- End Container-->
+            </div>
+        </section>        
+  ';
+
+
+	}
 
   } else {
 
