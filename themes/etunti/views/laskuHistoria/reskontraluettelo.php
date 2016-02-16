@@ -161,6 +161,7 @@ th{
 <?php endif; ?>
 
   <th><?php echo Yii::t('main','Laskunro'); ?></th>
+  <th><?php echo Yii::t('main','Asiakas'); ?></th>
   <th><?php echo Yii::t('main','Laskupvm'); ?></th>
   <th><?php echo Yii::t('main','Suorituksen numero'); ?></th>
   <th><?php echo Yii::t('main','Suorituksen summa'); ?></th>
@@ -175,8 +176,16 @@ th{
 	$saldo = '';
  foreach($model as $data)
  {
+	$asiakas='';
+	$a = Asiakkaat::model()->findbypk($data->as_nro);
+	if(isset($a->id) and !empty($a->yrityksen_nimi))
+	$asiakas = $a->yrityksen_nimi;
+	if(isset($a->id) and empty($a->yrityksen_nimi))
+	$asiakas = $a->yhteyshenkilo;
+
+
 	$saldo += $data->yhteensa_total;
-	$this->renderPartial('_reskontraluettelo',array('data'=>$data, 'saldo'=>$saldo));
+	$this->renderPartial('_reskontraluettelo',array('data'=>$data, 'saldo'=>$saldo, 'asiakas'=>$asiakas));
 
  }
  ?>

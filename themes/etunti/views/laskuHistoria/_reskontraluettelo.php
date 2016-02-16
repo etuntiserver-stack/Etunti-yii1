@@ -11,6 +11,10 @@
 	</td>
 
 	<td>
+	<?php echo CHtml::encode($asiakas); ?>
+	</td>
+
+	<td>
 	<?php echo date("d.m.Y",strtotime($data->paivays)); ?>
 	</td>
 
