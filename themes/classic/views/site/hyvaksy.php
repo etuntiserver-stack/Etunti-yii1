@@ -53,7 +53,6 @@
 
 
 echo '
-        <!-- Services -->
         <section class="esittely">
             <div class="paddings">
                 <div class="container">
@@ -70,15 +69,14 @@ echo '
                 </div>
                 <!-- End Container-->
             </div>
-        </section>        <!-- Services -->
+        </section>        
 ';
   
-  AsiakasHyvaksynta::model()->updatebypk($model->id, array('code'=>'','status'=>3));
+  //AsiakasHyvaksynta::model()->updatebypk($model->id, array('code'=>'','status'=>3));
 
   } else {
 
 echo '
-        <!-- Services -->
         <section class="esittely">
             <div class="paddings">
                 <div class="container">
@@ -95,7 +93,7 @@ echo '
                 </div>
                 <!-- End Container-->
             </div>
-        </section>        <!-- Services -->
+        </section>        
 ';
 
   }
