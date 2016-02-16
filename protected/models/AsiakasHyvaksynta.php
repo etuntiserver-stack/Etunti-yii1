@@ -42,7 +42,7 @@ class AsiakasHyvaksynta extends DB2ActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('asiakas_id, ids, sahkoposti, status', 'required'),
+			array('asiakas_id, ids, sahkoposti, code, status', 'required'),
 			array('id, asiakas_id, status', 'numerical', 'integerOnly'=>true),
 			array('sahkoposti', 'length', 'max'=>255),
 			array('code', 'length', 'max'=>500),

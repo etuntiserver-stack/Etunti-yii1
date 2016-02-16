@@ -72,7 +72,7 @@ echo '
         </section>        
 ';
   
-  AsiakasHyvaksynta::model()->updatebypk($model->id, array('code'=>'','status'=>3));
+  AsiakasHyvaksynta::model()->updatebypk($model->id, array('code'=>'hyvaksytty','status'=>3));
 
   } else {
 
