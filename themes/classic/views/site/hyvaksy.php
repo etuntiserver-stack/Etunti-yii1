@@ -1,5 +1,3 @@
-
-
         <!-- Header-->
         <header>
             <!-- Container-->
@@ -54,12 +52,7 @@
 	}
 
 
-  AsiakasHyvaksynta::model()->updatebypk($model->id, array('code'=>'','status'=>3));
-
-  ?>
-
-
-
+echo '
         <!-- Services -->
         <section class="esittely">
             <div class="paddings">
@@ -78,9 +71,32 @@
                 <!-- End Container-->
             </div>
         </section>        <!-- Services -->
-
-  <?php
+';
   
+  AsiakasHyvaksynta::model()->updatebypk($model->id, array('code'=>'','status'=>3));
+
+  } else {
+
+echo '
+        <!-- Services -->
+        <section class="esittely">
+            <div class="paddings">
+                <div class="container">
+                    <!-- Icon Big -->
+                    <!-- End Icon Big -->
+                        <h1 class="title-subtitle text-center">Tämä linkki on vanhentunut.
+                            <span>
+                              Kiitos.
+                            </span>
+                        </h1>
+                        <hr>
+                    <!-- End Titles Heading -->
+
+                </div>
+                <!-- End Container-->
+            </div>
+        </section>        <!-- Services -->
+';
 
   }
 ?>

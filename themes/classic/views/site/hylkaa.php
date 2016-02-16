@@ -1,3 +1,30 @@
+        <!-- Header-->
+        <header>
+            <!-- Container-->
+            <div class="container">
+                <!-- Row-->
+                <div class="row">
+                    <!-- Logo-->
+                    <div class="col-md-3">
+                        <div class="logo">
+  			<?php $asetukset=Asetukset::model()->find("id=1"); ?>
+  			<img src="<?php echo $asetukset->logon_polkku; ?>" height="<?php echo $asetukset->logon_korkeus; ?>">
+                        </div>
+                    </div>
+                    <!-- End Logo-->
+
+                    <!-- Nav-->
+                    <div class="col-md-9 slogan">
+                        <!--Voita siivousalan haasteet-->
+                    </div>
+                    <!-- End Nav-->
+                </div>
+                <!-- End Row-->
+            </div>
+            <!-- End Container-->
+        </header>
+        <!-- End Header-->
+
 <?php
 
 if(isset($_POST['palaute'])){
@@ -34,30 +61,80 @@ if(isset($_POST['palaute'])){
   }
 
 }
-?>
 
-<?php if(!empty($id) and !empty($code) and !empty($domain)) {
+
+if(!empty($id) and !empty($code) and !empty($domain)) 
+{
 
   $model = AsiakasHyvaksynta::model()->find(" id='".$_GET['id']."' and code='".$_GET['code']."' ");
   if(isset($model['id']))
   {
-?>
+
+  echo '
+        <!-- Services -->
+        <section class="esittely">
+            <div class="paddings">
+                <div class="container">
+                    <!-- Icon Big -->
+                    <!-- End Icon Big -->
+
+
+                        <h1 class="title-subtitle text-center" id="paa">
+                              Olet hylkäämässä tunteja. 
+			<span>Pyydämme jättämään hylkäämisperusteet.</span>
+                        </h1>
+
 <div class="row form palauteDiv">
-  <div class="col-sm-3">
+  <div class="col-sm-6 col-sm-offset-3">
 	<form action="#" id="palaute" method="POST">
-	<input type="hidden" name="id" id="id" value="<?php echo $id; ?>">
-	<input type="hidden" name="code" id="code" value="<?php echo $code; ?>">
-	<input type="hidden" name="domain" id="domain" value="<?php echo $domain; ?>">
-	<label><?php echo Yii::t('main','Selitys'); ?></label>
-	<textarea name="palaute" id="palauteText" class="form-control"></textarea>
-	<button class="btn btn-primary" id="tallenna-btn"><?php echo Yii::t('main','Lähetä'); ?></button>
+	<input type="hidden" name="id" id="id" value="'.$id.'">
+	<input type="hidden" name="code" id="code" value="'.$code.'">
+	<input type="hidden" name="domain" id="domain" value="'.$domain.'">
+	<label>'.Yii::t('main','Selitys').'</label>
+	<textarea name="palaute" id="palauteText" class="form-control" rows="6"></textarea>
+	<br>
+	<button class="btn btn-primary" id="tallenna-btn">'.Yii::t('main','Lähetä').'</button>
 	</form>
   </div>
 </div>
-<?php 
+
+
+                    <!-- End Titles Heading -->
+
+                </div>
+                <!-- End Container-->
+            </div>
+        </section>        <!-- Services -->
+  ';
+
+
+
+  } else {
+
+  echo '
+        <!-- Services -->
+        <section class="esittely">
+            <div class="paddings">
+                <div class="container">
+                    <!-- Icon Big -->
+                    <!-- End Icon Big -->
+                        <h1 class="title-subtitle text-center">Tämä linkki on vanhentunut.
+                            <span>
+                              Kiitos.
+                            </span>
+                        </h1>
+                        <hr>
+                    <!-- End Titles Heading -->
+
+                </div>
+                <!-- End Container-->
+            </div>
+        </section>        <!-- Services -->
+  ';
 
   }
-} 
+
+}
 ?>
 
 
@@ -91,7 +168,8 @@ $(this).attr("name");
   success:function(data){
   console.log(data);
 	//alert(data)
-	$('.palauteDiv').html('<h2>Kiitos</h2>');
+	$('#paa').hide('slow');
+	$('.palauteDiv').html('<center><h1 class="title-subtitle text-center"><span>Olemme vastaanottaneet hylkäämispyynnön perusteluineen.</span><br>Kiitos!</h1></center>');
 	return false;
   },
   error:function(data){
