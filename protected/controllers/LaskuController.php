@@ -405,13 +405,18 @@ class LaskuController extends Controller
 		if($row)
 		$body .= '<option value="'.$row.'">'.$row.' kpl</option>';
 	
-		$body .= '
-			<option value="kpl">kpl</option>
-			<option value="h">h</option>
-			<option value="min">min</option>
-			<option value="kk">kk</option>
-			<option value="kg">kg</option>
-		';
+
+		$list = array();
+      		$l = Valikkoot::model()->findAll(" select_type='laskutus_yksikko' ",array('order' => "select_type"));
+
+		if(isset($l[0]))
+		{
+		    foreach($l as $k=>$v)
+		    {
+			$body .= '<option value="'.$v->value.'">'.$v->value.'</option>';
+		    }
+		}
+
 		return $body;
 	}
 

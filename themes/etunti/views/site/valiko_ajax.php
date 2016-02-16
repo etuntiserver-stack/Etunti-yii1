@@ -49,6 +49,7 @@
 	elseif($_POST['select_type'] == 'admin status') $selType = 'Oikeukset';
 	elseif($_POST['select_type'] == 'siivous') $selType = 'Siivous tyyppi';
 	elseif($_POST['select_type'] == 'asiakas_ryhma') $selType = 'Asiakasryhmä';
+	elseif($_POST['select_type'] == 'laskutus_yksikko') $selType = 'Laskutusyksikkö';
 	else $selType = $r->select_type;
 
 
