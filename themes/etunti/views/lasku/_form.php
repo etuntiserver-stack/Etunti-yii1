@@ -559,7 +559,7 @@ $model->viivastyskorko = $asetukset->viivastyskorko;
 <br>
 
 <div id="rivit" class="table-responsive">
-<TABLE class="well" id="TableRivit">
+<TABLE class="table well" id="TableRivit">
 
      <TR>
      <thead class="myBgColors">
