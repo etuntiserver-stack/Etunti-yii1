@@ -71,7 +71,6 @@ if(!empty($id) and !empty($code) and !empty($domain))
   {
 
   echo '
-        <!-- Services -->
         <section class="esittely">
             <div class="paddings">
                 <div class="container">
@@ -104,7 +103,7 @@ if(!empty($id) and !empty($code) and !empty($domain))
                 </div>
                 <!-- End Container-->
             </div>
-        </section>        <!-- Services -->
+        </section>        
   ';
 
 
@@ -112,7 +111,6 @@ if(!empty($id) and !empty($code) and !empty($domain))
   } else {
 
   echo '
-        <!-- Services -->
         <section class="esittely">
             <div class="paddings">
                 <div class="container">
@@ -129,7 +127,7 @@ if(!empty($id) and !empty($code) and !empty($domain))
                 </div>
                 <!-- End Container-->
             </div>
-        </section>        <!-- Services -->
+        </section>        
   ';
 
   }
