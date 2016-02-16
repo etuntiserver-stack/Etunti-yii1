@@ -823,6 +823,23 @@ exit;
        		$criteria = new CDbCriteria();
 	        $criteria->order = "  id DESC ";
 
+
+		if(Yii::app()->request->getPost('asiakasLaskulle'))
+       		$criteria->addCondition ( " as_nro='".Yii::app()->request->getPost('asiakasLaskulle')."' " );
+
+		$from = date("Y-m-d");
+		$to = date("Y-m-d");
+
+		if(isset($_POST['from']) and isset($_POST['to'])){
+		$from 	= date("Y-m-d",strtotime($_POST['from']));
+		$to 	= date("Y-m-d",strtotime($_POST['to']));
+		}
+
+
+        	$criteria->addCondition ("DATE(paivays) BETWEEN 
+			'".$from."' AND '".$to."' 
+		");
+
 		if(isset($_POST['laskunumero']) and !empty(trim($_POST['laskunumero'])))
 	        $criteria->addCondition (" laskunumero LIKE '%".$_POST['laskunumero']."%' ");
 
@@ -836,7 +853,7 @@ exit;
 		));
 
 		$dataProvider->pagination->pageSize = 50;
-		$this->render('index', array('dataProvider' => $dataProvider));
+		$this->render('index', array('dataProvider' => $dataProvider, 'from'=>$from, 'to'=>$to));
 	}
 
 
