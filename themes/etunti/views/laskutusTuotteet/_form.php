@@ -34,7 +34,25 @@
 
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'yksikko'); ?>
-		<?php echo $form->textField($model,'yksikko',array('size'=>20,'maxlength'=>20,'class'=>'form-control')); ?>
+
+	   <div class="form-inline">
+		<?php
+		$list = array();
+      		$l = Valikkoot::model()->findAll(" select_type='laskutus_yksikko' ",array('order' => "select_type"));
+		foreach($l as $v)
+		$list[$v->id] = $v->value;
+
+		if(count($list) > 0)
+		{
+        	echo $form->dropDownList($model, 'yksikko', $list,
+		array('empty'=>'Valitse Laskutusyksikkö','class'=>'form-control form-group'));
+		} else {
+		echo 'Tyhjä';
+		}		
+        	?>
+		<span class="btn btn-primary myBgColors muokaValiko" for="laskutus_yksikko"><i class="fa fa-pencil-square-o"></i></span>
+	   </div>
+
 		<?php echo $form->error($model,'yksikko'); ?>
 	</div>
 <br>
@@ -46,12 +64,30 @@
   </div>
 </div><!-- form -->
 
-<?php
-/*
-	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'hinta_alv_sis'); ?>
-		<?php echo $form->textField($model,'hinta_alv_sis',array('size'=>20,'maxlength'=>20,'class'=>'form-control')); ?>
-		<?php echo $form->error($model,'hinta_alv_sis'); ?>
-	</div>
-*/
-?>
+
+	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/bootstrap.modal.js"></script>
+	<div id="showres" class="modal fade" tabindex="-1" role="dialog"></div>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+
+/* valikot */
+$(".muokaValiko").click(function() {
+    var thisFor = $(this).attr("for");
+
+        $.ajax({
+           url: location.protocol + "//" + location.host + "/index.php/site/valiko",
+	   type:'POST',
+	   data: { "select_type" : thisFor },
+           success: function(data){
+		//console.log(data);
+		$('#showres').modal().html(JSON.parse(data));
+           }
+        });
+});
+/* valikot */
+
+
+});
+</script>

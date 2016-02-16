@@ -122,7 +122,7 @@ else
 
 	<td><?php echo CHtml::link(CHtml::encode($data->id), array('update', 'id'=>$data->id)); ?></td>
 	<td><?php echo $versio; ?></td>
-	<td><b><?php echo CHtml::encode(date("d.m",strtotime($data->aloitan))); ?></b></td>
+	<td><b><?php echo CHtml::encode(date("d.m.Y",strtotime($data->aloitan))); ?></b></td>
 	<td><?php echo $karttaA." ".$karttaL; ?></td>
 
 	<td>

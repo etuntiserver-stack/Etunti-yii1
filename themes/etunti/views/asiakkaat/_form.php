@@ -113,7 +113,9 @@ $asiakasnumero = 'voidaan käyttää oleva ID numero';
 	</div>
 
 	<div class="section fill mb5 ashidd_a form-inline">
-		<br>
+		<?php echo $form->labelEx($model,'ryhma'); ?>
+
+	   <div class="form-inline">
 		<?php
 		$list = array();
       		$l = Valikkoot::model()->findAll(" select_type='asiakas_ryhma' ",array('order' => "select_type"));
@@ -129,6 +131,7 @@ $asiakasnumero = 'voidaan käyttää oleva ID numero';
 		}		
         	?>
 		<span class="btn btn-primary myBgColors muokaValiko" for="asiakas_ryhma"><i class="fa fa-pencil-square-o"></i></span>
+	   </div>
 
 		<?php echo $form->error($model,'ryhma'); ?>
 	</div>
