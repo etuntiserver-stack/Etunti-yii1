@@ -189,7 +189,7 @@ $(document).ready(function(){
 		Yii::app()->theme = 'classic';
 
        		$criteria = new CDbCriteria();
-       		$criteria->condition = " id='".$id."' and code='".$code."' ";
+       		$criteria->condition = " status=1 AND id='".$id."' AND code='".trim($code)."' ";
 		$model = AsiakasHyvaksynta::model()->find($criteria);
 
 		$this->render('hyvaksy', array(
