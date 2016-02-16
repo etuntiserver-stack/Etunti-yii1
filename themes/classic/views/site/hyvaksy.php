@@ -28,6 +28,32 @@
 <?php
   if(isset($model->id))
   {
+
+  echo '
+        <section class="esittely">
+            <div class="paddings">
+                <div class="container">
+                    <!-- Icon Big -->
+                    <!-- End Icon Big -->
+                        <h1 class="title-subtitle text-center">Olet hyväksynyt tunteja.
+                            <span>
+                              Kiitos.
+                            </span>
+                        </h1>
+                        <hr>
+                    <!-- End Titles Heading -->
+
+                </div>
+                <!-- End Container-->
+            </div>
+        </section>        
+  ';
+
+  }
+
+  if(isset($model->id))
+  {
+
 	$ids = explode(",",$model->ids);
 	foreach($ids as $val)
 	{
@@ -50,29 +76,8 @@
 	    }
 
 	}
-
-
-echo '
-        <section class="esittely">
-            <div class="paddings">
-                <div class="container">
-                    <!-- Icon Big -->
-                    <!-- End Icon Big -->
-                        <h1 class="title-subtitle text-center">Olet hyväksynyt tunteja.
-                            <span>
-                              Kiitos.
-                            </span>
-                        </h1>
-                        <hr>
-                    <!-- End Titles Heading -->
-
-                </div>
-                <!-- End Container-->
-            </div>
-        </section>        
-';
   
-  AsiakasHyvaksynta::model()->updatebypk($model->id, array('code'=>'hyvaksytty','status'=>3));
+  AsiakasHyvaksynta::model()->updatebypk($model->id, array('code'=>'','status'=>3));
 
   } else {
 
