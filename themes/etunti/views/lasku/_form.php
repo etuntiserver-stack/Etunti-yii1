@@ -286,6 +286,18 @@ $model->viivastyskorko = $asetukset->viivastyskorko;
 		<?php echo $form->error($model,'puhelin'); ?>
 	</div>
 
+	<div class="section fill mb5 deliverymethod">
+		<?php echo $form->labelEx($model,'deliverymethod'); ?>
+		<?php echo $form->textField($model,'deliverymethod',array('size'=>50,'maxlength'=>255,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'deliverymethod'); ?>
+	</div>
+
+	<div class="section fill mb5 deliveryterm">
+		<?php echo $form->labelEx($model,'deliveryterm'); ?>
+		<?php echo $form->textField($model,'deliveryterm',array('size'=>50,'maxlength'=>255,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'deliveryterm'); ?>
+	</div>
+
   </div><div class="col-sm-3">
   <legend><?php echo Yii::t('main', 'LASKUN TIEDOT'); ?></legend>
 	<div class="section fill mb5">

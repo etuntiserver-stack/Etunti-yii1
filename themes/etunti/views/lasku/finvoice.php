@@ -130,6 +130,8 @@ $xml = encodeXml (array(
         'transferkey' => $transferkey,
         'dataset' => array(
             array(
+		"deliverymethod" => $lasku['deliverymethod'],
+		"deliveryterm" => $lasku['deliveryterm'],
 		"refundtojobid" => $refundtojobid,
                 "custnum" => $lasku['as_nro'], # asiakasnumero
                 //"addressaddline1" => $lasku['osoite'],
@@ -433,8 +435,8 @@ $xml = '<?xml version="1.0" encoding="UTF-8"?>
 </DeliveryPartyDetails>
 <DeliveryDetails>
 <DeliveryDate Format="CCYYMMDD">'.date("Ymd").'</DeliveryDate>
-<DeliveryMethodText></DeliveryMethodText>
-<DeliveryTermsText></DeliveryTermsText>
+<DeliveryMethodText>'.$lasku['deliverymethod'].'</DeliveryMethodText>
+<DeliveryTermsText>'.$lasku['deliveryterm'].'</DeliveryTermsText>
 <TerminalAddressText></TerminalAddressText>
 <WaybillIdentifier></WaybillIdentifier>
 <WaybillTypeCode></WaybillTypeCode>
