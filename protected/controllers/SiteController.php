@@ -210,7 +210,11 @@ $(document).ready(function(){
 	
 		}
 	
-		AsiakasHyvaksynta::model()->updatebypk($model->id, array('code'=>'hyvaksytty','status'=>3));
+		$m=AsiakasHyvaksynta::model()->findbypk($model->id);
+		$m->attributes=$model->attributes;
+		$m->status=3;
+		$m->code=1;
+		$m->save();
 
 		$asia = true;
 
