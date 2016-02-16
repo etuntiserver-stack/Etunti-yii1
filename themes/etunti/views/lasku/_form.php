@@ -1325,7 +1325,7 @@ $(".muokaValiko").click(function() {
 	   type:'POST',
 	   data: { "select_type" : thisFor },
            success: function(data){
-		//console.log(data);
+		////console.log(data);
 		$('#showres').modal().html(JSON.parse(data));
            }
         });
