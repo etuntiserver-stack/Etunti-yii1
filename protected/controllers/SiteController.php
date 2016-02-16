@@ -210,20 +210,23 @@ $(document).ready(function(){
 	
 		}
 	
-		//AsiakasHyvaksynta::model()->updatebypk($model->id, array('code'=>'','status'=>3));
 
-		$asia = true;
+		$this->render('hyvaksy', array(
+			'asia' => true,
+		));
+
+		AsiakasHyvaksynta::model()->updatebypk($model->id, array('code'=>'','status'=>3));
 
 		} else {
 
-		$asia = false;
+		$this->render('hyvaksy', array(
+			'asia' => false,
+		));
 
 		}
 
 
-		$this->render('hyvaksy', array(
-			'asia' => $asia,
-		));
+
 	}
 
 	public function actionHylkaa($id,$code,$domain)
