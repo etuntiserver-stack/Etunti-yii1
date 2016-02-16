@@ -24,6 +24,77 @@
                     <!-- Input Icons -->
                     <div class="row">
 
+
+                      <div class="col-md-2">
+                        <div class="section">
+                          <label class="field select">
+
+
+    		<?php 
+       		$criteria = new CDbCriteria();
+		//$criteria->select = " COALESCE(NULLIF(yhteyshenkilo,yhteyshenkilo),'gg') AS yht ";
+		$criteria->order = " yhteyshenkilo ";
+
+        	$a = Asiakkaat::model()->findAll($criteria);
+		echo '<select name="asiakasLaskulle" class="gui-input">';
+
+		if(isset($_POST['asiakasLaskulle']) and !empty($_POST['asiakasLaskulle']))
+		{
+        	  $aon = Asiakkaat::model()->findbypk($_POST['asiakasLaskulle']);
+		  if(!empty($aon->yrityksen_nimi))
+		    echo '<option value="'.$aon->asiakasnumero.'">'.$aon->yrityksen_nimi.'</option>';
+		  elseif(empty($aon->yhteyshenkilo) and empty($aon->yrityksen_nimi))
+		    echo '<option value="'.$aon->asiakasnumero.'">nimet puutuu '.$aon->id.'</option>';
+		  else
+		    echo '<option value="'.$aon->asiakasnumero.'">'.$aon->yhteyshenkilo.' ID:'.$aon->id.'</option>';
+		} else {
+	        echo '<option></option>';
+		}
+
+		foreach($a as $aa)
+		{
+		  if(!empty($aa->yrityksen_nimi))
+		    echo '<option value="'.$aa->asiakasnumero.'">'.$aa->yrityksen_nimi.'</option>';
+		  elseif(empty($aa->yhteyshenkilo) and empty($aa->yrityksen_nimi))
+		    echo '<option value="'.$aa->asiakasnumero.'">nimet puutuu '.$aa->id.'</option>';
+		  else
+		    echo '<option value="'.$aa->asiakasnumero.'">'.$aa->yhteyshenkilo.' ID:'.$aa->id.'</option>';
+		}
+		echo '</select>';
+		?>
+
+                            <i class="arrow double"></i>
+                            </label>
+                          </label>
+                        </div>
+                      </div>
+
+
+                      <div class="col-md-2">
+                        <div class="section">
+                          <label class="field prepend-icon">
+
+   			    <input type="text" class="gui-input datepicker" name="from" value="<?php echo $from; ?>" >
+
+                            <label for="firstname" class="field-icon">
+                              <i class="fa fa-calendar"></i>
+                            </label>
+                          </label>
+                        </div>
+                      </div>
+                      <div class="col-md-2">
+                        <div class="section">
+                          <label class="field prepend-icon">
+
+   			    <input type="text" class="gui-input datepicker" name="to" value="<?php echo $to; ?>" >
+
+                            <label for="firstname" class="field-icon">
+                              <i class="fa fa-calendar"></i>
+                            </label>
+                          </label>
+                        </div>
+                      </div>
+
                       <div class="col-md-2">
                         <div class="section">
                           <label class="field prepend-icon">
@@ -48,7 +119,7 @@
                         </div>
                       </div>
 
-                      <div class="col-md-2 col-md-offset-6">
+                      <div class="col-md-2">
         	        <button class="btn btn-primary btn-lg haemob btn-block myBgColors" type="button"><i class="glyphicon glyphicon-search"> </i> Hae</button>
 		      </div>
                     </div>

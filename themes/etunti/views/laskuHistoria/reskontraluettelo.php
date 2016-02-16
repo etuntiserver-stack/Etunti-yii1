@@ -74,11 +74,11 @@ th{
 		{
         	  $aon = Asiakkaat::model()->findbypk($_POST['asiakasLaskulle']);
 		  if(!empty($aon->yrityksen_nimi))
-		    echo '<option value="'.$aon->id.'">'.$aon->yrityksen_nimi.'</option>';
+		    echo '<option value="'.$aon->asiakasnumero.'">'.$aon->yrityksen_nimi.'</option>';
 		  elseif(empty($aon->yhteyshenkilo) and empty($aon->yrityksen_nimi))
-		    echo '<option value="'.$aon->id.'">nimet puutuu '.$aon->id.'</option>';
+		    echo '<option value="'.$aon->asiakasnumero.'">nimet puutuu '.$aon->id.'</option>';
 		  else
-		    echo '<option value="'.$aon->id.'">'.$aon->yhteyshenkilo.' ID:'.$aon->id.'</option>';
+		    echo '<option value="'.$aon->asiakasnumero.'">'.$aon->yhteyshenkilo.' ID:'.$aon->id.'</option>';
 		} else {
 	        echo '<option></option>';
 		}
@@ -86,11 +86,11 @@ th{
 		foreach($a as $aa)
 		{
 		  if(!empty($aa->yrityksen_nimi))
-		    echo '<option value="'.$aa->id.'">'.$aa->yrityksen_nimi.'</option>';
+		    echo '<option value="'.$aa->asiakasnumero.'">'.$aa->yrityksen_nimi.'</option>';
 		  elseif(empty($aa->yhteyshenkilo) and empty($aa->yrityksen_nimi))
-		    echo '<option value="'.$aa->id.'">nimet puutuu '.$aa->id.'</option>';
+		    echo '<option value="'.$aa->asiakasnumero.'">nimet puutuu '.$aa->id.'</option>';
 		  else
-		    echo '<option value="'.$aa->id.'">'.$aa->yhteyshenkilo.' ID:'.$aa->id.'</option>';
+		    echo '<option value="'.$aa->asiakasnumero.'">'.$aa->yhteyshenkilo.' ID:'.$aa->id.'</option>';
 		}
 		echo '</select>';
 		?>
