@@ -289,7 +289,7 @@ $xml = encodeXml (array(
                 "ourcode" => $lasku['viitemme'],
                 "yourcode" => $lasku['viitenne'],
                 "email" => $lasku['sahkoposti'], # 1.email osoite
-                "email2" => "", # 2.email osoite
+                "email2" => "", # 2.email osoite//
                 //"salesman" => "MM", # vapaavalintainen myyjän tunniste
                 //"salesmanname" => "Masa Myyjä", # myyjän nimi
                 "checkbillnum" => 1, # 1=tarkista laskunumero, 0=ei
