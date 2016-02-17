@@ -5,6 +5,7 @@ if(isset($_GET['id']))
 
 
 
+
 if(isset($_GET['merkitseMaksetuksi'])){
 
      $tapahtumapvm = date("Y-m-d H:i:s");
@@ -23,6 +24,41 @@ if(isset($_GET['merkitseMaksetuksi'])){
 	$this->redirect(array('update','id'=>$id));
 }
 
+if(isset($_GET['merkitseLahetettavaksi'])){
+
+     $tapahtumapvm = date("Y-m-d H:i:s");
+     Lasku::model()->updatebypk($id, array('tilanne'=>2,'tapahtumapvm'=>$tapahtumapvm));
+
+		    // Lasku historia
+		    $l = Lasku::model()->findbypk($id);
+		    $historia = new LaskuHistoria;
+		    $historia->time = $tapahtumapvm;
+		    $historia->lid = $id;
+		    $historia->status = 'LÄHETETTY';
+		    $historia->palvelu = "local";
+		    $historia->yht_euro = $l->yhteensa_total;
+		    $historia->save();
+
+	$this->redirect(array('update','id'=>$id));
+}
+
+if(isset($_GET['merkitseMaksumuistutusLahetettavaksi'])){
+
+     $tapahtumapvm = date("Y-m-d H:i:s");
+     Lasku::model()->updatebypk($id, array('tapahtumapvm'=>$tapahtumapvm));
+
+		    // Lasku historia
+		    $l = Lasku::model()->findbypk($id);
+		    $historia = new LaskuHistoria;
+		    $historia->time = $tapahtumapvm;
+		    $historia->lid = $id;
+		    $historia->status = 'MAKSUMUISTUTUS';
+		    $historia->palvelu = "local";
+		    $historia->yht_euro = $l->yhteensa_total;
+		    $historia->save();
+
+	$this->redirect(array('update','id'=>$id));
+}
 
 
 
@@ -345,7 +381,9 @@ function base64url_encode($input) {
 
 
 
-if(isset($_GET['laskutus']) and $_GET['laskutus'] == 'verkkolasku'){
+if(isset($_GET['laskutus']))
+{
+
 
 if($lasku['tyyppi'] == 'yritys')
 $BuyerOrganisationName = $lasku['yritys'];
@@ -358,128 +396,159 @@ if($lasku['tyyppi'] == 'henkilo')
 $BuyerContactPersonName = $lasku['nimi'];
 
 
-
 $xml = '<?xml version="1.0" encoding="UTF-8"?>
 <Finvoice Version="1.3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Finvoice.xsd">
 <SellerPartyDetails>
 <SellerPartyIdentifier>'.$yritys['y_tunnus'].'</SellerPartyIdentifier>
+
 <SellerOrganisationName>'.$yritys['tyonantaja'].'</SellerOrganisationName>
 <SellerOrganisationTaxCode>'.$yritys['y_tunnus'].'</SellerOrganisationTaxCode>
 <SellerOrganisationTaxCodeUrlText>http://etunti.fi</SellerOrganisationTaxCodeUrlText>
 <SellerPostalAddressDetails>
+
 <SellerStreetName>'.$yritys['osoite'].'</SellerStreetName>
 <SellerTownName>'.$yritys['postitoimipaikka'].'</SellerTownName>
 <SellerPostCodeIdentifier>'.$yritys['postinumero'].'</SellerPostCodeIdentifier>
 </SellerPostalAddressDetails>
+
 </SellerPartyDetails>
 <SellerContactPersonName>'.$yritys['johtaja'].'</SellerContactPersonName>
 <SellerCommunicationDetails>
 <SellerEmailaddressIdentifier>'.$yritys['sahkoposti'].'</SellerEmailaddressIdentifier>
+
 </SellerCommunicationDetails>
 <SellerInformationDetails>
 <SellerHomeTownName>'.$yritys['postitoimipaikka'].'</SellerHomeTownName>
 <SellerPhoneNumber>'.$yritys['puhelin'].'</SellerPhoneNumber>
+
 <SellerFaxNumber></SellerFaxNumber>
 <SellerCommonEmailaddressIdentifier>'.$yritys['sahkoposti'].'</SellerCommonEmailaddressIdentifier>
 <SellerWebaddressIdentifier></SellerWebaddressIdentifier>
 <SellerFreeText></SellerFreeText>
+
 <SellerAccountDetails>
 <SellerAccountID IdentificationSchemeName="IBAN">'.$asetukset['iban'].'</SellerAccountID>
 <SellerBic IdentificationSchemeName="BIC">'.$asetukset['bic'].'</SellerBic>
 </SellerAccountDetails>
+
 <InvoiceRecipientDetails>
 <InvoiceRecipientAddress>'.$lasku['verkkolaskuosoite'].'</InvoiceRecipientAddress>
 <InvoiceRecipientIntermediatorAddress>'.$lasku['v_tunnus'].'</InvoiceRecipientIntermediatorAddress>
+
 </InvoiceRecipientDetails>
 </SellerInformationDetails>
 <InvoiceSenderPartyDetails>
 <InvoiceSenderPartyIdentifier>'.$yritys['y_tunnus'].'</InvoiceSenderPartyIdentifier>
+
 <InvoiceSenderOrganisationName>'.$yritys['tyonantaja'].'</InvoiceSenderOrganisationName>
 </InvoiceSenderPartyDetails>
 <InvoiceRecipientPartyDetails>
 <InvoiceRecipientPartyIdentifier/>
+
 <InvoiceRecipientOrganisationName>'.$lasku['yritys'].'</InvoiceRecipientOrganisationName>
 <InvoiceRecipientPostalAddressDetails>
 <InvoiceRecipientStreetName>'.$lasku['osoite'].'</InvoiceRecipientStreetName>
 <InvoiceRecipientTownName>'.$lasku['toimipaikka'].'</InvoiceRecipientTownName>
+
 <InvoiceRecipientPostCodeIdentifier>'.$lasku['postinumero'].'</InvoiceRecipientPostCodeIdentifier>
 <CountryCode>FI</CountryCode>
 <CountryName>FINLAND</CountryName>
 <InvoiceRecipientPostOfficeBoxIdentifier></InvoiceRecipientPostOfficeBoxIdentifier>
+
 </InvoiceRecipientPostalAddressDetails>
 </InvoiceRecipientPartyDetails>
 <BuyerPartyDetails>
 <BuyerPartyIdentifier>'.$lasku['as_nro'].'</BuyerPartyIdentifier>
+
 <BuyerOrganisationName>'.$BuyerOrganisationName.'</BuyerOrganisationName>
 <BuyerOrganisationTaxCode>'.$lasku['y_tunnus'].'</BuyerOrganisationTaxCode>
 <BuyerPostalAddressDetails>
 <BuyerStreetName>'.$lasku['osoite'].'</BuyerStreetName>
+
 <BuyerTownName>'.$lasku['toimipaikka'].'</BuyerTownName>
 <BuyerPostCodeIdentifier>'.$lasku['postinumero'].'</BuyerPostCodeIdentifier>
 </BuyerPostalAddressDetails>
 </BuyerPartyDetails>
+
 <BuyerContactPersonName>'.$BuyerContactPersonName.'</BuyerContactPersonName>
 <BuyerCommunicationDetails>
 <BuyerPhoneNumberIdentifier>'.$lasku['puhelin'].'</BuyerPhoneNumberIdentifier>
+
 <BuyerEmailaddressIdentifier>'.$lasku['sahkoposti'].'</BuyerEmailaddressIdentifier>
 </BuyerCommunicationDetails>
 <DeliveryPartyDetails>
 <DeliveryPartyIdentifier/>
+
 <DeliveryOrganisationName>'.$lasku['t_yritys'].'</DeliveryOrganisationName>
 <DeliveryPostalAddressDetails>
 <DeliveryStreetName>'.$lasku['t_osoite'].'</DeliveryStreetName>
 <DeliveryTownName>'.$lasku['t_toimipaikka'].'</DeliveryTownName>
+
 <DeliveryPostCodeIdentifier>'.$lasku['t_postinumero'].'</DeliveryPostCodeIdentifier>
 <DeliveryPostofficeBoxIdentifier/>
 </DeliveryPostalAddressDetails>
 </DeliveryPartyDetails>
+
 <DeliveryDetails>
 <DeliveryDate Format="CCYYMMDD">'.date("Ymd").'</DeliveryDate>
 <DeliveryMethodText>'.$lasku['deliverymethod'].'</DeliveryMethodText>
 <DeliveryTermsText>'.$lasku['deliveryterm'].'</DeliveryTermsText>
+
 <TerminalAddressText></TerminalAddressText>
 <WaybillIdentifier></WaybillIdentifier>
 <WaybillTypeCode></WaybillTypeCode>
 <DelivererIdentifier></DelivererIdentifier>
+
 <DelivererName></DelivererName>
 <DelivererCountryCode></DelivererCountryCode>
 
 <DelivererCountryName></DelivererCountryName>
+
 <ManufacturerIdentifier></ManufacturerIdentifier>
 <ManufacturerName></ManufacturerName>
 <ManufacturerCountryCode></ManufacturerCountryCode>
 <ManufacturerCountryName>Germany</ManufacturerCountryName>
+
 </DeliveryDetails>
 <InvoiceDetails>
+
 <InvoiceTypeCode>INV01</InvoiceTypeCode>
 <InvoiceTypeText>LASKU</InvoiceTypeText>
 <OriginCode>Original</OriginCode>
 <InvoiceNumber>'.$lasku['laskunumero'].'</InvoiceNumber>
+
 <InvoiceDate Format="CCYYMMDD">'.date("Ymd",strtotime($lasku['paivays'])).'</InvoiceDate>
 <SellerReferenceIdentifier></SellerReferenceIdentifier>
 <OrderIdentifier></OrderIdentifier>
 <InvoiceTotalVatExcludedAmount AmountCurrencyIdentifier="EUR">'.str_replace(".",",",$lasku['yhteensa_total_veroton']).'</InvoiceTotalVatExcludedAmount>
+
 <InvoiceTotalVatAmount AmountCurrencyIdentifier="EUR">'.str_replace(".",",",$lasku['yhteensa_total_verot']).'</InvoiceTotalVatAmount>
 <InvoiceTotalVatIncludedAmount AmountCurrencyIdentifier="EUR">'.str_replace(".",",",$lasku['yhteensa_total']).'</InvoiceTotalVatIncludedAmount>
+
 <VatSpecificationDetails>
 <VatBaseAmount AmountCurrencyIdentifier="EUR">'.str_replace(".",",",$lasku['yhteensa_total_veroton']).'</VatBaseAmount>
 <VatRatePercent>24</VatRatePercent>
 <VatRateAmount AmountCurrencyIdentifier="EUR">'.str_replace(".",",",$lasku['yhteensa_total_verot']).'</VatRateAmount>
+
 </VatSpecificationDetails>
 <PaymentTermsDetails>
 <PaymentTermsFreeText>'.$lasku['maksuehto'].' pv</PaymentTermsFreeText>
 <InvoiceDueDate Format="CCYYMMDD">'.date("Ymd",strtotime($lasku['erapaiva'])).'</InvoiceDueDate>
+
 <CashDiscountDate Format="CCYYMMDD"></CashDiscountDate>
 <CashDiscountBaseAmount AmountCurrencyIdentifier="EUR">'.str_replace(".",",",$lasku['yhteensa_total']).'</CashDiscountBaseAmount>
 <CashDiscountPercent>2</CashDiscountPercent>
 <CashDiscountAmount AmountCurrencyIdentifier="EUR"></CashDiscountAmount>
+
 <PaymentOverDueFineDetails>
 <PaymentOverDueFineFreeText>Viivästyskorko '.$lasku['viivastyskorko'].'%</PaymentOverDueFineFreeText>
 <PaymentOverDueFinePercent>'.$lasku['viivastyskorko'].'</PaymentOverDueFinePercent>
 </PaymentOverDueFineDetails>
+
 </PaymentTermsDetails>
 </InvoiceDetails>
 <PaymentStatusDetails>
+
 <PaymentStatusCode>PARTLYPAID</PaymentStatusCode>
 </PaymentStatusDetails>
 <VirtualBankBarcode></VirtualBankBarcode>';
@@ -488,33 +557,41 @@ foreach($laskunRivit as $rivi){
 $xml .= '<InvoiceRow>
 <RowSubIdentifier></RowSubIdentifier>
 <ArticleIdentifier></ArticleIdentifier>
+
 <ArticleName>'.$rivi['tkoodi'].'</ArticleName>
 <DeliveredQuantity QuantityUnitCode="kpl">'.$rivi['kpl'].'</DeliveredQuantity>
 <OrderedQuantity QuantityUnitCode="kpl">'.$rivi['kpl'].'</OrderedQuantity>
 <UnitPriceAmount AmountCurrencyIdentifier="EUR">'.$rivi['hinta'].'</UnitPriceAmount>
+
 <RowIdentifier></RowIdentifier>
 <RowDeliveryDate Format="CCYYMMDD"></RowDeliveryDate>
 <RowAgreementIdentifier></RowAgreementIdentifier>
 <RowRequestOfQuotationIdentifier></RowRequestOfQuotationIdentifier>
+
 <RowPriceListIdentifier></RowPriceListIdentifier>
 <RowDeliveryDetails>
 <RowWaybillIdentifier></RowWaybillIdentifier>
 <RowDelivererIdentifier></RowDelivererIdentifier>
+
 <RowDelivererName></RowDelivererName>
 <RowDelivererName></RowDelivererName>
 <RowDelivererCountryCode></RowDelivererCountryCode>
 <RowDelivererCountryName></RowDelivererCountryName>
+
 <RowManufacturerIdentifier></RowManufacturerIdentifier>
 <RowManufacturerName></RowManufacturerName>
 <RowManufacturerCountryCode></RowManufacturerCountryCode>
 <RowManufacturerCountryName></RowManufacturerCountryName>
+
 </RowDeliveryDetails>
 <RowShortProposedAccountIdentifier></RowShortProposedAccountIdentifier>
 <RowNormalProposedAccountIdentifier></RowNormalProposedAccountIdentifier>
 <RowFreeText></RowFreeText>
+
 <RowVatRatePercent>'.$rivi['alv'].'</RowVatRatePercent>
 <RowVatAmount AmountCurrencyIdentifier="EUR">'.str_replace(".",",",($rivi['yhteensa_alv']-$rivi['veroton'])).'</RowVatAmount>
 <RowVatExcludedAmount AmountCurrencyIdentifier="EUR">'.str_replace(".",",",$rivi['veroton']).'</RowVatExcludedAmount>
+
 <RowAmount AmountCurrencyIdentifier="EUR">'.str_replace(".",",",$rivi['yhteensa_alv']).'</RowAmount>
 </InvoiceRow>';
 }
@@ -523,30 +600,40 @@ $xml .= '<EpiDetails>
 <EpiIdentificationDetails>
 <EpiDate Format="CCYYMMDD">'.$lasku['erapaiva'].'</EpiDate>
 <EpiReference>2004486</EpiReference>
+
 </EpiIdentificationDetails>
 <EpiPartyDetails>
 <EpiBfiPartyDetails>
 <EpiBfiIdentifier IdentificationSchemeName="BIC">'.$asetukset['bic'].'</EpiBfiIdentifier>
+
 </EpiBfiPartyDetails>
 <EpiBeneficiaryPartyDetails>
 <EpiNameAddressDetails>'.$yritys['tyonantaja'].'</EpiNameAddressDetails>
 <EpiBei></EpiBei>
+
 <EpiAccountID IdentificationSchemeName="BBAN">'.$asetukset['tilinumero'].'</EpiAccountID>
 </EpiBeneficiaryPartyDetails>
 </EpiPartyDetails>
 <EpiPaymentInstructionDetails>
+
 <EpiRemittanceInfoIdentifier IdentificationSchemeName="SPY">'.$lasku['viitenumero'].'</EpiRemittanceInfoIdentifier>
 <EpiInstructedAmount AmountCurrencyIdentifier="EUR">'.str_replace(".",",",$lasku['yhteensa_total']).'</EpiInstructedAmount>
 <EpiCharge ChargeOption="SHA">SHA</EpiCharge>
 <EpiDateOptionDate Format="CCYYMMDD">'.$lasku['erapaiva'].'</EpiDateOptionDate>
+
 </EpiPaymentInstructionDetails>
 </EpiDetails>
 <InvoiceUrlNameText></InvoiceUrlNameText>
 <InvoiceUrlNameText></InvoiceUrlNameText>
+
 <InvoiceUrlText></InvoiceUrlText>
 <InvoiceUrlText></InvoiceUrlText>
 </Finvoice>';
 
+}
+
+
+if(isset($_GET['laskutus']) and $_GET['laskutus'] == 'verkkolasku'){
 
 //echo $xml;
 //exit;
@@ -577,7 +664,7 @@ $account_info = json_decode($account_info, true);
 $pdf = trim($xml);
 $pdf_b64 = base64url_encode($pdf);
 
-$data = array('job_name' => 'Verkkolasku', 'confirm' => false, 'pdf' => $pdf_b64);
+$data = array('job_name' => 'Verkkolasku', 'confirm' => false, 'finvoice' => $pdf_b64);
 curl_setopt($ch, CURLOPT_URL, $send_finvoice_url);
 curl_setopt($ch, CURLOPT_POST, TRUE);
 curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
@@ -727,10 +814,10 @@ echo '</pre>';
 
   $content_PDF = $html2pdf->Output('my_doc.pdf', EYiiPdf::OUTPUT_TO_STRING);
 
-$pdf = $content_PDF;
-$pdf_b64 = base64url_encode($pdf);
+  $pdf = $content_PDF;
+  $pdf_b64 = base64url_encode($pdf);
 
-$data = array('job_name' => 'PDF muoto', 'confirm' => false, 'pdf' => $pdf_b64);
+$data = array('job_name' => 'PDF muoto', 'confirm' => false, 'pdf' => $pdf_b64, 'post_class' => $lasku['kirjeenluokka']);
 curl_setopt($ch, CURLOPT_URL, $send_url);
 curl_setopt($ch, CURLOPT_POST, TRUE);
 curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
@@ -752,7 +839,7 @@ echo '</pre>';
 curl_close($ch);
 
 
-  if($send_response['status'] == 'NE')
+  if(isset($send_response['status']) and $send_response['status'] == 'NE')
   {
        $job_id = '';
        $created = '';
@@ -843,7 +930,7 @@ print_r($send_response);
 echo '</pre>';
 curl_close($ch);
 
-  if($send_response['status'] == 'CO')
+  if(isset($send_response['status']) and $send_response['status'] == 'CO')
   {
        $job_id = '';
        $created = '';
@@ -925,6 +1012,109 @@ curl_close($ch);
 }
 
 
+if(isset($_GET['lahetaMuistutusPostita']) and !empty($asetukset['postita_username']) and !empty($asetukset['postita_password'])){
+
+
+$username = $asetukset['postita_username'];
+$password = $asetukset['postita_password'];
+$auth_string = $username . ":" . $password;
+
+
+$account_info_url = 'https://postita.fi/api/account_info/';
+$send_url = 'https://postita.fi/api/send/';
+$send_finvoice_url = 'https://'.$auth_string.'@postita.fi/api/send_finvoice/';
+
+/* First initialize curl and set some options. For more information about
+   curl with PHP refer to http://php.net/manual/en/book.curl.php */
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+curl_setopt($ch, CURLOPT_URL, $account_info_url);
+curl_setopt($ch, CURLOPT_USERPWD, $auth_string);
+curl_setopt($ch, CURLOPT_FAILONERROR, 1);
+curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+curl_setopt($ch, CURLOPT_TIMEOUT, 100);
+
+/* Getting account info */
+$account_info = curl_exec($ch);
+$account_info = json_decode($account_info, true);
+
+
+echo '<pre>';
+print_r($account_info);
+echo '</pre>';
+
+
+  $asetukset=Asetukset::model()->find("id=1");
+  $firmanTiedot=FirmanTiedot::model()->find("id=1");
+
+  $html2pdf = Yii::app()->ePdf->HTML2PDF('P', 'A4', 'en');
+  $html2pdf->setDefaultFont('Arial');
+  $html2pdf->WriteHTML($this->renderPartial('lasku_pdf', 
+			array(
+			'lasku'=>$lasku,
+			'asetukset'=>$asetukset,
+			'laskunRivit'=>$laskunRivit,
+			'yritys'=>$firmanTiedot,
+			'lahetaMuistutusPostita' => true,
+			),true));
+
+
+  $content_PDF = $html2pdf->Output('my_doc.pdf', EYiiPdf::OUTPUT_TO_STRING);
+
+  $pdf = $content_PDF;
+  $pdf_b64 = base64url_encode($pdf);
+
+$data = array('job_name' => 'MAKSUMUISTUTUS', 'pdf' => $pdf_b64, 'post_class' => $lasku['kirjeenluokka']);
+curl_setopt($ch, CURLOPT_URL, $send_url);
+curl_setopt($ch, CURLOPT_POST, TRUE);
+curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+curl_setopt($ch, CURLOPT_HTTPHEADER, array('Expect:')); 
+
+$send_response = curl_exec($ch);
+$resultJson = json_encode($send_response);
+
+if (curl_errno($ch)) {
+  echo "\n\ncURL error number: " . curl_errno($ch);
+  echo "\n\ncURL error: " . curl_error($ch);
+}
+$send_response = json_decode($send_response, true);
+
+echo '<pre>';
+print_r($send_response);
+echo '</pre>';
+
+curl_close($ch);
+
+
+  if(isset($send_response['status']) and $send_response['status'] == 'CO')
+  {
+       $job_id = '';
+       $created = '';
+     foreach($send_response as $k => $v ) {
+       $prep[$k] = $k.":".$v;
+       if($k == 'id')
+       $job_id = $v;
+       if($k == 'created')
+       $created = $v;
+     }
+     $tapahtumapvm = date("Y-m-d H:i:s",strtotime(trim($created)));
+
+		    // Lasku historia
+		    $l = Lasku::model()->findbypk($id);
+		    $historia = new LaskuHistoria;
+		    $historia->time = $tapahtumapvm;
+		    $historia->lid = $id;
+		    $historia->status = $resultJson;
+		    $historia->postita_statuscode = 'MAKSUMUISTUTUS';
+		    $historia->palvelu = "postita";
+		    $historia->yht_euro = $l->yhteensa_total;
+		    $historia->save();
+
+     		    $this->redirect(array('update','id'=>$id));
+
+  }
+
+}
 
 
 
