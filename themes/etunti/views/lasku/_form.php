@@ -704,10 +704,24 @@ $model->viivastyskorko = $asetukset->viivastyskorko;
 		<a href="finvoice?id=<?php echo $model->id; ?>&finvoiceTrust=true" class="btn  btn-success btn-group myBgColors"><?php echo Yii::t('main','Lähetä finvoice (TRUST.FI)'); ?></a>
 		<?php endif; ?>
 
-		<?php if(isset($model->id) 
+		<?php if(
+			isset($model->id) 
+			and $model->tilanne != 0 
 			and $asetukset->palvelu_tyyppi != 2 
 		) : ?>
 		<a href="finvoice?id=<?php echo $model->id; ?>&lahetaSahkopostilla=true" class="btn  btn-success btn-group myBgColors"><?php echo Yii::t('main','Lähetä sähköpostilla'); ?></a>
+		<?php endif; ?>
+
+
+		<?php if(
+			isset($model->id) 
+			and $model->tilanne != 0 
+			and $asetukset->palvelu_tyyppi != 2
+			and !empty($asetukset->trust_url)
+			and !empty($asetukset->trust_cid)
+			and !empty($asetukset->trust_api)
+		) : ?>
+		<a href="finvoice?id=<?php echo $model->id; ?>&finvoiceTrust=true&jobtype=2" class="btn  btn-success btn-group myBgColors"><?php echo Yii::t('main','Lähetä perintään'); ?></a>
 		<?php endif; ?>
 
 
@@ -720,7 +734,7 @@ $model->viivastyskorko = $asetukset->viivastyskorko;
 			and ($asetukset->palvelu_tyyppi == 1 or $asetukset->palvelu_tyyppi == 3)
 			and $model->tilanne != '0'
 		) : ?>
-		<a href="finvoice?id=<?php echo $model->id; ?>&merkitseMaksetuksi=true" class="btn  btn-primary btn-group myBgColors"><?php echo Yii::t('main','Merkitse maksetuksi'); ?></a>
+		<a href="finvoice?id=<?php echo $model->id; ?>&merkitseMaksetuksi=true" class="btn  btn-primary btn-group myBgColors"><?php echo Yii::t('main','Maksettu'); ?></a>
 		<?php endif; ?>
 
 		<?php if(
@@ -728,16 +742,15 @@ $model->viivastyskorko = $asetukset->viivastyskorko;
 			and $asetukset->palvelu_tyyppi == 3
 			and $model->tilanne != '0'
 		) : ?>
-		<a href="finvoice?id=<?php echo $model->id; ?>&merkitseLahetettavaksi=true" class="btn  btn-primary btn-group myBgColors"><?php echo Yii::t('main','Merkitse lähetettäväksi'); ?></a>
+		<a href="finvoice?id=<?php echo $model->id; ?>&merkitseLahetettavaksi=true" class="btn  btn-primary btn-group myBgColors"><?php echo Yii::t('main','Lähetetty'); ?></a>
 		<?php endif; ?>
-
 
 		<?php if(
 			isset($model->id) 
 			and $asetukset->palvelu_tyyppi == 3
 			and $model->tilanne != '0'
 		) : ?>
-		<a href="finvoice?id=<?php echo $model->id; ?>&merkitseMaksumuistutusLahetettavaksi=true" class="btn  btn-primary btn-group myBgColors"><?php echo Yii::t('main','Merkitse maksumuistutus lähetettäväksi'); ?></a>
+		<a href="finvoice?id=<?php echo $model->id; ?>&merkitseMaksumuistutusLahetettavaksi=true" class="btn  btn-primary btn-group myBgColors"><?php echo Yii::t('main','Maksumuistutus lähetetty'); ?></a>
 		<?php endif; ?>
 
 
