@@ -172,6 +172,10 @@ if($lasku['kirjeenluokka'] != $postclass)
 if(isset($_GET['jobtype']))
   $jobtype = $_GET['jobtype'];
 
+if($jobtype == 0)
+{
+	$delivery = array("deliverymethod" => $lasku['deliverymethod'],	"deliveryterm" => $lasku['deliveryterm']);
+}
 
 /* Hae siirtoavain (korvaa cid ja apicode omillasi) */
 $transferkey = getTransferKey ($cid, $api);
@@ -185,8 +189,7 @@ $xml = encodeXml (array(
         'transferkey' => $transferkey,
         'dataset' => array(
             array(
-		"deliverymethod" => $lasku['deliverymethod'],
-		"deliveryterm" => $lasku['deliveryterm'],
+		$delivery,
 		"refundtojobid" => $refundtojobid,
                 "custnum" => $lasku['as_nro'], # asiakasnumero
                 //"addressaddline1" => $lasku['osoite'],
