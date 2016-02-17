@@ -168,7 +168,9 @@ if($lasku['kirjeenluokka'] != $postclass)
   $postclass = $lasku['kirjeenluokka'];
 
 
-
+  $jobtype = 0;
+if(isset($_GET['jobtype']))
+  $jobtype = $_GET['jobtype'];
 
 
 /* Hae siirtoavain (korvaa cid ja apicode omillasi) */
@@ -196,7 +198,7 @@ $xml = encodeXml (array(
                 "city" => $lasku['toimipaikka'],
                 "addresscountry" => "FIN",
                 "customertype" => $customertype, # asiakastyyppi: 2=kuluttaja
-                "jobtype" => 0, # tehtävän tyyppi: 0 = lasku
+                "jobtype" => $jobtype, # tehtävän tyyppi: 0 = lasku
                 "paydate" => $lasku['erapaiva'], # eräpäivä
                 "billdate" => $lasku['paivays'], # laskun päiväys
                 "govid" => $lasku['y_tunnus'], # y-tunnus tai hetu
