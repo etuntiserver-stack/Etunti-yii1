@@ -18,7 +18,7 @@ if(isset($_GET['merkitseMaksetuksi'])){
 		    $historia->lid = $id;
 		    $historia->status = 'MAKSETTU';
 		    $historia->palvelu = "local";
-		    $historia->yht_euro = $l->yhteensa_total;
+		    $historia->yht_euro = '0';
 		    $historia->save();
 
 	$this->redirect(array('update','id'=>$id));
@@ -60,6 +60,23 @@ if(isset($_GET['merkitseMaksumuistutusLahetettavaksi'])){
 	$this->redirect(array('update','id'=>$id));
 }
 
+if(isset($_GET['hyvaksyminen'])){
+
+     $tapahtumapvm = date("Y-m-d H:i:s");
+     Lasku::model()->updatebypk($id, array('tilanne'=>1,'tapahtumapvm'=>$tapahtumapvm));
+
+		    // Lasku historia
+		    $l = Lasku::model()->findbypk($id);
+		    $historia = new LaskuHistoria;
+		    $historia->time = $tapahtumapvm;
+		    $historia->lid = $id;
+		    $historia->status = 'HYVÄKSYTTY';
+		    $historia->palvelu = "local";
+		    $historia->yht_euro = $l->yhteensa_total;
+		    $historia->save();
+
+	$this->redirect(array('update','id'=>$id));
+}
 
 
 

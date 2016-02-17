@@ -447,6 +447,7 @@ class LaskuController extends Controller
 
 			$model->attributes=$_POST['Lasku'];
 			$model->tilanne=0;
+			$model->tapahtumapvm=date("Y-m-d H:i:s");
 			$model->laskun_nimetys="Lasku";
 			if($model->save()){
 
@@ -855,7 +856,7 @@ exit;
 		));
 
 		$dataProvider->pagination->pageSize = 50;
-		$this->render('index', array('dataProvider' => $dataProvider, 'from'=>$from, 'to'=>$to));
+		$this->render('index', array('dataProvider' => $dataProvider, 'from'=>$from, 'to'=>$to, 'asetukset' => $asetukset));
 	}
 
 
@@ -1031,6 +1032,9 @@ exit;
 		   $local = true;
 		  } elseif($l->status == 'Lasku luotu'){
 		   $localStr = 'Lasku luotu';
+		   $local = true;
+		  } elseif($l->status == 'HYVÄKSYTTY'){
+		   $localStr = 'Lasku hyväksytty';
 		   $local = true;
 		  } 
 
