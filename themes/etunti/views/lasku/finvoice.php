@@ -172,10 +172,6 @@ if($lasku['kirjeenluokka'] != $postclass)
 if(isset($_GET['jobtype']))
   $jobtype = $_GET['jobtype'];
 
-if($jobtype == 0)
-{
-	$delivery = array("deliverymethod" => $lasku['deliverymethod'],	"deliveryterm" => $lasku['deliveryterm']);
-}
 
 /* Hae siirtoavain (korvaa cid ja apicode omillasi) */
 $transferkey = getTransferKey ($cid, $api);
@@ -183,13 +179,17 @@ if (!$transferkey) {
     die ("Kirjautuminen epäonnistui\n");
 }
 
+
+if($jobtype == 0)
+{
 /* Muodosta täydellinen XML-lasku */
 $xml = encodeXml (array(
     'datastream' => array(
         'transferkey' => $transferkey,
         'dataset' => array(
             array(
-		$delivery,
+		"deliverymethod" => $lasku['deliverymethod'],
+		"deliveryterm" => $lasku['deliveryterm'],
 		"refundtojobid" => $refundtojobid,
                 "custnum" => $lasku['as_nro'], # asiakasnumero
                 //"addressaddline1" => $lasku['osoite'],
@@ -228,43 +228,12 @@ $xml = encodeXml (array(
                 "negvat" => 0, # 0 = ei käänteistä alvia
                 "postclass" => $postclass, # 1 = postitus 1.luokassa
                 "color" => 0, # 0 = mustavalko
-                //"model" => "Malli tai merkki",
                 "printoperator" => "enfo", # tulostusoperaattori
                 "billtemplate" => "CUSTOM", # laskupohja
                 "collectionprocess" => "AUTO", # saatavan laji
-
-                //"voucherbatch" => "43", # tositelaji
-                //"vouchernum" => "202132", # tositenumero
-                //"period" => "2013-11-01", # mille kuukaudelle kohdistuu
-                //"vatperiod" => "2013-11-01", # mille kuukaudella alv kohdistuu
-
                 "netamount" => $lasku['yhteensa_total_veroton'], # veroton hinta yhteensä
                 "vatamount" => $lasku['yhteensa_total_verot'], # veron määrä yhteensä
                 "totalamount" => $lasku['yhteensa_total'], # verollinen loppusumma
-
-/*
-                # Lisäosoitteet
-                "addaddress" => array(
-                    array(
-                        "addressaddline1" => "",
-                        "addressaddline2" => "",
-                        "address" => "Satamakatu 14",
-                        "postcode" => "70100",
-                        "city" => "KUOPIO",
-                        "addresscountry" => "FIN",
-                        "addresstype" => 2, # 2 = toimitusosoite
-                    ),
-                    array(
-                        "addressaddline1" => "Edunvalvontatoimisto",
-                        "addressaddline2" => "Edunvalvoja Essi Vuori",
-                        "address" => "PL 358",
-                        "postcode" => "02066",
-                        "city" => "DOCUSCAN",
-                        "addresscountry" => "FIN",
-                        "addresstype" => 3, # 3 = laskutusosoite
-                    ),
-                ),
-*/
 
                 # Myytävät tuotteet
                 "payrow" => $rowsArray,
@@ -278,60 +247,6 @@ $xml = encodeXml (array(
                         "totalamount" => $lasku['yhteensa_total']
                     )
                 ),
-/*
-                # liitedokumentit
-                "attachment" => array(
-                    "attachmentfile" => base64_encode(
-                        file_get_contents ("trust.jpg")
-                    )
-                ),
-*/
-/*
-                # laskun tiliöinti
-                "accountrow" => array(
-                    array(
-                        "accountid" => 3000, # myynti 24%
-                        "servicecode" => 0,
-                        "taxpr" => 0.0,
-                        "vatamount" => 0,
-                        "netamount" => 100.00,
-                        "debit" => null,
-
-                        "credit" => 100.00,
-                        "desc" => "Rupi-webhotelli"
-                    ),
-                    array(
-                        "accountid" => 3000, # myynti 24%
-                        "servicecode" => 0,
-                        "taxpr" => 0.0,
-                        "vatamount" => 0,
-                        "netamount" => 12.00,
-                        "debit" => null,
-                        "credit" => 12.00,
-                        "desc" => "Fi-verkkotunnus"
-                    ),
-                    array(
-                        "accountid" => 2939, # myynnin alv-velka
-                        "servicecode" => 0,
-                        "taxpr" => 0.0,
-                        "vatamount" => 0,
-                        "netamount" => 26.88,
-                        "debit" => null,
-                        "credit" => 26.88,
-                        "desc" => ""
-                    ),
-                    array(
-                        "accountid" => 1701, # myyntisaamiset
-                        "servicecode" => 0,
-                        "taxpr" => 0.0,
-                        "vatamount" => 0,
-                        "netamount" => 138.88,
-                        "debit" => 138.88,
-                        "credit" => null,
-                        "desc" => "Heikki Henkilö"
-                    )
-                ),
-*/
 
                 # Kassa-alennus
                 "cashdiscountrow" => $cashdiscountrow,
@@ -339,6 +254,85 @@ $xml = encodeXml (array(
         )
     )
 ));
+}
+
+
+
+if($jobtype == 2)
+{
+/* Muodosta täydellinen XML-lasku */
+$xml = encodeXml (array(
+    'datastream' => array(
+        'transferkey' => $transferkey,
+        'dataset' => array(
+            array(
+		"refundtojobid" => $refundtojobid,
+                "custnum" => $lasku['as_nro'], # asiakasnumero
+                //"addressaddline1" => $lasku['osoite'],
+                "person" => $person,
+                "company" => $lasku['yritys'], # yrityksen nimi
+                //"addressaddline2" => "Edunvalvoja Essi Vuori",
+                "address" => $lasku['osoite'], # katuosoite
+                "postcode" => $lasku['postinumero'],
+                "city" => $lasku['toimipaikka'],
+                "addresscountry" => "FIN",
+                "customertype" => $customertype, # asiakastyyppi: 2=kuluttaja
+                "jobtype" => $jobtype, # tehtävän tyyppi: 0 = lasku
+                "paydate" => $lasku['erapaiva'], # eräpäivä
+                "billdate" => $lasku['paivays'], # laskun päiväys
+                "govid" => $lasku['y_tunnus'], # y-tunnus tai hetu
+                "vatid" => "", # alv-tunniste
+                "evoice" => $evoice, # verkkolaskuosoite
+                "evoiceint" => $evoiceint, # välittäjän tunnus
+                "overdueinterest" => $lasku['viivastyskorko'], # korkopros: tyhjä = oletus
+                //"billnum" => $lasku['laskunumero'], # laskun numero
+                "billcode" => "", # tilitysviite tai viesti
+                "ourcode" => $lasku['viitemme'],
+                "yourcode" => $lasku['viitenne'],
+                "email" => $lasku['sahkoposti'], # 1.email osoite
+                "email2" => "", # 2.email osoite
+                //"salesman" => "MM", # vapaavalintainen myyjän tunniste
+                //"salesmanname" => "Masa Myyjä", # myyjän nimi
+                "checkbillnum" => 1, # 1=tarkista laskunumero, 0=ei
+                "language" => "fin", # laskun kieli
+                "freetext" => $lasku['freetext'],
+                "sendtype" => $sendtype, # laskun lähetystapa
+                "cashbill" => 0, # 0 = ei käteiskuitti
+                "sensible" => $sensible, # 0 = lähetä muistutus automaattisesti
+                //"ownref" => "x123", # sisäinen viite
+                //"ordernumber" => "10232", # tilausnumero
+                "negvat" => 0, # 0 = ei käänteistä alvia
+                "postclass" => $postclass, # 1 = postitus 1.luokassa
+                "color" => 0, # 0 = mustavalko
+                "printoperator" => "enfo", # tulostusoperaattori
+                "billtemplate" => "CUSTOM", # laskupohja
+                "collectionprocess" => "AUTO", # saatavan laji
+                "netamount" => $lasku['yhteensa_total_veroton'], # veroton hinta yhteensä
+                "vatamount" => $lasku['yhteensa_total_verot'], # veron määrä yhteensä
+                "totalamount" => $lasku['yhteensa_total'], # verollinen loppusumma
+
+                # Myytävät tuotteet
+                "payrow" => $rowsArray,
+
+                # alv-erittely (tässä vain yksi rivi)
+                "taxrow" => array(
+                    array(
+                        "taxpr" => 24.0,
+                        "netamount" => $lasku['yhteensa_total_veroton'],
+                        "vatamount" => $lasku['yhteensa_total_verot'],
+                        "totalamount" => $lasku['yhteensa_total']
+                    )
+                ),
+
+                # Kassa-alennus
+                "cashdiscountrow" => $cashdiscountrow,
+            )
+        )
+    )
+));
+}
+
+
 
 /* Lähetä lasku palvelimelle */
 echo "------ send ------\n";
@@ -347,7 +341,7 @@ $res = commitTransfer ($xml);
 
 /* Tulosta vastausviesti */
 echo "------ receive ------\n";
-echo '<textarea class="form-control" rows="20">'.$res.'</textarea>';
+//echo '<textarea class="form-control" rows="20">'.$res.'</textarea>';
 echo "\n";
 
 /* Tulkitse palvelimen vastausviesti */
