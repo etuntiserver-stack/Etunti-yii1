@@ -57,6 +57,17 @@
 
 		}
 		// Postita -->
+
+
+		// <-- Local
+		if(isset($data->palvelu) and $data->palvelu == 'local') 
+		{
+
+		    $str = $data->status;
+		    echo $str;
+
+		}
+		// Local -->
 	?>
 	</td>
 

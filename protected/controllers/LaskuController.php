@@ -594,9 +594,9 @@ class LaskuController extends Controller
 
 
 	// <-- Postita
-	if($asetukset->palvelu_tyyppi == 1)
+	if($asetukset->palvelu_tyyppi == 1 and !isset(Yii::app()->user->laskunTarkistus))
 	{
-
+	Yii::app()->user->setState('laskunTarkistus', true);
 
 	$username = $asetukset->postita_username;
 	$password = $asetukset->postita_password;
@@ -714,8 +714,11 @@ class LaskuController extends Controller
 
 
 	// <-- Trust
-	if($asetukset->palvelu_tyyppi == 2)
+	if($asetukset->palvelu_tyyppi == 2 and !isset(Yii::app()->user->laskunTarkistus))
 	{
+
+	Yii::app()->user->setState('laskunTarkistus', true);
+
 	$cid = $asetukset['trust_cid'];
 	$api = $asetukset['trust_api'];
 	$trust_url = $asetukset['trust_url'];
@@ -918,6 +921,7 @@ exit;
             	return $job_id;
 	}
 
+
     	protected function tilanneCheck($data,$row)
 	{ 
 
@@ -967,7 +971,7 @@ exit;
 		$postitaStr = '';
 
        		$criteria = new CDbCriteria();
-       		$criteria->select = " palvelu,postita_statuscode ";
+       		$criteria->select = " palvelu,postita_statuscode,status ";
        		$criteria->order = " id DESC ";
        		$criteria->condition = " lid='".$data->id."' ";
 		$l = LaskuHistoria::model()->find($criteria);
@@ -987,6 +991,9 @@ exit;
 		  } elseif($l->postita_statuscode == 'CA'){
 		   $postitaStr = 'Lasku peruutettu';
 		   $postita = true;
+		  } elseif($l->postita_statuscode == 'MAKSUMUISTUTUS'){
+		   $postitaStr = 'Maksumuistutus lähetetty';
+		   $postita = true;
 		  } elseif($l->postita_statuscode == 'POISTETTU'){
 		   $postitaStr = 'Lasku poistettu POSTITA.FI:sta';
 		   $postita = true;
@@ -997,8 +1004,36 @@ exit;
 
 
 
-		   
+		// <-- Local
+		$local = false;
+		$localStr = '';
+		if(isset($l->palvelu) and $l->palvelu == 'local')
+		{
 
+		  if($l->status == 'LÄHETETTY'){
+		   $localStr = 'Lasku lähetetty';
+		   $local = true;
+		  } elseif($l->status == 'MAKSUMUISTUTUS'){
+		   $localStr = 'Maksumuistutus lähetetty';
+		   $local = true;
+		  } elseif($l->status == 'MAKSETTU'){
+		   $localStr = 'Lasku maksettu';
+		   $local = true;
+		  } elseif($l->status == 'Lasku luotu'){
+		   $localStr = 'Lasku luotu';
+		   $local = true;
+		  } 
+
+		}
+		//  Local -->
+		  
+ 
+		if($postita == true)
+		    $tilanne = $postitaStr;
+		elseif($local == true)
+		    $tilanne = $localStr;
+
+/*
 		if($data->tilanne == 0 and $data->response_finvoice == '')
 		    $tilanne = 'Luotu';
 		elseif($data->tilanne == 1 and $trust == false)
@@ -1009,6 +1044,9 @@ exit;
 		    $tilanne = 'Maksettu';
 		elseif($postita == true)
 		    $tilanne = $postitaStr;
+		elseif($local == true)
+		    $tilanne = $localStr;
+*/
 
             	return $tilanne;
 	}
