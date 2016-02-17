@@ -714,10 +714,9 @@ class LaskuController extends Controller
 
 
 	// <-- Trust
-	if($asetukset->palvelu_tyyppi == 2 and !isset(Yii::app()->user->laskunTarkistus))
+	if($asetukset->palvelu_tyyppi == 2)
 	{
 
-	Yii::app()->user->setState('laskunTarkistus', true);
 
 	$cid = $asetukset['trust_cid'];
 	$api = $asetukset['trust_api'];
@@ -926,13 +925,28 @@ exit;
 	{ 
 
        		$criteria = new CDbCriteria();
-       		$criteria->select = " palvelu,id,status ";
+       		$criteria->select = " palvelu,postita_statuscode,status ";
        		$criteria->order = " id DESC ";
        		$criteria->condition = " lid='".$data->id."' ";
-		$l = LaskuHistoria::model()->findAll($criteria);
-		$tilanne = '';
+		$l = LaskuHistoria::model()->find($criteria);
 
 		// <-- Trust
+		$trust = false;
+		$trustStr = '';
+		if(isset($l->palvelu) and $l->palvelu == 'trust')
+		{
+
+		  $json = json_decode($l->status, true);
+		    if(isset($json['statustext']) and !empty($json['statustext']) and $json['statustext'] != 1)
+		    {
+		      	$trustStr = date("d.m.Y",strtotime($json['statustime'])).' <span id="first_'.$data->id.'">'.$json['statustext'].'</span>';
+			$trust = true;
+		    }
+
+		}
+		//  Trust -->
+
+/*
 		$trust = false;
 		$trustStr = '';
 		$xml = array();
@@ -962,7 +976,8 @@ exit;
 		$bd .= '</div>';
 		echo $bd;
 		}
-		//  Trust -->
+*/
+
 
 
 
@@ -970,11 +985,6 @@ exit;
 		$postita = false;
 		$postitaStr = '';
 
-       		$criteria = new CDbCriteria();
-       		$criteria->select = " palvelu,postita_statuscode,status ";
-       		$criteria->order = " id DESC ";
-       		$criteria->condition = " lid='".$data->id."' ";
-		$l = LaskuHistoria::model()->find($criteria);
 
 		if(isset($l->palvelu) and $l->palvelu == 'postita')
 		{
@@ -1027,8 +1037,11 @@ exit;
 		}
 		//  Local -->
 		  
- 
-		if($postita == true)
+		    $tilanne = ''; 
+
+		if($trust == true)
+		    $tilanne = $trustStr; 
+		elseif($postita == true)
 		    $tilanne = $postitaStr;
 		elseif($local == true)
 		    $tilanne = $localStr;

@@ -142,6 +142,7 @@
   <thead class="myBgColors">
   <tr>
   <th><?php echo Yii::t('main', 'Laskunumero'); ?></th>
+  <th><?php echo Yii::t('main', 'Asiakas'); ?></th>
   <th><?php echo Yii::t('main', 'Viitenumero'); ?></th>
   <th><?php echo Yii::t('main', 'Luotu'); ?></th>
   <th><?php echo Yii::t('main', 'Tilanne'); ?></th>
