@@ -266,7 +266,6 @@ $xml = encodeXml (array(
         'transferkey' => $transferkey,
         'dataset' => array(
             array(
-		"refundtojobid" => $refundtojobid,
                 "custnum" => $lasku['as_nro'], # asiakasnumero
                 //"addressaddline1" => $lasku['osoite'],
                 "person" => $person,
