@@ -347,7 +347,7 @@ $res = commitTransfer ($xml);
 
 /* Tulosta vastausviesti */
 echo "------ receive ------\n";
-//echo '<textarea class="form-control" rows="20">'.$res.'</textarea>';
+echo '<textarea class="form-control" rows="20">'.$res.'</textarea>';
 echo "\n";
 
 /* Tulkitse palvelimen vastausviesti */
