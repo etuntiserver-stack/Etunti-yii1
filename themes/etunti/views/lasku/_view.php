@@ -1,11 +1,21 @@
 <?php
 /* @var $this LaskuController */
 /* @var $data Lasku */
-$dat = Lasku::model()->findbypk($data->id);
+
+
+	$asiakas='';
+	$a = Asiakkaat::model()->findbypk($data->as_nro);
+	if(isset($a->id) and !empty($a->yrityksen_nimi))
+	$asiakas = $a->yrityksen_nimi;
+	if(isset($a->id) and empty($a->yrityksen_nimi))
+	$asiakas = $a->yhteyshenkilo;
 ?>
 <tr>
 	<td>
 		<?php echo $data->laskunumero; ?>
+	</td>
+	<td>
+		<?php echo $asiakas; ?>
 	</td>
 	<td>
 		<?php echo $data->viitenumero; ?>
@@ -14,7 +24,7 @@ $dat = Lasku::model()->findbypk($data->id);
 		<?php echo date("d.m.Y - H:i",strtotime($data->time)); ?>
 	</td>
 	<td>
-		<?php echo $this->tilanneCheck($dat,null); ?>
+		<?php echo $this->tilanneCheck($data,null); ?>
 	</td>
 	<td>
 		<?php echo $data->tapahtumapvm; ?>
@@ -23,7 +33,7 @@ $dat = Lasku::model()->findbypk($data->id);
 		<?php echo number_format($data->yhteensa_total, 2, ",", " "); ?>
 	</td>
 	<td>
-		<?php echo $this->avoinnaCheck($dat,null); ?>
+		<?php echo $this->avoinnaCheck($data,null); ?>
 	</td>
 	<td>
 		<?php echo $data->laskun_nimetys; ?>

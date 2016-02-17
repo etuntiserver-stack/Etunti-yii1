@@ -626,7 +626,7 @@ $model->viivastyskorko = $asetukset->viivastyskorko;
 		<a href="lasku_pdf?id=<?php echo $model->id; ?>" target="_blank" class="btn  btn-primary btn-group myBgColors"><?php echo Yii::t('main','Esikatselu'); ?></a>
 
 
-		<a href="lasku_pdf?id=<?php echo $model->id; ?>&muistutuslasku=true" target="_blank" class="btn  btn-primary btn-group myBgColors"><?php echo Yii::t('main','Esikatselu muistutuslasku'); ?></a>
+		<a href="lasku_pdf?id=<?php echo $model->id; ?>&muistutuslasku=true" target="_blank" class="btn  btn-primary btn-group myBgColors"><?php echo Yii::t('main','Maksumuistutus'); ?></a>
 		<?php endif; ?>
 
 
@@ -705,10 +705,9 @@ $model->viivastyskorko = $asetukset->viivastyskorko;
 		<?php endif; ?>
 
 
-		<h2><?php echo $this->tilanneCheck($model,null); ?></h2>
-
-
 		<hr>
+		<p><b>Laskun tila: </b><?php echo $this->tilanneCheck($model,null); ?></p>
+		<br>
 
 		<?php if(
 			isset($model->id) 
