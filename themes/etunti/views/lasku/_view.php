@@ -4,11 +4,12 @@
 
 
 	$asiakas='';
-	$a = Asiakkaat::model()->findbypk($data->as_nro);
-	if(isset($a->id) and !empty($a->yrityksen_nimi))
+	$a = Asiakkaat::model()->find( " asiakasnumero='".$data->as_nro."' ");
+	if(isset($a->id) and $a->tyyppi == 'yritys')
 	$asiakas = $a->yrityksen_nimi;
-	if(isset($a->id) and empty($a->yrityksen_nimi))
+	if(isset($a->id) and $a->tyyppi == 'henkilo')
 	$asiakas = $a->yhteyshenkilo;
+
 ?>
 <tr>
 	<td>
@@ -27,7 +28,7 @@
 		<?php echo $this->tilanneCheck($data,null); ?>
 	</td>
 	<td>
-		<?php echo $data->tapahtumapvm; ?>
+		<?php echo date("d.m.Y H:i",strtotime($data->tapahtumapvm)); ?>
 	</td>
 	<td>
 		<?php echo number_format($data->yhteensa_total, 2, ",", " "); ?>

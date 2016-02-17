@@ -668,7 +668,7 @@ $model->viivastyskorko = $asetukset->viivastyskorko;
 
 
 		<?php if(isset($model->id) and $model->tilanne == '0') : ?>
-		<a href="update?id=<?php echo $model->id; ?>&tilanne=1" class="btn  btn-success btn-group myBgColors"><?php echo Yii::t('main','Hyväksy'); ?></a>
+		<a href="finvoice?id=<?php echo $model->id; ?>&hyvaksyminen=true" class="btn  btn-success btn-group myBgColors"><?php echo Yii::t('main','Hyväksy'); ?></a>
 		<?php endif; ?>
 
 		<?php if(isset($model->id) 
