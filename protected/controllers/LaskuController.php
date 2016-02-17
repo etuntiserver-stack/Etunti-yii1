@@ -1036,6 +1036,9 @@ exit;
 		  } elseif($l->status == 'HYVÄKSYTTY'){
 		   $localStr = 'Lasku hyväksytty';
 		   $local = true;
+		  } elseif($l->status == 'Lähetetty sähköpostilla'){
+		   $localStr = 'Lähetetty sähköpostilla';
+		   $local = true;
 		  } 
 
 		}

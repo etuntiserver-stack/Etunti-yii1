@@ -141,7 +141,7 @@
   <table class="table table-striped" id="mobileTable">
   <thead class="myBgColors">
   <tr>
-  <th><?php echo Yii::t('main', 'Laskunumero'); ?></th>
+  <th><?php echo Yii::t('main', 'Nro.'); ?></th>
   <th><?php echo Yii::t('main', 'Asiakas'); ?></th>
   <th><?php echo Yii::t('main', 'Viitenumero'); ?></th>
   <th><?php echo Yii::t('main', 'Luotu'); ?></th>
