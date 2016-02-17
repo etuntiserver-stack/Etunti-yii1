@@ -704,6 +704,12 @@ $model->viivastyskorko = $asetukset->viivastyskorko;
 		<a href="finvoice?id=<?php echo $model->id; ?>&finvoiceTrust=true" class="btn  btn-success btn-group myBgColors"><?php echo Yii::t('main','Lähetä finvoice (TRUST.FI)'); ?></a>
 		<?php endif; ?>
 
+		<?php if(isset($model->id) 
+			and $asetukset->palvelu_tyyppi != 2 
+		) : ?>
+		<a href="finvoice?id=<?php echo $model->id; ?>&lahetaSahkopostilla=true" class="btn  btn-success btn-group myBgColors"><?php echo Yii::t('main','Lähetä sähköpostilla'); ?></a>
+		<?php endif; ?>
+
 
 		<hr>
 		<p><b>Laskun tila: </b><?php echo $this->tilanneCheck($model,null); ?></p>

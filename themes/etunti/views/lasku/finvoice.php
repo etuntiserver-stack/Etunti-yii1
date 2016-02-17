@@ -1115,7 +1115,7 @@ curl_close($ch);
        $created = $v;
      }
      $tapahtumapvm = date("Y-m-d H:i:s",strtotime(trim($created)));
-
+     Lasku::model()->updatebypk($id, array('tapahtumapvm'=>$tapahtumapvm));
 		    // Lasku historia
 		    $l = Lasku::model()->findbypk($id);
 		    $historia = new LaskuHistoria;
@@ -1133,6 +1133,69 @@ curl_close($ch);
 
 }
 
+if(isset($_GET['lahetaSahkopostilla']) and !empty($lasku['sahkoposti']))
+{
+
+  $asetukset=Asetukset::model()->find("id=1");
+  $firmanTiedot=FirmanTiedot::model()->find("id=1");
+
+  $html2pdf = Yii::app()->ePdf->HTML2PDF('P', 'A4', 'en');
+  $html2pdf->setDefaultFont('Arial');
+  $html2pdf->WriteHTML($this->renderPartial('lasku_pdf', 
+			array(
+			'lasku'=>$lasku,
+			'asetukset'=>$asetukset,
+			'laskunRivit'=>$laskunRivit,
+			'yritys'=>$firmanTiedot,
+			),true));
+  $content_PDF = $html2pdf->Output('my_doc.pdf', EYiiPdf::OUTPUT_TO_STRING);
+
+
+		/* file */
+		$file = 'lasku_'.date("YmdHi").'.pdf';
+		$path = Yii::app()->request->baseUrl."emails/laskut/".Yii::app()->user->domain;
+
+  		if (!file_exists($path))
+		  	mkdir($path, 0777, true);
+
+		file_put_contents($path.'/'.$file, $content_PDF);
+
+		$message = Yii::t('main', 'Liitteenä uusi lasku');
+		$saaja = $lasku['sahkoposti'];
+
+		$mail = new YiiMailer();
+		$mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
+		$mail->setTo($saaja);
+		$mail->setSubject(Yii::t('main', 'Ilmoitus saapuneesta laskusta'));
+		$mail->setBody($message);
+		$mail->setAttachment($path.'/'.$file);
+	
+		if($mail->send())
+		{
+
+     		$tapahtumapvm = date("Y-m-d H:i:s");
+     		Lasku::model()->updatebypk($id, array('tilanne'=>2,'tapahtumapvm'=>$tapahtumapvm));
+
+		    // Lasku historia
+		    $l = Lasku::model()->findbypk($id);
+		    $historia = new LaskuHistoria;
+		    $historia->time = $tapahtumapvm;
+		    $historia->lid = $id;
+		    $historia->status = 'Lähetetty sähköpostilla';
+		    $historia->palvelu = "local";
+		    $historia->yht_euro = $l->yhteensa_total;
+		    $historia->save();
+
+
+     		    $this->redirect(array('update','id'=>$id));
+		}
+
+
+} elseif(isset($_GET['lahetaSahkopostilla']) and empty($lasku['sahkoposti'])){
+
+		echo Yii::t('main', 'Sähköposti puuttuu');
+
+}
 
 
 

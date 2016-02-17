@@ -22,7 +22,7 @@
 		<?php echo $data->viitenumero; ?>
 	</td>
 	<td>
-		<?php echo date("d.m.Y - H:i",strtotime($data->time)); ?>
+		<?php echo date("d.m.Y H:i",strtotime($data->time)); ?>
 	</td>
 	<td>
 		<?php echo $this->tilanneCheck($data,null); ?>
