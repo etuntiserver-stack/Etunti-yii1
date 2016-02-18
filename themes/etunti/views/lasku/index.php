@@ -176,12 +176,32 @@
 
 
 
+	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/bootstrap.modal.js"></script>
+	<div id="showres" class="modal fade" tabindex="-1" role="dialog"></div>
+
 
 <script type="text/javascript">
 $(document).ready(function(){
 
 $(".haemob").click(function(){
 	$("#mobForm").submit();
+});
+
+
+$(".fa-history").click(function(){
+
+	var thisid = $(this).attr("for");
+
+        $.ajax({
+           url: 'get_historia',
+	   type: 'POST',
+	   data: { id : thisid },
+           success: function(data){
+		//console.log(data);
+		$("#showres").modal().html(JSON.parse(data));
+           }
+        });
+
 });
 
 });

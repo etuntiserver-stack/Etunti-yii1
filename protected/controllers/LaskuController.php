@@ -23,7 +23,7 @@ class LaskuController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','etsikohde','etsiasiakas', 'etsisaaja','luoKohteista', 'luoAsiakaasta', 'tr_rivit', 'tr_rivitkk','lasku_pdf', 'finvoice', 'postita', 'tr_rivit_tyhja','valitsetuote', 'hyvityslasku', 'postita_pdf'),
+				'actions'=>array('admin','delete','create','update','index','view','etsikohde','etsiasiakas', 'etsisaaja','luoKohteista', 'luoAsiakaasta', 'tr_rivit', 'tr_rivitkk','lasku_pdf', 'finvoice', 'postita', 'tr_rivit_tyhja','valitsetuote', 'hyvityslasku', 'postita_pdf', 'get_historia'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny', // allow admin user to perform 'admin' and 'delete' actions
@@ -913,6 +913,7 @@ exit;
 		    $job_id = '';
 
 		if($data->postita_jobid != '')
+
 		    $job_id = 'Postita:<br>'.$data->postita_jobid;
 
 		if($data->trust_jobid != '')
@@ -946,40 +947,6 @@ exit;
 
 		}
 		//  Trust -->
-
-/*
-		$trust = false;
-		$trustStr = '';
-		$xml = array();
-		$bd = '';
-		$bd .= '<div class="pull-right btn btn-info btn-xs" data-toggle="collapse" data-target="#haku_'.$data->id.'">'.Yii::t('main', 'historia').' <b class="caret"></b></div>';
-		$bd .= '<div class="collapse" id="haku_'.$data->id.'">';
-		foreach($l as $d)
-		{
-		  if(isset($d->palvelu) and $d->palvelu == 'trust')
-		  {
-
-		    $json = json_decode($d->status, true);
-
-		    if(isset($json['statustext']) and !empty($json['statustext']) and $json['statustext'] != 1){
-		      if($trust == false)
-		      echo '<b>'.date("d.m.Y",strtotime($json['statustime'])).'</b><br> <span id="first_'.$data->id.'">'.$json['statustext'].'</span>';
-		      if($trust == true)
-		      $bd .= '<div class="well"><b>'.date("d.m.Y",strtotime($json['statustime'])).'</b><br> '.$json['statustext'].'</div>';
-
-		      $trust = true;
-		    }
-
-		  }
-		}
-		if($trust == true)
-		{
-		$bd .= '</div>';
-		echo $bd;
-		}
-*/
-
-
 
 
 		// <-- Postita
@@ -1053,20 +1020,6 @@ exit;
 		elseif($local == true)
 		    $tilanne = $localStr;
 
-/*
-		if($data->tilanne == 0 and $data->response_finvoice == '')
-		    $tilanne = 'Luotu';
-		elseif($data->tilanne == 1 and $trust == false)
-		    $tilanne = 'Hyväksytty';
-		elseif($data->tilanne == 2 and $postita == false and $trust == false)
-		    $tilanne = 'Lähetetty';
-		elseif($data->tilanne == 3)
-		    $tilanne = 'Maksettu';
-		elseif($postita == true)
-		    $tilanne = $postitaStr;
-		elseif($local == true)
-		    $tilanne = $localStr;
-*/
 
             	return $tilanne;
 	}
@@ -1088,6 +1041,106 @@ exit;
             	return $yht_euro;
 	}
 
+	public function actionGet_historia()
+	{
+
+	$bod = '
+	<div class="modal-dialog">
+	    <div class="modal-content">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
+		<h2 class="modal-title">'.Yii::t('main', 'Historia').' '.$_POST['id'].'</h2>
+	
+		</div>
+		<div class="modal-body">
+		<div class="dialogTable clearfix modal-osio">';
+
+       		$criteria = new CDbCriteria();
+       		$criteria->select = " time,palvelu,postita_statuscode,status ";
+       		$criteria->order = " id ASC ";
+       		$criteria->condition = " lid='".$_POST['id']."' ";
+		$lh = LaskuHistoria::model()->findAll($criteria);
+
+		$str = '';
+
+
+		foreach($lh as $l)
+		{
+
+		  // <-- Trust
+		  if(isset($l->palvelu) and $l->palvelu == 'trust')
+		  {
+
+		    $json = json_decode($l->status, true);
+		    if(isset($json['statustext']) and !empty($json['statustext']) and $json['statustext'] != 1)
+		    {
+		      	$str .= '<b>'.date("d.m.Y H:i",strtotime($json['statustime'])).'</b> '.$json['statustext'].'<br>';
+		    }
+
+		  }
+		  //  Trust -->
+
+
+		// <-- Postita
+		if(isset($l->palvelu) and $l->palvelu == 'postita')
+		{
+
+		  if($l->postita_statuscode == 'NE'){
+		   $str .= '<b>'.date("d.m.Y H:i",strtotime($l->time)).'</b> Lasku on vielä vahvistettava<br>';
+		  } elseif($l->postita_statuscode == 'CO'){
+		   $str .= '<b>'.date("d.m.Y H:i",strtotime($l->time)).'</b> Odottaa lähetystä<br>';
+		  } elseif($l->postita_statuscode == 'SE'){
+		   $str .= '<b>'.date("d.m.Y H:i",strtotime($l->time)).'</b> Lasku lähetetty<br>';
+		  } elseif($l->postita_statuscode == 'CA'){
+		   $str .= '<b>'.date("d.m.Y H:i",strtotime($l->time)).'</b> Lasku peruutettu<br>';
+		  } elseif($l->postita_statuscode == 'MAKSUMUISTUTUS'){
+		   $str .= '<b>'.date("d.m.Y H:i",strtotime($l->time)).'</b> Maksumuistutus lähetetty<br>';
+		  } elseif($l->postita_statuscode == 'POISTETTU'){
+		   $str .= '<b>'.date("d.m.Y H:i",strtotime($l->time)).'</b> Lasku poistettu POSTITA.FI:sta<br>';
+		  }
+
+		}
+		//  Postita -->
+
+
+
+		// <-- Local
+		if(isset($l->palvelu) and $l->palvelu == 'local')
+		{
+
+		  if($l->status == 'LÄHETETTY'){
+		   $str .= '<b>'.date("d.m.Y H:i",strtotime($l->time)).'</b> Lasku lähetetty<br>';
+		  } elseif($l->status == 'MAKSUMUISTUTUS'){
+		   $str .= '<b>'.date("d.m.Y H:i",strtotime($l->time)).'</b> Maksumuistutus lähetetty<br>';
+		  } elseif($l->status == 'MAKSETTU'){
+		   $str .= '<b>'.date("d.m.Y H:i",strtotime($l->time)).'</b> Lasku maksettu<br>';
+		  } elseif($l->status == 'Lasku luotu'){
+		   $str .= '<b>'.date("d.m.Y H:i",strtotime($l->time)).'</b> Lasku luotu<br>';
+		  } elseif($l->status == 'HYVÄKSYTTY'){
+		   $str .= '<b>'.date("d.m.Y H:i",strtotime($l->time)).'</b> Lasku hyväksytty<br>';
+		  } elseif($l->status == 'Lähetetty sähköpostilla'){
+		   $str .= '<b>'.date("d.m.Y H:i",strtotime($l->time)).'</b> Lähetetty sähköpostilla<br>';
+		  } 
+
+		}
+		//  Local -->
+
+		}
+
+
+
+		$bod .= $str;
+
+	$bod .= '
+		</div>
+		</div>
+	   </div>
+	</div>';
+
+	echo json_encode($bod);
+	}
 
 
 
