@@ -285,7 +285,7 @@ $xml = encodeXml (array(
                 "billnum" => "", # laskun numero
                 "billcode" => "", # tilitysviite tai viesti
                 "email" => $lasku['sahkoposti'], # 1.email osoite
-                "email2" => "", # 2.email osoite//
+                "email2" => "", # 2.email osoite
                 "checkbillnum" => 1, # 1=tarkista laskunumero, 0=ei
                 "language" => "fin", # laskun kieli
                 "sendtype" => $sendtype, # laskun lähetystapa
