@@ -209,7 +209,7 @@ $xml = encodeXml (array(
                 "evoice" => $evoice, # verkkolaskuosoite
                 "evoiceint" => $evoiceint, # välittäjän tunnus
                 "overdueinterest" => $lasku['viivastyskorko'], # korkopros: tyhjä = oletus
-                "billnum" => "", # laskun numero
+                //"billnum" => $lasku['laskunumero'], # laskun numero
                 "billcode" => "", # tilitysviite tai viesti
                 "ourcode" => $lasku['viitemme'],
                 "yourcode" => $lasku['viitenne'],
@@ -284,7 +284,7 @@ $xml = encodeXml (array(
                 "evoice" => $evoice, # verkkolaskuosoite
                 "evoiceint" => $evoiceint, # välittäjän tunnus
                 "overdueinterest" => $lasku['viivastyskorko'], # korkopros: tyhjä = oletus
-                //"billnum" => $lasku['id'], # laskun numero
+                "billnum" => "", # laskun numero
                 "billcode" => "", # tilitysviite tai viesti
                 "ourcode" => $lasku['viitemme'],
                 "yourcode" => $lasku['viitenne'],
@@ -339,8 +339,7 @@ echo $xml;
 $res = commitTransfer ($xml);
 
 /* Tulosta vastausviesti */
-echo "------ receive ------\n";
-//echo '<textarea class="form-control" rows="20">'.$res.'</textarea>';
+echo '<textarea class="form-control" rows="20">'.$res.'</textarea>';
 echo "\n";
 
 /* Tulkitse palvelimen vastausviesti */
@@ -369,7 +368,7 @@ for ($i = 0; $i < count ($doc->row); $i++) {
 
     } else {
         echo 'reject billnum ' . $doc->row[$i]->billnum
-            . ' error ' . utf8_decode ($doc->row[$i]->error) . "<br>";
+            . '<br> error ' . utf8_decode ($doc->row[$i]->error) . "<br>";
     }
 }
 
