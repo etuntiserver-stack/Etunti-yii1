@@ -941,8 +941,27 @@ exit;
 		  $json = json_decode($l->status, true);
 		    if(isset($json['statustext']) and !empty($json['statustext']) and $json['statustext'] != 1)
 		    {
-		      	$trustStr = date("d.m.Y",strtotime($json['statustime'])).' <span id="first_'.$data->id.'">'.$json['statustext'].'</span>';
+		      	$trustStr = date("d.m.Y",strtotime($json['statustime'])).' '.$json['statustext'];
 			$trust = true;
+		    } elseif(!isset($json['statustext']) and isset($json['reference'])) {
+
+		       if(count($json) > 0)
+		       {
+		         foreach($json as $key=>$value)
+		         {
+			   if(is_array($value))
+			   {
+				foreach($value as $k=>$v)
+				$trustStr .= "&nbsp;".$k.": ".$v."<br>";
+
+			   } else {
+				$trustStr .= $key.": ".$value."<br>";
+			   }
+		         }
+				$trust = true;
+ 		       }
+
+
 		    }
 
 		}
