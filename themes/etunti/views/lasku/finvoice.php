@@ -289,7 +289,6 @@ $xml = encodeXml (array(
                 "checkbillnum" => 1, # 1=tarkista laskunumero, 0=ei
                 "language" => "fin", # laskun kieli
                 "sendtype" => $sendtype, # laskun lähetystapa
-                "postclass" => $postclass, # 1 = postitus 1.luokassa
                 "amount" => $lasku['yhteensa_total'], # verollinen loppusumma
 
                 # Myytävät tuotteet
