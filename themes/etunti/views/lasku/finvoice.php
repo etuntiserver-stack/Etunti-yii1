@@ -290,13 +290,7 @@ $xml = encodeXml (array(
                 "language" => "fin", # laskun kieli
                 "sendtype" => $sendtype, # laskun lähetystapa
                 "postclass" => $postclass, # 1 = postitus 1.luokassa
-                "color" => 0, # 0 = mustavalko//
-                "printoperator" => "enfo", # tulostusoperaattori
-                "billtemplate" => "CUSTOM", # laskupohja
-                "collectionprocess" => "AUTO", # saatavan laji
-                "netamount" => $lasku['yhteensa_total_veroton'], # veroton hinta yhteensä
-                "vatamount" => $lasku['yhteensa_total_verot'], # veron määrä yhteensä
-                "totalamount" => $lasku['yhteensa_total'], # verollinen loppusumma
+                "amount" => $lasku['yhteensa_total'], # verollinen loppusumma
 
                 # Myytävät tuotteet
                 "payrow" => $rowsArray,
