@@ -282,7 +282,7 @@ $xml = encodeXml (array(
                 "evoice" => $evoice, # verkkolaskuosoite
                 "evoiceint" => $evoiceint, # välittäjän tunnus
                 "overdueinterest" => $lasku['viivastyskorko'], # korkopros: tyhjä = oletus
-                "billnum" => "", # laskun numero
+                "billnum" => $lasku['laskunumero'], # laskun numero
                 "billcode" => $lasku['viitenumero'], # tilitysviite tai viesti
                 "email" => $lasku['sahkoposti'], # 1.email osoite
                 "email2" => "", # 2.email osoite
