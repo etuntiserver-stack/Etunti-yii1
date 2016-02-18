@@ -607,10 +607,10 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 	<TD></TD>
 	<TD></TD>
 	<TD></TD>
-	<TD><input type="text" class="form-control input-sm" size="10" name="Lasku[yhteensa_total_verot]" id="yhteensa_total_verot" readonly></TD>
+	<TD><input type="text" class="form-control" size="10" name="Lasku[yhteensa_total_verot]" id="yhteensa_total_verot" readonly></TD>
 	<TD></TD>
-	<TD><input type="text" class="form-control input-sm" size="10" name="Lasku[yhteensa_total_veroton]" id="yhteensa_total_veroton" readonly></TD>
-	<TD><input type="text" class="form-control input-sm" size="10" name="Lasku[yhteensa_total]" id="yhteensa_total" readonly></TD>
+	<TD><input type="text" class="form-control" size="10" name="Lasku[yhteensa_total_veroton]" id="yhteensa_total_veroton" readonly></TD>
+	<TD><input type="text" class="form-control" size="10" name="Lasku[yhteensa_total]" id="yhteensa_total" readonly></TD>
      </TR>
      </tfoot>
 </TABLE>
@@ -802,9 +802,10 @@ $("#lasku-form").on('submit',function(e) {
 	    return true;
 });
 
-if($("#trust_jobid").val() | $("#postita_jobid").val()){
+if(parseInt($("#forTilanne").val()) !== 0){
   $("input").prop("disabled", true);
   $("select").prop("disabled", true);
+  $("textarea").prop("disabled", true);
   $(".poista").remove();
   $("#uusiRivi").remove();
 }
