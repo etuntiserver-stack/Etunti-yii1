@@ -296,7 +296,7 @@ $xml = encodeXml (array(
                 "language" => "fin", # laskun kieli
                 //"freetext" => $lasku['freetext'],
                 "sendtype" => $sendtype, # laskun lähetystapa
-                "cashbill" => 0, # 0 = ei käteiskuitti
+                //"cashbill" => 0, # 0 = ei käteiskuitti
                 "sensible" => $sensible, # 0 = lähetä muistutus automaattisesti
                 //"ownref" => "x123", # sisäinen viite
                 //"ordernumber" => "10232", # tilausnumero
