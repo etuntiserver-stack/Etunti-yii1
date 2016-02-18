@@ -42,6 +42,13 @@ if(isset($model->id))
 <?php endif; ?> 
 
 <?php
+$asetukset = Asetukset::model()->findbypk(1);
+$model->yid = $asetukset->id;
+$model->saaja_iban = $asetukset->iban;
+if(empty($model->viivastyskorko))
+$model->viivastyskorko = $asetukset->viivastyskorko;
+
+
 if(isset($model->id)){
 echo '<input type="hidden" id="modelID" value="1">';
 echo '<input type="hidden" id="forLaskutusTyyppi" value="'.$model->laskutus.'">';
@@ -52,12 +59,7 @@ echo '<input type="hidden" id="postita_jobid" value="'.$model->postita_jobid.'">
 echo '<input type="hidden" id="forTilanne" value="0">';
 }
 
-$asetukset = Asetukset::model()->findbypk(1);
-$model->yid = $asetukset->id;
-$model->saaja_iban = $asetukset->iban;
-if(empty($model->viivastyskorko))
-$model->viivastyskorko = $asetukset->viivastyskorko;
-
+echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyppi.'">';
 ?>
 
 	<?php echo $form->errorSummary($model); ?>
@@ -245,6 +247,10 @@ $model->viivastyskorko = $asetukset->viivastyskorko;
 				'verkkolasku'=>Yii::t('main','Verkkolasku'),
 				'sahkoposti'=>Yii::t('main','Sähköposti')
 				);
+
+		if($asetukset->palvelu_tyyppi == 3)
+		unset($list['verkkolasku']);
+
         	echo $form->dropDownList($model, 'laskutus', $list,
 		array('empty'=>'Valitse','class'=>'form-control'));
         	?>
@@ -1287,7 +1293,7 @@ function laskutus(value){
 	$(".yhteyshenkilo").show('slow');
 	$(".puhelin").show('slow');
     }
-    if(value == 'verkkolasku'){
+    if((value == 'verkkolasku') && (parseInt($('#palvelu_tyyppi').val()) !== 3)){
 	$(".hidd").hide('slow');
 	$(".verkkolaskuosoite").show('slow');
 	$(".v_tunnus").show('slow');
