@@ -83,6 +83,7 @@ $model->viivastyskorko = $asetukset->viivastyskorko;
 		$vm = Lasku::model()->find($criteria);
 		if(isset($vm->id))
 		$ln = '110'.$vm->laskunumero+1;
+
 	?>
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'laskunumero'); ?>
