@@ -296,13 +296,13 @@ $xml = encodeXml (array(
                 "language" => "fin", # laskun kieli
                 //"freetext" => $lasku['freetext'],
                 "sendtype" => $sendtype, # laskun lähetystapa
-                "cashbill" => 0, # 0 = ei käteiskuitti
+                //"cashbill" => 0, # 0 = ei käteiskuitti
                 "sensible" => $sensible, # 0 = lähetä muistutus automaattisesti
                 //"ownref" => "x123", # sisäinen viite
                 //"ordernumber" => "10232", # tilausnumero
                 "negvat" => 0, # 0 = ei käänteistä alvia
                 "postclass" => $postclass, # 1 = postitus 1.luokassa
-                "color" => 0, # 0 = mustavalko
+                "color" => 0, # 0 = mustavalko//
                 "printoperator" => "enfo", # tulostusoperaattori
                 "billtemplate" => "CUSTOM", # laskupohja
                 "collectionprocess" => "AUTO", # saatavan laji
