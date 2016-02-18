@@ -328,22 +328,9 @@ echo "\n";
 $doc = parseXml ($res);
 echo "------ parse ------\n";
 
-
-	if($xml = simplexml_load_string($doc, 'SimpleXMLElement', LIBXML_NOCDATA))
-	{
-		libxml_use_internal_errors(true);
-		$sxe = simplexml_load_string($rss);
-		if ($sxe) 
-		{
-	  	   foreach ($sxe->status as $r) {
-			print_r($r);
-		   }
-		}
-	}
-
-
 /* Tulosta hyväksytyt ja hylätyt laskut */
 for ($i = 0; $i < count ($doc->row); $i++) {
+
     if ($doc->row[$i]->accepted == '1') {
         echo 'accept billnum ' . $doc->row[$i]->billnum
             . ' jobid ' . $doc->row[$i]->jobid . "<br>";
@@ -354,7 +341,7 @@ for ($i = 0; $i < count ($doc->row); $i++) {
 		    $l = Lasku::model()->findbypk($id);
 		    $historia = new LaskuHistoria;
 		    $historia->lid = $id;
-		    $historia->status = "Lasku//lähetetty//jobid:".$doc->row[$i]->jobid;
+		    $historia->status = json_encode($doc->row);
 		    $historia->palvelu = "trust";
 		    $historia->yht_euro = $l->yhteensa_total;
 		    $historia->save();
