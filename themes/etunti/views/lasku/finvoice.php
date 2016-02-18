@@ -267,10 +267,8 @@ $xml = encodeXml (array(
         'dataset' => array(
             array(
                 "custnum" => $lasku['as_nro'], # asiakasnumero
-                //"addressaddline1" => $lasku['osoite'],
                 "person" => $person,
                 "company" => $lasku['yritys'], # yrityksen nimi
-                //"addressaddline2" => "Edunvalvoja Essi Vuori",
                 "address" => $lasku['osoite'], # katuosoite
                 "postcode" => $lasku['postinumero'],
                 "city" => $lasku['toimipaikka'],
@@ -286,20 +284,11 @@ $xml = encodeXml (array(
                 "overdueinterest" => $lasku['viivastyskorko'], # korkopros: tyhjä = oletus
                 "billnum" => "", # laskun numero
                 "billcode" => "", # tilitysviite tai viesti
-                //"ourcode" => $lasku['viitemme'],
-                //"yourcode" => $lasku['viitenne'],
                 "email" => $lasku['sahkoposti'], # 1.email osoite
-                "email2" => "", # 2.email osoite//
-                //"salesman" => "MM", # vapaavalintainen myyjän tunniste
-                //"salesmanname" => "Masa Myyjä", # myyjän nimi
+                "email2" => "", # 2.email osoite
                 "checkbillnum" => 1, # 1=tarkista laskunumero, 0=ei
                 "language" => "fin", # laskun kieli
-                //"freetext" => $lasku['freetext'],
                 "sendtype" => $sendtype, # laskun lähetystapa
-                //"cashbill" => 0, # 0 = ei käteiskuitti
-                "sensible" => $sensible, # 0 = lähetä muistutus automaattisesti
-                //"ownref" => "x123", # sisäinen viite
-                //"ordernumber" => "10232", # tilausnumero
                 "negvat" => 0, # 0 = ei käänteistä alvia
                 "postclass" => $postclass, # 1 = postitus 1.luokassa
                 "color" => 0, # 0 = mustavalko//
