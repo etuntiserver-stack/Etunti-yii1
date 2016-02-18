@@ -328,6 +328,20 @@ echo "\n";
 $doc = parseXml ($res);
 echo "------ parse ------\n";
 
+
+	if($xml = simplexml_load_string($doc, 'SimpleXMLElement', LIBXML_NOCDATA))
+	{
+		libxml_use_internal_errors(true);
+		$sxe = simplexml_load_string($rss);
+		if ($sxe) 
+		{
+	  	   foreach ($sxe->status as $r) {
+			print_r($r);
+		   }
+		}
+	}
+
+
 /* Tulosta hyväksytyt ja hylätyt laskut */
 for ($i = 0; $i < count ($doc->row); $i++) {
     if ($doc->row[$i]->accepted == '1') {
