@@ -948,7 +948,7 @@ exit;
 		       if(count($json) > 0)
 		       {
 
-				$trustStr .= date("d.m.Y H:i",strtotime($data->paivays));
+				$trustStr .= '<b>'.date("d.m.Y H:i",strtotime($data->paivays)).'</b><br>';
 
 		         foreach($json as $key=>$value)
 		         {
@@ -1105,7 +1105,7 @@ exit;
 
 		       if(count($json) > 0)
 		       {
-				$str .= date("d.m.Y H:i",strtotime($la->paivays));
+				$str .= '<b>'.date("d.m.Y H:i",strtotime($la->paivays)).'</b><br>';
 
 		         foreach($json as $key=>$value)
 		         {
