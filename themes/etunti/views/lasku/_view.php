@@ -40,6 +40,7 @@
 		<?php echo $data->laskun_nimetys; ?>
 	</td>
 	<td>
+		<i class="link fa fa-history" for="<?php echo $data->id; ?>"></i>
 		<?php echo CHtml::link('', array('update', 'id'=>$data->id), array('class'=>'fa fa-pencil-square-o')); ?>
 	</td>
 </tr>
