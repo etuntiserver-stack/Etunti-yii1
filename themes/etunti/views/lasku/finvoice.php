@@ -294,7 +294,7 @@ $xml = encodeXml (array(
                 //"salesmanname" => "Masa Myyjä", # myyjän nimi
                 "checkbillnum" => 1, # 1=tarkista laskunumero, 0=ei
                 "language" => "fin", # laskun kieli
-                "freetext" => $lasku['freetext'],
+                //"freetext" => $lasku['freetext'],
                 "sendtype" => $sendtype, # laskun lähetystapa
                 "cashbill" => 0, # 0 = ei käteiskuitti
                 "sensible" => $sensible, # 0 = lähetä muistutus automaattisesti
