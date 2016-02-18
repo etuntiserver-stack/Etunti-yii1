@@ -947,6 +947,9 @@ exit;
 
 		       if(count($json) > 0)
 		       {
+
+				$trustStr .= date("d.m.Y H:i",strtotime($data->paivays));
+
 		         foreach($json as $key=>$value)
 		         {
 			   if(is_array($value))
@@ -1081,6 +1084,7 @@ exit;
        		$criteria->order = " id ASC ";
        		$criteria->condition = " lid='".$_POST['id']."' ";
 		$lh = LaskuHistoria::model()->findAll($criteria);
+		$la = Lasku::model()->findbypk($_POST['id']);
 
 		$str = '';
 
@@ -1096,6 +1100,28 @@ exit;
 		    if(isset($json['statustext']) and !empty($json['statustext']) and $json['statustext'] != 1)
 		    {
 		      	$str .= '<b>'.date("d.m.Y H:i",strtotime($json['statustime'])).'</b> '.$json['statustext'].'<br>';
+
+		    } elseif(!isset($json['statustext']) and isset($json['reference'])) {
+
+		       if(count($json) > 0)
+		       {
+				$str .= date("d.m.Y H:i",strtotime($la->paivays));
+
+		         foreach($json as $key=>$value)
+		         {
+			   if(is_array($value))
+			   {
+				foreach($value as $k=>$v)
+				$str .= "&nbsp;".$k.": ".$v."<br>";
+
+			   } else {
+				$str .= $key.": ".$value."<br>";
+			   }
+		         }
+				$trust = true;
+ 		       }
+
+
 		    }
 
 		  }
