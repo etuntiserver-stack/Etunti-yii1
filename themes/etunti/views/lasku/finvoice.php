@@ -290,6 +290,7 @@ $xml = encodeXml (array(
                 "language" => "fin", # laskun kieli
                 "sendtype" => $sendtype, # laskun lähetystapa
                 "amount" => $lasku['yhteensa_total'], # verollinen loppusumma
+		"noticedate" => $lasku['paivays'],
 
                 # Myytävät tuotteet
                 "payrow" => $rowsArray,
