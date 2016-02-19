@@ -305,6 +305,12 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 		<?php echo $form->error($model,'deliveryterm'); ?>
 	</div>
 
+	<div class="section fill mb5 vatperiod">
+		<?php echo $form->labelEx($model,'vatperiod'); ?>
+		<?php echo $form->textField($model,'vatperiod',array('size'=>50,'maxlength'=>50,'class'=>'form-control datepicker')); ?>
+		<?php echo $form->error($model,'vatperiod'); ?>
+	</div>
+
   </div><div class="col-sm-3">
   <legend><?php echo Yii::t('main', 'LASKUN TIEDOT'); ?></legend>
 	<div class="section fill mb5">
