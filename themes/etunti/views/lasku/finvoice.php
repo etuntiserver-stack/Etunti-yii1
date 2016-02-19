@@ -200,7 +200,7 @@ $xml = encodeXml (array(
                 "postcode" => $lasku['postinumero'],
                 "city" => $lasku['toimipaikka'],
                 "addresscountry" => "FIN",
-                "vatperiod" => $lasku['vatperiod'],
+                //"vatperiod" => $lasku['vatperiod'],
                 "customertype" => $customertype, # asiakastyyppi: 2=kuluttaja
                 "jobtype" => $jobtype, # tehtävän tyyppi: 0 = lasku
                 "paydate" => $lasku['erapaiva'], # eräpäivä
