@@ -1143,13 +1143,14 @@ exit;
 		   $str .= '<b>'.date("d.m.Y H:i",strtotime($l->time)).'</b> Lasku hyväksytty<br>';
 		  } elseif($l->status == 'Lähetetty sähköpostilla'){
 		   $str .= '<b>'.date("d.m.Y H:i",strtotime($l->time)).'</b> Lähetetty sähköpostilla<br>';
+		  } elseif($l->status == 'Lasku mitätöity'){
+		   $str .= '<b>'.date("d.m.Y H:i",strtotime($l->time)).'</b> Lasku mitätöity<br>';
 		  } 
 
 		}
 		//  Local -->
 
 		}
-
 
 
 		$bod .= $str;
