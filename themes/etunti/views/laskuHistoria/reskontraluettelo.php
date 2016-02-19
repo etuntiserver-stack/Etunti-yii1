@@ -1,6 +1,7 @@
 <?php
 /* @var $this LaskuHistoriaController */
 /* @var $dataProvider CActiveDataProvider */
+
 ?>
 <?php if(isset($_POST['tulosta'])) : ?>
 <?php
