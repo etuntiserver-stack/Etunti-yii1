@@ -1190,7 +1190,7 @@ $("#Lasku_as_nro").change(function() {
            url: 'etsiasiakas?id='+asiakas,
            success: function(data){
                	//console.log(data);
-		var sp = data.split("//");
+		var sp = JSON.parse(data).split("//");
 		$(".tyyppi").show('slow');
 
 
