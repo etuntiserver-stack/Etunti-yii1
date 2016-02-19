@@ -6,7 +6,7 @@
        	$criteria->order = " id DESC ";
        	$criteria->condition = " lid='".$data->id."' ";
 	$lh = LaskuHistoria::model()->find($criteria);
-	$yht_euro = '';
+	$yht_euro = 0;
 	if(isset($lh->id))
 	$yht_euro = $lh->yht_euro;
 
