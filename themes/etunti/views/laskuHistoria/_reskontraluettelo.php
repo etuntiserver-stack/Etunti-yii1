@@ -9,6 +9,13 @@
 	$yht_euro = '';
 	if(isset($lh->id))
 	$yht_euro = $lh->yht_euro;
+
+	$asiakas='';
+	$a = Asiakkaat::model()->find( " asiakasnumero='".$data->as_nro."' ");
+	if(isset($a->id) and $a->tyyppi == 'yritys')
+	$asiakas = $a->yrityksen_nimi;
+	if(isset($a->id) and $a->tyyppi == 'henkilo')
+	$asiakas = $a->yhteyshenkilo;
 ?>
 
 <tr>

@@ -15,7 +15,7 @@ table{
 	font-size: 80%;
 }
 th{
-	width: 100%;	
+	width: 10%;	
 	padding:3px 7px;
 }
 </style>
@@ -27,7 +27,7 @@ th{
 <hr>
 <?php endif; ?>
 
-<?php if(!isset($_POST['tulosta'])) : ?>
+<?php if(!isset($_POST['tulosta']) and !isset($_POST['laheta'])) : ?>
 
 
         <!-- begin: .tray-center -->
@@ -35,11 +35,34 @@ th{
 
    <!-- tulostus -->
    <div class="pull-right">
+   <div class="form-inline">
+     <?php
+     if(isset($_POST['asiakasLaskulle']) and !empty($_POST['asiakasLaskulle']) and count($model) > 0)
+     {
+     $a = Asiakkaat::model()->find(" asiakasnumero='".$_POST['asiakasLaskulle']."' ");
+     if(isset($a->id) and !empty($a->sahkoposti))
+     {
+     echo '
+     <div class="form-group">
+     <form action="#" method="POST">
+      <input type="hidden" name="from" value="'.$from.'">
+      <input type="hidden" name="to" value="'.$to.'">
+      <input type="hidden" name="sahkoposti" value="'.$a->sahkoposti.'">
+      <input type="hidden" name="asiakasLaskulle" value="'.$_POST['asiakasLaskulle'].'">
+      <input type="submit" name="laheta" class="btn btn-default btn-sm" value="Lähetä: '.$a->sahkoposti.'">
+     </form>
+     </div> ';
+     }
+     }
+     ?>
+     <div class="form-group">
      <form action="#" target="_blank" method="POST">
       <input type="hidden" name="from" value="<?php echo $from; ?>">
       <input type="hidden" name="to" value="<?php echo $to; ?>">
-      <input type="submit" name="tulosta" class="btn btn-primary myBgColors btn-sm" value="PDF">
+      <input type="submit" name="tulosta" class="btn btn-default btn-sm" value="PDF">
      </form>
+     </div>
+   </div>
    </div>
    <!-- tulostus -->
 
@@ -66,31 +89,40 @@ th{
        		$criteria = new CDbCriteria();
 		//$criteria->select = " COALESCE(NULLIF(yhteyshenkilo,yhteyshenkilo),'gg') AS yht ";
 		$criteria->order = " yhteyshenkilo ";
+		$criteria->condition = " asiakasnumero!=0 and asiakasnumero!='' ";
 
         	$a = Asiakkaat::model()->findAll($criteria);
 		echo '<select name="asiakasLaskulle" class="gui-input">';
 
 		if(isset($_POST['asiakasLaskulle']) and !empty($_POST['asiakasLaskulle']))
 		{
-        	  $aon = Asiakkaat::model()->findbypk($_POST['asiakasLaskulle']);
+        	  $aon = Asiakkaat::model()->find(" asiakasnumero='".$_POST['asiakasLaskulle']."' ");
+		  if(isset($aon->id))
+		  {
 		  if(!empty($aon->yrityksen_nimi))
 		    echo '<option value="'.$aon->asiakasnumero.'">'.$aon->yrityksen_nimi.'</option>';
 		  elseif(empty($aon->yhteyshenkilo) and empty($aon->yrityksen_nimi))
 		    echo '<option value="'.$aon->asiakasnumero.'">nimet puutuu '.$aon->id.'</option>';
 		  else
-		    echo '<option value="'.$aon->asiakasnumero.'">'.$aon->yhteyshenkilo.' ID:'.$aon->id.'</option>';
+		    echo '<option value="'.$aon->asiakasnumero.'">'.$aon->yhteyshenkilo.'</option>';
+		  }
+
 		} else {
 	        echo '<option></option>';
 		}
 
 		foreach($a as $aa)
 		{
+		  if(isset($aa->id))
+		  {
 		  if(!empty($aa->yrityksen_nimi))
 		    echo '<option value="'.$aa->asiakasnumero.'">'.$aa->yrityksen_nimi.'</option>';
 		  elseif(empty($aa->yhteyshenkilo) and empty($aa->yrityksen_nimi))
 		    echo '<option value="'.$aa->asiakasnumero.'">nimet puutuu '.$aa->id.'</option>';
 		  else
-		    echo '<option value="'.$aa->asiakasnumero.'">'.$aa->yhteyshenkilo.' ID:'.$aa->id.'</option>';
+		    echo '<option value="'.$aa->asiakasnumero.'">'.$aa->yhteyshenkilo.'</option>';
+		  }
+
 		}
 		echo '</select>';
 		?>
@@ -156,7 +188,7 @@ th{
 
 <table class="table table-bordered table-striped">
  <tr>
-<?php if(!isset($_POST['tulosta'])) : ?>
+<?php if(!isset($_POST['tulosta']) and !isset($_POST['laheta'])) : ?>
  <thead class="myBgColors">
 <?php endif; ?>
 
@@ -167,7 +199,7 @@ th{
   <th><?php echo Yii::t('main','Suorituksen summa'); ?></th>
   <th><?php echo Yii::t('main','Avoinna'); ?></th>
 
-<?php if(!isset($_POST['tulosta'])) : ?>
+<?php if(!isset($_POST['tulosta']) and !isset($_POST['laheta'])) : ?>
  </thead>
 <?php endif; ?>
 
