@@ -315,6 +315,40 @@ class LaskuHistoriaController extends Controller
 		  ), true));
 	          $html2pdf->Output();
 
+		} elseif(isset($_POST['laheta'])){
+
+	          $html2pdf = Yii::app()->ePdf->HTML2PDF('P', 'A4', 'en');
+		  $html2pdf->setDefaultFont('Arial');
+	          $html2pdf->WriteHTML($this->renderPartial('reskontraluettelo',array(
+			'model'=>$model,
+			'from'=>$from,
+			'to'=>$to
+		  ), true));
+         	  $content_PDF = $html2pdf->Output('my_doc.pdf', EYiiPdf::OUTPUT_TO_STRING);
+
+
+		$file = $from.'_'.$to.'_'.$_POST['asiakasLaskulle'].'.pdf';
+		$path = Yii::app()->request->baseUrl."emails/reskontraluettelot/".Yii::app()->user->domain;
+
+  		if (!file_exists($path))
+		  	mkdir($path, 0777, true);
+
+		file_put_contents($path.'/'.$file, $content_PDF);
+
+
+		$message = '<br> Laskut ajalta '.$from.' - '.$to;
+		$saaja = $_POST['sahkoposti'];
+
+		$mail = new YiiMailer();
+		$mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
+		$mail->setTo($saaja);
+		$mail->setSubject(Yii::t('main', 'Laskut'). ' '.$from.' - '.$to);
+		$mail->setBody($message);
+		$mail->setAttachment($path.'/'.$file);
+		if($mail->send())
+			$this->redirect(array('reskontraluettelo','mail'=>'sent'));
+
+
 		} else {
 
 		$this->render('reskontraluettelo',array(
