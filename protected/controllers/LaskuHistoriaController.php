@@ -111,7 +111,7 @@ class LaskuHistoriaController extends Controller
 		$pvm = date("Y-m-d",strtotime($_POST['from']));
 
         	$criteria->condition = " 
-			id IN ( SELECT lid FROM lasku_historia 
+			id IN ( SELECT lid FROM lasku_historia
 			WHERE  time > '".$pvm."'
 			AND yht_euro!=0
 			ORDER BY id DESC)
