@@ -300,9 +300,10 @@ class LaskuHistoriaController extends Controller
 		}
 
 
-        	$criteria->addCondition ("DATE(paivays) BETWEEN 
-			'".$from."' AND '".$to."' 
-		");
+        	$criteria->condition = " 
+			DATE(paivays) BETWEEN '".$from."' AND '".$to."'
+			AND tilanne!=999
+		";
 
 
 		$model = Lasku::model()->findAll($criteria);
