@@ -164,7 +164,7 @@ class Lasku extends DB2ActiveRecord
 			'freetext'=>'Viesti',
 			'deliverymethod'=>'Toimitustapa',
 			'deliveryterm'=>'Toimitusehto',
-			'vatperiod'=>'Vatperiod',
+			'vatperiod'=>'Päivämäärä johon ALV kohdistuu',
 		);
 	}
 
