@@ -939,15 +939,18 @@ exit;
 		{
 
 		  $json = json_decode($l->status, true);
-		    if(isset($json['statustext']) and !empty($json['statustext']) and $json['statustext'] != 1)
+		    if(isset($json['statustext']) and !empty($json['statustext']))
 		    {
 		      	$trustStr = date("d.m.Y",strtotime($json['statustime'])).' '.$json['statustext'];
 			$trust = true;
 		    } elseif(!isset($json['statustext']) and isset($json['reference'])) {
 
-			$trustStr .= 'Vastaanotettu<br>';
+			$trustStr = 'Vastaanotettu<br>';
 			$trust = true;
 
+		    } else {
+		      	$trustStr = print_r($json);
+			$trust = true;
 		    }
 
 		}
@@ -1080,13 +1083,17 @@ exit;
 		  {
 
 		    $json = json_decode($l->status, true);
-		    if(isset($json['statustext']) and !empty($json['statustext']) and $json['statustext'] != 1)
+		    if(isset($json['statustext']) and !empty($json['statustext']))
 		    {
 		      	$str .= '<b>'.date("d.m.Y H:i",strtotime($json['statustime'])).'</b> '.$json['statustext'].'<br>';
 
 		    } elseif(!isset($json['statustext']) and isset($json['accepted'])) {
 
 			$str .= '<b>'.date("d.m.Y H:i",strtotime($la->time)).'</b> Vastaanotettu<br>';
+			$trust = true;
+
+		    } else {
+		      	$str .= print_r($json);
 			$trust = true;
 		    }
 
