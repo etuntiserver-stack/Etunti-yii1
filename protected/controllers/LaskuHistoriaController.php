@@ -249,7 +249,10 @@ class LaskuHistoriaController extends Controller
 		$to 	= date("Y-m-d",strtotime($_POST['to']));
 		}
 
-        	$criteria->addCondition ("DATE(paivays) BETWEEN '".$from."' AND '".$to."' ");
+        	$criteria->condition = " 
+			DATE(paivays) BETWEEN '".$from."' AND '".$to."'
+			AND tilanne!=999
+		";
 
 		$model = Lasku::model()->findAll($criteria);
 
@@ -375,7 +378,10 @@ class LaskuHistoriaController extends Controller
 		$to 	= date("Y-m-d",strtotime($_POST['to']));
 		}
 
-        	$criteria->addCondition ("DATE(paivays) BETWEEN '".$from."' AND '".$to."' ");
+        	$criteria->condition = "
+			DATE(paivays) BETWEEN '".$from."' AND '".$to."'
+			AND tilanne!=999
+		";
 
 		$model = Lasku::model()->findAll($criteria);
 
@@ -409,7 +415,7 @@ class LaskuHistoriaController extends Controller
        		$criteria->order = " paivays DESC ";
        		$criteria->condition = "
 			id IN (select lid from lasku_historia where trust_statuscode='101')
-
+			AND tilanne!=999
 		";
 
 		$from = date("Y-m-d");
@@ -454,6 +460,7 @@ class LaskuHistoriaController extends Controller
        		$criteria->order = " paivays DESC ";
        		$criteria->condition = "
 			id IN (select lid from lasku_historia where trust_statuscode='101')
+			AND tilanne!=999
 		";
 
 		$from = date("Y-m-d");

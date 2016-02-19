@@ -78,6 +78,25 @@ if(isset($_GET['hyvaksyminen'])){
 	$this->redirect(array('update','id'=>$id));
 }
 
+if(isset($_GET['mitatointi'])){
+
+
+     $tapahtumapvm = date("Y-m-d H:i:s");
+     Lasku::model()->updatebypk($id, array('tilanne'=>999,'tapahtumapvm'=>$tapahtumapvm));
+
+		    // Lasku historia
+		    $l = Lasku::model()->findbypk($id);
+		    $historia = new LaskuHistoria;
+		    $historia->time = $tapahtumapvm;
+		    $historia->lid = $id;
+		    $historia->status = 'Lasku mitätöity';
+		    $historia->palvelu = "local";
+		    $historia->yht_euro = $l->yhteensa_total;
+		    $historia->save();
+
+	$this->redirect(array('update','id'=>$id));
+}
+
 
 
 if(isset($_GET['finvoiceTrust']) or isset($_GET['hyvityslasku'])){
