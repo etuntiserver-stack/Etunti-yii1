@@ -1014,7 +1014,10 @@ exit;
 		  } elseif($l->status == 'Lähetetty sähköpostilla'){
 		   $localStr = 'Lähetetty sähköpostilla';
 		   $local = true;
-		  } 
+		  } elseif($l->status == 'Lasku mitätöity'){
+		   $localStr = 'Lasku mitätöity';
+		   $local = true;
+		  }
 
 		}
 		//  Local -->
