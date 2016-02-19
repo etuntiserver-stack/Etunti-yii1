@@ -98,6 +98,8 @@ class LaskuHistoriaController extends Controller
 		$palvelu = 'postita';
 		if($asetukset->palvelu_tyyppi == 2)
 		$palvelu = 'trust';
+		if($asetukset->palvelu_tyyppi == 3)
+		$palvelu = 'local';
 
 
 
@@ -108,7 +110,8 @@ class LaskuHistoriaController extends Controller
 		// <-- Trust
 
        		$criteria->condition = "
-			id IN (SELECT id FROM lasku_historia WHERE  palvelu='".$palvelu."' )			 		
+			id IN (SELECT id FROM lasku_historia WHERE  palvelu='".$palvelu."' )
+			AND tilanne!=999		 		
 		";
 
 		// <-- Trust
