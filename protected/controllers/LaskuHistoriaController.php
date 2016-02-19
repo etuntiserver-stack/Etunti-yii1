@@ -113,7 +113,7 @@ class LaskuHistoriaController extends Controller
         	$criteria->condition = " 
 			id IN ( SELECT lid FROM lasku_historia
 			WHERE  time > '".$pvm."'
-			AND yht_euro!=0
+			AND yht_euro > 0
 			ORDER BY id DESC)
 			AND tilanne!=999			
 		";
