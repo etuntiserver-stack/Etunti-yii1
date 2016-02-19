@@ -927,7 +927,7 @@ exit;
 	{ 
 
        		$criteria = new CDbCriteria();
-       		$criteria->select = " palvelu,postita_statuscode,status ";
+       		$criteria->select = " time,palvelu,postita_statuscode,status ";
        		$criteria->order = " id DESC ";
        		$criteria->condition = " lid='".$data->id."' ";
 		$l = LaskuHistoria::model()->find($criteria);
@@ -945,25 +945,8 @@ exit;
 			$trust = true;
 		    } elseif(!isset($json['statustext']) and isset($json['reference'])) {
 
-		       if(count($json) > 0)
-		       {
-
-				$trustStr .= '<b>'.date("d.m.Y H:i",strtotime($data->paivays)).'</b><br>';
-
-		         foreach($json as $key=>$value)
-		         {
-			   if(is_array($value))
-			   {
-				foreach($value as $k=>$v)
-				$trustStr .= "&nbsp;".$k.": ".$v."<br>";
-
-			   } else {
-				$trustStr .= $key.": ".$value."<br>";
-			   }
-		         }
-				$trust = true;
- 		       }
-
+			$trustStr .= 'Vastaanotettu<br>';
+			$trust = true;
 
 		    }
 
@@ -1101,27 +1084,10 @@ exit;
 		    {
 		      	$str .= '<b>'.date("d.m.Y H:i",strtotime($json['statustime'])).'</b> '.$json['statustext'].'<br>';
 
-		    } elseif(!isset($json['statustext']) and isset($json['reference'])) {
+		    } elseif(!isset($json['statustext']) and isset($json['accepted'])) {
 
-		       if(count($json) > 0)
-		       {
-				$str .= '<b>'.date("d.m.Y H:i",strtotime($la->paivays)).'</b><br>';
-
-		         foreach($json as $key=>$value)
-		         {
-			   if(is_array($value))
-			   {
-				foreach($value as $k=>$v)
-				$str .= "&nbsp;".$k.": ".$v."<br>";
-
-			   } else {
-				$str .= $key.": ".$value."<br>";
-			   }
-		         }
-				$trust = true;
- 		       }
-
-
+			$str .= '<b>'.date("d.m.Y H:i",strtotime($la->time)).'</b> Vastaanotettu<br>';
+			$trust = true;
 		    }
 
 		  }
