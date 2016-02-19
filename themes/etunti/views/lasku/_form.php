@@ -79,12 +79,12 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 	<?php if($asetukset->palvelu_tyyppi != 2) : ?>
 	<?php
        		$criteria = new CDbCriteria();
-       		$criteria->order = "laskunumero DESC";
-       		$criteria->condition = "laskunumero!='0'";
-		$ln = '';
+       		$criteria->order = "id DESC,laskunumero DESC";
+       		$criteria->condition = "laskunumero!=0";
+		$ln = 0;
 		$vm = Lasku::model()->find($criteria);
 		if(isset($vm->id))
-		$ln = '110'.$vm->laskunumero+1;
+		$ln = $vm->laskunumero+1;
 
 	?>
 	<div class="section fill mb5">

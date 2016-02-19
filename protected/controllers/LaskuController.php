@@ -467,7 +467,7 @@ class LaskuController extends Controller
 
 
 			$viite = Viitenumero($model->as_nro."00".$model->id);
-			Lasku::model()->updatebypk($model->id, array('viitenumero'=>$viite, 'laskunumero'=>$model->id));
+			Lasku::model()->updatebypk($model->id, array('viitenumero'=>$viite));
 
 			foreach($_POST['tkoodi'] as $key=>$val)
 			{
