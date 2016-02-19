@@ -104,35 +104,20 @@ class LaskuHistoriaController extends Controller
 
 
        		$criteria = new CDbCriteria();
-       		//$criteria->select = " ,t.* ";
        		$criteria->order = " id DESC ";
 
-		// <-- Trust
-
-       		$criteria->condition = "
-			id IN (SELECT id FROM lasku_historia WHERE  palvelu='".$palvelu."' )
-			AND tilanne!=999		 		
-		";
-
-		// <-- Trust
-       		//$criteria->group = " lid ";
-
-		$pvm = '';
+		$pvm = date("Y-m-d");
 		if(isset($_POST['from']))
 		$pvm = date("Y-m-d",strtotime($_POST['from']));
-		else
-		$pvm = date("Y-m-d");
 
-		if(Yii::app()->request->getPost('from'))
-		{
-        	$criteria->addCondition (" 
-			id IN ( SELECT lid FROM lasku_historia 
+        	$criteria->condition = " 
+			id IN ( SELECT lid FROM lasku_historia
 			WHERE  time > '".$pvm."'
 			AND yht_euro!=0
 			ORDER BY id DESC)
-			
-		");
-		}
+			AND tilanne!=999			
+		";
+
 
 		if(isset($_POST['tulosta']))
 		{
