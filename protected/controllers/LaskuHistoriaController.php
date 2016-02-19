@@ -127,8 +127,9 @@ class LaskuHistoriaController extends Controller
 		{
         	$criteria->addCondition (" 
 			id IN ( SELECT lid FROM lasku_historia 
-			WHERE  time > '".$pvm."' 
-			AND trust_statuscode!='101' )
+			WHERE  time > '".$pvm."'
+			AND yht_euro!=0
+			ORDER BY id DESC)
 			
 		");
 		}
