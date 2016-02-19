@@ -327,7 +327,7 @@ class LaskuHistoriaController extends Controller
          	  $content_PDF = $html2pdf->Output('my_doc.pdf', EYiiPdf::OUTPUT_TO_STRING);
 
 
-		$file = $from.'_'.$to.'_'.$_POST['asiakasLaskulle'].'.pdf';
+		$file = date("Ymd").'_'.$_POST['asiakasLaskulle'].'.pdf';
 		$path = Yii::app()->request->baseUrl."emails/reskontraluettelot/".Yii::app()->user->domain;
 
   		if (!file_exists($path))
