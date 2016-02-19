@@ -1250,6 +1250,9 @@ $("#Lasku_as_nro").change(function() {
 		if(sp[13]){
 		    $("#Lasku_kirjeenluokka option[value="+sp[13]+"]").attr('selected','selected');
 		}
+		if(sp[14]){
+		    $("#Lasku_sahkoposti").val(sp[14])
+		}
 
            },
            error: function(XMLHttpRequest, textStatus, errorThrown){
