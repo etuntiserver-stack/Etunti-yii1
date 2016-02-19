@@ -2,6 +2,13 @@
 /* @var $this LaskuHistoriaController */
 /* @var $data LaskuHistoria */
 
+       	$criteria = new CDbCriteria();
+       	$criteria->order = " id DESC ";
+       	$criteria->condition = " lid='".$data->id."' ";
+	$lh = LaskuHistoria::model()->find($criteria);
+	$yht_euro = '';
+	if(isset($lh->id))
+	$yht_euro = $lh->yht_euro;
 ?>
 
 <tr>
@@ -27,7 +34,7 @@
 	</td>
 
 	<td>
-	00,00
+	<?php echo number_format($yht_euro, 2, ',', ' '); ?>
 	</td>
 
 </tr>
