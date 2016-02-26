@@ -641,10 +641,16 @@ class LaskuController extends Controller
 		$criteria = new CDbCriteria();
 	    	$criteria->order = " id DESC ";
 	    	//$criteria->group = " lid ";
+
+		if(isset($ids[0]))
+		{
+		$ids = implode(",",$job_ids);
 	    	$criteria->condition = " 
 			id IN (SELECT MAX(id) FROM lasku_historia GROUP BY lid )
 			AND lid IN (SELECT id FROM laskut where postita_jobid IN ($ids) ) 
 		";
+		}
+
 		$lh=LaskuHistoria::model()->findAll($criteria);
 
 		$ch = curl_init();
