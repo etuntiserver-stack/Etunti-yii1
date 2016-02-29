@@ -2,9 +2,17 @@
 
 	$tun = 0;
        	$criteria = new CDbCriteria();
+
+        $criteria->select = "
+		SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
+		DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit
+	";
+
 	$criteria->condition = " tid = '".$tid."' AND
-	DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
-	BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."' ";
+		DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
+		BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."'
+		AND admin!='1'
+	";
 
 	if(Yii::app()->session['Lounastauko'])
 	$criteria->addCondition (" status != '10' ");
@@ -12,8 +20,8 @@
 	if(Yii::app()->session['MATKA'])
 	$criteria->addCondition (" status != '2' ");
 
-	$lu = Mobile::model()->findAll($criteria); 
-
+	$lu = Mobile::model()->find($criteria); 
+/*
 	foreach($lu as $tvVal){
 	   if($tvVal->id){
 
@@ -24,6 +32,6 @@
 	   $tun += strtotime($tvVal->loppui)-strtotime($tvVal->aloitan);
 	   }
 	}
-
-	echo $tun;
+*/
+	echo $lu->l_tunnit;
 ?>

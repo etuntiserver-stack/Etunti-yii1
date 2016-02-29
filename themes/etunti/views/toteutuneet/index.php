@@ -258,6 +258,7 @@ function dateDiff($start, $end) {
   ?>
 
   <?php
+  $total_luettu = 0;
   $total_luettu = $this->renderPartial('//mobile/total_luettu',array('tid'=>$explTekija[0]),true);
   echo '<th><center>'.sprint($total_luettu).'</center></th>';
   ?>

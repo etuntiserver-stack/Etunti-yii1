@@ -588,9 +588,8 @@ class ToteutuneetController extends Controller
 
         	$criteria->condition = " 
 			loppui!='' and aloitan!='' 
-			AND tid='$tid'
-			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%u') = '".$week."'
-			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y') = '$year'
+			AND tid='".$tid."'
+			AND YEARWEEK(DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d')) = '".$year.$week."'
 		";
 
 		if(Yii::app()->session['Lounastauko'])
@@ -665,7 +664,7 @@ class ToteutuneetController extends Controller
 
 		  echo '</td>';
 		
-		  $totalLu = '';
+		  $totalLu = 0;
 		  $totalLu = $this->yhtLuWeek($tid,$vko,$year);
 		  echo '<td style="background: #669999;color: white; text-align:center" class="small myBgColors">'.$this->sprint($totalLu).'<br>('.$this->num($totalLu).')</td>';
 		  $totalTot = '';

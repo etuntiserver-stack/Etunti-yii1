@@ -15,11 +15,12 @@ $this->menu=array(
 	array('label'=>'Hallinta mobiili', 'url'=>array('admin')),
 );
 
-  $tag = '';
+
   $tag = explode("_",$model->asiakas_num);
   if(isset($tag[1]))
   $tag = $tag[1];
-
+  else
+  $tag = '';
 ?>
 
         <!-- begin: .tray-center -->
