@@ -654,7 +654,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 
 
 
-	protected function ilta($al,$lop){
+	public function ilta($al,$lop){
 
 		$totalIlta = 0;
 
@@ -710,10 +710,11 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 	}
 
 
-	protected function yo($al,$lop){
+	public function yo($al,$lop){
 
 		$totalYo = 0;
 
+		//echo $al[0].' '.$al[1].' - '.$lop[0].' '.$lop[1].'<br>';
 
 	  	if(strtotime($al[0]." ".$al[1]) >= strtotime($al[0]." 23:00")
 		and strtotime($lop[0]." ".$lop[1]) <= strtotime($lop[0]." 06:00"))
@@ -726,8 +727,9 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		}
 
 	  	if(strtotime($al[0]." ".$al[1]) <= strtotime($al[0]." 23:00")
-		and strtotime($lop[0]." ".$lop[1]) <= strtotime($lop[0]." 06:00")
-		and strtotime($lop[0]." ".$lop[1]) >= strtotime($lop[0]." 23:00"))
+		and strtotime($lop[0]." ".$lop[1]) >= strtotime($lop[0]." 23:00")
+		and $al[0] == $lop[0]
+		)
 		{
 	   	  $strAl0 = strtotime($al[0]." 23:00");
 	   	  $strLop0 = strtotime($lop[0]." ".$lop[1]);
@@ -737,10 +739,25 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		}
 
 	  	if(strtotime($al[0]." ".$al[1]) <= strtotime($al[0]." 23:00")
-		and strtotime($lop[0]." ".$lop[1]) >= strtotime($lop[0]." 06:00"))
+		and strtotime($lop[0]." ".$lop[1]) >= strtotime($lop[0]." 06:00")
+		and $al[0] != $lop[0]
+		)
 		{
 	   	  $strAl0 = strtotime($al[0]." 23:00");
 	   	  $strLop0 = strtotime($lop[0]." 06:00");
+
+	 	  $str = ($strLop0-$strAl0);
+	      	  $totalYo += $str;
+		}
+
+
+	  	if(strtotime($al[0]." ".$al[1]) <= strtotime($al[0]." 23:00")
+		and strtotime($lop[0]." ".$lop[1]) <= strtotime($lop[0]." 06:00")
+		and $al[0] != $lop[0]
+		)
+		{
+	   	  $strAl0 = strtotime($al[0]." 23:00");
+	   	  $strLop0 = strtotime($lop[0]." ".$lop[1]);
 
 	 	  $str = ($strLop0-$strAl0);
 	      	  $totalYo += $str;
@@ -753,9 +770,12 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 	   	  $strLop0 = strtotime($lop[0]." 06:00");
 
 	 	  $str = ($strLop0-$strAl0);
-
 	      	  $totalYo += $str;
 		}
+
+
+
+
 
 		if($totalYo > 0)
 		return $totalYo;
