@@ -201,7 +201,7 @@
 		if(count($list) > 0)
 		{
         	echo $form->dropDownList($model, 'ryhma', $list,
-		array('empty'=>'Valitse ryhmä','class'=>'form-control'));
+		array('empty'=>'Valitse toimialue','class'=>'form-control'));
 		} else {
 		echo 'Luo Valikko tietokannassa "Select Type = asiakas_ryhma"';
 		}		
