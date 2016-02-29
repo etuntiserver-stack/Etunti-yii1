@@ -6,9 +6,9 @@
 }
 .tb table .chckbxHyvaksynta{ display:none }
 .tb .col1{ width: 5%; text-align: left; }
-.tb .col2{ width: 43%; text-align: left;}
-.tb .col3{ width: 43%; text-align: left;}
-.tb .col4{ width: 43%; text-align: left;}
+.tb .col2{ width: 41%; text-align: left;}
+.tb .col3{ width: 41%; text-align: left;}
+.tb .col4{ width: 41%; text-align: left;}
 .tb .col5{ width: 10%; }
 .tb .col6{ width: 9%; }
 .tb .col7{ width: 9%; }
@@ -74,17 +74,19 @@ function dateDiff($start, $end) {
   <th><?php echo Yii::t('main', 'Yhteensä'); ?></th>
   <th><?php echo Yii::t('main', 'Ma'); ?></th>
   <th><?php echo Yii::t('main', 'Ilta'); ?></th>
+  <th><?php echo Yii::t('main', 'Yö'); ?></th>
   </tr>
   </thead>
   <tbody>
   <?php 
 
   $arrDate = array(1=>"Ma",2=>"Ti",3=>"Ke",4=>"To",5=>"Pe",6=>"La",7=>"Su");
-  $yhtMatka = 0;
-  $yhtIlta = 0;
+  $yhtMatka 	= 0;
+  $yhtIlta 	= 0;
+  $yhtYo 	= 0;
   $yhtMatkaWeek = 0;
-  $yhtIltaWeek = 0;
-  $viikkoBreak = '';
+  $yhtIltaWeek 	= 0;
+  $viikkoBreak 	= '';
 
   for ($i = 0; $i <= $dateDiff; $i++) 
   {
@@ -120,9 +122,14 @@ function dateDiff($start, $end) {
     echo '<td class="col6">'.$this->sprint($matka).'</td>';
 
     $tyoIlta = '';
-    $tyoIlta = $this->tyoIlta($explTekija[0],date("Y-m-d",strtotime($date)));
+    $tyoIlta = $this->tyoIlta($explTekija[0],date("Y-m-d",strtotime($date)),'ilta');
     $yhtIlta += $tyoIlta;
     echo '<td class="col7">'.$this->sprint($tyoIlta).'</td>';
+
+    $tyoYo = 0;
+    $tyoYo = $this->tyoIlta($explTekija[0],date("Y-m-d",strtotime($date)),'yo');
+    $yhtYo += $tyoYo;
+    echo '<td>'.$this->sprint($tyoYo).'</td>';
 
     if($viikkoBreak == false){
        $yhtMatkaWeek += $matka;
@@ -154,6 +161,7 @@ function dateDiff($start, $end) {
     echo '<td></td>';
     echo '<td>'.$this->sprint($yhtMatka).'</td>';
     echo '<td>'.$this->sprint($yhtIlta).'</td>';
+    echo '<td>'.$this->sprint($yhtYo).'</td>';
     echo '</tr>';
 ?>
   </tfoot>

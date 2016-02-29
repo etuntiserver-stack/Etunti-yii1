@@ -178,16 +178,18 @@ function dateDiff($start, $end) {
   <th><?php echo Yii::t('main', 'Yhteensä'); ?></th>
   <th><?php echo Yii::t('main', 'Ma'); ?></th>
   <th><?php echo Yii::t('main', 'Ilta'); ?></th>
+  <th><?php echo Yii::t('main', 'Yö'); ?></th>
   </tr>
   </thead>
   <tbody>
   <?php 
   $arrDate = array(1=>"Ma",2=>"Ti",3=>"Ke",4=>"To",5=>"Pe",6=>"La",7=>"Su");
-  $yhtMatka = 0;
-  $yhtIlta = 0;
+  $yhtMatka 	= 0;
+  $yhtIlta 	= 0;
+  $yhtYo 	= 0;
   $yhtMatkaWeek = 0;
-  $yhtIltaWeek = 0;
-  $viikkoBreak = '';
+  $yhtIltaWeek 	= 0;
+  $viikkoBreak 	= '';
 
   for ($i = 0; $i <= $dateDiff; $i++) 
   {
@@ -222,10 +224,15 @@ function dateDiff($start, $end) {
     $yhtMatka += $matka;
     echo '<td>'.$this->sprint($matka).'</td>';
 
-    $tyoIlta = '';
-    $tyoIlta = $this->tyoIlta($explTekija[0],date("Y-m-d",strtotime($date)));
+    $tyoIlta = 0;
+    $tyoIlta = $this->tyoIlta($explTekija[0],date("Y-m-d",strtotime($date)),'ilta');
     $yhtIlta += $tyoIlta;
     echo '<td>'.$this->sprint($tyoIlta).'</td>';
+
+    $tyoYo = 0;
+    $tyoYo = $this->tyoIlta($explTekija[0],date("Y-m-d",strtotime($date)),'yo');
+    $yhtYo += $tyoYo;
+    echo '<td>'.$this->sprint($tyoYo).'</td>';
 
 
     if($viikkoBreak == false){
@@ -271,6 +278,7 @@ function dateDiff($start, $end) {
   <th></th>
   <th><?php echo $this->sprint($yhtMatka); ?></th>
   <th><?php echo $this->sprint($yhtIlta); ?></th>
+  <th><?php echo $this->sprint($yhtYo); ?></th>
   </tr>
   </tfoot>
 

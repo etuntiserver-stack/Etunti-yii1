@@ -453,68 +453,11 @@ class ToteutuneetController extends Controller
 	}
 
 
-
-	protected function ilta($al,$lop){
-
-		$totalIlta = 0;
-
-	    if($al[0] == $lop[0])
-	    {
-
-	  	if(strtotime($al[0]." ".$al[1]) > strtotime($al[0]." 18:00")
-		and strtotime($lop[0]." ".$lop[1]) <= strtotime($lop[0]." 23:00"))
-		{
-	   	  $strAl0 = strtotime($al[0]." ".$al[1]);
-	   	  $strLop0 = strtotime($lop[0]." ".$lop[1]);
-
-	 	  $str = ($strLop0-$strAl0);
-	      	  $totalIlta += $str;
-		}
-
-	  	if(strtotime($al[0]." ".$al[1]) <= strtotime($al[0]." 18:00")
-		and strtotime($lop[0]." ".$lop[1]) <= strtotime($lop[0]." 23:00")
-		and strtotime($lop[0]." ".$lop[1]) >= strtotime($lop[0]." 18:00"))
-		{
-	   	  $strAl0 = strtotime($al[0]." 18:00");
-	   	  $strLop0 = strtotime($lop[0]." ".$lop[1]);
-
-	 	  $str = ($strLop0-$strAl0);
-	      	  $totalIlta += $str;
-		}
-
-	  	if(strtotime($al[0]." ".$al[1]) <= strtotime($al[0]." 18:00")
-
-		and strtotime($lop[0]." ".$lop[1]) >= strtotime($lop[0]." 23:00"))
-		{
-	   	  $strAl0 = strtotime($al[0]." 18:00");
-	   	  $strLop0 = strtotime($lop[0]." 23:00");
-
-	 	  $str = ($strLop0-$strAl0);
-	      	  $totalIlta += $str;
-		}
-
-	  	if(strtotime($al[0]." ".$al[1]) >= strtotime($al[0]." 18:00")
-		and strtotime($lop[0]." ".$lop[1]) >= strtotime($lop[0]." 23:00"))
-		{
-	   	  $strAl0 = strtotime($al[0]." ".$al[1]);
-	   	  $strLop0 = strtotime($lop[0]." 23:00");
-
-	 	  $str = ($strLop0-$strAl0);
-
-	      	  $totalIlta += $str;
-		}
-
-	    }
-
-		return $totalIlta;
-	}
-
-
-
-	protected function tyoIlta($tid,$pvm)
+	protected function tyoIlta($tid,$pvm,$tila)
 	{
 
-		$totalIlta 	= 0;
+		$total 	= 0;
+		$mobile = Yii::app()->createController('Mobile');
 
        		$criteria = new CDbCriteria();
         	$criteria->select = "
@@ -540,7 +483,10 @@ class ToteutuneetController extends Controller
 		    $l->l_tunnit = (strtotime($l->loppui)-strtotime($l->aloitan));
 		    $al = explode(" ",$l->aloitan);
 		    $lop = explode(" ",$l->loppui);
-		    $totalIlta += $this->ilta($al,$lop);
+		    if($tila == 'ilta')
+		    $total += $mobile[0]->ilta($al,$lop);
+		    elseif($tila == 'yo')
+		    $total += $mobile[0]->yo($al,$lop);
 		}
 		/* ////////////////////////// */
 
@@ -566,12 +512,15 @@ class ToteutuneetController extends Controller
 		    $l->l_tunnit = (strtotime($l->loppui)-strtotime($l->aloitan));
 		    $al = explode(" ",$l->aloitan);
 		    $lop = explode(" ",$l->loppui);
-		    $totalIlta += $this->ilta($al,$lop);
+		    if($tila == 'ilta')
+		    $total += $mobile[0]->ilta($al,$lop);
+		    elseif($tila == 'yo')
+		    $total += $mobile[0]->yo($al,$lop);
 
 		}
 
 
-		return $totalIlta;
+		return $total;
 
 	}
 
