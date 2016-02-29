@@ -648,10 +648,11 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 
   <?php 
   if(isset($model->id) 
- 	and $model->tilanne == '0'
+ 	and $model->tilanne == 1
 	and $asetukset->palvelu_tyyppi == 1
+	and $model->tilanne != 999 // mitatoiny, eli ei arvostele
   ){
-  echo '<a href="finvoice?id='.$model->id.'&laskutus='.$model->laskutus.'" class="btn btn-success btn-group myBgColors">'.Yii::t('main','Hyväksy ja luo POSTITA:ssa (ei viellä lähetä)').'</a>';
+  echo '<a href="finvoice?id='.$model->id.'&laskutus='.$model->laskutus.'" class="btn btn-success btn-group myBgColors">'.Yii::t('main','Luo POSTITA:ssa (ei viellä lähetä)').'</a>';
   }
   ?>
 
@@ -708,14 +709,14 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 		<a href="finvoice?id=<?php echo $model->id; ?>&hyvityslasku=true&refundtojobid=<?php echo $model->trust_jobid; ?>" class="btn  btn-success btn-group myBgColors"><?php echo Yii::t('main','Lähetä Hyvityslasku (TRUST.FI)'); ?></a>
 		<?php endif; ?>
 
-		<?php if(
+		<?php /* if(
 			isset($model->id) 
 			and $model->tilanne == '1' 
 			and $asetukset->palvelu_tyyppi == 1
 			and $model->tilanne != 999
 		) : ?>
 		<a href="finvoice?id=<?php echo $model->id; ?>&pdf=true" class="btn  btn-success btn-group myBgColors"><?php echo Yii::t('main','Lähetä PDF (POSTITA.FI)'); ?></a>
-		<?php endif; ?>
+		<?php endif; */ ?>
 
 
 		<?php if(isset($model->id) 
