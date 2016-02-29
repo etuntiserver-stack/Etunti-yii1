@@ -586,7 +586,7 @@ class ToteutuneetController extends Controller
 
 
 
-	protected function viikkonLoppu($date,$tid,$yhtMatkaWeek,$yhtIltaWeek,$viikkoBreak){
+	protected function viikkonLoppu($date,$tid,$yhtMatkaWeek,$yhtIltaWeek,$viikkoBreak,$yhtYoWeek){
 
 	    if(date('N', strtotime($date)) == 7)
 	    {
@@ -625,7 +625,7 @@ class ToteutuneetController extends Controller
 		  echo '<td style="background: #669999;color: white; text-align:center" class="small myBgColors"></td>';
 		  echo '<td style="background: #669999;color: white; text-align:center" class="small myBgColors">'.$this->sprint($yhtMatkaWeek).'<br>('.$this->num($yhtMatkaWeek).')</td>';
 		  echo '<td style="background: #669999;color: white; text-align:center" class="small myBgColors">'.$this->sprint($yhtIltaWeek).'<br>('.$this->num($yhtIltaWeek).')</td>';
-
+		  echo '<td style="background: #669999;color: white; text-align:center" class="small myBgColors">'.$this->sprint($yhtYoWeek).'<br>('.$this->num($yhtYoWeek).')</td>';
 	    echo '</tr>';
 	    $viikkoBreak = true;
 	    }

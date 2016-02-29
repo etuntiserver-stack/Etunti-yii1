@@ -86,6 +86,7 @@ function dateDiff($start, $end) {
   $yhtYo 	= 0;
   $yhtMatkaWeek = 0;
   $yhtIltaWeek 	= 0;
+  $yhtYoWeek	= 0;
   $viikkoBreak 	= '';
 
   for ($i = 0; $i <= $dateDiff; $i++) 
@@ -134,15 +135,17 @@ function dateDiff($start, $end) {
     if($viikkoBreak == false){
        $yhtMatkaWeek += $matka;
        $yhtIltaWeek += $tyoIlta;
+       $yhtYoWeek += $tyoYo;
     } else {
        $yhtMatkaWeek = 0;
        $yhtIltaWeek = 0;
+       $yhtYoWeek = 0;
     }
     $viikkoBreak = false;
 
     echo '</tr>';
 
-    echo $this->viikkonLoppu($date,$explTekija[0],$yhtMatkaWeek,$yhtIltaWeek,$viikkoBreak);
+    echo $this->viikkonLoppu($date,$explTekija[0],$yhtMatkaWeek,$yhtIltaWeek,$viikkoBreak,$yhtYoWeek);
 
   }
   ?>
