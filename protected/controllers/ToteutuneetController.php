@@ -578,7 +578,7 @@ class ToteutuneetController extends Controller
 
 
 
-	protected function totLuYhteensa($criteria,$tid,$week,$year){
+	protected function totLuYhteensa($criteria,$tid,$week,$year,$tila){
 
 
         	$criteria->select = "
@@ -588,10 +588,12 @@ class ToteutuneetController extends Controller
 
         	$criteria->condition = " 
 			loppui!='' and aloitan!='' 
-			AND tid='$tid'
-			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%u') = '".$week."'
-			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y') = '$year'
+			AND tid='".$tid."'
+			AND YEARWEEK(DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d')) = '".$year.$week."'
 		";
+
+		if($tila == 'luetut')
+	        $criteria->addCondition (" admin!='1' ");
 
 		if(Yii::app()->session['Lounastauko'])
 	        $criteria->addCondition (" status != '10' ");
@@ -607,7 +609,7 @@ class ToteutuneetController extends Controller
 
 
        		$cr1 = new CDbCriteria();
-		$this->totLuYhteensa($cr1,$tid,$week,$year);
+		$this->totLuYhteensa($cr1,$tid,$week,$year,'luetut');
 		$l = Mobile::model()->find($cr1);
 
 		$lu = $l->l_tunnit;
@@ -619,12 +621,12 @@ class ToteutuneetController extends Controller
 	protected function yhtTOtWeek($tid,$week,$year){
 
        		$cr1 = new CDbCriteria();
-		$this->totLuYhteensa($cr1,$tid,$week,$year);
+		$this->totLuYhteensa($cr1,$tid,$week,$year,'toteutuneet');
 		$cr1->addCondition (" id NOT IN (SELECT kid FROM sivexkuitti_repaired) ");
 		$tt = Mobile::model()->find($cr1);
 
        		$cr2 = new CDbCriteria();
-		$this->totLuYhteensa($cr2,$tid,$week,$year);
+		$this->totLuYhteensa($cr2,$tid,$week,$year,'toteutuneet');
 		$tt2 = Toteutuneet::model()->find($cr2);
 		
 		$tot = $tt->l_tunnit+$tt2->l_tunnit;
@@ -665,7 +667,7 @@ class ToteutuneetController extends Controller
 
 		  echo '</td>';
 		
-		  $totalLu = '';
+		  $totalLu = 0;
 		  $totalLu = $this->yhtLuWeek($tid,$vko,$year);
 		  echo '<td style="background: #669999;color: white; text-align:center" class="small myBgColors">'.$this->sprint($totalLu).'<br>('.$this->num($totalLu).')</td>';
 		  $totalTot = '';
