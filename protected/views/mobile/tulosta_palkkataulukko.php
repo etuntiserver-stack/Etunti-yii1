@@ -18,9 +18,9 @@
 .tb .col10{ width: 7%; }
 .tb .col11{ width: 7%; }
 .tb .col12{ width: 7%; }
-.tb .col13{ width: 20%; text-align: left; }
-.tb .col14{ width: 20%; text-align: left; }
-.tb .col15{ width: 20%; text-align: left; }
+.tb .col13{ width: 19%; text-align: left; }
+.tb .col14{ width: 19%; text-align: left; }
+.tb .col15{ width: 19%; text-align: left; }
 </style>
 
 
@@ -58,6 +58,7 @@
   <th><?php echo Yii::t('main', 'SL'); ?></th>
   <th><?php echo Yii::t('main', 'SPL<br>Pvm'); ?></th>
   <th><?php echo Yii::t('main', 'LS'); ?></th>
+  <th><?php echo Yii::t('main', 'VL'); ?></th>
   <th><?php echo Yii::t('main', 'Korvaus'); ?></th>
   <th><?php echo Yii::t('main', 'Lisätyötunnit'); ?></th>
   <th><?php echo Yii::t('main', 'Ennakko'); ?></th>
@@ -72,6 +73,8 @@
   $sl 		= 0;
   $ls 		= 0;
   $spl 		= 0;
+  $vl 		= 0;
+  $vlYht	= 0;
   $slYht	= 0;
   $splYht	= 0;
   $lsYht	= 0;
@@ -96,6 +99,8 @@
 	$lsYht += $ls;
   	$spl = $this->TidfromtoSPL($from,$to,$data->id);
 	$splYht += $spl;
+  	$vl = $this->TidfromtoVuosiloma($from,$to,$data->id);
+	$vlYht += $vl;
 	$totalTp += $tp;
   	$pyhat = $this->pyhapaivat($data->id,$from,$to,"pyhat");
 	$pyhatYht += $pyhat;
@@ -135,6 +140,7 @@
 			'sl'=>$sl,
 			'spl'=>$spl,
 			'ls'=>$ls,
+			'vl'=>$vl,
 			'from'=>$from,
 			'to'=>$to,
 			'pyhat'=>$pyhat,
@@ -167,6 +173,7 @@
 	<td><?php echo $this->num($slYht); ?></td>
 	<td><?php echo $splYht; ?></td>
 	<td><?php echo $this->num($lsYht); ?></td>
+	<td><?php echo $vlYht; ?></td>
 	<td></td>
 	<td></td>
 	<td></td>
