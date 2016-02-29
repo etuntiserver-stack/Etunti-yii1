@@ -14,7 +14,7 @@
 	if(substr($interval->format('%R%a days'), 0, 1) == "+")
 	{
 	$paljonko = $interval->format('%a');
-	if($paljonko < 30)
+	if($paljonko < 14)
 	$varo = "style='border:2px red solid'";
 	else
 	$varo = "";

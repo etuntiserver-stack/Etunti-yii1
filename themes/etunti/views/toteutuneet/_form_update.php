@@ -113,8 +113,10 @@ $forPVM = date('d.m.Y',strtotime($model->aloitan));
 	<div class="section">
 	<label><?php echo Yii::t('main','Kohteen tiedot'); ?></label>
 	<?php
-	$m = Kohteet::model()->findbypk($model->kohdenID);
 	$ohje = '';
+	if($model->status != 2 and $model->status != 10)
+	{
+	$m = Kohteet::model()->findbypk($model->kohdenID);
 	if(isset($m->id))
 	{
 
@@ -133,6 +135,7 @@ $forPVM = date('d.m.Y',strtotime($model->aloitan));
 		if(!empty($m->muut))
 		  $ohje .= "\nMuut: ".$m->muut;
 
+	}
 	}
 	?>
 	<textarea class="form-control input-sm" rows="12" ><?php echo $ohje; ?></textarea>
