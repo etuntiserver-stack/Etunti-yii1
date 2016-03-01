@@ -97,7 +97,7 @@ if(isset(Yii::app()->user->nimi))
 
 <body class="<?php if(isset(Yii::app()->user->currentBody)) echo Yii::app()->user->currentBody; ?>">
 
-<?php  if($curpage == 'tyovuoroot/index' and isset($_GET['tyovuorot']) and $_GET['tyovuorot'] == 'fullscreen') : ?>
+<?php  if($curpage == 'tyovuoroot/index' and isset($_GET['fullscreen']) and $_GET['fullscreen'] == true) : ?>
 	<?php echo ''; ?>
 <?php  else : ?>
 	<?php echo $this->renderPartial('//site/navbar'); ?>
