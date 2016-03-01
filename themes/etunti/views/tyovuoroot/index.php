@@ -122,9 +122,12 @@ td .laatikko:hover{
    <!--<input type="text" id="totalForCut" class="form-control">-->
 
         <!-- begin: .tray-center -->
+<?php if(!isset($_GET['fullscreen'])) : ?>
+<input type="hidden" id="korko" value="340">
+
         <div class="tray-center">
 
-	   <?php echo CHtml::link('','/index.php/tyovuoroot/index?tyovuorot=fullscreen',array('class'=>'pull-right btn btn-primary myBgColors btn-sm ad ad-screen-full')); ?>
+	   <?php echo CHtml::link('','/index.php/tyovuoroot/index?fullscreen=true',array('class'=>'pull-right btn btn-primary myBgColors btn-sm ad ad-screen-full')); ?>
 	   <h2 class="myBgColors p5"> <i class="fa fa-table"></i> <?php echo Yii::t('main','Työvuorot'); ?> </h2>
 
             <div class="admin-form">
@@ -181,6 +184,11 @@ td .laatikko:hover{
 
         <!-- loppu: .tray-center -->
         </div>
+
+<?php else: ?>
+<input type="hidden" id="korko" value="140">
+<?php endif; ?>
+
 
 
 <?php if(!empty($from) and !empty($to) and count(Yii::app()->session['Tekija']) > 0 and Yii::app()->session['Tekija'][0] != 0) : ?>
@@ -338,7 +346,7 @@ $(function () {
 
     var onResize = function () {
         var oSettings = dataTable.fnSettings();
-        oSettings.oScroll.sY = tableHeight()-340; 
+        oSettings.oScroll.sY = tableHeight()-parseInt($('#korko').val()); 
         dataTable.fnDraw();
     };
 
