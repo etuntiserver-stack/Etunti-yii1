@@ -103,19 +103,19 @@ td .latikkoAsetukset{
 	white-space: nowrap;
 	min-height:70px;
 }
+.forCut, .forCopy{ 
+	display: none;
+}
 .mplus, .mcut{ 
 	display: none;
-	font-size: 80%;
 }
 td:hover .mplus, td:hover .mcut{
 	display : block;
 }
 td .tp{
-	height:20px;
+	//position:absolute;
 }
-td .laatikko:hover{
-	background:#ededed;
-}
+
 </style>
 
 
@@ -140,9 +140,9 @@ td .laatikko:hover{
    <div class="row pull-right">
 	<i id="trash"></i> 
 	<i id="clear"></i> 
-	<div class="btn btn-default btn-sm btn-group" id="autoInsert">
+	<div class="btn btn-default btn-group" id="autoInsert">
 		<?php echo Yii::t('main', 'Lisää toistuvia työvuoroja'); ?></div>
-	<div class="btn btn-danger btn-sm btn-group" id="autoRemove">
+	<div class="btn btn-danger btn-group" id="autoRemove">
 		<?php echo Yii::t('main', 'Poista toistuvia työvuoroja'); ?></div>
    </div>
 
@@ -167,12 +167,10 @@ td .laatikko:hover{
     }
     echo '</select>';
    ?>
-   <b class="glyphicon glyphicon-calendar"></b>
-   <input type="text" name="from" id="from" class="form-control form-group input-sm datepicker" value="<?php echo Yii::app()->session['from']; ?>">
-   <b class="glyphicon glyphicon-calendar"></b>
-   <input type="text" name="to" id="to" class="form-control form-group input-sm datepicker" value="<?php echo Yii::app()->session['to']; ?>">
+   <input type="text" name="from" id="from" class="form-control form-group datepicker" value="<?php echo Yii::app()->session['from']; ?>">
+   <input type="text" name="to" id="to" class="form-control form-group datepicker" value="<?php echo Yii::app()->session['to']; ?>">
 
-   <input type="submit" class="btn btn-primary btn-sm" value="<?php echo Yii::t('main', 'haku'); ?>">
+   <input type="submit" class="btn btn-primary" value="<?php echo Yii::t('main', 'haku'); ?>">
    </form>
 
 </div>

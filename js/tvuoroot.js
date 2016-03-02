@@ -45,7 +45,7 @@ $(".tv_edit").click(function(){
 });
 
 
-$('.laatikko').bind("contextmenu",function(e){
+$('.luominen').click(function(){
 	var pvm = $(this).attr("pvm");
 	var tid = $(this).attr("tid");
 
@@ -85,8 +85,8 @@ $(".muistin").click(function() {
 	$(this).removeClass("muistin").addClass("muistissa");
  	$(this).css({"opacity":"0.4"});
 
-	$(".forCopy").removeClass("forCopy").addClass("mplus glyphicon glyphicon-plus text-success");
-	$(".forCut").removeClass("forCut").addClass("mcut glyphicon glyphicon-transfer text-success");
+	$(".forCopy").removeClass("forCopy").addClass("mplus glyphicon glyphicon-plus text-success link");
+	$(".forCut").removeClass("forCut").addClass("mcut glyphicon glyphicon-transfer text-success link");
 	$("#trash").addClass("glyphicon glyphicon-trash btn btn-danger btn-sm btn-group");
 	$("#clear").addClass("glyphicon glyphicon-refresh btn btn-success btn-sm btn-group");
 
