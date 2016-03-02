@@ -463,9 +463,13 @@ class TyovuorootController extends Controller
 		$v 		= $_POST['viikkoja'];
 
 		  $i=0; 
+		  $var = 0;
+		  if($v == 2 or $v == 4)
+		  $var = 1;
+
 		  while($startdate<$enddate) 
 		   {  
-		      if(in_array(date('w',$startdate),$w) and (date('W',$startdate) % $v) == 0)
+		      if(in_array(date('w',$startdate),$w) and (date('W',$startdate) %$v) == $var)
 		      {
 		    	$pvm = date('d.m.Y',$startdate);
 		    	echo $pvm.' '.$fi[date('w',$startdate)]."\n";
