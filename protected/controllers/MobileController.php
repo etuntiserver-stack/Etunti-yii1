@@ -33,7 +33,7 @@ class MobileController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin', 'delete', 'create', 'update', 'index', 'index_a', 'view', 'updatetime', 'showkohteet', 'yhteenveto', 'kyhteenveto', 'yhteenveto_m', 'historia', 'poistaKohde', 'total_suunniteltu', 'total_toteutu', 'total_luettu', 'kesto', 'index_ajax', 'raportit', 'uusirivi', 'palkkataulukko', 'tidfromtomatkat', 'tidfromtoSL', 'tidfromtoSPL', 'tyobykohde', 'asiakas_hyvaksyminen', 'kohdebytekija' ,'kyhteenveto_tuntemattomat', 'laskutettu'),
+				'actions'=>array('admin', 'delete', 'create', 'update', 'index', 'index_a', 'view', 'updatetime', 'showkohteet', 'yhteenveto', 'kyhteenveto', 'yhteenveto_m', 'historia', 'poistaKohde', 'total_suunniteltu', 'total_toteutu', 'total_luettu', 'kesto', 'index_ajax', 'raportit', 'uusirivi', 'palkkataulukko', 'tidfromtomatkat', 'tidfromtoSL', 'tidfromtoSPL', 'tyobykohde', 'asiakas_hyvaksyminen', 'kohdebytekija' ,'kyhteenveto_tuntemattomat', 'laskutettu', 'lahetys_asiakkaalle'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -1477,7 +1477,8 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			$explV = explode("//",$v);
 
 			$asiakas_hyvaksy = '';
-			if(isset($explV[4]) and !empty($explV[4])){
+			if(isset($explV[4]) and !empty($explV[4]) and isset($_GET['asiakkalle']) and $_GET['asiakkalle'] == 1)
+			{
 			  $exp = explode("_", $explV[4]);
 			    if(isset($exp[0]) and $exp[0] == 0)
 				$asiakas_hyvaksy = '<b class="fa fa-share pull-right text-warning"></b>';
@@ -1511,6 +1512,8 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			$ids[] = $explV[3];
 		}
 
+		if(isset($_GET['asiakkalle']) and $_GET['asiakkalle'] == 1)
+		{
 		echo '<br>';
 		echo '<div class="pull-right">';
 		echo '<form action="asiakas_hyvaksyminen" method="POST">';
@@ -1521,6 +1524,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		echo '<input type="submit" class="btn btn-sm btn-success" value="'.Yii::t('main','lähetä asiakkaalle hyväksymiseksi').'">';
 		echo '</form>';
 		echo '</div>';
+		}
 
 
 	}
@@ -1581,6 +1585,92 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			'to' => $to
 		  ));
 		}
+	}
+
+
+
+	public function actionLahetys_asiakkaalle()
+	{
+
+
+
+		if(Yii::app()->request->getPost('kohteet') == 'kaikki')
+		unset(Yii::app()->session['kohteet']);
+
+		if(Yii::app()->request->getPost('kohteet') and Yii::app()->request->getPost('kohteet') != 'kaikki')
+		Yii::app()->session['kohteet'] = Yii::app()->request->getPost('kohteet');
+		
+		if(Yii::app()->request->getPost('mitkatKohteet'))
+		Yii::app()->session['mitkatKohteet'] = Yii::app()->request->getPost('mitkatKohteet');
+
+		$from = date("Y-m-d");
+		$to = date("Y-m-d");
+
+		if(isset($_POST['from']) and isset($_POST['to'])){
+		$from 	= $_POST['from'];
+		$to 	= $_POST['to'];
+		}
+
+
+       		$criteria = new CDbCriteria();
+        	$criteria->select = "kohdenID,kohde_kannasta";
+        	$criteria->order = "kohde_kannasta";
+        	$criteria->group = "kohdenID";
+        	$criteria->condition = "
+
+			id NOT IN (select kid from sivexkuitti_repaired) 
+
+			AND status='3'
+
+			AND kohdenID!=''
+
+			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$from."' AND '".$to."' 
+
+		";
+
+
+		$model = Mobile::model()->findAll($criteria);
+		$lu = array();
+		foreach($model as $d){
+			$lu[$d->kohde_kannasta] = $d->kohdenID;
+		}
+
+
+
+       		$criteria = new CDbCriteria();
+        	$criteria->select = "kohdenID,kohde_kannasta";
+        	$criteria->order = "kohde_kannasta";
+        	$criteria->group = "kohdenID";
+
+        	$criteria->condition = "
+
+			id NOT IN (select kid from sivexkuitti_repaired) 
+
+			AND status='3'
+
+			AND kohdenID!=''
+
+			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$from."' AND '".$to."' 
+
+		";
+
+
+		$model = Toteutuneet::model()->findAll($criteria);
+		foreach($model as $d){
+			$lu[$d->kohde_kannasta] = $d->kohdenID;
+		}
+
+		if(count($lu) >0)
+		ksort($lu);
+	
+
+		  //$dataProvider->pagination->pageSize = 50;
+		  $this->render('lahetys_asiakkaalle', array(
+			'lu' => $lu,
+			'from' => $from,
+			'to' => $to
+		  ));
+		
 	}
 
 

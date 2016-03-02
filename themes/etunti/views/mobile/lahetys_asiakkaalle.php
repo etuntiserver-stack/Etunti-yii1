@@ -14,18 +14,7 @@ $this->breadcrumbs=array(
         <!-- begin: .tray-center -->
         <div class="tray-center">
 
-   <!-- tulostus -->
-   <div class="pull-right">
-     <form action="#" target="_blank" method="POST">
-      <input type="hidden" name="from" value="<?php echo $from; ?>">
-      <input type="hidden" name="to" value="<?php echo $to; ?>">
-      <input type="submit" name="tulosta" class="btn btn-primary btn-sm myBgColors" value="PDF">
-     </form>
-   </div>
-   <!-- tulostus -->
-
-
-              <h2 class="myBgColors p10"> <i class="fa fa-home"></i> <?php echo Yii::t('main', 'TUNTIYHTEENVETO KOHTEET'); ?> 
+              <h2 class="myBgColors p10"> <i class="fa fa-home"></i> <?php echo Yii::t('main', 'Lähetä hyväksyttäväksi'); ?> 
 
 		</h2>
 
@@ -170,7 +159,7 @@ $this->breadcrumbs=array(
 	$kplyht += $kpl;
 	// kpl -->
 
-	$this->renderPartial('_kyhteenveto',array(
+	$this->renderPartial('_lahetys_asiakkaalle',array(
 		'luetut'=>$luetut,
 		'toteutuneet'=>$toteutuneet,
 		'sunniteltu'=>$sunniteltu, 
@@ -248,7 +237,7 @@ $(".showKuka").click(function(){
         $.ajax({
            url: location.protocol + "//" + location.host + '/index.php/mobile/tyobykohde',
            type: "GET",
-	   data: { kohdenID : kohde_kannasta[1], from : from, to : to, asiakkalle : 0 },
+	   data: { kohdenID : kohde_kannasta[1], from : from, to : to, asiakkalle : 1 },
            success: function(data){
 		console.log(data);
 		$("#showtyo_"+thisID[1]).html(data);
