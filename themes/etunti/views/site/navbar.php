@@ -460,7 +460,7 @@
                   <span class="glyphicon glyphicon-time"></span> <?php echo Yii::t('main', 'Tuntien hyväksyntä'); ?></a>
               </li>       
               <li>
-                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/mobile/kyhteenveto">
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/mobile/lahetys_asiakkaalle">
                   <span class="glyphicon glyphicon-time"></span> <?php echo Yii::t('main', 'Lähetä hyväksyttäväksi'); ?></a>
               </li>
               <li>
