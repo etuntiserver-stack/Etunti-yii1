@@ -33,7 +33,9 @@ if(isset($_POST['uploaded']))
               <div class="panel heading-border">
                 <div class="panel-body bg-light">
 
+
 <div class="row">
+
 <div class="pull-right">
  <div class="kuva form-inline">
   <label><?php echo Yii::t('main', 'Syötä Excel tiedosto'); ?></label>
@@ -44,6 +46,9 @@ if(isset($_POST['uploaded']))
   </form>
  </div>
 </div>
+
+	<img src="<?php echo Yii::app()->baseUrl; ?>/img/excel_malli.jpg" class="thumbnail">
+
 </div>
 
 
