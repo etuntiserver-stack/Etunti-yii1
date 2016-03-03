@@ -35,7 +35,16 @@ if (
 		and ($_SERVER['REMOTE_ADDR'] != '::1' and $_SERVER['REMOTE_ADDR'] != '127.0.0.1')
 		and $sub[0] != 'staging'
 ) {
+
+    if (isset($_SERVER['HTTP_USER_AGENT'])) {
+    	$agent = $_SERVER['HTTP_USER_AGENT'];
+    }
+    if (strlen(strstr($agent, 'Firefox')) > 0) {
+    $redirect_url = "http://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+    } else {
     $redirect_url = "https://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+    }
+
     header("Location: $redirect_url");
     exit();
 }
