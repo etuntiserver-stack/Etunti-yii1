@@ -2,6 +2,9 @@
 $curpage = Yii::app()->getController()->getAction()->controller->id;
 $curpage .= '/'.Yii::app()->getController()->getAction()->controller->action->id;
 
+    if (isset($_SERVER['HTTP_USER_AGENT'])) {
+    	$agent = $_SERVER['HTTP_USER_AGENT'];
+    }
 
 $sub = explode(".",$_SERVER['HTTP_HOST']);
 if (
@@ -9,9 +12,15 @@ if (
 		and ($_SERVER['REMOTE_ADDR'] != '::1' and $_SERVER['REMOTE_ADDR'] != '127.0.0.1')
 		and $sub[0] != 'staging'
 ) {
+
+    if (strlen(strstr($agent, 'Firefox')) > 0) {
+
+    } else {
     $redirect_url = "https://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
     header("Location: $redirect_url");
     exit();
+    }
+
 }
 ?>
 
@@ -29,8 +38,16 @@ if (
   <meta name="author" content="AdminDesigns">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- Font CSS (Via CDN) -->
-  <link rel='stylesheet' type='text/css' href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,600'>
+
+<?php
+    if (strlen(strstr($agent, 'Firefox')) > 0) {
+    echo "<link rel='stylesheet' type='text/css' href='http://fonts.googleapis.com/css?family=Open+Sans:300,400,600'>";
+    } else {
+    echo "<link rel='stylesheet' type='text/css' href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,600'>";
+    }
+?>
+
+  
 
   <!-- Theme CSS -->
   <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/assets_etunti/assets/skin/default_skin/css/theme.css">
