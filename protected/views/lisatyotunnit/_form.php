@@ -39,6 +39,8 @@
 		    <li class="list-group-item">
 	<div class="row">
 		<?php echo $form->labelEx($model,'syy'); ?>
+
+	   <div class="form-inline">
 		<?php
 		$list = array();
       		$l = Valikkoot::model()->findAll(" select_type='YLITYÖTUNNIT' ",array('order' => "select_type"));
@@ -46,8 +48,11 @@
 		$list[$v->value] = $v->value;
 
         	echo $form->dropDownList($model, 'syy', $list,
-		array('empty'=>'','class'=>'form-control input-sm'));
+		array('empty'=>'','class'=>'form-control'));
         	?>
+		<span class="btn btn-primary myBgColors muokaValiko" for="YLITYÖTUNNIT"><i class="fa fa-pencil-square-o"></i></span>
+	   </div>
+
 		<?php echo $form->error($model,'syy'); ?>
 	</div>
                     </li>
@@ -78,6 +83,40 @@
             </div>
         </div>
 
+
+
+	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/bootstrap.modal.js"></script>
+	<div id="showres" class="modal fade" tabindex="-1" role="dialog"></div>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+
+/* valikot */
+$(".muokaValiko").click(function() {
+    var thisFor = $(this).attr("for");
+        $.ajax({
+           url: location.protocol + "//" + location.host + "/index.php/site/valiko",
+	   type:'POST',
+	   data: { "select_type" : thisFor },
+           success: function(data){
+		//console.log(data);
+		$('#showres').modal().html(JSON.parse(data));
+           }
+        });
+});
+/* valikot */
+
+  $(".sw").bootstrapSwitch({
+	size: "small",
+	onColor: "success",
+	offColor: "warning",
+	onText: "Kyllä",
+	offText: "Ei"
+  });
+
+});
+</script>
 
 
 <script type="text/javascript">
