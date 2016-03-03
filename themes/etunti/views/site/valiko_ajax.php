@@ -50,6 +50,7 @@
 	elseif($_POST['select_type'] == 'siivous') $selType = 'Siivous tyyppi';
 	elseif($_POST['select_type'] == 'asiakas_ryhma') $selType = 'Asiakasryhmä';
 	elseif($_POST['select_type'] == 'laskutus_yksikko') $selType = 'Laskutusyksikkö';
+	elseif($_POST['select_type'] == 'YLITYÖTUNNIT') $selType = 'YLITYÖTUNNIT';
 	else $selType = $r->select_type;
 
 

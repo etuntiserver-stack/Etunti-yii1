@@ -722,6 +722,7 @@ Toimi nopeasti, sillä paikkoja on rajoitetusti!</p></p>
                         </a>
                    </div>
 
+
                    <div class="col-lg-3 col-lg-6 item-center">
                         <div class="logo">
 			<br><br><br>
@@ -730,6 +731,7 @@ Toimi nopeasti, sillä paikkoja on rajoitetusti!</p></p>
                             </a>
                         </div>
                    </div>
+
 
 
 <!--
@@ -754,9 +756,14 @@ Toimi nopeasti, sillä paikkoja on rajoitetusti!</p></p>
                             </li>
                         </ul>
 
-
+		</div>
 -->
-                </div>
+                   <div class="col-lg-8 col-lg-6 item-center">
+			<p>
+			
+			</p>
+                   </div>
+
 
                 <!-- End Info Top - Footer Center-->
 
