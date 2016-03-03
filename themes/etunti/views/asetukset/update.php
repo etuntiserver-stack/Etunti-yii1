@@ -86,6 +86,7 @@ exit;
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/site/etusivu_esimerki" class="animated animated-short fadeInUp"><span class="fa fa-gear"></span> <?php echo Yii::t('main','Etusivun esimerki'); ?> </a> | 
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/site/mobemu" class="animated animated-short fadeInUp"><span class="fa fa-gear"></span> <?php echo Yii::t('main','Mobiili emulattori'); ?> </a> | 
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/valikkoot/index" class="animated animated-short fadeInUp"><span class="fa fa-gear"></span> <?php echo Yii::t('main','Valikot'); ?> </a>
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/tyontekijat/migraatio" class="animated animated-short fadeInUp"><span class="fa fa-gear"></span> <?php echo Yii::t('main','Työntekijän migraatio'); ?> </a>
 		<a href="#" id="clearLocalStorage" class="btn btn-primary">Clear LocalStorage</a>
                  </div>
                 </div>
