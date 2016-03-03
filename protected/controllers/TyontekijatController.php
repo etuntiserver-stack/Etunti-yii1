@@ -28,7 +28,7 @@ class TyontekijatController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','admin_ajax','delete','create','update', 'index','view','merkkipaivat','tulosta'),
+				'actions'=>array('admin', 'admin_ajax', 'delete', 'create', 'update', 'index', 'view','merkkipaivat', 'tulosta', 'migraatio'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -78,6 +78,11 @@ class TyontekijatController extends Controller
 		$this->render('merkkipaivat',array(
 			'model'=>$model,
 		));
+	}
+
+	public function actionMigraatio()
+	{
+		$this->render('migraatio');
 	}
 
 	public function actionView($id)
