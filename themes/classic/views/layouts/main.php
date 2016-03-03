@@ -40,12 +40,13 @@ if (
     	$agent = $_SERVER['HTTP_USER_AGENT'];
     }
     if (strlen(strstr($agent, 'Firefox')) > 0) {
-    $redirect_url = "http://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+
     } else {
     $redirect_url = "https://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+    header("Location: $redirect_url");
     }
 
-    header("Location: $redirect_url");
+
     exit();
 }
 ?>
