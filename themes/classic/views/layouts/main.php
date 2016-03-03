@@ -6,7 +6,7 @@
         <meta name="keywords" content="HTML5 Template" />
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-        <link href='http://fonts.googleapis.com/css?family=Ubuntu:400,300,700' rel='stylesheet' type='text/css'>
+        <link href='https://fonts.googleapis.com/css?family=Ubuntu:400,300,700' rel='stylesheet' type='text/css'>
         <link type="text/css" media="screen" rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/assets_classic/css/style.css?v=2.13"/>
         <link type="text/css" media="screen" rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/assets_classic/css/theme-responsive.css"/>
         <link type="text/css" media="screen" rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/assets_classic/css/skins/blue/blue.css?v=2" />
@@ -35,18 +35,8 @@ if (
 		and ($_SERVER['REMOTE_ADDR'] != '::1' and $_SERVER['REMOTE_ADDR'] != '127.0.0.1')
 		and $sub[0] != 'staging'
 ) {
-
-    if (isset($_SERVER['HTTP_USER_AGENT'])) {
-    	$agent = $_SERVER['HTTP_USER_AGENT'];
-    }
-    if (strlen(strstr($agent, 'Firefox')) > 0) {
-
-    } else {
     $redirect_url = "https://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
     header("Location: $redirect_url");
-    }
-
-
     exit();
 }
 ?>
