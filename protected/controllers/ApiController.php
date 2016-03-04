@@ -332,18 +332,18 @@ public function actionImei($dom)
 		      if($val->alku > 0 and $val->loppu > 0)
 		      $alkLop = $val->alku.'-'.$val->loppu.' ';
 
-
-	 		if(!empty($val->tyoajanlaatu) and empty($osoite))
-	 		{
+		      $color = '';
+	 	      if(!empty($val->tyoajanlaatu) and empty($osoite))
+	 	      {
 			    $expl1 = explode("/",$val->tyoajanlaatu);
 			    $color = (isset($expl1[1])) ? $expl1[1] : '';
 			    $osoite = (isset($expl1[0])) ? $expl1[0] : '';
-			}
+		      }
 
 
 		      $sel .= '<div class="well">
 				  <b>'.$val->pvm.'</b><br>
-				  <b><span class="text">'.$alkLop.$osoite.'</span></b>';
+				  <b><span class="text" style="color:'.$color.'">'.$alkLop.$osoite.'</span></b>';
 		      if(!empty($val->tietoja))
 		      {
 		      $sel .= '
