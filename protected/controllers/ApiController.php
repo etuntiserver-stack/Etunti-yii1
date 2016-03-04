@@ -335,7 +335,7 @@ public function actionImei($dom)
 
 	 		if(!empty($val->tyoajanlaatu) and empty($osoite))
 	 		{
-			    $expl1 = explode("/",$tvVal->tyoajanlaatu);
+			    $expl1 = explode("/",$val->tyoajanlaatu);
 			    $color = (isset($expl1[1])) ? $expl1[1] : '';
 			    $osoite = (isset($expl1[0])) ? $expl1[0] : '';
 			}
