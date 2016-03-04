@@ -155,7 +155,7 @@ td .tp{
 
 
 <div class="row">
-  <form action="#" id="yhtveto" class="form-inline" method="POST">
+  <form action="index" id="yhtveto" class="form-inline" method="POST">
 
    <a href="#" id="deselAll" class="glyphicon glyphicon-minus"></a>
    <a href="#" id="selAll" class="glyphicon glyphicon-plus"></a>
