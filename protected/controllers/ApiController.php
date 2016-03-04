@@ -320,16 +320,30 @@ public function actionImei($dom)
 		    }
 
 		    $sel = '<h2>Työvuorot</h2>';
-		    $osoite = '';
+
 		    foreach($tvuoro as $val)
 		    {
+		      $osoite = '';
 		      $kohde = Kohteet::model()->findbypk($val->kohde);
 		      if(isset($kohde['osoite']))
 		      $osoite = $kohde['osoite'];
 
+		      $alkLop = '';
+		      if($val->alku > 0 and $val->loppu > 0)
+		      $alkLop = $val->alku.'-'.$val->loppu.' ';
+
+
+	 		if(!empty($val->tyoajanlaatu) and empty($osoite))
+	 		{
+			    $expl1 = explode("/",$tvVal->tyoajanlaatu);
+			    $color = (isset($expl1[1])) ? $expl1[1] : '';
+			    $osoite = (isset($expl1[0])) ? $expl1[0] : '';
+			}
+
+
 		      $sel .= '<div class="well">
 				  <b>'.$val->pvm.'</b><br>
-				  <b><span class="text">'.$val->alku.'-'.$val->loppu.' '.$osoite.'</span></b>';
+				  <b><span class="text">'.$alkLop.$osoite.'</span></b>';
 		      if(!empty($val->tietoja))
 		      {
 		      $sel .= '

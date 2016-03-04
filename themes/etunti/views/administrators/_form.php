@@ -57,7 +57,7 @@
 			echo $form->textField($model,'status',array('size'=>60,'maxlength'=>1,'class'=>'form-control'));
 		}
 		?>
-		<span class="btn btn-primary myBgColors muokaValiko" for="admin status"><i class="fa fa-pencil-square-o"></i></span>
+		<span class="btn btn-primary myBgColors muokaValiko" for="admin status"><i class="fa fa-question-circle"></i></span>
 	   </div>
 		<?php echo $form->error($model,'status'); ?>
 	</div>
@@ -71,9 +71,39 @@
 <?php $this->endWidget(); ?>
 
 
+<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/bootstrap.modal.js"></script>
 
-	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/bootstrap.modal.js"></script>
-	<div id="showres" class="modal fade" tabindex="-1" role="dialog"></div>
+
+<div id="showres" class="modal fade" tabindex="-1" role="dialog">
+
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Neuvot oikeudesta</h4>
+      </div>
+      <div class="modal-body">
+
+	<label>Malli:</label>  <br><br>
+		<p>Ryhmän nimetys/arvo(ei saa muuttaa)</p>
+		<p><b>1:</b> Saa poista.</p>
+		<p><b>2:</b> Saa muokata. Ei saa poista.</p>
+		<p><b>3:</b> Ei saa poista, muokata, luoda.</p>
+		<p><b>4:</b> Ei käytettävissä.</p>
+		<p><b>5:</b> Ei käytettävissä.</p>
+		<p><b>6:</b> Ei käytettävissä.</p>
+
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Sulje</button>
+        <button type="button" class="btn btn-primary tallenna">Päivitä sivua</button>
+      </div>
+
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+
+</div>
 
 
 <script type="text/javascript">
@@ -81,16 +111,9 @@ $(document).ready(function(){
 
 /* valikot */
 $(".muokaValiko").click(function() {
-    var thisFor = $(this).attr("for");
-        $.ajax({
-           url: location.protocol + "//" + location.host + "/index.php/site/valiko",
-	   type:'POST',
-	   data: { "select_type" : thisFor },
-           success: function(data){
-		//console.log(data);
-		$('#showres').modal().html(JSON.parse(data));
-           }
-        });
+
+	$('#showres').modal().html();
+
 });
 /* valikot */
 

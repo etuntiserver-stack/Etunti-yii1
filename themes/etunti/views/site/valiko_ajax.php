@@ -82,18 +82,6 @@
 		<p>V/Vapaa/#006da9</p>
 		<p>tai V/Vapaa/blue</p>
 	';
-	} elseif($_POST['select_type'] == 'admin status')
-	{
-	$mod .= '
-	<label>Malli:</label>  <br><br>
-		<p>Ryhmän nimetys/arvo(ei saa muuttaa)</p>
-		<p><b>1:</b> Saa poista.</p>
-		<p><b>2:</b> Saa muokata. Ei saa poista.</p>
-		<p><b>3:</b> Ei saa poista, muokata, luoda.</p>
-		<p><b>4:</b> Ei käytettävissä.</p>
-		<p><b>5:</b> Ei käytettävissä.</p>
-		<p><b>6:</b> Ei käytettävissä.</p>
-	';
 	}
 
 	$mod .= '
