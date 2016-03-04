@@ -8,11 +8,15 @@
 	$height = 'style="min-height:10px;"';
 
 	echo '
-	   <div class="tp row">
-	     <div class="col-sm-1">
-	   	<a href="#" class="forCopy" id="forCopy_'.$did.'_'.$tid.'"></a>
-	     </div><div class="col-sm-1">
-	   	<a href="#" class="forCut" id="forCut_'.$did.'_'.$tid.'"></a>
+	   <div class="tp">
+	     <div class="form-inline">
+	     <div class="form-group">
+	   	<i class="link glyphicon glyphicon-plus luominen" pvm="'.date("d.m.Y",strtotime($pvm)).'" tid="'.$tid.'" style="margin-right: 5px"></i>
+	     </div><div class="form-group">
+	   	<i class="forCut" id="forCut_'.$did.'_'.$tid.'" style="margin-right: 5px"></i>
+	     </div><div class="form-group">
+	   	<i class="forCopy" id="forCopy_'.$did.'_'.$tid.'"></i> 
+	     </div>
 	     </div>
 	   </div>';
 
@@ -34,7 +38,7 @@
 	   $osoite = $tvVal->kohteet->osoite;//
 
 	   $strlen = strlen($osoite);
-	   $scount = 35;
+	   $scount = 30;
 	   if(isset($tietoja) and $tietoja == 1) $scount = 27;
 
 	   if($strlen > $scount)
@@ -71,10 +75,10 @@
 	   echo '&nbsp;<span class="link tv_edit" id="tv_'.$tvVal->id.'">'.$al.' '.$osoite.'</span>';
 
 	   if(!empty($tvVal->kohteet->avain))
-	   echo ' <b class="fa fa-key text-warning pull-right"></b>';
+	   echo ' <b class="fa fa-key text-warning"></b>';
 
 	   if(!empty($tvVal->tietoja))
-	   echo ' <b class="fa fa-file-text-o text-warning pull-right" title="Tietoja"></b>';
+	   echo ' <b class="fa fa-file-text-o text-warning" title="Tietoja"></b>';
 
 	   if(!empty($tvVal->tietoja) and isset($tietoja) and $tietoja == 1)
 	   echo '<p><span style="color: blue; border: 1px #333 solid">'.str_replace("\n","<br>",$tvVal->tietoja).'</span></p>';

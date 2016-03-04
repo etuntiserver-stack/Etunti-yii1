@@ -95,13 +95,9 @@ function dateDiff($start, $end) {
 
 ?>
 <style>
-body{
-    overflow-y: hidden;
-}
 td .latikkoAsetukset{
-	width: 320px;
-	white-space: nowrap;
-	min-height:70px;
+	min-width: 70px;
+	white-space: normal;
 }
 .forCut, .forCopy{ 
 	display: none;
@@ -115,7 +111,20 @@ td:hover .mplus, td:hover .mcut{
 td .tp{
 	//position:absolute;
 }
-
+.fullRivi{
+	height: 100%;
+	//border-bottom: 0px #ddd solid;
+	margin-bottom: 2px;
+}
+.luominen{
+	display: none;
+}
+.table tbody>tr>td{
+    	vertical-align: top;
+}
+.table{
+    height: 100%;
+}
 </style>
 
 
@@ -123,7 +132,7 @@ td .tp{
 
         <!-- begin: .tray-center -->
 <?php if(!isset($_GET['fullscreen'])) : ?>
-<input type="hidden" id="korko" value="340">
+<input type="hidden" id="korko" value="350">
 
         <div class="tray-center">
 
@@ -137,14 +146,13 @@ td .tp{
 
 
 
-   <div class="row pull-right">
-	<i id="trash"></i> 
-	<i id="clear"></i> 
+   <div class="pull-right">
 	<div class="btn btn-default btn-group" id="autoInsert">
 		<?php echo Yii::t('main', 'Lisää toistuvia työvuoroja'); ?></div>
 	<div class="btn btn-danger btn-group" id="autoRemove">
 		<?php echo Yii::t('main', 'Poista toistuvia työvuoroja'); ?></div>
    </div>
+
 
 <div class="row">
   <form action="#" id="yhtveto" class="form-inline" method="POST">
@@ -168,8 +176,6 @@ td .tp{
     echo '</select>';
    ?>
    <input type="text" name="from" id="from" class="form-control form-group datepicker" value="<?php echo Yii::app()->session['from']; ?>">
-   <input type="text" name="to" id="to" class="form-control form-group datepicker" value="<?php echo Yii::app()->session['to']; ?>">
-
    <input type="submit" class="btn btn-primary" value="<?php echo Yii::t('main', 'haku'); ?>">
    </form>
 
@@ -189,99 +195,93 @@ td .tp{
 
 
 
-<?php if(!empty($from) and !empty($to) and count(Yii::app()->session['Tekija']) > 0 and Yii::app()->session['Tekija'][0] != 0) : ?>
+<?php if(count(Yii::app()->session['Tekija']) > 0 and Yii::app()->session['Tekija'][0] != 0) : ?>
+
+<?php
+
+  $paivat=array(
+	1=>'Ma',
+	2=>'Ti',
+	3=>'Ke',
+	4=>'To',
+	5=>'Pe',
+	6=>'La',
+	7=>'Su',
+	);
+
+
+  $wkMaara = 53;
+  $year = (isset($_GET['year'])) ? $_GET['year'] : date("Y", strtotime($from));
+  $week = (isset($_GET['week'])) ? $_GET['week'] : date('W', strtotime($from));
+
+  if($week > $wkMaara) {
+    $year++;
+    $week = 1;
+  } elseif($week < 1) {
+    $year--;
+    $week = $wkMaara;
+  }
+    $week = sprintf("%02d", $week);
+
+?>
 
             <div class="admin-form">
               <div class="panel heading-border">
                 <div class="panel-body bg-light">
+
+                 <div class="pull-right">
+			<i id="trash"></i> 
+			<i id="clear"></i>
+                 </div>
+
                  <div class="row">
 
-<div class="tvuoro table-responsive">
-  <table class="table table-striped table-condensed table-bordered">
+<center>
+<h2>
+  <a href="<?php echo $_SERVER['PHP_SELF'].'?week='.($week == 1 ? $wkMaara : $week -1).'&year='.($week == 1 ? $year - 1 : $year); ?>"><<</a> 
+  <?php echo date('d.m.Y',strtotime($year ."W".$week .'1')).' - '.date('d.m.Y',strtotime($year ."W". $week .'7')); ?>
+  <a href="<?php echo $_SERVER['PHP_SELF'].'?week='.($week == $wkMaara ? 1 : 1 + $week).'&year='.($week == $wkMaara ? 1 + $year : $year); ?>">>></a> 
+</h2>
+</center>
+
+
+<div class="row tvuoro table-responsive">
+  <table class="table table-bordered small">
      <thead class="">
      <tr>
-     <th></th>
-        <?php 
-	foreach($tt as $t){
-	  echo '<th><div class="latikkoAsetukset">';
- 	  echo $t->tekijan_nimi;	
-	  echo '</div></th>';
+	<th>Nimi</th>
+        <?php
+	for($day= 1; $day <= 7; $day++)
+	{
+  	  $d = strtotime($year ."W". $week . $day);
+	  $date = date('d.m',$d);
+	  echo '<td>'.$paivat[date('N',$d)].', '.$date.'</td>';
 	}
         ?>
      </tr>
      </thead>
      <tbody>
         <?php
-	$arrDate = array(1=>"Ma",2=>"Ti",3=>"Ke",4=>"To",5=>"Pe",6=>"La",7=>"Su");
-    	for ($i = 0; $i <= $dateDiff; $i++) {
-	  $plus = "+$i day";
-	  $date = '';
-	  $date = date("d.m.Y",strtotime($from." ".$plus));
-	  $did = date("Ymd",strtotime($from." ".$plus));
+	foreach($tt as $t)
+	{
+	  echo '<tr>';
+	  echo '<td width=1>';
+ 	  echo $t->tekijan_nimi;	
+	  echo '</td>';
 
-	  $columnDate = date("N/d.m",strtotime($date));
-	  $explColDate = explode("/",$columnDate);
-
-	  $clPyhat = '';
-	  $pyhat = $this->pyhat($date);
-	  if($pyhat == true)
-	  $clPyhat = 'style="background:#ddd"';
-
-  	    echo '<tr>';
-  		echo '<td '.$clPyhat.' class="fixed-column"><b>'.$arrDate[$explColDate[0]].", ".$explColDate[1].'</b></td>';
-		foreach($tt as $t){
-		  echo '<td '.$clPyhat.' id="'.$did.'_'.$t->id.'">';
-		  $this->renderPartial('//tyovuoroot/did',array('pvm'=>$date,'tid'=>$t->id,'from'=>'tvuoro'));
-		  echo '</td>';
-		}
-	    echo '</tr>';
-
-	    if(date('N', strtotime($date)) == 7)
-	    {
-  	    echo '<tr class="myBgColors">';
-  		echo '<td class="text-center viikkoRivi fixed-column"><b>'.Yii::t('main', 'Viikko').' '.date("W",strtotime($date)).'</b></td>';
-		foreach($tt as $t){
-		 $vktyoaika = '';
-		 $ts = Tyosuhdet::model()->find(" tid = '".$t->id."' ");
-		 if(isset($ts->id) and !empty($ts['vktyoaika']))
-		  $vktyoaika = $ts['vktyoaika'];
-
-		  echo '<td class="viikkoRivi text-center" id="vk_'.date("W",strtotime($date)).'_'.$t->id.'">';
-		  $kokoViikko = '';
-		  $vko = '';
-		  $vko = date("W",strtotime($date));
-		  $year = date("Y",strtotime($date));
-		  $kokoViikko = $this->renderPartial('//tyovuoroot/viikko',array('tid'=>$t->id,'viikko'=>$vko,'year'=>$year),true);
-
-		  $cl = '';
-		  if(	(int)str_replace(":","",$kokoViikko) > (int)str_replace(":","",$vktyoaika)
-			and (int)str_replace(":","",$kokoViikko) > 0
-			and (int)str_replace(":","",$vktyoaika) > 0
-		  )
-		  $cl = 'class="btn btn-xs btn-danger"';
-
-		  echo '<span '.$cl.'>'.$kokoViikko. '('.$vktyoaika.')</span>';
-
-		  echo '</td>';
-		}
-	    echo '</tr>';
-	    }
-
-  	}
+	  for($day= 1; $day <= 7; $day++)
+	  {
+  	     $d = strtotime($year ."W". $week . $day);
+	     $date = date('d.m.Y',$d);
+	     $did = date('Ymd',$d);
+	     echo '<td id="'.$did.'_'.$t->id.'" valign="top">';
+ 	     echo $this->renderPartial('//tyovuoroot/did',array('pvm'=>$date,'tid'=>$t->id,'from'=>'tvuoro'));	
+	     echo '</td>';
+	  }
+	  echo '</tr>';
+	}
         ?>
      </tbody>
-     <tfoot>
-        <?php
-  	    echo '<tr class="myBgColors">';
-  		echo '<td class="text-center viikkoRivi fixed-column"></td>';
-		foreach($tt as $t){
-		  echo '<td class="text-center viikkoRivi myBgColors fromto_'.$t->id.'" />';
-		  $this->renderPartial('//tyovuoroot/fromto',array('tid'=>$t->id));
-		  echo '</td>';
-		}
-	    echo '</tr>';
-        ?>
-     </tfoot>
   </table>
 </div>
 
@@ -298,7 +298,6 @@ td .tp{
 	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/bootstrap.modal.js"></script>
 
 	<div id="showres" class="modal fade" tabindex="-1" role="dialog"></div>
-	<?php Yii::app()->clientScript->registerPackage('fixedTable'); ?>
 	<?php Yii::app()->clientScript->registerPackage('tyovuoroot'); ?>
 
 
@@ -321,45 +320,6 @@ $('#selAll').click(function(){
 });
 
 
-
-$(function () {
-
-    var tableHeight = function () {
-        var $tableHeader = $('.dataTables_scrollHeadInner thead tr');
-        return $(window).height() - 4 - ($tableHeader.length ? $tableHeader.height() : 0);
-    };
-
-    var dataTable = $('table').dataTable({
-        sDom: 'frtiS',
-        sScrollY: tableHeight(),
-        sScrollX: '100%',
-        bAutoWidth: false,
-        bScrollCollapse: true,
-        bPaginate: false,
-        bFilter: false,
-        bInfo: false,
-        bSort: false,
-        bDeferRender: true
-    });
-
-    var onResize = function () {
-        var oSettings = dataTable.fnSettings();
-        oSettings.oScroll.sY = tableHeight()-parseInt($('#korko').val()); 
-        dataTable.fnDraw();
-    };
-
-    var firstDraw = false;
-    new FixedColumns(dataTable, {
-        iLeftWidth: 100,
-        fnDrawCallback: function () {
-            if (firstDraw) return;
-            firstDraw = true;
-            onResize();
-        }
-    });
-
-    $(window).resize(onResize);
-});
 
 
 });
