@@ -4,14 +4,17 @@
 	$height = '';
 
 	$did = date("Ymd",strtotime($pvm));
-	if(date('N', strtotime($pvm)) == 6 or date('N', strtotime($pvm)) == 7)
-	$height = 'style="min-height:10px;"';
+	echo '<div class="small laatikko latikkoAsetukset" pvm="'.date("d.m.Y",strtotime($pvm)).'" tid="'.$tid.'">';
+
+	echo '
+	<div class="pull-right plussamerkki">
+	<plussa class="link glyphicon glyphicon-plus luominen" pvm="'.date("d.m.Y",strtotime($pvm)).'" tid="'.$tid.'"></plussa>
+	</div>';
 
 	echo '
 	   <div class="tp">
 	     <div class="form-inline">
 	     <div class="form-group">
-	   	<i class="link glyphicon glyphicon-plus luominen" pvm="'.date("d.m.Y",strtotime($pvm)).'" tid="'.$tid.'" style="margin-right: 5px"></i>
 	     </div><div class="form-group">
 	   	<i class="forCut" id="forCut_'.$did.'_'.$tid.'" style="margin-right: 5px"></i>
 	     </div><div class="form-group">
@@ -20,8 +23,6 @@
 	     </div>
 	   </div>';
 
-	echo '<div '.$height.' class="small laatikko latikkoAsetukset" pvm="'.date("d.m.Y",strtotime($pvm)).'" tid="'.$tid.'">';
-	
 
        	$criteria = new CDbCriteria();
 	$criteria->order = " alku ASC";
@@ -31,8 +32,6 @@
 	foreach($tv as $tvVal)
 	{
 
-	 if(isset($tvVal))
-	 {
 	   $osoite = '';
 	   if(isset($tvVal->kohteet->osoite))
 	   $osoite = $tvVal->kohteet->osoite;//
@@ -46,7 +45,7 @@
 
 
 	   if($tvVal->alku > 0 and $tvVal->loppu > 0)
-	    $al = $tvVal->alku.'-'.$tvVal->loppu;
+	    $al = '<b>'.$tvVal->alku.'-'.$tvVal->loppu.'</b><br>';
 	   else
 	    $al = '';
 
@@ -71,7 +70,7 @@
 
 	   echo '<div id="'.$tvVal->id.'_'.$did.'_'.$tid.'" class="fullRivi" style="color:'.$color.'">';
 	   if( $from != 'mobiili' )
-	   echo '<a href=# class="text-danger glyphicon glyphicon-paste muistin" for="'.$tvVal->id.'_'.$did.'_'.$tid.'"></a>';
+	   echo '<span class="link text-danger glyphicon glyphicon-paste muistin" for="'.$tvVal->id.'_'.$did.'_'.$tid.'"></span>';
 	   echo '&nbsp;<span class="link tv_edit" id="tv_'.$tvVal->id.'">'.$al.' '.$osoite.'</span>';
 
 	   if(!empty($tvVal->kohteet->avain))
@@ -86,10 +85,11 @@
 	   echo '<br>
 	   </div>';
 
-	 }
 	}
 
 	echo '</div>';
+
+
 	
 	if( $from == 'ajax' ){
 	?>

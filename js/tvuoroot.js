@@ -2,6 +2,17 @@ $(document).ready(function(){
 
 $("#showres").draggable();
 
+$('td').hover(function()
+{
+     $(this).find('plussa').show();
+}, function()
+{ 
+     $(this).find('plussa').hide();
+});
+
+
+
+
 $("#autoInsert").click(function(){
 
         $.ajax({
