@@ -145,9 +145,10 @@ if($week > $wkMaara) {
 
 	  for($day= 1; $day <= 7; $day++) {
 	    $d = strtotime($year ."W". $week . $day);
+	    $did = $this->renderPartial('//tyovuoroot/did',array('pvm'=>date('d.m.Y',$d),'tid'=>$t->id,'from'=>'mobiili'),true);
 	    echo "
 	    <td><div class='latikkoAsetukset'><b>".date('d.m.Y',$d)."</b><br>
-	    ". $this->renderPartial('//tyovuoroot/did',array('pvm'=>date('d.m.Y',$d),'tid'=>$t->id,'from'=>'mobiili'),true) ."
+	    ". json_decode($did, true) ."
 	    </div></td>";
 	  }
 

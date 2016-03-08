@@ -28,7 +28,7 @@ class TyovuorootController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','updatetime','showohje','did','muisti','operatio','viikko','fromto','autoinsert','autoremove','viikkottain', 'viikkottain_pdf', 'laheta','kk','pvmtid','laheta_k'),
+				'actions'=>array('admin','delete','create','update','index','view','updatetime','showohje','did','muisti','operatio','viikko','fromto','autoinsert','autoremove','viikkottain', 'viikkottain_pdf', 'laheta','kk','pvmtid','laheta_k', 'muistin', 'muisticlear', 'muistissa', 'vkolopput', 'vkolopchange'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny', // allow admin user to perform 'admin' and 'delete' actions
@@ -77,6 +77,7 @@ class TyovuorootController extends Controller
 	   	    if($val > 0)
 		   	   return sprintf('%02d:%02d', $val/3600, ($val % 3600)/60);
 	}
+
 
 	public function actionKk()
 	{
@@ -304,19 +305,83 @@ class TyovuorootController extends Controller
 		}
 	}
 
+
+	public function actionVkolopput()
+	{
+		if(isset($_SESSION['vkolopput']))
+		   echo 1;
+		else
+		   echo 0;
+		exit;
+	}
+
+	public function actionVkolopchange()
+	{
+		if(isset($_POST['nyt']) and $_POST['nyt'] == 0)
+		   $_SESSION['vkolopput'] = true;
+		elseif(isset($_POST['nyt']) and $_POST['nyt'] == 1)
+		   unset($_SESSION['vkolopput']);
+		exit;
+	}
+
+
+	public function actionMuistin()
+	{
+		if(isset($_POST['id']))
+		{
+			$_SESSION['muistin'][$_POST['id']] = $_POST['id'];
+			print_r($_SESSION['muistin']);
+			
+		}
+
+	}
+
+	public function actionMuistissa()
+	{
+		if(isset($_SESSION['muistin']))
+		   echo implode(",",$_SESSION['muistin']);
+		else
+		   echo 'muistityhja';
+	}
+
+	public function actionMuisticlear()
+	{
+		if(isset($_POST['clear']))
+		unset($_SESSION['muistin']);
+
+	}
+
+
 	public function actionOperatio()
 	{
 
-		// remove
-		if(isset($_POST['id']) and isset($_POST['remove']))
+		if(isset($_POST['checkThis']))
 		{
-		    $this->loadModel($_POST['id'])->delete();
-		    echo $_POST['id'];
+			$did = $this->renderPartial('did',array('pvm'=>$_POST['newPvm'],'tid'=>$_POST['newTid'],'from'=>'test'), true);
+			echo json_encode($did.'//');
+			exit;
+		}
+
+		// remove
+		if(isset($_POST['remove']) and isset($_SESSION['muistin']))
+		{
+		foreach($_SESSION['muistin'] as $cp)
+		{
+			$ex = explode("_",$cp);
+			$t = Tyovuoroot::model()->deletebypk($ex[0]);			
+		}
+
+			echo json_encode('//'.implode(",",$_SESSION['muistin']));
+			exit;
 		}
 		// copy
-		if(isset($_POST['id']) and isset($_POST['copy']))
+		if(isset($_POST['copy']) and isset($_SESSION['muistin']))
 		{
-			$t = Tyovuoroot::model()->findbypk($_POST['id']);
+
+		foreach($_SESSION['muistin'] as $cp)
+		{
+			$ex = explode("_",$cp);
+			$t = Tyovuoroot::model()->findbypk($ex[0]);
 			$model=new Tyovuoroot;
 			$model->attributes=$t->attributes;
 			$model->pvm=date("d.m.Y",strtotime($_POST['newPvm']));
@@ -326,13 +391,21 @@ class TyovuorootController extends Controller
 			$model->pituus=$t->pituus;
 			$model->kohde=$t->kohde;
 			$model->save();
-			echo $model->id;
+			
+		}
+
+			$did = $this->renderPartial('did',array('pvm'=>$_POST['newPvm'],'tid'=>$_POST['newTid'],'from'=>'test'), true);
+			echo json_encode($did.'//');
+			exit;
+
 		}
 		// cut
-		if(isset($_POST['id']) and isset($_POST['cut']))
+		if(isset($_POST['cut']) and isset($_SESSION['muistin']))
 		{
-			$t = Tyovuoroot::model()->findbypk($_POST['id']);
-
+		foreach($_SESSION['muistin'] as $cp)
+		{
+			$ex = explode("_",$cp);
+			$t = Tyovuoroot::model()->findbypk($ex[0]);
 			$model=new Tyovuoroot;
 			$model->attributes=$t->attributes;
 			$model->pvm=date("d.m.Y",strtotime($_POST['newPvm']));
@@ -342,8 +415,13 @@ class TyovuorootController extends Controller
 			$model->pituus=$t->pituus;
 			$model->kohde=$t->kohde;
 			$model->save();
-			$t = Tyovuoroot::model()->deletebypk($_POST['id']);
-			echo $model->id;
+			$t = Tyovuoroot::model()->deletebypk($ex[0]);			
+		}
+
+
+			$did = $this->renderPartial('did',array('pvm'=>$_POST['newPvm'],'tid'=>$_POST['newTid'],'from'=>'test'), true);
+			echo json_encode($did.'//'.implode(",",$_SESSION['muistin']));
+			exit;
 		}
 	}
 
@@ -684,7 +762,7 @@ class TyovuorootController extends Controller
 			}
 		}
 
-		$this->renderPartial('update',array(
+		$this->renderPartial('_form',array(
 			'model'=>$model,
 		));
 	?>
