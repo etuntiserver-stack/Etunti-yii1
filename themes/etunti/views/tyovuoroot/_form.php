@@ -190,6 +190,7 @@ if(!empty($t->gcm_reg_id)) :
 <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/asetukset.js"></script>
 <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/jquery.mask.js"></script>
 
+
 <script type="text/javascript">
 $(document).ready(function(){
 
@@ -222,16 +223,19 @@ $(document).ready(function(){
 		  data:$(this).serialize(),
 		  type:'POST',
 		  success:function(data){
-			console.log(data);
+			//console.log(data);
 
-	  	$.ajax({
+	  	 $.ajax({
 			url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/did',
 			type:'GET',
 			data: { "pvm" : "<?php echo $model->pvm; ?>", "tid" : "<?php echo $model->tid; ?>", "from" : "ajax" },
 			  success:function(data){
 			  //console.log(data);
-			  $('#<?php echo date("Ymd",strtotime($model->pvm))."_".$model->tid; ?>').html(data);
+			  $('#<?php echo date("Ymd",strtotime($model->pvm))."_".$model->tid; ?>').html(JSON.parse(data));
+
+			  jQuery.klikkaukset(); // js kansiossa
 			  return false;
+
 			  },
 			  error:function(data){
 			  console.log(data);
@@ -241,7 +245,7 @@ $(document).ready(function(){
 	  	$.ajax({
 			url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/viikko',
 			type:'GET',
-			data: { "tid" : "<?php echo $model->tid; ?>", "viikko" : "<?php echo date('W',strtotime($model->pvm)); ?>" },
+			data: { "tid" : "<?php echo $model->tid; ?>", "viikko" : "<?php echo date('W',strtotime($model->pvm)); ?>", "year" : "<?php echo date('Y',strtotime($model->pvm)); ?>" },
 			  success:function(data){
 			  //console.log(data);
 			  $('#vk_<?php echo date("W",strtotime($model->pvm))."_".$model->tid; ?>').html(data);
@@ -291,7 +295,11 @@ $(document).ready(function(){
 			  success:function(data){
 			  //console.log(data);
 			  $('#showres').modal('hide');
-			  $('#<?php echo date("Ymd",strtotime($model->pvm))."_".$model->tid; ?>').html(data);
+			  $('#<?php echo date("Ymd",strtotime($model->pvm))."_".$model->tid; ?>').html(JSON.parse(data));
+
+			  jQuery.klikkaukset(); // js kansiossa
+			  return false;
+
 			  },
 			  error:function(data){
 			  console.log(data);
@@ -365,52 +373,7 @@ $(document).ready(function(){
 
 
 
+
+
 });
 </script>
-
-
-<!--
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'ruokatauko'); ?>
-		<?php echo $form->textField($model,'ruokatauko',array('size'=>50,'maxlength'=>50)); ?>
-		<?php echo $form->error($model,'ruokatauko'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'alku_r'); ?>
-		<?php echo $form->textField($model,'alku_r',array('size'=>10,'maxlength'=>10)); ?>
-		<?php echo $form->error($model,'alku_r'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'kesto'); ?>
-		<?php echo $form->textField($model,'kesto',array('size'=>10,'maxlength'=>10)); ?>
-		<?php echo $form->error($model,'kesto'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'osoiteOnline'); ?>
-		<?php echo $form->textField($model,'osoiteOnline',array('size'=>60,'maxlength'=>100)); ?>
-		<?php echo $form->error($model,'osoiteOnline'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'kohde'); ?>
-		<?php echo $form->textField($model,'kohde',array('size'=>60,'maxlength'=>255)); ?>
-		<?php echo $form->error($model,'kohde'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'tid'); ?>
-		<?php echo $form->textField($model,'tid'); ?>
-		<?php echo $form->error($model,'tid'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'time'); ?>
-		<?php echo $form->textField($model,'time'); ?>
-		<?php echo $form->error($model,'time'); ?>
-	</div>
-
--->

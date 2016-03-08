@@ -155,7 +155,13 @@ else
 	  </a>
 
 	    <div style="position:absolute;width:300px;z-index: 2;" class="collapse" id="<?php echo 'sushow_'.$data->id; ?>">
-	    <div class="alert alert-info" style=""><?php $this->renderPartial('//tyovuoroot/did',array('pvm'=>$data->aloitan,'tid'=>$data->tid,'from'=>'mobiili')); ?></div>
+	     <div class="alert alert-info" style="">
+	     <?php 
+		$did = '';
+		$did = $this->renderPartial('//tyovuoroot/did',array('pvm'=>$data->aloitan,'tid'=>$data->tid,'from'=>'mobiili'), true); 
+		echo json_decode($did, true);
+	     ?>
+	     </div>
 	    </div>
 
 	<?php endif; ?>

@@ -4,14 +4,16 @@
 	$height = '';
 
 	$did = date("Ymd",strtotime($pvm));
-	echo '<div class="small laatikko latikkoAsetukset" pvm="'.date("d.m.Y",strtotime($pvm)).'" tid="'.$tid.'">';
 
-	echo '
+	$bod = ''; 
+	$bod .=  '<div class="small laatikko latikkoAsetukset" pvm="'.date("d.m.Y",strtotime($pvm)).'" tid="'.$tid.'">';
+
+	$bod .=  '
 	<div class="pull-right plussamerkki">
 	<plussa class="link glyphicon glyphicon-plus luominen" pvm="'.date("d.m.Y",strtotime($pvm)).'" tid="'.$tid.'"></plussa>
 	</div>';
 
-	echo '
+	$bod .=  '
 	   <div class="tp">
 	     <div class="form-inline">
 	     <div class="form-group">
@@ -68,36 +70,35 @@
 	 }
 
 
-	   echo '<div id="'.$tvVal->id.'_'.$did.'_'.$tid.'" class="fullRivi" style="color:'.$color.'">';
+	   $bod .=  '<div id="'.$tvVal->id.'_'.$did.'_'.$tid.'" class="fullRivi" style="color:'.$color.'">';
 	   if( $from != 'mobiili' )
-	   echo '<span class="link text-danger glyphicon glyphicon-paste muistin" for="'.$tvVal->id.'_'.$did.'_'.$tid.'"></span>';
-	   echo '&nbsp;<span class="link tv_edit" id="tv_'.$tvVal->id.'">'.$al.' '.$osoite.'</span>';
+	   $bod .=  '<span class="link text-danger glyphicon glyphicon-paste muistin" for="'.$tvVal->id.'_'.$did.'_'.$tid.'"></span>';
+	   $bod .=  '&nbsp;<span class="link tv_edit" id="tv_'.$tvVal->id.'">'.$al.' '.$osoite.'</span>';
 
 	   if(!empty($tvVal->kohteet->avain))
-	   echo ' <b class="fa fa-key text-warning"></b>';
+	   $bod .=  ' <b class="fa fa-key text-warning"></b>';
 
 	   if(!empty($tvVal->tietoja))
-	   echo ' <b class="fa fa-file-text-o text-warning" title="Tietoja"></b>';
+	   $bod .=  ' <b class="fa fa-file-text-o text-warning" title="Tietoja"></b>';
 
 	   if(!empty($tvVal->tietoja) and isset($tietoja) and $tietoja == 1)
-	   echo '<p><span style="color: blue; border: 1px #333 solid">'.str_replace("\n","<br>",$tvVal->tietoja).'</span></p>';
+	   $bod .=  '<p><span style="color: blue; border: 1px #333 solid">'.str_replace("\n","<br>",$tvVal->tietoja).'</span></p>';
 
-	   echo '<br>
+	   $bod .=  '<br>
 	   </div>';
 
 	}
-
-	echo '</div>';
-
-
-	
-	if( $from == 'ajax' ){
-	?>
-	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/tvuoroot.js"></script>
-	<?php
+	$bod .=  '</div>';
+/*
+	if( $from == 'ajax' )
+	{
+	$ajax = '';
+	$ajax = '<script type="text/javascript" src="'.Yii::app()->request->baseUrl.'/js/tvuoroot.js"></script>';
+	$bod .=  $ajax;
 	}
+*/
+	echo json_encode($bod);
 
-//print_r($tvVal->kohde);
-//exit;
+
 ?>
 

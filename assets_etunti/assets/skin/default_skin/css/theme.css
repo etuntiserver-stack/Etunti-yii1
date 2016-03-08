@@ -7188,6 +7188,7 @@ perspective effects (not including the modals and the overlay).
   transform-style: preserve-3d;
   -webkit-transform: translateY(100%) rotateX(90deg);
   transform: translateY(100%) rotateX(90deg);
+
   -webkit-transform-origin: 0 100%;
   transform-origin: 0 100%;
   opacity: 0;
