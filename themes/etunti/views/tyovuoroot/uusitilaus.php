@@ -21,6 +21,9 @@
   <div class="col-sm-3">
 		<label>Asiakkaan nimi</label>
 		<input type="text" name="yhteyshenkilo" class="form-control">
+
+		<label>Hinta</label>
+		<input type="text" name="hinta" class="form-control">
   </div>
 
   <div class="col-sm-3">
@@ -89,6 +92,7 @@
 		 }
 		echo '</select>';
         	?>
+
 
   </div>
   <div class="col-sm-6">

@@ -133,7 +133,7 @@ if($week > $wkMaara) {
 	echo '<tr>';
 	echo '<td>'.$t->tekijan_nimi.' '.date('Y-m-d',strtotime($year ."W". $week)).' '.$week.'<BR>
 	<input type="checkbox" for="'.$t->id.'">
-	'.CHtml::link('Lähettäminen','/index.php/tyovuoroot/laheta?tid='.$t->id.'&week='.$week.'&year='.$year.'&tulosta=false',array('target'=>'_blank','class'=>'text-success'));
+	'.CHtml::link('Lähetä','/index.php/tyovuoroot/laheta?tid='.$t->id.'&week='.$week.'&year='.$year.'&tulosta=false',array('target'=>'_blank','class'=>'text-success'));
 
 	$file = $week.'_'.$year.'_'.$t->id.'.pdf';
 	$path = Yii::app()->request->baseUrl."emails/tyovuorot/".Yii::app()->user->domain;
