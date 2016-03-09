@@ -104,7 +104,8 @@
   </div>
 </div>
 
-
+		<br>
+		<input type="checkbox" name="vieposti"> <?php echo Yii::t('main','Ilmoita asiakkaalle sähköpostilla'); ?>
 
 </div>
 

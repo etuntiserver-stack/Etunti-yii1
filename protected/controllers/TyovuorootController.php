@@ -739,6 +739,7 @@ class TyovuorootController extends Controller
 		if(isset($_POST['Tyovuoroot']))
 		{
 
+
 		$asiakkaat = new Asiakkaat;
 		$asiakkaat->tyyppi = 'henkilo';
 		$asiakkaat->yhteyshenkilo = $_POST['yhteyshenkilo'];
@@ -764,6 +765,8 @@ class TyovuorootController extends Controller
 				if($model->save())
 				{
 
+				   if(isset($_POST['vieposti']))
+				   {
 					$message = '
 					Asiakas: '.$asiakkaat->yhteyshenkilo.'<br>
 					Työvuorot:  '.$model->pvm.', '.$model->alku.'-'.$model->loppu.'<br>
@@ -776,6 +779,7 @@ class TyovuorootController extends Controller
 					$mail->setSubject(Yii::t('main', 'Kiitos tilausta'));
 					$mail->setBody($message);
 					$mail->send();
+				   }
 
 
 				}
