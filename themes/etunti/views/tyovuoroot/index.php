@@ -22,9 +22,8 @@
    }
 
 // oletus arvot
-   if(!isset(Yii::app()->session['from']) and !isset(Yii::app()->session['to']) and !isset(Yii::app()->session['Tekija'])){
+   if(!isset(Yii::app()->session['from']) and !isset(Yii::app()->session['Tekija'])){
 	Yii::app()->session['from'] = date("Y-m-d");
-	Yii::app()->session['to'] = date("Y-m-d",strtotime("+1 month", time()));
 
        		$criteria = new CDbCriteria();
         	$criteria->order = "tekijan_nimi";
@@ -79,19 +78,6 @@
 		$to = date("d.m.Y",strtotime(Yii::app()->session['to']));
 
 
-
-
-//print_r(Yii::app()->session['tvuoroTekija']);
-
-function dateDiff($start, $end) {
-  $start_ts = strtotime($start);
-  $end_ts = strtotime($end);
-  $diff = $end_ts - $start_ts;
-  return round($diff / 86400);
-}
-	$dateDiff = dateDiff($from, $to);
-
-//echo Yii::app()->session['copymove'];
 
 ?>
 <style>
@@ -160,22 +146,16 @@ td .tp{
 
 ?>
 
+
+        <div class="tray-center row">
             <div class="admin-form">
               <div class="panel heading-border">
-<center>
-   <h3>
-     <a href="<?php echo $_SERVER['PHP_SELF'].'?week='.($week == 1 ? $wkMaara : $week -1).'&year='.($week == 1 ? $year - 1 : $year); ?>"><<</a> 
-     <?php echo date('d.m.Y',strtotime($year ."W".$week .'1')).' - '.date('d.m.Y',strtotime($year ."W". $week .'7')); ?>
-     <a href="<?php echo $_SERVER['PHP_SELF'].'?week='.($week == $wkMaara ? 1 : 1 + $week).'&year='.($week == $wkMaara ? 1 + $year : $year); ?>">>></a> 
-   </h3>
-</center>
                 <div class="panel-body bg-light">
-
-                 
+                
 
 
 <div class="row">
- <div class="row col-sm-6">
+ <div class="row col-sm-5">
   <form action="index" id="yhtveto" method="POST">
 
    <div class="form-inline">
@@ -198,6 +178,18 @@ td .tp{
    <input type="submit" class="btn btn-primary" value="<?php echo Yii::t('main', 'haku'); ?>">
    </div>
    </form>
+
+ </div><div class="row col-sm-4">
+
+
+
+<center>
+   <h3>
+     <a href="<?php echo $_SERVER['PHP_SELF'].'?week='.($week == 1 ? $wkMaara : $week -1).'&year='.($week == 1 ? $year - 1 : $year); ?>"><<</a> 
+     <?php echo date('d.m.Y',strtotime($year ."W".$week .'1')).' - '.date('d.m.Y',strtotime($year ."W". $week .'7')); ?>
+     <a href="<?php echo $_SERVER['PHP_SELF'].'?week='.($week == $wkMaara ? 1 : 1 + $week).'&year='.($week == $wkMaara ? 1 + $year : $year); ?>">>></a> 
+   </h3>
+</center>
 
  </div>
 
@@ -227,13 +219,13 @@ $numDays = 7;
   <table class="table table-bordered small">
      <thead class="">
      <tr>
-	<th>Nimi</th>
+	<th class="myBgColors">Nimi</th>
         <?php
 	for($day= 1; $day <= $numDays; $day++)
 	{
   	  $d = strtotime($year ."W". $week . $day);
 	  $date = date('d.m',$d);
-	  echo '<td>'.$paivat[date('N',$d)].', '.$date.'</td>';
+	  echo '<th class="myBgColors">'.$paivat[date('N',$d)].', '.$date.'</th>';
 	}
         ?>
      </tr>
@@ -244,7 +236,30 @@ $numDays = 7;
 	{
 	  echo '<tr>';
 	  echo '<td width=1>';
- 	  echo $t->tekijan_nimi;	
+
+	     $vktyoaika = '';
+	     $ts = Tyosuhdet::model()->find(" tid = '".$t->id."' ");
+	     if(isset($ts->id) and !empty($ts['vktyoaika']))
+	     $vktyoaika = $ts['vktyoaika'];
+	     $kokoViikko = $this->renderPartial('//tyovuoroot/viikko',array('tid'=>$t->id,'viikko'=>$week,'year'=>$year),true);
+ 	  
+		$cl = '';
+		if((int)str_replace(":","",$kokoViikko) > (int)str_replace(":","",$vktyoaika)
+			and (int)str_replace(":","",$kokoViikko) > 0
+			and (int)str_replace(":","",$vktyoaika) > 0
+		)
+		$cl = 'class="btn btn-xs btn-danger"';
+
+		echo '
+		<div class="row">
+		  <div class="col-sm-12">
+		    	'.$t->tekijan_nimi.'
+			<br>
+			<span '.$cl.'><b id="vk_'.$week.'_'.$t->id.'">'.$kokoViikko. '</b> ('.$vktyoaika.')</span>
+		  </div>
+		</div>';
+
+
 	  echo '</td>';
 
 	  for($day= 1; $day <= $numDays; $day++)
@@ -268,7 +283,7 @@ $numDays = 7;
                 </div>
               </div>
             </div>
-
+        </div>
 
 <?php endif; ?>
 

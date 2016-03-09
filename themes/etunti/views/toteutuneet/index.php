@@ -208,8 +208,12 @@ function dateDiff($start, $end) {
   	<td width=1 class="small">'.$arrDate[$explColDate[0]].'<br>'.date("d.m",strtotime($date)).'</td>';
   
     $tas = explode(",",Yii::app()->user->adminPaketti);
-    if(in_array('2',$tas)) 
-    echo '<td>'.$this->renderPartial('//tyovuoroot/did',array('pvm'=>$date,'tid'=>$explTekija[0],'from'=>'mobiili'),true).'</td>';
+    if(in_array('2',$tas))
+    {
+	$dido = '';
+	$dido = $this->renderPartial('//tyovuoroot/did',array('pvm'=>$date,'tid'=>$explTekija[0],'from'=>'mobiili'),true);
+    	echo '<td>'.json_decode($dido, true).'</td>';
+    }
 
     echo '
   	<td>'.$this->renderPartial('luetutpvmtid',array('pvm'=>$date,'tid'=>$explTekija[0],'from'=>'mobiili'),true).'</td>
