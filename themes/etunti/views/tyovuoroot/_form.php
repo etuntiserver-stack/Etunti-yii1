@@ -159,7 +159,7 @@ if(!empty($t->gcm_reg_id)) :
 <div class="row">
   <div class="col-sm-12">
     <div class="pull-right">
-		<?php echo Yii::t('main','Ilmoita työntekijä viestinä'); ?> 
+		<?php echo Yii::t('main','Ilmoita työntekijää viestillä'); ?> 
 			<input type="checkbox" name="Tyovuoroot[PushNotify]" class="sw" id="Tyovuoroot_PushNotify">
     </div>
   </div>

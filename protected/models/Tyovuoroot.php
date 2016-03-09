@@ -102,7 +102,7 @@ public $count;
 			'alku_r' => 'Alku R',
 			'kesto' => 'Kesto',
 			'tyoajanlaatu' => 'Tyoajanlaatu',
-			'tyoajanmerkinta' => 'Tyoajanmerkinta',
+			'tyoajanmerkinta' => 'Työajanmerkintä',
 			'tietoja' => 'Tietoja',
 			'osoiteOnline' => 'Osoite Online',
 		);

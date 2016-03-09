@@ -49,7 +49,7 @@
 	<input type="text" class="form-control datepicker" name="pto" id="pto">
   </div>
   <div class="col-sm-4">
-	<label><?php echo Yii::t('main', 'Viikkoja'); ?></label>
+	<label><?php echo Yii::t('main', 'Työvuorojen viikkoväli'); ?></label>
 	<select class="form-control" name="viikkoja">
 	<option value="1">1</option>
 	<option value="2">2</option>

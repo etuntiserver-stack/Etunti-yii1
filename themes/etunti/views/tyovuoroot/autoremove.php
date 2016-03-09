@@ -48,7 +48,7 @@
 	<input type="text" class="form-control datepicker" name="pfrom" value="<?php echo date('Y-m-d'); ?>">
   </div>
   <div class="col-sm-6">
-	<label><?php echo Yii::t('main', 'Loppuun'); ?></label>
+	<label><?php echo Yii::t('main', 'Loppuen'); ?></label>
 	<input type="text" class="form-control datepicker" name="pto" id="pto">
   </div>
 </div>
@@ -107,7 +107,7 @@
 
 <div id="row">
     <div class="pull-right" id="supersubmit"></div>
-    <div id="oldBut"><button class="btn btn-danger doit"><?php echo Yii::t('main', 'Tarkista valitsemäsi päiviä'); ?></button></div> 
+    <div id="oldBut"><button class="btn btn-danger doit"><?php echo Yii::t('main', 'Tarkista valitsemasi päiviät'); ?></button></div> 
     <div id="newBut"></div>
 </div>
 
