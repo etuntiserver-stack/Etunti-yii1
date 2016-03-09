@@ -255,7 +255,7 @@ $(document).ready(function(){
 			  console.log(data);
 			  }
 	 	});
-
+/*
 	  	$.ajax({
 			url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/fromto',
 			type:'GET',
@@ -269,6 +269,7 @@ $(document).ready(function(){
 			  console.log(data);
 			  }
 	 	});
+*/
 
 		$('#showres').modal('hide');
 		return false;
