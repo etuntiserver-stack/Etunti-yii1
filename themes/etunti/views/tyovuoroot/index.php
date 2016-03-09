@@ -62,23 +62,6 @@
 
 
 
-		if(Yii::app()->request->getPost('from'))
-		Yii::app()->session['from'] = date("Y-m-d",strtotime(Yii::app()->request->getPost('from')));
-
-		if(Yii::app()->request->getPost('to'))
-		Yii::app()->session['to'] = date("Y-m-d",strtotime(Yii::app()->request->getPost('to')));
-
-
-		$from = '';
-		$to = '';
-		
-		if(isset(Yii::app()->session['from']))
-		$from = date("d.m.Y",strtotime(Yii::app()->session['from']));
-		if(isset(Yii::app()->session['to']))
-		$to = date("d.m.Y",strtotime(Yii::app()->session['to']));
-
-
-
 ?>
 <style>
 td .latikkoAsetukset{
@@ -132,8 +115,8 @@ td .tp{
 
 
   $wkMaara = 53;
-  $year = (isset($_GET['year'])) ? $_GET['year'] : date("Y", strtotime($from));
-  $week = (isset($_GET['week'])) ? $_GET['week'] : date('W', strtotime($from));
+  $year = (isset($_GET['year'])) ? $_GET['year'] : date("Y");
+  $week = (isset($_GET['week'])) ? $_GET['week'] : date('W');
 
   if($week > $wkMaara) {
     $year++;
@@ -174,22 +157,39 @@ td .tp{
     }
     echo '</select>';
    ?>
-   <input type="text" name="from" id="from" class="form-control form-group datepicker" value="<?php echo Yii::app()->session['from']; ?>">
    <input type="submit" class="btn btn-primary" value="<?php echo Yii::t('main', 'haku'); ?>">
    </div>
    </form>
 
- </div><div class="row col-sm-4">
+ </div><div class="col-sm-4">
 
 
 
-<center>
-   <h3>
-     <a href="<?php echo $_SERVER['PHP_SELF'].'?week='.($week == 1 ? $wkMaara : $week -1).'&year='.($week == 1 ? $year - 1 : $year); ?>"><<</a> 
-     <?php echo date('d.m.Y',strtotime($year ."W".$week .'1')).' - '.date('d.m.Y',strtotime($year ."W". $week .'7')); ?>
-     <a href="<?php echo $_SERVER['PHP_SELF'].'?week='.($week == $wkMaara ? 1 : 1 + $week).'&year='.($week == $wkMaara ? 1 + $year : $year); ?>">>></a> 
-   </h3>
-</center>
+   <div class="form-inline">
+     <a href="<?php echo $_SERVER['PHP_SELF'].'?week='.($week == 1 ? $wkMaara : $week -1).'&year='.($week == 1 ? $year - 1 : $year); ?>"><i class="fa fa-arrow-left"></i></a>
+
+	<select class="form-control" id="viikkonhyppaminen">
+	<?php
+	define('NL', "\n");
+	$year           = $year;
+	$firstDayOfYear = mktime(0, 0, 0, 1, 1, $year);
+	$nextMonday     = strtotime('monday', $firstDayOfYear);
+	$nextSunday     = strtotime('sunday', $nextMonday);
+	
+	    echo '<option value="'.$_SERVER['PHP_SELF'].'?week='.$week.'&year='.$year.'">'. date('d.m.Y',strtotime($year ."W".$week .'1')).' - '.date('d.m.Y',strtotime($year ."W". $week .'7')).'</option>';
+
+	while (date('Y', $nextMonday) == $year) {
+	    echo '<option value="'.$_SERVER['PHP_SELF'].'?week='.date('W', $nextMonday), NL.'&year='.$year.'">'.date('d.m.Y', $nextMonday), '-', date('d.m.Y', $nextSunday), NL.'</option>';
+	
+	    $nextMonday = strtotime('+1 week', $nextMonday);
+	    $nextSunday = strtotime('+1 week', $nextSunday);
+	}
+	?>
+	</select>
+     <a href="<?php echo $_SERVER['PHP_SELF'].'?week='.($week == $wkMaara ? 1 : 1 + $week).'&year='.($week == $wkMaara ? 1 + $year : $year); ?>"><i class="fa fa-arrow-right"></i></a> 
+
+   </div>
+
 
  </div>
 
