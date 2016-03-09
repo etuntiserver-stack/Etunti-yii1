@@ -130,12 +130,6 @@ td .tp{
 ?>
 
 
-        <div class="tray-center row">
-            <div class="admin-form">
-              <div class="panel heading-border">
-                <div class="panel-body bg-light">
-                
-
 
 <div class="row">
  <div class="row col-sm-5">
@@ -161,8 +155,7 @@ td .tp{
    </div>
    </form>
 
- </div><div class="col-sm-4">
-
+ </div><div class="col-sm-3">
 
 
    <div class="form-inline">
@@ -191,22 +184,34 @@ td .tp{
    </div>
 
 
- </div>
+ </div><div class="col-sm-4">
 
-	<div class="pull-right">
- 	  <div class="form-inline">
+ 	<div class="pull-right row">
+ 	  <div class="form-inline row">
 		<div id="trash"></div> 
 		<div id="clear"></div>
 		<div class="btn btn-primary fa fa-calendar-plus-o" id="autoInsert"></div>
 		<div class="btn btn-primary fa fa-calendar-minus-o" id="autoRemove"></div>
 		<!--<a class="btn btn-primary ad ad-screen-full myBgColors" href="/index.php/tyovuoroot/index?fullscreen=true"></a>-->
 		<div class="btn" id="vkolopput"><?php echo Yii::t('main', 'Viikonloput'); ?></div>
- 	 </div>
+ 	  </div>
  	</div>
 
+ </div>
 </div>
 
 <br>
+
+
+
+<div class="row">
+            <div class="admin-form">
+              <div class="panel heading-border">
+                <div class="panel-body bg-light">
+                
+
+
+
 
 <?php
 if(!isset($_SESSION['vkolopput']))
@@ -215,8 +220,8 @@ else
 $numDays = 7;
 ?>
 
-<div class="row tvuoro table-responsive">
-  <table class="table table-bordered small">
+<div class="row table-responsive">
+  <table class="table small">
      <thead class="">
      <tr>
 	<th class="myBgColors">Nimi</th>
@@ -283,7 +288,7 @@ $numDays = 7;
                 </div>
               </div>
             </div>
-        </div>
+</div>
 
 <?php endif; ?>
 
