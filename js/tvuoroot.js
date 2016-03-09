@@ -22,6 +22,24 @@ $('#tyontekijat').selectpicker({
 });
 */
 
+
+$("#uusiTilaus").click(function(){
+
+   $.ajax({
+	url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/uusitilaus',
+	data:$(this).serialize(),
+	type:'POST',
+	success:function(data){
+		$('#showres').modal().html(data);
+   	},
+	error:function(data){
+		console.log(data);
+    	}
+    });
+
+});
+
+
 $("#autoInsert").click(function(){
 
         $.ajax({

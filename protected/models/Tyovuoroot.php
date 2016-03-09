@@ -88,7 +88,7 @@ public $count;
 	{
 		return array(
 			'id' => 'ID',
-			'tid' => 'Tid',
+			'tid' => 'Työntekijä',
 			'tekijan_nimi' => 'Työntekijä',
 			'toimenpiteet' => 'Ohje',
 			'osoite' => 'Katuosoite',
