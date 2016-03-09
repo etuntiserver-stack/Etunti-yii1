@@ -7189,6 +7189,7 @@ perspective effects (not including the modals and the overlay).
   -webkit-transform: translateY(100%) rotateX(90deg);
   transform: translateY(100%) rotateX(90deg);
 
+
   -webkit-transform-origin: 0 100%;
   transform-origin: 0 100%;
   opacity: 0;
@@ -8267,6 +8268,7 @@ h6,
   text-rendering: optimizelegibility;
 }
 h1 small,
+
 h2 small,
 h3 small,
 h4 small,
@@ -10654,6 +10656,7 @@ tbody.collapse.in {
   line-height: 1.49;
   white-space: nowrap;
 }
+
 .dropdown-menu > li > a:hover,
 .dropdown-menu > li > a:focus {
   text-decoration: none;

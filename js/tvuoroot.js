@@ -12,11 +12,15 @@ $('td').hover(function()
 
 
 $('#tyontekijat').multiselect({
-	inheritClass: true,
-	enableFiltering: true,
+	//inheritClass: true,
+	//enableFiltering: true,
         includeSelectAllOption: true,
 });
+/*
+$('#tyontekijat').selectpicker({
 
+});
+*/
 
 $("#autoInsert").click(function(){
 
@@ -331,10 +335,7 @@ $("#yhtveto").on('submit',function(e){
 
 });
 
-$('.selectpicker').selectpicker({
-      style: 'btn-default btn-sm',
-      //size: 4
-  });
+
 
 
 });
