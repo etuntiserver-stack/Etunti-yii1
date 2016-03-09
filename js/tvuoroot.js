@@ -306,6 +306,12 @@ function vkolopputCheck(){
 }
 
 
+$("#viikkonhyppaminen").change(function() {
+	var thisVal = $(this).val();
+	window.location.href=thisVal;
+	return false;
+});
+
 
 
 
