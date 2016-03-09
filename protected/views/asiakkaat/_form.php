@@ -71,10 +71,24 @@ $asiakasnumero = 'voidaan käyttää oleva ID numero';
 	</div>
 
 	<div class="row ashidd_a">
-		<?php echo $form->labelEx($model,'osoite'); ?>
-		<?php echo $form->textField($model,'osoite',array('size'=>60,'maxlength'=>255,'class'=>'form-control input-sm')); ?>
-		<?php echo $form->error($model,'osoite'); ?>
+		<?php echo $form->labelEx($model,'ryhma'); ?>
+		<?php
+		$list = array();
+      		$l = Valikkoot::model()->findAll(" select_type='asiakas_ryhma' ",array('order' => "select_type"));
+		foreach($l as $v)
+		$list[$v->id] = $v->value;
+
+		if(count($list) > 0)
+		{
+        	echo $form->dropDownList($model, 'ryhma', $list,
+		array('empty'=>'Valitse ryhmä','class'=>'form-control input-sm'));
+		} else {
+		echo 'Luo Valikko tietokannassa "Select Type = asiakas_ryhma"';
+		}		
+        	?>
+		<?php echo $form->error($model,'ryhma'); ?>
 	</div>
+
 
 	<div class="row ashidd_a">
 		<?php echo $form->labelEx($model,'kaupunki'); ?>
@@ -100,23 +114,11 @@ $asiakasnumero = 'voidaan käyttää oleva ID numero';
 		<?php echo $form->error($model,'sahkoposti'); ?>
 	</div>
 
-	<div class="row ashidd_a">
-		<?php echo $form->labelEx($model,'ryhma'); ?>
-		<?php
-		$list = array();
-      		$l = Valikkoot::model()->findAll(" select_type='asiakas_ryhma' ",array('order' => "select_type"));
-		foreach($l as $v)
-		$list[$v->id] = $v->value;
 
-		if(count($list) > 0)
-		{
-        	echo $form->dropDownList($model, 'ryhma', $list,
-		array('empty'=>'Valitse ryhmä','class'=>'form-control input-sm'));
-		} else {
-		echo 'Luo Valikko tietokannassa "Select Type = asiakas_ryhma"';
-		}		
-        	?>
-		<?php echo $form->error($model,'ryhma'); ?>
+	<div class="row ashidd_a">
+		<?php echo $form->labelEx($model,'osoite'); ?>
+		<?php echo $form->textField($model,'osoite',array('size'=>60,'maxlength'=>255,'class'=>'form-control input-sm')); ?>
+		<?php echo $form->error($model,'osoite'); ?>
 	</div>
 
 	<div class="row ashidd_a">

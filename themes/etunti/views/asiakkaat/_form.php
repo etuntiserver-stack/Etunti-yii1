@@ -64,11 +64,30 @@ $asiakasnumero = 'voidaan käyttää oleva ID numero';
 		<?php echo $form->error($model,'yhteyshenkilo'); ?>
 	</div>
 
-	<div class="section fill mb5 ashidd_a">
-		<?php echo $form->labelEx($model,'osoite'); ?>
-		<?php echo $form->textField($model,'osoite',array('size'=>60,'maxlength'=>255,'class'=>'form-control')); ?>
-		<?php echo $form->error($model,'osoite'); ?>
+	<div class="section fill mb5 ashidd_a form-inline">
+		<?php echo $form->labelEx($model,'ryhma'); ?>
+
+	   <div class="form-inline">
+		<?php
+		$list = array();
+      		$l = Valikkoot::model()->findAll(" select_type='asiakas_ryhma' ",array('order' => "select_type"));
+		foreach($l as $v)
+		$list[$v->id] = $v->value;
+
+		if(count($list) > 0)
+		{
+        	echo $form->dropDownList($model, 'ryhma', $list,
+		array('empty'=>'Valitse ryhmä','class'=>'form-control form-group'));
+		} else {
+		echo 'Luo Valikko tietokannassa "Select Type = asiakas_ryhma"';
+		}		
+        	?>
+		<span class="btn btn-primary myBgColors muokaValiko" for="asiakas_ryhma"><i class="fa fa-pencil-square-o"></i></span>
+	   </div>
+
+		<?php echo $form->error($model,'ryhma'); ?>
 	</div>
+
 
 	<div class="section fill mb5 ashidd_a">
 
@@ -81,6 +100,12 @@ $asiakasnumero = 'voidaan käyttää oleva ID numero';
 
   </div><div class="col-sm-3">
 	<legend><h3><?php echo Yii::t('main', 'Asiakkaan tiedot'); ?></h3></legend>
+
+	<div class="section fill mb5 ashidd_a">
+		<?php echo $form->labelEx($model,'osoite'); ?>
+		<?php echo $form->textField($model,'osoite',array('size'=>60,'maxlength'=>255,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'osoite'); ?>
+	</div>
 
 	<div class="section fill mb5 ashidd_a">
 		<?php echo $form->labelEx($model,'kaupunki'); ?>
@@ -104,30 +129,6 @@ $asiakasnumero = 'voidaan käyttää oleva ID numero';
 		<?php echo $form->labelEx($model,'sahkoposti'); ?>
 		<?php echo $form->textField($model,'sahkoposti',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'sahkoposti'); ?>
-	</div>
-
-	<div class="section fill mb5 ashidd_a form-inline">
-		<?php echo $form->labelEx($model,'ryhma'); ?>
-
-	   <div class="form-inline">
-		<?php
-		$list = array();
-      		$l = Valikkoot::model()->findAll(" select_type='asiakas_ryhma' ",array('order' => "select_type"));
-		foreach($l as $v)
-		$list[$v->id] = $v->value;
-
-		if(count($list) > 0)
-		{
-        	echo $form->dropDownList($model, 'ryhma', $list,
-		array('empty'=>'Valitse ryhmä','class'=>'form-control form-group'));
-		} else {
-		echo 'Luo Valikko tietokannassa "Select Type = asiakas_ryhma"';
-		}		
-        	?>
-		<span class="btn btn-primary myBgColors muokaValiko" for="asiakas_ryhma"><i class="fa fa-pencil-square-o"></i></span>
-	   </div>
-
-		<?php echo $form->error($model,'ryhma'); ?>
 	</div>
 
 	<div class="section fill mb5 ashidd_a">

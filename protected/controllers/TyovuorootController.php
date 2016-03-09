@@ -28,7 +28,7 @@ class TyovuorootController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','updatetime','showohje','did','muisti','operatio','viikko','fromto','autoinsert','autoremove','viikkottain', 'viikkottain_pdf', 'laheta','kk','pvmtid','laheta_k', 'muistin', 'muisticlear', 'muistissa', 'vkolopput', 'vkolopchange'),
+				'actions'=>array('admin','delete','create','update','index','view','updatetime','showohje','did','muisti','operatio','viikko','fromto','autoinsert','autoremove','viikkottain', 'viikkottain_pdf', 'laheta','kk','pvmtid','laheta_k', 'muistin', 'muisticlear', 'muistissa', 'vkolopput', 'vkolopchange', 'uusitilaus'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny', // allow admin user to perform 'admin' and 'delete' actions
@@ -706,6 +706,80 @@ class TyovuorootController extends Controller
 	</div> <!-- end modal-body -->
 	<?php
 	}
+
+
+	public function actionUusitilaus()
+	{
+
+  	$tnimi = '';
+	if(isset($_POST['tid'])){
+  	  $tekija = Tyontekijat::model()->findbypk($_POST['tid']);
+	  $tnimi = $tekija->tekijan_nimi;
+	}
+	?>
+	<div class="modal-dialog modal-lg">
+	    <div class="modal-content">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
+		<h2 class="modal-title"><?php echo Yii::t('main', 'Uusi tilaus').' '.$tnimi; ?></h2>
+	
+		</div>
+		<div class="modal-body">
+
+	<div class="dialogTable clearfix modal-osio">
+	<?php
+
+		$model=new Tyovuoroot;
+
+		// Uncomment the following line if AJAX validation is needed
+		// $this->performAjaxValidation($model);
+
+		if(isset($_POST['Tyovuoroot']))
+		{
+
+		$asiakkaat = new Asiakkaat;
+		$asiakkaat->tyyppi = 'henkilo';
+		$asiakkaat->yhteyshenkilo = $_POST['yhteyshenkilo'];
+		$asiakkaat->osoite = $_POST['osoite'];
+		$asiakkaat->puhelin = $_POST['puhelin'];
+		$asiakkaat->sahkoposti = $_POST['sahkoposti'];
+		$asiakkaat->aktiivinen = 1;
+
+		  if($asiakkaat->save())
+		  {
+			$kohteet = new Kohteet;
+			$kohteet->asiakas_id = $asiakkaat->id;
+			$kohteet->etu_suku_nimet = $asiakkaat->yhteyshenkilo;
+			$kohteet->osoite = $asiakkaat->osoite;
+			$kohteet->puh_nro = $asiakkaat->puhelin;
+			$kohteet->email = $asiakkaat->sahkoposti;
+
+		  	   if($kohteet->save())
+		  	   {
+				$model->attributes=$_POST['Tyovuoroot'];
+				$model->kohde = $kohteet->id;
+				$model->pvm = date("d.m.Y",strtotime($_POST['Tyovuoroot']['pvm']));
+				$model->save();
+			   }
+
+		  }
+
+
+		exit;
+		}
+
+		$this->renderPartial('uusitilaus',array(
+			'model'=>$model,
+		));
+	?>
+	</div>
+	</div> <!-- end modal-body -->
+	<?php
+	}
+
+
 
 	/**
 	 * Updates a particular model.

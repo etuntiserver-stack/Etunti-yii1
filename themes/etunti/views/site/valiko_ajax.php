@@ -44,7 +44,7 @@
 	elseif($_POST['select_type'] == 'Palkkausmuoto') $selType = 'Palkkausmuoto';
 	elseif($_POST['select_type'] == 'tilanne') $selType = 'Tilanne';
 	elseif($_POST['select_type'] == 'aktiivinen') $selType = 'Työssä Aktiivinen';
-	elseif($_POST['select_type'] == 'tyoryhma') $selType = 'Työryhma';
+	elseif($_POST['select_type'] == 'tyoryhma') $selType = 'Työryhmä';
 	elseif($_POST['select_type'] == 'tyoajanmerkinta') $selType = 'Työajanmerkinta';
 	elseif($_POST['select_type'] == 'admin status') $selType = 'Oikeukset';
 	elseif($_POST['select_type'] == 'siivous') $selType = 'Siivous tyyppi';

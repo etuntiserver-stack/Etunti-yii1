@@ -73,7 +73,7 @@ class FirmanTiedot extends DB2ActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'tyonantaja' => 'Nimetys',
+			'tyonantaja' => 'Yrityksen nimi',
 			'osoite' => 'Osoite',
 			'postinumero' => 'Postinumero',
 			'postitoimipaikka' => 'Postitoimipaikka',

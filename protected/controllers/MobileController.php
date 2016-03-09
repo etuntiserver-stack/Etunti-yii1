@@ -1521,7 +1521,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		echo '<input type="hidden" name="toPosti" value="'.$to.'">';
 		echo '<input type="hidden" name="ids" value="'.implode(",",$ids).'">';
 		echo '<input type="hidden" name="kohdenID" value="'.$kohdenID.'">';
-		echo '<input type="submit" class="btn btn-sm btn-success" value="'.Yii::t('main','lähetä asiakkaalle hyväksymiseksi').'">';
+		echo '<input type="submit" class="btn btn-sm btn-success" value="'.Yii::t('main','Lähetä asiakkaalle hyväksyttäväksi').'">';
 		echo '</form>';
 		echo '</div>';
 		}

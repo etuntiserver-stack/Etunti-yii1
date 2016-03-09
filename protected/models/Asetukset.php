@@ -78,13 +78,13 @@ class Asetukset extends DB2ActiveRecord
 			'iban' => 'IBAN',
 			'bic' => 'BIC',
 			'viivastyskorko' => 'Viivästyskorko %',
-			'postita_username' => 'Postita username',
-			'postita_password' => 'Postita password',
-			'palvelu_tyyppi' => 'Palvelu tyyppi',
+			'postita_username' => 'Postita käyttäjätunnus',
+			'postita_password' => 'Postita salasana',
+			'palvelu_tyyppi' => 'Palvelutyyppi',
 			'trust_url'=>'Trust URL',
 			'pyhapaivat'=>'Viralliset pyhäpäivät / pp.kk.vvvv',
 			'erikoislauantai' => 'Erikoislauantai',
-			'sovellus_tyovuorot'=>'Työvuorojen nayttäminen',
+			'sovellus_tyovuorot'=>'Työvuorojen näyttäminen',
 		);
 	}
 

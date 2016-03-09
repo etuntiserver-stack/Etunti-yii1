@@ -111,12 +111,6 @@ if(empty($model->position) and isset($model->id))
 
 
 	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'imei'); ?>
-		<?php echo $form->textField($model,'imei',array('size'=>30,'maxlength'=>100,'class'=>'form-control')); ?>
-		<?php echo $form->error($model,'imei'); ?>
-	</div>
-
-	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'laiten_puh'); ?>
 		<?php echo $form->textField($model,'laiten_puh',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'laiten_puh'); ?>
