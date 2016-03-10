@@ -151,3 +151,19 @@
 <?php $this->endWidget(); ?>
 
 
+
+
+<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/jquery.mask.js"></script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+
+  $('#Tyosuhdet_vktyoaika').mask('00:00',{
+        placeholder: "__:__"
+  });
+
+});
+</script>
+
+

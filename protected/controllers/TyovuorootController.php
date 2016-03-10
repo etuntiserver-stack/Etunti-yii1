@@ -711,11 +711,8 @@ class TyovuorootController extends Controller
 	public function actionUusitilaus()
 	{
 
-  	$tnimi = '';
-	if(isset($_POST['tid'])){
-  	  $tekija = Tyontekijat::model()->findbypk($_POST['tid']);
-	  $tnimi = $tekija->tekijan_nimi;
-	}
+	if(!isset($_POST['Tyovuoroot']))
+	{
 	?>
 	<div class="modal-dialog modal-lg">
 	    <div class="modal-content">
@@ -723,13 +720,14 @@ class TyovuorootController extends Controller
 			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 				<span aria-hidden="true">&times;</span>
 			</button>
-		<h2 class="modal-title"><?php echo Yii::t('main', 'Uusi tilaus').' '.$tnimi; ?></h2>
+		<h2 class="modal-title"><?php echo Yii::t('main', 'Uusi tilaus'); ?></h2>
 	
 		</div>
 		<div class="modal-body">
 
 	<div class="dialogTable clearfix modal-osio">
 	<?php
+	}
 
 		$model=new Tyovuoroot;
 
@@ -756,6 +754,7 @@ class TyovuorootController extends Controller
 			$kohteet->osoite = $asiakkaat->osoite;
 			$kohteet->puh_nro = $asiakkaat->puhelin;
 			$kohteet->email = $asiakkaat->sahkoposti;
+			$kohteet->muut = date("d.m.Y",strtotime($_POST['Tyovuoroot']['pvm']))."\n".date("H:i",strtotime($_POST['Tyovuoroot']['alku']))."-".date("H:i",strtotime($_POST['Tyovuoroot']['loppu']))."\nHinta: ".$_POST['hinta'];
 
 		  	   if($kohteet->save())
 		  	   {
@@ -780,7 +779,8 @@ class TyovuorootController extends Controller
 					$mail->setBody($message);
 					$mail->send();
 				   }
-
+				
+				   echo $_POST['Tyovuoroot']['pvm'].'//'.date("Ymd",strtotime($model->pvm)).'//'.$model->tid;
 
 				}
 			   }
@@ -791,6 +791,8 @@ class TyovuorootController extends Controller
 		exit;
 		}
 
+	if(!isset($_POST['Tyovuoroot']))
+	{
 		$this->renderPartial('uusitilaus',array(
 			'model'=>$model,
 		));
@@ -798,6 +800,7 @@ class TyovuorootController extends Controller
 	</div>
 	</div> <!-- end modal-body -->
 	<?php
+	}
 	}
 
 

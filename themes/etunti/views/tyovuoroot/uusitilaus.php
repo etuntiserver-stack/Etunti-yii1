@@ -154,8 +154,8 @@ $(document).ready(function(){
 
 	$('#tyovuoroot-form').on('submit',function(e) {
 
-	console.log( $( this ).serializeArray() );
-	console.log( e.target[0].value );
+	//console.log( $( this ).serializeArray() );
+	//console.log( e.target[0].value );
 	var str = '';
 
 
@@ -164,16 +164,17 @@ $(document).ready(function(){
 		  data:$(this).serialize(),
 		  type:'POST',
 		  success:function(data){
-			//console.log(data);
+			console.log(data);
+			var sp = data.split('//');
 
 	  	$.ajax({
 			url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/did',
 			type:'GET',
-			data: { "pvm" : "<?php echo $model->pvm; ?>", "tid" : "<?php echo $model->tid; ?>", "from" : "ajax" },
+			data: { "pvm" : sp[0], "tid" : sp[2], "from" : "ajax" },
 			  success:function(data){
 			  //console.log(data);
 			  $('#showres').modal('hide');
-			  $('#<?php echo date("Ymd",strtotime($model->pvm))."_".$model->tid; ?>').html(JSON.parse(data));
+			  $('#'+sp[1]+'_'+sp[2]).html(JSON.parse(data));
 
 			  jQuery.klikkaukset(); // js kansiossa
 			  return false;
