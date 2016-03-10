@@ -758,8 +758,11 @@ Toimi nopeasti, sillä paikkoja on rajoitetusti!</p></p>
 
 		</div>
 -->
-                   <div class="col-lg-8 col-lg-6 item-center">
+                   <div class="col-lg-8 col-lg-6 ">
 			<p>
+”Useiden yritysten kanssa käydyissä keskusteluissa tuli selväksi, että puhdistusalalla kaivataan apua ja kannattavuutta halutaan parantaa. Lähdimme kehittämään ohjelmaa, koska markkinoilta ei ole ollut saatavilla helppokäyttöistä toiminnanohjausjärjestelmää, joka kattaa kaikki keskeiset toiminnot. Niinpä teimme työnhallintajärjestelmän itse alusta lähtien. Kehittämämme Etunti -ohjelma palvelee erinomaisesti työn tilaajia, tekijöitä ja työnjohtoa. Etunti -ohjelman voi hankkia kuka tahansa siivousalan yrittäjä. Etunti -ohjelman tavoitteena on auttaa puhdistusalanyrityksiä menestymään työtehtäviä ja toimintatapoja tehostamalla.” 
+<br>
+- Veiko Põldkivi, liiketoimintajohtaja, Etunti.
 			
 			</p>
                    </div>
