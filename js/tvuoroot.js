@@ -18,6 +18,7 @@ $('#tyontekijat').multiselect({
 	nonSelectedText: 'Tyhjä',
 	selectAllText: 'Valitse kaikki',
 	allSelectedText: 'Kaikki',
+	selectedText: 'valittu',
 });
 /*
 $('#tyontekijat').selectpicker({
