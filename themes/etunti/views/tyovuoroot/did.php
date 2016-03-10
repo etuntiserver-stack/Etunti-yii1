@@ -10,7 +10,7 @@
 
 	$bod .=  '
 	<div class="pull-right plussamerkki">
-	<plussa class="link glyphicon glyphicon-plus luominen" pvm="'.date("d.m.Y",strtotime($pvm)).'" tid="'.$tid.'"></plussa>
+	<span class="plussa link glyphicon glyphicon-plus luominen" pvm="'.date("d.m.Y",strtotime($pvm)).'" tid="'.$tid.'"></span>
 	</div>';
 
 	$bod .=  '

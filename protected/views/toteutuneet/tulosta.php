@@ -1,4 +1,5 @@
 <?php ?>
+<?php ini_set("max_execution_time", "120"); ?>
 <link rel="stylesheet" type="text/css" href="css/pdf_table.css">
 <style>
 #ylataulu{
@@ -6,7 +7,7 @@
 }
 .tb table .chckbxHyvaksynta{ display:none }
 .tb .col1{ width: 5%; text-align: left; }
-.tb .col2{ width: 41%; text-align: left;}
+.tb .col2{ width: 31%; text-align: left;}
 .tb .col3{ width: 41%; text-align: left;}
 .tb .col4{ width: 41%; text-align: left;}
 .tb .col5{ width: 10%; }
@@ -105,8 +106,12 @@ function dateDiff($start, $end) {
   	<td class="col1">'.$arrDate[$explColDate[0]].'<br> '.date("d.m",strtotime($date)).'</td>';
   
     $tas = explode(",",Yii::app()->user->adminPaketti);
-    if(in_array('2',$tas)) 
-    echo '<td class="col2">'.$this->renderPartial('//tyovuoroot/did',array('pvm'=>$date,'tid'=>$explTekija[0],'from'=>'mobiili'),true).'</td>';
+    if(in_array('2',$tas))
+    {
+	$dido = '';
+	$dido = $this->renderPartial('//tyovuoroot/did',array('pvm'=>$date,'tid'=>$explTekija[0],'from'=>'mobiili'),true);
+    	echo '<td class="col2">'.json_decode($dido, true).'</td>';
+    }
 
     echo '
   	<td class="col3">'.$this->renderPartial('luetutpvmtid',array('pvm'=>$date,'tid'=>$explTekija[0],'from'=>'mobiili'),true).'</td>
