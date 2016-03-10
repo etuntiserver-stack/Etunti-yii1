@@ -132,7 +132,7 @@ td .tp{
 
 
 <div class="row">
- <div class="row col-sm-5">
+ <div class="row col-sm-4">
   <form action="index" id="yhtveto" method="POST">
 
    <div class="form-inline">
@@ -155,7 +155,7 @@ td .tp{
    </div>
    </form>
 
- </div><div class="col-sm-3">
+ </div><div class="col-sm-5">
 
 
    <div class="form-inline">
@@ -169,10 +169,10 @@ td .tp{
 	$nextMonday     = strtotime('monday', $firstDayOfYear);
 	$nextSunday     = strtotime('sunday', $nextMonday);
 	
-	    echo '<option value="'.$_SERVER['PHP_SELF'].'?week='.$week.'&year='.$year.'">'. date('d.m.Y',strtotime($year ."W".$week .'1')).' - '.date('d.m.Y',strtotime($year ."W". $week .'7')).'</option>';
+	    echo '<option value="'.$_SERVER['PHP_SELF'].'?week='.$week.'&year='.$year.'">Vko:'.$week.', '. date('d.m.Y',strtotime($year ."W".$week .'1')).' - '.date('d.m.Y',strtotime($year ."W". $week .'7')).'</option>';
 
 	while (date('Y', $nextMonday) == $year) {
-	    echo '<option value="'.$_SERVER['PHP_SELF'].'?week='.date('W', $nextMonday), NL.'&year='.$year.'">'.date('d.m.Y', $nextMonday), '-', date('d.m.Y', $nextSunday), NL.'</option>';
+	    echo '<option value="'.$_SERVER['PHP_SELF'].'?week='.date('W', $nextMonday), NL.'&year='.$year.'">Vko:'.date('W', $nextMonday), NL.', '.date('d.m.Y', $nextMonday), '-', date('d.m.Y', $nextSunday), NL.'</option>';
 	
 	    $nextMonday = strtotime('+1 week', $nextMonday);
 	    $nextSunday = strtotime('+1 week', $nextSunday);
@@ -184,7 +184,7 @@ td .tp{
    </div>
 
 
- </div><div class="col-sm-4">
+ </div><div class="col-sm-3">
 
  	<div class="pull-right row">
  	  <div class="form-inline row">
@@ -222,7 +222,7 @@ $numDays = 7;
 ?>
 
 <div class="row table-responsive">
-  <table class="table small">
+  <table class="table table-bordered small">
      <thead class="">
      <tr>
 	<th class="myBgColors">Nimi</th>
