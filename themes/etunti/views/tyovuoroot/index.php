@@ -3,7 +3,7 @@
 
 /* @var $this TyovuorootController */
 /* @var $dataProvider CActiveDataProvider */
-
+/*
    $pvmtid = Yii::app()->request->getParam('pvmtid', 0);
    if(!empty($pvmtid)){
 	$expl = explode("_",$pvmtid);
@@ -20,10 +20,10 @@
 	</script>
 	<?php
    }
+*/
 
 // oletus arvot
-   if(!isset(Yii::app()->session['from']) and !isset(Yii::app()->session['Tekija'])){
-	Yii::app()->session['from'] = date("Y-m-d");
+   if(!isset(Yii::app()->session['TekijaVuoro'])){
 
        		$criteria = new CDbCriteria();
         	$criteria->order = "tekijan_nimi";
@@ -34,15 +34,15 @@
 		foreach($tt as $t)
 		$tekijatOletuksena[] = $t->id;
 
-		Yii::app()->session['Tekija'] = $tekijatOletuksena;
+		Yii::app()->session['TekijaVuoro'] = $tekijatOletuksena;
 
 
    }
 
 
 
-		if(Yii::app()->request->getPost('Tekija'))
-		Yii::app()->session['Tekija'] = Yii::app()->request->getPost('Tekija');
+		if(Yii::app()->request->getPost('TekijaVuoro'))
+		Yii::app()->session['TekijaVuoro'] = Yii::app()->request->getPost('TekijaVuoro');
 
        		$criteria = new CDbCriteria();
         	$criteria->order = "tekijan_nimi";
@@ -99,7 +99,7 @@ td .tp{
 
 
 
-<?php if(count(Yii::app()->session['Tekija']) > 0 and Yii::app()->session['Tekija'][0] != 0) : ?>
+<?php if(count(Yii::app()->session['TekijaVuoro']) > 0 and Yii::app()->session['TekijaVuoro'][0] != 0) : ?>
 
 <?php
 
@@ -142,7 +142,7 @@ td .tp{
    $criteria->condition = " aktiivinen='1' ";
 
     $list = CHtml::listData(Tyontekijat::model()->findAll($criteria), 'id', 'tekijan_nimi');
-    echo '<select name="Tekija[]" id="tyontekijat" multiple title="Työntekijät">';
+    echo '<select name="TekijaVuoro[]" id="tyontekijat" multiple title="Työntekijät">';
     foreach($list as $key=>$val){
        if(isset(Yii::app()->session['Tekija']) and in_array($key,Yii::app()->session['Tekija']))
        	 echo '<option value="'.$key.'" selected>'.$val.'</option>';

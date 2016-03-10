@@ -4,10 +4,10 @@ $("#showres").draggable();
 
 $('td').hover(function()
 {
-     $(this).find('plussa').show();
+     $(this).find('.plussa').show();
 }, function()
 { 
-     $(this).find('plussa').hide();
+     $(this).find('.plussa').hide();
 });
 
 

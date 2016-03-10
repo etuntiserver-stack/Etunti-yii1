@@ -1,4 +1,5 @@
 <div class="row">
+<?php ini_set("max_execution_time", "120"); ?>
 <?php
 /* @var $this MobileController */
 /* @var $dataProvider CActiveDataProvider */
