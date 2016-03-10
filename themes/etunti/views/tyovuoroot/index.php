@@ -49,11 +49,11 @@
         	$criteria->select = "id,tekijan_nimi";
         	$criteria->condition = " aktiivinen = '1' ";
 
-		if(Yii::app()->session['Tekija']){
-		  if(count(Yii::app()->session['Tekija']) > 1)
-		    $ids = implode(",",Yii::app()->session['Tekija']);
+		if(Yii::app()->session['TekijaVuoro']){
+		  if(count(Yii::app()->session['TekijaVuoro']) > 1)
+		    $ids = implode(",",Yii::app()->session['TekijaVuoro']);
 		  else
-		    $ids = Yii::app()->session['Tekija'][0];
+		    $ids = Yii::app()->session['TekijaVuoro'][0];
 
 	        $criteria->addCondition ('id IN ('.$ids.') ');
 		}
@@ -144,7 +144,7 @@ td .tp{
     $list = CHtml::listData(Tyontekijat::model()->findAll($criteria), 'id', 'tekijan_nimi');
     echo '<select name="TekijaVuoro[]" id="tyontekijat" multiple title="Työntekijät">';
     foreach($list as $key=>$val){
-       if(isset(Yii::app()->session['Tekija']) and in_array($key,Yii::app()->session['Tekija']))
+       if(isset(Yii::app()->session['TekijaVuoro']) and in_array($key,Yii::app()->session['TekijaVuoro']))
        	 echo '<option value="'.$key.'" selected>'.$val.'</option>';
        else
        	 echo '<option value="'.$key.'">'.$val.'</option>';
