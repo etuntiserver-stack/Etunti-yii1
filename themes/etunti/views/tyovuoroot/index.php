@@ -82,8 +82,11 @@ td .tp{
 }
 .fullRivi{
 	height: 100%;
-	//border-bottom: 0px #ddd solid;
 	margin-bottom: 2px;
+	border:1px #ccc solid;
+	padding:3px 7px;
+	background: white;
+	border-radius:5px;
 }
 .luominen{
 	display: none;
@@ -159,7 +162,7 @@ td .tp{
 
 
    <div class="form-inline">
-     <a href="<?php echo $_SERVER['PHP_SELF'].'?week='.($week == 1 ? $wkMaara : $week -1).'&year='.($week == 1 ? $year - 1 : $year); ?>"><i class="fa fa-arrow-left"></i></a>
+     <a href="<?php echo $_SERVER['PHP_SELF'].'?week='.($week == 1 ? $wkMaara : $week -1).'&year='.($week == 1 ? $year - 1 : $year); ?>"><i class="fa fa-arrow-left" style="font-size: 170%"></i></a>
 
 	<select class="form-control" id="viikkonhyppaminen">
 	<?php
@@ -179,7 +182,7 @@ td .tp{
 	}
 	?>
 	</select>
-     <a href="<?php echo $_SERVER['PHP_SELF'].'?week='.($week == $wkMaara ? 1 : 1 + $week).'&year='.($week == $wkMaara ? 1 + $year : $year); ?>"><i class="fa fa-arrow-right"></i></a> 
+     <a href="<?php echo $_SERVER['PHP_SELF'].'?week='.($week == $wkMaara ? 1 : 1 + $week).'&year='.($week == $wkMaara ? 1 + $year : $year); ?>"><i class="fa fa-arrow-right" style="font-size: 170%"></i></a> 
 
    </div>
 
@@ -259,7 +262,7 @@ $numDays = 7;
 		echo '
 		<div class="row">
 		  <div class="col-sm-12">
-		    	'.$t->tekijan_nimi.'
+		    	<b>'.$t->tekijan_nimi.'</b>
 			<br>
 			<span '.$cl.'><b id="vk_'.$week.'_'.$t->id.'">'.$kokoViikko. '</b> ('.$vktyoaika.')</span>
 		  </div>
