@@ -70,7 +70,7 @@
 	 }
 
 
-	   $bod .=  '<div id="'.$tvVal->id.'_'.$did.'_'.$tid.'" class="fullRivi" style="color:'.$color.'">';
+	   $bod .=  '<div id="'.$tvVal->id.'_'.$did.'_'.$tid.'" class="well fullRivi" style="color:'.$color.'">';
 	   if( $from != 'mobiili' )
 	   $bod .=  '<span class="link text-danger glyphicon glyphicon-paste muistin" for="'.$tvVal->id.'_'.$did.'_'.$tid.'"></span>';
 	   $bod .=  '&nbsp;<span class="link tv_edit" id="tv_'.$tvVal->id.'">'.$al.' '.$osoite.'</span>';
