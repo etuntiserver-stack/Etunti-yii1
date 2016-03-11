@@ -135,7 +135,7 @@ td .tp{
 
 
 <div class="row">
- <div class="row col-sm-4">
+ <div class="row col-sm-3">
   <form action="index" id="yhtveto" method="POST">
 
    <div class="form-inline">
@@ -158,11 +158,11 @@ td .tp{
    </div>
    </form>
 
- </div><div class="col-sm-5">
+ </div><div class="col-sm-6">
 
 
    <div class="form-inline">
-     <a href="<?php echo $_SERVER['PHP_SELF'].'?week='.($week == 1 ? $wkMaara : $week -1).'&year='.($week == 1 ? $year - 1 : $year); ?>"><i class="fa fa-arrow-left" style="font-size: 170%"></i></a>
+     <a href="<?php echo $_SERVER['PHP_SELF'].'?week='.($week == 1 ? $wkMaara : $week -1).'&year='.($week == 1 ? $year - 1 : $year); ?>"><i class="fa fa-arrow-left" style="font-size: 120%"></i> Edellinen viikko</a>
 
 	<select class="form-control" id="viikkonhyppaminen">
 	<?php
@@ -182,7 +182,7 @@ td .tp{
 	}
 	?>
 	</select>
-     <a href="<?php echo $_SERVER['PHP_SELF'].'?week='.($week == $wkMaara ? 1 : 1 + $week).'&year='.($week == $wkMaara ? 1 + $year : $year); ?>"><i class="fa fa-arrow-right" style="font-size: 170%"></i></a> 
+     <a href="<?php echo $_SERVER['PHP_SELF'].'?week='.($week == $wkMaara ? 1 : 1 + $week).'&year='.($week == $wkMaara ? 1 + $year : $year); ?>">Seuraava viikko <i class="fa fa-arrow-right" style="font-size: 120%"></i></a> 
 
    </div>
 
