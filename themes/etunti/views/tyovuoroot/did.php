@@ -5,7 +5,7 @@
 
 	$did = date("Ymd",strtotime($pvm));
 
-	$bod = ''; 
+	$bod = date("d.m",strtotime($pvm)).'<br>'; 
 	$bod .=  '<div class="small laatikko latikkoAsetukset" pvm="'.date("d.m.Y",strtotime($pvm)).'" tid="'.$tid.'">';
 
 	$bod .=  '
