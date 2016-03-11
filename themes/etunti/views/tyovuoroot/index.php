@@ -63,43 +63,6 @@
 
 
 ?>
-<style>
-td .latikkoAsetukset{
-	min-width: 70px;
-	white-space: normal;
-}
-.forCut, .forCopy{ 
-	display: none;
-}
-.mplus, .mcut{ 
-	display: none;
-}
-td:hover .mplus, td:hover .mcut{
-	display : block;
-}
-td .tp{
-	//position:absolute;
-}
-.fullRivi{
-	height: 100%;
-	margin-bottom: 2px;
-	border:1px #ccc solid;
-	padding:3px 7px;
-	background: white;
-	border-radius:5px;
-}
-.luominen{
-	display: none;
-}
-.table tbody>tr>td{
-    	vertical-align: top;
-}
-.table{
-    height: 100%;
-}
-</style>
-
-
 
 
 <?php if(count(Yii::app()->session['TekijaVuoro']) > 0 and Yii::app()->session['TekijaVuoro'][0] != 0) : ?>
@@ -224,17 +187,55 @@ else
 $numDays = 7;
 ?>
 
+<style>
+td .latikkoAsetukset{
+	min-width: 70px;
+	white-space: normal;
+}
+.forCut, .forCopy{ 
+	display: none;
+}
+.mplus, .mcut{ 
+	display: none;
+}
+td:hover .mplus, td:hover .mcut{
+	display : block;
+}
+td .tp{
+	//position:absolute;
+}
+.fullRivi{
+	height: 100%;
+	margin-bottom: 2px;
+	border:1px #ccc solid;
+	padding:3px 7px;
+	background: white;
+	border-radius:5px;
+}
+.luominen{
+	display: none;
+}
+.table tbody>tr>td{
+    	vertical-align: top;
+}
+.table{
+    height: 100%;
+}
+
+</style>
+
+
 <div class="row table-responsive">
   <table class="table table-bordered small">
-     <thead class="">
+     <thead>
      <tr>
-	<th class="myBgColors">Nimi</th>
+	<th>Nimi</th>
         <?php
 	for($day= 1; $day <= $numDays; $day++)
 	{
   	  $d = strtotime($year ."W". $week . $day);
 	  $date = date('d.m',$d);
-	  echo '<th class="myBgColors">'.$paivat[date('N',$d)].', '.$date.'</th>';
+	  echo '<th>'.$paivat[date('N',$d)].', '.$date.'</th>';
 	}
         ?>
      </tr>
@@ -304,4 +305,10 @@ $numDays = 7;
 
 
 
+<script type="text/javascript">
+$(document).ready(function(){
+
+
+});
+</script>
 
