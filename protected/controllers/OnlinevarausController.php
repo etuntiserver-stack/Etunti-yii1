@@ -28,21 +28,40 @@ class OnlinevarausController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view'),
-				'users'=>array('*'),
+				'actions'=>array('index','view', 'check', 'aika', 'osoite', 'maksu', 'palvelu_ajax', 'palvelu_save_ajax', 'lisat_ajax'),
+                		'users'=>array("*"),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
 				'actions'=>array('create','update'),
-				'users'=>array('*'),
+                		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
 				'actions'=>array('admin','delete'),
-				'users'=>array('admin'),
+                		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
 				'users'=>array('*'),
 			),
 		);
+	}
+
+	public function isEtuntiAdmin() {
+
+	$tas = '';
+	if(isset(Yii::app()->user->adminPaketti))
+	$tas = explode(",",Yii::app()->user->adminPaketti);
+
+		if(isset(Yii::app()->user->adminID) and in_array('4',$tas))
+		{
+		$m = Administrators::model()->findbypk(Yii::app()->user->adminID);
+	       	if($m->id == Yii::app()->user->adminID)
+	       	  return true;
+		else
+	       	   return false;		
+
+		} else {
+	            return false;
+		}
 	}
 
         public function init()
@@ -54,10 +73,81 @@ class OnlinevarausController extends Controller
 		$this->redirect(array('index'));
         }
 
-	/**
-	 * Displays a particular model.
-	 * @param integer $id the ID of the model to be displayed
-	 */
+
+	public function actionCheck($pvm)
+	{
+		$criteria=new CDbCriteria;
+		$criteria->condition = " pvm='".date("d.m.Y", strtotime($_POST['pvm']))."' ";
+		$tyovuorot = Tyovuoroot::model()->find($criteria);
+		if(isset($tyovuorot->id))
+		  echo 'varattu';
+		else
+		  echo 'vapaa';
+	}
+
+	public function actionLisat_ajax()
+	{
+	   if(isset($_POST['id']))
+	   {
+		$model = OnlinevarausTuotteet::model()->findbypk($_POST['id']);
+		if(isset($model->id))
+		{
+		    if($_POST['checked'] == 1)
+		    {
+			$_SESSION['onlinevaraus']['lisapalvelut'][$model->id] = $model->id;
+			echo 'save';
+		    }
+		    if($_POST['checked'] == 0)
+		    {
+			unset($_SESSION['onlinevaraus']['lisapalvelut'][$model->id]);
+			echo 'deleted';
+		    }
+
+
+		}
+	   }
+	}
+
+	public function actionPalvelu_ajax()
+	{
+
+	   if(isset($_POST['clear']) and $_POST['clear'] == 'all')
+	   {
+		unset($_SESSION['onlinevaraus']);
+		echo 'cleared';
+		exit;
+	   }
+
+	   if(isset($_POST['word']))
+	   {
+		$word = trim($_POST['word']);
+		$criteria=new CDbCriteria;
+		$criteria->condition = " nimike='".$word."' ";
+		$criteria->order = " SUBSTRING_INDEX(nelio,'-',1) ";
+		$data = OnlinevarausTuotteet::model()->findAll($criteria);
+
+		$this->renderPartial('palvelu_ajax',array(
+			'data'=>$data,
+		));
+	   }
+	}
+
+	public function actionPalvelu_save_ajax()
+	{
+	   if(isset($_POST['palvelu']) and isset($_POST['nelio']))
+	   {
+		$criteria=new CDbCriteria;
+		$criteria->condition = " palvelu='".$_POST['palvelu']."' AND nelio='".$_POST['nelio']."' ";
+		$model = OnlinevarausTuotteet::model()->find($criteria);
+		if(isset($model->id))
+		$_SESSION['onlinevaraus']['paapalvelu'] = $model->id;
+
+		$this->renderPartial('palvelu_save_ajax',array(
+			'model'=>$model,
+		));
+	   }
+	}
+
 	public function actionView($id)
 	{
 		$this->render('view',array(
@@ -131,12 +221,23 @@ class OnlinevarausController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$dataProvider=new CActiveDataProvider('Onlinevaraus');
-		$this->render('index',array(
-			'dataProvider'=>$dataProvider,
-		));
+		$this->render('index');
 	}
 
+	public function actionAika()
+	{
+		$this->render('aika');
+	}
+
+	public function actionOsoite()
+	{
+		$this->render('osoite');
+	}
+
+	public function actionMaksu()
+	{
+		$this->render('maksu');
+	}
 	/**
 	 * Manages all models.
 	 */
@@ -179,4 +280,113 @@ class OnlinevarausController extends Controller
 			Yii::app()->end();
 		}
 	}
+
+
+protected function build_calendar($month,$year,$dateArray) {
+
+     // Create array containing abbreviations of days of week.
+     $daysOfWeek = array('Ma','Ti','Ke','To','Pe','La','Su');
+
+     // What is the first day of the month in question?
+     $firstDayOfMonth = mktime(0,0,0,$month,7,$year);
+
+     // How many days does this month contain?
+     $numberDays = date('t',$firstDayOfMonth);
+
+     // Retrieve some information about the first day of the
+     // month in question.
+     $dateComponents = getdate($firstDayOfMonth);
+
+     // What is the name of the month in question?
+     $monthName = $dateComponents['month'];
+
+     // What is the index value (0-6) of the first day of the
+     // month in question.
+     $dayOfWeek = $dateComponents['wday'];
+
+     // Create the table tag opener and day headers
+
+     $calendar = "<table class='table table-bordered'>";
+     $calendar .= "<caption>$monthName $year</caption>";
+     $calendar .= "<tr>";
+
+     // Create the calendar headers
+
+     foreach($daysOfWeek as $day) {
+          $calendar .= "<th class='header'>$day</th>";
+     } 
+
+     // Create the rest of the calendar
+
+     // Initiate the day counter, starting with the 1st.
+
+     $currentDay = 1;
+
+     $calendar .= "</tr><tr>";
+
+     // The variable $dayOfWeek is used to
+     // ensure that the calendar
+     // display consists of exactly 7 columns.
+
+     if ($dayOfWeek > 0) { 
+          $calendar .= "<td colspan='$dayOfWeek'>&nbsp;</td>"; 
+     }
+     
+     $month = str_pad($month, 2, "0", STR_PAD_LEFT);
+  
+     while ($currentDay <= $numberDays) {
+
+          // Seventh column (Saturday) reached. Start a new row.
+
+          if ($dayOfWeek == 7) {
+
+               $dayOfWeek = 0;
+               $calendar .= "</tr><tr>";
+
+          }
+          
+          $currentDayRel = str_pad($currentDay, 2, "0", STR_PAD_LEFT);
+          
+          $date = "$year-$month-$currentDayRel";
+
+
+		$criteria=new CDbCriteria;
+		$criteria->condition = " pvm='".date("d.m.Y", strtotime($date))."' ";
+		$tyovuorot = Tyovuoroot::model()->find($criteria);
+		if(isset($tyovuorot->id))
+		  $tila = '<b style="opacity:0.4">'.$currentDay.'</b>';
+		else
+		  $tila = '<b>'.$currentDay.'</b>';
+
+
+          $calendar .= "<td class='day' rel='$date'>$tila</td>";
+
+          // Increment counters
+ 
+          $currentDay++;
+          $dayOfWeek++;
+
+     }
+     
+     
+
+     // Complete the row of the last week in month, if necessary
+
+     if ($dayOfWeek != 7) { 
+     
+          $remainingDays = 7 - $dayOfWeek;
+          $calendar .= "<td colspan='$remainingDays'>&nbsp;</td>"; 
+
+     }
+     
+     $calendar .= "</tr>";
+
+     $calendar .= "</table>";
+
+     return $calendar;
+
+}
+
+
+
 }
