@@ -43,7 +43,7 @@ $('.search-form form').submit(function(){
 	'filter'=>$model,
 	'columns'=>array(
 		'id',
-		//'tid',
+		'tid',
 array(
         'name'  => 'tt.tekijan_nimi',
         'filter'=>CHtml::activeTextField($model,'tekijan_nimi'),
