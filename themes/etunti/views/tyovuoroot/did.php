@@ -5,7 +5,8 @@
 
 	$did = date("Ymd",strtotime($pvm));
 
-	$bod = date("d.m",strtotime($pvm)).'<br>'; 
+	$bod = ''; 
+	$bod .= date("d.m",strtotime($pvm)).'<br>'; 
 	$bod .=  '<div class="small laatikko latikkoAsetukset" pvm="'.date("d.m.Y",strtotime($pvm)).'" tid="'.$tid.'">';
 
 	$bod .=  '
@@ -36,7 +37,7 @@
 
 	   $osoite = '';
 	   if(isset($tvVal->kohteet->osoite))
-	   $osoite = $tvVal->kohteet->osoite;//
+	   $osoite = str_replace('/', '', $tvVal->kohteet->osoite);
 
 	   $strlen = strlen($osoite);
 	   $scount = 30;
@@ -46,7 +47,7 @@
 	    $osoite = substr($osoite,0,$scount).'..';
 
 
-	   if($tvVal->alku > 0 and $tvVal->loppu > 0)
+	   if($tvVal->alku != '' and $tvVal->loppu != '')
 	    $al = '<b>'.$tvVal->alku.'-'.$tvVal->loppu.'</b><br>';
 	   else
 	    $al = '';
