@@ -33,7 +33,7 @@
 		<?php echo $this->yksikkot(null); ?>
 		</select>
 	</TD>
-	<TD><input type="text" size="10" name="hinta[<?php echo $num; ?>]" id="hinta_<?php echo $num; ?>" class="onlyDigits form-control" value="<?php echo $hinta; ?>"><span class="errmsg"></span></TD>
+	<TD><input type="text" size="10" name="hinta[<?php echo $num; ?>]" id="hinta_<?php echo $num; ?>" class="onlyDigits form-control" value="<?php echo $hinta; ?>" step="0.01"><span class="errmsg"></span></TD>
 	<TD>
 		<select type="text" name="alv[<?php echo $num; ?>]" id="alv_<?php echo $num; ?>" class="form-control">
 		<option value="<?php echo $a->alv; ?>"><?php echo $a->alv; ?></option>

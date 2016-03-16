@@ -20,7 +20,7 @@ if(isset($_POST['num'])){
 		<?php echo $this->yksikkot(null); ?>
 		</select>
 	</TD>
-	<TD><input type="text" size="10" name="hinta[<?php echo $num; ?>]" id="hinta_<?php echo $num; ?>" class="onlyDigits form-control" value=""><span class="errmsg"></span></TD>
+	<TD><input type="text" size="10" name="hinta[<?php echo $num; ?>]" id="hinta_<?php echo $num; ?>" class="onlyDigits form-control" value="" step="0.01"><span class="errmsg"></span></TD>
 	<TD>
 		<select type="text" name="alv[<?php echo $num; ?>]" id="alv_<?php echo $num; ?>" class="form-control">
 		<?php echo $this->alv(null); ?>
