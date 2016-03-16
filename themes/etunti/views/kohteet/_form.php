@@ -109,7 +109,7 @@
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'hinta_tyyppi'); ?>
 		<?php
-		$list = array(1=>'tunti',2=>'kk');
+		$list = array(1=>'tunti',2=>'kk',3=>'kpl');
         	echo $form->dropDownList($model, 'hinta_tyyppi', $list,
 		array('empty'=>'Valitse tyyppi','class'=>'form-control'));	
         	?>
@@ -118,7 +118,7 @@
 
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'hinta'); ?>
-		<?php echo $form->numberField($model,'hinta',array('size'=>10,'maxlength'=>100,'class'=>'form-control')); ?>
+		<?php echo $form->numberField($model,'hinta',array('size'=>10,'maxlength'=>100,'class'=>'form-control', 'step'=>'0.01')); ?>
 		<?php echo $form->error($model,'hinta'); ?>
 	</div>
 	<?php endif; ?>
