@@ -397,23 +397,28 @@ protected function build_calendar($month,$year,$dateArray) {
 			$on = 'vapaa';
 			elseif(strtotime("18:00")-strtotime($tv->loppu) <= $sumTunti)
 			$on = 'kiinni';
-			elseif(strtotime("08:00")-strtotime($tv->loppu) >= $sumTunti)
+
+/*
+			if(strtotime($tv->alku)-strtotime("08:00") >= $sumTunti)
 			$on = 'vapaa';
-			elseif(strtotime("08:00")-strtotime($tv->loppu) <= $sumTunti)
+			elseif(strtotime($tv->alku)-strtotime("08:00") <= $sumTunti)
 			$on = 'kiinni';
+*/
 
 			$a = strtotime($tv->alku);
 			$l = strtotime($tv->loppu);
 			//$vuorot .= $tv->alku.' '.$tv->loppu.' '.$on.'<br>';
+
+			if($on == 'kiinni')
+			$lp[$t->id] = 'kiinni';
 		    }
 
-			if($on == 'vapaa')
-			$lp[$ti] = $on;
+
 		}
 
 
-	  if(in_array('vapaa', $lp, true))
-		$on = 'vapaa';
+	  if(in_array('kiinni', $lp, true))
+		$on = 'kiinni';
 
 		//print_r($lp);
 
