@@ -97,9 +97,11 @@ function dateDiff($start, $end) {
 
 ?>
 <style>
+/*
 body{
     overflow-y: hidden;
 }
+*/
 td .latikkoAsetukset{
 	min-width: 70px;
 	width: 200px;
