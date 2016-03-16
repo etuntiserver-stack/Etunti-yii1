@@ -352,17 +352,19 @@ protected function build_calendar($month,$year,$dateArray) {
           
           $date = "$year-$month-$currentDayRel";
 
-		$lopputulos = array();
+		$lp = array();
 		$tila = '';
-		$on = true;
+		$on = 'vapaa';
 		$vuorot = '';
 		$criteria=new CDbCriteria;
 		$criteria->condition = "online_varauksen_valmina=1 ";
 		$tyontekijat = Tyontekijat::model()->findAll($criteria);
 
+		$ti = 0;
 		foreach($tyontekijat as $t)
 		{
-		$on = true;
+		$ti++;
+		$on = 'vapaa';
 		$criteria=new CDbCriteria;
 		$criteria->condition = " 
 			pvm='".date("d.m.Y", strtotime($date))."' 
@@ -375,7 +377,7 @@ protected function build_calendar($month,$year,$dateArray) {
 		{
 			//$vuorot .= $t->id.'<br>';
 		  	$tila = $vuorot;
-			$on = true;
+			$on = 'vapaa';
 			break;
 		}
 
@@ -385,32 +387,37 @@ protected function build_calendar($month,$year,$dateArray) {
 
 		    foreach($tyovuorot as $tv)
 		    {
-			$on = true;
+
+			$on = 'vapaa';
 
 			if($l > 0 and (strtotime($tv->alku)-$l) <= $sumTunti)
-			$on = false;
+			$on = 'kiinni';
 
 			if(strtotime("18:00")-strtotime($tv->loppu) >= $sumTunti)
-			$on = true;
+			$on = 'vapaa';
+			elseif(strtotime("18:00")-strtotime($tv->loppu) <= $sumTunti)
+			$on = 'kiinni';
+			elseif(strtotime("08:00")-strtotime($tv->loppu) >= $sumTunti)
+			$on = 'vapaa';
+			elseif(strtotime("08:00")-strtotime($tv->loppu) <= $sumTunti)
+			$on = 'kiinni';
 
 			$a = strtotime($tv->alku);
 			$l = strtotime($tv->loppu);
-			//$vuorot .= $tv->alku.' '.$tv->loppu.'<br>';
-
-			$lopputulos[$on] = $on;
-
+			//$vuorot .= $tv->alku.' '.$tv->loppu.' '.$on.'<br>';
 		    }
-		
-			print_r($lopputulos);
-			//$vuorot .= $lopputulos.'<br>';
-		  	//$tila = $vuorot;
+
+			if($on == 'vapaa')
+			$lp[$ti] = $on;
 		}
 
 
+	  if(in_array('vapaa', $lp, true))
+		$on = 'vapaa';
 
+		//print_r($lp);
 
-
-	  if($on == true)
+	  if($on == 'vapaa')
 		 $tila .= '<b class="btn btn-success btn-block">'.$currentDay.'</b>';
 	  else
 		$tila .= '<b class="btn btn-warning btn-block">'.$currentDay.'</b>';
