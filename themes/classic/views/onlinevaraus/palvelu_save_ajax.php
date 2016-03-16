@@ -47,6 +47,7 @@
 	 </div><div class="col-sm-11">';
 
 	$sumTunti = $lisaTunti+$model->kesto;
+	$_SESSION['onlinevaraus']['sumTunti'] = $sumTunti;
 	$body .= '<span id="clock">'.number_format($sumTunti, 1, '.', '').'</span> tuntia';
 
 	$body .= '
@@ -66,12 +67,13 @@
 
 
 	   </div>
-	</div>
+	</div>';
 
+	if(isset($sivu) and $sivu == 'index')
+	$body .= CHtml::link('Valitse aika','aika', array('class'=>'btn btn-success'));
+	elseif(isset($sivu) and $sivu == 'aika')
+	$body .= CHtml::link('Valitse osoite','osoite', array('class'=>'btn btn-success'));
 
-	'.CHtml::link('Valitse aika','aika', array('class'=>'btn btn-success')).'
-
-	';
 	echo json_encode($body);
 
   } 

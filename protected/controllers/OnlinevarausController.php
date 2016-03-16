@@ -76,6 +76,7 @@ class OnlinevarausController extends Controller
 
 	public function actionCheck($pvm)
 	{
+/*
 		$criteria=new CDbCriteria;
 		$criteria->condition = " pvm='".date("d.m.Y", strtotime($_POST['pvm']))."' ";
 		$tyovuorot = Tyovuoroot::model()->find($criteria);
@@ -83,6 +84,7 @@ class OnlinevarausController extends Controller
 		  echo 'varattu';
 		else
 		  echo 'vapaa';
+*/
 	}
 
 	public function actionLisat_ajax()
@@ -144,6 +146,7 @@ class OnlinevarausController extends Controller
 
 		$this->renderPartial('palvelu_save_ajax',array(
 			'model'=>$model,
+			'sivu'=>'index',
 		));
 	   }
 	}
@@ -306,7 +309,7 @@ protected function build_calendar($month,$year,$dateArray) {
 
      // Create the table tag opener and day headers
 
-     $calendar = "<table class='table table-bordered'>";
+     $calendar = "<table class='table'>";
      $calendar .= "<caption>$monthName $year</caption>";
      $calendar .= "<tr>";
 
@@ -349,14 +352,68 @@ protected function build_calendar($month,$year,$dateArray) {
           
           $date = "$year-$month-$currentDayRel";
 
-
+		$lopputulos = array();
+		$tila = '';
+		$on = true;
+		$vuorot = '';
 		$criteria=new CDbCriteria;
-		$criteria->condition = " pvm='".date("d.m.Y", strtotime($date))."' ";
-		$tyovuorot = Tyovuoroot::model()->find($criteria);
-		if(isset($tyovuorot->id))
-		  $tila = '<b style="opacity:0.4">'.$currentDay.'</b>';
-		else
-		  $tila = '<b>'.$currentDay.'</b>';
+		$criteria->condition = "online_varauksen_valmina=1 ";
+		$tyontekijat = Tyontekijat::model()->findAll($criteria);
+
+		foreach($tyontekijat as $t)
+		{
+		$on = true;
+		$criteria=new CDbCriteria;
+		$criteria->condition = " 
+			pvm='".date("d.m.Y", strtotime($date))."' 
+			AND tid='".$t->id."'
+			AND SUBSTRING_INDEX(alku,':',1) <= '18'
+		";
+		$tyovuorot = Tyovuoroot::model()->findAll($criteria);
+
+		if(!isset($tyovuorot[0]))
+		{
+			//$vuorot .= $t->id.'<br>';
+		  	$tila = $vuorot;
+			$on = true;
+			break;
+		}
+
+		$a = 0;
+		$l = 0;
+		$sumTunti = ((float)$_SESSION['onlinevaraus']['sumTunti']*3600)+3599;
+
+		    foreach($tyovuorot as $tv)
+		    {
+			$on = true;
+
+			if($l > 0 and (strtotime($tv->alku)-$l) <= $sumTunti)
+			$on = false;
+
+			if(strtotime("18:00")-strtotime($tv->loppu) >= $sumTunti)
+			$on = true;
+
+			$a = strtotime($tv->alku);
+			$l = strtotime($tv->loppu);
+			//$vuorot .= $tv->alku.' '.$tv->loppu.'<br>';
+
+			$lopputulos[$on] = $on;
+
+		    }
+		
+			print_r($lopputulos);
+			//$vuorot .= $lopputulos.'<br>';
+		  	//$tila = $vuorot;
+		}
+
+
+
+
+
+	  if($on == true)
+		 $tila .= '<b class="btn btn-success btn-block">'.$currentDay.'</b>';
+	  else
+		$tila .= '<b class="btn btn-warning btn-block">'.$currentDay.'</b>';
 
 
           $calendar .= "<td class='day' rel='$date'>$tila</td>";

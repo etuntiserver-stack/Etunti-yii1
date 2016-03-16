@@ -33,19 +33,29 @@ $asetukset = Asetukset::model()->findbypk(1);
      $dateArray = array();
      $dateComponents = getdate();
 
-     $month = '3'; 			     
-     $year = '2016';
+     $month = date('m');
+     $year = date('Y');
      echo $this->build_calendar($month,$year,$dateArray);
 
-     $month = '4'; 			     
-     $year = '2016';
+     $month = date('m',strtotime("+1 month"));
+     $year = date('Y',strtotime("+1 month"));
      echo $this->build_calendar($month,$year,$dateArray);
  ?>
  </div>
 
+ <div class="col-sm-5">
 
- <div class="col-sm-9">
- 
+ </div>
+
+ <div class="col-sm-4">
+   <?php 
+   if(isset($_SESSION['onlinevaraus']['paapalvelu']))
+   {
+	$model = OnlinevarausTuotteet::model()->findbypk($_SESSION['onlinevaraus']['paapalvelu']);
+	$return = $this->renderPartial('palvelu_save_ajax', array('model'=>$model,'sivu'=>'aika'), true); 
+   	echo json_decode($return, true);
+   }
+   ?>
  </div>
 </div>
 

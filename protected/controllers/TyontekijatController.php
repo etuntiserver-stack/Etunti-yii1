@@ -151,6 +151,7 @@ class TyontekijatController extends Controller
 
 			$model->attributes=$_POST['Tyontekijat'];
 
+			if(isset($_POST['Tyontekijat']['imei']))
 			$imei=Tyontekijat::model()->find(" id!='".$model->id."' and imei='".$_POST['Tyontekijat']['imei']."' and imei!='' ");
 			if(isset($imei->imei))
 			{
