@@ -9,7 +9,16 @@ $this->breadcrumbs=array(
 );
 
 ?>
-
+<style>
+.well.fullRivi{
+	height: 100%;
+	margin-bottom: 2px;
+	border:1px #ccc solid;
+	padding:3px 7px;
+	background: white;
+	border-radius:5px;
+}
+</style>
 
         <!-- begin: .tray-center -->
         <div class="tray-center">

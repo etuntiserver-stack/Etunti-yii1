@@ -114,6 +114,9 @@ $(document).ready(function(){
 		   $('#os').val(sp[0]).css({"border" : "2px green solid"});
 		   $('#kohdenID').val(sp[1]);
 		   $("#camButtons").show('slow');
+
+		   setTimeout(clearAndExit,120000); //2min
+
 		}
 		if(sp[2] == 'error')
 		{
@@ -137,10 +140,15 @@ $(document).ready(function(){
  },
 
  clear: function() {
- tagginro.innerHTML = "";
+ 	tagginro.innerHTML = "";
  },
   
  
 };
 
 
+
+function clearAndExit(){
+	//alert('bdfff');
+	navigator.app.exitApp();
+}
