@@ -658,11 +658,12 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 
 		$totalIlta = 0;
 
-	    if($al[0] == $lop[0])
-	    {
 
-	  	if(strtotime($al[0]." ".$al[1]) > strtotime($al[0]." 18:00")
-		and strtotime($lop[0]." ".$lop[1]) <= strtotime($lop[0]." 23:00"))
+	  	if(
+			strtotime($al[0]." ".$al[1]) > strtotime($al[0]." 18:00")
+			and strtotime($lop[0]." ".$lop[1]) <= strtotime($lop[0]." 23:00")
+			and $al[0] == $lop[0]
+		)
 		{
 	   	  $strAl0 = strtotime($al[0]." ".$al[1]);
 	   	  $strLop0 = strtotime($lop[0]." ".$lop[1]);
@@ -671,9 +672,12 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 	      	  $totalIlta += $str;
 		}
 
-	  	if(strtotime($al[0]." ".$al[1]) <= strtotime($al[0]." 18:00")
-		and strtotime($lop[0]." ".$lop[1]) <= strtotime($lop[0]." 23:00")
-		and strtotime($lop[0]." ".$lop[1]) >= strtotime($lop[0]." 18:00"))
+	  	if(
+			strtotime($al[0]." ".$al[1]) <= strtotime($al[0]." 18:00")
+			and strtotime($lop[0]." ".$lop[1]) < strtotime($lop[0]." 23:00")
+			and strtotime($lop[0]." ".$lop[1]) >= strtotime($lop[0]." 18:00")
+			and $al[0] == $lop[0]
+		)
 		{
 	   	  $strAl0 = strtotime($al[0]." 18:00");
 	   	  $strLop0 = strtotime($lop[0]." ".$lop[1]);
@@ -682,9 +686,11 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 	      	  $totalIlta += $str;
 		}
 
-	  	if(strtotime($al[0]." ".$al[1]) <= strtotime($al[0]." 18:00")
-
-		and strtotime($lop[0]." ".$lop[1]) >= strtotime($lop[0]." 23:00"))
+	  	if(
+		  	strtotime($al[0]." ".$al[1]) <= strtotime($al[0]." 18:00")
+			and strtotime($lop[0]." ".$lop[1]) >= strtotime($lop[0]." 23:00")
+			and $al[0] == $lop[0]
+		)
 		{
 	   	  $strAl0 = strtotime($al[0]." 18:00");
 	   	  $strLop0 = strtotime($lop[0]." 23:00");
@@ -693,18 +699,44 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 	      	  $totalIlta += $str;
 		}
 
-	  	if(strtotime($al[0]." ".$al[1]) >= strtotime($al[0]." 18:00")
-		and strtotime($lop[0]." ".$lop[1]) >= strtotime($lop[0]." 23:00"))
+	  	if(
+			strtotime($al[0]." ".$al[1]) >= strtotime($al[0]." 18:00")
+			and strtotime($lop[0]." ".$lop[1]) > strtotime($lop[0]." 23:00")
+			and $al[0] == $lop[0]
+		)
 		{
 	   	  $strAl0 = strtotime($al[0]." ".$al[1]);
 	   	  $strLop0 = strtotime($lop[0]." 23:00");
 
 	 	  $str = ($strLop0-$strAl0);
-
 	      	  $totalIlta += $str;
 		}
 
-	    }
+	  	if(
+			strtotime($al[0]." ".$al[1]) > strtotime($al[0]."18:00")
+			and $al[0] != $lop[0]
+		)
+		{
+	   	  $strAl0 = strtotime($al[0]." ".$al[1]);
+	   	  $strLop0 = strtotime($al[0]." 23:00");
+
+	 	  $str = ($strLop0-$strAl0);
+	      	  $totalIlta += $str;
+
+		}
+
+	  	if(
+			strtotime($al[0]." ".$al[1]) < strtotime($al[0]." 18:00")
+			and $al[0] != $lop[0]
+		)
+		{
+	   	  $strAl0 = strtotime($al[0]." 18:00");
+	   	  $strLop0 = strtotime($al[0]." 23:00");
+
+	 	  $str = ($strLop0-$strAl0);
+	      	  $totalIlta += $str;
+		}
+
 
 		return $totalIlta;
 	}

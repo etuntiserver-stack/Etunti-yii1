@@ -48,6 +48,7 @@ $asetukset = Asetukset::model()->findbypk(1);
  </div>
 
  <div class="col-sm-4">
+   <br>
    <?php 
    if(isset($_SESSION['onlinevaraus']['paapalvelu']))
    {
