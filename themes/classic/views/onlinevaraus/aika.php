@@ -30,12 +30,16 @@ $asetukset = Asetukset::model()->findbypk(1);
 <div class="row">
  <div class="col-sm-3">
  <?php
+     unset($_SESSION['ajaanReika']); // clear
+
      $dateArray = array();
      $dateComponents = getdate();
 
      $month = date('m');
      $year = date('Y');
      echo $this->build_calendar($month,$year,$dateArray);
+
+     echo '<hr>';
 
      $month = date('m',strtotime("+1 month"));
      $year = date('Y',strtotime("+1 month"));
@@ -44,11 +48,10 @@ $asetukset = Asetukset::model()->findbypk(1);
  </div>
 
  <div class="col-sm-5">
-
+	<div id="aikoja"></div>
  </div>
 
  <div class="col-sm-4">
-   <br>
    <?php 
    if(isset($_SESSION['onlinevaraus']['paapalvelu']))
    {
@@ -63,12 +66,7 @@ $asetukset = Asetukset::model()->findbypk(1);
 
 
 
-<div class="row">
- <div class="form-inline col-sm-12">
-	<?php echo CHtml::link('<< Edellinen sivu','index',array('class'=>'btn btn-success')); ?>
-	<?php echo CHtml::link('Seuraava sivu >>','osoite',array('class'=>'btn btn-success pull-right')); ?>
- </div>
-</div>
+
 
 
 </div>
@@ -77,22 +75,24 @@ $asetukset = Asetukset::model()->findbypk(1);
 
 <script type="text/javascript">
 $(document).ready(function(){
-/*
-$("#cal").change(function(){
 
+$(".cal").click(function(){
+
+   var pvm = $(this).attr("pvm");
    $.ajax({
-	url: location.protocol + "//" + location.host + '/index.php/onlinevaraus/check',
-	data:{ "pvm" : $(this).val() },
+	url: 'ajaat_ajax',
+	data:{ "pvm" : pvm },
 	type:'POST',
 	success:function(data){
-		$('#showres').html(data);
+		console.log(data);
+		$('#aikoja').html(JSON.parse(data));
    	},
 	error:function(data){
 		console.log(data);
     	}
     });
-
 });
-*/
+
+
 });
 </script>

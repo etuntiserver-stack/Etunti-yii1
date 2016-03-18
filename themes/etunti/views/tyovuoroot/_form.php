@@ -232,10 +232,6 @@ $(document).ready(function(){
 			  success:function(data){
 			  //console.log(data);
 			  $('#<?php echo date("Ymd",strtotime($model->pvm))."_".$model->tid; ?>').html(JSON.parse(data));
-
-			  jQuery.klikkaukset(); // js kansiossa
-			  return false;
-
 			  },
 			  error:function(data){
 			  console.log(data);
@@ -297,10 +293,6 @@ $(document).ready(function(){
 			  //console.log(data);
 			  $('#showres').modal('hide');
 			  $('#<?php echo date("Ymd",strtotime($model->pvm))."_".$model->tid; ?>').html(JSON.parse(data));
-
-			  jQuery.klikkaukset(); // js kansiossa
-			  return false;
-
 			  },
 			  error:function(data){
 			  console.log(data);

@@ -18,6 +18,9 @@
 	   <div class="tp">
 	     <div class="form-inline">
 	     <div class="form-group">
+		<div class="trash" style="margin-right: 5px"></div>
+	     </div><div class="form-group">
+		<div class="clear" style="margin-right: 5px"></div>
 	     </div><div class="form-group">
 	   	<i class="forCut" id="forCut_'.$did.'_'.$tid.'" style="margin-right: 5px"></i>
 	     </div><div class="form-group">
@@ -90,6 +93,7 @@
 
 	}
 	$bod .=  '</div>';
+
 /*
 	if( $from == 'ajax' )
 	{
@@ -98,6 +102,7 @@
 	$bod .=  $ajax;
 	}
 */
+
 	echo json_encode($bod);
 
 

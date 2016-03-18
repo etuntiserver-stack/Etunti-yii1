@@ -154,8 +154,6 @@
 
  	<div class="pull-right row">
  	  <div class="form-inline row">
-		<div id="trash"></div> 
-		<div id="clear"></div>
 		<div class="btn btn-primary fa fa-plus" id="uusiTilaus"></div>
 		<div class="btn btn-primary fa fa-calendar-plus-o" id="autoInsert"></div>
 		<div class="btn btn-primary fa fa-calendar-minus-o" id="autoRemove"></div>
@@ -195,10 +193,10 @@ td .latikkoAsetukset{
 .forCut, .forCopy{ 
 	display: none;
 }
-.mplus, .mcut{ 
+.mplus, .mcut, .clear, .trash{ 
 	display: none;
 }
-td:hover .mplus, td:hover .mcut{
+td:hover .mplus, td:hover .mcut, td:hover .clear, td:hover .trash{
 	display : block;
 }
 td .tp{
@@ -226,7 +224,7 @@ td .tp{
 
 
 <div class="row table-responsive">
-  <table class="table table-bordered small">
+  <table class="table table-bordered table-striped small" style="background: white">
      <thead>
      <tr>
 	<th>Nimi</th>
@@ -277,7 +275,13 @@ td .tp{
   	     $d = strtotime($year ."W". $week . $day);
 	     $date = date('d.m.Y',$d);
 	     $did = date('Ymd',$d);
-	     echo '<td id="'.$did.'_'.$t->id.'" valign="top">';
+
+	     $clPyhat = '';
+	     $pyhat = $this->pyhat($date);
+	     if($pyhat == true)
+	     $clPyhat = 'style="background:#ddd"';
+
+	     echo '<td '.$clPyhat.' id="'.$did.'_'.$t->id.'" valign="top">';
  	     $did = $this->renderPartial('//tyovuoroot/did',array('pvm'=>$date,'tid'=>$t->id,'from'=>'tvuoro'), true);
 	     echo json_decode($did, true);
 	     echo '</td>';

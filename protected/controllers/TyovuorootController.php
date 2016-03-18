@@ -357,7 +357,7 @@ class TyovuorootController extends Controller
 
 		if(isset($_POST['checkThis']))
 		{
-			$did = $this->renderPartial('did',array('pvm'=>$_POST['newPvm'],'tid'=>$_POST['newTid'],'from'=>'test'), true);
+			$did = $this->renderPartial('did',array('pvm'=>$_POST['newPvm'],'tid'=>$_POST['newTid'],'from'=>'ajax'), true);
 			echo json_encode($did.'//');
 			exit;
 		}
@@ -374,6 +374,7 @@ class TyovuorootController extends Controller
 			echo json_encode('//'.implode(",",$_SESSION['muistin']));
 			exit;
 		}
+
 		// copy
 		if(isset($_POST['copy']) and isset($_SESSION['muistin']))
 		{
@@ -394,7 +395,7 @@ class TyovuorootController extends Controller
 			
 		}
 
-			$did = $this->renderPartial('did',array('pvm'=>$_POST['newPvm'],'tid'=>$_POST['newTid'],'from'=>'test'), true);
+			$did = $this->renderPartial('did',array('pvm'=>$_POST['newPvm'],'tid'=>$_POST['newTid'],'from'=>'ajax'), true);
 			echo json_encode($did.'//');
 			exit;
 
@@ -406,6 +407,8 @@ class TyovuorootController extends Controller
 		{
 			$ex = explode("_",$cp);
 			$t = Tyovuoroot::model()->findbypk($ex[0]);
+			if(isset($t->id))
+			{
 			$model=new Tyovuoroot;
 			$model->attributes=$t->attributes;
 			$model->pvm=date("d.m.Y",strtotime($_POST['newPvm']));
@@ -415,11 +418,15 @@ class TyovuorootController extends Controller
 			$model->pituus=$t->pituus;
 			$model->kohde=$t->kohde;
 			$model->save();
-			$t = Tyovuoroot::model()->deletebypk($ex[0]);			
+			$t = Tyovuoroot::model()->deletebypk($ex[0]);	
+			} else {
+			echo json_encode('id puuttuu');
+			break;
+			}		
 		}
 
 
-			$did = $this->renderPartial('did',array('pvm'=>$_POST['newPvm'],'tid'=>$_POST['newTid'],'from'=>'test'), true);
+			$did = $this->renderPartial('did',array('pvm'=>$_POST['newPvm'],'tid'=>$_POST['newTid'],'from'=>'ajax'), true);
 			echo json_encode($did.'//'.implode(",",$_SESSION['muistin']));
 			exit;
 		}
