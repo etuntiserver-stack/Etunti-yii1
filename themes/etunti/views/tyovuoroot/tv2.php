@@ -203,7 +203,7 @@ td .tp{
                  <div class="row">
 
 <div class="tvuoro table-responsive">
-  <table class="table table-striped table-condensed table-bordered">
+  <table class="table table-striped table-condensed table-bordered" style="background: white">
      <thead class="">
      <tr>
      <th></th>

@@ -17,6 +17,14 @@ td:first-child {
 	height: 500px;
 	overflow: auto;
 }
+.fullRivi{
+	height: 100%;
+	margin-bottom: 2px;
+	border:1px #ccc solid;
+	padding:3px 7px;
+	background: white;
+	border-radius:5px;
+}
 </style>
 
 <div id="checkedLaheta"></div>

@@ -28,7 +28,7 @@ class OnlinevarausController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view', 'check', 'aika', 'osoite', 'maksu', 'palvelu_ajax', 'palvelu_save_ajax', 'lisat_ajax'),
+				'actions'=>array('index','view', 'check', 'aika', 'osoite', 'maksu', 'palvelu_ajax', 'palvelu_save_ajax', 'lisat_ajax', 'ajaat_ajax'),
                 		'users'=>array("*"),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
@@ -85,6 +85,16 @@ class OnlinevarausController extends Controller
 		else
 		  echo 'vapaa';
 */
+	}
+
+
+	public function actionAjaat_ajax()
+	{
+		$data = 0;
+		$this->renderPartial('ajaat_ajax',array(
+			'data'=>$data,
+		));
+
 	}
 
 	public function actionLisat_ajax()
@@ -287,6 +297,23 @@ class OnlinevarausController extends Controller
 
 protected function build_calendar($month,$year,$dateArray) {
 
+
+$months=array(
+	'01'=>'Tammikuu',
+	'02'=>'Helmikuu',
+	'03'=>'Maaliskuu',
+	'04'=>'Huhtikuu',
+	'05'=>'Toukokuu',
+	'06'=>'Kesäkuu',
+	'07'=>'Heinäkuu',
+	'08'=>'Elokuu',
+	'09'=>'Syyskuu',
+	10=>'Lokakuu',
+	11=>'Marraskuu',
+	12=>'Joulukuu'
+	);
+
+
      // Create array containing abbreviations of days of week.
      $daysOfWeek = array('Ma','Ti','Ke','To','Pe','La','Su');
 
@@ -309,8 +336,8 @@ protected function build_calendar($month,$year,$dateArray) {
 
      // Create the table tag opener and day headers
 
-     $calendar = "<table class='table'>";
-     $calendar .= "<caption>$monthName $year</caption>";
+     $calendar = "<table class=''>";
+     $calendar .= "<span>".$months[$month]." $year</span>";
      $calendar .= "<tr>";
 
      // Create the calendar headers
@@ -355,6 +382,7 @@ protected function build_calendar($month,$year,$dateArray) {
 		$lp = array();
 		$tila = '';
 		$on = 'vapaa';
+		$aamuOn = 'kiinni';
 		$vuorot = '';
 		$criteria=new CDbCriteria;
 		$criteria->condition = "online_varauksen_valmina=1 ";
@@ -366,6 +394,7 @@ protected function build_calendar($month,$year,$dateArray) {
 		$ti++;
 		$on = 'vapaa';
 		$criteria=new CDbCriteria;
+		$criteria->order = " alku ASC";
 		$criteria->condition = " 
 			pvm='".date("d.m.Y", strtotime($date))."' 
 			AND tid='".$t->id."'
@@ -373,6 +402,7 @@ protected function build_calendar($month,$year,$dateArray) {
 		";
 		$tyovuorot = Tyovuoroot::model()->findAll($criteria);
 
+/*
 		if(!isset($tyovuorot[0]))
 		{
 			//$vuorot .= $t->id.'<br>';
@@ -380,33 +410,55 @@ protected function build_calendar($month,$year,$dateArray) {
 			$on = 'vapaa';
 			break;
 		}
+*/
 
 		$a = 0;
 		$l = 0;
-		$sumTunti = ((float)$_SESSION['onlinevaraus']['sumTunti']*3600)+3599;
+		$l2 = 0;
+		$zapas = 3599; // 1 tunti
+		$sumTunti = ((float)$_SESSION['onlinevaraus']['sumTunti']*3600)+$zapas;
 
 		    foreach($tyovuorot as $tv)
 		    {
 
 			$on = 'vapaa';
+			$aamuOn = 'kiinni';
 
-			if($l > 0 and (strtotime($tv->alku)-$l) <= $sumTunti)
-			$on = 'kiinni';
-			elseif($l > 0 and (strtotime($tv->alku)-$l) >= $sumTunti)
-			$on = 'vapaa';
-			elseif(strtotime("18:00")-strtotime($tv->loppu) >= $sumTunti)
-			$on = 'vapaa';
-			elseif(strtotime("18:00")-strtotime($tv->loppu) <= $sumTunti)
-			$on = 'kiinni';
+			if($a == 0 and strtotime($tv->alku)-strtotime("08:00") >= $sumTunti)
+			{
+			  $on = 'vapaa';
+			  $aamuOn = 'vapaa';
+			  $_SESSION['ajaanReika'][$date."//08:00//".$tv->alku.'//'.$t->id] = $t->id;
+			}
 
-			$a = strtotime($tv->alku);
-			$l = strtotime($tv->loppu);
-			//$vuorot .= $tv->alku.' '.$tv->loppu.' '.$on.'<br>';
+			if($l > 0 and (strtotime($tv->alku)-$l) <= $sumTunti and $aamuOn == 'kiinni'){
+			  $on = 'kiinni';
+			} elseif($l > 0 and (strtotime($tv->alku)-$l) >= $sumTunti){
+			  $on = 'vapaa';
+			  $_SESSION['ajaanReika'][$date."//".$l2."//".$tv->alku.'//'.$t->id] = $t->id;
+			} elseif(strtotime("18:00")-strtotime($tv->loppu) <= $sumTunti and $aamuOn == 'kiinni'){
+			  $on = 'kiinni';
+			}
+			  $a = strtotime($tv->alku);
+			  $l = strtotime($tv->loppu);
+			  $l2 = $tv->loppu;
+
+			  //$vuorot .= $tv->alku.' '.$tv->loppu.' '.$on.'<br>';
 		    }
+
+			// loppuilta
+			if($l > 0 and strtotime("18:00")-$l >= $sumTunti)
+			{
+			  $on = 'vapaa';
+			  $_SESSION['ajaanReika'][$date."//".$l2."//18:00//".$t->id] = $t->id;
+			}
+
+
 			if($on == 'vapaa')
 			$lp[$t->id] = 'vapaa';
 
 		}
+			$tila = $vuorot;
 
 
 	  if(in_array('vapaa', $lp, true))
@@ -415,7 +467,7 @@ protected function build_calendar($month,$year,$dateArray) {
 		//print_r($lp);
 
 	  if($on == 'vapaa')
-		 $tila .= '<b class="btn btn-success btn-block">'.$currentDay.'</b>';
+		 $tila .= '<b class="btn btn-success btn-block cal" pvm="'.$date.'">'.$currentDay.'</b>';
 	  else
 		$tila .= '<b class="btn btn-warning btn-block">'.$currentDay.'</b>';
 

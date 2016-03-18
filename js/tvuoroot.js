@@ -71,9 +71,7 @@ $("#autoRemove").click(function(){
 });
 
 
-function tv_editClick(){
-$(".tv_edit").click(function(){
-
+$(document).delegate(".tv_edit","click",function(){
 	var thisVal = $(this).attr("id").split("_");
 
         $.ajax({
@@ -84,13 +82,11 @@ $(".tv_edit").click(function(){
 		$('#showres').modal().html(html);
            }
         });
-
 });
-}
 
 
-function luominenClick(){
-$('.luominen').click(function(){
+
+$(document).delegate(".luominen","click",function(){
 	var pvm = $(this).attr("pvm");
 	var tid = $(this).attr("tid");
 
@@ -104,7 +100,7 @@ $('.luominen').click(function(){
         });
    	return false;
 });
-}
+
 
 jQuery.clearKaikki = function clearKaikki(){
 
@@ -120,8 +116,8 @@ jQuery.clearKaikki = function clearKaikki(){
 		     $(this).removeClass("muistissa").addClass("muistin");
 		});
 
-		$('#trash').removeClass();
-		$("#clear").removeClass();
+		$('.trash').removeClass('fa fa-trash-o text-danger link');
+		$(".clear").removeClass('fa fa-circle-o-notch text-success link');
 		$(".mplus").removeClass().addClass("forCopy");
 		$(".mcut").removeClass().addClass("forCut");
 		$('#muistissa').html('')
@@ -135,14 +131,7 @@ jQuery.clearKaikki = function clearKaikki(){
 
 }
 
-$("#clear").click(function() {
-	jQuery.clearKaikki();
-});
-
-
-function muistiClick(){
-
-  $(".muistin").click(function() {
+$(document).delegate(".muistin","click",function(){
 
 	var thisFor = $(this).attr('for');
 	//var thisVal = $(this).attr('for').split('_');
@@ -159,9 +148,8 @@ function muistiClick(){
  	   }
         });
 
-  });
-		return false;
-}
+});
+
 
 
 muisti();
@@ -186,8 +174,8 @@ function muisti(){
 
 			$(".forCopy").removeClass("forCopy").addClass("mplus glyphicon glyphicon-plus text-success link");
 			$(".forCut").removeClass("forCut").addClass("mcut glyphicon glyphicon-transfer text-success link");
-			$("#trash").addClass("fa fa-trash-o btn btn-danger");
-			$("#clear").addClass("fa fa-circle-o-notch btn btn-success");
+			$(".trash").addClass("fa fa-trash-o text-danger link");
+			$(".clear").addClass("fa fa-circle-o-notch text-success link");
 		
 		}
 		return false;
@@ -200,32 +188,47 @@ function muisti(){
 }
 
 
+$(document).delegate(".mplus","click",function(){
+  	var thisID = $(this).attr("id");
+	parent.postMessage( "doit//"+thisID, "*");
+});
+
+$(document).delegate(".mcut","click",function(){
+	var thisID = $(this).attr("id");
+	parent.postMessage( "doit//"+thisID, "*");
+});
+
+$(document).delegate(".clear","click",function(){
+	jQuery.clearKaikki();
+});
+
+$(document).delegate(".trash","click",function(){
+	var thisID = 'forRemove_1_1';
+	parent.postMessage( "doit//"+thisID, "*");
+});
 
 
 
-jQuery.klikkaukset = function klikkaukset(){
-  tv_editClick();
-  luominenClick();
-  muistiClick();
-  return false;
-}
-jQuery.klikkaukset();
 
 
+window.addEventListener('message', function(e) {
+  var edata = e.data.split('//');
+  if(edata[0] == 'doit')
+  {
+	var thisID = edata[1].split('_');
 
-jQuery.DoIt = function DoIt(thisID,tila){
 
   var newPvm	= thisID[1];
   var newTid	= thisID[2];
   var doWhat	= 0;
 
-  if(tila == 'copy')
+  if(thisID[0] == 'forCopy')
   doWhat 	= { 'copy' : "true", "newPvm" : newPvm, "newTid" : newTid };
-  if(tila == 'cut')
+  if(thisID[0] == 'forCut')
   doWhat 	= { 'cut' : "true", "newPvm" : newPvm, "newTid" : newTid };
-  if(tila == 'remove')
+  if(thisID[0] == 'forRemove')
   doWhat 	= { 'remove' : "true", "newPvm" : newPvm, "newTid" : newTid };
-  if(tila == 'checkThis')
+  if(thisID[0] == 'checkThis')
   doWhat 	= { 'checkThis' : "true", "newPvm" : newPvm, "newTid" : newTid };
 
         $.ajax({
@@ -251,12 +254,9 @@ jQuery.DoIt = function DoIt(thisID,tila){
 				parseData = '';
 			}
 	
-			jQuery.klikkaukset();
-			jQuery.allKlikk();
 		  	jQuery.clearKaikki();
-			return false;
-		}
 
+		}
 
 
     	   },
@@ -265,32 +265,17 @@ jQuery.DoIt = function DoIt(thisID,tila){
  	   }
         });
 
-        	console.log('doIt funktio '+tila+' ok!');
-		return false;
+        	console.log('doIt funktio '+thisID[0]+' ok!');
+  }
 
-}
-
-
-jQuery.allKlikk = function allKlikk(){
-$(".forCopy").click(function() {
-  	var thisID = $(this).attr("id").split("_");
-	jQuery.DoIt(thisID,"copy");
-	return false;
 });
 
-$(".forCut").click(function() {
-	var thisID = $(this).attr("id").split("_");
-	jQuery.DoIt(thisID,"cut");
-	return false;
-});
-}
-jQuery.allKlikk();
 
-$("#trash").click(function() {
-	var thisID = $(this).attr("id").split("_");
-	jQuery.DoIt(thisID,"remove");
-	return false;
-});
+
+
+
+
+
 
 
 
