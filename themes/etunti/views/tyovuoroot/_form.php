@@ -174,13 +174,19 @@ if(!empty($t->gcm_reg_id)) :
 <br>
 
 	<div class="modal-footer">
+		<?php 
+			if(isset($model->id))
+			{
+			$doit = date("Ymd",strtotime($model->pvm))."_".$model->tid; 
+			echo CHtml::Button('Poista',array('class'=>'btn btn-danger', 'id'=>'poistaTv', 'for'=>$doit, 'model'=>$model->id, 'data-dismiss'=>'modal'));
+			}
+		?>
 		<?php echo CHtml::Button('Sulje',array('class'=>'btn btn-default','data-dismiss'=>'modal')); ?>
 		<?php 
 		if(Yii::app()->user->adminStatus != 2)
-		echo CHtml::submitButton($model->isNewRecord ? 'Luo' : 'Tallenna',array('class'=>'btn  btn-primary','id'=>'submitButton')); 
+		echo CHtml::submitButton($model->isNewRecord ? 'Luo' : 'Tallenna',array('class'=>'btn btn-primary','id'=>'submitButton')); 
 		?>
 	</div>		
-
 
 
 

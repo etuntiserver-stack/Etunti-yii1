@@ -28,7 +28,7 @@ class TyovuorootController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','updatetime','showohje','did','muisti','operatio','viikko','fromto','autoinsert','autoremove','viikkottain', 'viikkottain_pdf', 'laheta','kk','pvmtid','laheta_k', 'muistin', 'muisticlear', 'muistissa', 'vkolopput', 'vkolopchange', 'uusitilaus', 'tv2'),
+				'actions'=>array('admin','delete','create','update','index','view','updatetime','showohje','did','muisti','operatio','viikko','fromto','autoinsert','autoremove','viikkottain', 'viikkottain_pdf', 'laheta','kk','pvmtid','laheta_k', 'muistin', 'muisticlear', 'muistissa', 'vkolopput', 'vkolopchange', 'uusitilaus', 'tv2', 'PoistaTv'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny', // allow admin user to perform 'admin' and 'delete' actions
@@ -351,6 +351,11 @@ class TyovuorootController extends Controller
 
 	}
 
+	public function actionPoistaTv()
+	{
+		if(isset($_POST['poistaTv']))
+			$t = Tyovuoroot::model()->deletebypk($_POST['poistaTv']);
+	}
 
 	public function actionOperatio()
 	{
@@ -368,7 +373,7 @@ class TyovuorootController extends Controller
 		foreach($_SESSION['muistin'] as $cp)
 		{
 			$ex = explode("_",$cp);
-			$t = Tyovuoroot::model()->deletebypk($ex[0]);			
+			$t = Tyovuoroot::model()->deletebypk($ex[0]);
 		}
 
 			echo json_encode('//'.implode(",",$_SESSION['muistin']));
