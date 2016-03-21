@@ -781,7 +781,8 @@ class TyovuorootController extends Controller
 					$message = '
 					Asiakas: '.$asiakkaat->yhteyshenkilo.'<br>
 					Työvuorot:  '.$model->pvm.', '.$model->alku.'-'.$model->loppu.'<br>
-					Hinta: '.$_POST['hinta'].'
+					Hinta: '.$_POST['hinta'].'<br>
+					<h2>Kiitos tilauksesta.</h2>
 					';
 					$mail = new YiiMailer();
 					//$mail->clearLayout();//if layout is already set in config
