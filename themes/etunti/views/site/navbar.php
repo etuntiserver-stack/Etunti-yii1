@@ -343,7 +343,9 @@
     </div>
   </div>
 
-
+        <div class="form-group mn br-t p15">
+          <a href="#" id="clearLocalStorage" class="btn btn-primary btn-block pb10 pt10">Clear LocalStorage</a>
+        </div>
 
 	</li>
       </ul>
