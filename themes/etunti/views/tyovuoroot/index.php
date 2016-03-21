@@ -188,6 +188,7 @@ $numDays = 7;
 <style>
 td .latikkoAsetukset{
 	min-width: 70px;
+	width: 200px;
 	white-space: normal;
 }
 .forCut, .forCopy{ 
@@ -306,13 +307,52 @@ td .tp{
 	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/bootstrap.modal.js"></script>
 	<div id="showres" class="modal fade" tabindex="-1" role="dialog"></div>
 	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/tvuoroot.js"></script>
-
+	<?php Yii::app()->clientScript->registerPackage('fixedTable'); ?>
 
 
 <script type="text/javascript">
 $(document).ready(function(){
 
 
+$(function () {
+
+    var tableHeight = function () {
+        var $tableHeader = $('.dataTables_scrollHeadInner thead tr');
+        return $(window).height() - 4 - ($tableHeader.length ? $tableHeader.height() : 0);
+    };
+
+    var dataTable = $('table').dataTable({
+        sDom: 'frtiS',
+        sScrollY: tableHeight(),
+        sScrollX: '100%',
+        bAutoWidth: true,
+        bScrollCollapse: true,
+        bPaginate: false,
+        bFilter: false,
+        bInfo: false,
+        bSort: false,
+        bDeferRender: true
+    });
+
+    var onResize = function () {
+        var oSettings = dataTable.fnSettings();
+        oSettings.oScroll.sY = tableHeight()-230; 
+        dataTable.fnDraw();
+    };
+
+    var firstDraw = false;
+    new FixedColumns(dataTable, {
+        iLeftWidth: 100,
+        fnDrawCallback: function () {
+            if (firstDraw) return;
+            firstDraw = true;
+            onResize();
+        }
+    });
+
+    $(window).resize(onResize);
+});
+
+
 });
 </script>
-
