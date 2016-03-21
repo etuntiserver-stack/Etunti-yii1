@@ -110,10 +110,10 @@ td .latikkoAsetukset{
 .forCut, .forCopy{ 
 	display: none;
 }
-.mplus, .mcut{ 
+.mplus, .mcut, .clear, .trash{ 
 	display: none;
 }
-td:hover .mplus, td:hover .mcut{
+td:hover .mplus, td:hover .mcut, td:hover .clear, td:hover .trash{
 	display : block;
 }
 td .tp{
@@ -175,11 +175,9 @@ td .tp{
 
  	<div class="pull-right">
  	  <div class="form-inline">
-		<div id="trash"></div> 
-		<div id="clear"></div>
-		<div class="btn btn-primary fa fa-plus" id="uusiTilaus"></div>
-		<div class="btn btn-primary fa fa-calendar-plus-o" id="autoInsert"></div>
-		<div class="btn btn-primary fa fa-calendar-minus-o" id="autoRemove"></div>
+		<div class="btn btn-primary fa fa-plus" id="uusiTilaus" data-toggle="tooltip" title="Uusi tilaus"></div>
+		<div class="btn btn-primary fa fa-calendar-plus-o" id="autoInsert" data-toggle="tooltip" title="Toistuva työvuorot"></div>
+		<div class="btn btn-primary fa fa-calendar-minus-o" id="autoRemove" data-toggle="tooltip" title="Poista toistuva työvuorot"></div>
  	  </div>
  	</div>
 
