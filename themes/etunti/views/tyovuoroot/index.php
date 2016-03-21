@@ -154,9 +154,9 @@
 
  	<div class="pull-right row">
  	  <div class="form-inline row">
-		<div class="btn btn-primary fa fa-plus" id="uusiTilaus"></div>
-		<div class="btn btn-primary fa fa-calendar-plus-o" id="autoInsert"></div>
-		<div class="btn btn-primary fa fa-calendar-minus-o" id="autoRemove"></div>
+		<div class="btn btn-primary fa fa-plus" id="uusiTilaus" data-toggle="tooltip" title="Uusi tilaus"></div>
+		<div class="btn btn-primary fa fa-calendar-plus-o" id="autoInsert" data-toggle="tooltip" title="Toistuva työvuorot"></div>
+		<div class="btn btn-primary fa fa-calendar-minus-o" id="autoRemove" data-toggle="tooltip" title="Poista toistuva työvuorot"></div>
 		<!--<a class="btn btn-primary ad ad-screen-full myBgColors" href="/index.php/tyovuoroot/index?fullscreen=true"></a>-->
 		<div class="btn" id="vkolopput"><?php echo Yii::t('main', 'Viikonloput'); ?></div>
  	  </div>
