@@ -1,5 +1,60 @@
 <?php
 
+  if(isset($_SESSION['onlinevaraus']['paapalvelu']))
+	$model = OnlinevarausTuotteet::model()->findbypk($_SESSION['onlinevaraus']['paapalvelu']);
+
+  $blockAika = '';
+  if(isset($_SESSION['onlinevaraus']['modelTV']))
+  {
+	$tv = Tyovuoroot::model()->findbypk($_SESSION['onlinevaraus']['modelTV']);
+	if(isset($tv->id))
+	{
+
+	   $filename = "../../img/tekijat/".$_SESSION['domain']."/".$tv->tid.".jpg";
+	   if (file_exists(Yii::app()->request->baseUrl."img/tekijat/".Yii::app()->user->domain."/".$tv->tid.".jpg"))
+	   $kuva = '<img src="'.$filename.'" class="img-thumbnail">';
+	   else
+	   $kuva = '<img src="../../img/tekijat/noname.jpg" class="img-thumbnail">';
+
+
+	$blockAika = '
+	<hr>
+     	<label>Varattu aika </label><br>
+	<div class="row">
+	 <div class="col-sm-4">
+		'.$kuva.'		
+	 </div><div class="col-sm-8">
+		'.$tv->pvm.'<br>
+		'.$tv->alku.'-'.$tv->loppu.'
+	 </div>
+	</div>
+ 	';
+	}
+  }
+
+  $blockKohde = '';
+  if(isset($_SESSION['onlinevaraus']['modelKohde']))
+  {
+	$k = Kohteet::model()->findbypk($_SESSION['onlinevaraus']['modelKohde']);
+	if(isset($tv->id))
+	{
+	$blockKohde = '
+	<hr>
+     	<label>Osoite </label><br>
+	<div class="row">
+	 <div class="col-sm-4">
+		Asiakas: '.$k->asiakas_id.'		
+	 </div><div class="col-sm-8">
+		'.$k->osoite.'
+	 </div>
+	</div>
+ 	';
+	}
+  }
+
+
+
+
   if(isset($model))
   {
 	$lisaHinta = 0;
@@ -63,9 +118,13 @@
 
 	$body .= '
 	 </div>
-	</div>
+	</div>';
 
 
+	$body .= $blockAika;
+	$body .= $blockKohde;
+
+	$body .= '
 	   </div>
 	</div>';
 
@@ -73,6 +132,12 @@
 	$body .= CHtml::link('Valitse aika','aika', array('class'=>'btn btn-success'));
 	elseif(isset($sivu) and $sivu == 'aika')
 	$body .= CHtml::link('Valitse osoite','osoite', array('class'=>'btn btn-success'));
+	elseif(isset($sivu) and $sivu == 'osoite')
+	$body .= CHtml::link('Maksan','maksu', array('class'=>'btn btn-success'));
+	elseif(isset($sivu) and $sivu == 'maksu')
+	$body .= CHtml::link('Kassalle','kassalle', array('class'=>'btn btn-success'));
+
+	$body .= CHtml::link('Keskeytä','index?keskeyta=true', array('class'=>'btn btn-warning'));
 
 	echo json_encode($body);
 

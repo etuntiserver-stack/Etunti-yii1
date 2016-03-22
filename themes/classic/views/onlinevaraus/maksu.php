@@ -25,25 +25,49 @@ $asetukset = Asetukset::model()->findbypk(1);
 
 <br>
 
+<br><br>
 <div class="row">
- <div class="col-sm-8">
+ <div class="col-sm-3">
+ </div>
+
+ <div class="col-sm-5">
 
  </div>
+
  <div class="col-sm-4">
- 
+   <div id="panGetContent">
+   <?php 
+   if(isset($_SESSION['onlinevaraus']['paapalvelu']))
+   {
+	$return = $this->renderPartial('palvelu_save_ajax', array('sivu'=>'maksu'), true); 
+   	echo json_decode($return, true);
+   }
+   ?>
+   </div>
  </div>
 </div>
 
 
-<div class="row">
- <div class="form-inline col-sm-12">
-	<?php echo CHtml::link('<< Edellinen sivu','osoite',array('class'=>'btn btn-success')); ?>
- </div>
 </div>
 
 
-</div>
 
+
+<script type="text/javascript">
+$(document).ready(function(){
+
+
+var count = null;
+function counter(){
+    count += 1;
+    console.log("counter: "+count);
+    if(count > 20)
+    window.location.href="index?keskeyta=true";
+}
+setInterval(counter, "15000");
+
+});
+</script>
 
 
 

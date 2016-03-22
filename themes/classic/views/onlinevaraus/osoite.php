@@ -25,24 +25,121 @@ $asetukset = Asetukset::model()->findbypk(1);
 
 <br>
 
+<br><br>
 <div class="row">
- <div class="col-sm-8">
+ <div class="col-sm-3">
+
+     <?php if(!isset($_SESSION['onlinevaraus']['modelKohde'])) : ?>
+     <div class="sahkoposti">
+	<input type="text" id="sahkoposti" class="form-control" placeholder="Sähköposti">
+     </div>
+
+     <div class="buttons btncheckPosti">
+     <br>
+	<button class="btn btn-primary btn-block tarkistaSahkoposti">Jatka</button>
+     </div>
+     <?php endif; ?>
 
  </div>
+
+ <div class="col-sm-5">
+     <div id="loytynytOsoitteet"></div>
+ </div>
+
  <div class="col-sm-4">
- 
+   <div id="panGetContent">
+   <?php 
+   if(isset($_SESSION['onlinevaraus']['paapalvelu']))
+   {
+	$return = $this->renderPartial('palvelu_save_ajax', array('sivu'=>'osoite'), true); 
+   	echo json_decode($return, true);
+   }
+   ?>
+   </div>
  </div>
 </div>
 
-<div class="row">
- <div class="form-inline col-sm-12">
-	<?php echo CHtml::link('<< Edellinen sivu','aika',array('class'=>'btn btn-success')); ?>
-	<?php echo CHtml::link('Seuraava sivu >>','maksu',array('class'=>'btn btn-success pull-right')); ?>
- </div>
-</div>
 
 </div>
 
 
+
+<script type="text/javascript">
+$(document).ready(function(){
+
+
+$(document).delegate(".loytyiOsoite","click",function(){
+
+   var id = $(this).attr("id").split("_");
+
+   $.ajax({
+	url: 'palvelu_save_ajax',
+	data:{ "kohde" : id[1] },
+	type:'POST',
+	success:function(data){
+		//console.log(data);
+		if(data)
+		{
+			$('#loytynytOsoitteet').hide('slow');
+			$('#panGetContent').html(JSON.parse(data));
+
+		}
+   	},
+	error:function(data){
+		console.log(data);
+    	}
+    });
+
+
+});
+
+$(".tarkistaSahkoposti").click(function(){
+
+   var sahkoposti = $('#sahkoposti').val();
+   if(sahkoposti === '')
+   {
+   $('#sahkoposti').focus();
+   } else {
+
+   $.ajax({
+	url: 'onkokohde',
+	data:{ "sahkoposti" : sahkoposti },
+	type:'POST',
+	success:function(data){
+		data = JSON.parse(data);
+		if(data === 'ei')
+		{
+			console.log(data);
+			count = null;
+
+		} else {
+			$('#loytynytOsoitteet').html(data);
+			$('.sahkoposti, .btncheckPosti').hide('slow');
+			//console.log(data);
+			count = null;
+
+		}
+   	},
+	error:function(data){
+		console.log(data);
+    	}
+    });
+
+  }
+
+});
+
+
+var count = null;
+function counter(){
+    count += 1;
+    console.log("counter: "+count);
+    if(count > 20)
+    window.location.href="index?keskeyta=true";
+}
+setInterval(counter, "15000");
+
+});
+</script>
 
 
