@@ -17,13 +17,13 @@
 	   <div class="tp">
 	     <div class="form-inline">
 	     <div class="form-group">
-		<div class="trash" style="margin-right: 5px"></div>
+		<div class="trash" style="margin-right: 5px" data-toggle="tooltip" title="Poista työvuorosta"></div>
 	     </div><div class="form-group">
-		<div class="clear" style="margin-right: 5px"></div>
+		<div class="clear" style="margin-right: 5px" data-toggle="tooltip" title="Unohda valitettut kohteet"></div>
 	     </div><div class="form-group">
-	   	<i class="forCut" id="forCut_'.$did.'_'.$tid.'" style="margin-right: 5px"></i>
+	   	<i class="forCut" id="forCut_'.$did.'_'.$tid.'" style="margin-right: 5px" data-toggle="tooltip" title="Siirrä"></i>
 	     </div><div class="form-group">
-	   	<i class="forCopy" id="forCopy_'.$did.'_'.$tid.'"></i> 
+	   	<i class="forCopy" id="forCopy_'.$did.'_'.$tid.'" data-toggle="tooltip" title="Kopioi"></i> 
 	     </div>
 	     </div>
 	   </div>';
