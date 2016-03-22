@@ -97,7 +97,12 @@ class AsiakkaatController extends Controller
 		{
 			$model->attributes=$_POST['Asiakkaat'];
 			if($model->save())
+			{
+				if(empty($model->asiakasnumero))
+				$a = Asiakkaat::model()->updatebypk($model->id, array('asiakasnumero'=>$model->id));
+
 				$this->redirect(array('update','id'=>$model->id));
+			}
 		}
 
 		$this->render('create',array(
