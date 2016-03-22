@@ -28,7 +28,7 @@ class OnlinevarausController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view', 'check', 'aika', 'osoite', 'maksu', 'palvelu_ajax', 'palvelu_save_ajax', 'lisat_ajax', 'ajaat_ajax'),
+				'actions'=>array('index','view', 'check', 'aika', 'osoite', 'maksu', 'palvelu_ajax', 'palvelu_save_ajax', 'lisat_ajax', 'ajaat_ajax', 'aika_ajax', 'onkokohde', 'kassalle'),
                 		'users'=>array("*"),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
@@ -74,17 +74,47 @@ class OnlinevarausController extends Controller
         }
 
 
-	public function actionCheck($pvm)
+	public function actionOnkokohde()
 	{
-/*
-		$criteria=new CDbCriteria;
-		$criteria->condition = " pvm='".date("d.m.Y", strtotime($_POST['pvm']))."' ";
-		$tyovuorot = Tyovuoroot::model()->find($criteria);
-		if(isset($tyovuorot->id))
-		  echo 'varattu';
-		else
-		  echo 'vapaa';
-*/
+		if(isset($_POST['sahkoposti']))
+		{
+
+			$criteria=new CDbCriteria;
+			$criteria->condition = " email='".$_POST['sahkoposti']."' ";
+			$k = Kohteet::model()->findAll($criteria);
+			if(isset($k[0]))
+			{
+			  $body = '<h3>Valitse osoite</h3>';
+			  foreach($k as $data)
+			  {
+			     $body .= '
+			     <div>
+				<span class="loytyiOsoite link" id="kohde_'.$data->id.'">'.$data->osoite.'</span>
+			     </div>
+			     ';
+			  }
+			  echo json_encode($body);
+			} else {
+			  echo json_encode('ei');
+			}
+		}
+
+	}
+
+
+	public function actionKassalle()
+	{
+		if(isset($_SESSION['onlinevaraus']['modelTV']))
+		{
+		$tv = Tyovuoroot::model()->updatebypk($_SESSION['onlinevaraus']['modelTV'], array('osoiteOnline'=>2));
+		unset($_SESSION['onlinevaraus']);
+		}
+		$this->renderPartial('kassalle');
+	}
+
+	public function actionAika_ajax()
+	{
+		$this->renderPartial('aika_ajax');
 	}
 
 
@@ -157,6 +187,53 @@ class OnlinevarausController extends Controller
 		$this->renderPartial('palvelu_save_ajax',array(
 			'model'=>$model,
 			'sivu'=>'index',
+		));
+
+	   } elseif(isset($_POST['tid']) and isset($_POST['pvm'])) {
+
+		if(isset($_SESSION['onlinevaraus']['modelTV']))
+		{
+
+			$tv = Tyovuoroot::model()->findbypk($_SESSION['onlinevaraus']['modelTV']);
+			if(isset($tv->id))
+			{
+				$tv->attributes=$_POST;
+				$tv->save();
+
+			} else {
+
+				$modelTV = new Tyovuoroot;
+				$modelTV->attributes=$_POST;
+				$modelTV->save();
+				$_SESSION['onlinevaraus']['modelTV'] = $modelTV->id;
+
+			}
+
+		} else {
+
+			$modelTV = new Tyovuoroot;
+			$modelTV->attributes=$_POST;
+			$modelTV->save();
+			$_SESSION['onlinevaraus']['modelTV'] = $modelTV->id;
+
+		}
+
+		$this->renderPartial('palvelu_save_ajax',array(
+			'sivu'=>'aika',
+		));
+
+	   } elseif(isset($_POST['kohde'])) {
+
+
+		$k = Kohteet::model()->findbypk($_POST['kohde']);
+		if(isset($k->id))
+		{
+		    $_SESSION['onlinevaraus']['modelKohde'] = $k->id;
+		    Tyovuoroot::model()->updatebypk($_SESSION['onlinevaraus']['modelTV'], array('kohde'=>$k->id));
+		}
+
+		$this->renderPartial('palvelu_save_ajax',array(
+			'sivu'=>'osoite',
 		));
 	   }
 	}
@@ -234,6 +311,19 @@ class OnlinevarausController extends Controller
 	 */
 	public function actionIndex()
 	{
+		if(isset($_GET['keskeyta']))
+		{
+			if(isset($_SESSION['onlinevaraus']['modelTV']))
+			{
+			$tv = Tyovuoroot::model()->findbypk($_SESSION['onlinevaraus']['modelTV']);
+			if(isset($tv->id))
+			Tyovuoroot::model()->deletebypk($tv->id);
+			}
+
+			unset($_SESSION['onlinevaraus']);
+			$this->redirect('index');
+		}
+	
 		$this->render('index');
 	}
 
@@ -378,94 +468,11 @@ $months=array(
           $currentDayRel = str_pad($currentDay, 2, "0", STR_PAD_LEFT);
           
           $date = "$year-$month-$currentDayRel";
-
-		$lp = array();
-		$tila = '';
-		$on = 'vapaa';
-		$aamuOn = 'kiinni';
-		$vuorot = '';
-		$criteria=new CDbCriteria;
-		$criteria->condition = "online_varauksen_valmina=1 ";
-		$tyontekijat = Tyontekijat::model()->findAll($criteria);
-
-		$ti = 0;
-		foreach($tyontekijat as $t)
-		{
-		$ti++;
-		$on = 'vapaa';
-		$criteria=new CDbCriteria;
-		$criteria->order = " alku ASC";
-		$criteria->condition = " 
-			pvm='".date("d.m.Y", strtotime($date))."' 
-			AND tid='".$t->id."'
-			AND SUBSTRING_INDEX(alku,':',1) <= '18'
-		";
-		$tyovuorot = Tyovuoroot::model()->findAll($criteria);
-
-/*
-		if(!isset($tyovuorot[0]))
-		{
-			//$vuorot .= $t->id.'<br>';
-		  	$tila = $vuorot;
-			$on = 'vapaa';
-			break;
-		}
-*/
-
-		$a = 0;
-		$l = 0;
-		$l2 = 0;
-		$zapas = 3599; // 1 tunti
-		$sumTunti = ((float)$_SESSION['onlinevaraus']['sumTunti']*3600)+$zapas;
-
-		    foreach($tyovuorot as $tv)
-		    {
-
-			$on = 'vapaa';
-			$aamuOn = 'kiinni';
-
-			if($a == 0 and strtotime($tv->alku)-strtotime("08:00") >= $sumTunti)
-			{
-			  $on = 'vapaa';
-			  $aamuOn = 'vapaa';
-			  $_SESSION['ajaanReika'][$date."//08:00//".$tv->alku.'//'.$t->id] = $t->id;
-			}
-
-			if($l > 0 and (strtotime($tv->alku)-$l) <= $sumTunti and $aamuOn == 'kiinni'){
-			  $on = 'kiinni';
-			} elseif($l > 0 and (strtotime($tv->alku)-$l) >= $sumTunti){
-			  $on = 'vapaa';
-			  $_SESSION['ajaanReika'][$date."//".$l2."//".$tv->alku.'//'.$t->id] = $t->id;
-			} elseif(strtotime("18:00")-strtotime($tv->loppu) <= $sumTunti and $aamuOn == 'kiinni'){
-			  $on = 'kiinni';
-			}
-			  $a = strtotime($tv->alku);
-			  $l = strtotime($tv->loppu);
-			  $l2 = $tv->loppu;
-
-			  //$vuorot .= $tv->alku.' '.$tv->loppu.' '.$on.'<br>';
-		    }
-
-			// loppuilta
-			if($l > 0 and strtotime("18:00")-$l >= $sumTunti)
-			{
-			  $on = 'vapaa';
-			  $_SESSION['ajaanReika'][$date."//".$l2."//18:00//".$t->id] = $t->id;
-			}
+	  $on = $this->pmvCal($date)[0];
 
 
-			if($on == 'vapaa')
-			$lp[$t->id] = 'vapaa';
 
-		}
-			$tila = $vuorot;
-
-
-	  if(in_array('vapaa', $lp, true))
-		$on = 'vapaa';
-
-		//print_r($lp);
-
+	  $tila = '';
 	  if($on == 'vapaa')
 		 $tila .= '<b class="btn btn-success btn-block cal" pvm="'.$date.'">'.$currentDay.'</b>';
 	  else
@@ -501,5 +508,91 @@ $months=array(
 }
 
 
+
+	protected function pmvCal($date)
+	{
+
+		$lp = array();
+		$ajaanReika = array();
+		$on = 'vapaa';
+		$aamuOn = 'kiinni';
+		$vuorot = '';
+		$criteria=new CDbCriteria;
+		$criteria->condition = "online_varauksen_valmina=1 ";
+		$tyontekijat = Tyontekijat::model()->findAll($criteria);
+
+		$ti = 0;
+		foreach($tyontekijat as $t)
+		{
+		$ti++;
+		$on = 'vapaa';
+		$criteria=new CDbCriteria;
+		$criteria->order = " alku ASC";
+		$criteria->condition = " 
+
+			pvm='".date("d.m.Y", strtotime($date))."' 
+			AND tid='".$t->id."'
+			AND SUBSTRING_INDEX(alku,':',1) <= '18'
+		";
+		$tyovuorot = Tyovuoroot::model()->findAll($criteria);
+
+		$a = 0;
+		$l = 0;
+		$l2 = 0;
+
+		$sumTunti = ((float)$_SESSION['onlinevaraus']['sumTunti']*3600)+7199;
+		$sumAamuIlta = ((float)$_SESSION['onlinevaraus']['sumTunti']*3600)+3599;
+		$realSumMin = (float)$_SESSION['onlinevaraus']['sumTunti']*60;
+
+		    foreach($tyovuorot as $tv)
+		    {
+
+			$on = 'vapaa';
+			$aamuOn = 'kiinni';
+
+			if($a == 0 and strtotime($tv->alku)-strtotime("08:00") >= $sumAamuIlta)
+			{
+			  $on = 'vapaa';
+			  $aamuOn = 'vapaa';
+			  $ajaanReika["08:00//".date("H:i",strtotime("08:00 +".$realSumMin." minutes")).'//'.$t->id] = $t->id;
+			}
+
+			if($l > 0 and (strtotime($tv->alku)-$l) <= $sumTunti and $aamuOn == 'kiinni'){
+			  $on = 'kiinni';
+			} elseif($l > 0 and (strtotime($tv->alku)-$l) >= $sumTunti){
+			  $on = 'vapaa';
+			  $l2zapas = date("H:i",strtotime($l2." +1 hour"));
+			  $ajaanReika[$l2zapas."//".date("H:i",strtotime($l2zapas." +".$realSumMin." minutes")).'//'.$t->id] = $t->id;
+			} elseif(strtotime("18:00")-strtotime($tv->loppu) <= $sumTunti and $aamuOn == 'kiinni'){
+			  $on = 'kiinni';
+			}
+			  $a = strtotime($tv->alku);
+			  $l = strtotime($tv->loppu);
+			  $l2 = $tv->loppu;
+			  $l2zapas = date("H:i",strtotime($l2." +1 hour"));
+
+			  //$vuorot .= $tv->alku.' '.$tv->loppu.' '.$on.'<br>';
+		    }
+
+			// loppuilta
+			if($l > 0 and strtotime("18:00")-$l >= $sumAamuIlta)
+			{
+			  $on = 'vapaa';
+			  $ajaanReika[$l2zapas."//".date("H:i",strtotime($l2zapas." +".$realSumMin." minutes"))."//".$t->id] = $t->id;
+			}
+
+
+			if($on == 'vapaa')
+			$lp[$t->id] = 'vapaa';
+
+
+		}
+
+	  	if(in_array('vapaa', $lp, true))
+		$on = 'vapaa';
+
+		$return = array($on,$ajaanReika);
+		return $return;
+	}
 
 }

@@ -28,45 +28,28 @@ $asetukset = Asetukset::model()->findbypk(1);
 
 <br><br>
 <div class="row">
- <div class="col-sm-3">
- <?php
-     unset($_SESSION['ajaanReika']); // clear
-
-     $dateArray = array();
-     $dateComponents = getdate();
-
-     $month = date('m');
-     $year = date('Y');
-     echo $this->build_calendar($month,$year,$dateArray);
-
-     echo '<hr>';
-
-     $month = date('m',strtotime("+1 month"));
-     $year = date('Y',strtotime("+1 month"));
-     echo $this->build_calendar($month,$year,$dateArray);
- ?>
+ <div class="col-sm-4">
+ <div class="alert alert-success">
+	<div id="kalenterit"></div>
+ </div>
  </div>
 
- <div class="col-sm-5">
+ <div class="col-sm-4">
 	<div id="aikoja"></div>
  </div>
 
  <div class="col-sm-4">
+   <div id="panGetContent">
    <?php 
    if(isset($_SESSION['onlinevaraus']['paapalvelu']))
    {
-	$model = OnlinevarausTuotteet::model()->findbypk($_SESSION['onlinevaraus']['paapalvelu']);
-	$return = $this->renderPartial('palvelu_save_ajax', array('model'=>$model,'sivu'=>'aika'), true); 
+	$return = $this->renderPartial('palvelu_save_ajax', array(), true); 
    	echo json_decode($return, true);
    }
    ?>
+   </div>
  </div>
 </div>
-
-
-
-
-
 
 
 </div>
@@ -76,22 +59,96 @@ $asetukset = Asetukset::model()->findbypk(1);
 <script type="text/javascript">
 $(document).ready(function(){
 
-$(".cal").click(function(){
 
-   var pvm = $(this).attr("pvm");
+kaksiKalenteria();
+var count1 = null;
+function kaksiKalenteria()
+{
    $.ajax({
-	url: 'ajaat_ajax',
-	data:{ "pvm" : pvm },
+	url: 'aika_ajax',
+	data:{ "nothing" : "true" },
 	type:'POST',
 	success:function(data){
-		console.log(data);
-		$('#aikoja').html(JSON.parse(data));
+		//console.log(data);
+		count1 += 1;
+		console.log('count 1: '+count1);
+		$('#kalenterit').html(JSON.parse(data));
+
+		if(count1 > 20)
+		window.location.href="index?keskeyta=true";
    	},
 	error:function(data){
 		console.log(data);
     	}
     });
+}
+setInterval(kaksiKalenteria, "15000");
+
+
+$(document).delegate(".ajaanClick","click",function(){
+
+
+   var pvm = $(this).attr('pvm');
+   var tid = $(this).attr('tid');
+   var alku = $(this).attr('alku');
+   var loppu = $(this).attr('loppu');
+
+
+   $.ajax({
+	url: 'palvelu_save_ajax',
+	data:{ "tid" : tid, "pvm" : pvm, "alku" : alku, "loppu" : loppu, "osoiteOnline" : "1" },
+	type:'POST',
+	success:function(data){
+		//console.log(data);
+		if(data)
+		{
+			$('#panGetContent').html(JSON.parse(data));
+			$('#aikoja').html('');
+			aikoja();
+
+		}
+   	},
+	error:function(data){
+		console.log(data);
+    	}
+    });
+
+
 });
+
+
+$(document).delegate(".cal","click",function(){
+
+  localStorage.setItem('valinnuPvm', $(this).attr("pvm"));
+  aikoja();
+  setInterval(aikoja, "15000");
+
+});
+
+
+  clearInterval(aikoja);
+  localStorage.clear();
+  var count2 = null;
+  function aikoja()
+  {
+
+   var pvm = localStorage.getItem('valinnuPvm');
+   $.ajax({
+	url: 'ajaat_ajax',
+	data:{ "pvm" : pvm },
+	type:'POST',
+	success:function(data){
+		count2 += 1;
+		console.log('count 2: '+count2);
+		$('#aikoja').html(JSON.parse(data));
+		return false;
+   	},
+	error:function(data){
+		console.log(data);
+    	}
+    });
+  }
+
 
 
 });

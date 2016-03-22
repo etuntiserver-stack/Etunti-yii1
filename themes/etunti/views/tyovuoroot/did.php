@@ -38,15 +38,53 @@
 	{
 
 	   $osoite = '';
-	   if(isset($tvVal->kohteet->osoite))
-	   $osoite = str_replace('/', '', $tvVal->kohteet->osoite);
+	   if(isset($tvVal->kohteet->osoite) and empty($tvVal->osoiteOnline) 
+		and ($tvVal->osoiteOnline != 1 or $tvVal->osoiteOnline != 2))
+	   {
 
-	   $strlen = strlen($osoite);
-	   $scount = 30;
-	   if(isset($tietoja) and $tietoja == 1) $scount = 27;
+	   	$strlen = strlen($osoite);
+	   	$scount = 30;
+	   	if(isset($tietoja) and $tietoja == 1) $scount = 27;
 
-	   if($strlen > $scount)
-	    $osoite = substr($osoite,0,$scount).'..';
+	   	if($strlen > $scount)
+	    	$osoite = substr($osoite,0,$scount).'..';
+
+	   	$osoite = str_replace('/', '', $tvVal->kohteet->osoite);
+
+	   } elseif(!empty($tvVal->osoiteOnline) and empty($tvVal->kohde) and $tvVal->osoiteOnline == 1){
+
+	   	$osoite = '<span style="color: red">Vuoroa varataan..</span>';
+
+	   } elseif(isset($tvVal->kohteet->osoite) and !empty($tvVal->osoiteOnline) 
+			and !empty($tvVal->kohde) and $tvVal->osoiteOnline == 1
+	   ){
+
+	   	$strlen = strlen($osoite);
+	   	$scount = 30;
+	   	if(isset($tietoja) and $tietoja == 1) $scount = 27;
+
+	   	if($strlen > $scount)
+	    	$osoite = substr($osoite,0,$scount).'..';
+
+	   	$osoite = str_replace('/', '', $tvVal->kohteet->osoite);
+	   	$osoite = '<span style="color: red">Vuoroa varataan..<br>'.$osoite.'</span>';
+
+	   } elseif(isset($tvVal->kohteet->osoite) and !empty($tvVal->osoiteOnline) 
+			and !empty($tvVal->kohde) and $tvVal->osoiteOnline == 2
+	   ){
+
+	   	$strlen = strlen($osoite);
+	   	$scount = 30;
+	   	if(isset($tietoja) and $tietoja == 1) $scount = 27;
+
+	   	if($strlen > $scount)
+	    	$osoite = substr($osoite,0,$scount).'..';
+
+	   	$osoite = str_replace('/', '', $tvVal->kohteet->osoite);
+	   	$osoite = $osoite.'<br><span style="color: green">Onlinevaraus maksettu</span>';
+	   }
+
+
 
 
 	   if($tvVal->alku != '' and $tvVal->loppu != '')

@@ -117,13 +117,6 @@ class TyontekijatController extends Controller
 		{
 			$model->attributes=$_POST['Tyontekijat'];
 
-			$imei=Tyontekijat::model()->find(" imei='".$_POST['Tyontekijat']['imei']."' and imei!='' ");
-			if(isset($imei->imei))
-			{
-			echo Yii::t('main', 'Tämän imei on jo käytössä');
-			exit;
-			}
-
 			if(isset($_POST['kortit'])) $model->kortit = implode("##***",$_POST['kortit']);
 			if($model->save())
 				$this->redirect(array('update','id'=>$model->id));
