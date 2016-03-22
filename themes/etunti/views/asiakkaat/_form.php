@@ -36,6 +36,12 @@ $asiakasnumero = 'voidaan käyttää oleva ID numero';
   <div class="col-sm-3">
 	<legend><h3><?php echo Yii::t('main', 'Asiakkaan tiedot'); ?></h3></legend>
 
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'asiakasnumero'); ?>
+		<?php echo $form->textField($model,'asiakasnumero',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'asiakasnumero'); ?>
+	</div>
+
 	<div class="section fill mb5 tyyppi">
 		<?php echo $form->labelEx($model,'tyyppi'); ?>
 		<?php
@@ -149,12 +155,6 @@ $asiakasnumero = 'voidaan käyttää oleva ID numero';
 <div class="col-sm-3">
 	
 	<legend><h3><?php echo Yii::t('main', 'Laskutus tiedot'); ?></h3></legend>
-
-	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'asiakasnumero'); ?>
-		<?php echo $form->textField($model,'asiakasnumero',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
-		<?php echo $form->error($model,'asiakasnumero'); ?>
-	</div>
 
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'laskutus_kanava'); ?>
