@@ -2,10 +2,15 @@
   $(function() {
 
 
-
+/*
     $( ".datepicker" ).datepicker({
 	format:'yyyy-mm-dd',
 	language: 'fi'
+    });
+*/
+    $( ".datepicker" ).datetimepicker({
+         format : 'YYYY-MM-DD',
+	 locale: 'fi',
     });
 
     $( ".timepicker" ).datetimepicker({
@@ -14,6 +19,7 @@
 
     $( ".datetimepicker" ).datetimepicker({
          format : 'DD.MM.YYYY HH:mm',
+	 locale: 'fi',
     });
 
     $( ".datetimepicker2" ).datetimepicker({
