@@ -38,6 +38,14 @@ $asetukset = Asetukset::model()->findbypk(1);
      <br>
 	<button class="btn btn-primary btn-block tarkistaSahkoposti">Jatka</button>
      </div>
+
+     <div id="lomake" style="display:none">
+     <br>
+	<input type="text" id="osoite" class="form-control" placeholder="Osoite">
+     <br>
+	<input type="text" id="kaupunki" class="form-control" placeholder="Osoite">
+     </div>
+
      <?php endif; ?>
 
  </div>
@@ -61,6 +69,7 @@ $asetukset = Asetukset::model()->findbypk(1);
 
 
 </div>
+
 
 
 
@@ -109,6 +118,8 @@ $(".tarkistaSahkoposti").click(function(){
 		data = JSON.parse(data);
 		if(data === 'ei')
 		{
+			$('#lomake').show('slow');
+			$('.btncheckPosti').hide('slow');
 			console.log(data);
 			count = null;
 

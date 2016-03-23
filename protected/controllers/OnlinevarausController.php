@@ -79,6 +79,8 @@ class OnlinevarausController extends Controller
 		if(isset($_POST['sahkoposti']))
 		{
 
+			$_SESSION['onlinevaraus']['sahkoposti'] = $_POST['sahkoposti'];
+
 			$criteria=new CDbCriteria;
 			$criteria->condition = " email='".$_POST['sahkoposti']."' ";
 			$k = Kohteet::model()->findAll($criteria);
