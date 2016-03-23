@@ -344,10 +344,24 @@ $("#yhtveto").on('submit',function(e){
 
 });
 
+
 $('.mult').selectpicker({
       style: 'gui-input',
       //size: 4
   });
+
+
+/*
+$('.mult').multiselect({
+	//inheritClass: true,
+	//enableFiltering: true,
+        includeSelectAllOption: true,
+	nonSelectedText: 'Tyhjä',
+	selectAllText: 'Valitse kaikki',
+	allSelectedText: 'Kaikki',
+	nSelectedText: 'valittu',
+});
+*/
 
 });
 </script>

@@ -98,7 +98,7 @@ th{
 		if(isset($_POST['asiakasLaskulle']) and !empty($_POST['asiakasLaskulle']))
 		{
         	  $aon = Asiakkaat::model()->find(" asiakasnumero='".$_POST['asiakasLaskulle']."' ");
-		  if(isset($aon->id))
+		  if(isset($aon->id) and !empty($aon->asiakasnumero))
 		  {
 		  if(!empty($aon->yrityksen_nimi))
 		    echo '<option value="'.$aon->asiakasnumero.'">'.$aon->yrityksen_nimi.'</option>';
@@ -195,8 +195,8 @@ th{
 
   <th><?php echo Yii::t('main','Laskunro'); ?></th>
   <th><?php echo Yii::t('main','Asiakas'); ?></th>
-  <th><?php echo Yii::t('main','Laskupvm'); ?></th>
-  <th><?php echo Yii::t('main','Suorituksen numero'); ?></th>
+  <th><?php echo Yii::t('main','Laskun päivä'); ?></th>
+  <th><?php echo Yii::t('main','Maksupäivä'); ?></th>
   <th><?php echo Yii::t('main','Suorituksen summa'); ?></th>
   <th><?php echo Yii::t('main','Avoinna'); ?></th>
 
@@ -207,6 +207,7 @@ th{
  </tr>
  <?php 
 	$saldo = '';
+	$asetukset=Asetukset::model()->findbypk(1);
  foreach($model as $data)
  {
 	$asiakas='';
@@ -218,7 +219,7 @@ th{
 
 
 	$saldo += $data->yhteensa_total;
-	$this->renderPartial('_reskontraluettelo',array('data'=>$data, 'saldo'=>$saldo, 'asiakas'=>$asiakas));
+	$this->renderPartial('_reskontraluettelo',array('data'=>$data, 'saldo'=>$saldo, 'asiakas'=>$asiakas, 'asetukset'=>$asetukset));
 
  }
  ?>

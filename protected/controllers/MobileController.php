@@ -1626,17 +1626,6 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 	public function actionLahetys_asiakkaalle()
 	{
 
-
-
-		if(Yii::app()->request->getPost('kohteet') == 'kaikki')
-		unset(Yii::app()->session['kohteet']);
-
-		if(Yii::app()->request->getPost('kohteet') and Yii::app()->request->getPost('kohteet') != 'kaikki')
-		Yii::app()->session['kohteet'] = Yii::app()->request->getPost('kohteet');
-		
-		if(Yii::app()->request->getPost('mitkatKohteet'))
-		Yii::app()->session['mitkatKohteet'] = Yii::app()->request->getPost('mitkatKohteet');
-
 		$from = date("Y-m-d");
 		$to = date("Y-m-d");
 
@@ -1651,17 +1640,15 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
         	$criteria->order = "kohde_kannasta";
         	$criteria->group = "kohdenID";
         	$criteria->condition = "
-
 			id NOT IN (select kid from sivexkuitti_repaired) 
-
 			AND status='3'
-
 			AND kohdenID!=''
-
 			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$from."' AND '".$to."' 
-
 		";
 
+		if(isset($_POST['osoite']) and !empty($_POST['osoite'])){
+		$criteria->addCondition  (" kohde_kannasta LIKE '%".$_POST['osoite']."%' ");
+		}
 
 		$model = Mobile::model()->findAll($criteria);
 		$lu = array();
@@ -1677,17 +1664,15 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
         	$criteria->group = "kohdenID";
 
         	$criteria->condition = "
-
 			id NOT IN (select kid from sivexkuitti_repaired) 
-
 			AND status='3'
-
 			AND kohdenID!=''
-
 			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$from."' AND '".$to."' 
-
 		";
 
+		if(isset($_POST['osoite']) and !empty($_POST['osoite'])){
+		$criteria->addCondition  (" kohde_kannasta LIKE '%".$_POST['osoite']."%' ");
+		}
 
 		$model = Toteutuneet::model()->findAll($criteria);
 		foreach($model as $d){
@@ -1711,7 +1696,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 	public function actionKyhteenveto()
 	{
 
-
+/*
 
 		if(Yii::app()->request->getPost('kohteet') == 'kaikki')
 		unset(Yii::app()->session['kohteet']);
@@ -1721,6 +1706,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		
 		if(Yii::app()->request->getPost('mitkatKohteet'))
 		Yii::app()->session['mitkatKohteet'] = Yii::app()->request->getPost('mitkatKohteet');
+*/
 
 		$from = date("Y-m-d");
 		$to = date("Y-m-d");
@@ -1741,6 +1727,10 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			AND kohdenID!=''
 			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$from."' AND '".$to."' 
 		";
+
+		if(isset($_POST['osoite']) and !empty($_POST['osoite'])){
+		$criteria->addCondition  (" kohde_kannasta LIKE '%".$_POST['osoite']."%' ");
+		}
 
 
 		$model = Mobile::model()->findAll($criteria);
@@ -1763,6 +1753,9 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$from."' AND '".$to."' 
 		";
 
+		if(isset($_POST['osoite']) and !empty($_POST['osoite'])){
+		$criteria->addCondition  (" kohde_kannasta LIKE '%".$_POST['osoite']."%' ");
+		}
 
 		$model = Toteutuneet::model()->findAll($criteria);
 		foreach($model as $d){

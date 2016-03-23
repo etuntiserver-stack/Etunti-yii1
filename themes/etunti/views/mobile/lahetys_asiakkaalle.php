@@ -29,6 +29,18 @@ $this->breadcrumbs=array(
                     <!-- Input Icons -->
                     <div class="row">
 
+                      <div class="col-md-2">
+                        <div class="section">
+                          <label class="field prepend-icon">
+
+	   <input type="text" name="osoite" class="gui-input" value="<?php if(isset($_POST['osoite'])) echo $_POST['osoite']; ?>" placeholder="Osoite..">
+
+                            <label for="firstname" class="field-icon">
+                              <i class="fa fa-home"></i>
+                            </label>
+                          </label>
+                        </div>
+                      </div>
 
                       <div class="col-md-2">
                         <div class="section">
@@ -56,7 +68,7 @@ $this->breadcrumbs=array(
                         </div>
                       </div>
 
-                      <div class="col-md-2 col-md-offset-6">
+                      <div class="col-md-2 col-md-offset-4">
         	        <button class="btn btn-primary btn-lg haemob btn-block myBgColors" type="button"><i class="glyphicon glyphicon-search"> </i> Hae</button>
 		      </div>
 

@@ -28,7 +28,7 @@ class TyontekijatController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin', 'admin_ajax', 'delete', 'create', 'update', 'index', 'view','merkkipaivat', 'tulosta', 'migraatio'),
+				'actions'=>array('admin', 'admin_ajax', 'delete', 'create', 'update', 'index', 'view','merkkipaivat', 'tulosta', 'migraatio', 'verotustiedot', 'muuta_suhteet'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -62,6 +62,27 @@ class TyontekijatController extends Controller
                 parent::init();
         }
 
+	public function actionMuuta_suhteet()
+	{
+		if(isset($_POST))
+		{
+	       		$criteria = new CDbCriteria();
+			$criteria->condition = " tid='".$_POST['tid']."' ";
+			$model=Tyosuhdet::model()->find($criteria);
+			if(isset($model->id))
+			{
+				$ts = Tyosuhdet::model()->updatebypk($model->id, array($_POST['sarake']=>$_POST['value']));
+			} else {
+				$ts = new Tyosuhdet;
+				$ts->tid = $_POST['tid'];
+				$ts->$_POST['sarake'] = $_POST['value'];
+				$ts->save();
+			}
+
+		}
+
+	}
+
 	public function actionMerkkipaivat()
 	{
 		//STR_TO_DATE(sivexkuitti.aloitan, '%d.%m.%Y %H:%i:%s'), '%Y-%m-%d %H:%i:%s'))
@@ -78,6 +99,38 @@ class TyontekijatController extends Controller
 		$this->render('merkkipaivat',array(
 			'model'=>$model,
 		));
+	}
+
+	public function actionVerotustiedot()
+	{
+       		$criteria = new CDbCriteria();
+	        $criteria->order = "  id DESC ";
+
+		if(isset($_POST['aktiivinen']) and $_POST['aktiivinen'] != 'kaikki')
+	        $criteria->addCondition (" aktiivinen ='".(int)$_POST['aktiivinen']."' ");
+		else
+	        $criteria->addCondition (" aktiivinen=1 ");
+
+		if(isset($_POST['osoite']) and !empty($_POST['osoite']))
+	        $criteria->addCondition (" tekijan_katuosoite LIKE '%".$_POST['osoite']."%' ");
+
+		if(isset($_POST['nimi']) and !empty(trim($_POST['nimi'])))
+	        $criteria->addCondition (" tekijan_nimi LIKE '%".$_POST['nimi']."%' ");
+
+		if(isset($_POST['puhelin']) and !empty(trim($_POST['puhelin'])))
+	        $criteria->addCondition (" laiten_puh LIKE '%".$_POST['puhelin']."%' OR tekijan_puh LIKE '%".$_POST['puhelin']."%' ");
+
+		if(isset($_POST['sahkoposti']) and !empty(trim($_POST['sahkoposti'])))
+	        $criteria->addCondition (" tekijan_email LIKE '%".$_POST['sahkoposti']."%' ");
+
+		$dataProvider=new CActiveDataProvider('Tyontekijat', array(
+			'criteria'=>$criteria,
+			//'pagination'=>false
+		));
+
+		$dataProvider->pagination->pageSize = 50;
+		$this->render('verotustiedot', array('dataProvider' => $dataProvider));
+
 	}
 
 	public function actionMigraatio()

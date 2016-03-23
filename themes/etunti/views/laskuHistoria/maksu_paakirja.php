@@ -135,14 +135,24 @@ th{
 
  </tr>
  <?php 
-	$saldo = '';
+	$saldo = 0;
+	$saldoPlus = 0;
  foreach($model as $data)
  {
 	$saldo -= $data->yhteensa_total;
+	$saldoPlus += $data->yhteensa_total;
 	$this->renderPartial('_maksu_paakirja',array('data'=>$data, 'saldo'=>$saldo));
 
  }
  ?>
+
+  <th></th>
+  <th></th>
+  <th></th>
+  <th><?php echo Yii::t('main','Yhteensä'); ?></th>
+  <th><?php echo number_format($saldoPlus, 2, ',', ' '); ?></th>
+  <th></th>
+
 </table>
 
    </div>

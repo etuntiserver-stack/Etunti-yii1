@@ -1059,7 +1059,8 @@ $(".luoRiviKk").click(function() {
 
 function pyyntoRiville(kohteet,from,to,tuotePalvelu,tuntiVaiKk){
 
-	    //$("#trRivi_1").remove();
+	    if($('#tkoodi_1').val() === '')
+	    $("#trRivi_1").remove();
 
 	    $.each(kohteet, function( index, value ) {
 

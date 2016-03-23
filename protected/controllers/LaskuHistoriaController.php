@@ -277,9 +277,6 @@ class LaskuHistoriaController extends Controller
        		$criteria->order = " paivays DESC ";
 
 
-		if(Yii::app()->request->getPost('asiakasLaskulle'))
-       		$criteria->addCondition ( " as_nro='".Yii::app()->request->getPost('asiakasLaskulle')."' " );
-
 		$from = date("Y-m-d");
 		$to = date("Y-m-d");
 
@@ -288,11 +285,13 @@ class LaskuHistoriaController extends Controller
 		$to 	= date("Y-m-d",strtotime($_POST['to']));
 		}
 
-
         	$criteria->condition = " 
 			DATE(paivays) BETWEEN '".$from."' AND '".$to."'
 			AND tilanne!=999
 		";
+
+		if(isset($_POST['asiakasLaskulle']) and !empty($_POST['asiakasLaskulle']))
+       		$criteria->addCondition ( " as_nro='".$_POST['asiakasLaskulle']."' " );
 
 
 		$model = Lasku::model()->findAll($criteria);

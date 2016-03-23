@@ -75,15 +75,15 @@
 	</div>
 
 	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'kaupunki'); ?>
-		<?php echo $form->textField($model,'kaupunki',array('size'=>20,'maxlength'=>20,'class'=>'form-control')); ?>
-		<?php echo $form->error($model,'kaupunki'); ?>
-	</div>
-
-	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'pnumero'); ?>
 		<?php echo $form->textField($model,'pnumero',array('size'=>7,'maxlength'=>7,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'pnumero'); ?>
+	</div>
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'kaupunki'); ?>
+		<?php echo $form->textField($model,'kaupunki',array('size'=>20,'maxlength'=>20,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'kaupunki'); ?>
 	</div>
 
 	<div class="section fill mb5">

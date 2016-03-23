@@ -136,11 +136,20 @@ th{
 
  </tr>
  <?php 
+	$saldo = 0;
  foreach($model as $data)
  {
+	$saldo += $data->yhteensa_total;
 	$this->renderPartial('_paivakirja',array('data'=>$data));
  }
  ?>
+
+  <th></th>
+  <th></th>
+  <th></th>
+  <th><?php echo Yii::t('main','Yhteensä'); ?></th>
+  <th><?php echo number_format($saldo, 2, ',', ' '); ?></th>
+
 </table>
 
    </div>
