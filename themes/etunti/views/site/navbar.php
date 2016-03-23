@@ -528,6 +528,10 @@
                   <span class="fa fa-male"></span> <?php echo Yii::t('main', 'Työntekijät'); ?></a>
               </li>
               <li>
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/tyontekijat/verotustiedot">
+                  <span class="fa fa-male"></span> <?php echo Yii::t('main', 'Verotustiedot'); ?></a>
+              </li>
+              <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/tyosuhdet/index">
                   <span class="fa fa-list"></span> <?php echo Yii::t('main', 'Työsuhdelomake'); ?></a>
               </li>
@@ -563,11 +567,11 @@
             </a>
             <ul class="nav sub-nav">
               <li>
-                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/tyovuoroot/index" target="_blank">
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/tyovuoroot/index">
                   <span class="fa fa-clock-o"></span> <?php echo Yii::t('main', 'Työvuorot viikkoittain'); ?></a>
               </li>
               <li>
-                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/tyovuoroot/tv2" target="_blank">
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/tyovuoroot/tv2">
                   <span class="fa fa-clock-o"></span> <?php echo Yii::t('main', 'Työvuorot työntekijöiden mukaan'); ?></a>
               </li>
               <li>

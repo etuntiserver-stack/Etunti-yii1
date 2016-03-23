@@ -2,10 +2,22 @@
 /* @var $this LaskuHistoriaController */
 /* @var $data LaskuHistoria */
 
+	$maksupvm = '';
+
+if($asetukset->palvelu_tyyppi == 2)
+{
        	$criteria = new CDbCriteria();
-       	$criteria->order = " id DESC ";
-       	$criteria->condition = " lid='".$data->id."' ";
+       	$criteria->order = "id DESC";
+       	$criteria->condition = " 
+		lid='".$data->id."' 
+		AND trust_statuscode='101'
+	";
 	$lh = LaskuHistoria::model()->find($criteria);
+
+	if(isset($lh->id))
+	$maksupvm = date("d.m.Y",strtotime($lh->time));
+}
+
 	$yht_euro = 0;
 	if(isset($lh->id))
 	$yht_euro = $lh->yht_euro;
@@ -33,7 +45,7 @@
 	</td>
 
 	<td>
-	<?php echo $data->id; ?>
+	<?php echo $maksupvm; ?>
 	</td>
 
 	<td>

@@ -157,7 +157,7 @@ function dateDiff($start, $end) {
   </tbody>
 
 
-  <tfoot>
+
 <?php
     echo '<tr>';
     echo '<td>'.Yii::t('main', 'Yhteensä').'</td>';
@@ -172,7 +172,7 @@ function dateDiff($start, $end) {
     echo '<td>'.$this->sprint($yhtYo).'</td>';
     echo '</tr>';
 ?>
-  </tfoot>
+
 
   </table>
 </div>

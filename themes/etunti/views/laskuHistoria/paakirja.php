@@ -132,10 +132,9 @@ th{
 <?php if(!isset($_POST['tulosta'])) : ?>
  </thead>
 <?php endif; ?>
-
  </tr>
  <?php 
-	$saldo = '';
+	$saldo = 0;
  foreach($model as $data)
  {
 	$saldo += $data->yhteensa_total;
@@ -143,6 +142,14 @@ th{
 
  }
  ?>
+
+  <th></th>
+  <th></th>
+  <th></th>
+  <th></th>
+  <th><?php echo Yii::t('main','Yhteensä'); ?></th>
+  <th><?php echo number_format($saldo, 2, ',', ' '); ?></th>
+
 </table>
 
    </div>

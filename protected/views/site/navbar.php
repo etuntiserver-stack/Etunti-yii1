@@ -98,6 +98,7 @@
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?php echo Yii::t('main', 'Työntekijät'); ?> <span class="caret"></span></a>
           <ul class="dropdown-menu">
         	<li><?php echo CHtml::link(Yii::t('main', 'Työntekijät'),array('/tyontekijat/admin')); ?></li>
+        	<li><?php echo CHtml::link(Yii::t('main', 'Verotustiedot'),array('/tyontekijat/verotustiedot')); ?></li>
         	<li><?php echo CHtml::link(Yii::t('main', 'Työsuhdelomake'),array('/tyosuhdet/index')); ?></li>
 	        <li role="separator" class="divider"></li>
         	<li><?php echo CHtml::link(Yii::t('main', 'Merkkipäivät'),array('/tyontekijat/merkkipaivat')); ?></li>

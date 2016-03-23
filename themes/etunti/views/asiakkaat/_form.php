@@ -114,15 +114,15 @@ $asiakasnumero = 'voidaan käyttää oleva ID numero';
 	</div>
 
 	<div class="section fill mb5 ashidd_a">
-		<?php echo $form->labelEx($model,'kaupunki'); ?>
-		<?php echo $form->textField($model,'kaupunki',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
-		<?php echo $form->error($model,'kaupunki'); ?>
-	</div>
-
-	<div class="section fill mb5 ashidd_a">
 		<?php echo $form->labelEx($model,'postinumero'); ?>
 		<?php echo $form->textField($model,'postinumero',array('class'=>'form-control','maxlength'=>5)); ?>
 		<?php echo $form->error($model,'postinumero'); ?>
+	</div>
+
+	<div class="section fill mb5 ashidd_a">
+		<?php echo $form->labelEx($model,'kaupunki'); ?>
+		<?php echo $form->textField($model,'kaupunki',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'kaupunki'); ?>
 	</div>
 
 	<div class="section fill mb5 ashidd_a">
