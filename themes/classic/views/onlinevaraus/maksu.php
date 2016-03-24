@@ -57,14 +57,7 @@ $asetukset = Asetukset::model()->findbypk(1);
 $(document).ready(function(){
 
 
-var count = null;
-function counter(){
-    count += 1;
-    console.log("counter: "+count);
-    if(count > 20)
-    window.location.href="index?keskeyta=true";
-}
-setInterval(counter, "15000");
+
 
 });
 </script>

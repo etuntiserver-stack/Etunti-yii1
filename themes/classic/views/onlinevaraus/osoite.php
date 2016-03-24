@@ -30,6 +30,7 @@ $asetukset = Asetukset::model()->findbypk(1);
  <div class="col-sm-3">
 
      <?php if(!isset($_SESSION['onlinevaraus']['modelKohde'])) : ?>
+<div id="fullLomake">
      <div class="sahkoposti">
 	<input type="text" id="sahkoposti" class="form-control" placeholder="Sähköposti">
      </div>
@@ -49,9 +50,11 @@ $asetukset = Asetukset::model()->findbypk(1);
      <br>
 	<input type="text" id="puhelin" class="form-control" placeholder="Puhelin">
      <br>
+	<input type="text" id="yhteyshenkilo" class="form-control" placeholder="Yhteyshenkilö">
+     <br>
 	<button class="btn btn-primary btn-block tallennaUusi">Tallenna</button>
      </div>
-
+</div>
      <?php endif; ?>
 
  </div>
@@ -114,6 +117,7 @@ $(".tarkistaSahkoposti").click(function(){
    if(sahkoposti === '')
    {
    $('#sahkoposti').focus();
+   return false;
    } else {
 
    $.ajax({
@@ -145,6 +149,83 @@ $(".tarkistaSahkoposti").click(function(){
   }
 
 });
+
+
+
+
+$(".tallennaUusi").click(function(){
+
+   var sahkoposti = $('#sahkoposti').val();
+   var osoite = $('#osoite').val();
+   var postinumero = $('#postinumero').val();
+   var kaupunki = $('#kaupunki').val();
+   var puhelin = $('#puhelin').val();
+   var yhteyshenkilo = $('#yhteyshenkilo').val();
+
+
+   if(sahkoposti === '')
+   {
+      $('#sahkoposti').focus();
+      return false;
+   } else if(osoite === ''){
+      $('#osoite').focus();
+      return false;
+   } else if(postinumero === ''){
+      $('#postinumero').focus();
+      return false;
+   } else if(kaupunki === ''){
+      $('#kaupunki').focus();
+      return false;
+   } else if(puhelin === ''){
+      $('#puhelin').focus();
+      return false;
+   } else if(yhteyshenkilo === ''){
+      $('#yhteyshenkilo').focus();
+      return false;
+   }
+
+
+   $.ajax({
+	url: 'luouusi',
+	data:{ "sahkoposti" : sahkoposti, "osoite" : osoite, "postinumero" : postinumero, "kaupunki" : kaupunki, "puhelin" : puhelin, "yhteyshenkilo" : yhteyshenkilo },
+	type:'POST',
+	success:function(data){
+		data = JSON.parse(data).split('_');
+		if(data[0] == 'ok')
+		{
+
+		   $.ajax({
+			url: 'palvelu_save_ajax',
+			data:{ "kohde" : data[1] },
+			type:'POST',
+			success:function(data){
+				//console.log(data);
+				if(data)
+				{
+					$('#fullLomake').hide();
+					$('#panGetContent').html(JSON.parse(data));	
+				}
+		   	},
+			error:function(data){
+				console.log(data);
+		    	}
+		    });
+
+
+			console.log(data);
+			count = null;
+
+		}
+   	},
+	error:function(data){
+		console.log(data);
+    	}
+    });
+
+  
+
+});
+
 
 
 var count = null;
