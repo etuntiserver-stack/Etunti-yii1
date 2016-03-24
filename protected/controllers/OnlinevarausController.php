@@ -28,7 +28,7 @@ class OnlinevarausController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view', 'check', 'aika', 'osoite', 'maksu', 'palvelu_ajax', 'palvelu_save_ajax', 'lisat_ajax', 'ajaat_ajax', 'aika_ajax', 'onkokohde', 'kassalle', 'luouusi'),
+				'actions'=>array('index','view', 'check', 'aika', 'osoite', 'maksu', 'palvelu_ajax', 'palvelu_save_ajax', 'lisat_ajax', 'ajaat_ajax', 'aika_ajax', 'onkokohde', 'luouusi', 'checkout', 'maksettu'),
                 		'users'=>array("*"),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
@@ -73,6 +73,15 @@ class OnlinevarausController extends Controller
 		$this->redirect(array('index'));
         }
 
+	public function actionCheckout()
+	{
+		$this->renderPartial('checkout');
+	}
+
+	public function actionMaksettu()
+	{
+		$this->renderPartial('maksettu');
+	}
 
 	public function actionOnkokohde()
 	{
@@ -116,11 +125,12 @@ class OnlinevarausController extends Controller
 
 		  if($asiakkaat->save())
 		  {
-
 			$kohteet = new Kohteet;
 			$kohteet->asiakas_id = $asiakkaat->id;
 			$kohteet->etu_suku_nimet = $asiakkaat->yhteyshenkilo;
 			$kohteet->osoite = $asiakkaat->osoite;
+			$kohteet->pnumero = $asiakkaat->postinumero;
+			$kohteet->kaupunki = $asiakkaat->kaupunki;
 			$kohteet->puh_nro = $asiakkaat->puhelin;
 			$kohteet->email = $asiakkaat->sahkoposti;
 			$kohteet->muut = "Onlinevaraus ".date("d.m.Y");
@@ -136,16 +146,6 @@ class OnlinevarausController extends Controller
 
 	}
 
-
-	public function actionKassalle()
-	{
-		if(isset($_SESSION['onlinevaraus']['modelTV']))
-		{
-		$tv = Tyovuoroot::model()->updatebypk($_SESSION['onlinevaraus']['modelTV'], array('osoiteOnline'=>2));
-		unset($_SESSION['onlinevaraus']);
-		}
-		$this->renderPartial('kassalle');
-	}
 
 	public function actionAika_ajax()
 	{
