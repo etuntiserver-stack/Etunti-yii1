@@ -43,7 +43,13 @@ $asetukset = Asetukset::model()->findbypk(1);
      <br>
 	<input type="text" id="osoite" class="form-control" placeholder="Osoite">
      <br>
-	<input type="text" id="kaupunki" class="form-control" placeholder="Osoite">
+	<input type="text" id="postinumero" class="form-control" placeholder="Postinumero">
+     <br>
+	<input type="text" id="kaupunki" class="form-control" placeholder="Postitoimipaikka">
+     <br>
+	<input type="text" id="puhelin" class="form-control" placeholder="Puhelin">
+     <br>
+	<button class="btn btn-primary btn-block tallennaUusi">Tallenna</button>
      </div>
 
      <?php endif; ?>

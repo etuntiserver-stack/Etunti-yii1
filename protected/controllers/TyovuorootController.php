@@ -907,6 +907,17 @@ class TyovuorootController extends Controller
 		return sprintf('%02d:%02d', $val/3600, ($val % 3600)/60);
 	}
 
+		// <-- Poistaminen
+		$criteria=new CDbCriteria;
+		$criteria->order= " id DESC "; 
+		$criteria->condition= " 
+			(time + INTERVAL 30 MINUTE) < NOW()
+			AND osoiteOnline=1
+		";
+		$model = Tyovuoroot::model()->deleteAll($criteria);
+		// Poistaminen -->
+
+
 		$this->render('index');
 	}
 
