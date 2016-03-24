@@ -115,6 +115,7 @@
 
 	$sum = $lisaHinta+$model->hinta;
 	$body .= '<span id="hinta">'.number_format($sum, 2, ',', '').'</span> &euro;';
+	$_SESSION['onlinevaraus']['amount'] = $sum;
 
 	$body .= '
 	 </div>
