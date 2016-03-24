@@ -28,7 +28,7 @@ class OnlinevarausController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view', 'check', 'aika', 'osoite', 'maksu', 'palvelu_ajax', 'palvelu_save_ajax', 'lisat_ajax', 'ajaat_ajax', 'aika_ajax', 'onkokohde', 'kassalle'),
+				'actions'=>array('index','view', 'check', 'aika', 'osoite', 'maksu', 'palvelu_ajax', 'palvelu_save_ajax', 'lisat_ajax', 'ajaat_ajax', 'aika_ajax', 'onkokohde', 'kassalle', 'luouusi'),
                 		'users'=>array("*"),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
@@ -99,6 +99,39 @@ class OnlinevarausController extends Controller
 			} else {
 			  echo json_encode('ei');
 			}
+		}
+
+	}
+
+
+	public function actionLuouusi()
+	{
+		if(isset($_POST))
+		{
+
+		$asiakkaat = new Asiakkaat;
+		$asiakkaat->attributes=$_POST;
+		$asiakkaat->tyyppi = 'henkilo';
+		$asiakkaat->aktiivinen = 1;
+
+		  if($asiakkaat->save())
+		  {
+
+			$kohteet = new Kohteet;
+			$kohteet->asiakas_id = $asiakkaat->id;
+			$kohteet->etu_suku_nimet = $asiakkaat->yhteyshenkilo;
+			$kohteet->osoite = $asiakkaat->osoite;
+			$kohteet->puh_nro = $asiakkaat->puhelin;
+			$kohteet->email = $asiakkaat->sahkoposti;
+			$kohteet->muut = "Onlinevaraus ".date("d.m.Y");
+		  	   if($kohteet->save())
+		  	   {
+				$tv = Tyovuoroot::model()->updatebypk($_SESSION['onlinevaraus']['modelTV'], array('kohde'=>$kohteet->id));
+				echo json_encode('ok_'.$kohteet->id);
+			   }
+
+		  }
+
 		}
 
 	}
