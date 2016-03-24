@@ -2,6 +2,8 @@
 /* @var $this MobileController */
 /* @var $dataProvider CActiveDataProvider */
 
+ini_set("max_execution_time", "60");
+
 $this->breadcrumbs=array(
 	Yii::t('main', 'Kohteet'),
 );
