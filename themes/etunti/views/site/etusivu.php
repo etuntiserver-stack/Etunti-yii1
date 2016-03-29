@@ -3,6 +3,7 @@
 
 
 // <-- Backup
+/*
 if (!file_exists(Yii::app()->basePath."/../backup/".Yii::app()->user->domain.'/'.date("Y-m-d").'.sql.gz'))
 {
 
@@ -40,6 +41,7 @@ if (!file_exists(Yii::app()->basePath."/../backup/".Yii::app()->user->domain.'/'
 	}
    }
 }
+*/
 // Backup -->
 
 
