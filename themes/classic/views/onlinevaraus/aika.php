@@ -2,6 +2,7 @@
 /* @var $this OnlinevarausController */
 /* @var $dataProvider CActiveDataProvider */
 $asetukset = Asetukset::model()->findbypk(1);
+
 ?>
 
 <div class="container-fluid">
@@ -43,7 +44,7 @@ $asetukset = Asetukset::model()->findbypk(1);
    <?php 
    if(isset($_SESSION['onlinevaraus']['paapalvelu']))
    {
-	$return = $this->renderPartial('palvelu_save_ajax', array(), true); 
+	$return = $this->renderPartial('palvelu_save_ajax', array('sivu'=>'aika'), true); 
    	echo json_decode($return, true);
    }
    ?>

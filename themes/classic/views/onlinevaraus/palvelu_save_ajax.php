@@ -131,7 +131,7 @@
 
 	if(isset($sivu) and $sivu == 'index')
 	$body .= CHtml::link('Valitse aika','aika', array('class'=>'btn btn-success'));
-	elseif(isset($sivu) and $sivu == 'aika')
+	elseif(isset($sivu) and $sivu == 'aika' and isset($_SESSION['onlinevaraus']['modelTV']))
 	$body .= CHtml::link('Valitse osoite','osoite', array('class'=>'btn btn-success'));
 	elseif(isset($sivu) and $sivu == 'osoite')
 	$body .= CHtml::link('Maksan','maksu', array('class'=>'btn btn-success'));
