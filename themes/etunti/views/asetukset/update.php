@@ -94,6 +94,34 @@ exit;
             </div>
 
 
+
+
+
+            <div class="admin-form">
+              <div class="panel heading-border">
+		<h2 class="p15"><?php echo Yii::t('main','Varmuskopio dumpit');?></h2>
+                <div class="panel-body bg-light">
+
+
+   <?php
+   foreach(array_reverse(glob(Yii::app()->baseUrl.'backup/'.Yii::app()->user->domain.'/*')) as $file) 
+   {
+	$explNimi = explode("/",$file);
+
+ 	echo '
+	<div class="row">
+	  <a href="../../'.$file.'">'.end($explNimi).'</a>
+	</div>
+	';
+	
+   }
+   ?>
+
+
+                </div>
+              </div>
+            </div>
+
         <!-- loppu: .tray-center -->
         </div>
 
