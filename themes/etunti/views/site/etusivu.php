@@ -15,7 +15,9 @@ if (!file_exists(Yii::app()->basePath."/../backup/".Yii::app()->user->domain.'/'
 	
   	} else {
 
-  	    exec("/usr/bin/mysqldump -u estromfi_".Yii::app()->user->domain." -pKristinA1 estromfi_".Yii::app()->user->domain." > ".Yii::app()->user->domain."/".date("Y-m-d").".sql ");
+  	    exec("/usr/bin/mysqldump -u estromfi_".Yii::app()->user->domain." -pKristinA1 estromfi_".Yii::app()->user->domain." | gzip -c > testo.gz");
+echo system("ls | grep .gz");
+
       	    echo '<span id="uusiVarmuskopioText">uusi varmuskopio on tehty</span>';
 
    	    foreach(array_reverse(glob(Yii::app()->baseUrl.'backup/'.Yii::app()->user->domain.'/*')) as $file) 
