@@ -664,6 +664,10 @@
                   <span class="fa fa-clock-o"></span> <?php echo Yii::t('main', 'Onlinevaraus'); ?></a>
               </li>
               <li>
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/onlinevaraus/kaikki">
+                  <span class="fa fa-clock-o"></span> <?php echo Yii::t('main', 'Kaikki varaukset'); ?></a>
+              </li>
+              <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/onlinevarausTuotteet/index">
                   <span class="fa fa-paper-plane"></span> <?php echo Yii::t('main', 'Onlinevaraus tuotteet'); ?></a>
               </li>

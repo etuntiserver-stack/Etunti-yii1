@@ -3,15 +3,42 @@
 /* @var $data Onlinevaraus */
 ?>
 
-<div class="view">
+<tr>
+	<td>
+		<?php echo date("d.m.Y  H:i",strtotime($data->time)); ?>
+	</td>
+	<td>
+		<?php 
+		$tv = Tyovuoroot::model()->findbypk($data->tv_id);
+		if(isset($tv->id))
+		{
+			$tekija = Tyontekijat::model()->findbypk($tv->tid);
+			if(isset($tekija->id))
+			{
+			   echo '
+				<b>'.$tekija->tekijan_nimi.'</b><br>
+				'.$tv->pvm.'<br>
+				'.$tv->alku.'-'.$tv->loppu.'
+			   ';
+			}
+		}
+		?>
+	</td>
+	<td>
+		<?php 
+		$k = Kohteet::model()->findbypk($data->kohde_id);
+		if(isset($k->id))
+			   echo $k->osoite;
+		?>
+	</td>
+	<td>
+		<?php echo $data->kesto.'h'; ?>
+	</td>
+	<td>
+		<?php echo $data->hinta.'&euro;'; ?>
+	</td>
+	<td>
+		<?php if($data->tila == 1) echo 'Maksettu'; ?>
+	</td>
+</tr>
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('id')); ?>:</b>
-	<?php echo CHtml::link(CHtml::encode($data->id), array('view', 'id'=>$data->id)); ?>
-	<br />
-
-	<b><?php echo CHtml::encode($data->getAttributeLabel('time')); ?>:</b>
-	<?php echo CHtml::encode($data->time); ?>
-	<br />
-
-
-</div>
