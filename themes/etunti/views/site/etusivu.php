@@ -1,22 +1,22 @@
 <?php
 
 // <-- Backup
-if (!file_exists(Yii::app()->basePath."/../backup/".Yii::app()->user->domain.'/'.date("Y-m-d").'.sql'))
+if (!file_exists(Yii::app()->basePath."/../backup/".Yii::app()->user->domain.'/'.date("Y-m-d").'.gz'))
 {
 
    if (!file_exists(Yii::app()->basePath."/../backup/".Yii::app()->user->domain)) {
   	mkdir(Yii::app()->basePath."/../backup/".Yii::app()->user->domain, 0777, true);
   }
 
-  $file = Yii::app()->basePath.'/../backup/'.Yii::app()->user->domain.'/'.date("Y-m-d").'.sql';
+  //$file = Yii::app()->basePath.'/../backup/'.Yii::app()->user->domain.'/'.date("Y-m-d").'.sql';
 
   	if( $_SERVER['REMOTE_ADDR'] == '::1' or $_SERVER['REMOTE_ADDR'] == '127.0.0.1' )
   	{
 	
   	} else {
 
-  	    exec("/usr/bin/mysqldump -u estromfi_".Yii::app()->user->domain." -pKristinA1 estromfi_".Yii::app()->user->domain." | gzip -c > testo.gz");
-echo system("ls | grep .gz");
+  	    exec("/usr/bin/mysqldump -u estromfi_".Yii::app()->user->domain." -pKristinA1 estromfi_".Yii::app()->user->domain." | gzip -c > backup/".Yii::app()->user->domain."/".date("Y-m-d").".gz");
+
 
       	    echo '<span id="uusiVarmuskopioText">uusi varmuskopio on tehty</span>';
 
