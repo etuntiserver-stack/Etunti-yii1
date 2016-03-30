@@ -1,7 +1,7 @@
 <?php
 
 // <-- Backup
-if (!file_exists(Yii::app()->basePath."/../backup/".Yii::app()->user->domain.'/'.date("Y-m-d").'.gz'))
+if (!file_exists(Yii::app()->basePath."/../backup/".Yii::app()->user->domain.'/'.date("Y-m-d").'.sql.gz'))
 {
 
    if (!file_exists(Yii::app()->basePath."/../backup/".Yii::app()->user->domain)) {
@@ -15,7 +15,7 @@ if (!file_exists(Yii::app()->basePath."/../backup/".Yii::app()->user->domain.'/'
 	
   	} else {
 
-  	    exec("/usr/bin/mysqldump -u estromfi_".Yii::app()->user->domain." -pKristinA1 estromfi_".Yii::app()->user->domain." | gzip -c > backup/".Yii::app()->user->domain."/".date("Y-m-d").".gz");
+  	    exec("/usr/bin/mysqldump -u estromfi_".Yii::app()->user->domain." -pKristinA1 estromfi_".Yii::app()->user->domain." | gzip -c > backup/".Yii::app()->user->domain."/".date("Y-m-d").".sql.gz");
 
 
       	    echo '<span id="uusiVarmuskopioText">uusi varmuskopio on tehty</span>';
