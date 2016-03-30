@@ -31,7 +31,6 @@ class SDatabaseDumper
 
 		foreach($this->getTables() as $key=>$val)
 		{
-			echo $key.'<br>';
 /*
 			if(
 				$key == 'asetukset'
@@ -106,7 +105,7 @@ class SDatabaseDumper
 				{
 					$row[$key] = 'NULL';
 				} else {
-					$value = iconv("ISO-8859-1","UTF-8//TRANSLIT//IGNORE",$value);
+					$value = iconv("ISO-8859-1","UTF-8",$value);
 					$row[$key] = $pdo->quote($value);
 				}
 			}
