@@ -28,8 +28,33 @@ class SDatabaseDumper
 	{
 		ob_start();
 		echo 'SET FOREIGN_KEY_CHECKS = 0;'.PHP_EOL;
+
 		foreach($this->getTables() as $key=>$val)
+		{
+			echo $key.'<br>';
+/*
+			if(
+				$key == 'asetukset'
+				or $key == 'asiakkaat'
+				or $key == 'laskut'
+				or $key == 'laskutus_tuotteet'
+				or $key == 'laskun_rivit'
+				or $key == 'lasku_historia'
+				or $key == 'sivex_kohdet'
+				or $key == 'sivex_korvaukset'
+				or $key == 'sivex_lisatyot'
+				or $key == 'sivex_ttekijat'
+				or $key == 'sivex_tvuoro'
+				or $key == 'sivex_tyonantaja'
+				or $key == 'sivex_viestinta'
+				//or $key == 'sivexkuitti'
+				or $key == 'sivexkuitti_repaired'
+				or $key == 'vuosilomat'
+			)
+*/
 			$this->dumpTable($key);
+
+		}
 		echo 'SET FOREIGN_KEY_CHECKS = 1;'.PHP_EOL;
 		$result=ob_get_contents();
 		ob_end_clean();
@@ -72,10 +97,10 @@ class SDatabaseDumper
 		echo 'INSERT INTO '.$db->quoteTableName($tableName).''." (", implode(', ', $attrs), ') VALUES'.PHP_EOL;
 		$i=0;
 		$rowsCount = count($rows);
-		foreach($rows AS $row)
+		foreach($rows as $row)
 		{
 			// Process row
-			foreach($row AS $key => $value)
+			foreach($row as $key => $value)
 			{
 				if($value === null)
 				{
@@ -86,7 +111,7 @@ class SDatabaseDumper
 				}
 			}
 
-			echo " (", implode(', ', $row), ')';
+			echo ' ('. implode(', ', $row). ')';
 			if($i<$rowsCount-1)
 				echo ',';
 			else

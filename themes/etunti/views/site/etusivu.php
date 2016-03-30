@@ -3,7 +3,6 @@
 
 
 // <-- Backup
-/*
 if (!file_exists(Yii::app()->basePath."/../backup/".Yii::app()->user->domain.'/'.date("Y-m-d").'.sql.gz'))
 {
 
@@ -21,7 +20,11 @@ if (!file_exists(Yii::app()->basePath."/../backup/".Yii::app()->user->domain.'/'
   {
     if (!file_exists(Yii::app()->basePath."/../backup/".Yii::app()->user->domain.'/'.date("Y-m-d").'.sql.gz'))
     {
-       file_put_contents($file.'.gz', gzencode($dumper->getDump()));
+       //file_put_contents($file.'.gz', gzencode($dumper->getDump()));
+//print_r($dumper->getDump());
+
+exec("mysqldump -u estromfi_".Yii::app()->user->domain." -p KristinA1 ".Yii::app()->user->domain." > ".Yii::app()->user->domain.".sql");
+
        echo '<span id="uusiVarmuskopioText">uusi varmuskopio on tehty</span>';
     }
   } else {
@@ -41,7 +44,6 @@ if (!file_exists(Yii::app()->basePath."/../backup/".Yii::app()->user->domain.'/'
 	}
    }
 }
-*/
 // Backup -->
 
 
