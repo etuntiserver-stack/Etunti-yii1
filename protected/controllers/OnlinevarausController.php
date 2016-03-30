@@ -32,7 +32,7 @@ class OnlinevarausController extends Controller
                 		'users'=>array("*"),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update'),
+				'actions'=>array('create','update', 'kaikki'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -72,6 +72,36 @@ class OnlinevarausController extends Controller
 		if(isset($_GET['domain']))
 		$this->redirect(array('index'));
         }
+
+
+	public function actionKaikki()
+	{
+
+                Yii::app()->theme = 'etunti';
+
+       		$criteria = new CDbCriteria();
+	        $criteria->order = " id DESC ";
+
+		$from = date("Y-m-d");
+		$to = date("Y-m-d");
+
+		if(isset($_POST['from']) and isset($_POST['to'])){
+		$from 	= date("Y-m-d",strtotime($_POST['from']));
+		$to 	= date("Y-m-d",strtotime($_POST['to']));
+		}
+
+	        $criteria->addCondition (" DATE(time) BETWEEN '".$from."' AND '".$to."' ");
+
+
+		$dataProvider=new CActiveDataProvider('Onlinevaraus', array(
+			'criteria'=>$criteria,
+			//'pagination'=>false
+		));
+
+		$dataProvider->pagination->pageSize = 50;
+		$this->render('kaikki', array('dataProvider' => $dataProvider));
+	}
+
 
 	public function actionCheckout()
 	{
