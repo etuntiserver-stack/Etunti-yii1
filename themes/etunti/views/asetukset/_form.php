@@ -148,6 +148,33 @@
 <?php endif; ?>
 
 
+
+<?php if(in_array('4',$tas)) : ?>
+<hr>
+  <div class="row form">
+    <div class="col-sm-4">
+    <legend><h2><?php echo Yii::t('main','Onlinevaraus'); ?></h2></legend>
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'checkout_id'); ?>
+		<?php echo $form->textField($model,'checkout_id',array('size'=>20,'maxlength'=>100,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'checkout_id'); ?>
+	</div>
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'checkout_salasana'); ?>
+		<?php echo $form->textField($model,'checkout_salasana',array('size'=>20,'maxlength'=>255,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'checkout_salasana'); ?>
+	</div>
+
+    </div><div class="col-sm-4">
+
+    </div><div class="col-sm-4">
+
+    </div>
+  </div>
+<?php endif; ?>
+
 <hr>
   <div class="row form">
    <div class="col-sm-4">

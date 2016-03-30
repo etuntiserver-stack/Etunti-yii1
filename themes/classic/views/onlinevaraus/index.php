@@ -45,6 +45,15 @@ $asetukset = Asetukset::model()->findbypk(1);
 }
 </style>
 
+<?php 
+$asetukset = Asetukset::model()->findbypk(1);
+if(isset($asetukset->checkout_id) and !empty($asetukset->checkout_id) and !empty($asetukset->checkout_salasana))
+{
+
+} else {
+		echo '<h3 class="alert alert-danger"><center>Checkout tunnukset puuttuu!</center></h3>';
+}
+?>
 
 <div class="row">
  <div class="col-sm-8">

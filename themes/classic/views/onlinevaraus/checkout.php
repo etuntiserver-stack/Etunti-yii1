@@ -8,8 +8,13 @@ require 'CheckoutFinland/Client.php';
 use CheckoutFinland\Payment;
 use CheckoutFinland\Client;
 
-$demo_merchant_id       = "375917";
-$demo_merchant_secret   = "SAIPPUAKAUPPIAS";
+$asetukset = Asetukset::model()->findbypk(1);
+if(isset($asetukset->checkout_id) and !empty($asetukset->checkout_id) and !empty($asetukset->checkout_salasana))
+{
+$demo_merchant_id       = $asetukset->checkout_id;
+$demo_merchant_secret   = $asetukset->checkout_salasana;
+
+
 $return_url             = 'http://' .$_SERVER['SERVER_NAME'] .str_replace('maksu', 'maksettu', $_SERVER['REQUEST_URI']);
 
 $payment = new  Payment($demo_merchant_id, $demo_merchant_secret);
@@ -176,7 +181,15 @@ else {
 
 <?php
 
+
 } // if tv->id
+
+
+
+} else {
+echo 'Checkout tunnukset puuttuu!';
+}
+
 
 /*
 
