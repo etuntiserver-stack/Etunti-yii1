@@ -27,7 +27,8 @@ if (!file_exists(Yii::app()->basePath."/../backup/".Yii::app()->user->domain.'/'
   } else {
 
   	exec("/usr/bin/mysqldump -u estromfi_".Yii::app()->user->domain." -pKristinA1 estromfi_".Yii::app()->user->domain."", $output);
-  	file_put_contents($file.'.gz', gzencode($output));
+print_r($output);
+  	//file_put_contents($file.'.gz', gzencode($output));
       	echo '<span id="uusiVarmuskopioText">uusi varmuskopio on tehty</span>';
 
   }
