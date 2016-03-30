@@ -1,41 +1,35 @@
 <?php
 
-
-
 // <-- Backup
-if (!file_exists(Yii::app()->basePath."/../backup/".Yii::app()->user->domain.'/'.date("Y-m-d").'.sql.gz'))
+if (!file_exists(Yii::app()->basePath."/../backup/".Yii::app()->user->domain.'/'.date("Y-m-d").'.sql'))
 {
 
- 
-  if (!file_exists(Yii::app()->basePath."/../backup/".Yii::app()->user->domain)) {
+   if (!file_exists(Yii::app()->basePath."/../backup/".Yii::app()->user->domain)) {
   	mkdir(Yii::app()->basePath."/../backup/".Yii::app()->user->domain, 0777, true);
   }
 
   $file = Yii::app()->basePath.'/../backup/'.Yii::app()->user->domain.'/'.date("Y-m-d").'.sql';
- 
-  // Gzip dump
-  if(function_exists('gzencode'))
-  {
-    if (!file_exists(Yii::app()->basePath."/../backup/".Yii::app()->user->domain.'/'.date("Y-m-d").'.sql.gz'))
-    {
-       //file_put_contents($file.'.gz', gzencode($dumper->getDump()));
-//print_r($dumper->getDump());
 
-  if( $_SERVER['REMOTE_ADDR'] == '::1' or $_SERVER['REMOTE_ADDR'] == '127.0.0.1' )
-  {
+  	if( $_SERVER['REMOTE_ADDR'] == '::1' or $_SERVER['REMOTE_ADDR'] == '127.0.0.1' )
+  	{
+	
+  	} else {
 
-  } else {
+  	    exec("/usr/bin/mysqldump -u estromfi_".Yii::app()->user->domain." -pKristinA1 estromfi_".Yii::app()->user->domain." > /www/staging/etuntifw/backup/".Yii::app()->user->domain."/".date("Y-m-d").".sql ");
+      	    echo '<span id="uusiVarmuskopioText">uusi varmuskopio on tehty</span>';
 
-  	exec("/usr/bin/mysqldump -u estromfi_".Yii::app()->user->domain." -pKristinA1 estromfi_".Yii::app()->user->domain."", $output);
-  	file_put_contents($file, $output);
-      	echo '<span id="uusiVarmuskopioText">uusi varmuskopio on tehty</span>';
+   	    foreach(array_reverse(glob(Yii::app()->baseUrl.'backup/'.Yii::app()->user->domain.'/*')) as $file) 
+	    {
+		$explNimi = explode("/",$file);
+		$explNimi2 = explode(".",end($explNimi));
+		if($explNimi2[0] < date("Y-m-d", strtotime("-7 day")))
+		{
+			//echo $explNimi2[0].' '.date("Y-m-d", strtotime("-7 day")).'<br>';
+			unlink(Yii::app()->basePath.'/../backup/'.Yii::app()->user->domain.'/'.end($explNimi));
+		}
+   	    }
 
-  }
-
-
-    }
-  } 
-
+  	}
 
 }
 // Backup -->
