@@ -6,8 +6,6 @@
 if (!file_exists(Yii::app()->basePath."/../backup/".Yii::app()->user->domain.'/'.date("Y-m-d").'.sql.gz'))
 {
 
-  Yii::import('ext.yii-database-dumper.SDatabaseDumper');
-  $dumper = new SDatabaseDumper;
  
   if (!file_exists(Yii::app()->basePath."/../backup/".Yii::app()->user->domain)) {
   	mkdir(Yii::app()->basePath."/../backup/".Yii::app()->user->domain, 0777, true);
@@ -36,22 +34,9 @@ if (!file_exists(Yii::app()->basePath."/../backup/".Yii::app()->user->domain.'/'
 
 
     }
-  } else {
-    if (!file_exists(Yii::app()->basePath."/../backup/".Yii::app()->user->domain.'/'.date("Y-m-d").'.sql'))
-       file_put_contents($file, $dumper->getDump());
-  }
+  } 
 
 
-   foreach(array_reverse(glob(Yii::app()->baseUrl.'backup/'.Yii::app()->user->domain.'/*')) as $file) 
-   {
-	$explNimi = explode("/",$file);
-	$explNimi2 = explode(".",end($explNimi));
-	if($explNimi2[0] < date("Y-m-d", strtotime("-7 day")))
-	{
-		//echo $explNimi2[0].' '.date("Y-m-d", strtotime("-7 day")).'<br>';
-		unlink(Yii::app()->basePath.'/../backup/'.Yii::app()->user->domain.'/'.end($explNimi));
-	}
-   }
 }
 // Backup -->
 
