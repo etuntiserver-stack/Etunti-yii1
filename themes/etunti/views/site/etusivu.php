@@ -23,16 +23,18 @@ if (!file_exists(Yii::app()->basePath."/../backup/".Yii::app()->user->domain.'/'
        //file_put_contents($file.'.gz', gzencode($dumper->getDump()));
 //print_r($dumper->getDump());
 
-  if( $_SERVER['REMOTE_ADDR'] != '::1' and $_SERVER['REMOTE_ADDR'] != '127.0.0.1' )
+  if( $_SERVER['REMOTE_ADDR'] == '::1' or $_SERVER['REMOTE_ADDR'] == '127.0.0.1' )
   {
-exec("/usr/bin/mysqldump -u estromfi_".Yii::app()->user->domain." -pKristinA1 estromfi_".Yii::app()->user->domain."", $output);
-/* $output will have sql backup, then save file with these codes */
-$h=fopen("/backup/roma.sql", "w+");
-fputs($h, $output);
-fclose($h);
+
+  } else {
+
+  	exec("/usr/bin/mysqldump -u estromfi_".Yii::app()->user->domain." -pKristinA1 estromfi_".Yii::app()->user->domain."", $output);
+  	file_put_contents($file.'.gz', gzencode($output));
+      	echo '<span id="uusiVarmuskopioText">uusi varmuskopio on tehty</span>';
+
   }
 
-       echo '<span id="uusiVarmuskopioText">uusi varmuskopio on tehty</span>';
+
     }
   } else {
     if (!file_exists(Yii::app()->basePath."/../backup/".Yii::app()->user->domain.'/'.date("Y-m-d").'.sql'))
