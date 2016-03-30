@@ -138,7 +138,31 @@
 	</div>
 
 	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'gps_sijainti'); ?>
+		<?php 
+
+	    function getlatlong($address)
+	    {
+	        $url = 'http://maps.googleapis.com/maps/api/geocode/json?address=' . urlencode($address) . '&sensor=true';
+	        $json = @file_get_contents($url);
+	        $data = json_decode($json);
+	        if ($data->status == "OK")
+	            return $data;
+	        else
+	            return false;
+	    }
+	
+	        $latAuto = '';
+	        $lngAuto = '';
+	    	$coordinates = getlatlong($model->osoite);
+		if(isset($coordinates->results[0]->geometry->location->lat))
+	        $latAuto = '('.$coordinates->results[0]->geometry->location->lat.',';
+		if(isset($coordinates->results[0]->geometry->location->lng))
+	        $lngAuto = $coordinates->results[0]->geometry->location->lng.')';
+	
+    		//print_r($coordinates);
+
+		echo '<label>GPS-sijainti '.$latAuto.$lngAuto.'</label>';
+		?>
 		<?php echo $form->textField($model,'gps_sijainti',array('size'=>50,'maxlength'=>50,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'gps_sijainti'); ?>
 	</div>
@@ -353,31 +377,24 @@ $(".poistaKuva").click(function(){
 
 
 <?php
+    $lat = '';
+    $lng = '';
 
-    function getlatlong($address)
+    if(!empty($model->gps_sijainti))
     {
-        $url = 'http://maps.googleapis.com/maps/api/geocode/json?address=' . urlencode($address) . '&sensor=true';
-        $json = @file_get_contents($url);
-        $data = json_decode($json);
-        if ($data->status == "OK")
-            return $data;
-        else
-            return false;
+	$ex = explode(",", $model->gps_sijainti);
+	if(isset($ex[1]))
+	{
+	        $lat = $ex[0];
+	        $lng = $ex[1];
+	}
+
     }
-
-        $lat = '';
-        $lng = '';
-
-    	$coordinates = getlatlong($model->osoite);
-	if(isset($coordinates->results[0]->geometry->location->lat))
-        $lat = $coordinates->results[0]->geometry->location->lat;
-	if(isset($coordinates->results[0]->geometry->location->lng))
-        $lng = $coordinates->results[0]->geometry->location->lng;
-
-    	//print_r($coordinates);
 
 ?>
 
+    <input type="hidden" id="lat" value="<?php echo $lat; ?>">
+    <input type="hidden" id="lng" value="<?php echo $lng; ?>">
 
 <!DOCTYPE html>
 <html>
@@ -392,12 +409,8 @@ $(".poistaKuva").click(function(){
     <script>
 
 window.initialize = function() {
-    var lat = "<?php echo $lat; ?>";
-    var lng = "<?php echo $lng; ?>";
-
-    var sijainti = document.getElementById('Kohteet_gps_sijainti').value;
-    if(sijainti == '')
-    document.getElementById('Kohteet_gps_sijainti').value="<?php echo $lat; ?>,<?php echo $lng; ?>";
+    var lat = parseFloat(document.getElementById('lat').value);
+    var lng = parseFloat(document.getElementById('lng').value);
 
     var myLatlng = new google.maps.LatLng(lat, lng);
     var mapCanvas = document.getElementById('map-canvas');
