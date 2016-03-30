@@ -42,8 +42,8 @@ class Asetukset extends DB2ActiveRecord
 			array('id,logon_polkku, logon_korkeus, johtaja', 'required'),
 			array('id, sovellus_tyovuorot, logon_korkeus, palvelu_tyyppi', 'numerical', 'integerOnly'=>true),
 			array('paivan_uutinen, logon_polkku', 'length', 'max'=>500),
-			array('johtaja, viivastyskorko, tilinumero, iban, bic, , postita_username, postita_password, trust_cid, trust_api', 'length', 'max'=>100),
-			array('trust_url', 'length', 'max'=>255),
+			array('johtaja, viivastyskorko, tilinumero, iban, bic, , postita_username, postita_password, trust_cid, trust_api, checkout_id', 'length', 'max'=>100),
+			array('trust_url, checkout_salasana', 'length', 'max'=>255),
 			array('pyhapaivat, erikoislauantai', 'length', 'max'=>3000),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
@@ -85,6 +85,8 @@ class Asetukset extends DB2ActiveRecord
 			'pyhapaivat'=>'Viralliset pyhäpäivät / pp.kk.vvvv',
 			'erikoislauantai' => 'Erikoislauantai',
 			'sovellus_tyovuorot'=>'Työvuorojen näyttäminen',
+			'checkout_id'=>'Checkout tunnus',
+			'checkout_salasana'=>'Checkout salasana',
 		);
 	}
 
