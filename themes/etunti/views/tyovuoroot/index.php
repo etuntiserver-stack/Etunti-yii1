@@ -211,7 +211,7 @@ td .tp{
 	background: white;
 	border-radius:5px;
 }
-.luominen{
+.luominen, .valitseKokopaiva{
 	display: none;
 }
 .table tbody>tr>td{

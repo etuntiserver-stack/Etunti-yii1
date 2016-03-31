@@ -4,10 +4,10 @@ $("#showres").draggable();
 
 $('td').hover(function()
 {
-     $(this).find('.plussa').show();
+     $(this).find('.plussa, .valitseKokopaiva').show();
 }, function()
 { 
-     $(this).find('.plussa').hide();
+     $(this).find('.plussa, .valitseKokopaiva').hide();
 });
 
 
@@ -85,6 +85,22 @@ $(document).delegate(".tv_edit","click",function(){
 });
 
 
+
+$(document).delegate(".valitseKokopaiva","click",function(){
+	var pvm = $(this).attr("pvm");
+	var tid = $(this).attr("tid");
+
+        $.ajax({
+           url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/valitse_kokopaiva',
+           type: "POST",
+           data: { "pvm" : pvm, "tid" : tid },
+           success: function(data){
+		console.log(data);
+		muisti();
+           }
+        });
+   	return false;
+});
 
 $(document).delegate(".luominen","click",function(){
 	var pvm = $(this).attr("pvm");
@@ -336,6 +352,7 @@ function vkolopputCheck(){
    	return false;
 
 }
+
 
 
 $("#viikkonhyppaminen").change(function() {

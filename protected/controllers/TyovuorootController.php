@@ -28,7 +28,7 @@ class TyovuorootController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','updatetime','showohje','did','muisti','operatio','viikko','fromto','autoinsert','autoremove','viikkottain', 'viikkottain_pdf', 'laheta','kk','pvmtid','laheta_k', 'muistin', 'muisticlear', 'muistissa', 'vkolopput', 'vkolopchange', 'uusitilaus', 'tv2', 'PoistaTv'),
+				'actions'=>array('admin','delete','create','update','index','view','updatetime','showohje','did','muisti','operatio','viikko','fromto','autoinsert','autoremove','viikkottain', 'viikkottain_pdf', 'laheta','kk','pvmtid','laheta_k', 'muistin', 'muisticlear', 'muistissa', 'vkolopput', 'vkolopchange', 'uusitilaus', 'tv2', 'PoistaTv', 'valitse_kokopaiva'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny', // allow admin user to perform 'admin' and 'delete' actions
@@ -324,6 +324,32 @@ class TyovuorootController extends Controller
 		exit;
 	}
 
+	public function actionValitse_kokopaiva()
+	{
+		if(isset($_POST['pvm']) and isset($_POST['tid']))
+		{
+
+			$criteria=new CDbCriteria;
+			$criteria->condition = " 
+				pvm='".date("d.m.Y", strtotime($_POST['pvm']))."' 
+				AND tid='".$_POST['tid']."'
+			";
+			$tv = Tyovuoroot::model()->findAll($criteria);
+			$for = '';
+			if(isset($tv[0]))
+			{
+			  foreach($tv as $data)
+			  {
+				$id = $data->id."_".date("Ymd", strtotime($data->pvm))."_".$data->tid;
+				$for = date("Ymd", strtotime($data->pvm))."_".$data->tid;
+				$_SESSION['muistin'][$id] = $id;
+				//print_r($_SESSION['muistin']);
+			  }
+			}
+				echo $for;
+		}
+
+	}
 
 	public function actionMuistin()
 	{

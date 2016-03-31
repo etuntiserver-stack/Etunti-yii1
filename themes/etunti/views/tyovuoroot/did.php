@@ -9,8 +9,18 @@
 	$bod .=  '<div class="small laatikko latikkoAsetukset" pvm="'.date("d.m.Y",strtotime($pvm)).'" tid="'.$tid.'">';
 
 	$bod .=  '
-	<div class="pull-right plussamerkki">
+	<div class="pull-right">
+	  <div class="form-inline">
+
+	<div class="kokopaiva form-group">
+	<span class="valitseKokopaiva link glyphicon glyphicon-th-large" pvm="'.date("d.m.Y",strtotime($pvm)).'" tid="'.$tid.'"></span>
+	</div>
+
+	<div class="plussamerkki form-group">
 	<span class="plussa link glyphicon glyphicon-plus luominen" pvm="'.date("d.m.Y",strtotime($pvm)).'" tid="'.$tid.'"></span>
+	</div>
+
+	  </div>
 	</div>';
 
 	$bod .=  '
