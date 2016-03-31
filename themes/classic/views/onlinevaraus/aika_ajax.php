@@ -11,8 +11,8 @@
 
      $body .= '<hr>';
 
-     $month = date('m',strtotime("+1 month"));
-     $year = date('Y',strtotime("+1 month"));
+     $month = date('m',strtotime("last day of +1 month"));
+     $year = date('Y',strtotime("last day of +1 month"));
      $body .= $this->build_calendar($month,$year,$dateArray);
 
      echo json_encode($body);
