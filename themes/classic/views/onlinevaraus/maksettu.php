@@ -73,7 +73,7 @@ try {
 		if(isset($ov->id) and isset($tv->id))
 		{
 			$asetukset = Asetukset::model()->findbypk(1);
-			$tv = Tyovuoroot::model()->updatebypk($_GET['REFERENCE'], array('osoiteOnline'=>2));
+			$t = Tyovuoroot::model()->updatebypk($_GET['REFERENCE'], array('osoiteOnline'=>2));
 			$ov = Onlinevaraus::model()->updatebypk($ov->id, array('tila'=>1));
 
 			$message = '<h2>Kiitos tilauksesta, olemme vastanottaneet maksun!</h2><br>';
