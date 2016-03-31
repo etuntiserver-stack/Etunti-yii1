@@ -716,7 +716,7 @@ Toimi nopeasti, sillä paikkoja on rajoitetusti!</p></p>
                    <div class="col-lg-3 col-lg-6 item-center">
                         <h3><a href="mailto:info@etunti.fi">info@etunti.fi</a></h3>
 
-                       <a href="#">
+                        <a href="#">
                         <i class="fa fa-envelope"></i>
                         <h3><a href="mailto:info@etunti.fi">Lähetä viesti</a></h3>
                         </a>
@@ -726,9 +726,16 @@ Toimi nopeasti, sillä paikkoja on rajoitetusti!</p></p>
                    <div class="col-lg-3 col-lg-6 item-center">
                         <div class="logo">
 			<br><br><br>
-                            <a href="index.php" title="Return Home">
-                                <img src="<?php echo Yii::app()->request->baseUrl; ?>/img/logo.png" alt="Logo" class="logo_img">
-                            </a>
+
+                        <a href="index.php" title="Return Home">
+                              <img src="<?php echo Yii::app()->request->baseUrl; ?>/img/logo.png" alt="Logo" class="logo_img">
+                        </a>
+			<br><br>
+
+                        <a href="https://www.facebook.com/etunti" target="_blank"><i class="fa fa-facebook-official"></i></a>&nbsp;&nbsp;&nbsp;
+                        <a href="https://twitter.com/etuntifi" target="_blank"><i class="fa fa-twitter-square"></i></a>
+
+
                         </div>
                    </div>
 

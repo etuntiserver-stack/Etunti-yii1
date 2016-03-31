@@ -184,6 +184,14 @@
 
     </div><div class="col-sm-5">
 
+    <legend><h2><?php echo Yii::t('main','Muut'); ?></h2></legend>
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'tilausvahvistus'); ?>
+		<?php echo $form->textarea($model,'tilausvahvistus',array('rows'=>4,'maxlength'=>5000,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'tilausvahvistus'); ?>
+	</div>
+
     </div>
   </div>
 <?php endif; ?>
