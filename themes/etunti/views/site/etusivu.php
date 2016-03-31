@@ -22,7 +22,7 @@ if (!file_exists(Yii::app()->basePath."/../backup/".Yii::app()->user->domain.'/'
    	    foreach(array_reverse(glob(Yii::app()->baseUrl.'backup/'.Yii::app()->user->domain.'/*')) as $file) 
 	    {
 		$explNimi = explode("/",$file);
-		$explNimi2 = explode(".",end($explNimi));
+		$explNimi2 = explode("_",end($explNimi));
 		if($explNimi2[0] < date("Y-m-d", strtotime("-7 day")))
 		{
 			//echo $explNimi2[0].' '.date("Y-m-d", strtotime("-7 day")).'<br>';
