@@ -611,6 +611,7 @@ class TyovuorootController extends Controller
 
 
 
+
 	public function actionShowohje($id)
 	{
 		$m = Kohteet::model()->findbypk($id);
@@ -932,7 +933,7 @@ class TyovuorootController extends Controller
 	    if($val > 0)
 		return sprintf('%02d:%02d', $val/3600, ($val % 3600)/60);
 	}
-
+/*
 		// <-- Poistaminen
 		$criteria=new CDbCriteria;
 		$criteria->order= " id DESC "; 
@@ -942,7 +943,7 @@ class TyovuorootController extends Controller
 		";
 		$model = Tyovuoroot::model()->deleteAll($criteria);
 		// Poistaminen -->
-
+*/
 
 		$this->render('index');
 	}
