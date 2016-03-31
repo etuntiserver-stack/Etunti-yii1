@@ -4,12 +4,20 @@
 	$model = OnlinevarausTuotteet::model()->findbypk($_SESSION['onlinevaraus']['paapalvelu']);
 
   $blockAika = '';
+  $vkolisa = 0;
+
   if(isset($_SESSION['onlinevaraus']['modelTV']))
   {
 	$tv = Tyovuoroot::model()->findbypk($_SESSION['onlinevaraus']['modelTV']);
 	if(isset($tv->id))
 	{
 
+	   $pyhat = $this->pyhatCheck($tv->pvm);
+	   if($pyhat == 'pyhat')
+	   $vkolisa = 2;
+	   elseif($pyhat == 'lauantai')
+	   $vkolisa = 1.5;
+	   
 	   $filename = "../../img/tekijat/".$_SESSION['domain']."/".$tv->tid.".jpg";
 	   if (file_exists(Yii::app()->request->baseUrl."img/tekijat/".Yii::app()->user->domain."/".$tv->tid.".jpg"))
 	   $kuva = '<img src="'.$filename.'" class="img-thumbnail">';
@@ -17,7 +25,7 @@
 	   $kuva = '<img src="../../img/tekijat/noname.jpg" class="img-thumbnail">';
 
 
-	$blockAika = '
+	$blockAika .= '
 	<hr>
      	<label>Varattu aika </label><br>
 	<div class="row">
@@ -113,7 +121,11 @@
 	   <i class="fa fa-eur"></i> 
 	 </div><div class="col-sm-11">';
 
+	if($vkolisa > 0)
+	$sum = ($lisaHinta+$model->hinta)*$vkolisa;
+	else
 	$sum = $lisaHinta+$model->hinta;
+
 	$body .= '<span id="hinta">'.number_format($sum, 2, ',', '').'</span> &euro;';
 	$_SESSION['onlinevaraus']['amount'] = $sum;
 
@@ -133,7 +145,7 @@
 	$body .= CHtml::link('Valitse aika','aika', array('class'=>'btn btn-success'));
 	elseif(isset($sivu) and $sivu == 'aika' and isset($_SESSION['onlinevaraus']['modelTV']))
 	$body .= CHtml::link('Valitse osoite','osoite', array('class'=>'btn btn-success'));
-	elseif(isset($sivu) and $sivu == 'osoite')
+	elseif(isset($sivu) and $sivu == 'osoite' and isset($_SESSION['onlinevaraus']['modelKohde']))
 	$body .= CHtml::link('Maksan','maksu', array('class'=>'btn btn-success'));
 	elseif(isset($sivu) and $sivu == 'maksu')
 	$body .= CHtml::link('Kassalle','kassalle', array('class'=>'btn btn-success'));

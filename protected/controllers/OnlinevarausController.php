@@ -130,7 +130,7 @@ class OnlinevarausController extends Controller
 			  {
 			     $body .= '
 			     <div>
-				<span class="loytyiOsoite link" id="kohde_'.$data->id.'">'.$data->osoite.'</span>
+				<a href="#" class="loytyiOsoite link" id="kohde_'.$data->id.'">'.$data->osoite.'</a>
 			     </div>
 			     ';
 			  }
@@ -544,7 +544,17 @@ $months=array(
 		$tila .= '<b class="btn btn-warning btn-block">'.$currentDay.'</b>';
 
 
-          $calendar .= "<td class='day' rel='$date'>$tila</td>";
+	  $pyhat = $this->pyhatCheck($date);
+	  if($pyhat == 'pyhat')
+	  {
+	     $tooltip = "data-toggle='tooltip' title='+100%'";
+	  } elseif($pyhat == 'lauantai'){
+	     $tooltip = "data-toggle='tooltip' title='+50%'";
+	  } else {
+	     $tooltip = "";
+ 	  }
+
+          $calendar .= "<td class='day' rel='$date' width=1><div class='toolt' ".$tooltip.">$tila</div></td>";
 
           // Increment counters
  
@@ -659,5 +669,25 @@ $months=array(
 		$return = array($on,$ajaanReika);
 		return $return;
 	}
+
+
+	protected function pyhatCheck($date){
+
+	$dateMonth = '';
+	$pyh = array();
+
+	$dateMonth = date("d.m.Y",strtotime($date));
+	$asetukset = Asetukset::model()->findbypk(1);
+	$pyh = explode("\n",$asetukset->pyhapaivat);
+
+	if(
+	   date("N",strtotime($date)) == 7
+	   or strstr($asetukset->pyhapaivat, $dateMonth)
+	)
+	return 'pyhat';
+	elseif(date("N",strtotime($date)) == 6)
+	return 'lauantai';
+
+ 	}
 
 }

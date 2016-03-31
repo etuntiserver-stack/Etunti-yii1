@@ -72,9 +72,23 @@ try {
 
 		if(isset($ov->id) and isset($tv->id))
 		{
+			$asetukset = Asetukset::model()->findbypk(1);
 			$tv = Tyovuoroot::model()->updatebypk($_GET['REFERENCE'], array('osoiteOnline'=>2));
 			$ov = Onlinevaraus::model()->updatebypk($ov->id, array('tila'=>1));
-        		echo '<h2>Kiitos tilauksesta, olemme vastanottaneet maksun!</h2>';
+
+			$message = '<h2>Kiitos tilauksesta, olemme vastanottaneet maksun!</h2><br>';
+			$message .= '<h3>'.$asetukset->tilausvahvistus.'</h3><br>';
+			$message .= $tv->pvm.', '.$tv->alku.'-'.$tv->loppu;
+
+			echo $message;
+
+	          	$mail = new YiiMailer();
+			$mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
+			$mail->setTo($_SESSION['onlinevaraus']['sahkoposti']);
+			$mail->setSubject('Online varaus');
+			$mail->setBody($message);
+			$mail->send();
+
 			unset($_SESSION['onlinevaraus']);
 		}
 	}

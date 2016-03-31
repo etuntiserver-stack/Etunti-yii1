@@ -19,6 +19,7 @@ $asetukset = Asetukset::model()->findbypk(1);
  </div>
 </div>
 
+
 <ul class="nav nav-pills nav-justified">
   <li role="presentation"><?php echo CHtml::link('Palvelu','index'); ?></li>
   <li role="presentation" class="active"><?php echo CHtml::link('Aika','aika'); ?></li>
@@ -74,6 +75,8 @@ function kaksiKalenteria()
 		count1 += 1;
 		console.log('count 1: '+count1);
 		$('#kalenterit').html(JSON.parse(data));
+
+	        $(".toolt").tooltip();
 
 		if(count1 > 20)
 		window.location.href="index?keskeyta=true";
@@ -153,4 +156,6 @@ $(document).delegate(".cal","click",function(){
 
 
 });
+
 </script>
+
