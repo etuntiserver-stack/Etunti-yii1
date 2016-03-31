@@ -167,9 +167,22 @@
 		<?php echo $form->error($model,'checkout_salasana'); ?>
 	</div>
 
-    </div><div class="col-sm-4">
+    </div><div class="col-sm-3">
+    <legend><h2><?php echo Yii::t('main','Viikonloppulisät'); ?></h2></legend>
 
-    </div><div class="col-sm-4">
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'viikonloppulisa_la'); ?>
+		<?php echo $form->numberField($model,'viikonloppulisa_la',array('size'=>20,'maxlength'=>10,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'viikonloppulisa_la'); ?>
+	</div>
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'viikonloppulisa_su'); ?>
+		<?php echo $form->numberField($model,'viikonloppulisa_su',array('size'=>20,'maxlength'=>10,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'viikonloppulisa_su'); ?>
+	</div>
+
+    </div><div class="col-sm-5">
 
     </div>
   </div>
