@@ -64,14 +64,14 @@ Yii::setPathOfAlias('chartjs', dirname(__FILE__).'/../extensions/yii-chartjs');
 
   } else {
 
-  $db = 'estromfi_fw';
+  $db = 'etuntifw';
   $db_host = 'localhost';
-  $etuntifw_user = 'estromfi_fw';
+  $etuntifw_user = 'mulgikapsas';
   $etuntifw_pass = 'KristinA1';
 
-  $db2 = 'estromfi_'.$_SESSION['domain'];
+  $db2 = $_SESSION['domain'];
   $db2_host = 'localhost';
-  $db2_user = 'estromfi_'.$_SESSION['domain'];
+  $db2_user = 'mulgikapsas';
   $db2_pass = 'KristinA1';
   }
 
