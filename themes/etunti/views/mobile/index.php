@@ -176,7 +176,7 @@ $(".haemob").click(function(){
 $('#mobForm').on('submit',function(e) {
 
   $.ajax({
-  url: location.protocol + "//" + location.host + '/index.php/mobile/index?Mobile_page='+mobnum,
+  url: 'index?Mobile_page='+mobnum,
   data:$(this).serialize(),
   type:'POST',
   success:function(data){
@@ -197,7 +197,7 @@ e.preventDefault();
 function tableAjax(){
 
    $.ajax({
-  url: location.protocol + "//" + location.host + '/index.php/mobile/index?Mobile_page='+mobnum,
+  url: 'index?Mobile_page='+mobnum,
       type: "POST",
       data: { index_ajax : "true" },
       	success: function(data){
