@@ -7,8 +7,11 @@
 
 	   <div class="pull-right">
 	   <?php     
-		$site = Yii::app()->createController('Site');
-		$site[0]->oikeudet($model->id,null);
+		echo CHtml::link("poista", '#', array(
+		'submit'=>array('delete', "id"=>$model->id), 
+		'confirm' => 'Haluatko varmaasti poistaa?',
+		'class'=>'btn btn-primary myBgColors'
+		));
 	   ?>
 	   </div>
 	   <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-user"></i> <?php echo Yii::t('main','Keskustelu'); ?> </h2>

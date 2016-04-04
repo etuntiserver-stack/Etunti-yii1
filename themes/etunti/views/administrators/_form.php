@@ -40,25 +40,15 @@
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'status'); ?>
 
-	   <div class="form-inline">
 		<?php 
-		$a = Valikkoot::model()->findAll(" select_type='admin status' ");
-        	$tal = array();
-		foreach($a as $v){
-		$exV = explode("/",$v->value);
-		   if(isset($exV[1]))
-		   $tal[$exV[1]] = $exV[0];
-		}
+		$as = Yii::app()->createController('Asetukset');
+		$val = $as[0]->oikeudenOtsikot();
 
-		if(isset($a[0])){
-			echo $form->dropDownList($model,'status', $tal, 
+		echo $form->dropDownList($model,'status', $val, 
 			array('class'=>'form-control')); 
-		} else {
-			echo $form->textField($model,'status',array('size'=>60,'maxlength'=>1,'class'=>'form-control'));
-		}
+
 		?>
-		<span class="btn btn-primary myBgColors muokaValiko" for="admin status"><i class="fa fa-question-circle"></i></span>
-	   </div>
+
 		<?php echo $form->error($model,'status'); ?>
 	</div>
 

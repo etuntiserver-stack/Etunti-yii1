@@ -100,18 +100,15 @@
 </legend>
 <?php
 
-  $defdb = Yii::app()->baseUrl."protected/views/domainit/sql/defdb.sql";
-  if (file_exists($defdb)) {
-	$fn = explode("/",$defdb);
-	$end = end($fn);
+
  	echo '<div class="form-inline">
 
 		<form class="form-group" action="#" method="POST">
-		<input type="hidden" name="compare" value="'.$defdb.'">
+		<input type="hidden" name="compare" >
 		<input class="btn btn-success btn-group" type="submit" value="TARKISTA">
 		</form>
 		';
-  }
+
 
 ?>
 </div>
@@ -264,9 +261,9 @@ if($insert){
 		echo '</select>';
 
 	echo '
-		<input type="hidden" name="compare" value="'.$defdb.'">
+		<input type="hidden" name="compare" >
 		<input type="hidden" name="insert" value="true">
-		<input class="btn btn-danger btn-group" type="submit" value="'.$end.' >> INSERT">
+		<input class="btn btn-danger btn-group" type="submit" value=" >> INSERT">
 		</form>
 	 	</div> ';
 }

@@ -88,6 +88,13 @@ class AsiakkaatController extends Controller
 	 */
 	public function actionCreate()
 	{
+
+	// <-- Oikeudet
+	   $checkOikeus = "asiakkaat_1_".Yii::app()->user->adminStatus;
+	   $site = Yii::app()->createController('Site');
+	   $site[0]->checkOikeus($checkOikeus);
+	//  Oikeudet -->
+
 		$model=new Asiakkaat;
 
 		// Uncomment the following line if AJAX validation is needed
@@ -117,6 +124,13 @@ class AsiakkaatController extends Controller
 	 */
 	public function actionUpdate($id)
 	{
+
+	// <-- Oikeudet
+	   $checkOikeus = "asiakkaat_2_".Yii::app()->user->adminStatus;
+	   $site = Yii::app()->createController('Site');
+	   $site[0]->checkOikeus($checkOikeus);
+	//  Oikeudet -->
+
 		$model=$this->loadModel($id);
 
 		// Uncomment the following line if AJAX validation is needed
@@ -141,6 +155,14 @@ class AsiakkaatController extends Controller
 	 */
 	public function actionDelete($id)
 	{
+
+	// <-- Oikeudet
+	   $checkOikeus = "asiakkaat_3_".Yii::app()->user->adminStatus;
+	   $site = Yii::app()->createController('Site');
+	   $site[0]->checkOikeus($checkOikeus);
+	//  Oikeudet -->
+
+
 		$this->loadModel($id)->delete();
 
 		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
@@ -153,6 +175,13 @@ class AsiakkaatController extends Controller
 	 */
 	public function actionIndex()
 	{
+
+	// <-- Oikeudet
+	   $checkOikeus = "asiakkaat_0_".Yii::app()->user->adminStatus;
+	   $site = Yii::app()->createController('Site');
+	   $site[0]->checkOikeus($checkOikeus);
+	//  Oikeudet -->
+
        		$criteria = new CDbCriteria();
 	        $criteria->order = "  id DESC ";
 

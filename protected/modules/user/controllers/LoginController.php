@@ -41,9 +41,9 @@ class LoginController extends Controller
 			    if(isset($domainit->paketti))
 			    Yii::app()->user->setState('adminPaketti', $domainit->paketti);
 
-			    $this->redirect("/index.php/site/etusivu");
+			    $this->redirect(Yii::app()->request->baseUrl.'/index.php/site/etusivu');
 			  } else {
-			    $this->redirect('/index.php/user/login');
+			    $this->redirect(Yii::app()->request->baseUrl.'/index.php/user/login');
 			  }
 			exit;
 			}
@@ -56,9 +56,9 @@ class LoginController extends Controller
 				Yii::app()->user->setState('superadmin', true);
 					$this->lastViset();
 					if (Yii::app()->user->returnUrl=='/index.php')
-						$this->redirect("/index.php/user/profile");
+						$this->redirect(Yii::app()->request->baseUrl.'/index.php/user/profile');
 					else
-						$this->redirect("/index.php/user/profile"); //Yii::app()->user->returnUrl
+						$this->redirect(Yii::app()->request->baseUrl.'/index.php/user/profile'); //Yii::app()->user->returnUrl
 				}
 			}
 

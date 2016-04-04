@@ -24,7 +24,7 @@ class AsetuksetController extends Controller
 		return array(
 
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('update'),
+				'actions'=>array('update','oikeudet'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -64,6 +64,18 @@ class AsetuksetController extends Controller
                 parent::init();
         }
 
+	public function actionOikeudet()
+	{
+		if(isset($_POST['oikeudet']))
+		{
+			$as = Asetukset::model()->updatebypk(1,array('oikeudet' => json_encode($_POST['oikeudet'])));
+			exit;
+		} else {
+
+			$this->render('oikeudet');
+		}
+	}
+
 	public function actionView($id)
 	{
 		$this->render('view',array(
@@ -101,6 +113,13 @@ class AsetuksetController extends Controller
 	 */
 	public function actionUpdate($id)
 	{
+
+	// <-- Oikeudet
+	   $checkOikeus = "asetukset_2_".Yii::app()->user->adminStatus;
+	   $site = Yii::app()->createController('Site');
+	   $site[0]->checkOikeus($checkOikeus);
+	//  Oikeudet -->
+
 		$model=$this->loadModel($id);
 		$f = FirmanTiedot::model()->findbypk(1);
 		// Uncomment the following line if AJAX validation is needed
@@ -193,4 +212,11 @@ class AsetuksetController extends Controller
 			Yii::app()->end();
 		}
 	}
+
+	protected function oikeudenOtsikot()
+	{
+		$otsiko = array(1=>'Ryhmä 1', 2=>'Ryhmä 2', 3=>'Ryhmä 3', 4=>'Ryhmä 4', 5=>'Ryhmä 5', 6=>'Ryhmä 6', 7=>'Ryhmä 7');
+		return $otsiko;
+	}
+
 }

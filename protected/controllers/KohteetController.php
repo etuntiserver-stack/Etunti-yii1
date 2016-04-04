@@ -167,6 +167,13 @@ class KohteetController extends Controller
 
 	public function actionCreate()
 	{
+
+	// <-- Oikeudet
+	   $checkOikeus = "kohteet_1_".Yii::app()->user->adminStatus;
+	   $site = Yii::app()->createController('Site');
+	   $site[0]->checkOikeus($checkOikeus);
+	//  Oikeudet -->
+
 		$model=new Kohteet;
 
 		// Uncomment the following line if AJAX validation is needed
@@ -191,6 +198,13 @@ class KohteetController extends Controller
 	 */
 	public function actionUpdate($id)
 	{
+
+	// <-- Oikeudet
+	   $checkOikeus = "kohteet_2_".Yii::app()->user->adminStatus;
+	   $site = Yii::app()->createController('Site');
+	   $site[0]->checkOikeus($checkOikeus);
+	//  Oikeudet -->
+
 		$model=$this->loadModel($id);
 
 		// Uncomment the following line if AJAX validation is needed
@@ -215,6 +229,13 @@ class KohteetController extends Controller
 	 */
 	public function actionDelete($id)
 	{
+
+	// <-- Oikeudet
+	   $checkOikeus = "kohteet_3_".Yii::app()->user->adminStatus;
+	   $site = Yii::app()->createController('Site');
+	   $site[0]->checkOikeus($checkOikeus);
+	//  Oikeudet -->
+
 		$this->loadModel($id)->delete();
 
 		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
@@ -227,6 +248,12 @@ class KohteetController extends Controller
 	 */
 	public function actionIndex()
 	{
+
+	// <-- Oikeudet
+	   $checkOikeus = "kohteet_0_".Yii::app()->user->adminStatus;
+	   $site = Yii::app()->createController('Site');
+	   $site[0]->checkOikeus($checkOikeus);
+	//  Oikeudet -->
 
        		$criteria = new CDbCriteria();
 	        $criteria->order = " id DESC ";
@@ -292,6 +319,7 @@ class KohteetController extends Controller
 			throw new CHttpException(404,'The requested page does not exist.');
 		return $model;
 	}
+
 
 	/**
 	 * Performs the AJAX validation.

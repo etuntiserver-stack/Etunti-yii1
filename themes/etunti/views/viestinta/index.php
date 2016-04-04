@@ -10,7 +10,7 @@
 
 
               <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-envelope"></i> <?php echo Yii::t('main', 'VIESTIT'); ?> 
-		<?php echo CHtml::link('','/index.php/viestinta/create',array('class'=>'btn btn-default fa fa-plus')); ?></h2>
+		<?php echo CHtml::link('',Yii::app()->request->baseUrl.'/index.php/viestinta/create',array('class'=>'btn btn-default fa fa-plus')); ?></h2>
 
 
 
