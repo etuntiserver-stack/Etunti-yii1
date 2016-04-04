@@ -188,7 +188,7 @@ $(".haemob").click(function(){
 	$("#mobForm").submit();
 });
 
-
+/*
   $(".chckbxHyvaksynta").bootstrapSwitch({
 	size: "mini",
 	//onColor: "success",
@@ -196,7 +196,7 @@ $(".haemob").click(function(){
 	onText: "Kyllä",
 	offText: "Ei"
   });
-
+*/
 
 $('.chckbxHyvaksynta').on('switchChange.bootstrapSwitch', function(event, state) {
   $(this).each(function() {
