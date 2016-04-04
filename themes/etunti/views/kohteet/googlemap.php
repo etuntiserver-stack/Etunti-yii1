@@ -21,8 +21,6 @@ if(isset($_GET['center'])){
 	$get_osoite = $obj->results[0]->geometry->location->lat.",".$obj->results[0]->geometry->location->lng;
 	$center = $get_osoite;
 }
-
-echo '<input type="hidden" id="polku" value="'.Yii::app()->request->baseUrl.'/index.php/kohteet/googlemap_k">';
 ?>
 
 
@@ -31,8 +29,6 @@ echo '<input type="hidden" id="polku" value="'.Yii::app()->request->baseUrl.'/in
 
   function codeAddress() {
     var address = document.getElementById("kivikonkaari").value;
-    var polku = document.getElementById("polku").value;
-
     geocoder.geocode( { 'address': address}, function(results, status) {
       if (status == google.maps.GeocoderStatus.OK) {
         map.setCenter(results[0].geometry.location);
@@ -91,7 +87,7 @@ if(!centerUusi[0]){
 
 
 
-        GDownloadUrl(polku, function(data) {
+        GDownloadUrl(location.protocol + "//" + location.host + "/index.php/kohteet/googlemap_k", function(data) {
           var xml = GXml.parse(data);
           var markers = xml.documentElement.getElementsByTagName("marker");
           for (var i = 0; i < markers.length; i++) {
