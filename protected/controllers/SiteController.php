@@ -550,9 +550,10 @@ $(document).ready(function(){
 		<br>
 		<div class="col-sm-6 col-sm-offset-3">
 		 <center>
-		  <h2 class="alert alert-warning">
-			Sinulla ei ole tarvittavia oikeuksia!
-		  </h2>
+		  <div class="alert alert-warning">
+			<h2>Sinulla ei ole tarvittavia oikeuksia!</h2>
+			<p>"admin" tunnuksella saa vaihda oikeuksia asetuksessa</p>
+		  </div>
 		 </center>
 		</div>';
 
