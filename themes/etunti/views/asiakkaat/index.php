@@ -7,7 +7,7 @@
 
 
               <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-home"></i> <?php echo Yii::t('main', 'ASIAKKAAT'); ?> 
-		<?php echo CHtml::link('','/index.php/asiakkaat/create',array('class'=>'btn btn-default fa fa-plus')); ?></h2>
+		<?php echo CHtml::link('',Yii::app()->request->baseUrl.'/index.php/asiakkaat/create',array('class'=>'btn btn-default fa fa-plus')); ?></h2>
 
 
 

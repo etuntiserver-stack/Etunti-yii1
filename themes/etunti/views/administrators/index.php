@@ -9,8 +9,8 @@
         <div class="tray-center">
 
 
-              <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-home"></i> <?php echo Yii::t('main', 'ADMINISTRATORS'); ?> 
-		<?php echo CHtml::link('','/index.php/administrators/create',array('class'=>'btn btn-default fa fa-plus')); ?></h2>
+              <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-home"></i> <?php echo Yii::t('main', 'Järjestelmänvalvojat'); ?> 
+		<?php echo CHtml::link('',Yii::app()->request->baseUrl.'/index.php/administrators/create',array('class'=>'btn btn-default fa fa-plus')); ?></h2>
 
 
 

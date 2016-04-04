@@ -516,29 +516,54 @@ $(document).ready(function(){
 	{
 		$return = '';
 
-	   if(Yii::app()->user->adminStatus == 1 and $sivu != 'noDelete'){
 
+/*
  		$return .= CHtml::link("poista", '#', array(
 		'submit'=>array('delete', "id"=>$id), 
 		'confirm' => 'Haluatko varmaasti poistaa?',
 		'class'=>'btn btn-primary myBgColors'
 		));
 
-	   } elseif(Yii::app()->user->adminStatus == 2){
-
-	   } elseif(Yii::app()->user->adminStatus == 3){
 	   
-	     $return .= '
+	     	$return .= '
 		<script type="text/javascript">
 		$(document).ready(function(){
 		   $(":input").prop("disabled", true);	
 		});
 		</script>';
+*/
+	   
 
+		echo $return;
+	}
+
+
+	public function checkOikeus($pyynto)
+	{
+	   $return = '';
+	   $asetukset = Asetukset::model()->findbypk(1);
+	   $oikeudet = $asetukset->oikeudet;
+	   if (!preg_match("/".$pyynto."/i", $oikeudet) and Yii::app()->user->username != 'admin') {
+
+	      	$return = '
+		<link href="'.Yii::app()->request->baseUrl.'/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+		<br>
+		<div class="col-sm-6 col-sm-offset-3">
+		 <center>
+		  <h2 class="alert alert-warning">
+			Sinulla ei ole tarvittavia oikeuksia!
+		  </h2>
+		 </center>
+		</div>';
+
+		echo $return;
+		exit;
 	   }
 
 		echo $return;
 	}
+
+
 
 
 

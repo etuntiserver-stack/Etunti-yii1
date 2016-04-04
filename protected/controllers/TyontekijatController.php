@@ -161,6 +161,13 @@ class TyontekijatController extends Controller
 	 */
 	public function actionCreate()
 	{
+
+	// <-- Oikeudet
+	   $checkOikeus = "tyontekijat_1_".Yii::app()->user->adminStatus;
+	   $site = Yii::app()->createController('Site');
+	   $site[0]->checkOikeus($checkOikeus);
+	//  Oikeudet -->
+
 		$model=new Tyontekijat;
 
 		// Uncomment the following line if AJAX validation is needed
@@ -187,6 +194,13 @@ class TyontekijatController extends Controller
 	 */
 	public function actionUpdate($id)
 	{
+
+	// <-- Oikeudet
+	   $checkOikeus = "tyontekijat_2_".Yii::app()->user->adminStatus;
+	   $site = Yii::app()->createController('Site');
+	   $site[0]->checkOikeus($checkOikeus);
+	//  Oikeudet -->
+
 		$model=$this->loadModel($id);
 
 		// Uncomment the following line if AJAX validation is needed
@@ -223,6 +237,13 @@ class TyontekijatController extends Controller
 	public function actionDelete($id)
 	{
 	
+	// <-- Oikeudet
+	   $checkOikeus = "tyontekijat_3_".Yii::app()->user->adminStatus;
+	   $site = Yii::app()->createController('Site');
+	   $site[0]->checkOikeus($checkOikeus);
+	//  Oikeudet -->
+
+
 	   $filename = "../../img/tekijat/".Yii::app()->user->domain."/".$id.".jpg";
 	   if (file_exists(Yii::app()->request->baseUrl."img/tekijat/".Yii::app()->user->domain."/".$id.".jpg"))
 	   unlink(Yii::app()->basePath.$filename);
@@ -239,6 +260,13 @@ class TyontekijatController extends Controller
 	 */
 	public function actionIndex()
 	{
+
+	// <-- Oikeudet
+	   $checkOikeus = "tyontekijat_0_".Yii::app()->user->adminStatus;
+	   $site = Yii::app()->createController('Site');
+	   $site[0]->checkOikeus($checkOikeus);
+	//  Oikeudet -->
+
        		$criteria = new CDbCriteria();
 	        $criteria->order = "  id DESC ";
 
