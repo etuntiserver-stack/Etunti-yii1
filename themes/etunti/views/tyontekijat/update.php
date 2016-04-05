@@ -131,10 +131,10 @@ exit;
 <?php
 
 	$i = 0;
-	foreach(array_reverse(glob(Yii::app()->baseUrl.'/tiedostot/tekijat/'.Yii::app()->user->domain.'/'.$model->id.'_*.*')) as $file) {
+	foreach(array_reverse(glob('tiedostot/tekijat/'.Yii::app()->user->domain.'/'.$model->id.'_*.*')) as $file) {
 	$i++;
 	$explNimi = explode("/",$file);
- 	echo 'dddd
+ 	echo '
 	<div class="form-inline" id="t_'.$model->id.$i.'">
 	  <div class="btn btn-xs btn-danger poistaTiedosto" this="'.$file.'" model="'.$model->id.'" for="t_'.$model->id.$i.'">X</div>
 	  <a href="../../'.$file.'">'.end($explNimi).'</a>
