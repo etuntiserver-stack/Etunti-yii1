@@ -1242,39 +1242,19 @@ $("#Lasku_as_nro").change(function() {
 		  }
 		}
 
-		if(sp[3]){
+
 		    $("#Lasku_osoite").val(sp[3])
-		}
-		if(sp[4]){
 		    $("#Lasku_postinumero").val(sp[4])
-		}
-		if(sp[5]){
 		    $("#Lasku_toimipaikka").val(sp[5])
-		}
-		if(sp[6]){
 		    $("#Lasku_yhteyshenkilo").val(sp[6])
-		}
-		if(sp[7]){
 		    $("#Lasku_puhelin").val(sp[7])
-		}
-		if(sp[9]){
 		    $("#Lasku_erapaiva").val(sp[9])
-		}
-		if(sp[10]){
 		    $("#Lasku_v_tunnus").val(sp[10])
-		}
-		if(sp[11]){
 		    $("#Lasku_verkkolaskuosoite").val(sp[11])
-		}
-		if(sp[12]){
 		    $("#Lasku_muistutuslasku_auto option[value="+sp[12]+"]").attr('selected','selected');
-		}
-		if(sp[13]){
 		    $("#Lasku_kirjeenluokka option[value="+sp[13]+"]").attr('selected','selected');
-		}
-		if(sp[14]){
 		    $("#Lasku_sahkoposti").val(sp[14])
-		}
+		    $("#Lasku_viivastyskorko").val(sp[15])
 
            },
            error: function(XMLHttpRequest, textStatus, errorThrown){

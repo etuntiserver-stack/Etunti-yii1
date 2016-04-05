@@ -203,6 +203,12 @@ $asiakasnumero = 'voidaan käyttää oleva ID numero';
 	</div>
 
 	<div class="row">
+		<?php echo $form->labelEx($model,'viivastyskorko'); ?>
+		<?php echo $form->numberField($model,'viivastyskorko',array('size'=>60,'maxlength'=>20,'class'=>'form-control input-sm', 'step'=>'0.01')); ?>
+		<?php echo $form->error($model,'viivastyskorko'); ?>
+	</div>
+
+	<div class="row">
 		<?php echo $form->labelEx($model,'maksuehto'); ?>
 		<?php echo $form->textField($model,'maksuehto',array('size'=>60,'maxlength'=>100,'class'=>'form-control input-sm')); ?>
 		<?php echo $form->error($model,'maksuehto'); ?>
