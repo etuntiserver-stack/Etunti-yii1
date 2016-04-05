@@ -147,7 +147,7 @@ else
 	$did = date("Ymd",strtotime($apvm[$data->id]));
 	?>
 	<td>
-	  <span class="link vietyovuoroon" pvmtid="<?php echo $did.'_'.$data->tid; ?>"><i class="fa fa-table"></i></span>
+	  <!--<span class="link vietyovuoroon" pvmtid="<?php echo $did.'_'.$data->tid; ?>"><i class="fa fa-table"></i></span>-->
 	<?php  if($obtrue == true):  ?>
 
 	  <span class="link" data-toggle="collapse" data-target="<?php echo '#sushow_'.$data->id; ?>">
@@ -155,7 +155,7 @@ else
 	  </a>
 
 	    <div style="position:absolute;width:300px;z-index: 2;" class="collapse" id="<?php echo 'sushow_'.$data->id; ?>">
-	     <div class="alert alert-info" style="">
+	     <div class="well row">
 	     <?php 
 		$did = '';
 		$did = $this->renderPartial('//tyovuoroot/did',array('pvm'=>$data->aloitan,'tid'=>$data->tid,'from'=>'mobiili'), true); 
