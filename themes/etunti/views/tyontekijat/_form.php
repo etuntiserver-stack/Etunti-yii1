@@ -241,11 +241,11 @@ if(empty($model->position) and isset($model->id))
 	<?php if(isset($model->id)): ?>
 	<div class="section fill mb5">
 		<?php
-		$filename = "../../img/tekijat/".Yii::app()->user->domain."/".$model->id.".jpg";
-		if (file_exists(Yii::app()->request->baseUrl."img/tekijat/".Yii::app()->user->domain."/".$model->id.".jpg"))
+		$filename = Yii::app()->request->baseUrl."/img/tekijat/".Yii::app()->user->domain."/".$model->id.".jpg";
+		if (file_exists(Yii::app()->basePath."/../img/tekijat/".Yii::app()->user->domain."/".$model->id.".jpg"))
 		   echo '<img src="'.$filename.'" class="img-thumbnail">';
 		else
-		   echo '<img src="../../img/tekijat/noname.jpg" class="img-thumbnail">';
+		   echo '<img src="'.Yii::app()->request->baseUrl.'/img/tekijat/noname.jpg" class="img-thumbnail">';
 		?>		
 	</div>
 	<?php endif; ?>

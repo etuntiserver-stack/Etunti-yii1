@@ -213,7 +213,7 @@ $asiakasnumero = 'voidaan käyttää oleva ID numero';
 
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'viivastyskorko'); ?>
-		<?php echo $form->numberField($model,'viivastyskorko',array('size'=>60,'maxlength'=>20,'class'=>'form-control input-sm', 'step'=>'0.01')); ?>
+		<?php echo $form->numberField($model,'viivastyskorko',array('size'=>60,'maxlength'=>20,'class'=>'form-control', 'step'=>'0.01')); ?>
 		<?php echo $form->error($model,'viivastyskorko'); ?>
 	</div>
 
