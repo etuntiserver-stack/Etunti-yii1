@@ -51,7 +51,7 @@ class Asiakkaat extends DB2ActiveRecord
 			array('kirjeenluokka, muistutuslasku_auto, ryhma, aktiivinen', 'numerical', 'integerOnly'=>true),
 			array('myyja, postinumero, yhteyshenkilo, yrityksen_nimi, y_tunnus, kaupunki, puhelin, sahkoposti', 'length', 'max'=>100),
 			array('tyyppi, laskutus_kanava, osoite, verkkolaskuosoite', 'length', 'max'=>255),
-			array('maksuehto', 'length', 'max'=>20),
+			array('maksuehto, viivastyskorko', 'length', 'max'=>20),
 			array('alv', 'length', 'max'=>3),
 			array('hinta_tyyppi', 'length', 'max'=>50),
 			array('hinta', 'length', 'max'=>10),
