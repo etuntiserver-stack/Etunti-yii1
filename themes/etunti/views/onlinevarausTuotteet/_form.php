@@ -44,6 +44,12 @@
 	</div>
 
 	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'kotitalousvahennys'); ?>
+		<?php echo $form->numberField($model,'kotitalousvahennys',array('size'=>20,'maxlength'=>20, 'class'=>'form-control', 'placeholder'=>'Esimerkiksi 45')); ?>
+		<?php echo $form->error($model,'kotitalousvahennys'); ?>
+	</div>
+
+	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'nelio'); ?>
 		<?php
 		$list = array(

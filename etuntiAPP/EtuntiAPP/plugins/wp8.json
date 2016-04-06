@@ -1,0 +1,48 @@
+{
+    "prepare_queue": {
+        "installed": [],
+        "uninstalled": []
+    },
+    "config_munge": {
+        "files": {}
+    },
+    "installed_plugins": {
+        "com.chariotsolutions.nfc.plugin": {
+            "PACKAGE_NAME": "{bf0966c0-fbcd-11e5-8040-ff9a4bcae351}"
+        },
+        "cordova-plugin-camera": {
+            "PACKAGE_NAME": "{bf0966c0-fbcd-11e5-8040-ff9a4bcae351}"
+        },
+        "cordova-plugin-dialogs": {
+            "PACKAGE_NAME": "{bf0966c0-fbcd-11e5-8040-ff9a4bcae351}"
+        },
+        "cordova-plugin-file": {
+            "PACKAGE_NAME": "{bf0966c0-fbcd-11e5-8040-ff9a4bcae351}"
+        },
+        "cordova-plugin-file-transfer": {
+            "PACKAGE_NAME": "{bf0966c0-fbcd-11e5-8040-ff9a4bcae351}"
+        },
+        "cordova-plugin-geolocation": {
+            "PACKAGE_NAME": "{bf0966c0-fbcd-11e5-8040-ff9a4bcae351}"
+        },
+        "cordova-plugin-media": {
+            "PACKAGE_NAME": "{bf0966c0-fbcd-11e5-8040-ff9a4bcae351}"
+        },
+        "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "{bf0966c0-fbcd-11e5-8040-ff9a4bcae351}"
+        },
+        "de.appplant.cordova.plugin.local-notification": {
+            "PACKAGE_NAME": "{bf0966c0-fbcd-11e5-8040-ff9a4bcae351}"
+        },
+        "org.apache.cordova.device": {
+            "PACKAGE_NAME": "{bf0966c0-fbcd-11e5-8040-ff9a4bcae351}"
+        },
+        "phonegap-plugin-push": {
+            "PACKAGE_NAME": "{bf0966c0-fbcd-11e5-8040-ff9a4bcae351}"
+        },
+        "uk.co.whiteoctober.cordova.appversion": {
+            "PACKAGE_NAME": "{bf0966c0-fbcd-11e5-8040-ff9a4bcae351}"
+        }
+    },
+    "dependent_plugins": {}
+}

@@ -42,7 +42,7 @@ class OnlinevarausTuotteet extends DB2ActiveRecord
 			array('nimike, palvelu, kesto, hinta', 'required'),
 			array('palvelu', 'numerical', 'integerOnly'=>true),
 			array('nimike, selitysteksti', 'length', 'max'=>255),
-			array('hinta, kesto, nelio', 'length', 'max'=>20),
+			array('hinta, kesto, nelio, kotitalousvahennys', 'length', 'max'=>20),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('id, nimike, hinta, selitysteksti, palvelu, kesto, nelio', 'safe', 'on'=>'search'),
@@ -73,6 +73,7 @@ class OnlinevarausTuotteet extends DB2ActiveRecord
 			'palvelu' => 'Palvelu',
 			'kesto' => 'Kesto (tunnilla)',
 			'nelio' => 'Neliömetri m²',
+			'kotitalousvahennys' => 'Kotitalousvähennys %',
 		);
 	}
 
