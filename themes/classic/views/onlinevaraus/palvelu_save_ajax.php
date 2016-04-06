@@ -129,6 +129,13 @@
 	$body .= '<span id="hinta">'.number_format($sum, 2, ',', '').'</span> &euro;';
 	$_SESSION['onlinevaraus']['amount'] = $sum;
 
+$body .= $model->kotitalousvahennys;
+	if(isset($model->kotitalousvahennys) and !empty($model->kotitalousvahennys))
+	{
+	$s = $sum-(($sum*100)/$model->kotitalousvahennys);
+	$body .= $s.'gg';
+	}
+
 	$body .= '
 	 </div>
 	</div>';

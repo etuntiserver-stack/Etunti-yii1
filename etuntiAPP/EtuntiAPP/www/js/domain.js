@@ -5,7 +5,18 @@
   var my_location = '';
   var tag = '000000';
 
-  var server = "http://etunti.fi";
+
+    var server = 'http://etunti.fi';
+
+    document.addEventListener("deviceready", onServerReady, false);
+    function onServerReady() {
+
+	if(device.platform == 'ios'){
+		server = 'https://etunti.fi';
+	}
+
+    }
+
   var url = server+"/index.php/api/mob";
   var puh_nro = "";
   var versio = "1.70";
@@ -124,6 +135,17 @@ $("#dm").html('<label>Domain</label>' +
   }
 
 
+    var exitbutton = '&nbsp;&nbsp;&nbsp;<a href="#" onclick="exitFromApp()"><h2 class="glyphicon glyphicon-new-window"></h2></a>';
+
+    document.addEventListener("deviceready", onDeviceReady, false);
+    function onDeviceReady() {
+
+	if(device.platform == 'ios'){
+		exitbutton = '';
+	}
+
+    }
+
 
 
   $("#footlinks").html(
@@ -137,8 +159,8 @@ $("#dm").html('<label>Domain</label>' +
 		'<a href="#" id="tvuoro"><h2 class="glyphicon glyphicon-time form-group"></h2></a>&nbsp;&nbsp;&nbsp;' +
 		'<a href="#" id="tehty"><h2 class="glyphicon glyphicon-chevron-down"></h2></a>&nbsp;&nbsp;&nbsp;' +
 		'<a href="#" id="asetukset"><h2 class="glyphicon glyphicon-cog"></h2></a>&nbsp;&nbsp;&nbsp;' +
-		'<a href="#" id="camera"><h2 class="glyphicon glyphicon-camera"></h2></a>&nbsp;&nbsp;&nbsp;' +
-		'<a href="#" onclick="exitFromApp()"><h2 class="glyphicon glyphicon-new-window"></h2></a>' +
+		'<a href="#" id="camera"><h2 class="glyphicon glyphicon-camera"></h2></a>' +
+		exitbutton +
 	    '</center>' +
 	'</div>' +
 	'</div>' +
