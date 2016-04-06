@@ -2,6 +2,8 @@
 //ini_set('session.gc_maxlifetime',12*60*60);
 //ini_set('session.cookie_lifetime',12*60*60);
 
+if(!isset(Yii::app()->user->domain))
+$this->redirect(Yii::app()->request->baseUrl.'/index.php/user/login');
 
 //phpinfo();
 function num($val){
