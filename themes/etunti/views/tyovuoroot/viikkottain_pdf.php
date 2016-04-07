@@ -1,4 +1,4 @@
-<link rel="stylesheet" type="text/css" href="css/pdf_table.css">
+<link rel="stylesheet" type="text/css" href="css/pdf_table_palkka.css">
 
 <style>
 #ylataulu{
@@ -6,13 +6,13 @@
 }
 td{ height: auto }
 .tb .col0{  text-align: left; font-size: 50%; line-height: 130%; }
-.tb .col1{ width: 22%; text-align: left; font-size: 50%; line-height: 130%; }
-.tb .col2{ width: 22%; text-align: left; font-size: 50%; line-height: 130%; }
-.tb .col3{ width: 22%; text-align: left; font-size: 50%; line-height: 130%; }
-.tb .col4{ width: 22%; text-align: left; font-size: 50%; line-height: 130%; }
-.tb .col5{ width: 22%; text-align: left; font-size: 50%; line-height: 130%; }
-.tb .col6{ width: 22%; text-align: left; font-size: 50%; line-height: 130%; }
-.tb .col7{ width: 22%; text-align: left; font-size: 50%; line-height: 130%; }
+.tb .col1{ width: 21%; text-align: left; font-size: 50%; line-height: 130%; }
+.tb .col2{ width: 21%; text-align: left; font-size: 50%; line-height: 130%; }
+.tb .col3{ width: 21%; text-align: left; font-size: 50%; line-height: 130%; }
+.tb .col4{ width: 21%; text-align: left; font-size: 50%; line-height: 130%; }
+.tb .col5{ width: 21%; text-align: left; font-size: 50%; line-height: 130%; }
+.tb .col6{ width: 21%; text-align: left; font-size: 50%; line-height: 130%; }
+.tb .col7{ width: 21%; text-align: left; font-size: 50%; line-height: 130%; }
 </style>
 
 
@@ -61,8 +61,7 @@ if($week > $wkMaara) {
 
 
 <div class="tb">
-<table class="table table-bordered table-condensed small">
-  <thead class="myBgColors">
+<table class="table table-bordered table-condensed">
   <tr>
   <th><?php echo Yii::t('main', 'Työntekijä'); ?></th>
   <?php
@@ -78,7 +77,7 @@ if($week > $wkMaara) {
   }
   ?>
   </tr>
-  </thead>
+
   <?php
   $criteria = new CDbCriteria();
   $criteria->order = " tekijan_nimi ";
@@ -107,9 +106,10 @@ if($week > $wkMaara) {
 
 	  for($day= 1; $day <= 7; $day++) {
 	    $d = strtotime($year ."W". $week . $day);
+	    $tab = $this->renderPartial('//tyovuoroot/did',array('pvm'=>date('d.m.Y',$d),'tid'=>$t->id,'from'=>'mobiili','tietoja'=>1),true);
 	    echo "
 	    <td class='col$day'><div class='latikkoAsetukset'>
-	    ". $this->renderPartial('//tyovuoroot/did',array('pvm'=>date('d.m.Y',$d),'tid'=>$t->id,'from'=>'mobiili','tietoja'=>1),true) ."
+	    ". json_decode($tab, true) ."
 	    </div></td>";
 	  }
 

@@ -27,19 +27,29 @@ $asetukset = Asetukset::model()->findbypk(1);
   <li role="presentation"><?php echo CHtml::link('Maksu','maksu'); ?></li>
 </ul>
 
+<style>
+.well{
+    background: rgba(255, 255, 255, 1);
+    border:3px rgba(0, 157, 218, 1) solid;
+}
+.kiinni{ opacity:0.4 } 
+.boxes-info{
+	height: auto;
+}
+.day b:hover{ color: orange; }
+.orangeColor{ color: orange; }
+</style>
 
 <br><br>
+
+
 <div class="row">
  <div class="col-sm-4">
- <div class="alert alert-success">
 	<div id="kalenterit"></div>
  </div>
- </div>
-
  <div class="col-sm-4">
 	<div id="aikoja"></div>
  </div>
-
  <div class="col-sm-4">
    <div id="panGetContent">
    <?php 
@@ -60,6 +70,14 @@ $asetukset = Asetukset::model()->findbypk(1);
 
 <script type="text/javascript">
 $(document).ready(function(){
+
+
+$(document).delegate(".day b","click",function(){
+	$('.day b').removeClass('orangeColor');
+	$(this).addClass('orangeColor');
+});
+
+
 
 
 kaksiKalenteria();

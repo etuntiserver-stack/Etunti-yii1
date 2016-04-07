@@ -6,6 +6,7 @@ $asetukset = Asetukset::model()->findbypk(1);
 <style>
 .well{
     background: rgba(255, 255, 255, 1);
+    border:3px rgba(0, 157, 218, 1) solid;
 }
 </style>
 

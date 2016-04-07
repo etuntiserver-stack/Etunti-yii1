@@ -70,18 +70,18 @@
 
 	$body = 
 	'
-	<div class = "panel panel-success">
-	   <div class = "panel-heading">
-	      Yhteenveto
+	<div class="panel boxes-info">
+	   <div class="panel-heading">
+	      <h4>Yhteenveto</h4>
 	   </div>
 	   
 	   <div class = "panel-body">
 
 
 	<div class="row">
-	 <div class="col-sm-1">
+	 <div class="col-sm-2">
 	   <i class="fa fa-home"></i> 
-	 </div><div class="col-sm-11">
+	 </div><div class="col-sm-10">
 		<span id="nimikejanelio">'.$model->nimike.' '.$model->nelio.' m²</span>';
 
 		if(isset($_SESSION['onlinevaraus']['lisapalvelut']))
@@ -105,9 +105,9 @@
 	 </div>
 	</div>
 	<div class="row">
-	 <div class="col-sm-1">
+	 <div class="col-sm-2">
 	   <i class="fa fa-clock-o"></i> 
-	 </div><div class="col-sm-11">';
+	 </div><div class="col-sm-10">';
 
 	$sumTunti = $lisaTunti+$model->kesto;
 	$_SESSION['onlinevaraus']['sumTunti'] = $sumTunti;
@@ -117,9 +117,9 @@
 	 </div>
 	</div>
 	<div class="row">
-	 <div class="col-sm-1">
+	 <div class="col-sm-2">
 	   <i class="fa fa-eur"></i> 
-	 </div><div class="col-sm-11">';
+	 </div><div class="col-sm-10">';
 
 	if($vkolisa > 0)
 	$sum = ($lisaHinta+$model->hinta)*$vkolisa;

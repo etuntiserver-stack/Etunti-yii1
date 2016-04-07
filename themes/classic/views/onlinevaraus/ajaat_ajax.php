@@ -57,7 +57,7 @@ if($taysinVapaana == 'on' and !empty($vapaaTid))
    $kuva = '<img src="../../img/tekijat/noname.jpg" class="img-thumbnail">';
 
 
-   $body .= '<div class="row">';
+   $body .= '<div class="row small">';
      $body .= '<div class="link col-sm-10 col-sm-offset-1 ajaanClick"  tid="'.$vapaaTid.'" pvm="'.date("d.m.Y",strtotime($_POST['pvm'])).'" alku="'.$sta.'" loppu="'.$sto.'">';
      	$body .= '
 	    <div class="">
@@ -91,7 +91,7 @@ if($taysinVapaana == 'ei' and empty($vapaaTid))
    foreach($pmvCal as $k=>$v)
    {
 	$ex = explode("//",$k);
-   $body .= '<div class="row">';
+   $body .= '<div class="row small">';
      $body .= '<div class="link col-sm-10 col-sm-offset-1 ajaanClick" tid="'.$ex[2].'" pvm="'.date("d.m.Y",strtotime($_POST['pvm'])).'" alku="'.$ex[0].'" loppu="'.$ex[1].'">';
 	$body .= '
 	    <div class="">
