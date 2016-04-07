@@ -3,6 +3,7 @@
 /* @var $dataProvider CActiveDataProvider */
 $asetukset = Asetukset::model()->findbypk(1);
 ?>
+<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/onlinevaraus.css">
 
 <div class="container-fluid">
 <br><br>
@@ -16,13 +17,27 @@ $asetukset = Asetukset::model()->findbypk(1);
  </div>
 </div>
 
-<ul class="nav nav-pills nav-justified">
-  <li role="presentation"><?php echo CHtml::link('Palvelu','index'); ?></li>
-  <li role="presentation"><?php echo CHtml::link('Aika','aika'); ?></li>
-  <li role="presentation"><?php echo CHtml::link('Osoite','osoite'); ?></li>
-  <li role="presentation" class="active"><?php echo CHtml::link('Maksu','maksu'); ?></li>
-</ul>
+<div class="stepwizard">
+    <div class="stepwizard-row">
+        <div class="stepwizard-step">
+            <button type="button" class="btn btn-default btn-circle"><?php echo CHtml::link('1','index'); ?></button>
+            <p>PALVELU</p>
+        </div>
+        <div class="stepwizard-step">
+            <button type="button" class="btn btn-default btn-circle"><?php echo CHtml::link('2','aika'); ?></button>
+            <p>AIKA</p>
+        </div>
+        <div class="stepwizard-step">
+            <button type="button" class="btn btn-default btn-circle"><?php echo CHtml::link('3','osoite'); ?></button>
+            <p>OSOITE</p>
+        </div> 
+              <div class="stepwizard-step">
+            <button type="button" class="btn btn-primary btn-circle"><?php echo CHtml::link('4','maksu'); ?></button>
+            <p>MAKSU</p>
+        </div>
 
+    </div>
+</div>
 <br>
 
 <br><br>
@@ -30,7 +45,7 @@ $asetukset = Asetukset::model()->findbypk(1);
 
  <div class="col-sm-8">
    <?php 
-   if(isset($_SESSION['onlinevaraus']['paapalvelu']))
+   if(isset($_SESSION['onlinevaraus']['paapalvelu']) and isset($_SESSION['onlinevaraus']['modelKohde']))
    {
 	$k = Kohteet::model()->findbypk($_SESSION['onlinevaraus']['modelKohde']);
 	if(isset($k->id))

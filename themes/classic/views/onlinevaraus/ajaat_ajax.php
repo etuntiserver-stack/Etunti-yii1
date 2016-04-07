@@ -1,6 +1,11 @@
 <?php
 
-   $body = '<center><h3>'.date("d.m.Y", strtotime($_POST['pvm'])).'</h3></center>';
+   $body = '
+	<div class="boxes-info">
+	      <h4>'.date("d.m.Y", strtotime($_POST['pvm'])).'</h4>
+	   <div class = "panel-body">
+
+   ';
    $body .= '<input type="hidden" value="'.date("d.m.Y", strtotime($_POST['pvm'])).'" id="valinnuPvm">';
 
 
@@ -29,8 +34,18 @@
    // Tarkista taysin vapaana -->
 
 
+function tr($vapaaTid, $pvm, $sta, $sto, $kuva)
+{
+   	$return = '
+	<tr class="link ajaanClick" tid="'.$vapaaTid.'" pvm="'.date("d.m.Y",strtotime($_POST['pvm'])).'" alku="'.$sta.'" loppu="'.$sto.'">
+	<td class="col-sm-3">'.$kuva.'</td>
+	<td>'.$sta.' - '.$sto.'</td>
+	</tr>';
+	return $return;
+}
 
 
+   $body .= '<table class="table table-hover">';
 
    $sumTunti = (float)$_SESSION['onlinevaraus']['sumTunti'];
    $sumTuntiMin = $sumTunti*60;
@@ -56,17 +71,7 @@ if($taysinVapaana == 'on' and !empty($vapaaTid))
    else
    $kuva = '<img src="../../img/tekijat/noname.jpg" class="img-thumbnail">';
 
-
-   $body .= '<div class="row small">';
-     $body .= '<div class="link col-sm-10 col-sm-offset-1 ajaanClick"  tid="'.$vapaaTid.'" pvm="'.date("d.m.Y",strtotime($_POST['pvm'])).'" alku="'.$sta.'" loppu="'.$sto.'">';
-     	$body .= '
-	    <div class="">
-		<div class="col-sm-3">'.$kuva.'</div>
-		<div class="col-sm-9">'.$sta.' - '.$sto.'</div>
-	    </div>
-		';
-     $body .= '</div>';
-   $body .= '</div><br>';
+   $body .= tr($vapaaTid, $_POST['pvm'], $sta, $sto, $kuva);
 
    $int += $sumTuntiMin;
    $sta = date("H:i",strtotime($sta." +$int minutes"));
@@ -87,24 +92,18 @@ if($taysinVapaana == 'ei' and empty($vapaaTid))
    $kuva = '<img src="../../img/tekijat/noname.jpg" class="img-thumbnail">';
 
    $pmvCal = $this->pmvCal($_POST['pvm'])[1];
-   $body .= '<center><b>Vapaat vuorot</b></center>';
    foreach($pmvCal as $k=>$v)
    {
 	$ex = explode("//",$k);
-   $body .= '<div class="row small">';
-     $body .= '<div class="link col-sm-10 col-sm-offset-1 ajaanClick" tid="'.$ex[2].'" pvm="'.date("d.m.Y",strtotime($_POST['pvm'])).'" alku="'.$ex[0].'" loppu="'.$ex[1].'">';
-	$body .= '
-	    <div class="">
-		<div class="col-sm-3">'.$kuva.'</div>
-		<div class="col-sm-9">'.$ex[0].' - '.$ex[1].'</div>
-	    </div>
-	';
-     $body .= '</div>';
-   $body .= '</div><br>';
+	$body .= tr($ex[2], $_POST['pvm'], $ex[0], $ex[1], $kuva);
 	
    }
   
 }
+
+   $body .= '</table>';
+
+   $body .= '</div></div>';
 
    echo json_encode($body);
 ?>

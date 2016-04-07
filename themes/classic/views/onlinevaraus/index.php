@@ -3,15 +3,11 @@
 /* @var $dataProvider CActiveDataProvider */
 $asetukset = Asetukset::model()->findbypk(1);
 ?>
-<style>
-.well{
-    background: rgba(255, 255, 255, 1);
-    border:3px rgba(0, 157, 218, 1) solid;
-}
-</style>
+<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/onlinevaraus.css">
 
 <div class="container-fluid">
 <br>
+
 <div class="row">
  <div class="form-inline col-sm-12">
    <div class="form-group">
@@ -22,12 +18,29 @@ $asetukset = Asetukset::model()->findbypk(1);
  </div>
 </div>
 
-<ul class="nav nav-pills nav-justified">
-  <li role="presentation" class="active"><?php echo CHtml::link('Palvelu','index'); ?></li>
-  <li role="presentation"><?php echo CHtml::link('Aika','aika'); ?></li>
-  <li role="presentation"><?php echo CHtml::link('Osoite','osoite'); ?></li>
-  <li role="presentation"><?php echo CHtml::link('Maksu','maksu'); ?></li>
-</ul>
+
+
+<div class="stepwizard">
+    <div class="stepwizard-row">
+        <div class="stepwizard-step">
+            <button type="button" class="btn btn-primary btn-circle"><?php echo CHtml::link('1','index'); ?></button>
+            <p>PALVELU</p>
+        </div>
+        <div class="stepwizard-step">
+            <button type="button" class="btn btn-default btn-circle"><?php echo CHtml::link('2','aika'); ?></button>
+            <p>AIKA</p>
+        </div>
+        <div class="stepwizard-step">
+            <button type="button" class="btn btn-default btn-circle"><?php echo CHtml::link('3','osoite'); ?></button>
+            <p>OSOITE</p>
+        </div> 
+              <div class="stepwizard-step">
+            <button type="button" class="btn btn-default btn-circle"><?php echo CHtml::link('4','maksu'); ?></button>
+            <p>MAKSU</p>
+        </div>
+
+    </div>
+</div>
 
 <br>
 
@@ -58,7 +71,7 @@ if(isset($asetukset->checkout_id) and !empty($asetukset->checkout_id) and !empty
 
 <div class="row">
  <div class="col-sm-8">
-  <div class="well">
+  <div class="boxes-info">
    <center>
 	<p>
 		<h4>Valitse palvelu ja huoneiston koko</h4>

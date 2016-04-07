@@ -125,7 +125,7 @@ class OnlinevarausController extends Controller
 			$k = Kohteet::model()->findAll($criteria);
 			if(isset($k[0]))
 			{
-			  $body = '<h3>Valitse osoite</h3>';
+			  $body = '<h4>Valitse osoite</h4>';
 			  foreach($k as $data)
 			  {
 			     $body .= '
@@ -495,7 +495,7 @@ $months=array(
 
      // Create the table tag opener and day headers
 
-     $calendar = "<table class='table small'>";
+     $calendar = "<table class='table table-bordered table-hover'>";
      $calendar .= "<span>".$months[$month]." $year</span>";
      $calendar .= "<tr>";
 

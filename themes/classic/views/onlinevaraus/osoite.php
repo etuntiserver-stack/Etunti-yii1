@@ -4,6 +4,8 @@
 $asetukset = Asetukset::model()->findbypk(1);
 ?>
 
+<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/onlinevaraus.css">
+
 <div class="container-fluid">
 <br><br>
 <div class="row">
@@ -16,50 +18,68 @@ $asetukset = Asetukset::model()->findbypk(1);
  </div>
 </div>
 
-<ul class="nav nav-pills nav-justified">
-  <li role="presentation"><?php echo CHtml::link('Palvelu','index'); ?></li>
-  <li role="presentation"><?php echo CHtml::link('Aika','aika'); ?></li>
-  <li role="presentation" class="active"><?php echo CHtml::link('Osoite','osoite'); ?></li>
-  <li role="presentation"><?php echo CHtml::link('Maksu','maksu'); ?></li>
-</ul>
+<div class="stepwizard">
+    <div class="stepwizard-row">
+        <div class="stepwizard-step">
+            <button type="button" class="btn btn-default btn-circle"><?php echo CHtml::link('1','index'); ?></button>
+            <p>PALVELU</p>
+        </div>
+        <div class="stepwizard-step">
+            <button type="button" class="btn btn-default btn-circle"><?php echo CHtml::link('2','aika'); ?></button>
+            <p>AIKA</p>
+        </div>
+        <div class="stepwizard-step">
+            <button type="button" class="btn btn-primary btn-circle"><?php echo CHtml::link('3','osoite'); ?></button>
+            <p>OSOITE</p>
+        </div> 
+              <div class="stepwizard-step">
+            <button type="button" class="btn btn-default btn-circle"><?php echo CHtml::link('4','maksu'); ?></button>
+            <p>MAKSU</p>
+        </div>
+
+    </div>
+</div>
+
 
 <br>
 
 <br><br>
 <div class="row">
- <div class="col-sm-3">
+ <div class="col-sm-4">
 
      <?php if(!isset($_SESSION['onlinevaraus']['modelKohde'])) : ?>
 <div id="fullLomake">
+ <div class="boxes-info">
      <div class="sahkoposti">
-	<input type="text" id="sahkoposti" class="form-control" placeholder="Sähköposti">
+	<input type="text" id="sahkoposti" class="form-control input-lg" placeholder="Sähköposti">
      </div>
 
      <div class="buttons btncheckPosti">
      <br>
-	<button class="btn btn-primary btn-block tarkistaSahkoposti">Jatka</button>
+	<button class="btn btn-primary btn-block btn-lg tarkistaSahkoposti">Jatka</button>
      </div>
 
      <div id="lomake" style="display:none">
      <br>
-	<input type="text" id="osoite" class="form-control" placeholder="Osoite">
+	<input type="text" id="osoite" class="form-control input-lg" placeholder="Osoite">
      <br>
-	<input type="text" id="postinumero" class="form-control" placeholder="Postinumero">
+	<input type="text" id="postinumero" class="form-control input-lg" placeholder="Postinumero">
      <br>
-	<input type="text" id="kaupunki" class="form-control" placeholder="Postitoimipaikka">
+	<input type="text" id="kaupunki" class="form-control input-lg" placeholder="Postitoimipaikka">
      <br>
-	<input type="text" id="puhelin" class="form-control" placeholder="Puhelin">
+	<input type="text" id="puhelin" class="form-control input-lg" placeholder="Puhelin">
      <br>
-	<input type="text" id="yhteyshenkilo" class="form-control" placeholder="Yhteyshenkilö">
+	<input type="text" id="yhteyshenkilo" class="form-control input-lg" placeholder="Yhteyshenkilö">
      <br>
-	<button class="btn btn-primary btn-block tallennaUusi">Tallenna</button>
+	<button class="btn btn-primary btn-block btn-lg tallennaUusi">Tallenna</button>
      </div>
+ </div>
 </div>
      <?php endif; ?>
 
  </div>
 
- <div class="col-sm-5">
+ <div class="col-sm-4">
      <div id="loytynytOsoitteet"></div>
  </div>
 
@@ -134,7 +154,7 @@ $(".tarkistaSahkoposti").click(function(){
 			count = null;
 
 		} else {
-			$('#loytynytOsoitteet').html(data);
+			$('#loytynytOsoitteet').html(data).addClass('boxes-info');
 			$('.sahkoposti, .btncheckPosti').hide('slow');
 			//console.log(data);
 			count = null;
