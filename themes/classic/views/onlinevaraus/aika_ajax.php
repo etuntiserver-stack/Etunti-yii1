@@ -10,11 +10,11 @@
 
      $body .= '
 <div class="row">
- <div class="boxes-info etuntibox">
-  <div class="cont">
-     '.$this->build_calendar($month,$year,$dateArray).'</div></div>
-  <div>
- <div>
+ <div class="boxes-info">
+
+     '.$this->build_calendar($month,$year,$dateArray).'
+
+ <div></div></div>
 </div>
      ';
 
@@ -24,10 +24,8 @@
 
      $body .= '
 <div class="row">
- <div class="boxes-info etuntibox">
-  <div class="cont">
+ <div class="boxes-info">
      '.$this->build_calendar($month,$year,$dateArray).'
-  <div>
  <div>
 </div>
      ';

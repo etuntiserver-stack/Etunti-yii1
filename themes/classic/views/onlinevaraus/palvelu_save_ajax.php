@@ -70,11 +70,9 @@
 
 	$body = 
 	'
-	<div class="panel boxes-info">
-	   <div class="panel-heading">
+	<div class="boxes-info">
 	      <h4>Yhteenveto</h4>
-	   </div>
-	   
+   
 	   <div class = "panel-body">
 
 
@@ -149,15 +147,15 @@
 	</div>';
 
 	if(isset($sivu) and $sivu == 'index')
-	$body .= CHtml::link('Valitse aika','aika', array('class'=>'btn btn-success'));
+	$body .= CHtml::link('Valitse aika','aika', array('class'=>'btn btn-success btn-lg'));
 	elseif(isset($sivu) and $sivu == 'aika' and isset($_SESSION['onlinevaraus']['modelTV']))
-	$body .= CHtml::link('Valitse osoite','osoite', array('class'=>'btn btn-success'));
+	$body .= CHtml::link('Valitse osoite','osoite', array('class'=>'btn btn-success btn-lg'));
 	elseif(isset($sivu) and $sivu == 'osoite' and isset($_SESSION['onlinevaraus']['modelKohde']))
-	$body .= CHtml::link('Maksan','maksu', array('class'=>'btn btn-success'));
+	$body .= CHtml::link('Maksan','maksu', array('class'=>'btn btn-success btn-lg'));
 	elseif(isset($sivu) and $sivu == 'maksu')
-	$body .= CHtml::link('Kassalle','kassalle', array('class'=>'btn btn-success'));
+	$body .= CHtml::link('Kassalle','kassalle', array('class'=>'btn btn-success btn-lg'));
 
-	$body .= CHtml::link('Keskeytä','index?keskeyta=true', array('class'=>'btn btn-warning'));
+	$body .= CHtml::link('Keskeytä','index?keskeyta=true', array('class'=>'btn btn-warning btn-lg'));
 
 	echo json_encode($body);
 

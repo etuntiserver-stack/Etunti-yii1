@@ -4,6 +4,7 @@
 $asetukset = Asetukset::model()->findbypk(1);
 
 ?>
+<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/onlinevaraus.css">
 
 <div class="container-fluid">
 
@@ -20,25 +21,28 @@ $asetukset = Asetukset::model()->findbypk(1);
 </div>
 
 
-<ul class="nav nav-pills nav-justified">
-  <li role="presentation"><?php echo CHtml::link('Palvelu','index'); ?></li>
-  <li role="presentation" class="active"><?php echo CHtml::link('Aika','aika'); ?></li>
-  <li role="presentation"><?php echo CHtml::link('Osoite','osoite'); ?></li>
-  <li role="presentation"><?php echo CHtml::link('Maksu','maksu'); ?></li>
-</ul>
+<div class="stepwizard">
+    <div class="stepwizard-row">
+        <div class="stepwizard-step">
+            <button type="button" class="btn btn-default btn-circle"><?php echo CHtml::link('1','index'); ?></button>
+            <p>PALVELU</p>
+        </div>
+        <div class="stepwizard-step">
+            <button type="button" class="btn btn-primary btn-circle"><?php echo CHtml::link('2','aika'); ?></button>
+            <p>AIKA</p>
+        </div>
+        <div class="stepwizard-step">
+            <button type="button" class="btn btn-default btn-circle"><?php echo CHtml::link('3','osoite'); ?></button>
+            <p>OSOITE</p>
+        </div> 
+              <div class="stepwizard-step">
+            <button type="button" class="btn btn-default btn-circle"><?php echo CHtml::link('4','maksu'); ?></button>
+            <p>MAKSU</p>
+        </div>
 
-<style>
-.well{
-    background: rgba(255, 255, 255, 1);
-    border:3px rgba(0, 157, 218, 1) solid;
-}
-.kiinni{ opacity:0.4 } 
-.boxes-info{
-	height: auto;
-}
-.day b:hover{ color: orange; }
-.orangeColor{ color: orange; }
-</style>
+    </div>
+</div>
+
 
 <br><br>
 
