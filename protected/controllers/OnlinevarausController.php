@@ -495,14 +495,14 @@ $months=array(
 
      // Create the table tag opener and day headers
 
-     $calendar = "<table class=''>";
+     $calendar = "<table class='table small'>";
      $calendar .= "<span>".$months[$month]." $year</span>";
      $calendar .= "<tr>";
 
      // Create the calendar headers
 
      foreach($daysOfWeek as $day) {
-          $calendar .= "<th class='header'>$day</th>";
+          $calendar .= "<td class='header'>$day</td>";
      } 
 
      // Create the rest of the calendar
@@ -543,9 +543,9 @@ $months=array(
 
 	  $tila = '';
 	  if($on == 'vapaa')
-		 $tila .= '<b class="btn btn-success btn-block cal" pvm="'.$date.'">'.$currentDay.'</b>';
+		 $tila .= '<b class="link vapaa cal" pvm="'.$date.'">'.$currentDay.'</b>';
 	  else
-		$tila .= '<b class="btn btn-warning btn-block">'.$currentDay.'</b>';
+		$tila .= '<b class="kiinni">'.$currentDay.'</b>';
 
 
 	  $pyhat = $this->pyhatCheck($date);
