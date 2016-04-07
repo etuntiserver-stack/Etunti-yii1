@@ -188,6 +188,9 @@ class OnlinevarausController extends Controller
 
 	public function actionAjaat_ajax()
 	{
+		if(isset($_POST['pvm']))
+		$_SESSION['onlinevaraus']['valittuPVM'] = $_POST['pvm'];
+
 		$data = 0;
 		$this->renderPartial('ajaat_ajax',array(
 			'data'=>$data,
@@ -498,7 +501,7 @@ $months=array(
 
      // Create the table tag opener and day headers
 
-     $calendar = "<table class='table table-bordered table-hover'>";
+     $calendar = "<table class='table table-bordered'>";
      $calendar .= "<span>".$months[$month]." $year</span>";
      $calendar .= "<tr>";
 
@@ -543,14 +546,6 @@ $months=array(
 	  $on = $this->pmvCal($date)[0];
 
 
-
-	  $tila = '';
-	  if($on == 'vapaa')
-		 $tila .= '<b class="link vapaa cal" pvm="'.$date.'">'.$currentDay.'</b>';
-	  else
-		$tila .= '<b class="kiinni">'.$currentDay.'</b>';
-
-
 	  $pyhat = $this->pyhatCheck($date);
 	  if($pyhat == 'pyhat')
 	  {
@@ -561,7 +556,20 @@ $months=array(
 	     $tooltip = "";
  	  }
 
-          $calendar .= "<td class='day' rel='$date' width=1><div class='toolt' ".$tooltip.">$tila</div></td>";
+	  $tila = '';
+	  if($on == 'vapaa' and isset($_SESSION['onlinevaraus']['valittuPVM']) and $_SESSION['onlinevaraus']['valittuPVM'] != date("Y-m-d", strtotime($date)))
+		 $tila .= '<td class="day link vapaa cal" pvm="'.$date.'"><div class="toolt" '.$tooltip.'>'.$currentDay.'</div></td>';
+	  elseif($on == 'vapaa' and !isset($_SESSION['onlinevaraus']['valittuPVM']))
+		 $tila .= '<td class="day link vapaa cal" pvm="'.$date.'"><div class="toolt" '.$tooltip.'>'.$currentDay.'</div></td>';
+	  elseif($on == 'vapaa' and isset($_SESSION['onlinevaraus']['valittuPVM']) and $_SESSION['onlinevaraus']['valittuPVM'] == date("Y-m-d", strtotime($date)))
+		 $tila .= '<td class="day link orangeColor cal" pvm="'.$date.'"><div class="toolt" '.$tooltip.'>'.$currentDay.'</div></td>';
+	  else
+		$tila .= '<td class="day kiinni">'.$currentDay.'</td>';
+
+
+
+
+          $calendar .= $tila;
 
           // Increment counters
  

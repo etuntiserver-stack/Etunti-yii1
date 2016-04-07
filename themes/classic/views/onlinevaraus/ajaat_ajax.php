@@ -1,5 +1,6 @@
 <?php
 
+
    $body = '
 	<div class="boxes-info">
 	      <h4>'.date("d.m.Y", strtotime($_POST['pvm'])).'</h4>

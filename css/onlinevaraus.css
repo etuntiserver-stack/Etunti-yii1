@@ -44,12 +44,17 @@ body{margin:40px;}
     background: rgba(255, 255, 255, 1);
     border:3px rgba(0, 157, 218, 1) solid;
 }
-.kiinni{ opacity:0.4 } 
 .boxes-info{
 	height: auto;
 }
-.day:hover{ color: orange; }
-.orangeColor{ color: orange; }
+
+.day:hover{ background: orange; color: white; }
+.vapaa{ background: green; color: white;  }
+.orangeColor{ background: orange; color: white; }
+.kiinni{ background: red; color: white; } 
+
+
+
 .btn, .form-control {
   border-radius:0;
 }
@@ -65,3 +70,9 @@ body{margin:40px;}
   border-radius: 20px;
 }
 .btn-primary a{ color: white; }
+
+#kalenterit table td{ text-align: center; }
+
+
+
+

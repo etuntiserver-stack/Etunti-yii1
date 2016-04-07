@@ -76,8 +76,8 @@ $asetukset = Asetukset::model()->findbypk(1);
 $(document).ready(function(){
 
 
-$(document).delegate(".day b","click",function(){
-	$('.day b').removeClass('orangeColor');
+$(document).delegate(".day","click",function(){
+	$('.day').removeClass('orangeColor');
 	$(this).addClass('orangeColor');
 });
 
