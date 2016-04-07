@@ -70,7 +70,10 @@ class OnlinevarausController extends Controller
                 Yii::app()->theme = 'classic';
 		parent::init();
 		if(isset($_GET['domain']))
+		{
+		Yii::app()->user->setState('domain', $_GET['domain']);
 		$this->redirect(array('index'));
+		}
         }
 
 
