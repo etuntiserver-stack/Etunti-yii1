@@ -168,7 +168,7 @@ $("#palvelu").change(function(){
    if(palvelu)
    {
    $.ajax({
-	url: location.protocol + "//" + location.host + '/index.php/onlinevaraus/palvelu_ajax',
+	url: 'palvelu_ajax',
 	data:{ "word" : palvelu },
 	type:'POST',
 	success:function(data){
@@ -198,7 +198,7 @@ $("#palvelu").change(function(){
 function clearAll(){
 
    $.ajax({
-	url: location.protocol + "//" + location.host + '/index.php/onlinevaraus/palvelu_ajax',
+	url: 'palvelu_ajax',
 	data:{ "clear" : "all" },
 	type:'POST',
 	success:function(data){
@@ -226,7 +226,7 @@ function checker(){
 	console.log(palvelu+ " " + nelio);
 
    $.ajax({
-	url: location.protocol + "//" + location.host + '/index.php/onlinevaraus/palvelu_save_ajax',
+	url: 'palvelu_save_ajax',
 	data:{ "palvelu" : palvelu, "nelio" : nelio },
 	type:'POST',
 	success:function(data){
@@ -262,7 +262,7 @@ $(".checkbox").click(function(){
    if(lisapalveluID)
    {
    $.ajax({
-	url: location.protocol + "//" + location.host + '/index.php/onlinevaraus/lisat_ajax',
+	url: 'lisat_ajax',
 	data:{ "id" : lisapalveluID, "checked" : checked },
 	type:'POST',
 	success:function(data){

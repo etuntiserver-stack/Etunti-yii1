@@ -244,10 +244,14 @@ class OnlinevarausController extends Controller
 	   if(isset($_POST['palvelu']) and isset($_POST['nelio']))
 	   {
 		$criteria=new CDbCriteria;
-		$criteria->condition = " palvelu='".$_POST['palvelu']."' AND nelio='".$_POST['nelio']."' ";
+		$criteria->condition = " 
+			palvelu=0 AND nimike='".$_POST['palvelu']."' AND nelio='".$_POST['nelio']."' 
+		";
 		$model = OnlinevarausTuotteet::model()->find($criteria);
 		if(isset($model->id))
-		$_SESSION['onlinevaraus']['paapalvelu'] = $model->id;
+		{
+			$_SESSION['onlinevaraus']['paapalvelu'] = $model->id;
+		}
 
 		$this->renderPartial('palvelu_save_ajax',array(
 			'model'=>$model,
