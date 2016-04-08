@@ -63,10 +63,36 @@
 		echo '</select>';
 		?>
 
+
                             <i class="arrow double"></i>
                             </label>
                           </label>
                         </div>
+
+
+                        <div class="section">
+                         <label class="field select">
+
+				<?php
+				if(isset($_POST['tilaLaskulle']))
+				echo '<input type="hidden" id="getTila" value="'.$_POST['tilaLaskulle'].'">';
+				?>
+
+				<select name="tilaLaskulle" id="tilaLaskulle" class="gui-input">
+				<option>Tila</option>
+				<option value="1">Lasku luotu</option>
+				<option value="2">Lasku lähetetty</option>
+				<option value="3">Lasku maksettu</option>
+				</select>
+
+                            <i class="arrow double"></i>
+                            </label>
+                          </label>
+                        </div>
+
+
+
+
                       </div>
 
 
@@ -182,6 +208,11 @@
 
 <script type="text/javascript">
 $(document).ready(function(){
+
+if($('#getTila').val())
+{
+   $("#tilaLaskulle option[value='2']").prop('selected', true);
+}
 
 $(".haemob").click(function(){
 	$("#mobForm").submit();
