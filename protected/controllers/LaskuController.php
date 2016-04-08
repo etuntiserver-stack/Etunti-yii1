@@ -23,7 +23,7 @@ class LaskuController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','etsikohde','etsiasiakas', 'etsisaaja','luoKohteista', 'luoAsiakaasta', 'tr_rivit', 'tr_rivitkk','lasku_pdf', 'finvoice', 'postita', 'tr_rivit_tyhja','valitsetuote', 'hyvityslasku', 'postita_pdf', 'get_historia'),
+				'actions'=>array('admin','delete','create','update','index','view','etsikohde','etsiasiakas', 'etsisaaja','luoKohteista', 'luoAsiakaasta', 'tr_rivit', 'tr_rivitkk','lasku_pdf', 'finvoice', 'postita', 'tr_rivit_tyhja','valitsetuote', 'hyvityslasku', 'postita_pdf', 'get_historia', 'kohteen_tieto'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny', // allow admin user to perform 'admin' and 'delete' actions
@@ -78,6 +78,19 @@ class LaskuController extends Controller
 		$this->renderPartial('tr_rivit_tyhja');
 	}
 
+
+	public function actionKohteen_tieto()
+	{
+
+		if(isset($_POST['id']))
+		{
+			$k=Kohteet::model()->findbypk($_POST['id']);
+			if(isset($k->id))
+			{
+				echo json_encode($k->hinnoittelu."//");
+			}	
+		}
+	}
 
 	public function actionHyvityslasku($id)
 	{
@@ -858,6 +871,11 @@ exit;
 	        $criteria->addCondition (" viitenumero LIKE '%".$_POST['viitenumero']."%' ");
 
 	
+		//if(isset($_POST['tilaLaskulle']) and $asetukset->palvelu_tyyppi == 2)
+
+
+
+
 		$dataProvider=new CActiveDataProvider('Lasku', array(
 			'criteria'=>$criteria,
 			//'pagination'=>false

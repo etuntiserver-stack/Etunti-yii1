@@ -511,8 +511,15 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 	?>
 	</div>
       </div>
-      <div class="col-sm-12">
-        	<b class="btn btn-success  luoRiviTunti"><?php echo Yii::t('main', 'Luo rivit'); ?></b>
+      
+      <div class="section fill mb5">
+      <div class="col-sm-6">
+
+      </div>
+      <div class="col-sm-6">
+	<br>
+        	<b class="btn btn-success pull-right luoRiviTunti"><?php echo Yii::t('main', 'Luo rivit'); ?></b>
+      </div>
       </div>
 
    </div>
@@ -521,7 +528,7 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
     </div>
 </div>
 
-
+<div id="hinnoitelu"></div>
 
 
 <div id="kkKalut">
@@ -553,9 +560,16 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 	?>
 	</div>
       </div>
-      <div class="col-sm-12">
-        	<b class="btn btn-success  luoRiviKk"><?php echo Yii::t('main', 'Luo rivit'); ?></b>
-      </div>
+
+       <div class="section fill mb5">
+       <div class="col-sm-6">
+	
+       </div>
+       <div class="col-sm-6">
+	<br>
+        	<b class="btn btn-success pull-right luoRiviKk"><?php echo Yii::t('main', 'Luo rivit'); ?></b>
+       </div>
+       </div>
 
    </div>
   </div>
@@ -1326,6 +1340,32 @@ $("#Lasku_toimitusosoite").change(function() {
     }
 });
 
+
+// hinnoitelu
+$(document).delegate(".selectpicker","change",function(){
+
+  if($(this).val())
+  {
+	var thisVal = $(this).val();
+        $.ajax({
+           url: 'kohteen_tieto',
+	   type: 'POST',
+	   data: { id : thisVal },
+           success: function(data){
+		var sp = JSON.parse(data).split("//");
+		if(sp[0])
+		$('#hinnoitelu').html('<div class="alert alert-success">'+sp[0]+'</div>');
+
+           },
+           error: function(XMLHttpRequest, textStatus, errorThrown){
+               	console.log(XMLHttpRequest);
+	   }
+        });
+   } else {
+		$('#hinnoitelu').html('');
+   }
+
+});
 
 
 });
