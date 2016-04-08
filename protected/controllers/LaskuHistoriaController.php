@@ -28,7 +28,7 @@ class LaskuHistoriaController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view','paivakirja', 'avoimet', 'maksu_paivakirja', 'paakirja', 'maksu_paakirja', 'reskontraluettelo'),
+				'actions'=>array('index','view','paivakirja', 'avoimet', 'maksu_paivakirja', 'paakirja', 'maksu_paakirja', 'reskontraluettelo', 'alv_raportti'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
@@ -222,6 +222,51 @@ class LaskuHistoriaController extends Controller
 		$this->render('index', array('dataProvider' => $dataProvider));
 
 	}
+
+
+	public function actionAlv_raportti()
+	{
+
+       		$criteria = new CDbCriteria();
+       		$criteria->order = " paivays DESC ";
+
+		$from = date("Y-m-d");
+		$to = date("Y-m-d");
+
+		if(isset($_POST['from']) and isset($_POST['to'])){
+		$from 	= date("Y-m-d",strtotime($_POST['from']));
+		$to 	= date("Y-m-d",strtotime($_POST['to']));
+		}
+
+        	$criteria->condition = " 
+			DATE(paivays) BETWEEN '".$from."' AND '".$to."'
+			AND tilanne!=999
+		";
+
+		$model = Lasku::model()->findAll($criteria);
+
+		if(isset($_POST['tulosta']))
+		{
+	          $html2pdf = Yii::app()->ePdf->HTML2PDF('P', 'A4', 'en');
+		  $html2pdf->setDefaultFont('Arial');
+	          $html2pdf->WriteHTML($this->renderPartial('paivakirja',array(
+			'model'=>$model,
+			'from'=>$from,
+			'to'=>$to,
+		  ), true));
+	          $html2pdf->Output();
+
+		} else {
+
+		$this->render('alv_raportti',array(
+			'model'=>$model,
+			'from'=>$from,
+			'to'=>$to,
+		));
+
+		}
+	}
+
 
 
 	public function actionPaivakirja()
