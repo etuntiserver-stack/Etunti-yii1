@@ -159,6 +159,8 @@ $("#dm").html('<label>Domain</label>' +
 	'</footer>' +
 	'</div>');
 
+	painikkeet();
+
 	} else {
 
   $("#footlinks").html(
@@ -182,6 +184,7 @@ $("#dm").html('<label>Domain</label>' +
 
 	}
 
+	painikkeet();
     }
 
 
@@ -189,6 +192,7 @@ $("#dm").html('<label>Domain</label>' +
 
 
 
+function painikkeet(){
 
   $("#home").click(function(){
 	window.location.href='index.html';
@@ -213,5 +217,7 @@ $("#dm").html('<label>Domain</label>' +
   $("#asetukset").click(function(){
 	window.location.href='asetukset.html';
   });
+}
+
 
 });
