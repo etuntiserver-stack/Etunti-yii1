@@ -11,7 +11,7 @@
     document.addEventListener("deviceready", onServerReady, false);
     function onServerReady() {
 
-	if(device.platform == 'ios'){
+	if(device.platform == 'iOS'){
 		server = 'https://etunti.fi';
 	}
 
@@ -140,7 +140,7 @@ $("#dm").html('<label>Domain</label>' +
     document.addEventListener("deviceready", onDeviceReady, false);
     function onDeviceReady() {
 
-	if(device.platform == 'ios'){
+	if(device.platform == 'iOS'){
 		exitbutton = '';
 	}
 
