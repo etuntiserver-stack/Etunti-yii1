@@ -394,13 +394,13 @@ setTimeout(function() {
 
 
 		if(sp[0] == '3'){
-		  $("#butTyo").removeClass("btn-warning").addClass("btn-success").attr("tilanne","aloitusTyo");
+		  $("#butTyo").removeClass("btn-warning").addClass("btn-success").attr("tilanne","aloitusTyo").text('TYÖ');
 		}
 		if(sp[0] == '2'){
-		  $("#butMatka").removeClass("btn-warning").addClass("btn-success").attr("tilanne","aloitusMatka");
+		  $("#butMatka").removeClass("btn-warning").addClass("btn-success").attr("tilanne","aloitusMatka").text('MATKA');
 		}
 		if(sp[0] == '10'){
-		  $("#butLounas").removeClass("btn-warning").addClass("btn-success").attr("tilanne","aloitusLounas");
+		  $("#butLounas").removeClass("btn-warning").addClass("btn-success").attr("tilanne","aloitusLounas").text('LOUNAS');
 		}
 
 
@@ -409,22 +409,22 @@ setTimeout(function() {
 		  allHide();
 		  $("#tyo").show(370);
 		  $("#tyo_kohde").html(sp[1]).show(370);
-		  $("#butTyo").removeClass("btn-success").addClass("btn-warning").attr("tilanne","lopetusTyo");
-		  $("#alLop").html('<h2>LOPETA</h2>');
+		  $("#butTyo").removeClass("btn-success").addClass("btn-warning").attr("tilanne","lopetusTyo").text('LOPETA');
+		  $("#alLop").html('<h2>TYÖ</h2>');
 		} 
 		if(sp[0] == '2.1')
 		{
 		  allHide();
 		  $("#matka").show(370);
-		  $("#butMatka").removeClass("btn-success").addClass("btn-warning").attr("tilanne","lopetusMatka");
-		  $("#alLop").html('<h2>LOPETA</h2>');
+		  $("#butMatka").removeClass("btn-success").addClass("btn-warning").attr("tilanne","lopetusMatka").text('LOPETA');
+		  $("#alLop").html('<h2>MATKA</h2>');
 		}
 		if(sp[0] == '10.1')
 		{
 		  allHide();
 		  $("#lounas").show(370);
-		  $("#butLounas").removeClass("btn-success").addClass("btn-warning").attr("tilanne","lopetusLounas");
-		  $("#alLop").html('<h2>LOPETA</h2>');
+		  $("#butLounas").removeClass("btn-success").addClass("btn-warning").attr("tilanne","lopetusLounas").text('LOPETA');
+		  $("#alLop").html('<h2>LOUNAS</h2>');
 		}
 
 
