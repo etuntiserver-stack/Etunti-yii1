@@ -634,6 +634,10 @@
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/laskuHistoria/maksu_paakirja">
                   <span class="glyphicon glyphicon-time"></span> <?php echo Yii::t('main', 'Maksu pääkirja'); ?></a>
               </li>
+              <li>
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/laskuHistoria/alv_raportti">
+                  <span class="glyphicon glyphicon-time"></span> <?php echo Yii::t('main', 'ALV-raportti'); ?></a>
+              </li>
             </ul>
           </li>
 
