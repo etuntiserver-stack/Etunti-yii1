@@ -135,18 +135,11 @@ $("#dm").html('<label>Domain</label>' +
   }
 
 
-    var exitbutton = '&nbsp;&nbsp;&nbsp;<a href="#" onclick="exitFromApp()"><h2 class="glyphicon glyphicon-new-window"></h2></a>';
 
     document.addEventListener("deviceready", onDeviceReady, false);
     function onDeviceReady() {
 
 	if(device.platform == 'iOS'){
-		exitbutton = '';
-	}
-
-    }
-
-
 
   $("#footlinks").html(
 	'<div class="row">'+
@@ -159,13 +152,41 @@ $("#dm").html('<label>Domain</label>' +
 		'<a href="#" id="tvuoro"><h2 class="glyphicon glyphicon-time form-group"></h2></a>&nbsp;&nbsp;&nbsp;' +
 		'<a href="#" id="tehty"><h2 class="glyphicon glyphicon-chevron-down"></h2></a>&nbsp;&nbsp;&nbsp;' +
 		'<a href="#" id="asetukset"><h2 class="glyphicon glyphicon-cog"></h2></a>&nbsp;&nbsp;&nbsp;' +
-		'<a href="#" id="camera"><h2 class="glyphicon glyphicon-camera"></h2></a>' +
-		exitbutton +
+		'<a href="#" id="camera"><h2 class="glyphicon glyphicon-camera"></h2></a>&nbsp;&nbsp;&nbsp;' +
 	    '</center>' +
 	'</div>' +
 	'</div>' +
 	'</footer>' +
 	'</div>');
+
+	} else {
+
+  $("#footlinks").html(
+	'<div class="row">'+
+	'<footer id="footer">'+
+	'<div class="navbar navbar-default navbar-fixed-bottom">' +
+	'<div class="" id="footer-body">' +
+	    '<center>' +
+		'<a href="#" id="home"><h2 class="glyphicon glyphicon-home"></h2></a>&nbsp;&nbsp;&nbsp;' +
+		'<a href="#" id="viestintaURL"><h2 class="glyphicon glyphicon-envelope form-group"></h2></a>&nbsp;&nbsp;&nbsp;' +
+		'<a href="#" id="tvuoro"><h2 class="glyphicon glyphicon-time form-group"></h2></a>&nbsp;&nbsp;&nbsp;' +
+		'<a href="#" id="tehty"><h2 class="glyphicon glyphicon-chevron-down"></h2></a>&nbsp;&nbsp;&nbsp;' +
+		'<a href="#" id="asetukset"><h2 class="glyphicon glyphicon-cog"></h2></a>&nbsp;&nbsp;&nbsp;' +
+		'<a href="#" id="camera"><h2 class="glyphicon glyphicon-camera"></h2></a>&nbsp;&nbsp;&nbsp;' +
+		'<a href="#" onclick="exitFromApp()"><h2 class="glyphicon glyphicon-new-window"></h2></a>' +
+	    '</center>' +
+	'</div>' +
+	'</div>' +
+	'</footer>' +
+	'</div>');
+
+	}
+
+    }
+
+
+
+
 
 
 
