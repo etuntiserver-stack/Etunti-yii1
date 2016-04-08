@@ -118,7 +118,18 @@ if(empty($model->position) and isset($model->id))
 
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'tekijan_henkilotunnus'); ?>
-		<?php echo $form->textField($model,'tekijan_henkilotunnus',array('size'=>20,'maxlength'=>20,'class'=>'form-control')); ?>
+		<?php 
+
+	// <-- Oikeudet
+	   $checkOikeus = "henkilotunnukset_2_".Yii::app()->user->adminStatus;
+	   $site = Yii::app()->createController('Site');
+	   $vastaus = $site[0]->checkOikeusFields($checkOikeus);
+	//  Oikeudet -->
+		if($vastaus == 0)
+		echo $form->passwordField($model,'tekijan_henkilotunnus',array('size'=>20,'maxlength'=>20,'class'=>'form-control', 'readonly'=>'yes')); 
+		else
+		echo $form->textField($model,'tekijan_henkilotunnus',array('size'=>20,'maxlength'=>20,'class'=>'form-control')); 
+		?>
 		<?php echo $form->error($model,'tekijan_henkilotunnus'); ?>
 	</div>
 

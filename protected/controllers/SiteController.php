@@ -566,6 +566,20 @@ $(document).ready(function(){
 
 
 
+	public function checkOikeusFields($pyynto)
+	{
+
+	   $asetukset = Asetukset::model()->findbypk(1);
+	   $oikeudet = $asetukset->oikeudet;
+	   if (!preg_match("/".$pyynto."/i", $oikeudet) and Yii::app()->user->username != 'admin') {
+	   	$return = 0;
+	   } else {
+	   	$return = 1;
+	   }
+
+		return $return;
+	}
+
 
 
 }
