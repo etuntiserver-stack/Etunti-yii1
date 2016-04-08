@@ -2,6 +2,7 @@
  $array = array
  (
 	'asetukset'=>array(0=>null,1=>null,2=>'Muoka asetukset',3=>null),
+	'henkilotunnukset'=>array(0=>null,1=>null,2=>'Henkilötunnukset',3=>null),
 	'asiakkaat'=>array(0=>'Asiakkaat taulu',1=>'Luo asiakas',2=>'Muoka asiakas',3=>'Poista asiakas'),
 	'kohteet'=>array(0=>'Kohteet taulu',1=>'Luo kohde',2=>'Muoka kohde',3=>'Poista kohde'),
 	'tyontekijat'=>array(0=>'Työntekijät taulu',1=>'Luo työntekijä',2=>'Muoka työntekijä',3=>'Poista työntekijä'),
