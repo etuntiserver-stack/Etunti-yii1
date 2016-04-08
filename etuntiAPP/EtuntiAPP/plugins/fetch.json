@@ -105,7 +105,7 @@
             "type": "registry",
             "id": "cordova-plugin-device"
         },
-        "is_top_level": true,
+        "is_top_level": false,
         "variables": {}
     },
     "phonegap-nfc": {
@@ -114,6 +114,14 @@
             "id": "phonegap-nfc"
         },
         "is_top_level": true,
+        "variables": {}
+    },
+    "de.appplant.cordova.common.registerusernotificationsettings": {
+        "source": {
+            "type": "registry",
+            "id": "de.appplant.cordova.common.registerusernotificationsettings"
+        },
+        "is_top_level": false,
         "variables": {}
     }
 }
