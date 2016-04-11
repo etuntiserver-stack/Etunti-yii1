@@ -211,7 +211,7 @@ $(document).ready(function(){
 
 if($('#getTila').val())
 {
-   $("#tilaLaskulle option[value='2']").prop('selected', true);
+   $("#tilaLaskulle option[value="+$('#getTila').val()+"]").prop('selected', true);
 }
 
 $(".haemob").click(function(){
