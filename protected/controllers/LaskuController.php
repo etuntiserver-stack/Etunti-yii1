@@ -866,6 +866,32 @@ exit;
 		if(isset($_POST['viitenumero']) and !empty(trim($_POST['viitenumero'])))
 	        $criteria->addCondition (" viitenumero LIKE '%".$_POST['viitenumero']."%' ");
 
+/*
+		// POSTITA Luotu
+		if(isset($_POST['tilaLaskulle']) and $_POST['tilaLaskulle'] == 1 and $asetukset->palvelu_tyyppi == 1)
+		{
+	        $criteria->addCondition (" 
+			id IN 	(
+				SELECT lid FROM lasku_historia 
+				WHERE status='Lasku luotu'
+				AND (palvelu='postita' OR palvelu='local')
+				GROUP by lid
+				)
+		");
+		}
+
+		// POSTITA Lahetetty
+		if(isset($_POST['tilaLaskulle']) and $_POST['tilaLaskulle'] == 2 and $asetukset->palvelu_tyyppi == 1)
+		{
+	        $criteria->addCondition (" 
+			id IN 	(
+				SELECT lid FROM lasku_historia 
+				WHERE postita_statuscode='SE'
+				AND palvelu='postita'
+				ORDER by id DESC
+				)
+		");
+		}
 
 		// Trust Luotu
 		if(isset($_POST['tilaLaskulle']) and $_POST['tilaLaskulle'] == 1 and $asetukset->palvelu_tyyppi == 2)
@@ -886,7 +912,7 @@ exit;
 	        $criteria->addCondition (" 
 			id IN 	(
 				SELECT lid FROM lasku_historia 
-				WHERE status LIKE '%lähetetty%'
+				WHERE trust_statuscode='98'
 				AND palvelu='trust'
 				ORDER by id DESC
 				)
@@ -905,14 +931,14 @@ exit;
 				)
 		");
 		}
-
+*/
 
 		$dataProvider=new CActiveDataProvider('Lasku', array(
 			'criteria'=>$criteria,
 			//'pagination'=>false
 		));
 
-		$dataProvider->pagination->pageSize = 50;
+		$dataProvider->pagination->pageSize = 200;
 		$this->render('index', array('dataProvider' => $dataProvider, 'from'=>$from, 'to'=>$to, 'asetukset' => $asetukset));
 	}
 

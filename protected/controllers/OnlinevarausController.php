@@ -235,8 +235,8 @@ class OnlinevarausController extends Controller
 	   {
 		$word = trim($_POST['word']);
 		$criteria=new CDbCriteria;
-		$criteria->condition = " nimike='".$word."' ";
 		$criteria->order = " SUBSTRING_INDEX(nelio,'-',1) ";
+		$criteria->condition = " nimike='".$word."' ";
 		$data = OnlinevarausTuotteet::model()->findAll($criteria);
 
 		$this->renderPartial('palvelu_ajax',array(
@@ -559,14 +559,14 @@ $months=array(
  	  }
 
 	  $tila = '';
-	  if($date >= date("Y-m-d") and $on == 'vapaa' and isset($_SESSION['onlinevaraus']['valittuPVM']) and $_SESSION['onlinevaraus']['valittuPVM'] != date("Y-m-d", strtotime($date)))
+	  if($date > date("Y-m-d") and $on == 'vapaa' and isset($_SESSION['onlinevaraus']['valittuPVM']) and $_SESSION['onlinevaraus']['valittuPVM'] != date("Y-m-d", strtotime($date)))
 		 $tila .= '<td class="day link vapaa cal" pvm="'.$date.'"><div class="toolt" '.$tooltip.'>'.$currentDay.'</div></td>';
-	  elseif($date >= date("Y-m-d") and $on == 'vapaa' and !isset($_SESSION['onlinevaraus']['valittuPVM']))
+	  elseif($date > date("Y-m-d") and $on == 'vapaa' and !isset($_SESSION['onlinevaraus']['valittuPVM']))
 		 $tila .= '<td class="day link vapaa cal" pvm="'.$date.'"><div class="toolt" '.$tooltip.'>'.$currentDay.'</div></td>';
-	  elseif($date >= date("Y-m-d") and $on == 'vapaa' and isset($_SESSION['onlinevaraus']['valittuPVM']) and $_SESSION['onlinevaraus']['valittuPVM'] == date("Y-m-d", strtotime($date)))
+	  elseif($date > date("Y-m-d") and $on == 'vapaa' and isset($_SESSION['onlinevaraus']['valittuPVM']) and $_SESSION['onlinevaraus']['valittuPVM'] == date("Y-m-d", strtotime($date)))
 		 $tila .= '<td class="day link orangeColor cal" pvm="'.$date.'"><div class="toolt" '.$tooltip.'>'.$currentDay.'</div></td>';
 	  elseif($date < date("Y-m-d"))
-		 $tila .= '<td class="day lkiinni" >'.$currentDay.'</td>';
+		 $tila .= '<td class="day kiinni" >'.$currentDay.'</td>';
 	  else
 		$tila .= '<td class="day kiinni">'.$currentDay.'</td>';
 
