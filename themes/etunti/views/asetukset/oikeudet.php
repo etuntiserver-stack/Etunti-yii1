@@ -10,6 +10,19 @@
 	'viestinta'=>array(0=>'Viestinta taulu',1=>'Luo viesti',2=>'Muoka viesti',3=>'Poista viesti'),
 	'administrators'=>array(0=>'Järjestelmänvalvoja taulu',1=>'Luo järjestelmänvalvoja',2=>'Muoka järjestelmänvalvoja',3=>'Poista järjestelmänvalvoja'),
  );
+
+	$tas = '';
+	if(isset(Yii::app()->user->adminPaketti))
+	$tas = explode(",",Yii::app()->user->adminPaketti);
+
+
+	if(isset(Yii::app()->user->adminID) and in_array('4',$tas))
+	{
+		$tuotteet = array(0=>'Onlinevaraus tuotteet taulu',1=>'Luo tuote',2=>'Muoka tuote',3=>'Poista tuote');
+		$array['onlineTuotteet'] = $tuotteet;
+	}
+
+
 ?>
 
 

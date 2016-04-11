@@ -83,6 +83,7 @@
   <th><?php echo Yii::t('main', 'Kesto'); ?></th>
   <th><?php echo Yii::t('main', 'Hinta'); ?></th>
   <th><?php echo Yii::t('main', 'Tila'); ?></th>
+  <th></th>
   </tr>
   </thead>
   <?php $this->widget('zii.widgets.CListView', array(

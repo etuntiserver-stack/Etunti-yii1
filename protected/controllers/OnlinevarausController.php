@@ -350,6 +350,8 @@ class OnlinevarausController extends Controller
 	 */
 	public function actionUpdate($id)
 	{
+
+                Yii::app()->theme = 'etunti';
 		$model=$this->loadModel($id);
 
 		// Uncomment the following line if AJAX validation is needed

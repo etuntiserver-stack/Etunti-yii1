@@ -94,6 +94,13 @@ class OnlinevarausTuotteetController extends Controller
 	 */
 	public function actionCreate()
 	{
+
+	// <-- Oikeudet
+	   $checkOikeus = "onlineTuotteet_1_".Yii::app()->user->adminStatus;
+	   $site = Yii::app()->createController('Site');
+	   $site[0]->checkOikeus($checkOikeus);
+	//  Oikeudet -->
+
 		$model=new OnlinevarausTuotteet;
 
 		// Uncomment the following line if AJAX validation is needed
@@ -118,6 +125,13 @@ class OnlinevarausTuotteetController extends Controller
 	 */
 	public function actionUpdate($id)
 	{
+
+	// <-- Oikeudet
+	   $checkOikeus = "onlineTuotteet_2_".Yii::app()->user->adminStatus;
+	   $site = Yii::app()->createController('Site');
+	   $site[0]->checkOikeus($checkOikeus);
+	//  Oikeudet -->
+
 		$model=$this->loadModel($id);
 
 		// Uncomment the following line if AJAX validation is needed
@@ -142,6 +156,13 @@ class OnlinevarausTuotteetController extends Controller
 	 */
 	public function actionDelete($id)
 	{
+
+	// <-- Oikeudet
+	   $checkOikeus = "onlineTuotteet_3_".Yii::app()->user->adminStatus;
+	   $site = Yii::app()->createController('Site');
+	   $site[0]->checkOikeus($checkOikeus);
+	//  Oikeudet -->
+
 		$this->loadModel($id)->delete();
 
 		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
@@ -154,6 +175,12 @@ class OnlinevarausTuotteetController extends Controller
 	 */
 	public function actionIndex()
 	{
+
+	// <-- Oikeudet
+	   $checkOikeus = "onlineTuotteet_0_".Yii::app()->user->adminStatus;
+	   $site = Yii::app()->createController('Site');
+	   $site[0]->checkOikeus($checkOikeus);
+	//  Oikeudet -->
 
        		$criteria = new CDbCriteria();
 	        $criteria->order = " id DESC ";
