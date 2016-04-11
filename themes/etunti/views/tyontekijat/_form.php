@@ -125,6 +125,7 @@ if(empty($model->position) and isset($model->id))
 	   $site = Yii::app()->createController('Site');
 	   $vastaus = $site[0]->checkOikeusFields($checkOikeus);
 	//  Oikeudet -->
+
 		if($vastaus == 0)
 		echo $form->passwordField($model,'tekijan_henkilotunnus',array('size'=>20,'maxlength'=>20,'class'=>'form-control', 'readonly'=>'yes')); 
 		else

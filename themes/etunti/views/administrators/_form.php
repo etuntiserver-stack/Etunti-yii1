@@ -44,6 +44,15 @@
 		$as = Yii::app()->createController('Asetukset');
 		$val = $as[0]->oikeudenOtsikot();
 
+	// <-- Oikeudet
+	   $checkOikeus = "ryhmat_2_".Yii::app()->user->adminStatus;
+	   $site = Yii::app()->createController('Site');
+	   $vastaus = $site[0]->checkOikeusFields($checkOikeus);
+	//  Oikeudet -->
+
+		if($vastaus == 0)
+		echo '<br><span class="small">Sinulla ei ole oikeuksia</span>'; 
+		else
 		echo $form->dropDownList($model,'status', $val, 
 			array('class'=>'form-control')); 
 
