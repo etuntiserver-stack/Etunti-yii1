@@ -40,5 +40,8 @@
 	<td>
 		<?php if($data->tila == 1) echo 'Maksettu'; ?>
 	</td>
+	<td>
+		<?php echo CHtml::link('', array('update', 'id'=>$data->id), array('class'=>'fa fa-pencil-square-o')); ?>
+	</td>
 </tr>
 
