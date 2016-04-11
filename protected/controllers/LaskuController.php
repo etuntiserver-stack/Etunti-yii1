@@ -602,12 +602,8 @@ class LaskuController extends Controller
 	public function actionIndex()
 	{
 
-
-
 	$asetukset=Asetukset::model()->findbypk(1);
 	
-
-
 
 	// <-- Postita
 	if($asetukset->palvelu_tyyppi == 1 and !isset(Yii::app()->user->laskunTarkistus))
@@ -870,10 +866,45 @@ exit;
 		if(isset($_POST['viitenumero']) and !empty(trim($_POST['viitenumero'])))
 	        $criteria->addCondition (" viitenumero LIKE '%".$_POST['viitenumero']."%' ");
 
-	
-		//if(isset($_POST['tilaLaskulle']) and $asetukset->palvelu_tyyppi == 2)
 
+		// Trust Luotu
+		if(isset($_POST['tilaLaskulle']) and $_POST['tilaLaskulle'] == 1 and $asetukset->palvelu_tyyppi == 2)
+		{
+	        $criteria->addCondition (" 
+			id IN 	(
+				SELECT lid FROM lasku_historia 
+				WHERE status LIKE '%Lasku luotu%'
+				AND palvelu='trust'
+				ORDER by id DESC
+				)
+		");
+		}
 
+		// Trust Lahetetty
+		if(isset($_POST['tilaLaskulle']) and $_POST['tilaLaskulle'] == 2 and $asetukset->palvelu_tyyppi == 2)
+		{
+	        $criteria->addCondition (" 
+			id IN 	(
+				SELECT lid FROM lasku_historia 
+				WHERE status LIKE '%lähetetty%'
+				AND palvelu='trust'
+				ORDER by id DESC
+				)
+		");
+		}
+
+		// Trust Maksettu
+		if(isset($_POST['tilaLaskulle']) and $_POST['tilaLaskulle'] == 3 and $asetukset->palvelu_tyyppi == 2)
+		{
+	        $criteria->addCondition (" 
+			id IN 	(
+				SELECT lid FROM lasku_historia 
+				WHERE trust_statuscode='101'
+				AND palvelu='trust'
+				ORDER by id DESC
+				)
+		");
+		}
 
 
 		$dataProvider=new CActiveDataProvider('Lasku', array(
