@@ -866,72 +866,85 @@ exit;
 		if(isset($_POST['viitenumero']) and !empty(trim($_POST['viitenumero'])))
 	        $criteria->addCondition (" viitenumero LIKE '%".$_POST['viitenumero']."%' ");
 
-/*
+
 		// POSTITA Luotu
-		if(isset($_POST['tilaLaskulle']) and $_POST['tilaLaskulle'] == 1 and $asetukset->palvelu_tyyppi == 1)
+		if(isset($_POST['tilaLaskulle']) and $_POST['tilaLaskulle'] == 1 
+			and ($asetukset->palvelu_tyyppi == 1 or $asetukset->palvelu_tyyppi == 2 or $asetukset->palvelu_tyyppi == 3)
+		)
 		{
-	        $criteria->addCondition (" 
-			id IN 	(
-				SELECT lid FROM lasku_historia 
-				WHERE status='Lasku luotu'
-				AND (palvelu='postita' OR palvelu='local')
-				GROUP by lid
-				)
+		$criteria->addCondition ("
+		id in (SELECT lid FROM 
+			(SELECT lid FROM lasku_historia 
+			   WHERE id IN (SELECT MAX(id) FROM lasku_historia GROUP BY lid)
+			   AND (status='Lasku luotu' OR status='HYVÄKSYTTY')
+			) as lid)
 		");
 		}
+
 
 		// POSTITA Lahetetty
 		if(isset($_POST['tilaLaskulle']) and $_POST['tilaLaskulle'] == 2 and $asetukset->palvelu_tyyppi == 1)
 		{
-	        $criteria->addCondition (" 
-			id IN 	(
-				SELECT lid FROM lasku_historia 
-				WHERE postita_statuscode='SE'
-				AND palvelu='postita'
-				ORDER by id DESC
-				)
+		$criteria->addCondition ("
+		id in (SELECT lid FROM 
+			(SELECT lid FROM lasku_historia 
+			   WHERE id IN (SELECT MAX(id) FROM lasku_historia GROUP BY lid)
+			   AND postita_statuscode='SE'
+			) as lid)
 		");
 		}
 
-		// Trust Luotu
-		if(isset($_POST['tilaLaskulle']) and $_POST['tilaLaskulle'] == 1 and $asetukset->palvelu_tyyppi == 2)
+		// POSTITA Maksettu
+		if(isset($_POST['tilaLaskulle']) and $_POST['tilaLaskulle'] == 3 and $asetukset->palvelu_tyyppi == 1)
 		{
-	        $criteria->addCondition (" 
-			id IN 	(
-				SELECT lid FROM lasku_historia 
-				WHERE status LIKE '%Lasku luotu%'
-				AND palvelu='trust'
-				ORDER by id DESC
-				)
+		$criteria->addCondition ("
+		id in (SELECT lid FROM 
+			(SELECT lid FROM lasku_historia 
+			   WHERE id IN (SELECT MAX(id) FROM lasku_historia GROUP BY lid)
+			   AND status='MAKSETTU'
+			) as lid)
 		");
 		}
+
 
 		// Trust Lahetetty
 		if(isset($_POST['tilaLaskulle']) and $_POST['tilaLaskulle'] == 2 and $asetukset->palvelu_tyyppi == 2)
 		{
-	        $criteria->addCondition (" 
-			id IN 	(
-				SELECT lid FROM lasku_historia 
-				WHERE trust_statuscode='98'
-				AND palvelu='trust'
-				ORDER by id DESC
-				)
+		$criteria->addCondition ("
+		id in (SELECT lid FROM 
+			(SELECT lid FROM lasku_historia 
+			   WHERE id IN (SELECT MAX(id) FROM lasku_historia GROUP BY lid)
+			   AND trust_statuscode='98' AND palvelu='trust'
+			) as lid)
 		");
 		}
 
 		// Trust Maksettu
 		if(isset($_POST['tilaLaskulle']) and $_POST['tilaLaskulle'] == 3 and $asetukset->palvelu_tyyppi == 2)
 		{
-	        $criteria->addCondition (" 
-			id IN 	(
-				SELECT lid FROM lasku_historia 
-				WHERE trust_statuscode='101'
-				AND palvelu='trust'
-				ORDER by id DESC
-				)
+		$criteria->addCondition ("
+		id in (SELECT lid FROM 
+			(SELECT lid FROM lasku_historia 
+			   WHERE id IN (SELECT MAX(id) FROM lasku_historia GROUP BY lid)
+			   AND trust_statuscode='101' AND palvelu='trust'
+			) as lid)
 		");
 		}
-*/
+
+		// LOCAL Lahetetty
+		if(isset($_POST['tilaLaskulle']) and $_POST['tilaLaskulle'] == 2 and $asetukset->palvelu_tyyppi == 3)
+		{
+		$criteria->addCondition ("
+		id in (SELECT lid FROM 
+			(SELECT lid FROM lasku_historia 
+			   WHERE id IN (SELECT MAX(id) FROM lasku_historia GROUP BY lid)
+			   AND status='LÄHETETTY'
+			) as lid)
+		");
+		}
+
+
+
 
 		$dataProvider=new CActiveDataProvider('Lasku', array(
 			'criteria'=>$criteria,

@@ -80,9 +80,9 @@
 
 				<select name="tilaLaskulle" id="tilaLaskulle" class="gui-input">
 				<option>Tila</option>
-				<option value="1">Lasku luotu</option>
-				<option value="2">Lasku lähetetty</option>
-				<option value="3">Lasku maksettu</option>
+				<option value="1">Luotu/hyväksytty</option>
+				<option value="2">Lähetetty</option>
+				<option value="3">Maksettu</option>
 				</select>
 
                             <i class="arrow double"></i>
