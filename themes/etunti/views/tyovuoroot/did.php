@@ -4,9 +4,12 @@
 	$height = '';
 
 	$did = date("Ymd",strtotime($pvm));
+	$onkoMennyt = '';
+	if($did < date("Ymd"))
+	$onkoMennyt = 'mennytPaivat';
 
 	$bod = ''; 
-	$bod .=  '<div class="small laatikko latikkoAsetukset" pvm="'.date("d.m.Y",strtotime($pvm)).'" tid="'.$tid.'">';
+	$bod .=  '<div class="small laatikko latikkoAsetukset '.$onkoMennyt.'" pvm="'.date("d.m.Y",strtotime($pvm)).'" tid="'.$tid.'">';
 
 	$bod .=  '
 	<div class="pull-right">
