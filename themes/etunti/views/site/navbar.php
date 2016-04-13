@@ -575,6 +575,10 @@
                   <span class="fa fa-clock-o"></span> <?php echo Yii::t('main', 'Työvuorot työntekijöiden mukaan'); ?></a>
               </li>
               <li>
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/tyovuoroot/tv_kohteet">
+                  <span class="fa fa-clock-o"></span> <?php echo Yii::t('main', 'Työvuorot kohteen mukaan'); ?></a>
+              </li>
+              <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/tyovuoroot/viikkottain">
                   <span class="fa fa-paper-plane"></span> <?php echo Yii::t('main', 'Työvuorojen lähetys'); ?></a>
               </li>

@@ -46,6 +46,13 @@
 	$criteria->order = " alku ASC";
 	$criteria->with=array('kohteet');
 	$criteria->condition = " tid = '".$tid."' and pvm = '".date("d.m.Y",strtotime($pvm))."' ";
+
+	if(isset($kohteenArr))
+	{
+		$kohteenArr = implode(',',$kohteenArr);
+		$criteria->addCondition  (" kohde IN ($kohteenArr) ");
+	}
+
 	$tv = Tyovuoroot::model()->findAll($criteria); 
 	foreach($tv as $tvVal)
 	{

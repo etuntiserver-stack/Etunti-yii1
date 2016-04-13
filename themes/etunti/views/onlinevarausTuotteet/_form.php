@@ -8,7 +8,7 @@
  <div class="col-sm-4">
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'onlinevaraus-tuotteet-form',
-	'enableAjaxValidation'=>false,
+	'enableAjaxValidation'=>true,
 )); ?>
 
 
@@ -68,7 +68,7 @@
 
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'kesto'); ?>
-		<?php echo $form->numberField($model,'kesto',array('size'=>20,'maxlength'=>20, 'class'=>'form-control', 'placeholder'=>'Esimerkiksi.. 0.5', 'step'=>'0.01')); ?>
+		<?php echo $form->numberField($model,'kesto',array('size'=>20,'maxlength'=>20, 'class'=>'form-control', 'placeholder'=>'Esimerkiksi.. 0.5', 'step'=>'0.5')); ?>
 		<?php echo $form->error($model,'kesto'); ?>
 	</div>
 
