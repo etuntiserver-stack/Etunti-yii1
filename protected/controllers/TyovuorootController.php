@@ -28,7 +28,7 @@ class TyovuorootController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','updatetime','showohje','did','muisti','operatio','viikko','fromto','autoinsert','autoremove','viikkottain', 'viikkottain_pdf', 'laheta','kk','pvmtid','laheta_k', 'muistin', 'muisticlear', 'muistissa', 'vkolopput', 'vkolopchange', 'uusitilaus', 'tv2', 'PoistaTv', 'valitse_kokopaiva'),
+				'actions'=>array('admin','delete','create','update','index','view','updatetime','showohje','did','muisti','operatio','viikko','fromto','autoinsert','autoremove','viikkottain', 'viikkottain_pdf', 'laheta','kk','pvmtid','laheta_k', 'muistin', 'muisticlear', 'muistissa', 'vkolopput', 'vkolopchange', 'uusitilaus', 'tv2', 'PoistaTv', 'valitse_kokopaiva', 'tv_kohteet'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny', // allow admin user to perform 'admin' and 'delete' actions
@@ -612,6 +612,7 @@ class TyovuorootController extends Controller
 
 
 
+
 	public function actionShowohje($id)
 	{
 		$m = Kohteet::model()->findbypk($id);
@@ -928,12 +929,25 @@ class TyovuorootController extends Controller
 	 */
 	public function actionIndex()
 	{
-
-	function sprint($val){
-	    if($val > 0)
-		return sprintf('%02d:%02d', $val/3600, ($val % 3600)/60);
+		$this->poistaminenOnlineVarauksetJokaMeniOhi();
+		$this->render('index');
 	}
-/*
+
+	public function actionTv2()
+	{
+		$this->poistaminenOnlineVarauksetJokaMeniOhi();
+		$this->render('tv2');
+	}
+
+	public function actionTv_kohteet()
+	{
+		$this->poistaminenOnlineVarauksetJokaMeniOhi();
+		$this->render('tv_kohteet');
+	}
+
+	protected function poistaminenOnlineVarauksetJokaMeniOhi()
+	{
+
 		// <-- Poistaminen
 		$criteria=new CDbCriteria;
 		$criteria->order= " id DESC "; 
@@ -941,22 +955,9 @@ class TyovuorootController extends Controller
 			(time + INTERVAL 30 MINUTE) < NOW()
 			AND osoiteOnline=1
 		";
-		$model = Tyovuoroot::model()->deleteAll($criteria);
+		$poistaminen = Tyovuoroot::model()->deleteAll($criteria);
 		// Poistaminen -->
-*/
 
-		$this->render('index');
-	}
-
-	public function actionTv2()
-	{
-
-	function sprint($val){
-	    if($val > 0)
-		return sprintf('%02d:%02d', $val/3600, ($val % 3600)/60);
-	}
-
-		$this->render('tv2');
 	}
 
 	/**
