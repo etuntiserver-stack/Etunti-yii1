@@ -98,7 +98,7 @@ class AsiakkaatController extends Controller
 		$model=new Asiakkaat;
 
 		// Uncomment the following line if AJAX validation is needed
-		// $this->performAjaxValidation($model);
+		$this->performAjaxValidation($model);
 
 		if(isset($_POST['Asiakkaat']))
 		{
