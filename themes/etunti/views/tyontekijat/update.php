@@ -42,8 +42,11 @@ exit;
 	   <div class="pull-right">
 	    <div class="form-inline">
 	   <?php     
-		$site = Yii::app()->createController('Site');
-		$site[0]->oikeudet($model->id,null);
+		echo CHtml::link("poista", '#', array(
+		'submit'=>array('delete', "id"=>$model->id), 
+		'confirm' => 'Haluatko varmaasti poistaa?',
+		'class'=>'btn btn-primary myBgColors'
+		));
 	   ?>
 
   	     <!-- tulostus -->
