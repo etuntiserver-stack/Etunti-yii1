@@ -77,7 +77,7 @@
 
 			$_POST['kohteenArr'] = $kohteenArr;
 
-			if(isset($tekijanArr[0]))
+			if(count($tekijanArr) > 0)
 			{
 			$tekijanArr = implode(',',$tekijanArr);
 
