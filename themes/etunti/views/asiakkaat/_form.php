@@ -27,7 +27,7 @@ $asiakasnumero = 'voidaan käyttää oleva ID numero';
 
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'asiakkaat-form',
-	'enableAjaxValidation'=>false,
+	'enableAjaxValidation'=>true,
 )); ?>
 
 
@@ -38,7 +38,7 @@ $asiakasnumero = 'voidaan käyttää oleva ID numero';
 
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'asiakasnumero'); ?>
-		<?php echo $form->textField($model,'asiakasnumero',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
+		<?php echo $form->numberField($model,'asiakasnumero',array('class'=>'form-control')); ?>
 		<?php echo $form->error($model,'asiakasnumero'); ?>
 	</div>
 
@@ -142,7 +142,7 @@ $asiakasnumero = 'voidaan käyttää oleva ID numero';
 		<?php
 		$list = array(1=>Yii::t('main', 'Kyllä'),0=>Yii::t('main', 'Ei'));
         	echo $form->dropDownList($model, 'aktiivinen', $list,
-		array('empty'=>'Valitse tilanne','class'=>'form-control'));	
+		array('class'=>'form-control'));	
         	?>
 		<?php echo $form->error($model,'aktiivinen'); ?>
 	</div>
