@@ -186,6 +186,9 @@ $numDays = 7;
 ?>
 
 <style>
+.mennytPaivat{
+	opacity: 0.4;
+}
 td .latikkoAsetukset{
 	min-width: 70px;
 	width: 200px;
