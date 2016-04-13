@@ -77,6 +77,8 @@
 
 			$_POST['kohteenArr'] = $kohteenArr;
 
+			if(isset($tekijanArr[0]))
+			{
 			$tekijanArr = implode(',',$tekijanArr);
 
        			$criteria = new CDbCriteria();
@@ -84,6 +86,9 @@
 	        	$criteria->select = "id,tekijan_nimi";
 	        	$criteria->condition = " aktiivinen = '1' AND id IN ($tekijanArr) ";
 			$tt = Tyontekijat::model()->findAll($criteria);
+			} else {
+				echo '<h1>'.Yii::t('main','Ei löydy').'</h1>';
+			}
 
 		}
 
