@@ -50,7 +50,6 @@ echo	'<input type=hidden id=number value='.cal_days_in_month(CAL_GREGORIAN, $mon
 ?>
 
 
-
         <!-- begin: .tray-center -->
         <div class="tray-center">
 
@@ -172,7 +171,7 @@ echo	'<input type=hidden id=number value='.cal_days_in_month(CAL_GREGORIAN, $mon
 <script type="text/javascript">
 $(document).ready(function(){
 
-
+ 
 /* valikot */
 $(".muokaValiko").click(function() {
     var thisFor = $(this).attr("for");

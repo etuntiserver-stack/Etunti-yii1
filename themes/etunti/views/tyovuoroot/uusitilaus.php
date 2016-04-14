@@ -94,6 +94,10 @@
         	?>
 
 
+		<?php echo $form->labelEx($model,'tietoja'); ?>
+		<?php echo $form->textarea($model,'tietoja',array('rows'=>4,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'tietoja'); ?>
+
   </div>
   <div class="col-sm-6">
 		<?php echo $form->labelEx($model,'tid'); ?>

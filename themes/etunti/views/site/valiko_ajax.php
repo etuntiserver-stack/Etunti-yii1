@@ -60,6 +60,9 @@
 
 	$mod = '
 
+
+	<link rel="stylesheet" href="'.Yii::app()->request->baseUrl.'/css/palette-color-picker.css">
+	<script src="'.Yii::app()->request->baseUrl.'/js/palette-color-picker.js"></script>
 	<input type="hidden" id="select_type" value="'.$_POST['select_type'].'">
 
   <div class="modal-dialog modal-lg">
@@ -102,16 +105,46 @@
 		  $success = 'btn-success';
 		else
 		  $success = '';
+
 	
 		$mod .= '
 		<div class="row" id="rivi_'.$u->id.'">
-		  <div class="form-inline">
-			<input type="text" class="form-control form-group '.$success.'" value="'.$u->value.'" id="m_'.$u->id.'">
+		  <div class="form-inline">';
+
+
+		if($_POST['select_type'] == 'vuosilomat')
+		{
+		$mod .= '<input type="text" class="form-control form-group '.$success.'" value="'.$u->value.'" id="m_'.$u->id.'">';
+
+/*
+		$mod .= '
+      <input type="hidden" name="duplicated-name-'.$u->id.'" class="form-group" data-palette=\'["#D50000","#304FFE","#00B8D4","#00C853","#FFD600","#FF6D00","#FF1744","#3D5AFE","#00E5FF","#00E676","#FFEA00","#FF9100","#FF5252","#536DFE","#18FFFF","#69F0AE","#FFFF00","#FFAB40"]\' value="#000000" >
+
+<script type="text/javascript">
+$(document).ready(function(){
+
+  $(\'[name="duplicated-name-'.$u->id.'"]\').paletteColorPicker({
+    position: \'downside\',
+    //custom_class: \'zindex\',
+  });
+
+});
+</script>';
+*/
+
+		} else {
+		$mod .= '<input type="text" class="form-control form-group '.$success.'" value="'.$u->value.'" id="m_'.$u->id.'">';
+		}
+
+		$mod .= '
 			<input type="button" class="btn btn-warning muokka" for="m_'.$u->id.'" id="'.$u->id.'" value="Tallenna"></button>
 			<input type="button" class="btn btn-danger deleteFromSelect" id="poista_'.$u->id.'" select_type="'.$u->select_type.'" value="X"></button>
 		  </div>
 		</div>
 		';
+
+
+
 		}
 
 		$mod .= '<BR>
