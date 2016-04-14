@@ -35,6 +35,7 @@
 			$tekijanArr = array();
 			$kohteenArr = array();
 			$pvmArr = array();
+			$tpvmArr = array();
 			foreach($k as $kohde)
 			{
 
@@ -72,6 +73,7 @@
 
 			}
 
+			if(count($tpvmArr) > 0)
 			ksort($tpvmArr);
 
 			//print_r($tpvmArr);
