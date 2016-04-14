@@ -65,12 +65,14 @@
 				$tv = Tyovuoroot::model()->findAll($criteria);
 				if(isset($tv[0]))
 				   foreach($tv as $dat)
-				     $tpvmArr[$dat->pvm] = $dat->pvm;
+				     $tpvmArr[strtotime($dat->pvm)] = $dat->pvm;
 
 
 				     $kohteenArr[] = $kohde->id;
 
 			}
+
+			ksort($tpvmArr);
 
 			//print_r($tpvmArr);
 			//exit;
