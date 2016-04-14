@@ -12,7 +12,7 @@
 	$bod .=  '<div class="small laatikko latikkoAsetukset '.$onkoMennyt.'" pvm="'.date("d.m.Y",strtotime($pvm)).'" tid="'.$tid.'">';
 
 	$bod .=  '
-	<div class="pull-right">
+	<div class="pull-right oikeallaPlusV">
 	  <div class="form-inline">
 
 	<div class="kokopaiva form-group">

@@ -126,7 +126,7 @@ $t = Tyontekijat::model()->findbypk($ex[1]);
 	<br>
 	<div class="modal-footer">
 		<span class="btn btn-default" data-dismiss="modal">Sulje</span>
-		<?php echo CHtml::Button('Tallenna',array('class'=>'btn btn-primary uusiRivi')); ?>
+		<?php echo CHtml::Button('Tallenna',array('class'=>'btn btn-primary uusiRiviSubmit')); ?>
 	</div>		
 		</div> <!-- end modal-content -->
 	</div> <!-- end modal-dialog -->
@@ -168,7 +168,7 @@ $("#Mobile_kohde_kannasta").change(function(){
 
 
 
-
+/*
   $('.uusiRivi').click(function(){
 
 
@@ -215,6 +215,7 @@ $("#Mobile_kohde_kannasta").change(function(){
 			blockUpdater(divID);
 			$('#showres').modal('hide');
 		*/
+/*
 		setTimeout(function(){document.location.href = "index";},500);
 		return false;
 	   	},
@@ -226,6 +227,6 @@ $("#Mobile_kohde_kannasta").change(function(){
 
 	e.preventDefault(); 
   });
-
+*/
 });
 </script>
