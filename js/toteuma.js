@@ -3,8 +3,7 @@ $(document).ready(function(){
 
 
 
-
-$(".uusirivi").click(function(){
+$(document).delegate(".uusirivi","click",function(){
 
       var forThis = $(this).attr("for");
 
@@ -22,12 +21,11 @@ $(".uusirivi").click(function(){
 });
 
 
-
-$(".al").keyup(function(){
+$(document).delegate(".al","keyup",function(){
 	lasketaanKesto();
 });
 
-$(".lp").keyup(function(){
+$(document).delegate(".lp","keyup",function(){
 	lasketaanKesto();
 });
 
@@ -50,7 +48,8 @@ function lasketaanKesto(){
 	return false;
 }
 
-$(".chckbxHyvaksynta").click(function(){
+$(document).delegate(".chckbxHyvaksynta","click",function(){
+
   $(this).each(function() {
       var label = $(this).prop("checked");
       var kuka = $(this).attr("kuka");
@@ -95,7 +94,7 @@ $(".chckbxHyvaksynta").click(function(){
 
 $(document).ready(function(){
 
-  $('.uusiRivi').click(function(){
+   $(document).delegate(".uusiRiviSubmit","click",function(){
 
 
     var Mobile_aloitan = $("#Mobile_aloitan").val();
@@ -124,7 +123,7 @@ $(document).ready(function(){
 		return false;
   });
 
-  $('#mobile-form').on('submit',function(e) {
+  $(document).on('submit', '#mobile-form', function(e) {
 
 	console.log( $( this ).serializeArray() );
 	console.log( e.target[0].value );
@@ -134,15 +133,17 @@ $(document).ready(function(){
 		  data:$(this).serialize(),
 		  type:'POST',
 		  success:function(data){
-			//console.log(data);
-		/*
+
+			console.log(data);
 			var divID = data.split("_");
+
 			if( divID )
 			blockUpdater(divID);
+
 			$('#showres').modal('hide');
-		*/
-		setTimeout(function(){document.location.href = "index";},500);
-		return false;
+		
+			//setTimeout(function(){document.location.href = "index";},500);
+			//return false;
 	   	},
 		error:function(data){
 		console.log(data);
@@ -153,12 +154,11 @@ $(document).ready(function(){
 	e.preventDefault(); 
   });
 
-
-  $('.uusiTot').click(function(){
+  $(document).delegate(".uusiTot","click",function(){
 		$('#toteutuneet-form').submit();
   });
 
-  $('#toteutuneet-form').on('submit',function(e) {
+  $(document).on('submit', '#toteutuneet-form', function(e) {
 
 	console.log( $( this ).serializeArray() );
 	console.log( e.target[0].value );
@@ -172,12 +172,11 @@ $(document).ready(function(){
 			var divID = data.split("_");
 			console.log(divID);
 
-		if( divID )
-		blockUpdater(divID);
+			if( divID )
+			blockUpdater(divID);
 
+			$('#showres').modal('hide');
 
-		$('#showres').modal('hide');
-		//return false;
 	   	},
 		error:function(data){
 		console.log(data);
@@ -188,12 +187,11 @@ $(document).ready(function(){
 	e.preventDefault(); 
   });
 
-
-  $('.updTot').click(function(){
+  $(document).delegate(".updTot","click",function(){
 		$('#toteutuneet-form-upd').submit();
   });
 
-  $('#toteutuneet-form-upd').on('submit',function(e) {
+  $(document).on('submit', '#toteutuneet-form-upd', function(e) {
 
 	console.log( $( this ).serializeArray() );
 	console.log( e.target[0].value );
@@ -208,14 +206,11 @@ $(document).ready(function(){
 			var divID = data.split("_");
 			console.log(divID);
 
-		if( divID ){
+			if( divID )
+			blockUpdater(divID);
+	
+			$('#showres').modal('hide');
 
-		blockUpdater(divID);
-
-		}
-
-		$('#showres').modal('hide');
-		//return false;
 	   	},
 		error:function(data){
 		console.log(data);
@@ -252,8 +247,9 @@ $(document).ready(function(){
 			data: { "pvm" : divID[0], "tid" : divID[1], "from" : "ajax" },
 			  success:function(data){
 			  //console.log(data);
+			  var sp = data.split('explode999');
 
-			  $('#'+divID[0]+'_'+divID[1]).html(data);
+			  $('#'+divID[0]+'_'+divID[1]).html(sp[0]);
 			  },
 			  error:function(data){
 			  console.log(data);
@@ -274,6 +270,106 @@ $(document).ready(function(){
 			  }
 	 	});
   }
+
+
+
+
+
+$("#showres").draggable();
+
+$(document).delegate(".totRivi","click",function(){
+
+	var thisVal = $(this).attr("id").split("_");
+	var mod = $(this).attr("mod");
+
+	if( mod == 'update' )
+	{
+        $.ajax({
+           url: location.protocol + "//" + location.host + '/index.php/toteutuneet/update?id='+thisVal[1],
+           type: "GET",
+           success: function(html){
+		console.log("update " + thisVal[1]);
+		$('#showres').modal().html(html);
+           }
+        });
+	}
+
+	if( mod == 'create' )
+	{
+
+        $.ajax({
+           url: location.protocol + "//" + location.host + '/index.php/toteutuneet/create',
+           type: "POST",
+	   data: { forid : thisVal[1] },
+           success: function(html){
+		console.log("create " + thisVal[1]);
+		$('#showres').modal().html(html);
+           }
+        });
+	}
+
+});
+
+
+
+$(document).delegate(".poistaTot","click",function(){
+
+	var thisVal = $(this).attr("rivi");
+	var divID = $(this).attr("for").split("_");
+
+        $.ajax({
+           url: location.protocol + "//" + location.host + '/index.php/toteutuneet/deletebyajax',
+           type: "POST",
+	   data : { "id" : thisVal },
+           success: function(data){
+		//console.log(data);
+
+
+	  	$.ajax({
+			url: location.protocol + "//" + location.host + '/index.php/toteutuneet/totpvmtid',
+			type:'GET',
+			data: { "pvm" : divID[0], "tid" : divID[1], "from" : "ajax" },
+			  success:function(data){
+			  //console.log(data);
+			  var sp = data.split('explode999');
+
+			  $('#'+divID[0]+'_'+divID[1]).html(sp[0]);
+
+			  },
+			  error:function(data){
+			  console.log(data);
+			  }
+	 	});
+
+	  	$.ajax({
+			url: location.protocol + "//" + location.host + '/index.php/toteutuneet/yhteensapvm',
+			type:'GET',
+			data: { "pvm" : divID[0], "tid" : divID[1], "from" : "ajax" },
+			  success:function(data){
+			  //console.log(data);
+
+			  $('#yht_'+divID[0]+'_'+divID[1]).html(data);
+			  },
+			  error:function(data){
+			  console.log(data);
+			  }
+	 	});
+
+
+           },
+	        error:function(data){
+		console.log(data);
+	  }
+        });
+
+
+});
+
+
+
+
+
+
 
 });
 

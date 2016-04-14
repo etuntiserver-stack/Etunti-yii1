@@ -28,7 +28,7 @@ $forPVM = date('d.m.Y',strtotime($s->aloitan));
 			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 				<span aria-hidden="true">&times;</span>
 			</button>
-		<h2 class="modal-title"><?php echo Yii::t('main', 'Toteuman muutos'); ?></h2>
+		<h2 class="modal-title"><?php echo Yii::t('main', 'Toteuman muutos').' ID:'.$s->id; ?></h2>
 	
 		</div>
 		<div class="modal-body">
@@ -49,6 +49,7 @@ $forPVM = date('d.m.Y',strtotime($s->aloitan));
 		<?php echo $form->hiddenField($model,'tid',array('value'=>$s->tid)); ?>
 		<?php echo $form->hiddenField($model,'tekijan_nimi',array('value'=>$s->tekijan_nimi)); ?>
 		<?php echo $form->hiddenField($model,'viesti',array('value'=>$s->viesti)); ?>
+		<?php echo $form->hiddenField($model,'asiakas_hyvaksy',array('value'=>$s->asiakas_hyvaksy)); ?>
 
 
 
@@ -184,7 +185,7 @@ $forPVM = date('d.m.Y',strtotime($s->aloitan));
 
 
 
-	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/toteuma.js"></script>
+
 	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/jquery.mask.js"></script>
 
 

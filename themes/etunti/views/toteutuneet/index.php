@@ -18,6 +18,9 @@ $this->breadcrumbs=array(
 	background: white;
 	border-radius:5px;
 }
+.oikeallaPlusV{
+	display:none;
+}
 </style>
 
         <!-- begin: .tray-center -->
@@ -200,6 +203,8 @@ function dateDiff($start, $end) {
   $yhtMatkaWeek = 0;
   $yhtIltaWeek 	= 0;
   $yhtYoWeek	= 0;
+  $yhtTotpvmtid	= 0;
+  $yhtLuetutpvmtid = 0;
   $viikkoBreak 	= '';
 
   for ($i = 0; $i <= $dateDiff; $i++) 
@@ -225,9 +230,21 @@ function dateDiff($start, $end) {
     	echo '<td>'.json_decode($dido, true).'</td>';
     }
 
-    echo '
-  	<td>'.$this->renderPartial('luetutpvmtid',array('pvm'=>$date,'tid'=>$explTekija[0],'from'=>'mobiili'),true).'</td>
-  	<td id="'.$did.'_'.$explTekija[0].'">'.$this->renderPartial('totpvmtid',array('pvm'=>$date,'tid'=>$explTekija[0],'from'=>'mobiili'),true).'</td>
+    echo '<td>';
+	   $luetutpvmtid = $this->renderPartial('luetutpvmtid',array('pvm'=>$date,'tid'=>$explTekija[0],'from'=>'mobiili'),true);
+	   $exLatikoLu = explode('explode999', $luetutpvmtid);
+	   echo $exLatikoLu[0];
+
+    echo '</td>';
+
+    echo '<td id="'.$did.'_'.$explTekija[0].'">';
+
+	   $totpvmtid = $this->renderPartial('totpvmtid',array('pvm'=>$date,'tid'=>$explTekija[0],'from'=>'mobiili'),true);
+	   $exLatiko = explode('explode999', $totpvmtid);
+	   echo $exLatiko[0];
+
+    echo '</td>
+
   	<td id="yht_'.$did.'_'.$explTekija[0].'">'.$this->renderPartial('yhteensapvm',array('pvm'=>date("Y-m-d",strtotime($date)),'tid'=>$explTekija[0],'from'=>'mobiili'),true).'</td>';
 
     $matka = '';
@@ -251,19 +268,71 @@ function dateDiff($start, $end) {
 
 
     if($viikkoBreak == false){
-       $yhtMatkaWeek += $matka;
-       $yhtIltaWeek += $tyoIlta;
-       $yhtYoWeek += $tyoYo;
+	$yhtMatkaWeek += $matka;
+	$yhtIltaWeek += $tyoIlta;
+	$yhtYoWeek += $tyoYo;
+
+	if(isset($exLatiko[1]))
+	$yhtTotpvmtid += $exLatiko[1];
+
+	if(isset($exLatikoLu[1]))
+ 	$yhtLuetutpvmtid += $exLatikoLu[1];
+
     } else {
-       $yhtMatkaWeek = 0;
-       $yhtIltaWeek = 0;
-       $yhtYoWeek = 0;
+	$yhtMatkaWeek = 0;
+	$yhtIltaWeek = 0;
+	$yhtYoWeek = 0;
+	$yhtTotpvmtid = 0;
+ 	$yhtLuetutpvmtid = 0;
     }
     $viikkoBreak = false;
 
     echo '</tr>';
 
-    echo $this->viikkonLoppu($date,$explTekija[0],$yhtMatkaWeek,$yhtIltaWeek,$viikkoBreak,$yhtYoWeek);
+    //echo $this->viikkonLoppu($date,$explTekija[0],$yhtMatkaWeek,$yhtIltaWeek,$viikkoBreak,$yhtYoWeek,$yhtTotpvmtid);
+
+
+    $tid = $explTekija[0];
+
+	    if(date('N', strtotime($date)) == 7)
+	    {
+  	    echo '<tr>';
+  		echo '<td style="background: #669999;color: white" class="text-center viikkoRivi small myBgColors"><b>'.Yii::t('main', 'Viikko').' '.date("W",strtotime($date)).'</b></td>';
+
+		 $vktyoaika = '';
+		 $ts = Tyosuhdet::model()->find(" tid = '".$tid."' ");
+		 if(isset($ts->id) and !empty($ts['vktyoaika']))
+		  $vktyoaika = $ts['vktyoaika'];
+
+		  echo '<td style="background: #669999;color: white; text-align:center" class="viikkoRivi small myBgColors" id="vk_'.date("W",strtotime($date)).'_'.$tid.'">';
+		  $kokoViikko = '';
+		  $vko = '';
+		  $vko = date("W",strtotime($date));
+		  $year = date("Y",strtotime($date));
+		  $kokoViikko = $this->renderPartial('//tyovuoroot/viikko',array('tid'=>$tid,'viikko'=>$vko,'year'=>$year),true);
+
+		  $cl = '';
+		  if(	(int)str_replace(":","",$kokoViikko) > (int)str_replace(":","",$vktyoaika)
+			and (int)str_replace(":","",$kokoViikko) > 0
+			and (int)str_replace(":","",$vktyoaika) > 0
+		  )
+		  $cl = 'class="btn btn-xs btn-danger"';
+
+		  echo '<span '.$cl.'>'.$kokoViikko. '<br>('.$vktyoaika.')</span>';
+
+		  echo '</td>';
+
+		  echo '<td style="background: #669999;color: white; text-align:center" class="small myBgColors">'.$this->sprint($yhtLuetutpvmtid).'<br>('.$this->num($yhtLuetutpvmtid).')</td>';
+		  echo '<td style="background: #669999;color: white; text-align:center" class="small myBgColors">'.$this->sprint($yhtTotpvmtid).'<br>('.$this->num($yhtTotpvmtid).')</td>';
+		  echo '<td style="background: #669999;color: white; text-align:center" class="small myBgColors"></td>';
+		  echo '<td style="background: #669999;color: white; text-align:center" class="small myBgColors">'.$this->sprint($yhtMatkaWeek).'<br>('.$this->num($yhtMatkaWeek).')</td>';
+		  echo '<td style="background: #669999;color: white; text-align:center" class="small myBgColors">'.$this->sprint($yhtIltaWeek).'<br>('.$this->num($yhtIltaWeek).')</td>';
+		  echo '<td style="background: #669999;color: white; text-align:center" class="small myBgColors">'.$this->sprint($yhtYoWeek).'<br>('.$this->num($yhtYoWeek).')</td>';
+	    echo '</tr>';
+	    $viikkoBreak = true;
+	    }
+
+
 
   }
   ?>

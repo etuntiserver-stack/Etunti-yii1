@@ -1,5 +1,5 @@
 $(document).ready(function(){
-
+/*
 $("#showres").draggable();
 
 $(".totRivi").click(function(){
@@ -37,8 +37,7 @@ $(".totRivi").click(function(){
 
 
 
-
-$(".poistaTot").click(function(){
+$(document).delegate(".poistaTot","click",function(){
 
 	var thisVal = $(this).attr("rivi");
 	var divID = $(this).attr("for").split("_");
@@ -57,8 +56,9 @@ $(".poistaTot").click(function(){
 			data: { "pvm" : divID[0], "tid" : divID[1], "from" : "ajax" },
 			  success:function(data){
 			  //console.log(data);
+			  var sp = data.split('explode999');
 
-			  $('#'+divID[0]+'_'+divID[1]).html(data);
+			  $('#'+divID[0]+'_'+divID[1]).html(sp[0]);
 
 			  },
 			  error:function(data){
@@ -89,6 +89,6 @@ $(".poistaTot").click(function(){
 
 
 });
-
+*/
 
 });
