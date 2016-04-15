@@ -109,8 +109,6 @@ try {
 			$kohteet = Kohteet::model()->findbypk($ov->kohde_id);
 
 			$asetukset = Asetukset::model()->findbypk(1);
-			$t = Tyovuoroot::model()->updatebypk($_GET['REFERENCE'], array('osoiteOnline'=>2));
-			$ov1 = Onlinevaraus::model()->updatebypk($ov->id, array('tila'=>1));
 
 
 $nimi = '';
@@ -211,6 +209,8 @@ $message .= '<br></td></tr>
 			$mail->setBody($message);
 			$mail->send();
 
+			$t = Tyovuoroot::model()->updatebypk($_GET['REFERENCE'], array('osoiteOnline'=>2));
+			$o = Onlinevaraus::model()->updatebypk($ov->id, array('tila'=>1));
 			unset($_SESSION['onlinevaraus']);
 
 		}
