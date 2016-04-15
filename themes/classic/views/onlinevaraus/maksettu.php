@@ -214,6 +214,7 @@ $message .= '<br></td></tr>
 				$t->osoiteOnline=2;
 				$t->save();
 
+
 				$o = Onlinevaraus::model()->updatebypk($ov->id);
 				$o->tila=1;
 				$o->save();
