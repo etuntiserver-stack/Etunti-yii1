@@ -59,13 +59,11 @@
 	$r = Valikkoot::model()->find($criteria);
 
 	$mod = '
+	<script src="'.Yii::app()->request->baseUrl.'/js/jscolor.js"></script>
 
-
-	<link rel="stylesheet" href="'.Yii::app()->request->baseUrl.'/css/palette-color-picker.css">
-	<script src="'.Yii::app()->request->baseUrl.'/js/palette-color-picker.js"></script>
 	<input type="hidden" id="select_type" value="'.$_POST['select_type'].'">
 
-  <div class="modal-dialog modal-lg">
+  <div class="modal-dialog modal-lg" id="myModal">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -79,12 +77,9 @@
 
 	if($_POST['select_type'] == 'vuosilomat')
 	{
-	$mod .= '
-	<label>Malli:</label>  <br><br>
-		<p>Merkki/Teksti/Html vääri</p>
-		<p>V/Vapaa/#006da9</p>
-		<p>tai V/Vapaa/blue</p>
-	';
+	$mod .= '<input type="hidden" id="kolmekenta" value="1">';
+	} elseif($_POST['select_type'] == 'aktiivinen') {
+	$mod .= 'Malli:  Tilanne/ID, Esimerkiksi Aktiivinen/1';		
 	}
 
 	$mod .= '
@@ -108,33 +103,43 @@
 
 	
 		$mod .= '
-		<div class="row" id="rivi_'.$u->id.'">
+		<div class="row moe" id="rivi_'.$u->id.'">
 		  <div class="form-inline">';
 
 
 		if($_POST['select_type'] == 'vuosilomat')
 		{
-		$mod .= '<input type="text" class="form-control form-group '.$success.'" value="'.$u->value.'" id="m_'.$u->id.'">';
 
-/*
+		$exVari = explode('/',$u->value);
+		   $ex0 = '';;
+		   $ex1 = '';
+		   $ex2 = '';
+    		if(isset($exVari[0]) and isset($exVari[1]) and isset($exVari[2]))
+		{
+		   $ex0 = $exVari[0];
+		   $ex1 = $exVari[1];
+		   $ex2 = $exVari[2];
+		}
+
 		$mod .= '
-      <input type="hidden" name="duplicated-name-'.$u->id.'" class="form-group" data-palette=\'["#D50000","#304FFE","#00B8D4","#00C853","#FFD600","#FF6D00","#FF1744","#3D5AFE","#00E5FF","#00E676","#FFEA00","#FF9100","#FF5252","#536DFE","#18FFFF","#69F0AE","#FFFF00","#FFAB40"]\' value="#000000" >
+		<input type="text" class="m0 form-control form-group" size="3" value="'.$ex0.'" id="m0_'.$u->id.'" placeholder="Merki">
+		<input type="text" class="m1 form-control form-group" value="'.$ex1.'" id="m1_'.$u->id.'" placeholder="Nimike">
 
-<script type="text/javascript">
-$(document).ready(function(){
+		<button class="jscolor {valueElement:\'m2_'.$u->id.'\', onFineChange:\'setTextColor(this)\'}">
+			'.Yii::t('main', 'Väri').'
+		</button>
+		<input type="hidden" class="m2" id="m2_'.$u->id.'" value="'.$ex2.'">
+		';
 
-  $(\'[name="duplicated-name-'.$u->id.'"]\').paletteColorPicker({
-    position: \'downside\',
-    //custom_class: \'zindex\',
-  });
+		$mod .= '<input type="hidden" class="form-control" value="'.$u->value.'" id="m_'.$u->id.'">';
 
-});
-</script>';
-*/
 
 		} else {
 		$mod .= '<input type="text" class="form-control form-group '.$success.'" value="'.$u->value.'" id="m_'.$u->id.'">';
 		}
+
+
+
 
 		$mod .= '
 			<input type="button" class="btn btn-warning muokka" for="m_'.$u->id.'" id="'.$u->id.'" value="Tallenna"></button>
@@ -174,8 +179,40 @@ $(document).ready(function(){
 
 
 $mod .= '
+
+
+
 <script type="text/javascript">
 $(document).ready(function(){
+
+
+  if($("#kolmekenta").val() === "1"){
+
+    $(".m0, .m1").keyup(function(){
+	var thId = $(this).attr("id").split("_");
+	kolmeKenta(thId[1]);
+    });
+
+    $(".m2").change(function(){
+	var thId = $(this).attr("id").split("_");
+	kolmeKenta(thId[1]);
+    });
+
+    function kolmeKenta(id)
+    {
+
+	var m0 = $("#m0_"+id).val();
+	var m1 = $("#m1_"+id).val();
+	var m2 = $("#m2_"+id).val();
+	$("#m_"+id).val(m0+"/"+m1+"/#"+m2);
+    }
+
+  }
+
+
+	function setTextColor(picker) {
+		document.getElementsByTagName(\'body\')[0].style.color = \'#\' + picker.toString()
+	}
 
   $(".tallenna").click(function(){
 	window.location.reload();

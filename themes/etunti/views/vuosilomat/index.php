@@ -145,6 +145,9 @@ echo	'<input type=hidden id=number value='.cal_days_in_month(CAL_GREGORIAN, $mon
   $valikkoot = Valikkoot::model()->findAll("select_type = 'vuosilomat'");
   foreach($valikkoot as $vl){
     $expl = explode("/",$vl->value);
+
+    if(isset($expl[0]) and isset($expl[1]) and isset($expl[2]))
+    {
     $back = " style='background:".$expl[2].";color: white;'";
     if($expl[0] == 'VL')
     $checked = 'checked';
@@ -156,6 +159,7 @@ echo	'<input type=hidden id=number value='.cal_days_in_month(CAL_GREGORIAN, $mon
 	<input type=radio name="valikko" class="valikko" value="'.$expl[0].'//'.$expl[2].'//'.$expl[1].'" '.$checked.'> 
 	<span class="col-sm-1 btn btn-xs btn-group btn-primary btn-group-justified" style="background: '.$expl[2].'">'.$expl[0].'</span>  '.$expl[1].'
     </div>';
+    }
   }
  ?>
  <div class="row"></div>
