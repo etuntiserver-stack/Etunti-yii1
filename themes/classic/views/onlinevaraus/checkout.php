@@ -76,6 +76,7 @@ if($response)
 		$ov->kohde_id = $k->id;
 		$ov->kesto = $kesto;
 		$ov->hinta = $amount;
+		$ov->tilauksen_kuvaus = json_encode($_SESSION['onlinevaraus']['tilauksenKuvaus']);
 		$ov->save();
 		}
 	}
