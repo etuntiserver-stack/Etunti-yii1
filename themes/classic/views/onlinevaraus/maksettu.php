@@ -207,11 +207,13 @@ $message .= '<br></td></tr>
 			$mail->setTo($_SESSION['onlinevaraus']['sahkoposti']);
 			$mail->setSubject('Online varaus');
 			$mail->setBody($message);
-			$mail->send();
 
-			$t = Tyovuoroot::model()->updatebypk($_GET['REFERENCE'], array('osoiteOnline'=>2));
-			$o = Onlinevaraus::model()->updatebypk($ov->id, array('tila'=>1));
-			unset($_SESSION['onlinevaraus']);
+			if($mail->send())
+			{
+				Tyovuoroot::model()->updatebypk($_GET['REFERENCE'], array('osoiteOnline'=>2));
+				Onlinevaraus::model()->updatebypk($ov->id, array('tila'=>1));
+				unset($_SESSION['onlinevaraus']);
+			}
 
 		}
 	}
