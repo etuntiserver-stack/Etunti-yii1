@@ -167,10 +167,13 @@ $message .= '
 
 <tr><td valign="top">Tilattu tuote</td><td>';
 
+if(isset($tilauksen_kuvaus['paa']) and isset($tilauksen_kuvaus['lisa']))
+{
   foreach($tilauksen_kuvaus['paa'] as $k=>$v)
 	$message .=  $k.' '.$v.' m²<br>';
   foreach($tilauksen_kuvaus['lisa'] as $k=>$v)
 	$message .=  $k.' '.$v.' h<br>';
+}
 
 $message .= '<br></td></tr>
 
