@@ -58,8 +58,40 @@ try {
 }
 ?>
 
-<div class="row">
-    <div class="col-sm-12">
+
+
+
+
+        <!-- Header-->
+        <header>
+            <!-- Container-->
+            <div class="container">
+                <!-- Row-->
+                <div class="row">
+                    <!-- Logo-->
+                    <div class="col-md-3">
+                        <div class="logo">
+  			<?php $asetukset=Asetukset::model()->find("id=1"); ?>
+  			<img src="<?php echo $asetukset->logon_polkku; ?>" height="<?php echo $asetukset->logon_korkeus; ?>">
+                        </div>
+                    </div>
+                    <!-- End Logo-->
+
+                    <!-- Nav-->
+                    <div class="col-md-9 slogan">
+                        <!--Voita siivousalan haasteet-->
+                    </div>
+                    <!-- End Nav-->
+                </div>
+                <!-- End Row-->
+            </div>
+            <!-- End Container-->
+        </header>
+        <!-- End Header-->
+
+
+
+
 	<?php
 	if($status_string == 'PAID')
 	{
@@ -72,13 +104,100 @@ try {
 
 		if(isset($ov->id) and isset($tv->id))
 		{
+
+			$asiakas = Asiakkaat::model()->findbypk($ov->asiakas_id);
+			$kohteet = Kohteet::model()->findbypk($ov->kohde_id);
+
 			$asetukset = Asetukset::model()->findbypk(1);
 			$t = Tyovuoroot::model()->updatebypk($_GET['REFERENCE'], array('osoiteOnline'=>2));
-			$ov = Onlinevaraus::model()->updatebypk($ov->id, array('tila'=>1));
+			$ov1 = Onlinevaraus::model()->updatebypk($ov->id, array('tila'=>1));
 
-			$message = '<h2>Kiitos tilauksesta, olemme vastanottaneet maksun!</h2><br>';
-			$message .= '<h3>'.$asetukset->tilausvahvistus.'</h3><br>';
-			$message .= $tv->pvm.', '.$tv->alku.'-'.$tv->loppu;
+
+$nimi = '';
+if(!empty($asiakas->yrityksen_nimi) and empty($asiakas->yhteyshenkilo))
+$nimi = $asiakas->yrityksen_nimi;
+if(empty($asiakas->yrityksen_nimi) and !empty($asiakas->yhteyshenkilo))
+$nimi = $asiakas->yhteyshenkilo;
+
+$tilauksen_kuvaus = json_decode($ov->tilauksen_kuvaus, true);
+
+
+$message = '';
+$message .= '
+
+        <section class="esittely">
+            <div class="paddings">
+                <div class="container">
+                    <!-- Icon Big -->
+                    <!-- End Icon Big -->
+
+
+<style>
+table{ 
+	width:800px;
+}
+td{
+	line-height: 170%;
+	width: 400px;
+}
+</style>
+
+
+<p><h1 class="title-subtitle text-left"><span>Kiitos tilauksestasi!</span></h1></p>
+
+<p><h4 class="title-subtitle text-left">
+Olemme vastaanottaneet tilauksesi ja tästä voit tulostaa tilausvahvistuksen. 
+</h4></p>
+
+
+<table>
+<tr><td>Nimi</td><td>'.$nimi.'</td></tr>
+<tr><td>Osoite</td><td>'.$asiakas->osoite.'</td></tr>
+<tr><td>Puhelin</td><td>'.$asiakas->puhelin.'</td></tr>
+<tr><td>S-posti</td><td>'.$asiakas->sahkoposti.'</td></tr>';
+
+if(!empty($asiakas->y_tunnus))
+$message .= '<tr><td>Y-tunnus</td><td>'.$asiakas->y_tunnus.'</td></tr>';
+
+$message .= '
+</table>
+<hr>
+<table>
+<tr><td>Tilausnumero</td><td>'.$ov->id.'</td></tr>
+
+<tr><td valign="top">Tilattu tuote</td><td>';
+
+  foreach($tilauksen_kuvaus['paa'] as $k=>$v)
+	$message .=  $k.' '.$v.' m²<br>';
+  foreach($tilauksen_kuvaus['lisa'] as $k=>$v)
+	$message .=  $k.' '.$v.' h<br>';
+
+$message .= '<br></td></tr>
+
+<tr><td>Ajankohta</td><td>'.$tv->pvm.'</td></tr>
+<tr><td>Aika</td><td>KLO '.$tv->alku.'-'.$tv->loppu.'</td></tr>				
+<tr><td>Paikka</td><td>'.$kohteet->osoite.', '.$kohteet->pnumero.' '.$kohteet->kaupunki.'</td></tr>
+<tr><td>Hinta</td><td>'.number_format($ov->hinta, 2, ',', '').' euroa</td></tr>
+<tr><td>Maksu</td><td>Maksu on vahvistettu</td></tr>
+</table>
+
+			<span>'.$asetukset->tilausvahvistus.'</span>
+
+
+
+
+
+                        <hr>
+                    <!-- End Titles Heading -->
+
+                </div>
+                <!-- End Container-->
+            </div>
+        </section>  
+
+
+			';
+
 
 			echo $message;
 
@@ -90,10 +209,10 @@ try {
 			$mail->send();
 
 			unset($_SESSION['onlinevaraus']);
+
 		}
 	}
 	?>
-    </div>
-</div>
+
 
 

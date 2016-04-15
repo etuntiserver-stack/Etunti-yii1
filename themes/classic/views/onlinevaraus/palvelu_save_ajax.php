@@ -82,6 +82,9 @@
 	 </div><div class="col-sm-10">
 		<span id="nimikejanelio">'.$model->nimike.' '.$model->nelio.' m²</span>';
 
+		$tilauksenKuvaus = array();
+		$tilauksenKuvaus['paa'][$model->nimike] = $model->nelio;
+
 		if(isset($_SESSION['onlinevaraus']['lisapalvelut']))
 		foreach($_SESSION['onlinevaraus']['lisapalvelut'] as $p)
 		{
@@ -96,8 +99,12 @@
 			<span style="opacity:0.6">h</span></span>
 			</div>
 			';
+			$tilauksenKuvaus['lisa'][$onlineTuotteet->nimike] = $onlineTuotteet->kesto;
+
 		    }
 		}
+
+	$_SESSION['onlinevaraus']['tilauksenKuvaus'] = $tilauksenKuvaus;
 
 	$body .= '
 	 </div>

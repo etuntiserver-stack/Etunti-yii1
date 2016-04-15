@@ -40,6 +40,7 @@ class Onlinevaraus extends DB2ActiveRecord
 			array('tila', 'length', 'max'=>1),
 			array('kesto, hinta', 'length', 'max'=>50),
 			array('maksun_onnistu_koodi', 'length', 'max'=>1000),
+			array('tilauksen_kuvaus', 'length', 'max'=>5000),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('id, time', 'safe', 'on'=>'search'),

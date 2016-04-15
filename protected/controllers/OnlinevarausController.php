@@ -113,7 +113,7 @@ class OnlinevarausController extends Controller
 
 	public function actionMaksettu()
 	{
-		$this->renderPartial('maksettu');
+		$this->render('maksettu');
 	}
 
 	public function actionOnkokohde()
