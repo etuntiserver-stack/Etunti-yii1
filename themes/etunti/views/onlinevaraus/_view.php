@@ -1,6 +1,8 @@
 <?php
 /* @var $this OnlinevarausController */
 /* @var $data Onlinevaraus */
+
+$tilauksen_kuvaus = json_decode($data->tilauksen_kuvaus, true);
 ?>
 
 <tr>
@@ -39,6 +41,18 @@
 	</td>
 	<td>
 		<?php if($data->tila == 1) echo 'Maksettu'; ?>
+	</td>
+	<td>
+		<?php
+
+if(isset($tilauksen_kuvaus['paa']) and isset($tilauksen_kuvaus['lisa']))
+{
+  foreach($tilauksen_kuvaus['paa'] as $k=>$v)
+	echo $k.' '.$v.' m²<br>';
+  foreach($tilauksen_kuvaus['lisa'] as $k=>$v)
+	echo  $k.' '.$v.' h<br>';
+}
+		?>
 	</td>
 	<td>
 		<?php echo CHtml::link('', array('update', 'id'=>$data->id), array('class'=>'fa fa-pencil-square-o')); ?>
