@@ -1,12 +1,14 @@
 <?php
   $r = array();
+if(is_array($rekisteriseloste))
+{
   foreach($rekisteriseloste as $val)
   {
 	$ex = explode("___", $val);
 	if(isset($ex[0]) and isset($ex[1]))
 	$r[$ex[0]] = $ex[1];
   }
-
+}
 
 ?>
 <div id="rekisteriteloste">
@@ -73,7 +75,7 @@ table{ background: white; }
 </tr>
 <tr>
 	<td class="col-sm-3">5<br>Rekisterin tietosisältö</td>
-	<td class="col-sm-9"><textarea id="rekisterin_tietosisalto" class="form-control" rows="2"><?php if(isset($r['rekisterin_tietosisalt'])) echo $r['rekisterin_tietosisalt']; ?></textarea></td>
+	<td class="col-sm-9"><textarea id="rekisterin_tietosisalto" class="form-control" rows="2"><?php if(isset($r['rekisterin_tietosisalto'])) echo $r['rekisterin_tietosisalto']; ?></textarea></td>
 </tr>
 <tr>
 	<td class="col-sm-3">6<br>Säännönmukaiset tieto-lähteet</td>

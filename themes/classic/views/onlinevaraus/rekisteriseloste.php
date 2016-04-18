@@ -74,7 +74,7 @@ täyttämistä. Käytä tarvittaessa liitettä.</p><br>
 </tr>
 <tr>
 	<td class="col-sm-3">5<br>Rekisterin tietosisältö</td>
-	<td class="col-sm-9"><span class="small"><?php if(isset($r['rekisterin_tietosisalt'])) echo $r['rekisterin_tietosisalt']; ?></span><br></td>
+	<td class="col-sm-9"><span class="small"><?php if(isset($r['rekisterin_tietosisalto'])) echo $r['rekisterin_tietosisalto']; ?></span><br></td>
 </tr>
 <tr>
 	<td class="col-sm-3">6<br>Säännönmukaiset tieto-lähteet</td>
