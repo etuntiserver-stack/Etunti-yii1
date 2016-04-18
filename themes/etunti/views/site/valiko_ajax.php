@@ -59,8 +59,6 @@
 	$r = Valikkoot::model()->find($criteria);
 
 	$mod = '
-	<script src="'.Yii::app()->request->baseUrl.'/js/jscolor.js"></script>
-
 	<input type="hidden" id="select_type" value="'.$_POST['select_type'].'">
 
   <div class="modal-dialog modal-lg" id="myModal">
@@ -122,14 +120,17 @@
 		}
 
 		$mod .= '
+		<script src="'.Yii::app()->request->baseUrl.'/js/jscolor.js"></script>
+
+
 		<input type="text" class="m0 form-control form-group" size="3" value="'.$ex0.'" id="m0_'.$u->id.'" placeholder="Merki">
 		<input type="text" class="m1 form-control form-group" value="'.$ex1.'" id="m1_'.$u->id.'" placeholder="Nimike">
 
-		<button class="jscolor {valueElement:\'m2_'.$u->id.'\', onFineChange:\'setTextColor(this)\'}">
+		<button class="jscolor {valueElement:\'m2_'.$u->id.'\'}">
 			'.Yii::t('main', 'Väri').'
 		</button>
 		<input type="hidden" class="m2" id="m2_'.$u->id.'" value="'.$ex2.'">
-		';
+		'; // , onFineChange:\'setTextColor(this)\'
 
 		$mod .= '<input type="hidden" class="form-control" value="'.$u->value.'" id="m_'.$u->id.'">';
 
@@ -142,7 +143,7 @@
 
 
 		$mod .= '
-			<input type="button" class="btn btn-warning muokka" for="m_'.$u->id.'" id="'.$u->id.'" value="Tallenna"></button>
+			<input type="button" class="btn btn-warning muokkaSelectValikoja" for="m_'.$u->id.'" id="'.$u->id.'" value="Tallenna"></button>
 			<input type="button" class="btn btn-danger deleteFromSelect" id="poista_'.$u->id.'" select_type="'.$u->select_type.'" value="X"></button>
 		  </div>
 		</div>
@@ -170,8 +171,8 @@
        </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Sulje</button>
-        <button type="button" class="btn btn-primary tallenna">Päivitä sivua</button>
+        <!--<button type="button" class="btn btn-default" data-dismiss="modal">Sulje</button>-->
+        <button type="button" class="btn btn-primary tallenna">Tallenna muutokset</button>
 
       </div>
     </div><!-- /.modal-content -->
@@ -184,6 +185,13 @@ $mod .= '
 
 <script type="text/javascript">
 $(document).ready(function(){
+
+
+/*
+	function setTextColor(picker) {
+		document.getElementsByTagName(\'body\')[0].style.color = \'#\' + picker.toString()
+	}
+*/
 
 
   if($("#kolmekenta").val() === "1"){
@@ -209,16 +217,11 @@ $(document).ready(function(){
 
   }
 
-
-	function setTextColor(picker) {
-		document.getElementsByTagName(\'body\')[0].style.color = \'#\' + picker.toString()
-	}
-
   $(".tallenna").click(function(){
 	window.location.reload();
   });
 
-  $(".muokka").click(function(){
+  $(".muokkaSelectValikoja").click(function(){
 	var forID = $(this).attr("for");
 	var thisID = $(this).attr("id");
 	var thisVal = $("#"+forID).val();
@@ -228,6 +231,7 @@ $(document).ready(function(){
            type: "POST",
            data: {"muokkaSelects" : "true", "id" : thisID, "value" : thisVal, "select_type" : $("#select_type").val()},
            success: function(html){
+		//console.log(html)
 		$("#result").html(html);
            }
         });

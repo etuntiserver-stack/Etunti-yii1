@@ -169,6 +169,7 @@ echo	'<input type=hidden id=number value='.cal_days_in_month(CAL_GREGORIAN, $mon
  </div>
 </div>
 
+
 	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/bootstrap.modal.js"></script>
 	<div id="showres" class="modal fade" tabindex="-1" role="dialog"></div>
 
