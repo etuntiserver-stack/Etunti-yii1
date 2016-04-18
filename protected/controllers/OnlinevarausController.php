@@ -28,7 +28,7 @@ class OnlinevarausController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view', 'check', 'aika', 'osoite', 'maksu', 'palvelu_ajax', 'palvelu_save_ajax', 'lisat_ajax', 'ajaat_ajax', 'aika_ajax', 'onkokohde', 'luouusi', 'checkout', 'maksettu'),
+				'actions'=>array('index','view', 'check', 'aika', 'osoite', 'maksu', 'palvelu_ajax', 'palvelu_save_ajax', 'lisat_ajax', 'ajaat_ajax', 'aika_ajax', 'onkokohde', 'luouusi', 'checkout', 'maksettu', 'rekisteriseloste'),
                 		'users'=>array("*"),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
@@ -76,6 +76,16 @@ class OnlinevarausController extends Controller
 		}
         }
 
+	public function actionRekisteriseloste()
+	{
+
+		$rt = Asetukset::model()->findbypk(1);
+		$rekisteriseloste = json_decode($rt->rekisteriseloste);
+		$this->render('rekisteriseloste',array(
+			'rekisteriseloste'=>$rekisteriseloste
+		));
+
+	}
 
 	public function actionKaikki()
 	{

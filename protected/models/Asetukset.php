@@ -45,7 +45,7 @@ class Asetukset extends DB2ActiveRecord
 			array('johtaja, viivastyskorko, tilinumero, iban, bic, , postita_username, postita_password, trust_cid, trust_api, checkout_id', 'length', 'max'=>100),
 			array('trust_url, checkout_salasana', 'length', 'max'=>255),
 			array('viikonloppulisa_la, viikonloppulisa_su', 'length', 'max'=>10),
-			array('oikeudet, pyhapaivat, erikoislauantai, tilausvahvistus', 'length', 'max'=>10000),
+			array('oikeudet, pyhapaivat, erikoislauantai, tilausvahvistus, rekisteriseloste', 'length', 'max'=>10000),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('id, syntyrin_emails, paivan_uutinen, logon_polkku, logon_korkeus, johtaja, viivastyskorko, tilinumero, iban, bic, trust_cid, trust_api, palvelu_tyyppi, trust_url, pyhapaivat, erikoislauantai, sovellus_tyovuorot', 'safe', 'on'=>'search'),
