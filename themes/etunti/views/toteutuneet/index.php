@@ -205,7 +205,7 @@ function dateDiff($start, $end) {
   $yhtYoWeek	= 0;
   $yhtTotpvmtid	= 0;
   $yhtLuetutpvmtid = 0;
-  $viikkoBreak 	= '';
+  $viikkoBreak 	= false;
 
   for ($i = 0; $i <= $dateDiff; $i++) 
   {
@@ -267,32 +267,23 @@ function dateDiff($start, $end) {
     echo '<td>'.$this->sprint($tyoYo).'</td>';
 
 
-    if($viikkoBreak == false){
-	$yhtMatkaWeek += $matka;
-	$yhtIltaWeek += $tyoIlta;
-	$yhtYoWeek += $tyoYo;
 
-	if(isset($exLatiko[1]))
-	$yhtTotpvmtid += $exLatiko[1];
+    $yhtMatkaWeek += $matka;
+    $yhtIltaWeek += $tyoIlta;
+    $yhtYoWeek += $tyoYo;
+    if(isset($exLatiko[1]))
+    $yhtTotpvmtid += $exLatiko[1];
+    if(isset($exLatikoLu[1]))
+    $yhtLuetutpvmtid += $exLatikoLu[1];
 
-	if(isset($exLatikoLu[1]))
- 	$yhtLuetutpvmtid += $exLatikoLu[1];
 
-    } else {
-	$yhtMatkaWeek = 0;
-	$yhtIltaWeek = 0;
-	$yhtYoWeek = 0;
-	$yhtTotpvmtid = 0;
- 	$yhtLuetutpvmtid = 0;
-    }
-    $viikkoBreak = false;
 
     echo '</tr>';
 
-    //echo $this->viikkonLoppu($date,$explTekija[0],$yhtMatkaWeek,$yhtIltaWeek,$viikkoBreak,$yhtYoWeek,$yhtTotpvmtid);
 
 
-    $tid = $explTekija[0];
+
+    		$tid = $explTekija[0];
 
 	    if(date('N', strtotime($date)) == 7)
 	    {
@@ -329,7 +320,14 @@ function dateDiff($start, $end) {
 		  echo '<td style="background: #669999;color: white; text-align:center" class="small myBgColors">'.$this->sprint($yhtIltaWeek).'<br>('.$this->num($yhtIltaWeek).')</td>';
 		  echo '<td style="background: #669999;color: white; text-align:center" class="small myBgColors">'.$this->sprint($yhtYoWeek).'<br>('.$this->num($yhtYoWeek).')</td>';
 	    echo '</tr>';
-	    $viikkoBreak = true;
+
+
+		$yhtMatkaWeek = 0;
+		$yhtIltaWeek = 0;
+		$yhtYoWeek = 0;
+		$yhtTotpvmtid = 0;
+	 	$yhtLuetutpvmtid = 0;
+
 	    }
 
 
