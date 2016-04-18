@@ -24,7 +24,7 @@ class AsetuksetController extends Controller
 		return array(
 
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('update','oikeudet'),
+				'actions'=>array('update','oikeudet', 'rekisteriseloste'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -74,6 +74,12 @@ class AsetuksetController extends Controller
 
 			$this->render('oikeudet');
 		}
+	}
+
+
+	public function actionRekisteriseloste()
+	{
+		$this->render('rekisteriseloste');
 	}
 
 	public function actionView($id)

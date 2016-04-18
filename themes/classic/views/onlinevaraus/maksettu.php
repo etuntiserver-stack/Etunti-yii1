@@ -210,8 +210,15 @@ $message .= '<br></td></tr>
 
 			if($mail->send())
 			{
-				Tyovuoroot::model()->updatebypk($_GET['REFERENCE'], array('osoiteOnline'=>2));
-				Onlinevaraus::model()->updatebypk($ov->id, array('tila'=>1));
+				$t = Tyovuoroot::model()->findbypk($_GET['REFERENCE']);
+				$t->osoiteOnline=2;
+				$t->save();
+
+
+				$o = Onlinevaraus::model()->updatebypk($ov->id);
+				$o->tila=1;
+				$o->save();
+
 				unset($_SESSION['onlinevaraus']);
 			}
 

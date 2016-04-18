@@ -167,6 +167,14 @@
 		<?php echo $form->error($model,'checkout_salasana'); ?>
 	</div>
 
+	<br>
+	<div class="section fill mb5">
+
+		<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/asetukset/rekisteriseloste"><?php echo Yii::t('main','Onlinevaraus tietosuoja- ja rekisteriseloste'); ?> </a>
+
+	</div>
+
+
     </div><div class="col-sm-3">
     <legend><h2><?php echo Yii::t('main','Viikonloppulisät'); ?></h2></legend>
 
