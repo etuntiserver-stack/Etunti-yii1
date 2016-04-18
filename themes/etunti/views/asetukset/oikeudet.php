@@ -1,14 +1,14 @@
 <?php
  $array = array
  (
-	'asetukset'=>array(0=>null,1=>null,2=>'Muoka asetukset',3=>null),
+	'asetukset'=>array(0=>null,1=>null,2=>'Muokaa asetukset',3=>null),
 	'henkilotunnukset'=>array(0=>null,1=>null,2=>'Henkilötunnukset',3=>null),
 	'ryhmat'=>array(0=>null,1=>null,2=>'Ryhmät',3=>null),
-	'asiakkaat'=>array(0=>'Asiakkaat taulu',1=>'Luo asiakas',2=>'Muoka asiakas',3=>'Poista asiakas'),
-	'kohteet'=>array(0=>'Kohteet taulu',1=>'Luo kohde',2=>'Muoka kohde',3=>'Poista kohde'),
-	'tyontekijat'=>array(0=>'Työntekijät taulu',1=>'Luo työntekijä',2=>'Muoka työntekijä',3=>'Poista työntekijä'),
-	'viestinta'=>array(0=>'Viestinta taulu',1=>'Luo viesti',2=>'Muoka viesti',3=>'Poista viesti'),
-	'administrators'=>array(0=>'Järjestelmänvalvoja taulu',1=>'Luo järjestelmänvalvoja',2=>'Muoka järjestelmänvalvoja',3=>'Poista järjestelmänvalvoja'),
+	'asiakkaat'=>array(0=>'Asiakkaat taulu',1=>'Luo asiakas',2=>'Muokaa asiakas',3=>'Poista asiakas'),
+	'kohteet'=>array(0=>'Kohteet taulu',1=>'Luo kohde',2=>'Muokaa kohde',3=>'Poista kohde'),
+	'tyontekijat'=>array(0=>'Työntekijät taulu',1=>'Luo työntekijä',2=>'Muokaa työntekijä',3=>'Poista työntekijä'),
+	'viestinta'=>array(0=>'Viestinta taulu',1=>'Luo viesti',2=>'Muokaa viesti',3=>'Poista viesti'),
+	'administrators'=>array(0=>'Järjestelmänvalvoja taulu',1=>'Luo järjestelmänvalvoja',2=>'Muokaa järjestelmänvalvoja',3=>'Poista järjestelmänvalvoja'),
  );
 
 	$tas = '';

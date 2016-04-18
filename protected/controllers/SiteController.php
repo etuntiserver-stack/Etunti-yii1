@@ -104,7 +104,7 @@ $(document).ready(function(){
            type: "POST",
            data: { "select_type" : $("#select_type").val() },
            success: function(data){
-		console.log(data);
+		//console.log(data);
 		$("#result").html(data);
            }
         });

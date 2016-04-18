@@ -267,7 +267,7 @@ echo '
              <!-- Pie Chart -->
               <div class="panel" id="p10">
                 <div class="panel-heading">
-                  <span class="panel-title">Siivojat tänään </span>
+                  <span class="panel-title">Siivoojat tänään </span>
 		  <?php 
 		   $parasSiivoja = json_encode($this->parasSiivojaTanaan());
 		  ?>
