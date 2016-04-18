@@ -79,7 +79,19 @@ class AsetuksetController extends Controller
 
 	public function actionRekisteriseloste()
 	{
-		$this->render('rekisteriseloste');
+
+		if(isset($_POST['rekisteriseloste']))
+		{
+			$as = Asetukset::model()->updatebypk(1,array('rekisteriseloste' => json_encode($_POST['rekisteriseloste'])));
+			exit;
+		} else {
+			$rt = Asetukset::model()->findbypk(1);
+			$rekisteriseloste = json_decode($rt->rekisteriseloste);
+			$this->render('rekisteriseloste',array(
+				'rekisteriseloste'=>$rekisteriseloste
+			));
+		}
+
 	}
 
 	public function actionView($id)

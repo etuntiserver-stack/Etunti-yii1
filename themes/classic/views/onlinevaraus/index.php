@@ -166,7 +166,7 @@ if(isset($asetukset->checkout_id) and !empty($asetukset->checkout_id) and !empty
 <br>
 
 
-
+<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/onlinevaraus/rekisteriseloste" target="_blank"><?php echo Yii::t('main','Onlinevaraus tietosuoja- ja rekisteriseloste'); ?> </a>
 </div>
 
 
