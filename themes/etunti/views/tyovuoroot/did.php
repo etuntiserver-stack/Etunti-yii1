@@ -47,7 +47,7 @@
 	$criteria->with=array('kohteet');
 	$criteria->condition = " tid = '".$tid."' and pvm = '".date("d.m.Y",strtotime($pvm))."' ";
 
-	if(isset($kohteenArr))
+	if(isset($kohteenArr) and count($kohteenArr) > 0)
 	{
 		$kohteenArr = implode(',',$kohteenArr);
 		$criteria->addCondition  (" kohde IN ($kohteenArr) ");
