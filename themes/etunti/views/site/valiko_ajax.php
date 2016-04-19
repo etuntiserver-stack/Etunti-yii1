@@ -222,17 +222,19 @@ $(document).ready(function(){
   });
 
   $(".muokkaSelectValikoja").click(function(){
+
+	$(this).removeClass("btn-warning").addClass("btn-success");
 	var forID = $(this).attr("for");
 	var thisID = $(this).attr("id");
 	var thisVal = $("#"+forID).val();
-	$("#"+forID).val("Hetkinen..");
+	//$("#"+forID).val("Hetkinen..");
         $.ajax({
            url: location.protocol + "//" + location.host + "/index.php/site/valiko_ajax",
            type: "POST",
            data: {"muokkaSelects" : "true", "id" : thisID, "value" : thisVal, "select_type" : $("#select_type").val()},
            success: function(html){
 		//console.log(html)
-		$("#result").html(html);
+		//$("#result").html(html);
            }
         });
   });
@@ -248,7 +250,7 @@ $(document).ready(function(){
            type: "POST",
            data: { "deleteFromSelect" : "true", "id" : thisID[1], "select_type" : select_type },
            success: function(html){
-		$("#result").html(html);
+		$("#rivi_"+thisID[1]).remove();
            }
         });
 	}
