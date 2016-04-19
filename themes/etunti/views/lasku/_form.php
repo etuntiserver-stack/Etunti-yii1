@@ -940,7 +940,7 @@ function Rivi(){
 
   valitseTuote();
 
-  $(".onlyDigits ").attr('type', 'number');
+  $(".onlyDigits ").attr('type', 'number').attr('step', '0.01');
 
   $('#rivit input[type="number"]').keyup(function() {
   	eachLaskenta();
