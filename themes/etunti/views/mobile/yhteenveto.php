@@ -33,7 +33,7 @@ $this->breadcrumbs=array(
    	    <form id="yhtveto" action="#" class="form-inline" method="POST">
    	    <input type="hidden" name="yhtvetoform">
 
-            <div >
+            <div class="admin-form">
               <div class="panel heading-border">
                 <div class="panel-body bg-light">
 
@@ -41,7 +41,7 @@ $this->breadcrumbs=array(
                     <div class="row">
 
 
-                      <div class="col-md-3">
+                      <div class="col-md-4">
                         <div class="section">
                           <label class="field">
 
@@ -107,7 +107,7 @@ $this->breadcrumbs=array(
                         </div>
                       </div>
 
-                      <div class="col-md-2 col-md-offset-3">
+                      <div class="col-md-2 col-md-offset-2">
         	        <button class="btn btn-primary btn-lg haemob btn-block myBgColors" type="button"><i class="glyphicon glyphicon-search"> </i> Hae</button>
 		      </div>
 
@@ -126,7 +126,6 @@ $this->breadcrumbs=array(
         </div>
 
 
-<br>
 
 
 
@@ -135,7 +134,7 @@ $this->breadcrumbs=array(
   <div class="panel heading-border">
    <div class="panel-body">
 
-  <table class="table table-striped small">
+  <table class="table table-striped">
   <thead class="myBgColors">
   <tr>
   <th><?php echo Yii::t('main', 'Työntekijä'); ?></th>

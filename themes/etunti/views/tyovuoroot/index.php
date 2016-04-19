@@ -95,6 +95,12 @@
 
 ?>
 
+<div class="row">
+            <div class="admin-form">
+              <div class="panel heading-border myBgColors">
+                <div class="panel-body bg-light">
+
+
 
 
 <div class="row">
@@ -179,8 +185,12 @@
  </div>
 </div>
 
-<br>
 
+
+                </div>
+              </div>
+            </div>
+</div>
 
 
 <div class="row">
@@ -374,7 +384,7 @@ $(function () {
 
     var onResize = function () {
         var oSettings = dataTable.fnSettings();
-        oSettings.oScroll.sY = tableHeight()-230; 
+        oSettings.oScroll.sY = tableHeight()-260; 
         dataTable.fnDraw();
     };
 
