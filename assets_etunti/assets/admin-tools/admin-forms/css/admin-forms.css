@@ -421,6 +421,9 @@
   opacity: 0;
   left: 0;
 }
+
+/* Roman */
+not([type="multiple"]) {
 .admin-form .checkbox,
 .admin-form .radio {
   cursor: pointer;
@@ -433,6 +436,9 @@
   width: 21px;
   top: 4px;
 }
+}
+/* Roman */
+
 .admin-form .checkbox:before,
 .admin-form .radio:before {
   content: '';

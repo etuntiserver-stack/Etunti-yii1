@@ -146,7 +146,14 @@ td .tp{
 
         <!-- begin: .tray-center -->
 <?php if(!isset($_GET['fullscreen'])) : ?>
-<input type="hidden" id="korko" value="250">
+<input type="hidden" id="korko" value="290">
+
+
+<div class="row">
+
+            <div class="admin-form">
+              <div class="panel heading-border myBgColors">
+                <div class="panel-body bg-light">
 
 
 <div class="row">
@@ -201,7 +208,12 @@ td .tp{
  </div>
 </div>
 
-<br>
+
+                </div>
+              </div>
+            </div>
+</div>
+
 
 
 <?php else: ?>
@@ -236,7 +248,7 @@ td .tp{
 ?>
 
 
-
+<div class="row">
             <div class="admin-form">
               <div class="panel heading-border">
                 <div class="panel-body bg-light">
@@ -336,7 +348,7 @@ td .tp{
                 </div>
               </div>
             </div>
-
+</div>
 
 <?php endif; ?>
 
