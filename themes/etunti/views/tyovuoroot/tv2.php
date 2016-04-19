@@ -168,6 +168,20 @@ td .tp{
        	 echo '<option value="'.$key.'">'.$val.'</option>';
     }
     echo '</select>';
+
+
+   // Kohteen ryhman mukaan
+   $list = array();
+   $criteria = new CDbCriteria();
+   $criteria->order = " select_type ";
+   $criteria->condition = " select_type='siivous' ";
+   $l = Valikkoot::model()->findAll($criteria);
+   foreach($l as $v)
+   $list[$v->value] = $v->value;
+
+   echo CHtml::dropDownList('siivous', 'siivous', $list,
+   array('empty'=>'Työnimike','class'=>'form-control form-group'));
+
    ?>
    <input type="text" name="from" id="from" class="form-control form-group datepicker" value="<?php echo Yii::app()->session['from']; ?>">
    <input type="text" name="to" id="to" class="form-control form-group datepicker" value="<?php echo Yii::app()->session['to']; ?>">
@@ -197,6 +211,31 @@ td .tp{
 
 
 <?php if(!empty($from) and !empty($to) and count(Yii::app()->session['Tekija']) > 0 and Yii::app()->session['Tekija'][0] != 0) : ?>
+
+<?php
+
+	$kohteenArr = array();
+	if(isset($_POST['siivous']))
+	{
+
+		echo '
+		<script type="text/javascript">
+		$(document).ready(function(){
+		  $("#siivous option[value='.$_POST['siivous'].']").attr(\'selected\',\'selected\');
+		});
+		</script>';
+
+		$criteria = new CDbCriteria();
+       		$criteria->select = "id";
+       		$criteria->condition = " siivous LIKE '%//".$_POST['siivous']."%' ";
+		$k = Kohteet::model()->findAll($criteria);
+		foreach($k as $kohde)
+		$kohteenArr[] = $kohde->id;
+	}
+
+?>
+
+
 
             <div class="admin-form">
               <div class="panel heading-border">
@@ -238,7 +277,7 @@ td .tp{
   		echo '<td '.$clPyhat.' class="fixed-column"><b>'.$arrDate[$explColDate[0]].", ".$explColDate[1].'</b></td>';
 		foreach($tt as $t){
 		  echo '<td '.$clPyhat.' id="'.$did.'_'.$t->id.'">';
-		  $tv = $this->renderPartial('//tyovuoroot/did',array('pvm'=>$date,'tid'=>$t->id,'from'=>'tvuoro'), true);
+		  $tv = $this->renderPartial('//tyovuoroot/did',array('pvm'=>$date,'tid'=>$t->id,'from'=>'tvuoro', 'kohteenArr'=>$kohteenArr), true);
 		  echo json_decode($tv, true);
 		  echo '</td>';
 		}
@@ -246,15 +285,15 @@ td .tp{
 
 	    if(date('N', strtotime($date)) == 7)
 	    {
-  	    echo '<tr class="myBgColors">';
-  		echo '<td class="text-center viikkoRivi fixed-column"><b>'.Yii::t('main', 'Viikko').' '.date("W",strtotime($date)).'</b></td>';
+  	    echo '<tr>';
+  		echo '<td class="text-center myBgColors viikkoRivi fixed-column"><b>'.Yii::t('main', 'Viikko').' '.date("W",strtotime($date)).'</b></td>';
 		foreach($tt as $t){
 		 $vktyoaika = '';
 		 $ts = Tyosuhdet::model()->find(" tid = '".$t->id."' ");
 		 if(isset($ts->id) and !empty($ts['vktyoaika']))
 		  $vktyoaika = $ts['vktyoaika'];
 
-		  echo '<td class="viikkoRivi text-center" id="vk_'.date("W",strtotime($date)).'_'.$t->id.'">';
+		  echo '<td class="viikkoRivi myBgColors text-center" id="vk_'.date("W",strtotime($date)).'_'.$t->id.'">';
 		  $kokoViikko = '';
 		  $vko = '';
 		  $vko = date("W",strtotime($date));

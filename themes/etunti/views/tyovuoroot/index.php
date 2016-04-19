@@ -98,7 +98,7 @@
 
 
 <div class="row">
- <div class="row col-sm-3">
+ <div class="row col-sm-4">
   <form action="index" id="yhtveto" method="POST">
 
    <div class="form-inline">
@@ -116,16 +116,30 @@
        	 echo '<option value="'.$key.'">'.$val.'</option>';
     }
     echo '</select>';
+
+   // Kohteen ryhman mukaan
+   $list = array();
+   $criteria = new CDbCriteria();
+   $criteria->order = " select_type ";
+   $criteria->condition = " select_type='siivous' ";
+   $l = Valikkoot::model()->findAll($criteria);
+   foreach($l as $v)
+   $list[$v->value] = $v->value;
+
+   echo CHtml::dropDownList('siivous', 'siivous', $list,
+   array('empty'=>'Työnimike','class'=>'form-control form-group'));
+
+
    ?>
    <input type="submit" class="btn btn-primary" value="<?php echo Yii::t('main', 'haku'); ?>">
    </div>
    </form>
 
- </div><div class="col-sm-6">
+ </div><div class="col-sm-5">
 
 
    <div class="form-inline">
-     <a href="<?php echo $_SERVER['PHP_SELF'].'?week='.($week == 1 ? $wkMaara : $week -1).'&year='.($week == 1 ? $year - 1 : $year); ?>"><i class="fa fa-arrow-left" style="font-size: 120%"></i> Edellinen viikko</a>
+     <a href="<?php echo $_SERVER['PHP_SELF'].'?week='.($week == 1 ? $wkMaara : $week -1).'&year='.($week == 1 ? $year - 1 : $year); ?>"><i class="fa fa-arrow-left" style="font-size: 120%"></i></a>
 
 	<select class="form-control" id="viikkonhyppaminen">
 	<?php
@@ -145,7 +159,7 @@
 	}
 	?>
 	</select>
-     <a href="<?php echo $_SERVER['PHP_SELF'].'?week='.($week == $wkMaara ? 1 : 1 + $week).'&year='.($week == $wkMaara ? 1 + $year : $year); ?>">Seuraava viikko <i class="fa fa-arrow-right" style="font-size: 120%"></i></a> 
+     <a href="<?php echo $_SERVER['PHP_SELF'].'?week='.($week == $wkMaara ? 1 : 1 + $week).'&year='.($week == $wkMaara ? 1 + $year : $year); ?>"><i class="fa fa-arrow-right" style="font-size: 120%"></i></a> 
 
    </div>
 
@@ -243,6 +257,27 @@ td .tp{
      </thead>
      <tbody>
         <?php
+
+	$kohteenArr = array();
+	if(isset($_POST['siivous']))
+	{
+
+		echo '
+		<script type="text/javascript">
+		$(document).ready(function(){
+		  $("#siivous option[value='.$_POST['siivous'].']").attr(\'selected\',\'selected\');
+		});
+		</script>';
+
+		$criteria = new CDbCriteria();
+       		$criteria->select = "id";
+       		$criteria->condition = " siivous LIKE '%//".$_POST['siivous']."%' ";
+		$k = Kohteet::model()->findAll($criteria);
+		foreach($k as $kohde)
+		$kohteenArr[] = $kohde->id;
+	}
+
+
 	foreach($tt as $t)
 	{
 	  echo '<tr>';
@@ -285,7 +320,7 @@ td .tp{
 	     $clPyhat = 'style="background:#ddd"';
 
 	     echo '<td '.$clPyhat.' id="'.$did.'_'.$t->id.'" valign="top">';
- 	     $did = $this->renderPartial('//tyovuoroot/did',array('pvm'=>$date,'tid'=>$t->id,'from'=>'tvuoro'), true);
+ 	     $did = $this->renderPartial('//tyovuoroot/did',array('pvm'=>$date,'tid'=>$t->id,'from'=>'tvuoro', 'kohteenArr'=>$kohteenArr), true);
 	     echo json_decode($did, true);
 	     echo '</td>';
 	  }
