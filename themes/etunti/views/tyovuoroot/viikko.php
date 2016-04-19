@@ -10,10 +10,9 @@
         $criteria->condition = " 
 		tid = '".$tid."'  
 		AND $eilasketa
+		AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%u') = '".$viikko."'
+		AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y') = '$year'
 	";
-
-	if(Yii::app()->session['from'] and Yii::app()->session['to'])
-	$criteria->addCondition ("DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."' ");
 
 	$tv = Tyovuoroot::model()->find($criteria); 
 	echo $this->sprint($tv['l_tunnit']);

@@ -247,12 +247,15 @@ public function actionImei($dom)
 
 	        if($_POST['check'] == 'getTyovuorotToday'){
 
+		    $site = Yii::app()->createController('Site');
+		    $eilasketa = $site[0]->eiLasketa();
+
 		    $criteria = new CDbCriteria();
 		    $criteria->order = " DATE_FORMAT(STR_TO_DATE(alku, '%H.%i'), '%H.%i') ASC ";
 		    $criteria->condition = " 
 				tid = '".$ttekija->id."' 
 				and DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE() 
-				AND tyoajanmerkinta NOT LIKE '%Ei lasketa%'
+				AND $eilasketa
 		    ";
 
 	            $tvuoro = Tyovuoroot::model()->findAll($criteria);

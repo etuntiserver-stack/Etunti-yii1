@@ -580,6 +580,14 @@ $(document).ready(function(){
 		return $return;
 	}
 
+	public function eiLasketa()
+	{
+		$return = " 
+		(tyoajanmerkinta NOT LIKE '%Ei lasketa%' AND tyoajanmerkinta NOT LIKE '%Varallaolo%')
+		";
+
+		return $return;
+	}
 
 
 }

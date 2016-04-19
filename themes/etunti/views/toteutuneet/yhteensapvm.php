@@ -3,12 +3,15 @@
 	$getTot = 0;
 	$ero = 0;
 
+	$site = Yii::app()->createController('Site');
+	$eilasketa = $site[0]->eiLasketa();
+
        	$criteria = new CDbCriteria();
 	$criteria->select = " SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppu, '%H:%i'), '%H:%i'), DATE_FORMAT(STR_TO_DATE(alku, '%H:%i'), '%H:%i')))) as l_tunnit ";
 	$criteria->condition = " 
 		loppu !='' AND alku!=''
 		AND tid = '".$tid."' and pvm = '".date("d.m.Y",strtotime($pvm))."' 
-		AND tyoajanmerkinta NOT LIKE '%Ei lasketa%'
+		AND $eilasketa
 	";
 	$sun = Tyovuoroot::model()->find($criteria); 
 	$getSun = $sun->l_tunnit;
