@@ -33,7 +33,7 @@ $this->breadcrumbs=array(
    	    <form id="yhtveto" action="#" class="form-inline" method="POST">
    	    <input type="hidden" name="yhtvetoform">
 
-            <div class="admin-form">
+            <div >
               <div class="panel heading-border">
                 <div class="panel-body bg-light">
 
@@ -49,7 +49,7 @@ $this->breadcrumbs=array(
    <?php
     $list = CHtml::listData(Mobile::model()->findAll(array('order' => 'tekijan_nimi','group'=>'tekijan_nimi')), 'tid', 'tekijan_nimi');
 
-    echo '<select name="Tekija[]" class="mult" id="tyontekijat" multiple class="btn btn-default" title="Työntekijät">';
+    echo '<select name="Tekija[]" class="mult" id="tyontekijat" class="mult" multiple title="Työntekijät">';
     foreach($list as $key=>$val){
      if(!empty($val))
      {
@@ -63,25 +63,13 @@ $this->breadcrumbs=array(
    ?>
 
 
-                          </label>
-
-   <a href="#" id="deselAll" class="glyphicon glyphicon-minus"></a>
-   <a href="#" id="selAll" class="glyphicon glyphicon-plus"></a>
-
-
-                        </div>
-                      </div>
-                      <div class="col-md-2">
-                        <div class="section">
-                          <label class="field select">
-
    <?php
     $lounas = '';
     $lounas = ( isset(Yii::app()->session['Lounastauko']))  ? 'selected' : '';
     $matka = '';
     $matka = ( isset(Yii::app()->session['MATKA']))  ? 'selected' : '';
 
-    echo '<select name="ilman[]" class="mult ilman"  multiple="multiple"  title="Ei lasketa...">';
+    echo '<select name="ilman[]" class="ilman"  multiple="multiple">';
     echo '<option value="Lounastauko" '.$lounas.'>Lounastauko</option>';
     echo '<option value="MATKA" '.$matka.'>MATKA</option>';
     echo '</select>';
@@ -92,7 +80,8 @@ $this->breadcrumbs=array(
                           </label>
                         </div>
                       </div>
-                      <div class="col-md-2 col-md-offset-1">
+
+                      <div class="col-md-2 admin-form">
                         <div class="section">
                           <label class="field prepend-icon">
 
@@ -105,7 +94,7 @@ $this->breadcrumbs=array(
                         </div>
                       </div>
 
-                      <div class="col-md-2">
+                      <div class="col-md-2 admin-form">
                         <div class="section">
                           <label class="field prepend-icon">
 
@@ -118,7 +107,7 @@ $this->breadcrumbs=array(
                         </div>
                       </div>
 
-                      <div class="col-md-2">
+                      <div class="col-md-2 col-md-offset-3">
         	        <button class="btn btn-primary btn-lg haemob btn-block myBgColors" type="button"><i class="glyphicon glyphicon-search"> </i> Hae</button>
 		      </div>
 
@@ -299,11 +288,35 @@ $(".showKuka").click(function(){
 });
 
 
-
+/*
 $('.mult').selectpicker({
       style: 'gui-input',
       //size: 4
   });
+*/
+
+
+$('.ilman').multiselect({
+	//inheritClass: true,
+	//enableFiltering: true,
+        includeSelectAllOption: true,
+	nonSelectedText: 'Ei lasketa',
+	selectAllText: 'Valitse kaikki',
+	allSelectedText: 'Kaikki',
+	nSelectedText: 'valittu',
+});
+
+
+$('.mult').multiselect({
+	//inheritClass: true,
+	//enableFiltering: true,
+        includeSelectAllOption: true,
+	nonSelectedText: 'Tyhjä',
+	selectAllText: 'Valitse kaikki',
+	allSelectedText: 'Kaikki',
+	nSelectedText: 'valittu',
+});
+
 
 });
 </script>

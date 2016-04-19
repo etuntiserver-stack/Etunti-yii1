@@ -215,7 +215,7 @@ td .tp{
 <?php
 
 	$kohteenArr = array();
-	if(isset($_POST['siivous']))
+	if(isset($_POST['siivous']) and !empty($_POST['siivous']))
 	{
 
 		echo '

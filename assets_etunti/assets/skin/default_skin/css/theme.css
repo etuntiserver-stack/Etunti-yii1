@@ -7190,6 +7190,7 @@ perspective effects (not including the modals and the overlay).
   transform: translateY(100%) rotateX(90deg);
 
 
+
   -webkit-transform-origin: 0 100%;
   transform-origin: 0 100%;
   opacity: 0;
@@ -17516,6 +17517,7 @@ body.sidebar-collapsed #sidebar:before {
 .navbar .navbar-btn.btn-group > .btn + .dropdown-toggle {
   border-left: 0;
 }
+
 .navbar .navbar-btn > .btn > span.ad,
 .navbar .navbar-btn > .btn > span.fa,
 .navbar .navbar-btn > .btn > span.glyphicon,
