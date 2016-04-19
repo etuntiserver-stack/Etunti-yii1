@@ -259,7 +259,7 @@ td .tp{
         <?php
 
 	$kohteenArr = array();
-	if(isset($_POST['siivous']))
+	if(isset($_POST['siivous']) and !empty($_POST['siivous']))
 	{
 
 		echo '
@@ -295,6 +295,7 @@ td .tp{
 			and (int)str_replace(":","",$vktyoaika) > 0
 		)
 		$cl = 'class="btn btn-xs btn-danger"';
+
 
 		echo '
 		<div class="row">
