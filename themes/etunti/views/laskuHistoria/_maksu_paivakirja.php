@@ -2,19 +2,29 @@
 /* @var $this LaskuHistoriaController */
 /* @var $data LaskuHistoria */
 
-$nimi = '';
 
-   if($data->tyyppi == 'henkilo')
-	$nimi = $data->nimi;
-   if($data->tyyppi == 'yritys')
-	$nimi = $data->yritys;
+	$l = Lasku::model()->findbypk($data->lid);
 
+	$nimi = '';
+	$laskunumero = '';
+	$as_nro = '';
+
+if(isset($l->id))
+{
+   if($l->tyyppi == 'henkilo')
+	$nimi = $l->nimi;
+   if($l->tyyppi == 'yritys')
+	$nimi = $l->yritys;
+
+	$laskunumero = $l->laskunumero;
+	$as_nro = $l->as_nro;
+}
 ?>
 
 <tr>
 
 	<td>
-	<?php echo CHtml::encode($data->as_nro); ?>
+	<?php echo CHtml::encode($as_nro); ?>
 	</td>
 
 	<td>
@@ -22,15 +32,35 @@ $nimi = '';
 	</td>
 
 	<td>
-	<?php echo CHtml::encode($data->laskunumero); ?>
+	<?php echo CHtml::encode($laskunumero); ?>
 	</td>
 
 	<td>
-	<?php echo date("d.m.Y",strtotime($data->paivays)); ?>
+	<?php 
+		// Trust
+		if($asetukset->palvelu_tyyppi == 2 and isset($data->palvelu) and $data->palvelu == 'trust')
+		{
+
+		    $json = json_decode($data->status, true);
+
+		   if(isset($json['statustext']) and !empty($json['statustext']))
+		   {
+		      	echo '<b>'.date("d.m.Y H:i",strtotime($json['statustime'])).'</b><br> '.$json['statustext'];
+		   }
+
+		}
+
+		// Postita tai Local
+		if($asetukset->palvelu_tyyppi == 1 or $asetukset->palvelu_tyyppi == 3)
+		{
+		      	echo '<b>'.date("d.m.Y H:i",strtotime($data->time)).'</b>';
+		}
+
+	?>
 	</td>
 
 	<td>
-	<?php echo number_format($data->yhteensa_total, 2, ',', ' '); ?>
+	<?php echo number_format($data->yht_euro, 2, ',', ' '); ?>
 	</td>
 
 

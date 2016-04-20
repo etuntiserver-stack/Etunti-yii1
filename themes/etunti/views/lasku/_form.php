@@ -528,7 +528,7 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
     </div>
 </div>
 
-<div id="hinnoitelu"></div>
+
 
 
 <div id="kkKalut">
@@ -582,6 +582,7 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 
 	<input type="hidden" class="form-control" id="kohteistaRivit" readonly><br>
 	<div id="tuntienTulos"></div>
+	<div id="hinnoitelu"></div>
 
 <br>
 
