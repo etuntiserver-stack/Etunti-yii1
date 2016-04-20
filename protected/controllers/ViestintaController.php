@@ -138,23 +138,29 @@ class ViestintaController extends Controller
 	   $site[0]->checkOikeus($checkOikeus);
 	//  Oikeudet -->
 
-		$model=new Viestinta;
+
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
 		if(isset($_POST['Viestinta']))
 		{
+
+			foreach($_POST['Viestinta']['tekija'] as $tekija)
+			{
+			$model=new Viestinta;
 			$model->attributes=$_POST['Viestinta'];
 			$model->viesti=date("d.m H:i").", ".Yii::app()->user->nimi.": ".$_POST['Viestinta']['viesti'];
-			if($model->save()){
-
+			$model->tekija=$tekija;
+			$model->save();
 			Domainit::PushNotify($model->tekija,"ETUNTI",$model->viesti);
+			}
+
 			$this->redirect(array('index'));
 
-			}
 		}
 
+		$model=new Viestinta;
 		$this->render('create',array(
 			'model'=>$model,
 		));

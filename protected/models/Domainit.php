@@ -34,7 +34,7 @@ class Domainit extends CActiveRecord
 		$t = Tyontekijat::model()->findbypk($tid); 
 		$a = AsetuksetForAll::model()->find(" asetus='asetus1' ");
 		
-		define( 'API_ACCESS_KEY', $a->api_access_key );
+		//define( 'API_ACCESS_KEY', $a->api_access_key );
 		$registrationIds = array( $t->gcm_reg_id );
 		// prep the bundle
 		$msg = array
@@ -56,7 +56,7 @@ class Domainit extends CActiveRecord
 		 
 		$headers = array
 		(
-			'Authorization: key=' . API_ACCESS_KEY,
+			'Authorization: key=' . $a->api_access_key,
 			'Content-Type: application/json'
 		);
 		 
