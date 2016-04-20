@@ -50,14 +50,37 @@ if(isset($ad->adm_nimi))
 		  preg_match('/tt_(.*?),/', $model->admin, $matches);
 		  if(isset($matches[1])) $model->tekija = $matches[1];
 
-		  echo $form->labelEx($model,'tekija');
+		  echo $form->labelEx($model,'tekija').'<br>';
+
         	  $list = CHtml::listData(Tyontekijat::model()->findAll(array('order' => 'tekijan_nimi')), 'id', 'tekijan_nimi');
         	  echo $form->dropDownList($model, 'tekija', $list,
 			array('class'=>'form-control','readonly'=>'yes'));
+
+
 		  } else {
-		  echo $form->labelEx($model,'tekija');
+
+		  echo $form->labelEx($model,'tekija').'<br>';
         	  $list = CHtml::listData(Tyontekijat::model()->findAll(array('order' => 'tekijan_nimi')), 'id', 'tekijan_nimi');
-        	  echo $form->dropDownList($model, 'tekija', $list,array('class'=>'form-control'));
+        	  echo $form->dropDownList($model, 'tekija', $list,array('class'=>'form-control', 'multiple'=>'yes'));
+
+echo "
+<script>
+$(document).ready(function(){
+
+$('#Viestinta_tekija').multiselect({
+	//inheritClass: true,
+	//enableFiltering: true,
+        includeSelectAllOption: true,
+	nonSelectedText: 'Tyhjä',
+	selectAllText: 'Valitse kaikki',
+	allSelectedText: 'Kaikki',
+	nSelectedText: 'valittu',
+});
+
+});
+</script>";
+
+
 		  }
 		}
         	?>
@@ -66,6 +89,7 @@ if(isset($ad->adm_nimi))
 
   </div>
 </div>
+
 
 
 	<?php if(isset($model->id)) : ?>
