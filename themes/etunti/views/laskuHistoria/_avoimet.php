@@ -2,11 +2,11 @@
 /* @var $this LaskuHistoriaController */
 /* @var $data LaskuHistoria */
 
-       		$criteria = new CDbCriteria();
-       		$criteria->select = " palvelu,id,status ";
-       		$criteria->order = " id DESC ";
-       		$criteria->condition = " lid='".$data->id."' ";
-		$l = LaskuHistoria::model()->find($criteria);
+       	$criteria = new CDbCriteria();
+       	$criteria->select = " palvelu,id,status ";
+       	$criteria->order = " id DESC ";
+       	$criteria->condition = " lid='".$data->id."' ";
+	$l = LaskuHistoria::model()->find($criteria);
 
 
 	$nimi = '';

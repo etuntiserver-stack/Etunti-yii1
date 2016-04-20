@@ -13,12 +13,16 @@ if(isset($_GET['merkitseMaksetuksi'])){
 
 		    // Lasku historia
 		    $l = Lasku::model()->findbypk($id);
+		    $yhteensa_total = 0;
+		    if(isset($l->yhteensa_total))
+		    $yhteensa_total = $l->yhteensa_total;
+
 		    $historia = new LaskuHistoria;
 		    $historia->time = $tapahtumapvm;
 		    $historia->lid = $id;
 		    $historia->status = 'MAKSETTU';
 		    $historia->palvelu = "local";
-		    $historia->yht_euro = '0';
+		    $historia->yht_euro = $yhteensa_total;
 		    $historia->save();
 
 	$this->redirect(array('update','id'=>$id));

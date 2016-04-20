@@ -489,13 +489,28 @@ class LaskuHistoriaController extends Controller
 	public function actionMaksu_paivakirja()
 	{
 
+		$asetukset=Asetukset::model()->findbypk(1);
 
        		$criteria = new CDbCriteria();
-       		$criteria->order = " paivays DESC ";
-       		$criteria->condition = "
-			id IN (select lid from lasku_historia where trust_statuscode='101')
-			AND tilanne!=999
-		";
+       		$criteria->order = " id DESC ";
+
+
+		// Trust Maksettu
+		if($asetukset->palvelu_tyyppi == 2)
+		{
+       		$criteria->addCondition("
+			trust_statuscode='101'
+		");
+		}
+
+		// Postita tai Local Maksettu
+		if($asetukset->palvelu_tyyppi == 1 or $asetukset->palvelu_tyyppi == 3)
+		{
+       		$criteria->addCondition("
+			status='MAKSETTU'
+		");
+		}
+
 
 		$from = date("Y-m-d");
 		$to = date("Y-m-d");
@@ -505,9 +520,9 @@ class LaskuHistoriaController extends Controller
 		$to 	= date("Y-m-d",strtotime($_POST['to']));
 		}
 
-        	$criteria->addCondition ("DATE(paivays) BETWEEN '".$from."' AND '".$to."' ");
+        	$criteria->addCondition ("DATE(time) BETWEEN '".$from."' AND '".$to."' ");
 
-		$model = Lasku::model()->findAll($criteria);
+		$model = LaskuHistoria::model()->findAll($criteria);
 
 		if(isset($_POST['tulosta']))
 		{
@@ -517,6 +532,7 @@ class LaskuHistoriaController extends Controller
 			'model'=>$model,
 			'from'=>$from,
 			'to'=>$to,
+			'asetukset'=>$asetukset
 		  ), true));
 	          $html2pdf->Output();
 
@@ -526,6 +542,7 @@ class LaskuHistoriaController extends Controller
 			'model'=>$model,
 			'from'=>$from,
 			'to'=>$to,
+			'asetukset'=>$asetukset
 		));
 
 		}

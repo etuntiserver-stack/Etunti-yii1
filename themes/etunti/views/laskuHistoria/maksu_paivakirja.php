@@ -126,7 +126,7 @@ th{
   <th><?php echo Yii::t('main','Asiakas nro'); ?></th>
   <th><?php echo Yii::t('main','Asiakas'); ?></th>
   <th><?php echo Yii::t('main','Laskunro'); ?></th>
-  <th><?php echo Yii::t('main','Laskupvm'); ?></th>
+  <th><?php echo Yii::t('main','Maksu pvm'); ?></th>
   <th><?php echo Yii::t('main','Yhteensä'); ?></th>
 
 <?php if(!isset($_POST['tulosta'])) : ?>
@@ -138,8 +138,9 @@ th{
 	$saldo = 0;
  foreach($model as $data)
  {
-	$saldo += $data->yhteensa_total;
-	$this->renderPartial('_maksu_paivakirja',array('data'=>$data));
+
+	$saldo += $data->yht_euro;
+	$this->renderPartial('_maksu_paivakirja',array('data'=>$data, 'asetukset'=>$asetukset));
  }
  ?>
 

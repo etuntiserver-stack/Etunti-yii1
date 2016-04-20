@@ -140,12 +140,13 @@
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'aktiivinen'); ?>
 		<?php
-		$list = array(0=>'Ei',1=>'Kyllä');
+		$list = array(1=>'Kyllä',0=>'Ei');
         	echo $form->dropDownList($model, 'aktiivinen', $list,
-		array('empty'=>'','class'=>'form-control'));
+		array('class'=>'form-control'));
         	?>
 		<?php echo $form->error($model,'aktiivinen'); ?>
 	</div>
+
 
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'avain'); ?>
