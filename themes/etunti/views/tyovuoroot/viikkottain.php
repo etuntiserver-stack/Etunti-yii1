@@ -27,20 +27,25 @@ if($week > $wkMaara) {
 
 ?>
 <style>
-th{
-	text-align: center;
+.mennytPaivat{
+	opacity: 0.4;
 }
 td .latikkoAsetukset{
-	width: 290px;
-	white-space: nowrap;
-	min-height:70px;
-}
-td:first-child {
+	min-width: 70px;
+	width: 200px;
 	white-space: normal;
 }
-.table-responsive{
-	height: 500px;
-	overflow: auto;
+.forCut, .forCopy{ 
+	display: none;
+}
+.mplus, .mcut, .clear, .trash{ 
+	display: none;
+}
+td:hover .mplus, td:hover .mcut, td:hover .clear, td:hover .trash{
+	display : block;
+}
+td .tp{
+	//position:absolute;
 }
 .fullRivi{
 	height: 100%;
@@ -50,10 +55,20 @@ td:first-child {
 	background: white;
 	border-radius:5px;
 }
+.luominen, .valitseKokopaiva{
+	display: none;
+}
+.table tbody>tr>td{
+    	vertical-align: top;
+}
+.table{
+    height: 100%;
+}
 .oikeallaPlusV{
 	display: none;
 }
 </style>
+
 
 <div id="checkedLaheta"></div>
 
@@ -101,17 +116,15 @@ td:first-child {
 
 
 
-
 <div class="row">
             <div class="admin-form">
-              <div class="panel heading-border myBgColors">
+              <div class="panel heading-border">
                 <div class="panel-body bg-light">
 
 
-<div class="row">
 <div class="table-responsive" id="lahetysTable">
-<table class="table table-bordered table-condensed">
-  <thead class="myBgColors">
+  <table class="table table-bordered table-striped small" style="background: white">
+  <thead>
   <tr>
   <th><?php echo Yii::t('main', 'Työntekijä'); ?></th>
   <?php
@@ -151,8 +164,8 @@ td:first-child {
     if(count($tv) > 0)
     {
 	echo '<tr>';
-	echo '<td>'.$t->tekijan_nimi.'
-	<input type="checkbox" for="'.$t->id.'">
+	echo '<td>'.$t->tekijan_nimi.'<br>
+	<input type="checkbox" for="'.$t->id.'" title="Määrittele lähetettäväksi"><br>
 	'.CHtml::link('Lähetä','/index.php/tyovuoroot/laheta?tid='.$t->id.'&week='.$week.'&year='.$year.'&tulosta=false',array('target'=>'_blank','class'=>'text-success'));
 
 	$file = $week.'_'.$year.'_'.$t->id.'.pdf';
@@ -179,10 +192,9 @@ td:first-child {
 
 </table>
 </div>
-</div>
 
 
-
+                 </div>
                 </div>
               </div>
             </div>
@@ -192,16 +204,18 @@ td:first-child {
 
 
 
-  <div id="showres" class="modal fade" tabindex="-1" role="dialog"></div>
 
-  <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/bootstrap.modal.js"></script>
-  <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/tvuoroot.js"></script>
+	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/bootstrap.modal.js"></script>
+	<div id="showres" class="modal fade" tabindex="-1" role="dialog"></div>
+	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/tvuoroot.js"></script>
+	<?php Yii::app()->clientScript->registerPackage('fixedTable'); ?>
 
 
 
 
 <script type="text/javascript">
 $(document).ready(function(){
+
 
 $("#lahetaKaikkille").click(function(){
 
@@ -227,6 +241,54 @@ function checkChecked() {
 
 
 
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+
+
+$(function () {
+
+    var tableHeight = function () {
+        var $tableHeader = $('.dataTables_scrollHeadInner thead tr');
+        return $(window).height() - 4 - ($tableHeader.length ? $tableHeader.height() : 0);
+    };
+
+    var dataTable = $('table').dataTable({
+        sDom: 'frtiS',
+        sScrollY: tableHeight(),
+        sScrollX: '100%',
+        bAutoWidth: true,
+        bScrollCollapse: true,
+        bPaginate: false,
+        bFilter: false,
+        bInfo: false,
+        bSort: false,
+        bDeferRender: true
+    });
+
+    var onResize = function () {
+        var oSettings = dataTable.fnSettings();
+        oSettings.oScroll.sY = tableHeight()-240; 
+        dataTable.fnDraw();
+    };
+
+    var firstDraw = false;
+    new FixedColumns(dataTable, {
+        iLeftWidth: 100,
+        fnDrawCallback: function () {
+            if (firstDraw) return;
+            firstDraw = true;
+            onResize();
+        }
+    });
+
+    $(window).resize(onResize);
+});
+
+
+});
+</script>
 
 
 
