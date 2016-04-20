@@ -1,5 +1,30 @@
 <?php
 
+$paivat=array(
+	1=>'Maanantai',
+	2=>'Tiistai',
+	3=>'Keskiviikko',
+	4=>'Torstai',
+	5=>'Perjantai',
+	6=>'Lauantai',
+	7=>'Sunnuntai',
+	);
+
+$wkMaara = 53;
+
+$year = (isset($_GET['year'])) ? $_GET['year'] : date("Y");
+$week = (isset($_GET['week'])) ? $_GET['week'] : date('W');
+
+if($week > $wkMaara) {
+    $year++;
+    $week = 1;
+} elseif($week < 1) {
+    $year--;
+    $week = $wkMaara;
+}
+
+    $week = sprintf("%02d", $week);
+
 ?>
 <style>
 th{
@@ -25,23 +50,48 @@ td:first-child {
 	background: white;
 	border-radius:5px;
 }
+.oikeallaPlusV{
+	display: none;
+}
 </style>
 
 <div id="checkedLaheta"></div>
 
 
         <!-- begin: .tray-center -->
-        <div class="tray-center">
+        <div class="row tray-center">
+
+
+              <h2 class="myBgColors p10"> 
 
    <!-- tulostus -->
    <div class="pull-right">
-     <form action="#" target="_blank" method="POST">
-      <input type="submit" name="tulosta" class="btn btn-primary btn-sm myBgColors" value="PDF">
+    <div class="form-inline">
+
+     <?php echo CHtml::button(Yii::t('main', 'Lähetä kaikille'),array('target'=>'_blank','class'=>'btn btn-sm btn-success myBgColors form-group','id'=>'lahetaKaikkille'));
+     ?>
+
+     <form action="#" class="form-group" target="_blank" method="POST">
+      <input type="submit" name="tulosta" class="btn btn-sm btn-primary myBgColors" value="PDF">
      </form>
+    </div>
    </div>
    <!-- tulostus -->
 
-              <h2 class="myBgColors p10"> <i class="fa fa-paper-plane"></i> <?php echo Yii::t('main', 'TYÖVUOROJEN LÄHETYS'); ?></h2>
+
+
+<i class="fa fa-paper-plane"></i> <?php echo Yii::t('main', 'TYÖVUOROJEN LÄHETYS'); ?>&nbsp;&nbsp;&nbsp;&nbsp;
+
+
+  <a href="<?php echo $_SERVER['PHP_SELF'].'?week='.($week == 1 ? $wkMaara : $week -1).'&year='.($week == 1 ? $year - 1 : $year); ?>"><<</a> 
+  <?php echo date('d.m.Y',strtotime($year ."W".$week .'1')).' - '.date('d.m.Y',strtotime($year ."W". $week .'7')); ?>
+  <a href="<?php echo $_SERVER['PHP_SELF'].'?week='.($week == $wkMaara ? 1 : 1 + $week).'&year='.($week == $wkMaara ? 1 + $year : $year); ?>">>></a> 
+
+
+		</h2>
+
+
+
 
         <!-- loppu: .tray-center -->
         </div>
@@ -49,56 +99,18 @@ td:first-child {
 
 
 
-  <div id="showres" class="modal fade" tabindex="-1" role="dialog"></div>
 
-  <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/bootstrap.modal.js"></script>
-  <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/tvuoroot.js"></script>
 
-<?php
-$paivat=array(
-	1=>'Maanantai',
-	2=>'Tiistai',
-	3=>'Keskiviikko',
-	4=>'Torstai',
-	5=>'Perjantai',
-	6=>'Lauantai',
-	7=>'Sunnuntai',
-	);
 
-$wkMaara = 53;
-
-$year = (isset($_GET['year'])) ? $_GET['year'] : date("Y");
-$week = (isset($_GET['week'])) ? $_GET['week'] : date('W');
-
-if($week > $wkMaara) {
-    $year++;
-    $week = 1;
-} elseif($week < 1) {
-    $year--;
-    $week = $wkMaara;
-}
-
-    $week = sprintf("%02d", $week);
-?>
 <div class="row">
-<div class="col-sm-3">
-<?php echo CHtml::button(Yii::t('main', 'Lähetä kaikille'),array('target'=>'_blank','class'=>'btn btn-success myBgColors','id'=>'lahetaKaikkille'));
-?>
-</div>
-<div class="col-sm-offset-4">
-<h2>
-  <a href="<?php echo $_SERVER['PHP_SELF'].'?week='.($week == 1 ? $wkMaara : $week -1).'&year='.($week == 1 ? $year - 1 : $year); ?>"><<</a> 
-  <?php echo date('d.m.Y',strtotime($year ."W".$week .'1')).' - '.date('d.m.Y',strtotime($year ."W". $week .'7')); ?>
-  <a href="<?php echo $_SERVER['PHP_SELF'].'?week='.($week == $wkMaara ? 1 : 1 + $week).'&year='.($week == $wkMaara ? 1 + $year : $year); ?>">>></a> 
-</h2>
-</div>
-</div>
+            <div class="admin-form">
+              <div class="panel heading-border myBgColors">
+                <div class="panel-body bg-light">
 
 
-
-
+<div class="row">
 <div class="table-responsive" id="lahetysTable">
-<table class="table table-bordered table-condensed small">
+<table class="table table-bordered table-condensed">
   <thead class="myBgColors">
   <tr>
   <th><?php echo Yii::t('main', 'Työntekijä'); ?></th>
@@ -139,7 +151,7 @@ if($week > $wkMaara) {
     if(count($tv) > 0)
     {
 	echo '<tr>';
-	echo '<td>'.$t->tekijan_nimi.' '.date('Y-m-d',strtotime($year ."W". $week)).' '.$week.'<BR>
+	echo '<td>'.$t->tekijan_nimi.'
 	<input type="checkbox" for="'.$t->id.'">
 	'.CHtml::link('Lähetä','/index.php/tyovuoroot/laheta?tid='.$t->id.'&week='.$week.'&year='.$year.'&tulosta=false',array('target'=>'_blank','class'=>'text-success'));
 
@@ -155,7 +167,7 @@ if($week > $wkMaara) {
 	    $d = strtotime($year ."W". $week . $day);
 	    $did = $this->renderPartial('//tyovuoroot/did',array('pvm'=>date('d.m.Y',$d),'tid'=>$t->id,'from'=>'mobiili'),true);
 	    echo "
-	    <td><div class='latikkoAsetukset'><b>".date('d.m.Y',$d)."</b><br>
+	    <td><div class='latikkoAsetukset'>
 	    ". json_decode($did, true) ."
 	    </div></td>";
 	  }
@@ -167,6 +179,26 @@ if($week > $wkMaara) {
 
 </table>
 </div>
+</div>
+
+
+
+                </div>
+              </div>
+            </div>
+</div>
+
+
+
+
+
+  <div id="showres" class="modal fade" tabindex="-1" role="dialog"></div>
+
+  <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/bootstrap.modal.js"></script>
+  <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/tvuoroot.js"></script>
+
+
+
 
 <script type="text/javascript">
 $(document).ready(function(){
