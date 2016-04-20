@@ -314,6 +314,7 @@ class LaskuController extends Controller
        		$criteria->condition = " 
 			asiakas_id='".$as->id."' 
 			AND hinta_tyyppi='".$tuntiTaiKk."' AND (hinta!='' or hinta!='0')
+			AND aktiivinen=1
 		";
 		$k = Kohteet::model()->findAll($criteria);
 		foreach($k as $a)
