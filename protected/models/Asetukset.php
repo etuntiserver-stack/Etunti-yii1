@@ -40,7 +40,7 @@ class Asetukset extends DB2ActiveRecord
 		// will receive user inputs.
 		return array(
 			array('id,logon_polkku, logon_korkeus, johtaja', 'required'),
-			array('id, sovellus_tyovuorot, logon_korkeus, palvelu_tyyppi', 'numerical', 'integerOnly'=>true),
+			array('id, sovellus_tyovuorot, logon_korkeus, palvelu_tyyppi, lasku_asiakasnumero', 'numerical', 'integerOnly'=>true),
 			array('paivan_uutinen, logon_polkku', 'length', 'max'=>500),
 			array('johtaja, viivastyskorko, tilinumero, iban, bic, , postita_username, postita_password, trust_cid, trust_api, checkout_id', 'length', 'max'=>100),
 			array('trust_url, checkout_salasana', 'length', 'max'=>255),
@@ -90,6 +90,7 @@ class Asetukset extends DB2ActiveRecord
 			'checkout_salasana'=>'Checkout salasana',
 			'viikonloppulisa_la'=>'Lauantai %',
 			'viikonloppulisa_su'=>'Sunnuntai %',
+			'lasku_asiakasnumero'=>'Syöttääkö itse asiakasnumeron vai lasketaan edellisestä automaattisesti',
 		);
 	}
 

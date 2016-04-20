@@ -14,6 +14,14 @@ $asiakasnumero = 'voidaan käyttää oleva ID numero';
      $tas = array();
    if(isset(Yii::app()->user->adminPaketti)) 
      $tas = explode(",",Yii::app()->user->adminPaketti);
+
+   $asetukset = Asetukset::model()->findbypk(1);
+   $as = Asiakkaat::model()->find(array("order"=>"id DESC"));
+
+   if(isset($as->id) and !isset($model->id) and $asetukset->lasku_asiakasnumero == 1)
+   $asnum = array('value'=>$as->id,'class'=>'form-control');
+   else
+   $asnum = array('class'=>'form-control');
 ?>
 
 <style>
@@ -38,7 +46,7 @@ $asiakasnumero = 'voidaan käyttää oleva ID numero';
 
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'asiakasnumero'); ?>
-		<?php echo $form->numberField($model,'asiakasnumero',array('class'=>'form-control')); ?>
+		<?php echo $form->numberField($model,'asiakasnumero',$asnum); ?>
 		<?php echo $form->error($model,'asiakasnumero'); ?>
 	</div>
 
