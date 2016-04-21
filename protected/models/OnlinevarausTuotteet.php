@@ -66,14 +66,14 @@ class OnlinevarausTuotteet extends DB2ActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'id' => 'ID',
-			'nimike' => 'Nimike',
-			'hinta' => 'Hinta',
-			'selitysteksti' => 'Selitysteksti',
-			'palvelu' => 'Palvelu',
-			'kesto' => 'Kesto (tunnilla)',
-			'nelio' => 'Neliömetri m²',
-			'kotitalousvahennys' => 'Kotitalousvähennys %',
+			'id' => Yii::t('main', 'ID'),
+			'nimike' => Yii::t('main', 'Nimike'),
+			'hinta' => Yii::t('main', 'Hinta'),
+			'selitysteksti' => Yii::t('main', 'Selitysteksti'),
+			'palvelu' => Yii::t('main', 'Palvelu'),
+			'kesto' => Yii::t('main', 'Kesto (tunnilla)'),
+			'nelio' => Yii::t('main', 'Neliömetri m²'),
+			'kotitalousvahennys' => Yii::t('main', 'Kotitalousvähennys %'),
 		);
 	}
 

@@ -67,12 +67,12 @@ class Korvaukset extends DB2ActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'id' => 'ID',
-			'tid' => 'Työntekijä',
-			'time' => 'Luotu',
-			'pvm' => 'Päivämäärä',
-			'syy' => 'Syy',
-			'korvaus' => 'Korvaus',
+			'id' => Yii::t('main', 'ID'),
+			'tid' => Yii::t('main', 'Työntekijä'),
+			'time' => Yii::t('main', 'Luotu'),
+			'pvm' => Yii::t('main', 'Päivämäärä'),
+			'syy' => Yii::t('main', 'Syy'),
+			'korvaus' => Yii::t('main', 'Korvaus'),
 		);
 	}
 

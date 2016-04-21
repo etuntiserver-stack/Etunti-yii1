@@ -61,9 +61,9 @@ class Page extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'id' => 'ID',
-			'sivu' => 'Sivu',
-			'text' => 'Text',
+			'id' => Yii::t('main', 'ID'),
+			'sivu' => Yii::t('main', 'Sivu'),
+			'text' => Yii::t('main', 'Text'),
 		);
 	}
 

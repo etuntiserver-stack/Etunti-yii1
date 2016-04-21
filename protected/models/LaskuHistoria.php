@@ -66,15 +66,15 @@ class LaskuHistoria extends DB2ActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'id' => 'ID',
-			'lid' => 'Lasku id',
-			'time' => 'Tapahtuma pvm',
-			'status' => 'Response',
-			'yht_euro' => 'Yht Euro',
-			'palvelu' => 'Palvelu',
-			'trust_statuscode'=>'Trust statuscode',
-			'paydate' => 'Paydate',
-			'amount' => 'Amount',
+			'id' => Yii::t('main', 'ID'),
+			'lid' => Yii::t('main', 'Lasku id'),
+			'time' => Yii::t('main', 'Tapahtuma pvm'),
+			'status' => Yii::t('main', 'Response'),
+			'yht_euro' => Yii::t('main', 'Yht Euro'),
+			'palvelu' => Yii::t('main', 'Palvelu'),
+			'trust_statuscode'=> Yii::t('main', 'Trust statuscode'),
+			'paydate' => Yii::t('main', 'Paydate'),
+			'amount' => Yii::t('main', 'Amount'),
 		);
 	}
 

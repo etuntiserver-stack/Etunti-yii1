@@ -72,18 +72,18 @@ class FirmanTiedot extends DB2ActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'id' => 'ID',
-			'tyonantaja' => 'Yrityksen nimi',
-			'osoite' => 'Osoite',
-			'postinumero' => 'Postinumero',
-			'postitoimipaikka' => 'Postitoimipaikka',
-			'puhelin' => 'Puhelin',
-			'y_tunnus' => 'Y-Tunnus',
-			'sahkoposti' => 'Sähköposti',
-			'tilinumero' => 'Tilinumero',
-			'iban' => 'IBAN',
-			'bic' => 'BIC',
-			'johtaja' => 'Johtaja',
+			'id' => Yii::t('main', 'ID'),
+			'tyonantaja' => Yii::t('main', 'Yrityksen nimi'),
+			'osoite' => Yii::t('main', 'Osoite'),
+			'postinumero' => Yii::t('main', 'Postinumero'),
+			'postitoimipaikka' => Yii::t('main', 'Postitoimipaikka'),
+			'puhelin' => Yii::t('main', 'Puhelin'),
+			'y_tunnus' => Yii::t('main', 'Y-Tunnus'),
+			'sahkoposti' => Yii::t('main', 'Sähköposti'),
+			'tilinumero' => Yii::t('main', 'Tilinumero'),
+			'iban' => Yii::t('main', 'IBAN'),
+			'bic' => Yii::t('main', 'BIC'),
+			'johtaja' => Yii::t('main', 'Johtaja'),
 		);
 	}
 

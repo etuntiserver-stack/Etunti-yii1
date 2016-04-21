@@ -62,9 +62,9 @@ class Valikkoot extends DB2ActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'id' => 'ID',
-			'value' => 'Value',
-			'select_type' => 'Select Type',
+			'id' => Yii::t('main', 'ID'),
+			'value' => Yii::t('main', 'Value'),
+			'select_type' => Yii::t('main', 'Select Type'),
 		);
 	}
 

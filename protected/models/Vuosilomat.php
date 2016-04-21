@@ -64,10 +64,10 @@ class Vuosilomat extends DB2ActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'id' => 'ID',
-			'tid' => 'Tid',
-			'pvm' => 'Pvm',
-			'status' => 'Status',
+			'id' => Yii::t('main', 'ID'),
+			'tid' => Yii::t('main', 'Tid'),
+			'pvm' => Yii::t('main', 'Pvm'),
+			'status' => Yii::t('main', 'Status'),
 		);
 	}
 

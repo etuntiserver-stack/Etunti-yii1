@@ -75,20 +75,20 @@ class LaskunRivit extends DB2ActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'id' => 'ID',
-			'time' => 'Time',
-			'lid' => 'Lid',
-			'rivi' => 'Rivi',
-			'tkoodi' => 'Tkoodi',
-			'nimike' => 'Nimike',
-			'kpl' => 'Kpl',
-			'yksikko' => 'Yksikko',
-			'hinta' => 'Hinta',
-			'alv' => 'Alv',
-			'hinta_alv' => 'Hinta Alv',
-			'ale' => 'Ale',
-			'veroton' => 'Veroton',
-			'yhteensa_alv' => 'Yhteensa Alv',
+			'id' => Yii::t('main', 'ID'),
+			'time' => Yii::t('main', 'Time'),
+			'lid' => Yii::t('main', 'Lid'),
+			'rivi' => Yii::t('main', 'Rivi'),
+			'tkoodi' => Yii::t('main', 'Tkoodi'),
+			'nimike' => Yii::t('main', 'Nimike'),
+			'kpl' => Yii::t('main', 'Kpl'),
+			'yksikko' => Yii::t('main', 'Yksikko'),
+			'hinta' => Yii::t('main', 'Hinta'),
+			'alv' => Yii::t('main', 'Alv'),
+			'hinta_alv' => Yii::t('main', 'Hinta Alv'),
+			'ale' => Yii::t('main', 'Ale'),
+			'veroton' => Yii::t('main', 'Veroton'),
+			'yhteensa_alv' => Yii::t('main', 'Yhteensa Alv'),
 		);
 	}
 
