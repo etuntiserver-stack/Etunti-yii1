@@ -169,9 +169,32 @@ if(empty($model->position) and isset($model->id))
 		<?php echo $form->error($model,'tyoryhma'); ?>
 	</div>
 
+
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'tyo_toimialue'); ?>
-		<?php echo $form->textField($model,'tyo_toimialue',array('size'=>20,'maxlength'=>20,'class'=>'form-control')); ?>
+
+	   <div class="form-inline">
+		<?php
+		$exists = Valikkoot::model()->find(" select_type='tyo_toimialue' ");
+		if(!isset($exists->id))
+		{
+		    $valiko = new Valikkoot;
+		    $valiko->select_type = 'tyo_toimialue';
+		    $valiko->value = 'Test';
+		    $valiko->save();
+		}
+
+		$list = array();
+      		$l = Valikkoot::model()->findAll(" select_type='tyo_toimialue' ",array('order' => "select_type"));
+		foreach($l as $v)
+		$list[$v->value] = $v->value;
+
+        	echo $form->dropDownList($model, 'tyo_toimialue', $list,
+		array('empty'=>'','class'=>'form-control form-group'));
+        	?>
+		<span class="btn btn-primary myBgColors muokaValiko" for="tyo_toimialue"><i class="fa fa-pencil-square-o"></i></span>
+	   </div>
+
 		<?php echo $form->error($model,'tyo_toimialue'); ?>
 	</div>
 
