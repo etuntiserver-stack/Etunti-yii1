@@ -188,7 +188,12 @@ class TyontekijatController extends Controller
 
 				$subject = 'Tervetuloa Etunnin käyttäjäksi.';
 				$message = 'Hei '.$model->tekijan_nimi.'!<br>
-				Tervetuloa Etunnin käyttäjäksi. '.$yr.' on lisännyt sinulle profiilin Etuntiin. Lataa sovellus puhelimeesi alla olevien linkkien kautta.<br>
+				<b>Domain:</b> '.Yii::app()->user->domain.'<br>
+				<b>Käyttäjätunnus:</b> '.$model->tekijan_email.'<br>
+				<b>Salasana:</b> '.$model->salasana.'<br>
+<p>
+				Tervetuloa Etunnin käyttäjäksi. '.$yr.' on lisännyt sinulle profiilin Etuntiin. Lataa sovellus puhelimeesi alla olevien linkkien kautta.
+</p><br>
 				<br>
 				<p>Ystävällisin terveisin</p>
 				Etunti<br>
