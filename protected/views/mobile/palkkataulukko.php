@@ -52,7 +52,7 @@ $this->breadcrumbs=array(
    <?php
     $list = CHtml::listData(Mobile::model()->findAll(array('order' => 'tekijan_nimi','group'=>'tekijan_nimi')), 'tid', 'tekijan_nimi');
 
-    echo '<select name="Tekija[]" class="mult" id="tyontekijat" multiple title="Työntekijät">';
+    echo '<select name="Tekija[]" id="tyontekijat" multiple title="Työntekijät">';
     foreach($list as $key=>$val){
      if(!empty($val))
      {
@@ -68,8 +68,6 @@ $this->breadcrumbs=array(
 
                           </label>
 
-   <a href="#" id="deselAll" class="glyphicon glyphicon-minus"></a>
-   <a href="#" id="selAll" class="glyphicon glyphicon-plus"></a>
 
 
                         </div>
@@ -337,10 +335,15 @@ $("#yhtveto").on('submit',function(e){
 
 });
 
-$('.mult').selectpicker({
-      style: 'gui-input',
-      //size: 4
-  });
+$('#tyontekijat').multiselect({
+	//inheritClass: true,
+	//enableFiltering: true,
+        includeSelectAllOption: true,
+	nonSelectedText: 'Tyhjä',
+	selectAllText: 'Valitse kaikki',
+	allSelectedText: 'Kaikki',
+	nSelectedText: 'valittu',
+});
 
 });
 </script>

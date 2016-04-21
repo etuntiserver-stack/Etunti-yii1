@@ -43,38 +43,6 @@ $this->breadcrumbs=array(
                     <!-- Input Icons -->
                     <div class="row">
 
-
-                      <div class="col-md-3">
-                        <div class="section">
-                          <label class="field">
-
-
-   <?php
-    $list = CHtml::listData(Mobile::model()->findAll(array('order' => 'tekijan_nimi','group'=>'tekijan_nimi')), 'tid', 'tekijan_nimi');
-
-    echo '<select name="Tekija[]" class="mult" id="tyontekijat" multiple title="Työntekijät">';
-    foreach($list as $key=>$val){
-     if(!empty($val))
-     {
-       if(isset(Yii::app()->session['Tekija']) and in_array($key,Yii::app()->session['Tekija']))
-       	 echo '<option value="'.$key.'" selected>'.$val.'</option>';
-       else
-       	 echo '<option value="'.$key.'">'.$val.'</option>';
-     }
-    }
-    echo '</select>';
-   ?>
-
-
-                          </label>
-
-   <a href="#" id="deselAll" class="glyphicon glyphicon-minus"></a>
-   <a href="#" id="selAll" class="glyphicon glyphicon-plus"></a>
-
-
-                        </div>
-                      </div>
-
                       <div class="col-md-2">
                         <div class="section">
                           <label class="field prepend-icon">
@@ -100,6 +68,34 @@ $this->breadcrumbs=array(
                           </label>
                         </div>
                       </div>
+
+
+                      <div class="col-md-3">
+                        <div class="section">
+                          <label class="field">
+
+
+   <?php
+    $list = CHtml::listData(Mobile::model()->findAll(array('order' => 'tekijan_nimi','group'=>'tekijan_nimi')), 'tid', 'tekijan_nimi');
+
+    echo '<select name="Tekija[]" id="tyontekijat" multiple title="Työntekijät">';
+    foreach($list as $key=>$val){
+     if(!empty($val))
+     {
+       if(isset(Yii::app()->session['Tekija']) and in_array($key,Yii::app()->session['Tekija']))
+       	 echo '<option value="'.$key.'" selected>'.$val.'</option>';
+       else
+       	 echo '<option value="'.$key.'">'.$val.'</option>';
+     }
+    }
+    echo '</select>';
+   ?>
+
+
+                          </label>
+                        </div>
+                      </div>
+
 
                       <div class="col-md-2  col-md-offset-3">
         	        <button class="btn btn-primary btn-lg haemob btn-block myBgColors" type="button"><i class="glyphicon glyphicon-search"> </i> Hae</button>
@@ -345,14 +341,7 @@ $("#yhtveto").on('submit',function(e){
 });
 
 
-$('.mult').selectpicker({
-      style: 'gui-input',
-      //size: 4
-  });
-
-
-/*
-$('.mult').multiselect({
+$('#tyontekijat').multiselect({
 	//inheritClass: true,
 	//enableFiltering: true,
         includeSelectAllOption: true,
@@ -361,7 +350,7 @@ $('.mult').multiselect({
 	allSelectedText: 'Kaikki',
 	nSelectedText: 'valittu',
 });
-*/
+
 
 });
 </script>
