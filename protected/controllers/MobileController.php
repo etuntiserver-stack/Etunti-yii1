@@ -1018,7 +1018,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		if(Yii::app()->request->getPost('Tekija'))
 		Yii::app()->session['Tekija'] = Yii::app()->request->getPost('Tekija');
 
-		$from = date("Y-m-d");
+		$from = date("Y-m-d",strtotime("first day of this month"));
 		$to = date("Y-m-d");
 
 		if(isset($_POST['from']) and isset($_POST['to'])){

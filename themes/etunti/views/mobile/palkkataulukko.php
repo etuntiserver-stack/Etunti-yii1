@@ -140,7 +140,7 @@ $this->breadcrumbs=array(
   </div>
 </div>
 
-<?php if(isset($_POST['Tekija']) and $from and $to) : ?>
+<?php if(isset(Yii::app()->session['Tekija']) and $from and $to) : ?>
 
             <div class="admin-form">
               <div class="panel heading-border">
