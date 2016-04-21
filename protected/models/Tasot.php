@@ -63,10 +63,10 @@ class Tasot extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'id' => 'ID',
-			'taso' => 'Taso',
-			'nimetys' => 'Nimetys',
-			'kuvaus' => 'Kuvaus',
+			'id' => Yii::t('main', 'ID'),
+			'taso' => Yii::t('main', 'Taso'),
+			'nimetys' => Yii::t('main', 'Nimetys'),
+			'kuvaus' => Yii::t('main', 'Kuvaus'),
 		);
 	}
 

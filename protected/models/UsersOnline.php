@@ -68,12 +68,12 @@ class UsersOnline extends DB2ActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'id' => 'ID',
-			'ip' => 'Ip',
-			'session' => 'Session',
-			'time' => 'Time',
-			'user' => 'User',
-			'url' => 'Url',
+			'id' => Yii::t('main', 'ID'),
+			'ip' => Yii::t('main', 'Ip'),
+			'session' => Yii::t('main', 'Session'),
+			'time' => Yii::t('main', 'Time'),
+			'user' => Yii::t('main', 'User'),
+			'url' => Yii::t('main', 'Url'),
 		);
 	}
 

@@ -66,12 +66,12 @@ class Ennakko extends DB2ActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'id' => 'ID',
-			'tid' => 'Työntekijä',
-			'time' => 'Luotu',
-			'pvm' => 'Päivämäärä',
-			'syy' => 'Syy',
-			'ennakko' => 'Ennakko',
+			'id' => Yii::t('main', 'ID'),
+			'tid' => Yii::t('main', 'Työntekijä'),
+			'time' => Yii::t('main', 'Luotu'),
+			'pvm' => Yii::t('main', 'Päivämäärä'),
+			'syy' => Yii::t('main', 'Syy'),
+			'ennakko' => Yii::t('main', 'Ennakko'),
 		);
 	}
 

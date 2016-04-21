@@ -67,13 +67,13 @@ class LaskutusTuotteet extends DB2ActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'id' => 'ID',
-			'time' => 'Time',
-			'tuotenimi' => 'Tuotenimi',
-			'hinta_alv_0' => 'Hinta Alv 0',
-			'hinta_alv_sis' => 'Hinta Alv Sis',
-			'alv' => 'Alv',
-			'yksikko' => 'Yksikko',
+			'id' => Yii::t('main', 'ID'),
+			'time' => Yii::t('main', 'Time'),
+			'tuotenimi' => Yii::t('main', 'Tuotenimi'),
+			'hinta_alv_0' => Yii::t('main', 'Hinta Alv 0'),
+			'hinta_alv_sis' => Yii::t('main', 'Hinta Alv Sis'),
+			'alv' => Yii::t('main', 'Alv'),
+			'yksikko' => Yii::t('main', 'Yksikko'),
 		);
 	}
 

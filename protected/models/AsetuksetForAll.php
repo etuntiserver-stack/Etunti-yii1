@@ -64,10 +64,10 @@ class AsetuksetForAll extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'id' => 'ID',
-			'asetus' => 'Asetus',
-			'api_access_key' => 'Api Access Key',
-			'ohjesivu' => 'Ohjesivu',
+			'id' => Yii::t('main', 'ID'),
+			'asetus' => Yii::t('main', 'Asetus'),
+			'api_access_key' => Yii::t('main', 'Api Access Key'),
+			'ohjesivu' => Yii::t('main', 'Ohjesivu'),
 		);
 	}
 

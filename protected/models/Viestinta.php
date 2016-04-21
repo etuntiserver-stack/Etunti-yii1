@@ -71,13 +71,13 @@ public $edellinen_viesti;
 	public function attributeLabels()
 	{
 		return array(
-			'id' => 'ID',
-			'time' => 'Päivämäärä',
-			'pvm' => 'Pvm',
-			'tekija' => 'Vastaanottaja',
-			'viesti' => 'Viesti',
-			'admin' => 'Lähettäjä',
-			'edellinen_viesti'=>'Viimeiset viestit',
+			'id' => Yii::t('main', 'ID'),
+			'time' => Yii::t('main', 'Päivämäärä'),
+			'pvm' => Yii::t('main', 'Pvm'),
+			'tekija' => Yii::t('main', 'Vastaanottaja'),
+			'viesti' => Yii::t('main', 'Viesti'),
+			'admin' => Yii::t('main', 'Lähettäjä'),
+			'edellinen_viesti'=> Yii::t('main', 'Viimeiset viestit'),
 		);
 	}
 

@@ -109,11 +109,11 @@ class Domainit extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'id' => 'ID',
-			'domain' => 'Domain',
-			'paketti' => 'Tasot',
-			'yritys' => 'Yritys',
-			'pakettin_nimetus' => 'Pakettin nimetus',
+			'id' => Yii::t('main', 'ID'),
+			'domain' => Yii::t('main', 'Domain'),
+			'paketti' => Yii::t('main', 'Tasot'),
+			'yritys' => Yii::t('main', 'Yritys'),
+			'pakettin_nimetus' => Yii::t('main', 'Pakettin nimetus'),
 		);
 	}
 

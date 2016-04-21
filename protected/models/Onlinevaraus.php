@@ -64,8 +64,8 @@ class Onlinevaraus extends DB2ActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'id' => 'ID',
-			'time' => 'Time',
+			'id' => Yii::t('main', 'ID'),
+			'time' => Yii::t('main', 'Time'),
 		);
 	}
 

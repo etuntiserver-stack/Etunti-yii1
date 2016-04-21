@@ -65,12 +65,12 @@ class Administrators extends DB2ActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'id' => 'ID',
-			'adm_login' => 'Käyttäjätunnus',
-			'adm_salasana' => 'Uusi salasana',
-			'adm_email' => 'Sähköposti',
-			'adm_nimi' => 'Nimi',
-			'status' => 'Ryhmä',
+			'id' => Yii::t('main', 'ID'),
+			'adm_login' => Yii::t('main', 'Käyttäjätunnus'),
+			'adm_salasana' => Yii::t('main', 'Uusi salasana'),
+			'adm_email' => Yii::t('main', 'Sähköposti'),
+			'adm_nimi' => Yii::t('main', 'Nimi'),
+			'status' => Yii::t('main', 'Ryhmä'),
 		);
 	}
 
