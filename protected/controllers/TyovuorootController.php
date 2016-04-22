@@ -28,7 +28,7 @@ class TyovuorootController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','updatetime','showohje','did','muisti','operatio','viikko','fromto','autoinsert','autoremove','viikkottain', 'viikkottain_pdf', 'laheta','kk','pvmtid','laheta_k', 'muistin', 'muisticlear', 'muistissa', 'vkolopput', 'vkolopchange', 'uusitilaus', 'tv2', 'PoistaTv', 'valitse_kokopaiva', 'tv_kohteet'),
+				'actions'=>array('admin','delete','create','update','index','view','updatetime','showohje','did','muisti','operatio','viikko','fromto','autoinsert','autoremove','viikkottain', 'viikkottain_pdf', 'laheta','kk','pvmtid','laheta_k', 'muistin', 'muisticlear', 'muistissa', 'vkolopput', 'vkolopchange', 'uusitilaus', 'tv2', 'PoistaTv', 'valitse_kokopaiva', 'tv_kohteet', 'siivous_tyonimike'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny', // allow admin user to perform 'admin' and 'delete' actions
@@ -76,6 +76,52 @@ class TyovuorootController extends Controller
 	protected function sprint($val){
 	   	    if($val > 0)
 		   	   return sprintf('%02d:%02d', $val/3600, ($val % 3600)/60);
+	}
+
+
+
+
+	public function actionSiivous_tyonimike()
+	{
+		if(isset($_POST['siivousTyonimike']))
+		{
+			$siivousTyonimike = $_POST['siivousTyonimike'];
+			$fromTV = date("Y-m-d", strtotime($_POST['fromTV']));
+			$toTV = date("Y-m-d", strtotime($_POST['toTV']));
+			$tekijanToimialue = $_POST['tekijanToimialue'];
+
+			$criteria=new CDbCriteria;
+
+			if(!empty($siivousTyonimike))
+			{
+			$criteria->addCondition (" 
+				id IN(
+				   SELECT tid FROM sivex_tvuoro
+				   WHERE DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d')
+				   BETWEEN '".$fromTV."' AND '".$toTV."'
+					AND kohde IN(
+					   SELECT id FROM sivex_kohdet
+					   WHERE siivous LIKE '%".$siivousTyonimike."%'
+					)
+				)
+			");
+			}
+
+			if(!empty($tekijanToimialue))
+			{
+			$criteria->addCondition("
+				tyo_toimialue='".$tekijanToimialue."' 
+			");
+			}
+
+			$tv = Tyontekijat::model()->findAll($criteria);
+			$t = array();
+			foreach($tv as $data)
+			$t[] = $data->id;
+
+			echo json_encode($t);
+
+		}
 	}
 
 
