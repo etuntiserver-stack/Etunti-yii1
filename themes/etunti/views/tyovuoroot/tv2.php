@@ -187,11 +187,11 @@ td .tp{
    $list[$v->value] = $v->value;
 
    echo CHtml::dropDownList('siivous', 'siivous', $list,
-   array('empty'=>'Työnimike','class'=>'form-control form-group'));
+   array('empty'=>Yii::t('main', 'Työnimike kohteet'),'class'=>'form-control form-group'));
 
    ?>
-   <input type="text" name="from" id="from" class="form-control form-group datepicker" value="<?php echo Yii::app()->session['from']; ?>">
-   <input type="text" name="to" id="to" class="form-control form-group datepicker" value="<?php echo Yii::app()->session['to']; ?>">
+   <input type="text" name="from" id="from" size="10" class="form-control form-group datepicker" value="<?php echo Yii::app()->session['from']; ?>" placeholder="<?php echo Yii::t('main' ,'Päivämäärä'); ?>">
+   <input type="text" name="to" id="to" size="10" class="form-control form-group datepicker" value="<?php echo Yii::app()->session['to']; ?>" placeholder="<?php echo Yii::t('main' ,'Päivämäärä'); ?>">
 
    <input type="submit" class="btn btn-primary" value="<?php echo Yii::t('main', 'haku'); ?>">
    </form>
@@ -292,6 +292,7 @@ td .tp{
 		  $tv = $this->renderPartial('//tyovuoroot/did',array('pvm'=>$date,'tid'=>$t->id,'from'=>'tvuoro', 'kohteenArr'=>$kohteenArr), true);
 		  echo json_decode($tv, true);
 		  echo '</td>';
+
 		}
 	    echo '</tr>';
 

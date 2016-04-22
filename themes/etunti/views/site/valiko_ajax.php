@@ -172,7 +172,7 @@
        </div>
       </div>
       <div class="modal-footer">
-        <!--<button type="button" class="btn btn-default" data-dismiss="modal">Sulje</button>-->
+        <button type="button" class="btn btn-default" data-dismiss="modal">Sulje</button>
         <button type="button" class="btn btn-primary tallenna">Tallenna muutokset</button>
 
       </div>
@@ -180,7 +180,9 @@
   </div><!-- /.modal-dialog -->';
 
 
-$mod .= '
+	echo $mod;
+?>
+
 
 
 
@@ -200,82 +202,101 @@ $(document).ready(function(){
     $(".m0, .m1").keyup(function(){
 	var thId = $(this).attr("id").split("_");
 	kolmeKenta(thId[1]);
+
     });
 
     $(".m2").change(function(){
+
 	var thId = $(this).attr("id").split("_");
 	kolmeKenta(thId[1]);
     });
+
 
     function kolmeKenta(id)
     {
 
 	var m0 = $("#m0_"+id).val();
+
 	var m1 = $("#m1_"+id).val();
 	var m2 = $("#m2_"+id).val();
 	$("#m_"+id).val(m0+"/"+m1+"/#"+m2);
     }
 
+
   }
 
   $(".tallenna").click(function(){
+
 	window.location.reload();
   });
+
 
   $(".muokkaSelectValikoja").click(function(){
 
 	$(this).removeClass("btn-warning").addClass("btn-success");
 	var forID = $(this).attr("for");
+
 	var thisID = $(this).attr("id");
 	var thisVal = $("#"+forID).val();
 	//$("#"+forID).val("Hetkinen..");
         $.ajax({
+
            url: location.protocol + "//" + location.host + "/index.php/site/valiko_ajax",
            type: "POST",
            data: {"muokkaSelects" : "true", "id" : thisID, "value" : thisVal, "select_type" : $("#select_type").val()},
            success: function(html){
+
 		//console.log(html)
 		//$("#result").html(html);
            }
+
         });
   });
 
   $(".deleteFromSelect").click(function(){
+
 	var thisID = $(this).attr("id").split("poista_");
 	var select_type = $(this).attr("select_type");
         var r=confirm("Oletko varmaa?")
         if (r)
+
 	{
         $.ajax({
            url: location.protocol + "//" + location.host + "/index.php/site/valiko_ajax",
            type: "POST",
+
            data: { "deleteFromSelect" : "true", "id" : thisID[1], "select_type" : select_type },
            success: function(html){
 		$("#rivi_"+thisID[1]).remove();
            }
+
         });
 	}
   });
 
 
+
   $(".uusi").click(function(){
 	var forID = $(this).attr("for");
+
 	var select_type = $(this).attr("tyyppi");
 	var thisVal = $("#"+forID).val();
         $.ajax({
            url: location.protocol + "//" + location.host + "/index.php/site/valiko_ajax",
+
            type: "POST",
            data: {"uusiRiviSelects" : "true", "value" : thisVal, "select_type" : select_type},
            success: function(data){
 		//console.log(html);
+
 		$("#result").html(data);
            }
         });
+
   });
 
 
 });
-</script>';
-	echo $mod;
-?>
+
+</script>
 

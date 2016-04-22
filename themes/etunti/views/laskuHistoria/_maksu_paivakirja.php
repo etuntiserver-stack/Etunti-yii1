@@ -32,7 +32,7 @@ if(isset($l->id))
 	</td>
 
 	<td>
-	<?php echo CHtml::encode($laskunumero); ?>
+	<?php echo CHtml::link($laskunumero, Yii::app()->request->baseUrl.'/index.php/lasku/update?id='.$data->lid); ?>
 	</td>
 
 	<td>

@@ -133,7 +133,7 @@
    $list[$v->value] = $v->value;
 
    echo CHtml::dropDownList('siivous', 'siivous', $list,
-   array('empty'=>'Työnimike','class'=>'form-control form-group'));
+   array('empty'=>Yii::t('main', 'Työnimike kohteet'),'class'=>'form-control form-group'));
 
 
    ?>
