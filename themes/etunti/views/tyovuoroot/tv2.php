@@ -82,6 +82,11 @@
 
 
 
+   $dTVfrom = date("Y-m-d",strtotime($from));
+   echo '<input type="hidden" id="fromTV" value="'.$dTVfrom.'">';
+   $dTVto = date("Y-m-d",strtotime($to));
+   echo '<input type="hidden" id="toTV" value="'.$dTVto.'">';
+
 
 //print_r(Yii::app()->session['tvuoroTekija']);
 
@@ -162,6 +167,33 @@ td .tp{
 
 
    <?php
+   // Toimialue
+   $list = array();
+   $criteria = new CDbCriteria();
+   $criteria->order = " select_type ";
+   $criteria->condition = " select_type='tyo_toimialue' ";
+   $l = Valikkoot::model()->findAll($criteria);
+   foreach($l as $v)
+   $list[$v->value] = $v->value;
+
+   echo CHtml::dropDownList('siivous', 'siivous', $list,
+   array('empty'=>Yii::t('main', 'Toimialue'),'class'=>'form-control form-group','id'=>'tekijanToimialue'));
+
+
+   // Kohteen ryhman mukaan
+   $list = array();
+   $criteria = new CDbCriteria();
+   $criteria->order = " select_type ";
+   $criteria->condition = " select_type='siivous' ";
+   $l = Valikkoot::model()->findAll($criteria);
+   foreach($l as $v)
+   $list[$v->value] = $v->value;
+
+   echo CHtml::dropDownList('siivous', 'siivous', $list,
+   array('empty'=>Yii::t('main', 'Työnimike kohteet'),'class'=>'form-control form-group','id'=>'siivousTyonimike'));
+
+
+   //
    $criteria = new CDbCriteria();
    $criteria->order = " tekijan_nimi ";
    $criteria->condition = " aktiivinen='1' ";
@@ -175,19 +207,6 @@ td .tp{
        	 echo '<option value="'.$key.'">'.$val.'</option>';
     }
     echo '</select>';
-
-
-   // Kohteen ryhman mukaan
-   $list = array();
-   $criteria = new CDbCriteria();
-   $criteria->order = " select_type ";
-   $criteria->condition = " select_type='siivous' ";
-   $l = Valikkoot::model()->findAll($criteria);
-   foreach($l as $v)
-   $list[$v->value] = $v->value;
-
-   echo CHtml::dropDownList('siivous', 'siivous', $list,
-   array('empty'=>Yii::t('main', 'Työnimike kohteet'),'class'=>'form-control form-group'));
 
    ?>
    <input type="text" name="from" id="from" size="10" class="form-control form-group datepicker" value="<?php echo Yii::app()->session['from']; ?>" placeholder="<?php echo Yii::t('main' ,'Päivämäärä'); ?>">
@@ -233,16 +252,21 @@ td .tp{
 		echo '
 		<script type="text/javascript">
 		$(document).ready(function(){
-		  $("#siivous option[value='.$_POST['siivous'].']").attr(\'selected\',\'selected\');
+		  $("#siivousTyonimike option[value=\''.$_POST['siivous'].'\']").attr(\'selected\',\'selected\');
 		});
 		</script>';
 
 		$criteria = new CDbCriteria();
        		$criteria->select = "id";
-       		$criteria->condition = " siivous LIKE '%//".$_POST['siivous']."%' ";
+       		$criteria->condition = " siivous LIKE '%".$_POST['siivous']."%' ";
 		$k = Kohteet::model()->findAll($criteria);
 		foreach($k as $kohde)
 		$kohteenArr[] = $kohde->id;
+
+		if(count($kohteenArr) > 0)
+		$checkSiivous = true;
+		else
+		$checkSiivous = false;
 	}
 
 ?>
@@ -254,6 +278,7 @@ td .tp{
                 <div class="panel-body bg-light">
                  <div class="row">
 
+<?php if((isset($checkSiivous) and $checkSiivous == true) or !isset($checkSiivous)) : ?>
 <div class="tvuoro table-responsive">
   <table class="table table-striped table-condensed table-bordered" style="background: white">
      <thead class="">
@@ -344,6 +369,8 @@ td .tp{
      </tfoot>
   </table>
 </div>
+<?php endif; ?>
+
 
                  </div>
                 </div>

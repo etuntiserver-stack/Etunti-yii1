@@ -27,6 +27,74 @@ $('#tyontekijat').selectpicker({
 */
 
 
+
+
+
+
+
+
+
+$(document).delegate("#from","blur",function(){
+   	tekijanValikkoMuutetaan();
+});
+
+$(document).delegate("#to","blur",function(){
+   	tekijanValikkoMuutetaan();
+});
+
+$(document).delegate("#tekijanToimialue","change",function(){
+   	tekijanValikkoMuutetaan();
+});
+
+$(document).delegate("#siivousTyonimike","change",function(){
+   	tekijanValikkoMuutetaan();
+});
+
+function tekijanValikkoMuutetaan(){
+
+	var fromTV = '';
+	var toTV = '';
+
+	if($('#fromTV').val())
+	 fromTV = $('#fromTV').val();
+	if($('#toTV').val())
+	 toTV = $('#toTV').val();
+	if($('#from').val())
+	 fromTV = $('#from').val();
+	if($('#to').val())
+	 toTV = $('#to').val();
+
+
+	var tekijanToimialue = $("#tekijanToimialue option:selected").val();
+	var siivousTyonimike = $("#siivousTyonimike option:selected").val();
+
+        $.ajax({
+           url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/siivous_tyonimike',
+           type: "POST",
+           data: { "tekijanToimialue" : tekijanToimialue, "siivousTyonimike" : siivousTyonimike, "fromTV" : fromTV, "toTV" : toTV },
+           success: function(data){
+		var d = JSON.parse(data);
+		console.log(d);
+
+		$("#tyontekijat").val(d);
+		// Then refresh
+		$("#tyontekijat").multiselect("refresh");
+
+           }
+        });
+
+}
+
+
+
+
+
+
+
+
+
+
+
 $("#uusiTilaus").click(function(){
 
    $.ajax({

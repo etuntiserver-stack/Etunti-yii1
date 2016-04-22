@@ -1,27 +1,6 @@
 <?php
 
 
-/* @var $this TyovuorootController */
-/* @var $dataProvider CActiveDataProvider */
-/*
-   $pvmtid = Yii::app()->request->getParam('pvmtid', 0);
-   if(!empty($pvmtid)){
-	$expl = explode("_",$pvmtid);
-	Yii::app()->session['from'] = date("Y-m-d",strtotime($expl['0']));
-	Yii::app()->session['to'] = date("Y-m-d",strtotime($expl['0']." +1 week"));
-	Yii::app()->session['Tekija'] = array($expl['1']);
-	?>
-	<script type="text/javascript">
-	$(document).ready(function(){
-	
-	  $('#<?php echo $pvmtid; ?>').addClass("alert alert-info");
-	
-	});
-	</script>
-	<?php
-   }
-*/
-
 // oletus arvot
    if(!isset(Yii::app()->session['TekijaVuoro'])){
 
@@ -93,6 +72,11 @@
   }
     $week = sprintf("%02d", $week);
 
+
+   $dTVfrom = date("Y-m-d",strtotime($year ."W". $week. '1'));
+   echo '<input type="hidden" id="fromTV" value="'.$dTVfrom.'">';
+   $dTVto = date("Y-m-d",strtotime($year ."W". $week. '7'));
+   echo '<input type="hidden" id="toTV" value="'.$dTVto.'">';
 ?>
 
 <div class="row">
@@ -104,11 +88,38 @@
 
 
 <div class="row">
- <div class="row col-sm-4">
+ <div class="row col-sm-5">
   <form action="index" id="yhtveto" method="POST">
 
    <div class="form-inline">
    <?php
+   // Toimialue
+   $list = array();
+   $criteria = new CDbCriteria();
+   $criteria->order = " select_type ";
+   $criteria->condition = " select_type='tyo_toimialue' ";
+   $l = Valikkoot::model()->findAll($criteria);
+   foreach($l as $v)
+   $list[$v->value] = $v->value;
+
+   echo CHtml::dropDownList('siivous', 'siivous', $list,
+   array('empty'=>Yii::t('main', 'Toimialue'),'class'=>'form-control form-group','id'=>'tekijanToimialue'));
+
+
+   // Kohteen ryhman mukaan
+   $list = array();
+   $criteria = new CDbCriteria();
+   $criteria->order = " select_type ";
+   $criteria->condition = " select_type='siivous' ";
+   $l = Valikkoot::model()->findAll($criteria);
+   foreach($l as $v)
+   $list[$v->value] = $v->value;
+
+   echo CHtml::dropDownList('siivous', 'siivous', $list,
+   array('empty'=>Yii::t('main', 'Työnimike kohteet'),'class'=>'form-control form-group','id'=>'siivousTyonimike'));
+
+
+   //
    $criteria = new CDbCriteria();
    $criteria->order = " tekijan_nimi ";
    $criteria->condition = " aktiivinen='1' ";
@@ -122,26 +133,12 @@
        	 echo '<option value="'.$key.'">'.$val.'</option>';
     }
     echo '</select>';
-
-   // Kohteen ryhman mukaan
-   $list = array();
-   $criteria = new CDbCriteria();
-   $criteria->order = " select_type ";
-   $criteria->condition = " select_type='siivous' ";
-   $l = Valikkoot::model()->findAll($criteria);
-   foreach($l as $v)
-   $list[$v->value] = $v->value;
-
-   echo CHtml::dropDownList('siivous', 'siivous', $list,
-   array('empty'=>Yii::t('main', 'Työnimike kohteet'),'class'=>'form-control form-group'));
-
-
    ?>
    <input type="submit" class="btn btn-primary" value="<?php echo Yii::t('main', 'haku'); ?>">
    </div>
    </form>
 
- </div><div class="col-sm-5">
+ </div><div class="col-sm-4">
 
 
    <div class="form-inline">
@@ -249,7 +246,44 @@ td .tp{
 }
 </style>
 
+<?php
 
+	$kohteenArr = array();
+	if(isset($_POST['siivous']) and !empty($_POST['siivous']))
+	{
+
+		echo '
+		<script type="text/javascript">
+		$(document).ready(function(){
+
+		  $("#siivousTyonimike option[value=\''.$_POST['siivous'].'\']").attr(\'selected\',\'selected\');
+		});
+		</script>';
+
+		$criteria = new CDbCriteria();
+       		$criteria->select = "id";
+       		$criteria->condition = " 
+			siivous LIKE '%".$_POST['siivous']."%' 
+			AND id IN(
+				SELECT kohde FROM sivex_tvuoro 
+				WHERE YEARWEEK(DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d')) = '".$year.$week."'
+			)
+		";
+		$k = Kohteet::model()->findAll($criteria);
+		foreach($k as $kohde)
+		echo $kohteenArr[] = $kohde->id;
+
+		if(count($kohteenArr) > 0)
+		$checkSiivous = true;
+		else
+		$checkSiivous = false;
+
+	}
+
+
+?>
+
+<?php if((isset($checkSiivous) and $checkSiivous == true) or !isset($checkSiivous)) : ?>
 <div class="row table-responsive">
   <table class="table table-bordered table-striped small" style="background: white">
      <thead>
@@ -267,26 +301,6 @@ td .tp{
      </thead>
      <tbody>
         <?php
-
-	$kohteenArr = array();
-	if(isset($_POST['siivous']) and !empty($_POST['siivous']))
-	{
-
-		echo '
-		<script type="text/javascript">
-		$(document).ready(function(){
-		  $("#siivous option[value='.$_POST['siivous'].']").attr(\'selected\',\'selected\');
-		});
-		</script>';
-
-		$criteria = new CDbCriteria();
-       		$criteria->select = "id";
-       		$criteria->condition = " siivous LIKE '%//".$_POST['siivous']."%' ";
-		$k = Kohteet::model()->findAll($criteria);
-		foreach($k as $kohde)
-		$kohteenArr[] = $kohde->id;
-	}
-
 
 	foreach($tt as $t)
 	{
@@ -341,6 +355,7 @@ td .tp{
      </tbody>
   </table>
 </div>
+<?php endif; ?>
 
                  </div>
                 </div>
