@@ -50,12 +50,14 @@ $model->viivastyskorko = $asetukset->viivastyskorko;
 
 
 if(isset($model->id)){
+$paivays = $model->paivays;
 echo '<input type="hidden" id="modelID" value="1">';
 echo '<input type="hidden" id="forLaskutusTyyppi" value="'.$model->laskutus.'">';
 echo '<input type="hidden" id="forTilanne" value="'.$model->tilanne.'">';
 echo '<input type="hidden" id="trust_jobid" value="'.$model->trust_jobid.'">';
 echo '<input type="hidden" id="postita_jobid" value="'.$model->postita_jobid.'">';
 } else {
+$paivays = date("Y-m-d");
 echo '<input type="hidden" id="forTilanne" value="0">';
 }
 
@@ -309,7 +311,7 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
   <legend><?php echo Yii::t('main', 'LASKUN TIEDOT'); ?></legend>
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'paivays'); ?>
-		<?php echo $form->textField($model,'paivays',array('value'=>date("Y-m-d"),'size'=>20,'maxlength'=>20,'class'=>'form-control  datepicker')); ?>
+		<?php echo $form->textField($model,'paivays',array('value'=>$paivays,'size'=>20,'maxlength'=>20,'class'=>'form-control  datepicker')); ?>
 		<?php echo $form->error($model,'paivays'); ?>
 	</div>
 
