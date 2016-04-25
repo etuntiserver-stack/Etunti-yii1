@@ -48,6 +48,7 @@ public function actionLang($dom)
 		'tallenna' => Yii::t('app', 'Tallenna'),
 		'Valitse_kieli' => Yii::t('app', 'Valitse kieli'),
 		'Asetukset' => Yii::t('app', 'Asetukset'),
+		'tallennaKieli' => Yii::t('app', 'Tallenna kieli'),
 		);
 	    }
 

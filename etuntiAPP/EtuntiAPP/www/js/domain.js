@@ -1,14 +1,25 @@
+$(document).ready(function(){
 
-  var domain = '';
-  var email = '';
-  var salasana = '';
-  var my_location = '';
-  var tag = '000000';
-  var etunti_language = 'Suomi';
+  $("#tallennaKieli").click(function(){
+	var selected = $("#kieliValiko option:selected").val();
+
+	localStorage.removeItem('etunti_language');
+	localStorage.setItem('etunti_language', selected);
+	location.reload(true);
+  });
+
+});
+
+    var domain = '';
+    var email = '';
+    var salasana = '';
+    var my_location = '';
+    var tag = '000000';
+    var etunti_language = 'Suomi';
 
 
-  if(localStorage.getItem('etunti_language'))
-  etunti_language = localStorage.getItem('etunti_language');
+    if(localStorage.getItem('etunti_language'))
+    etunti_language = localStorage.getItem('etunti_language');
 
 
     var server = 'http://etunti.fi';
@@ -131,6 +142,7 @@ $("#dm").html('<label>Domain</label>' +
 
   $('#Valitse_kieli').text(lang['Valitse_kieli']);
   $('#Asetukset').text(lang['Asetukset']);
+  $('#tallennaKieli').text(lang['tallennaKieli']);
 
 
 
@@ -251,12 +263,6 @@ function painikkeet(){
   });
 }
 
-
-  $("#tallennaKieli").click(function(){
-	var selected = $("#kieliValiko option:selected").val();
-	localStorage.setItem('etunti_language', selected);
-	window.location.reload();
-  });
 
 
 
