@@ -4,6 +4,11 @@
   var salasana = '';
   var my_location = '';
   var tag = '000000';
+  var etunti_language = 'Suomi';
+
+
+  if(localStorage.getItem('etunti_language'))
+  etunti_language = localStorage.getItem('etunti_language');
 
 
     var server = 'http://etunti.fi';
@@ -91,10 +96,29 @@
 
 $(document).ready(function(){
 
+var text = new Object();
+
+        $.ajax({
+           url: url+'/lang?dom='+domain,
+	   type:'POST',
+ 	   data: { lang : etunti_language },
+           success: function(data){
+        	alert(data);
+
+		//text[$(this).attr('id')] = $(this).text();
+
+    	},
+    		error:function (xhr, ajaxOptions, thrownError){
+        	console.log(xhr.responseText);
+    	}
+        });
+
+
+
 
 $("#dm").html('<label>Domain</label>' +
 		'<input type="text" class="form-control" id="domain">' +
-		'<label>Työntekijän sähköposti</label>' +
+		'<label>ee</label>' +
 		'<input type="text" class="form-control" id="email">' +
 		'<label>Työntekijän salasana</label>' +
 		'<input type="password" class="form-control" id="salasana"><br>' +
@@ -218,6 +242,14 @@ function painikkeet(){
 	window.location.href='asetukset.html';
   });
 }
+
+
+  $("#tallennaKieli").click(function(){
+	var selected = $("#kieliValiko option:selected").val();
+	localStorage.setItem('etunti_language', selected);
+	window.location.reload();
+  });
+
 
 
 });
