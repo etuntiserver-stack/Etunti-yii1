@@ -2,10 +2,18 @@
 
 
 return array(
-/* Views */
+
+	/* Index */		
+	'TYO' => 'JOB',
+	'MATKA' => 'TRAVEL',
+	'LOUNAS' => 'LUNCH TIME',
+	'ALOITA' => 'START',
+	'LOPETA' => 'FINISH',
+
+	/* Asetukset */
 	'Työntekijän sähköposti' => 'E-mail',
 	'Työntekijän salasana' => 'Password',
-	'tallenna' => 'Save',
+	'Tallenna' => 'Save',
 	'Valitse kieli' => 'Choose language',
 	'Asetukset' => 'Settings',
 	'Tallenna kieli' => 'Save language',

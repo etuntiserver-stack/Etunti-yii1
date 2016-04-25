@@ -647,18 +647,21 @@ $kysymykset[] = array(
             <div class="padding-bottom white">
                 <div class="container">
                         <div class="titles-heading">
-                        <h2>Liity testiryhmään
-                            <span>
+                        <h2>Kiitos pilotointitestiryhmään hakeneille
+                            <!--<span>
                               <i class="fa fa-star"></i>
                               Vaikuta sovelluksen kehitykseen korvauksen kera
-                              <i class="fa fa-star"></i>
+                              <i class="fa fa-star"></i>-->
                             </span>
                         </h2>
                         </div>
                     <div class="row">
                         <div class="col-md-6 col-sm-5 padding-bottom">
-                            <p>Etsimme vielä muutamia pilottiasiakkaita osallistumaan Etunti- ohjelman viimeistelyyn. Saat aktiivisesta mukanaolostasi 500 € ja Etunti -ohjelman käyttöösi veloituksetta kolmeksi kuukaudeksi. 
-<p>Jos olet idearikas ja peloton pilotti, ota yhteyttä. 
+<p>Pilotointiin haku on nyt päättynyt ja pilotointiryhmä on täynnä.</p>
+<p>Mikäli olet kiinnostunut Etunti -ohjelmasta, jätä yhteystietosi viereiseen yhteystiedot kenttään, niin otamme yhteyttä.</p>
+
+<p style="background: #ddd;">Etsimme vielä muutamia pilottiasiakkaita osallistumaan Etunti- ohjelman viimeistelyyn. Saat aktiivisesta mukanaolostasi 500 € ja Etunti -ohjelman käyttöösi veloituksetta kolmeksi kuukaudeksi. 
+<p style="background: #ddd;">Jos olet idearikas ja peloton pilotti, ota yhteyttä. 
 <br>
 Toimi nopeasti, sillä paikkoja on rajoitetusti!</p></p>
 <!--                             <form id="newsletterForm" action="php/mailchip/newsletter-subscribe.php">
