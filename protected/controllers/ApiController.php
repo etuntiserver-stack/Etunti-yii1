@@ -43,7 +43,11 @@ public function actionLang($dom)
 	    {
 	  	$_SESSION['lang'] = $_POST['lang'];
 		$lang = array(
-		   'tyontekijan_sahkoposti' => Yii::t('app', 'Työntekijän sähköposti'),
+		'tyontekijan_sahkoposti' => Yii::t('app', 'Työntekijän sähköposti'),
+		'tyontekijan_salasana' => Yii::t('app', 'Työntekijän salasana'),
+		'tallenna' => Yii::t('app', 'Tallenna'),
+		'Valitse_kieli' => Yii::t('app', 'Valitse kieli'),
+		'Asetukset' => Yii::t('app', 'Asetukset'),
 		);
 	    }
 

@@ -3,7 +3,10 @@
 
 return array(
 /* Views */
-	'Työntekijän sähköposti' => 'E-mail',
+	'Työntekijän sähköposti' => 'Työntekijän sähköposti',
+	'Työntekijän salasana' => 'Työntekijän salasana',
+	'tallenna' => 'Tallenna',
+	'Valitse kieli' => 'Choose language',
 );
 
 ?>
