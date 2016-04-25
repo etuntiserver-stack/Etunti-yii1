@@ -37,9 +37,15 @@ public function actionLang($dom)
     {
         case 'mob':
 
+		$lang = array();
+
+	    if(isset($_POST['lang']))
+	    {
+	  	$_SESSION['lang'] = $_POST['lang'];
 		$lang = array(
-		   'test'=>'testo',
+		   'tyontekijan_sahkoposti' => Yii::t('app', 'Työntekijän sähköposti'),
 		);
+	    }
 
         	$this->_sendResponse(200, CJSON::encode($lang));
 
