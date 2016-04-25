@@ -271,7 +271,7 @@ td .tp{
 		";
 		$k = Kohteet::model()->findAll($criteria);
 		foreach($k as $kohde)
-		echo $kohteenArr[] = $kohde->id;
+		 $kohteenArr[] = $kohde->id;
 
 		if(count($kohteenArr) > 0)
 		$checkSiivous = true;

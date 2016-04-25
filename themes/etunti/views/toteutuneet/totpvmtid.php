@@ -66,7 +66,6 @@ $did = date("Ymd",strtotime($pvm));
 	} else {
 
 		   ksort($get);
-		   $laatikot = '';
 		   foreach($get as $v){
 		      $laatikot .= $this->renderPartial('al',array('str'=>$v), true);
 		   }
