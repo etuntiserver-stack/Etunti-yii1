@@ -96,16 +96,19 @@
 
 $(document).ready(function(){
 
-var text = new Object();
+var lang = [];
 
         $.ajax({
+	   async: false,
            url: url+'/lang?dom='+domain,
 	   type:'POST',
  	   data: { lang : etunti_language },
            success: function(data){
-        	alert(data);
+		var d = JSON.parse(data);
 
-		//text[$(this).attr('id')] = $(this).text();
+		$.each(d, function( index, value ) {
+		  lang[index] = value;
+		});
 
     	},
     		error:function (xhr, ajaxOptions, thrownError){
@@ -115,10 +118,9 @@ var text = new Object();
 
 
 
-
 $("#dm").html('<label>Domain</label>' +
 		'<input type="text" class="form-control" id="domain">' +
-		'<label>ee</label>' +
+		'<label>'+ lang['tyontekijan_sahkoposti'] +'</label>' +
 		'<input type="text" class="form-control" id="email">' +
 		'<label>Työntekijän salasana</label>' +
 		'<input type="password" class="form-control" id="salasana"><br>' +
