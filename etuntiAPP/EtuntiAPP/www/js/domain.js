@@ -139,10 +139,17 @@ $("#dm").html('<label>Domain</label>' +
 		'<i class="glyphicon glyphicon-warning-sign"> '+ lang['tallenna'] +'</i></button>');
 
 
+  /* Index */
+  $('#butTyo').text(lang['TYO']);
+  $('#butMatka').text(lang['MATKA']);
+  $('#butLounas').text(lang['LOUNAS']);
 
+
+  /* Asetukset */
   $('#Valitse_kieli').text(lang['Valitse_kieli']);
   $('#Asetukset').text(lang['Asetukset']);
   $('#tallennaKieli').text(lang['tallennaKieli']);
+
 
 
 
