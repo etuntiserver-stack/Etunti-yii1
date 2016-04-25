@@ -3,10 +3,12 @@
 
 return array(
 /* Views */
-	'Työntekijän sähköposti' => 'Työntekijän sähköposti',
-	'Työntekijän salasana' => 'Työntekijän salasana',
-	'tallenna' => 'Tallenna',
+	'Työntekijän sähköposti' => 'E-mail',
+	'Työntekijän salasana' => 'Password',
+	'tallenna' => 'Save',
 	'Valitse kieli' => 'Choose language',
+	'Asetukset' => 'Settings',
+	'Tallenna kieli' => 'Save language',
 );
 
 ?>

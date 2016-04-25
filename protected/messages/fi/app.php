@@ -8,6 +8,7 @@ return array(
 	'tallenna' => 'Tallenna',
 	'Valitse kieli' => 'Valitse kieli',
 	'Asetukset' => 'Asetukset',
+	'Tallenna kieli' => 'Tallenna kieli',
 );
 
 ?>
