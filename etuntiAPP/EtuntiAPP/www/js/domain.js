@@ -122,15 +122,21 @@ $("#dm").html('<label>Domain</label>' +
 		'<input type="text" class="form-control" id="domain">' +
 		'<label>'+ lang['tyontekijan_sahkoposti'] +'</label>' +
 		'<input type="text" class="form-control" id="email">' +
-		'<label>Työntekijän salasana</label>' +
+		'<label>'+ lang['tyontekijan_salasana'] +'</label>' +
 		'<input type="password" class="form-control" id="salasana"><br>' +
 		'<button class="btn btn-success btn-group-justified aloita" type="button">' +
-		'<i class="glyphicon glyphicon-warning-sign"> Tallenna</i></button>');
+		'<i class="glyphicon glyphicon-warning-sign"> '+ lang['tallenna'] +'</i></button>');
+
+
+
+  $('#Valitse_kieli').text(lang['Valitse_kieli']);
+  $('#Asetukset').text(lang['Asetukset']);
+
+
 
   $(".aloita").click(function(){
 	saveFile();
   });
-
 
   function saveFile(){
 
