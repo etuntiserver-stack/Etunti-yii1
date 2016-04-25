@@ -447,6 +447,7 @@ not([type="multiple"]) {
 .admin-form input:checked + .checkbox:before,
 .admin-form input:checked + .radio:before {
   display: block;
+  color: white;
 }
 .admin-form .checkbox:before {
   position: absolute;
@@ -1199,6 +1200,14 @@ not([type="multiple"]) {
 .admin-form .button-list .button {
   margin-bottom: 5px;
 }
+/* Roman */
+.dropdown-menu > .active > a,
+.dropdown-menu > .active > a:hover,
+.dropdown-menu > .active > a:focus {
+    background-color: #ddd; /*you color here*/
+    background-image: none;
+}
+/* Roman */
 /*==================================================================
   Primary Button
 -===================================================================*/
