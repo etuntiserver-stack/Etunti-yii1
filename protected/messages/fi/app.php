@@ -18,6 +18,8 @@ return array(
 	'Uusi viesti' => 'Uusi viesti',
 	'Keskustelu' => 'Keskustelu nro.',
 	'vastaus' => 'vastaus',
+	'Viesti' => 'Viesti',
+	'Lähetä viesti toimistoon' => 'Lähetä viesti toimistoon',
 
 	/* Asetukset */
 	'Työntekijän sähköposti' => 'Työntekijän sähköposti',
