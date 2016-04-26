@@ -1,6 +1,29 @@
 $(document).ready(function(){
 
 
+var lang = [];
+
+        $.ajax({
+	   async: false,
+           url: url+'/lang?dom='+domain,
+	   type:'POST',
+ 	   data: { lang : etunti_language },
+           success: function(data){
+		var d = JSON.parse(data);
+
+		$.each(d, function( index, value ) {
+		  lang[index] = value;
+		});
+
+    	},
+    		error:function (xhr, ajaxOptions, thrownError){
+        	console.log(xhr.responseText);
+    	}
+        });
+
+
+
+
   $("#odotta").html("<img src='img/icon.png'>");
 
   setTimeout(tiedot,3000); 
@@ -183,7 +206,7 @@ function allShow(){
 	$('#tyo').show(370);
 	$('#matka').show(370);
 	$('#lounas').show(370);
-	$("#alLop").html('<h2>ALOITA</h2>');
+	$("#alLop").html('<h2>'+ lang['ALOITA'] +'</h2>');
 	$("#getTyovuorotToday").show(370);
 }
 function allTilasetHide(){
@@ -191,7 +214,6 @@ function allTilasetHide(){
 	$("#matka_kohde").hide();
 	$("#lounas_kohde").hide();
 }
-
 
 
 
