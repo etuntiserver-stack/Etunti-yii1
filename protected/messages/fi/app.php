@@ -17,6 +17,7 @@ return array(
 	'Lähetä GPS tiedot' => 'Lähetä GPS tiedot',
 	'Uusi viesti' => 'Uusi viesti',
 	'Keskustelu' => 'Keskustelu nro.',
+	'vastaus' => 'vastaus',
 
 	/* Asetukset */
 	'Työntekijän sähköposti' => 'Työntekijän sähköposti',

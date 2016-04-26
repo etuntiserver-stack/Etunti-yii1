@@ -17,6 +17,7 @@ return array(
 	'Lähetä GPS tiedot' => 'Send your position',
 	'Uusi viesti' => 'New message',
 	'Keskustelu' => 'Chat ID.',
+	'vastaus' => 'answer',
 
 	/* Asetukset */
 	'Työntekijän sähköposti' => 'E-mail',
