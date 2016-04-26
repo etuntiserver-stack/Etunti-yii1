@@ -21,6 +21,9 @@ return array(
 	'Viesti' => 'Message',
 	'Lähetä viesti toimistoon' => 'Send message',
 
+	/* Työvuorot */
+	'Työvuorot' => 'Shift',
+
 	/* Asetukset */
 	'Työntekijän sähköposti' => 'E-mail',
 	'Työntekijän salasana' => 'Password',
