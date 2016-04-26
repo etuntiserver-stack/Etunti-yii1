@@ -203,13 +203,11 @@
 
 	  <div id="CaptureButtons">
 	  <br>
-	    <button class="btn btn-success btn-group-justified" onclick="capturePhoto();">Ota kuvan kamerasta</button>
+	    <button class="btn btn-success btn-group-justified" onclick="capturePhoto();" id="fromCamera"></button>
 	    <br>
-	    <button class="btn btn-success btn-group-justified" onclick="getPhoto(pictureSource.PHOTOLIBRARY);">From
-	        Photo Library</button>
+	    <button class="btn btn-success btn-group-justified" onclick="getPhoto(pictureSource.PHOTOLIBRARY);" id="fromLibrary"></button>
 	    <br>
-	    <button class="btn btn-success btn-group-justified" onclick="getPhoto(pictureSource.SAVEDPHOTOALBUM);">From
-	        PhotoAlbum</button>
+	    <button class="btn btn-success btn-group-justified" onclick="getPhoto(pictureSource.SAVEDPHOTOALBUM);" id="fromAlbum"></button>
 	    <br>
 	  </div>
 
