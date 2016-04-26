@@ -23,6 +23,12 @@ return array(
 
 	/* Työvuorot */
 	'Työvuorot' => 'Työvuorot',
+	'Päivämäärä' => 'Päivämäärä',
+	'Klo' => 'Klo',
+	'Kesto' => 'Kesto',
+
+	/* Tehty */
+	'Tänään tekemasi työt' => 'Tänään tekemasi työt',
 
 	/* Asetukset */
 	'Työntekijän sähköposti' => 'Työntekijän sähköposti',

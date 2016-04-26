@@ -296,7 +296,7 @@ public function actionImei($dom)
 		    return sprintf('%02d:%02d', $val/3600, ($val % 3600)/60);
 		    }
 
-		    $sel = '';
+		    $sel = '<h2>'.Yii::t('app', 'Tänään tekemasi työt').'</h2>';
 		    foreach($mob as $val)
 		    {
 		    $kesto = '00:00';
@@ -304,11 +304,11 @@ public function actionImei($dom)
 		    $kesto = (strtotime($val->loppui)-strtotime($val->aloitan));
 
 		      $sel .= '<div class="well">
-				  Päivämäärä: <b>'.date("d.m.Y",strtotime($val->aloitan)).'</b><br> 
-				  Klo: '.$val->aloitan.'-'.$val->loppui.'<br> 
-				  <h4>Osoite: '.$val->kohde_kannasta.'</h4>
+				  '.Yii::t('app', 'Päivämäärä').': <b>'.date("d.m.Y",strtotime($val->aloitan)).'</b><br> 
+				  '.Yii::t('app', 'Klo').': '.$val->aloitan.'-'.$val->loppui.'<br> 
+				  <h4>'.Yii::t('app', 'Osoite').': '.$val->kohde_kannasta.'</h4>
 				  <hr>
-				  <h3>Kesto: '.sprint($kesto).'</h3>
+				  <h3>'.Yii::t('app', 'Kesto').': '.sprint($kesto).'</h3>
 				</div>';
 		    }
 
