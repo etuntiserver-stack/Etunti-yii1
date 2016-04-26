@@ -50,6 +50,8 @@ public function actionLang($dom)
 		'LOUNAS' => Yii::t('app', 'LOUNAS'),
 		'ALOITA' => Yii::t('app', 'ALOITA'),
 		'LOPETA' => Yii::t('app', 'LOPETA'),
+		'Osoite' => Yii::t('app', 'Osoite'),
+		'lyhyt_viesti' => Yii::t('app', 'lyhyt_viesti'),
 
 		/* Asetukset */
 		'tyontekijan_sahkoposti' => Yii::t('app', 'Työntekijän sähköposti'),
