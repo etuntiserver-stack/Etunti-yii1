@@ -24,6 +24,12 @@ return array(
 	/* Työvuorot */
 	'Työvuorot' => 'Shift',
 
+	/* Tehty */
+	'Tänään tekemasi työt' => 'Your work today',
+	'Päivämäärä' => 'Date',
+	'Klo' => 'Time',
+	'Kesto' => 'Total time',
+
 	/* Asetukset */
 	'Työntekijän sähköposti' => 'E-mail',
 	'Työntekijän salasana' => 'Password',
