@@ -138,7 +138,7 @@ $("#dm").html('<label>Domain</label>' +
 		'<button class="btn btn-success btn-group-justified aloita" type="button">' +
 		'<i class="glyphicon glyphicon-warning-sign"> '+ lang['tallenna'] +'</i></button>');
 
-alert(lang['osoite'])
+
   /* Index */
   $('#butTyo').text(lang['TYO']);
   $('#butMatka').text(lang['MATKA']);
@@ -146,6 +146,9 @@ alert(lang['osoite'])
   $('#os').attr('placeholder', lang['osoite']);
   $('#lyhytviesti').attr('placeholder', lang['lyhyt_viesti']);
 
+  /* Viestinta */
+  $('#olenEksynyt').text(lang['olenEksynyt']);
+  $('#LangUusiViesti').text(lang['LangUusiViesti']);
 
   /* Asetukset */
   $('#Valitse_kieli').text(lang['Valitse_kieli']);
