@@ -15,7 +15,7 @@ $(document).ready(function(){
     var salasana = '';
     var my_location = '';
     var tag = '000000';
-    var etunti_language = 'Suomi';
+    var etunti_language = 'fi';
 
 
     if(localStorage.getItem('etunti_language'))
