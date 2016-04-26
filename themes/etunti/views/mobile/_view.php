@@ -184,6 +184,25 @@ else
 	</td>
 
 	<td>
+	  <?php 
+	  $asiakas = '';
+	  if(!empty($data->kohdenID))
+	  {
+		$k = Kohteet::model()->findbypk($data->kohdenID);
+		if(isset($k->asiakas_id))
+		{
+			$a = Asiakkaat::model()->findbypk($k->asiakas_id);
+			if(isset($a->id) and !empty($a->yrityksen_nimi))
+			$asiakas = $a->yrityksen_nimi;
+			elseif(isset($a->id) and empty($a->yrityksen_nimi) and !empty($a->yhteyshenkilo))
+			$asiakas = $a->yhteyshenkilo;
+		}
+	  }
+	  echo $asiakas;
+	  ?>
+	</td>
+
+	<td>
 	  <span class="link fa fa-pencil-square-o openkohde" id="<?php echo 'kohttisID_'.$data->id; ?>" for="<?php echo 'kohtval_'.$data->id; ?>" data-toggle="collapse" data-target="<?php echo '#kshow_'.$data->id; ?>"></span>&nbsp;
 
 	  <span id="vaihto_<?php echo 'kohttisID_'.$data->id; ?>">
@@ -193,7 +212,7 @@ else
 	  else
 		echo '<span class="text-danger">'.$data->kohde_kannasta.'</span>';
 	  ?>
-	  </div>
+	  </span>
 
 	  <div style="position:absolute;z-index: 2;" class="collapse" id="<?php echo 'kshow_'.$data->id; ?>">
 	    <div class="well" id="<?php echo 'kohtval_'.$data->id; ?>"></div>
