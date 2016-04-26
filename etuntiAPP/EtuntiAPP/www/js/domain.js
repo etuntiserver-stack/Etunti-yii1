@@ -150,6 +150,8 @@ $("#dm").html('<label>Domain</label>' +
   $('#LangViestinta').text(lang['LangViestinta']);
   $('#olenEksynyt').text(lang['olenEksynyt']);
   $('#LangUusiViesti').text(lang['LangUusiViesti']);
+  $('#LangViesti').text(lang['LangViesti']);
+  $('.lahetaToimistoon').text(lang['lahetaToimistoon']);
 
   /* Asetukset */
   $('#Valitse_kieli').text(lang['Valitse_kieli']);

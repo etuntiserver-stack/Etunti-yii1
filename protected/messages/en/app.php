@@ -18,6 +18,8 @@ return array(
 	'Uusi viesti' => 'New message',
 	'Keskustelu' => 'Chat ID.',
 	'vastaus' => 'answer',
+	'Viesti' => 'Message',
+	'Lähetä viesti toimistoon' => 'Send message',
 
 	/* Asetukset */
 	'Työntekijän sähköposti' => 'E-mail',
