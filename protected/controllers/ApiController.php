@@ -71,6 +71,9 @@ public function actionLang($dom)
 		/* Kamera */
 		'LangKuvienLahettaminen' => Yii::t('app', 'Kuvien lähettäminen'),
 		'Valitse_osoite' => Yii::t('app', 'Valitse osoite'),
+		'fromCamera' => Yii::t('app', 'Ota kuva kameralla'),
+		'fromLibrary' => Yii::t('app', 'Tuo kuva kirjastosta'),
+		'fromAlbum' => Yii::t('app', 'Tuo kuva galleriasta'),
 
 		);
 	    }

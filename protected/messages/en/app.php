@@ -40,6 +40,9 @@ return array(
 
 	/* Kameraa */
 	'Kuvien lähettäminen' => 'Picture sender',
+	'Ota kuva kameralla' => 'From camera',
+	'Tuo kuva kirjastosta' => 'From Photo Library',
+	'Tuo kuva galleriasta' => 'From PhotoAlbum',
 
 	'Valitse kohde työvuorosta' => 'Select object',
 	'Valitse osoite' => 'Select address',

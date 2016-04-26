@@ -160,6 +160,9 @@ $("#dm").html('<label>Domain</label>' +
 
   /*  Kamera */
   $('#LangKuvienLahettaminen').text(lang['LangKuvienLahettaminen']);
+  $('#fromCamera').text(lang['fromCamera']);
+  $('#fromLibrary').text(lang['fromLibrary']);
+  $('#fromAlbum').text(lang['fromAlbum']);
 
 
   $(".aloita").click(function(){

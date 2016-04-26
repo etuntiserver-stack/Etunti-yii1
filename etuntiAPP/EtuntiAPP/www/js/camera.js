@@ -60,7 +60,7 @@ $("#os").keyup(function(){
         $.ajax({
            url: url+'/imei?dom='+domain,
 	   type:'POST',
- 	   data: { check : "osoitevaihto", my_location : my_location, thisKey : thisKey, email : email, salasana : salasana },
+ 	   data: { check : "osoitevaihto", my_location : my_location, thisKey : thisKey, email : email, salasana : salasana, lang : etunti_language },
            success: function(data){
         	console.log(data);
 		//$("#result").val(data);

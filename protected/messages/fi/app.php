@@ -40,6 +40,9 @@ return array(
 
 	/* Kameraa */
 	'Kuvien lähettäminen' => 'Kuvien lähettäminen',
+	'Ota kuva kameralla' => 'Ota kuva kameralla',
+	'Tuo kuva kirjastosta' => 'Tuo kuva kirjastosta',
+	'Tuo kuva galleriasta' => 'Tuo kuva galleriasta',
 
 	'Valitse kohde työvuorosta' => 'Valitse kohde työvuorosta',
 	'Valitse osoite' => 'Valitse osoite',
