@@ -1,5 +1,27 @@
 $(document).ready(function(){
 
+var lang = [];
+
+        $.ajax({
+	   async: false,
+           url: url+'/lang?dom='+domain,
+	   type:'POST',
+ 	   data: { lang : etunti_language },
+           success: function(data){
+		var d = JSON.parse(data);
+
+		$.each(d, function( index, value ) {
+		  lang[index] = value;
+		});
+
+    	},
+    		error:function (xhr, ajaxOptions, thrownError){
+        	console.log(xhr.responseText);
+    	}
+        });
+
+
+
 
   $("#odotta").html("<img src='img/icon.png'>");
   setTimeout(tiedot,1000); 
@@ -42,7 +64,7 @@ $("#os").keyup(function(){
            success: function(data){
         	console.log(data);
 		//$("#result").val(data);
-		$("#getListFromServer").html("<label>Valitse kohde</label><br>" + data + "<br>");
+		$("#getListFromServer").html("<label>"+ lang['Valitse_osoite'] +"</label><br>" + data + "<br>");
 
   		    $("#list").change(function(){
 			$("#os").val($( "#list option:selected" ).text());

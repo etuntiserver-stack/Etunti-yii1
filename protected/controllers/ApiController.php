@@ -67,6 +67,11 @@ public function actionLang($dom)
 		'Valitse_kieli' => Yii::t('app', 'Valitse kieli'),
 		'Asetukset' => Yii::t('app', 'Asetukset'),
 		'tallennaKieli' => Yii::t('app', 'Tallenna kieli'),
+
+		/* Kamera */
+		'LangKuvienLahettaminen' => Yii::t('app', 'Kuvien lähettäminen'),
+		'Valitse_osoite' => Yii::t('app', 'Valitse osoite'),
+
 		);
 	    }
 
@@ -340,7 +345,7 @@ public function actionImei($dom)
 
 		    $sel = '';
 		    $sel .= '<select id="list" class="form-control">';
-		    $sel .= '<option>'.Yii::t('main','Valitse kohde työvuorosta').'</option>';
+		    $sel .= '<option>'.Yii::t('app','Valitse kohde työvuorosta').'</option>';
 		    foreach($tvuoro as $val){
 			$k = Kohteet::model()->findbypk($val->kohde);
 			if(isset($k->osoite))
@@ -628,7 +633,7 @@ public function actionImei($dom)
 	            $kohteet = Kohteet::model()->findAll($criteria);
 
 		    $sel = '<select id="list" class="form-control">';
-		    $sel .= '<option id="valitseOsoite">Valitse osoite</option>';
+		    $sel .= '<option id="valitseOsoite">'.Yii::t('app', 'Valitse osoite').'</option>';
 		    foreach($kohteet as $val)
 		      $sel .= '<option value="'.$val->id.'">'.$val->osoite.'</option>';
 		    $sel .= '</select>';
