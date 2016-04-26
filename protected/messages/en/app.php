@@ -15,7 +15,7 @@ return array(
 	/* Viestinta */		
 	'olenEksynyt' => 'Send your position',
 	'Uusi viesti' => 'New message',
-	'Keskustelu' = > 'Chat ID.',
+	'Keskustelu' => 'Chat ID.',
 
 	/* Asetukset */
 	'Työntekijän sähköposti' => 'E-mail',
