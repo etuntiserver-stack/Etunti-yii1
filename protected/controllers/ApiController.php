@@ -53,7 +53,8 @@ public function actionLang($dom)
 		'osoite' => Yii::t('app', 'Osoite'),
 		'lyhyt_viesti' => Yii::t('app', 'lyhyt_viesti'),
 
-		/* Viestinta */		
+		/* Viestinta */
+		'LangViestinta' => Yii::t('app', 'Viestintä'),
 		'olenEksynyt' => Yii::t('app', 'Lähetä GPS tiedot'),
 		'LangUusiViesti' => Yii::t('app', 'Uusi viesti'),
 

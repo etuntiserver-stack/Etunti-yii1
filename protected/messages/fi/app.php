@@ -12,8 +12,9 @@ return array(
 	'Osoite' => 'Osoite',
 	'lyhyt_viesti' => 'Lyhyt viesti',
 
-	/* Viestinta */		
-	'olenEksynyt' => 'Lähetä GPS tiedot',
+	/* Viestinta */
+	'Viestintä' => 'Viestintä',
+	'Lähetä GPS tiedot' => 'Lähetä GPS tiedot',
 	'Uusi viesti' => 'Uusi viesti',
 	'Keskustelu' => 'Keskustelu nro.',
 

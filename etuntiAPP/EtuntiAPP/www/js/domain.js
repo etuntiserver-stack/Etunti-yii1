@@ -147,6 +147,7 @@ $("#dm").html('<label>Domain</label>' +
   $('#lyhytviesti').attr('placeholder', lang['lyhyt_viesti']);
 
   /* Viestinta */
+  $('#LangViestinta').text(lang['LangViestinta']);
   $('#olenEksynyt').text(lang['olenEksynyt']);
   $('#LangUusiViesti').text(lang['LangUusiViesti']);
 
