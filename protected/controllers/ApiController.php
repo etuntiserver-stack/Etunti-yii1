@@ -394,7 +394,7 @@ public function actionImei($dom)
 		    exit;
 		    }
 
-		    $sel = '<h2>Työvuorot</h2>';
+		    $sel = '<h2>'.Yii::t('app', 'Työvuorot').'</h2>';
 
 		    foreach($tvuoro as $val)
 		    {
