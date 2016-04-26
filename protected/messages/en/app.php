@@ -4,7 +4,7 @@
 return array(
 
 	/* Index */		
-	'TYO' => 'JOB',
+	'TYÖ' => 'JOB',
 	'MATKA' => 'TRAVEL',
 	'LOUNAS' => 'LUNCH TIME',
 	'ALOITA' => 'START',

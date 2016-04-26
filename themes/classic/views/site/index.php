@@ -188,7 +188,7 @@
         <section class="box-action">
             <div class="container">
                 <div class="title">
-                    <!--<p class="lead">Liity nyt testiryhmään ja tienaa 500 €</p>-->
+                    <p class="lead">Tilaa Etunti -uutiskirje</p>
                 </div>
                 <div class="button">
                     <a href="#liitytestaajaksi" >TÄSTÄ</a>
