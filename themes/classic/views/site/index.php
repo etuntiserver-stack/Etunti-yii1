@@ -647,7 +647,7 @@ $kysymykset[] = array(
             <div class="padding-bottom white">
                 <div class="container">
                         <div class="titles-heading">
-                        <h2>Kiitos pilotointitestiryhmään hakeneille
+                        <h2>Tilaa Etunti -uutiskirje
                             <!--<span>
                               <i class="fa fa-star"></i>
                               Vaikuta sovelluksen kehitykseen korvauksen kera
@@ -657,7 +657,8 @@ $kysymykset[] = array(
                         </div>
                     <div class="row">
                         <div class="col-md-6 col-sm-5 padding-bottom">
-<p>Pilotointiin haku on nyt päättynyt ja pilotointiryhmä on täynnä.</p>
+<p>Kiitos pilotointitestiryhmään hakeneille.<br>
+Pilotointiin haku on nyt päättynyt ja pilotointiryhmä on täynnä.</p>
 <p>Mikäli olet kiinnostunut Etunti -ohjelmasta, jätä yhteystietosi viereiseen yhteystiedot kenttään, niin otamme yhteyttä.</p>
 
 <p style="background: #ddd;">Etsimme vielä muutamia pilottiasiakkaita osallistumaan Etunti- ohjelman viimeistelyyn. Saat aktiivisesta mukanaolostasi 500 € ja Etunti -ohjelman käyttöösi veloituksetta kolmeksi kuukaudeksi. 
