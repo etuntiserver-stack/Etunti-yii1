@@ -53,7 +53,8 @@ public function actionLang($dom)
 		'osoite' => Yii::t('app', 'Osoite'),
 		'lyhyt_viesti' => Yii::t('app', 'lyhyt_viesti'),
 
-		/* Viestinta */		
+		/* Viestinta */
+		'LangViestinta' => Yii::t('app', 'Viestintä'),
 		'olenEksynyt' => Yii::t('app', 'Lähetä GPS tiedot'),
 		'LangUusiViesti' => Yii::t('app', 'Uusi viesti'),
 
@@ -556,7 +557,7 @@ public function actionImei($dom)
             			    <div class="input-group">
 			              <input type="text" class="form-control form-input" id="vastaus_'.$val->id.'">
 			              <div class="input-group-btn">
-			                <button class="viesti btn btn-primary btn-group" id="'.$val->id.'">vastaus</button>
+			                <button class="viesti btn btn-primary btn-group" id="'.$val->id.'">'.Yii::t('app', 'vastaus').'</button>
 			              </div>
 			            </div>
 

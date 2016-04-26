@@ -12,10 +12,12 @@ return array(
 	'Osoite' => 'Address',
 	'lyhyt_viesti' => 'Short message',
 
-	/* Viestinta */		
-	'olenEksynyt' => 'Send your position',
+	/* Viestinta */
+	'Viestintä' => 'Communication',
+	'Lähetä GPS tiedot' => 'Send your position',
 	'Uusi viesti' => 'New message',
 	'Keskustelu' => 'Chat ID.',
+	'vastaus' => 'answer',
 
 	/* Asetukset */
 	'Työntekijän sähköposti' => 'E-mail',
