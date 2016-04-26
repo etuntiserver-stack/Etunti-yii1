@@ -51,7 +51,7 @@ function set(){
         $.ajax({
            url: url+'/imei?dom='+domain,
 	   type:'POST',
- 	   data: { check : "viestinta", my_location : my_location, email : email, salasana : salasana },
+ 	   data: { check : "viestinta", my_location : my_location, email : email, salasana : salasana, lang : etunti_language },
            success: function(data){
         	//console.log(data);
 

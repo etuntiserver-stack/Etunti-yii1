@@ -4,13 +4,18 @@
 return array(
 
 	/* Index */		
-	'TYÖ' => 'JOB',
-	'MATKA' => 'TRAVEL',
-	'LOUNAS' => 'LUNCH TIME',
+	'TYÖ' => 'WORK',
+	'MATKA' => 'TRIP',
+	'LOUNAS' => 'LUNCH',
 	'ALOITA' => 'START',
 	'LOPETA' => 'FINISH',
 	'Osoite' => 'Address',
 	'lyhyt_viesti' => 'Short message',
+
+	/* Viestinta */		
+	'olenEksynyt' => 'Send your position',
+	'Uusi viesti' => 'New message',
+	'Keskustelu' = > 'Chat ID.',
 
 	/* Asetukset */
 	'Työntekijän sähköposti' => 'E-mail',

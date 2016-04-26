@@ -53,6 +53,10 @@ public function actionLang($dom)
 		'osoite' => Yii::t('app', 'Osoite'),
 		'lyhyt_viesti' => Yii::t('app', 'lyhyt_viesti'),
 
+		/* Viestinta */		
+		'olenEksynyt' => Yii::t('app', 'Lähetä GPS tiedot'),
+		'LangUusiViesti' => Yii::t('app', 'Uusi viesti'),
+
 		/* Asetukset */
 		'tyontekijan_sahkoposti' => Yii::t('app', 'Työntekijän sähköposti'),
 		'tyontekijan_salasana' => Yii::t('app', 'Työntekijän salasana'),
@@ -184,7 +188,8 @@ public function actionImei($dom)
         // Get an instance of the respective model
         case 'mob':
 
-
+	    if(isset($_POST['lang']))
+	  	$_SESSION['lang'] = $_POST['lang'];
 
 	    if(isset($_POST['imei']) and !isset($_POST['salasana']))
 	    {
@@ -541,7 +546,7 @@ public function actionImei($dom)
   			$admin = $val->admin;
 
 		     	$sel .= '<div class="well">
-				  <p>'.$cl.' <b>Keskustelu nro.: '.$val->id.'</b></p>
+				  <p>'.$cl.' <b>'.Yii::t('app', 'Keskustelu').': '.$val->id.'</b></p>
 				  <span class="text" id="text_'.$val->id.'">'.str_replace("\n","<br>",$val->viesti).'</span><br>';
 
 				  if(isset($exAdmin[0]) and !empty($exAdmin[0])){
