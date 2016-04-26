@@ -37,6 +37,12 @@ return array(
 	'Valitse kieli' => 'Choose language',
 	'Asetukset' => 'Settings',
 	'Tallenna kieli' => 'Save language',
+
+	/* Kameraa */
+	'Kuvien lähettäminen' => 'Picture sender',
+
+	'Valitse kohde työvuorosta' => 'Select object',
+	'Valitse osoite' => 'Select address',
 );
 
 ?>

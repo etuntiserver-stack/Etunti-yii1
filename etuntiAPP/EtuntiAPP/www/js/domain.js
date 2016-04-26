@@ -158,7 +158,8 @@ $("#dm").html('<label>Domain</label>' +
   $('#Asetukset').text(lang['Asetukset']);
   $('#tallennaKieli').text(lang['tallennaKieli']);
 
-
+  /*  Kamera */
+  $('#LangKuvienLahettaminen').text(lang['LangKuvienLahettaminen']);
 
 
   $(".aloita").click(function(){
