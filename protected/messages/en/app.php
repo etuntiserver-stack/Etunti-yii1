@@ -9,6 +9,8 @@ return array(
 	'LOUNAS' => 'LUNCH TIME',
 	'ALOITA' => 'START',
 	'LOPETA' => 'FINISH',
+	'Osoite' => 'Address',
+	'lyhyt_viesti' => 'Short message',
 
 	/* Asetukset */
 	'Työntekijän sähköposti' => 'E-mail',

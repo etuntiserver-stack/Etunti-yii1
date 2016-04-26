@@ -9,6 +9,8 @@ return array(
 	'LOUNAS' => 'LOUNAS',
 	'ALOITA' => 'ALOITA',
 	'LOPETA' => 'LOPETA',
+	'Osoite' => 'Osoite',
+	'lyhyt_viesti' => 'Lyhyt viesti',
 
 	/* Asetukset */
 	'Työntekijän sähköposti' => 'Työntekijän sähköposti',

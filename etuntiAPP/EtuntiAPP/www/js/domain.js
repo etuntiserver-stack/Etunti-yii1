@@ -143,6 +143,8 @@ $("#dm").html('<label>Domain</label>' +
   $('#butTyo').text(lang['TYO']);
   $('#butMatka').text(lang['MATKA']);
   $('#butLounas').text(lang['LOUNAS']);
+  $('#os').attr('placeholder', lang['Osoite']);
+  $('#lyhytviesti').attr('placeholder', lang['lyhyt_viesti']);
 
 
   /* Asetukset */
