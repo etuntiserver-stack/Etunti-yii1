@@ -107,6 +107,18 @@
                             </label>
                           </label>
                         </div>
+
+                        <div class="section">
+                          <label class="field prepend-icon">
+
+   			    <input type="text" class="gui-input" name="laskuosoite" value="<?php if(isset($_POST['laskuosoite'])) echo $_POST['laskuosoite']; ?>" placeholder="<?php echo Yii::t('main', 'Osoite'); ?>">
+
+                            <label for="firstname" class="field-icon">
+                              <i class="fa fa-bookmark"></i>
+                            </label>
+                          </label>
+                        </div>
+
                       </div>
                       <div class="col-md-2">
                         <div class="section">
@@ -146,7 +158,7 @@
                       </div>
 
                       <div class="col-md-2">
-        	        <button class="btn btn-primary btn-lg haemob btn-block myBgColors" type="button"><i class="glyphicon glyphicon-search"> </i> Hae</button>
+        	        <input type="submit" class="btn btn-primary btn-lg haemob btn-block myBgColors" value="<?php echo Yii::t('main', 'Hae'); ?>">
 		      </div>
                     </div>
 
@@ -169,6 +181,7 @@
   <tr>
   <th><?php echo Yii::t('main', 'Nro.'); ?></th>
   <th><?php echo Yii::t('main', 'Asiakas'); ?></th>
+  <th><?php echo Yii::t('main', 'Osoite'); ?></th>
   <th><?php echo Yii::t('main', 'Viitenumero'); ?></th>
   <th><?php echo Yii::t('main', 'Luotu'); ?></th>
   <th><?php echo Yii::t('main', 'Tilanne'); ?></th>

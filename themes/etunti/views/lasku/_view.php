@@ -19,6 +19,9 @@
 		<?php echo $asiakas; ?>
 	</td>
 	<td>
+		<?php echo $data->osoite; ?>
+	</td>
+	<td>
 		<?php echo $data->viitenumero; ?>
 	</td>
 	<td>
