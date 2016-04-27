@@ -51,6 +51,24 @@
                         </div>
                       </div>
 
+                      <div class="col-md-2">
+                        <div class="section">
+                          <label class="field select">
+
+ 		<?php
+		echo CHtml::dropDownList('myyja', 'myyja', 
+		CHtml::listData(Administrators::model()->findAll(), 'id', 'adm_nimi'),
+		array('empty'=>'Valitse myyjä','class'=>'gui-input'));
+		
+        	?>
+
+                            <label for="firstname" class="field-icon">
+                              <i class="arrow double"></i>
+                            </label>
+                          </label>
+                        </div>
+                      </div>
+
 
                       <div class="col-md-2">
         	        <button class="btn btn-primary btn-lg haemob btn-block myBgColors" type="button"><i class="glyphicon glyphicon-search"> </i> Luo lista</button>
@@ -91,6 +109,7 @@
   <?php 
 if(isset($data) and isset($_POST['ryhma']))
 {
+
   foreach($data as $m)
   {
     echo '
