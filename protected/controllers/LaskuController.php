@@ -867,6 +867,8 @@ exit;
 		if(isset($_POST['viitenumero']) and !empty(trim($_POST['viitenumero'])))
 	        $criteria->addCondition (" viitenumero LIKE '%".$_POST['viitenumero']."%' ");
 
+		if(isset($_POST['laskuosoite']) and !empty(trim($_POST['laskuosoite'])))
+	        $criteria->addCondition (" osoite LIKE '%".$_POST['laskuosoite']."%' ");
 
 		// POSTITA Luotu
 		if(isset($_POST['tilaLaskulle']) and $_POST['tilaLaskulle'] == 1 
