@@ -90,12 +90,23 @@ class SiteController extends Controller
 
 		$data = array();
 
-	 	if(isset($_POST['ryhma']))
+	 	if(isset($_POST) and (!empty($_POST['ryhma']) or !empty($_POST['myyja'])))
 		{
        			$criteria = new CDbCriteria();
-       			$criteria->condition = " ryhma='".trim($_POST['ryhma'])."' ";
+
+			if(!empty($_POST['ryhma']))
+       			$criteria->addCondition ( " ryhma='".trim($_POST['ryhma'])."' " );
+
+			if(!empty($_POST['myyja']))
+       			$criteria->addCondition ( " myyja='".trim($_POST['myyja'])."' " );
+
+
 			$a = Asiakkaat::model()->findAll($criteria);
 			foreach($a as $asiakas)
+			{
+				$m = Administrators::model()->findbypk($asiakas->myyja);
+				if(isset($m->adm_nimi)) $myyja = $m->adm_nimi; else $myyja = '';
+
 				$data[] = array(
 					'Asiakkaat', 
 					$asiakas->yrityksen_nimi, 
@@ -104,23 +115,35 @@ class SiteController extends Controller
 					$asiakas->kaupunki,
 					$asiakas->puhelin,
 					$asiakas->sahkoposti,
-					$asiakas->myyja,
+					$myyja,
 				);
+			}
 
        			$criteria = new CDbCriteria();
-       			$criteria->condition = " ryhma='".trim($_POST['ryhma'])."' ";
-			$a = Yhteystiedot::model()->findAll($criteria);
-			foreach($a as $asiakas)
+
+			if(!empty($_POST['ryhma']))
+       			$criteria->addCondition ( " ryhma='".trim($_POST['ryhma'])."' " );
+
+			if(!empty($_POST['myyja']))
+       			$criteria->addCondition ( " myyja='".trim($_POST['myyja'])."' " );
+
+			$y = Yhteystiedot::model()->findAll($criteria);
+			foreach($y as $asiakas)
+			{
+				$m = Administrators::model()->findbypk($asiakas->myyja);
+				if(isset($m->adm_nimi)) $myyja = $m->adm_nimi; else $myyja = '';
+
 				$data[] = array(
-					'Asiakkaat', 
+					'Yhteystiedot', 
 					$asiakas->yrityksen_nimi, 
 					$asiakas->yhteyshenkilo, 
 					$asiakas->osoite,
 					$asiakas->postitoimipaikka,
 					$asiakas->puhelin,
 					$asiakas->sahkoposti,
-					$asiakas->myyja,
+					$myyja,
 				);
+			}
 
 		}
 
