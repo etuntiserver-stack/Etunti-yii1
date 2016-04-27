@@ -696,6 +696,10 @@
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/yhteystiedot/index">
                   <span class="fa fa-clock-o"></span> <?php echo Yii::t('main', 'Yhteystiedot'); ?></a>
               </li>
+              <li>
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/site/kohderyhma">
+                  <span class="fa fa-clock-o"></span> <?php echo Yii::t('main', 'Kohderyhmä'); ?></a>
+              </li>
             </ul>
           </li>
 	<?php endif; ?>
@@ -716,6 +720,7 @@
 
       <!-- Start: Topbar-Dropdown -->
       <div id="topbar-dropmenu">
+
         <div class="topbar-menu row">
           <div class="col-xs-4 col-sm-2">
             <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/mobile/index" class="metro-tile">

@@ -29,7 +29,7 @@ class SiteController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', 
-				'actions'=>array('etusivu','ohjesivu','etusivu_esimerki', 'change_color', 'valiko', 'valiko_ajax'),
+				'actions'=>array('etusivu','ohjesivu','etusivu_esimerki', 'change_color', 'valiko', 'valiko_ajax', 'kohderyhma'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('allow', 
@@ -84,6 +84,48 @@ class SiteController extends Controller
 		return  number_format((float)$val/3600, 2, '.', '');
 	}
 
+
+	public function actionKohderyhma()
+	{
+
+		$data = array();
+
+	 	if(isset($_POST['ryhma']))
+		{
+       			$criteria = new CDbCriteria();
+       			$criteria->condition = " ryhma='".trim($_POST['ryhma'])."' ";
+			$a = Asiakkaat::model()->findAll($criteria);
+			foreach($a as $asiakas)
+				$data[] = array(
+					'Asiakkaat', 
+					$asiakas->yrityksen_nimi, 
+					$asiakas->yhteyshenkilo, 
+					$asiakas->osoite,
+					$asiakas->kaupunki,
+					$asiakas->puhelin,
+					$asiakas->sahkoposti,
+					$asiakas->myyja,
+				);
+
+       			$criteria = new CDbCriteria();
+       			$criteria->condition = " ryhma='".trim($_POST['ryhma'])."' ";
+			$a = Yhteystiedot::model()->findAll($criteria);
+			foreach($a as $asiakas)
+				$data[] = array(
+					'Asiakkaat', 
+					$asiakas->yrityksen_nimi, 
+					$asiakas->yhteyshenkilo, 
+					$asiakas->osoite,
+					$asiakas->postitoimipaikka,
+					$asiakas->puhelin,
+					$asiakas->sahkoposti,
+					$asiakas->myyja,
+				);
+
+		}
+
+		$this->render('kohderyhma', array('data'=>$data));
+	}
 
 	public function actionValiko()
 	{

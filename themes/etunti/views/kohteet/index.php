@@ -48,7 +48,7 @@
        				<option value="kaikki">Kaikki</option>
 			   </select>
 
-
+                            <label for="firstname" class="field-icon">
                             <i class="arrow double"></i>
                             </label>
                           </label>
