@@ -60,6 +60,7 @@ th{
      <form action="#" target="_blank" method="POST">
       <input type="hidden" name="from" value="<?php echo $from; ?>">
       <input type="hidden" name="to" value="<?php echo $to; ?>">
+      <input type="hidden" name="asiakasLaskulle" value="<?php echo $_POST['asiakasLaskulle']; ?>">
       <input type="submit" name="tulosta" class="btn btn-default btn-sm" value="PDF">
      </form>
      </div>
