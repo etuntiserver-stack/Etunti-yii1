@@ -693,8 +693,8 @@
             </a>
             <ul class="nav sub-nav">
               <li>
-                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/tarjoukset/index">
-                  <span class="fa fa-clock-o"></span> <?php echo Yii::t('main', 'Tarjoukset'); ?></a>
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/yhteystiedot/index">
+                  <span class="fa fa-clock-o"></span> <?php echo Yii::t('main', 'Yhteystiedot'); ?></a>
               </li>
             </ul>
           </li>
