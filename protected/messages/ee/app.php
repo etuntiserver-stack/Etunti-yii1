@@ -5,10 +5,10 @@ return array(
 
 	/* Index */		
 	'TYÖ' => 'TÖÖ',
-	'MATKA' => 'LIIGU',
-	'LOUNAS' => 'LÕUNAS',
-	'ALOITA' => 'ALOITUS',
-	'LOPETA' => 'LOPETA',
+	'MATKA' => 'MATK',
+	'LOUNAS' => 'LÕUNA',
+	'ALOITA' => 'ALUSTA',
+	'LOPETA' => 'LÕPETA',
 	'Osoite' => 'Aadress',
 	'lyhyt_viesti' => 'Lũhike sõnum',
 
@@ -23,12 +23,12 @@ return array(
 
 	/* Työvuorot */
 	'Työvuorot' => 'Töögraafikud',
-	'Päivämäärä' => 'Päev',
+	'Päivämäärä' => 'Kuupäev',
 	'Klo' => 'Kl',
 	'Kesto' => 'Aeg',
 
 	/* Tehty */
-	'Tänään tekemasi työt' => 'Tänä tehdud tööd',
+	'Tänään tekemasi työt' => 'Täna tehdud tööd',
 
 	/* Asetukset */
 	'Työntekijän sähköposti' => 'Töölise email',
@@ -39,7 +39,7 @@ return array(
 	'Tallenna kieli' => 'Salvesta keel',
 
 	/* Kameraa */
-	'Kuvien lähettäminen' => 'Lähetä foto',
+	'Kuvien lähettäminen' => 'Saada foto',
 	'Ota kuva kameralla' => 'Võta foto kaamerast',
 	'Tuo kuva kirjastosta' => 'Too foto raamatukogust',
 	'Tuo kuva galleriasta' => 'Too foto galleriist',
