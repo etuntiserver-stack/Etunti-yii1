@@ -1,0 +1,157 @@
+<?php
+
+?>
+
+        <!-- begin: .tray-center -->
+        <div class="tray-center">
+
+
+              <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-home"></i> <?php echo Yii::t('main', 'Yhteystiedot'); ?> 
+		<?php echo CHtml::link('',Yii::app()->request->baseUrl.'/index.php/yhteystiedot/create',array('class'=>'btn btn-default fa fa-plus')); ?></h2>
+
+
+
+   	    <form id="mobForm" action="#" class="form-inline" method="POST">
+   	    <input type="hidden" name="mob_hae">
+
+            <div class="admin-form">
+              <div class="panel heading-border">
+                <div class="panel-body">
+
+                    <!-- Input Icons -->
+                    <div class="row">
+
+                      <div class="col-md-2">
+
+                        <div class="section">
+                          <label class="field prepend-icon">
+
+   			    <input type="text" class="gui-input" name="osoite" value="<?php if(isset($_POST['osoite'])) echo $_POST['osoite']; ?>" placeholder="Osoite..">
+
+                            <label for="firstname" class="field-icon">
+                              <i class="fa fa-user"></i>
+                            </label>
+                          </label>
+                        </div>
+                      </div>
+
+                      <div class="col-md-2">
+                        <div class="section">
+                          <label class="field prepend-icon">
+
+   			    <input type="text" class="gui-input" name="yrityksen_nimi" value="<?php if(isset($_POST['yrityksen_nimi'])) echo $_POST['yrityksen_nimi']; ?>" placeholder="Yritys..">
+
+                            <label for="firstname" class="field-icon">
+                              <i class="fa fa-user"></i>
+                            </label>
+                          </label>
+                        </div>
+                      </div>
+
+
+                      <div class="col-md-2">
+                        <div class="section">
+                          <label class="field prepend-icon">
+
+   			    <input type="text" class="gui-input" name="yhteyshenkilo" value="<?php if(isset($_POST['yhteyshenkilo'])) echo $_POST['yhteyshenkilo']; ?>" placeholder="Yhteyshenkilö">
+
+                            <label for="firstname" class="field-icon">
+                              <i class="fa fa-user"></i>
+                            </label>
+                          </label>
+                        </div>
+                      </div>
+                      <div class="col-md-2">
+                        <div class="section">
+                          <label class="field prepend-icon">
+
+   			    <input type="text" name="puhelin"  class="gui-input" value="<?php if(isset($_POST['puhelin'])) echo $_POST['puhelin']; ?>" placeholder="Puhelin">
+                            <label for="firstname" class="field-icon">
+                              <i class="fa fa-phone"></i>
+                            </label>
+                          </label>
+                        </div>
+                      </div>
+
+                      <div class="col-md-2">
+                        <div class="section">
+                          <label class="field prepend-icon">
+
+   			    <input type="text" name="sahkoposti" class="gui-input" value="<?php if(isset($_POST['sahkoposti'])) echo $_POST['sahkoposti']; ?>" placeholder="<?php echo Yii::t('main','Sähköposti'); ?>">
+                            <label for="firstname" class="field-icon">
+                              <i class="fa fa-at"></i>
+                            </label>
+                          </label>
+                        </div>
+                      </div>
+
+                      <div class="col-md-2">
+        	        <input type="submit" class="btn btn-primary btn-lg haemob btn-block myBgColors" value="Hae">
+		      </div>
+
+                    </div>
+
+
+
+                </div>
+              </div>
+            </div>
+
+	    </form>
+
+
+        <!-- loppu: .tray-center -->
+        </div>
+
+
+  <div class="panel heading-border">
+   <div class="panel-body">
+
+<div class="table-responsive">
+  <table class="table table-striped" id="mobileTable">
+  <thead class="myBgColors">
+  <tr>
+  <th><?php echo Yii::t('main', 'Asiakas'); ?></th>
+  <th><?php echo Yii::t('main', 'Osoite'); ?></th>
+  <th><?php echo Yii::t('main', 'Yhteyshenkilo'); ?></th>
+  <th><?php echo Yii::t('main', 'Postinumero'); ?></th>
+  <th><?php echo Yii::t('main', 'Puhelin'); ?></th>
+  <th><?php echo Yii::t('main', 'Sähköposti'); ?></th>
+  <th><?php echo Yii::t('main', 'Tyyppi'); ?></th>
+  <th></th>
+  </tr>
+  </thead>
+  <?php $this->widget('zii.widgets.CListView', array(
+	'dataProvider'=>$dataProvider,
+	'itemView'=>'_view',
+  	'template'=>'{items}<table class="table table-striped table-condensed"></table><br/>{pager}',
+
+
+	'pager' => array(
+           'firstPageLabel'=>'<<',
+           'prevPageLabel'=>'< Edellinen',
+           'nextPageLabel'=>'Seuraava >',
+           'lastPageLabel'=>'>>',
+           //'maxButtonCount'=>'10',
+           'header'=>'<h3>Siirry sivulle:</h3>',
+           'cssFile'=>false,
+       ), 
+
+  )); ?>
+  </table>
+</div>
+
+   </div>
+  </div>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+
+
+$(".haemob").click(function(){
+	$("#mobForm").submit();
+});
+
+});
+</script>

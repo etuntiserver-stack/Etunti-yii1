@@ -21,7 +21,11 @@
 		$tuotteet = array(0=>'Onlinevaraus tuotteet taulu',1=>'Luo tuote',2=>'Muoka tuote',3=>'Poista tuote');
 		$array['onlineTuotteet'] = $tuotteet;
 	}
-
+	if(isset(Yii::app()->user->adminID) and in_array('5',$tas))
+	{
+		$yhteystiedot = array(0=>'Yhteystiedot taulu',1=>'Luo yhteystieto',2=>'Muokaa yhteystieto',3=>'Poista yhteystieto');
+		$array['yhteystiedot'] = $yhteystiedot;
+	}
 
 ?>
 

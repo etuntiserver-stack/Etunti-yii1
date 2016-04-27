@@ -11,7 +11,7 @@
 		<?php echo $data->osoite; ?>
 	</td>
 	<td>
-		<?php echo $this->asiakasMuutosTheme($data->yhteyshenkilo); ?>
+		<?php echo $this->asiakasMuutosTheme($data->id); ?>
 	</td>
 	<td>
 		<?php echo $data->postinumero; ?>
