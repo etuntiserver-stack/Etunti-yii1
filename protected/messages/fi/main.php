@@ -203,8 +203,7 @@ return array(
 'Matkat' => 'Matkat',
 'Työtunnit' => 'Työtunnit',
 'Ilta' => 'Ilta',
-'Iltatunnit yht' => 'Iltamatka+
-Iltatunnit yht',
+'Iltatunnit yht' => 'Iltamatka+ Iltatunnit yht',
 'Yö' => 'Yö',
 'Su' => 'Su',
 'PY' => 'PY',

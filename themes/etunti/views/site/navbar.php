@@ -561,7 +561,7 @@
 	<?php if(in_array('2',$tas)) : ?>
           <li>
             <a class="accordion-toggle" href="#">
-              <span class="fa fa-clock-o"></span>
+              <span class="fa fa-calendar-check-o"></span>
               <span class="sidebar-title"><?php echo Yii::t('main', 'Työvuorot'); ?></span>
               <span class="caret"></span>
             </a>
@@ -683,6 +683,22 @@
           </li>
 	<?php endif; ?>
 
+
+	<?php if(in_array('5',$tas)) : ?>
+          <li>
+            <a class="accordion-toggle" href="#">
+              <span class="fa fa-users"></span>
+              <span class="sidebar-title"><?php echo Yii::t('main', 'CRM'); ?></span>
+              <span class="caret"></span>
+            </a>
+            <ul class="nav sub-nav">
+              <li>
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/tarjoukset/index">
+                  <span class="fa fa-clock-o"></span> <?php echo Yii::t('main', 'Tarjoukset'); ?></a>
+              </li>
+            </ul>
+          </li>
+	<?php endif; ?>
 
             </ul>
           </li>
