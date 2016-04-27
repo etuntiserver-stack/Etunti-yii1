@@ -773,6 +773,7 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 			and $model->tilanne != 999
 		) : ?>
 		<a href="finvoice?id=<?php echo $model->id; ?>&mitatointi=true" class="btn  btn-success btn-group myBgColors"><?php echo Yii::t('main','Mitätöi'); ?></a>
+		<a href="finvoice?id=<?php echo $model->id; ?>&kopio=true" class="btn  btn-success btn-group myBgColors"><?php echo Yii::t('main','Kopio'); ?></a>
 		<?php endif; ?>
 
 

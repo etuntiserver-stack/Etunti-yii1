@@ -5,6 +5,40 @@ if(isset($_GET['id']))
 
 
 
+if(isset($_GET['kopio'])){
+
+     $tapahtumapvm = date("Y-m-d H:i:s");
+     $l = Lasku::model()->findbypk($id);
+
+     $uusi = new Lasku;
+     $uusi->attributes = $l->attributes;
+     $uusi->paivays = date("Y-m-d");
+     $uusi->erapaiva = date("Y-m-d", strtotime("+".$l->maksuehto." day"));
+     $uusi->save();
+
+     $lr = LaskunRivit::model()->findAll(" lid='".$id."' ");
+     foreach($lr as $rivi)
+     {
+
+     $uusiR = new LaskunRivit;
+     $uusiR->attributes = $rivi->attributes;
+     $uusiR->lid = $uusi->id;
+     $uusiR->save();
+
+     }
+
+
+		    $historia = new LaskuHistoria;
+		    $historia->time = $tapahtumapvm;
+		    $historia->lid = $uusi->id;
+		    $historia->status = 'Lasku luotu';
+		    $historia->palvelu = "local";
+		    $historia->yht_euro = $l->yhteensa_total;
+		    $historia->save();
+
+	$this->redirect(array('update','id'=>$uusi->id));
+}
+
 
 if(isset($_GET['merkitseMaksetuksi'])){
 
