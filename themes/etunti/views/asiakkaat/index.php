@@ -135,6 +135,10 @@
   <th><?php echo Yii::t('main', 'Puhelin'); ?></th>
   <th><?php echo Yii::t('main', 'Sähköposti'); ?></th>
   <th><?php echo Yii::t('main', 'Tyyppi'); ?></th>
+<?php
+	if($this->tas(2))
+		echo '<th>'.Yii::t('main', 'Työvuorot').'</th>';
+?>
   <th></th>
   </tr>
   </thead>

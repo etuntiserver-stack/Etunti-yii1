@@ -59,13 +59,53 @@ if(isset($ad->adm_nimi))
 
 		  } else {
 
+
+   // Toimialue
+   $list = array();
+   $criteria = new CDbCriteria();
+   $criteria->order = " select_type ";
+   $criteria->condition = " select_type='tyo_toimialue' ";
+   $l = Valikkoot::model()->findAll($criteria);
+   foreach($l as $v)
+   $list[$v->value] = $v->value;
+
+   echo CHtml::dropDownList('siivous', 'siivous', $list,
+   array('empty'=>Yii::t('main', 'Toimialue'),'class'=>'form-control form-group','id'=>'tekijanToimialue'));
+
+
+
 		  echo $form->labelEx($model,'tekija').'<br>';
         	  $list = CHtml::listData(Tyontekijat::model()->findAll(array('order' => 'tekijan_nimi')), 'id', 'tekijan_nimi');
         	  echo $form->dropDownList($model, 'tekija', $list,array('class'=>'form-control', 'multiple'=>'yes'));
 
-echo "
+?>
 <script>
 $(document).ready(function(){
+
+
+$(document).delegate("#tekijanToimialue","change",function(){
+
+	var tekijanToimialue = $(this).val();
+
+
+        $.ajax({
+           url: 'toimialue',
+           type: "POST",
+           data: { "tekijanToimialue" : tekijanToimialue },
+           success: function(data){
+		var d = JSON.parse(data);
+		console.log(d);
+
+		$("#Viestinta_tekija").val(d);
+		// Then refresh
+		$("#Viestinta_tekija").multiselect("refresh");
+
+           }
+        });
+
+});
+
+
 
 $('#Viestinta_tekija').multiselect({
 	//inheritClass: true,
@@ -78,7 +118,8 @@ $('#Viestinta_tekija').multiselect({
 });
 
 });
-</script>";
+</script>
+<?php
 
 
 		  }
