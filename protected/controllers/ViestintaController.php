@@ -29,7 +29,7 @@ class ViestintaController extends Controller
 		return array(
 
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','vastaanotettu', 'get_viestit'),
+				'actions'=>array('admin','delete','create','update','index','view','vastaanotettu', 'get_viestit', 'toimialue'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -67,6 +67,32 @@ class ViestintaController extends Controller
                 }
                 parent::init();
         }
+
+
+	public function actionToimialue()
+	{
+
+		if(isset($_POST['tekijanToimialue']))
+		{
+			$tekijanToimialue = $_POST['tekijanToimialue'];
+			$criteria=new CDbCriteria;
+
+			if(!empty($tekijanToimialue))
+			{
+			$criteria->addCondition("
+				tyo_toimialue='".$tekijanToimialue."' 
+			");
+			}
+
+			$tv = Tyontekijat::model()->findAll($criteria);
+			$t = array();
+			foreach($tv as $data)
+			$t[] = $data->id;
+
+			echo json_encode($t);
+		}
+
+	}
 
 	public function actionGet_viestit()
 	{

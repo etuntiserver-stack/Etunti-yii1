@@ -28,7 +28,7 @@ class AsiakkaatController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view', 'checkLastAsiakasID'),
+				'actions'=>array('admin','delete','create','update','index','view', 'checkLastAsiakasID', 'showshift'),
                 		//'expression'=>"Yii::app()->user->username == 'roman'",
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
@@ -64,6 +64,65 @@ class AsiakkaatController extends Controller
         }
 
 
+	protected function sprint($val){
+	    if($val > 0)
+		return sprintf('%02d:%02d', $val/3600, ($val % 3600)/60);
+	}
+
+	public function actionShowshift($id)
+	{
+
+       		$criteria = new CDbCriteria();
+	        $criteria->order = " DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') ASC ";
+/*
+        	$criteria->condition = "DATE(paivays) BETWEEN 
+			asiakas_id='".$id."'
+		";
+*/
+		$from = date("Y-m-d");
+		$to = date("Y-m-d", strtotime("+1 month"));
+
+		if(isset($_POST['from']) and isset($_POST['to'])){
+		$from 	= date("Y-m-d",strtotime($_POST['from']));
+		$to 	= date("Y-m-d",strtotime($_POST['to']));
+		}
+
+
+        	$criteria->addCondition ("
+			kohde IN 
+			(SELECT id FROM sivex_kohdet 
+			   WHERE asiakas_id='".$id."'
+			)
+		AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$from."' AND '".$to."'
+		");
+
+
+		$model=Tyovuoroot::model()->findAll($criteria);
+
+		if(isset($_POST['tulosta'])){
+
+	          $html2pdf = Yii::app()->ePdf->HTML2PDF('P', 'A4', 'en');
+		  $html2pdf->setDefaultFont('Arial');
+	          $html2pdf->WriteHTML($this->renderPartial('showshift', 
+			array(
+			'model'=>$model,
+			'from'=>$from,
+			'to'=>$to,
+			'id'=>$id,
+			),true));
+	          $html2pdf->Output();
+
+		} else {
+
+		$this->render('showshift',array(
+			'model'=>$model,
+			'from'=>$from,
+			'to'=>$to,
+			'id'=>$id,
+		));
+
+		}
+	}
 
 	public function actionCheckLastAsiakasID()
 	{
@@ -278,6 +337,16 @@ class AsiakkaatController extends Controller
 		    $return = '<b class="text-success">Yritys</b><br>'.$return;
 
             	return $return;
+	}
+
+	protected function tas($tasnro)
+	{
+		if(isset(Yii::app()->user->adminPaketti))
+		$tas = explode(",",Yii::app()->user->adminPaketti);
+		if(isset(Yii::app()->user->adminID) and in_array($tasnro,$tas))
+		return true;
+		else
+		return false;
 	}
 
 }

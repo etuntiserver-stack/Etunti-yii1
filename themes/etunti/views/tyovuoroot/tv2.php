@@ -192,6 +192,11 @@ td .tp{
    echo CHtml::dropDownList('siivous', 'siivous', $list,
    array('empty'=>Yii::t('main', 'Työnimike kohteet'),'class'=>'form-control form-group','id'=>'siivousTyonimike'));
 
+   ?>
+   <input type="text" name="from" id="from" size="10" class="form-control form-group datepicker" value="<?php echo Yii::app()->session['from']; ?>" placeholder="<?php echo Yii::t('main' ,'Päivämäärä'); ?>">
+   <input type="text" name="to" id="to" size="10" class="form-control form-group datepicker" value="<?php echo Yii::app()->session['to']; ?>" placeholder="<?php echo Yii::t('main' ,'Päivämäärä'); ?>">
+
+  <?php
 
    //
    $criteria = new CDbCriteria();
@@ -207,10 +212,7 @@ td .tp{
        	 echo '<option value="'.$key.'">'.$val.'</option>';
     }
     echo '</select>';
-
-   ?>
-   <input type="text" name="from" id="from" size="10" class="form-control form-group datepicker" value="<?php echo Yii::app()->session['from']; ?>" placeholder="<?php echo Yii::t('main' ,'Päivämäärä'); ?>">
-   <input type="text" name="to" id="to" size="10" class="form-control form-group datepicker" value="<?php echo Yii::app()->session['to']; ?>" placeholder="<?php echo Yii::t('main' ,'Päivämäärä'); ?>">
+  ?>
 
    <input type="submit" class="btn btn-primary" value="<?php echo Yii::t('main', 'haku'); ?>">
    </form>
