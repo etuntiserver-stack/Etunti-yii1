@@ -558,19 +558,29 @@ class TyovuorootController extends Controller
 
 		  $i=0; 
 		  $var = 0;
-		  if(($v == 2 or $v == 4 ) and date('W',$startdate)%2 == 1)
+		  if($v == 2 and date('W',$startdate)%2 == 1)
 		  $var = 1;
-
+		  elseif($v == 4 and date('W',$startdate)%2 == 0)
+		  $var = 2;
+		  elseif($v == 4 and date('W',$startdate)%2 == 1)
+		  $var = 1;
+		  elseif($v == 3 and date('W',$startdate)%3 == 1)
+		  $var = 1;
+		  elseif($v == 3 and date('W',$startdate)%2 == 1)
+		  $var = 2;
 
 		  while($startdate<$enddate) 
 		   {  
 
+		      $ero = (date('W',$startdate) %$v);
+		      //echo date('d.m',$startdate).", ".date('W',$startdate)." | ".$var." | ".$ero."\n";
 
-		      if(in_array(date('w',$startdate),$w) and (date('W',$startdate) %$v) == $var)
+
+		      if(in_array(date('w',$startdate),$w) and $ero == $var)
 		      {
 
 		    	$pvm = date('d.m.Y',$startdate);
-		    	echo date('W',$startdate)." ".$pvm." ".$fi[date('w',$startdate)]."\n";
+		    	echo $pvm." ".$fi[date('w',$startdate)]."\n";
 
 			if($_POST['valmis'] == "true")
 			{
@@ -626,12 +636,24 @@ class TyovuorootController extends Controller
 
 		  $i=0; 
 		  $var = 0;
-		  if(($v == 2 or $v == 4 ) and date('W',$startdate)%2 == 1)
+		  if($v == 2 and date('W',$startdate)%2 == 1)
 		  $var = 1;
+		  elseif($v == 4 and date('W',$startdate)%2 == 0)
+		  $var = 2;
+		  elseif($v == 4 and date('W',$startdate)%2 == 1)
+		  $var = 1;
+		  elseif($v == 3 and date('W',$startdate)%3 == 1)
+		  $var = 1;
+		  elseif($v == 3 and date('W',$startdate)%2 == 1)
+		  $var = 2;
 
 		  while($startdate<$enddate) 
 		   {  
-		      if(in_array(date('w',$startdate),$w) and (date('W',$startdate) %$v) == $var)
+		      $ero = (date('W',$startdate) %$v);
+		      //echo date('d.m',$startdate).", ".date('W',$startdate)." | ".$var." | ".$ero."\n";
+
+
+		      if(in_array(date('w',$startdate),$w) and $ero == $var)
 		      {
 		    	$pvm = date('d.m.Y',$startdate);
 		    	echo $pvm.' '.$fi[date('w',$startdate)]."\n";
