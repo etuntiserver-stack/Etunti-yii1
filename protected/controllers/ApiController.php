@@ -287,7 +287,9 @@ public function actionImei($dom)
 		    $criteria = new CDbCriteria();
 		    $criteria->order = " id DESC ";
 		    $criteria->condition = " 
-			tid = '".$ttekija->id."' and DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = '".date("Y-m-d")."' 
+			tid = '".$ttekija->id."' 
+			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
+			BETWEEN '".date("Y-m-d", strtotime("first day of this month"))."' AND '".date("Y-m-d")."' 
 			AND loppui!=''
 		    ";
 	            $mob = Mob::model()->findAll($criteria);
