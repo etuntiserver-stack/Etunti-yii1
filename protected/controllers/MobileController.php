@@ -2044,6 +2044,63 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 
 
 
+	public function lounaat($tid,$from,$to)
+	{
+
+
+		$total	= 0;
+
+
+       		$criteria = new CDbCriteria();
+        	$criteria->select = "
+
+		TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'))) as l_tunnit,aloitan,loppui
+
+		";
+
+        	$criteria->condition = "  
+			tid = '".$tid."' and aloitan !='' and loppui !='' 
+			AND id NOT IN(select kid from sivexkuitti_repaired)
+			AND status = '10'
+			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$from."' AND '".$to."'
+		";
+
+
+
+		$lu = Mobile::model()->findAll($criteria);
+		foreach($lu as $l)
+		{
+		    $l->loppui = date("d.m.Y H:i",strtotime($l->loppui));
+		    $l->aloitan = date("d.m.Y H:i",strtotime($l->aloitan));
+		    $total += (strtotime($l->loppui)-strtotime($l->aloitan));
+		}
+		/* ////////////////////////// */
+
+       		$criteria = new CDbCriteria();
+        	$criteria->select = "
+		TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'))) as l_tunnit,aloitan,loppui 
+		";
+
+        	$criteria->condition = "  
+			tid = '".$tid."' and aloitan !='' and loppui !='' 
+			AND status = '10'
+			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$from."' AND '".$to."'
+		";
+
+
+		$tot = Toteutuneet::model()->findAll($criteria);
+		foreach($tot as $l)
+		{
+		    $l->loppui = date("d.m.Y H:i",strtotime($l->loppui));
+		    $l->aloitan = date("d.m.Y H:i",strtotime($l->aloitan));
+		    $total += (strtotime($l->loppui)-strtotime($l->aloitan));
+		}
+
+
+		return $total;
+
+	}
+
 
 	public function actionKohdebytekija($tid,$from,$to)
 	{

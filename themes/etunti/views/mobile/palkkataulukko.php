@@ -153,12 +153,13 @@ $this->breadcrumbs=array(
   <thead class="myBgColors">
   <tr>
   <th><?php echo Yii::t('main', 'Työntekijä'); ?></th>
-  <th><?php echo Yii::t('main', 'Työpäiviä'); ?></th>
-  <th><?php echo Yii::t('main', 'Matkat'); ?></th>
+  <th><?php echo Yii::t('main', 'Tp'); ?></th>
+  <th><?php echo Yii::t('main', 'M'); ?></th>
   <th><?php echo Yii::t('main', 'Työtunnit'); ?></th>
   <th><?php echo Yii::t('main', 'matka+<br>tunnit yht'); ?></th>
   <th><?php echo Yii::t('main', 'Ilta'); ?></th>
   <th><?php echo Yii::t('main', 'Iltamatka+<br>Iltatunnit yht'); ?></th>
+  <th><?php echo Yii::t('main', 'Lounas'); ?></th>
   <th><?php echo Yii::t('main', 'Yö'); ?></th>
   <th><?php echo Yii::t('main', 'Su'); ?></th>
   <th><?php echo Yii::t('main', 'PY'); ?></th>
@@ -196,6 +197,8 @@ $this->breadcrumbs=array(
   $mPlusTYht	= 0;
   $matkaIltaYht = 0;
   $iltaMatkaPlusIltatunnitYht = 0;
+  $loun		= 0;
+  $lounYht	= 0;
 
   foreach($model as $data)
   {
@@ -225,6 +228,9 @@ $this->breadcrumbs=array(
 	$return = $this->toteutu($data->id,"palkkataulukko",$from,$to);
 	$mPlusTYht += $return[0]+$m;
 
+	$loun = $this->lounaat($data->id,$from,$to);
+	$lounYht += $loun;
+
 	$matkaIlta = $this->matkaIlta($data->id,$from,$to);
 	$matkaIltaYht += $matkaIlta;
 
@@ -253,6 +259,7 @@ $this->breadcrumbs=array(
 			'to'=>$to,
 			'pyhat'=>$pyhat,
 			'el'=>$el,
+			'loun'=>$loun,
 	));
   }
 
@@ -274,6 +281,7 @@ $this->breadcrumbs=array(
 	<td><?php echo $this->num($mPlusTYht); ?></td>
 	<td><?php echo '<b>Työt</b>:<br>'.$this->num($yht[1]).$matkaIltaYht; ?></td>
 	<td><?php echo $this->num($iltaMatkaPlusIltatunnitYht); ?></td>
+	<td><?php echo $this->num($lounYht); ?></td>
 	<td><?php echo $this->num($yht[2]); ?></td>
 	<td><?php echo $this->num($yht[3]); ?></td>
 	<td><?php echo $this->num($pyhatYht); ?></td>
