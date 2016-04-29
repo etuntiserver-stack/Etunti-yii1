@@ -199,6 +199,13 @@ public function actionImei($dom)
         // Get an instance of the respective model
         case 'mob':
 
+
+function num($val){
+    if($val > 0)
+	return  number_format((float)$val/3600, 2, '.', '');
+}
+
+
 	    if(isset($_POST['lang']))
 	  	$_SESSION['lang'] = $_POST['lang'];
 
@@ -718,8 +725,13 @@ public function actionImei($dom)
 		    if($mobCheck->status == 10 and $mobCheck->loppui == '')
 		       $mobCheck->status = 10.1;
 
-	
-                       $this->_sendResponse(200, $mobCheck->status."//".$mobCheck->kohde_kannasta."<br>test//".$mobCheck->aloitan."//".$mobCheck->loppui."//".$get_osoite."//".$ttekija->tekijan_nimi."//".$kohdenID."//".$tag);
+		    $nykyinenKesto = 0;
+		    $nykyinenKesto = time()-strtotime($mobCheck->aloitan);
+		    $nykyinenKesto = num($nykyinenKesto);
+
+
+
+                       $this->_sendResponse(200, $mobCheck->status."//".$mobCheck->kohde_kannasta."<br>".$nykyinenKesto."//".$mobCheck->aloitan."//".$mobCheck->loppui."//".$get_osoite."//".$ttekija->tekijan_nimi."//".$kohdenID."//".$tag);
 		  } else {
                      $this->_sendResponse(200, "3//mull//null//null//".$get_osoite."//".$ttekija->tekijan_nimi."//".$kohdenID."//".$tag);
 		  }
