@@ -66,6 +66,7 @@
 	<td class="col5"><?php echo $sum; ?></td>
 	<td class="col6"><?php echo $return[1].$matkaIlta; ?></td>
 	<td class="col7"><?php echo $this->num($iltaMatkaPlusIltatunnit); ?></td>
+	<td class="col8"><?php echo $this->num($loun); ?></td>
 	<td class="col8"><?php echo $return[2]; ?></td>
 	<td class="col9"><?php echo $return[3]; ?></td>
 	<td class="col10"><?php echo $this->num($pyhat); ?></td>
