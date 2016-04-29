@@ -200,12 +200,6 @@ public function actionImei($dom)
         case 'mob':
 
 
-function num($val){
-    if($val > 0)
-	return  number_format((float)$val/3600, 2, '.', '');
-}
-
-
 	    if(isset($_POST['lang']))
 	  	$_SESSION['lang'] = $_POST['lang'];
 
@@ -727,7 +721,7 @@ function num($val){
 
 		    $nykyinenKesto = 0;
 		    $nykyinenKesto = time()-strtotime($mobCheck->aloitan);
-		    $nykyinenKesto = num($nykyinenKesto);
+		    $nykyinenKesto = sprint($nykyinenKesto);
 
 
 
