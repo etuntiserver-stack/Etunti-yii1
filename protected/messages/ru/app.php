@@ -28,7 +28,7 @@ return array(
 	'Kesto' => 'Продолжителность',
 
 	/* Tehty */
-	'Tänään tekemasi työt' => 'Сегодня проделанных работ',
+	'Tänään tekemasi työt' => 'Проделанные работы',
 
 	/* Asetukset */
 	'Työntekijän sähköposti' => 'Емайл работника',

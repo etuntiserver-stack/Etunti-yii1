@@ -28,7 +28,7 @@ return array(
 	'Kesto' => 'Aeg',
 
 	/* Tehty */
-	'Tänään tekemasi työt' => 'Täna tehdud tööd',
+	'Tänään tekemasi työt' => 'Tehdud tööd',
 
 	/* Asetukset */
 	'Työntekijän sähköposti' => 'Töölise email',
