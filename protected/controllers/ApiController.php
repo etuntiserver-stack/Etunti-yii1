@@ -720,8 +720,8 @@ public function actionImei($dom)
 		       $mobCheck->status = 10.1;
 
 		    $nykyinenKesto = 0;
-		    $nykyinenKesto = time()-strtotime($mobCheck->aloitan);
-		    $nykyinenKesto = sprint($nykyinenKesto);
+		    //$nykyinenKesto = time()-strtotime($mobCheck->aloitan);
+		    //$nykyinenKesto = sprint($nykyinenKesto);
 
 
 
