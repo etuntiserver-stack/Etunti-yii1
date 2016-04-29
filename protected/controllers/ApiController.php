@@ -200,6 +200,13 @@ public function actionImei($dom)
         case 'mob':
 
 
+		    function sprint($val)
+ 		    {
+			if($val > 0)
+		    return sprintf('%02d:%02d', $val/3600, ($val % 3600)/60);
+		    }
+
+
 	    if(isset($_POST['lang']))
 	  	$_SESSION['lang'] = $_POST['lang'];
 
@@ -301,11 +308,6 @@ public function actionImei($dom)
 		    exit;
 		    }
 
-		    function sprint($val)
- 		    {
-			if($val > 0)
-		    return sprintf('%02d:%02d', $val/3600, ($val % 3600)/60);
-		    }
 
 		    $sel = '<h2>'.Yii::t('app', 'Tänään tekemasi työt').'</h2>';
 		    foreach($mob as $val)
@@ -720,8 +722,11 @@ public function actionImei($dom)
 		       $mobCheck->status = 10.1;
 
 		    $nykyinenKesto = 0;
-		    //$nykyinenKesto = time()-strtotime($mobCheck->aloitan);
-		    //$nykyinenKesto = sprint($nykyinenKesto);
+		    if(strtotime($mobCheck->aloitan) > 0)
+		    {
+		    $nykyinenKesto = time()-strtotime($mobCheck->aloitan);
+		    $nykyinenKesto = sprint($nykyinenKesto);
+		    }
 
 
 
@@ -752,10 +757,6 @@ public function actionImei($dom)
 	    if(isset($mob->id)){
 
 
-	    function sprint($val){
-	      if($val > 0)
-		return sprintf('%02d:%02d', $val/3600, ($val % 3600)/60);
-	    }
 
 		$kesto = '';
 
