@@ -28,7 +28,7 @@ return array(
 	'Kesto' => 'Kesto',
 
 	/* Tehty */
-	'Tänään tekemasi työt' => 'Tänään tekemasi työt',
+	'Tänään tekemasi työt' => 'Tekemasi työt',
 
 	/* Asetukset */
 	'Työntekijän sähköposti' => 'Työntekijän sähköposti',

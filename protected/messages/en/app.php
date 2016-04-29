@@ -25,7 +25,7 @@ return array(
 	'Työvuorot' => 'Shift',
 
 	/* Tehty */
-	'Tänään tekemasi työt' => 'Your work today',
+	'Tänään tekemasi työt' => 'Your works',
 	'Päivämäärä' => 'Date',
 	'Klo' => 'Time',
 	'Kesto' => 'Total time',
