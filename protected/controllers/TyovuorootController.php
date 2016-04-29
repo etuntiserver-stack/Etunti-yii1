@@ -558,7 +558,7 @@ class TyovuorootController extends Controller
 
 		  $i=0; 
 		  $var = 0;
-		  if($v == 2 or $v == 4)
+		  if(($v == 2 or $v == 4 ) and date('W',$startdate)%2 == 1)
 		  $var = 1;
 
 
@@ -570,7 +570,7 @@ class TyovuorootController extends Controller
 		      {
 
 		    	$pvm = date('d.m.Y',$startdate);
-		    	echo $pvm.' '.$fi[date('w',$startdate)]."\n";
+		    	echo date('W',$startdate)." ".$pvm." ".$fi[date('w',$startdate)]."\n";
 
 			if($_POST['valmis'] == "true")
 			{
@@ -626,7 +626,7 @@ class TyovuorootController extends Controller
 
 		  $i=0; 
 		  $var = 0;
-		  if($v == 2 or $v == 4)
+		  if(($v == 2 or $v == 4 ) and date('W',$startdate)%2 == 1)
 		  $var = 1;
 
 		  while($startdate<$enddate) 
