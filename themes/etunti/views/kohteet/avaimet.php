@@ -26,7 +26,7 @@ legend{  padding: 3px 7px; }
    <!-- tulostus -->
    <div class="pull-right">
      <form action="#" target="_blank" method="POST">
-      <input type="submit" name="tulosta" class="btn btn-success btn-sm" value="PDF">
+      <input type="submit" name="tulosta" class="btn btn-success btn-sm myBgColors" value="PDF">
      </form>
    </div>
    <!-- tulostus -->
@@ -59,7 +59,7 @@ legend{  padding: 3px 7px; }
 
     $list = CHtml::listData($m, 'id', 'tekijan_nimi');
 
-    echo '<select name="Tekija[]" class="mult" id="tyontekijat" multiple title="Työntekijät">';
+    echo '<select name="Tekija[]" id="tyontekijat" multiple title="Työntekijät">';
     foreach($list as $key=>$val){
      if(!empty($val))
      {
@@ -74,11 +74,6 @@ legend{  padding: 3px 7px; }
 
 
                           </label>
-
-   <a href="#" id="deselAll" class="glyphicon glyphicon-minus"></a>
-   <a href="#" id="selAll" class="glyphicon glyphicon-plus"></a>
-
-
                         </div>
                       </div>
                       <div class="col-md-2">
@@ -176,10 +171,15 @@ $('#selAll').click(function(){
 });
 
 
-$('.mult').selectpicker({
-      style: 'gui-input',
-      //size: 4
-  });
+$('#tyontekijat').multiselect({
+	//inheritClass: true,
+	//enableFiltering: true,
+        includeSelectAllOption: true,
+	nonSelectedText: 'Tyhjä',
+	selectAllText: 'Valitse kaikki',
+	allSelectedText: 'Kaikki',
+	nSelectedText: 'valittu',
+});
 
 });
 </script>

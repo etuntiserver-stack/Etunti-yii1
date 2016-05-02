@@ -8,6 +8,10 @@ $(document).ready(function(){
 	location.reload(true);
   });
 
+    if(localStorage.getItem('etunti_language'))
+	$("#kieliValiko option[value=" + localStorage.getItem('etunti_language') + "]").prop("selected",true);
+
+
 });
 
     var domain = '';
