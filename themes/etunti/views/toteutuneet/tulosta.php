@@ -258,7 +258,7 @@ function dateDiff($start, $end) {
   ?>
   </tbody>
 
-  <tfoot>
+
   <tr>
   <th><?php echo Yii::t('main', 'Yhteensä'); ?></th>
 
@@ -289,7 +289,7 @@ function dateDiff($start, $end) {
   <th><?php echo $this->sprint($yhtPy); ?></th>
   <th><?php echo $this->sprint($yhtEl); ?></th>
   </tr>
-  </tfoot>
+
 
   </table>
 
