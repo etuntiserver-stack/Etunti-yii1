@@ -192,6 +192,9 @@ function dateDiff($start, $end) {
   <th><?php echo Yii::t('main', 'Ma'); ?></th>
   <th><?php echo Yii::t('main', 'Ilta'); ?></th>
   <th><?php echo Yii::t('main', 'Yö'); ?></th>
+  <th><?php echo Yii::t('main', 'Su'); ?></th>
+  <th><?php echo Yii::t('main', 'Py'); ?></th>
+  <th><?php echo Yii::t('main', 'El'); ?></th>
   </tr>
   </thead>
   <tbody>
@@ -200,12 +203,21 @@ function dateDiff($start, $end) {
   $yhtMatka 	= 0;
   $yhtIlta 	= 0;
   $yhtYo 	= 0;
+  $yhtSu 	= 0;
   $yhtMatkaWeek = 0;
   $yhtIltaWeek 	= 0;
   $yhtYoWeek	= 0;
+  $yhtSuWeek	= 0;
   $yhtTotpvmtid	= 0;
   $yhtLuetutpvmtid = 0;
   $viikkoBreak 	= false;
+
+  $tyoPy 	= 0;
+  $yhtPy	= 0;
+  $tyoEl 	= 0;
+  $yhtEl	= 0;
+  $yhtPyWeek	= 0;
+  $yhtElWeek	= 0;
 
   for ($i = 0; $i <= $dateDiff; $i++) 
   {
@@ -266,15 +278,35 @@ function dateDiff($start, $end) {
     $yhtYo += $tyoYo;
     echo '<td>'.$this->sprint($tyoYo).'</td>';
 
+    $tyoSu = 0;
+    $tyoSu = $this->tyoIlta($explTekija[0],date("Y-m-d",strtotime($date)),'su');
+    $yhtSu += $tyoSu;
+    echo '<td>'.$this->sprint($tyoSu).'</td>';
+
+    $tyoPy = 0;
+    $tyoPy = $this->pyhapaivat($explTekija[0],$date,"pyhat");
+    $yhtPy += $tyoPy;
+    echo '<td>'.$this->sprint($tyoPy).'</td>';
+
+    $tyoEl = 0;
+    $tyoEl = $this->pyhapaivat($explTekija[0],$date,"el");
+    $yhtEl += $tyoEl;
+    echo '<td>'.$this->sprint($tyoEl).'</td>';
 
 
-    $yhtMatkaWeek += $matka;
-    $yhtIltaWeek += $tyoIlta;
-    $yhtYoWeek += $tyoYo;
+
+
+
+    $yhtMatkaWeek 	+= $matka;
+    $yhtIltaWeek 	+= $tyoIlta;
+    $yhtYoWeek 		+= $tyoYo;
+    $yhtSuWeek 		+= $tyoSu;
+    $yhtPyWeek 		+= $tyoPy;
+    $yhtElWeek 		+= $tyoEl;
     if(isset($exLatiko[1]))
-    $yhtTotpvmtid += $exLatiko[1];
+    $yhtTotpvmtid 	+= $exLatiko[1];
     if(isset($exLatikoLu[1]))
-    $yhtLuetutpvmtid += $exLatikoLu[1];
+    $yhtLuetutpvmtid 	+= $exLatikoLu[1];
 
 
 
@@ -319,13 +351,19 @@ function dateDiff($start, $end) {
 		  echo '<td style="background: #669999;color: white; text-align:center" class="small myBgColors">'.$this->sprint($yhtMatkaWeek).'<br>('.$this->num($yhtMatkaWeek).')</td>';
 		  echo '<td style="background: #669999;color: white; text-align:center" class="small myBgColors">'.$this->sprint($yhtIltaWeek).'<br>('.$this->num($yhtIltaWeek).')</td>';
 		  echo '<td style="background: #669999;color: white; text-align:center" class="small myBgColors">'.$this->sprint($yhtYoWeek).'<br>('.$this->num($yhtYoWeek).')</td>';
+		  echo '<td style="background: #669999;color: white; text-align:center" class="small myBgColors">'.$this->sprint($yhtSuWeek).'<br>('.$this->num($yhtSuWeek).')</td>';
+		  echo '<td style="background: #669999;color: white; text-align:center" class="small myBgColors">'.$this->sprint($yhtPyWeek).'<br>('.$this->num($yhtPyWeek).')</td>';
+		  echo '<td style="background: #669999;color: white; text-align:center" class="small myBgColors">'.$this->sprint($yhtElWeek).'<br>('.$this->num($yhtElWeek).')</td>';
 	    echo '</tr>';
 
 
-		$yhtMatkaWeek = 0;
-		$yhtIltaWeek = 0;
-		$yhtYoWeek = 0;
-		$yhtTotpvmtid = 0;
+		$yhtMatkaWeek 	= 0;
+		$yhtIltaWeek 	= 0;
+		$yhtYoWeek 	= 0;
+		$yhtSuWeek 	= 0;
+		$yhtPyWeek 	= 0;
+		$yhtElWeek 	= 0;
+		$yhtTotpvmtid 	= 0;
 	 	$yhtLuetutpvmtid = 0;
 
 	    }
@@ -363,6 +401,9 @@ function dateDiff($start, $end) {
   <th><?php echo $this->sprint($yhtMatka); ?></th>
   <th><?php echo $this->sprint($yhtIlta); ?></th>
   <th><?php echo $this->sprint($yhtYo); ?></th>
+  <th><?php echo $this->sprint($yhtSu); ?></th>
+  <th><?php echo $this->sprint($yhtPy); ?></th>
+  <th><?php echo $this->sprint($yhtEl); ?></th>
   </tr>
   </tfoot>
 

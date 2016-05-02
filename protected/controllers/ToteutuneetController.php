@@ -487,6 +487,8 @@ class ToteutuneetController extends Controller
 		    $total += $mobile[0]->ilta($al,$lop);
 		    elseif($tila == 'yo')
 		    $total += $mobile[0]->yo($al,$lop);
+		    elseif($tila == 'su' and date('N', strtotime($al[0])) == 7)
+		    $total += $l->l_tunnit;
 		}
 		/* ////////////////////////// */
 
@@ -516,6 +518,8 @@ class ToteutuneetController extends Controller
 		    $total += $mobile[0]->ilta($al,$lop);
 		    elseif($tila == 'yo')
 		    $total += $mobile[0]->yo($al,$lop);
+		    elseif($tila == 'su' and date('N', strtotime($al[0])) == 7)
+		    $total += $l->l_tunnit;
 
 		}
 
@@ -647,6 +651,84 @@ class ToteutuneetController extends Controller
 	  return $spl;
 	}
 
+
+	public function pyhapaivat($tid,$date,$m)
+	{
+
+		$pvmSTR = '';
+
+		$asetukset = Asetukset::model()->findbypk(1);
+		if($m == "pyhat")
+		$pvms = explode("\n",$asetukset->pyhapaivat);
+		elseif($m == "el")
+		$pvms = explode("\n",$asetukset->erikoislauantai);
+
+		$pget = array(0);
+		if(isset($pvms[0]))
+		{
+		  foreach($pvms as $p)
+		  {
+		    if(date("Y-m-d",strtotime($p)) == date("Y-m-d",strtotime($date)))
+		    {
+		      $prepair = date("Y-m-d",strtotime($p));
+		      $pget[$prepair] = $prepair;
+		    }
+		  }
+		}
+		if(isset($pget[0]))
+		{
+		unset($pget[0]);
+		$pvmSTR = "DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d')='".implode("' OR DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d')='",$pget)."'";
+		}
+
+		if(!empty($pvmSTR))
+		$pvmSTR = " AND ($pvmSTR) ";
+
+		$return 	= 0;
+
+       		$criteria = new CDbCriteria();
+        	$criteria->select = "
+		SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit
+		";
+
+        	$criteria->condition = "  
+			tid = '".$tid."' and aloitan !='' and loppui !='' 
+			AND id NOT IN(select kid from sivexkuitti_repaired)
+			AND (status='2' OR status='3')
+			$pvmSTR
+		";
+
+
+		$lu = Mobile::model()->findAll($criteria);
+		foreach($lu as $l)
+		{
+		    $return += $l->l_tunnit;
+		}
+
+		/* ////////////////////////// */
+
+       		$criteria = new CDbCriteria();
+        	$criteria->select = "
+		SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit,aloitan,loppui 
+		";
+
+        	$criteria->condition = "  
+			tid = '".$tid."' and aloitan !='' and loppui !='' 
+			AND (status='2' OR status='3')
+			$pvmSTR
+		";
+
+
+		$tot = Toteutuneet::model()->findAll($criteria);
+		foreach($tot as $l)
+		{
+		    $return += $l->l_tunnit;
+		}
+
+
+		return $return;
+
+	}
 
 
 }
