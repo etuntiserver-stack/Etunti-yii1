@@ -53,25 +53,15 @@ echo	'<input type=hidden id=number value='.cal_days_in_month(CAL_GREGORIAN, $mon
         <!-- begin: .tray-center -->
         <div class="tray-center">
 
-	   <h2 class="myBgColors p10"> <i class="fa fa-table"></i> <?php echo Yii::t('main', 'VUOSILOMAT'); ?> </h2>
+	   <h2 class="myBgColors p10"> <i class="fa fa-table"></i> <?php echo Yii::t('main', 'VUOSILOMAT'); ?> 
+
+		<a href="index?pvm=<?php echo $previous; ?>"><<</a> <?php echo $months[$month].' '.$year; ?> <a href="index?pvm=<?php echo $next; ?>">>></a>
+
+	   </h2>
 
         <!-- loppu: .tray-center -->
         </div>
 
-
-            <div class="admin-form">
-              <div class="panel heading-border">
-                <div class="panel-body bg-light">
-
-                    <!-- Input Icons -->
-                    <div class="row">
-		     <center>
-  			<H4><a href="index?pvm=<?php echo $previous; ?>"><<</a> <?php echo $months[$month].' '.$year; ?> <a href="index?pvm=<?php echo $next; ?>">>></a></H4>
-		     </center>
-                    </div>
-                </div>
-              </div>
-            </div>
 
 <br>
 
@@ -83,23 +73,27 @@ echo	'<input type=hidden id=number value='.cal_days_in_month(CAL_GREGORIAN, $mon
                 <div class="panel-body bg-light">
                  <div class="row">
 
-<div class="table-responsive">
-  <TABLE id="verkko" class="table table-bordered">
+<div class="tvuoro table-responsive">
+  <table id="verkko" class="table table-striped table-condensed table-bordered">
   <?php 
-  echo '<TR>';
-  echo '<TH>Nimi</TH>';
+  echo '<thead><tr>';
+  echo '<th>Nimi</th>';
 
    for ($i = 1; $i <= $number; $i++) 
    {
-     echo '<TH>'.$i.'</TH>';
+     echo '<th>'.$i.'</th>';
    }
 
-  echo '</TR>';
-  $t = Tyontekijat::model()->findAll(" aktiivinen = '1' ");
+  echo '</tr></thead><tbody>';
+
+  $criteria = new CDbCriteria();
+  $criteria->order = " tekijan_nimi ";
+  $criteria->condition = " aktiivinen = '1' ";
+  $t = Tyontekijat::model()->findAll($criteria);
   foreach($t as $v)
   {
-  echo '<TR>';
-  echo '<TD>'.$v->tekijan_nimi.'</TD>';
+  echo '<tr>';
+  echo '<td class="fixed-column">'.$v->tekijan_nimi.'</td>';
 
    for ($i = 1; $i <= $number; $i++) 
    {
@@ -122,16 +116,17 @@ echo	'<input type=hidden id=number value='.cal_days_in_month(CAL_GREGORIAN, $mon
 
      if($this->pyhat($thisDate))
      {
-       echo '<TD id="riv_'.$thisDate.$v->id.'" class="muokka myBgColors" method="'.$id.'" thisDate='.$thisDate.' thisTid='.$v->id.'>'.$st0.'</TD>';
+       echo '<td id="riv_'.$thisDate.$v->id.'" class="muokka myBgColors" method="'.$id.'" thisDate='.$thisDate.' thisTid='.$v->id.'>'.$st0.'</td>';
      } else {
-       echo '<TD id="riv_'.$thisDate.$v->id.'" '.$style.' class="muokka" method="'.$id.'" thisDate='.$thisDate.' thisTid='.$v->id.'>'.$st0.'</TD>';
+       echo '<td id="riv_'.$thisDate.$v->id.'" '.$style.' class="muokka" method="'.$id.'" thisDate='.$thisDate.' thisTid='.$v->id.'>'.$st0.'</td>';
      }
    }
 
-  echo '<TR>';
+  echo '<tr>';
   }
   ?>
-  </TABLE>
+   </tbody>
+  </table>
 </div>
 
                  </div>
@@ -172,6 +167,56 @@ echo	'<input type=hidden id=number value='.cal_days_in_month(CAL_GREGORIAN, $mon
 
 	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/bootstrap.modal.js"></script>
 	<div id="showres" class="modal fade" tabindex="-1" role="dialog"></div>
+	<?php Yii::app()->clientScript->registerPackage('fixedTable'); ?>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+
+
+$(function () {
+
+    var tableHeight = function () {
+        var $tableHeader = $('.dataTables_scrollHeadInner thead tr');
+        return $(window).height() - 4 - ($tableHeader.length ? $tableHeader.height() : 0);
+    };
+
+    var dataTable = $('table').dataTable({
+        sDom: 'frtiS',
+        sScrollY: tableHeight(),
+        sScrollX: '100%',
+        bAutoWidth: false,
+        bScrollCollapse: true,
+        bPaginate: false,
+        bFilter: false,
+        bInfo: false,
+        bSort: false,
+        bDeferRender: true
+    });
+
+    var onResize = function () {
+        var oSettings = dataTable.fnSettings();
+        oSettings.oScroll.sY = tableHeight()-240; 
+        dataTable.fnDraw();
+    };
+
+    var firstDraw = false;
+    new FixedColumns(dataTable, {
+        iLeftWidth: 100,
+        fnDrawCallback: function () {
+            if (firstDraw) return;
+            firstDraw = true;
+            onResize();
+        }
+    });
+
+    $(window).resize(onResize);
+});
+
+
+});
+</script>
+
 
 <script type="text/javascript">
 $(document).ready(function(){
@@ -255,3 +300,7 @@ $(".muokaValiko").click(function() {
 
 });
 </script>
+
+
+
+
