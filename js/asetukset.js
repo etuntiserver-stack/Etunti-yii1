@@ -13,6 +13,11 @@
 	 locale: 'fi',
     });
 
+   $( ".datepickerFI" ).datetimepicker({
+         format : 'DD.MM.YYYY',
+	 locale: 'fi',
+    });
+
     $( ".timepicker" ).datetimepicker({
 	format:'hh:mm',
     });
