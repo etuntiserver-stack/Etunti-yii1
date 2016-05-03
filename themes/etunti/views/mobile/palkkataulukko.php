@@ -175,9 +175,6 @@ $this->breadcrumbs=array(
   </thead>
 
   <?php 
-  $from = date("Y-m-d", strtotime($from));
-  $to = date("Y-m-d", strtotime($to));
-
   $tids = array();
   $totalTp	= 0;
   $tot_sun	= 0;
