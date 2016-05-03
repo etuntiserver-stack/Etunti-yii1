@@ -18,9 +18,9 @@
 .tb .col10{ width: 7%; }
 .tb .col11{ width: 7%; }
 .tb .col12{ width: 7%; }
-.tb .col13{ width: 19%; text-align: left; }
-.tb .col14{ width: 19%; text-align: left; }
-.tb .col15{ width: 19%; text-align: left; }
+.tb .col13{ width: 12%; text-align: left; }
+.tb .col14{ width: 12%; text-align: left; }
+.tb .col15{ width: 12%; text-align: left; }
 </style>
 
 
@@ -51,6 +51,7 @@
   <th><?php echo Yii::t('main', 'M+T'); ?></th>
   <th><?php echo Yii::t('main', 'Ilta'); ?></th>
   <th><?php echo Yii::t('main', 'Ilta M+<br>Ilta T'); ?></th>
+  <th><?php echo Yii::t('main', 'Lounas'); ?></th>
   <th><?php echo Yii::t('main', 'Yö'); ?></th>
   <th><?php echo Yii::t('main', 'Su'); ?></th>
   <th><?php echo Yii::t('main', 'PY'); ?></th>
@@ -88,6 +89,8 @@
   $mPlusTYht	= 0;
   $matkaIltaYht = 0;
   $iltaMatkaPlusIltatunnitYht = 0;
+  $loun		= 0;
+  $lounYht	= 0;
 
   foreach($model as $data)
   {
@@ -117,6 +120,9 @@
 	$return = $this->toteutu($data->id,"palkkataulukko",$from,$to);
 	$mPlusTYht += $return[0]+$m;
 
+	$loun = $this->lounaat($data->id,$from,$to);
+	$lounYht += $loun;
+
 	$matkaIlta = $this->matkaIlta($data->id,$from,$to);
 	$matkaIltaYht += $matkaIlta;
 
@@ -145,6 +151,7 @@
 			'to'=>$to,
 			'pyhat'=>$pyhat,
 			'el'=>$el,
+			'loun'=>$loun,
 	));
   }
 
@@ -166,6 +173,7 @@
 	<td><?php echo $this->num($mPlusTYht); ?></td>
 	<td><?php echo '<b>Työt</b>:<br>'.$this->num($yht[1]).$matkaIltaYht; ?></td>
 	<td><?php echo $this->num($iltaMatkaPlusIltatunnitYht); ?></td>
+	<td><?php echo $this->num($lounYht); ?></td>
 	<td><?php echo $this->num($yht[2]); ?></td>
 	<td><?php echo $this->num($yht[3]); ?></td>
 	<td><?php echo $this->num($pyhatYht); ?></td>

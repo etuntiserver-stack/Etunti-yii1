@@ -1049,6 +1049,9 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 */
 		$model = Tyontekijat::model()->findAll($criteria);
 
+		$from = date("Y-m-d", strtotime($from));
+		$to = date("Y-m-d", strtotime($to));
+
 		if(Yii::app()->request->getPost('tulosta'))
 		{
 	          $html2pdf = Yii::app()->ePdf->HTML2PDF('L', 'A4', 'en');
