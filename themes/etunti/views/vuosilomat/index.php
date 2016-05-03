@@ -65,6 +65,20 @@ echo	'<input type=hidden id=number value='.cal_days_in_month(CAL_GREGORIAN, $mon
 
 <br>
 
+<style>
+body{
+    overflow-y: hidden;
+}
+.table{
+    height: 100%;
+}
+.laatikot{
+	min-width: 30px;
+	text-align: center;
+}
+
+</style>
+
 <div class="row">
  <div class="col-sm-10">
 
@@ -74,14 +88,14 @@ echo	'<input type=hidden id=number value='.cal_days_in_month(CAL_GREGORIAN, $mon
                  <div class="row">
 
 <div class="tvuoro table-responsive">
-  <table id="verkko" class="table table-striped table-condensed table-bordered">
+  <table class="table table-striped table-condensed table-bordered">
   <?php 
   echo '<thead><tr>';
   echo '<th>Nimi</th>';
 
    for ($i = 1; $i <= $number; $i++) 
    {
-     echo '<th>'.$i.'</th>';
+     echo '<th><div class="fixed-column laatikot">'.$i.'</div></th>';
    }
 
   echo '</tr></thead><tbody>';
@@ -116,13 +130,14 @@ echo	'<input type=hidden id=number value='.cal_days_in_month(CAL_GREGORIAN, $mon
 
      if($this->pyhat($thisDate))
      {
-       echo '<td id="riv_'.$thisDate.$v->id.'" class="muokka myBgColors" method="'.$id.'" thisDate='.$thisDate.' thisTid='.$v->id.'>'.$st0.'</td>';
+       echo '<td id="riv_'.$thisDate.$v->id.'" class="muokka myBgColors" method="'.$id.'" thisDate='.$thisDate.' thisTid='.$v->id.'>
+	<div class="link laatikot">'.$st0.'</div></td>';
      } else {
-       echo '<td id="riv_'.$thisDate.$v->id.'" '.$style.' class="muokka" method="'.$id.'" thisDate='.$thisDate.' thisTid='.$v->id.'>'.$st0.'</td>';
+       echo '<td id="riv_'.$thisDate.$v->id.'" '.$style.' class="muokka" method="'.$id.'" thisDate='.$thisDate.' thisTid='.$v->id.'><div class="link laatikot">'.$st0.'</div></td>';
      }
    }
 
-  echo '<tr>';
+  echo '</tr>';
   }
   ?>
    </tbody>
@@ -163,6 +178,7 @@ echo	'<input type=hidden id=number value='.cal_days_in_month(CAL_GREGORIAN, $mon
 
  </div>
 </div>
+
 
 
 	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/bootstrap.modal.js"></script>

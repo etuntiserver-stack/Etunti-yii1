@@ -107,6 +107,7 @@ class VuosilomatController extends Controller
 	   }
 
 
+		$this->renderPartial('vlupdater');
 
 	}
 
