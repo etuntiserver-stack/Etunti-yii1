@@ -28,7 +28,7 @@ class TyontekijatController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin', 'admin_ajax', 'delete', 'create', 'update', 'index', 'view','merkkipaivat', 'tulosta', 'migraatio', 'verotustiedot', 'muuta_suhteet'),
+				'actions'=>array('admin', 'admin_ajax', 'delete', 'create', 'update', 'index', 'view','merkkipaivat', 'tulosta', 'migraatio', 'verotustiedot', 'muuta_suhteet', 'varoitus'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -81,6 +81,11 @@ class TyontekijatController extends Controller
 
 		}
 
+	}
+
+	public function actionVaroitus()
+	{
+		$this->render('varoitus');
 	}
 
 	public function actionMerkkipaivat()
@@ -252,6 +257,7 @@ class TyontekijatController extends Controller
 			if(isset($imei->imei))
 			{
 			echo Yii::t('main', 'Tämän imei on jo käytössä');
+
 			exit;
 			}
 
