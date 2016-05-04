@@ -59,6 +59,7 @@ echo	'<input type=hidden id=number value='.cal_days_in_month(CAL_GREGORIAN, $mon
 
 	   </h2>
 
+	   <textarea class="form-control vapaateksti" rows="2" placeholder="<?php echo Yii::t('main', 'Tähän tulee teksti, joka lisätään selitteeksi työvuorosuunnittelussa tietoihin.'); ?>"></textarea>
         <!-- loppu: .tray-center -->
         </div>
 
@@ -66,9 +67,11 @@ echo	'<input type=hidden id=number value='.cal_days_in_month(CAL_GREGORIAN, $mon
 <br>
 
 <style>
+/*
 body{
     overflow-y: hidden;
 }
+*/
 .table{
     height: 100%;
 }
@@ -212,7 +215,7 @@ $(function () {
 
     var onResize = function () {
         var oSettings = dataTable.fnSettings();
-        oSettings.oScroll.sY = tableHeight()-240; 
+        oSettings.oScroll.sY = tableHeight()-180; 
         dataTable.fnDraw();
     };
 
@@ -251,6 +254,12 @@ $(".muokaValiko").click(function() {
            }
         });
 });
+
+
+$('input[type="radio"]').change(function() {
+		$('.vapaateksti').val('');
+});
+
 /* valikot */
 
 
@@ -266,13 +275,14 @@ $(".muokaValiko").click(function() {
     var thisStatus = $(".valikot input:radio:checked").val();
     var lat1 = thisStatus.split("//");
     var lat = '('+lat1[0]+') '+lat1[2]+'/'+lat1[1];
-
+    var vapaateksti = $('.vapaateksti').val();
 
 
     var postdata = {
 	tid 	: thisTid,
 	pvm 	: thisDate,
-	status 	: thisStatus
+	status 	: thisStatus,
+	tietoja	: vapaateksti,
     }
 
         $.ajax({
