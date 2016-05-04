@@ -72,7 +72,7 @@
 
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'koe_loppu'); ?>
-		<?php echo $form->textField($model,'koe_loppu',array('size'=>20,'maxlength'=>20,'class'=>'form-control datepicker')); ?>
+		<?php echo $form->numberField($model,'koe_loppu',array('size'=>20,'maxlength'=>20,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'koe_loppu'); ?>
 	</div>
 
