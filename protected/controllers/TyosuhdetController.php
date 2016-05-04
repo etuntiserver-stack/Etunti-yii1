@@ -142,21 +142,33 @@ class TyosuhdetController extends Controller
 
 	       	$criteria = new CDbCriteria();
 		$criteria->order = 'id DESC';
-		$criteria->condition = " 
-			tid!='' and tid!=0 
-			and tid IN (select id from sivex_ttekijat)
-		";
 
-		$dataProvider=new CActiveDataProvider('Tyosuhdet', array(
-			'criteria'=>$criteria,
-    			'pagination'=>array(
-			        'pageSize'=>12,
-			        'pageVar'=>'page',
-			    ),
-			//'pagination'=>false
-		));
+		if(Yii::app()->request->getPost('TekijaVuoro'))
+		{
+			Yii::app()->session['TekijaVuoro'] = Yii::app()->request->getPost('TekijaVuoro');
+		}
 
-		$this->render('index', array('dataProvider' => $dataProvider));
+		if(Yii::app()->session['TekijaVuoro'])
+		{
+			$impl = implode(",",Yii::app()->session['TekijaVuoro']);
+			$criteria->addCondition ( " 
+				id IN ($impl)
+			");
+		}
+
+		$model = Tyontekijat::model()->findAll($criteria);
+
+		if(Yii::app()->request->getPost('tulosta'))
+		{
+	          $html2pdf = Yii::app()->ePdf->HTML2PDF('L', 'A4', 'en');
+		  $html2pdf->setDefaultFont('Arial');
+	          $html2pdf->WriteHTML($this->renderPartial('index', array(
+			'model' => $model
+		  ),true));
+	          $html2pdf->Output();
+		} else {
+		  $this->render('index', array('model' => $model));
+		}
 	}
 
 	/**
