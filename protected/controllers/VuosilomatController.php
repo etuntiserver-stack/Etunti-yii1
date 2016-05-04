@@ -94,6 +94,7 @@ class VuosilomatController extends Controller
 			$tv->alku='00:00';
 			$tv->loppu='00:00';
 			$tv->pituus='00:00';
+			$tv->tietoja=$_POST['Vuosilomat']['tietoja'];
 			$tv->save();
 			} else {
 				print_r($_POST);
