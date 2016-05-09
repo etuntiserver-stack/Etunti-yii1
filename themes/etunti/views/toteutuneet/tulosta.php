@@ -1,37 +1,4 @@
 <?php ini_set("max_execution_time", "120"); ?>
-<link rel="stylesheet" type="text/css" href="css/pdf_table.css">
-<style>
-#ylataulu{
-	width: 710px;
-}
-.tb table .chckbxHyvaksynta{ display:none }
-.tb .col1{ width: 5%; text-align: left; }
-.tb .col2{ width: 31%; text-align: left;}
-.tb .col3{ width: 31%; text-align: left;}
-.tb .col4{ width: 31%; text-align: left;}
-.tb .col5{ width: 10%; }
-.tb .col6{ width: 9%; }
-.tb .col7{ width: 9%; }
-.tb .col8{ width: 9%; }
-input[type="checkbox"]{ display:none }
-</style>
-
-<table id="ylataulu">
- <tr><td>
-  <?php $asetukset=Asetukset::model()->find("id=1"); ?>
-  <img src="<?php echo $asetukset->logon_polkku; ?>" height="<?php echo $asetukset->logon_korkeus; ?>">
- </td><td valign="right" style="width:20%">
-  <?php echo Yii::t('main', 'Yhteenveto tunnit'); ?>
-  <?php if(isset($from) and isset($to)) : ?>
-    <?php echo $tekija.", ".date("d.m.Y",strtotime($from)).'-'.date("d.m.Y",strtotime($to)); ?>
-  <?php endif; ?>
- </td>
- </tr>
-</table>
-
-<br>
-
-
 
 <?php
     if(Yii::app()->session['tekija'])
@@ -57,11 +24,32 @@ function dateDiff($start, $end) {
 ?>
 
 
+<link rel="stylesheet" type="text/css" href="css/pdf_table_toteutu.css">
+<style>
+.tb table .chckbxHyvaksynta{ display:none }
+.tb .col1{ width: 2%; text-align: left; }
+.tb .col2{ width: 30%; text-align: left;}
+.tb .col3{ width: 30%; text-align: left;}
+.tb .col4{ width: 30%; text-align: left;}
+input[type="checkbox"]{ display:none }
+</style>
+
+
+  <?php $asetukset=Asetukset::model()->find("id=1"); ?>
+  <img src="<?php echo $asetukset->logon_polkku; ?>" height="<?php echo $asetukset->logon_korkeus; ?>">
+
+  <?php echo Yii::t('main', 'Yhteenveto tunnit'); ?>
+  <?php if(isset($from) and isset($to)) : ?>
+    <?php echo $tekija.", ".date("d.m.Y",strtotime($from)).'-'.date("d.m.Y",strtotime($to)); ?>
+  <?php endif; ?>
+  <br>
+
+
 <div class="tb">
   <table>
   <thead>
   <tr>
-  <th width=1><?php echo Yii::t('main', 'Pvm'); ?></th>
+  <th><?php echo Yii::t('main', 'Pvm'); ?></th>
 
   <?php
   $tas = explode(",",Yii::app()->user->adminPaketti);

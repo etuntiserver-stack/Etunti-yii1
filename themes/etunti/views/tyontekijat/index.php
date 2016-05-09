@@ -8,8 +8,10 @@
         <div class="tray-center">
 
 
-              <h2 class="myBgColors p10"> <i class="fa fa-male"></i> <?php echo Yii::t('main', 'TYÖNTEKIJÄT'); ?> 
-		<?php echo CHtml::link('',Yii::app()->request->baseUrl.'/index.php/tyontekijat/create',array('class'=>'btn btn-default fa fa-plus')); ?></h2>
+	<h2 class="myBgColors p10"> <i class="fa fa-male"></i> <?php echo Yii::t('main', 'TYÖNTEKIJÄT'); ?> 
+		<?php echo CHtml::link('',Yii::app()->request->baseUrl.'/index.php/tyontekijat/create',array('class'=>'btn btn-default fa fa-plus')); ?>
+		<?php echo CHtml::link(Yii::t('main', 'Varoitus (Testauksessa)'),Yii::app()->request->baseUrl.'/index.php/tyontekijat/varoitus',array('class'=>'btn btn-default')); ?>
+	</h2>
 
 
 
