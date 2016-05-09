@@ -113,9 +113,14 @@ if(!isset($_POST['tulosta']))
 
 
 	   if($tvVal->alku != '' and $tvVal->loppu != '')
-	    $al = '<b>'.$tvVal->alku.'-'.$tvVal->loppu.'</b><br>';
-	   else
+	   {
+
+	    if(!isset($_POST['tulosta'])) $br = '<br>'; else $br = '';
+
+	    $al = '<b>'.$tvVal->alku.'-'.$tvVal->loppu.'</b>'.$br;
+	   } else {
 	    $al = '';
+	   }
 
 
 	 if(!empty($tvVal->tyoajanlaatu) and empty($osoite))
