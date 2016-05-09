@@ -19,7 +19,7 @@ $this->menu=array(
         <div class="tray-center">
 
 
-              <h2 class="myBgColors p10"> <i class="fa fa-list"></i> <?php echo Yii::t('main', 'TYÖSUHTEET'); ?>
+              <h2 class="myBgColors p10"> <i class="fa fa-list"></i> <?php echo Yii::t('main', 'Työsuhdetiedot'); ?>
 
    <!-- tulostus -->
    <div class="pull-right">
