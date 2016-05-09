@@ -85,6 +85,28 @@ class TyontekijatController extends Controller
 
 	public function actionVaroitus()
 	{
+
+		Yii::import('ext.yiiword.YiiWord', true);
+		Yii::registerAutoloader(array('YiiWord', 'autoload'), true);
+
+		if (!file_exists(Yii::app()->basePath."/../tiedostot/varoitukset/".Yii::app()->user->domain)) {
+		 	mkdir(Yii::app()->basePath."/../tiedostot/varoitukset/".Yii::app()->user->domain, 0777, true);
+		}
+
+
+		
+		if(isset($_POST['aika']))
+		{
+			$PHPWord = new PHPWord();
+		
+			$document = $PHPWord->loadTemplate('tiedostot/templates/varoitus_template.docx');
+			$document->setValue('aika', $_POST['aika']);
+			$document->setValue('paikka', $_POST['paikka']);
+			$document->setValue('text', $_POST['text']);
+		  	$document->save('tiedostot/varoitukset/'.Yii::app()->user->domain.'/'.$_POST['tyontekija'].'_'.$_POST['aika'].'.docx');
+
+		}
+
 		$this->render('varoitus');
 	}
 
