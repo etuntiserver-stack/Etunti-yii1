@@ -533,7 +533,7 @@
               </li>
               <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/tyosuhdet/index">
-                  <span class="fa fa-list"></span> <?php echo Yii::t('main', 'Työsuhdelomake'); ?></a>
+                  <span class="fa fa-list"></span> <?php echo Yii::t('main', 'Työsuhdetiedot'); ?></a>
               </li>
               <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/tyontekijat/merkkipaivat">
