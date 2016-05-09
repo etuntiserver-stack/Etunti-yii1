@@ -281,7 +281,7 @@ function palaTakais(){
 	$('.submit').click(function(){
 	   $("#autoinsForm").submit();
 	   //window.location.reload();
-	   setTimeout(function(){document.location.href = "index";},500);
+	   setTimeout(function(){document.location.href = self.document.location;},500);
 	});
 
 	$('#newBut').click(function(){
