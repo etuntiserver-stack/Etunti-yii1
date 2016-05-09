@@ -400,7 +400,7 @@ class ToteutuneetController extends Controller
 	          $html2pdf->WriteHTML($this->renderPartial('tulosta',array('from'=>$from,'to'=>$to,'tekija'=>$tekija),true));
 	          $html2pdf->Output();
 
-		  //$this->renderPartial('tulosta',array('from'=>$from,'to'=>$to, 'tekija'=>$tekija));
+		  //$this->renderPartial('tulosta',array('from'=>$from,'to'=>$to, 'tekija'=>$tekija));//
 		} else {
 		  //$dataProvider->pagination->pageSize = 50;
 		  $this->render('index',array('from'=>$from,'to'=>$to));
