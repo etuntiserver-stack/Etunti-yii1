@@ -6,9 +6,9 @@ Yii::registerAutoloader(array('YiiWord', 'autoload'), true);
 // Create a new PHPWord Object
 $PHPWord = new PHPWord();
 
-$document = $PHPWord->loadTemplate('Template.docx');
-$document->setValue('Name', 'paska');
+$document = $PHPWord->loadTemplate('tiedostot/Template.docx');
+$document->setValue('etunimi', 'paska');
 //$document->setValue('Street', 'osoite joko');
-$document->save('tulos.docx');
+$document->save('tiedostot/tulos.docx');
 ?>
 

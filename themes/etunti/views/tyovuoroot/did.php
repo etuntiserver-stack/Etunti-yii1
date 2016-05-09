@@ -11,6 +11,10 @@
 	$bod = ''; 
 	$bod .=  '<div class="small laatikko latikkoAsetukset '.$onkoMennyt.'" pvm="'.date("d.m.Y",strtotime($pvm)).'" tid="'.$tid.'">';
 
+
+if(!isset($_POST['tulosta']))
+{
+
 	$bod .=  '
 	<div class="pull-right oikeallaPlusV">
 	  <div class="form-inline">
@@ -26,6 +30,7 @@
 	  </div>
 	</div>';
 
+
 	$bod .=  '
 	   <div class="tp">
 	     <div class="form-inline">
@@ -40,7 +45,7 @@
 	     </div>
 	     </div>
 	   </div>';
-
+}
 
        	$criteria = new CDbCriteria();
 	$criteria->order = " alku ASC";
