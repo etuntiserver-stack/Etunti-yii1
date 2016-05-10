@@ -97,13 +97,72 @@ class TyontekijatController extends Controller
 		
 		if(isset($_POST['aika']))
 		{
-			$PHPWord = new PHPWord();
+
+
+			$firma = FirmanTiedot::model()->findbypk(1);
+			$tt = Tyontekijat::model()->findbypk($_POST['tyontekija']);
 		
+			$PHPWord = new PHPWord();
 			$document = $PHPWord->loadTemplate('tiedostot/templates/varoitus_template.docx');
+
+			if(!empty($firma->tyonantaja)) 
+			   $document->setValue('tyonantaja', iconv('UTF-8','ISO-8859-1',$firma->tyonantaja));
+			else
+			   $document->setValue('tyonantaja', '');
+
+			if(!empty($firma->osoite)) 
+			   $document->setValue('osoite', iconv('UTF-8','ISO-8859-1',$firma->osoite));
+			else
+			   $document->setValue('osoite', '');
+
+			if(!empty($firma->y_tunnus)) 
+			   $document->setValue('y_tunnus', $firma->y_tunnus);
+			else
+			   $document->setValue('y_tunnus', '');
+
+			if(!empty($firma->puhelin)) 
+			   $document->setValue('puhelin', $firma->puhelin);
+			else
+			   $document->setValue('puhelin', '');
+
+
+			if(!empty($firma->sahkoposti))
+			   $document->setValue('sahkoposti', $firma->sahkoposti);
+			else
+			   $document->setValue('sahkoposti', '');
+
+
+
+			if(!empty($tt->tekijan_nimi))
+			   $document->setValue('tekijan_nimi', iconv('UTF-8','ISO-8859-1',$tt->tekijan_nimi));
+			else
+			   $document->setValue('tekijan_nimi', '');
+
+			if(!empty($tt->tekijan_katuosoite))
+			   $document->setValue('Katuosoite', iconv('UTF-8','ISO-8859-1',$tt->tekijan_katuosoite));
+			else
+			   $document->setValue('Katuosoite', '');
+
+			if(!empty($tt->tekijan_henkilotunnus))
+			   $document->setValue('tekijan_henkilotunnus', $tt->tekijan_henkilotunnus);
+			else
+			   $document->setValue('tekijan_henkilotunnus', '');
+
+			if(!empty($tt->tekijan_puh))
+			   $document->setValue('tekijan_puh', $tt->tekijan_puh);
+			else
+			   $document->setValue('tekijan_puh', '');
+
+			if(!empty($tt->tekijan_email))
+			   $document->setValue('tekijan_email', $tt->tekijan_email);
+			else
+			   $document->setValue('tekijan_email', '');
+
+			$file = 'tiedostot/varoitukset/'.Yii::app()->user->domain.'/'.$_POST['tyontekija'].'_'.$_POST['aika'].'.docx';
 			$document->setValue('aika', $_POST['aika']);
-			$document->setValue('paikka', $_POST['paikka']);
-			$document->setValue('text', $_POST['text']);
-		  	$document->save('tiedostot/varoitukset/'.Yii::app()->user->domain.'/'.$_POST['tyontekija'].'_'.$_POST['aika'].'.docx');
+			$document->setValue('paikka', iconv('UTF-8','ISO-8859-1',$_POST['paikka']));
+			$document->setValue('varoitus', iconv('UTF-8','ISO-8859-1',$_POST['text']));
+		  	$document->save($file);
 
 		}
 

@@ -66,6 +66,12 @@ $kentat[] = array(
 'TYPE' => 'select',
 'OPTIONS' => array("alle 500 000 €", "500 000 - 800 000 €", "800 000 - 1 000 000 €", "1 000 000 - 1 500 000 €", "1 500 000 € - 2 000 000 €", "Yli 2 000 000 €"),
 );
+$kentat[] = array(
+'NAME' => 'Tilaan uutiskirjeen',
+'REQUIRED' => true,
+'TYPE' => 'select',
+'OPTIONS' => array("Kyllä", "Ei"),
+);
 
 $kentat[] = array(
 'VALUE' => 'Lähetä',
