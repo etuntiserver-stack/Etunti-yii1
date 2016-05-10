@@ -539,6 +539,10 @@
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/tyontekijat/merkkipaivat">
                   <span class="fa fa-indent"></span> <?php echo Yii::t('main', 'Merkkipäivät'); ?></a>
               </li>
+              <li>
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/tyontekijat/varoitus">
+                  <span class="fa fa-indent"></span> <?php echo Yii::t('main', 'Kirjallinen varoitus'); ?></a>
+              </li>
             </ul>
           </li>
 
