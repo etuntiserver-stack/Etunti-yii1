@@ -42,6 +42,8 @@ if(isset($_GET['center'])){
     });
   }
 
+
+
     var iconBlue = new GIcon(); 
     iconBlue.image = '/img/mm_20_blue.png';
     iconBlue.shadow = '/img/mm_20_shadow.png';
@@ -78,8 +80,23 @@ if(isset($_GET['center'])){
         map.addControl(new GMapTypeControl());
 
         var centerUusi = "<?php echo $center; ?>".split(",");
+
+
+  var keskeytyLAT = '60.2480743';
+  var keskeytyLNG = '24.9263055';
+
+if (localStorage.getItem('keskeytyLAT') !== null) {
+  keskeytyLAT = localStorage.getItem('keskeytyLAT');
+}
+
+if (localStorage.getItem('keskeytyLNG') !== null) {
+  keskeytyLNG = localStorage.getItem('keskeytyLNG');
+}
+
+
+
 if(!centerUusi[0]){
-        map.setCenter(new GLatLng(60.2480743,24.9263055), 11);
+        map.setCenter(new GLatLng(keskeytyLAT,keskeytyLNG), 11);
 } else {
         map.setCenter(new GLatLng(centerUusi[0],centerUusi[1]), 15);
 //alert(centerUusi)

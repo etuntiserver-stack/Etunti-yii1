@@ -465,8 +465,42 @@ echo '
 	
 
 	<div class="row">
+	<?php echo Yii::t('main', 'Keskeyty'); ?>
+	 <div class="form-inline">
+		Lat <input type="number" class="form-control form-group" id="keskeytyLAT">
+		Lng <input type="number" class="form-control form-group" id="keskeytyLNG">
+		 <button class="tallennaLatLng btn btn-primary myBgColors"><?php echo Yii::t('main', 'Tallenna'); ?></button>
+	 </div>
+	</div>
+
+	<div class="row">
 	 <iframe src="<?php echo Yii::app()->request->baseUrl; ?>/index.php/kohteet/googlemap?nomenu" scrolling="no" style="width: 100%; height: 700px; border: none"></iframe>
 	</div>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+
+if (localStorage.getItem('keskeytyLAT') !== "") {
+  $("#keskeytyLAT").val(localStorage.getItem('keskeytyLAT'));
+}
+
+if (localStorage.getItem('keskeytyLNG') !== "") {
+  $("#keskeytyLNG").val(localStorage.getItem('keskeytyLNG'));
+}
+
+
+$(".tallennaLatLng").click(function(){
+	localStorage.setItem('keskeytyLAT', $("#keskeytyLAT").val());
+	localStorage.setItem('keskeytyLNG', $("#keskeytyLNG").val());
+	window.location.reload();
+});
+
+
+});
+</script>
+
+
 
 
 

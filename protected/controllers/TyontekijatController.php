@@ -106,24 +106,24 @@ class TyontekijatController extends Controller
 			$document = $PHPWord->loadTemplate('tiedostot/templates/varoitus_template.docx');
 
 			if(!empty($firma->tyonantaja)) 
-			   $document->setValue('ftyonantaja', iconv('UTF-8','ISO-8859-1',$firma->tyonantaja));
+			   $document->setValue('tyonantaja', iconv('UTF-8','ISO-8859-1',$firma->tyonantaja));
 			else
-			   $document->setValue('ftyonantaja', '');
+			   $document->setValue('tyonantaja', '');
 
 			if(!empty($firma->osoite)) 
-			   $document->setValue('fosoite', iconv('UTF-8','ISO-8859-1',$firma->osoite));
+			   $document->setValue('osoite', iconv('UTF-8','ISO-8859-1',$firma->osoite));
 			else
-			   $document->setValue('fosoite', '');
+			   $document->setValue('osoite', '');
 
 			if(!empty($firma->y_tunnus)) 
-			   $document->setValue('fy_tunnus', $firma->y_tunnus);
+			   $document->setValue('y_tunnus', $firma->y_tunnus);
 			else
-			   $document->setValue('fy_tunnus', '');
+			   $document->setValue('y_tunnus', '');
 
 			if(!empty($firma->puhelin)) 
-			   $document->setValue('fpuhelin', $firma->puhelin);
+			   $document->setValue('puhelin', $firma->puhelin);
 			else
-			   $document->setValue('fpuhelin', '');
+			   $document->setValue('puhelin', '');
 
 
 			if(!empty($firma->sahkoposti))
@@ -144,9 +144,9 @@ class TyontekijatController extends Controller
 			   $document->setValue('katuosoite', '');
 
 			if(!empty($tt->tekijan_henkilotunnus))
-			   $document->setValue('tekijan_henkilotunnus', $tt->tekijan_henkilotunnus);
+			   $document->setValue('henkilotunnus', $tt->tekijan_henkilotunnus);
 			else
-			   $document->setValue('tekijan_henkilotunnus', '');
+			   $document->setValue('henkilotunnus', '');
 
 			if(!empty($tt->tekijan_puh))
 			   $document->setValue('tekijan_puh', $tt->tekijan_puh);
@@ -162,7 +162,7 @@ class TyontekijatController extends Controller
 			$document->setValue('aika', $_POST['aika']);
 			$document->setValue('paikka', iconv('UTF-8','ISO-8859-1',$_POST['paikka']));
 			$document->setValue('johtaja', iconv('UTF-8','ISO-8859-1',$_POST['johtaja']));
-			$document->setValue('tekijaallakirjoitus', iconv('UTF-8','ISO-8859-1',$tt->tekijan_nimi));
+			$document->setValue('allekirjoitus', iconv('UTF-8','ISO-8859-1',$tt->tekijan_nimi));
 			$document->setValue('varoitus', iconv('UTF-8','ISO-8859-1',$_POST['text']));
 		  	$document->save($file);
 
