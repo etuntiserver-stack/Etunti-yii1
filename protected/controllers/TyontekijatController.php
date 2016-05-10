@@ -111,9 +111,9 @@ class TyontekijatController extends Controller
 			   $document->setValue('tyonantaja', '');
 
 			if(!empty($firma->osoite)) 
-			   $document->setValue('osoite', iconv('UTF-8','ISO-8859-1',$firma->osoite));
+			   $document->setValue('fosoite', iconv('UTF-8','ISO-8859-1',$firma->osoite));
 			else
-			   $document->setValue('osoite', '');
+			   $document->setValue('fosoite', '');
 
 			if(!empty($firma->y_tunnus)) 
 			   $document->setValue('y_tunnus', $firma->y_tunnus);
@@ -127,9 +127,9 @@ class TyontekijatController extends Controller
 
 
 			if(!empty($firma->sahkoposti))
-			   $document->setValue('sahkoposti', $firma->sahkoposti);
+			   $document->setValue('sposti', $firma->sahkoposti);
 			else
-			   $document->setValue('sahkoposti', '');
+			   $document->setValue('sposti', '');
 
 
 
