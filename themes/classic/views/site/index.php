@@ -647,7 +647,7 @@ $kysymykset[] = array(
             <div class="padding-bottom white">
                 <div class="container">
                         <div class="titles-heading">
-                        <h2>Tilaa Etunti -uutiskirje
+                        <h2>Jätä tarjouspyyntö ja tilaa Etunti -uutiskirje
                             <!--<span>
                               <i class="fa fa-star"></i>
                               Vaikuta sovelluksen kehitykseen korvauksen kera
@@ -657,8 +657,12 @@ $kysymykset[] = array(
                         </div>
                     <div class="row">
                         <div class="col-md-6 col-sm-5 padding-bottom">
-<p>Etunti -uutiskirjeen tilaajana saat<br>
-ajankohtaista tietoa ja vinkkejä siitä, miten kehität yrityksen liiketoimintaa, säästät aikaa ja parannat samalla tuottavuutta.</p>
+<p>Jättämällä yhteystietosi,<br>
+olemme sinuun yhteydessä.  <br>
+Etunti -uutiskirjeen tilaajana saat<br>
+ajankohtaista tietoa ja vinkkejä siitä,<br>
+miten kehität yrityksen liiketoimintaa,<br>
+säästät aikaa ja parannat samalla tuottavuutta.</p>
 <!--                             <form id="newsletterForm" action="php/mailchip/newsletter-subscribe.php">
                                 <div class="input-group input-group-lg">
                                     <span class="input-group-addon">
