@@ -162,7 +162,7 @@ class TyontekijatController extends Controller
 			$document->setValue('aika', $_POST['aika']);
 			$document->setValue('paikka', iconv('UTF-8','ISO-8859-1',$_POST['paikka']));
 			$document->setValue('johtaja', iconv('UTF-8','ISO-8859-1',$_POST['johtaja']));
-			$document->setValue('tekijaallekirjoitus', iconv('UTF-8','ISO-8859-1',$tt->tekijan_nimi));
+			$document->setValue('tekijaallakirjoitus', iconv('UTF-8','ISO-8859-1',$tt->tekijan_nimi));
 			$document->setValue('varoitus', iconv('UTF-8','ISO-8859-1',$_POST['text']));
 		  	$document->save($file);
 
