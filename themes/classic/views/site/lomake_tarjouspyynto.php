@@ -353,12 +353,13 @@ $asetukset['email'][] = array(
 //     ',
 // );
 $kentat = array();
-
+/*
 $kentat[] = array(
 'NAME' => 'Modulit',
 'TYPE' => 'hidden',
 'FIELD_CLASS' => 'valitut_modulit',
 );
+*/
 $kentat[] = array(
 'NAME' => 'Nimi',
 'REQUIRED' => true,
