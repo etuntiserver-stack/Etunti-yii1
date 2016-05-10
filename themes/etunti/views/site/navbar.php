@@ -222,10 +222,6 @@
                 <span class="mr10"></span> Suomi </a>
             </li>
             <li>
-              <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/site/etusivu?lang=ee">
-                <span class="mr10"></span> Eesti </a>
-            </li>
-            <li>
               <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/site/etusivu?lang=en">
                 <span class="mr10"></span> English </a>
             </li>
@@ -407,7 +403,7 @@
           <li>
             <a class="accordion-toggle" href="#">
               <span class="fa fa-user"></span>
-              <span class="sidebar-title"><?php echo Yii::t('main', 'Asiakkaat'); ?></span>
+              <span class="sidebar-title"><?php echo Yii::t('main', 'Asiakaiden hallinta'); ?></span>
               <span class="caret"></span>
             </a>
             <ul class="nav sub-nav">
@@ -440,7 +436,7 @@
           <li>
             <a class="accordion-toggle" href="#">
               <span class="fa fa-mobile"></span>
-              <span class="sidebar-title"><?php echo Yii::t('main', 'Tunnit'); ?></span>
+              <span class="sidebar-title"><?php echo Yii::t('main', 'Tuntien hallinta'); ?></span>
               <span class="caret"></span>
             </a>
             <ul class="nav sub-nav">
@@ -519,7 +515,7 @@
           <li>
             <a class="accordion-toggle" href="#">
               <span class="fa fa-male"></span>
-              <span class="sidebar-title"><?php echo Yii::t('main', 'Työntekijät'); ?></span>
+              <span class="sidebar-title"><?php echo Yii::t('main', 'Työntekijöiden hallinta'); ?></span>
               <span class="caret"></span>
             </a>
             <ul class="nav sub-nav">
@@ -551,7 +547,7 @@
           <li>
             <a class="accordion-toggle" href="#">
               <span class="fa fa-envelope"></span>
-              <span class="sidebar-title"><?php echo Yii::t('main', 'Viestintä'); ?></span>
+              <span class="sidebar-title"><?php echo Yii::t('main', 'Viestintä hallinta'); ?></span>
               <span class="caret"></span>
             </a>
             <ul class="nav sub-nav">
@@ -566,7 +562,7 @@
           <li>
             <a class="accordion-toggle" href="#">
               <span class="fa fa-calendar-check-o"></span>
-              <span class="sidebar-title"><?php echo Yii::t('main', 'Työvuorot'); ?></span>
+              <span class="sidebar-title"><?php echo Yii::t('main', 'Työvuorojen hallinta'); ?></span>
               <span class="caret"></span>
             </a>
             <ul class="nav sub-nav">
@@ -602,7 +598,7 @@
           <li>
             <a class="accordion-toggle" href="#">
               <span class="glyphicon glyphicon-barcode"></span>
-              <span class="sidebar-title"><?php echo Yii::t('main', 'Laskutus'); ?></span>
+              <span class="sidebar-title"><?php echo Yii::t('main', 'Laskutuksen hallinta'); ?></span>
               <span class="caret"></span>
             </a>
             <ul class="nav sub-nav">
