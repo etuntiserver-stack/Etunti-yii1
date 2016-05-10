@@ -217,7 +217,7 @@
 Etunti on monipuolinen ja kattava ohjelma, jonka avulla
 yritystoimintaa on helppo hallita, organisoida ja kehittää. Ohjelma toimii mobiilissa ja on vaivatonta 
 käyttää. Etunnin avulla helpotat huomattavasti yrityksen liiketoimintaa, säästät aikaa ja parannat samalla 
-tuottavuutta sekä kehität palveluita. 
+tuottavuutta sekä kehität palveluja. 
 </p>
 <p>
 Etunnin perus- ja lisätyökalut ovat suunniteltu ratkaisemaan puhdistusalan 
@@ -657,14 +657,8 @@ $kysymykset[] = array(
                         </div>
                     <div class="row">
                         <div class="col-md-6 col-sm-5 padding-bottom">
-<p>Kiitos pilotointitestiryhmään hakeneille.<br>
-Pilotointiin haku on nyt päättynyt ja pilotointiryhmä on täynnä.</p>
-<p>Mikäli olet kiinnostunut Etunti -ohjelmasta, jätä yhteystietosi viereiseen yhteystiedot kenttään, niin otamme yhteyttä.</p>
-
-<p style="background: #ddd;">Etsimme vielä muutamia pilottiasiakkaita osallistumaan Etunti- ohjelman viimeistelyyn. Saat aktiivisesta mukanaolostasi 500 € ja Etunti -ohjelman käyttöösi veloituksetta kolmeksi kuukaudeksi. 
-<p style="background: #ddd;">Jos olet idearikas ja peloton pilotti, ota yhteyttä. 
-<br>
-Toimi nopeasti, sillä paikkoja on rajoitetusti!</p></p>
+<p>Etunti -uutiskirjeen tilaajana saat<br>
+ajankohtaista tietoa ja vinkkejä siitä, miten kehität yrityksen liiketoimintaa, säästät aikaa ja parannat samalla tuottavuutta.</p>
 <!--                             <form id="newsletterForm" action="php/mailchip/newsletter-subscribe.php">
                                 <div class="input-group input-group-lg">
                                     <span class="input-group-addon">
