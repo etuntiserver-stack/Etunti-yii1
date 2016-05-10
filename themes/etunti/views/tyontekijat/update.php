@@ -205,6 +205,42 @@ exit;
               </div>
             </div>
 
+
+
+            <div class="admin-form">
+              <div class="panel heading-border">
+                <div class="panel-body bg-light">
+
+
+<div class="row">
+  <div class="col-sm-4">
+   <legend><?php echo Yii::t('main', 'Kirjallinen varoitus'); ?></legend>
+
+<?php
+
+	$i = 0;
+	foreach(array_reverse(glob('tiedostot/varoitukset/'.Yii::app()->user->domain.'/'.$model->id.'_*.*')) as $file) {
+	$i++;
+	$explNimi = explode("/",$file);
+ 	echo '
+	<div class="form-inline" id="t_'.$model->id.$i.'">
+
+	  <div class="btn btn-xs btn-danger poistaTiedosto" this="'.$file.'" model="'.$model->id.'" for="t_'.$model->id.$i.'">X</div>
+	  &nbsp;&nbsp;&nbsp;<a href="../../'.$file.'">'.end($explNimi).'</a>
+	</div>
+	';
+	$kuvat[$i] = $file;
+	}
+?>
+
+  </div>
+</div>
+
+
+                </div>
+              </div>
+            </div>
+
         <!-- loppu: .tray-center -->
         </div>
 

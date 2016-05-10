@@ -64,6 +64,15 @@
                           </label>
                         </div>
 
+                        <div class="section">
+                          <label class="field prepend-icon">
+   			    <input type="text" class="gui-input" name="johtaja" placeholder="<?php echo Yii::t('main', 'Johtaja'); ?>">
+                            <label for="firstname" class="field-icon">
+                              <i class="fa fa-bookmark"></i>
+                            </label>
+                          </label>
+                        </div>
+
                       </div>
 
                       <div class="col-md-4">
@@ -85,7 +94,20 @@
         	        <input type="submit" class="btn btn-primary btn-lg haemob myBgColors" value="<?php echo Yii::t('main', 'Luo'); ?>">
 		      </div>
 
+<br>
 
+<?php
+if(!empty($file))
+{
+	$explNimi = explode("/",$file);
+ 	echo '
+	<div class="">
+	  <a href="../../'.$file.'">'.end($explNimi).'</a>
+	</div>
+	';
+}
+
+?>
 
 
 
