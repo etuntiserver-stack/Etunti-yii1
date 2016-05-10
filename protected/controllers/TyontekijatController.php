@@ -93,7 +93,7 @@ class TyontekijatController extends Controller
 		 	mkdir(Yii::app()->basePath."/../tiedostot/varoitukset/".Yii::app()->user->domain, 0777, true);
 		}
 
-
+		$file = '';
 		
 		if(isset($_POST['aika']))
 		{
@@ -106,9 +106,9 @@ class TyontekijatController extends Controller
 			$document = $PHPWord->loadTemplate('tiedostot/templates/varoitus_template.docx');
 
 			if(!empty($firma->tyonantaja)) 
-			   $document->setValue('tyonantaja', iconv('UTF-8','ISO-8859-1',$firma->tyonantaja));
+			   $document->setValue('ftyonantaja', iconv('UTF-8','ISO-8859-1',$firma->tyonantaja));
 			else
-			   $document->setValue('tyonantaja', '');
+			   $document->setValue('ftyonantaja', '');
 
 			if(!empty($firma->osoite)) 
 			   $document->setValue('fosoite', iconv('UTF-8','ISO-8859-1',$firma->osoite));
@@ -116,14 +116,14 @@ class TyontekijatController extends Controller
 			   $document->setValue('fosoite', '');
 
 			if(!empty($firma->y_tunnus)) 
-			   $document->setValue('y_tunnus', $firma->y_tunnus);
+			   $document->setValue('fy_tunnus', $firma->y_tunnus);
 			else
-			   $document->setValue('y_tunnus', '');
+			   $document->setValue('fy_tunnus', '');
 
 			if(!empty($firma->puhelin)) 
-			   $document->setValue('puhelin', $firma->puhelin);
+			   $document->setValue('fpuhelin', $firma->puhelin);
 			else
-			   $document->setValue('puhelin', '');
+			   $document->setValue('fpuhelin', '');
 
 
 			if(!empty($firma->sahkoposti))
@@ -139,9 +139,9 @@ class TyontekijatController extends Controller
 			   $document->setValue('tekijan_nimi', '');
 
 			if(!empty($tt->tekijan_katuosoite))
-			   $document->setValue('Katuosoite', iconv('UTF-8','ISO-8859-1',$tt->tekijan_katuosoite));
+			   $document->setValue('katuosoite', iconv('UTF-8','ISO-8859-1',$tt->tekijan_katuosoite));
 			else
-			   $document->setValue('Katuosoite', '');
+			   $document->setValue('katuosoite', '');
 
 			if(!empty($tt->tekijan_henkilotunnus))
 			   $document->setValue('tekijan_henkilotunnus', $tt->tekijan_henkilotunnus);
@@ -161,12 +161,14 @@ class TyontekijatController extends Controller
 			$file = 'tiedostot/varoitukset/'.Yii::app()->user->domain.'/'.$_POST['tyontekija'].'_'.$_POST['aika'].'.docx';
 			$document->setValue('aika', $_POST['aika']);
 			$document->setValue('paikka', iconv('UTF-8','ISO-8859-1',$_POST['paikka']));
+			$document->setValue('johtaja', iconv('UTF-8','ISO-8859-1',$_POST['johtaja']));
+			$document->setValue('tekijaallekirjoitus', iconv('UTF-8','ISO-8859-1',$tt->tekijan_nimi));
 			$document->setValue('varoitus', iconv('UTF-8','ISO-8859-1',$_POST['text']));
 		  	$document->save($file);
 
 		}
 
-		$this->render('varoitus');
+		$this->render('varoitus', array('file'=>$file));
 	}
 
 	public function actionMerkkipaivat()
