@@ -547,7 +547,7 @@
           <li>
             <a class="accordion-toggle" href="#">
               <span class="fa fa-envelope"></span>
-              <span class="sidebar-title"><?php echo Yii::t('main', 'Viestintä hallinta'); ?></span>
+              <span class="sidebar-title"><?php echo Yii::t('main', 'Viestinnän hallinta'); ?></span>
               <span class="caret"></span>
             </a>
             <ul class="nav sub-nav">
