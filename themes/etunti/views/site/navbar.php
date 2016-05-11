@@ -700,6 +700,10 @@
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/site/kohderyhma">
                   <span class="fa fa-clock-o"></span> <?php echo Yii::t('main', 'Kohderyhmä'); ?></a>
               </li>
+              <li>
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/crmTarjoukset/index">
+                  <span class="fa fa-clock-o"></span> <?php echo Yii::t('main', 'Tarjoukset'); ?></a>
+              </li>
             </ul>
           </li>
 	<?php endif; ?>
