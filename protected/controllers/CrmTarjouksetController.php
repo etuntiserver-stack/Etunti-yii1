@@ -93,10 +93,10 @@ $randstring = generateRandomString();
 		$firma = FirmanTiedot::model()->findbypk(1);
 		$message = Yii::t('main', 'CRM tarjous body');
 		$message .= '<br>
-		<a href="'.Yii::app()->request->baseUrl.'/index.php/crmTarjoukset/success?code='.$randstring.'">
+		<a href="http://'.$_SERVER['SERVER_NAME'].'/index.php/crmTarjoukset/success?code='.$randstring.'">
 				<h2>'.Yii::t('main', 'Hyväksy').'
 		</a>
-		<a href="'.Yii::app()->request->baseUrl.'/index.php/crmTarjoukset/cancel?code='.$randstring.'">
+		<a href="http://'.$_SERVER['SERVER_NAME'].'/index.php/crmTarjoukset/cancel?code='.$randstring.'">
 				<h2>'.Yii::t('main', 'Hylkä').'
 		</a>
 		';
