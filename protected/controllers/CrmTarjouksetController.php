@@ -28,8 +28,11 @@ class CrmTarjouksetController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
+				'actions'=>array('success', 'cancel'),
+				'users'=>array('*'),
+			),
+			array('allow', // allow admin user to perform 'admin' and 'delete' actions
 				'actions'=>array('admin','delete','create','update','index','view', 'laheta'),
-                		//'expression'=>"Yii::app()->user->username == 'roman'",
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -63,6 +66,36 @@ class CrmTarjouksetController extends Controller
                 parent::init();
         }
 
+	public function actionSuccess($id, $code)
+	{
+		Yii::app()->theme = 'classic';
+		$asia = false;
+
+		$crm = CrmTarjoukset::model()->findbypk($id);
+		if(isset($crm->id) and $crm->code == $code and $crm->status == 1)
+		{
+			CrmTarjoukset::model()->updatebypk($id, array('status'=>2));
+			$asia = true;
+		}
+
+		$this->render('success', array('asia'=>$asia));
+	}
+
+	public function actionCancel($id, $code)
+	{
+		Yii::app()->theme = 'classic';
+		$asia = false;
+
+		$crm = CrmTarjoukset::model()->findbypk($id);
+		if(isset($crm->id) and $crm->code == $code and $crm->status == 1)
+		{
+			CrmTarjoukset::model()->updatebypk($id, array('status'=>3));
+			$asia = true;
+		}
+
+		$this->render('cancel', array('asia'=>$asia));
+	}
+
 
 	public function actionLaheta()
 	{
@@ -93,10 +126,10 @@ $randstring = generateRandomString();
 		$firma = FirmanTiedot::model()->findbypk(1);
 		$message = Yii::t('main', 'CRM tarjous body');
 		$message .= '<br>
-		<a href="http://'.$_SERVER['SERVER_NAME'].'/index.php/crmTarjoukset/success?code='.$randstring.'">
+		<a href="http://'.$_SERVER['SERVER_NAME'].'/index.php/crmTarjoukset/success?id='.$_POST['id'].'&code='.$randstring.'">
 				<h2>'.Yii::t('main', 'Hyväksy').'
 		</a>
-		<a href="http://'.$_SERVER['SERVER_NAME'].'/index.php/crmTarjoukset/cancel?code='.$randstring.'">
+		<a href="http://'.$_SERVER['SERVER_NAME'].'/index.php/crmTarjoukset/cancel?id='.$_POST['id'].'&code='.$randstring.'">
 				<h2>'.Yii::t('main', 'Hylkä').'
 		</a>
 		';
