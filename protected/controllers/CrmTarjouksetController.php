@@ -220,7 +220,7 @@ $(document).ready(function(){
            data: { "polkku" : polkku },
            success: function(data){
 		console.log(data);
-		//window.location.href="index";
+		window.location.href="index";
            }
         });
 
