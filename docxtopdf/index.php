@@ -1,10 +1,10 @@
 <?php
 
-require_once 'PhpWord\PhpWord.php';
-require_once 'PhpWord\Autoloader.php';
-require_once 'PhpWord\Common\XMLReader.php';
-require_once 'PhpWord\Common\XMLWriter.php';
-require_once 'PhpWord\Common\Text.php';
+require_once 'PhpWord/PhpWord.php';
+require_once 'PhpWord/Autoloader.php';
+require_once 'PhpWord/Common/XMLReader.php';
+require_once 'PhpWord/Common/XMLWriter.php';
+require_once 'PhpWord/Common/Text.php';
 PHPWord_Autoloader::register();
 
 
