@@ -87,7 +87,7 @@ $randstring = generateRandomString();
 
 
 		/* file */
-		$file = $crm->liite;
+		$file = $crm->liite.'.pdf';
 		$path = Yii::app()->request->baseUrl."tiedostot/crm/tarjoukset/".Yii::app()->user->domain;
 
 		$firma = FirmanTiedot::model()->findbypk(1);
@@ -101,6 +101,8 @@ $randstring = generateRandomString();
 		</a>
 		';
 		
+   if(file_exists(Yii::app()->basePath."/../tiedostot/crm/tarjoukset/".Yii::app()->user->domain."/".$crm->liite.".pdf"))
+   {
 		$mail = new YiiMailer();
 		//$mail->clearLayout();//if layout is already set in config
 		$mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
@@ -115,6 +117,9 @@ $randstring = generateRandomString();
 			CrmTarjoukset::model()->updatebypk($_POST['id'], array('status'=>1,'hyvaksyn_koodi'=>$randstring));
 			$this->redirect(array('index'));
 		   }
+   }
+
+
 
 		}
 	}

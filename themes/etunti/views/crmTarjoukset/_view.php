@@ -26,7 +26,9 @@
 	</td>
 	<td>
 		<?php 
-			if(isset($as->sahkoposti) and $data->status == 0)
+			if(isset($as->sahkoposti) and $data->status == 0 and
+   		(file_exists(Yii::app()->basePath."/../tiedostot/crm/tarjoukset/".Yii::app()->user->domain."/".$data->liite.".pdf"))
+			)
 			{
 				echo '<button class="btn btn-primary myBgColors laheta" for="'.$data->id.'">'.Yii::t('main', 'lähetä').'</button>';
 			} elseif($data->status == 1){
