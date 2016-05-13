@@ -791,7 +791,8 @@ säästät aikaa ja parannat samalla tuottavuutta.</p>
                <div class="row">
 
                     <!-- Nav-->
-			       <p class="text-center">Digisten Oy, Hämeentie 157 6. krs. H9, 00560 Helsinki<br> Y-tunnus: 2751718-1</p>
+			       <p class="text-center">Digisten Oy, Hämeentie 157 6. krs. H9, 00560 Helsinki<br> Y-tunnus: 2751718-1 
+			      | <a href="rekisteriteloste.pdf">Rekisteriseloste</a></p>
                                <p class="text-center">&copy; 2015 Etunti</p>
 
                     <!-- End Nav-->
