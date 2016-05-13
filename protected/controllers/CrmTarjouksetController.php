@@ -175,8 +175,36 @@ $randstring = generateRandomString();
 			$model->asiakkaan_sahkoposti=$as->sahkoposti;
 
 			if($model->save()){
-				$this->docx($model);
-				$this->redirect(array('index'));
+
+				$returnPath = $this->docx($model);
+
+echo '
+	<input type="hidden" id="polkku" value="'.$returnPath.'">
+
+<script src="'.Yii::app()->request->baseUrl.'/js/jquery-1.9.1.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+
+	var polkku = $("#polkku").val();
+
+        $.ajax({
+           url: location.protocol + "//" + location.host + "/docxtopdf/index.php",
+           type: "POST",
+           data: { "polkku" : polkku },
+           success: function(data){
+		console.log(data);
+		window.location.href="index";
+           }
+        });
+
+});
+</script>';
+exit;
+
+	
+
+
 			}
 		}
 
@@ -190,10 +218,11 @@ $randstring = generateRandomString();
 	{
 
 			$liite = $model->id.'_'.date("d.m.Y");
-			$crm = CrmTarjoukset::model()->updatebypk($model->id, array('liite'=>$liite.'.docx'));
+			$crm = CrmTarjoukset::model()->updatebypk($model->id, array('liite'=>$liite));
 
 			Yii::import('ext.yiiword.YiiWord', true);
 			Yii::registerAutoloader(array('YiiWord', 'autoload'), true);
+
 	
 			if (!file_exists(Yii::app()->basePath."/../tiedostot/crm/tarjoukset/".Yii::app()->user->domain)) {
 			 	mkdir(Yii::app()->basePath."/../tiedostot/crm/tarjoukset/".Yii::app()->user->domain, 0777, true);
@@ -238,10 +267,12 @@ $randstring = generateRandomString();
 			   $document->setValue('sposti', '');
 */
 
-
-			$file = 'tiedostot/crm/tarjoukset/'.Yii::app()->user->domain.'/'.$liite.'.docx';
+			$path = 'tiedostot/crm/tarjoukset/'.Yii::app()->user->domain.'/'.$liite;
 			$document->setValue('tarjous', iconv('UTF-8','ISO-8859-1',$model->tarjous));
-		  	$document->save($file);
+		  	$document->save($path.'.docx');
+
+			return $path;
+
 	}
 
 	public function actionDelete($id)
