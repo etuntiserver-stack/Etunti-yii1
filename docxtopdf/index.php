@@ -16,7 +16,7 @@ $rendererLibraryPath = dirname(__FILE__) .'/plugins/tcpdf/' . $rendererLibrary;
 
 \PhpOffice\PhpWord\Settings::setPdfRenderer($rendererName,$rendererLibraryPath);
 
-$path = '../'.$_POST['polkku'];
+$path = dirname(__FILE__) .'/../'.$_POST['polkku'];
 $phpWord = \PhpOffice\PhpWord\IOFactory::load($path.'.docx'); 
 $xmlWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord , 'PDF');
 $xmlWriter->save($path.'.pdf');  
