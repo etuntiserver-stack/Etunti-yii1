@@ -1,4 +1,5 @@
 <?php
+header("Content-Type: text/plain");
 
 require_once 'PhpWord/PhpWord.php';
 require_once 'PhpWord/Autoloader.php';
@@ -10,11 +11,19 @@ PHPWord_Autoloader::register();
 
 $phpWord = new \PhpOffice\PhpWord\PhpWord();
 
+
 $rendererName = \PhpOffice\PhpWord\Settings::PDF_RENDERER_TCPDF;
 $rendererLibrary = 'tcpdf.php';
 $rendererLibraryPath = dirname(__FILE__) .'/plugins/tcpdf/' . $rendererLibrary;
-
 \PhpOffice\PhpWord\Settings::setPdfRenderer($rendererName,$rendererLibraryPath);
+
+
+/*
+$rendererName = \PhpOffice\PhpWord\Settings::PDF_RENDERER_MPDF;
+$rendererLibrary = 'mpdf.php';
+$rendererLibraryPath = dirname(__FILE__) .'/plugins/mpdf/' . $rendererLibrary;
+\PhpOffice\PhpWord\Settings::setPdfRenderer($rendererName,$rendererLibraryPath);
+*/
 
 $path = dirname(__FILE__) .'/../'.$_POST['polkku'];
 $phpWord = \PhpOffice\PhpWord\IOFactory::load($path.'.docx'); 

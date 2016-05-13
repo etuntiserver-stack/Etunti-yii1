@@ -89,6 +89,9 @@ class PHPWord_Template {
             $replace = utf8_encode($replace);
         }
         
+//echo $replace;
+//exit;
+
         $this->_documentXML = str_replace($search, $replace, $this->_documentXML);
     }
     
