@@ -35,7 +35,7 @@ echo '
                 <div class="container">
                     <!-- Icon Big -->
                     <!-- End Icon Big -->
-                        <h1 class="title-subtitle text-center">Olet hyväksynyt tunteja.
+                        <h1 class="title-subtitle text-center">Olet hylännyt tarjouksen.
                             <span>
                               Kiitos.
                             </span>
@@ -59,7 +59,7 @@ echo '
                 <div class="container">
                     <!-- Icon Big -->
                     <!-- End Icon Big -->
-                        <h1 class="title-subtitle text-center">Olet hylännyt tarjouksen.
+                        <h1 class="title-subtitle text-center">Tämä linkki on vanhentunut.
                             <span>
                               Kiitos.
                             </span>
