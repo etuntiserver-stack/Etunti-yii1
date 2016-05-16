@@ -79,9 +79,12 @@ class CrmTarjouksetController extends Controller
 			else
 				var_dump($crm->errors);
 
-		} 
-		$this->render('success', array('asia'=>$asia));
-		
+			$this->render('success', array('asia'=>$asia));
+
+		} else {
+
+			$this->render('success', array('asia'=>$asia));
+		}		
 	}
 
 	public function actionCancel($id, $code)
