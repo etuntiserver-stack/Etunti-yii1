@@ -124,19 +124,21 @@ body{
       	$style = " style='background: $status[1]; color: white' ";
 	$st0 = $status[0];
 	$id = $vl['id'];
+	$myBgColors = '';
      } else {
       	$status = '';
       	$style = '';
 	$st0 = '';
 	$id = 'new';
+	$myBgColors = 'myBgColors';
      }
 
      if($this->pyhat($thisDate))
      {
-       echo '<td id="riv_'.$thisDate.$v->id.'" class="muokka myBgColors" method="'.$id.'" thisDate='.$thisDate.' thisTid='.$v->id.'>
+       echo '<td id="riv_'.$thisDate.$v->id.'" class="muokaTaulunLatiko '.$myBgColors.'" '.$style.' method="'.$id.'" thisdate='.$thisDate.' thistid='.$v->id.'>
 	<div class="link laatikot">'.$st0.'</div></td>';
      } else {
-       echo '<td id="riv_'.$thisDate.$v->id.'" '.$style.' class="muokka" method="'.$id.'" thisDate='.$thisDate.' thisTid='.$v->id.'><div class="link laatikot">'.$st0.'</div></td>';
+       echo '<td id="riv_'.$thisDate.$v->id.'" '.$style.' class="muokaTaulunLatiko" method="'.$id.'" thisdate='.$thisDate.' thistid='.$v->id.'><div class="link laatikot">'.$st0.'</div></td>';
      }
    }
 
@@ -262,14 +264,13 @@ $('input[type="radio"]').change(function() {
 
 /* valikot */
 
-
-  $(".muokka").click(function(){
+  $(document).delegate(".muokaTaulunLatiko","click",function(){
 
     $(this).css({"background" : "#ccc"});
 
     var thisID = $(this).attr("id");
-    var thisDate = $(this).attr("thisDate");
-    var thisTid = parseInt($(this).attr("thisTid"));
+    var thisDate = $(this).attr("thisdate");
+    var thisTid = parseInt($(this).attr("thistid"));
     var thisTXT = $(this).text();
     var id = $(this).attr("method");
     var thisStatus = $(".valikot input:radio:checked").val();
@@ -294,15 +295,20 @@ $('input[type="radio"]').change(function() {
 
 		var spData  = data.split("//");
 
-		if(spData[3] != ''){
+		if(spData[3] != '' && data != 'removed'){
 		   $("#"+thisID).attr("method",spData[0]);
+		   $("#"+thisID).removeClass("myBgColors bg-info");
 		   $("#"+thisID).attr("style","background:"+spData[4]+";color:white;");
-		   $("#"+thisID).html(spData[3]);
+		   $("#"+thisID).html('<div class="link laatikot">'+ spData[3] +'</div>');
 		}
 
 		if(data == 'removed')
-		   $("#"+thisID).html('');
+		{
+		   $("#"+thisID).attr("method", "new");
+		   $("#"+thisID).html('<div class="link laatikot"></div>');
+		}
 
+/*
     		if(thisTXT == ''){
 		    $("#lisattyTyovuoroon").html("<h3>Lisätty työvuoroon</h3>").fadeToggle("fade", function() {
 			$("#lisattyTyovuoroon").fadeOut(2000);
@@ -313,6 +319,7 @@ $('input[type="radio"]').change(function() {
 			$("#lisattyTyovuoroon").fadeOut(2000);
   		    });
 		}
+*/
     
 
            },
