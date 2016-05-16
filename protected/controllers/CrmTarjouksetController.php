@@ -74,12 +74,12 @@ class CrmTarjouksetController extends Controller
 		if($asia == 'hyvaksy' and isset($crm->id) and $crm->hyvaksyn_koodi == $code and $crm->status == 1){
 
 			CrmTarjoukset::model()->updatebypk($id, array('status'=>2));
-			$this->redirect('success', array('asia'=>1));
+			$this->render('success', array('asia'=>1));
 
 		} elseif($asia == 'hylatty' and isset($crm->id) and $crm->hyvaksyn_koodi == $code and $crm->status == 1){
 
 			CrmTarjoukset::model()->updatebypk($id, array('status'=>3));
-			$this->redirect('cancel', array('asia'=>1));
+			$this->render('cancel', array('asia'=>1));
 		}		
 	}
 
