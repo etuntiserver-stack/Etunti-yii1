@@ -28,7 +28,7 @@ class CrmTarjouksetController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('vastaus', 'success', 'cancel'),
+				'actions'=>array('vastaus', 'success', 'cancel', 'vanhentunut'),
 				'users'=>array('*'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -80,7 +80,10 @@ class CrmTarjouksetController extends Controller
 
 			CrmTarjoukset::model()->updatebypk($id, array('status'=>3));
 			$this->redirect(array('cancel'));
-		}		
+		} else {
+			$this->redirect(array('vanhentunut'));
+		}
+	
 	}
 
 	public function actionSuccess()
@@ -95,6 +98,11 @@ class CrmTarjouksetController extends Controller
 		$this->render('cancel');		
 	}
 
+	public function actionVanhentunut()
+	{
+		Yii::app()->theme = 'classic';
+		$this->render('vanhentunut');		
+	}
 
 	public function actionLaheta()
 	{
