@@ -26,7 +26,6 @@
         <!-- End Header-->
 
 <?php
-echo $asia;
   if($asia == true)
   {
 
