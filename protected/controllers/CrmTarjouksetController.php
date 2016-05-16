@@ -28,7 +28,7 @@ class CrmTarjouksetController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('success', 'cancel'),
+				'actions'=>array('vastaus', 'success', 'cancel'),
 				'users'=>array('*'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -66,37 +66,33 @@ class CrmTarjouksetController extends Controller
                 parent::init();
         }
 
-	public function actionSuccess($id, $code)
+
+	public function actionVastaus($asia, $id, $code)
 	{
 		Yii::app()->theme = 'classic';
 		$crm = CrmTarjoukset::model()->findbypk($id);
-		if(isset($crm->id) and $crm->hyvaksyn_koodi == $code and $crm->status == 1)
-		{
+		if($asia == 'hyvaksy' and isset($crm->id) and $crm->hyvaksyn_koodi == $code and $crm->status == 1){
 
-			$crm->status = 1;
-			$crm->save();
-			$this->render('success', array('asia'=>1));
+			CrmTarjoukset::model()->updatebypk($id, array('status'=>2));
+			$this->redirect('success', array('asia'=>1));
 
-		} else {
+		} elseif($asia == 'hylatty' and isset($crm->id) and $crm->hyvaksyn_koodi == $code and $crm->status == 1){
 
-			$this->render('success', array('asia'=>0));
+			CrmTarjoukset::model()->updatebypk($id, array('status'=>3));
+			$this->redirect('cancel', array('asia'=>1));
 		}		
 	}
 
-	public function actionCancel($id, $code)
+	public function actionSuccess($asia)
 	{
 		Yii::app()->theme = 'classic';
-		$asia = 0;
-		$crm = CrmTarjoukset::model()->findbypk($id);
-		if(isset($crm->id) and $crm->hyvaksyn_koodi == $code and $crm->status == 1)
-		{
-			$crm->status = 3;
-			if($crm->save())
-				$asia = 1;
-			else
-				var_dump($crm->errors);
-		} 
-		$this->render('cancel', array('asia'=>$asia));
+		$this->render('success', array('asia'=>$asia));		
+	}
+
+	public function actionCancel($asia)
+	{
+		Yii::app()->theme = 'classic';
+		$this->render('cancel', array('asia'=>$asia));		
 	}
 
 
@@ -129,10 +125,10 @@ $randstring = generateRandomString();
 		$firma = FirmanTiedot::model()->findbypk(1);
 		$message = Yii::t('main', 'CRM tarjous body');
 		$message .= '<br>
-		<a href="http://'.$_SERVER['SERVER_NAME'].'/index.php/crmTarjoukset/success?id='.$_POST['id'].'&code='.$randstring.'">
+		<a href="http://'.$_SERVER['SERVER_NAME'].'/index.php/crmTarjoukset/vastaus?asia=hyvaksy&id='.$_POST['id'].'&code='.$randstring.'">
 				<h2>'.Yii::t('main', 'Hyväksy').'
 		</a>
-		<a href="http://'.$_SERVER['SERVER_NAME'].'/index.php/crmTarjoukset/cancel?id='.$_POST['id'].'&code='.$randstring.'">
+		<a href="http://'.$_SERVER['SERVER_NAME'].'/index.php/crmTarjoukset/vastaus?asia=hylatty&id='.$_POST['id'].'&code='.$randstring.'">
 				<h2>'.Yii::t('main', 'Hylkä').'
 		</a>
 		';
