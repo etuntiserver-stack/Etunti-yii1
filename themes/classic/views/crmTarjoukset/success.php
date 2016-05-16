@@ -53,7 +53,7 @@ echo '
   
 
 
-  } else {
+  } elseif($asia == 0) {
 
 echo '
         <section class="esittely">
