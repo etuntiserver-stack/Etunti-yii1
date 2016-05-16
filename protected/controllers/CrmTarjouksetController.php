@@ -72,14 +72,9 @@ class CrmTarjouksetController extends Controller
 		$crm = CrmTarjoukset::model()->findbypk($id);
 		if(isset($crm->id) and $crm->hyvaksyn_koodi == $code and $crm->status == 1)
 		{
-/*
-			$crm->status = 2;
-			if($crm->save())
-				$this->render('success', array('asia'=>1));
-			else
-				var_dump($crm->errors);
-*/
 
+			$crm->status = 1;
+			$crm->save();
 			$this->render('success', array('asia'=>1));
 
 		} else {
