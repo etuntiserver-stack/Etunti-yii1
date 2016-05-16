@@ -94,7 +94,7 @@ class CrmTarjouksetController extends Controller
 				$asia = 1;
 		} 
 		
-		$this->render('success', array('asia'=>$asia));
+		$this->render('cancel', array('asia'=>$asia));
 	}
 
 
