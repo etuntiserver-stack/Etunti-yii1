@@ -33,6 +33,10 @@
 				echo '<button class="btn btn-primary myBgColors laheta" for="'.$data->id.'">'.Yii::t('main', 'lähetä').'</button>';
 			} elseif($data->status == 1){
 				echo '<button class="btn btn-success">'.Yii::t('main', 'Lähetetty').'</button>';
+			} elseif($data->status == 2){
+				echo '<button class="btn btn-success">'.Yii::t('main', 'Hyväksytty').'</button>';
+			} elseif($data->status == 3){
+				echo '<button class="btn btn-success">'.Yii::t('main', 'Hylätty').'</button>';
 			}
 		?>
 	</td>
