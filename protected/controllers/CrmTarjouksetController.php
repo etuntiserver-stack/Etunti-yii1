@@ -83,13 +83,13 @@ class CrmTarjouksetController extends Controller
 		}		
 	}
 
-	public function actionSuccess($asia)
+	public function actionSuccess()
 	{
 		Yii::app()->theme = 'classic';
 		$this->render('success');		
 	}
 
-	public function actionCancel($asia)
+	public function actionCancel()
 	{
 		Yii::app()->theme = 'classic';
 		$this->render('cancel');		
