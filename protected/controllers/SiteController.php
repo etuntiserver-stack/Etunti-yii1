@@ -654,5 +654,14 @@ $(document).ready(function(){
 		return $return;
 	}
 
+	public function eiLasketaSubStr($val)
+	{
+
+		$return = false;
+		if (strpos($val, 'Ei lasketa') !== false or strpos($val, 'Varallaolo') !== false) {
+		    $return = true;
+		}
+		return $return;
+	}
 
 }

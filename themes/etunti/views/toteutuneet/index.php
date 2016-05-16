@@ -219,6 +219,10 @@ function dateDiff($start, $end) {
   $yhtPyWeek	= 0;
   $yhtElWeek	= 0;
 
+  $suunnittelut = 0;
+  $yhtSuunnittelut = 0;
+  $yhtSuunnittelutWeek = 0;
+
   for ($i = 0; $i <= $dateDiff; $i++) 
   {
   
@@ -234,12 +238,24 @@ function dateDiff($start, $end) {
     <tr>
   	<td width=1 class="small">'.$arrDate[$explColDate[0]].'<br>'.date("d.m",strtotime($date)).'</td>';
   
-    $tas = explode(",",Yii::app()->user->adminPaketti);
     if(in_array('2',$tas))
     {
 	$dido = '';
-	$dido = $this->renderPartial('//tyovuoroot/did',array('pvm'=>$date,'tid'=>$explTekija[0],'from'=>'mobiili'),true);
-    	echo '<td>'.json_decode($dido, true).'</td>';
+	$dido = $this->renderPartial('//tyovuoroot/did',array('pvm'=>$date,'tid'=>$explTekija[0],'from'=>'mobiili','yhteensa'=>true),true);
+	
+	$dido = explode("//", json_decode($dido, true));
+	if(isset($dido[1]))
+	{
+		$didoResult = $dido[0];
+
+		$suunnittelut = 0;
+		$suunnittelut = $dido[1];
+		$yhtSuunnittelut += $suunnittelut;
+	} else {
+		$didoResult = 0;
+	}
+
+    	echo '<td>'.$didoResult.'</td>';
     }
 
     echo '<td>';
@@ -308,6 +324,9 @@ function dateDiff($start, $end) {
     if(isset($exLatikoLu[1]))
     $yhtLuetutpvmtid 	+= $exLatikoLu[1];
 
+    $yhtSuunnittelutWeek += $suunnittelut;
+
+
 
 
     echo '</tr>';
@@ -320,8 +339,11 @@ function dateDiff($start, $end) {
 	    if(date('N', strtotime($date)) == 7)
 	    {
   	    echo '<tr>';
+
+
   		echo '<td style="background: #669999;color: white" class="text-center viikkoRivi small myBgColors"><b>'.Yii::t('main', 'Viikko').' '.date("W",strtotime($date)).'</b></td>';
 
+/*
 		 $vktyoaika = '';
 		 $ts = Tyosuhdet::model()->find(" tid = '".$tid."' ");
 		 if(isset($ts->id) and !empty($ts['vktyoaika']))
@@ -344,6 +366,13 @@ function dateDiff($start, $end) {
 		  echo '<span '.$cl.'>'.$kokoViikko. '<br>('.$vktyoaika.')</span>';
 
 		  echo '</td>';
+*/
+
+    	if(in_array('2',$tas))
+    	{
+
+		  echo '<td style="background: #669999;color: white; text-align:center" class="small myBgColors">'.$this->sprint($yhtSuunnittelut).'<br>('.$this->num($yhtSuunnittelut).')</td>';
+	}
 
 		  echo '<td style="background: #669999;color: white; text-align:center" class="small myBgColors">'.$this->sprint($yhtLuetutpvmtid).'<br>('.$this->num($yhtLuetutpvmtid).')</td>';
 		  echo '<td style="background: #669999;color: white; text-align:center" class="small myBgColors">'.$this->sprint($yhtTotpvmtid).'<br>('.$this->num($yhtTotpvmtid).')</td>';
@@ -365,6 +394,7 @@ function dateDiff($start, $end) {
 		$yhtElWeek 	= 0;
 		$yhtTotpvmtid 	= 0;
 	 	$yhtLuetutpvmtid = 0;
+		$yhtSuunnittelut = 0;
 
 	    }
 
@@ -381,8 +411,10 @@ function dateDiff($start, $end) {
   <?php
   $tas = explode(",",Yii::app()->user->adminPaketti);
   if(in_array('2',$tas) and isset($explTekija[0])){
-  $total_sunniteltu = $this->renderPartial('//mobile/suunniteltu',array('id'=>$explTekija[0],'kohde_tid'=>'tid','from'=>Yii::app()->session['from'], 'to'=>Yii::app()->session['to']),true);
-  echo '<th><center>'.sprint($total_sunniteltu).'</center></th>';
+
+  //$total_sunniteltu = $this->renderPartial('//mobile/suunniteltu',array('id'=>$explTekija[0],'kohde_tid'=>'tid','from'=>Yii::app()->session['from'], 'to'=>Yii::app()->session['to']),true);
+
+  echo '<th><center>'.sprint($yhtSuunnittelutWeek).'</center></th>';
   }
   ?>
 

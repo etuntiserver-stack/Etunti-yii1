@@ -1,7 +1,12 @@
 <?php
 
+	if(isset($yhteensa) and $yhteensa == true)
+	$site = Yii::app()->createController('Site');
+
+
     	$color = '';
 	$height = '';
+	$yht = 0;
 
 	$did = date("Ymd",strtotime($pvm));
 	$onkoMennyt = '';
@@ -115,6 +120,13 @@ if(!isset($_POST['tulosta']))
 	   if($tvVal->alku != '' and $tvVal->loppu != '')
 	   {
 
+		if(isset($yhteensa) and $yhteensa == true)
+		{
+			$eilasketa = $site[0]->eiLasketaSubStr($tvVal->tyoajanmerkinta);
+			if($eilasketa != true)
+	    		$yht += strtotime($tvVal->loppu)-strtotime($tvVal->alku);
+		}
+
 	    if(!isset($_POST['tulosta'])) $br = '<br>'; else $br = '';
 
 	    $al = '<b>'.$tvVal->alku.'-'.$tvVal->loppu.'</b>'.$br;
@@ -170,7 +182,10 @@ if(!isset($_POST['tulosta']))
 	}
 */
 
-	echo json_encode($bod);
+	if(isset($yhteensa) and $yhteensa == true)
+		echo json_encode($bod.'//'.$yht);
+	else
+		echo json_encode($bod);
 
 
 ?>
