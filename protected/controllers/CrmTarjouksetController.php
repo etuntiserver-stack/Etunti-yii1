@@ -70,9 +70,9 @@ class CrmTarjouksetController extends Controller
 	{
 		Yii::app()->theme = 'classic';
 		$asia = false;
-
+	
 		$crm = CrmTarjoukset::model()->findbypk($id);
-		if(isset($crm->id) and $crm->code == $code and $crm->status == 1)
+		if(isset($crm->id) and $crm->hyvaksyn_koodi == $code and $crm->status == 1)
 		{
 			CrmTarjoukset::model()->updatebypk($id, array('status'=>2));
 			$asia = true;
@@ -87,7 +87,7 @@ class CrmTarjouksetController extends Controller
 		$asia = false;
 
 		$crm = CrmTarjoukset::model()->findbypk($id);
-		if(isset($crm->id) and $crm->code == $code and $crm->status == 1)
+		if(isset($crm->id) and $crm->hyvaksyn_koodi == $code and $crm->status == 1)
 		{
 			CrmTarjoukset::model()->updatebypk($id, array('status'=>3));
 			$asia = true;
