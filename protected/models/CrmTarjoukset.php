@@ -30,7 +30,7 @@ class CrmTarjoukset extends DB2ActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('asiakas_id', 'required'),
+			//array('asiakas_id', 'required'),
 			array('asiakas_id, status', 'numerical', 'integerOnly'=>true),
 			array('hyvaksyn_koodi, liite', 'length', 'max'=>255),
 			array('asiakkaan_sahkoposti', 'length', 'max'=>100),

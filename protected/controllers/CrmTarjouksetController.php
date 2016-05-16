@@ -69,69 +69,32 @@ class CrmTarjouksetController extends Controller
 	public function actionSuccess($id, $code)
 	{
 		Yii::app()->theme = 'classic';
+		$asia = 0;
 		$crm = CrmTarjoukset::model()->findbypk($id);
 		if(isset($crm->id) and $crm->hyvaksyn_koodi == $code and $crm->status == 1)
 		{
-
-$bd = '
-        <section class="esittely">
-            <div class="paddings">
-                <div class="container">
-                    <!-- Icon Big -->
-                    <!-- End Icon Big -->
-                        <h1 class="title-subtitle text-center">Olet hyväksynyt tarjous.
-                            <span>
-                              Kiitos.
-                            </span>
-                        </h1>
-                        <hr>
-                    <!-- End Titles Heading -->
-
-                </div>
-                <!-- End Container-->
-            </div>
-        </section>        
-';
-
-			$this->render('success', array('id'=>$id, 'bd'=>$bd, 'status'=>2));
-
-		} else {
-
-$bd = '
-        <section class="esittely">
-            <div class="paddings">
-                <div class="container">
-                    <!-- Icon Big -->
-                    <!-- End Icon Big -->
-                        <h1 class="title-subtitle text-center">Tämä linkki on vanhentunut.
-                            <span>
-                              Kiitos.
-                            </span>
-                        </h1>
-                        <hr>
-                    <!-- End Titles Heading -->
-
-                </div>
-                <!-- End Container-->
-            </div>
-        </section>        
-';
-
-			$this->render('success', array('bd'=>$bd));
-		}
+			$crm->status = 2;
+			if($crm->save())
+				$asia = 1;
+		} 
+		
+		$this->render('success', array('asia'=>$asia));
+		
 	}
 
 	public function actionCancel($id, $code)
 	{
 		Yii::app()->theme = 'classic';
+		$asia = 0;
 		$crm = CrmTarjoukset::model()->findbypk($id);
 		if(isset($crm->id) and $crm->hyvaksyn_koodi == $code and $crm->status == 1)
 		{
-			$ct = CrmTarjoukset::model()->updatebypk($id, array('status'=>3));
-			$this->render('cancel', array('asia'=>true));
-		} else {
-			$this->render('cancel', array('asia'=>false));
-		}
+			$crm->status = 3;
+			if($crm->save())
+				$asia = 1;
+		} 
+		
+		$this->render('success', array('asia'=>$asia));
 	}
 
 
