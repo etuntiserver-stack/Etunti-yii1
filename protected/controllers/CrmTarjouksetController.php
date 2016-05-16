@@ -72,10 +72,52 @@ class CrmTarjouksetController extends Controller
 		$crm = CrmTarjoukset::model()->findbypk($id);
 		if(isset($crm->id) and $crm->hyvaksyn_koodi == $code and $crm->status == 1)
 		{
-			$ct = CrmTarjoukset::model()->updatebypk($id, array('status'=>2));
-			$this->render('success', array('asia'=>true));
+
+$bd = '
+        <section class="esittely">
+            <div class="paddings">
+                <div class="container">
+                    <!-- Icon Big -->
+                    <!-- End Icon Big -->
+                        <h1 class="title-subtitle text-center">Olet hyväksynyt tarjous.
+                            <span>
+                              Kiitos.
+                            </span>
+                        </h1>
+                        <hr>
+                    <!-- End Titles Heading -->
+
+                </div>
+                <!-- End Container-->
+            </div>
+        </section>        
+';
+
+			$this->render('success', array('id'=>$id, 'bd'=>$bd, 'status'=>2));
+
 		} else {
-			$this->render('success', array('asia'=>false));
+
+$bd = '
+        <section class="esittely">
+            <div class="paddings">
+                <div class="container">
+                    <!-- Icon Big -->
+                    <!-- End Icon Big -->
+                        <h1 class="title-subtitle text-center">Tämä linkki on vanhentunut.
+                            <span>
+                              Kiitos.
+                            </span>
+                        </h1>
+                        <hr>
+                    <!-- End Titles Heading -->
+
+                </div>
+                <!-- End Container-->
+            </div>
+        </section>        
+';
+
+			$this->render('success', array('bd'=>$bd));
 		}
 	}
 
@@ -341,7 +383,7 @@ exit;
 
 		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
 		if(!isset($_GET['ajax']))
-			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
+			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('index'));
 	}
 
 	/**

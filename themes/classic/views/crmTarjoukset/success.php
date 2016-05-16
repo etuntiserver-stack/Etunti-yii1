@@ -26,53 +26,12 @@
         <!-- End Header-->
 
 <?php
-  if($asia == true)
+	echo $bd;
+
+  if(isset($status))
   {
-
-echo '
-        <section class="esittely">
-            <div class="paddings">
-                <div class="container">
-                    <!-- Icon Big -->
-                    <!-- End Icon Big -->
-                        <h1 class="title-subtitle text-center">Olet hyväksynyt tarjous.
-                            <span>
-                              Kiitos.
-                            </span>
-                        </h1>
-                        <hr>
-                    <!-- End Titles Heading -->
-
-                </div>
-                <!-- End Container-->
-            </div>
-        </section>        
-';
-  
-
-
-  } else {
-
-echo '
-        <section class="esittely">
-            <div class="paddings">
-                <div class="container">
-                    <!-- Icon Big -->
-                    <!-- End Icon Big -->
-                        <h1 class="title-subtitle text-center">Tämä linkki on vanhentunut.
-                            <span>
-                              Kiitos.
-                            </span>
-                        </h1>
-                        <hr>
-                    <!-- End Titles Heading -->
-
-                </div>
-                <!-- End Container-->
-            </div>
-        </section>        
-';
-
+	$ct = CrmTarjoukset::model()->updatebypk($id, array('status'=>2));
   }
+
 ?>
 
