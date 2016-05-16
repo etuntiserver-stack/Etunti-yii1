@@ -72,10 +72,8 @@ class CrmTarjouksetController extends Controller
 		$crm = CrmTarjoukset::model()->findbypk($id);
 		if(isset($crm->id) and $crm->hyvaksyn_koodi == $code and $crm->status == 1)
 		{
-
-			$crm->status = 2;
-			$crm->save();
-			$this->render('success', array('asia'=>1));
+			CrmTarjoukset::model()->updatebypk($id, array('status'=>2));
+			$this->redirect('success', array('asia'=>1));
 
 		} else {
 
@@ -86,17 +84,16 @@ class CrmTarjouksetController extends Controller
 	public function actionCancel($id, $code)
 	{
 		Yii::app()->theme = 'classic';
-		$asia = 0;
 		$crm = CrmTarjoukset::model()->findbypk($id);
 		if(isset($crm->id) and $crm->hyvaksyn_koodi == $code and $crm->status == 1)
 		{
-			$crm->status = 3;
-			if($crm->save())
-				$asia = 1;
-			else
-				var_dump($crm->errors);
-		} 
-		$this->render('cancel', array('asia'=>$asia));
+			CrmTarjoukset::model()->updatebypk($id, array('status'=>3));
+			$this->redirect('cancel', array('asia'=>1));
+
+		} else {
+
+			$this->render('cancel', array('asia'=>0));
+		}
 	}
 
 
