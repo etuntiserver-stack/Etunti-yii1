@@ -26,9 +26,6 @@
         <!-- End Header-->
 
 <?php
-  if($asia == 1)
-  {
-
 echo '
         <section class="esittely">
             <div class="paddings">
@@ -48,9 +45,5 @@ echo '
             </div>
         </section>        
 ';
-  
-
-
-  } 
 ?>
 
