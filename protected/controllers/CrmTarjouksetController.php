@@ -69,21 +69,20 @@ class CrmTarjouksetController extends Controller
 	public function actionSuccess($id, $code)
 	{
 		Yii::app()->theme = 'classic';
-		$asia = 0;
 		$crm = CrmTarjoukset::model()->findbypk($id);
 		if(isset($crm->id) and $crm->hyvaksyn_koodi == $code and $crm->status == 1)
 		{
 			$crm->status = 2;
 			if($crm->save())
-				$asia = 1;
+				$this->render('success', array('asia'=>1));
 			else
 				var_dump($crm->errors);
 
-			$this->render('success', array('asia'=>$asia));
+			break;
 
 		} else {
 
-			$this->render('success', array('asia'=>$asia));
+			$this->render('success', array('asia'=>0));
 		}		
 	}
 
