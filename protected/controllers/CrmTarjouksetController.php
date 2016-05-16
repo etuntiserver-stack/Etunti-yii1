@@ -73,7 +73,7 @@ class CrmTarjouksetController extends Controller
 		if(isset($crm->id) and $crm->hyvaksyn_koodi == $code and $crm->status == 1)
 		{
 
-			$crm->status = 1;
+			$crm->status = 2;
 			$crm->save();
 			$this->render('success', array('asia'=>1));
 
