@@ -30,13 +30,13 @@
    		(file_exists(Yii::app()->basePath."/../tiedostot/crm/tarjoukset/".Yii::app()->user->domain."/".$data->liite.".pdf"))
 			)
 			{
-				echo '<button class="btn btn-primary myBgColors laheta" for="'.$data->id.'">'.Yii::t('main', 'lähetä').'</button>';
+				echo '<button class="btn btn-primary laheta" for="'.$data->id.'">'.Yii::t('main', 'lähetä').'</button>';
 			} elseif($data->status == 1){
-				echo '<button class="btn btn-success">'.Yii::t('main', 'Lähetetty').'</button>';
+				echo '<button class="btn btn-warning">'.Yii::t('main', 'Lähetetty').'</button>';
 			} elseif($data->status == 2){
 				echo '<button class="btn btn-success">'.Yii::t('main', 'Hyväksytty').'</button>';
 			} elseif($data->status == 3){
-				echo '<button class="btn btn-success">'.Yii::t('main', 'Hylätty').'</button>';
+				echo '<button class="btn btn-danger">'.Yii::t('main', 'Hylätty').'</button>';
 			}
 		?>
 	</td>
