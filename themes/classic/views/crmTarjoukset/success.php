@@ -52,28 +52,6 @@ echo '
   
 
 
-  } elseif($asia == 0) {
-
-echo '
-        <section class="esittely">
-            <div class="paddings">
-                <div class="container">
-                    <!-- Icon Big -->
-                    <!-- End Icon Big -->
-                        <h1 class="title-subtitle text-center">Tämä linkki on vanhentunut.
-                            <span>
-                              Kiitos.
-                            </span>
-                        </h1>
-                        <hr>
-                    <!-- End Titles Heading -->
-
-                </div>
-                <!-- End Container-->
-            </div>
-        </section>        
-';
-
-  }
+  } 
 ?>
 
