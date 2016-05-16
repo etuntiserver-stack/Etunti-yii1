@@ -77,7 +77,6 @@ class CrmTarjouksetController extends Controller
 			if($crm->save())
 				$asia = 1;
 		} 
-		
 		$this->render('success', array('asia'=>$asia));
 		
 	}
@@ -93,7 +92,6 @@ class CrmTarjouksetController extends Controller
 			if($crm->save())
 				$asia = 1;
 		} 
-		
 		$this->render('cancel', array('asia'=>$asia));
 	}
 
