@@ -565,7 +565,7 @@ class AsiakkaatController extends Controller
 		 <tr>
 		  <th>'.Yii::t('main', 'Päiväys').'</th>
 		  <th>'.Yii::t('main', 'Osoite').'</th>
-		  <th>'.Yii::t('main', 'Aika').'</th>
+		  <th>'.Yii::t('main', 'Aloitus').'</th>
 		 </tr>';
 	
 		foreach($tar as $data)
@@ -575,7 +575,7 @@ class AsiakkaatController extends Controller
 		<tr>
 			<td>'.date("d.m.Y", strtotime($data->pvm)).'</td>
 			<td>'.$k->osoite.'</td>
-			<td>'.$data->alku.'-'.$data->loppu.'</td>
+			<td>'.$data->alku.'</td>
 		</tr>';
 	  	}
 		$bod .= '</table>';
