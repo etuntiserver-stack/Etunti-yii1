@@ -27,6 +27,10 @@ class KohteetController extends Controller
 	public function accessRules()
 	{
 		return array(
+			array('allow', 
+				'actions'=>array('asiakas_tila'),
+                		'expression'=>"Yii::app()->controller->isAsiakas()",
+			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
 				'actions'=>array('admin','delete','create','update','index', 'view','osoite','autotaytaminen','createfromasiakas', 'googlemap','googlemap_k', 'avaimet'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
@@ -35,6 +39,19 @@ class KohteetController extends Controller
 				'users'=>array('*'),
 			),
 		);
+	}
+
+
+	public function isAsiakas() 
+	{
+		if(isset(Yii::app()->user->asiakas))
+		{
+		$m = Asiakkaat::model()->findbypk(Yii::app()->user->asiakas);
+	        if($m->id == Yii::app()->user->asiakas)
+	            return true;
+		} else {
+	            return false;
+		}
 	}
 
 	public function isEtuntiAdmin() {
@@ -61,6 +78,34 @@ class KohteetController extends Controller
                 }
                 parent::init();
         }
+
+
+	public function actionAsiakas_tila($id)
+	{
+
+		$model=$this->loadModel($id);
+
+	        if($model->asiakas_id == Yii::app()->user->asiakas)
+		{
+			Yii::app()->theme = 'customer';
+
+
+		if(isset($_POST['Kohteet']))
+		{
+			$model->attributes=$_POST['Kohteet'];
+			if($model->save())
+				$this->redirect(array('asiakas_tila','id'=>$model->id));
+		}
+
+
+			$this->render('update', array('model'=>$model));
+
+		} else {
+	        	return false;
+		}
+
+
+	}
 
 	public function actionAvaimet()
 	{
