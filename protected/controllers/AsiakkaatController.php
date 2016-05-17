@@ -105,6 +105,7 @@ class AsiakkaatController extends Controller
 			$criteria->condition = " 
 				sahkoposti='".$_POST['sahkoposti']."' 
 				AND salasana='".md5($_POST['salasana'])."'
+				AND salasana!=''
 			";
 			$model=Asiakkaat::model()->find($criteria);
 			if(isset($model->id))
@@ -133,7 +134,10 @@ class AsiakkaatController extends Controller
 		if(isset($_POST['Asiakkaat']))
 		{
 			$model->attributes=$_POST['Asiakkaat'];
+
+			if($model->salasana != md5($_POST['Asiakkaat']['salasana']))
 			$model->salasana = md5($_POST['Asiakkaat']['salasana']);
+
 			if($model->save())
 				$this->redirect(array('asiakas_tila','id'=>$model->id));
 		}
@@ -246,7 +250,10 @@ class AsiakkaatController extends Controller
 		if(isset($_POST['Asiakkaat']))
 		{
 			$model->attributes=$_POST['Asiakkaat'];
+
+			if($model->salasana != md5($_POST['Asiakkaat']['salasana']))
 			$model->salasana = md5($_POST['Asiakkaat']['salasana']);
+
 			if($model->save())
 			{
 				if(empty($model->asiakasnumero))
@@ -283,7 +290,10 @@ class AsiakkaatController extends Controller
 		if(isset($_POST['Asiakkaat']))
 		{
 			$model->attributes=$_POST['Asiakkaat'];
+
+			if($model->salasana != md5($_POST['Asiakkaat']['salasana']))
 			$model->salasana = md5($_POST['Asiakkaat']['salasana']);
+
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
 		}

@@ -69,8 +69,7 @@ $head = $model->osoite;
 
 	   <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-user"></i> <?php echo Yii::t('main', 'Asiakas historia'); ?> </h2>
 
-<div class="row">
-  <div class="col-sm-12">
+
         <div class="tray-center">
             <div class="admin-form">
               <div class="panel heading-border">
@@ -134,8 +133,7 @@ $head = $model->osoite;
               </div>
             </div>
         </div>
-  </div>
-</div>
+
 
 <br><br>
 
