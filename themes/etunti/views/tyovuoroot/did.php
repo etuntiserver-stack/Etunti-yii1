@@ -134,24 +134,18 @@ if(!isset($_POST['tulosta']))
 	    $al = '';
 	   }
 
-
-	 if(!empty($tvVal->tyoajanlaatu) and empty($osoite))
-	 {
-	    $expl1 = explode("/",$tvVal->tyoajanlaatu);
-	    $color = (isset($expl1[1])) ? $expl1[1] : '';
-	    $osoite = (isset($expl1[0])) ? $expl1[0] : '';
-	 } else {
-	    $color = '';
-	 }
-
-	 if(!empty($tvVal->tyoajanmerkinta))
-	 {
+	   $color = '';
+	   if(!empty($tvVal->tyoajanmerkinta))
+	   {
 	    $expl = explode("/",$tvVal->tyoajanmerkinta);
-	    $color = (isset($expl[1])) ? $expl[1] : '';
-	 } else {
-	    $color = '';
-	 }
+	    if(isset($expl[1]) and !empty($expl[1])) $color = $expl[1];
 
+	   } 
+	   if(!empty($tvVal->tyoajanlaatu) and empty($osoite)){
+	    $expl1 = explode("/",$tvVal->tyoajanlaatu);
+	    if(isset($expl1[1]) and !empty($expl1[1])) $color = $expl1[1];
+	    $osoite = (isset($expl1[0])) ? $expl1[0] : '';
+  	   } 
 
 	   $bod .=  '<div id="'.$tvVal->id.'_'.$did.'_'.$tid.'" class="well fullRivi" style="color:'.$color.'">';
 	   if( $from != 'mobiili' )

@@ -73,7 +73,7 @@ class VuosilomatController extends Controller
                 parent::init();
         }
 
-	public function actionVlupdater($id,$txt,$lat)
+	public function actionVlupdater($id,$txt)
 	{
 
 	
@@ -90,7 +90,7 @@ class VuosilomatController extends Controller
 			$tv = new Tyovuoroot;
 			$tv->tid=$model->tid;
 			$tv->pvm=date("d.m.Y",strtotime($model->pvm));
-			$tv->tyoajanlaatu=$lat;
+			$tv->tyoajanlaatu=$_POST['Vuosilomat']['tyoajanlaatu'];
 			$tv->alku='00:00';
 			$tv->loppu='00:00';
 			$tv->pituus='00:00';
