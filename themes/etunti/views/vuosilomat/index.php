@@ -284,10 +284,11 @@ $('input[type="radio"]').change(function() {
 	pvm 	: thisDate,
 	status 	: thisStatus,
 	tietoja	: vapaateksti,
+	tyoajanlaatu : lat,
     }
 
         $.ajax({
-           url: 'vlupdater?id='+id+'&txt='+thisTXT+'&lat='+lat,
+           url: 'vlupdater?id='+id+'&txt='+thisTXT,
 	   type: 'POST',
 	   data: { Vuosilomat : postdata },
            success: function(data){
