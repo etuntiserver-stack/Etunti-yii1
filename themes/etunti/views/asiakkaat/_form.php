@@ -157,7 +157,7 @@ $asiakasnumero = 'voidaan käyttää oleva ID numero';
 
 	<div class="section fill mb5 ashidd_a">
 		<?php echo $form->labelEx($model,'salasana'); ?>
-		<?php echo $form->textField($model,'salasana',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
+		<?php echo $form->passwordField($model,'salasana',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'salasana'); ?>
 	</div>
 

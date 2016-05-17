@@ -78,10 +78,10 @@ $asiakasnumero = 'voidaan käyttää oleva ID numero';
 		<?php echo $form->error($model,'yhteyshenkilo'); ?>
 	</div>
 
-	<div class="section fill mb5 ashidd_a form-inline">
+	<div class="section fill mb5 ashidd_a">
 		<?php echo $form->labelEx($model,'ryhma'); ?>
 
-	   <div class="form-inline">
+
 		<?php
 		$list = array();
       		$l = Valikkoot::model()->findAll(" select_type='asiakas_ryhma' ",array('order' => "select_type"));
@@ -96,8 +96,6 @@ $asiakasnumero = 'voidaan käyttää oleva ID numero';
 		echo 'Luo Valikko tietokannassa "Select Type = asiakas_ryhma"';
 		}		
         	?>
-		<span class="btn btn-primary myBgColors muokaValiko" for="asiakas_ryhma"><i class="fa fa-pencil-square-o"></i></span>
-	   </div>
 
 		<?php echo $form->error($model,'ryhma'); ?>
 	</div>
@@ -157,7 +155,7 @@ $asiakasnumero = 'voidaan käyttää oleva ID numero';
 
 	<div class="section fill mb5 ashidd_a">
 		<?php echo $form->labelEx($model,'salasana'); ?>
-		<?php echo $form->textField($model,'salasana',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
+		<?php echo $form->passwordField($model,'salasana',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'salasana'); ?>
 	</div>
 
@@ -277,9 +275,6 @@ $asiakasnumero = 'voidaan käyttää oleva ID numero';
 	<?php if(isset($model->id)): ?>
 	<legend><h3><?php echo Yii::t('main', 'Asiakkaaseen liittyviä kohteita'); ?></h3></legend>
 	<br>
-	<div class="section fill mb5">
-		<?php echo CHtml::link(' +','/index.php/kohteet/createfromasiakas?id='.$model->id,array('class'=>'btn btn-default glyphicon glyphicon-home')); ?>
-	</div>
 
 	<div class="section fill mb5">		
 		<?php
