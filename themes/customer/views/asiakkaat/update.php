@@ -70,64 +70,39 @@ $head = $model->osoite;
 	   <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-user"></i> <?php echo Yii::t('main', 'Asiakas historia'); ?> </h2>
 
 
+	<h3><?php echo Yii::t('main', 'Työvuorot'); ?></h3>
         <div class="tray-center">
             <div class="admin-form">
               <div class="panel heading-border">
                 <div class="panel-body bg-light">
 
+		  <?php echo $this->tyovuorotCRM($model); ?>
 
-<?php
-  $criteria=new CDbCriteria;
-  $criteria->condition = " asiakas_id='".$model->id."' ";
-  $tar = CrmTarjoukset::model()->findAll($criteria);
-?>
+                </div>
+              </div>
+            </div>
+        </div>
 
-<?php if(isset($tar[0])) : ?>
-<table class="table">
- <tr>
-  <th><?php echo Yii::t('main', 'Tarjoukset'); ?></th>
- </tr>
+	<h3><?php echo Yii::t('main', 'Laskut'); ?></h3>
+        <div class="tray-center">
+            <div class="admin-form">
+              <div class="panel heading-border">
+                <div class="panel-body bg-light">
 
-  <?php
-  foreach($tar as $data)
-  {
+		  <?php echo $this->laskutuksetCRM($model); ?>
 
-		$f = '';
-		if(file_exists(Yii::app()->basePath."/../tiedostot/crm/tarjoukset/".Yii::app()->user->domain."/".$data->liite.".docx"))
-	 	$f .= '<a href="../../tiedostot/crm/tarjoukset/'.Yii::app()->user->domain.'/'.$data->liite.'.docx">'.$data->liite.'.docx</a>';
-		$f .= '<br>';
-		if(file_exists(Yii::app()->basePath."/../tiedostot/crm/tarjoukset/".Yii::app()->user->domain."/".$data->liite.".pdf"))
-		$f .= '<a href="../../tiedostot/crm/tarjoukset/'.Yii::app()->user->domain.'/'.$data->liite.'.pdf">'.$data->liite.'.pdf</a>';
+                </div>
+              </div>
+            </div>
+        </div>
 
+	<h3><?php echo Yii::t('main', 'Tarjoukset'); ?></h3>
+        <div class="tray-center">
+            <div class="admin-form">
+              <div class="panel heading-border">
+                <div class="panel-body bg-light">
 
-		$s = '';
-		if($data->status == 0 and
-  		(file_exists(Yii::app()->basePath."/../tiedostot/crm/tarjoukset/".Yii::app()->user->domain."/".$data->liite.".pdf"))
-		)
-		{
-			$s .= '<button class="btn btn-primary btn-block laheta" for="'.$data->id.'">'.Yii::t('main', 'odotta lähetystä').'</button>';
-		} elseif($data->status == 1){
-			$s .= '<button class="btn btn-warning btn-block">'.Yii::t('main', 'Lähetetty').'</button>';
-		} elseif($data->status == 2){
-			$s .= '<button class="btn btn-success btn-block">'.Yii::t('main', 'Hyväksytty').'</button>';
-		} elseif($data->status == 3){
-			$s .= '<button class="btn btn-danger btn-block">'.Yii::t('main', 'Hylätty').'</button>';
-		}
-
-  	echo '<tr><td>';
-		echo '
-		<div class="row">
-		   <div class="col-sm-4">'.date("d.m.Y", strtotime($data->time)).'</div>
-		   <div class="col-sm-4">'.$f.'</div>
-		   <div class="col-sm-4">'.$s.'</div>
-		</div>';
-	echo '</td></tr>';
-  }
-  ?>
-
-</table>
-<?php endif; ?>
-
+		  <?php echo $this->tarjouksetCRM($model); ?>
 
                 </div>
               </div>

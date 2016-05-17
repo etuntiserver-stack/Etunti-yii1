@@ -445,4 +445,143 @@ class AsiakkaatController extends Controller
 		return false;
 	}
 
+	protected function tarjouksetCRM($model)
+	{
+
+		$criteria=new CDbCriteria;
+		$criteria->order = " DATE(time) DESC ";
+		$criteria->condition = " asiakas_id='".$model->id."' ";
+		$tar = CrmTarjoukset::model()->findAll($criteria);
+		$bod = '';
+
+		if(isset($tar[0])){
+
+		$bod .= '<table class="table table-bordered">
+		 <tr>
+		  <th>'.Yii::t('main', 'Päiväys').'</th>
+		  <th>'.Yii::t('main', 'Tiedostot').'</th>
+		  <th>'.Yii::t('main', 'Tila').'</th>
+		 </tr>';
+	
+
+		foreach($tar as $data)
+		{
+	
+			$f = '';
+			if(file_exists(Yii::app()->basePath."/../tiedostot/crm/tarjoukset/".Yii::app()->user->domain."/".$data->liite.".docx"))
+		 	$f .= '<a href="../../tiedostot/crm/tarjoukset/'.Yii::app()->user->domain.'/'.$data->liite.'.docx">'.$data->liite.'.docx</a>';
+			$f .= '<br>';
+			if(file_exists(Yii::app()->basePath."/../tiedostot/crm/tarjoukset/".Yii::app()->user->domain."/".$data->liite.".pdf"))
+			$f .= '<a href="../../tiedostot/crm/tarjoukset/'.Yii::app()->user->domain.'/'.$data->liite.'.pdf">'.$data->liite.'.pdf</a>';
+
+
+			$s = '';
+			if($data->status == 0 and
+	  		(file_exists(Yii::app()->basePath."/../tiedostot/crm/tarjoukset/".Yii::app()->user->domain."/".$data->liite.".pdf"))
+			)
+			{
+				$s .= '<button class="btn btn-primary btn-block laheta" for="'.$data->id.'">'.Yii::t('main', 'odotta lähetystä').'</button>';
+			} elseif($data->status == 1){
+				$s .= '<button class="btn btn-warning btn-block">'.Yii::t('main', 'Lähetetty').'</button>';
+			} elseif($data->status == 2){
+				$s .= '<button class="btn btn-success btn-block">'.Yii::t('main', 'Hyväksytty').'</button>';
+			} elseif($data->status == 3){
+				$s .= '<button class="btn btn-danger btn-block">'.Yii::t('main', 'Hylätty').'</button>';
+			}
+
+	  	$bod .= '
+		<tr>
+			<td>'.date("d.m.Y", strtotime($data->time)).'</td>
+			<td>'.$f.'</td>
+			<td>'.$s.'</td>
+		</tr>';
+	  	}
+
+
+		$bod .= '</table>';
+		}
+	
+		return $bod;
+	}
+
+
+	protected function laskutuksetCRM($model)
+	{
+
+	   $lasku = Yii::app()->createController('Lasku');
+	   
+
+		$criteria=new CDbCriteria;
+		$criteria->order = " DATE(paivays) DESC ";
+		$criteria->condition = " as_nro='".$model->asiakasnumero."' ";
+		$tar = Lasku::model()->findAll($criteria);
+		$bod = '';
+
+		if(isset($tar[0])){
+
+		$bod .= '<table class="table table-bordered">
+		 <tr>
+		  <th>'.Yii::t('main', 'Päiväys').'</th>
+		  <th>'.Yii::t('main', 'Tiedosto').'</th>
+		  <th>'.Yii::t('main', 'Tilanne').'</th>
+		  <th>'.Yii::t('main', 'Yhteensä').'</th>
+		 </tr>';
+	
+		foreach($tar as $data)
+		{
+	  	$bod .= '
+		<tr>
+			<td>'.date("d.m.Y", strtotime($data->paivays)).'</td>
+			<td>'.CHtml::link('PDF', array('//lasku/lasku_pdf', 'id'=>$data->id), array('target'=>'_blank')).'</td>
+			<td>'.$lasku[0]->tilanneCheck($data).'</td>
+			<td>'.number_format($data->yhteensa_total, 2, ",", " ").'</td>
+		</tr>';
+	  	}
+		$bod .= '</table>';
+		}
+	
+		return $bod;
+	}
+
+
+	protected function tyovuorotCRM($model)
+	{
+
+		$criteria=new CDbCriteria;
+		$criteria->order = " DATE(pvm) DESC ";
+		$criteria->condition = " 
+			kohde IN
+			(
+				SELECT id FROM sivex_kohdet
+				WHERE id IN(SELECT id FROM asiakkaat WHERE id='".$model->id."')
+			) 
+		";
+		$tar = Tyovuoroot::model()->findAll($criteria);
+		$bod = '';
+
+		if(isset($tar[0])){
+
+		$bod .= '<table class="table table-bordered">
+		 <tr>
+		  <th>'.Yii::t('main', 'Päiväys').'</th>
+		  <th>'.Yii::t('main', 'Osoite').'</th>
+		  <th>'.Yii::t('main', 'Aika').'</th>
+		 </tr>';
+	
+		foreach($tar as $data)
+		{
+		$k = Kohteet::model()->findbypk($data->kohde);
+	  	$bod .= '
+		<tr>
+			<td>'.date("d.m.Y", strtotime($data->pvm)).'</td>
+			<td>'.$k->osoite.'</td>
+			<td>'.$data->alku.'-'.$data->loppu.'</td>
+		</tr>';
+	  	}
+		$bod .= '</table>';
+		}
+	
+		return $bod;
+	}
+
 }

@@ -1022,7 +1022,7 @@ exit;
 	}
 
 
-    	protected function tilanneCheck($data,$row)
+    	public function tilanneCheck($data)
 	{ 
 
        		$criteria = new CDbCriteria();
