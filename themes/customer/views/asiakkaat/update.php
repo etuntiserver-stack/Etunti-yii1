@@ -7,24 +7,6 @@ else
 $head = $model->osoite;
 
 
-if(isset($_POST['uploaded_t']))
-{
-
-  if (!file_exists(Yii::app()->basePath."/../tiedostot/asiakkaat/".Yii::app()->user->domain)) {
-  	mkdir(Yii::app()->basePath."/../tiedostot/asiakkaat/".Yii::app()->user->domain, 0777, true);
-  }
-
-  $uploaddir = Yii::app()->basePath.'/../tiedostot/asiakkaat/'.Yii::app()->user->domain.'/';
-  $uploadfile = $uploaddir . basename($model->id.'_'.$_FILES['file']['name']);
-  if (move_uploaded_file($_FILES['file']['tmp_name'], $uploadfile)) {
-     //echo "";
-  } 
-}
-
-if(isset($_POST['poistaTamaTiedosto'])){
-	unlink($_POST['poistaTamaTiedosto']);
-exit;
-}
 ?>
 
         <!-- begin: .tray-center -->
@@ -32,10 +14,8 @@ exit;
 
 	   <div class="pull-right">
 	   <?php     
-		echo CHtml::link("poista", '#', array(
-		'submit'=>array('delete', "id"=>$model->id), 
-		'confirm' => 'Haluatko varmaasti poistaa?',
-		'class'=>'btn btn-primary myBgColors'
+		echo CHtml::link(Yii::t('main', 'Kirjaudu ulos'), Yii::app()->request->baseUrl.'/index.php/asiakkaat/ulos', array(
+		'class'=>'btn btn-primary'
 		));
 	   ?>
 	   </div>
@@ -56,27 +36,6 @@ exit;
 
 <div class="row">
   <div class="col-sm-6">
-
-
-
-  <form id="uploadimage" action="#" class="form-input" method="post" enctype="multipart/form-data">
-     <div class="section input-group">
-       <label class="field prepend-icon append-button file">
-         <span class="button"><?php echo Yii::t('main', 'Tiedostot (sopimukset jne)'); ?></span>
-         <input type="file" class="gui-file" name="file" id="t_file" onChange="document.getElementById('tiedostoUP').value = this.value;">
-         <input type="text" class="gui-input" name="uploaded_t" id="tiedostoUP" placeholder="Valitse tiedosto..">
-         <label class="field-icon">
-          <i class="fa fa-upload"></i>
-         </label>
-       </label>
-	<span class="input-group-btn">
-          <input type="submit" value="Lataa" class="btn btn-primary myBgColors" />
-	</span>
-    </div>
-  </form>
-
-<br>
-
     <?php
 
 
@@ -93,7 +52,6 @@ exit;
 	$kuvat[$i] = $file;
 	}
    ?>
-     
    </div>
 </div>
 

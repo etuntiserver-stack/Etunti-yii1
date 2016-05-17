@@ -288,7 +288,7 @@ $asiakasnumero = 'voidaan käyttää oleva ID numero';
 		{
 		   echo '<div class="section fill mb5">
 		   <h3 class="glyphicon glyphicon-home"></h3>&nbsp;&nbsp;&nbsp; 
-		   '.CHtml::link($v->osoite,'/index.php/kohteet/update?id='.$v->id,array('class'=>'link')).'	       	  
+		   '.CHtml::link($v->osoite,'/index.php/kohteet/asiakas_tila?id='.$v->id,array('class'=>'link')).'	       	  
 		   </div>';
 		}	
         	?>

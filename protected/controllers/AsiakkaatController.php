@@ -27,15 +27,35 @@ class AsiakkaatController extends Controller
 	public function accessRules()
 	{
 		return array(
-			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view', 'checkLastAsiakasID', 'showshift'),
-                		//'expression'=>"Yii::app()->user->username == 'roman'",
+			array('allow',
+				'actions'=>array('login'),
+				'users'=>array('*'),
+			),
+			array('allow', 
+				'actions'=>array('asiakas_tila', 'ulos'),
+                		'expression'=>"Yii::app()->controller->isAsiakas()",
+			),
+			array('allow',
+				'actions'=>array('admin', 'delete', 'create', 'update', 'index','view', 'checkLastAsiakasID', 'showshift'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
 				'users'=>array('*'),
 			),
 		);
+	}
+
+
+	public function isAsiakas() 
+	{
+		if(isset(Yii::app()->user->asiakas))
+		{
+		$m = Asiakkaat::model()->findbypk(Yii::app()->user->asiakas);
+	        if($m->id == Yii::app()->user->asiakas)
+	            return true;
+		} else {
+	            return false;
+		}
 	}
 
 	public function isEtuntiAdmin() {
@@ -63,6 +83,70 @@ class AsiakkaatController extends Controller
                 parent::init();
         }
 
+	public function actionUlos()
+	{
+		$dm = Yii::app()->user->domain;
+		Yii::app()->user->logout();
+		   $this->redirect(array('login','domain'=>$dm));
+	}
+
+	public function actionLogin($domain)
+	{
+		Yii::app()->theme = 'customer';
+		$dm=Domainit::model()->find(" domain='".$domain."' ");
+		if(!isset($dm->id))
+		exit;
+		else
+		Yii::app()->user->setState('domain', $dm->domain);
+
+		if(isset($_POST['sahkoposti']) and isset($_POST['salasana']))
+		{
+			$criteria=new CDbCriteria;
+			$criteria->condition = " 
+				sahkoposti='".$_POST['sahkoposti']."' 
+				AND salasana='".md5($_POST['salasana'])."'
+			";
+			$model=Asiakkaat::model()->find($criteria);
+			if(isset($model->id))
+			{
+
+			    	if(isset($dm->paketti))
+			    	Yii::app()->user->setState('adminPaketti', $dm->paketti);
+
+				Yii::app()->user->setState('asiakas', $model->id);
+				$this->redirect(array('asiakas_tila','id'=>$model->id));
+			}
+		}
+
+
+		$this->render('login', array('dm'=>$dm));
+	}
+
+	public function actionAsiakas_tila($id)
+	{
+
+	        if($id == Yii::app()->user->asiakas)
+		{
+			Yii::app()->theme = 'customer';
+			$model=$this->loadModel($id);
+
+		if(isset($_POST['Asiakkaat']))
+		{
+			$model->attributes=$_POST['Asiakkaat'];
+			$model->salasana = md5($_POST['Asiakkaat']['salasana']);
+			if($model->save())
+				$this->redirect(array('asiakas_tila','id'=>$model->id));
+		}
+
+
+			$this->render('update', array('model'=>$model));
+
+		} else {
+	        	return false;
+		}
+
+
+	}
 
 	protected function sprint($val){
 	    if($val > 0)
@@ -162,6 +246,7 @@ class AsiakkaatController extends Controller
 		if(isset($_POST['Asiakkaat']))
 		{
 			$model->attributes=$_POST['Asiakkaat'];
+			$model->salasana = md5($_POST['Asiakkaat']['salasana']);
 			if($model->save())
 			{
 				if(empty($model->asiakasnumero))
@@ -198,6 +283,7 @@ class AsiakkaatController extends Controller
 		if(isset($_POST['Asiakkaat']))
 		{
 			$model->attributes=$_POST['Asiakkaat'];
+			$model->salasana = md5($_POST['Asiakkaat']['salasana']);
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
 		}
