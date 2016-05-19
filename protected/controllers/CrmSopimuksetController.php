@@ -182,7 +182,19 @@ $randstring = generateRandomString();
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
+			$tm = '';
+
 		if(isset($_POST['CrmSopimukset']))
+		{
+			$nimike		= $_POST['CrmSopimukset']['template'].'.docx';
+			$polku 		= Yii::app()->basePath;
+			$tiedosto 	= "/../tiedostot/templates/".Yii::app()->user->domain."/".$nimike;
+		}
+
+		if(isset($_POST['CrmSopimukset']) and !file_exists($polku.$tiedosto))
+			$tm = '<h2 class="alert alert-danger">'.Yii::t('main', 'Template puuttuu').'</h2>';
+
+		if(isset($_POST['CrmSopimukset']) and file_exists($polku.$tiedosto))
 		{
 
 			$model->attributes=$_POST['CrmSopimukset'];
@@ -221,10 +233,12 @@ exit;
 
 
 			}
-		}
+
+		} 
 
 		$this->render('create',array(
 			'model'=>$model,
+			'tm'=>$tm,
 		));
 	}
 
@@ -238,8 +252,20 @@ exit;
 		$model=$this->loadModel($id);
 
 	
-			if(isset($_POST['CrmSopimukset']))
-			{
+			$tm = '';
+
+		if(isset($_POST['CrmSopimukset']))
+		{
+			$nimike		= $_POST['CrmSopimukset']['template'].'.docx';
+			$polku 		= Yii::app()->basePath;
+			$tiedosto 	= "/../tiedostot/templates/".Yii::app()->user->domain."/".$nimike;
+		}
+
+		if(isset($_POST['CrmSopimukset']) and !file_exists($polku.$tiedosto))
+			$tm = '<h2 class="alert alert-danger">'.Yii::t('main', 'Template puuttuu').'</h2>';
+
+		if(isset($_POST['CrmSopimukset']) and file_exists($polku.$tiedosto))
+		{
 
 			$model->attributes=$_POST['CrmSopimukset'];
 			$as = Asiakkaat::model()->findbypk($model->asiakas_id);
@@ -281,6 +307,7 @@ exit;
 
 		$this->render('update',array(
 			'model'=>$model,
+			'tm'=>$tm,
 		));
 	}
 
@@ -288,7 +315,9 @@ exit;
 	protected function docx($model)
 	{
 
-			$liite = $model->id.'_'.date("d.m.Y");
+			$liite 		= $model->id.'_'.date("d.m.Y");
+			$tiedosto 	= $model->template.'.docx';
+
 			$crm = CrmSopimukset::model()->updatebypk($model->id, array('liite'=>$liite));
 
 			Yii::import('ext.yiiword.YiiWord', true);
@@ -300,7 +329,7 @@ exit;
 			}
 	
 			$PHPWord = new PHPWord();
-			$document = $PHPWord->loadTemplate('tiedostot/templates/crm_sopimus.docx');
+			$document = $PHPWord->loadTemplate('tiedostot/templates/'.Yii::app()->user->domain.'/'.$tiedosto);
 			$file = '';
 
 /*
@@ -339,7 +368,7 @@ exit;
 */
 
 			$path = 'tiedostot/crm/sopimukset/'.Yii::app()->user->domain.'/'.$liite;
-			$document->setValue('teksi', htmlspecialchars(iconv('UTF-8','ISO-8859-1',$model->teksti)));
+			$document->setValue('teksti', htmlspecialchars(iconv('UTF-8','ISO-8859-1',$model->teksti)));
 		  	$document->save($path.'.docx');
 
 			return $path;
@@ -399,7 +428,18 @@ exit;
 		));
 
 		$dataProvider->pagination->pageSize = 50;
-		$this->render('index', array('dataProvider' => $dataProvider));
+
+        	$tal = array(
+			'palvelusopimus_kuluttajat'=>Yii::t('main', 'Palvelusopimus kuluttajat'),
+			'sosiaalialan_palvelusopimus'=>Yii::t('main', 'Sosiaalialan palvelusopimus'),
+			'palvelusopimus_novosan'=>Yii::t('main', 'Palvelusopimus Novosan'),
+			'avainten_luovutussopimus'=>Yii::t('main', 'Avainten luovutussopimus'),
+		);
+
+		$this->render('index', array(
+			'dataProvider' => $dataProvider,
+			'tal' => $tal,
+		));
 	}
 
 	/**

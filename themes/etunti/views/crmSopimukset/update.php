@@ -27,6 +27,7 @@
                 <div class="panel-body bg-light">
 
                  <div class="row">
+		  <?php echo $tm; ?>
 		  <?php echo $this->renderPartial('_form', array('model'=>$model)); ?>
                  </div>
 

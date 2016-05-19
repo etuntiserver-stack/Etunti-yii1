@@ -44,6 +44,20 @@
 		<?php echo $form->error($model,'asiakas_id'); ?>
 	</div>
 
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'template'); ?>
+		<?php 
+        	$tal = array(		
+			'palvelusopimus_kuluttajat'=>Yii::t('main', 'Palvelusopimus kuluttajat'),
+			'sosiaalialan_palvelusopimus'=>Yii::t('main', 'Sosiaalialan palvelusopimus'),
+			'palvelusopimus_novosan'=>Yii::t('main', 'Palvelusopimus Novosan'),
+			'avainten_luovutussopimus'=>Yii::t('main', 'Avainten luovutussopimus'),
+		);
+		echo $form->dropDownList($model,'template', $tal, 
+		array('class'=>'form-control')) ?>
+		<?php echo $form->error($model,'template'); ?>
+	</div>
+
 	<div lass="section fill mb5">
 		<?php echo $form->labelEx($model,'teksti'); ?>
 		<?php echo $form->textArea($model,'teksti',array('rows'=>6, 'cols'=>50, 'class'=>'form-control')); ?>
