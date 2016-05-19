@@ -2,7 +2,6 @@ assets/*
 emails/*
 backup/*
 tiedostot/*
-!tiedostot/templates
 img/*
 protected/views/domainit/sql/*
 protected/runtime/*

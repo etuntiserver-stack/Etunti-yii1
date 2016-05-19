@@ -33,7 +33,7 @@ class CrmSopimukset extends DB2ActiveRecord
 		return array(
 			//array('time, asiakas_id, teksti, hyvaksyn_koodi, asiakkaan_sahkoposti, status, liite', 'required'),
 			array('asiakas_id, status', 'numerical', 'integerOnly'=>true),
-			array('hyvaksyn_koodi, liite', 'length', 'max'=>255),
+			array('hyvaksyn_koodi, liite, template', 'length', 'max'=>255),
 			array('asiakkaan_sahkoposti', 'length', 'max'=>100),
 			array('teksti', 'length', 'max'=>3000),
 			// The following rule is used by search().

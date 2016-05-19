@@ -1,5 +1,9 @@
 <?php
-
+/*
+  if (!file_exists(Yii::app()->basePath."/../tiedostot/templates/".Yii::app()->user->domain."/palvelusopimus_kuluttajat.docx")) {
+  	echo '<h1 class="alert alert-danger">'.Yii::t('main', 'Template tiedosto puuttuu').'</h1>';
+  }
+*/
 ?>
 
         <!-- begin: .tray-center -->
@@ -16,6 +20,7 @@
               <div class="panel heading-border">
                 <div class="panel-body bg-light">
                  <div class="row">
+		  <?php echo $tm; ?>
 		  <?php echo $this->renderPartial('_form', array('model'=>$model)); ?>
                  </div>
                 </div>

@@ -1,5 +1,39 @@
 <?php
 
+
+if(isset($_POST['poistaTemplate'])){
+	unlink($_POST['poistaTemplate']);
+	exit;
+}
+
+foreach($tal as $k=>$v)
+{
+
+  if(isset($_POST[$k]))
+  {
+
+  if (!file_exists(Yii::app()->basePath."/../tiedostot/templates/".Yii::app()->user->domain)) {
+  	mkdir(Yii::app()->basePath."/../tiedostot/templates/".Yii::app()->user->domain, 0777, true);
+  }
+
+  $uploaddir = Yii::app()->basePath.'/../tiedostot/templates/'.Yii::app()->user->domain.'/';
+  $array = explode('.', $_FILES['file']['name']);
+  $extension = end($array);
+  $tiedosto = $k.'.docx';
+
+  $uploadfile = $uploaddir . basename($tiedosto);
+  if ($extension == 'docx' and move_uploaded_file($_FILES['file']['tmp_name'], $uploadfile)) {
+
+  } else {
+	echo Yii::t('main', 'Lataaminen ei onnistuu');
+  }
+  }
+
+
+}
+
+
+
 ?>
 
         <!-- begin: .tray-center -->
@@ -10,13 +44,15 @@
 		<?php echo CHtml::link('',Yii::app()->request->baseUrl.'/index.php/crmSopimukset/create',array('class'=>'btn btn-default fa fa-plus')); ?></h2>
 
 
-<?php /* ?>
+
    	    <form id="mobForm" action="#" class="form-inline" method="POST">
    	    <input type="hidden" name="mob_hae">
 
             <div class="admin-form">
               <div class="panel heading-border">
                 <div class="panel-body">
+
+<?php /*
 
                     <!-- Input Icons -->
                     <div class="row">
@@ -108,14 +144,59 @@
 
                     </div>
 
+*/ ?>
+	    </form>
+
+
+
+<div class="row">
+<?php
+
+  $i = 0;
+  foreach($tal as $key=>$val)
+  {
+
+  $i++;
+
+  $nimike	= $key.'.docx';
+  $polku 	= Yii::app()->basePath;
+  $tiedosto 	= "/../tiedostot/templates/".Yii::app()->user->domain."/".$nimike;
+
+  echo '<div class="admin-form col-sm-6">';
+
+  if (file_exists($polku.$tiedosto))
+  echo '<a href="'.$tiedosto.'">'.$nimike.'</a> <span class="poista btn btn-xs btn-danger" for="'.$polku.$tiedosto.'">X</span>';
+
+  echo '
+  <form action="#" class="form-input" method="post" enctype="multipart/form-data">
+     <div class="section input-group">
+       <label class="field prepend-icon append-button file">
+         <span class="button">'.$val.'</span>
+         <input type="file" class="gui-file" name="file" onChange="document.getElementById(\'tiedostoUP_'.$i.'\').value = this.value;">
+         <input type="text" class="gui-input" name="'.$key.'" id="tiedostoUP_'.$i.'" placeholder="Valitse tiedosto..">
+         <label class="field-icon">
+          <i class="fa fa-upload"></i>
+         </label>
+       </label>
+	<span class="input-group-btn">
+          <input type="submit" value="Lataa docx" class="btn btn-primary btn-group myBgColors" />
+	</span>
+    </div>
+  </form>
+ </div>';
+  
+
+  }
+?>
+</div>
 
 
                 </div>
               </div>
             </div>
 
-	    </form>
-<?php */ ?>
+
+
 
         <!-- loppu: .tray-center -->
         </div>
@@ -167,6 +248,18 @@ $("#aktiivinen").val($("#akt").val());
 else
 $("#aktiivinen").val(1);
 
+$(".poista").click(function(){
+	var polku = $(this).attr('for');
+        $.ajax({
+           url: 'index',
+           type: "POST",
+           data: { "poistaTemplate" : polku },
+           success: function(data){
+		console.log(data);
+		window.location.href="index";
+           }
+        });
+});
 
 $(".haemob").click(function(){
 	$("#mobForm").submit();
