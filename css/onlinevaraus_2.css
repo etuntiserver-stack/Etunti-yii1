@@ -1,0 +1,129 @@
+body{margin:40px;}
+
+table {
+	width: 100%; border-spacing: 0; 
+}
+td.def{
+	background: #f6d654 url(../ylapalkki/pitk_harm.png);
+}
+td div.inline_block{
+	display: inline;
+}
+td div.sin{
+	float: left;
+	background: #f6d654 url(../ylapalkki/sin.png);
+}
+td div.osa_sin{
+	background: #f6d654 url(../ylapalkki/osa_sin.png) no-repeat;
+}
+
+
+#green_and_orange_step_menu { 
+clear:both;
+margin:0; padding:0px; 
+display:inline-table; list-style:none;
+}
+
+#green_and_orange_step_menu li{ 
+display:inline; float:left; 
+position:relative;
+height:37px; line-height:37px;
+margin-left:0px;
+width: 245px;
+text-align: center;
+z-index:2000;
+padding:0;
+}
+#green_and_orange_step_menu li.first{ 
+margin-left:0;
+}
+#green_and_orange_step_menu li a{
+padding:0;
+clear:both;
+	position: absolute;
+	margin-left:-40px;
+	color:#FFF;
+} 
+
+#green_and_orange_step_menu li.tehty{ 
+background:url(../ylapalkki/vihr.png) no-repeat;
+background-size: contain;
+}
+#green_and_orange_step_menu li.aktiivinen{ 
+background:url(../ylapalkki/sin.png) no-repeat;
+background-size: contain;
+}
+#green_and_orange_step_menu li.passivinen{ 
+background:url(../ylapalkki/harm.png) no-repeat;
+background-size: contain;
+}
+
+#green_and_orange_step_menu li span{ 
+display:block; 
+position:absolute; 
+width:31px; 
+padding:0;
+height:37px; 
+top:0px; left:-15px;
+}
+
+#green_and_orange_step_menu li span.teh_teh{ 
+background:url(../ylapalkki/teh_teh.png)  no-repeat;
+background-size: contain;
+}
+#green_and_orange_step_menu li span.teh{ 
+background:url(../ylapalkki/teht_sin.png)  no-repeat;
+background-size: contain;
+}
+#green_and_orange_step_menu li span.akt{ 
+background:url(../ylapalkki/osa_sin.png)  no-repeat;
+background-size: contain;
+
+}
+#green_and_orange_step_menu li span.pas{ 
+background:url(../ylapalkki/osa_harm.png)  no-repeat; 
+background-size: contain;
+}
+
+
+
+
+
+
+
+.well{
+    background: rgba(255, 255, 255, 1);
+    border:3px rgba(0, 157, 218, 1) solid;
+}
+.boxes-info{
+	height: auto;
+}
+
+.day:hover{ background: orange; color: white; }
+.vapaa{ background: green; color: white;  }
+.orangeColor{ background: orange; color: white; }
+.kiinni{ background: red; color: white; } 
+
+
+
+.btn, .form-control {
+  border-radius:0;
+}
+
+
+.btn-circle {
+  width: 40px;
+  height: 40px;
+  text-align: center;
+  padding: 6px 0;
+  font-size: 12px;
+  line-height: 1.428571429;
+  border-radius: 20px;
+}
+.btn-primary a{ color: white; }
+
+#kalenterit table td{ text-align: center; }
+
+
+
+
