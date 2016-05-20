@@ -1,4 +1,26 @@
 <?php
+if(isset($_POST['poistaTemplate'])){
+	unlink($_POST['poistaTemplate']);
+	exit;
+}
+
+  if(isset($_POST['crm_tarjous']))
+  {
+
+    if (!file_exists(Yii::app()->basePath."/../tiedostot/templates/".Yii::app()->user->domain)) {
+  	mkdir(Yii::app()->basePath."/../tiedostot/templates/".Yii::app()->user->domain, 0777, true);
+    }
+
+  $uploaddir = Yii::app()->basePath.'/../tiedostot/templates/'.Yii::app()->user->domain.'/';
+  $tiedosto = 'crm_tarjous.docx';
+
+  $uploadfile = $uploaddir . basename($tiedosto);
+    if (move_uploaded_file($_FILES['file']['tmp_name'], $uploadfile)) {
+
+    } else {
+	echo Yii::t('main', 'Lataaminen ei onnistuu');
+    }
+  }
 
 ?>
 
@@ -17,6 +39,9 @@
             <div class="admin-form">
               <div class="panel heading-border">
                 <div class="panel-body">
+
+
+<?php /*
 
                     <!-- Input Icons -->
                     <div class="row">
@@ -107,6 +132,40 @@
 		      </div>
 
                     </div>
+*/ ?>
+	    </form>
+
+
+
+<?php
+  $nimike	= 'crm_tarjous.docx';
+  $polku 	= Yii::app()->basePath;
+  $tiedosto 	= "/../tiedostot/templates/".Yii::app()->user->domain."/".$nimike;
+
+  if (file_exists($polku.$tiedosto))
+  echo '<a href="'.$tiedosto.'">'.$nimike.'</a> <span class="poista btn btn-xs btn-danger" for="'.$polku.$tiedosto.'">X</span>';
+
+  echo '
+  <form action="#" class="form-input" method="post" enctype="multipart/form-data">
+     <div class="section input-group">
+       <label class="field prepend-icon append-button file">
+         <span class="button">'.Yii::t('main', 'Tarjous template').'</span>
+         <input type="file" class="gui-file" name="file" onChange="document.getElementById(\'tiedostoUP\').value = this.value;">
+         <input type="text" class="gui-input" name="crm_tarjous" id="tiedostoUP" placeholder="Valitse tiedosto..">
+         <label class="field-icon">
+          <i class="fa fa-upload"></i>
+         </label>
+       </label>
+	<span class="input-group-btn">
+          <input type="submit" value="Lataa docx" class="btn btn-primary btn-group myBgColors" />
+	</span>
+    </div>
+  </form>
+ </div>';
+  
+
+ 
+?>
 
 
 
@@ -114,7 +173,7 @@
               </div>
             </div>
 
-	    </form>
+
 
 
         <!-- loppu: .tray-center -->
@@ -161,6 +220,21 @@
 
 <script type="text/javascript">
 $(document).ready(function(){
+
+
+$(".poista").click(function(){
+	var polku = $(this).attr('for');
+        $.ajax({
+           url: 'index',
+           type: "POST",
+           data: { "poistaTemplate" : polku },
+           success: function(data){
+		console.log(data);
+		window.location.href="index";
+           }
+        });
+});
+
 
 if($("#akt").val())
 $("#aktiivinen").val($("#akt").val());

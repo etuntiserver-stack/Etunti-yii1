@@ -3,7 +3,7 @@
 /* @var $dataProvider CActiveDataProvider */
 $asetukset = Asetukset::model()->findbypk(1);
 ?>
-<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/onlinevaraus.css">
+<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/onlinevaraus_2.css">
 
 <div class="container-fluid">
 <br>
@@ -20,26 +20,13 @@ $asetukset = Asetukset::model()->findbypk(1);
 
 
 
-<div class="stepwizard">
-    <div class="stepwizard-row">
-        <div class="stepwizard-step">
-            <button type="button" class="btn btn-primary btn-circle"><?php echo CHtml::link('1','index'); ?></button>
-            <p>PALVELU</p>
-        </div>
-        <div class="stepwizard-step">
-            <button type="button" class="btn btn-default btn-circle"><?php echo CHtml::link('2','aika'); ?></button>
-            <p>AIKA</p>
-        </div>
-        <div class="stepwizard-step">
-            <button type="button" class="btn btn-default btn-circle"><?php echo CHtml::link('3','osoite'); ?></button>
-            <p>OSOITE</p>
-        </div> 
-              <div class="stepwizard-step">
-            <button type="button" class="btn btn-default btn-circle"><?php echo CHtml::link('4','maksu'); ?></button>
-            <p>MAKSU</p>
-        </div>
-
-    </div>
+<div class="">
+<ul id="green_and_orange_step_menu">
+<li class="first aktiivinen"><?php echo CHtml::link('PALVELU','index'); ?></li>
+<li class="passivinen"><?php echo CHtml::link('AIKA','aika'); ?><span class="akt"></span></li>
+<li class="passivinen"><?php echo CHtml::link('OSOITE','osoite'); ?><span class="pas"></span></li>
+<li class="passivinen"><?php echo CHtml::link('MAKSU','maksu'); ?><span class="pas"></span></li>
+</ul>
 </div>
 
 <br>

@@ -12,9 +12,9 @@ foreach($tal as $k=>$v)
   if(isset($_POST[$k]))
   {
 
-  if (!file_exists(Yii::app()->basePath."/../tiedostot/templates/".Yii::app()->user->domain)) {
+    if (!file_exists(Yii::app()->basePath."/../tiedostot/templates/".Yii::app()->user->domain)) {
   	mkdir(Yii::app()->basePath."/../tiedostot/templates/".Yii::app()->user->domain, 0777, true);
-  }
+    }
 
   $uploaddir = Yii::app()->basePath.'/../tiedostot/templates/'.Yii::app()->user->domain.'/';
   $array = explode('.', $_FILES['file']['name']);
@@ -22,11 +22,11 @@ foreach($tal as $k=>$v)
   $tiedosto = $k.'.docx';
 
   $uploadfile = $uploaddir . basename($tiedosto);
-  if ($extension == 'docx' and move_uploaded_file($_FILES['file']['tmp_name'], $uploadfile)) {
+    if ($extension == 'docx' and move_uploaded_file($_FILES['file']['tmp_name'], $uploadfile)) {
 
-  } else {
+    } else {
 	echo Yii::t('main', 'Lataaminen ei onnistuu');
-  }
+    }
   }
 
 

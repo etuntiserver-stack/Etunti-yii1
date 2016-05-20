@@ -182,9 +182,22 @@ $randstring = generateRandomString();
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
+			$tm = '';
+
 		if(isset($_POST['CrmTarjoukset']))
 		{
 
+
+			$nimike		= 'crm_tarjous.docx';
+			$polku 		= Yii::app()->basePath;
+			$tiedosto 	= "/../tiedostot/templates/".Yii::app()->user->domain."/".$nimike;
+
+		if(!file_exists($polku.$tiedosto))
+			$tm = '<h2 class="alert alert-danger">'.Yii::t('main', 'Template puuttuu').'</h2>';
+
+
+		if(file_exists($polku.$tiedosto))
+		{
 			$model->attributes=$_POST['CrmTarjoukset'];
 
 			if($model->save()){
@@ -218,13 +231,14 @@ $(document).ready(function(){
 });
 </script>';
 exit;
-
+		}
 
 			}
 		}
 
 		$this->render('create',array(
 			'model'=>$model,
+			'tm'=>$tm,
 		));
 	}
 
@@ -300,7 +314,7 @@ exit;
 			}
 	
 			$PHPWord = new PHPWord();
-			$document = $PHPWord->loadTemplate('tiedostot/templates/crm_tarjous.docx');
+			$document = $PHPWord->loadTemplate('tiedostot/templates/'.Yii::app()->user->domain.'/crm_tarjous.docx');
 			$file = '';
 
 /*
