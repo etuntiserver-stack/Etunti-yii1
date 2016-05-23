@@ -203,9 +203,7 @@ $randstring = generateRandomString();
 
 				$as = Asiakkaat::model()->findbypk($model->asiakas_id);
 				CrmSopimukset::model()->updatebypk($model->id, array('asiakkaan_sahkoposti'=>$as->sahkoposti));
-
 				$this->docx($model);
-				exit;
 
 			}
 
@@ -248,7 +246,6 @@ $randstring = generateRandomString();
 
 			if($model->save()){
 				$this->docx($model);
-				exit;
 			}
 		}
 

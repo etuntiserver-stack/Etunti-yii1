@@ -45,6 +45,8 @@ array(
 );
 $data = $result->RetrieveDocumentResult;
 
+print_r($soap);
+
 //Impostazione e salvataggio del file PDF
 $file_PDF = $path.'.pdf';
 file_put_contents($file_PDF, base64_decode($data));
