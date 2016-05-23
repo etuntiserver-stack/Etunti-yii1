@@ -204,33 +204,8 @@ $randstring = generateRandomString();
 				$as = Asiakkaat::model()->findbypk($model->asiakas_id);
 				CrmSopimukset::model()->updatebypk($model->id, array('asiakkaan_sahkoposti'=>$as->sahkoposti));
 
-
-				$returnPath = $this->docx($model);
-
-echo '
-	<input type="hidden" id="polkku" value="'.$returnPath.'">
-
-<script src="'.Yii::app()->request->baseUrl.'/js/jquery-1.9.1.min.js"></script>
-
-<script type="text/javascript">
-$(document).ready(function(){
-
-	var polkku = $("#polkku").val();
-
-        $.ajax({
-           url: location.protocol + "//" + location.host + "/docxtopdf/index.php",
-           type: "POST",
-           data: { "polkku" : polkku },
-           success: function(data){
-		console.log(data);
-		window.location.href="index";
-           }
-        });
-
-});
-</script>';
-exit;
-
+				$this->docx($model);
+				exit;
 
 			}
 
@@ -272,36 +247,8 @@ exit;
 			$model->asiakkaan_sahkoposti=$as->sahkoposti;
 
 			if($model->save()){
-
-				$returnPath = $this->docx($model);
-
-echo '
-	<input type="hidden" id="polkku" value="'.$returnPath.'">
-
-<script src="'.Yii::app()->request->baseUrl.'/js/jquery-1.9.1.min.js"></script>
-
-<script type="text/javascript">
-$(document).ready(function(){
-
-	var polkku = $("#polkku").val();
-
-        $.ajax({
-           url: location.protocol + "//" + location.host + "/docxtopdf/index.php",
-           type: "POST",
-           data: { "polkku" : polkku },
-           success: function(data){
-		console.log(data);
-		window.location.href="index";
-           }
-        });
-
-});
-</script>';
-exit;
-
-	
-
-
+				$this->docx($model);
+				exit;
 			}
 		}
 
@@ -371,7 +318,38 @@ exit;
 			$document->setValue('teksti', htmlspecialchars(iconv('UTF-8','ISO-8859-1',$model->teksti)));
 		  	$document->save($path.'.docx');
 
-			return $path;
+
+
+
+echo '
+	<input type="hidden" id="polkku" value="'.$path.'">
+
+<script src="'.Yii::app()->request->baseUrl.'/js/jquery-1.9.1.min.js"></script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+
+
+	var polkku = $("#polkku").val();
+
+        $.ajax({
+
+           url: location.protocol + "//" + location.host + "/docxtopdf/index.php",
+           type: "POST",
+           data: { "polkku" : polkku },
+           success: function(data){
+
+		console.log(data);
+		window.location.href="index";
+           }
+        });
+
+
+});
+</script>';
+
+
 
 	}
 

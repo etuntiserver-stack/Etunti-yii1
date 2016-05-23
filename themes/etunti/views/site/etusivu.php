@@ -465,16 +465,14 @@ echo '
 	
 
 	<div class="row">
-	<?php echo Yii::t('main', 'Keskeyty'); ?>
 	 <div class="form-inline">
-		Lat <input type="number" class="form-control form-group" id="keskeytyLAT">
-		Lng <input type="number" class="form-control form-group" id="keskeytyLNG">
+		Alue/Kaupunki <input type="text" class="form-control form-group" id="alueKaupunki">
 		 <button class="tallennaLatLng btn btn-primary myBgColors"><?php echo Yii::t('main', 'Tallenna'); ?></button>
 	 </div>
 	</div>
 
 	<div class="row">
-	 <iframe src="<?php echo Yii::app()->request->baseUrl; ?>/index.php/kohteet/googlemap?nomenu" scrolling="no" style="width: 100%; height: 700px; border: none"></iframe>
+	 <div id="kartta"></div>
 	</div>
 
 
@@ -485,16 +483,23 @@ if (localStorage.getItem('keskeytyLAT') !== "") {
   $("#keskeytyLAT").val(localStorage.getItem('keskeytyLAT'));
 }
 
-if (localStorage.getItem('keskeytyLNG') !== "") {
-  $("#keskeytyLNG").val(localStorage.getItem('keskeytyLNG'));
-}
+
 
 
 $(".tallennaLatLng").click(function(){
-	localStorage.setItem('keskeytyLAT', $("#keskeytyLAT").val());
-	localStorage.setItem('keskeytyLNG', $("#keskeytyLNG").val());
+	localStorage.setItem('alueKaupunki', $("#alueKaupunki").val());
 	window.location.reload();
 });
+
+	var keskusta = '';
+	if (localStorage.getItem('alueKaupunki') !== "") {
+		$("#alueKaupunki").val(localStorage.getItem('alueKaupunki'));
+		keskusta = localStorage.getItem('alueKaupunki');
+	}
+
+	$('#kartta').html('<iframe src="' + location.protocol + '//' + location.host + '/index.php/kohteet/googlemap?nomenu=true&center='+keskusta+'" scrolling="no" style="width: 100%; height: 700px; border: none"></iframe>');
+
+
 
 
 });
@@ -674,6 +679,7 @@ $(".tallennaLatLng").click(function(){
             <div id="sidebar-right-tab3" class="tab-pane"></div>
           </div>
           <!-- end: .tab-content -->
+
         </div>
 
       </div>
