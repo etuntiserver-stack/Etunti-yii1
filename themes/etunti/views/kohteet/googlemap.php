@@ -12,7 +12,7 @@
 <?php
 $center = '';
 $valCenter = '';
-if(isset($_GET['center'])){
+if(isset($_GET['center']) and !empty($_GET['center'])){
 	$valCenter = $_GET['center'];
 	$cityclean = str_replace (" ", "+", $_GET['center']);
 	$json_url = 'https://maps.googleapis.com/maps/api/geocode/json?address='.$cityclean.'&language=fi&sensor=true';
@@ -82,23 +82,14 @@ if(isset($_GET['center'])){
         var centerUusi = "<?php echo $center; ?>".split(",");
 
 
-  var keskeytyLAT = '60.2480743';
-  var keskeytyLNG = '24.9263055';
-
-if (localStorage.getItem('keskeytyLAT') !== null) {
-  keskeytyLAT = localStorage.getItem('keskeytyLAT');
-}
-
-if (localStorage.getItem('keskeytyLNG') !== null) {
-  keskeytyLNG = localStorage.getItem('keskeytyLNG');
-}
-
+  var hesariLAT = '60.2480743';
+  var hesariLNG = '24.9263055';
 
 
 if(!centerUusi[0]){
-        map.setCenter(new GLatLng(keskeytyLAT,keskeytyLNG), 11);
+        map.setCenter(new GLatLng(hesariLAT,hesariLNG), 11);
 } else {
-        map.setCenter(new GLatLng(centerUusi[0],centerUusi[1]), 15);
+        map.setCenter(new GLatLng(centerUusi[0],centerUusi[1]), 11);
 //alert(centerUusi)
 }
 
