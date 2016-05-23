@@ -1,6 +1,61 @@
 <?php
 
 
+// Impostiamo il livello di errori da visualizzare
+error_reporting (E_ALL|E_STRICT);
+
+// Disattiviamo la cache WSDL
+ini_set ('soap.wsdl_cache_enabled', 0);
+
+// definiamo le credenziali scelte al momento della registrazione
+define ('USERNAME', 'etunti');
+define ('PASSWORD', 'Estrom2016!');
+
+// SOAP WSDL endpoint
+define ('ENDPOINT', 'https://api.livedocx.com/1.2/mailmerge.asmx?WSDL');
+
+// Definiamo il timezone locale
+date_default_timezone_set('Europe/Helsinki');
+
+// Instanziamo l'oggetto SOAP e gli passiamo le credenziali sotto forma di array
+$soap = new SoapClient(ENDPOINT);
+$soap->LogIn(
+array(
+'username' => USERNAME,
+'password' => PASSWORD
+)
+);
+
+// Upload del file DOCX da convertire
+$path = dirname(__FILE__) .'/../'.$_POST['polkku'];
+$file_docx = $path.'.docx';
+$data = file_get_contents($file_docx);
+$soap->SetLocalTemplate(
+array(
+'template' => base64_encode($data),
+'format' => 'docx'
+  )
+);
+
+//Impostiamo il formato di output che vogliamo (pdf in questo caso) 
+$result = $soap->RetrieveDocument(
+array(
+'format' => 'pdf'
+  )
+);
+$data = $result->RetrieveDocumentResult;
+
+//Impostazione e salvataggio del file PDF
+$file_PDF = $path.'.pdf';
+file_put_contents($file_PDF, base64_decode($data));
+
+// Logout
+$soap->LogOut();
+unset($soap);
+
+
+
+/*
 require_once 'PhpWord/PhpWord.php';
 require_once 'PhpWord/Autoloader.php';
 require_once 'PhpWord/Common/XMLReader.php';
@@ -34,10 +89,10 @@ $rendererLibraryPath = dirname(__FILE__) .'/plugins/dompdf/' . $rendererLibrary;
 \PhpOffice\PhpWord\Settings::setPdfRenderer($rendererName,$rendererLibraryPath);
 */
 
-
+/*
 $path = dirname(__FILE__) .'/../'.$_POST['polkku'];
 $phpWord = \PhpOffice\PhpWord\IOFactory::load($path.'.docx'); 
 $xmlWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord , 'PDF');
 $xmlWriter->save($path.'.pdf');  
-
+*/
 ?>
