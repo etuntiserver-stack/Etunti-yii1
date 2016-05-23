@@ -6,11 +6,9 @@
         <div class="tray-center">
 
 	   <div class="pull-right">
-	   <?php      
- 		echo CHtml::link("poista", '#', array(
-		'submit'=>array('delete', "id"=>$model->id), 
-		'confirm' => 'Haluatko varmaasti poistaa?',
-		'class'=>'btn btn-primary myBgColors'
+	   <?php     
+		echo CHtml::link(Yii::t('main', 'Palaa takaisin muokkaamaan'), 'update?id='.$model->id, array(
+		'class'=>'btn btn-default'
 		));
 	   ?>
 	   </div>
