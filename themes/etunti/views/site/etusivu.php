@@ -479,13 +479,6 @@ echo '
 <script type="text/javascript">
 $(document).ready(function(){
 
-if (localStorage.getItem('keskeytyLAT') !== "") {
-  $("#keskeytyLAT").val(localStorage.getItem('keskeytyLAT'));
-}
-
-
-
-
 $(".tallennaLatLng").click(function(){
 	localStorage.setItem('alueKaupunki', $("#alueKaupunki").val());
 	window.location.reload();

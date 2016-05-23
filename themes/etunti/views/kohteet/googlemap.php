@@ -12,7 +12,7 @@
 <?php
 $center = '';
 $valCenter = '';
-if(isset($_GET['center']) and !empty($_GET['center'])){
+if(isset($_GET['center']) and !empty($_GET['center']) and $_GET['center'] != 'null'){
 	$valCenter = $_GET['center'];
 	$cityclean = str_replace (" ", "+", $_GET['center']);
 	$json_url = 'https://maps.googleapis.com/maps/api/geocode/json?address='.$cityclean.'&language=fi&sensor=true';
