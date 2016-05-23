@@ -231,6 +231,18 @@
 		<?php echo $form->error($model,'sovellus_tyovuorot'); ?>
 	</div>
 
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'show_name'); ?>
+		<?php 
+        	$tal = array(
+			0=>'Ei',
+			1=>'Kyllä'
+		);
+		echo $form->dropDownList($model,'show_name', $tal, 
+		array('class'=>'form-control')) ?>
+		<?php echo $form->error($model,'show_name'); ?>
+	</div>
+
    </div>
   </div>
 
