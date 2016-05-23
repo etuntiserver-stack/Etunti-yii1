@@ -40,7 +40,7 @@ class Asetukset extends DB2ActiveRecord
 		// will receive user inputs.
 		return array(
 			array('id,logon_polkku, logon_korkeus, johtaja', 'required'),
-			array('id, sovellus_tyovuorot, logon_korkeus, palvelu_tyyppi, lasku_asiakasnumero', 'numerical', 'integerOnly'=>true),
+			array('id, show_name, sovellus_tyovuorot, logon_korkeus, palvelu_tyyppi, lasku_asiakasnumero', 'numerical', 'integerOnly'=>true),
 			array('paivan_uutinen, logon_polkku', 'length', 'max'=>500),
 			array('johtaja, viivastyskorko, tilinumero, iban, bic, , postita_username, postita_password, trust_cid, trust_api, checkout_id', 'length', 'max'=>100),
 			array('trust_url, checkout_salasana', 'length', 'max'=>255),
@@ -91,6 +91,7 @@ class Asetukset extends DB2ActiveRecord
 			'viikonloppulisa_la'=> Yii::t('main', 'Lauantai %'),
 			'viikonloppulisa_su'=> Yii::t('main', 'Sunnuntai %'),
 			'lasku_asiakasnumero'=> Yii::t('main', 'Syöttääkö itse asiakasnumeron vai lasketaan edellisestä automaattisesti'),
+			'show_name' => Yii::t('main', 'Näytä asiakas nimi'),
 		);
 	}
 

@@ -428,9 +428,13 @@ public function actionImei($dom)
 			    $osoite = (isset($expl1[0])) ? $expl1[0] : '';
 		      }
 
+		      $nm = '';
+		      if(isset($asetukset->show_name) and $asetukset->show_name == 1 and $kohde->etu_suku_nimet != '')
+		      $nm = ', '.$kohde->etu_suku_nimet;
+		      
 
 		      $sel .= '<div class="well">
-				  <b>'.$val->pvm.'</b><br>
+				  <b>'.$val->pvm.$nm.'</b><br>
 				  <b><span class="text" style="color:'.$color.'">'.$alkLop.$osoite.'</span></b>';
 		      if(!empty($val->tietoja))
 		      {
