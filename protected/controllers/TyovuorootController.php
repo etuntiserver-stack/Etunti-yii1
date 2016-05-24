@@ -759,6 +759,25 @@ class TyovuorootController extends Controller
 	if(isset($_POST['tid'])){
   	  $tekija = Tyontekijat::model()->findbypk($_POST['tid']);
 	  $tnimi = $tekija->tekijan_nimi;
+
+
+		// Tyosuhde oikeus
+		$oikeus = '<div class="alert alert-danger">'.Yii::t('main', 'Työsuhdetta ei ole määritelty tai työsuhde ei ole voimassa.').'</div>';
+		$pvm = date("Ymd", strtotime($_POST['pvm']));
+		$criteria=new CDbCriteria;
+		$criteria->condition = " 
+			tid='".$tekija->id."' 
+		";
+		$ts = Tyosuhdet::model()->find($criteria);
+		if(isset($ts->id) and !empty($ts->alku) and !empty($ts->loppu))
+		{
+			$alku = date("Ymd", strtotime($ts->alku));
+			$loppu = date("Ymd", strtotime($ts->loppu));
+			if($pvm >= $alku and $pvm <= $loppu)
+			$oikeus = '';
+		}
+		// Tyosuhde oikeus
+
 	}
 	?>
 	<div class="modal-dialog modal-lg">
@@ -774,6 +793,7 @@ class TyovuorootController extends Controller
 
 	<div class="dialogTable clearfix modal-osio">
 	<?php
+		echo $oikeus;
 
 		$model=new Tyovuoroot;
 
