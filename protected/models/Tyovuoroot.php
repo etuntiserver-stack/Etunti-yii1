@@ -103,7 +103,7 @@ public $count;
 			'kesto' => Yii::t('main', 'Kesto'),
 			'tyoajanlaatu' => Yii::t('main', 'Tyoajanlaatu'),
 			'tyoajanmerkinta' => Yii::t('main', 'Työajanmerkintä'),
-			'tietoja' => Yii::t('main', 'Tietoja'),
+			'tietoja' => Yii::t('main', 'Tietoja mobiilisovelukseen'),
 			'osoiteOnline' => Yii::t('main', 'Osoite Online'),
 		);
 	}
