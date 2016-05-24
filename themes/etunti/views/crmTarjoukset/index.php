@@ -137,6 +137,7 @@ if(isset($_POST['poistaTemplate'])){
 
 
 
+<div class="col-sm-6">
 <?php
   $nimike	= 'crm_tarjous.docx';
   $polku 	= Yii::app()->basePath;
@@ -161,11 +162,22 @@ if(isset($_POST['poistaTemplate'])){
 	</span>
     </div>
   </form>
- </div>';
-  
-
- 
+ ';
 ?>
+</div>
+
+
+<div class="col-sm-6">
+<p><b>Template variables</b></p><br>
+
+${yritys}<br>
+${yrityksen_osoite}<br>
+${yrityksen_postinumero} ${yrityksen_toimipaikka} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${paivays}<br>
+<br>
+${asiakas}<br>
+${asiakkaan_osoite}<br>
+${asiakkaan_postinumero} ${asiakkaan_toimipaikka}
+</div>
 
 
 

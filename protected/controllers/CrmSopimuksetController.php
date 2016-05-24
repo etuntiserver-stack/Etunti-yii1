@@ -352,7 +352,14 @@ $(document).ready(function(){
 
 	public function actionDelete($id)
 	{
-		$this->loadModel($id)->delete();
+		$model=$this->loadModel($id);
+		$t = 'tiedostot/crm/sopimukset/'.Yii::app()->user->domain.'/'.$model->liite;
+		if(file_exists(Yii::app()->basePath."/../tiedostot/crm/sopimukset/".Yii::app()->user->domain."/".$t.".docx"))
+			unlink($t.".docx");
+		if(file_exists(Yii::app()->basePath."/../tiedostot/crm/sopimukset/".Yii::app()->user->domain."/".$t.".pdf"))
+			unlink($t.".pdf");
+		
+		$model->delete();
 
 		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
 		if(!isset($_GET['ajax']))

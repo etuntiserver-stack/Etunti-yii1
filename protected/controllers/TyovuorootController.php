@@ -699,7 +699,7 @@ class TyovuorootController extends Controller
 		  $ohje .= "\nTietoja: ".$m->tietoja;
 		if(!empty($m->muut))
 		  $ohje .= "\nMuut: ".$m->muut;
-		echo $ohje;
+		echo json_encode($ohje."//".$m->tietoja);
 	}
 
 	public function actionView($id)

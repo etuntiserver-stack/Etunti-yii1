@@ -112,7 +112,7 @@ class Kohteet extends DB2ActiveRecord
 			'hinnoittelu' => Yii::t('main', 'Hinnoittelu'),
 			'muut' => Yii::t('main', 'Muut'),
 			'toimenpiteet' => Yii::t('main', 'Toimenpiteet'),
-			'tietoja' => Yii::t('main', 'Tietoja'),
+			'tietoja' => Yii::t('main', 'Tietoja mobiilisovelukseen'),
 			'tyoryhma' => Yii::t('main', 'Työryhmä'),
 			'ryhma' => Yii::t('main', 'Toimialue'),
 			'aktiivinen' => Yii::t('main', 'Aktiivinen'),
