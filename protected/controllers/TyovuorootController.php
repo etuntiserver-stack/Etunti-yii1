@@ -769,11 +769,13 @@ class TyovuorootController extends Controller
 			tid='".$tekija->id."' 
 		";
 		$ts = Tyosuhdet::model()->find($criteria);
-		if(isset($ts->id) and !empty($ts->alku) and !empty($ts->loppu))
+		if(isset($ts->id) and !empty($ts->alku))
 		{
 			$alku = date("Ymd", strtotime($ts->alku));
-			$loppu = date("Ymd", strtotime($ts->loppu));
-			if($pvm >= $alku and $pvm <= $loppu)
+
+			if($pvm >= $alku and empty($ts->loppu))
+			$oikeus = '';
+			elseif($pvm >= $alku and !empty($ts->loppu) and $pvm <= date("Ymd", strtotime($ts->loppu)))
 			$oikeus = '';
 		}
 		// Tyosuhde oikeus
@@ -913,6 +915,7 @@ class TyovuorootController extends Controller
 
 				}
 			   }
+
 
 		  }
 
