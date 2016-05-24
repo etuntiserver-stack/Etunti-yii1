@@ -361,8 +361,10 @@ $(document).ready(function(){
 		  url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/showohje?id='+thisID,
 		  success:function(data){
 			//console.log(data);
-			$('.ohje').text(data);
-		return false;
+			var d = JSON.parse(data).split("//");
+			$('.ohje').text(d[0]);
+			$('#Tyovuoroot_tietoja').val(d[1]);
+
 	   	},
 		error:function(data){
 		console.log(data);

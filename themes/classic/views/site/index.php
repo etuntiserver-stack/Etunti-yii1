@@ -279,7 +279,7 @@ etuntimyynti@etunti.fi<br>
                                     <h4>Työajanseuranta liikkuvalle työlle ja mobiilisovellus</h4>
                                   </div>
                                   <div class="modal-body">
-                                     <p>Työntekijäsi kuittaavat tehdyt työt ja käytetyt matka-ajat helposti kännykällä. Työtunnit kirjataan ja lasketaan oikein, eikä manuaalisia tuntiraportteja enää tarvita ja seuraat reaaliajassa missä työntekijäsi liikkuvat.
+                                     <p>Työntekijäsi kuittaavat tehdyt työt ja käytetyt matka-ajat helposti kännykällä. Työtunnit kirjataan ja lasketaan oikein, eikä manuaalisia tuntiraportteja enää tarvita ja tiedät reaaliajassa missä työntekijäsi liikkuvat.
                                     <br><br>
                                     Voit lähettää viestejä ja ohjeita työntekijällesi ja hyväksyttää tehdyt tunnit asiakkaalla sähköisesti.</p>
                                   </div>
