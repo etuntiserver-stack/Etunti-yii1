@@ -290,7 +290,7 @@ $randstring = generateRandomString();
 
 
 			$path = 'tiedostot/crm/tarjoukset/'.Yii::app()->user->domain.'/'.$liite;
-			$document->setValue('tarjous', htmlspecialchars(iconv('UTF-8','ISO-8859-1',$model->tarjous)));
+			$document->setValue('teksti', htmlspecialchars(iconv('UTF-8','ISO-8859-1',$model->tarjous)));
 		  	$document->save($path.'.docx');
 
 

@@ -176,7 +176,9 @@ ${yrityksen_postinumero} ${yrityksen_toimipaikka} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 <br>
 ${asiakas}<br>
 ${asiakkaan_osoite}<br>
-${asiakkaan_postinumero} ${asiakkaan_toimipaikka}
+${asiakkaan_postinumero} ${asiakkaan_toimipaikka}<br>
+<br>
+<p>${teksti}</p>
 </div>
 
 

@@ -61,7 +61,7 @@ class CrmTarjoukset extends DB2ActiveRecord
 			'id' => 'ID',
 			'time' => 'Time',
 			'asiakas_id' => 'Asiakas',
-			'tarjous' => 'Tarjous',
+			'tarjous' => 'Teksti',
 			'hyvaksyn_koodi' => 'Hyvaksyn Koodi',
 			'asiakkaan_sahkoposti' => 'Asiakkaan Sahkoposti',
 			'status' => 'Status',
