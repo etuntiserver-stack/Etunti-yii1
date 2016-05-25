@@ -276,40 +276,32 @@ $randstring = generateRandomString();
 			$document = $PHPWord->loadTemplate('tiedostot/templates/'.Yii::app()->user->domain.'/'.$tiedosto);
 			$file = '';
 
-/*
+
 			$firma = FirmanTiedot::model()->findbypk(1);
 			$as = Asiakkaat::model()->findbypk($model->asiakas_id);
 		
 
+			$document->setValue('paivays', iconv('UTF-8','ISO-8859-1',date("d.m.Y")));
 
-			if(!empty($firma->tyonantaja)) 
-			   $document->setValue('tyonantaja', iconv('UTF-8','ISO-8859-1',$firma->tyonantaja));
+			// Yritys
+			$document->setValue('yritys', iconv('UTF-8','ISO-8859-1',$firma->tyonantaja));
+			$document->setValue('yrityksen_osoite', iconv('UTF-8','ISO-8859-1',$firma->osoite));
+			$document->setValue('yrityksen_postinumero', iconv('UTF-8','ISO-8859-1',$firma->postinumero));
+			$document->setValue('yrityksen_toimipaikka', iconv('UTF-8','ISO-8859-1',$firma->postitoimipaikka));
+			$document->setValue('yrityksen_y_tunnus', iconv('UTF-8','ISO-8859-1',$firma->y_tunnus));
+			$document->setValue('yrityksen_puhelin', iconv('UTF-8','ISO-8859-1',$firma->puhelin));
+			// Asiakas
+			if(!empty($as->yrityksen_nimi))
+			   $asiakas = $as->yrityksen_nimi;
+			elseif(empty($as->yrityksen_nimi) and !empty($as->yhteyshenkilo)) 
+			   $asiakas = $as->yhteyshenkilo;
 			else
-			   $document->setValue('tyonantaja', '');
+			   $asiakas = '';
 
-			if(!empty($firma->osoite)) 
-			   $document->setValue('osoite', iconv('UTF-8','ISO-8859-1',$firma->osoite));
-			else
-			   $document->setValue('osoite', '');
-
-			if(!empty($firma->y_tunnus)) 
-			   $document->setValue('y_tunnus', $firma->y_tunnus);
-			else
-			   $document->setValue('y_tunnus', '');
-
-
-			if(!empty($firma->puhelin)) 
-			   $document->setValue('puhelin', $firma->puhelin);
-
-			else
-			   $document->setValue('puhelin', '');
-
-			if(!empty($firma->sahkoposti))
-
-			   $document->setValue('sposti', $firma->sahkoposti);
-			else
-			   $document->setValue('sposti', '');
-*/
+			$document->setValue('asiakas', iconv('UTF-8','ISO-8859-1',$asiakas));
+			$document->setValue('asiakkaan_osoite', iconv('UTF-8','ISO-8859-1',$as->osoite));
+			$document->setValue('asiakkaan_postinumero', iconv('UTF-8','ISO-8859-1',$as->postinumero));
+			$document->setValue('asiakkaan_toimipaikka', iconv('UTF-8','ISO-8859-1',$as->kaupunki));
 
 			$path = 'tiedostot/crm/sopimukset/'.Yii::app()->user->domain.'/'.$liite;
 			$document->setValue('teksti', htmlspecialchars(iconv('UTF-8','ISO-8859-1',$model->teksti)));

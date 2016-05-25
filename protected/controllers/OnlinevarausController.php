@@ -28,7 +28,7 @@ class OnlinevarausController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view', 'check', 'aika', 'osoite', 'maksu', 'palvelu_ajax', 'palvelu_save_ajax', 'lisat_ajax', 'ajaat_ajax', 'aika_ajax', 'onkokohde', 'luouusi', 'checkout', 'maksettu', 'rekisteriseloste'),
+				'actions'=>array('index','view', 'check', 'aika', 'osoite', 'maksu', 'palvelu_ajax', 'palvelu_save_ajax', 'lisat_ajax', 'ajaat_ajax', 'aika_ajax', 'onkokohde', 'luouusi', 'checkout', 'maksettu', 'rekisteriseloste', 'tidtietoja'),
                 		'users'=>array("*"),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
@@ -75,6 +75,42 @@ class OnlinevarausController extends Controller
 		$this->redirect(array('index'));
 		}
         }
+
+
+	public function actionTidtietoja()
+	{
+
+
+		$tt = Tyontekijat::model()->findbypk($_POST['tid']);
+		if(isset($tt->id))
+		{
+
+		$tietoja = '
+		<div class="panel panel-success">
+		  <div class="panel-heading"><b>'.$tt->tekijan_nimi.'</b></div>
+		  <div class="panel-body">
+
+		 <div class="row col-sm-4">
+		 ';
+			$filename = Yii::app()->request->baseUrl."/img/tekijat/".Yii::app()->user->domain."/".$_POST['tid'].".jpg";
+			if (file_exists(Yii::app()->basePath."/../img/tekijat/".Yii::app()->user->domain."/".$_POST['tid'].".jpg")){
+			   $tietoja .= '<img src="'.$filename.'" class="img-thumbnail">';
+			} else {
+			   $tietoja .= '<img src="'.Yii::app()->request->baseUrl.'/img/tekijat/noname.jpg" class="img-thumbnail">';
+			}
+		$tietoja .= '
+		  </div><div class="col-sm-8">
+		    <div class="small">
+			'.$tt->tietoja_onlinevarauksen.'
+		    </div>
+		 </div>
+
+		 </div>
+		</div>
+		';
+				echo json_encode($tietoja);
+		}
+	}
 
 	public function actionRekisteriseloste()
 	{

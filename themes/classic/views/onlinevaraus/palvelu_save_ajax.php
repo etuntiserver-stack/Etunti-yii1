@@ -70,10 +70,9 @@
 
 	$body = 
 	'
-	<div class="boxes-info">
-	      <h4>Yhteenveto</h4>
-   
-	   <div class = "panel-body">
+		<div class="panel panel-success">
+		  <div class="panel-heading"><b>'.Yii::t('main', 'Yhteenveto').'</b></div>
+		  <div class="panel-body">
 
 
 	<div class="row">
@@ -153,16 +152,34 @@
 	   </div>
 	</div>';
 
-	if(isset($sivu) and $sivu == 'index')
-	$body .= CHtml::link('Valitse aika','aika', array('class'=>'btn btn-success btn-lg'));
-	elseif(isset($sivu) and $sivu == 'aika' and isset($_SESSION['onlinevaraus']['modelTV']))
-	$body .= CHtml::link('Valitse osoite','osoite', array('class'=>'btn btn-success btn-lg'));
-	elseif(isset($sivu) and $sivu == 'osoite' and isset($_SESSION['onlinevaraus']['modelKohde']))
-	$body .= CHtml::link('Maksan','maksu', array('class'=>'btn btn-success btn-lg'));
-	elseif(isset($sivu) and $sivu == 'maksu')
-	$body .= CHtml::link('Kassalle','kassalle', array('class'=>'btn btn-success btn-lg'));
+	if(isset($sivu) and $sivu == 'index'){
+	$body .= CHtml::link('Valitse aika','aika', array('class'=>'btn btn-warning btn-block btn-lg'));
+	} elseif(isset($sivu) and $sivu == 'aika' and isset($_SESSION['onlinevaraus']['modelTV'])){
+	$body .= '
+	<div class="row">
+	  <div class="col-sm-6">
+			'.CHtml::link('Edellinen','index', array('class'=>'btn btn-block btn-success btn-lg')).'
+	  </div><div class="col-sm-6">
+			'.CHtml::link('Valitse osoite','osoite', array('class'=>'btn btn-block btn-warning btn-lg')).'
+	  </div>
+	</div>';
 
-	$body .= CHtml::link('Keskeytä','index?keskeyta=true', array('class'=>'btn btn-warning btn-lg'));
+	}elseif(isset($sivu) and $sivu == 'osoite' and isset($_SESSION['onlinevaraus']['modelKohde'])){
+	$body .= '
+	<div class="row">
+	  <div class="col-sm-6">
+			'.CHtml::link('Edellinen','aika', array('class'=>'btn btn-block btn-success btn-lg')).'
+	  </div><div class="col-sm-6">
+			'.CHtml::link('Maksu','maksu', array('class'=>'btn btn-block btn-warning btn-lg')).'
+	  </div>
+	</div>';
+
+	} elseif(isset($sivu) and $sivu == 'maksu'){
+	$body .= CHtml::link('Kassalle','kassalle', array('class'=>'btn btn-success btn-lg'));
+	}
+
+	//$body .= CHtml::link('Keskeytä','index?keskeyta=true', array('class'=>'btn btn-warning btn-lg'));
+	$body .= '<br>';
 
 	echo json_encode($body);
 

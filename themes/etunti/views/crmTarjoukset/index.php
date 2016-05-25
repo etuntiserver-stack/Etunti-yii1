@@ -170,15 +170,17 @@ if(isset($_POST['poistaTemplate'])){
 <div class="col-sm-6">
 <p><b>Template variables</b></p><br>
 
-${yritys}<br>
-${yrityksen_osoite}<br>
-${yrityksen_postinumero} ${yrityksen_toimipaikka} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${paivays}<br>
-<br>
-${asiakas}<br>
-${asiakkaan_osoite}<br>
-${asiakkaan_postinumero} ${asiakkaan_toimipaikka}<br>
-<br>
-<p>${teksti}</p>
+<textarea class="form-control" rows="10" cols="60">
+${yritys}
+${yrityksen_osoite}
+${yrityksen_postinumero} ${yrityksen_toimipaikka} ${paivays}
+
+${asiakas}
+${asiakkaan_osoite}
+${asiakkaan_postinumero} ${asiakkaan_toimipaikka}
+
+${teksti}
+</textarea>
 </div>
 
 

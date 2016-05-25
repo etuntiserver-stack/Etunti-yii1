@@ -39,6 +39,7 @@ $asetukset = Asetukset::model()->findbypk(1);
  </div>
  <div class="col-sm-4">
 	<div id="aikoja"></div>
+	<div id="tidTietoja"></div>
  </div>
  <div class="col-sm-4">
    <div id="panGetContent">
@@ -50,6 +51,28 @@ $asetukset = Asetukset::model()->findbypk(1);
    }
    ?>
    </div>
+
+	      <div id="alennuskoodi">
+		<div class="boxes-info">
+		  <center><h4><?php echo Yii::t('main', 'Alennuskoodi'); ?></h4>
+			<form class="input-group">
+			<input type="text" class="form-control form-group input-lg">
+			<span class="input-group-btn">
+			  <input type="submit" class="btn btn-lg btn-group btn-warning" value="<?php echo Yii::t('main', 'Aktivoi'); ?>">
+			</span>	
+			</form>
+		  </center>
+		</div>
+	      </div>
+
+	      <div>
+		<div class="boxes-info sininen">
+		  <center><h4><?php echo Yii::t('main', 'Asiakaspalvelu'); ?></h4>
+
+		  </center>
+		</div>
+	      </div>
+
  </div>
 </div>
 
@@ -117,6 +140,24 @@ $(document).delegate(".ajaanClick","click",function(){
 			$('#panGetContent').html(JSON.parse(data));
 			$('#aikoja').html('');
 			aikoja();
+
+		}
+   	},
+	error:function(data){
+		console.log(data);
+    	}
+    });
+
+
+  $.ajax({
+	url: 'tidtietoja',
+	data:{ "tid" : tid },
+	type:'POST',
+	success:function(data){
+		//console.log(data);
+		if(data)
+		{
+			$('#tidTietoja').html(JSON.parse(data));
 
 		}
    	},

@@ -325,6 +325,19 @@ if(empty($model->position) and isset($model->id))
 		<?php echo $form->error($model,'tekijan_muisti'); ?>
 	</div>
 
+<?php
+	$tas = '';
+	if(isset(Yii::app()->user->adminPaketti))
+	$tas = explode(",",Yii::app()->user->adminPaketti);
+?>
+	<?php if(isset(Yii::app()->user->adminID) and in_array('4',$tas)) : ?>
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'tietoja_onlinevarauksen'); ?>
+		<?php echo $form->textArea($model,'tietoja_onlinevarauksen',array('rows'=>6, 'cols'=>50,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'tietoja_onlinevarauksen'); ?>
+	</div>
+	<?php endif; ?>
+
    </div><div class="col-sm-6">
 
 <label><?php echo Yii::t('','Viimeinen sijainti kartalla').' '.$viimeinenAika; ?> </label>
