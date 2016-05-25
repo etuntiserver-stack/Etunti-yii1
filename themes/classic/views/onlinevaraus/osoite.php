@@ -32,12 +32,17 @@ $asetukset = Asetukset::model()->findbypk(1);
 
 <br><br>
 <div class="row">
- <div class="col-sm-4">
+ <div class="col-sm-8">
 
      <?php if(!isset($_SESSION['onlinevaraus']['modelKohde'])) : ?>
 <div id="fullLomake">
  <div class="boxes-info">
+
+   <div class="row">
+      <div class="col-sm-6">
+
      <div class="sahkoposti">
+	<label><?php echo Yii::t('main', 'Sähköposti'); ?></label>
 	<input type="text" id="sahkoposti" class="form-control input-lg" placeholder="Sähköposti">
      </div>
 
@@ -46,27 +51,40 @@ $asetukset = Asetukset::model()->findbypk(1);
 	<button class="btn btn-primary btn-block btn-lg tarkistaSahkoposti">Jatka</button>
      </div>
 
+      </div>
+
+
      <div id="lomake" style="display:none">
-     <br>
-	<input type="text" id="osoite" class="form-control input-lg" placeholder="Osoite">
-     <br>
-	<input type="text" id="postinumero" class="form-control input-lg" placeholder="Postinumero">
-     <br>
-	<input type="text" id="kaupunki" class="form-control input-lg" placeholder="Postitoimipaikka">
-     <br>
-	<input type="text" id="puhelin" class="form-control input-lg" placeholder="Puhelin">
-     <br>
-	<input type="text" id="yhteyshenkilo" class="form-control input-lg" placeholder="Yhteyshenkilö">
-     <br>
+
+      <div class="col-sm-6">
+	<label><?php echo Yii::t('main', 'Osoite'); ?></label>
+	<input type="text" id="osoite" class="form-control input-lg">
+      </div><div class="col-sm-6">
+	<label><?php echo Yii::t('main', 'Postinumero'); ?></label>
+	<input type="text" id="postinumero" class="form-control input-lg">
+      </div><div class="col-sm-6">
+	<label><?php echo Yii::t('main', 'Postitoimipaikka'); ?></label>
+	<input type="text" id="kaupunki" class="form-control input-lg">
+      </div><div class="col-sm-6">
+	<label><?php echo Yii::t('main', 'Puhelin'); ?></label>
+	<input type="text" id="puhelin" class="form-control input-lg">
+      </div><div class="col-sm-6">
+	<label><?php echo Yii::t('main', 'Yhteyshenkilö'); ?></label>
+	<input type="text" id="yhteyshenkilo" class="form-control input-lg">
+      </div><div class="col-sm-6">
+	<br>
 	<button class="btn btn-primary btn-block btn-lg tallennaUusi">Tallenna</button>
+
      </div>
+
+      </div>
+   </div>
+
  </div>
 </div>
      <?php endif; ?>
 
- </div>
 
- <div class="col-sm-4">
      <div id="loytynytOsoitteet"></div>
  </div>
 
