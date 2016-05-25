@@ -32,19 +32,7 @@ $asetukset = Asetukset::model()->findbypk(1);
 <br>
 
 
-<style>
-.checkbox {
-   width: 80px;
-   height: 30px;
-   margin: auto;
-   position: relative;
-   background: #fff;
-   border: none;
-   border-radius: 2px;
-   -webkit-border-radius: 2px;
-   -moz-border-radius: 2px;
-}
-</style>
+
 
 <?php 
 $asetukset = Asetukset::model()->findbypk(1);
@@ -60,12 +48,11 @@ if(isset($asetukset->checkout_id) and !empty($asetukset->checkout_id) and !empty
  <div class="col-sm-8">
   <div class="boxes-info">
    <center>
-	<p>
-		<h4>Valitse palvelu ja huoneiston koko</h4>
-	</p>
 
 	<div class="row">
-	  <div class="col-sm-4 col-sm-offset-1">
+	  <div class="col-sm-4 col-sm-offset-4">
+
+		<h4>Valitse palvelu</h4>
 		<select class="form-control input-lg" id="palvelu">
 		<?php
 		if(isset($_SESSION['onlinevaraus']['paapalvelu']))
@@ -93,8 +80,11 @@ if(isset($asetukset->checkout_id) and !empty($asetukset->checkout_id) and !empty
 		?>
 		</select>
 	  </div>
-
-	  <div class="col-sm-4 col-sm-offset-1">
+	</div>
+<br>
+	<div class="row" id="huoneistonkoko">
+	  <div class="col-sm-4 col-sm-offset-4">
+	   <h4>Valitse huoneiston koko</h4>
 	    <div id="nelioValikko">
 		<select class="form-control input-lg" id="nelio">
 		<?php
@@ -113,14 +103,25 @@ if(isset($asetukset->checkout_id) and !empty($asetukset->checkout_id) and !empty
 	</div>
 
 
-	<p>
-		<h4>Valitse lisäpalvelu</h4>
-	</p>
+<br>
+	<div class="row" id="lispalvimg">
+	  <div class="col-sm-4 col-sm-offset-4">
+		<h4>Haluaisitko lisäpalveluita?</h4>
+	   	<img src="<?php echo Yii::app()->request->baseUrl; ?>/ylapalkki/lisapalv.png">
+	  </div>
+	</div>
+<br>
+
+
+
 	<div id="lisapalvelulista">
+	<p><h4>Valitse lisäpalvelu</h4></p>
 	<?php
        	$criteria = new CDbCriteria();
        	$criteria->condition = " palvelu=1 ";
 	$onlineTuotteet = OnlinevarausTuotteet::model()->findAll($criteria);
+
+	echo '<div class="row">';
 	foreach($onlineTuotteet as $data)
 	{
 	  $checked = '';
@@ -128,17 +129,44 @@ if(isset($asetukset->checkout_id) and !empty($asetukset->checkout_id) and !empty
 	  $checked = 'checked';
 	  echo 
 	  '
-		<div class="row">
-		    <div class="col-md-4">
-			<input class="checkbox pull-right" for="'.$data->id.'" type="checkbox" '.$checked.'>
-		    </div><div class="col-md-8 text-left">
-				<div class="row">'.$data->nimike.'</div>
-				<div class="row small">'.$data->selitysteksti.'</div>
-		    </div>
-		</div>
-		<br>
+	  <div class="col-sm-6">
+	   <table class="tblisat">
+	    <tr>
+	     <td width=1>
+		<input class="checkbox" for="'.$data->id.'" type="checkbox" '.$checked.'>
+	     </td><td>
+	        <a href="#" data-toggle="modal" data-target="#myModal_'.$data->id.'">'.$data->nimike.'</a>
+
+
+<!-- Modal -->
+<div id="myModal_'.$data->id.'" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">'.Yii::t('main', 'Selitysteksti').'</h4>
+      </div>
+      <div class="modal-body">
+        <p>'.$data->selitysteksti.'</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+	     </td>
+	    </tr>
+	   </table>
+	  </div>
 	  ';
 	}
+	echo '</div>';
 	?>
 	</div>
    </center>
@@ -147,13 +175,59 @@ if(isset($asetukset->checkout_id) and !empty($asetukset->checkout_id) and !empty
  <div class="col-sm-4">
  
 	      <div id="panGetContent"></div>
+
+	      <div id="alennuskoodi">
+		<div class="boxes-info">
+		  <center><h4><?php echo Yii::t('main', 'Alennuskoodi'); ?></h4>
+			<form class="input-group">
+			<input type="text" class="form-control form-group input-lg">
+			<span class="input-group-btn">
+			  <input type="submit" class="btn btn-lg btn-group btn-warning" value="<?php echo Yii::t('main', 'Aktivoi'); ?>">
+			</span>	
+			</form>
+		  </center>
+		</div>
+	      </div>
+
+	      <div>
+		<div class="boxes-info sininen">
+		  <center><h4><?php echo Yii::t('main', 'Laatu ja luotettavuus'); ?></h4>
+
+		  </center>
+		</div>
+	      </div>
+
+	      <div>
+		<div class="boxes-info sininen">
+		  <center><h4><?php echo Yii::t('main', 'Takuu ja turvallisuus'); ?></h4>
+
+		  </center>
+		</div>
+	      </div>
+
+	      <div>
+		<div class="boxes-info sininen">
+		  <center><h4><?php echo Yii::t('main', 'Asiakaspalvelu'); ?></h4>
+
+		  </center>
+		</div>
+	      </div>
+
  </div>
 </div>
 
 <br>
 
+<div class="">
+  <div class="boxes-info sininen">
+	<center><h4><?php echo Yii::t('main', 'Arvio siivouksesta'); ?></h4>
+
+	</center>
+  </div>
+</div>
 
 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/onlinevaraus/rekisteriseloste" target="_blank"><?php echo Yii::t('main','Onlinevaraus tietosuoja- ja rekisteriseloste'); ?> </a>
+
 </div>
 
 
@@ -161,10 +235,22 @@ if(isset($asetukset->checkout_id) and !empty($asetukset->checkout_id) and !empty
 <script type="text/javascript">
 $(document).ready(function(){
 
+
+$( "#lispalvimg" ).hover(
+  function() {
+	$('#lispalvimg img').replaceWith('<img src="<?php echo Yii::app()->request->baseUrl; ?>/ylapalkki/haluan.png">');
+  }, function() {
+	$('#lispalvimg img').replaceWith('<img src="<?php echo Yii::app()->request->baseUrl; ?>/ylapalkki/lisapalv.png">');
+  }
+);
+
+$("#lispalvimg").click(function(){
+	$('#lisapalvelulista').show('slow');
+});
+
 $("#palvelu").change(function(){
 
    clearAll();
-
    var palvelu = $(this).val();
    if(palvelu)
    {
@@ -177,6 +263,8 @@ $("#palvelu").change(function(){
 		if(data)
 		{
 			$('#nelioValikko').html(JSON.parse(data));
+			$('#huoneistonkoko').show('slow');
+			$('#lispalvimg').show('slow');
 			checker();
 
 			$("#nelio").change(function(){
