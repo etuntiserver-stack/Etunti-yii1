@@ -93,7 +93,7 @@ else {
 } 
 ?>
 
-    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.5.0/pure-min.css">
+
 
     <style>
         .C1 {

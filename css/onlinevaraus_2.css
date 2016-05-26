@@ -4,6 +4,95 @@ body{margin:40px;}
 	border: none;
 }
 
+
+
+
+.steps {
+    cursor: pointer;
+    display: inline-block;
+    font-size: 0px;
+    overflow: hidden;
+    border: 1px solid #ccc;
+    line-height: 1;
+    box-sizing: border-box;
+    padding-left: 0;
+width: 100%;
+}
+
+
+.steps.radius {
+    border-radius: 5px;
+}
+
+.steps.vertical.radius li:first-child {
+    border-radius: 5px 5px 0 0;
+}
+
+.steps.vertical.radius li:last-child {
+    border-radius: 0 0 5px 5px;
+}
+
+.steps.round:not(.vertical) {
+    border-radius: 1000px;
+}
+
+.steps li {
+    display: inline-block;
+    position: relative;
+    padding: 1em 2em 1em 3em;
+    vertical-align: top;
+    background-color: #fafafa;
+    box-sizing: border-box;
+    font-size: 1rem;
+    width: 25%;
+    text-align: center;
+}
+
+.steps li a{
+	color: white;
+}
+
+.steps li:after {
+    display: block;
+    position: absolute;
+    z-index: 2;
+    content: "";
+    top: 0.36em;
+    right: -1.2em;
+    width: 2.3em;
+    height: 2.3em;
+    background-color: #fafafa;
+    transform: rotate(-45deg);
+    border-right: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+}
+
+
+.steps li:hover,
+.steps li:hover:after {
+    background-color: #e6f4f9;
+}
+
+.steps li.active,
+.steps li.active:after {
+  background-color: #007295;
+  color: #fff;
+}
+
+.steps li.disabled,
+.steps li.disabled:after {
+  background-color: #B8B8B8;
+  cursor: default;
+}
+
+.steps li.tehtty,
+.steps li.tehtty:after {
+  background-color: #78BE14;
+  cursor: default;
+}
+
+
+/*
 #green_and_orange_step_menu { 
 clear:both;
 margin:0; padding:0px; 
@@ -70,7 +159,7 @@ background-size: contain;
 background:url(../ylapalkki/osa_harm.png)  no-repeat; 
 background-size: contain;
 }
-
+*/
 
 
 

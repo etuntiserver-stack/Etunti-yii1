@@ -8,27 +8,13 @@
      $month = date('m');
      $year = date('Y');
 
-     $body .= '
-<div class="row">
- <div class="boxes-info">
-
-     '.$this->build_calendar($month,$year,$dateArray).'
-
- <div></div></div>
-</div>
-     ';
+     $body .= $this->build_calendar($month,$year,$dateArray);
 
      $month = date('m',strtotime("last day of +1 month"));
      $year = date('Y',strtotime("last day of +1 month"));
 
 
-     $body .= '
-<div class="row">
- <div class="boxes-info">
-     '.$this->build_calendar($month,$year,$dateArray).'
- <div>
-</div>
-     ';
+     $body .= $this->build_calendar($month,$year,$dateArray);
 
 
      echo json_encode($body);

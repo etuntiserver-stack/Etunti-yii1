@@ -554,8 +554,9 @@ $months=array(
 
      // Create the table tag opener and day headers
 
-     $calendar = "<table class='table table-bordered'>";
-     $calendar .= "<span>".$months[$month]." $year</span>";
+     $calendar = "";
+     $calendar .= "<h4>".$months[$month]." $year</h4>";
+     $calendar .= "<table class='table table-bordered'>";
      $calendar .= "<tr>";
 
      // Create the calendar headers
