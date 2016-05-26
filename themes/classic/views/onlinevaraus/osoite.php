@@ -12,25 +12,22 @@ $asetukset = Asetukset::model()->findbypk(1);
  <div class="form-inline col-sm-12">
    <div class="form-group">
 	<img src="<?php echo $asetukset->logon_polkku; ?>" height="<?php echo $asetukset->logon_korkeus; ?>">
-   </div><div class="form-group col-sm-offset-3">
+   </div><div class="form-group col-sm-offset-4">
 	<h2>Online-Varaus</h2>
    </div>
  </div>
 </div>
 
 
-<div class="">
-<ul id="green_and_orange_step_menu">
-<li class="first tehty"><?php echo CHtml::link('PALVELU','index'); ?></li>
-<li class="tehty"><?php echo CHtml::link('AIKA','aika'); ?><span class="teh_teh"></span></li>
-<li class="aktiivinen"><?php echo CHtml::link('OSOITE','osoite'); ?><span class="teh"></span></li>
-<li class="passivinen"><?php echo CHtml::link('MAKSU','maksu'); ?><span class="akt"></span></li>
+<ul class="steps expanded even-4">
+    <li class="tehtty"><?php echo CHtml::link('PALVELU','index'); ?></li>
+    <li class="tehtty"><?php echo CHtml::link('AIKA','aika'); ?></li>
+    <li class="active"><?php echo CHtml::link('OSOITE','osoite'); ?></li>
+    <li class="disabled"><?php echo CHtml::link('MAKSU','maksu'); ?></li>
 </ul>
-</div>
-
-<br>
 
 <br><br>
+
 <div class="row">
  <div class="col-sm-8">
 

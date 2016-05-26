@@ -2,9 +2,8 @@
 
 
    $body = '
-	<div class="boxes-info">
+
 	      <h4>'.date("d.m.Y", strtotime($_POST['pvm'])).'</h4>
-	   <div class = "panel-body">
 
    ';
    $body .= '<input type="hidden" value="'.date("d.m.Y", strtotime($_POST['pvm'])).'" id="valinnuPvm">';
@@ -39,7 +38,7 @@ function tr($vapaaTid, $pvm, $sta, $sto, $kuva)
 {
    	$return = '
 	<tr class="link ajaanClick" tid="'.$vapaaTid.'" pvm="'.date("d.m.Y",strtotime($_POST['pvm'])).'" alku="'.$sta.'" loppu="'.$sto.'">
-	<td class="col-sm-3">'.$kuva.'</td>
+	<td class="col-sm-2">'.$kuva.'</td>
 	<td>'.$sta.' - '.$sto.'</td>
 	</tr>';
 	return $return;
@@ -104,7 +103,7 @@ if($taysinVapaana == 'ei' and empty($vapaaTid))
 
    $body .= '</table>';
 
-   $body .= '</div></div>';
+
 
    echo json_encode($body);
 ?>
