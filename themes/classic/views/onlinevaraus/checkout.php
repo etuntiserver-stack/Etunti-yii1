@@ -99,11 +99,11 @@ else {
         .C1 {
              width: 180px;
              height: 130px;
-             border: 1pt solid #a0a0a0;
+             //border: 1pt solid #a0a0a0;
              display: block;
              float: left;
              margin: 7px;
-             -moz-border-radius: 5px; -webkit-border-radius: 5px; border-radius: 5px;
+             //-moz-border-radius: 5px; -webkit-border-radius: 5px; border-radius: 5px;
              clear: none;
              padding: 0;
             }
@@ -134,7 +134,7 @@ else {
         .C1 div {
              text-align: center;
              font-family: arial;
-             font-size: 8pt;
+             font-size: 11pt;
             }
     </style>
 
@@ -171,10 +171,7 @@ else {
 <div class="row"></div>
 <p>
     <div class="small">
-        <p>The payment options listed here are in test mode, some options are missing (like credit cards) 
-            that will be shown on this list when you use production credentials. For testing purposes the easiest 
-            payment method is Nordea: login credentials are prefilled with demo credentials and you can use whatever 
-            string you wish as the authorization code (Vahvistustunnus in finnish)</p>
+        <p></p>
     </div>
 </p>
 

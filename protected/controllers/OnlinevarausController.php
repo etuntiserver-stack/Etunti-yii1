@@ -178,8 +178,12 @@ class OnlinevarausController extends Controller
 			  foreach($k as $data)
 			  {
 			     $body .= '
-			     <div>
+			     <div class="row">
+			       <div class="col-sm-4">
+				'.$data->etu_suku_nimet.'
+			       </div><div class="col-sm-4">
 				<a href="#" class="loytyiOsoite link" id="kohde_'.$data->id.'">'.$data->osoite.'</a>
+			       </div>
 			     </div>
 			     ';
 			  }
@@ -213,6 +217,7 @@ class OnlinevarausController extends Controller
 			$kohteet->puh_nro = $asiakkaat->puhelin;
 			$kohteet->email = $asiakkaat->sahkoposti;
 			$kohteet->muut = "Onlinevaraus ".date("d.m.Y");
+			$kohteet->tietoja = $_POST['lisatietoja'];
 		  	   if($kohteet->save())
 		  	   {
 				$tv = Tyovuoroot::model()->updatebypk($_SESSION['onlinevaraus']['modelTV'], array('kohde'=>$kohteet->id));
@@ -640,6 +645,7 @@ $months=array(
      }
      
      $calendar .= "</tr>";
+
 
      $calendar .= "</table>";
 
