@@ -52,33 +52,71 @@ $asetukset = Asetukset::model()->findbypk(1);
      </div>
 
       </div>
+   </div>
 
 
      <div id="lomake" style="display:none">
+      <div class="row">
+       <div class="col-sm-6">
 
-      <div class="col-sm-6">
-	<label><?php echo Yii::t('main', 'Osoite'); ?></label>
-	<input type="text" id="osoite" class="form-control input-lg">
-      </div><div class="col-sm-6">
-	<label><?php echo Yii::t('main', 'Postinumero'); ?></label>
-	<input type="text" id="postinumero" class="form-control input-lg">
-      </div><div class="col-sm-6">
-	<label><?php echo Yii::t('main', 'Postitoimipaikka'); ?></label>
-	<input type="text" id="kaupunki" class="form-control input-lg">
-      </div><div class="col-sm-6">
+	<label><?php echo Yii::t('main', 'Etu- ja sukunimi'); ?></label>
+	<input type="text" id="yhteyshenkilo" class="form-control input-lg">
+
+       </div><div class="col-sm-6">
+
 	<label><?php echo Yii::t('main', 'Puhelin'); ?></label>
 	<input type="text" id="puhelin" class="form-control input-lg">
-      </div><div class="col-sm-6">
-	<label><?php echo Yii::t('main', 'Yhteyshenkilö'); ?></label>
-	<input type="text" id="yhteyshenkilo" class="form-control input-lg">
-      </div><div class="col-sm-6">
+
+       </div>
+      </div>
+
+	<br>
+	<center><h4><?php echo Yii::t('main', 'Osoite'); ?></h4></center>
+
+      <div class="row">
+       <div class="col-sm-12">
+
+	<label><?php echo Yii::t('main', 'Osoite'); ?></label>
+	<input type="text" id="osoite" class="form-control input-lg">
+
+       </div>
+      </div>
+
+
+      <div class="row">
+       <div class="col-sm-6">
+
+	<label><?php echo Yii::t('main', 'Postinumero'); ?></label>
+	<input type="text" id="postinumero" class="form-control input-lg">
+
+       </div><div class="col-sm-6">
+
+	<label><?php echo Yii::t('main', 'Postitoimipaikka'); ?></label>
+	<input type="text" id="kaupunki" class="form-control input-lg">
+
+       </div>
+      </div>
+
+	<br>
+	<center><h4><?php echo Yii::t('main', 'Lisätietoja'); ?></h4></center>
+
+      <div class="row">
+       <div class="col-sm-12">
+
+	<label><?php echo Yii::t('main', 'Lisätietoja'); ?></label>
+	<textarea id="lisatietoja" class="form-control input-lg" placeholder="<?php echo Yii::t('main', 'Lemmikkejä, ovikoodi ja muuta lisätietoa'); ?>" rows="5"></textarea>
+
+       </div>
+      </div>
+
+
 	<br>
 	<button class="btn btn-primary btn-block btn-lg tallennaUusi">Tallenna</button>
 
      </div>
 
-      </div>
-   </div>
+
+
 
  </div>
 </div>
@@ -181,8 +219,8 @@ $(".tarkistaSahkoposti").click(function(){
 			count = null;
 
 		} else {
-			$('#loytynytOsoitteet').html(data).addClass('boxes-info');
-			$('.sahkoposti, .btncheckPosti').hide('slow');
+			$('#fullLomake').hide('slow');
+			$('#loytynytOsoitteet').html(data);
 			//console.log(data);
 			count = null;
 
@@ -208,7 +246,7 @@ $(".tallennaUusi").click(function(){
    var kaupunki = $('#kaupunki').val();
    var puhelin = $('#puhelin').val();
    var yhteyshenkilo = $('#yhteyshenkilo').val();
-
+   var lisatietoja = $('#lisatietoja').val();
 
    if(sahkoposti === '')
    {
@@ -234,7 +272,7 @@ $(".tallennaUusi").click(function(){
 
    $.ajax({
 	url: 'luouusi',
-	data:{ "sahkoposti" : sahkoposti, "osoite" : osoite, "postinumero" : postinumero, "kaupunki" : kaupunki, "puhelin" : puhelin, "yhteyshenkilo" : yhteyshenkilo },
+	data:{ "sahkoposti" : sahkoposti, "osoite" : osoite, "postinumero" : postinumero, "kaupunki" : kaupunki, "puhelin" : puhelin, "yhteyshenkilo" : yhteyshenkilo, "lisatietoja" : lisatietoja },
 	type:'POST',
 	success:function(data){
 		data = JSON.parse(data).split('_');
