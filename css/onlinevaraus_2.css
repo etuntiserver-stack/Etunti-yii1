@@ -184,17 +184,31 @@ background-size: contain;
 .btn, .form-control {
   border-radius:0;
 }
-
-
-.btn-circle {
-  width: 40px;
-  height: 40px;
-  text-align: center;
-  padding: 6px 0;
-  font-size: 12px;
-  line-height: 1.428571429;
-  border-radius: 20px;
+.seuraava{
+	width: 100%;
+	color: white;
+	background:url(../ylapalkki/seuraava.png)  no-repeat; 
+	background-size: 100% 100%;
+    	text-decoration: none;
 }
+.seuraava:hover{
+	clear: both;
+	box-shadow: none;
+	color: white;
+}
+.edellinen{
+	width: 100%;
+	color: white;
+	background:url(../ylapalkki/edellinen.png)  no-repeat; 
+	background-size: 100% 100%;
+    	text-decoration: none;
+}
+.edellinen:hover{
+	clear: both;
+	box-shadow: none;
+	color: white;
+}
+
 .btn-primary a{ color: white; }
 
 #kalenterit table td{ text-align: center; }

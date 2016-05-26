@@ -153,14 +153,16 @@
 	</div>';
 
 	if(isset($sivu) and $sivu == 'index'){
-	$body .= CHtml::link('Valitse aika','aika', array('class'=>'btn btn-warning btn-block btn-lg'));
+
+	$body .= CHtml::link('Valitse aika','aika', array('class'=>'btn btn-lg seuraava')).'<br>';
+
 	} elseif(isset($sivu) and $sivu == 'aika' and isset($_SESSION['onlinevaraus']['modelTV'])){
 	$body .= '
 	<div class="row">
 	  <div class="col-sm-6">
-			'.CHtml::link('Edellinen','index', array('class'=>'btn btn-block btn-success btn-lg')).'
+			'.CHtml::link('Edellinen','index', array('class'=>'btn btn-lg edellinen')).'
 	  </div><div class="col-sm-6">
-			'.CHtml::link('Valitse osoite','osoite', array('class'=>'btn btn-block btn-warning btn-lg')).'
+			'.CHtml::link('Valitse osoite','osoite', array('class'=>'btn btn-lg seuraava')).'
 	  </div>
 	</div>';
 
@@ -168,14 +170,14 @@
 	$body .= '
 	<div class="row">
 	  <div class="col-sm-6">
-			'.CHtml::link('Edellinen','aika', array('class'=>'btn btn-block btn-success btn-lg')).'
+			'.CHtml::link('Edellinen','aika', array('class'=>'btn btn-lg edellinen')).'
 	  </div><div class="col-sm-6">
-			'.CHtml::link('Maksu','maksu', array('class'=>'btn btn-block btn-warning btn-lg')).'
+			'.CHtml::link('Maksu','maksu', array('class'=>'btn btn-lg seuraava')).'
 	  </div>
 	</div>';
 
 	} elseif(isset($sivu) and $sivu == 'maksu'){
-	$body .= CHtml::link('Kassalle','kassalle', array('class'=>'btn btn-success btn-lg'));
+	$body .= CHtml::link('Kassalle','kassalle', array('class'=>'btn btn-lg edellinen'));
 	}
 
 	//$body .= CHtml::link('Keskeytä','index?keskeyta=true', array('class'=>'btn btn-warning btn-lg'));
