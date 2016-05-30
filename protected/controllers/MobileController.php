@@ -195,6 +195,12 @@ function num($val){
 			$tot = Toteutuneet::model()->findAll($criteria); 
 			$model = array_merge($lu, $tot);
 
+  			foreach($model as $data){
+				$model[strtotime($data->aloitan)] = $data;
+			}
+			ksort($model);
+
+
 		        $html2pdf = Yii::app()->ePdf->HTML2PDF('P', 'A4', 'en');
 			$html2pdf->setDefaultFont('Arial');
 		        $html2pdf->WriteHTML($this->renderPartial('raportit_pdf_l', array('model' => $model, 'tyyppi' => 'Toteutuneet'),true));
@@ -1196,6 +1202,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
 			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit
 		";
+
 
         	$criteria->condition = "  
 			status = '2' and tid = '".$tid."' and aloitan !='' and loppui !='' 
