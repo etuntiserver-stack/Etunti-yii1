@@ -27,13 +27,6 @@ $tilauksen_kuvaus = json_decode($data->tilauksen_kuvaus, true);
 		?>
 	</td>
 	<td>
-		<?php 
-		$k = Kohteet::model()->findbypk($data->kohde_id);
-		if(isset($k->id))
-			   echo $k->osoite;
-		?>
-	</td>
-	<td>
 		<?php echo $data->kesto.'h'; ?>
 	</td>
 	<td>
@@ -54,6 +47,23 @@ if(isset($tilauksen_kuvaus['paa']) and isset($tilauksen_kuvaus['lisa']))
 }
 		?>
 	</td>
+
+	<td>
+		<?php echo $data->yhteyshenkilo; ?>
+	</td>
+	<td>
+		<?php echo $data->puhelin; ?>
+	</td>
+	<td>
+		<?php echo $data->osoite; ?>
+	</td>
+	<td>
+		<?php echo $data->sahkoposti; ?>
+	</td>
+	<td>
+		<?php echo $data->lisatietoja; ?>
+	</td>
+
 	<td>
 		<?php echo CHtml::link('', array('update', 'id'=>$data->id), array('class'=>'fa fa-pencil-square-o')); ?>
 	</td>

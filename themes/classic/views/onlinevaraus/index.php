@@ -2,6 +2,16 @@
 /* @var $this OnlinevarausController */
 /* @var $dataProvider CActiveDataProvider */
 $asetukset = Asetukset::model()->findbypk(1);
+
+// clear
+  if(isset($_SESSION['onlinevaraus']['onlinevarausID']))
+	$this->loadModel($_SESSION['onlinevaraus']['onlinevarausID'])->delete();
+
+  if(isset($_SESSION['onlinevaraus']['modelTV']))
+	Tyovuoroot::model()->deletebypk($_SESSION['onlinevaraus']['modelTV']);
+
+  unset($_SESSION['onlinevaraus']);
+//
 ?>
 <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/onlinevaraus_2.css">
 
@@ -244,6 +254,7 @@ if(isset($asetukset->checkout_id) and !empty($asetukset->checkout_id) and !empty
 <script type="text/javascript">
 $(document).ready(function(){
 
+  localStorage.clear();
 
 $( "#lispalvimg" ).hover(
   function() {

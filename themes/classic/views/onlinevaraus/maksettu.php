@@ -95,8 +95,8 @@ try {
 	<?php
 	if($status_string == 'PAID')
 	{
-		$ov = Onlinevaraus::model()->find(" tv_id='".$_GET['REFERENCE']."' and tila=0 ");
-		$tv = Tyovuoroot::model()->findbypk($_GET['REFERENCE']);
+		$ov = Onlinevaraus::model()->find(" id='".$_GET['REFERENCE']."' and tila=0 ");
+		$tv = Tyovuoroot::model()->findbypk($ov->tv_id);
 		if(!isset($tv->id))
 		{
         		echo '<h2>Tilaus vanhentunut!</h2>';		
@@ -106,8 +106,6 @@ try {
 		{
 
 			$asiakas = Asiakkaat::model()->findbypk($ov->asiakas_id);
-			$kohteet = Kohteet::model()->findbypk($ov->kohde_id);
-
 			$asetukset = Asetukset::model()->findbypk(1);
 
 
@@ -177,7 +175,7 @@ $message .= '<br></td></tr>
 
 <tr><td>Ajankohta</td><td>'.$tv->pvm.'</td></tr>
 <tr><td>Aika</td><td>KLO '.$tv->alku.'-'.$tv->loppu.'</td></tr>				
-<tr><td>Paikka</td><td>'.$kohteet->osoite.', '.$kohteet->pnumero.' '.$kohteet->kaupunki.'</td></tr>
+<tr><td>Paikka</td><td>'.$ov->osoite.', '.$ov->postinumero.' '.$ov->kaupunki.'</td></tr>
 <tr><td>Hinta</td><td>'.number_format($ov->hinta, 2, ',', '').' euroa</td></tr>
 <tr><td>Maksu</td><td>Maksu on vahvistettu</td></tr>
 </table>
@@ -207,20 +205,18 @@ $message .= '<br></td></tr>
 			$mail->setTo($_SESSION['onlinevaraus']['sahkoposti']);
 			$mail->setSubject('Online varaus');
 			$mail->setBody($message);
+			$mail->send();
+			
+			$t = Tyovuoroot::model()->findbypk($tv->id);
+			$t->osoiteOnline=2;
+			$t->save();
 
-			if($mail->send())
-			{
-				$t = Tyovuoroot::model()->findbypk($_GET['REFERENCE']);
-				$t->osoiteOnline=2;
-				$t->save();
+			$o = Onlinevaraus::model()->findbypk($ov->id);
+			$o->tila=1;
+			$o->save();
 
-
-				$o = Onlinevaraus::model()->updatebypk($ov->id);
-				$o->tila=1;
-				$o->save();
-
-				unset($_SESSION['onlinevaraus']);
-			}
+			unset($_SESSION['onlinevaraus']);
+			
 
 		}
 	}
