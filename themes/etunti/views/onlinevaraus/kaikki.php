@@ -28,7 +28,7 @@
                         <div class="section">
                           <label class="field prepend-icon">
 
-   			    <input type="text" class="gui-input datepicker" name="from" value="<?php if(isset($_POST['from'])) echo $_POST['from']; ?>">
+   			    <input type="text" class="gui-input datepicker" name="from" value="<?php echo $from; ?>">
 
                             <label for="firstname" class="field-icon">
                               <i class="glyphicon glyphicon-calendar"></i>
@@ -41,7 +41,7 @@
                         <div class="section">
                           <label class="field prepend-icon">
 
-   			    <input type="text" class="gui-input datepicker" name="to" value="<?php if(isset($_POST['to'])) echo $_POST['to']; ?>">
+   			    <input type="text" class="gui-input datepicker" name="to" value="<?php echo $to; ?>">
 
                             <label for="firstname" class="field-icon">
                               <i class="glyphicon glyphicon-calendar"></i>
@@ -79,11 +79,15 @@
   <tr>
   <th><?php echo Yii::t('main', 'Maksupäivä'); ?></th>
   <th><?php echo Yii::t('main', 'Työvuoro'); ?></th>
-  <th><?php echo Yii::t('main', 'Kohde'); ?></th>
   <th><?php echo Yii::t('main', 'Kesto'); ?></th>
   <th><?php echo Yii::t('main', 'Hinta'); ?></th>
   <th><?php echo Yii::t('main', 'Tila'); ?></th>
   <th><?php echo Yii::t('main', 'Kuvaus'); ?></th>
+  <th><?php echo Yii::t('main', 'Yhteyshenkilo'); ?></th>
+  <th><?php echo Yii::t('main', 'Puhelin'); ?></th>
+  <th><?php echo Yii::t('main', 'Osoite'); ?></th>
+  <th><?php echo Yii::t('main', 'Sähköposti'); ?></th>
+  <th><?php echo Yii::t('main', 'Tietoja'); ?></th>
   <th></th>
   </tr>
   </thead>

@@ -2,6 +2,8 @@
 /* @var $this OnlinevarausController */
 /* @var $dataProvider CActiveDataProvider */
 $asetukset = Asetukset::model()->findbypk(1);
+
+//print_r($_SESSION['onlinevaraus']);
 ?>
 <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/onlinevaraus_2.css">
 
@@ -31,7 +33,7 @@ $asetukset = Asetukset::model()->findbypk(1);
 <div class="row">
  <div class="col-sm-8">
 
-     <?php if(!isset($_SESSION['onlinevaraus']['modelKohde'])) : ?>
+
 <div id="fullLomake">
  <div class="boxes-info">
 
@@ -40,29 +42,35 @@ $asetukset = Asetukset::model()->findbypk(1);
 
      <div class="sahkoposti">
 	<label><?php echo Yii::t('main', 'Sähköposti'); ?></label>
-	<input type="text" id="sahkoposti" class="form-control input-lg" placeholder="Sähköposti">
+	<input type="text" id="sahkoposti" class="form-control input-lg" placeholder="Sähköposti" value="<?php if(isset($_SESSION['onlinevaraus']['sahkoposti'])) echo $_SESSION['onlinevaraus']['sahkoposti'] ;?>">
      </div>
 
+     <?php if(!isset($_SESSION['onlinevaraus']['sahkoposti'])) : ?>
      <div class="buttons btncheckPosti">
      <br>
 	<button class="btn btn-primary btn-block btn-lg tarkistaSahkoposti">Jatka</button>
      </div>
+     <?php endif; ?>
+
+     <div id="loytynytOsoitteet"></div>
 
       </div>
    </div>
 
-
+     <br>
      <div id="lomake" style="display:none">
       <div class="row">
        <div class="col-sm-6">
 
+	<input type="hidden" id="asiakas_id">
+
 	<label><?php echo Yii::t('main', 'Etu- ja sukunimi'); ?></label>
-	<input type="text" id="yhteyshenkilo" class="form-control input-lg">
+	<input type="text" id="yhteyshenkilo" class="form-control input-lg" value="<?php if(isset($_SESSION['onlinevaraus']['modelKohde_etu_suku_nimet'])) echo $_SESSION['onlinevaraus']['modelKohde_etu_suku_nimet'] ;?>">
 
        </div><div class="col-sm-6">
 
 	<label><?php echo Yii::t('main', 'Puhelin'); ?></label>
-	<input type="text" id="puhelin" class="form-control input-lg">
+	<input type="text" id="puhelin" class="form-control input-lg" value="<?php if(isset($_SESSION['onlinevaraus']['modelKohde_puh_nro'])) echo $_SESSION['onlinevaraus']['modelKohde_puh_nro'] ;?>">
 
        </div>
       </div>
@@ -74,7 +82,7 @@ $asetukset = Asetukset::model()->findbypk(1);
        <div class="col-sm-12">
 
 	<label><?php echo Yii::t('main', 'Osoite'); ?></label>
-	<input type="text" id="osoite" class="form-control input-lg">
+	<input type="text" id="osoite" class="form-control input-lg" value="<?php if(isset($_SESSION['onlinevaraus']['modelKohde_osoite'])) echo $_SESSION['onlinevaraus']['modelKohde_osoite'] ;?>">
 
        </div>
       </div>
@@ -84,12 +92,12 @@ $asetukset = Asetukset::model()->findbypk(1);
        <div class="col-sm-6">
 
 	<label><?php echo Yii::t('main', 'Postinumero'); ?></label>
-	<input type="text" id="postinumero" class="form-control input-lg">
+	<input type="text" id="postinumero" class="form-control input-lg" value="<?php if(isset($_SESSION['onlinevaraus']['modelKohde_pnumero'])) echo $_SESSION['onlinevaraus']['modelKohde_pnumero'] ;?>">
 
        </div><div class="col-sm-6">
 
 	<label><?php echo Yii::t('main', 'Postitoimipaikka'); ?></label>
-	<input type="text" id="kaupunki" class="form-control input-lg">
+	<input type="text" id="kaupunki" class="form-control input-lg" value="<?php if(isset($_SESSION['onlinevaraus']['modelKohde_kaupunki'])) echo $_SESSION['onlinevaraus']['modelKohde_kaupunki'] ;?>">
 
        </div>
       </div>
@@ -101,14 +109,26 @@ $asetukset = Asetukset::model()->findbypk(1);
        <div class="col-sm-12">
 
 	<label><?php echo Yii::t('main', 'Lisätietoja'); ?></label>
-	<textarea id="lisatietoja" class="form-control input-lg" placeholder="<?php echo Yii::t('main', 'Lemmikkejä, ovikoodi ja muuta lisätietoa'); ?>" rows="5"></textarea>
+	<textarea id="lisatietoja" class="form-control input-lg" placeholder="<?php echo Yii::t('main', 'Lemmikkejä, ovikoodi ja muuta lisätietoa'); ?>" rows="5"><?php if(isset($_SESSION['onlinevaraus']['modelKohde_tietoja'])) echo $_SESSION['onlinevaraus']['modelKohde_tietoja'] ;?></textarea>
 
        </div>
       </div>
 
 
 	<br>
-	<button class="btn btn-primary btn-block btn-lg tallennaUusi">Tallenna</button>
+<?php
+	echo '
+	<div class="row">
+	  <div class="col-sm-6">
+			'.CHtml::link('Edellinen','aika', array('class'=>'btn btn-lg edellinen')).'
+	  </div><div class="col-sm-6">
+			<button class="btn btn-lg seuraava tallennaUusi">Maksu</button>
+	  </div>
+	</div>';
+?>
+
+
+
 
      </div>
 
@@ -117,10 +137,12 @@ $asetukset = Asetukset::model()->findbypk(1);
 
  </div>
 </div>
-     <?php endif; ?>
 
 
-     <div id="loytynytOsoitteet"></div>
+
+
+
+
  </div>
 
  <div class="col-sm-4">
@@ -167,35 +189,71 @@ $asetukset = Asetukset::model()->findbypk(1);
 <script type="text/javascript">
 $(document).ready(function(){
 
+if((localStorage.getItem('onkokohde') !== 'ei' || localStorage.getItem('onkokohde') !== '') && ($('#sahkoposti').val() !== ''))
+{
+    $('#loytynytOsoitteet').html(localStorage.getItem('onkokohde'));
+    if(localStorage.getItem('valittuOsoiteID') !== '')
+    {
+	$("#valitseOsoite").val(localStorage.getItem('valittuOsoiteID'));
+        osoiteAjax(localStorage.getItem('valittuOsoiteID'));
+    }
+}
 
-$(document).delegate(".loytyiOsoite","click",function(){
 
-   var id = $(this).attr("id").split("_");
+if(localStorage.getItem('onkokohde') === 'ei' && localStorage.getItem('sahkoposti') !== '')
+{
+    $('#loytynytOsoitteet').hide();
+    $('#lomake').show('hide');
+}
+
+
+
+
+$(document).delegate("#valitseOsoite","change",function(){
+
+   var id = $(this).val();
+   localStorage.setItem('valittuOsoiteID', id);
+   osoiteAjax(id);
+
+});
+
+function osoiteAjax(id)
+{
 
    $.ajax({
-	url: 'palvelu_save_ajax',
-	data:{ "kohde" : id[1] },
-	type:'POST',
+	url: 'get_lomake_ajax?id='+id,
 	success:function(data){
-		//console.log(data);
-		if(data)
+		var d = JSON.parse(data);
+		console.log(d);
+		if(d)
 		{
-			$('#loytynytOsoitteet').hide('slow');
-			$('#panGetContent').html(JSON.parse(data));
+			$('#lomake').show('slow');
 
+			$('#asiakas_id').val(d['asiakas_id']);
+			$('#yhteyshenkilo').val(d['etu_suku_nimet']);
+			$('#puhelin').val(d['puh_nro']);
+			$('#osoite').val(d['osoite']);
+			$('#postinumero').val(d['pnumero']);
+			$('#kaupunki').val(d['kaupunki']);
+			$('#lisatietoja').val(d['tietoja']);
+
+			//$('#loytynytOsoitteet').hide('slow');
+			//$('#panGetContent').html(JSON.parse(data));
 		}
    	},
 	error:function(data){
 		console.log(data);
     	}
     });
+}
 
 
-});
 
 $(".tarkistaSahkoposti").click(function(){
 
    var sahkoposti = $('#sahkoposti').val();
+   localStorage.setItem('sahkoposti', sahkoposti);
+
    if(sahkoposti === '')
    {
    $('#sahkoposti').focus();
@@ -210,14 +268,17 @@ $(".tarkistaSahkoposti").click(function(){
 		data = JSON.parse(data);
 		if(data === 'ei')
 		{
+			localStorage.setItem('onkokohde', 'ei');
 			$('#lomake').show('slow');
 			$('.btncheckPosti').hide('slow');
 			console.log(data);
 			count = null;
 
 		} else {
-			$('#fullLomake').hide('slow');
+			//$('#fullLomake').hide('slow');
+			$('.btncheckPosti').hide('slow');
 			$('#loytynytOsoitteet').html(data);
+			localStorage.setItem('onkokohde', data);
 			//console.log(data);
 			count = null;
 
@@ -237,6 +298,7 @@ $(".tarkistaSahkoposti").click(function(){
 
 $(".tallennaUusi").click(function(){
 
+   var asiakas_id = $('#asiakas_id').val();
    var sahkoposti = $('#sahkoposti').val();
    var osoite = $('#osoite').val();
    var postinumero = $('#postinumero').val();
@@ -269,35 +331,17 @@ $(".tallennaUusi").click(function(){
 
    $.ajax({
 	url: 'luouusi',
-	data:{ "sahkoposti" : sahkoposti, "osoite" : osoite, "postinumero" : postinumero, "kaupunki" : kaupunki, "puhelin" : puhelin, "yhteyshenkilo" : yhteyshenkilo, "lisatietoja" : lisatietoja },
+	data:{ "sahkoposti" : sahkoposti, "osoite" : osoite, "postinumero" : postinumero, "kaupunki" : kaupunki, "puhelin" : puhelin, "yhteyshenkilo" : yhteyshenkilo, "lisatietoja" : lisatietoja, "asiakas_id" : asiakas_id },
 	type:'POST',
 	success:function(data){
-		data = JSON.parse(data).split('_');
-		if(data[0] == 'ok')
+		console.log(data);
+		data = JSON.parse(data);
+
+		if(data == 'nytRedirectMaksulle')
 		{
-
-		   $.ajax({
-			url: 'palvelu_save_ajax',
-			data:{ "kohde" : data[1] },
-			type:'POST',
-			success:function(data){
-				//console.log(data);
-				if(data)
-				{
-					$('#fullLomake').hide();
-					$('#panGetContent').html(JSON.parse(data));	
-				}
-		   	},
-			error:function(data){
-				console.log(data);
-		    	}
-		    });
-
-
-			console.log(data);
-			count = null;
-
+			window.location.href="maksu";
 		}
+
    	},
 	error:function(data){
 		console.log(data);

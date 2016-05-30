@@ -29,7 +29,7 @@ if(isset($tv->id))
 $payment_data = [
     'stamp'         => time(),                      // stamp is the unique id for this transaction
     'amount'        => ($amount * 100),    // amount is in cents
-    'reference'     => $_SESSION['onlinevaraus']['modelTV'],                     // some reference id (perhaps order id)
+    'reference'     => $_SESSION['onlinevaraus']['onlinevarausID'],                     // some reference id (perhaps order id)
     'message'       => 'Työvuoro '.$tv->pvm.', '.$tv->alku.' - '.$tv->loppu,            // some short description about the order
     'deliveryDate'  => new \DateTime('2014-12-24'), // approximated delivery date, this is shown to customer service in Checkout Finland but not to the buyer
     'firstName'     => $etu_suku_nimet,
@@ -59,26 +59,17 @@ if($response)
 
 	//print_r($xml);
 
-		$ovCheck = Onlinevaraus::model()->find(" tv_id = '".$_SESSION['onlinevaraus']['modelTV']."' ");
-	if(isset($ovCheck->id))
+
+	if(isset($_SESSION['onlinevaraus']['onlinevarausID']))
 	{
-		$ov = Onlinevaraus::model()->updatebypk($ovCheck->id, array('maksun_onnistu_koodi'=>$xml->delayedMAC));
-	} else {
-
-		$k = Kohteet::model()->findbypk($_SESSION['onlinevaraus']['modelKohde']);
-		if(isset($k->id))
-		{
-
-		$ov = new Onlinevaraus;
+		$ov = Onlinevaraus::model()->findbypk($_SESSION['onlinevaraus']['onlinevarausID']);
 		$ov->tv_id = $_SESSION['onlinevaraus']['modelTV'];
 		$ov->maksun_onnistu_koodi = $xml->delayedMAC;
-		$ov->asiakas_id = $k->asiakas_id;
-		$ov->kohde_id = $k->id;
 		$ov->kesto = $kesto;
 		$ov->hinta = $amount;
 		$ov->tilauksen_kuvaus = json_encode($_SESSION['onlinevaraus']['tilauksenKuvaus']);
 		$ov->save();
-		}
+
 	}
 
              

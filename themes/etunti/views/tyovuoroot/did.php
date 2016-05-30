@@ -68,8 +68,7 @@ if(!isset($_POST['tulosta']))
 	{
 
 	   $osoite = '';
-	   if(isset($tvVal->kohteet->osoite) and empty($tvVal->osoiteOnline) 
-		and ($tvVal->osoiteOnline != 1 or $tvVal->osoiteOnline != 2))
+	   if(isset($tvVal->kohteet->osoite) and empty($tvVal->osoiteOnline) and $tvVal->onlinevaraus_id == 0)
 	   {
 
 	   	$strlen = strlen($osoite);
@@ -81,37 +80,34 @@ if(!isset($_POST['tulosta']))
 
 	   	$osoite = str_replace('/', '', $tvVal->kohteet->osoite);
 
-	   } elseif(!empty($tvVal->osoiteOnline) and empty($tvVal->kohde) and $tvVal->osoiteOnline == 1){
+	   } elseif(!empty($tvVal->osoiteOnline) and $tvVal->osoiteOnline == 1 and $tvVal->onlinevaraus_id == 0){
 
 	   	$osoite = '<span style="color: red">Vuoroa varataan..</span>';
 
-	   } elseif(isset($tvVal->kohteet->osoite) and !empty($tvVal->osoiteOnline) 
-			and !empty($tvVal->kohde) and $tvVal->osoiteOnline == 1
-	   ){
+	   } elseif(!empty($tvVal->osoiteOnline) and $tvVal->onlinevaraus_id != 0){
 
-	   	$strlen = strlen($osoite);
-	   	$scount = 30;
-	   	if(isset($tietoja) and $tietoja == 1) $scount = 27;
+		$ov = Onlinevaraus::model()->findbypk($tvVal->onlinevaraus_id);
 
-	   	if($strlen > $scount)
-	    	$osoite = substr($osoite,0,$scount).'..';
+		if(isset($ov->id))
+		{
 
-	   	$osoite = str_replace('/', '', $tvVal->kohteet->osoite);
-	   	$osoite = '<span style="color: red">Vuoroa varataan..<br>'.$osoite.'</span>';
+			$osoite = $ov->osoite;
+	   		$strlen = strlen($osoite);
+		   	$scount = 30;
+		   	if(!empty($ov->lisatietoja)) $scount = 27;
+	
+		   	if($strlen > $scount)
+		    	$osoite = substr($osoite,0,$scount).'..';
+	
+		   	$osoite = str_replace('/', '', $ov->osoite);
 
-	   } elseif(isset($tvVal->kohteet->osoite) and !empty($tvVal->osoiteOnline) 
-			and !empty($tvVal->kohde) and $tvVal->osoiteOnline == 2
-	   ){
+			if($tvVal->osoiteOnline == 1)
+		   	$osoite = '<span style="color: red">Vuoroa varataan..<br>'.$osoite.'</span>';
+			elseif($tvVal->osoiteOnline == 2)
+	   		$osoite = $osoite.'<br><span style="color: green">Onlinevaraus maksettu</span>';
 
-	   	$strlen = strlen($osoite);
-	   	$scount = 30;
-	   	if(isset($tietoja) and $tietoja == 1) $scount = 27;
+		}
 
-	   	if($strlen > $scount)
-	    	$osoite = substr($osoite,0,$scount).'..';
-
-	   	$osoite = str_replace('/', '', $tvVal->kohteet->osoite);
-	   	$osoite = $osoite.'<br><span style="color: green">Onlinevaraus maksettu</span>';
 	   }
 
 

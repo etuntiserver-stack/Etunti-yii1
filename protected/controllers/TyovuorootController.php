@@ -795,7 +795,7 @@ class TyovuorootController extends Controller
 
 	<div class="dialogTable clearfix modal-osio">
 	<?php
-		echo $oikeus;
+		if(isset($oikeus)) echo $oikeus;
 
 		$model=new Tyovuoroot;
 
@@ -1043,7 +1043,7 @@ class TyovuorootController extends Controller
 		$criteria=new CDbCriteria;
 		$criteria->order= " id DESC "; 
 		$criteria->condition= " 
-			(time + INTERVAL 30 MINUTE) < NOW()
+			(time + INTERVAL 1 DAY) < NOW()
 			AND osoiteOnline=1
 		";
 		$poistaminen = Tyovuoroot::model()->deleteAll($criteria);

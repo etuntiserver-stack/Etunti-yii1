@@ -133,8 +133,18 @@ if(isset($model->id))
   <div class="col-sm-6">
 		<?php echo $form->labelEx($model,'kohde'); ?>
 		<?php
-        	$list = CHtml::listData(Kohteet::model()->findAll(array('order' => 'osoite')), 'id', 'osoite');
-        	echo $form->dropDownList($model, 'kohde', $list,array('empty'=>'Valitse','class'=>'form-control kohde'));
+		if($model->onlinevaraus_id == 0)
+		{
+        		$list = CHtml::listData(Kohteet::model()->findAll(array('order' => 'osoite')), 'id', 'osoite');
+        		echo $form->dropDownList($model, 'kohde', $list,array('empty'=>'Valitse','class'=>'form-control kohde'));
+
+		} else {
+
+	 		$ov = Onlinevaraus::model()->findbypk($model->onlinevaraus_id);
+			if(isset($ov->id))
+			echo '<input type="text" class="form-control" value="'.$ov->osoite.'">';
+
+		}
         	?>
   </div>
 </div>
@@ -142,7 +152,16 @@ if(isset($model->id))
 <div class="row">
   <div class="col-sm-6">
 		<?php echo $form->labelEx($model,'tietoja'); ?>
-		<?php echo $form->textarea($model,'tietoja',array('rows'=>8,'class'=>'form-control')); ?>
+		<?php 
+
+	 		$ov = Onlinevaraus::model()->findbypk($model->onlinevaraus_id);
+			if(isset($ov->id))
+				$model->tietoja = $ov->lisatietoja;
+			elseif(!isset($ov->id) and isset($model->tietoja))
+				$model->tietoja = $model->tietoja;
+
+			echo $form->textarea($model,'tietoja',array('rows'=>8,'class'=>'form-control')); 
+		?>
 		<?php echo $form->error($model,'tietoja'); ?>
   </div>
   <div class="col-sm-6">

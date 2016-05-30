@@ -2,6 +2,8 @@
 /* @var $this OnlinevarausController */
 /* @var $dataProvider CActiveDataProvider */
 $asetukset = Asetukset::model()->findbypk(1);
+
+//print_r($_SESSION['onlinevaraus']);
 ?>
 <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/onlinevaraus_2.css">
 
@@ -31,18 +33,19 @@ $asetukset = Asetukset::model()->findbypk(1);
 <div class="row">
  <div class="col-sm-8">
    <?php 
-   if(isset($_SESSION['onlinevaraus']['paapalvelu']) and isset($_SESSION['onlinevaraus']['modelKohde']))
+   if(isset($_SESSION['onlinevaraus']['paapalvelu']) and isset($_SESSION['onlinevaraus']['onlinevarausID']))
    {
-	$k = Kohteet::model()->findbypk($_SESSION['onlinevaraus']['modelKohde']);
-	if(isset($k->id))
+
+	$ov = Onlinevaraus::model()->findbypk($_SESSION['onlinevaraus']['onlinevarausID']);
+	if(isset($ov->id))
 	{
 	$return = $this->renderPartial('checkout', array(
 			'amount'=>$_SESSION['onlinevaraus']['amount'],
 			'kesto'=>$_SESSION['onlinevaraus']['sumTunti'],
-			'etu_suku_nimet'=>$k->etu_suku_nimet,
-			'osoite'=>$k->osoite,
-			'postinumero'=>$k->pnumero,
-			'kaupunki'=>$k->kaupunki,
+			'etu_suku_nimet'=>$ov->yhteyshenkilo,
+			'osoite'=>$ov->osoite,
+			'postinumero'=>$ov->postinumero,
+			'kaupunki'=>$ov->kaupunki,
 	), true); 
    	echo $return;
 	}

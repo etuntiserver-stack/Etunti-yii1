@@ -28,7 +28,7 @@ class OnlinevarausController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view', 'check', 'aika', 'osoite', 'maksu', 'palvelu_ajax', 'palvelu_save_ajax', 'lisat_ajax', 'ajaat_ajax', 'aika_ajax', 'onkokohde', 'luouusi', 'checkout', 'maksettu', 'rekisteriseloste', 'tidtietoja'),
+				'actions'=>array('index','view', 'check', 'aika', 'osoite', 'maksu', 'palvelu_ajax', 'palvelu_save_ajax', 'lisat_ajax', 'ajaat_ajax', 'aika_ajax', 'onkokohde', 'luouusi', 'checkout', 'maksettu', 'rekisteriseloste', 'tidtietoja', 'get_lomake_ajax'),
                 		'users'=>array("*"),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
@@ -75,6 +75,15 @@ class OnlinevarausController extends Controller
 		$this->redirect(array('index'));
 		}
         }
+
+
+
+	public function actionGet_lomake_ajax($id)
+	{
+
+		$model = Kohteet::model()->findbypk($id);
+		$this->renderPartial('get_lomake_ajax', array('model'=>$model));
+	}
 
 
 	public function actionTidtietoja()
@@ -148,7 +157,11 @@ class OnlinevarausController extends Controller
 		));
 
 		$dataProvider->pagination->pageSize = 50;
-		$this->render('kaikki', array('dataProvider' => $dataProvider));
+		$this->render('kaikki', array(
+			'dataProvider' => $dataProvider,
+			'from' => $from,
+			'to' => $to
+		));
 	}
 
 
@@ -174,19 +187,15 @@ class OnlinevarausController extends Controller
 			$k = Kohteet::model()->findAll($criteria);
 			if(isset($k[0]))
 			{
-			  $body = '<h4>Valitse osoite</h4>';
+			  $body = '<br>
+			  <select id="valitseOsoite" class="form-control input-lg">
+			  <option>'.Yii::t('main', 'Valitse osoite').'</option>';
 			  foreach($k as $data)
 			  {
-			     $body .= '
-			     <div class="row">
-			       <div class="col-sm-4">
-				'.$data->etu_suku_nimet.'
-			       </div><div class="col-sm-4">
-				<a href="#" class="loytyiOsoite link" id="kohde_'.$data->id.'">'.$data->osoite.'</a>
-			       </div>
-			     </div>
-			     ';
+			     $body .= '<option value="'.$data->id.'">'.$data->osoite.'</option>';
 			  }
+			  $body .= '</select>';
+
 			  echo json_encode($body);
 			} else {
 			  echo json_encode('ei');
@@ -198,7 +207,10 @@ class OnlinevarausController extends Controller
 
 	public function actionLuouusi()
 	{
-		if(isset($_POST))
+
+		$k = Kohteet::model()->find(" email='".$_POST['sahkoposti']."' ");
+
+		if(isset($_POST) and !isset($k->id))
 		{
 
 		$asiakkaat = new Asiakkaat;
@@ -208,6 +220,7 @@ class OnlinevarausController extends Controller
 
 		  if($asiakkaat->save())
 		  {
+
 			$kohteet = new Kohteet;
 			$kohteet->asiakas_id = $asiakkaat->id;
 			$kohteet->etu_suku_nimet = $asiakkaat->yhteyshenkilo;
@@ -218,15 +231,56 @@ class OnlinevarausController extends Controller
 			$kohteet->email = $asiakkaat->sahkoposti;
 			$kohteet->muut = "Onlinevaraus ".date("d.m.Y");
 			$kohteet->tietoja = $_POST['lisatietoja'];
-		  	   if($kohteet->save())
-		  	   {
-				$tv = Tyovuoroot::model()->updatebypk($_SESSION['onlinevaraus']['modelTV'], array('kohde'=>$kohteet->id));
-				echo json_encode('ok_'.$kohteet->id);
-			   }
+		  	$kohteet->save();
 
 		  }
 
-		}
+		} 
+
+			$bd = 'onOlemassa';
+			if(isset($_SESSION['onlinevaraus']['onlinevarausID']))
+			{
+				$ov = Onlinevaraus::model()->findbypk($_SESSION['onlinevaraus']['onlinevarausID']);
+			} else {
+
+				$ov = new Onlinevaraus;
+			}
+
+			if(isset($_POST['asiakas_id']) and !empty($_POST['asiakas_id']))
+			$asiakas_id = $_POST['asiakas_id'];
+			elseif(isset($_POST['asiakas_id']) and empty($_POST['asiakas_id']) and isset($asiakkaat->id))
+			$asiakas_id = $asiakkaat->id;
+
+
+				$ov->asiakas_id = $asiakas_id;
+				$ov->yhteyshenkilo = $_POST['yhteyshenkilo'];
+				$ov->puhelin = $_POST['puhelin'];
+				$ov->osoite = $_POST['osoite'];
+				$ov->postinumero = $_POST['postinumero'];
+				$ov->kaupunki = $_POST['kaupunki'];
+				$ov->lisatietoja = $_POST['lisatietoja'];
+				$ov->sahkoposti = $_POST['sahkoposti'];
+
+				if($ov->save())
+				{
+					$_SESSION['onlinevaraus']['onlinevarausID'] = $ov->id;
+
+					if(isset($_SESSION['onlinevaraus']['modelTV']))
+					{
+				        $tv = Tyovuoroot::model()->updatebypk($_SESSION['onlinevaraus']['modelTV'], 
+						array(
+							'onlinevaraus_id' => $ov->id
+						));
+					}
+
+					$bd = 'nytRedirectMaksulle';
+				} else {
+					var_dump($ov->errors);
+				}
+
+
+				echo json_encode($bd);
+		
 
 	}
 
@@ -278,6 +332,10 @@ class OnlinevarausController extends Controller
 	   if(isset($_POST['clear']) and $_POST['clear'] == 'all')
 	   {
 		unset($_SESSION['onlinevaraus']);
+
+		if(isset($_SESSION['onlinevaraus']['onlinevarausID']))
+		$this->loadModel($_SESSION['onlinevaraus']['onlinevarausID'])->delete();
+
 		echo 'cleared';
 		exit;
 	   }

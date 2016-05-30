@@ -177,7 +177,7 @@ $(document).delegate(".cal","click",function(){
 
 
   clearInterval(aikoja);
-  localStorage.clear();
+  localStorage.setItem('valinnuPvm', null);
   var count2 = null;
   function aikoja()
   {
