@@ -810,30 +810,49 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 		<a href="finvoice?id=<?php echo $model->id; ?>&lahetaMuistutusPostita=true" class="btn  btn-primary btn-group myBgColors"><?php echo Yii::t('main','Lähetä MAKSUMUISTUTUS POSTITA.FI'); ?></a>
 		<?php endif; ?>
 
-<?php
-if(isset($model->id) and $asetukset->palvelu_tyyppi == 2)
+
+
+<?php // Trustpoint PDF
+if(isset($model->id))
 {
+
+  $exists = Yii::app()->basePath."/../tiedostot/laskut/trust/".Yii::app()->user->domain;
+  $pathForTrust = Yii::app()->basePath;
+  $pdfFile = "/../tiedostot/laskut/trust/".Yii::app()->user->domain."/".$model->id.'.pdf';
+
+  if (!file_exists($exists)) {
+  	mkdir($exists, 0777, true);
+  }
+
+  if($asetukset->palvelu_tyyppi == 2 and !empty($model->trust_jobid) and !file_exists($pathForTrust.$pdfFile))
+  {
 
 	$cid = $asetukset['trust_cid'];
 	$apiCode = $asetukset['trust_api'];
-	$trust_url = $asetukset['trust_url'];
+	$trust_jobid = $model->trust_jobid;
 
 
 	$client = new SoapClient('https://wsbeta.trustpoint.fi/index.php/?wsdl');
 	$result = $client->doLogin(array('cid'=>$cid, 'apiCode'=>$apiCode, 'apiVersion'=>'1'));
 	$sessionId = $result['authResponse']->sessionId;
-	echo $sessionId;
-	//$getPDF = $client->getJobPdf(array('sessionId'=>$sessionId));
+
+	echo $sessionId.'<br>';
+	echo $trust_jobid.'<br>';
+
+	$pdf = $client->getJobPdf($sessionId, array('id'=>$trust_jobid, 'idType'=>'jobid'));
+	file_put_contents($pathForTrust.$pdfFile, base64_decode($pdf['getPdfResponse']));
+
 
 	echo '<pre>';
-	//print_r($getPDF);
+	//print_r($client->__GetFunctions());
 	echo '</pre>';
 
-	echo '<pre>';
-	print_r($client->__GetFunctions());
-	echo '</pre>';
+  }
+  if(file_exists($pathForTrust.$pdfFile))
+  echo '<a href="'.$pdfFile.'" class="btn btn-primary" target="_blank">PDF</a>';
+
 }
-?>
+// Trustpoint PDF ?>
 
 <!--
 		<?php if(isset($model->id) and $model->tilanne != '3') : ?>
