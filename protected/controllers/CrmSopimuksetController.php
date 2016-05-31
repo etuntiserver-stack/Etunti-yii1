@@ -285,11 +285,13 @@ $randstring = generateRandomString();
 
 			// Yritys
 			$document->setValue('yritys', iconv('UTF-8','ISO-8859-1',$firma->tyonantaja));
+			$document->setValue('y_tunnus', iconv('UTF-8','ISO-8859-1',$firma->y_tunnus));
 			$document->setValue('yrityksen_osoite', iconv('UTF-8','ISO-8859-1',$firma->osoite));
 			$document->setValue('yrityksen_postinumero', iconv('UTF-8','ISO-8859-1',$firma->postinumero));
 			$document->setValue('yrityksen_toimipaikka', iconv('UTF-8','ISO-8859-1',$firma->postitoimipaikka));
-			$document->setValue('yrityksen_y_tunnus', iconv('UTF-8','ISO-8859-1',$firma->y_tunnus));
 			$document->setValue('yrityksen_puhelin', iconv('UTF-8','ISO-8859-1',$firma->puhelin));
+			$document->setValue('yrityksen_sahkoposti', iconv('UTF-8','ISO-8859-1',$firma->sahkoposti));
+			$document->setValue('yrityksen_johtaja', iconv('UTF-8','ISO-8859-1',$firma->johtaja));
 			// Asiakas
 			if(!empty($as->yrityksen_nimi))
 			   $asiakas = $as->yrityksen_nimi;
@@ -302,6 +304,8 @@ $randstring = generateRandomString();
 			$document->setValue('asiakkaan_osoite', iconv('UTF-8','ISO-8859-1',$as->osoite));
 			$document->setValue('asiakkaan_postinumero', iconv('UTF-8','ISO-8859-1',$as->postinumero));
 			$document->setValue('asiakkaan_toimipaikka', iconv('UTF-8','ISO-8859-1',$as->kaupunki));
+			$document->setValue('asiakkaan_puhelin', iconv('UTF-8','ISO-8859-1',$as->puhelin));
+			$document->setValue('asiakkaan_sahkoposti', iconv('UTF-8','ISO-8859-1',$as->sahkoposti));
 
 			$path = 'tiedostot/crm/sopimukset/'.Yii::app()->user->domain.'/'.$liite;
 			$document->setValue('teksti', htmlspecialchars(iconv('UTF-8','ISO-8859-1',$model->teksti)));

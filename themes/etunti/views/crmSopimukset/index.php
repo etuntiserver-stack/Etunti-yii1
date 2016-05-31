@@ -196,6 +196,33 @@ foreach($tal as $k=>$v)
 </div>
 
 
+<div class="">
+<p><b>Template variables</b></p><br>
+
+<textarea class="form-control" rows="10" cols="60">
+${paivays}
+
+${yritys}
+${y_tunnus}
+${yrityksen_osoite}
+${yrityksen_postinumero}
+${yrityksen_toimipaikka}
+${yrityksen_puhelin}
+${yrityksen_sahkoposti}
+${yrityksen_johtaja}
+
+${asiakas}
+${asiakkaan_osoite}
+${asiakkaan_postinumero}
+${asiakkaan_toimipaikka}
+${asiakkaan_puhelin}
+${asiakkaan_sahkoposti}
+
+${teksti}
+</textarea>
+</div>
+
+
                 </div>
               </div>
             </div>
