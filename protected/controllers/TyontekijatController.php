@@ -28,7 +28,7 @@ class TyontekijatController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin', 'admin_ajax', 'delete', 'create', 'update', 'index', 'view','merkkipaivat', 'tulosta', 'migraatio', 'verotustiedot', 'muuta_suhteet', 'varoitus'),
+				'actions'=>array('admin', 'admin_ajax', 'delete', 'create', 'update', 'index', 'view','merkkipaivat', 'tulosta', 'migraatio', 'verotustiedot', 'muuta_suhteet'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -83,93 +83,6 @@ class TyontekijatController extends Controller
 
 	}
 
-	public function actionVaroitus()
-	{
-
-		Yii::import('ext.yiiword.YiiWord', true);
-		Yii::registerAutoloader(array('YiiWord', 'autoload'), true);
-
-		if (!file_exists(Yii::app()->basePath."/../tiedostot/varoitukset/".Yii::app()->user->domain)) {
-		 	mkdir(Yii::app()->basePath."/../tiedostot/varoitukset/".Yii::app()->user->domain, 0777, true);
-		}
-
-		$file = '';
-		
-		if(isset($_POST['aika']))
-		{
-
-
-			$firma = FirmanTiedot::model()->findbypk(1);
-			$tt = Tyontekijat::model()->findbypk($_POST['tyontekija']);
-		
-			$PHPWord = new PHPWord();
-			$document = $PHPWord->loadTemplate('tiedostot/templates/varoitus_template.docx');
-
-			if(!empty($firma->tyonantaja)) 
-			   $document->setValue('tyonantaja', iconv('UTF-8','ISO-8859-1',$firma->tyonantaja));
-			else
-			   $document->setValue('tyonantaja', '');
-
-			if(!empty($firma->osoite)) 
-			   $document->setValue('osoite', iconv('UTF-8','ISO-8859-1',$firma->osoite));
-			else
-			   $document->setValue('osoite', '');
-
-			if(!empty($firma->y_tunnus)) 
-			   $document->setValue('y_tunnus', $firma->y_tunnus);
-			else
-			   $document->setValue('y_tunnus', '');
-
-			if(!empty($firma->puhelin)) 
-			   $document->setValue('puhelin', $firma->puhelin);
-			else
-			   $document->setValue('puhelin', '');
-
-
-			if(!empty($firma->sahkoposti))
-			   $document->setValue('sposti', $firma->sahkoposti);
-			else
-			   $document->setValue('sposti', '');
-
-
-
-			if(!empty($tt->tekijan_nimi))
-			   $document->setValue('tekijan_nimi', iconv('UTF-8','ISO-8859-1',$tt->tekijan_nimi));
-			else
-			   $document->setValue('tekijan_nimi', '');
-
-			if(!empty($tt->tekijan_katuosoite))
-			   $document->setValue('katuosoite', iconv('UTF-8','ISO-8859-1',$tt->tekijan_katuosoite));
-			else
-			   $document->setValue('katuosoite', '');
-
-			if(!empty($tt->tekijan_henkilotunnus))
-			   $document->setValue('henkilotunnus', $tt->tekijan_henkilotunnus);
-			else
-			   $document->setValue('henkilotunnus', '');
-
-			if(!empty($tt->tekijan_puh))
-			   $document->setValue('tekijan_puh', $tt->tekijan_puh);
-			else
-			   $document->setValue('tekijan_puh', '');
-
-			if(!empty($tt->tekijan_email))
-			   $document->setValue('tekijan_email', $tt->tekijan_email);
-			else
-			   $document->setValue('tekijan_email', '');
-
-			$file = 'tiedostot/varoitukset/'.Yii::app()->user->domain.'/'.$_POST['tyontekija'].'_'.$_POST['aika'].'.docx';
-			$document->setValue('aika', $_POST['aika']);
-			$document->setValue('paikka', iconv('UTF-8','ISO-8859-1',$_POST['paikka']));
-			$document->setValue('johtaja', iconv('UTF-8','ISO-8859-1',$_POST['johtaja']));
-			$document->setValue('allekirjoitus', iconv('UTF-8','ISO-8859-1',$tt->tekijan_nimi));
-			$document->setValue('varoitus', iconv('UTF-8','ISO-8859-1',$_POST['text']));
-		  	$document->save($file);
-
-		}
-
-		$this->render('varoitus', array('file'=>$file));
-	}
 
 	public function actionMerkkipaivat()
 	{

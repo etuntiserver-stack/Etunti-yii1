@@ -80,6 +80,8 @@ class PHPWord_Template {
      * @param mixed $search
      * @param mixed $replace
      */
+
+/*
     public function setValue($search, $replace) {
         if(substr($search, 0, 2) !== '${' && substr($search, -1) !== '}') {
             $search = '${'.$search.'}';
@@ -88,13 +90,51 @@ class PHPWord_Template {
         if(!is_array($replace)) {
             $replace = utf8_encode($replace);
         }
-        
-//echo $replace;
-//exit;
+
 
         $this->_documentXML = str_replace($search, $replace, $this->_documentXML);
     }
-    
+*/  
+
+
+public function setValue($search, $replace) {
+$pattern = '|\$\{([^\}]+)\}|U'; //if you need the $, use: '|\$\{([^\}]+)\}|U''
+preg_match_all($pattern, $this->_documentXML, $matches);
+$openedTagPattern= '/<[^>]+>/';
+$closedTagPattern= '/<\/[^>]+>/';
+foreach ($matches[0] as $value) {
+$modificado = preg_replace($openedTagPattern, '', $value);
+$modificado = preg_replace($closedTagPattern, '', $modificado);
+$this->_documentXML = str_replace($value, $modificado, $this->_documentXML);
+}
+
+if(substr($search, 0, 1) !== '{' && substr($search, 0, 2) !== '${') { //change to: substr($search, 0, 2) !== '${' if you need the $ character
+$search = '${'.$search.'}'; //change to '${'.$search.'}' if $ needed
+}
+
+if(!is_array($replace)) {
+$replace = utf8_encode($replace);
+}
+
+$this->_documentXML = str_replace($search, $replace, $this->_documentXML);
+}
+
+/*
+public function setValue($search, $replace) {
+    if(substr($search, 0, 2) !== '${' && substr($search, -1) !== '}') {
+        //было - $search = '${'.$search.'}';
+        $search = '/\$\{.*?'.$search.'.*?\}/is';
+    }
+
+    if(!is_array($replace)) {
+        //$replace = utf8_encode($replace);
+    }
+
+    //было - $this->_documentXML = str_replace($search, $replace, $this->_documentXML);
+    $this->_documentXML = preg_replace($search, $replace, $this->_documentXML);
+}
+*/
+
     /**
      * Save Template
      * 
