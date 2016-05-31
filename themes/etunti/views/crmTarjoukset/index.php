@@ -163,6 +163,8 @@ if(isset($_POST['poistaTemplate'])){
     </div>
   </form>
  ';
+
+  echo '<a href="/../tiedostot/templates/mallit/crm_tarjous.docx">'.Yii::t('main', 'Tässä').'</a> '.Yii::t('main', 'on templaten esimerkki.');
 ?>
 </div>
 

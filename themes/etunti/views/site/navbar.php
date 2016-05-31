@@ -536,7 +536,7 @@
                   <span class="fa fa-indent"></span> <?php echo Yii::t('main', 'Merkkipäivät'); ?></a>
               </li>
               <li>
-                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/tyontekijat/varoitus">
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/kirjallinenVaroitus/index">
                   <span class="fa fa-indent"></span> <?php echo Yii::t('main', 'Kirjallinen varoitus'); ?></a>
               </li>
             </ul>
