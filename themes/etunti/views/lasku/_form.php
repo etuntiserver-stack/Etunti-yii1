@@ -810,6 +810,31 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 		<a href="finvoice?id=<?php echo $model->id; ?>&lahetaMuistutusPostita=true" class="btn  btn-primary btn-group myBgColors"><?php echo Yii::t('main','Lähetä MAKSUMUISTUTUS POSTITA.FI'); ?></a>
 		<?php endif; ?>
 
+<?php
+if(isset($model->id) and $asetukset->palvelu_tyyppi == 2)
+{
+
+	$cid = $asetukset['trust_cid'];
+	$apiCode = $asetukset['trust_api'];
+	$trust_url = $asetukset['trust_url'];
+
+
+	$client = new SoapClient('https://wsbeta.trustpoint.fi/index.php/?wsdl');
+	$result = $client->doLogin(array('cid'=>$cid, 'apiCode'=>$apiCode, 'apiVersion'=>'1'));
+	$sessionId = $result['authResponse']->sessionId;
+	echo $sessionId;
+	//$getPDF = $client->getJobPdf(array('sessionId'=>$sessionId));
+
+	echo '<pre>';
+	//print_r($getPDF);
+	echo '</pre>';
+
+	echo '<pre>';
+	print_r($client->__GetFunctions());
+	echo '</pre>';
+}
+?>
+
 <!--
 		<?php if(isset($model->id) and $model->tilanne != '3') : ?>
 		<a href="finvoice?id=<?php echo $model->id; ?>&lahetaPerintaan=true" class="btn  btn-primary btn-group myBgColors"><?php echo Yii::t('main','Lähetä perintään'); ?></a>
