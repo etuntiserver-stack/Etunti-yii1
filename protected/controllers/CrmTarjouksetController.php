@@ -326,9 +326,9 @@ $(document).ready(function(){
 
 		$model=$this->loadModel($id);
 		$t = 'tiedostot/crm/tarjoukset/'.Yii::app()->user->domain.'/'.$model->liite;
-		if(file_exists(Yii::app()->basePath."/../tiedostot/crm/sopimukset/".Yii::app()->user->domain."/".$t.".docx"))
+		if(file_exists(Yii::app()->basePath."/../".$t.".docx"))
 			unlink($t.".docx");
-		if(file_exists(Yii::app()->basePath."/../tiedostot/crm/sopimukset/".Yii::app()->user->domain."/".$t.".pdf"))
+		if(file_exists(Yii::app()->basePath."/../".$t.".pdf"))
 			unlink($t.".pdf");
 		$model->delete();
 

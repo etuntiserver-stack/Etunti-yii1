@@ -188,7 +188,13 @@ class KirjallinenVaroitusController extends Controller
 
 	public function actionDelete($id)
 	{
-		$this->loadModel($id)->delete();
+		$model=$this->loadModel($id);
+		$t = 'tiedostot/varoitukset/'.Yii::app()->user->domain.'/'.$model->tiedosto;
+		if(file_exists(Yii::app()->basePath."/../".$t.".docx"))
+			unlink($t.".docx");
+
+	
+		//$model->delete();
 
 		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
 		if(!isset($_GET['ajax']))
