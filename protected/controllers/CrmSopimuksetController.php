@@ -311,9 +311,10 @@ $randstring = generateRandomString();
 			$document->setValue('teksti', htmlspecialchars(iconv('UTF-8','ISO-8859-1',$model->teksti)));
 		  	$document->save($path.'.docx');
 
+			shell_exec('unoconv -f pdf '.$path.'.docx');
+			$this->redirect(array('index'));
 
-
-
+/*
 echo '
 	<input type="hidden" id="polkku" value="'.$path.'">
 
@@ -341,6 +342,7 @@ $(document).ready(function(){
 
 });
 </script>';
+*/
 
 
 

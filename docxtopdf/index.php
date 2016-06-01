@@ -1,6 +1,8 @@
 <?php
 
 
+
+/*
 // Impostiamo il livello di errori da visualizzare
 error_reporting (E_ALL|E_STRICT);
 
