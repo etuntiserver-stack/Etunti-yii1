@@ -824,15 +824,18 @@ if(isset($model->id))
   	mkdir($exists, 0777, true);
   }
 
-  if($asetukset->palvelu_tyyppi == 2 and !empty($model->trust_jobid) and !file_exists($pathForTrust.$pdfFile))
+	$cid = $asetukset->trust_cid;
+	$apiCode = $asetukset->trust_api;
+	$trust_ws_api_url = $asetukset->trust_ws_api_url;
+
+  if($asetukset->palvelu_tyyppi == 2 and !empty($model->trust_jobid) and !file_exists($pathForTrust.$pdfFile)
+  and !empty($cid) and !empty($apiCode) and !empty($trust_ws_api_url))
   {
 
-	$cid = $asetukset['trust_cid'];
-	$apiCode = $asetukset['trust_api'];
 	$trust_jobid = $model->trust_jobid;
 
 
-	$client = new SoapClient('https://wsbeta.trustpoint.fi/index.php/?wsdl');
+	$client = new SoapClient($trust_ws_api_url.'/?wsdl');
 	$result = $client->doLogin(array('cid'=>$cid, 'apiCode'=>$apiCode, 'apiVersion'=>'1'));
 	$sessionId = $result['authResponse']->sessionId;
 
@@ -840,11 +843,14 @@ if(isset($model->id))
 	echo $trust_jobid.'<br>';
 
 	$pdf = $client->getJobPdf($sessionId, array('id'=>$trust_jobid, 'idType'=>'jobid'));
+
+	if(!empty($pdf['getPdfResponse']))
 	file_put_contents($pathForTrust.$pdfFile, base64_decode($pdf['getPdfResponse']));
 
 
 	echo '<pre>';
 	//print_r($client->__GetFunctions());
+	print_r($pdf);
 	echo '</pre>';
 
   }
