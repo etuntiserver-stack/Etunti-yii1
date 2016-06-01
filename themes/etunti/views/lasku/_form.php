@@ -850,6 +850,7 @@ if(isset($model->id))
 
 	echo '<pre>';
 	//print_r($client->__GetFunctions());
+	print_r($result);
 	print_r($pdf);
 	echo '</pre>';
 

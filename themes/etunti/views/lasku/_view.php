@@ -34,7 +34,11 @@
 		<?php echo date("d.m.Y H:i",strtotime($data->tapahtumapvm)); ?>
 	</td>
 	<td>
-		<?php echo number_format($data->yhteensa_total, 2, ",", " "); ?>
+		<?php 
+			if($data->yhteensa_total > 0)
+			echo number_format($data->yhteensa_total, 2, ",", " "); 
+		?>
+
 	</td>
 	<td>
 		<?php 
