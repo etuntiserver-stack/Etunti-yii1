@@ -159,6 +159,20 @@
 		<?php echo $form->error($model,'trust_ws_api_url'); ?>
 	</div>
 
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'trust_ws_cid'); ?>
+		<?php echo $form->textField($model,'trust_ws_cid',array('size'=>20,'maxlength'=>100,'class'=>'form-control')); ?>
+
+		<?php echo $form->error($model,'trust_ws_cid'); ?>
+	</div>
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'trust_ws_salasana'); ?>
+		<?php echo $form->textField($model,'trust_ws_salasana',array('size'=>20,'maxlength'=>255,'class'=>'form-control')); ?>
+
+		<?php echo $form->error($model,'trust_ws_salasana'); ?>
+	</div>
+
     </div>
   </div>
 <?php endif; ?>

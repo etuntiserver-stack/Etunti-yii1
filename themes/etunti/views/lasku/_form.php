@@ -824,23 +824,27 @@ if(isset($model->id))
   	mkdir($exists, 0777, true);
   }
 
-	$cid = $asetukset->trust_cid;
-	$apiCode = $asetukset->trust_api;
+	$trust_ws_cid = $asetukset->trust_ws_cid;
+	$trust_ws_salasana = $asetukset->trust_ws_salasana;
+	$trust_cid = $asetukset->trust_cid;
+	$trust_api = $asetukset->trust_api;
 	$trust_ws_api_url = $asetukset->trust_ws_api_url;
 
   if($asetukset->palvelu_tyyppi == 2 and !empty($model->trust_jobid) and !file_exists($pathForTrust.$pdfFile)
-  and !empty($cid) and !empty($apiCode) and !empty($trust_ws_api_url))
+  and !empty($trust_ws_cid) and !empty($trust_ws_salasana) and !empty($trust_ws_api_url))
   {
 
 	$trust_jobid = $model->trust_jobid;
 
+	$client = new SoapClient($trust_ws_api_url.'/?wsdl', array(
+						'login'=>$trust_ws_cid,
+						'password'=>$trust_ws_salasana));
 
-	$client = new SoapClient($trust_ws_api_url.'/?wsdl');
-	$result = $client->doLogin(array('cid'=>$cid, 'apiCode'=>$apiCode, 'apiVersion'=>'1'));
+	$result = $client->doLogin(array('cid'=>$trust_cid, 'apiCode'=>$trust_api, 'apiVersion'=>'1'));
 	$sessionId = $result['authResponse']->sessionId;
 
-	echo $sessionId.'<br>';
-	echo $trust_jobid.'<br>';
+	//echo $sessionId.'<br>';
+	//echo $trust_jobid.'<br>';
 
 	$pdf = $client->getJobPdf($sessionId, array('id'=>$trust_jobid, 'idType'=>'jobid'));
 
@@ -848,11 +852,11 @@ if(isset($model->id))
 	file_put_contents($pathForTrust.$pdfFile, base64_decode($pdf['getPdfResponse']));
 
 
-	echo '<pre>';
+	//echo '<pre>';
+	//print_r($result);
+	//print_r($pdf);
 	//print_r($client->__GetFunctions());
-	print_r($result);
-	print_r($pdf);
-	echo '</pre>';
+	//echo '</pre>';
 
   }
   if(file_exists($pathForTrust.$pdfFile))
