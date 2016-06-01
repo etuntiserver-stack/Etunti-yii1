@@ -152,6 +152,13 @@
 		<?php echo $form->error($model,'trust_api'); ?>
 	</div>
 
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'trust_ws_api_url'); ?>
+		<?php echo $form->textField($model,'trust_ws_api_url',array('size'=>20,'maxlength'=>255,'class'=>'form-control')); ?>
+
+		<?php echo $form->error($model,'trust_ws_api_url'); ?>
+	</div>
+
     </div>
   </div>
 <?php endif; ?>

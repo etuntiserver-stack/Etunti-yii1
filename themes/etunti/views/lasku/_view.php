@@ -37,7 +37,10 @@
 		<?php echo number_format($data->yhteensa_total, 2, ",", " "); ?>
 	</td>
 	<td>
-		<?php echo number_format($this->avoinnaCheck($data,null), 2, ",", " "); ?>
+		<?php 
+			if($this->avoinnaCheck($data,null) > 0)
+			echo number_format($this->avoinnaCheck($data,null), 2, ",", " "); 
+		?>
 	</td>
 	<td>
 		<?php echo $data->laskun_nimetys; ?>
