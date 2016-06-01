@@ -8,9 +8,11 @@
 
 
 
+	<?php echo $info; ?>
 
-              <h2 class="myBgColors p10"> <i class="fa fa-barcode"></i> <?php echo Yii::t('main', 'LASKU'); ?> 
-		<?php echo CHtml::link('',Yii::app()->request->baseUrl.'/index.php/lasku/create',array('class'=>'btn btn-default fa fa-plus')); ?></h2>
+        <h2 class="myBgColors p10"> <i class="fa fa-barcode"></i> <?php echo Yii::t('main', 'LASKU'); ?> 
+		<?php echo CHtml::link('',Yii::app()->request->baseUrl.'/index.php/lasku/create',array('class'=>'btn btn-default fa fa-plus')); ?>
+	</h2>
 
 
 
@@ -237,6 +239,7 @@ $(".fa-history").click(function(){
 	var thisid = $(this).attr("for");
 
         $.ajax({
+
            url: 'get_historia',
 	   type: 'POST',
 	   data: { id : thisid },

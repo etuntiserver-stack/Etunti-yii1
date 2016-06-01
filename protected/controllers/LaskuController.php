@@ -603,8 +603,12 @@ class LaskuController extends Controller
 	public function actionIndex()
 	{
 
+	$info =  '';
 	$asetukset=Asetukset::model()->findbypk(1);
-	
+
+if( $_SERVER['REMOTE_ADDR'] != '::1' and $_SERVER['REMOTE_ADDR'] != '127.0.0.1' )
+{
+
 
 	// <-- Postita
 	if($asetukset->palvelu_tyyppi == 1 and !isset(Yii::app()->user->laskunTarkistus))
@@ -840,6 +844,11 @@ exit;
 	// Trust -->
 
 
+} else { // jos ei localhost
+	$info =  '<h1>Ei päivitetään laskun tietoja, koska olet localhostina</h1>';
+}
+
+
 
        		$criteria = new CDbCriteria();
 	        $criteria->order = "  id DESC ";
@@ -955,7 +964,13 @@ exit;
 		));
 
 		$dataProvider->pagination->pageSize = 200;
-		$this->render('index', array('dataProvider' => $dataProvider, 'from'=>$from, 'to'=>$to, 'asetukset' => $asetukset));
+		$this->render('index', array(
+				'dataProvider' => $dataProvider, 
+				'from'=>$from, 
+				'to'=>$to, 
+				'asetukset' => $asetukset,
+				'info' => $info
+		));
 	}
 
 
