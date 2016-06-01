@@ -187,7 +187,7 @@ class OnlinevarausController extends Controller
 			$k = Kohteet::model()->findAll($criteria);
 			if(isset($k[0]))
 			{
-			  $body = '<br>
+			  $body = '<label>'.Yii::t('main', 'Valitse osoite').'</label>
 			  <select id="valitseOsoite" class="form-control input-lg">
 			  <option>'.Yii::t('main', 'Valitse osoite').'</option>';
 			  foreach($k as $data)

@@ -40,25 +40,20 @@ $asetukset = Asetukset::model()->findbypk(1);
    <div class="row">
       <div class="col-sm-6">
 
-     <div class="sahkoposti">
+     	<div class="sahkoposti">
 	<label><?php echo Yii::t('main', 'Sähköposti'); ?></label>
 	<input type="text" id="sahkoposti" class="form-control input-lg" placeholder="Sähköposti" value="<?php if(isset($_SESSION['onlinevaraus']['sahkoposti'])) echo $_SESSION['onlinevaraus']['sahkoposti'] ;?>">
-     </div>
+     	</div>
 
-     <?php if(!isset($_SESSION['onlinevaraus']['sahkoposti'])) : ?>
-     <div class="buttons btncheckPosti">
-     <br>
-	<button class="btn btn-primary btn-block btn-lg tarkistaSahkoposti">Jatka</button>
-     </div>
-     <?php endif; ?>
+      </div><div class="col-sm-6">
 
-     <div id="loytynytOsoitteet"></div>
+       	<div id="loytynytOsoitteet"></div>
 
       </div>
    </div>
 
      <br>
-     <div id="lomake" style="display:none">
+     <div id="lomake">
       <div class="row">
        <div class="col-sm-6">
 
@@ -189,15 +184,22 @@ $asetukset = Asetukset::model()->findbypk(1);
 <script type="text/javascript">
 $(document).ready(function(){
 
-if((localStorage.getItem('onkokohde') !== 'ei' || localStorage.getItem('onkokohde') !== '') && ($('#sahkoposti').val() !== ''))
-{
-    $('#loytynytOsoitteet').html(localStorage.getItem('onkokohde'));
-    if(localStorage.getItem('valittuOsoiteID') !== '')
-    {
-	$("#valitseOsoite").val(localStorage.getItem('valittuOsoiteID'));
-        osoiteAjax(localStorage.getItem('valittuOsoiteID'));
-    }
-}
+
+		if(localStorage.getItem('asiakas_id') !== null)
+			$('#asiakas_id').val(localStorage.getItem('asiakas_id'));
+		if(localStorage.getItem('yhteyshenkilo') !== null)
+			$('#yhteyshenkilo').val(localStorage.getItem('yhteyshenkilo'));
+		if(localStorage.getItem('puhelin') !== null)
+			$('#puhelin').val(localStorage.getItem('puhelin'));
+		if(localStorage.getItem('osoite') !== null)
+			$('#osoite').val(localStorage.getItem('osoite'));
+		if(localStorage.getItem('postinumero') !== null)
+			$('#postinumero').val(localStorage.getItem('postinumero'));
+		if(localStorage.getItem('kaupunki') !== null)
+			$('#kaupunki').val(localStorage.getItem('kaupunki'));
+		if(localStorage.getItem('lisatietoja') !== null)
+			$('#lisatietoja').val(localStorage.getItem('lisatietoja'));
+
 
 
 if(localStorage.getItem('onkokohde') === 'ei' && localStorage.getItem('sahkoposti') !== '')
@@ -227,7 +229,6 @@ function osoiteAjax(id)
 		console.log(d);
 		if(d)
 		{
-			$('#lomake').show('slow');
 
 			$('#asiakas_id').val(d['asiakas_id']);
 			$('#yhteyshenkilo').val(d['etu_suku_nimet']);
@@ -249,17 +250,12 @@ function osoiteAjax(id)
 
 
 
-$(".tarkistaSahkoposti").click(function(){
+$("#sahkoposti").keyup(function(){
 
-   var sahkoposti = $('#sahkoposti').val();
-   localStorage.setItem('sahkoposti', sahkoposti);
+   var sahkoposti = $(this).val();
 
-   if(sahkoposti === '')
+   if(sahkoposti.length > 5)
    {
-   $('#sahkoposti').focus();
-   return false;
-   } else {
-
    $.ajax({
 	url: 'onkokohde',
 	data:{ "sahkoposti" : sahkoposti },
@@ -288,8 +284,7 @@ $(".tarkistaSahkoposti").click(function(){
 		console.log(data);
     	}
     });
-
-  }
+   }
 
 });
 
@@ -339,6 +334,16 @@ $(".tallennaUusi").click(function(){
 
 		if(data == 'nytRedirectMaksulle')
 		{
+
+			localStorage.setItem('asiakas_id', $('#asiakas_id').val());
+			localStorage.setItem('yhteyshenkilo', $('#yhteyshenkilo').val());
+			localStorage.setItem('puhelin', $('#puhelin').val());
+			localStorage.setItem('osoite', $('#osoite').val());
+			localStorage.setItem('postinumero', $('#postinumero').val());
+			localStorage.setItem('kaupunki', $('#kaupunki').val());
+			localStorage.setItem('lisatietoja', $('#lisatietoja').val());
+
+
 			window.location.href="maksu";
 		}
 
