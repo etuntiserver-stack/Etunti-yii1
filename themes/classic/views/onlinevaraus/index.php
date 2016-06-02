@@ -23,7 +23,9 @@ $asetukset = Asetukset::model()->findbypk(1);
    <div class="form-group">
 	<img src="<?php echo $asetukset->logon_polkku; ?>" height="<?php echo $asetukset->logon_korkeus; ?>">
    </div><div class="form-group col-sm-offset-4">
-	<h2>Online-Varaus</h2>
+	<h3><?php echo Yii::t('main', 'Online-Varaus'); ?><br>
+           <span class="small"><?php echo CHtml::link(Yii::t('main', 'Mikä on online-varaus'),'index'); ?></span>
+	</h3>
    </div>
  </div>
 </div>

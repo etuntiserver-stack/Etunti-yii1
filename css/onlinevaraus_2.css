@@ -75,7 +75,7 @@ width: 100%;
 
 .steps li.active,
 .steps li.active:after {
-  background-color: #007295;
+  background-color: #0A98DC;
   color: #fff;
 }
 
@@ -91,6 +91,9 @@ width: 100%;
   cursor: default;
 }
 
+.text-sininen{
+  color: #0A98DC;
+}
 
 /*
 #green_and_orange_step_menu { 

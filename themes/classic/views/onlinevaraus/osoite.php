@@ -15,7 +15,9 @@ $asetukset = Asetukset::model()->findbypk(1);
    <div class="form-group">
 	<img src="<?php echo $asetukset->logon_polkku; ?>" height="<?php echo $asetukset->logon_korkeus; ?>">
    </div><div class="form-group col-sm-offset-4">
-	<h2>Online-Varaus</h2>
+	<h3><?php echo Yii::t('main', 'Online-Varaus'); ?><br>
+           <span class="small"><?php echo CHtml::link(Yii::t('main', 'Mikä on online-varaus'),'index'); ?></span>
+	</h3>
    </div>
  </div>
 </div>
@@ -37,12 +39,11 @@ $asetukset = Asetukset::model()->findbypk(1);
 <div id="fullLomake">
  <div class="boxes-info">
 
-   <h4 class="title-subtitle text-center"><?php echo Yii::t('main', 'Tunnistaudu sähköpostilla'); ?>
+   <h4 class="title-subtitle text-center"><?php echo Yii::t('main', 'Osoite'); ?></h4>
 
-   </h4>
-      <span class="small">
-      	<?php echo Yii::t('main', 'sähköpostillaTeksti'); ?>
-      </span>
+   <span class="text-sininen"><?php echo Yii::t('main', 'Tunnistaudu sähköpostilla'); ?></span><br>
+
+      <span class="small"><?php echo Yii::t('main', 'sähköpostillaTeksti'); ?></span>
       <br>
 
    <div class="row">
@@ -61,10 +62,9 @@ $asetukset = Asetukset::model()->findbypk(1);
      <br>
 
 
-      <span>
-      	<?php echo Yii::t('main', 'taiTayta'); ?>
-      </span>
-       <br>
+     <span class="text-sininen"><?php echo Yii::t('main', 'Tai täytä yhteystietokentät'); ?></span><br>
+     <span class="small"><?php echo Yii::t('main', 'taitaytateksti'); ?></span>
+     <br>
 
      <div id="lomake">
       <div class="row">
