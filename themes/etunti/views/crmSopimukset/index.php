@@ -40,15 +40,17 @@ foreach($tal as $k=>$v)
         <div class="tray-center">
 
 
-              <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-home"></i> <?php echo Yii::t('main', 'Sopimukset'); ?> 
-		<?php echo CHtml::link('',Yii::app()->request->baseUrl.'/index.php/crmSopimukset/create',array('class'=>'btn btn-default fa fa-plus')); ?></h2>
+        <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-home"></i> <?php echo Yii::t('main', 'Sopimukset'); ?> 
+		
+		<?php echo CHtml::link('',Yii::app()->request->baseUrl.'/index.php/crmSopimukset/create',array('class'=>'btn btn-default fa fa-plus')); ?>
+		<button class="btn btn-default" data-toggle="collapse" data-target="#admin-form"><?php echo Yii::t('main', 'Extrat'); ?></button>
+	</h2>
 
 
 
-   	    <form id="mobForm" action="#" class="form-inline" method="POST">
-   	    <input type="hidden" name="mob_hae">
 
-            <div class="admin-form">
+
+            <div class="admin-form collapse" id="admin-form">
               <div class="panel heading-border">
                 <div class="panel-body">
 
@@ -145,7 +147,7 @@ foreach($tal as $k=>$v)
                     </div>
 
 */ ?>
-	    </form>
+
 
 
 
