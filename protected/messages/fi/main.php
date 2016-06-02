@@ -646,6 +646,12 @@ return array(
 'Viimeiset viestit' => 'Viimeiset viestit',
 /* Models */
 
+	'Tunnistaudu sähköpostilla' => 'Tunnistaudu sähköpostilla',
+	'sähköpostillaTeksti' => '
+Yhteystietosi löytyvät sähköpostisi perusteella, mikäli olet tilannut aiemmin palveluta. Vaihda tarvittaessa tietojasi muokkaamalla kenttiä. Uudet tiedot tallentuvat automaattisesti.</br>
+Huom. Sinulla voi olla monta osoitetta tallennettuna.',
+	'taiTayta' => 'Tai täytä yhteystietokentät<br> 
+Antamasi yhteystiedot tallentuvat, jolloin seuraavalla kerralla kenttiä ei tarvitse uudestaan täyttää.',
 
 	);
 

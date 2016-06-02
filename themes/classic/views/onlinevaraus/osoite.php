@@ -37,6 +37,14 @@ $asetukset = Asetukset::model()->findbypk(1);
 <div id="fullLomake">
  <div class="boxes-info">
 
+   <h4 class="title-subtitle text-center"><?php echo Yii::t('main', 'Tunnistaudu sähköpostilla'); ?>
+
+   </h4>
+      <span class="small">
+      	<?php echo Yii::t('main', 'sähköpostillaTeksti'); ?>
+      </span>
+      <br>
+
    <div class="row">
       <div class="col-sm-6">
 
@@ -46,13 +54,18 @@ $asetukset = Asetukset::model()->findbypk(1);
      	</div>
 
       </div><div class="col-sm-6">
-
        	<div id="loytynytOsoitteet"></div>
-
       </div>
    </div>
 
      <br>
+
+
+      <span>
+      	<?php echo Yii::t('main', 'taiTayta'); ?>
+      </span>
+       <br>
+
      <div id="lomake">
       <div class="row">
        <div class="col-sm-6">
