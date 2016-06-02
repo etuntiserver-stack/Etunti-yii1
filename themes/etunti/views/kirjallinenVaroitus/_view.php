@@ -14,6 +14,9 @@
 	<?php
 		if(file_exists(Yii::app()->basePath."/../tiedostot/varoitukset/".Yii::app()->user->domain."/".$data->tiedosto.".docx"))
 	 	echo '<a href="../../tiedostot/varoitukset/'.Yii::app()->user->domain.'/'.$data->tiedosto.'.docx">'.$data->tiedosto.'.docx</a>';
+		echo '<br>';
+		if(file_exists(Yii::app()->basePath."/../tiedostot/varoitukset/".Yii::app()->user->domain."/".$data->tiedosto.".pdf"))
+		echo '<a href="../../tiedostot/varoitukset/'.Yii::app()->user->domain.'/'.$data->tiedosto.'.pdf">'.$data->tiedosto.'.pdf</a>';
 		
 	?>
 	</td>
