@@ -1,6 +1,6 @@
 <?php
 
-  $template = 'template_varoitus';
+  $template = 'template_tyotodistus';
 
 
   if(isset($_POST['poistaTemplate'])){
@@ -35,8 +35,8 @@
         <div class="tray-center">
 
 
-	<h2 class="myBgColors p10"> <?php echo Yii::t('main', 'Kirjallinen varoitus'); ?> 
-		<?php echo CHtml::link('',Yii::app()->request->baseUrl.'/index.php/kirjallinenVaroitus/create',array('class'=>'btn btn-default fa fa-plus')); ?>
+	<h2 class="myBgColors p10"> <?php echo Yii::t('main', 'Työtodistus'); ?> 
+		<?php echo CHtml::link('',Yii::app()->request->baseUrl.'/index.php/tyotodistus/create',array('class'=>'btn btn-default fa fa-plus')); ?>
 		<button class="btn btn-default" data-toggle="collapse" data-target="#admin-form"><?php echo Yii::t('main', 'Extrat'); ?></button>
 	</h2>
 
@@ -68,7 +68,7 @@
   <form action="#" class="form-input" method="post" enctype="multipart/form-data">
      <div class="section input-group">
        <label class="field prepend-icon append-button file">
-         <span class="button">'.Yii::t('main', 'Varoitus template').'</span>
+         <span class="button">'.Yii::t('main', 'Työtodistus template').'</span>
          <input type="file" class="gui-file" name="file" onChange="document.getElementById(\'tiedostoUP\').value = this.value;">
          <input type="text" class="gui-input" name="'.$template.'" id="tiedostoUP" placeholder="Valitse tiedosto..">
          <label class="field-icon">
@@ -82,7 +82,7 @@
   </form>
  ';
 
-  echo '<a href="/../tiedostot/templates/mallit/kirjallinen_varoitus.docx">'.Yii::t('main', 'Tässä').'</a> '.Yii::t('main', 'on templaten esimerkki.');
+  echo '<a href="/../tiedostot/templates/mallit/tyotodistus.docx">'.Yii::t('main', 'Tässä').'</a> '.Yii::t('main', 'on templaten esimerkki.');
 ?>
                         </div>
                       </div>
@@ -107,7 +107,15 @@ ${tyontekija_sahkoposti}
 ${aika}
 ${paikka}
 ${johtajan_nimi}
-${varoitus_teksti}</textarea>
+
+${Alku}
+${Loppu}
+${Tyokohde}
+${TyosuhteenPaattamisenSyy}
+${Kaytos}
+${Arvio}
+${NimikeTehtava}
+</textarea>
 
                         </div>
                       </div>
@@ -149,7 +157,6 @@ ${varoitus_teksti}</textarea>
   <tr>
 
   <th><?php echo Yii::t('main', 'Nimi'); ?></th>
-  <th><?php echo Yii::t('main', 'Kirjallinen varoitus'); ?></th>
   <th><?php echo Yii::t('main', 'Tiedosto'); ?></th>
   <th></th>
   </tr>

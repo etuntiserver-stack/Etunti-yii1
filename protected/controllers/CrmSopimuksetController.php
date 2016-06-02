@@ -409,12 +409,7 @@ $(document).ready(function(){
 
 		$dataProvider->pagination->pageSize = 50;
 
-        	$tal = array(
-			'palvelusopimus_kuluttajat'=>Yii::t('main', 'Palvelusopimus kuluttajat'),
-			'sosiaalialan_palvelusopimus'=>Yii::t('main', 'Sosiaalialan palvelusopimus'),
-			'palvelusopimus_novosan'=>Yii::t('main', 'Palvelusopimus Novosan'),
-			'avainten_luovutussopimus'=>Yii::t('main', 'Avainten luovutussopimus'),
-		);
+		$tal = $this->tal();
 
 		$this->render('index', array(
 			'dataProvider' => $dataProvider,
@@ -422,9 +417,21 @@ $(document).ready(function(){
 		));
 	}
 
-	/**
-	 * Manages all models.
-	 */
+
+	protected function tal()
+	{
+
+        	$tal = array(
+			'palvelusopimus_kuluttajat'=>Yii::t('main', 'Palvelusopimus kuluttajat'),
+			'sosiaalialan_palvelusopimus'=>Yii::t('main', 'Sosiaalialan palvelusopimus'),
+			'palvelusopimus_novosan'=>Yii::t('main', 'Palvelusopimus Novosan'),
+			'avainten_luovutussopimus'=>Yii::t('main', 'Avainten luovutussopimus'),
+			'hotelfinn_helsinki_siivousehdotus'=>Yii::t('main', 'Hotelfinn Helsinki siivousehdotus'),
+		);
+		return $tal;
+	}
+
+
 	public function actionAdmin()
 	{
 		$model=new CrmSopimukset('search');
