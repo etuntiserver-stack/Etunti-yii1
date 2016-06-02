@@ -143,6 +143,7 @@
   <th><?php echo Yii::t('main', 'Päivä'); ?></th>
   <th><?php echo Yii::t('main', 'Kartta'); ?></th>
   <th><?php echo Yii::t('main', 'Työntekijä'); ?></th>
+  <th><?php echo Yii::t('main', 'Asiakas'); ?></th>
   <th><?php echo Yii::t('main', 'Kohde'); ?></th>
   <th><?php echo Yii::t('main', 'Lyhyt viesti'); ?></th>
   <th><?php echo Yii::t('main', 'Aloitus'); ?></th>
@@ -198,7 +199,7 @@ $(".haemob").click(function(){
   });
 */
 
-$('.chckbxHyvaksynta').on('switchChange.bootstrapSwitch', function(event, state) {
+$('.chckbxHyvaksynta').on('click', function(event, state) {
   $(this).each(function() {
       var label = $(this).prop("checked");
       var tot = $(this).attr("tot");

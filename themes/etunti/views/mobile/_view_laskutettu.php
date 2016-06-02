@@ -113,6 +113,28 @@ else
 	</td>
 
 	<td>
+	  <?php 
+	  $asiakas = '';
+	  if(!empty($data->kohdenID))
+	  {
+		$k = Kohteet::model()->findbypk($data->kohdenID);
+		if(isset($k->asiakas_id))
+		{
+			$a = Asiakkaat::model()->findbypk($k->asiakas_id);
+			if(isset($a->id) and !empty($a->yrityksen_nimi))
+			$asiakas = $a->yrityksen_nimi;
+			elseif(isset($a->id) and empty($a->yrityksen_nimi) and !empty($a->yhteyshenkilo))
+			$asiakas = $a->yhteyshenkilo;
+
+			if(isset($a->id))
+		  	echo CHtml::link($asiakas,'/index.php/asiakkaat/update?id='.$a->id,array('target'=>'_blank'));
+		}
+	  }
+
+	  ?>
+	</td>
+
+	<td>
 	  <?php if(!$toteutuneet) : ?> 
 	  <span class="link fa fa-pencil-square-o openkohde" id="<?php echo 'kohttisID_'.$data->id; ?>" for="<?php echo 'kohtval_'.$data->id; ?>" data-toggle="collapse" data-target="<?php echo '#kshow_'.$data->id; ?>"></span>&nbsp;
 
