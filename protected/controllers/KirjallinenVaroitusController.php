@@ -181,8 +181,11 @@ class KirjallinenVaroitusController extends Controller
 			$document->setValue('johtajan_nimi', iconv('UTF-8','ISO-8859-1', $model->TyonantajanEdustaja));
 			$document->setValue('varoitus_teksti', iconv('UTF-8','ISO-8859-1', $model->kirjallisen_varoituksen));
 
-			$file = 'tiedostot/varoitukset/'.Yii::app()->user->domain.'/'.$tiedosto.'.docx';
-		  	$document->save($file);
+			$file = 'tiedostot/varoitukset/'.Yii::app()->user->domain.'/'.$tiedosto;
+		  	$document->save($file.'.docx');
+
+			shell_exec('unoconv -f pdf '.$file.'.docx'); // ei localhostina
+			$this->redirect(array('index'));
 
 	}
 
@@ -206,10 +209,17 @@ class KirjallinenVaroitusController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$dataProvider=new CActiveDataProvider('KirjallinenVaroitus');
-		$this->render('index',array(
-			'dataProvider'=>$dataProvider,
+       		$criteria = new CDbCriteria();
+		$criteria->order = " id DESC ";
+
+		$dataProvider=new CActiveDataProvider('KirjallinenVaroitus', array(
+			'criteria'=>$criteria,
+			//'pagination'=>false
 		));
+
+		$dataProvider->pagination->pageSize = 50;
+		$this->render('index', array('dataProvider' => $dataProvider));
+
 	}
 
 	/**

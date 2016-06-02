@@ -290,9 +290,9 @@ $randstring = generateRandomString();
 			$document->setValue('asiakkaan_postinumero', iconv('UTF-8','ISO-8859-1',$as->postinumero));
 			$document->setValue('asiakkaan_toimipaikka', iconv('UTF-8','ISO-8859-1',$as->kaupunki));
 
+			$document->setValue('teksti', htmlspecialchars(iconv('UTF-8','ISO-8859-1',$model->tarjous)));
 
 			$path = 'tiedostot/crm/tarjoukset/'.Yii::app()->user->domain.'/'.$liite;
-			$document->setValue('teksti', htmlspecialchars(iconv('UTF-8','ISO-8859-1',$model->tarjous)));
 		  	$document->save($path.'.docx');
 
 			shell_exec('unoconv -f pdf '.$path.'.docx');

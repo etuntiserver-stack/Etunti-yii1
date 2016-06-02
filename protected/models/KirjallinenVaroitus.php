@@ -122,6 +122,7 @@ class KirjallinenVaroitus extends DB2ActiveRecord
 		// @todo Please modify the following code to remove attributes that should not be searched.
 
 		$criteria=new CDbCriteria;
+		$criteria->order = " id DESC ";
 
 		$criteria->compare('id',$this->id);
 		$criteria->compare('time',$this->time,true);
