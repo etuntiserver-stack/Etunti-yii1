@@ -138,7 +138,7 @@ else
 	  </div>
 	 -->
 	  <?php echo CHtml::link(' ','/index.php/viestinta/create?tid='.$data->tid,array('target'=>'_blank','class'=>'link fa fa-envelope')); ?>&nbsp;
-	  <?php echo CHtml::link($data->tekijan_nimi,'/index.php/tyontekijat/update?id='.$data->tid,array('target'=>'_blank')); ?>
+	  <?php echo CHtml::link($data->tekijan_nimi,'/index.php/tyontekijat/update?id='.$data->tid,array('target'=>'_blank','style'=>'color: #0A98DC;')); ?>
 	</td>
 
 	<!-- adminPaketti -->
