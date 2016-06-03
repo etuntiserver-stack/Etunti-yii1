@@ -155,6 +155,7 @@ $(document).ready(function(){
   });
 
   $(document).delegate(".uusiTot","click",function(){
+		$(this).remove();
 		$('#toteutuneet-form').submit();
   });
 
@@ -188,6 +189,7 @@ $(document).ready(function(){
   });
 
   $(document).delegate(".updTot","click",function(){
+		$(this).remove();
 		$('#toteutuneet-form-upd').submit();
   });
 
