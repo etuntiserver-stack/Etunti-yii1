@@ -47,7 +47,7 @@ $this->breadcrumbs=array(
                         <div class="section">
                           <label class="field prepend-icon">
 
-	   <input type="text" name="from" id="from" class="gui-input datepickerFI" value="<?php echo $from; ?>">
+	   <input type="text" name="from" id="from" class="gui-input datepickerFI" value="<?php echo date('d.m.Y', strtotime($from)); ?>">
 
                             <label for="firstname" class="field-icon">
                               <i class="glyphicon glyphicon-calendar"></i>
@@ -60,7 +60,7 @@ $this->breadcrumbs=array(
                         <div class="section">
                           <label class="field prepend-icon">
 
-   	   <input type="text" name="to" id="to" class="gui-input datepickerFI" value="<?php echo $to; ?>">
+   	   <input type="text" name="to" id="to" class="gui-input datepickerFI" value="<?php echo date('d.m.Y', strtotime($to)); ?>">
 
                             <label for="firstname" class="field-icon">
                               <i class="glyphicon glyphicon-calendar"></i>
