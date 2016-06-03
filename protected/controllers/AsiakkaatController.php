@@ -451,6 +451,14 @@ class AsiakkaatController extends Controller
 		$criteria=new CDbCriteria;
 		$criteria->order = " DATE(time) DESC ";
 		$criteria->condition = " asiakas_id='".$model->id."' ";
+
+		if(!empty($from) and !empty($to))
+		{
+		$criteria->addCondition (" 
+			DATE(time) BETWEEN '".date("Y-m-d", strtotime($from))."' AND '".date("Y-m-d", strtotime($to))."'
+		");
+		}
+
 		$tar = CrmTarjoukset::model()->findAll($criteria);
 		$bod = '';
 
@@ -514,6 +522,15 @@ class AsiakkaatController extends Controller
 		$criteria=new CDbCriteria;
 		$criteria->order = " DATE(paivays) DESC ";
 		$criteria->condition = " as_nro='".$model->asiakasnumero."' ";
+
+		if(!empty($from) and !empty($to))
+		{
+		$criteria->addCondition (" 
+			paivays BETWEEN '".date("Y-m-d", strtotime($from))."' AND '".date("Y-m-d", strtotime($to))."'
+		");
+		}
+
+
 		$tar = Lasku::model()->findAll($criteria);
 		$bod = '';
 
@@ -556,6 +573,14 @@ class AsiakkaatController extends Controller
 				WHERE id IN(SELECT id FROM asiakkaat WHERE id='".$model->id."')
 			) 
 		";
+
+		if(!empty($from) and !empty($to))
+		{
+		$criteria->addCondition (" 
+			DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".date("Y-m-d", strtotime($from))."' AND '".date("Y-m-d", strtotime($to))."'
+		");
+		}
+
 		$tar = Tyovuoroot::model()->findAll($criteria);
 		$bod = '';
 
