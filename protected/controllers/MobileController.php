@@ -1489,7 +1489,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		  $d->aloitan = date("d.m.Y H:i",strtotime($d->aloitan));
 
 			$kesto = strtotime($d->loppui)-strtotime($d->aloitan);
-			$lu[] = $d->tekijan_nimi."//".date("d.m",strtotime($d->aloitan))."//".$kesto."//mobile_".$d->id."//".$d->asiakas_hyvaksy."//".date("H:i",strtotime($d->aloitan))."//".date("H:i",strtotime($d->loppui))."//////".$d->sairaus;
+			$lu[strtotime($d->aloitan)] = $d->tekijan_nimi."//".date("d.m",strtotime($d->aloitan))."//".$kesto."//mobile_".$d->id."//".$d->asiakas_hyvaksy."//".date("H:i",strtotime($d->aloitan))."//".date("H:i",strtotime($d->loppui))."//////".$d->sairaus;
 		}
 
 
@@ -1511,11 +1511,11 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		  $d->loppui = date("d.m.Y H:i",strtotime($d->loppui));
 		  $d->aloitan = date("d.m.Y H:i",strtotime($d->aloitan));
 			$kesto = strtotime($d->loppui)-strtotime($d->aloitan);
-			$lu[] = $d->tekijan_nimi."//".date("d.m",strtotime($d->aloitan))."//".$kesto."//toteutu_".$d->id."//".$d->asiakas_hyvaksy."//".date("H:i",strtotime($d->aloitan))."//".date("H:i",strtotime($d->loppui))."//".$d->osoite."//".$d->tietoja."//".$d->sairaus;
+			$lu[strtotime($d->aloitan)] = $d->tekijan_nimi."//".date("d.m",strtotime($d->aloitan))."//".$kesto."//toteutu_".$d->id."//".$d->asiakas_hyvaksy."//".date("H:i",strtotime($d->aloitan))."//".date("H:i",strtotime($d->loppui))."//".$d->osoite."//".$d->tietoja."//".$d->sairaus;
 		}
 
 		//if(count($lu) > 0)
-		//ksort($lu);
+		ksort($lu);
 
 
 
@@ -1544,14 +1544,16 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 
 			$tietoja = '';
 			if(isset($explV[7]) and !empty($explV[8]))
-			$tietoja = trim($explV[8]).'<hr>';
+			$tietoja = trim($explV[8]);
 
 			$spl = $this->sairausMerkki($explV[9]);
 
 			echo 
 			'<div class="row">
-			   <div class="col-sm-6 text-right">'.$explV[0].$kertaosoite.$spl.', '.$explV[1].'</div>
-			   <div class="col-sm-6"> '.$explV[5].'-'.$explV[6].' kesto: <b> '.$this->sprint($explV[2]).'</b> '.$asiakas_hyvaksy.'</div>
+			  <div class="row">
+			   <div class="col-sm-6"><b>'.$explV[1].' '.$explV[5].'-'.$explV[6].'</b> kesto: '.$this->sprint($explV[2]).' '.$asiakas_hyvaksy.'</div>
+			   <div class="col-sm-6">'.$explV[0].$kertaosoite.$spl.'</div>
+			  </div>
 			'.$tietoja.'
 			</div>';
 			}
