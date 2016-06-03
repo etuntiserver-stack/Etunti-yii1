@@ -7191,6 +7191,7 @@ perspective effects (not including the modals and the overlay).
 
 
 
+
   -webkit-transform-origin: 0 100%;
   transform-origin: 0 100%;
   opacity: 0;
@@ -11340,6 +11341,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
   display: inline-block;
 }
 .nav-list li.active a {
+
   color: #444;
   border-bottom: 3px solid #4a89dc;
 }
@@ -15426,6 +15428,7 @@ ol.timeline-list li.timeline-item .timeline-date {
   td.visible-lg {
     display: table-cell !important;
   }
+
 }
 @media (min-width: 1140px) {
   .visible-lg-block {
@@ -17793,6 +17796,7 @@ body.sb-top #toggle_sidemenu_t {
 .navbar-nav.navbar-right,
 .navbar-nav.navbar-right:last-child {
   float: right;
+
   margin: 0 15px 0 0;
 }
 /*==========================================================
@@ -18593,6 +18597,7 @@ ul.tray-nav {
 }
 /* item link */
 ul.tray-nav li a {
+
   width: 100%;
   padding: 11px 15px 11px 30px;
   color: #999;
