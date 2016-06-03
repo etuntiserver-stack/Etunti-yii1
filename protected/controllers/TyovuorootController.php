@@ -661,7 +661,7 @@ class TyovuorootController extends Controller
 			if($_POST['valmis'] == "true")
 			{
 
-			  Tyovuoroot::model()->deleteAll(" tid='".$_POST['tekija']."' and pvm='".$pvm."' and kohde='".$_POST['kohde']."' ");
+			  Tyovuoroot::model()->deleteAll(" tid='".$_POST['tekija']."' and pvm='".$pvm."' and kohde='".$_POST['kohde']."' and alku='".$_POST['tfrom']."' and loppu='".$_POST['tto']."' ");
 
 			}
 		      }

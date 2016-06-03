@@ -217,10 +217,6 @@ $("#kohde").change(function(){
 });
 
 
-$(".doit").click(function(){
-	$("#autoinsForm").submit();
-});
-
 
 // Send form by ajax
 $('#autoinsForm').on('submit',function(e) {
@@ -267,43 +263,17 @@ $('#autoinsForm').on('submit',function(e) {
   success:function(data){
 
   	console.log(data);
-	palaTakais();
 
-function palaTakais(){
+	   if($('#valmis').val() === "true")
+	   window.location.reload();
 
 	   $('#oldBut').html('');
 	   $('#newBut').html("<button class='btn btn-warning takaisin'><?php echo Yii::t('main', 'Palaa takaisin'); ?></button>");
-	   $('#supersubmit').html("<button class='btn btn-primary submit'><?php echo Yii::t('main', 'LÄHETÄ TYÖVUOROON'); ?></button>");
+	   $('#supersubmit').html("<button class='btn btn-primary submitLaheta'><?php echo Yii::t('main', 'LÄHETÄ TYÖVUOROON'); ?></button>");
 	   $('#tarkistaLista').html("<textarea class='form-control' rows='14'>"+data+"</textarea>").show('hide');
 	   $('#lomake').hide('slow');
 	   $('#valmis').val("true");
 
-	$('.submit').click(function(){
-	   $("#autoinsForm").submit();
-	   //window.location.reload();
-	   setTimeout(function(){document.location.href = self.document.location;},500);
-	});
-
-	$('#newBut').click(function(){
-	   $(this).html('');
-	   $('#oldBut').html("<button class='btn btn-success doit'><?php echo Yii::t('main', 'Tarkista tekemäsi työvuoroot'); ?></button>");
-	   $('#supersubmit').html("");
-	   $('#tarkistaLista').hide('slow');
-	   $('#lomake').show('slow');
-	   $('#valmis').val("false");
-
-
-	$('.doit').click(function(){
-	   $("#autoinsForm").submit();
-	});
-
-	});
-
-}
-
-
-
-	//return false;
   },
   error:function (xhr, ajaxOptions, thrownError){
         //console.log(xhr.responseText);
@@ -313,6 +283,35 @@ function palaTakais(){
   e.preventDefault(); 
 });
 
+
+
+
+
+
+	$(document).delegate(".submitLaheta","click",function(){
+	   $(this).html('Odota..');
+	   $("#autoinsForm").submit();
+
+	   //window.location.reload();
+	   //setTimeout(function(){document.location.href = self.document.location;},500);
+
+	});
+
+	$(document).delegate("#newBut","click",function(){
+
+	   $(this).html('');
+	   $('#oldBut').html("<button class='btn btn-success doit'><?php echo Yii::t('main', 'Tarkista tekemäsi työvuoroot'); ?></button>");
+	   $('#supersubmit').html("");
+	   $('#tarkistaLista').hide('slow');
+	   $('#lomake').show('slow');
+	   $('#valmis').val("false");
+
+	});
+
+
+	$(document).delegate(".doit","click",function(){
+	   $("#autoinsForm").submit();
+	});
 
 
 });

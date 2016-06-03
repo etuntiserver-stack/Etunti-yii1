@@ -51,6 +51,15 @@
 	<label><?php echo Yii::t('main', 'Loppuen'); ?></label>
 	<input type="text" class="form-control datepicker" name="pto" id="pto">
   </div>
+
+  <div class="col-sm-6">
+	<label><?php echo Yii::t('main', 'Aloitusaika'); ?></label>
+	<input type="text" class="form-control timeVuorot" name="tfrom" id="tfrom">
+  </div>
+  <div class="col-sm-6">
+	<label><?php echo Yii::t('main', 'Lopetusaika'); ?></label>
+	<input type="text" class="form-control timeVuorot" name="tto" id="tto">
+  </div>
 </div>
 
 <br>
@@ -117,9 +126,15 @@
 
 
   <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/asetukset.js"></script>
+  <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/jquery.mask.js"></script>
 
 <script type="text/javascript">
 $(document).ready(function(){
+
+  $('.timeVuorot').mask('00:00',{
+        placeholder: "__:__"
+  });
+
 
   $(".sw").bootstrapSwitch({
 	size: "mini",
@@ -140,16 +155,13 @@ $("#kohde").change(function(){
 });
 
 
-$(".doit").click(function(){
-	$("#autoinsForm").submit();
-});
-
-
 // Send form by ajax
 $('#autoinsForm').on('submit',function(e) {
 
   var pfrom = $("#pfrom").val();
   var pto = $("#pto").val();
+  var tfrom = $("#tfrom").val();
+  var tto = $("#tto").val();
   var tekija = $("#tekija").find('selected').val();
   var kohde = $("#kohde").find('selected').val();
 
@@ -160,6 +172,14 @@ $('#autoinsForm').on('submit',function(e) {
     }
     if (pto  === '') {
         $('#pto').css({"border" : "2px #f14010 solid"}).focus();
+        return false;
+    }
+    if (tfrom  === '') {
+        $('#tfrom').css({"border" : "2px #f14010 solid"}).focus();
+        return false;
+    }
+    if (tto  === '') {
+        $('#tto').css({"border" : "2px #f14010 solid"}).focus();
         return false;
     }
     if (!tekijaVal) {
@@ -180,42 +200,18 @@ $('#autoinsForm').on('submit',function(e) {
   success:function(data){
 
   	console.log(data);
-	palaTakais();
 
-function palaTakais(){
+	   if($('#valmis').val() === "true")
+	   window.location.reload();
 
 	   $('#oldBut').html('');
 	   $('#newBut').html("<button class='btn btn-warning takaisin'><?php echo Yii::t('main', 'Palaa takaisin'); ?></button>");
-	   $('#supersubmit').html("<button class='btn btn-danger submit'><?php echo Yii::t('main', 'POISTA TYÖVUOROSTA'); ?></button>");
+	   $('#supersubmit').html("<button class='btn btn-danger submitLaheta'><?php echo Yii::t('main', 'POISTA TYÖVUOROSTA'); ?></button>");
 	   $('#tarkistaLista').html("<textarea class='form-control' rows='14'>"+data+"</textarea>").show('hide');
 	   $('#lomake').hide('slow');
 	   $('#valmis').val("true");
 
-	$('.submit').click(function(){
-	   $("#autoinsForm").submit();
-	   setTimeout(function(){document.location.href = "index";},500);
-	});
 
-	$('#newBut').click(function(){
-	   $(this).html('');
-	   $('#oldBut').html("<button class='btn btn-danger doit'><?php echo Yii::t('main', 'Tarkista valitsemäsi päiviä'); ?></button>");
-	   $('#supersubmit').html("");
-	   $('#tarkistaLista').hide('slow');
-	   $('#lomake').show('slow');
-	   $('#valmis').val("false");
-
-
-	$('.doit').click(function(){
-	   $("#autoinsForm").submit();
-	});
-
-	});
-
-}
-
-
-
-	//return false;
   },
   error:function (xhr, ajaxOptions, thrownError){
         //console.log(xhr.responseText);
@@ -226,6 +222,33 @@ function palaTakais(){
 });
 
 
+
+
+
+	$(document).delegate(".submitLaheta","click",function(){
+	   $(this).html('Odota..');
+	   $("#autoinsForm").submit();
+
+	   //window.location.reload();
+	   //setTimeout(function(){document.location.href = self.document.location;},500);
+
+	});
+
+	$(document).delegate("#newBut","click",function(){
+
+	   $(this).html('');
+	   $('#oldBut').html("<button class='btn btn-success doit'><?php echo Yii::t('main', 'Tarkista tekemäsi työvuoroot'); ?></button>");
+	   $('#supersubmit').html("");
+	   $('#tarkistaLista').hide('slow');
+	   $('#lomake').show('slow');
+	   $('#valmis').val("false");
+
+	});
+
+
+	$(document).delegate(".doit","click",function(){
+	   $("#autoinsForm").submit();
+	});
 
 });
 </script>
