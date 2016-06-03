@@ -23,7 +23,7 @@ class LaskuController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','etsikohde','etsiasiakas', 'etsisaaja','luoKohteista', 'luoAsiakaasta', 'tr_rivit', 'tr_rivitkk','lasku_pdf', 'finvoice', 'postita', 'tr_rivit_tyhja','valitsetuote', 'hyvityslasku', 'postita_pdf', 'get_historia', 'kohteen_tieto'),
+				'actions'=>array('admin','delete','create','update','index','view','etsikohde','etsiasiakas', 'etsisaaja','luoKohteista', 'luoAsiakaasta', 'tr_rivit', 'tr_rivitkk','lasku_pdf', 'finvoice', 'postita', 'tr_rivit_tyhja','valitsetuote', 'hyvityslasku', 'postita_pdf', 'get_historia', 'kohteen_tieto', 'osoite_haku'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny', // allow admin user to perform 'admin' and 'delete' actions
@@ -76,6 +76,36 @@ class LaskuController extends Controller
 	public function actionTr_rivit_tyhja()
 	{
 		$this->renderPartial('tr_rivit_tyhja');
+	}
+
+
+	public function actionOsoite_haku()
+	{
+
+				$result = '';
+
+		if(isset($_POST['word']))
+		{
+       			$criteria = new CDbCriteria();
+       			$criteria->condition = " osoite LIKE '%".$_POST['word']."%' ";
+			$k=Kohteet::model()->findAll($criteria);
+			if(isset($k[0]))
+			{
+
+				$result .= '<br><select class="form-control" id="loytyiOsoitteet">';
+				$result .= '<option>'.Yii::t('main', 'Valitse asiakkaita kohteista').'</option>';
+				foreach($k as $data)
+				{
+					$a=Asiakkaat::model()->findbypk($data->asiakas_id);
+					$result .= '<option value="'.$a->asiakasnumero.'">'.$data->osoite.'</option>';
+				}
+				$result .= '</select>';
+
+			}	
+		}
+
+				echo json_encode($result);
+
 	}
 
 
