@@ -96,6 +96,14 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 	</div>
 	<?php endif; ?>
 
+	<?php if(!isset($model->id)) : ?>
+	<div class="section fill mb5">
+		<label><?php echo Yii::t('main', 'Osoite haku'); ?></label>
+		<input type="text" id="osoiteHaku" class="form-control">
+		<div id="osoiteHakuResult"></div>
+	</div>
+	<?php endif; ?>
+
 	<div class="section fill mb5 asiakas">
 		<?php echo $form->labelEx($model,'as_nro'); ?>
     		<?php 
@@ -1229,7 +1237,7 @@ $("#Lasku_yid").change(function() {
 
 $("#Lasku_as_nro").change(function() {
 
-    var asiakas = $(this).val();
+    var asiakas = $("#Lasku_as_nro option:selected").val();
     if(!asiakas)
     {
 	alert("Asiakasnumero puuttuu");
@@ -1423,6 +1431,34 @@ $(document).delegate(".selectpicker","change",function(){
    } else {
 		$('#hinnoitelu').html('');
    }
+
+});
+
+
+$("#osoiteHaku").keyup(function() {
+    var thisVal = $(this).val();
+
+    if(thisVal.length > 4)
+    {
+        $.ajax({
+           url: 'osoite_haku',
+	   type: 'POST',
+	   data: { word : thisVal },
+           success: function(data){
+		var data = JSON.parse(data);
+		$("#osoiteHakuResult").html(data);
+           },
+           error: function(XMLHttpRequest, textStatus, errorThrown){
+               	console.log(XMLHttpRequest);
+	   }
+        });
+    }
+});
+
+
+$(document).delegate("#loytyiOsoitteet","change",function(){
+    var thisVal = $(this).val();
+    $("#Lasku_as_nro").val(thisVal).change();
 
 });
 
