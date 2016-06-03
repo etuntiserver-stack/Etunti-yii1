@@ -15,6 +15,9 @@ if(isset($_GET['kopio'])){
      $uusi->paivays = date("Y-m-d");
      $uusi->erapaiva = date("Y-m-d", strtotime("+".$l->maksuehto." day"));
      $uusi->tilanne = 0;
+     $uusi->laskunumero = '';
+     $uusi->viitenumero = '';
+     $uusi->trust_jobid = '';
      $uusi->save();
 
      $lr = LaskunRivit::model()->findAll(" lid='".$id."' ");

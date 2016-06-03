@@ -445,7 +445,7 @@ class AsiakkaatController extends Controller
 		return false;
 	}
 
-	protected function tarjouksetCRM($model)
+	protected function tarjouksetCRM($model, $from, $to)
 	{
 
 		$criteria=new CDbCriteria;
@@ -505,7 +505,7 @@ class AsiakkaatController extends Controller
 	}
 
 
-	protected function laskutuksetCRM($model)
+	protected function laskutuksetCRM($model, $from, $to)
 	{
 
 	   $lasku = Yii::app()->createController('Lasku');
@@ -544,7 +544,7 @@ class AsiakkaatController extends Controller
 	}
 
 
-	protected function tyovuorotCRM($model)
+	protected function tyovuorotCRM($model, $from, $to)
 	{
 
 		$criteria=new CDbCriteria;
