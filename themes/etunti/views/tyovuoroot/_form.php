@@ -241,6 +241,7 @@ $(document).ready(function(){
 	console.log( $( this ).serializeArray() );
 	console.log( e.target[0].value );
 	var str = '';
+
 	if( e.target[0].value != '')
 	{
 	  $.ajax({
@@ -263,19 +264,6 @@ $(document).ready(function(){
 			  }
 	 	});
 
-	  	$.ajax({
-			url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/viikko',
-			type:'GET',
-			data: { "tid" : "<?php echo $model->tid; ?>", "viikko" : "<?php echo date('W',strtotime($model->pvm)); ?>", "year" : "<?php echo date('Y',strtotime($model->pvm)); ?>" },
-			  success:function(data){
-			  //console.log(data);
-			  $('#vk_<?php echo date("W",strtotime($model->pvm))."_".$model->tid; ?>').html(data);
-			  return false;
-			  },
-			  error:function(data){
-			  console.log(data);
-			  }
-	 	});
 /*
 	  	$.ajax({
 			url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/fromto',
@@ -332,6 +320,27 @@ $(document).ready(function(){
 	  });
 
 	}
+
+
+
+	//var pvmFromPost = e.target[7].value; 
+	//alert(pvmFromPost)
+
+	  	$.ajax({
+			url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/viikko',
+			type:'GET',
+			data: { "tid" : "<?php echo $model->tid; ?>", "viikko" : "<?php echo date('W',strtotime($model->pvm)); ?>", "year" : "<?php echo date('Y',strtotime($model->pvm)); ?>" },
+			  success:function(data){
+			  console.log(data);
+			  $('#vk_<?php echo date("W",strtotime($model->pvm))."_".$model->tid; ?>').html(data);
+			  return false;
+			  },
+			  error:function(data){
+			  console.log(data);
+			  }
+	 	});
+
+
 
 
 	e.preventDefault(); 
