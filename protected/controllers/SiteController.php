@@ -25,7 +25,7 @@ class SiteController extends Controller
 	{
 		return array(
 			array('allow', 
-				'actions'=>array('lomake_tarjouspyynto', 'lomake_testiryhma'),
+				'actions'=>array( 'header', 'footer', 'lomake_tarjouspyynto', 'lomake_testiryhma', 'ajankohtaista', 'asiakkaat', 'yritys', 'yhteystiedot'),
 				'users'=>array('*'),
 			),
 			array('allow', 
@@ -73,6 +73,25 @@ class SiteController extends Controller
                 }
                 parent::init();
         }
+
+	public function actionAjankohtaista()
+	{
+		$this->render('ajankohtaista');
+	}
+	public function actionAsiakkaat()
+	{
+		$this->render('asiakkaat');
+	}
+	public function actionYritys()
+	{
+		$this->render('yritys');
+	}
+	public function actionYhteystiedot()
+	{
+		$this->render('yhteystiedot');
+	}
+
+
 
 	protected function sprint($val){
 	    if($val > 0)

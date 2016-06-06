@@ -12,6 +12,10 @@
   $img = Yii::app()->baseUrl.'/img/admins/'.Yii::app()->user->domain.'/'.Yii::app()->user->id.".jpg";
   }
 
+
+$curpage = Yii::app()->getController()->getAction()->controller->id;
+$curpage .= '/'.Yii::app()->getController()->getAction()->controller->action->id;
+echo '<input type="hidden" id="curpage" value="'.$curpage.'">';
 ?>
   
   <!-- For Demo Purposes - Theme Settings Pane -->
@@ -401,7 +405,7 @@
 
 
           <li>
-            <a class="accordion-toggle" href="#">
+            <a class="accordion-toggle asiakkaidenHallinta" href="#">
               <span class="fa fa-user"></span>
               <span class="sidebar-title"><?php echo Yii::t('main', 'Asiakkaiden hallinta'); ?></span>
               <span class="caret"></span>
@@ -434,7 +438,7 @@
 
 
           <li>
-            <a class="accordion-toggle" href="#">
+            <a class="accordion-toggle tuntienHallinta" href="#">
               <span class="fa fa-mobile"></span>
               <span class="sidebar-title"><?php echo Yii::t('main', 'Tuntien hallinta'); ?></span>
               <span class="caret"></span>
@@ -447,7 +451,7 @@
 
 
           <li>
-            <a class="accordion-toggle" href="#">
+            <a class="accordion-toggle tuntienHyvaksynta" href="#">
               <span class="fa fa-bars"></span>
               <span><?php echo Yii::t('main', 'Tuntien hyväksyntä'); ?></span>
               <span class="caret"></span>
@@ -482,7 +486,7 @@
               </li>
 
           <li>
-            <a class="accordion-toggle" href="#">
+            <a class="accordion-toggle Yhteenvedot" href="#">
               <span class="fa fa-bars"></span>
               <span><?php echo Yii::t('main', 'Yhteenvedot'); ?></span>
               <span class="caret"></span>
@@ -513,7 +517,7 @@
 
 
           <li>
-            <a class="accordion-toggle" href="#">
+            <a class="accordion-toggle tyontekijoidenHallinta" href="#">
               <span class="fa fa-male"></span>
               <span class="sidebar-title"><?php echo Yii::t('main', 'Työntekijöiden hallinta'); ?></span>
               <span class="caret"></span>
@@ -549,7 +553,7 @@
 
 
           <li>
-            <a class="accordion-toggle" href="#">
+            <a class="accordion-toggle viestinnanHallinta" href="#">
               <span class="fa fa-envelope"></span>
               <span class="sidebar-title"><?php echo Yii::t('main', 'Viestinnän hallinta'); ?></span>
               <span class="caret"></span>
@@ -564,7 +568,7 @@
 
 	<?php if(in_array('2',$tas)) : ?>
           <li>
-            <a class="accordion-toggle" href="#">
+            <a class="accordion-toggle tyovuorojenHallinta" href="#">
               <span class="fa fa-calendar-check-o"></span>
               <span class="sidebar-title"><?php echo Yii::t('main', 'Työvuorojen hallinta'); ?></span>
               <span class="caret"></span>
@@ -600,7 +604,7 @@
 
 	<?php if(in_array('3',$tas)) : ?>
           <li>
-            <a class="accordion-toggle" href="#">
+            <a class="accordion-toggle laskutuksenHallinta" href="#">
               <span class="glyphicon glyphicon-barcode"></span>
               <span class="sidebar-title"><?php echo Yii::t('main', 'Laskutuksen hallinta'); ?></span>
               <span class="caret"></span>
@@ -620,7 +624,7 @@
               </li>
 
           <li>
-            <a class="accordion-toggle" href="#">
+            <a class="accordion-toggle raportit" href="#">
               <span class="fa fa-bars"></span>
               <span><?php echo Yii::t('main', 'Raportit'); ?></span>
               <span class="caret"></span>
@@ -665,7 +669,7 @@
 
 	<?php if(in_array('4',$tas)) : ?>
           <li>
-            <a class="accordion-toggle" href="#">
+            <a class="accordion-toggle onlinevaraus" href="#">
               <span class="fa fa-clock-o"></span>
               <span class="sidebar-title"><?php echo Yii::t('main', 'Onlinevaraus'); ?></span>
               <span class="caret"></span>
@@ -690,7 +694,7 @@
 
 	<?php if(in_array('5',$tas)) : ?>
           <li>
-            <a class="accordion-toggle" href="#">
+            <a class="accordion-toggle crm" href="#">
               <span class="fa fa-users"></span>
               <span class="sidebar-title"><?php echo Yii::t('main', 'CRM'); ?></span>
               <span class="caret"></span>
@@ -974,8 +978,89 @@
     }
 
 
-
   });
   </script>
 
+
+
+
+  <script type="text/javascript">
+  jQuery(document).ready(function() {
+
+    var curpage = $('#curpage').val();
+
+    if(
+	curpage === 'asiakkaat/index'
+	|| curpage === 'kohteet/index'
+	|| curpage === 'kohteet/avaimet'
+	|| curpage === 'kohteet/googlemap'
+	|| curpage === 'mobile/laskutettu'
+    ){  $('.asiakkaidenHallinta').addClass('menu-open'); }
+    else if(
+	curpage === 'mobile/index' 
+	|| curpage === 'toteutuneet/kk'
+	|| curpage === 'mobile/palkkataulukko'
+	|| curpage === 'mobile/raportit'
+    ){  $('.tuntienHallinta').addClass('menu-open'); }
+    else if(
+	curpage === 'toteutuneet/index' 
+	|| curpage === 'toteutuneet/kk'
+	|| curpage === 'mobile/lahetys_asiakkaalle'
+	|| curpage === 'asiakasHyvaksynta/index'
+    ){  $('.tuntienHallinta').addClass('menu-open'); $('.tuntienHyvaksynta').addClass('menu-open'); }
+    else if(
+	curpage === 'mobile/yhteenveto' 
+	|| curpage === 'mobile/kyhteenveto'
+	|| curpage === 'mobile/kyhteenveto_tuntemattomat'
+	|| curpage === 'mobile/yhteenveto_m'
+    ){  $('.tuntienHallinta').addClass('menu-open'); $('.Yhteenvedot').addClass('menu-open'); }
+    else if(
+	curpage === 'tyontekijat/index' 
+	|| curpage === 'tyontekijat/verotustiedot'
+	|| curpage === 'tyosuhdet/index'
+	|| curpage === 'mobile/raportit'
+	|| curpage === 'tyontekijat/merkkipaivat'
+	|| curpage === 'kirjallinenVaroitus/index'
+	|| curpage === 'tyotodistus/index'
+    ){  $('.tyontekijoidenHallinta').addClass('menu-open'); }
+    else if(
+	curpage === 'viestinta/index' 
+    ){  $('.viestinnanHallinta').addClass('menu-open'); }
+    else if(
+	curpage === 'tyovuoroot/index'
+	|| curpage === 'tyovuoroot/tv2'
+	|| curpage === 'tyovuoroot/tv_kohteet'
+	|| curpage === 'tyovuoroot/viikkottain'
+	|| curpage === 'tyovuoroot/kk'
+	|| curpage === 'vuosilomat/index'
+    ){  $('.tyovuorojenHallinta').addClass('menu-open'); }
+    else if(
+	curpage === 'lasku/index'
+	|| curpage === 'laskutusTuotteet/index'
+	|| curpage === 'laskuHistoria/index'
+	|| curpage === 'laskuHistoria/reskontraluettelo'
+    ){  $('.laskutuksenHallinta').addClass('menu-open'); }
+    else if(
+	curpage === 'laskuHistoria/paivakirja'
+	|| curpage === 'laskuHistoria/paakirja'
+	|| curpage === 'laskuHistoria/maksu_paivakirja'
+	|| curpage === 'laskuHistoria/maksu_paakirja'
+	|| curpage === 'laskuHistoria/alv_raportti'
+    ){  $('.laskutuksenHallinta').addClass('menu-open');  $('.raportit').addClass('menu-open'); }
+    else if(
+	curpage === 'onlinevaraus/kaikki'
+	|| curpage === 'onlinevarausTuotteet/index'
+    ){  $('.onlinevaraus').addClass('menu-open'); }
+    else if(
+	curpage === 'yhteystiedot/index'
+	|| curpage === 'site/kohderyhma'
+	|| curpage === 'crmTarjoukset/index'
+	|| curpage === 'crmSopimukset/index'
+    ){  $('.crm').addClass('menu-open'); }
+
+
+
+
+  });
+  </script>
   <!-- END: PAGE SCRIPTS -->

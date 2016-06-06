@@ -1,200 +1,16 @@
-<?php ?>
+<?php $this->renderPartial('/site/header'); ?>
 
 
-
-    <!--Preloader-->
-    <div class="preloader">
-        <div class="status">&nbsp;</div>
-    </div>
-    <!--End Preloader-->
-
-    <!-- layout-->
-    <div id="layout" class="layout-wide">
-        <!-- Login Client -->
-        <div class="jBar">
-            <div class="container">
-                <div class="row">
-                <div class="col-sm-7 col-md-8 padding-bottom">
-                        <h4>Tuki</h4>
-                        <p><i class="fa fa-phone"></i> <a href="#">+358 40 7614 366</a></p>
-                        <p><a href="#">Tukinumero vastaa 9 - 17</a></p>
-                        <p><i class="fa fa-envelope"></i> <a href="mailto:tuki@etunti.fi">tuki@etunti.fi</a></p>
-
-                   </div>
-                    <!-- Login-->
-                    <div class="col-sm-5 col-md-4">
-                        <h4>Kirjaudu</h4>
-                        <form action="index.php/user/login" method="POST">
-                            <input type="text" name="UserLogin[domain]" placeholder="Domain" required>
-                            <input type="text" name="UserLogin[username]" placeholder="Käyttäjätunnus" required>
-                            <input type="password" name="UserLogin[password]" placeholder="Salasana" required>
-                            <input type="submit" class="btn btn-lg" value="Kirjaudu">
-                        </form>
-                    </div>
-                    <!-- ENd Login-->
-
-                    <span class="jTrigger downarrow"><i class="fa fa-minus"></i></span>
-                </div>
-            </div>
-        </div>
-        <span class="jRibbon jTrigger up" title="Login">KIRJAUDU <i class="fa fa-plus"></i></span>
-        <div class="line"></div>
-        <!-- End Login Client -->
-
-        <!-- Header-->
-        <header>
-            <!-- Container-->
-            <div class="container">
-                <!-- Row-->
-                <div class="row">
-                    <!-- Logo-->
-                    <div class="col-md-3">
-                        <div class="logo">
-                            <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php" title="Return Home">
-                                <img src="<?php echo Yii::app()->request->baseUrl; ?>/assets_classic/img/logo.png" alt="Logo" class="logo_img">
-                            </a>
-                        </div>
-                    </div>
-                    <!-- End Logo-->
-
-                    <!-- Nav-->
-                    <div class="col-md-9 slogan">
-                        Voita siivousalan haasteet
-                    </div>
-                    <!-- End Nav-->
-                </div>
-                <!-- End Row-->
-            </div>
-            <!-- End Container-->
-        </header>
-        <!-- End Header-->
+<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/etusivu_2.css">
+<ul class="steps expanded even-4">
+    <li class="active"><?php echo CHtml::link('Etusivu', Yii::app()->request->baseUrl.'/index.php/site/index'); ?></li>
+    <li class="disabled"><?php echo CHtml::link('Ajankohtaista', Yii::app()->request->baseUrl.'/index.php/site/ajankohtaista'); ?></li>
+    <li class="disabled"><?php echo CHtml::link('Asiakkaat', Yii::app()->request->baseUrl.'/index.php/site/asiakkaat'); ?></li>
+    <li class="disabled"><?php echo CHtml::link('Yritys', Yii::app()->request->baseUrl.'/index.php/site/yritys'); ?></li>
+    <li class="disabled"><?php echo CHtml::link('Yhteystiedot', Yii::app()->request->baseUrl.'/index.php/site/yhteystiedot'); ?></li>
+</ul>
 
 
-
-
-
-        <!-- Slide Section-->
-        <div class="tp-banner-container">
-            <div class="tp-banner">
-                <ul>
-                    <!-- SLIDE  01-->
-                    <li data-transition="zoomout" data-slotamount="7" data-masterspeed="1500" >
-                        <!-- MAIN IMAGE -->
-                        <img src="<?php echo Yii::app()->request->baseUrl; ?>/assets_classic/img/slides/header3.jpg"   alt="kenburns6"  data-bgposition="center center" data-kenburns="on" data-duration="25000" data-ease="Linear.easeNone" data-bgfit="100" data-bgfitend="120" data-bgpositionend="center top">
-
-                        <!-- LAYER NR. 1 -->
-
-                        <div class="tp-caption large_text lft boxi"
-                            data-x="55"
-                            data-y="150"
-                            data-speed="100"
-                            data-start="500"
-                            data-easing="Power4.easeOut"
-                            data-splitin="chars"
-                            data-splitout="none"
-                            data-elementdelay="0.1"
-                            data-endelementdelay="0.1"
-                            data-endspeed="300"
-                            style="z-index: 5; max-width: 700px; width:50%; line-height: 60px; max-height: auto; white-space: normal;">
-                            Markkinoiden paras
-                        </div>
-                        <!-- END LAYER NR. 1 -->
-
-                        <!-- LAYER NR. 2 -->
-                        <div class="tp-caption large_bold_white lft"
-                            data-x="60"
-                            data-y="210"
-                            data-speed="500"
-                            data-start="1400"
-                            data-easing="Power4.easeOut"
-                            data-splitin="none"
-                            data-splitout="none"
-                            data-elementdelay="0.1"
-                            data-endelementdelay="0.1"
-                            data-endspeed="300"
-                            style="z-index: 5; max-width: 700px; line-height: 60px; max-height: auto; white-space: normal;">
-                            MOBIILITYÖKALU
-                        </div>
-                        <!-- END LAYER NR. 2 -->
-                        <!-- LAYER NR. 3 -->
-                        <div class="tp-caption small_light_white sfb stb"
-                            data-x="60"
-                            data-y="270"
-                            data-speed="500"
-                            data-start="1200"
-                            data-splitin="none"
-                            data-splitout="none"
-                            data-easing="easeOutExpo"
-                            style="font-size: 20px;"><br>Kehitetty työnajan hallintaan puhdistusalan työntekijöille ja esimiehille.
-                        </div>
-
-                    </li>
-                    <!-- END SLIDE  01-->
-
-                    <!-- SLIDE 02-->
-                    <li data-transition="zoomout" data-slotamount="7"  data-masterspeed="1500">
-                        <!-- MAIN IMAGE -->
-                        <img src="<?php echo Yii::app()->request->baseUrl; ?>/assets_classic/img/slides/header0.jpg"  alt="slidebg1"  data-bgposition="left center" data-kenburns="on" data-duration="10000" data-ease="Linear.easeNone" data-bgfit="130" data-bgfitend="100" data-bgpositionend="right center">
-
-                        <!-- LAYER NR. 1 -->
-                        <div class="tp-caption large_text lft boxi"
-                            data-x="55"
-                            data-y="150"
-                            data-speed="100"
-                            data-start="500"
-                            data-easing="Power4.easeOut"
-                            data-splitin="chars"
-                            data-splitout="none"
-                            data-elementdelay="0.1"
-                            data-endelementdelay="0.1"
-                            data-endspeed="300"
-                            style="z-index: 5; max-width: 700px; width:50%; line-height: 60px; max-height: auto; white-space: normal;">Kehitetty tehostamaan
-                        </div>
-
-                        <!-- LAYER NR. 2 -->
-                        <div class="tp-caption large_bold_white sft stb"
-                            data-x="60"
-                            data-y="200"
-                            data-speed="300"
-                            data-start="1000"
-                            data-splitin="none"
-                            data-splitout="none"
-                            data-easing="easeOutExpo">TOIMINTAA
-                        </div>
-
-                        <!-- LAYER NR. 3 -->
-                        <div class="tp-caption small_light_white sfb stb"
-                            data-x="65"
-                            data-y="265"
-                            data-speed="500"
-                            data-start="1200"
-                            data-splitin="none"
-                            data-splitout="none"
-                            data-easing="easeOutExpo"
-                            style="font-size: 20px;"><br>Suunniteltu yhteistyössä  puhdistusalan ammattilaisten kanssa.
-                        </div>
-
-                    </li>
-                    <!-- END SLIDE 02-->
-
-                </ul>
-                <div class="tp-bannertimer"></div>
-            </div>
-        </div>
-        <!-- End Slide Section-->
-
-
-
-        <section class="box-action">
-            <div class="container">
-                <div class="title">
-                    <p class="lead">Tilaa Etunti -uutiskirje</p>
-                </div>
-                <div class="button">
-                    <a href="#liitytestaajaksi" >TÄSTÄ</a>
-                </div>
-            </div>
-        </section>
 
         <!-- Services -->
         <section class="esittely">
@@ -497,15 +313,13 @@ etuntimyynti@etunti.fi<br>
         </section>
         <!-- End Services-->
         <section class="content_info testeri">
-            <div class="padding-bottom padding-top green border-top border-white">
+            <div class="padding-bottom padding-top green border-top border-white" style="padding: 0; margin:0;">
                 <div class="container">
+
                     <div class="row">
-                    <div class="col-md-6">
-                        <h2>Etunti testeri</h2>
-                    </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-6" style="padding: 20px;border-right:4px white solid;">
+
+                            <h2>Etunti testeri</h2>
                             <p>
                               Testaa, miten Etunti -ohjelma tehostaisi yrityksesi työnkulkua ja toisi liiketoimintaan lisäpotkua.
                             </p>
@@ -513,12 +327,18 @@ etuntimyynti@etunti.fi<br>
                              Testerin avulla tunnistat yritystoimintasi mahdolliset kehityskohteet ja saat testillä ratkaisuehdotuksen heti.
                             </p>
 
-                        </div>
-                        <div class="col-md-5 col-md-offset-1">
-                            <div class="">
-
                             <button type="button"  class="btn btn-xl btn-primary" role="button" data-toggle="modal" data-target=".testeri-modal">TEE TESTI</button>
-                            </div>
+
+                        </div>
+                        <div class="col-md-6" style="padding: 20px;">
+
+                            <h2>Pyydä ilmainen Etunti esittely</h2>
+                            <p>
+                              Pyydä yritykseesi ilmainen Etunti esittely. Kartoitamme yrityksesi tuottavuuden ja pohdimme yhdessä, millä tavalla yritystoimintaa voi tehostaa. 
+                            </p>
+
+                            <button type="button"  class="btn btn-xl btn-primary" role="button" data-toggle="modal" data-target=".pyyda-modal">PYYDÄ ESITTELY</button>
+
                         </div>
                     </div>
                 </div>
@@ -621,6 +441,25 @@ $kysymykset[] = array(
 </div><!-- /.modal -->
 
 
+
+<div class="modal fade pyyda-modal">
+    <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h3>PYYDÄ ESITTELY</h3>
+      </div>
+      <div class="modal-body">
+	<span style="color: #333">
+			  <?php $this->renderPartial('/site/lomake_testiryhma'); ?>
+	</span>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+
             <div class="paddings grey-white border-top border-white hidden">
                 <div class="container">
                     <div class="row">
@@ -686,125 +525,4 @@ säästät aikaa ja parannat samalla tuottavuutta.</p>
         </section>
 
 
-
-
-        <!-- footer Center-->
-        <footer class="footer-center">
-            <div class="container-fluid">
-
-                <!-- Info Top - Footer Center-->
-<style>
-.img-thumbnail{
-	margin-top : 5px;
-	box-radius: 0;
-	box-radius: 0;
-	padding : 0;
-}
-</style>
-                <div class="row">
-                   <div class="col-lg-3">
-                                <img src="<?php echo Yii::app()->request->baseUrl; ?>/img/veikokuva.jpg" class="img-thumbnail">
-                   </div>
-
-                   <div class="col-lg-3 col-lg-6 item-center">
-                        <h3>+358 40 761 4366</h3>
-
-                        <a href="#">
-                        <i class="fa fa-phone"></i>
-                        <h3>Soita</h3>
-                        </a>
-                   </div>
-
-                   <div class="col-lg-3 col-lg-6 item-center">
-                        <h3><a href="mailto:info@etunti.fi">info@etunti.fi</a></h3>
-
-                        <a href="#">
-                        <i class="fa fa-envelope"></i>
-                        <h3><a href="mailto:info@etunti.fi">Lähetä viesti</a></h3>
-                        </a>
-                   </div>
-
-
-                   <div class="col-lg-3 col-lg-6 item-center">
-                        <div class="logo">
-			<br><br><br>
-
-                        <a href="index.php" title="Return Home">
-                              <img src="<?php echo Yii::app()->request->baseUrl; ?>/img/logo.png" alt="Logo" class="logo_img">
-                        </a>
-			<br><br>
-
-                        <a href="https://www.facebook.com/etunti" target="_blank"><i class="fa fa-facebook-official"></i></a>&nbsp;&nbsp;&nbsp;
-                        <a href="https://twitter.com/etuntifi" target="_blank"><i class="fa fa-twitter-square"></i></a>
-
-
-                        </div>
-                   </div>
-
-
-
-<!--
-                   <div class="col-md-3 col-xs-6 item-center">
-                        <h3><a href="#">Myynti</a></h3>
-
-                        <a href="#">
-                        <i class="fa fa-comment"></i>
-                        <h4>Live Chat</h4>
-                        </a>
-                   </div>
-                   <div class="col-md-3 col-xs-6 item-center">
-                        <h3>Some</h3>
-
-                        <ul class="social">
-
-                            <li data-toggle="tooltip" title data-original-title="Twitter">
-                                <a href="#" target="_blank"><i class="fa fa-twitter"></i></a>
-                            </li>
-                            <li data-toggle="tooltip" title data-original-title="Youtube">
-                                <a href="#" target="_blank"><i class="fa fa-youtube"></i></a>
-                            </li>
-                        </ul>
-
-		</div>
--->
-                   <div class="col-lg-8 col-lg-6 ">
-			<p>
-”Useiden yritysten kanssa käydyissä keskusteluissa tuli selväksi, että puhdistusalalla kaivataan apua ja kannattavuutta halutaan parantaa. Lähdimme kehittämään ohjelmaa, koska markkinoilta ei ole ollut saatavilla helppokäyttöistä toiminnanohjausjärjestelmää, joka kattaa kaikki keskeiset toiminnot. Niinpä teimme työnhallintajärjestelmän itse alusta lähtien. Kehittämämme Etunti -ohjelma palvelee erinomaisesti työn tilaajia, tekijöitä ja työnjohtoa. Etunti -ohjelman voi hankkia kuka tahansa siivousalan yrittäjä. Etunti -ohjelman tavoitteena on auttaa puhdistusalanyrityksiä menestymään työtehtäviä ja toimintatapoja tehostamalla.” 
-<br>
-- Veiko Põldkivi, liiketoimintajohtaja, Etunti.
-			
-			</p>
-                   </div>
-
-
-                <!-- End Info Top - Footer Center-->
-
-
-            </div>
-        </footer>
-        <!-- End footer Center-->
-
-        <!-- footer bottom-->
-
-        <footer class="footer-bottom">
-            <div class="container">
-               <div class="row">
-
-                    <!-- Nav-->
-			       <p class="text-center">Digisten Oy, Hämeentie 157 6. krs. H9, 00560 Helsinki<br> Y-tunnus: 2751718-1 
-			      | <a href="rekisteriteloste.pdf">Rekisteriseloste</a></p>
-                               <p class="text-center">&copy; 2015 Etunti</p>
-
-                    <!-- End Nav-->
-
-               </div>
-
-            </div>
-        </footer>
-        <!-- End footer bottom-->
-    </div>
-    <!-- End layout-->
-
-
-
-
+<?php $this->renderPartial('/site/footer'); ?>
