@@ -12,6 +12,7 @@ $asetukset = Asetukset::model()->findbypk(1);
 
 <div class="row">
  <div class="form-inline col-sm-12">
+	<b id="countTimer" class="pull-right"></b>
    <div class="form-group">
 	<img src="<?php echo $asetukset->logon_polkku; ?>" height="<?php echo $asetukset->logon_korkeus; ?>">
    </div><div class="form-group col-sm-offset-4">
@@ -198,6 +199,26 @@ $asetukset = Asetukset::model()->findbypk(1);
 $(document).ready(function(){
 
 
+
+var step = 41;
+var count = step;
+function counter(){
+    count += -1;
+
+
+	var time = count*15;
+	var minutes = "0" + Math.floor(time / 60);
+	var seconds = "0" + (time - minutes * 60);
+	jaljella =  minutes.substr(-2) + ":" + seconds.substr(-2);
+	$('#countTimer').text('Aikajäljellä: '+jaljella);
+
+    if(count < 1)
+    window.location.href="index?keskeyta=true";
+}
+setInterval(counter, "15000");
+
+
+
 		if(localStorage.getItem('asiakas_id') !== null)
 			$('#asiakas_id').val(localStorage.getItem('asiakas_id'));
 		if(localStorage.getItem('yhteyshenkilo') !== null)
@@ -281,7 +302,7 @@ $("#sahkoposti").keyup(function(){
 			$('#lomake').show('slow');
 			$('.btncheckPosti').hide('slow');
 			console.log(data);
-			count = null;
+			count = step;
 
 		} else {
 			//$('#fullLomake').hide('slow');
@@ -289,7 +310,7 @@ $("#sahkoposti").keyup(function(){
 			$('#loytynytOsoitteet').html(data);
 			localStorage.setItem('onkokohde', data);
 			//console.log(data);
-			count = null;
+			count = step;
 
 		}
    	},
@@ -372,14 +393,6 @@ $(".tallennaUusi").click(function(){
 
 
 
-var count = null;
-function counter(){
-    count += 1;
-    console.log("counter: "+count);
-    if(count > 20)
-    window.location.href="index?keskeyta=true";
-}
-setInterval(counter, "15000");
 
 });
 </script>
