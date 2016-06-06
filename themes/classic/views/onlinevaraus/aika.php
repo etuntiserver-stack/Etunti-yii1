@@ -11,6 +11,7 @@ $asetukset = Asetukset::model()->findbypk(1);
 
 <div class="row">
  <div class="form-inline col-sm-12">
+	<b id="countTimer" class="pull-right"></b>
    <div class="form-group">
 	<img src="<?php echo $asetukset->logon_polkku; ?>" height="<?php echo $asetukset->logon_korkeus; ?>">
    </div><div class="form-group col-sm-offset-4">
@@ -93,7 +94,9 @@ $(document).delegate(".day","click",function(){
 
 
 kaksiKalenteria();
-var count1 = null;
+var step = 41;
+var count1 = step;
+
 function kaksiKalenteria()
 {
    $.ajax({
@@ -102,13 +105,18 @@ function kaksiKalenteria()
 	type:'POST',
 	success:function(data){
 		//console.log(data);
-		count1 += 1;
-		console.log('count 1: '+count1);
-		$('#kalenterit').html(JSON.parse(data));
+		count1 += -1;
 
+		var time = count1*15;
+		var minutes = "0" + Math.floor(time / 60);
+		var seconds = "0" + (time - minutes * 60);
+		jaljella =  minutes.substr(-2) + ":" + seconds.substr(-2);
+		$('#countTimer').text('Aikajäljellä: '+jaljella);
+
+		$('#kalenterit').html(JSON.parse(data));
 	        $(".toolt").tooltip();
 
-		if(count1 > 20)
+		if(count1 < 1)
 		window.location.href="index?keskeyta=true";
    	},
 	error:function(data){
@@ -121,7 +129,7 @@ setInterval(kaksiKalenteria, "15000");
 
 $(document).delegate(".ajaanClick","click",function(){
 
-
+   count1 = step;
    var pvm = $(this).attr('pvm');
    var tid = $(this).attr('tid');
    var alku = $(this).attr('alku');
@@ -174,13 +182,12 @@ $(document).delegate(".cal","click",function(){
   localStorage.setItem('valinnuPvm', $(this).attr("pvm"));
   aikoja();
   setInterval(aikoja, "15000");
-
+  count1 = step;
 });
 
 
   clearInterval(aikoja);
   localStorage.setItem('valinnuPvm', null);
-  var count2 = null;
   function aikoja()
   {
 
@@ -190,8 +197,7 @@ $(document).delegate(".cal","click",function(){
 	data:{ "pvm" : pvm },
 	type:'POST',
 	success:function(data){
-		count2 += 1;
-		console.log('count 2: '+count2);
+
 		$('#aikoja').html(JSON.parse(data));
 		return false;
    	},
