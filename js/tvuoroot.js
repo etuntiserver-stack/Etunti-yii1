@@ -318,8 +318,6 @@ $(document).delegate("#poistaTv","click",function(){
 
 window.addEventListener('message', function(e) {
   var edata = e.data.split('//');
-  var sivu = window.parent.location.href.split('/');
-
   if(edata[0] == 'doit')
   {
 	var thisID = edata[1].split('_');
@@ -351,15 +349,16 @@ window.addEventListener('message', function(e) {
 			var sp = JSON.parse(data).split('//');
 			if(sp[0])
 			{
+
 				$('#'+newPvm+'_'+newTid).html(JSON.parse(sp[0]));
 				
-				if(thisID[0] == 'forCopy' && sivu[5] === 'index')
+				if(thisID[0] == 'forCopy' && parent.location.href.match(/index/))
 				{
 					var ThisHeight = $('#'+newPvm+'_'+newTid).height();
 					var FirstHeight = $('#first_'+newTid).height(ThisHeight);
 				}
 
-				if(thisID[0] == 'forCopy' && sivu[5] === 'tv2')
+				if(thisID[0] == 'forCopy' && parent.location.href.match(/tv2/))
 				{
 					var ThisHeight = $('#'+newPvm+'_'+newTid).height();
 					var FirstHeight = $('#first_'+newPvm).height(ThisHeight);

@@ -219,8 +219,6 @@ if(!empty($t->gcm_reg_id)) :
 <script type="text/javascript">
 $(document).ready(function(){
 
-  var sivu = window.parent.location.href.split('/');
-console.log(sivu)
 
   $('.timeVuorot').mask('00:00',{
         placeholder: "__:__"
@@ -311,12 +309,12 @@ console.log(sivu)
 			  $('#<?php echo date("Ymd",strtotime($model->pvm))."_".$model->tid; ?>').html(JSON.parse(data));
 
 
-			  if(sivu[5] === 'index')
+			  if(parent.location.href.match(/index/))
 			  {
 				var ThisHeight = $('#<?php echo date("Ymd",strtotime($model->pvm))."_".$model->tid; ?>').height();
 				var FirstHeight = $('#first_<?php echo $model->tid; ?>').height(ThisHeight);
 			  }
-			  if(sivu[5] === 'tv2')
+			  if(parent.location.href.match(/tv2/))
 			  {
 				var ThisHeight = $('#<?php echo date("Ymd",strtotime($model->pvm))."_".$model->tid; ?>').height();
 				var FirstHeight = $('#first_<?php echo date("Ymd",strtotime($model->pvm)); ?>').height(ThisHeight);
