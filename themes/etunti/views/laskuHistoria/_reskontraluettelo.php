@@ -49,6 +49,10 @@ if($asetukset->palvelu_tyyppi == 2)
 	</td>
 
 	<td>
+	<?php echo date("d.m.Y",strtotime($data->erapaiva)); ?>
+	</td>
+
+	<td>
 	<?php echo number_format($data->yhteensa_total, 2, ',', ' '); ?>
 	</td>
 
