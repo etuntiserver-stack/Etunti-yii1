@@ -305,7 +305,7 @@ td .tp{
 	foreach($tt as $t)
 	{
 	  echo '<tr>';
-	  echo '<td width=1>';
+	  echo '<td width=1 id="first_'.$t->id.'">';
 
 	     $vktyoaika = '';
 	     $ts = Tyosuhdet::model()->find(" tid = '".$t->id."' ");
@@ -375,7 +375,6 @@ td .tp{
 
 <script type="text/javascript">
 $(document).ready(function(){
-
 
 $(function () {
 

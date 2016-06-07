@@ -219,6 +219,9 @@ if(!empty($t->gcm_reg_id)) :
 <script type="text/javascript">
 $(document).ready(function(){
 
+  var sivu = window.parent.location.href.split('/');
+
+
   $('.timeVuorot').mask('00:00',{
         placeholder: "__:__"
   });
@@ -306,6 +309,20 @@ $(document).ready(function(){
 			  //console.log(data);
 			  $('#showres').modal('hide');
 			  $('#<?php echo date("Ymd",strtotime($model->pvm))."_".$model->tid; ?>').html(JSON.parse(data));
+
+
+			  if(sivu[5] === 'index')
+			  {
+				var ThisHeight = $('#<?php echo date("Ymd",strtotime($model->pvm))."_".$model->tid; ?>').height();
+				var FirstHeight = $('#first_<?php echo $model->tid; ?>').height(ThisHeight);
+			  }
+			  if(sivu[5] === 'tv2')
+			  {
+				var ThisHeight = $('#<?php echo date("Ymd",strtotime($model->pvm))."_".$model->tid; ?>').height();
+				var FirstHeight = $('#first_<?php echo date("Ymd",strtotime($model->pvm)); ?>').height(ThisHeight);
+			  }
+
+
 			  },
 			  error:function(data){
 			  console.log(data);
@@ -320,7 +337,6 @@ $(document).ready(function(){
 	  });
 
 	}
-
 
 
 	//var pvmFromPost = e.target[7].value; 

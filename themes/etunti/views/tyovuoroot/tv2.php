@@ -313,7 +313,7 @@ td .tp{
 	  $clPyhat = 'style="background:#ddd"';
 
   	    echo '<tr>';
-  		echo '<td '.$clPyhat.' class="fixed-column"><b>'.$arrDate[$explColDate[0]].", ".$explColDate[1].'</b></td>';
+  		echo '<td '.$clPyhat.' class="fixed-column" id="first_'.$did.'"><b>'.$arrDate[$explColDate[0]].", ".$explColDate[1].'</b></td>';
 		foreach($tt as $t){
 		  echo '<td '.$clPyhat.' id="'.$did.'_'.$t->id.'">';
 		  $tv = $this->renderPartial('//tyovuoroot/did',array('pvm'=>$date,'tid'=>$t->id,'from'=>'tvuoro', 'kohteenArr'=>$kohteenArr), true);
