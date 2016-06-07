@@ -220,7 +220,7 @@ if(!empty($t->gcm_reg_id)) :
 $(document).ready(function(){
 
   var sivu = window.parent.location.href.split('/');
-
+console.log(sivu)
 
   $('.timeVuorot').mask('00:00',{
         placeholder: "__:__"
