@@ -30,17 +30,6 @@
 
 
 <p>
-Idea Etunnista syntyi vuonna 2013, kun eräs siivousalan yritys ei löytänyt markkinoilta sopivaa ohjelmistoa, joka olisi tukenut yrityksen kasvua ja kehitystä, joten alan tuntemuksen avulla yritys lähti kehittämään omaa kattavaa ohjelmaa. Tarkoitus ei ollut tehdä tuotetta, mikä olisi kopio jostain toisesta tuotteesta, vaan haluttiin rakentaa ohjelma, joka sisältäisi kaikki tarvittavat ominaisuudet työajanseurantaan, laskutukseen, työvuorosuunnitteluun, asiakkaidenhallintaan ja moneen muuhun. Yhtä kattavaa ja käyttäjäystävällistä ohjelmaa markkinoilla ei vielä ole, joten markkinapotentiaali huomattiin jo suunnitteluvaiheessa.
-</p>
- 
-
-			<h1 class="title-subtitle text-center">
-			<span>Maaliskuussa vuonna 2016 Etunnille perustettiin yritys Digisten Oy, jolloin samaan aikaan Etunti astui markkinoille.</span>
-			</h1>
-
-
-
-<p>
 Etunti on ohjelma, joka kehittyy koko ajan yhteistyössä asiakkaiden mukana ja asiakkailta saamien palautteiden mukaan. Vuoden 2016 loppuun mennessä valmistuu kaikki Etunnin työkalut. Asiakkaidemme mielipide on meille tärkeää ja saadun palautteen avulla kehitämme Etuntia asiakkaita palvelevaksi, monipuoliseksi ohjelmakokonaisuudeksi.  
 </p>
 

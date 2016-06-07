@@ -198,6 +198,7 @@ th{
   <th><?php echo Yii::t('main','Asiakas'); ?></th>
   <th><?php echo Yii::t('main','Laskun päivä'); ?></th>
   <th><?php echo Yii::t('main','Maksupäivä'); ?></th>
+  <th><?php echo Yii::t('main','Eräpäivä'); ?></th>
   <th><?php echo Yii::t('main','Suorituksen summa'); ?></th>
   <th><?php echo Yii::t('main','Avoinna'); ?></th>
 
@@ -224,6 +225,15 @@ th{
 
  }
  ?>
+ <tr>
+  <td></td>
+  <td></td>
+  <td></td>
+  <td></td>
+  <td><?php echo Yii::t('main','Yhteensä'); ?></td>
+  <td><?php echo number_format($saldo, 2, ',', ' '); ?></td>
+  <td></td>
+ </tr>
 </table>
 
    </div>
