@@ -31,7 +31,7 @@
         <li><?php echo CHtml::link(Yii::t('main', 'Kirjaudu'),array('/user/login')); ?></li>
 	<?php endif; ?>
 
-	<?php if(!isset(Yii::app()->user->adminID) and Yii::app()->User->isAdmin()) : ?>
+	<?php if(!isset(Yii::app()->user->adminID) and Yii::app()->User->isAdmin() and isset(Yii::app()->user->superadmin)) : ?>
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?php echo Yii::t('main', 'Hallinta'); ?> <span class="caret"></span></a>
           <ul class="dropdown-menu">
@@ -41,6 +41,16 @@
 	        <li><?php echo CHtml::link(Yii::t('main', 'Tasot'),array('/tasot/admin')); ?></li>
 	        <li><?php echo CHtml::link(Yii::t('main', 'Tietokannat'),array('/domainit/tietokannat')); ?></li>
 	        <li><?php echo CHtml::link(Yii::t('main', 'Asetukset'),array('/AsetuksetForAll/admin')); ?></li>
+          </ul>
+        </li>
+	<?php endif; ?>
+
+
+	<?php if(!isset(Yii::app()->user->adminID) and Yii::app()->User->isAdmin() and isset(Yii::app()->user->etusivu)) : ?>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?php echo Yii::t('main', 'Hallinta'); ?> <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+        	<li><?php echo CHtml::link(Yii::t('main', 'Blogit'),array('/blog/admin')); ?></li>
           </ul>
         </li>
 	<?php endif; ?>

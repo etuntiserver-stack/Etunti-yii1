@@ -12,21 +12,17 @@ class LoginController extends Controller
 		if (Yii::app()->user->isGuest) {
 			$model=new UserLogin;
 			// collect user input data
-			if(isset($_POST['UserLogin']) and $_POST['UserLogin']['domain'] != 'superadmin')
+			if(
+				isset($_POST['UserLogin']) 
+				and $_POST['UserLogin']['domain'] != 'superadmin'
+				and $_POST['UserLogin']['domain'] != 'etusivu'
+			)
 			{
 
 			$mod=Administrators::model()->find(" adm_login = '".$_POST['UserLogin']['username']."' and adm_salasana = '".md5($_POST['UserLogin']['password'])."' ");
 
 			  if(isset($mod->id))
 			  {
-
-/*
-	$identity=new UserIdentity('demo','111111');
-	if($identity->authenticate())
-	    Yii::app()->user->login($identity);
-	else
-	    echo $identity->errorMessage;
-*/
 
 			    Yii::app()->user->setState('id', $mod->id);
 			    Yii::app()->user->setState('adminID', $mod->id);
@@ -48,17 +44,21 @@ class LoginController extends Controller
 			exit;
 			}
 
-			if(isset($_POST['UserLogin']) and $_POST['UserLogin']['domain'] == 'superadmin') {
+			if(
+				isset($_POST['UserLogin']) 
+				and ($_POST['UserLogin']['domain'] == 'superadmin' or $_POST['UserLogin']['domain'] == 'etusivu')
+			)
+			{
 
 				$model->attributes=$_POST['UserLogin'];
 				// validate user input and redirect to previous page if valid
 				if($model->validate()) {
-				Yii::app()->user->setState('superadmin', true);
+				Yii::app()->user->setState($_POST['UserLogin']['domain'], true);
 					$this->lastViset();
 					if (Yii::app()->user->returnUrl=='/index.php')
 						$this->redirect(Yii::app()->request->baseUrl.'/index.php/user/profile');
 					else
-						$this->redirect(Yii::app()->request->baseUrl.'/index.php/user/profile'); //Yii::app()->user->returnUrl
+						$this->redirect(Yii::app()->request->baseUrl.'/index.php/user/profile'); 
 				}
 			}
 

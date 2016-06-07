@@ -103,6 +103,10 @@ td,th{
 <?php endif; ?>
 
 <?php
+  $site = Yii::app()->createController('Site');
+  
+
+
   $criteria = new CDbCriteria();
   $criteria->order = " alku ASC "; 
   $criteria->condition = " tid='".$tid."' AND 
@@ -144,7 +148,7 @@ for($day= 1; $day <= 7; $day++) {
 	{
 	  $al = $t->alku.'-'.$t->loppu;
 
-	  if(strpos($t->tyoajanmerkinta,'Ei lasketa') === false)
+	  if($site[0]->eiLasketaSubStr($t->tyoajanmerkinta) === false)
 	  $yht += strtotime($t->loppu)-strtotime($t->alku);
 
 	} else {
