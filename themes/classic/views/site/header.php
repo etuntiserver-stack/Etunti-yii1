@@ -24,7 +24,7 @@
                     <!-- Login-->
                     <div class="col-sm-5 col-md-4">
                         <h4>Kirjaudu</h4>
-                        <form action="index.php/user/login" method="POST">
+                        <form action="<?php echo Yii::app()->request->baseUrl; ?>/index.php/user/login" method="POST">
                             <input type="text" name="UserLogin[domain]" placeholder="Domain" required>
                             <input type="text" name="UserLogin[username]" placeholder="Käyttäjätunnus" required>
                             <input type="password" name="UserLogin[password]" placeholder="Salasana" required>

@@ -2,12 +2,15 @@
 $this->breadcrumbs=array(
 	UserModule::t("Profile"),
 );
-$this->menu=array(
+
+
+//$this->menu=array(
 /*
 	((UserModule::isAdmin())
 		?array('label'=>UserModule::t('Sivut'), 'url'=>array('/page/admin'))
 		:array()),
 */
+/*
 	((UserModule::isAdmin())
 		?array('label'=>UserModule::t('Hallitse käyttäjiä'), 'url'=>array('/user/admin'))
 		:array()),
@@ -16,6 +19,7 @@ $this->menu=array(
     array('label'=>UserModule::t('Vaihda salasana'), 'url'=>array('changepassword')),
     array('label'=>UserModule::t('Kirjaudu ulos'), 'url'=>array('/user/logout')),
 );
+*/
 ?><h1><?php echo UserModule::t('TERVETULOA!'); ?></h1>
 
 <?php if(Yii::app()->user->hasFlash('profileMessage')): ?>

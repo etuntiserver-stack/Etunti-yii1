@@ -19,24 +19,25 @@
                     <!-- Icon Big -->
                     <!-- End Icon Big -->
                         <h1 class="title-subtitle text-center">Ajankohtaista
-                            <span>
-                              Sivu on suunnitelmissa.
-                            </span>
                         </h1>
                         <hr>
                     <!-- End Titles Heading -->
                     <div class="row">
-                        <div class="col-md-8 col-md-offset-2 lead">
-                        
-<div class="text-center">
-<p>
-Sivu on suunnitelmissa.
-</p>
-</div>
-                        <hr>
+                        <div class="col-md-12 lead">
+                       
+
+
+<?php $this->widget('zii.widgets.CListView', array(
+	'dataProvider'=>$dataProvider,
+	'itemView'=>'_blog',
+)); ?>
+
 
                         </div>
                     </div>
+
+
+
                 </div>
                 <!-- End Container-->
             </div>
