@@ -210,6 +210,18 @@ exit;
             </div>
         </div>
 
+	<h3><?php echo Yii::t('main', 'Palautteet'); ?></h3>
+        <div class="tray-center">
+            <div class="admin-form">
+              <div class="panel heading-border">
+                <div class="panel-body bg-light">
+
+		  <?php echo $this->palautteetCRM($model, $from, $to); ?>
+
+                </div>
+              </div>
+            </div>
+        </div>
 <br><br>
 
 

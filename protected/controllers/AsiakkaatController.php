@@ -276,6 +276,13 @@ class AsiakkaatController extends Controller
 	public function actionUpdate($id)
 	{
 
+
+		if(isset($_GET['suljeJuttelu']))
+		{
+			Palautteet::model()->updatebypk($_GET['suljeJuttelu'], array('status'=>3));
+			$this->redirect(array('update','id'=>$id));
+		}
+
 	// <-- Oikeudet
 	   $checkOikeus = "asiakkaat_2_".Yii::app()->user->adminStatus;
 	   $site = Yii::app()->createController('Site');
@@ -602,6 +609,92 @@ class AsiakkaatController extends Controller
 			<td>'.$k->osoite.'</td>
 			<td>'.$data->alku.'</td>
 		</tr>';
+	  	}
+		$bod .= '</table>';
+		}
+	
+		return $bod;
+	}
+
+
+
+	protected function palautteetCRM($model, $from, $to)
+	{
+
+		$criteria=new CDbCriteria;
+		$criteria->order = " DATE(time) DESC ";
+		$criteria->condition = "
+			asiakas_id='".$_GET['id']."' 
+			AND keskustelu_id=id
+		";
+
+		if(!empty($from) and !empty($to))
+		{
+		$criteria->addCondition (" 
+			DATE(time) BETWEEN '".date("Y-m-d", strtotime($from))."' AND '".date("Y-m-d", strtotime($to))."'
+		");
+		}
+		$p = Palautteet::model()->findAll($criteria);
+
+
+		$criteria=new CDbCriteria;
+		$criteria->order = " DATE(time) DESC ";
+		$criteria->condition = "
+			asiakas_id='".$_GET['id']."' 
+			AND keskustelu_id!=id
+		";
+		$p_juttelu = Palautteet::model()->findAll($criteria);
+
+		$bod = '';
+
+		if(isset($p[0])){
+
+		$bod .= '<table class="table table-bordered">
+
+		 <tr>
+		  <th>'.Yii::t('main', 'Päiväys').'</th>
+		  <th>'.Yii::t('main', 'Otsikko').'</th>
+		  <th>'.Yii::t('main', 'Palaute').'</th>
+		  <th>'.Yii::t('main', 'Tila').'</th>
+		 </tr>';
+	
+		foreach($p as $data)
+		{
+	  	$bod .= '
+		<tr>
+
+			<td>'.date("d.m.Y", strtotime($data->time)).'</td>
+			<td>'.$data->otsikko.'</td>';
+
+	  	$bod .= '<td>';
+		$bod .= '<p>'.$data->teksti.'</p>';
+		   foreach($p_juttelu as $data2)
+		   {
+			$bod .= '<p>'.$data2->teksti.'</p>';
+		   }
+
+		if($data->status == 0)
+		$bod .= CHtml::link(Yii::t('main', 'Vasta'), Yii::app()->request->baseUrl.'/index.php/palautteet/vastaus?id='.$data->keskustelu_id,array('class'=>'btn btn-primary btn-sm'));
+	  	$bod .= '</td>';
+
+	  	$bod .= '<td>';
+		if($data->status == 0)
+	  	$bod .= '<span class="btn btn-sm btn-warning btn-block">'.Yii::t('main', 'avoin').'</span>';
+		elseif($data->status == 3)
+	  	$bod .= '<span class="btn btn-sm btn-success btn-block">'.Yii::t('main', 'suljettu').'</span>';
+
+		if(isset(Yii::app()->user->adminID) and $data->status != 3)
+		{
+		$bod .= CHtml::link('Sulje', '#', array(
+		'submit'=>array('update', "suljeJuttelu"=>$data->keskustelu_id, "id"=>$data->asiakas_id), 
+		'class'=>'btn btn-danger btn-sm btn-block'
+		));
+		}
+
+	  	$bod .= '</td>';
+
+
+		$bod .= '</tr>';
 	  	}
 		$bod .= '</table>';
 		}
