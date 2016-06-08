@@ -252,11 +252,11 @@ class PalautteetController extends Controller
 	 */
 	public function actionDelete($id)
 	{
-		$this->loadModel($id)->delete();
+		Palautteet::model()->deleteAll(" keskustelu_id='".$id."' ");
 
 		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
 		if(!isset($_GET['ajax']))
-			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
+			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('index'));
 	}
 
 	/**
@@ -264,9 +264,39 @@ class PalautteetController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$dataProvider=new CActiveDataProvider('Palautteet');
-		$this->render('index',array(
-			'dataProvider'=>$dataProvider,
+/*
+	// <-- Oikeudet
+	   $checkOikeus = "kohteet_0_".Yii::app()->user->adminStatus;
+	   $site = Yii::app()->createController('Site');
+	   $site[0]->checkOikeus($checkOikeus);
+	//  Oikeudet -->
+*/
+       		$criteria = new CDbCriteria();
+	        $criteria->order = " id DESC ";
+		$criteria->condition = "
+			keskustelu_id=id
+		";
+
+		$from = date("d.m.Y", strtotime("-1 month"));
+		$to = date("d.m.Y");
+
+		if(isset($_POST['from']) and isset($_POST['to'])){
+		$from 	= date("Y-m-d",strtotime($_POST['from']));
+		$to 	= date("Y-m-d",strtotime($_POST['to']));
+		}
+
+	        $criteria->addCondition (" DATE(time) BETWEEN '".date("Y-m-d",strtotime($from))."' AND '".date("Y-m-d",strtotime($to))."' ");
+
+		$dataProvider=new CActiveDataProvider('Palautteet', array(
+			'criteria'=>$criteria,
+			//'pagination'=>false
+		));
+
+		$dataProvider->pagination->pageSize = 30;
+		$this->render('index', array(
+			'dataProvider' => $dataProvider,
+			'from' => $from,
+			'to' => $to,
 		));
 	}
 
