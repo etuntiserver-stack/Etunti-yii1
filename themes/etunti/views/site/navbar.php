@@ -431,7 +431,10 @@ echo '<input type="hidden" id="curpage" value="'.$curpage.'">';
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/mobile/laskutettu">
                   <span class="glyphicon glyphicon-phone"></span> <?php echo Yii::t('main', 'Laskutettavat kohteet'); ?></a>
               </li>
-
+              <li>
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/palautteet/index">
+                  <span class="fa fa-map"></span> <?php echo Yii::t('main', 'Palautteet'); ?></a>
+              </li>
             </ul>
           </li>
 
@@ -995,6 +998,7 @@ echo '<input type="hidden" id="curpage" value="'.$curpage.'">';
 	|| curpage === 'kohteet/avaimet'
 	|| curpage === 'kohteet/googlemap'
 	|| curpage === 'mobile/laskutettu'
+	|| curpage === 'palautteet/index'
     ){  $('.asiakkaidenHallinta').addClass('menu-open'); }
     else if(
 	curpage === 'mobile/index' 

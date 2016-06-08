@@ -13,7 +13,10 @@ $head = $model->osoite;
         <div class="tray-center">
 
 	   <div class="pull-right">
-	   <?php     
+	   <?php   
+		echo CHtml::link(Yii::t('main', 'Lähetä palaute'), Yii::app()->request->baseUrl.'/index.php/palautteet/create', array(
+		'class'=>'btn btn-primary'
+		)).'&nbsp;';
 		echo CHtml::link(Yii::t('main', 'Kirjaudu ulos'), Yii::app()->request->baseUrl.'/index.php/asiakkaat/ulos', array(
 		'class'=>'btn btn-primary'
 		));
@@ -169,6 +172,18 @@ $head = $model->osoite;
             </div>
         </div>
 
+	<h3><?php echo Yii::t('main', 'Palautteet'); ?></h3>
+        <div class="tray-center">
+            <div class="admin-form">
+              <div class="panel heading-border">
+                <div class="panel-body bg-light">
+
+		  <?php echo $this->palautteetCRM($model, $from, $to); ?>
+
+                </div>
+              </div>
+            </div>
+        </div>
 
 <br><br>
 

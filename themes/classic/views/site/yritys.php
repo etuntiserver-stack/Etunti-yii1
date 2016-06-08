@@ -30,7 +30,7 @@
 
 
 <p>
-Idea Etunnista syntyi, kun eräs yritys ei löytänyt markkinoilta sopivaa ohjelmistoa, joka olisi tukenut yrityksen kasvua ja kehitystä. Omaa ammattitaitoa hyödyntäen yritys lähti kehittämään omaa kattavaa ohjelmaa, jollaista ei vielä markkinoilla ollut. Tarkoitus ei ollut tehdä tuotetta, mikä olisi kopio jostain toisesta tuotteesta, vaan haluttiin rakentaa ohjelma, joka sisältäisi kaikki tarvittavat ominaisuudet työajanseurantaan, laskutukseen, työvuorosuunnitteluun, asiakkaidenhallintaan ja moneen muuhun. Yhtä kattavaa ja käyttäjäystävällistä ohjelmaa markkinoilla ei vielä ole, joten markkinapotentiaali huomattiin jo suunnitteluvaiheessa.
+Idea Etunnista syntyi, kun eräs yritys ei löytänyt markkinoilta sopivaa ohjelmistoa, joka olisi tukenut yrityksen kasvua ja kehitystä. Markkinoita tutkittaessa havaittiin, että yrityksillä oli tarve tehostaa omia toimintaprosesseja, mutta siihen sopivaa ohjelmaa ei ollut. Tarkoitus ei ollut tehdä tuotetta, mikä olisi kopio jostain toisesta tuotteesta, vaan haluttiin rakentaa ohjelma, joka sisältäisi kaiken tarvittavan yrityksen sisäisiin toimintaprosesseihin kuten työajanseurantaan, laskutukseen, työvuorosuunnitteluun, asiakkaidenhallintaan ja moneen muuhun. Yhtä kattavaa ja käyttäjäystävällistä ohjelmaa markkinoilla ei vielä ole.
 </p>
  
 
@@ -41,7 +41,7 @@ Idea Etunnista syntyi, kun eräs yritys ei löytänyt markkinoilta sopivaa ohjel
 
 
 <p>
-Etunti on ohjelma, joka kehittyy koko ajan asiakkaiden mukana ja asiakkailta saamien palautteiden avulla. Vuoden 2016 loppuun mennessä valmistuu kaikki Etunnin työkalut. Asiakkaidemme mielipide on meille tärkeää ja saadun palautteen avulla kehitämme Etuntia asiakkaita palvelevaksi, monipuoliseksi ohjelmakokonaisuudeksi.  
+Etunti on ohjelma, joka kehittyy koko ajan asiakkaiden mukana ja asiakkailta saamien kehitysehdotusten avulla. Vuoden 2016 loppuun mennessä valmistuu kaikki Etunnin työkalut. Asiakkaidemme mielipide on meille tärkeää ja saadun kehitysehdotusten avulla teemme Etuntia asiakkaitamme palvelevaksi, monipuoliseksi ohjelmakokonaisuudeksi. Ajatuksemme on, että asiakkaan ei pidä mukautua ohjelmaan vaan ohjelman pitää mukautua asiakkaan tarpeisiin.
 </p>
 
 
@@ -68,7 +68,7 @@ Arvomme ovat asiakaslähtöiset. Ymmärrämme, tuemme ja autamme asiakkaitamme j
 			</h1>
  
 <p>
-Etunnin missiona on parantaa työn tehokkuuden hallintaa kokonaisvaltaisella tavalla.  Puhtaasti siivousalan tarpeisiin ei ole vielä markkinoilla ohjelmistoa, joka tuntisi alan tarpeet ja mahdollistaisi yrityksen kasvun. Yrityksen kasvua tuetaan Etunti -ohjelmalla, jolla voidaan hoitaa monipuolisesti yrityksen tarpeet työvuorosuunnittelusta laskutukseen, työajanseurannasta asiakkaiden hallintaan ja monia muita asioita. Etunnin avulla yritys voi keskittyä tulokselliseen toimintaan ja samalla seurata yrityksen tilaa ja sen kehitystä reaaliaikaisesti. Tärkeintä on, että ohjelma on kokonaisvaltainen, mutta silti käyttäjäystävällinen, helppo ja selkeä.
+Etunnin missiona on parantaa työn tehokkuuden hallintaa kokonaisvaltaisella tavalla.  Puhtaasti liikkuvan työn tarpeisiin ei ole vielä markkinoilla ohjelmistoa, joka tuntisi yritysten tarpeet ja mahdollistaisi hyvän kasvun. Yrityksen kasvua tuetaan Etunti -ohjelmalla, jolla voidaan hoitaa monipuolisesti yrityksen tarpeet työvuorosuunnittelusta laskutukseen, työajanseurannasta asiakkaiden hallintaan ja monia muita asioita. Etunnin avulla yritys voi keskittyä tulokselliseen toimintaan ja samalla seurata yrityksen tilaa ja sen kehitystä reaaliaikaisesti. Tärkeintä on, että ohjelma on kokonaisvaltainen, mutta silti käyttäjäystävällinen, helppo ja selkeä.
 </p>
  
 
