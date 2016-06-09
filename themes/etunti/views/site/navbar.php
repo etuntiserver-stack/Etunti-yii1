@@ -719,6 +719,10 @@ echo '<input type="hidden" id="curpage" value="'.$curpage.'">';
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/crmSopimukset/index">
                   <span class="fa fa-clock-o"></span> <?php echo Yii::t('main', 'Sopimukset'); ?></a>
               </li>
+              <li>
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/kirjeidenHallinta/index">
+                  <span class="fa fa-clock-o"></span> <?php echo Yii::t('main', 'Kirjeiden hallinta'); ?></a>
+              </li>
             </ul>
           </li>
 	<?php endif; ?>
@@ -1060,6 +1064,7 @@ echo '<input type="hidden" id="curpage" value="'.$curpage.'">';
 	|| curpage === 'site/kohderyhma'
 	|| curpage === 'crmTarjoukset/index'
 	|| curpage === 'crmSopimukset/index'
+	|| curpage === 'kirjeidenHallinta/index'
     ){  $('.crm').addClass('menu-open'); }
 
 
