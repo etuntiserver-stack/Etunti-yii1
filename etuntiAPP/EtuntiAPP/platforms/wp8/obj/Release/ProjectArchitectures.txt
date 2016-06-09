@@ -1,0 +1,1 @@
+C:\xampp\htdocs\etuntifw\etuntiAPP\EtuntiAPP\platforms\wp8\Etunti_fi.csproj;neutral
