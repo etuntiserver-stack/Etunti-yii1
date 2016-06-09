@@ -43,11 +43,18 @@ class CrmTarjouksetController extends Controller
 
 	public function isEtuntiAdmin() {
 
-		if(isset(Yii::app()->user->adminID))
+	$tas = '';
+	if(isset(Yii::app()->user->adminPaketti))
+	$tas = explode(",",Yii::app()->user->adminPaketti);
+
+		if(isset(Yii::app()->user->adminID) and in_array('5',$tas))
 		{
 		$m = Administrators::model()->findbypk(Yii::app()->user->adminID);
-	        if($m->id == Yii::app()->user->adminID)
-	            return true;
+	       	if($m->id == Yii::app()->user->adminID)
+	       	  return true;
+		else
+	       	   return false;		
+
 		} else {
 	            return false;
 		}
@@ -184,9 +191,6 @@ $randstring = generateRandomString();
 
 			$tm = '';
 
-		if(isset($_POST['CrmTarjoukset']))
-		{
-
 
 			$nimike		= 'crm_tarjous.docx';
 			$polku 		= Yii::app()->basePath;
@@ -194,6 +198,10 @@ $randstring = generateRandomString();
 
 		if(!file_exists($polku.$tiedosto))
 			$tm = '<h2 class="alert alert-danger">'.Yii::t('main', 'Template puuttuu').'</h2>';
+
+
+		if(isset($_POST['CrmTarjoukset']))
+		{
 
 
 		if(file_exists($polku.$tiedosto))
@@ -298,32 +306,8 @@ $randstring = generateRandomString();
 			shell_exec('unoconv -f pdf '.$path.'.docx');
 			$this->redirect(array('index'));
 
-/*
-echo '
-	<input type="hidden" id="polkku" value="'.$path.'">
-
-<script src="'.Yii::app()->request->baseUrl.'/js/jquery-1.9.1.min.js"></script>
-
-<script type="text/javascript">
-$(document).ready(function(){
-
-	var polkku = $("#polkku").val();
-
-        $.ajax({
-           url: location.protocol + "//" + location.host + "/docxtopdf/index.php",
-           type: "POST",
-           data: { "polkku" : polkku },
-           success: function(data){
-		console.log(data);
-		window.location.href="index";
-           }
-        });
-
-});
-</script>';
-*/
-
 	}
+
 
 	public function actionDelete($id)
 	{
