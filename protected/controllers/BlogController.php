@@ -82,9 +82,21 @@ class BlogController extends Controller
 
 		if(isset($_POST['Blog']))
 		{
+			$rnd = rand(0,9999);
 			$model->attributes=$_POST['Blog'];
+
+			$uploadedFile=CUploadedFile::getInstance($model,'kuva');
+			$fileName = "{$rnd}-{$uploadedFile}";  // random number + file name
+			$model->kuva = $fileName;
+
 			if($model->save())
+			{
+			  if (!file_exists(Yii::app()->basePath."/../tiedostot/etusivu")) {
+			  	mkdir(Yii::app()->basePath."/../tiedostot/etusivu", 0777, true);
+			  }
+				$uploadedFile->saveAs(Yii::app()->basePath.'/../tiedostot/etusivu/'.$fileName);
 				$this->redirect(array('view','id'=>$model->id));
+			}
 		}
 
 		$this->render('create',array(
@@ -106,9 +118,21 @@ class BlogController extends Controller
 
 		if(isset($_POST['Blog']))
 		{
+			$rnd = rand(0,9999);
 			$model->attributes=$_POST['Blog'];
+
+			$uploadedFile=CUploadedFile::getInstance($model,'kuva');
+			$fileName = "{$rnd}-{$uploadedFile}";  // random number + file name
+			$model->kuva = $fileName;
+
 			if($model->save())
+			{
+			  if (!file_exists(Yii::app()->basePath."/../tiedostot/etusivu")) {
+			  	mkdir(Yii::app()->basePath."/../tiedostot/etusivu", 0777, true);
+			  }
+				$uploadedFile->saveAs(Yii::app()->basePath.'/../tiedostot/etusivu/'.$fileName);
 				$this->redirect(array('view','id'=>$model->id));
+			}
 		}
 
 		$this->render('update',array(

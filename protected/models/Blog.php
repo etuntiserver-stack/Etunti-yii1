@@ -29,7 +29,8 @@ class Blog extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('luoja, otsikko, teksti', 'required'),
-			array('luoja, otsikko', 'length', 'max'=>255),
+			array('luoja, otsikko, kuva', 'length', 'max'=>255),
+			array('kuva', 'file','types'=>'jpg, gif, png', 'allowEmpty'=>true, 'on'=>'update'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('id, time, luoja, otsikko, teksti', 'safe', 'on'=>'search'),
