@@ -87,6 +87,7 @@ class BlogController extends Controller
 
 			$uploadedFile=CUploadedFile::getInstance($model,'kuva');
 			$fileName = "{$rnd}-{$uploadedFile}";  // random number + file name
+			if(!empty($uploadedFile))
 			$model->kuva = $fileName;
 
 			if($model->save())
@@ -94,6 +95,7 @@ class BlogController extends Controller
 			  if (!file_exists(Yii::app()->basePath."/../tiedostot/etusivu")) {
 			  	mkdir(Yii::app()->basePath."/../tiedostot/etusivu", 0777, true);
 			  }
+				if(!empty($uploadedFile))
 				$uploadedFile->saveAs(Yii::app()->basePath.'/../tiedostot/etusivu/'.$fileName);
 				$this->redirect(array('view','id'=>$model->id));
 			}
@@ -121,6 +123,7 @@ class BlogController extends Controller
 			$rnd = rand(0,9999);
 			$model->attributes=$_POST['Blog'];
 
+
 			$uploadedFile=CUploadedFile::getInstance($model,'kuva');
 			$fileName = "{$rnd}-{$uploadedFile}";  // random number + file name
 			$model->kuva = $fileName;
@@ -130,6 +133,9 @@ class BlogController extends Controller
 			  if (!file_exists(Yii::app()->basePath."/../tiedostot/etusivu")) {
 			  	mkdir(Yii::app()->basePath."/../tiedostot/etusivu", 0777, true);
 			  }
+ 
+
+				if(!empty($uploadedFile))
 				$uploadedFile->saveAs(Yii::app()->basePath.'/../tiedostot/etusivu/'.$fileName);
 				$this->redirect(array('view','id'=>$model->id));
 			}
