@@ -13,5 +13,6 @@ protected/config/*
 .DS_Store
 etuntiAPP/.DS_Store
 etuntiAPP/EtuntiAPP/platforms/*
+!etuntiAPP/EtuntiAPP/platforms/wp8
 error_log
 themes/roker/js/twitter/*
