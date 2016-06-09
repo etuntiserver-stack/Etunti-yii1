@@ -13,6 +13,9 @@
 	// There is a call to performAjaxValidation() commented in generated controller code.
 	// See class documentation of CActiveForm for details on this.
 	'enableAjaxValidation'=>false,
+'htmlOptions' => array(
+        'enctype' => 'multipart/form-data',
+    ),
 )); ?>
 
 
@@ -26,6 +29,18 @@
 		<?php echo $form->textField($model,'luoja',array('size'=>60,'maxlength'=>255, 'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'luoja'); ?>
 	</div>
+
+
+<div class="row">
+        <?php echo $form->labelEx($model,'kuva'); ?>
+        <?php echo CHtml::activeFileField($model, 'kuva'); ?>  
+        <?php echo $form->error($model,'kuva'); ?>
+</div>
+<?php if($model->isNewRecord!='1') : ?>
+<div class="row">
+     <?php echo CHtml::image(Yii::app()->request->baseUrl.'/tiedostot/etusivu/'.$model->kuva,"kuva",array("class"=>"thumbnail")); ?>  
+</div>
+<?php endif; ?>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'otsikko'); ?>
