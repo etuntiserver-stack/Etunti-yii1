@@ -10,7 +10,9 @@
     <li class="disabled"><?php echo CHtml::link('Yhteystiedot', Yii::app()->request->baseUrl.'/index.php/site/yhteystiedot'); ?></li>
 </ul>
 
-
+<style>
+.summary{ display:none }
+</style>
 
         <!-- Services -->
         <section class="esittely">
