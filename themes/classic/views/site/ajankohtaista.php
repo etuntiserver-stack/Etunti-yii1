@@ -11,7 +11,7 @@
 </ul>
 
 <style>
-.summary{ display:none }
+.summary, .empty{ display:none }
 </style>
 
         <!-- Services -->
