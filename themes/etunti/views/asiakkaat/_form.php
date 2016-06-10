@@ -22,6 +22,9 @@ $asiakasnumero = 'voidaan käyttää oleva ID numero';
    $asnum = array('value'=>$as->id,'class'=>'form-control');
    else
    $asnum = array('class'=>'form-control');
+
+if(isset($model->id))
+$model->hinta = str_replace(",",".",$model->hinta);
 ?>
 
 <style>
