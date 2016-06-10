@@ -756,7 +756,7 @@ class TyovuorootController extends Controller
 	{
 
   	$tnimi = '';
-	if(isset($_POST['tid'])){
+	if(isset($_POST['tid']) and $_POST['tid'] != 0){
   	  $tekija = Tyontekijat::model()->findbypk($_POST['tid']);
 	  $tnimi = $tekija->tekijan_nimi;
 
@@ -946,8 +946,14 @@ class TyovuorootController extends Controller
 
 	{
 
+			$tekijan_nimi = '';
+
 		$model=$this->loadModel($id);
 	  	$t = Tyontekijat::model()->findbypk($model->tid);
+		if(isset($t->id))
+		{
+			$tekijan_nimi = $t->tekijan_nimi;
+		}
 
 	?>
 	<div class="modal-dialog modal-lg">
@@ -956,7 +962,7 @@ class TyovuorootController extends Controller
 			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 				<span aria-hidden="true">&times;</span>
 			</button>
-		<h2 class="modal-title"><?php echo Yii::t('main', 'Työvuoron suunnittelu').': '.$t->tekijan_nimi; ?></h2>
+		<h2 class="modal-title"><?php echo Yii::t('main', 'Työvuoron suunnittelu').': '.$tekijan_nimi; ?></h2>
 	
 		</div>
 		<div class="modal-body">

@@ -302,6 +302,43 @@ td .tp{
      <tbody>
         <?php
 
+	// VARAUS
+	  echo '<tr>';
+	  echo '<td width=1 id="first_0">';
+
+		echo '
+		<div class="row">
+		  <div class="col-sm-12">
+		    	<b class="text-warning">'.Yii::t('main', 'VARAUS').'</b>
+		  </div>
+		</div>';
+
+
+	  echo '</td>';
+
+	  for($day= 1; $day <= $numDays; $day++)
+	  {
+  	     $d = strtotime($year ."W". $week . $day);
+	     $date = date('d.m.Y',$d);
+	     $did = date('Ymd',$d);
+
+	     $clPyhat = '';
+	     $pyhat = $this->pyhat($date);
+	     if($pyhat == true)
+	     $clPyhat = 'style="background:#ddd"';
+
+	     echo '<td '.$clPyhat.' id="'.$did.'_0" valign="top">';
+ 	     $did = $this->renderPartial('//tyovuoroot/did',array('pvm'=>$date,'tid'=>0,'from'=>'tvuoro', 'kohteenArr'=>$kohteenArr), true);
+	     echo json_decode($did, true);
+	     echo '</td>';
+	  }
+	  echo '</tr>';
+	// VARAUS
+
+
+
+
+
 	foreach($tt as $t)
 	{
 	  echo '<tr>';

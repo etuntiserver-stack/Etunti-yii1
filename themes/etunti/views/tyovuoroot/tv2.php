@@ -287,6 +287,14 @@ td .tp{
      <tr>
      <th></th>
         <?php 
+
+	// VARAUS
+	  echo '<th><div class="latikkoAsetukset">';
+ 	  echo '<b class="text-warning">'.Yii::t('main', 'VARAUS').'</b>';	
+	  echo '</div></th>';
+	// VARAUS
+
+
 	foreach($tt as $t){
 	  echo '<th><div class="latikkoAsetukset">';
  	  echo $t->tekijan_nimi;	
@@ -314,12 +322,19 @@ td .tp{
 
   	    echo '<tr>';
   		echo '<td '.$clPyhat.' class="fixed-column" id="first_'.$did.'"><b>'.$arrDate[$explColDate[0]].", ".$explColDate[1].'</b></td>';
+
+		// VARAUS
+		  echo '<td '.$clPyhat.' id="'.$did.'_0">';
+		  $tv = $this->renderPartial('//tyovuoroot/did',array('pvm'=>$date,'tid'=>0,'from'=>'tvuoro', 'kohteenArr'=>$kohteenArr), true);
+		  echo json_decode($tv, true);
+		  echo '</td>';
+		// VARAUS
+
 		foreach($tt as $t){
 		  echo '<td '.$clPyhat.' id="'.$did.'_'.$t->id.'">';
 		  $tv = $this->renderPartial('//tyovuoroot/did',array('pvm'=>$date,'tid'=>$t->id,'from'=>'tvuoro', 'kohteenArr'=>$kohteenArr), true);
 		  echo json_decode($tv, true);
 		  echo '</td>';
-
 		}
 	    echo '</tr>';
 
@@ -327,6 +342,23 @@ td .tp{
 	    {
   	    echo '<tr>';
   		echo '<td class="text-center myBgColors viikkoRivi fixed-column"><b>'.Yii::t('main', 'Viikko').' '.date("W",strtotime($date)).'</b></td>';
+
+
+
+		// VARAUS
+		  echo '<td class="viikkoRivi myBgColors text-center" id="vk_'.date("W",strtotime($date)).'_0">';
+		  $kokoViikko = '';
+		  $vko = '';
+		  $vko = date("W",strtotime($date));
+		  $year = date("Y",strtotime($date));
+		  $kokoViikko = $this->renderPartial('//tyovuoroot/viikko',array('tid'=>0,'viikko'=>$vko,'year'=>$year),true);
+
+		  echo '<span>'.$kokoViikko.'</span>';
+		  echo '</td>';
+		// VARAUS
+
+
+
 		foreach($tt as $t){
 		 $vktyoaika = '';
 		 $ts = Tyosuhdet::model()->find(" tid = '".$t->id."' ");
