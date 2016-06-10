@@ -19,6 +19,9 @@
                     <!-- Icon Big -->
                     <!-- End Icon Big -->
                         <h1 class="title-subtitle text-center">Asiakkaat
+			<span>Etunnin avulla asiakkaamme voivat saavuttaa merkittäviä säästöjä ja kehittää omaa liiketoimintaansa.
+
+</span>
                         </h1>
                         <hr>
                     <!-- End Titles Heading -->
@@ -27,15 +30,15 @@
                         
 <div class="text-center">
 <p>
-Etunnin avulla asiakkaamme saavuttavat merkittäviä säästöjä.
 
- 
+                        <ul class="stars">
+			<li></li>Yrityksessä A otettiin käyttöön Etunti työvuorosuunnitteluohjelma. Sen avulla suunniteltiin yrityksessä uusiksi kohteiden siirtymäajat. Kolmessa kuukaudessa yritys säästi ohjelman avulla yhden työntekijän kuukausipalkan verran rahaa.
+			<li></li>Yrityksessä B tehostettiin Etunnin avulla työajaseurantaa. Puolessa vuodessa yritys sai kolme prosenttia lisää liikevoittoa.
+			<li></li>Yrityksessä C Etunnin avulla saatiin aikavarkaudet kitkettyä pois ja yritys säästi rahaa, kun tehdyistä tunneista maksettiin työntekijöille.
+			<li></li>Yritys D joutui ikävään tilanteeseen, kun asiakas väitti yrityksen huijanneen ja veloittavan asiakkaalta tunneista, joita ei asiakkaan mukaan ollut. Asiakas veti asian kuluttajariitalautakuntaan, mutta yritys pystyi kuitenkin todistamaan siivoojien olleen kohteessa yrityksen merkitsemän ajan sähköisen työajanseurannan avulla.
 
-Yrityksessä X otettiin käyttöön Etunti työvuorosuunnitteluohjelma. Sen avulla suunniteltiin yrityksessä uusiksi kohteiden siirtymäajat. Kolmessa kuukaudessa yritys säästi ohjelman avulla yhden työntekijän kuukausipalkan verran rahaa.
+                        </ul>
 
- 
-
-Yrityksessä Y tehostettiin Etunnin avulla työajaseurantaa. Puolessa vuodessa yritys sai kolme prosenttia lisää liikevoittoa.
 </p>
 </div>
                         <hr>
