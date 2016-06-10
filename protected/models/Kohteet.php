@@ -61,7 +61,7 @@ class Kohteet extends DB2ActiveRecord
 		// will receive user inputs.
 		return array(
 			array('asiakas_id,etu_suku_nimet,osoite', 'required'),
-			array('asiakas_id,aktiivinen, maksuehto_paiva', 'numerical', 'integerOnly'=>true),
+			array('asiakas_id,aktiivinen, maksuehto_paiva, avaimen_sijainti', 'numerical', 'integerOnly'=>true),
 			array('tag_id, kaupunki, toimipaikka, tyoryhma', 'length', 'max'=>20),
 			array('gps_sijainti, osoite, katuosoite, kenella_on_avain, puh_nro', 'length', 'max'=>50),
 			array('lyhenne', 'length', 'max'=>46),
@@ -117,7 +117,7 @@ class Kohteet extends DB2ActiveRecord
 			'ryhma' => Yii::t('main', 'Toimialue'),
 			'aktiivinen' => Yii::t('main', 'Aktiivinen'),
 			'avain' => Yii::t('main', 'Avain'),
-			'kenella_on_avain' => Yii::t('main', 'Avaimen haltija'),
+			'kenella_on_avain' => Yii::t('main', 'Avain työntekijällä'),
 			'puh_nro' => Yii::t('main', 'Puhelin'),
 			'siivous' => Yii::t('main', 'Työnimike'),
 			'etu_suku_nimet' => Yii::t('main', 'Nimi'),
@@ -126,6 +126,7 @@ class Kohteet extends DB2ActiveRecord
 			'lasku_tiedot' => Yii::t('main', 'Lasku Tiedot'),
 			'hinta_tyyppi'=> Yii::t('main', 'Hinta tyyppi'),
 			'hinta'=> Yii::t('main', 'Hinta'),
+			'avaimen_sijainti'=>Yii::t('main', 'Avaimen sijainti'),
 		);
 	}
 

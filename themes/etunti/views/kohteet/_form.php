@@ -206,6 +206,22 @@ $model->hinta = str_replace(",",".",$model->hinta);
 	</div>
 
 	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'avaimen_sijainti'); ?>
+
+		<?php
+		$list = array(
+			1=>Yii::t('main', 'Asiakas'),
+			2=>Yii::t('main', 'Toimisto'),
+			3=>Yii::t('main', 'Työntekijä')
+		);
+        	echo $form->dropDownList($model, 'avaimen_sijainti', $list,
+		array('empty'=>'','class'=>'form-control'));
+        	?>
+
+		<?php echo $form->error($model,'avaimen_sijainti'); ?>
+	</div>
+
+	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'kenella_on_avain'); ?>
 
 		<?php
