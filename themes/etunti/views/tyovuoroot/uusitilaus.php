@@ -102,7 +102,8 @@
   <div class="col-sm-6">
 		<?php echo $form->labelEx($model,'tid'); ?>
 		<?php
-        	$list = CHtml::listData(Tyontekijat::model()->findAll(array('order' => 'tekijan_nimi')), 'id', 'tekijan_nimi');
+		$list = array(0=>'VARAUS');
+        	$list[] = CHtml::listData(Tyontekijat::model()->findAll(array('order' => 'tekijan_nimi')), 'id', 'tekijan_nimi');
         	echo $form->dropDownList($model, 'tid', $list,array('empty'=>'Valitse','class'=>'form-control'));
         	?>
   </div>
