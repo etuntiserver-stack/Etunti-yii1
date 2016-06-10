@@ -96,14 +96,20 @@ try {
 	if($status_string == 'PAID')
 	{
 		$ov = Onlinevaraus::model()->find(" id='".$_GET['REFERENCE']."' and tila=0 ");
-		if(!isset($ov->id))
+		if(isset($ov->id))
+		{
+			$tv = Tyovuoroot::model()->find(" onlinevaraus_id='".$ov->id."' ");
+		} else {
         		echo '<h2>'.Yii::t('main', 'Onlinevaraus ID puuttuu').'</h2>';
-		else
-		$tv = Tyovuoroot::model()->find(" onlinevaraus_id='".$ov->id."' ");
+			exit;
+		}
 
 
 		if(!isset($tv->id))
+		{
         		echo '<h2>'.Yii::t('main', 'Työvuoro ID puuttuu').'</h2>';		
+			exit;
+		}
 
 
 		if(isset($ov->id) and isset($tv->id))
