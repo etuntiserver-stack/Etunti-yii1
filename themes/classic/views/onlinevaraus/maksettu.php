@@ -96,7 +96,7 @@ try {
 	if($status_string == 'PAID')
 	{
 		$ov = Onlinevaraus::model()->find(" id='".$_GET['REFERENCE']."' and tila=0 ");
-		$tv = Tyovuoroot::model()->findbypk($ov->tv_id);
+		$tv = Tyovuoroot::model()->find(" onlinevaraus_id='".$ov->id."' ");
 		if(!isset($tv->id))
 		{
         		echo '<h2>Tilaus vanhentunut!</h2>';		
