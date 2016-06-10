@@ -18,6 +18,32 @@ if(isset($_POST['poistaTamaTiedosto'])){
 	unlink($_POST['poistaTamaTiedosto']);
 exit;
 }
+
+
+if(isset($_POST['uploaded_tyonkuvaus']))
+{
+
+  if (!file_exists(Yii::app()->basePath."/../tiedostot/kohteet/".Yii::app()->user->domain."/tyonkuvaukset")) {
+  	mkdir(Yii::app()->basePath."/../tiedostot/kohteet/".Yii::app()->user->domain."/tyonkuvaukset", 0777, true);
+  }
+
+  $uploaddir = Yii::app()->basePath.'/../tiedostot/kohteet/'.Yii::app()->user->domain.'/tyonkuvaukset/';
+  $uploadfile = $uploaddir . basename($model->id.'_'.$_FILES['file']['name']);
+  if (move_uploaded_file($_FILES['file']['tmp_name'], $uploadfile)) {
+     //echo "";
+  } 
+}
+
+if(isset($_POST['poistaTyonkuvaus'])){
+	unlink($_POST['poistaTyonkuvaus']);
+exit;
+}
+
+
+
+
+
+
 ?>
 
         <!-- begin: .tray-center -->
@@ -68,8 +94,6 @@ exit;
 <br>
 
     <?php
-
-
 	$i = 0;
 	foreach(array_reverse(glob('tiedostot/kohteet/'.Yii::app()->user->domain.'/'.$model->id.'_*.*')) as $file) {
 	$i++;
@@ -103,6 +127,22 @@ exit;
 <script type="text/javascript">
 $(document).ready(function(){
 
+
+$(".poistaTyonkuvaus").click(function(){
+	var forThis = $(this).attr("this");
+	var model = $(this).attr("model");
+	var forID = $(this).attr("for");
+
+        $.ajax({
+           url: "update?id="+model,
+	   type:'POST',
+	   data: { "poistaTyonkuvaus" : forThis },
+           success: function(data){
+		console.log(data);
+		$("#"+forID).remove();
+           }
+        });
+});
 
 $(".poistaTiedosto").click(function(){
 	var forThis = $(this).attr("this");

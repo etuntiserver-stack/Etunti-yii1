@@ -271,6 +271,29 @@ $model->hinta = str_replace(",",".",$model->hinta);
 	</div>
 
 	<div class="section fill mb5">
+    <?php
+	$i = 0;
+	foreach(array_reverse(glob('tiedostot/kohteet/'.Yii::app()->user->domain.'/tyonkuvaukset/'.$model->id.'_*.*')) as $file) {
+	$i++;
+	$explNimi = explode("/",$file);
+ 	echo '
+	<div class="row">
+ 	  <div class="col-sm-4">
+	<label>'. Yii::t('main', 'Työnkuvaus').'</label>
+	<div class="form-inline" id="t_'.$model->id.$i.'">
+	  <div class="btn btn-xs btn-danger poistaTyonkuvaus" this="'.$file.'" model="'.$model->id.'" for="t_'.$model->id.$i.'">X</div>
+	  &nbsp;&nbsp;&nbsp;<a href="../../'.$file.'">'.end($explNimi).'</a>
+	</div>
+	 </div>
+	</div>
+	<br>
+	';
+	$kuvat[$i] = $file;
+	}
+   ?>
+	</div>
+
+	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'tietoja'); ?>
 		<?php echo $form->textArea($model,'tietoja',array('rows'=>6, 'cols'=>50,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'tietoja'); ?>
@@ -288,6 +311,30 @@ $model->hinta = str_replace(",",".",$model->hinta);
 <?php $this->endWidget(); ?>
 
 <br>
+
+
+<div class="row">
+  <div class="col-sm-6 pull-right">
+  <form id="uploadimage" action="#" class="form-input" method="post" enctype="multipart/form-data">
+     <div class="section input-group">
+       <label class="field prepend-icon append-button file">
+         <span class="button"><?php echo Yii::t('main', 'Työnkuvaus'); ?></span>
+         <input type="file" class="gui-file" name="file" id="t_file" onChange="document.getElementById('tiedostoUP').value = this.value;">
+         <input type="text" class="gui-input" name="uploaded_tyonkuvaus" id="tiedostoUP" placeholder="Valitse tiedosto..">
+         <label class="field-icon">
+          <i class="fa fa-upload"></i>
+         </label>
+       </label>
+	<span class="input-group-btn">
+          <input type="submit" value="Lataa" class="btn btn-primary myBgColors" />
+	</span>
+    </div>
+  </form>
+ </div>
+</div>
+
+
+
 <hr>
 
 <?php
