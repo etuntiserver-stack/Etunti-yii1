@@ -31,7 +31,7 @@
 		'gps_sijainti',
 		'lyhenne',
 		'osoite',
-		'katuosoite',
+		//'katuosoite',
 		'kaupunki',
 		'toimipaikka',
 		'pnumero',
