@@ -375,9 +375,9 @@ class ViestintaController extends Controller
 
 			    $toimistoTekija = '';
 			if ($pos === false) {
-			    $toimistoTekija = '<b>'.Yii::t('main','Järjestelmänvalvoja<br>').'</b>';
+			    $toimistoTekija = '<b>'.Yii::t('main','Järjestelmänvalvoja').'</b><br>';
 			} else {
-			    $toimistoTekija = '<b>'.Yii::t('main','Työntekijä<br>').'</b>';
+			    $toimistoTekija = '<b>'.Yii::t('main','Työntekijä<br>').'</b><br>';
 			}
 
 			$admin = $toimistoTekija.$expl[1];

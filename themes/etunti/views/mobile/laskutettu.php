@@ -60,7 +60,7 @@
                         <div class="section">
                           <label class="field prepend-icon">
 
-   			    <input type="text" class="gui-input" name="etsi_kohteet" value="<?php if(isset($_POST['etsi_kohteet'])) echo $_POST['etsi_kohteet']; ?>" placeholder="Osoite">
+   			    <input type="text" class="gui-input" name="etsi_kohteet" value="<?php if(isset($_POST['etsi_kohteet'])) echo $_POST['etsi_kohteet']; ?>" placeholder="<?php echo Yii::t('main', 'Osoite'); ?>">
 
                             <label for="firstname" class="field-icon">
                               <i class="fa fa-user"></i>
@@ -101,9 +101,9 @@
 			     if(isset($_POST['laskutettu']) and $_POST['laskutettu'] == '0')
 			     echo '<option value="0">Laskuttamatta</option>';
 			     ?>
-			     <option value="">Tilanne</option>
-			     <option value="1">Laskutettu</option>
-			     <option value="0">Laskuttamatta</option>
+			     <option value=""><?php echo Yii::t('main', 'Tilanne'); ?></option>
+			     <option value="1"><?php echo Yii::t('main', 'Laskutettu'); ?></option>
+			     <option value="0"><?php echo Yii::t('main', 'Laskuttamatta'); ?></option>
 			    </select>
                             <i class="arrow double"></i>
                             </label>
@@ -112,7 +112,7 @@
                       </div>
 
                       <div class="col-md-2">
-        	        <button class="btn btn-primary btn-lg haemob btn-block myBgColors" type="button"><i class="glyphicon glyphicon-search"> </i> Hae</button>
+        	        <input type="submit" class="btn btn-primary btn-lg haemob btn-block myBgColors" value="<?php echo Yii::t('main', 'Hae'); ?>">
 		      </div>
 
                     </div>

@@ -46,9 +46,9 @@
 
 	  	$bod .= '<td>';
 		if($data->status == 0)
-	  	$bod .= '<span class="btn btn-sm btn-warning btn-block">'.Yii::t('main', 'avoin').'</span>';
+	  	$bod .= '<span class="btn btn-sm btn-warning btn-block">'.Yii::t('main', 'Avoinna').'</span>';
 		elseif($data->status == 3)
-	  	$bod .= '<span class="btn btn-sm btn-success btn-block">'.Yii::t('main', 'suljettu').'</span>';
+	  	$bod .= '<span class="btn btn-sm btn-success btn-block">'.Yii::t('main', 'Suljettu').'</span>';
 
 		if(isset(Yii::app()->user->adminID) and $data->status != 3)
 		{

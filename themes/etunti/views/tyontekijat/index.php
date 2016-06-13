@@ -55,7 +55,7 @@
                         <div class="section">
                           <label class="field prepend-icon">
 
-   			    <input type="text" class="gui-input" name="nimi" value="<?php if(isset($_POST['nimi'])) echo $_POST['nimi']; ?>" placeholder="Nimi...">
+   			    <input type="text" class="gui-input" name="nimi" value="<?php if(isset($_POST['nimi'])) echo $_POST['nimi']; ?>" placeholder="<?php echo Yii::t('main', 'Nimi'); ?>...">
 
                             <label for="firstname" class="field-icon">
                               <i class="fa fa-user"></i>
@@ -67,7 +67,7 @@
                         <div class="section">
                           <label class="field prepend-icon">
 
-   			    <input type="text" name="puhelin"  class="gui-input" value="<?php if(isset($_POST['puhelin'])) echo $_POST['puhelin']; ?>" placeholder="Puhelin">
+   			    <input type="text" name="puhelin"  class="gui-input" value="<?php if(isset($_POST['puhelin'])) echo $_POST['puhelin']; ?>" placeholder="<?php echo Yii::t('main', 'Puhelin'); ?>">
                             <label for="firstname" class="field-icon">
                               <i class="fa fa-phone"></i>
                             </label>
@@ -78,7 +78,7 @@
                         <div class="section">
                           <label class="field prepend-icon">
 
-   			    <input type="text" name="osoite" class="gui-input" value="<?php if(isset($_POST['osoite'])) echo $_POST['osoite']; ?>" placeholder="Osoite...">
+   			    <input type="text" name="osoite" class="gui-input" value="<?php if(isset($_POST['osoite'])) echo $_POST['osoite']; ?>" placeholder="<?php echo Yii::t('main', 'Osoite'); ?>...">
                             <label for="firstname" class="field-icon">
                               <i class="fa fa-home"></i>
                             </label>
@@ -99,7 +99,7 @@
                       </div>
 
                       <div class="col-md-2">
-        	        <input type="submit" class="btn btn-primary btn-lg haemob btn-block myBgColors" value="Hae">
+        	        <input type="submit" class="btn btn-primary btn-lg haemob btn-block myBgColors" value="<?php echo Yii::t('main', 'Hae'); ?>">
 		      </div>
 
                     </div>

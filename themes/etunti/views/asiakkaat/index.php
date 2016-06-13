@@ -26,7 +26,7 @@
                         <div class="section">
                           <label class="field prepend-icon">
 
-   			    <input type="text" class="gui-input" name="osoite" value="<?php if(isset($_POST['osoite'])) echo $_POST['osoite']; ?>" placeholder="Osoite..">
+   			    <input type="text" class="gui-input" name="osoite" value="<?php if(isset($_POST['osoite'])) echo $_POST['osoite']; ?>" placeholder="<?php echo Yii::t('main', 'Osoite'); ?>..">
 
                             <label for="firstname" class="field-icon">
                               <i class="fa fa-user"></i>
@@ -37,7 +37,7 @@
                         <div class="section">
                           <label class="field prepend-icon">
 
-   			    <input type="text" class="gui-input" name="yrityksen_nimi" value="<?php if(isset($_POST['yrityksen_nimi'])) echo $_POST['yrityksen_nimi']; ?>" placeholder="Yritys..">
+   			    <input type="text" class="gui-input" name="yrityksen_nimi" value="<?php if(isset($_POST['yrityksen_nimi'])) echo $_POST['yrityksen_nimi']; ?>" placeholder="<?php echo Yii::t('main', 'Yritys'); ?>..">
 
                             <label for="firstname" class="field-icon">
                               <i class="fa fa-user"></i>
@@ -54,9 +54,9 @@
 
 
 			   <select class="gui-input" name="aktiivinen" id="aktiivinen">
-       				<option value="1">Aktiiviset</option>
-       				<option value="0">Passiviset</option>
-       				<option value="kaikki">Kaikki</option>
+       				<option value="1"><?php echo Yii::t('main', 'Aktiiviset'); ?></option>
+       				<option value="0"><?php echo Yii::t('main', 'Passiviset'); ?></option>
+       				<option value="kaikki"><?php echo Yii::t('main', 'Kaikki'); ?></option>
 			   </select>
 
 
@@ -70,7 +70,7 @@
                         <div class="section">
                           <label class="field prepend-icon">
 
-   			    <input type="text" class="gui-input" name="yhteyshenkilo" value="<?php if(isset($_POST['yhteyshenkilo'])) echo $_POST['yhteyshenkilo']; ?>" placeholder="Yhteyshenkilö">
+   			    <input type="text" class="gui-input" name="yhteyshenkilo" value="<?php if(isset($_POST['yhteyshenkilo'])) echo $_POST['yhteyshenkilo']; ?>" placeholder="<?php echo Yii::t('main', 'Yhteyshenkilö'); ?>">
 
                             <label for="firstname" class="field-icon">
                               <i class="fa fa-user"></i>
@@ -82,7 +82,7 @@
                         <div class="section">
                           <label class="field prepend-icon">
 
-   			    <input type="text" name="puhelin"  class="gui-input" value="<?php if(isset($_POST['puhelin'])) echo $_POST['puhelin']; ?>" placeholder="Puhelin">
+   			    <input type="text" name="puhelin"  class="gui-input" value="<?php if(isset($_POST['puhelin'])) echo $_POST['puhelin']; ?>" placeholder="<?php echo Yii::t('main', 'Puhelin'); ?>">
                             <label for="firstname" class="field-icon">
                               <i class="fa fa-phone"></i>
                             </label>
@@ -103,7 +103,7 @@
                       </div>
 
                       <div class="col-md-2">
-        	        <input type="submit" class="btn btn-primary btn-lg haemob btn-block myBgColors" value="Hae">
+        	        <input type="submit" class="btn btn-primary btn-lg haemob btn-block myBgColors" value="<?php echo Yii::t('main', 'Hae'); ?>">
 		      </div>
 
                     </div>

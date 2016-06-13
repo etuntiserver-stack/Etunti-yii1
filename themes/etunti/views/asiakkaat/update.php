@@ -64,13 +64,13 @@ exit;
        <label class="field prepend-icon append-button file">
          <span class="button"><?php echo Yii::t('main', 'Tiedostot (sopimukset jne)'); ?></span>
          <input type="file" class="gui-file" name="file" id="t_file" onChange="document.getElementById('tiedostoUP').value = this.value;">
-         <input type="text" class="gui-input" name="uploaded_t" id="tiedostoUP" placeholder="Valitse tiedosto..">
+         <input type="text" class="gui-input" name="uploaded_t" id="tiedostoUP" placeholder="<?php echo Yii::t('main', 'Valitse tiedosto'); ?>..">
          <label class="field-icon">
           <i class="fa fa-upload"></i>
          </label>
        </label>
 	<span class="input-group-btn">
-          <input type="submit" value="Lataa" class="btn btn-primary myBgColors" />
+          <input type="submit" value="<?php echo Yii::t('main', 'Lataa'); ?>" class="btn btn-primary myBgColors" />
 	</span>
     </div>
   </form>

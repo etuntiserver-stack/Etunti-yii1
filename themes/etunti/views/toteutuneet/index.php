@@ -93,9 +93,9 @@ $this->breadcrumbs=array(
     $matka = '';
     $matka = ( isset(Yii::app()->session['MATKA']))  ? 'selected' : '';
 
-    echo '<select name="ilman[]" class="mult ilman"  multiple="multiple"  title="Ei lasketa">';
-    echo '<option value="Lounastauko" '.$lounas.'>Lounastauko</option>';
-    echo '<option value="MATKA" '.$matka.'>MATKA</option>';
+    echo '<select name="ilman[]" class="mult ilman"  multiple="multiple"  title="'.Yii::t('main', 'Ei lasketa').'">';
+    echo '<option value="Lounastauko" '.$lounas.'>'.Yii::t('main', 'Lounastauko').'</option>';
+    echo '<option value="MATKA" '.$matka.'>'.Yii::t('main', 'Matka').'</option>';
     echo '</select>';
    ?>
 
@@ -131,7 +131,7 @@ $this->breadcrumbs=array(
                       </div>
 
                       <div class="col-md-2">
-        	        <button class="btn btn-primary btn-lg haemob btn-block myBgColors" type="button"><i class="glyphicon glyphicon-search"> </i> Hae</button>
+        	        <input type="submit" class="btn btn-primary btn-lg haemob btn-block myBgColors" value="<?php echo Yii::t('main', 'Hae'); ?>">
 		      </div>
 
                     </div>

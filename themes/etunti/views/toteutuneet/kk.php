@@ -13,18 +13,18 @@ $this->menu=array(
 */
 
 $months=array(
-	1=>'Tammikuu',
-	2=>'Helmikuu',
-	3=>'Maaliskuu',
-	4=>'Huhtikuu',
-	5=>'Toukokuu',
-	6=>'Kesäkuu',
-	7=>'Heinäkuu',
-	8=>'Elokuu',
-	9=>'Syyskuu',
-	10=>'Lokakuu',
-	11=>'Marraskuu',
-	12=>'Joulukuu'
+	'1'=>Yii::t('main', 'Tammikuu'),
+	'2'=>Yii::t('main', 'Helmikuu'),
+	'3'=>Yii::t('main', 'Maaliskuu'),
+	'4'=>Yii::t('main', 'Huhtikuu'),
+	'5'=>Yii::t('main', 'Toukokuu'),
+	'6'=>Yii::t('main', 'Kesäkuu'),
+	'7'=>Yii::t('main', 'Heinäkuu'),
+	'8'=>Yii::t('main', 'Elokuu'),
+	'9'=>Yii::t('main', 'Syyskuu'),
+	'10'=>Yii::t('main', 'Lokakuu'),
+	'11'=>Yii::t('main', 'Marraskuu'),
+	'12'=>Yii::t('main', 'Joulukuu'),
 	);
 
 $pvm = '';
@@ -76,9 +76,9 @@ echo	'<input type=hidden id=number value='.cal_days_in_month(CAL_GREGORIAN, $mon
 	    $matka = '';
 	    $matka = ( isset(Yii::app()->session['MATKA']))  ? 'selected' : '';
 
-	    echo '<select name="ilman[]" class="selectpicker form-group" id="ilman"  multiple="multiple" title="Ei lasketa..." >'; //
-	    echo '<option value="Lounastauko" '.$lounas.'>Lounastauko</option>';
-	    echo '<option value="MATKA" '.$matka.'>MATKA</option>';
+	    echo '<select name="ilman[]" class="selectpicker form-group" id="ilman"  multiple="multiple" title="'.Yii::t('main', 'Ei lasketa').'..." >'; //
+	    echo '<option value="Lounastauko" '.$lounas.'>'.Yii::t('main', 'Lounastauko').'</option>';
+	    echo '<option value="MATKA" '.$matka.'>'.Yii::t('main', 'Matka').'</option>';
 	    echo '</select>';
 	   ?>
 	   <div class="form-group input-group-btn">

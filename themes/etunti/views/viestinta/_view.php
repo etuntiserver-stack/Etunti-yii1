@@ -10,7 +10,7 @@
 	</td>
 	<td>
 		<?php 
-			echo '<p><b>Keskustelu nro.: '.$data->id.'</b></p>';
+			echo '<p><b>'.Yii::t('main', 'Keskustelu nro.').': '.$data->id.'</b></p>';
 			echo str_replace("\n","<br>",$data->viesti); 
 		?>
 	</td>

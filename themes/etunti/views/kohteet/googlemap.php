@@ -132,7 +132,7 @@ if(!centerUusi[0]){
 
   <div class="pull-right">
     <form class="form-inline" method="GET">
-    <input type="text" class="form-control input-sm form-group" name="center" placeholder="Osoite" value="<?php echo $valCenter; ?>">
+    <input type="text" class="form-control input-sm form-group" name="center" placeholder="<?php echo Yii::t('main', 'Osoite'); ?>" value="<?php echo $valCenter; ?>">
     <span class="form-group input-group-btn">
     <input type="submit"  class="btn btn-sm btn-primary" value="ok">
     </span>

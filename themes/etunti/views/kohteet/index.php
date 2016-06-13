@@ -29,7 +29,7 @@
                         <div class="section">
                           <label class="field prepend-icon">
 
-   			    <input type="text" class="gui-input" name="osoite" value="<?php if(isset($_POST['osoite'])) echo $_POST['osoite']; ?>" placeholder="Osoite..">
+   			    <input type="text" class="gui-input" name="osoite" value="<?php if(isset($_POST['osoite'])) echo $_POST['osoite']; ?>" placeholder="<?php echo Yii::t('main', 'Osoite'); ?>..">
 
                             <label for="firstname" class="field-icon">
                               <i class="fa fa-user"></i>
@@ -44,9 +44,9 @@
 
 
 			   <select class="gui-input" name="aktiivinen" id="aktiivinen">
-       				<option value="1">Aktiiviset</option>
-       				<option value="0">Passiviset</option>
-       				<option value="kaikki">Kaikki</option>
+       				<option value="1"><?php echo Yii::t('main', 'Aktiiviset'); ?></option>
+       				<option value="0"><?php echo Yii::t('main', 'Passiviset'); ?></option>
+       				<option value="kaikki"><?php echo Yii::t('main', 'Kaikki'); ?></option>
 			   </select>
 
                             <label for="firstname" class="field-icon">
@@ -61,7 +61,7 @@
                         <div class="section">
                           <label class="field prepend-icon">
 
-   			    <input type="text" class="gui-input" name="nimi" value="<?php if(isset($_POST['nimi'])) echo $_POST['nimi']; ?>" placeholder="Nimi">
+   			    <input type="text" class="gui-input" name="nimi" value="<?php if(isset($_POST['nimi'])) echo $_POST['nimi']; ?>" placeholder="<?php echo Yii::t('main', 'Nimi'); ?>..">
 
                             <label for="firstname" class="field-icon">
                               <i class="fa fa-user"></i>
@@ -85,7 +85,7 @@
                         <div class="section">
                           <label class="field prepend-icon">
 
-   			    <input type="text" name="avain" class="gui-input" value="<?php if(isset($_POST['avain'])) echo $_POST['avain']; ?>" placeholder="Avain">
+   			    <input type="text" name="avain" class="gui-input" value="<?php if(isset($_POST['avain'])) echo $_POST['avain']; ?>" placeholder="<?php echo Yii::t('main', 'Avain'); ?>">
                             <label for="firstname" class="field-icon">
                               <i class="fa fa-key"></i>
                             </label>
@@ -106,7 +106,7 @@
                       </div>
 
                       <div class="col-md-2">
-        	        <input type="submit" class="btn btn-primary btn-lg haemob btn-block myBgColors" value="Hae">
+        	        <input type="submit" class="btn btn-primary btn-lg haemob btn-block myBgColors" value="<?php echo Yii::t('main', 'Hae'); ?>">
 		      </div>
 
                     </div>

@@ -1,13 +1,13 @@
 <?php
 
 $paivat=array(
-	1=>'Maanantai',
-	2=>'Tiistai',
-	3=>'Keskiviikko',
-	4=>'Torstai',
-	5=>'Perjantai',
-	6=>'Lauantai',
-	7=>'Sunnuntai',
+	1=>Yii::t('main', 'Maanantai'),
+	2=>Yii::t('main', 'Tiistai'),
+	3=>Yii::t('main', 'Keskiviikko'),
+	4=>Yii::t('main', 'Torstai'),
+	5=>Yii::t('main', 'Perjantai'),
+	6=>Yii::t('main', 'Lauantai'),
+	7=>Yii::t('main', 'Sunnuntai'),
 	);
 
 $wkMaara = 53;
@@ -95,7 +95,7 @@ td .tp{
 
 
 
-<i class="fa fa-paper-plane"></i> <?php echo Yii::t('main', 'TYÖVUOROJEN LÄHETYS'); ?>&nbsp;&nbsp;&nbsp;&nbsp;
+<i class="fa fa-paper-plane"></i> <?php echo Yii::t('main', 'Työvuorojen lähetys'); ?>&nbsp;&nbsp;&nbsp;&nbsp;
 
 
   <a href="<?php echo $_SERVER['PHP_SELF'].'?week='.($week == 1 ? $wkMaara : $week -1).'&year='.($week == 1 ? $year - 1 : $year); ?>"><<</a> 
@@ -166,7 +166,7 @@ td .tp{
 	echo '<tr>';
 	echo '<td>'.$t->tekijan_nimi.'<br>
 	<input type="checkbox" for="'.$t->id.'" title="Määrittele lähetettäväksi"><br>
-	'.CHtml::link('Lähetä','/index.php/tyovuoroot/laheta?tid='.$t->id.'&week='.$week.'&year='.$year.'&tulosta=false',array('target'=>'_blank','class'=>'text-success'));
+	'.CHtml::link(Yii::t('main', 'Lähetä'),'/index.php/tyovuoroot/laheta?tid='.$t->id.'&week='.$week.'&year='.$year.'&tulosta=false',array('target'=>'_blank','class'=>'text-success'));
 
 	$file = $week.'_'.$year.'_'.$t->id.'.pdf';
 	$path = Yii::app()->request->baseUrl."emails/tyovuorot/".Yii::app()->user->domain;
