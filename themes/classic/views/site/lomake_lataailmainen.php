@@ -1,88 +1,9 @@
 <?php
 error_reporting(E_ALL ^ ( E_NOTICE | E_WARNING | E_DEPRECATED | E_STRICT));
 
-// TYPE-kentän valuet: text, email, number, textarea, select, hidden, submit, checkbox, radio
-// validointi tulee tämän mukaan
 
-/* MALLI
-include_once 'lomake.php';
 
-$asetukset = array(
-    'nimi' => 'testei', //ei välilyöntejä eikä ääkkösiä
-    'kiitos' => 'Kiitos',
-    'error' => 'Huom! Tarkista, että täytit kaikki kentät oikein.',
-    'AJAX' => TRUE, // TRUE, FALSE
-    'LABEL_CLASS' => '',
-    'FIELD_CLASS' => '', // input-wrapper, hiddenfieldissä input
-    'GROUP_CLASS' => '', // label-input-wrapper
-    'FORM_CLASS' => '',
-    'URL' => __FILE__, // älä koske
-);
-
-$asetukset['email'][] = array(
-    'osoite' => '',
-    'kopio' => '',
-    'otsikko' => '',
-    'lahettaja' => '',
-    'viesti' => 'VIESTI Nimi: [Nimi]<br> jou',
-);
-
-//toinen viesti
-$asetukset['email'][] = array(
-    'osoite' => '',
-    'kopio' => '',
-    'otsikko' => '',
-    'lahettaja' => '',
-    'viesti' => '[kentat]',
-);
-
-$kentat = array();
-
-$kentat[] = array(
-'NAME' => 'Nimi',
-'TYPE' => 'text',
-);
-
-$kentat[] = array(
-'NAME' => 'Nimi2',
-'REQUIRED' => true,
-'TYPE' => 'text',
-'PLACEHOLDER' => 'Placeholder-teksi',
-'GROUP_CLASS' => '',
-'PLACEHOLDER' => '',
-'INPUT_CLASS' => '',
-);
-
-$kentat[] = array(
-'NAME' => 'test',
-'REQUIRED' => true,
-'TYPE' => 'radio',
-'VALUE' => array('checkbox', 'test'),
-);
-
-$kentat[] = array(
-'NAME' => 'Rastia ruutuun',
-'REQUIRED' => true,
-'TYPE' => 'checkbox',
-);
-
-$kentat[] = array(
-'NAME' => 'piilokenttä',
-'VALUE' => 'arvo',
-'TYPE' => 'hidden',
-);
-
-$kentat[] = array(
-'VALUE' => 'Lähetä',
-'TYPE' => 'submit',
-);
-
-$lomake = new lomake($kentat, $asetukset);
-$lomake->form();
-
-*/
-
-class lomake {
+class lomake_ilmainen {
 
 var $kentat = array();
 var $asetukset = array();
@@ -249,7 +170,7 @@ public function tulosta_kentat()
 	}
 
 
-	print "<form method=\"post\" name=\"lomake\" action=\"".Yii::app()->request->baseUrl."/index.php/site/lomake_tarjouspyynto\" id=\"{$this->asetukset['nimi']}\" class=\"lomake $FORM_class\">";
+	print "<form method=\"post\" name=\"lomake\" action=\"".Yii::app()->request->baseUrl."/index.php/site/lomake_lataailmainen\" id=\"{$this->asetukset['nimi']}\" class=\"lomake $FORM_class\">";
 	foreach ($this->kentat as $key => $value) {
 			//yleiset
 			$LABEL_class = isset($this->asetukset['LABEL_CLASS']) ? $this->asetukset['LABEL_CLASS'] : "";
@@ -381,10 +302,10 @@ $kentat[] = array(
 'TYPE' => 'text',
 );
 $kentat[] = array(
-'NAME' => 'Mitä Siivousta',
+'NAME' => 'Yrityksen toimiala',
 'REQUIRED' => true,
 'TYPE' => 'text',
-'PLACEHOLDER' => 'Kotisiivous, Toimistosiivous, jne.',
+'PLACEHOLDER' => '',
 );
 $kentat[] = array(
 'NAME' => 'Työntekijöiden määrä',
@@ -408,8 +329,8 @@ $kentat[] = array(
 'VALUE' => 'Lähetä',
 'TYPE' => 'submit',
 'FIELD_CLASS' => 'col-sm-offset-9 col-sm-3',
-'INPUT_CLASS' => 'btn btn-primary btn-lg',
+'INPUT_CLASS' => 'btn btn-primary btn-block',
 );
 
-$tarjouspyynto = new lomake($kentat, $asetukset);
+$tarjouspyynto = new lomake_ilmainen($kentat, $asetukset);
 $tarjouspyynto->form();

@@ -25,7 +25,7 @@ class SiteController extends Controller
 	{
 		return array(
 			array('allow', 
-				'actions'=>array( 'header', 'footer', 'lomake_tarjouspyynto', 'lomake_testiryhma', 'ajankohtaista', 'asiakkaat', 'yritys', 'yhteystiedot'),
+				'actions'=>array( 'header', 'footer', 'lomake_tarjouspyynto', 'lomake_testiryhma', 'ajankohtaista', 'asiakkaat', 'yritys', 'yhteystiedot', 'lomake_lataailmainen'),
 				'users'=>array('*'),
 			),
 			array('allow', 
@@ -92,6 +92,11 @@ class SiteController extends Controller
 	{
 		$this->render('yhteystiedot');
 	}
+	public function actionLomake_lataailmainen()
+	{
+		$this->render('lomake_lataailmainen');
+	}
+
 
 
 

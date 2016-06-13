@@ -725,6 +725,7 @@ return array(
 	'Perjantai'=>'Friday',
 	'Lauantai'=>'Saturday',
 	'Sunnuntai'=>'Sunday',
+	'toteuma'=>'realization',
 
 
 
