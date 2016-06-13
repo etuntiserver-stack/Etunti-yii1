@@ -1,6 +1,54 @@
 <?php
 error_reporting(E_ALL|E_STRICT);
 ini_set('display_errors', 1);
+?>
+
+
+
+
+
+        <!-- Header-->
+        <header>
+            <!-- Container-->
+            <div class="container">
+                <!-- Row-->
+                <div class="row">
+                    <!-- Logo-->
+                    <div class="col-md-3">
+                        <div class="logo">
+  			<?php $asetukset=Asetukset::model()->find("id=1"); ?>
+  			<img src="<?php echo $asetukset->logon_polkku; ?>" height="<?php echo $asetukset->logon_korkeus; ?>">
+                        </div>
+                    </div>
+                    <!-- End Logo-->
+
+                    <!-- Nav-->
+                    <div class="col-md-9 slogan">
+                        <!--Voita siivousalan haasteet-->
+                    </div>
+                    <!-- End Nav-->
+                </div>
+                <!-- End Row-->
+            </div>
+            <!-- End Container-->
+        </header>
+        <!-- End Header-->
+
+
+
+
+	<?php
+	if(isset($_GET['check']))
+	{
+		echo $_SESSION['onlinevaraus']['message'];
+		unset($_SESSION['onlinevaraus']);
+		exit;
+	}
+
+
+
+
+
 
 require 'CheckoutFinland/Response.php';
 
@@ -56,64 +104,19 @@ try {
 } catch(UnsupportedAlgorithmException $ex) {
     echo 'Unsupported algorithm';
 }
-?>
 
 
 
-
-
-        <!-- Header-->
-        <header>
-            <!-- Container-->
-            <div class="container">
-                <!-- Row-->
-                <div class="row">
-                    <!-- Logo-->
-                    <div class="col-md-3">
-                        <div class="logo">
-  			<?php $asetukset=Asetukset::model()->find("id=1"); ?>
-  			<img src="<?php echo $asetukset->logon_polkku; ?>" height="<?php echo $asetukset->logon_korkeus; ?>">
-                        </div>
-                    </div>
-                    <!-- End Logo-->
-
-                    <!-- Nav-->
-                    <div class="col-md-9 slogan">
-                        <!--Voita siivousalan haasteet-->
-                    </div>
-                    <!-- End Nav-->
-                </div>
-                <!-- End Row-->
-            </div>
-            <!-- End Container-->
-        </header>
-        <!-- End Header-->
-
-
-
-
-	<?php
-	if($status_string == 'PAID')
+	if($status_string == 'PAID' and !isset($_GET['check']))
 	{
 		$ov = Onlinevaraus::model()->find(" id='".$_GET['REFERENCE']."' and tila=0 ");
+
 		if(isset($ov->id))
-		{
-			$tv = Tyovuoroot::model()->find(" onlinevaraus_id='".$ov->id."' ");
-		} else {
-        		echo '<h2>'.Yii::t('main', 'Onlinevaraus ID puuttuu').'</h2>';
-			exit;
-		}
-
-
-		if(!isset($tv->id))
-		{
-        		echo '<h2>'.Yii::t('main', 'Työvuoro ID puuttuu').'</h2>';		
-			exit;
-		}
-
+		$tv = Tyovuoroot::model()->find(" onlinevaraus_id='".$ov->id."' ");
 
 		if(isset($ov->id) and isset($tv->id))
 		{
+
 
 			$asiakas = Asiakkaat::model()->findbypk($ov->asiakas_id);
 			$asetukset = Asetukset::model()->findbypk(1);
@@ -207,8 +210,7 @@ $message .= '<br></td></tr>
 
 			';
 
-
-			echo $message;
+			$_SESSION['onlinevaraus']['message'] = $message;
 
 	          	$mail = new YiiMailer();
 			$mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
@@ -225,8 +227,8 @@ $message .= '<br></td></tr>
 			$o->tila=1;
 			$o->save();
 
-			unset($_SESSION['onlinevaraus']);
-			
+			$this->redirect(Yii::app()->request->baseUrl.'/index.php/onlinevaraus/maksettu?check=ok');
+	
 
 		}
 	}
