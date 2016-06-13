@@ -662,12 +662,18 @@ return array(
 	'Joulukuu'=>'December',
 
 
-	'Asiakkaiden hallinta'=>'',
-	'Tuntien hallinta'=>'',
-	'Työntekijöiden hallinta'=>'',
-	'Viestinnän hallinta'=>'',
-	'Työvuorojen hallinta'=>'',
-	'Laskutuksen hallinta'=>'',
+	'Asiakkaiden hallinta'=>'Customers',
+	'Tuntien hallinta'=>'Hour management',
+	'Työntekijöiden hallinta'=>'Emploee management',
+	'Viestinnän hallinta'=>'Message management',
+	'Työvuorojen hallinta'=>'Shift management',
+	'Laskutuksen hallinta'=>'Invoice management',
+	'Tuntien toteuma kk'=>'',
+	'Yhteystiedot'=>'',
+	'Kohderyhmä'=>'',
+	'Tarjoukset'=>'',
+	'Sopimukset'=>'',
+	'Kirjeiden hallinta'=>'',
 
 
 
