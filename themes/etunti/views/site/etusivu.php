@@ -37,18 +37,18 @@ if (!file_exists(Yii::app()->basePath."/../backup/".Yii::app()->user->domain.'/'
 
 
 $months=array(
-	'01'=>'Tammikuu',
-	'02'=>'Helmikuu',
-	'03'=>'Maaliskuu',
-	'04'=>'Huhtikuu',
-	'05'=>'Toukokuu',
-	'06'=>'Kesäkuu',
-	'07'=>'Heinäkuu',
-	'08'=>'Elokuu',
-	'09'=>'Syyskuu',
-	'10'=>'Lokakuu',
-	'11'=>'Marraskuu',
-	'12'=>'Joulukuu',
+	'01'=>Yii::t('main', 'Tammikuu'),
+	'02'=>Yii::t('main', 'Helmikuu'),
+	'03'=>Yii::t('main', 'Maaliskuu'),
+	'04'=>Yii::t('main', 'Huhtikuu'),
+	'05'=>Yii::t('main', 'Toukokuu'),
+	'06'=>Yii::t('main', 'Kesäkuu'),
+	'07'=>Yii::t('main', 'Heinäkuu'),
+	'08'=>Yii::t('main', 'Elokuu'),
+	'09'=>Yii::t('main', 'Syyskuu'),
+	'10'=>Yii::t('main', 'Lokakuu'),
+	'11'=>Yii::t('main', 'Marraskuu'),
+	'12'=>Yii::t('main', 'Joulukuu'),
 	);
 
 
@@ -73,7 +73,7 @@ $months=array(
 			?>
 		  </b>
                 </h2>
-                <h5 class="text-muted"><?php echo $months[date("m")]; ?> toteuma</h5>
+                <h5 class="text-muted"><?php echo $months[date("m")].' '.Yii::t('main', 'toteuma'); ?></h5>
               </div>
             </div>
           </div>
@@ -134,7 +134,7 @@ $months=array(
                 <h2 class="mt15 lh15">
                   <b><?php echo $suunniteltu; ?></b>
                 </h2>
-                <h5 class="text-muted">Suunniteltu tänään</h5>
+                <h5 class="text-muted"><?php echo Yii::t('main', 'Suunniteltu tänään'); ?></h5>
               </div>
             </div>
           </div>
@@ -159,7 +159,7 @@ $months=array(
                 <h2 class="mt15 lh15">
                   <b><?php echo $viestit; ?></b>
                 </h2>
-                <h5 class="text-muted">Viestit tänään</h5>
+                <h5 class="text-muted"><?php echo Yii::t('main', 'Viestit tänään'); ?></h5>
               </div>
             </div>
           </div>
@@ -271,7 +271,7 @@ echo '
              <!-- Pie Chart -->
               <div class="panel" id="p10">
                 <div class="panel-heading">
-                  <span class="panel-title">Siivoojat tänään </span>
+                  <span class="panel-title"><?php echo Yii::t('main', 'Siivoojat tänään'); ?></span>
 		  <?php 
 		   $parasSiivoja = json_encode($this->parasSiivojaTanaan());
 		  ?>
@@ -292,16 +292,16 @@ echo '
 
               <div class="panel" id="p5">
                 <div class="panel-heading">
-                  <span class="panel-title">Tilat tänään</span>
+                  <span class="panel-title"><?php echo Yii::t('main', 'Tilat tänään'); ?></span>
                 </div>
                 <div class="panel-body">
                   <div class="mb20 text-right">
                     <span class="fs11 text-muted ml10">
-                      <i class="fa fa-circle text-primary fs12 pr5"></i> Työt</span>
+                      <i class="fa fa-circle text-primary fs12 pr5"></i> <?php echo Yii::t('main', 'Työt'); ?></span>
                     <span class="fs11 text-muted ml10">
-                      <i class="fa fa-circle text-info fs12 pr5"></i> Matkat</span>
+                      <i class="fa fa-circle text-info fs12 pr5"></i> <?php echo Yii::t('main', 'Matkat'); ?></span>
                     <span class="fs11 text-muted ml10">
-                      <i class="fa fa-circle text-warning fs12 pr5"></i> Lounaat</span>
+                      <i class="fa fa-circle text-warning fs12 pr5"></i> <?php echo Yii::t('main', 'Lounaat'); ?></span>
                   </div>
 		  <br><br>
                   <div class="row">
@@ -328,7 +328,7 @@ echo '
               <!-- Bar Graph -->
               <div class="panel" id="p12">
                 <div class="panel-heading">
-                  <span class="panel-title">Toimialat</span>
+                  <span class="panel-title"><?php echo Yii::t('main', 'Toimialat'); ?></span>
 		  <?php 
 		    $month1 = $months[date("m")];
 		    $month2 = $months[date("m",strtotime("-1 month"))];
@@ -370,7 +370,7 @@ echo '
               <!-- Text List -->
               <div class="panel" id="p21">
                 <div class="panel-heading">
-                  <span class="panel-title">Käyttäjää online</span>
+                  <span class="panel-title"><?php echo Yii::t('main', 'Käyttäjää online'); ?></span>
                 </div>
                 <div class="panel-body pn">
                   <table class="table mbn tc-list-1 tc-text-muted-2 tc-fw600-2">
@@ -410,7 +410,7 @@ echo '
               <!-- Country List -->
               <div class="panel" id="p16">
                 <div class="panel-heading">
-                  <span class="panel-title">Avoimet kohteet</span>
+                  <span class="panel-title"><?php echo Yii::t('main', 'Avoimet kohteet'); ?></span>
                 </div>
                 <div class="panel-body pn">
                   <table class="table mbn tc-med-1 tc-bold-last">
@@ -466,7 +466,7 @@ echo '
 
 	<div class="row">
 	 <div class="form-inline">
-		Alue/Kaupunki <input type="text" class="form-control form-group" id="alueKaupunki">
+		<?php echo Yii::t('main', 'Alue/Kaupunki'); ?> <input type="text" class="form-control form-group" id="alueKaupunki">
 		 <button class="tallennaLatLng btn btn-primary myBgColors"><?php echo Yii::t('main', 'Tallenna'); ?></button>
 	 </div>
 	</div>
@@ -529,9 +529,10 @@ $(".tallennaLatLng").click(function(){
     <!-- End: Content-Wrapper -->
 
     <!-- Start: Right Sidebar -->
+<!--
     <aside id="sidebar_right" class="nano affix">
 
-      <!-- Start: Sidebar Right Content -->
+
       <div class="sidebar-right-content nano-content">
 
         <div class="tab-block sidebar-block br-n">
@@ -671,13 +672,13 @@ $(".tallennaLatLng").click(function(){
             <div id="sidebar-right-tab2" class="tab-pane"></div>
             <div id="sidebar-right-tab3" class="tab-pane"></div>
           </div>
-          <!-- end: .tab-content -->
+
 
         </div>
 
       </div>
     </aside>
-    <!-- End: Right Sidebar -->
+     -->
 
   </div>
   <!-- End: Main -->
