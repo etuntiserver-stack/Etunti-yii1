@@ -158,6 +158,22 @@ $model->hinta = str_replace(",",".",$model->hinta);
 	</div>
 
 	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'avaimen_sijainti'); ?>
+
+		<?php
+		$list = array(
+			1=>Yii::t('main', 'Asiakas'),
+			2=>Yii::t('main', 'Toimisto'),
+			3=>Yii::t('main', 'Työntekijä')
+		);
+        	echo $form->dropDownList($model, 'avaimen_sijainti', $list,
+		array('empty'=>'','class'=>'form-control'));
+        	?>
+
+		<?php echo $form->error($model,'avaimen_sijainti'); ?>
+	</div>
+
+	<div class="section fill mb5 kenella_on_avain">
 		<?php echo $form->labelEx($model,'kenella_on_avain'); ?>
 
 		<?php
@@ -263,43 +279,25 @@ $(".muokaValiko").click(function() {
 /* valikot */
 
 
+
+	var avainOn = $( "#Kohteet_avaimen_sijainti option:selected" ).val();
+	if(avainOn !== '3')
+	$('.kenella_on_avain').hide();
+
+
+$("#Kohteet_avaimen_sijainti").change(function() {
+    var thisVal = $(this).val();
+	if(thisVal !== '3')
+	{
+		$('.kenella_on_avain').hide('slow');
+		$('#Kohteet_kenella_on_avain').val('');
+	} else {
+		$('.kenella_on_avain').show('slow');
+	}
+});
+
+
 });
 </script>
 
 
-
-
-<?php /*
-
-	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'tyoryhma'); ?>
-		<?php echo $form->textField($model,'tyoryhma',array('size'=>20,'maxlength'=>20,'class'=>'form-control')); ?>
-
-		<?php echo $form->error($model,'tyoryhma'); ?>
-	</div>
-
-	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'ryhma'); ?>
-		<?php echo $form->textField($model,'ryhma',array('size'=>10,'maxlength'=>10,'class'=>'form-control')); ?>
-		<?php echo $form->error($model,'ryhma'); ?>
-	</div>
-
-	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'maksuehto_paiva'); ?>
-		<?php echo $form->textField($model,'maksuehto_paiva',array('class'=>'form-control')); ?>
-		<?php echo $form->error($model,'maksuehto_paiva'); ?>
-	</div>
-
-	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'viivastyskorko'); ?>
-		<?php echo $form->textField($model,'viivastyskorko',array('size'=>10,'maxlength'=>10,'class'=>'form-control')); ?>
-		<?php echo $form->error($model,'viivastyskorko'); ?>
-	</div>
-
-	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'lasku_tiedot'); ?>
-		<?php echo $form->textField($model,'lasku_tiedot',array('size'=>60,'maxlength'=>255,'class'=>'form-control')); ?>
-		<?php echo $form->error($model,'lasku_tiedot'); ?>
-	</div>
-*/
-?>
