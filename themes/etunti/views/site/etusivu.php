@@ -522,8 +522,7 @@ $(".tallennaLatLng").click(function(){
           </div>
         </div>
       </footer>
--->
-      <!-- End: Page Footer -->
+
 
     </section>
     <!-- End: Content-Wrapper -->
