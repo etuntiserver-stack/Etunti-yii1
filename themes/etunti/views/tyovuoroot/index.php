@@ -49,13 +49,13 @@
 <?php
 
   $paivat=array(
-	1=>'Ma',
-	2=>'Ti',
-	3=>'Ke',
-	4=>'To',
-	5=>'Pe',
-	6=>'La',
-	7=>'Su',
+	1=>Yii::t('main', 'Ma'),
+	2=>Yii::t('main', 'Ti'),
+	3=>Yii::t('main', 'Ke'),
+	4=>Yii::t('main', 'To'),
+	5=>Yii::t('main', 'Pe'),
+	6=>Yii::t('main', 'La'),
+	7=>Yii::t('main', 'Su'),
 	);
 
 
@@ -116,7 +116,7 @@
    $list[$v->value] = $v->value;
 
    echo CHtml::dropDownList('siivous', 'siivous', $list,
-   array('empty'=>Yii::t('main', 'Työnimike kohteet'),'class'=>'form-control form-group','id'=>'siivousTyonimike'));
+   array('empty'=>Yii::t('main', 'Työnimike'),'class'=>'form-control form-group','id'=>'siivousTyonimike'));
 
 
    //
@@ -288,7 +288,7 @@ td .tp{
   <table class="table table-bordered table-striped small" style="background: white">
      <thead>
      <tr>
-	<th>Nimi</th>
+	<th><?php echo Yii::t('main', 'Nimi'); ?></th>
         <?php
 	for($day= 1; $day <= $numDays; $day++)
 	{
@@ -450,6 +450,18 @@ $(function () {
     });
 
     $(window).resize(onResize);
+});
+
+
+
+$('#tyontekijat').multiselect({
+	//inheritClass: true,
+	//enableFiltering: true,
+        includeSelectAllOption: true,
+	nonSelectedText: '<?php echo Yii::t("main", "Tyhjä"); ?>',
+	selectAllText: '<?php echo Yii::t("main", "Valitse kaikki"); ?>',
+	allSelectedText: '<?php echo Yii::t("main", "Kaikki"); ?>',
+	nSelectedText: '<?php echo Yii::t("main", "valittu"); ?>',
 });
 
 

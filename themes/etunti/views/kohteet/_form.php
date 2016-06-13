@@ -118,7 +118,7 @@ $model->hinta = str_replace(",",".",$model->hinta);
 		<?php
 		$list = array(1=>'tunti',2=>'kk',3=>'kpl');
         	echo $form->dropDownList($model, 'hinta_tyyppi', $list,
-		array('empty'=>'Valitse tyyppi','class'=>'form-control'));	
+		array('empty'=>Yii::t('main', 'Valitse'),'class'=>'form-control'));	
         	?>
 		<?php echo $form->error($model,'hinta_tyyppi'); ?>
 	</div>
@@ -240,6 +240,7 @@ $model->hinta = str_replace(",",".",$model->hinta);
 		<?php echo $form->labelEx($model,'ryhma'); ?>
 	   <div class="form-inline">
 		<?php
+
 		$list = array();
       		$l = Valikkoot::model()->findAll(" select_type='asiakas_ryhma' ",array('order' => "select_type"));
 		foreach($l as $v)
@@ -248,7 +249,7 @@ $model->hinta = str_replace(",",".",$model->hinta);
 		if(count($list) > 0)
 		{
         	echo $form->dropDownList($model, 'ryhma', $list,
-		array('empty'=>'Valitse toimialue','class'=>'form-control'));
+		array('empty'=>Yii::t('main', 'Valitse'),'class'=>'form-control'));
 		} else {
 		echo 'Luo Valikko tietokannassa "Select Type = asiakas_ryhma"';
 		}		

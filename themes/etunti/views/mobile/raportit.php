@@ -84,7 +84,7 @@ $this->breadcrumbs=array(
 
       <div class="row">
        <div class="col-sm-12">
-    	   <select name="ilman[]" class="selectpicker form-control"  multiple="multiple"  title="Ei lasketa">
+    	   <select name="ilman[]" class="selectpicker form-control"  multiple="multiple"  title="<?php echo Yii::t('main', 'Ei lasketa'); ?>">
     	   <option value="Lounastauko"><?php echo Yii::t('main', 'Lounastauko'); ?></option>
     	   <option value="MATKA"><?php echo Yii::t('main', 'MATKA'); ?></option>
     	   </select>
@@ -169,7 +169,7 @@ $this->breadcrumbs=array(
 
       <div class="row">
        <div class="col-sm-12">
-    	   <select name="ilman[]" class="selectpicker form-control"  multiple="multiple"  title="Ei lasketa">
+    	   <select name="ilman[]" class="selectpicker form-control"  multiple="multiple"  title="<?php echo Yii::t('main', 'Ei lasketa'); ?>">
     	   <option value="Lounastauko"><?php echo Yii::t('main', 'Lounastauko'); ?></option>
     	   <option value="MATKA"><?php echo Yii::t('main', 'MATKA'); ?></option>
     	   </select>

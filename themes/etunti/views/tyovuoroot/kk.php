@@ -13,18 +13,18 @@ $this->menu=array(
 */
 
 $months=array(
-	1=>'Tammikuu',
-	2=>'Helmikuu',
-	3=>'Maaliskuu',
-	4=>'Huhtikuu',
-	5=>'Toukokuu',
-	6=>'Kesäkuu',
-	7=>'Heinäkuu',
-	8=>'Elokuu',
-	9=>'Syyskuu',
-	10=>'Lokakuu',
-	11=>'Marraskuu',
-	12=>'Joulukuu'
+	1=>Yii::t('main', 'Tammikuu'),
+	2=>Yii::t('main', 'Helmikuu'),
+	3=>Yii::t('main', 'Maaliskuu'),
+	4=>Yii::t('main', 'Huhtikuu'),
+	5=>Yii::t('main', 'Toukokuu'),
+	6=>Yii::t('main', 'Kesäkuu'),
+	7=>Yii::t('main', 'Heinäkuu'),
+	8=>Yii::t('main', 'Elokuu'),
+	9=>Yii::t('main', 'Syyskuu'),
+	10=>Yii::t('main', 'Lokakuu'),
+	11=>Yii::t('main', 'Marraskuu'),
+	12=>Yii::t('main', 'Joulukuu')
 	);
 
 $pvm = '';

@@ -11,15 +11,7 @@ $('td').hover(function()
 });
 
 
-$('#tyontekijat').multiselect({
-	//inheritClass: true,
-	//enableFiltering: true,
-        includeSelectAllOption: true,
-	nonSelectedText: 'Tyhjä',
-	selectAllText: 'Valitse kaikki',
-	allSelectedText: 'Kaikki',
-	nSelectedText: 'valittu',
-});
+
 /*
 $('#tyontekijat').selectpicker({
 

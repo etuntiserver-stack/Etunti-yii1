@@ -76,7 +76,10 @@ $this->breadcrumbs=array(
 
 
    <?php
-    $list = CHtml::listData(Mobile::model()->findAll(array('order' => 'tekijan_nimi','group'=>'tekijan_nimi')), 'tid', 'tekijan_nimi');
+    $criteria=new CDbCriteria;
+    $criteria->order=" tekijan_nimi ";
+    $criteria->condition=" aktiivinen=1 ";
+    $list = CHtml::listData(Tyontekijat::model()->findAll($criteria), 'id', 'tekijan_nimi');
 
     echo '<select name="Tekija[]" id="tyontekijat" multiple title="Työntekijät">';
     foreach($list as $key=>$val){
@@ -98,7 +101,7 @@ $this->breadcrumbs=array(
 
 
                       <div class="col-md-2  col-md-offset-3">
-        	        <button class="btn btn-primary btn-lg haemob btn-block myBgColors" type="button"><i class="glyphicon glyphicon-search"> </i> Hae</button>
+        	        <input type="submit" class="btn btn-primary btn-lg haemob btn-block myBgColors" value="<?php echo Yii::t('main', 'Hae'); ?>">
 		      </div>
 
                     </div>
@@ -353,10 +356,10 @@ $('#tyontekijat').multiselect({
 	//inheritClass: true,
 	//enableFiltering: true,
         includeSelectAllOption: true,
-	nonSelectedText: 'Tyhjä',
-	selectAllText: 'Valitse kaikki',
-	allSelectedText: 'Kaikki',
-	nSelectedText: 'valittu',
+	nonSelectedText: '<?php echo Yii::t("main", "Tyhjä"); ?>',
+	selectAllText: '<?php echo Yii::t("main", "Valitse kaikki"); ?>',
+	allSelectedText: '<?php echo Yii::t("main", "Kaikki"); ?>',
+	nSelectedText: '<?php echo Yii::t("main", "valittu"); ?>',
 });
 
 

@@ -70,8 +70,8 @@ $this->breadcrumbs=array(
     $matka = ( isset(Yii::app()->session['MATKA']))  ? 'selected' : '';
 
     echo '<select name="ilman[]" class="ilman"  multiple="multiple">';
-    echo '<option value="Lounastauko" '.$lounas.'>Lounastauko</option>';
-    echo '<option value="MATKA" '.$matka.'>MATKA</option>';
+    echo '<option value="Lounastauko" '.$lounas.'>'.Yii::t('main', 'Lounastauko').'</option>';
+    echo '<option value="MATKA" '.$matka.'>'.Yii::t('main', 'Matka').'</option>';
     echo '</select>';
    ?>
 
@@ -108,7 +108,7 @@ $this->breadcrumbs=array(
                       </div>
 
                       <div class="col-md-2 col-md-offset-2">
-        	        <button class="btn btn-primary btn-lg haemob btn-block myBgColors" type="button"><i class="glyphicon glyphicon-search"> </i> Hae</button>
+        	        <input type="submit" class="btn btn-primary btn-lg haemob btn-block myBgColors" value="<?php echo Yii::t('main', 'Hae'); ?>">
 		      </div>
 
                     </div>
@@ -299,10 +299,10 @@ $('.ilman').multiselect({
 	//inheritClass: true,
 	//enableFiltering: true,
         includeSelectAllOption: true,
-	nonSelectedText: 'Ei lasketa',
-	selectAllText: 'Valitse kaikki',
-	allSelectedText: 'Kaikki',
-	nSelectedText: 'valittu',
+	nonSelectedText: '<?php echo Yii::t("main", "Ei lasketa"); ?>',
+	selectAllText: '<?php echo Yii::t("main", "Valitse kaikki"); ?>',
+	allSelectedText: '<?php echo Yii::t("main", "Kaikki"); ?>',
+	nSelectedText: '<?php echo Yii::t("main", "valittu"); ?>',
 });
 
 
@@ -310,10 +310,10 @@ $('.mult').multiselect({
 	//inheritClass: true,
 	//enableFiltering: true,
         includeSelectAllOption: true,
-	nonSelectedText: 'Tyhjä',
-	selectAllText: 'Valitse kaikki',
-	allSelectedText: 'Kaikki',
-	nSelectedText: 'valittu',
+	nonSelectedText: '<?php echo Yii::t("main", "Tyhjä"); ?>',
+	selectAllText: '<?php echo Yii::t("main", "Valitse kaikki"); ?>',
+	allSelectedText: '<?php echo Yii::t("main", "Kaikki"); ?>',
+	nSelectedText: '<?php echo Yii::t("main", "valittu"); ?>',
 });
 
 

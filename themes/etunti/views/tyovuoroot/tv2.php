@@ -190,7 +190,7 @@ td .tp{
    $list[$v->value] = $v->value;
 
    echo CHtml::dropDownList('siivous', 'siivous', $list,
-   array('empty'=>Yii::t('main', 'Työnimike kohteet'),'class'=>'form-control form-group','id'=>'siivousTyonimike'));
+   array('empty'=>Yii::t('main', 'Työnimike'),'class'=>'form-control form-group','id'=>'siivousTyonimike'));
 
    ?>
    <input type="text" name="from" id="from" size="10" class="form-control form-group datepicker" value="<?php echo Yii::app()->session['from']; ?>" placeholder="<?php echo Yii::t('main' ,'Päivämäärä'); ?>">
@@ -466,6 +466,17 @@ $(function () {
     $(window).resize(onResize);
 });
 
+
+
+$('#tyontekijat').multiselect({
+	//inheritClass: true,
+	//enableFiltering: true,
+        includeSelectAllOption: true,
+	nonSelectedText: '<?php echo Yii::t("main", "Tyhjä"); ?>',
+	selectAllText: '<?php echo Yii::t("main", "Valitse kaikki"); ?>',
+	allSelectedText: '<?php echo Yii::t("main", "Kaikki"); ?>',
+	nSelectedText: '<?php echo Yii::t("main", "valittu"); ?>',
+});
 
 });
 </script>

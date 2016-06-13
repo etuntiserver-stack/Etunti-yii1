@@ -80,7 +80,7 @@ legend{  padding: 3px 7px; }
                         <div class="section">
                           <label class="field prepend-icon">
 
-   			    <input type="text" class="gui-input" name="avain" value="<?php if(isset($_POST['avain'])) echo $_POST['avain']; ?>" placeholder="Avain">
+   			    <input type="text" class="gui-input" name="avain" value="<?php if(isset($_POST['avain'])) echo $_POST['avain']; ?>" placeholder="<?php echo Yii::t('main', 'Avain'); ?>">
 
                             <label for="firstname" class="field-icon">
                               <i class="fa fa-key"></i>
@@ -90,7 +90,7 @@ legend{  padding: 3px 7px; }
                       </div>
 
                       <div class="col-md-2 col-md-offset-5">
-        	        <button class="btn btn-primary btn-lg haemob btn-block myBgColors" type="button"><i class="glyphicon glyphicon-search"> </i> Hae</button>
+        	        <input type="submit" class="btn btn-primary btn-lg haemob btn-block myBgColors" value="<?php echo Yii::t('main', 'Hae'); ?>">
 		      </div>
 
                     </div>
@@ -175,7 +175,7 @@ $('#tyontekijat').multiselect({
 	//inheritClass: true,
 	//enableFiltering: true,
         includeSelectAllOption: true,
-	nonSelectedText: 'Tyhjä',
+	nonSelectedText: '<?php echo Yii::t("main", "Tyhjä"); ?>',
 	selectAllText: 'Valitse kaikki',
 	allSelectedText: 'Kaikki',
 	nSelectedText: 'valittu',

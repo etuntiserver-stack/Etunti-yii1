@@ -67,9 +67,6 @@ $this->breadcrumbs=array(
 
                           </label>
 
-   <a href="#" id="deselAll" class="glyphicon glyphicon-minus"></a>
-   <a href="#" id="selAll" class="glyphicon glyphicon-plus"></a>
-
 
                         </div>
                       </div>
@@ -83,9 +80,9 @@ $this->breadcrumbs=array(
     $matka = '';
     $matka = ( isset(Yii::app()->session['MATKA']))  ? 'selected' : '';
 
-    echo '<select name="ilman[]" class="mult ilman"  multiple="multiple"  title="Ei lasketa...">';
-    echo '<option value="Lounastauko" '.$lounas.'>Lounastauko</option>';
-    echo '<option value="MATKA" '.$matka.'>MATKA</option>';
+    echo '<select name="ilman[]" class="ilman"  multiple="multiple"  title="Ei lasketa...">';
+    echo '<option value="Lounastauko" '.$lounas.'>'.Yii::t('main', 'Lounastauko').'</option>';
+    echo '<option value="MATKA" '.$matka.'>'.Yii::t('main', 'Matka').'</option>';
     echo '</select>';
    ?>
 
@@ -120,7 +117,7 @@ $this->breadcrumbs=array(
                       </div>
 
                       <div class="col-md-2">
-        	        <button class="btn btn-primary btn-lg haemob btn-block myBgColors" type="button"><i class="glyphicon glyphicon-search"> </i> Hae</button>
+        	        <input type="submit" class="btn btn-primary btn-lg haemob btn-block myBgColors" value="<?php echo Yii::t('main', 'Hae'); ?>">
 		      </div>
 
                     </div>
@@ -234,10 +231,25 @@ $("#yhtveto").on('submit',function(e){
 });
 
 
-$('.mult').selectpicker({
-      style: 'gui-input',
-      //size: 4
-  });
+$('.ilman').multiselect({
+	//inheritClass: true,
+	//enableFiltering: true,
+        includeSelectAllOption: true,
+	nonSelectedText: '<?php echo Yii::t("main", "Ei lasketa"); ?>',
+	selectAllText: '<?php echo Yii::t("main", "Valitse kaikki"); ?>',
+	allSelectedText: '<?php echo Yii::t("main", "Kaikki"); ?>',
+	nSelectedText: '<?php echo Yii::t("main", "valittu"); ?>',
+});
+
+$('.mult').multiselect({
+	//inheritClass: true,
+	//enableFiltering: true,
+        includeSelectAllOption: true,
+	nonSelectedText: '<?php echo Yii::t("main", "Tyhjä"); ?>',
+	selectAllText: '<?php echo Yii::t("main", "Valitse kaikki"); ?>',
+	allSelectedText: '<?php echo Yii::t("main", "Kaikki"); ?>',
+	nSelectedText: '<?php echo Yii::t("main", "valittu"); ?>',
+});
 
 });
 </script>
