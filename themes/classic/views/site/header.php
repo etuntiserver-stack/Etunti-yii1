@@ -188,10 +188,10 @@
         <section class="box-action">
             <div class="container">
                 <div class="title">
-                    <p class="lead">Tilaa Etunti -uutiskirje</p>
+                    <p class="lead">Lataa ilmainen Menestyvän yrityksen opas</p>
                 </div>
                 <div class="button">
-                    <a href="#liitytestaajaksi" >TÄSTÄ</a>
+                    <a href="#" data-toggle="modal" data-target=".lataailmainen_lomake">TÄSTÄ</a>
                 </div>
             </div>
         </section>

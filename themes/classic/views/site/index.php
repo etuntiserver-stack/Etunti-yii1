@@ -327,7 +327,7 @@ etuntimyynti@etunti.fi<br>
                              Testerin avulla tunnistat yritystoimintasi mahdolliset kehityskohteet ja saat testillä ratkaisuehdotuksen heti.
                             </p>
 
-                            <button type="button"  class="btn btn-xl btn-primary" role="button" data-toggle="modal" data-target=".testeri-modal">TEE TESTI</button>
+                            <button type="button"  class="btn btn-xl btn-primary" role="button" data-toggle="modal" data-target=".lataailmainen_lomake">TEE TESTI</button>
 
                         </div>
                         <div class="col-md-6" style="padding: 20px;">
@@ -343,6 +343,12 @@ etuntimyynti@etunti.fi<br>
                     </div>
                 </div>
             </div>
+
+
+
+
+
+
 
 
 
@@ -458,6 +464,27 @@ $kysymykset[] = array(
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
+
+
+                <!-- Modal -->
+                  <div class="modal fade lataailmainen_lomake">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                          <h3>Lataa Menestyvän yrityksen opas</h3>
+                        </div>
+                        <div class="modal-body">
+                          <h5>Täytä pyydetyt kentät. Ilmainen opas lähetetään sähköpostiisi.</h5>
+                          <p class="valitut_modulit"></p>
+                          <span style="color: #333">
+				<?php $this->renderPartial('/site/lomake_lataailmainen'); ?>
+			  </span>
+                        </div>
+                      </div><!-- /.modal-content -->
+                    </div><!-- /.modal-dialog -->
+                  </div>
+                <!-- /.modal -->
 
 
             <div class="paddings grey-white border-top border-white hidden">
