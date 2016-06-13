@@ -1,14 +1,14 @@
 <?php
-/* @var $this BlogController */
-/* @var $model Blog */
+/* @var $this UutisetController */
+/* @var $model Uutiset */
 
 $this->breadcrumbs=array(
-	'Blogs'=>array('index'),
+	'Uutisets'=>array('index'),
 	'Manage',
 );
 
 $this->menu=array(
-	array('label'=>'Luo blog', 'url'=>array('create')),
+	array('label'=>'Luo uutinen', 'url'=>array('create')),
 );
 
 Yii::app()->clientScript->registerScript('search', "
@@ -17,7 +17,7 @@ $('.search-button').click(function(){
 	return false;
 });
 $('.search-form form').submit(function(){
-	$('#blog-grid').yiiGridView('update', {
+	$('#uutiset-grid').yiiGridView('update', {
 		data: $(this).serialize()
 	});
 	return false;
@@ -25,8 +25,7 @@ $('.search-form form').submit(function(){
 ");
 ?>
 
-<h1>Manage Blogs</h1>
-
+<h1>Uutiset hallinta</h1>
 
 
 <?php echo CHtml::link('Advanced Search','#',array('class'=>'search-button')); ?>
@@ -37,15 +36,15 @@ $('.search-form form').submit(function(){
 </div><!-- search-form -->
 
 <?php $this->widget('zii.widgets.grid.CGridView', array(
-	'id'=>'blog-grid',
+	'id'=>'uutiset-grid',
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,
 	'columns'=>array(
 		'id',
 		'time',
-		'luoja',
 		'otsikko',
 		'teksti',
+		'luoja',
 		array(
 			'class'=>'CButtonColumn',
 		),

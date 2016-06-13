@@ -12,15 +12,10 @@
 
      <div class="">
 
-	<h1 class="title-subtitle text-left">
-	<span><?php echo CHtml::encode($data->otsikko); ?></span>
-	</h1>
-
 
 	<div class="row">
 	 <div class="col-sm-2">
 	  <?php echo CHtml::encode(date("d.m.Y", strtotime($data->time))); ?>
-	  <?php echo CHtml::image(Yii::app()->request->baseUrl.'/tiedostot/etusivu/'.$data->kuva,"kuva",array('class'=>'img-thumbnail')); ?>
 	 </div>
 
 	 <div class="col-sm-8 col-sm-offset-1">
@@ -37,5 +32,4 @@
  </p>
  </div>
 </div>
-<hr>
 
