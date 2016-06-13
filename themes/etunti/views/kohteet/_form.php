@@ -221,7 +221,7 @@ $model->hinta = str_replace(",",".",$model->hinta);
 		<?php echo $form->error($model,'avaimen_sijainti'); ?>
 	</div>
 
-	<div class="section fill mb5">
+	<div class="section fill mb5 kenella_on_avain">
 		<?php echo $form->labelEx($model,'kenella_on_avain'); ?>
 
 		<?php
@@ -527,6 +527,24 @@ $(".muokaValiko").click(function() {
         });
 });
 /* valikot */
+
+
+
+	var avainOn = $( "#Kohteet_avaimen_sijainti option:selected" ).val();
+	if(avainOn !== '3')
+	$('.kenella_on_avain').hide();
+
+
+$("#Kohteet_avaimen_sijainti").change(function() {
+    var thisVal = $(this).val();
+	if(thisVal !== '3')
+	{
+		$('.kenella_on_avain').hide('slow');
+		$('#Kohteet_kenella_on_avain').val('');
+	} else {
+		$('.kenella_on_avain').show('slow');
+	}
+});
 
 
 });

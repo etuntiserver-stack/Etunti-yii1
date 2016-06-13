@@ -661,7 +661,13 @@ return array(
 	'Marraskuu'=>'November',
 	'Joulukuu'=>'December',
 
-'Tuntien hallinta'=>'',
+
+	'Asiakkaiden hallinta'=>'',
+	'Tuntien hallinta'=>'',
+	'Työntekijöiden hallinta'=>'',
+	'Viestinnän hallinta'=>'',
+	'Työvuorojen hallinta'=>'',
+	'Laskutuksen hallinta'=>'',
 
 
 
