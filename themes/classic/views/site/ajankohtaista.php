@@ -18,22 +18,57 @@
         <section class="esittely">
             <div class="paddings">
                 <div class="container">
-                    <!-- Icon Big -->
-                    <!-- End Icon Big -->
-                        <h1 class="title-subtitle text-center">Ajankohtaista
-                        </h1>
-                        <hr>
-                    <!-- End Titles Heading -->
+
                     <div class="row">
                         <div class="col-md-12 lead">
                        
 
+                        <h1 class="title-subtitle text-left">
+			<?php echo Yii::t('main', 'Ajankohtaista'); ?>
+                        </h1>
+<?php 
 
+       		$criteria = new CDbCriteria();
+	        $criteria->order = " id DESC ";
 
-<?php $this->widget('zii.widgets.CListView', array(
-	'dataProvider'=>$dataProvider,
-	'itemView'=>'_blog',
-)); ?>
+		$dataProvider=new CActiveDataProvider('Uutiset', array(
+			'criteria'=>$criteria,
+			//'pagination'=>false
+		));
+
+		$dataProvider->pagination->pageSize = 5;
+
+		$this->widget('zii.widgets.CListView', array(
+			'dataProvider'=>$dataProvider,
+			'itemView'=>'_uutiset',
+		));
+
+?>
+
+			<hr>
+
+                        <h1 class="title-subtitle text-left">
+			<?php echo Yii::t('main', 'Blogi'); ?>
+                        </h1>
+
+<?php 
+
+       		$criteria = new CDbCriteria();
+	        $criteria->order = " id DESC ";
+
+		$dataProvider=new CActiveDataProvider('Blog', array(
+			'criteria'=>$criteria,
+			//'pagination'=>false
+		));
+
+		$dataProvider->pagination->pageSize = 10;
+
+		$this->widget('zii.widgets.CListView', array(
+			'dataProvider'=>$dataProvider,
+			'itemView'=>'_blog',
+		));
+
+?>
 
 
 

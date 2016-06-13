@@ -77,16 +77,7 @@ class SiteController extends Controller
 	public function actionAjankohtaista()
 	{
 
-       		$criteria = new CDbCriteria();
-	        $criteria->order = " id DESC ";
-
-		$dataProvider=new CActiveDataProvider('Blog', array(
-			'criteria'=>$criteria,
-			//'pagination'=>false
-		));
-
-		$dataProvider->pagination->pageSize = 10;
-		$this->render('ajankohtaista', array('dataProvider' => $dataProvider));
+		$this->render('ajankohtaista');
 
 	}
 	public function actionAsiakkaat()

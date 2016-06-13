@@ -1,23 +1,23 @@
 <?php
 
 /**
- * This is the model class for table "blog".
+ * This is the model class for table "uutiset".
  *
- * The followings are the available columns in table 'blog':
+ * The followings are the available columns in table 'uutiset':
  * @property integer $id
  * @property string $time
- * @property string $luoja
  * @property string $otsikko
  * @property string $teksti
+ * @property string $luoja
  */
-class Blog extends CActiveRecord
+class Uutiset extends CActiveRecord
 {
 	/**
 	 * @return string the associated database table name
 	 */
 	public function tableName()
 	{
-		return 'blog';
+		return 'uutiset';
 	}
 
 	/**
@@ -29,11 +29,10 @@ class Blog extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('otsikko, teksti', 'required'),
-			array('luoja, otsikko, kuva', 'length', 'max'=>255),
-			array('kuva', 'file','types'=>'jpg, gif, png', 'allowEmpty'=>false, 'on'=>'update'),
+			array('otsikko, luoja', 'length', 'max'=>255),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, time, luoja, otsikko, teksti', 'safe', 'on'=>'search'),
+			array('id, time, otsikko, teksti, luoja', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -56,9 +55,9 @@ class Blog extends CActiveRecord
 		return array(
 			'id' => 'ID',
 			'time' => 'Time',
-			'luoja' => 'Luoja',
 			'otsikko' => 'Otsikko',
 			'teksti' => 'Teksti',
+			'luoja' => 'Luoja',
 		);
 	}
 
@@ -79,13 +78,12 @@ class Blog extends CActiveRecord
 		// @todo Please modify the following code to remove attributes that should not be searched.
 
 		$criteria=new CDbCriteria;
-		$criteria->order =" id DESC ";
 
 		$criteria->compare('id',$this->id);
 		$criteria->compare('time',$this->time,true);
-		$criteria->compare('luoja',$this->luoja,true);
 		$criteria->compare('otsikko',$this->otsikko,true);
 		$criteria->compare('teksti',$this->teksti,true);
+		$criteria->compare('luoja',$this->luoja,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -96,7 +94,7 @@ class Blog extends CActiveRecord
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return Blog the static model class
+	 * @return Uutiset the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{
