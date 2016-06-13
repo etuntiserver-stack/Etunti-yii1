@@ -646,6 +646,30 @@ return array(
 /* Models */
 
 
+/* navbar */
+
+	'Tammikuu'=>'January',
+	'Helmikuu'=>'February',
+	'Maaliskuu'=>'March',
+	'Huhtikuu'=>'April',
+	'Toukokuu'=>'May',
+	'Kesäkuu'=>'June',
+	'Heinäkuu'=>'July',
+	'Elokuu'=>'August',
+	'Syyskuu'=>'September',
+	'Lokakuu'=>'Oktober',
+	'Marraskuu'=>'November',
+	'Joulukuu'=>'December',
+
+'Tuntien hallinta'=>'',
+
+
+
+
+
+
+
+
 
 	);
 
