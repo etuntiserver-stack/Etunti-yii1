@@ -138,12 +138,28 @@ public function email()
 		  </body>
 		</html>";
 		if(!empty($value1['osoite'])){
-			mail ($value1['osoite'], $otsikko, $viesti, $headers);
-		}else
-		{
-		echo "<h3>$otsikko</h3>";
-		echo $viesti;
+			//mail ($value1['osoite'], $otsikko, $viesti, $headers);
+		} else {
+			echo "<h3>$otsikko</h3>";
+			echo $viesti;
 		}
+
+
+		if(isset($this->kentat[2]['VALUE']) and !empty($this->kentat[2]['VALUE']))
+		{
+
+			$liite = Yii::app()->request->baseUrl."ylapalkki/Menestyvan_yrityksen_opas.pdf";
+
+			$message = Yii::t('main', 'lataaIlmainenMessage');
+			$mail = new YiiMailer();
+			$mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
+			$mail->setTo($this->kentat[2]['VALUE']);
+			$mail->setSubject(Yii::t('main', 'lataaIlmainenOtsikko'));
+			$mail->setBody($message);
+			$mail->setAttachment($liite);
+			$mail->send();
+		}
+
 	}
 }
 

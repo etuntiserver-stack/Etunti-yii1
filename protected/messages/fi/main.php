@@ -652,6 +652,15 @@ Yhteystietosi löytyvät sähköpostisi perusteella, mikäli olet tilannut aiemm
 Huom. Sinulla voi olla monta osoitetta tallennettuna.',
 	'taitaytateksti' => 'Antamasi yhteystiedot tallentuvat, jolloin seuraavalla kerralla kenttiä ei tarvitse uudestaan täyttää.',
 
+	'lataaIlmainenOtsikko'=>'Etunti - Menestyvän yrityksen opas',
+	'lataaIlmainenMessage'=>'Hei,<br>
+<p>
+Latasit juuri Etunnin Menestyvän yrityksen oppaan. Opas on liitteenä. Mikäli sinulla on kysyttävää tai haluaisit tutustua Etuntiin tarkemmin, niin ota meihin yhteyttä.
+</p>
+',
+
+
 	);
+
 
 ?>
