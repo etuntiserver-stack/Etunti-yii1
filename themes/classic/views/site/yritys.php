@@ -33,7 +33,16 @@
 Idea Etunnista syntyi, kun eräs yritys ei löytänyt markkinoilta sopivaa ohjelmistoa, joka olisi tukenut yrityksen kasvua ja kehitystä. Markkinoita tutkittaessa havaittiin, että yrityksillä oli tarve tehostaa omia toimintaprosesseja, mutta siihen sopivaa ohjelmaa ei ollut. Tarkoitus ei ollut tehdä tuotetta, mikä olisi kopio jostain toisesta tuotteesta, vaan haluttiin rakentaa ohjelma, joka sisältäisi kaiken tarvittavan yrityksen sisäisiin toimintaprosesseihin kuten työajanseurantaan, laskutukseen, työvuorosuunnitteluun, asiakkaidenhallintaan ja moneen muuhun. Yhtä kattavaa ja käyttäjäystävällistä ohjelmaa markkinoilla ei vielä ole.
 </p>
  
-<br>
+
+
+<p class="text-center">
+			<div class="row">
+                        <ul class="stars">
+			<li></li>
+			</ul>
+			</div>
+</p>
+
 
 <p>
 Etunti on ohjelma, joka kehittyy koko ajan asiakkaiden mukana ja asiakkailta saamien kehitysehdotusten avulla. Vuoden 2016 loppuun mennessä valmistuu kaikki Etunnin työkalut. Asiakkaidemme mielipide on meille tärkeää ja saadun kehitysehdotusten avulla teemme Etuntia asiakkaitamme palvelevaksi, monipuoliseksi ohjelmakokonaisuudeksi. Ajatuksemme on, että asiakkaan ei pidä mukautua ohjelmaan vaan ohjelman pitää mukautua asiakkaan tarpeisiin.
@@ -87,3 +96,17 @@ Visiona on tuottaa asiakkaillemme kustannussäästöjä ja enemmän voittovaroja
 
 
 <?php $this->renderPartial('/site/footer'); ?>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+
+
+
+    $("html, body").delay(2000).animate({
+        scrollTop: 700
+    }, 2000);
+
+
+});
+</script>
