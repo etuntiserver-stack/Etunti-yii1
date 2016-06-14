@@ -65,7 +65,7 @@ public function kasittely()
 		$this->print_form = FALSE;
 		$this->email();
 		$this->csv_save();
-		echo "<div class='kiitos'><h2>{$this->asetukset['kiitos']}</h2></div>";
+		//echo "<div class='kiitos'><h2>{$this->asetukset['kiitos']}</h2></div>";
 
 		} else {
 
@@ -74,7 +74,7 @@ public function kasittely()
 		$this->print_form = FALSE;
 		$this->email();
 		$this->csv_save();
-		echo "<div class='kiitos'><h2>{$this->asetukset['kiitos']}</h2></div>";
+		//echo "<div class='kiitos'><h2>{$this->asetukset['kiitos']}</h2></div>";
 
 
 		}
@@ -234,7 +234,10 @@ public function tulosta_kentat()
 
 				case 'select':
 					print "<div class=\"$GROUP_class\"><label class=\"$LABEL_class\">{$value['NAME']}$asterix</label><div class=\"$FIELD_class\"><select class='selectbox $required $type $INPUT_class' name='lomake[$key]' >";
+
+		    if($value['NAME'] != 'Tilaan uutiskirjeen')
                     print "<option value=\"\">-- Valitse --</option>";
+
                     foreach ($value['OPTIONS'] as $value) {
                     	print "<option value=\"$value\">$value</option>";
 	                }
