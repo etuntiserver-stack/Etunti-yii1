@@ -53,6 +53,11 @@ jQuery(document).ready(function(){
 		  //console.log(data)
                   // Optionally alert the user of success here...
                   form.closest('div').html(data);
+
+
+		  $('#lataaMenestyvan').html('Kiitos oppaan lataamisesta.');		
+		  $('#taytapyydetytKentaat').html('Ilmainen opas on lähetetty sähköpostisi.');		
+
                   //console.log(data);
                 }).fail(function(data) {
                     console.log("fail");
