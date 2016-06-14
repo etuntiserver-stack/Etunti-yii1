@@ -25,7 +25,7 @@ class SiteController extends Controller
 	{
 		return array(
 			array('allow', 
-				'actions'=>array( 'header', 'footer', 'lomake_tarjouspyynto', 'lomake_testiryhma', 'ajankohtaista', 'asiakkaat', 'yritys', 'yhteystiedot', 'lomake_lataailmainen'),
+				'actions'=>array( 'header', 'footer', 'lomake_tarjouspyynto', 'lomake_testiryhma', 'ajankohtaista', 'asiakkaat', 'yritys', 'yhteystiedot', 'lomake_lataailmainen', 'uusi_kommento'),
 				'users'=>array('*'),
 			),
 			array('allow', 
@@ -96,6 +96,20 @@ class SiteController extends Controller
 	{
 		$this->render('lomake_lataailmainen');
 	}
+	public function actionUusi_kommento()
+	{
+		if(isset($_POST))
+		{
+			$model = new BlogComments;
+			$model->blog_id=$_POST['blog_id'];
+			$model->nimimerkki=$_POST['nimimerkki'];
+			$model->teksti=$_POST['teksti'];
+			if($model->save())
+			echo 'ok';
+		}
+		exit;
+	}
+
 
 
 

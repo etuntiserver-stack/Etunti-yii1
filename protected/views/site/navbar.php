@@ -52,6 +52,7 @@
           <ul class="dropdown-menu">
         	<li><?php echo CHtml::link(Yii::t('main', 'Uutiset'),array('/uutiset/admin')); ?></li>
         	<li><?php echo CHtml::link(Yii::t('main', 'Blogit'),array('/blog/admin')); ?></li>
+        	<li><?php echo CHtml::link(Yii::t('main', 'Blogin kommentit'),array('/blogComments/admin')); ?></li>
           </ul>
         </li>
 	<?php endif; ?>
