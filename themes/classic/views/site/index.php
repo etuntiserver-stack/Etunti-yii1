@@ -1,7 +1,7 @@
 <?php $this->renderPartial('/site/header'); ?>
 
 
-<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/etusivu_2.css">
+
 <ul class="steps expanded even-4">
     <li class="active"><?php echo CHtml::link('Etusivu', Yii::app()->request->baseUrl.'/index.php/site/index'); ?></li>
     <li class="disabled"><?php echo CHtml::link('Ajankohtaista', Yii::app()->request->baseUrl.'/index.php/site/ajankohtaista'); ?></li>
@@ -466,25 +466,6 @@ $kysymykset[] = array(
 
 
 
-                <!-- Modal -->
-                  <div class="modal fade lataailmainen_lomake">
-                    <div class="modal-dialog">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                          <h3>Lataa Menestyvän yrityksen opas</h3>
-                        </div>
-                        <div class="modal-body">
-                          <h5>Täytä pyydetyt kentät. Ilmainen opas lähetetään sähköpostiisi.</h5>
-                          <p class="valitut_modulit"></p>
-                          <span style="color: #333">
-				<?php $this->renderPartial('/site/lomake_lataailmainen'); ?>
-			  </span>
-                        </div>
-                      </div><!-- /.modal-content -->
-                    </div><!-- /.modal-dialog -->
-                  </div>
-                <!-- /.modal -->
 
 
             <div class="paddings grey-white border-top border-white hidden">
