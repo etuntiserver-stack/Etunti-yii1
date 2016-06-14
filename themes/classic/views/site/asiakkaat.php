@@ -52,3 +52,16 @@
 
 
 <?php $this->renderPartial('/site/footer'); ?>
+
+<script type="text/javascript">
+$(document).ready(function(){
+
+
+
+    $("html, body").delay(2000).animate({
+        scrollTop: 700
+    }, 2000);
+
+
+});
+</script>

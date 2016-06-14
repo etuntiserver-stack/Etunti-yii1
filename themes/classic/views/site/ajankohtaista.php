@@ -2,7 +2,7 @@
 
 
 
-<ul class="steps expanded even-4">
+<ul class="steps expanded even-4" id="stepsScroll">
     <li class="disabled"><?php echo CHtml::link('Etusivu', Yii::app()->request->baseUrl.'/index.php/site/index'); ?></li>
     <li class="active"><?php echo CHtml::link('Ajankohtaista', Yii::app()->request->baseUrl.'/index.php/site/ajankohtaista'); ?></li>
     <li class="disabled"><?php echo CHtml::link('Asiakkaat', Yii::app()->request->baseUrl.'/index.php/site/asiakkaat'); ?></li>
@@ -83,4 +83,20 @@
         </section>        <!-- Services -->
 
 
+
+
 <?php $this->renderPartial('/site/footer'); ?>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+
+
+
+    $("html, body").delay(2000).animate({
+        scrollTop: 700
+    }, 2000);
+
+
+});
+</script>
