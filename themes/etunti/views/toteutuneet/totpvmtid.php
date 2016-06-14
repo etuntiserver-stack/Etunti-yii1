@@ -25,7 +25,7 @@ $did = date("Ymd",strtotime($pvm));
 	   if($tvVal->id){
 	   $muutos = true;
 
-	   $get[$u.strtotime($tvVal->loppui)] = $tvVal->id."//".$tvVal->aloitan."//".$tvVal->loppui."//".$tvVal->kohde_kannasta."//".$did."//".$tid."//".$muutos."//".(strtotime($tvVal->loppui)-strtotime($tvVal->aloitan))."//".$tvVal->kid."//".$tvVal->asiakas_hyvaksy."//".$tvVal->tietoja."//".$tvVal->sairaus;
+	   $get[strtotime($tvVal->loppui)] = $tvVal->id."//".$tvVal->aloitan."//".$tvVal->loppui."//".$tvVal->kohde_kannasta."//".$did."//".$tid."//".$muutos."//".(strtotime($tvVal->loppui)-strtotime($tvVal->aloitan))."//".$tvVal->kid."//".$tvVal->asiakas_hyvaksy."//".$tvVal->tietoja."//".$tvVal->sairaus;
 
 	  $tvVal->loppui = date("Y-m-d H:i",strtotime($tvVal->loppui));
 	  $tvVal->aloitan = date("Y-m-d H:i",strtotime($tvVal->aloitan));
@@ -53,7 +53,7 @@ $did = date("Ymd",strtotime($pvm));
 	   if($tvVal->id){
 	   $muutos = false;
 
-	   $get[$u.strtotime($tvVal->loppui)] = $tvVal->id."//".$tvVal->aloitan."//".$tvVal->loppui."//".$tvVal->kohde_kannasta."//".$did."//".$tid."//".$muutos."//".(strtotime($tvVal->loppui)-strtotime($tvVal->aloitan))."//".$tvVal->id."//".$tvVal->asiakas_hyvaksy."////".$tvVal->sairaus;
+	   $get[strtotime($tvVal->loppui)] = $tvVal->id."//".$tvVal->aloitan."//".$tvVal->loppui."//".$tvVal->kohde_kannasta."//".$did."//".$tid."//".$muutos."//".(strtotime($tvVal->loppui)-strtotime($tvVal->aloitan))."//".$tvVal->id."//".$tvVal->asiakas_hyvaksy."////".$tvVal->sairaus;
 
 
 	  $tvVal->loppui = date("Y-m-d H:i",strtotime($tvVal->loppui));
