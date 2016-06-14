@@ -8,9 +8,14 @@
 		<tr>
             <td style="color:#4D90FE;font-size:22px;border-bottom: 2px solid #4D90FE;">
 	    <?php
-		$d = Domainit::model()->find("domain='".Yii::app()->user->domain."'");
-		if(isset($d->yritys))
-		echo $d->yritys;
+		if(isset(Yii::app()->user->domain))
+		{
+			$d = Domainit::model()->find("domain='".Yii::app()->user->domain."'");
+			if(isset($d->yritys))
+			echo $d->yritys;
+		} else {
+			echo 'ETUNTI.FI';
+		}
 	    ?>
             </td>
 		</tr>
