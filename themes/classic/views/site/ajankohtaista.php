@@ -23,6 +23,8 @@
                         <div class="col-md-12 lead">
                        
 
+<?php if(!isset($_GET['blog'])) : ?>
+
                         <h1 class="title-subtitle text-left">
 			<?php echo Yii::t('main', 'Ajankohtaista'); ?>
                         </h1>
@@ -42,10 +44,11 @@
 			'dataProvider'=>$dataProvider,
 			'itemView'=>'_uutiset',
 		));
-
 ?>
 
 			<hr>
+<?php endif; ?>
+
 
                         <h1 class="title-subtitle text-left">
 			<?php echo Yii::t('main', 'Blogi'); ?>
@@ -55,6 +58,9 @@
 
        		$criteria = new CDbCriteria();
 	        $criteria->order = " id DESC ";
+
+		if(isset($_GET['blog']))
+	        $criteria->addCondition (" id='".$_GET['blog']."' ");
 
 		$dataProvider=new CActiveDataProvider('Blog', array(
 			'criteria'=>$criteria,
@@ -96,6 +102,35 @@ $(document).ready(function(){
     $("html, body").delay(2000).animate({
         scrollTop: 700
     }, 2000);
+
+
+$(document).delegate(".lahetaKommento","click",function(){
+   	var blog_id = $(this).attr('for');
+   	var nimimerkki = $('#'+blog_id).find('.nimimerkki').val();
+   	var teksti = $('#'+blog_id).find('.teksti').val();
+	if(teksti === '')
+	{
+		$('#'+blog_id).find('.teksti').css({"border" : "1px red solid"}).focus();
+		return false;
+	}
+
+
+
+        $.ajax({
+           url: 'uusi_kommento',
+           type: "POST",
+           data: { "blog_id" : blog_id, "nimimerkki" : nimimerkki, "teksti" : teksti },
+           success: function(data){
+		console.log(data);
+
+		if(data === 'ok')
+		window.location.reload();
+
+           }
+        });
+
+
+});
 
 
 });
