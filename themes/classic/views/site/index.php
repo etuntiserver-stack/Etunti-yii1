@@ -319,15 +319,12 @@ etuntimyynti@etunti.fi<br>
                     <div class="row">
                         <div class="col-md-6" style="padding: 20px;border-right:4px white solid;">
 
-                            <h2>Etunti testeri</h2>
+                            <h2>Lataa ilmainen opas</h2>
                             <p>
-                              Testaa, miten Etunti -ohjelma tehostaisi yrityksesi työnkulkua ja toisi liiketoimintaan lisäpotkua.
-                            </p>
-                            <p>
-                             Testerin avulla tunnistat yritystoimintasi mahdolliset kehityskohteet ja saat testillä ratkaisuehdotuksen heti.
+                              Tilaa sähköpostiisi ilmainen Menestyvän yrityksen opas. Opas kokoaa yhteen jokaiselle yrittäjälle hyödyllisiä käytännön vinkkejä oman yritystoiminnan kehittämiseen.
                             </p>
 
-                            <button type="button"  class="btn btn-xl btn-primary" role="button" data-toggle="modal" data-target=".lataailmainen_lomake">TEE TESTI</button>
+                            <button type="button"  class="btn btn-xl btn-primary" role="button" data-toggle="modal" data-target=".lataailmainen_lomake">LATAA OPAS</button>
 
                         </div>
                         <div class="col-md-6" style="padding: 20px;">
