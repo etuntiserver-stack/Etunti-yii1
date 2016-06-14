@@ -214,7 +214,7 @@ etuntimyynti@etunti.fi<br>
                         </div>
                         <div class="clearfix visible-md-block visible-lg-block"></div>
                         <div class="col-md-4 col-sm-6 col-xs-6">
-                            <div class="boxes-info etuntibox margin-top0">
+                            <div class="boxes-info selected etuntibox">
                                 <div class="cont">
                                 <h3>Etunti Laskutus</h3>
                                 <h5>Tehokas laskutusohjelma</h5>
@@ -243,7 +243,7 @@ etuntimyynti@etunti.fi<br>
                         </div>
                         <div class="clearfix visible-sm-block"></div>
                         <div class="col-md-4 col-sm-6 col-xs-6">
-                            <div class="boxes-info etuntibox margin-top0">
+                            <div class="boxes-info selected etuntibox">
                                 <div class="cont">
                                 <h3>Etunti Online</h3>
                                 <h5>Online -varauskalenteri ja -tilaus</h5>
