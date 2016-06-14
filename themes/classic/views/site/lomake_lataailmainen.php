@@ -277,7 +277,7 @@ $asetukset = array(
 $asetukset['email'][] = array(
     'osoite' => 'info@etunti.fi',//veiko.poldkivi@etunti.fi
     'kopio' => '',
-    'otsikko' => 'tarjouspyynto: [Nimi]',
+    'otsikko' => 'Oppaan lataus',
     'lahettaja' => 'info@etunti.fi',
     'viesti' => '[kentat]',
 );

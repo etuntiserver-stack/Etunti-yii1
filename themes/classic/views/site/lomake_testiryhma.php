@@ -50,10 +50,10 @@ $kentat[] = array(
 'TYPE' => 'text',
 );
 $kentat[] = array(
-'NAME' => 'Mitä Siivousta',
+'NAME' => 'Yrityksen toimiala',
 'REQUIRED' => true,
 'TYPE' => 'text',
-'PLACEHOLDER' => 'Kotisiivous, Toimistosiivous, jne.',
+'PLACEHOLDER' => '',
 );
 $kentat[] = array(
 'NAME' => 'Työntekijöiden määrä',
