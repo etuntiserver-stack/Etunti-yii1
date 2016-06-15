@@ -89,6 +89,8 @@ class KirjeidenHallintaController extends Controller
 	{
 		if(isset($_POST['id']))
 		{
+
+			KirjeidenHallinta::model()->updatebypk($_POST['id'], array('status'=>1));
 			$crm = KirjeidenHallinta::model()->findbypk($_POST['id']);
 			$asData = Asiakkaat::model()->findAll(" ryhma='".$crm->ryhma."' ");
 
@@ -251,10 +253,17 @@ class KirjeidenHallintaController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$dataProvider=new CActiveDataProvider('KirjeidenHallinta');
-		$this->render('index',array(
-			'dataProvider'=>$dataProvider,
+
+       		$criteria = new CDbCriteria();
+	        $criteria->order = "  id DESC ";
+
+		$dataProvider=new CActiveDataProvider('KirjeidenHallinta', array(
+			'criteria'=>$criteria,
+			//'pagination'=>false
 		));
+
+		$dataProvider->pagination->pageSize = 50;
+		$this->render('index', array('dataProvider' => $dataProvider));
 	}
 
 	/**
