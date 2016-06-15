@@ -130,7 +130,40 @@ if(isset($model->id))
         	?>
 
   </div>
-  <div class="col-sm-6">
+
+
+  <div class="col-sm-3">
+		<label><?php echo Yii::t('main', 'Asiakas'); ?></label><br>
+		<?php 
+
+		$criteria=new CDbCriteria;
+		$criteria->order =" yhteyshenkilo!='' ";
+		$criteria->condition =" aktiivinen=1 ";
+
+ 		$as = Asiakkaat::model()->findAll($criteria);
+		if(isset($as[0]))
+		{
+			echo '<select name="asiakas" id="asiakas" class="form-control">';
+				echo '<option value=""></option>';
+			foreach($as as $a)
+			{
+				if(!empty($a->yritys))
+				$nm = $a->yritys;
+				elseif(empty($a->yritys) and !empty($a->yhteyshenkilo))
+				$nm = $a->yhteyshenkilo;
+				else
+				$nm = Yii::t('main', 'Tyhjä');
+
+				echo '<option value="'.$a->id.'">'.$nm.'</option>';
+			}
+
+			echo '</select>';
+		}
+		?>
+
+  </div>
+
+  <div class="col-sm-3">
 		<?php echo $form->labelEx($model,'kohde'); ?>
 		<?php
 		if($model->onlinevaraus_id == 0)
@@ -248,6 +281,28 @@ if(!empty($t->gcm_reg_id)) :
 
 <script type="text/javascript">
 $(document).ready(function(){
+
+  $('#asiakas').change(function(){
+	var thisVal = $(this).val();
+
+	  	 $.ajax({
+			url: 'getKohdeByAsiakas',
+			type:'GET',
+			data: { "id" : thisVal },
+			  success:function(data){
+				data = JSON.parse(data);
+			  	console.log(data);
+				$('#Tyovuoroot_kohde').html(data);
+
+			  },
+			  error:function(data){
+			  	console.log(data);
+			  }
+	 	});
+  });
+
+
+
 
 $('.mult').multiselect({
 	//inheritClass: true,
