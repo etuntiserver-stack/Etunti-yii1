@@ -126,7 +126,7 @@
                             data-splitin="none"
                             data-splitout="none"
                             data-easing="easeOutExpo"
-                            style="font-size: 20px;"><br>Kehitetty työnajan hallintaan puhdistusalan työntekijöille ja esimiehille.
+                            style="font-size: 20px;"><br>Kehitetty työnajan hallintaan liikkuvan työn työntekijöille ja esimiehille.
                         </div>
 
                     </li>
@@ -172,7 +172,7 @@
                             data-splitin="none"
                             data-splitout="none"
                             data-easing="easeOutExpo"
-                            style="font-size: 20px;"><br>Suunniteltu yhteistyössä  puhdistusalan ammattilaisten kanssa.
+                            style="font-size: 20px;"><br>Suunniteltu yhteistyössä liikkuvan työn ammattilaisten kanssa.
                         </div>
 
                     </li>
