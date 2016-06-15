@@ -174,7 +174,7 @@ if(isset($model->id))
 <?php if(!isset($model->id)) : ?>
 <div class="row">
   <div class="col-sm-6">
-		<label><?php echo Yii::t('main', 'Lisää työpaari'); ?></label><br>
+		<label><?php echo Yii::t('main', 'Lisää työpari'); ?></label><br>
 		<?php 
 
 		$criteria=new CDbCriteria;
