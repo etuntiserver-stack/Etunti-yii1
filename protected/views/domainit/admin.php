@@ -44,7 +44,7 @@ $('.search-form form').submit(function(){
 	   <?php     
 		echo CHtml::link("HUOLTOKATKOT POIS", '#', array(
 		'submit'=>array('admin', "huoltokatkoAllClear"=>true), 
-		'confirm' => 'Haluatko varmaasti siirtää kaikki huoltokatkolle?',
+		'confirm' => 'Haluatko varmaasti pois kaikki huoltokatkosta?',
 		'class'=>'btn btn-success'
 		));
 	   ?>

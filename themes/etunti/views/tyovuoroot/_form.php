@@ -170,6 +170,36 @@ if(isset($model->id))
   </div>
 </div>
 
+
+<?php if(!isset($model->id)) : ?>
+<div class="row">
+  <div class="col-sm-6">
+		<label><?php echo Yii::t('main', 'Lisää työpari'); ?></label><br>
+		<?php 
+
+		$criteria=new CDbCriteria;
+		$criteria->order =" tekijan_nimi ";
+		$criteria->condition =" aktiivinen=1 and id!='".$model->tid."' ";
+
+ 		$tt = Tyontekijat::model()->findAll($criteria);
+		if(isset($tt[0]))
+		{
+			echo '<select name="tyopaari[]" id="tyopaari" class="mult" multiple>';
+			foreach($tt as $tekija)
+			echo '<option value="'.$tekija->id.'">'.$tekija->tekijan_nimi.'</option>';
+
+			echo '</select>';
+		}
+		?>
+
+  </div>
+  <div class="col-sm-6">
+
+  </div>
+</div>
+<?php endif; ?>
+
+
 <?php 
 $t = Tyontekijat::model()->findbypk($model->tid);
 if(!empty($t->gcm_reg_id)) :
@@ -218,6 +248,17 @@ if(!empty($t->gcm_reg_id)) :
 
 <script type="text/javascript">
 $(document).ready(function(){
+
+$('.mult').multiselect({
+	//inheritClass: true,
+	//enableFiltering: true,
+        includeSelectAllOption: true,
+	nonSelectedText: '<?php echo Yii::t("main", "Tyhjä"); ?>',
+	selectAllText: '<?php echo Yii::t("main", "Valitse kaikki"); ?>',
+	allSelectedText: '<?php echo Yii::t("main", "Kaikki"); ?>',
+	nSelectedText: '<?php echo Yii::t("main", "valittu"); ?>',
+});
+
 
 
   $('.timeVuorot').mask('00:00',{
@@ -333,6 +374,65 @@ $(document).ready(function(){
 		console.log(data);
 	    	}
 	  });
+
+
+
+	var tyopaari = $('#tyopaari').val();
+	$(tyopaari).each(function( index, dataVal ) {
+	  if(dataVal !== '')
+	  {
+	  	console.log( dataVal );
+		$("#tyovuoroot-form :input[name='Tyovuoroot[tid]']").val(dataVal);
+		var form = $("#tyovuoroot-form").serialize();
+
+	  $.ajax({
+		  url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/create',
+		  data:$('#tyovuoroot-form').serialize(),
+		  type:'POST',
+		  success:function(data){
+			//console.log(data);
+
+	  	$.ajax({
+			url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/did',
+			type:'GET',
+			data: { "pvm" : "<?php echo $model->pvm; ?>", "tid" : dataVal, "from" : "ajax" },
+			  success:function(data){
+			  //console.log(data);
+			  $('#showres').modal('hide');
+			  $('#<?php echo date("Ymd",strtotime($model->pvm)); ?>_'+dataVal).html(JSON.parse(data));
+
+
+			  if(parent.location.href.match(/index/))
+			  {
+				var ThisHeight = $('#<?php echo date("Ymd",strtotime($model->pvm)); ?>_'+dataVal).height();
+				var FirstHeight = $('#first_'+dataVal).height(ThisHeight);
+			  }
+			  if(parent.location.href.match(/tv2/))
+			  {
+				var ThisHeight = $('#<?php echo date("Ymd",strtotime($model->pvm)); ?>_'+dataVal).height();
+				var FirstHeight = $('#first_<?php echo date("Ymd",strtotime($model->pvm)); ?>').height(ThisHeight);
+			  }
+
+
+			  },
+			  error:function(data){
+			  console.log(data);
+			  }
+	 	});
+
+		//return false;
+	   	},
+		error:function(data){
+		console.log(data);
+	    	}
+	  });
+
+	  }
+	});
+
+
+
+
 
 	}
 
