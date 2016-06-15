@@ -28,7 +28,7 @@ class TyovuorootController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','updatetime','showohje','did','muisti','operatio','viikko','fromto','autoinsert','autoremove','viikkottain', 'viikkottain_pdf', 'laheta','kk','pvmtid','laheta_k', 'muistin', 'muisticlear', 'muistissa', 'vkolopput', 'vkolopchange', 'uusitilaus', 'tv2', 'PoistaTv', 'valitse_kokopaiva', 'tv_kohteet', 'siivous_tyonimike'),
+				'actions'=>array('admin','delete','create','update','index','view','updatetime','showohje','did','muisti','operatio','viikko','fromto','autoinsert','autoremove','viikkottain', 'viikkottain_pdf', 'laheta','kk','pvmtid','laheta_k', 'muistin', 'muisticlear', 'muistissa', 'vkolopput', 'vkolopchange', 'uusitilaus', 'tv2', 'PoistaTv', 'valitse_kokopaiva', 'tv_kohteet', 'siivous_tyonimike', 'getKohdeByAsiakas'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny', // allow admin user to perform 'admin' and 'delete' actions
@@ -78,7 +78,17 @@ class TyovuorootController extends Controller
 		   	   return sprintf('%02d:%02d', $val/3600, ($val % 3600)/60);
 	}
 
+	public function actionGetKohdeByAsiakas($id)
+	{
+		$model = Kohteet::model()->findAll(" asiakas_id='".$id."' ");
+			$bd = '';
+			$bd .= '<option></option>';
+			foreach($model as $k)
+			$bd .= '<option value="'.$k->id.'">'.$k->osoite.'</option>';
 
+
+		echo json_encode($bd);	
+	}
 
 
 	public function actionSiivous_tyonimike()
