@@ -208,7 +208,7 @@ th{
 
  </tr>
  <?php 
-	$saldo = '';
+	$saldo = 0;
 	$asetukset=Asetukset::model()->findbypk(1);
  foreach($model as $data)
  {
