@@ -85,6 +85,7 @@ class Domainit extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('domain', 'required'),
+			array('huoltokatko', 'numerical', 'integerOnly'=>true),
 			array('domain, paketti, yritys, pakettin_nimetus', 'length', 'max'=>100),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.

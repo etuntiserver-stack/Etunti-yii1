@@ -587,6 +587,22 @@ echo '<input type="hidden" id="curpage" value="'.$curpage.'">';
           </li>
 	<?php endif; ?>
 
+	<?php if(in_array('6',$tas)) : ?>
+          <li>
+            <a class="accordion-toggle onlinevaraus" href="#">
+              <span class="fa fa-line-chart"></span>
+              <span class="sidebar-title"><?php echo Yii::t('main', 'Management'); ?></span>
+              <span class="caret"></span>
+            </a>
+            <ul class="nav sub-nav">
+              <li>
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/site/index">
+                  <span class="fa fa-line-chart"></span> <?php echo Yii::t('main', 'Yhteenveto'); ?></a>
+              </li>
+            </ul>
+          </li>
+	<?php endif; ?>
+
             </ul>
           </li>
 

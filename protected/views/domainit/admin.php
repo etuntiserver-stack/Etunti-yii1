@@ -31,6 +31,25 @@ $('.search-form form').submit(function(){
 
 
 <?php echo CHtml::link('Haku','#',array('class'=>'search-button')); ?>
+
+
+	   <?php     
+		echo CHtml::link("HUOLTOKATKO KAIKILLE", '#', array(
+		'submit'=>array('admin', "huoltokatkoAll"=>true), 
+		'confirm' => 'Haluatko varmaasti siirtää kaikki huoltokatkolle?',
+		'class'=>'btn btn-danger'
+		));
+	   ?>
+
+	   <?php     
+		echo CHtml::link("HUOLTOKATKOT POIS", '#', array(
+		'submit'=>array('admin', "huoltokatkoAllClear"=>true), 
+		'confirm' => 'Haluatko varmaasti siirtää kaikki huoltokatkolle?',
+		'class'=>'btn btn-success'
+		));
+	   ?>
+
+
 <div class="search-form" style="display:none">
 <?php $this->renderPartial('_search',array(
 	'model'=>$model,
@@ -45,6 +64,7 @@ $('.search-form form').submit(function(){
 		'id',
 		'domain',
 		'paketti',
+		'huoltokatko',
 		array(
 			'class'=>'CButtonColumn',
 		),

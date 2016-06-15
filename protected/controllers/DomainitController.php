@@ -156,6 +156,21 @@ class DomainitController extends Controller
 	 */
 	public function actionAdmin()
 	{
+
+
+		if(isset($_GET['huoltokatkoAll']))
+		{
+			Domainit::model()->updateAll(array('huoltokatko'=>1));
+			$this->redirect(array('admin'));
+		}
+		if(isset($_GET['huoltokatkoAllClear']))
+		{
+			Domainit::model()->updateAll(array('huoltokatko'=>0));
+			$this->redirect(array('admin'));
+		}
+
+
+
 		$model=new Domainit('search');
 		$model->unsetAttributes();  // clear any default values
 		if(isset($_GET['Domainit']))

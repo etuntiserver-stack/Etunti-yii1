@@ -78,6 +78,39 @@ Yii::app()->clientScript->registerPackage('bootstrapJS');
 Yii::app()->clientScript->registerPackage('bootstrapCSS');
 */
 
+if(isset(Yii::app()->user->domain))
+{
+  $domainit = Domainit::model()->find(" domain='".Yii::app()->user->domain."' ");
+  if(isset($domainit->huoltokatko) and $domainit->huoltokatko == 1)
+  {
+	echo '
+
+    <div class="container">
+      <div class="header clearfix">
+
+      <div class="jumbotron">
+        <h1><i class="fa fa-wrench" aria-hidden="true"></i> '.Yii::t('main', 'HUOLTOKATKO').'</h1>
+        <p class="lead">
+<p>
+Palvelussamme on huoltokatko<br>
+Verkkopalvelumme ovat tilapäisesti poissa käytöstä. Pahoittelemme katkosta aiheutuvaa häiriötä.<br>
+</p>
+
+<p>
+Service is temporarily unavailable
+Our service is temporarily unavailable. We apologize for any inconvenience this might cause for You.
+</p>
+	</p>
+      </div>
+
+        </div>
+      </div>
+
+	';
+	exit;
+  }
+}
+
 
 if(isset(Yii::app()->user->nimi))
 {
