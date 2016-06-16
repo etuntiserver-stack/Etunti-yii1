@@ -23,9 +23,10 @@ else
   elseif((int)date("n") == 1)
 	$c = 10;
 
-  echo 'L: '.$l.'<br>';
-  echo 'C: '.$c.'<br>';
+  //echo 'L: '.$l.'<br>';
+  //echo 'C: '.$c.'<br>';
   $pv = $c*$l;
+
   echo '<br><br>';
 
   $m = Yii::app()->createController('Mobile');
@@ -47,7 +48,7 @@ else
 	$toteutu = $m[0]->toteutu($model->tid,'palkkataulukko',$from,$to);
 
 	echo '<tr>';
-	echo '<td>'.date("d.m.Y",strtotime($from)).' - '.date("d.m.Y",strtotime($to)).'</td>';
+	echo '<td width=1>'.date("m.Y",strtotime($from)).'</td>';
 
 	// TP
 	echo '<td>';
@@ -65,10 +66,10 @@ else
 	echo '<td>';
 	   if((int)$m[0]->num($toteutu[0]) < 35)
 	   {
-		echo '<span class="btn btn-danger btn-block btn-sm">'.(int)$m[0]->num($toteutu[0]).'</span>';
+		echo '<span class="btn btn-danger btn-block btn-sm">'.(float)$m[0]->num($toteutu[0]).'</span>';
 		$tulos = "false";
   	   } else {
-		echo '<span class="btn btn-success btn-block btn-sm">'.(int)$m[0]->num($toteutu[0]).'</span>';
+		echo '<span class="btn btn-success btn-block btn-sm">'.(float)$m[0]->num($toteutu[0]).'</span>';
 	   }
 	echo '</td>';
 
