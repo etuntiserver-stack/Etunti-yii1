@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="fi.etunti.admin" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>Etunti.fi</name>
+    <name>Etunti Admin</name>
     <description>
         Etunnin perus- ja lisätyökalut ovat suunniteltu ratkaisemaan puhdistusalan tyypilliset ongelmat. Yhden ohjelman avulla pyörität yritystoimintaasi ennen näkemättömän helposti.
     </description>
