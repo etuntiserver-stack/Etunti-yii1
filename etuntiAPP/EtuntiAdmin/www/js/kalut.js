@@ -10,11 +10,8 @@ $(document).ready(function(){
  	   data: { "luolomakke" : true },
            success: function(data){
 		data = JSON.parse(data);
-
-        	if(data)
-		{
-		  
-		}
+alert(data)
+		$('#eriTyokalut').html(data);
 
     	   },
     		error:function (xhr, ajaxOptions, thrownError){
