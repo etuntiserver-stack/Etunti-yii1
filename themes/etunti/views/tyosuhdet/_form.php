@@ -31,21 +31,64 @@ else
   $m = Yii::app()->createController('Mobile');
   $tulos = "true";	
 
+  echo '<div class="row">
+	 <div class="col-sm-6">';
+  echo '<h3>'.Yii::t('main', 'Vuosiloma laskenta').'</h3>';
+  echo '<table class="table table-bordered table-hover">
+	<tr>
+	<th>'.Yii::t('main', 'Kuukausi').'</th>
+	<th>'.Yii::t('main', 'Työpäiviä').'</th>
+	<th>'.Yii::t('main', 'Tunnit').'</th>
+	</tr>';
   while($c) {
 	$from = date("Y-m-01", strtotime("-".$c--." month"));
 	$to = date("Y-m-d", strtotime($from." last day +1 month"));
 	$tp = $m[0]->TP($model->tid,$from,$to);
- 
-	echo $from.' - '.$to.' työpäiviä: '.$tp.'<br>';
-	if($tp <= 14)
+	$toteutu = $m[0]->toteutu($model->tid,'palkkataulukko',$from,$to);
+
+	echo '<tr>';
+	echo '<td>'.$from.' - '.$to.'</td>';
+
+	// TP
+	echo '<td>';
+	   if($tp <= 14)
+	   {
+		echo '<span class="btn btn-danger btn-block btn-sm">'.$tp.'</span>';
+		$tulos = "false";
+  	   } else {
+		echo '<span class="btn btn-success btn-block btn-sm">'.$tp.'</span>';
+	   }
+	echo '</td>';
+
+
+	// Toteutu
+	echo '<td>';
+	   if((int)$m[0]->num($toteutu[0]) < 35)
+	   {
+		echo '<span class="btn btn-danger btn-block btn-sm">'.(int)$m[0]->num($toteutu[0]).'</span>';
+		$tulos = "false";
+  	   } else {
+		echo '<span class="btn btn-success btn-block btn-sm">'.(int)$m[0]->num($toteutu[0]).'</span>';
+	   }
+	echo '</td>';
+
+	echo '</tr>';
+
+	if($tp <= 14 or (int)$m[0]->num($toteutu[0]) < 35)
 	{
 		$tulos = "false";
 		//break;
 	}
   }
+  echo '</table>';
 
   echo '<h3>Tulos: '.$tulos.'</h3>';
 
+  echo ' </div>
+	</div>
+
+
+	<hr>';
 
 
 ?>
