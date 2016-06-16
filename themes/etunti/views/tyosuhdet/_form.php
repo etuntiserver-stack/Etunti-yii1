@@ -25,7 +25,7 @@ else
 
   echo 'L: '.$l.'<br>';
   echo 'C: '.$c.'<br>';
-  echo $c*$l;
+  $pv = $c*$l;
   echo '<br><br>';
 
   $m = Yii::app()->createController('Mobile');
@@ -47,7 +47,7 @@ else
 	$toteutu = $m[0]->toteutu($model->tid,'palkkataulukko',$from,$to);
 
 	echo '<tr>';
-	echo '<td>'.$from.' - '.$to.'</td>';
+	echo '<td>'.date("d.m.Y",strtotime($from)).' - '.date("d.m.Y",strtotime($to)).'</td>';
 
 	// TP
 	echo '<td>';
@@ -82,7 +82,10 @@ else
   }
   echo '</table>';
 
-  echo '<h3>Tulos: '.$tulos.'</h3>';
+  if($tulos == 'true')
+  echo '<div class="alert alert-success">'.Yii::t('main', 'Vuosiloma päiviä').': '.$pv.'</div>';
+  else
+  echo '<div class="alert alert-danger">'.Yii::t('main', 'Vuosiloma päiviä ei saa olla').'</div>';
 
   echo ' </div>
 	</div>
