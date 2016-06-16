@@ -85,10 +85,12 @@ public function actionAdminkalut($dom)
     {
         case 'mob':
 
+	    Yii::app()->theme = 'etunti';
+
 	    if(isset($_POST['luolomakke']))
 	    {
 		$model = new Asiakkaat;
-		$lomake = $this->renderPartial('//asiakkaat/_form', array('model'=>$model));
+		$lomake = $this->renderPartial('//asiakkaat/_form', array('model'=>$model), true);
        	    	$this->_sendResponse(200, CJSON::encode($lomake));
 	    }
 
