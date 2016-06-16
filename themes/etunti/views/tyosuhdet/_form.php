@@ -65,10 +65,10 @@ else
 	echo '<td>';
 	   if((int)$m[0]->num($toteutu[0]) < 35)
 	   {
-		echo '<span class="btn btn-danger btn-block btn-sm">'.(int)$m[0]->num($toteutu[0]).'</span>';
+		echo '<span class="btn btn-danger btn-block btn-sm">'.(float)$m[0]->num($toteutu[0]).'</span>';
 		$tulos = "false";
   	   } else {
-		echo '<span class="btn btn-success btn-block btn-sm">'.(int)$m[0]->num($toteutu[0]).'</span>';
+		echo '<span class="btn btn-success btn-block btn-sm">'.(float)$m[0]->num($toteutu[0]).'</span>';
 	   }
 	echo '</td>';
 
