@@ -89,7 +89,7 @@ public function actionAdminkalut($dom)
 	    {
 		$model = new Asiakkaat;
 		$lomake = $this->renderPartial('//asiakkaat/_form', array('model'=>$model));
-       	    	$this->_sendResponse(200, CJSON::encode($lomake));
+       	    	$this->_sendResponse(200, CJSON::encode('ggg'));
 	    }
 
             break;
