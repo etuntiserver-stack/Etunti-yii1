@@ -47,7 +47,7 @@ else
 	$toteutu = $m[0]->toteutu($model->tid,'palkkataulukko',$from,$to);
 
 	echo '<tr>';
-	echo '<td>'.date("d.m.Y",strtotime($from)).' - '.date("d.m.Y",strtotime($to)).'</td>';
+	echo '<td width=1>'.date("m.Y",strtotime($from)).'</td>';
 
 	// TP
 	echo '<td>';
