@@ -23,7 +23,12 @@ $(document).ready(function(){
  	   data: { tunnus : tunnus, salasana : salasana },
            success: function(data){
 		data = JSON.parse(data);
-        	alert(data);
+
+alert(data)
+        	if(data == 'loginOk')
+		  window.location.href="kalut.html";
+		else
+		  window.location.href="asetukset.html";
 
     	   },
     		error:function (xhr, ajaxOptions, thrownError){

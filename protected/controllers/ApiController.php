@@ -41,8 +41,13 @@ public function actionCheck_admin($dom)
 
 	    if(isset($_POST['tunnus']) and isset($_POST['salasana']))
 	    {
-
-       	    $this->_sendResponse(200, CJSON::encode('ok'));
+	   	$criteria = new CDbCriteria();
+	    	$criteria->condition = " adm_login='".$_POST['tunnus']."' AND adm_salasana='".md5($_POST['salasana'])."' ";
+		$model = Administrators::model()->find($criteria);
+		if(isset($model->id))
+       	    	 $this->_sendResponse(200, CJSON::encode('loginOk'));
+		else
+       	    	 $this->_sendResponse(200, CJSON::encode('loginError'));
 	    }
 
             break;
