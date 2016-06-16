@@ -16,6 +16,7 @@
   	<script src="js/bootstrap-switch.js"></script>
 
     	<script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+ 	<script type="text/javascript" src="js/footlinks.js"></script>
  	<script type="text/javascript" src="js/kalut.js"></script>
 
 
@@ -26,22 +27,16 @@
 
   <div class="container-fluid">
 
-  <div class="row">
-    <div class="col-sm-12">
-     <div class="head"> 
-     	  <div class="pull-right">
-	    <div id="tekija"></div>
-	    <div id="version" class="small"></div> 
-	  </div>
-	<img src="img/logo-black.png" class="logo">
-     </div>
-    </div>
-  </div>
+  <div id="headers"></div>
   <hr>
   <h2>Työkalut</h2>
 
+	<p><button class="btn btn-success btn-lg btn-block" id="luoAsiakas">Luo asiakas</button></p>
+	<p><button class="btn btn-success btn-lg btn-block" id="luoKohde">Luo kohde</button></p>
+	<p><button class="btn btn-success btn-lg btn-block" id="luoKohde">Luo työntekijä</button></p>
 
-	    <textarea cols="100" rows="20" class="form-control" id="result2" style="display:none"></textarea>
+
+	<textarea cols="100" rows="20" class="form-control" id="result2" style="display:none"></textarea>
   </div>
   <br><br><br><br>
   <div id="footlinks"></div>

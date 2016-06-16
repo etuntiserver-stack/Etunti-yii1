@@ -1,5 +1,8 @@
 $(document).ready(function(){
 
+  var login = localStorage.getItem('login');
+  if(login == "true")
+    $('#domainBlokki').hide();
 
 
   $("#odotta").html("<img src='img/icon.png'>");
@@ -24,11 +27,14 @@ $(document).ready(function(){
            success: function(data){
 		data = JSON.parse(data);
 
-alert(data)
         	if(data == 'loginOk')
+		{
 		  window.location.href="kalut.html";
-		else
+		  localStorage.setItem('login', true);
+		} else {
 		  window.location.href="asetukset.html";
+		  localStorage.setItem('login', false);
+		}
 
     	   },
     		error:function (xhr, ajaxOptions, thrownError){
@@ -37,5 +43,8 @@ alert(data)
     	   }
         });
   }
+
+
+
 
 });

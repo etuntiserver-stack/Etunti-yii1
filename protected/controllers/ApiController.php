@@ -77,6 +77,48 @@ public function actionCheck_admin($dom)
 
 
 
+public function actionAdminkalut($dom)
+
+    {
+
+    switch($_GET['model'])
+    {
+        case 'mob':
+
+	    if(isset($_POST['luolomakke']))
+	    {
+		$model = new Asiakkaat;
+		$lomake = $this->renderPartial('//asiakkaat/_form', array('model'=>$model), true);
+       	    	$this->_sendResponse(200, CJSON::encode($lomake));
+	    }
+
+            break;
+        default:
+            // Model not implemented error
+            $this->_sendResponse(501, sprintf(
+                'Error: Mode <b>list</b> is not implemented for model <b>%s</b>',
+                $_GET['model']) );
+            Yii::app()->end();
+    }
+    // Did we get some results?
+    if(empty($models)) {
+        // No
+        $this->_sendResponse(200, 
+                sprintf('No items where found for model <b>%s</b>', $_GET['model']) );
+    } else {
+        // Prepare response
+        $rows = array();
+        foreach($models as $model)
+            $rows[] = $model->attributes;
+        // Send the response
+        $this->_sendResponse(200, CJSON::encode($rows));
+    }
+
+
+}
+
+
+
 
 
 public function actionLang($dom)
