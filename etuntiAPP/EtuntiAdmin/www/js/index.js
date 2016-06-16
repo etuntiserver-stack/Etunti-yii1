@@ -31,6 +31,8 @@ $(document).ready(function(){
 		{
 		  window.location.href="kalut.html";
 		  localStorage.setItem('login', true);
+		  localStorage.setItem('domain', domain);
+
 		} else {
 		  window.location.href="asetukset.html";
 		  localStorage.setItem('login', false);
