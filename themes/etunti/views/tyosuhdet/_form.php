@@ -23,9 +23,10 @@ else
   elseif((int)date("n") == 1)
 	$c = 10;
 
-  echo 'L: '.$l.'<br>';
-  echo 'C: '.$c.'<br>';
+  //echo 'L: '.$l.'<br>';
+  //echo 'C: '.$c.'<br>';
   $pv = $c*$l;
+
   echo '<br><br>';
 
   $m = Yii::app()->createController('Mobile');
