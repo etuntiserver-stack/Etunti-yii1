@@ -55,7 +55,7 @@ class Tyosuhdet extends DB2ActiveRecord
 		// will receive user inputs.
 		return array(
 			//array('tid, alku, loppu, vktyoaika, nimike, palkkausmuoto, tuntihinta, matka_thinta, lippu_kuumaks, koe_loppu, koe_hinta, tuloraja_ajalle, perusprosentti, lisaprosentti, kuukaudessa, kahdessa_viikossa, viikossa, paivassa, atk_varten, yksi_tuloraja', 'required'),
-			array('tid', 'numerical', 'integerOnly'=>true),
+			array('tid, tyopvm_kk', 'numerical', 'integerOnly'=>true),
 			array('alku, loppu, koe_loppu', 'length', 'max'=>20),
 			array('vktyoaika, tuntihinta, matka_thinta, lippu_kuumaks, koe_hinta, perusprosentti, lisaprosentti, kuukaudessa, kahdessa_viikossa, viikossa, paivassa, atk_varten, yksi_tuloraja', 'length', 'max'=>10),
 			array('nimike', 'length', 'max'=>40),
@@ -105,6 +105,7 @@ class Tyosuhdet extends DB2ActiveRecord
 			'paivassa' => Yii::t('main', 'Päivässä'),
 			'atk_varten' => Yii::t('main', 'Laskennallinen tuloraja ATK-järjestelmiä varten'),
 			'yksi_tuloraja' => Yii::t('main', 'B Ennakonpidätys yhden tulorajan mukaan'),
+			'tyopvm_kk'=> Yii::t('main', 'Työpäiviä kuukaudessa'),
 		);
 	}
 

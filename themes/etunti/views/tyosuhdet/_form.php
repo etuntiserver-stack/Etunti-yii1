@@ -4,6 +4,50 @@
 /* @var $form CActiveForm */
 
 
+
+$d1 = date("Y-m-d");
+$d2 = date("Y-m-d", strtotime($model->alku));
+$result = (int)abs((strtotime($d1) - strtotime($d2))/(60*60*24*30));
+
+if($result < 12)
+  $l = 2;
+else
+  $l = 2.5;
+
+  if((int)date("n") > 3)
+	$c = (int)date("n")-3;
+  elseif((int)date("n") == 3)
+	$c = 0;
+  elseif((int)date("n") == 2)
+	$c = 11;
+  elseif((int)date("n") == 1)
+	$c = 10;
+
+  echo 'L: '.$l.'<br>';
+  echo 'C: '.$c.'<br>';
+  echo $c*$l;
+  echo '<br><br>';
+
+  $m = Yii::app()->createController('Mobile');
+  $tulos = "true";	
+
+  while($c) {
+	$from = date("Y-m-01", strtotime("-".$c--." month"));
+	$to = date("Y-m-d", strtotime($from." last day +1 month"));
+	$tp = $m[0]->TP($model->tid,$from,$to);
+ 
+	echo $from.' - '.$to.' työpäiviä: '.$tp.'<br>';
+	if($tp <= 14)
+	{
+		$tulos = "false";
+		//break;
+	}
+  }
+
+  echo '<h3>Tulos: '.$tulos.'</h3>';
+
+
+
 ?>
 
 
@@ -32,6 +76,12 @@
 		<?php echo $form->labelEx($model,'loppu'); ?>
 		<?php echo $form->textField($model,'loppu',array('size'=>20,'maxlength'=>20,'class'=>'form-control datepicker')); ?>
 		<?php echo $form->error($model,'loppu'); ?>
+	</div>
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'tyopvm_kk'); ?>
+		<?php echo $form->numberField($model,'tyopvm_kk',array('maxlength'=>2,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'tyopvm_kk'); ?>
 	</div>
 
 	<div class="section fill mb5">

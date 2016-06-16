@@ -34,7 +34,7 @@
                         <ul class="stars">
 			<li></li>Yrityksessä A otettiin käyttöön Etunti työvuorosuunnitteluohjelma. Sen avulla suunniteltiin yrityksessä uusiksi kohteiden siirtymäajat. Kolmessa kuukaudessa yritys säästi ohjelman avulla yhden työntekijän kuukausipalkan verran rahaa.
 			<li></li>Yrityksessä B tehostettiin Etunnin avulla työajaseurantaa. Puolessa vuodessa yritys sai kolme prosenttia lisää liikevoittoa.
-			<li></li>Yrityksessä C Etunnin avulla saatiin aikavarkaudet kitkettyä pois ja yritys säästi rahaa, kun tehdyistä tunneista maksettiin työntekijöille.
+			<li></li>Yrityksessä C Etunnin avulla saatiin aikavarkaudet kitkettyä pois ja yritys säästi rahaa, kun tehdyistä tunneista maksettiin oikein työntekijöille.
 			<li></li>Yritys D joutui ikävään tilanteeseen, kun asiakas väitti työntekijöiden huijanneen ja häntä veloitettiin tunneista, joita ei asiakkaan mukaan ollut. Asiakas vei asian kuluttajariitalautakuntaan, mutta yritys todisti siivoojien olleen kohteessa Etunnin RFID-tarran ja sähköisen työajanseurannan avulla.
 
                         </ul>
