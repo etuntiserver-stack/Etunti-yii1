@@ -165,59 +165,6 @@ $("#dm").html('<label>Domain</label>' +
 
 
 
-    document.addEventListener("deviceready", onDeviceReady, false);
-    function onDeviceReady() {
-
-	if(device.platform == 'iOS'){
-
-  $("#footlinks").html(
-	'<div class="row">'+
-	'<footer id="footer">'+
-	'<div class="navbar navbar-default navbar-fixed-bottom">' +
-	'<div class="" id="footer-body">' +
-	    '<center>' +
-		'<a href="#" id="home"><h2 class="glyphicon glyphicon-home"></h2></a>&nbsp;&nbsp;&nbsp;' +
-		'<a href="#" id="asetukset"><h2 class="glyphicon glyphicon-cog"></h2></a>&nbsp;&nbsp;&nbsp;' +
-	    '</center>' +
-	'</div>' +
-	'</div>' +
-	'</footer>' +
-	'</div>');
-
-	painikkeet();
-
-	} else {
-
-  $("#footlinks").html(
-	'<div class="row">'+
-	'<footer id="footer">'+
-	'<div class="navbar navbar-default navbar-fixed-bottom">' +
-	'<div class="" id="footer-body">' +
-	    '<center>' +
-		'<a href="#" id="home"><h2 class="glyphicon glyphicon-home"></h2></a>&nbsp;&nbsp;&nbsp;' +
-		'<a href="#" id="asetukset"><h2 class="glyphicon glyphicon-cog"></h2></a>&nbsp;&nbsp;&nbsp;' +
-	    '</center>' +
-	'</div>' +
-	'</div>' +
-	'</footer>' +
-	'</div>');
-
-	}
-
-	painikkeet();
-    }
-
-
-
-
-
-
-function painikkeet(){
-
-  $("#home").click(function(){
-	window.location.href='index.html';
-  });
-}
 
 
 
