@@ -657,6 +657,13 @@ Huom. Sinulla voi olla monta osoitetta tallennettuna.',
 <p>
 Latasit juuri Etunnin Menestyvän yrityksen oppaan. Opas on liitteenä. Mikäli sinulla on kysyttävää tai haluaisit tutustua Etuntiin tarkemmin, niin ota meihin yhteyttä.
 </p>
+
+<p>
+Toivottamme menestyvää yritystoimintaa<br>
+Etunti
+</p>
+
+<p><img src="https://etunti.fi/assets_classic/img/logo.png"></p>
 ',
 
 

@@ -232,7 +232,7 @@ etuntimyynti@etunti.fi<br>
                                     <h4>Tehokas laskutusohjelma</h4>
                                   </div>
                                   <div class="modal-body">
-                                    <p>Etunti Laskutus on markkinoiden paras siivousalan yrityksille suunnattu laskutusohjelma. Lähetät toteutuneista työtunneista muodostettavat laskut suoraan asiakkaille verkkolaskuina tai sähköpostiin. Tarkistat avoimet saatavat ja teet maksumuistutukset helpommin kuin koskaan aikaisemmin. Säästät laskuttajan työajasta jopa kahden työpäivän tunnit kuukausittain.</p>
+                                    <p>Etunti Laskutus on markkinoiden paras liikuvan työn yrityksille suunnattu laskutusohjelma. Lähetät toteutuneista työtunneista muodostettavat laskut suoraan asiakkaille verkkolaskuina tai sähköpostiin. Tarkistat avoimet saatavat ja teet maksumuistutukset helpommin kuin koskaan aikaisemmin. Säästät laskuttajan työajasta jopa kahden työpäivän tunnit kuukausittain.</p>
                                   </div>
                                   <div class="modal-footer">
                                     <button type="button" class="btn btn-default" data-dismiss="modal">Sulje</button>
