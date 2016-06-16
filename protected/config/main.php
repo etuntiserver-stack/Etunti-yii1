@@ -201,6 +201,7 @@ return array(
         array('api/imei', 'pattern'=>'api/<model:\w+>/imei', 'verb'=>'POST'),
         array('api/tiedosto', 'pattern'=>'api/<model:\w+>/tiedosto', 'verb'=>'POST'),
         array('api/lang', 'pattern'=>'api/<model:\w+>/lang', 'verb'=>'POST'),
+        array('api/check_admin', 'pattern'=>'api/<model:\w+>/check_admin', 'verb'=>'POST'),
         //array('api/update', 'pattern'=>'api/<model:\w+>/<id:\d+>', 'verb'=>'PUT'),
         //array('api/updaterow', 'pattern'=>'api/<model:\w+>/updaterow/<id:\d+>', 'verb'=>'POST'),
         //array('api/delete', 'pattern'=>'api/<model:\w+>/<id:\d+>', 'verb'=>'DELETE'),

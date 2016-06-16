@@ -1,0 +1,13 @@
+
+included the min and target in your config.xml versions as follows:
+
+XML
+        <preference name="android-minSdkVersion" value="14" />
+        <preference name="android-targetSdkVersion" value="23" />
+If problem persists, please check the following file:
+
+YOUR_APP_FOLDER/platforms/android/project.properties
+
+And change the configuration if needed:
+
+target=android-23
