@@ -23,7 +23,7 @@ $(document).ready(function(){
   });
 
 
-  $(document).delegate("#asiakkaat-form.btn-primary","click",function(e){
+  $(document).delegate(".luoTallennaAsiakas","click",function(e){
 
 
         $.ajax({
@@ -64,8 +64,7 @@ $(document).ready(function(){
   });
 
 
-  $(document).delegate("#kohteet-form.luoTallennaKohde","click",function(e){
-
+  $(document).delegate(".luoTallennaKohde","click",function(e){
 
         $.ajax({
            url: url+'/adminkalut?dom='+domain,
