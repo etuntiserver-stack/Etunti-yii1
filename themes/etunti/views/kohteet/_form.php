@@ -290,6 +290,7 @@ $model->hinta = str_replace(",",".",$model->hinta);
 		<?php echo $form->error($model,'toimenpiteet'); ?>
 	</div>
 
+	<?php if(isset($model->id)) : ?>
 	<div class="section fill mb5">
     <?php
 	$i = 0;
@@ -312,6 +313,7 @@ $model->hinta = str_replace(",",".",$model->hinta);
 	}
    ?>
 	</div>
+	<?php endif; ?>
 
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'tietoja'); ?>
