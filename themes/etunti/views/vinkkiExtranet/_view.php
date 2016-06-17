@@ -20,6 +20,12 @@
 		<?php echo $nimi; ?>
 	</td>
 	<td>
+		<?php echo $data->nimi; ?>
+	</td>
+	<td>
+		<?php echo $data->sahkoposti; ?>
+	</td>
+	<td>
 		<?php echo $data->teksti; ?>
 	</td>
 	<td>

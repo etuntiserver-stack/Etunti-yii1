@@ -249,6 +249,14 @@ class AsiakkaatController extends Controller
 
 		if(isset($_POST['Asiakkaat']))
 		{
+
+			$criteria=new CDbCriteria;
+			$criteria->condition = " sahkoposti='".$_POST['Asiakkaat']['sahkoposti']."' ";
+			$vinkki = VinkkiExtranet::model()->find($criteria);
+			if(isset($vinkki->id))
+				VinkkiExtranet::model()->updatebypk($vinkki->id, array('tila'=>2));
+
+
 			$model->attributes=$_POST['Asiakkaat'];
 
 			if($model->salasana != md5($_POST['Asiakkaat']['salasana']))
