@@ -222,6 +222,20 @@ exit;
               </div>
             </div>
         </div>
+
+	<h3><?php echo Yii::t('main', 'Vinkit'); ?></h3>
+        <div class="tray-center">
+            <div class="admin-form">
+              <div class="panel heading-border">
+                <div class="panel-body bg-light">
+
+		  <?php echo $this->vinkitCRM($model, $from, $to); ?>
+
+                </div>
+              </div>
+            </div>
+        </div>
+
 <br><br>
 
 
