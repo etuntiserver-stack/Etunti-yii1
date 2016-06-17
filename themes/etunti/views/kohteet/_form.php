@@ -140,6 +140,7 @@ $model->hinta = str_replace(",",".",$model->hinta);
 		<?php echo $form->error($model,'tag_id'); ?>
 	</div>
 
+	<?php 	if(isset($model->id)) : ?>
 	<div class="section fill mb5">
 		<?php 
 
@@ -169,6 +170,7 @@ $model->hinta = str_replace(",",".",$model->hinta);
 		<?php echo $form->textField($model,'gps_sijainti',array('size'=>50,'maxlength'=>50,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'gps_sijainti'); ?>
 	</div>
+	<?php endif; ?>
 
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'siivous'); ?>
@@ -239,6 +241,7 @@ $model->hinta = str_replace(",",".",$model->hinta);
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'ryhma'); ?>
 	   <div class="form-inline">
+
 		<?php
 
 		$list = array();

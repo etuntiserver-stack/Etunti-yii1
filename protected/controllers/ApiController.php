@@ -87,12 +87,30 @@ public function actionAdminkalut($dom)
 
 	    Yii::app()->theme = 'etunti';
 
-	    if(isset($_POST['luolomakke']))
+	    if(isset($_POST['luoAsiakas']))
 	    {
 		$model = new Asiakkaat;
 		$lomake = $this->renderPartial('//asiakkaat/_form', array('model'=>$model), true);
        	    	$this->_sendResponse(200, CJSON::encode($lomake));
 	    }
+
+	    if(isset($_POST['Asiakkaat']))
+	    {
+		$model = new Asiakkaat;
+		$model->attributes = $_POST['Asiakkaat'];
+		if($model->save())
+       	    	 $this->_sendResponse(200, CJSON::encode($model->id));
+		else
+       	    	 $this->_sendResponse(200, CJSON::encode('saveError'));
+	    }
+
+	    if(isset($_POST['luoKohde']))
+	    {
+		$model = new Kohteet;
+		$lomake = $this->renderPartial('//kohteet/_form', array('model'=>$model), true);
+       	    	$this->_sendResponse(200, CJSON::encode($lomake));
+	    }
+
 
             break;
         default:
