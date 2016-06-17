@@ -5,6 +5,9 @@
 
 
 
+
+if($model->tyopvm_kk != 0)
+{
 $d1 = date("Y-m-d");
 $d2 = date("Y-m-d", strtotime($model->alku));
 $result = (int)abs((strtotime($d1) - strtotime($d2))/(60*60*24*30));
@@ -14,17 +17,32 @@ if($result < 12)
 else
   $l = 2.5;
 
-  if((int)date("n") > 3)
-	$c = (int)date("n")-3;
-  elseif((int)date("n") == 3)
-	$c = 0;
-  elseif((int)date("n") == 2)
-	$c = 11;
-  elseif((int)date("n") == 1)
-	$c = 10;
+	$year = date("Y");
+	$a_year = date("Y");
+	$l_year = date("Y");
+	if( date("Ymd") > date("Ymd",strtotime("31.03.".$year)) ){
+		$a_year = (int)date("Y");
+		$l_year = (int)date("Y")+1;
+
+	} else	if( date("Ymd") < date("Ymd",strtotime("31.03.".$year)) ){
+		$a_year = (int)date("Y")-1;
+		$l_year = (int)date("Y");
+	}
+
+	$alku = date("d.m.Y", strtotime("01.04.".$a_year));
+	$loppu = date("d.m.Y", strtotime("31.03.".$l_year));
+	$lomakausi = $alku.' - '.$loppu;
+
+
+$d3 = $alku;
+$d4 = date("Y-m-d");
+$result2 = (int)abs((strtotime($d3) - strtotime($d4))/(60*60*24*30));
+
+	$c = $result2;
+
 
   //echo 'L: '.$l.'<br>';
-  //echo 'C: '.$c.'<br>';
+  $kkmaara = $c;
   $pv = $c*$l;
 
   echo '<br><br>';
@@ -34,13 +52,18 @@ else
 
   echo '<div class="row">
 	 <div class="col-sm-6">';
-  echo '<h3>'.Yii::t('main', 'Vuosiloma laskenta').'</h3>';
+  echo '<h3>'.Yii::t('main', 'Vuosiloma laskenta').' <b>'.$lomakausi.'</b></h3>';
   echo '<table class="table table-bordered table-hover">
 	<tr>
-	<th>'.Yii::t('main', 'Kuukausi').'</th>
-	<th>'.Yii::t('main', 'Työpäiviä').'</th>
-	<th>'.Yii::t('main', 'Tunnit').'</th>
-	</tr>';
+	<th>'.Yii::t('main', 'Kuukausi').'</th>';
+
+	if($model->tyopvm_kk >= 14)
+	echo '<th>'.Yii::t('main', 'Työpäiviä').'</th>';
+
+	if($model->tyopvm_kk < 14)
+	echo '<th>'.Yii::t('main', 'Tunnit').'</th>';
+
+	echo '</tr>';
   while($c) {
 	$from = date("Y-m-01", strtotime("-".$c--." month"));
 	$to = date("Y-m-d", strtotime($from." last day +1 month"));
@@ -51,6 +74,8 @@ else
 	echo '<td width=1>'.date("m.Y",strtotime($from)).'</td>';
 
 	// TP
+	if($model->tyopvm_kk >= 14)
+	{
 	echo '<td>';
 	   if($tp <= 14)
 	   {
@@ -60,9 +85,11 @@ else
 		echo '<span class="btn btn-success btn-block btn-sm">'.$tp.'</span>';
 	   }
 	echo '</td>';
-
+	}
 
 	// Toteutu
+	if($model->tyopvm_kk < 14)
+	{
 	echo '<td>';
 	   if((int)$m[0]->num($toteutu[0]) < 35)
 	   {
@@ -72,7 +99,8 @@ else
 		echo '<span class="btn btn-success btn-block btn-sm">'.(float)$m[0]->num($toteutu[0]).'</span>';
 	   }
 	echo '</td>';
-
+	}
+	
 	echo '</tr>';
 
 	if($tp <= 14 or (int)$m[0]->num($toteutu[0]) < 35)
@@ -81,12 +109,22 @@ else
 		//break;
 	}
   }
-  echo '</table>';
+
 
   if($tulos == 'true')
-  echo '<div class="alert alert-success">'.Yii::t('main', 'Vuosiloma päiviä').': '.$pv.'</div>';
+  $t = '<h3>'.Yii::t('main', 'Vuosiloma päiviä').': '.$pv.'</h3>';
   else
-  echo '<div class="alert alert-danger">'.Yii::t('main', 'Vuosiloma päiviä ei saa olla').'</div>';
+  $t = '<h3>'.Yii::t('main', 'Vuosiloma päiviä').': '.$kkmaara.'</h3>';
+
+	echo '<tr>
+		<th></th>
+		<th>'.$t.'</th>
+	</tr>';
+
+
+  echo '</table>';
+
+
 
   echo ' </div>
 	</div>
@@ -94,7 +132,7 @@ else
 
 	<hr>';
 
-
+}
 ?>
 
 
