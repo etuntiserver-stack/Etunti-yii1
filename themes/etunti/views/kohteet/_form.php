@@ -140,7 +140,7 @@ $model->hinta = str_replace(",",".",$model->hinta);
 		<?php echo $form->error($model,'tag_id'); ?>
 	</div>
 
-	<?php 	if(isset($model->id)) : ?>
+	<?php if(isset($model->id)) : ?>
 	<div class="section fill mb5">
 		<?php 
 
@@ -463,6 +463,8 @@ $(".poistaKuva").click(function(){
 
 ?>
 
+
+<?php if(isset($model->id)) : ?>
     <input type="hidden" id="lat" value="<?php echo $lat; ?>">
     <input type="hidden" id="lng" value="<?php echo $lng; ?>">
 
@@ -507,7 +509,7 @@ window.initialize = function() {
     <div id="map-canvas"></div>
   </body>
 </html>
-
+<?php endif; ?>
 
 
 	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/bootstrap.modal.js"></script>

@@ -54,6 +54,7 @@ $(document).ready(function(){
            success: function(data){
 		data = JSON.parse(data);
 		$('#eriTyokalut').html(data).show('slow');
+alert(data)
     	   },
     		error:function (xhr, ajaxOptions, thrownError){
         	console.log(xhr.responseText);
