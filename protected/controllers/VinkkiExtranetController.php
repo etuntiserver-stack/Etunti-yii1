@@ -245,9 +245,11 @@ class VinkkiExtranetController extends Controller
 	{
 		if($tila == 0)
 		{
-			echo '<span class="btn btn-sm btn-warning btn-block">'.Yii::t('main', 'avoin').'</span>';
-		} else {
-			echo '<span class="btn btn-sm btn-success btn-block">'.Yii::t('main', 'soitettu').'</span>';
+			echo '<span class="btn btn-sm btn-warning btn-block">'.Yii::t('main', 'Avoin').'</span>';
+		} elseif($tila == 1) {
+			echo '<span class="btn btn-sm btn-success btn-block">'.Yii::t('main', 'Hoidettu').'</span>';
+		} elseif($tila == 2) {
+			echo '<span class="btn btn-sm btn-success btn-block">'.Yii::t('main', 'Asiakas').'</span>';
 		}
 	}
 

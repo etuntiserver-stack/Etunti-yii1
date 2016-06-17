@@ -48,7 +48,11 @@
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'tila'); ?>
 		<?php
-		$list = array(0=>Yii::t('main', 'Avoinna'),1=>Yii::t('main', 'Soitettu'));
+		$list = array(
+			0=>Yii::t('main', 'Avoinna'),
+			1=>Yii::t('main', 'Hoidettu'),
+			2=>Yii::t('main', 'Asiakas')
+		);
         	echo $form->dropDownList($model, 'tila', $list,
 		array('empty'=>'Valitse tyyppi','class'=>'form-control'));	
         	?>

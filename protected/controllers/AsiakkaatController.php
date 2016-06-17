@@ -753,9 +753,11 @@ class AsiakkaatController extends Controller
 	{
 		if($tila == 0)
 		{
-			$r = '<span class="btn btn-sm btn-warning btn-block">'.Yii::t('main', 'avoin').'</span>';
-		} else {
-			$r = '<span class="btn btn-sm btn-success btn-block">'.Yii::t('main', 'soitettu').'</span>';
+			$r = '<span class="btn btn-sm btn-warning btn-block">'.Yii::t('main', 'Avoin').'</span>';
+		} elseif($tila == 1) {
+			$r = '<span class="btn btn-sm btn-success btn-block">'.Yii::t('main', 'Hoidettu').'</span>';
+		} elseif($tila == 2) {
+			$r = '<span class="btn btn-sm btn-success btn-block">'.Yii::t('main', 'Asiakas').'</span>';
 		}
 		return $r;
 	}
