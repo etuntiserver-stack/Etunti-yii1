@@ -81,6 +81,8 @@ public function actionAdminkalut($dom)
 
     {
 
+	    Yii::app()->user->setState('domain', $dom);
+
     switch($_GET['model'])
     {
         case 'mob':
@@ -109,8 +111,8 @@ public function actionAdminkalut($dom)
 	    if(isset($_POST['luoKohde']))
 	    {
 		$model = new Kohteet;
-		$lomake = $this->renderPartial('//kohteet/_form', array('model'=>$model), true);
-       	    	$this->_sendResponse(200, CJSON::encode('dfd'));
+		$lomake = $this->renderPartial('//kohteet/_form', array('model'=>$model));
+       	    	$this->_sendResponse(200, CJSON::encode($lomake));
 		exit;
 	    }
 

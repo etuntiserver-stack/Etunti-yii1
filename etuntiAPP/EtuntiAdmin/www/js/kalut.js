@@ -32,11 +32,12 @@ $(document).ready(function(){
  	   data: $('#asiakkaat-form').serialize(),
            success: function(data){
 		data = JSON.parse(data);
-   	alert(data)
+   		if(data == 'saveError')
+		alert(data)
     	   },
     		error:function (xhr, ajaxOptions, thrownError){
         	console.log(xhr.responseText);
-		$("#result2").html(xhr.responseText).show();
+		$("#result2").val(xhr.responseText).show();
     	   }
         });
 
@@ -54,11 +55,10 @@ $(document).ready(function(){
            success: function(data){
 		data = JSON.parse(data);
 		$('#eriTyokalut').html(data).show('slow');
-alert(data)
     	   },
     		error:function (xhr, ajaxOptions, thrownError){
         	console.log(xhr.responseText);
-		$("#result2").html(xhr.responseText).show();
+		$("#result2").val(xhr.responseText).show();
     	   }
         });
   });
