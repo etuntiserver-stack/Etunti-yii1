@@ -268,6 +268,29 @@
   </div>
 
 
+<?php if(in_array('5',$tas)) : ?>
+<hr>
+  <div class="row form">
+   <div class="col-sm-4">
+    <legend><h2><?php echo Yii::t('main','VINKKI'); ?></h2></legend>
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'vinkki_tunnit'); ?>
+		<?php echo $form->numberField($model,'vinkki_tunnit',array('maxlength'=>10,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'vinkki_tunnit'); ?>
+	</div>
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'vinkki_prosentti'); ?>
+		<?php echo $form->numberField($model,'vinkki_prosentti',array('maxlength'=>10,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'vinkki_prosentti'); ?>
+	</div>
+
+   </div>
+  </div>
+<?php endif; ?>
+
+
 <br>
 <br>
 	<div class="buttons">
