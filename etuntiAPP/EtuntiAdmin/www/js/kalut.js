@@ -33,7 +33,9 @@ $(document).ready(function(){
            success: function(data){
 		data = JSON.parse(data);
    		if(data == 'saveError')
-		alert(data)
+		alert(data);
+
+		window.location.href="kalut.html";
     	   },
     		error:function (xhr, ajaxOptions, thrownError){
         	console.log(xhr.responseText);
@@ -73,7 +75,9 @@ $(document).ready(function(){
            success: function(data){
 		data = JSON.parse(data);
    		if(data == 'saveError')
-		alert(data)
+		alert(data);
+
+		window.location.href="kalut.html";
     	   },
     		error:function (xhr, ajaxOptions, thrownError){
         	console.log(xhr.responseText);
