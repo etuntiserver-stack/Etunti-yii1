@@ -702,4 +702,65 @@ class AsiakkaatController extends Controller
 		return $bod;
 	}
 
+
+	protected function vinkitCRM($model, $from, $to)
+	{
+
+		$criteria=new CDbCriteria;
+		$criteria->order = " DATE(time) DESC ";
+		$criteria->condition = "
+			asiakas_id='".$_GET['id']."' 
+		";
+
+		if(!empty($from) and !empty($to))
+		{
+		$criteria->addCondition (" 
+			DATE(time) BETWEEN '".date("Y-m-d", strtotime($from))."' AND '".date("Y-m-d", strtotime($to))."'
+		");
+		}
+		$p = VinkkiExtranet::model()->findAll($criteria);
+
+		$bod = '';
+
+		if(isset($p[0])){
+
+		$bod .= '<table class="table table-bordered">
+
+		 <tr>
+		  <th>'.Yii::t('main', 'Päiväys').'</th>
+		  <th>'.Yii::t('main', 'Teksti').'</th>
+		  <th>'.Yii::t('main', 'Tila').'</th>
+		 </tr>';
+	
+		foreach($p as $data)
+		{
+	  	$bod .= '
+		<tr>
+
+		<td>'.date("d.m.Y", strtotime($data->time)).'</td>
+		<td>'.$data->teksti.'</td>';
+	  	$bod .= '<td>'.$this->VinkitilaMuutos($data->tila).'</td>';
+		$bod .= '</tr>';
+	  	}
+		$bod .= '</table>';
+		}
+	
+		return $bod;
+	}
+
+
+	protected function VinkitilaMuutos($tila)
+	{
+		if($tila == 0)
+		{
+			$r = '<span class="btn btn-sm btn-warning btn-block">'.Yii::t('main', 'avoin').'</span>';
+		} else {
+			$r = '<span class="btn btn-sm btn-success btn-block">'.Yii::t('main', 'soitettu').'</span>';
+		}
+		return $r;
+	}
+
+
+
+
 }
