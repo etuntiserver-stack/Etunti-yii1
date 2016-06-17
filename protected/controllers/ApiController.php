@@ -111,8 +111,19 @@ public function actionAdminkalut($dom)
 	    if(isset($_POST['luoKohde']))
 	    {
 		$model = new Kohteet;
-		$lomake = $this->renderPartial('//kohteet/_form', array('model'=>$model));
+		$lomake = $this->renderPartial('//kohteet/_form', array('model'=>$model), true);
        	    	$this->_sendResponse(200, CJSON::encode($lomake));
+		exit;
+	    }
+
+	    if(isset($_POST['Kohteet']))
+	    {
+		$model = new Kohteet;
+		$model->attributes = $_POST['Kohteet'];
+		if($model->save())
+       	    	 $this->_sendResponse(200, CJSON::encode($model->id));
+		else
+       	    	 $this->_sendResponse(200, CJSON::encode('saveError'));
 		exit;
 	    }
 

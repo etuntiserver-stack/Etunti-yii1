@@ -290,7 +290,7 @@ $model->hinta = str_replace(",",".",$model->hinta);
 		<?php echo $form->error($model,'toimenpiteet'); ?>
 	</div>
 
-	<?php if(isset($model->id)) : ?>
+
 	<div class="section fill mb5">
     <?php
 	$i = 0;
@@ -313,7 +313,7 @@ $model->hinta = str_replace(",",".",$model->hinta);
 	}
    ?>
 	</div>
-	<?php endif; ?>
+
 
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'tietoja'); ?>
@@ -327,7 +327,7 @@ $model->hinta = str_replace(",",".",$model->hinta);
 <br>
 
 	<div class="section">
-		<?php echo CHtml::submitButton($model->isNewRecord ? 'Luo' : 'Tallenna',array('class'=>'btn btn-primary myBgColors')); ?>
+		<?php echo CHtml::submitButton($model->isNewRecord ? 'Luo' : 'Tallenna',array('class'=>'btn btn-primary myBgColors luoTallennaKohde')); ?>
 	</div>
 
 <?php $this->endWidget(); ?>

@@ -23,7 +23,7 @@ $(document).ready(function(){
   });
 
 
-  $(document).delegate(".btn-primary","click",function(e){
+  $(document).delegate("#asiakkaat-form.btn-primary","click",function(e){
 
 
         $.ajax({
@@ -63,6 +63,27 @@ $(document).ready(function(){
         });
   });
 
+
+  $(document).delegate("#kohteet-form.luoTallennaKohde","click",function(e){
+
+
+        $.ajax({
+           url: url+'/adminkalut?dom='+domain,
+	   type:'POST',
+ 	   data: $('#kohteet-form').serialize(),
+           success: function(data){
+		data = JSON.parse(data);
+   		if(data == 'saveError')
+		alert(data)
+    	   },
+    		error:function (xhr, ajaxOptions, thrownError){
+        	console.log(xhr.responseText);
+		$("#result2").val(xhr.responseText).show();
+    	   }
+        });
+
+
+  });
 
 
 
