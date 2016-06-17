@@ -92,6 +92,7 @@ public function actionAdminkalut($dom)
 		$model = new Asiakkaat;
 		$lomake = $this->renderPartial('//asiakkaat/_form', array('model'=>$model), true);
        	    	$this->_sendResponse(200, CJSON::encode($lomake));
+		exit;
 	    }
 
 	    if(isset($_POST['Asiakkaat']))
@@ -102,13 +103,15 @@ public function actionAdminkalut($dom)
        	    	 $this->_sendResponse(200, CJSON::encode($model->id));
 		else
        	    	 $this->_sendResponse(200, CJSON::encode('saveError'));
+		exit;
 	    }
 
 	    if(isset($_POST['luoKohde']))
 	    {
 		$model = new Kohteet;
 		$lomake = $this->renderPartial('//kohteet/_form', array('model'=>$model), true);
-       	    	$this->_sendResponse(200, CJSON::encode($lomake));
+       	    	$this->_sendResponse(200, CJSON::encode('dfd'));
+		exit;
 	    }
 
 
