@@ -10,7 +10,7 @@ $(document).ready(function(){
         $.ajax({
            url: url+'/adminkalut?dom='+domain,
 	   type:'POST',
- 	   data: { "luolomakke" : "true" },
+ 	   data: { "luoAsiakas" : "true" },
            success: function(data){
 		data = JSON.parse(data);
 		$('#eriTyokalut').html(data).show('slow');
@@ -43,6 +43,24 @@ $(document).ready(function(){
 
   });
 
+
+  $('#luoKohde').click(function(){
+
+	$('#eriTyokalut').hide('slow');
+        $.ajax({
+           url: url+'/adminkalut?dom='+domain,
+	   type:'POST',
+ 	   data: { "luoKohde" : "true" },
+           success: function(data){
+		data = JSON.parse(data);
+		$('#eriTyokalut').html(data).show('slow');
+    	   },
+    		error:function (xhr, ajaxOptions, thrownError){
+        	console.log(xhr.responseText);
+		$("#result2").html(xhr.responseText).show();
+    	   }
+        });
+  });
 
 
 
