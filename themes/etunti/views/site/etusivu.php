@@ -1,5 +1,14 @@
 <?php
 
+$criteria=new CDbCriteria;
+$criteria->condition = " 
+	DATE(time) < (DATE_SUB(CURDATE(), INTERVAL 2 DAY)) 
+	AND tila=0
+";
+$vinkki = VinkkiExtranet::model()->find($criteria);
+if(isset($vinkki->id))
+echo '<p><div class="alert alert-danger">'.Yii::t('main', 'Käsittelemättömiä vinkkejä').' ID: '.$vinkki->id.'</div></p>';
+
 // <-- Backup
 if (!file_exists(Yii::app()->basePath."/../backup/".Yii::app()->user->domain.'/'.date("Y-m-d").'_'.Yii::app()->user->domain.'.sql.gz'))
 {

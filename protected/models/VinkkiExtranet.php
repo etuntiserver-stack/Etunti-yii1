@@ -32,7 +32,7 @@ class VinkkiExtranet extends DB2ActiveRecord
 		return array(
 			array('asiakas_id, nimi, puhelin, sahkoposti', 'required'),
 			array('tila, asiakas_id', 'numerical', 'integerOnly'=>true),
-			array('nimi, puhelin', 'length', 'max'=>100),
+			array('time, nimi, puhelin', 'length', 'max'=>100),
 			array('sahkoposti', 'length', 'max'=>255),
 			array('teksti', 'length', 'max'=>3000),
 			// The following rule is used by search().

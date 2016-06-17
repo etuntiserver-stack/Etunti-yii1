@@ -20,6 +20,11 @@
 
 	<?php echo $form->errorSummary($model); ?>
 
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'time'); ?>
+		<?php echo $form->textField($model,'time',array('size'=>60,'maxlength'=>100, 'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'time'); ?>
+	</div>
 
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'nimi'); ?>
