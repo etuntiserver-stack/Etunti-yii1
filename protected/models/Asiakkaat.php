@@ -54,7 +54,7 @@ class Asiakkaat extends DB2ActiveRecord
 			array('maksuehto, viivastyskorko', 'length', 'max'=>20),
 			array('alv', 'length', 'max'=>3),
 			array('hinta_tyyppi', 'length', 'max'=>50),
-			array('hinta', 'length', 'max'=>10),
+			array('hinta, vinkki_tunnit, vinkki_prosentti', 'length', 'max'=>10),
 			array('asiakasnumero, ovt_tunnus, valittajan_tunnus', 'length', 'max'=>100),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.

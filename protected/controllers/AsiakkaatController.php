@@ -257,7 +257,17 @@ class AsiakkaatController extends Controller
 				VinkkiExtranet::model()->updatebypk($vinkki->id, array('tila'=>2));
 
 
+
+
 			$model->attributes=$_POST['Asiakkaat'];
+			if(isset($vinkki->id))
+			{
+				$asetukset = Asetukset::model()->findbypk(1);
+				Asiakkaat::model()->updatebypk($vinkki->asiakas_id,
+				array('vinkki_tunnit'=>$asetukset->vinkki_tunnit, 'vinkki_prosentti'=>$asetukset->vinkki_prosentti
+				));
+
+			}
 
 			if($model->salasana != md5($_POST['Asiakkaat']['salasana']))
 			$model->salasana = md5($_POST['Asiakkaat']['salasana']);
