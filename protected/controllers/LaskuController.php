@@ -403,8 +403,11 @@ class LaskuController extends Controller
 		}
 		$body .= '</select>';
 
+		$allennus = array();
+		if(isset($as->vinkki_tunnit) and !empty($as->vinkki_tunnit) and isset($as->vinkki_prosentti) and !empty($as->vinkki_prosentti))
+		$allennus = array('vinkki_tunnit'=>$as->vinkki_tunnit,'vinkki_prosentti'=>$as->vinkki_prosentti);
 
-		echo json_encode($body.'***'.$thisTrue);
+		echo json_encode($body.'***'.$thisTrue.'***'.json_encode($allennus));
 	}
 
 
@@ -515,6 +518,8 @@ class LaskuController extends Controller
 			$viite = Viitenumero($model->as_nro."00".$model->id);
 			Lasku::model()->updatebypk($model->id, array('viitenumero'=>$viite));
 
+			$as = Asiakkaat::model()->find(" asiakasnumero='".$model->as_nro."'  ");
+
 			foreach($_POST['tkoodi'] as $key=>$val)
 			{
 				$lr = new LaskunRivit;
@@ -528,10 +533,28 @@ class LaskuController extends Controller
 				$lr->alv	=$_POST['alv'][$key];
 				$lr->hinta_alv	=$_POST['hinta_alv'][$key];
 				$lr->ale	=$_POST['ale'][$key];
+
+				if(	isset($as->id) 
+					and (int)$as->vinkki_tunnit > 0 
+					and $_POST['ale'][$key] > 0
+					and $_POST['yksikko'][$key] == 'h'
+				)
+				{
+					$vinkki_tunnit = '';
+					$vinkki_tunnit = (int)$as->vinkki_tunnit-$_POST['kpl'][$key];
+					Asiakkaat::model()->updatebypk($as->id, array('vinkki_tunnit'=>$vinkki_tunnit));
+				}
+
+
 				$lr->veroton	=$_POST['veroton'][$key];
 				$lr->yhteensa_alv=$_POST['yhteensa_alv'][$key];
 				$lr->save();
 			}
+
+
+
+
+
 
 
 		    // Lasku historia

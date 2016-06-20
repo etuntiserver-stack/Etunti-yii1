@@ -594,6 +594,10 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 	<div id="tuntienTulos"></div>
 	<div id="hinnoitelu"></div>
 
+	<?php if(!isset($model->id)) : ?> 
+	<div id="ilmoitusAllennusta"></div>
+	<?php endif; ?> 
+
 <br>
 
 <div id="rivit" class="table-responsive">
@@ -1022,8 +1026,10 @@ function Rivi(){
 
 }
 
+
   eachLaskenta();
 
+  var aleAsiakkaasta = '';
 function eachLaskenta(){
 
   $("#rivit input").each(function() {
@@ -1259,6 +1265,17 @@ $("#Lasku_as_nro").change(function() {
 		$("#tuntiKalut").show();
 		} else {
 		$("#tuntiKalut").hide();
+		}
+
+
+		if(spdata[2] !== ''){
+
+			var allennus = JSON.parse(spdata[2]);
+			if(allennus['vinkki_tunnit'] && allennus['vinkki_prosentti'])
+			{
+				$('#ilmoitusAllennusta').addClass('text-success').html('<h1>Asiakas ALE: <span id="aleAsiakkaasta">'+ allennus['vinkki_tunnit'] +'</span> tunti, ' + allennus['vinkki_prosentti'] + '%</h1>');
+				$('#ale_1').val(parseInt(allennus['vinkki_prosentti']));
+			}
 		}
 
            },

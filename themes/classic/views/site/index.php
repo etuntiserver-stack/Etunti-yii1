@@ -36,7 +36,7 @@ käyttää. Etunnin avulla helpotat huomattavasti yrityksen liiketoimintaa, sä�
 tuottavuutta sekä kehität palveluja. 
 </p>
 <p>
-Etunnin perus- ja lisätyökalut ovat suunniteltu ratkaisemaan puhdistusalan 
+Etunnin perus- ja lisätyökalut ovat suunniteltu ratkaisemaan liikkuvan työn 
 tyypilliset ongelmat. Yhden ohjelman avulla pyörität yritystoimintaasi ennen näkemättömän helposti. </p>
 
 <p>
