@@ -647,6 +647,7 @@ return array(
 /* Models */
 
 	'Tunnistaudu sähköpostilla' => 'Tunnistaudu sähköpostilla',
+
 	'sähköpostillaTeksti' => '
 Yhteystietosi löytyvät sähköpostisi perusteella, mikäli olet tilannut aiemmin palveluta. Vaihda tarvittaessa tietojasi muokkaamalla kenttiä. Uudet tiedot tallentuvat automaattisesti.</br>
 Huom. Sinulla voi olla monta osoitetta tallennettuna.',

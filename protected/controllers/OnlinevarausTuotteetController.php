@@ -183,7 +183,7 @@ class OnlinevarausTuotteetController extends Controller
 	//  Oikeudet -->
 
        		$criteria = new CDbCriteria();
-	        $criteria->order = " id DESC ";
+	        $criteria->order = " palvelu=0 DESC,nimike ASC ";
 
 		if(isset($_POST['nimike']) and !empty(trim($_POST['nimike'])))
 	        $criteria->addCondition (" nimike LIKE '%".$_POST['nimike']."%' ");

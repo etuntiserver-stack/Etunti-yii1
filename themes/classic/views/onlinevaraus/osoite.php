@@ -44,7 +44,7 @@ $asetukset = Asetukset::model()->findbypk(1);
 
    <span class="text-sininen"><?php echo Yii::t('main', 'Tunnistaudu sähköpostilla'); ?></span><br>
 
-      <span class="small"><?php echo Yii::t('main', 'sähköpostillaTeksti'); ?></span>
+      <!--<span class="small"><?php echo Yii::t('main', 'sähköpostillaTeksti'); ?></span>-->
       <br>
 
    <div class="row">
@@ -64,7 +64,7 @@ $asetukset = Asetukset::model()->findbypk(1);
 
 
      <span class="text-sininen"><?php echo Yii::t('main', 'Tai täytä yhteystietokentät'); ?></span><br>
-     <span class="small"><?php echo Yii::t('main', 'taitaytateksti'); ?></span>
+     <!--<span class="small"><?php echo Yii::t('main', 'taitaytateksti'); ?></span>-->
      <br>
 
      <div id="lomake">
@@ -285,6 +285,7 @@ function osoiteAjax(id)
 
 
 $("#sahkoposti").keyup(function(){
+
 
    var sahkoposti = $(this).val();
 
