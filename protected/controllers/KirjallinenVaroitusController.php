@@ -193,11 +193,11 @@ class KirjallinenVaroitusController extends Controller
 	{
 		$model=$this->loadModel($id);
 		$t = 'tiedostot/varoitukset/'.Yii::app()->user->domain.'/'.$model->tiedosto;
-		if(file_exists(Yii::app()->basePath."/../".$t.".docx"))
-			unlink($t.".docx");
+		if(file_exists(Yii::app()->basePath."/../".$t.".*"))
+			unlink($t.".*");
 
 	
-		//$model->delete();
+		$model->delete();
 
 		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
 		if(!isset($_GET['ajax']))
