@@ -48,6 +48,10 @@ echo '<input type="hidden" id="curpage" value="'.$curpage.'">';
               <a href="#">
                 <span class="mr10"></span> <?php echo strtoupper(Yii::app()->user->domain); ?> </a>
             </li>
+            <li>
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/site/ohjevideot">
+                  <span class="mr10"></span> <?php echo Yii::t('main', 'Ohjevideot'); ?></a>
+            </li>
       </ul>
 <!--
       <form class="navbar-form navbar-left navbar-search" role="search">

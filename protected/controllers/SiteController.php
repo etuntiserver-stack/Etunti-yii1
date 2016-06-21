@@ -29,7 +29,7 @@ class SiteController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', 
-				'actions'=>array('etusivu','ohjesivu','etusivu_esimerki', 'change_color', 'valiko', 'valiko_ajax', 'kohderyhma'),
+				'actions'=>array('etusivu','ohjesivu','etusivu_esimerki', 'change_color', 'valiko', 'valiko_ajax', 'kohderyhma', 'ohjevideot'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('allow', 
@@ -76,9 +76,11 @@ class SiteController extends Controller
 
 	public function actionAjankohtaista()
 	{
-
 		$this->render('ajankohtaista');
-
+	}
+	public function actionOhjevideot()
+	{
+		$this->render('ohjevideot');
 	}
 	public function actionAsiakkaat()
 	{
