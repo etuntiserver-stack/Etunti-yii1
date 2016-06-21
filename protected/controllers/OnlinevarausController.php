@@ -348,8 +348,13 @@ class OnlinevarausController extends Controller
 		$criteria->condition = " nimike='".$word."' ";
 		$data = OnlinevarausTuotteet::model()->findAll($criteria);
 
+		$criteria=new CDbCriteria;
+		$criteria->condition = " palvelu=0 AND nimike='".$word."' AND selitysteksti!='' ";
+		$dataThis = OnlinevarausTuotteet::model()->find($criteria);
+
 		$this->renderPartial('palvelu_ajax',array(
 			'data'=>$data,
+			'dataThis'=>$dataThis
 		));
 	   }
 	}
