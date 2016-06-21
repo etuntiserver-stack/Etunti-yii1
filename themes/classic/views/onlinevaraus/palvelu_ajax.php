@@ -4,7 +4,13 @@
   {
 	$d2 = array();
 
-	$body ='<select class="form-control input-lg" id="nelio">
+	$body = '';
+	if(isset($dataThis->selitysteksti))
+	$body .= '<p class="small">'.$dataThis->selitysteksti.'</p>';
+
+	$body .='
+	<h4>Valitse huoneiston koko</h4>
+	<select class="form-control input-lg" id="nelio">
 		<option value="">Huoneisten koko m²</option>';
 
 	foreach($data as $d)

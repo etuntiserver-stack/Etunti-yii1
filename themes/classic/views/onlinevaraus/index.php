@@ -129,7 +129,7 @@ Tähdellä merkityt kentät ovat paollisia. Jokaiselle palvelulle on määritelt
 <br>
 	<div class="row" id="huoneistonkoko">
 	  <div class="col-sm-4 col-sm-offset-4">
-	   <h4>Valitse huoneiston koko</h4>
+	   
 	    <div id="nelioValikko">
 		<select class="form-control input-lg" id="nelio">
 		<?php
