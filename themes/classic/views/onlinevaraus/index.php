@@ -24,23 +24,11 @@ $asetukset = Asetukset::model()->findbypk(1);
 	<img src="<?php echo $asetukset->logon_polkku; ?>" height="<?php echo $asetukset->logon_korkeus; ?>">
    </div><div class="form-group col-sm-offset-4">
 	<h3><?php echo Yii::t('main', 'Online-Varaus'); ?><br>
-           <span class="small"><?php echo CHtml::link(Yii::t('main', 'Mikä on online-varaus'),'index'); ?></span>
+           <p class="small link text-sininen" data-toggle="modal" data-target=".mikaOnOnlinevaraus"><?php echo Yii::t('main', 'Mikä on online-varaus'); ?></p>
 	</h3>
    </div>
  </div>
 </div>
-
-
-<!--
-<div class="">
-<ul id="green_and_orange_step_menu">
-<li class="first aktiivinen"><?php echo CHtml::link('PALVELU','index'); ?></li>
-<li class="passivinen"><?php echo CHtml::link('AIKA','aika'); ?><span class="akt"></span></li>
-<li class="passivinen"><?php echo CHtml::link('OSOITE','osoite'); ?><span class="pas"></span></li>
-<li class="passivinen"><?php echo CHtml::link('MAKSU','maksu'); ?><span class="pas"></span></li>
-</ul>
-</div>
--->
 
 
 <ul class="steps expanded even-4">
@@ -67,13 +55,49 @@ if(isset($asetukset->checkout_id) and !empty($asetukset->checkout_id) and !empty
 
 <div class="row">
  <div class="col-sm-8">
-  <div class="boxes-info">
+  <div class="well">
    <center>
 
 	<div class="row">
 	  <div class="col-sm-4 col-sm-offset-4">
 
 		<h4>Valitse palvelu</h4>
+
+
+		<p data-toggle="modal" data-target=".kysymys" class="link"><img src="<?php echo Yii::app()->request->baseUrl; ?>/ylapalkki/kysymys.png" height="30"></p>
+
+                            <!-- Modal -->
+                            <div class="modal fade kysymys">
+                              <div class="modal-dialog">
+                                <div class="modal-content">
+                                  <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    <h4>Palvelun varaaminen</h4>
+                                  </div>
+                                  <div class="modal-body" style="text-align: left">
+                                  <p>
+
+1.       Valitse alasvetovalikosta pääpalvelu.<br>
+2.       Valitse huoneiston koko.<br>
+3.       Valitse haluamasi lisäpalvelut.<br>
+4.       Syötä mahdollinen alennuskoodi ja aktivoi se. Alennuskoodin voi syöttää myöhemmässäkin vaiheessa.<br>
+5.       Siirry eteenpäin valitsemaan palvelulle ajankohtaa.<br>
+
+<br><br> 
+
+<p>
+Tähdellä merkityt kentät ovat paollisia. Jokaiselle palvelulle on määritelty palvelusisältö. Pääpalvelun palvelusisältö näkyy ”Mitä palvelu sisältää?” -painikkeen kautta, joka ilmestyy pääpalvelun alapuolelle, kun palvelu on valittu. Lisäpalveluiden palvelusisältö näkyy, kun palvelua painetaan. Lisäpalvelut eivät ole pakollisia ja niitä voidaan valita rajaton määrä. Pääpalvelun ja lisäpalveluiden hinta ja kesto tulevat eriteltynä näkyviin sivun oikeaan laitaan (mobiilissa alapuolelle) yhteenveto kenttään. Asiakaspalvelun yhteystiedot ovat näkyvillä sivustolla. Ole yhteydessä asiakaspalveluun, mikäli sinulla on jotain kysyttävää.</p>
+
+				  </p>
+                                  </div>
+                                  <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Sulje</button>
+                                  </div>
+                                </div><!-- /.modal-content -->
+                              </div><!-- /.modal-dialog -->
+                            </div><!-- /.modal -->
+
+
 		<select class="form-control input-lg" id="palvelu">
 		<?php
 		if(isset($_SESSION['onlinevaraus']['paapalvelu']))
@@ -198,7 +222,7 @@ if(isset($asetukset->checkout_id) and !empty($asetukset->checkout_id) and !empty
 	      <div id="panGetContent"></div>
 
 	      <div id="alennuskoodi">
-		<div class="boxes-info">
+		<div class="well">
 		  <center><h4><?php echo Yii::t('main', 'Alennuskoodi'); ?></h4>
 			<form class="input-group">
 			<input type="text" class="form-control form-group input-lg">
@@ -211,7 +235,7 @@ if(isset($asetukset->checkout_id) and !empty($asetukset->checkout_id) and !empty
 	      </div>
 
 	      <div>
-		<div class="boxes-info sininen">
+		<div class="well sininen">
 		  <center><h4><?php echo Yii::t('main', 'Laatu ja luotettavuus'); ?></h4>
 
 		  </center>
@@ -219,7 +243,7 @@ if(isset($asetukset->checkout_id) and !empty($asetukset->checkout_id) and !empty
 	      </div>
 
 	      <div>
-		<div class="boxes-info sininen">
+		<div class="well sininen">
 		  <center><h4><?php echo Yii::t('main', 'Takuu ja turvallisuus'); ?></h4>
 
 		  </center>
@@ -227,7 +251,7 @@ if(isset($asetukset->checkout_id) and !empty($asetukset->checkout_id) and !empty
 	      </div>
 
 	      <div>
-		<div class="boxes-info sininen">
+		<div class="well sininen">
 		  <center><h4><?php echo Yii::t('main', 'Asiakaspalvelu'); ?></h4>
 
 		  </center>
@@ -240,7 +264,7 @@ if(isset($asetukset->checkout_id) and !empty($asetukset->checkout_id) and !empty
 <br>
 
 <div class="">
-  <div class="boxes-info sininen">
+  <div class="well sininen">
 	<center><h4><?php echo Yii::t('main', 'Arvio siivouksesta'); ?></h4>
 
 	</center>
@@ -251,6 +275,8 @@ if(isset($asetukset->checkout_id) and !empty($asetukset->checkout_id) and !empty
 
 </div>
 
+
+<?php echo $this->renderPartial('_footer'); ?>
 
 
 <script type="text/javascript">

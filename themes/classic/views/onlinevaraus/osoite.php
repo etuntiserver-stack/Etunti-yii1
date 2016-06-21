@@ -15,14 +15,47 @@ $asetukset = Asetukset::model()->findbypk(1);
 	<b id="countTimer" class="pull-right"></b>
    <div class="form-group">
 	<img src="<?php echo $asetukset->logon_polkku; ?>" height="<?php echo $asetukset->logon_korkeus; ?>">
+
+	&nbsp;<span data-toggle="modal" data-target=".kysymys" class="link"><img src="<?php echo Yii::app()->request->baseUrl; ?>/ylapalkki/kysymys.png" height="30"></span>
+
    </div><div class="form-group col-sm-offset-4">
 	<h3><?php echo Yii::t('main', 'Online-Varaus'); ?><br>
-           <span class="small"><?php echo CHtml::link(Yii::t('main', 'Mikä on online-varaus'),'index'); ?></span>
+           <p class="small link text-sininen" data-toggle="modal" data-target=".mikaOnOnlinevaraus"><?php echo Yii::t('main', 'Mikä on online-varaus'); ?></p>
 	</h3>
    </div>
  </div>
 </div>
 
+
+                            <!-- Modal -->
+                            <div class="modal fade kysymys">
+                              <div class="modal-dialog">
+                                <div class="modal-content">
+                                  <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    <h4>Osoite</h4>
+                                  </div>
+                                  <div class="modal-body" style="text-align: left">
+                                  <p>
+
+1.       Kirjoita osoitekenttiin pyydetyt yhteystiedot.<br>
+2.       Jos sinulla on lemmikkejä, huoneita, jonne et halua kenenkään menevän, ovikoodi tai muuta työntekijän saapumiseen tai palvelun suorittamiseen liittyviä asioita, niin kirjoita ne vapaaseen tekstikenttään ”Lisätietoja”.<br>
+3.       Syötä mahdollinen alennuskoodi ja aktivoi se. Alennuskoodin voi syöttää myöhemmässäkin vaiheessa.<br>
+4.       Siirry eteenpäin hyväksymään ja maksamaan palvelun.<br>
+
+<br><br> 
+
+<p>
+Tähdellä merkityt kohdat ovat pakollisia. Yhteenveto kenttä päivittyy, kun tietoja kirjataan. Asiakaspalvelun yhteystiedot ovat näkyvillä sivustolla. Ole yhteydessä asiakaspalveluun, mikäli sinulla on jotain kysyttävää.</p>
+
+				  </p>
+                                  </div>
+                                  <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Sulje</button>
+                                  </div>
+                                </div><!-- /.modal-content -->
+                              </div><!-- /.modal-dialog -->
+                            </div><!-- /.modal -->
 
 <ul class="steps expanded even-4">
     <li class="tehtty"><?php echo CHtml::link('PALVELU','index'); ?></li>
@@ -38,11 +71,11 @@ $asetukset = Asetukset::model()->findbypk(1);
 
 
 <div id="fullLomake">
- <div class="boxes-info">
+ <div class="well">
 
    <h4 class="title-subtitle text-center"><?php echo Yii::t('main', 'Osoite'); ?></h4>
 
-   <span class="text-sininen"><?php echo Yii::t('main', 'Tunnistaudu sähköpostilla'); ?></span><br>
+   <span class="text-sininen"><?php echo Yii::t('main', 'Tunnistaudu sähköpostilla'); ?></span>
 
       <!--<span class="small"><?php echo Yii::t('main', 'sähköpostillaTeksti'); ?></span>-->
       <br>
@@ -63,7 +96,7 @@ $asetukset = Asetukset::model()->findbypk(1);
      <br>
 
 
-     <span class="text-sininen"><?php echo Yii::t('main', 'Tai täytä yhteystietokentät'); ?></span><br>
+     <span class="text-sininen"><?php echo Yii::t('main', 'Tai täytä yhteystietokentät'); ?></span>
      <!--<span class="small"><?php echo Yii::t('main', 'taitaytateksti'); ?></span>-->
      <br>
 
@@ -166,7 +199,7 @@ $asetukset = Asetukset::model()->findbypk(1);
    </div>
 
 	      <div id="alennuskoodi">
-		<div class="boxes-info">
+		<div class="well">
 		  <center><h4><?php echo Yii::t('main', 'Alennuskoodi'); ?></h4>
 			<form class="input-group">
 			<input type="text" class="form-control form-group input-lg">
@@ -179,7 +212,7 @@ $asetukset = Asetukset::model()->findbypk(1);
 	      </div>
 
 	      <div>
-		<div class="boxes-info sininen">
+		<div class="well sininen">
 		  <center><h4><?php echo Yii::t('main', 'Asiakaspalvelu'); ?></h4>
 
 		  </center>
@@ -194,6 +227,7 @@ $asetukset = Asetukset::model()->findbypk(1);
 
 <br><br>
 
+<?php echo $this->renderPartial('_footer'); ?>
 
 <script type="text/javascript">
 $(document).ready(function(){

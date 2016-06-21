@@ -14,9 +14,12 @@ $asetukset = Asetukset::model()->findbypk(1);
 	<b id="countTimer" class="pull-right"></b>
    <div class="form-group">
 	<img src="<?php echo $asetukset->logon_polkku; ?>" height="<?php echo $asetukset->logon_korkeus; ?>">
+
+	&nbsp;<span data-toggle="modal" data-target=".kysymys" class="link"><img src="<?php echo Yii::app()->request->baseUrl; ?>/ylapalkki/kysymys.png" height="30"></span>
+
    </div><div class="form-group col-sm-offset-4">
 	<h3><?php echo Yii::t('main', 'Online-Varaus'); ?><br>
-           <span class="small"><?php echo CHtml::link(Yii::t('main', 'Mikä on online-varaus'),'index'); ?></span>
+           <p class="small link text-sininen" data-toggle="modal" data-target=".mikaOnOnlinevaraus"><?php echo Yii::t('main', 'Mikä on online-varaus'); ?></p>
 	</h3>
    </div>
  </div>
@@ -32,6 +35,38 @@ $asetukset = Asetukset::model()->findbypk(1);
 
 <br><br>
 
+
+
+                            <!-- Modal -->
+                            <div class="modal fade kysymys">
+                              <div class="modal-dialog">
+                                <div class="modal-content">
+                                  <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    <h4>Ajan varaaminen</h4>
+                                  </div>
+                                  <div class="modal-body" style="text-align: left">
+                                  <p>
+
+1.       Valitse kalenterista päivämäärä, jolloin haluat palvelun.<br>
+2.       Valitse kellonaika, jolloin haluat palvelun alkavan.<br>
+3.       Valitse työntekijä.<br>
+4.       Syötä mahdollinen alennuskoodi ja aktivoi se. Alennuskoodin voi syöttää myöhemmässäkin vaiheessa.<br>
+5.       Siirry eteenpäin antamaan osoitetiedot.<br>
+
+<br><br> 
+
+<p>
+Päivät, joissa on vapaita aikoja valittavana näkyvät vihreällä, harmaalla näkyvät päivät, joita ei voi valita ja oranssilla näkyvä on valitsemasi päivä. Kellonajat, joita päivämäärän valinnan jälkeen näkyy ovat kaikki mahdolliset vapaat ajat kyseiselle päivälle. Yhteenveto kenttä päivittyy, kun tietoja kirjataan. Asiakaspalvelun yhteystiedot ovat näkyvillä sivustolla. Ole yhteydessä asiakaspalveluun, mikäli sinulla on jotain kysyttävää.</p>
+
+				  </p>
+                                  </div>
+                                  <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Sulje</button>
+                                  </div>
+                                </div><!-- /.modal-content -->
+                              </div><!-- /.modal-dialog -->
+                            </div><!-- /.modal -->
 
 <div class="row">
  <div class="col-sm-4">
@@ -53,7 +88,7 @@ $asetukset = Asetukset::model()->findbypk(1);
    </div>
 
 	      <div id="alennuskoodi">
-		<div class="boxes-info">
+		<div class="well">
 		  <center><h4><?php echo Yii::t('main', 'Alennuskoodi'); ?></h4>
 			<form class="input-group">
 			<input type="text" class="form-control form-group input-lg">
@@ -66,7 +101,7 @@ $asetukset = Asetukset::model()->findbypk(1);
 	      </div>
 
 	      <div>
-		<div class="boxes-info sininen">
+		<div class="well sininen">
 		  <center><h4><?php echo Yii::t('main', 'Asiakaspalvelu'); ?></h4>
 
 		  </center>
@@ -79,6 +114,8 @@ $asetukset = Asetukset::model()->findbypk(1);
 
 </div>
 
+
+<?php echo $this->renderPartial('_footer'); ?>
 
 
 <script type="text/javascript">
