@@ -104,7 +104,7 @@ class AsiakkaatController extends Controller
 			$criteria=new CDbCriteria;
 			$criteria->condition = " 
 				sahkoposti='".$_POST['sahkoposti']."' 
-				AND salasana='".md5($_POST['salasana'])."'
+				AND salasana='".$_POST['salasana']."'
 				AND salasana!=''
 			";
 			$model=Asiakkaat::model()->find($criteria);
@@ -269,9 +269,6 @@ class AsiakkaatController extends Controller
 
 			}
 
-			if($model->salasana != md5($_POST['Asiakkaat']['salasana']))
-			$model->salasana = md5($_POST['Asiakkaat']['salasana']);
-
 			if($model->save())
 			{
 				if(empty($model->asiakasnumero))
@@ -315,9 +312,6 @@ class AsiakkaatController extends Controller
 		if(isset($_POST['Asiakkaat']))
 		{
 			$model->attributes=$_POST['Asiakkaat'];
-
-			if($model->salasana != md5($_POST['Asiakkaat']['salasana']))
-			$model->salasana = md5($_POST['Asiakkaat']['salasana']);
 
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
@@ -746,6 +740,7 @@ class AsiakkaatController extends Controller
 
 		 <tr>
 		  <th>'.Yii::t('main', 'Päiväys').'</th>
+		  <th>'.Yii::t('main', 'Nimi').'</th>
 		  <th>'.Yii::t('main', 'Teksti').'</th>
 		  <th>'.Yii::t('main', 'Tila').'</th>
 		 </tr>';
@@ -756,7 +751,9 @@ class AsiakkaatController extends Controller
 		<tr>
 
 		<td>'.date("d.m.Y", strtotime($data->time)).'</td>
+		<td>'.$data->nimi.'</td>
 		<td>'.$data->teksti.'</td>';
+
 	  	$bod .= '<td>'.$this->VinkitilaMuutos($data->tila).'</td>';
 		$bod .= '</tr>';
 	  	}
@@ -781,6 +778,28 @@ class AsiakkaatController extends Controller
 	}
 
 
+	protected function VinkiTahdet($asiakas_id)
+	{
+		  $criteria=new CDbCriteria;
+		  $criteria->condition = "
+				asiakas_id='".$asiakas_id."' 
+				AND (tila=1 OR tila=2)
+		  ";
+		  $vi = VinkkiExtranet::model()->findAll($criteria);
+		  if(isset($vi[0]))
+		  {
+		  echo '
+		  <div class="row p10">
+		    <div class="form-inline">';
+		     foreach($vi as $vinki)
+		     {
+			echo '<div class="form-group"><i class="fa fa-star" aria-hidden="true" style="color:orange; font-size: 190%"></i></div>&nbsp;';
+		     }
+		  echo '
+		   </div>
+		  </div>';
+		  }
+	}
 
 
 }

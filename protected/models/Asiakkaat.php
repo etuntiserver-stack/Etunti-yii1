@@ -104,6 +104,7 @@ class Asiakkaat extends DB2ActiveRecord
 			'muistutuslasku_auto'=> Yii::t('main', 'Muistutuslasku automaatiseesti'),
 			'kirjeenluokka'=> Yii::t('main', 'Kirjeenluokka'),
 			'myyja'=> Yii::t('main', 'Myyjä'),
+			'salasana'=> Yii::t('main', 'Extranet-salasana'),
 		);
 	}
 

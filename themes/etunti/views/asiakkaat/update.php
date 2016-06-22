@@ -41,6 +41,8 @@ exit;
 	   </div>
 	   <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-user"></i> <?php echo $head; ?> </h2>
 
+	   <?php echo $this->VinkiTahdet($model->id); ?>
+
 
             <div class="admin-form">
               <div class="panel heading-border">

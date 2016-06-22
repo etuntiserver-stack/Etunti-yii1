@@ -155,7 +155,7 @@ $asiakasnumero = 'voidaan käyttää oleva ID numero';
 
 	<div class="section fill mb5 ashidd_a">
 		<?php echo $form->labelEx($model,'salasana'); ?>
-		<?php echo $form->passwordField($model,'salasana',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
+		<?php echo $form->textField($model,'salasana',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'salasana'); ?>
 	</div>
 
@@ -270,7 +270,7 @@ $asiakasnumero = 'voidaan käyttää oleva ID numero';
   <?php endif; ?>
 <?php endif; ?>
 
-<div class="col-sm-4">
+<div class="col-sm-3">
 
 	<?php if(isset($model->id)): ?>
 	<legend><h3><?php echo Yii::t('main', 'Asiakkaaseen liittyviä kohteita'); ?></h3></legend>
