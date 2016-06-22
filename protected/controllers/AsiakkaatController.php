@@ -146,7 +146,6 @@ class AsiakkaatController extends Controller
 			}
 			$bd .= '</table>';
 
-
 			$ft = FirmanTiedot::model()->findbypk(1);
 			$mail = new YiiMailer();
 			//$mail->clearLayout();//if layout is already set in config
@@ -154,9 +153,10 @@ class AsiakkaatController extends Controller
 			$mail->setTo($ft->sahkoposti);
 			$mail->setSubject(Yii::t('main', 'Osoitteen muutos'). ' '.Yii::t('main', 'Asiakas').': '.$model->id);
 			$mail->setBody($bd);
-			if($mail->send())
+			$mail->send();
+			
 				$this->redirect(array('//site/index'));
-
+				exit;
 
 		}
 
