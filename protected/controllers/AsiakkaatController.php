@@ -32,7 +32,7 @@ class AsiakkaatController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', 
-				'actions'=>array('asiakas_tila', 'ulos'),
+				'actions'=>array('asiakas_tila', 'ulos', 'osoitteen_muutos'),
                 		'expression'=>"Yii::app()->controller->isAsiakas()",
 			),
 			array('allow',
@@ -123,6 +123,51 @@ class AsiakkaatController extends Controller
 
 
 		$this->render('login', array('dm'=>$dm));
+	}
+
+
+
+	public function actionOsoitteen_muutos()
+	{
+
+	        if(isset(Yii::app()->user->asiakas))
+		{
+			Yii::app()->theme = 'customer';
+			$model=$this->loadModel(Yii::app()->user->asiakas);
+
+		if(isset($_POST['Asiakkaat']))
+		{
+			$model->attributes=$_POST['Asiakkaat'];
+			$bd = '<table>';
+			foreach($model->attributes as $k=>$v)
+			{
+				if(isset($_POST['Asiakkaat'][$k]) and !empty($_POST['Asiakkaat'][$k]))
+				$bd .= '<tr><td>'.$model->getAttributeLabel($k).'</td><td>'.$v.'</td></tr>';
+			}
+			$bd .= '</table>';
+
+
+			$ft = FirmanTiedot::model()->findbypk(1);
+			$mail = new YiiMailer();
+			//$mail->clearLayout();//if layout is already set in config
+			$mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
+			$mail->setTo($ft->sahkoposti);
+			$mail->setSubject(Yii::t('main', 'Osoitteen muutos'). ' '.Yii::t('main', 'Asiakas').': '.$model->id);
+			$mail->setBody($bd);
+			if($mail->send())
+				$this->redirect(array('asiakas_tila','id'=>$model->id));
+
+
+		}
+
+
+			$this->render('osoitteen_muutos', array('model'=>$model));
+
+		} else {
+	        	return false;
+		}
+
+
 	}
 
 	public function actionAsiakas_tila()
