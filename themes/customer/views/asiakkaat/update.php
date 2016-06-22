@@ -6,7 +6,6 @@ $head = $model->yhteyshenkilo;
 else
 $head = $model->osoite;
 
-
 ?>
 
         <!-- begin: .tray-center -->
@@ -25,12 +24,15 @@ $head = $model->osoite;
 		));
 	   ?>
 	   </div>
-	   <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-user"></i> <?php echo $head; ?> </h2>
+	   <h2 class=""> <i class="glyphicon glyphicon-user"></i> <?php echo $head; ?> </h2>
+
+	   <?php echo $this->VinkiTahdet($model->id); ?>   
 
 
             <div class="admin-form">
               <div class="panel heading-border">
                 <div class="panel-body bg-light">
+
 
                  <div class="row">
 		  <?php echo $this->renderPartial('_form', array('model'=>$model)); ?>
