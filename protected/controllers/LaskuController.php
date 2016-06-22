@@ -910,7 +910,7 @@ exit;
 		if(Yii::app()->request->getPost('asiakasLaskulle'))
        		$criteria->addCondition ( " as_nro='".Yii::app()->request->getPost('asiakasLaskulle')."' " );
 
-		$from = date("Y-m-d");
+		$from = date("Y-m-d", strtotime("first day of this month"));
 		$to = date("Y-m-d");
 
 		if(isset($_POST['from']) and isset($_POST['to'])){
