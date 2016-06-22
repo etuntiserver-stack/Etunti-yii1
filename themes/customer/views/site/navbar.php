@@ -226,11 +226,15 @@ echo '<input type="hidden" id="curpage" value="'.$curpage.'">';
 
               <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/vinkkiExtranet/create">
-                  <span class="fa fa-paper-plane-o"></span> <?php echo Yii::t('main', 'Lähetä vinkki'); ?></a>
+                  <span class="fa fa-paper-plane-o"></span> 
+ 		  <span class="sidebar-title"><?php echo Yii::t('main', 'Lähetä vinkki'); ?></span>
+		</a>
               </li>
               <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/palautteet/create">
-                  <span class="fa fa-paper-plane"></span> <?php echo Yii::t('main', 'Lähetä palaute'); ?></a>
+                  <span class="fa fa-paper-plane"></span> 
+		  <span class="sidebar-title"><?php echo Yii::t('main', 'Lähetä palaute'); ?></span>
+		</a>
               </li>
 
           <li>
@@ -250,6 +254,14 @@ echo '<input type="hidden" id="curpage" value="'.$curpage.'">';
               </li>
             </ul>
           </li>
+
+
+              <li>
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/asiakkaat/osoitteen_muutos">
+                  <span class="fa fa-gear"></span> 
+		  <span class="sidebar-title"><?php echo Yii::t('main', 'Osoitteen muutos'); ?></span>
+		</a>
+              </li>
 
 
             </ul>
