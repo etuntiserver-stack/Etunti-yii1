@@ -282,6 +282,30 @@ if(!empty($t->gcm_reg_id)) :
 <script type="text/javascript">
 $(document).ready(function(){
 
+  if($('#Tyovuoroot_kohde').val() !== '')
+  {
+	var kohdeOn = $('#Tyovuoroot_kohde option:selected').val();
+	  	 $.ajax({
+			url: 'getAsiakasByKohde',
+			type:'GET',
+			data: { "id" : kohdeOn },
+			  success:function(data){
+			     if(data)
+			     {
+				data = JSON.parse(data);
+			  	console.log(data);
+				$('#asiakas').val(data);
+			     } else {
+			  	console.log('ei ole asiakas id');
+			     }
+
+			  },
+			  error:function(data){
+			  	console.log(data);
+			  }
+	 	});
+  }
+
   $('#asiakas').change(function(){
 	var thisVal = $(this).val();
 
