@@ -18,9 +18,9 @@
 
 <?php
    if(isset(Yii::app()->user->asiakas))
-		echo CHtml::link(Yii::t('main', 'Palaa takaisin omalle sivullesi'), Yii::app()->request->baseUrl.'/index.php/asiakkaat/asiakas_tila?id='.$asiakas_id, array('class'=>'btn btn-primary'));
+		echo CHtml::link(Yii::t('main', 'Palaa takaisin omalle sivullesi'), Yii::app()->request->baseUrl.'/index.php/asiakkaat/asiakas_tila?id='.$asiakas_id, array('class'=>'btn btn-primary myBgColors'));
    elseif(isset(Yii::app()->user->adminID))
-		echo CHtml::link(Yii::t('main', 'Palaa takaisin omalle sivullesi'), Yii::app()->request->baseUrl.'/index.php/asiakkaat/update?id='.$asiakas_id, array('class'=>'btn btn-primary'));
+		echo CHtml::link(Yii::t('main', 'Palaa takaisin omalle sivullesi'), Yii::app()->request->baseUrl.'/index.php/asiakkaat/update?id='.$asiakas_id, array('class'=>'btn btn-primary myBgColors'));
 		?>
                 </div>
               </div>

@@ -28,7 +28,7 @@ class KohteetController extends Controller
 	{
 		return array(
 			array('allow', 
-				'actions'=>array('asiakas_tila'),
+				'actions'=>array('asiakas_tila', 'asiakas_kohteet'),
                 		'expression'=>"Yii::app()->controller->isAsiakas()",
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -73,11 +73,29 @@ class KohteetController extends Controller
                         Yii::app()->theme = 'etunti';
                 } elseif (Yii::app()->controller->isEtuntiAdmin() and isset(Yii::app()->user->user_theme)) {
                         Yii::app()->theme = Yii::app()->user->user_theme;
+                } elseif (isset(Yii::app()->user->asiakas)) {
+                        Yii::app()->theme = 'customer';
                 } else {
                         Yii::app()->theme = 'classic';
                 }
                 parent::init();
         }
+
+
+	public function actionAsiakas_kohteet()
+	{
+
+       		$criteria = new CDbCriteria();
+	        $criteria->condition = "  asiakas_id='".Yii::app()->user->asiakas."' ";
+
+		$dataProvider=new CActiveDataProvider('Kohteet', array(
+			'criteria'=>$criteria,
+			//'pagination'=>false
+		));
+
+		$dataProvider->pagination->pageSize = 50;
+		$this->render('asiakas_kohteet', array('dataProvider' => $dataProvider));
+	}
 
 
 	public function actionAsiakas_tila($id)
@@ -87,8 +105,6 @@ class KohteetController extends Controller
 
 	        if($model->asiakas_id == Yii::app()->user->asiakas)
 		{
-			Yii::app()->theme = 'customer';
-
 
 		if(isset($_POST['Kohteet']))
 		{
