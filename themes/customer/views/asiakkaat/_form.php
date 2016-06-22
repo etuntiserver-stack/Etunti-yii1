@@ -138,12 +138,6 @@ $asiakasnumero = 'voidaan käyttää oleva ID numero';
 	</div>
 
 	<div class="section fill mb5 ashidd_a">
-		<?php echo $form->labelEx($model,'sahkoposti'); ?>
-		<?php echo $form->textField($model,'sahkoposti',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
-		<?php echo $form->error($model,'sahkoposti'); ?>
-	</div>
-
-	<div class="section fill mb5 ashidd_a">
 		<?php echo $form->labelEx($model,'aktiivinen'); ?>
 		<?php
 		$list = array(1=>Yii::t('main', 'Kyllä'),0=>Yii::t('main', 'Ei'));
@@ -151,6 +145,14 @@ $asiakasnumero = 'voidaan käyttää oleva ID numero';
 		array('class'=>'form-control'));	
         	?>
 		<?php echo $form->error($model,'aktiivinen'); ?>
+	</div>
+
+	<hr>
+
+	<div class="section fill mb5 ashidd_a">
+		<?php echo $form->labelEx($model,'sahkoposti'); ?>
+		<?php echo $form->textField($model,'sahkoposti',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'sahkoposti'); ?>
 	</div>
 
 	<div class="section fill mb5 ashidd_a">
