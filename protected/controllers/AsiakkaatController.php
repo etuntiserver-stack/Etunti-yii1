@@ -155,7 +155,7 @@ class AsiakkaatController extends Controller
 			$mail->setSubject(Yii::t('main', 'Osoitteen muutos'). ' '.Yii::t('main', 'Asiakas').': '.$model->id);
 			$mail->setBody($bd);
 			if($mail->send())
-				$this->redirect(array('asiakas_tila','id'=>$model->id));
+				$this->redirect(array('//site/index');
 
 
 		}
