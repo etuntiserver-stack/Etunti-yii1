@@ -11,32 +11,56 @@ $head = $model->osoite;
         <!-- begin: .tray-center -->
         <div class="tray-center">
 
-	   <div class="pull-right">
-	   <?php
-		echo CHtml::link(Yii::t('main', 'Lähetä vinkki'), Yii::app()->request->baseUrl.'/index.php/vinkkiExtranet/create', array(
-		'class'=>'btn btn-primary'
-		)).'&nbsp;';
-		echo CHtml::link(Yii::t('main', 'Lähetä palaute'), Yii::app()->request->baseUrl.'/index.php/palautteet/create', array(
-		'class'=>'btn btn-primary'
-		)).'&nbsp;';
-		echo CHtml::link(Yii::t('main', 'Kirjaudu ulos'), Yii::app()->request->baseUrl.'/index.php/asiakkaat/ulos', array(
-		'class'=>'btn btn-primary'
-		));
-	   ?>
-	   </div>
-	   <h2 class=""> <i class="glyphicon glyphicon-user"></i> <?php echo $head; ?> </h2>
+	   <h2 class="myBgColors p15"> <i class="glyphicon glyphicon-user"></i> <?php echo $head; ?> </h2>
 
 	   <?php echo $this->VinkiTahdet($model->id); ?>   
 
 
-            <div class="admin-form">
-              <div class="panel heading-border">
-                <div class="panel-body bg-light">
 
+  <div class="panel heading-border">
+   <div class="panel-body">
 
-                 <div class="row">
-		  <?php echo $this->renderPartial('_form', array('model'=>$model)); ?>
-                 </div>
+<div class="table-responsive">
+  <table class="table table-striped" id="mobileTable">
+  <thead class="myBgColors">
+  <tr>
+  <th><?php echo Yii::t('main', 'Yritys'); ?></th>
+  <th><?php echo Yii::t('main', 'Yhteyshenkilö'); ?></th>
+  <th><?php echo Yii::t('main', 'Toimipaikka'); ?></th>
+  <th><?php echo Yii::t('main', 'Osoite'); ?></th>
+  <th><?php echo Yii::t('main', 'Postinumero'); ?></th>
+  <th><?php echo Yii::t('main', 'Sähköposti'); ?></th>
+  <th><?php echo Yii::t('main', 'Puhelin'); ?></th>
+  </tr>
+  </thead>
+<tr>
+	<td>
+		<?php echo $model->yrityksen_nimi; ?>
+	</td>
+	<td>
+		<?php echo $model->yhteyshenkilo; ?>
+	</td>
+	<td>
+		<?php echo $model->kaupunki; ?>
+	</td>
+	<td>
+		<?php echo $model->osoite; ?>
+	</td>
+	<td>
+		<?php echo $model->postinumero; ?>
+	</td>
+	<td>
+		<?php echo $model->sahkoposti; ?>
+	</td>
+	<td>
+		<?php echo $model->puhelin; ?>
+	</td>
+</tr>
+  </table>
+</div>
+
+   </div>
+  </div>
 
 
 
@@ -64,10 +88,6 @@ $head = $model->osoite;
 </div>
 
 
-
-                </div>
-              </div>
-            </div>
 
 
         <!-- loppu: .tray-center -->

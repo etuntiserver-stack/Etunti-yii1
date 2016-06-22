@@ -77,6 +77,8 @@ class AsiakkaatController extends Controller
                         Yii::app()->theme = 'etunti';
                 } elseif (Yii::app()->controller->isEtuntiAdmin() and isset(Yii::app()->user->user_theme)) {
                         Yii::app()->theme = Yii::app()->user->user_theme;
+                } elseif (isset(Yii::app()->user->asiakas)) {
+                        Yii::app()->theme = 'customer';
                 } else {
                         Yii::app()->theme = 'classic';
                 }
@@ -123,13 +125,13 @@ class AsiakkaatController extends Controller
 		$this->render('login', array('dm'=>$dm));
 	}
 
-	public function actionAsiakas_tila($id)
+	public function actionAsiakas_tila()
 	{
 
-	        if($id == Yii::app()->user->asiakas)
+	        if(isset(Yii::app()->user->asiakas))
 		{
 			Yii::app()->theme = 'customer';
-			$model=$this->loadModel($id);
+			$model=$this->loadModel(Yii::app()->user->asiakas);
 
 		if(isset($_POST['Asiakkaat']))
 		{
@@ -344,9 +346,9 @@ class AsiakkaatController extends Controller
 			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('index'));
 	}
 
-	/**
-	 * Lists all models.
-	 */
+
+
+
 	public function actionIndex()
 	{
 
@@ -633,10 +635,11 @@ class AsiakkaatController extends Controller
 	protected function palautteetCRM($model, $from, $to)
 	{
 
+
 		$criteria=new CDbCriteria;
 		$criteria->order = " DATE(time) DESC ";
 		$criteria->condition = "
-			asiakas_id='".$_GET['id']."' 
+			asiakas_id='".$model->id."' 
 			AND keskustelu_id=id
 		";
 
@@ -652,7 +655,7 @@ class AsiakkaatController extends Controller
 		$criteria=new CDbCriteria;
 		$criteria->order = " DATE(time) DESC ";
 		$criteria->condition = "
-			asiakas_id='".$_GET['id']."' 
+			asiakas_id='".$model->id."' 
 			AND keskustelu_id!=id
 		";
 		$p_juttelu = Palautteet::model()->findAll($criteria);
@@ -721,7 +724,7 @@ class AsiakkaatController extends Controller
 		$criteria=new CDbCriteria;
 		$criteria->order = " DATE(time) DESC ";
 		$criteria->condition = "
-			asiakas_id='".$_GET['id']."' 
+			asiakas_id='".$model->id."' 
 		";
 
 		if(!empty($from) and !empty($to))

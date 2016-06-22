@@ -87,10 +87,12 @@ Yii::app()->clientScript->registerPackage('bootstrapCSS');
 
 <body>
 
+<?php 
+	if(isset(Yii::app()->user->asiakas))
+	echo $this->renderPartial('//site/navbar'); 
+?>
 <div class="container-fluid">
-
 	<?php echo $content; ?>
-
 </div><!-- page -->
 
 
