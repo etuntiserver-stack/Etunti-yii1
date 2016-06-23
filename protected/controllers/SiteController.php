@@ -25,6 +25,10 @@ class SiteController extends Controller
 	{
 		return array(
 			array('allow', 
+				'actions'=>array('etunnin_asiakkaat', 'update_etunnin_asiakas', 'etunnin_asiakas_kk'),
+                		'expression'=>"Yii::app()->controller->isDigisten()",
+			),
+			array('allow', 
 				'actions'=>array( 'header', 'footer', 'lomake_tarjouspyynto', 'lomake_testiryhma', 'ajankohtaista', 'asiakkaat', 'yritys', 'yhteystiedot', 'lomake_lataailmainen', 'uusi_kommento'),
 				'users'=>array('*'),
 			),
@@ -46,6 +50,19 @@ class SiteController extends Controller
 		);
 	}
 
+	public function isDigisten() {
+
+		if(isset(Yii::app()->user->adminID) and Yii::app()->user->domain == 'digisten')
+		{
+		$m = Administrators::model()->findbypk(Yii::app()->user->adminID);
+	        if($m->id == Yii::app()->user->adminID)
+	            return true;
+		else
+	            return false;
+		} else {
+	            return false;
+		}
+	}
 
 	public function isEtuntiAdmin() {
 
@@ -75,6 +92,71 @@ class SiteController extends Controller
                 }
                 parent::init();
         }
+
+
+
+	public function actionEtunnin_asiakas_kk_laskuri($id)
+	{
+		$model=Domainit::model()->findbypk($id);
+
+		Yii::app()->db1->setActive(false);
+		Yii::app()->db1->connectionString = 'mysql:host=localhost;dbname='.$model->domain;
+
+		$this->render('etunnin_asiakas_kk_laskuri',array(
+			'id'=>$id,
+			'model'=>$model,
+		));
+	}
+
+
+	public function actionEtunnin_asiakas_kk($id)
+	{
+		$model=Domainit::model()->findbypk($id);
+
+		Yii::app()->db1->setActive(false);
+		Yii::app()->db1->connectionString = 'mysql:host=localhost;dbname='.$model->domain;
+
+		$this->render('etunnin_asiakas_kk',array(
+			'id'=>$id,
+			'model'=>$model,
+		));
+	}
+
+	public function actionUpdate_etunnin_asiakas($id)
+	{
+		$model=Domainit::model()->findbypk($id);
+
+		if(isset($_POST['Domainit']))
+		{
+			$model->attributes=$_POST['Domainit'];
+			if(isset($_POST['tasot'])) $model->paketti = implode(",",$_POST['tasot']);
+			if($model->save())
+				$this->redirect(array('etunnin_asiakkaat'));
+		}
+
+		$this->render('update_etunnin_asiakas',array(
+			'model'=>$model,
+		));
+	}
+
+	public function actionEtunnin_asiakkaat()
+	{
+       		$criteria = new CDbCriteria();
+	        $criteria->order = " id DESC ";
+	        $criteria->condition = " domain!='defdb' ";
+
+		if(isset($_POST['domain_nimi']) and !empty($_POST['domain_nimi']))
+	        $criteria->addCondition (" domain LIKE '%".$_POST['domain_nimi']."%' ");
+
+		$dataProvider=new CActiveDataProvider('Domainit', array(
+			'criteria'=>$criteria,
+			//'pagination'=>false
+		));
+
+		$dataProvider->pagination->pageSize = 50;
+		$this->render('etunnin_asiakkaat', array('dataProvider' => $dataProvider));
+	}
+
 
 	public function actionAjankohtaista()
 	{
@@ -323,6 +405,7 @@ $(document).ready(function(){
 		$this->render('hyvaksy', array(
 			'asia' => true,
 		));
+
 
 		AsiakasHyvaksynta::model()->updatebypk($model->id, array('code'=>'','status'=>3));
 
@@ -707,5 +790,20 @@ $(document).ready(function(){
 		}
 		return $return;
 	}
+
+	public function moduliMuutos($m)
+	{
+		$return = "";
+		$ex = explode(",", $m);
+		foreach($ex as $e)
+		{
+			$t = Tasot::model()->find(" taso='".$e."' ");
+			if(isset($t->id))
+			$return .= '<b>'.$t->nimetys.':</b> '.$t->kuvaus."<br>";
+		}
+
+		echo $return;
+	}
+
 
 }
