@@ -614,6 +614,23 @@ echo '<input type="hidden" id="curpage" value="'.$curpage.'">';
           </li>
 	<?php endif; ?>
 
+	<?php if(in_array('999',$tas)) : ?>
+
+          <li>
+            <a class="accordion-toggle crm" href="#">
+              <span class="fa fa-users"></span>
+              <span class="sidebar-title"><?php echo Yii::t('main', 'DIGISTEN hallinta'); ?></span>
+              <span class="caret"></span>
+            </a>
+            <ul class="nav sub-nav">
+              <li>
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/site/etunnin_asiakkaat">
+                  <span class="fa fa-clock-o"></span> <?php echo Yii::t('main', 'Etunnin domainit'); ?></a>
+              </li>
+            </ul>
+          </li>
+	<?php endif; ?>
+
             </ul>
           </li>
 

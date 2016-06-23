@@ -66,7 +66,7 @@ $did = date("Ymd",strtotime($pvm));
 
 	if( $from == 'kk' ){
 		if($tun > 0)
-		echo sprint($tun)."//".$tun;
+		echo $this->sprint($tun)."//".$tun;
 
 	} else {
 
