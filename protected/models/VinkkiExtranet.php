@@ -33,6 +33,7 @@ class VinkkiExtranet extends DB2ActiveRecord
 			array('asiakas_id, nimi, puhelin, sahkoposti', 'required'),
 			array('tila, asiakas_id', 'numerical', 'integerOnly'=>true),
 			array('time, nimi, puhelin', 'length', 'max'=>100),
+			array('muutos_pvm', 'length', 'max'=>50),
 			array('sahkoposti', 'length', 'max'=>255),
 			array('teksti', 'length', 'max'=>3000),
 			// The following rule is used by search().
@@ -59,12 +60,13 @@ class VinkkiExtranet extends DB2ActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'time' => 'Time',
+			'time' => 'Luotu',
 			'asiakas_id' => 'Asiakas',
 			'nimi' => 'Nimi',
 			'puhelin' => 'Puhelin',
 			'sahkoposti' => 'Sahkoposti',
 			'teksti' => 'Teksti',
+			'muutos_pvm' => Yii::t('main', 'Muutokset päivämäärä'),
 		);
 	}
 

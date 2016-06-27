@@ -134,6 +134,7 @@ class VinkkiExtranetController extends Controller
 		if(isset($_POST['VinkkiExtranet']))
 		{
 			$model->attributes=$_POST['VinkkiExtranet'];
+			$model->muutos_pvm = date("Y-m-d H:i:s");
 			if($model->save())
 				$this->redirect(array('index'));
 		}
