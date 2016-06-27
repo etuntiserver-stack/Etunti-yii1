@@ -166,7 +166,18 @@
 	  </div>
 	</div>';
 
-	}elseif(isset($sivu) and $sivu == 'osoite' and isset($_SESSION['onlinevaraus']['modelKohde'])){
+	} elseif(isset($sivu) and $sivu == 'osoite' and isset($_SESSION['onlinevaraus']['modelTV'])){
+	$body .= '
+	<div class="row">
+	  <div class="col-sm-6">
+			'.CHtml::link('Edellinen','aika', array('class'=>'btn btn-lg edellinen')).'
+
+	  </div><div class="col-sm-6">
+			'.CHtml::link('Maksu','maksu', array('class'=>'btn btn-lg seuraava tallennaUusi')).'
+	  </div>
+	</div>';
+
+	} elseif(isset($sivu) and $sivu == 'osoite' and isset($_SESSION['onlinevaraus']['modelKohde'])){
 	$body .= '
 	<div class="row">
 	  <div class="col-sm-6">

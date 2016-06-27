@@ -38,15 +38,13 @@ $asetukset = Asetukset::model()->findbypk(1);
                                   <div class="modal-body" style="text-align: left">
                                   <p>
 
-1.       Kirjoita osoitekenttiin pyydetyt yhteystiedot.<br>
-2.       Jos sinulla on lemmikkejä, huoneita, jonne et halua kenenkään menevän, ovikoodi tai muuta työntekijän saapumiseen tai palvelun suorittamiseen liittyviä asioita, niin kirjoita ne vapaaseen tekstikenttään ”Lisätietoja”.<br>
-3.       Syötä mahdollinen alennuskoodi ja aktivoi se. Alennuskoodin voi syöttää myöhemmässäkin vaiheessa.<br>
-4.       Siirry eteenpäin hyväksymään ja maksamaan palvelun.<br>
+1.       Kirjoita osoitekenttiin pyydetyt yhteystiedot. Jos olet käyttänyt palvelua aikaisemmin, niin yhteystietosi löytyvät sähköpostisi perusteella.<br>
+2.       Jos sinulla on lemmikkejä, huoneita, jonne et halua kenenkään menevän, ovikoodi tai muuta työntekijän saapumiseen tai palvelun suorittamiseen liittyviä asioita, niin kirjoita ne lisätietoja osioon.<br>
+3.       Siirry eteenpäin hyväksymään ja maksamaan palvelun.<br>
 
 <br><br> 
 
-<p>
-Tähdellä merkityt kohdat ovat pakollisia. Yhteenveto kenttä päivittyy, kun tietoja kirjataan. Asiakaspalvelun yhteystiedot ovat näkyvillä sivustolla. Ole yhteydessä asiakaspalveluun, mikäli sinulla on jotain kysyttävää.</p>
+<p>Kaikki kentät ovat pakollisia. Antamasi tiedot tallentuvat järjestelmään, jolloin tietoja ei tarvitse kirjoittaa uudestaan, kun palveluja tilataan tulevaisuudessa. Sinulla voi olla useampia osoitteita tallentuneena. Yhteenveto kenttä päivittyy, kun tietoja kirjataan. Mikäli haluat poistaa tietyn osoitteen järjestelmästä, niin ota yhteyttä asiakaspalveluumme. Asiakaspalvelun yhteystiedot ovat näkyvillä sivustolla.</p>
 
 				  </p>
                                   </div>
@@ -198,6 +196,7 @@ Tähdellä merkityt kohdat ovat pakollisia. Yhteenveto kenttä päivittyy, kun t
    ?>
    </div>
 
+<!--
 	      <div id="alennuskoodi">
 		<div class="well">
 		  <center><h4><?php echo Yii::t('main', 'Alennuskoodi'); ?></h4>
@@ -210,6 +209,7 @@ Tähdellä merkityt kohdat ovat pakollisia. Yhteenveto kenttä päivittyy, kun t
 		  </center>
 		</div>
 	      </div>
+-->
 
 	      <div>
 		<div class="well sininen">
