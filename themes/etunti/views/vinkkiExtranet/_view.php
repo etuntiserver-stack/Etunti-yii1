@@ -21,6 +21,9 @@
 		<?php echo date("d.m.Y H:i", strtotime($data->time)); ?>
 	</td>
 	<td>
+		<?php if(!empty($data->muutos_pvm)) echo date("d.m.Y H:i", strtotime($data->muutos_pvm)); ?>
+	</td>
+	<td>
 		<?php echo CHtml::link($nimi, array('//asiakkaat/update', 'id'=>$as_id), array('class'=>'link')); ?>
 	</td>
 	<td>

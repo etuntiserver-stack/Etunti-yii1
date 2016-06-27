@@ -75,6 +75,7 @@
   <thead class="myBgColors">
   <tr>
   <th><?php echo Yii::t('main', 'Aika'); ?></th>
+  <th><?php echo Yii::t('main', 'Muutokset päivämäärä'); ?></th>
   <th><?php echo Yii::t('main', 'Asiakas'); ?></th>
   <th><?php echo Yii::t('main', 'Nimi'); ?></th>
   <th><?php echo Yii::t('main', 'Sähköposti'); ?></th>
