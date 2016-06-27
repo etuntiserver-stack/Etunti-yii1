@@ -22,6 +22,9 @@ $asetukset = Asetukset::model()->findbypk(1);
  <div class="form-inline col-sm-12">
    <div class="form-group">
 	<img src="<?php echo $asetukset->logon_polkku; ?>" height="<?php echo $asetukset->logon_korkeus; ?>">
+
+	&nbsp;<span data-toggle="modal" data-target=".kysymys" class="link"><img src="<?php echo Yii::app()->request->baseUrl; ?>/ylapalkki/kysymys.png" height="30"></span>
+
    </div><div class="form-group col-sm-offset-4">
 	<h3><?php echo Yii::t('main', 'Online-Varaus'); ?><br>
            <p class="small link text-sininen" data-toggle="modal" data-target=".mikaOnOnlinevaraus"><?php echo Yii::t('main', 'Mikä on online-varaus'); ?></p>
@@ -64,8 +67,6 @@ if(isset($asetukset->checkout_id) and !empty($asetukset->checkout_id) and !empty
 		<h4>Valitse palvelu</h4>
 
 
-		<p data-toggle="modal" data-target=".kysymys" class="link"><img src="<?php echo Yii::app()->request->baseUrl; ?>/ylapalkki/kysymys.png" height="30"></p>
-
                             <!-- Modal -->
                             <div class="modal fade kysymys">
                               <div class="modal-dialog">
@@ -80,13 +81,11 @@ if(isset($asetukset->checkout_id) and !empty($asetukset->checkout_id) and !empty
 1.       Valitse alasvetovalikosta pääpalvelu.<br>
 2.       Valitse huoneiston koko.<br>
 3.       Valitse haluamasi lisäpalvelut.<br>
-4.       Syötä mahdollinen alennuskoodi ja aktivoi se. Alennuskoodin voi syöttää myöhemmässäkin vaiheessa.<br>
-5.       Siirry eteenpäin valitsemaan palvelulle ajankohtaa.<br>
+4.       Siirry eteenpäin valitsemaan palvelulle ajankohtaa.<br>
 
 <br><br> 
 
-<p>
-Tähdellä merkityt kentät ovat paollisia. Jokaiselle palvelulle on määritelty palvelusisältö. Pääpalvelun palvelusisältö näkyy ”Mitä palvelu sisältää?” -painikkeen kautta, joka ilmestyy pääpalvelun alapuolelle, kun palvelu on valittu. Lisäpalveluiden palvelusisältö näkyy, kun palvelua painetaan. Lisäpalvelut eivät ole pakollisia ja niitä voidaan valita rajaton määrä. Pääpalvelun ja lisäpalveluiden hinta ja kesto tulevat eriteltynä näkyviin sivun oikeaan laitaan (mobiilissa alapuolelle) yhteenveto kenttään. Asiakaspalvelun yhteystiedot ovat näkyvillä sivustolla. Ole yhteydessä asiakaspalveluun, mikäli sinulla on jotain kysyttävää.</p>
+<p>Jokaiselle palvelulle on määritelty palvelusisältö ja ne näkyvät palvelun yhteydessä. Lisäpalveluja voidaan valita rajaton määrä. Pääpalvelun ja lisäpalveluiden kesto ja kokonaishinta tulevat näkyviin yhteenvetoon. Asiakaspalvelun yhteystiedot ovat näkyvillä sivustolla. Ole yhteydessä asiakaspalveluun, mikäli sinulla on jotain kysyttävää.</p>
 
 				  </p>
                                   </div>
@@ -221,6 +220,7 @@ Tähdellä merkityt kentät ovat paollisia. Jokaiselle palvelulle on määritelt
  
 	      <div id="panGetContent"></div>
 
+<!--
 	      <div id="alennuskoodi">
 		<div class="well">
 		  <center><h4><?php echo Yii::t('main', 'Alennuskoodi'); ?></h4>
@@ -233,43 +233,49 @@ Tähdellä merkityt kentät ovat paollisia. Jokaiselle palvelulle on määritelt
 		  </center>
 		</div>
 	      </div>
+-->
 
+	     <?php if(!empty($asetukset->onlinevaraus_laatu_luotettavuus)) : ?>
 	      <div>
 		<div class="well sininen">
-		  <center><h4><?php echo Yii::t('main', 'Laatu ja luotettavuus'); ?></h4>
-
-		  </center>
+		  <center><h4><?php echo Yii::t('main', 'Laatu ja luotettavuus'); ?></h4></center>
+		  <p class="small"><?php echo str_replace("\n", "<br>", $asetukset->onlinevaraus_laatu_luotettavuus); ?></p>
 		</div>
 	      </div>
+	     <?php endif; ?>
 
+	     <?php if(!empty($asetukset->onlinevaraus_takuu_turvallisuus)) : ?>
 	      <div>
 		<div class="well sininen">
-		  <center><h4><?php echo Yii::t('main', 'Takuu ja turvallisuus'); ?></h4>
-
-		  </center>
+		  <center><h4><?php echo Yii::t('main', 'Takuu ja turvallisuus'); ?></h4></center>
+		  <p class="small"><?php echo str_replace("\n", "<br>", $asetukset->onlinevaraus_takuu_turvallisuus); ?></p>
 		</div>
 	      </div>
+	     <?php endif; ?>
 
+	     <?php if(!empty($asetukset->onlinevaraus_asiakaspalvelu)) : ?>
 	      <div>
 		<div class="well sininen">
-		  <center><h4><?php echo Yii::t('main', 'Asiakaspalvelu'); ?></h4>
-
-		  </center>
+		  <center><h4><?php echo Yii::t('main', 'Asiakaspalvelu'); ?></h4></center>
+		  <p class="small"><?php echo str_replace("\n", "<br>", $asetukset->onlinevaraus_asiakaspalvelu); ?></p>
 		</div>
 	      </div>
+	     <?php endif; ?>
 
  </div>
 </div>
 
 <br>
 
+<?php if(!empty($asetukset->onlinevaraus_arvio_siivouksesta)) : ?>
 <div class="">
   <div class="well sininen">
-	<center><h4><?php echo Yii::t('main', 'Arvio siivouksesta'); ?></h4>
-
-	</center>
+	<center><h4><?php echo Yii::t('main', 'Arvio siivouksesta'); ?></h4></center>
+        <p class="small"><?php echo str_replace("\n", "<br>", $asetukset->onlinevaraus_arvio_siivouksesta); ?></p>	
   </div>
 </div>
+<?php endif; ?>
+
 
 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/onlinevaraus/rekisteriseloste" target="_blank"><?php echo Yii::t('main','Onlinevaraus tietosuoja- ja rekisteriseloste'); ?> </a>
 

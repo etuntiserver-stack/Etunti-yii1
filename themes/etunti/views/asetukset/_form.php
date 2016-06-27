@@ -225,6 +225,30 @@
     <legend><h2><?php echo Yii::t('main','Muut'); ?></h2></legend>
 
 	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'onlinevaraus_laatu_luotettavuus'); ?>
+		<?php echo $form->textarea($model,'onlinevaraus_laatu_luotettavuus',array('rows'=>4,'maxlength'=>5000,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'onlinevaraus_laatu_luotettavuus'); ?>
+	</div>
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'onlinevaraus_takuu_turvallisuus'); ?>
+		<?php echo $form->textarea($model,'onlinevaraus_takuu_turvallisuus',array('rows'=>4,'maxlength'=>5000,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'onlinevaraus_takuu_turvallisuus'); ?>
+	</div>
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'onlinevaraus_asiakaspalvelu'); ?>
+		<?php echo $form->textarea($model,'onlinevaraus_asiakaspalvelu',array('rows'=>4,'maxlength'=>5000,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'onlinevaraus_asiakaspalvelu'); ?>
+	</div>
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'onlinevaraus_arvio_siivouksesta'); ?>
+		<?php echo $form->textarea($model,'onlinevaraus_arvio_siivouksesta',array('rows'=>4,'maxlength'=>5000,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'onlinevaraus_arvio_siivouksesta'); ?>
+	</div>
+
+	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'tilausvahvistus'); ?>
 		<?php echo $form->textarea($model,'tilausvahvistus',array('rows'=>4,'maxlength'=>5000,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'tilausvahvistus'); ?>

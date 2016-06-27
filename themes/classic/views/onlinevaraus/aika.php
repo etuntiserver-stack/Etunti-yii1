@@ -50,14 +50,11 @@ $asetukset = Asetukset::model()->findbypk(1);
 
 1.       Valitse kalenterista päivämäärä, jolloin haluat palvelun.<br>
 2.       Valitse kellonaika, jolloin haluat palvelun alkavan.<br>
-3.       Valitse työntekijä.<br>
-4.       Syötä mahdollinen alennuskoodi ja aktivoi se. Alennuskoodin voi syöttää myöhemmässäkin vaiheessa.<br>
-5.       Siirry eteenpäin antamaan osoitetiedot.<br>
+3.       Siirry eteenpäin antamaan osoitetiedot.<br>
 
 <br><br> 
 
-<p>
-Päivät, joissa on vapaita aikoja valittavana näkyvät vihreällä, harmaalla näkyvät päivät, joita ei voi valita ja oranssilla näkyvä on valitsemasi päivä. Kellonajat, joita päivämäärän valinnan jälkeen näkyy ovat kaikki mahdolliset vapaat ajat kyseiselle päivälle. Yhteenveto kenttä päivittyy, kun tietoja kirjataan. Asiakaspalvelun yhteystiedot ovat näkyvillä sivustolla. Ole yhteydessä asiakaspalveluun, mikäli sinulla on jotain kysyttävää.</p>
+<p>Päivät, joissa on vapaita aikoja valittavana näkyvät vihreällä, harmaalla näkyvät päivät, joita ei voi valita ja oranssilla näkyvä on valitsemasi päivä. Kellonajat, joita päivämäärän valinnan jälkeen näkyy ovat kaikki mahdolliset vapaat ajat kyseiselle päivälle. Yhteenvetoon päivittyy, kun tietoja kirjataan. Asiakaspalvelun yhteystiedot ovat näkyvillä sivustolla. Ole yhteydessä asiakaspalveluun, mikäli sinulla on jotain kysyttävää.</p>
 
 				  </p>
                                   </div>
@@ -87,6 +84,7 @@ Päivät, joissa on vapaita aikoja valittavana näkyvät vihreällä, harmaalla 
    ?>
    </div>
 
+<!--
 	      <div id="alennuskoodi">
 		<div class="well">
 		  <center><h4><?php echo Yii::t('main', 'Alennuskoodi'); ?></h4>
@@ -99,6 +97,7 @@ Päivät, joissa on vapaita aikoja valittavana näkyvät vihreällä, harmaalla 
 		  </center>
 		</div>
 	      </div>
+-->
 
 	      <div>
 		<div class="well sininen">

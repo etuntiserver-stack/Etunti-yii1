@@ -45,7 +45,7 @@ class Asetukset extends DB2ActiveRecord
 			array('johtaja, viivastyskorko, tilinumero, iban, bic, , postita_username, postita_password, trust_cid, trust_api, checkout_id, trust_ws_cid, trust_ws_salasana', 'length', 'max'=>100),
 			array('trust_url, checkout_salasana, trust_ws_api_url', 'length', 'max'=>255),
 			array('viikonloppulisa_la, viikonloppulisa_su, vinkki_tunnit, vinkki_prosentti', 'length', 'max'=>10),
-			array('oikeudet, pyhapaivat, erikoislauantai, tilausvahvistus, rekisteriseloste', 'length', 'max'=>10000),
+			array('oikeudet, pyhapaivat, erikoislauantai, tilausvahvistus, rekisteriseloste, onlinevaraus_laatu_luotettavuus, onlinevaraus_takuu_turvallisuus, onlinevaraus_asiakaspalvelu, onlinevaraus_arvio_siivouksesta', 'length', 'max'=>10000),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('id, syntyrin_emails, paivan_uutinen, logon_polkku, logon_korkeus, johtaja, viivastyskorko, tilinumero, iban, bic, trust_cid, trust_api, palvelu_tyyppi, trust_url, pyhapaivat, erikoislauantai, sovellus_tyovuorot', 'safe', 'on'=>'search'),
@@ -93,6 +93,12 @@ class Asetukset extends DB2ActiveRecord
 			'lasku_asiakasnumero'=> Yii::t('main', 'Syöttääkö itse asiakasnumeron vai lasketaan edellisestä automaattisesti'),
 			'show_name' => Yii::t('main', 'Näytä asiakas nimi'),
 			'trust_ws_api_url'=> Yii::t('main', 'Trust WS API'),
+
+			'onlinevaraus_laatu_luotettavuus' => Yii::t('main', 'Laatu ja luotettavuus'),
+			'onlinevaraus_takuu_turvallisuus' => Yii::t('main', 'Takuu ja turvallisuus'),
+			'onlinevaraus_asiakaspalvelu' => Yii::t('main', 'Asiakaspalvelu'),
+			'onlinevaraus_arvio_siivouksesta' => Yii::t('main', 'Arvio siivouksesta'),
+
 		);
 	}
 

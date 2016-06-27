@@ -40,15 +40,13 @@ $asetukset = Asetukset::model()->findbypk(1);
 
 1.       Tarkasta palveluntilauksen tiedot.<br>
 2.       Muokkaa tilausta tai tietoja tarvittaessa.<br>
-3.       Syötä mahdollinen alennuskoodi ja aktivoi se.<br>
-4.       Lue tilaus- ja peruutusehdot ja hyväksy ne.<br>
-5.       Valitse maksutapa ja suorita maksu.<br>
-6.       Maksun suorittamisen jälkeen saat tilausvahvistuksen sähköpostiisi.<br>
+3.       Lue varaus- ja peruutusehdot ja hyväksy ne.<br>
+4.       Valitse maksutapa ja suorita maksu.<br>
+5.       Maksun suorittamisen jälkeen saat tilausvahvistuksen sähköpostiisi.<br>
 
 <br><br> 
 
-<p>
-Maksamisen jälkeen saat tilausvahvistuksen ja voit halutessasi tulostaa sen. Asiakaspalvelun yhteystiedot ovat näkyvillä sivustolla. Ole yhteydessä asiakaspalveluun, mikäli sinulla on jotain kysyttävää.</p>
+<p>Maksamisen jälkeen saat tilausvahvistuksen ja voit halutessasi tulostaa sen. Asiakaspalvelun yhteystiedot ovat näkyvillä sivustolla. Ole yhteydessä asiakaspalveluun, mikäli sinulla on jotain kysyttävää.</p>
 
 				  </p>
                                   </div>
@@ -101,6 +99,7 @@ Maksamisen jälkeen saat tilausvahvistuksen ja voit halutessasi tulostaa sen. As
    ?>
    </div>
 
+<!--
 	      <div id="alennuskoodi">
 		<div class="well">
 		  <center><h4><?php echo Yii::t('main', 'Alennuskoodi'); ?></h4>
@@ -113,6 +112,7 @@ Maksamisen jälkeen saat tilausvahvistuksen ja voit halutessasi tulostaa sen. As
 		  </center>
 		</div>
 	      </div>
+-->
 
 	      <div>
 		<div class="well sininen">
