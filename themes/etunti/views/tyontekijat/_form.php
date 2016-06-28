@@ -61,7 +61,13 @@ if(empty($model->position) and isset($model->id))
 		<?php echo $form->textField($model,'tekijan_nimi',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'tekijan_nimi'); ?>
 	</div>
-
+<!--
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'sukunimi'); ?>
+		<?php echo $form->textField($model,'sukunimi',array('size'=>60,'maxlength'=>255,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'sukunimi'); ?>
+	</div>
+-->
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'tekijan_email'); ?>
 		<?php echo $form->textField($model,'tekijan_email',array('size'=>50,'maxlength'=>50,'class'=>'form-control')); ?>
