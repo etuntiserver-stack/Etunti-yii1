@@ -1,6 +1,30 @@
 <?php
 /* @var $this OnlinevarausController */
 /* @var $dataProvider CActiveDataProvider */
+
+  if(!isset($_SESSION['domain']))
+  {
+    echo '  <link rel="stylesheet" type="text/css" href="'.Yii::app()->request->baseUrl.'/css/bootstrap.min.css">';
+
+    echo '
+    <div class="container-fluid">
+     <div class="col-sm-4 col-sm-offset-4">
+      <form action="#" class="form-signin" method="GET">
+        <h2 class="form-signin-heading">DOMAIN</h2>
+        <label for="domain" class="sr-only">'.Yii::t('main', 'Domain').'</label>
+        <input type="text" id="domain" name="domain" class="form-control input-lg" placeholder="" required autofocus>
+	<br>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">'.Yii::t('main', 'Jatka').'</button>
+      </form>
+     </div>
+    </div> <!-- /container -->
+    ';
+
+
+    exit;
+  }
+
+
 $asetukset = Asetukset::model()->findbypk(1);
 
 // clear
