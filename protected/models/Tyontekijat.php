@@ -68,6 +68,7 @@ public $tunnus;
 			array('tekijan_henkilotunnus, tekijan_puh, tekijan_lanka_puh, tyoryhma', 'length', 'max'=>20),
 			array('tekijan_email, tekijan_ptoimipaikka, tyoehtosopimus, tekijan_kulunvalvonta, tekijan_konttori, aktiivinen', 'length', 'max'=>50),
 			array('tekijan_pnumero', 'length', 'max'=>7),
+			array('sukunimi', 'length', 'max'=>255),
 			array('ayjasenyys', 'length', 'max'=>10),
 			array('kortit, tekijan_muisti, tekijan_tietoja, tietoja_onlinevarauksen', 'length', 'max'=>2000),
 			array('gcm_reg_id, position', 'length', 'max'=>500),
@@ -120,6 +121,7 @@ public $tunnus;
 			'gcm_reg_id'=> Yii::t('main', 'Google Cloud Messaging ID'),
 			'position' => Yii::t('main', 'Viimeinen sijainti'),
 			'tyo_toimialue' => Yii::t('main', 'Toimialue'),
+			'sukunimi' => Yii::t('main', 'Sukunimi'),
 		);
 	}
 
