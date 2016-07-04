@@ -188,14 +188,15 @@ function num($val){
 		       	$criteria = new CDbCriteria();
 			$criteria->select = " aloitan,loppui,tekijan_nimi,kohde_kannasta ";
 			$criteria->order = " DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i') ASC ";
-			$criteria->condition = " aloitan!='' and loppui!='' AND id NOT IN (SELECT kid FROM sivexkuitti) ";
+			$criteria->condition = " aloitan!='' and loppui!='' ";
 
 			allCrit($criteria);
-
+			$tot = array();
 			$tot = Toteutuneet::model()->findAll($criteria); 
-			$model = array_merge($lu, $tot);
+			$m = array_merge($lu, $tot);
 
-  			foreach($model as $data){
+			$model = array();
+  			foreach($m as $data){
 				$model[strtotime($data->aloitan)] = $data;
 			}
 			ksort($model);
