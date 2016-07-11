@@ -401,7 +401,7 @@ return array(
 'Avain: ' => 'Avain: ',
 'Työvuoron suunnittelu' => 'Työvuoron suunnittelu',
 'Uusi tilaus' => 'Uusi tilaus',
-'Kiitos tilausta' => 'Kiitos tilausta',
+'Kiitos tilauksesta' => 'Kiitos tilauksesta',
 'Viesti' => 'Viesti',
 'Järjestelmänvalvoja' => 'Järjestelmänvalvoja',
 'Työntekijä' => 'Työntekijä',

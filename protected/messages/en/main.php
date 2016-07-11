@@ -401,7 +401,7 @@ return array(
 'Avain: ' => 'Key: ',
 'Työvuoron suunnittelu' => 'Planning of a shift',
 'Uusi tilaus' => 'New order',
-'Kiitos tilausta' => 'Thank you for your order',
+'Kiitos tilauksesta' => 'Thank you for your order',
 'Viesti' => 'Message',
 'Järjestelmänvalvoja' => 'Administrator',
 'Työntekijä' => 'Employee',

@@ -912,6 +912,7 @@ class TyovuorootController extends Controller
 				$model->kohde = $kohteet->id;
 				$model->pvm = date("d.m.Y",strtotime($_POST['Tyovuoroot']['pvm']));
 				if($model->save())
+
 				{
 
 				   if(isset($_POST['vieposti']))
@@ -926,7 +927,7 @@ class TyovuorootController extends Controller
 					//$mail->clearLayout();//if layout is already set in config
 					$mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
 					$mail->setTo($_POST['sahkoposti']);
-					$mail->setSubject(Yii::t('main', 'Kiitos tilausta'));
+					$mail->setSubject(Yii::t('main', 'Kiitos tilauksesta'));
 					$mail->setBody($message);
 					$mail->send();
 				   }
