@@ -98,12 +98,28 @@ class SiteController extends Controller
 	public function actionLaheta_et_kirje()
 	{
 
-      		$criteria = new CDbCriteria();
-	        $criteria->order = " id DESC ";
-	        $criteria->condition = " domain!='defdb' ";
-		$model=Domainit::model()->findAll($criteria);
+		if(isset($_POST['Domainit']))
+		{
 
 
+			$message = str_replace("\n", "<br>", $_POST['Domainit']['viesti']);
+			foreach($_POST['Domainit']['sahkoposti'] as $sahkoposti)
+			{
+			
+	
+			$mail = new YiiMailer();
+			$mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
+			$mail->setTo($sahkoposti);
+			$mail->setSubject(Yii::t('main', 'ETUNTI.FI'));
+			$mail->setBody($message);
+
+
+			}
+
+				$this->redirect(array('etunnin_asiakkaat'));
+		}
+
+		$model= new Domainit;
 		$this->render('laheta_et_kirje',array(
 			'model'=>$model,
 		));
