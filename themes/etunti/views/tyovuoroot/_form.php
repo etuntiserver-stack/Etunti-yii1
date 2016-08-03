@@ -257,7 +257,12 @@ if(!empty($t->gcm_reg_id)) :
 
 	<div class="modal-footer">
 		<?php 
-			if(isset($model->id))
+	   	$site = Yii::app()->createController('Site');
+
+	   	$checkPoista = "tyovuorot_3_".Yii::app()->user->adminStatus;
+	   	$poista = $site[0]->checkOikeusFields($checkPoista);
+
+			if(isset($model->id) and $poista == 1)
 			{
 			$doit = date("Ymd",strtotime($model->pvm))."_".$model->tid; 
 			echo CHtml::Button('Poista',array('class'=>'btn btn-danger', 'id'=>'poistaTv', 'for'=>$doit, 'model'=>$model->id, 'data-dismiss'=>'modal'));
@@ -265,8 +270,18 @@ if(!empty($t->gcm_reg_id)) :
 		?>
 		<?php echo CHtml::Button('Sulje',array('class'=>'btn btn-default','data-dismiss'=>'modal')); ?>
 		<?php 
-		if(Yii::app()->user->adminStatus != 2)
-		echo CHtml::submitButton($model->isNewRecord ? 'Luo' : 'Tallenna',array('class'=>'btn btn-primary','id'=>'submitButton')); 
+
+
+	   	$checkLuo = "tyovuorot_1_".Yii::app()->user->adminStatus;
+	   	$luo = $site[0]->checkOikeusFields($checkLuo);
+
+	   	$checkTallenna = "tyovuorot_2_".Yii::app()->user->adminStatus;
+	   	$tallenna = $site[0]->checkOikeusFields($checkTallenna);
+
+		if(!isset($model->id) and $luo == 1)
+		echo CHtml::submitButton('Luo',array('class'=>'btn btn-primary','id'=>'submitButton'));
+		elseif(isset($model->id) and $tallenna == 1)
+		echo CHtml::submitButton('Tallenna',array('class'=>'btn btn-primary','id'=>'submitButton')); 
 		?>
 	</div>		
 

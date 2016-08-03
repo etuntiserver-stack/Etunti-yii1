@@ -25,7 +25,7 @@ class SiteController extends Controller
 	{
 		return array(
 			array('allow', 
-				'actions'=>array('etunnin_asiakkaat', 'update_etunnin_asiakas', 'etunnin_asiakas_kk'),
+				'actions'=>array('etunnin_asiakkaat', 'update_etunnin_asiakas', 'etunnin_asiakas_kk', 'laheta_et_kirje'),
                 		'expression'=>"Yii::app()->controller->isDigisten()",
 			),
 			array('allow', 
@@ -93,6 +93,21 @@ class SiteController extends Controller
                 parent::init();
         }
 
+
+
+	public function actionLaheta_et_kirje()
+	{
+
+      		$criteria = new CDbCriteria();
+	        $criteria->order = " id DESC ";
+	        $criteria->condition = " domain!='defdb' ";
+		$model=Domainit::model()->findAll($criteria);
+
+
+		$this->render('laheta_et_kirje',array(
+			'model'=>$model,
+		));
+	}
 
 
 	public function actionEtunnin_asiakas_kk_laskuri($id)

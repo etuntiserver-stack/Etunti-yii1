@@ -6,8 +6,7 @@
         <div class="tray-center">
 
 
-              <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-home"></i> <?php echo Yii::t('main', 'ASIAKKAAT'); ?> 
-		<?php echo CHtml::link('',Yii::app()->request->baseUrl.'/index.php/asiakkaat/create',array('class'=>'btn btn-default fa fa-plus')); ?></h2>
+              <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-home"></i> <?php echo Yii::t('main', 'ASIAKKAAT'); ?> </h2>
 
 
 
@@ -41,6 +40,10 @@
         	        <input type="submit" class="btn btn-primary btn-lg haemob btn-block myBgColors" value="<?php echo Yii::t('main', 'Hae'); ?>">
 		      </div>
 
+                      <div class="col-md-2 col-md-offset-6">
+			<?php echo CHtml::link(Yii::t('main', 'Lähetä kirje'),Yii::app()->request->baseUrl.'/index.php/site/laheta_et_kirje',array('class'=>'btn btn-default')); ?>
+		      </div>
+
                     </div>
 
 
@@ -65,6 +68,8 @@
   <tr>
   <th><?php echo Yii::t('main', 'Domain'); ?></th>
   <th><?php echo Yii::t('main', 'Yritys'); ?></th>
+  <th><?php echo Yii::t('main', 'Puhelin'); ?></th>
+  <th><?php echo Yii::t('main', 'Sähköposti'); ?></th>
   <th><?php echo Yii::t('main', 'Modulit'); ?></th>
   <th><?php echo Yii::t('main', 'Kuukauden käyttö (tunnit)'); ?></th>
   <th><?php echo Yii::t('main', 'Hinnat'); ?></th>
