@@ -87,6 +87,7 @@ class Domainit extends CActiveRecord
 			array('domain', 'required'),
 			array('huoltokatko, palveluhinta_persiivoja, tyovuorohinta_persiivoja, muut_tyokaluhinta', 'numerical', 'integerOnly'=>true),
 			array('domain, paketti, yritys, pakettin_nimetus', 'length', 'max'=>100),
+			array('puhelin, sahkoposti', 'length', 'max'=>255),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('id, domain, paketti, yritys, pakettin_nimetus', 'safe', 'on'=>'search'),
@@ -114,6 +115,8 @@ class Domainit extends CActiveRecord
 			'domain' => Yii::t('main', 'Domain'),
 			'paketti' => Yii::t('main', 'Tasot'),
 			'yritys' => Yii::t('main', 'Yritys'),
+			'yritys' => Yii::t('main', 'Puhelin'),
+			'yritys' => Yii::t('main', 'Sähköposti'),
 			'pakettin_nimetus' => Yii::t('main', 'Pakettin nimetus'),
 			'palveluhinta_persiivoja'=> Yii::t('main', 'Palveluhinta per siivoja'),
 			'tyovuorohinta_persiivoja'=> Yii::t('main', 'Työvuorot hinta per siivoja'),

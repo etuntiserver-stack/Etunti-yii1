@@ -52,6 +52,18 @@
 	</div>
 
 	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'puhelin'); ?>
+		<?php echo $form->textField($model,'puhelin',array('class'=>'form-control')); ?>
+		<?php echo $form->error($model,'puhelin'); ?>
+	</div>
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'sahkoposti'); ?>
+		<?php echo $form->textField($model,'sahkoposti',array('class'=>'form-control')); ?>
+		<?php echo $form->error($model,'sahkoposti'); ?>
+	</div>
+
+	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'palveluhinta_persiivoja'); ?>
 		<?php echo $form->numberField($model,'palveluhinta_persiivoja',array('class'=>'form-control', 'step'=>'0.01')); ?>
 		<?php echo $form->error($model,'palveluhinta_persiivoja'); ?>

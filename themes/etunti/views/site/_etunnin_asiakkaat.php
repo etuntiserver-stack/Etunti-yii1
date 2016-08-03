@@ -11,6 +11,12 @@
 		<?php echo $data->yritys; ?>
 	</td>
 	<td>
+		<?php echo $data->puhelin; ?>
+	</td>
+	<td>
+		<?php echo $data->sahkoposti; ?>
+	</td>
+	<td>
 		<?php echo $this->moduliMuutos($data->paketti); ?>
 	</td>
 	<td>
