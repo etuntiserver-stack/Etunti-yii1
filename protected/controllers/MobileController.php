@@ -300,6 +300,7 @@ function num($val){
 	public function actionUpdatetime()
 	{
 
+
 		$model = $this->loadModel($_POST['id']);
 
  		$newdate = date("d.m.Y H:i:s",strtotime($_POST['value']));
@@ -411,7 +412,7 @@ function num($val){
 		{
 			$model->attributes=$_POST['Mobile'];
 			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+				$this->redirect(array('index'));
 		}
 
 		$this->render('create',array(
