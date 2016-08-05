@@ -11,8 +11,10 @@ $criteria->condition = "
 	AND kohde NOT IN 
 	(SELECT kohdenID FROM sivexkuitti 
 	WHERE DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d') = CURDATE()
+	AND osoite NOT LIKE '%MATKA%'
 	)
 	AND kohde!='' AND tyoajanmerkinta='Normaali/'
+	AND kohde NOT IN (SELECT id FROM sivex_kohdet WHERE osoite LIKE '%matka%' OR osoite LIKE '%lounastauko%' )
 ";
 $tvc = Tyovuoroot::model()->findAll($criteria);
 
