@@ -291,8 +291,12 @@ echo '
                 </div>
               </div>
 
+
+
             </div>
             <!-- end: .col-md-5-->
+
+
 
             <div class="col-md-6 col-lg-4 admin-grid">
 
@@ -331,6 +335,51 @@ echo '
                   </div>
                 </div>
               </div>
+
+
+
+              <div class="panel" id="p55">
+                <div class="panel-heading">
+                  <span class="panel-title"><?php echo Yii::t('main', 'Työt myöhässä'); ?></span>
+                </div>
+                <div class="panel-body">
+		  <?php 
+// Tyovuoro tksekkaus
+$criteria=new CDbCriteria;
+$criteria->condition = " 
+	DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE()
+	AND DATE_ADD(DATE_FORMAT(STR_TO_DATE(CONCAT(pvm, alku), '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), INTERVAL 10 MINUTE) < NOW() 
+	AND kohde NOT IN 
+	(SELECT kohdenID FROM sivexkuitti 
+	WHERE DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d') = CURDATE()
+	AND osoite NOT LIKE '%MATKA%'
+	)
+	AND kohde!='' AND tyoajanmerkinta='Normaali/'
+	AND kohde NOT IN (SELECT id FROM sivex_kohdet WHERE osoite LIKE '%matka%' OR osoite LIKE '%lounastauko%' )
+";
+$tvc = Tyovuoroot::model()->findAll($criteria);
+
+if(count($tvc) > 0)
+{
+echo '
+<div class="row">
+  <div class="col-sm-12">';
+  foreach($tvc as $dat)
+  {
+	$k = Kohteet::model()->findbypk($dat->kohde);
+	$t = Tyontekijat::model()->findbypk($dat->tid);
+	if(isset($t->id) and isset($k->id))
+	{
+		echo $t->tekijan_nimi.', '.$k->osoite.': '.$dat->alku.'-'.$dat->loppu.'<br>';
+	}
+  }
+echo '</div></div>';
+}
+// Tyovuoro tksekkaus -->
+		  ?>
+                </div>
+              </div>
+
 
 
 
