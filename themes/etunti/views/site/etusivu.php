@@ -1,5 +1,40 @@
 <?php
 
+// Tyovuoro tksekkaus
+$criteria=new CDbCriteria;
+//$criteria->select = " kohde,tid, loppu, 
+//	DATE_FORMAT(STR_TO_DATE(CONCAT(pvm, alku), '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')  as alku "; 
+
+$criteria->condition = " 
+	DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE()
+	AND DATE_ADD(DATE_FORMAT(STR_TO_DATE(CONCAT(pvm, alku), '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), INTERVAL 10 MINUTE) < NOW() 
+	AND kohde NOT IN 
+	(SELECT kohdenID FROM sivexkuitti 
+	WHERE DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d') = CURDATE()
+	)
+";
+$tvc = Tyovuoroot::model()->findAll($criteria);
+
+if(count($tvc) > 0)
+{
+echo '
+<div class="row">
+  <div class="col-sm-12">
+<h3>Työntekijä ei ole kirjannut työtä aloitetuksi ajallaan</h3>
+<div class="alert alert-danger">';
+  foreach($tvc as $dat)
+  {
+	$k = Kohteet::model()->findbypk($dat->kohde);
+	$t = Tyontekijat::model()->findbypk($dat->tid);
+	if(isset($t->id) and isset($k->id))
+	{
+		echo $t->tekijan_nimi.', '.$k->osoite.': '.$dat->alku.'-'.$dat->loppu.'<br>';
+	}
+  }
+echo '</div></div></div>';
+}
+
+
 $criteria=new CDbCriteria;
 $criteria->condition = " 
 	DATE(time) < (DATE_SUB(CURDATE(), INTERVAL 2 DAY)) 
