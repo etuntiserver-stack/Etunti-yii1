@@ -12,7 +12,7 @@ $criteria->condition = "
 	(SELECT kohdenID FROM sivexkuitti 
 	WHERE DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d') = CURDATE()
 	)
-	AND kohde!=''
+	AND kohde!='' AND tyoajanmerkinta='Normaali/'
 ";
 $tvc = Tyovuoroot::model()->findAll($criteria);
 
