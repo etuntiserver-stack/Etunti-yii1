@@ -20,7 +20,7 @@ if(count($tvc) > 0)
 echo '
 <div class="row">
   <div class="col-sm-12">
-<h3>Työntekijä ei ole kirjannut työtä aloitetuksi ajallaan</h3>
+<h3>Kohteessa ei ole kirjattu työtä aloitetuksi ajallaan</h3>
 <div class="alert alert-danger">';
   foreach($tvc as $dat)
   {
