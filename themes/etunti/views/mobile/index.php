@@ -19,7 +19,9 @@ $this->breadcrumbs=array(
         <div class="tray-center">
 
 
-              <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-phone"></i> <?php echo Yii::t('main', 'TUNNIT'); ?> <span class="klo"></span></h2>
+        <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-phone"></i> <?php echo Yii::t('main', 'TUNNIT'); ?> <span class="klo"></span>
+		<?php echo CHtml::link('',Yii::app()->request->baseUrl.'/index.php/mobile/create',array('class'=>'btn btn-default fa fa-plus')); ?>
+	</h2>
 
 
 
