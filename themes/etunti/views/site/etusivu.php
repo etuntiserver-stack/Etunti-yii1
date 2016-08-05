@@ -340,7 +340,7 @@ echo '
 
               <div class="panel" id="p55">
                 <div class="panel-heading">
-                  <span class="panel-title"><?php echo Yii::t('main', 'Työt myöhässä'); ?></span>
+                  <span class="panel-title"><?php echo Yii::t('main', 'Myöhästyneet kohteet'); ?></span>
                 </div>
                 <div class="panel-body">
 		  <?php 
