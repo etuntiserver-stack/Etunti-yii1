@@ -186,7 +186,7 @@ if(isset($asetukset->checkout_id) and !empty($asetukset->checkout_id) and !empty
 	<p><h4>Valitse lisäpalvelu</h4></p>
 	<?php
        	$criteria = new CDbCriteria();
-       	$criteria->condition = " palvelu=1 ";
+       	$criteria->condition = " palvelu=1 AND nayta_sivuilla=1 ";
 	$onlineTuotteet = OnlinevarausTuotteet::model()->findAll($criteria);
 
 	echo '<div class="row">';

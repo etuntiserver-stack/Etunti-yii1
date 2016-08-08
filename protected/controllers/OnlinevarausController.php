@@ -345,11 +345,11 @@ class OnlinevarausController extends Controller
 		$word = trim($_POST['word']);
 		$criteria=new CDbCriteria;
 		$criteria->order = " SUBSTRING_INDEX(nelio,'-',1) ";
-		$criteria->condition = " nimike='".$word."' ";
+		$criteria->condition = " nimike='".$word."' AND nayta_sivuilla=1 ";
 		$data = OnlinevarausTuotteet::model()->findAll($criteria);
 
 		$criteria=new CDbCriteria;
-		$criteria->condition = " palvelu=0 AND nimike='".$word."' AND selitysteksti!='' ";
+		$criteria->condition = " palvelu=0 AND nayta_sivuilla=1 AND nimike='".$word."' AND selitysteksti!='' ";
 		$dataThis = OnlinevarausTuotteet::model()->find($criteria);
 
 		$this->renderPartial('palvelu_ajax',array(
@@ -365,7 +365,7 @@ class OnlinevarausController extends Controller
 	   {
 		$criteria=new CDbCriteria;
 		$criteria->condition = " 
-			palvelu=0 AND nimike='".$_POST['palvelu']."' AND nelio='".$_POST['nelio']."' 
+			palvelu=0 AND nayta_sivuilla=1 AND nimike='".$_POST['palvelu']."' AND nelio='".$_POST['nelio']."' 
 		";
 		$model = OnlinevarausTuotteet::model()->find($criteria);
 		if(isset($model->id))
