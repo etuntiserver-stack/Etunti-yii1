@@ -24,8 +24,10 @@ echo '<markers>';
 		  echo 'address="' . parseToXML($k->osoite) . '" ';
 		  echo 'lat="' . $explSijainti[0] . '" ';
 		  echo 'lng="' . $explSijainti[1] . '" ';
-		  if($k->tag_id)
+		  if(!empty($k->tag_id) and !isset($_GET['tila']))
 		  echo 'type="cafe" ';
+		  elseif(isset($_GET['tila']))
+		  echo 'type="restaurant" ';
 		  else
 		  echo 'type="" ';
 		  echo '/>';

@@ -21,6 +21,13 @@ if(isset($_GET['center']) and !empty($_GET['center']) and $_GET['center'] != 'nu
 	$get_osoite = $obj->results[0]->geometry->location->lat.",".$obj->results[0]->geometry->location->lng;
 	$center = $get_osoite;
 }
+
+
+if(isset($_GET['tila']) and !empty($_GET['tila'])){
+	echo '<input type="hidden" id="getThistila" value="'.$_GET['tila'].'">';
+} else {
+	echo '<input type="hidden" id="getThistila" value="">';
+}
 ?>
 
 
@@ -93,9 +100,12 @@ if(!centerUusi[0]){
 //alert(centerUusi)
 }
 
+	var tila = '';
+	if(document.getElementById("getThistila").value !== '')
+	tila = '?tila='+document.getElementById("getThistila").value;
 
 
-        GDownloadUrl(location.protocol + "//" + location.host + "/index.php/kohteet/googlemap_k", function(data) {
+        GDownloadUrl(location.protocol + "//" + location.host + "/index.php/kohteet/googlemap_k"+tila, function(data) {
           var xml = GXml.parse(data);
           var markers = xml.documentElement.getElementsByTagName("marker");
           for (var i = 0; i < markers.length; i++) {

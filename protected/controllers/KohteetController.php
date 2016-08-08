@@ -175,7 +175,38 @@ class KohteetController extends Controller
 	public function actionGooglemap_k()
 	{
 
-		$model=Kohteet::model()->findAll();
+       		$criteria = new CDbCriteria();
+
+		if(isset($_GET['tila']) and $_GET['tila'] == 'aktiiviset')
+		{
+		$criteria->addCondition("
+			id IN 
+			( 
+			SELECT kohdenID FROM sivexkuitti 
+			WHERE DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE() 
+			AND status=1
+			)
+		");
+		} elseif(isset($_GET['tila']) and $_GET['tila'] == 'toteutetut') {
+		$criteria->addCondition("
+			id IN 
+			( 
+			SELECT kohdenID FROM sivexkuitti 
+			WHERE DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE() 
+			AND status=3
+			)
+		");
+		} elseif(isset($_GET['tila']) and $_GET['tila'] == 'kaikki') {
+		$criteria->addCondition("
+			id IN 
+			( 
+			SELECT kohdenID FROM sivexkuitti 
+			WHERE DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE() 
+			)
+		");
+		} 
+
+		$model=Kohteet::model()->findAll($criteria);
 
 		$this->renderPartial('googlemap_k',array(
 			'model'=>$model,

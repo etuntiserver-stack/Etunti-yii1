@@ -526,11 +526,21 @@ echo '</div></div>';
 	 <div class="form-inline">
 		<?php echo Yii::t('main', 'Alue/Kaupunki'); ?> <input type="text" class="form-control form-group" id="alueKaupunki">
 		 <button class="tallennaLatLng btn btn-primary myBgColors"><?php echo Yii::t('main', 'Tallenna'); ?></button>
+
+		<select id="tilanneKartalla" class="form-control">
+		<option><?php echo Yii::t('main', 'Tilanne'); ?></option>
+		<option value="aktiiviset"><?php echo Yii::t('main', 'Aktiiviset tänään'); ?></option>
+		<option value="toteutetut"><?php echo Yii::t('main', 'Toteutetut tänään'); ?></option>
+		<option value="kaikki"><?php echo Yii::t('main', 'Kaikki tänään'); ?></option>
+		</select>
+		<input type="hidden" id="getTila" value="<?php if(isset($_GET['tila'])) echo $_GET['tila']; ?>">
 	 </div>
 	</div>
 
 	<div class="row">
-	 <div id="kartta"></div>
+	  <div id="kartta">
+		<iframe scrolling="no" style="width: 100%; height: 700px; border: none" id="iframekartta"></iframe>
+	  </div>
 	</div>
 
 
@@ -543,14 +553,27 @@ $(".tallennaLatLng").click(function(){
 });
 
 	var keskusta = '';
+	var tila = '';
+	
+	if($('#getTila').val() !== '')
+	{
+		tila = $('#getTila').val();
+		$("#tilanneKartalla").val(tila);
+	}
+
 	if (localStorage.getItem('alueKaupunki') !== "") {
 		$("#alueKaupunki").val(localStorage.getItem('alueKaupunki'));
 		keskusta = localStorage.getItem('alueKaupunki');
 	}
 
-	$('#kartta').html('<iframe src="' + location.protocol + '//' + location.host + '/index.php/kohteet/googlemap?nomenu=true&center='+keskusta+'" scrolling="no" style="width: 100%; height: 700px; border: none"></iframe>');
+
+	$('#iframekartta').attr('src', location.protocol + '//' + location.host + '/index.php/kohteet/googlemap?tila='+tila+'&nomenu=true&center='+keskusta);
 
 
+$("#tilanneKartalla").change(function(){
+	var tila = $(this).val();
+	window.location.href="etusivu?tila="+tila;
+});
 
 
 });
