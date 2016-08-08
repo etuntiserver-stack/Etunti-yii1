@@ -88,6 +88,38 @@
 <br>
 <div class="row">
   <div class="col-sm-4"><?php echo $tt; ?></div>
+
+  <div class="col-sm-4">
+
+		<?php 
+
+		$criteria=new CDbCriteria;
+		$criteria->order =" yhteyshenkilo!='' ";
+		$criteria->condition =" aktiivinen=1 ";
+
+ 		$as = Asiakkaat::model()->findAll($criteria);
+		if(isset($as[0]))
+		{
+			echo '<select name="asiakas" id="asiakas" class="form-control">';
+				echo '<option value="">'.Yii::t('main', 'Valitse asiakas').'</option>';
+			foreach($as as $a)
+			{
+				if(!empty($a->yritys))
+				$nm = $a->yritys;
+				elseif(empty($a->yritys) and !empty($a->yhteyshenkilo))
+				$nm = $a->yhteyshenkilo;
+				else
+				$nm = Yii::t('main', 'Tyhjä');
+
+				echo '<option value="'.$a->id.'">'.$nm.'</option>';
+			}
+
+			echo '</select>';
+		}
+		?>
+
+  </div>
+
   <div class="col-sm-4"><?php echo $k; ?></div>
 </div>
 <br>
@@ -179,6 +211,27 @@
 
 <script type="text/javascript">
 $(document).ready(function(){
+
+
+  $('#asiakas').change(function(){
+	var thisVal = $(this).val();
+
+	  	 $.ajax({
+			url: 'getKohdeByAsiakas',
+			type:'GET',
+			data: { "id" : thisVal },
+			  success:function(data){
+				data = JSON.parse(data);
+			  	console.log(data);
+				$('#kohde').html(data);
+
+			  },
+			  error:function(data){
+			  	console.log(data);
+			  }
+	 	});
+  });
+
 
   $('.timeVuorot').mask('00:00',{
         placeholder: "__:__"
