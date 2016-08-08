@@ -397,6 +397,14 @@ class AsiakkaatController extends Controller
 	public function actionIndex()
 	{
 
+		if(isset($_POST['asiakkaatPerSivu']))
+		{
+			Yii::app()->user->setState('asiakkaatPerSivu', $_POST['asiakkaatPerSivu']);
+			echo json_encode($_POST['asiakkaatPerSivu']);
+			exit;
+		}
+
+
 	// <-- Oikeudet
 	   $checkOikeus = "asiakkaat_0_".Yii::app()->user->adminStatus;
 	   $site = Yii::app()->createController('Site');
@@ -433,8 +441,14 @@ class AsiakkaatController extends Controller
 			//'pagination'=>false
 		));
 
-		$dataProvider->pagination->pageSize = 50;
-		$this->render('index', array('dataProvider' => $dataProvider));
+
+		$perSivu = 50;
+		if(isset(Yii::app()->user->asiakkaatPerSivu))
+		$perSivu = Yii::app()->user->asiakkaatPerSivu;
+
+		$dataProvider->pagination->pageSize = $perSivu;
+
+		$this->render('index', array('dataProvider' => $dataProvider, 'perSivu' => $perSivu));
 	}
 
 	/**

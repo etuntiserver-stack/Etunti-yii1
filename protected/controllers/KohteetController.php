@@ -310,6 +310,13 @@ class KohteetController extends Controller
 	public function actionIndex()
 	{
 
+		if(isset($_POST['kohteetPerSivu']))
+		{
+			Yii::app()->user->setState('kohteetPerSivu', $_POST['kohteetPerSivu']);
+			echo json_encode($_POST['kohteetPerSivu']);
+			exit;
+		}
+
 	// <-- Oikeudet
 	   $checkOikeus = "kohteet_0_".Yii::app()->user->adminStatus;
 	   $site = Yii::app()->createController('Site');
@@ -344,8 +351,13 @@ class KohteetController extends Controller
 			//'pagination'=>false
 		));
 
-		$dataProvider->pagination->pageSize = 50;
-		$this->render('index', array('dataProvider' => $dataProvider));
+		$perSivu = 50;
+		if(isset(Yii::app()->user->kohteetPerSivu))
+		$perSivu = Yii::app()->user->kohteetPerSivu;
+
+		$dataProvider->pagination->pageSize = $perSivu;
+
+		$this->render('index', array('dataProvider' => $dataProvider, 'perSivu' => $perSivu));
 	}
 
 	/**
