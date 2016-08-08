@@ -72,6 +72,19 @@
 		<?php echo $form->error($model,'kesto'); ?>
 	</div>
 
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'nayta_sivuilla'); ?>
+		<?php
+		$list = array(
+			1=>'Kyllä',
+			0=>'Ei',
+		);
+        	echo $form->dropDownList($model, 'nayta_sivuilla', $list,
+		array('class'=>'form-control'));	
+        	?>
+		<?php echo $form->error($model,'nayta_sivuilla'); ?>
+	</div>
+
 	<div class="buttons">
 		<?php echo CHtml::submitButton($model->isNewRecord ? 'Luo' : 'Tallenna', array('class'=>'btn btn-primary myBgColors')); ?>
 	</div>
