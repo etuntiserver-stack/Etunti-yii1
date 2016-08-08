@@ -6,8 +6,22 @@
         <div class="tray-center">
 
 
-              <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-home"></i> <?php echo Yii::t('main', 'ASIAKKAAT'); ?> 
-		<?php echo CHtml::link('',Yii::app()->request->baseUrl.'/index.php/asiakkaat/create',array('class'=>'btn btn-default fa fa-plus')); ?></h2>
+        <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-home"></i> <?php echo Yii::t('main', 'ASIAKKAAT'); ?> 
+	<?php echo CHtml::link('',Yii::app()->request->baseUrl.'/index.php/asiakkaat/create',array('class'=>'btn btn-default fa fa-plus')); ?>
+
+	 <div class="pull-right">
+	   <?php
+	   ($perSivu == 10) ? $defcl10 = 'btn-success' : $defcl10 = 'btn-default';
+	   ($perSivu == 50) ? $defcl50 = 'btn-success' : $defcl50 = 'btn-default';
+	   ($perSivu == 100) ? $defcl00 = 'btn-success' : $defcl00 = 'btn-default';
+
+	   echo '<button class="btn '.$defcl10.' kpl" kpl="10">10</button>';
+	   echo '<button class="btn '.$defcl50.' kpl" kpl="50">50</button>';
+	   echo '<button class="btn '.$defcl00.' kpl" kpl="100">100</button>';
+
+	   ?>
+	 </div>
+	</h2>
 
 
 
@@ -169,15 +183,30 @@
 <script type="text/javascript">
 $(document).ready(function(){
 
-if($("#akt").val())
-$("#aktiivinen").val($("#akt").val());
-else
-$("#aktiivinen").val(1);
+ if($("#akt").val())
+ $("#aktiivinen").val($("#akt").val());
+ else
+ $("#aktiivinen").val(1);
 
 
-$(".haemob").click(function(){
+ $(".haemob").click(function(){
 	$("#mobForm").submit();
-});
+ });
+
+ $(".kpl").click(function(){
+	var asiakkaatPerSivu = $(this).attr('kpl');
+        $.ajax({
+           url: 'index',
+           type: "POST",
+           data: { "asiakkaatPerSivu" : asiakkaatPerSivu },
+           success: function(data){
+		var d = JSON.parse(data);
+		window.location.reload();
+
+           }
+        });
+ });
+
 
 });
 </script>
