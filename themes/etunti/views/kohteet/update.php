@@ -16,6 +16,7 @@ if(isset($_POST['uploaded_t']))
 
 if(isset($_POST['poistaTamaTiedosto'])){
 	unlink($_POST['poistaTamaTiedosto']);
+	KuviaKohteesta::model()->deletebypk($_POST['kuva_id']);
 exit;
 }
 
