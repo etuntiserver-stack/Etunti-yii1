@@ -367,7 +367,36 @@ $model->hinta = str_replace(",",".",$model->hinta);
    }
 
    echo '<div class="section fill mb5">';
+
+	$criteria = new CDbCriteria();
+	$criteria->condition = " kohde_id='".$model->id."'  ";
+	$kuvk = KuviaKohteesta::model()->findAll($criteria);
+
 	$i = 0;
+
+	foreach($kuvk as $data) {
+	$i++;
+ 	echo '
+	<div class="col-sm-3">
+	  <div class="link poistaKuva" this="../../img/uploadedfromphone/'.Yii::app()->user->domain.'/'.$data->tiedosto.'" kuva_id="'.$data->id.'">'.Yii::t('main','poista').'</div>
+	  <label>'.$data->tekijan_nimi.', '.date("d.m.Y H:i", strtotime($data->time)).'</label><br>
+	  <a href="../../img/uploadedfromphone/'.Yii::app()->user->domain.'/'.$data->tiedosto.'" target="_blank">
+	  <img src="../../img/uploadedfromphone/'.Yii::app()->user->domain.'/'.$data->tiedosto.'" class="img-responsive thumbnail" style="height:200px">
+	  </a>';
+
+	if(!empty($data->kuvaus))
+	{
+	echo '
+	  <br>
+	  <label>'.Yii::t('main','Kuvaus').'</label><br>
+	  '.$data->kuvaus;
+	}
+
+	echo '</div>
+	';
+	}
+
+/*
 	foreach(array_reverse(glob(Yii::app()->basePath."/../img/uploadedfromphone/".Yii::app()->user->domain."/".$model->id."_*.*")) as $file) {
 	$i++;
 	$explNimi = explode("/",$file);
@@ -386,9 +415,15 @@ $model->hinta = str_replace(",",".",$model->hinta);
 	  <a href="../../img/uploadedfromphone/'.Yii::app()->user->domain.'/'.end($explNimi).'" target="_blank">
 	  <img src="../../img/uploadedfromphone/'.Yii::app()->user->domain.'/'.end($explNimi).'" class="img-responsive thumbnail" style="height:200px">
 	  </a>
+	  <br>
+	  <label>'.Yii::t('main','Kuvaus').'</label><br>
+	  
 	</div>
 	';
 	}
+*/
+
+
    echo '</div>';
 ?>
 
@@ -431,10 +466,11 @@ $('#Kohteet_asiakas_id').change(function(){
 
 $(".poistaKuva").click(function(){
 	var forThis = $(this).attr("this");
+	var kuva_id = $(this).attr("kuva_id");
         $.ajax({
            url: "update?id=<?php echo $model->id; ?>",
 	   type:'POST',
-	   data: { "poistaTamaKuva" : forThis },
+	   data: { "poistaTamaKuva" : forThis, kuva_id : kuva_id },
            success: function(data){
 		//console.log(data)
 	    	window.location.reload();
