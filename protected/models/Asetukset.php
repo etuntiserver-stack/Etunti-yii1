@@ -45,6 +45,7 @@ class Asetukset extends DB2ActiveRecord
 			array('johtaja, viivastyskorko, tilinumero, iban, bic, , postita_username, postita_password, trust_cid, trust_api, checkout_id, trust_ws_cid, trust_ws_salasana', 'length', 'max'=>100),
 			array('trust_url, checkout_salasana, trust_ws_api_url', 'length', 'max'=>255),
 			array('viikonloppulisa_la, viikonloppulisa_su, vinkki_tunnit, vinkki_prosentti', 'length', 'max'=>10),
+			array('aikavali_halytys', 'length', 'max'=>3),
 			array('oikeudet, pyhapaivat, erikoislauantai, tilausvahvistus, rekisteriseloste, onlinevaraus_laatu_luotettavuus, onlinevaraus_takuu_turvallisuus, onlinevaraus_asiakaspalvelu, onlinevaraus_arvio_siivouksesta', 'length', 'max'=>10000),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
@@ -98,7 +99,7 @@ class Asetukset extends DB2ActiveRecord
 			'onlinevaraus_takuu_turvallisuus' => Yii::t('main', 'Takuu ja turvallisuus'),
 			'onlinevaraus_asiakaspalvelu' => Yii::t('main', 'Asiakaspalvelu'),
 			'onlinevaraus_arvio_siivouksesta' => Yii::t('main', 'Arvio siivouksesta'),
-
+			'aikavali_halytys' => Yii::t('main', 'Aikaväli hälytys (min)'),
 		);
 	}
 
