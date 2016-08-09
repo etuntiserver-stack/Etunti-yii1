@@ -147,7 +147,7 @@ if(isset($model->id))
 				echo '<option value=""></option>';
 			foreach($as as $a)
 			{
-				if(!empty($a->yritys))
+				if(!empty($a->yritys) and empty($a->yhteyshenkilo))
 				$nm = $a->yritys;
 				elseif(empty($a->yritys) and !empty($a->yhteyshenkilo))
 				$nm = $a->yhteyshenkilo;

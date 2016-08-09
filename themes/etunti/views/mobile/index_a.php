@@ -43,13 +43,13 @@
   $tas = explode(",",Yii::app()->user->adminPaketti);
   if(in_array('2',$tas)) : 
   ?>
-  <th><?php echo Yii::t('main', 'Työvuoroot'); ?></th>
+  <th><?php echo Yii::t('main', 'Työvuorot'); ?></th>
   <?php endif; ?>
 
 
   <th><?php echo Yii::t('main', 'TAG'); ?></th>
   <th><?php echo Yii::t('main', 'Asiakas'); ?></th>
-  <th class="col-sm-4"><?php echo Yii::t('main', 'Osoite/Matka'); ?></th>
+  <th class="col-sm-4"><?php echo Yii::t('main', 'Osoite'); ?></th>
   <th class="col-sm-2"><?php echo Yii::t('main', 'Aloitus'); ?></th>
   <th class="col-sm-2"><?php echo Yii::t('main', 'Lopetus'); ?></th>
   <th><?php echo Yii::t('main', 'Kesto'); ?></th>
