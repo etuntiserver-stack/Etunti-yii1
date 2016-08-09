@@ -32,8 +32,8 @@ class KuviaKohteesta extends DB2ActiveRecord
 		// will receive user inputs.
 		return array(
 			array('kohde_id, osoite, tid, tekijan_nimi, tiedosto', 'required'),
-			array('kohde_id, tid, tekijan_nimi', 'numerical', 'integerOnly'=>true),
-			array('osoite, tiedosto', 'length', 'max'=>255),
+			array('kohde_id, tid', 'numerical', 'integerOnly'=>true),
+			array('osoite, tiedosto, tekijan_nimi', 'length', 'max'=>255),
 			array('kuvaus', 'length', 'max'=>5000),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
