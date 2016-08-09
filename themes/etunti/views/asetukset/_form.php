@@ -44,6 +44,22 @@
 		<?php echo $form->error($model,'johtaja'); ?>
 	</div>
 
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'aikavali_halytys'); ?>
+		<?php 
+        	$l = array(
+			10=>10,
+			20=>20,
+			30=>30,
+			40=>40,
+			50=>50,
+			60=>60
+		);
+		echo $form->dropDownList($model,'aikavali_halytys', $l, 
+		array('empty'=>Yii::t('main', 'Valitse'), 'class'=>'form-control')) ?>
+		<?php echo $form->error($model,'aikavali_halytys'); ?>
+	</div>
+
   </div><div class="col-sm-4">
 
 	<div class="section fill mb5">
