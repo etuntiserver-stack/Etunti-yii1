@@ -378,7 +378,7 @@ $model->hinta = str_replace(",",".",$model->hinta);
 	$i++;
  	echo '
 	<div class="col-sm-3">
-	  <div class="link poistaKuva" this="../../img/uploadedfromphone/'.Yii::app()->user->domain.'/'.$data->tiedosto.'" kuva_id="'.$data->id.'">'.Yii::t('main','poista').'</div>
+	  <div class="link poistaKuva" this="'.Yii::app()->request->baseUrl.'img/uploadedfromphone/'.Yii::app()->user->domain.'/'.$data->tiedosto.'" kuva_id="'.$data->id.'">'.Yii::t('main','poista').'</div>
 	  <label>'.$data->tekijan_nimi.', '.date("d.m.Y H:i", strtotime($data->time)).'</label><br>
 	  <a href="../../img/uploadedfromphone/'.Yii::app()->user->domain.'/'.$data->tiedosto.'" target="_blank">
 	  <img src="../../img/uploadedfromphone/'.Yii::app()->user->domain.'/'.$data->tiedosto.'" class="img-responsive thumbnail" style="height:200px">
@@ -387,7 +387,6 @@ $model->hinta = str_replace(",",".",$model->hinta);
 	if(!empty($data->kuvaus))
 	{
 	echo '
-	  <br>
 	  <label>'.Yii::t('main','Kuvaus').'</label><br>
 	  '.$data->kuvaus;
 	}
