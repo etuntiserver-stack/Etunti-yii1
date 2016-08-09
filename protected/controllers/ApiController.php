@@ -265,17 +265,34 @@ public function actionTiedosto($dom)
 
 	  	if(isset($ttekija->id)){
 
-    	 	if (move_uploaded_file($_FILES['file']['tmp_name'], Yii::app()->basePath."/../img/uploadedfromphone/".$dom."/".$_POST['kohdenID']."_".$ttekija->id."_".date("YmdHi").".jpg")) 
+		$tiedosto = $_POST['kohdenID']."_".$ttekija->id."_".date("YmdHi").".jpg";
+    	 	if (move_uploaded_file($_FILES['file']['tmp_name'], Yii::app()->basePath."/../img/uploadedfromphone/".$dom."/".$tiedosto)) 
 		{
+
+		$k = Kohteet::model()->findbypk($_POST['kohdenID']);
+
+		if(isset($k->id))
+		{
+
+		$kuva = new KuviaKohteesta;
+		$kuva->kohde_id=$_POST['kohdenID'];
+		$kuva->osoite=$k->osoite;
+		$kuva->tid=$ttekija->id;
+		$kuva->tekijan_nimi=$ttekija->tekijan_nimi;
+		$kuva->tiedosto=$tiedosto;
+		if(isset($_POST['kuvaus']))
+		$kuva->kuvaus=$_POST['kuvaus'];
+		$kuva->save();
 
 
 		$firma = FirmanTiedot::model()->findbypk(1);
 		if(isset($firma->sahkoposti) and !empty($firma->sahkoposti))
 		{
-		$k = Kohteet::model()->findbypk($_POST['kohdenID']);
-		$message = Yii::t('main', 'Hei. Valokuva on saapunut kohteista: ').$k->osoite;
-		mail($firma->sahkoposti,Yii::t('main', 'Uusi valokuva kohteista. Lähettäjä: '). ' '.$ttekija->tekijan_nimi,$message);
+			$message = Yii::t('main', 'Hei. Valokuva on saapunut kohteista: ').$k->osoite;
+			mail($firma->sahkoposti,Yii::t('main', 'Uusi valokuva kohteista. Lähettäjä: '). ' '.$ttekija->tekijan_nimi,$message);
 		}
+
+		} //if(isset($k->id))
 
         	$this->_sendResponse(200, "saveOK");
 

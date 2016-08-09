@@ -122,6 +122,7 @@
 	var email = document.getElementById('email').value;
 	var salasana = document.getElementById('salasana').value;
 	var kohdenID = document.getElementById('kohdenID').value;
+	var kuvaus = document.getElementById('kuvaus').value;
 	//var server = "https://etunti.fi";
 	var path = server + "/index.php/api/mob/tiedosto?dom="+domain;
 
@@ -156,6 +157,7 @@
 	          params.kohdenID = kohdenID;
 	          params.email = email;
 	          params.salasana = salasana;
+	          params.kuvaus = kuvaus;
 	
 	          options.params = params;
 	          options.chunkedMode = false;
@@ -197,7 +199,8 @@
 	<input type="text" class="form-control input-sm" id="os" placeholder="osoite">
 	<div id="getListFromServer"></div>
 	<input type="hidden" id="kohdenID" value="0">
-
+	<label>Kuvaus</label>
+	<textarea class="form-control" id="kuvaus"></textarea>
 
 	<div id="camButtons" style="display:none">
 
