@@ -16,9 +16,16 @@ if(isset($_POST['uploaded_t']))
 
 if(isset($_POST['poistaTamaTiedosto'])){
 	unlink($_POST['poistaTamaTiedosto']);
-	KuviaKohteesta::model()->deletebypk($_POST['kuva_id']);
 exit;
 }
+
+   if(isset($_POST['poistaTamaKuva']))
+   {
+	KuviaKohteesta::model()->deletebypk($_POST['kuva_id']);
+	if(file_exists(Yii::app()->basePath."/../".$_POST['poistaTamaKuva']))
+	unlink(Yii::app()->basePath."/../".$_POST['poistaTamaKuva']);
+	exit;
+   }
 
 
 if(isset($_POST['uploaded_tyonkuvaus']))
