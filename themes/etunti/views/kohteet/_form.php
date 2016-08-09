@@ -361,10 +361,6 @@ $model->hinta = str_replace(",",".",$model->hinta);
 
 <?php
 
-   if(isset($_POST['poistaTamaKuva']))
-   {
-	unlink($_POST['poistaTamaKuva']);
-   }
 
    echo '<div class="section fill mb5">';
 
@@ -376,23 +372,26 @@ $model->hinta = str_replace(",",".",$model->hinta);
 
 	foreach($kuvk as $data) {
 	$i++;
- 	echo '
-	<div class="col-sm-3">
+
+	 //if(file_exists(Yii::app()->request->baseUrl.'img/uploadedfromphone/'.Yii::app()->user->domain.'/'.$data->tiedosto))
+	 //{
+ 	 echo '
+	 <div class="col-sm-3">
 	  <div class="link poistaKuva" this="'.Yii::app()->request->baseUrl.'img/uploadedfromphone/'.Yii::app()->user->domain.'/'.$data->tiedosto.'" kuva_id="'.$data->id.'">'.Yii::t('main','poista').'</div>
-	  <label>'.$data->tekijan_nimi.', '.date("d.m.Y H:i", strtotime($data->time)).'</label><br>
+	  <label>'.$data->tekijan_nimi.'<br><b>'.date("d.m.Y H:i", strtotime($data->time)).'</b></label><br>
 	  <a href="../../img/uploadedfromphone/'.Yii::app()->user->domain.'/'.$data->tiedosto.'" target="_blank">
 	  <img src="../../img/uploadedfromphone/'.Yii::app()->user->domain.'/'.$data->tiedosto.'" class="img-responsive thumbnail" style="height:200px">
 	  </a>';
 
-	if(!empty($data->kuvaus))
-	{
-	echo '
-	  <label>'.Yii::t('main','Kuvaus').'</label><br>
-	  '.$data->kuvaus;
-	}
+	   if(!empty($data->kuvaus))
+	   {
+	    echo '
+	      <label>'.Yii::t('main','Kuvaus').'</label><br>
+	      '.$data->kuvaus;
+	   }
 
-	echo '</div>
-	';
+	 echo '</div>';
+	 //}
 	}
 
 /*
