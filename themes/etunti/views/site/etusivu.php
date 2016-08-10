@@ -393,7 +393,7 @@ echo '</div></div>';
               <!-- Bar Graph -->
               <div class="panel" id="p12">
                 <div class="panel-heading">
-                  <span class="panel-title"><?php echo Yii::t('main', 'Toimialat'); ?></span>
+                  <span class="panel-title"><?php echo Yii::t('main', 'Toimipaikat'); ?></span>
 		  <?php 
 		    $month1 = $months[date("m")];
 		    $month2 = $months[date("m",strtotime("-1 month"))];
@@ -509,6 +509,59 @@ echo '</div></div>';
                           <span class=""></span> '.$data->kohde_kannasta.'</td>
                         <td>'.$this->sprint($kesto).'</td>
                       </tr>
+			  ';
+			}
+	
+		    }
+		    ?>
+
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+
+              <!-- Country List -->
+              <div class="panel" id="p216">
+                <div class="panel-heading">
+                  <span class="panel-title"><?php echo Yii::t('main', 'Suunniteltu'); ?></span>
+                </div>
+                <div class="panel-body pn">
+                  <table class="table mbn tc-med-1 tc-bold-last">
+                    <thead>
+                      <tr class="hidden">
+                        <th>#</th>
+                        <th>First Name</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+
+		    <?php
+       		    $criteria = new CDbCriteria();
+       		    $criteria->order = " DATE_FORMAT(STR_TO_DATE(CONCAT(pvm, alku), '%d.%m.%Y %H:%i'), '%Y-%m-%d  %H:%i') ASC";
+       		    $criteria->condition = " 
+			DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE()
+		    ";
+		    $m = Tyovuoroot::model()->findAll($criteria);
+		    if(isset($m[0]))
+		    {
+
+			foreach($m as $data)
+			{
+			$t = Tyontekijat::model()->findbypk($data->tid);
+			$k = Kohteet::model()->findbypk($data->kohde);
+			  echo '
+
+                      <tr>
+
+                        <td>
+
+                          <span class=""></span> '.$data->alku.'-'.$data->loppu.'</td>
+
+                        <td>'.$t->tekijan_nimi.'<br>'.$k->osoite.'</td>
+
+                      </tr>
+
 			  ';
 			}
 	
