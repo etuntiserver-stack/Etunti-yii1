@@ -571,6 +571,28 @@ $('.mult').multiselect({
 	$("#pituus").val((h<10?"0"+h:h)+":"+(m<10?"0"+m:m));
   }
 
+  $('#alku').blur(function(){
+	var alku = $("#alku").val().split(':');
+	if(!alku[1])
+	{
+		var h = $("#alku").val() ^ 0 ;
+		var m = 0 ^ 0 ;
+		$("#alku").val((h<10?"0"+h:h)+":"+(m<10?"0"+m:m));
+		laskePituus();
+	}
+  });
+
+  $('#loppu').blur(function(){
+	var alku = $("#loppu").val().split(':');
+	if(!alku[1])
+	{
+		var h = $("#loppu").val() ^ 0 ;
+		var m = 0 ^ 0 ;
+		$("#loppu").val((h<10?"0"+h:h)+":"+(m<10?"0"+m:m));
+		laskePituus();
+	}
+  });
+
 
   $('#alku').keyup(function(){
 	laskePituus();
