@@ -526,7 +526,7 @@ echo '</div></div>';
                 <div class="panel-heading">
                   <span class="panel-title"><?php echo Yii::t('main', 'Suunniteltu'); ?></span>
                 </div>
-                <div class="panel-body pn">
+                <div class="panel-body panel-scroller scroller-md scroller-overlay pn">
                   <table class="table mbn tc-med-1 tc-bold-last">
                     <thead>
                       <tr class="hidden">
@@ -552,17 +552,11 @@ echo '</div></div>';
 			$t = Tyontekijat::model()->findbypk($data->tid);
 			$k = Kohteet::model()->findbypk($data->kohde);
 			  echo '
-
                       <tr>
-
                         <td>
-
-                          <span class=""></span> '.$data->alku.'-'.$data->loppu.'</td>
-
+                          '.$data->alku.'-'.$data->loppu.'</td>
                         <td>'.$t->tekijan_nimi.'<br>'.$k->osoite.'</td>
-
                       </tr>
-
 			  ';
 			}
 	
