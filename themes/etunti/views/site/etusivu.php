@@ -541,6 +541,7 @@ echo '</div></div>';
        		    $criteria->order = " DATE_FORMAT(STR_TO_DATE(CONCAT(pvm, alku), '%d.%m.%Y %H:%i'), '%Y-%m-%d  %H:%i') ASC";
        		    $criteria->condition = " 
 			DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE()
+			AND alku!='00:00'
 		    ";
 		    $m = Tyovuoroot::model()->findAll($criteria);
 		    if(isset($m[0]))
