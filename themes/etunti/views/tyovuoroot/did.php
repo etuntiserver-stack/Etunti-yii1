@@ -108,13 +108,22 @@ if(!isset($_POST['tulosta']))
 
 		}
 
-	   } elseif(empty($tvVal->kohde) and $tvVal->status != 0){
+	   } 
+
+	   // status
+	   $status = '';
+	   if($tvVal->status != 0){
 
         	$l = $this->tilanteet();
-	   	$osoite = $l[$tvVal['status']];
+		if($tvVal->status == 10)
+		$status = ' <i class="p3 pull-right fa fa-cutlery text-danger"></i>';
+		elseif($tvVal->status == 2)
+		$status = ' <i class="p3 pull-right fa fa-bus text-warning"></i>';
+		elseif($tvVal->status == 3)
+		$status = ' <i class="p3 pull-right fa fa-home text-info" style="font-size:120%"></i>';
+		else
+	   	$status = ' ('.$l[$tvVal['status']].') ';
 	   }
-
-
 
 
 	   if($tvVal->alku != '' and $tvVal->loppu != '')
@@ -127,9 +136,9 @@ if(!isset($_POST['tulosta']))
 	    		$yht += strtotime($tvVal->loppu)-strtotime($tvVal->alku);
 		}
 
-	    if(!isset($_POST['tulosta'])) $br = '<br>'; else $br = '';
+	    //if(!isset($_POST['tulosta'])) $br = '<br>'; else $br = '';
 
-	    $al = '<b>'.$tvVal->alku.'-'.$tvVal->loppu.'</b>'.$br;
+	    $al = '<b>'.$tvVal->alku.'-'.$tvVal->loppu.$status.'</b>';
 	   } else {
 	    $al = '';
 	   }
@@ -146,6 +155,9 @@ if(!isset($_POST['tulosta']))
 	    if(isset($expl1[1]) and !empty($expl1[1])) $color = $expl1[1];
 	    $osoite = (isset($expl1[0])) ? $expl1[0] : '';
   	   } 
+
+	   if(!empty($osoite))
+	   $osoite = '<br>'.$osoite;
 
 	   $bod .=  '<div id="'.$tvVal->id.'_'.$did.'_'.$tid.'" class="well fullRivi" style="color:'.$color.'">';
 	   if( $from != 'mobiili' )
