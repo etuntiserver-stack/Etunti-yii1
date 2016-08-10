@@ -1141,4 +1141,16 @@ class TyovuorootController extends Controller
 	return false;
 
  	}
+
+	protected function tilanteet()
+	{
+        	$l = array(
+			3=>Yii::t('main', 'Työ'),
+			2=>Yii::t('main', 'Matka'),
+			10=>Yii::t('main', 'Lounastauko'),
+			11=>Yii::t('main', 'Apuaika'),
+		);
+		return $l;
+	}
+
 }
