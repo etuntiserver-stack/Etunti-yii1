@@ -108,6 +108,10 @@ if(!isset($_POST['tulosta']))
 
 		}
 
+	   } elseif(empty($tvVal->kohde) and $tvVal->status != 0){
+
+        	$l = $this->tilanteet();
+	   	$osoite = $l[$tvVal['status']];
 	   }
 
 

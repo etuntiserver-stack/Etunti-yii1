@@ -55,7 +55,7 @@ public $count;
 		// will receive user inputs.
 		return array(
 			//array('kohde, pvm, alku, loppu, pituus, tyoajanlaatu, tyoajanmerkinta', 'required'),
-			array('tid, onlinevaraus_id', 'numerical', 'integerOnly'=>true),
+			array('tid, onlinevaraus_id, status', 'numerical', 'integerOnly'=>true),
 			array('kohde', 'length', 'max'=>255),
 			array('pvm', 'length', 'max'=>20),
 			array('alku, loppu, pituus, alku_r, kesto', 'length', 'max'=>10),
@@ -105,6 +105,7 @@ public $count;
 			'tyoajanmerkinta' => Yii::t('main', 'Työajanmerkintä'),
 			'tietoja' => Yii::t('main', 'Tietoja mobiilisovelukseen'),
 			'osoiteOnline' => Yii::t('main', 'Osoite Online'),
+			'status' => Yii::t('main', 'Tilanne'),
 		);
 	}
 

@@ -107,7 +107,7 @@ if(isset($model->id))
         	?>
   </div>
 -->
-  <div class="col-sm-6">
+  <div class="col-sm-3">
 		<?php echo $form->labelEx($model,'tyoajanmerkinta'); ?>
 		<?php
         	$tal = Valikkoot::model()->findAll(" select_type='tyoajanmerkinta' ", array('order' => 'select_type'));
@@ -131,6 +131,14 @@ if(isset($model->id))
 
   </div>
 
+  <div class="col-sm-3">
+		<?php echo $form->labelEx($model,'status'); ?>
+		<?php 
+        	$l = $this->tilanteet();
+		echo $form->dropDownList($model,'status', $l, 
+		array('empty'=>Yii::t('main', 'Valitse'), 'class'=>'form-control')) ?>
+
+  </div>
 
   <div class="col-sm-3">
 		<label><?php echo Yii::t('main', 'Asiakas'); ?></label><br>
@@ -204,7 +212,7 @@ if(isset($model->id))
 </div>
 
 
-<?php if(!isset($model->id)) : ?>
+
 <div class="row">
   <div class="col-sm-6">
 		<label><?php echo Yii::t('main', 'Lisää työpari'); ?></label><br>
@@ -230,7 +238,7 @@ if(isset($model->id))
 
   </div>
 </div>
-<?php endif; ?>
+
 
 
 <?php 
@@ -471,6 +479,14 @@ $('.mult').multiselect({
 
 
 
+	}
+
+
+
+
+
+
+
 	var tyopaari = $('#tyopaari').val();
 	$(tyopaari).each(function( index, dataVal ) {
 	  if(dataVal !== '')
@@ -523,12 +539,6 @@ $('.mult').multiselect({
 
 	  }
 	});
-
-
-
-
-
-	}
 
 
 	//var pvmFromPost = e.target[7].value; 
