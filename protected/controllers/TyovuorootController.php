@@ -913,6 +913,7 @@ class TyovuorootController extends Controller
 				$model->pvm = date("d.m.Y",strtotime($_POST['Tyovuoroot']['pvm']));
 				if($model->save())
 
+
 				{
 
 				   if(isset($_POST['vieposti']))
