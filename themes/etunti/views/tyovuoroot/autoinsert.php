@@ -94,7 +94,7 @@
 		<?php 
 
 		$criteria=new CDbCriteria;
-		$criteria->order =" yhteyshenkilo!='' ";
+		$criteria->order =" yrityksen_nimi!='' DESC,yhteyshenkilo!='' DESC";
 		$criteria->condition =" aktiivinen=1 ";
 
  		$as = Asiakkaat::model()->findAll($criteria);
