@@ -16,6 +16,14 @@
 $curpage = Yii::app()->getController()->getAction()->controller->id;
 $curpage .= '/'.Yii::app()->getController()->getAction()->controller->action->id;
 echo '<input type="hidden" id="curpage" value="'.$curpage.'">';
+
+$sivunnimike = '';
+if( $curpage == 'tyovuoroot/tv_kohteet' )
+   $sivunnimike = Yii::t('main','Työvuorot kohteen mukaan');
+elseif( $curpage == 'tyovuoroot/index' )
+   $sivunnimike = Yii::t('main','Työvuorot viikkoittain');
+if( $curpage == 'tyovuoroot/tv2' )
+   $sivunnimike = Yii::t('main','Työvuorot työntekijöiden mukaan');
 ?>
   
        
@@ -47,6 +55,10 @@ echo '<input type="hidden" id="curpage" value="'.$curpage.'">';
             <li>
               <a href="#">
                 <span class="mr10"></span> <?php echo strtoupper(Yii::app()->user->domain); ?> </a>
+            </li>
+            <li>
+	      <a href="#" style="font-size: 120%">
+                <span class="mr10"></span> <?php echo $sivunnimike; ?> </a>
             </li>
       </ul>
 <!--
