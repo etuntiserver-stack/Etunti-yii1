@@ -33,7 +33,7 @@ class MobileController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin', 'delete', 'create', 'update', 'index', 'index_a', 'view', 'updatetime', 'showkohteet', 'yhteenveto', 'kyhteenveto', 'yhteenveto_m', 'historia', 'poistaKohde', 'total_suunniteltu', 'total_toteutu', 'total_luettu', 'kesto', 'index_ajax', 'raportit', 'uusirivi', 'palkkataulukko', 'tidfromtomatkat', 'tidfromtoSL', 'tidfromtoSPL', 'tyobykohde', 'asiakas_hyvaksyminen', 'kohdebytekija' ,'kyhteenveto_tuntemattomat', 'laskutettu', 'lahetys_asiakkaalle'),
+				'actions'=>array('admin', 'delete', 'create', 'update', 'index', 'index_a', 'view', 'updatetime', 'showkohteet', 'yhteenveto', 'kyhteenveto', 'yhteenveto_m', 'historia', 'poistaKohde', 'total_suunniteltu', 'total_toteutu', 'total_luettu', 'kesto', 'index_ajax', 'raportit', 'uusirivi', 'palkkataulukko', 'tidfromtomatkat', 'tidfromtoSL', 'tidfromtoSPL', 'tyobykohde', 'asiakas_hyvaksyminen', 'kohdebytekija' ,'kyhteenveto_tuntemattomat', 'laskutettu', 'lahetys_asiakkaalle', 'get_tyovuorot_day'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -71,6 +71,19 @@ class MobileController extends Controller
                 }
                 parent::init();
         }
+
+	public function actionGet_tyovuorot_day($id)
+	{
+		$model = Tyovuoroot::model()->findbypk($id);
+		if(isset($model->pvm))
+		{
+			$return = array(
+				'week'=>date("W", strtotime($model->pvm)),
+				'year'=>date("Y", strtotime($model->pvm)),
+			);
+			echo json_encode($return);
+		}
+	}
 
 	public function actionRaportit()
 	{
@@ -299,6 +312,7 @@ function num($val){
 
 	public function actionUpdatetime()
 	{
+
 
 
 		$model = $this->loadModel($_POST['id']);

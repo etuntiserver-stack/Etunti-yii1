@@ -111,6 +111,23 @@ $(".poistaKohde").click(function(){
 
 });
 
+$(document).delegate(".latikkoAsetukset .fullRivi","click",function(){
+   	var thisId = $(this).attr('id').split("_");
+        $.ajax({
+           url: 'get_tyovuorot_day',
+           type: "GET",
+           data: { "id" : thisId[0] },
+           success: function(html){
+		html = JSON.parse(html);
+		console.log(html)
+		window.location.href= location.protocol + "//" + location.host + "/index.php/tyovuoroot/index?week="+html['week']+"&year="+html['year'];
+           }
+        });
+});
+
+
+
+
 /*
 $(".etsi_tekijan_nimi").change(function(){
 	var thisVal = $(this).val();
