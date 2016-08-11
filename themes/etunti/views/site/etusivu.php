@@ -323,14 +323,15 @@ echo '
 			{
 			$t = Tyontekijat::model()->findbypk($data->tid);
 			$k = Kohteet::model()->findbypk($data->kohde);
-			  echo '
-                      <tr>
-
-                        <td>
-                          '.$data->alku.'-'.$data->loppu.'</td>
-                        <td>'.$t->tekijan_nimi.'<br>'.$k->osoite.'</td>
-                      </tr>
-			  ';
+			   if(isset($k->id) and isset($t->id))
+			   {
+			     echo '<tr>
+	                        <td>
+	                          '.$data->alku.'-'.$data->loppu.'</td>
+	                        <td>'.$t->tekijan_nimi.'<br>'.$k->osoite.'</td>
+	                      </tr>
+				  ';
+			   }
 			}
 	
 		    }
@@ -462,6 +463,7 @@ echo '</div></div>';
                   <input type="hidden" id="vantaa2" value="<?php echo $vantaa2; ?>">
                 </div>
                 <div class="panel-menu">
+
                   <div class="chart-legend" data-chart-id="#high-bars">
                     <a data-chart-id="0" class="legend-item btn btn-warning btn-sm mr5">Data 1</a>
                     <a data-chart-id="1" class="legend-item btn btn-primary btn-sm mr5">Data 2</a>
