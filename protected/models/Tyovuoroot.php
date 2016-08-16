@@ -55,13 +55,13 @@ public $count;
 		// will receive user inputs.
 		return array(
 			//array('kohde, pvm, alku, loppu, pituus, tyoajanlaatu, tyoajanmerkinta', 'required'),
-			array('tid, onlinevaraus_id, status', 'numerical', 'integerOnly'=>true),
+			array('tid, onlinevaraus_id, status, toistuva_id', 'numerical', 'integerOnly'=>true),
 			array('kohde', 'length', 'max'=>255),
 			array('pvm', 'length', 'max'=>20),
 			array('alku, loppu, pituus, alku_r, kesto', 'length', 'max'=>10),
 			array('ruokatauko, tyoajanlaatu, tyoajanmerkinta', 'length', 'max'=>50),
 			array('osoiteOnline', 'length', 'max'=>100),
-			array('tietoja', 'length', 'max'=>2000),
+			array('tietoja, tyopaari', 'length', 'max'=>2000),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('id, tid, time, kohde, pvm, alku, loppu, pituus, ruokatauko, alku_r, kesto, tyoajanlaatu, tyoajanmerkinta, tietoja, osoiteOnline, tekijan_nimi, toimenpiteet, osoite', 'safe', 'on'=>'search'),
