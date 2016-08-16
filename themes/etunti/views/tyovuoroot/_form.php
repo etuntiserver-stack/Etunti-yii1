@@ -59,6 +59,7 @@ if(isset($model->id))
 	<?php echo $form->hiddenField($model,'kesto'); ?>
 	<?php echo $form->hiddenField($model,'osoiteOnline'); ?>
 	<?php echo $form->hiddenField($model,'time'); ?>
+	<?php echo $form->hiddenField($model,'toistuva_id'); ?>
 	<?php echo $form->error($model,'tid'); ?>
 
 <div class="row">
@@ -201,13 +202,13 @@ if(isset($model->id))
 			elseif(!isset($ov->id) and isset($model->tietoja))
 				$model->tietoja = $model->tietoja;
 
-			echo $form->textarea($model,'tietoja',array('rows'=>8,'class'=>'form-control')); 
+			echo $form->textarea($model,'tietoja',array('rows'=>4,'class'=>'form-control')); 
 		?>
 		<?php echo $form->error($model,'tietoja'); ?>
   </div>
   <div class="col-sm-6">
 		<?php echo $form->labelEx($model,'ohje'); ?>
-		<textarea class="form-control ohje" rows="8"><?php echo $ohje; ?></textarea>
+		<textarea class="form-control ohje" rows="4"><?php echo $ohje; ?></textarea>
   </div>
 </div>
 
@@ -215,8 +216,9 @@ if(isset($model->id))
 
 <div class="row">
   <div class="col-sm-6">
-		<label><?php echo Yii::t('main', 'Lisää työpari'); ?></label><br>
+		<label><?php echo Yii::t('main', 'Työpari'); ?></label><br>
 		<?php 
+		$tyopaari = json_decode($model->tyopaari, true);
 
 		$criteria=new CDbCriteria;
 		$criteria->order =" tekijan_nimi ";
@@ -227,8 +229,12 @@ if(isset($model->id))
 		{
 			echo '<select name="tyopaari[]" id="tyopaari" class="mult" multiple>';
 			foreach($tt as $tekija)
-			echo '<option value="'.$tekija->id.'">'.$tekija->tekijan_nimi.'</option>';
-
+			{
+			  if(is_array($tyopaari) and in_array($tekija->id,$tyopaari, true))
+			    echo '<option value="'.$tekija->id.'" selected>'.$tekija->tekijan_nimi.'</option>';
+			  else
+			    echo '<option value="'.$tekija->id.'">'.$tekija->tekijan_nimi.'</option>';
+			}
 			echo '</select>';
 		}
 		?>
@@ -236,25 +242,146 @@ if(isset($model->id))
   </div>
   <div class="col-sm-6">
 
-  </div>
-</div>
-
-
 
 <?php 
 $t = Tyontekijat::model()->findbypk($model->tid);
 if(!empty($t->gcm_reg_id)) :
 ?>
-<br>
-<div class="row">
-  <div class="col-sm-12">
     <div class="pull-right">
+    <br>
 		<?php echo Yii::t('main','Ilmoita työntekijää viestillä'); ?> 
 			<input type="checkbox" name="Tyovuoroot[PushNotify]" class="sw" id="Tyovuoroot_PushNotify">
     </div>
+<?php endif; ?>
   </div>
 </div>
-<?php endif; ?>
+
+<br>
+
+<?php
+  if(isset($model->id) and $model->toistuva_id != 0)
+  {
+    $to = ToistuvatTyovuorot::model()->findByPk($model->toistuva_id);
+    $pfrom = $to->pfrom;
+    $viikkoja = $to->viikkoja;
+    $viikko_paivat = json_decode($to->viikko_paivat, true);
+    $pto = $to->pto;
+    $classCol = 'collapse in';
+    $toistuvaID =  '<span id="toistuvaID">'.$model->toistuva_id.'</span>';
+  } else {
+    $pfrom = $model->pvm;
+    $pto = '';
+    $viikkoja = '';
+    $viikko_paivat = array();
+    $classCol = 'collapse';
+    $toistuvaID =  '<span id="toistuvaID"></span>';
+  }
+?>
+<div class="row">
+ <div class="col-sm-12">
+
+	<?php if((isset($model->id) and $model->toistuva_id != 0) or !isset($model->id)) : ?>
+  	<a href="#" class="btn btn-sm btn-primary" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample"> <?php echo Yii::t('main','Toistuva työvuoro'); ?></a>
+	<?php endif; ?>
+
+	<div class="<?php echo $classCol; ?>" id="collapseExample">
+	<br>
+	<b><?php echo Yii::t('main','Suorita'); ?></b>
+	<input type="checkbox" class="sw" name="ToistuvatTyovuorot[toistuva_aktiivinen]" id="toistuva_aktiivinen">
+
+<div class="row">
+  <div class="col-sm-4">
+	<label><?php echo Yii::t('main', 'Alkaen'); ?></label>
+	<input type="text" class="form-control datepicker" name="ToistuvatTyovuorot[pfrom]" value="<?php echo $pfrom; ?>">
+  </div>
+  <div class="col-sm-4">
+	<label><?php echo Yii::t('main', 'Loppuen'); ?></label>
+	<input type="text" class="form-control datepicker" name="ToistuvatTyovuorot[pto]" id="pto" value="<?php echo $pto; ?>">
+  </div>
+  <div class="col-sm-4">
+	<label><?php echo Yii::t('main', 'Työvuorojen viikkoväli'); ?></label>
+	<select class="form-control" name="ToistuvatTyovuorot[viikkoja]">
+	<?php
+	if(!empty($viikkoja)) echo '<option value="'.$viikkoja.'">'.$viikkoja.'</option>';
+	?>
+	<option value="1">1</option>
+	<option value="2">2</option>
+	<option value="3">3</option>
+	<option value="4">4</option>
+	</select>
+  </div>
+</div>
+
+<br>
+<div class="row">
+  <div class="col-sm-12 col-sm-offset-1">
+  <label><?php echo Yii::t('main', 'Ma'); ?></label>
+
+  <?php if(in_array(1, $viikko_paivat)): ?>
+  <input type="checkbox" class="sw" name="P[1]" id="ma" value="1" checked>
+  <?php else: ?>
+  <input type="checkbox" class="sw" name="P[1]" id="ma" value="1">
+  <?php endif; ?>
+
+  <label><?php echo Yii::t('main', 'Ti'); ?></label>
+
+  <?php if(in_array(2, $viikko_paivat)): ?>
+  <input type="checkbox" class="sw" name="P[2]" id="ti" value="2" checked>
+  <?php else: ?>
+  <input type="checkbox" class="sw" name="P[2]" id="ti" value="2">
+  <?php endif; ?>
+
+
+  <label><?php echo Yii::t('main', 'Ke'); ?></label>
+
+  <?php if(in_array(3, $viikko_paivat)): ?>
+  <input type="checkbox" class="sw" name="P[3]" id="ke" value="3" checked>
+  <?php else: ?>
+  <input type="checkbox" class="sw" name="P[3]" id="ke" value="3">
+  <?php endif; ?>
+
+  <label><?php echo Yii::t('main', 'To'); ?></label>
+
+  <?php if(in_array(4, $viikko_paivat)): ?>
+  <input type="checkbox" class="sw" name="P[4]" id="to" value="4" checked>
+  <?php else: ?>
+  <input type="checkbox" class="sw" name="P[4]" id="to" value="4">
+  <?php endif; ?>
+
+  <label><?php echo Yii::t('main', 'Pe'); ?></label>
+
+  <?php if(in_array(5, $viikko_paivat)): ?>
+  <input type="checkbox" class="sw" name="P[5]" id="pe" value="5" checked>
+  <?php else: ?>
+  <input type="checkbox" class="sw" name="P[5]" id="pe" value="5">
+  <?php endif; ?>
+
+  <label><?php echo Yii::t('main', 'La'); ?></label>
+
+  <?php if(in_array(6, $viikko_paivat)): ?>
+  <input type="checkbox" class="sw" name="P[6]" id="la" value="6" checked>
+  <?php else: ?>
+  <input type="checkbox" class="sw" name="P[6]" id="la" value="6">
+  <?php endif; ?>
+
+  <label><?php echo Yii::t('main', 'Su'); ?></label>
+
+  <?php if(in_array(7, $viikko_paivat)): ?>
+  <input type="checkbox" class="sw" name="P[7]" id="su" value="7" checked>
+  <?php else: ?>
+  <input type="checkbox" class="sw" name="P[7]" id="su" value="7">
+  <?php endif; ?>
+
+  </div>
+</div>
+
+	</div>
+ </div>
+</div>
+
+
+
+
 
 </div>
 
@@ -368,7 +495,7 @@ $('.mult').multiselect({
   });
 
   $(".sw").bootstrapSwitch({
-	size: "small",
+	size: "mini",
 	onColor: "success",
 	offColor: "danger",
 	onText: "Kyllä",
@@ -382,50 +509,48 @@ $('.mult').multiselect({
 
 	$('#tyovuoroot-form').on('submit',function(e) {
 
+	$('#showres').modal('hide');
+
 	console.log( $( this ).serializeArray() );
 	console.log( e.target[0].value );
 	var str = '';
+	var thisDataReturn = [];
 
 	if( e.target[0].value != '')
 	{
+
+	// paivita vanhat
+	  var toistuva_aktiivinen = $('#toistuva_aktiivinen').is(':checked');
+	  if(toistuva_aktiivinen === true)
+	  {
+	  //alert(e.target[7].value);
+	  $.ajax({
+		  url: 'paivita_laatikot',
+		  data:{ toistuva_id : e.target[7].value },
+		  type:'POST',
+		  success:function(data){
+			data = JSON.parse(data);
+			//console.log(data);
+			laatikonPaivays(data);
+
+	   	},
+		error:function(data){
+		console.log(data);
+	    	}
+	  });
+  	  }
+	// paivita vanhat
+
+
 	  $.ajax({
 		  url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/update?id='+e.target[0].value,
 		  data:$(this).serialize(),
 		  type:'POST',
 		  success:function(data){
-			//console.log(data);
+			thisDataReturn = JSON.parse(data);
+			//console.log(thisDataReturn);
+			laatikonPaivays(thisDataReturn);
 
-	  	 $.ajax({
-			url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/did',
-			type:'GET',
-			data: { "pvm" : "<?php echo $model->pvm; ?>", "tid" : "<?php echo $model->tid; ?>", "from" : "ajax" },
-			  success:function(data){
-			  //console.log(data);
-			  $('#<?php echo date("Ymd",strtotime($model->pvm))."_".$model->tid; ?>').html(JSON.parse(data));
-			  },
-			  error:function(data){
-			  console.log(data);
-			  }
-	 	});
-
-/*
-	  	$.ajax({
-			url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/fromto',
-			type:'GET',
-			data: { "tid" : "<?php echo $model->tid; ?>" },
-			  success:function(data){
-			  //console.log(data);
-			  $('.fromto_<?php echo $model->tid; ?>').html(data);
-			  return false;
-			  },
-			  error:function(data){
-			  console.log(data);
-			  }
-	 	});
-*/
-
-		$('#showres').modal('hide');
-		return false;
 	   	},
 		error:function(data){
 		console.log(data);
@@ -440,37 +565,10 @@ $('.mult').multiselect({
 		  data:$(this).serialize(),
 		  type:'POST',
 		  success:function(data){
-			//console.log(data);
+			thisDataReturn = JSON.parse(data);
+			//console.log(thisDataReturn);
+			laatikonPaivays(thisDataReturn);
 
-	  	$.ajax({
-			url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/did',
-			type:'GET',
-			data: { "pvm" : "<?php echo $model->pvm; ?>", "tid" : "<?php echo $model->tid; ?>", "from" : "ajax" },
-			  success:function(data){
-			  //console.log(data);
-			  $('#showres').modal('hide');
-			  $('#<?php echo date("Ymd",strtotime($model->pvm))."_".$model->tid; ?>').html(JSON.parse(data));
-
-
-			  if(parent.location.href.match(/index/))
-			  {
-				var ThisHeight = $('#<?php echo date("Ymd",strtotime($model->pvm))."_".$model->tid; ?>').height();
-				var FirstHeight = $('#first_<?php echo $model->tid; ?>').height(ThisHeight);
-			  }
-			  if(parent.location.href.match(/tv2/))
-			  {
-				var ThisHeight = $('#<?php echo date("Ymd",strtotime($model->pvm))."_".$model->tid; ?>').height();
-				var FirstHeight = $('#first_<?php echo date("Ymd",strtotime($model->pvm)); ?>').height(ThisHeight);
-			  }
-
-
-			  },
-			  error:function(data){
-			  console.log(data);
-			  }
-	 	});
-
-		//return false;
 	   	},
 		error:function(data){
 		console.log(data);
@@ -487,58 +585,7 @@ $('.mult').multiselect({
 
 
 
-	var tyopaari = $('#tyopaari').val();
-	$(tyopaari).each(function( index, dataVal ) {
-	  if(dataVal !== '')
-	  {
-	  	console.log( dataVal );
-		$("#tyovuoroot-form :input[name='Tyovuoroot[tid]']").val(dataVal);
-		var form = $("#tyovuoroot-form").serialize();
 
-	  $.ajax({
-		  url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/create',
-		  data:$('#tyovuoroot-form').serialize(),
-		  type:'POST',
-		  success:function(data){
-			//console.log(data);
-
-	  	$.ajax({
-			url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/did',
-			type:'GET',
-			data: { "pvm" : "<?php echo $model->pvm; ?>", "tid" : dataVal, "from" : "ajax" },
-			  success:function(data){
-			  //console.log(data);
-			  $('#showres').modal('hide');
-			  $('#<?php echo date("Ymd",strtotime($model->pvm)); ?>_'+dataVal).html(JSON.parse(data));
-
-
-			  if(parent.location.href.match(/index/))
-			  {
-				var ThisHeight = $('#<?php echo date("Ymd",strtotime($model->pvm)); ?>_'+dataVal).height();
-				var FirstHeight = $('#first_'+dataVal).height(ThisHeight);
-			  }
-			  if(parent.location.href.match(/tv2/))
-			  {
-				var ThisHeight = $('#<?php echo date("Ymd",strtotime($model->pvm)); ?>_'+dataVal).height();
-				var FirstHeight = $('#first_<?php echo date("Ymd",strtotime($model->pvm)); ?>').height(ThisHeight);
-			  }
-
-
-			  },
-			  error:function(data){
-			  console.log(data);
-			  }
-	 	});
-
-		//return false;
-	   	},
-		error:function(data){
-		console.log(data);
-	    	}
-	  });
-
-	  }
-	});
 
 
 	//var pvmFromPost = e.target[7].value; 
@@ -564,6 +611,101 @@ $('.mult').multiselect({
 	e.preventDefault(); 
 	});
 
+
+
+// Poistaminen
+$('#poistaTv').click(function(){
+
+	var thisID = 'checkThis_'+$(this).attr('for');
+	var model = $(this).attr('model');
+	var toistuva_aktiivinen = $('#toistuva_aktiivinen').is(':checked');
+
+	var r = confirm('Haluatko varmasti poistaa?');
+	if(r)
+	{
+
+	// paivita vanhat
+	  if(toistuva_aktiivinen === true)
+	  {
+	  var toistuva_id = $('#Tyovuoroot_toistuva_id').val();
+	  $.ajax({
+		  url: 'paivita_laatikot',
+		  data:{ toistuva_id : toistuva_id },
+		  type:'POST',
+		  success:function(data){
+			data = JSON.parse(data);
+			//console.log(data);
+			laatikonPaivays(data);
+
+	   	},
+		error:function(data){
+		console.log(data);
+	    	}
+	  });
+  	  }
+	// paivita vanhat
+
+
+        $.ajax({
+           url: 'poistaTv',
+	   type:'POST',
+	   data: { "poistaTv" : model, toistuva_aktiivinen : toistuva_aktiivinen },
+           success: function(data){
+        	//console.log(data);
+		parent.postMessage( "doit//"+thisID, "*");
+
+    	   },
+    	   error: function(XMLHttpRequest, textStatus, errorThrown) {
+	    	console.log(XMLHttpRequest);
+ 	   }
+        });
+	}
+
+});
+
+
+
+function laatikonPaivays(thisDataReturn){
+
+
+		$(thisDataReturn).each(function( iarr, arr ) {
+		 $(arr).each(function( i, d ) {
+		 //console.log(d['pvm']);
+
+	  	    $.ajax({
+			url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/did',
+			type:'GET',
+			data: { "pvm" : d['pvm'], "tid" : d['tid'], "from" : "ajax" },
+			  success:function(data){
+			  //console.log(data);
+
+
+			  if( $('#'+d['ymd']+'_'+d['tid']).length )
+			  {
+			    $('#'+d['ymd']+'_'+d['tid']).html(JSON.parse(data));
+			    if(parent.location.href.match(/index/))
+			    {
+				var ThisHeight = $('#'+d['ymd']+'_'+d['tid']).height();
+				var FirstHeight = $('#first_'+d['tid']).height(ThisHeight);
+			    }
+			    if(parent.location.href.match(/tv2/))
+			    {
+				var ThisHeight = $('#'+d['ymd']+'_'+d['tid']).height();
+				var FirstHeight = $('#first_'+d['ymd']).height(ThisHeight);
+			    }
+			  }
+
+
+			  },
+			  error:function(data){
+			  console.log(data);
+			  }
+	 	    });
+
+		 });
+		});
+
+}
 
 
   function laskePituus(){
@@ -619,6 +761,7 @@ $('.mult').multiselect({
   $('#loppu').change(function(){
 	laskePituus();
   });
+
 
 
   $('#Tyovuoroot_kohde').change(function(){

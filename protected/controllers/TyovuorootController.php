@@ -28,7 +28,7 @@ class TyovuorootController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','updatetime','showohje','did','muisti','operatio','viikko','fromto','autoinsert','autoremove','viikkottain', 'viikkottain_pdf', 'laheta','kk','pvmtid','laheta_k', 'muistin', 'muisticlear', 'muistissa', 'vkolopput', 'vkolopchange', 'uusitilaus', 'tv2', 'PoistaTv', 'valitse_kokopaiva', 'tv_kohteet', 'siivous_tyonimike', 'getKohdeByAsiakas', 'getAsiakasByKohde'),
+				'actions'=>array('admin','delete','create','update','index','view','updatetime','showohje','did','muisti','operatio','viikko','fromto','autoinsert','autoremove','viikkottain', 'viikkottain_pdf', 'laheta','kk','pvmtid','laheta_k', 'muistin', 'muisticlear', 'muistissa', 'vkolopput', 'vkolopchange', 'uusitilaus', 'tv2', 'PoistaTv', 'valitse_kokopaiva', 'tv_kohteet', 'siivous_tyonimike', 'getKohdeByAsiakas', 'getAsiakasByKohde', 'paivita_laatikot'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny', // allow admin user to perform 'admin' and 'delete' actions
@@ -98,6 +98,7 @@ class TyovuorootController extends Controller
 		   if(isset($a->id))
 		    echo json_encode($a->id);
 	}
+
 
 
 
@@ -445,8 +446,20 @@ class TyovuorootController extends Controller
 
 	public function actionPoistaTv()
 	{
+
+		$model = Tyovuoroot::model()->findbypk($_POST['poistaTv']);
+
+
+		if(isset($_POST['toistuva_aktiivinen']) and $_POST['toistuva_aktiivinen'] == 'true' and $model->toistuva_id != 0)
+		{
+
+			Tyovuoroot::model()->deleteAll(" toistuva_id='".$model->toistuva_id."' ");
+			exit;
+		}
+
+
 		if(isset($_POST['poistaTv']))
-			$t = Tyovuoroot::model()->deletebypk($_POST['poistaTv']);
+			$t = Tyovuoroot::model()->deletebypk($model->id);
 	}
 
 	public function actionOperatio()
@@ -488,6 +501,8 @@ class TyovuorootController extends Controller
 			$model->loppu=$t->loppu;
 			$model->pituus=$t->pituus;
 			$model->kohde=$t->kohde;
+			$model->toistuva_id=0;
+			$model->tyopaari='';
 			$model->save();
 			
 		}
@@ -514,6 +529,8 @@ class TyovuorootController extends Controller
 			$model->loppu=$t->loppu;
 			$model->pituus=$t->pituus;
 			$model->kohde=$t->kohde;
+			$model->toistuva_id=0;
+			$model->tyopaari='';
 			$model->save();
 			$t = Tyovuoroot::model()->deletebypk($ex[0]);	
 			} else {
@@ -586,7 +603,7 @@ class TyovuorootController extends Controller
 		  $var = 1;
 		  elseif($v == 3 and date('W',$startdate)%3 == 1)
 		  $var = 1;
-		  elseif($v == 3 and date('W',$startdate)%2 == 1)
+		  elseif($v == 3 and date('W',$startdate)%2 == 0)
 		  $var = 2;
 
 		  while($startdate<$enddate) 
@@ -664,7 +681,7 @@ class TyovuorootController extends Controller
 		  $var = 1;
 		  elseif($v == 3 and date('W',$startdate)%3 == 1)
 		  $var = 1;
-		  elseif($v == 3 and date('W',$startdate)%2 == 1)
+		  elseif($v == 3 and date('W',$startdate)%2 == 0)
 		  $var = 2;
 
 		  while($startdate<$enddate) 
@@ -768,12 +785,156 @@ class TyovuorootController extends Controller
 		));
 	}
 
-	/**
-	 * Creates a new model.
-	 * If creation is successful, the browser will be redirected to the 'view' page.
-	 */
+
+
 	public function actionCreate()
 	{
+
+
+
+		$return = array();
+
+		if(isset($_POST['ToistuvatTyovuorot']) and isset($_POST['ToistuvatTyovuorot']['toistuva_aktiivinen']) and $_POST['ToistuvatTyovuorot']['toistuva_aktiivinen'] == 'on')
+		{
+
+			$toistuva=new ToistuvatTyovuorot;
+			$toistuva->attributes=$_POST['ToistuvatTyovuorot'];
+			$toistuva->pvm = date("d.m.Y",strtotime($_POST['Tyovuoroot']['pvm']));
+			$toistuva->alku=$_POST['Tyovuoroot']['alku'];
+			$toistuva->loppu=$_POST['Tyovuoroot']['loppu'];
+			$toistuva->pituus=$_POST['Tyovuoroot']['pituus'];
+			$toistuva->kohde=$_POST['Tyovuoroot']['kohde'];
+			$toistuva->tid=$_POST['Tyovuoroot']['tid'];
+			$toistuva->kesto=$_POST['Tyovuoroot']['kesto'];
+			$toistuva->tyoajanmerkinta=$_POST['Tyovuoroot']['tyoajanmerkinta'];
+			$toistuva->status=$_POST['Tyovuoroot']['status'];
+			$toistuva->tietoja=$_POST['Tyovuoroot']['tietoja'];
+
+			if(isset($_POST['P']))
+			$toistuva->viikko_paivat=json_encode($_POST['P']);
+			if(isset($_POST['tyopaari']))
+			{
+			  $tp = $_POST['tyopaari'];
+			  array_push($tp, $toistuva->tid);
+			  $toistuva->tyopaari=json_encode($tp);
+			}
+
+			if($toistuva->save())
+			{
+	
+
+			$return[] = $this->toistuvaInsert(
+				$toistuva->id,
+				$toistuva->pfrom, 
+				$toistuva->pto, 
+				json_decode($toistuva->viikko_paivat, true),
+				$toistuva->viikkoja, 
+				$toistuva->tid, 
+				$toistuva->kohde, 
+				$toistuva->alku, 
+				$toistuva->loppu, 
+				$toistuva->pituus, 
+				$toistuva->tyoajanmerkinta, 
+				$toistuva->tietoja,
+				$toistuva->status,
+				$toistuva->tyopaari
+				);
+			}
+
+
+			// <-- jos on tyopaari
+			if(isset($_POST['tyopaari']) and count($_POST['tyopaari']) > 0)
+			{
+
+			    foreach($_POST['tyopaari'] as $tid)
+			    {
+				$return[] = $this->toistuvaInsert(
+					$toistuva->id,
+					$toistuva->pfrom, 
+					$toistuva->pto, 
+					json_decode($toistuva->viikko_paivat, true),
+					$toistuva->viikkoja, 
+					$tid, 
+					$toistuva->kohde, 
+					$toistuva->alku, 
+					$toistuva->loppu, 
+					$toistuva->pituus, 
+					$toistuva->tyoajanmerkinta, 
+					$toistuva->tietoja,
+					$toistuva->status,
+					$toistuva->tyopaari
+					);
+			    }
+			}
+			// jos on tyopaari -->
+
+
+			echo json_encode($return);
+		exit;
+		}
+
+
+
+
+
+		$model=new Tyovuoroot;
+
+		if(isset($_POST['Tyovuoroot']))
+		{
+
+			$model->attributes=$_POST['Tyovuoroot'];
+			$model->pvm = date("d.m.Y",strtotime($_POST['Tyovuoroot']['pvm']));
+			if(isset($_POST['tyopaari']))
+			$model->tyopaari=json_encode($_POST['tyopaari']);
+
+
+			if($model->save())
+			{
+
+
+			// <-- jos on tyopaari
+			if(isset($_POST['tyopaari']) and count($_POST['tyopaari']) > 0)
+			{
+
+			    $tp = $_POST['tyopaari'];
+			    array_push($tp, $model->tid);
+
+			    foreach($_POST['tyopaari'] as $tid)
+			    {
+				$m=new Tyovuoroot;
+				$m->attributes=$_POST['Tyovuoroot'];
+				$m->pvm = date("d.m.Y",strtotime($_POST['Tyovuoroot']['pvm']));
+				$m->tid=$tid;
+				$m->tyopaari=json_encode($tp);
+				$m->save();
+				$return[] = array('tid'=>$m->tid, 'pvm'=>$m->pvm, 'ymd'=>date("Ymd",strtotime($m->pvm)));
+			    }
+			}
+			// jos on tyopaari -->
+
+
+
+			  if(isset($_POST['Tyovuoroot']['PushNotify']) and $_POST['Tyovuoroot']['PushNotify'] == 'on')
+			  {
+			   $t = Tyontekijat::model()->findbypk($model->tid);
+			   $k = Kohteet::model()->findbypk($model->kohde);
+			   if(isset($k->osoite) and !empty($k->osoite))
+			   {
+				$pushviesti = "Uusi työvuoro\n
+					".$model->pvm."
+					".$model->alku."-".$model->loppu." ".$k->osoite."
+					".$model->tietoja;
+
+				Domainit::PushNotify($t->id,"Hei ".$t->tekijan_nimi,$pushviesti);
+
+			   }
+			  }
+			$return[] = array('tid'=>$model->tid, 'pvm'=>$model->pvm, 'ymd'=>date("Ymd",strtotime($model->pvm)));
+			echo json_encode($return);
+			}
+		exit;
+		}
+
 
   	$tnimi = '';
 	if(isset($_POST['tid']) and $_POST['tid'] != 0){
@@ -817,38 +978,183 @@ class TyovuorootController extends Controller
 	<?php
 		if(isset($oikeus)) echo $oikeus;
 
-		$model=new Tyovuoroot;
 
-		// Uncomment the following line if AJAX validation is needed
-		// $this->performAjaxValidation($model);
+
+		$this->renderPartial('create',array(
+			'model'=>$model,
+		));
+	?>
+	</div>
+	</div> <!-- end modal-body -->
+	<?php
+	}
+
+
+	public function actionPaivita_laatikot()
+	{
+		if(isset($_POST['toistuva_id']))
+		{
+			$data = Tyovuoroot::model()->findAll(" toistuva_id='".$_POST['toistuva_id']."' ");
+			foreach($data as $model)
+			$return[] = array('tid'=>$model->tid, 'pvm'=>$model->pvm, 'ymd'=>date("Ymd",strtotime($model->pvm)));
+
+			echo json_encode($return);
+			exit;
+		}
+	}
+
+	public function actionUpdate($id)
+	{
+
+		$model=$this->loadModel($id);
+
+
+
+
+		$return = array();
+
+		if(isset($_POST['ToistuvatTyovuorot']) and isset($_POST['ToistuvatTyovuorot']['toistuva_aktiivinen']) and $_POST['ToistuvatTyovuorot']['toistuva_aktiivinen'] == 'on' and $model->toistuva_id != 0)
+		{
+
+
+			$toistuva= ToistuvatTyovuorot::model()->findByPk($model->toistuva_id);
+			$toistuva->attributes=$_POST['ToistuvatTyovuorot'];
+			$toistuva->pvm = date("d.m.Y",strtotime($_POST['Tyovuoroot']['pvm']));
+			$toistuva->alku=$_POST['Tyovuoroot']['alku'];
+			$toistuva->loppu=$_POST['Tyovuoroot']['loppu'];
+			$toistuva->pituus=$_POST['Tyovuoroot']['pituus'];
+			$toistuva->kohde=$_POST['Tyovuoroot']['kohde'];
+			$toistuva->tid=$_POST['Tyovuoroot']['tid'];
+			$toistuva->kesto=$_POST['Tyovuoroot']['kesto'];
+			$toistuva->tyoajanmerkinta=$_POST['Tyovuoroot']['tyoajanmerkinta'];
+			$toistuva->status=$_POST['Tyovuoroot']['status'];
+			$toistuva->tietoja=$_POST['Tyovuoroot']['tietoja'];
+
+			if(isset($_POST['P']))
+			$toistuva->viikko_paivat=json_encode($_POST['P']);
+			if(isset($_POST['tyopaari']))
+			{
+			  $tp = $_POST['tyopaari'];
+			  array_push($tp, $toistuva->tid);
+			  $toistuva->tyopaari=json_encode($tp);
+			}
+
+			if($toistuva->save())
+			{
+	
+			Tyovuoroot::model()->deleteAll(" toistuva_id='".$model->toistuva_id."' ");
+
+			$return[] = $this->toistuvaInsert(
+				$toistuva->id,
+				$toistuva->pfrom, 
+				$toistuva->pto, 
+				json_decode($toistuva->viikko_paivat, true),
+				$toistuva->viikkoja, 
+				$toistuva->tid, 
+				$toistuva->kohde, 
+				$toistuva->alku, 
+				$toistuva->loppu, 
+				$toistuva->pituus, 
+				$toistuva->tyoajanmerkinta, 
+				$toistuva->tietoja,
+				$toistuva->status,
+				$toistuva->tyopaari
+				);
+			}
+
+
+			// <-- jos on tyopaari
+			if(isset($_POST['tyopaari']) and count($_POST['tyopaari']) > 0)
+			{
+
+			    foreach($_POST['tyopaari'] as $tid)
+			    {
+				$return[] = $this->toistuvaInsert(
+					$toistuva->id,
+					$toistuva->pfrom, 
+					$toistuva->pto, 
+					json_decode($toistuva->viikko_paivat, true),
+					$toistuva->viikkoja, 
+					$tid, 
+					$toistuva->kohde, 
+					$toistuva->alku, 
+					$toistuva->loppu,
+					$toistuva->pituus, 
+					$toistuva->tyoajanmerkinta, 
+					$toistuva->tietoja,
+					$toistuva->status,
+					$toistuva->tyopaari
+					);
+			    }
+			}
+			// jos on tyopaari -->
+
+
+			echo json_encode($return);
+		exit;
+		}
+
+
 
 		if(isset($_POST['Tyovuoroot']))
 		{
+
+
+			$_POST['Tyovuoroot']['pvm'] = date("d.m.Y",strtotime($_POST['Tyovuoroot']['pvm']));
 			$model->attributes=$_POST['Tyovuoroot'];
-			$model->pvm = date("d.m.Y",strtotime($_POST['Tyovuoroot']['pvm']));
-			if($model->save())
-			{
+			if($model->save()){
+
 
 			  if(isset($_POST['Tyovuoroot']['PushNotify']) and $_POST['Tyovuoroot']['PushNotify'] == 'on')
 			  {
-			   $t = Tyontekijat::model()->findbypk($model->tid);
 			   $k = Kohteet::model()->findbypk($model->kohde);
 			   if(isset($k->osoite) and !empty($k->osoite))
 			   {
-				$pushviesti = "Uusi työvuoro\n
+				$pushviesti = "Työvuorossa on muutokset\n
 					".$model->pvm."
 					".$model->alku."-".$model->loppu." ".$k->osoite."
 					".$model->tietoja;
 
 				Domainit::PushNotify($t->id,"Hei ".$t->tekijan_nimi,$pushviesti);
-
 			   }
 			  }
+
+
+
+			$return = array('tid'=>$model->tid, 'pvm'=>$model->pvm, 'ymd'=>date("Ymd",strtotime($model->pvm)));
+			echo json_encode($return);
 			}
 		exit;
 		}
 
-		$this->renderPartial('create',array(
+
+
+
+
+		$tekijan_nimi = '';
+
+	  	$t = Tyontekijat::model()->findbypk($model->tid);
+		if(isset($t->id))
+		{
+			$tekijan_nimi = $t->tekijan_nimi;
+		}
+
+	?>
+	<div class="modal-dialog modal-lg">
+	    <div class="modal-content">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
+		<h2 class="modal-title"><?php echo Yii::t('main', 'Työvuoron suunnittelu').': '.$tekijan_nimi; ?></h2>
+	
+		</div>
+		<div class="modal-body">
+
+	<div class="dialogTable clearfix modal-osio">
+	<?php
+
+		$this->renderPartial('_form',array(
 			'model'=>$model,
 		));
 	?>
@@ -914,6 +1220,7 @@ class TyovuorootController extends Controller
 				if($model->save())
 
 
+
 				{
 
 				   if(isset($_POST['vieposti']))
@@ -958,82 +1265,6 @@ class TyovuorootController extends Controller
 	}
 
 
-
-	/**
-	 * Updates a particular model.
-	 * If update is successful, the browser will be redirected to the 'view' page.
-	 * @param integer $id the ID of the model to be updated
-	 */
-	public function actionUpdate($id)
-
-	{
-
-			$tekijan_nimi = '';
-
-		$model=$this->loadModel($id);
-	  	$t = Tyontekijat::model()->findbypk($model->tid);
-		if(isset($t->id))
-		{
-			$tekijan_nimi = $t->tekijan_nimi;
-		}
-
-	?>
-	<div class="modal-dialog modal-lg">
-	    <div class="modal-content">
-		<div class="modal-header">
-			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-				<span aria-hidden="true">&times;</span>
-			</button>
-		<h2 class="modal-title"><?php echo Yii::t('main', 'Työvuoron suunnittelu').': '.$tekijan_nimi; ?></h2>
-	
-		</div>
-		<div class="modal-body">
-
-	<div class="dialogTable clearfix modal-osio">
-	<?php
-
-
-
-		// Uncomment the following line if AJAX validation is needed
-		// $this->performAjaxValidation($model);
-
-		if(isset($_POST['Tyovuoroot']))
-		{
-
-			$_POST['Tyovuoroot']['pvm'] = date("d.m.Y",strtotime($_POST['Tyovuoroot']['pvm']));
-			$model->attributes=$_POST['Tyovuoroot'];
-			if($model->save()){
-
-			  if(isset($_POST['Tyovuoroot']['PushNotify']) and $_POST['Tyovuoroot']['PushNotify'] == 'on')
-			  {
-			   $k = Kohteet::model()->findbypk($model->kohde);
-			   if(isset($k->osoite) and !empty($k->osoite))
-			   {
-				$pushviesti = "Työvuorossa on muutokset\n
-					".$model->pvm."
-					".$model->alku."-".$model->loppu." ".$k->osoite."
-					".$model->tietoja;
-
-				Domainit::PushNotify($t->id,"Hei ".$t->tekijan_nimi,$pushviesti);
-			   }
-			  }
-			}
-		}
-
-		$this->renderPartial('_form',array(
-			'model'=>$model,
-		));
-	?>
-	</div>
-	</div> <!-- end modal-body -->
-	<?php
-	}
-
-	/**
-	 * Deletes a particular model.
-	 * If deletion is successful, the browser will be redirected to the 'admin' page.
-	 * @param integer $id the ID of the model to be deleted
-	 */
 	public function actionDelete($id)
 	{
 		$this->loadModel($id)->delete();
@@ -1151,6 +1382,79 @@ class TyovuorootController extends Controller
 			11=>Yii::t('main', 'Apuaika'),
 		);
 		return $l;
+	}
+
+
+	protected function toistuvaInsert($id, $pfrom, $pto, $p, $viikkoja, $tid, $kohde, $alku, $loppu, $pituus, $tyoajanmerkinta, $tietoja, $status, $tyopaari)
+	{
+
+		$fi = array(
+		    1=>'Maanantai',
+		    2=>'Tiistai',
+		    3=>'Keskkiviikko',
+		    4=>'Torstai',
+		    5=>'Perjantai',
+		    6=>'Lauantai',
+		    0=>'Sunnuntai',
+		);
+
+		$pvmstart 	= $pfrom;
+		$startdate 	= strtotime($pfrom);
+		$enddate	= strtotime($pto);
+		$w		= $p;
+		$v 		= $viikkoja;
+
+		  $i=0; 
+		  $var = 0;
+		  if($v == 2 and date('W',$startdate)%2 == 1)
+		  $var = 1;
+		  elseif($v == 4 and date('W',$startdate)%2 == 0)
+		  $var = 2;
+		  elseif($v == 4 and date('W',$startdate)%2 == 1)
+		  $var = 1;
+		  elseif($v == 3 and date('W',$startdate)%3 == 1)
+		  $var = 1;
+		  elseif($v == 3 and date('W',$startdate)%2 == 0)
+		  $var = 2;
+
+		  $return = array();
+		  while($startdate<$enddate) 
+		   {  
+
+		      $ero = (date('W',$startdate) %$v);
+		      //echo date('d.m',$startdate).", ".date('W',$startdate)." | ".$var." | ".$ero."\n";
+
+
+		      if(in_array(date('w',$startdate),$w) and $ero == $var)
+		      {
+
+		    	$pvm = date('d.m.Y',$startdate);
+		    	//echo $pvm." ".$fi[date('w',$startdate)]."\n";
+
+
+				$t = new Tyovuoroot;
+				$t->tid = $tid;
+				$t->kohde = $kohde;
+				$t->pvm = $pvm;
+				$t->alku = $alku;
+				$t->loppu = $loppu;
+				$t->pituus = $pituus;
+				$t->tyoajanmerkinta = $tyoajanmerkinta;
+				$t->tietoja = $tietoja;
+				$t->status = $status;
+				$t->tyopaari = $tyopaari;
+				$t->toistuva_id = $id;
+				if($t->save())
+				$return[] = array('tid'=>$t->tid, 'pvm'=>$t->pvm, 'ymd'=>date("Ymd",strtotime($t->pvm)));
+
+		      }
+
+			$i++; 
+			$startdate+=86400; 
+
+		   }	
+				return $return;
+
 	}
 
 }

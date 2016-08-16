@@ -283,27 +283,6 @@ $(document).delegate(".trash","click",function(){
 	parent.postMessage( "doit//"+thisID, "*");
 });
 
-$(document).delegate("#poistaTv","click",function(){
-	var thisID = 'checkThis_'+$(this).attr('for');
-	var model = $(this).attr('model');
-	var r = confirm('Haluatko varmasti poistaa sen?');
-	if(r)
-	{
-        $.ajax({
-           url: 'poistaTv',
-	   type:'POST',
-	   data: { "poistaTv" : model },
-           success: function(data){
-        	//console.log(data);
-		parent.postMessage( "doit//"+thisID, "*");
-    	   },
-    	   error: function(XMLHttpRequest, textStatus, errorThrown) {
-	    	console.log(XMLHttpRequest);
- 	   }
-        });
-	}
-
-});
 
 
 
