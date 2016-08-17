@@ -29,7 +29,7 @@ class SiteController extends Controller
                 		'expression'=>"Yii::app()->controller->isDigisten()",
 			),
 			array('allow', 
-				'actions'=>array( 'header', 'footer', 'lomake_tarjouspyynto', 'lomake_testiryhma', 'ajankohtaista', 'asiakkaat', 'yritys', 'yhteystiedot', 'lomake_lataailmainen', 'uusi_kommento'),
+				'actions'=>array( 'header', 'footer', 'lomake_tarjouspyynto', 'lomake_testiryhma', 'ajankohtaista', 'asiakkaat', 'yritys', 'yhteystiedot', 'lomake_lataailmainen', 'uusi_kommento', 'crontab'),
 				'users'=>array('*'),
 			),
 			array('allow', 
@@ -93,6 +93,14 @@ class SiteController extends Controller
                 parent::init();
         }
 
+
+	public function actionCrontab($pass)
+	{
+                Yii::app()->theme = 'classic';
+		$this->renderPartial('crontab',array(
+			'pass'=>$pass,
+		));
+	}
 
 
 	public function actionLaheta_et_kirje()
