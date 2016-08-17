@@ -1,0 +1,3007 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+<head>
+<meta name="GENERATOR" content="yiidoc http://www.yiiframework.com">
+</head>
+<body>
+<object type="text/site properties">
+<param name="Window Styles" value="0x800025">
+<param name="FrameName" value="right">
+<param name="ImageType" value="Folder">
+<param name="comment" value="title:Online Help">
+<param name="comment" value="base:index.html">
+</object>
+
+<ul>
+	<li><object type="text/sitemap">
+		<param name="Name" value="All Packages">
+		<param name="Local" value="index.html">
+		</object>
+	<li><object type="text/sitemap">
+		<param name="Name" value="">
+		</object>
+	<ul>
+			<li><object type="text/sitemap">
+			<param name="Name" value="Administrators">
+			<param name="Local" value="Administrators.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="AdministratorsController">
+			<param name="Local" value="AdministratorsController.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="ApiController">
+			<param name="Local" value="ApiController.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="Asetukset">
+			<param name="Local" value="Asetukset.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="AsetuksetController">
+			<param name="Local" value="AsetuksetController.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="AsetuksetForAll">
+			<param name="Local" value="AsetuksetForAll.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="AsetuksetForAllController">
+			<param name="Local" value="AsetuksetForAllController.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="AsiakasHyvaksynta">
+			<param name="Local" value="AsiakasHyvaksynta.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="AsiakasHyvaksyntaController">
+			<param name="Local" value="AsiakasHyvaksyntaController.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="Asiakkaat">
+			<param name="Local" value="Asiakkaat.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="AsiakkaatController">
+			<param name="Local" value="AsiakkaatController.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="Blog">
+			<param name="Local" value="Blog.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="BlogComments">
+			<param name="Local" value="BlogComments.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="BlogCommentsController">
+			<param name="Local" value="BlogCommentsController.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="BlogController">
+			<param name="Local" value="BlogController.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="Controller">
+			<param name="Local" value="Controller.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CrmSopimukset">
+			<param name="Local" value="CrmSopimukset.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CrmSopimuksetController">
+			<param name="Local" value="CrmSopimuksetController.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CrmTarjoukset">
+			<param name="Local" value="CrmTarjoukset.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CrmTarjouksetController">
+			<param name="Local" value="CrmTarjouksetController.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="DB2ActiveRecord">
+			<param name="Local" value="DB2ActiveRecord.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="Domainit">
+			<param name="Local" value="Domainit.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="DomainitController">
+			<param name="Local" value="DomainitController.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="Ennakko">
+			<param name="Local" value="Ennakko.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="EnnakkoController">
+			<param name="Local" value="EnnakkoController.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="FirmanTiedot">
+			<param name="Local" value="FirmanTiedot.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="FirmanTiedotController">
+			<param name="Local" value="FirmanTiedotController.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="KirjallinenVaroitus">
+			<param name="Local" value="KirjallinenVaroitus.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="KirjallinenVaroitusController">
+			<param name="Local" value="KirjallinenVaroitusController.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="KirjeidenHallinta">
+			<param name="Local" value="KirjeidenHallinta.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="KirjeidenHallintaController">
+			<param name="Local" value="KirjeidenHallintaController.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="Kohteet">
+			<param name="Local" value="Kohteet.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="KohteetController">
+			<param name="Local" value="KohteetController.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="Korvaukset">
+			<param name="Local" value="Korvaukset.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="KorvauksetController">
+			<param name="Local" value="KorvauksetController.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="KuviaKohteesta">
+			<param name="Local" value="KuviaKohteesta.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="KuviaKohteestaController">
+			<param name="Local" value="KuviaKohteestaController.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="Lasku">
+			<param name="Local" value="Lasku.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="LaskuController">
+			<param name="Local" value="LaskuController.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="LaskuHistoria">
+			<param name="Local" value="LaskuHistoria.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="LaskuHistoriaController">
+			<param name="Local" value="LaskuHistoriaController.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="LaskunRivit">
+			<param name="Local" value="LaskunRivit.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="LaskunRivitController">
+			<param name="Local" value="LaskunRivitController.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="LaskutusTuotteet">
+			<param name="Local" value="LaskutusTuotteet.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="LaskutusTuotteetController">
+			<param name="Local" value="LaskutusTuotteetController.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="Lisatyotunnit">
+			<param name="Local" value="Lisatyotunnit.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="LisatyotunnitController">
+			<param name="Local" value="LisatyotunnitController.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="LoginForm">
+			<param name="Local" value="LoginForm.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="Mob">
+			<param name="Local" value="Mob.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="MobController">
+			<param name="Local" value="MobController.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="Mobile">
+			<param name="Local" value="Mobile.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="MobileController">
+			<param name="Local" value="MobileController.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="Onlinevaraus">
+			<param name="Local" value="Onlinevaraus.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="OnlinevarausController">
+			<param name="Local" value="OnlinevarausController.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="OnlinevarausTuotteet">
+			<param name="Local" value="OnlinevarausTuotteet.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="OnlinevarausTuotteetController">
+			<param name="Local" value="OnlinevarausTuotteetController.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="Page">
+			<param name="Local" value="Page.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="PageController">
+			<param name="Local" value="PageController.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="Palautteet">
+			<param name="Local" value="Palautteet.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="PalautteetController">
+			<param name="Local" value="PalautteetController.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="SiteController">
+			<param name="Local" value="SiteController.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="Tasot">
+			<param name="Local" value="Tasot.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="TasotController">
+			<param name="Local" value="TasotController.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="ToistuvatTyovuorot">
+			<param name="Local" value="ToistuvatTyovuorot.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="ToistuvatTyovuorotController">
+			<param name="Local" value="ToistuvatTyovuorotController.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="Toteutuneet">
+			<param name="Local" value="Toteutuneet.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="ToteutuneetController">
+			<param name="Local" value="ToteutuneetController.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="Tyontekijat">
+			<param name="Local" value="Tyontekijat.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="TyontekijatController">
+			<param name="Local" value="TyontekijatController.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="Tyosuhdet">
+			<param name="Local" value="Tyosuhdet.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="TyosuhdetController">
+			<param name="Local" value="TyosuhdetController.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="Tyotodistus">
+			<param name="Local" value="Tyotodistus.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="TyotodistusController">
+			<param name="Local" value="TyotodistusController.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="Tyovuoroot">
+			<param name="Local" value="Tyovuoroot.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="TyovuorootController">
+			<param name="Local" value="TyovuorootController.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="UserIdentity">
+			<param name="Local" value="UserIdentity.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="UsersOnline">
+			<param name="Local" value="UsersOnline.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="UsersOnlineController">
+			<param name="Local" value="UsersOnlineController.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="Uutiset">
+			<param name="Local" value="Uutiset.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="UutisetController">
+			<param name="Local" value="UutisetController.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="Valikkoot">
+			<param name="Local" value="Valikkoot.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="ValikkootController">
+			<param name="Local" value="ValikkootController.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="Viestinta">
+			<param name="Local" value="Viestinta.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="ViestintaController">
+			<param name="Local" value="ViestintaController.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="VinkkiExtranet">
+			<param name="Local" value="VinkkiExtranet.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="VinkkiExtranetController">
+			<param name="Local" value="VinkkiExtranetController.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="Vuosilomat">
+			<param name="Local" value="Vuosilomat.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="VuosilomatController">
+			<param name="Local" value="VuosilomatController.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="Yhteystiedot">
+			<param name="Local" value="Yhteystiedot.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="YhteystiedotController">
+			<param name="Local" value="YhteystiedotController.html">
+			</object>
+		</ul>
+	<li><object type="text/sitemap">
+		<param name="Name" value="application.views.administrators">
+		</object>
+	<ul>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.administrators._form">
+			<param name="Local" value="application.views.administrators._form.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.administrators._search">
+			<param name="Local" value="application.views.administrators._search.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.administrators._view">
+			<param name="Local" value="application.views.administrators._view.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.administrators.admin">
+			<param name="Local" value="application.views.administrators.admin.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.administrators.create">
+			<param name="Local" value="application.views.administrators.create.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.administrators.index">
+			<param name="Local" value="application.views.administrators.index.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.administrators.update">
+			<param name="Local" value="application.views.administrators.update.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.administrators.view">
+			<param name="Local" value="application.views.administrators.view.html">
+			</object>
+		</ul>
+	<li><object type="text/sitemap">
+		<param name="Name" value="application.views.asetukset">
+		</object>
+	<ul>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.asetukset._form">
+			<param name="Local" value="application.views.asetukset._form.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.asetukset._search">
+			<param name="Local" value="application.views.asetukset._search.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.asetukset._view">
+			<param name="Local" value="application.views.asetukset._view.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.asetukset.admin">
+			<param name="Local" value="application.views.asetukset.admin.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.asetukset.create">
+			<param name="Local" value="application.views.asetukset.create.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.asetukset.index">
+			<param name="Local" value="application.views.asetukset.index.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.asetukset.update">
+			<param name="Local" value="application.views.asetukset.update.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.asetukset.view">
+			<param name="Local" value="application.views.asetukset.view.html">
+			</object>
+		</ul>
+	<li><object type="text/sitemap">
+		<param name="Name" value="application.views.asetuksetForAll">
+		</object>
+	<ul>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.asetuksetForAll._form">
+			<param name="Local" value="application.views.asetuksetForAll._form.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.asetuksetForAll._search">
+			<param name="Local" value="application.views.asetuksetForAll._search.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.asetuksetForAll._view">
+			<param name="Local" value="application.views.asetuksetForAll._view.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.asetuksetForAll.admin">
+			<param name="Local" value="application.views.asetuksetForAll.admin.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.asetuksetForAll.create">
+			<param name="Local" value="application.views.asetuksetForAll.create.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.asetuksetForAll.index">
+			<param name="Local" value="application.views.asetuksetForAll.index.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.asetuksetForAll.update">
+			<param name="Local" value="application.views.asetuksetForAll.update.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.asetuksetForAll.view">
+			<param name="Local" value="application.views.asetuksetForAll.view.html">
+			</object>
+		</ul>
+	<li><object type="text/sitemap">
+		<param name="Name" value="application.views.asiakasHyvaksynta">
+		</object>
+	<ul>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.asiakasHyvaksynta._form">
+			<param name="Local" value="application.views.asiakasHyvaksynta._form.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.asiakasHyvaksynta._search">
+			<param name="Local" value="application.views.asiakasHyvaksynta._search.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.asiakasHyvaksynta._view">
+			<param name="Local" value="application.views.asiakasHyvaksynta._view.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.asiakasHyvaksynta.admin">
+			<param name="Local" value="application.views.asiakasHyvaksynta.admin.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.asiakasHyvaksynta.create">
+			<param name="Local" value="application.views.asiakasHyvaksynta.create.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.asiakasHyvaksynta.index">
+			<param name="Local" value="application.views.asiakasHyvaksynta.index.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.asiakasHyvaksynta.update">
+			<param name="Local" value="application.views.asiakasHyvaksynta.update.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.asiakasHyvaksynta.view">
+			<param name="Local" value="application.views.asiakasHyvaksynta.view.html">
+			</object>
+		</ul>
+	<li><object type="text/sitemap">
+		<param name="Name" value="application.views.asiakkaat">
+		</object>
+	<ul>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.asiakkaat._form">
+			<param name="Local" value="application.views.asiakkaat._form.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.asiakkaat._search">
+			<param name="Local" value="application.views.asiakkaat._search.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.asiakkaat._view">
+			<param name="Local" value="application.views.asiakkaat._view.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.asiakkaat.admin">
+			<param name="Local" value="application.views.asiakkaat.admin.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.asiakkaat.create">
+			<param name="Local" value="application.views.asiakkaat.create.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.asiakkaat.index">
+			<param name="Local" value="application.views.asiakkaat.index.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.asiakkaat.update">
+			<param name="Local" value="application.views.asiakkaat.update.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.asiakkaat.view">
+			<param name="Local" value="application.views.asiakkaat.view.html">
+			</object>
+		</ul>
+	<li><object type="text/sitemap">
+		<param name="Name" value="application.views.blog">
+		</object>
+	<ul>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.blog._form">
+			<param name="Local" value="application.views.blog._form.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.blog._search">
+			<param name="Local" value="application.views.blog._search.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.blog._view">
+			<param name="Local" value="application.views.blog._view.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.blog.admin">
+			<param name="Local" value="application.views.blog.admin.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.blog.create">
+			<param name="Local" value="application.views.blog.create.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.blog.index">
+			<param name="Local" value="application.views.blog.index.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.blog.update">
+			<param name="Local" value="application.views.blog.update.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.blog.view">
+			<param name="Local" value="application.views.blog.view.html">
+			</object>
+		</ul>
+	<li><object type="text/sitemap">
+		<param name="Name" value="application.views.blogComments">
+		</object>
+	<ul>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.blogComments._form">
+			<param name="Local" value="application.views.blogComments._form.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.blogComments._search">
+			<param name="Local" value="application.views.blogComments._search.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.blogComments._view">
+			<param name="Local" value="application.views.blogComments._view.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.blogComments.admin">
+			<param name="Local" value="application.views.blogComments.admin.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.blogComments.create">
+			<param name="Local" value="application.views.blogComments.create.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.blogComments.index">
+			<param name="Local" value="application.views.blogComments.index.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.blogComments.update">
+			<param name="Local" value="application.views.blogComments.update.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.blogComments.view">
+			<param name="Local" value="application.views.blogComments.view.html">
+			</object>
+		</ul>
+	<li><object type="text/sitemap">
+		<param name="Name" value="application.views.crmSopimukset">
+		</object>
+	<ul>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.crmSopimukset._form">
+			<param name="Local" value="application.views.crmSopimukset._form.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.crmSopimukset._search">
+			<param name="Local" value="application.views.crmSopimukset._search.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.crmSopimukset._view">
+			<param name="Local" value="application.views.crmSopimukset._view.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.crmSopimukset.admin">
+			<param name="Local" value="application.views.crmSopimukset.admin.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.crmSopimukset.create">
+			<param name="Local" value="application.views.crmSopimukset.create.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.crmSopimukset.index">
+			<param name="Local" value="application.views.crmSopimukset.index.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.crmSopimukset.update">
+			<param name="Local" value="application.views.crmSopimukset.update.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.crmSopimukset.view">
+			<param name="Local" value="application.views.crmSopimukset.view.html">
+			</object>
+		</ul>
+	<li><object type="text/sitemap">
+		<param name="Name" value="application.views.crmTarjoukset">
+		</object>
+	<ul>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.crmTarjoukset._form">
+			<param name="Local" value="application.views.crmTarjoukset._form.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.crmTarjoukset._search">
+			<param name="Local" value="application.views.crmTarjoukset._search.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.crmTarjoukset._view">
+			<param name="Local" value="application.views.crmTarjoukset._view.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.crmTarjoukset.admin">
+			<param name="Local" value="application.views.crmTarjoukset.admin.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.crmTarjoukset.create">
+			<param name="Local" value="application.views.crmTarjoukset.create.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.crmTarjoukset.index">
+			<param name="Local" value="application.views.crmTarjoukset.index.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.crmTarjoukset.update">
+			<param name="Local" value="application.views.crmTarjoukset.update.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.crmTarjoukset.view">
+			<param name="Local" value="application.views.crmTarjoukset.view.html">
+			</object>
+		</ul>
+	<li><object type="text/sitemap">
+		<param name="Name" value="application.views.domainit">
+		</object>
+	<ul>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.domainit._form">
+			<param name="Local" value="application.views.domainit._form.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.domainit._search">
+			<param name="Local" value="application.views.domainit._search.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.domainit._view">
+			<param name="Local" value="application.views.domainit._view.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.domainit.admin">
+			<param name="Local" value="application.views.domainit.admin.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.domainit.create">
+			<param name="Local" value="application.views.domainit.create.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.domainit.domaini_seuranta">
+			<param name="Local" value="application.views.domainit.domaini_seuranta.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.domainit.index">
+			<param name="Local" value="application.views.domainit.index.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.domainit.seuranta">
+			<param name="Local" value="application.views.domainit.seuranta.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.domainit.tietokannat">
+			<param name="Local" value="application.views.domainit.tietokannat.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.domainit.update">
+			<param name="Local" value="application.views.domainit.update.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.domainit.view">
+			<param name="Local" value="application.views.domainit.view.html">
+			</object>
+		</ul>
+	<li><object type="text/sitemap">
+		<param name="Name" value="application.views.ennakko">
+		</object>
+	<ul>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.ennakko._form">
+			<param name="Local" value="application.views.ennakko._form.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.ennakko._search">
+			<param name="Local" value="application.views.ennakko._search.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.ennakko._view">
+			<param name="Local" value="application.views.ennakko._view.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.ennakko.admin">
+			<param name="Local" value="application.views.ennakko.admin.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.ennakko.create">
+			<param name="Local" value="application.views.ennakko.create.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.ennakko.index">
+			<param name="Local" value="application.views.ennakko.index.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.ennakko.tidfromto">
+			<param name="Local" value="application.views.ennakko.tidfromto.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.ennakko.update">
+			<param name="Local" value="application.views.ennakko.update.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.ennakko.view">
+			<param name="Local" value="application.views.ennakko.view.html">
+			</object>
+		</ul>
+	<li><object type="text/sitemap">
+		<param name="Name" value="application.views.firmanTiedot">
+		</object>
+	<ul>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.firmanTiedot._form">
+			<param name="Local" value="application.views.firmanTiedot._form.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.firmanTiedot._search">
+			<param name="Local" value="application.views.firmanTiedot._search.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.firmanTiedot._view">
+			<param name="Local" value="application.views.firmanTiedot._view.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.firmanTiedot.admin">
+			<param name="Local" value="application.views.firmanTiedot.admin.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.firmanTiedot.create">
+			<param name="Local" value="application.views.firmanTiedot.create.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.firmanTiedot.index">
+			<param name="Local" value="application.views.firmanTiedot.index.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.firmanTiedot.update">
+			<param name="Local" value="application.views.firmanTiedot.update.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.firmanTiedot.view">
+			<param name="Local" value="application.views.firmanTiedot.view.html">
+			</object>
+		</ul>
+	<li><object type="text/sitemap">
+		<param name="Name" value="application.views.kirjallinenVaroitus">
+		</object>
+	<ul>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.kirjallinenVaroitus._form">
+			<param name="Local" value="application.views.kirjallinenVaroitus._form.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.kirjallinenVaroitus._search">
+			<param name="Local" value="application.views.kirjallinenVaroitus._search.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.kirjallinenVaroitus._view">
+			<param name="Local" value="application.views.kirjallinenVaroitus._view.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.kirjallinenVaroitus.admin">
+			<param name="Local" value="application.views.kirjallinenVaroitus.admin.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.kirjallinenVaroitus.create">
+			<param name="Local" value="application.views.kirjallinenVaroitus.create.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.kirjallinenVaroitus.index">
+			<param name="Local" value="application.views.kirjallinenVaroitus.index.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.kirjallinenVaroitus.update">
+			<param name="Local" value="application.views.kirjallinenVaroitus.update.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.kirjallinenVaroitus.view">
+			<param name="Local" value="application.views.kirjallinenVaroitus.view.html">
+			</object>
+		</ul>
+	<li><object type="text/sitemap">
+		<param name="Name" value="application.views.kirjeidenHallinta">
+		</object>
+	<ul>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.kirjeidenHallinta._form">
+			<param name="Local" value="application.views.kirjeidenHallinta._form.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.kirjeidenHallinta._search">
+			<param name="Local" value="application.views.kirjeidenHallinta._search.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.kirjeidenHallinta._view">
+			<param name="Local" value="application.views.kirjeidenHallinta._view.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.kirjeidenHallinta.admin">
+			<param name="Local" value="application.views.kirjeidenHallinta.admin.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.kirjeidenHallinta.create">
+			<param name="Local" value="application.views.kirjeidenHallinta.create.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.kirjeidenHallinta.index">
+			<param name="Local" value="application.views.kirjeidenHallinta.index.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.kirjeidenHallinta.update">
+			<param name="Local" value="application.views.kirjeidenHallinta.update.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.kirjeidenHallinta.view">
+			<param name="Local" value="application.views.kirjeidenHallinta.view.html">
+			</object>
+		</ul>
+	<li><object type="text/sitemap">
+		<param name="Name" value="application.views.kohteet">
+		</object>
+	<ul>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.kohteet._form">
+			<param name="Local" value="application.views.kohteet._form.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.kohteet._form_fromasiakas">
+			<param name="Local" value="application.views.kohteet._form_fromasiakas.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.kohteet._search">
+			<param name="Local" value="application.views.kohteet._search.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.kohteet._view">
+			<param name="Local" value="application.views.kohteet._view.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.kohteet.admin">
+			<param name="Local" value="application.views.kohteet.admin.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.kohteet.autotaytaminen">
+			<param name="Local" value="application.views.kohteet.autotaytaminen.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.kohteet.avaimet">
+			<param name="Local" value="application.views.kohteet.avaimet.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.kohteet.create">
+			<param name="Local" value="application.views.kohteet.create.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.kohteet.createfromasiakas">
+			<param name="Local" value="application.views.kohteet.createfromasiakas.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.kohteet.googlemap">
+			<param name="Local" value="application.views.kohteet.googlemap.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.kohteet.googlemap_k">
+			<param name="Local" value="application.views.kohteet.googlemap_k.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.kohteet.index">
+			<param name="Local" value="application.views.kohteet.index.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.kohteet.update">
+			<param name="Local" value="application.views.kohteet.update.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.kohteet.view">
+			<param name="Local" value="application.views.kohteet.view.html">
+			</object>
+		</ul>
+	<li><object type="text/sitemap">
+		<param name="Name" value="application.views.korvaukset">
+		</object>
+	<ul>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.korvaukset._form">
+			<param name="Local" value="application.views.korvaukset._form.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.korvaukset._search">
+			<param name="Local" value="application.views.korvaukset._search.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.korvaukset._view">
+			<param name="Local" value="application.views.korvaukset._view.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.korvaukset.admin">
+			<param name="Local" value="application.views.korvaukset.admin.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.korvaukset.create">
+			<param name="Local" value="application.views.korvaukset.create.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.korvaukset.index">
+			<param name="Local" value="application.views.korvaukset.index.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.korvaukset.tidfromto">
+			<param name="Local" value="application.views.korvaukset.tidfromto.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.korvaukset.update">
+			<param name="Local" value="application.views.korvaukset.update.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.korvaukset.view">
+			<param name="Local" value="application.views.korvaukset.view.html">
+			</object>
+		</ul>
+	<li><object type="text/sitemap">
+		<param name="Name" value="application.views.kuviaKohteesta">
+		</object>
+	<ul>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.kuviaKohteesta._form">
+			<param name="Local" value="application.views.kuviaKohteesta._form.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.kuviaKohteesta._search">
+			<param name="Local" value="application.views.kuviaKohteesta._search.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.kuviaKohteesta._view">
+			<param name="Local" value="application.views.kuviaKohteesta._view.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.kuviaKohteesta.admin">
+			<param name="Local" value="application.views.kuviaKohteesta.admin.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.kuviaKohteesta.create">
+			<param name="Local" value="application.views.kuviaKohteesta.create.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.kuviaKohteesta.index">
+			<param name="Local" value="application.views.kuviaKohteesta.index.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.kuviaKohteesta.update">
+			<param name="Local" value="application.views.kuviaKohteesta.update.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.kuviaKohteesta.view">
+			<param name="Local" value="application.views.kuviaKohteesta.view.html">
+			</object>
+		</ul>
+	<li><object type="text/sitemap">
+		<param name="Name" value="application.views.lasku">
+		</object>
+	<ul>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.lasku._form">
+			<param name="Local" value="application.views.lasku._form.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.lasku._search">
+			<param name="Local" value="application.views.lasku._search.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.lasku._view">
+			<param name="Local" value="application.views.lasku._view.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.lasku.admin">
+			<param name="Local" value="application.views.lasku.admin.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.lasku.create">
+			<param name="Local" value="application.views.lasku.create.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.lasku.finvoice">
+			<param name="Local" value="application.views.lasku.finvoice.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.lasku.index">
+			<param name="Local" value="application.views.lasku.index.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.lasku.lasku_pdf">
+			<param name="Local" value="application.views.lasku.lasku_pdf.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.lasku.tr_rivi_update">
+			<param name="Local" value="application.views.lasku.tr_rivi_update.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.lasku.tr_rivit">
+			<param name="Local" value="application.views.lasku.tr_rivit.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.lasku.tr_rivit_tyhja">
+			<param name="Local" value="application.views.lasku.tr_rivit_tyhja.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.lasku.tr_rivitkk">
+			<param name="Local" value="application.views.lasku.tr_rivitkk.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.lasku.update">
+			<param name="Local" value="application.views.lasku.update.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.lasku.view">
+			<param name="Local" value="application.views.lasku.view.html">
+			</object>
+		</ul>
+	<li><object type="text/sitemap">
+		<param name="Name" value="application.views.laskuHistoria">
+		</object>
+	<ul>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.laskuHistoria._avoimet">
+			<param name="Local" value="application.views.laskuHistoria._avoimet.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.laskuHistoria._form">
+			<param name="Local" value="application.views.laskuHistoria._form.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.laskuHistoria._maksu_paakirja">
+			<param name="Local" value="application.views.laskuHistoria._maksu_paakirja.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.laskuHistoria._maksu_paivakirja">
+			<param name="Local" value="application.views.laskuHistoria._maksu_paivakirja.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.laskuHistoria._paakirja">
+			<param name="Local" value="application.views.laskuHistoria._paakirja.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.laskuHistoria._paivakirja">
+			<param name="Local" value="application.views.laskuHistoria._paivakirja.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.laskuHistoria._reskontraluettelo">
+			<param name="Local" value="application.views.laskuHistoria._reskontraluettelo.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.laskuHistoria._search">
+			<param name="Local" value="application.views.laskuHistoria._search.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.laskuHistoria._view">
+			<param name="Local" value="application.views.laskuHistoria._view.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.laskuHistoria.admin">
+			<param name="Local" value="application.views.laskuHistoria.admin.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.laskuHistoria.avoimet">
+			<param name="Local" value="application.views.laskuHistoria.avoimet.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.laskuHistoria.create">
+			<param name="Local" value="application.views.laskuHistoria.create.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.laskuHistoria.index">
+			<param name="Local" value="application.views.laskuHistoria.index.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.laskuHistoria.maksu_paakirja">
+			<param name="Local" value="application.views.laskuHistoria.maksu_paakirja.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.laskuHistoria.maksu_paivakirja">
+			<param name="Local" value="application.views.laskuHistoria.maksu_paivakirja.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.laskuHistoria.paakirja">
+			<param name="Local" value="application.views.laskuHistoria.paakirja.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.laskuHistoria.paivakirja">
+			<param name="Local" value="application.views.laskuHistoria.paivakirja.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.laskuHistoria.reskontraluettelo">
+			<param name="Local" value="application.views.laskuHistoria.reskontraluettelo.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.laskuHistoria.update">
+			<param name="Local" value="application.views.laskuHistoria.update.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.laskuHistoria.view">
+			<param name="Local" value="application.views.laskuHistoria.view.html">
+			</object>
+		</ul>
+	<li><object type="text/sitemap">
+		<param name="Name" value="application.views.laskunRivit">
+		</object>
+	<ul>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.laskunRivit._form">
+			<param name="Local" value="application.views.laskunRivit._form.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.laskunRivit._search">
+			<param name="Local" value="application.views.laskunRivit._search.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.laskunRivit._view">
+			<param name="Local" value="application.views.laskunRivit._view.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.laskunRivit.admin">
+			<param name="Local" value="application.views.laskunRivit.admin.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.laskunRivit.create">
+			<param name="Local" value="application.views.laskunRivit.create.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.laskunRivit.index">
+			<param name="Local" value="application.views.laskunRivit.index.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.laskunRivit.update">
+			<param name="Local" value="application.views.laskunRivit.update.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.laskunRivit.view">
+			<param name="Local" value="application.views.laskunRivit.view.html">
+			</object>
+		</ul>
+	<li><object type="text/sitemap">
+		<param name="Name" value="application.views.laskutusTuotteet">
+		</object>
+	<ul>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.laskutusTuotteet._form">
+			<param name="Local" value="application.views.laskutusTuotteet._form.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.laskutusTuotteet._search">
+			<param name="Local" value="application.views.laskutusTuotteet._search.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.laskutusTuotteet._view">
+			<param name="Local" value="application.views.laskutusTuotteet._view.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.laskutusTuotteet.admin">
+			<param name="Local" value="application.views.laskutusTuotteet.admin.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.laskutusTuotteet.create">
+			<param name="Local" value="application.views.laskutusTuotteet.create.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.laskutusTuotteet.index">
+			<param name="Local" value="application.views.laskutusTuotteet.index.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.laskutusTuotteet.update">
+			<param name="Local" value="application.views.laskutusTuotteet.update.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.laskutusTuotteet.view">
+			<param name="Local" value="application.views.laskutusTuotteet.view.html">
+			</object>
+		</ul>
+	<li><object type="text/sitemap">
+		<param name="Name" value="application.views.layouts">
+		</object>
+	<ul>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.layouts.column1">
+			<param name="Local" value="application.views.layouts.column1.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.layouts.column2">
+			<param name="Local" value="application.views.layouts.column2.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.layouts.mail">
+			<param name="Local" value="application.views.layouts.mail.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.layouts.main">
+			<param name="Local" value="application.views.layouts.main.html">
+			</object>
+		</ul>
+	<li><object type="text/sitemap">
+		<param name="Name" value="application.views.lisatyotunnit">
+		</object>
+	<ul>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.lisatyotunnit._form">
+			<param name="Local" value="application.views.lisatyotunnit._form.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.lisatyotunnit._search">
+			<param name="Local" value="application.views.lisatyotunnit._search.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.lisatyotunnit._view">
+			<param name="Local" value="application.views.lisatyotunnit._view.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.lisatyotunnit.admin">
+			<param name="Local" value="application.views.lisatyotunnit.admin.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.lisatyotunnit.create">
+			<param name="Local" value="application.views.lisatyotunnit.create.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.lisatyotunnit.index">
+			<param name="Local" value="application.views.lisatyotunnit.index.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.lisatyotunnit.tidfromto">
+			<param name="Local" value="application.views.lisatyotunnit.tidfromto.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.lisatyotunnit.update">
+			<param name="Local" value="application.views.lisatyotunnit.update.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.lisatyotunnit.view">
+			<param name="Local" value="application.views.lisatyotunnit.view.html">
+			</object>
+		</ul>
+	<li><object type="text/sitemap">
+		<param name="Name" value="application.views.mobile">
+		</object>
+	<ul>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.mobile._form">
+			<param name="Local" value="application.views.mobile._form.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.mobile._kyhteenveto">
+			<param name="Local" value="application.views.mobile._kyhteenveto.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.mobile._kyhteenveto_tuntemattomat">
+			<param name="Local" value="application.views.mobile._kyhteenveto_tuntemattomat.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.mobile._palkkataulukko">
+			<param name="Local" value="application.views.mobile._palkkataulukko.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.mobile._search">
+			<param name="Local" value="application.views.mobile._search.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.mobile._uusirivi">
+			<param name="Local" value="application.views.mobile._uusirivi.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.mobile._view">
+			<param name="Local" value="application.views.mobile._view.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.mobile._yhteenveto">
+			<param name="Local" value="application.views.mobile._yhteenveto.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.mobile._yhteenveto_m">
+			<param name="Local" value="application.views.mobile._yhteenveto_m.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.mobile.admin">
+			<param name="Local" value="application.views.mobile.admin.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.mobile.asiakas_hyvaksyminen">
+			<param name="Local" value="application.views.mobile.asiakas_hyvaksyminen.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.mobile.create">
+			<param name="Local" value="application.views.mobile.create.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.mobile.historia">
+			<param name="Local" value="application.views.mobile.historia.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.mobile.index">
+			<param name="Local" value="application.views.mobile.index.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.mobile.index_a">
+			<param name="Local" value="application.views.mobile.index_a.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.mobile.kyhteenveto">
+			<param name="Local" value="application.views.mobile.kyhteenveto.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.mobile.kyhteenveto_tuntemattomat">
+			<param name="Local" value="application.views.mobile.kyhteenveto_tuntemattomat.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.mobile.palkkataulukko">
+			<param name="Local" value="application.views.mobile.palkkataulukko.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.mobile.raportit">
+			<param name="Local" value="application.views.mobile.raportit.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.mobile.raportit_pdf_l">
+			<param name="Local" value="application.views.mobile.raportit_pdf_l.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.mobile.raportit_pdf_t">
+			<param name="Local" value="application.views.mobile.raportit_pdf_t.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.mobile.suunniteltu">
+			<param name="Local" value="application.views.mobile.suunniteltu.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.mobile.tidfromtomatkat">
+			<param name="Local" value="application.views.mobile.tidfromtomatkat.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.mobile.total_luettu">
+			<param name="Local" value="application.views.mobile.total_luettu.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.mobile.total_toteutu">
+			<param name="Local" value="application.views.mobile.total_toteutu.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.mobile.tulosta_kyhteenveto">
+			<param name="Local" value="application.views.mobile.tulosta_kyhteenveto.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.mobile.tulosta_palkkataulukko">
+			<param name="Local" value="application.views.mobile.tulosta_palkkataulukko.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.mobile.tulosta_yhteenveto">
+			<param name="Local" value="application.views.mobile.tulosta_yhteenveto.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.mobile.tulosta_yhteenveto_m">
+			<param name="Local" value="application.views.mobile.tulosta_yhteenveto_m.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.mobile.update">
+			<param name="Local" value="application.views.mobile.update.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.mobile.view">
+			<param name="Local" value="application.views.mobile.view.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.mobile.yhteenveto">
+			<param name="Local" value="application.views.mobile.yhteenveto.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.mobile.yhteenveto_m">
+			<param name="Local" value="application.views.mobile.yhteenveto_m.html">
+			</object>
+		</ul>
+	<li><object type="text/sitemap">
+		<param name="Name" value="application.views.onlinevaraus">
+		</object>
+	<ul>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.onlinevaraus._form">
+			<param name="Local" value="application.views.onlinevaraus._form.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.onlinevaraus._search">
+			<param name="Local" value="application.views.onlinevaraus._search.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.onlinevaraus._view">
+			<param name="Local" value="application.views.onlinevaraus._view.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.onlinevaraus.admin">
+			<param name="Local" value="application.views.onlinevaraus.admin.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.onlinevaraus.create">
+			<param name="Local" value="application.views.onlinevaraus.create.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.onlinevaraus.index">
+			<param name="Local" value="application.views.onlinevaraus.index.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.onlinevaraus.update">
+			<param name="Local" value="application.views.onlinevaraus.update.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.onlinevaraus.view">
+			<param name="Local" value="application.views.onlinevaraus.view.html">
+			</object>
+		</ul>
+	<li><object type="text/sitemap">
+		<param name="Name" value="application.views.onlinevarausTuotteet">
+		</object>
+	<ul>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.onlinevarausTuotteet._form">
+			<param name="Local" value="application.views.onlinevarausTuotteet._form.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.onlinevarausTuotteet._search">
+			<param name="Local" value="application.views.onlinevarausTuotteet._search.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.onlinevarausTuotteet._view">
+			<param name="Local" value="application.views.onlinevarausTuotteet._view.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.onlinevarausTuotteet.admin">
+			<param name="Local" value="application.views.onlinevarausTuotteet.admin.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.onlinevarausTuotteet.create">
+			<param name="Local" value="application.views.onlinevarausTuotteet.create.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.onlinevarausTuotteet.index">
+			<param name="Local" value="application.views.onlinevarausTuotteet.index.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.onlinevarausTuotteet.update">
+			<param name="Local" value="application.views.onlinevarausTuotteet.update.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.onlinevarausTuotteet.view">
+			<param name="Local" value="application.views.onlinevarausTuotteet.view.html">
+			</object>
+		</ul>
+	<li><object type="text/sitemap">
+		<param name="Name" value="application.views.page">
+		</object>
+	<ul>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.page._form">
+			<param name="Local" value="application.views.page._form.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.page._search">
+			<param name="Local" value="application.views.page._search.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.page._view">
+			<param name="Local" value="application.views.page._view.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.page.admin">
+			<param name="Local" value="application.views.page.admin.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.page.create">
+			<param name="Local" value="application.views.page.create.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.page.index">
+			<param name="Local" value="application.views.page.index.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.page.update">
+			<param name="Local" value="application.views.page.update.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.page.view">
+			<param name="Local" value="application.views.page.view.html">
+			</object>
+		</ul>
+	<li><object type="text/sitemap">
+		<param name="Name" value="application.views.palautteet">
+		</object>
+	<ul>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.palautteet._form">
+			<param name="Local" value="application.views.palautteet._form.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.palautteet._search">
+			<param name="Local" value="application.views.palautteet._search.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.palautteet._vastaus">
+			<param name="Local" value="application.views.palautteet._vastaus.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.palautteet._view">
+			<param name="Local" value="application.views.palautteet._view.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.palautteet.admin">
+			<param name="Local" value="application.views.palautteet.admin.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.palautteet.create">
+			<param name="Local" value="application.views.palautteet.create.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.palautteet.index">
+			<param name="Local" value="application.views.palautteet.index.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.palautteet.update">
+			<param name="Local" value="application.views.palautteet.update.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.palautteet.view">
+			<param name="Local" value="application.views.palautteet.view.html">
+			</object>
+		</ul>
+	<li><object type="text/sitemap">
+		<param name="Name" value="application.views.site">
+		</object>
+	<ul>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.site.contact">
+			<param name="Local" value="application.views.site.contact.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.site.error">
+			<param name="Local" value="application.views.site.error.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.site.etusivu">
+			<param name="Local" value="application.views.site.etusivu.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.site.etusivu_esimerki">
+			<param name="Local" value="application.views.site.etusivu_esimerki.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.site.hylkaa">
+			<param name="Local" value="application.views.site.hylkaa.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.site.hyvaksy">
+			<param name="Local" value="application.views.site.hyvaksy.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.site.index">
+			<param name="Local" value="application.views.site.index.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.site.kiitos">
+			<param name="Local" value="application.views.site.kiitos.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.site.login">
+			<param name="Local" value="application.views.site.login.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.site.mobemu">
+			<param name="Local" value="application.views.site.mobemu.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.site.navbar">
+			<param name="Local" value="application.views.site.navbar.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.site.ohjesivu">
+			<param name="Local" value="application.views.site.ohjesivu.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.site.start">
+			<param name="Local" value="application.views.site.start.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.site.ta_raports">
+			<param name="Local" value="application.views.site.ta_raports.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.site.test">
+			<param name="Local" value="application.views.site.test.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.site.tv_raports">
+			<param name="Local" value="application.views.site.tv_raports.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.site.uploadfromphone">
+			<param name="Local" value="application.views.site.uploadfromphone.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.site.yhteys">
+			<param name="Local" value="application.views.site.yhteys.html">
+			</object>
+		</ul>
+	<li><object type="text/sitemap">
+		<param name="Name" value="application.views.site.pages">
+		</object>
+	<ul>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.site.pages.about">
+			<param name="Local" value="application.views.site.pages.about.html">
+			</object>
+		</ul>
+	<li><object type="text/sitemap">
+		<param name="Name" value="application.views.tasot">
+		</object>
+	<ul>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.tasot._form">
+			<param name="Local" value="application.views.tasot._form.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.tasot._search">
+			<param name="Local" value="application.views.tasot._search.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.tasot._view">
+			<param name="Local" value="application.views.tasot._view.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.tasot.admin">
+			<param name="Local" value="application.views.tasot.admin.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.tasot.create">
+			<param name="Local" value="application.views.tasot.create.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.tasot.index">
+			<param name="Local" value="application.views.tasot.index.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.tasot.update">
+			<param name="Local" value="application.views.tasot.update.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.tasot.view">
+			<param name="Local" value="application.views.tasot.view.html">
+			</object>
+		</ul>
+	<li><object type="text/sitemap">
+		<param name="Name" value="application.views.toistuvatTyovuorot">
+		</object>
+	<ul>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.toistuvatTyovuorot._form">
+			<param name="Local" value="application.views.toistuvatTyovuorot._form.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.toistuvatTyovuorot._search">
+			<param name="Local" value="application.views.toistuvatTyovuorot._search.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.toistuvatTyovuorot._view">
+			<param name="Local" value="application.views.toistuvatTyovuorot._view.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.toistuvatTyovuorot.admin">
+			<param name="Local" value="application.views.toistuvatTyovuorot.admin.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.toistuvatTyovuorot.create">
+			<param name="Local" value="application.views.toistuvatTyovuorot.create.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.toistuvatTyovuorot.index">
+			<param name="Local" value="application.views.toistuvatTyovuorot.index.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.toistuvatTyovuorot.update">
+			<param name="Local" value="application.views.toistuvatTyovuorot.update.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.toistuvatTyovuorot.view">
+			<param name="Local" value="application.views.toistuvatTyovuorot.view.html">
+			</object>
+		</ul>
+	<li><object type="text/sitemap">
+		<param name="Name" value="application.views.toteutuneet">
+		</object>
+	<ul>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.toteutuneet._form">
+			<param name="Local" value="application.views.toteutuneet._form.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.toteutuneet._form_update">
+			<param name="Local" value="application.views.toteutuneet._form_update.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.toteutuneet._search">
+			<param name="Local" value="application.views.toteutuneet._search.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.toteutuneet._view">
+			<param name="Local" value="application.views.toteutuneet._view.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.toteutuneet.admin">
+			<param name="Local" value="application.views.toteutuneet.admin.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.toteutuneet.al">
+			<param name="Local" value="application.views.toteutuneet.al.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.toteutuneet.create">
+			<param name="Local" value="application.views.toteutuneet.create.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.toteutuneet.index">
+			<param name="Local" value="application.views.toteutuneet.index.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.toteutuneet.kk">
+			<param name="Local" value="application.views.toteutuneet.kk.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.toteutuneet.luetutpvmtid">
+			<param name="Local" value="application.views.toteutuneet.luetutpvmtid.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.toteutuneet.totpvmtid">
+			<param name="Local" value="application.views.toteutuneet.totpvmtid.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.toteutuneet.tulosta">
+			<param name="Local" value="application.views.toteutuneet.tulosta.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.toteutuneet.update">
+			<param name="Local" value="application.views.toteutuneet.update.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.toteutuneet.view">
+			<param name="Local" value="application.views.toteutuneet.view.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.toteutuneet.yhteensapvm">
+			<param name="Local" value="application.views.toteutuneet.yhteensapvm.html">
+			</object>
+		</ul>
+	<li><object type="text/sitemap">
+		<param name="Name" value="application.views.tyontekijat">
+		</object>
+	<ul>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.tyontekijat._form">
+			<param name="Local" value="application.views.tyontekijat._form.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.tyontekijat._merkkipaivat">
+			<param name="Local" value="application.views.tyontekijat._merkkipaivat.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.tyontekijat._search">
+			<param name="Local" value="application.views.tyontekijat._search.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.tyontekijat._view">
+			<param name="Local" value="application.views.tyontekijat._view.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.tyontekijat.admin">
+			<param name="Local" value="application.views.tyontekijat.admin.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.tyontekijat.admin_ajax">
+			<param name="Local" value="application.views.tyontekijat.admin_ajax.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.tyontekijat.create">
+			<param name="Local" value="application.views.tyontekijat.create.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.tyontekijat.index">
+			<param name="Local" value="application.views.tyontekijat.index.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.tyontekijat.merkkipaivat">
+			<param name="Local" value="application.views.tyontekijat.merkkipaivat.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.tyontekijat.tulosta_pdf">
+			<param name="Local" value="application.views.tyontekijat.tulosta_pdf.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.tyontekijat.update">
+			<param name="Local" value="application.views.tyontekijat.update.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.tyontekijat.view">
+			<param name="Local" value="application.views.tyontekijat.view.html">
+			</object>
+		</ul>
+	<li><object type="text/sitemap">
+		<param name="Name" value="application.views.tyosuhdet">
+		</object>
+	<ul>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.tyosuhdet._form">
+			<param name="Local" value="application.views.tyosuhdet._form.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.tyosuhdet._search">
+			<param name="Local" value="application.views.tyosuhdet._search.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.tyosuhdet._view">
+			<param name="Local" value="application.views.tyosuhdet._view.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.tyosuhdet.admin">
+			<param name="Local" value="application.views.tyosuhdet.admin.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.tyosuhdet.create">
+			<param name="Local" value="application.views.tyosuhdet.create.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.tyosuhdet.index">
+			<param name="Local" value="application.views.tyosuhdet.index.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.tyosuhdet.update">
+			<param name="Local" value="application.views.tyosuhdet.update.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.tyosuhdet.view">
+			<param name="Local" value="application.views.tyosuhdet.view.html">
+			</object>
+		</ul>
+	<li><object type="text/sitemap">
+		<param name="Name" value="application.views.tyotodistus">
+		</object>
+	<ul>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.tyotodistus._form">
+			<param name="Local" value="application.views.tyotodistus._form.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.tyotodistus._search">
+			<param name="Local" value="application.views.tyotodistus._search.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.tyotodistus._view">
+			<param name="Local" value="application.views.tyotodistus._view.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.tyotodistus.admin">
+			<param name="Local" value="application.views.tyotodistus.admin.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.tyotodistus.create">
+			<param name="Local" value="application.views.tyotodistus.create.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.tyotodistus.index">
+			<param name="Local" value="application.views.tyotodistus.index.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.tyotodistus.update">
+			<param name="Local" value="application.views.tyotodistus.update.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.tyotodistus.view">
+			<param name="Local" value="application.views.tyotodistus.view.html">
+			</object>
+		</ul>
+	<li><object type="text/sitemap">
+		<param name="Name" value="application.views.tyovuoroot">
+		</object>
+	<ul>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.tyovuoroot._form">
+			<param name="Local" value="application.views.tyovuoroot._form.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.tyovuoroot._search">
+			<param name="Local" value="application.views.tyovuoroot._search.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.tyovuoroot._view">
+			<param name="Local" value="application.views.tyovuoroot._view.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.tyovuoroot.admin">
+			<param name="Local" value="application.views.tyovuoroot.admin.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.tyovuoroot.autoinsert">
+			<param name="Local" value="application.views.tyovuoroot.autoinsert.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.tyovuoroot.autoremove">
+			<param name="Local" value="application.views.tyovuoroot.autoremove.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.tyovuoroot.create">
+			<param name="Local" value="application.views.tyovuoroot.create.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.tyovuoroot.did">
+			<param name="Local" value="application.views.tyovuoroot.did.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.tyovuoroot.fromto">
+			<param name="Local" value="application.views.tyovuoroot.fromto.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.tyovuoroot.index">
+			<param name="Local" value="application.views.tyovuoroot.index.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.tyovuoroot.kk">
+			<param name="Local" value="application.views.tyovuoroot.kk.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.tyovuoroot.laheta">
+			<param name="Local" value="application.views.tyovuoroot.laheta.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.tyovuoroot.laheta_k">
+			<param name="Local" value="application.views.tyovuoroot.laheta_k.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.tyovuoroot.pvmtid">
+			<param name="Local" value="application.views.tyovuoroot.pvmtid.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.tyovuoroot.update">
+			<param name="Local" value="application.views.tyovuoroot.update.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.tyovuoroot.view">
+			<param name="Local" value="application.views.tyovuoroot.view.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.tyovuoroot.viikko">
+			<param name="Local" value="application.views.tyovuoroot.viikko.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.tyovuoroot.viikkottain">
+			<param name="Local" value="application.views.tyovuoroot.viikkottain.html">
+			</object>
+		</ul>
+	<li><object type="text/sitemap">
+		<param name="Name" value="application.views.usersOnline">
+		</object>
+	<ul>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.usersOnline._form">
+			<param name="Local" value="application.views.usersOnline._form.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.usersOnline._search">
+			<param name="Local" value="application.views.usersOnline._search.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.usersOnline._view">
+			<param name="Local" value="application.views.usersOnline._view.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.usersOnline.admin">
+			<param name="Local" value="application.views.usersOnline.admin.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.usersOnline.create">
+			<param name="Local" value="application.views.usersOnline.create.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.usersOnline.index">
+			<param name="Local" value="application.views.usersOnline.index.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.usersOnline.update">
+			<param name="Local" value="application.views.usersOnline.update.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.usersOnline.view">
+			<param name="Local" value="application.views.usersOnline.view.html">
+			</object>
+		</ul>
+	<li><object type="text/sitemap">
+		<param name="Name" value="application.views.uutiset">
+		</object>
+	<ul>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.uutiset._form">
+			<param name="Local" value="application.views.uutiset._form.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.uutiset._search">
+			<param name="Local" value="application.views.uutiset._search.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.uutiset._view">
+			<param name="Local" value="application.views.uutiset._view.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.uutiset.admin">
+			<param name="Local" value="application.views.uutiset.admin.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.uutiset.create">
+			<param name="Local" value="application.views.uutiset.create.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.uutiset.index">
+			<param name="Local" value="application.views.uutiset.index.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.uutiset.update">
+			<param name="Local" value="application.views.uutiset.update.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.uutiset.view">
+			<param name="Local" value="application.views.uutiset.view.html">
+			</object>
+		</ul>
+	<li><object type="text/sitemap">
+		<param name="Name" value="application.views.valikkoot">
+		</object>
+	<ul>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.valikkoot._form">
+			<param name="Local" value="application.views.valikkoot._form.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.valikkoot._search">
+			<param name="Local" value="application.views.valikkoot._search.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.valikkoot._view">
+			<param name="Local" value="application.views.valikkoot._view.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.valikkoot.admin">
+			<param name="Local" value="application.views.valikkoot.admin.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.valikkoot.create">
+			<param name="Local" value="application.views.valikkoot.create.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.valikkoot.index">
+			<param name="Local" value="application.views.valikkoot.index.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.valikkoot.index_ajax">
+			<param name="Local" value="application.views.valikkoot.index_ajax.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.valikkoot.update">
+			<param name="Local" value="application.views.valikkoot.update.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.valikkoot.view">
+			<param name="Local" value="application.views.valikkoot.view.html">
+			</object>
+		</ul>
+	<li><object type="text/sitemap">
+		<param name="Name" value="application.views.viestinta">
+		</object>
+	<ul>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.viestinta._form">
+			<param name="Local" value="application.views.viestinta._form.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.viestinta._search">
+			<param name="Local" value="application.views.viestinta._search.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.viestinta._view">
+			<param name="Local" value="application.views.viestinta._view.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.viestinta.admin">
+			<param name="Local" value="application.views.viestinta.admin.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.viestinta.create">
+			<param name="Local" value="application.views.viestinta.create.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.viestinta.index">
+			<param name="Local" value="application.views.viestinta.index.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.viestinta.update">
+			<param name="Local" value="application.views.viestinta.update.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.viestinta.view">
+			<param name="Local" value="application.views.viestinta.view.html">
+			</object>
+		</ul>
+	<li><object type="text/sitemap">
+		<param name="Name" value="application.views.vinkkiExtranet">
+		</object>
+	<ul>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.vinkkiExtranet._form">
+			<param name="Local" value="application.views.vinkkiExtranet._form.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.vinkkiExtranet._search">
+			<param name="Local" value="application.views.vinkkiExtranet._search.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.vinkkiExtranet._view">
+			<param name="Local" value="application.views.vinkkiExtranet._view.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.vinkkiExtranet.admin">
+			<param name="Local" value="application.views.vinkkiExtranet.admin.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.vinkkiExtranet.create">
+			<param name="Local" value="application.views.vinkkiExtranet.create.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.vinkkiExtranet.index">
+			<param name="Local" value="application.views.vinkkiExtranet.index.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.vinkkiExtranet.update">
+			<param name="Local" value="application.views.vinkkiExtranet.update.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.vinkkiExtranet.view">
+			<param name="Local" value="application.views.vinkkiExtranet.view.html">
+			</object>
+		</ul>
+	<li><object type="text/sitemap">
+		<param name="Name" value="application.views.vuosilomat">
+		</object>
+	<ul>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.vuosilomat._form">
+			<param name="Local" value="application.views.vuosilomat._form.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.vuosilomat._search">
+			<param name="Local" value="application.views.vuosilomat._search.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.vuosilomat._view">
+			<param name="Local" value="application.views.vuosilomat._view.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.vuosilomat.admin">
+			<param name="Local" value="application.views.vuosilomat.admin.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.vuosilomat.create">
+			<param name="Local" value="application.views.vuosilomat.create.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.vuosilomat.index">
+			<param name="Local" value="application.views.vuosilomat.index.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.vuosilomat.update">
+			<param name="Local" value="application.views.vuosilomat.update.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.vuosilomat.view">
+			<param name="Local" value="application.views.vuosilomat.view.html">
+			</object>
+		</ul>
+	<li><object type="text/sitemap">
+		<param name="Name" value="application.views.yhteystiedot">
+		</object>
+	<ul>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.yhteystiedot._form">
+			<param name="Local" value="application.views.yhteystiedot._form.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.yhteystiedot._search">
+			<param name="Local" value="application.views.yhteystiedot._search.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.yhteystiedot._view">
+			<param name="Local" value="application.views.yhteystiedot._view.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.yhteystiedot.admin">
+			<param name="Local" value="application.views.yhteystiedot.admin.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.yhteystiedot.create">
+			<param name="Local" value="application.views.yhteystiedot.create.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.yhteystiedot.index">
+			<param name="Local" value="application.views.yhteystiedot.index.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.yhteystiedot.update">
+			<param name="Local" value="application.views.yhteystiedot.update.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="application.views.yhteystiedot.view">
+			<param name="Local" value="application.views.yhteystiedot.view.html">
+			</object>
+		</ul>
+	<li><object type="text/sitemap">
+		<param name="Name" value="system">
+		</object>
+	<ul>
+			<li><object type="text/sitemap">
+			<param name="Name" value="Yii">
+			<param name="Local" value="Yii.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="YiiBase">
+			<param name="Local" value="YiiBase.html">
+			</object>
+		</ul>
+	<li><object type="text/sitemap">
+		<param name="Name" value="system.base">
+		</object>
+	<ul>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CApplication">
+			<param name="Local" value="CApplication.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CApplicationComponent">
+			<param name="Local" value="CApplicationComponent.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CBehavior">
+			<param name="Local" value="CBehavior.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CComponent">
+			<param name="Local" value="CComponent.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CDbStatePersister">
+			<param name="Local" value="CDbStatePersister.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CEnumerable">
+			<param name="Local" value="CEnumerable.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CErrorEvent">
+			<param name="Local" value="CErrorEvent.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CErrorHandler">
+			<param name="Local" value="CErrorHandler.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CEvent">
+			<param name="Local" value="CEvent.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CException">
+			<param name="Local" value="CException.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CExceptionEvent">
+			<param name="Local" value="CExceptionEvent.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CHttpException">
+			<param name="Local" value="CHttpException.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CModel">
+			<param name="Local" value="CModel.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CModelBehavior">
+			<param name="Local" value="CModelBehavior.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CModelEvent">
+			<param name="Local" value="CModelEvent.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CModule">
+			<param name="Local" value="CModule.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CSecurityManager">
+			<param name="Local" value="CSecurityManager.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CStatePersister">
+			<param name="Local" value="CStatePersister.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="IAction">
+			<param name="Local" value="IAction.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="IApplicationComponent">
+			<param name="Local" value="IApplicationComponent.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="IAuthManager">
+			<param name="Local" value="IAuthManager.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="IBehavior">
+			<param name="Local" value="IBehavior.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="IFilter">
+			<param name="Local" value="IFilter.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="IStatePersister">
+			<param name="Local" value="IStatePersister.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="IUserIdentity">
+			<param name="Local" value="IUserIdentity.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="IViewRenderer">
+			<param name="Local" value="IViewRenderer.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="IWebServiceProvider">
+			<param name="Local" value="IWebServiceProvider.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="IWebUser">
+			<param name="Local" value="IWebUser.html">
+			</object>
+		</ul>
+	<li><object type="text/sitemap">
+		<param name="Name" value="system.caching">
+		</object>
+	<ul>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CApcCache">
+			<param name="Local" value="CApcCache.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CCache">
+			<param name="Local" value="CCache.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CDbCache">
+			<param name="Local" value="CDbCache.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CDummyCache">
+			<param name="Local" value="CDummyCache.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CEAcceleratorCache">
+			<param name="Local" value="CEAcceleratorCache.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CFileCache">
+			<param name="Local" value="CFileCache.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CMemCache">
+			<param name="Local" value="CMemCache.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CMemCacheServerConfiguration">
+			<param name="Local" value="CMemCacheServerConfiguration.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CRedisCache">
+			<param name="Local" value="CRedisCache.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CWinCache">
+			<param name="Local" value="CWinCache.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CXCache">
+			<param name="Local" value="CXCache.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CZendDataCache">
+			<param name="Local" value="CZendDataCache.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="ICache">
+			<param name="Local" value="ICache.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="ICacheDependency">
+			<param name="Local" value="ICacheDependency.html">
+			</object>
+		</ul>
+	<li><object type="text/sitemap">
+		<param name="Name" value="system.collections">
+		</object>
+	<ul>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CAttributeCollection">
+			<param name="Local" value="CAttributeCollection.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CConfiguration">
+			<param name="Local" value="CConfiguration.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CList">
+			<param name="Local" value="CList.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CListIterator">
+			<param name="Local" value="CListIterator.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CMap">
+			<param name="Local" value="CMap.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CMapIterator">
+			<param name="Local" value="CMapIterator.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CQueue">
+			<param name="Local" value="CQueue.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CQueueIterator">
+			<param name="Local" value="CQueueIterator.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CStack">
+			<param name="Local" value="CStack.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CStackIterator">
+			<param name="Local" value="CStackIterator.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CTypedList">
+			<param name="Local" value="CTypedList.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CTypedMap">
+			<param name="Local" value="CTypedMap.html">
+			</object>
+		</ul>
+	<li><object type="text/sitemap">
+		<param name="Name" value="system.console">
+		</object>
+	<ul>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CConsoleApplication">
+			<param name="Local" value="CConsoleApplication.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CConsoleCommand">
+			<param name="Local" value="CConsoleCommand.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CConsoleCommandBehavior">
+			<param name="Local" value="CConsoleCommandBehavior.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CConsoleCommandEvent">
+			<param name="Local" value="CConsoleCommandEvent.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CConsoleCommandRunner">
+			<param name="Local" value="CConsoleCommandRunner.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CHelpCommand">
+			<param name="Local" value="CHelpCommand.html">
+			</object>
+		</ul>
+	<li><object type="text/sitemap">
+		<param name="Name" value="system.db">
+		</object>
+	<ul>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CDbCommand">
+			<param name="Local" value="CDbCommand.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CDbConnection">
+			<param name="Local" value="CDbConnection.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CDbDataReader">
+			<param name="Local" value="CDbDataReader.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CDbException">
+			<param name="Local" value="CDbException.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CDbMigration">
+			<param name="Local" value="CDbMigration.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CDbTransaction">
+			<param name="Local" value="CDbTransaction.html">
+			</object>
+		</ul>
+	<li><object type="text/sitemap">
+		<param name="Name" value="system.gii">
+		</object>
+	<ul>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CCodeFile">
+			<param name="Local" value="CCodeFile.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CCodeForm">
+			<param name="Local" value="CCodeForm.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CCodeGenerator">
+			<param name="Local" value="CCodeGenerator.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CCodeModel">
+			<param name="Local" value="CCodeModel.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="GiiModule">
+			<param name="Local" value="GiiModule.html">
+			</object>
+		</ul>
+	<li><object type="text/sitemap">
+		<param name="Name" value="system.i18n">
+		</object>
+	<ul>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CChoiceFormat">
+			<param name="Local" value="CChoiceFormat.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CDateFormatter">
+			<param name="Local" value="CDateFormatter.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CDbMessageSource">
+			<param name="Local" value="CDbMessageSource.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CGettextMessageSource">
+			<param name="Local" value="CGettextMessageSource.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CLocale">
+			<param name="Local" value="CLocale.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CMessageSource">
+			<param name="Local" value="CMessageSource.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CMissingTranslationEvent">
+			<param name="Local" value="CMissingTranslationEvent.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CNumberFormatter">
+			<param name="Local" value="CNumberFormatter.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CPhpMessageSource">
+			<param name="Local" value="CPhpMessageSource.html">
+			</object>
+		</ul>
+	<li><object type="text/sitemap">
+		<param name="Name" value="system.logging">
+		</object>
+	<ul>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CChainedLogFilter">
+			<param name="Local" value="CChainedLogFilter.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CDbLogRoute">
+			<param name="Local" value="CDbLogRoute.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CEmailLogRoute">
+			<param name="Local" value="CEmailLogRoute.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CFileLogRoute">
+			<param name="Local" value="CFileLogRoute.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CLogFilter">
+			<param name="Local" value="CLogFilter.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CLogRoute">
+			<param name="Local" value="CLogRoute.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CLogRouter">
+			<param name="Local" value="CLogRouter.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CLogger">
+			<param name="Local" value="CLogger.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CProfileLogRoute">
+			<param name="Local" value="CProfileLogRoute.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CSysLogRoute">
+			<param name="Local" value="CSysLogRoute.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CWebLogRoute">
+			<param name="Local" value="CWebLogRoute.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="ILogFilter">
+			<param name="Local" value="ILogFilter.html">
+			</object>
+		</ul>
+	<li><object type="text/sitemap">
+		<param name="Name" value="system.utils">
+		</object>
+	<ul>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CDateTimeParser">
+			<param name="Local" value="CDateTimeParser.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CFileHelper">
+			<param name="Local" value="CFileHelper.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CFormatter">
+			<param name="Local" value="CFormatter.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CLocalizedFormatter">
+			<param name="Local" value="CLocalizedFormatter.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CMarkdownParser">
+			<param name="Local" value="CMarkdownParser.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CPasswordHelper">
+			<param name="Local" value="CPasswordHelper.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CPropertyValue">
+			<param name="Local" value="CPropertyValue.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CTimestamp">
+			<param name="Local" value="CTimestamp.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CVarDumper">
+			<param name="Local" value="CVarDumper.html">
+			</object>
+		</ul>
+	<li><object type="text/sitemap">
+		<param name="Name" value="system.validators">
+		</object>
+	<ul>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CBooleanValidator">
+			<param name="Local" value="CBooleanValidator.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CCaptchaValidator">
+			<param name="Local" value="CCaptchaValidator.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CCompareValidator">
+			<param name="Local" value="CCompareValidator.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CDateValidator">
+			<param name="Local" value="CDateValidator.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CDefaultValueValidator">
+			<param name="Local" value="CDefaultValueValidator.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CEmailValidator">
+			<param name="Local" value="CEmailValidator.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CExistValidator">
+			<param name="Local" value="CExistValidator.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CFileValidator">
+			<param name="Local" value="CFileValidator.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CFilterValidator">
+			<param name="Local" value="CFilterValidator.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CInlineValidator">
+			<param name="Local" value="CInlineValidator.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CNumberValidator">
+			<param name="Local" value="CNumberValidator.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CRangeValidator">
+			<param name="Local" value="CRangeValidator.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CRegularExpressionValidator">
+			<param name="Local" value="CRegularExpressionValidator.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CRequiredValidator">
+			<param name="Local" value="CRequiredValidator.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CSafeValidator">
+			<param name="Local" value="CSafeValidator.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CStringValidator">
+			<param name="Local" value="CStringValidator.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CTypeValidator">
+			<param name="Local" value="CTypeValidator.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CUniqueValidator">
+			<param name="Local" value="CUniqueValidator.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CUnsafeValidator">
+			<param name="Local" value="CUnsafeValidator.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CUrlValidator">
+			<param name="Local" value="CUrlValidator.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CValidator">
+			<param name="Local" value="CValidator.html">
+			</object>
+		</ul>
+	<li><object type="text/sitemap">
+		<param name="Name" value="system.web">
+		</object>
+	<ul>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CActiveDataProvider">
+			<param name="Local" value="CActiveDataProvider.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CArrayDataProvider">
+			<param name="Local" value="CArrayDataProvider.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CAssetManager">
+			<param name="Local" value="CAssetManager.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CBaseController">
+			<param name="Local" value="CBaseController.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CBaseUrlRule">
+			<param name="Local" value="CBaseUrlRule.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CCacheHttpSession">
+			<param name="Local" value="CCacheHttpSession.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CClientScript">
+			<param name="Local" value="CClientScript.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CController">
+			<param name="Local" value="CController.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CCookieCollection">
+			<param name="Local" value="CCookieCollection.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CDataProvider">
+			<param name="Local" value="CDataProvider.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CDataProviderIterator">
+			<param name="Local" value="CDataProviderIterator.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CDbHttpSession">
+			<param name="Local" value="CDbHttpSession.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CExtController">
+			<param name="Local" value="CExtController.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CFormModel">
+			<param name="Local" value="CFormModel.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CHttpCookie">
+			<param name="Local" value="CHttpCookie.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CHttpRequest">
+			<param name="Local" value="CHttpRequest.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CHttpSession">
+			<param name="Local" value="CHttpSession.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CHttpSessionIterator">
+			<param name="Local" value="CHttpSessionIterator.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="COutputEvent">
+			<param name="Local" value="COutputEvent.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CPagination">
+			<param name="Local" value="CPagination.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CSort">
+			<param name="Local" value="CSort.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CSqlDataProvider">
+			<param name="Local" value="CSqlDataProvider.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CTheme">
+			<param name="Local" value="CTheme.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CThemeManager">
+			<param name="Local" value="CThemeManager.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CUploadedFile">
+			<param name="Local" value="CUploadedFile.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CUrlManager">
+			<param name="Local" value="CUrlManager.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CUrlRule">
+			<param name="Local" value="CUrlRule.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CWebApplication">
+			<param name="Local" value="CWebApplication.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CWebModule">
+			<param name="Local" value="CWebModule.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="CWidgetFactory">
+			<param name="Local" value="CWidgetFactory.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="IDataProvider">
+			<param name="Local" value="IDataProvider.html">
+			</object>
+			<li><object type="text/sitemap">
+			<param name="Name" value="IWidgetFactory">
+			<param name="Local" value="IWidgetFactory.html">
+			</object>
+		</ul>
+</ul>
+</body>
+</html>

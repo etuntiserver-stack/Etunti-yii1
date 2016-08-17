@@ -1,4 +1,10 @@
 <?php
+/**
+  * Some text describing what the view does goes here
+  * @uses CActiveDataProvider $dataProvider The data provider for this model
+  * @uses User $model The user model
+  */
+
 /* @var $this AsetuksetController */
 /* @var $dataProvider CActiveDataProvider */
 

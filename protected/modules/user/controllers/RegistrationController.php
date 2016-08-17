@@ -1,6 +1,6 @@
 <?php
-echo 'Estetty!!!';
-exit;
+//echo 'Estetty!!!';
+//exit;
 class RegistrationController extends Controller
 {
 	public $defaultAction = 'registration';
