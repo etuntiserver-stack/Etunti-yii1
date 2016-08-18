@@ -87,9 +87,10 @@ var lang = [];
   function tiedot(){
 
 
-	domain	= $("#domain").val();
-	email = $("#email").val();
-	salasana = $("#salasana").val();
+	//domain = $("#domain").val();
+	//email = $("#email").val();
+	//salasana = $("#salasana").val();
+
 
 	if(my_location == '') my_location = $("#location").val();
 
@@ -397,6 +398,7 @@ setTimeout(function() {
 		  $("#tekija").html("<div class='alert alert-danger'>"+sp[1]+"</div>").show();
 		  $("#odotta").fadeOut(370);
 		  $("#all").hide();
+		  $("#domainBlokki").show();
 		  return false;
 		} 
 

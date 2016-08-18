@@ -43,7 +43,7 @@ $(document).ready(function(){
 
 
 
-
+/* <-- poista tama 10.2016 */
   document.addEventListener('deviceready', this.readFile, true);
   function readFile() {
         window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, gotFS, fail);
@@ -63,34 +63,16 @@ $(document).ready(function(){
 	            console.log(evt.target.result);
 
 
-
-/*
-  var fordm =	'<label>Domain</label>' +
-		'<input type="text" class="form-control" id="domain">' +
-		'<label>Työntekijän sähköposti</label>' +
-		'<input type="text" class="form-control" id="email">' +
-		'<label>Työntekijän salasana</label>' +
-		'<input type="password" class="form-control" id="salasana"><br>' +
-		'<button class="btn btn-primary btn-group-justified aloita" type="button">' +
-		'<i class="glyphicon glyphicon-warning-sign"> Tallenna</i></button>';
-  dm.innerHTML += fordm;
-*/
-
-			/*
-			 if(device.platform == 'Android')
-			    server = "http://etunti.fi";
-			 else
-			    server = "https://etunti.fi";
-		
-			 url = server+"/index.php/api/mob";
-			*/
-
-
 	   		 var spFile = evt.target.result.split("//");
 		
 			 document.getElementById('domain').value=spFile[0];
 			 document.getElementById('email').value=spFile[1];
 			 document.getElementById('salasana').value=spFile[2];
+
+
+			 localStorage.setItem('domain', spFile[0]);
+			 localStorage.setItem('email', spFile[1]);
+			 localStorage.setItem('salasana', spFile[2]);
 
 		
 	        };
@@ -100,6 +82,10 @@ $(document).ready(function(){
 	        console.log(evt.target.error.code);
 	    }
   }
+/* poista tama 10.2016 --> */
+
+
+
 
   function exitFromApp()
   {
@@ -110,6 +96,15 @@ $(document).ready(function(){
 
 
 $(document).ready(function(){
+
+
+	if(localStorage.getItem('domain') !== '')
+	  domain=localStorage.getItem('domain');
+	if(localStorage.getItem('email') !== '')
+	  email=localStorage.getItem('email');
+	if(localStorage.getItem('salasana') !== '')
+	  salasana=localStorage.getItem('salasana');
+
 
 var lang = [];
 
@@ -134,11 +129,11 @@ var lang = [];
 
 
 $("#dm").html('<label>Domain</label>' +
-		'<input type="text" class="form-control" id="domain">' +
+		'<input type="text" class="form-control" id="domain" value="'+domain+'">' +
 		'<label>'+ lang['tyontekijan_sahkoposti'] +'</label>' +
-		'<input type="text" class="form-control" id="email">' +
+		'<input type="text" class="form-control" id="email" value="'+email+'">' +
 		'<label>'+ lang['tyontekijan_salasana'] +'</label>' +
-		'<input type="password" class="form-control" id="salasana"><br>' +
+		'<input type="password" class="form-control" id="salasana" value="'+salasana+'"><br>' +
 		'<button class="btn btn-success btn-group-justified aloita" type="button">' +
 		'<i class="glyphicon glyphicon-warning-sign"> '+ lang['tallenna'] +'</i></button>');
 
@@ -170,9 +165,19 @@ $("#dm").html('<label>Domain</label>' +
 
 
   $(".aloita").click(function(){
-	saveFile();
+	tallennaTunnukset();
   });
 
+  function tallennaTunnukset(){
+
+	localStorage.setItem('domain', $("#domain").val());
+	localStorage.setItem('email', $("#email").val());
+	localStorage.setItem('salasana', $("#salasana").val());
+
+	window.location.href='index.html';
+  }
+
+/*
   function saveFile(){
 
     document.addEventListener("deviceready", onDeviceReadyFileSave, false);
@@ -200,7 +205,7 @@ $("#dm").html('<label>Domain</label>' +
         console.log(error.code);
     }
   }
-
+*/
 
 
     document.addEventListener("deviceready", onDeviceReady, false);

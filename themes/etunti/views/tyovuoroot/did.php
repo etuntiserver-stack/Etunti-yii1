@@ -114,7 +114,9 @@ if(!isset($_POST['tulosta']))
 	   $status = '';
 	   if($tvVal->status != 0){
 
-        	$l = $this->tilanteet();
+		$tvController = Yii::app()->createController('Tyovuoroot');
+
+        	$l = $tvController[0]->tilanteet();
 		if($tvVal->status == 10)
 		$status = ' <i class="p3 pull-right fa fa-cutlery text-danger"></i>';
 		elseif($tvVal->status == 2)
