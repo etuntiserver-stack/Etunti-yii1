@@ -1,32 +1,14 @@
 $(document).ready(function(){
 
 
-var lang = [];
-
-        $.ajax({
-	   async: false,
-           url: url+'/lang?dom='+domain,
-	   type:'POST',
- 	   data: { lang : etunti_language },
-           success: function(data){
-		var d = JSON.parse(data);
-
-		$.each(d, function( index, value ) {
-		  lang[index] = value;
-		});
-
-    	},
-    		error:function (xhr, ajaxOptions, thrownError){
-        	console.log(xhr.responseText);
-    	}
-        });
-
+var lang = JSON.parse(localStorage.getItem('lang'));
 
 
 
   $("#odotta").html("<img src='img/icon.png'>");
 
-  setTimeout(tiedot,3000); 
+  //setTimeout(tiedot,3000);
+  tiedot();
 
 
 	    document.addEventListener("deviceready", onDeviceReady, false);
@@ -86,7 +68,6 @@ var lang = [];
 
   function tiedot(){
 
-
 	//domain = $("#domain").val();
 	//email = $("#email").val();
 	//salasana = $("#salasana").val();
@@ -116,6 +97,7 @@ var now             = new Date().getTime(),
 	} else {
 		//setTimeout(function(){document.location.href = "asetukset.html";},500);
 		$("#domainBlokki").show();
+		$("#all").hide();
 		return false;
  	}
 	
@@ -462,8 +444,8 @@ setTimeout(function() {
     		error:function (xhr, ajaxOptions, thrownError){
         	console.log(xhr.responseText);
 
-		  if($("#domain").val() != '')
-		     $("#odotta").html("<div class='alert alert-danger'>Domain: <b>" + $("#domain").val() + "</b> on virhellinen,  tai tietokantaa ei löydy</div>").show();
+		  if(domain != '')
+		     $("#odotta").html("<div class='alert alert-danger'>Domain: <b>" + domain + "</b> on virhellinen,  tai tietokantaa ei löydy</div>").show();
 		  else
 		     $("#odotta").hide();
 

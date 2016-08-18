@@ -1,4 +1,4 @@
-
+/*
 
   document.addEventListener('deviceready', this.readFile, true);
   function readFile() {
@@ -34,6 +34,7 @@
 	        console.log(evt.target.error.code);
 	    }
   }
+*/
 
 
 var appNFC = {
@@ -96,9 +97,9 @@ var appNFC = {
 $(document).ready(function(){
 
 
-	var domain = document.getElementById('domain').value;
-	var email = document.getElementById('email').value;
-	var salasana = document.getElementById('salasana').value;
+	var domain = localStorage.getItem('domain');
+	var email = localStorage.getItem('email');
+	var salasana = localStorage.getItem('salasana');
 	var tag = document.getElementById('tagginro').value;
 
         $.ajax({
@@ -146,6 +147,9 @@ $(document).ready(function(){
  
 };
 
+
+
+appNFC.initialize();
 
 
 function clearAndExit(){

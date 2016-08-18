@@ -14,6 +14,8 @@ $(document).ready(function(){
 
 });
 
+
+
     var domain = '';
     var email = '';
     var salasana = '';
@@ -42,8 +44,11 @@ $(document).ready(function(){
   var versio = "1.70";
 
 
+//localStorage.clear();
 
 /* <-- poista tama 10.2016 */
+if( !localStorage.getItem('domain') | !localStorage.getItem('email') | !localStorage.getItem('salasana')  )
+{
   document.addEventListener('deviceready', this.readFile, true);
   function readFile() {
         window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, gotFS, fail);
@@ -63,17 +68,17 @@ $(document).ready(function(){
 	            console.log(evt.target.result);
 
 
+
 	   		 var spFile = evt.target.result.split("//");
-		
 			 document.getElementById('domain').value=spFile[0];
 			 document.getElementById('email').value=spFile[1];
 			 document.getElementById('salasana').value=spFile[2];
-
 
 			 localStorage.setItem('domain', spFile[0]);
 			 localStorage.setItem('email', spFile[1]);
 			 localStorage.setItem('salasana', spFile[2]);
 
+			 window.location.href="index.html";
 		
 	        };
 	        reader.readAsText(file);
@@ -82,6 +87,8 @@ $(document).ready(function(){
 	        console.log(evt.target.error.code);
 	    }
   }
+
+}
 /* poista tama 10.2016 --> */
 
 
@@ -98,16 +105,19 @@ $(document).ready(function(){
 $(document).ready(function(){
 
 
-	if(localStorage.getItem('domain') !== '')
+	if(localStorage.getItem('domain'))
 	  domain=localStorage.getItem('domain');
-	if(localStorage.getItem('email') !== '')
+	if(localStorage.getItem('email'))
 	  email=localStorage.getItem('email');
-	if(localStorage.getItem('salasana') !== '')
+	if(localStorage.getItem('salasana'))
 	  salasana=localStorage.getItem('salasana');
 
 
-var lang = [];
 
+ 	var lang = [];
+
+if(!localStorage.getItem('lang'))
+{
         $.ajax({
 	   async: false,
            url: url+'/lang?dom='+domain,
@@ -115,16 +125,18 @@ var lang = [];
  	   data: { lang : etunti_language },
            success: function(data){
 		var d = JSON.parse(data);
-
-		$.each(d, function( index, value ) {
-		  lang[index] = value;
-		});
+		localStorage.setItem('lang', JSON.stringify(d));
 
     	},
     		error:function (xhr, ajaxOptions, thrownError){
         	console.log(xhr.responseText);
     	}
         });
+
+} 
+
+ 	lang = JSON.parse(localStorage.getItem('lang'));
+
 
 
 

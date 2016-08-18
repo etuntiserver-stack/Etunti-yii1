@@ -1,37 +1,21 @@
 $(document).ready(function(){
 
-var lang = [];
-
-        $.ajax({
-	   async: false,
-           url: url+'/lang?dom='+domain,
-	   type:'POST',
- 	   data: { lang : etunti_language },
-           success: function(data){
-		var d = JSON.parse(data);
-
-		$.each(d, function( index, value ) {
-		  lang[index] = value;
-		});
-
-    	},
-    		error:function (xhr, ajaxOptions, thrownError){
-        	console.log(xhr.responseText);
-    	}
-        });
+var lang = JSON.parse(localStorage.getItem('lang'));
 
 
 
 
   $("#odotta").html("<img src='img/icon.png'>");
-  setTimeout(tiedot,1000); 
+
+  //setTimeout(tiedot,3000);
+  tiedot();
 
   function tiedot(){
 
 
-	domain	= $("#domain").val();
-	email = $("#email").val();
-	salasana = $("#salasana").val();
+	//domain = $("#domain").val();
+	//email = $("#email").val();
+	//salasana = $("#salasana").val();
 
 
 	if(my_location == '') my_location = $("#location").val();
