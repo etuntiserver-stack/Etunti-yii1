@@ -21,6 +21,14 @@ class SiteController extends Controller
 		);
 	}
 
+	public function filters()
+	{
+		return array(
+			'accessControl', // perform access control for CRUD operations
+			'postOnly + delete', // we only allow deletion via POST request
+		);
+	}
+
 	public function accessRules()
 	{
 		return array(
@@ -57,8 +65,6 @@ class SiteController extends Controller
 		$m = Administrators::model()->findbypk(Yii::app()->user->adminID);
 	        if($m->id == Yii::app()->user->adminID)
 	            return true;
-		else
-	            return false;
 		} else {
 	            return false;
 		}
@@ -71,8 +77,6 @@ class SiteController extends Controller
 		$m = Administrators::model()->findbypk(Yii::app()->user->adminID);
 	        if($m->id == Yii::app()->user->adminID)
 	            return true;
-		else
-	            return false;
 		} else {
 	            return false;
 		}
