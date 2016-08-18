@@ -1,6 +1,10 @@
 <?php
 
+ if($pass == 'Estrom2016!')
+ {
 
-echo 'ok '.$pass;
+
+
+ }
 
 ?>
