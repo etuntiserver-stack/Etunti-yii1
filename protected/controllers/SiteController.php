@@ -203,6 +203,7 @@ class SiteController extends Controller
 
 	public function actionAjankohtaista()
 	{
+		Yii::app()->theme = 'classic';
 		$this->render('ajankohtaista');
 	}
 	public function actionOhjevideot()
@@ -215,14 +216,17 @@ class SiteController extends Controller
 	}
 	public function actionYritys()
 	{
+		Yii::app()->theme = 'classic';
 		$this->render('yritys');
 	}
 	public function actionYhteystiedot()
 	{
+		Yii::app()->theme = 'classic';
 		$this->render('yhteystiedot');
 	}
 	public function actionLomake_lataailmainen()
 	{
+		Yii::app()->theme = 'classic';
 		$this->render('lomake_lataailmainen');
 	}
 	public function actionUusi_kommento()
