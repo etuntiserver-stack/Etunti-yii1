@@ -3,13 +3,14 @@ $(document).ready(function(){
 
   $("#odotta").html("<img src='img/icon.png'>");
 
-  setTimeout(tiedot,1000);
+  //setTimeout(tiedot,3000);
+  tiedot();
 
   function tiedot(){
 
-	domain	= $("#domain").val();
-	email = $("#email").val();
-	salasana = $("#salasana").val();
+	//domain = $("#domain").val();
+	//email = $("#email").val();
+	//salasana = $("#salasana").val();
 
 	if(my_location == '') my_location = $("#location").val();
 	if((domain != '') & (email !='') & (salasana != ''))
