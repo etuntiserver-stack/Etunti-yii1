@@ -37,6 +37,17 @@ if(!empty($data->loppui))
 else
  $dloppu[$data->id] = '';
 
+
+ $pv = explode("\n", $data->viesti);
+
+if(isset($pv[0]) and strpos($pv[0], 'xxx') === false)
+ $pikkuviesti = '<div class="row"><div class="col-sm-12 text-danger"><b>'.Yii::t('main', 'Viesti').':</b> '.$pv[0].'</div><div>';
+elseif(isset($pv[1]) and strpos($pv[1], 'xxx') === false)
+ $pikkuviesti = '<div class="row"><div class="col-sm-12 text-danger"><b>'.Yii::t('main', 'Viesti').':</b> '.$pv[1].'</div><div>';
+else
+ $pikkuviesti = '';
+
+
 if(!empty($data->aloitan)){
  $at[$data->id] = date("H:i",strtotime($data->aloitan));
  $apvm[$data->id] = date("d.m.Y",strtotime($data->aloitan));
@@ -211,6 +222,8 @@ else
 		echo CHtml::link($data->kohde_kannasta,'/index.php/kohteet/update?id='.$data->kohdenID,array('target'=>'_blank','class'=>'text-success')); 
 	  else
 		echo '<span class="text-danger">'.$data->kohde_kannasta.'</span>';
+
+	  echo $pikkuviesti;
 	  ?>
 	  </span>
 
