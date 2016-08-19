@@ -54,7 +54,11 @@ require 'CheckoutFinland/Response.php';
 
 use CheckoutFinland\Response;
 
-$demo_merchant_secret   = "SAIPPUAKAUPPIAS";
+$asetukset = Asetukset::model()->findbypk(1);
+if(!empty($asetukset->checkout_salasana))
+$demo_merchant_secret = $asetukset->checkout_salasana;
+else
+echo 'merchant_secret error';
 
 $response = new Response($demo_merchant_secret);
 
