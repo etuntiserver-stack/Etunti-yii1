@@ -280,7 +280,7 @@ echo '
              <!-- Pie Chart -->
               <div class="panel" id="p10">
                 <div class="panel-heading">
-                  <span class="panel-title"><?php echo Yii::t('main', 'Siivoojat tänään'); ?></span>
+                  <span class="panel-title"><?php echo Yii::t('main', 'Työntekijät tänään'); ?></span>
 		  <?php 
 		   $parasSiivoja = json_encode($this->parasSiivojaTanaan());
 		  ?>
