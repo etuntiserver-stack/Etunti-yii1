@@ -150,21 +150,27 @@ if(isset($model->id))
 		$criteria->condition =" aktiivinen=1 ";
 
  		$as = Asiakkaat::model()->findAll($criteria);
+		$nm = array();
 		if(isset($as[0]))
 		{
-			echo '<select name="asiakas" id="asiakas" class="form-control">';
-				echo '<option value=""></option>';
+
 			foreach($as as $a)
 			{
 				if(!empty($a->yrityksen_nimi))
-				$nm = $a->yrityksen_nimi;
+				$nm[$a->yrityksen_nimi] = $a->id;
 				elseif(!empty($a->yhteyshenkilo))
-				$nm = $a->yhteyshenkilo;
+				$nm[$a->yhteyshenkilo] = $a->id;
 				else
-				$nm = Yii::t('main', 'Asiakas ID:').$a->id;
+				$nm[$a->osoite] = $a->id;
 
-				echo '<option value="'.$a->id.'">'.$nm.'</option>';
 			}
+			ksort($nm);
+
+			echo '<select name="asiakas" id="asiakas" class="form-control">';
+				echo '<option value=""></option>';
+
+			foreach($nm as $k=>$v)
+				echo '<option value="'.$v.'">'.$k.'</option>';
 
 			echo '</select>';
 		}
