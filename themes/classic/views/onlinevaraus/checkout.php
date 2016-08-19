@@ -26,25 +26,41 @@ $tv = Tyovuoroot::model()->findbypk($_SESSION['onlinevaraus']['modelTV']);
 if(isset($tv->id))
 {
 
+$versio = '0001';
+$stamp = time();
+$amount = ($amount * 100);
+$reference = $_SESSION['onlinevaraus']['onlinevarausID'];
+$message = 'Työvuoro '.$tv->pvm.', '.$tv->alku.' - '.$tv->loppu;
+$deliveryDate = new \DateTime(date("Y-m-d"));
+$firstName = $etu_suku_nimet;
+$familyName = '';
+$address = $osoite;
+$postOffice = $kaupunki;
+$postcode = $postinumero;
+$country = 'FIN';
+$language = 'EN';
+
+
 $payment_data = [
-    'stamp'         => time(),                      // stamp is the unique id for this transaction
-    'amount'        => ($amount * 100),    // amount is in cents
-    'reference'     => $_SESSION['onlinevaraus']['onlinevarausID'],                     // some reference id (perhaps order id)
-    'message'       => 'Työvuoro '.$tv->pvm.', '.$tv->alku.' - '.$tv->loppu,            // some short description about the order
-    'deliveryDate'  => new \DateTime('2014-12-24'), // approximated delivery date, this is shown to customer service in Checkout Finland but not to the buyer
-    'firstName'     => $etu_suku_nimet,
-    'familyName'    => '',
-    'address'       => $osoite,
-    'postOffice'    => $kaupunki,
-    'postcode'      => $postinumero,
-    'country'       => 'FIN',                       // country affects what payment options are shown FIN = all, others = credit cards
-    'language'      => 'EN'
+    'versio'        => $versio,   
+    'stamp'         => $stamp,
+    'amount'        => $amount, 
+    'reference'     => $reference,
+    'message'       => $message,            // some short description about the order
+    'deliveryDate'  => $deliveryDate, // approximated delivery date, this is shown to customer service in Checkout Finland but not to the buyer
+    'firstName'     => $firstName,
+    'familyName'    => $familyName,
+    'address'       => $address,
+    'postOffice'    => $postOffice,
+    'postcode'      => $postcode,
+    'country'       => $country,                       // country affects what payment options are shown FIN = all, others = credit cards
+    'language'      => $language
 ];
 
+
+
 $payment->setData($payment_data);
-
 $client = new Client();
-
 $response = $client->sendPayment($payment);
 
 if($response)

@@ -142,13 +142,93 @@
   <table class="table table-striped" id="mobileTable">
   <thead class="myBgColors">
   <tr>
-  <th><?php echo CHtml::link(Yii::t('main', 'ID'),'index?sort=id'); ?></th>
-  <th><?php echo CHtml::link(Yii::t('main', 'Asiakas'),'index?sort=yrityksen_nimi'); ?></th>
-  <th><?php echo CHtml::link(Yii::t('main', 'Osoite'),'index?sort=osoite'); ?></th>
-  <th><?php echo CHtml::link(Yii::t('main', 'Yhteyshenkilo'),'index?sort=yhteyshenkilo'); ?></th>
-  <th><?php echo CHtml::link(Yii::t('main', 'Postinumero'),'index?sort=postinumero'); ?></th>
-  <th><?php echo CHtml::link(Yii::t('main', 'Puhelin'),'index?sort=puhelin'); ?></th>
-  <th><?php echo CHtml::link(Yii::t('main', 'Sähköposti'),'index?sort=sahkoposti'); ?></th>
+  <th class="col-sm-1"><?php echo Yii::t('main', 'ID').'
+	<div classs="row">
+	 <div class="form-inline">
+	  <div class="form-group">
+		'.CHtml::link('<i class="fa fa-arrow-down"></i>','index?sort=id&s=asc').'
+
+		'.CHtml::link('<i class="fa fa-arrow-up"></i>','index?sort=id&s=desc').'
+	  </div>
+	 </div>
+	</div>';
+      ?>
+  </th>
+  <th><?php echo Yii::t('main', 'Asiakas').'
+	<div classs="row">
+	 <div class="form-inline">
+	  <div class="form-group">
+		'.CHtml::link('<i class="fa fa-arrow-down"></i>','index?sort=yrityksen_nimi&s=asc').'
+
+		'.CHtml::link('<i class="fa fa-arrow-up"></i>','index?sort=yrityksen_nimi&s=desc').'
+	  </div>
+	 </div>
+	</div>';
+      ?>
+  </th>
+  <th><?php echo Yii::t('main', 'Osoite').'
+	<div classs="row">
+	 <div class="form-inline">
+	  <div class="form-group">
+		'.CHtml::link('<i class="fa fa-arrow-down"></i>','index?sort=osoite&s=asc').'
+
+		'.CHtml::link('<i class="fa fa-arrow-up"></i>','index?sort=osoite&s=desc').'
+	  </div>
+	 </div>
+	</div>';
+      ?>
+  </th>
+  <th><?php echo Yii::t('main', 'Yhteyshenkilo').'
+	<div classs="row">
+	 <div class="form-inline">
+	  <div class="form-group">
+		'.CHtml::link('<i class="fa fa-arrow-down"></i>','index?sort=yhteyshenkilo&s=asc').'
+
+		'.CHtml::link('<i class="fa fa-arrow-up"></i>','index?sort=yhteyshenkilo&s=desc').'
+	  </div>
+	 </div>
+	</div>';
+      ?>
+  </th>
+  <th><?php echo Yii::t('main', 'Postinumero').'
+	<div classs="row">
+	 <div class="form-inline">
+	  <div class="form-group">
+		'.CHtml::link('<i class="fa fa-arrow-down"></i>','index?sort=postinumero&s=asc').'
+
+		'.CHtml::link('<i class="fa fa-arrow-up"></i>','index?sort=postinumero&s=desc').'
+	  </div>
+	 </div>
+	</div>';
+      ?>
+  </th>
+  <th><?php echo Yii::t('main', 'Puhelin').'
+	<div classs="row">
+	 <div class="form-inline">
+	  <div class="form-group">
+		'.CHtml::link('<i class="fa fa-arrow-down"></i>','index?sort=puhelin&s=asc').'
+
+		'.CHtml::link('<i class="fa fa-arrow-up"></i>','index?sort=puhelin&s=desc').'
+	  </div>
+	 </div>
+	</div>';
+      ?>
+  </th>
+  <th><?php echo Yii::t('main', 'Sähköposti').'
+	<div classs="row">
+	 <div class="form-inline">
+	  <div class="form-group">
+		'.CHtml::link('<i class="fa fa-arrow-down"></i>','index?sort=sahkoposti&s=asc').'
+
+		'.CHtml::link('<i class="fa fa-arrow-up"></i>','index?sort=sahkoposti&s=desc').'
+	  </div>
+	 </div>
+	</div>';
+      ?>
+  </th>
+
+
+
   <th><?php echo Yii::t('main', 'Tyyppi'); ?></th>
 <?php
 	if($this->tas(2))

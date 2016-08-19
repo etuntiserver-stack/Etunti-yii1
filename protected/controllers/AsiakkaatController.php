@@ -415,7 +415,7 @@ class AsiakkaatController extends Controller
 
 		if(isset($_GET['sort']))
 		{
-	        $criteria->order = " $_GET[sort]!='' DESC, $_GET[sort] ASC ";
+	        $criteria->order = " $_GET[sort]!='' DESC, $_GET[sort] $_GET[s] ";
 		} else {
 	        $criteria->order = " id DESC ";
 		}

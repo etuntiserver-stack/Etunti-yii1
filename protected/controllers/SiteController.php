@@ -37,7 +37,7 @@ class SiteController extends Controller
                 		'expression'=>"Yii::app()->controller->isDigisten()",
 			),
 			array('allow', 
-				'actions'=>array( 'header', 'footer', 'lomake_tarjouspyynto', 'lomake_testiryhma', 'ajankohtaista', 'asiakkaat', 'yritys', 'yhteystiedot', 'lomake_lataailmainen', 'uusi_kommento', 'crontab'),
+				'actions'=>array( 'header', 'footer', 'lomake_tarjouspyynto', 'lomake_testiryhma', 'ajankohtaista', 'asiakkaat', 'yritys', 'yhteystiedot', 'lomake_lataailmainen', 'uusi_kommento', 'crontab', 'logout'),
 				'users'=>array('*'),
 			),
 			array('allow', 
