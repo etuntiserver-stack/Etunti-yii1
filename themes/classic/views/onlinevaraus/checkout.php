@@ -28,7 +28,7 @@ if(isset($tv->id))
 
 $versio = '0001';
 $stamp = time();
-$amount = ($amount * 100);
+$amount = $amount; //
 $reference = $_SESSION['onlinevaraus']['onlinevarausID'];
 $message = 'Työvuoro '.$tv->pvm.', '.$tv->alku.' - '.$tv->loppu;
 $deliveryDate = new \DateTime(date("Y-m-d"));
