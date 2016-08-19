@@ -90,8 +90,9 @@ class LaskutusTuotteetController extends Controller
 		if(isset($_POST['LaskutusTuotteet']))
 		{
 			$model->attributes=$_POST['LaskutusTuotteet'];
+			$model->hinta_alv_0=str_replace(",",".",$_POST['LaskutusTuotteet']['hinta_alv_0']);
 			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+				$this->redirect(array('index'));
 		}
 
 		$this->render('create',array(
@@ -114,8 +115,9 @@ class LaskutusTuotteetController extends Controller
 		if(isset($_POST['LaskutusTuotteet']))
 		{
 			$model->attributes=$_POST['LaskutusTuotteet'];
+			$model->hinta_alv_0=str_replace(",",".",$_POST['LaskutusTuotteet']['hinta_alv_0']);
 			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+				$this->redirect(array('index'));
 		}
 
 		$this->render('update',array(
