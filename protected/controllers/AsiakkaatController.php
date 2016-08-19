@@ -412,7 +412,13 @@ class AsiakkaatController extends Controller
 	//  Oikeudet -->
 
        		$criteria = new CDbCriteria();
-	        $criteria->order = "  id DESC ";
+
+		if(isset($_GET['sort']))
+		{
+	        $criteria->order = " $_GET[sort]!='' DESC, $_GET[sort] ASC ";
+		} else {
+	        $criteria->order = " id DESC ";
+		}
 
 		if(isset($_POST['osoite']) and !empty($_POST['osoite']))
 	        $criteria->addCondition (" osoite LIKE '%".$_POST['osoite']."%' ");

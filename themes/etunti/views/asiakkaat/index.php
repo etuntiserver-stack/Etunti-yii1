@@ -142,13 +142,13 @@
   <table class="table table-striped" id="mobileTable">
   <thead class="myBgColors">
   <tr>
-  <th><?php echo Yii::t('main', 'ID'); ?></th>
-  <th><?php echo Yii::t('main', 'Asiakas'); ?></th>
-  <th><?php echo Yii::t('main', 'Osoite'); ?></th>
-  <th><?php echo Yii::t('main', 'Yhteyshenkilo'); ?></th>
-  <th><?php echo Yii::t('main', 'Postinumero'); ?></th>
-  <th><?php echo Yii::t('main', 'Puhelin'); ?></th>
-  <th><?php echo Yii::t('main', 'Sähköposti'); ?></th>
+  <th><?php echo CHtml::link(Yii::t('main', 'ID'),'index?sort=id'); ?></th>
+  <th><?php echo CHtml::link(Yii::t('main', 'Asiakas'),'index?sort=yrityksen_nimi'); ?></th>
+  <th><?php echo CHtml::link(Yii::t('main', 'Osoite'),'index?sort=osoite'); ?></th>
+  <th><?php echo CHtml::link(Yii::t('main', 'Yhteyshenkilo'),'index?sort=yhteyshenkilo'); ?></th>
+  <th><?php echo CHtml::link(Yii::t('main', 'Postinumero'),'index?sort=postinumero'); ?></th>
+  <th><?php echo CHtml::link(Yii::t('main', 'Puhelin'),'index?sort=puhelin'); ?></th>
+  <th><?php echo CHtml::link(Yii::t('main', 'Sähköposti'),'index?sort=sahkoposti'); ?></th>
   <th><?php echo Yii::t('main', 'Tyyppi'); ?></th>
 <?php
 	if($this->tas(2))
