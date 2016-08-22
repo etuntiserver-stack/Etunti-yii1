@@ -6,8 +6,8 @@
 
 
 
-   $aikavali = 15;
-   $aktiivinen = 0;
+
+   $koodi_aktiivinen = 0;
 
    $list = Domainit::model()->findAll(" domain!='defdb' ");
    foreach($list as $d)
@@ -26,6 +26,13 @@
 	}
 	Yii::app()->db1->setActive(true);
 
+
+		$asetukset = Asetukset::model()->findByPk(1);
+
+		$aikavali = 15;
+		if(!empty($asetukset->aikavali_halytys))
+		$aikavali = $asetukset->aikavali_halytys;
+
 		$ft = FirmanTiedot::model()->findByPk(1);
 
 
@@ -40,6 +47,8 @@
 			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN DATE_ADD(CURDATE(), INTERVAL -1 DAY) AND CURDATE()
 			AND tid=t.tid
 			)
+			AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN DATE_ADD(CURDATE(), INTERVAL -1 DAY) AND CURDATE()
+			AND kohde!=0
 		";
 
 
@@ -59,9 +68,9 @@
 			$message .= '</p>';
 
 
-			if($aktiivinen == 1)
+			if($koodi_aktiivinen == 1)
 			{
-				//Tyovuoroot::model()->updatebypk($data->id,array('ilmoitus_avoimista_kohteesta'=>1));
+				Tyovuoroot::model()->updatebypk($data->id,array('ilmoitus_avoimista_kohteesta'=>1));
 			}
 		
 		  }
@@ -69,13 +78,13 @@
 
 
 		$saaja = ''; // $asetukset->sahkoposti
-		if(!empty($ft->sahkoposti) and !empty($message))
+		if(!empty($ft->sahkoposti) and !empty($message) and $asetukset->ilmoitus_avoimista_kohteesta_sahkopostiin == 1)
 		{
 			$saaja = 'laptopsr@gmail.com'; // $ft->sahkoposti
 			echo $saaja.'<br>';
 			echo $message;
 /*
-			if($aktiivinen == 1)
+			if($koodi_aktiivinen == 1)
 			{
 			$mail = new YiiMailer();
 			$mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
