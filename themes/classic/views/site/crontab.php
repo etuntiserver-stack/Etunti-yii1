@@ -7,7 +7,7 @@
 
 
 
-   $koodi_aktiivinen = 0;
+   $koodi_aktiivinen = 1;
 
    $list = Domainit::model()->findAll(" domain!='defdb' ");
    foreach($list as $d)
@@ -80,10 +80,10 @@
 		$saaja = ''; // $asetukset->sahkoposti
 		if(!empty($ft->sahkoposti) and !empty($message) and $asetukset->ilmoitus_avoimista_kohteesta_sahkopostiin == 1)
 		{
-			$saaja = 'laptopsr@gmail.com'; // $ft->sahkoposti
+			$saaja = $ft->sahkoposti; // $ft->sahkoposti
 			echo $saaja.'<br>';
 			echo $message;
-/*
+
 			if($koodi_aktiivinen == 1)
 			{
 			$mail = new YiiMailer();
@@ -93,7 +93,7 @@
 			$mail->setBody($message);
 			$mail->send();
 			}
-*/
+
 
 		echo '<hr>';
 
