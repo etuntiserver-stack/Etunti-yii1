@@ -37,7 +37,7 @@ public $t_tunnit;
 public $count;
 public $lkohde_kannasta;
 public $tkohde_kannasta;
-public $tvid;
+
 
 
 	/**
