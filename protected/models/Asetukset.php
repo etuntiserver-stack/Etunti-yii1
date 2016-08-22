@@ -40,7 +40,7 @@ class Asetukset extends DB2ActiveRecord
 		// will receive user inputs.
 		return array(
 			array('id,logon_polkku, logon_korkeus, johtaja', 'required'),
-			array('id, show_name, sovellus_tyovuorot, logon_korkeus, palvelu_tyyppi, lasku_asiakasnumero', 'numerical', 'integerOnly'=>true),
+			array('id, show_name, sovellus_tyovuorot, logon_korkeus, palvelu_tyyppi, lasku_asiakasnumero, ilmoitus_avoimista_kohteesta_sahkopostiin', 'numerical', 'integerOnly'=>true),
 			array('paivan_uutinen, logon_polkku', 'length', 'max'=>500),
 			array('johtaja, viivastyskorko, tilinumero, iban, bic, , postita_username, postita_password, trust_cid, trust_api, checkout_id, trust_ws_cid, trust_ws_salasana', 'length', 'max'=>100),
 			array('trust_url, checkout_salasana, trust_ws_api_url', 'length', 'max'=>255),
@@ -100,6 +100,7 @@ class Asetukset extends DB2ActiveRecord
 			'onlinevaraus_asiakaspalvelu' => Yii::t('main', 'Asiakaspalvelu'),
 			'onlinevaraus_arvio_siivouksesta' => Yii::t('main', 'Arvio siivouksesta'),
 			'aikavali_halytys' => Yii::t('main', 'Aikaväli hälytys (min)'),
+			'ilmoitus_avoimista_kohteesta_sahkopostiin' => Yii::t('main', 'Ilmoitus avoimista kohteesta sähköpostiin'),
 		);
 	}
 
