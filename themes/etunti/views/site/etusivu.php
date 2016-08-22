@@ -449,7 +449,6 @@ echo '</div></div>';
 $criteria=new CDbCriteria;
 $criteria->condition = " 
 			DATE_FORMAT(STR_TO_DATE(CONCAT(pvm,loppu), '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i') < (NOW() - INTERVAL $aikavali_halytys MINUTE)
-			AND ilmoitus_avoimista_kohteesta=0
 			AND kohde IN
 			(
 			SELECT kohdenID FROM sivexkuitti
