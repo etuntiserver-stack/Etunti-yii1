@@ -473,7 +473,7 @@ echo '
 	$t = Tyontekijat::model()->findbypk($dat->tid);
 	if(isset($t->id) and isset($k->id))
 	{
-		echo $t->tekijan_nimi.', '.$k->osoite.': '.$dat->alku.'-'.$dat->loppu.'<br>';
+		echo '<p>'.$t->tekijan_nimi.', '.$k->osoite.'<br>'.$dat->pvm.' - '.$dat->alku.'-'.$dat->loppu.'</p>';
 	}
   }
 echo '</div></div>';
