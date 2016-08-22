@@ -438,6 +438,53 @@ echo '</div></div>';
 
 
 
+              <div class="panel" id="p56">
+                <div class="panel-heading">
+                  <span class="panel-title"><?php echo Yii::t('main', 'Avoimet kohteet'); ?></span>
+                </div>
+                <div class="panel-body">
+		  <?php 
+
+
+$criteria=new CDbCriteria;
+$criteria->condition = " 
+			DATE_FORMAT(STR_TO_DATE(CONCAT(pvm,loppu), '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i') < (NOW() - INTERVAL $aikavali_halytys MINUTE)
+			AND ilmoitus_avoimista_kohteesta=0
+			AND kohde IN
+			(
+			SELECT kohdenID FROM sivexkuitti
+			WHERE status=1 
+			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN DATE_ADD(CURDATE(), INTERVAL -1 DAY) AND CURDATE()
+			AND tid=t.tid
+			)
+			AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN DATE_ADD(CURDATE(), INTERVAL -1 DAY) AND CURDATE()
+			AND kohde!=0
+";
+$tv = Tyovuoroot::model()->findAll($criteria);
+
+if(count($tv) > 0)
+{
+echo '
+
+<div class="row">
+  <div class="col-sm-12">';
+  foreach($tv as $dat)
+  {
+	$k = Kohteet::model()->findbypk($dat->kohde);
+	$t = Tyontekijat::model()->findbypk($dat->tid);
+	if(isset($t->id) and isset($k->id))
+	{
+		echo $t->tekijan_nimi.', '.$k->osoite.': '.$dat->alku.'-'.$dat->loppu.'<br>';
+	}
+  }
+echo '</div></div>';
+}
+// Tyovuoro tksekkaus -->
+		  ?>
+                </div>
+              </div>
+
+
 
               <!-- Bar Graph -->
               <div class="panel" id="p12">
