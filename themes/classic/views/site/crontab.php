@@ -28,47 +28,42 @@
 
 		$ft = FirmanTiedot::model()->findByPk(1);
 
-		$criteria=new CDbCriteria;
-		$criteria->select = "
-			( 
-			   SELECT id FROM sivex_tvuoro 
-			   WHERE 
-			   DATE_FORMAT(STR_TO_DATE(CONCAT(pvm,loppu), '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i') < (NOW() - INTERVAL $aikavali MINUTE)
-			   AND ilmoitus_avoimista_kohteesta=0
-			   AND kohde=t.kohdenID
-			   AND tid=t.tid
-			) as tvid, t.*
- 
-		";
 
-		$criteria->condition = " 
-			kohdenID !=0
-			AND kohdenID IN ( 
-			   SELECT kohde FROM sivex_tvuoro 
-			   WHERE 
-			   DATE_FORMAT(STR_TO_DATE(CONCAT(pvm,loppu), '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i') < (NOW() - INTERVAL $aikavali MINUTE)
-			   AND ilmoitus_avoimista_kohteesta=0
-			   AND tid=t.tid
-			)
-			AND status=1 
+		$criteria=new CDbCriteria;
+		$criteria="
+			DATE_FORMAT(STR_TO_DATE(CONCAT(pvm,loppu), '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i') < (NOW() - INTERVAL $aikavali MINUTE)
+			AND ilmoitus_avoimista_kohteesta=0
+			AND kohde IN
+			(
+			SELECT kohdenID FROM sivexkuitti
+			WHERE status=1 
 			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN DATE_ADD(CURDATE(), INTERVAL -1 DAY) AND CURDATE()
+			AND tid=t.tid
+			)
 		";
 
 
 		$message = '';
-		$m = Mobile::model()->findAll($criteria);
+		$m = Tyovuoroot::model()->findAll($criteria);
 		if(isset($m[0]))
 		{
 			$message .= '<h2>'.strtoupper($ft->tyonantaja).'</h2>';
 			$message .= '<h2>'.Yii::t('main', 'Avoimet kohteet').' '.date("d.m.Y H:i").'</h2><br>';
 		  foreach($m as $data)
 		  {
-			$tv = Tyovuoroot::model()->findByPk($data->tvid);		
-			$message .= '<p>'.$data->kohde_kannasta.', '.$data->tekijan_nimi.'<br>';
-			$message .= Yii::t('main', 'Lopetusajaksi oli määritelty').': '.$tv->pvm.' '.$tv->loppu;
+			$k = Kohteet::model()->findbypk($data->kohde);
+			$tt = Tyontekijat::model()->findbypk($data->tid);
+
+			$message .= '<p>'.$k->osoite.', '.$tt->tekijan_nimi.'<br>';
+			$message .= Yii::t('main', 'Lopetusajaksi oli määritelty').': '.$data->pvm.' '.$data->loppu;
 			$message .= '</p>';
+
+
 			if($aktiivinen == 1)
-			$tv = Tyovuoroot::model()->updateByPk($data->tvid,array('ilmoitus_avoimista_kohteesta'=>1));		
+			{
+				//Tyovuoroot::model()->updatebypk($data->id,array('ilmoitus_avoimista_kohteesta'=>1));
+			}
+		
 		  }
 		}
 
@@ -79,7 +74,7 @@
 			$saaja = 'laptopsr@gmail.com'; // $ft->sahkoposti
 			echo $saaja.'<br>';
 			echo $message;
-
+/*
 			if($aktiivinen == 1)
 			{
 			$mail = new YiiMailer();
@@ -89,6 +84,7 @@
 			$mail->setBody($message);
 			$mail->send();
 			}
+*/
 
 		echo '<hr>';
 
