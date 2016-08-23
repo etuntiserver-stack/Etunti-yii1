@@ -461,7 +461,7 @@ if(count($tvc) > 0)
 			     echo '<tr>
 
 	                        <td>
-	                          '.$data->alku.'-'.$data->loppu.'</td>
+	                          '.$dat->alku.'-'.$dat->loppu.'</td>
 	                        <td>'.$t->tekijan_nimi.'<br>'.$k->osoite.'</td>
 	                      </tr>
 				  ';
@@ -512,7 +512,7 @@ if(count($tv) > 0)
 			     echo '<tr>
 
 	                        <td>
-	                          '.$data->alku.'-'.$data->loppu.'</td>
+	                          '.$dat->alku.'-'.$dat->loppu.'</td>
 	                        <td>'.$t->tekijan_nimi.'<br>'.$k->osoite.'</td>
 	                      </tr>
 				  ';
