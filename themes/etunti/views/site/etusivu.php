@@ -430,7 +430,15 @@ echo '
                 <div class="panel-heading">
                   <span class="panel-title"><?php echo Yii::t('main', 'Myöhästyneet kohteet'); ?></span>
                 </div>
-                <div class="panel-body">
+                <div class="panel-body panel-scroller scroller-md scroller-overlay pn">
+                  <table class="table mbn tc-med-1 tc-bold-last">
+                    <thead>
+                      <tr class="hidden">
+                        <th>#</th>
+                        <th>First Name</th>
+                      </tr>
+                    </thead>
+                    <tbody>
 		  <?php 
 // Tyovuoro tksekkaus
 $criteria=new CDbCriteria;
@@ -442,22 +450,29 @@ $tvc = Tyovuoroot::model()->findAll($criteria);
 
 if(count($tvc) > 0)
 {
-echo '
-<div class="row">
-  <div class="col-sm-12">';
+
   foreach($tvc as $dat)
   {
 	$k = Kohteet::model()->findbypk($dat->kohde);
 	$t = Tyontekijat::model()->findbypk($dat->tid);
 	if(isset($t->id) and isset($k->id))
 	{
-		echo '<p>'.$t->tekijan_nimi.', '.$k->osoite.'<br>'.$dat->pvm.' - '.$dat->alku.'-'.$dat->loppu.'</p>';
+
+			     echo '<tr>
+
+	                        <td>
+	                          '.$data->alku.'-'.$data->loppu.'</td>
+	                        <td>'.$t->tekijan_nimi.'<br>'.$k->osoite.'</td>
+	                      </tr>
+				  ';
 	}
   }
-echo '</div></div>';
+
 }
 // Tyovuoro tksekkaus -->
 		  ?>
+                    </tbody>
+                  </table>
                 </div>
               </div>
 
@@ -467,7 +482,15 @@ echo '</div></div>';
                 <div class="panel-heading">
                   <span class="panel-title"><?php echo Yii::t('main', 'Määräajan ylittäneet kohteet'); ?></span>
                 </div>
-                <div class="panel-body">
+                <div class="panel-body panel-scroller scroller-md scroller-overlay pn">
+                  <table class="table mbn tc-med-1 tc-bold-last">
+                    <thead>
+                      <tr class="hidden">
+                        <th>#</th>
+                        <th>First Name</th>
+                      </tr>
+                    </thead>
+                    <tbody>
 		  <?php 
 
 
@@ -480,23 +503,27 @@ $tv = Tyovuoroot::model()->findAll($criteria);
 
 if(count($tv) > 0)
 {
-echo '
-
-<div class="row">
-  <div class="col-sm-12">';
   foreach($tv as $dat)
   {
 	$k = Kohteet::model()->findbypk($dat->kohde);
 	$t = Tyontekijat::model()->findbypk($dat->tid);
 	if(isset($t->id) and isset($k->id))
 	{
-		echo '<p>'.$t->tekijan_nimi.', '.$k->osoite.'<br>'.$dat->pvm.' - '.$dat->alku.'-'.$dat->loppu.'</p>';
+			     echo '<tr>
+
+	                        <td>
+	                          '.$data->alku.'-'.$data->loppu.'</td>
+	                        <td>'.$t->tekijan_nimi.'<br>'.$k->osoite.'</td>
+	                      </tr>
+				  ';
 	}
   }
-echo '</div></div>';
+
 }
 // Tyovuoro tksekkaus -->
 		  ?>
+                    </tbody>
+                  </table>
                 </div>
               </div>
 
