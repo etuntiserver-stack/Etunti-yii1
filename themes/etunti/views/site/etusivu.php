@@ -293,6 +293,45 @@ echo '
 
 
 
+
+              <!-- Bar Graph -->
+              <div class="panel" id="p12">
+                <div class="panel-heading">
+                  <span class="panel-title"><?php echo Yii::t('main', 'Toimipaikat'); ?></span>
+		  <?php 
+		    $month1 = $months[date("m")];
+		    $month2 = $months[date("m",strtotime("-1 month"))];
+		    $hesari1 = $this->toteutuThisMonthByCity(date("Ym"), "helsinki"); 
+		    $hesari2 = $this->toteutuThisMonthByCity(date("Ym",strtotime("-1 month")), "helsinki"); 
+		    $espoo1 = $this->toteutuThisMonthByCity(date("Ym"), "espoo"); 
+		    $espoo2 = $this->toteutuThisMonthByCity(date("Ym",strtotime("-1 month")), "espoo");
+		    $vantaa1 = $this->toteutuThisMonthByCity(date("Ym"), "vantaa"); 
+		    $vantaa2 = $this->toteutuThisMonthByCity(date("Ym",strtotime("-1 month")), "vantaa");
+		  ?>
+                  <input type="hidden" id="month1" value="<?php echo $month1; ?>">
+                  <input type="hidden" id="month2" value="<?php echo $month2; ?>">
+                  <input type="hidden" id="hesari1" value="<?php echo $hesari1; ?>">
+                  <input type="hidden" id="hesari2" value="<?php echo $hesari2; ?>">
+                  <input type="hidden" id="espoo1" value="<?php echo $espoo1; ?>">
+                  <input type="hidden" id="espoo2" value="<?php echo $espoo2; ?>">
+                  <input type="hidden" id="vantaa1" value="<?php echo $vantaa1; ?>">
+                  <input type="hidden" id="vantaa2" value="<?php echo $vantaa2; ?>">
+                </div>
+                <div class="panel-menu">
+
+                  <div class="chart-legend" data-chart-id="#high-bars">
+                    <a data-chart-id="0" class="legend-item btn btn-warning btn-sm mr5">Data 1</a>
+                    <a data-chart-id="1" class="legend-item btn btn-primary btn-sm mr5">Data 2</a>
+                    <a data-chart-id="2" class="legend-item btn btn-info btn-sm">Data 3</a>
+                  </div>
+                </div>
+                <div class="panel-body pn">
+                  <div id="high-bars" style="width: 100%; height: 140px; margin: 0 auto"></div>
+                </div>
+              </div>
+
+
+
               <!-- Country List -->
               <div class="panel" id="p216">
                 <div class="panel-heading">
@@ -461,43 +500,6 @@ echo '</div></div>';
                 </div>
               </div>
 
-
-
-              <!-- Bar Graph -->
-              <div class="panel" id="p12">
-                <div class="panel-heading">
-                  <span class="panel-title"><?php echo Yii::t('main', 'Toimipaikat'); ?></span>
-		  <?php 
-		    $month1 = $months[date("m")];
-		    $month2 = $months[date("m",strtotime("-1 month"))];
-		    $hesari1 = $this->toteutuThisMonthByCity(date("Ym"), "helsinki"); 
-		    $hesari2 = $this->toteutuThisMonthByCity(date("Ym",strtotime("-1 month")), "helsinki"); 
-		    $espoo1 = $this->toteutuThisMonthByCity(date("Ym"), "espoo"); 
-		    $espoo2 = $this->toteutuThisMonthByCity(date("Ym",strtotime("-1 month")), "espoo");
-		    $vantaa1 = $this->toteutuThisMonthByCity(date("Ym"), "vantaa"); 
-		    $vantaa2 = $this->toteutuThisMonthByCity(date("Ym",strtotime("-1 month")), "vantaa");
-		  ?>
-                  <input type="hidden" id="month1" value="<?php echo $month1; ?>">
-                  <input type="hidden" id="month2" value="<?php echo $month2; ?>">
-                  <input type="hidden" id="hesari1" value="<?php echo $hesari1; ?>">
-                  <input type="hidden" id="hesari2" value="<?php echo $hesari2; ?>">
-                  <input type="hidden" id="espoo1" value="<?php echo $espoo1; ?>">
-                  <input type="hidden" id="espoo2" value="<?php echo $espoo2; ?>">
-                  <input type="hidden" id="vantaa1" value="<?php echo $vantaa1; ?>">
-                  <input type="hidden" id="vantaa2" value="<?php echo $vantaa2; ?>">
-                </div>
-                <div class="panel-menu">
-
-                  <div class="chart-legend" data-chart-id="#high-bars">
-                    <a data-chart-id="0" class="legend-item btn btn-warning btn-sm mr5">Data 1</a>
-                    <a data-chart-id="1" class="legend-item btn btn-primary btn-sm mr5">Data 2</a>
-                    <a data-chart-id="2" class="legend-item btn btn-info btn-sm">Data 3</a>
-                  </div>
-                </div>
-                <div class="panel-body pn">
-                  <div id="high-bars" style="width: 100%; height: 140px; margin: 0 auto"></div>
-                </div>
-              </div>
 
             </div>
             <!-- end: .col-md-4-->
