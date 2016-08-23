@@ -60,6 +60,19 @@
 		<?php echo $form->error($model,'aikavali_halytys'); ?>
 	</div>
 
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'ilmoitus_myohastyneista_kohteesta_sahkopostiin'); ?>
+		<?php 
+        	$l = array(
+			0=>'Ei',
+			1=>'Kyllä'
+		);
+		echo $form->dropDownList($model,'ilmoitus_myohastyneista_kohteesta_sahkopostiin', $l, 
+		array('empty'=>Yii::t('main', 'Valitse'), 'class'=>'form-control')) ?>
+		<?php echo $form->error($model,'ilmoitus_myohastyneista_kohteesta_sahkopostiin'); ?>
+	</div>
+
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'ilmoitus_avoimista_kohteesta_sahkopostiin'); ?>
 		<?php 
@@ -71,6 +84,8 @@
 		array('empty'=>Yii::t('main', 'Valitse'), 'class'=>'form-control')) ?>
 		<?php echo $form->error($model,'ilmoitus_avoimista_kohteesta_sahkopostiin'); ?>
 	</div>
+
+
 
 
   </div><div class="col-sm-4">

@@ -394,24 +394,10 @@ echo '
                 <div class="panel-body">
 		  <?php 
 // Tyovuoro tksekkaus
-$a = Asetukset::model()->findByPk(1);
-
-$aikavali_halytys = 10;
-if($a->aikavali_halytys != 0)
-$aikavali_halytys = $a->aikavali_halytys;
-
-
 $criteria=new CDbCriteria;
 $criteria->condition = " 
 	DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE()
-	AND DATE_ADD(DATE_FORMAT(STR_TO_DATE(CONCAT(pvm, alku), '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), INTERVAL $aikavali_halytys MINUTE) < NOW() 
-	AND kohde NOT IN 
-	(SELECT kohdenID FROM sivexkuitti 
-	WHERE DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d') = CURDATE()
-	AND osoite NOT LIKE '%MATKA%'
-	)
-	AND kohde!='' AND tyoajanmerkinta='Normaali/'
-	AND kohde NOT IN (SELECT id FROM sivex_kohdet WHERE osoite LIKE '%matka%' OR osoite LIKE '%lounastauko%' )
+	AND ilmoitus_myohastyneista_kohteesta=1
 ";
 $tvc = Tyovuoroot::model()->findAll($criteria);
 
@@ -448,15 +434,8 @@ echo '</div></div>';
 
 $criteria=new CDbCriteria;
 $criteria->condition = " 
-			DATE_FORMAT(STR_TO_DATE(CONCAT(pvm,loppu), '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i') < (NOW() - INTERVAL $aikavali_halytys MINUTE)
-			AND kohde IN
-			(
-			SELECT kohdenID FROM sivexkuitti
-			WHERE status=1 
-			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = DATE_FORMAT(STR_TO_DATE(t.pvm, '%d.%m.%Y'), '%Y-%m-%d')
-			AND tid=t.tid
-			)
-			AND kohde!=0
+	DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE()
+	AND ilmoitus_avoimista_kohteesta=1
 ";
 $tv = Tyovuoroot::model()->findAll($criteria);
 
