@@ -453,10 +453,10 @@ $criteria->condition = "
 			(
 			SELECT kohdenID FROM sivexkuitti
 			WHERE status=1 
-			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN DATE_ADD(CURDATE(), INTERVAL -1 DAY) AND CURDATE()
+			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE()
 			AND tid=t.tid
 			)
-			AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN DATE_ADD(CURDATE(), INTERVAL -1 DAY) AND CURDATE()
+			AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE()
 			AND kohde!=0
 ";
 $tv = Tyovuoroot::model()->findAll($criteria);
