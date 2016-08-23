@@ -426,7 +426,7 @@ echo '</div></div>';
 
               <div class="panel" id="p56">
                 <div class="panel-heading">
-                  <span class="panel-title"><?php echo Yii::t('main', 'Sulkemattomat kohteet'); ?></span>
+                  <span class="panel-title"><?php echo Yii::t('main', 'Määräajanylittäneet kohteet'); ?></span>
                 </div>
                 <div class="panel-body">
 		  <?php 
