@@ -565,6 +565,24 @@ public function actionImei($dom)
 		      if(isset($kohde['osoite']))
 		      $osoite = $kohde['osoite'];
 
+		      $tyopaari = array();
+		      if(!empty($val->tyopaari))
+		      $tyopaari = json_decode($val->tyopaari, true);
+		      $tplista = '';
+		      foreach($tyopaari as $tp)
+		      {
+			if($tp != $ttekija->id)
+			{
+		      	   $tpID = Tyontekijat::model()->findbypk($tp);
+			   if(isset($tpID->tekijan_nimi))
+			   $tplista .= Yii::t('main', 'Työpari').': '.$tpID->tekijan_nimi.'<br>';
+			}
+		      }
+		      
+		      if(!empty($tplista))
+		      $tplista = '<hr>'.$tplista;
+
+
 		      $alkLop = '';
 		      if($val->alku > 0 and $val->loppu > 0)
 		      $alkLop = $val->alku.'-'.$val->loppu.' ';
@@ -591,6 +609,7 @@ public function actionImei($dom)
 				  <hr>
 				  <div class="text-small">'.$val->tietoja.'</div>';
 		      }
+		      $sel .= $tplista;
 		      $sel .= '
 				</div>';
 		    }
