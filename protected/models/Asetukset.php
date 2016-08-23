@@ -100,7 +100,7 @@ class Asetukset extends DB2ActiveRecord
 			'onlinevaraus_asiakaspalvelu' => Yii::t('main', 'Asiakaspalvelu'),
 			'onlinevaraus_arvio_siivouksesta' => Yii::t('main', 'Arvio siivouksesta'),
 			'aikavali_halytys' => Yii::t('main', 'Aikaväli hälytys (min)'),
-			'ilmoitus_avoimista_kohteesta_sahkopostiin' => Yii::t('main', 'Ilmoitus avoimista kohteesta sähköpostiin'),
+			'ilmoitus_avoimista_kohteesta_sahkopostiin' => Yii::t('main', 'Ilmoitus määräajan ylittäneistä kohteista sähköpostiin'),
 			'ilmoitus_myohastyneista_kohteesta_sahkopostiin' => Yii::t('main', 'ilmoitus myöhästyneistä kohteesta sähköpostiin'),
 		);
 	}
