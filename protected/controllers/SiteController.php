@@ -316,6 +316,7 @@ class SiteController extends Controller
 
 		}
 
+
 		$this->render('kohderyhma', array('data'=>$data));
 	}
 
@@ -847,6 +848,5 @@ $(document).ready(function(){
 
 		echo $return;
 	}
-
 
 }
