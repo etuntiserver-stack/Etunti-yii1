@@ -426,7 +426,7 @@ echo '
 	$t = Tyontekijat::model()->findbypk($dat->tid);
 	if(isset($t->id) and isset($k->id))
 	{
-		echo $t->tekijan_nimi.', '.$k->osoite.': '.$dat->alku.'-'.$dat->loppu.'<br>';
+		echo '<p>'.$t->tekijan_nimi.', '.$k->osoite.'<br>'.$dat->pvm.' - '.$dat->alku.'-'.$dat->loppu.'</p>';
 	}
   }
 echo '</div></div>';
@@ -440,7 +440,7 @@ echo '</div></div>';
 
               <div class="panel" id="p56">
                 <div class="panel-heading">
-                  <span class="panel-title"><?php echo Yii::t('main', 'Avoimet kohteet'); ?></span>
+                  <span class="panel-title"><?php echo Yii::t('main', 'Sulkemattomat kohteet'); ?></span>
                 </div>
                 <div class="panel-body">
 		  <?php 
@@ -453,10 +453,9 @@ $criteria->condition = "
 			(
 			SELECT kohdenID FROM sivexkuitti
 			WHERE status=1 
-			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE()
+			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = DATE_FORMAT(STR_TO_DATE(t.pvm, '%d.%m.%Y'), '%Y-%m-%d')
 			AND tid=t.tid
 			)
-			AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE()
 			AND kohde!=0
 ";
 $tv = Tyovuoroot::model()->findAll($criteria);
