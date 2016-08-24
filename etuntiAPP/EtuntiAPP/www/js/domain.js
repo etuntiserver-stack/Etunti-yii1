@@ -19,6 +19,16 @@ $(document).ready(function(){
     var domain = '';
     var email = '';
     var salasana = '';
+
+
+    if(localStorage.getItem('domain'))
+	  domain=localStorage.getItem('domain');
+    if(localStorage.getItem('email'))
+	  email=localStorage.getItem('email');
+    if(localStorage.getItem('salasana'))
+	  salasana=localStorage.getItem('salasana');
+
+
     var my_location = '';
     var tag = '000000';
     var etunti_language = 'fi';
@@ -103,15 +113,6 @@ if( !localStorage.getItem('domain') | !localStorage.getItem('email') | !localSto
 
 
 $(document).ready(function(){
-
-
-	if(localStorage.getItem('domain'))
-	  domain=localStorage.getItem('domain');
-	if(localStorage.getItem('email'))
-	  email=localStorage.getItem('email');
-	if(localStorage.getItem('salasana'))
-	  salasana=localStorage.getItem('salasana');
-
 
 
  	var lang = [];

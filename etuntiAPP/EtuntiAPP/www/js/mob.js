@@ -1,7 +1,19 @@
 $(document).ready(function(){
 
 
-var lang = JSON.parse(localStorage.getItem('lang'));
+    var domain = '';
+    var email = '';
+    var salasana = '';
+
+
+    if(localStorage.getItem('domain'))
+	  domain=localStorage.getItem('domain');
+    if(localStorage.getItem('email'))
+	  email=localStorage.getItem('email');
+    if(localStorage.getItem('salasana'))
+	  salasana=localStorage.getItem('salasana');
+
+    var lang = JSON.parse(localStorage.getItem('lang'));
 
 
 
@@ -73,9 +85,10 @@ var lang = JSON.parse(localStorage.getItem('lang'));
 	//salasana = $("#salasana").val();
 
 
-	if(my_location == '') my_location = $("#location").val();
+	if(my_location == '') 
+	my_location = $("#location").val();
 
-	if((domain != '') & (email !='') & (salasana != ''))
+	if((domain !== '') & (email !== '') & (salasana !== ''))
 	{
 		checkTAG();
 		set();

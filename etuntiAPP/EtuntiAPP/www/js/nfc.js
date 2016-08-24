@@ -97,9 +97,20 @@ var appNFC = {
 $(document).ready(function(){
 
 
-	var domain = localStorage.getItem('domain');
-	var email = localStorage.getItem('email');
-	var salasana = localStorage.getItem('salasana');
+    var domain = '';
+    var email = '';
+    var salasana = '';
+
+
+    if(localStorage.getItem('domain'))
+	  domain=localStorage.getItem('domain');
+    if(localStorage.getItem('email'))
+	  email=localStorage.getItem('email');
+    if(localStorage.getItem('salasana'))
+	  salasana=localStorage.getItem('salasana');
+
+
+
 	var tag = document.getElementById('tagginro').value;
 
         $.ajax({
