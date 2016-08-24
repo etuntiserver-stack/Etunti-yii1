@@ -41,7 +41,7 @@ class SiteController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', 
-				'actions'=>array('etusivu','ohjesivu','etusivu_esimerki', 'change_color', 'valiko', 'valiko_ajax', 'kohderyhma', 'ohjevideot', 'mobemu'),
+				'actions'=>array('etusivu','ohjesivu','etusivu_esimerki', 'change_color', 'valiko', 'valiko_ajax', 'kohderyhma', 'ohjevideot', 'mobemu', 'etusivu_ajax'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('allow', 
@@ -93,6 +93,17 @@ class SiteController extends Controller
                 parent::init();
         }
 
+
+	public function actionEtusivu_ajax()
+	{
+		if(isset($_POST['suoritus']))
+		{
+		$suoritus = $_POST['suoritus'];
+		$this->renderPartial('etusivu_ajax',array(
+			'suoritus'=>$suoritus,
+		));
+		}
+	}
 
 	public function actionCrontab($pass)
 	{
@@ -315,6 +326,7 @@ class SiteController extends Controller
 			}
 
 		}
+
 
 
 		$this->render('kohderyhma', array('data'=>$data));
@@ -645,6 +657,7 @@ $(document).ready(function(){
 		{
 		    $total_l += $l->count;
 		}
+
 		/* ////////////////////////// */
 
        		$criteria = new CDbCriteria();

@@ -46,7 +46,7 @@ $(document).ready(function(){
 
 //localStorage.clear();
 
-/* <-- poista tama 10.2016 */
+/* <-- poistettu 24.08.2016 
 if( !localStorage.getItem('domain') | !localStorage.getItem('email') | !localStorage.getItem('salasana')  )
 {
   document.addEventListener('deviceready', this.readFile, true);
@@ -89,7 +89,7 @@ if( !localStorage.getItem('domain') | !localStorage.getItem('email') | !localSto
   }
 
 }
-/* poista tama 10.2016 --> */
+*/
 
 
 
