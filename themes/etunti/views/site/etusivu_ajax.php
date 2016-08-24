@@ -21,7 +21,20 @@ if($suoritus == 'cronin_asiat')
 		$t = Tyontekijat::model()->findbypk($dat->tid);
 		if(isset($t->id) and isset($k->id))
 		{
-			$ylittaneet .= '<p class="form-inline"><div class="col-sm-3">'.$dat->alku.'-'.$dat->loppu.'</div><div class="col-sm-9">'.$t->tekijan_nimi.'<br>'.$k->osoite.'</div></p>';
+
+		$criteria=new CDbCriteria;
+		$criteria->condition = " 
+			kohdenID='".$k->id."' AND tid='".$t->id."'
+			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = '".date("Y-m-d", strtotime($dat->pvm))."'
+			AND status=1
+		";
+		$mob = Mobile::model()->find($criteria);
+		$tilanne = '<span class="text-success">'.Yii::t('main', 'Lopetettu').'</span>';
+		if(isset($mob->id))
+		$tilanne = '<span class="text-danger">'.Yii::t('main', 'Avoin').'</span>';
+
+		$ylittaneet .= '<tr><td><span class=""></span> '.$t->tekijan_nimi.'<br>'.$k->osoite.'</td><td>'.$dat->alku.'-'.$dat->loppu.'<br>'.$tilanne.'</td></tr>';
+
 		}
 	  }
 	
@@ -46,7 +59,7 @@ if($suoritus == 'cronin_asiat')
 		$t = Tyontekijat::model()->findbypk($dat->tid);
 		if(isset($t->id) and isset($k->id))
 		{
-			$myohastyneet .= '<p class="form-inline"><div class="col-sm-3">'.$dat->alku.'-'.$dat->loppu.'</div><div class="col-sm-9">'.$t->tekijan_nimi.'<br>'.$k->osoite.'</div></p>';
+		$myohastyneet .= '<tr><td><span class=""></span> '.$t->tekijan_nimi.'<br>'.$k->osoite.'</td><td>'.$dat->alku.'-'.$dat->loppu.'</td></tr>';
 		}
 	  }
 	

@@ -432,7 +432,16 @@ echo '
                 </div>
                 <div class="panel-body panel-scroller scroller-md scroller-overlay pn">
 
-		    <span id="myohastyneet"></span>
+                  <table class="table mbn tc-med-1 tc-bold-last">
+                    <thead>
+                      <tr class="hidden">
+                        <th>#</th>
+                        <th>First Name</th>
+                      </tr>
+                    </thead>
+                    <tbody id="myohastyneet">
+                    </tbody>
+                  </table>
 
                 </div>
               </div>
@@ -445,7 +454,16 @@ echo '
                 </div>
                 <div class="panel-body panel-scroller scroller-md scroller-overlay pn">
 
-		    <span id="ylittaneet"></span>
+                  <table class="table mbn tc-med-1 tc-bold-last">
+                    <thead>
+                      <tr class="hidden">
+                        <th>#</th>
+                        <th>First Name</th>
+                      </tr>
+                    </thead>
+                    <tbody id="ylittaneet">
+                    </tbody>
+                  </table>
 
                 </div>
               </div>
@@ -462,10 +480,10 @@ echo '
 $(document).ready(function(){
 
 var count = 0;
-etusivuAjax();
-function etusivuAjax()
-{
-	count += 1;
+var etusivuAjax = function(){
+     if(count < 20) {
+          count++;
+
 	console.log('Count: '+count);
         $.ajax({
            url: 'etusivu_ajax',
@@ -474,14 +492,26 @@ function etusivuAjax()
            success: function(data){
 		var d = JSON.parse(data);
 		//console.log(d);
-		$("#ylittaneet").replaceWith(d[0]);
-		$("#myohastyneet").replaceWith(d[1]);
+		$("#ylittaneet").html(d[0]);
+		$("#myohastyneet").html(d[1]);
+
 
            }
         });
-}
 
-   setInterval(etusivuAjax, "60000");
+     } else {
+
+	  $("#ylittaneet").html('<div class="alert alert-danger">Tiedot ovat vanhetuneet</div>');
+	  $("#myohastyneet").html('<div class="alert alert-danger">Tiedot ovat vanhetuneet</div>');
+          clearInterval(etusivuAjax);
+
+     }
+};
+
+     etusivuAjax();
+     setInterval(etusivuAjax, 60000);
+
+
 
 });
 </script>
