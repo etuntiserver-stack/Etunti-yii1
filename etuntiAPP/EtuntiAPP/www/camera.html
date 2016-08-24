@@ -111,6 +111,18 @@
     }
     function savePhoto() {
 
+    var domain = '';
+    var email = '';
+    var salasana = '';
+
+
+    if(localStorage.getItem('domain'))
+	  domain=localStorage.getItem('domain');
+    if(localStorage.getItem('email'))
+	  email=localStorage.getItem('email');
+    if(localStorage.getItem('salasana'))
+	  salasana=localStorage.getItem('salasana');
+
 
 	jQuery("#camButtons").hide();
 	jQuery("#otsikko").hide();
