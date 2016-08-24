@@ -7,8 +7,8 @@ var lang = JSON.parse(localStorage.getItem('lang'));
 
   $("#odotta").html("<img src='img/icon.png'>");
 
-  //setTimeout(tiedot,3000);
-  tiedot();
+  setTimeout(tiedot,3000);
+
 
 
 	    document.addEventListener("deviceready", onDeviceReady, false);

@@ -34,7 +34,7 @@
 
 	$ft = FirmanTiedot::model()->findByPk(1);
 
-	// <-- ilmoitus_avoimista_kohteesta
+	// <-- ilmoitus_avoimista_kohteesta ylittaneet
 		$message = '';
 
 		$criteria=new CDbCriteria;
@@ -79,6 +79,8 @@
 		  }
 		}
 
+		if(!empty($message))
+			echo $message;
 
 		$saaja = ''; // $asetukset->sahkoposti
 		if(!empty($ft->sahkoposti) and !empty($message) and $asetukset->ilmoitus_avoimista_kohteesta_sahkopostiin == 1)
@@ -151,13 +153,15 @@
 		  }
 		}
 
+		if(!empty($message))
+			echo $message;
 
 		$saaja = ''; // $asetukset->sahkoposti
 		if(!empty($ft->sahkoposti) and !empty($message) and $asetukset->ilmoitus_myohastyneista_kohteesta_sahkopostiin == 1)
 		{
 			$saaja = $ft->sahkoposti; // $ft->sahkoposti
 			echo $saaja.'<br>';
-			echo $message;
+
 
 			if($koodi_aktiivinen == 1)
 			{

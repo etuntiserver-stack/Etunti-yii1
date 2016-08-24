@@ -431,48 +431,9 @@ echo '
                   <span class="panel-title"><?php echo Yii::t('main', 'Myöhästyneet kohteet'); ?></span>
                 </div>
                 <div class="panel-body panel-scroller scroller-md scroller-overlay pn">
-                  <table class="table mbn tc-med-1 tc-bold-last">
-                    <thead>
-                      <tr class="hidden">
-                        <th>#</th>
-                        <th>First Name</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-		  <?php 
-// Tyovuoro tksekkaus
-$criteria=new CDbCriteria;
-$criteria->condition = " 
-	DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE()
-	AND ilmoitus_myohastyneista_kohteesta=1
-";
-$tvc = Tyovuoroot::model()->findAll($criteria);
 
-if(count($tvc) > 0)
-{
+		    <span id="myohastyneet"></span>
 
-  foreach($tvc as $dat)
-  {
-	$k = Kohteet::model()->findbypk($dat->kohde);
-	$t = Tyontekijat::model()->findbypk($dat->tid);
-	if(isset($t->id) and isset($k->id))
-	{
-
-			     echo '<tr>
-
-	                        <td>
-	                          '.$dat->alku.'-'.$dat->loppu.'</td>
-	                        <td>'.$t->tekijan_nimi.'<br>'.$k->osoite.'</td>
-	                      </tr>
-				  ';
-	}
-  }
-
-}
-// Tyovuoro tksekkaus -->
-		  ?>
-                    </tbody>
-                  </table>
                 </div>
               </div>
 
@@ -483,47 +444,9 @@ if(count($tvc) > 0)
                   <span class="panel-title"><?php echo Yii::t('main', 'Määräajan ylittäneet kohteet'); ?></span>
                 </div>
                 <div class="panel-body panel-scroller scroller-md scroller-overlay pn">
-                  <table class="table mbn tc-med-1 tc-bold-last">
-                    <thead>
-                      <tr class="hidden">
-                        <th>#</th>
-                        <th>First Name</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-		  <?php 
 
+		    <span id="ylittaneet"></span>
 
-$criteria=new CDbCriteria;
-$criteria->condition = " 
-	DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE()
-	AND ilmoitus_avoimista_kohteesta=1
-";
-$tv = Tyovuoroot::model()->findAll($criteria);
-
-if(count($tv) > 0)
-{
-  foreach($tv as $dat)
-  {
-	$k = Kohteet::model()->findbypk($dat->kohde);
-	$t = Tyontekijat::model()->findbypk($dat->tid);
-	if(isset($t->id) and isset($k->id))
-	{
-			     echo '<tr>
-
-	                        <td>
-	                          '.$dat->alku.'-'.$dat->loppu.'</td>
-	                        <td>'.$t->tekijan_nimi.'<br>'.$k->osoite.'</td>
-	                      </tr>
-				  ';
-	}
-  }
-
-}
-// Tyovuoro tksekkaus -->
-		  ?>
-                    </tbody>
-                  </table>
                 </div>
               </div>
 
@@ -531,6 +454,37 @@ if(count($tv) > 0)
             </div>
             <!-- end: .col-md-4-->
 
+
+
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+
+var count = 0;
+etusivuAjax();
+function etusivuAjax()
+{
+	count += 1;
+	console.log('Count: '+count);
+        $.ajax({
+           url: 'etusivu_ajax',
+           type: "POST",
+           data: { "suoritus" : "cronin_asiat" , count : count },
+           success: function(data){
+		var d = JSON.parse(data);
+		//console.log(d);
+		$("#ylittaneet").replaceWith(d[0]);
+		$("#myohastyneet").replaceWith(d[1]);
+
+           }
+        });
+}
+
+   setInterval(etusivuAjax, "60000");
+
+});
+</script>
 
 
             <div class="col-md-6 col-lg-3 admin-grid">
