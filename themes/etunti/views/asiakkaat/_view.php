@@ -29,6 +29,12 @@
 		<?php echo $data->tyyppi; ?>
 	</td>
 
+<?php if($netvisor == true) : ?>
+	<td>
+		<?php echo $this->onkoNetvisor($data->id); ?>
+	</td>
+<?php endif; ?>
+
 <?php if($this->tas(2)) : ?>
 	<td>
 		<?php echo CHtml::link(Yii::t('main', 'näytä'), array('showshift', 'id'=>$data->id), array('class'=>'btn btn-primary myBgColors', 'style'=>'color:white')); ?>

@@ -36,7 +36,7 @@ class AsiakkaatController extends Controller
                 		'expression'=>"Yii::app()->controller->isAsiakas()",
 			),
 			array('allow',
-				'actions'=>array('admin', 'delete', 'create', 'update', 'index', 'view', 'checkLastAsiakasID', 'showshift'),
+				'actions'=>array('admin', 'delete', 'create', 'update', 'index', 'view', 'checkLastAsiakasID', 'showshift', 'netvisor_sync'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -304,12 +304,11 @@ class AsiakkaatController extends Controller
 				VinkkiExtranet::model()->updatebypk($vinkki->id, array('tila'=>2));
 
 
-
+			$asetukset = Asetukset::model()->findbypk(1);
 
 			$model->attributes=$_POST['Asiakkaat'];
 			if(isset($vinkki->id))
 			{
-				$asetukset = Asetukset::model()->findbypk(1);
 				Asiakkaat::model()->updatebypk($vinkki->asiakas_id,
 				array('vinkki_tunnit'=>$asetukset->vinkki_tunnit, 'vinkki_prosentti'=>$asetukset->vinkki_prosentti
 				));
@@ -318,6 +317,20 @@ class AsiakkaatController extends Controller
 
 			if($model->save())
 			{
+
+
+
+			   if($asetukset->netvisor_kaytto == 1)
+			   {
+				if(empty($model->netvisorkey))
+				{
+					$InsertedDataIdentifier = $this->netvisorCustomer("add", $model);
+					if(!empty($InsertedDataIdentifier))
+					Asiakkaat::model()->updateByPk($model->id, array('netvisorkey'=>$InsertedDataIdentifier));
+				}
+			   }
+
+
 				if(empty($model->asiakasnumero))
 				$a = Asiakkaat::model()->updatebypk($model->id, array('asiakasnumero'=>$model->id));
 
@@ -361,7 +374,31 @@ class AsiakkaatController extends Controller
 			$model->attributes=$_POST['Asiakkaat'];
 
 			if($model->save())
+			{
+
+
+			   $a = Asetukset::model()->findbypk(1);
+			   if($a->netvisor_kaytto == 1)
+			   {
+				if(empty($model->netvisorkey))
+				{
+					$InsertedDataIdentifier = $this->netvisorCustomer("add", $model);
+					if(!empty($InsertedDataIdentifier))
+					Asiakkaat::model()->updateByPk($model->id, array('netvisorkey'=>$InsertedDataIdentifier));
+				} else {
+					$InsertedDataIdentifier = $this->netvisorCustomer("edit", $model);
+					/*
+					echo '<pre>';
+					print_r( $InsertedDataIdentifier );
+					echo '</pre>';
+					exit;
+					*/
+				}
+			    }
+
+
 				$this->redirect(array('view','id'=>$model->id));
+			}
 		}
 
 		$this->render('update',array(
@@ -392,6 +429,138 @@ class AsiakkaatController extends Controller
 	}
 
 
+	protected function netvisorCustomer($tila, $model)
+	{
+
+		$return = '';
+		$site = Yii::app()->createController('Site');
+		$n = $site[0]->netvisorYhteys();
+
+	if(isset($n[0]))
+	{
+		if( $tila == 'add' )
+		$url		= $n[0].'/customer.nv?method=add';
+		if( $tila == 'edit' and !empty($model->netvisorkey))
+		$url		= $n[0].'/customer.nv?id='.$model->netvisorkey.'&method=edit';
+
+		$host 		= $n[1];
+
+		$sender 	= $n[2];
+		$customerId	= $n[3];
+		$partnerId	= $n[4];
+		$timestamp	= $n[5];
+		$language	= $n[6];
+		$organisationIdentifier	= $n[7];
+		$transactionIdentifier	= $n[8];
+		$userKey 	= $n[9];
+		$partnerKey	= $n[10];
+
+
+
+	$getMAC = md5(
+		$url.'&'.
+		$sender.'&'.
+		$customerId.'&'.
+		$timestamp.'&'.
+		$language.'&'.
+		$organisationIdentifier.'&'.
+		$transactionIdentifier.'&'.
+		$userKey.'&'.
+		$partnerKey
+	 	);
+	
+	$auth_data = 
+	    "Host: $host\r\n".  
+	    "X-Netvisor-Authentication-Sender: $sender\r\n".  
+	    "X-Netvisor-Authentication-CustomerId: $customerId\r\n".  
+	    "X-Netvisor-Authentication-PartnerId: $partnerId\r\n".  
+	    "X-Netvisor-Authentication-Timestamp: $timestamp\r\n".
+	    "X-Netvisor-Interface-Language: $language\r\n".
+	    "X-Netvisor-Organisation-ID: $organisationIdentifier\r\n".  
+	    "X-Netvisor-Authentication-TransactionId: $transactionIdentifier\r\n".
+	    "X-Netvisor-Authentication-MAC: $getMAC\r\n"
+	; 
+	
+	
+	$name = 'Ei tietoja';
+	if(!empty($model->yrityksen_nimi))
+	$name = $model->yrityksen_nimi;
+	elseif(empty($model->yrityksen_nimi) and !empty($model->yhteyshenkilo))
+	$name = $model->yhteyshenkilo;
+
+$xml = '
+<root>
+  <customer>
+    <customerbaseinformation>
+      <internalidentifier>'.$model->id.'</internalidentifier>
+      <externalidentifier>'.$model->y_tunnus.'</externalidentifier>
+      <name>'.$name.'</name>
+      <nameextension></nameextension>
+      <streetaddress>'.$model->osoite.'</streetaddress>
+      <city>'.$model->kaupunki.'</city>
+      <postnumber>'.$model->postinumero.'</postnumber>
+      <country type="ISO-3166">FI</country>
+      <customergroupname>Asiakas</customergroupname>
+      <phonenumber>'.$model->puhelin.'</phonenumber>
+      <faxnumber></faxnumber>
+      <email>'.$model->sahkoposti.'</email>
+      <homepageuri></homepageuri>
+    </customerbaseinformation>
+    <customerfinvoicedetails>
+      <finvoiceaddress>'.$model->verkkolaskuosoite.'</finvoiceaddress>
+      <finvoiceroutercode>'.$model->valittajan_tunnus.'</finvoiceroutercode>
+    </customerfinvoicedetails>
+    <customerdeliverydetails>
+      <deliveryname>'.$name.'</deliveryname>
+      <deliverystreetaddress>'.$model->osoite.'</deliverystreetaddress>
+      <deliverycity>'.$model->kaupunki.'</deliverycity>
+      <deliverypostnumber>'.$model->postinumero.'</deliverypostnumber>
+      <deliverycountry type="ISO-3166">FI</deliverycountry>
+    </customerdeliverydetails>
+      <customercontactdetails>
+      <contactperson>'.$name.'</contactperson>
+      <contactpersonemail>'.$model->sahkoposti.'</contactpersonemail>
+      <contactpersonphone>'.$model->puhelin.'</contactpersonphone>
+    </customercontactdetails>
+    <customeradditionalinformation>
+      <customerreferencenumber></customerreferencenumber>
+    </customeradditionalinformation>
+  </customer>
+</root>';
+	
+	$optsPOST = array(
+	  'http'=>array(
+	    'method'=>"POST",
+	    'header'=>"Accept: text/plain\r\n" .
+	              "Content-Type: application/x-www-form-urlencoded\r\n".
+	              "Content-Length: ".strlen($xml)."\r\n".
+		      $auth_data,
+	    'content'=> $xml
+	  )
+	);
+	
+	$context = stream_context_create($optsPOST);
+	
+	$response = file_get_contents($url, false, $context);
+	$result = new SimpleXMLElement($response);
+	
+
+	  if($result->ResponseStatus->Status == 'OK')
+	  {
+		if( $tila == 'add' )
+		$return=$result->Replies->InsertedDataIdentifier;
+		if( $tila == 'edit' )
+		$return=$result;
+	  }
+
+
+	
+	} // if isset $n[0]
+
+		return $return;
+
+
+	}
 
 
 	public function actionIndex()
@@ -454,7 +623,17 @@ class AsiakkaatController extends Controller
 
 		$dataProvider->pagination->pageSize = $perSivu;
 
-		$this->render('index', array('dataProvider' => $dataProvider, 'perSivu' => $perSivu));
+		$a = Asetukset::model()->findbypk(1);
+		if($a->netvisor_kaytto == 1)
+		$netvisor = true;
+		else
+		$netvisor = false;
+
+		$this->render('index', array(
+			'dataProvider' => $dataProvider, 
+			'perSivu' => $perSivu,
+			'netvisor' => $netvisor,
+		));
 	}
 
 	/**
@@ -867,6 +1046,51 @@ class AsiakkaatController extends Controller
 		   </div>
 		  </div>';
 		  }
+	}
+
+
+	protected function onkoNetvisor($id)
+	{
+
+		$return = 'vv';
+		$as = Asiakkaat::model()->findbypk($id);
+		if(isset($as->id) and !empty($as->netvisorkey))
+		{
+		$return = CHtml::Button(Yii::t('main', 'Sync'), array(
+		'submit'=>array('netvisor_sync', "tila"=>"edit", "id"=>$id), 
+		'confirm' => 'Haluatko varmaasti synkronoida Netvisoriin?',
+		'class'=>'btn btn-warning btn-block'
+		));
+		} elseif(isset($as->id) and empty($as->netvisorkey)){
+		$return = CHtml::Button(Yii::t('main', 'Tuonti'), array(
+		'submit'=>array('netvisor_sync', "tila"=>"add", "id"=>$id), 
+		'confirm' => 'Haluatko varmaasti synkronoida Netvisoriin?',
+		'class'=>'btn btn-success btn-block'
+		));
+		}
+
+		return $return;
+	}
+
+
+	public function actionNetvisor_sync($tila, $id)
+	{
+		$model = Asiakkaat::model()->findbypk($id);
+		$return = '';
+		if($tila == 'add')
+		{
+		   $return = $this->netvisorCustomer("add", $model);
+		   if(!empty($return))
+		   Asiakkaat::model()->updateByPk($id, array('netvisorkey'=>$return));
+
+		} elseif($tila == 'edit') {
+		   $return = $this->netvisorCustomer("edit", $model);
+		}
+
+		//echo $return;
+		//exit;
+
+		$this->redirect(array('index'));
 	}
 
 
