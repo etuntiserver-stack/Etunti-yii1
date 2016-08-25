@@ -336,6 +336,64 @@
   </div>
 
 
+<hr>
+  <div class="row form">
+   <div class="col-sm-4">
+    <legend><h2><?php echo Yii::t('main','NETVISOR'); ?></h2></legend>
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'netvisor_kaytto'); ?>
+		<?php 
+        	$tal = array(
+			0=>'Ei',
+			1=>'Kyllä'
+		);
+		echo $form->dropDownList($model,'netvisor_kaytto', $tal, 
+		array('class'=>'form-control')) ?>
+		<?php echo $form->error($model,'netvisor_kaytto'); ?>
+	</div>
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'netvisor_organisation_identifier'); ?>
+		<?php echo $form->textField($model,'netvisor_organisation_identifier',array('maxlength'=>255,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'netvisor_organisation_identifier'); ?>
+	</div>
+
+   </div>
+   <div class="col-sm-4">
+    <legend><h2><?php echo Yii::t('main','ID'); ?></h2></legend>
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'netvisor_customer_id'); ?>
+		<?php echo $form->textField($model,'netvisor_customer_id',array('maxlength'=>255,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'netvisor_customer_id'); ?>
+	</div>
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'netvisor_partner_id'); ?>
+		<?php echo $form->textField($model,'netvisor_partner_id',array('maxlength'=>255,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'netvisor_partner_id'); ?>
+	</div>
+
+   </div>
+   <div class="col-sm-4">
+    <legend><h2><?php echo Yii::t('main','KEY'); ?></h2></legend>
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'netvisor_userkey'); ?>
+		<?php echo $form->textField($model,'netvisor_userkey',array('maxlength'=>255,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'netvisor_userkey'); ?>
+	</div>
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'netvisor_partnerkey'); ?>
+		<?php echo $form->textField($model,'netvisor_partnerkey',array('maxlength'=>255,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'netvisor_partnerkey'); ?>
+	</div>
+
+   </div>
+  </div>
+
+
 <?php if(in_array('5',$tas)) : ?>
 <hr>
   <div class="row form">

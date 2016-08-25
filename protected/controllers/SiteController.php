@@ -862,4 +862,36 @@ $(document).ready(function(){
 		echo $return;
 	}
 
+
+	public function netvisorYhteys()
+	{
+
+	   $return = array();
+	   $a = Asetukset::model()->findbypk(1);
+	   $fm = FirmanTiedot::model()->findbypk(1);
+
+	   if($a->netvisor_kaytto == 1)
+	   {
+
+		$url		= "http://integrationdemo.netvisor.fi"; 
+		$host 		= 'integrationdemo.netvisor.fi';
+
+		$sender 	= $fm->tyonantaja;
+		$customerId	= $a->netvisor_customer_id;
+		$partnerId	= $a->netvisor_partner_id;
+		$timestamp	=  date("Y-m-d H:i:s");
+		$language	= 'FI';
+		$organisationIdentifier	= $a->netvisor_organisation_identifier;
+		$transactionIdentifier	= rand(0,100000);
+		$userKey 	= $a->netvisor_userkey;
+		$partnerKey	= $a->netvisor_partnerkey;
+
+		$return = array($url,$host,$sender,$customerId,$partnerId,$timestamp,$language,$organisationIdentifier,$transactionIdentifier,$userKey, $partnerKey);
+
+	   }
+
+		return $return;
+
+	}
+
 }

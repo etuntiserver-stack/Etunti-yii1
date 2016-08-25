@@ -230,16 +230,22 @@
 
 
   <th><?php echo Yii::t('main', 'Tyyppi'); ?></th>
-<?php
+  <?php
+    if($netvisor == true)
+    echo '<th>'.Yii::t('main', 'Netvisor').'</th>';
+  ?>
+  
+  <?php
 	if($this->tas(2))
 		echo '<th>'.Yii::t('main', 'Työvuorot').'</th>';
-?>
+  ?>
   <th></th>
   </tr>
   </thead>
   <?php $this->widget('zii.widgets.CListView', array(
 	'dataProvider'=>$dataProvider,
 	'itemView'=>'_view',
+	'viewData' => array( 'netvisor' => $netvisor ),
   	'template'=>'{items}<table class="table table-striped table-condensed"></table><br/>{pager}',
 
 

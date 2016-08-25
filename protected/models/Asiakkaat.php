@@ -48,7 +48,7 @@ class Asiakkaat extends DB2ActiveRecord
 			array('tyyppi, osoite', 'required'),
                         array('asiakasnumero','unique', 'message'=>'Tämä asiakasnumero on jo olemassa!'),
 			//array('etunimi, sukunimi, osoite, kaupunki, postinumero, puhelin, sahkoposti, ryhma, aktiivinen', 'required'),
-			array('kirjeenluokka, muistutuslasku_auto, ryhma, aktiivinen', 'numerical', 'integerOnly'=>true),
+			array('kirjeenluokka, muistutuslasku_auto, ryhma, aktiivinen, netvisorkey', 'numerical', 'integerOnly'=>true),
 			array('myyja, postinumero, yhteyshenkilo, yrityksen_nimi, y_tunnus, kaupunki, puhelin, sahkoposti', 'length', 'max'=>100),
 			array('tyyppi, laskutus_kanava, osoite, verkkolaskuosoite, salasana', 'length', 'max'=>255),
 			array('maksuehto, viivastyskorko', 'length', 'max'=>20),
