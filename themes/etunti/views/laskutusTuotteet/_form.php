@@ -5,7 +5,7 @@
 ?>
 
 <div class="section fill mb5">
-  <div class="col-sm-3">
+  <div class="col-sm-4">
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'laskutus-tuotteet-form',
 	'enableAjaxValidation'=>false,
@@ -24,6 +24,12 @@
 		<?php echo $form->labelEx($model,'hinta_alv_0'); ?>
 		<?php echo $form->textField($model,'hinta_alv_0',array('size'=>20,'maxlength'=>20,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'hinta_alv_0'); ?>
+	</div>
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'hinta_alv_sis'); ?>
+		<?php echo $form->textField($model,'hinta_alv_sis',array('size'=>20,'maxlength'=>20,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'hinta_alv_sis'); ?>
 	</div>
 
 	<div class="section fill mb5">

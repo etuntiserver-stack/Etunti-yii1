@@ -19,6 +19,11 @@
 	<td>
 		<?php echo $data->yksikko; ?>
 	</td>
+<?php if($netvisor == true) : ?>
+	<td>
+		<?php echo $this->onkoNetvisor($data->id); ?>
+	</td>
+<?php endif; ?>
 	<td>
 		<?php echo CHtml::link('', array('update', 'id'=>$data->id), array('class'=>'fa fa-pencil-square-o')); ?>
 	</td>

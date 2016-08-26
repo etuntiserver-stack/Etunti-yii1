@@ -24,7 +24,7 @@ class LaskutusTuotteetController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view'),
+				'actions'=>array('admin','delete','create','update','index','view', 'netvisor_sync'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny', // allow admin user to perform 'admin' and 'delete' actions
@@ -91,8 +91,25 @@ class LaskutusTuotteetController extends Controller
 		{
 			$model->attributes=$_POST['LaskutusTuotteet'];
 			$model->hinta_alv_0=str_replace(",",".",$_POST['LaskutusTuotteet']['hinta_alv_0']);
+			$model->hinta_alv_sis=str_replace(",",".",$_POST['LaskutusTuotteet']['hinta_alv_sis']);
 			if($model->save())
+			{
+
+			   // <-- Netvisor
+			   if($asetukset->netvisor_kaytto == 1)
+			   {
+				if(empty($model->netvisorkey))
+				{
+					$InsertedDataIdentifier = $this->netvisorCustomer("add", $model);
+					if(!empty($InsertedDataIdentifier))
+					LaskutusTuotteet::model()->updateByPk($model->id, array('netvisorkey'=>$InsertedDataIdentifier));
+				}
+			   }
+			   //  Netvisor -->
+
+
 				$this->redirect(array('index'));
+			}
 		}
 
 		$this->render('create',array(
@@ -116,8 +133,33 @@ class LaskutusTuotteetController extends Controller
 		{
 			$model->attributes=$_POST['LaskutusTuotteet'];
 			$model->hinta_alv_0=str_replace(",",".",$_POST['LaskutusTuotteet']['hinta_alv_0']);
+			$model->hinta_alv_sis=str_replace(",",".",$_POST['LaskutusTuotteet']['hinta_alv_sis']);
 			if($model->save())
+			{
+
+			   // <-- Netvisor
+			   $a = Asetukset::model()->findbypk(1);
+			   if($a->netvisor_kaytto == 1)
+			   {
+				if(empty($model->netvisorkey))
+				{
+					$InsertedDataIdentifier = $this->netvisorProduct("add", $model);
+					if(!empty($InsertedDataIdentifier))
+					LaskutusTuotteet::model()->updateByPk($model->id, array('netvisorkey'=>$InsertedDataIdentifier));
+				} else {
+					$InsertedDataIdentifier = $this->netvisorProduct("edit", $model);
+					/*
+					echo '<pre>';
+					print_r( $InsertedDataIdentifier );
+					echo '</pre>';
+					exit;
+					*/
+				}
+			    }
+			   //  Netvisor -->
+
 				$this->redirect(array('index'));
+			}
 		}
 
 		$this->render('update',array(
@@ -171,7 +213,14 @@ class LaskutusTuotteetController extends Controller
 		));
 
 		$dataProvider->pagination->pageSize = 50;
-		$this->render('index', array('dataProvider' => $dataProvider));
+
+		$a = Asetukset::model()->findbypk(1);
+		if($a->netvisor_kaytto == 1)
+		$netvisor = true;
+		else
+		$netvisor = false;
+
+		$this->render('index', array('dataProvider' => $dataProvider, 'netvisor' => $netvisor));
 
 	}
 
@@ -217,4 +266,170 @@ class LaskutusTuotteetController extends Controller
 			Yii::app()->end();
 		}
 	}
+
+
+
+	protected function netvisorProduct($tila, $model)
+	{
+
+		$return = '';
+		$site = Yii::app()->createController('Site');
+		$n = $site[0]->netvisorYhteys();
+
+	if(isset($n[0]))
+	{
+		if( $tila == 'add' )
+		$url		= $n[0].'/product.nv?method=add';
+		if( $tila == 'edit' and !empty($model->netvisorkey))
+		$url		= $n[0].'/product.nv?id='.$model->netvisorkey.'&method=edit';
+
+		$host 		= $n[1];
+
+		$sender 	= $n[2];
+		$customerId	= $n[3];
+		$partnerId	= $n[4];
+		$timestamp	= $n[5];
+		$language	= $n[6];
+		$organisationIdentifier	= $n[7];
+		$transactionIdentifier	= $n[8];
+		$userKey 	= $n[9];
+		$partnerKey	= $n[10];
+
+
+
+	$getMAC = md5(
+		$url.'&'.
+		$sender.'&'.
+		$customerId.'&'.
+		$timestamp.'&'.
+		$language.'&'.
+		$organisationIdentifier.'&'.
+		$transactionIdentifier.'&'.
+		$userKey.'&'.
+		$partnerKey
+	 	);
+	
+	$auth_data = 
+	    "Host: $host\r\n".  
+	    "X-Netvisor-Authentication-Sender: $sender\r\n".  
+	    "X-Netvisor-Authentication-CustomerId: $customerId\r\n".  
+	    "X-Netvisor-Authentication-PartnerId: $partnerId\r\n".  
+	    "X-Netvisor-Authentication-Timestamp: $timestamp\r\n".
+	    "X-Netvisor-Interface-Language: $language\r\n".
+	    "X-Netvisor-Organisation-ID: $organisationIdentifier\r\n".  
+	    "X-Netvisor-Authentication-TransactionId: $transactionIdentifier\r\n".
+	    "X-Netvisor-Authentication-MAC: $getMAC\r\n"
+	; 
+	
+
+$xml = '
+<root>
+  <product>
+    <productbaseinformation>
+      <productcode>'.$model->id.'</productcode>
+      <productgroup></productgroup>
+      <name>'.$model->tuotenimi.'</name>
+      <description></description>
+      <unitprice type="net">'.$model->hinta_alv_sis.'</unitprice>
+      <unit>'.$model->yksikko.'</unit>
+      <unitweight>1</unitweight>
+      <purchaseprice>'.$model->hinta_alv_0.'</purchaseprice>
+      <tariffheading></tariffheading>
+      <comissionpercentage>0</comissionpercentage>
+      <isactive>1</isactive>
+      <issalesproduct>0</issalesproduct>
+      <inventoryenabled>1</inventoryenabled>
+    </productbaseinformation>
+    <productbookkeepingdetails>
+      <defaultvatpercentage>'.$model->alv.'</defaultvatpercentage>
+    </productbookkeepingdetails>
+  </product>
+</root>';
+	
+	$optsPOST = array(
+	  'http'=>array(
+	    'method'=>"POST",
+	    'header'=>"Accept: text/plain\r\n" .
+	              "Content-Type: application/x-www-form-urlencoded\r\n".
+	              "Content-Length: ".strlen($xml)."\r\n".
+		      $auth_data,
+	    'content'=> $xml
+	  )
+	);
+	
+	$context = stream_context_create($optsPOST);
+	
+	$response = file_get_contents($url, false, $context);
+	$result = new SimpleXMLElement($response);
+	
+	
+	  if($result->ResponseStatus->Status == 'OK')
+	  {
+		if( $tila == 'add' )
+		$return=$result->Replies->InsertedDataIdentifier;
+		if( $tila == 'edit' )
+		$return=$result;
+	  } else {
+
+		echo '<pre>';
+		print_r( $response );
+		echo '</pre>';
+		exit;
+
+	  }
+
+
+	
+	} // if isset $n[0]
+
+		return $return;
+
+
+	}
+
+
+	protected function onkoNetvisor($id)
+	{
+
+		$return = 'vv';
+		$as = LaskutusTuotteet::model()->findbypk($id);
+		if(isset($as->id) and !empty($as->netvisorkey))
+		{
+		$return = CHtml::Button(Yii::t('main', 'Sync'), array(
+		'submit'=>array('netvisor_sync', "tila"=>"edit", "id"=>$id), 
+		'confirm' => 'Haluatko varmaasti synkronoida Netvisoriin?',
+		'class'=>'btn btn-warning btn-block'
+		));
+		} elseif(isset($as->id) and empty($as->netvisorkey)){
+		$return = CHtml::Button(Yii::t('main', 'Tuonti'), array(
+		'submit'=>array('netvisor_sync', "tila"=>"add", "id"=>$id), 
+		'confirm' => 'Haluatko varmaasti synkronoida Netvisoriin?',
+		'class'=>'btn btn-success btn-block'
+		));
+		}
+
+		return $return;
+	}
+
+
+	public function actionNetvisor_sync($tila, $id)
+	{
+		$model = LaskutusTuotteet::model()->findbypk($id);
+		$return = '';
+		if($tila == 'add')
+		{
+		   $return = $this->netvisorProduct("add", $model);
+		   if(!empty($return))
+		   LaskutusTuotteet::model()->updateByPk($id, array('netvisorkey'=>$return));
+
+		} elseif($tila == 'edit') {
+		   $return = $this->netvisorProduct("edit", $model);
+		}
+
+		//echo $return;
+		//exit;
+
+		$this->redirect(array('index'));
+	}
+
 }

@@ -41,6 +41,7 @@ class LaskutusTuotteet extends DB2ActiveRecord
 		// will receive user inputs.
 		return array(
 			array('tuotenimi, hinta_alv_0, alv, yksikko', 'required'),
+			array('netvisorkey', 'numerical', 'integerOnly'=>true),
 			array('tuotenimi', 'length', 'max'=>100),
 			array('hinta_alv_0, hinta_alv_sis, yksikko', 'length', 'max'=>20),
 			array('alv', 'length', 'max'=>10),

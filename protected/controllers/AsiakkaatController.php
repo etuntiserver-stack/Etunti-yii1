@@ -319,7 +319,7 @@ class AsiakkaatController extends Controller
 			{
 
 
-
+			   // <-- Netvisor
 			   if($asetukset->netvisor_kaytto == 1)
 			   {
 				if(empty($model->netvisorkey))
@@ -329,6 +329,7 @@ class AsiakkaatController extends Controller
 					Asiakkaat::model()->updateByPk($model->id, array('netvisorkey'=>$InsertedDataIdentifier));
 				}
 			   }
+			   //  Netvisor -->
 
 
 				if(empty($model->asiakasnumero))
@@ -376,7 +377,7 @@ class AsiakkaatController extends Controller
 			if($model->save())
 			{
 
-
+			   // <-- Netvisor
 			   $a = Asetukset::model()->findbypk(1);
 			   if($a->netvisor_kaytto == 1)
 			   {
@@ -395,6 +396,7 @@ class AsiakkaatController extends Controller
 					*/
 				}
 			    }
+			   //  Netvisor -->
 
 
 				$this->redirect(array('view','id'=>$model->id));
@@ -488,6 +490,11 @@ class AsiakkaatController extends Controller
 	elseif(empty($model->yrityksen_nimi) and !empty($model->yhteyshenkilo))
 	$name = $model->yhteyshenkilo;
 
+	$ryhma = '';
+	$r = Valikkoot::model()->findbypk($model->ryhma);
+	if(isset($r->id))
+	$ryhma = $r->value;
+
 $xml = '
 <root>
   <customer>
@@ -500,11 +507,11 @@ $xml = '
       <city>'.$model->kaupunki.'</city>
       <postnumber>'.$model->postinumero.'</postnumber>
       <country type="ISO-3166">FI</country>
-      <customergroupname>Asiakas</customergroupname>
+      <customergroupname>'.$ryhma.'</customergroupname>
       <phonenumber>'.$model->puhelin.'</phonenumber>
       <faxnumber></faxnumber>
       <email>'.$model->sahkoposti.'</email>
-      <homepageuri></homepageuri>
+      <isactive>'.$model->aktiivinen.'</isactive>
     </customerbaseinformation>
     <customerfinvoicedetails>
       <finvoiceaddress>'.$model->verkkolaskuosoite.'</finvoiceaddress>
@@ -551,8 +558,14 @@ $xml = '
 		$return=$result->Replies->InsertedDataIdentifier;
 		if( $tila == 'edit' )
 		$return=$result;
-	  }
+	  } else {
 
+		echo '<pre>';
+		print_r( $response );
+		echo '</pre>';
+		exit;
+
+	  }
 
 	
 	} // if isset $n[0]

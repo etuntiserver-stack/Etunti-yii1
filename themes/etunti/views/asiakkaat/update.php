@@ -32,11 +32,15 @@ exit;
 
 	   <div class="pull-right">
 	   <?php     
+	   $a = Asetukset::model()->findbypk(1);
+	   if($a->netvisor_kaytto != 1)
+	   {
 		echo CHtml::link("poista", '#', array(
 		'submit'=>array('delete', "id"=>$model->id), 
 		'confirm' => 'Haluatko varmaasti poistaa?',
 		'class'=>'btn btn-primary myBgColors'
 		));
+	   }
 	   ?>
 	   </div>
 	   <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-user"></i> <?php echo $head; ?> </h2>

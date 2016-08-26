@@ -114,12 +114,31 @@
   <th><?php echo Yii::t('main', 'Hinta Alv Sis'); ?></th>
   <th><?php echo Yii::t('main', 'Alv'); ?></th>
   <th><?php echo Yii::t('main', 'Yksikko'); ?></th>
+  <?php
+    if($netvisor == true)
+    echo '<th>'.Yii::t('main', 'Netvisor').'</th>';
+  ?>
   <th></th>
   </tr>
   </thead>
 <?php $this->widget('zii.widgets.CListView', array(
 	'dataProvider'=>$dataProvider,
+	'viewData' => array( 'netvisor' => $netvisor ),
 	'itemView'=>'_view',
+
+  	'template'=>'{items}<table class="table table-striped table-condensed"></table><br/>{pager}',
+
+
+	'pager' => array(
+           'firstPageLabel'=>'<<',
+           'prevPageLabel'=>'< Edellinen',
+           'nextPageLabel'=>'Seuraava >',
+           'lastPageLabel'=>'>>',
+           //'maxButtonCount'=>'10',
+           'header'=>'<h3>Siirry sivulle:</h3>',
+           'cssFile'=>false,
+       ), 
+
 )); ?>
   </table>
    </div>
