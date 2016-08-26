@@ -96,14 +96,13 @@ class LaskutusTuotteetController extends Controller
 			{
 
 			   // <-- Netvisor
-			   if($asetukset->netvisor_kaytto == 1)
+			   $a = Asetukset::model()->findbypk(1);
+			   if($a->netvisor_kaytto == 1)
 			   {
-				if(empty($model->netvisorkey))
-				{
-					$InsertedDataIdentifier = $this->netvisorCustomer("add", $model);
+					$InsertedDataIdentifier = $this->netvisorProduct("add", $model);
 					if(!empty($InsertedDataIdentifier))
 					LaskutusTuotteet::model()->updateByPk($model->id, array('netvisorkey'=>$InsertedDataIdentifier));
-				}
+
 			   }
 			   //  Netvisor -->
 
@@ -141,7 +140,7 @@ class LaskutusTuotteetController extends Controller
 			   $a = Asetukset::model()->findbypk(1);
 			   if($a->netvisor_kaytto == 1)
 			   {
-				if(empty($model->netvisorkey))
+				if($model->netvisorkey == 0)
 				{
 					$InsertedDataIdentifier = $this->netvisorProduct("add", $model);
 					if(!empty($InsertedDataIdentifier))
@@ -322,9 +321,12 @@ class LaskutusTuotteetController extends Controller
 	; 
 	
 	$ryhma = '';
-	$r = Valikkoot::model()->findbypk($model->ryhma);
-	if(isset($r->id))
-	$ryhma = $r->value;
+	if(isset($model->ryhma))
+	{
+	  $r = Valikkoot::model()->findbypk($model->ryhma);
+	   if(isset($r->id))
+	   $ryhma = $r->value;
+	}
 
 $xml = '
 <root>
@@ -373,6 +375,7 @@ $xml = '
 		$return=$result->Replies->InsertedDataIdentifier;
 		if( $tila == 'edit' )
 		$return=$result;
+
 	  } else {
 
 		echo '<pre>';
@@ -382,8 +385,9 @@ $xml = '
 
 	  }
 
-
 	
+
+
 	} // if isset $n[0]
 
 		return $return;
@@ -397,7 +401,7 @@ $xml = '
 
 		$return = 'vv';
 		$as = LaskutusTuotteet::model()->findbypk($id);
-		if(isset($as->id) and !empty($as->netvisorkey))
+		if(isset($as->id) and $as->netvisorkey != 0)
 		{
 		$return = CHtml::Button(Yii::t('main', 'Sync'), array(
 		'submit'=>array('netvisor_sync', "tila"=>"edit", "id"=>$id), 

@@ -322,12 +322,9 @@ class AsiakkaatController extends Controller
 			   // <-- Netvisor
 			   if($asetukset->netvisor_kaytto == 1)
 			   {
-				if(empty($model->netvisorkey))
-				{
 					$InsertedDataIdentifier = $this->netvisorCustomer("add", $model);
 					if(!empty($InsertedDataIdentifier))
 					Asiakkaat::model()->updateByPk($model->id, array('netvisorkey'=>$InsertedDataIdentifier));
-				}
 			   }
 			   //  Netvisor -->
 
@@ -381,7 +378,7 @@ class AsiakkaatController extends Controller
 			   $a = Asetukset::model()->findbypk(1);
 			   if($a->netvisor_kaytto == 1)
 			   {
-				if(empty($model->netvisorkey))
+				if($model->netvisorkey == 0)
 				{
 					$InsertedDataIdentifier = $this->netvisorCustomer("add", $model);
 					if(!empty($InsertedDataIdentifier))
@@ -1067,7 +1064,7 @@ $xml = '
 
 		$return = 'vv';
 		$as = Asiakkaat::model()->findbypk($id);
-		if(isset($as->id) and !empty($as->netvisorkey))
+		if(isset($as->id) and $as->netvisorkey != 0)
 		{
 		$return = CHtml::Button(Yii::t('main', 'Sync'), array(
 		'submit'=>array('netvisor_sync', "tila"=>"edit", "id"=>$id), 
