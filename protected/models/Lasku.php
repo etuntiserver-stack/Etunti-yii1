@@ -80,7 +80,7 @@ class Lasku extends DB2ActiveRecord
 		return array(
                         //array('laskunumero','unique', 'message'=>'Tämä laskunumero on jo olemassa!'),
 			array('yid, tyyppi, as_nro, osoite, postinumero, toimipaikka, laskutus, paivays, erapaiva, maksuehto, toimitusosoite', 'required'),
-			array('kirjeenluokka, muistutuslasku_auto, lid, yid, as_nro, laskunumero', 'numerical', 'integerOnly'=>true),
+			array('kirjeenluokka, muistutuslasku_auto, lid, yid, as_nro, laskunumero, netvisorkey', 'numerical', 'integerOnly'=>true),
 			array('tyyppi, yritys, nimi, sahkoposti, v_tunnus, yhteyshenkilo, nimitarkenne, t_yritys, t_nimi, t_osoite, t_toimipaikka, t_sahkoposti, toimitusosoite, viitenumero, saaja_iban, maksettu_euro, laskun_nimetys, postita_jobid, trust_jobid', 'length', 'max'=>100),
 			array('vatperiod, y_tunnus, toimipaikka, laskutus, puhelin, t_y_tunnus, t_puhelin, viivastyskorko, tilanne, tapahtumapvm', 'length', 'max'=>50),
 			array('deliverymethod, deliveryterm, freetext, viitenne, viitemme, osoite, verkkolaskuosoite, saaja_virtualkoodi', 'length', 'max'=>255),

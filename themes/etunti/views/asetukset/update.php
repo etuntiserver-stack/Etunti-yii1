@@ -30,6 +30,26 @@ if(isset($_POST['uploaded_t']))
   } 
 }
 
+
+if(isset($_POST['uploaded_onlinevarausehdot']))
+{
+
+  if (!file_exists(Yii::app()->basePath."/../tiedostot/firma/".Yii::app()->user->domain)) {
+  	mkdir(Yii::app()->basePath."/../tiedostot/firma/".Yii::app()->user->domain, 0777, true);
+  }
+
+  $uploaddir = Yii::app()->basePath.'/../tiedostot/firma/'.Yii::app()->user->domain.'/';
+  $temp = explode(".", $_FILES["file"]["name"]);
+  $uploadfile = $uploaddir . basename('onlinevarausehdot.'.end($temp));
+  if (move_uploaded_file($_FILES['file']['tmp_name'], $uploadfile)) {
+     //echo "";
+  } 
+}
+
+
+
+
+
 if(isset($_POST['poistaTamaTiedosto'])){
 	unlink($_POST['poistaTamaTiedosto']);
 exit;
@@ -143,6 +163,8 @@ exit;
   <legend>
   <h2><?php echo Yii::t('main', 'TIEDOSTOT'); ?> <i class="glyphicon glyphicon-phone"></i></h2>
   </legend>
+
+
 <?php
 	$i = 0;
 	foreach(array_reverse(glob(Yii::app()->baseUrl.'tiedostot/firma/'.Yii::app()->user->domain.'/'.$model->id.'_*.*')) as $file) {
@@ -164,16 +186,41 @@ exit;
 <div class="row">
  <div class="col-sm-12">
 
-<div class="pull-right">
- <div class="tiedosto form-inline">
-  <label><?php echo Yii::t('main', 'Tiedostot (sopimukset jne)'); ?></label>
+ <div class="admin-form col-sm-6" id="onlinevarausehdot">
   <form id="uploadimage" action="#" class="form-input" method="post" enctype="multipart/form-data">
-   <input type="hidden" name="uploaded_t" value="true" />
-   <input type="file" name="file" id="t_file" data-icon="false" data-buttonText="Etsi kuvaa" class="form-group" />
-   <input type="submit" value="Lataa" class="btn btn-primary btn-group" id="tiedostoUP" /></button>
+     <div class="section input-group">
+       <label class="field prepend-icon append-button file">
+         <span class="button"><?php echo Yii::t('main', 'Onlinevarausehdot'); ?></span>
+         <input type="file" class="gui-file" name="file" id="t_file" onChange="document.getElementById('tiedostoUP').value = this.value;">
+         <input type="text" class="gui-input" name="uploaded_onlinevarausehdot" id="tiedostoUP" placeholder="Valitse tiedosto..">
+         <label class="field-icon">
+          <i class="fa fa-upload"></i>
+         </label>
+       </label>
+	<span class="input-group-btn">
+          <input type="submit" value="Lataa" class="btn btn-primary btn-group myBgColors" />
+	</span>
+    </div>
   </form>
  </div>
-</div>
+
+ <div class="admin-form col-sm-6" id="onlinevarausehdot">
+  <form id="uploadimage" action="#" class="form-input" method="post" enctype="multipart/form-data">
+     <div class="section input-group">
+       <label class="field prepend-icon append-button file">
+         <span class="button"><?php echo Yii::t('main', 'Sopimukset jne.'); ?></span>
+         <input type="file" class="gui-file" name="file" id="t_file" onChange="document.getElementById('tiedostoUP').value = this.value;">
+         <input type="text" class="gui-input" name="uploaded_t" id="tiedostoUP" placeholder="Valitse tiedosto..">
+         <label class="field-icon">
+          <i class="fa fa-upload"></i>
+         </label>
+       </label>
+	<span class="input-group-btn">
+          <input type="submit" value="Lataa" class="btn btn-primary btn-group myBgColors" />
+	</span>
+    </div>
+  </form>
+ </div>
 
  </div>
 </div>

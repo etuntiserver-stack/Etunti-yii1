@@ -244,7 +244,18 @@
 	<br>
 	<div class="section fill mb5">
 
-		<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/asetukset/rekisteriseloste"><?php echo Yii::t('main','Onlinevaraus tietosuoja- ja rekisteriseloste'); ?> </a>
+		<p><a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/asetukset/rekisteriseloste"><?php echo Yii::t('main','Onlinevaraus tietosuoja- ja rekisteriseloste'); ?> </a></p>
+		
+
+   <?php
+   foreach(array_reverse(glob(Yii::app()->baseUrl.'tiedostot/firma/'.Yii::app()->user->domain.'/onlinevarausehdot.*')) as $file) 
+   {
+	$explNimi = explode("/",$file);
+ 	echo '<a href="../../'.$file.'">'.end($explNimi).'</a>';
+	
+   }
+   ?>
+		<p><a href="#onlinevarausehdot"><?php echo Yii::t('main','Onlinevarausehdot lat'); ?> </a></p>
 
 	</div>
 
@@ -299,6 +310,11 @@
 	</div>
 
     </div>
+
+    <div class="col-sm-12">
+    <h4><?php echo Yii::t('main','Onlinevarauksen osoite'); ?>  :</h4> <?php echo Yii::app()->getBaseUrl(true).'/index.php/onlinevaraus/index?domain='.Yii::app()->user->domain; ?>
+    </div>
+
   </div>
 <?php endif; ?>
 
