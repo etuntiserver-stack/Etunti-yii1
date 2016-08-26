@@ -61,6 +61,38 @@
 
 		<?php echo $form->error($model,'yksikko'); ?>
 	</div>
+
+
+	<div class="section fill mb5 ashidd_a form-inline">
+		<?php echo $form->labelEx($model,'ryhma'); ?>
+
+	   <div class="form-inline">
+		<?php
+		$list = array();
+		$v = Valikkoot::model()->find(" select_type='laskutus_tuotteet_ryhma' ");
+		if(!isset($v->id))
+		{
+			$vnew = new Valikkoot;
+			$vnew->value = 'test';
+			$vnew->select_type = 'laskutus_tuotteet_ryhma';
+			$vnew->save();		
+		}
+
+      		$l = Valikkoot::model()->findAll(" select_type='laskutus_tuotteet_ryhma' ",array('order' => "select_type"));
+		foreach($l as $v)
+		$list[$v->id] = $v->value;
+
+		if(count($list) > 0)
+		{
+        	echo $form->dropDownList($model, 'ryhma', $list,
+		array('empty'=>'Valitse ryhmä','class'=>'form-control form-group'));
+		} 		
+        	?>
+		<span class="btn btn-primary myBgColors muokaValiko" for="laskutus_tuotteet_ryhma"><i class="fa fa-pencil-square-o"></i></span>
+	   </div>
+
+		<?php echo $form->error($model,'ryhma'); ?>
+	</div>
 <br>
 	<div class="buttons">
 		<?php echo CHtml::submitButton($model->isNewRecord ? 'Luo' : 'Tallenna',array('class'=>'btn btn-primary')); ?>
