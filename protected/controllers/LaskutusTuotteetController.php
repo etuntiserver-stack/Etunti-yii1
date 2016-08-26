@@ -321,13 +321,17 @@ class LaskutusTuotteetController extends Controller
 	    "X-Netvisor-Authentication-MAC: $getMAC\r\n"
 	; 
 	
+	$ryhma = '';
+	$r = Valikkoot::model()->findbypk($model->ryhma);
+	if(isset($r->id))
+	$ryhma = $r->value;
 
 $xml = '
 <root>
   <product>
     <productbaseinformation>
       <productcode>'.$model->id.'</productcode>
-      <productgroup></productgroup>
+      <productgroup>'.$ryhma.'</productgroup>
       <name>'.$model->tuotenimi.'</name>
       <description></description>
       <unitprice type="net">'.$model->hinta_alv_sis.'</unitprice>

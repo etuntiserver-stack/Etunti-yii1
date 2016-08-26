@@ -49,6 +49,7 @@
 	elseif($_POST['select_type'] == 'admin status') $selType = 'Oikeukset';
 	elseif($_POST['select_type'] == 'siivous') $selType = 'Siivous tyyppi';
 	elseif($_POST['select_type'] == 'asiakas_ryhma') $selType = 'Asiakasryhmä';
+	elseif($_POST['select_type'] == 'laskutus_tuotteet_ryhma') $selType = 'Laskutuksen tuoteryhmä';
 	elseif($_POST['select_type'] == 'laskutus_yksikko') $selType = 'Laskutusyksikkö';
 	elseif($_POST['select_type'] == 'YLITYÖTUNNIT') $selType = 'YLITYÖTUNNIT';
 	elseif($_POST['select_type'] == 'tyo_toimialue') $selType = 'Työntekijä toimialue';
@@ -58,6 +59,7 @@
        	$criteria = new CDbCriteria();
 	$criteria->condition = " select_type='".$_POST['select_type']."' ";
 	$r = Valikkoot::model()->find($criteria);
+
 
 	$mod = '
 	<input type="hidden" id="select_type" value="'.$_POST['select_type'].'">
