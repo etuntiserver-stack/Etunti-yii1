@@ -383,14 +383,11 @@ class AsiakkaatController extends Controller
 					$InsertedDataIdentifier = $this->netvisorCustomer("add", $model);
 					if(!empty($InsertedDataIdentifier))
 					Asiakkaat::model()->updateByPk($model->id, array('netvisorkey'=>$InsertedDataIdentifier));
+
 				} else {
+
 					$InsertedDataIdentifier = $this->netvisorCustomer("edit", $model);
-					/*
-					echo '<pre>';
-					print_r( $InsertedDataIdentifier );
-					echo '</pre>';
-					exit;
-					*/
+
 				}
 			    }
 			   //  Netvisor -->

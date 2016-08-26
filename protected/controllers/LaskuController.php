@@ -599,6 +599,30 @@ class LaskuController extends Controller
 			$model->attributes=$_POST['Lasku'];
 			if($model->save()){
 
+
+
+			   // <-- Netvisor
+/* ei toimi (Virhetunniste: 576297)
+
+			   $a = Asetukset::model()->findbypk(1);
+			   if($a->netvisor_kaytto == 1)
+			   {
+				if($model->netvisorkey == 0)
+				{
+					$InsertedDataIdentifier = $this->netvisorLasku("add", $model);
+					if(!empty($InsertedDataIdentifier))
+					Lasku::model()->updateByPk($model->id, array('netvisorkey'=>$InsertedDataIdentifier));
+
+				} else {
+
+					$InsertedDataIdentifier = $this->netvisorLasku("edit", $model);
+
+				}
+			    }
+*/
+			   //  Netvisor -->
+
+
 			LaskunRivit::model()->deleteAll("lid='".$id."'");
 
 
@@ -1329,6 +1353,187 @@ exit;
 	</div>';
 
 	echo json_encode($bod);
+	}
+
+
+
+
+	protected function netvisorLasku($tila, $model)
+	{
+
+		$return = '';
+		$site = Yii::app()->createController('Site');
+		$n = $site[0]->netvisorYhteys();
+
+	if(isset($n[0]))
+	{
+		if( $tila == 'add' )
+		$url		= $n[0].'/salesinvoice.nv?method=add';
+		if( $tila == 'edit' and !empty($model->netvisorkey))
+		$url		= $n[0].'/salesinvoice.nv?id='.$model->netvisorkey.'&method=edit';
+
+		$host 		= $n[1];
+
+		$sender 	= $n[2];
+		$customerId	= $n[3];
+		$partnerId	= $n[4];
+		$timestamp	= $n[5];
+		$language	= $n[6];
+		$organisationIdentifier	= $n[7];
+		$transactionIdentifier	= $n[8];
+		$userKey 	= $n[9];
+		$partnerKey	= $n[10];
+
+
+
+	$getMAC = md5(
+		$url.'&'.
+		$sender.'&'.
+		$customerId.'&'.
+		$timestamp.'&'.
+		$language.'&'.
+		$organisationIdentifier.'&'.
+		$transactionIdentifier.'&'.
+		$userKey.'&'.
+		$partnerKey
+	 	);
+	
+	$auth_data = 
+	    "Host: $host\r\n".  
+	    "X-Netvisor-Authentication-Sender: $sender\r\n".  
+	    "X-Netvisor-Authentication-CustomerId: $customerId\r\n".  
+	    "X-Netvisor-Authentication-PartnerId: $partnerId\r\n".  
+	    "X-Netvisor-Authentication-Timestamp: $timestamp\r\n".
+	    "X-Netvisor-Interface-Language: $language\r\n".
+	    "X-Netvisor-Organisation-ID: $organisationIdentifier\r\n".  
+	    "X-Netvisor-Authentication-TransactionId: $transactionIdentifier\r\n".
+	    "X-Netvisor-Authentication-MAC: $getMAC\r\n"
+	; 
+	
+
+	$name = 'Ei tietoja';
+	if(!empty($model->yritys))
+	$name = $model->yritys;
+	elseif(empty($model->yritys) and !empty($model->nimi))
+	$name = $model->nimi;
+
+
+$xml = '
+<root>
+  <SalesInvoice>
+    <SalesInvoiceDate format="ansi">'.date("Y-m-d", strtotime($model->paivays)).'</SalesInvoiceDate>
+    <SalesInvoiceDeliveryDate format="ansi">'.date("Y-m-d", strtotime($model->paivays)).'</SalesInvoiceDeliveryDate>
+    <SalesInvoiceReferenceNumber>1070</SalesInvoiceReferenceNumber>
+    <SalesInvoiceAmount>'.$model->yhteensa_total.'</SalesInvoiceAmount>
+    <SellerIdentifier type="netvisor">32</SellerIdentifier> 
+    <SalesInvoiceStatus type="netvisor">unsent</SalesInvoiceStatus>
+    <InvoicingCustomerIdentifier type="netvisor">1</InvoicingCustomerIdentifier>
+    <InvoicingCustomerName>'.$name.'</InvoicingCustomerName>
+    <InvoicingCustomerNameExtension></InvoicingCustomerNameExtension>
+    <InvoicingCustomerAddressLine>'.$model->osoite.'</InvoicingCustomerAddressLine>
+    <InvoicingCustomerPostNumber>'.$model->postinumero.'</InvoicingCustomerPostNumber>
+    <InvoicingCustomerTown>'.$model->toimipaikka.'</InvoicingCustomerTown>
+    <InvoicingCustomerCountryCode type="ISO-3166">FI</InvoicingCustomerCountryCode>
+    <DeliveryAddressName>'.$name.'</DeliveryAddressName>
+    <DeliveryAddressNameExtension>Ohjelmistokehitys ja tuotanto</DeliveryAddressNameExtension>
+    <DeliveryAddressLine>Snelmanninkatu 12</DeliveryAddressLine>
+    <DeliveryAddressPostNumber>53100</DeliveryAddressPostNumber>
+    <DeliveryAddressTown>LPR</DeliveryAddressTown>
+    <DeliveryAddressCountryCode type="ISO-3166">FI</DeliveryAddressCountryCode>
+    <PaymentTermNetDays>14</PaymentTermNetDays>
+    <PaymentTermCashDiscountDays>5</PaymentTermCashDiscountDays>
+    <PaymentTermCashDiscount type="percentage">9</PaymentTermCashDiscount>
+    <InvoiceLines>
+       <InvoiceLine>
+          <SalesInvoiceProductLine>
+             <ProductIdentifier type="netvisor">unsent</ProductIdentifier>
+             <ProductName>Omena</ProductName>
+             <ProductUnitPrice type="net">6,90</ProductUnitPrice>
+             <ProductVatPercentage vatcode="KOMY">22</ProductVatPercentage>
+             <SalesInvoiceProductLineQuantity>2</SalesInvoiceProductLineQuantity>
+             <SalesInvoiceProductLineDiscountPercentage>0</SalesInvoiceProductLineDiscountPercentage>
+             <AccountingAccountSuggestion>3000</AccountingAccountSuggestion> 
+             <Dimension>
+                <DimensionName>Liiketoimintayksikkö laskentakohteena</DimensionName>
+                <DimensionItem>Yleishallinto</DimensionItem>
+             </Dimension>
+             <Dimension>
+                <DimensionName>Severan "työ" laskentakohteena</DimensionName>
+                <DimensionItem>Makkaran paisto</DimensionItem>
+             </Dimension>
+           </SalesInvoiceProductLine>
+       </InvoiceLine>
+       <InvoiceLine>
+          <SalesInvoiceProductLine>
+            <ProductIdentifier type="netvisor">1697</ProductIdentifier>
+            <ProductName>Banaani</ProductName>
+            <ProductUnitPrice type="net">100,00</ProductUnitPrice>
+            <ProductVatPercentage vatcode="KOMY">22</ProductVatPercentage>
+            <SalesInvoiceProductLineQuantity>1</SalesInvoiceProductLineQuantity>
+            <AccountingAccountSuggestion>3200</AccountingAccountSuggestion>
+          </SalesInvoiceProductLine>     
+      </InvoiceLine>
+      <InvoiceLine>
+        <SalesInvoiceCommentLine>
+            <Comment>Kommenttirivi</Comment>
+        </SalesInvoiceCommentLine>
+      </InvoiceLine>
+    </InvoiceLines>
+    <CustomTags>
+      <Tag>
+        <TagName>Paiva</TagName>
+          <TagValue datatype="date">'.date("Y-m-d", strtotime($model->erapaiva)).'</TagValue>
+      </Tag>
+      <Tag>
+        <TagName>Summa</TagName>
+          <TagValue datatype="float">23,87</TagValue>
+      </Tag>
+    </CustomTags>   
+  </SalesInvoice>
+</root>';
+	
+	$optsPOST = array(
+	  'http'=>array(
+	    'method'=>"POST",
+	    'header'=>"Accept: text/plain\r\n" .
+	              "Content-Type: application/x-www-form-urlencoded\r\n".
+	              "Content-Length: ".strlen($xml)."\r\n".
+		      $auth_data,
+	    'content'=> $xml
+	  )
+	);
+	
+	$context = stream_context_create($optsPOST);
+	
+	$response = file_get_contents($url, false, $context);
+	$result = new SimpleXMLElement($response);
+	
+	
+	  if($result->ResponseStatus->Status == 'OK')
+	  {
+		if( $tila == 'add' )
+		$return=$result->Replies->InsertedDataIdentifier;
+		if( $tila == 'edit' )
+		$return=$result;
+
+	  } else {
+
+
+
+	  }
+
+	
+		echo '<pre>';
+		print_r( $response );
+		echo '</pre>';
+		exit;
+
+
+	} // if isset $n[0]
+
+		return $return;
+
+
 	}
 
 

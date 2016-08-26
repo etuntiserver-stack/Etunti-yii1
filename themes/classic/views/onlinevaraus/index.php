@@ -301,7 +301,16 @@ if(isset($asetukset->checkout_id) and !empty($asetukset->checkout_id) and !empty
 <?php endif; ?>
 
 
-<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/onlinevaraus/rekisteriseloste" target="_blank"><?php echo Yii::t('main','Onlinevaraus tietosuoja- ja rekisteriseloste'); ?> </a>
+    <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/onlinevaraus/rekisteriseloste" target="_blank"><?php echo Yii::t('main','Onlinevaraus tietosuoja- ja rekisteriseloste'); ?> </a>
+   <br>
+   <?php
+   foreach(array_reverse(glob(Yii::app()->baseUrl.'tiedostot/firma/'.Yii::app()->user->domain.'/onlinevarausehdot.*')) as $file) 
+   {
+	$explNimi = explode("/",$file);
+ 	echo '<a href="../../'.$file.'">'.end($explNimi).'</a>';
+	
+   }
+   ?>
 
 </div>
 

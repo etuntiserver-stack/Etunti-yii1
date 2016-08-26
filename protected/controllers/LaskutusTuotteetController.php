@@ -145,14 +145,11 @@ class LaskutusTuotteetController extends Controller
 					$InsertedDataIdentifier = $this->netvisorProduct("add", $model);
 					if(!empty($InsertedDataIdentifier))
 					LaskutusTuotteet::model()->updateByPk($model->id, array('netvisorkey'=>$InsertedDataIdentifier));
+
 				} else {
+
 					$InsertedDataIdentifier = $this->netvisorProduct("edit", $model);
-					/*
-					echo '<pre>';
-					print_r( $InsertedDataIdentifier );
-					echo '</pre>';
-					exit;
-					*/
+
 				}
 			    }
 			   //  Netvisor -->
