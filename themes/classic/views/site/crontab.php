@@ -182,10 +182,53 @@
 
 
 
+	// <-- merkkipaivailmoitukset
+	if(isset($asetukset->merkkipaivailmoitukset_sahkoposti) and !empty($asetukset->merkkipaivailmoitukset_sahkoposti))
+	{
+		$criteria=new CDbCriteria;
+		$criteria->select = "id, tekijan_nimi, 
+			DATE_FORMAT(STR_TO_DATE(SUBSTRING_INDEX(tekijan_henkilotunnus, '-', 1), '%d%m%y'), CONCAT(YEAR(CURDATE()),'-%m-%d')) as tekijan_henkilotunnus 
+		";
+		$criteria->condition = " 
+			aktiivinen='1'
+			AND tekijan_henkilotunnus!=''
+			AND DATE_FORMAT(STR_TO_DATE(SUBSTRING_INDEX(tekijan_henkilotunnus, '-', 1), '%d%m%y'), CONCAT(YEAR(CURDATE()),'-%m-%d')) BETWEEN CURDATE() 
+			AND (CURDATE() + INTERVAL 14 DAY)
+			AND ilmoitus_merkkipaivasta_vuosi!=YEAR(CURDATE())
+		";
+		$tt = Tyontekijat::model()->findAll($criteria);
+
+		$message = '';
+		foreach($tt as $data)
+		{
+			$message .= '#('.$data->id.'), '.$data->tekijan_nimi.'&nbsp;&nbsp;'.date("d.m.Y", strtotime($data->tekijan_henkilotunnus)).'<br>';
+			if($koodi_aktiivinen == 1)
+			Tyontekijat::model()->updateByPk($data->id, array('ilmoitus_merkkipaivasta_vuosi'=>date("Y")));
+		}
+
+
+			if($koodi_aktiivinen == 1 and !empty($message))
+			{
+			$saaja = $asetukset->merkkipaivailmoitukset_sahkoposti;
+			$mail = new YiiMailer();
+			$mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
+			$mail->setTo($saaja);
+			$mail->setSubject(Yii::t('main', 'Ilmoitus merkkipäivästä'));
+			$mail->setBody($message);
+			$mail->send();
+			}
+
+
+	}
+	// merkkipaivailmoitukset -->
+
+
+
+
 
 
    }
-
+exit;
 
  }
 
