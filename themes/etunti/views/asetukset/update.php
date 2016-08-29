@@ -63,26 +63,24 @@ exit;
 	   <h2 class="myBgColors p10"> <i class="fa fa-gear"></i> <?php echo Yii::t('main', 'ASETUKSET'); ?> </h2>
 
 
-            <div class="admin-form">
+	   <p><span class="btn btn-primary btn-block myBgColors" data-toggle="collapse" data-target="#yrityksentiedot"><?php echo Yii::t('main','Yrityksen tiedot'); ?> <i class="fa fa-caret-square-o-down" aria-hidden="true"></i></span></p>
+
+            <div class="admin-form collapse" id="yrityksentiedot">
               <div class="panel heading-border">
-		<h2 class="p15"><?php echo Yii::t('main','Yrityksen tiedot');?></h2>
-                <div class="panel-body bg-light">
-                 <div class="row">
+
+		<h2 class="p15"><?php echo Yii::t('main','Yrityksen tiedot'); ?></h2>
+                 <div class="panel-body bg-light">
+                  <div class="row">
 		  <?php echo $this->renderPartial('//firmanTiedot/_form', array('model'=>$f)); ?>
+                  </div>
                  </div>
-                </div>
+
               </div>
             </div>
 
+
             <div class="admin-form">
               <div class="panel heading-border">
-	   <div class="pull-right">
-	   <?php     
-		$site = Yii::app()->createController('Site');
-		$site[0]->oikeudet($model->id,'noDelete');
-	   ?>
-	   </div>
-		<h2 class="p15"><?php echo Yii::t('main','Järjestelmän asetukset');?></h2>
                 <div class="panel-body bg-light">
                  <div class="row">
 		  <?php echo $this->renderPartial('_form', array('model'=>$model)); ?>
@@ -92,7 +90,9 @@ exit;
             </div>
 
 
-            <div class="admin-form">
+	   <p><span class="btn btn-primary btn-block myBgColors" data-toggle="collapse" data-target="#kayttajienoikeus"><?php echo Yii::t('main','Käyttäjien oikeudet'); ?> <i class="fa fa-caret-square-o-down" aria-hidden="true"></i></span></p>
+
+            <div class="admin-form collapse" id="kayttajienoikeus">
               <div class="panel heading-border">
 		<h2 class="p15"><?php echo Yii::t('main','Käyttäjien oikeudet');?></h2>
                 <div class="panel-body bg-light">
@@ -107,7 +107,9 @@ exit;
               </div>
             </div>
 
-            <div class="admin-form">
+	   <p><span class="btn btn-primary btn-block myBgColors" data-toggle="collapse" data-target="#kehitys"><?php echo Yii::t('main','Käyttäjien oikeudet'); ?> <i class="fa fa-caret-square-o-down" aria-hidden="true"></i></span></p>
+
+            <div class="admin-form collapse" id="kehitys">
               <div class="panel heading-border">
 		<h2 class="p15"><?php echo Yii::t('main','Kehitys');?></h2>
                 <div class="panel-body bg-light">
@@ -125,9 +127,9 @@ exit;
 
 
 
+	   <p><span class="btn btn-primary btn-block myBgColors" data-toggle="collapse" data-target="#dumpit"><?php echo Yii::t('main','Varmuskopio dumpit'); ?> <i class="fa fa-caret-square-o-down" aria-hidden="true"></i></span></p>
 
-
-            <div class="admin-form">
+            <div class="admin-form collapse" id="dumpit">
               <div class="panel heading-border">
 		<h2 class="p15"><?php echo Yii::t('main','Varmuskopio dumpit');?></h2>
                 <div class="panel-body bg-light">

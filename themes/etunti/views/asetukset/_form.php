@@ -9,7 +9,7 @@
      $tas = explode(",",Yii::app()->user->adminPaketti);
 ?>
 
-<div class="row">
+
 
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'asetukset-form',
@@ -24,8 +24,11 @@
 		<?php echo $form->hiddenField($model,'id'); ?>
 		<?php echo $form->error($model,'id'); ?>
 
-  <div class="col-sm-4">
+<span class="btn btn-primary btn-block myBgColors" data-toggle="collapse" data-target="#jarjestAsetukset"><?php echo Yii::t('main','Järjestelmän asetukset'); ?> <i class="fa fa-caret-square-o-down" aria-hidden="true"></i></span>
 
+<div class="row form collapse" id="jarjestAsetukset">
+  <div class="col-sm-4">
+    <legend><h2><?php echo Yii::t('main','Järjestelmän asetukset'); ?></h2></legend>
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'logon_polkku'); ?>
 		<?php echo $form->textField($model,'logon_polkku',array('size'=>60,'maxlength'=>500,'class'=>'form-control')); ?>
@@ -89,6 +92,7 @@
 
 
   </div><div class="col-sm-4">
+    <legend><h2><?php echo Yii::t('main','Järjestelmän asetukset'); ?></h2></legend>
 
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'pyhapaivat'); ?>
@@ -103,7 +107,7 @@
 	</div>
 
   </div><div class="col-sm-4">
-
+    <legend><h2><?php echo Yii::t('main','Järjestelmän asetukset'); ?></h2></legend>
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'erikoislauantai'); ?>
 		<?php echo $form->textarea($model,'erikoislauantai',array('rows'=>8,'maxlength'=>3000,'class'=>'form-control')); ?>
@@ -116,7 +120,10 @@
 
 <?php if(in_array('3',$tas)) : ?>
 <hr>
-  <div class="row form">
+
+<span class="btn btn-primary btn-block myBgColors" data-toggle="collapse" data-target="#laskutuksenAsetukset"><?php echo Yii::t('main','Laskutuksen asetukset'); ?> <i class="fa fa-caret-square-o-down" aria-hidden="true"></i></span>
+
+  <div class="row form collapse" id="laskutuksenAsetukset">
     <div class="col-sm-4">
     <legend><h2><?php echo Yii::t('main','Laskutuksen asetukset'); ?></h2></legend>
 	<div class="section fill mb5">
@@ -231,7 +238,9 @@
 
 <?php if(in_array('4',$tas)) : ?>
 <hr>
-  <div class="row form">
+<span class="btn btn-primary btn-block myBgColors" data-toggle="collapse" data-target="#onlinevarauksenAsetukset"><?php echo Yii::t('main','Onlinevaraus'); ?> <i class="fa fa-caret-square-o-down" aria-hidden="true"></i></span>
+
+  <div class="row form collapse" id="onlinevarauksenAsetukset">
     <div class="col-sm-4">
     <legend><h2><?php echo Yii::t('main','Onlinevaraus'); ?></h2></legend>
 
@@ -325,9 +334,11 @@
 <?php endif; ?>
 
 <hr>
-  <div class="row form">
+<span class="btn btn-primary btn-block myBgColors" data-toggle="collapse" data-target="#sovellusAsetukset"><?php echo Yii::t('main','Sovelluksen asetukset'); ?> <i class="fa fa-caret-square-o-down" aria-hidden="true"></i></span>
+
+  <div class="row form collapse" id="sovellusAsetukset">
    <div class="col-sm-4">
-    <legend><h2><?php echo Yii::t('main','SOVELLUS'); ?></h2></legend>
+    <legend><h2><?php echo Yii::t('main','Sovelluksen asetukset'); ?></h2></legend>
 
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'sovellus_tyovuorot'); ?>
@@ -359,9 +370,11 @@
 
 
 <hr>
-  <div class="row form">
+<span class="btn btn-primary btn-block myBgColors" data-toggle="collapse" data-target="#netvisorAsetukset"><?php echo Yii::t('main','Netvisor asetukset'); ?> <i class="fa fa-caret-square-o-down" aria-hidden="true"></i></span>
+
+  <div class="row form collapse" id="netvisorAsetukset">
    <div class="col-sm-4">
-    <legend><h2><?php echo Yii::t('main','NETVISOR'); ?></h2></legend>
+    <legend><h2><?php echo Yii::t('main','Netvisor'); ?></h2></legend>
 
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'netvisor_kaytto'); ?>
@@ -418,7 +431,9 @@
 
 <?php if(in_array('5',$tas)) : ?>
 <hr>
-  <div class="row form">
+<span class="btn btn-primary btn-block myBgColors" data-toggle="collapse" data-target="#vinkkiAsetukset"><?php echo Yii::t('main','Vinkki asetukset'); ?> <i class="fa fa-caret-square-o-down" aria-hidden="true"></i></span>
+
+  <div class="row form collapse" id="vinkkiAsetukset">
    <div class="col-sm-4">
     <legend><h2><?php echo Yii::t('main','VINKKI'); ?></h2></legend>
 
@@ -441,9 +456,9 @@
 
 <br>
 <br>
-	<div class="buttons">
-		<?php echo CHtml::submitButton($model->isNewRecord ? 'Luo' : 'Tallenna',array('class'=>'btn btn-primary')); ?>
-	</div>
+	<p><div class="buttons">
+		<?php echo CHtml::submitButton($model->isNewRecord ? 'Luo' : 'Tallenna',array('class'=>'btn btn-success')); ?>
+	</div></p>
 
 <?php $this->endWidget(); ?>
 
