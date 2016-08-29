@@ -11,33 +11,17 @@
 	$now = date("Y-m-d");
 	$nowPlusInt = date("Y-m-d", strtotime($string." -".$interval." day"));
 
-
-	if($now >= $nowPlusInt and $string > $now)
-	$varo = "style='border:2px red solid'";
+	if($now >= $nowPlusInt and $now <= $string)
+	$varo = "style='color:red'";
 	else
 	$varo = '';
 
-/*
-	$datetime1 = new DateTime(date('Y-m-d'));
-	$datetime2 = new DateTime(date('Y-m-d',strtotime($string)));
-	$interval = $datetime1->diff($datetime2);
 
-	if(substr($interval->format('%R%a days'), 0, 1) == "+")
-	{
-	$paljonko = $interval->format('%a');
-	if($paljonko < 14)
-	$varo = "style='border:2px red solid'";
-	else
-	$varo = "";
-	} else {
-	$varo = "";
-	}
-*/
 ?>
 
 
-<tr <?php echo $varo; ?>>
-	<td><?php echo CHtml::encode($data->tekijan_nimi); ?></td>
-	<td><?php echo CHtml::encode(date("d.m.Y",strtotime($string))).' / '.$nowPlusInt; ?></td>
+<tr>
+	<td <?php echo $varo; ?>><?php echo CHtml::encode($data->tekijan_nimi); ?></td>
+	<td><?php echo CHtml::encode(date("d.m.Y",strtotime($string))); ?></td>
 	<td><?php echo CHtml::encode($data->tunnus); ?></td>
 </tr>

@@ -43,7 +43,7 @@ class Asetukset extends DB2ActiveRecord
 			array('id, show_name, sovellus_tyovuorot, logon_korkeus, palvelu_tyyppi, lasku_asiakasnumero, ilmoitus_avoimista_kohteesta_sahkopostiin, ilmoitus_myohastyneista_kohteesta_sahkopostiin, netvisor_kaytto', 'numerical', 'integerOnly'=>true),
 			array('paivan_uutinen, logon_polkku', 'length', 'max'=>500),
 			array('johtaja, viivastyskorko, tilinumero, iban, bic, , postita_username, postita_password, trust_cid, trust_api, checkout_id, trust_ws_cid, trust_ws_salasana', 'length', 'max'=>100),
-			array('trust_url, checkout_salasana, trust_ws_api_url, netvisor_customer_id, netvisor_partner_id, netvisor_userkey, netvisor_partnerkey, netvisor_organisation_identifier', 'length', 'max'=>255),
+			array('trust_url, checkout_salasana, trust_ws_api_url, netvisor_customer_id, netvisor_partner_id, netvisor_userkey, netvisor_partnerkey, netvisor_organisation_identifier, merkkipaivailmoitukset_sahkoposti', 'length', 'max'=>255),
 			array('viikonloppulisa_la, viikonloppulisa_su, vinkki_tunnit, vinkki_prosentti', 'length', 'max'=>10),
 			array('aikavali_halytys', 'length', 'max'=>3),
 			array('oikeudet, pyhapaivat, erikoislauantai, tilausvahvistus, rekisteriseloste, onlinevaraus_laatu_luotettavuus, onlinevaraus_takuu_turvallisuus, onlinevaraus_asiakaspalvelu, onlinevaraus_arvio_siivouksesta', 'length', 'max'=>10000),
@@ -101,7 +101,8 @@ class Asetukset extends DB2ActiveRecord
 			'onlinevaraus_arvio_siivouksesta' => Yii::t('main', 'Arvio siivouksesta'),
 			'aikavali_halytys' => Yii::t('main', 'Aikaväli hälytys (min)'),
 			'ilmoitus_avoimista_kohteesta_sahkopostiin' => Yii::t('main', 'Ilmoitus määräajan ylittäneistä kohteista sähköpostiin'),
-			'ilmoitus_myohastyneista_kohteesta_sahkopostiin' => Yii::t('main', 'ilmoitus myöhästyneistä kohteesta sähköpostiin'),
+			'ilmoitus_myohastyneista_kohteesta_sahkopostiin' => Yii::t('main', 'Ilmoitus myöhästyneistä kohteesta sähköpostiin'),
+			'merkkipaivailmoitukset_sahkoposti' => Yii::t('main', 'Sähköposti, johoon tulevat merkkipäiväilmoitukset'),
 		);
 	}
 

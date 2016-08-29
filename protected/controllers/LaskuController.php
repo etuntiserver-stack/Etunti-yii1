@@ -520,6 +520,20 @@ class LaskuController extends Controller
 
 			$as = Asiakkaat::model()->find(" asiakasnumero='".$model->as_nro."'  ");
 
+
+
+
+			   // <-- Netvisor
+			   $a = Asetukset::model()->findbypk(1);
+			   if($a->netvisor_kaytto == 1)
+			   {
+					$InsertedDataIdentifier = $this->netvisorLasku("add", $model);
+					if(!empty($InsertedDataIdentifier))
+					Lasku::model()->updateByPk($model->id, array('netvisorkey'=>$InsertedDataIdentifier));
+			    }
+			   //  Netvisor -->
+
+
 			foreach($_POST['tkoodi'] as $key=>$val)
 			{
 				$lr = new LaskunRivit;
@@ -602,8 +616,6 @@ class LaskuController extends Controller
 
 
 			   // <-- Netvisor
-/* ei toimi (Virhetunniste: 576297)
-
 			   $a = Asetukset::model()->findbypk(1);
 			   if($a->netvisor_kaytto == 1)
 			   {
@@ -619,7 +631,6 @@ class LaskuController extends Controller
 
 				}
 			    }
-*/
 			   //  Netvisor -->
 
 
@@ -1361,6 +1372,8 @@ exit;
 	protected function netvisorLasku($tila, $model)
 	{
 
+
+
 		$return = '';
 		$site = Yii::app()->createController('Site');
 		$n = $site[0]->netvisorYhteys();
@@ -1442,12 +1455,18 @@ $xml = '
     <DeliveryAddressCountryCode type="ISO-3166">FI</DeliveryAddressCountryCode>
     <PaymentTermNetDays>14</PaymentTermNetDays>
     <PaymentTermCashDiscountDays>5</PaymentTermCashDiscountDays>
-    <PaymentTermCashDiscount type="percentage">9</PaymentTermCashDiscount>
+    <PaymentTermCashDiscount type="percentage">9</PaymentTermCashDiscount>';
+
+$laskunRivit=LaskunRivit::model()->findAll("lid='".$model->id."'");
+foreach($laskunRivit as $rivit)
+{
+
+$xml .= '
     <InvoiceLines>
        <InvoiceLine>
           <SalesInvoiceProductLine>
-             <ProductIdentifier type="netvisor">unsent</ProductIdentifier>
-             <ProductName>Omena</ProductName>
+             <ProductIdentifier type="netvisor">8</ProductIdentifier>
+             <ProductName>'.$rivit->tkoodi.'</ProductName>
              <ProductUnitPrice type="net">6,90</ProductUnitPrice>
              <ProductVatPercentage vatcode="KOMY">22</ProductVatPercentage>
              <SalesInvoiceProductLineQuantity>2</SalesInvoiceProductLineQuantity>
@@ -1463,32 +1482,15 @@ $xml = '
              </Dimension>
            </SalesInvoiceProductLine>
        </InvoiceLine>
-       <InvoiceLine>
-          <SalesInvoiceProductLine>
-            <ProductIdentifier type="netvisor">1697</ProductIdentifier>
-            <ProductName>Banaani</ProductName>
-            <ProductUnitPrice type="net">100,00</ProductUnitPrice>
-            <ProductVatPercentage vatcode="KOMY">22</ProductVatPercentage>
-            <SalesInvoiceProductLineQuantity>1</SalesInvoiceProductLineQuantity>
-            <AccountingAccountSuggestion>3200</AccountingAccountSuggestion>
-          </SalesInvoiceProductLine>     
-      </InvoiceLine>
-      <InvoiceLine>
+      <InvoiceLine>';
+}
+
+$xml .= '
         <SalesInvoiceCommentLine>
             <Comment>Kommenttirivi</Comment>
         </SalesInvoiceCommentLine>
       </InvoiceLine>
-    </InvoiceLines>
-    <CustomTags>
-      <Tag>
-        <TagName>Paiva</TagName>
-          <TagValue datatype="date">'.date("Y-m-d", strtotime($model->erapaiva)).'</TagValue>
-      </Tag>
-      <Tag>
-        <TagName>Summa</TagName>
-          <TagValue datatype="float">23,87</TagValue>
-      </Tag>
-    </CustomTags>   
+    </InvoiceLines> 
   </SalesInvoice>
 </root>';
 	
@@ -1518,15 +1520,15 @@ $xml = '
 
 	  } else {
 
-
-
-	  }
-
-	
 		echo '<pre>';
 		print_r( $response );
 		echo '</pre>';
 		exit;
+
+	  }
+
+	
+
 
 
 	} // if isset $n[0]
