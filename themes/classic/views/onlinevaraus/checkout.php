@@ -4,9 +4,13 @@ ini_set('display_errors', 1);
 
 require 'CheckoutFinland/Payment.php';
 require 'CheckoutFinland/Client.php';
+//require 'CheckoutFinland/Exceptions/AmountUnderMinimumException.php';
 
 use CheckoutFinland\Payment;
 use CheckoutFinland\Client;
+//use CheckoutFinland\Exceptions\AmountUnderMinimumException;
+
+
 
 $asetukset = Asetukset::model()->findbypk(1);
 if(isset($asetukset->checkout_id) and !empty($asetukset->checkout_id) and !empty($asetukset->checkout_salasana))
@@ -28,7 +32,7 @@ if(isset($tv->id))
 
 $versio = '0001';
 $stamp = time();
-$amount = $amount; //
+$amount = $amount*100; //
 $reference = $_SESSION['onlinevaraus']['onlinevarausID'];
 $message = 'Työvuoro '.$tv->pvm.', '.$tv->alku.' - '.$tv->loppu;
 $deliveryDate = new \DateTime(date("Y-m-d"));
@@ -82,7 +86,7 @@ if($response)
 		$ov->tv_id = $_SESSION['onlinevaraus']['modelTV'];
 		$ov->maksun_onnistu_koodi = $xml->delayedMAC;
 		$ov->kesto = $kesto;
-		$ov->hinta = $amount;
+		$ov->hinta = $_SESSION['onlinevaraus']['amount'];
 		$ov->tilauksen_kuvaus = json_encode($_SESSION['onlinevaraus']['tilauksenKuvaus']);
 		$ov->save();
 
@@ -98,6 +102,7 @@ if($response)
 else {
     // no response at all, maybe the server is down, do some error handling
 } 
+
 ?>
 
 
