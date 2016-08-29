@@ -286,11 +286,6 @@ if(isset($asetukset->checkout_id) and !empty($asetukset->checkout_id) and !empty
 	      </div>
 	     <?php endif; ?>
 
- </div>
-</div>
-
-<br>
-
 <?php if(!empty($asetukset->onlinevaraus_arvio_siivouksesta)) : ?>
 <div class="">
   <div class="well sininen">
@@ -299,6 +294,14 @@ if(isset($asetukset->checkout_id) and !empty($asetukset->checkout_id) and !empty
   </div>
 </div>
 <?php endif; ?>
+
+
+ </div>
+</div>
+
+<br>
+
+
 
 
     <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/onlinevaraus/rekisteriseloste" target="_blank"><?php echo Yii::t('main','Onlinevaraus tietosuoja- ja rekisteriseloste'); ?> </a>

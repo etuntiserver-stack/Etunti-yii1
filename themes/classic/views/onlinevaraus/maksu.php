@@ -114,13 +114,14 @@ $asetukset = Asetukset::model()->findbypk(1);
 	      </div>
 -->
 
+	     <?php if(!empty($asetukset->onlinevaraus_asiakaspalvelu)) : ?>
 	      <div>
 		<div class="well sininen">
-		  <center><h4><?php echo Yii::t('main', 'Asiakaspalvelu'); ?></h4>
-
-		  </center>
+		  <center><h4><?php echo Yii::t('main', 'Asiakaspalvelu'); ?></h4></center>
+		  <p class="small"><?php echo str_replace("\n", "<br>", $asetukset->onlinevaraus_asiakaspalvelu); ?></p>
 		</div>
 	      </div>
+	     <?php endif; ?>
 
  </div>
 </div>

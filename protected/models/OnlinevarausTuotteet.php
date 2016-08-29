@@ -74,7 +74,7 @@ class OnlinevarausTuotteet extends DB2ActiveRecord
 			'kesto' => Yii::t('main', 'Kesto (tunnilla)'),
 			'nelio' => Yii::t('main', 'Neliömetri m²'),
 			'kotitalousvahennys' => Yii::t('main', 'Kotitalousvähennys %'),
-			'nayta_sivuilla' => Yii::t('main', 'Näytä sivuilla'),
+			'nayta_sivuilla' => Yii::t('main', 'Julkaise'),
 		);
 	}
 
