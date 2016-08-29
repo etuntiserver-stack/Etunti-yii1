@@ -166,6 +166,7 @@
 	  </div>
 	</div>';
 
+/*
 	} elseif(isset($sivu) and $sivu == 'osoite' and isset($_SESSION['onlinevaraus']['modelTV'])){
 	$body .= '
 	<div class="row">
@@ -177,6 +178,7 @@
 	  </div>
 	</div>';
 
+
 	} elseif(isset($sivu) and $sivu == 'osoite' and isset($_SESSION['onlinevaraus']['modelKohde'])){
 	$body .= '
 	<div class="row">
@@ -186,6 +188,7 @@
 			'.CHtml::link('Maksu','maksu', array('class'=>'btn btn-lg seuraava')).'
 	  </div>
 	</div>';
+*/
 
 	} elseif(isset($sivu) and $sivu == 'maksu'){
 	$body .= CHtml::link('Kassalle','kassalle', array('class'=>'btn btn-lg edellinen'));
