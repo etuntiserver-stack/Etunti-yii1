@@ -882,7 +882,7 @@ $(document).ready(function(){
 		$timestamp	=  date("Y-m-d H:i:s");
 		$language	= 'FI';
 		$organisationIdentifier	= $a->netvisor_organisation_identifier;
-		$transactionIdentifier	= rand(0,100000);
+		$transactionIdentifier	= rand(0,10000000);
 		$userKey 	= $a->netvisor_userkey;
 		$partnerKey	= $a->netvisor_partnerkey;
 

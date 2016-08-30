@@ -23,7 +23,7 @@ class LaskuController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','etsikohde','etsiasiakas', 'etsisaaja','luoKohteista', 'luoAsiakaasta', 'tr_rivit', 'tr_rivitkk','lasku_pdf', 'finvoice', 'postita', 'tr_rivit_tyhja','valitsetuote', 'hyvityslasku', 'postita_pdf', 'get_historia', 'kohteen_tieto', 'osoite_haku'),
+				'actions'=>array('admin','delete','create','update','index','view','etsikohde','etsiasiakas', 'etsisaaja','luoKohteista', 'luoAsiakaasta', 'tr_rivit', 'tr_rivitkk','lasku_pdf', 'finvoice', 'postita', 'tr_rivit_tyhja','valitsetuote', 'hyvityslasku', 'postita_pdf', 'get_historia', 'kohteen_tieto', 'osoite_haku', 'indexnv', 'updatenv'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny', // allow admin user to perform 'admin' and 'delete' actions
@@ -521,19 +521,6 @@ class LaskuController extends Controller
 			$as = Asiakkaat::model()->find(" asiakasnumero='".$model->as_nro."'  ");
 
 
-
-
-			   // <-- Netvisor
-			   $a = Asetukset::model()->findbypk(1);
-			   if($a->netvisor_kaytto == 1)
-			   {
-					$InsertedDataIdentifier = $this->netvisorLasku("add", $model);
-					if(!empty($InsertedDataIdentifier))
-					Lasku::model()->updateByPk($model->id, array('netvisorkey'=>$InsertedDataIdentifier));
-			    }
-			   //  Netvisor -->
-
-
 			foreach($_POST['tkoodi'] as $key=>$val)
 			{
 				$lr = new LaskunRivit;
@@ -566,11 +553,6 @@ class LaskuController extends Controller
 			}
 
 
-
-
-
-
-
 		    // Lasku historia
 		    $historia = new LaskuHistoria;
 		    $historia->lid = $model->id;
@@ -578,6 +560,23 @@ class LaskuController extends Controller
 		    $historia->palvelu = "local";
 		    $historia->yht_euro = $model->yhteensa_total;
 		    $historia->save();
+
+
+
+
+			   // <-- Netvisor
+			   $a = Asetukset::model()->findbypk(1);
+			   if($a->netvisor_kaytto == 1 and $a->palvelu_tyyppi == 4)
+			   {
+					$m = Lasku::model()->findbypk($model->id);
+					$InsertedDataIdentifier = $this->netvisorLasku("add", $m);
+					if(!empty($InsertedDataIdentifier))
+					Lasku::model()->updateByPk($model->id, array('netvisorkey'=>$InsertedDataIdentifier));
+					$this->redirect(array('indexnv'));
+			    }
+			   //  Netvisor -->
+
+
 
 
 				$this->redirect(array('update','id'=>$model->id));
@@ -614,26 +613,6 @@ class LaskuController extends Controller
 			if($model->save()){
 
 
-
-			   // <-- Netvisor
-			   $a = Asetukset::model()->findbypk(1);
-			   if($a->netvisor_kaytto == 1)
-			   {
-				if($model->netvisorkey == 0)
-				{
-					$InsertedDataIdentifier = $this->netvisorLasku("add", $model);
-					if(!empty($InsertedDataIdentifier))
-					Lasku::model()->updateByPk($model->id, array('netvisorkey'=>$InsertedDataIdentifier));
-
-				} else {
-
-					$InsertedDataIdentifier = $this->netvisorLasku("edit", $model);
-
-				}
-			    }
-			   //  Netvisor -->
-
-
 			LaskunRivit::model()->deleteAll("lid='".$id."'");
 
 
@@ -657,6 +636,27 @@ class LaskuController extends Controller
 				$lr->save();
 			}
 		}
+
+
+
+
+			   // <-- Netvisor
+			   $a = Asetukset::model()->findbypk(1);
+			   if($a->netvisor_kaytto == 1 and $a->palvelu_tyyppi == 4)
+			   {
+				if($model->netvisorkey == 0)
+				{
+					$InsertedDataIdentifier = $this->netvisorLasku("add", $model);
+					if(!empty($InsertedDataIdentifier))
+					Lasku::model()->updateByPk($model->id, array('netvisorkey'=>$InsertedDataIdentifier));
+
+				} else {
+
+					$InsertedDataIdentifier = $this->netvisorLasku("edit", $model);
+
+				}
+			    }
+			   //  Netvisor -->
 
 
 
@@ -1436,7 +1436,7 @@ $xml = '
   <SalesInvoice>
     <SalesInvoiceDate format="ansi">'.date("Y-m-d", strtotime($model->paivays)).'</SalesInvoiceDate>
     <SalesInvoiceDeliveryDate format="ansi">'.date("Y-m-d", strtotime($model->paivays)).'</SalesInvoiceDeliveryDate>
-    <SalesInvoiceReferenceNumber>1070</SalesInvoiceReferenceNumber>
+    <SalesInvoiceReferenceNumber>'.$model->viitenumero.'</SalesInvoiceReferenceNumber>
     <SalesInvoiceAmount>'.$model->yhteensa_total.'</SalesInvoiceAmount>
     <SellerIdentifier type="netvisor">32</SellerIdentifier> 
     <SalesInvoiceStatus type="netvisor">unsent</SalesInvoiceStatus>
@@ -1448,29 +1448,30 @@ $xml = '
     <InvoicingCustomerTown>'.$model->toimipaikka.'</InvoicingCustomerTown>
     <InvoicingCustomerCountryCode type="ISO-3166">FI</InvoicingCustomerCountryCode>
     <DeliveryAddressName>'.$name.'</DeliveryAddressName>
-    <DeliveryAddressNameExtension>Ohjelmistokehitys ja tuotanto</DeliveryAddressNameExtension>
-    <DeliveryAddressLine>Snelmanninkatu 12</DeliveryAddressLine>
-    <DeliveryAddressPostNumber>53100</DeliveryAddressPostNumber>
-    <DeliveryAddressTown>LPR</DeliveryAddressTown>
+    <DeliveryAddressNameExtension>Lasku</DeliveryAddressNameExtension>
+    <DeliveryAddressLine>'.$model->osoite.'</DeliveryAddressLine>
+    <DeliveryAddressPostNumber>'.$model->postinumero.'</DeliveryAddressPostNumber>
+    <DeliveryAddressTown>'.$model->toimipaikka.'</DeliveryAddressTown>
     <DeliveryAddressCountryCode type="ISO-3166">FI</DeliveryAddressCountryCode>
-    <PaymentTermNetDays>14</PaymentTermNetDays>
-    <PaymentTermCashDiscountDays>5</PaymentTermCashDiscountDays>
-    <PaymentTermCashDiscount type="percentage">9</PaymentTermCashDiscount>';
+    <PaymentTermNetDays>'.$model->maksuehto.'</PaymentTermNetDays>';
 
 $laskunRivit=LaskunRivit::model()->findAll("lid='".$model->id."'");
+
+if(count($laskunRivit) > 0)
+$xml .= '<InvoiceLines>';
+
 foreach($laskunRivit as $rivit)
 {
 
 $xml .= '
-    <InvoiceLines>
        <InvoiceLine>
           <SalesInvoiceProductLine>
              <ProductIdentifier type="netvisor">8</ProductIdentifier>
              <ProductName>'.$rivit->tkoodi.'</ProductName>
-             <ProductUnitPrice type="net">6,90</ProductUnitPrice>
-             <ProductVatPercentage vatcode="KOMY">22</ProductVatPercentage>
-             <SalesInvoiceProductLineQuantity>2</SalesInvoiceProductLineQuantity>
-             <SalesInvoiceProductLineDiscountPercentage>0</SalesInvoiceProductLineDiscountPercentage>
+             <ProductUnitPrice type="net">'.$rivit->hinta.'</ProductUnitPrice>
+             <ProductVatPercentage vatcode="KOMY">'.$rivit->alv.'</ProductVatPercentage>
+             <SalesInvoiceProductLineQuantity>'.$rivit->kpl.'</SalesInvoiceProductLineQuantity>
+             <SalesInvoiceProductLineDiscountPercentage>'.$rivit->ale.'</SalesInvoiceProductLineDiscountPercentage>
              <AccountingAccountSuggestion>3000</AccountingAccountSuggestion> 
              <Dimension>
                 <DimensionName>Liiketoimintayksikkö laskentakohteena</DimensionName>
@@ -1481,16 +1482,13 @@ $xml .= '
                 <DimensionItem>Makkaran paisto</DimensionItem>
              </Dimension>
            </SalesInvoiceProductLine>
-       </InvoiceLine>
-      <InvoiceLine>';
+       </InvoiceLine>';
 }
 
+if(count($laskunRivit) > 0)
+$xml .= '</InvoiceLines>';
+
 $xml .= '
-        <SalesInvoiceCommentLine>
-            <Comment>Kommenttirivi</Comment>
-        </SalesInvoiceCommentLine>
-      </InvoiceLine>
-    </InvoiceLines> 
   </SalesInvoice>
 </root>';
 	
@@ -1527,14 +1525,268 @@ $xml .= '
 
 	  }
 
-	
-
-
 
 	} // if isset $n[0]
 
 		return $return;
 
+	}
+
+
+
+	public function actionIndexnv()
+	{
+
+		$return = '';
+		$site = Yii::app()->createController('Site');
+		$n = $site[0]->netvisorYhteys();
+
+	  if(isset($n[0]))
+	  {
+		$url		= $n[0].'/salesinvoicelist.nv';
+		$host 		= $n[1];
+
+		$sender 	= $n[2];
+		$customerId	= $n[3];
+		$partnerId	= $n[4];
+		$timestamp	= $n[5];
+		$language	= $n[6];
+		$organisationIdentifier	= $n[7];
+		$transactionIdentifier	= $n[8];
+		$userKey 	= $n[9];
+		$partnerKey	= $n[10];
+
+
+
+		$getMAC = md5(
+			$url.'&'.
+			$sender.'&'.
+			$customerId.'&'.
+			$timestamp.'&'.
+			$language.'&'.
+			$organisationIdentifier.'&'.
+			$transactionIdentifier.'&'.
+			$userKey.'&'.
+			$partnerKey
+		 	);
+	
+		$auth_data = 
+		    "Host: $host\r\n".  
+		    "X-Netvisor-Authentication-Sender: $sender\r\n".  
+		    "X-Netvisor-Authentication-CustomerId: $customerId\r\n".  
+		    "X-Netvisor-Authentication-PartnerId: $partnerId\r\n".  
+		    "X-Netvisor-Authentication-Timestamp: $timestamp\r\n".
+		    "X-Netvisor-Interface-Language: $language\r\n".
+		    "X-Netvisor-Organisation-ID: $organisationIdentifier\r\n".  
+		    "X-Netvisor-Authentication-TransactionId: $transactionIdentifier\r\n".
+		    "X-Netvisor-Authentication-MAC: $getMAC\r\n"; 
+		
+	
+		$optsGET = array(
+		  'http'=>array(
+		    'method'=>"GET",
+		    'header'=>"Accept: text/plain\r\n" .
+		              "Content-Type: application/x-www-form-urlencoded\r\n".
+			      $auth_data,
+		    'content'=> ''
+		  )
+		);
+	
+		$context = stream_context_create($optsGET);
+		
+		$response = file_get_contents($url, false, $context);
+		$result = new SimpleXMLElement($response);
+	
+		$this->render('indexnv', array('result'=>$result));
+
+	  }
+	}
+
+
+	public function actionUpdatenv($id)
+	{
+
+
+		$return = '';
+		$site = Yii::app()->createController('Site');
+		$n = $site[0]->netvisorYhteys();
+
+	  if(isset($n[0]))
+	  {
+
+		if(isset($_POST['Sales_Invoice_Number']))
+		$url		= $n[0].'/salesinvoice.nv?id='.$id.'&method=edit';
+		else
+		$url		= $n[0].'/getsalesinvoice.nv?netvisorkey='.$id;
+
+		$host 		= $n[1];
+
+		$sender 	= $n[2];
+		$customerId	= $n[3];
+		$partnerId	= $n[4];
+		$timestamp	= $n[5];
+		$language	= $n[6];
+		$organisationIdentifier	= $n[7];
+		$transactionIdentifier	= $n[8];
+		$userKey 	= $n[9];
+		$partnerKey	= $n[10];
+
+
+
+		$getMAC = md5(
+			$url.'&'.
+			$sender.'&'.
+			$customerId.'&'.
+			$timestamp.'&'.
+			$language.'&'.
+			$organisationIdentifier.'&'.
+			$transactionIdentifier.'&'.
+			$userKey.'&'.
+			$partnerKey
+		 	);
+	
+		$auth_data = 
+		    "Host: $host\r\n".  
+		    "X-Netvisor-Authentication-Sender: $sender\r\n".  
+		    "X-Netvisor-Authentication-CustomerId: $customerId\r\n".  
+		    "X-Netvisor-Authentication-PartnerId: $partnerId\r\n".  
+		    "X-Netvisor-Authentication-Timestamp: $timestamp\r\n".
+		    "X-Netvisor-Interface-Language: $language\r\n".
+		    "X-Netvisor-Organisation-ID: $organisationIdentifier\r\n".  
+		    "X-Netvisor-Authentication-TransactionId: $transactionIdentifier\r\n".
+		    "X-Netvisor-Authentication-MAC: $getMAC\r\n"; 
+		
+
+		// update -->
+		if(isset($_POST['Sales_Invoice_Number']))
+		{
+
+		header("Content-Type: text/html; charset=utf-8");
+
+
+
+$xml = '
+<root>
+  <SalesInvoice>
+    <SalesInvoiceDate format="ansi">'.date("Y-m-d", strtotime($_POST['Sales_Invoice_Date'])).'</SalesInvoiceDate>
+    <SalesInvoiceDeliveryDate format="ansi">'.date("Y-m-d", strtotime($_POST['Sales_Invoice_Delivery_Date'])).'</SalesInvoiceDeliveryDate>
+    <SalesInvoiceReferenceNumber>'.$_POST['Sales_Invoice_Reference_Number'].'</SalesInvoiceReferenceNumber>
+    <SalesInvoiceAmount>'.$_POST['Sales_Invoice_Amount'].'</SalesInvoiceAmount>
+    <SellerIdentifier type="netvisor">32</SellerIdentifier> 
+    <SalesInvoiceStatus type="netvisor">unsent</SalesInvoiceStatus>
+    <InvoicingCustomerIdentifier type="netvisor">1</InvoicingCustomerIdentifier>
+    <InvoicingCustomerName>'.$_POST['Invoicing_Customer_Name'].'</InvoicingCustomerName>
+    <InvoicingCustomerNameExtension></InvoicingCustomerNameExtension>
+    <InvoicingCustomerAddressLine>'.$_POST['Invoicing_Customer_Address_Line'].'</InvoicingCustomerAddressLine>
+    <InvoicingCustomerPostNumber>'.$_POST['Invoicing_Customer_Postnumber'].'</InvoicingCustomerPostNumber>
+    <InvoicingCustomerTown>'.$_POST['Invoicing_Customer_Town'].'</InvoicingCustomerTown>
+    <InvoicingCustomerCountryCode type="ISO-3166">FI</InvoicingCustomerCountryCode>
+    <DeliveryAddressName>'.$_POST['Delivery_Address_Name'].'</DeliveryAddressName>
+    <DeliveryAddressNameExtension>Lasku</DeliveryAddressNameExtension>
+    <DeliveryAddressLine>'.$_POST['Delivery_Address_Line'].'</DeliveryAddressLine>
+    <DeliveryAddressPostNumber>'.$_POST['Delivery_Address_Postnumber'].'</DeliveryAddressPostNumber>
+    <DeliveryAddressTown>'.$_POST['Delivery_Address_Town'].'</DeliveryAddressTown>
+    <DeliveryAddressCountryCode type="ISO-3166">FI</DeliveryAddressCountryCode>
+    <PaymentTermNetDays>'.$_POST['Payment_Term_Net_Days'].'</PaymentTermNetDays>
+    <PaymentTermCashDiscountDays>'.$_POST['Payment_Term_Cash_Discount_Days'].'</PaymentTermCashDiscountDays>
+';
+
+
+if(count($_POST['InvoiceLine']['ProductName']) > 0)
+$xml .= '<InvoiceLines>';
+
+
+foreach($_POST['InvoiceLine']['ProductName'] as $key=>$rivit)
+{
+
+$xml .= '
+       <InvoiceLine>
+          <SalesInvoiceProductLine>
+             <ProductIdentifier type="netvisor">8</ProductIdentifier>
+             <ProductName>'.$_POST['InvoiceLine']['ProductName'][$key].'</ProductName>
+             <ProductUnitPrice type="net">'.$_POST['InvoiceLine']['ProductUnitPrice'][$key].'</ProductUnitPrice>
+             <ProductVatPercentage vatcode="KOMY">'.$_POST['InvoiceLine']['ProductVatPercentage'][$key].'</ProductVatPercentage>
+             <SalesInvoiceProductLineQuantity>'.$_POST['InvoiceLine']['SalesInvoiceProductLineQuantity'][$key].'</SalesInvoiceProductLineQuantity>
+             <SalesInvoiceProductLineDiscountPercentage>'.$_POST['InvoiceLine']['SalesInvoiceProductLineDiscountPercentage'][$key].'</SalesInvoiceProductLineDiscountPercentage>
+             <AccountingAccountSuggestion>3000</AccountingAccountSuggestion> 
+             <Dimension>
+                <DimensionName>Liiketoimintayksikkö laskentakohteena</DimensionName>
+                <DimensionItem>Yleishallinto</DimensionItem>
+             </Dimension>
+             <Dimension>
+                <DimensionName>Severan "työ" laskentakohteena</DimensionName>
+                <DimensionItem>Makkaran paisto</DimensionItem>
+             </Dimension>
+           </SalesInvoiceProductLine>
+       </InvoiceLine>';
+}
+
+if(count($_POST['InvoiceLine']['ProductName']) > 0)
+$xml .= '</InvoiceLines>';
+
+$xml .= '
+  </SalesInvoice>
+</root>';
+
+
+
+	$optsPOST = array(
+	  'http'=>array(
+	    'method'=>"POST",
+	    'header'=>"Accept: text/plain\r\n" .
+	              "Content-Type: application/x-www-form-urlencoded\r\n".
+	              "Content-Length: ".strlen($xml)."\r\n".
+		      $auth_data,
+	    'content'=> $xml
+	  )
+	);
+	
+	$context = stream_context_create($optsPOST);
+	
+	$response = file_get_contents($url, false, $context);
+	$result = new SimpleXMLElement($response);
+	
+	
+	  if($result->ResponseStatus->Status == 'OK')
+	  {
+			$this->redirect(array('indexnv'));
+			echo '<pre>';
+			print_r($result);
+			echo '</pre>';
+			exit;
+	  } else {
+
+			echo '<pre>';
+			print_r($result);
+			echo '</pre>';
+			exit;
+	  }
+
+
+
+		}
+		// loppu update -->
+
+
+	
+		$optsGET = array(
+		  'http'=>array(
+		    'method'=>"GET",
+		    'header'=>"Accept: text/plain\r\n" .
+		              "Content-Type: application/x-www-form-urlencoded\r\n".
+			      $auth_data,
+		    'content'=> ''
+		  )
+		);
+	
+		$context = stream_context_create($optsGET);
+		
+		$response = file_get_contents($url, false, $context);
+		$result = new SimpleXMLElement($response);
+	
+		$this->render('updatenv', array('id'=>$id, 'result'=>$result));
+
+	  }
 
 	}
 
