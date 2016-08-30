@@ -719,8 +719,12 @@ function laatikonPaivays(thisDataReturn){
 	var alku = $("#alku").val().split(':');
 	var loppu = $("#loppu").val().split(':');
 
-	var d2 = new Date(2014, 0, 31, loppu[0], loppu[1]);
-	var d1 = new Date(2014, 0, 31, alku[0], alku[1]);
+	if(loppu[0] < alku[0])
+	var d2 = new Date(2016, 0, 21, loppu[0], loppu[1]);
+	else
+	var d2 = new Date(2016, 0, 20, loppu[0], loppu[1]);
+
+	var d1 = new Date(2016, 0, 20, alku[0], alku[1]);
 	var seconds =  (d2- d1)/1000;
 	var sec = seconds;
 	var h = sec/3600 ^ 0 ;
