@@ -219,7 +219,7 @@ class TyovuorootController extends Controller
 		/* file */
 		$message = Yii::t('main', 'VIIKKO').'-'.$week.'<br>'.Yii::t('main', ' Liitteenä uusi PDF-tiedosto');
 		if(isset($_POST['kirjenBody']) and !empty($_POST['kirjenBody']))
-		$message .= '<br>'.str_replace("\n", "<br>", $_POST['kirjenBody']);
+		$message .= '<br><div style="font-size: 120%">'.str_replace("\n", "<br>", $_POST['kirjenBody']).'</div>';
 		
 
 		$saaja = $tt->tekijan_email;
@@ -237,6 +237,8 @@ class TyovuorootController extends Controller
 	
 		if($mail->send())
 		  $this->render('laheta',array('tid'=>$tid,'week'=>$week,'year'=>$year,'tulosta'=>false,'tt'=>$tt));
+		else
+		  echo 'Send error';
 
 		} else {
 		  $this->render('laheta',array('tid'=>$tid,'week'=>$week,'year'=>$year,'tulosta'=>false,'tt'=>$tt));
