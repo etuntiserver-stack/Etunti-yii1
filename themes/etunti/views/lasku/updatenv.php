@@ -23,7 +23,7 @@
   echo '<h2>'.Yii::t('main', 'InvoiceStatus').': '.$result->SalesInvoice->InvoiceStatus.'</h2>';
 
   echo '
-  <form action="#" method="POST">
+  <form action="#" method="POST" id="lasku-form">
   <div class="row">
    <div class="col-sm-3">
 
@@ -148,6 +148,18 @@
  echo '
    </table>
   </div>
+
+  <div class="row">
+   <div class="col-sm-3">
+
+	<div class="section fill mb5">
+	 <label>'.Yii::t('main', 'SalesInvoiceStatus').' (unset, open)</label>
+	 <input type="text" class="form-control" name="Sales_Invoice_Status" id="Sales_Invoice_Status" value="'.$result->SalesInvoice->SalesInvoiceStatus.'">
+	</div>
+
+   </div>
+  </div>
+
   <br>
   <input type="submit" class="btn btn-success" value="'.Yii::t('main', 'Tallenna').'">
   </form>
@@ -175,3 +187,29 @@
 
         <!-- loppu: .tray-center -->
         </div>
+
+
+
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+
+
+$("#lasku-form").on('submit',function(e) {
+
+	var Sales_Invoice_Status = $("#Sales_Invoice_Status").val();
+
+	if (Sales_Invoice_Status  === '') 
+	{
+	     $('#Sales_Invoice_Status').css({"border" : "2px #f14010 solid"}).focus();
+	     return false;
+	}
+});
+
+
+});
+</script>
+
+
+

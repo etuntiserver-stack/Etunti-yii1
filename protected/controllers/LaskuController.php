@@ -1673,7 +1673,7 @@ $xml = '
     <SalesInvoiceReferenceNumber>'.$_POST['Sales_Invoice_Reference_Number'].'</SalesInvoiceReferenceNumber>
     <SalesInvoiceAmount>'.$_POST['Sales_Invoice_Amount'].'</SalesInvoiceAmount>
     <SellerIdentifier type="netvisor">32</SellerIdentifier> 
-    <SalesInvoiceStatus type="netvisor">unsent</SalesInvoiceStatus>
+    <SalesInvoiceStatus type="netvisor">'.$_POST['Sales_Invoice_Status'].'</SalesInvoiceStatus>
     <InvoicingCustomerIdentifier type="netvisor">1</InvoicingCustomerIdentifier>
     <InvoicingCustomerName>'.$_POST['Invoicing_Customer_Name'].'</InvoicingCustomerName>
     <InvoicingCustomerNameExtension></InvoicingCustomerNameExtension>
