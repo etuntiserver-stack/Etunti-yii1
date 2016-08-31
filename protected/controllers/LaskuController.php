@@ -1695,7 +1695,7 @@ $xml = '
 if(count($_POST['InvoiceLine']['ProductName']) > 0)
 $xml .= '<InvoiceLines>';
 
-
+$forLaskuRivit = array();
 foreach($_POST['InvoiceLine']['ProductName'] as $key=>$rivit)
 {
 
@@ -1719,6 +1719,14 @@ $xml .= '
              </Dimension>
            </SalesInvoiceProductLine>
        </InvoiceLine>';
+
+	$forLaskuRivit[] = array(
+	   $_POST['InvoiceLine']['ProductName'][$key],
+	   $_POST['InvoiceLine']['ProductUnitPrice'][$key],
+	   $_POST['InvoiceLine']['ProductVatPercentage'][$key],
+	   $_POST['InvoiceLine']['SalesInvoiceProductLineQuantity'][$key],
+	   $_POST['InvoiceLine']['SalesInvoiceProductLineDiscountPercentage'][$key]
+	);
 }
 
 if(count($_POST['InvoiceLine']['ProductName']) > 0)
@@ -1749,11 +1757,58 @@ $xml .= '
 	
 	  if($result->ResponseStatus->Status == 'OK')
 	  {
+
+		$l = Lasku::model()->find(" netvisorkey='".$id."' ");
+		if(isset($l->id))
+		{
+
+			Lasku::model()->updateByPk($l->id, array(
+				'paivays'=>date("Y-m-d", strtotime($_POST['Sales_Invoice_Date'])),
+				'toimituspaiva'=>date("Y-m-d", strtotime($_POST['Sales_Invoice_Delivery_Date'])),
+				'viitenumero'=>$_POST['Sales_Invoice_Reference_Number'],
+				'yhteensa_total'=>$_POST['Sales_Invoice_Amount'],
+				'viitenumero'=>$_POST['Sales_Invoice_Reference_Number'],
+				'response'=>$_POST['Sales_Invoice_Status'],
+				'nimi'=>$_POST['Invoicing_Customer_Name'],
+				'osoite'=>$_POST['Invoicing_Customer_Address_Line'],
+				'postinumero'=>$_POST['Invoicing_Customer_Postnumber'],
+				'toimipaikka'=>$_POST['Invoicing_Customer_Town']
+			));
+
+		    	LaskunRivit::model()->deleteAll("lid='".$l->id."'");
+
+
+			if(count($forLaskuRivit) > 0)
+			{
+			   foreach($forLaskuRivit as $key=>$val)
+			   {
+				$lr = new LaskunRivit;
+				$lr->lid	=$l->id;
+				$lr->rivi	=$key;
+				$lr->tkoodi	=$forLaskuRivit[$key][0]; // on nimetus
+				$lr->kpl	=$forLaskuRivit[$key][3];
+				//$lr->yksikko	=$_POST['yksikko'][$key];
+				$lr->hinta	=$forLaskuRivit[$key][1];
+				$lr->alv	=$forLaskuRivit[$key][2];
+				//$lr->hinta_alv	=$_POST['hinta_alv'][$key];
+				$lr->ale	=$forLaskuRivit[$key][4];
+				//$lr->veroton	=$_POST['veroton'][$key];
+				//$lr->yhteensa_alv=$_POST['yhteensa_alv'][$key];
+				if(!$lr->save())
+				print_r($lr->getErrors()).'<br>';
+			   }
+			}
+
+
+		}
+
 			$this->redirect(array('indexnv'));
+
 			echo '<pre>';
 			print_r($result);
 			echo '</pre>';
 			exit;
+
 	  } else {
 
 			echo '<pre>';

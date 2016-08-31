@@ -153,7 +153,7 @@
    <div class="col-sm-3">
 
 	<div class="section fill mb5">
-	 <label>'.Yii::t('main', 'SalesInvoiceStatus').' (unset, open)</label>
+	 <label>'.Yii::t('main', 'SalesInvoiceStatus').' (unsent, open)</label>
 	 <input type="text" class="form-control" name="Sales_Invoice_Status" id="Sales_Invoice_Status" value="'.$result->SalesInvoice->SalesInvoiceStatus.'">
 	</div>
 
