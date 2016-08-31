@@ -296,6 +296,7 @@ td .tp{
 	  echo '</div></th>';
 	// VARAUS
 
+	$asetukset = Asetukset::model()->findByPk(1);
 
 	foreach($tt as $t){
 	  echo '<th><div class="latikkoAsetukset">';
@@ -327,14 +328,14 @@ td .tp{
 
 		// VARAUS
 		  echo '<td '.$clPyhat.' id="'.$did.'_0">';
-		  $tv = $this->renderPartial('//tyovuoroot/did',array('pvm'=>$date,'tid'=>0,'from'=>'tvuoro', 'kohteenArr'=>$kohteenArr), true);
+		  $tv = $this->renderPartial('//tyovuoroot/did',array('pvm'=>$date,'tid'=>0,'from'=>'tvuoro', 'kohteenArr'=>$kohteenArr, 'asetukset'=>$asetukset), true);
 		  echo json_decode($tv, true);
 		  echo '</td>';
 		// VARAUS
 
 		foreach($tt as $t){
 		  echo '<td '.$clPyhat.' id="'.$did.'_'.$t->id.'">';
-		  $tv = $this->renderPartial('//tyovuoroot/did',array('pvm'=>$date,'tid'=>$t->id,'from'=>'tvuoro', 'kohteenArr'=>$kohteenArr), true);
+		  $tv = $this->renderPartial('//tyovuoroot/did',array('pvm'=>$date,'tid'=>$t->id,'from'=>'tvuoro', 'kohteenArr'=>$kohteenArr, 'asetukset'=>$asetukset), true);
 		  echo json_decode($tv, true);
 		  echo '</td>';
 		}

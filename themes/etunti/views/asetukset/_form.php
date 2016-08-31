@@ -88,7 +88,17 @@
 		<?php echo $form->error($model,'ilmoitus_avoimista_kohteesta_sahkopostiin'); ?>
 	</div>
 
-
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'asiakas_tyovuorossa'); ?>
+		<?php 
+        	$l = array(
+			0=>'Ei',
+			1=>'Kyllä'
+		);
+		echo $form->dropDownList($model,'asiakas_tyovuorossa', $l, 
+		array('empty'=>Yii::t('main', 'Valitse'), 'class'=>'form-control')) ?>
+		<?php echo $form->error($model,'asiakas_tyovuorossa'); ?>
+	</div>
 
 
   </div><div class="col-sm-4">

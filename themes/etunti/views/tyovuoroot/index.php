@@ -318,6 +318,7 @@ td .tp{
 
 	  echo '</td>';
 
+	  $asetukset = Asetukset::model()->findByPk(1);
 	  for($day= 1; $day <= $numDays; $day++)
 	  {
   	     $d = strtotime($year ."W". $week . $day);
@@ -330,7 +331,7 @@ td .tp{
 	     $clPyhat = 'style="background:#ddd"';
 
 	     echo '<td '.$clPyhat.' id="'.$did.'_0" valign="top">';
- 	     $did = $this->renderPartial('//tyovuoroot/did',array('pvm'=>$date,'tid'=>0,'from'=>'tvuoro', 'kohteenArr'=>$kohteenArr), true);
+ 	     $did = $this->renderPartial('//tyovuoroot/did',array('pvm'=>$date,'tid'=>0,'from'=>'tvuoro', 'kohteenArr'=>$kohteenArr, 'asetukset'=>$asetukset), true);
 	     echo json_decode($did, true);
 	     echo '</td>';
 	  }
@@ -384,7 +385,7 @@ td .tp{
 	     $clPyhat = 'style="background:#ddd"';
 
 	     echo '<td '.$clPyhat.' id="'.$did.'_'.$t->id.'" valign="top">';
- 	     $did = $this->renderPartial('//tyovuoroot/did',array('pvm'=>$date,'tid'=>$t->id,'from'=>'tvuoro', 'kohteenArr'=>$kohteenArr), true);
+ 	     $did = $this->renderPartial('//tyovuoroot/did',array('pvm'=>$date,'tid'=>$t->id,'from'=>'tvuoro', 'kohteenArr'=>$kohteenArr, 'asetukset'=>$asetukset), true);
 	     echo json_decode($did, true);
 	     echo '</td>';
 	  }
