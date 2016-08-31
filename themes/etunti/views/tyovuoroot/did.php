@@ -110,6 +110,12 @@ if(!isset($_POST['tulosta']))
 
 	   } 
 
+	   // toistuva
+	   $toistuva = '';
+	   if($tvVal->toistuva_id != 0){
+		$toistuva = '<i class="p3 pull-right fa fa-repeat text-success" style="font-size:120%"></i>';
+	   }
+
 	   // status
 	   $status = '';
 	   if($tvVal->status != 0){
@@ -140,7 +146,7 @@ if(!isset($_POST['tulosta']))
 
 	    //if(!isset($_POST['tulosta'])) $br = '<br>'; else $br = '';
 
-	    $al = '<b>'.$tvVal->alku.'-'.$tvVal->loppu.$status.'</b>';
+	    $al = '<b>'.$tvVal->alku.'-'.$tvVal->loppu.$toistuva.$status.'</b>';
 	   } else {
 	    $al = '';
 	   }
