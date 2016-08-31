@@ -110,6 +110,20 @@ if(!isset($_POST['tulosta']))
 
 	   } 
 
+	   // asiakasNakyvissa
+	   $asiakasNakyvissa = '';
+	   if(isset($asetukset) and $asetukset->asiakas_tyovuorossa == 1){
+		$as = Asiakkaat::model()->findbypk($tvVal->kohteet->asiakas_id);
+		$name = '';
+		if(isset($as->id) and !empty($as->yrityksen_nimi))
+		$name = $as->yrityksen_nimi;
+		elseif(isset($as->id) and empty($as->yrityksen_nimi) and !empty($as->yhteyshenkilo))
+		$name = $as->yhteyshenkilo;
+
+		if(!empty($name))
+		$asiakasNakyvissa = $name.'<br>';
+	   }
+
 	   // toistuva
 	   $toistuva = '';
 	   if($tvVal->toistuva_id != 0){
@@ -165,7 +179,7 @@ if(!isset($_POST['tulosta']))
   	   } 
 
 	   if(!empty($osoite))
-	   $osoite = '<br>'.$osoite;
+	   $osoite = '<br>'.$asiakasNakyvissa.$osoite;
 
 	   $bod .=  '<div id="'.$tvVal->id.'_'.$did.'_'.$tid.'" class="well fullRivi" style="color:'.$color.'">';
 	   if( $from != 'mobiili' )
