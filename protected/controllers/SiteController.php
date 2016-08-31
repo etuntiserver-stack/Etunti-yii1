@@ -41,7 +41,7 @@ class SiteController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', 
-				'actions'=>array('etusivu','ohjesivu','etusivu_esimerki', 'change_color', 'valiko', 'valiko_ajax', 'kohderyhma', 'ohjevideot', 'mobemu', 'etusivu_ajax'),
+				'actions'=>array('etusivu','ohjesivu','etusivu_esimerki', 'change_color', 'valiko', 'valiko_ajax', 'kohderyhma', 'ohjevideot', 'mobemu', 'etusivu_ajax', 'ulkonaky'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('allow', 
@@ -92,6 +92,50 @@ class SiteController extends Controller
                 }
                 parent::init();
         }
+
+
+
+	public function actionUlkonaky()
+	{
+		$ad = Administrators::model()->findByPk(Yii::app()->user->adminID);
+		$result = '';
+		if(isset($_POST['vaihdo']))
+		{
+			if( $_POST['vaihdo'] == 'sidebarSkin' )
+			{
+
+				$ulkonaky = json_decode($ad->ulkonaky, true);
+				$ulkonaky['sidebarSkin'] = $_POST['sidebarSkin'];
+
+				$result = json_encode($ulkonaky);
+				Administrators::model()->updateByPk($ad->id, array('ulkonaky'=>$result));
+			
+			}
+
+			if( $_POST['vaihdo'] == 'headerSkin' )
+			{
+
+				$ulkonaky = json_decode($ad->ulkonaky, true);
+				$ulkonaky['headerSkin'] = $_POST['headerSkin'];
+
+				$result = json_encode($ulkonaky);
+				Administrators::model()->updateByPk($ad->id, array('ulkonaky'=>$result));
+			
+			}
+		}
+
+		if(isset($_POST['getSkins']))
+		{
+			$result = $ad->ulkonaky;
+		}
+
+		if(isset($_POST['clearStorage']))
+		{
+			Administrators::model()->updateByPk($ad->id, array('ulkonaky'=>''));
+		}
+
+		echo $result;
+	}
 
 
 	public function actionEtusivu_ajax()

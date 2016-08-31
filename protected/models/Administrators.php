@@ -42,6 +42,7 @@ class Administrators extends DB2ActiveRecord
 			array('adm_login, adm_salasana, adm_email, adm_nimi', 'required'),
 			array('status', 'numerical', 'integerOnly'=>true),
 			array('adm_login, adm_salasana, adm_email, adm_nimi', 'length', 'max'=>100),
+			array('ulkonaky', 'length', 'max'=>3000),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('id, adm_login, adm_salasana, adm_email, adm_nimi, status', 'safe', 'on'=>'search'),

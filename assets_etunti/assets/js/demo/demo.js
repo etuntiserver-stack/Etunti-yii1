@@ -243,6 +243,24 @@ $("#notiFyClick").click(function(){
         var settingsParse = JSON.parse(themeGet);
         settingsObj = settingsParse;
 
+
+        $.ajax({
+           url: location.protocol + "//" + location.host + '/index.php/site/ulkonaky',
+           type: "POST",
+	   async: false,
+	   data: { getSkins : "true" },
+           success: function(data){
+		if(data !== '')
+		data = JSON.parse(data);
+		//console.log(data);
+		if(data['sidebarSkin'])
+		settingsObj['sidebarSkin'] = data['sidebarSkin'];
+		if(data['headerSkin'])
+		settingsObj['headerSkin'] = data['headerSkin'];
+           }
+        });
+
+
 	$('.myBgColors').removeClass(headerSkins);
 	$('.myBgColors').addClass(settingsObj['headerSkin']);
 	var backgroundColor = $('.myBgColors').css('backgroundColor');
@@ -373,6 +391,17 @@ $("#notiFyClick").click(function(){
 	$('head').append('<style>.admin-form .heading-border:before{background-color: '+backgroundColor+';}</style>');
 
 
+        $.ajax({
+           url: location.protocol + "//" + location.host + '/index.php/site/ulkonaky',
+           type: "POST",
+	   data: { vaihdo : "headerSkin", headerSkin : Val },
+           success: function(data){
+		data = JSON.parse(data);
+		console.log(data);
+           }
+        });
+
+
       });
 
       // Sidebar Skin Switcher
@@ -384,7 +413,20 @@ $("#notiFyClick").click(function(){
 
         // Save new Skin to Settings Key
         settingsObj['sidebarSkin'] = Val;
+
         localStorage.setItem(themeKey, JSON.stringify(settingsObj));
+
+        $.ajax({
+           url: location.protocol + "//" + location.host + '/index.php/site/ulkonaky',
+           type: "POST",
+	   data: { vaihdo : "sidebarSkin", sidebarSkin : Val },
+           success: function(data){
+		data = JSON.parse(data);
+		console.log(data);
+           }
+        });
+
+
       });
 
       // Fixed Header Switcher
@@ -487,6 +529,7 @@ $("#notiFyClick").click(function(){
         var breadcrumbState = "";
 
         if (Breadcrumbs.hasClass('affix')) {
+
           Breadcrumbs.removeClass('affix');
           breadcrumbState = "";
         } else {
@@ -530,6 +573,19 @@ $("#notiFyClick").click(function(){
               // fade away so they can visibly see the options reset
               setTimeout(function() {
                 localStorage.clear();
+
+
+        $.ajax({
+           url: location.protocol + "//" + location.host + '/index.php/site/ulkonaky',
+
+           type: "POST",
+	   data: { clearStorage : "true" },
+           success: function(data){
+		data = JSON.parse(data);
+		console.log(data);
+           }
+        });
+
                 location.reload();
               }, 200);
             } else {
