@@ -751,11 +751,13 @@ class TyovuorootController extends Controller
 	public function actionDid($pvm,$tid,$from)
 	{
 		if(isset($tietoja)) $tietoja = 1; else $tietoja = 0;
+		$asetukset = Asetukset::model()->findByPk(1);
 		$this->renderPartial('did',array(
 			'pvm'=>$pvm,
 			'tid'=>$tid,
 			'from'=>$from,
 			'tietoja'=>$tietoja,
+			'asetukset'=>$asetukset
 		));
 	}
 
@@ -1133,13 +1135,22 @@ class TyovuorootController extends Controller
 
 
 
-		$tekijan_nimi = '';
-
-	  	$t = Tyontekijat::model()->findbypk($model->tid);
-		if(isset($t->id))
+		$criteria = new CDBcriteria;
+		$criteria->order="tekijan_nimi";
+		$criteria->condition="aktiivinen=1";
+	  	$t = Tyontekijat::model()->findAll($criteria);
+		$tekijan_nimi = '<select id="tekijanVaihdo" class="form-control">';
+		if(count($t) > 0)
 		{
-			$tekijan_nimi = $t->tekijan_nimi;
+		   foreach($t as $tekijanData)
+		   {
+			if($tekijanData->id == $model->tid)
+			$tekijan_nimi .= '<option value="'.$tekijanData->id.'" selected>'.$tekijanData->tekijan_nimi.'</option>';
+			else
+			$tekijan_nimi .= '<option value="'.$tekijanData->id.'">'.$tekijanData->tekijan_nimi.'</option>';
+		   }
 		}
+		$tekijan_nimi .= '</select>';
 
 	?>
 	<div class="modal-dialog modal-lg">
@@ -1148,7 +1159,7 @@ class TyovuorootController extends Controller
 			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 				<span aria-hidden="true">&times;</span>
 			</button>
-		<h2 class="modal-title"><?php echo Yii::t('main', 'Työvuoron suunnittelu').': '.$tekijan_nimi; ?></h2>
+		<h2 class="modal-title form-inline"><?php echo Yii::t('main', 'Työvuoron suunnittelu').': '.$tekijan_nimi; ?></h2>
 	
 		</div>
 		<div class="modal-body">
