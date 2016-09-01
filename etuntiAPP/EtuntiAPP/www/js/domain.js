@@ -125,8 +125,7 @@ $(document).ready(function(){
 
  	var lang = [];
 
-if(!localStorage.getItem('lang'))
-{
+
         $.ajax({
 	   async: false,
            url: url+'/lang?dom='+domain,
@@ -142,7 +141,7 @@ if(!localStorage.getItem('lang'))
     	}
         });
 
-} 
+
 
  	lang = JSON.parse(localStorage.getItem('lang'));
 

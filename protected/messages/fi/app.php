@@ -35,8 +35,9 @@ return array(
 	'Työntekijän salasana' => 'Työntekijän salasana',
 	'Tallenna' => 'Tallenna',
 	'Valitse kieli' => 'Valitse kieli',
+	'Valitse fonttikoko' => 'Valitse fonttikoko',
 	'Asetukset' => 'Asetukset',
-	'Tallenna kieli' => 'Tallenna kieli',
+	'Tallenna' => 'Tallenna',
 
 	/* Kameraa */
 	'Kuvien lähettäminen' => 'Kuvien lähettäminen',
