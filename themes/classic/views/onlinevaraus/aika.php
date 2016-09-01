@@ -161,7 +161,7 @@ function kaksiKalenteria()
     	}
     });
 }
-setInterval(kaksiKalenteria, "15000");
+setInterval(kaksiKalenteria, "5000");
 
 
 $(document).delegate(".ajaanClick","click",function(){

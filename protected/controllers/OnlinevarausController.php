@@ -576,7 +576,7 @@ class OnlinevarausController extends Controller
 	}
 
 
-protected function build_calendar($month,$year,$dateArray) {
+protected function build_calendar($month, $year, $dateArray, $pvmRaja) {
 
 
 $months=array(
@@ -674,11 +674,11 @@ $months=array(
  	  }
 
 	  $tila = '';
-	  if($date > date("Y-m-d") and $on == 'vapaa' and isset($_SESSION['onlinevaraus']['valittuPVM']) and $_SESSION['onlinevaraus']['valittuPVM'] != date("Y-m-d", strtotime($date)))
+	  if($date > date("Y-m-d", strtotime("+$pvmRaja day")) and $on == 'vapaa' and isset($_SESSION['onlinevaraus']['valittuPVM']) and $_SESSION['onlinevaraus']['valittuPVM'] != date("Y-m-d", strtotime($date)))
 		 $tila .= '<td class="day link vapaa cal" pvm="'.$date.'"><div class="toolt" '.$tooltip.'>'.$currentDay.'</div></td>';
-	  elseif($date > date("Y-m-d") and $on == 'vapaa' and !isset($_SESSION['onlinevaraus']['valittuPVM']))
+	  elseif($date > date("Y-m-d", strtotime("+$pvmRaja day")) and $on == 'vapaa' and !isset($_SESSION['onlinevaraus']['valittuPVM']))
 		 $tila .= '<td class="day link vapaa cal" pvm="'.$date.'"><div class="toolt" '.$tooltip.'>'.$currentDay.'</div></td>';
-	  elseif($date > date("Y-m-d") and $on == 'vapaa' and isset($_SESSION['onlinevaraus']['valittuPVM']) and $_SESSION['onlinevaraus']['valittuPVM'] == date("Y-m-d", strtotime($date)))
+	  elseif($date > date("Y-m-d", strtotime("+$pvmRaja day")) and $on == 'vapaa' and isset($_SESSION['onlinevaraus']['valittuPVM']) and $_SESSION['onlinevaraus']['valittuPVM'] == date("Y-m-d", strtotime($date)))
 		 $tila .= '<td class="day link orangeColor cal" pvm="'.$date.'"><div class="toolt" '.$tooltip.'>'.$currentDay.'</div></td>';
 	  elseif($date < date("Y-m-d"))
 		 $tila .= '<td class="day kiinni" >'.$currentDay.'</td>';

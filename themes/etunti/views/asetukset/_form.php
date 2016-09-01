@@ -300,6 +300,12 @@
 		<?php echo $form->error($model,'viikonloppulisa_su'); ?>
 	</div>
 
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'onlinevaraus_aikaisintaan_paivamaara'); ?>
+		<?php echo $form->numberField($model,'onlinevaraus_aikaisintaan_paivamaara',array('maxlength'=>2,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'onlinevaraus_aikaisintaan_paivamaara'); ?>
+	</div>
+
     </div><div class="col-sm-5">
 
     <legend><h2><?php echo Yii::t('main','Muut'); ?></h2></legend>
