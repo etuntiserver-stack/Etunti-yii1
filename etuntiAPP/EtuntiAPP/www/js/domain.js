@@ -145,7 +145,7 @@ $(document).ready(function(){
 
  	lang = JSON.parse(localStorage.getItem('lang'));
 
-
+console.log(lang)
 
 
 $("#dm").html('<label>Domain</label>' +
@@ -174,7 +174,9 @@ $("#dm").html('<label>Domain</label>' +
 
   /* Asetukset */
   $('#Valitse_kieli').text(lang['Valitse_kieli']);
-  $('#Asetukset').text(lang['Asetukset']);
+  $('#Valitse_fonttikoko').text(lang['Valitse_fonttikoko']);
+  $('#paaAsetukset').text(lang['paaAsetukset']);
+  $('#MuutAsetukset').text(lang['MuutAsetukset']);
   $('#tallennaKieli').text(lang['tallennaKieli']);
 
   /*  Kamera */

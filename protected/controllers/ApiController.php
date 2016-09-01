@@ -194,7 +194,8 @@ public function actionLang($dom)
 		'tallenna' => Yii::t('app', 'Tallenna'),
 		'Valitse_kieli' => Yii::t('app', 'Valitse kieli'),
 		'Valitse_fonttikoko' => Yii::t('app', 'Valitse fonttikoko'),
-		'Asetukset' => Yii::t('app', 'Asetukset'),
+		'paaAsetukset' => Yii::t('app', 'Pääasetukset'),
+		'MuutAsetukset' => Yii::t('app', 'Muut asetukset'),
 		'tallennaKieli' => Yii::t('app', 'Tallenna'),
 
 		/* Kamera */
