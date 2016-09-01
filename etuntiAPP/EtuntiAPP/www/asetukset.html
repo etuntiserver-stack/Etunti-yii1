@@ -34,34 +34,37 @@
 	<img src="img/logo-black.png" class="logo">
      </div>
 
-     <h2 id="Asetukset"></h2>
+     <h2 id="paaAsetukset"></h2>
 
-		<div id="dm"></div>
-		<hr>
-	       	<label id="Valitse_kieli"></label>
-	       	<select id="kieliValiko" class="form-control">
-		<option value="fi">Suomi</option>
-		<option value="ee">Eesti</option>
-		<option value="en">English</option>
-		<option value="ru">Русский</option>
-		</select>
+		<div class="well">
+		 <div id="dm"></div>
+		</div>
+     <h2 id="MuutAsetukset"></h2>
+		<div class="well">
+	       	 <label id="Valitse_kieli"></label>
+	       	  <select id="kieliValiko" class="form-control">
+		  <option value="fi">Suomi</option>
+		  <option value="ee">Eesti</option>
+		  <option value="en">English</option>
+		  <option value="ru">Русский</option>
+		  </select>
+	       	 <label id="Valitse_fonttikoko"></label>
+	       	  <select id="fonttikokoValiko" class="form-control">
+		  <option value="12">12</option>
+		  <option value="14">14</option>
+		  <option value="18">18</option>
+		  <option value="20">20</option>
+		  </select>
+		  <br>
+	       	 <button id="tallennaKieli" class="btn btn-success btn-block"></button>
+		</div>
 		<br>
-	       	<label id="Valitse_fonttikoko"></label>
-	       	<select id="fonttikokoValiko" class="form-control">
-		<option value="12">12</option>
-		<option value="14">14</option>
-		<option value="18">18</option>
-		<option value="20">20</option>
-		</select>
-		<br>
-	       	<button id="tallennaKieli" class="btn btn-primary btn-block"></button>
-		
-		<hr>
-	       	<label>TAG control</label>
-	       	<input type="text" id="tagginro" class="form-control" readonly="yes">
-		<br>
-		<input type="text" class="form-control input-sm" id="os" placeholder="osoite">
-
+		<div class="well">
+	       	 <label>TAG control</label>
+	       	  <input type="text" id="tagginro" class="form-control" readonly="yes">
+		  <br>
+		  <input type="text" class="form-control input-sm" id="os" placeholder="osoite">
+		</div>
 		<br><br>
     </div>
   </div>
