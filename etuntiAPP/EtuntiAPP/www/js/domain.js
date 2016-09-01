@@ -2,15 +2,23 @@ $(document).ready(function(){
 
   $("#tallennaKieli").click(function(){
 	var selected = $("#kieliValiko option:selected").val();
+	var selectedFontti = $("#fonttikokoValiko option:selected").val();
 
-	localStorage.removeItem('etunti_language');
+	//localStorage.removeItem('etunti_language');
+
 	localStorage.setItem('etunti_language', selected);
+	localStorage.setItem('etunti_fonttikoko', selectedFontti);
 	location.reload(true);
   });
 
     if(localStorage.getItem('etunti_language'))
 	$("#kieliValiko option[value=" + localStorage.getItem('etunti_language') + "]").prop("selected",true);
 
+    if(localStorage.getItem('etunti_fonttikoko'))
+    {
+	$("#fonttikokoValiko option[value=" + localStorage.getItem('etunti_fonttikoko') + "]").prop("selected",true);
+        $('body').css({'font-size': localStorage.getItem('etunti_fonttikoko')+'px'});
+    }
 
 });
 

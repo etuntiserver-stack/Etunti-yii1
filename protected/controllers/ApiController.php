@@ -193,8 +193,9 @@ public function actionLang($dom)
 		'tyontekijan_salasana' => Yii::t('app', 'Työntekijän salasana'),
 		'tallenna' => Yii::t('app', 'Tallenna'),
 		'Valitse_kieli' => Yii::t('app', 'Valitse kieli'),
+		'Valitse_fonttikoko' => Yii::t('app', 'Valitse fonttikoko'),
 		'Asetukset' => Yii::t('app', 'Asetukset'),
-		'tallennaKieli' => Yii::t('app', 'Tallenna kieli'),
+		'tallennaKieli' => Yii::t('app', 'Tallenna'),
 
 		/* Kamera */
 		'LangKuvienLahettaminen' => Yii::t('app', 'Kuvien lähettäminen'),
