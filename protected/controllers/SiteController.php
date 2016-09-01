@@ -325,6 +325,7 @@ class SiteController extends Controller
        			$criteria->addCondition ( " myyja='".trim($_POST['myyja'])."' " );
 
 
+
 			$a = Asiakkaat::model()->findAll($criteria);
 			foreach($a as $asiakas)
 			{

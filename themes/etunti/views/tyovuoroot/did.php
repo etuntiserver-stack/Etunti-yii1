@@ -113,6 +113,7 @@ if(!isset($_POST['tulosta']))
 	   // asiakasNakyvissa
 	   $asiakasNakyvissa = '';
 	   if(isset($asetukset) and $asetukset->asiakas_tyovuorossa == 1){
+		if(isset($tvVal->kohteet->asiakas_id))
 		$as = Asiakkaat::model()->findbypk($tvVal->kohteet->asiakas_id);
 		$name = '';
 		if(isset($as->id) and !empty($as->yrityksen_nimi))
