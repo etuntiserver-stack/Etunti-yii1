@@ -41,6 +41,8 @@ if(isset($model->id))
 	}
 
 }
+echo '<input type="hidden" id="alkuperainenID" value="'.$model->id.'">';
+echo '<input type="hidden" id="alkuperainenDID" value="'.date("Ymd", strtotime($model->pvm)).'_'.$model->tid.'">';
 ?>
 
 <div class="section">
@@ -673,7 +675,8 @@ $('#poistaTv').click(function(){
 
 function laatikonPaivays(thisDataReturn){
 
-
+		var splDID = [];
+		var did = '';
 		$(thisDataReturn).each(function( iarr, arr ) {
 		 $(arr).each(function( i, d ) {
 		 //console.log(d['pvm']);
@@ -699,6 +702,16 @@ function laatikonPaivays(thisDataReturn){
 				var ThisHeight = $('#'+d['ymd']+'_'+d['tid']).height();
 				var FirstHeight = $('#first_'+d['ymd']).height(ThisHeight);
 			    }
+
+			    // <-- poista latikosta tvuoro jos id ei sama
+			    splDID = d['pvm'].split(".");
+			    did = $('#alkuperainenID').val()+'_'+splDID[2]+''+splDID[1]+''+splDID[0]+'_'+d['tid'];
+			    if($('#alkuperainenID').val()+'_'+$('#alkuperainenDID').val() !== did)
+			    {
+				$('#'+$('#alkuperainenID').val()+'_'+$('#alkuperainenDID').val()).remove();
+			    }
+			    // poista latikosta tvuoro jos id ei sama -->
+
 			  }
 
 
@@ -794,6 +807,10 @@ function laatikonPaivays(thisDataReturn){
   });
 
 
+  $('#tekijanVaihdo').change(function(){
+	var thisId = $(this).val();
+	$('#Tyovuoroot_tid').val(thisId);
+  });
 
 
 
