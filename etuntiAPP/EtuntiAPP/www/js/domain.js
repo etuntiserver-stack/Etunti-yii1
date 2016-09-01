@@ -233,6 +233,17 @@ $("#dm").html('<label>Domain</label>' +
     document.addEventListener("deviceready", onDeviceReady, false);
     function onDeviceReady() {
 
+
+		function showAppVersion() {
+		  cordova.getAppVersion(function(version) {
+		  document.getElementById('version').innerHTML = version;
+		  versio = version;
+		  });
+		}
+		showAppVersion();
+
+
+
 	if(device.platform == 'iOS'){
 
   $("#footlinks").html(
