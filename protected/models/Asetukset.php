@@ -92,7 +92,7 @@ class Asetukset extends DB2ActiveRecord
 			'viikonloppulisa_la'=> Yii::t('main', 'Lauantai %'),
 			'viikonloppulisa_su'=> Yii::t('main', 'Sunnuntai %'),
 			'lasku_asiakasnumero'=> Yii::t('main', 'Syöttääkö itse asiakasnumeron vai lasketaan edellisestä automaattisesti'),
-			'show_name' => Yii::t('main', 'Näytä asiakas nimi'),
+			'show_name' => Yii::t('main', 'Näytä asiakas nimi ja puhelinnumero'),
 			'trust_ws_api_url'=> Yii::t('main', 'Trust WS API'),
 
 			'onlinevaraus_laatu_luotettavuus' => Yii::t('main', 'Laatu ja luotettavuus'),
