@@ -34,14 +34,6 @@ $(document).ready(function(){
 	        navigator.geolocation.getCurrentPosition(onSuccess, onError);
 		navigator.geolocation.watchPosition(onSuccessWatch, onErrorWatch, { timeout: 30000, enableHighAccuracy: false });
 
-		function showAppVersion() {
-		  cordova.getAppVersion(function(version) {
-		  document.getElementById('version').innerHTML = 'versio: ' +version;
-		  versio = version;
-		  });
-		}
-		showAppVersion();
-
 	    }
 	    function onSuccess(position) {
 	        document.getElementById('location').value = position.coords.latitude + '/' + position.coords.longitude;
@@ -279,7 +271,7 @@ function row(tilanne,st){
 		salasana : salasana,
 		domain: domain,
 		imei: "ei ole",
-		asiakas_num: versio+"_"+tag,
+		asiakas_num: $("#version").text()+"_"+tag,
 		puh_numero: puh_nro,
 		bluetooth_name: "0",
 		sim_serial_number: "0",
@@ -304,7 +296,7 @@ function row(tilanne,st){
 	   type:'POST',
  	   data: postData,
            success: function(data){
-        	console.log(data);
+        	//console.log(data);
 
 		var sp = data.split("//");
 		 if((sp[4] == 'tagnumerror') & (sp[6] == 'update'))
@@ -486,7 +478,7 @@ $("#os").keyup(function(){
 	   type:'POST',
  	   data: { check : "osoitevaihto", my_location : my_location, thisKey : thisKey, email : email, salasana : salasana },
            success: function(data){
-        	console.log(data);
+        	//console.log(data);
 		//$("#result").val(data);
 		$("#getListFromServer").html(
 			"<p><div class='row'>" +
