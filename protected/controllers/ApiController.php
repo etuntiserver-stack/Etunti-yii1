@@ -598,11 +598,17 @@ public function actionImei($dom)
 		      $nm = '';
 		      if(isset($asetukset->show_name) and $asetukset->show_name == 1 and $kohde->etu_suku_nimet != '')
 		      $nm = ', '.$kohde->etu_suku_nimet;
-		      
+
+		      $puh_nro = '';
+		      if(isset($asetukset->show_name) and $asetukset->show_name == 1 and $kohde->puh_nro != '')
+		      $puh_nro = '<br>'.Yii::t('main', 'Puhelinnumero').': '.$kohde->puh_nro;
 
 		      $sel .= '<div class="well">
 				  <b>'.$val->pvm.$nm.'</b><br>
-				  <b><span class="text" style="color:'.$color.'">'.$alkLop.$osoite.'</span></b>';
+				  <b><span class="text" style="color:'.$color.'">'.$alkLop.$osoite.'</span></b>
+				  '.$puh_nro.'
+		      ';
+
 		      if(!empty($val->tietoja))
 		      {
 		      $sel .= '
