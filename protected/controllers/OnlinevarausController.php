@@ -743,6 +743,7 @@ $months=array(
 			pvm='".date("d.m.Y", strtotime($date))."' 
 			AND tid='".$t->id."'
 			AND SUBSTRING_INDEX(alku,':',1) <= '18'
+			AND SUBSTRING_INDEX(alku,':',1) >= '08'
 		";
 		$tyovuorot = Tyovuoroot::model()->findAll($criteria);
 

@@ -220,7 +220,7 @@ if(isset($asetukset->checkout_id) and !empty($asetukset->checkout_id) and !empty
         <p>'.$data->selitysteksti.'</p>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">'.Yii::t('main', 'Sulje').'</button>
       </div>
     </div>
 

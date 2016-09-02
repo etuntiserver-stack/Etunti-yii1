@@ -65,7 +65,7 @@ if($taysinVapaana == 'on' and !empty($vapaaTid))
 	$sto = $stop;
    }
 
-   $filename = "../../img/tekijat/".$_SESSION['domain']."/".$vapaaTid.".jpg";
+   $filename = "../../img/tekijat/".Yii::app()->user->domain."/".$vapaaTid.".jpg";
    if (file_exists(Yii::app()->request->baseUrl."img/tekijat/".Yii::app()->user->domain."/".$vapaaTid.".jpg"))
    $kuva = '<img src="'.$filename.'" class="img-thumbnail">';
    else
@@ -85,7 +85,7 @@ if($taysinVapaana == 'on' and !empty($vapaaTid))
 if($taysinVapaana == 'ei' and empty($vapaaTid))
 {
 
-   $filename = "../../img/tekijat/".$_SESSION['domain']."/".$vapaaTid.".jpg";
+   $filename = "../../img/tekijat/".Yii::app()->user->domain."/".$vapaaTid.".jpg";
    if (file_exists(Yii::app()->request->baseUrl."img/tekijat/".Yii::app()->user->domain."/".$vapaaTid.".jpg"))
    $kuva = '<img src="'.$filename.'" class="img-thumbnail">';
    else
