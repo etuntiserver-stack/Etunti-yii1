@@ -9,7 +9,7 @@
 		$site = Yii::app()->createController('Site');
 		$site[0]->oikeudet($model->id,'noDelete');
 	   ?>
-	   <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-phone"></i> <?php echo Yii::t('main', 'Luo uusi rivi'); ?> </h2>
+	   <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-phone"></i> <?php echo Yii::t('main', 'Lisää tunnit'); ?> </h2>
 
 
             <div class="admin-form">

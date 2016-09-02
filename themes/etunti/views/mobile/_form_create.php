@@ -21,11 +21,11 @@ $model->hinta = str_replace(",",".",$model->hinta);
 
 	<?php echo $form->errorSummary($model); ?>
 
-  <div class="col-sm-3">
+  <div class="col-sm-4">
 
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'tid'); ?>
-		<?php echo $form->dropDownList($model, 'tid', CHtml::listData(Tyontekijat::model()->findAll(), 'id', 'tekijan_nimi'), 
+		<?php echo $form->dropDownList($model, 'tid', CHtml::listData(Tyontekijat::model()->findAll(array('order'=>'tekijan_nimi')), 'id', 'tekijan_nimi'), 
 		array('empty'=>'Valitse', 'class'=>'form-control')); 
 		?>
 		<?php echo $form->error($model,'tid'); ?>
@@ -33,7 +33,7 @@ $model->hinta = str_replace(",",".",$model->hinta);
 
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'kohdenID'); ?>
-		<?php echo $form->dropDownList($model, 'kohdenID', CHtml::listData(Kohteet::model()->findAll(), 'id', 'osoite'), 
+		<?php echo $form->dropDownList($model, 'kohdenID', CHtml::listData(Kohteet::model()->findAll(array('order'=>'osoite')), 'id', 'osoite'), 
 		array('empty'=>'Valitse', 'class'=>'form-control')); 
 		?>
 		<?php echo $form->error($model,'kohdenID'); ?>
@@ -53,16 +53,23 @@ $model->hinta = str_replace(",",".",$model->hinta);
 
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'aloitan'); ?>
-		<?php echo $form->textField($model,'aloitan',array('rows'=>6, 'cols'=>50,'class'=>'form-control datetimepicker')); ?>
+		<?php echo $form->textField($model,'aloitan',array('class'=>'form-control datetimepicker')); ?>
 		<?php echo $form->error($model,'aloitan'); ?>
 	</div>
 
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'loppui'); ?>
-		<?php echo $form->textField($model,'loppui',array('rows'=>6, 'cols'=>50,'class'=>'form-control datetimepicker')); ?>
+		<?php echo $form->textField($model,'loppui',array('class'=>'form-control datetimepicker')); ?>
 		<?php echo $form->error($model,'loppui'); ?>
 	</div>
 
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'viesti'); ?>
+		<?php echo $form->textarea($model,'viesti',array('rows'=>6, 'cols'=>50,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'viesti'); ?>
+
+	</div>
 
 		<?php echo $form->hiddenField($model,'kohde_kannasta',array('rows'=>6, 'cols'=>50,'class'=>'form-control')); ?>
 		<?php echo $form->hiddenField($model,'tekijan_nimi',array('rows'=>6, 'cols'=>50,'class'=>'form-control')); ?>
