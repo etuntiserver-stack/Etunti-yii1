@@ -721,6 +721,36 @@ $months=array(
 
 	protected function pmvCal($date)
 	{
+		$asetukset = Asetukset::model()->findbypk(1);
+		$sumTunti = ((float)$_SESSION['onlinevaraus']['sumTunti']*3600);
+
+		$tekija = array();
+		$on = 'kiinni';
+
+		$criteria=new CDbCriteria;
+		$criteria->condition = "
+			online_varauksen_valmina=1 
+			AND id NOT IN ( SELECT tid FROM sivex_tvuoro WHERE pvm='".date("d.m.Y", strtotime($date))."' )
+		";
+		$tyontekijat = Tyontekijat::model()->findAll($criteria);
+
+		foreach($tyontekijat as $t)
+		{
+			$on = 'vapaa';
+			$tekija[$t->id] = array($date,null,null);
+		}
+
+
+
+		$return = array($on,$tekija);
+		return $return;
+	}
+
+
+/*
+	protected function pmvCal($date)
+	{
+		$asetukset = Asetukset::model()->findbypk(1);
 
 		$lp = array();
 		$ajaanReika = array();
@@ -739,12 +769,12 @@ $months=array(
 		$criteria=new CDbCriteria;
 		$criteria->order = " alku ASC";
 		$criteria->condition = " 
-
 			pvm='".date("d.m.Y", strtotime($date))."' 
 			AND tid='".$t->id."'
-			AND SUBSTRING_INDEX(alku,':',1) <= '18'
-			AND SUBSTRING_INDEX(alku,':',1) >= '08'
+			AND SUBSTRING_INDEX(alku,':',1) <= '".$asetukset->onlinevaraus_loppu."'
+			AND SUBSTRING_INDEX(alku,':',1) >= '".$asetukset->onlinevaraus_alku."'
 		";
+
 		$tyovuorot = Tyovuoroot::model()->findAll($criteria);
 
 		$a = 0;
@@ -753,7 +783,8 @@ $months=array(
 
 		$sumTunti = ((float)$_SESSION['onlinevaraus']['sumTunti']*3600)+7199;
 		$sumAamuIlta = ((float)$_SESSION['onlinevaraus']['sumTunti']*3600)+3599;
-		$realSumMin = (float)$_SESSION['onlinevaraus']['sumTunti']*60;
+		//$realSumMin = (float)$_SESSION['onlinevaraus']['sumTunti']*60;
+		$realSumMin = 24*60;
 
 		    foreach($tyovuorot as $tv)
 		    {
@@ -761,20 +792,20 @@ $months=array(
 			$on = 'vapaa';
 			$aamuOn = 'kiinni';
 
-			if($a == 0 and strtotime($tv->alku)-strtotime("08:00") >= $sumAamuIlta)
+			if($a == 0 and strtotime($tv->alku)-strtotime($asetukset->onlinevaraus_alku.":00") >= $sumAamuIlta)
 			{
 			  $on = 'vapaa';
 			  $aamuOn = 'vapaa';
-			  $ajaanReika["08:00//".date("H:i",strtotime("08:00 +".$realSumMin." minutes")).'//'.$t->id] = $t->id;
+			  $ajaanReika[$asetukset->onlinevaraus_alku."//".date("H:i",strtotime($asetukset->onlinevaraus_alku.":00 +".$realSumMin." minutes")).'//'.$t->id] = $t->id;
 			}
 
-			if($l > 0 and (strtotime($tv->alku)-$l) <= $sumTunti and $aamuOn == 'kiinni'){
+			if($l > 0 and (strtotime($tv->alku.":00")-$l) <= $sumTunti and $aamuOn == 'kiinni'){
 			  $on = 'kiinni';
-			} elseif($l > 0 and (strtotime($tv->alku)-$l) >= $sumTunti){
+			} elseif($l > 0 and (strtotime($tv->alku.":00")-$l) >= $sumTunti){
 			  $on = 'vapaa';
 			  $l2zapas = date("H:i",strtotime($l2." +1 hour"));
 			  $ajaanReika[$l2zapas."//".date("H:i",strtotime($l2zapas." +".$realSumMin." minutes")).'//'.$t->id] = $t->id;
-			} elseif(strtotime("18:00")-strtotime($tv->loppu) <= $sumTunti and $aamuOn == 'kiinni'){
+			} elseif(strtotime($asetukset->onlinevaraus_loppu.":00")-strtotime($tv->loppu) <= $sumTunti and $aamuOn == 'kiinni'){
 			  $on = 'kiinni';
 			}
 			  $a = strtotime($tv->alku);
@@ -786,7 +817,7 @@ $months=array(
 		    }
 
 			// loppuilta
-			if($l > 0 and strtotime("18:00")-$l >= $sumAamuIlta)
+			if($l > 0 and strtotime($asetukset->onlinevaraus_loppu.":00")-$l >= $sumAamuIlta)
 			{
 			  $on = 'vapaa';
 			  $ajaanReika[$l2zapas."//".date("H:i",strtotime($l2zapas." +".$realSumMin." minutes"))."//".$t->id] = $t->id;
@@ -805,6 +836,7 @@ $months=array(
 		$return = array($on,$ajaanReika);
 		return $return;
 	}
+*/
 
 
 	protected function pyhatCheck($date){
