@@ -50,6 +50,12 @@ tyypilliset ongelmat. Yhden ohjelman avulla pyörität yritystoimintaasi ennen n
 </div>
                         <hr>
 
+<video width="100%" controls>
+  <source src="tiedostot/etunti_remake_v2.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
+
+
                         <h2 class="title-subtitle text-center">Miksi Etunti on paras?
                         </h2>
                         <ul class="stars">

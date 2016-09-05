@@ -4,6 +4,7 @@
 /* @var $form CActiveForm */
 
 
+
      $tas = array();
    if(isset(Yii::app()->user->adminPaketti)) 
      $tas = explode(",",Yii::app()->user->adminPaketti);
@@ -304,6 +305,30 @@
 		<?php echo $form->labelEx($model,'onlinevaraus_aikaisintaan_paivamaara'); ?>
 		<?php echo $form->numberField($model,'onlinevaraus_aikaisintaan_paivamaara',array('maxlength'=>2,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'onlinevaraus_aikaisintaan_paivamaara'); ?>
+	</div>
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'onlinevaraus_alku'); ?>
+		<?php 
+        	$l = array();
+		for ($i = 1; $i <= 24; $i++) {
+        		$l[$i] = $i;
+		}
+		echo $form->dropDownList($model,'onlinevaraus_alku', $l, 
+		array('class'=>'form-control')) ?>
+		<?php echo $form->error($model,'onlinevaraus_alku'); ?>
+	</div>
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'onlinevaraus_loppu'); ?>
+		<?php 
+        	$l = array();
+		for ($i = 1; $i <= 24; $i++) {
+        		$l[$i] = $i;
+		}
+		echo $form->dropDownList($model,'onlinevaraus_loppu', $l, 
+		array('class'=>'form-control')) ?>
+		<?php echo $form->error($model,'onlinevaraus_loppu'); ?>
 	</div>
 
     </div><div class="col-sm-5">

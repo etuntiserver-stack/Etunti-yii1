@@ -27,6 +27,14 @@
 
 $asetukset = Asetukset::model()->findbypk(1);
 
+if($asetukset->onlinevaraus_alku == 0){
+Asetukset::model()->updatebypk(1, array('onlinevaraus_alku'=>8));
+}
+
+if($asetukset->onlinevaraus_loppu == 0){
+Asetukset::model()->updatebypk(1, array('onlinevaraus_loppu'=>18));
+}
+
 // clear
   if(isset($_SESSION['onlinevaraus']['onlinevarausID']))
 	$this->loadModel($_SESSION['onlinevaraus']['onlinevarausID'])->delete();
