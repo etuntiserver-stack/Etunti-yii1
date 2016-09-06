@@ -28,7 +28,7 @@ class TyovuorootController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','updatetime','showohje','did','muisti','operatio','viikko','fromto','autoinsert','autoremove','viikkottain', 'viikkottain_pdf', 'laheta','kk','pvmtid','laheta_k', 'muistin', 'muisticlear', 'muistissa', 'vkolopput', 'vkolopchange', 'uusitilaus', 'tv2', 'PoistaTv', 'valitse_kokopaiva', 'tv_kohteet', 'siivous_tyonimike', 'getKohdeByAsiakas', 'getAsiakasByKohde', 'paivita_laatikot'),
+				'actions'=>array('admin','delete','create','update','index','view','updatetime','showohje','did','muisti','operatio','viikko','fromto','autoinsert','autoremove','viikkottain', 'viikkottain_pdf', 'laheta','kk','pvmtid','laheta_k', 'muistin', 'muisticlear', 'muistissa', 'vkolopput', 'vkolopchange', 'uusitilaus', 'tv2', 'PoistaTv', 'valitse_kokopaiva', 'tv_kohteet', 'siivous_tyonimike', 'getKohdeByAsiakas', 'getAsiakasByKohde', 'paivita_laatikot', 'onko_sama'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny', // allow admin user to perform 'admin' and 'delete' actions
@@ -90,6 +90,53 @@ class TyovuorootController extends Controller
 		echo json_encode($bd);	
 	}
 
+
+	public function actionOnko_sama($id, $pvm, $tid, $kohde, $alku, $loppu)
+	{
+		$return = '';
+		$return = $this->onko_sama($id, $pvm, $tid, $kohde, $alku, $loppu);
+		if(!empty($return))
+		echo json_encode($return);
+	}
+
+
+	public function onko_sama($id, $pvm, $tid, $kohde, $alku, $loppu)
+	{
+		$return = '';
+
+			$criteria=new CDbCriteria;
+			$criteria->condition="
+				tid='".$tid."'
+				AND pvm='".date("d.m.Y", strtotime($pvm))."'
+				AND kohde='".$kohde."'
+				AND alku='".$alku."'
+				AND loppu='".$loppu."'
+			";
+			if(!empty($id))
+			$criteria->addCondition(" id!='".$id."' ");
+
+			$model = Tyovuoroot::model()->findAll($criteria);
+			foreach($model as $data)
+			{
+				$osoite = '';
+				$k = Kohteet::model()->findbypk($data->kohde);
+				if(isset($k->id))
+				$osoite = $k->osoite;
+
+				$tt = '';
+				$k = Tyontekijat::model()->findbypk($data->tid);
+				if(isset($k->id))
+				$tt = $k->tekijan_nimi;
+
+				$return .= $data->pvm.", ".$data->alku."-".$data->loppu.", ".$tt.", ".$osoite."\n";
+			}
+			
+
+		if(!empty($return))
+		return $return;
+	}
+
+
 	public function actionGetAsiakasByKohde($id)
 	{
 		$k = Kohteet::model()->findbypk($id);
@@ -98,9 +145,6 @@ class TyovuorootController extends Controller
 		   if(isset($a->id))
 		    echo json_encode($a->id);
 	}
-
-
-
 
 	public function actionSiivous_tyonimike()
 	{
@@ -1229,6 +1273,7 @@ class TyovuorootController extends Controller
 		  	   {
 				$model->attributes=$_POST['Tyovuoroot'];
 				$model->kohde = $kohteet->id;
+
 				$model->pvm = date("d.m.Y",strtotime($_POST['Tyovuoroot']['pvm']));
 				if($model->save())
 
@@ -1445,6 +1490,11 @@ class TyovuorootController extends Controller
 		    	//echo $pvm." ".$fi[date('w',$startdate)]."\n";
 
 
+
+			$onkosama = $this->onko_sama(null, $pvm, $tid, $kohde, $alku, $loppu);
+
+			if(empty($onkosama))
+			{			
 				$t = new Tyovuoroot;
 				$t->tid = $tid;
 				$t->kohde = $kohde;
@@ -1459,6 +1509,9 @@ class TyovuorootController extends Controller
 				$t->toistuva_id = $id;
 				if($t->save())
 				$return[] = array('tid'=>$t->tid, 'pvm'=>$t->pvm, 'ymd'=>date("Ymd",strtotime($t->pvm)));
+			} else {
+				$return[] = array('tid'=>$t->tid, 'pvm'=>$t->pvm, 'ymd'=>date("Ymd",strtotime($t->pvm)),'onkosama'=>$onkosama);
+			}
 
 		      }
 

@@ -307,6 +307,12 @@ window.addEventListener('message', function(e) {
   if(thisID[0] == 'checkThis')
   doWhat 	= { 'checkThis' : "true", "newPvm" : newPvm, "newTid" : newTid };
 
+  if(thisID[0] == 'forRemove')
+  {
+	var r = confirm('Haluatko varmasti poistaa tämän?');
+	if(!r)
+	return false;
+  }
 
         $.ajax({
            url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/operatio',

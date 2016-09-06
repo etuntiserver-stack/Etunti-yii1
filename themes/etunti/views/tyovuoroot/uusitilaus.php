@@ -21,9 +21,6 @@
   <div class="col-sm-3">
 		<label>Asiakkaan nimi</label>
 		<input type="text" name="yhteyshenkilo" class="form-control">
-
-		<label>Hinta</label>
-		<input type="text" name="hinta" class="form-control">
   </div>
 
   <div class="col-sm-3">
@@ -41,6 +38,10 @@
 		<input type="text" name="sahkoposti" class="form-control">
   </div>
 
+  <div class="col-sm-3">
+		<label>Hinta</label>
+		<input type="text" name="hinta" class="form-control">
+  </div>
 </div>
 
 
@@ -93,11 +94,6 @@
 		echo '</select>';
         	?>
 
-
-		<?php echo $form->labelEx($model,'tietoja'); ?>
-		<?php echo $form->textarea($model,'tietoja',array('rows'=>4,'class'=>'form-control')); ?>
-		<?php echo $form->error($model,'tietoja'); ?>
-
   </div>
   <div class="col-sm-6">
 		<?php echo $form->labelEx($model,'tid'); ?>
@@ -106,6 +102,12 @@
         	$list[] = CHtml::listData(Tyontekijat::model()->findAll(array('order' => 'tekijan_nimi')), 'id', 'tekijan_nimi');
         	echo $form->dropDownList($model, 'tid', $list,array('empty'=>'Valitse','class'=>'form-control'));
         	?>
+  </div>
+
+  <div class="col-sm-6">
+		<?php echo $form->labelEx($model,'tietoja'); ?>
+		<?php echo $form->textarea($model,'tietoja',array('rows'=>4,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'tietoja'); ?>
   </div>
 </div>
 

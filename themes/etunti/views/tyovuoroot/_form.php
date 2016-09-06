@@ -512,15 +512,26 @@ $('.mult').multiselect({
 
 	$('#submitButton').click(function(){
 		$('#tyovuoroot-form').submit();
-		return false;
 	});
 
 	$('#tyovuoroot-form').on('submit',function(e) {
 
+	//console.log( $( this ).serializeArray() );
+	//console.log( e.target[0].value );
+
 	$('#showres').modal('hide');
 
-	console.log( $( this ).serializeArray() );
-	console.log( e.target[0].value );
+	// <-- onko sama
+	var onko = onkoSama( e.target[0].value, $('#Tyovuoroot_pvm').val(), $('#Tyovuoroot_tid').val(), $('#Tyovuoroot_kohde').val(), $('#alku').val(), $('#loppu').val() );
+	if(onko !== '')
+		return false;
+	//  onko sama -->
+
+
+
+
+
+
 	var str = '';
 	var thisDataReturn = [];
 
@@ -621,6 +632,37 @@ $('.mult').multiselect({
 
 
 
+
+function onkoSama( id, pvm, tid, kohde, alku, loppu ){
+
+	var returnVastaus = '';
+
+	  $.ajax({
+		  url: 'onko_sama',
+		  data:{ id : id, pvm : pvm, tid : tid, kohde : kohde, alku : alku, loppu : loppu },
+		  type:'GET',
+		  async: false,
+		  success:function(data){
+			//console.log(data);
+			if(data)
+			{
+			   data = JSON.parse(data);
+			   returnVastaus = data;
+			}
+	   	},
+		error:function(data){
+		console.log(data);
+	    	}
+	  });
+
+		if(returnVastaus !== '')
+			ilmoitusSamasta(returnVastaus);
+
+	return returnVastaus;
+
+}
+
+
 // Poistaminen
 $('#poistaTv').click(function(){
 
@@ -677,10 +719,15 @@ function laatikonPaivays(thisDataReturn){
 
 		var splDID = [];
 		var did = '';
+		var ilmoitus = '';
 		$(thisDataReturn).each(function( iarr, arr ) {
 		 $(arr).each(function( i, d ) {
 		 //console.log(d['pvm']);
 
+		if(d['onkosama'])
+		{
+		    ilmoitus += d['onkosama'].replace(/\n/g, "<br>");
+		}
 	  	    $.ajax({
 			url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/did',
 			type:'GET',
@@ -724,7 +771,21 @@ function laatikonPaivays(thisDataReturn){
 		 });
 		});
 
+
+		if(ilmoitus !== '')
+			ilmoitusSamasta(ilmoitus);
+
 }
+
+
+  function ilmoitusSamasta(ilmoitus){
+
+    $('#ilmoitukset').addClass('row alert alert-danger').html('<div class="pull-right close link">sulje</div><h2>Päällekäisyyksiä työvuoro(i)ssa, joten kaikkia vuoroja ei voitu luoda.</h2>');
+    $('#ilmoitukset').append(ilmoitus);
+    $('.close').click(function(){
+	$('#ilmoitukset').removeClass('row alert alert-danger').html('');
+    });
+  }
 
 
   function laskePituus(){
