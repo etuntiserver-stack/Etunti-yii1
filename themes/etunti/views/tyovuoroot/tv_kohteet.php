@@ -198,9 +198,7 @@ td .tp{
 
  	<div class="pull-right">
  	  <div class="form-inline">
-		<div class="btn btn-primary fa fa-plus" id="uusiTilaus" data-toggle="tooltip" title="Uusi tilaus"></div>
-		<div class="btn btn-primary fa fa-calendar-plus-o" id="autoInsert" data-toggle="tooltip" title="Toistuva työvuorot"></div>
-		<div class="btn btn-primary fa fa-calendar-minus-o" id="autoRemove" data-toggle="tooltip" title="Poista toistuva työvuorot"></div>
+		<button class="btn btn-primary" id="uusiTilaus"><?php echo Yii::t('main', 'Tilaus'); ?></button>
  	  </div>
  	</div>
 

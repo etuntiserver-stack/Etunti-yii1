@@ -373,7 +373,7 @@ return array(
 'Yhteensä' => 'Yhteensä',
 'Ei löydy' => 'Ei löydy',
 'Ilmoita asiakkaalle sähköpostilla' => 'Ilmoita asiakkaalle sähköpostilla',
-'Ilmoita työntekijää viestillä' => 'Ilmoita työntekijää viestillä',
+'Ilmoita työntekijää viestillä' => 'Lähetä viesti mobiilisovellukseen',
 'Lähetä viesti mobiilisovellukseen' => 'Lähetä viesti mobiilisovellukseen',
 'Päivämäärä' => 'Päivämäärä',
 'Keskustelu nro..' => 'Keskustelu nro..',

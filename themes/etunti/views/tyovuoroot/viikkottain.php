@@ -83,7 +83,7 @@ td .tp{
    <div class="pull-right">
     <div class="form-inline">
 
-     <?php echo CHtml::button(Yii::t('main', 'Lähetä kaikille'),array('target'=>'_blank','class'=>'btn btn-sm btn-success myBgColors form-group','id'=>'lahetaKaikkille'));
+     <?php echo CHtml::button(Yii::t('main', 'Lähetä'),array('target'=>'_blank','class'=>'btn btn-sm btn-success myBgColors form-group','id'=>'lahetaKaikkille'));
      ?>
 
      <form action="#" class="form-group" target="_blank" method="POST">
@@ -166,7 +166,7 @@ td .tp{
 	echo '<tr>';
 	echo '<td>'.$t->tekijan_nimi.'<br>
 	<input type="checkbox" for="'.$t->id.'" title="Määrittele lähetettäväksi"><br>
-	'.CHtml::link(Yii::t('main', 'Lähetä'),'/index.php/tyovuoroot/laheta?tid='.$t->id.'&week='.$week.'&year='.$year.'&tulosta=false',array('target'=>'_blank','class'=>'text-success'));
+	'.CHtml::link(Yii::t('main', 'Lähetä'),'/index.php/tyovuoroot/laheta?tid='.$t->id.'&week='.$week.'&year='.$year.'&tulosta=false',array('target'=>'_blank','class'=>'btn btn-sm btn-success'));
 
 	$file = $week.'_'.$year.'_'.$t->id.'.pdf';
 	$path = Yii::app()->request->baseUrl."emails/tyovuorot/".Yii::app()->user->domain;
@@ -219,13 +219,16 @@ $(document).ready(function(){
 
 $("#lahetaKaikkille").click(function(){
 
- setTimeout(function(){document.location.href = "laheta_k?week=<?php echo $week; ?>&year=<?php echo$year; ?>&tulosta=false&check="+checkChecked();},500);
+   if(checkChecked() !== '')
+   setTimeout(function(){document.location.href = "laheta_k?week=<?php echo $week; ?>&year=<?php echo$year; ?>&tulosta=false&check="+checkChecked();},500);
+   else
+   alert('Valitse työntekijä');
 
 });
 
 function checkChecked() {
     var get = '';
-    $('#lahetysTable table tr td input[type="checkbox"]').each(function() {
+    $('#lahetysTable table tr td input[type="checkbox"]:checked').each(function() {
         if ($(this).is(":checked")) {
             get += $(this).attr("for")+",";
         }
