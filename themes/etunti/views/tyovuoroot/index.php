@@ -77,21 +77,19 @@
    echo '<input type="hidden" id="fromTV" value="'.$dTVfrom.'">';
    $dTVto = date("Y-m-d",strtotime($year ."W". $week. '7'));
    echo '<input type="hidden" id="toTV" value="'.$dTVto.'">';
+
+   $nbsp = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
 ?>
 
-<div class="row">
-            <div class="admin-form">
-              <div class="panel heading-border myBgColors">
-                <div class="panel-body bg-light">
 
+<div id="ylapalkki" style="display:none">
+ <div class="form-inline">
+  <div class="form-group">
 
+	<label><?php echo Yii::t('main', 'Haku'); ?></label><br>
 
-
-<div class="row">
- <div class="row col-sm-5">
   <form action="index" id="yhtveto" method="POST">
 
-   <div class="form-inline">
    <?php
    // Toimialue
    $list = array();
@@ -103,7 +101,7 @@
    $list[$v->value] = $v->value;
 
    echo CHtml::dropDownList('siivous', 'siivous', $list,
-   array('empty'=>Yii::t('main', 'Toimialue'),'class'=>'form-control form-group','id'=>'tekijanToimialue'));
+   array('empty'=>Yii::t('main', 'Toimialue'),'class'=>'form-control form-group','id'=>'tekijanToimialue')).' ';
 
 
    // Kohteen ryhman mukaan
@@ -116,7 +114,7 @@
    $list[$v->value] = $v->value;
 
    echo CHtml::dropDownList('siivous', 'siivous', $list,
-   array('empty'=>Yii::t('main', 'Työnimike'),'class'=>'form-control form-group','id'=>'siivousTyonimike'));
+   array('empty'=>Yii::t('main', 'Työnimike'),'class'=>'form-control form-group','id'=>'siivousTyonimike')).' ';
 
 
    //
@@ -134,15 +132,15 @@
     }
     echo '</select>';
    ?>
-   <input type="submit" class="btn btn-primary" value="<?php echo Yii::t('main', 'haku'); ?>">
-   </div>
+   <button type="submit" class="btn btn-primary fa fa-search"></button><?php echo $nbsp; ?>
    </form>
 
- </div><div class="col-sm-4">
 
+   </div><div class="form-group">
 
-   <div class="form-inline">
-     <a href="<?php echo $_SERVER['PHP_SELF'].'?week='.($week == 1 ? $wkMaara : $week -1).'&year='.($week == 1 ? $year - 1 : $year); ?>"><i class="fa fa-arrow-left" style="font-size: 120%"></i></a>
+	<label><?php echo Yii::t('main', 'Viikot'); ?></label><br>
+
+     	<a href="<?php echo $_SERVER['PHP_SELF'].'?week='.($week == 1 ? $wkMaara : $week -1).'&year='.($week == 1 ? $year - 1 : $year); ?>"><i class="fa fa-arrow-left btn btn-primary myBgColors"></i></a>
 
 	<select class="form-control" id="viikkonhyppaminen">
 	<?php
@@ -152,50 +150,53 @@
 	$nextMonday     = strtotime('monday', $firstDayOfYear);
 	$nextSunday     = strtotime('sunday', $nextMonday);
 	
-	    echo '<option value="'.$_SERVER['PHP_SELF'].'?week='.$week.'&year='.$year.'">Vko:'.$week.', '. date('d.m.Y',strtotime($year ."W".$week .'1')).' - '.date('d.m.Y',strtotime($year ."W". $week .'7')).'</option>';
+	    echo '<option value="'.$_SERVER['PHP_SELF'].'?week='.$week.'&year='.$year.'">Vko: '.$week.'</option>';
 
 	while (date('Y', $nextMonday) == $year) {
-	    echo '<option value="'.$_SERVER['PHP_SELF'].'?week='.date('W', $nextMonday), NL.'&year='.$year.'">Vko:'.date('W', $nextMonday), NL.', '.date('d.m.Y', $nextMonday), '-', date('d.m.Y', $nextSunday), NL.'</option>';
+	    echo '<option value="'.$_SERVER['PHP_SELF'].'?week='.date('W', $nextMonday), NL.'&year='.$year.'">Vko: '.date('W', $nextMonday), NL.'</option>';
 	
 	    $nextMonday = strtotime('+1 week', $nextMonday);
 	    $nextSunday = strtotime('+1 week', $nextSunday);
 	}
 	?>
 	</select>
-     <a href="<?php echo $_SERVER['PHP_SELF'].'?week='.($week == $wkMaara ? 1 : 1 + $week).'&year='.($week == $wkMaara ? 1 + $year : $year); ?>"><i class="fa fa-arrow-right" style="font-size: 120%"></i></a> 
+     	<a href="<?php echo $_SERVER['PHP_SELF'].'?week='.($week == $wkMaara ? 1 : 1 + $week).'&year='.($week == $wkMaara ? 1 + $year : $year); ?>"><i class="fa fa-arrow-right btn btn-primary myBgColors"></i></a> <?php echo $nbsp; ?>
+
+   </div><div class="form-group">
+
+	<label><?php echo Yii::t('main', 'Näytä viikkonlopput'); ?></label><br>
+	<div class="btn" id="vkolopput"><?php echo Yii::t('main', 'Viikonloput'); ?></div>
+
+   </div><div class="form-group pull-right">
+
+     <div class="form-inline">
+      <div class="form-group">
+	<label><?php echo Yii::t('main', 'Uusi tilaus'); ?></label><br>
+	<button class="btn btn-primary" id="uusiTilaus"><?php echo Yii::t('main', 'Tilaus'); ?></button><?php echo $nbsp; ?>
+      </div><div class="form-group">
+	<label><?php echo Yii::t('main', 'Valitse näkymä'); ?></label><br>
+	<select class="form-control tvchange">
+ 	  <option value="index" selected><?php echo Yii::t('main', 'Viikko'); ?></option>
+ 	  <option value="tv2"><?php echo Yii::t('main', 'Työntekijä'); ?></option>
+ 	  <option value="tv_kohteet"><?php echo Yii::t('main', 'Kohde'); ?></option>
+	</select>
+      </div>
+     </div>
 
    </div>
-
-
- </div><div class="col-sm-3">
-
- 	<div class="pull-right row">
- 	  <div class="form-inline row">
-		<button class="btn btn-primary" id="uusiTilaus"><?php echo Yii::t('main', 'Tilaus'); ?></button>
-		<div class="btn" id="vkolopput"><?php echo Yii::t('main', 'Viikonloput'); ?></div>
- 	  </div>
- 	</div>
-
  </div>
 </div>
 
+<br>
 
-
-                </div>
-              </div>
-            </div>
-</div>
 
 <div id="ilmoitukset"></div>
 
-<div class="row">
+
             <div class="admin-form">
-              <div class="panel heading-border">
+              <div class="panel heading-border myBgColors">
                 <div class="panel-body bg-light">
-                
-
-
-
+                 <div class="row">
 
 <?php
 if(!isset($_SESSION['vkolopput']))
@@ -283,7 +284,7 @@ td .tp{
 
 <?php if((isset($checkSiivous) and $checkSiivous == true) or !isset($checkSiivous)) : ?>
 <div class="row table-responsive">
-  <table class="table table-bordered table-striped small" style="background: white">
+  <table class="table table-striped table-condensed table-bordered" style="background: white">
      <thead>
      <tr>
 	<th><?php echo Yii::t('main', 'Nimi'); ?></th>
@@ -397,7 +398,7 @@ td .tp{
                 </div>
               </div>
             </div>
-</div>
+
 
 <?php endif; ?>
 
@@ -451,7 +452,9 @@ $(function () {
     $(window).resize(onResize);
 });
 
-
+$('#tyontekijat').ready(function(){
+	$('#ylapalkki').show('slow');
+});
 
 $('#tyontekijat').multiselect({
 	//inheritClass: true,
@@ -459,8 +462,13 @@ $('#tyontekijat').multiselect({
         includeSelectAllOption: true,
 	nonSelectedText: '<?php echo Yii::t("main", "Tyhjä"); ?>',
 	selectAllText: '<?php echo Yii::t("main", "Valitse kaikki"); ?>',
-	allSelectedText: '<?php echo Yii::t("main", "Kaikki"); ?>',
+	allSelectedText: '<?php echo Yii::t("main", "Työntekijät"); ?>',
 	nSelectedText: '<?php echo Yii::t("main", "valittu"); ?>',
+});
+
+$('.tvchange').change(function(){
+	var thisVal = $(this).val();
+	window.location.href=thisVal;
 });
 
 

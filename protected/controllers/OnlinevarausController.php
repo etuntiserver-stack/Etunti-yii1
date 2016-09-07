@@ -718,14 +718,30 @@ $months=array(
 }
 
 
+	protected function sprint($val){
+	    if($val > 0)
+		return sprintf('%02d:%02d', $val/3600, ($val % 3600)/60);
+	}
+
 
 	protected function pmvCal($date)
 	{
-		$asetukset = Asetukset::model()->findbypk(1);
-		$sumTunti = ((float)$_SESSION['onlinevaraus']['sumTunti']*3600);
-
 		$tekija = array();
 		$on = 'kiinni';
+
+		$asetukset = Asetukset::model()->findbypk(1);
+		$alkuAstetuksesta = strtotime($asetukset->onlinevaraus_alku.":00");
+		$loppuAstetuksesta = strtotime($asetukset->onlinevaraus_loppu.":00");
+		$aikavali_1t = 3600;
+		$aikavali_2t = 7200;
+
+		// <-- Täysin vapaana
+   		$sumTunti = (float)$_SESSION['onlinevaraus']['sumTunti'];
+		$sumTuntiMin = $sumTunti*60;
+		$sumTuntiSec = $sumTunti*3600;
+		$start = $asetukset->onlinevaraus_alku.":00";
+		$stop = date("H:i",strtotime($start." +".$sumTuntiMin." minutes"));
+		$period = 24;
 
 		$criteria=new CDbCriteria;
 		$criteria->condition = "
@@ -733,14 +749,69 @@ $months=array(
 			AND id NOT IN ( SELECT tid FROM sivex_tvuoro WHERE pvm='".date("d.m.Y", strtotime($date))."' )
 		";
 		$tyontekijat = Tyontekijat::model()->findAll($criteria);
-
 		foreach($tyontekijat as $t)
 		{
-			$on = 'vapaa';
-			$tekija[$t->id] = array($date,null,null);
+		   $on = 'vapaa';
+		   if(isset($sta))
+		  	unset($sta);
+		   if(isset($sto))
+		  	unset($sto);
+
+		   for ($i = 1; $i <= $period; $i++) 
+		   {
+
+		   	$int = 0;
+		   	if(!isset($sta) and !isset($sto))
+		   	{
+				$sta = $start;
+				$sto = $stop;
+		   	}
+
+			$tekija[] = array($t->id, $date, $sta, $sto);
+
+		   	$int += $sumTuntiMin;
+		   	$sta = date("H:i",strtotime($sta." +$int minutes"));
+		   	$sto = date("H:i",strtotime($sto." +$int minutes"));
+		
+		   	if(strtotime($sta." +$int minutes") > strtotime($asetukset->onlinevaraus_loppu.":00"))
+		   	break;
+
+		   }
+
 		}
+		// Täysin vapaana -->
 
 
+
+		// <-- Osittain vapaana
+		$criteria=new CDbCriteria;
+		$criteria->condition = "
+			pvm='".date("d.m.Y", strtotime($date))."'
+			AND tid IN ( SELECT id FROM sivex_ttekijat WHERE online_varauksen_valmina=1 )
+		";
+
+		$tv = Tyovuoroot::model()->findAll($criteria);
+		$i = 0;
+		foreach($tv as $t)
+		{
+		$i++;
+
+
+			if(isset($edellinenLoppu[$t->tid]) and $edellinenLoppu[$t->tid] > 0
+			and ( strtotime($t->alku)-strtotime($edellinenLoppu[$t->tid]) > $sumTuntiSec+$aikavali_2t )
+			)
+			{
+
+		   		$on = 'vapaa';
+				$tekija[] = array($t->tid, $date, $t->alku, strtotime($t->alku)-strtotime($edellinenLoppu[$t->tid]));
+			}
+
+
+			$edellinenAlku[$t->tid] = strtotime($t->alku);
+			$edellinenLoppu[$t->tid] = strtotime($t->loppu);
+
+		}
+		// Osittain vapaana -->
 
 		$return = array($on,$tekija);
 		return $return;

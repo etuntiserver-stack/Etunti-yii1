@@ -183,25 +183,37 @@ td .tp{
 <input type="hidden" id="korko" value="250">
 
 
-<div class="row">
- <div class="col-sm-8">
+<div id="ylapalkki">
+ <div class="form-inline">
+  <div class="form-group">
+	<label><?php echo Yii::t('main', 'Haku'); ?></label><br>
   <form action="#" id="yhtveto" class="form-inline" method="POST">
 
 
    <input type="text" name="osoiteTV" id="osoiteTV" class="form-control form-group" value="<?php echo Yii::app()->session['osoiteTV']; ?>" placeholder="Osoite..">
-   <input type="text" name="from" id="from" class="form-control form-group datepicker" value="<?php echo Yii::app()->session['from']; ?>">
-   <input type="text" name="to" id="to" class="form-control form-group datepicker" value="<?php echo Yii::app()->session['to']; ?>">
+   <input type="text" name="from" id="from" class="form-control form-group datepickerFI" value="<?php echo date('d.m.Y', strtotime(Yii::app()->session['from'])); ?>">
+   <input type="text" name="to" id="to" class="form-control form-group datepickerFI" value="<?php echo  date('d.m.Y', strtotime(Yii::app()->session['to'])); ?>">
 
    <input type="submit" class="btn btn-primary" value="<?php echo Yii::t('main', 'haku'); ?>">
    </form>
- </div><div class="col-sm-4">
 
- 	<div class="pull-right">
- 	  <div class="form-inline">
-		<button class="btn btn-primary" id="uusiTilaus"><?php echo Yii::t('main', 'Tilaus'); ?></button>
- 	  </div>
- 	</div>
+   </div><div class="form-group pull-right">
 
+     <div class="form-inline">
+      <div class="form-group">
+	<label><?php echo Yii::t('main', 'Uusi tilaus'); ?></label><br>
+	<button class="btn btn-primary" id="uusiTilaus"><?php echo Yii::t('main', 'Tilaus'); ?></button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      </div><div class="form-group">
+	<label><?php echo Yii::t('main', 'Valitse näkymä'); ?></label><br>
+	<select class="form-control tvchange">
+ 	  <option value="index"><?php echo Yii::t('main', 'Viikko'); ?></option>
+ 	  <option value="tv2" selected><?php echo Yii::t('main', 'Työntekijä'); ?></option>
+ 	  <option value="tv_kohteet"><?php echo Yii::t('main', 'Kohde'); ?></option>
+	</select>
+      </div>
+     </div>
+
+   </div>
  </div>
 </div>
 
@@ -370,6 +382,12 @@ $(function () {
     $(window).resize(onResize);
 });
 
+
+
+$('.tvchange').change(function(){
+	var thisVal = $(this).val();
+	window.location.href=thisVal;
+});
 
 });
 </script>
