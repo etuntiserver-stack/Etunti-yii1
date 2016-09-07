@@ -154,18 +154,14 @@ td .tp{
 <input type="hidden" id="korko" value="290">
 
 
-<div class="row">
 
-            <div class="admin-form">
-              <div class="panel heading-border myBgColors">
-                <div class="panel-body bg-light">
+<div class="row" id="ylapalkki" style="display:none">
+ <div class="form-inline">
+  <div class="form-group">
 
+	<label><?php echo Yii::t('main', 'Haku'); ?></label><br>
 
-<div class="row">
- <div class="col-sm-8">
   <form action="#" id="yhtveto" class="form-inline" method="POST">
-
-
    <?php
    // Toimialue
    $list = array();
@@ -177,7 +173,7 @@ td .tp{
    $list[$v->value] = $v->value;
 
    echo CHtml::dropDownList('siivous', 'siivous', $list,
-   array('empty'=>Yii::t('main', 'Toimialue'),'class'=>'form-control form-group','id'=>'tekijanToimialue'));
+   array('empty'=>Yii::t('main', 'Toimialue'),'class'=>'form-control form-group','id'=>'tekijanToimialue')).' ';
 
 
    // Kohteen ryhman mukaan
@@ -193,8 +189,8 @@ td .tp{
    array('empty'=>Yii::t('main', 'Työnimike'),'class'=>'form-control form-group','id'=>'siivousTyonimike'));
 
    ?>
-   <input type="text" name="from" id="from" size="10" class="form-control form-group datepicker" value="<?php echo Yii::app()->session['from']; ?>" placeholder="<?php echo Yii::t('main' ,'Päivämäärä'); ?>">
-   <input type="text" name="to" id="to" size="10" class="form-control form-group datepicker" value="<?php echo Yii::app()->session['to']; ?>" placeholder="<?php echo Yii::t('main' ,'Päivämäärä'); ?>">
+   <input type="text" name="from" id="from" size="10" class="form-control form-group datepickerFI" value="<?php echo date('d.m.Y', strtotime(Yii::app()->session['from'])); ?>" placeholder="<?php echo Yii::t('main' ,'Päivämäärä'); ?>">
+   <input type="text" name="to" id="to" size="10" class="form-control form-group datepickerFI" value="<?php echo date('d.m.Y', strtotime(Yii::app()->session['to'])); ?>" placeholder="<?php echo Yii::t('main' ,'Päivämäärä'); ?>">
 
   <?php
 
@@ -214,25 +210,32 @@ td .tp{
     echo '</select>';
   ?>
 
-   <input type="submit" class="btn btn-primary" value="<?php echo Yii::t('main', 'haku'); ?>">
+   <button type="submit" class="btn btn-primary fa fa-search"></button>
    </form>
- </div><div class="col-sm-4">
 
- 	<div class="pull-right">
- 	  <div class="form-inline">
-		<button class="btn btn-primary" id="uusiTilaus"><?php echo Yii::t('main', 'Tilaus'); ?></button>
- 	  </div>
- 	</div>
 
+
+   </div><div class="form-group pull-right">
+
+     <div class="form-inline">
+      <div class="form-group">
+	<label><?php echo Yii::t('main', 'Uusi tilaus'); ?></label><br>
+	<button class="btn btn-primary" id="uusiTilaus"><?php echo Yii::t('main', 'Tilaus'); ?></button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      </div><div class="form-group">
+	<label><?php echo Yii::t('main', 'Valitse näkymä'); ?></label><br>
+	<select class="form-control tvchange">
+ 	  <option value="index"><?php echo Yii::t('main', 'Viikko'); ?></option>
+ 	  <option value="tv2" selected><?php echo Yii::t('main', 'Työntekijä'); ?></option>
+ 	  <option value="tv_kohteet"><?php echo Yii::t('main', 'Kohde'); ?></option>
+	</select>
+      </div>
+     </div>
+
+   </div>
  </div>
 </div>
 
-
-                </div>
-              </div>
-            </div>
-</div>
-
+<br>
 
 
 <?php else: ?>
@@ -274,7 +277,7 @@ td .tp{
 
 <div class="row">
             <div class="admin-form">
-              <div class="panel heading-border">
+              <div class="panel heading-border myBgColors">
                 <div class="panel-body bg-light">
                  <div class="row">
 
@@ -465,6 +468,9 @@ $(function () {
     $(window).resize(onResize);
 });
 
+$('#tyontekijat').ready(function(){
+	$('#ylapalkki').show('slow');
+});
 
 
 $('#tyontekijat').multiselect({
@@ -473,8 +479,14 @@ $('#tyontekijat').multiselect({
         includeSelectAllOption: true,
 	nonSelectedText: '<?php echo Yii::t("main", "Tyhjä"); ?>',
 	selectAllText: '<?php echo Yii::t("main", "Valitse kaikki"); ?>',
-	allSelectedText: '<?php echo Yii::t("main", "Kaikki"); ?>',
+	allSelectedText: '<?php echo Yii::t("main", "Työntekijät"); ?>',
 	nSelectedText: '<?php echo Yii::t("main", "valittu"); ?>',
+});
+
+
+$('.tvchange').change(function(){
+	var thisVal = $(this).val();
+	window.location.href=thisVal;
 });
 
 });

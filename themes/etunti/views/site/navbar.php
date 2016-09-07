@@ -458,15 +458,7 @@ if( $curpage == 'tyovuoroot/tv2' )
             <ul class="nav sub-nav">
               <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/tyovuoroot/index">
-                  <span class="fa fa-clock-o"></span> <?php echo Yii::t('main', 'Työvuorot viikkoittain'); ?></a>
-              </li>
-              <li>
-                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/tyovuoroot/tv2">
-                  <span class="fa fa-clock-o"></span> <?php echo Yii::t('main', 'Työvuorot työntekijöiden mukaan'); ?></a>
-              </li>
-              <li>
-                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/tyovuoroot/tv_kohteet">
-                  <span class="fa fa-clock-o"></span> <?php echo Yii::t('main', 'Työvuorot kohteen mukaan'); ?></a>
+                  <span class="fa fa-clock-o"></span> <?php echo Yii::t('main', 'Työvuorot'); ?></a>
               </li>
               <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/tyovuoroot/viikkottain">

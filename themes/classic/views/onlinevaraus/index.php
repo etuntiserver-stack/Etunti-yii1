@@ -1,4 +1,6 @@
 <?php
+echo 'huoltokatko';
+exit;
 /* @var $this OnlinevarausController */
 /* @var $dataProvider CActiveDataProvider */
 
