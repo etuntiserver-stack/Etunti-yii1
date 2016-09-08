@@ -41,7 +41,7 @@ td,th{
 
 <?php if(!$tulosta) : ?>
 <legend>
-<h1> <?php echo Yii::t('main', 'TYÖVUOROT KAIKILLE'). ', '.Yii::t('main', 'VIIKKO').'-'.$week; ?></h1>
+<h1> <?php echo Yii::t('main', 'TYÖVUOROT'). ', '.Yii::t('main', 'VIIKKO').'-'.$week; ?></h1>
 </legend>
 
 <div class="form-inline">
@@ -128,6 +128,11 @@ for($day= 1; $day <= 7; $day++) {
   AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d')  
   BETWEEN  '".date('Y-m-d',strtotime($year ."W". $week .'1'))."' AND '".date('Y-m-d',strtotime($year ."W". $week .'7'))."' 
   AND pvm!='' ";
+
+  if(isset($_POST['P']))
+  $criteria->Addcondition ( " DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%w') IN (".implode(",",$_POST['P']).") ");
+
+
   $tv = Tyovuoroot::model()->findAll($criteria);
 
   $yht = 0;
@@ -197,6 +202,7 @@ $totalWeek = $this->renderPartial('//tyovuoroot/viikko',array('tid'=>$tt->id,'vi
 <?php } ?>
 
 <?php if($tulosta != 'lista') : ?>
+<br>
 <div class="row">
  <div class="col-sm-5">
   <form action="#" id="pdf_email" class="form-group" target="_blank" method="POST">
@@ -205,7 +211,34 @@ $totalWeek = $this->renderPartial('//tyovuoroot/viikko',array('tid'=>$tt->id,'vi
     <label><?php echo Yii::t('main','Lähetettävän viestin sisältö'); ?></label>
     <textarea name="kirjenBody" class="form-control" rows="6"></textarea>
     <br>
-    <button class="btn btn-success btn-sm laheta"><?php echo Yii::t('main','PDF >>> Sähköpostille'); ?></button>
+    <label><?php echo Yii::t('main','Lähetettävät päivät'); ?></label>
+<div class="row">
+  <div class="col-sm-12">
+  <label><?php echo Yii::t('main', 'Ma'); ?></label>
+  <input type="checkbox" class="sw" name="P[1]" id="ma" value="1" checked>
+
+  <label><?php echo Yii::t('main', 'Ti'); ?></label>
+  <input type="checkbox" class="sw" name="P[2]" id="ti" value="2" checked>
+
+  <label><?php echo Yii::t('main', 'Ke'); ?></label>
+  <input type="checkbox" class="sw" name="P[3]" id="ke" value="3" checked>
+
+  <label><?php echo Yii::t('main', 'To'); ?></label>
+  <input type="checkbox" class="sw" name="P[4]" id="to" value="4" checked>
+
+  <label><?php echo Yii::t('main', 'Pe'); ?></label>
+  <input type="checkbox" class="sw" name="P[5]" id="pe" value="5" checked>
+
+  <label><?php echo Yii::t('main', 'La'); ?></label>
+  <input type="checkbox" class="sw" name="P[6]" id="la" value="6" checked>
+
+  <label><?php echo Yii::t('main', 'Su'); ?></label>
+  <input type="checkbox" class="sw" name="P[0]" id="su" value="0" checked>
+
+  </div>
+</div>
+
+    <button class="btn btn-success btn-sm laheta"><?php echo Yii::t('main','Lähetä'); ?></button>
   </form>
  </div>
 </div>

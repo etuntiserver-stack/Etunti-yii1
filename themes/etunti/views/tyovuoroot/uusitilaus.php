@@ -155,7 +155,10 @@ $(document).ready(function(){
   });
 
 	$('#submitButton').click(function(){
+		var r = confirm('Olet myös luomassa uuden asiakkaan ja kohteen.\n Haluatko jatkaa?');
+		if(r)
 		$('#tyovuoroot-form').submit();
+		else
 		return false;
 	});
 

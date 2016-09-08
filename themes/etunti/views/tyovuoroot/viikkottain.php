@@ -77,33 +77,36 @@ td .tp{
         <div class="row tray-center">
 
 
-              <h2 class="myBgColors p10"> 
 
-   <!-- tulostus -->
-   <div class="pull-right">
+<h2 class="myBgColors p15"> 
     <div class="form-inline">
+     <div class="form-group">
+   	<?php echo Yii::t('main', 'Työvuorojen lähetys'); ?>&nbsp;&nbsp;&nbsp;
+     </div><div class="form-group">
 
-     <?php echo CHtml::button(Yii::t('main', 'Lähetä'),array('target'=>'_blank','class'=>'btn btn-sm btn-success myBgColors form-group','id'=>'lahetaKaikkille'));
-     ?>
 
-     <form action="#" class="form-group" target="_blank" method="POST">
-      <input type="submit" name="tulosta" class="btn btn-sm btn-primary myBgColors" value="PDF">
-     </form>
+  <b>
+  <a href="<?php echo $_SERVER['PHP_SELF'].'?week='.($week == 1 ? $wkMaara : $week -1).'&year='.($week == 1 ? $year - 1 : $year); ?>"><i class="fa fa-arrow-left btn btn-default"></i></a> 
+  <span class="btn btn-default"><?php echo date('d.m.Y',strtotime($year ."W".$week .'1')).' - '.date('d.m.Y',strtotime($year ."W". $week .'7')); ?></span>
+  <a href="<?php echo $_SERVER['PHP_SELF'].'?week='.($week == $wkMaara ? 1 : 1 + $week).'&year='.($week == $wkMaara ? 1 + $year : $year); ?>"><i class="fa fa-arrow-right btn btn-default"></i></a> 
+  </b>
+
+
+     </div><div class="form-group pull-right row">
+      <div class="form-inline">
+ 	<div class="form-group">
+          <?php echo CHtml::button(Yii::t('main', 'Valitse kaikki'),array('target'=>'_blank','class'=>'btn btn-default valitseKaikki')); ?>&nbsp;
+ 	<div class="form-group">
+          <?php echo CHtml::button(Yii::t('main', 'Lähetä'),array('target'=>'_blank','class'=>'btn btn-default','id'=>'lahetaKaikkille')); ?> &nbsp;
+ 	</div><div class="form-group">
+      	  <form action="#" target="_blank" method="POST">
+           <input type="submit" name="tulosta" class="btn btn-default" value="PDF">
+          </form>
+	</div>
+      </div>
+     </div>
     </div>
-   </div>
-   <!-- tulostus -->
-
-
-
-<i class="fa fa-paper-plane"></i> <?php echo Yii::t('main', 'Työvuorojen lähetys'); ?>&nbsp;&nbsp;&nbsp;&nbsp;
-
-
-  <a href="<?php echo $_SERVER['PHP_SELF'].'?week='.($week == 1 ? $wkMaara : $week -1).'&year='.($week == 1 ? $year - 1 : $year); ?>"><<</a> 
-  <?php echo date('d.m.Y',strtotime($year ."W".$week .'1')).' - '.date('d.m.Y',strtotime($year ."W". $week .'7')); ?>
-  <a href="<?php echo $_SERVER['PHP_SELF'].'?week='.($week == $wkMaara ? 1 : 1 + $week).'&year='.($week == $wkMaara ? 1 + $year : $year); ?>">>></a> 
-
-
-		</h2>
+</h2>
 
 
 
@@ -165,8 +168,8 @@ td .tp{
     {
 	echo '<tr>';
 	echo '<td>'.$t->tekijan_nimi.'<br>
-	<input type="checkbox" for="'.$t->id.'" title="Määrittele lähetettäväksi"><br>
-	'.CHtml::link(Yii::t('main', 'Lähetä'),'/index.php/tyovuoroot/laheta?tid='.$t->id.'&week='.$week.'&year='.$year.'&tulosta=false',array('target'=>'_blank','class'=>'btn btn-sm btn-success'));
+	<input type="checkbox" for="'.$t->id.'" title="Määrittele lähetettäväksi"><br>';
+	//CHtml::link(Yii::t('main', 'Lähetä'),'/index.php/tyovuoroot/laheta?tid='.$t->id.'&week='.$week.'&year='.$year.'&tulosta=false',array('target'=>'_blank','class'=>'btn btn-sm btn-success'))
 
 	$file = $week.'_'.$year.'_'.$t->id.'.pdf';
 	$path = Yii::app()->request->baseUrl."emails/tyovuorot/".Yii::app()->user->domain;
@@ -249,6 +252,26 @@ function checkChecked() {
 <script type="text/javascript">
 $(document).ready(function(){
 
+valitseTaiPiilota();
+
+function valitseTaiPiilota(){
+ if(localStorage.getItem('tvLahetysChckBoxes') == 'all'){
+  $('input:checkbox').prop("checked", true);
+  $('.valitseKaikki').val('Piilota kaikki').removeClass('valitseKaikki').addClass('piilotaKaikki');
+
+  $(document).delegate(".piilotaKaikki","click",function(){
+	$('input:checkbox').prop("checked", false);
+	localStorage.removeItem('tvLahetysChckBoxes');
+        $(this).val('Valitse kaikki').addClass('valitseKaikki').removeClass('piilotaKaikki');
+  });
+ }
+}
+
+$(document).delegate(".valitseKaikki","click",function(){
+	$('input:checkbox').prop("checked", true);
+	localStorage.setItem('tvLahetysChckBoxes', 'all');
+	valitseTaiPiilota();
+});
 
 $(function () {
 
