@@ -274,6 +274,7 @@ class TyovuorootController extends Controller
 		$mail = new YiiMailer();
 		//$mail->clearLayout();//if layout is already set in config
 		$mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
+
 		$mail->setTo($saaja);
 		$mail->setSubject(Yii::t('main', 'TYÖVUOROT'). ' '.$tt->tekijan_nimi);
 		$mail->setBody($message);
@@ -307,6 +308,12 @@ class TyovuorootController extends Controller
 
 		} elseif(Yii::app()->request->getPost('pdf_email'))
 		{
+
+
+  		if(!isset($_POST['P'])) {
+		    echo 'Days error';
+		    exit;
+		}
 
 		$kenelle = explode(",",Yii::app()->request->getPost('kenelle'));
 

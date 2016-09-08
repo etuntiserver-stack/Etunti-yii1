@@ -213,7 +213,7 @@ $totalWeek = $this->renderPartial('//tyovuoroot/viikko',array('tid'=>$tid,'viikk
 <script type="text/javascript">
 $(document).ready(function(){
 
-
+/*
   $(".sw").bootstrapSwitch({
 	size: "mini",
 	onColor: "success",
@@ -221,7 +221,7 @@ $(document).ready(function(){
 	onText: "Kyllä",
 	offText: "Ei"
   });
-
+*/
 
 $(".laheta").click(function(){
         var r=confirm("Oletko varmaa?")

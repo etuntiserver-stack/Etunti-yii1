@@ -508,7 +508,17 @@ public function actionImei($dom)
 		    foreach($tvuoro as $val){
 			$k = Kohteet::model()->findbypk($val->kohde);
 			if(isset($k->osoite))
-		      	$sel .= '<option value="'.$k->id.'">'.$k->osoite.'</option>';
+			{
+				$osoite = '';
+				if(!empty($k->osoite))
+				$osoite .= $k->osoite;
+				if(!empty($k->pnumero))
+				$osoite .= ', '.$k->pnumero;
+				if(!empty($k->kaupunki))
+				$osoite .= ', '.$k->kaupunki;
+
+		      		$sel .= '<option value="'.$k->id.'">'.$osoite.'</option>';
+			}
 		    }
 		    $sel .= '</select>';
 
@@ -564,8 +574,17 @@ public function actionImei($dom)
 		    {
 		      $osoite = '';
 		      $kohde = Kohteet::model()->findbypk($val->kohde);
-		      if(isset($kohde['osoite']))
-		      $osoite = $kohde['osoite'];
+		      if(isset($kohde->osoite))
+		      {
+				$osoite = '';
+				if(!empty($kohde->osoite))
+				$osoite .= $kohde->osoite;
+				if(!empty($kohde->pnumero))
+				$osoite .= ', '.$kohde->pnumero;
+				if(!empty($kohde->kaupunki))
+				$osoite .= ', '.$kohde->kaupunki;
+		      }
+
 
 		      $tyopaari = array();
 		      if(!empty($val->tyopaari))
