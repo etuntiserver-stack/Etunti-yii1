@@ -852,7 +852,7 @@ public function actionImei($dom)
 			if(!empty($kohde->kaupunki))
 			$osoite .= ', '.$kohde->kaupunki;
 
-		        $sel .= '<option value="'.$kohde->id.'">'.$kohde->osoite.'</option>';
+		        $sel .= '<option value="'.$kohde->id.'">'.$osoite.'</option>';
 		    }
 		    $sel .= '</select>';
 
