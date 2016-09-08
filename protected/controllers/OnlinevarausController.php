@@ -741,7 +741,7 @@ $months=array(
 		$sumTuntiSec = $sumTunti*3600;
 		$start = $asetukset->onlinevaraus_alku.":00";
 		$stop = date("H:i",strtotime($start." +".$sumTuntiMin." minutes"));
-		$period = 24;
+		$countStop = strtotime($asetukset->onlinevaraus_loppu.":00");
 
 		$criteria=new CDbCriteria;
 		$criteria->condition = "
@@ -751,40 +751,16 @@ $months=array(
 		$tyontekijat = Tyontekijat::model()->findAll($criteria);
 		foreach($tyontekijat as $t)
 		{
-		   $on = 'vapaa';
-		   if(isset($sta))
-		  	unset($sta);
-		   if(isset($sto))
-		  	unset($sto);
-
-		   for ($i = 1; $i <= $period; $i++) 
-		   {
-
-		   	$int = 0;
-		   	if(!isset($sta) and !isset($sto))
-		   	{
-				$sta = $start;
-				$sto = $stop;
-		   	}
-
-			$tekija[] = array($t->id, $date, $sta, $sto);
-
-		   	$int += $sumTuntiMin;
-		   	$sta = date("H:i",strtotime($sta." +$int minutes"));
-		   	$sto = date("H:i",strtotime($sto." +$int minutes"));
-		
-		   	if(strtotime($sta." +$int minutes") > strtotime($asetukset->onlinevaraus_loppu.":00"))
-		   	break;
-
-		   }
-
+		   	$on = 'vapaa';
+			$tekija = $this->loopForAjaat($t->id, $start, $stop, $date, $sumTuntiMin, $countStop, $tekija);
 		}
 		// Täysin vapaana -->
 
 
 
-		// <-- Osittain vapaana
+		// <-- Reika vuoron välillä
 		$criteria=new CDbCriteria;
+		$criteria->order = " tid,UNIX_TIMESTAMP(STR_TO_DATE(loppu, '%H:%i'))  ";
 		$criteria->condition = "
 			pvm='".date("d.m.Y", strtotime($date))."'
 			AND tid IN ( SELECT id FROM sivex_ttekijat WHERE online_varauksen_valmina=1 )
@@ -796,27 +772,88 @@ $months=array(
 		{
 		$i++;
 
+			// <-- Ihan ensimmäinen vuoro tietynä päivänä
+			if(!isset($ihanEnsimmainenAlku[$t->tid]))
+			{
+				$ihanEnsimmainenAlku = array();
+				$ihanEnsimmainenAlku[$t->tid] = strtotime($t->alku);
 
+				if( $ihanEnsimmainenAlku[$t->tid]-$alkuAstetuksesta > $sumTuntiSec+$aikavali_1t )
+				{
+			   		$on = 'vapaa';
+					$alku = '';
+					$loppu = '';
+					$alku = $alkuAstetuksesta;
+					$loppu = $alku+$sumTuntiSec;
+					$countStop = strtotime($t->alku)-3600;
+					$tekija = $this->loopForAjaat($t->tid, date("H:i",$alku), date("H:i",$loppu), $date, $sumTuntiMin, $countStop, $tekija);
+					//$tekija[] = array($t->tid, $date, date("H:i",$ihanEnsimmainenAlku[$t->tid]), $t->loppu); // for test
+				}
+			}
+			// Ihan ensimmäinen vuoro tietynä päivänä -->
+
+
+			// <-- Reika vuoron välillä
 			if(isset($edellinenLoppu[$t->tid]) and $edellinenLoppu[$t->tid] > 0
-			and ( strtotime($t->alku)-strtotime($edellinenLoppu[$t->tid]) > $sumTuntiSec+$aikavali_2t )
+			and ( strtotime($t->alku)-$edellinenLoppu[$t->tid] > $sumTuntiSec+$aikavali_2t )
 			)
 			{
-
 		   		$on = 'vapaa';
-				$tekija[] = array($t->tid, $date, $t->alku, strtotime($t->alku)-strtotime($edellinenLoppu[$t->tid]));
+				$alku = '';
+				$loppu = '';
+				$alku = $edellinenLoppu[$t->tid]+3600;
+				$loppu = $alku+$sumTuntiSec;
+				$countStop = strtotime($t->alku)-3600;
+				$tekija = $this->loopForAjaat($t->tid, date("H:i",$alku), date("H:i",$loppu), $date, $sumTuntiMin, $countStop, $tekija);
+
+				//$tekija[] = array($t->tid, $date, date("H:i",$edellinenLoppu[$t->tid]), $t->loppu); // for test
 			}
 
-
+			$edellinenAlku = array();
+			$edellinenLoppu = array();
 			$edellinenAlku[$t->tid] = strtotime($t->alku);
 			$edellinenLoppu[$t->tid] = strtotime($t->loppu);
+			// Reika vuoron välillä -->
+
 
 		}
-		// Osittain vapaana -->
+		// Reika vuoron välillä -->
 
+
+		ksort($tekija);
 		$return = array($on,$tekija);
 		return $return;
 	}
 
+
+	protected function loopForAjaat($tid, $start, $stop, $date, $sumTuntiMin, $countStop, $tekija)
+	{
+
+		   for ($i = 1; $i <= 24; $i++) 
+		   {
+
+		   	$int = 0;
+		   	if(!isset($sta[$tid]) and !isset($sto[$tid]))
+		   	{
+				$sta = array();
+				$sto = array();
+				$sta[$tid] = $start;
+				$sto[$tid] = $stop;
+		   	}
+
+			$tekija[strtotime($sta[$tid]).$tid] = array($tid, $date, $sta[$tid], $sto[$tid]);
+
+		   	$int += $sumTuntiMin;
+		   	$sta[$tid] = date("H:i",strtotime($sta[$tid]." +$int minutes"));
+		   	$sto[$tid] = date("H:i",strtotime($sto[$tid]." +$int minutes"));
+		
+		   	if(strtotime($sta[$tid]." +$int minutes") > $countStop)
+		   	break;
+
+		   }
+		   return $tekija;
+
+	}
 
 /*
 	protected function pmvCal($date)

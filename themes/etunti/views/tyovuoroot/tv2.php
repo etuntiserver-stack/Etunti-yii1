@@ -468,9 +468,9 @@ $(function () {
     $(window).resize(onResize);
 });
 
-$('#tyontekijat').ready(function(){
+
 	$('#ylapalkki').show('slow');
-});
+
 
 
 $('#tyontekijat').multiselect({
