@@ -841,8 +841,19 @@ public function actionImei($dom)
 
 		    $sel = '<select id="list" class="form-control">';
 		    $sel .= '<option id="valitseOsoite">'.Yii::t('app', 'Valitse osoite').'</option>';
-		    foreach($kohteet as $val)
-		      $sel .= '<option value="'.$val->id.'">'.$val->osoite.'</option>';
+		    foreach($kohteet as $kohde)
+		    {
+
+			$osoite = '';
+			if(!empty($kohde->osoite))
+			$osoite .= $kohde->osoite;
+			if(!empty($kohde->pnumero))
+			$osoite .= ', '.$kohde->pnumero;
+			if(!empty($kohde->kaupunki))
+			$osoite .= ', '.$kohde->kaupunki;
+
+		        $sel .= '<option value="'.$kohde->id.'">'.$kohde->osoite.'</option>';
+		    }
 		    $sel .= '</select>';
 
 		    $this->_sendResponse(200, $sel);
