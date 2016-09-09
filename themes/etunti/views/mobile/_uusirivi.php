@@ -167,6 +167,30 @@ $("#Mobile_kohde_kannasta").change(function(){
   });
 
 
+$('.al').blur(function(){
+	checkMaxValues($(this).val());
+});
+
+$('.lp').blur(function(){
+	checkMaxValues($(this).val());
+});
+
+function checkMaxValues(val){
+	var check = val.split(" ");
+	var dat = check[0].split(".");
+	var time = check[1].split(":");
+	
+	if(dat[0] > 31)
+	alert('Päivät eivät voi olla yli 31.')
+	if(dat[1] > 12)
+	alert('Kuukaudet eivät voi olla yli 12.')
+
+	if(time[0] > 23)
+	alert('Tunnit eivät voi olla yli 23.')
+	if(time[1] > 59)
+	alert('Minutit eivät voi olla yli 59.')
+}
+
 
 /*
   $('.uusiRivi').click(function(){
