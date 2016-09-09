@@ -32,7 +32,7 @@ public $viesti;
 	}
 
 
-	public static function PushNotify($tid,$title,$message){
+	public static function PushNotify($tid,$title,$message, $sound){
 
 		$t = Tyontekijat::model()->findbypk($tid); 
 		$a = AsetuksetForAll::model()->find(" asetus='asetus1' ");
@@ -47,7 +47,7 @@ public $viesti;
 			'subtitle'	=> 'This is a subtitle. subtitle',
 			'tickerText'	=> 'Ticker text here...Ticker text here...Ticker text here',
 			'vibrate'	=> 1,
-			'sound'		=> 'beep', // viella on "danger"
+			'sound'		=> $sound, // viella on "danger"
 			'largeIcon'	=> 'large_icon',
 			'smallIcon'	=> 'small_icon'
 		);
