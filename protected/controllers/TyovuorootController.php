@@ -275,6 +275,8 @@ class TyovuorootController extends Controller
 		//$mail->clearLayout();//if layout is already set in config
 		$mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
 
+
+
 		$mail->setTo($saaja);
 		$mail->setSubject(Yii::t('main', 'TYÖVUOROT'). ' '.$tt->tekijan_nimi);
 		$mail->setBody($message);
@@ -973,14 +975,14 @@ class TyovuorootController extends Controller
 			  {
 			   $t = Tyontekijat::model()->findbypk($model->tid);
 			   $k = Kohteet::model()->findbypk($model->kohde);
-			   if(isset($k->osoite) and !empty($k->osoite))
+			   if(isset($k->osoite) and !empty($k->osoite) and isset($t->id))
 			   {
 				$pushviesti = "Uusi työvuoro\n
 					".$model->pvm."
 					".$model->alku."-".$model->loppu." ".$k->osoite."
 					".$model->tietoja;
 
-				Domainit::PushNotify($t->id,"Hei ".$t->tekijan_nimi,$pushviesti);
+				Domainit::PushNotify($t->id,"Hei ".$t->tekijan_nimi,$pushviesti,'beep');
 
 			   }
 			  }
@@ -1162,15 +1164,16 @@ class TyovuorootController extends Controller
 
 			  if(isset($_POST['Tyovuoroot']['PushNotify']) and $_POST['Tyovuoroot']['PushNotify'] == 'on')
 			  {
+			   $t = Tyontekijat::model()->findbypk($model->tid);
 			   $k = Kohteet::model()->findbypk($model->kohde);
-			   if(isset($k->osoite) and !empty($k->osoite))
+			   if(isset($k->osoite) and !empty($k->osoite) and isset($t->id))
 			   {
 				$pushviesti = "Työvuorossa on muutokset\n
 					".$model->pvm."
 					".$model->alku."-".$model->loppu." ".$k->osoite."
 					".$model->tietoja;
 
-				Domainit::PushNotify($t->id,"Hei ".$t->tekijan_nimi,$pushviesti);
+				Domainit::PushNotify($t->id,"Hei ".$t->tekijan_nimi,$pushviesti, 'beep');
 			   }
 			  }
 

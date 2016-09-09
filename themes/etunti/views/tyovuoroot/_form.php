@@ -259,6 +259,7 @@ if(!empty($t->gcm_reg_id)) :
     <br>
 		<?php echo Yii::t('main','Ilmoita työntekijää viestillä'); ?> 
 			<input type="checkbox" name="Tyovuoroot[PushNotify]" class="sw" id="Tyovuoroot_PushNotify">
+
     </div>
 <?php endif; ?>
   </div>
@@ -285,6 +286,7 @@ if(!empty($t->gcm_reg_id)) :
     $toistuvaID =  '<span id="toistuvaID"></span>';
   }
 ?>
+<hr>
 <div class="row">
  <div class="col-sm-12">
 
@@ -294,8 +296,11 @@ if(!empty($t->gcm_reg_id)) :
 
 	<div class="<?php echo $classCol; ?>" id="collapseExample">
 	<br>
-	<b><?php echo Yii::t('main','Suorita'); ?></b>
+	<p>
+	<b><?php echo Yii::t('main','Muokkaa toistuvaa työvuoroa. Jos valintaa ei ole tehtynä, muokataan vain kyseisen päivän työvuoroa.'); ?></b> <br> 
 	<input type="checkbox" class="sw" name="ToistuvatTyovuorot[toistuva_aktiivinen]" id="toistuva_aktiivinen">
+	</p>
+	<br>
 
 <div class="row">
   <div class="col-sm-4">
@@ -585,7 +590,7 @@ $('.mult').multiselect({
 		  type:'POST',
 		  success:function(data){
 			thisDataReturn = JSON.parse(data);
-			//console.log(thisDataReturn);
+			console.log(thisDataReturn);
 			laatikonPaivays(thisDataReturn);
 
 	   	},
@@ -809,7 +814,7 @@ function laatikonPaivays(thisDataReturn){
 
   $('#alku').blur(function(){
 	var alku = $("#alku").val().split(':');
-	if(!alku[1])
+	if(!alku[1] & $("#alku").val() !== '')
 	{
 		var h = $("#alku").val() ^ 0 ;
 		var m = 0 ^ 0 ;
