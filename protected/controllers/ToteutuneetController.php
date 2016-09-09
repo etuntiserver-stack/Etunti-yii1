@@ -461,7 +461,7 @@ class ToteutuneetController extends Controller
 
        		$criteria = new CDbCriteria();
         	$criteria->select = "
-		TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'))) as l_tunnit,aloitan,loppui
+		TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'))) as l_tunnit,aloitan,loppui,id
 		";
 
         	$criteria->condition = "  
@@ -477,8 +477,8 @@ class ToteutuneetController extends Controller
 		foreach($lu as $l)
 		{
 
-		  $l->loppui = date("d.m.Y H:i",strtotime($l->loppui));
-		  $l->aloitan = date("d.m.Y H:i",strtotime($l->aloitan));
+		    $l->loppui = date("d.m.Y H:i",strtotime($l->loppui));
+		    $l->aloitan = date("d.m.Y H:i",strtotime($l->aloitan));
 
 		    $l->l_tunnit = (strtotime($l->loppui)-strtotime($l->aloitan));
 		    $al = explode(" ",$l->aloitan);
@@ -489,6 +489,7 @@ class ToteutuneetController extends Controller
 		    $total += $mobile[0]->yo($al,$lop);
 		    elseif($tila == 'su' and date('N', strtotime($al[0])) == 7)
 		    $total += $l->l_tunnit;
+
 		}
 		/* ////////////////////////// */
 
