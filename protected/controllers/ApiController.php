@@ -915,7 +915,7 @@ public function actionImei($dom)
 	    	$criteria->order = " 
 			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i') DESC, id DESC ";
 	    	$criteria->condition = " 
-			tid = '".$ttekija->id."' 
+			tid = '".$ttekija->id."' AND loppui=''
 	    	";
 
            	//$mobCheck = Mob::model()->find(" tid = '".$ttekija->id."' order by id DESC ");
@@ -926,6 +926,10 @@ public function actionImei($dom)
 
 		  if(isset($mobCheck->id))
 		  {
+
+		    if($mobCheck->status == 1 and $mobCheck->loppui == '')
+		      $mobCheck->status = 1;
+
 		    if($mobCheck->status == 2 and $mobCheck->loppui == '')
 		      $mobCheck->status = 2.1;
 
