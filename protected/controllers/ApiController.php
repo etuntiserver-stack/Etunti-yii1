@@ -950,7 +950,7 @@ public function actionImei($dom)
 			exit;
 
 		  } else {
-                     //$this->_sendResponse(200, "3//mull//null//null//".$get_osoite."//".$ttekija->tekijan_nimi."//".$kohdenID."//".$tag);
+                     $this->_sendResponse(200, "3//mull//null//null//".$get_osoite."//".$ttekija->tekijan_nimi."//".$kohdenID."//".$tag);
 		  }
 
 
