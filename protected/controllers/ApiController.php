@@ -873,6 +873,7 @@ public function actionImei($dom)
 		   $json_url = 'http://maps.googleapis.com/maps/api/geocode/json?latlng='.$gps.'&language=fi&sensor=true';
 		   	if($json = file_get_contents($json_url))
 		   	{
+
 			  $obj = json_decode($json);
 			  if(isset($obj->results[0]))
 			  {
@@ -912,10 +913,11 @@ public function actionImei($dom)
 
 	    	$criteria = new CDbCriteria();
 	    	$criteria->order = " 
-			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i') DESC, id DESC ";
+			id DESC ";
 	    	$criteria->condition = " 
-			tid = '".$ttekija->id."' 
+			tid = '".$ttekija->id."' AND loppui=''
 	    	";
+	//			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i') DESC, id DESC ";
 
            	//$mobCheck = Mob::model()->find(" tid = '".$ttekija->id."' order by id DESC ");
            	$mobCheck = Mob::model()->find($criteria);
@@ -925,10 +927,10 @@ public function actionImei($dom)
 
 		  if(isset($mobCheck->id))
 		  {
-		    if($mobCheck->status == 2 and $mobCheck->loppui == '')
+		    if($mobCheck->status == 2)
 		      $mobCheck->status = 2.1;
 
-		    if($mobCheck->status == 10 and $mobCheck->loppui == '')
+		    if($mobCheck->status == 10)
 		       $mobCheck->status = 10.1;
 
 		    $nykyinenKesto = 0;
@@ -1077,31 +1079,40 @@ public function actionImei($dom)
                 $mobinsert->tekijan_nimi = $ttekija->tekijan_nimi;
                 $mobinsert->tietoja = $_POST['tietoja'];
                 $mobinsert->aloitan = date("d.m.Y H:i:s");
-                $mobinsert->save();
 
-		// <-- Timer
-		if(isset($mobinsert->kohdenID))
+                if($mobinsert->save())
 		{
-		    $criteria = new CDbCriteria();
-		    $criteria->order = "alku DESC"; 
-		    $criteria->condition = " 
-				tid = '".$ttekija->id."' and kohde = '".$mobinsert->kohdenID."'
-				and DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE()
-		    ";
-		    $loppu = '';
-		    $sekForSignal = '';
-	            $tvuoro = Tyovuoroot::model()->find($criteria);
-		    if(isset($tvuoro->id))
-		    {
-			$loppu = date("d.m.Y H:i",strtotime($tvuoro->pvm." ".$tvuoro->loppu));
-			$sekForSignal = strtotime($tvuoro->pvm." ".$tvuoro->loppu)-time();
-		    }
 
+
+			$loppu = '';
+			$sekForSignal = '';
+			// <-- Timer
+			if(isset($mobinsert->kohdenID))
+			{
+			    $criteria = new CDbCriteria();
+			    $criteria->order = "alku DESC"; 
+			    $criteria->condition = " 
+					tid = '".$ttekija->id."' and kohde = '".$mobinsert->kohdenID."'
+					and DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE()
+			    ";
+		            $tvuoro = Tyovuoroot::model()->find($criteria);
+			    if(isset($tvuoro->id))
+			    {
+				$loppu = date("d.m.Y H:i",strtotime($tvuoro->pvm." ".$tvuoro->loppu));
+				$sekForSignal = strtotime($tvuoro->pvm." ".$tvuoro->loppu)-time();
+			    }
+	
+			}
+			// Timer -->
+
+
+	                $this->_sendResponse(200, $mobinsert->id."//".$mobinsert->kohde_kannasta."//new//".$mobinsert->kohdenID."//".$loppu."//".$sekForSignal);
+
+		} else {
+	                $this->_sendResponse(200, "mobinsert Error!");
 		}
-		// Timer -->
 
 
-                $this->_sendResponse(200, $mobinsert->id."//".$mobinsert->kohde_kannasta."//new//".$mobinsert->kohdenID."//".$loppu."//".$sekForSignal);
 
 	    } else {
                 $this->_sendResponse(200, "Kaikki on suljettu, ei ole mitään avoina");
