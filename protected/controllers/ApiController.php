@@ -913,7 +913,7 @@ public function actionImei($dom)
 
 	    	$criteria = new CDbCriteria();
 	    	$criteria->order = " 
-			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i') DESC, id DESC ";
+			id DESC "; // DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i') DESC, 
 	    	$criteria->condition = " 
 			tid = '".$ttekija->id."'
 	    	";
