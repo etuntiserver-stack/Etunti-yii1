@@ -915,7 +915,7 @@ public function actionImei($dom)
 	    	$criteria->order = " 
 			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i') DESC, id DESC ";
 	    	$criteria->condition = " 
-			tid = '".$ttekija->id."' AND loppui=''
+			tid = '".$ttekija->id."'
 	    	";
 
            	//$mobCheck = Mob::model()->find(" tid = '".$ttekija->id."' order by id DESC ");
@@ -926,10 +926,6 @@ public function actionImei($dom)
 
 		  if(isset($mobCheck->id))
 		  {
-
-		    if($mobCheck->status == 1 and $mobCheck->loppui == '')
-		      $mobCheck->status = 1;
-
 		    if($mobCheck->status == 2 and $mobCheck->loppui == '')
 		      $mobCheck->status = 2.1;
 
@@ -946,15 +942,12 @@ public function actionImei($dom)
 
 
                        $this->_sendResponse(200, $mobCheck->status."//".$mobCheck->kohde_kannasta."<br>".$nykyinenKesto."//".$mobCheck->aloitan."//".$mobCheck->loppui."//".$get_osoite."//".$ttekija->tekijan_nimi."//".$kohdenID."//".$tag);
-
-			exit;
-
 		  } else {
                      $this->_sendResponse(200, "3//mull//null//null//".$get_osoite."//".$ttekija->tekijan_nimi."//".$kohdenID."//".$tag);
 		  }
 
 
-	     		exit;
+	     	exit;
 	    }
 
 
