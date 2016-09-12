@@ -234,7 +234,7 @@ $(document).delegate(".cal","click",function(){
 	data:{ "pvm" : pvm },
 	type:'POST',
 	success:function(data){
-
+		//console.log(JSON.parse(data));
 		$('#aikoja').html(JSON.parse(data));
 		return false;
    	},
