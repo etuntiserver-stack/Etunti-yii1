@@ -524,6 +524,18 @@ function num($val){
 		if(isset($_POST['tekijaPaaSivulla']) and !empty($_POST['tekijaPaaSivulla']))
 	        $criteria->addCondition (" tid = '".$_POST['tekijaPaaSivulla']."' ");
 
+		if(isset($_POST['asiakas']) and !empty($_POST['asiakas']))
+		{
+	        $criteria->addCondition ("  
+			kohdenID IN ( 
+			SELECT id FROM sivex_kohdet WHERE asiakas_id IN 
+				( SELECT id FROM asiakkaat 
+					WHERE yrityksen_nimi LIKE '%".$_POST['asiakas']."%' OR yhteyshenkilo LIKE '%".$_POST['asiakas']."%'
+				)
+			)
+		");
+		}
+
 		if(isset($_POST['etsi_kohteet']) and !empty($_POST['etsi_kohteet']))
 	        $criteria->addCondition (" kohde_kannasta LIKE '%".$_POST['etsi_kohteet']."%' ");
 

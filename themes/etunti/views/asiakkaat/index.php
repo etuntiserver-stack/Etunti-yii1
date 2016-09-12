@@ -65,19 +65,36 @@
                       <div class="col-md-2">
                         <div class="section">
                           <label class="field select">
-
-
 			   <select class="gui-input" name="aktiivinen" id="aktiivinen">
        				<option value="1"><?php echo Yii::t('main', 'Aktiiviset'); ?></option>
        				<option value="0"><?php echo Yii::t('main', 'Passiviset'); ?></option>
        				<option value="kaikki"><?php echo Yii::t('main', 'Kaikki'); ?></option>
 			   </select>
-
-
                             <i class="arrow double"></i>
                             </label>
                           </label>
                         </div>
+
+		      <?php if(isset($_POST['ryhma'])) echo '<input type="hidden" id="ryhma" value="'.$_POST['ryhma'].'">'; ?>
+                        <div class="section">
+                          <label class="field select">
+			<?php
+					$list = array();
+			      		$l = Valikkoot::model()->findAll(" select_type='asiakas_ryhma' ",array('order' => "select_type"));
+					foreach($l as $v)
+					$list[$v->id] = $v->value;
+			
+					if(count($list) > 0)
+					{
+			        	echo CHtml::dropDownList('ryhma', 'ryhma', $list,
+					array('empty'=>'Valitse ryhmä','class'=>'form-control form-group', 'id'=>'ryhmaSelect'));
+					}
+			?>
+                            <i class="arrow double"></i>
+                            </label>
+                          </label>
+                        </div>
+
                       </div>
 
                       <div class="col-md-2">
@@ -226,7 +243,22 @@
 	</div>';
       ?>
   </th>
+  <th><?php echo Yii::t('main', 'Ryhmä').'
 
+	<div classs="row">
+	 <div class="form-inline">
+
+	  <div class="form-group">
+		'.CHtml::link('<i class="fa fa-arrow-down"></i>','index?sort=ryhma&s=asc').'
+
+
+		'.CHtml::link('<i class="fa fa-arrow-up"></i>','index?sort=ryhma&s=desc').'
+
+	  </div>
+	 </div>
+	</div>';
+      ?>
+  </th>
 
 
   <th><?php echo Yii::t('main', 'Tyyppi'); ?></th>
@@ -274,6 +306,11 @@ $(document).ready(function(){
  $("#aktiivinen").val($("#akt").val());
  else
  $("#aktiivinen").val(1);
+
+ if($("#ryhma").val())
+ $("#ryhmaSelect").val($("#ryhma").val());
+ else
+ $("#ryhmaSelect").val(1);
 
 
  $(".haemob").click(function(){

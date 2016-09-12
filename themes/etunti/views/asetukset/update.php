@@ -60,10 +60,10 @@ exit;
         <!-- begin: .tray-center -->
         <div class="tray-center">
 
-	   <h2 class="myBgColors p10"> <i class="fa fa-gear"></i> <?php echo Yii::t('main', 'ASETUKSET'); ?> </h2>
+	   <h2 class="myBgColors p20"> <i class="fa fa-gear"></i> <?php echo Yii::t('main', 'ASETUKSET'); ?> </h2>
 
 
-	   <p><span class="btn btn-primary btn-block myBgColors" data-toggle="collapse" data-target="#yrityksentiedot"><?php echo Yii::t('main','Yrityksen tiedot'); ?> <i class="fa fa-caret-square-o-down" aria-hidden="true"></i></span></p>
+	   <p><div class="btn btn-primary btn-block myBgColors" data-toggle="collapse" data-target="#yrityksentiedot"><h3><?php echo Yii::t('main','Yrityksen tiedot'); ?> &nbsp; <i class="fa fa-caret-square-o-down" aria-hidden="true"></i> </h3></div></p>
 
             <div class="admin-form collapse" id="yrityksentiedot">
               <div class="panel heading-border">
@@ -90,7 +90,7 @@ exit;
             </div>
 
 
-	   <p><span class="btn btn-primary btn-block myBgColors" data-toggle="collapse" data-target="#kayttajienoikeus"><?php echo Yii::t('main','Käyttäjien oikeudet'); ?> <i class="fa fa-caret-square-o-down" aria-hidden="true"></i></span></p>
+	   <p><div class="btn btn-primary btn-block myBgColors" data-toggle="collapse" data-target="#kayttajienoikeus"><h3><?php echo Yii::t('main','Käyttäjien oikeudet'); ?>&nbsp; <i class="fa fa-caret-square-o-down" aria-hidden="true"></i></h3></div></p>
 
             <div class="admin-form collapse" id="kayttajienoikeus">
               <div class="panel heading-border">
@@ -107,7 +107,7 @@ exit;
               </div>
             </div>
 
-	   <p><span class="btn btn-primary btn-block myBgColors" data-toggle="collapse" data-target="#kehitys"><?php echo Yii::t('main','Käyttäjien oikeudet'); ?> <i class="fa fa-caret-square-o-down" aria-hidden="true"></i></span></p>
+	   <p><div class="btn btn-primary btn-block myBgColors" data-toggle="collapse" data-target="#kehitys"><h3><?php echo Yii::t('main','Käyttäjien oikeudet'); ?>&nbsp; <i class="fa fa-caret-square-o-down" aria-hidden="true"></i></h3></div></p>
 
             <div class="admin-form collapse" id="kehitys">
               <div class="panel heading-border">
@@ -127,7 +127,7 @@ exit;
 
 
 
-	   <p><span class="btn btn-primary btn-block myBgColors" data-toggle="collapse" data-target="#dumpit"><?php echo Yii::t('main','Varmuskopio dumpit'); ?> <i class="fa fa-caret-square-o-down" aria-hidden="true"></i></span></p>
+	   <p><div class="btn btn-primary btn-block myBgColors" data-toggle="collapse" data-target="#dumpit"><h3><?php echo Yii::t('main','Varmuskopio dumpit'); ?>&nbsp; <i class="fa fa-caret-square-o-down" aria-hidden="true"></i></h3></div></p>
 
             <div class="admin-form collapse" id="dumpit">
               <div class="panel heading-border">

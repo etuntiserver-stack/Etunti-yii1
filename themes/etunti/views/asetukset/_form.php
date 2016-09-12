@@ -25,7 +25,7 @@
 		<?php echo $form->hiddenField($model,'id'); ?>
 		<?php echo $form->error($model,'id'); ?>
 
-<span class="btn btn-primary btn-block myBgColors" data-toggle="collapse" data-target="#jarjestAsetukset"><?php echo Yii::t('main','Järjestelmän asetukset'); ?> <i class="fa fa-caret-square-o-down" aria-hidden="true"></i></span>
+<div class="btn btn-primary btn-block myBgColors" data-toggle="collapse" data-target="#jarjestAsetukset"><h3><?php echo Yii::t('main','Järjestelmän asetukset'); ?> &nbsp;<i class="fa fa-caret-square-o-down" aria-hidden="true"></i></h3></div>
 
 <div class="row form collapse" id="jarjestAsetukset">
   <div class="col-sm-4">
@@ -130,9 +130,9 @@
 
 
 <?php if(in_array('3',$tas)) : ?>
-<hr>
+<br>
 
-<span class="btn btn-primary btn-block myBgColors" data-toggle="collapse" data-target="#laskutuksenAsetukset"><?php echo Yii::t('main','Laskutuksen asetukset'); ?> <i class="fa fa-caret-square-o-down" aria-hidden="true"></i></span>
+<div class="btn btn-primary btn-block myBgColors" data-toggle="collapse" data-target="#laskutuksenAsetukset"><h3><?php echo Yii::t('main','Laskutuksen asetukset'); ?>&nbsp; <i class="fa fa-caret-square-o-down" aria-hidden="true"></i></h3></div>
 
   <div class="row form collapse" id="laskutuksenAsetukset">
     <div class="col-sm-4">
@@ -248,8 +248,8 @@
 
 
 <?php if(in_array('4',$tas)) : ?>
-<hr>
-<span class="btn btn-primary btn-block myBgColors" data-toggle="collapse" data-target="#onlinevarauksenAsetukset"><?php echo Yii::t('main','Onlinevaraus'); ?> <i class="fa fa-caret-square-o-down" aria-hidden="true"></i></span>
+<br>
+<div class="btn btn-primary btn-block myBgColors" data-toggle="collapse" data-target="#onlinevarauksenAsetukset"><h3><?php echo Yii::t('main','Onlinevaraus'); ?>&nbsp; <i class="fa fa-caret-square-o-down" aria-hidden="true"></i><h3></div>
 
   <div class="row form collapse" id="onlinevarauksenAsetukset">
     <div class="col-sm-4">
@@ -374,8 +374,8 @@
   </div>
 <?php endif; ?>
 
-<hr>
-<span class="btn btn-primary btn-block myBgColors" data-toggle="collapse" data-target="#sovellusAsetukset"><?php echo Yii::t('main','Sovelluksen asetukset'); ?> <i class="fa fa-caret-square-o-down" aria-hidden="true"></i></span>
+<br>
+<div class="btn btn-primary btn-block myBgColors" data-toggle="collapse" data-target="#sovellusAsetukset"><h3><?php echo Yii::t('main','Sovelluksen asetukset'); ?>&nbsp; <i class="fa fa-caret-square-o-down" aria-hidden="true"></i></h3></div>
 
   <div class="row form collapse" id="sovellusAsetukset">
    <div class="col-sm-4">
@@ -410,8 +410,8 @@
   </div>
 
 
-<hr>
-<span class="btn btn-primary btn-block myBgColors" data-toggle="collapse" data-target="#netvisorAsetukset"><?php echo Yii::t('main','Netvisor asetukset'); ?> <i class="fa fa-caret-square-o-down" aria-hidden="true"></i></span>
+<br>
+<div class="btn btn-primary btn-block myBgColors" data-toggle="collapse" data-target="#netvisorAsetukset"><h3><?php echo Yii::t('main','Netvisor asetukset'); ?>&nbsp; <i class="fa fa-caret-square-o-down" aria-hidden="true"></i></h3></div>
 
   <div class="row form collapse" id="netvisorAsetukset">
    <div class="col-sm-4">
@@ -471,8 +471,8 @@
 
 
 <?php if(in_array('5',$tas)) : ?>
-<hr>
-<span class="btn btn-primary btn-block myBgColors" data-toggle="collapse" data-target="#vinkkiAsetukset"><?php echo Yii::t('main','Vinkki asetukset'); ?> <i class="fa fa-caret-square-o-down" aria-hidden="true"></i></span>
+<br>
+<div class="btn btn-primary btn-block myBgColors" data-toggle="collapse" data-target="#vinkkiAsetukset"><h3><?php echo Yii::t('main','Vinkki asetukset'); ?>&nbsp; <i class="fa fa-caret-square-o-down" aria-hidden="true"></i></h3></div>
 
   <div class="row form collapse" id="vinkkiAsetukset">
    <div class="col-sm-4">

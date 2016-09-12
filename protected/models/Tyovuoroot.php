@@ -90,7 +90,7 @@ public $count;
 			'id' => Yii::t('main', 'ID'),
 			'tid' => Yii::t('main', 'Työntekijä'),
 			'tekijan_nimi' => Yii::t('main', 'Työntekijä'),
-			'toimenpiteet' => Yii::t('main', 'Ohje'),
+			'ohje' => Yii::t('main', 'Ohjeteksti kohdetiedoista'),
 			'osoite' => Yii::t('main', 'Katuosoite'),
 			'time' => Yii::t('main', 'Time'),
 			'kohde' => Yii::t('main', 'Kohde'),

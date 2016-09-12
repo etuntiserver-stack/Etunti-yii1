@@ -26,6 +26,9 @@
 		<?php echo $data->sahkoposti; ?>
 	</td>
 	<td>
+		<?php echo $this->ryhmaMuutos($data->ryhma); ?>
+	</td>
+	<td>
 		<?php echo $data->tyyppi; ?>
 	</td>
 
