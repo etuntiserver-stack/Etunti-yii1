@@ -1011,7 +1011,7 @@ public function actionImei($dom)
 		{
 			$save = 'ok';
 		} else {
-			$save = 'error';
+			$save = json_encode(var_dump($mobupdate->getErrors()));
 		}
 
 		$kesto = sprint(strtotime($mobupdate->loppui)-strtotime($mobupdate->aloitan));
