@@ -67,7 +67,8 @@ public $domain;
 			array('my_location', 'length', 'max'=>1000),
 			array('osoite', 'length', 'max'=>255),
 			array('aloitan, loppui, etaisyys', 'length', 'max'=>20),
-			array('viesti, tietoja', 'length', 'max'=>250),
+			array('viesti', 'length', 'max'=>250),
+			array('tietoja', 'length', 'max'=>10000),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('id, asiakas_num, time, requests, puh_numero, imei, bluetooth_name, sim_serial_number, subscriber_id, my_location, osoite, kohde_kannasta, kohdenID, aloitan, loppui, viesti, tekijan_nimi, tid, etaisyys, status, tietoja, admin, hyvaksytty, tekijan_nimi, domain', 'safe', 'on'=>'search'),
