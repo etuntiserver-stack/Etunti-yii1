@@ -874,6 +874,7 @@ public function actionImei($dom)
 		   	if($json = file_get_contents($json_url))
 		   	{
 
+
 			  $obj = json_decode($json);
 			  if(isset($obj->results[0]))
 			  {
@@ -913,7 +914,7 @@ public function actionImei($dom)
 
 	    	$criteria = new CDbCriteria();
 	    	$criteria->order = " 
-			id DESC "; // DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i') DESC, 
+			loppui='' DESC, id DESC "; // DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i') DESC, 
 	    	$criteria->condition = " 
 			tid = '".$ttekija->id."'
 	    	";
@@ -940,8 +941,8 @@ public function actionImei($dom)
 		    }
 
 
-
                        $this->_sendResponse(200, $mobCheck->status."//".$mobCheck->kohde_kannasta."<br>".$nykyinenKesto."//".$mobCheck->aloitan."//".$mobCheck->loppui."//".$get_osoite."//".$ttekija->tekijan_nimi."//".$kohdenID."//".$tag);
+
 		  } else {
                      $this->_sendResponse(200, "3//mull//null//null//".$get_osoite."//".$ttekija->tekijan_nimi."//".$kohdenID."//".$tag);
 		  }
