@@ -875,6 +875,7 @@ public function actionImei($dom)
 		   	{
 
 
+
 			  $obj = json_decode($json);
 			  if(isset($obj->results[0]))
 			  {
@@ -953,10 +954,14 @@ public function actionImei($dom)
 
 
 	    $criteria = new CDbCriteria();
+/*
 	    $criteria->order = " 
 		DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i') 
 		AND status IN (1,2,10)
 		AND loppui='' DESC, id DESC ";
+*/
+	    $criteria->order = " 
+		loppui='' DESC, id DESC ";
 	    $criteria->condition = " 
 		tid = '".$ttekija->id."' 
 		and loppui='' 
