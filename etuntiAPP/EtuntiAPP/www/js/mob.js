@@ -296,7 +296,7 @@ function row(tilanne,st){
 	   type:'POST',
  	   data: postData,
            success: function(data){
-        	//console.log(data);
+        	console.log(data);
 
 		var sp = data.split("//");
 		 if((sp[4] == 'tagnumerror') & (sp[6] == 'update'))

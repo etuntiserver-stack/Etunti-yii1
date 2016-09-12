@@ -876,6 +876,7 @@ public function actionImei($dom)
 
 
 
+
 			  $obj = json_decode($json);
 			  if(isset($obj->results[0]))
 			  {
@@ -1005,11 +1006,17 @@ public function actionImei($dom)
                 $mobupdate->viesti = $vanhaViesti.$_POST['viesti'];
 
                 $mobupdate->my_location = $mobupdate->my_location."**".$_POST['my_location'];
-                $mobupdate->save();
+		$save = '';
+		if($mobupdate->save())
+		{
+			$save = 'ok';
+		} else {
+			$save = json_encode($model->getErrors());
+		}
 
 		$kesto = sprint(strtotime($mobupdate->loppui)-strtotime($mobupdate->aloitan));
 
-                $this->_sendResponse(200, $ms."//".$mobupdate->id."//".$mobupdate->status."//".$mob->kohde_kannasta."//null//".$kesto."//update");
+                $this->_sendResponse(200, $ms."//".$mobupdate->id."//".$mobupdate->status."//".$mob->kohde_kannasta."//null//".$kesto."//update//".$save);
 
 	     } elseif($mob->status == 2 and $_POST['status'] == 2)
 	     {
