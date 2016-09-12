@@ -768,6 +768,7 @@ $months=array(
 
 		$tv = Tyovuoroot::model()->findAll($criteria);
 		$i = 0;
+		$allTyontekijat = array();
 		foreach($tv as $t)
 		{
 		$i++;
@@ -808,16 +809,38 @@ $months=array(
 
 				//$tekija[] = array($t->tid, $date, date("H:i",$edellinenLoppu[$t->tid]), $t->loppu); // for test
 			}
+			// Reika vuoron välillä -->
+
+
 
 			$edellinenAlku = array();
 			$edellinenLoppu = array();
 			$edellinenAlku[$t->tid] = strtotime($t->alku);
 			$edellinenLoppu[$t->tid] = strtotime($t->loppu);
-			// Reika vuoron välillä -->
-
+			$allTyontekijat[$t->tid] = strtotime($t->loppu);
 
 		}
 		// Reika vuoron välillä -->
+
+
+		// <-- Ihan viimeinen vuoro tietynä päivänä
+		$countStop = strtotime($asetukset->onlinevaraus_loppu.":00");
+		foreach($allTyontekijat as $k=>$t)
+		{
+				$alku = '';
+				$loppu = '';
+				$alku = $t+3600;
+				$loppu = $alku+$sumTuntiSec;
+
+				if($loppu < $countStop)
+				{
+		   			$on = 'vapaa';
+					$tekija = $this->loopForAjaat($k, date("H:i",$alku), date("H:i",$loppu), $date, $sumTuntiMin, $countStop, $tekija);
+				}
+				//$tekija[] = array($k, $date, date("H:i",$t), $t); // for test
+		}
+		// Ihan viimeinen vuoro tietynä päivänä -->
+
 
 
 		ksort($tekija);
@@ -831,7 +854,6 @@ $months=array(
 
 		   for ($i = 1; $i <= 24; $i++) 
 		   {
-
 		   	$int = 0;
 		   	if(!isset($sta[$tid]) and !isset($sto[$tid]))
 		   	{
@@ -840,6 +862,7 @@ $months=array(
 				$sta[$tid] = $start;
 				$sto[$tid] = $stop;
 		   	}
+
 
 			$tekija[strtotime($sta[$tid]).$tid] = array($tid, $date, $sta[$tid], $sto[$tid]);
 
