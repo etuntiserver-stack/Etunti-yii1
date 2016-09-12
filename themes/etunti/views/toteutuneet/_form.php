@@ -28,7 +28,7 @@ $forPVM = date('d.m.Y',strtotime($s->aloitan));
 			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 				<span aria-hidden="true">&times;</span>
 			</button>
-		<h2 class="modal-title"><?php echo Yii::t('main', 'Toteuman muutos').' ID:'.$s->id; ?></h2>
+		<h2 class="modal-title"><?php echo Yii::t('main', 'Toteuman muutos'); ?></h2>
 	
 		</div>
 		<div class="modal-body">

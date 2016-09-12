@@ -666,7 +666,7 @@ Etunti
 
 <p><img src="https://etunti.fi/assets_classic/img/logo.png"></p>
 ',
-
+	'laskutettuAllaOlevaIlmoitus'=>'Vihreät reunukset kertovat, että tietoja ei voida enää muokata, koska niitä on jo muokattu tuntien hyväksynnässä.',
 
 	);
 

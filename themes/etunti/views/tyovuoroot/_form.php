@@ -58,6 +58,7 @@ echo '<input type="hidden" id="alkuperainenDID" value="'.date("Ymd", strtotime($
 	<?php echo $form->hiddenField($model,'tid'); ?>
 	<?php echo $form->hiddenField($model,'ruokatauko'); ?>
 	<?php echo $form->hiddenField($model,'alku_r'); ?>
+	<?php echo $form->hiddenField($model,'pituus'); ?>
 	<?php echo $form->hiddenField($model,'kesto'); ?>
 	<?php echo $form->hiddenField($model,'osoiteOnline'); ?>
 	<?php echo $form->hiddenField($model,'time'); ?>
@@ -80,7 +81,7 @@ echo '<input type="hidden" id="alkuperainenDID" value="'.date("Ymd", strtotime($
   </div>
   <div class="col-sm-3">
 		<?php echo $form->labelEx($model,'pituus'); ?>
-		<input type="text" name="Tyovuoroot[pituus]" id="pituus" class="form-control timeVuorot" value="<?php echo $model->pituus; ?>">
+		<div id="tvPituus"><?php echo $model->pituus; ?></div>
   </div>
 </div>
 
@@ -216,7 +217,9 @@ echo '<input type="hidden" id="alkuperainenDID" value="'.date("Ymd", strtotime($
   </div>
   <div class="col-sm-6">
 		<?php echo $form->labelEx($model,'ohje'); ?>
-		<textarea class="form-control ohje" rows="4"><?php echo $ohje; ?></textarea>
+		<div style="height:100px; overflow: scroll; overflow-x:hidden;">
+		<div class="ohje"><?php echo $ohje; ?></div>
+		</div>
   </div>
 </div>
 
@@ -560,6 +563,7 @@ $('.mult').multiselect({
 	   	},
 		error:function(data){
 		console.log(data);
+
 	    	}
 	  });
   	  }
@@ -793,6 +797,8 @@ function laatikonPaivays(thisDataReturn){
   }
 
 
+  laskePituus();
+
   function laskePituus(){
 
 	var alku = $("#alku").val().split(':');
@@ -809,7 +815,7 @@ function laatikonPaivays(thisDataReturn){
 	var h = sec/3600 ^ 0 ;
 	var m = (sec-h*3600)/60 ^ 0 ;
 
-	$("#pituus").val((h<10?"0"+h:h)+":"+(m<10?"0"+m:m));
+	$("#tvPituus").html((h<10?"0"+h:h)+":"+(m<10?"0"+m:m));
   }
 
   $('#alku').blur(function(){
@@ -862,7 +868,7 @@ function laatikonPaivays(thisDataReturn){
 		  success:function(data){
 			//console.log(data);
 			var d = JSON.parse(data).split("//");
-			$('.ohje').text(d[0]);
+			$('.ohje').html(d[0]);
 			$('#Tyovuoroot_tietoja').val(d[1]);
 
 	   	},

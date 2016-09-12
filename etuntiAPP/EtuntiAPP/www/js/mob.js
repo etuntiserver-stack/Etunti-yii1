@@ -607,7 +607,7 @@ function getTyovuorotToday(domain){
 
 	var kloSplit = val.split(" ");
 	if(kloSplit[1])
-	$("#muistaLopetta").html("<br><div class='alert alert-danger'>Muistakaa lopettaa sen <br><h2>klo: " + kloSplit[1] + "</h2></div>");
+	$("#muistaLopetta").html("<br><div class='alert alert-danger'>Muista lopettaa<br><h2>Klo: " + kloSplit[1] + "</h2></div>");
   }
 
  }

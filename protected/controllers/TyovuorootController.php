@@ -277,6 +277,8 @@ class TyovuorootController extends Controller
 
 
 
+
+
 		$mail->setTo($saaja);
 		$mail->setSubject(Yii::t('main', 'TYÖVUOROT'). ' '.$tt->tekijan_nimi);
 		$mail->setBody($message);
@@ -780,17 +782,17 @@ class TyovuorootController extends Controller
 
 		  $ohje = '';
 		if(isset($k[1]))
-		  $ohje .= Yii::t('main', 'Avain on: ')." ".$k[1]."\n";
+		  $ohje .= Yii::t('main', 'Avain on: ')." ".$k[1]."<br>";
 		if(!empty($m->avain))
-		  $ohje .= Yii::t('main', 'Avain: ')." ".$m->avain."\n\n";
+		  $ohje .= Yii::t('main', 'Avain: ')." ".$m->avain."<br>";
 		if(!empty($m->aikataulu))
-		  $ohje .= "\nAikataulu: ".$m->aikataulu;
+		  $ohje .= "<br>Aikataulu: ".$m->aikataulu;
 		if(!empty($m->toimenpiteet))
-		  $ohje .= "\nToimenpiteet: ".$m->toimenpiteet;
+		  $ohje .= "<br>Toimenpiteet: ".$m->toimenpiteet;
 		if(!empty($m->tietoja))
-		  $ohje .= "\nTietoja: ".$m->tietoja;
+		  $ohje .= "<br>Tietoja: ".$m->tietoja;
 		if(!empty($m->muut))
-		  $ohje .= "\nMuut: ".$m->muut;
+		  $ohje .= "<br>Muut: ".$m->muut;
 		echo json_encode($ohje."//".$m->tietoja);
 	}
 
@@ -1168,7 +1170,7 @@ class TyovuorootController extends Controller
 			   $k = Kohteet::model()->findbypk($model->kohde);
 			   if(isset($k->osoite) and !empty($k->osoite) and isset($t->id))
 			   {
-				$pushviesti = "Työvuorossa on muutokset\n
+				$pushviesti = "Työvuorosi on muuttunut. Alta löydät uudet tiedot:\n
 					".$model->pvm."
 					".$model->alku."-".$model->loppu." ".$k->osoite."
 					".$model->tietoja;
@@ -1243,6 +1245,7 @@ class TyovuorootController extends Controller
 			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 				<span aria-hidden="true">&times;</span>
 			</button>
+
 		<h2 class="modal-title"><?php echo Yii::t('main', 'Uusi tilaus'); ?></h2>
 	
 		</div>

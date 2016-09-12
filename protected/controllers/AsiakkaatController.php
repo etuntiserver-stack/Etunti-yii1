@@ -612,6 +612,9 @@ $xml = '
 		if(isset($_POST['yhteyshenkilo']) and !empty(trim($_POST['yhteyshenkilo'])))
 	        $criteria->addCondition (" yhteyshenkilo LIKE '%".$_POST['yhteyshenkilo']."%' ");
 
+		if(isset($_POST['ryhma']) and !empty(trim($_POST['ryhma'])))
+	        $criteria->addCondition (" ryhma='".$_POST['ryhma']."' ");
+
 		if(isset($_POST['puhelin']) and !empty(trim($_POST['puhelin'])))
 	        $criteria->addCondition (" puhelin LIKE '%".$_POST['puhelin']."%' ");
 
@@ -1099,6 +1102,17 @@ $xml = '
 
 		$this->redirect(array('index'));
 	}
+
+	protected function ryhmaMuutos($ryhma)
+	{
+		$return = '';
+		$model = Valikkoot::model()->findbypk($ryhma);
+		if(isset($model->id))
+		$return = $model->value;
+
+		return $return;
+	}
+
 
 
 }

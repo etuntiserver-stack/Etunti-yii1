@@ -6,7 +6,7 @@
         <div class="tray-center">
 
 
-              <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-home"></i> <?php echo Yii::t('main', 'Laskutettavat kohteet'); ?> 
+              <h2 class="myBgColors p20"> <i class="glyphicon glyphicon-home"></i> <?php echo Yii::t('main', 'Laskutettavat kohteet'); ?> 
 	      </h2>
 
 
@@ -55,7 +55,20 @@
                             </label>
                           </label>
                         </div>
+
+                        <div class="section">
+                          <label class="field prepend-icon">
+
+   			    <input type="text" class="gui-input" name="asiakas" value="<?php if(isset($_POST['asiakas'])) echo $_POST['asiakas']; ?>" placeholder="<?php echo Yii::t('main', 'Asiakas'); ?>">
+
+                            <label for="firstname" class="field-icon">
+                              <i class="fa fa-user"></i>
+                            </label>
+                          </label>
+                        </div>
+
                       </div>
+
                       <div class="col-md-2">
                         <div class="section">
                           <label class="field prepend-icon">
@@ -116,8 +129,8 @@
 		      </div>
 
                     </div>
-
-		Vihreät laatikkot ei voidaan muokata, koska "Tunnin hyväksyntä" sivulla oli tehtty muutokset.
+		    <div class="alert alert-success"><?php echo Yii::t('main', 'laskutettuAllaOlevaIlmoitus'); ?></div>
+		
 
                 </div>
               </div>
