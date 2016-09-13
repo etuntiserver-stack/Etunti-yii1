@@ -910,19 +910,61 @@ public function actionImei($dom)
 
 
 
-	 	 $tag = '';
-		 if(isset($_POST['tag']))
-	 	 $tag = $_POST['tag'];
+	
+		if(isset($_POST['tag'])) $tag = $_POST['tag']; else $tag = '';
 
 
+		if(isset($_POST['avoinID'])) $avoinID = $_POST['avoinID']; else $avoinID = '';
+		if(isset($_POST['appVersio'])) $appVersio = $_POST['appVersio']; else $appVersio = '';	
+		// <-- Jos versio yli 0.0.57
+		$explVersio = array();
+		$explVersio = explode(".", $appVersio);
+		if( isset($explVersio[2]) and (int)$explVersio[2] >= 57)
+		{
+
+			if( (int)$avoinID > 0 )
+			{
+	    		$criteria = new CDbCriteria();
+	    		$criteria->condition = " id='".(int)$avoinID."' AND tid = '".$ttekija->id."' ";
+	           	$mobCheck = Mob::model()->find($criteria);
+			}
+
+		 	if(isset($mobCheck->id))
+		  	{
+
+		    		if($mobCheck->loppui == '') $tila = 'avoina'; else $tila = 'suljettu';
+
+			    	if($mobCheck->status == 1 and $mobCheck->loppui == '')
+			    		$mobCheck->status = 1;
+			    	if($mobCheck->status == 2 and $mobCheck->loppui == '')
+					$mobCheck->status = 2.1;
+				if($mobCheck->status == 10 and $mobCheck->loppui == '')
+					$mobCheck->status = 10.1;
+
+				$nykyinenKesto = 0;
+				if(strtotime($mobCheck->aloitan) > 0)
+				{
+					$nykyinenKesto = time()-strtotime($mobCheck->aloitan);
+					$nykyinenKesto = sprint($nykyinenKesto);
+				}
+
+				$this->_sendResponse(200, $mobCheck->status."//".$mobCheck->kohde_kannasta."<br>".$nykyinenKesto."//".$mobCheck->aloitan."//".$mobCheck->loppui."//".$get_osoite."//".$ttekija->tekijan_nimi."//".$kohdenID."//".$tag."//".$mobCheck->id."_".$tila."//uusi versio");
+
+			} else {
+                     		$this->_sendResponse(200, "3//mull//null//null//".$get_osoite."//".$ttekija->tekijan_nimi."//".$kohdenID."//".$tag."//uusi versio");
+			}
+
+		exit;
+		}
+		// Jos versio yli 0.0.57 -->
+
+
+
+		// <-- Jos versio vanhempi kun  0.0.57
 	    	$criteria = new CDbCriteria();
-	    	$criteria->order = " 
-			loppui='' DESC, id DESC "; // DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i') DESC, 
-	    	$criteria->condition = " 
-			tid = '".$ttekija->id."'
-	    	";
+	    	$criteria->order = " loppui='' DESC, id DESC ";
+	    	$criteria->condition = " tid = '".$ttekija->id."' "; //AND loppui=''
 
-           	//$mobCheck = Mob::model()->find(" tid = '".$ttekija->id."' order by id DESC ");
            	$mobCheck = Mob::model()->find($criteria);
 		$kohdenID = '';
 		$get_osoite = '';
@@ -930,44 +972,75 @@ public function actionImei($dom)
 
 		  if(isset($mobCheck->id))
 		  {
-		    if($mobCheck->status == 2 and $mobCheck->loppui == '')
-		      $mobCheck->status = 2.1;
 
-		    if($mobCheck->status == 10 and $mobCheck->loppui == '')
-		       $mobCheck->status = 10.1;
+		    	if($mobCheck->loppui == '') $tila = 'avoina'; else $tila = 'suljettu';
 
-		    $nykyinenKesto = 0;
-		    if(strtotime($mobCheck->aloitan) > 0)
-		    {
-		    $nykyinenKesto = time()-strtotime($mobCheck->aloitan);
-		    $nykyinenKesto = sprint($nykyinenKesto);
-		    }
+		    	if($mobCheck->status == 1 and $mobCheck->loppui == '')
+		    		$mobCheck->status = 1;
+		    	if($mobCheck->status == 2 and $mobCheck->loppui == '')
+				$mobCheck->status = 2.1;
+			if($mobCheck->status == 10 and $mobCheck->loppui == '')
+				$mobCheck->status = 10.1;
 
+			$nykyinenKesto = 0;
+			if(strtotime($mobCheck->aloitan) > 0)
+			{
+				$nykyinenKesto = time()-strtotime($mobCheck->aloitan);
+				$nykyinenKesto = sprint($nykyinenKesto);
+			}
 
-                       $this->_sendResponse(200, $mobCheck->status."//".$mobCheck->kohde_kannasta."<br>".$nykyinenKesto."//".$mobCheck->aloitan."//".$mobCheck->loppui."//".$get_osoite."//".$ttekija->tekijan_nimi."//".$kohdenID."//".$tag);
+                       	$this->_sendResponse(200, $mobCheck->status."//".$mobCheck->kohde_kannasta."<br>".$nykyinenKesto."//".$mobCheck->aloitan."//".$mobCheck->loppui."//".$get_osoite."//".$ttekija->tekijan_nimi."//".$kohdenID."//".$tag."//".$mobCheck->id."_".$tila."//vanha versio");
 
 		  } else {
-                     $this->_sendResponse(200, "3//mull//null//null//".$get_osoite."//".$ttekija->tekijan_nimi."//".$kohdenID."//".$tag);
+                     	$this->_sendResponse(200, "3//mull//null//null//".$get_osoite."//".$ttekija->tekijan_nimi."//".$kohdenID."//".$tag."//vanha versio");
 		  }
+		// Jos versio vanhempi kun  0.0.57 -->
+
+
+
 
 
 	     	exit;
-	    }
+	    } // if(isset($_POST['check']))
+	    // Check loppu -->
 
 
+	// <-- Mob finder
+	// <-- Jos versio yli 0.0.57
+	$checkVersio = '';
+	if(isset($_POST['avoinID'])) $avoinID = $_POST['avoinID']; else $avoinID = '';
+	if(isset($_POST['appVersio'])) $appVersio = $_POST['appVersio']; else $appVersio = '';	
+	$explVersio = array();
+	$explVersio = explode(".", $appVersio);
+	if( isset($explVersio[2]) and (int)$explVersio[2] >= 57)
+	{
+		if( (int)$avoinID > 0 )
+		{
+	    		$criteria = new CDbCriteria();
+	    		$criteria->condition = " id='".(int)$avoinID."' AND tid = '".$ttekija->id."' ";
+	           	$mob = Mob::model()->find($criteria);	
+			$checkVersio = (int)$explVersio[2];	
+		}
 
-	    // <-- jos on avoin kohde
-	    $criteria = new CDbCriteria();
-	    $criteria->order = " 
-		DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i') 
-		AND status IN (1,2,10)
-		AND loppui='' DESC, id DESC ";
-	    $criteria->condition = " 
-		tid = '".$ttekija->id."' 
-		and loppui='' 
-		AND status IN (1,2,10)
-	    ";
-            $mob = Mob::model()->find($criteria);
+	} else { // Jos versio yli 0.0.57 -->
+
+	
+	    		// <-- jos on avoin kohde
+			$criteria = new CDbCriteria();
+	    		$criteria->order = " 
+				DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i') 
+				AND status IN (1,2,10)
+				AND loppui='' DESC, id DESC ";
+	    		$criteria->condition = " 
+				tid = '".$ttekija->id."' 
+				and loppui='' 
+				AND status IN (1,2,10)
+	    		";
+            		$mob = Mob::model()->find($criteria);
+			$checkVersio = 'versio vanhempi kun 0.0.57';
+	}
+	// Mob finder -->
+
 
 	    if(isset($mob->id)){
 
@@ -1022,7 +1095,7 @@ public function actionImei($dom)
 		} else {
 			$save = var_dump($mobupdate->getErrors());
 		}
-                $this->_sendResponse(200, $ms."//".$mobupdate->id."//".$mobupdate->status."//".$mob->kohde_kannasta."//null//".$kesto."//update//".$save);
+                $this->_sendResponse(200, $ms."//".$mobupdate->id."//".$mobupdate->status."//".$mob->kohde_kannasta."//null//".$kesto."//update//".$save."//".$checkVersio);
 		exit;
 
 	    }

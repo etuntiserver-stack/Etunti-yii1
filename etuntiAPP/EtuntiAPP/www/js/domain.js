@@ -45,8 +45,8 @@ $(document).ready(function(){
     if(localStorage.getItem('etunti_language'))
     etunti_language = localStorage.getItem('etunti_language');
 
-
-    var server = 'http://etunti.fi';
+    var server = 'http://staging.etunti.fi';
+    //var server = 'http://etunti.fi';
 
     document.addEventListener("deviceready", onServerReady, false);
     function onServerReady() {
@@ -122,6 +122,9 @@ if( !localStorage.getItem('domain') | !localStorage.getItem('email') | !localSto
 
 $(document).ready(function(){
 
+	if(server == 'http://staging.etunti.fi'){
+		$('#server').html('<h1 class="text-danger">STAGING</h1>').show();
+	}
 
  	var lang = [];
 
