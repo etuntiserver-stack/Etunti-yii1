@@ -1011,15 +1011,13 @@ public function actionImei($dom)
 	if(isset($_POST['appVersio'])) $appVersio = $_POST['appVersio']; else $appVersio = '';	
 	$explVersio = array();
 	$explVersio = explode(".", $appVersio);
-	if( isset($explVersio[2]) and (int)$explVersio[2] >= 57)
+	if( isset($explVersio[2]) and (int)$explVersio[2] >= 57 and (int)$avoinID > 0 )
 	{
-		if( (int)$avoinID > 0 )
-		{
+
 	    		$criteria = new CDbCriteria();
 	    		$criteria->condition = " id='".(int)$avoinID."' AND tid = '".$ttekija->id."' ";
 	           	$mob = Mob::model()->find($criteria);	
 			$checkVersio = (int)$explVersio[2];	
-		}
 
 	} else { // Jos versio yli 0.0.57 -->
 
