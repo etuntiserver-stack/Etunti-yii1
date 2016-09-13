@@ -223,6 +223,11 @@ function curDateTime(){
 
 function row(tilanne,st){
 
+	// <-- Avoin kohde ID
+   var avoinID = '';
+   if(localStorage.getItem('avoinID'))
+	avoinID = localStorage.getItem('avoinID');
+
    checkTAG();
    allHide();
    allTilasetHide();
@@ -279,6 +284,8 @@ function row(tilanne,st){
 		viesti: viesti,
 		status: st,
 		gcm_reg_id : $("#regId").text(),
+		avoinID : avoinID,
+		appVersio : $("#version").text()
 	};
 
 
@@ -287,9 +294,19 @@ function row(tilanne,st){
 	   type:'POST',
  	   data: postData,
            success: function(data){
+
+		// <-- log
         	console.log(data);
+		if(server == 'http://staging.etunti.fi'){
+			$("#result2").append('<br>'+data).show();
+		}
+		// log -->
 
 		var sp = data.split("//");
+
+		 if((sp[0] != 0) & (sp[2] == 'new'))
+		 localStorage.setItem('avoinID', sp[0]);
+
 		 if((sp[4] == 'tagnumerror') & (sp[6] == 'update'))
 		 {
 		   $("#result2").html("<div class='alert alert-danger'><h3>VIRHE!!!</h3>Voit lopettaa osoitessa <b>"+sp[3]+"</b></div>").show();
@@ -321,18 +338,6 @@ setTimeout(function() {
 
 		 }
 
-		 if(sp[6] == 'update')
-		 {
-			cordova.plugins.notification.local.cancel(1, function() {
-			    //alert("done");
-			});
-		 }
-
-		$("#muistaLopetta").text('');
-		if((sp[4] !== '') & (sp[2] == 'new'))
-		{
-			setTimer(sp[4],sp[5]);
-		}
 
 		// reset 
 		$("#tagginro").val('');
@@ -343,6 +348,19 @@ setTimeout(function() {
 		$('#getListFromServer').val('').hide();
 
 		set();
+
+		$("#muistaLopetta").text('');
+		if((sp[4] !== '') & (sp[2] == 'new'))
+		{
+			setTimer(sp[4],sp[5]);
+		}
+
+		if(sp[6] == 'update')
+		{
+			cordova.plugins.notification.local.cancel(1, function() {
+			    //alert("done");
+			});
+		}
 
     	},
     		error:function (xhr, ajaxOptions, thrownError){
@@ -362,13 +380,25 @@ setTimeout(function() {
 
 	getTyovuorotToday(domain);
 
+	// <-- Avoin kohde ID
+	var avoinID = '';
+	if(localStorage.getItem('avoinID'))
+		avoinID = localStorage.getItem('avoinID');
+
+
         $.ajax({
            url: url+'/imei?dom='+domain,
 	   type:'POST',
- 	   data: { check : "testi", my_location : my_location, tag : tag, email : email, salasana : salasana },
+ 	   data: { check : "testi", my_location : my_location, tag : tag, email : email, salasana : salasana, avoinID : avoinID, appVersio : $("#version").text() },
            success: function(data){
-        	//console.log(data);
-		//$("#result2").html(data).show();
+
+		// <-- log
+        	console.log(data);
+		if(server == 'http://staging.etunti.fi'){
+			$("#result2").append('<br>'+data).show();
+		}
+		// log -->
+
 		var sp = data.split("//");
 
 		if(sp[0] == 'eiLoytyTekija')
@@ -388,9 +418,11 @@ setTimeout(function() {
 
 
 		if((sp[0] == '3') || (sp[0] == '2') || (sp[0] == '10')){
-		  allShow();
-		  allTilasetHide();
-		} else {
+		  	allShow();
+		  	allTilasetHide();
+
+			if(localStorage.getItem('avoinID'))
+				localStorage.removeItem('avoinID');
 
 		}
 
