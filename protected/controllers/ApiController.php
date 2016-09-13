@@ -877,6 +877,7 @@ public function actionImei($dom)
 
 
 
+
 			  $obj = json_decode($json);
 			  if(isset($obj->results[0]))
 			  {
@@ -954,6 +955,8 @@ public function actionImei($dom)
 	    }
 
 
+
+	    // <-- jos on avoin kohde
 	    $criteria = new CDbCriteria();
 	    $criteria->order = " 
 		DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i') 
@@ -964,15 +967,21 @@ public function actionImei($dom)
 		and loppui='' 
 		AND status IN (1,2,10)
 	    ";
-
-            //$mob = Mob::model()->find(" tid = '".$ttekija->id."' and loppui='' order by id DESC ");
             $mob = Mob::model()->find($criteria);
 
 	    if(isset($mob->id)){
 
+                $mobupdate = Mob::model()->findbypk($mob->id);
+                $mobupdate->loppui = date("d.m.Y H:i:s");
 
+		$vanhaViesti = '';
+		if($mobupdate->viesti != '')
+		$vanhaViesti = $mobupdate->viesti."\n";
+                $mobupdate->viesti = $vanhaViesti.$_POST['viesti'];
+                $mobupdate->my_location = $mobupdate->my_location."**".$_POST['my_location'];
 
 		$kesto = '';
+		$kesto = sprint(strtotime($mobupdate->loppui)-strtotime($mobupdate->aloitan));
 
 		  $ms = '';
 		if($mob->status == 1)
@@ -982,30 +991,30 @@ public function actionImei($dom)
 		if($mob->status == 10)
 		  $ms = 'Lounas';
 
+		if($mob->status == 1 and $_POST['status'] == 3) {
 
-	     if($mob->status == 1 and $_POST['status'] == 3)
-	     {
-                $mobupdate = Mob::model()->findbypk($mob->id);
+                	$mobupdate->status = 3;
 
-		$explAsNum = explode("_",$mobupdate->asiakas_num);
-		$explAsNumPost = explode("_",$_POST['asiakas_num']);
+			// <-- Check TAG
+			$explAsNum = explode("_",$mobupdate->asiakas_num);
+			$explAsNumPost = explode("_",$_POST['asiakas_num']);
+			if( isset($explAsNum[1]) and isset($explAsNumPost[1]) and $explAsNum[1] != $explAsNumPost[1] )
+			{
+		                $this->_sendResponse(200, $ms."//".$mobupdate->id."//".$mobupdate->status."//".$mob->kohde_kannasta."//tagnumerror//null//update");
+			        exit;
+			}
+			// Check TAG -->
 
-		if( isset($explAsNum[1]) and isset($explAsNumPost[1]) and $explAsNum[1] != $explAsNumPost[1] )
-
-		{
-                $this->_sendResponse(200, $ms."//".$mobupdate->id."//".$mobupdate->status."//".$mob->kohde_kannasta."//tagnumerror//null//update");
-	        exit;
+		} elseif($mob->status == 2 and $_POST['status'] == 2) {
+                	$mobupdate->status = 2;
+		} elseif($mob->status == 10 and $_POST['status'] == 10) {
+                	$mobupdate->status = 10;
+		} else {
+                	$this->_sendResponse(200, $ms." on avattu ID: ".$mob->id.", ".$mob->kohde_kannasta);
+			exit;
 		}
 
-                $mobupdate->loppui = date("d.m.Y H:i:s");
-                $mobupdate->status = 3;
 
-		$vanhaViesti = '';
-		if($mobupdate->viesti != '')
-		$vanhaViesti = $mobupdate->viesti."\n";
-                $mobupdate->viesti = $vanhaViesti.$_POST['viesti'];
-
-                $mobupdate->my_location = $mobupdate->my_location."**".$_POST['my_location'];
 		$save = '';
 		if($mobupdate->save())
 		{
@@ -1013,57 +1022,14 @@ public function actionImei($dom)
 		} else {
 			$save = var_dump($mobupdate->getErrors());
 		}
-
-		$kesto = sprint(strtotime($mobupdate->loppui)-strtotime($mobupdate->aloitan));
-
                 $this->_sendResponse(200, $ms."//".$mobupdate->id."//".$mobupdate->status."//".$mob->kohde_kannasta."//null//".$kesto."//update//".$save);
+		exit;
 
-	     } elseif($mob->status == 2 and $_POST['status'] == 2)
-	     {
-                $mobupdate = Mob::model()->findbypk($mob->id);
-                $mobupdate->loppui = date("d.m.Y H:i:s");
-                $mobupdate->status = 2;
-
-		$vanhaViesti = '';
-		if($mobupdate->viesti != '')
-		$vanhaViesti = $mobupdate->viesti."\n";
-                $mobupdate->viesti = $vanhaViesti.$_POST['kohde_kannasta']." - ".$_POST['viesti'];
-
-                $mobupdate->my_location = $mobupdate->my_location."**".$_POST['my_location'];
-                $mobupdate->save();
-
-		$kesto = sprint(strtotime($mobupdate->loppui)-strtotime($mobupdate->aloitan));
-
-                $this->_sendResponse(200, $ms."//".$mobupdate->id."//".$mobupdate->status."//".$mob->kohde_kannasta."//null//".$kesto."//update");
-
-	     } elseif($mob->status == 10 and $_POST['status'] == 10)
-	     {
-                $mobupdate = Mob::model()->findbypk($mob->id);
-                $mobupdate->loppui = date("d.m.Y H:i:s");
-                $mobupdate->status = 10;
-	
-		$vanhaViesti = '';
-		if($mobupdate->viesti != '')
-		$vanhaViesti = $mobupdate->viesti."\n";
-                $mobupdate->viesti = $vanhaViesti.$_POST['kohde_kannasta']." - ".$_POST['viesti'];
-
-                $mobupdate->my_location = $mobupdate->my_location."**".$_POST['my_location'];
-                $mobupdate->save();
-
-		$kesto = sprint(strtotime($mobupdate->loppui)-strtotime($mobupdate->aloitan));
-
-                $this->_sendResponse(200, $ms."//".$mobupdate->id."//".$mobupdate->status."//".$mob->kohde_kannasta."//null//".$kesto."//update");
-
-	     } else {
-
-                $this->_sendResponse(200, $ms." on avattu ID: ".$mob->id.", ".$mob->kohde_kannasta);
-
-	     }
-	      exit;
 	    }
+	    // jos on avoin kohde -->
 
 
-	    // uusi rivi
+	    // <-- uusi rivi
 	    if(isset($ttekija->id) and !empty($_POST['aloitan']) and empty($_POST['loppui'])){
 
 
@@ -1073,13 +1039,13 @@ public function actionImei($dom)
 		if($_POST['status'] == 2)
 		{
                 $mobinsert->kohde_kannasta = 'MATKA';
-                $mobinsert->viesti = $_POST['kohde_kannasta']." - ".$_POST['viesti'];
+                $mobinsert->osoite = $_POST['kohde_kannasta'];
 		}
 
 		if($_POST['status'] == 10)
 		{
                 $mobinsert->kohde_kannasta = 'LOUNASTAUKO';
-                $mobinsert->viesti = $_POST['kohde_kannasta']." - ".$_POST['viesti'];
+                $mobinsert->osoite = $_POST['kohde_kannasta'];
 		}
 
                 $mobinsert->imei = $ttekija->imei;
@@ -1121,11 +1087,11 @@ public function actionImei($dom)
 		}
 
 
-
 	    } else {
                 $this->_sendResponse(200, "Kaikki on suljettu, ei ole mitään avoina");
 	      exit;
 	    }
+	    // uusi rivi -->
             break;
         default:
             $this->_sendResponse(501, 

@@ -40,9 +40,9 @@ else
 
  $pv = explode("\n", $data->viesti);
 
-if(isset($pv[0]) and strpos($pv[0], 'xxx') === false)
+if(isset($pv[0]) and !empty($pv[0]) and strpos($pv[0], 'xxx') === false)
  $pikkuviesti = '<div class="row"><div class="col-sm-12 text-danger"><b>'.Yii::t('main', 'Viesti').':</b> '.$pv[0].'</div><div>';
-elseif(isset($pv[1]) and strpos($pv[1], 'xxx') === false)
+elseif(isset($pv[1]) and !empty($pv[1]) and strpos($pv[1], 'xxx') === false)
  $pikkuviesti = '<div class="row"><div class="col-sm-12 text-danger"><b>'.Yii::t('main', 'Viesti').':</b> '.$pv[1].'</div><div>';
 else
  $pikkuviesti = '';
@@ -234,6 +234,7 @@ else
 
 	<td>
 	  <span class="link fa fa-pencil-square-o nowrap" data-toggle="collapse" id="<?php echo 'altxt_'.$data->id; ?>" data-target="<?php echo '#alshow_'.$data->id; ?>"> <?php echo $at[$data->id]; ?></span>
+
 	  <div style="position:absolute;z-index: 2;margin-left:-100px" class="collapse" id="<?php echo 'alshow_'.$data->id; ?>">
 	    <div class="well form-inline">
 	     <?php echo '<input type="text" class="form-control form-group datetimepicker" request="aloitan" status="'.$data->status.'" id="al_'.$data->id.'" value="'.$apvm[$data->id].' '.$at[$data->id].'">'; ?>

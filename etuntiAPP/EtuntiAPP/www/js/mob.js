@@ -261,32 +261,23 @@ function row(tilanne,st){
 	var lp 	= curDateTime();
    }
 
+   var viesti = '';
    if($("#lyhytviesti").val() !== '')
    viesti = $("#lyhytviesti").val();
-   else
-   viesti = "xxx";
 
    	var postData = {
 		email : email,
 		salasana : salasana,
 		domain: domain,
-		imei: "ei ole",
 		asiakas_num: $("#version").text()+"_"+tag,
 		puh_numero: puh_nro,
-		bluetooth_name: "0",
-		sim_serial_number: "0",
-		subscriber_id: "0",
 		my_location: my_location,
-		osoite: "0",
 		kohde_kannasta: $("#os").val(),
 		kohdenID: $("#kohdenID").val(),
 		aloitan: al,
 		loppui: lp,
 		viesti: viesti,
-		etaisyys: "0",
 		status: st,
-		tietoja: "",
-		hyvaksytty: "0",
 		gcm_reg_id : $("#regId").text(),
 	};
 
