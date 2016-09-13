@@ -878,6 +878,7 @@ public function actionImei($dom)
 
 
 
+
 			  $obj = json_decode($json);
 			  if(isset($obj->results[0]))
 			  {
@@ -919,15 +920,13 @@ public function actionImei($dom)
 		// <-- Jos versio yli 0.0.57
 		$explVersio = array();
 		$explVersio = explode(".", $appVersio);
-		if( isset($explVersio[2]) and (int)$explVersio[2] >= 57)
+		if( isset($explVersio[2]) and (int)$explVersio[2] >= 57 and (int)$avoinID > 0 )
 		{
 
-			if( (int)$avoinID > 0 )
-			{
+
 	    		$criteria = new CDbCriteria();
 	    		$criteria->condition = " id='".(int)$avoinID."' AND tid = '".$ttekija->id."' ";
 	           	$mobCheck = Mob::model()->find($criteria);
-			}
 
 		 	if(isset($mobCheck->id))
 		  	{
