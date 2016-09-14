@@ -1,6 +1,10 @@
 <?php
 
+?>
 
+<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/tyovuorot.css">
+
+<?php
 // oletus arvot
    if(!isset(Yii::app()->session['TekijaVuoro'])){
 
@@ -132,7 +136,7 @@
     }
     echo '</select>';
    ?>
-   <button type="submit" class="btn btn-primary fa fa-search"></button><?php echo $nbsp; ?>
+   <button type="submit" class="btn btn-primary fa fa-search myBgColors"></button><?php echo $nbsp; ?>
    </form>
 
 
@@ -150,10 +154,10 @@
 	$nextMonday     = strtotime('monday', $firstDayOfYear);
 	$nextSunday     = strtotime('sunday', $nextMonday);
 	
-	    echo '<option value="'.$_SERVER['PHP_SELF'].'?week='.$week.'&year='.$year.'">Vko: '.$week.'</option>';
+	    echo '<option value="'.$_SERVER['PHP_SELF'].'?week='.$week.'&year='.$year.'">'.Yii::t('main', 'Viikko').': '.$week.'</option>';
 
 	while (date('Y', $nextMonday) == $year) {
-	    echo '<option value="'.$_SERVER['PHP_SELF'].'?week='.date('W', $nextMonday), NL.'&year='.$year.'">Vko: '.date('W', $nextMonday), NL.'</option>';
+	    echo '<option value="'.$_SERVER['PHP_SELF'].'?week='.date('W', $nextMonday), NL.'&year='.$year.'">'.Yii::t('main', 'Viikko').': '.date('W', $nextMonday), NL.'</option>';
 	
 	    $nextMonday = strtotime('+1 week', $nextMonday);
 	    $nextSunday = strtotime('+1 week', $nextSunday);
@@ -167,12 +171,25 @@
 	<label><?php echo Yii::t('main', 'Näytä viikkonlopput'); ?></label><br>
 	<div class="btn" id="vkolopput"><?php echo Yii::t('main', 'Viikonloput'); ?></div>
 
+   </div><div class="form-group">
+
+	<label></label>
+	   <div class="">
+	     <div class="form-inline">
+	      <div class="form-group">
+		<div class="trash"></div>
+	      </div><div class="form-group">
+		<div class="clear"></div>
+	      </div>
+	     </div>
+	   </div>
+
    </div><div class="form-group pull-right">
 
      <div class="form-inline">
       <div class="form-group">
 	<label><?php echo Yii::t('main', 'Uusi tilaus'); ?></label><br>
-	<button class="btn btn-primary" id="uusiTilaus"><?php echo Yii::t('main', 'Tilaus'); ?></button><?php echo $nbsp; ?>
+	<button class="btn btn-primary myBgColors" id="uusiTilaus"><?php echo Yii::t('main', 'Tilaus'); ?></button><?php echo $nbsp; ?>
       </div><div class="form-group">
 	<label><?php echo Yii::t('main', 'Valitse näkymä'); ?></label><br>
 	<select class="form-control tvchange">
@@ -204,46 +221,6 @@ $numDays = 5;
 else
 $numDays = 7;
 ?>
-
-<style>
-.mennytPaivat{
-	opacity: 0.4;
-}
-td .latikkoAsetukset{
-	min-width: 70px;
-	width: 200px;
-	white-space: normal;
-}
-.forCut, .forCopy{ 
-	display: none;
-}
-.mplus, .mcut, .clear, .trash{ 
-	display: none;
-}
-td:hover .mplus, td:hover .mcut, td:hover .clear, td:hover .trash{
-	display : block;
-}
-td .tp{
-	//position:absolute;
-}
-.fullRivi{
-	height: 100%;
-	margin-bottom: 2px;
-	border:1px #ccc solid;
-	padding:3px 7px;
-	background: white;
-	border-radius:5px;
-}
-.luominen, .valitseKokopaiva{
-	display: none;
-}
-.table tbody>tr>td{
-    	vertical-align: top;
-}
-.table{
-    height: 100%;
-}
-</style>
 
 <?php
 

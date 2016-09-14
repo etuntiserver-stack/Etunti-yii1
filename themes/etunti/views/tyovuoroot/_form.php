@@ -4,9 +4,9 @@
 /* @var $form CActiveForm */
 
 if(isset($_POST['pvm']))
-  $model->pvm = date("Y-m-d",strtotime($_POST['pvm']));
+  $model->pvm = date("d.m.Y",strtotime($_POST['pvm']));
 else
-  $model->pvm = date("Y-m-d",strtotime($model->pvm));
+  $model->pvm = date("d.m.Y",strtotime($model->pvm));
 
 
 if(isset($_POST['tid']))
@@ -68,7 +68,7 @@ echo '<input type="hidden" id="alkuperainenDID" value="'.date("Ymd", strtotime($
 <div class="row">
   <div class="col-sm-3">
 		<?php echo $form->labelEx($model,'pvm'); ?>
-		<?php echo $form->textField($model,'pvm',array('size'=>20,'maxlength'=>20,'class'=>'form-control datepicker'));//,'readonly'=>'yes' ?>
+		<?php echo $form->textField($model,'pvm',array('size'=>20,'maxlength'=>20,'class'=>'form-control datepickerFI'));//,'readonly'=>'yes' ?>
 		<?php echo $form->error($model,'pvm'); ?>
   </div>
   <div class="col-sm-3">
@@ -308,11 +308,11 @@ if(!empty($t->gcm_reg_id)) :
 <div class="row">
   <div class="col-sm-4">
 	<label><?php echo Yii::t('main', 'Alkaen'); ?></label>
-	<input type="text" class="form-control datepicker" name="ToistuvatTyovuorot[pfrom]" value="<?php echo $pfrom; ?>">
+	<input type="text" class="form-control datepickerFI" name="ToistuvatTyovuorot[pfrom]" id="pfrom" value="<?php echo date('d.m.Y', strtotime($pfrom)); ?>">
   </div>
   <div class="col-sm-4">
 	<label><?php echo Yii::t('main', 'Loppuen'); ?></label>
-	<input type="text" class="form-control datepicker" name="ToistuvatTyovuorot[pto]" id="pto" value="<?php echo $pto; ?>">
+	<input type="text" class="form-control datepickerFI" name="ToistuvatTyovuorot[pto]" id="pto" value="<?php if(!empty($pto)) echo date('d.m.Y', strtotime($pto)); ?>">
   </div>
   <div class="col-sm-4">
 	<label><?php echo Yii::t('main', 'Työvuorojen viikkoväli'); ?></label>
@@ -518,7 +518,36 @@ $('.mult').multiselect({
 	offText: "Ei"
   });
 
+
 	$('#submitButton').click(function(){
+
+	// <-- tarkistetaan tietoja pituus
+	var leng = $('#Tyovuoroot_tietoja').val().length;
+	var raja = 10000;
+	if(leng > raja)
+	{
+		alert('Tietoja mobiilisovellukseen kentän merkkimäärä ei voi ylittää '+raja+' rajaa');
+		return false;
+	}
+	// tarkistetaan tietoja -->
+
+	var pfrom = '';
+	var pto = '';
+  	if($('#pfrom').val() !== ''){
+		pfrom = $('#pfrom').val().split(".");
+		pfrom = parseInt(pfrom[2]+''+pfrom[1]+''+pfrom[0]);
+	}
+  	if($('#pto').val() !== ''){
+		pto = $('#pto').val().split(".");
+		pto = parseInt(pto[2]+''+pto[1]+''+pto[0]);
+	}
+
+	if(pto !=='' & pto < pfrom)
+	{
+		alert('Toistuvan työvuoron lopetuspäivämäärä ei voi olla ennen toistuvan työvuoron aloituspäivämäärä');
+		return false;
+	}
+
 		$('#tyovuoroot-form').submit();
 	});
 
@@ -859,6 +888,8 @@ function laatikonPaivays(thisDataReturn){
 
 
 
+
+
   $('#Tyovuoroot_kohde').change(function(){
 
 	var thisID = $(this).val();
@@ -883,7 +914,6 @@ function laatikonPaivays(thisDataReturn){
 	var thisId = $(this).val();
 	$('#Tyovuoroot_tid').val(thisId);
   });
-
 
 
 });

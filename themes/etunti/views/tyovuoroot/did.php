@@ -39,15 +39,11 @@ if(!isset($_POST['tulosta']))
 	$bod .=  '
 	   <div class="tp">
 	     <div class="form-inline">
-	     <div class="form-group">
-		<div class="trash" style="margin-right: 5px"></div>
-	     </div><div class="form-group">
-		<div class="clear" style="margin-right: 5px"></div>
-	     </div><div class="form-group">
+	      <div class="form-group">
 	   	<i class="forCut" id="forCut_'.$did.'_'.$tid.'" style="margin-right: 5px"></i>
-	     </div><div class="form-group">
+	      </div><div class="form-group">
 	   	<i class="forCopy" id="forCopy_'.$did.'_'.$tid.'"></i> 
-	     </div>
+	      </div>
 	     </div>
 	   </div>';
 }
