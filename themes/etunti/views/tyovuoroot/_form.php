@@ -211,7 +211,7 @@ echo '<input type="hidden" id="alkuperainenDID" value="'.date("Ymd", strtotime($
 			elseif(!isset($ov->id) and isset($model->tietoja))
 				$model->tietoja = $model->tietoja;
 
-			echo $form->textarea($model,'tietoja',array('rows'=>4,'class'=>'form-control')); 
+			echo $form->textarea($model,'tietoja',array('rows'=>4,'class'=>'form-control', 'placeholder'=>'Esim. Avainten tiedot tai kohteesa olevat rajoitukset.')); 
 		?>
 		<?php echo $form->error($model,'tietoja'); ?>
   </div>
