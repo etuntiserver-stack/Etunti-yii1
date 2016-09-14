@@ -1,6 +1,10 @@
 <?php
 
+?>
 
+<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/tyovuorot.css">
+
+<?php
 /* @var $this TyovuorootController */
 /* @var $dataProvider CActiveDataProvider */
 
@@ -102,47 +106,8 @@ function dateDiff($start, $end) {
 
 ?>
 <style>
-/*
-body{
-    overflow-y: hidden;
-}
-*/
-.mennytPaivat{
-	opacity: 0.4;
-}
-td .latikkoAsetukset{
-	min-width: 70px;
-	width: 200px;
-	white-space: normal;
-}
-.forCut, .forCopy{ 
-	display: none;
-}
-.mplus, .mcut, .clear, .trash{ 
-	display: none;
-}
-td:hover .mplus, td:hover .mcut, td:hover .clear, td:hover .trash{
-	display : block;
-}
-td .tp{
-	//position:absolute;
-}
-.fullRivi{
-	height: 100%;
-	margin-bottom: 2px;
-	border:1px #ccc solid;
-	padding:3px 7px;
-	background: white;
-	border-radius:5px;
-}
-.luominen, .valitseKokopaiva{
-	display: none;
-}
 .table tbody>tr>td{
     	vertical-align: top;
-}
-.table{
-    height: 100%;
 }
 </style>
 
@@ -210,9 +175,21 @@ td .tp{
     echo '</select>';
   ?>
 
-   <button type="submit" class="btn btn-primary fa fa-search"></button>
+   <button type="submit" class="btn btn-primary myBgColors fa fa-search"></button>
    </form>
 
+   </div><div class="form-group p10">
+
+	<label></label>
+	   <div class="tpTrash">
+	     <div class="form-inline">
+	      <div class="form-group">
+		<div class="trash"></div>
+	      </div><div class="form-group">
+		<div class="clear"></div>
+	      </div>
+	     </div>
+	   </div>
 
 
    </div><div class="form-group pull-right">
@@ -220,7 +197,7 @@ td .tp{
      <div class="form-inline">
       <div class="form-group">
 	<label><?php echo Yii::t('main', 'Uusi tilaus'); ?></label><br>
-	<button class="btn btn-primary" id="uusiTilaus"><?php echo Yii::t('main', 'Tilaus'); ?></button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	<button class="btn btn-primary myBgColors" id="uusiTilaus"><?php echo Yii::t('main', 'Tilaus'); ?></button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
       </div><div class="form-group">
 	<label><?php echo Yii::t('main', 'Valitse näkymä'); ?></label><br>
 	<select class="form-control tvchange">

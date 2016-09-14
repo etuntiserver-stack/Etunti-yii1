@@ -9,7 +9,7 @@
         <div class="tray-center">
 
 
-              <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-home"></i> <?php echo Yii::t('main', 'Tuotteet ja palveluut'); ?> 
+              <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-home"></i> <?php echo Yii::t('main', 'Tuotteet ja palvelut'); ?> 
 		<?php echo CHtml::link('','/index.php/laskutusTuotteet/create',array('class'=>'btn btn-default fa fa-plus')); ?></h2>
 
 
