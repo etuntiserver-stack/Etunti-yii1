@@ -290,6 +290,7 @@ if(!empty($t->gcm_reg_id)) :
   }
 ?>
 <hr>
+<div id="toistuvaAll">
 <div class="row">
  <div class="col-sm-12">
 
@@ -329,7 +330,7 @@ if(!empty($t->gcm_reg_id)) :
 </div>
 
 <br>
-<div class="row">
+<div class="row" id="vikoPvm">
   <div class="col-sm-12 col-sm-offset-1">
   <label><?php echo Yii::t('main', 'Ma'); ?></label>
 
@@ -395,11 +396,11 @@ if(!empty($t->gcm_reg_id)) :
  </div>
 </div>
 
-
-
-
-
+<div id="sopivatPaivat" style="display:none"></div>
+<input type="hidden" name="ToistuvatTyovuorot[sopivatPaivat]" id="sopivatPaivatInput" value="0">
 </div>
+
+</div><!-- toistuvaAll -->
 
 		</div> <!-- end modal-content -->
 	</div> <!-- end modal-dialog -->
@@ -531,6 +532,26 @@ $('.mult').multiselect({
 	}
 	// tarkistetaan tietoja -->
 
+	if(($('#toistuva_aktiivinen').bootstrapSwitch('state') === true) && ($('#pto').val() === ''))
+	{
+		$('#pto').addClass('bg-danger');
+		return false;
+	}
+
+	if( ($('#toistuva_aktiivinen').bootstrapSwitch('state') === true) && 
+	(	$('#ma').bootstrapSwitch('state') === false & 
+		$('#ti').bootstrapSwitch('state') === false & 
+		$('#ke').bootstrapSwitch('state') === false & 
+		$('#to').bootstrapSwitch('state') === false & 
+		$('#pe').bootstrapSwitch('state') === false & 
+		$('#la').bootstrapSwitch('state') === false & 
+		$('#su').bootstrapSwitch('state') === false
+	) )
+	{
+		$('#vikoPvm').addClass('alert alert-danger');
+		return false;
+	}
+
 	var pfrom = '';
 	var pto = '';
   	if($('#pfrom').val() !== ''){
@@ -553,10 +574,6 @@ $('.mult').multiselect({
 
 	$('#tyovuoroot-form').on('submit',function(e) {
 
-	//console.log( $( this ).serializeArray() );
-	//console.log( e.target[0].value );
-
-	$('#showres').modal('hide');
 
 	// <-- onko sama
 	var onko = onkoSama( e.target[0].value, $('#Tyovuoroot_pvm').val(), $('#Tyovuoroot_tid').val(), $('#Tyovuoroot_kohde').val(), $('#alku').val(), $('#loppu').val() );
@@ -582,7 +599,7 @@ $('.mult').multiselect({
 	  //alert(e.target[7].value);
 	  $.ajax({
 		  url: 'paivita_laatikot',
-		  data:{ toistuva_id : e.target[7].value },
+		  data:{ toistuva_id : $('#Tyovuoroot_toistuva_id').val() },
 		  type:'POST',
 		  success:function(data){
 			data = JSON.parse(data);
@@ -605,9 +622,8 @@ $('.mult').multiselect({
 		  type:'POST',
 		  success:function(data){
 			thisDataReturn = JSON.parse(data);
-			//console.log(thisDataReturn);
-			laatikonPaivays(thisDataReturn);
-
+			console.log(thisDataReturn);
+			paivaysTarkistus(thisDataReturn);
 	   	},
 		error:function(data){
 		console.log(data);
@@ -624,8 +640,7 @@ $('.mult').multiselect({
 		  success:function(data){
 			thisDataReturn = JSON.parse(data);
 			console.log(thisDataReturn);
-			laatikonPaivays(thisDataReturn);
-
+			paivaysTarkistus(thisDataReturn);
 	   	},
 		error:function(data){
 		console.log(data);
@@ -639,8 +654,33 @@ $('.mult').multiselect({
 
 
 
+  function paivaysTarkistus(thisDataReturn){
 
+			if( $('#toistuva_aktiivinen').bootstrapSwitch('state') === true )
+			{
+				if( thisDataReturn[0][0]['isSaved'] === true )
+				{
+					laatikonPaivays(thisDataReturn);
+					$('#showres').modal('hide');
+				} else {
 
+					$('#sopivatPaivat').html('<br><h3>Toistuvien työvuorojen päivämäärät</h3><div class="col-sm-offset-1">').show('slow');
+					$(thisDataReturn).each(function( iarr, arr ) {
+					 $(arr).each(function( i, d ) {
+					   $('#sopivatPaivat').append(d['pvm']+'- '+d['tekijan_nimi']+'<br>');
+					 });
+					});
+					$('#sopivatPaivat').append('<br><span class="btn btn-success sopiiSopivat">Hyväksy valitut päivät</span></div>');
+
+				}
+
+			} else {
+
+					laatikonPaivays(thisDataReturn);
+					$('#showres').modal('hide');
+			}
+
+  }
 
 
 
@@ -653,7 +693,7 @@ $('.mult').multiselect({
 			type:'GET',
 			data: { "tid" : "<?php echo $model->tid; ?>", "viikko" : "<?php echo date('W',strtotime($model->pvm)); ?>", "year" : "<?php echo date('Y',strtotime($model->pvm)); ?>" },
 			  success:function(data){
-			  console.log(data);
+			  //console.log(data);
 			  $('#vk_<?php echo date("W",strtotime($model->pvm))."_".$model->tid; ?>').html(data);
 			  return false;
 			  },
@@ -914,6 +954,55 @@ function laatikonPaivays(thisDataReturn){
 	var thisId = $(this).val();
 	$('#Tyovuoroot_tid').val(thisId);
   });
+
+  $(document).delegate(".sopiiSopivat","click",function(){
+	$(this).remove();
+	$('#sopivatPaivatInput').val(1);
+	$('#toistuvaAll').hide('slow');
+	$('#submitButton').val('Luo');
+	$('#toistuvaAll').html('<h3 class="alert alert-success">Toistuvien työvuorojen päivät talennettu.<br>Paina LUO-painikketta lisätäksesi työvuorot työvuorolistaa.</h3>').show('slow');
+  });
+
+  $('#pto').blur(function(){
+  	$(this).removeClass('bg-danger').addClass('bg-success');
+  });
+
+
+  $('#toistuva_aktiivinen').on('switchChange.bootstrapSwitch', function(event, state) {
+	if(state === true){
+
+		if( $('#pto').val() === '' )
+		$('#pto').removeClass('bg-success').addClass('bg-danger');
+
+		$('#submitButton').val('Tarkista päivämäärät');
+	} else {
+		$('#submitButton').val('Luo');
+	}
+	switchesPvm();
+  });
+
+  $('#ma,#ti,#ke,#to,#pe,#la,#su').on('switchChange.bootstrapSwitch', function(event, state) {
+	switchesPvm();
+  });
+
+  function switchesPvm(){
+
+	if( ($('#toistuva_aktiivinen').bootstrapSwitch('state') === true) && 
+	(	$('#ma').bootstrapSwitch('state') === true | 
+		$('#ti').bootstrapSwitch('state') === true | 
+		$('#ke').bootstrapSwitch('state') === true | 
+		$('#to').bootstrapSwitch('state') === true | 
+		$('#pe').bootstrapSwitch('state') === true | 
+		$('#la').bootstrapSwitch('state') === true | 
+		$('#su').bootstrapSwitch('state') === true
+	) )
+	{
+		$('#vikoPvm').removeClass('alert alert-danger').addClass('alert alert-success');
+	} else {
+		$('#vikoPvm').removeClass('alert alert-success').addClass('alert alert-danger');
+	}
+
+  }
 
 
 });
