@@ -45,6 +45,8 @@ echo '<input type="hidden" id="alkuperainenID" value="'.$model->id.'">';
 echo '<input type="hidden" id="alkuperainenDID" value="'.date("Ymd", strtotime($model->pvm)).'_'.$model->tid.'">';
 ?>
 
+
+
 <div class="section">
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'tyovuoroot-form',
@@ -290,6 +292,9 @@ if(!empty($t->gcm_reg_id)) :
   }
 ?>
 <hr>
+
+<div id="toistuvaAllsijaan"></div>
+
 <div id="toistuvaAll">
 <div class="row">
  <div class="col-sm-12">
@@ -519,8 +524,18 @@ $('.mult').multiselect({
 	offText: "Ei"
   });
 
+	var pfrom = '';
+	var pto = '';
 
 	$('#submitButton').click(function(){
+
+		$('#tyovuoroot-form').submit();
+	});
+
+
+
+	$('#tyovuoroot-form').on('submit',function(e) {
+
 
 	// <-- tarkistetaan tietoja pituus
 	var leng = $('#Tyovuoroot_tietoja').val().length;
@@ -552,8 +567,6 @@ $('.mult').multiselect({
 		return false;
 	}
 
-	var pfrom = '';
-	var pto = '';
   	if($('#pfrom').val() !== ''){
 		pfrom = $('#pfrom').val().split(".");
 		pfrom = parseInt(pfrom[2]+''+pfrom[1]+''+pfrom[0]);
@@ -568,22 +581,6 @@ $('.mult').multiselect({
 		alert('Toistuvan työvuoron lopetuspäivämäärä ei voi olla ennen toistuvan työvuoron aloituspäivämäärä');
 		return false;
 	}
-
-		$('#tyovuoroot-form').submit();
-	});
-
-	$('#tyovuoroot-form').on('submit',function(e) {
-
-
-	// <-- onko sama
-	var onko = onkoSama( e.target[0].value, $('#Tyovuoroot_pvm').val(), $('#Tyovuoroot_tid').val(), $('#Tyovuoroot_kohde').val(), $('#alku').val(), $('#loppu').val() );
-	if(onko !== '')
-		return false;
-	//  onko sama -->
-
-
-
-
 
 
 	var str = '';
@@ -656,8 +653,11 @@ $('.mult').multiselect({
 
   function paivaysTarkistus(thisDataReturn){
 
+	var onkosama = '';
+
 			if( $('#toistuva_aktiivinen').bootstrapSwitch('state') === true )
 			{
+
 				if( thisDataReturn[0][0]['isSaved'] === true )
 				{
 					laatikonPaivays(thisDataReturn);
@@ -667,7 +667,12 @@ $('.mult').multiselect({
 					$('#sopivatPaivat').html('<br><h3>Toistuvien työvuorojen päivämäärät</h3><div class="col-sm-offset-1">').show('slow');
 					$(thisDataReturn).each(function( iarr, arr ) {
 					 $(arr).each(function( i, d ) {
-					   $('#sopivatPaivat').append(d['pvm']+'- '+d['tekijan_nimi']+'<br>');
+
+					   if(d['onkosama'])
+					   	$('#sopivatPaivat').append('<b class="text-danger">'+d['pvm']+'- '+d['tekijan_nimi']+' - Tämä työvuoro on jo olemassa</b><br>');
+					   else
+					   	$('#sopivatPaivat').append(d['pvm']+'- '+d['tekijan_nimi']+'<br>');
+
 					 });
 					});
 					$('#sopivatPaivat').append('<br><span class="btn btn-success sopiiSopivat">Hyväksy valitut päivät</span></div>');
@@ -707,38 +712,6 @@ $('.mult').multiselect({
 
 	e.preventDefault(); 
 	});
-
-
-
-
-function onkoSama( id, pvm, tid, kohde, alku, loppu ){
-
-	var returnVastaus = '';
-
-	  $.ajax({
-		  url: 'onko_sama',
-		  data:{ id : id, pvm : pvm, tid : tid, kohde : kohde, alku : alku, loppu : loppu },
-		  type:'GET',
-		  async: false,
-		  success:function(data){
-			//console.log(data);
-			if(data)
-			{
-			   data = JSON.parse(data);
-			   returnVastaus = data;
-			}
-	   	},
-		error:function(data){
-		console.log(data);
-	    	}
-	  });
-
-		if(returnVastaus !== '')
-			ilmoitusSamasta(returnVastaus);
-
-	return returnVastaus;
-
-}
 
 
 // Poistaminen
@@ -802,10 +775,6 @@ function laatikonPaivays(thisDataReturn){
 		 $(arr).each(function( i, d ) {
 		 //console.log(d['pvm']);
 
-		if(d['onkosama'])
-		{
-		    ilmoitus += d['onkosama'].replace(/\n/g, "<br>");
-		}
 	  	    $.ajax({
 			url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/did',
 			type:'GET',
@@ -850,20 +819,9 @@ function laatikonPaivays(thisDataReturn){
 		});
 
 
-		if(ilmoitus !== '')
-			ilmoitusSamasta(ilmoitus);
 
 }
 
-
-  function ilmoitusSamasta(ilmoitus){
-
-    $('#ilmoitukset').addClass('row alert alert-danger').html('<div class="pull-right close link">sulje</div><h2>Päällekäisyyksiä työvuoro(i)ssa, joten kaikkia vuoroja ei voitu luoda.</h2>');
-    $('#ilmoitukset').append(ilmoitus);
-    $('.close').click(function(){
-	$('#ilmoitukset').removeClass('row alert alert-danger').html('');
-    });
-  }
 
 
   laskePituus();
@@ -960,7 +918,7 @@ function laatikonPaivays(thisDataReturn){
 	$('#sopivatPaivatInput').val(1);
 	$('#toistuvaAll').hide('slow');
 	$('#submitButton').val('Luo');
-	$('#toistuvaAll').html('<h3 class="alert alert-success">Toistuvien työvuorojen päivät talennettu.<br>Paina LUO-painikketta lisätäksesi työvuorot työvuorolistaa.</h3>').show('slow');
+	$('#toistuvaAllsijaan').html('<h3 class="alert alert-success">Toistuvien työvuorojen päivät talennettu.<br>Paina LUO-painikketta lisätäksesi työvuorot työvuorolistaa.</h3>').show('slow');
   });
 
   $('#pto').blur(function(){
