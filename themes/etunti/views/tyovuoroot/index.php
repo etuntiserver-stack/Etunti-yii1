@@ -207,7 +207,6 @@
 <br>
 
 
-<div id="ilmoitukset"></div>
 
 
             <div class="admin-form">

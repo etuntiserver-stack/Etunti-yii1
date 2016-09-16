@@ -154,8 +154,8 @@ function dateDiff($start, $end) {
    array('empty'=>Yii::t('main', 'Työnimike'),'class'=>'form-control form-group','id'=>'siivousTyonimike'));
 
    ?>
-   <input type="text" name="from" id="from" size="10" class="form-control form-group datepickerFI" value="<?php echo date('d.m.Y', strtotime(Yii::app()->session['from'])); ?>" placeholder="<?php echo Yii::t('main' ,'Päivämäärä'); ?>">
-   <input type="text" name="to" id="to" size="10" class="form-control form-group datepickerFI" value="<?php echo date('d.m.Y', strtotime(Yii::app()->session['to'])); ?>" placeholder="<?php echo Yii::t('main' ,'Päivämäärä'); ?>">
+   <input type="text" name="from" size="10" class="form-control form-group datepickerFI" value="<?php echo date('d.m.Y', strtotime(Yii::app()->session['from'])); ?>" placeholder="<?php echo Yii::t('main' ,'Päivämäärä'); ?>">
+   <input type="text" name="to" size="10" class="form-control form-group datepickerFI" value="<?php echo date('d.m.Y', strtotime(Yii::app()->session['to'])); ?>" placeholder="<?php echo Yii::t('main' ,'Päivämäärä'); ?>">
 
   <?php
 

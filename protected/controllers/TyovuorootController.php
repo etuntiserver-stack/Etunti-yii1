@@ -1524,7 +1524,7 @@ class TyovuorootController extends Controller
 				$pvm = $date;
 				//$return[] = array('tid'=>$tid, 'pvm'=>$pvm, 'ymd'=>date("Ymd",strtotime($pvm)));
 				$onkosama = $this->onko_sama(null, $pvm, $tid, $kohde, $alku, $loppu);
-
+				$tt = Tyontekijat::model()->findByPk($tid);
 				if(empty($onkosama))
 				{			
 					$t = new Tyovuoroot;
@@ -1544,12 +1544,11 @@ class TyovuorootController extends Controller
 						if($t->save())
 						$return[] = array('tid'=>$t->tid, 'pvm'=>$t->pvm, 'ymd'=>date("Ymd",strtotime($t->pvm)), 'isSaved'=>true);
 					} else {
-						$tt = Tyontekijat::model()->findByPk($t->tid);
 						$return[] = array('tid'=>$t->tid, 'pvm'=>$t->pvm, 'ymd'=>date("Ymd",strtotime($t->pvm)), 'isSaved'=>false, 'tekijan_nimi'=>$tt->tekijan_nimi);
 					}
 
 				} else {
-					$return[] = array('tid'=>$t->tid, 'pvm'=>$t->pvm, 'ymd'=>date("Ymd",strtotime($t->pvm)),'onkosama'=>$onkosama, 'isSaved'=>false);
+					$return[] = array('tid'=>$tid, 'pvm'=>$pvm, 'ymd'=>date("Ymd",strtotime($t->pvm)),'onkosama'=>$onkosama, 'isSaved'=>false, 'tekijan_nimi'=>$tt->tekijan_nimi);
 				}
 
 			}
