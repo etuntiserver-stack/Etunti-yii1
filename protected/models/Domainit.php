@@ -32,7 +32,7 @@ public $viesti;
 	}
 
 
-	public static function PushNotify($tid,$title,$message, $sound){
+	public static function PushNotify($tid,$title,$message,$sound){
 
 		$t = Tyontekijat::model()->findbypk($tid); 
 		$a = AsetuksetForAll::model()->find(" asetus='asetus1' ");

@@ -179,7 +179,7 @@ class ViestintaController extends Controller
 			$model->viesti=date("d.m H:i").", ".Yii::app()->user->nimi.": ".$_POST['Viestinta']['viesti'];
 			$model->tekija=$tekija;
 			$model->save();
-			Domainit::PushNotify($model->tekija,"ETUNTI",$model->viesti);
+			Domainit::PushNotify($model->tekija,"ETUNTI",$model->viesti,'beep');
 			}
 
 			$this->redirect(array('index'));

@@ -279,6 +279,7 @@ class TyovuorootController extends Controller
 
 
 
+
 		$mail->setTo($saaja);
 		$mail->setSubject(Yii::t('main', 'TYÖVUOROT'). ' '.$tt->tekijan_nimi);
 		$mail->setBody($message);
@@ -855,6 +856,7 @@ class TyovuorootController extends Controller
 
 		if(isset($_POST['ToistuvatTyovuorot']) and isset($_POST['ToistuvatTyovuorot']['toistuva_aktiivinen']) and $_POST['ToistuvatTyovuorot']['toistuva_aktiivinen'] == 'on')
 		{
+			$saankoSuoritta = $_POST['ToistuvatTyovuorot']['sopivatPaivat'];
 
 			$toistuva=new ToistuvatTyovuorot;
 			$toistuva->attributes=$_POST['ToistuvatTyovuorot'];
@@ -896,7 +898,8 @@ class TyovuorootController extends Controller
 				$toistuva->tyoajanmerkinta, 
 				$toistuva->tietoja,
 				$toistuva->status,
-				$toistuva->tyopaari
+				$toistuva->tyopaari,
+				$saankoSuoritta
 				);
 			}
 
@@ -921,7 +924,8 @@ class TyovuorootController extends Controller
 					$toistuva->tyoajanmerkinta, 
 					$toistuva->tietoja,
 					$toistuva->status,
-					$toistuva->tyopaari
+					$toistuva->tyopaari,
+					$saankoSuoritta
 					);
 			    }
 			}
@@ -1076,6 +1080,8 @@ class TyovuorootController extends Controller
 		{
 
 
+			$saankoSuoritta = $_POST['ToistuvatTyovuorot']['sopivatPaivat'];
+
 			$toistuva= ToistuvatTyovuorot::model()->findByPk($model->toistuva_id);
 			$toistuva->attributes=$_POST['ToistuvatTyovuorot'];
 			$toistuva->pvm = date("d.m.Y",strtotime($_POST['Tyovuoroot']['pvm']));
@@ -1101,6 +1107,7 @@ class TyovuorootController extends Controller
 			if($toistuva->save())
 			{
 	
+			if($saankoSuoritta == 1)
 			Tyovuoroot::model()->deleteAll(" toistuva_id='".$model->toistuva_id."' ");
 
 			$return[] = $this->toistuvaInsert(
@@ -1117,7 +1124,8 @@ class TyovuorootController extends Controller
 				$toistuva->tyoajanmerkinta, 
 				$toistuva->tietoja,
 				$toistuva->status,
-				$toistuva->tyopaari
+				$toistuva->tyopaari,
+				$saankoSuoritta
 				);
 			}
 
@@ -1142,7 +1150,8 @@ class TyovuorootController extends Controller
 					$toistuva->tyoajanmerkinta, 
 					$toistuva->tietoja,
 					$toistuva->status,
-					$toistuva->tyopaari
+					$toistuva->tyopaari,
+					$saankoSuoritta
 					);
 			    }
 			}
@@ -1456,7 +1465,7 @@ class TyovuorootController extends Controller
 	}
 
 
-	protected function toistuvaInsert($id, $pfrom, $pto, $p, $viikkoja, $tid, $kohde, $alku, $loppu, $pituus, $tyoajanmerkinta, $tietoja, $status, $tyopaari)
+	protected function toistuvaInsert($id, $pfrom, $pto, $p, $viikkoja, $tid, $kohde, $alku, $loppu, $pituus, $tyoajanmerkinta, $tietoja, $status, $tyopaari, $saankoSuoritta)
 	{
 
 		$fi = array(
@@ -1469,69 +1478,85 @@ class TyovuorootController extends Controller
 		    0=>'Sunnuntai',
 		);
 
-		$pvmstart 	= $pfrom;
-		$startdate 	= strtotime($pfrom);
-		$enddate	= strtotime($pto);
+
+
+		$startDate	= $pfrom;
+		$end_date	= $pto;
+		$date		= $startDate;
+
+		$var		= 1;
+
+		if($viikkoja == 1)
+			$var	= 0;
+
 		$w		= $p;
 		$v 		= $viikkoja;
+		$weeksArr = array();
+ 		while (strtotime($date) <= strtotime($end_date)) {
 
-		  $i=0; 
-		  $var = 0;
-		  if($v == 2 and date('W',$startdate)%2 == 1)
-		  $var = 1;
-		  elseif($v == 4 and date('W',$startdate)%2 == 0)
-		  $var = 2;
-		  elseif($v == 4 and date('W',$startdate)%2 == 1)
-		  $var = 1;
-		  elseif($v == 3 and date('W',$startdate)%3 == 1)
-		  $var = 1;
-		  elseif($v == 3 and date('W',$startdate)%2 == 0)
-		  $var = 2;
+			$viikonNumero = (date('W',strtotime($date)));
+		  	$weeksArr[$viikonNumero] = $viikonNumero;
+	                $date = date ("d.m.Y", strtotime("+1 day", strtotime($date)));
+		}
 
-		  $return = array();
-		  while($startdate<$enddate) 
-		   {  
+		$i = 1;
+		$sopivaViikot = array();
+		foreach($weeksArr as $k=>$result)
+		{
+		    if($i % $viikkoja === $var) {
+		        $sopivaViikot[$result] = $result;
+		    }
+		    $i++;
+		}
 
-		      $ero = (date('W',$startdate) %$v);
-		      //echo date('d.m',$startdate).", ".date('W',$startdate)." | ".$var." | ".$ero."\n";
+		$date		= $startDate;
+		$end_date	= $end_date;
+		$return = array();
+ 		while (strtotime($date) <= strtotime($end_date)) {
 
+			$viikonNumero = (date('W',strtotime($date)));
 
-		      if(in_array(date('w',$startdate),$w) and $ero == $var)
-		      {
+	                if( 
+				in_array(date('w',strtotime($date)),$w) 
+				and in_array($viikonNumero,$sopivaViikot) 
+			)
+			{
+				$pvm = $date;
+				//$return[] = array('tid'=>$tid, 'pvm'=>$pvm, 'ymd'=>date("Ymd",strtotime($pvm)));
+				$onkosama = $this->onko_sama(null, $pvm, $tid, $kohde, $alku, $loppu);
 
-		    	$pvm = date('d.m.Y',$startdate);
-		    	//echo $pvm." ".$fi[date('w',$startdate)]."\n";
+				if(empty($onkosama))
+				{			
+					$t = new Tyovuoroot;
+					$t->tid = $tid;
+					$t->kohde = $kohde;
+					$t->pvm = $pvm;
+					$t->alku = $alku;
+					$t->loppu = $loppu;
+					$t->pituus = $pituus;
+					$t->tyoajanmerkinta = $tyoajanmerkinta;
+					$t->tietoja = $tietoja;
+					$t->status = $status;
+					$t->tyopaari = $tyopaari;
+					$t->toistuva_id = $id;
+					if($saankoSuoritta == 1)
+					{
+						if($t->save())
+						$return[] = array('tid'=>$t->tid, 'pvm'=>$t->pvm, 'ymd'=>date("Ymd",strtotime($t->pvm)), 'isSaved'=>true);
+					} else {
+						$tt = Tyontekijat::model()->findByPk($t->tid);
+						$return[] = array('tid'=>$t->tid, 'pvm'=>$t->pvm, 'ymd'=>date("Ymd",strtotime($t->pvm)), 'isSaved'=>false, 'tekijan_nimi'=>$tt->tekijan_nimi);
+					}
 
+				} else {
+					$return[] = array('tid'=>$t->tid, 'pvm'=>$t->pvm, 'ymd'=>date("Ymd",strtotime($t->pvm)),'onkosama'=>$onkosama, 'isSaved'=>false);
+				}
 
-
-			$onkosama = $this->onko_sama(null, $pvm, $tid, $kohde, $alku, $loppu);
-
-			if(empty($onkosama))
-			{			
-				$t = new Tyovuoroot;
-				$t->tid = $tid;
-				$t->kohde = $kohde;
-				$t->pvm = $pvm;
-				$t->alku = $alku;
-				$t->loppu = $loppu;
-				$t->pituus = $pituus;
-				$t->tyoajanmerkinta = $tyoajanmerkinta;
-				$t->tietoja = $tietoja;
-				$t->status = $status;
-				$t->tyopaari = $tyopaari;
-				$t->toistuva_id = $id;
-				if($t->save())
-				$return[] = array('tid'=>$t->tid, 'pvm'=>$t->pvm, 'ymd'=>date("Ymd",strtotime($t->pvm)));
-			} else {
-				$return[] = array('tid'=>$t->tid, 'pvm'=>$t->pvm, 'ymd'=>date("Ymd",strtotime($t->pvm)),'onkosama'=>$onkosama);
 			}
 
-		      }
+	                $date = date ("d.m.Y", strtotime("+1 day", strtotime($date)));
+		}
 
-			$i++; 
-			$startdate+=86400; 
-
-		   }	
 				return $return;
 
 	}
