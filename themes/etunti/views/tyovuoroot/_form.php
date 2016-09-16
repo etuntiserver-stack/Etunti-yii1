@@ -669,9 +669,11 @@ $('.mult').multiselect({
 					 $(arr).each(function( i, d ) {
 
 					   if(d['onkosama'])
-					   	$('#sopivatPaivat').append('<b class="text-danger">'+d['pvm']+'- '+d['tekijan_nimi']+' - Tämä työvuoro on jo olemassa</b><br>');
-					   else
-					   	$('#sopivatPaivat').append(d['pvm']+'- '+d['tekijan_nimi']+'<br>');
+					   {
+					   	$('#sopivatPaivat').append('<div class="row"><b class="text-danger"><div class="col-sm-3">'+d['pvm']+'</div><div class="col-sm-3">'+d['vkopvm']+'</div><div class="col-sm-3">'+d['tekijan_nimi']+'</div><div class="col-sm-3">Tämä työvuoro on jo olemassa</div></b></div>');
+					   } else {
+					   	$('#sopivatPaivat').append('<div class="row"><div class="col-sm-3">'+d['pvm']+'</div><div class="col-sm-3">'+d['vkopvm']+'</div><div class="col-sm-3">'+d['tekijan_nimi']+'</div></div>');
+					   }
 
 					 });
 					});
