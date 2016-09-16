@@ -1544,11 +1544,11 @@ class TyovuorootController extends Controller
 						if($t->save())
 						$return[] = array('tid'=>$t->tid, 'pvm'=>$t->pvm, 'ymd'=>date("Ymd",strtotime($t->pvm)), 'isSaved'=>true);
 					} else {
-						$return[] = array('tid'=>$t->tid, 'pvm'=>$t->pvm, 'ymd'=>date("Ymd",strtotime($t->pvm)), 'isSaved'=>false, 'tekijan_nimi'=>$tt->tekijan_nimi);
+						$return[] = array('tid'=>$t->tid, 'pvm'=>$t->pvm, 'ymd'=>date("Ymd",strtotime($t->pvm)), 'isSaved'=>false, 'tekijan_nimi'=>$tt->tekijan_nimi, 'vkopvm' => $fi[date("w",strtotime($t->pvm))] );
 					}
 
 				} else {
-					$return[] = array('tid'=>$tid, 'pvm'=>$pvm, 'ymd'=>date("Ymd",strtotime($t->pvm)),'onkosama'=>$onkosama, 'isSaved'=>false, 'tekijan_nimi'=>$tt->tekijan_nimi);
+					$return[] = array('tid'=>$tid, 'pvm'=>$pvm, 'ymd'=>date("Ymd",strtotime($t->pvm)),'onkosama'=>$onkosama, 'isSaved'=>false, 'tekijan_nimi'=>$tt->tekijan_nimi, 'vkopvm' => $fi[date("w",strtotime($t->pvm))] );
 				}
 
 			}
