@@ -280,6 +280,7 @@ class TyovuorootController extends Controller
 
 
 
+
 		$mail->setTo($saaja);
 		$mail->setSubject(Yii::t('main', 'TYÖVUOROT'). ' '.$tt->tekijan_nimi);
 		$mail->setBody($message);
@@ -880,8 +881,10 @@ class TyovuorootController extends Controller
 			  $toistuva->tyopaari=json_encode($tp);
 			}
 
-			if($toistuva->save())
-			{
+
+			if($saankoSuoritta == 1)
+			$toistuva->save();
+
 	
 
 			$return[] = $this->toistuvaInsert(
@@ -901,7 +904,7 @@ class TyovuorootController extends Controller
 				$toistuva->tyopaari,
 				$saankoSuoritta
 				);
-			}
+
 
 
 			// <-- jos on tyopaari
@@ -1104,11 +1107,13 @@ class TyovuorootController extends Controller
 			  $toistuva->tyopaari=json_encode($tp);
 			}
 
-			if($toistuva->save())
-			{
+
 	
 			if($saankoSuoritta == 1)
-			Tyovuoroot::model()->deleteAll(" toistuva_id='".$model->toistuva_id."' ");
+			{
+				$toistuva->save();
+				Tyovuoroot::model()->deleteAll(" toistuva_id='".$model->toistuva_id."' ");
+			}
 
 			$return[] = $this->toistuvaInsert(
 				$toistuva->id,
@@ -1127,7 +1132,7 @@ class TyovuorootController extends Controller
 				$toistuva->tyopaari,
 				$saankoSuoritta
 				);
-			}
+
 
 
 			// <-- jos on tyopaari
@@ -1544,11 +1549,11 @@ class TyovuorootController extends Controller
 						if($t->save())
 						$return[] = array('tid'=>$t->tid, 'pvm'=>$t->pvm, 'ymd'=>date("Ymd",strtotime($t->pvm)), 'isSaved'=>true);
 					} else {
-						$return[] = array('tid'=>$t->tid, 'pvm'=>$t->pvm, 'ymd'=>date("Ymd",strtotime($t->pvm)), 'isSaved'=>false, 'tekijan_nimi'=>$tt->tekijan_nimi, 'vkopvm' => $fi[date("w",strtotime($t->pvm))] );
+						$return[] = array('tid'=>$tid, 'pvm'=>$pvm, 'ymd'=>date("Ymd",strtotime($pvm)), 'isSaved'=>false, 'tekijan_nimi'=>$tt->tekijan_nimi, 'vkopvm' => $fi[date("w",strtotime($pvm))] );
 					}
 
 				} else {
-					$return[] = array('tid'=>$tid, 'pvm'=>$pvm, 'ymd'=>date("Ymd",strtotime($t->pvm)),'onkosama'=>$onkosama, 'isSaved'=>false, 'tekijan_nimi'=>$tt->tekijan_nimi, 'vkopvm' => $fi[date("w",strtotime($t->pvm))] );
+					$return[] = array('tid'=>$tid, 'pvm'=>$pvm, 'ymd'=>date("Ymd",strtotime($pvm)),'onkosama'=>$onkosama, 'isSaved'=>false, 'tekijan_nimi'=>$tt->tekijan_nimi, 'vkopvm' => $fi[date("w",strtotime($pvm))] );
 				}
 
 			}

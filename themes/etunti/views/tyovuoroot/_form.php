@@ -591,7 +591,7 @@ $('.mult').multiselect({
 
 	// paivita vanhat
 	  var toistuva_aktiivinen = $('#toistuva_aktiivinen').is(':checked');
-	  if(toistuva_aktiivinen === true)
+	  if((toistuva_aktiivinen === true) && ($('#sopivatPaivatInput').val() == 1))
 	  {
 	  //alert(e.target[7].value);
 	  $.ajax({
@@ -600,7 +600,7 @@ $('.mult').multiselect({
 		  type:'POST',
 		  success:function(data){
 			data = JSON.parse(data);
-			//console.log(data);
+			console.log('paivita laatikot > ' +data);
 			laatikonPaivays(data);
 
 	   	},
@@ -737,7 +737,7 @@ $('#poistaTv').click(function(){
 		  type:'POST',
 		  success:function(data){
 			data = JSON.parse(data);
-			//console.log(data);
+			console.log('paivita laatikot, poisto > ' +data);
 			laatikonPaivays(data);
 
 	   	},
