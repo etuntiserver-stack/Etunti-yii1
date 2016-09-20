@@ -361,7 +361,7 @@ class OnlinevarausController extends Controller
 
 	public function actionPalvelu_save_ajax()
 	{
-	   if(isset($_POST['palvelu']) and isset($_POST['nelio']))
+	   if(isset($_POST['palvelu']) and isset($_POST['nelio']) and isset($_POST['tyo_toimialue']))
 	   {
 		$criteria=new CDbCriteria;
 		$criteria->condition = " 
@@ -371,6 +371,7 @@ class OnlinevarausController extends Controller
 		if(isset($model->id))
 		{
 			$_SESSION['onlinevaraus']['paapalvelu'] = $model->id;
+			$_SESSION['onlinevaraus']['tyo_toimialue'] = $_POST['tyo_toimialue'];
 		}
 
 		$this->renderPartial('palvelu_save_ajax',array(
@@ -726,8 +727,12 @@ $months=array(
 
 	protected function pmvCal($date)
 	{
-		$tekija = array();
-		$on = 'kiinni';
+		$tyo_toimialue 	= '';
+		if(isset($_SESSION['onlinevaraus']['tyo_toimialue']) and !empty($_SESSION['onlinevaraus']['tyo_toimialue']))
+		$tyo_toimialue 	= $_SESSION['onlinevaraus']['tyo_toimialue'];
+
+		$tekija 	= array();
+		$on 		= 'kiinni';
 
 		$asetukset = Asetukset::model()->findbypk(1);
 		$alkuAstetuksesta = strtotime($asetukset->onlinevaraus_alku.":00");
@@ -748,6 +753,13 @@ $months=array(
 			online_varauksen_valmina=1 
 			AND id NOT IN ( SELECT tid FROM sivex_tvuoro WHERE pvm='".date("d.m.Y", strtotime($date))."' )
 		";
+		if(!empty($tyo_toimialue))
+		{
+			$criteria->addCondition ("
+				tyo_toimialue LIKE '%".$tyo_toimialue."%'
+			");
+		}
+
 		$tyontekijat = Tyontekijat::model()->findAll($criteria);
 		foreach($tyontekijat as $t)
 		{
@@ -765,6 +777,12 @@ $months=array(
 			pvm='".date("d.m.Y", strtotime($date))."'
 			AND tid IN ( SELECT id FROM sivex_ttekijat WHERE online_varauksen_valmina=1 )
 		";
+		if(!empty($tyo_toimialue))
+		{
+			$criteria->addCondition ("
+				tid IN ( SELECT id FROM sivex_ttekijat WHERE tyo_toimialue LIKE '%".$tyo_toimialue."%' )
+			");
+		}
 
 		$tv = Tyovuoroot::model()->findAll($criteria);
 		$i = 0;

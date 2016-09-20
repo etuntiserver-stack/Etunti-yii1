@@ -102,12 +102,26 @@
 
 		    }
 		}
+	$body .= '
+	 </div>
+	</div>';
 
 	$_SESSION['onlinevaraus']['tilauksenKuvaus'] = $tilauksenKuvaus;
 
+	if(isset($_SESSION['onlinevaraus']['tyo_toimialue']) and !empty($_SESSION['onlinevaraus']['tyo_toimialue']))
+	{
+	$body .= '
+	<div class="row">
+	 <div class="col-sm-2">
+	   <i class="fa fa-map-marker"></i> 
+	 </div><div class="col-sm-10">';
+	$body .= $_SESSION['onlinevaraus']['tyo_toimialue'];
 	$body .= '
 	 </div>
-	</div>
+	</div>';
+	}
+
+	$body .= '
 	<div class="row">
 	 <div class="col-sm-2">
 	   <i class="fa fa-clock-o"></i> 
