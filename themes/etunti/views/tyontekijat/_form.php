@@ -179,7 +179,7 @@ if(empty($model->position) and isset($model->id))
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'tyo_toimialue'); ?>
 
-	   <div class="form-inline">
+	   <div class="row form-inline">
 		<?php
 		$exists = Valikkoot::model()->find(" select_type='tyo_toimialue' ");
 		if(!isset($exists->id))
@@ -190,13 +190,27 @@ if(empty($model->position) and isset($model->id))
 		    $valiko->save();
 		}
 
-		$list = array();
       		$l = Valikkoot::model()->findAll(" select_type='tyo_toimialue' ",array('order' => "select_type"));
+		$arr = json_decode($model->tyo_toimialue);
+
+		echo '<select name="Tyontekijat[tyo_toimialue][]" class="selectpicker col-sm-9" multiple title="Valitse">';
+		foreach($l as $val)
+		{
+			if(is_array($arr) and in_array($val->value,$arr))
+		    		echo '<option value="'.$val->value.'" selected>'.$val->value.'</option>';
+			elseif(!is_array($arr) and $val->value == $model->tyo_toimialue)
+		    		echo '<option value="'.$val->value.'" selected>'.$val->value.'</option>';
+			else
+		    		echo '<option value="'.$val->value.'">'.$val->value.'</option>';
+		}
+		echo '</select>';
+/*
 		foreach($l as $v)
 		$list[$v->value] = $v->value;
 
         	echo $form->dropDownList($model, 'tyo_toimialue', $list,
-		array('empty'=>'','class'=>'form-control form-group'));
+		array('empty'=>'','class'=>'selectpicker col-sm-9', 'multiple'=>'yes'));
+*/
         	?>
 		<span class="btn btn-primary myBgColors muokaValiko" for="tyo_toimialue"><i class="fa fa-pencil-square-o"></i></span>
 	   </div>

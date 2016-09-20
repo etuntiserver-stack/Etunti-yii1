@@ -38,6 +38,7 @@
 		'tekijan_pnumero',
 		'tekijan_ptoimipaikka',
 		'tyoryhma',
+		'tyo_toimialue',
 		'tyoehtosopimus',
 		'tekijan_kulunvalvonta',
 		'tekijan_pankkitili',

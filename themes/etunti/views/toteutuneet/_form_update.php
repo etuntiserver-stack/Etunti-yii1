@@ -156,6 +156,7 @@ $forPVM = date('d.m.Y',strtotime($model->aloitan));
 <br>
 
 	<div class="modal-footer">
+		<span class="btn btn-danger poistaRivit" id="<?php echo $model->kid; ?>"><?php echo Yii::t('main', 'Poista'); ?></span>
 		<span class="btn btn-default" data-dismiss="modal">Sulje</span>
 		<?php echo CHtml::submitButton($model->isNewRecord ? 'Luo' : 'Tallenna',array('class'=>'btn btn-primary updTot')); ?>
 	</div>
@@ -180,6 +181,50 @@ $(document).ready(function(){
         placeholder: "__.__.____ __:__"
   });
 
+
+$('.al').blur(function(){
+	checkMaxValues($(this).val());
+});
+
+$('.lp').blur(function(){
+	checkMaxValues($(this).val());
+});
+
+function checkMaxValues(val){
+	var check = val.split(" ");
+	var dat = check[0].split(".");
+	var time = check[1].split(":");
+	
+	if(dat[0] > 31)
+	alert('Päivät eivät voi olla yli 31.')
+	if(dat[1] > 12)
+	alert('Kuukaudet eivät voi olla yli 12.')
+
+	if(time[0] > 23)
+	alert('Tunnit eivät voi olla yli 23.')
+	if(time[1] > 59)
+	alert('Minutit eivät voi olla yli 59.')
+}
+
+$('.poistaRivit').click(function(){
+	var thisVal = $(this).attr('id');
+	var r = confirm('Oletko varmaa?');
+	if(r){
+        $.ajax({
+           url: 'poista_luetut_toteutuneet',
+           type: "POST",
+           data: { "id" : thisVal },
+           success: function(data){
+		var d = JSON.parse(data);
+		console.log(d);
+
+		window.location.reload();
+		//$('#showres').modal('hide');
+
+           }
+        });
+	}
+});
 
 });
 </script>

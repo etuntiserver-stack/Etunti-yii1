@@ -162,7 +162,6 @@ if(isset($asetukset->checkout_id) and !empty($asetukset->checkout_id) and !empty
 <br>
 	<div class="row" id="huoneistonkoko">
 	  <div class="col-sm-4 col-sm-offset-4">
-	   
 	    <div id="nelioValikko">
 		<select class="form-control input-lg" id="nelio">
 		<?php
@@ -180,6 +179,30 @@ if(isset($asetukset->checkout_id) and !empty($asetukset->checkout_id) and !empty
 	  </div>
 	</div>
 
+
+	<div class="row" id="toimialueRow">
+	  <div class="col-sm-4 col-sm-offset-4">
+		<h4><?php echo Yii::t('main', 'Valitse toimialue'); ?></h4>
+		<?php
+		$exists = Valikkoot::model()->find(" select_type='tyo_toimialue' ");
+		if(!isset($exists->id))
+		{
+		    $valiko = new Valikkoot;
+		    $valiko->select_type = 'tyo_toimialue';
+		    $valiko->value = 'Test';
+		    $valiko->save();
+		}
+
+		$list = array();
+      		$l = Valikkoot::model()->findAll(" select_type='tyo_toimialue' ",array('order' => "select_type"));
+		foreach($l as $v)
+		$list[$v->value] = $v->value;
+
+        	echo CHtml::dropDownList('tyo_toimialue', 'tyo_toimialue', $list,
+		array('class'=>'form-control input-lg'));
+        	?>
+	  </div>
+	</div>
 
 <br>
 	<div class="row" id="lispalvimg">

@@ -191,6 +191,9 @@ function checkMaxValues(val){
 	alert('Minutit eivät voi olla yli 59.')
 }
 
+  $('#mobile-form').on('submit',function(){
+	$('.uusiRiviSubmit').remove();
+  });
 
 /*
   $('.uusiRivi').click(function(){

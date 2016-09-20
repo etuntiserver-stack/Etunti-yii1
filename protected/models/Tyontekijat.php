@@ -115,7 +115,7 @@ public $tunnus;
 			'tekijan_tietoja' => Yii::t('main', 'Tietoja'),
 			'tekijan_muisti' => Yii::t('main', 'Muistiinpanoja'),
 			'salasana' => Yii::t('main', 'Mobiilisovelluksen salasana'),
-			'online_varauksen_valmina' => Yii::t('main', 'Valmius onlinevaraukseen'),
+			'online_varauksen_valmina' => Yii::t('main', 'Valmis onlinevaraukseen'),
 			'kortit' => Yii::t('main', 'Kortit'),
 			'ayjasenyys' => Yii::t('main', 'Ay-jäsenyys'),
 			'gcm_reg_id'=> Yii::t('main', 'Google Cloud Messaging ID'),

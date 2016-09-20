@@ -177,7 +177,7 @@ class TyontekijatController extends Controller
 		if(isset($_POST['Tyontekijat']))
 		{
 			$model->attributes=$_POST['Tyontekijat'];
-
+			$model->tyo_toimialue=json_encode($model->tyo_toimialue);
 			if(isset($_POST['kortit'])) $model->kortit = implode("##***",$_POST['kortit']);
 			if($model->save())
 			{
@@ -247,16 +247,7 @@ class TyontekijatController extends Controller
 		{
 
 			$model->attributes=$_POST['Tyontekijat'];
-
-			if(isset($_POST['Tyontekijat']['imei']))
-			$imei=Tyontekijat::model()->find(" id!='".$model->id."' and imei='".$_POST['Tyontekijat']['imei']."' and imei!='' ");
-			if(isset($imei->imei))
-			{
-			echo Yii::t('main', 'Tämän imei on jo käytössä');
-
-			exit;
-			}
-
+			$model->tyo_toimialue=json_encode($model->tyo_toimialue);
 			if(isset($_POST['kortit'])) $model->kortit = implode("##***",$_POST['kortit']);
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
