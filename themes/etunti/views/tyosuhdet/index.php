@@ -25,6 +25,7 @@ $this->menu=array(
    <div class="pull-right">
     <div class="form-inline">
      <form action="#" target="_blank" class="form-group" method="POST">
+      <textarea name="sarakkeet" style="display:none"><?php if(isset($_POST['sarakkeet'])) echo json_encode($_POST['sarakkeet']); ?></textarea>
       <input type="submit" name="tulosta" class="btn btn-primary btn-sm myBgColors" value="PDF">
      </form>
     </div>

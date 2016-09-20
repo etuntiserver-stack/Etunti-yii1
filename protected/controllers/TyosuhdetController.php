@@ -141,7 +141,7 @@ class TyosuhdetController extends Controller
 	{
 
 	       	$criteria = new CDbCriteria();
-		$criteria->order = 'id DESC';
+		$criteria->order = 'tekijan_nimi ASC';
 
 		if(Yii::app()->request->getPost('TekijaVuoro'))
 		{
@@ -160,6 +160,9 @@ class TyosuhdetController extends Controller
 
 		if(Yii::app()->request->getPost('tulosta'))
 		{
+		  if(isset($_POST['sarakkeet'])) 
+			$_POST['sarakkeet'] = json_decode($_POST['sarakkeet']);
+
 	          $html2pdf = Yii::app()->ePdf->HTML2PDF('L', 'A4', 'en');
 		  $html2pdf->setDefaultFont('Arial');
 	          $html2pdf->WriteHTML($this->renderPartial('index', array(

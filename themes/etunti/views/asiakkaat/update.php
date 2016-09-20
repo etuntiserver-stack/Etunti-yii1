@@ -1,7 +1,9 @@
 <?php
 $head = '';
 
-if(!empty($model->yhteyshenkilo))
+if(!empty($model->yrityksen_nimi))
+$head = $model->yrityksen_nimi;
+elseif(empty($model->yrityksen_nimi) and !empty($model->yhteyshenkilo))
 $head = $model->yhteyshenkilo;
 else
 $head = $model->osoite;

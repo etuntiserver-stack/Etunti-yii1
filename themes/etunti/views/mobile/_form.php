@@ -178,7 +178,6 @@ $(document).ready(function(){
 
   $("#Mobile_tekijan_nimi").change(function(){
 
-	$
 
   });
 

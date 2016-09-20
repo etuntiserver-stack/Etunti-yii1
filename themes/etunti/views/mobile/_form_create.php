@@ -105,6 +105,40 @@ $('#Mobile_kohdenID').change(function(){
 
 });
 
+
+  $('.luoTallennaKohde').click(function(){
+
+	var lomake  = $('#mobile-form').serialize();
+	var isLine = false;
+        $.ajax({
+           url: 'create',
+           type: "POST",
+	   async: false,
+	   data: lomake,
+           success: function(data){
+		console.log(data);
+		if(data == 1)
+		isLine = true;
+           }
+        });
+
+	if(!isLine)
+	{
+		$('#mobile-form').submit();
+	} else {
+		alert('Tämä on jo olemassa.');
+		return false;
+	}
+
+  });
+
+  $('#mobile-form').on('submit', function(e){
+
+
+	window.location.href="index";
+	e.preventDefault();
+  });
+
 });
 </script>
 

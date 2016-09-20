@@ -188,28 +188,28 @@ function num($val){
 
 			/* lu */
 		       	$criteria = new CDbCriteria();
-			$criteria->select = " aloitan,loppui,tekijan_nimi,kohde_kannasta,viesti ";
+			$criteria->select = " time,aloitan,loppui,tekijan_nimi,kohde_kannasta,viesti ";
 			$criteria->order = " DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i') ASC ";
 			$criteria->condition = " aloitan!='' and loppui!='' AND id NOT IN (SELECT kid FROM sivexkuitti_repaired) ";
 
 			allCrit($criteria);
 
-			$lu = Mobile::model()->findAll($criteria); 
-
+			$lu = Mobile::model()->findAll($criteria);
+  			foreach($lu as $data){
+				$model[strtotime($data->aloitan)] = $data;
+			}
 
 			/* tot */
 		       	$criteria = new CDbCriteria();
-			$criteria->select = " aloitan,loppui,tekijan_nimi,kohde_kannasta ";
+			$criteria->select = " time,aloitan,loppui,tekijan_nimi,kohde_kannasta ";
 			$criteria->order = " DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i') ASC ";
 			$criteria->condition = " aloitan!='' and loppui!='' ";
 
 			allCrit($criteria);
 			$tot = array();
 			$tot = Toteutuneet::model()->findAll($criteria); 
-			$m = array_merge($lu, $tot);
 
-			$model = array();
-  			foreach($m as $data){
+  			foreach($tot as $data){
 				$model[strtotime($data->aloitan)] = $data;
 			}
 			ksort($model);
@@ -422,11 +422,33 @@ function num($val){
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
+
+
+
 		if(isset($_POST['Mobile']))
 		{
+			$isLine =  false;
 			$model->attributes=$_POST['Mobile'];
-			if($model->save())
-				$this->redirect(array('index'));
+
+			$criteria = new CDBCriteria;
+			$criteria->condition = "
+				DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')='".date("Y-m-d H:i", strtotime($model->aloitan))."'
+				AND DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')='".date("Y-m-d H:i", strtotime($model->loppui))."'
+				AND tid='".$model->tid."'
+				AND kohdenID='".$model->kohdenID."'
+				AND status='".$model->status."'
+			";
+			$check = Mobile::model()->find($criteria);
+			if(isset($check->id))
+			{
+				$isLine = true;
+			}
+
+			if($isLine == false)
+			$model->save();
+
+			echo $isLine;
+			exit;
 		}
 
 		$this->render('create',array(

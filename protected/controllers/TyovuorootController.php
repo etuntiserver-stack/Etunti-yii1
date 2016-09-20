@@ -159,6 +159,7 @@ class TyovuorootController extends Controller
 
 			if(!empty($siivousTyonimike))
 			{
+			
 			$criteria->addCondition (" 
 				id IN(
 				   SELECT tid FROM sivex_tvuoro
@@ -171,11 +172,10 @@ class TyovuorootController extends Controller
 				)
 			");
 			}
-
 			if(!empty($tekijanToimialue))
 			{
 			$criteria->addCondition("
-				tyo_toimialue='".$tekijanToimialue."' 
+				tyo_toimialue LIKE '%".$tekijanToimialue."%' 
 			");
 			}
 
@@ -274,6 +274,7 @@ class TyovuorootController extends Controller
 		$mail = new YiiMailer();
 		//$mail->clearLayout();//if layout is already set in config
 		$mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
+
 
 
 
@@ -938,6 +939,7 @@ class TyovuorootController extends Controller
 			echo json_encode($return);
 		exit;
 		}
+
 
 
 

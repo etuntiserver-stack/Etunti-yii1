@@ -70,7 +70,7 @@ $this->breadcrumbs=array(
 
                         </div>
                       </div>
-                      <div class="col-md-2">
+                      <div class="col-md-1  col-md-offset-1">
                         <div class="section">
                           <label class="field select">
 

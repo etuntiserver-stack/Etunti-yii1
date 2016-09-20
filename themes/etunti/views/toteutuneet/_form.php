@@ -177,6 +177,7 @@ $forPVM = date('d.m.Y',strtotime($s->aloitan));
 <br>
 
 	<div class="modal-footer">
+		<span class="btn btn-danger poistaRivit" id="<?php echo $s->id; ?>"><?php echo Yii::t('main', 'Poista'); ?></span>
 		<span class="btn btn-default" data-dismiss="modal">Sulje</span>
 		<?php echo CHtml::Button('Tallenna',array('class'=>'btn btn-primary uusiTot')); ?>
 	</div>		
@@ -226,6 +227,28 @@ function checkMaxValues(val){
 	if(time[1] > 59)
 	alert('Minutit eivät voi olla yli 59.')
 }
+
+
+$('.poistaRivit').click(function(){
+	var thisVal = $(this).attr('id');
+	var r = confirm('Oletko varmaa?');
+	if(r){
+        $.ajax({
+           url: 'poista_luetut_toteutuneet',
+           type: "POST",
+           data: { "id" : thisVal },
+           success: function(data){
+		var d = JSON.parse(data);
+		console.log(d);
+
+		window.location.reload();
+		//$('#showres').modal('hide');
+
+           }
+        });
+	}
+});
+
 
 
 });
