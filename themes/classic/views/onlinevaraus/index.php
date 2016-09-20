@@ -159,7 +159,7 @@ if(isset($asetukset->checkout_id) and !empty($asetukset->checkout_id) and !empty
 		</select>
 	  </div>
 	</div>
-<br>
+
 	<div class="row" id="huoneistonkoko">
 	  <div class="col-sm-4 col-sm-offset-4">
 	    <div id="nelioValikko">
@@ -371,6 +371,10 @@ $("#lispalvimg").click(function(){
 	$('#lisapalvelulista').show('slow');
 });
 
+$("#tyo_toimialue").change(function(){
+	checker();
+});
+
 $("#palvelu").change(function(){
 
    clearAll();
@@ -387,13 +391,7 @@ $("#palvelu").change(function(){
 		{
 			$('#nelioValikko').html(JSON.parse(data));
 			$('#huoneistonkoko').show('slow');
-			$('#lispalvimg').show('slow');
 			checker();
-
-			$("#nelio").change(function(){
-			checker();
-			});
-
 		}
    	},
 	error:function(data){
@@ -404,6 +402,11 @@ $("#palvelu").change(function(){
 			checker();
     }
 
+});
+
+$(document).delegate("#nelio","change",function(){
+	$('#lispalvimg').show('slow');
+	checker();
 });
 
 
@@ -432,6 +435,7 @@ function checker(){
 
 	var palvelu = $("#palvelu").val();
 	var nelio = $("#nelio").val();
+	var tyo_toimialue = $('#tyo_toimialue').val();
 
 	if(palvelu && nelio)
 	{
@@ -439,7 +443,7 @@ function checker(){
 
    $.ajax({
 	url: 'palvelu_save_ajax',
-	data:{ "palvelu" : palvelu, "nelio" : nelio },
+	data:{ "palvelu" : palvelu, "nelio" : nelio, "tyo_toimialue" : tyo_toimialue },
 	type:'POST',
 	success:function(data){
 		//console.log(data);
