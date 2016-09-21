@@ -586,7 +586,7 @@ $('.mult').multiselect({
 
 	var str = '';
 	var thisDataReturn = [];
-alert()
+
 	if( e.target[0].value != '')
 	{
 
