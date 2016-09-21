@@ -94,7 +94,37 @@ $(document).delegate(".chckbxHyvaksynta","click",function(){
 
 $(document).ready(function(){
 
+
    $(document).delegate(".uusiRiviSubmit","click",function(){
+
+	// <-- tarkista , aloitus ja lopetus
+	var lomake  = [{
+		aloitan 	: $("#Mobile_aloitan").val(),
+		loppui 		: $("#Mobile_loppui").val(),
+		tid 		: $("#Mobile_tid").val(),
+	}];
+
+	var isLine = '';
+        $.ajax({
+           url: location.protocol + "//" + location.host + '/index.php/mobile/on_olemassa',
+           type: "POST",
+	   async: false,
+	   data: lomake[0],
+           success: function(data){
+		data = JSON.parse(data);
+		console.log(data);
+		if(data !== '')
+		isLine = data;
+           }
+        });
+
+	if(isLine !== '')
+	{
+		alert(isLine);
+		return false;
+	}
+	// tarkista , aloitus ja lopetus -->
+
 
 
     var Mobile_aloitan = $("#Mobile_aloitan").val();
@@ -119,6 +149,7 @@ $(document).ready(function(){
         return false;
     }
 
+		$('.uusiRiviSubmit').remove();
 		$('#mobile-form').submit();
 		return false;
   });
