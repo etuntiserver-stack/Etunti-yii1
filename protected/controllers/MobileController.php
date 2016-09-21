@@ -33,7 +33,7 @@ class MobileController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin', 'delete', 'create', 'update', 'index', 'index_a', 'view', 'updatetime', 'showkohteet', 'yhteenveto', 'kyhteenveto', 'yhteenveto_m', 'historia', 'poistaKohde', 'total_suunniteltu', 'total_toteutu', 'total_luettu', 'kesto', 'index_ajax', 'raportit', 'uusirivi', 'palkkataulukko', 'tidfromtomatkat', 'tidfromtoSL', 'tidfromtoSPL', 'tyobykohde', 'asiakas_hyvaksyminen', 'kohdebytekija' ,'kyhteenveto_tuntemattomat', 'laskutettu', 'lahetys_asiakkaalle', 'get_tyovuorot_day'),
+				'actions'=>array('admin', 'delete', 'create', 'update', 'index', 'index_a', 'view', 'updatetime', 'showkohteet', 'yhteenveto', 'kyhteenveto', 'yhteenveto_m', 'historia', 'poistaKohde', 'total_suunniteltu', 'total_toteutu', 'total_luettu', 'kesto', 'index_ajax', 'raportit', 'uusirivi', 'palkkataulukko', 'tidfromtomatkat', 'tidfromtoSL', 'tidfromtoSPL', 'tyobykohde', 'asiakas_hyvaksyminen', 'kohdebytekija' ,'kyhteenveto_tuntemattomat', 'laskutettu', 'lahetys_asiakkaalle', 'get_tyovuorot_day', 'on_olemassa'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -413,6 +413,42 @@ function num($val){
 			'model'=>$model,
 		));
 	
+	}
+
+
+	public function actionOn_olemassa()
+	{
+		$model=new Mobile;
+		$isLine = '';
+
+		if(isset($_POST))
+		{
+			$model->attributes=$_POST;
+
+			$criteria = new CDBCriteria;
+			$criteria->condition = "
+				DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d')='".date("Y-m-d", strtotime($model->aloitan))."'
+				AND tid='".$model->tid."'
+			";
+			$check = Mobile::model()->findAll($criteria);
+
+			foreach($check as $data)
+			{
+			   if( date("Y-m-d H:i", strtotime($data->aloitan)) == date("Y-m-d H:i", strtotime($model->aloitan)) ){
+				$isLine .= Yii::t('main', 'Tämä aloitus on jo olemassa')."\n";
+				break;
+			   }
+
+			   if( date("Y-m-d H:i", strtotime($data->loppui)) == date("Y-m-d H:i", strtotime($model->loppui)) ){
+				$isLine .= Yii::t('main', 'Tämä lopetus on jo olemassa')."\n";
+				break;
+			   }
+			}
+
+		}
+
+		echo json_encode($isLine);
+		exit;
 	}
 
 	public function actionCreate()

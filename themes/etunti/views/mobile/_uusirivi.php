@@ -191,69 +191,7 @@ function checkMaxValues(val){
 	alert('Minutit eivät voi olla yli 59.')
 }
 
-  $('#mobile-form').on('submit',function(){
-	$('.uusiRiviSubmit').remove();
-  });
+	// toteuma.js on toimimassa
 
-/*
-  $('.uusiRivi').click(function(){
-
-
-    var Mobile_aloitan = $("#Mobile_aloitan").val();
-    var Mobile_loppui = $("#Mobile_loppui").val();
-    var Mobile_kohde_kannasta = $("#Mobile_kohde_kannasta").val();
-    var Mobile_status = $("#Mobile_status").val();
-
-    if (Mobile_aloitan  === '__:__') {
-        $('#Mobile_aloitan').css({"border" : "2px #f14010 solid"}).focus();
-        return false;
-    }
-    if (Mobile_loppui  === '__:__') {
-        $('#Mobile_loppui').css({"border" : "2px #f14010 solid"}).focus();
-        return false;
-    }
-    if (Mobile_kohde_kannasta  === '') {
-        $('#Mobile_kohde_kannasta').css({"border" : "2px #f14010 solid"}).focus();
-        return false;
-    }
-    if (Mobile_status  === '') {
-        $('#Mobile_status').css({"border" : "2px #f14010 solid"}).focus();
-        return false;
-    }
-
-		$('#mobile-form').submit();
-		return false;
-  });
-
-  $('#mobile-form').on('submit',function(e) {
-
-	console.log( $( this ).serializeArray() );
-	console.log( e.target[0].value );
-
-	  $.ajax({
-		  url: location.protocol + "//" + location.host + '/index.php/mobile/uusirivi',
-		  data:$(this).serialize(),
-		  type:'POST',
-		  success:function(data){
-			console.log(data);
-		/*
-			var divID = data.split("_");
-			if( divID )
-			blockUpdater(divID);
-			$('#showres').modal('hide');
-		*/
-/*
-		setTimeout(function(){document.location.href = "index";},500);
-		return false;
-	   	},
-		error:function(data){
-		console.log(data);
-	    	}
-	  });
-
-
-	e.preventDefault(); 
-  });
-*/
 });
 </script>
