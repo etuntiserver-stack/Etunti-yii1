@@ -879,6 +879,7 @@ public function actionImei($dom)
 
 
 
+
 			  $obj = json_decode($json);
 			  if(isset($obj->results[0]))
 			  {
@@ -915,12 +916,13 @@ public function actionImei($dom)
 		if(isset($_POST['tag'])) $tag = $_POST['tag']; else $tag = '';
 
 
-		if(isset($_POST['avoinID'])) $avoinID = $_POST['avoinID']; else $avoinID = '';
+		if(isset($_POST['avoinID'])) $avoinID = $_POST['avoinID']; else $avoinID = 0;
 		if(isset($_POST['appVersio'])) $appVersio = $_POST['appVersio']; else $appVersio = '';	
 		// <-- Jos versio yli 0.0.57
 		$explVersio = array();
 		$explVersio = explode(".", $appVersio);
-		if( isset($explVersio[2]) and (int)$explVersio[2] >= 57 and (int)$avoinID > 0 )
+		//if( isset($explVersio[2]) and (int)$explVersio[2] >= 57 and (int)$avoinID > 0 )
+		if( (int)$avoinID > 0 )
 		{
 
 
@@ -1007,11 +1009,11 @@ public function actionImei($dom)
 	// <-- Mob finder
 	// <-- Jos versio yli 0.0.57
 	$checkVersio = '';
-	if(isset($_POST['avoinID'])) $avoinID = $_POST['avoinID']; else $avoinID = '';
+	if(isset($_POST['avoinID'])) $avoinID = $_POST['avoinID']; else $avoinID = 0;
 	if(isset($_POST['appVersio'])) $appVersio = $_POST['appVersio']; else $appVersio = '';	
 	$explVersio = array();
 	$explVersio = explode(".", $appVersio);
-	if( isset($explVersio[2]) and (int)$explVersio[2] >= 57 and (int)$avoinID > 0 )
+	if( (int)$avoinID > 0 )
 	{
 
 	    		$criteria = new CDbCriteria();
