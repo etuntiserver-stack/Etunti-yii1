@@ -530,6 +530,7 @@ $('.mult').multiselect({
 	$('#submitButton').click(function(){
 
 		$('#tyovuoroot-form').submit();
+		return false;
 	});
 
 
@@ -585,7 +586,7 @@ $('.mult').multiselect({
 
 	var str = '';
 	var thisDataReturn = [];
-
+alert()
 	if( e.target[0].value != '')
 	{
 
@@ -713,6 +714,7 @@ $('.mult').multiselect({
 
 
 	e.preventDefault(); 
+
 	});
 
 
@@ -879,6 +881,7 @@ function laatikonPaivays(thisDataReturn){
   });
 
   $('#alku').change(function(){
+
 	laskePituus();
   });
 
