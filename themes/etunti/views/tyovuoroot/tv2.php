@@ -8,6 +8,9 @@
 /* @var $this TyovuorootController */
 /* @var $dataProvider CActiveDataProvider */
 
+
+
+
    $pvmtid = Yii::app()->request->getParam('pvmtid', 0);
    if(!empty($pvmtid)){
 	$expl = explode("_",$pvmtid);
@@ -24,6 +27,31 @@
 	</script>
 	<?php
    }
+
+
+
+
+		if(Yii::app()->request->getPost('from'))
+		Yii::app()->session['from'] = date("Y-m-d",strtotime(Yii::app()->request->getPost('from')));
+
+		if(Yii::app()->request->getPost('to'))
+		Yii::app()->session['to'] = date("Y-m-d",strtotime(Yii::app()->request->getPost('to')));
+
+
+		$from = '';
+		$to = '';
+		
+		if(isset(Yii::app()->session['from']))
+		$from = date("d.m.Y",strtotime(Yii::app()->session['from']));
+		if(isset(Yii::app()->session['to']))
+		$to = date("d.m.Y",strtotime(Yii::app()->session['to']));
+
+
+   		$dTVfrom = date("Y-m-d",strtotime($from));
+		echo '<input type="hidden" id="fromTV" value="'.$dTVfrom.'">';
+		$dTVto = date("Y-m-d",strtotime($to));
+		echo '<input type="hidden" id="toTV" value="'.$dTVto.'">';
+
 
 // oletus arvot
 
@@ -56,7 +84,7 @@
         	$criteria->select = "id,tekijan_nimi";
         	$criteria->condition = " aktiivinen = '1' ";
 
-		if(Yii::app()->session['Tekija']){
+		if(Yii::app()->session['Tekija'] and (!isset($_GET['asiakas']) and !isset($_GET['kohde']))){
 		  if(count(Yii::app()->session['Tekija']) > 1)
 		    $ids = implode(",",Yii::app()->session['Tekija']);
 		  else
@@ -65,31 +93,43 @@
 	        $criteria->addCondition ('id IN ('.$ids.') ');
 		}
 
+		// <-- Asiakas
+		if(isset($_GET['asiakas']) and !empty($_GET['asiakas']))
+		{
+	           $criteria->addCondition ("
+		   id IN (  
+		     SELECT tid FROM sivex_tvuoro WHERE DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '$dTVfrom' AND '$dTVto'
+		       AND kohde IN 
+		       (
+			    SELECT id FROM sivex_kohdet WHERE asiakas_id IN
+   			    (
+			       SELECT id FROM asiakkaat WHERE yrityksen_nimi LIKE '%".$_GET['asiakas']."%' OR yhteyshenkilo LIKE '%".$_GET['asiakas']."%' OR puhelin LIKE '%".$_GET['asiakas']."%'
+			    )
+		       )
+		   )
+		   ");
+		}
+		// Asiakas -->
+
+		// <-- Kohde
+		if(isset($_GET['kohde']) and !empty($_GET['kohde']))
+		{
+	           $criteria->addCondition ("
+		   id IN (  
+		     SELECT tid FROM sivex_tvuoro WHERE DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '$dTVfrom' AND '$dTVto'
+		       AND kohde IN 
+		       (
+			    SELECT id FROM sivex_kohdet WHERE osoite LIKE '%".$_GET['kohde']."%' OR puh_nro LIKE '%".$_GET['kohde']."%'
+		       )
+		   )
+		   ");
+		}
+		//  Kohde -->
+
 		$tt = Tyontekijat::model()->findAll($criteria);
 
 
 
-		if(Yii::app()->request->getPost('from'))
-		Yii::app()->session['from'] = date("Y-m-d",strtotime(Yii::app()->request->getPost('from')));
-
-		if(Yii::app()->request->getPost('to'))
-		Yii::app()->session['to'] = date("Y-m-d",strtotime(Yii::app()->request->getPost('to')));
-
-
-		$from = '';
-		$to = '';
-		
-		if(isset(Yii::app()->session['from']))
-		$from = date("d.m.Y",strtotime(Yii::app()->session['from']));
-		if(isset(Yii::app()->session['to']))
-		$to = date("d.m.Y",strtotime(Yii::app()->session['to']));
-
-
-
-   $dTVfrom = date("Y-m-d",strtotime($from));
-   echo '<input type="hidden" id="fromTV" value="'.$dTVfrom.'">';
-   $dTVto = date("Y-m-d",strtotime($to));
-   echo '<input type="hidden" id="toTV" value="'.$dTVto.'">';
 
 
 //print_r(Yii::app()->session['tvuoroTekija']);
