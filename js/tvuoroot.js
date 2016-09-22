@@ -204,8 +204,7 @@ jQuery.clearKaikki = function clearKaikki(){
 		     $(this).removeClass("muistissa").addClass("muistin");
 		});
 
-		$('.trash').removeClass('fa fa-trash-o text-danger link');
-		$(".clear").removeClass('fa fa-circle-o-notch text-success link');
+		$(".muokkausLi").hide();
 		$(".mplus").removeClass().addClass("forCopy");
 		$(".mcut").removeClass().addClass("forCut");
 		$('#muistissa').html('')
@@ -260,10 +259,9 @@ function muisti(){
      			$('#'+value).removeClass("muistin").addClass("muistissa");
 		});
 
+			$(".muokkausLi").show();
 			$(".forCopy").removeClass("forCopy").addClass("mplus glyphicon glyphicon-plus text-success link");
 			$(".forCut").removeClass("forCut").addClass("mcut glyphicon glyphicon-transfer text-success link");
-			$(".trash").addClass("fa fa-trash-o text-danger link");
-			$(".clear").addClass("fa fa-circle-o-notch text-success link");
 		
 		}
 		return false;

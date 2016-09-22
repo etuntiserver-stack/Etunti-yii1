@@ -171,19 +171,6 @@
 	<label><?php echo Yii::t('main', 'Näytä viikkonlopput'); ?></label><br>
 	<div class="btn" id="vkolopput"><?php echo Yii::t('main', 'Viikonloput'); ?></div>
 
-   </div><div class="form-group">
-
-	<label></label>
-	   <div class="">
-	     <div class="form-inline">
-	      <div class="form-group">
-		<div class="trash"></div>
-	      </div><div class="form-group">
-		<div class="clear"></div>
-	      </div>
-	     </div>
-	   </div>
-
    </div><div class="form-group pull-right">
 
      <div class="form-inline">

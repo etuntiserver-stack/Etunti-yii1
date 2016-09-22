@@ -60,6 +60,21 @@ if( $curpage == 'tyovuoroot/tv2' )
 	      <a href="#" style="font-size: 120%">
                 <span class="mr10"></span> <?php echo $sivunnimike; ?> </a>
             </li>
+	    <li class="muokkausLi" style="display:none">
+	     <a href="#" class="bg-warning">
+	        <span class="mr10">Muokkaus tila</span>
+	     </a>
+	    </li>
+	    <li class="muokkausLi" style="display:none">
+	     <a href="#" class="trash fa fa-trash-o" style="font-size: 150%">
+	     </a>
+	    </li>
+	    <li class="muokkausLi" style="display:none">
+	     <a href="#" class="clear fa fa-circle-o-notch" style="font-size: 150%">
+	     </a>
+	    </li>
+
+
       </ul>
 <!--
       <form class="navbar-form navbar-left navbar-search" role="search">
