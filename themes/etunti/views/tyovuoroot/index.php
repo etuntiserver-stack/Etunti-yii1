@@ -5,56 +5,10 @@
 <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/tyovuorot.css">
 
 <?php
-// oletus arvot
-   if(!isset(Yii::app()->session['TekijaVuoro'])){
-
-       		$criteria = new CDbCriteria();
-        	$criteria->order = "tekijan_nimi";
-        	$criteria->select = "id,tekijan_nimi";
-        	$criteria->condition = " aktiivinen = '1' ";
-		$tt = Tyontekijat::model()->findAll($criteria);
-		$tekijatOletuksena = array();
-		foreach($tt as $t)
-		$tekijatOletuksena[] = $t->id;
-
-		Yii::app()->session['TekijaVuoro'] = $tekijatOletuksena;
-
-
-   }
-
-
-
-		if(Yii::app()->request->getPost('TekijaVuoro'))
-		Yii::app()->session['TekijaVuoro'] = Yii::app()->request->getPost('TekijaVuoro');
-
-       		$criteria = new CDbCriteria();
-        	$criteria->order = "tekijan_nimi";
-        	$criteria->select = "id,tekijan_nimi";
-        	$criteria->condition = " aktiivinen = '1' ";
-
-		if(Yii::app()->session['TekijaVuoro']){
-		  if(count(Yii::app()->session['TekijaVuoro']) > 1)
-		    $ids = implode(",",Yii::app()->session['TekijaVuoro']);
-		  else
-		    $ids = Yii::app()->session['TekijaVuoro'][0];
-
-	        $criteria->addCondition ('id IN ('.$ids.') ');
-		}
-
-		$tt = Tyontekijat::model()->findAll($criteria);
-
-
-
-?>
-
-
-<?php if(count(Yii::app()->session['TekijaVuoro']) > 0 and Yii::app()->session['TekijaVuoro'][0] != 0) : ?>
-
-<?php
-
   $paivat=array(
 	1=>Yii::t('main', 'Ma'),
 	2=>Yii::t('main', 'Ti'),
+
 	3=>Yii::t('main', 'Ke'),
 	4=>Yii::t('main', 'To'),
 	5=>Yii::t('main', 'Pe'),
@@ -84,6 +38,82 @@
 
    $nbsp = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
 ?>
+
+<?php
+// oletus arvot
+   if(!isset(Yii::app()->session['TekijaVuoro'])){
+
+       		$criteria = new CDbCriteria();
+        	$criteria->order = "tekijan_nimi";
+        	$criteria->select = "id,tekijan_nimi";
+        	$criteria->condition = " aktiivinen = '1' ";
+		$tt = Tyontekijat::model()->findAll($criteria);
+		$tekijatOletuksena = array();
+		foreach($tt as $t)
+		$tekijatOletuksena[] = $t->id;
+
+		Yii::app()->session['TekijaVuoro'] = $tekijatOletuksena;
+   }
+
+
+
+		if(Yii::app()->request->getPost('TekijaVuoro'))
+		Yii::app()->session['TekijaVuoro'] = Yii::app()->request->getPost('TekijaVuoro');
+
+       		$criteria = new CDbCriteria();
+        	$criteria->order = "tekijan_nimi";
+        	$criteria->select = "id,tekijan_nimi";
+        	$criteria->condition = " aktiivinen = '1' ";
+
+		if(Yii::app()->session['TekijaVuoro'] and (!isset($_GET['asiakas']) and !isset($_GET['kohde']))){
+		  if(count(Yii::app()->session['TekijaVuoro']) > 1)
+		    $ids = implode(",",Yii::app()->session['TekijaVuoro']);
+		  else
+		    $ids = Yii::app()->session['TekijaVuoro'][0];
+
+	        $criteria->addCondition ('id IN ('.$ids.') ');
+		}
+		// <-- Asiakas
+		if(isset($_GET['asiakas']) and !empty($_GET['asiakas']))
+		{
+	           $criteria->addCondition ("
+		   id IN (  
+		     SELECT tid FROM sivex_tvuoro WHERE DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '$dTVfrom' AND '$dTVto'
+		       AND kohde IN 
+		       (
+			    SELECT id FROM sivex_kohdet WHERE asiakas_id IN
+   			    (
+			       SELECT id FROM asiakkaat WHERE yrityksen_nimi LIKE '%".$_GET['asiakas']."%' OR yhteyshenkilo LIKE '%".$_GET['asiakas']."%' OR puhelin LIKE '%".$_GET['asiakas']."%'
+			    )
+		       )
+		   )
+		   ");
+		}
+		// Asiakas -->
+
+		// <-- Kohde
+		if(isset($_GET['kohde']) and !empty($_GET['kohde']))
+		{
+	           $criteria->addCondition ("
+		   id IN (  
+		     SELECT tid FROM sivex_tvuoro WHERE DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '$dTVfrom' AND '$dTVto'
+		       AND kohde IN 
+		       (
+			    SELECT id FROM sivex_kohdet WHERE osoite LIKE '%".$_GET['kohde']."%' OR puh_nro LIKE '%".$_GET['kohde']."%'
+		       )
+		   )
+		   ");
+		}
+		//  Kohde -->
+
+		$tt = Tyontekijat::model()->findAll($criteria);
+
+
+
+?>
+
+
+<?php if(count(Yii::app()->session['TekijaVuoro']) > 0 and Yii::app()->session['TekijaVuoro'][0] != 0) : ?>
 
 
 <div id="ylapalkki" style="display:none">

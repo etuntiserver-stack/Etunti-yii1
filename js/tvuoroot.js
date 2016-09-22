@@ -33,9 +33,34 @@ $('#tyontekijat').selectpicker({
 
 
 
+$('#EtsiAsiakas').on('keypress', function (e) {
+         if(e.which === 13){
+		$( ".EtsiAsiakas" ).trigger( "click" );
+         }
+});
 
+$('#EtsiKohde').on('keypress', function (e) {
+         if(e.which === 13){
+		$( ".EtsiKohde" ).trigger( "click" );
+         }
+});
 
+$('.EtsiAsiakas').click(function(){
+	var asiakas = $('#EtsiAsiakas').val();
+	var controller = $(this).attr('controller');
+	window.location.href=location.protocol + "//" + location.host + '/index.php/'+controller+'?asiakas='+asiakas;
+});
 
+$('.EtsiKohde').click(function(){
+	var kohde = $('#EtsiKohde').val();
+	var controller = $(this).attr('controller');
+	window.location.href=location.protocol + "//" + location.host + '/index.php/'+controller+'?kohde='+kohde;
+});
+
+$('.PalautaTvEtusivulle').click(function(){
+	var controller = $(this).attr('controller');
+	window.location.href=location.protocol + "//" + location.host + '/index.php/'+controller;
+});
 
 
 $(document).delegate("#from","blur",function(){

@@ -58,32 +58,48 @@ if( $curpage == 'tyovuoroot/tv2' )
             </li>
 	    <?php if( !empty($tyovuorot_sivut) ) : ?>
 
-        <li class="dropdown menu-merge">
-          <a href="#" class="dropdown-toggle " data-toggle="dropdown"> 
-		 <?php echo $tyovuorot_sivut; ?>
+            <li>
+              <a href="#">
+                <span class="mr10"></span> <?php echo $tyovuorot_sivut; ?> </a>
+            </li>
+
+        <li class="dropdown menu-merge <?php if((isset($_GET['asiakas']) and !empty($_GET['asiakas'])) or (isset($_GET['kohde']) and !empty($_GET['kohde']))) echo 'open'; ?>">
+          <a href="#" class="dropdown-toggle <?php if((isset($_GET['asiakas']) and !empty($_GET['asiakas'])) or (isset($_GET['kohde']) and !empty($_GET['kohde']))) echo 'bg-danger'; ?>" data-toggle="dropdown"> 
+		 <?php echo Yii::t('main','HAKU'); ?>
             <span class="caret caret-tp hidden-xs"></span>
           </a>
-          <ul class="dropdown-menu list-group dropdown-persist w200" role="menu">
+          <ul class="dropdown-menu list-group dropdown-persist w300" role="menu">
             <li class="list-group-item">
               <a href="#" class="animated animated-short fadeInUp">
+		    <label><?php echo Yii::t('main','Asiakas'); ?></label>
 		    <div class="input-group">
-		      <input type="text" class="form-control" placeholder="<?php echo Yii::t('main','Asiakas'); ?>...">
+		      <input type="text" class="form-control" id="EtsiAsiakas" placeholder="<?php echo Yii::t('main','Yritys, Yhteyshenkilö, Puhelin'); ?>..." value="<?php if(isset($_GET['asiakas'])) echo $_GET['asiakas']; ?>">
 		      <span class="input-group-btn">
-		        <button class="btn btn-default" type="button"><li class="fa fa-search"></i></button>
+		        <button class="btn btn-default EtsiAsiakas" controller="<?php echo $curpage; ?>" type="button"><li class="fa fa-search"></i></button>
 		      </span>
 		    </div>
 	      </a>
             </li>
             <li class="list-group-item">
               <a href="#" class="animated animated-short fadeInUp">
+		    <label><?php echo Yii::t('main','Kohde'); ?></label>
 		    <div class="input-group">
-		      <input type="text" class="form-control" placeholder="<?php echo Yii::t('main','Kohde'); ?>...">
+		      <input type="text" class="form-control" id="EtsiKohde" placeholder="<?php echo Yii::t('main','Osoite, Puhelin'); ?>..." value="<?php if(isset($_GET['kohde'])) echo $_GET['kohde']; ?>">
 		      <span class="input-group-btn">
-		        <button class="btn btn-default" type="button"><li class="fa fa-search"></i></button>
+		        <button class="btn btn-default EtsiKohde" controller="<?php echo $curpage; ?>" type="button"><li class="fa fa-search"></i></button>
 		      </span>
 		    </div>
 	      </a>
             </li>
+
+	    <?php if((isset($_GET['asiakas']) and !empty($_GET['asiakas'])) or (isset($_GET['kohde']) and !empty($_GET['kohde']))) : ?>
+            <li class="list-group-item">
+              <a href="#" class="animated animated-short fadeInUp">
+		        <button class="btn btn-default btn-block PalautaTvEtusivulle" controller="<?php echo $curpage; ?>" type="button"><?php echo Yii::t('main','Palauta'); ?></button>
+	      </a>
+            </li>
+	    <?php endif; ?>
+
           </ul>
         </li>
 
