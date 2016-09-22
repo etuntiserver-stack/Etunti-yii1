@@ -427,22 +427,15 @@ function num($val){
 
 			$criteria = new CDBCriteria;
 			$criteria->condition = "
-				DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d')='".date("Y-m-d", strtotime($model->aloitan))."'
+				DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')='".date("Y-m-d H:i", strtotime($model->aloitan))."'
+				AND DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')='".date("Y-m-d H:i", strtotime($model->loppui))."'
 				AND tid='".$model->tid."'
 			";
-			$check = Mobile::model()->findAll($criteria);
+			$check = Mobile::model()->find($criteria);
 
-			foreach($check as $data)
+			if(isset($check->id))
 			{
-			   if( date("Y-m-d H:i", strtotime($data->aloitan)) == date("Y-m-d H:i", strtotime($model->aloitan)) ){
-				$isLine .= Yii::t('main', 'Tämä aloitus on jo olemassa')."\n";
-				break;
-			   }
-
-			   if( date("Y-m-d H:i", strtotime($data->loppui)) == date("Y-m-d H:i", strtotime($model->loppui)) ){
-				$isLine .= Yii::t('main', 'Tämä lopetus on jo olemassa')."\n";
-				break;
-			   }
+				$isLine = Yii::t('main', 'Tämä aika on jo olemassa ID:'). $check->id . "\n";
 			}
 
 		}

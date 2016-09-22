@@ -17,13 +17,13 @@ $curpage = Yii::app()->getController()->getAction()->controller->id;
 $curpage .= '/'.Yii::app()->getController()->getAction()->controller->action->id;
 echo '<input type="hidden" id="curpage" value="'.$curpage.'">';
 
-$sivunnimike = '';
+$tyovuorot_sivut = '';
 if( $curpage == 'tyovuoroot/tv_kohteet' )
-   $sivunnimike = Yii::t('main','Työvuorot kohteen mukaan');
+   $tyovuorot_sivut = Yii::t('main','Työvuorot kohteen mukaan');
 elseif( $curpage == 'tyovuoroot/index' )
-   $sivunnimike = Yii::t('main','Työvuorot viikkoittain');
+   $tyovuorot_sivut = Yii::t('main','Työvuorot viikkoittain');
 if( $curpage == 'tyovuoroot/tv2' )
-   $sivunnimike = Yii::t('main','Työvuorot työntekijöiden mukaan');
+   $tyovuorot_sivut = Yii::t('main','Työvuorot työntekijöiden mukaan');
 ?>
   
        
@@ -56,10 +56,37 @@ if( $curpage == 'tyovuoroot/tv2' )
               <a href="#">
                 <span class="mr10"></span> <?php echo strtoupper(Yii::app()->user->domain); ?> </a>
             </li>
-            <li>
-	      <a href="#" style="font-size: 120%">
-                <span class="mr10"></span> <?php echo $sivunnimike; ?> </a>
+	    <?php if( !empty($tyovuorot_sivut) ) : ?>
+
+        <li class="dropdown menu-merge">
+          <a href="#" class="dropdown-toggle " data-toggle="dropdown"> 
+		 <?php echo $tyovuorot_sivut; ?>
+            <span class="caret caret-tp hidden-xs"></span>
+          </a>
+          <ul class="dropdown-menu list-group dropdown-persist w200" role="menu">
+            <li class="list-group-item">
+              <a href="#" class="animated animated-short fadeInUp">
+		    <div class="input-group">
+		      <input type="text" class="form-control" placeholder="<?php echo Yii::t('main','Asiakas'); ?>...">
+		      <span class="input-group-btn">
+		        <button class="btn btn-default" type="button"><li class="fa fa-search"></i></button>
+		      </span>
+		    </div>
+	      </a>
             </li>
+            <li class="list-group-item">
+              <a href="#" class="animated animated-short fadeInUp">
+		    <div class="input-group">
+		      <input type="text" class="form-control" placeholder="<?php echo Yii::t('main','Kohde'); ?>...">
+		      <span class="input-group-btn">
+		        <button class="btn btn-default" type="button"><li class="fa fa-search"></i></button>
+		      </span>
+		    </div>
+	      </a>
+            </li>
+          </ul>
+        </li>
+
 	    <li class="muokkausLi" style="display:none">
 	     <a href="#" class="bg-warning">
 	        <span class="mr10">Muokkaus tila</span>
@@ -73,7 +100,7 @@ if( $curpage == 'tyovuoroot/tv2' )
 	     <a href="#" class="clear fa fa-circle-o-notch" style="font-size: 150%">
 	     </a>
 	    </li>
-
+	    <?php endif; ?>
 
       </ul>
 <!--
