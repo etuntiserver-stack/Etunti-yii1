@@ -734,6 +734,7 @@ $("#tilanneKartalla").change(function(){
                   <span class="fs11">DB Request</span>
                 </div>
               </div>
+
               <div class="progress mh5">
                 <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 84%">
                   <span class="fs11 text-left">Server Load</span>
