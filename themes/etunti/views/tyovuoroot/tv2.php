@@ -178,20 +178,6 @@ function dateDiff($start, $end) {
    <button type="submit" class="btn btn-primary myBgColors fa fa-search"></button>
    </form>
 
-   </div><div class="form-group p10">
-
-	<label></label>
-	   <div class="tpTrash">
-	     <div class="form-inline">
-	      <div class="form-group">
-		<div class="trash"></div>
-	      </div><div class="form-group">
-		<div class="clear"></div>
-	      </div>
-	     </div>
-	   </div>
-
-
    </div><div class="form-group pull-right">
 
      <div class="form-inline">
