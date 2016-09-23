@@ -90,10 +90,33 @@ class AdministratorsController extends Controller
 
 		if(isset($_POST['Administrators']))
 		{
-			$_POST['Administrators']['adm_salasana']=md5($_POST['Administrators']['adm_salasana']);
+
 			$model->attributes=$_POST['Administrators'];
+			$model->adm_salasana=md5($_POST['Administrators']['adm_salasana']);
 			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+			{
+
+
+				$message = 'Hei '.$model->adm_nimi.'!<br>
+				<b>'.Yii::t('main', 'Yritystunnus').':</b> '.Yii::app()->user->domain.'<br>
+				<b>'.ii::t('main', 'Käyttäjätunnus').':</b> '.$model->adm_login.'<br>
+				<b>'.Yii::t('main', 'Salasana').':</b> '.$_POST['Administrators']['adm_salasana'].'<br>
+				<p>
+				Tervetuloa Etunnin käyttäjäksi. 
+				</p><br>
+				<br>
+				<p>Ystävällisin terveisin</p>
+				Etunti<br>';
+
+				$mail = new YiiMailer();
+				$mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
+				$mail->setTo($model->adm_email);
+				$mail->setSubject(Yii::t('main', 'Tervetuloa Etunnin käyttäjäksi.'));
+				$mail->setBody($message);
+				$mail->send();
+
+				$this->redirect(array('index'));
+			}
 		}
 
 		$this->render('create',array(
@@ -128,7 +151,7 @@ class AdministratorsController extends Controller
 
 			$model->attributes=$_POST['Administrators'];
 			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+				$this->redirect(array('index'));
 		}
 
 		$this->render('update',array(
