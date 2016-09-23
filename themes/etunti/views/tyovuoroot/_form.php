@@ -923,7 +923,7 @@ function laatikonPaivays(thisDataReturn){
 	$('#sopivatPaivatInput').val(1);
 	$('#toistuvaAll').hide('slow');
 	$('#submitButton').val('Luo');
-	$('#toistuvaAllsijaan').html('<h3 class="alert alert-success">Toistuvien työvuorojen päivät talennettu.<br>Paina LUO-painikketta lisätäksesi työvuorot työvuorolistaa.</h3>').show('slow');
+	$('#toistuvaAllsijaan').html('<h3 class="alert alert-success">Toistuvien työvuorojen päivät tallennettu.<br>Paina Luo-painikketta lisätäksesi työvuorot työvuorolistaan.</h3>').show('slow');
   });
 
   $('#pto').blur(function(){
