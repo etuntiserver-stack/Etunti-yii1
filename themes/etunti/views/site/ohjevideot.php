@@ -12,8 +12,7 @@
                 <div class="panel-body bg-light">
 
 
-<div class="row">
- <div class="col-sm-6 col-sm-offset-3">
+
    <?php
 	Yii::app()->db1->setActive(true);
 	$model = Ohjevideot::model()->findAll();
@@ -22,18 +21,19 @@
 
 	 	echo '<p>
 		<div class="row">
+		 <div class="col-sm-6 col-sm-offset-3">
 			<h2>'.$data->otsiko.'</h2>
-			<video class="img-thumbnail" controls="controls">
+			<video class="img-thumbnail" controls="controls" style="width:100%">
 			  <source src="../../ohjevideot/'.$data->tiedoston_nimi.'" type="video/mp4">
 			</video>
 			<h3>'.$data->kuvaus.'</h3>
+		 </div>
 		</div></p>
 		';
 
    	}
    ?>
- </div>
-</div>
+
 
 
                 </div>
