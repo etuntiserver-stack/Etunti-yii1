@@ -15,21 +15,22 @@
 <div class="row">
  <div class="col-sm-6 col-sm-offset-3">
    <?php
-   foreach(glob(Yii::app()->baseUrl.'ohjevideot/*') as $file) 
-   {
+	Yii::app()->db1->setActive(true);
+	$model = Ohjevideot::model()->findAll();
+   	foreach($model as $data) 
+   	{
 
-	$explNimi = explode("/",$file);
-	if(!empty(end($explNimi)))
-	{
- 	echo '<p>
-	<div class="row">
-		<video class="img-thumbnail" controls="controls">
-		  <source src="../../'.$file.'" type="video/mp4">
-		</video>
-	</div></p>
-	';
-	}
-   }
+	 	echo '<p>
+		<div class="row">
+			<h2>'.$data->otsiko.'</h2>
+			<video class="img-thumbnail" controls="controls">
+			  <source src="../../ohjevideot/'.$data->tiedoston_nimi.'" type="video/mp4">
+			</video>
+			<h3>'.$data->kuvaus.'</h3>
+		</div></p>
+		';
+
+   	}
    ?>
  </div>
 </div>
