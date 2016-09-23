@@ -48,7 +48,7 @@
 <div class="row">
   <div class="col-sm-3">
 		<?php echo $form->labelEx($model,'pvm'); ?>
-		<?php echo $form->textField($model,'pvm',array('value'=>date("Y-m-d"),'size'=>20,'maxlength'=>20,'class'=>'form-control datepicker'));//,'readonly'=>'yes' ?>
+		<?php echo $form->textField($model,'pvm',array('value'=>date("d.m.Y"),'size'=>20,'maxlength'=>20,'class'=>'form-control datepickerFI'));//,'readonly'=>'yes' ?>
 		<?php echo $form->error($model,'pvm'); ?>
   </div>
 
