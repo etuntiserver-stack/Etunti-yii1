@@ -99,7 +99,7 @@ class AdministratorsController extends Controller
 
 				$message = 'Hei '.$model->adm_nimi.'!<br>
 				<b>'.Yii::t('main', 'Yritystunnus').':</b> '.Yii::app()->user->domain.'<br>
-				<b>'.ii::t('main', 'Käyttäjätunnus').':</b> '.$model->adm_login.'<br>
+				<b>'.Yii::t('main', 'Käyttäjätunnus').':</b> '.$model->adm_login.'<br>
 				<b>'.Yii::t('main', 'Salasana').':</b> '.$_POST['Administrators']['adm_salasana'].'<br>
 				<p>
 				Tervetuloa Etunnin käyttäjäksi. 
