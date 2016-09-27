@@ -62,55 +62,6 @@ $(document).ready(function(){
   var versio = "1.70";
 
 
-//localStorage.clear();
-
-/* <-- poistettu 24.08.2016 
-if( !localStorage.getItem('domain') | !localStorage.getItem('email') | !localStorage.getItem('salasana')  )
-{
-  document.addEventListener('deviceready', this.readFile, true);
-  function readFile() {
-        window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, gotFS, fail);
-	    function gotFS(fileSystem) {
-	        fileSystem.root.getFile("etunti.cfg", null, gotFileEntry, fail);
-	    }
-	    function gotFileEntry(fileEntry) {
-	        fileEntry.file(gotFile, fail);
-	    }
-	    function gotFile(file){
-	        readAsText(file);
-	    }	
-	    function readAsText(file) {
-	        var reader = new FileReader();
-	        reader.onloadend = function(evt) {
-	            console.log("Read as text");
-	            console.log(evt.target.result);
-
-
-
-	   		 var spFile = evt.target.result.split("//");
-			 document.getElementById('domain').value=spFile[0];
-			 document.getElementById('email').value=spFile[1];
-			 document.getElementById('salasana').value=spFile[2];
-
-			 localStorage.setItem('domain', spFile[0]);
-			 localStorage.setItem('email', spFile[1]);
-			 localStorage.setItem('salasana', spFile[2]);
-
-			 window.location.href="index.html";
-		
-	        };
-	        reader.readAsText(file);
-	    }
-	    function fail(evt) {
-	        console.log(evt.target.error.code);
-	    }
-  }
-
-}
-*/
-
-
-
 
   function exitFromApp()
   {
@@ -157,6 +108,12 @@ $("#dm").html('<label>Domain</label>' +
 		'<input type="text" class="form-control" id="email" value="'+email+'">' +
 		'<label>'+ lang['tyontekijan_salasana'] +'</label>' +
 		'<input type="password" class="form-control" id="salasana" value="'+salasana+'"><br>' +
+		'<label>'+ lang['server'] +'</label>' +
+		'<select class="form-control" id="server">' +
+		'<option value="production">production</option>' +
+		'<option value="staging">staging</option>' +
+		'</select>' +
+		'<br>' +
 		'<button class="btn btn-success btn-group-justified aloita" type="button">' +
 		'<i class="glyphicon glyphicon-warning-sign"> '+ lang['tallenna'] +'</i></button>');
 

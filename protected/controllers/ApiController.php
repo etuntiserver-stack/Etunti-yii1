@@ -189,6 +189,7 @@ public function actionLang($dom)
 		'lahetaToimistoon' => Yii::t('app', 'Lähetä viesti toimistoon'),
 
 		/* Asetukset */
+		'server' => Yii::t('app', 'Palvelin'),
 		'tyontekijan_sahkoposti' => Yii::t('app', 'Työntekijän sähköposti'),
 		'tyontekijan_salasana' => Yii::t('app', 'Työntekijän salasana'),
 		'tallenna' => Yii::t('app', 'Tallenna'),
@@ -1143,6 +1144,7 @@ public function actionImei($dom)
 					and DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE()
 			    ";
 		            $tvuoro = Tyovuoroot::model()->find($criteria);
+
 			    if(isset($tvuoro->id))
 			    {
 				$loppu = date("d.m.Y H:i",strtotime($tvuoro->pvm." ".$tvuoro->loppu));
