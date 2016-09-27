@@ -398,6 +398,11 @@ function dateDiff($start, $end) {
         <?php
   	    echo '<tr class="myBgColors">';
   		echo '<td class="text-center viikkoRivi fixed-column"></td>';
+
+		  echo '<td class="text-center viikkoRivi myBgColors fromto_0" />';
+		  $this->renderPartial('//tyovuoroot/fromto',array('tid'=>0));
+		  echo '</td>';
+
 		foreach($tt as $t){
 		  echo '<td class="text-center viikkoRivi myBgColors fromto_'.$t->id.'" />';
 		  $this->renderPartial('//tyovuoroot/fromto',array('tid'=>$t->id));
