@@ -328,6 +328,7 @@ class SiteController extends Controller
 
 
 
+
 			$a = Asiakkaat::model()->findAll($criteria);
 			foreach($a as $asiakas)
 			{

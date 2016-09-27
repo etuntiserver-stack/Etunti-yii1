@@ -826,7 +826,7 @@ $xml = '
 			<td>'.date("d.m.Y", strtotime($data->paivays)).'</td>
 			<td>'.CHtml::link('PDF', array('//lasku/lasku_pdf', 'id'=>$data->id), array('target'=>'_blank')).'</td>
 			<td>'.$lasku[0]->tilanneCheck($data).'</td>
-			<td>'.number_format($data->yhteensa_total, 2, ",", " ").'</td>
+			<td>'.number_format((int)$data->yhteensa_total, 2, ",", " ").'</td>
 		</tr>';
 	  	}
 		$bod .= '</table>';
@@ -845,7 +845,7 @@ $xml = '
 			kohde IN
 			(
 				SELECT id FROM sivex_kohdet
-				WHERE id IN(SELECT id FROM asiakkaat WHERE id='".$model->id."')
+				WHERE asiakas_id IN(SELECT id FROM asiakkaat WHERE id='".$model->id."')
 			) 
 		";
 
@@ -866,6 +866,7 @@ $xml = '
 		  <th>'.Yii::t('main', 'Päiväys').'</th>
 		  <th>'.Yii::t('main', 'Osoite').'</th>
 		  <th>'.Yii::t('main', 'Aloitus').'</th>
+		  <th>'.Yii::t('main', 'Lopetus').'</th>
 		 </tr>';
 	
 		foreach($tar as $data)
@@ -876,6 +877,7 @@ $xml = '
 			<td>'.date("d.m.Y", strtotime($data->pvm)).'</td>
 			<td>'.$k->osoite.'</td>
 			<td>'.$data->alku.'</td>
+			<td>'.$data->loppu.'</td>
 		</tr>';
 	  	}
 		$bod .= '</table>';
