@@ -457,6 +457,7 @@ $('#tyontekijat').multiselect({
 	selectAllText: '<?php echo Yii::t("main", "Valitse kaikki"); ?>',
 	allSelectedText: '<?php echo Yii::t("main", "Työntekijät"); ?>',
 	nSelectedText: '<?php echo Yii::t("main", "valittu"); ?>',
+	numberDisplayed: 0,
 });
 
 $('.tvchange').change(function(){
