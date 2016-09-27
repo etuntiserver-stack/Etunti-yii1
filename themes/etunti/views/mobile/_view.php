@@ -214,7 +214,7 @@ else
 	</td>
 
 	<td>
-	  <span class="link fa fa-pencil-square-o openkohde" id="<?php echo 'kohttisID_'.$data->id; ?>" for="<?php echo 'kohtval_'.$data->id; ?>" data-toggle="collapse" data-target="<?php echo '#kshow_'.$data->id; ?>"></span>&nbsp;
+	  <span class="link fa fa-pencil-square-o openkohde muokkaminen" id="<?php echo 'kohttisID_'.$data->id; ?>" for="<?php echo 'kohtval_'.$data->id; ?>" data-toggle="collapse" data-target="<?php echo '#kshow_'.$data->id; ?>"></span>&nbsp;
 
 	  <span id="vaihto_<?php echo 'kohttisID_'.$data->id; ?>">
 	  <?php 
@@ -233,11 +233,11 @@ else
 	</td>
 
 	<td>
-	  <span class="link fa fa-pencil-square-o nowrap" data-toggle="collapse" id="<?php echo 'altxt_'.$data->id; ?>" data-target="<?php echo '#alshow_'.$data->id; ?>"> <?php echo $at[$data->id]; ?></span>
+	  <span class="link fa fa-pencil-square-o nowrap muokkaminen" data-toggle="collapse" id="<?php echo 'altxt_'.$data->id; ?>" data-target="<?php echo '#alshow_'.$data->id; ?>"> <?php echo $at[$data->id]; ?></span>
 
 	  <div style="position:absolute;z-index: 2;margin-left:-100px" class="collapse" id="<?php echo 'alshow_'.$data->id; ?>">
 	    <div class="well form-inline">
-	     <?php echo '<input type="text" class="form-control form-group datetimepicker" request="aloitan" status="'.$data->status.'" id="al_'.$data->id.'" value="'.$apvm[$data->id].' '.$at[$data->id].'">'; ?>
+	     <?php echo '<input type="text" class="form-control form-group ajaat" request="aloitan" status="'.$data->status.'" id="al_'.$data->id.'" value="'.$apvm[$data->id].' '.$at[$data->id].'">'; ?>
 
 		<div class="form-group input-group-btn">
 		     <button class="btn btn-success pvmupdate" for="al_<?php echo $data->id; ?>" >
@@ -250,7 +250,7 @@ else
 	</td>
 
 	<td width="1">
-	  <span class="link fa fa-pencil-square-o nowrap" data-toggle="collapse" id="<?php echo 'lptxt_'.$data->id; ?>" data-target="<?php echo '#ltshow_'.$data->id; ?>"> 
+	  <span class="link fa fa-pencil-square-o nowrap muokkaminen" data-toggle="collapse" id="<?php echo 'lptxt_'.$data->id; ?>" data-target="<?php echo '#ltshow_'.$data->id; ?>"> 
 	  <?php 
 	  if(empty($lt[$data->id])) 
 		echo ' <b class="text-success glyphicon glyphicon-plus"></b>'; 
@@ -260,7 +260,7 @@ else
 
 	  <div style="position:absolute;z-index: 2;margin-left:-100px" class="collapse" id="<?php echo 'ltshow_'.$data->id; ?>">
 	    <div class="well form-inline">
-	     <?php echo '<input type="text" class="form-control form-group datetimepicker" request="loppui" status="'.$data->status.'" id="lt_'.$data->id.'" value="'.$lpvm[$data->id].' '.$lt[$data->id].'">'; ?>
+	     <?php echo '<input type="text" class="form-control form-group ajaat" request="loppui" status="'.$data->status.'" id="lt_'.$data->id.'" value="'.$lpvm[$data->id].' '.$lt[$data->id].'">'; ?>
 
 		<div class="form-group input-group-btn">
 		     <button class="btn btn-success pvmupdate" for="lt_<?php echo $data->id; ?>" >

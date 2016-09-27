@@ -1,7 +1,13 @@
 $(document).ready(function(){
 
 
-$(".vastaanotettu").click(function(){
+  $('.ajaat').mask('00.00.0000 00:00',{
+        placeholder: "pp.kk.vvvv tt:mm"
+  });
+
+
+
+$(document).delegate(".vastaanotettu","click",function(){
 
 	var thisVid = $(this).attr("for");
 	var id = $(this).attr("for").split("_");
@@ -15,16 +21,15 @@ $(".vastaanotettu").click(function(){
         });
 
 });
-
+/*
 $(".vietyovuoroon").click(function(){
 
 	var thisVal = $(this).attr("pvmtid");
 	window.open(location.protocol + "//" + location.host + '/index.php/tyovuoroot?pvmtid='+thisVal+'#'+thisVal);
 
 });
-
-$(".pvmupdate").click(function(){
-
+*/
+$(document).delegate(".pvmupdate","click",function(){
 
 	var thisID = $(this).attr("for").split("_");
 	var st = $("#"+thisID[0]+"_"+thisID[1]).attr("status");
@@ -51,16 +56,16 @@ $(".pvmupdate").click(function(){
 
 		if(getData[0] == 'aloitan')
 		{
-		   $('#altxt_'+thisID[1]).html(getData[1]).addClass("text-success");
+		   $('#altxt_'+thisID[1]).html(' '+getData[1]).addClass("text-success collapsed");
 		   //$('#'+thisID[0]+'_'+thisID[1]).removeClass("btn-default").addClass("text-success");
-		   $('#alshow_'+thisID[1]).hide('slow');
+		   $('#alshow_'+thisID[1]).removeClass('in');
 		}
 
 		if(getData[0] == 'loppui')
 		{
-		   $('#lptxt_'+thisID[1]).html(getData[2]).addClass("text-success");
+		   $('#lptxt_'+thisID[1]).html(' '+getData[2]).addClass("text-success");
 		   //$('#'+thisID[0]+'_'+thisID[1]).removeClass("btn-default").addClass("text-success");
-		   $('#ltshow_'+thisID[1]).hide('slow');
+		   $('#ltshow_'+thisID[1]).removeClass('in');
 		}
 
         	$.ajax({
@@ -76,7 +81,7 @@ $(".pvmupdate").click(function(){
 
 });
 
-$(".openkohde").click(function(){
+$(document).delegate(".openkohde","click",function(){
 
 	var thisID = $(this).attr("id");
 	var forid = $(this).attr("for");
@@ -87,10 +92,31 @@ $(".openkohde").click(function(){
            type: "POST",
            data: { "id" : riviid[1], "thisID" : thisID },
            success: function(html){
+		html = JSON.parse(html);
 		$('#'+forid).html(html);
            }
         });
 
+});
+
+$(document).delegate("#Kohteet_id","change",function(){
+
+	var kohdenID = $("#sainkohdenID").val().split("_");
+	var thisText = $(this).find("option:selected").text();
+	var thisVal = $(this).val();
+	var Mobile = {fromMob: "true",kohdenID: thisVal,kohde_kannasta: thisText};
+
+       $.ajax({
+          url: "update?id="+kohdenID[1],
+          type: "POST",
+          data: Mobile,
+          success: function(html){
+	//console.log(html);
+	$("#vaihto_kohttisID_"+kohdenID[1]).addClass("text-success").text(thisText);
+	//alert(thisText)
+          }
+       });
+		
 });
 
 $(".poistaKohde").click(function(){

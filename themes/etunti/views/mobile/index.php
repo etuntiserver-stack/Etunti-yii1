@@ -87,7 +87,7 @@ $this->breadcrumbs=array(
                         <div class="section">
                           <label class="field prepend-icon">
 
-   			    <input type="text" name="fromP" id="from" class="gui-input datepicker" value="<?php echo Yii::app()->session['fromP']; ?>">
+   			    <input type="text" name="fromP" id="from" class="gui-input datepickerFI" value="<?php echo date('d.m.Y', strtotime(Yii::app()->session['fromP'])); ?>">
                             <label for="firstname" class="field-icon">
                               <i class="fa fa-calendar"></i>
                             </label>
@@ -98,7 +98,7 @@ $this->breadcrumbs=array(
                         <div class="section">
                           <label class="field prepend-icon">
 
-   			    <input type="text" name="toP" id="to" class="gui-input datepicker" value="<?php echo Yii::app()->session['toP']; ?>">
+   			    <input type="text" name="toP" id="to" class="gui-input datepickerFI" value="<?php echo date('d.m.Y', strtotime(Yii::app()->session['toP'])); ?>">
                             <label for="firstname" class="field-icon">
                               <i class="fa fa-calendar"></i>
                             </label>
@@ -156,6 +156,10 @@ $this->breadcrumbs=array(
 
   <input type="hidden" id="dataChange" >
 
+  <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/asetukset.js"></script>
+  <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/jquery.mask.js"></script>
+  <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/mobile.js"></script>
+
 
 <script type="text/javascript">
 $(document).ready(function(){
@@ -179,12 +183,14 @@ $(".haemob").click(function(){
 // Send form by ajax
 $('#mobForm').on('submit',function(e) {
 
+  $('#tb').html('Odota..');
+
   $.ajax({
   url: 'index?Mobile_page='+mobnum,
   data:$(this).serialize(),
   type:'POST',
   success:function(data){
-  	console.log(data);
+  	//console.log(data);
 	tableAjax();
 	return false;
   },
@@ -201,11 +207,12 @@ e.preventDefault();
 function tableAjax(){
 
    $.ajax({
-  url: 'index?Mobile_page='+mobnum,
+   url: 'index?Mobile_page='+mobnum,
       type: "POST",
       data: { index_ajax : "true" },
       	success: function(data){
   	  	//console.log(data);
+  	  	console.log('tableAjax updated');
 	  	$('#tb').html(data);
       	},
   	error:function(data){
@@ -215,8 +222,28 @@ function tableAjax(){
 
 }
 
-   setTimeout(function(){tableAjax();},1500);
-   setInterval(tableAjax, "60000");
+   setTimeout(function(){tableAjax();},300);
+   
+   // <-- Start and stop Table update
+   var interval = 60000;
+   var tableAjaxInterval = setInterval(tableAjax, interval);
+
+   $(document).delegate(".muokkaminen","click",function(){
+  	console.log('tableAjax pysähtynyt');
+	window.clearInterval(tableAjaxInterval);
+   });
+
+   $(document).delegate(".pvmupdate","click",function(){
+  	console.log('tableAjax updated');
+   	setInterval(tableAjax, interval);
+   });
+
+   $(document).delegate("#Kohteet_id","change",function(){
+  	console.log('tableAjax updated');
+   	setInterval(tableAjax, interval);
+   });
+   // Start and stop Table update -->
+
 
 
     updateRivi();

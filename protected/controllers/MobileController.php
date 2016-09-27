@@ -340,41 +340,15 @@ function num($val){
 	public function actionShowkohteet()
 	{
 		$as=new Kohteet;
-		echo   CHtml::activeDropDownList($as, 'id',
+		$bd = CHtml::activeDropDownList($as, 'id',
 		CHtml::listData(Kohteet::model()->findAll(array("order"=>"osoite")), 'id', 'osoite'),   
 		    array('empty'=>'Muokka', "class"=>"kohdenvaihto btn btn-default") 
 		);
 
-		?>
-		<input type="hidden" id="sainkohdenID" value="<?php echo $_POST['thisID']; ?>">
-		<script type="text/javascript">
-		$(document).ready(function(){
 
+		$bd .= '<input type="hidden" id="sainkohdenID" value="'.$_POST['thisID'].'">';
+		echo json_encode($bd);
 
-		  $("#Kohteet_id").on('change',function(){
-
-			var kohdenID = $("#sainkohdenID").val().split("_");
-			var thisText = $(this).find("option:selected").text();
-			var thisVal = $(this).val();
-
-   			var Mobile = {fromMob: "true",kohdenID: thisVal,kohde_kannasta: thisText};
-
-		        $.ajax({
-		           url: "update?id="+kohdenID[1],
-		           type: "POST",
-		           data: Mobile,
-		           success: function(html){
-				//console.log(html);
-				$("#vaihto_kohttisID_"+kohdenID[1]).addClass("text-success").text(thisText);
-				//alert(thisText)
-		           }
-		        });
-		
-		  });
-
-		});
-		</script>
-		<?php
 	}
 
 
@@ -689,9 +663,13 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		$dataProvider->pagination->pageSize = 50;
 
 		if(isset($_POST['index_ajax']))
-		$this->renderPartial('index_a', array('dataProvider' => $dataProvider));
-		else
-		$this->render('index', array('dataProvider' => $dataProvider));
+		{
+			echo $this->renderPartial('index_a', array('dataProvider' => $dataProvider));
+			exit;
+		} else {
+			echo $this->render('index', array('dataProvider' => $dataProvider));
+		}
+
 	}
 
 	/**
