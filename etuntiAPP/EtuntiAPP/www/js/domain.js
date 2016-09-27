@@ -45,17 +45,28 @@ $(document).ready(function(){
     if(localStorage.getItem('etunti_language'))
     etunti_language = localStorage.getItem('etunti_language');
 
-    //var server = 'http://staging.etunti.fi';
-    var server = 'http://etunti.fi';
+    // <-- Palvelin
+    if(localStorage.getItem('server'))
+    {
+    	var server = 'http://'+localStorage.getItem('server');
+    } else {
+    	var server = 'http://etunti.fi';
+    }
 
     document.addEventListener("deviceready", onServerReady, false);
     function onServerReady() {
 
 	if(device.platform == 'iOS'){
-		server = 'https://etunti.fi';
+
+	    if(localStorage.getItem('server'))
+	    	server = 'https://'+localStorage.getItem('server');
+	    else
+	    	server = 'https://etunti.fi';
+
 	}
 
     }
+    // Palvelin -->
 
   var url = server+"/index.php/api/mob";
   var puh_nro = "";
@@ -99,7 +110,7 @@ $(document).ready(function(){
 
  	lang = JSON.parse(localStorage.getItem('lang'));
 
-console.log(lang)
+	//console.log(lang)
 
 
 $("#dm").html('<label>Domain</label>' +
@@ -107,16 +118,23 @@ $("#dm").html('<label>Domain</label>' +
 		'<label>'+ lang['tyontekijan_sahkoposti'] +'</label>' +
 		'<input type="text" class="form-control" id="email" value="'+email+'">' +
 		'<label>'+ lang['tyontekijan_salasana'] +'</label>' +
-		'<input type="password" class="form-control" id="salasana" value="'+salasana+'"><br>' +
+		'<input type="password" class="form-control" id="salasana" value="'+salasana+'">' +
 		'<label>'+ lang['server'] +'</label>' +
 		'<select class="form-control" id="server">' +
-		'<option value="production">production</option>' +
-		'<option value="staging">staging</option>' +
+		'<option value="etunti.fi">etunti.fi</option>' +
+		'<option value="staging.etunti.fi">staging.etunti.fi</option>' +
 		'</select>' +
 		'<br>' +
 		'<button class="btn btn-success btn-group-justified aloita" type="button">' +
 		'<i class="glyphicon glyphicon-warning-sign"> '+ lang['tallenna'] +'</i></button>');
 
+
+  if(localStorage.getItem('server'))
+  {
+    $("#dm").ready(function(){
+	$('#server').val(localStorage.getItem('server'));
+    });	
+  }
 
   /* Index */
   $('#butTyo').text(lang['TYO']);
@@ -155,6 +173,7 @@ $("#dm").html('<label>Domain</label>' +
 	localStorage.setItem('domain', $("#domain").val());
 	localStorage.setItem('email', $("#email").val());
 	localStorage.setItem('salasana', $("#salasana").val());
+	localStorage.setItem('server', $("#server").val());
 
 	window.location.href='index.html';
   }

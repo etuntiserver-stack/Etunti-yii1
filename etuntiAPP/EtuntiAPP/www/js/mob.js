@@ -296,10 +296,12 @@ function row(tilanne,st){
            success: function(data){
 
 		// <-- log
-        	console.log(data);
+        	//console.log(data);
+		/*
 		if(server == 'http://staging.etunti.fi'){
 			$("#result2").append('<br>'+data).show();
 		}
+		*/
 		// log -->
 
 		var sp = data.split("//");
@@ -393,10 +395,12 @@ setTimeout(function() {
            success: function(data){
 
 		// <-- log
-        	console.log(data);
+        	//console.log(data);
+		/*
 		if(server == 'http://staging.etunti.fi'){
 			$("#result2").append('<br>'+data).show();
 		}
+		*/
 		// log -->
 
 		var sp = data.split("//");
