@@ -621,7 +621,7 @@ public function actionImei($dom)
 		      $nm = ', '.$kohde->etu_suku_nimet;
 
 		      $puh_nro = '';
-		      if(isset($asetukset->show_name) and $asetukset->show_name == 1 and $kohde->puh_nro != '')
+		      if(isset($asetukset->app_show_phone) and $asetukset->app_show_phone == 1 and $kohde->puh_nro != '')
 		      $puh_nro = '<br>'.Yii::t('main', 'Puhelinnumero').': '.$kohde->puh_nro;
 
 		      $sel .= '<div class="well">
@@ -873,6 +873,7 @@ public function actionImei($dom)
 		   $json_url = 'http://maps.googleapis.com/maps/api/geocode/json?latlng='.$gps.'&language=fi&sensor=true';
 		   	if($json = file_get_contents($json_url))
 		   	{
+
 
 
 
