@@ -66,7 +66,7 @@ exit;
 		));
 	   ?>
 	   </div>
-	   <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-home"></i> <?php echo $model->osoite; ?> </h2>
+	   <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-home"></i> <?php echo Yii::t('main', 'Kohteiden hallinta'); ?>: <?php echo $model->osoite; ?> </h2>
 
 
             <div class="admin-form">
