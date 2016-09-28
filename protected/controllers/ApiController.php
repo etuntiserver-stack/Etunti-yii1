@@ -189,6 +189,7 @@ public function actionLang($dom)
 		'lahetaToimistoon' => Yii::t('app', 'Lähetä viesti toimistoon'),
 
 		/* Asetukset */
+		'domain' => Yii::t('app', 'Yritystunnus'),
 		'server' => Yii::t('app', 'Palvelin'),
 		'tyontekijan_sahkoposti' => Yii::t('app', 'Työntekijän sähköposti'),
 		'tyontekijan_salasana' => Yii::t('app', 'Työntekijän salasana'),

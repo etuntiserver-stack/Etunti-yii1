@@ -113,7 +113,7 @@ $(document).ready(function(){
 	//console.log(lang)
 
 
-$("#dm").html('<label>Domain</label>' +
+$("#dm").html('<label>'+ lang['domain'] +'</label>' +
 		'<input type="text" class="form-control" id="domain" value="'+domain+'">' +
 		'<label>'+ lang['tyontekijan_sahkoposti'] +'</label>' +
 		'<input type="text" class="form-control" id="email" value="'+email+'">' +
