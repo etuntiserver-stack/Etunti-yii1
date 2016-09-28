@@ -452,7 +452,7 @@ function vkolopputCheck(){
 
 
 
-$("#viikkonhyppaminen").change(function() {
+$("#viikkonhyppaminen, #vuodenhyppaminen").change(function() {
 	var thisVal = $(this).val();
 	window.location.href=thisVal;
 	return false;

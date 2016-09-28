@@ -176,6 +176,18 @@
 
      	<a href="<?php echo $_SERVER['PHP_SELF'].'?week='.($week == 1 ? $wkMaara : $week -1).'&year='.($week == 1 ? $year - 1 : $year); ?>"><i class="fa fa-arrow-left btn btn-primary myBgColors"></i></a>
 
+	<select class="form-control" id="vuodenhyppaminen">
+	<?php
+	$v = date('Y',strtotime('-5 year'));
+	for ($i = 1; $i <= 10; $i++) {
+		if($year == ($v+$i))
+    			echo '<option value="'.$_SERVER['PHP_SELF'].'?week='.$week.'&year='.(int)($v+$i).'" selected>'.(int)($v+$i).'</option>';
+		else
+    			echo '<option value="'.$_SERVER['PHP_SELF'].'?week='.$week.'&year='.(int)($v+$i).'">'.(int)($v+$i).'</option>';
+	}
+	?>
+	</select>
+
 	<select class="form-control" id="viikkonhyppaminen">
 	<?php
 	define('NL', "\n");
