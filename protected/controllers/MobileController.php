@@ -1186,8 +1186,8 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		Yii::app()->session['to'] = date("Y-m-d",strtotime(Yii::app()->request->getPost('to')));
 */		
 
-		$from = date("Y-m-d");
-		$to = date("Y-m-d");
+		$from = date("d.m.Y");
+		$to = date("d.m.Y");
 
 		if(isset($_POST['from']) and isset($_POST['to'])){
 		$from 	= $_POST['from'];
@@ -1204,7 +1204,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
         	$criteria->group = 'tid';
         	$criteria->condition = " 
 			aloitan !='' and loppui !='' 
-			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$from."' AND '".$to."' 
+			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".date('Y-m-d',strtotime($from))."' AND '".date('Y-m-d',strtotime($to))."' 
 		";
 
 		if(Yii::app()->session['Tekija']){
@@ -1311,8 +1311,8 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		if(Yii::app()->request->getPost('Tekija'))
 		Yii::app()->session['Tekija'] = Yii::app()->request->getPost('Tekija');
 
-		$from = date("Y-m-d");
-		$to = date("Y-m-d");
+		$from = date("d.m.Y");
+		$to = date("d.m.Y");
 
 		if(isset($_POST['from']) and isset($_POST['to'])){
 		$from 	= $_POST['from'];
@@ -1337,7 +1337,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			aloitan!='' AND loppui!=''
 			AND status = '2' 
 			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
-			BETWEEN '".$from."' AND '".$to."'
+			BETWEEN '".date('Y-m-d', strtotime($from))."' AND '".date('Y-m-d', strtotime($to))."'
 		";
 
 		if(Yii::app()->session['Tekija']){
@@ -1647,8 +1647,8 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		if(Yii::app()->request->getPost('kohteet') and Yii::app()->request->getPost('kohteet') != 'kaikki')
 		Yii::app()->session['kohteet'] = Yii::app()->request->getPost('kohteet');
 
-		$from = date("Y-m-d");
-		$to = date("Y-m-d");
+		$from = date("d.m.Y");
+		$to = date("d.m.Y");
 
 		if(isset($_POST['from']) and isset($_POST['to'])){
 		$from 	= $_POST['from'];
@@ -1667,7 +1667,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			AND kohdenID=''
 			AND status='3'
 			AND id NOT IN (select kid from sivexkuitti_repaired) 
-			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$from."' AND '".$to."' 			
+			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".date('Y-m-d', strtotime($from))."' AND '".date('Y-m-d', strtotime($to))."' 			
 		";
 
 
@@ -1782,8 +1782,8 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		Yii::app()->session['mitkatKohteet'] = Yii::app()->request->getPost('mitkatKohteet');
 */
 
-		$from = date("Y-m-d");
-		$to = date("Y-m-d");
+		$from = date("d.m.Y");
+		$to = date("d.m.Y");
 
 		if(isset($_POST['from']) and isset($_POST['to'])){
 		$from 	= $_POST['from'];
@@ -1800,7 +1800,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			AND status='3' 
 			AND sairaus!=1
 			AND kohdenID!=''
-			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$from."' AND '".$to."' 
+			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".date('Y-m-d', strtotime($from))."' AND '".date('Y-m-d', strtotime($to))."' 
 		";
 
 		if(isset($_POST['osoite']) and !empty($_POST['osoite'])){
