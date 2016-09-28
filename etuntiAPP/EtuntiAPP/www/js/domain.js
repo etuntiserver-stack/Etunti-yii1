@@ -53,6 +53,7 @@ $(document).ready(function(){
     	var server = 'http://etunti.fi';
     }
 
+    // <-- On device Reay
     document.addEventListener("deviceready", onServerReady, false);
     function onServerReady() {
 
@@ -65,7 +66,22 @@ $(document).ready(function(){
 
 	}
 
+	function showAppVersion() {
+		  cordova.getAppVersion(function(version) {
+		  document.getElementById('versioBlock').style.display="block";
+		  document.getElementById('version').innerHTML = version;
+		  versio = version;
+		  });
+	}
+	showAppVersion();
+
+	//alert(device.platform)
+	if(device.platform == 'Android')
+	document.getElementById('exitPainike').innerHTML = '<h2 class="glyphicon glyphicon-new-window"></h2>';
+
+
     }
+    // On device Reay -->
     // Palvelin -->
 
   var url = server+"/index.php/api/mob";
@@ -181,31 +197,7 @@ $("body").ready(function(){
 	window.location.href='index.html';
   });
 
-
-  var mobileIs = '';
-
-  document.addEventListener("deviceready", onDeviceReady, false);
-  function onDeviceReady() {
-
-		function showAppVersion() {
-		  cordova.getAppVersion(function(version) {
-		  document.getElementById('versioBlock').style.display="block";
-		  document.getElementById('version').innerHTML = version;
-		  versio = version;
-		  });
-		}
-		showAppVersion();
-	
-		if(devicePlatform === 'Android')
-		mobileIs = 'Android';
-  }
-
-
    $("body").ready(function(){
-	
-	var exitPainike = '';
-	if(mobileIs === 'Android')
-	var exitPainike = '<a href="#" onclick="exitFromApp()"><h2 class="glyphicon glyphicon-new-window"></h2></a>';
 
        $("#footlinks").html(
 	'<div class="row">'+
@@ -219,7 +211,7 @@ $("body").ready(function(){
 		'<a href="#" id="tehty"><h2 class="glyphicon glyphicon-chevron-down"></h2></a>&nbsp;&nbsp;&nbsp;' +
 		'<a href="#" id="asetukset"><h2 class="glyphicon glyphicon-cog"></h2></a>&nbsp;&nbsp;&nbsp;' +
 		'<a href="#" id="camera"><h2 class="glyphicon glyphicon-camera"></h2></a>&nbsp;&nbsp;&nbsp;' +
-		exitPainike +
+		'<a href="#" id="exitPainike" onclick="exitFromApp()"></a>' +
 	    '</center>' +
 	'</div>' +
 	'</div>' +
