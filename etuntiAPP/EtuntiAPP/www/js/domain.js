@@ -4,8 +4,6 @@ $(document).ready(function(){
 	var selected = $("#kieliValiko option:selected").val();
 	var selectedFontti = $("#fonttikokoValiko option:selected").val();
 
-	//localStorage.removeItem('etunti_language');
-
 	localStorage.setItem('etunti_language', selected);
 	localStorage.setItem('etunti_fonttikoko', selectedFontti);
 	location.reload(true);
@@ -22,7 +20,7 @@ $(document).ready(function(){
 
 });
 
-
+    //localStorage.clear();
 
     var domain = '';
     var email = '';
@@ -140,6 +138,16 @@ $("body").ready(function(){
 		'<br>' +
 		'<button class="btn btn-success btn-group-justified aloita" type="button">' +
 		'<i class="glyphicon glyphicon-warning-sign"> '+ lang['tallenna'] +'</i></button>');
+
+  $(".aloita").click(function(){
+	tallennaTunnukset();
+  });
+
+  $("#tallennaServer").click(function(){
+	localStorage.setItem('server', $("#palvelin").val());
+	window.location.href='index.html';
+  });
+
 });
 
 
@@ -172,10 +180,6 @@ $("body").ready(function(){
   $('#fromAlbum').text(lang['fromAlbum']);
 
 
-  $(".aloita").click(function(){
-	tallennaTunnukset();
-  });
-
   function tallennaTunnukset(){
 
 	localStorage.setItem('domain', $("#domain").val());
@@ -192,10 +196,6 @@ $("body").ready(function(){
     });	
   }
 
-  $("#tallennaServer").click(function(){
-	localStorage.setItem('server', $("#palvelin").val());
-	window.location.href='index.html';
-  });
 
    $("body").ready(function(){
 
