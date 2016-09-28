@@ -113,7 +113,9 @@ $(document).ready(function(){
 	//console.log(lang)
 
 
-$("#dm").html('<label>'+ lang['domain'] +'</label>' +
+$("body").ready(function(){
+
+  $("#dm").html('<label>'+ lang['domain'] +'</label>' +
 		'<input type="text" class="form-control" id="domain" value="'+domain+'">' +
 		'<label>'+ lang['tyontekijan_sahkoposti'] +'</label>' +
 		'<input type="text" class="form-control" id="email" value="'+email+'">' +
@@ -122,6 +124,7 @@ $("#dm").html('<label>'+ lang['domain'] +'</label>' +
 		'<br>' +
 		'<button class="btn btn-success btn-group-justified aloita" type="button">' +
 		'<i class="glyphicon glyphicon-warning-sign"> '+ lang['tallenna'] +'</i></button>');
+});
 
 
 
@@ -179,25 +182,32 @@ $("#dm").html('<label>'+ lang['domain'] +'</label>' +
   });
 
 
+  var mobileIs = '';
 
-
-    document.addEventListener("deviceready", onDeviceReady, false);
-    function onDeviceReady() {
-
+  document.addEventListener("deviceready", onDeviceReady, false);
+  function onDeviceReady() {
 
 		function showAppVersion() {
 		  cordova.getAppVersion(function(version) {
+		  document.getElementById('versioBlock').style.display="block";
 		  document.getElementById('version').innerHTML = version;
 		  versio = version;
 		  });
 		}
 		showAppVersion();
+	
+		if(devicePlatform === 'Android')
+		mobileIs = 'Android';
+  }
 
 
+   $("body").ready(function(){
+	
+	var exitPainike = '';
+	if(mobileIs === 'Android')
+	var exitPainike = '<a href="#" onclick="exitFromApp()"><h2 class="glyphicon glyphicon-new-window"></h2></a>';
 
-	if(device.platform == 'iOS'){
-
-  $("#footlinks").html(
+       $("#footlinks").html(
 	'<div class="row">'+
 	'<footer id="footer">'+
 	'<div class="navbar navbar-default navbar-fixed-bottom">' +
@@ -209,46 +219,24 @@ $("#dm").html('<label>'+ lang['domain'] +'</label>' +
 		'<a href="#" id="tehty"><h2 class="glyphicon glyphicon-chevron-down"></h2></a>&nbsp;&nbsp;&nbsp;' +
 		'<a href="#" id="asetukset"><h2 class="glyphicon glyphicon-cog"></h2></a>&nbsp;&nbsp;&nbsp;' +
 		'<a href="#" id="camera"><h2 class="glyphicon glyphicon-camera"></h2></a>&nbsp;&nbsp;&nbsp;' +
+		exitPainike +
 	    '</center>' +
 	'</div>' +
 	'</div>' +
 	'</footer>' +
 	'</div>');
 
-	painikkeet();
+   });
 
-	} else {
-
-  $("#footlinks").html(
-	'<div class="row">'+
-	'<footer id="footer">'+
-	'<div class="navbar navbar-default navbar-fixed-bottom">' +
-	'<div class="" id="footer-body">' +
-	    '<center>' +
-		'<a href="#" id="home"><h2 class="glyphicon glyphicon-home"></h2></a>&nbsp;&nbsp;&nbsp;' +
-		'<a href="#" id="viestintaURL"><h2 class="glyphicon glyphicon-envelope form-group"></h2></a>&nbsp;&nbsp;&nbsp;' +
-		'<a href="#" id="tvuoro"><h2 class="glyphicon glyphicon-time form-group"></h2></a>&nbsp;&nbsp;&nbsp;' +
-		'<a href="#" id="tehty"><h2 class="glyphicon glyphicon-chevron-down"></h2></a>&nbsp;&nbsp;&nbsp;' +
-		'<a href="#" id="asetukset"><h2 class="glyphicon glyphicon-cog"></h2></a>&nbsp;&nbsp;&nbsp;' +
-		'<a href="#" id="camera"><h2 class="glyphicon glyphicon-camera"></h2></a>&nbsp;&nbsp;&nbsp;' +
-		'<a href="#" onclick="exitFromApp()"><h2 class="glyphicon glyphicon-new-window"></h2></a>' +
-	    '</center>' +
-	'</div>' +
-	'</div>' +
-	'</footer>' +
-	'</div>');
-
-	}
+	
 
 	painikkeet();
-    }
-
-
-
 
 
 
 function painikkeet(){
+
+$("body").ready(function(){
 
   $("#home").click(function(){
 	window.location.href='index.html';
@@ -273,6 +261,8 @@ function painikkeet(){
   $("#asetukset").click(function(){
 	window.location.href='asetukset.html';
   });
+
+});
 }
 
 
