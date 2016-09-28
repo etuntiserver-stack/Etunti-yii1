@@ -505,7 +505,7 @@ public function actionImei($dom)
 		    }
 
 		    $sel = '';
-		    $sel .= '<select id="list" class="form-control">';
+		    $sel .= '<select id="list" class="form-control input-lg">';
 		    $sel .= '<option>'.Yii::t('app','Valitse kohde työvuorosta').'</option>';
 		    foreach($tvuoro as $val){
 			$k = Kohteet::model()->findbypk($val->kohde);
