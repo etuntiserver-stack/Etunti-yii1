@@ -75,6 +75,12 @@ if(empty($model->position) and isset($model->id))
 	</div>
 
 	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'salasana'); ?>
+		<?php echo $form->textField($model,'salasana',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'salasana'); ?>
+	</div>
+
+	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'tekijan_katuosoite'); ?>
 		<?php echo $form->textField($model,'tekijan_katuosoite',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'tekijan_katuosoite'); ?>
@@ -95,7 +101,7 @@ if(empty($model->position) and isset($model->id))
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'aktiivinen'); ?>
 
-	   <div class="form-inline">
+	   <div class="input-group">
 		<?php 
 		$a = Valikkoot::model()->findAll(" select_type='aktiivinen' ");
         	$tal = '';
@@ -105,9 +111,11 @@ if(empty($model->position) and isset($model->id))
 		   $tal[$exV[1]] = $exV[0];
 		}
 
-		echo $form->dropDownList($model,'aktiivinen', $tal, 
-		array('class'=>'form-control form-group')) ?>
-		<span class="btn btn-primary myBgColors muokaValiko" for="aktiivinen"><i class="fa fa-pencil-square-o"></i></span>
+		echo $form->dropDownList($model,'aktiivinen', $tal, array('class'=>'form-control'));
+		?>
+		<span class="input-group-btn">
+		  <span class="btn btn-primary myBgColors muokaValiko" for="aktiivinen"><i class="fa fa-pencil-square-o"></i></span>
+		</span>
 	   </div>
 
 		<?php echo $form->error($model,'aktiivinen'); ?>
@@ -159,7 +167,7 @@ if(empty($model->position) and isset($model->id))
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'tyoryhma'); ?>
 
-	   <div class="form-inline">
+	   <div class="input-group">
 		<?php
 		$list = array();
       		$l = Valikkoot::model()->findAll(" select_type='tyoryhma' ",array('order' => "select_type"));
@@ -167,9 +175,11 @@ if(empty($model->position) and isset($model->id))
 		$list[$v->value] = $v->value;
 
         	echo $form->dropDownList($model, 'tyoryhma', $list,
-		array('empty'=>'','class'=>'form-control form-group'));
+		array('empty'=>'','class'=>'form-control'));
         	?>
-		<span class="btn btn-primary myBgColors muokaValiko" for="tyoryhma"><i class="fa fa-pencil-square-o"></i></span>
+		<span class="input-group-btn">
+		  <span class="btn btn-primary myBgColors muokaValiko" for="tyoryhma"><i class="fa fa-pencil-square-o"></i></span>
+		</span>
 	   </div>
 
 		<?php echo $form->error($model,'tyoryhma'); ?>
@@ -179,7 +189,7 @@ if(empty($model->position) and isset($model->id))
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'tyo_toimialue'); ?>
 
-	   <div class="row form-inline">
+	   <div class="input-group">
 		<?php
 		$exists = Valikkoot::model()->find(" select_type='tyo_toimialue' ");
 		if(!isset($exists->id))
@@ -193,7 +203,7 @@ if(empty($model->position) and isset($model->id))
       		$l = Valikkoot::model()->findAll(" select_type='tyo_toimialue' ",array('order' => "select_type"));
 		$arr = json_decode($model->tyo_toimialue);
 
-		echo '<select name="Tyontekijat[tyo_toimialue][]" class="selectpicker col-sm-9" multiple title="Valitse">';
+		echo '<select name="Tyontekijat[tyo_toimialue][]" class="selectpicker form-control" multiple title="Valitse">';
 		foreach($l as $val)
 		{
 			if(is_array($arr) and in_array($val->value,$arr))
@@ -212,7 +222,9 @@ if(empty($model->position) and isset($model->id))
 		array('empty'=>'','class'=>'selectpicker col-sm-9', 'multiple'=>'yes'));
 */
         	?>
-		<span class="btn btn-primary myBgColors muokaValiko" for="tyo_toimialue"><i class="fa fa-pencil-square-o"></i></span>
+		<span class="input-group-btn">
+		  <span class="btn btn-primary myBgColors muokaValiko" for="tyo_toimialue"><i class="fa fa-pencil-square-o"></i></span>
+		</span>
 	   </div>
 
 		<?php echo $form->error($model,'tyo_toimialue'); ?>
@@ -250,12 +262,12 @@ if(empty($model->position) and isset($model->id))
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'kortit'); ?>
 
-	   <div class="row form-inline">
+	   <div class="input-group">
 		<?php
 		$a = Valikkoot::model()->findAll(" select_type='kortit' ");
 		$check = explode("##***",$model->kortit);
 
-		echo '<select name="kortit[]" class="selectpicker col-sm-9" multiple title="Valitse">';
+		echo '<select name="kortit[]" class="selectpicker form-control" multiple title="Valitse">';
 		  foreach($a as $val){
 		    	$on = false;
 		   foreach($check as $c)
@@ -271,22 +283,17 @@ if(empty($model->position) and isset($model->id))
 		  }
 		echo '</select>';
 		?>
-		<span class="btn btn-primary myBgColors muokaValiko" for="kortit"><i class="fa fa-pencil-square-o"></i></span>
+		<span class="input-group-btn">
+		  <span class="btn btn-primary myBgColors muokaValiko" for="kortit"><i class="fa fa-pencil-square-o"></i></span>
+		</span>
 	   </div>
 
 		<?php echo $form->error($model,'kortit'); ?>
 	</div>
-
-	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'salasana'); ?>
-		<?php echo $form->textField($model,'salasana',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
-		<?php echo $form->error($model,'salasana'); ?>
-	</div>
-
+	<br>
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'ayjasenyys'); ?>
 		<?php echo $form->checkbox($model,'ayjasenyys',array('size'=>10,'maxlength'=>10,'class'=>'sw')); ?>
-
 		<?php echo $form->error($model,'ayjasenyys'); ?>
 	</div>
 
