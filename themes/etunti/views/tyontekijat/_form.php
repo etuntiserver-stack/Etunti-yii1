@@ -68,6 +68,7 @@ if(empty($model->position) and isset($model->id))
 		<?php echo $form->error($model,'sukunimi'); ?>
 	</div>
 -->
+	
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'tekijan_email'); ?>
 		<?php echo $form->textField($model,'tekijan_email',array('size'=>50,'maxlength'=>50,'class'=>'form-control')); ?>

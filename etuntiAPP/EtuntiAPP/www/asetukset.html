@@ -61,13 +61,30 @@
 		  <br>
 	       	 <button id="tallennaKieli" class="btn btn-success btn-block"></button>
 		</div>
-		<br>
+
 		<div class="well">
 	       	 <label>TAG control</label>
 	       	  <input type="text" id="tagginro" class="form-control" readonly="yes">
 		  <br>
 		  <input type="text" class="form-control input-sm" id="os" placeholder="osoite">
 		</div>
+
+		<button class="btn btn-block btn-primary" data-toggle="collapse" data-target="#demo">Kehittäjän työkalut <i class="caret"></i></button>
+
+		<div id="demo" class="collapse">
+		<br>
+		 <div class="well">
+		  <label>Server</label>
+		   <select class="form-control" id="palvelin">
+		    <option value="etunti.fi">etunti.fi</option>
+		    <option value="staging.etunti.fi">staging.etunti.fi</option>
+		   </select>
+		   <br>
+		   <button class="btn btn-success btn-group-justified" id="tallennaServer" type="button">Tallenna</button>
+		 </div>
+		</div>
+
+
 		<br><br>
     </div>
   </div>

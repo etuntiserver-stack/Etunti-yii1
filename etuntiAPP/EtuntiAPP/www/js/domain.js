@@ -119,22 +119,11 @@ $("#dm").html('<label>Domain</label>' +
 		'<input type="text" class="form-control" id="email" value="'+email+'">' +
 		'<label>'+ lang['tyontekijan_salasana'] +'</label>' +
 		'<input type="password" class="form-control" id="salasana" value="'+salasana+'">' +
-		'<label>'+ lang['server'] +'</label>' +
-		'<select class="form-control" id="server">' +
-		'<option value="etunti.fi">etunti.fi</option>' +
-		'<option value="staging.etunti.fi">staging.etunti.fi</option>' +
-		'</select>' +
 		'<br>' +
 		'<button class="btn btn-success btn-group-justified aloita" type="button">' +
 		'<i class="glyphicon glyphicon-warning-sign"> '+ lang['tallenna'] +'</i></button>');
 
 
-  if(localStorage.getItem('server'))
-  {
-    $("#dm").ready(function(){
-	$('#server').val(localStorage.getItem('server'));
-    });	
-  }
 
   /* Index */
   $('#butTyo').text(lang['TYO']);
@@ -173,40 +162,23 @@ $("#dm").html('<label>Domain</label>' +
 	localStorage.setItem('domain', $("#domain").val());
 	localStorage.setItem('email', $("#email").val());
 	localStorage.setItem('salasana', $("#salasana").val());
-	localStorage.setItem('server', $("#server").val());
 
 	window.location.href='index.html';
   }
 
-/*
-  function saveFile(){
-
-    document.addEventListener("deviceready", onDeviceReadyFileSave, false);
-
-    function onDeviceReadyFileSave() {
-        window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, gotFS, fail);
-    }
-
-    function gotFS(fileSystem) {
-        fileSystem.root.getFile("etunti.cfg", {create: true, exclusive: false}, gotFileEntry, fail);
-    }
-
-    function gotFileEntry(fileEntry) {
-        fileEntry.createWriter(gotFileWriter, fail);
-    }
-
-    function gotFileWriter(writer) {
-        writer.write($("#domain").val() +"//"+$("#email").val() +"//"+$("#salasana").val());
-	  window.location.href='index.html';
-       	  //set();
- 	  //checkviesti(domain);
-    }
-
-    function fail(error) {
-        console.log(error.code);
-    }
+  if(localStorage.getItem('server'))
+  {
+    $("body").ready(function(){
+	$('#palvelin').val(localStorage.getItem('server'));
+    });	
   }
-*/
+
+  $("#tallennaServer").click(function(){
+	localStorage.setItem('server', $("#palvelin").val());
+	window.location.href='index.html';
+  });
+
+
 
 
     document.addEventListener("deviceready", onDeviceReady, false);
