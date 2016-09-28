@@ -163,7 +163,7 @@
 	<table>
 	 <tr>
 	  <td>
-		'.Yii::t('main', 'ID').' 
+		'.Yii::t('main', 'ID').'  
 	  </td><td>
 		'.CHtml::link('<i class="fa fa-arrow-down"></i>','index?sort=id&s=asc').'
 	  </td><td>
@@ -177,7 +177,7 @@
 	<table>
 	 <tr>
 	  <td>
-		'.Yii::t('main', 'Asiakas').'
+		'.Yii::t('main', 'Yritys').'
 	  </td><td>
 		'.CHtml::link('<i class="fa fa-arrow-down"></i>','index?sort=yrityksen_nimi&s=asc').'
 	  </td><td>

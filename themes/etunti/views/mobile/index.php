@@ -87,7 +87,7 @@ $this->breadcrumbs=array(
                         <div class="section">
                           <label class="field prepend-icon">
 
-   			    <input type="text" name="fromP" id="from" class="gui-input datepickerFI" value="<?php echo date('d.m.Y', strtotime(Yii::app()->session['fromP'])); ?>">
+   			    <input type="text" name="fromP" id="from" class="gui-input datepickerFI" value="<?php if(isset(Yii::app()->session['fromP'])) echo date('d.m.Y', strtotime(Yii::app()->session['fromP'])); ?>">
                             <label for="firstname" class="field-icon">
                               <i class="fa fa-calendar"></i>
                             </label>
@@ -98,7 +98,7 @@ $this->breadcrumbs=array(
                         <div class="section">
                           <label class="field prepend-icon">
 
-   			    <input type="text" name="toP" id="to" class="gui-input datepickerFI" value="<?php echo date('d.m.Y', strtotime(Yii::app()->session['toP'])); ?>">
+   			    <input type="text" name="toP" id="to" class="gui-input datepickerFI" value="<?php if(isset(Yii::app()->session['toP'])) echo date('d.m.Y', strtotime(Yii::app()->session['toP'])); ?>">
                             <label for="firstname" class="field-icon">
                               <i class="fa fa-calendar"></i>
                             </label>
