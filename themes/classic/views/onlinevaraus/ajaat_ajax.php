@@ -23,7 +23,7 @@
    {
    	$return = '
 	<tr class="link ajaanClick" tid="'.$vapaaTid.'" pvm="'.date("d.m.Y",strtotime($_POST['pvm'])).'" alku="'.$sta.'" loppu="'.$sto.'">
-	<td class="col-sm-2">'.$kuva.'</td>
+	<td class="col-xs-2">'.$kuva.'</td>
 	<td>'.$sta.' - '.$sto.'</td>
 	</tr>';
 	return $return;
@@ -31,12 +31,14 @@
 
 
    $tekijat = $this->pmvCal($_POST['pvm'])[1];
+   $body .= '<div class="table-responsive">';
    $body .= '<table class="table table-hover">';
    foreach($tekijat as $key=>$value)
    {
 	$body .= tr($value[0], $value[1], $value[2], $value[3], kuva($value[0]));
    }
    $body .= '</table>';
+   $body .= '</div>';
 
 
 

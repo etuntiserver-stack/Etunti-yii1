@@ -208,7 +208,7 @@ if(isset($asetukset->checkout_id) and !empty($asetukset->checkout_id) and !empty
 	<div class="row" id="lispalvimg">
 	  <div class="col-sm-4 col-sm-offset-4">
 		<h4>Haluaisitko lisäpalveluita?</h4>
-	   	<img src="<?php echo Yii::app()->request->baseUrl; ?>/ylapalkki/lisapalv.png">
+	   	<img src="<?php echo Yii::app()->request->baseUrl; ?>/ylapalkki/haluan.png">
 	  </div>
 	</div>
 <br>
@@ -359,17 +359,23 @@ $(document).ready(function(){
 
   localStorage.clear();
 
-$( "#lispalvimg" ).hover(
-  function() {
-	$('#lispalvimg img').replaceWith('<img src="<?php echo Yii::app()->request->baseUrl; ?>/ylapalkki/haluan.png">');
-  }, function() {
-	$('#lispalvimg img').replaceWith('<img src="<?php echo Yii::app()->request->baseUrl; ?>/ylapalkki/lisapalv.png">');
-  }
-);
 
 $("#lispalvimg").click(function(){
 	$('#lisapalvelulista').show('slow');
 });
+/*
+$( "#lispalvimg" ).hover(
+  function() {
+	$('#lispalvimg img').replaceWith('<img src="<?php echo Yii::app()->request->baseUrl; ?>/ylapalkki/haluan.png">');
+
+
+
+  }, function() {
+	$('#lispalvimg img').replaceWith('<img src="<?php echo Yii::app()->request->baseUrl; ?>/ylapalkki/lisapalv.png">');
+  }
+);
+*/
+
 
 $("#tyo_toimialue").change(function(){
 	checker();

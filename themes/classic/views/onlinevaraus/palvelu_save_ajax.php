@@ -29,9 +29,9 @@
 	<hr>
      	<label>Varattu aika </label><br>
 	<div class="row">
-	 <div class="col-sm-4">
+	 <div class="col-xs-4">
 		'.$kuva.'		
-	 </div><div class="col-sm-8">
+	 </div><div class="col-xs-8">
 		'.$tv->pvm.'<br>
 		'.$tv->alku.'-'.$tv->loppu.'
 	 </div>
@@ -50,9 +50,9 @@
 	<hr>
      	<label>Osoite </label><br>
 	<div class="row">
-	 <div class="col-sm-4">
+	 <div class="col-xs-4">
 		Asiakas: '.$k->asiakas_id.'		
-	 </div><div class="col-sm-8">
+	 </div><div class="col-xs-8">
 		'.$k->osoite.'
 	 </div>
 	</div>
@@ -76,9 +76,9 @@
 
 
 	<div class="row">
-	 <div class="col-sm-2">
+	 <div class="col-xs-2">
 	   <i class="fa fa-home"></i> 
-	 </div><div class="col-sm-10">
+	 </div><div class="col-xs-10">
 		<span id="nimikejanelio">'.$model->nimike.' '.$model->nelio.' m²</span>';
 
 		$tilauksenKuvaus = array();
@@ -112,9 +112,9 @@
 	{
 	$body .= '
 	<div class="row">
-	 <div class="col-sm-2">
+	 <div class="col-xs-2">
 	   <i class="fa fa-map-marker"></i> 
-	 </div><div class="col-sm-10">';
+	 </div><div class="col-xs-10">';
 	$body .= $_SESSION['onlinevaraus']['tyo_toimialue'];
 	$body .= '
 	 </div>
@@ -123,9 +123,9 @@
 
 	$body .= '
 	<div class="row">
-	 <div class="col-sm-2">
+	 <div class="col-xs-2">
 	   <i class="fa fa-clock-o"></i> 
-	 </div><div class="col-sm-10">';
+	 </div><div class="col-xs-10">';
 
 	$sumTunti = $lisaTunti+$model->kesto;
 	$_SESSION['onlinevaraus']['sumTunti'] = $sumTunti;
@@ -135,9 +135,9 @@
 	 </div>
 	</div>
 	<div class="row">
-	 <div class="col-sm-2">
+	 <div class="col-xs-2">
 	   <i class="fa fa-eur"></i> 
-	 </div><div class="col-sm-10">';
+	 </div><div class="col-xs-10">';
 
 	if($vkolisa > 0)
 	$sum = ($lisaHinta+$model->hinta)*$vkolisa;
@@ -173,9 +173,9 @@
 	} elseif(isset($sivu) and $sivu == 'aika' and isset($_SESSION['onlinevaraus']['modelTV'])){
 	$body .= '
 	<div class="row">
-	  <div class="col-sm-6">
+	  <div class="col-xs-6">
 			'.CHtml::link('Edellinen','index', array('class'=>'btn btn-lg edellinen')).'
-	  </div><div class="col-sm-6">
+	  </div><div class="col-xs-6">
 			'.CHtml::link('Valitse osoite','osoite', array('class'=>'btn btn-lg seuraava')).'
 	  </div>
 	</div>';
@@ -184,10 +184,10 @@
 	} elseif(isset($sivu) and $sivu == 'osoite' and isset($_SESSION['onlinevaraus']['modelTV'])){
 	$body .= '
 	<div class="row">
-	  <div class="col-sm-6">
+	  <div class="col-xs-6">
 			'.CHtml::link('Edellinen','aika', array('class'=>'btn btn-lg edellinen')).'
 
-	  </div><div class="col-sm-6">
+	  </div><div class="col-xs-6">
 			'.CHtml::link('Maksu','maksu', array('class'=>'btn btn-lg seuraava tallennaUusi')).'
 	  </div>
 	</div>';
@@ -196,9 +196,9 @@
 	} elseif(isset($sivu) and $sivu == 'osoite' and isset($_SESSION['onlinevaraus']['modelKohde'])){
 	$body .= '
 	<div class="row">
-	  <div class="col-sm-6">
+	  <div class="col-xs-6">
 			'.CHtml::link('Edellinen','aika', array('class'=>'btn btn-lg edellinen')).'
-	  </div><div class="col-sm-6">
+	  </div><div class="col-xs-6">
 			'.CHtml::link('Maksu','maksu', array('class'=>'btn btn-lg seuraava')).'
 	  </div>
 	</div>';
