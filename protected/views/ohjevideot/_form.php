@@ -35,7 +35,7 @@
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'tiedoston_nimi'); ?>
-		<?php echo $form->FileField($model,'tiedoston_nimi'); ?>
+		<input type="file" name="file">
 		<?php echo $form->error($model,'tiedoston_nimi'); ?>
 	</div>
 
