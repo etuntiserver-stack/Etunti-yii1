@@ -58,6 +58,7 @@
         </li>
 	<?php endif; ?>
 
+	        <li><?php echo CHtml::link(Yii::t('main', 'PhpInfo'),array('/domainit/phpinfo')); ?></li>
 
 	<?php if(isset(Yii::app()->user->adminID)) : ?>
         <li class="dropdown">
