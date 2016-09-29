@@ -88,17 +88,11 @@ class OhjevideotController extends Controller
 		if(isset($_POST['Ohjevideot']))
 		{
 			$model->attributes=$_POST['Ohjevideot'];
-            		//$model->tiedoston_nimi=CUploadedFile::getInstance($model,'tiedoston_nimi');
-
-			$uploaddir = Yii::app()->basePath.'/../ohjevideot/';
-			$uploadfile = $uploaddir . basename($_FILES['file']['name']);
-			if (move_uploaded_file($_FILES['file']['tmp_name'], $uploadfile)) {
-				echo "ok";
-			} 
-			$model->tiedoston_nimi = basename($_FILES['file']['name']);
+            		$model->tiedoston_nimi=CUploadedFile::getInstance($model,'tiedoston_nimi');
             		if($model->save()){
-		                //$path=Yii::getPathOfAlias('webroot').'/ohjevideot/'.$model->tiedoston_nimi->getName();
-		                $this->redirect(array('view','id'=>$model->id));
+		                $path=Yii::getPathOfAlias('webroot').'/ohjevideot/'.$model->tiedoston_nimi->getName();
+		                $model->tiedoston_nimi->saveAs($path);
+				$this->redirect(array('view','id'=>$model->id));
 		        } else {
 				print_r($model->getErrors());
 			}
