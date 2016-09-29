@@ -92,7 +92,7 @@ class OhjevideotController extends Controller
             		if($model->save()){
 		                $path=Yii::getPathOfAlias('webroot').'/ohjevideot/'.$model->tiedoston_nimi->getName();
 		                $model->tiedoston_nimi->saveAs($path);
-				$this->redirect(array('view','id'=>$model->id));
+				//$this->redirect(array('view','id'=>$model->id));
 		        }
 
 		}
