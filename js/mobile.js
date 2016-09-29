@@ -119,7 +119,8 @@ $(document).delegate("#Kohteet_id","change",function(){
 		
 });
 
-$(".poistaKohde").click(function(){
+
+$(document).delegate(".poistaKohde","click",function(){
 
 	var forRivi = $(this).attr("for");
 	var riviid = $(this).attr("for").split("_");
