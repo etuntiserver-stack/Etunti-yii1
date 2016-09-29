@@ -71,8 +71,6 @@ class DomainitController extends Controller
 
 	public function actionPhpinfo()
 	{
-		ini_set( 'upload_max_size' , '100M' );
-		ini_set( 'post_max_size', '100M');
 		echo phpinfo();
 	}
 
