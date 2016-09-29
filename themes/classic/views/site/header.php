@@ -126,7 +126,7 @@
                             data-splitin="none"
                             data-splitout="none"
                             data-easing="easeOutExpo"
-                            style="font-size: 20px;"><br>Kehitetty työnajan hallintaan liikkuvan työn työntekijöille ja esimiehille.
+                            style="font-size: 20px;"><br>Kehitetty työnajanhallintaan liikkuvan työn työntekijöille ja esimiehille.
                         </div>
 
                     </li>
