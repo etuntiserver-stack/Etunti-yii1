@@ -20,7 +20,7 @@ class SiteController extends Controller
 			),
 		);
 	}
-
+/*
 	public function filters()
 	{
 		return array(
@@ -28,7 +28,7 @@ class SiteController extends Controller
 			'postOnly + delete', // we only allow deletion via POST request
 		);
 	}
-
+*/
 	public function accessRules()
 	{
 		return array(
@@ -323,6 +323,7 @@ class SiteController extends Controller
 
 			if(!empty($_POST['myyja']))
        			$criteria->addCondition ( " myyja='".trim($_POST['myyja'])."' " );
+
 
 
 

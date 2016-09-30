@@ -181,19 +181,28 @@ class OnlinevarausController extends Controller
 		{
 
 			$_SESSION['onlinevaraus']['sahkoposti'] = $_POST['sahkoposti'];
+			$body = '';
 
 			$criteria=new CDbCriteria;
-			$criteria->condition = " email='".$_POST['sahkoposti']."' ";
-			$k = Kohteet::model()->findAll($criteria);
-			if(isset($k[0]))
+			$criteria->condition = " sahkoposti='".$_POST['sahkoposti']."' ";
+			$a = Asiakkaat::model()->findAll($criteria);
+			if(isset($a[0]))
 			{
-			  $body = '<label>'.Yii::t('main', 'Valitse osoite').'</label>
+
+			  $body .= '<label>'.Yii::t('main', 'Valitse osoite').'</label>
 			  <select id="valitseOsoite" class="form-control input-lg">
 			  <option>'.Yii::t('main', 'Valitse osoite').'</option>';
-			  foreach($k as $data)
+
+			  foreach($a as $asiakasData)
 			  {
-			     $body .= '<option value="'.$data->id.'">'.$data->osoite.'</option>';
+			  	$k = Kohteet::model()->findAll(" asiakas_id='".$asiakasData->id."' ");
+
+			  	foreach($k as $data)
+			  	{
+			     		$body .= '<option value="'.$data->id.'">'.$data->osoite.'</option>';
+			  	}
 			  }
+
 			  $body .= '</select>';
 
 			  echo json_encode($body);
