@@ -13,7 +13,6 @@ protected/runtime/*
 protected/runtime/application.log
 !protected/runtime/.gitignore
 protected/data/*.db
-protected/config/*
 .DS_Store
 etuntiAPP/.DS_Store
 etuntiAPP/EtuntiAPP/platforms/*
