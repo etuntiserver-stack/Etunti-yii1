@@ -26,9 +26,9 @@
                     <div class="col-sm-5 col-md-4">
                         <h4>Kirjaudu</h4>
                         <form action="<?php echo Yii::app()->request->baseUrl; ?>/index.php/user/login" method="POST">
-                            <input type="text" name="UserLogin[domain]" placeholder="Domain" required>
-                            <input type="text" name="UserLogin[username]" placeholder="Käyttäjätunnus" required>
-                            <input type="password" name="UserLogin[password]" placeholder="Salasana" required>
+                            <input type="text" name="UserLogin[domain]" placeholder="<?php echo Yii::t('main', 'Yritystunnus')?>" required>
+                            <input type="text" name="UserLogin[username]" placeholder="<?php echo Yii::t('main', 'Käyttäjätunnus')?>" required>
+                            <input type="password" name="UserLogin[password]" placeholder="<?php echo Yii::t('main', 'Salasana')?>" required>
                             <input type="submit" class="btn btn-lg" value="Kirjaudu">
                         </form>
                     </div>
