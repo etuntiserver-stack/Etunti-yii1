@@ -29,6 +29,7 @@ class Ohjevideot extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('otsiko, kuvaus', 'required'),
+			array('sort', 'numerical', 'integerOnly'=>true),
 			array('otsiko, tiedoston_nimi', 'length', 'max'=>500),
 		        //array('tiedoston_nimi', 'file', 'types'=>'mp4'),
 			// The following rule is used by search().

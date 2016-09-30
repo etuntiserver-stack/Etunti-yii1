@@ -26,5 +26,6 @@ $this->menu=array(
 		'otsiko',
 		'kuvaus',
 		'tiedoston_nimi',
+		'sort',
 	),
 )); ?>

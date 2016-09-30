@@ -15,7 +15,7 @@
 
    <?php
 	Yii::app()->db1->setActive(true);
-	$model = Ohjevideot::model()->findAll();
+	$model = Ohjevideot::model()->findAll(array('order'=>'sort ASC'));
    	foreach($model as $data) 
    	{
 
