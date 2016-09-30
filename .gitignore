@@ -1,9 +1,11 @@
 assets/*
+!tiedostot/templates/mallit/*
+!tiedostot/etusivu/*
+!tiedostot/trust/*
 emails/*
 backup/*
 tiedostot/*
 ohjevideot/*
-!tiedostot/templates/mallit/*
 img/*
 protected/views/domainit/sql/*
 protected/runtime/*
