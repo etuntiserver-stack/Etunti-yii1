@@ -4,6 +4,8 @@ backup/*
 tiedostot/*
 ohjevideot/*
 !tiedostot/templates/mallit/*
+!tiedostot/etusivu/*
+!tiedostot/trust/*
 img/*
 protected/views/domainit/sql/*
 protected/runtime/*
@@ -18,4 +20,3 @@ etuntiAPP/EtuntiAdmin/platforms/*
 !etuntiAPP/EtuntiAdmin/platforms/wp8
 !etuntiAPP/EtuntiAPP/platforms/wp8
 error_log
-themes/roker/js/twitter/*
