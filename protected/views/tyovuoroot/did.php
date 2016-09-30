@@ -1,0 +1,103 @@
+<?php
+
+    	$color = '';
+	$height = '';
+
+	$did = date("Ymd",strtotime($pvm));
+	if(date('N', strtotime($pvm)) == 6 or date('N', strtotime($pvm)) == 7)
+	$height = 'style="min-height:10px;"';
+
+	echo '
+	   <div class="tp">
+	     <div class="form-inline">
+	     <div class="form-group">
+	   	<i class="link glyphicon glyphicon-plus luominen" pvm="'.date("d.m.Y",strtotime($pvm)).'" tid="'.$tid.'" style="margin-right: 5px"></i>
+	     </div><div class="form-group">
+	   	<i class="forCut" id="forCut_'.$did.'_'.$tid.'" style="margin-right: 5px"></i>
+	     </div><div class="form-group">
+	   	<i class="forCopy" id="forCopy_'.$did.'_'.$tid.'"></i> 
+	     </div>
+	     </div>
+	   </div>';
+
+	echo '<div '.$height.' class="small laatikko latikkoAsetukset" pvm="'.date("d.m.Y",strtotime($pvm)).'" tid="'.$tid.'">';
+	
+
+       	$criteria = new CDbCriteria();
+	$criteria->order = " alku ASC";
+	$criteria->with=array('kohteet');
+	$criteria->condition = " tid = '".$tid."' and pvm = '".date("d.m.Y",strtotime($pvm))."' ";
+	$tv = Tyovuoroot::model()->findAll($criteria); 
+	foreach($tv as $tvVal)
+	{
+
+	 if(isset($tvVal))
+	 {
+	   $osoite = '';
+	   if(isset($tvVal->kohteet->osoite))
+	   $osoite = $tvVal->kohteet->osoite;//
+
+	   $strlen = strlen($osoite);
+	   $scount = 30;
+	   if(isset($tietoja) and $tietoja == 1) $scount = 27;
+
+	   if($strlen > $scount)
+	    $osoite = substr($osoite,0,$scount).'..';
+
+
+	   if($tvVal->alku > 0 and $tvVal->loppu > 0)
+	    $al = $tvVal->alku.'-'.$tvVal->loppu;
+	   else
+	    $al = '';
+
+
+	 if(!empty($tvVal->tyoajanlaatu) and empty($osoite))
+	 {
+	    $expl1 = explode("/",$tvVal->tyoajanlaatu);
+	    $color = (isset($expl1[1])) ? $expl1[1] : '';
+	    $osoite = (isset($expl1[0])) ? $expl1[0] : '';
+	 } else {
+	    $color = '';
+	 }
+
+	 if(!empty($tvVal->tyoajanmerkinta))
+	 {
+	    $expl = explode("/",$tvVal->tyoajanmerkinta);
+	    $color = (isset($expl[1])) ? $expl[1] : '';
+	 } else {
+	    $color = '';
+	 }
+
+
+	   echo '<div id="'.$tvVal->id.'_'.$did.'_'.$tid.'" class="fullRivi" style="color:'.$color.'">';
+	   if( $from != 'mobiili' )
+	   echo '<a href=# class="text-danger glyphicon glyphicon-paste muistin" for="'.$tvVal->id.'_'.$did.'_'.$tid.'"></a>';
+	   echo '&nbsp;<span class="link tv_edit" id="tv_'.$tvVal->id.'">'.$al.' '.$osoite.'</span>';
+
+	   if(!empty($tvVal->kohteet->avain))
+	   echo ' <b class="fa fa-key text-warning"></b>';
+
+	   if(!empty($tvVal->tietoja))
+	   echo ' <b class="fa fa-file-text-o text-warning" title="Tietoja"></b>';
+
+	   if(!empty($tvVal->tietoja) and isset($tietoja) and $tietoja == 1)
+	   echo '<p><span style="color: blue; border: 1px #333 solid">'.str_replace("\n","<br>",$tvVal->tietoja).'</span></p>';
+
+	   echo '<br>
+	   </div>';
+
+	 }
+	}
+
+	echo '</div>';
+	
+	if( $from == 'ajax' ){
+	?>
+	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/tvuoroot.js"></script>
+	<?php
+	}
+
+//print_r($tvVal->kohde);
+//exit;
+?>
+

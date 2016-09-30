@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="fi.etunti.admin" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>Etunti Admin</name>
+    <description>
+        Etunnin perus- ja lisätyökalut ovat suunniteltu ratkaisemaan puhdistusalan tyypilliset ongelmat. Yhden ohjelman avulla pyörität yritystoimintaasi ennen näkemättömän helposti.
+    </description>
+    <author email="laptopsr@gmail.com" href="http://etunti.fi">
+        Etunti.fi
+    </author>
+    <content src="index.html" />
+    <plugin name="cordova-plugin-whitelist" version="1" />
+    <access origin="*" />
+    <allow-intent href="http://*/*" />
+    <allow-intent href="https://*/*" />
+    <allow-intent href="tel:*" />
+    <allow-intent href="sms:*" />
+    <allow-intent href="mailto:*" />
+    <allow-intent href="geo:*" />
+
+
+    <platform name="android">
+        <allow-intent href="market:*" />
+	<preference name="AndroidPersistentFileLocation" value="Compatibility" />
+        <preference name="android-minSdkVersion" value="14" />
+        <preference name="android-targetSdkVersion" value="23" />
+
+    	<icon src="res/android/xhdpi.png" />
+    	<icon src="res/android/ldpi.png" density="ldpi" />
+    	<icon src="res/android/mdpi.png" density="mdpi" />
+    	<icon src="res/android/hdpi.png" density="hdpi" />
+    	<icon src="res/android/xhdpi.png" density="xhdpi" />
+    </platform>
+
+    <platform name="ios">
+        <allow-intent href="itms:*" />
+        <allow-intent href="itms-apps:*" />
+    </platform>
+
+    <platform name="wp8">
+	<icon platform="wp8" src="res/wp8/icon-48.png" width="48" height="48" />
+	<icon platform="wp8" src="res/wp8/icon-62-tile.png" width="62" height="62" />
+	<icon platform="wp8" src="res/wp8/icon-173-tile.png" width="173" height="173" />
+	<splash src="res/wp8/SplashScreenImage.jpg" width="480" height="800"/>
+    </platform>
+
+</widget>

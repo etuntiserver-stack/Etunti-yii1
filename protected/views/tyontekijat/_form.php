@@ -1,0 +1,376 @@
+<?php
+/* @var $this TyontekijatController */
+/* @var $model Tyontekijat */
+/* @var $form CActiveForm */
+
+$position = '';
+$viimeinenAika = '';
+
+if(isset($model->position) and isset($model->id)){
+
+  $si = explode("//",trim($model->position));
+
+  	if(isset($si[0]) and !empty($si[0]))
+     	  $position = $si[0];
+
+  	if(isset($si[1]) and !empty($si[1]))
+     	  $viimeinenAika = $si[1];
+}
+
+if(empty($model->position) and isset($model->id))
+{
+	$criteria=new CDbCriteria;
+	$criteria->order = " id DESC ";
+	$criteria->condition = " tid='".$model->id."' AND my_location!='' AND my_location!='GPS disabled' ";
+	$m = Mobile::model()->find($criteria);
+
+	if(isset($m->my_location))
+	{
+	  $explLoc = explode("**",$m->my_location);
+
+	    if(isset($explLoc[1]))
+ 	    {
+	   	$position = $explLoc[1];
+     	  	$viimeinenAika = $m->loppui;
+	 
+	    } elseif(isset($explLoc[0]) and !isset($explLoc[1])){
+	  	$position = $explLoc[0];
+     	  	$viimeinenAika = $m->aloitan;
+ 	    }
+	
+	}
+}
+
+?>
+
+<input type="hidden" id="position" value="<?php echo $position; ?>">
+
+<?php $form=$this->beginWidget('CActiveForm', array(
+	'id'=>'tyontekijat-form',
+	'enableAjaxValidation'=>false,
+)); ?>
+
+<div class="row form">
+   <div class="col-sm-3">
+
+	<?php echo $form->errorSummary($model); ?>
+
+
+	<div class="row">
+		<?php echo $form->labelEx($model,'tekijan_nimi'); ?>
+		<?php echo $form->textField($model,'tekijan_nimi',array('size'=>60,'maxlength'=>100,'class'=>'form-control input-sm')); ?>
+		<?php echo $form->error($model,'tekijan_nimi'); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->labelEx($model,'tekijan_email'); ?>
+		<?php echo $form->textField($model,'tekijan_email',array('size'=>50,'maxlength'=>50,'class'=>'form-control input-sm')); ?>
+		<?php echo $form->error($model,'tekijan_email'); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->labelEx($model,'tekijan_katuosoite'); ?>
+		<?php echo $form->textField($model,'tekijan_katuosoite',array('size'=>60,'maxlength'=>100,'class'=>'form-control input-sm')); ?>
+		<?php echo $form->error($model,'tekijan_katuosoite'); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->labelEx($model,'tekijan_pnumero'); ?>
+		<?php echo $form->textField($model,'tekijan_pnumero',array('size'=>7,'maxlength'=>7,'class'=>'form-control input-sm')); ?>
+		<?php echo $form->error($model,'tekijan_pnumero'); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->labelEx($model,'tekijan_ptoimipaikka'); ?>
+		<?php echo $form->textField($model,'tekijan_ptoimipaikka',array('size'=>50,'maxlength'=>50,'class'=>'form-control input-sm')); ?>
+		<?php echo $form->error($model,'tekijan_ptoimipaikka'); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->labelEx($model,'aktiivinen'); ?>
+		<?php 
+		$a = Valikkoot::model()->findAll(" select_type='aktiivinen' ");
+        	$tal = '';
+		foreach($a as $v){
+		$exV = explode("/",$v->value);
+		   $tal[$exV[1]] = $exV[0];
+		}
+
+		echo $form->dropDownList($model,'aktiivinen', $tal, 
+		array('class'=>'form-control input-sm','id'=>'osoite')) ?>
+		<?php echo $form->error($model,'aktiivinen'); ?>
+	</div>
+
+   </div>
+   <div class="col-sm-3">
+
+
+	<div class="row">
+		<?php echo $form->labelEx($model,'imei'); ?>
+		<?php echo $form->textField($model,'imei',array('size'=>30,'maxlength'=>100,'class'=>'form-control input-sm')); ?>
+		<?php echo $form->error($model,'imei'); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->labelEx($model,'laiten_puh'); ?>
+		<?php echo $form->textField($model,'laiten_puh',array('size'=>60,'maxlength'=>100,'class'=>'form-control input-sm')); ?>
+		<?php echo $form->error($model,'laiten_puh'); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->labelEx($model,'tekijan_henkilotunnus'); ?>
+		<?php echo $form->textField($model,'tekijan_henkilotunnus',array('size'=>20,'maxlength'=>20,'class'=>'form-control input-sm')); ?>
+		<?php echo $form->error($model,'tekijan_henkilotunnus'); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->labelEx($model,'tekijan_puh'); ?>
+		<?php echo $form->textField($model,'tekijan_puh',array('size'=>20,'maxlength'=>20,'class'=>'form-control input-sm')); ?>
+		<?php echo $form->error($model,'tekijan_puh'); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->labelEx($model,'online_varauksen_valmina'); ?>
+		<?php 
+        	$tal = array(0=>'Ei',1=>'Kyllä');
+		echo $form->dropDownList($model,'online_varauksen_valmina', $tal, 
+		array('class'=>'form-control input-sm','id'=>'osoite')) ?>
+		<?php echo $form->error($model,'online_varauksen_valmina'); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->labelEx($model,'tyoryhma'); ?>
+		<?php
+		$list = array();
+      		$l = Valikkoot::model()->findAll(" select_type='tyoryhma' ",array('order' => "select_type"));
+		foreach($l as $v)
+		$list[$v->value] = $v->value;
+
+        	echo $form->dropDownList($model, 'tyoryhma', $list,
+		array('empty'=>'','class'=>'form-control input-sm'));
+        	?>
+		<?php echo $form->error($model,'tyoryhma'); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->labelEx($model,'tyo_toimialue'); ?>
+		<?php echo $form->textField($model,'tyo_toimialue',array('size'=>20,'maxlength'=>20,'class'=>'form-control input-sm')); ?>
+		<?php echo $form->error($model,'tyo_toimialue'); ?>
+	</div>
+
+   </div>
+   <div class="col-sm-3">
+
+	<div class="row">
+		<?php echo $form->labelEx($model,'tyoehtosopimus'); ?>
+		<?php
+		$list = array();
+      		$l = Valikkoot::model()->findAll(" select_type='tyoehtosopimus' ",array('order' => "select_type"));
+		foreach($l as $v)
+		$list[$v->value] = $v->value;
+
+        	echo $form->dropDownList($model, 'tyoehtosopimus', $list,
+		array('empty'=>'','class'=>'form-control input-sm'));
+        	?>
+		<?php echo $form->error($model,'tyoehtosopimus'); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->labelEx($model,'tekijan_pankkitili'); ?>
+		<?php echo $form->textField($model,'tekijan_pankkitili',array('size'=>60,'maxlength'=>100,'class'=>'form-control input-sm')); ?>
+		<?php echo $form->error($model,'tekijan_pankkitili'); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->labelEx($model,'tekijan_konttori'); ?>
+		<?php echo $form->textField($model,'tekijan_konttori',array('size'=>50,'maxlength'=>50,'class'=>'form-control input-sm')); ?>
+		<?php echo $form->error($model,'tekijan_konttori'); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->labelEx($model,'kortit'); ?>
+		<?php
+		$a = Valikkoot::model()->findAll(" select_type='kortit' ");
+		$check = explode("##***",$model->kortit);
+
+		echo '<select name="kortit[]" class="selectpicker form-control input-sm" multiple title="Valitse">';
+		  foreach($a as $val){
+		    	$on = false;
+		   foreach($check as $c)
+		   {
+		     if(trim($c) == trim('kortti_'.$val->value))
+		     {
+		    	echo '<option value="kortti_'.$val->value.'" selected>'.$val->value.'</option>';
+		    	$on = true;
+		     }
+		   }
+		    if($on == false)
+		    echo '<option value="kortti_'.$val->value.'">'.$val->value.'</option>';
+		  }
+		echo '</select>';
+		?>
+		<?php echo $form->error($model,'kortit'); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->labelEx($model,'salasana'); ?>
+		<?php echo $form->textField($model,'salasana',array('size'=>60,'maxlength'=>100,'class'=>'form-control input-sm')); ?>
+		<?php echo $form->error($model,'salasana'); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->labelEx($model,'ayjasenyys'); ?>
+		<?php echo $form->checkbox($model,'ayjasenyys',array('size'=>10,'maxlength'=>10,'class'=>'sw')); ?>
+
+		<?php echo $form->error($model,'ayjasenyys'); ?>
+	</div>
+
+   </div><div class="col-sm-3">
+
+	<div class="row">
+   <div class="pull-right">
+	<?php if(isset($model->id)): ?>
+	<div class="row">
+		<?php
+		$filename = "../../img/tekijat/".Yii::app()->user->domain."/".$model->id.".jpg";
+		if (file_exists(Yii::app()->request->baseUrl."img/tekijat/".Yii::app()->user->domain."/".$model->id.".jpg"))
+		   echo '<img src="'.$filename.'" class="img-thumbnail">';
+		else
+		   echo '<img src="../../img/tekijat/noname.jpg" class="img-thumbnail">';
+		?>		
+	</div>
+	<?php endif; ?>
+   </div>
+	</div>
+
+	<div class="row">
+		<?php echo $form->labelEx($model,'gcm_reg_id'); ?>
+		<?php echo $form->textField($model,'gcm_reg_id',array('size'=>60,'maxlength'=>500,'class'=>'form-control input-sm')); ?>
+		<?php echo $form->error($model,'gcm_reg_id'); ?>
+
+	</div>
+
+	<div class="row">
+		<?php echo $form->labelEx($model,'position'); ?>
+		<?php echo $form->textField($model,'position',array('size'=>60,'maxlength'=>500,'class'=>'form-control input-sm')); ?>
+		<?php echo $form->error($model,'position'); ?>
+	</div>
+
+
+   </div>
+
+
+
+</div><!-- form -->
+
+<hr>
+
+<div class="row form">
+   <div class="col-sm-6">
+
+	<div class="row">
+		<?php echo $form->labelEx($model,'tekijan_tietoja'); ?>
+		<?php echo $form->textArea($model,'tekijan_tietoja',array('rows'=>6, 'cols'=>50,'class'=>'form-control input-sm')); ?>
+		<?php echo $form->error($model,'tekijan_tietoja'); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->labelEx($model,'tekijan_muisti'); ?>
+		<?php echo $form->textArea($model,'tekijan_muisti',array('rows'=>6, 'cols'=>50,'class'=>'form-control input-sm')); ?>
+		<?php echo $form->error($model,'tekijan_muisti'); ?>
+	</div>
+
+   </div><div class="col-sm-6">
+
+<label><?php echo Yii::t('','Viimeinen sijainti kartalla').' '.$viimeinenAika; ?> </label>
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      #map-canvas {
+        width: 100%;
+        height: 400px;
+      }
+    </style>
+    <script src="https://maps.googleapis.com/maps/api/js"></script>
+    <script>
+
+window.initialize = function() {
+    var Mypos = document.getElementById("position").value.split("/");
+    var myLatlng = new google.maps.LatLng(Mypos[0], Mypos[1]);
+    var mapCanvas = document.getElementById('map-canvas');
+    var mapOptions = {
+        center: myLatlng,          
+        zoom: 14,
+    }
+    var map = new google.maps.Map(mapCanvas, mapOptions);
+    var marker = new google.maps.Marker({
+      position: myLatlng,
+      map: map,
+      title:"123"
+      });
+    var latLng = marker.getPosition(); 
+    map.setCenter(latLng);
+
+  }
+
+  google.maps.event.addDomListener(window, 'load', initialize);
+
+    </script>
+  </head>
+  <body>
+    <div id="map-canvas"></div>
+  </body>
+</html>
+
+
+   </div>
+</div>
+
+
+<br>
+
+	<div class="buttons">
+		<?php echo CHtml::submitButton($model->isNewRecord ? 'Luo' : 'Tallenna',array('class'=>'btn btn-primary')); ?>
+	</div>
+
+<?php $this->endWidget(); ?>
+
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+
+  $(".sw").bootstrapSwitch({
+	size: "mini",
+	onColor: "success",
+	offColor: "warning",
+	onText: "Kyllä",
+	offText: "Ei"
+  });
+
+});
+</script>
+
+
+
+
+<?php
+/*
+
+	<div class="row">
+		<?php echo $form->labelEx($model,'tekijan_lanka_puh'); ?>
+		<?php echo $form->textField($model,'tekijan_lanka_puh',array('size'=>20,'maxlength'=>20,'class'=>'form-control input-sm')); ?>
+		<?php echo $form->error($model,'tekijan_lanka_puh'); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->labelEx($model,'tekijan_kulunvalvonta'); ?>
+		<?php echo $form->textField($model,'tekijan_kulunvalvonta',array('size'=>50,'maxlength'=>50,'class'=>'form-control input-sm')); ?>
+		<?php echo $form->error($model,'tekijan_kulunvalvonta'); ?>
+	</div>
+
+
+
+*/
+

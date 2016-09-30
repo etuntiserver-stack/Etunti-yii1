@@ -1,0 +1,228 @@
+<?php
+/* @var $this ToteutuneetController */
+/* @var $model Toteutuneet */
+/* @var $form CActiveForm */
+
+if(isset($_POST['forid'])){
+  $s= Mobile::model()->findbypk($_POST['forid']);
+  $model->kohde_kannasta = $s->kohde_kannasta;
+}
+
+	  $s->loppui = date("d.m.Y H:i",strtotime($s->loppui));
+	  $s->aloitan = date("d.m.Y H:i",strtotime($s->aloitan));
+
+$kesto = '<h1>'.$this->sprint(strtotime($s->loppui)-strtotime($s->aloitan)).'</h1>';
+$forPVM = date('d.m.Y',strtotime($s->aloitan));
+//$aloitan = date("H:i",strtotime($s->aloitan));
+//$loppui = date("H:i",strtotime($s->loppui));
+
+
+?>
+	<input type="hidden" id="forDatepickerAlkuPVM" value="<?php echo date('Y-m-d H:i',strtotime($s->aloitan)); ?>">
+	<input type="hidden" id="forDatepickerLoppuPVM" value="<?php echo date('Y-m-d H:i',strtotime($s->loppui)); ?>">
+
+
+
+	<div class="modal-dialog modal-lg">
+	    <div class="modal-content">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
+		<h2 class="modal-title"><?php echo Yii::t('main', 'Toteuman muutos'); ?></h2>
+	
+		</div>
+		<div class="modal-body">
+
+	<div class="dialogTable clearfix modal-osio">
+
+
+<div class="row form">
+
+<?php $form=$this->beginWidget('CActiveForm', array(
+	'id'=>'toteutuneet-form',
+	'enableAjaxValidation'=>false,
+)); ?>
+
+
+		<input type="hidden" name="forPVM" value="<?php echo $forPVM; ?>">
+		<?php echo $form->hiddenField($model,'kid',array('value'=>$s->id)); ?>
+		<?php echo $form->hiddenField($model,'tid',array('value'=>$s->tid)); ?>
+		<?php echo $form->hiddenField($model,'tekijan_nimi',array('value'=>$s->tekijan_nimi)); ?>
+		<?php echo $form->hiddenField($model,'viesti',array('value'=>$s->viesti)); ?>
+
+
+
+  <div class="col-sm-12">
+	<div class="row">
+		<?php echo $form->labelEx($model,'tietoja'); ?>
+		<?php echo $form->textarea($model,'tietoja',array('rows'=>4,'class'=>'form-control input-sm')); ?>
+		<?php echo $form->error($model,'tietoja'); ?>
+	</div>
+  </div>
+
+
+  <div class="col-sm-4">
+	<div class="row">
+		<?php echo $form->labelEx($model,'kohde_kannasta'); ?>
+		<?php 
+
+		         $opt = array($s->kohdenID=>array('selected'=>true));
+		      if($s->status == 2){
+		         $k = Kohteet::model()->find("osoite='MATKA'");
+		         $opt = array($k->id=>array('selected'=>true));
+		      } elseif($s->status == 10){
+		         $k = Kohteet::model()->find("osoite='LOUNASTAUKO'");
+		         $opt = array($k->id=>array('selected'=>true));
+		      } 
+
+		      echo $form->dropDownList($model,'kohde_kannasta', 
+			CHtml::listData(Kohteet::model()->findAll(array('order' => 'osoite ASC')), 'id', 'osoite'), 
+			    array(
+                		'class'=>'form-control input-sm',
+		                'options' => $opt,
+			    )
+			);
+		?>
+		<?php echo $form->error($model,'kohde_kannasta'); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->labelEx($model,'osoite'); ?>
+		<?php echo $form->textField($model,'osoite',array('class'=>'form-control input-sm')); ?>
+		<?php echo $form->error($model,'osoite'); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->labelEx($model,'status'); ?>
+		<?php 
+		      $list = array(3=>Yii::t('main','TYÖ'),2=>Yii::t('main','MATKA'),10=>Yii::t('main','LOUNASTAUKO'));
+		      //array_unshift($list, $list[$s->status]);
+		      echo $form->dropDownList($model,'status', 
+			 	$list, 
+				array('options' => array($s->status=>array('selected'=>true)),'class'=>'form-control input-sm'));
+		?>
+		<?php echo $form->error($model,'status'); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->labelEx($model,'aloitan'); ?>
+		<?php echo $form->textField($model,'aloitan',array('value'=>$s->aloitan,'size'=>60,'maxlength'=>100,'class'=>'form-control input-sm al')); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->labelEx($model,'loppui'); ?>
+		<?php echo $form->textField($model,'loppui',array('value'=>$s->loppui,'size'=>60,'maxlength'=>100,'class'=>'form-control input-sm lp')); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->labelEx($model,'sairaus'); ?>
+		<?php 
+        	$tal = array(1=>'Palkaton',2=>'Palkallinen',3=>'Lapsi sairaus');
+		$optS = array($s->sairaus=>array('selected'=>true));
+
+		echo $form->dropDownList($model,'sairaus', $tal, 
+		array('empty'=>'Valitse','class'=>'form-control input-sm','options'=>$optS)) ?>
+		<?php echo $form->error($model,'sairaus'); ?>
+	</div>
+
+  </div><div class="col-sm-8">
+
+	<div class="row">
+	<label><?php echo Yii::t('main','Kohteen tiedot'); ?></label>
+	<?php
+	$m = Kohteet::model()->findbypk($s->kohdenID);
+	$ohje = '';
+	if(isset($m->id))
+	{
+
+		$k = explode("//",$m->kenella_on_avain);
+
+		if(isset($k[1]))
+		  $ohje .= Yii::t('main', 'Avain on: ')." ".$k[1]."\n";
+		if(!empty($m->avain))
+		  $ohje .= Yii::t('main', 'Avain: ')." ".$m->avain."\n\n";
+		if(!empty($m->aikataulu))
+		  $ohje .= "\nAikataulu: ".$m->aikataulu;
+		if(!empty($m->toimenpiteet))
+		  $ohje .= "\nToimenpiteet: ".$m->toimenpiteet;
+		if(!empty($m->tietoja))
+		  $ohje .= "\nTietoja: ".$m->tietoja;
+		if(!empty($m->muut))
+		  $ohje .= "\nMuut: ".$m->muut;
+
+	}
+	?>
+	<textarea class="form-control input-sm" rows="12" ><?php echo $ohje; ?></textarea>
+	</div>
+
+	<div class="row">
+		<div id="kesto"><?php echo $kesto; ?></div>
+	</div>
+
+  </div>
+</div><!-- form -->
+
+
+
+<?php $this->endWidget(); ?>
+
+
+
+
+
+	<div class="modal-footer">
+		<span class="btn btn-default" data-dismiss="modal">Sulje</span>
+		<?php echo CHtml::Button('Tallenna',array('class'=>'btn btn-primary uusiTot')); ?>
+	</div>		
+		</div> <!-- end modal-content -->
+	</div> <!-- end modal-dialog -->
+
+
+
+
+	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/toteuma.js"></script>
+	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/jquery.mask.js"></script>
+
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+
+
+  $('.al').mask('00.00.0000 00:00',{
+        placeholder: "__.__.____ __:__"
+  });
+
+  $('.lp').mask('00.00.0000 00:00',{
+        placeholder: "__.__.____ __:__"
+  });
+
+
+});
+</script>
+
+<?php
+/*
+<!--
+	<div class="row">
+		<?php echo $form->labelEx($model,'tyoajanlaatu'); ?>
+		<?php echo $form->textField($model,'tyoajanlaatu',array('size'=>60,'maxlength'=>100,'class'=>'form-control input-sm')); ?>
+		<?php echo $form->error($model,'tyoajanlaatu'); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->labelEx($model,'tyoajanmerkinta'); ?>
+		<?php echo $form->textField($model,'tyoajanmerkinta',array('size'=>60,'maxlength'=>100,'class'=>'form-control input-sm')); ?>
+		<?php echo $form->error($model,'tyoajanmerkinta'); ?>
+	</div>
+
+
+	<div class="row">
+		<?php echo $form->labelEx($model,'tietoja'); ?>
+		<?php echo $form->textArea($model,'tietoja',array('rows'=>6, 'cols'=>50,'value'=>$s->tietoja,'class'=>'form-control input-sm')); ?>
+		<?php echo $form->error($model,'tietoja'); ?>
+	</div>
+-->
+*/
+?>

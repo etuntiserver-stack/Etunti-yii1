@@ -1,0 +1,42 @@
+.mennytPaivat{
+	opacity: 0.4;
+}
+td .latikkoAsetukset{
+	min-width: 70px;
+	width: 200px;
+	white-space: normal;
+}
+.forCut, .forCopy{ 
+	display: none;
+}
+.mplus, .mcut{ 
+	display: none;
+	font-size: 150%;
+}
+.clear, .trash{ 
+	font-size: 150%;
+	margin-left:5px;
+}
+td:hover .mplus, td:hover .mcut{
+	display : block;
+}
+td .tp{
+	margin-bottom: 5px;
+}
+.fullRivi{
+	height: 100%;
+	margin-bottom: 2px;
+	border:1px #ccc solid;
+	padding:3px 7px;
+	background: white;
+	border-radius:5px;
+}
+.luominen, .valitseKokopaiva{
+	display: none;
+}
+.table tbody>tr>td{
+    	vertical-align: top;
+}
+.table{
+    height: 100%;
+}
