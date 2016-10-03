@@ -78,16 +78,14 @@ function rivit($data, $kesto, $viesti){
 	if($data->viesti != '' and $data->viesti != 'xxx')
 	$viesti = $data->viesti;
 
+	$date1 = new DateTime($data->loppui);
+	$date2 = new DateTime($data->aloitan);
+	$interval = $date1->diff($date2);
+
 	// <-- Vain jos ero on 1 päivä, erotellaan rivit
-	if(date('d', strtotime($data->loppui)) > date('d', strtotime($data->aloitan)))
+	if(date('d', strtotime($data->loppui)) != date('d', strtotime($data->aloitan)) and ( (int)$interval->d == 0 or (int)$interval->d == 1) )
 	{
 
-	   $date1 = new DateTime($data->loppui);
-	   $date2 = new DateTime($data->aloitan);
-	   $interval = $date1->diff($date2);
-	
-	   if((int)$interval->d == 1)
-	   {
 		// <--Ensimmäinen osa
 		$loppuiOrigin = $data->loppui;
 		$data->loppui = date("Y-m-d 00:00",strtotime($data->loppui));
@@ -101,9 +99,9 @@ function rivit($data, $kesto, $viesti){
 		$kesto = strtotime($data->loppui)-strtotime($data->aloitan);
 		echo rivit($data, $kesto, $viesti);
 		// Toinen osa -->
-	   }
 
 		continue;
+
 	}
 	// Vain jos ero on 1 päivä, erotellaan rivit -->
 
