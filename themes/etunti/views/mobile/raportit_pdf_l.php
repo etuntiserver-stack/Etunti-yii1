@@ -32,6 +32,24 @@
 
 <br>
 
+
+<?php
+
+function rivit($data, $kesto, $viesti){
+	$r = '';
+	$r .=  '<tr>';
+	$r .= '<td style="width:5%">'.date("d.m",strtotime($data->aloitan)).'</td>';
+	$r .= '<td style="width:20%">'.$data->tekijan_nimi.'</td>';
+	$r .= '<td style="width:34%">'.$data->kohde_kannasta.'</td>';
+	$r .= '<td style="width:5%">'.date("H:i",strtotime($data->aloitan)).'</td>';
+	$r .= '<td style="width:5%">'.date("H:i",strtotime($data->loppui)).'</td>';
+	$r .= '<td style="width:5%">'.sprint($kesto).' <b>('.num($kesto).')</b></td>';
+	$r .= '<td style="width:27%">'.$viesti.'</td>';
+	$r .= '</tr>';
+	return $r;
+}
+?>
+
 <div class="tb">
 <table>
   <thead>
@@ -50,25 +68,49 @@
   $kkesto = 0;
   foreach($model as $data){
 
-  $data->loppui = date("Y-m-d H:i",strtotime($data->loppui));
-  $data->aloitan = date("Y-m-d H:i",strtotime($data->aloitan));
+	$data->loppui = date("Y-m-d H:i",strtotime($data->loppui));
+	$data->aloitan = date("Y-m-d H:i",strtotime($data->aloitan));
   
-  $kesto = strtotime($data->loppui)-strtotime($data->aloitan);
-  $kkesto += $kesto;
+	$kesto = strtotime($data->loppui)-strtotime($data->aloitan);
+	$kkesto += $kesto;
 
-  $viesti = '';
-  if($data->viesti != '' and $data->viesti != 'xxx')
-  $viesti = $data->viesti;
+	$viesti = '';
+	if($data->viesti != '' and $data->viesti != 'xxx')
+	$viesti = $data->viesti;
 
-   echo  '<tr>';
-   echo '<td style="width:5%">'.date("d.m",strtotime($data->aloitan)).'</td>';
-   echo '<td style="width:20%">'.$data->tekijan_nimi.'</td>';
-   echo '<td style="width:34%">'.$data->kohde_kannasta.'</td>';
-   echo '<td style="width:5%">'.date("H:i",strtotime($data->aloitan)).'</td>';
-   echo '<td style="width:5%">'.date("H:i",strtotime($data->loppui)).'</td>';
-   echo '<td style="width:5%">'.sprint($kesto).' <b>('.num($kesto).')</b></td>';
-   echo '<td style="width:27%">'.$viesti.'</td>';
-   echo '</tr>';
+	// <-- Vain jos ero on 1 päivä, erotellaan rivit
+	if(date('d', strtotime($data->loppui)) > date('d', strtotime($data->aloitan)))
+	{
+
+	   $date1 = new DateTime($data->loppui);
+	   $date2 = new DateTime($data->aloitan);
+	   $interval = $date1->diff($date2);
+	
+	   if((int)$interval->d == 1)
+	   {
+		// <--Ensimmäinen osa
+		$loppuiOrigin = $data->loppui;
+		$data->loppui = date("Y-m-d 00:00",strtotime($data->loppui));
+		$kesto = strtotime($data->loppui)-strtotime($data->aloitan);
+		echo rivit($data, $kesto, $viesti);
+		// Ensimmäinen osa -->
+
+		// <--Toinen osa
+		$data->aloitan = date("Y-m-d 00:00",strtotime($data->loppui));
+		$data->loppui = date("Y-m-d H:i",strtotime($loppuiOrigin));
+		$kesto = strtotime($data->loppui)-strtotime($data->aloitan);
+		echo rivit($data, $kesto, $viesti);
+		// Toinen osa -->
+	   }
+
+		continue;
+	}
+	// Vain jos ero on 1 päivä, erotellaan rivit -->
+
+
+		echo rivit($data, $kesto, $viesti);
+
+
   }
   ?>
   </tbody>
