@@ -236,6 +236,9 @@ function num($val){
 	public function actionTotal_suunniteltu($id,$kohde_tid,$from,$to)
 	{
 
+		$from = date("Y-m-d", strtotime($from));
+		$to = date("Y-m-d", strtotime($to));
+
 		$this->renderPartial('suunniteltu',array(
 			'id'=>$id,
 			'kohde_tid'=>$kohde_tid,
@@ -1930,7 +1933,9 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 
 	public function toteutu($tid,$sivu,$from,$to)
 	{
-
+		$from = date("Y-m-d", strtotime($from));
+		$to = date("Y-m-d", strtotime($to));
+	
 		$total_l 	= 0;
 		$total_t 	= 0;
 		$totalIlta 	= 0;
@@ -2036,6 +2041,8 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 	public function matkaIlta($tid,$from,$to)
 	{
 
+		$from = date("Y-m-d", strtotime($from));
+		$to = date("Y-m-d", strtotime($to));
 
 		$totalIlta 	= 0;
 
@@ -2065,6 +2072,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		    $al = explode(" ",$l->aloitan);
 		    $lop = explode(" ",$l->loppui);
 		    $totalIlta += $this->ilta($al,$lop);
+
 		}
 		/* ////////////////////////// */
 
@@ -2104,7 +2112,8 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 	public function lounaat($tid,$from,$to)
 	{
 
-
+		$from = date("Y-m-d", strtotime($from));
+		$to = date("Y-m-d", strtotime($to));
 		$total	= 0;
 
 
@@ -2162,6 +2171,8 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 	public function actionKohdebytekija($tid,$from,$to)
 	{
 
+		$from = date("Y-m-d", strtotime($from));
+		$to = date("Y-m-d", strtotime($to));
 
        		$criteria = new CDbCriteria();
         	$criteria->select = "COUNT(*) as count,
@@ -2283,6 +2294,9 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 
 	public function pyhapaivat($tid,$from,$to,$m)
 	{
+
+		$from = date("Y-m-d", strtotime($from));
+		$to = date("Y-m-d", strtotime($to));
 
 		$pvmSTR = '';
 

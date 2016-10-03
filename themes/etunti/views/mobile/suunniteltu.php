@@ -1,4 +1,6 @@
 <?php
+		$from = date("Y-m-d", strtotime($from));
+		$to = date("Y-m-d", strtotime($to));
 
 		$site = Yii::app()->createController('Site');
 		$eilasketa = $site[0]->eiLasketa();
