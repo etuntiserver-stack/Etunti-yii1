@@ -152,22 +152,25 @@
   <table class="table table-striped" id="mobileTable">
   <thead class="myBgColors">
   <tr>
-  <th><?php echo Yii::t('main', 'ID'); ?></th>
+  <th><?php echo Yii::t('main', 'T'); ?></th>
+  <th><?php echo Yii::t('main', 'Rivi'); ?></th>
+  <th><?php echo Yii::t('main', 'Versio'); ?></th>
   <th><?php echo Yii::t('main', 'Päivä'); ?></th>
   <th><?php echo Yii::t('main', 'Kartta'); ?></th>
-  <th><?php echo Yii::t('main', 'Työntekijä'); ?></th>
+  <th class="col-sm-4"><?php echo Yii::t('main', 'Työntekijä'); ?></th>
+  <th><?php echo Yii::t('main', 'TAG'); ?></th>
   <th><?php echo Yii::t('main', 'Asiakas'); ?></th>
-  <th><?php echo Yii::t('main', 'Kohde'); ?></th>
-  <th><?php echo Yii::t('main', 'Lyhyt viesti'); ?></th>
-  <th><?php echo Yii::t('main', 'Aloitus'); ?></th>
-  <th><?php echo Yii::t('main', 'Lopetus'); ?></th>
+  <th class="col-sm-4"><?php echo Yii::t('main', 'Osoite'); ?></th>
+  <th class="col-sm-2"><?php echo Yii::t('main', 'Aloitus'); ?></th>
+  <th class="col-sm-2"><?php echo Yii::t('main', 'Lopetus'); ?></th>
   <th><?php echo Yii::t('main', 'Kesto'); ?></th>
   <th><?php echo Yii::t('main', 'Laskutettu'); ?></th>
   </tr>
   </thead>
   <?php $this->widget('zii.widgets.CListView', array(
 	'dataProvider'=>$dataProvider,
-	'itemView'=>'_view_laskutettu',
+	'itemView'=>'_view',
+	'viewData' => array("sivu" => "laskutettu" ),
   	'template'=>'{items}<table class="table table-striped table-condensed"></table><br/>{pager}',
 
 
@@ -190,8 +193,10 @@
   </div>
 
 
+  <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/jquery.mask.js"></script>
   <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/mobile.js"></script>
   <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/asetukset.js"></script>
+
   <input type="hidden" id="dataChange" >
 
 <script type="text/javascript">

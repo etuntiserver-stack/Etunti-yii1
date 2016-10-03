@@ -1,7 +1,7 @@
 <?php
 /* @var $this MobileController */
 /* @var $data Mobile */
-
+/*
 // onko toteumassa
   $toteutuneet = false;
   $tot = Toteutuneet::model()->find(" kid='".$data->id."' ");
@@ -165,7 +165,7 @@ else
 
 	  <div style="position:absolute;z-index: 2;margin-left:-100px" class="collapse" id="<?php echo 'alshow_'.$data->id; ?>">
 	    <div class="well form-inline">
-	     <?php echo '<input type="text" class="form-control form-group datetimepicker" request="aloitan" status="'.$data->status.'" id="al_'.$data->id.'" value="'.$apvm[$data->id].' '.$at[$data->id].'">'; ?>
+	     <?php echo '<input type="text" class="form-control form-group" request="aloitan" status="'.$data->status.'" id="al_'.$data->id.'" value="'.$apvm[$data->id].' '.$at[$data->id].'">'; ?>
 
 		<div class="form-group input-group-btn">
 		     <button class="btn btn-success pvmupdate" for="al_<?php echo $data->id; ?>" >
@@ -193,7 +193,7 @@ else
 
 	  <div style="position:absolute;z-index: 2;margin-left:-100px" class="collapse" id="<?php echo 'ltshow_'.$data->id; ?>">
 	    <div class="well form-inline">
-	     <?php echo '<input type="text" class="form-control form-group datetimepicker" request="loppui" status="'.$data->status.'" id="lt_'.$data->id.'" value="'.$lpvm[$data->id].' '.$lt[$data->id].'">'; ?>
+	     <?php echo '<input type="text" class="form-control form-group" request="loppui" status="'.$data->status.'" id="lt_'.$data->id.'" value="'.$lpvm[$data->id].' '.$lt[$data->id].'">'; ?>
 
 		<div class="form-group input-group-btn">
 		     <button class="btn btn-success pvmupdate" for="lt_<?php echo $data->id; ?>" >
@@ -212,7 +212,7 @@ else
 	</td>
 
 </tr>
-
+*/
 	
 	
 

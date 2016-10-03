@@ -266,12 +266,6 @@ function num($val){
 	public function actionIndex_ajax()
 	{
 
-	function sprint($val){
-	    if($val > 0)
-		return sprintf('%02d:%02d', $val/3600, ($val % 3600)/60);
-	}
-
-
 		$model = Mobile::model()->find("id!='' order by id DESC");
 		if(isset($_POST['setRivi']))
 		$this->renderPartial('_view', array('data' => $model));
@@ -584,15 +578,8 @@ function num($val){
 		$this->render('laskutettu', array('dataProvider' => $dataProvider));
 	}
 
-
-
 	public function actionIndex()
 	{
-
-	function sprint($val){
-	    if($val > 0)
-		return sprintf('%02d:%02d', $val/3600, ($val % 3600)/60);
-	}
 
 
 		if(Yii::app()->request->getPost('tekijaPaaSivulla') == 'kaikki')

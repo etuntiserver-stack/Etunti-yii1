@@ -119,6 +119,37 @@ else
   	$diff = strtotime(date('Y-m-d H:i'))-strtotime($data->aloitan);
   	$class = '';
   }
+
+
+// <-- Jos sivu on laskutettu
+if( isset($sivu) and $sivu == 'laskutettu' )
+{
+	if($data->laskutettu == '1')
+	  $laskutettu =  'checked';
+	else
+	  $laskutettu =  '';
+
+  	$toteutuneet = false;
+  	$tot = Toteutuneet::model()->find(" kid='".$data->id."' ");
+   	if(isset($tot->id))
+   	{
+      		$toteutuneet = true;
+      		$data = $tot;
+   	}
+
+  	$class 	= '';
+	$diff 	= 0;
+  	if($toteutuneet)
+  	{
+  		$diff = strtotime(date('Y-m-d H:i'))-strtotime($data->aloitan);
+  		$class = 'border:2px green solid;';
+  	} elseif(empty($data->loppui)) {
+  		$diff = strtotime(date('Y-m-d H:i'))-strtotime($data->aloitan);
+  		$class = '';
+  	}
+}
+// Jos sivu on laskutettu -->
+
 ?>
 
 <tr style="<?php echo $class; ?>" id="rivi_<?php echo $data->id; ?>">
@@ -127,7 +158,7 @@ else
 		<?php echo $door; ?>
 
 		<?php if($diff > 0) : ?>
-		 <b><?php echo sprint($diff); ?></b>
+		 <b><?php echo $this->sprint($diff); ?></b>
 		<?php endif; ?>
 	</td>
 
@@ -153,7 +184,7 @@ else
 	</td>
 
 	<!-- adminPaketti -->
-	<?php if(in_array('2',$tas)) : ?>
+	<?php if( in_array('2',$tas) and isset($sivu) and $sivu == 'index' ) : ?>
 	<?php
 	$did = date("Ymd",strtotime($apvm[$data->id]));
 	?>
@@ -272,9 +303,19 @@ else
 	  </div>
 	</td>
 
-	<td><span id="kesto_<?php echo $data->id; ?>"><?php echo sprint($kesto[$data->id]); ?></span></td>
+	<td><span id="kesto_<?php echo $data->id; ?>"><?php echo $this->sprint($kesto[$data->id]); ?></span></td>
+
+	<?php if( isset($sivu) and $sivu == 'laskutettu' ) : ?>
+	<td><center>
+	    <input type="checkbox" class="chckbxHyvaksynta" id="laskutettu_<?php echo $data->id; ?>" <?php echo $laskutettu; ?> tot="<?php echo $toteutuneet; ?>"> 
+	    </center>
+	</td>
+	<?php endif; ?>
+
+	<?php if( isset($sivu) and $sivu == 'index' ) : ?>
 	<td><center><?php echo $muokattu[$data->id]; ?></center></td>
 	<td><center><span class="link glyphicon glyphicon-trash text-danger poistaKohde" for="rivi_<?php echo $data->id; ?>"></span></center></td>
+	<?php endif; ?>
 </tr>
 
 	
