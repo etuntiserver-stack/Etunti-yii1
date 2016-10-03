@@ -358,7 +358,7 @@ $('#tyontekijat').multiselect({
         includeSelectAllOption: true,
 	nonSelectedText: '<?php echo Yii::t("main", "Tyhjä"); ?>',
 	selectAllText: '<?php echo Yii::t("main", "Valitse kaikki"); ?>',
-	allSelectedText: '<?php echo Yii::t("main", "Kaikki"); ?>',
+	allSelectedText: '<?php echo Yii::t("main", "Työntekijät"); ?>',
 	nSelectedText: '<?php echo Yii::t("main", "valittu"); ?>',
 });
 
