@@ -186,6 +186,8 @@ function num($val){
 
 			allSess();
 
+			$model = array();
+
 			/* lu */
 		       	$criteria = new CDbCriteria();
 			$criteria->select = " time,aloitan,loppui,tekijan_nimi,kohde_kannasta,viesti ";
@@ -212,6 +214,8 @@ function num($val){
   			foreach($tot as $data){
 				$model[strtotime($data->aloitan)] = $data;
 			}
+
+			if(count($model) > 0)
 			ksort($model);
 
 
@@ -2066,6 +2070,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		{
 
 		  $l->loppui = date("d.m.Y H:i",strtotime($l->loppui));
+
 		  $l->aloitan = date("d.m.Y H:i",strtotime($l->aloitan));
 
 		    $l->l_tunnit = (strtotime($l->loppui)-strtotime($l->aloitan));
@@ -2338,6 +2343,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			tid = '".$tid."' and aloitan !='' and loppui !='' 
 			AND id NOT IN(select kid from sivexkuitti_repaired)
 			AND (status='2' OR status='3')
+
 			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$from."' AND '".$to."'
 			$pvmSTR
 		";
