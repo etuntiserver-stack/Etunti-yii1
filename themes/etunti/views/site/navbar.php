@@ -47,12 +47,12 @@ if( $curpage == 'tyovuoroot/tv2' )
             <span class="ad ad-wand fs16"></span>
           </a>
         </li>
-        <li class="hidden-xs">
+        <li class="hidden-xs" id="fullscreenTila">
           <a class="request-fullscreen toggle-active" href="#">
             <span class="ad ad-screen-full fs18"></span>
           </a>
         </li>
-            <li>
+            <li id="domainTila">
               <a href="#">
                 <span class="mr10"></span> <?php echo strtoupper(Yii::app()->user->domain); ?> </a>
             </li>
@@ -162,13 +162,9 @@ if( $curpage == 'tyovuoroot/tv2' )
           </ul>
         </li>
 
-
-        <li class="menu-divider hidden-xs">
-          <i class="fa fa-circle"></i>
-        </li>
         <li class="dropdown menu-merge">
           <a href="#" class="dropdown-toggle " data-toggle="dropdown"> 
-		 <?php echo Yii::t('main','Asetukset'); ?>
+	    <i class="fa fa-gear"></i>
             <span class="caret caret-tp hidden-xs"></span>
           </a>
           <ul class="dropdown-menu list-group dropdown-persist w250" role="menu">
@@ -290,17 +286,24 @@ if( $curpage == 'tyovuoroot/tv2' )
 
 
 
-        <li id="toggle_sidemenu_t">  
-        		<span class="fa fa-caret-up"></span>
-        </li>
 
-        <li class="menu-divider hidden-xs">
-          <i class="fa fa-circle"></i>
-        </li>
-        <li class="dropdown menu-merge">
-          <a href="#" class="dropdown-toggle fw600 p15" data-toggle="dropdown"> <img src="<?php echo $img; ?>" alt="avatar" class="mw30 br64 mr15"> <?php if(isset(Yii::app()->user->nimi)) echo Yii::app()->user->nimi; ?>
-            <span class="caret caret-tp hidden-xs"></span>
+        <li class="dropdown menu-merge" id="etuSukuNimi">
+          <a href="#" class="dropdown-toggle fw600 p15" data-toggle="dropdown"> 
+	     <etuSukuNimi>
+		<img src="<?php echo $img; ?>" alt="avatar" class="mw30 br64 mr15"> 
+		<?php if(isset(Yii::app()->user->nimi)) echo Yii::app()->user->nimi; ?>
+                <span class="caret caret-tp hidden-xs"></span>
+	     </etuSukuNimi>
+
+	     <etuSukuNimiSm>
+		<span class="fa fa-user" aria-hidden="true"></span>
+	     </etuSukuNimiSm>
+
           </a>
+
+
+
+
           <ul class="dropdown-menu list-group dropdown-persist w250" role="menu">
             <li class="list-group-item">
               <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/administrators/update?id=<?php echo Yii::app()->user->id; ?>" class="animated animated-short fadeInUp">

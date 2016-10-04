@@ -7193,6 +7193,7 @@ perspective effects (not including the modals and the overlay).
 
 
 
+
   -webkit-transform-origin: 0 100%;
   transform-origin: 0 100%;
   opacity: 0;
@@ -7817,6 +7818,7 @@ table.footable > tbody > tr.footable-detail-show.row-system > td.footable-first-
   border-left-color: #37bc9b;
 }
 /* Dark Row */
+
 table.footable > tbody > tr.row-dark:hover > td.footable-first-column,
 table.footable > tbody > tr.footable-detail-show.row-dark > td.footable-first-column {
   border-left-color: #3b3f4f;
@@ -9228,6 +9230,7 @@ pre code {
   }
   .col-lg-8 {
     width: 66.66666667%;
+
   }
   .col-lg-7 {
     width: 58.33333333%;
@@ -10746,8 +10749,14 @@ tbody.collapse.in {
 }
 @media (max-width: 480px) {
   .navbar-right {
-    background: #333;
+    //background: #333;
   }
+  etuSukuNimi, #domainTila, #fullscreenTila { display:none }
+  etuSukuNimiSm { display:block }
+  #etuSukuNimi a { margin-top: 5px }
+}
+@media (min-width: 480px) {
+  etuSukuNimiSm { display:none }
 }
 /*==================================================
   Button Groups
@@ -13244,6 +13253,7 @@ button.close {
   Panel Tab Navigation must be placed inside
   ".panel-heading" see Docs for example 
 ================================================= */
+
 .panel-tabs {
   position: absolute;
   bottom: 0;
@@ -21027,6 +21037,7 @@ body.timeline-page #content {
 @media (max-width: 770px) {
   #timeline > .row > .left-column .panel {
     margin-right: 0;
+
   }
   #timeline > .row > .right-column .panel {
     margin-left: 0;
