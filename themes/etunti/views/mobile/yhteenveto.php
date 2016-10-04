@@ -162,6 +162,12 @@ $this->breadcrumbs=array(
   $total_sunniteltu = 0;
   $tot_sun	=0;
   $tp		= 0;
+
+  $yht[0] = 0;
+  $yht[1] = 0;
+  $yht[2] = 0;
+  $yht[3] = 0;
+
   foreach($model as $data)
   {
 	$tids[] = $data->tid;
@@ -171,26 +177,14 @@ $this->breadcrumbs=array(
 	$tot_sun = $this->renderPartial('//mobile/suunniteltu',array('id'=>$data->tid,'kohde_tid'=>'tid','from'=>$from,'to'=>$to),true);
 	$total_sunniteltu += $tot_sun;
 
-	$this->renderPartial('_yhteenveto',array('data'=>$data,'tp'=>$tp,'tot_sun'=>$tot_sun,'from'=>$from,'to'=>$to));
-  }
+	$return = $this->toteutu($data->tid,"yhteenveto",$from,$to);
+	$this->renderPartial('_yhteenveto',array('data'=>$data,'tp'=>$tp,'tot_sun'=>$tot_sun,'return'=>$return));
 
-
-	$yht[0] = 0;
-	$yht[1] = 0;
-	$yht[2] = 0;
-	$yht[3] = 0;
-
-  foreach($tids as $t)
-  {
-	$return = '';
-	$return = $this->toteutu($t,"yhteenveto",$from,$to);
 	$yht[0] += $return[0];
 	$yht[1] += $return[1];
 	$yht[2] += $return[2];
 	$yht[3] += $return[3];
   }
-
-
   ?>
   <tfoot>
   <tr>

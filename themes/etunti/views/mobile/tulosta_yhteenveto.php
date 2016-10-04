@@ -60,6 +60,11 @@
   $total_sunniteltu = 0;
   $tot_sun	=0;
   $tp		= 0;
+
+  $yht[0] = 0;
+  $yht[1] = 0;
+  $yht[2] = 0;
+  $yht[3] = 0;
   foreach($model as $data)
   {
 	$tids[] = $data->tid;
@@ -69,10 +74,17 @@
 	$tot_sun = $this->renderPartial('//mobile/suunniteltu',array('id'=>$data->tid,'kohde_tid'=>'tid','from'=>$from,'to'=>$to),true);
 	$total_sunniteltu += $tot_sun;
 
-	$this->renderPartial('_yhteenveto',array('data'=>$data,'tp'=>$tp,'tot_sun'=>$tot_sun,'from'=>$from,'to'=>$to));
+	$return = $this->toteutu($data->tid,"yhteenveto",$from,$to);
+	$this->renderPartial('_yhteenveto',array('data'=>$data,'tp'=>$tp,'tot_sun'=>$tot_sun,'return'=>$return));
+
+	$yht[0] += $return[0];
+	$yht[1] += $return[1];
+	$yht[2] += $return[2];
+	$yht[3] += $return[3];
   }
 
 
+/*
 		$total_l 	= 0;
 		$total_t 	= 0;
 		$totalIlta 	= 0;
@@ -116,7 +128,7 @@
 		    if(date('N', strtotime($al[0])) == 7)
 		    $totalSu += (strtotime($lop[0]." ".$lop[1])-strtotime($al[0]." ".$al[1]));
 		}
-		/* ////////////////////////// */
+
 
        		$criteria = new CDbCriteria();
         	$criteria->select = "
@@ -149,7 +161,7 @@
 		}
 }
 		$total = $total_l;
-
+*/
   ?>
   <tfoot>
   <tr>
@@ -162,11 +174,11 @@
 	?>
 
 	<td><?php echo $this->sprint($total_lu); ?></td>
-	<td><?php echo $this->sprint($total); ?></td>
+	<td><?php echo $this->sprint($yht[0]); ?></td>
 	<td><?php echo $totalTp; ?></td>
-	<td><?php echo $this->sprint($totalIlta); ?></td>
-	<td><?php echo $this->sprint($totalYo); ?></td>
-	<td><?php echo $this->sprint($totalSu); ?></td>
+	<td><?php echo $this->sprint($yht[1]); ?></td>
+	<td><?php echo $this->sprint($yht[2]); ?></td>
+	<td><?php echo $this->sprint($yht[3]); ?></td>
   </tr>
   </tfoot>
   </table>
