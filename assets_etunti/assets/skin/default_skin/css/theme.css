@@ -10753,7 +10753,7 @@ tbody.collapse.in {
   }
   etuSukuNimi, #domainTila, #fullscreenTila { display:none }
   etuSukuNimiSm { display:block }
-  #etuSukuNimi a { margin-top: 5px }
+  etuSukuNimiSm { margin-top: 5px }
 }
 @media (min-width: 480px) {
   etuSukuNimiSm { display:none }
