@@ -49,7 +49,10 @@ $this->breadcrumbs=array(
 
 
    <?php
-    $list = CHtml::listData(Mobile::model()->findAll(array('order' => 'tekijan_nimi','group'=>'tekijan_nimi')), 'tid', 'tekijan_nimi');
+    $criteria = new CDbCriteria();
+    $criteria->order = " tekijan_nimi ";
+    $criteria->condition = " aktiivinen=1 ";
+    $list = CHtml::listData(Tyontekijat::model()->findAll($criteria), 'id', 'tekijan_nimi');
 
     echo '<select name="Tekija[]" class="mult" id="tyontekijat" multiple title="Työntekijät">';
     foreach($list as $key=>$val){
@@ -68,26 +71,6 @@ $this->breadcrumbs=array(
                           </label>
 
 
-                        </div>
-                      </div>
-                      <div class="col-md-1">
-                        <div class="section">
-                          <label class="field select">
-
-   <?php
-    $lounas = '';
-    $lounas = ( isset(Yii::app()->session['Lounastauko']))  ? 'selected' : '';
-    $matka = '';
-    $matka = ( isset(Yii::app()->session['MATKA']))  ? 'selected' : '';
-
-    echo '<select name="ilman[]" class="ilman"  multiple="multiple"  title="Ei lasketa...">';
-    echo '<option value="Lounastauko" '.$lounas.'>'.Yii::t('main', 'Lounastauko').'</option>';
-    echo '<option value="MATKA" '.$matka.'>'.Yii::t('main', 'Matka').'</option>';
-    echo '</select>';
-   ?>
-
-
-                          </label>
                         </div>
                       </div>
                       <div class="col-md-2 col-md-offset-1">
@@ -161,23 +144,47 @@ $this->breadcrumbs=array(
   </tr>
   </thead>
 
-  <?php 
-  foreach($model as $data){
-	$this->renderPartial('_yhteenveto_m',array('data'=>$data,'from'=>$from,'to'=>$to));
-  }
+  <?php
+	$luetutYht 	= 0;
+	$toteutuneetYht	= 0;
+
+  	foreach($model as $data){
+
+		$luetut		= 0;
+		$toteutuneet	= 0;
+
+		// <-- Luetut
+		$luetut = $this->YhteensaLuMatka($data->id,$from,$to);
+		// Luetut -->
+
+		// <-- Toteutuneet
+       		$criteria = new CDbCriteria();
+		$this->luMatka($criteria,$data->id,$from,$to);
+
+		$lu = Mobile::model()->find($criteria);
+
+		$this->totMatka($criteria,$data->id,$from,$to);
+		$tot = Toteutuneet::model()->find($criteria);
+		if( isset($lu->l_tunnit) or isset($tot->l_tunnit) )
+		$toteutuneet = $lu->l_tunnit+$tot->l_tunnit;
+		// Toteutuneet -->
+
+
+		$this->renderPartial('_yhteenveto_m',array(
+					'luetut'=>$luetut,
+					'toteutuneet'=>$toteutuneet,
+					'tekijan_nimi'=>$data->tekijan_nimi
+		));
+
+		$luetutYht += $luetut;
+		$toteutuneetYht += $toteutuneet;
+  	}
   ?>
   <tfoot>
-  <?php
-	$lu = '0';
-	$tot = '0';
-
-		$lu = $this->yhtLUmatka($from,$to);
-		$tot = $this->yhtTOTmatka($from,$to);
-  ?>
   <tr>
   <th><?php echo Yii::t('main', 'Yhteensä'); ?></th>
-  <th><?php echo $this->sprint($lu); ?></th>
-  <th><?php echo $this->sprint($tot); ?></th>
+  <th><?php echo $this->sprint($luetutYht); ?></th>
+  <th><?php echo $this->sprint($toteutuneetYht); ?></th>
   </tr>
   </tfoot>
   </table>

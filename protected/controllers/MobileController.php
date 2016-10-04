@@ -1131,6 +1131,9 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 
 	protected function TP($tid,$from,$to){
 
+		$from = date("Y-m-d", strtotime($from));
+		$to = date("Y-m-d", strtotime($to));
+
        		$criteria = new CDbCriteria();
         	$criteria->select = "id";
         	$criteria->group = "DATE(DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d'))";
@@ -1199,6 +1202,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
         	$criteria->condition = " 
 			aloitan !='' and loppui !='' 
 			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".date('Y-m-d',strtotime($from))."' AND '".date('Y-m-d',strtotime($to))."' 
+			AND admin!='1'
 		";
 
 		if(Yii::app()->session['Tekija']){
@@ -1258,10 +1262,15 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 
         	$criteria->condition = "  
 			status = '2' and tid = '".$tid."' and aloitan !='' and loppui !='' 
+			AND admin!='1'
 		";
 
 		if(!empty($from) and !empty($to))
 		{
+
+		$from = date("Y-m-d", strtotime($from));
+		$to = date("Y-m-d", strtotime($to));
+
 	        $criteria->addCondition (" 
 			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
 			BETWEEN '".$from."' AND '".$to."' 
@@ -1270,7 +1279,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 
 	        $criteria->addCondition (" id NOT IN (SELECT kid FROM sivexkuitti_repaired) ");
 
-	return $criteria;
+		return $criteria;
 	}
 
 	protected function totMatka($criteria,$tid,$from,$to){
@@ -1286,15 +1295,18 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 
 		if(!empty($from) and !empty($to))
 		{
+		$from = date("Y-m-d", strtotime($from));
+		$to = date("Y-m-d", strtotime($to));
+
 	        $criteria->addCondition (" 
 			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
 			BETWEEN '".$from."' AND '".$to."' 
 		");
 		}
 
-	        $criteria->addCondition (" kid IN (SELECT id FROM sivexkuitti) ");
+	        //$criteria->addCondition (" kid IN (SELECT id FROM sivexkuitti) ");
 
-	return $criteria;
+		return $criteria;
 	}
 
 	public function actionYhteenveto_m()
@@ -1315,36 +1327,18 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		
 
        		$criteria = new CDbCriteria();
-        	$criteria->select = "
-			SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
-			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit,
-		t.*
-		";
-
-
-
-        	//$criteria->condition = " l_loppu = '' and l_alku = '' ";
-
         	$criteria->order = "tekijan_nimi"; //"SUBSTR(LTRIM(tekijan_nimi), LOCATE(' ',LTRIM(tekijan_nimi)))"
-        	$criteria->group = 'tid';
-	        $criteria->condition = " 
-			aloitan!='' AND loppui!=''
-			AND status = '2' 
-			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
-			BETWEEN '".date('Y-m-d', strtotime($from))."' AND '".date('Y-m-d', strtotime($to))."'
-		";
-
 		if(Yii::app()->session['Tekija']){
 		  if(count(Yii::app()->session['Tekija']) > 1)
 		    $ids = implode(",",Yii::app()->session['Tekija']);
 		  else
 		    $ids = Yii::app()->session['Tekija'][0];
 
-	        $criteria->addCondition ('tid IN ('.$ids.') ');
+	        $criteria->addCondition ('id IN ('.$ids.') ');
 		}
 
 
-		$model = Mobile::model()->findAll($criteria);
+		$model = Tyontekijat::model()->findAll($criteria);
 
 		if(Yii::app()->request->getPost('tulosta'))
 		{
@@ -1368,6 +1362,9 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 
 	protected function yhtSUUNN($from,$to){
 
+		$from = date("Y-m-d", strtotime($from));
+		$to = date("Y-m-d", strtotime($to));
+
 		$site = Yii::app()->createController('Site');
 		$eilasketa = $site[0]->eiLasketa();
 
@@ -1390,6 +1387,8 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 
 	protected function totKpl($criteria,$kohdenID,$from,$to){
 
+		$from = date("Y-m-d", strtotime($from));
+		$to = date("Y-m-d", strtotime($to));
 
         	$criteria->select = " COUNT(*) as count	";
 
@@ -1411,6 +1410,8 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 
 	protected function totLu($criteria,$kohdenID,$from,$to){
 
+		$from = date("Y-m-d", strtotime($from));
+		$to = date("Y-m-d", strtotime($to));
 
         	$criteria->select = "
 			SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
@@ -1429,8 +1430,46 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 	}
 
 
+	protected function YhteensaLuMatka($tid,$from,$to){
+
+		$from = date("Y-m-d", strtotime($from));
+		$to = date("Y-m-d", strtotime($to));
+
+		$return = 0;
+
+       		$criteria = new CDbCriteria();
+        	$criteria->select = "
+			SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
+			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit
+		";
+
+        	$criteria->condition = " 
+			tid='".$tid."'
+			AND loppui!='' and aloitan!='' 
+			AND status=2
+			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
+			BETWEEN '".$from."' AND '".$to."' 
+			AND admin!=1
+		";
+
+		$lu = Mobile::model()->find($criteria);
+
+		if( isset($lu->l_tunnit) and $lu->l_tunnit > 0 )
+			$return = $lu->l_tunnit;
+
+		return $return;
+	}
+
+
 	protected function totLuYhteensa($criteria,$status,$from,$to){
 
+		$from = date("Y-m-d", strtotime($from));
+		$to = date("Y-m-d", strtotime($to));
+
+		if($status != 2 and $status != 10)
+		$kid = " AND kohdenID !='' ";
+		else
+		$kid = '';
 
         	$criteria->select = "
 			SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
@@ -1440,9 +1479,10 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
         	$criteria->condition = " 
 			loppui!='' and aloitan!='' 
 			AND status='$status'
-			AND kohdenID !='' 
+			$kid 
 			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
 			BETWEEN '".$from."' AND '".$to."' 
+			AND admin!=1
 		";
 
 
@@ -1452,6 +1492,8 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 
 	protected function yhtLU($from,$to){
 
+		$from = date("Y-m-d", strtotime($from));
+		$to = date("Y-m-d", strtotime($to));
 
        		$cr1 = new CDbCriteria();
 		$this->totLuYhteensa($cr1,3,$from,$to);
@@ -1464,6 +1506,9 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 	}
 
 	protected function yhtTOT($from,$to){
+
+		$from = date("Y-m-d", strtotime($from));
+		$to = date("Y-m-d", strtotime($to));
 
        		$cr1 = new CDbCriteria();
 		$this->totLuYhteensa($cr1,3,$from,$to);
@@ -1484,6 +1529,8 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 
 	protected function yhtLUmatka($from,$to){
 
+		$from = date("Y-m-d", strtotime($from));
+		$to = date("Y-m-d", strtotime($to));
 
        		$cr1 = new CDbCriteria();
 		$this->totLuYhteensa($cr1,2,$from,$to);
@@ -1496,6 +1543,9 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 	}
 
 	protected function yhtTOTmatka($from,$to){
+
+		$from = date("Y-m-d", strtotime($from));
+		$to = date("Y-m-d", strtotime($to));
 
        		$cr1 = new CDbCriteria();
 		$this->totLuYhteensa($cr1,2,$from,$to);
@@ -1514,6 +1564,9 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 
 	public function actionTyobykohde($kohdenID,$from,$to)
 	{
+
+		$from = date("Y-m-d", strtotime($from));
+		$to = date("Y-m-d", strtotime($to));
 
 		$lu = array();
 		$ids = array();
@@ -1939,6 +1992,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 	{
 		$from = date("Y-m-d", strtotime($from));
 		$to = date("Y-m-d", strtotime($to));
+
 	
 		$total_l 	= 0;
 		$total_t 	= 0;
