@@ -74,13 +74,19 @@
 	   else
 	    $al = '';
 
+	   if( date("d",strtotime($aloitan)) != date("d",strtotime($loppui)) ) 
+	    $isEripaivat = '<i class="fa fa-retweet text-danger" aria-hidden="true" style="font-size: 130%" title="'.Yii::t('main', 'Päivämäärät  eivät täsmää').'"></i> '; 
+	   else 
+	    $isEripaivat = '';
+
+
 	   echo '
 	   <div id="'.$rivi.'_'.$did.'_'.$tid.'" class="fullRivi form-inline">';
 	   echo '&nbsp;
 		<span class="form-group">
 			<input type="checkbox" class="chckbxHyvaksynta" id="hyv_'.$rivi.'" '.$chk[$rivi].' kuka="'.Yii::app()->user->username.'///'.date('d.m.Y').'">&nbsp; 
 		</span><span class="form-group">
-			<i class="form-group link totRivi '.$admin.'" mod="'.$mod.'" id="tot_'.$rivi.'">'.$al.$spl.' '.$kohde.'</i>
+			'.$isEripaivat.'<i class="form-group link totRivi '.$admin.'" mod="'.$mod.'" id="tot_'.$rivi.'">'.$al.$spl.' '.$kohde.'</i>
 			'.$ap.'
 		</span>
 		'.$asiakas_hyvaksy.'
