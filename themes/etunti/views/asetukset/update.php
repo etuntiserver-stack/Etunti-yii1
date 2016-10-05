@@ -107,6 +107,8 @@ exit;
               </div>
             </div>
 
+
+<?php if(Yii::app()->user->username == 'admin'): ?>
 	   <p><div class="btn btn-primary btn-block myBgColors" data-toggle="collapse" data-target="#kehitys"><h3><?php echo Yii::t('main','Kehitys'); ?>&nbsp; <i class="fa fa-caret-square-o-down" aria-hidden="true"></i></h3></div></p>
 
             <div class="admin-form collapse" id="kehitys">
@@ -153,6 +155,8 @@ exit;
                 </div>
               </div>
             </div>
+<?php endif; ?><!-- is admin -->
+
 
         <!-- loppu: .tray-center -->
         </div>
@@ -188,7 +192,7 @@ exit;
 <div class="row">
  <div class="col-sm-12">
 
- <div class="admin-form col-sm-6" id="onlinevarausehdot">
+ <div class="admin-form col-sm-6">
   <form id="uploadimage" action="#" class="form-input" method="post" enctype="multipart/form-data">
      <div class="section input-group">
        <label class="field prepend-icon append-button file">
@@ -206,7 +210,7 @@ exit;
   </form>
  </div>
 
- <div class="admin-form col-sm-6" id="onlinevarausehdot">
+ <div class="admin-form col-sm-6">
   <form id="uploadimage" action="#" class="form-input" method="post" enctype="multipart/form-data">
      <div class="section input-group">
        <label class="field prepend-icon append-button file">

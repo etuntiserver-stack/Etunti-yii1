@@ -144,9 +144,8 @@
   <thead class="myBgColors">
   <tr>
   <th><?php echo Yii::t('main', 'Asiakas'); ?></th>
-  <th><?php echo Yii::t('main', 'Nimi'); ?></th>
-  <th><?php echo Yii::t('main', 'NFC'); ?></th>
-  <th><?php echo Yii::t('main', 'Osoite'); ?></th>
+  <th><?php echo Yii::t('main', 'Kohteen osoite'); ?></th>
+  <th><?php echo Yii::t('main', 'Kohteen yhteyshenkilö'); ?></th>
   <th><?php echo Yii::t('main', 'Sähköposti'); ?></th>
   <th><?php echo Yii::t('main', 'Puhelin'); ?></th>
   <th><?php echo Yii::t('main', 'Avain'); ?></th>

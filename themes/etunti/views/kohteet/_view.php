@@ -1,20 +1,25 @@
 <?php
 /* @var $this KohteetController */
 /* @var $data Kohteet */
+
+	$asiakas='';
+	$a = Asiakkaat::model()->findbypk($data->asiakas_id);
+	if(isset($a->id) and !empty($a->yrityksen_nimi))
+	$asiakas = $a->yrityksen_nimi;
+	elseif(isset($a->id) and empty($a->yrityksen_nimi) and !empty($a->yhteyshenkilo))
+	$asiakas = $a->yhteyshenkilo;
+
 ?>
 
 <tr>
 	<td>
-		<?php echo $data->asiakas_id; ?>
-	</td>
-	<td>
-		<?php echo $data->etu_suku_nimet; ?>
-	</td>
-	<td>
-		<?php echo $data->tag_id; ?>
+		<?php echo $asiakas; ?>
 	</td>
 	<td>
 		<?php echo $data->osoite; ?>
+	</td>
+	<td>
+		<?php echo $data->etu_suku_nimet; ?>
 	</td>
 	<td>
 		<?php echo $data->email; ?>
