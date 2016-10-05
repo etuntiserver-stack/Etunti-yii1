@@ -81,6 +81,7 @@ $model->hinta = str_replace(",",".",$model->hinta);
 		<?php echo $form->error($model,'yhteyshenkilo'); ?>
 	</div>
 
+<?php if(in_array('5',$tas)) : ?>
 	<div class="section fill mb5 ashidd_a form-inline">
 		<?php echo $form->labelEx($model,'ryhma'); ?>
 
@@ -104,6 +105,7 @@ $model->hinta = str_replace(",",".",$model->hinta);
 
 		<?php echo $form->error($model,'ryhma'); ?>
 	</div>
+<?php endif ; ?>
 
 
 	<div class="section fill mb5 ashidd_a">
@@ -160,11 +162,13 @@ $model->hinta = str_replace(",",".",$model->hinta);
 		<?php echo $form->error($model,'sahkoposti'); ?>
 	</div>
 
+<?php if(in_array('5',$tas)) : ?>
 	<div class="section fill mb5 ashidd_a">
 		<?php echo $form->labelEx($model,'salasana'); ?>
 		<?php echo $form->textField($model,'salasana',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'salasana'); ?>
 	</div>
+<?php endif ; ?>
 
 
   </div>

@@ -33,7 +33,7 @@ class MobileController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin', 'delete', 'create', 'update', 'index', 'index_a', 'view', 'updatetime', 'showkohteet', 'yhteenveto', 'kyhteenveto', 'yhteenveto_m', 'historia', 'poistaKohde', 'total_suunniteltu', 'total_toteutu', 'total_luettu', 'kesto', 'index_ajax', 'raportit', 'uusirivi', 'palkkataulukko', 'tidfromtomatkat', 'tidfromtoSL', 'tidfromtoSPL', 'tyobykohde', 'asiakas_hyvaksyminen', 'kohdebytekija' ,'kyhteenveto_tuntemattomat', 'laskutettu', 'lahetys_asiakkaalle', 'get_tyovuorot_day', 'on_olemassa'),
+				'actions'=>array('admin', 'delete', 'create', 'update', 'index', 'index_a', 'view', 'updatetime', 'showkohteet', 'yhteenveto', 'kyhteenveto', 'yhteenveto_m', 'historia', 'poistaKohde', 'total_suunniteltu', 'total_toteutu', 'total_luettu', 'kesto', 'index_ajax', 'raportit', 'uusirivi', 'palkkataulukko', 'tidfromtomatkat', 'tidfromtoSL', 'tidfromtoSPL', 'tyobykohde', 'asiakas_hyvaksyminen', 'kohdebytekija' ,'kyhteenveto_tuntemattomat', 'laskutettu', 'lahetys_asiakkaalle', 'get_tyovuorot_day', 'on_olemassa', 'luetut_toteutuneet_ero_pdf'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -134,7 +134,7 @@ function num($val){
 	        	$criteria->addCondition (" tid = '".Yii::app()->request->getPost('tekija')."'");
 
 			if(isset(Yii::app()->session['kohteet']) and Yii::app()->session['kohteet'] != 'kaikki')
-	        	$criteria->addCondition (" kohde_kannasta = '".Yii::app()->session['kohteet']."'");
+	        	$criteria->addCondition (" kohdenID = '".Yii::app()->session['kohteet']."'");
 
 			if(Yii::app()->session['from'] and Yii::app()->session['to'])
 	        	$criteria->addCondition ("DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."' ");
@@ -226,6 +226,100 @@ function num($val){
 
 		  }
 		//  Toteutuneet -->
+
+		// <-- Toteutuneen ja suunnitellun työn erot
+		  if(Yii::app()->request->getPost('method') == 'LuetutToteutuneetEro')
+		  {
+
+		       	$criteria = new CDbCriteria();
+		       	$criteria->order = " DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m.%d'),( SELECT tekijan_nimi FROM sivex_ttekijat WHERE t.tid=id ) ";
+		       	//$criteria->group = " kohde,tid ";
+		       	$criteria->select = " 
+				( SELECT osoite FROM sivex_kohdet WHERE t.kohde=id ) as osoite, 
+				( SELECT tekijan_nimi FROM sivex_ttekijat WHERE t.tid=id ) as tekijan_nimi, 
+
+				TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(CONCAT(pvm, loppu), '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
+				DATE_FORMAT(STR_TO_DATE(CONCAT(pvm, alku), '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'))) as suunnittellut,
+
+				( SELECT 
+
+					SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
+					DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'))))
+
+				 	FROM sivexkuitti 
+					WHERE t.kohde=kohdenID AND t.tid=tid
+					AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = DATE_FORMAT(STR_TO_DATE(t.pvm, '%d.%m.%Y'), '%Y-%m-%d')
+					AND sairaus!=1
+					AND id NOT IN ( SELECT kid FROM sivexkuitti_repaired )
+				)
+				as luetutIlmanToteutuneet, 
+
+				( SELECT 
+
+					SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
+					DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'))))
+
+				 	FROM sivexkuitti_repaired 
+					WHERE t.kohde=kohdenID AND t.tid=tid
+					AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = DATE_FORMAT(STR_TO_DATE(t.pvm, '%d.%m.%Y'), '%Y-%m-%d')
+				)
+				as toteutuneet, 
+
+				t.* 
+			";
+
+/*
+
+				(( SELECT 
+
+					SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
+					DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'))))
+
+				 	FROM sivexkuitti 
+					WHERE t.kohde=kohdenID AND t.tid=tid
+					AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = DATE_FORMAT(STR_TO_DATE(t.pvm, '%d.%m.%Y'), '%Y-%m-%d')
+					AND id NOT IN (SELECT kid FROM sivexkuitti_repaired)
+				)+
+				( SELECT 
+
+					SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
+					DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) 
+
+				 	FROM sivexkuitti_repaired 
+					WHERE t.kohde=kohdenID AND t.tid=tid
+					AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = DATE_FORMAT(STR_TO_DATE(t.pvm, '%d.%m.%Y'), '%Y-%m-%d')
+				))
+				as toteutuneet, 
+*/
+
+			if(Yii::app()->session['from'] and Yii::app()->session['to'])
+			{
+	        		$criteria->addCondition ("
+					DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') 
+					BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."' 
+				");
+				// 	AND kohde IN ( SELECT id FROM sivex_kohdet )
+			}
+
+			if(isset($_POST['tekija']) and  $_POST['tekija'] != 'kaikki')
+	        	$criteria->addCondition (" tid = '".$_POST['tekija']."'");
+
+			if(isset($_POST['kohteet']) and  $_POST['kohteet'] != 'kaikki')
+	        	$criteria->addCondition (" kohde = '".$_POST['kohteet']."'");
+
+
+			$model = Tyovuoroot::model()->findAll($criteria); 
+
+/*
+		        $html2pdf = Yii::app()->ePdf->HTML2PDF('P', 'A4', 'en');
+			$html2pdf->setDefaultFont('Arial');
+		        $html2pdf->WriteHTML($this->renderPartial('luetut_toteutuneet_ero_pdf', array('model' => $model),true));
+		        $html2pdf->Output();
+*/
+			$this->render('luetut_toteutuneet_ero_pdf', array('model' => $model));
+
+		  }
+		// Toteutuneen ja suunnitellun työn erot -->
 
 
 		} else {
@@ -1764,7 +1858,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			AND status='3'
 			AND sairaus!=1
 			AND kohdenID!=''
-			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$from."' AND '".$to."' 
+			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".date('Y-m-d', strtotime($from))."' AND '".date('Y-m-d', strtotime($to))."' 
 		";
 
 		if(isset($_POST['osoite']) and !empty($_POST['osoite'])){

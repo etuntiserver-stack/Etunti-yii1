@@ -233,7 +233,15 @@ class AsetuksetController extends Controller
 
 	protected function oikeudenOtsikot()
 	{
-		$otsiko = array(1=>'Ryhmä 1', 2=>'Ryhmä 2', 3=>'Ryhmä 3', 4=>'Ryhmä 4', 5=>'Ryhmä 5', 6=>'Ryhmä 6', 7=>'Ryhmä 7');
+		$otsiko = array(
+			1=>'Ryhmä 1',
+			2=>'Ryhmä 2',
+			3=>'Ryhmä 3',
+			4=>'Ryhmä 4',
+			5=>'Ryhmä 5',
+			6=>'Ryhmä 6',
+			7=>'Ryhmä 7'
+		);
 		return $otsiko;
 	}
 
