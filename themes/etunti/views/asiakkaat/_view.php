@@ -5,9 +5,6 @@
 
 <tr>
 	<td>
-		<?php echo $data->id; ?>
-	</td>
-	<td>
 		<?php echo $data->yrityksen_nimi; ?>
 	</td>
 	<td>

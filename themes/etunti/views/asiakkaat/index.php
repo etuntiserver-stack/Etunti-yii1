@@ -163,20 +163,6 @@
 	<table>
 	 <tr>
 	  <td>
-		'.Yii::t('main', 'ID').'  
-	  </td><td>
-		'.CHtml::link('<i class="fa fa-arrow-down"></i>','index?sort=id&s=asc').'
-	  </td><td>
-		'.CHtml::link('<i class="fa fa-arrow-up"></i>','index?sort=id&s=desc').'
-	  </td>
-	 </tr>
-	</table>';
-      ?>
-  </th>
-  <th><?php echo '
-	<table>
-	 <tr>
-	  <td>
 		'.Yii::t('main', 'Yritys').'
 	  </td><td>
 		'.CHtml::link('<i class="fa fa-arrow-down"></i>','index?sort=yrityksen_nimi&s=asc').'
