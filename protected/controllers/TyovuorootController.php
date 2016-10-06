@@ -1482,7 +1482,7 @@ class TyovuorootController extends Controller
 		    4=>'Torstai',
 		    5=>'Perjantai',
 		    6=>'Lauantai',
-		    0=>'Sunnuntai',
+		    7=>'Sunnuntai',
 		);
 
 
@@ -1524,7 +1524,7 @@ class TyovuorootController extends Controller
 			$viikonNumero = (date('W',strtotime($date)));
 
 	                if( 
-				in_array(date('w',strtotime($date)),$w) 
+				in_array(date('N',strtotime($date)),$w) 
 				and in_array($viikonNumero,$sopivaViikot) 
 			)
 			{
@@ -1551,11 +1551,11 @@ class TyovuorootController extends Controller
 						if($t->save())
 						$return[] = array('tid'=>$t->tid, 'pvm'=>$t->pvm, 'ymd'=>date("Ymd",strtotime($t->pvm)), 'isSaved'=>true);
 					} else {
-						$return[] = array('tid'=>$tid, 'pvm'=>$pvm, 'ymd'=>date("Ymd",strtotime($pvm)), 'isSaved'=>false, 'tekijan_nimi'=>$tt->tekijan_nimi, 'vkopvm' => $fi[date("w",strtotime($pvm))] );
+						$return[] = array('tid'=>$tid, 'pvm'=>$pvm, 'ymd'=>date("Ymd",strtotime($pvm)), 'isSaved'=>false, 'tekijan_nimi'=>$tt->tekijan_nimi, 'vkopvm' => $fi[date("N",strtotime($pvm))] );
 					}
 
 				} else {
-					$return[] = array('tid'=>$tid, 'pvm'=>$pvm, 'ymd'=>date("Ymd",strtotime($pvm)),'onkosama'=>$onkosama, 'isSaved'=>false, 'tekijan_nimi'=>$tt->tekijan_nimi, 'vkopvm' => $fi[date("w",strtotime($pvm))] );
+					$return[] = array('tid'=>$tid, 'pvm'=>$pvm, 'ymd'=>date("Ymd",strtotime($pvm)),'onkosama'=>$onkosama, 'isSaved'=>false, 'tekijan_nimi'=>$tt->tekijan_nimi, 'vkopvm' => $fi[date("N",strtotime($pvm))] );
 				}
 
 			}
