@@ -234,6 +234,7 @@ $this->breadcrumbs=array(
 
 	   echo '</select>';
 	?>
+       <br>
        </div>
        <div class="col-sm-6">
    	<?php
@@ -244,12 +245,17 @@ $this->breadcrumbs=array(
     	   }
     	   echo '</select>';
    	?>
+       <br>
+       </div>
+       <div class="col-sm-6">
+	<select name="is_kaikki" class="form-control">
+	 <option value="erot"><?php echo Yii::t('main', 'Näytä erot'); ?></option>
+	 <option value="kaikki"><?php echo Yii::t('main', 'Näytä kaikki'); ?></option>
+	</select>
        </div>
       </div>
       <br>
-      <br>
-      <br>
-      <br>
+
 
 	   <input type="submit" class="btn btn-primary pull-right myBgColors" value="<?php echo Yii::t('main', 'Luo raportti'); ?>">
 

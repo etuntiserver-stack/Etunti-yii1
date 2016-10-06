@@ -53,12 +53,20 @@
 	$data->status = 3;
 
 	$toteutuneet = $this->toteutuneet($data->tid,$data->pvm,$data->status,$data->kohde);
-	if($data->suunnittellut > $toteutuneet)
+
+	if($data->suunnittellut > $toteutuneet) {
 		$ero = '<b style="color:red">-'.$this->sprint($data->suunnittellut-$toteutuneet).'</b>';
-	elseif($data->suunnittellut < $toteutuneet)
+	} elseif($data->suunnittellut < $toteutuneet) {
 		$ero = '<b style="color:green">+'.$this->sprint($toteutuneet-$data->suunnittellut).'</b>';
-	elseif($data->suunnittellut == $toteutuneet)
+	} elseif($data->suunnittellut == $toteutuneet and $_POST['is_kaikki'] == 'erot') {
 		$ero = '<b>00:00</b>';
+		continue;
+	} elseif($data->suunnittellut == $toteutuneet and $_POST['is_kaikki'] != 'erot') {
+		$ero = '<b>00:00</b>';
+	}
+	$suunnittellutYht += $data->suunnittellut;
+	$toteutuneetYht += $toteutuneet;
+
   ?>
   <tr>
     <td><?php echo $data->pvm; ?></td>
@@ -76,9 +84,9 @@
     <td><?php echo Yii::t('main', 'Yhteenssä'); ?></td>
     <td></td>
     <td></td>
-    <td><?php echo $suunnittellutYht; ?></td>
-    <td><?php echo $toteutuneetYht; ?></td>
-    <td><?php echo $eroYht; ?></td>
+    <td><?php echo $this->sprint($suunnittellutYht); ?></td>
+    <td><?php echo $this->sprint($toteutuneetYht); ?></td>
+    <td></td>
   </tr>
   </tfoot>
 </table>

@@ -2,6 +2,40 @@
 /* @var $this MobileController */
 /* @var $data Mobile */
 
+  	$class = '';
+
+// <-- Jos sivu on laskutettu
+if( isset($sivu) and $sivu == 'laskutettu' )
+{
+
+  	$toteutuneet = false;
+
+	$criteria = new CDbCriteria();
+       	$criteria->condition = " kid='".$data->id."' ";
+  	$tot = Toteutuneet::model()->find($criteria);
+   	if(isset($tot->id))
+   	{
+      		$toteutuneet = true;
+      		$data = $tot;
+   	}
+
+	if($data->laskutettu == '1')
+	  $laskutettu =  'checked';
+	else
+	  $laskutettu =  '';
+
+
+  	if($toteutuneet)
+  	{
+  		$class = 'border:2px green solid;';
+
+  	} elseif(empty($data->loppui)) {
+
+  	}
+}
+// Jos sivu on laskutettu -->
+
+
 /* TAG */
  $tag = '';
  $t = explode("_",$data->asiakas_num);
@@ -109,7 +143,7 @@ else
 	}
 	// <-- adminPaketti 
 
-  $class 	= '';
+
   $diff 	= 0;
   if(date('Y-m-d H:i', strtotime($data->aloitan.'+4 hour')) < date('Y-m-d H:i') and empty($data->loppui))
   {
@@ -117,38 +151,9 @@ else
   	$class = 'border:2px red solid;';
   } elseif(empty($data->loppui)) {
   	$diff = strtotime(date('Y-m-d H:i'))-strtotime($data->aloitan);
-  	$class = '';
   }
 
 
-// <-- Jos sivu on laskutettu
-if( isset($sivu) and $sivu == 'laskutettu' )
-{
-	if($data->laskutettu == '1')
-	  $laskutettu =  'checked';
-	else
-	  $laskutettu =  '';
-
-  	$toteutuneet = false;
-  	$tot = Toteutuneet::model()->find(" kid='".$data->id."' ");
-   	if(isset($tot->id))
-   	{
-      		$toteutuneet = true;
-      		$data = $tot;
-   	}
-
-  	$class 	= '';
-	$diff 	= 0;
-  	if($toteutuneet)
-  	{
-  		$diff = strtotime(date('Y-m-d H:i'))-strtotime($data->aloitan);
-  		$class = 'border:2px green solid;';
-  	} elseif(empty($data->loppui)) {
-  		$diff = strtotime(date('Y-m-d H:i'))-strtotime($data->aloitan);
-  		$class = '';
-  	}
-}
-// Jos sivu on laskutettu -->
 
 ?>
 
