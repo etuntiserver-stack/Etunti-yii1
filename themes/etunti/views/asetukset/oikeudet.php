@@ -34,6 +34,7 @@
 
 ?>
 
+<?php echo CHtml::link('Muokka ryhmät', array('oikeusryhmat/index'), array('class' => 'btn btn-primary myBgColors')); ?>
 
 <table class="table table-bordered table-striped oikeudet">
 
