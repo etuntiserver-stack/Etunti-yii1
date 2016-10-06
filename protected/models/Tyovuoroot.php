@@ -27,9 +27,7 @@ public $tekijan_nimi;
 public $toimenpiteet;
 public $l_tunnit;
 public $count;
-public $toteutuneet;
 public $suunnittellut;
-public $luetutIlmanToteutuneet;
 
 	/**
 	 * Returns the static model of the specified AR class.

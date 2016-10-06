@@ -1,7 +1,7 @@
 <?php
 
 ?>
-<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/pdf_table.css">
+<link rel="stylesheet" type="text/css" href="css/pdf_table.css">
 
 <div style="100%">
 
@@ -31,6 +31,7 @@
     <th><?php echo Yii::t('main', 'Työntekijä'); ?></th>
     <th><?php echo Yii::t('main', 'Suunnittelut'); ?></th>
     <th><?php echo Yii::t('main', 'Toteutuneet'); ?></th>
+    <th><?php echo Yii::t('main', 'Ero'); ?></th>
   </tr>
   </thead>
   <tbody>
@@ -38,19 +39,34 @@
   <?php
   $suunnittellutYht	= 0;
   $toteutuneetYht	= 0;
+  $eroYht		= 0;
   $suunnittellut 	= 0;
   $toteutuneet 		= 0;
+  $ero			= 0;
   $osoite 		= '';
   $tyontekija 		= '';
   ?>
   <?php foreach($model as $data) : ?>
 
+  <?php
+	if($data->status == 0)
+	$data->status = 3;
+
+	$toteutuneet = $this->toteutuneet($data->tid,$data->pvm,$data->status,$data->kohde);
+	if($data->suunnittellut > $toteutuneet)
+		$ero = '<b style="color:red">-'.$this->sprint($data->suunnittellut-$toteutuneet).'</b>';
+	elseif($data->suunnittellut < $toteutuneet)
+		$ero = '<b style="color:green">+'.$this->sprint($toteutuneet-$data->suunnittellut).'</b>';
+	elseif($data->suunnittellut == $toteutuneet)
+		$ero = '<b>00:00</b>';
+  ?>
   <tr>
     <td><?php echo $data->pvm; ?></td>
     <td style="text-align:left"><?php echo $data->osoite; ?></td>
     <td style="text-align:left"><?php echo $data->tekijan_nimi; ?></td>
     <td><?php echo $this->sprint($data->suunnittellut); ?></td>
-    <td><?php echo $this->sprint($data->luetutIlmanToteutuneet+$data->toteutuneet); ?></td>
+    <td><?php echo $this->sprint($toteutuneet); ?></td>
+    <td><?php echo $ero; ?></td>
   </tr>
 
   <?php endforeach; ?>
@@ -62,6 +78,7 @@
     <td></td>
     <td><?php echo $suunnittellutYht; ?></td>
     <td><?php echo $toteutuneetYht; ?></td>
+    <td><?php echo $eroYht; ?></td>
   </tr>
   </tfoot>
 </table>

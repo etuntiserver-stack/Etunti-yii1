@@ -232,72 +232,28 @@ function num($val){
 
 		       	$criteria = new CDbCriteria();
 		       	$criteria->order = " DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m.%d'),( SELECT tekijan_nimi FROM sivex_ttekijat WHERE t.tid=id ) ";
-		       	//$criteria->group = " kohde,tid ";
+		       	$criteria->group = " CONCAT(pvm,kohde,tid) ";
 		       	$criteria->select = " 
 				( SELECT osoite FROM sivex_kohdet WHERE t.kohde=id ) as osoite, 
 				( SELECT tekijan_nimi FROM sivex_ttekijat WHERE t.tid=id ) as tekijan_nimi, 
 
-				TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(CONCAT(pvm, loppu), '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
-				DATE_FORMAT(STR_TO_DATE(CONCAT(pvm, alku), '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'))) as suunnittellut,
-
-				( SELECT 
-
-					SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
-					DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'))))
-
-				 	FROM sivexkuitti 
-					WHERE t.kohde=kohdenID AND t.tid=tid
-					AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = DATE_FORMAT(STR_TO_DATE(t.pvm, '%d.%m.%Y'), '%Y-%m-%d')
-					AND sairaus!=1
-					AND id NOT IN ( SELECT kid FROM sivexkuitti_repaired )
-				)
-				as luetutIlmanToteutuneet, 
-
-				( SELECT 
-
-					SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
-					DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'))))
-
-				 	FROM sivexkuitti_repaired 
-					WHERE t.kohde=kohdenID AND t.tid=tid
-					AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = DATE_FORMAT(STR_TO_DATE(t.pvm, '%d.%m.%Y'), '%Y-%m-%d')
-				)
-				as toteutuneet, 
-
+				SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(CONCAT(pvm, loppu), '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
+				DATE_FORMAT(STR_TO_DATE(CONCAT(pvm, alku), '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as suunnittellut,
 				t.* 
 			";
 
-/*
-
-				(( SELECT 
-
-					SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
-					DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'))))
-
-				 	FROM sivexkuitti 
-					WHERE t.kohde=kohdenID AND t.tid=tid
-					AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = DATE_FORMAT(STR_TO_DATE(t.pvm, '%d.%m.%Y'), '%Y-%m-%d')
-					AND id NOT IN (SELECT kid FROM sivexkuitti_repaired)
-				)+
-				( SELECT 
-
-					SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
-					DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) 
-
-				 	FROM sivexkuitti_repaired 
-					WHERE t.kohde=kohdenID AND t.tid=tid
-					AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = DATE_FORMAT(STR_TO_DATE(t.pvm, '%d.%m.%Y'), '%Y-%m-%d')
-				))
-				as toteutuneet, 
-*/
-
-			if(Yii::app()->session['from'] and Yii::app()->session['to'])
+			if(isset($_POST['from']) and isset($_POST['to']))
 			{
+
+			$site = Yii::app()->createController('Site');
+			$eilasketa = $site[0]->eiLasketa();
+
 	        		$criteria->addCondition ("
 					DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') 
-					BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."' 
+					BETWEEN '".date("Y-m-d", strtotime($_POST['from']))."' AND '".date("Y-m-d", strtotime($_POST['to']))."' 
+					AND $eilasketa
 				");
-				// 	AND kohde IN ( SELECT id FROM sivex_kohdet )
+
 			}
 
 			if(isset($_POST['tekija']) and  $_POST['tekija'] != 'kaikki')
@@ -309,13 +265,13 @@ function num($val){
 
 			$model = Tyovuoroot::model()->findAll($criteria); 
 
-/*
+
 		        $html2pdf = Yii::app()->ePdf->HTML2PDF('P', 'A4', 'en');
 			$html2pdf->setDefaultFont('Arial');
 		        $html2pdf->WriteHTML($this->renderPartial('luetut_toteutuneet_ero_pdf', array('model' => $model),true));
 		        $html2pdf->Output();
-*/
-			$this->render('luetut_toteutuneet_ero_pdf', array('model' => $model));
+
+			//$this->render('luetut_toteutuneet_ero_pdf', array('model' => $model));
 
 		  }
 		// Toteutuneen ja suunnitellun työn erot -->
@@ -2073,6 +2029,44 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		} else {
 		  $this->render('asiakas_hyvaksyminen');
 		}
+
+	}
+
+	public function toteutuneet($tid,$pvm,$status,$kohdenID)
+	{
+		$pvm = date("Y-m-d", strtotime($pvm));
+		if($kohdenID !== null and $status == 3) $kohdenID = " AND kohdenID='".$kohdenID."' "; else $kohdenID = "";
+		if($status !== null) $status = " AND status='".$status."' "; else $status = "";
+
+       		$criteria = new CDbCriteria();
+        	$criteria->select = "
+			SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
+			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit
+		";
+        	$criteria->condition = "  
+			tid = '".$tid."' and aloitan!='' and loppui!='' 
+			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d')='".$pvm."'
+			$status $kohdenID 
+			AND sairaus!=1
+			AND id NOT IN(select kid from sivexkuitti_repaired)
+		";
+		$luetut = Mobile::model()->find($criteria);
+
+       		$criteria = new CDbCriteria();
+        	$criteria->select = "
+			SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
+			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit
+		";
+        	$criteria->condition = "  
+			tid = '".$tid."' and aloitan!='' and loppui!='' 
+			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d')='".$pvm."'
+			$status $kohdenID 
+			AND sairaus!=1
+		";
+		$toteutuneet = Toteutuneet::model()->find($criteria);
+
+
+		return $luetut->l_tunnit+$toteutuneet->l_tunnit;
 
 	}
 
