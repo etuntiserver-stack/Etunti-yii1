@@ -83,12 +83,25 @@ $this->breadcrumbs=array(
       <br>
 
       <div class="row">
-       <div class="col-sm-12">
+       <div class="col-sm-6">
     	   <select name="ilman[]" class="selectpicker form-control"  multiple="multiple"  title="<?php echo Yii::t('main', 'Ei lasketa'); ?>">
     	   <option value="Lounastauko"><?php echo Yii::t('main', 'Lounastauko'); ?></option>
     	   <option value="MATKA"><?php echo Yii::t('main', 'MATKA'); ?></option>
     	   </select>
        </div>
+
+       <div class="col-sm-6">
+       <?php
+   	$kohdenTnimike = Valikkoot::model()->findAll(" select_type='siivous' ",array('order' => "select_type"));
+    	echo '<select class="form-control" name="siivousPaaSivulla">';
+        echo '<option value="">'.Yii::t('main', 'Kohden työnimike').'</option>';
+    	foreach($kohdenTnimike as $key=>$val){
+    		echo '<option value="'.$val->value.'">'.$val->value.'</option>';
+    	}
+   	echo '</select>';
+   	?>
+       </div>
+
       </div>
       <br>
 
@@ -164,12 +177,24 @@ $this->breadcrumbs=array(
       <br>
 
       <div class="row">
-       <div class="col-sm-12">
+       <div class="col-sm-6">
     	   <select name="ilman[]" class="selectpicker form-control"  multiple="multiple"  title="<?php echo Yii::t('main', 'Ei lasketa'); ?>">
     	   <option value="Lounastauko"><?php echo Yii::t('main', 'Lounastauko'); ?></option>
     	   <option value="MATKA"><?php echo Yii::t('main', 'MATKA'); ?></option>
     	   </select>
        </div>
+
+       <div class="col-sm-6">
+       <?php
+    	echo '<select class="form-control" name="siivousPaaSivulla">';
+        echo '<option value="">'.Yii::t('main', 'Kohden työnimike').'</option>';
+    	foreach($kohdenTnimike as $key=>$val){
+    		echo '<option value="'.$val->value.'">'.$val->value.'</option>';
+    	}
+   	echo '</select>';
+   	?>
+       </div>
+
       </div>
       <br>
 
@@ -252,6 +277,16 @@ $this->breadcrumbs=array(
 	 <option value="erot"><?php echo Yii::t('main', 'Näytä erot'); ?></option>
 	 <option value="kaikki"><?php echo Yii::t('main', 'Näytä kaikki'); ?></option>
 	</select>
+       </div>
+       <div class="col-sm-6">
+   	<?php
+    	echo '<select class="form-control" name="siivousPaaSivulla">';
+        echo '<option value="">'.Yii::t('main', 'Kohden työnimike').'</option>';
+    	foreach($kohdenTnimike as $key=>$val){
+    		echo '<option value="'.$val->value.'">'.$val->value.'</option>';
+    	}
+   	echo '</select>';
+   	?>
        </div>
       </div>
       <br>

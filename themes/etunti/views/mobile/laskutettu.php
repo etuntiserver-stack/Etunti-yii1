@@ -80,6 +80,39 @@
                             </label>
                           </label>
                         </div>
+
+                        <div class="section">
+                          <label class="field select">
+
+
+   <?php
+   $list = array();
+   $l = Valikkoot::model()->findAll(" select_type='siivous' ",array('order' => "select_type"));
+
+    echo '<select class="gui-input" name="siivousPaaSivulla">';
+    if(isset($_POST['siivousPaaSivulla']))
+    {
+       echo '<option value="'.$_POST['siivousPaaSivulla'].'">'.$_POST['siivousPaaSivulla'].'</option>';
+
+    } else {
+       echo '<option value="">'.Yii::t('main', 'Kohden työnimike').'</option>';
+    }
+
+       echo '<option value="">Kaikki</option>';
+
+    foreach($l as $key=>$val){
+    echo '<option value="'.$val->value.'">'.$val->value.'</option>';
+
+    }
+    echo '</select>';
+   ?>
+
+                            <i class="arrow double"></i>
+                            </label>
+                          </label>
+                        </div>
+
+
                       </div>
                       <div class="col-md-2">
                         <div class="section">

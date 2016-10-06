@@ -136,6 +136,9 @@ function num($val){
 			if(isset(Yii::app()->session['kohteet']) and Yii::app()->session['kohteet'] != 'kaikki')
 	        	$criteria->addCondition (" kohdenID = '".Yii::app()->session['kohteet']."'");
 
+			if(isset($_POST['siivousPaaSivulla']) and !empty($_POST['siivousPaaSivulla']))
+	        	$criteria->addCondition (" kohdenID IN ( SELECT id FROM sivex_kohdet WHERE siivous LIKE '%".$_POST['siivousPaaSivulla']."%' ) ");
+
 			if(Yii::app()->session['from'] and Yii::app()->session['to'])
 	        	$criteria->addCondition ("DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."' ");
 
@@ -263,6 +266,8 @@ function num($val){
 			if(isset($_POST['kohteet']) and  $_POST['kohteet'] != 'kaikki')
 	        	$criteria->addCondition (" kohde = '".$_POST['kohteet']."'");
 
+			if(isset($_POST['siivousPaaSivulla']) and !empty($_POST['siivousPaaSivulla']))
+	        	$criteria->addCondition (" kohde IN ( SELECT id FROM sivex_kohdet WHERE siivous LIKE '%".$_POST['siivousPaaSivulla']."%' ) ");
 
 			$model = Tyovuoroot::model()->findAll($criteria); 
 
@@ -599,6 +604,10 @@ function num($val){
 
 		if(isset($_POST['tekijaPaaSivulla']) and !empty($_POST['tekijaPaaSivulla']))
 	        $criteria->addCondition (" tid = '".$_POST['tekijaPaaSivulla']."' ");
+
+		if(isset($_POST['siivousPaaSivulla']))
+	        $criteria->addCondition (" kohdenID IN ( SELECT id FROM sivex_kohdet WHERE siivous LIKE '%".$_POST['siivousPaaSivulla']."%' ) ");
+
 
 		if(isset($_POST['asiakas']) and !empty($_POST['asiakas']))
 		{
