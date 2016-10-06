@@ -252,6 +252,7 @@ function num($val){
 					DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') 
 					BETWEEN '".date("Y-m-d", strtotime($_POST['from']))."' AND '".date("Y-m-d", strtotime($_POST['to']))."' 
 					AND $eilasketa
+					AND kohde!=''
 				");
 
 			}
