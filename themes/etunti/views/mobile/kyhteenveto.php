@@ -177,9 +177,9 @@ $this->breadcrumbs=array(
 
 	$cr5 = new CDbCriteria();
 	$this->totKpl($cr5,$val,$from,$to);
-	$k = Toteutuneet::model()->find($cr5);
+	$kt = Toteutuneet::model()->find($cr5);
 
-	if(isset($k->count)) $kpl2 += $k->count;
+	if(isset($kt->count)) $kpl2 += $kt->count;
 
 	$kpl = $kpl1+$kpl2;
 	$kplyht += $kpl;
