@@ -375,7 +375,7 @@
 <?php endif; ?>
 
 <br>
-<div class="btn btn-primary btn-block myBgColors" data-toggle="collapse" data-target="#sovellusAsetukset"><h3><?php echo Yii::t('main','Sovelluksen asetukset'); ?>&nbsp; <i class="fa fa-caret-square-o-down" aria-hidden="true"></i></h3></div>
+<div class="btn btn-primary btn-block myBgColors" data-toggle="collapse" data-target="#sovellusAsetukset"><h3><?php echo Yii::t('main','Mobiilisovelluksen asetukset'); ?>&nbsp; <i class="fa fa-caret-square-o-down" aria-hidden="true"></i></h3></div>
 
   <div class="row form collapse" id="sovellusAsetukset">
    <div class="col-sm-4">

@@ -75,6 +75,7 @@ class LaskutusTuotteet extends DB2ActiveRecord
 			'hinta_alv_sis' => Yii::t('main', 'Hinta Alv Sis'),
 			'alv' => Yii::t('main', 'Alv'),
 			'yksikko' => Yii::t('main', 'Yksikko'),
+			'ryhma' => Yii::t('main', 'Laskutuksen tuoteryhmä'),
 		);
 	}
 

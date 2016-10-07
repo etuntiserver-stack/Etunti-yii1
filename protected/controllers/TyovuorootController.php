@@ -1478,7 +1478,7 @@ class TyovuorootController extends Controller
 		$fi = array(
 		    1=>'Maanantai',
 		    2=>'Tiistai',
-		    3=>'Keskkiviikko',
+		    3=>'Keskiviikko',
 		    4=>'Torstai',
 		    5=>'Perjantai',
 		    6=>'Lauantai',

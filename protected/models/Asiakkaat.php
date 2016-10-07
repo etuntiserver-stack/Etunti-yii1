@@ -90,7 +90,7 @@ class Asiakkaat extends DB2ActiveRecord
 			'postinumero' => Yii::t('main', 'Postinumero'),
 			'puhelin' => Yii::t('main', 'Puhelin'),
 			'sahkoposti' => Yii::t('main', 'Sähköposti'),
-			'ryhma' => Yii::t('main', 'Ryhmä'),
+			'ryhma' => Yii::t('main', 'Asiakasryhmä'),
 			'aktiivinen' => Yii::t('main', 'Aktiivinen'),
 			'laskutus_kanava' => Yii::t('main', 'Laskutus kanava'),
 			'maksuehto' => Yii::t('main', 'Maksuehto'),

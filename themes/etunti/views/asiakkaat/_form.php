@@ -82,10 +82,10 @@ $model->hinta = str_replace(",",".",$model->hinta);
 	</div>
 
 <?php if(in_array('5',$tas)) : ?>
-	<div class="section fill mb5 ashidd_a form-inline">
+	<div class="section fill mb5 ashidd_a">
 		<?php echo $form->labelEx($model,'ryhma'); ?>
 
-	   <div class="form-inline">
+	   <div class="input-group">
 		<?php
 		$list = array();
       		$l = Valikkoot::model()->findAll(" select_type='asiakas_ryhma' ",array('order' => "select_type"));
@@ -95,12 +95,14 @@ $model->hinta = str_replace(",",".",$model->hinta);
 		if(count($list) > 0)
 		{
         	echo $form->dropDownList($model, 'ryhma', $list,
-		array('empty'=>'Valitse ryhmä','class'=>'form-control form-group'));
+		array('empty'=>'Valitse ryhmä','class'=>'form-control'));
 		} else {
 		echo 'Luo Valikko tietokannassa "Select Type = asiakas_ryhma"';
 		}		
         	?>
-		<span class="btn btn-primary myBgColors muokaValiko" for="asiakas_ryhma"><i class="fa fa-pencil-square-o"></i></span>
+		<span class="input-group-btn">
+			<span class="btn btn-primary myBgColors muokaValiko" for="asiakas_ryhma"><i class="fa fa-pencil-square-o"></i></span>
+		</span>
 	   </div>
 
 		<?php echo $form->error($model,'ryhma'); ?>

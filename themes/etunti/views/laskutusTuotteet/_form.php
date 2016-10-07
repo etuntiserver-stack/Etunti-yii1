@@ -41,7 +41,7 @@
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'yksikko'); ?>
 
-	   <div class="form-inline">
+	   <div class="input-group">
 		<?php
 		$list = array();
       		$l = Valikkoot::model()->findAll(" select_type='laskutus_yksikko' ",array('order' => "select_type"));
@@ -51,22 +51,24 @@
 		if(count($list) > 0)
 		{
         	echo $form->dropDownList($model, 'yksikko', $list,
-		array('empty'=>'Valitse Laskutusyksikkö','class'=>'form-control form-group'));
+		array('empty'=>'Valitse Laskutusyksikkö','class'=>'form-control'));
 		} else {
 		echo 'Tyhjä';
 		}		
         	?>
-		<span class="btn btn-primary myBgColors muokaValiko" for="laskutus_yksikko"><i class="fa fa-pencil-square-o"></i></span>
+		<span class="input-group-btn">
+			<span class="btn btn-primary myBgColors muokaValiko" for="laskutus_yksikko"><i class="fa fa-pencil-square-o"></i></span>
+		</span>
 	   </div>
 
 		<?php echo $form->error($model,'yksikko'); ?>
 	</div>
 
 
-	<div class="section fill mb5 ashidd_a form-inline">
+	<div class="section fill mb5 ashidd_a">
 		<?php echo $form->labelEx($model,'ryhma'); ?>
 
-	   <div class="form-inline">
+	   <div class="input-group">
 		<?php
 		$list = array();
 		$v = Valikkoot::model()->find(" select_type='laskutus_tuotteet_ryhma' ");
@@ -85,10 +87,12 @@
 		if(count($list) > 0)
 		{
         	echo $form->dropDownList($model, 'ryhma', $list,
-		array('empty'=>'Valitse ryhmä','class'=>'form-control form-group'));
+		array('empty'=>'Valitse ryhmä','class'=>'form-control'));
 		} 		
         	?>
-		<span class="btn btn-primary myBgColors muokaValiko" for="laskutus_tuotteet_ryhma"><i class="fa fa-pencil-square-o"></i></span>
+		<span class="input-group-btn">
+			<span class="btn btn-primary myBgColors muokaValiko" for="laskutus_tuotteet_ryhma"><i class="fa fa-pencil-square-o"></i></span>
+		</span>
 	   </div>
 
 		<?php echo $form->error($model,'ryhma'); ?>

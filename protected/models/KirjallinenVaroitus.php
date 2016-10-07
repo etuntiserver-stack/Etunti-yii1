@@ -87,7 +87,7 @@ class KirjallinenVaroitus extends DB2ActiveRecord
 			'postitoimipaikka' => 'Työnantaja postitoimipaikka',
 			'puhelin' => 'Työnantaja puhelin',
 			'y_tunnus' => 'Työnantaja Y-tunnus',
-			'sahkoposti' => 'Työnantaja saäköposti',
+			'sahkoposti' => 'Työnantaja sähköposti',
 			'tekijan_email' => 'Työntekijä sähköposti',
 			'tid' => 'Tid',
 			'tekijan_nimi' => 'Työntekijä nimi',
