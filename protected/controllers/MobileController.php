@@ -33,7 +33,7 @@ class MobileController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin', 'delete', 'create', 'update', 'index', 'index_a', 'view', 'updatetime', 'showkohteet', 'yhteenveto', 'kyhteenveto', 'yhteenveto_m', 'historia', 'poistaKohde', 'total_suunniteltu', 'total_toteutu', 'total_luettu', 'kesto', 'index_ajax', 'raportit', 'uusirivi', 'palkkataulukko', 'tidfromtomatkat', 'tidfromtoSL', 'tidfromtoSPL', 'tyobykohde', 'asiakas_hyvaksyminen', 'kohdebytekija' ,'kyhteenveto_tuntemattomat', 'laskutettu', 'lahetys_asiakkaalle', 'get_tyovuorot_day', 'on_olemassa', 'luetut_toteutuneet_ero_pdf'),
+				'actions'=>array('admin', 'delete', 'create', 'update', 'index', 'index_a', 'view', 'updatetime', 'showkohteet', 'yhteenveto', 'kyhteenveto', 'yhteenveto_m', 'historia', 'poistaKohde', 'total_suunniteltu', 'total_toteutu', 'total_luettu', 'kesto', 'index_ajax', 'raportit', 'uusirivi', 'palkkataulukko', 'tidfromtomatkat', 'tidfromtoSL', 'tidfromtoSPL', 'tyobykohde', 'asiakas_hyvaksyminen', 'kohdebytekija' ,'kyhteenveto_tuntemattomat', 'laskutettu', 'lahetys_asiakkaalle', 'get_tyovuorot_day', 'on_olemassa', 'luetut_toteutuneet_ero_pdf', 'vuosilomat_pdf'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -281,6 +281,44 @@ function num($val){
 
 		  }
 		// Toteutuneen ja suunnitellun työn erot -->
+
+		// <-- lomat Ja Poissaolot
+		  if(Yii::app()->request->getPost('method') == 'lomatJaPoissaolot')
+		  {
+		       	$criteria = new CDbCriteria();
+			$criteria->order = "(SELECT tekijan_nimi FROM sivex_ttekijat WHERE t.tid=id),status";
+			$criteria->group = "tid,status";
+		       	$criteria->select = " COUNT(status) as kpl, (SELECT tekijan_nimi FROM sivex_ttekijat WHERE t.tid=id) as tekijan_nimi, t.*";
+
+			if(isset($_POST['from']) and isset($_POST['to']))
+			{
+
+	        		$criteria->addCondition ("
+					DATE_FORMAT(STR_TO_DATE(pvm, '%Y-%m-%d'), '%Y-%m-%d') 
+					BETWEEN '".date("Y-m-d", strtotime($_POST['from']))."' AND '".date("Y-m-d", strtotime($_POST['to']))."' 
+				");
+
+			}
+
+			if(isset($_POST['tekija']) and  $_POST['tekija'] != 'kaikki')
+	        	$criteria->addCondition (" tid = '".$_POST['tekija']."'");
+
+			if(isset($_POST['status']) and !empty($_POST['status']))
+	        	$criteria->addCondition (" status LIKE '%".$_POST['status']."/%' ");
+
+			$model = Vuosilomat::model()->findAll($criteria); 
+
+
+		        $html2pdf = Yii::app()->ePdf->HTML2PDF('P', 'A4', 'en');
+			$html2pdf->setDefaultFont('Arial');
+		        $html2pdf->WriteHTML($this->renderPartial('vuosilomat_pdf', array('model' => $model),true));
+		        $html2pdf->Output();
+
+
+			//$this->render('vuosilomat_pdf', array('model' => $model));
+
+		  }
+		//  lomat Ja Poissaolot -->
 
 
 		} else {
