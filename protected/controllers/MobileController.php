@@ -164,7 +164,7 @@ function num($val){
 			allSess();
 
 		       	$criteria = new CDbCriteria();
-			$criteria->select = " aloitan,loppui,tekijan_nimi,kohde_kannasta,viesti ";
+			$criteria->select = " aloitan,loppui,tekijan_nimi,kohde_kannasta,viesti,sairaus ";
 			$criteria->order = " DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i') ASC ";
 			$criteria->condition = " 
 				aloitan!='' and loppui!='' 
@@ -192,7 +192,7 @@ function num($val){
 
 			/* lu */
 		       	$criteria = new CDbCriteria();
-			$criteria->select = " time,aloitan,loppui,tekijan_nimi,kohde_kannasta,viesti ";
+			$criteria->select = " time,aloitan,loppui,tekijan_nimi,kohde_kannasta,viesti,sairaus ";
 			$criteria->order = " DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i') ASC ";
 			$criteria->condition = " aloitan!='' and loppui!='' AND id NOT IN (SELECT kid FROM sivexkuitti_repaired) ";
 
@@ -205,7 +205,7 @@ function num($val){
 
 			/* tot */
 		       	$criteria = new CDbCriteria();
-			$criteria->select = " time,aloitan,loppui,tekijan_nimi,kohde_kannasta ";
+			$criteria->select = " time,aloitan,loppui,tekijan_nimi,kohde_kannasta,sairaus ";
 			$criteria->order = " DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i') ASC ";
 			$criteria->condition = " aloitan!='' and loppui!='' ";
 
@@ -2434,15 +2434,14 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 	{
 	     $spl = '';
 	  if($val == '1')
-	     $spl = '<span style="color:red" class="small"> (SPL)</span>';
+	     $spl = '<span style="color:red" class="small"> (SPL) </span>';
 	  elseif($val == '2')
-	     $spl = '<span style="color:red" class="small"> (SL)</span>';
+	     $spl = '<span style="color:red" class="small"> (SL) </span>';
 	  elseif($val == '3')
-	     $spl = '<span style="color:red" class="small"> (LS)</span>';
+	     $spl = '<span style="color:red" class="small"> (LS) </span>';
 	
 	  return $spl;
 	}
-
 
 
 	public function pyhapaivat($tid,$from,$to,$m)

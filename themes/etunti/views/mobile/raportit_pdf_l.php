@@ -35,12 +35,13 @@
 
 <?php
 
-function rivit($data, $kesto, $viesti){
+function rivit($data, $kesto, $viesti, $spl){
+
 	$r = '';
 	$r .=  '<tr>';
 	$r .= '<td style="width:5%">'.date("d.m",strtotime($data->aloitan)).'</td>';
-	$r .= '<td style="width:20%">'.$data->tekijan_nimi.'</td>';
-	$r .= '<td style="width:34%">'.$data->kohde_kannasta.'</td>';
+	$r .= '<td style="width:20%;text-align:left">'.$data->tekijan_nimi.$spl.'</td>';
+	$r .= '<td style="width:34%;text-align:left">'.$data->kohde_kannasta.'</td>';
 	$r .= '<td style="width:5%">'.date("H:i",strtotime($data->aloitan)).'</td>';
 	$r .= '<td style="width:5%">'.date("H:i",strtotime($data->loppui)).'</td>';
 	$r .= '<td style="width:5%">'.sprint($kesto).' <b>('.num($kesto).')</b></td>';
@@ -82,6 +83,8 @@ function rivit($data, $kesto, $viesti){
 	$date2 = new DateTime($data->aloitan);
 	$interval = $date1->diff($date2);
 
+	$spl = $this->sairausMerkki($data->sairaus);
+
 	// <-- Vain jos ero on 1 päivä, erotellaan rivit
 	if(date('d', strtotime($data->loppui)) != date('d', strtotime($data->aloitan)) and ( (int)$interval->d == 0 or (int)$interval->d == 1) )
 	{
@@ -90,14 +93,14 @@ function rivit($data, $kesto, $viesti){
 		$loppuiOrigin = $data->loppui;
 		$data->loppui = date("Y-m-d 00:00",strtotime($data->loppui));
 		$kesto = strtotime($data->loppui)-strtotime($data->aloitan);
-		echo rivit($data, $kesto, $viesti);
+		echo rivit($data, $kesto, $viesti, $spl);
 		// Ensimmäinen osa -->
 
 		// <--Toinen osa
 		$data->aloitan = date("Y-m-d 00:00",strtotime($data->loppui));
 		$data->loppui = date("Y-m-d H:i",strtotime($loppuiOrigin));
 		$kesto = strtotime($data->loppui)-strtotime($data->aloitan);
-		echo rivit($data, $kesto, $viesti);
+		echo rivit($data, $kesto, $viesti, $spl);
 		// Toinen osa -->
 
 		continue;
@@ -106,7 +109,7 @@ function rivit($data, $kesto, $viesti){
 	// Vain jos ero on 1 päivä, erotellaan rivit -->
 
 
-		echo rivit($data, $kesto, $viesti);
+		echo rivit($data, $kesto, $viesti, $spl);
 
 
   }

@@ -248,6 +248,9 @@ class ToteutuneetController extends Controller
 			$model->kohde_kannasta=$k->osoite;
 
 			if($model->save()){
+
+			   Mobile::model()->updateByPk($model->kid, array('sairaus'=>$model->sairaus));
+
 			   $did = date("Ymd",strtotime($model->aloitan));
 			   echo $did."_".$model->tid;
 
@@ -296,6 +299,9 @@ class ToteutuneetController extends Controller
 
 
 			if($model->save()){
+
+			   Mobile::model()->updateByPk($model->kid, array('sairaus'=>$model->sairaus));
+
 			   $did = date("Ymd",strtotime($model->aloitan));
 			   echo $did."_".$model->tid;
 
