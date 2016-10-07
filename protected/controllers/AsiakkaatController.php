@@ -840,7 +840,7 @@ $xml = '
 	{
 
 		$criteria=new CDbCriteria;
-		$criteria->order = " DATE(pvm) DESC ";
+		$criteria->order = " DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') DESC ";
 		$criteria->condition = " 
 			kohde IN
 			(
