@@ -234,6 +234,7 @@ if(empty($model->position) and isset($model->id))
    </div>
    <div class="col-sm-3">
 
+<!--
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'tyoehtosopimus'); ?>
 		<?php
@@ -247,6 +248,7 @@ if(empty($model->position) and isset($model->id))
         	?>
 		<?php echo $form->error($model,'tyoehtosopimus'); ?>
 	</div>
+-->
 
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'tekijan_pankkitili'); ?>

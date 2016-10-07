@@ -174,7 +174,6 @@
 
 	<label><?php echo Yii::t('main', 'Viikot'); ?></label><br>
 
-     	<a href="<?php echo $_SERVER['PHP_SELF'].'?week='.($week == 1 ? $wkMaara : $week -1).'&year='.($week == 1 ? $year - 1 : $year); ?>"><i class="fa fa-arrow-left btn btn-primary myBgColors"></i></a>
 
 	<select class="form-control" id="vuodenhyppaminen">
 	<?php
@@ -187,6 +186,11 @@
 	}
 	?>
 	</select>
+
+<div class="input-group">
+  <span class="input-group-btn">
+     	<a href="<?php echo $_SERVER['PHP_SELF'].'?week='.($week == 1 ? $wkMaara : $week -1).'&year='.($week == 1 ? $year - 1 : $year); ?>"><i class="fa fa-arrow-left btn btn-primary myBgColors"></i></a>
+  </span>
 
 	<select class="form-control" id="viikkonhyppaminen">
 	<?php
@@ -206,15 +210,20 @@
 	}
 	?>
 	</select>
+  <span class="input-group-btn">
      	<a href="<?php echo $_SERVER['PHP_SELF'].'?week='.($week == $wkMaara ? 1 : 1 + $week).'&year='.($week == $wkMaara ? 1 + $year : $year); ?>"><i class="fa fa-arrow-right btn btn-primary myBgColors"></i></a> <?php echo $nbsp; ?>
+  </span>
+</div>
+
+
+   </div><div class="form-group">
+	
+	<label><?php echo Yii::t('main', 'Viikkonloput'); ?></label><br>
+	<div class="btn" id="vkolopput"><?php echo Yii::t('main', 'Viikonloput'); ?></div>
 
    </div><div class="form-group">
 
-	<label><?php echo Yii::t('main', 'Näytä viikkonlopput'); ?></label><br>
-	<div class="btn" id="vkolopput"><?php echo Yii::t('main', 'Viikonloput'); ?></div>
-
-   </div><div class="form-group pull-right">
-
+    <div class="">
      <div class="form-inline">
       <div class="form-group">
 	<label><?php echo Yii::t('main', 'Uusi tilaus'); ?></label><br>
@@ -228,6 +237,7 @@
 	</select>
       </div>
      </div>
+    </div>
 
    </div>
  </div>
