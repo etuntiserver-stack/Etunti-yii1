@@ -56,7 +56,24 @@
     </span>
    </div>
   </div>
+  <br>
+  <div class="row">
+   <div class="col-md-1">
+    <img src="<?php echo Yii::app()->request->baseUrl; ?>/etusivuimg/toimitusjohtaja.jpg" class="img-thumbnail">
+   </div>
+   <div class="col-md-8">
+    <span class="small yhteysInfo">
+	<p>
+	Toimitusjohtaja<br>
+	Turkka Rantanen<br>
+	turkka.rantanen@etunti.fi<br>
+	+358 40 124 9082
+	</p>
+    </span>
+   </div>
+  </div>
 </div>
+
 
 
 <br>
