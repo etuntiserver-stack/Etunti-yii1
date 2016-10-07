@@ -45,7 +45,7 @@
   ?>
   <tr>
     <td style="text-align:left"><?php echo $data->tekijan_nimi; ?></td>
-    <td <?php echo $back; ?>><?php echo $expl[4]; ?></td>
+    <td style="text-align:left"><?php echo $expl[4]; ?></td>
     <td><?php echo $data->kpl; ?></td>
   </tr>
 

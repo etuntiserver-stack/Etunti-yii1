@@ -360,12 +360,12 @@
        <div class="col-sm-6">
        <?php
    	$lomat = Valikkoot::model()->findAll(" select_type='vuosilomat' ",array('order' => "select_type"));
-    	echo '<select class="form-control" name="status">';
-        echo '<option value="">'.Yii::t('main', 'Lomat').'</option>';
+    	echo '<select class="form-control selectpicker" multiple name="status[]" title="Lomat">';
+        echo '<option value=""></option>';
     	foreach($lomat as $key=>$val){
 		$expl = explode("/",$val->value);
-		$back = " style='background:".$expl[2].";color: white;'";
-    		echo '<option value="'.$expl[0].'" '.$back.'>'.$expl[1].'</option>';
+		//$back = " style='background:".$expl[2].";color: white;'";
+    		echo '<option value="'.$expl[0].'">'.$expl[1].'</option>';
     	}
    	echo '</select>';
    	?>

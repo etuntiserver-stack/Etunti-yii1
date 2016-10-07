@@ -303,8 +303,12 @@ function num($val){
 			if(isset($_POST['tekija']) and  $_POST['tekija'] != 'kaikki')
 	        	$criteria->addCondition (" tid = '".$_POST['tekija']."'");
 
+
 			if(isset($_POST['status']) and !empty($_POST['status']))
-	        	$criteria->addCondition (" status LIKE '%".$_POST['status']."/%' ");
+			{
+				$impl = "status LIKE '%". implode("/%' OR status LIKE '%", $_POST['status'])."/%'";
+	        		$criteria->addCondition ($impl);
+			}
 
 			$model = Vuosilomat::model()->findAll($criteria); 
 
@@ -1154,6 +1158,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		";
 
 		$tv = Tyovuoroot::model()->findAll($criteria);
+
 		if(isset($tv[0]))
 		{
 		   foreach($tv as $t)
