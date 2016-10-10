@@ -101,6 +101,18 @@
 		<?php echo $form->error($model,'asiakas_tyovuorossa'); ?>
 	</div>
 
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'paikkakunta_tyovuorossa'); ?>
+		<?php 
+        	$l = array(
+			0=>'Ei',
+			1=>'Kyllä'
+		);
+		echo $form->dropDownList($model,'paikkakunta_tyovuorossa', $l, 
+		array('empty'=>Yii::t('main', 'Valitse'), 'class'=>'form-control')) ?>
+		<?php echo $form->error($model,'paikkakunta_tyovuorossa'); ?>
+	</div>
+
 
   </div><div class="col-sm-4">
     <legend><h2><?php echo Yii::t('main','Järjestelmän asetukset'); ?></h2></legend>

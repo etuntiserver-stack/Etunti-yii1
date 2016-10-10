@@ -1,5 +1,12 @@
 $(document).ready(function(){
 
+/* Alertin esimerkki IOS varten
+setTimeout(function() {
+    // do your thing here!
+}, 0);
+*/
+
+
   $("#tallennaKieli").click(function(){
 	var selected = $("#kieliValiko option:selected").val();
 	var selectedFontti = $("#fonttikokoValiko option:selected").val();

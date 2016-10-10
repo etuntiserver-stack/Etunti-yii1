@@ -134,7 +134,7 @@ if(!isset($_POST['tulosta']))
 
 	   } 
 
-	   // asiakasNakyvissa
+	   // Asiakas nakyvissa
 	   $asiakasNakyvissa = '';
 	   if(isset($asetukset) and $asetukset->asiakas_tyovuorossa == 1){
 		if(isset($tvVal->kohteet->asiakas_id))
@@ -147,6 +147,17 @@ if(!isset($_POST['tulosta']))
 
 		if(!empty($name))
 		$asiakasNakyvissa = $name.'<br>';
+	   }
+
+	   // paikkakunta nakyvissa
+	   $paikkakuntaNakyvissa = '';
+	   if(isset($asetukset) and $asetukset->paikkakunta_tyovuorossa == 1){
+		$paikkakunta = '';
+		if(isset($tvVal->kohteet->kaupunki) and !empty($tvVal->kohteet->kaupunki))
+		$paikkakunta = $tvVal->kohteet->kaupunki;
+
+		if(!empty($paikkakunta))
+		$paikkakuntaNakyvissa = $paikkakunta.'<br>';
 	   }
 
 	   // toistuva
@@ -204,7 +215,7 @@ if(!isset($_POST['tulosta']))
   	   } 
 
 	   if(!empty($osoite))
-	   $osoite = '<br>'.$asiakasNakyvissa.$osoite;
+	   $osoite = '<br>'.$asiakasNakyvissa.$paikkakuntaNakyvissa.$osoite;
 
 	   $bod .=  '<div id="'.$tvVal->id.'_'.$did.'_'.$tid.'" class="well fullRivi" style="color:'.$color.'">';
 	   if( $from != 'mobiili' )
