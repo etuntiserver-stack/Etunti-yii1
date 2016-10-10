@@ -49,6 +49,7 @@
 		'salasana',
 		'online_varauksen_valmina',
 		'kortit',
+		'kortit_voimassaolo',
 		'ayjasenyys',
 		'gcm_reg_id',
 	),

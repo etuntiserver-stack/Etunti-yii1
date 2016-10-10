@@ -178,7 +178,17 @@ class TyontekijatController extends Controller
 		{
 			$model->attributes=$_POST['Tyontekijat'];
 			$model->tyo_toimialue=json_encode($model->tyo_toimialue);
-			if(isset($_POST['kortit'])) $model->kortit = implode("##***",$_POST['kortit']);
+
+			if(isset($_POST['kortitVoimassaolo']))
+				$model->kortit_voimassaolo=json_encode($_POST['kortitVoimassaolo']);
+			else
+				$model->kortit_voimassaolo="";
+
+			if(isset($_POST['kortit'])) 
+				$model->kortit = implode("##***",$_POST['kortit']);
+			else
+				$model->kortit = "";
+
 			if($model->save())
 			{
 
@@ -248,7 +258,17 @@ class TyontekijatController extends Controller
 
 			$model->attributes=$_POST['Tyontekijat'];
 			$model->tyo_toimialue=json_encode($model->tyo_toimialue);
-			if(isset($_POST['kortit'])) $model->kortit = implode("##***",$_POST['kortit']);
+		
+			if(isset($_POST['kortitVoimassaolo']))
+				$model->kortit_voimassaolo=json_encode($_POST['kortitVoimassaolo']);
+			else
+				$model->kortit_voimassaolo="";
+
+			if(isset($_POST['kortit'])) 
+				$model->kortit = implode("##***",$_POST['kortit']);
+			else
+				$model->kortit = "";
+
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
 		}

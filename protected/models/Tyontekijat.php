@@ -71,7 +71,7 @@ public $tunnus;
 			array('sukunimi', 'length', 'max'=>255),
 			array('ayjasenyys', 'length', 'max'=>10),
 			array('kortit, tekijan_muisti, tekijan_tietoja, tietoja_onlinevarauksen', 'length', 'max'=>2000),
-			array('gcm_reg_id, position', 'length', 'max'=>500),
+			array('gcm_reg_id, position, kortit_voimassaolo', 'length', 'max'=>500),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('id, imei, laiten_puh, tekijan_nimi, tekijan_henkilotunnus, tekijan_puh, tekijan_email, tekijan_lanka_puh, tekijan_katuosoite, tekijan_pnumero, tekijan_ptoimipaikka, tyoryhma, tyoehtosopimus, tekijan_kulunvalvonta, tekijan_pankkitili, tekijan_konttori, aktiivinen, tekijan_tietoja, tekijan_muisti, salasana, online_varauksen_valmina, kortit, ayjasenyys, gcm_reg_id, position, tyo_toimialue', 'safe', 'on'=>'search'),

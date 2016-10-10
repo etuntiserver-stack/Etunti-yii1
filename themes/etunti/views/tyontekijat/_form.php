@@ -270,7 +270,7 @@ if(empty($model->position) and isset($model->id))
 		$a = Valikkoot::model()->findAll(" select_type='kortit' ");
 		$check = explode("##***",$model->kortit);
 
-		echo '<select name="kortit[]" class="selectpicker form-control" multiple title="Valitse">';
+		echo '<select name="kortit[]" id="kortit" class="form-control" multiple title="Valitse">';
 		  foreach($a as $val){
 		    	$on = false;
 		   foreach($check as $c)
@@ -293,12 +293,90 @@ if(empty($model->position) and isset($model->id))
 
 		<?php echo $form->error($model,'kortit'); ?>
 	</div>
-	<br>
-	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'ayjasenyys'); ?>
-		<?php echo $form->checkbox($model,'ayjasenyys',array('size'=>10,'maxlength'=>10,'class'=>'sw')); ?>
-		<?php echo $form->error($model,'ayjasenyys'); ?>
-	</div>
+
+
+	<?php 
+	if(!empty($model->kortit_voimassaolo))
+		echo '<textarea id="tallennettuVoimassaolot" style="display:none">'.$model->kortit_voimassaolo.'</textarea>';
+
+	?>
+	<div id="kortitVoimassaolot"></div>
+
+
+
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+
+ kortit();
+
+ function kortit()
+ {
+	try
+	{
+	   var tallennettuVoimassaolot = JSON.parse($('#tallennettuVoimassaolot').val());
+	}
+	catch(e)
+	{
+	   var tallennettuVoimassaolot = [];
+	}
+
+
+	var data	= '';
+	var value 	= '';
+	var $el=$("#kortit");
+	$el.find('option:selected').each(function(){
+
+	value 	= '';
+	if(tallennettuVoimassaolot[$(this).val()])
+	{
+	    value 	= tallennettuVoimassaolot[$(this).val()];
+	    var dString = value.split(".");
+	    var d1 	= new Date(parseInt(dString[2]), parseInt(dString[1]), parseInt(dString[0]));
+	    var d2 	= new Date();
+	    var thisClass = '';
+
+	    if( d2.getTime() > d1.getTime() )
+	    thisClass = "btn-danger";
+	}
+
+	    data += '<div class="section fill mb5"><label>'+$(this).text()+' voimassaoloaika' +
+		     '</label><input type="text" name="kortitVoimassaolo['+$(this).val()+']" class="form-control mask '+thisClass+'" value="'+value+'">'+
+		    '</div>';
+	});
+
+	$('#kortitVoimassaolot').html(data);
+
+	$('.mask').mask('00.00.0000',{
+        	placeholder: "pp.kk.vvvv"
+	});
+ }
+
+
+ $("#kortit").multiselect({
+
+	//inheritClass: true,
+	//enableFiltering: true,
+        includeSelectAllOption: true,
+	nonSelectedText: '<?php echo Yii::t("main", "Tyhjä"); ?>',
+	selectAllText: '<?php echo Yii::t("main", "Valitse kaikki"); ?>',
+	allSelectedText: '<?php echo Yii::t("main", "Kortit"); ?>',
+	nSelectedText: '<?php echo Yii::t("main", "valittu"); ?>',
+	numberDisplayed: 0,
+ }); 
+
+
+ $('#kortit').change( function() {
+  	kortit();
+ });
+
+
+});
+</script>
+
+
+
 
    </div><div class="col-sm-3">
 
@@ -331,6 +409,13 @@ if(empty($model->position) and isset($model->id))
 		<?php echo $form->error($model,'position'); ?>
 	</div>
 
+
+	<br>
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'ayjasenyys'); ?>
+		<?php echo $form->checkbox($model,'ayjasenyys',array('size'=>10,'maxlength'=>10,'class'=>'sw')); ?>
+		<?php echo $form->error($model,'ayjasenyys'); ?>
+	</div>
 
    </div>
 
@@ -454,6 +539,8 @@ $(".muokaValiko").click(function() {
 	onText: "Kyllä",
 	offText: "Ei"
   });
+
+
 
 });
 </script>
