@@ -321,6 +321,7 @@ class ToteutuneetController extends Controller
 
 		$this->renderPartial('update',array(
 			'model'=>$model,
+
 		));
 	}
 
@@ -750,6 +751,45 @@ class ToteutuneetController extends Controller
 		return $return;
 
 	}
+
+
+
+	public function toteutuneetByPvm($tid,$pvm,$status)
+	{
+		$pvm = date("Y-m-d", strtotime($pvm));
+
+       		$criteria = new CDbCriteria();
+        	$criteria->select = "
+			SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
+			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit
+		";
+        	$criteria->condition = "  
+			tid = '".$tid."' and aloitan!='' and loppui!='' 
+			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d')='".$pvm."'
+			$status
+			AND sairaus!=1
+			AND id NOT IN(select kid from sivexkuitti_repaired)
+		";
+		$luetut = Mobile::model()->find($criteria);
+
+       		$criteria = new CDbCriteria();
+        	$criteria->select = "
+			SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
+			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit
+		";
+        	$criteria->condition = "  
+			tid = '".$tid."' and aloitan!='' and loppui!='' 
+			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d')='".$pvm."'
+			$status
+			AND sairaus!=1
+		";
+		$toteutuneet = Toteutuneet::model()->find($criteria);
+
+
+		return $luetut->l_tunnit+$toteutuneet->l_tunnit;
+
+	}
+
 
 
 }

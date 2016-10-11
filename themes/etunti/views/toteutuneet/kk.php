@@ -100,6 +100,13 @@ echo	'<input type=hidden id=number value='.cal_days_in_month(CAL_GREGORIAN, $mon
   <TABLE id="verkko" class="table table-bordered">
   <?php 
 
+  $status = '';
+  if(isset(Yii::app()->session['Lounastauko']))
+  	$status .= " AND status!='".Yii::app()->session['Lounastauko']."' ";
+  if(isset(Yii::app()->session['MATKA']))
+  	$status .= " AND status!='".Yii::app()->session['MATKA']."' ";
+
+
   echo '<thead class="myBgColors"><TR>';
   echo '<TH>Nimi</TH>';
 
@@ -121,18 +128,17 @@ echo	'<input type=hidden id=number value='.cal_days_in_month(CAL_GREGORIAN, $mon
      $thisDate = $year.'-'.$month.'-'.$i;
      $date = $i.'.'.$month;
 
-	$tot[$i] = $this->renderPartial('//toteutuneet/totpvmtid',array('pvm'=>$thisDate,'tid'=>$v->id,'from'=>'kk'),true);
-	$explT = explode("//",$tot[$i]);
-	if(isset($explT[1]))
-	$yht += $explT[1];
+	$getTime = $this->toteutuneetByPvm($v->id, $thisDate, $status);
+	$tot[$i] = $this->sprint($getTime);
+	$yht += $getTime;
 
 	$cl = "";
-	if(isset($explT[1]) and (int)$explT[1] < 18000)
+	if(isset($getTime) and (int)$getTime < 18000 and (int)$getTime > 0)
 	$cl = "btn btn-xs btn-warning";
-	elseif(isset($explT[1]) and (int)$explT[1] > 28800)
+	elseif(isset($getTime) and (int)$getTime > 28800 and (int)$getTime > 0)
 	$cl = "btn btn-xs btn-danger";
 
-	echo '<TD class="text-small" style="font-size:90%"><span class="'.$cl.'">'.$explT[0].'</span></TD>';
+	echo '<TD class="text-small" style="font-size:90%"><span class="'.$cl.'">'.$tot[$i].'</span></TD>';
 
    }
   echo '<TD class="text-small"><b>'.sprint($yht).'</b></TD>';
@@ -163,7 +169,7 @@ $(document).ready(function(){
 	   type:'POST',
 	   data: { "ilman" : thisVal },
            success: function(data){
-        	console.log(data);
+        	//console.log(data);
 	 	window.location.reload();
     	   },
     	   error: function(XMLHttpRequest, textStatus, errorThrown) {

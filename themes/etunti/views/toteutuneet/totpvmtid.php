@@ -8,7 +8,8 @@ $did = date("Ymd",strtotime($pvm));
 	$get = array();
 
        	$criteria = new CDbCriteria();
-	$criteria->condition = " tid = '".$tid."' 
+	$criteria->condition = " 
+		tid = '".$tid."' 
 		AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = '".date("Y-m-d",strtotime($pvm))."' 
 	 ";
 	if(Yii::app()->session['Lounastauko'])
@@ -34,9 +35,11 @@ $did = date("Ymd",strtotime($pvm));
 
 
        	$criteria = new CDbCriteria();
-	$criteria->condition = " tid = '".$tid."' 
-	and DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = '".date("Y-m-d",strtotime($pvm))."' 
-	AND id NOT IN (SELECT kid FROM sivexkuitti_repaired) ";
+	$criteria->condition = " 
+		tid = '".$tid."' 
+		AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = '".date("Y-m-d",strtotime($pvm))."' 
+		AND id NOT IN (SELECT kid FROM sivexkuitti_repaired) 
+	";
 	if(Yii::app()->session['Lounastauko'])
 	$criteria->addCondition (" status != '10' ");
 	if(Yii::app()->session['MATKA'])
@@ -59,24 +62,27 @@ $did = date("Ymd",strtotime($pvm));
 	   }
 	}
 
+/*
 	if( $from == 'kk' ){
 		if($tun > 0)
 		echo $this->sprint($tun)."//".$tun;
 
 	} else {
+*/
 
 		   ksort($get);
 		   foreach($get as $v){
 		      $laatikot .= $this->renderPartial('al',array('str'=>$v), true);
 		   }
 
-	}
+	//}
 	
 	$laatikot .= '&nbsp;&nbsp;<b class="link glyphicon glyphicon-plus uusirivi" for="'.$did.'_'.$tid.'"></b>';
 	$laatikot .= '</div>';
-
+/*
 	if($from != 'kk')
         echo $laatikot.'explode999'.$tun;
+*/
 
 /*
 	if( $from == 'ajax' ){
