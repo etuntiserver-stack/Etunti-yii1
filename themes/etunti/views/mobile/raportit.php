@@ -210,6 +210,7 @@
 
 
 
+<?php if(in_array('2',$tas)) : ?>
 
 	  <!-- Toteutuneet ja suunnittelut ero -->
             <div class="admin-form col-sm-4">
@@ -306,7 +307,7 @@
 
 
 
-	<?php if(in_array('2',$tas)) : ?>
+
 	  <!-- Lomat ja poissaolot -->
             <div class="admin-form col-sm-4">
               <div class="panel heading-border">
@@ -383,7 +384,8 @@
                 </div>
               </div>
             </div>
-	<?php endif; ?>
+
+<?php endif; ?>
 
 
 

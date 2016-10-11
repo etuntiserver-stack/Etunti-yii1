@@ -176,7 +176,7 @@ $model->hinta = str_replace(",",".",$model->hinta);
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'siivous'); ?>
 
-	   <div class="form-inline">
+	   <div class="input-group">
 		<?php
 		$list = array();
       		$l = Valikkoot::model()->findAll(" select_type='siivous' ",array('order' => "select_type"));
@@ -186,7 +186,9 @@ $model->hinta = str_replace(",",".",$model->hinta);
         	echo $form->dropDownList($model, 'siivous', $list,
 		array('empty'=>'','class'=>'form-control form-group'));
         	?>
-		<span class="btn btn-primary myBgColors muokaValiko" for="siivous"><i class="fa fa-pencil-square-o"></i></span>
+		<span class="input-group-btn">
+			<span class="btn btn-primary myBgColors muokaValiko" for="siivous"><i class="fa fa-pencil-square-o"></i></span>
+		</span>
 	   </div>
 
 		<?php echo $form->error($model,'siivous'); ?>
@@ -241,7 +243,7 @@ $model->hinta = str_replace(",",".",$model->hinta);
 
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'ryhma'); ?>
-	   <div class="form-inline">
+	   <div class="input-group">
 
 		<?php
 
@@ -258,7 +260,9 @@ $model->hinta = str_replace(",",".",$model->hinta);
 		echo 'Luo Valikko tietokannassa "Select Type = asiakas_ryhma"';
 		}		
         	?>
-		<span class="btn btn-primary myBgColors muokaValiko" for="asiakas_ryhma"><i class="fa fa-pencil-square-o"></i></span>
+		<span class="input-group-btn">
+			<span class="btn btn-primary myBgColors muokaValiko" for="asiakas_ryhma"><i class="fa fa-pencil-square-o"></i></span>
+		</span>
 	   </div>
 
 		<?php echo $form->error($model,'ryhma'); ?>
