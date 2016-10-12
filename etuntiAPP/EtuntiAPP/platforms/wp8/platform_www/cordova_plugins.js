@@ -263,14 +263,14 @@ module.exports.metadata =
     "de.appplant.cordova.common.registerusernotificationsettings": "1.0.1",
     "phonegap-plugin-push": "1.3.0",
     "cordova-plugin-compat": "1.0.0",
-    "cordova-plugin-geolocation": "2.4.0",
     "cordova-plugin-camera": "2.3.0",
     "cordova-plugin-dialogs": "1.3.0",
     "cordova-plugin-file": "3.0.0",
     "cordova-plugin-file-transfer": "1.6.0",
     "cordova-plugin-media": "2.4.0",
     "cordova-plugin-device": "1.1.3",
-    "cordova-plugin-app-version": "0.1.9"
+    "cordova-plugin-app-version": "0.1.9",
+    "cordova-plugin-geolocation": "2.4.0"
 }
 // BOTTOM OF METADATA
 });

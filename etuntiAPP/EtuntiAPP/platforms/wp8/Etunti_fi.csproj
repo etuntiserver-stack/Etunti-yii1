@@ -242,9 +242,6 @@
     </ItemGroup>
     <ItemGroup />
     <ItemGroup>
-        <Compile Include="Plugins\cordova-plugin-geolocation\Geolocation.cs" />
-    </ItemGroup>
-    <ItemGroup>
         <Compile Include="Plugins\cordova-plugin-camera\Camera.cs" />
     </ItemGroup>
     <ItemGroup>
@@ -276,5 +273,8 @@
     </ItemGroup>
     <ItemGroup>
         <Compile Include="Plugins\cordova-plugin-app-version\AppVersion.cs" />
+    </ItemGroup>
+    <ItemGroup>
+        <Compile Include="Plugins\cordova-plugin-geolocation\Geolocation.cs" />
     </ItemGroup>
 </Project>

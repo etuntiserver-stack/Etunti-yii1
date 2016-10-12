@@ -28,9 +28,6 @@
         "cordova-plugin-file-transfer": {
             "PACKAGE_NAME": "fi.etunti.local"
         },
-        "cordova-plugin-geolocation": {
-            "PACKAGE_NAME": "fi.etunti.local"
-        },
         "cordova-plugin-media": {
             "PACKAGE_NAME": "fi.etunti.local"
         },
@@ -41,6 +38,9 @@
             "PACKAGE_NAME": "fi.etunti.local"
         },
         "phonegap-plugin-push": {
+            "PACKAGE_NAME": "fi.etunti.local"
+        },
+        "cordova-plugin-geolocation": {
             "PACKAGE_NAME": "fi.etunti.local"
         }
     },

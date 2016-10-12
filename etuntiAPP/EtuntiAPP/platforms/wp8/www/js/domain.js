@@ -85,35 +85,47 @@ setTimeout(function() {
 	document.getElementById('exitPainike').innerHTML = '<h2 class="glyphicon glyphicon-new-window"></h2>';
 
 
+        // <-- Geolocation
+	//alert("navigator.geolocation works well");
 	navigator.geolocation.getCurrentPosition(onSuccess, onError);
-	navigator.geolocation.watchPosition(onSuccessWatch, onErrorWatch, { timeout: 29000, enableHighAccuracy: false });
 
-
-	    function onSuccess(position) {
-	        document.getElementById('location').value = position.coords.latitude + '/' + position.coords.longitude;
-	        my_location = position.coords.latitude + '/' + position.coords.longitude;
-		sendLocation(my_location);
-	    }
-	    function onError(error) {
-	        alert('code: '    + error.code    + '\n' +
-	              'message: ' + error.message + '\n');
-	    }
-
-
-	    function onSuccessWatch(position) {
-	        my_location = position.coords.latitude + '/' + position.coords.longitude;
-	        document.getElementById('location').value = position.coords.latitude + '/' + position.coords.longitude;
-		sendLocation(my_location);
-	    }
-	    function onErrorWatch(error) {
-		/*
-	        alert('code: '    + error.code    + '\n' +
-	              'message: ' + error.message + '\n');
-		*/
-		
-	    }
+	var options;
+	options = {
+	    maximumAge: 30000,
+	    timeout: 5000,
+	    enableHighAccuracy: false
+	};
+	var watchID = navigator.geolocation.watchPosition(onSuccessWatch, onErrorWatch, options);
 
     }
+
+	function onSuccess(position) {
+	        document.getElementById('location').value = position.coords.latitude + '/' + position.coords.longitude;
+	        my_location = position.coords.latitude + '/' + position.coords.longitude;
+		sendLocation(my_location);
+	}
+	function onError(error) {
+	        alert('code: '    + error.code    + '\n' +
+	              'message: ' + error.message + '. GPS ongelma\n');
+	}
+
+	function onSuccessWatch(position) {
+
+        var element = document.getElementById('geolocation');
+        element.innerHTML = 'Latitude: '  + position.coords.latitude      + '<br />' +
+                            'Longitude: ' + position.coords.longitude     + '<br />' +
+                            '<hr />'      + element.innerHTML;
+
+	    var elementL = document.getElementById('location');
+	    elementL.value = position.coords.latitude + '/' + position.coords.longitude;
+	}
+
+	function onErrorWatch(error) {
+	    alert('code: '    + error.code    + '\n' +
+	          'message: ' + error.message + '\n');
+	}
+
+
     // On device Reay -->
     // Palvelin -->
 
@@ -294,7 +306,7 @@ $("body").ready(function(){
 }
 
 
-	alert(email)
+
 /*
  function testo(){
 	my_location = $("#location").val();
@@ -306,6 +318,7 @@ $("body").ready(function(){
 
  function sendLocation(my_location){
 
+/*
 	if(my_location !== '')
 	{
         $.ajax({
@@ -314,7 +327,8 @@ $("body").ready(function(){
  	   data: { check : "sendLocation", my_location : my_location, email : email, salasana : salasana },
            success: function(data){
         	console.log("Send Location: " + data);
-		//$("#result2").html(data).show();
+		if($("#resultLahetysta").val())
+		$("#resultLahetysta").val(data).show();
 
     	},
     		error:function (xhr, ajaxOptions, thrownError){
@@ -323,7 +337,7 @@ $("body").ready(function(){
     	}
         });
 	}
-
+*/
  }
 
 

@@ -16,9 +16,6 @@
         "phonegap-plugin-push": {
             "PACKAGE_NAME": "{346c98b0-fd63-11e5-9bf1-13f91d566cb8}"
         },
-        "cordova-plugin-geolocation": {
-            "PACKAGE_NAME": "{346c98b0-fd63-11e5-9bf1-13f91d566cb8}"
-        },
         "cordova-plugin-camera": {
             "PACKAGE_NAME": "{346c98b0-fd63-11e5-9bf1-13f91d566cb8}"
         },
@@ -35,6 +32,9 @@
             "PACKAGE_NAME": "{346c98b0-fd63-11e5-9bf1-13f91d566cb8}"
         },
         "cordova-plugin-app-version": {
+            "PACKAGE_NAME": "{346c98b0-fd63-11e5-9bf1-13f91d566cb8}"
+        },
+        "cordova-plugin-geolocation": {
             "PACKAGE_NAME": "{346c98b0-fd63-11e5-9bf1-13f91d566cb8}"
         }
     },
