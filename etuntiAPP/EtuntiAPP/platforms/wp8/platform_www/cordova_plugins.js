@@ -7,6 +7,14 @@ module.exports = [
         "runs": true
     },
     {
+        "file": "plugins/phonegap-plugin-push/www/push.js",
+        "id": "phonegap-plugin-push.PushNotification",
+        "pluginId": "phonegap-plugin-push",
+        "clobbers": [
+            "PushNotification"
+        ]
+    },
+    {
         "file": "plugins/cordova-plugin-camera/www/CameraConstants.js",
         "id": "cordova-plugin-camera.Camera",
         "pluginId": "cordova-plugin-camera",
@@ -231,52 +239,17 @@ module.exports = [
         ]
     },
     {
-        "file": "plugins/org.apache.cordova.device/www/device.js",
-        "id": "org.apache.cordova.device.device",
-        "pluginId": "org.apache.cordova.device",
+        "file": "plugins/cordova-plugin-device/www/device.js",
+        "id": "cordova-plugin-device.device",
+        "pluginId": "cordova-plugin-device",
         "clobbers": [
             "device"
         ]
     },
     {
-        "file": "plugins/de.appplant.cordova.plugin.local-notification/www/local-notification.js",
-        "id": "de.appplant.cordova.plugin.local-notification.LocalNotification",
-        "pluginId": "de.appplant.cordova.plugin.local-notification",
-        "clobbers": [
-            "cordova.plugins.notification.local",
-            "plugin.notification.local"
-        ]
-    },
-    {
-        "file": "plugins/de.appplant.cordova.plugin.local-notification/www/local-notification-core.js",
-        "id": "de.appplant.cordova.plugin.local-notification.LocalNotification.Core",
-        "pluginId": "de.appplant.cordova.plugin.local-notification",
-        "clobbers": [
-            "cordova.plugins.notification.local.core",
-            "plugin.notification.local.core"
-        ]
-    },
-    {
-        "file": "plugins/de.appplant.cordova.plugin.local-notification/www/local-notification-util.js",
-        "id": "de.appplant.cordova.plugin.local-notification.LocalNotification.Util",
-        "pluginId": "de.appplant.cordova.plugin.local-notification",
-        "merges": [
-            "cordova.plugins.notification.local.core",
-            "plugin.notification.local.core"
-        ]
-    },
-    {
-        "file": "plugins/phonegap-plugin-push/www/push.js",
-        "id": "phonegap-plugin-push.PushNotification",
-        "pluginId": "phonegap-plugin-push",
-        "clobbers": [
-            "PushNotification"
-        ]
-    },
-    {
-        "file": "plugins/uk.co.whiteoctober.cordova.appversion/www/AppVersionPlugin.js",
-        "id": "uk.co.whiteoctober.cordova.appversion.AppVersionPlugin",
-        "pluginId": "uk.co.whiteoctober.cordova.appversion",
+        "file": "plugins/cordova-plugin-app-version/www/AppVersionPlugin.js",
+        "id": "cordova-plugin-app-version.AppVersionPlugin",
+        "pluginId": "cordova-plugin-app-version",
         "clobbers": [
             "cordova.getAppVersion"
         ]
@@ -286,18 +259,18 @@ module.exports.metadata =
 // TOP OF METADATA
 {
     "com.chariotsolutions.nfc.plugin": "0.6.2",
-    "cordova-plugin-camera": "1.2.0",
-    "cordova-plugin-dialogs": "1.1.1",
-    "cordova-plugin-file": "3.0.0",
-    "cordova-plugin-file-transfer": "1.3.0",
-    "cordova-plugin-geolocation": "1.0.2-dev",
-    "cordova-plugin-media": "1.0.1",
     "cordova-plugin-whitelist": "1.0.0",
     "de.appplant.cordova.common.registerusernotificationsettings": "1.0.1",
-    "org.apache.cordova.device": "0.3.0",
-    "de.appplant.cordova.plugin.local-notification": "0.8.2-dev",
     "phonegap-plugin-push": "1.3.0",
-    "uk.co.whiteoctober.cordova.appversion": "0.1.7"
+    "cordova-plugin-compat": "1.0.0",
+    "cordova-plugin-geolocation": "2.4.0",
+    "cordova-plugin-camera": "2.3.0",
+    "cordova-plugin-dialogs": "1.3.0",
+    "cordova-plugin-file": "3.0.0",
+    "cordova-plugin-file-transfer": "1.6.0",
+    "cordova-plugin-media": "2.4.0",
+    "cordova-plugin-device": "1.1.3",
+    "cordova-plugin-app-version": "0.1.9"
 }
 // BOTTOM OF METADATA
 });

@@ -1,5 +1,16 @@
 $(document).ready(function(){
 
+    var domain = '';
+    var email = '';
+    var salasana = '';
+
+
+    if(localStorage.getItem('domain'))
+	  domain=localStorage.getItem('domain');
+    if(localStorage.getItem('email'))
+	  email=localStorage.getItem('email');
+    if(localStorage.getItem('salasana'))
+	  salasana=localStorage.getItem('salasana');
 
 
   $("#odotta").html("<img src='img/icon.png'>");
@@ -23,17 +34,19 @@ $(document).ready(function(){
 
 
 
-  setTimeout(tiedot,1000);
+  //setTimeout(tiedot,3000);
+  tiedot();
 
   function tiedot(){
 
-	domain	= $("#domain").val();
-	email = $("#email").val();
-	salasana = $("#salasana").val();
+	//domain = $("#domain").val();
+	//email = $("#email").val();
+	//salasana = $("#salasana").val();
 
-	if(my_location == '') my_location = $("#location").val();
+	if(my_location == '') 
+	my_location = $("#location").val();
 
-	if((domain != '') & (email !='') & (salasana != ''))
+	if((domain !== '') & (email !== '') & (salasana !== ''))
 	{
 
 		set();
@@ -108,8 +121,12 @@ function set(){
 
 $(".lahetaToimistoon").click(function(){
 
-  var viesti = $("#toimistoon").val();
-  if (viesti  === '') {
+  var osoite = '';
+  if($("#os").val() !== '')
+  osoite = '<br><b>Osoite: </b>'+$("#os").val()+'<br>';
+
+  var viesti = osoite+$("#toimistoon").val();
+  if ($("#toimistoon").val()  === '') {
         $('#toimistoon').css({"border" : "2px #f14010 solid"}).focus();
         return false;
   }
@@ -184,5 +201,69 @@ $(".lahetaToimistoon").click(function(){
 	}
 
  }
+
+
+
+
+
+$("#os").keyup(function(){
+
+  var thisKey = $(this).val();
+  var lengThis = thisKey.length;
+
+  if(lengThis > 0)
+  {
+	$("#getListFromServer").show(370);
+	$(this).removeClass("alert alert-danger");
+
+        $.ajax({
+           url: url+'/imei?dom='+domain,
+	   type:'POST',
+ 	   data: { check : "osoitevaihto", my_location : my_location, thisKey : thisKey, email : email, salasana : salasana },
+           success: function(data){
+        	console.log(data);
+		//$("#result").val(data);
+		$("#getListFromServer").html(
+			"<p><div class='row'>" +
+			"<div class='col-sm-12'>" +
+				 data + 
+			"</div>" +
+			"</div></p>"
+		);
+
+  		$("#list").change(function(){
+
+			$("#getListFromServer").hide(370);
+			$("#os").val($( "#list option:selected" ).text());
+			$("#kohdenID").val($( "#list option:selected" ).val());
+		});
+
+		var listSize = $('#list option').size();
+
+			$("#valitseOsoite").text("Löyty: "+(listSize-1)+" kohteita");
+
+		if(listSize > 1)
+		{
+			$("#list").show();
+		} else {
+			$("#list").hide();
+		}
+
+		$("#result").hide();
+    	},
+    		error:function (xhr, ajaxOptions, thrownError){
+        	console.log(xhr.responseText);
+		$("#result2").val(xhr.responseText).show();
+    	}
+        });
+
+  } else {
+			$("#list").hide();
+
+  }
+
+});
+
+
 
 });

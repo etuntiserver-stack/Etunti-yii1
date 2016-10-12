@@ -39,26 +39,29 @@
      <div class="head"> 
      	  <div class="pull-right">
 	    <div id="tekija"></div>
-	    <div id="version" class="small"></div> 
+	    <div id="server" style="display:none"></div>
+	    <div style="display:none" id="versioBlock">Versio: <span id="version" class="small"></span></div> 
 	  </div>
 	<img src="img/logo-black.png" class="logo">
      </div>
+     <br>
+
+	    <div id="domainBlokki" style="display:none">
+		<div id="dm" class="well"></div>
+	    </div>
+
 
 	   <div id="kesto"></div>
 	   <div id="josOnViesti"></div>
 
      	   <div id="all">
 
-	    <div id="domainBlokki" style="display:none">
-		<div id="dm"></div>
-	    </div>
-
 	    <div id="osoite" style="display:none">
 	      <div class="row">
 		<div class="col-xs-6">
-		   <input type="text" class="form-control" id="os">
+		   <input type="text" class="form-control input-lg" id="os">
 		</div><div class="col-xs-6">
-		   <input type="text" class="form-control" id="lyhytviesti">
+		   <input type="text" class="form-control input-lg" id="lyhytviesti">
 		</div>
 	      </div>
 
@@ -90,7 +93,7 @@
 	    <div id="result2" style="display:none"></div>
 	    <BR>
 
-	    <div id="tietoja" style="display:none">
+	    <div id="tietoja" >
 	       <label>tag</label>
 	       <input type="text" id="tagginro" class="form-control" readonly="yes">
 	       <label>gps</label>

@@ -1,52 +1,33 @@
 $(document).ready(function(){
 
 
-var lang = [];
+    var domain = '';
+    var email = '';
+    var salasana = '';
 
-        $.ajax({
-	   async: false,
-           url: url+'/lang?dom='+domain,
-	   type:'POST',
- 	   data: { lang : etunti_language },
-           success: function(data){
-		var d = JSON.parse(data);
 
-		$.each(d, function( index, value ) {
-		  lang[index] = value;
-		});
+    if(localStorage.getItem('domain'))
+	  domain=localStorage.getItem('domain');
+    if(localStorage.getItem('email'))
+	  email=localStorage.getItem('email');
+    if(localStorage.getItem('salasana'))
+	  salasana=localStorage.getItem('salasana');
 
-    	},
-    		error:function (xhr, ajaxOptions, thrownError){
-        	console.log(xhr.responseText);
-    	}
-        });
-
+    var lang = JSON.parse(localStorage.getItem('lang'));
 
 
 
   $("#odotta").html("<img src='img/icon.png'>");
 
-  setTimeout(tiedot,3000); 
+  setTimeout(tiedot,3000);
 
 
+/*
 	    document.addEventListener("deviceready", onDeviceReady, false);
 	    function onDeviceReady() {
-		/*
-		cordova.plugins.notification.local.cancelAll(function() {
-		    alert("done");
-		}, this);
-		*/
 
 	        navigator.geolocation.getCurrentPosition(onSuccess, onError);
 		navigator.geolocation.watchPosition(onSuccessWatch, onErrorWatch, { timeout: 30000, enableHighAccuracy: false });
-
-		function showAppVersion() {
-		  cordova.getAppVersion(function(version) {
-		  document.getElementById('version').innerHTML = 'versio: ' +version;
-		  versio = version;
-		  });
-		}
-		showAppVersion();
 
 	    }
 	    function onSuccess(position) {
@@ -66,11 +47,12 @@ var lang = [];
 		sendLocation(my_location);
 	    }
 	    function onErrorWatch(error) {
-		/*
-	        alert('code: '    + error.code    + '\n' +
-	              'message: ' + error.message + '\n');
-		*/
+		
+	        //alert('code: '    + error.code    + '\n' +
+	        //'message: ' + error.message + '\n');
+		
 	    }
+*/
 
 
 
@@ -86,14 +68,10 @@ var lang = [];
 
   function tiedot(){
 
+	if($("#location").val() !== '')
+	my_location = $("#location").val();
 
-	domain	= $("#domain").val();
-	email = $("#email").val();
-	salasana = $("#salasana").val();
-
-	if(my_location == '') my_location = $("#location").val();
-
-	if((domain != '') & (email !='') & (salasana != ''))
+	if((domain !== '') & (email !== '') & (salasana !== ''))
 	{
 		checkTAG();
 		set();
@@ -115,6 +93,7 @@ var now             = new Date().getTime(),
 	} else {
 		//setTimeout(function(){document.location.href = "asetukset.html";},500);
 		$("#domainBlokki").show();
+		$("#all").hide();
 		return false;
  	}
 	
@@ -235,6 +214,11 @@ function curDateTime(){
 
 function row(tilanne,st){
 
+	// <-- Avoin kohde ID
+   var avoinID = '';
+   if(localStorage.getItem('avoinID'))
+	avoinID = localStorage.getItem('avoinID');
+
    checkTAG();
    allHide();
    allTilasetHide();
@@ -273,33 +257,26 @@ function row(tilanne,st){
 	var lp 	= curDateTime();
    }
 
+   var viesti = '';
    if($("#lyhytviesti").val() !== '')
    viesti = $("#lyhytviesti").val();
-   else
-   viesti = "xxx";
 
    	var postData = {
 		email : email,
 		salasana : salasana,
 		domain: domain,
-		imei: "ei ole",
-		asiakas_num: versio+"_"+tag,
+		asiakas_num: $("#version").text()+"_"+tag,
 		puh_numero: puh_nro,
-		bluetooth_name: "0",
-		sim_serial_number: "0",
-		subscriber_id: "0",
 		my_location: my_location,
-		osoite: "0",
 		kohde_kannasta: $("#os").val(),
 		kohdenID: $("#kohdenID").val(),
 		aloitan: al,
 		loppui: lp,
 		viesti: viesti,
-		etaisyys: "0",
 		status: st,
-		tietoja: "",
-		hyvaksytty: "0",
 		gcm_reg_id : $("#regId").text(),
+		avoinID : avoinID,
+		appVersio : $("#version").text()
 	};
 
 
@@ -308,9 +285,21 @@ function row(tilanne,st){
 	   type:'POST',
  	   data: postData,
            success: function(data){
-        	console.log(data);
+
+		// <-- log
+        	//console.log(data);
+		/*
+		if(server == 'http://staging.etunti.fi'){
+			$("#result2").append('<br>'+data).show();
+		}
+		*/
+		// log -->
 
 		var sp = data.split("//");
+
+		 if((sp[0] != 0) & (sp[2] == 'new'))
+		 localStorage.setItem('avoinID', sp[0]);
+
 		 if((sp[4] == 'tagnumerror') & (sp[6] == 'update'))
 		 {
 		   $("#result2").html("<div class='alert alert-danger'><h3>VIRHE!!!</h3>Voit lopettaa osoitessa <b>"+sp[3]+"</b></div>").show();
@@ -342,18 +331,6 @@ setTimeout(function() {
 
 		 }
 
-		 if(sp[6] == 'update')
-		 {
-			cordova.plugins.notification.local.cancel(1, function() {
-			    //alert("done");
-			});
-		 }
-
-		$("#muistaLopetta").text('');
-		if((sp[4] !== '') & (sp[2] == 'new'))
-		{
-			setTimer(sp[4],sp[5]);
-		}
 
 		// reset 
 		$("#tagginro").val('');
@@ -364,6 +341,19 @@ setTimeout(function() {
 		$('#getListFromServer').val('').hide();
 
 		set();
+
+		$("#muistaLopetta").text('');
+		if((sp[4] !== '') & (sp[2] == 'new'))
+		{
+			setTimer(sp[4],sp[5]);
+		}
+
+		if(sp[6] == 'update')
+		{
+			cordova.plugins.notification.local.cancel(1, function() {
+			    //alert("done");
+			});
+		}
 
     	},
     		error:function (xhr, ajaxOptions, thrownError){
@@ -383,13 +373,27 @@ setTimeout(function() {
 
 	getTyovuorotToday(domain);
 
+	// <-- Avoin kohde ID
+	var avoinID = '';
+	if(localStorage.getItem('avoinID'))
+		avoinID = localStorage.getItem('avoinID');
+
+
         $.ajax({
            url: url+'/imei?dom='+domain,
 	   type:'POST',
- 	   data: { check : "testi", my_location : my_location, tag : tag, email : email, salasana : salasana },
+ 	   data: { check : "testi", my_location : my_location, tag : tag, email : email, salasana : salasana, avoinID : avoinID, appVersio : $("#version").text() },
            success: function(data){
+
+		// <-- log
         	//console.log(data);
-		//$("#result2").html(data).show();
+		/*
+		if(server == 'http://staging.etunti.fi'){
+			$("#result2").append('<br>'+data).show();
+		}
+		*/
+		// log -->
+
 		var sp = data.split("//");
 
 		if(sp[0] == 'eiLoytyTekija')
@@ -397,6 +401,7 @@ setTimeout(function() {
 		  $("#tekija").html("<div class='alert alert-danger'>"+sp[1]+"</div>").show();
 		  $("#odotta").fadeOut(370);
 		  $("#all").hide();
+		  $("#domainBlokki").show();
 		  return false;
 		} 
 
@@ -408,9 +413,11 @@ setTimeout(function() {
 
 
 		if((sp[0] == '3') || (sp[0] == '2') || (sp[0] == '10')){
-		  allShow();
-		  allTilasetHide();
-		} else {
+		  	allShow();
+		  	allTilasetHide();
+
+			if(localStorage.getItem('avoinID'))
+				localStorage.removeItem('avoinID');
 
 		}
 
@@ -460,8 +467,8 @@ setTimeout(function() {
     		error:function (xhr, ajaxOptions, thrownError){
         	console.log(xhr.responseText);
 
-		  if($("#domain").val() != '')
-		     $("#odotta").html("<div class='alert alert-danger'>Domain: <b>" + $("#domain").val() + "</b> on virhellinen,  tai tietokantaa ei löydy</div>").show();
+		  if(domain != '')
+		     $("#odotta").html("<div class='alert alert-danger'>Domain: <b>" + domain + "</b> on virhellinen,  tai tietokantaa ei löydy</div>").show();
 		  else
 		     $("#odotta").hide();
 
@@ -489,7 +496,7 @@ $("#os").keyup(function(){
 	   type:'POST',
  	   data: { check : "osoitevaihto", my_location : my_location, thisKey : thisKey, email : email, salasana : salasana },
            success: function(data){
-        	console.log(data);
+        	//console.log(data);
 		//$("#result").val(data);
 		$("#getListFromServer").html(
 			"<p><div class='row'>" +
@@ -618,7 +625,7 @@ function getTyovuorotToday(domain){
 
 	var kloSplit = val.split(" ");
 	if(kloSplit[1])
-	$("#muistaLopetta").html("<br><div class='alert alert-danger'>Muistakaa lopettaa sen <br><h2>klo: " + kloSplit[1] + "</h2></div>");
+	$("#muistaLopetta").html("<br><div class='alert alert-danger'>Muista lopettaa<br><h2>Klo: " + kloSplit[1] + "</h2></div>");
   }
 
  }
@@ -628,32 +635,7 @@ function getTyovuorotToday(domain){
 
 
 
- function sendLocation(my_location){
 
-        $.ajax({
-           url: url+'/imei?dom='+domain,
-	   type:'POST',
- 	   data: { check : "sendLocation", my_location : my_location, email : email, salasana : salasana },
-           success: function(data){
-        	console.log("Send Location: " + data);
-		//$("#result2").html(data).show();
-
-    	},
-    		error:function (xhr, ajaxOptions, thrownError){
-        	//console.log(xhr.responseText);
-		//$("#result2").html(xhr.responseText).show();
-    	}
-        });
-
- }
-
-
- function testo(){
-	my_location = $("#location").val();
-	if(my_location !== '')
-	sendLocation(my_location);
- }
- setInterval(testo, "30000");
 
 
 

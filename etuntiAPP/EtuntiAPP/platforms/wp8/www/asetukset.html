@@ -31,28 +31,64 @@
   <div class="row">
     <div class="col-lg-12 full">
      <div class="head"> 
+     	  <div class="pull-right">
+	    <div>Versio: <span id="version" class="small"></span></div> 
+	  </div>
 	<img src="img/logo-black.png" class="logo">
      </div>
 
-     <h2 id="Asetukset"></h2>
+     <h2 id="paaAsetukset"></h2>
 
-		<div id="dm"></div>
-		<hr>
-	       	<label id="Valitse_kieli"></label>
-	       	<select id="kieliValiko" class="form-control">
-		<option value="fi">Suomi</option>
-		<option value="ee">Eesti</option>
-		<option value="en">English</option>
-		<option value="ru">Русский</option>
-		</select>
+		<div class="well">
+		 <div id="dm"></div>
+		</div>
+     <h2 id="MuutAsetukset"></h2>
+		<div class="well">
+	       	 <label id="Valitse_kieli"></label>
+	       	  <select id="kieliValiko" class="form-control">
+		  <option value="fi">Suomi</option>
+		  <option value="ee">Eesti</option>
+		  <option value="en">English</option>
+		  <option value="ru">Русский</option>
+		  </select>
+	       	 <label id="Valitse_fonttikoko"></label>
+	       	  <select id="fonttikokoValiko" class="form-control">
+		  <option value="12">12</option>
+		  <option value="14">14</option>
+		  <option value="18">18</option>
+		  <option value="20">20</option>
+		  </select>
+		  <br>
+	       	 <button id="tallennaKieli" class="btn btn-success btn-block"></button>
+		</div>
+
+
+		<button class="btn btn-block btn-primary" data-toggle="collapse" data-target="#demo">Kehittäjän työkalut <i class="caret"></i></button>
+
+		<div id="demo" class="collapse">
 		<br>
-	       	<button id="tallennaKieli" class="btn btn-primary btn-block"></button>
-		
-		<hr>
-	       	<label>TAG control</label>
-	       	<input type="text" id="tagginro" class="form-control" readonly="yes">
-		<br>
-		<input type="text" class="form-control input-sm" id="os" placeholder="osoite">
+		 <div class="well">
+		  <label>Server</label>
+		   <select class="form-control" id="palvelin">
+		    <option value="etunti.fi">etunti.fi</option>
+		    <option value="staging.etunti.fi">staging.etunti.fi</option>
+		   </select>
+		   <br>
+		   <button class="btn btn-success btn-group-justified" id="tallennaServer" type="button">Tallenna</button>
+
+		  
+		 <br>
+	       	 <label>TAG control</label>
+	       	  <input type="text" id="tagginro" class="form-control" readonly="yes">
+		  <br>
+		  <input type="text" class="form-control" id="os" placeholder="osoite">
+		  <br>
+	          <label>GPS-koordinaatit</label>
+	          <input type="text" id="location" class="form-control" readonly="yes">
+
+		 </div>
+		</div>
+
 
 		<br><br>
     </div>

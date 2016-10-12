@@ -1,18 +1,33 @@
 $(document).ready(function(){
 
+    var domain = '';
+    var email = '';
+    var salasana = '';
+
+
+    if(localStorage.getItem('domain'))
+	  domain=localStorage.getItem('domain');
+    if(localStorage.getItem('email'))
+	  email=localStorage.getItem('email');
+    if(localStorage.getItem('salasana'))
+	  salasana=localStorage.getItem('salasana');
+
 
   $("#odotta").html("<img src='img/icon.png'>");
 
-  setTimeout(tiedot,1000);
+  //setTimeout(tiedot,3000);
+  tiedot();
 
   function tiedot(){
 
-	domain	= $("#domain").val();
-	email = $("#email").val();
-	salasana = $("#salasana").val();
+	//domain = $("#domain").val();
+	//email = $("#email").val();
+	//salasana = $("#salasana").val();
 
-	if(my_location == '') my_location = $("#location").val();
-	if((domain != '') & (email !='') & (salasana != ''))
+	if(my_location == '') 
+	my_location = $("#location").val();
+
+	if((domain !== '') & (email !== '') & (salasana !== ''))
 	{
 
 		set();

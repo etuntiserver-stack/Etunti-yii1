@@ -1,42 +1,39 @@
 $(document).ready(function(){
 
-var lang = [];
+    var domain = '';
+    var email = '';
+    var salasana = '';
 
-        $.ajax({
-	   async: false,
-           url: url+'/lang?dom='+domain,
-	   type:'POST',
- 	   data: { lang : etunti_language },
-           success: function(data){
-		var d = JSON.parse(data);
 
-		$.each(d, function( index, value ) {
-		  lang[index] = value;
-		});
+    if(localStorage.getItem('domain'))
+	  domain=localStorage.getItem('domain');
+    if(localStorage.getItem('email'))
+	  email=localStorage.getItem('email');
+    if(localStorage.getItem('salasana'))
+	  salasana=localStorage.getItem('salasana');
 
-    	},
-    		error:function (xhr, ajaxOptions, thrownError){
-        	console.log(xhr.responseText);
-    	}
-        });
+var lang = JSON.parse(localStorage.getItem('lang'));
 
 
 
 
   $("#odotta").html("<img src='img/icon.png'>");
-  setTimeout(tiedot,1000); 
+
+  //setTimeout(tiedot,3000);
+  tiedot();
 
   function tiedot(){
 
 
-	domain	= $("#domain").val();
-	email = $("#email").val();
-	salasana = $("#salasana").val();
+	//domain = $("#domain").val();
+	//email = $("#email").val();
+	//salasana = $("#salasana").val();
 
 
-	if(my_location == '') my_location = $("#location").val();
+	if(my_location == '') 
+	my_location = $("#location").val();
 
-	if((domain != '') & (email !='') & (salasana != ''))
+	if((domain !== '') & (email !== '') & (salasana !== ''))
 	{
 		$("#odotta").hide();
 

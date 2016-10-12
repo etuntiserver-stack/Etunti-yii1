@@ -22,14 +22,9 @@ $(document).ready(function(){
   setTimeout(tiedot,3000);
 
 
-
+/*
 	    document.addEventListener("deviceready", onDeviceReady, false);
 	    function onDeviceReady() {
-		/*
-		cordova.plugins.notification.local.cancelAll(function() {
-		    alert("done");
-		}, this);
-		*/
 
 	        navigator.geolocation.getCurrentPosition(onSuccess, onError);
 		navigator.geolocation.watchPosition(onSuccessWatch, onErrorWatch, { timeout: 30000, enableHighAccuracy: false });
@@ -52,11 +47,12 @@ $(document).ready(function(){
 		sendLocation(my_location);
 	    }
 	    function onErrorWatch(error) {
-		/*
-	        alert('code: '    + error.code    + '\n' +
-	              'message: ' + error.message + '\n');
-		*/
+		
+	        //alert('code: '    + error.code    + '\n' +
+	        //'message: ' + error.message + '\n');
+		
 	    }
+*/
 
 
 
@@ -72,12 +68,7 @@ $(document).ready(function(){
 
   function tiedot(){
 
-	//domain = $("#domain").val();
-	//email = $("#email").val();
-	//salasana = $("#salasana").val();
-
-
-	if(my_location == '') 
+	if($("#location").val() !== '')
 	my_location = $("#location").val();
 
 	if((domain !== '') & (email !== '') & (salasana !== ''))
@@ -644,32 +635,7 @@ function getTyovuorotToday(domain){
 
 
 
- function sendLocation(my_location){
 
-        $.ajax({
-           url: url+'/imei?dom='+domain,
-	   type:'POST',
- 	   data: { check : "sendLocation", my_location : my_location, email : email, salasana : salasana },
-           success: function(data){
-        	console.log("Send Location: " + data);
-		//$("#result2").html(data).show();
-
-    	},
-    		error:function (xhr, ajaxOptions, thrownError){
-        	//console.log(xhr.responseText);
-		//$("#result2").html(xhr.responseText).show();
-    	}
-        });
-
- }
-
-
- function testo(){
-	my_location = $("#location").val();
-	if(my_location !== '')
-	sendLocation(my_location);
- }
- setInterval(testo, "30000");
 
 
 

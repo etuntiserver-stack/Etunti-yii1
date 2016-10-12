@@ -85,6 +85,34 @@ setTimeout(function() {
 	document.getElementById('exitPainike').innerHTML = '<h2 class="glyphicon glyphicon-new-window"></h2>';
 
 
+	navigator.geolocation.getCurrentPosition(onSuccess, onError);
+	navigator.geolocation.watchPosition(onSuccessWatch, onErrorWatch, { timeout: 29000, enableHighAccuracy: false });
+
+
+	    function onSuccess(position) {
+	        document.getElementById('location').value = position.coords.latitude + '/' + position.coords.longitude;
+	        my_location = position.coords.latitude + '/' + position.coords.longitude;
+		sendLocation(my_location);
+	    }
+	    function onError(error) {
+	        alert('code: '    + error.code    + '\n' +
+	              'message: ' + error.message + '\n');
+	    }
+
+
+	    function onSuccessWatch(position) {
+	        my_location = position.coords.latitude + '/' + position.coords.longitude;
+	        document.getElementById('location').value = position.coords.latitude + '/' + position.coords.longitude;
+		sendLocation(my_location);
+	    }
+	    function onErrorWatch(error) {
+		/*
+	        alert('code: '    + error.code    + '\n' +
+	              'message: ' + error.message + '\n');
+		*/
+		
+	    }
+
     }
     // On device Reay -->
     // Palvelin -->
@@ -99,6 +127,7 @@ setTimeout(function() {
   {
        navigator.app.exitApp();
   }
+
 
 
 
@@ -265,6 +294,38 @@ $("body").ready(function(){
 }
 
 
+
+/*
+ function testo(){
+	my_location = $("#location").val();
+	if(my_location !== '')
+	sendLocation(my_location);
+ }
+ setInterval(testo, "30000");
+*/
+
+ function sendLocation(my_location){
+
+	if(my_location !== '')
+	{
+        $.ajax({
+           url: url+'/imei?dom='+domain,
+	   type:'POST',
+ 	   data: { check : "sendLocation", my_location : my_location, email : email, salasana : salasana },
+           success: function(data){
+        	console.log("Send Location: " + data);
+		if($("#resultLahetysta").val())
+		$("#resultLahetysta").val(data).show();
+
+    	},
+    		error:function (xhr, ajaxOptions, thrownError){
+        	//console.log(xhr.responseText);
+		//$("#result2").html(xhr.responseText).show();
+    	}
+        });
+	}
+
+ }
 
 
 });
