@@ -1108,10 +1108,14 @@ class TyovuorootController extends Controller
 			if(isset($_POST['tyopaari'])) $tp = $_POST['tyopaari'];
 		  	array_push($tp, $toistuva->tid);
 
+
 			// <-- Vertailaan työparia
-			$diff = array_diff(json_decode($toistuva->tyopaari), $tp);
-			if( count($diff) > 0 )
+			$arg1 = json_decode($toistuva->tyopaari);
+			if( is_array($arg1) and count($tp) > 0 )
 			{
+			  $diff = array_diff($arg1, $tp);
+			  if( count($diff) > 0 )
+			  {
 				$fi = $this->vkoPaivat();
 				$newreturn = array();
 				foreach($diff as $v)
@@ -1121,6 +1125,7 @@ class TyovuorootController extends Controller
 				}
 
 				array_push( $return,  $newreturn );
+			  }
 			}
 			// Vertailaan työparia -->
 
