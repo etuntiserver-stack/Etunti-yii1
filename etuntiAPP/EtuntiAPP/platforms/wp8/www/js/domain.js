@@ -43,6 +43,7 @@ setTimeout(function() {
 
 
     var my_location = '';
+    var platform = '';
     var tag = '000000';
     var etunti_language = 'fi';
 
@@ -58,9 +59,10 @@ setTimeout(function() {
     	var server = 'http://etunti.fi';
     }
 
-    // <-- On device Reay
-    document.addEventListener("deviceready", onServerReady, false);
-    function onServerReady() {
+    localStorage.removeItem('platform');
+    // <-- On device Ready
+    document.addEventListener("deviceready", onServerReady1, false);
+    function onServerReady1() {
 
 	if(device.platform == 'iOS'){
 
@@ -70,6 +72,54 @@ setTimeout(function() {
 	    	server = 'https://etunti.fi';
 
 	}
+
+	// <-- Tallenna platform jos ei ole tallessa
+        if(!localStorage.getItem('platform'))
+		localStorage.setItem('platform', device.platform);
+	// Tallenna platform -->
+
+    }
+    // On device Ready -->
+
+
+    var url = server+"/index.php/api/mob";
+    var puh_nro = "";
+    var versio = "";
+    // Palvelin -->
+
+
+
+
+
+    // <-- Send my location
+    function sendMyLocation(my_location){
+
+	if((my_location !=='') && (email !=='') && (salasana !=='') && (url !=='') && (domain !==''))
+	{
+        $.ajax({
+           url: url+'/imei?dom='+domain,
+	   type:'POST',
+ 	   data: { check : "sendLocation", my_location : my_location, email : email, salasana : salasana },
+           success: function(data){
+        	//console.log("Send Location: " + data);
+		$("#resultLahetysta").val(data).show();
+
+    	},
+    		error:function (xhr, ajaxOptions, thrownError){
+        	//console.log(xhr.responseText);
+		$("#result2").html(xhr.responseText).show();
+    	}
+        });
+	}
+
+    }
+    // Send my location -->
+
+
+
+    // <-- On device Reay
+    document.addEventListener("deviceready", onServerReady2, false);
+    function onServerReady2() {
 
 	function showAppVersion() {
 		  cordova.getAppVersion(function(version) {
@@ -87,51 +137,50 @@ setTimeout(function() {
 
         // <-- Geolocation
 	//alert("navigator.geolocation works well");
-	navigator.geolocation.getCurrentPosition(onSuccess, onError);
+	navigator.geolocation.getCurrentPosition(onSuccessLocation, onErrorLocation);
 
 	var options;
 	options = {
-	    maximumAge: 30000,
-	    timeout: 5000,
+	    maximumAge: 60000,
+	    timeout: 30000,
 	    enableHighAccuracy: false
 	};
 	var watchID = navigator.geolocation.watchPosition(onSuccessWatch, onErrorWatch, options);
 
     }
+    // On device Reay -->
 
-	function onSuccess(position) {
+
+	function onSuccessLocation(position) {
 	        document.getElementById('location').value = position.coords.latitude + '/' + position.coords.longitude;
 	        my_location = position.coords.latitude + '/' + position.coords.longitude;
-		sendLocation(my_location);
 	}
-	function onError(error) {
-	        alert('code: '    + error.code    + '\n' +
-	              'message: ' + error.message + '. GPS ongelma\n');
+	function onErrorLocation(error) {
+	
+	    var ilmoitus = 'code: '    + error.code    + '\n' +
+	          		'message: ' + error.message + '. GPS location ongelma \n';
+
+	    	document.getElementById('result').style.display="block";
+	    	document.getElementById('result').value = ilmoitus;
 	}
 
 	function onSuccessWatch(position) {
-
-        var element = document.getElementById('geolocation');
-        element.innerHTML = 'Latitude: '  + position.coords.latitude      + '<br />' +
-                            'Longitude: ' + position.coords.longitude     + '<br />' +
-                            '<hr />'      + element.innerHTML;
-
-	    var elementL = document.getElementById('location');
-	    elementL.value = position.coords.latitude + '/' + position.coords.longitude;
+	    	document.getElementById('location').value = position.coords.latitude + '/' + position.coords.longitude;
+	        my_location = position.coords.latitude + '/' + position.coords.longitude;
+		sendMyLocation(my_location);
 	}
 
 	function onErrorWatch(error) {
-	    alert('code: '    + error.code    + '\n' +
-	          'message: ' + error.message + '\n');
+	
+	    var ilmoitus = 'code: '    + error.code    + '\n' +
+	          		'message: ' + error.message + '. GPS watch ongelma \n';
+
+	    	document.getElementById('result').style.display="block";
+	    	document.getElementById('result').value = ilmoitus;
 	}
 
 
-    // On device Reay -->
-    // Palvelin -->
 
-  var url = server+"/index.php/api/mob";
-  var puh_nro = "";
-  var versio = "1.70";
 
 
 
@@ -307,38 +356,6 @@ $("body").ready(function(){
 
 
 
-/*
- function testo(){
-	my_location = $("#location").val();
-	if(my_location !== '')
-	sendLocation(my_location);
- }
- setInterval(testo, "30000");
-*/
-
- function sendLocation(my_location){
-
-/*
-	if(my_location !== '')
-	{
-        $.ajax({
-           url: url+'/imei?dom='+domain,
-	   type:'POST',
- 	   data: { check : "sendLocation", my_location : my_location, email : email, salasana : salasana },
-           success: function(data){
-        	console.log("Send Location: " + data);
-		if($("#resultLahetysta").val())
-		$("#resultLahetysta").val(data).show();
-
-    	},
-    		error:function (xhr, ajaxOptions, thrownError){
-        	//console.log(xhr.responseText);
-		//$("#result2").html(xhr.responseText).show();
-    	}
-        });
-	}
-*/
- }
 
 
 });

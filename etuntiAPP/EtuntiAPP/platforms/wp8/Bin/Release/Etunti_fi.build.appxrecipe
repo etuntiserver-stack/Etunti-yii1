@@ -6,7 +6,7 @@
     <TargetPlatformIdentifier>Windows Phone</TargetPlatformIdentifier>
     <SolutionConfiguration>Release|AnyCPU</SolutionConfiguration>
     <PackageArchitecture>neutral</PackageArchitecture>
-    <PackageIdentityName>346c98b0-fd63-11e5-9bf1-13f91d566cb8</PackageIdentityName>
+    <PackageIdentityName>0796f120-912c-11e6-af98-15ba0642eea8</PackageIdentityName>
     <IntermediateOutputPath>C:\xampp\htdocs\etuntifw\etuntiAPP\EtuntiAPP\platforms\wp8\obj\Release\</IntermediateOutputPath>
   </PropertyGroup>
   <ItemGroup>
@@ -43,12 +43,6 @@
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\xampp\htdocs\etuntifw\etuntiAPP\EtuntiAPP\platforms\wp8\Assets\WideLogo.png">
       <PackagePath>Assets\WideLogo.png</PackagePath>
-    </AppxPackagedFile>
-    <AppxPackagedFile Include="C:\xampp\htdocs\etuntifw\etuntiAPP\EtuntiAPP\platforms\wp8\icon-173-tile.png">
-      <PackagePath>icon-173-tile.png</PackagePath>
-    </AppxPackagedFile>
-    <AppxPackagedFile Include="C:\xampp\htdocs\etuntifw\etuntiAPP\EtuntiAPP\platforms\wp8\icon-62-tile.png">
-      <PackagePath>icon-62-tile.png</PackagePath>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\xampp\htdocs\etuntifw\etuntiAPP\EtuntiAPP\platforms\wp8\www\img\etunt_icone.png">
       <PackagePath>www\img\etunt_icone.png</PackagePath>
@@ -161,6 +155,9 @@
     <AppxPackagedFile Include="C:\xampp\htdocs\etuntifw\etuntiAPP\EtuntiAPP\platforms\wp8\www\plugins\com.chariotsolutions.nfc.plugin\www\phonegap-nfc.js">
       <PackagePath>www\plugins\com.chariotsolutions.nfc.plugin\www\phonegap-nfc.js</PackagePath>
     </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\xampp\htdocs\etuntifw\etuntiAPP\EtuntiAPP\platforms\wp8\www\plugins\cordova-plugin-app-version\www\AppVersionPlugin.js">
+      <PackagePath>www\plugins\cordova-plugin-app-version\www\AppVersionPlugin.js</PackagePath>
+    </AppxPackagedFile>
     <AppxPackagedFile Include="C:\xampp\htdocs\etuntifw\etuntiAPP\EtuntiAPP\platforms\wp8\www\plugins\cordova-plugin-camera\www\Camera.js">
       <PackagePath>www\plugins\cordova-plugin-camera\www\Camera.js</PackagePath>
     </AppxPackagedFile>
@@ -172,6 +169,9 @@
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\xampp\htdocs\etuntifw\etuntiAPP\EtuntiAPP\platforms\wp8\www\plugins\cordova-plugin-camera\www\CameraPopoverOptions.js">
       <PackagePath>www\plugins\cordova-plugin-camera\www\CameraPopoverOptions.js</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\xampp\htdocs\etuntifw\etuntiAPP\EtuntiAPP\platforms\wp8\www\plugins\cordova-plugin-device\www\device.js">
+      <PackagePath>www\plugins\cordova-plugin-device\www\device.js</PackagePath>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\xampp\htdocs\etuntifw\etuntiAPP\EtuntiAPP\platforms\wp8\www\plugins\cordova-plugin-dialogs\www\notification.js">
       <PackagePath>www\plugins\cordova-plugin-dialogs\www\notification.js</PackagePath>
@@ -254,14 +254,8 @@
     <AppxPackagedFile Include="C:\xampp\htdocs\etuntifw\etuntiAPP\EtuntiAPP\platforms\wp8\www\plugins\de.appplant.cordova.plugin.local-notification\www\local-notification.js">
       <PackagePath>www\plugins\de.appplant.cordova.plugin.local-notification\www\local-notification.js</PackagePath>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="C:\xampp\htdocs\etuntifw\etuntiAPP\EtuntiAPP\platforms\wp8\www\plugins\org.apache.cordova.device\www\device.js">
-      <PackagePath>www\plugins\org.apache.cordova.device\www\device.js</PackagePath>
-    </AppxPackagedFile>
     <AppxPackagedFile Include="C:\xampp\htdocs\etuntifw\etuntiAPP\EtuntiAPP\platforms\wp8\www\plugins\phonegap-plugin-push\www\push.js">
       <PackagePath>www\plugins\phonegap-plugin-push\www\push.js</PackagePath>
-    </AppxPackagedFile>
-    <AppxPackagedFile Include="C:\xampp\htdocs\etuntifw\etuntiAPP\EtuntiAPP\platforms\wp8\www\plugins\uk.co.whiteoctober.cordova.appversion\www\AppVersionPlugin.js">
-      <PackagePath>www\plugins\uk.co.whiteoctober.cordova.appversion\www\AppVersionPlugin.js</PackagePath>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\xampp\htdocs\etuntifw\etuntiAPP\EtuntiAPP\platforms\wp8\www\css\bootstrap-switch.css">
       <PackagePath>www\css\bootstrap-switch.css</PackagePath>

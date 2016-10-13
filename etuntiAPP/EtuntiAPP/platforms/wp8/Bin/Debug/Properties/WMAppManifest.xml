@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Deployment AppPlatformVersion="8.1" xmlns="http://schemas.microsoft.com/windowsphone/2014/deployment">
+<Deployment AppPlatformVersion="8.0" xmlns="http://schemas.microsoft.com/windowsphone/2012/deployment">
   <DefaultLanguage code="en-US" xmlns="" />
   <Languages xmlns="">
     <Language code="en-US" />
   </Languages>
-  <App Author="Etunti.fi" BitsPerPixel="32" Description="Etunnin perus- ja lisätyökalut ovat suunniteltu ratkaisemaan puhdistusalan tyypilliset ongelmat. Yhden ohjelman avulla pyörität yritystoimintaasi ennen näkemättömän helposti." Genre="apps.normal" ProductID="{346c98b0-fd63-11e5-9bf1-13f91d566cb8}" Publisher="Etunti.fi" PublisherID="{db093ed5-53b1-45f7-af72-751e8f36ab80}" RuntimeType="Silverlight" Title="Etunti.fi" Version="0.0.46" xmlns="">
+  <App Author="Etunti.fi" BitsPerPixel="32" Description="Etunnin perus- ja lisätyökalut ovat suunniteltu ratkaisemaan puhdistusalan tyypilliset ongelmat. Yhden ohjelman avulla pyörität yritystoimintaasi ennen näkemättömän helposti." Genre="apps.normal" ProductID="{0796f120-912c-11e6-af98-15ba0642eea8}" Publisher="Etunti.fi" PublisherID="{db093ed5-53b1-45f7-af72-751e8f36ab80}" RuntimeType="Silverlight" Title="Etunti.fi" Version="0.0.583" xmlns="">
     <IconPath IsRelative="true" IsResource="false">ApplicationIcon.png</IconPath>
     <Capabilities>
       <Capability Name="ID_CAP_WEBBROWSERCOMPONENT" />
@@ -12,11 +12,11 @@
       <Capability Name="ID_CAP_PROXIMITY" />
       <Capability Name="ID_CAP_ISV_CAMERA" />
       <Capability Name="ID_CAP_MEDIALIB_PHOTO" />
+      <Capability Name="ID_CAP_IDENTITY_DEVICE" />
       <Capability Name="ID_CAP_LOCATION" />
       <Capability Name="ID_CAP_MEDIALIB_AUDIO" />
       <Capability Name="ID_CAP_MEDIALIB_PLAYBACK" />
       <Capability Name="ID_CAP_MICROPHONE" />
-      <Capability Name="ID_CAP_IDENTITY_DEVICE" />
     </Capabilities>
     <Tasks>
       <DefaultTask Name="_default" NavigationPage="MainPage.xaml" />
@@ -46,4 +46,4 @@
     </ScreenResolutions>
   </App>
 </Deployment>
-<!-- WPSDK Version 8.1.15116 -->
+<!-- WPSDK Version 8.0.9900 -->

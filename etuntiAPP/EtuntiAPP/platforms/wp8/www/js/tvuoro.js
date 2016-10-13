@@ -20,10 +20,6 @@ $(document).ready(function(){
 
   function tiedot(){
 
-	//domain = $("#domain").val();
-	//email = $("#email").val();
-	//salasana = $("#salasana").val();
-
 	if(my_location == '') 
 	my_location = $("#location").val();
 

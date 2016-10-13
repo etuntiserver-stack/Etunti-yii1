@@ -8,8 +8,6 @@ Assets\StoreLogo.png
 Assets\WideLogo.png
 Background.png
 config.xml
-icon-173-tile.png
-icon-62-tile.png
 Images\appbar.back.rest.png
 Images\appbar.close.rest.png
 Images\appbar.feature.video.rest.png
@@ -53,10 +51,12 @@ www\js\tehty.js
 www\js\tvuoro.js
 www\js\viestinta.js
 www\plugins\com.chariotsolutions.nfc.plugin\www\phonegap-nfc.js
+www\plugins\cordova-plugin-app-version\www\AppVersionPlugin.js
 www\plugins\cordova-plugin-camera\www\Camera.js
 www\plugins\cordova-plugin-camera\www\CameraConstants.js
 www\plugins\cordova-plugin-camera\www\CameraPopoverHandle.js
 www\plugins\cordova-plugin-camera\www\CameraPopoverOptions.js
+www\plugins\cordova-plugin-device\www\device.js
 www\plugins\cordova-plugin-dialogs\www\notification.js
 www\plugins\cordova-plugin-file\www\DirectoryEntry.js
 www\plugins\cordova-plugin-file\www\DirectoryReader.js
@@ -84,9 +84,7 @@ www\plugins\cordova-plugin-media\www\MediaError.js
 www\plugins\de.appplant.cordova.plugin.local-notification\www\local-notification.js
 www\plugins\de.appplant.cordova.plugin.local-notification\www\local-notification-core.js
 www\plugins\de.appplant.cordova.plugin.local-notification\www\local-notification-util.js
-www\plugins\org.apache.cordova.device\www\device.js
 www\plugins\phonegap-plugin-push\www\push.js
-www\plugins\uk.co.whiteoctober.cordova.appversion\www\AppVersionPlugin.js
 www\sounds\beep.wav
 www\sounds\bing.mp3
 www\sounds\blinblin.mp3

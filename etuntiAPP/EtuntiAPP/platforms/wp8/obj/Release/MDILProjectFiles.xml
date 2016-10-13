@@ -4,14 +4,12 @@
     <File>resources.pri</File>
     <File>fi.etunti.local.dll</File>
     <File>Assets\BadgeLogo.png</File>
-    <File>Assets\Logo.png</File>
     <File>Assets\SplashScreen.png</File>
     <File>Assets\SquareTile150x150.png</File>
     <File>Assets\SquareTile71x71.png</File>
     <File>Assets\StoreLogo.png</File>
     <File>Assets\WideLogo.png</File>
     <File>config.xml</File>
-    <File>icon-62-tile.png</File>
     <File>www\asetukset.html</File>
     <File>www\camera.html</File>
     <File>www\cordova-js-src\exec.js</File>
@@ -46,10 +44,12 @@
     <File>www\js\tvuoro.js</File>
     <File>www\js\viestinta.js</File>
     <File>www\plugins\com.chariotsolutions.nfc.plugin\www\phonegap-nfc.js</File>
+    <File>www\plugins\cordova-plugin-app-version\www\AppVersionPlugin.js</File>
     <File>www\plugins\cordova-plugin-camera\www\Camera.js</File>
     <File>www\plugins\cordova-plugin-camera\www\CameraConstants.js</File>
     <File>www\plugins\cordova-plugin-camera\www\CameraPopoverHandle.js</File>
     <File>www\plugins\cordova-plugin-camera\www\CameraPopoverOptions.js</File>
+    <File>www\plugins\cordova-plugin-device\www\device.js</File>
     <File>www\plugins\cordova-plugin-dialogs\www\notification.js</File>
     <File>www\plugins\cordova-plugin-file-transfer\www\FileTransfer.js</File>
     <File>www\plugins\cordova-plugin-file-transfer\www\FileTransferError.js</File>
@@ -77,9 +77,7 @@
     <File>www\plugins\de.appplant.cordova.plugin.local-notification\www\local-notification-core.js</File>
     <File>www\plugins\de.appplant.cordova.plugin.local-notification\www\local-notification-util.js</File>
     <File>www\plugins\de.appplant.cordova.plugin.local-notification\www\local-notification.js</File>
-    <File>www\plugins\org.apache.cordova.device\www\device.js</File>
     <File>www\plugins\phonegap-plugin-push\www\push.js</File>
-    <File>www\plugins\uk.co.whiteoctober.cordova.appversion\www\AppVersionPlugin.js</File>
     <File>www\sounds\beep.wav</File>
     <File>www\sounds\bing.mp3</File>
     <File>www\sounds\blinblin.mp3</File>
@@ -99,7 +97,7 @@
     <File>SplashScreenImage.jpg</File>
     <File>Plugins\cordova-plugin-dialogs\notification-beep.wav</File>
     <File>AppManifest.xaml</File>
-    <File>icon-173-tile.png</File>
+    <File>Assets\Logo.png</File>
     <File>WMAppManifest.xml</File>
     <File>AppxManifest.xml</File>
   </XAPFiles>

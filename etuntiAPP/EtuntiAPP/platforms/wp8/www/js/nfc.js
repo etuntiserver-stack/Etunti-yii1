@@ -1,42 +1,3 @@
-/*
-
-  document.addEventListener('deviceready', this.readFile, true);
-  function readFile() {
-        window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, gotFS, fail);
-	    function gotFS(fileSystem) {
-	        fileSystem.root.getFile("etunti.cfg", null, gotFileEntry, fail);
-	    }
-	    function gotFileEntry(fileEntry) {
-	        fileEntry.file(gotFile, fail);
-	    }
-	    function gotFile(file){
-	        readAsText(file);
-	    }	
-	    function readAsText(file) {
-	        var reader = new FileReader();
-	        reader.onloadend = function(evt) {
-	            console.log("Read as text");
-	            console.log(evt.target.result);
-		
-
-	   		 var spFile = evt.target.result.split("//");
-		
-			 document.getElementById('domain').value=spFile[0];
-			 document.getElementById('email').value=spFile[1];
-			 document.getElementById('salasana').value=spFile[2];
-
-			 appNFC.initialize();
-
-	        };
-	        reader.readAsText(file);
-	    }
-	    function fail(evt) {
-	        console.log(evt.target.error.code);
-	    }
-  }
-*/
-
-
 var appNFC = {
  // Application Constructor
  initialize: function() {
@@ -45,10 +6,10 @@ var appNFC = {
  },
  // Bind Event Listeners
  bindEvents: function() {
- document.addEventListener('deviceready', this.onDeviceReady, false);
+ document.addEventListener('deviceready', this.onNfcReady, false);
  },
  // deviceready Event Handler 
- onDeviceReady: function() {
+ onNfcReady: function() {
  //app.receivedEvent('deviceready');
  nfc.addTagDiscoveredListener(
  appNFC.onNfc, // tag successfully scanned
@@ -160,7 +121,9 @@ $(document).ready(function(){
 
 
 
-appNFC.initialize();
+ if(localStorage.getItem('platform') !== 'iOS'){
+	appNFC.initialize();
+ }
 
 
 function clearAndExit(){

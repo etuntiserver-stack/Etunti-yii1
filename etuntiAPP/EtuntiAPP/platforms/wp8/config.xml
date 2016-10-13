@@ -1,10 +1,16 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="fi.etunti.local" version="0.0.580" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="fi.etunti.local" version="0.0.583" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <feature name="NfcPlugin">
         <param name="wp-package" value="NfcPlugin" />
     </feature>
+    <feature name="AppVersion">
+        <param name="wp-package" value="AppVersion" />
+    </feature>
     <feature name="Camera">
         <param name="wp-package" value="Camera" />
+    </feature>
+    <feature name="Device">
+        <param name="wp-package" value="Device" />
     </feature>
     <feature name="Notification">
         <param name="wp-package" value="Notification" />
@@ -18,18 +24,12 @@
     <feature name="Media">
         <param name="wp-package" value="Media" />
     </feature>
-    <feature name="Device">
-        <param name="wp-package" value="Device" />
-    </feature>
-    <feature name="AppVersion">
-        <param name="wp-package" value="AppVersion" />
-    </feature>
-    <name>Etunti.fi</name>
+    <name>Etunti</name>
     <description>
         Etunnin perus- ja lisätyökalut ovat suunniteltu ratkaisemaan puhdistusalan tyypilliset ongelmat. Yhden ohjelman avulla pyörität yritystoimintaasi ennen näkemättömän helposti.
     </description>
     <author email="laptopsr@gmail.com" href="http://etunti.fi">
-        Etunti.fi
+        Etunti
     </author>
     <content src="index.html" />
     <access origin="*" />

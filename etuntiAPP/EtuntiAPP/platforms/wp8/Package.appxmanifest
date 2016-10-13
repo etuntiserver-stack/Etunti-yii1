@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/2010/manifest" xmlns:m2="http://schemas.microsoft.com/appx/2013/manifest" xmlns:m3="http://schemas.microsoft.com/appx/2014/manifest" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest">
-  <Identity Name="DigistenOy.Etunti" Publisher="CN=7006775B-9DA1-403C-8A18-C9CAB5E2C1E5" Version="0.0.0.50" />
-  <mp:PhoneIdentity PhoneProductId="346c98b0-fd63-11e5-9bf1-13f91d566cb8" PhonePublisherId="db093ed5-53b1-45f7-af72-751e8f36ab80" />
+  <Identity Name="DigistenOy.Etunti" Publisher="CN=7006775B-9DA1-403C-8A18-C9CAB5E2C1E5" Version="0.0.0.582" />
+  <mp:PhoneIdentity PhoneProductId="0796f120-912c-11e6-af98-15ba0642eea8" PhonePublisherId="db093ed5-53b1-45f7-af72-751e8f36ab80" />
   <Properties>
-    <DisplayName>Etunti_fi</DisplayName>
+    <DisplayName>Etunti</DisplayName>
     <PublisherDisplayName>Digisten Oy</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
@@ -15,8 +15,8 @@
     <Resource Language="x-generate" />
   </Resources>
   <Applications>
-    <Application Id="x346c98b0yfd63y11e5y9bf1y13f91d566cb8x" Executable="AGHost.exe" EntryPoint="MainPage.xaml">
-      <m3:VisualElements DisplayName="Etunti_fi" Square150x150Logo="Assets\SquareTile150x150.png" Square44x44Logo="Assets\Logo.png" Description="Etunti_fi" ForegroundText="light" BackgroundColor="#464646">
+    <Application Id="x0796f120y912cy11e6yaf98y15ba0642eea8x" Executable="AGHost.exe" EntryPoint="MainPage.xaml">
+      <m3:VisualElements DisplayName="Etunti" Square150x150Logo="Assets\SquareTile150x150.png" Square44x44Logo="Assets\Logo.png" Description="Etunti" ForegroundText="light" BackgroundColor="#464646">
         <m3:DefaultTile Square71x71Logo="Assets\SquareTile71x71.png">
         </m3:DefaultTile>
         <m3:SplashScreen Image="SplashScreenImage.jpg" />
