@@ -175,8 +175,7 @@ $model->hinta = str_replace(",",".",$model->hinta);
 
   </div>
 
-<?php if(isset($model->id)): ?>
-  <?php if(in_array('3',$tas)) : ?>
+<!-- Laskutus-->
 <div class="col-sm-3">
 	
 	<legend><h3><?php echo Yii::t('main', 'Laskutus tiedot'); ?></h3></legend>
@@ -299,8 +298,8 @@ $model->hinta = str_replace(",",".",$model->hinta);
 
 
   </div>
-  <?php endif; ?>
-<?php endif; ?>
+<!-- Laskutus loppu -->
+
 
 <div class="col-sm-3">
 
