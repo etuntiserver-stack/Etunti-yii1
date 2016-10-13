@@ -537,6 +537,8 @@ $('.mult').multiselect({
 
 	$('#tyovuoroot-form').on('submit',function(e) {
 
+	if( ($('#submitButton').val() === 'Luo') || ($('#submitButton').val() === 'Tallenna') ) 
+		$('#submitButton').remove();
 
 	// <-- tarkistetaan tietoja pituus
 	var leng = $('#Tyovuoroot_tietoja').val().length;
@@ -659,7 +661,16 @@ $('.mult').multiselect({
 			if( $('#toistuva_aktiivinen').bootstrapSwitch('state') === true )
 			{
 
-				if( thisDataReturn[0][0]['isSaved'] === true )
+				var isSaved = false;
+
+				$(thisDataReturn).each(function( iarr, arr ) {
+				 $(arr).each(function( i, d ) {
+					if( d['isSaved'] === true )
+					isSaved = true;
+				 });
+				});
+
+				if( isSaved === true )
 				{
 					laatikonPaivays(thisDataReturn);
 					$('#showres').modal('hide');
@@ -671,9 +682,14 @@ $('.mult').multiselect({
 
 					   if(d['onkosama'])
 					   {
-					   	$('#sopivatPaivat').append('<div class="row"><b class="text-danger"><div class="col-sm-3">'+d['pvm']+'</div><div class="col-sm-3">'+d['vkopvm']+'</div><div class="col-sm-3">'+d['tekijan_nimi']+'</div><div class="col-sm-3">Tämä työvuoro on jo olemassa</div></b></div>');
-					   } else {
-					   	$('#sopivatPaivat').append('<div class="row"><div class="col-sm-3">'+d['pvm']+'</div><div class="col-sm-3">'+d['vkopvm']+'</div><div class="col-sm-3">'+d['tekijan_nimi']+'</div></div>');
+					   	$('#sopivatPaivat').append('<div class="row"><b class="text-danger"><div class="col-sm-3">'+d['pvm']+'</div><div class="col-sm-3">'+d['vkopvm']+'</div><div class="col-sm-3">'+d['tekijan_nimi']+'</div><div class="col-sm-3">Ei muutoksia</div></b></div>');
+					   } 
+					   else if(d['poistetaan'])
+					   {
+					   	$('#sopivatPaivat').append('<div class="row"><b class="text-warning"><div class="col-sm-3">Kaikki</div><div class="col-sm-3">Kaikki</div><div class="col-sm-3">'+d['tekijan_nimi']+'</div><div class="col-sm-3">Pois taulusta</div></b></div>');
+					   }
+					   else {
+					   	$('#sopivatPaivat').append('<div class="row"><b class="text-success"><div class="col-sm-3">'+d['pvm']+'</div><div class="col-sm-3">'+d['vkopvm']+'</div><div class="col-sm-3">'+d['tekijan_nimi']+'</div><div class="col-sm-3">Uusi/Muokkaus</div></b></div>');
 					   }
 
 					 });
@@ -681,6 +697,7 @@ $('.mult').multiselect({
 					$('#sopivatPaivat').append('<br><span class="btn btn-success sopiiSopivat">Hyväksy valitut päivät</span></div>');
 
 				}
+
 
 			} else {
 

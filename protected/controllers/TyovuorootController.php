@@ -1102,12 +1102,31 @@ class TyovuorootController extends Controller
 
 			if(isset($_POST['P']))
 			$toistuva->viikko_paivat=json_encode($_POST['P']);
-			if(isset($_POST['tyopaari']))
+
+
+		  	$tp = array();
+			if(isset($_POST['tyopaari'])) $tp = $_POST['tyopaari'];
+		  	array_push($tp, $toistuva->tid);
+
+			// <-- Vertailaan työparia
+			$diff = array_diff(json_decode($toistuva->tyopaari), $tp);
+			if( count($diff) > 0 )
 			{
-			  $tp = $_POST['tyopaari'];
-			  array_push($tp, $toistuva->tid);
-			  $toistuva->tyopaari=json_encode($tp);
+				$fi = $this->vkoPaivat();
+				$newreturn = array();
+				foreach($diff as $v)
+				{
+					$tnimi = Tyontekijat::model()->findByPk($v);
+					$newreturn[] = array('tid'=>$v, 'pvm'=>$toistuva->pvm, 'ymd'=>date("Ymd",strtotime($toistuva->pvm)), 'isSaved'=>false, 'tekijan_nimi'=>$tnimi->tekijan_nimi, 'poistetaan' => true );
+				}
+
+				array_push( $return,  $newreturn );
 			}
+			// Vertailaan työparia -->
+
+
+			$toistuva->tyopaari=json_encode($tp);
+
 
 
 	
@@ -1475,15 +1494,7 @@ class TyovuorootController extends Controller
 	protected function toistuvaInsert($id, $pfrom, $pto, $p, $viikkoja, $tid, $kohde, $alku, $loppu, $pituus, $tyoajanmerkinta, $tietoja, $status, $tyopaari, $saankoSuoritta)
 	{
 
-		$fi = array(
-		    1=>'Maanantai',
-		    2=>'Tiistai',
-		    3=>'Keskiviikko',
-		    4=>'Torstai',
-		    5=>'Perjantai',
-		    6=>'Lauantai',
-		    7=>'Sunnuntai',
-		);
+		$fi = $this->vkoPaivat();
 
 
 
@@ -1565,6 +1576,20 @@ class TyovuorootController extends Controller
 
 				return $return;
 
+	}
+
+	protected function vkoPaivat(){
+
+		$arr = array(
+		    1=>'Maanantai',
+		    2=>'Tiistai',
+		    3=>'Keskiviikko',
+		    4=>'Torstai',
+		    5=>'Perjantai',
+		    6=>'Lauantai',
+		    7=>'Sunnuntai',
+		);
+		return $arr;
 	}
 
 }
