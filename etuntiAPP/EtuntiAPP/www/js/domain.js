@@ -43,6 +43,7 @@ setTimeout(function() {
 
 
     var my_location = '';
+    var platform = '';
     var tag = '000000';
     var etunti_language = 'fi';
 
@@ -58,9 +59,10 @@ setTimeout(function() {
     	var server = 'http://etunti.fi';
     }
 
+    localStorage.removeItem('platform');
     // <-- On device Ready
-    document.addEventListener("deviceready", onServerReady, false);
-    function onServerReady() {
+    document.addEventListener("deviceready", onServerReady1, false);
+    function onServerReady1() {
 
 	if(device.platform == 'iOS'){
 
@@ -70,6 +72,12 @@ setTimeout(function() {
 	    	server = 'https://etunti.fi';
 
 	}
+
+	// <-- Tallenna platform jos ei ole tallessa
+        if(!localStorage.getItem('platform'))
+		localStorage.setItem('platform', device.platform);
+	// Tallenna platform -->
+
     }
     // On device Ready -->
 
@@ -110,8 +118,8 @@ setTimeout(function() {
 
 
     // <-- On device Reay
-    document.addEventListener("deviceready", onServerReady, false);
-    function onServerReady() {
+    document.addEventListener("deviceready", onServerReady2, false);
+    function onServerReady2() {
 
 	function showAppVersion() {
 		  cordova.getAppVersion(function(version) {

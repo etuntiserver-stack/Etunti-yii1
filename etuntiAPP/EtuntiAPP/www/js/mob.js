@@ -22,39 +22,6 @@ $(document).ready(function(){
   setTimeout(tiedot,3000);
 
 
-/*
-	    document.addEventListener("deviceready", onDeviceReady, false);
-	    function onDeviceReady() {
-
-	        navigator.geolocation.getCurrentPosition(onSuccess, onError);
-		navigator.geolocation.watchPosition(onSuccessWatch, onErrorWatch, { timeout: 30000, enableHighAccuracy: false });
-
-	    }
-	    function onSuccess(position) {
-	        document.getElementById('location').value = position.coords.latitude + '/' + position.coords.longitude;
-	        my_location = position.coords.latitude + '/' + position.coords.longitude;
-		sendLocation(my_location);
-	    }
-	    function onError(error) {
-	        alert('code: '    + error.code    + '\n' +
-	              'message: ' + error.message + '\n');
-	    }
-
-
-	    function onSuccessWatch(position) {
-	        my_location = position.coords.latitude + '/' + position.coords.longitude;
-	        document.getElementById('location').value = position.coords.latitude + '/' + position.coords.longitude;
-		sendLocation(my_location);
-	    }
-	    function onErrorWatch(error) {
-		
-	        //alert('code: '    + error.code    + '\n' +
-	        //'message: ' + error.message + '\n');
-		
-	    }
-*/
-
-
 
   function checkTAG(){
 
