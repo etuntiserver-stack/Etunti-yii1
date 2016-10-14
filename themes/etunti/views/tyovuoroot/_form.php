@@ -818,13 +818,18 @@ function laatikonPaivays(thisDataReturn){
 				var FirstHeight = $('#first_'+d['ymd']).height(ThisHeight);
 			    }
 
-			    // <-- poista latikosta tvuoro jos id ei sama
+			    // <-- poista latikosta tvuoro jos id ei sama   
+/*
+MITEN VARTEN, aaa se on jos vaihdat kortilla henkiloa
+voi vittu
+
 			    splDID = d['pvm'].split(".");
 			    did = $('#alkuperainenID').val()+'_'+splDID[2]+''+splDID[1]+''+splDID[0]+'_'+d['tid'];
 			    if($('#alkuperainenID').val()+'_'+$('#alkuperainenDID').val() !== did)
 			    {
 				$('#'+$('#alkuperainenID').val()+'_'+$('#alkuperainenDID').val()).remove();
 			    }
+*/
 			    // poista latikosta tvuoro jos id ei sama -->
 
 			  }

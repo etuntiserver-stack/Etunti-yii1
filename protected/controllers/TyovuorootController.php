@@ -969,9 +969,6 @@ class TyovuorootController extends Controller
 
 			$model->attributes=$_POST['Tyovuoroot'];
 			$model->pvm = date("d.m.Y",strtotime($_POST['Tyovuoroot']['pvm']));
-			if(isset($_POST['tyopaari']))
-			$model->tyopaari=json_encode($_POST['tyopaari']);
-
 
 			if($model->save())
 			{
@@ -981,8 +978,8 @@ class TyovuorootController extends Controller
 			if(isset($_POST['tyopaari']) and count($_POST['tyopaari']) > 0)
 			{
 
-			    $tp = $_POST['tyopaari'];
-			    array_push($tp, $model->tid);
+			    $luotu = array();
+			    $luotu[$model->id] = $model->tid;
 
 			    foreach($_POST['tyopaari'] as $tid)
 			    {
@@ -990,17 +987,22 @@ class TyovuorootController extends Controller
 				$m->attributes=$_POST['Tyovuoroot'];
 				$m->pvm = date("d.m.Y",strtotime($_POST['Tyovuoroot']['pvm']));
 				$m->tid=$tid;
-				$m->tyopaari=json_encode($tp);
-				$m->save();
+				if($m->save())
+					$luotu[$m->id] = $m->tid;
+
 				$return[] = array('tid'=>$m->tid, 'pvm'=>$m->pvm, 'ymd'=>date("Ymd",strtotime($m->pvm)));
 			    }
+			    foreach($luotu as $k=>$v)
+					Tyovuoroot::model()->updatebypk($k, array('tyopaari' => json_encode($luotu)));
+
+
 			}
 			// jos on tyopaari -->
 
 
-
-			  if(isset($_POST['Tyovuoroot']['PushNotify']) and $_POST['Tyovuoroot']['PushNotify'] == 'on')
-			  {
+			// <-- PushNotify
+			if(isset($_POST['Tyovuoroot']['PushNotify']) and $_POST['Tyovuoroot']['PushNotify'] == 'on')
+			{
 			   $t = Tyontekijat::model()->findbypk($model->tid);
 			   $k = Kohteet::model()->findbypk($model->kohde);
 			   if(isset($k->osoite) and !empty($k->osoite) and isset($t->id))
@@ -1013,9 +1015,13 @@ class TyovuorootController extends Controller
 				Domainit::PushNotify($t->id,"Hei ".$t->tekijan_nimi,$pushviesti,'beep');
 
 			   }
-			  }
+			}
+			// PushNotify -->
+
+
 			$return[] = array('tid'=>$model->tid, 'pvm'=>$model->pvm, 'ymd'=>date("Ymd",strtotime($model->pvm)));
 			echo json_encode($return);
+
 			}
 		exit;
 		}
@@ -1221,8 +1227,55 @@ class TyovuorootController extends Controller
 			if($model->save()){
 
 
-			  if(isset($_POST['Tyovuoroot']['PushNotify']) and $_POST['Tyovuoroot']['PushNotify'] == 'on')
-			  {
+			// <-- jos on tyopaari
+			$vanhat = json_decode($model->tyopaari, true);
+			if(is_array($vanhat))
+			{
+				foreach($vanhat as $tyovuoroID=>$tid)
+				{
+					if(isset($tyovuoroID) and !empty($tyovuoroID) and $tyovuoroID!=$model->id )
+					{
+						$m = Tyovuoroot::model()->findByPk($tyovuoroID);
+						$return[] = array('tid'=>$m->tid, 'pvm'=>$m->pvm, 'ymd'=>date("Ymd",strtotime($m->pvm)));
+						Tyovuoroot::model()->deleteByPk($tyovuoroID);
+					}	
+				}
+			}
+
+			if(isset($_POST['tyopaari']) and count($_POST['tyopaari']) > 0)
+			{
+
+			    $luotu = array();
+			    $arr = array();
+			    $luotu[$model->id] = $model->tid;
+			    $arr[$model->id] = array($model->tid,$model->pvm);
+
+			    foreach($_POST['tyopaari'] as $tid)
+			    {
+				$m=new Tyovuoroot;
+				$m->attributes=$_POST['Tyovuoroot'];
+				$m->pvm = date("d.m.Y",strtotime($_POST['Tyovuoroot']['pvm']));
+				$m->tid=$tid;
+				if($m->save())
+				{
+					$luotu[$m->id] = $m->tid;
+			    		$arr[$m->id] = array($m->tid,$m->pvm);
+				}
+			    }
+			    foreach($arr as $k=>$v)
+			    {
+					Tyovuoroot::model()->updatebypk($k, array('tyopaari' => json_encode($luotu)));
+				      	$return[] = array('tid'=>$v[0], 'pvm'=>$v[1], 'ymd'=>date("Ymd",strtotime($v[1])));
+			    }
+
+
+			}
+			// jos on tyopaari -->
+
+
+			// <-- PushNotify
+			if(isset($_POST['Tyovuoroot']['PushNotify']) and $_POST['Tyovuoroot']['PushNotify'] == 'on')
+			{
 			   $t = Tyontekijat::model()->findbypk($model->tid);
 			   $k = Kohteet::model()->findbypk($model->kohde);
 			   if(isset($k->osoite) and !empty($k->osoite) and isset($t->id))
@@ -1234,11 +1287,12 @@ class TyovuorootController extends Controller
 
 				Domainit::PushNotify($t->id,"Hei ".$t->tekijan_nimi,$pushviesti, 'beep');
 			   }
-			  }
+			}
+			// PushNotify -->
 
 
 
-			$return = array('tid'=>$model->tid, 'pvm'=>$model->pvm, 'ymd'=>date("Ymd",strtotime($model->pvm)));
+			//$return[] = array('tid'=>$model->tid, 'pvm'=>$model->pvm, 'ymd'=>date("Ymd",strtotime($model->pvm)));
 			echo json_encode($return);
 			}
 		exit;
