@@ -307,8 +307,6 @@ $(document).ready(function(){
 
  if($("#ryhma").val())
  $("#ryhmaSelect").val($("#ryhma").val());
- else
- $("#ryhmaSelect").val(1);
 
 
  $(".haemob").click(function(){

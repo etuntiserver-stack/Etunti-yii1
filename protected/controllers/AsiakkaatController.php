@@ -624,7 +624,7 @@ $xml = '
 	        $criteria->addCondition (" yhteyshenkilo LIKE '%".$_POST['yhteyshenkilo']."%' ");
 
 		if(isset($_POST['ryhma']) and !empty(trim($_POST['ryhma'])))
-	        $criteria->addCondition (" ryhma='".$_POST['ryhma']."' ");
+	        $criteria->addCondition (" ryhma LIKE '%".$_POST['ryhma']."%' ");
 
 		if(isset($_POST['puhelin']) and !empty(trim($_POST['puhelin'])))
 	        $criteria->addCondition (" puhelin LIKE '%".$_POST['puhelin']."%' ");
