@@ -89,16 +89,21 @@ $model->hinta = str_replace(",",".",$model->hinta);
 		<?php
 		$list = array();
       		$l = Valikkoot::model()->findAll(" select_type='asiakas_ryhma' ",array('order' => "select_type"));
-		foreach($l as $v)
-		$list[$v->id] = $v->value;
 
-		if(count($list) > 0)
-		{
-        	echo $form->dropDownList($model, 'ryhma', $list,
-		array('empty'=>'Valitse ryhmä','class'=>'form-control'));
-		} else {
-		echo 'Luo Valikko tietokannassa "Select Type = asiakas_ryhma"';
-		}		
+			$arr = json_decode($model->ryhma);
+
+			echo '<select name="Asiakkaat[ryhma][]" class="selectpicker form-control" multiple title="Valitse">';
+			foreach($l as $val)
+			{
+				if(is_array($arr) and in_array($val,$arr))
+			    		echo '<option value="'.$val->id.'" selected>'.$val->value.'</option>';
+				elseif(!is_array($arr) and $val->id == $model->ryhma)
+			    		echo '<option value="'.$val->id.'" selected>'.$val->value.'</option>';
+				else
+			    		echo '<option value="'.$val->id.'">'.$val->value.'</option>';
+			}
+			echo '</select>';
+		
         	?>
 		<span class="input-group-btn">
 			<span class="btn btn-primary myBgColors muokaValiko" for="asiakas_ryhma"><i class="fa fa-pencil-square-o"></i></span>

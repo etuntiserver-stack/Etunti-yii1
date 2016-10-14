@@ -370,7 +370,7 @@ class AsiakkaatController extends Controller
 		if(isset($_POST['Asiakkaat']))
 		{
 			$model->attributes=$_POST['Asiakkaat'];
-
+			$model->ryhma=json_encode($model->ryhma);
 			if($model->save())
 			{
 
@@ -1108,9 +1108,27 @@ $xml = '
 	protected function ryhmaMuutos($ryhma)
 	{
 		$return = '';
-		$model = Valikkoot::model()->findbypk($ryhma);
-		if(isset($model->id))
-		$return = $model->value;
+
+		$return = '';
+		$ryhma = json_decode($ryhma);
+
+		if(is_array($ryhma) and count($ryhma) > 0)
+		{
+		   foreach($ryhma as $k=>$v)
+		   {
+			$model = Valikkoot::model()->findbypk($v);
+			if(isset($model->id))
+			$return .= $model->value.'<br>';
+		   }
+
+		} else {
+
+			$model = Valikkoot::model()->findbypk($ryhma);
+			if(isset($model->id))
+			$return = $model->value;
+
+		}
+
 
 		return $return;
 	}
