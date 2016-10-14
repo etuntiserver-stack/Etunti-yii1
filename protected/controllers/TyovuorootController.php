@@ -525,9 +525,16 @@ class TyovuorootController extends Controller
 	public function actionOperatio()
 	{
 
+		$asetukset = Asetukset::model()->findByPk(1);
+
 		if(isset($_POST['checkThis']))
 		{
-			$did = $this->renderPartial('did',array('pvm'=>$_POST['newPvm'],'tid'=>$_POST['newTid'],'from'=>'ajax'), true);
+			$did = $this->renderPartial('did',array(
+				'pvm'=>$_POST['newPvm'],
+				'tid'=>$_POST['newTid'],
+				'from'=>'ajax',
+				'asetukset'=>$asetukset
+			), true);
 			echo json_encode($did.'//');
 			exit;
 		}
@@ -567,7 +574,12 @@ class TyovuorootController extends Controller
 			
 		}
 
-			$did = $this->renderPartial('did',array('pvm'=>$_POST['newPvm'],'tid'=>$_POST['newTid'],'from'=>'ajax'), true);
+			$did = $this->renderPartial('did',array(
+					'pvm'=>$_POST['newPvm'],
+					'tid'=>$_POST['newTid'],
+					'from'=>'ajax',
+					'asetukset'=>$asetukset
+			), true);
 			echo json_encode($did.'//');
 			exit;
 
@@ -600,7 +612,12 @@ class TyovuorootController extends Controller
 		}
 
 
-			$did = $this->renderPartial('did',array('pvm'=>$_POST['newPvm'],'tid'=>$_POST['newTid'],'from'=>'ajax'), true);
+			$did = $this->renderPartial('did',array(
+				'pvm'=>$_POST['newPvm'],
+				'tid'=>$_POST['newTid'],
+				'from'=>'ajax',
+				'asetukset'=>$asetukset
+			), true);
 			echo json_encode($did.'//'.implode(",",$_SESSION['muistin']));
 			exit;
 		}
