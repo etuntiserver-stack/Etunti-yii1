@@ -75,14 +75,15 @@ $did = date("Ymd",strtotime($pvm));
 		      $laatikot .= $this->renderPartial('al',array('str'=>$v), true);
 		   }
 
+
 	//}
 	
 	$laatikot .= '&nbsp;&nbsp;<b class="link glyphicon glyphicon-plus uusirivi" for="'.$did.'_'.$tid.'"></b>';
 	$laatikot .= '</div>';
-/*
-	if($from != 'kk')
+
+	//if($from != 'kk')
         echo $laatikot.'explode999'.$tun;
-*/
+
 
 /*
 	if( $from == 'ajax' ){
