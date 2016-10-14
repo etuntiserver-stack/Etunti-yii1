@@ -1,3 +1,7 @@
+if(localStorage.getItem('platform') == 'iOS'){
+	return false;
+}
+
 var appNFC = {
  // Application Constructor
  initialize: function() {
@@ -121,9 +125,9 @@ $(document).ready(function(){
 
 
 
- if(localStorage.getItem('platform') !== 'iOS'){
+
 	appNFC.initialize();
- }
+
 
 
 function clearAndExit(){

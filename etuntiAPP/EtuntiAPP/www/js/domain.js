@@ -160,8 +160,8 @@ setTimeout(function() {
 	    var ilmoitus = 'code: '    + error.code    + '\n' +
 	          		'message: ' + error.message + '. GPS location ongelma \n';
 
-	    	document.getElementById('result').style.display="block";
-	    	document.getElementById('result').value = ilmoitus;
+	    	//document.getElementById('result').style.display="block";
+	    	//document.getElementById('result').value = ilmoitus;
 	}
 
 	function onSuccessWatch(position) {
@@ -175,8 +175,8 @@ setTimeout(function() {
 	    var ilmoitus = 'code: '    + error.code    + '\n' +
 	          		'message: ' + error.message + '. GPS watch ongelma \n';
 
-	    	document.getElementById('result').style.display="block";
-	    	document.getElementById('result').value = ilmoitus;
+	    	//document.getElementById('result').style.display="block";
+	    	//document.getElementById('result').value = ilmoitus;
 	}
 
 
