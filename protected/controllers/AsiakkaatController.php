@@ -307,6 +307,12 @@ class AsiakkaatController extends Controller
 			$asetukset = Asetukset::model()->findbypk(1);
 
 			$model->attributes=$_POST['Asiakkaat'];
+
+			if(isset($_POST['Asiakkaat']['ryhma']))
+				$model->ryhma=json_encode($_POST['Asiakkaat']['ryhma']);
+			else
+				$model->ryhma="";
+
 			if(isset($vinkki->id))
 			{
 				Asiakkaat::model()->updatebypk($vinkki->asiakas_id,
@@ -332,7 +338,7 @@ class AsiakkaatController extends Controller
 				if(empty($model->asiakasnumero))
 				$a = Asiakkaat::model()->updatebypk($model->id, array('asiakasnumero'=>$model->id));
 
-				$this->redirect(array('update','id'=>$model->id));
+				$this->redirect(array('index'));
 			}
 		}
 
@@ -370,7 +376,12 @@ class AsiakkaatController extends Controller
 		if(isset($_POST['Asiakkaat']))
 		{
 			$model->attributes=$_POST['Asiakkaat'];
-			$model->ryhma=json_encode($model->ryhma);
+
+			if(isset($_POST['Asiakkaat']['ryhma']))
+				$model->ryhma=json_encode($_POST['Asiakkaat']['ryhma']);
+			else
+				$model->ryhma="";
+
 			if($model->save())
 			{
 

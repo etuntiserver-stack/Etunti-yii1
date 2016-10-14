@@ -91,16 +91,15 @@ $model->hinta = str_replace(",",".",$model->hinta);
       		$l = Valikkoot::model()->findAll(" select_type='asiakas_ryhma' ",array('order' => "select_type"));
 
 			$arr = json_decode($model->ryhma);
-
-			echo '<select name="Asiakkaat[ryhma][]" class="selectpicker form-control" multiple title="Valitse">';
-			foreach($l as $val)
+			echo '<select name="Asiakkaat[ryhma][]" class="ryhmat form-control" multiple title="Valitse">';
+			foreach($l as $data)
 			{
-				if(is_array($arr) and in_array($val,$arr))
-			    		echo '<option value="'.$val->id.'" selected>'.$val->value.'</option>';
-				elseif(!is_array($arr) and $val->id == $model->ryhma)
-			    		echo '<option value="'.$val->id.'" selected>'.$val->value.'</option>';
+				if(is_array($arr) and in_array($data->id, $arr))
+			    		echo '<option value="'.$data->id.'" selected>'.$data->value.'</option>';
+				elseif(!is_array($arr) and $model->ryhma == $data->id)
+			    		echo '<option value="'.$data->id.'" selected>'.$data->value.'</option>';
 				else
-			    		echo '<option value="'.$val->id.'">'.$val->value.'</option>';
+			    		echo '<option value="'.$data->id.'">'.$data->value.'</option>';
 			}
 			echo '</select>';
 		
@@ -426,6 +425,18 @@ function laskutusTyyppi(value){
     }
 
 }
+
+
+$('.ryhmat').multiselect({
+	//inheritClass: true,
+	//enableFiltering: true,
+        includeSelectAllOption: true,
+	nonSelectedText: '<?php echo Yii::t("main", "Tyhjä"); ?>',
+	selectAllText: '<?php echo Yii::t("main", "Valitse kaikki"); ?>',
+	allSelectedText: '<?php echo Yii::t("main", "Ryhmät"); ?>',
+	nSelectedText: '<?php echo Yii::t("main", "valittu"); ?>',
+	numberDisplayed: 0,
+});
 
 
 });
