@@ -204,7 +204,7 @@ if(empty($model->position) and isset($model->id))
       		$l = Valikkoot::model()->findAll(" select_type='tyo_toimialue' ",array('order' => "select_type"));
 		$arr = json_decode($model->tyo_toimialue);
 
-		echo '<select name="Tyontekijat[tyo_toimialue][]" class="selectpicker form-control" multiple title="Valitse">';
+		echo '<select name="Tyontekijat[tyo_toimialue][]" class="mult form-control" multiple title="Valitse">';
 		foreach($l as $val)
 		{
 			if(is_array($arr) and in_array($val->value,$arr))
@@ -270,7 +270,7 @@ if(empty($model->position) and isset($model->id))
 		$a = Valikkoot::model()->findAll(" select_type='kortit' ");
 		$check = explode("##***",$model->kortit);
 
-		echo '<select name="kortit[]" id="kortit" class="form-control" multiple title="Valitse">';
+		echo '<select name="kortit[]" id="kortit" class="form-control mult" multiple title="Valitse">';
 		  foreach($a as $val){
 		    	$on = false;
 		   foreach($check as $c)
@@ -354,14 +354,14 @@ $(document).ready(function(){
  }
 
 
- $("#kortit").multiselect({
+ $(".mult").multiselect({
 
 	//inheritClass: true,
 	//enableFiltering: true,
         includeSelectAllOption: true,
 	nonSelectedText: '<?php echo Yii::t("main", "Tyhjä"); ?>',
 	selectAllText: '<?php echo Yii::t("main", "Valitse kaikki"); ?>',
-	allSelectedText: '<?php echo Yii::t("main", "Kortit"); ?>',
+	allSelectedText: '<?php echo Yii::t("main", "Kaikki"); ?>',
 	nSelectedText: '<?php echo Yii::t("main", "valittu"); ?>',
 	numberDisplayed: 0,
  }); 
@@ -543,6 +543,7 @@ $(".muokaValiko").click(function() {
 
 
 });
+
 </script>
 
 
