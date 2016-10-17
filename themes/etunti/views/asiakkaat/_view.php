@@ -1,6 +1,12 @@
 <?php
 /* @var $this AsiakkaatController */
 /* @var $data Asiakkaat */
+
+  $osoite = $data->osoite;
+  if(!empty($data->postinumero))
+  $osoite .= ', '.$data->postinumero;
+  if(!empty($data->kaupunki))
+  $osoite .= ', '.$data->kaupunki;
 ?>
 
 <tr>
@@ -21,13 +27,10 @@
 		<?php echo $data->yrityksen_nimi; ?>
 	</td>
 	<td>
-		<?php echo $data->osoite; ?>
+		<?php echo $osoite; ?>
 	</td>
 	<td>
 		<?php echo $data->yhteyshenkilo; ?>
-	</td>
-	<td>
-		<?php echo $data->postinumero; ?>
 	</td>
 	<td>
 		<?php echo $data->puhelin; ?>

@@ -174,19 +174,7 @@
 	</table>';
       ?>
   </th>
-  <th><?php echo '
-	<table>
-	 <tr>
-	  <td>
-		'.Yii::t('main', 'Osoite').'
-	  </td><td>
-		'.CHtml::link('<i class="fa fa-arrow-down"></i>','index?sort=osoite&s=asc').'
-	  </td><td>
-		'.CHtml::link('<i class="fa fa-arrow-up"></i>','index?sort=osoite&s=desc').'
-	  </td>
-	 </tr>
-	</table>';
-      ?>
+  <th><?php echo Yii::t('main', 'Osoite'); ?>
   </th>
   <th><?php echo '
 	<table>
@@ -197,20 +185,6 @@
 		'.CHtml::link('<i class="fa fa-arrow-down"></i>','index?sort=yhteyshenkilo&s=asc').'
 	  </td><td>
 		'.CHtml::link('<i class="fa fa-arrow-up"></i>','index?sort=yhteyshenkilo&s=desc').'
-	  </td>
-	 </tr>
-	</table>';
-      ?>
-  </th>
-  <th><?php echo '
-	<table>
-	 <tr>
-	  <td>
-		'.Yii::t('main', 'Postinumero').'
-	  </td><td>
-		'.CHtml::link('<i class="fa fa-arrow-down"></i>','index?sort=postinumero&s=asc').'
-	  </td><td>
-		'.CHtml::link('<i class="fa fa-arrow-up"></i>','index?sort=postinumero&s=desc').'
 	  </td>
 	 </tr>
 	</table>';
