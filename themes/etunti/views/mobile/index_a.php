@@ -37,7 +37,7 @@
   <th><?php echo Yii::t('main', 'Versio'); ?></th>
   <th><?php echo Yii::t('main', 'Päivä'); ?></th>
   <th><?php echo Yii::t('main', 'Kartta'); ?></th>
-  <th class="col-sm-4"><?php echo Yii::t('main', 'Työntekijä'); ?></th>
+  <th><?php echo Yii::t('main', 'Työntekijä'); ?></th>
 
   <?php
   $tas = explode(",",Yii::app()->user->adminPaketti);
@@ -49,9 +49,9 @@
 
   <th><?php echo Yii::t('main', 'TAG'); ?></th>
   <th><?php echo Yii::t('main', 'Asiakas'); ?></th>
-  <th class="col-sm-4"><?php echo Yii::t('main', 'Osoite'); ?></th>
-  <th class="col-sm-2"><?php echo Yii::t('main', 'Aloitus'); ?></th>
-  <th class="col-sm-2"><?php echo Yii::t('main', 'Lopetus'); ?></th>
+  <th><?php echo Yii::t('main', 'Osoite'); ?></th>
+  <th><?php echo Yii::t('main', 'Aloitus'); ?></th>
+  <th><?php echo Yii::t('main', 'Lopetus'); ?></th>
   <th><?php echo Yii::t('main', 'Kesto'); ?></th>
   <th><center><?php echo Yii::t('main', 'M'); ?></center></th>
   <th><center><?php echo Yii::t('main', 'P'); ?></center></th>

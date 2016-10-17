@@ -109,9 +109,9 @@ if(!empty($data->loppui) and !empty($data->aloitan)){
 }
 
 if(!empty($data->tietoja) and !empty($data->tietoja))
-  $muokattu[$data->id] =  '<button type="button" class="btn btn-warning" data-toggle="tooltip" data-placement="top" title="'.Yii::t('main', 'Riviä on muokattu').'"><i class="fa fa-check-square-o"></i></button>';
+  $muokattu[$data->id] =  '<span class="fa fa-check-square-o" title="'.Yii::t('main', 'Riviä on muokattu').'"></span>';
 else
-  $muokattu[$data->id] =  '<button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="'.Yii::t('main', 'Riviä ei ole muokattu').'"><i class="fa fa-sign-in"></i></button>';
+  $muokattu[$data->id] =  '<span class="fa fa-sign-in" title="'.Yii::t('main', 'Riviä ei ole muokattu').'"></span>';
 
 
 	if($data->status == '1')
@@ -319,12 +319,7 @@ else
 
 	<?php if( isset($sivu) and $sivu == 'index' ) : ?>
 	<td><center><?php echo $muokattu[$data->id]; ?></center></td>
-	<td>
-	 <center>
-		<button type="button" class="btn btn-danger poistaKohde" data-toggle="tooltip" data-placement="top" title="<?php echo Yii::t('main', 'Poista rivi'); ?>" for="rivi_<?php echo $data->id; ?>"><i class="fa fa-trash-o"></i>
-		</button>
-	 </center>
-	</td>
+	<td><center><span class="link glyphicon glyphicon-trash text-danger poistaKohde" for="rivi_<?php echo $data->id; ?>"></span></center></td>
 	<?php endif; ?>
 
 

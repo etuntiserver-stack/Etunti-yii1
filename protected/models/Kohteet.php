@@ -120,7 +120,7 @@ class Kohteet extends DB2ActiveRecord
 			'kenella_on_avain' => Yii::t('main', 'Avain työntekijällä'),
 			'puh_nro' => Yii::t('main', 'Puhelin'),
 			'siivous' => Yii::t('main', 'Työnimike'),
-			'etu_suku_nimet' => Yii::t('main', 'Nimi'),
+			'etu_suku_nimet' => Yii::t('main', 'Kohteen yhteyshenkilö'),
 			'maksuehto_paiva' => Yii::t('main', 'Maksuehto Paiva'),
 			'viivastyskorko' => Yii::t('main', 'Viivästyskorko'),
 			'lasku_tiedot' => Yii::t('main', 'Lasku Tiedot'),

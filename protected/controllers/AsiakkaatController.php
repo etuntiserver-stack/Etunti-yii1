@@ -404,7 +404,7 @@ class AsiakkaatController extends Controller
 			   //  Netvisor -->
 
 
-				$this->redirect(array('view','id'=>$model->id));
+				$this->redirect(array('index'));
 			}
 		}
 
