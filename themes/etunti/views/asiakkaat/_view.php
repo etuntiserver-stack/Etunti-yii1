@@ -7,6 +7,16 @@
   $osoite .= ', '.$data->postinumero;
   if(!empty($data->kaupunki))
   $osoite .= ', '.$data->kaupunki;
+
+  $tyyppi = '';
+  $tauste = 'bg-default';
+  if($data->tyyppi == 'yritys'){
+  	$tyyppi = Yii::t('main', 'Yritys');
+	$tauste = 'bg-primary';
+  } else if($data->tyyppi == 'henkilo') {
+  	$tyyppi = Yii::t('main', 'Henkilö');
+	$tauste = 'bg-warning';
+  }
 ?>
 
 <tr>
@@ -41,8 +51,8 @@
 	<td>
 		<?php echo $this->ryhmaMuutos($data->ryhma); ?>
 	</td>
-	<td>
-		<?php echo $data->tyyppi; ?>
+	<td class="<?php echo $tauste; ?>" align="center">
+		<?php echo $tyyppi; ?>
 	</td>
 
 <?php if($netvisor == true) : ?>

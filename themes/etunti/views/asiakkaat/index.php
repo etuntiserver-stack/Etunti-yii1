@@ -156,7 +156,7 @@
    <div class="panel-body">
 
 <div class="table-responsive">
-  <table class="table table-striped" id="mobileTable">
+  <table class="table table-hovered" id="mobileTable">
   <thead class="myBgColors">
   <tr>
   <th></th>
