@@ -258,7 +258,7 @@ class AsiakkaatController extends Controller
 
 		}
 	}
-
+/*
 	public function actionCheckLastAsiakasID()
 	{
 		$check = 0;
@@ -268,6 +268,7 @@ class AsiakkaatController extends Controller
 
 		echo $check;
 	}
+*/
 
 	public function actionView($id)
 	{

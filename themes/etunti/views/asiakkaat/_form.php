@@ -378,7 +378,7 @@ $("#Asiakkaat_tyyppi").change(function() {
 });
 
 
-
+/*
 $("#Asiakkaat_asiakasnumero").keyup(function() {
     var checkLastAsiakasID = $(this).val();
         $.ajax({
@@ -399,6 +399,7 @@ $("#Asiakkaat_asiakasnumero").keyup(function() {
            }
         });
 });
+*/
 
 function openAll(){
 

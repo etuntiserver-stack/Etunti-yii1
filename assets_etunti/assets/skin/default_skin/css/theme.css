@@ -14,8 +14,11 @@
 	color: #666666;
 }
 
-
+/* Roman */
+.required, .errorMessage { color: red; }
 .link{ cursor: pointer }
+/* Roman */
+
 .sparkline-delay {
   position: absolute;
   bottom: 0;
@@ -7195,6 +7198,7 @@ perspective effects (not including the modals and the overlay).
 
 
 
+
   -webkit-transform-origin: 0 100%;
   transform-origin: 0 100%;
   opacity: 0;
@@ -13581,7 +13585,6 @@ button.close {
 /*==================================================
   Switches - Created with Pure CSS, no js required
 ==================================================== */
-.required { color: red; } // Roman
 div.switch label {
   display: block;
   position: relative;
@@ -17531,6 +17534,7 @@ body.sidebar-collapsed #sidebar:before {
 .navbar li.dropdown.open .caret.alt:after {
   opacity: 1;
 }
+
 /*==========================================================
   Navbar Advanced Dropdown - Button Dropdowns
 =========================================================== */
