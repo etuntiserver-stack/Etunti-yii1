@@ -21,7 +21,17 @@
 		<?php echo $this->tekijaMuutosTheme($data->tekija); ?>
 	</td>
 	<td>
-		<?php echo CHtml::link('', array('update', 'id'=>$data->id), array('class'=>'fa fa-pencil-square-o')); ?>
+		<?php echo CHtml::link('<i class="fa fa-pencil-square-o" aria-hidden="true"></i>', 
+				array('update', 'id'=>$data->id), 
+				array(
+					'class'=>'btn btn-primary myBgColors', 
+					'style'=>'color:white', 
+					'data-toggle'=>'tooltip', 
+					'data-placement'=>'top', 
+					'title'=>Yii::t('main', 'Muokkaa') 
+				)
+			); 
+		?>
 	</td>
 </tr>
 

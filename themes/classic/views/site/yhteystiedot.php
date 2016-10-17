@@ -27,15 +27,12 @@
 <div class="text-left">
   <div class="row">
    <div class="col-md-1">
-    <img src="<?php echo Yii::app()->request->baseUrl; ?>/etusivuimg/myyja.jpg" class="img-thumbnail">
+    <img src="<?php echo Yii::app()->request->baseUrl; ?>/etusivuimg/etuntipikkulogo.jpg" class="img-thumbnail">
    </div>
    <div class="col-md-8">
     <span class="small yhteysInfo">
 	<p>
-	Myyjä<br>
-	Tuomo Ek<br>
-	etuntimyynti@etunti.fi<br>
-	+358 40 124 9081
+	Haemme tiimiimme uutta myyjää.
 	</p>
     </span>
    </div>
@@ -94,7 +91,7 @@ Toimistomme sijaitsee historiallisesti arvokkaan ja luonnonkauniin Vanhankaupung
 </div>
 
 <br>
-
+<!--
 <div class="text-center">
   <div class="row">
    <div class="col-md-12">
@@ -102,6 +99,7 @@ Toimistomme sijaitsee historiallisesti arvokkaan ja luonnonkauniin Vanhankaupung
    </div>
   </div>
 </div>
+-->
 
 
 

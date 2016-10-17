@@ -2,17 +2,7 @@
 /* @var $this MobileController */
 /* @var $dataProvider CActiveDataProvider */
 
-$this->breadcrumbs=array(
-	Yii::t('main', 'Luetut kohteet'),
-);
-
-
-	$this->widget('ext.tooltipster.tooltipster');
-
-
 ?>
-<br>
-
 
 
         <!-- begin: .tray-center -->
