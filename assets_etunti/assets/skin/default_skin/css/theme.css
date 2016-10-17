@@ -7194,6 +7194,7 @@ perspective effects (not including the modals and the overlay).
 
 
 
+
   -webkit-transform-origin: 0 100%;
   transform-origin: 0 100%;
   opacity: 0;
@@ -8272,6 +8273,7 @@ h6,
   line-height: 1.1;
   color: inherit;
   text-rendering: optimizelegibility;
+
 }
 h1 small,
 
@@ -13579,6 +13581,7 @@ button.close {
 /*==================================================
   Switches - Created with Pure CSS, no js required
 ==================================================== */
+.required { color: red; } // Roman
 div.switch label {
   display: block;
   position: relative;
@@ -17202,6 +17205,7 @@ table.tc-va-b-last tbody td:last-child {
 }
 /* Table item checked state - class added via JS */
 .table-checklist tr.task-checked .label,
+
 .table-checklist tr.task-checked .progress {
   opacity: 0.3;
 }
