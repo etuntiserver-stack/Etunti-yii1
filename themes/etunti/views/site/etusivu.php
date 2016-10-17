@@ -619,7 +619,7 @@ var etusivuAjax = function(){
 	<div class="row">
 	 <div class="form-inline">
 		<?php echo Yii::t('main', 'Alue/Kaupunki'); ?> <input type="text" class="form-control form-group" id="alueKaupunki">
-		 <button class="tallennaLatLng btn btn-primary myBgColors"><?php echo Yii::t('main', 'Tallenna'); ?></button>
+		 <button class="tallennaLatLng btn btn-primary myBgColors"><?php echo Yii::t('main', 'Hae'); ?></button>
 
 		<select id="tilanneKartalla" class="form-control">
 		<option><?php echo Yii::t('main', 'Tilanne'); ?></option>
@@ -734,6 +734,7 @@ $("#tilanneKartalla").change(function(){
                   <span class="fs11">DB Request</span>
                 </div>
               </div>
+
 
               <div class="progress mh5">
                 <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 84%">
