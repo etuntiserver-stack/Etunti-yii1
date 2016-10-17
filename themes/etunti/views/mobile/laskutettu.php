@@ -162,7 +162,7 @@
 		      </div>
 
                     </div>
-		    <div class="alert alert-success"><?php echo Yii::t('main', 'laskutettuAllaOlevaIlmoitus'); ?></div>
+		    <div class="alert alert-default"><?php echo Yii::t('main', 'laskutettuAllaOlevaIlmoitus'); ?></div>
 		
 
                 </div>
