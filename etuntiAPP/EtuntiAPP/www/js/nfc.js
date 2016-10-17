@@ -1,7 +1,3 @@
-if(localStorage.getItem('platform') == 'iOS'){
-	return false;
-}
-
 var appNFC = {
  // Application Constructor
  initialize: function() {
@@ -91,6 +87,7 @@ $(document).ready(function(){
 		   $('#os').val(sp[0]).css({"border" : "2px green solid"});
 		   $('#kohdenID').val(sp[1]);
 		   $("#camButtons").show('slow');
+		   $("#virheTila").hide().removeClass('alert alert-danger');
 
 		   setTimeout(clearAndExit,120000); //2min
 

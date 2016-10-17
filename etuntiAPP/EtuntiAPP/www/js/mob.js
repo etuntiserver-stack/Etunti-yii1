@@ -269,10 +269,10 @@ function row(tilanne,st){
 
 		 if((sp[4] == 'tagnumerror') & (sp[6] == 'update'))
 		 {
-		   $("#result2").html("<div class='alert alert-danger'><h3>VIRHE!!!</h3>Voit lopettaa osoitessa <b>"+sp[3]+"</b></div>").show();
+		   $("#virheTila").html("<h3>VIRHE!!!</h3>Voit lopettaa osoitessa <b>"+sp[3]+"</b><br>").addClass('alert alert-danger').show();
 		   //return false;
 		 } else {
-		   $("#result2").hide();
+		   $("#virheTila").hide().removeClass('alert alert-danger');
 		   //$("#result2").html("data: <br>" + data).show();
 		 }
 

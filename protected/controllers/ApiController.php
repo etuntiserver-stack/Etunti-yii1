@@ -1073,7 +1073,14 @@ public function actionImei($dom)
 			// <-- Check TAG
 			$explAsNum = explode("_",$mobupdate->asiakas_num);
 			$explAsNumPost = explode("_",$_POST['asiakas_num']);
-			if( isset($explAsNum[1]) and isset($explAsNumPost[1]) and $explAsNum[1] != $explAsNumPost[1] )
+		    	$asetukset = Asetukset::model()->findbypk(1);
+			if( 
+				isset($asetukset->app_lopettaa_vain_tagilla) 
+				and $asetukset->app_lopettaa_vain_tagilla == 1
+				and isset($explAsNum[1]) 
+				and isset($explAsNumPost[1]) 
+				and $explAsNum[1] != $explAsNumPost[1] 
+			)
 			{
 		                $this->_sendResponse(200, $ms."//".$mobupdate->id."//".$mobupdate->status."//".$mob->kohde_kannasta."//tagnumerror//null//update");
 			        exit;

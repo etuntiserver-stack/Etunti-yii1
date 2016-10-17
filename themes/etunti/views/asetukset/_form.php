@@ -218,6 +218,7 @@
 		<?php echo $form->error($model,'trust_url'); ?>
 	</div>
 
+
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'trust_cid'); ?>
 		<?php echo $form->textField($model,'trust_cid',array('size'=>20,'maxlength'=>100,'class'=>'form-control')); ?>
@@ -429,8 +430,24 @@
 		array('class'=>'form-control')) ?>
 		<?php echo $form->error($model,'app_show_phone'); ?>
 	</div>
-
    </div>
+
+   <div class="col-sm-4">
+    <legend><h2><?php echo Yii::t('main','Sovelluksen asetukset'); ?></h2></legend>
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'app_lopettaa_vain_tagilla'); ?>
+		<?php 
+        	$tal = array(
+			0=>'Ei',
+			1=>'Kyllä'
+		);
+		echo $form->dropDownList($model,'app_lopettaa_vain_tagilla', $tal, 
+		array('class'=>'form-control')) ?>
+		<?php echo $form->error($model,'app_lopettaa_vain_tagilla'); ?>
+	</div>
+   </div>
+
+
   </div>
 
 
