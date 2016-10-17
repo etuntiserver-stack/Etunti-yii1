@@ -12,6 +12,20 @@
 ?>
 
 <tr>
+
+	<td>
+		<?php echo CHtml::link('<i class="fa fa-pencil-square-o" aria-hidden="true"></i>', 
+				array('update', 'id'=>$data->id), 
+				array(
+					'style'=>'font-size: 150%', 
+					'data-toggle'=>'tooltip', 
+					'data-placement'=>'top', 
+					'title'=>Yii::t('main', 'Muokkaa') 
+				)
+			); 
+		?>
+	</td>
+
 	<td>
 		<?php echo $asiakas; ?>
 	</td>
@@ -30,18 +44,6 @@
 	<td>
 		<?php echo $data->avain; ?>
 	</td>
-	<td>
-		<?php echo CHtml::link('<i class="fa fa-pencil-square-o" aria-hidden="true"></i>', 
-				array('update', 'id'=>$data->id), 
-				array(
-					'class'=>'btn btn-primary myBgColors', 
-					'style'=>'color:white', 
-					'data-toggle'=>'tooltip', 
-					'data-placement'=>'top', 
-					'title'=>Yii::t('main', 'Muokkaa') 
-				)
-			); 
-		?>
-	</td>
+
 </tr>
 

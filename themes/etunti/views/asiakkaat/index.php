@@ -159,6 +159,7 @@
   <table class="table table-striped" id="mobileTable">
   <thead class="myBgColors">
   <tr>
+  <th></th>
   <th><?php echo '
 	<table>
 	 <tr>
@@ -269,7 +270,6 @@
 	if($this->tas(2))
 		echo '<th>'.Yii::t('main', 'Työvuorot').'</th>';
   ?>
-  <th></th>
   </tr>
   </thead>
   <?php $this->widget('zii.widgets.CListView', array(
