@@ -1222,7 +1222,14 @@ class TyovuorootController extends Controller
 
 
 			$_POST['Tyovuoroot']['pvm'] = date("d.m.Y",strtotime($_POST['Tyovuoroot']['pvm']));
+
+			// <-- Tyontekijan vaihto
+			if( $model->tid != $_POST['Tyovuoroot']['tid'] )
+			$return[] = array('tid'=>$model->tid, 'pvm'=>$model->pvm, 'ymd'=>date("Ymd",strtotime($model->pvm)));
+			// Tyontekijan vaihto -->
+
 			$model->attributes=$_POST['Tyovuoroot'];
+
 			if($model->save()){
 
 
