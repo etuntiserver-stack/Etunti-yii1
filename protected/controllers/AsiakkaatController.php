@@ -338,7 +338,7 @@ class AsiakkaatController extends Controller
 				if(empty($model->asiakasnumero))
 				$a = Asiakkaat::model()->updatebypk($model->id, array('asiakasnumero'=>$model->id));
 
-				$this->redirect(array('index'));
+				$this->redirect(array('//kohteet/createfromasiakas', 'id'=>$model->id));
 			}
 		}
 
