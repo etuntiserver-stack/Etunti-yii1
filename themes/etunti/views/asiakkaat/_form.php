@@ -58,7 +58,7 @@ $model->hinta = str_replace(",",".",$model->hinta);
 		<?php
 		$list = array('yritys'=>Yii::t('main', 'Yritys'),'henkilo'=>Yii::t('main', 'Yksityishenkilö'));
         	echo $form->dropDownList($model, 'tyyppi', $list,
-		array('empty'=>'Valitse tyyppi','class'=>'form-control'));	
+		array('class'=>'form-control'));	
         	?>
 		<?php echo $form->error($model,'tyyppi'); ?>
 	</div>
@@ -85,6 +85,15 @@ $model->hinta = str_replace(",",".",$model->hinta);
 		<?php echo $form->labelEx($model,'sahkoposti'); ?>
 		<?php echo $form->textField($model,'sahkoposti',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'sahkoposti'); ?>
+	</div>
+
+	<div class="section fill mb5 ashidd_a">
+
+		<?php echo $form->labelEx($model,'myyja'); ?>
+		<?php echo $form->dropDownList($model, 'myyja', CHtml::listData(Administrators::model()->findAll(), 'id', 'adm_nimi'), 
+		array('empty'=>'Valitse', 'class'=>'form-control')); 
+		?>
+		<?php echo $form->error($model,'myyja'); ?>
 	</div>
 
 <?php if(in_array('5',$tas)) : ?>
@@ -119,15 +128,6 @@ $model->hinta = str_replace(",",".",$model->hinta);
 	</div>
 <?php endif ; ?>
 
-
-	<div class="section fill mb5 ashidd_a">
-
-		<?php echo $form->labelEx($model,'myyja'); ?>
-		<?php echo $form->dropDownList($model, 'myyja', CHtml::listData(Administrators::model()->findAll(), 'id', 'adm_nimi'), 
-		array('empty'=>'Valitse', 'class'=>'form-control')); 
-		?>
-		<?php echo $form->error($model,'myyja'); ?>
-	</div>
 
   </div><div class="col-sm-3">
 	<legend><h3><?php echo Yii::t('main', 'Asiakkaan tiedot'); ?></h3></legend>
