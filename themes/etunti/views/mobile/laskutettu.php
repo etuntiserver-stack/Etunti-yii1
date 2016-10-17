@@ -262,9 +262,9 @@ $('.chckbxHyvaksynta').on('click', function(event, state) {
            url: location.protocol + "//" + location.host + '/index.php/mobile/laskutettu',
            type: "POST",
 	   data: { id : thisID[1], ajax : "true", las : "1", tot : tot },
-
            success: function(data){
 		console.log(data);
+		alert('Kohde merkitty laskutetuksi.');
            }
         });
       } else {
