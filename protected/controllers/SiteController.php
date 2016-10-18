@@ -966,7 +966,7 @@ $(document).ready(function(){
 		$criteria = new CDBcriteria;
 		$criteria->order = " $sarake ";
 		$criteria->group = " $sarake ";
-		$criteria->condition = " $sarake LIKE '%".$term."%' ";
+		$criteria->condition = " $sarake LIKE '".$term."%' ";
 		$model = $model::model()->findAll($criteria);
 
 		$arr = array();
