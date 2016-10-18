@@ -324,17 +324,17 @@ class TyontekijatController extends Controller
 		else
 	        $criteria->addCondition (" aktiivinen=1 ");
 
-		if(isset($_POST['osoite']) and !empty($_POST['osoite']))
-	        $criteria->addCondition (" tekijan_katuosoite LIKE '%".$_POST['osoite']."%' ");
+		if(isset($_POST['tekijan_katuosoite']) and !empty($_POST['tekijan_katuosoite']))
+	        $criteria->addCondition (" tekijan_katuosoite LIKE '%".$_POST['tekijan_katuosoite']."%' ");
 
-		if(isset($_POST['nimi']) and !empty(trim($_POST['nimi'])))
-	        $criteria->addCondition (" tekijan_nimi LIKE '%".$_POST['nimi']."%' ");
+		if(isset($_POST['tekijan_nimi']) and !empty(trim($_POST['tekijan_nimi'])))
+	        $criteria->addCondition (" tekijan_nimi LIKE '%".$_POST['tekijan_nimi']."%' ");
 
-		if(isset($_POST['puhelin']) and !empty(trim($_POST['puhelin'])))
-	        $criteria->addCondition (" laiten_puh LIKE '%".$_POST['puhelin']."%' OR tekijan_puh LIKE '%".$_POST['puhelin']."%' ");
+		if(isset($_POST['tekijan_puh']) and !empty(trim($_POST['tekijan_puh'])))
+	        $criteria->addCondition (" laiten_puh LIKE '%".$_POST['tekijan_puh']."%' OR tekijan_puh LIKE '%".$_POST['tekijan_puh']."%' ");
 
-		if(isset($_POST['sahkoposti']) and !empty(trim($_POST['sahkoposti'])))
-	        $criteria->addCondition (" tekijan_email LIKE '%".$_POST['sahkoposti']."%' ");
+		if(isset($_POST['tekijan_email']) and !empty(trim($_POST['tekijan_email'])))
+	        $criteria->addCondition (" tekijan_email LIKE '%".$_POST['tekijan_email']."%' ");
 
 		$dataProvider=new CActiveDataProvider('Tyontekijat', array(
 			'criteria'=>$criteria,

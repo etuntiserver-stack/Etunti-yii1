@@ -41,7 +41,7 @@ class SiteController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', 
-				'actions'=>array('etusivu','ohjesivu','etusivu_esimerki', 'change_color', 'valiko', 'valiko_ajax', 'kohderyhma', 'ohjevideot', 'mobemu', 'etusivu_ajax', 'ulkonaky'),
+				'actions'=>array('etusivu','ohjesivu','etusivu_esimerki', 'change_color', 'valiko', 'valiko_ajax', 'kohderyhma', 'ohjevideot', 'mobemu', 'etusivu_ajax', 'ulkonaky', 'autocomplete'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('allow', 
@@ -942,5 +942,47 @@ $(document).ready(function(){
 		return $return;
 
 	}
+
+	// <-- Autocomplete
+	public function autocompleteFor($model, $sarake, $placeholder, $postvalue)
+	{
+		$this->widget('zii.widgets.jui.CJuiAutoComplete',array(
+		    'name'=>$sarake,
+		    'value'=> $postvalue,
+		    'source'=>$this->createUrl('autocomplete', array('model'=>$model,'sarake'=>$sarake)),
+		    'options'=>array(
+		        'minLength'=>'2',
+		    ),
+		    'htmlOptions'=>array(
+			'class'=>'gui-input',
+		     	'placeholder'=> Yii::t('main', $placeholder),
+		    ),
+		));
+	}
+
+	public function actionAutocomplete($model, $sarake, $term)
+	{
+
+		$criteria = new CDBcriteria;
+		$criteria->order = " $sarake ";
+		$criteria->group = " $sarake ";
+		$criteria->condition = " $sarake LIKE '%".$term."%' ";
+		$model = $model::model()->findAll($criteria);
+
+		$arr = array();
+		foreach($model as $data)
+		{
+		    $arr[] = array(
+		        'label'=>$data->$sarake,
+		        'value'=>$data->$sarake,    
+		        'id'=>$data->id,
+        	    );
+		}
+  
+		echo CJSON::encode($arr);
+	}
+	// Autocomplete -->
+
+
 
 }

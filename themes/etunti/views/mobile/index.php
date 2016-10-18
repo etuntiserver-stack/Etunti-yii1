@@ -65,7 +65,18 @@
                         <div class="section">
                           <label class="field prepend-icon">
 
-   			    <input type="text" class="gui-input" name="etsi_kohteet" value="<?php echo Yii::app()->session['etsi_kohteet']; ?>" placeholder="Osoite">
+			    <!-- Autocomplete -->
+			    <?php
+	   			$site = Yii::app()->createController('Site');
+				$mod = 'Mobile';
+				$sarake = 'kohde_kannasta';
+				$placeholder = 'Osoite';
+				if(isset($_POST[$sarake])) 			$postvalue = $_POST[$sarake]; 
+				else if(isset(Yii::app()->session[$sarake])) 	$postvalue = Yii::app()->session[$sarake]; 
+				else $postvalue='';				
+		 	        $site[0]->autocompleteFor($mod, $sarake, $placeholder, $postvalue);
+			    ?>
+			    <!-- Autocomplete -->
 
                             <label for="firstname" class="field-icon">
                               <i class="fa fa-user"></i>

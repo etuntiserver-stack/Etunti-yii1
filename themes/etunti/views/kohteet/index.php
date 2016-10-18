@@ -41,7 +41,16 @@
                         <div class="section">
                           <label class="field prepend-icon">
 
-   			    <input type="text" class="gui-input" name="osoite" value="<?php if(isset($_POST['osoite'])) echo $_POST['osoite']; ?>" placeholder="<?php echo Yii::t('main', 'Osoite'); ?>..">
+			    <!-- Autocomplete -->
+			    <?php
+	   			$site = Yii::app()->createController('Site');
+				$mod = 'Kohteet';
+				$sarake = 'osoite';
+				$placeholder = 'Osoite';
+				if(isset($_POST[$sarake])) $postvalue = $_POST[$sarake]; else $postvalue='';
+		 	        $site[0]->autocompleteFor($mod, $sarake, $placeholder, $postvalue);
+			    ?>
+			    <!-- Autocomplete -->
 
                             <label for="firstname" class="field-icon">
                               <i class="fa fa-user"></i>
@@ -73,7 +82,16 @@
                         <div class="section">
                           <label class="field prepend-icon">
 
-   			    <input type="text" class="gui-input" name="nimi" value="<?php if(isset($_POST['nimi'])) echo $_POST['nimi']; ?>" placeholder="<?php echo Yii::t('main', 'Nimi'); ?>..">
+			    <!-- Autocomplete -->
+			    <?php
+	   			$site = Yii::app()->createController('Site');
+				$mod = 'Kohteet';
+				$sarake = 'etu_suku_nimet';
+				$placeholder = 'Nimi';
+				if(isset($_POST[$sarake])) $postvalue = $_POST[$sarake]; else $postvalue='';
+		 	        $site[0]->autocompleteFor($mod, $sarake, $placeholder, $postvalue);
+			    ?>
+			    <!-- Autocomplete -->
 
                             <label for="firstname" class="field-icon">
                               <i class="fa fa-user"></i>
@@ -86,7 +104,17 @@
                         <div class="section">
                           <label class="field prepend-icon">
 
-   			    <input type="text" name="tag"  class="gui-input" value="<?php if(isset($_POST['tag'])) echo $_POST['tag']; ?>" placeholder="NFC tag">
+			    <!-- Autocomplete -->
+			    <?php
+	   			$site = Yii::app()->createController('Site');
+				$mod = 'Kohteet';
+				$sarake = 'tag_id';
+				$placeholder = 'NFC tag';
+				if(isset($_POST[$sarake])) $postvalue = $_POST[$sarake]; else $postvalue='';
+		 	        $site[0]->autocompleteFor($mod, $sarake, $placeholder, $postvalue);
+			    ?>
+			    <!-- Autocomplete -->
+
                             <label for="firstname" class="field-icon">
                               <i class="fa fa-tag"></i>
                             </label>
@@ -97,7 +125,17 @@
                         <div class="section">
                           <label class="field prepend-icon">
 
-   			    <input type="text" name="avain" class="gui-input" value="<?php if(isset($_POST['avain'])) echo $_POST['avain']; ?>" placeholder="<?php echo Yii::t('main', 'Avain'); ?>">
+			    <!-- Autocomplete -->
+			    <?php
+	   			$site = Yii::app()->createController('Site');
+				$mod = 'Kohteet';
+				$sarake = 'avain';
+				$placeholder = 'Avain';
+				if(isset($_POST[$sarake])) $postvalue = $_POST[$sarake]; else $postvalue='';
+		 	        $site[0]->autocompleteFor($mod, $sarake, $placeholder, $postvalue);
+			    ?>
+			    <!-- Autocomplete -->
+
                             <label for="firstname" class="field-icon">
                               <i class="fa fa-key"></i>
                             </label>
@@ -109,7 +147,17 @@
                         <div class="section">
                           <label class="field prepend-icon">
 
-   			    <input type="text" name="sahkoposti" class="gui-input" value="<?php if(isset($_POST['sahkoposti'])) echo $_POST['sahkoposti']; ?>" placeholder="<?php echo Yii::t('main','Sähköposti'); ?>">
+			    <!-- Autocomplete -->
+			    <?php
+	   			$site = Yii::app()->createController('Site');
+				$mod = 'Kohteet';
+				$sarake = 'email';
+				$placeholder = 'Sähkoposti';
+				if(isset($_POST[$sarake])) $postvalue = $_POST[$sarake]; else $postvalue='';
+		 	        $site[0]->autocompleteFor($mod, $sarake, $placeholder, $postvalue);
+			    ?>
+			    <!-- Autocomplete -->
+
                             <label for="firstname" class="field-icon">
                               <i class="fa fa-at"></i>
                             </label>

@@ -55,7 +55,16 @@
                         <div class="section">
                           <label class="field prepend-icon">
 
-   			    <input type="text" class="gui-input" name="nimi" value="<?php if(isset($_POST['nimi'])) echo $_POST['nimi']; ?>" placeholder="<?php echo Yii::t('main', 'Nimi'); ?>...">
+			    <!-- Autocomplete -->
+			    <?php
+	   			$site = Yii::app()->createController('Site');
+				$mod = 'Tyontekijat';
+				$sarake = 'tekijan_nimi';
+				$placeholder = 'Nimi';
+				if(isset($_POST[$sarake])) $postvalue = $_POST[$sarake]; else $postvalue='';
+		 	        $site[0]->autocompleteFor($mod, $sarake, $placeholder, $postvalue);
+			    ?>
+			    <!-- Autocomplete -->
 
                             <label for="firstname" class="field-icon">
                               <i class="fa fa-user"></i>
@@ -67,7 +76,17 @@
                         <div class="section">
                           <label class="field prepend-icon">
 
-   			    <input type="text" name="puhelin"  class="gui-input" value="<?php if(isset($_POST['puhelin'])) echo $_POST['puhelin']; ?>" placeholder="<?php echo Yii::t('main', 'Puhelin'); ?>">
+			    <!-- Autocomplete -->
+			    <?php
+	   			$site = Yii::app()->createController('Site');
+				$mod = 'Tyontekijat';
+				$sarake = 'tekijan_puh';
+				$placeholder = 'Puhelin';
+				if(isset($_POST[$sarake])) $postvalue = $_POST[$sarake]; else $postvalue='';
+		 	        $site[0]->autocompleteFor($mod, $sarake, $placeholder, $postvalue);
+			    ?>
+			    <!-- Autocomplete -->
+
                             <label for="firstname" class="field-icon">
                               <i class="fa fa-phone"></i>
                             </label>
@@ -78,7 +97,17 @@
                         <div class="section">
                           <label class="field prepend-icon">
 
-   			    <input type="text" name="osoite" class="gui-input" value="<?php if(isset($_POST['osoite'])) echo $_POST['osoite']; ?>" placeholder="<?php echo Yii::t('main', 'Osoite'); ?>...">
+			    <!-- Autocomplete -->
+			    <?php
+	   			$site = Yii::app()->createController('Site');
+				$mod = 'Tyontekijat';
+				$sarake = 'tekijan_katuosoite';
+				$placeholder = 'Osoite';
+				if(isset($_POST[$sarake])) $postvalue = $_POST[$sarake]; else $postvalue='';
+		 	        $site[0]->autocompleteFor($mod, $sarake, $placeholder, $postvalue);
+			    ?>
+			    <!-- Autocomplete -->
+
                             <label for="firstname" class="field-icon">
                               <i class="fa fa-home"></i>
                             </label>
@@ -90,7 +119,19 @@
                         <div class="section">
                           <label class="field prepend-icon">
 
-   			    <input type="text" name="sahkoposti" class="gui-input" value="<?php if(isset($_POST['sahkoposti'])) echo $_POST['sahkoposti']; ?>" placeholder="<?php echo Yii::t('main','Sähköposti'); ?>">
+			    <!-- Autocomplete -->
+			    <?php
+	   			$site = Yii::app()->createController('Site');
+				$mod = 'Tyontekijat';
+				$sarake = 'tekijan_email';
+				$placeholder = 'Sähköposti';
+				if(isset($_POST[$sarake])) 			$postvalue = $_POST[$sarake]; 
+				else if(isset(Yii::app()->session[$sarake])) 	$postvalue = Yii::app()->session[$sarake]; 
+				else $postvalue='';				
+		 	        $site[0]->autocompleteFor($mod, $sarake, $placeholder, $postvalue);
+			    ?>
+			    <!-- Autocomplete -->
+
                             <label for="firstname" class="field-icon">
                               <i class="fa fa-at"></i>
                             </label>

@@ -365,17 +365,17 @@ class KohteetController extends Controller
 	        $criteria->addCondition (" aktiivinen='".(int)$_POST['aktiivinen']."' ");
 
 
-		if(isset($_POST['nimi']) and !empty(trim($_POST['nimi'])))
-	        $criteria->addCondition (" etu_suku_nimet LIKE '%".$_POST['nimi']."%' ");
+		if(isset($_POST['etu_suku_nimet']) and !empty(trim($_POST['etu_suku_nimet'])))
+	        $criteria->addCondition (" etu_suku_nimet LIKE '%".$_POST['etu_suku_nimet']."%' ");
 
-		if(isset($_POST['tag']) and !empty(trim($_POST['tag'])))
-	        $criteria->addCondition (" tag_id LIKE '%".$_POST['tag']."%' ");
+		if(isset($_POST['tag_id']) and !empty(trim($_POST['tag_id'])))
+	        $criteria->addCondition (" tag_id LIKE '%".$_POST['tag_id']."%' ");
 
 		if(isset($_POST['avain']) and !empty(trim($_POST['avain'])))
 	        $criteria->addCondition (" avain LIKE '%".$_POST['avain']."%' ");
 
-		if(isset($_POST['sahkoposti']) and !empty(trim($_POST['sahkoposti'])))
-	        $criteria->addCondition (" email LIKE '%".$_POST['sahkoposti']."%' ");
+		if(isset($_POST['email']) and !empty(trim($_POST['email'])))
+	        $criteria->addCondition (" email LIKE '%".$_POST['email']."%' ");
 
 		$dataProvider=new CActiveDataProvider('Kohteet', array(
 			'criteria'=>$criteria,
