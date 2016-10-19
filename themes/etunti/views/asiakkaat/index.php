@@ -202,7 +202,7 @@
 	<table>
 	 <tr>
 	  <td>
-		'.Yii::t('main', 'Yritys').'
+		<span class="p10">'.Yii::t('main', 'Yritys').'</span>
 	  </td><td>
 		'.CHtml::link('<i class="fa fa-arrow-down"></i>','index?sort=yrityksen_nimi&s=asc').'
 	  </td><td>
@@ -212,13 +212,25 @@
 	</table>';
       ?>
   </th>
-  <th><?php echo Yii::t('main', 'Osoite'); ?>
+  <th><?php echo '
+	<table>
+	 <tr>
+	  <td>
+		<span class="p10">'.Yii::t('main', 'Osoite').'</span>
+	  </td><td>
+		'.CHtml::link('<i class="fa fa-arrow-down"></i>','index?sort=osoite&s=asc').'
+	  </td><td>
+		'.CHtml::link('<i class="fa fa-arrow-up"></i>','index?sort=osoite&s=desc').'
+	  </td>
+	 </tr>
+	</table>';
+      ?>
   </th>
   <th><?php echo '
 	<table>
 	 <tr>
 	  <td>
-		'.Yii::t('main', 'Yhteyshenkilo').'
+		<span class="p10">'.Yii::t('main', 'Yhteyshenkilo').'</span>
 	  </td><td>
 		'.CHtml::link('<i class="fa fa-arrow-down"></i>','index?sort=yhteyshenkilo&s=asc').'
 	  </td><td>
@@ -232,7 +244,7 @@
 	<table>
 	 <tr>
 	  <td>
-		'.Yii::t('main', 'Puhelin').'
+		<span class="p10">'.Yii::t('main', 'Puhelin').'</span>
 	  </td><td>
 		'.CHtml::link('<i class="fa fa-arrow-down"></i>','index?sort=puhelin&s=asc').'
 	  </td><td>
@@ -246,7 +258,7 @@
 	<table>
 	 <tr>
 	  <td>
-		'.Yii::t('main', 'Sähköposti').'
+		<span class="p10">'.Yii::t('main', 'Sähköposti').'</span>
 	  </td><td>
 		'.CHtml::link('<i class="fa fa-arrow-down"></i>','index?sort=sahkoposti&s=asc').'
 	  </td><td>
@@ -260,7 +272,7 @@
 	<table>
 	 <tr>
 	  <td>
-		'.Yii::t('main', 'Ryhmä').'
+		<span class="p10">'.Yii::t('main', 'Ryhmä').'</span>
 	  </td><td>
 		'.CHtml::link('<i class="fa fa-arrow-down"></i>','index?sort=ryhma&s=asc').'
 	  </td><td>
