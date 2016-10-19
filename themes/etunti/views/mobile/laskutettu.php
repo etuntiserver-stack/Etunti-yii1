@@ -163,6 +163,7 @@
 
                     </div>
 		    <div class="alert alert-default"><?php echo Yii::t('main', 'laskutettuAllaOlevaIlmoitus'); ?></div>
+		    <div id="ilmoitusMerkkitysta"></div>
 		
 
                 </div>
@@ -264,7 +265,13 @@ $('.chckbxHyvaksynta').on('click', function(event, state) {
 	   data: { id : thisID[1], ajax : "true", las : "1", tot : tot },
            success: function(data){
 		console.log(data);
-		alert('Kohde merkitty laskutetuksi.');
+
+		   $('#ilmoitusMerkkitysta').html('<div class="alert bg-success">Kohde merkitty laskutetuksi.</div>').show();
+		setTimeout(function() { 
+			$('#ilmoitusMerkkitysta').hide('slow');
+		}, 5000);
+
+
            }
         });
       } else {
@@ -274,6 +281,13 @@ $('.chckbxHyvaksynta').on('click', function(event, state) {
 	   data: { id : thisID[1], ajax : "true", las : "0", tot : tot },
            success: function(data){
 		console.log(data);
+
+		   $('#ilmoitusMerkkitysta').html('<div class="alert bg-warning">Kohteen laskutusmerkintä poistettu.</div>').show();
+		setTimeout(function() { 
+			$('#ilmoitusMerkkitysta').hide('slow');
+		}, 5000);
+
+		
            }
         });
       }
