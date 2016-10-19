@@ -89,11 +89,11 @@
   <table class="table table-striped" id="mobileTable">
   <thead class="myBgColors">
   <tr>
+  <th></th>
   <th><?php echo Yii::t('main', 'Päivämäärä'); ?></th>
   <th><?php echo Yii::t('main', 'Viesti'); ?></th>
   <th><?php echo Yii::t('main', 'Lähettäjä'); ?></th>
   <th><?php echo Yii::t('main', 'Vastaanottaja'); ?></th>
-  <th><?php echo Yii::t('main', 'Kirjoita'); ?></th>
   </tr>
   </thead>
   <?php $this->widget('zii.widgets.CListView', array(

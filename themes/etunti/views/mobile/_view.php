@@ -159,6 +159,20 @@ else
 
 <tr style="<?php echo $class; ?>" id="rivi_<?php echo $data->id; ?>">
 
+	<td>
+		<?php echo CHtml::link('<i class="fa fa-pencil-square-o" aria-hidden="true" style="font-size: 110%"></i>', 
+				array('update', 'id'=>$data->id), 
+				array(
+					'class'=>'btn btn-primary myBgColors', 
+					'style'=>'color:white', 
+					'data-toggle'=>'tooltip', 
+					'data-placement'=>'top', 
+					'title'=>Yii::t('main', 'Muokkaa') 
+				)
+			); 
+		?>
+	</td>
+
 	<td style="white-space: nowrap">
 		<?php echo $door; ?>
 
@@ -167,7 +181,6 @@ else
 		<?php endif; ?>
 	</td>
 
-	<td><?php echo CHtml::link(CHtml::encode($data->id), array('update', 'id'=>$data->id)); ?></td>
 	<td><?php echo $versio; ?></td>
 	<td><b><?php echo CHtml::encode(date("d.m.Y",strtotime($data->aloitan))); ?></b></td>
 	<td><?php echo $karttaA." ".$karttaL; ?></td>
