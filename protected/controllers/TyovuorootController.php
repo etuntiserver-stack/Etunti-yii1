@@ -28,7 +28,7 @@ class TyovuorootController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','updatetime','showohje','did','muisti','operatio','viikko','fromto','autoinsert','autoremove','viikkottain', 'viikkottain_pdf', 'laheta','kk','pvmtid','laheta_k', 'muistin', 'muisticlear', 'muistissa', 'vkolopput', 'vkolopchange', 'uusitilaus', 'tv2', 'PoistaTv', 'valitse_kokopaiva', 'tv_kohteet', 'siivous_tyonimike', 'getKohdeByAsiakas', 'getAsiakasByKohde', 'paivita_laatikot', 'onko_sama'),
+				'actions'=>array('admin','delete','create','update','index','view','updatetime','showohje','did','muisti','operatio','viikko','fromto','autoinsert','autoremove','viikkottain', 'viikkottain_pdf', 'laheta','kk','pvmtid','laheta_k', 'muistin', 'muisticlear', 'muistissa', 'vkolopput', 'vkolopchange', 'uusitilaus', 'tv2', 'PoistaTv', 'valitse_kokopaiva', 'tv_kohteet', 'siivous_tyonimike', 'getKohdeByAsiakas', 'getAsiakasByKohde', 'paivita_laatikot', 'onko_sama', 'asiakas_autocomplete'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny', // allow admin user to perform 'admin' and 'delete' actions
@@ -82,7 +82,6 @@ class TyovuorootController extends Controller
 	{
 		$model = Kohteet::model()->findAll(" asiakas_id='".$id."' ");
 			$bd = '';
-			$bd .= '<option></option>';
 			foreach($model as $k)
 			$bd .= '<option value="'.$k->id.'">'.$k->osoite.'</option>';
 
@@ -1677,4 +1676,44 @@ class TyovuorootController extends Controller
 		return $arr;
 	}
 
+	public function actionAsiakas_autocomplete($key)
+	{
+
+		$criteria=new CDbCriteria;
+		$criteria->order =" yrityksen_nimi!='' DESC,yhteyshenkilo!='' DESC";
+		$criteria->condition =" 
+			aktiivinen=1 
+			AND (yrityksen_nimi LIKE '%".$key."%' OR yhteyshenkilo LIKE '%".$key."%' OR osoite LIKE '%".$key."%' )	
+		";
+
+ 		$as = Asiakkaat::model()->findAll($criteria);
+		$nm = array();
+		$return = '';
+		if( count($as) > 0 )
+		{
+
+		$return .= '
+			<div class="row" style="position:absolute; z-index:9999999;margin-left:0px">
+			  <div class="list-group">';
+			foreach($as as $a)
+			{
+				if(!empty($a->yrityksen_nimi))
+				$nm = array($a->yrityksen_nimi, $a->id);
+				elseif(!empty($a->yhteyshenkilo))
+				$nm = array($a->yhteyshenkilo, $a->id);
+				else
+				$nm = array($a->osoite, $a->id);
+				
+				$return .= '<a href="#" class="list-group-item asiakasSelecter" for="'.$nm[1].'">'.$nm[0].'</a>';
+			}
+			$return .='</div></div>';
+		}
+
+
+
+
+
+		echo json_encode($return);
+
+	}
 }

@@ -147,39 +147,8 @@ if(isset($model->id))
 
   <div class="col-sm-3">
 		<label><?php echo Yii::t('main', 'Asiakas'); ?></label><br>
-		<?php 
-
-		$criteria=new CDbCriteria;
-		$criteria->order =" yrityksen_nimi!='' DESC,yhteyshenkilo!='' DESC";
-		$criteria->condition =" aktiivinen=1 ";
-
- 		$as = Asiakkaat::model()->findAll($criteria);
-		$nm = array();
-		if(isset($as[0]))
-		{
-
-			foreach($as as $a)
-			{
-				if(!empty($a->yrityksen_nimi))
-				$nm[$a->yrityksen_nimi] = $a->id;
-				elseif(!empty($a->yhteyshenkilo))
-				$nm[$a->yhteyshenkilo] = $a->id;
-				else
-				$nm[$a->osoite] = $a->id;
-
-			}
-			ksort($nm);
-
-			echo '<select name="asiakas" id="asiakas" class="form-control">';
-				echo '<option value=""></option>';
-
-			foreach($nm as $k=>$v)
-				echo '<option value="'.$v.'">'.$k.'</option>';
-
-			echo '</select>';
-		}
-		?>
-
+		<input type="text" id="asiakas" class="form-control">
+		<div id="asiakasAutocompleteResult"></div>
   </div>
 
   <div class="col-sm-3">
@@ -477,23 +446,55 @@ $(document).ready(function(){
 	 	});
   }
 
-  $('#asiakas').change(function(){
+  $('#asiakas').keyup(function(){
 	var thisVal = $(this).val();
 
+	if( thisVal.length >= 2 )
+	{
+
 	  	 $.ajax({
-			url: 'getKohdeByAsiakas',
+			url: 'asiakas_autocomplete',
 			type:'GET',
-			data: { "id" : thisVal },
+			async : false,
+			data: { "key" : thisVal },
 			  success:function(data){
 				data = JSON.parse(data);
-			  	console.log(data);
-				$('#Tyovuoroot_kohde').html(data);
+			  	//console.log(data);
+				if(data)
+					$('#asiakasAutocompleteResult').html(data).show();
 
 			  },
 			  error:function(data){
 			  	console.log(data);
 			  }
 	 	});
+
+	} else {
+					$('#asiakasAutocompleteResult').html('');
+	}
+
+
+     $('.asiakasSelecter').click(function(){
+	var thisVal = $(this).attr('for');
+	var thisAsiakas = $(this).text();
+	  	 $.ajax({
+			url: 'getKohdeByAsiakas',
+			type:'GET',
+			data: { "id" : thisVal },
+			  success:function(data){
+				data = JSON.parse(data);
+			  	//console.log(data);
+				$('#Tyovuoroot_kohde').html(data);
+				$('#asiakasAutocompleteResult').html('').hide();
+				$('#asiakas').val(thisAsiakas);
+
+			  },
+			  error:function(data){
+			  	console.log(data);
+			  }
+	 	});
+     });
+
   });
 
 

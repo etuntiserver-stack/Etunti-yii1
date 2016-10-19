@@ -954,6 +954,7 @@ $(document).ready(function(){
 		        'minLength'=>'2',
 		    ),
 		    'htmlOptions'=>array(
+                        'showAnim'=>'fold',
 			'class'=>'gui-input',
 		     	'placeholder'=> Yii::t('main', $placeholder),
 		    ),
@@ -963,10 +964,11 @@ $(document).ready(function(){
 	public function actionAutocomplete($model, $sarake, $term)
 	{
 
+		$term = trim($term);
 		$criteria = new CDBcriteria;
 		$criteria->order = " $sarake ";
 		$criteria->group = " $sarake ";
-		$criteria->condition = " $sarake LIKE '".$term."%' ";
+		$criteria->condition = " $sarake LIKE '%".$term."%' ";
 		$model = $model::model()->findAll($criteria);
 
 		$arr = array();
