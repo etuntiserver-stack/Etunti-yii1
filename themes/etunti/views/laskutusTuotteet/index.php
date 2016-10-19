@@ -10,7 +10,8 @@
 
 
               <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-home"></i> <?php echo Yii::t('main', 'Tuotteet ja palvelut'); ?> 
-		<?php echo CHtml::link('','/index.php/laskutusTuotteet/create',array('class'=>'btn btn-default fa fa-plus')); ?></h2>
+		<?php echo CHtml::link('','/index.php/laskutusTuotteet/create',array('class'=>'btn btn-default fa fa-plus','data-toggle'=>'tooltip', 'data-placement'=>'top', 'title' => Yii::t('main', 'Lisää tuote') )); ?>
+		</h2>
 
 
 
@@ -103,12 +104,17 @@
         </div>
 
 
+
+<div class="admin-form">
   <div class="panel heading-border">
    <div class="panel-body">
 
+<div class="row">
+ <div class="table-responsive">
   <table class="table table-striped" id="mobileTable">
   <thead class="myBgColors">
   <tr>
+  <th></th>
   <th><?php echo Yii::t('main', 'Tuotenimi'); ?></th>
   <th><?php echo Yii::t('main', 'Hinta Alv 0'); ?></th>
   <th><?php echo Yii::t('main', 'Hinta Alv Sis'); ?></th>
@@ -118,7 +124,6 @@
     if($netvisor == true)
     echo '<th>'.Yii::t('main', 'Netvisor').'</th>';
   ?>
-  <th></th>
   </tr>
   </thead>
 <?php $this->widget('zii.widgets.CListView', array(
@@ -141,9 +146,13 @@
 
 )); ?>
   </table>
+ </div>
+</div>
+
+
    </div>
   </div>
-
+</div>
 
 
 

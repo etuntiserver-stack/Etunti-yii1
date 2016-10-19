@@ -24,7 +24,7 @@ $this->breadcrumbs=array(
    </div>
    <!-- tulostus -->
 
-              <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-time"></i> <?php echo Yii::t('main', 'TUNTIYHTEENVETO TYÖNTEKIJÄT'); ?> 
+              <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-time"></i> <?php echo Yii::t('main', 'Tuntiyhtenveto työntekijät'); ?> 
 
 		</h2>
 
@@ -130,10 +130,12 @@ $this->breadcrumbs=array(
 
 
 
-
+<div class="admin-form">
   <div class="panel heading-border">
    <div class="panel-body">
 
+<div class="row">
+ <div class="table-responsive">
   <table class="table table-striped">
   <thead class="myBgColors">
   <tr>
@@ -205,11 +207,11 @@ $this->breadcrumbs=array(
   </tr>
   </tfoot>
   </table>
+ </div>
+</div>
 
    </div>
   </div>
-
-
 </div>
 
 	<div id="showres" class="modal fade" tabindex="-1" role="dialog"></div>
@@ -306,6 +308,7 @@ $('.mult').multiselect({
 	//enableFiltering: true,
         includeSelectAllOption: true,
 	nonSelectedText: '<?php echo Yii::t("main", "Tyhjä"); ?>',
+
 	selectAllText: '<?php echo Yii::t("main", "Valitse kaikki"); ?>',
 	allSelectedText: '<?php echo Yii::t("main", "Kaikki"); ?>',
 	nSelectedText: '<?php echo Yii::t("main", "valittu"); ?>',

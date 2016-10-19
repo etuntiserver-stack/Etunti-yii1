@@ -30,7 +30,7 @@ legend{  padding: 3px 7px; }
      </form>
    </div>
    <!-- tulostus -->
-              <h2 class="myBgColors p10"> <i class="fa fa-key"></i> <?php echo Yii::t('main', 'AVAIMET'); ?> 
+              <h2 class="myBgColors p10"> <i class="fa fa-key"></i> <?php echo Yii::t('main', 'Avaimet'); ?> 
 		</h2>
 
 
@@ -112,18 +112,20 @@ legend{  padding: 3px 7px; }
 
 <?php endif; ?>
 
-
+<div class="admin-form">
   <div class="panel heading-border">
    <div class="panel-body">
 
-<table class="table table-stripped">
-<thead class="myBgColors">
- <tr>
-  <th><?php echo Yii::t('main','Työntekijä'); ?></th>
-  <th><?php echo Yii::t('main','Avain'); ?></th>
- </tr>
-</thead>
-<tbody>
+	<div class="row">
+ 	 <div class="table-responsive">
+	  <table class="table table-stripped">
+	   <thead class="myBgColors">
+		 <tr>
+		  <th><?php echo Yii::t('main','Työntekijä'); ?></th>
+		  <th><?php echo Yii::t('main','Avain'); ?></th>
+		 </tr>
+	   </thead>
+	   <tbody>
   <?php
   foreach($model as $data)
   {
@@ -145,12 +147,14 @@ legend{  padding: 3px 7px; }
     echo '</tr>';
   }
   ?>
-</tbody>
-</table>
+	    </tbody>
+	   </table>
+ 	 </div>
+	</div>
 
    </div>
   </div>
-
+</div>
 
 <?php if(!isset($_POST['tulosta'])) : ?>
 <script type="text/javascript">

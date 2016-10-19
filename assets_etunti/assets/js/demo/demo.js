@@ -264,10 +264,10 @@ $("#notiFyClick").click(function(){
 	$('.myBgColors').removeClass(headerSkins);
 	$('.myBgColors').addClass(settingsObj['headerSkin']);
 	var backgroundColor = $('.myBgColors').css('backgroundColor');
-
-
-
 	$('head').append('<style>.admin-form .heading-border:before{background-color: '+backgroundColor+';}</style>');
+
+	localStorage.setItem('headerSkin', settingsObj['headerSkin']);
+
 
         $.each(settingsParse, function(i, e) {
           switch (i) {

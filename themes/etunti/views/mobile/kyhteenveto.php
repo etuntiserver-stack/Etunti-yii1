@@ -28,7 +28,7 @@ $this->breadcrumbs=array(
    <!-- tulostus -->
 
 
-              <h2 class="myBgColors p10"> <i class="fa fa-home"></i> <?php echo Yii::t('main', 'TUNTIYHTEENVETO KOHTEET'); ?> 
+              <h2 class="myBgColors p10"> <i class="fa fa-home"></i> <?php echo Yii::t('main', 'Tuntiyhtenveto kohteet'); ?> 
 
 		</h2>
 
@@ -108,9 +108,12 @@ $this->breadcrumbs=array(
 
 <?php if($from and $to) : ?>
 
+<div class="admin-form">
   <div class="panel heading-border">
    <div class="panel-body">
 
+<div class="row">
+ <div class="table-responsive">
   <table class="table table-striped small">
   <thead class="myBgColors">
   <tr>
@@ -216,10 +219,13 @@ $this->breadcrumbs=array(
   </tfoot>
 
   </table>
+ </div>
+</div>
+
 
    </div>
   </div>
-
+</div>
 <?php endif; ?>
 
 

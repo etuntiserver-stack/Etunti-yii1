@@ -179,10 +179,12 @@
 
 
 
-
+<div class="admin-form">
   <div class="panel heading-border">
    <div class="panel-body">
 
+<div class="row">
+ <div class="table-responsive">
   <table class="table table-striped" id="mobileTable">
   <thead class="myBgColors">
   <tr>
@@ -220,11 +222,14 @@
 
   )); ?>
   </table>
+ </div>
+</div>
 
 
 
    </div>
   </div>
+</div>
 
 
   <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/jquery.mask.js"></script>

@@ -145,12 +145,15 @@
 
 
 
-
+<div class="admin-form">
   <div class="panel heading-border">
    <div class="panel-body">
-    <div id="tb" class="table-responsive"></div>
+    <div class="row">
+     <div id="tb" class="table-responsive"></div>
+    </div>
    </div>
   </div>
+</div>
 
 
 
@@ -215,6 +218,7 @@ function tableAjax(){
   	  	//console.log(data);
   	  	console.log('tableAjax updated');
 	  	$('#tb').html(data);
+		$('.myBgColors').addClass(localStorage.getItem('headerSkin'));
       	},
   	error:function(data){
   		console.log(data); 
@@ -223,10 +227,10 @@ function tableAjax(){
 
 }
 
-   setTimeout(function(){tableAjax();},300);
+   setTimeout(function(){tableAjax();},100);
    
    // <-- Start and stop Table update
-   var interval = 60000;
+   var interval = 6000;
    var tableAjaxInterval = setInterval(tableAjax, interval);
 
    $(document).delegate(".muokkaminen","click",function(){

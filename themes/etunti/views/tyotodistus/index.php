@@ -148,10 +148,12 @@ ${NimikeTehtava}
 
 
 
+<div class="admin-form">
   <div class="panel heading-border">
    <div class="panel-body">
 
-<div class="table-responsive">
+<div class="row">
+ <div class="table-responsive">
   <table class="table table-striped" id="mobileTable">
   <thead class="myBgColors">
   <tr>
@@ -179,11 +181,13 @@ ${NimikeTehtava}
 
   )); ?>
   </table>
+ </div>
 </div>
+
 
    </div>
   </div>
-
+</div>
 
 
 
