@@ -42,12 +42,12 @@ if( $curpage == 'tyovuoroot/tv2' )
             <span class="ad ad-ruby fs18"></span>
           </a>
         </li>
-        <li>
+        <li data-toggle="tooltip" title="<?php echo Yii::t('main', 'Ylävalikko'); ?>">
           <a class="topbar-menu-toggle" href="#">
             <span class="ad ad-wand fs16"></span>
           </a>
         </li>
-        <li class="hidden-xs" id="fullscreenTila">
+        <li class="hidden-xs" id="fullscreenTila" data-toggle="tooltip" title="<?php echo Yii::t('main', 'Kokoruuduntila'); ?>">
           <a class="request-fullscreen toggle-active" href="#">
             <span class="ad ad-screen-full fs18"></span>
           </a>
@@ -127,7 +127,7 @@ if( $curpage == 'tyovuoroot/tv2' )
       </form>
 -->
       <ul class="nav navbar-nav navbar-right">
-        <li class="dropdown menu-merge">
+        <li class="dropdown menu-merge" data-toggle="tooltip" title="<?php echo Yii::t('main', 'Uusimmat viestit'); ?>">
           <a class="dropdown-toggle" data-toggle="dropdown" href="#">
             <span class="ad ad-radio-tower fs18" id="notiFyClick"></span>
           </a>
@@ -140,7 +140,7 @@ if( $curpage == 'tyovuoroot/tv2' )
 	    	
           </ul>
         </li>
-        <li class="dropdown menu-merge">
+        <li class="dropdown menu-merge" data-toggle="tooltip" title="<?php echo Yii::t('main', 'Valitse kieli'); ?>">
           <a class="dropdown-toggle" data-toggle="dropdown" href="#">
              <span class=""></span> 
 		<?php
@@ -162,7 +162,7 @@ if( $curpage == 'tyovuoroot/tv2' )
           </ul>
         </li>
 
-        <li class="dropdown menu-merge">
+        <li class="dropdown menu-merge" data-toggle="tooltip" title="<?php echo Yii::t('main', 'Asetukset'); ?>">
           <a href="#" class="dropdown-toggle " data-toggle="dropdown"> 
 	    <i class="fa fa-gear"></i>
             <span class="caret caret-tp hidden-xs"></span>
@@ -184,7 +184,7 @@ if( $curpage == 'tyovuoroot/tv2' )
         </li>
 
 
-        <li class="dropdown menu-merge">
+        <li class="dropdown menu-merge" data-toggle="tooltip" title="<?php echo Yii::t('main', 'Katso ohjevideot'); ?>">
           <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/site/ohjevideot">
             <span class="fa fa-question-circle"></span>
           </a>
@@ -192,7 +192,7 @@ if( $curpage == 'tyovuoroot/tv2' )
 
 
 
-        <li class="dropdown menu-merge">
+        <li class="dropdown menu-merge" data-toggle="tooltip" title="<?php echo Yii::t('main', 'Valitse värit'); ?>">
           <a class="dropdown-toggle" data-toggle="dropdown" href="#">
              <span class="fa fa-eyedropper"></span> 
 
@@ -210,7 +210,7 @@ if( $curpage == 'tyovuoroot/tv2' )
         <div class="text-dark">
           <div class="col-sm-6">
             <form id="toolbox-header-skin">
-              <h4 class="mv20"><?php echo Yii::t('main','Header Skins'); ?></h4>
+              <h4 class="mv20"><?php echo Yii::t('main','Väri'); ?></h4>
               <div class="skin-toolbox-swatches">
                 <div class="checkbox-custom checkbox-disabled fill mb5">
                   <input type="radio" name="headerSkin" id="headerSkin8" checked value="">
@@ -253,7 +253,7 @@ if( $curpage == 'tyovuoroot/tv2' )
           </div>
           <div class="col-sm-6">
             <form id="toolbox-sidebar-skin">
-              <h4 class="mv20"><?php echo Yii::t('main','Sidebar Skins'); ?></h4>
+              <h4 class="mv20"><?php echo Yii::t('main','Sivupalkin väri'); ?></h4>
               <div class="skin-toolbox-swatches">
                 <div class="checkbox-custom fill mb5">
                   <input type="radio" name="sidebarSkin" checked id="sidebarSkin3" value="">
