@@ -4,7 +4,7 @@
         <!-- begin: .tray-center -->
         <div class="tray-center">
 
-	   <h2 class="myBgColors p10"> <i class="fa fa-male"></i> <?php echo Yii::t('main','LUO TYÖNTEKIJÄ'); ?> </h2>
+	   <h2 class="myBgColors p10"> <i class="fa fa-male"></i> <?php echo Yii::t('main','Luo työntekijä'); ?> </h2>
 
 
             <div class="admin-form">

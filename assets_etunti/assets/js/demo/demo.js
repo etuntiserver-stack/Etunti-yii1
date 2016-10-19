@@ -23,6 +23,14 @@ var Demo = function() {
     });
     */
 
+    // <-- errorSummary
+    if( $('.errorSummary').text() !== '' ){
+		$('.errorSummary').addClass('alert bg-warning');
+		$('.errorSummary p').css({ 'font-weight':'bold' });
+    }
+    // errorSummary -->
+
+
     // give file-upload preview onclick functionality
     var fileUpload = $('.fileupload-preview');
     if (fileUpload.length) {

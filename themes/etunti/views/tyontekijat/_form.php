@@ -50,10 +50,11 @@ if(empty($model->position) and isset($model->id))
 	'enableAjaxValidation'=>false,
 )); ?>
 
+	<?php echo $form->errorSummary($model); ?>
+
 <div class="row">
    <div class="col-sm-3">
 
-	<?php echo $form->errorSummary($model); ?>
 
 
 	<div class="section fill mb5">
@@ -304,7 +305,7 @@ if(empty($model->position) and isset($model->id))
 
 
 
-
+	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/jquery.mask.js"></script>
 
 <script type="text/javascript">
 $(document).ready(function(){
