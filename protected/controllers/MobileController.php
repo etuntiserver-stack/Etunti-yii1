@@ -651,13 +651,13 @@ function num($val){
 	        $criteria->addCondition (" kohdenID IN ( SELECT id FROM sivex_kohdet WHERE siivous LIKE '%".$_POST['siivousPaaSivulla']."%' ) ");
 
 
-		if(isset($_POST['asiakas']) and !empty($_POST['asiakas']))
+		if(isset($_POST['yrityksen_nimi']) and !empty($_POST['yrityksen_nimi']))
 		{
 	        $criteria->addCondition ("  
 			kohdenID IN ( 
 			SELECT id FROM sivex_kohdet WHERE asiakas_id IN 
 				( SELECT id FROM asiakkaat 
-					WHERE yrityksen_nimi LIKE '%".$_POST['asiakas']."%' OR yhteyshenkilo LIKE '%".$_POST['asiakas']."%'
+					WHERE yrityksen_nimi LIKE '%".$_POST['yrityksen_nimi']."%' OR yhteyshenkilo LIKE '%".$_POST['yrityksen_nimi']."%'
 				)
 			)
 		");
@@ -711,6 +711,22 @@ function num($val){
 		if(isset($_POST['tunni_status']) and $_POST['tunni_status'] == 'kaikki')
 		unset(Yii::app()->session['tunni_status']);
 
+		if(isset($_POST['yrityksen_nimi']) and empty($_POST['yrityksen_nimi']))
+			unset(Yii::app()->session['yrityksen_nimi']);
+		else if(isset($_POST['yrityksen_nimi']) and !empty($_POST['yrityksen_nimi']))
+			Yii::app()->session['yrityksen_nimi'] = Yii::app()->request->getPost('yrityksen_nimi');
+
+		if(isset($_POST['siivousPaaSivulla']) and empty($_POST['siivousPaaSivulla']))
+			unset(Yii::app()->session['siivousPaaSivulla']);
+		else if(isset($_POST['siivousPaaSivulla']) and !empty($_POST['siivousPaaSivulla']))
+			Yii::app()->session['siivousPaaSivulla'] = Yii::app()->request->getPost('siivousPaaSivulla');
+
+		if(isset($_POST['tyontekijanRyhma']) and empty($_POST['tyontekijanRyhma']))
+			unset(Yii::app()->session['tyontekijanRyhma']);
+		else if(isset($_POST['tyontekijanRyhma']) and !empty($_POST['tyontekijanRyhma']))
+			Yii::app()->session['tyontekijanRyhma'] = Yii::app()->request->getPost('tyontekijanRyhma');
+
+
 
 		if(Yii::app()->request->getPost('fromP'))
 		Yii::app()->session['fromP'] = date("Y-m-d",strtotime(Yii::app()->request->getPost('fromP')));
@@ -749,6 +765,38 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 	        $criteria->addCondition ("DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".Yii::app()->session['fromP']."' AND '".Yii::app()->session['toP']."' ");
 		if(Yii::app()->session['tunni_status'])
 	        $criteria->addCondition (" status = '".Yii::app()->session['tunni_status']."' ");
+
+		if(isset(Yii::app()->session['yrityksen_nimi']))
+		{
+	        $criteria->addCondition ("  
+			kohdenID IN ( 
+			SELECT id FROM sivex_kohdet WHERE asiakas_id IN 
+				( SELECT id FROM asiakkaat 
+					WHERE yrityksen_nimi LIKE '%".Yii::app()->session['yrityksen_nimi']."%' OR yhteyshenkilo LIKE '%".Yii::app()->session['yrityksen_nimi']."%'
+				)
+			)
+		");
+		}
+
+		if(isset(Yii::app()->session['siivousPaaSivulla']))
+	        $criteria->addCondition (" kohdenID IN ( SELECT id FROM sivex_kohdet WHERE siivous LIKE '%".Yii::app()->session['siivousPaaSivulla']."%' ) ");
+
+
+		if(isset(Yii::app()->session['tyontekijanRyhma']))
+		{
+	        $criteria->addCondition ("  
+			tid IN ( 
+			SELECT id FROM sivex_ttekijat WHERE tyoryhma IN 
+				( SELECT value FROM sivex_selects 
+					WHERE value LIKE '%".Yii::app()->session['tyontekijanRyhma']."%'
+				)
+			)
+		");
+		}
+
+
+
+
 
 		$dataProvider=new CActiveDataProvider('Mobile', array(
 			'criteria'=>$criteria,

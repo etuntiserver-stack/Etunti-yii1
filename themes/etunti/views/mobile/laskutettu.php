@@ -59,7 +59,18 @@
                         <div class="section">
                           <label class="field prepend-icon">
 
-   			    <input type="text" class="gui-input" name="asiakas" value="<?php if(isset($_POST['asiakas'])) echo $_POST['asiakas']; ?>" placeholder="<?php echo Yii::t('main', 'Asiakas'); ?>">
+			    <!-- Autocomplete -->
+			    <?php
+	   			$site = Yii::app()->createController('Site');
+				$mod = 'Asiakkaat';
+				$sarake = 'yrityksen_nimi';
+				$placeholder = 'Asiakas';
+				if(isset($_POST[$sarake])) 			$postvalue = $_POST[$sarake]; 
+				else if(isset(Yii::app()->session[$sarake])) 	$postvalue = Yii::app()->session[$sarake]; 
+				else $postvalue='';				
+		 	        $site[0]->autocompleteFor($mod, $sarake, $placeholder, $postvalue);
+			    ?>
+			    <!-- Autocomplete -->
 
                             <label for="firstname" class="field-icon">
                               <i class="fa fa-user"></i>
@@ -95,7 +106,7 @@
        echo '<option value="'.$_POST['siivousPaaSivulla'].'">'.$_POST['siivousPaaSivulla'].'</option>';
 
     } else {
-       echo '<option value="">'.Yii::t('main', 'Kohden työnimike').'</option>';
+       echo '<option value="">'.Yii::t('main', 'Kohteen työnimike').'</option>';
     }
 
        echo '<option value="">Kaikki</option>';

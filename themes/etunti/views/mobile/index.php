@@ -26,6 +26,7 @@
                     <div class="row">
 
                       <div class="col-md-2">
+
                         <div class="section">
                           <label class="field select">
 
@@ -60,8 +61,33 @@
                             </label>
                           </label>
                         </div>
+
+
+                        <div class="section">
+                          <label class="field prepend-icon">
+
+			    <!-- Autocomplete -->
+			    <?php
+	   			$site = Yii::app()->createController('Site');
+				$mod = 'Asiakkaat';
+				$sarake = 'yrityksen_nimi';
+				$placeholder = 'Asiakas';
+				if(isset($_POST[$sarake])) 			$postvalue = $_POST[$sarake]; 
+				else if(isset(Yii::app()->session[$sarake])) 	$postvalue = Yii::app()->session[$sarake]; 
+				else $postvalue='';				
+		 	        $site[0]->autocompleteFor($mod, $sarake, $placeholder, $postvalue);
+			    ?>
+			    <!-- Autocomplete -->
+
+                            <label for="firstname" class="field-icon">
+                              <i class="fa fa-user"></i>
+                            </label>
+                          </label>
+                        </div>
+
                       </div>
                       <div class="col-md-2">
+
                         <div class="section">
                           <label class="field prepend-icon">
 
@@ -83,8 +109,41 @@
                             </label>
                           </label>
                         </div>
+
+                        <div class="section">
+                          <label class="field select">
+
+
+   <?php
+   $list = array();
+   $l = Valikkoot::model()->findAll(" select_type='siivous' ",array('order' => "select_type"));
+
+    echo '<select class="gui-input" name="siivousPaaSivulla">';
+    if(isset(Yii::app()->session['siivousPaaSivulla']))
+    {
+       echo '<option value="'.Yii::app()->session['siivousPaaSivulla'].'">'.Yii::app()->session['siivousPaaSivulla'].'</option>';
+
+    } else {
+       echo '<option value="">'.Yii::t('main', 'Kohteen työnimike').'</option>';
+    }
+
+       echo '<option value="">Kaikki</option>';
+
+    foreach($l as $key=>$val){
+    echo '<option value="'.$val->value.'">'.$val->value.'</option>';
+
+    }
+    echo '</select>';
+   ?>
+
+                            <i class="arrow double"></i>
+                            </label>
+                          </label>
+                        </div>
+
                       </div>
                       <div class="col-md-2">
+
                         <div class="section">
                           <label class="field prepend-icon">
 
@@ -94,6 +153,38 @@
                             </label>
                           </label>
                         </div>
+
+                        <div class="section">
+                          <label class="field select">
+
+
+   <?php
+   $list = array();
+   $l = Valikkoot::model()->findAll(" select_type='tyoryhma' ",array('order' => "select_type"));
+
+    echo '<select class="gui-input" name="tyontekijanRyhma">';
+    if(isset(Yii::app()->session['tyontekijanRyhma']))
+    {
+       echo '<option value="'.Yii::app()->session['tyontekijanRyhma'].'">'.Yii::app()->session['tyontekijanRyhma'].'</option>';
+
+    } else {
+       echo '<option value="">'.Yii::t('main', 'Työntekijän ryhmä').'</option>';
+    }
+
+       echo '<option value="">Kaikki</option>';
+
+    foreach($l as $key=>$val){
+    echo '<option value="'.$val->value.'">'.$val->value.'</option>';
+
+    }
+    echo '</select>';
+   ?>
+
+                            <i class="arrow double"></i>
+                            </label>
+                          </label>
+                        </div>
+
                       </div>
                       <div class="col-md-2">
                         <div class="section">
@@ -230,7 +321,7 @@ function tableAjax(){
    setTimeout(function(){tableAjax();},100);
    
    // <-- Start and stop Table update
-   var interval = 6000;
+   var interval = 60000;
    var tableAjaxInterval = setInterval(tableAjax, interval);
 
    $(document).delegate(".muokkaminen","click",function(){
