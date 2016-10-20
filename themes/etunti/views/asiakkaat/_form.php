@@ -19,7 +19,7 @@ $asiakasnumero = 'voidaan käyttää oleva ID numero';
    $as = Asiakkaat::model()->find(array("order"=>"id DESC"));
 
    if(isset($as->id) and !isset($model->id) and $asetukset->lasku_asiakasnumero == 0)
-   $asnum = array('value'=>$as->id,'class'=>'form-control');
+   $asnum = array('value'=>($as->id+1),'class'=>'form-control');
    else
    $asnum = array('class'=>'form-control');
 
@@ -247,7 +247,7 @@ $model->hinta = str_replace(",",".",$model->hinta);
 
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'maksuehto'); ?>
-		<?php echo $form->textField($model,'maksuehto',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
+		<?php echo $form->numberField($model,'maksuehto',array('size'=>60,'maxlength'=>3,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'maksuehto'); ?>
 	</div>
 

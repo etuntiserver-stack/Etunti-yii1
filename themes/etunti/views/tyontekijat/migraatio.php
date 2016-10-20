@@ -174,7 +174,6 @@ if(isset($_POST['esikatselu']))
 
 		$attributes = Tyontekijat::model()->getAttributes();
 		unset(	
-		$attributes['laiten_puh'],
 		$attributes['tyoryhma'],
 		$attributes['tyoehtosopimus'],
 		$attributes['tekijan_konttori'],
