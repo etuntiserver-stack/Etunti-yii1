@@ -82,6 +82,7 @@ class TyovuorootController extends Controller
 	{
 		$model = Kohteet::model()->findAll(" asiakas_id='".$id."' ");
 			$bd = '';
+			$bd .= '<option>'.Yii::t('main', 'Valitse kohde').'</option>';
 			foreach($model as $k)
 			$bd .= '<option value="'.$k->id.'">'.$k->osoite.'</option>';
 
