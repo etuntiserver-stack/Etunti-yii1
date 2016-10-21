@@ -88,6 +88,16 @@ $model->hinta = str_replace(",",".",$model->hinta);
 	</div>
 
 	<div class="section fill mb5 ashidd_a">
+		<?php echo $form->labelEx($model,'aktiivinen'); ?>
+		<?php
+		$list = array(1=>Yii::t('main', 'Kyllä'),0=>Yii::t('main', 'Ei'));
+        	echo $form->dropDownList($model, 'aktiivinen', $list,
+		array('class'=>'form-control'));	
+        	?>
+		<?php echo $form->error($model,'aktiivinen'); ?>
+	</div>
+
+	<div class="section fill mb5 ashidd_a">
 
 		<?php echo $form->labelEx($model,'myyja'); ?>
 		<?php echo $form->dropDownList($model, 'myyja', CHtml::listData(Administrators::model()->findAll(), 'id', 'adm_nimi'), 
@@ -128,9 +138,17 @@ $model->hinta = str_replace(",",".",$model->hinta);
 	</div>
 <?php endif ; ?>
 
+<?php if(in_array('5',$tas)) : ?>
+	<div class="section fill mb5 ashidd_a">
+		<?php echo $form->labelEx($model,'salasana'); ?>
+		<?php echo $form->textField($model,'salasana',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'salasana'); ?>
+	</div>
+<?php endif ; ?>
+
 
   </div><div class="col-sm-3">
-	<legend><h3><?php echo Yii::t('main', 'Asiakkaan tiedot'); ?></h3></legend>
+	<legend><h3><?php echo Yii::t('main', 'Laskutusosoite'); ?></h3></legend>
 
 	<div class="section fill mb5 ashidd_a">
 		<?php echo $form->labelEx($model,'osoite'); ?>
@@ -156,26 +174,31 @@ $model->hinta = str_replace(",",".",$model->hinta);
 		<?php echo $form->error($model,'puhelin'); ?>
 	</div>
 
+	<br>
+	<legend><?php echo Yii::t('main', 'Käyntiosoite'); ?> <input type="checkbox" data-toggle="collapse" data-target="#kosoiteet"></legend>
+
+	<div id="kosoiteet" class="collapse">
+
 	<div class="section fill mb5 ashidd_a">
-		<?php echo $form->labelEx($model,'aktiivinen'); ?>
-		<?php
-		$list = array(1=>Yii::t('main', 'Kyllä'),0=>Yii::t('main', 'Ei'));
-        	echo $form->dropDownList($model, 'aktiivinen', $list,
-		array('class'=>'form-control'));	
-        	?>
-		<?php echo $form->error($model,'aktiivinen'); ?>
+		<?php echo $form->labelEx($model,'k_osoite'); ?>
+		<?php echo $form->textField($model,'k_osoite',array('size'=>60,'maxlength'=>255,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'k_osoite'); ?>
 	</div>
 
-	<hr>
-
-<?php if(in_array('5',$tas)) : ?>
 	<div class="section fill mb5 ashidd_a">
-		<?php echo $form->labelEx($model,'salasana'); ?>
-		<?php echo $form->textField($model,'salasana',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
-		<?php echo $form->error($model,'salasana'); ?>
+		<?php echo $form->labelEx($model,'k_postinumero'); ?>
+		<?php echo $form->textField($model,'k_postinumero',array('class'=>'form-control','maxlength'=>5)); ?>
+		<?php echo $form->error($model,'k_postinumero'); ?>
 	</div>
-<?php endif ; ?>
 
+	<div class="section fill mb5 ashidd_a">
+		<?php echo $form->labelEx($model,'k_kaupunki'); ?>
+		<?php echo $form->textField($model,'k_kaupunki',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
+
+		<?php echo $form->error($model,'k_kaupunki'); ?>
+	</div>
+
+	</div>
 
   </div>
 
