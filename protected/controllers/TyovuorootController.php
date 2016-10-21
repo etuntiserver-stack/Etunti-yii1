@@ -1238,7 +1238,6 @@ class TyovuorootController extends Controller
 			// Tyontekijan vaihto -->
 
 			$model->attributes=$_POST['Tyovuoroot'];
-
 			if($model->save()){
 
 
@@ -1261,10 +1260,6 @@ class TyovuorootController extends Controller
 
 
 
-			// <-- jos on tyopaari
-			if(isset($_POST['tyopaari']) and count($_POST['tyopaari']) > 0)
-			{
-
 			    $vanhat = json_decode($model->tyopaari, true);
 			    if(is_array($vanhat))
 			    {
@@ -1279,6 +1274,13 @@ class TyovuorootController extends Controller
 				}
 			    }
 
+			if(!isset($_POST['tyopaari']))
+			Tyovuoroot::model()->updatebypk($model->id, array('tyopaari' => ''));
+
+
+			// <-- jos on tyopaari
+			if(isset($_POST['tyopaari']) and count($_POST['tyopaari']) > 0)
+			{
 
 			    $luotu = array();
 			    $arr = array();
