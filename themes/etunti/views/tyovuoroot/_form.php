@@ -67,82 +67,11 @@ if(isset($model->id))
 	<?php echo $form->error($model,'tid'); ?>
 
 <div class="row">
+
   <div class="col-sm-3">
 		<?php echo $form->labelEx($model,'pvm'); ?>
 		<?php echo $form->textField($model,'pvm',array('size'=>20,'maxlength'=>20,'class'=>'form-control datepickerFI'));//,'readonly'=>'yes' ?>
 		<?php echo $form->error($model,'pvm'); ?>
-  </div>
-  <div class="col-sm-3">
-		<?php echo $form->labelEx($model,'alku'); ?>
-		<input type="text" name="Tyovuoroot[alku]" class="form-control laske timeVuorot" id="alku" value="<?php echo $model->alku; ?>" autofocus>
-  </div>
-  <div class="col-sm-3">
-		<?php echo $form->labelEx($model,'loppu'); ?>
-		<input type="text" name="Tyovuoroot[loppu]" class="form-control laske timeVuorot" id="loppu" value="<?php echo $model->loppu; ?>">
-  </div>
-  <div class="col-sm-3">
-		<?php echo $form->labelEx($model,'pituus'); ?>
-		<div id="tvPituus"><?php echo $model->pituus; ?></div>
-  </div>
-</div>
-
-
-<div class="row">
-<!--
-  <div class="col-sm-3">
-		<?php echo $form->labelEx($model,'tyoajanlaatu'); ?>
-		<?php
-        	$tal = Valikkoot::model()->findAll(" select_type='tyoajanlaatu' ", array('order' => 'select_type'));
-		echo '<select name="Tyovuoroot[tyoajanlaatu]" class="form-control">';
-
-		 if(!empty($model->tyoajanlaatu)){
-		   $expl1 = explode("/",$model->tyoajanlaatu);
-		   $value1 = (isset($expl1[0])) ? $expl1[0] : '';
-		   echo '<option value="'.$model->tyoajanlaatu.'">'.$value1.'</option>';
-		 }
-
-		 foreach($tal as $v)
-		 {
-		   $expl1 = explode("/",$v->value);
-		   $color = (isset($expl1[1])) ? $expl1[1] : '';
-		   $value1 = (isset($expl1[0])) ? $expl1[0] : '';
-		   echo '<option style="color:'.$color.'" value="'.$v->value.'">'.$value1.'</option>';
-		 }
-		echo '</select>';
-        	?>
-  </div>
--->
-  <div class="col-sm-3">
-		<?php echo $form->labelEx($model,'tyoajanmerkinta'); ?>
-		<?php
-        	$tal = Valikkoot::model()->findAll(" select_type='tyoajanmerkinta' ", array('order' => 'select_type'));
-		echo '<select name="Tyovuoroot[tyoajanmerkinta]" class="form-control">';
-
-		 if(!empty($model->tyoajanmerkinta)){
-		   $expl = explode("/",$model->tyoajanmerkinta);
-		   $value = (isset($expl[0])) ? $expl[0] : '';
-		   echo '<option value="'.$model->tyoajanmerkinta.'">'.$value.'</option>';
-		 }
-
-		 foreach($tal as $v)
-		 {
-		   $expl = explode("/",$v->value);
-		   $color = (isset($expl[1])) ? $expl[1] : '';
-		   $value = (isset($expl[0])) ? $expl[0] : '';
-		   echo '<option style="color:'.$color.'" value="'.$v->value.'">'.$value.'</option>';
-		 }
-		echo '</select>';
-        	?>
-
-  </div>
-
-  <div class="col-sm-3">
-		<?php echo $form->labelEx($model,'status'); ?>
-		<?php 
-        	$l = $this->tilanteet();
-		echo $form->dropDownList($model,'status', $l, 
-		array('empty'=>Yii::t('main', 'Valitse'), 'class'=>'form-control')) ?>
-
   </div>
 
   <div class="col-sm-3">
@@ -168,7 +97,70 @@ if(isset($model->id))
 		}
         	?>
   </div>
+
+  <div class="col-sm-3">
+		<?php echo $form->labelEx($model,'status'); ?>
+		<?php 
+        	$l = $this->tilanteet();
+		echo $form->dropDownList($model,'status', $l, 
+		array('empty'=>Yii::t('main', 'Valitse'), 'class'=>'form-control')) ?>
+
+  </div>
+
 </div>
+
+<div class="row">
+
+  <div class="col-sm-3">
+		<?php echo $form->labelEx($model,'alku'); ?>
+		<input type="text" name="Tyovuoroot[alku]" class="form-control laske timeVuorot" id="alku" value="<?php echo $model->alku; ?>" autofocus>
+  </div>
+
+  <div class="col-sm-3">
+		<?php echo $form->labelEx($model,'loppu'); ?>
+		<input type="text" name="Tyovuoroot[loppu]" class="form-control laske timeVuorot" id="loppu" value="<?php echo $model->loppu; ?>">
+  </div>
+
+  <div class="col-sm-3">
+	<div class="form-inline">
+	 <div class="form-group mr20">
+		<?php echo $form->labelEx($model,'pituus'); ?>
+		<div id="tvPituus" class="p10"><?php echo $model->pituus; ?></div>
+	 </div>
+	 <div class="form-group">
+		<label><?php echo Yii::t('main', 'Arvioitu kesto'); ?></label>
+		<div id="arvioitu_kesto" class="p10">00:00</div>
+	 </div>
+	</div>
+  </div>
+
+  <div class="col-sm-3">
+		<?php echo $form->labelEx($model,'tyoajanmerkinta'); ?>
+		<?php
+        	$tal = Valikkoot::model()->findAll(" select_type='tyoajanmerkinta' ", array('order' => 'select_type'));
+		echo '<select name="Tyovuoroot[tyoajanmerkinta]" class="form-control">';
+
+		 if(!empty($model->tyoajanmerkinta)){
+		   $expl = explode("/",$model->tyoajanmerkinta);
+		   $value = (isset($expl[0])) ? $expl[0] : '';
+		   echo '<option value="'.$model->tyoajanmerkinta.'">'.$value.'</option>';
+		 }
+
+		 foreach($tal as $v)
+		 {
+		   $expl = explode("/",$v->value);
+		   $color = (isset($expl[1])) ? $expl[1] : '';
+		   $value = (isset($expl[0])) ? $expl[0] : '';
+		   echo '<option style="color:'.$color.'" value="'.$v->value.'">'.$value.'</option>';
+		 }
+		echo '</select>';
+        	?>
+
+  </div>
+
+</div>
+
+
 
 <div class="row">
   <div class="col-sm-6">
@@ -899,8 +891,26 @@ function laatikonPaivays(thisDataReturn){
   });
 
 
+  
+  if( $('#Tyovuoroot_kohde').val() !== '' ){
+	var thisID = $('#Tyovuoroot_kohde option:selected').val();
+	  $.ajax({
+		  url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/showohje?id='+thisID,
+		  success:function(data){
+			//console.log(data);
+			var d = JSON.parse(data);
 
+			if(d[2] !== '')
+				$('#arvioitu_kesto').html(d[2]);
+			else
+				$('#arvioitu_kesto').html('00:00');
 
+	   	},
+		error:function(data){
+		console.log(data);
+	    	}
+	  });
+  }
 
   $('#Tyovuoroot_kohde').change(function(){
 
@@ -910,9 +920,16 @@ function laatikonPaivays(thisDataReturn){
 		  url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/showohje?id='+thisID,
 		  success:function(data){
 			//console.log(data);
-			var d = JSON.parse(data).split("//");
+			var d = JSON.parse(data);
+
+
 			$('.ohje').html(d[0]);
 			$('#Tyovuoroot_tietoja').val(d[1]);
+
+			if(d[2] !== '')
+				$('#arvioitu_kesto').html(d[2]);
+			else
+				$('#arvioitu_kesto').html('00:00');
 
 	   	},
 		error:function(data){
