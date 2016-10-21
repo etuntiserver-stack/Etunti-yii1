@@ -142,7 +142,16 @@ class TyovuorootController extends Controller
 		 if(isset($k->asiakas_id))
 		  $a = Asiakkaat::model()->findbypk($k->asiakas_id);
 		   if(isset($a->id))
-		    echo json_encode($a->id);
+		   {
+			if(!empty($a->yrityksen_nimi))
+				$asiakas = $a->yrityksen_nimi;
+			else if(!empty($a->yhteyshenkilo) and empty($a->yrityksen_nimi))
+				$asiakas = $a->yhteyshenkilo;
+			else
+				$asiakas = $a->osoite;
+
+		    	echo json_encode($asiakas);
+		   }
 	}
 
 	public function actionSiivous_tyonimike()
