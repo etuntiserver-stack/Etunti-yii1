@@ -219,6 +219,7 @@
 	</div>
 
 
+
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'trust_cid'); ?>
 		<?php echo $form->textField($model,'trust_cid',array('size'=>20,'maxlength'=>100,'class'=>'form-control')); ?>
@@ -314,6 +315,7 @@
 		<?php echo $form->error($model,'viikonloppulisa_su'); ?>
 	</div>
 
+	<legend><h2><?php echo Yii::t('main', 'Varauksen aikarajat'); ?></h2></legend>
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'onlinevaraus_aikaisintaan_paivamaara'); ?>
 		<?php echo $form->numberField($model,'onlinevaraus_aikaisintaan_paivamaara',array('maxlength'=>2,'class'=>'form-control')); ?>

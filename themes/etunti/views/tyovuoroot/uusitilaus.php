@@ -86,7 +86,7 @@
 
   <div class="col-sm-3">
 		<?php echo $form->labelEx($model,'pituus'); ?>
-		<input type="text" name="Tyovuoroot[pituus]" id="pituus" class="form-control timeVuorot">
+		<div id="tvPituus"><?php echo $model->pituus; ?></div>
   </div>
 
 </div>
@@ -267,14 +267,18 @@ function laatikonPaivays(thisDataReturn){
 	var alku = $("#alku").val().split(':');
 	var loppu = $("#loppu").val().split(':');
 
-	var d2 = new Date(2014, 0, 31, loppu[0], loppu[1]);
-	var d1 = new Date(2014, 0, 31, alku[0], alku[1]);
+	if(loppu[0] < alku[0])
+	var d2 = new Date(2016, 0, 21, loppu[0], loppu[1]);
+	else
+	var d2 = new Date(2016, 0, 20, loppu[0], loppu[1]);
+
+	var d1 = new Date(2016, 0, 20, alku[0], alku[1]);
 	var seconds =  (d2- d1)/1000;
 	var sec = seconds;
 	var h = sec/3600 ^ 0 ;
 	var m = (sec-h*3600)/60 ^ 0 ;
 
-	$("#pituus").val((h<10?"0"+h:h)+":"+(m<10?"0"+m:m));
+	$("#tvPituus").html((h<10?"0"+h:h)+":"+(m<10?"0"+m:m));
   }
 
 
