@@ -268,6 +268,13 @@ $model->hinta = str_replace(",",".",$model->hinta);
 		<?php echo $form->error($model,'ryhma'); ?>
 	</div>
 
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'tarvittavien_tyontekijoiden_maara'); ?>
+		<?php echo $form->numberField($model,'tarvittavien_tyontekijoiden_maara',array('maxlength'=>3,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'tarvittavien_tyontekijoiden_maara'); ?>
+	</div>
+
   </div><div class="col-sm-6">
 
 	<div class="section fill mb5">
@@ -529,6 +536,7 @@ window.initialize = function() {
     var mapCanvas = document.getElementById('map-canvas');
     var mapOptions = {
         center: myLatlng,          
+
 
         zoom: 14,
     }

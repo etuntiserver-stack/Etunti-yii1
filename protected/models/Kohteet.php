@@ -61,7 +61,7 @@ class Kohteet extends DB2ActiveRecord
 		// will receive user inputs.
 		return array(
 			array('asiakas_id,etu_suku_nimet,osoite', 'required'),
-			array('asiakas_id,aktiivinen, maksuehto_paiva, avaimen_sijainti', 'numerical', 'integerOnly'=>true),
+			array('asiakas_id, aktiivinen, maksuehto_paiva, avaimen_sijainti, tarvittavien_tyontekijoiden_maara', 'numerical', 'integerOnly'=>true),
 			array('tag_id, kaupunki, toimipaikka, tyoryhma', 'length', 'max'=>20),
 			array('gps_sijainti, osoite, katuosoite, kenella_on_avain, puh_nro', 'length', 'max'=>50),
 			array('lyhenne', 'length', 'max'=>46),
@@ -127,6 +127,7 @@ class Kohteet extends DB2ActiveRecord
 			'hinta_tyyppi'=> Yii::t('main', 'Hinta tyyppi'),
 			'hinta'=> Yii::t('main', 'Hinta'),
 			'avaimen_sijainti'=>Yii::t('main', 'Avaimen sijainti'),
+			'tarvittavien_tyontekijoiden_maara'=>Yii::t('main', 'Tarvittavien työntekijöiden määrä'),
 		);
 	}
 
