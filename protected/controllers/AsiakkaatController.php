@@ -627,6 +627,9 @@ $xml = '
 		if(isset($_POST['ryhma']) and !empty(trim($_POST['ryhma'])))
 	        $criteria->addCondition (" ryhma LIKE '%".$_POST['ryhma']."%' ");
 
+		if(isset($_POST['tyyppi']) and !empty(trim($_POST['tyyppi'])))
+	        $criteria->addCondition (" tyyppi='".$_POST['tyyppi']."' ");
+
 		if(isset($_POST['puhelin']) and !empty(trim($_POST['puhelin'])))
 	        $criteria->addCondition (" puhelin LIKE '%".$_POST['puhelin']."%' ");
 

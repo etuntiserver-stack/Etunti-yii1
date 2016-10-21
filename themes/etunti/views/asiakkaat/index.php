@@ -136,6 +136,26 @@
                             </label>
                           </label>
                         </div>
+
+		      <?php if(isset($_POST['tyyppi'])) echo '<input type="hidden" id="as_tyyppi" value="'.$_POST['tyyppi'].'">'; ?>
+                        <div class="section">
+                          <label class="field select">
+			<?php
+					$list = array(
+						'yritys'=>Yii::t('main', 'Yritys'),
+						 'henkilo'=>Yii::t('main', 'Henkilö') 
+					);		
+					if(count($list) > 0)
+					{
+			        	echo CHtml::dropDownList('tyyppi', 'tyyppi', $list,
+					array('empty'=>'Asiakas tyyppi','class'=>'form-control form-group'));
+					}
+			?>
+                            <i class="arrow double"></i>
+                            </label>
+                          </label>
+                        </div>
+
                       </div>
                       <div class="col-md-2">
                         <div class="section">
@@ -333,6 +353,9 @@ $(document).ready(function(){
 
  if($("#ryhma").val())
  $("#ryhmaSelect").val($("#ryhma").val());
+
+ if($("#as_tyyppi").val())
+ $("#tyyppi").val($("#as_tyyppi").val());
 
 
  $(".haemob").click(function(){
