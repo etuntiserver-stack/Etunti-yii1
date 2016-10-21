@@ -163,8 +163,14 @@ if(!isset($_POST['tulosta']))
 	   // toistuva
 	   $toistuva = '';
 	   if($tvVal->toistuva_id != 0){
-		$toistuva = '<i class="p3 pull-right fa fa-repeat text-success" style="font-size:120%"></i>';
+		$toistuva = '<i class="p5 pull-right fa fa-repeat text-success" style="font-size:120%"></i>';
 	   }
+
+	   // <-- Tarvittavien työntekijöiden määrä
+	   $tarvittavien_tyontekijoiden_maara = '';
+	   if(isset($tvVal->kohteet->tarvittavien_tyontekijoiden_maara) and $tvVal->kohteet->tarvittavien_tyontekijoiden_maara > 0)
+	   $tarvittavien_tyontekijoiden_maara = '<i class="p3 pull-right text-success">'.$tvVal->kohteet->tarvittavien_tyontekijoiden_maara.'</i>';
+	   // Tarvittavien työntekijöiden määrä -->
 
 	   // status
 	   $status = '';
@@ -196,7 +202,7 @@ if(!isset($_POST['tulosta']))
 
 	    //if(!isset($_POST['tulosta'])) $br = '<br>'; else $br = '';
 
-	    $al = '<b>'.$tvVal->alku.'-'.$tvVal->loppu.$toistuva.$status.'</b>';
+	    $al = '<b>'.$tvVal->alku.'-'.$tvVal->loppu.$toistuva.$status.$tarvittavien_tyontekijoiden_maara.'</b>';
 	   } else {
 	    $al = '';
 	   }
