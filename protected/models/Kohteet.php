@@ -69,7 +69,7 @@ class Kohteet extends DB2ActiveRecord
 			array('email', 'length', 'max'=>72),
 			array('ryhma, viivastyskorko', 'length', 'max'=>10),
 			array('avain, lasku_tiedot', 'length', 'max'=>255),
-			array('siivous, etu_suku_nimet', 'length', 'max'=>100),
+			array('siivous, etu_suku_nimet, arvioitu_kesto', 'length', 'max'=>100),
 			array('hinta_tyyppi', 'length', 'max'=>50),
 			array('hinta', 'length', 'max'=>10),
 			array('aikataulu, hinnoittelu, muut, toimenpiteet, tietoja', 'safe'),
@@ -128,6 +128,7 @@ class Kohteet extends DB2ActiveRecord
 			'hinta'=> Yii::t('main', 'Hinta'),
 			'avaimen_sijainti'=>Yii::t('main', 'Avaimen sijainti'),
 			'tarvittavien_tyontekijoiden_maara'=>Yii::t('main', 'Tarvittavien työntekijöiden määrä'),
+			'arvioitu_kesto'=>Yii::t('main', 'Arvioitu kesto'),
 		);
 	}
 

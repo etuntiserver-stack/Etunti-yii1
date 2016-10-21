@@ -275,6 +275,22 @@ $model->hinta = str_replace(",",".",$model->hinta);
 		<?php echo $form->error($model,'tarvittavien_tyontekijoiden_maara'); ?>
 	</div>
 
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'arvioitu_kesto'); ?>
+		<?php echo $form->textField($model,'arvioitu_kesto',array('maxlength'=>5,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'arvioitu_kesto'); ?>
+	</div>
+
+	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/jquery.mask.js"></script>
+	<script type="text/javascript">
+	$(document).ready(function(){
+	  $('#Kohteet_arvioitu_kesto').mask('00:00',{
+	        placeholder: "__:__"
+	  });
+	});
+	</script>
+
+
   </div><div class="col-sm-6">
 
 	<div class="section fill mb5">
