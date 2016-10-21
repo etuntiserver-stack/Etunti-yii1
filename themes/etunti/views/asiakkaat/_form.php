@@ -113,7 +113,17 @@ $model->hinta = str_replace(",",".",$model->hinta);
 	   <div class="input-group">
 		<?php
 		$list = array();
-      		$l = Valikkoot::model()->findAll(" select_type='asiakas_ryhma' ",array('order' => "select_type"));
+      		$l = Valikkoot::model()->findAll(" select_type='asiakas_ryhma_real' ",array('order' => "select_type"));
+		if(count($l) == 0)
+      		{
+			$new_val = new Valikkoot;
+			$new_val->select_type = "asiakas_ryhma_real";
+			$new_val->value = "Testi ryhmä";
+			if($new_val->save())
+	      			$l = Valikkoot::model()->findAll(" select_type='asiakas_ryhma_real' ",array('order' => "select_type"));
+			else
+				var_dump($new_val->getErrors());
+		}
 
 			$arr = json_decode($model->ryhma);
 			echo '<select name="Asiakkaat[ryhma][]" class="ryhmat form-control" multiple title="Valitse">';
@@ -130,7 +140,7 @@ $model->hinta = str_replace(",",".",$model->hinta);
 		
         	?>
 		<span class="input-group-btn">
-			<span class="btn btn-primary myBgColors muokaValiko" for="asiakas_ryhma"><i class="fa fa-pencil-square-o"></i></span>
+			<span class="btn btn-primary myBgColors muokaValiko" for="asiakas_ryhma_real"><i class="fa fa-pencil-square-o"></i></span>
 		</span>
 	   </div>
 
