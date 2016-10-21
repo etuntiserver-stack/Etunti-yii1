@@ -1388,14 +1388,16 @@ class TyovuorootController extends Controller
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
+		$return = array();
 
 		if(isset($_POST['Tyovuoroot']))
 		{
 
-
 		$asiakkaat = new Asiakkaat;
-		$asiakkaat->tyyppi = 'henkilo';
+		$asiakkaat->tyyppi = $_POST['asiakas_tyyppi'];
 		$asiakkaat->yhteyshenkilo = $_POST['yhteyshenkilo'];
+		$asiakkaat->postinumero = $_POST['postinumero'];
+		$asiakkaat->kaupunki = $_POST['kaupunki'];
 		$asiakkaat->osoite = $_POST['osoite'];
 		$asiakkaat->puhelin = $_POST['puhelin'];
 		$asiakkaat->sahkoposti = $_POST['sahkoposti'];
@@ -1415,12 +1417,8 @@ class TyovuorootController extends Controller
 		  	   {
 				$model->attributes=$_POST['Tyovuoroot'];
 				$model->kohde = $kohteet->id;
-
 				$model->pvm = date("d.m.Y",strtotime($_POST['Tyovuoroot']['pvm']));
 				if($model->save())
-
-
-
 				{
 
 				   if(isset($_POST['vieposti']))
@@ -1440,16 +1438,27 @@ class TyovuorootController extends Controller
 					$mail->send();
 				   }
 				
-				   echo $_POST['Tyovuoroot']['pvm'].'//'.date("Ymd",strtotime($model->pvm)).'//'.$model->tid;
-
+					$return[] = array('tid'=>$model->tid, 'pvm'=>$model->pvm, 'ymd'=>date("Ymd",strtotime($model->pvm)));
+				  	echo json_encode($return);
+					exit;
 				}
+			   } else { // Kohde save error
+
+			  	echo json_encode($kohteet->getErrors());
+			  	exit;
+
 			   }
 
 
+		  } else { // Asiakas save error
+
+		  	echo json_encode($asiakkaat->getErrors());
+		  	exit;
+
 		  }
 
-
-		exit;
+		  echo json_encode('Error');
+		  exit;
 		}
 
 	if(!isset($_POST['Tyovuoroot']))

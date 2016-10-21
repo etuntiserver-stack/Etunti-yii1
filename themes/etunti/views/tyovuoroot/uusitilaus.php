@@ -16,35 +16,57 @@
 	<?php echo $form->errorSummary($model); ?>
 
 
-
+<legend><h2><?php echo Yii::t('main', 'Asiakas'); ?></h2></legend>
 <div class="row">
   <div class="col-sm-3">
-		<label>Asiakkaan nimi</label>
-		<input type="text" name="yhteyshenkilo" class="form-control">
-  </div>
-
-  <div class="col-sm-3">
-		<label>Asiakkaan osoite</label>
-		<input type="text" name="osoite" class="form-control">
-  </div>
-
-  <div class="col-sm-3">
-		<label>Asiakkaan puhelin</label>
-		<input type="text" name="puhelin" class="form-control">
-  </div>
-
-  <div class="col-sm-3">
-		<label>Asiakkaan sähköposti</label>
-		<input type="text" name="sahkoposti" class="form-control">
-  </div>
-
-  <div class="col-sm-3">
-		<label>Hinta</label>
+    <div class="section">
+		<label>Asiakkaan tyyppi</label>
+		<select name="asiakas_tyyppi" class="form-control">
+		<option value="yritys"><?php echo Yii::t('main', 'Yritys'); ?></option>
+		<option value="henkilo"><?php echo Yii::t('main', 'Henkilö'); ?></option>
+		</select>
+    </div>
+    <div class="section">
+		<label><?php echo Yii::t('main', 'Hinta'); ?></label>
 		<input type="text" name="hinta" class="form-control">
+    </div>
+  </div>
+  <div class="col-sm-3">
+    <div class="section">
+		<label><?php echo Yii::t('main', 'Asiakkaan nimi'); ?></label>
+		<input type="text" name="yhteyshenkilo" class="form-control">
+    </div>
+    <div class="section">
+		<label><?php echo Yii::t('main', 'Asiakkaan osoite'); ?></label>
+		<input type="text" name="osoite" class="form-control">
+    </div>
+  </div>
+  <div class="col-sm-3">
+    <div class="section">
+		<label><?php echo Yii::t('main', 'Asiakkaan postinumero'); ?></label>
+		<input type="text" name="postinumero" class="form-control">
+    </div>
+    <div class="section">
+		<label><?php echo Yii::t('main', 'Asiakkaan postitoimipaikka'); ?></label>
+		<input type="text" name="kaupunki" class="form-control">
+    </div>
+  </div>
+  <div class="col-sm-3">
+    <div class="section">
+		<label><?php echo Yii::t('main', 'Asiakkaan puhelin'); ?></label>
+		<input type="text" name="puhelin" class="form-control">
+    </div>
+    <div class="section">
+		<label><?php echo Yii::t('main', 'Asiakkaan sähköposti'); ?></label>
+		<input type="text" name="sahkoposti" class="form-control">
+    </div>
   </div>
 </div>
 
 
+
+
+<legend><h2><?php echo Yii::t('main', 'Työvuoro'); ?></h2></legend>
 <div class="row">
   <div class="col-sm-3">
 		<?php echo $form->labelEx($model,'pvm'); ?>
@@ -174,28 +196,10 @@ $(document).ready(function(){
 		  data:$(this).serialize(),
 		  type:'POST',
 		  success:function(data){
+			thisDataReturn = JSON.parse(data);
 			console.log(data);
-			var sp = data.split('//');
-
-	  	$.ajax({
-			url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/did',
-			type:'GET',
-			data: { "pvm" : sp[0], "tid" : sp[2], "from" : "ajax" },
-			  success:function(data){
-			  //console.log(data);
-			  $('#showres').modal('hide');
-			  $('#'+sp[1]+'_'+sp[2]).html(JSON.parse(data));
-
-			  jQuery.klikkaukset(); // js kansiossa
-			  return false;
-
-			  },
-			  error:function(data){
-			  console.log(data);
-			  }
-	 	});
-
-		//return false;
+			laatikonPaivays(thisDataReturn);
+			$('#showres').modal('hide');
 	   	},
 		error:function(data){
 		console.log(data);
@@ -207,6 +211,55 @@ $(document).ready(function(){
 	e.preventDefault(); 
 	});
 
+
+
+function laatikonPaivays(thisDataReturn){
+
+		var splDID = [];
+		var did = '';
+		var ilmoitus = '';
+		$(thisDataReturn).each(function( iarr, arr ) {
+		 $(arr).each(function( i, d ) {
+		 //console.log(d['pvm']);
+
+	  	    $.ajax({
+			url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/did',
+			type:'GET',
+			data: { "pvm" : d['pvm'], "tid" : d['tid'], "from" : "ajax" },
+			  success:function(data){
+			  //console.log(data);
+
+
+			  if( $('#'+d['ymd']+'_'+d['tid']).length )
+			  {
+			    $('#'+d['ymd']+'_'+d['tid']).html(JSON.parse(data));
+			    if(parent.location.href.match(/index/))
+			    {
+				var ThisHeight = $('#'+d['ymd']+'_'+d['tid']).height();
+				var FirstHeight = $('#first_'+d['tid']).height(ThisHeight);
+			    }
+			    if(parent.location.href.match(/tv2/))
+			    {
+				var ThisHeight = $('#'+d['ymd']+'_'+d['tid']).height();
+				var FirstHeight = $('#first_'+d['ymd']).height(ThisHeight);
+			    }
+
+
+			  }
+
+
+			  },
+			  error:function(data){
+			  console.log(data);
+			  }
+	 	    });
+
+		 });
+		});
+
+
+
+}
 
 
   function laskePituus(){
@@ -225,6 +278,29 @@ $(document).ready(function(){
   }
 
 
+  $('#alku').blur(function(){
+	var alku = $("#alku").val().split(':');
+	if(!alku[1] & $("#alku").val() !== '')
+	{
+		var h = $("#alku").val() ^ 0 ;
+		var m = 0 ^ 0 ;
+		$("#alku").val((h<10?"0"+h:h)+":"+(m<10?"0"+m:m));
+		laskePituus();
+	}
+  });
+
+  $('#loppu').blur(function(){
+	var alku = $("#loppu").val().split(':');
+	if(!alku[1])
+	{
+		var h = $("#loppu").val() ^ 0 ;
+		var m = 0 ^ 0 ;
+		$("#loppu").val((h<10?"0"+h:h)+":"+(m<10?"0"+m:m));
+		laskePituus();
+	}
+  });
+
+
   $('#alku').keyup(function(){
 	laskePituus();
   });
@@ -234,6 +310,7 @@ $(document).ready(function(){
   });
 
   $('#alku').change(function(){
+
 	laskePituus();
   });
 
