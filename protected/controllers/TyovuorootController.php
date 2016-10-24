@@ -1397,6 +1397,8 @@ class TyovuorootController extends Controller
 
 		$asiakkaat = new Asiakkaat;
 		$asiakkaat->tyyppi = $_POST['asiakas_tyyppi'];
+		$asiakkaat->yrityksen_nimi = $_POST['yrityksen_nimi'];
+		$asiakkaat->y_tunnus = $_POST['y_tunnus'];
 		$asiakkaat->yhteyshenkilo = $_POST['yhteyshenkilo'];
 		$asiakkaat->postinumero = $_POST['postinumero'];
 		$asiakkaat->kaupunki = $_POST['kaupunki'];

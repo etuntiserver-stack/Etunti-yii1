@@ -5,6 +5,12 @@
 
 ?>
 
+<style>
+.ashidd{
+	display:none;
+}
+</style>
+
 <div class="section">
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'tyovuoroot-form',
@@ -21,7 +27,7 @@
   <div class="col-sm-3">
     <div class="section">
 		<label>Asiakkaan tyyppi</label>
-		<select name="asiakas_tyyppi" class="form-control">
+		<select name="asiakas_tyyppi" id="Asiakkaat_tyyppi" class="form-control tyyppi">
 		<option value="yritys"><?php echo Yii::t('main', 'Yritys'); ?></option>
 		<option value="henkilo"><?php echo Yii::t('main', 'Henkilö'); ?></option>
 		</select>
@@ -32,16 +38,24 @@
     </div>
   </div>
   <div class="col-sm-3">
-    <div class="section">
-		<label><?php echo Yii::t('main', 'Asiakkaan nimi'); ?></label>
+    <div class="section yritys ashidd">
+		<label><?php echo Yii::t('main', 'Yrityksen nimi'); ?></label>
+		<input type="text" name="yrityksen_nimi" class="form-control">
+    </div>
+    <div class="section y_tunnus ashidd">
+		<label><?php echo Yii::t('main', 'Y-tunnus'); ?></label>
+		<input type="text" name="y_tunnus" class="form-control">
+    </div>
+    <div class="section nimi ashidd">
+		<label><?php echo Yii::t('main', 'Yhteyshenkilo'); ?></label>
 		<input type="text" name="yhteyshenkilo" class="form-control">
     </div>
+  </div>
+  <div class="col-sm-3">
     <div class="section">
 		<label><?php echo Yii::t('main', 'Asiakkaan osoite'); ?></label>
 		<input type="text" name="osoite" class="form-control">
     </div>
-  </div>
-  <div class="col-sm-3">
     <div class="section">
 		<label><?php echo Yii::t('main', 'Asiakkaan postinumero'); ?></label>
 		<input type="text" name="postinumero" class="form-control">
@@ -163,6 +177,34 @@
 
 <script type="text/javascript">
 $(document).ready(function(){
+
+  // <-- Yritys vai henkilo
+  $("#Asiakkaat_tyyppi").change(function() {
+    var value = $(this).val();
+    asiakasTyyppi(value);
+  });
+
+  $("#Asiakkaat_tyyppi").each(function() {
+    var value = $(this).val();
+    asiakasTyyppi(value);
+  });
+
+  function asiakasTyyppi(value){
+
+    if(value == 'yritys'){
+	$(".ashidd").hide('slow');
+	$(".yritys").show('slow');
+	$(".y_tunnus").show('slow');
+	$(".nimi").show('slow');
+    }
+    if(value == 'henkilo'){
+	$(".ashidd").hide('slow');
+	$(".nimi").show('slow');
+    }
+
+  }
+  // Yritys vai henkilo -->
+
 
   $('.timeVuorot').mask('00:00',{
         placeholder: "__:__"
