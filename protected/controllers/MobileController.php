@@ -591,8 +591,10 @@ function num($val){
 
 			if(!$model->save())
 			{
-			   var_dump($model->getErrors());
+			   	var_dump($model->getErrors());
 			   exit;
+			} else {
+				$this->redirect(array('index'));
 			}
 
 		}

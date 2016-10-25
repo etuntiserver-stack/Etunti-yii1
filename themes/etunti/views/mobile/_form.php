@@ -136,12 +136,19 @@ if(isset($model->tietoja))
 	<div class="section">
 		<?php echo $form->labelEx($model,'tid'); ?>
 		<?php echo $form->dropDownList($model, 'tid', CHtml::listData(Tyontekijat::model()->findAll(), 'id', 'tekijan_nimi'), array('class'=>'form-control')); ?>
+		<?php echo $form->hiddenField($model,'tekijan_nimi',array('size'=>20,'maxlength'=>20,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'tid'); ?>
 	</div>
 	<div class="section">
-		<?php echo $form->labelEx($model,'tekijan_nimi'); ?>
-		<?php echo $form->dropDownList($model, 'tekijan_nimi', CHtml::listData(Tyontekijat::model()->findAll(), 'tekijan_nimi', 'tekijan_nimi'), array('class'=>'form-control')); ?>
-		<?php echo $form->error($model,'tekijan_nimi'); ?>
+		<?php echo $form->labelEx($model,'status'); ?>
+		<?php 
+		      $list = array(3=>Yii::t('main','TYÖ'),2=>Yii::t('main','MATKA'),10=>Yii::t('main','LOUNASTAUKO'));
+		      //array_unshift($list, $list[$s->status]);
+		      echo $form->dropDownList($model,'status', 
+			 	$list, 
+				array('class'=>'form-control'));
+		?>
+		<?php echo $form->error($model,'status'); ?>
 	</div>
 	<div class="section">
 		<?php echo $form->labelEx($model,'aloitan'); ?>
@@ -176,9 +183,8 @@ if(isset($model->tietoja))
 <script type="text/javascript">
 $(document).ready(function(){
 
-  $("#Mobile_tekijan_nimi").change(function(){
-
-
+  $("#Mobile_tid").change(function(){
+	$("#Mobile_tekijan_nimi").val( $("#Mobile_tid option:selected").text() );
   });
 
 });
