@@ -38,7 +38,7 @@
 			//'pagination'=>false
 		));
 
-		$dataProvider->pagination->pageSize = 5;
+		$dataProvider->pagination->pageSize = 20;
 
 		$this->widget('zii.widgets.CListView', array(
 			'dataProvider'=>$dataProvider,
