@@ -20,7 +20,7 @@
 	  <br>
 	  <div class="collapse" id="open_<?php echo $data->id; ?>">
 	  <br>
-	  <p>
+	  <p class="col-sm-offset-1">
 	  	<span><?php echo str_replace("\n", "<br>", $data->teksti); ?></span>
 	  	<p><b><?php echo CHtml::encode($data->luoja); ?></b></p>
 	  </p>
