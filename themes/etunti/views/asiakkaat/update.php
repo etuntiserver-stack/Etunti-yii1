@@ -33,7 +33,9 @@ exit;
         <div class="tray-center">
 
 	   <div class="pull-right">
-	   <?php     
+	   <button class="btn btn-primary myBgColors" id="historiaSiirto"><?php echo Yii::t('main', 'Historia'); ?></button>
+
+	   <?php
 	   $a = Asetukset::model()->findbypk(1);
 	   if($a->netvisor_kaytto != 1)
 	   {
@@ -117,7 +119,7 @@ exit;
 
 
 
-	<h2 class="myBgColors p10"> <i class="glyphicon glyphicon-user"></i> <?php echo Yii::t('main', 'Asiakas historia'); ?> </h2>
+	<h2 class="myBgColors p10" id="historia"> <i class="glyphicon glyphicon-user"></i> <?php echo Yii::t('main', 'Asiakas historia'); ?> </h2>
 
         <div class="tray-center">
 
@@ -259,6 +261,11 @@ exit;
 
 <script type="text/javascript">
 $(document).ready(function(){
+
+$("#historiaSiirto").click(function(){
+	var divPosition = $('#historia').offset();
+	$('html, body').animate({scrollTop: divPosition.top}, "slow");
+});
 
 
 $(".poistaTiedosto").click(function(){
