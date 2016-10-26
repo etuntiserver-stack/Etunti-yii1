@@ -31,7 +31,7 @@
 		</tr>
 		<tr>
             <td style="padding:15px 20px;text-align:right;padding-top:5px;border-top:solid 1px #dfdfdf">
-				http://etunti.fi
+				https://etunti.fi
 			</td>
 		</tr>
 	</tbody>

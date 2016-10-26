@@ -272,6 +272,8 @@
 			ToistuvatTyovuorot::model()->updateByPk($data->id, array('ilmoitus_paattymisesta'=>1));
 		}
 
+
+			// <-- Valmistetaan viesti
 			if(!empty($m))
 			{
 				$message .= '<h1>'.Yii::t('main', 'Ilmoitus toistuvien työvuorojen päättymisestä').'</h1>';
@@ -291,13 +293,14 @@
 				$mail = new YiiMailer();
 				$mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
 				$mail->setTo($sahkoposti);
-				$mail->setSubject(Yii::t('main', 'Ilmoitus merkkipäivästä'));
+				$mail->setSubject(Yii::t('main', 'lmoitus toistuvien työvuorojen päättymisestä'));
 				$mail->setBody($message);
 				if(!$mail->send())
 				echo 'Mail send error to '.$sahkoposti;
 			   }
 			}
 			print_r($message);
+			// Valmistetaan viesti -->
 
 	}
 	// lmoitus toistuvien työvuorojen päättymisestä -->
