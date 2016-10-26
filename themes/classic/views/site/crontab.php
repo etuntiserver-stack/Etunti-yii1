@@ -293,7 +293,8 @@
 				$mail->setTo($sahkoposti);
 				$mail->setSubject(Yii::t('main', 'Ilmoitus merkkipäivästä'));
 				$mail->setBody($message);
-				$mail->send();
+				if(!$mail->send())
+				echo 'Mail send error to '.$sahkoposti;
 			   }
 			}
 			print_r($message);
