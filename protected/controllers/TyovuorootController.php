@@ -984,20 +984,7 @@ class TyovuorootController extends Controller
 
 			// <-- PushNotify
 			if(isset($_POST['Tyovuoroot']['PushNotify']) and $_POST['Tyovuoroot']['PushNotify'] == 'on')
-			{
-			   $t = Tyontekijat::model()->findbypk($model->tid);
-			   $k = Kohteet::model()->findbypk($model->kohde);
-			   if(isset($k->osoite) and !empty($k->osoite) and isset($t->id))
-			   {
-				$pushviesti = "Uusi työvuoro\n
-					".$model->pvm."
-					".$model->alku."-".$model->loppu." ".$k->osoite."
-					".$model->tietoja;
-
-				Domainit::PushNotify($t->id,"Hei ".$t->tekijan_nimi,$pushviesti,'beep');
-
-			   }
-			}
+			$this->pushNotifySending($model->id);
 			// PushNotify -->
 
 
@@ -1015,9 +1002,17 @@ class TyovuorootController extends Controller
 				$m->pvm = date("d.m.Y",strtotime($_POST['Tyovuoroot']['pvm']));
 				$m->tid=$tid;
 				if($m->save())
+				{
 					$luotu[$m->id] = $m->tid;
+					$return[] = array('tid'=>$m->tid, 'pvm'=>$m->pvm, 'ymd'=>date("Ymd",strtotime($m->pvm)));
 
-				$return[] = array('tid'=>$m->tid, 'pvm'=>$m->pvm, 'ymd'=>date("Ymd",strtotime($m->pvm)));
+					// <-- PushNotify
+					if(isset($_POST['Tyovuoroot']['PushNotify']) and $_POST['Tyovuoroot']['PushNotify'] == 'on')
+					$this->pushNotifySending($m->id);
+					// PushNotify -->
+
+				}
+
 			    }
 			    foreach($luotu as $k=>$v)
 					Tyovuoroot::model()->updatebypk($k, array('tyopaari' => json_encode($luotu)));
@@ -1240,82 +1235,95 @@ class TyovuorootController extends Controller
 			$model->attributes=$_POST['Tyovuoroot'];
 			if($model->save()){
 
+				// <-- Onko tyopari esitetty
+				$post_tyopaari = array();
+				if(isset($_POST['tyopaari']) and count($_POST['tyopaari']) > 0)
+				$post_tyopaari = $_POST['tyopaari'];
+				// Onko tyopari esitetty -->
+	
 
-			// <-- PushNotify
-			if(isset($_POST['Tyovuoroot']['PushNotify']) and $_POST['Tyovuoroot']['PushNotify'] == 'on')
-			{
-			   $t = Tyontekijat::model()->findbypk($model->tid);
-			   $k = Kohteet::model()->findbypk($model->kohde);
-			   if(isset($k->osoite) and !empty($k->osoite) and isset($t->id))
-			   {
-				$pushviesti = "Työvuorosi on muuttunut. Alta löydät uudet tiedot:\n
-					".$model->pvm."
-					".$model->alku."-".$model->loppu." ".$k->osoite."
-					".$model->tietoja;
-
-				Domainit::PushNotify($t->id,"Hei ".$t->tekijan_nimi,$pushviesti, 'beep');
-			   }
-			}
-			// PushNotify -->
-
-
-
-			    $vanhat = json_decode($model->tyopaari, true);
-			    if(is_array($vanhat))
-			    {
-				foreach($vanhat as $tyovuoroID=>$tid)
+				// <-- Vanhat
+				$vanhat = json_decode($model->tyopaari, true);
+				if(is_array($vanhat))
 				{
+
+				   foreach($vanhat as $tyovuoroID=>$tid)
+				   {
 					if(isset($tyovuoroID) and !empty($tyovuoroID) and $tyovuoroID!=$model->id )
 					{
 						$m = Tyovuoroot::model()->findByPk($tyovuoroID);
-						$return[] = array('tid'=>$m->tid, 'pvm'=>$m->pvm, 'ymd'=>date("Ymd",strtotime($m->pvm)));
-						Tyovuoroot::model()->deleteByPk($tyovuoroID);
+						if(isset($m->id))
+						{
+							$return[] = array('tid'=>$m->tid, 'pvm'=>$m->pvm, 'ymd'=>date("Ymd",strtotime($m->pvm)));
+							Tyovuoroot::model()->deleteByPk($m->id);
+						}
 					}	
+				   }
 				}
-			    }
-
-			if(!isset($_POST['tyopaari']))
-			Tyovuoroot::model()->updatebypk($model->id, array('tyopaari' => ''));
+				// Vanhat -->
 
 
-			// <-- jos on tyopaari
-			if(isset($_POST['tyopaari']) and count($_POST['tyopaari']) > 0)
-			{
+				if(count($post_tyopaari) == 0)
+				Tyovuoroot::model()->updatebypk($model->id, array('tyopaari' => ''));
 
-			    $luotu = array();
-			    $arr = array();
-			    $luotu[$model->id] = $model->tid;
-			    $arr[$model->id] = array($model->tid,$model->pvm);
 
-			    foreach($_POST['tyopaari'] as $tid)
-			    {
-				$m=new Tyovuoroot;
-				$m->attributes=$_POST['Tyovuoroot'];
-				$m->pvm = date("d.m.Y",strtotime($_POST['Tyovuoroot']['pvm']));
-				$m->tid=$tid;
-				if($m->save())
+				// <-- jos on tyopaari
+				if(count($post_tyopaari) > 0)
 				{
-					$luotu[$m->id] = $m->tid;
-			    		$arr[$m->id] = array($m->tid,$m->pvm);
-				}
-			    }
-			    foreach($arr as $k=>$v)
-			    {
+	
+				$luotu = array();
+				$arr = array();
+				$luotu[$model->id] = $model->tid;
+				$arr[$model->id] = array($model->tid,$model->pvm);
+	
+				    foreach($_POST['tyopaari'] as $tid)
+				    {
+					$m=new Tyovuoroot;
+					$m->attributes=$_POST['Tyovuoroot'];
+					$m->pvm = date("d.m.Y",strtotime($_POST['Tyovuoroot']['pvm']));
+					$m->tid=$tid;
+					if($m->save())
+					{
+						$luotu[$m->id] = $m->tid;
+				    		$arr[$m->id] = array($m->tid,$m->pvm);
+					}
+				    }
+	
+	
+				    foreach($arr as $k=>$v)
+				    {
 					Tyovuoroot::model()->updatebypk($k, array('tyopaari' => json_encode($luotu)));
-				      	$return[] = array('tid'=>$v[0], 'pvm'=>$v[1], 'ymd'=>date("Ymd",strtotime($v[1])));
-			    }
+					$return[] = array('tid'=>$v[0], 'pvm'=>$v[1], 'ymd'=>date("Ymd",strtotime($v[1])));
+		
+					// <-- PushNotify
+					if(isset($_POST['Tyovuoroot']['PushNotify']) and $_POST['Tyovuoroot']['PushNotify'] == 'on')
+					$this->pushNotifySending($k);
+					// PushNotify -->
+				    }
+	
+				}
+				// jos on tyopaari -->
+	
+	
 
 
-			}
-			// jos on tyopaari -->
+				if(count($post_tyopaari) == 0)
+				{
+	
+					// <-- PushNotify
+					if(isset($_POST['Tyovuoroot']['PushNotify']) and $_POST['Tyovuoroot']['PushNotify'] == 'on')
+					$this->pushNotifySending($model->id);
+					// PushNotify -->
+	
+					$return[] = array('tid'=>$model->tid, 'pvm'=>$model->pvm, 'ymd'=>date("Ymd",strtotime($model->pvm)));
+				}
 
-
-			if(!isset($_POST['tyopaari']))
-			$return[] = array('tid'=>$model->tid, 'pvm'=>$model->pvm, 'ymd'=>date("Ymd",strtotime($model->pvm)));
 
 			echo json_encode($return);
-			}
-		exit;
+
+			} // model save 
+
+			exit;
 		}
 
 
@@ -1363,6 +1371,23 @@ class TyovuorootController extends Controller
 	<?php
 	}
 
+
+
+	protected function pushNotifySending($tv_id)
+	{
+		$m = Tyovuoroot::model()->findByPk($tv_id);
+		$t = Tyontekijat::model()->findbypk($m->tid);
+		$k = Kohteet::model()->findbypk($m->kohde);
+		if(isset($k->osoite) and !empty($k->osoite) and isset($t->id))
+		{
+			$pushviesti = "Työvuorosi on muuttunut. Alta löydät uudet tiedot:\n
+				".$m->pvm."
+				".$m->alku."-".$m->loppu." ".$k->osoite."
+				".$m->tietoja;
+		
+			Domainit::PushNotify($t->id,"Hei ".$t->tekijan_nimi,$pushviesti, 'beep');
+		}
+	}
 
 	public function actionUusitilaus()
 	{
