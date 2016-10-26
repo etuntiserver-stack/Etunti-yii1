@@ -71,10 +71,9 @@
 			$message .= '</p>';
 
 
-			if($koodi_aktiivinen == 1)
-			{
-				Tyovuoroot::model()->updatebypk($data->id,array('ilmoitus_avoimista_kohteesta'=>1));
-			}
+			if( $_SERVER['REMOTE_ADDR'] != '::1' and $_SERVER['REMOTE_ADDR'] != '127.0.0.1' )
+			Tyovuoroot::model()->updatebypk($data->id,array('ilmoitus_avoimista_kohteesta'=>1));
+
 		
 		  }
 		}
@@ -89,7 +88,7 @@
 			echo $saaja.'<br>';
 			echo $message;
 
-			if($koodi_aktiivinen == 1)
+			if( $_SERVER['REMOTE_ADDR'] != '::1' and $_SERVER['REMOTE_ADDR'] != '127.0.0.1' )
 			{
 			$mail = new YiiMailer();
 			$mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
@@ -145,10 +144,8 @@
 			$message .= '</p>';
 
 
-			if($koodi_aktiivinen == 1)
-			{
-				Tyovuoroot::model()->updatebypk($data->id,array('ilmoitus_myohastyneista_kohteesta'=>1));
-			}
+			if( $_SERVER['REMOTE_ADDR'] != '::1' and $_SERVER['REMOTE_ADDR'] != '127.0.0.1' )
+			Tyovuoroot::model()->updatebypk($data->id,array('ilmoitus_myohastyneista_kohteesta'=>1));
 		
 		  }
 		}
@@ -163,7 +160,7 @@
 			echo $saaja.'<br>';
 
 
-			if($koodi_aktiivinen == 1)
+			if( $_SERVER['REMOTE_ADDR'] != '::1' and $_SERVER['REMOTE_ADDR'] != '127.0.0.1' )
 			{
 			$mail = new YiiMailer();
 			$mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
@@ -202,12 +199,11 @@
 		foreach($tt as $data)
 		{
 			$message .= '#('.$data->id.'), '.$data->tekijan_nimi.'&nbsp;&nbsp;'.date("d.m.Y", strtotime($data->tekijan_henkilotunnus)).'<br>';
-			if($koodi_aktiivinen == 1)
+			if( $_SERVER['REMOTE_ADDR'] != '::1' and $_SERVER['REMOTE_ADDR'] != '127.0.0.1' )
 			Tyontekijat::model()->updateByPk($data->id, array('ilmoitus_merkkipaivasta_vuosi'=>date("Y")));
 		}
 
-
-			if($koodi_aktiivinen == 1 and !empty($message))
+			if( $_SERVER['REMOTE_ADDR'] != '::1' and $_SERVER['REMOTE_ADDR'] != '127.0.0.1' and !empty($message) )
 			{
 			$saaja = $asetukset->merkkipaivailmoitukset_sahkoposti;
 			$mail = new YiiMailer();
@@ -221,6 +217,89 @@
 
 	}
 	// merkkipaivailmoitukset -->
+
+
+
+	// <-- lmoitus toistuvien työvuorojen päättymisestä
+	if(isset($asetukset->ilmoitus_toistuvien_tyovuorojen_paattymisesta) and $asetukset->ilmoitus_toistuvien_tyovuorojen_paattymisesta == 1 )
+	{
+		$criteria=new CDbCriteria;
+		//$criteria->select = "";
+		$criteria->condition = " 
+			DATE_FORMAT(STR_TO_DATE(pto, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN (CURDATE() - INTERVAL '".$asetukset->ilmoitus_toistuvien_tyovuorojen_paattymisesta_paivat_ennen."' DAY) 
+			AND CURDATE()
+		";
+		$toistuvat = ToistuvatTyovuorot::model()->findAll($criteria);
+
+		$m = '';
+		$message = '';
+
+		foreach($toistuvat as $data)
+		{
+
+
+
+			$k = Kohteet::model()->findbypk($data->kohde);
+			$osoite = '';
+			if(isset($k->osoite)) $osoite = $k->osoite;
+
+			$t = Tyontekijat::model()->findbypk($data->tid);
+			$tekijan_nimi = '';
+			if(isset($t->tekijan_nimi)) $tekijan_nimi = $t->tekijan_nimi;
+
+			$m .= '<hr><b>'.Yii::t('main', 'Osoite').':</b> '.$osoite.'<br>';
+			$m .= '<b>'.Yii::t('main', 'Aikaväli').':</b> '.$data->pfrom.'-'.$data->pto.'<br>';
+			$m .= '<b>'.Yii::t('main', 'Klo').':</b> '.$data->alku.'-'.$data->loppu.'<br>';
+			$m .= '<b>'.Yii::t('main', 'Työntekijä').':</b> '.$tekijan_nimi.'<br>';
+
+			if(!empty($data->tyopaari))
+			{
+				$tyopari = json_decode($data->tyopaari);
+				foreach($tyopari as $tid)
+				{
+					$tekijan_nimi2 = '';
+					$t2 = Tyontekijat::model()->findbypk($tid);
+					if(isset($t2->tekijan_nimi) and $tid != $data->tid)
+					{
+						$tekijan_nimi2 = $t2->tekijan_nimi;
+						$m .= '<b>'.Yii::t('main', 'Työpari').':</b> '.$tekijan_nimi2.'<br>';
+					}
+				}
+			}
+
+			if( $_SERVER['REMOTE_ADDR'] != '::1' and $_SERVER['REMOTE_ADDR'] != '127.0.0.1' )
+			ToistuvatTyovuorot::model()->updateByPk($data->id, array('ilmoitus_paattymisesta'=>1));
+		}
+
+			if(!empty($m))
+			{
+				$message .= '<h1>'.Yii::t('main', 'Ilmoitus toistuvien työvuorojen päättymisestä').'</h1>';
+				$message .= $m;
+			}
+
+			$saaja = array();
+			$s = explode("\n", $asetukset->ilmoitus_toistuvien_tyovuorojen_paattymisesta_saajat);
+			foreach($s as $sp)
+				if(!empty($sp))
+					array_push($saaja, $sp);
+
+			if( $_SERVER['REMOTE_ADDR'] != '::1' and $_SERVER['REMOTE_ADDR'] != '127.0.0.1' and count($saaja) > 0 and !empty($message) )
+			{
+			   foreach($saaja as $key=>$sahkoposti)
+			   {			
+				$mail = new YiiMailer();
+				$mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
+				$mail->setTo($sahkoposti);
+				$mail->setSubject(Yii::t('main', 'Ilmoitus merkkipäivästä'));
+				$mail->setBody($message);
+				$mail->send();
+			   }
+			}
+			print_r($message);
+
+	}
+	// lmoitus toistuvien työvuorojen päättymisestä -->
+
 
 
 

@@ -40,13 +40,13 @@ class Asetukset extends DB2ActiveRecord
 		// will receive user inputs.
 		return array(
 			array('id,logon_polkku, logon_korkeus, johtaja', 'required'),
-			array('id, show_name, app_show_phone, sovellus_tyovuorot, logon_korkeus, palvelu_tyyppi, lasku_asiakasnumero, ilmoitus_avoimista_kohteesta_sahkopostiin, ilmoitus_myohastyneista_kohteesta_sahkopostiin, netvisor_kaytto, asiakas_tyovuorossa, onlinevaraus_aikaisintaan_paivamaara, onlinevaraus_alku, onlinevaraus_loppu, paikkakunta_tyovuorossa, app_lopettaa_vain_tagilla', 'numerical', 'integerOnly'=>true),
+			array('id, show_name, app_show_phone, sovellus_tyovuorot, logon_korkeus, palvelu_tyyppi, lasku_asiakasnumero, ilmoitus_avoimista_kohteesta_sahkopostiin, ilmoitus_myohastyneista_kohteesta_sahkopostiin, netvisor_kaytto, asiakas_tyovuorossa, onlinevaraus_aikaisintaan_paivamaara, onlinevaraus_alku, onlinevaraus_loppu, paikkakunta_tyovuorossa, app_lopettaa_vain_tagilla, ilmoitus_toistuvien_tyovuorojen_paattymisesta, ilmoitus_toistuvien_tyovuorojen_paattymisesta_paivat_ennen', 'numerical', 'integerOnly'=>true),
 			array('paivan_uutinen, logon_polkku', 'length', 'max'=>500),
 			array('johtaja, viivastyskorko, tilinumero, iban, bic, , postita_username, postita_password, trust_cid, trust_api, checkout_id, trust_ws_cid, trust_ws_salasana', 'length', 'max'=>100),
 			array('trust_url, checkout_salasana, trust_ws_api_url, netvisor_customer_id, netvisor_partner_id, netvisor_userkey, netvisor_partnerkey, netvisor_organisation_identifier, merkkipaivailmoitukset_sahkoposti', 'length', 'max'=>255),
 			array('viikonloppulisa_la, viikonloppulisa_su, vinkki_tunnit, vinkki_prosentti', 'length', 'max'=>10),
 			array('aikavali_halytys', 'length', 'max'=>3),
-			array('oikeudet, pyhapaivat, erikoislauantai, tilausvahvistus, rekisteriseloste, onlinevaraus_laatu_luotettavuus, onlinevaraus_takuu_turvallisuus, onlinevaraus_asiakaspalvelu, onlinevaraus_arvio_siivouksesta', 'length', 'max'=>10000),
+			array('oikeudet, pyhapaivat, erikoislauantai, tilausvahvistus, rekisteriseloste, onlinevaraus_laatu_luotettavuus, onlinevaraus_takuu_turvallisuus, onlinevaraus_asiakaspalvelu, onlinevaraus_arvio_siivouksesta, ilmoitus_toistuvien_tyovuorojen_paattymisesta_saajat', 'length', 'max'=>10000),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('id, syntyrin_emails, paivan_uutinen, logon_polkku, logon_korkeus, johtaja, viivastyskorko, tilinumero, iban, bic, trust_cid, trust_api, palvelu_tyyppi, trust_url, pyhapaivat, erikoislauantai, sovellus_tyovuorot', 'safe', 'on'=>'search'),
@@ -103,12 +103,16 @@ class Asetukset extends DB2ActiveRecord
 			'ilmoitus_avoimista_kohteesta_sahkopostiin' => Yii::t('main', 'Ilmoitus määräajan ylittäneistä kohteista sähköpostiin'),
 			'ilmoitus_myohastyneista_kohteesta_sahkopostiin' => Yii::t('main', 'Ilmoitus myöhästyneistä kohteesta sähköpostiin'),
 			'merkkipaivailmoitukset_sahkoposti' => Yii::t('main', 'Sähköposti, johoon tulevat merkkipäiväilmoitukset'),
-			'asiakas_tyovuorossa'=>Yii::t('main', 'Asiakas työvuorossa'),
+			'asiakas_tyovuorossa'=>Yii::t('main', 'Näytetäänkö asiakas työvuorossa'),
+			'paikkakunta_tyovuorossa' => Yii::t('main', 'Näytetäänkö paikkakunta työvuorossa'),
 			'onlinevaraus_aikaisintaan_paivamaara'=>Yii::t('main', 'Monenko päivän päästä vuoroja voi varata.'),
 			'onlinevaraus_alku'=>Yii::t('main', 'Varaukset alku'),
 			'onlinevaraus_loppu'=>Yii::t('main', 'Varaukset loppu'),
-			'paikkakunta_tyovuorossa' => Yii::t('main', 'Paikkakunta työvuorossa'),
 			'app_lopettaa_vain_tagilla' => Yii::t('main', 'Kohde mahdollista lopettaa vain aloitetulla Tagilla'),
+
+			'ilmoitus_toistuvien_tyovuorojen_paattymisesta' => Yii::t('main', 'Ilmoitus toistuvien työvuorojen päättymisestä'),
+			'ilmoitus_toistuvien_tyovuorojen_paattymisesta_paivat_ennen' => Yii::t('main', 'Ilmoitus päättymisestä päivät ennen'),
+			'ilmoitus_toistuvien_tyovuorojen_paattymisesta_saajat' => Yii::t('main', 'Saajan sähköpostit'),
 		);
 	}
 
