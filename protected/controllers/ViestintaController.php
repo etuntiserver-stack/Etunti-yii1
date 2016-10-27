@@ -172,6 +172,8 @@ class ViestintaController extends Controller
 		if(isset($_POST['Viestinta']))
 		{
 
+		    if(is_array($_POST['Viestinta']['tekija']))
+		    {
 			foreach($_POST['Viestinta']['tekija'] as $tekija)
 			{
 			$model=new Viestinta;
@@ -181,6 +183,13 @@ class ViestintaController extends Controller
 			$model->save();
 			Domainit::PushNotify($model->tekija,"ETUNTI",$model->viesti,'beep');
 			}
+		    } else {
+			$model=new Viestinta;
+			$model->attributes=$_POST['Viestinta'];
+			$model->viesti=date("d.m H:i").", ".Yii::app()->user->nimi.": ".$_POST['Viestinta']['viesti'];
+			$model->save();
+			Domainit::PushNotify($model->tekija,"ETUNTI",$model->viesti,'beep');
+		    }
 
 			$this->redirect(array('index'));
 
