@@ -28,7 +28,7 @@ $this->breadcrumbs=array(
    <!-- tulostus -->
 
 
-              <h2 class="myBgColors p10"> <i class="fa fa-home"></i> <?php echo Yii::t('main', 'Tuntiyhtenveto kohteet'); ?> 
+              <h2 class="myBgColors p10"> <i class="fa fa-home"></i> <?php echo Yii::t('main', 'Tuntiyhteenveto kohteet'); ?> 
 
 		</h2>
 
