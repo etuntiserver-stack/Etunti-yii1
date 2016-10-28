@@ -291,11 +291,10 @@ $(document).ready(function(){
 	var thisID 	= $(this).attr("id");
 	var thisVal 	= $("#"+forID).val();
 
-	var value2 	= []; 
-	$("#m3_"+forID+" option:selected").each(function(i, selected){ 
-	  value2[i] = $(selected).text(); 
-	});
 
+	var value2 = $('#m3_'+thisID+' :selected').map(function(){return $(this).val();}).get();
+
+console.log( value2 );
 
         $.ajax({
 
@@ -304,7 +303,7 @@ $(document).ready(function(){
            data: {"muokkaSelects" : "true", "id" : thisID, "value" : thisVal, "value2" : JSON.stringify(value2), "select_type" : $("#select_type").val()},
            success: function(html){
 
-		console.log(html)
+		//console.log(html)
 		//$("#result").html(html);
            }
 
