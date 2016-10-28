@@ -4,7 +4,6 @@
 	// muokka
 	if(isset($_POST['muokkaSelects']) and isset($_POST['id']))
 	{
-print_r($_POST);
 		$value2	= '';
 		if( isset($_POST['value2']) and $_POST['select_type'] == 'tyoryhma' )
 		$value2	= json_encode($_POST['value2']);
@@ -108,7 +107,6 @@ print_r($_POST);
 	   if(Yii::app()->user->adminStatus == 1){
 
 	       	$criteria = new CDbCriteria();
-		$criteria->select = " value,id,select_type ";
 		$criteria->condition = " select_type = '".$_POST['select_type']."' ";
 		$v2 = Valikkoot::model()->findAll($criteria);
 
@@ -160,18 +158,23 @@ print_r($_POST);
 
 		} else {
 
-			$mod .= '<input type="text" class="form-control form-group '.$success.'" value="'.$u->value.'" id="m_'.$u->id.'">';
-
 			// <-- Työryhmä
 			if(isset($admins) and is_array($admins) and $u->select_type == 'tyoryhma')
 			{
 				$mod .= '<select class="form-control form-group '.$success.' m3" value="'.$u->value2.'" multiple id="m3_'.$u->id.'">';
 				foreach($admins as $adm)
-					$mod .= '<option>'.$adm->adm_nimi.'</option>';
-
+				{
+					$value2 = json_decode($u->value2);
+					if( is_array($value2) and in_array($adm->id, $value2) )
+						$mod .= '<option value="'.$adm->id.'" selected>'.$adm->adm_nimi.'</option>';
+					else
+						$mod .= '<option value="'.$adm->id.'">'.$adm->adm_nimi.'</option>';
+				}
 				$mod .= '</select>';
 			}
 			// Työryhmä -->
+
+			$mod .= '<input type="text" class="form-control form-group '.$success.'" value="'.$u->value.'" id="m_'.$u->id.'">';
 
 		}
 
@@ -290,20 +293,17 @@ $(document).ready(function(){
 	var forID 	= $(this).attr("for");
 	var thisID 	= $(this).attr("id");
 	var thisVal 	= $("#"+forID).val();
-
-
 	var value2 = $('#m3_'+thisID+' :selected').map(function(){return $(this).val();}).get();
 
-console.log( value2 );
 
         $.ajax({
 
            url: location.protocol + "//" + location.host + "/index.php/site/valiko_ajax",
            type: "POST",
-           data: {"muokkaSelects" : "true", "id" : thisID, "value" : thisVal, "value2" : JSON.stringify(value2), "select_type" : $("#select_type").val()},
+           data: {"muokkaSelects" : "true", "id" : thisID, "value" : thisVal, "value2" : value2, "select_type" : $("#select_type").val()},
            success: function(html){
 
-		//console.log(html)
+		console.log(html)
 		//$("#result").html(html);
            }
 

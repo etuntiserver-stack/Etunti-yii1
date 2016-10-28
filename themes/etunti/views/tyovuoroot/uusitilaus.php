@@ -142,7 +142,9 @@
 
   <div class="col-sm-6">
 		<?php echo $form->labelEx($model,'toimenpiteet'); ?>
-		<?php echo $form->textarea($model,'toimenpiteet',array('rows'=>4,'class'=>'form-control')); ?>
+		<?php echo $form->textarea($model,'toimenpiteet',array('rows'=>4,'class'=>'form-control', 
+		'placeholder'=>Yii::t('main', 'Kirjoita tähän toimenpiteet, jotka näytetään sekä asiakkaalle että kohteen kortilla toimenpite kentäällä')
+		)); ?>
 		<?php echo $form->error($model,'toimenpiteet'); ?>
   </div>
   <div class="col-sm-6">
