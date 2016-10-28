@@ -112,6 +112,7 @@ $ids .= $tt->id.',';
 <th><?php echo Yii::t('main', 'Tietoja'); ?></th>
 </tr>
 <?php
+$asetukset = Asetukset::model()->findByPk(1);
 for($day= 1; $day <= 7; $day++) {
 
   $d = strtotime($year ."W". $week . $day);
@@ -140,17 +141,36 @@ for($day= 1; $day <= 7; $day++) {
   {
     if($t->pvm == $date)
     {
-	$k = Kohteet::model()->findbypk($t->kohde,array("select"=>"osoite,avain"));
+	$k = Kohteet::model()->findbypk($t->kohde,array("select"=>"asiakas_id,osoite,avain,kaupunki"));
+
+	// <-- Asiakas Tiedot
+	$as = Asiakkaat::model()->findbypk($k->asiakas_id);
+	$asiakasTiedot = '';
+	if(isset($k->asiakas_id) and $as->id > 0){
+		
+		if(isset($as->yrityksen_nimi) and !empty($as->yrityksen_nimi) and $asetukset->tyovuorolahetys_naytetaanko_asiakas == 1){
+			$asiakasTiedot = '<br><b>'.Yii::t('main', 'Asiakas').':</b> '.$as->yrityksen_nimi;
+		} else if(isset($as->yhteyshenkilo) and empty($as->yrityksen_nimi) and !empty($as->yhteyshenkilo) and $asetukset->tyovuorolahetys_naytetaanko_asiakas == 1){
+			$asiakasTiedot = '<br><b>'.Yii::t('main', 'Asiakas').':</b> '.$as->yhteyshenkilo;
+		}
+
+		if($asetukset->tyovuorolahetys_naytetaanko_kohteen_postitoimipaikka == 1)
+			$asiakasTiedot .= '<br><b>'.Yii::t('main', 'Kohteen postitoimipaikka').':</b> '.$k->kaupunki;
+
+		if($asetukset->tyovuorolahetys_naytetaanko_asiakas == 1 or $asetukset->tyovuorolahetys_naytetaanko_kohteen_postitoimipaikka == 1)
+			$asiakasTiedot .= '<p style="padding:0;margin:0">------</p>';
+	}
+	// Asiakas Tiedot -->
 
 	if($t->alku > 0 and $t->loppu > 0)
 	{
-	  $al = $t->alku.'-'.$t->loppu;
+	  	$al = $t->alku.'-'.$t->loppu;
 
-	  if(strpos($t->tyoajanmerkinta,'Ei lasketa') === false)
-	  $yht += strtotime($t->loppu)-strtotime($t->alku);
+	  	if(strpos($t->tyoajanmerkinta,'Ei lasketa') === false)
+	  	$yht += strtotime($t->loppu)-strtotime($t->alku);
 
 	} else {
-	  $al = '';
+	  	$al = '';
  	}
 
 	$expl = explode("/",$t->tyoajanlaatu);
@@ -162,6 +182,7 @@ for($day= 1; $day <= 7; $day++) {
 	echo ' &nbsp;<b class="fa fa-key text-warning"></b>';
 	elseif(!empty($k['avain']) and $tulosta)
 	echo ' &nbsp;(avain on)';
+	echo $asiakasTiedot;
 	echo '<br>';
 
     }
@@ -180,7 +201,7 @@ for($day= 1; $day <= 7; $day++) {
     {
 
 	echo '<b>'.$k['osoite'].':</b> <br>'.$t->tietoja;
-	echo '<hr>';
+	echo '<p>------</p>';
     }
   }
   echo '</td>';

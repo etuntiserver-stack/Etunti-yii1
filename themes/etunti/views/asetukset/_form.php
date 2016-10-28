@@ -124,7 +124,7 @@
 <div class="btn btn-primary btn-block myBgColors" data-toggle="collapse" data-target="#tyovuoroAsetukset"><h3><?php echo Yii::t('main','Työvuorot'); ?>&nbsp; <i class="fa fa-caret-square-o-down" aria-hidden="true"></i></h3></div>
 
   <div class="row form collapse" id="tyovuoroAsetukset">
-   <div class="col-sm-4">
+   <div class="col-sm-3">
     <legend><h2><?php echo Yii::t('main','Työvuorot asetukset'); ?></h2></legend>
 
 	<div class="section fill mb5">
@@ -153,7 +153,7 @@
 
    </div>
 
-   <div class="col-sm-4">
+   <div class="col-sm-3">
     <legend><h2><?php echo Yii::t('main','Toistuvat työvuorot'); ?></h2></legend>
 
 	<div class="section fill mb5">
@@ -179,6 +179,36 @@
 		<?php echo $form->textarea($model,'ilmoitus_toistuvien_tyovuorojen_paattymisesta_saajat',array('rows'=>8,'maxlength'=>3000,'class'=>'form-control', 'placeholder' => "sähköposti1@testi.fi\nsähköposti2@testi.fi")); ?>
 		<?php echo $form->error($model,'ilmoitus_toistuvien_tyovuorojen_paattymisesta_saajat'); ?>
 	</div>
+   </div>
+
+
+   <div class="col-sm-3">
+    <legend><h2><?php echo Yii::t('main','Työvuorojen lähetys'); ?></h2></legend>
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'tyovuorolahetys_naytetaanko_asiakas'); ?>
+		<?php 
+        	$l = array(
+			0=>'Ei',
+			1=>'Kyllä'
+		);
+		echo $form->dropDownList($model,'tyovuorolahetys_naytetaanko_asiakas', $l, 
+		array('class'=>'form-control')) ?>
+		<?php echo $form->error($model,'tyovuorolahetys_naytetaanko_asiakas'); ?>
+	</div>
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'tyovuorolahetys_naytetaanko_kohteen_postitoimipaikka'); ?>
+		<?php 
+        	$l = array(
+			0=>'Ei',
+			1=>'Kyllä'
+		);
+		echo $form->dropDownList($model,'tyovuorolahetys_naytetaanko_kohteen_postitoimipaikka', $l, 
+		array('class'=>'form-control')) ?>
+		<?php echo $form->error($model,'tyovuorolahetys_naytetaanko_kohteen_postitoimipaikka'); ?>
+	</div>
+
    </div>
 
   </div>
