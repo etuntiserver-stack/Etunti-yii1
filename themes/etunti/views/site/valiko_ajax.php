@@ -4,7 +4,18 @@
 	// muokka
 	if(isset($_POST['muokkaSelects']) and isset($_POST['id']))
 	{
-		Valikkoot::model()->updatebypk($_POST['id'], array('value'=>$_POST['value']));
+print_r($_POST);
+		$value2	= '';
+		if( isset($_POST['value2']) and $_POST['select_type'] == 'tyoryhma' )
+		$value2	= json_encode($_POST['value2']);
+
+
+		Valikkoot::model()->updatebypk($_POST['id'], 
+			array(
+				'value'=>$_POST['value'],
+				'value2'=>$value2
+			)
+		);
 	}
 
 	// deleteFromSelect
@@ -57,6 +68,12 @@
 	else $selType = $r->select_type;
 
 
+	if($_POST['select_type'] == 'tyoryhma')
+	{
+		$admins = Administrators::model()->findAll(array('order' => 'adm_nimi'));
+	}
+
+
        	$criteria = new CDbCriteria();
 	$criteria->condition = " select_type='".$_POST['select_type']."' ";
 	$r = Valikkoot::model()->find($criteria);
@@ -73,7 +90,7 @@
       </div>
       <div class="modal-body">
        <div class="row">
-       <div class="col-sm-5">
+       <div class="col-sm-4">
 	<br>
 	<legend>'.$selType.'</legend>';
 
@@ -85,7 +102,7 @@
 	}
 
 	$mod .= '
-       </div><div class="col-sm-7">
+       </div><div class="col-sm-8">
         <p><center>';
 
 	   if(Yii::app()->user->adminStatus == 1){
@@ -106,7 +123,9 @@
 	
 		$mod .= '
 		<div class="row moe" id="rivi_'.$u->id.'">
-		  <div class="form-inline">';
+		 <div class="col-sm-12">
+		  <div class="form-inline">
+		   <div class="pull-right">';
 
 
 		if($_POST['select_type'] == 'vuosilomat')
@@ -140,16 +159,34 @@
 
 
 		} else {
-		$mod .= '<input type="text" class="form-control form-group '.$success.'" value="'.$u->value.'" id="m_'.$u->id.'">';
+
+			$mod .= '<input type="text" class="form-control form-group '.$success.'" value="'.$u->value.'" id="m_'.$u->id.'">';
+
+			// <-- Työryhmä
+			if(isset($admins) and is_array($admins) and $u->select_type == 'tyoryhma')
+			{
+				$mod .= '<select class="form-control form-group '.$success.' m3" value="'.$u->value2.'" multiple id="m3_'.$u->id.'">';
+				foreach($admins as $adm)
+					$mod .= '<option>'.$adm->adm_nimi.'</option>';
+
+				$mod .= '</select>';
+			}
+			// Työryhmä -->
+
 		}
 
 
 
 
 		$mod .= '
-			<input type="button" class="btn btn-warning muokkaSelectValikoja" for="m_'.$u->id.'" id="'.$u->id.'" value="Tallenna"></button>
-			<input type="button" class="btn btn-danger deleteFromSelect" id="poista_'.$u->id.'" select_type="'.$u->select_type.'" value="X"></button>
+			<span class="form-group">
+			   <input type="button" class="btn btn-warning muokkaSelectValikoja" for="m_'.$u->id.'" id="'.$u->id.'" value="Tallenna"></button>
+			   <input type="button" class="btn btn-danger deleteFromSelect" id="poista_'.$u->id.'" select_type="'.$u->select_type.'" value="X"></button>
+			</span>
+
+		   </div>
 		  </div>
+		 </div>
 		</div>
 		';
 
@@ -159,10 +196,12 @@
 
 		$mod .= '<BR>
 		<div class="row">
-		  <div class="form-inline">
+		 <div class="col-sm-12">
+		  <div class="form-inline pull-right">
 			<input type="text" class="form-control form-group" id="u_'.$r->id.'">
 			<button class="btn btn-success form-group uusi" tyyppi="'.$r->select_type.'" for="u_'.$r->id.'">uusi</button>
 		  </div>
+		 </div>
 		</div>';
 
 	} else {
@@ -192,6 +231,17 @@
 <script type="text/javascript">
 $(document).ready(function(){
 
+ $(".m3").multiselect({
+
+	//inheritClass: true,
+	//enableFiltering: true,
+        includeSelectAllOption: true,
+	nonSelectedText: '<?php echo Yii::t("main", "Järjestelmänvalvojat"); ?>',
+	selectAllText: '<?php echo Yii::t("main", "Valitse kaikki"); ?>',
+	allSelectedText: '<?php echo Yii::t("main", "Kaikki"); ?>',
+	nSelectedText: '<?php echo Yii::t("main", "valittu"); ?>',
+	numberDisplayed: 0,
+ }); 
 
 /*
 	function setTextColor(picker) {
@@ -237,19 +287,24 @@ $(document).ready(function(){
   $(".muokkaSelectValikoja").click(function(){
 
 	$(this).removeClass("btn-warning").addClass("btn-success");
-	var forID = $(this).attr("for");
+	var forID 	= $(this).attr("for");
+	var thisID 	= $(this).attr("id");
+	var thisVal 	= $("#"+forID).val();
 
-	var thisID = $(this).attr("id");
-	var thisVal = $("#"+forID).val();
-	//$("#"+forID).val("Hetkinen..");
+	var value2 	= []; 
+	$("#m3_"+forID+" option:selected").each(function(i, selected){ 
+	  value2[i] = $(selected).text(); 
+	});
+
+
         $.ajax({
 
            url: location.protocol + "//" + location.host + "/index.php/site/valiko_ajax",
            type: "POST",
-           data: {"muokkaSelects" : "true", "id" : thisID, "value" : thisVal, "select_type" : $("#select_type").val()},
+           data: {"muokkaSelects" : "true", "id" : thisID, "value" : thisVal, "value2" : JSON.stringify(value2), "select_type" : $("#select_type").val()},
            success: function(html){
 
-		//console.log(html)
+		console.log(html)
 		//$("#result").html(html);
            }
 

@@ -134,6 +134,12 @@ if(empty($model->position) and isset($model->id))
 	</div>
 
 	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'tekijan_puh'); ?>
+		<?php echo $form->textField($model,'tekijan_puh',array('size'=>20,'maxlength'=>20,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'tekijan_puh'); ?>
+	</div>
+
+	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'tekijan_henkilotunnus'); ?>
 		<?php 
 
@@ -149,12 +155,6 @@ if(empty($model->position) and isset($model->id))
 		echo $form->textField($model,'tekijan_henkilotunnus',array('size'=>20,'maxlength'=>20,'class'=>'form-control')); 
 		?>
 		<?php echo $form->error($model,'tekijan_henkilotunnus'); ?>
-	</div>
-
-	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'tekijan_puh'); ?>
-		<?php echo $form->textField($model,'tekijan_puh',array('size'=>20,'maxlength'=>20,'class'=>'form-control')); ?>
-		<?php echo $form->error($model,'tekijan_puh'); ?>
 	</div>
 
 	<div class="section fill mb5">

@@ -37,7 +37,7 @@ class Valikkoot extends DB2ActiveRecord
 		// will receive user inputs.
 		return array(
 			array('value, select_type', 'required'),
-			array('value', 'length', 'max'=>255),
+			array('value, value2', 'length', 'max'=>255),
 			array('select_type', 'length', 'max'=>50),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.

@@ -141,6 +141,11 @@
   </div>
 
   <div class="col-sm-6">
+		<?php echo $form->labelEx($model,'toimenpiteet'); ?>
+		<?php echo $form->textarea($model,'toimenpiteet',array('rows'=>4,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'toimenpiteet'); ?>
+  </div>
+  <div class="col-sm-6">
 		<?php echo $form->labelEx($model,'tietoja'); ?>
 		<?php echo $form->textarea($model,'tietoja',array('rows'=>4,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'tietoja'); ?>

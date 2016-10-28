@@ -1440,6 +1440,7 @@ class TyovuorootController extends Controller
 			$kohteet->osoite = $asiakkaat->osoite;
 			$kohteet->puh_nro = $asiakkaat->puhelin;
 			$kohteet->email = $asiakkaat->sahkoposti;
+			$kohteet->toimenpiteet = $_POST['Tyovuoroot']['toimenpiteet'];
 			$kohteet->muut = date("d.m.Y",strtotime($_POST['Tyovuoroot']['pvm']))."\n".date("H:i",strtotime($_POST['Tyovuoroot']['alku']))."-".date("H:i",strtotime($_POST['Tyovuoroot']['loppu']))."\nHinta: ".$_POST['hinta'];
 
 		  	   if($kohteet->save())
@@ -1455,9 +1456,14 @@ class TyovuorootController extends Controller
 					$message = '
 					Asiakas: '.$asiakkaat->yhteyshenkilo.'<br>
 					Työvuorot:  '.$model->pvm.', '.$model->alku.'-'.$model->loppu.'<br>
-					Hinta: '.$_POST['hinta'].'<br>
-					<h2>Kiitos tilauksesta.</h2>
-					';
+					Hinta: '.$_POST['hinta'].'<br>';
+
+					if(!empty($kohteet->toimenpiteet))
+					$message .= str_replace("\n", "<br>",$kohteet->toimenpiteet);
+
+					$message .= '<h2>Kiitos tilauksesta.</h2>';
+
+
 					$mail = new YiiMailer();
 					//$mail->clearLayout();//if layout is already set in config
 					$mail->setFrom('info@etunti.fi', 'ETUNTI.FI');

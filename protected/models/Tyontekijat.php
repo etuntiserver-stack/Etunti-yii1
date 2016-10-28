@@ -97,10 +97,10 @@ public $tunnus;
 		return array(
 			'id' => Yii::t('main', 'ID'),
 			'imei' => Yii::t('main', 'Imei'),
-			'laiten_puh' => Yii::t('main', 'Työpuhelinnumero'),
+			'laiten_puh' => Yii::t('main', 'Työpuhelin'),
 			'tekijan_nimi' => Yii::t('main', 'Etu- ja sukunimi'),
 			'tekijan_henkilotunnus' => Yii::t('main', 'Henkilötunnus'),
-			'tekijan_puh' => Yii::t('main', 'Puhelin'),
+			'tekijan_puh' => Yii::t('main', 'Oma puhelin'),
 			'tekijan_email' => Yii::t('main', 'Sähköposti'),
 			'tekijan_lanka_puh' => Yii::t('main', 'Lanka Puh'),
 			'tekijan_katuosoite' => Yii::t('main', 'Katuosoite'),
