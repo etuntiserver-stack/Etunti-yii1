@@ -7,14 +7,17 @@
 <style>
 .tb .col1{ width: 3%; text-align: left; }
 
-.tb .col2{ width: 7%; }
+.tb .col2{ width: 9%; }
 .tb .col2 input{ width: 80%; }
 </style>
 <h1><?php echo Yii::t('main', 'Verotustiedot'); ?></h1>
+<?php $tulostus = true; ?>
 <?php endif; ?>
 
 
 <?php if(!isset($_POST['tulosta'])): ?>
+<?php $tulostus = false; ?>
+
         <!-- begin: .tray-center -->
         <div class="tray-center">
 
@@ -158,7 +161,7 @@
   <?php
 	foreach($model as $data)
 	{
-		echo $this->renderPartial('_verotustiedot', array('data'=>$data));
+		echo $this->renderPartial('_verotustiedot', array('data'=>$data, 'tulostus'=>$tulostus));
 	}
   ?>
   </table>

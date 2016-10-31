@@ -40,30 +40,66 @@
 		<?php echo $data->tekijan_nimi; ?>
 	</td>
 	<td class="col2">
-	<input type="text" class="form-control valRiviSuhteet" for="tuloraja_ajalle" tid="<?php echo $data->id; ?>" value="<?php echo $tuloraja_ajalle; ?>">
+	<?php if($tulostus): ?>
+		<?php echo $tuloraja_ajalle; ?>
+	<?php else : ?>
+		<input type="text" class="form-control valRiviSuhteet" for="tuloraja_ajalle" tid="<?php echo $data->id; ?>" value="<?php echo $tuloraja_ajalle; ?>">
+	<?php endif; ?>
 	</td>
 	<td class="col2">
-	<input type="text" class="form-control valRiviSuhteet" for="perusprosentti" tid="<?php echo $data->id; ?>" value="<?php echo $perusprosentti; ?>">
+	<?php if($tulostus): ?>
+		<?php echo $perusprosentti; ?>
+	<?php else : ?>
+		<input type="text" class="form-control valRiviSuhteet" for="perusprosentti" tid="<?php echo $data->id; ?>" value="<?php echo $perusprosentti; ?>">
+	<?php endif; ?>
 	</td>
 	<td class="col2">
-	<input type="text" class="form-control valRiviSuhteet" for="lisaprosentti" tid="<?php echo $data->id; ?>" value="<?php echo $lisaprosentti; ?>">
+	<?php if($tulostus): ?>
+		<?php echo $lisaprosentti; ?>
+	<?php else : ?>
+		<input type="text" class="form-control valRiviSuhteet" for="lisaprosentti" tid="<?php echo $data->id; ?>" value="<?php echo $lisaprosentti; ?>">
+	<?php endif; ?>
 	</td>
 	<td class="col2">
-	<input type="text" class="form-control valRiviSuhteet" for="kuukaudessa" tid="<?php echo $data->id; ?>" value="<?php echo $kuukaudessa; ?>">
+	<?php if($tulostus): ?>
+		<?php echo $kuukaudessa; ?>
+	<?php else : ?>
+		<input type="text" class="form-control valRiviSuhteet" for="kuukaudessa" tid="<?php echo $data->id; ?>" value="<?php echo $kuukaudessa; ?>">
+	<?php endif; ?>
 	</td>
 	<td class="col2">
-	<input type="text" class="form-control valRiviSuhteet" for="kahdessa_viikossa" tid="<?php echo $data->id; ?>" value="<?php echo $kahdessa_viikossa; ?>">
+	<?php if($tulostus): ?>
+		<?php echo $kahdessa_viikossa; ?>
+	<?php else : ?>
+		<input type="text" class="form-control valRiviSuhteet" for="kahdessa_viikossa" tid="<?php echo $data->id; ?>" value="<?php echo $kahdessa_viikossa; ?>">
+	<?php endif; ?>
 	</td>
 	<td class="col2">
-	<input type="text" class="form-control valRiviSuhteet" for="viikossa" tid="<?php echo $data->id; ?>" value="<?php echo $viikossa; ?>">
+	<?php if($tulostus): ?>
+		<?php echo $viikossa; ?>
+	<?php else : ?>
+		<input type="text" class="form-control valRiviSuhteet" for="viikossa" tid="<?php echo $data->id; ?>" value="<?php echo $viikossa; ?>">
+	<?php endif; ?>
 	</td>
 	<td class="col2">
-	<input type="text" class="form-control valRiviSuhteet" for="paivassa" tid="<?php echo $data->id; ?>" value="<?php echo $paivassa; ?>">
+	<?php if($tulostus): ?>
+		<?php echo $paivassa; ?>
+	<?php else : ?>
+		<input type="text" class="form-control valRiviSuhteet" for="paivassa" tid="<?php echo $data->id; ?>" value="<?php echo $paivassa; ?>">
+	<?php endif; ?>
 	</td>
 	<td class="col2">
-	<input type="text" class="form-control valRiviSuhteet" for="atk_varten" tid="<?php echo $data->id; ?>" value="<?php echo $atk_varten; ?>">
+	<?php if($tulostus): ?>
+		<?php echo $atk_varten; ?>
+	<?php else : ?>
+		<input type="text" class="form-control valRiviSuhteet" for="atk_varten" tid="<?php echo $data->id; ?>" value="<?php echo $atk_varten; ?>">
+	<?php endif; ?>
 	</td>
 	<td class="col2">
-	<input type="text" class="form-control valRiviSuhteet" for="yksi_tuloraja" tid="<?php echo $data->id; ?>" value="<?php echo $yksi_tuloraja; ?>">
+	<?php if($tulostus): ?>
+		<?php echo $yksi_tuloraja; ?>
+	<?php else : ?>
+		<input type="text" class="form-control valRiviSuhteet" for="yksi_tuloraja" tid="<?php echo $data->id; ?>" value="<?php echo $yksi_tuloraja; ?>">
+	<?php endif; ?>
 	</td>
 </tr>
