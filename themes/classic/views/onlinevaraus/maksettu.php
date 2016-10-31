@@ -40,8 +40,11 @@ ini_set('display_errors', 1);
 	<?php
 	if(isset($_GET['check']))
 	{
-		echo $_SESSION['onlinevaraus']['message'];
-		unset($_SESSION['onlinevaraus']);
+		if(isset($_SESSION['onlinevaraus']))
+		{
+			echo $_SESSION['onlinevaraus']['message'];
+			unset($_SESSION['onlinevaraus']);
+		}
 		exit;
 	}
 
@@ -192,16 +195,6 @@ if(isset($tilauksen_kuvaus['paa']) and is_array($tilauksen_kuvaus['paa']))
   $message .= '<br></td></tr>';
 }
 
-
-if(isset($tilauksen_kuvaus['paa']) or isset($tilauksen_kuvaus['lisa']))
-{
-  $message .= '<tr><td valign="top">Tilattu tuote</td><td>';
-  foreach($tilauksen_kuvaus['paa'] as $k=>$v)
-	$message .=  $k.' '.$v.' m²<br>';
-  foreach($tilauksen_kuvaus['lisa'] as $k=>$v)
-	$message .=  $k.' '.$v.' h<br>';
-  $message .= '<br></td></tr>';
-}
 
 
 $message .= '
