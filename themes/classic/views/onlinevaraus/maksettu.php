@@ -141,10 +141,6 @@ $message .= '
         <section class="esittely">
             <div class="paddings">
                 <div class="container">
-                    <!-- Icon Big -->
-                    <!-- End Icon Big -->
-
-
 <style>
 table{ 
 	width:800px;
@@ -176,20 +172,39 @@ $message .= '
 </table>
 <hr>
 <table>
-<tr><td>Tilausnumero</td><td>'.$ov->id.'</td></tr>
+<tr><td>Tilausnumero</td><td>'.$ov->id.'</td></tr>';
 
-<tr><td valign="top">Tilattu tuote</td><td>';
 
-if(isset($tilauksen_kuvaus['paa']) and isset($tilauksen_kuvaus['lisa']))
+if(isset($tilauksen_kuvaus['paa']) and is_array($tilauksen_kuvaus['paa']))
 {
+
+  $message .= '<tr><td valign="top">Tilattu tuote</td><td>';
+  foreach($tilauksen_kuvaus['paa'] as $k=>$v){
+	$message .=  $k.' '.$v.' m²<br>';
+  }
+
+  if(isset($tilauksen_kuvaus['lisa']) and is_array($tilauksen_kuvaus['lisa']))
+  {
+     foreach($tilauksen_kuvaus['lisa'] as $k=>$v){
+	$message .=  $k.' '.$v.' h<br>';
+     }
+  }
+  $message .= '<br></td></tr>';
+}
+
+
+if(isset($tilauksen_kuvaus['paa']) or isset($tilauksen_kuvaus['lisa']))
+{
+  $message .= '<tr><td valign="top">Tilattu tuote</td><td>';
   foreach($tilauksen_kuvaus['paa'] as $k=>$v)
 	$message .=  $k.' '.$v.' m²<br>';
   foreach($tilauksen_kuvaus['lisa'] as $k=>$v)
 	$message .=  $k.' '.$v.' h<br>';
+  $message .= '<br></td></tr>';
 }
 
-$message .= '<br></td></tr>
 
+$message .= '
 <tr><td>Ajankohta</td><td>'.$tv->pvm.'</td></tr>
 <tr><td>Aika</td><td>KLO '.$tv->alku.'-'.$tv->loppu.'</td></tr>				
 <tr><td>Paikka</td><td>'.$ov->osoite.', '.$ov->postinumero.' '.$ov->kaupunki.'</td></tr>
@@ -197,17 +212,9 @@ $message .= '<br></td></tr>
 <tr><td>Maksu</td><td>Maksu on vahvistettu</td></tr>
 </table>
 
-			<span>'.$asetukset->tilausvahvistus.'</span>
-
-
-
-
-
-                        <hr>
-                    <!-- End Titles Heading -->
+			<p><span>'.$asetukset->tilausvahvistus.'</span></p>
 
                 </div>
-                <!-- End Container-->
             </div>
         </section>  
 
@@ -216,12 +223,30 @@ $message .= '<br></td></tr>
 
 			$_SESSION['onlinevaraus']['message'] = $message;
 
+			// <-- Lähetetään asiakkaalle
 	          	$mail = new YiiMailer();
 			$mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
 			$mail->setTo($_SESSION['onlinevaraus']['sahkoposti']);
 			$mail->setSubject('Online varaus');
 			$mail->setBody($message);
 			$mail->send();
+			// Lähetetään asiakkaalle -->
+
+			$firmanTiedot = FirmanTiedot::model()->findbypk(1);
+
+			// <-- Lähetetään toimistoon
+			if(isset($firmanTiedot->sahkoposti) and !empty($firmanTiedot->sahkoposti))
+			{
+			$message .= '<p><h3>Kopio</h3></p>';
+	          	$mail = new YiiMailer();
+			$mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
+			$mail->setTo($firmanTiedot->sahkoposti);
+			$mail->setSubject('Online varaus');
+			$mail->setBody($message);
+			$mail->send();
+			}
+			// Lähetetään toimistoon -->
+
 			
 			$t = Tyovuoroot::model()->findbypk($tv->id);
 			$t->osoiteOnline=2;
