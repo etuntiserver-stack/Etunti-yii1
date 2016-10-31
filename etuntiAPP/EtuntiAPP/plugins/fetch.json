@@ -9,9 +9,8 @@
     },
     "com.chariotsolutions.nfc.plugin": {
         "source": {
-            "type": "git",
-            "url": "https://github.com/chariotsolutions/phonegap-nfc.git",
-            "subdir": "."
+            "type": "registry",
+            "id": "phonegap-nfc"
         },
         "is_top_level": true,
         "variables": {}

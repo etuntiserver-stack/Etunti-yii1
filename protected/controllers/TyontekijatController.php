@@ -124,13 +124,18 @@ class TyontekijatController extends Controller
 		if(isset($_POST['sahkoposti']) and !empty(trim($_POST['sahkoposti'])))
 	        $criteria->addCondition (" tekijan_email LIKE '%".$_POST['sahkoposti']."%' ");
 
-		$dataProvider=new CActiveDataProvider('Tyontekijat', array(
-			'criteria'=>$criteria,
-			//'pagination'=>false
-		));
+		$model= Tyontekijat::model()->findAll($criteria);
 
-		$dataProvider->pagination->pageSize = 50;
-		$this->render('verotustiedot', array('dataProvider' => $dataProvider));
+		//$dataProvider->pagination->pageSize = 50;
+		if(isset($_POST['tulosta']))
+		{
+		        $html2pdf = Yii::app()->ePdf->HTML2PDF('L', 'A4', 'en');
+			$html2pdf->setDefaultFont('Arial');
+		        $html2pdf->WriteHTML($this->renderPartial('verotustiedot', array('model' => $model),true));
+		        $html2pdf->Output();
+		} else {
+			$this->render('verotustiedot', array('model' => $model));
+		}
 
 	}
 

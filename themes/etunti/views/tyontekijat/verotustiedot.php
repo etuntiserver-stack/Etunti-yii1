@@ -2,11 +2,29 @@
 /* @var $this KohteetController */
 /* @var $dataProvider CActiveDataProvider */
 ?>
+<?php if(isset($_POST['tulosta'])): ?>
+<link rel="stylesheet" type="text/css" href="css/pdf_table.css">
+<style>
+.tb .col1{ width: 3%; text-align: left; }
+
+.tb .col2{ width: 7%; }
+.tb .col2 input{ width: 80%; }
+</style>
+<h1><?php echo Yii::t('main', 'Verotustiedot'); ?></h1>
+<?php endif; ?>
 
 
+<?php if(!isset($_POST['tulosta'])): ?>
         <!-- begin: .tray-center -->
         <div class="tray-center">
 
+	   <div class="pull-right">
+  	     <!-- tulostus -->
+     	      <form action="#" class="form-group" target="_blank" method="POST">
+      	      <input type="submit" name="tulosta" class="btn btn-success myBgColors" value="PDF">
+     	      </form>
+  	     <!-- tulostus -->
+           </div>
 
               <h2 class="myBgColors p10"> <i class="fa fa-male"></i> <?php echo Yii::t('main', 'Verotustiedot'); ?></h2>
 
@@ -112,6 +130,8 @@
 
         <!-- loppu: .tray-center -->
         </div>
+<?php endif; ?>
+
 
 
 <div class="admin-form">
@@ -119,41 +139,30 @@
    <div class="panel-body">
 
 <div class="row">
- <div class="table-responsive">
+ <div class="table-responsive tb">
   <table class="table table-striped" id="mobileTable">
   <thead class="myBgColors">
   <tr>
   <th><?php echo Yii::t('main', 'Nimi'); ?></th>
   <th><?php echo Yii::t('main', 'Tuloraja ajalle'); ?></th>
-  <th><?php echo Yii::t('main', 'Palkkaa varten Perusprosentti'); ?></th>
+  <th><?php echo Yii::t('main', 'Palkkaa varten<br> Perusprosentti'); ?></th>
   <th><?php echo Yii::t('main', 'Lisäprosentti'); ?></th>
   <th><?php echo Yii::t('main', 'A Kuukaudessa'); ?></th>
   <th><?php echo Yii::t('main', 'Kahdessa viikossa'); ?></th>
   <th><?php echo Yii::t('main', 'Viikossa'); ?></th>
   <th><?php echo Yii::t('main', 'Päivässä'); ?></th>
-  <th><?php echo Yii::t('main', 'Laskennallinen tuloraja ATK-järjestelmiä varten'); ?></th>
-  <th><?php echo Yii::t('main', 'B Ennakonpidätys yhden tulorajan mukaan'); ?></th>
-  <th></th>
+  <th><?php echo Yii::t('main', 'Laskennallinen tuloraja<br> ATK-järjestelmiä varten'); ?></th>
+  <th><?php echo Yii::t('main', 'B Ennakonpidätys yhden<br> tulorajan mukaan'); ?></th>
   </tr>
   </thead>
-  <?php $this->widget('zii.widgets.CListView', array(
-	'dataProvider'=>$dataProvider,
-	'itemView'=>'_verotustiedot',
-  	'template'=>'{items}<table class="table table-striped table-condensed"></table><br/>{pager}',
-
-
-	'pager' => array(
-           'firstPageLabel'=>'<<',
-           'prevPageLabel'=>'< Edellinen',
-           'nextPageLabel'=>'Seuraava >',
-           'lastPageLabel'=>'>>',
-           //'maxButtonCount'=>'10',
-           'header'=>'<h3>Siirry sivulle:</h3>',
-           'cssFile'=>false,
-       ), 
-
-  )); ?>
+  <?php
+	foreach($model as $data)
+	{
+		echo $this->renderPartial('_verotustiedot', array('data'=>$data));
+	}
+  ?>
   </table>
+ </div>
  </div>
 
 
@@ -162,7 +171,7 @@
 </div>
 
 
-
+<?php if(!isset($_POST['tulosta'])): ?>
 <script type="text/javascript">
 $(document).ready(function(){
 
@@ -192,3 +201,4 @@ $(".haemob").click(function(){
 
 });
 </script>
+<?php endif; ?>
