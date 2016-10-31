@@ -896,6 +896,7 @@ Copyright (c) 2014 Daniel Eden
 }
 .glyphicon-qrcode:before {
   content: "\e039";
+
 }
 .glyphicon-barcode:before {
   content: "\e040";
@@ -1728,6 +1729,7 @@ Copyright (c) 2014 Daniel Eden
   content: "\f005";
 }
 .fa-star-o:before {
+
   content: "\f006";
 }
 .fa-user:before {
@@ -9231,6 +9233,7 @@ pre code {
   .col-lg-10 {
     width: 83.33333333%;
   }
+
   .col-lg-9 {
     width: 75%;
   }
@@ -10664,6 +10667,7 @@ tbody.collapse.in {
   display: block;
   padding: 5px 15px;
   clear: both;
+
   color: #666666;
   font-weight: normal;
   line-height: 1.49;
@@ -10753,6 +10757,7 @@ tbody.collapse.in {
     right: auto;
   }
 }
+/* Roman */
 @media (max-width: 480px) {
   .navbar-right {
     //background: #333;
@@ -10760,10 +10765,12 @@ tbody.collapse.in {
   etuSukuNimi, #domainTila, #fullscreenTila { display:none }
   etuSukuNimiSm { display:block }
   etuSukuNimiSm { margin-top: 5px }
+  .montakoRiviaSivulle { display:none }
 }
 @media (min-width: 480px) {
   etuSukuNimiSm { display:none }
 }
+/* Roman */
 /*==================================================
   Button Groups
 ==================================================== */
@@ -14669,6 +14676,7 @@ ol.timeline-list li.timeline-item .timeline-date {
   -webkit-transform: translate3d(0, 0, 0);
   transform: translate3d(0, 0, 0);
 }
+
 .modal-open .modal {
   overflow-x: hidden;
   overflow-y: auto;

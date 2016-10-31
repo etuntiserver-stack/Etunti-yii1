@@ -11,7 +11,8 @@
 
         <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-home"></i> <?php echo Yii::t('main', 'Kohteet'); ?> 
 		<?php echo CHtml::link('',Yii::app()->request->baseUrl.'/index.php/kohteet/create',array('class'=>'btn btn-default fa fa-plus', 'data-toggle'=>'tooltip', 'data-placement'=>'top', 'title' => Yii::t('main', 'Lisää kohde') )); ?>
-	 <div class="pull-right">
+
+	 <div class="pull-right montakoRiviaSivulle">
 	   <?php
 	   ($perSivu == 10) ? $defcl10 = 'btn-success' : $defcl10 = 'btn-default';
 	   ($perSivu == 50) ? $defcl50 = 'btn-success' : $defcl50 = 'btn-default';
