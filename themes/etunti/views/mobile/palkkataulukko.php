@@ -25,7 +25,7 @@ $this->breadcrumbs=array(
       <input type="hidden" name="to" value="<?php echo $to; ?>">
       <input type="submit" name="tulosta" class="btn btn-primary btn-sm myBgColors" value="PDF">
      </form>
-     <button class="btn btn-primary btn-sm btn-group myBgColors" data-toggle="collapse"  data-target="#haku"><?php echo Yii::t('main', 'Extrat'); ?> <b class="caret"></b></button>
+     <button class="btn btn-primary btn-sm btn-group myBgColors" data-toggle="collapse"  data-target="#haku"><?php echo Yii::t('main', 'Ekstrat'); ?> <b class="caret"></b></button>
     </div>
    </div>
    <!-- tulostus -->
