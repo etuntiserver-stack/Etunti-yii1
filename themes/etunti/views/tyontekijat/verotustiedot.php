@@ -24,6 +24,11 @@
 	   <div class="pull-right">
   	     <!-- tulostus -->
      	      <form action="#" class="form-group" target="_blank" method="POST">
+      	      <input type="hidden" name="aktiivinen" value="<?php if(isset($_POST['aktiivinen'])) echo $_POST['aktiivinen'] ; ?>">
+      	      <input type="hidden" name="osoite" value="<?php if(isset($_POST['osoite'])) echo $_POST['osoite'] ; ?>">
+      	      <input type="hidden" name="nimi" value="<?php if(isset($_POST['nimi'])) echo $_POST['nimi'] ; ?>">
+      	      <input type="hidden" name="puhelin" value="<?php if(isset($_POST['puhelin'])) echo $_POST['puhelin'] ; ?>">
+      	      <input type="hidden" name="sahkoposti" value="<?php if(isset($_POST['sahkoposti'])) echo $_POST['sahkoposti'] ; ?>">
       	      <input type="submit" name="tulosta" class="btn btn-success myBgColors" value="PDF">
      	      </form>
   	     <!-- tulostus -->
