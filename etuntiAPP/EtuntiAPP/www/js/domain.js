@@ -64,6 +64,21 @@ setTimeout(function() {
     document.addEventListener("deviceready", onServerReady1, false);
     function onServerReady1() {
 
+
+	// <-- Test Alert
+	/*
+	function alertDismissed() {
+	    // do something
+	}
+	navigator.notification.alert(
+	    'Kuva lähetetty onnistuneesti',
+	    alertDismissed,
+	    'Kiitos!',
+	    'OK'
+	);
+	*/
+	// Test Alert -->
+
 	if(device.platform == 'iOS'){
 
 	    if(localStorage.getItem('server'))

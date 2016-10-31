@@ -74,10 +74,10 @@ function stateFalse(){
 	    $("#os").addClass("alert alert-danger").focus();
 	}
 	navigator.notification.alert(
-	    'Osoite puuttuu',            // title
-	    alertDismissed,         // callback
-	    'Huomio!',  // message
-	    'OK'                  // buttonName
+	    'Osoite puuttuu',
+	    alertDismissed,
+	    'Huomio!',
+	    'OK'
 	);
 
 
