@@ -365,7 +365,7 @@
         echo '<option value=""></option>';
     	foreach($lomat as $key=>$val){
 		$expl = explode("/",$val->value);
-		//$back = " style='background:".$expl[2].";color: white;'";
+		if(isset($expl[0]) and isset($expl[1]))
     		echo '<option value="'.$expl[0].'">'.$expl[1].'</option>';
     	}
    	echo '</select>';
