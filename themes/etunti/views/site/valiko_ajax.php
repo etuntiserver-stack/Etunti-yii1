@@ -161,7 +161,7 @@
 			// <-- Työryhmä
 			if(isset($admins) and is_array($admins) and $u->select_type == 'tyoryhma')
 			{
-				$mod .= '<select class="form-control form-group '.$success.' m3" value="'.$u->value2.'" multiple id="m3_'.$u->id.'">';
+				$mod .= '<select class="form-control form-group '.$success.' m3" multiple id="m3_'.$u->id.'">';
 				foreach($admins as $adm)
 				{
 					$value2 = json_decode($u->value2);
@@ -244,6 +244,7 @@ $(document).ready(function(){
 	allSelectedText: '<?php echo Yii::t("main", "Kaikki"); ?>',
 	nSelectedText: '<?php echo Yii::t("main", "valittu"); ?>',
 	numberDisplayed: 0,
+
  }); 
 
 /*

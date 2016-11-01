@@ -471,6 +471,10 @@ if( $curpage == 'tyovuoroot/tv2' )
                   <span class="fa fa-male"></span> <?php echo Yii::t('main', 'Työntekijät'); ?></a>
               </li>
               <li>
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/tyontekijat/tyoryhmat_hallinta">
+                  <span class="fa fa-male"></span> <?php echo Yii::t('main', 'Työryhmät hallinta'); ?></a>
+              </li>
+              <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/tyontekijat/verotustiedot">
                   <span class="fa fa-male"></span> <?php echo Yii::t('main', 'Verotustiedot'); ?></a>
               </li>

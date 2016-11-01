@@ -21,7 +21,7 @@
 	if(count($tyoryhmat) > 0){
 		$ryhmaBody .= '
 		<div class="alert alert-default">
-			<h3>'.Yii::app()->user->nimi.'</h3> '.Yii::t('main', 'Työntekijöiden työryhmät').': <b>'.implode(",", $tyoryhmat).'</b>
+			<h3>'.Yii::app()->user->nimi.'</h3> '.Yii::t('main', 'Työntekijöiden työryhmät').': <b>'.implode(", ", $tyoryhmat).'</b>
 		</div';
 	}
 	// Järjestelmanvalvojan kuluvia ryhmiä -->

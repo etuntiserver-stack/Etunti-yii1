@@ -28,7 +28,7 @@ class TyontekijatController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin', 'admin_ajax', 'delete', 'create', 'update', 'index', 'view','merkkipaivat', 'tulosta', 'migraatio', 'verotustiedot', 'muuta_suhteet'),
+				'actions'=>array('admin', 'admin_ajax', 'delete', 'create', 'update', 'index', 'view','merkkipaivat', 'tulosta', 'migraatio', 'verotustiedot', 'muuta_suhteet', 'tyoryhmat_hallinta'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -83,6 +83,50 @@ class TyontekijatController extends Controller
 
 	}
 
+
+	public function actionTyoryhmat_hallinta()
+	{
+
+	       	$criteria = new CDbCriteria();
+		$criteria->order = " value ";
+		$criteria->condition = " select_type='tyoryhma' ";
+		$model=Valikkoot::model()->findAll($criteria);
+
+		if(isset($_POST['update']))
+		{
+			if(isset($_POST['value2']) and is_array($_POST['value2']))
+				$value2 = json_encode($_POST['value2']);
+			else
+				$value2 = '';
+
+			Valikkoot::model()->updateByPk($_POST['id'], array('value'=>$_POST['value'], 'value2'=>$value2 ) );
+			exit;
+		}
+		if(isset($_GET['poista']))
+		{
+			if(count($model) > 1)
+			{
+				Valikkoot::model()->deletebypk($_GET['id']);
+				$this->redirect(array('tyoryhmat_hallinta'));
+			} else {
+				$this->redirect(array('tyoryhmat_hallinta?error'));
+			}
+		}
+		if(isset($_POST['uusi_tyoryhma']))
+		{
+			$m = new Valikkoot;
+			$m->select_type = 'tyoryhma';
+			$m->value = $_POST['uusi_tyoryhma'];
+			if($m->save())
+				$this->redirect(array('tyoryhmat_hallinta'));
+		}
+
+
+
+		$this->render('tyoryhmat_hallinta',array(
+			'model'=>$model,
+		));
+	}
 
 	public function actionMerkkipaivat()
 	{
