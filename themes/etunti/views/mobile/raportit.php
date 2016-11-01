@@ -60,8 +60,6 @@
 
 	   $tlist = CHtml::listData(Tyontekijat::model()->findAll($criteriaT), 'id', 'tekijan_nimi');
 	   echo '<select name="tekija[]" multiple class="mult">';
-	   echo '<option value="kaikki">'.Yii::t('main', 'Kaikki työntekijät').'</option>';
-
 	   foreach($tlist as $key=>$val)
 	   echo '<option value="'.$key.'//'.$val.'">'.$val.'</option>';
 
@@ -155,8 +153,6 @@
        <div class="col-sm-6">
       	<?php
 	   echo '<select name="tekija[]" multiple class="mult">';
-	   echo '<option value="kaikki">'.Yii::t('main', 'Kaikki työntekijät').'</option>';
-
 	   foreach($tlist as $key=>$val)
 	   echo '<option value="'.$key.'//'.$val.'">'.$val.'</option>';
 
@@ -253,8 +249,6 @@
        <div class="col-sm-6">
       	<?php
 	   echo '<select name="tekija[]" multiple class="mult">';
-	   echo '<option value="kaikki">'.Yii::t('main', 'Kaikki työntekijät').'</option>';
-
 	   foreach($tlist as $key=>$val)
 	   echo '<option value="'.$key.'//'.$val.'">'.$val.'</option>';
 
@@ -348,7 +342,7 @@
       <div class="row">
        <div class="col-sm-6">
       	<?php
-	   echo '<select name="tekija[]" multiple class="mult">';
+	   echo '<select name="tekija" class="form-control">';
 	   echo '<option value="kaikki">'.Yii::t('main', 'Kaikki työntekijät').'</option>';
 
 	   foreach($tlist as $key=>$val)
