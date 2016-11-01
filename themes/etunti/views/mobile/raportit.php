@@ -108,7 +108,7 @@
 
       <div class="row">
        <div class="col-sm-6">
-    	   <select name="ilman[]" class="selectpicker form-control"  multiple="multiple"  title="<?php echo Yii::t('main', 'Ei lasketa'); ?>">
+    	   <select name="ilman[]" class="eilasketa"  multiple="multiple"  title="<?php echo Yii::t('main', 'Ei lasketa'); ?>">
     	   <option value="Lounastauko"><?php echo Yii::t('main', 'Lounastauko'); ?></option>
     	   <option value="MATKA"><?php echo Yii::t('main', 'MATKA'); ?></option>
     	   </select>
@@ -203,7 +203,7 @@
 
       <div class="row">
        <div class="col-sm-6">
-    	   <select name="ilman[]" class="selectpicker form-control"  multiple="multiple"  title="<?php echo Yii::t('main', 'Ei lasketa'); ?>">
+    	   <select name="ilman[]" class="eilasketa"  multiple="multiple"  title="<?php echo Yii::t('main', 'Ei lasketa'); ?>">
     	   <option value="Lounastauko"><?php echo Yii::t('main', 'Lounastauko'); ?></option>
     	   <option value="MATKA"><?php echo Yii::t('main', 'MATKA'); ?></option>
     	   </select>
@@ -440,6 +440,20 @@ $('.mult').multiselect({
 	numberDisplayed: 0,
 	buttonWidth: '100%',
 });
+
+$('.eilasketa').multiselect({
+	//inheritClass: true,
+	//enableFiltering: true,
+        includeSelectAllOption: true,
+	nonSelectedText: '<?php echo Yii::t("main", "Ei lasketa"); ?>',
+	selectAllText: '<?php echo Yii::t("main", "Valitse kaikki"); ?>',
+	allSelectedText: '<?php echo Yii::t("main", "Kaikki"); ?>',
+	nSelectedText: '<?php echo Yii::t("main", "valittu"); ?>',
+	numberDisplayed: 0,
+	buttonWidth: '100%',
+});
+
+
 
 });
 </script>
