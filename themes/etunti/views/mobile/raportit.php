@@ -2,6 +2,29 @@
      $tas = array();
    if(isset(Yii::app()->user->adminPaketti)) 
      $tas = explode(",",Yii::app()->user->adminPaketti);
+
+	// <-- Järjestelmanvalvojan kuluvia ryhmiä
+	$criteria = new CDbCriteria();
+	$criteria->order = " value ";
+	$criteria->condition = " 
+		select_type='tyoryhma'	
+		AND value2 LIKE '%\"".Yii::app()->user->adminID."\"%'
+	";
+	$valikot = Valikkoot::model()->findAll($criteria);
+	
+	$tyoryhmat = array();
+	foreach($valikot as $data){
+		$tyoryhmat[] = $data->value;
+	}
+
+	$ryhmaBody = '';
+	if(count($tyoryhmat) > 0){
+		$ryhmaBody .= '
+		<div class="alert alert-default">
+			<h3>'.Yii::app()->user->nimi.'</h3> '.Yii::t('main', 'Työntekijöiden työryhmät').': <b>'.implode(",", $tyoryhmat).'</b>
+		</div';
+	}
+	// Järjestelmanvalvojan kuluvia ryhmiä -->
 ?>
 
 
@@ -9,8 +32,8 @@
         <div class="tray-center">
 
 
-              <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-th-list"></i> <?php echo Yii::t('main', 'RAPORTIT'); ?> 
-	      </h2>
+        <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-th-list"></i> <?php echo Yii::t('main', 'RAPORTIT'); ?></h2>
+	<?php echo $ryhmaBody; ?>	
 
           <div class="row">
 
@@ -57,12 +80,15 @@
       	<?php
 	   $criteriaT = new CDbCriteria();
 	   $criteriaT->order = " tekijan_nimi ";
+	   $tlist = Tyontekijat::model()->findAll($criteriaT);
 
-	   $tlist = CHtml::listData(Tyontekijat::model()->findAll($criteriaT), 'id', 'tekijan_nimi');
 	   echo '<select name="tekija[]" multiple class="mult">';
-	   foreach($tlist as $key=>$val)
-	   echo '<option value="'.$key.'//'.$val.'">'.$val.'</option>';
-
+	   foreach($tlist as $val){
+		if(count($tyoryhmat) > 0 and in_array($val->tyoryhma, $tyoryhmat))
+			echo '<option value="'.$val->id.'" selected>'.$val->tekijan_nimi.'</option>';
+		else
+			echo '<option value="'.$val->id.'">'.$val->tekijan_nimi.'</option>';
+	   }
 	   echo '</select>';
 	?>
        </div>
@@ -153,9 +179,12 @@
        <div class="col-sm-6">
       	<?php
 	   echo '<select name="tekija[]" multiple class="mult">';
-	   foreach($tlist as $key=>$val)
-	   echo '<option value="'.$key.'//'.$val.'">'.$val.'</option>';
-
+	   foreach($tlist as $val){
+		if(count($tyoryhmat) > 0 and in_array($val->tyoryhma, $tyoryhmat))
+			echo '<option value="'.$val->id.'" selected>'.$val->tekijan_nimi.'</option>';
+		else
+			echo '<option value="'.$val->id.'">'.$val->tekijan_nimi.'</option>';
+	   }
 	   echo '</select>';
 	?>
        </div>
@@ -249,9 +278,12 @@
        <div class="col-sm-6">
       	<?php
 	   echo '<select name="tekija[]" multiple class="mult">';
-	   foreach($tlist as $key=>$val)
-	   echo '<option value="'.$key.'//'.$val.'">'.$val.'</option>';
-
+	   foreach($tlist as $val){
+		if(count($tyoryhmat) > 0 and in_array($val->tyoryhma, $tyoryhmat))
+			echo '<option value="'.$val->id.'" selected>'.$val->tekijan_nimi.'</option>';
+		else
+			echo '<option value="'.$val->id.'">'.$val->tekijan_nimi.'</option>';
+	   }
 	   echo '</select>';
 	?>
        <br>
@@ -344,10 +376,9 @@
       	<?php
 	   echo '<select name="tekija" class="form-control">';
 	   echo '<option value="kaikki">'.Yii::t('main', 'Kaikki työntekijät').'</option>';
-
-	   foreach($tlist as $key=>$val)
-	   echo '<option value="'.$key.'//'.$val.'">'.$val.'</option>';
-
+	   foreach($tlist as $val){
+			echo '<option value="'.$val->id.'">'.$val->tekijan_nimi.'</option>';
+	   }
 	   echo '</select>';
 	?>
        <br>
