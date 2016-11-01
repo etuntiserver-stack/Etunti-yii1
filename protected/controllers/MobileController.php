@@ -129,9 +129,14 @@ function num($val){
 
 		function allCrit($criteria){
 
+			$tids = array();
+			if(false != Yii::app()->request->getPost('tekija') and is_array(Yii::app()->request->getPost('tekija')) )
+			{
+				$tids = "tid='".implode("' OR tid='", Yii::app()->request->getPost('tekija'))."'";
+			}
 
 			if(Yii::app()->request->getPost('tekija') != 'kaikki')
-	        	$criteria->addCondition (" tid = '".Yii::app()->request->getPost('tekija')."'");
+	        	$criteria->addCondition ($tids);
 
 			if(isset(Yii::app()->session['kohteet']) and Yii::app()->session['kohteet'] != 'kaikki')
 	        	$criteria->addCondition (" kohdenID = '".Yii::app()->session['kohteet']."'");

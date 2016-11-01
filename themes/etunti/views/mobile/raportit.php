@@ -11,7 +11,7 @@
 
               <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-th-list"></i> <?php echo Yii::t('main', 'RAPORTIT'); ?> 
 	      </h2>
-	      <br><br><br><br>
+
           <div class="row">
 
 
@@ -59,7 +59,7 @@
 	   $criteriaT->order = " tekijan_nimi ";
 
 	   $tlist = CHtml::listData(Tyontekijat::model()->findAll($criteriaT), 'id', 'tekijan_nimi');
-	   echo '<select name="tekija" id="nimi" class="form-control">';
+	   echo '<select name="tekija[]" multiple class="mult">';
 	   echo '<option value="kaikki">'.Yii::t('main', 'Kaikki työntekijät').'</option>';
 
 	   foreach($tlist as $key=>$val)
@@ -154,7 +154,7 @@
       <div class="row">
        <div class="col-sm-6">
       	<?php
-	   echo '<select name="tekija" id="nimi" class="form-control">';
+	   echo '<select name="tekija[]" multiple class="mult">';
 	   echo '<option value="kaikki">'.Yii::t('main', 'Kaikki työntekijät').'</option>';
 
 	   foreach($tlist as $key=>$val)
@@ -252,7 +252,7 @@
       <div class="row">
        <div class="col-sm-6">
       	<?php
-	   echo '<select name="tekija" id="nimi" class="form-control">';
+	   echo '<select name="tekija[]" multiple class="mult">';
 	   echo '<option value="kaikki">'.Yii::t('main', 'Kaikki työntekijät').'</option>';
 
 	   foreach($tlist as $key=>$val)
@@ -348,7 +348,7 @@
       <div class="row">
        <div class="col-sm-6">
       	<?php
-	   echo '<select name="tekija" id="nimi" class="form-control">';
+	   echo '<select name="tekija[]" multiple class="mult">';
 	   echo '<option value="kaikki">'.Yii::t('main', 'Kaikki työntekijät').'</option>';
 
 	   foreach($tlist as $key=>$val)
@@ -401,8 +401,23 @@
 
 
 
+<script>
+$(document).ready(function(){
 
+$('.mult').multiselect({
+	//inheritClass: true,
+	//enableFiltering: true,
+        includeSelectAllOption: true,
+	nonSelectedText: '<?php echo Yii::t("main", "Työntekijät"); ?>',
+	selectAllText: '<?php echo Yii::t("main", "Valitse kaikki"); ?>',
+	allSelectedText: '<?php echo Yii::t("main", "Kaikki"); ?>',
+	nSelectedText: '<?php echo Yii::t("main", "valittu"); ?>',
+	numberDisplayed: 0,
+	buttonWidth: '100%',
+});
 
+});
+</script>
 
 
 
