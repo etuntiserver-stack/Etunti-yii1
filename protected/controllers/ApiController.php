@@ -618,6 +618,7 @@ public function actionImei($dom)
 			    $osoite = (isset($expl1[0])) ? $expl1[0] : '';
 		      }
 
+		      // <-- Nayta asiakas
 		      $nm = '';
 		      if(isset($asetukset->show_name) and $asetukset->show_name == 1 and $kohde->asiakas_id != 0){
 				$asiakas = Asiakkaat::model()->findbypk($kohde->asiakas_id);
@@ -626,32 +627,38 @@ public function actionImei($dom)
 				if(isset($asiakas->id) and empty($asiakas->yrityksen_nimi) and empty($asiakas->yhteyshenkilo))
 		      			$nm = '<br> '.Yii::t('main', 'Asiakas').': <b>'.$asiakas->yhteyshenkilo.'</b>';
 		      }
+		      // Nayta asiakas -->
 
-
+		      // <-- Nayta kohteen puhelinnumero
 		      $puh_nro = '';
 		      if(isset($asetukset->app_show_phone) and $asetukset->app_show_phone == 1 and $kohde->puh_nro != '')
 		      $puh_nro = '<br>'.Yii::t('main', 'Puhelinnumero').': <b>'.$kohde->puh_nro.'</b>';
+		      // Nayta kohteen puhelinnumero -->
 
 		      $sel .= '<div class="well">
 				  <b>'.$val->pvm.'</b><br>
-				  <b><span class="text" style="color:'.$color.'">'.$alkLop.$osoite.'</span></b>
+				  <b><span class="text" style="color:'.$color.'">'.$alkLop.$osoite.'</span></b>';
+
+		      if(!empty($nm) or !empty($puh_nro)){
+		      $sel .= '<p>
 				  '.$nm.'
 				  '.$puh_nro.'
-		      ';
+		      		</p>';
+		      }
 
-		      if(!empty($val->tietoja))
-		      {
+		      if(!empty($val->tietoja)){
 		      $sel .= '
 				  <hr>
 				  <div class="text-small">'.$val->tietoja.'</div>';
 		      }
+
 		      $sel .= $tplista;
 		      $sel .= '
 				</div>';
 		    }
 
 		    $this->_sendResponse(200, $sel);
-		exit;
+		    exit;
 	        }
 
 	        if($_POST['check'] == 'uusiviesti'){
@@ -670,7 +677,7 @@ public function actionImei($dom)
 		       $this->_sendResponse(200, "Viestisi vastaanotettu");
 		    else
 		       $this->_sendResponse(200, "Ei onnistuu");
-		exit;
+		    exit;
 	        }
 
 
@@ -697,7 +704,7 @@ public function actionImei($dom)
 		       $this->_sendResponse(200, "Viestisi vastaanotettu");
 		    else
 		       $this->_sendResponse(200, "Ei onnistuu");
-		exit;
+		    exit;
 	        }
 
 
