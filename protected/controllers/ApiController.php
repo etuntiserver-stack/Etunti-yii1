@@ -624,11 +624,11 @@ public function actionImei($dom)
 		      if(isset($asetukset->show_name) and $asetukset->show_name == 1 and $kohde->asiakas_id != 0){
 				$asiakas = Asiakkaat::model()->findbypk($kohde->asiakas_id);
 				if(isset($asiakas->id) and !empty($asiakas->yrityksen_nimi)){
-		      			$nm = Yii::t('main', 'Asiakas').': <b>'.$asiakas->yrityksen_nimi.'</b>';
+		      			$nm = Yii::t('main', 'Asiakas').': <b>'.$asiakas->yrityksen_nimi.'</b><br>';
 				}
 
 				if(isset($asiakas->id) and empty($asiakas->yrityksen_nimi) and empty($asiakas->yhteyshenkilo)){
-		      			$nm = Yii::t('main', 'Asiakas').': <b>'.$asiakas->yhteyshenkilo.'</b>';
+		      			$nm = Yii::t('main', 'Asiakas').': <b>'.$asiakas->yhteyshenkilo.'</b><br>';
 				}
 		      }
 		      // Nayta asiakas -->
@@ -646,10 +646,10 @@ public function actionImei($dom)
 
 		      if(!empty($nm) or !empty($puh_nro)){
 		      $sel .= '
-		      <br>
+		      <p>
 				  '.$nm.'
 				  '.$puh_nro.'
-		      ';
+		      </p>';
 		      }
 
 		      if(!empty($val->tietoja)){
