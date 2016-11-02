@@ -470,6 +470,7 @@ $('.ryhmat').multiselect({
 	allSelectedText: '<?php echo Yii::t("main", "Ryhmät"); ?>',
 	nSelectedText: '<?php echo Yii::t("main", "valittu"); ?>',
 	numberDisplayed: 0,
+	buttonWidth: '100%',
 });
 
 

@@ -619,16 +619,23 @@ public function actionImei($dom)
 		      }
 
 		      $nm = '';
-		      if(isset($asetukset->show_name) and $asetukset->show_name == 1 and $kohde->etu_suku_nimet != '')
-		      $nm = ', '.$kohde->etu_suku_nimet;
+		      if(isset($asetukset->show_name) and $asetukset->show_name == 1 and $kohde->asiakas_id != 0){
+				$asiakas = Asiakkaat::model()->findbypk($kohde->asiakas_id);
+				if(isset($asiakas->id) and !empty($asiakas->yrityksen_nimi))
+		      			$nm = '<br> '.Yii::t('main', 'Asiakas').': <b>'.$asiakas->yrityksen_nimi.'</b>';
+				if(isset($asiakas->id) and empty($asiakas->yrityksen_nimi) and empty($asiakas->yhteyshenkilo))
+		      			$nm = '<br> '.Yii::t('main', 'Asiakas').': <b>'.$asiakas->yhteyshenkilo.'</b>';
+		      }
+
 
 		      $puh_nro = '';
 		      if(isset($asetukset->app_show_phone) and $asetukset->app_show_phone == 1 and $kohde->puh_nro != '')
-		      $puh_nro = '<br>'.Yii::t('main', 'Puhelinnumero').': '.$kohde->puh_nro;
+		      $puh_nro = '<br>'.Yii::t('main', 'Puhelinnumero').': <b>'.$kohde->puh_nro.'</b>';
 
 		      $sel .= '<div class="well">
 				  <b>'.$val->pvm.$nm.'</b><br>
 				  <b><span class="text" style="color:'.$color.'">'.$alkLop.$osoite.'</span></b>
+				  '.$nm.'
 				  '.$puh_nro.'
 		      ';
 

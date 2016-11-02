@@ -365,6 +365,7 @@ $(document).ready(function(){
 	allSelectedText: '<?php echo Yii::t("main", "Kaikki"); ?>',
 	nSelectedText: '<?php echo Yii::t("main", "valittu"); ?>',
 	numberDisplayed: 0,
+	buttonWidth: '100%',
  }); 
 
 

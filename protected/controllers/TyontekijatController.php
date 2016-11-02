@@ -99,7 +99,7 @@ class TyontekijatController extends Controller
 			else
 				$value2 = '';
 
-			Valikkoot::model()->updateByPk($_POST['id'], array('value'=>$_POST['value'], 'value2'=>$value2 ) );
+			Valikkoot::model()->updateByPk($_POST['id'], array('value'=>trim($_POST['value']), 'value2'=>$value2 ) );
 			exit;
 		}
 		if(isset($_GET['poista']))
@@ -116,7 +116,7 @@ class TyontekijatController extends Controller
 		{
 			$m = new Valikkoot;
 			$m->select_type = 'tyoryhma';
-			$m->value = $_POST['uusi_tyoryhma'];
+			$m->value = trim($_POST['uusi_tyoryhma']);
 			if($m->save())
 				$this->redirect(array('tyoryhmat_hallinta'));
 		}
