@@ -646,6 +646,7 @@ public function actionImei($dom)
 
 		      if(!empty($nm) or !empty($puh_nro)){
 		      $sel .= '
+		      <br>
 		      <p>
 				  '.$nm.'
 				  '.$puh_nro.'
