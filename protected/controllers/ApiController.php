@@ -622,28 +622,32 @@ public function actionImei($dom)
 		      $nm = '';
 		      if(isset($asetukset->show_name) and $asetukset->show_name == 1 and $kohde->asiakas_id != 0){
 				$asiakas = Asiakkaat::model()->findbypk($kohde->asiakas_id);
-				if(isset($asiakas->id) and !empty($asiakas->yrityksen_nimi))
-		      			$nm = '<br> '.Yii::t('main', 'Asiakas').': <b>'.$asiakas->yrityksen_nimi.'</b>';
-				if(isset($asiakas->id) and empty($asiakas->yrityksen_nimi) and empty($asiakas->yhteyshenkilo))
-		      			$nm = '<br> '.Yii::t('main', 'Asiakas').': <b>'.$asiakas->yhteyshenkilo.'</b>';
+				if(isset($asiakas->id) and !empty($asiakas->yrityksen_nimi)){
+		      			$nm = '<div class="col-sm-6">'.Yii::t('main', 'Asiakas').': </div><div class="col-sm-6"><b>'.$asiakas->yrityksen_nimi.'</b></div>';
+				}
+
+				if(isset($asiakas->id) and empty($asiakas->yrityksen_nimi) and empty($asiakas->yhteyshenkilo)){
+		      			$nm = '<div class="col-sm-6">'.Yii::t('main', 'Asiakas').': </div><div class="col-sm-6"><b>'.$asiakas->yhteyshenkilo.'</b></div>';
+				}
 		      }
 		      // Nayta asiakas -->
 
 		      // <-- Nayta kohteen puhelinnumero
 		      $puh_nro = '';
 		      if(isset($asetukset->app_show_phone) and $asetukset->app_show_phone == 1 and $kohde->puh_nro != '')
-		      $puh_nro = '<br>'.Yii::t('main', 'Puhelinnumero').': <b>'.$kohde->puh_nro.'</b>';
+		      $puh_nro = '<br>'.Yii::t('main', 'Kohteen puhelinnumero').': <b>'.$kohde->puh_nro.'</b>';
 		      // Nayta kohteen puhelinnumero -->
 
 		      $sel .= '<div class="well">
-				  <b>'.$val->pvm.'</b><br>
-				  <b><span class="text" style="color:'.$color.'">'.$alkLop.$osoite.'</span></b>';
+				  <b>'.$val->pvm.'</b>, '.Yii::t('main', 'Klo').': '.$alkLop.'<br>
+				  <b><span class="text" style="color:'.$color.'">'.$osoite.'</span></b>';
 
 		      if(!empty($nm) or !empty($puh_nro)){
 		      $sel .= '<p>
+				<div class="row">
 				  '.$nm.'
 				  '.$puh_nro.'
-		      		</p>';
+		      		</div></p>';
 		      }
 
 		      if(!empty($val->tietoja)){
