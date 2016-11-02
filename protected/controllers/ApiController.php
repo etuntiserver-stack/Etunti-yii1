@@ -293,7 +293,8 @@ public function actionTiedosto($dom)
 		if(isset($firma->sahkoposti) and !empty($firma->sahkoposti))
 		{
 			$message = Yii::t('main', 'Hei. Valokuva on saapunut kohteista: ').$k->osoite;
-			mail($firma->sahkoposti,Yii::t('main', 'Uusi valokuva kohteista. Lähettäjä: '). ' '.$ttekija->tekijan_nimi,$message);
+			$headers = "From: info@etunti.fi";
+			mail($firma->sahkoposti,Yii::t('main', 'Uusi valokuva kohteista. Lähettäjä: '). ' '.$ttekija->tekijan_nimi,$message,$headers);
 		}
 
 		} //if(isset($k->id))
@@ -625,16 +626,16 @@ public function actionImei($dom)
 				if(isset($asiakas->id) and !empty($asiakas->yrityksen_nimi)){
 		      			$nm = '
 					<div class="row">
-						<div class="col-sm-6">'.Yii::t('main', 'Asiakas').': </div>
-						<div class="col-sm-6"><b>'.$asiakas->yrityksen_nimi.'</b></div>
+						<div class="col-sm-4">'.Yii::t('main', 'Asiakas').': </div>
+						<div class="col-sm-8"><b>'.$asiakas->yrityksen_nimi.'</b></div>
 					</div>';
 				}
 
 				if(isset($asiakas->id) and empty($asiakas->yrityksen_nimi) and empty($asiakas->yhteyshenkilo)){
 		      			$nm = '
 					<div class="row">
-						<div class="col-sm-6">'.Yii::t('main', 'Asiakas').': </div>
-						<div class="col-sm-6"><b>'.$asiakas->yhteyshenkilo.'</b></div>
+						<div class="col-sm-4">'.Yii::t('main', 'Asiakas').': </div>
+						<div class="col-sm-8"><b>'.$asiakas->yhteyshenkilo.'</b></div>
 					</div>';
 				}
 		      }
@@ -645,8 +646,8 @@ public function actionImei($dom)
 		      if(isset($asetukset->app_show_phone) and $asetukset->app_show_phone == 1 and $kohde->puh_nro != ''){
 		      			$puh_nro = '
 					<div class="row">
-						<div class="col-sm-6">'.Yii::t('main', 'Kohteen puhelinnumero').': </div>
-						<div class="col-sm-6"><b>'.$kohde->puh_nro.'</b></div>
+						<div class="col-sm-4">'.Yii::t('main', 'Kohteen puhelinnumero').': </div>
+						<div class="col-sm-8"><b>'.$kohde->puh_nro.'</b></div>
 					</div>';
 		      }
 		      // Nayta kohteen puhelinnumero -->
