@@ -624,19 +624,11 @@ public function actionImei($dom)
 		      if(isset($asetukset->show_name) and $asetukset->show_name == 1 and $kohde->asiakas_id != 0){
 				$asiakas = Asiakkaat::model()->findbypk($kohde->asiakas_id);
 				if(isset($asiakas->id) and !empty($asiakas->yrityksen_nimi)){
-		      			$nm = '
-					<div class="row">
-						<div class="col-sm-4">'.Yii::t('main', 'Asiakas').': </div>
-						<div class="col-sm-7"><b>'.$asiakas->yrityksen_nimi.'</b></div>
-					</div>';
+		      			$nm = Yii::t('main', 'Asiakas').': <b>'.$asiakas->yrityksen_nimi.'</b>';
 				}
 
 				if(isset($asiakas->id) and empty($asiakas->yrityksen_nimi) and empty($asiakas->yhteyshenkilo)){
-		      			$nm = '
-					<div class="row">
-						<div class="col-sm-4">'.Yii::t('main', 'Asiakas').': </div>
-						<div class="col-sm-7"><b>'.$asiakas->yhteyshenkilo.'</b></div>
-					</div>';
+		      			$nm = Yii::t('main', 'Asiakas').': <b>'.$asiakas->yhteyshenkilo.'</b>';
 				}
 		      }
 		      // Nayta asiakas -->
@@ -644,11 +636,7 @@ public function actionImei($dom)
 		      // <-- Nayta kohteen puhelinnumero
 		      $puh_nro = '';
 		      if(isset($asetukset->app_show_phone) and $asetukset->app_show_phone == 1 and $kohde->puh_nro != ''){
-		      			$puh_nro = '
-					<div class="row">
-						<div class="col-sm-4">'.Yii::t('main', 'Kohteen puhelinnumero').': </div>
-						<div class="col-sm-7"><b>'.$kohde->puh_nro.'</b></div>
-					</div>';
+		      			$puh_nro = Yii::t('main', 'Kohteen puhelinnumero').': <b>'.$kohde->puh_nro.'</b>';
 		      }
 		      // Nayta kohteen puhelinnumero -->
 
@@ -658,10 +646,10 @@ public function actionImei($dom)
 
 		      if(!empty($nm) or !empty($puh_nro)){
 		      $sel .= '
-		      <p>
+		      <br>
 				  '.$nm.'
 				  '.$puh_nro.'
-		      </p>';
+		      ';
 		      }
 
 		      if(!empty($val->tietoja)){
