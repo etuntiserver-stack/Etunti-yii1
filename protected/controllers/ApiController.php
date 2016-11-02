@@ -293,7 +293,7 @@ public function actionTiedosto($dom)
 		if(isset($firma->sahkoposti) and !empty($firma->sahkoposti))
 		{
 			$message = Yii::t('main', 'Hei. Valokuva on saapunut kohteista: ').$k->osoite;
-			$headers = "From: info@etunti.fi";
+			$headers = "From: ". $firma->sahkoposti;
 			mail($firma->sahkoposti,Yii::t('main', 'Uusi valokuva kohteista. Lähettäjä: '). ' '.$ttekija->tekijan_nimi,$message,$headers);
 		}
 
@@ -627,7 +627,7 @@ public function actionImei($dom)
 		      			$nm = '
 					<div class="row">
 						<div class="col-sm-4">'.Yii::t('main', 'Asiakas').': </div>
-						<div class="col-sm-8"><b>'.$asiakas->yrityksen_nimi.'</b></div>
+						<div class="col-sm-7"><b>'.$asiakas->yrityksen_nimi.'</b></div>
 					</div>';
 				}
 
@@ -635,7 +635,7 @@ public function actionImei($dom)
 		      			$nm = '
 					<div class="row">
 						<div class="col-sm-4">'.Yii::t('main', 'Asiakas').': </div>
-						<div class="col-sm-8"><b>'.$asiakas->yhteyshenkilo.'</b></div>
+						<div class="col-sm-7"><b>'.$asiakas->yhteyshenkilo.'</b></div>
 					</div>';
 				}
 		      }
@@ -647,7 +647,7 @@ public function actionImei($dom)
 		      			$puh_nro = '
 					<div class="row">
 						<div class="col-sm-4">'.Yii::t('main', 'Kohteen puhelinnumero').': </div>
-						<div class="col-sm-8"><b>'.$kohde->puh_nro.'</b></div>
+						<div class="col-sm-7"><b>'.$kohde->puh_nro.'</b></div>
 					</div>';
 		      }
 		      // Nayta kohteen puhelinnumero -->
