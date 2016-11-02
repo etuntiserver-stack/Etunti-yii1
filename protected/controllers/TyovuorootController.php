@@ -360,9 +360,10 @@ class TyovuorootController extends Controller
 		$message .= '<br>'.str_replace("\n", "<br>", $_POST['kirjenBody']);
 		
 
+		  $firma = FirmanTiedot::model()->findbypk(1);		
 		  $mail = new YiiMailer();
 		  //$mail->clearLayout();//if layout is already set in config
-		  $mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
+		  $mail->setFrom($firma->sahkoposti, 'ETUNTI.FI');
 		  $mail->setTo($tt->tekijan_email);
 		  $mail->setSubject(Yii::t('main', 'TYÖVUOROT'). ' '.$tt->tekijan_nimi);
 		  $mail->setBody($message);
