@@ -13,6 +13,14 @@
    foreach($list as $d)
    {
 
+
+	if($d->domain != 'demo'){
+		if(($_SERVER['REMOTE_ADDR'] == '::1' or $_SERVER['REMOTE_ADDR'] == '127.0.0.1')){
+			echo 'Olet localhostissa niin näytetään vain DEMO domain<br>'; 
+		}
+		continue;
+	}
+
 	
 	Yii::app()->db1->setActive(false);
 	Yii::app()->db1->connectionString = 'mysql:host=localhost;dbname='.$d->domain;
@@ -34,8 +42,10 @@
 
 	$ft = FirmanTiedot::model()->findByPk(1);
 
-	// <-- ilmoitus_avoimista_kohteesta ylittaneet
-		$message = '';
+	// <-- Ilmoitus määräajan ylittäneistä kohteista
+		$message 	= '';
+		$arr 		= array();
+		$forMessage	= array();
 
 		$criteria=new CDbCriteria;
 		$criteria->condition = " 
@@ -55,21 +65,43 @@
 		if(isset($m[0]))
 		{
 			$message .= '<h2>'.strtoupper($ft->tyonantaja).'</h2>';
-			$message .= '<h2>'.Yii::t('main', 'Avoimet kohteet').' '.date("d.m.Y H:i").'</h2><br>';
+			$message .= '<h2>'.Yii::t('main', 'Avoimet kohteet').' '.date("d.m.Y H:i").'</h2>';
+
+
 		  foreach($m as $data)
 		  {
-			$message .= '<p>';
+
+			$bod 		= '';
+			$osoite 	= '';
+			$tekijan_nimi 	= '';
+			$tyoryhma 	= '';
+			$tyoryhmaForArr = '';
+
 			$k = Kohteet::model()->findbypk($data->kohde);
 			if(isset($k->osoite))
-			$message .= $k->osoite.', ';
+				$osoite = Yii::t('main', 'Osoite').': <b>'. $k->osoite.'</b><br>';
+
 			$tt = Tyontekijat::model()->findbypk($data->tid);
-			if(isset($tt->tekijan_nimi))
-			$message .= $tt->tekijan_nimi;
-			$message .= '<br>';
+			if(isset($tt->id)){
+				$tekijan_nimi = Yii::t('main', 'Työntekijä').':  <b>'.$tt->tekijan_nimi.'</b><br>';
+				$tyoryhma = Yii::t('main', 'Työryhmä').':  <b>'.$tt->tyoryhma.'</b><br>';
+				$tyoryhmaForArr = $tt->tyoryhma;
+			}
 
-			$message .= Yii::t('main', 'Lopetusajaksi oli määritelty').': '.$data->pvm.' '.$data->loppu;
-			$message .= '</p>';
 
+
+			$bod 	.= '<p>';
+			$bod 	.= '<br>';
+			$bod 	.= $tyoryhma.$tekijan_nimi.$osoite;
+			$bod 	.= Yii::t('main', 'Lopetusajaksi oli määritelty').': <b>'.$data->pvm.' '.$data->loppu.'</b>';
+			$bod 	.= '</p>';
+
+
+			$arr[$tyoryhmaForArr] 	= $tyoryhmaForArr;
+			array_push($forMessage, array(
+						'tyoryhma'=>$tyoryhmaForArr, 
+						'message'=>$bod) 
+			);
 
 			if( $_SERVER['REMOTE_ADDR'] != '::1' and $_SERVER['REMOTE_ADDR'] != '127.0.0.1' )
 			Tyovuoroot::model()->updatebypk($data->id,array('ilmoitus_avoimista_kohteesta'=>1));
@@ -78,15 +110,59 @@
 		  }
 		}
 
-		if(!empty($message))
-			echo $message;
+		//if(count($arr))
+			//echo $arr[1];
 
 		$saaja = ''; // $asetukset->sahkoposti
-		if(!empty($ft->sahkoposti) and !empty($message) and $asetukset->ilmoitus_avoimista_kohteesta_sahkopostiin == 1)
+		if(count($arr) > 0 and $asetukset->ilmoitus_avoimista_kohteesta_sahkopostiin == 1)
 		{
+
+
+			// <-- Järjestelmanvalvojan kuluvia ryhmiä
+			$criteria = new CDbCriteria();
+			$criteria->order = " value ";
+			$criteria->condition = " 
+				select_type='tyoryhma'	
+				AND value2!=''
+			";
+			$valikot = Valikkoot::model()->findAll($criteria);
+		
+
+			$tyoryhmat = array();
+
+			foreach($arr as $ryhma){
+				
+				foreach($valikot as $data){
+					if($data->value == $ryhma){
+						echo '<h2>'.$ryhma.'</h2>';
+						echo $data->value2.'<br>';
+
+						foreach($forMessage as $key=>$value){
+							if($value['tyoryhma'] == $data->value)
+							echo $value['message'].'<br>';
+						}
+
+					}
+				}
+
+			}
+
+		
+
+/*
+
+			echo '<pre>';
+			print_r($arr);
+			echo '</pre>';
+*/
+
+
+
+			// Järjestelmanvalvojan kuluvia ryhmiä -->
+
+
+
 			$saaja = $ft->sahkoposti; // $ft->sahkoposti
-			echo $saaja.'<br>';
-			echo $message;
 
 			if( $_SERVER['REMOTE_ADDR'] != '::1' and $_SERVER['REMOTE_ADDR'] != '127.0.0.1' )
 			{
@@ -102,7 +178,7 @@
 		echo '<hr>';
 
 		}
-	// ilmoitus_avoimista_kohteesta -->
+	// Ilmoitus määräajan ylittäneistä kohteista -->
 
 
 

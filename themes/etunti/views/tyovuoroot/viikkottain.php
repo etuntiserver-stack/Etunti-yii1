@@ -137,6 +137,7 @@ td .tp{
   }
 */
 
+  $asetukset = Asetukset::model()->findByPk(1);
   for($day= 1; $day <= 7; $day++) {
     $d = strtotime($year ."W". $week . $day);
     echo "<th>". $paivat[date('N', sprintf("%02d", $d))] ."<br>". date('d.m', $d) ."</th>";
@@ -181,7 +182,7 @@ td .tp{
 
 	  for($day= 1; $day <= 7; $day++) {
 	    $d = strtotime($year ."W". $week . $day);
-	    $did = $this->renderPartial('//tyovuoroot/did',array('pvm'=>date('d.m.Y',$d),'tid'=>$t->id,'from'=>'mobiili'),true);
+	    $did = $this->renderPartial('//tyovuoroot/did',array('pvm'=>date('d.m.Y',$d),'tid'=>$t->id,'from'=>'mobiili', 'asetukset'=>$asetukset),true);
 	    echo "
 	    <td><div class='latikkoAsetukset'>
 	    ". json_decode($did, true) ."

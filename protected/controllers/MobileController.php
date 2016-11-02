@@ -536,6 +536,9 @@ function num($val){
 			$isLine =  false;
 			$model->attributes=$_POST['Mobile'];
 
+			if(empty($_POST['Mobile']['loppui']) and $_POST['Mobile']['status'] == 3)
+			$model->status=1;
+
 			$criteria = new CDBCriteria;
 			$criteria->condition = "
 				DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')='".date("Y-m-d H:i", strtotime($model->aloitan))."'

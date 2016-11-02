@@ -70,7 +70,7 @@ if($week > $wkMaara) {
     $week = ($week/10)*10;
   }
 */
-
+  $asetukset = Asetukset::model()->findByPk(1);
   for($day= 1; $day <= 7; $day++) {
     $d = strtotime($year ."W". $week . $day);
     echo "<th>". $paivat[date('N', sprintf("%02d", $d))] ."<br>". date('d.m', $d) ."</th>";
@@ -106,7 +106,7 @@ if($week > $wkMaara) {
 
 	  for($day= 1; $day <= 7; $day++) {
 	    $d = strtotime($year ."W". $week . $day);
-	    $tab = $this->renderPartial('//tyovuoroot/did',array('pvm'=>date('d.m.Y',$d),'tid'=>$t->id,'from'=>'mobiili','tietoja'=>1),true);
+	    $tab = $this->renderPartial('//tyovuoroot/did',array('pvm'=>date('d.m.Y',$d),'tid'=>$t->id,'from'=>'mobiili','tietoja'=>1, 'asetukset'=>$asetukset),true);
 	    echo "
 	    <td class='col$day'><div class='latikkoAsetukset'>
 	    ". json_decode($tab, true) ."
