@@ -633,7 +633,7 @@ public function actionImei($dom)
 		      $puh_nro = '<br>'.Yii::t('main', 'Puhelinnumero').': <b>'.$kohde->puh_nro.'</b>';
 
 		      $sel .= '<div class="well">
-				  <b>'.$val->pvm.$nm.'</b><br>
+				  <b>'.$val->pvm.'</b><br>
 				  <b><span class="text" style="color:'.$color.'">'.$alkLop.$osoite.'</span></b>
 				  '.$nm.'
 				  '.$puh_nro.'
