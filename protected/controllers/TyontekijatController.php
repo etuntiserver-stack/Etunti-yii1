@@ -151,7 +151,7 @@ class TyontekijatController extends Controller
        		$criteria = new CDbCriteria();
 	        $criteria->order = "  id DESC ";
 
-		if(isset($_POST['aktiivinen']) and $_POST['aktiivinen'] != 'kaikki')
+		if(isset($_POST['aktiivinen']) and $_POST['aktiivinen'] != 'kaikki' and !empty($_POST['aktiivinen']))
 	        $criteria->addCondition (" aktiivinen ='".(int)$_POST['aktiivinen']."' ");
 		else
 	        $criteria->addCondition (" aktiivinen=1 ");
