@@ -138,7 +138,7 @@ if(isset($model->id))
 		<?php echo $form->labelEx($model,'tyoajanmerkinta'); ?>
 		<?php
         	$tal = Valikkoot::model()->findAll(" select_type='tyoajanmerkinta' ", array('order' => 'select_type'));
-		echo '<select name="Tyovuoroot[tyoajanmerkinta]" class="form-control">';
+		echo '<select name="Tyovuoroot[tyoajanmerkinta]" class="form-control" id="Tyovuoroot_tyoajanmerkinta">';
 
 		 if(!empty($model->tyoajanmerkinta)){
 		   $expl = explode("/",$model->tyoajanmerkinta);
@@ -146,11 +146,15 @@ if(isset($model->id))
 		   echo '<option value="'.$model->tyoajanmerkinta.'">'.$value.'</option>';
 		 }
 
+		   echo '<option style="color:" value="Normaali/">Normaali</option>';
+		   echo '<option style="color:red" value="Ei lasketa/red">Ei lasketa</option>';
+
 		 foreach($tal as $v)
 		 {
 		   $expl = explode("/",$v->value);
 		   $color = (isset($expl[1])) ? $expl[1] : '';
 		   $value = (isset($expl[0])) ? $expl[0] : '';
+		   if($v->value != 'Normaali/' and $v->value != 'Ei lasketa/red')
 		   echo '<option style="color:'.$color.'" value="'.$v->value.'">'.$value.'</option>';
 		 }
 		echo '</select>';
@@ -161,6 +165,18 @@ if(isset($model->id))
 </div>
 
 
+<script type="text/javascript">
+$(document).ready(function(){
+
+ $('#Tyovuoroot_status').change(function(){
+	if($(this).val() == '10')
+		$('#Tyovuoroot_tyoajanmerkinta').val('Ei lasketa/red');
+	else
+		$('#Tyovuoroot_tyoajanmerkinta').val('Normaali/');
+ });
+
+});
+</script>
 
 <div class="row">
   <div class="col-sm-6">
