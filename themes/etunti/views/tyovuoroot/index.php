@@ -200,10 +200,10 @@
 	$nextMonday     = strtotime('monday', $firstDayOfYear);
 	$nextSunday     = strtotime('sunday', $nextMonday);
 	
-	    echo '<option value="'.$_SERVER['PHP_SELF'].'?week='.$week.'&year='.$year.'">'.Yii::t('main', 'Viikko').': '.$week.'</option>';
+	    echo '<option value="'.$_SERVER['PHP_SELF'].'?week='.$week.'&year='.$year.'">'.date('d', strtotime($year ."W". $week . '1')), NL.'-'.date('d.m', strtotime($year ."W". $week . '7')), NL.'</option>';
 
 	while (date('Y', $nextMonday) == $year) {
-	    echo '<option value="'.$_SERVER['PHP_SELF'].'?week='.date('W', $nextMonday), NL.'&year='.$year.'">'.Yii::t('main', 'Viikko').': '.date('W', $nextMonday), NL.'</option>';
+	    echo '<option value="'.$_SERVER['PHP_SELF'].'?week='.date('W', $nextMonday), NL.'&year='.$year.'">'.date('d', $nextMonday), NL.'-'.date('d.m', $nextSunday), NL.'</option>';
 	
 	    $nextMonday = strtotime('+1 week', $nextMonday);
 	    $nextSunday = strtotime('+1 week', $nextSunday);
