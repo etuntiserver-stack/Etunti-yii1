@@ -16,7 +16,13 @@ $this->breadcrumbs=array(
         <div class="tray-center">
 
 
-              <h2 class="myBgColors p10"> <i class="fa fa-eur"></i> <?php echo Yii::t('main', 'PALKKATAULUKKO'); ?> 
+        <h2 class="myBgColors p10"> <i class="fa fa-eur"></i> <?php echo Yii::t('main', 'Palkkataulukko'); ?> 
+
+	<?php if(!isset($_GET['kaikki_tyontekijat'])): ?>
+	<?php echo ', '.Yii::t('main', 'aktiiviset työntekijät'); ?>
+	<?php echo CHtml::link(Yii::t('main', 'Näytä kaikki'),'palkkataulukko?kaikki_tyontekijat', array('class'=>'btn btn-primary')); ?>
+	<?php endif; ?>
+
    <!-- tulostus -->
    <div class="pull-right">
     <div class="form-inline">
@@ -29,7 +35,7 @@ $this->breadcrumbs=array(
     </div>
    </div>
    <!-- tulostus -->
-		</h2>
+	</h2>
 
 
 
@@ -78,7 +84,10 @@ $this->breadcrumbs=array(
    <?php
     $criteria=new CDbCriteria;
     $criteria->order=" tekijan_nimi ";
-    $criteria->condition=" aktiivinen=1 ";
+
+    if(!isset($_GET['kaikki_tyontekijat']))
+    $criteria->condition = " aktiivinen=1 ";
+
     $list = CHtml::listData(Tyontekijat::model()->findAll($criteria), 'id', 'tekijan_nimi');
 
     echo '<select name="Tekija[]" id="tyontekijat" multiple title="Työntekijät">';
