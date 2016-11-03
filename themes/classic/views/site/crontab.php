@@ -64,8 +64,8 @@
 
 		if(isset($m[0]))
 		{
-			$message .= '<h2>'.strtoupper($ft->tyonantaja).'</h2>';
-			$message .= '<h2>'.Yii::t('main', 'Avoimet kohteet').' '.date("d.m.Y H:i").'</h2>';
+			echo '<h2>'.strtoupper($ft->tyonantaja).'</h2>';
+			echo '<h2>'.Yii::t('main', 'Avoimet kohteet').' '.date("d.m.Y H:i").'</h2>';
 
 
 		  foreach($m as $data)
@@ -74,7 +74,6 @@
 			$bod 		= '';
 			$osoite 	= '';
 			$tekijan_nimi 	= '';
-			$tyoryhma 	= '';
 			$tyoryhmaForArr = '';
 
 			$k = Kohteet::model()->findbypk($data->kohde);
@@ -84,17 +83,13 @@
 			$tt = Tyontekijat::model()->findbypk($data->tid);
 			if(isset($tt->id)){
 				$tekijan_nimi = Yii::t('main', 'Työntekijä').':  <b>'.$tt->tekijan_nimi.'</b><br>';
-				$tyoryhma = Yii::t('main', 'Työryhmä').':  <b>'.$tt->tyoryhma.'</b><br>';
 				$tyoryhmaForArr = $tt->tyoryhma;
 			}
 
 
-
-			$bod 	.= '<p>';
-			$bod 	.= '<br>';
-			$bod 	.= $tyoryhma.$tekijan_nimi.$osoite;
+			$bod 	.= $tekijan_nimi.$osoite;
 			$bod 	.= Yii::t('main', 'Lopetusajaksi oli määritelty').': <b>'.$data->pvm.' '.$data->loppu.'</b>';
-			$bod 	.= '</p>';
+			$bod 	.= '<br>';
 
 
 			$arr[$tyoryhmaForArr] 	= $tyoryhmaForArr;
@@ -110,13 +105,10 @@
 		  }
 		}
 
-		//if(count($arr))
-			//echo $arr[1];
 
-		$saaja = ''; // $asetukset->sahkoposti
+
 		if(count($arr) > 0 and $asetukset->ilmoitus_avoimista_kohteesta_sahkopostiin == 1)
 		{
-
 
 			// <-- Järjestelmanvalvojan kuluvia ryhmiä
 			$criteria = new CDbCriteria();
@@ -126,56 +118,54 @@
 				AND value2!=''
 			";
 			$valikot = Valikkoot::model()->findAll($criteria);
-		
-
-			$tyoryhmat = array();
 
 			foreach($arr as $ryhma){
 				
 				foreach($valikot as $data){
+
 					if($data->value == $ryhma){
-						echo '<h2>'.$ryhma.'</h2>';
-						echo $data->value2.'<br>';
+
+						$sahkopostiArray	= array();
+						$mailMessage 	= '';
+						$mailMessage 	.= '<h3>'.Yii::t('main', 'Työryhmä').' '.$ryhma.'</h3>';
 
 						foreach($forMessage as $key=>$value){
 							if($value['tyoryhma'] == $data->value)
-							echo $value['message'].'<br>';
+							$mailMessage .= $value['message'].'<br>';
 						}
 
+						$admin_ids = json_decode($data->value2);
+						if(is_array($admin_ids)){
+							foreach($admin_ids as $adm_id){
+								$administrators = Administrators::model()->findByPk($adm_id);
+								if(isset($administrators->adm_email) and !empty($administrators->adm_email))
+								array_push($sahkopostiArray, $administrators->adm_email);
+							}
+						}
+
+						if( $_SERVER['REMOTE_ADDR'] != '::1' and $_SERVER['REMOTE_ADDR'] != '127.0.0.1' )
+						{
+							$mail = new YiiMailer();
+							$mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
+							$mail->setTo($sahkopostiArray);
+							$mail->setSubject(Yii::t('main', 'Ilmoitus avoimista kohteesta '.date("d.m.Y H:i")));
+							$mail->setBody($mailMessage);
+							$mail->send();
+						}
+
+						//print_r($sahkopostiArray);
+						echo $mailMessage;
+
 					}
+
 				}
 
 			}
 
-		
-
-/*
-
-			echo '<pre>';
-			print_r($arr);
-			echo '</pre>';
-*/
 
 
 
-			// Järjestelmanvalvojan kuluvia ryhmiä -->
-
-
-
-			$saaja = $ft->sahkoposti; // $ft->sahkoposti
-
-			if( $_SERVER['REMOTE_ADDR'] != '::1' and $_SERVER['REMOTE_ADDR'] != '127.0.0.1' )
-			{
-			$mail = new YiiMailer();
-			$mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
-			$mail->setTo($saaja);
-			$mail->setSubject(Yii::t('main', 'Ilmoitus avoimista kohteesta '.date("d.m.Y H:i")));
-			$mail->setBody($message);
-			$mail->send();
-			}
-
-
-		echo '<hr>';
+			echo '<hr>';
 
 		}
 	// Ilmoitus määräajan ylittäneistä kohteista -->
@@ -183,7 +173,9 @@
 
 
 	// <-- ilmoitus_myohastyneista_kohteesta
-		$message = '';
+		$message 	= '';
+		$arr 		= array();
+		$forMessage	= array();
 
 		$criteria=new CDbCriteria;
 		$criteria->condition = " 
@@ -202,23 +194,38 @@
 
 		if(isset($m[0]))
 		{
-			$message .= '<h2>'.strtoupper($ft->tyonantaja).'</h2>';
-			$message .= '<h2>'.Yii::t('main', 'Myöhästyneet kohteet').' '.date("d.m.Y H:i").'</h2><br>';
+			echo '<h2>'.strtoupper($ft->tyonantaja).'</h2>';
+			echo '<h2>'.Yii::t('main', 'Myöhästyneet kohteet').' '.date("d.m.Y H:i").'</h2><br>';
+
 		  foreach($m as $data)
 		  {
 
-			$message .= '<p>';
+			$bod 		= '';
+			$osoite 	= '';
+			$tekijan_nimi 	= '';
+			$tyoryhmaForArr = '';
+
 			$k = Kohteet::model()->findbypk($data->kohde);
 			if(isset($k->osoite))
-			$message .= $k->osoite.', ';
+				$osoite = Yii::t('main', 'Osoite').': <b>'. $k->osoite.'</b><br>';
+
 			$tt = Tyontekijat::model()->findbypk($data->tid);
-			if(isset($tt->tekijan_nimi))
-			$message .= $tt->tekijan_nimi;
-			$message .= '<br>';
+			if(isset($tt->id)){
+				$tekijan_nimi = Yii::t('main', 'Työntekijä').':  <b>'.$tt->tekijan_nimi.'</b><br>';
+				$tyoryhmaForArr = $tt->tyoryhma;
+			}
 
-			$message .= Yii::t('main', 'Aloitusajaksi oli määritelty').': '.$data->pvm.' '.$data->alku;
-			$message .= '</p>';
 
+			$bod 	.= $tekijan_nimi.$osoite;
+			$bod 	.= Yii::t('main', 'Aloitusajaksi oli määritelty').': '.$data->pvm.', '.$data->alku;
+			$bod 	.= '<br>';
+
+
+			$arr[$tyoryhmaForArr] 	= $tyoryhmaForArr;
+			array_push($forMessage, array(
+						'tyoryhma'=>$tyoryhmaForArr, 
+						'message'=>$bod) 
+			);
 
 			if( $_SERVER['REMOTE_ADDR'] != '::1' and $_SERVER['REMOTE_ADDR'] != '127.0.0.1' )
 			Tyovuoroot::model()->updatebypk($data->id,array('ilmoitus_myohastyneista_kohteesta'=>1));
@@ -226,28 +233,63 @@
 		  }
 		}
 
-		if(!empty($message))
-			echo $message;
 
-		$saaja = ''; // $asetukset->sahkoposti
-		if(!empty($ft->sahkoposti) and !empty($message) and $asetukset->ilmoitus_myohastyneista_kohteesta_sahkopostiin == 1)
+		if(count($arr) > 0 and $asetukset->ilmoitus_myohastyneista_kohteesta_sahkopostiin == 1)
 		{
-			$saaja = $ft->sahkoposti; // $ft->sahkoposti
-			echo $saaja.'<br>';
 
+			// <-- Järjestelmanvalvojan kuluvia ryhmiä
+			$criteria = new CDbCriteria();
+			$criteria->order = " value ";
+			$criteria->condition = " 
+				select_type='tyoryhma'	
+				AND value2!=''
+			";
+			$valikot = Valikkoot::model()->findAll($criteria);
 
-			if( $_SERVER['REMOTE_ADDR'] != '::1' and $_SERVER['REMOTE_ADDR'] != '127.0.0.1' )
-			{
-			$mail = new YiiMailer();
-			$mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
-			$mail->setTo($saaja);
-			$mail->setSubject(Yii::t('main', 'Ilmoitus myöhästyneistä kohteesta '.date("d.m.Y H:i")));
-			$mail->setBody($message);
-			$mail->send();
+			foreach($arr as $ryhma){
+				
+				foreach($valikot as $data){
+
+					if($data->value == $ryhma){
+
+						$sahkopostiArray	= array();
+						$mailMessage 	= '';
+						$mailMessage 	.= '<h3>'.Yii::t('main', 'Työryhmä').' '.$ryhma.'</h3>';
+
+						foreach($forMessage as $key=>$value){
+							if($value['tyoryhma'] == $data->value)
+							$mailMessage .= $value['message'].'<br>';
+						}
+
+						$admin_ids = json_decode($data->value2);
+						if(is_array($admin_ids)){
+							foreach($admin_ids as $adm_id){
+								$administrators = Administrators::model()->findByPk($adm_id);
+								if(isset($administrators->adm_email) and !empty($administrators->adm_email))
+								array_push($sahkopostiArray, $administrators->adm_email);
+							}
+						}
+
+						if( $_SERVER['REMOTE_ADDR'] != '::1' and $_SERVER['REMOTE_ADDR'] != '127.0.0.1' )
+						{
+							$mail = new YiiMailer();
+							$mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
+							$mail->setTo($sahkopostiArray);
+							$mail->setSubject(Yii::t('main', 'Ilmoitus myöhästyneistä kohteesta '.date("d.m.Y H:i")));
+							$mail->setBody($mailMessage);
+							$mail->send();
+						}
+
+						//print_r($sahkopostiArray);
+						echo $mailMessage;
+
+					}
+
+				}
+
 			}
 
-
-		echo '<hr>';
+			echo '<hr>';
 
 		}
 	// ilmoitus_myohastyneista_kohteesta -->
@@ -256,10 +298,12 @@
 
 
 	// <-- merkkipaivailmoitukset
-	if(isset($asetukset->merkkipaivailmoitukset_sahkoposti) and !empty($asetukset->merkkipaivailmoitukset_sahkoposti))
-	{
+		$message 	= '';
+		$arr 		= array();
+		$forMessage	= array();
+
 		$criteria=new CDbCriteria;
-		$criteria->select = "id, tekijan_nimi, 
+		$criteria->select = "id, tekijan_nimi, tyoryhma, 
 			DATE_FORMAT(STR_TO_DATE(SUBSTRING_INDEX(tekijan_henkilotunnus, '-', 1), '%d%m%y'), CONCAT(YEAR(CURDATE()),'-%m-%d')) as tekijan_henkilotunnus 
 		";
 		$criteria->condition = " 
@@ -271,27 +315,90 @@
 		";
 		$tt = Tyontekijat::model()->findAll($criteria);
 
-		$message = '';
-		foreach($tt as $data)
+		if(isset($tt[0]))
 		{
-			$message .= '#('.$data->id.'), '.$data->tekijan_nimi.'&nbsp;&nbsp;'.date("d.m.Y", strtotime($data->tekijan_henkilotunnus)).'<br>';
+			echo '<h2>'.strtoupper($ft->tyonantaja).'</h2>';
+			echo '<h2>'.Yii::t('main', 'Ilmoitus merkkipäivästä').' '.date("d.m.Y H:i").'</h2><br>';
+
+		   foreach($tt as $data)
+		   {
+
+			$bod 		= '';
+			$tyoryhmaForArr = $data->tyoryhma;
+
+			$bod 	.= Yii::t('main', 'Merkkipäivä').': <b>'.date("d.m.Y", strtotime($data->tekijan_henkilotunnus)).', '.$data->tekijan_nimi.'</b><br>';
+
+			$arr[$tyoryhmaForArr] 	= $tyoryhmaForArr;
+			array_push($forMessage, array(
+						'tyoryhma'=>$tyoryhmaForArr, 
+						'message'=>$bod) 
+			);
+
 			if( $_SERVER['REMOTE_ADDR'] != '::1' and $_SERVER['REMOTE_ADDR'] != '127.0.0.1' )
 			Tyontekijat::model()->updateByPk($data->id, array('ilmoitus_merkkipaivasta_vuosi'=>date("Y")));
+		   }
+
 		}
 
-			if( $_SERVER['REMOTE_ADDR'] != '::1' and $_SERVER['REMOTE_ADDR'] != '127.0.0.1' and !empty($message) )
-			{
-			$saaja = $asetukset->merkkipaivailmoitukset_sahkoposti;
-			$mail = new YiiMailer();
-			$mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
-			$mail->setTo($saaja);
-			$mail->setSubject(Yii::t('main', 'Ilmoitus merkkipäivästä'));
-			$mail->setBody($message);
-			$mail->send();
+
+		if(count($arr) > 0 and $asetukset->ilmoitus_merkkipaivasta == 1)
+		{
+
+			// <-- Järjestelmanvalvojan kuluvia ryhmiä
+			$criteria = new CDbCriteria();
+			$criteria->order = " value ";
+			$criteria->condition = " 
+				select_type='tyoryhma'	
+				AND value2!=''
+			";
+			$valikot = Valikkoot::model()->findAll($criteria);
+
+			foreach($arr as $ryhma){
+				
+				foreach($valikot as $data){
+
+					if($data->value == $ryhma){
+
+						$sahkopostiArray	= array();
+						$mailMessage 	= '';
+						$mailMessage 	.= '<h3>'.Yii::t('main', 'Työryhmä').' '.$ryhma.'</h3>';
+
+						foreach($forMessage as $key=>$value){
+							if($value['tyoryhma'] == $data->value)
+							$mailMessage .= $value['message'].'<br>';
+						}
+
+						$admin_ids = json_decode($data->value2);
+						if(is_array($admin_ids)){
+							foreach($admin_ids as $adm_id){
+								$administrators = Administrators::model()->findByPk($adm_id);
+								if(isset($administrators->adm_email) and !empty($administrators->adm_email))
+								array_push($sahkopostiArray, $administrators->adm_email);
+							}
+						}
+
+						if( $_SERVER['REMOTE_ADDR'] != '::1' and $_SERVER['REMOTE_ADDR'] != '127.0.0.1' )
+						{
+							$mail = new YiiMailer();
+							$mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
+							$mail->setTo($sahkopostiArray);
+							$mail->setSubject(Yii::t('main', 'Ilmoitus merkkipäivästä '.date("d.m.Y H:i")));
+							$mail->setBody($mailMessage);
+							$mail->send();
+						}
+
+						//print_r($sahkopostiArray);
+						echo $mailMessage;
+
+					}
+
+				}
+
 			}
 
+			echo '<hr>';
 
-	}
+		}	
 	// merkkipaivailmoitukset -->
 
 
@@ -352,7 +459,7 @@
 			// <-- Valmistetaan viesti
 			if(!empty($m))
 			{
-				$message .= '<h1>'.Yii::t('main', 'Ilmoitus toistuvien työvuorojen päättymisestä').'</h1>';
+				$message .= '<h2>'.Yii::t('main', 'Ilmoitus toistuvien työvuorojen päättymisestä').'</h2>';
 				$message .= $m;
 			}
 

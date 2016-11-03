@@ -589,6 +589,9 @@ function num($val){
 		{
 			$model->attributes=$_POST['Mobile'];
 
+			if(empty($_POST['Mobile']['loppui']) and $_POST['Mobile']['status'] == 3)
+			$model->status=1;
+
 			if(!empty($model->tietoja)) 
 			  $tietoja = $model->tietoja."\n"; 
 			else 
@@ -1430,6 +1433,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 
 
         	$criteria->condition = "  
+
 			status = '2' and tid = '".$tid."' and aloitan !='' and loppui !='' 
 		";
 

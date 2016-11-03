@@ -89,6 +89,18 @@
 		<?php echo $form->error($model,'ilmoitus_avoimista_kohteesta_sahkopostiin'); ?>
 	</div>
 
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'ilmoitus_merkkipaivasta'); ?>
+		<?php 
+        	$l = array(
+			0=>'Ei',
+			1=>'Kyllä'
+		);
+		echo $form->dropDownList($model,'ilmoitus_merkkipaivasta', $l, 
+		array('empty'=>Yii::t('main', 'Valitse'), 'class'=>'form-control')) ?>
+		<?php echo $form->error($model,'ilmoitus_merkkipaivasta'); ?>
+	</div>
+
 
   </div><div class="col-sm-4">
     <legend><h2><?php echo Yii::t('main','Järjestelmän asetukset'); ?></h2></legend>
@@ -99,11 +111,13 @@
 		<?php echo $form->error($model,'pyhapaivat'); ?>
 	</div>
 
+<!--
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'merkkipaivailmoitukset_sahkoposti'); ?>
 		<?php echo $form->textField($model,'merkkipaivailmoitukset_sahkoposti',array('maxlength'=>255,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'merkkipaivailmoitukset_sahkoposti'); ?>
 	</div>
+-->
 
   </div><div class="col-sm-4">
     <legend><h2><?php echo Yii::t('main','Järjestelmän asetukset'); ?></h2></legend>
