@@ -32,7 +32,14 @@
         <div class="tray-center">
 
 
-        <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-th-list"></i> <?php echo Yii::t('main', 'RAPORTIT'); ?></h2>
+        <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-th-list"></i> <?php echo Yii::t('main', 'Raportit'); ?>
+	<?php if(!isset($_GET['kaikki_tyontekijat'])): ?>
+	<?php echo ', '.Yii::t('main', 'aktiiviset työntekijät'); ?>
+	<?php echo CHtml::link(Yii::t('main', 'Näytä kaikki'),'raportit?kaikki_tyontekijat', array('class'=>'btn btn-primary')); ?>
+	<?php endif; ?>
+	</h2>
+
+
 	<?php echo $ryhmaBody; ?>	
 
           <div class="row">
@@ -80,6 +87,8 @@
       	<?php
 	   $criteriaT = new CDbCriteria();
 	   $criteriaT->order = " tekijan_nimi ";
+	   if(!isset($_GET['kaikki_tyontekijat']))
+	   $criteriaT->condition = " aktiivinen=1 ";
 	   $tlist = Tyontekijat::model()->findAll($criteriaT);
 
 	   echo '<select name="tekija[]" multiple class="mult">';
