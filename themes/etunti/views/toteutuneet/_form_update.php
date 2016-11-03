@@ -88,7 +88,7 @@ $forPVM = date('d.m.Y',strtotime($model->aloitan));
 
 	<div class="section">
 		<?php echo $form->labelEx($model,'aloitan'); ?>
-		<?php echo $form->textField($model,'aloitan',array('size'=>60,'maxlength'=>100,'class'=>'form-control input-sm al')); ?>
+		<?php echo $form->textField($model,'aloitan',array('size'=>60,'maxlength'=>100,'class'=>'form-control input-sm al', 'autofocus'=>'yes')); ?>
 	</div>
 
 	<div class="section">
