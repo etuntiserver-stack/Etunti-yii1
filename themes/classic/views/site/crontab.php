@@ -14,13 +14,6 @@
    {
 
 
-	if($d->domain != 'demo'){
-		if(($_SERVER['REMOTE_ADDR'] == '::1' or $_SERVER['REMOTE_ADDR'] == '127.0.0.1')){
-			echo 'Olet localhostissa niin näytetään vain DEMO domain<br>'; 
-		}
-		continue;
-	}
-
 	
 	Yii::app()->db1->setActive(false);
 	Yii::app()->db1->connectionString = 'mysql:host=localhost;dbname='.$d->domain;
