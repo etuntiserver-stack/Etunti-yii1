@@ -34,7 +34,18 @@
 
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'alv'); ?>
-		<?php echo $form->textField($model,'alv',array('size'=>10,'maxlength'=>10,'class'=>'form-control')); ?>
+		<?php 
+        	$l = array();
+		for ($i = 1; $i <= 50; $i++) {
+		    $l[$i] = $i;
+		}
+
+		echo $form->dropDownList($model,'alv',$l, 
+			array('class'=>'form-control','options' => array('24'=>array('selected'=>true)))
+		);
+
+		?>
+
 		<?php echo $form->error($model,'alv'); ?>
 	</div>
 
@@ -129,6 +140,25 @@ $(".muokaValiko").click(function() {
         });
 });
 /* valikot */
+
+
+
+ $('#LaskutusTuotteet_hinta_alv_0').keyup(function(){
+	lasketa();
+ });
+
+ $('#LaskutusTuotteet_alv').change(function(){
+	lasketa();
+ });
+
+ function lasketa(){
+	var hinta_alv_0 = parseFloat($('#LaskutusTuotteet_hinta_alv_0').val());
+	var alv = parseFloat($('#LaskutusTuotteet_alv').val());
+
+	var result = ((hinta_alv_0*alv)/100)+hinta_alv_0;
+	var result = Math.round(result * 100) / 100;
+	$('#LaskutusTuotteet_hinta_alv_sis').val(result);
+ }
 
 
 });
