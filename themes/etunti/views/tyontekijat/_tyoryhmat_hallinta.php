@@ -3,6 +3,7 @@
 /* @var $data Tyontekijat */
 
 $mod = '';
+$tek = '';
 ?>
 
 <tr>
@@ -33,6 +34,28 @@ $mod = '';
 	<td class="col-sm-3">
 		<input type="text" class="form-control m2" value="<?php echo $data->value; ?>" id="a2_<?php echo $data->id; ?>" for="<?php echo $data->id; ?>">
 	</td>
+
+	<td class="col-sm-3">
+		<?php
+			// <-- tyontekijat
+			if(isset($tyontekijat) and is_array($tyontekijat))
+			{
+				$tek .= '<select class="form-control form-group m4" id="a4_'.$data->id.'" multiple for="'.$data->id.'">';
+				foreach($tyontekijat as $tekija)
+				{
+					$ryhmat = json_decode($tekija->tyoryhma);
+					if( is_array($ryhmat) and in_array($data->value, $ryhmat) )
+						$tek .= '<option value="'.$tekija->id.'" selected>'.$tekija->tekijan_nimi.'</option>';
+					else
+						$tek .= '<option value="'.$tekija->id.'">'.$tekija->tekijan_nimi.'</option>';
+				}
+				$tek .= '</select>';
+				echo $tek;
+			}
+			// tyontekijat -->
+		?>
+	</td>
+
 	<td class="col-sm-3">
 		<?php
 			// <-- Työryhmä

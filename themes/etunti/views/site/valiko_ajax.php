@@ -54,7 +54,7 @@
 	elseif($_POST['select_type'] == 'Palkkausmuoto') $selType = 'Palkkausmuoto';
 	elseif($_POST['select_type'] == 'tilanne') $selType = 'Tilanne';
 	elseif($_POST['select_type'] == 'aktiivinen') $selType = 'Työssä Aktiivinen';
-	elseif($_POST['select_type'] == 'tyoryhma') $selType = 'Työryhmä';
+	//elseif($_POST['select_type'] == 'tyoryhma') $selType = 'Työryhmä';
 	elseif($_POST['select_type'] == 'tyoajanmerkinta') $selType = 'Työajanmerkinta';
 	elseif($_POST['select_type'] == 'admin status') $selType = 'Oikeukset';
 	elseif($_POST['select_type'] == 'siivous') $selType = 'Siivous tyyppi';
@@ -66,12 +66,12 @@
 	elseif($_POST['select_type'] == 'tyo_toimialue') $selType = 'Työntekijä toimialue';
 	else $selType = $r->select_type;
 
-
+/*
 	if($_POST['select_type'] == 'tyoryhma')
 	{
 		$admins = Administrators::model()->findAll(array('order' => 'adm_nimi'));
 	}
-
+*/
 
        	$criteria = new CDbCriteria();
 	$criteria->condition = " select_type='".$_POST['select_type']."' ";
@@ -159,6 +159,7 @@
 		} else {
 
 			// <-- Työryhmä
+			/*
 			if(isset($admins) and is_array($admins) and $u->select_type == 'tyoryhma')
 			{
 				$mod .= '<select class="form-control form-group '.$success.' m3" multiple id="m3_'.$u->id.'">';
@@ -172,6 +173,7 @@
 				}
 				$mod .= '</select>';
 			}
+			*/
 			// Työryhmä -->
 
 			$mod .= '<input type="text" class="form-control form-group '.$success.'" value="'.$u->value.'" id="m_'.$u->id.'">';

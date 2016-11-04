@@ -169,21 +169,29 @@ if(empty($model->position) and isset($model->id))
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'tyoryhma'); ?>
 
-	   <div class="input-group">
 		<?php
 		$list = array();
       		$l = Valikkoot::model()->findAll(" select_type='tyoryhma' ",array('order' => "select_type"));
-		foreach($l as $v)
-		$list[$v->value] = $v->value;
 
-        	echo $form->dropDownList($model, 'tyoryhma', $list,
-		array('empty'=>'','class'=>'form-control'));
+		$ryhmat = array();
+		if(is_array(json_decode($model->tyoryhma)))
+			$ryhmat = json_decode($model->tyoryhma);
+		else
+			array_push($ryhmat, $model->tyoryhma);
+
+
+		if(isset($l[0]))
+		{
+			echo '<select class="mult" name="Tyontekijat[tyoryhma][]" multiple id="Tyontekijat_tyoryhma">';
+			foreach($l as $ryhma){
+			    if(in_array($ryhma->value, $ryhmat))
+				echo '<option value="'.$ryhma->value.'" selected>'.$ryhma->value.'</option>';
+			    else
+				echo '<option value="'.$ryhma->value.'">'.$ryhma->value.'</option>';
+			}
+			echo '</select>';
+		}
         	?>
-		<span class="input-group-btn">
-		  <span class="btn btn-primary myBgColors muokaValiko" for="tyoryhma"><i class="fa fa-pencil-square-o"></i></span>
-		</span>
-	   </div>
-
 		<?php echo $form->error($model,'tyoryhma'); ?>
 	</div>
 
@@ -396,6 +404,12 @@ $(document).ready(function(){
 	</div>
 	<?php endif; ?>
    </div>
+	</div>
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'tyontekijan_numero'); ?>
+		<?php echo $form->numberField($model,'tyontekijan_numero',array('size'=>60,'maxlength'=>10,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'tyontekijan_numero'); ?>
 	</div>
 
 	<div class="section fill mb5">

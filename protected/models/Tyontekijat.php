@@ -62,16 +62,16 @@ public $tunnus;
 		// will receive user inputs.
 		return array(
 			array('tekijan_nimi, aktiivinen', 'required'),
-			array('online_varauksen_valmina, ilmoitus_merkkipaivasta_vuosi', 'numerical', 'integerOnly'=>true),
+			array('online_varauksen_valmina, ilmoitus_merkkipaivasta_vuosi, tyontekijan_numero', 'numerical', 'integerOnly'=>true),
 			array('imei', 'length', 'max'=>100),
 			array('tyo_toimialue, laiten_puh, tekijan_nimi, tekijan_katuosoite, tekijan_pankkitili, salasana', 'length', 'max'=>100),
-			array('tekijan_henkilotunnus, tekijan_puh, tekijan_lanka_puh, tyoryhma', 'length', 'max'=>20),
+			array('tekijan_henkilotunnus, tekijan_puh, tekijan_lanka_puh', 'length', 'max'=>20),
 			array('tekijan_email, tekijan_ptoimipaikka, tyoehtosopimus, tekijan_kulunvalvonta, tekijan_konttori, aktiivinen', 'length', 'max'=>50),
 			array('tekijan_pnumero', 'length', 'max'=>7),
 			array('sukunimi', 'length', 'max'=>255),
 			array('ayjasenyys', 'length', 'max'=>10),
 			array('kortit, tekijan_muisti, tekijan_tietoja, tietoja_onlinevarauksen', 'length', 'max'=>2000),
-			array('gcm_reg_id, position, kortit_voimassaolo', 'length', 'max'=>500),
+			array('gcm_reg_id, position, kortit_voimassaolo, tyoryhma', 'length', 'max'=>500),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('id, imei, laiten_puh, tekijan_nimi, tekijan_henkilotunnus, tekijan_puh, tekijan_email, tekijan_lanka_puh, tekijan_katuosoite, tekijan_pnumero, tekijan_ptoimipaikka, tyoryhma, tyoehtosopimus, tekijan_kulunvalvonta, tekijan_pankkitili, tekijan_konttori, aktiivinen, tekijan_tietoja, tekijan_muisti, salasana, online_varauksen_valmina, kortit, ayjasenyys, gcm_reg_id, position, tyo_toimialue', 'safe', 'on'=>'search'),

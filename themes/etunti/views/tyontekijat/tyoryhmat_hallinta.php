@@ -66,14 +66,15 @@
   <thead class="myBgColors">
   <tr>
   <th></th>
-  <th><?php echo Yii::t('main', 'Nimike'); ?></th>
-  <th><?php echo Yii::t('main', 'Jaärjestelmanvalvoja'); ?></th>
+  <th><?php echo Yii::t('main', 'Työryhmä'); ?></th>
+  <th><?php echo Yii::t('main', 'Työntekijät'); ?></th>
+  <th><?php echo Yii::t('main', 'Vastuuhenkilö'); ?></th>
   </tr>
   </thead>
   <?php
 	$admins = Administrators::model()->findAll(array('order' => 'adm_nimi'));
 	foreach($model as $data){
-		echo $this->renderPartial('_tyoryhmat_hallinta', array('data'=>$data, 'admins'=>$admins));
+		echo $this->renderPartial('_tyoryhmat_hallinta', array('data'=>$data, 'admins'=>$admins, 'tyontekijat'=>$tyontekijat));
 	}
   ?>
   </table>
@@ -95,7 +96,20 @@ $(document).ready(function(){
 	//inheritClass: true,
 	//enableFiltering: true,
         includeSelectAllOption: true,
-	nonSelectedText: '<?php echo Yii::t("main", "Järjestelmänvalvojat"); ?>',
+	nonSelectedText: '<?php echo Yii::t("main", "Vastuuhenkilöt"); ?>',
+	selectAllText: '<?php echo Yii::t("main", "Valitse kaikki"); ?>',
+	allSelectedText: '<?php echo Yii::t("main", "Kaikki"); ?>',
+	nSelectedText: '<?php echo Yii::t("main", "valittu"); ?>',
+	numberDisplayed: 0,
+	buttonWidth: '100%',
+ });
+
+ $(".m4").multiselect({
+
+	//inheritClass: true,
+	//enableFiltering: true,
+        includeSelectAllOption: true,
+	nonSelectedText: '<?php echo Yii::t("main", "Työntekijät"); ?>',
 	selectAllText: '<?php echo Yii::t("main", "Valitse kaikki"); ?>',
 	allSelectedText: '<?php echo Yii::t("main", "Kaikki"); ?>',
 	nSelectedText: '<?php echo Yii::t("main", "valittu"); ?>',
@@ -104,6 +118,10 @@ $(document).ready(function(){
  });
 
  $(".m3").change(function(){
+	var thisFor = $(this).attr('for');
+	updateValiko(thisFor);
+ });
+ $(".m4").change(function(){
 	var thisFor = $(this).attr('for');
 	updateValiko(thisFor);
  });
@@ -121,13 +139,14 @@ $(document).ready(function(){
 	var thisID = $(this).attr('id');
 	var a2 = $('#a2_'+thisID).val();
 	var a3 = $('#a3_'+thisID+' :selected').map(function(){return $(this).val();}).get();
+	var a4 = $('#a4_'+thisID+' :selected').map(function(){return $(this).val();}).get();
 
 		console.log(a3)
 
         $.ajax({
            url: 'tyoryhmat_hallinta',
            type: "POST",
-           data: { update : "true", id : thisID, value : a2, value2 : a3 },
+           data: { update : "true", id : thisID, value : a2, value2 : a3, selected_tyontekijat : a4 },
            success: function(html){
 
 		console.log(html);

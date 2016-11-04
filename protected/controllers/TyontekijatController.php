@@ -87,6 +87,12 @@ class TyontekijatController extends Controller
 	public function actionTyoryhmat_hallinta()
 	{
 
+		$criteria = new CDbCriteria();
+	        $criteria->order = " tekijan_nimi ";
+	        $criteria->condition = " aktiivinen=1 ";
+		$tyontekijat = Tyontekijat::model()->findAll($criteria);
+	
+
 	       	$criteria = new CDbCriteria();
 		$criteria->order = " value ";
 		$criteria->condition = " select_type='tyoryhma' ";
@@ -94,6 +100,64 @@ class TyontekijatController extends Controller
 
 		if(isset($_POST['update']))
 		{
+
+		       	$criteria = new CDbCriteria();
+			$criteria->condition = " tyoryhma LIKE '%\"".$_POST['value']."\"%' ";
+			$tyontekijat_jolla_oli_tamaryhma = Tyontekijat::model()->findAll($criteria);
+			foreach($tyontekijat_jolla_oli_tamaryhma as $tekija){
+				$arr = array();
+				if(is_array(json_decode($tekija->tyoryhma))){
+					$arr = json_decode($tekija->tyoryhma);
+				} else {
+					if(!empty($tekija->tyoryhma))
+						array_push($arr, $tekija->tyoryhma);
+				}
+
+				$arr = array_diff($arr, array($_POST['value']));
+				if(count($arr) > 0)
+					$tyoryhma = json_encode($arr);
+				else
+					$tyoryhma = '';
+
+				Tyontekijat::model()->updateByPk($tekija->id, array('tyoryhma'=>$tyoryhma));
+
+			}
+
+
+			$selected_tyontekijat = array();
+			if(isset($_POST['selected_tyontekijat']))
+			$selected_tyontekijat = $_POST['selected_tyontekijat'];
+
+			foreach($tyontekijat as $tekija)
+			{
+
+				$arr = array();
+				if(is_array(json_decode($tekija->tyoryhma))){
+					$arr = json_decode($tekija->tyoryhma);
+				} else {
+					if(!empty($tekija->tyoryhma))
+						array_push($arr, $tekija->tyoryhma);
+				}
+
+				if(!in_array($_POST['value'], $arr))
+					array_push($arr, $_POST['value']);
+
+				if(in_array($tekija->id, $selected_tyontekijat))
+				{
+
+					if(count($arr) > 0)
+						Tyontekijat::model()->updateByPk($tekija->id, array('tyoryhma'=>json_encode($arr)));
+
+					//print_r($arr);
+				}
+				//Tyontekijat::model()->updateByPk($tekija->id, array('tyoryhma'=>''));
+
+
+			}
+
+
+
+
 			if(isset($_POST['value2']) and is_array($_POST['value2']))
 				$value2 = json_encode($_POST['value2']);
 			else
@@ -125,6 +189,7 @@ class TyontekijatController extends Controller
 
 		$this->render('tyoryhmat_hallinta',array(
 			'model'=>$model,
+			'tyontekijat'=>$tyontekijat,
 		));
 	}
 
@@ -233,6 +298,11 @@ class TyontekijatController extends Controller
 			else
 				$model->kortit_voimassaolo="";
 
+			if(isset($_POST['Tyontekijat']['tyoryhma']))
+				$model->tyoryhma=json_encode($_POST['Tyontekijat']['tyoryhma']);
+			else
+				$model->tyoryhma="";
+
 			if(isset($_POST['kortit'])) 
 				$model->kortit = implode("##***",$_POST['kortit']);
 			else
@@ -274,7 +344,7 @@ class TyontekijatController extends Controller
 				$mail->setBody($message);
 				$mail->send();
 
-				$this->redirect(array('update','id'=>$model->id));
+				$this->redirect(array('index'));
 			}
 		}
 
@@ -313,13 +383,18 @@ class TyontekijatController extends Controller
 			else
 				$model->kortit_voimassaolo="";
 
+			if(isset($_POST['Tyontekijat']['tyoryhma']))
+				$model->tyoryhma=json_encode($_POST['Tyontekijat']['tyoryhma']);
+			else
+				$model->tyoryhma="";
+
 			if(isset($_POST['kortit'])) 
 				$model->kortit = implode("##***",$_POST['kortit']);
 			else
 				$model->kortit = "";
 
 			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+				$this->redirect(array('index'));
 		}
 
 		$this->render('update',array(
