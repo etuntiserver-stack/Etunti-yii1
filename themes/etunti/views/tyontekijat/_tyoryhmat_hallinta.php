@@ -43,8 +43,9 @@ $tek = '';
 				$tek .= '<select class="form-control form-group m4" id="a4_'.$data->id.'" multiple for="'.$data->id.'">';
 				foreach($tyontekijat as $tekija)
 				{
-					$ryhmat = json_decode($tekija->tyoryhma);
-					if( is_array($ryhmat) and in_array($data->value, $ryhmat) )
+					if( is_array(json_decode($tekija->tyoryhma)) and in_array($data->value, json_decode($tekija->tyoryhma)) )
+						$tek .= '<option value="'.$tekija->id.'" selected>'.$tekija->tekijan_nimi.'</option>';
+					elseif( !is_array(json_decode($tekija->tyoryhma)) and $data->value == $tekija->tyoryhma)
 						$tek .= '<option value="'.$tekija->id.'" selected>'.$tekija->tekijan_nimi.'</option>';
 					else
 						$tek .= '<option value="'.$tekija->id.'">'.$tekija->tekijan_nimi.'</option>';
