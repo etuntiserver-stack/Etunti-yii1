@@ -120,7 +120,7 @@ if(isset($model->tietoja))
                 </div>
                 <ul class="list-group list-group-flush text-center">
                     <li class="list-group-item">
-                        <?php echo $form->textArea($model,'tietoja',array('rows'=>20, 'cols'=>50,'class'=>'form-control')) //,'readonly'=>'yes'; ?>
+                        <?php echo $form->textArea($model,'tietoja',array('rows'=>20, 'cols'=>50,'class'=>'form-control','readonly'=>'yes')) //,'readonly'=>'yes'; ?>
                     </li>
                 </ul>
             </div>
