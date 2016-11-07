@@ -229,7 +229,7 @@ function dateDiff($start, $end) {
 	<select class="form-control tvchange">
  	  <option value="index"><?php echo Yii::t('main', 'Viikko'); ?></option>
  	  <option value="tv2" selected><?php echo Yii::t('main', 'Työntekijä'); ?></option>
- 	  <option value="tv_kohteet"><?php echo Yii::t('main', 'Kohde'); ?></option>
+ 	  <!--<option value="tv_kohteet"><?php echo Yii::t('main', 'Kohde'); ?></option>-->
 	</select>
       </div>
      </div>

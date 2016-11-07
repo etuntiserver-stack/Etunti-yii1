@@ -401,9 +401,11 @@ function num($val){
 		echo sprint($k);
 	}
 
-	public function actionHistoria($id,$tilanne,$uusikohde,$uusialoitus,$uusilopetus)
+
+	public function actionHistoria($id,$tilanne,$kohde_kannasta,$aloitan,$loppui,$tekijan_nimi)
 	{
 
+/*
 		$this->renderPartial('historia',array(
 			'id'=>$id,
 			'tilanne'=>$tilanne,
@@ -411,30 +413,44 @@ function num($val){
 			'uusialoitus'=>$uusialoitus,
 			'uusilopetus'=>$uusilopetus,
 		));
+*/
 	}
 
 	public function actionUpdatetime()
 	{
 
+		$model 		= $this->loadModel($_POST['id']);
+
+ 		$kohde_kannasta	= $model->kohde_kannasta;
+ 		$aloitan 	= $model->aloitan;
+ 		$loppui	 	= $model->loppui;
+ 		$tekijan_nimi	= $model->tekijan_nimi;
 
 
-		$model = $this->loadModel($_POST['id']);
+		if($_POST['request'] == 'aloitan'){
+			$model->aloitan = date("d.m.Y H:i:s",strtotime($_POST['value']));
+		}
+		if($_POST['request'] == 'loppui'){
+			$model->loppui = date("d.m.Y H:i:s",strtotime($_POST['value']));
+		}
+		if($_POST['request'] == 'kohde_kannasta'){
+			$model->kohde_kannasta = $_POST['value'];
+		}
 
- 		$newdate = date("d.m.Y H:i:s",strtotime($_POST['value']));
-		$model->$_POST['request']=$newdate;
-		$model->status=$_POST['status'];
 
 		if($model->save()){
 
 			// <-- Kirjoitetaan historia luettut tietokantaan
 			$this->renderPartial('//mobile/historia',array(
 			'id'=>$model->id,
-			'tilanne'=>"Luetut ".$_POST['request'],
-			'uusikohde'=>$model->kohde_kannasta,
-			'uusialoitus'=>$model->aloitan,
-			'uusilopetus'=>$model->loppui,
+			'tilanne'=>"Luetut",
+			'kohde_kannasta'=>array('vanha'=>$kohde_kannasta, 'uusi'=>$model->kohde_kannasta),
+			'aloitan'=>array('vanha'=>$aloitan, 'uusi'=>$model->aloitan),
+			'loppui'=>array('vanha'=>$loppui, 'uusi'=>$model->loppui),
+			'tekijan_nimi'=>array('vanha'=>$tekijan_nimi, 'uusi'=>$model->tekijan_nimi),
 			));
 			// Kirjoitetaan historia luettut tietokantaan -->
+
 			echo $_POST['request']."//".date("H:i",strtotime($model->aloitan))."//".date("H:i",strtotime($model->loppui));
 		}
 
@@ -576,7 +592,7 @@ function num($val){
 	//exit;
 
 		$model=$this->loadModel($id);
-		$vanha_kohde_kannasta = $model->kohde_kannasta;
+
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
@@ -587,25 +603,38 @@ function num($val){
 
 		if(isset($_POST['Mobile']))
 		{
+
+	 		$aloitan 	= $model->aloitan;
+	 		$loppui	 	= $model->loppui;
+	 		$kohde_kannasta	= $model->kohde_kannasta;
+	 		$tekijan_nimi 	= $model->tekijan_nimi;
+
 			$model->attributes=$_POST['Mobile'];
 
-			if(empty($_POST['Mobile']['loppui']) and $_POST['Mobile']['status'] == 3)
+			if(isset($_POST['Mobile']['status']) and empty($_POST['Mobile']['loppui']) and $_POST['Mobile']['status'] == 3)
 			$model->status=1;
 
-			if(!empty($model->tietoja)) 
-			  $tietoja = $model->tietoja."\n"; 
-			else 
-			  $tietoja = "<perus>".$vanha_kohde_kannasta."//".$model->aloitan."//".$model->loppui."</perus>";
-
-			if(isset($_POST['Mobile']['kohde_kannasta']))
-			$model->tietoja=$tietoja.Yii::app()->user->nimi." (".date("d.m.Y H:i")."):\nTilanne-Kohteen muutos, vanha-".$vanha_kohde_kannasta.", uusi-".$_POST['Mobile']['kohde_kannasta'];
-
-			if(!$model->save())
+			if($model->save())
 			{
-			   	var_dump($model->getErrors());
-			   exit;
-			} else {
+
+				// <-- Kirjoitetaan historia luettut tietokantaan
+				$this->renderPartial('//mobile/historia',array(
+				'id'=>$model->id,
+				'tilanne'=>"Luetut",
+				'kohde_kannasta'=>array('vanha'=>$kohde_kannasta, 'uusi'=>$model->kohde_kannasta),
+				'aloitan'=>array('vanha'=>$aloitan, 'uusi'=>$model->aloitan),
+				'loppui'=>array('vanha'=>$loppui, 'uusi'=>$model->loppui),
+				'tekijan_nimi'=>array('vanha'=>$tekijan_nimi, 'uusi'=>$model->tekijan_nimi),
+				));
+				// Kirjoitetaan historia luettut tietokantaan -->
+
 				$this->redirect(array('index'));
+
+			} else {
+
+			   	var_dump($model->getErrors());
+			   	exit;
+
 			}
 
 		}

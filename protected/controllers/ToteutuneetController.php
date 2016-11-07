@@ -204,10 +204,26 @@ class ToteutuneetController extends Controller
 	public function actionDeletebyajax()
 	{
 		$model = Toteutuneet::model()->findbypk($_POST['id']);
+
+ 		if(isset($model->id)) $kohde_kannasta = $model->kohde_kannasta; else $kohde_kannasta = '';
+ 		if(isset($model->id)) $aloitan = $model->aloitan; else $aloitan = '';
+ 		if(isset($model->id)) $loppui = $model->loppui; else $loppui = '';
+ 		if(isset($model->id)) $tekijan_nimi = $model->tekijan_nimi; else $tekijan_nimi = '';
+
 		Toteutuneet::model()->deletebypk($_POST['id']);
 
-		$m = Mobile::model()->findbypk($model->kid);
-		Mobile::model()->updatebypk($m->id, array('tietoja'=>$m->tietoja."\n".Yii::app()->user->nimi." (".date("d.m.Y H:i")."):\nMuutokset poistettu"));
+		$mob = Mobile::model()->findbypk($model->kid);
+
+		// <-- Kirjoitetaan historia luettut tietokantaan
+		$this->renderPartial('//mobile/historia',array(
+		'id'=>$model->kid,
+		'tilanne'=>"Toteutuneet",
+		'kohde_kannasta'=>array('vanha'=>$kohde_kannasta, 'uusi'=>$mob->kohde_kannasta),
+		'aloitan'=>array('vanha'=>$aloitan, 'uusi'=>$mob->aloitan),
+		'loppui'=>array('vanha'=>$loppui, 'uusi'=>$mob->loppui),
+		'tekijan_nimi'=>array('vanha'=>$tekijan_nimi, 'uusi'=>$mob->tekijan_nimi),
+		));
+		// Kirjoitetaan historia luettut tietokantaan -->
 	}
 
 	/**
@@ -240,6 +256,13 @@ class ToteutuneetController extends Controller
 		if(isset($_POST['Toteutuneet']))
 		{
 
+			$mob =  Mobile::model()->findByPk($_POST['Toteutuneet']['kid']);
+
+ 			if(isset($mob->id)) $kohde_kannasta = $mob->kohde_kannasta; else $kohde_kannasta = '';
+	 		if(isset($mob->id)) $aloitan = $mob->aloitan; else $aloitan = '';
+	 		if(isset($mob->id)) $loppui = $mob->loppui; else $loppui = '';
+	 		if(isset($mob->id)) $tekijan_nimi = $mob->tekijan_nimi; else $tekijan_nimi = '';
+
 			$k = Kohteet::model()->findbypk($_POST['Toteutuneet']['kohde_kannasta']);
 			$model->attributes=$_POST['Toteutuneet'];
 			$model->aloitan = date("d.m.Y H:i:s",strtotime($_POST['Toteutuneet']['aloitan']));
@@ -249,21 +272,22 @@ class ToteutuneetController extends Controller
 
 			if($model->save()){
 
-			   Mobile::model()->updateByPk($model->kid, array('sairaus'=>$model->sairaus));
 
-			   $did = date("Ymd",strtotime($model->aloitan));
-			   echo $did."_".$model->tid;
+			   	Mobile::model()->updateByPk($model->kid, array('sairaus'=>$model->sairaus));
 
+			   	$did = date("Ymd",strtotime($model->aloitan));
+			   	echo $did."_".$model->tid;
 
-			// <-- Kirjoitetaan historia luettut tietokantaan
-			$this->renderPartial('//mobile/historia',array(
-			'id'=>$model->kid,
-			'tilanne'=>"Toteuma",
-			'uusikohde'=>$model->kohde_kannasta,
-			'uusialoitus'=>$model->aloitan,
-			'uusilopetus'=>$model->loppui,
-			));
-			// Kirjoitetaan historia luettut tietokantaan -->
+				// <-- Kirjoitetaan historia luettut tietokantaan
+				$this->renderPartial('//mobile/historia',array(
+				'id'=>$model->kid,
+				'tilanne'=>"Toteutuneet",
+				'kohde_kannasta'=>array('vanha'=>$kohde_kannasta, 'uusi'=>$model->kohde_kannasta),
+				'aloitan'=>array('vanha'=>$aloitan, 'uusi'=>$model->aloitan),
+				'loppui'=>array('vanha'=>$loppui, 'uusi'=>$model->loppui),
+				'tekijan_nimi'=>array('vanha'=>$tekijan_nimi, 'uusi'=>$model->tekijan_nimi),
+				));
+				// Kirjoitetaan historia luettut tietokantaan -->
 
 			   exit;
 			}
@@ -290,6 +314,11 @@ class ToteutuneetController extends Controller
 		if(isset($_POST['Toteutuneet']))
 		{
 
+ 			$kohde_kannasta	= $model->kohde_kannasta;
+	 		$aloitan 	= $model->aloitan;
+	 		$loppui	 	= $model->loppui;
+	 		$tekijan_nimi	= $model->tekijan_nimi;
+
 			$k = Kohteet::model()->findbypk($_POST['Toteutuneet']['kohde_kannasta']);
 			$model->attributes=$_POST['Toteutuneet'];
 			$model->aloitan = date("d.m.Y H:i:s",strtotime($_POST['Toteutuneet']['aloitan']));
@@ -305,15 +334,16 @@ class ToteutuneetController extends Controller
 			   $did = date("Ymd",strtotime($model->aloitan));
 			   echo $did."_".$model->tid;
 
-			// <-- Kirjoitetaan historia luettut tietokantaan
-			$this->renderPartial('//mobile/historia',array(
-			'id'=>$model->kid,
-			'tilanne'=>"Toteuma",
-			'uusikohde'=>$model->kohde_kannasta,
-			'uusialoitus'=>$model->aloitan,
-			'uusilopetus'=>$model->loppui,
-			));
-			// Kirjoitetaan historia luettut tietokantaan -->
+				// <-- Kirjoitetaan historia luettut tietokantaan
+				$this->renderPartial('//mobile/historia',array(
+				'id'=>$model->kid,
+				'tilanne'=>"Toteutuneet",
+				'kohde_kannasta'=>array('vanha'=>$kohde_kannasta, 'uusi'=>$model->kohde_kannasta),
+				'aloitan'=>array('vanha'=>$aloitan, 'uusi'=>$model->aloitan),
+				'loppui'=>array('vanha'=>$loppui, 'uusi'=>$model->loppui),
+				'tekijan_nimi'=>array('vanha'=>$tekijan_nimi, 'uusi'=>$model->tekijan_nimi),
+				));
+				// Kirjoitetaan historia luettut tietokantaan -->
 
 			   exit;
 			}
@@ -321,6 +351,7 @@ class ToteutuneetController extends Controller
 
 		$this->renderPartial('update',array(
 			'model'=>$model,
+
 
 		));
 	}

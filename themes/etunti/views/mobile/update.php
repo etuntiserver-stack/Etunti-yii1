@@ -70,7 +70,7 @@ $this->menu=array(
 		'tekijan_nimi',
 		'etaisyys',
 		'status',
-		'tietoja',
+		//'tietoja',
 		'admin',
 		'hyvaksytty',
 	),

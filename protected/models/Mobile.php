@@ -70,7 +70,7 @@ public $tkohde_kannasta;
 			array('requests, kohdenID, tid, status, admin, sairaus', 'numerical', 'integerOnly'=>true),
 			array('asiakas_num, puh_numero, bluetooth_name, subscriber_id, tekijan_nimi', 'length', 'max'=>50),
 			array('domain, asiakas_hyvaksy, imei, sim_serial_number, kohde_kannasta, hyvaksytty', 'length', 'max'=>100),
-			array('my_location, tietoja', 'length', 'max'=>10000),
+			array('my_location, tietoja', 'length', 'max'=>20000),
 			array('osoite', 'length', 'max'=>255),
 			array('aloitan, loppui, etaisyys', 'length', 'max'=>20),
 			array('viesti', 'length', 'max'=>250),

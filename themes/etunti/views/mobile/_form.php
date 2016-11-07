@@ -140,6 +140,12 @@ if(isset($model->tietoja))
 		<?php echo $form->error($model,'tid'); ?>
 	</div>
 	<div class="section">
+		<?php echo $form->labelEx($model,'kohdenID'); ?>
+		<?php echo $form->dropDownList($model, 'kohdenID', CHtml::listData(Kohteet::model()->findAll(), 'id', 'osoite'), array('class'=>'form-control')); ?>
+		<?php echo $form->hiddenField($model,'kohde_kannasta',array('size'=>20,'maxlength'=>20,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'kohdenID'); ?>
+	</div>
+	<div class="section">
 		<?php echo $form->labelEx($model,'status'); ?>
 		<?php 
 		      $list = array(3=>Yii::t('main','TYÖ'),2=>Yii::t('main','MATKA'),10=>Yii::t('main','LOUNASTAUKO'));
@@ -185,6 +191,9 @@ $(document).ready(function(){
 
   $("#Mobile_tid").change(function(){
 	$("#Mobile_tekijan_nimi").val( $("#Mobile_tid option:selected").text() );
+  });
+  $("#Mobile_kohdenID").change(function(){
+	$("#Mobile_kohde_kannasta").val( $("#Mobile_kohdenID option:selected").text() );
   });
 
 });
