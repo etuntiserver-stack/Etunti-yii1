@@ -30,7 +30,7 @@
 
 </div>
 <br><br>
-<?php $this->renderPartial('/site/footer'); ?>
+
 
 <script type="text/javascript">
 $(document).ready(function(){
@@ -42,21 +42,33 @@ $(document).ready(function(){
 	  data: { username: $('#username').val() },
 	  type:'POST',
 	  success:function(data){
-		data = JSON.parse(data);
-	  	console.log(data);
+
+		try
+		{
+		   data = JSON.parse(data);
+	  	   console.log(data);
+		}
+		catch(e)
+		{
+		   $('#success').html('<br><span class="alert alert-danger btn-block">Tarkista tiedot</span>');
+		   return false;
+		}
+
+
 		if(data == 'domainEmpty')
 		{
-			alert('Yritystunnus on pakkolinen');
+			$('#success').html('<br><span class="alert alert-danger btn-block">Yritystunnus on pakkolinen</span>');
 		}
 		if(data == 'error')
 		{
-			alert('Käyttäjätunnus ei löydy');
+			$('#success').html('<br><span class="alert alert-danger btn-block">Käyttäjätunnus ei löydy</span>');
 		}
 		if(data[0] == 'ok')
 		{
 			$('input').val('');
 			$('#success').html('<br><span class="alert alert-success btn-block">Uusi salasana lähetetty: '+data[1]+'</span>');
 		}
+
 		//$("#salasanaLomake").submit();
 	  },
 	  error:function(data){
