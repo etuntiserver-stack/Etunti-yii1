@@ -37,7 +37,7 @@ class SiteController extends Controller
                 		'expression'=>"Yii::app()->controller->isDigisten()",
 			),
 			array('allow', 
-				'actions'=>array( 'header', 'footer', 'lomake_tarjouspyynto', 'lomake_testiryhma', 'ajankohtaista', 'asiakkaat', 'yritys', 'yhteystiedot', 'lomake_lataailmainen', 'uusi_kommento', 'crontab', 'logout'),
+				'actions'=>array( 'header', 'footer', 'lomake_tarjouspyynto', 'lomake_testiryhma', 'ajankohtaista', 'asiakkaat', 'yritys', 'yhteystiedot', 'lomake_lataailmainen', 'uusi_kommento', 'crontab', 'logout', 'salasanan_palauttaminen'),
 				'users'=>array('*'),
 			),
 			array('allow', 
@@ -137,6 +137,58 @@ class SiteController extends Controller
 		echo $result;
 	}
 
+	protected function rand_pass( $length ) {
+
+    		$chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    		return substr(str_shuffle($chars),0,$length);
+
+	}
+
+
+
+	public function actionSalasanan_palauttaminen()
+	{
+
+		if(isset($_GET['check']))
+		{
+			if(empty($_GET['domain'])){
+				echo json_encode('domainEmpty');
+				exit;
+			}			
+
+			$domain 	= $_GET['domain'];
+			$username	= $_POST['username'];
+
+	       		$criteria = new CDbCriteria();
+		        $criteria->condition = " adm_login='".$username."' ";
+			$model = Administrators::model()->find($criteria);
+
+			if(isset($model->id) and !empty($model->adm_email))
+			{
+
+				$uusiSalasana = $this->rand_pass(8);
+				Administrators::model()->updateByPk($model->id, array('adm_salasana'=>md5($uusiSalasana)));
+				$message = Yii::t('main', 'Uusi salasana').': '.$uusiSalasana;
+
+
+				$mail = new YiiMailer();
+				$mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
+				$mail->setTo($model->adm_email);
+				$mail->setSubject(Yii::t('main', 'Uusi salasana'). ' '.$model->adm_nimi);
+				$mail->setBody($message);
+				$mail->send();
+
+				echo json_encode(array('ok',$model->adm_email));
+
+			} else {
+				echo json_encode('error');
+			}
+			exit;
+		}
+
+                Yii::app()->theme = 'classic';
+		$this->render('salasanan_palauttaminen');
+	}
 
 	public function actionEtusivu_ajax()
 	{

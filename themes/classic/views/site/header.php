@@ -31,6 +31,7 @@
                             <input type="password" name="UserLogin[password]" placeholder="<?php echo Yii::t('main', 'Salasana')?>" required>
                             <input type="submit" class="btn btn-lg" value="Kirjaudu">
                         </form>
+                            <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/site/salasanan_palauttaminen" class="link"><?php echo Yii::t('main', 'Unohditko salasanasi?'); ?></a>
                     </div>
                     <!-- ENd Login-->
 
