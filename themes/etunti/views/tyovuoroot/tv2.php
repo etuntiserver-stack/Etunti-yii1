@@ -48,7 +48,7 @@
 
 
 <?php if(!isset($_GET['fullscreen'])) : ?>
-	<input type="hidden" id="taulunKorko" value="210">
+	<input type="hidden" id="taulunKorko" value="190">
 <?php else: ?>
 	<input type="hidden" id="taulunKorko" value="140">
 <?php endif; ?>

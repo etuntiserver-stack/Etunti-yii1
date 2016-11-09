@@ -940,6 +940,7 @@ class TyovuorootController extends Controller
 			{
 
 
+
 			    foreach($_POST['tyopaari'] as $tid)
 			    {
 				$return[] = $this->toistuvaInsert(
@@ -1526,7 +1527,158 @@ class TyovuorootController extends Controller
 	public function actionIndex()
 	{
 		$this->poistaminenOnlineVarauksetJokaMeniOhi();
-		$this->render('index');
+
+
+
+		// <-- Year Week
+		$wkMaara = 53;
+		if(isset($_POST['yearWeek']) and !empty($_POST['yearWeek'])){
+			$ex = explode("/", $_POST['yearWeek']);
+			Yii::app()->session['year'] = $ex[0];
+			Yii::app()->session['week'] = $ex[1];
+			Yii::app()->session['yearWeek'] = $_POST['yearWeek'];
+		}
+
+		if(!isset(Yii::app()->session['year']))
+			Yii::app()->session['year'] = date("Y");
+
+		if(!isset(Yii::app()->session['week']))
+			Yii::app()->session['week'] = date("W");
+
+		if(!isset(Yii::app()->session['yearWeek']))
+			Yii::app()->session['yearWeek'] = date("Y").'/'.date("W");
+
+
+		$year = Yii::app()->session['year'];
+		$week = Yii::app()->session['week'];
+		
+		if($week > $wkMaara) {
+		    $year++;
+		    $week = 1;
+		} elseif($week < 1) {
+		    $year--;
+		    $week = $wkMaara;
+		}
+		$week = sprintf("%02d", $week);
+		//    Year Week -->
+
+
+		if(!isset($_SESSION['vkolopput']))
+			$numDays = 5;
+		else
+			$numDays = 7;
+
+
+		Yii::app()->session['from'] = date("Y-m-d", strtotime($year ."W". $week.'1'));
+		Yii::app()->session['to'] = date("Y-m-d", strtotime($year ."W". $week . $numDays));
+
+		// <-- Asiakas
+		if(isset($_POST['asiakas']) and !empty($_POST['asiakas']))
+			Yii::app()->session['asiakas'] = $_POST['asiakas'];
+		if(isset($_POST['asiakas']) and empty($_POST['asiakas']))
+			unset(Yii::app()->session['asiakas']);
+		// Asiakas -->
+
+		// <-- Kohde
+		if(isset($_POST['kohde']) and !empty($_POST['kohde']))
+			Yii::app()->session['kohde'] = $_POST['kohde'];
+		if(isset($_POST['kohde']) and empty($_POST['kohde']))
+			unset(Yii::app()->session['kohde']);
+		// Kohde -->
+
+
+       		$criteria = new CDbCriteria();
+
+		// <-- Oletus arvot
+		if(!isset(Yii::app()->session['tyontekijat']))
+		{
+        		$criteria->order = "id DESC LIMIT 5";
+	        	$criteria->select = "id,tekijan_nimi";
+	        	$criteria->condition = " aktiivinen = '1' ";
+			$tt = Tyontekijat::model()->findAll($criteria);
+			$tekijatOletuksena = array();
+			foreach($tt as $t)
+			$tekijatOletuksena[] = $t->id;
+	
+			Yii::app()->session['tyontekijat'] = $tekijatOletuksena;
+		}
+		// Oletus arvot -->
+
+
+
+		if(isset($_POST['tyontekijat']) and !empty($_POST['tyontekijat']))
+		{
+			Yii::app()->session['tyontekijat'] = $_POST['tyontekijat'];
+		}
+
+		if(Yii::app()->session['tyontekijat'])
+		{
+        		$criteria->order = "tekijan_nimi";
+        		$criteria->select = "id,tekijan_nimi";
+        		$criteria->condition = " aktiivinen = '1' ";
+
+		    	if(count(Yii::app()->session['tyontekijat'] > 1))
+		      	$ids = implode(",", Yii::app()->session['tyontekijat']);
+		    	else
+		      	$ids = Yii::app()->session['tyontekijat'][0];
+
+
+	        	$criteria->addCondition ('id IN ('.$ids.') ');
+		}
+
+
+		// <-- Asiakas
+		if(isset(Yii::app()->session['asiakas']))
+		{
+	           $criteria->addCondition ("
+		   id IN (  
+		     SELECT tid FROM sivex_tvuoro WHERE DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') 
+		     BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."'
+		       AND kohde IN 
+		       (
+			    SELECT id FROM sivex_kohdet WHERE asiakas_id IN
+   			    (
+			       SELECT id FROM asiakkaat WHERE yrityksen_nimi 
+					LIKE '%".Yii::app()->session['asiakas']."%' 
+					OR yhteyshenkilo LIKE '%".Yii::app()->session['asiakas']."%' 
+					OR puhelin LIKE '%".Yii::app()->session['asiakas']."%'
+			    )
+		       )
+		   )
+		   ");
+		}
+		// Asiakas -->
+
+		// <-- Kohde
+		if(isset(Yii::app()->session['kohde']))
+		{
+	           $criteria->addCondition ("
+		   id IN (  
+		     SELECT tid FROM sivex_tvuoro WHERE DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') 
+		     BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."'
+		       AND kohde IN 
+		       (
+			    SELECT id FROM sivex_kohdet WHERE osoite 
+					LIKE '%".Yii::app()->session['kohde']."%' 
+					OR puh_nro LIKE '%".Yii::app()->session['kohde']."%'
+		       )
+		   )
+		   ");
+		}
+		//  Kohde -->
+
+		$tyontekijat_model = Tyontekijat::model()->findAll($criteria);
+
+
+
+		$this->render('index', array(
+			'tyontekijat_model'	=>$tyontekijat_model,
+			'tyontekijat'		=>Yii::app()->session['tyontekijat'],
+			'year'			=>$year,
+			'week'			=>$week,
+			'numDays'		=>$numDays
+		));
+
 	}
 
 	public function actionTv2()

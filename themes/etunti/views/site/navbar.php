@@ -76,11 +76,39 @@ if( $curpage == 'tyovuoroot/tv2' )
 	  <form action="#" class="admin-form" method="POST">
             <li class="list-group-item">
               <div class="form-group">
+
+		<?php if($curpage == 'tyovuoroot/tv2') : ?>
 		    <label><?php echo Yii::t('main','Aikaväli'); ?></label>
 		     <div class="input-group">
    			<input type="text" name="from" class="form-control datepickerFI" value="<?php if(isset(Yii::app()->session['from'])) echo date('d.m.Y', strtotime(Yii::app()->session['from'])); ?>" placeholder="<?php echo Yii::t('main' ,'Päivämäärä'); ?>">
    			<input type="text" name="to" class="form-control datepickerFI" value="<?php if(isset(Yii::app()->session['to'])) echo date('d.m.Y', strtotime(Yii::app()->session['to'])); ?>" placeholder="<?php echo Yii::t('main' ,'Päivämäärä'); ?>">
 		     </div>
+		<?php endif; ?>
+
+		<?php if($curpage == 'tyovuoroot/index') : ?>
+		    <label><?php echo Yii::t('main','Viikko'); ?></label>
+			<select class="form-control" name="yearWeek">
+			<?php
+			define('NL', "\n");
+			$year           = (int)Yii::app()->session['year'];
+			$week           = (int)Yii::app()->session['week'];
+
+			$firstDayOfYear = mktime(0, 0, 0, 1, 1, $year);
+			$nextMonday     = strtotime('monday', $firstDayOfYear);
+			$nextSunday     = strtotime('sunday', $nextMonday);
+			
+			    echo '<option value="'.$year.'/'.$week.'">'.Yii::t('main', 'Viikko').': '.$week.', '.date('d.m', strtotime($year ."W". $week . '1')), NL.'-'.date('d.m', strtotime($year ."W". $week . '7')), NL.'</option>';
+
+			while (date('Y', $nextMonday) == $year) {
+			    echo '<option value="'.$year.'/'.date('W', $nextMonday), NL.'">'.Yii::t('main', 'Viikko').': '.date('W', $nextMonday), NL.', '.date('d.m', $nextMonday), NL.'-'.date('d.m', $nextSunday), NL.'</option>';
+	
+			    $nextMonday = strtotime('+1 week', $nextMonday);
+			    $nextSunday = strtotime('+1 week', $nextSunday);
+			}
+			?>
+			</select>
+		<?php endif; ?>
+
 	      </div>
 
               <div class="form-group">

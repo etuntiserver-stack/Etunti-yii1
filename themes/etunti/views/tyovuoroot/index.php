@@ -17,104 +17,18 @@
 	);
 
 
-  $wkMaara = 53;
-  $year = (isset($_GET['year'])) ? $_GET['year'] : date("Y");
-  $week = (isset($_GET['week'])) ? $_GET['week'] : date('W');
-
-  if($week > $wkMaara) {
-    $year++;
-    $week = 1;
-  } elseif($week < 1) {
-    $year--;
-    $week = $wkMaara;
-  }
-    $week = sprintf("%02d", $week);
-
 
    $dTVfrom = date("Y-m-d",strtotime($year ."W". $week. '1'));
    echo '<input type="hidden" id="fromTV" value="'.$dTVfrom.'">';
    $dTVto = date("Y-m-d",strtotime($year ."W". $week. '7'));
    echo '<input type="hidden" id="toTV" value="'.$dTVto.'">';
 
-   $nbsp = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
-?>
-
-<?php
-// oletus arvot
-   if(!isset(Yii::app()->session['TekijaVuoro'])){
-
-       		$criteria = new CDbCriteria();
-        	$criteria->order = "tekijan_nimi";
-        	$criteria->select = "id,tekijan_nimi";
-        	$criteria->condition = " aktiivinen = '1' ";
-		$tt = Tyontekijat::model()->findAll($criteria);
-		$tekijatOletuksena = array();
-		foreach($tt as $t)
-		$tekijatOletuksena[] = $t->id;
-
-		Yii::app()->session['TekijaVuoro'] = $tekijatOletuksena;
-   }
-
-
-
-		if(Yii::app()->request->getPost('TekijaVuoro'))
-		Yii::app()->session['TekijaVuoro'] = Yii::app()->request->getPost('TekijaVuoro');
-
-       		$criteria = new CDbCriteria();
-        	$criteria->order = "tekijan_nimi";
-        	$criteria->select = "id,tekijan_nimi";
-        	$criteria->condition = " aktiivinen = '1' ";
-
-		if(Yii::app()->session['TekijaVuoro'] and (!isset($_GET['asiakas']) and !isset($_GET['kohde']))){
-		  if(count(Yii::app()->session['TekijaVuoro']) > 1)
-		    $ids = implode(",",Yii::app()->session['TekijaVuoro']);
-		  else
-		    $ids = Yii::app()->session['TekijaVuoro'][0];
-
-	        $criteria->addCondition ('id IN ('.$ids.') ');
-		}
-		// <-- Asiakas
-		if(isset($_GET['asiakas']) and !empty($_GET['asiakas']))
-		{
-	           $criteria->addCondition ("
-		   id IN (  
-		     SELECT tid FROM sivex_tvuoro WHERE DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '$dTVfrom' AND '$dTVto'
-		       AND kohde IN 
-		       (
-			    SELECT id FROM sivex_kohdet WHERE asiakas_id IN
-   			    (
-			       SELECT id FROM asiakkaat WHERE yrityksen_nimi LIKE '%".$_GET['asiakas']."%' OR yhteyshenkilo LIKE '%".$_GET['asiakas']."%' OR puhelin LIKE '%".$_GET['asiakas']."%'
-			    )
-		       )
-		   )
-		   ");
-		}
-		// Asiakas -->
-
-		// <-- Kohde
-		if(isset($_GET['kohde']) and !empty($_GET['kohde']))
-		{
-	           $criteria->addCondition ("
-		   id IN (  
-		     SELECT tid FROM sivex_tvuoro WHERE DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '$dTVfrom' AND '$dTVto'
-		       AND kohde IN 
-		       (
-			    SELECT id FROM sivex_kohdet WHERE osoite LIKE '%".$_GET['kohde']."%' OR puh_nro LIKE '%".$_GET['kohde']."%'
-		       )
-		   )
-		   ");
-		}
-		//  Kohde -->
-
-		$tt = Tyontekijat::model()->findAll($criteria);
-
-
-
 ?>
 
 
 
-<!--
+
+<?php /*
 <div id="ylapalkki" style="display:none">
  <div class="form-inline">
   <div class="form-group">
@@ -242,16 +156,15 @@
 </div>
 
 <br>
--->
+*/ ?>
 
 
 
-<?php
-if(!isset($_SESSION['vkolopput']))
-$numDays = 5;
-else
-$numDays = 7;
-?>
+<?php if(!isset($_GET['fullscreen'])) : ?>
+	<input type="hidden" id="taulunKorko" value="160">
+<?php else: ?>
+	<input type="hidden" id="taulunKorko" value="140">
+<?php endif; ?>
 
 <?php
 
@@ -290,8 +203,12 @@ $numDays = 7;
 
 ?>
 
+<?php if( count($tyontekijat_model) == 0 ) : ?>
+	<div class="alert alert-danger"><?php echo Yii::t('main', 'Ei tuloksia, tarkasta haku.'); ?></div>
+<?php endif; ?>
 
-<?php if( !empty($from) and !empty($to) and count($tyontekijat_model) > 0 ) : ?>
+
+<?php if( !empty($year) and !empty($week) and count($tyontekijat_model) > 0 ) : ?>
 <div class="row">
             <div class="admin-form">
               <div class="panel heading-border myBgColors">
@@ -355,7 +272,7 @@ $numDays = 7;
 
 
 
-	foreach($tt as $t)
+	foreach($tyontekijat_model as $t)
 	{
 	  echo '<tr>';
 	  echo '<td width=1 id="first_'.$t->id.'">';
@@ -450,7 +367,7 @@ $(function () {
 
     var onResize = function () {
         var oSettings = dataTable.fnSettings();
-        oSettings.oScroll.sY = tableHeight()-260; 
+        oSettings.oScroll.sY = tableHeight()-$('#taulunKorko').val(); 
         dataTable.fnDraw();
     };
 
