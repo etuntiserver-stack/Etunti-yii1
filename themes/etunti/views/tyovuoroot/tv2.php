@@ -164,7 +164,7 @@ function dateDiff($start, $end) {
  <div class="form-inline">
   <div class="form-group">
 
-	<label><?php echo Yii::t('main', 'Haku'); ?></label><br>
+	<label><?php echo Yii::t('main', 'Työntekijät'); ?></label><br>
 
   <form action="#" id="yhtveto" class="form-inline" method="POST">
    <?php

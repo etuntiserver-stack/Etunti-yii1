@@ -120,7 +120,7 @@
  <div class="form-inline">
   <div class="form-group">
 
-	<label><?php echo Yii::t('main', 'Haku'); ?></label><br>
+	<label><?php echo Yii::t('main', 'Työntekijät'); ?></label><br>
 
   <form action="index" id="yhtveto" method="POST">
 

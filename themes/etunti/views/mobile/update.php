@@ -2,6 +2,7 @@
 /* @var $this MobileController */
 /* @var $model Mobile */
 
+/*
 $this->breadcrumbs=array(
 	Yii::t('main', 'Mobiili')=>array('index'),
 	$model->id=>array('view','id'=>$model->id),
@@ -14,7 +15,7 @@ $this->menu=array(
 	array('label'=>'Katso mobiili', 'url'=>array('view', 'id'=>$model->id)),
 	array('label'=>'Hallinta mobiili', 'url'=>array('admin')),
 );
-
+*/
 
   $tag = explode("_",$model->asiakas_num);
   if(isset($tag[1]))
@@ -45,6 +46,7 @@ $this->menu=array(
 
 <hr>
 
+<!--
 <h1><?php echo Yii::t('main', 'Tärkeimmät tiedot'); ?></h1>
 
 <?php $this->widget('zii.widgets.CDetailView', array(
@@ -74,4 +76,4 @@ $this->menu=array(
 		'admin',
 		'hyvaksytty',
 	),
-)); ?>
+)); ?> -->
