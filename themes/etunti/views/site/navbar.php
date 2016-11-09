@@ -58,50 +58,147 @@ if( $curpage == 'tyovuoroot/tv2' )
             </li>
 	    <?php if( !empty($tyovuorot_sivut) ) : ?>
 
+<!--
             <li>
               <a href="#">
                 <span class="mr10"></span> <?php echo $tyovuorot_sivut; ?> </a>
             </li>
+-->
 
-        <li class="dropdown menu-merge <?php if((isset($_GET['asiakas']) and !empty($_GET['asiakas'])) or (isset($_GET['kohde']) and !empty($_GET['kohde']))) echo 'open'; ?>">
-          <a href="#" class="dropdown-toggle <?php if((isset($_GET['asiakas']) and !empty($_GET['asiakas'])) or (isset($_GET['kohde']) and !empty($_GET['kohde']))) echo 'bg-danger'; ?>" data-toggle="dropdown"> 
+
+	<!-- Haku -->
+        <li class="dropdown menu-merge">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown"> 
 		 <?php echo Yii::t('main','HAKU'); ?>
             <span class="caret caret-tp hidden-xs"></span>
           </a>
           <ul class="dropdown-menu list-group dropdown-persist w300" role="menu">
+	  <form action="#" class="admin-form" method="POST">
             <li class="list-group-item">
-              <a href="#" class="animated animated-short fadeInUp">
+              <div class="form-group">
+		    <label><?php echo Yii::t('main','Aikaväli'); ?></label>
+		     <div class="input-group">
+   			<input type="text" name="from" class="form-control datepickerFI" value="<?php if(isset(Yii::app()->session['from'])) echo date('d.m.Y', strtotime(Yii::app()->session['from'])); ?>" placeholder="<?php echo Yii::t('main' ,'Päivämäärä'); ?>">
+   			<input type="text" name="to" class="form-control datepickerFI" value="<?php if(isset(Yii::app()->session['to'])) echo date('d.m.Y', strtotime(Yii::app()->session['to'])); ?>" placeholder="<?php echo Yii::t('main' ,'Päivämäärä'); ?>">
+		     </div>
+	      </div>
+
+              <div class="form-group">
 		    <label><?php echo Yii::t('main','Asiakas'); ?></label>
-		    <div class="input-group">
-		      <input type="text" class="form-control" id="EtsiAsiakas" placeholder="<?php echo Yii::t('main','Yritys, Yhteyshenkilö, Puhelin'); ?>..." value="<?php if(isset($_GET['asiakas'])) echo $_GET['asiakas']; ?>">
-		      <span class="input-group-btn">
-		        <button class="btn btn-default EtsiAsiakas" controller="<?php echo $curpage; ?>" type="button"><li class="fa fa-search"></i></button>
-		      </span>
-		    </div>
-	      </a>
-            </li>
-            <li class="list-group-item">
-              <a href="#" class="animated animated-short fadeInUp">
+		      <input type="text" class="form-control" name="asiakas" placeholder="<?php echo Yii::t('main','Yritys, Yhteyshenkilö, Puhelin'); ?>..." value="<?php if(isset(Yii::app()->session['asiakas'])) echo Yii::app()->session['asiakas']; ?>">
+	      </div>
+
+              <div class="form-group">
 		    <label><?php echo Yii::t('main','Kohde'); ?></label>
-		    <div class="input-group">
-		      <input type="text" class="form-control" id="EtsiKohde" placeholder="<?php echo Yii::t('main','Osoite, Puhelin'); ?>..." value="<?php if(isset($_GET['kohde'])) echo $_GET['kohde']; ?>">
-		      <span class="input-group-btn">
-		        <button class="btn btn-default EtsiKohde" controller="<?php echo $curpage; ?>" type="button"><li class="fa fa-search"></i></button>
-		      </span>
-		    </div>
-	      </a>
-            </li>
+		      <input type="text" class="form-control" name="kohde" placeholder="<?php echo Yii::t('main','Osoite, Puhelin'); ?>..." value="<?php if(isset(Yii::app()->session['kohde'])) echo Yii::app()->session['kohde']; ?>">
+	      </div>
 
-	    <?php if((isset($_GET['asiakas']) and !empty($_GET['asiakas'])) or (isset($_GET['kohde']) and !empty($_GET['kohde']))) : ?>
+              <div class="form-group">
+		 <label><?php echo Yii::t('main','Toimialue'); ?></label>
+		        <?php
+			// Toimialue
+			$list = array();
+			$criteria = new CDbCriteria();
+			$criteria->order = " select_type ";
+			$criteria->condition = " select_type='tyo_toimialue' ";
+			$l = Valikkoot::model()->findAll($criteria);
+			foreach($l as $v)
+			$list[$v->value] = $v->value;
+			
+			echo CHtml::dropDownList('siivous', 'siivous', $list,
+			array('empty'=>Yii::t('main', 'Valitse'),'class'=>'form-control','id'=>'tekijanToimialue')).' ';
+		       ?>
+	      </div>
+<!--
+              <div class="form-group">
+		    <label><?php echo Yii::t('main','Työnimike'); ?></label>
+		    <?php
+			// Kohteen ryhman mukaan
+			$list = array();
+			$criteria = new CDbCriteria();
+			$criteria->order = " select_type ";
+			$criteria->condition = " select_type='siivous' ";
+			$l = Valikkoot::model()->findAll($criteria);
+			foreach($l as $v)
+			$list[$v->value] = $v->value;
+
+			echo CHtml::dropDownList('siivous', 'siivous', $list,
+			array('empty'=>Yii::t('main', 'Valitse'),'class'=>'form-control','id'=>'siivousTyonimike'));
+		    ?>
+	      </div>
+-->
+
+              <div class="form-group">
+		    <label><?php echo Yii::t('main','Työntekijät'); ?></label>
+		    <?php
+			//
+			$criteria = new CDbCriteria();
+			$criteria->order = " tekijan_nimi ";
+			$criteria->condition = " aktiivinen='1' ";
+
+			$list = CHtml::listData(Tyontekijat::model()->findAll($criteria), 'id', 'tekijan_nimi');
+			echo '<select name="tyontekijat[]" class="multTyontekijat" multiple title="Työntekijät">';
+			foreach($list as $key=>$val){
+			  if(isset(Yii::app()->session['tyontekijat']) and in_array($key, Yii::app()->session['tyontekijat']))
+			    echo '<option value="'.$key.'" selected>'.$val.'</option>';
+			  else
+			    echo '<option value="'.$key.'">'.$val.'</option>';
+			}
+			echo '</select>';
+		    ?>
+	      </div>
+
+
+            </li>
             <li class="list-group-item">
-              <a href="#" class="animated animated-short fadeInUp">
-		        <button class="btn btn-default btn-block PalautaTvEtusivulle" controller="<?php echo $curpage; ?>" type="button"><?php echo Yii::t('main','Palauta'); ?></button>
-	      </a>
+              <span class="animated animated-short fadeInUp">
+		        <button type="submit" class="btn btn-default btn-block" controller="<?php echo $curpage; ?>" type="button"><?php echo Yii::t('main','Hae'); ?></button>
+	      </span>
             </li>
-	    <?php endif; ?>
-
+	  </form>
           </ul>
         </li>
+	<!-- Haku -->
+
+
+	<!-- Nakyma -->
+        <li class="p10" data-toggle="tooltip">
+	<select class="form-control tvchange">
+ 	  <option value="index" <?php if($curpage == 'tyovuoroot/index') echo 'selected'; ?>><?php echo Yii::t('main', 'Viikko'); ?></option>
+ 	  <option value="tv2" <?php if($curpage == 'tyovuoroot/tv2') echo 'selected'; ?>><?php echo Yii::t('main', 'Työntekijä'); ?></option>
+ 	  <!--<option value="tv_kohteet"><?php echo Yii::t('main', 'Kohde'); ?></option>-->
+	</select>
+        </li>
+	<!-- Nakyma -->
+
+
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+
+$('.multTyontekijat').multiselect({
+	//inheritClass: true,
+	//enableFiltering: true,
+        includeSelectAllOption: true,
+	nonSelectedText: '<?php echo Yii::t("main", "Tyhjä"); ?>',
+	selectAllText: '<?php echo Yii::t("main", "Valitse kaikki"); ?>',
+	allSelectedText: '<?php echo Yii::t("main", "Työntekijät"); ?>',
+	nSelectedText: '<?php echo Yii::t("main", "valittu"); ?>',
+	numberDisplayed: 0,
+	buttonWidth: '100%',
+});
+
+
+$('.tvchange').change(function(){
+	var thisVal = $(this).val();
+	window.location.href=thisVal;
+});
+
+});
+</script>
+
+
 
 	    <li class="muokkausLi" style="display:none">
 	     <a href="#" class="bg-warning">

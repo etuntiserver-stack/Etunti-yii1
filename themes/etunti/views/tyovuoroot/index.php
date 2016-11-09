@@ -113,9 +113,8 @@
 ?>
 
 
-<?php if(count(Yii::app()->session['TekijaVuoro']) > 0 and Yii::app()->session['TekijaVuoro'][0] != 0) : ?>
 
-
+<!--
 <div id="ylapalkki" style="display:none">
  <div class="form-inline">
   <div class="form-group">
@@ -233,7 +232,6 @@
 	<select class="form-control tvchange">
  	  <option value="index" selected><?php echo Yii::t('main', 'Viikko'); ?></option>
  	  <option value="tv2"><?php echo Yii::t('main', 'Työntekijä'); ?></option>
- 	  <!--<option value="tv_kohteet"><?php echo Yii::t('main', 'Kohde'); ?></option>-->
 	</select>
       </div>
      </div>
@@ -244,14 +242,9 @@
 </div>
 
 <br>
+-->
 
 
-
-
-            <div class="admin-form">
-              <div class="panel heading-border myBgColors">
-                <div class="panel-body bg-light">
-                 <div class="row">
 
 <?php
 if(!isset($_SESSION['vkolopput']))
@@ -297,8 +290,16 @@ $numDays = 7;
 
 ?>
 
-<?php if((isset($checkSiivous) and $checkSiivous == true) or !isset($checkSiivous)) : ?>
-<div class="row table-responsive">
+
+<?php if( !empty($from) and !empty($to) and count($tyontekijat_model) > 0 ) : ?>
+<div class="row">
+            <div class="admin-form">
+              <div class="panel heading-border myBgColors">
+                <div class="panel-body bg-light">
+                 <div class="row">
+
+
+<div class="table-responsive">
   <table class="table table-striped table-condensed table-bordered" style="background: white">
      <thead>
      <tr>
@@ -407,14 +408,13 @@ $numDays = 7;
      </tbody>
   </table>
 </div>
-<?php endif; ?>
+
 
                  </div>
                 </div>
               </div>
             </div>
-
-
+</div>
 <?php endif; ?>
 
 
@@ -471,21 +471,6 @@ $(function () {
 	$('#ylapalkki').show('slow');
 
 
-$('#tyontekijat').multiselect({
-	//inheritClass: true,
-	//enableFiltering: true,
-        includeSelectAllOption: true,
-	nonSelectedText: '<?php echo Yii::t("main", "Tyhjä"); ?>',
-	selectAllText: '<?php echo Yii::t("main", "Valitse kaikki"); ?>',
-	allSelectedText: '<?php echo Yii::t("main", "Työntekijät"); ?>',
-	nSelectedText: '<?php echo Yii::t("main", "valittu"); ?>',
-	numberDisplayed: 0,
-});
-
-$('.tvchange').change(function(){
-	var thisVal = $(this).val();
-	window.location.href=thisVal;
-});
 
 
 });

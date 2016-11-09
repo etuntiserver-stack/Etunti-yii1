@@ -24,15 +24,8 @@ $('td').hover(function()
 
 
 
+
 /*
-$('#tyontekijat').selectpicker({
-
-});
-*/
-
-
-
-
 $('#EtsiAsiakas').on('keypress', function (e) {
          if(e.which === 13){
 		$( ".EtsiAsiakas" ).trigger( "click" );
@@ -61,6 +54,8 @@ $('.PalautaTvEtusivulle').click(function(){
 	var controller = $(this).attr('controller');
 	window.location.href=location.protocol + "//" + location.host + '/index.php/'+controller;
 });
+*/
+
 
 
 $(document).delegate("#from","blur",function(){
