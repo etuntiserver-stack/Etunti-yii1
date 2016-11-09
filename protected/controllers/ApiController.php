@@ -625,9 +625,7 @@ public function actionImei($dom)
 				$asiakas = Asiakkaat::model()->findbypk($kohde->asiakas_id);
 				if(isset($asiakas->id) and !empty($asiakas->yrityksen_nimi)){
 		      			$nm = Yii::t('main', 'Asiakas').': <b>'.$asiakas->yrityksen_nimi.'</b><br>';
-				}
-
-				if(isset($asiakas->id) and empty($asiakas->yrityksen_nimi) and empty($asiakas->yhteyshenkilo)){
+				} elseif(isset($asiakas->id) and empty($asiakas->yrityksen_nimi) and !empty($asiakas->yhteyshenkilo)){
 		      			$nm = Yii::t('main', 'Asiakas').': <b>'.$asiakas->yhteyshenkilo.'</b><br>';
 				}
 		      }
