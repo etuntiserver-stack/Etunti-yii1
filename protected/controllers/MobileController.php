@@ -426,6 +426,9 @@ function num($val){
  		$loppui	 	= $model->loppui;
  		$tekijan_nimi	= $model->tekijan_nimi;
 
+		if(isset($_POST['status']))
+		$model->status =  (int)$_POST['status'];
+
 
 		if($_POST['request'] == 'aloitan'){
 			$model->aloitan = date("d.m.Y H:i:s",strtotime($_POST['value']));

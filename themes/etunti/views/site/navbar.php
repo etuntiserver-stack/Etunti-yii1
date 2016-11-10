@@ -74,6 +74,7 @@ if( $curpage == 'tyovuoroot/tv2' )
 		or isset(Yii::app()->session['kohde'])
 		or isset(Yii::app()->session['tyo_toimialue'])
 		or isset(Yii::app()->session['kohteiden_tyonimike'])
+		or isset(Yii::app()->session['tyoryhma'])
 	)
 	{
 		$hakuPainike = "bg-warning";
@@ -172,12 +173,14 @@ if( $curpage == 'tyovuoroot/tv2' )
 
               <div class="form-group">
 		    <label><?php echo Yii::t('main','Asiakas'); ?></label>
-		      <input type="text" class="form-control" name="asiakas" placeholder="<?php echo Yii::t('main','Yritys, Yhteyshenkilö, Puhelin'); ?>..." value="<?php if(isset(Yii::app()->session['asiakas'])) echo Yii::app()->session['asiakas']; ?>">
+		      <input type="text" class="form-control" name="asiakas" id="asiakas" placeholder="<?php echo Yii::t('main','Yritys, Yhteyshenkilö, Puhelin'); ?>..." value="<?php if(isset(Yii::app()->session['asiakas'])) echo Yii::app()->session['asiakas']; ?>" AUTOCOMPLETE="off">
+			<div id="asiakasAutocompleteResult"></div>
 	      </div>
 
               <div class="form-group">
 		    <label><?php echo Yii::t('main','Kohde'); ?></label>
-		      <input type="text" class="form-control" name="kohde" placeholder="<?php echo Yii::t('main','Osoite, Puhelin'); ?>..." value="<?php if(isset(Yii::app()->session['kohde'])) echo Yii::app()->session['kohde']; ?>">
+		      <input type="text" class="form-control" name="kohde" id="kohde" placeholder="<?php echo Yii::t('main','Osoite, Puhelin'); ?>..." value="<?php if(isset(Yii::app()->session['kohde'])) echo Yii::app()->session['kohde']; ?>" AUTOCOMPLETE="off">
+			<div id="kohdeAutocompleteResult"></div>
 	      </div>
 
               <div class="form-group">
@@ -195,6 +198,29 @@ if( $curpage == 'tyovuoroot/tv2' )
 			echo '<select name="tyo_toimialue[]" class="multToimialue" multiple title="Toimialue">';
 			foreach($list as $key=>$val){
 			  if(isset(Yii::app()->session['tyo_toimialue']) and in_array($key, Yii::app()->session['tyo_toimialue']))
+			    echo '<option value="'.$key.'" selected>'.$val.'</option>';
+			  else
+			    echo '<option value="'.$key.'">'.$val.'</option>';
+			}
+			echo '</select>';
+		       ?>
+	      </div>
+
+              <div class="form-group">
+		 <label><?php echo Yii::t('main','Työntekijän työryhmä'); ?></label>
+		        <?php
+			// Toimialue
+			$list = array();
+			$criteria = new CDbCriteria();
+			$criteria->order = " select_type ";
+			$criteria->condition = " select_type='tyoryhma' ";
+			$l = Valikkoot::model()->findAll($criteria);
+			foreach($l as $v)
+			$list[$v->value] = $v->value;
+			
+			echo '<select name="tyoryhma[]" class="multTyoryhma" multiple title="Työryhmät">';
+			foreach($list as $key=>$val){
+			  if(isset(Yii::app()->session['tyoryhma']) and in_array($key, Yii::app()->session['tyoryhma']))
 			    echo '<option value="'.$key.'" selected>'.$val.'</option>';
 			  else
 			    echo '<option value="'.$key.'">'.$val.'</option>';
@@ -279,6 +305,84 @@ if( $curpage == 'tyovuoroot/tv2' )
 <script type="text/javascript">
 $(document).ready(function(){
 
+// <-- Asiakas Autocomplete
+  $('#asiakas').keyup(function(){
+	var thisVal = $(this).val();
+
+	if( thisVal.length >= 2 )
+	{
+
+	  	 $.ajax({
+			url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/asiakas_autocomplete',
+			type:'GET',
+			async : false,
+			data: { "key" : thisVal },
+			  success:function(data){
+				data = JSON.parse(data);
+			  	//console.log(data);
+				if(data)
+					$('#asiakasAutocompleteResult').html(data).show();
+
+			  },
+			  error:function(data){
+			  	console.log(data);
+			  }
+	 	});
+
+	} else {
+					$('#asiakasAutocompleteResult').html('');
+	}
+
+     $('.asiakasSelecter').click(function(){
+		var thisAsiakas = $(this).text();
+		$('#asiakas').val(thisAsiakas);
+		$('#asiakasAutocompleteResult').html('');
+     });
+
+  });
+// Asiakas Autocomplete -->
+
+
+// <-- Kohde Autocomplete
+  $('#kohde').keyup(function(){
+	var thisVal = $(this).val();
+
+	if( thisVal.length >= 2 )
+	{
+
+	  	 $.ajax({
+			url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/kohde_autocomplete',
+			type:'GET',
+			async : false,
+			data: { "key" : thisVal },
+			  success:function(data){
+				data = JSON.parse(data);
+			  	//console.log(data);
+				if(data)
+					$('#kohdeAutocompleteResult').html(data).show();
+
+			  },
+			  error:function(data){
+			  	console.log(data);
+			  }
+	 	});
+
+	} else {
+					$('#kohdeAutocompleteResult').html('');
+	}
+
+     $('.kohdeSelecter').click(function(){
+		var thisAsiakas = $(this).text();
+		$('#kohde').val(thisAsiakas);
+		$('#kohdeAutocompleteResult').html('');
+     });
+
+  });
+// Kohde Autocomplete -->
+
+
+
+
 $("#uusiTilaus").click(function(){
 
    $.ajax({
@@ -315,6 +419,19 @@ $('.multToimialue').multiselect({
 	nonSelectedText: '<?php echo Yii::t("main", "Tyhjä"); ?>',
 	selectAllText: '<?php echo Yii::t("main", "Valitse kaikki"); ?>',
 	allSelectedText: '<?php echo Yii::t("main", "Kaikki toimialueet"); ?>',
+	nSelectedText: '<?php echo Yii::t("main", "valittu"); ?>',
+	numberDisplayed: 0,
+	buttonWidth: '100%',
+        maxHeight: 300,
+});
+
+$('.multTyoryhma').multiselect({
+	//inheritClass: true,
+	//enableFiltering: true,
+        includeSelectAllOption: true,
+	nonSelectedText: '<?php echo Yii::t("main", "Tyhjä"); ?>',
+	selectAllText: '<?php echo Yii::t("main", "Valitse kaikki"); ?>',
+	allSelectedText: '<?php echo Yii::t("main", "Kaikki työryhmät"); ?>',
 	nSelectedText: '<?php echo Yii::t("main", "valittu"); ?>',
 	numberDisplayed: 0,
 	buttonWidth: '100%',

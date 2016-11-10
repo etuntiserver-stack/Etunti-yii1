@@ -28,7 +28,7 @@ class TyovuorootController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','updatetime','showohje','did','muisti','operatio','viikko','fromto','autoinsert','autoremove','viikkottain', 'viikkottain_pdf', 'laheta','kk','pvmtid','laheta_k', 'muistin', 'muisticlear', 'muistissa', 'vkolopput', 'vkolopchange', 'uusitilaus', 'tv2', 'PoistaTv', 'valitse_kokopaiva', 'tv_kohteet', 'siivous_tyonimike', 'getKohdeByAsiakas', 'getAsiakasByKohde', 'paivita_laatikot', 'onko_sama', 'asiakas_autocomplete'),
+				'actions'=>array('admin','delete','create','update','index','view','updatetime','showohje','did','muisti','operatio','viikko','fromto','autoinsert','autoremove','viikkottain', 'viikkottain_pdf', 'laheta','kk','pvmtid','laheta_k', 'muistin', 'muisticlear', 'muistissa', 'vkolopput', 'vkolopchange', 'uusitilaus', 'tv2', 'PoistaTv', 'valitse_kokopaiva', 'tv_kohteet', 'siivous_tyonimike', 'getKohdeByAsiakas', 'getAsiakasByKohde', 'paivita_laatikot', 'onko_sama', 'asiakas_autocomplete', 'kohde_autocomplete'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny', // allow admin user to perform 'admin' and 'delete' actions
@@ -941,6 +941,7 @@ class TyovuorootController extends Controller
 
 
 
+
 			    foreach($_POST['tyopaari'] as $tid)
 			    {
 				$return[] = $this->toistuvaInsert(
@@ -1540,6 +1541,7 @@ class TyovuorootController extends Controller
 			unset(Yii::app()->session['tyontekijat']);
 			unset(Yii::app()->session['tyo_toimialue']);
 			unset(Yii::app()->session['kohteiden_tyonimike']);
+			unset(Yii::app()->session['tyoryhma']);
 
 			$this->redirect(array('index'));
 		}
@@ -1558,6 +1560,11 @@ class TyovuorootController extends Controller
 				Yii::app()->session['tyo_toimialue'] = $_POST['tyo_toimialue'];
 			if(!isset($_POST['tyo_toimialue']))
 				unset(Yii::app()->session['tyo_toimialue']);
+
+			if(isset($_POST['tyoryhma']) and !empty($_POST['tyoryhma']))
+				Yii::app()->session['tyoryhma'] = $_POST['tyoryhma'];
+			if(!isset($_POST['tyoryhma']))
+				unset(Yii::app()->session['tyoryhma']);
 
 			// <-- Asiakas
 			if(isset($_POST['asiakas']) and !empty($_POST['asiakas']))
@@ -1713,6 +1720,25 @@ class TyovuorootController extends Controller
 		}
 		//   tyo_toimialue -->
 
+		// <-- tyoryhma
+		if(isset(Yii::app()->session['tyoryhma']))
+		{
+
+		   $tyoryhma_like = "tyoryhma LIKE '%".implode("%' OR tyoryhma LIKE '%", Yii::app()->session['tyoryhma'])."%'";
+	           $criteria->addCondition ("
+		   id IN (  
+		     SELECT tid FROM sivex_tvuoro WHERE DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') 
+
+		     BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."'
+		       AND tid IN 
+		       (
+			    SELECT id FROM sivex_ttekijat WHERE $tyoryhma_like
+		       )
+
+		   )
+		   ");
+		}
+		//   tyoryhma -->
 
 		// <-- Asiakas
 		if(isset(Yii::app()->session['asiakas']))
@@ -1788,6 +1814,7 @@ class TyovuorootController extends Controller
 			unset(Yii::app()->session['tyontekijat']);
 			unset(Yii::app()->session['tyo_toimialue']);
 			unset(Yii::app()->session['kohteiden_tyonimike']);
+			unset(Yii::app()->session['tyoryhma']);
 
 			$this->redirect(array('tv2'));
 		}
@@ -1806,6 +1833,11 @@ class TyovuorootController extends Controller
 				Yii::app()->session['tyo_toimialue'] = $_POST['tyo_toimialue'];
 			if(!isset($_POST['tyo_toimialue']))
 				unset(Yii::app()->session['tyo_toimialue']);
+
+			if(isset($_POST['tyoryhma']) and !empty($_POST['tyoryhma']))
+				Yii::app()->session['tyoryhma'] = $_POST['tyoryhma'];
+			if(!isset($_POST['tyoryhma']))
+				unset(Yii::app()->session['tyoryhma']);
 
 			// <-- Asiakas
 			if(isset($_POST['asiakas']) and !empty($_POST['asiakas']))
@@ -1931,6 +1963,23 @@ class TyovuorootController extends Controller
 		}
 		//   tyo_toimialue -->
 
+		// <-- tyoryhma
+		if(isset(Yii::app()->session['tyoryhma']))
+		{
+
+		   $tyoryhma_like = "tyoryhma LIKE '%".implode("%' OR tyoryhma LIKE '%", Yii::app()->session['tyoryhma'])."%'";
+	           $criteria->addCondition ("
+		   id IN (  
+		     SELECT tid FROM sivex_tvuoro WHERE DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') 
+		     BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."'
+		       AND tid IN 
+		       (
+			    SELECT id FROM sivex_ttekijat WHERE $tyoryhma_like
+		       )
+		   )
+		   ");
+		}
+		//   tyoryhma -->
 
 		// <-- Asiakas
 		if(isset(Yii::app()->session['asiakas']))
@@ -2215,6 +2264,41 @@ class TyovuorootController extends Controller
 				$nm = array($a->osoite, $a->id);
 				
 				$return .= '<a href="#" class="list-group-item asiakasSelecter" for="'.$nm[1].'">'.$nm[0].'</a>';
+			}
+			$return .='</div></div>';
+		}
+
+
+
+
+
+		echo json_encode($return);
+
+	}
+
+
+	public function actionKohde_autocomplete($key)
+	{
+
+		$criteria=new CDbCriteria;
+		$criteria->order =" osoite!='' DESC, osoite ASC";
+		$criteria->condition =" 
+			osoite LIKE '%".$key."%'	
+		";
+
+ 		$as = Kohteet::model()->findAll($criteria);
+		$nm = array();
+		$return = '';
+		if( count($as) > 0 )
+		{
+
+		$return .= '
+			<div class="row" style="position:absolute; z-index:9999999;margin-left:0px">
+			  <div class="list-group">';
+			foreach($as as $a)
+			{
+				if(!empty($a->osoite))	
+				$return .= '<a href="#" class="list-group-item kohdeSelecter" for="'.$a->id.'">'.$a->osoite.'</a>';
 			}
 			$return .='</div></div>';
 		}
