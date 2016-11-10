@@ -173,14 +173,14 @@ if( $curpage == 'tyovuoroot/tv2' )
 
               <div class="form-group">
 		    <label><?php echo Yii::t('main','Asiakas'); ?></label>
-		      <input type="text" class="form-control" name="asiakas" id="asiakas" placeholder="<?php echo Yii::t('main','Yritys, Yhteyshenkilö, Puhelin'); ?>..." value="<?php if(isset(Yii::app()->session['asiakas'])) echo Yii::app()->session['asiakas']; ?>" AUTOCOMPLETE="off">
-			<div id="asiakasAutocompleteResult"></div>
+		      <input type="text" class="form-control" name="asiakas" id="asiakasHakussa" placeholder="<?php echo Yii::t('main','Yritys, Yhteyshenkilö, Puhelin'); ?>..." value="<?php if(isset(Yii::app()->session['asiakas'])) echo Yii::app()->session['asiakas']; ?>" AUTOCOMPLETE="off">
+			<div id="asiakasAutocompleteResultHakussa"></div>
 	      </div>
 
               <div class="form-group">
 		    <label><?php echo Yii::t('main','Kohde'); ?></label>
-		      <input type="text" class="form-control" name="kohde" id="kohde" placeholder="<?php echo Yii::t('main','Osoite, Puhelin'); ?>..." value="<?php if(isset(Yii::app()->session['kohde'])) echo Yii::app()->session['kohde']; ?>" AUTOCOMPLETE="off">
-			<div id="kohdeAutocompleteResult"></div>
+		      <input type="text" class="form-control" name="kohde" id="kohdeHakussa" placeholder="<?php echo Yii::t('main','Osoite, Puhelin'); ?>..." value="<?php if(isset(Yii::app()->session['kohde'])) echo Yii::app()->session['kohde']; ?>" AUTOCOMPLETE="off">
+			<div id="kohdeAutocompleteResultHakussa"></div>
 	      </div>
 
               <div class="form-group">
@@ -306,7 +306,7 @@ if( $curpage == 'tyovuoroot/tv2' )
 $(document).ready(function(){
 
 // <-- Asiakas Autocomplete
-  $('#asiakas').keyup(function(){
+  $('#asiakasHakussa').keyup(function(){
 	var thisVal = $(this).val();
 
 	if( thisVal.length >= 2 )
@@ -321,7 +321,7 @@ $(document).ready(function(){
 				data = JSON.parse(data);
 			  	//console.log(data);
 				if(data)
-					$('#asiakasAutocompleteResult').html(data).show();
+					$('#asiakasAutocompleteResultHakussa').html(data).show();
 
 			  },
 			  error:function(data){
@@ -330,13 +330,13 @@ $(document).ready(function(){
 	 	});
 
 	} else {
-					$('#asiakasAutocompleteResult').html('');
+					$('#asiakasAutocompleteResultHakussa').html('');
 	}
 
      $('.asiakasSelecter').click(function(){
 		var thisAsiakas = $(this).text();
-		$('#asiakas').val(thisAsiakas);
-		$('#asiakasAutocompleteResult').html('');
+		$('#asiakasHakussa').val(thisAsiakas);
+		$('#asiakasAutocompleteResultHakussa').html('');
      });
 
   });
@@ -344,7 +344,7 @@ $(document).ready(function(){
 
 
 // <-- Kohde Autocomplete
-  $('#kohde').keyup(function(){
+  $('#kohdeHakussa').keyup(function(){
 	var thisVal = $(this).val();
 
 	if( thisVal.length >= 2 )
@@ -359,7 +359,7 @@ $(document).ready(function(){
 				data = JSON.parse(data);
 			  	//console.log(data);
 				if(data)
-					$('#kohdeAutocompleteResult').html(data).show();
+					$('#kohdeAutocompleteResultHakussa').html(data).show();
 
 			  },
 			  error:function(data){
@@ -368,13 +368,13 @@ $(document).ready(function(){
 	 	});
 
 	} else {
-					$('#kohdeAutocompleteResult').html('');
+					$('#kohdeAutocompleteResultHakussa').html('');
 	}
 
      $('.kohdeSelecter').click(function(){
 		var thisAsiakas = $(this).text();
-		$('#kohde').val(thisAsiakas);
-		$('#kohdeAutocompleteResult').html('');
+		$('#kohdeHakussa').val(thisAsiakas);
+		$('#kohdeAutocompleteResultHakussa').html('');
      });
 
   });
