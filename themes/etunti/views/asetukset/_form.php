@@ -386,7 +386,7 @@
 	
    }
    ?>
-		<p><a href="#onlinevarausehdot"><?php echo Yii::t('main','Onlinevarausehdot lat'); ?> </a></p>
+		<p><a href="#onlinevarausehdot"><?php echo Yii::t('main','Onlinevarausehdot lataa'); ?> </a></p>
 
 	</div>
 
