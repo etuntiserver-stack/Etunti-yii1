@@ -20,12 +20,6 @@
 	</div>
 
 	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'adm_salasana'); ?>
-		<?php echo $form->passwordField($model,'adm_salasana',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
-		<?php echo $form->error($model,'adm_salasana'); ?>
-	</div>
-
-	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'adm_email'); ?>
 		<?php echo $form->textField($model,'adm_email',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'adm_email'); ?>
@@ -33,7 +27,7 @@
 
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'adm_nimi'); ?>
-		<?php echo $form->textField($model,'adm_nimi',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
+		<?php echo $form->textField($model,'adm_nimi',array('size'=>60,'maxlength'=>100,'class'=>'form-control', 'AUTOCOMPLETE'=>'off')); ?>
 		<?php echo $form->error($model,'adm_nimi'); ?>
 	</div>
 
@@ -61,6 +55,30 @@
 		<?php echo $form->error($model,'status'); ?>
 	</div>
 
+	<?php if(isset($model->id)) : ?>
+	<br>
+	<p><span class="btn btn-primary myBgColors" data-toggle="collapse" data-target="#salasanaVaihdo"><?php echo Yii::t('main', 'Salasana'); ?> <i class="caret"></i></span></p>
+
+
+	<div id="salasanaVaihdo" class="collapse">
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'adm_salasana'); ?>
+		<?php echo $form->passwordField($model,'adm_salasana',array('value'=>'','size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'adm_salasana'); ?>
+	</div>
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'adm_salasana_repeat'); ?>
+		<?php echo $form->passwordField($model,'adm_salasana_repeat',array('value'=>'','size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'adm_salasana_repeat'); ?>
+	</div>
+	</div>
+	<?php else: ?>
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'adm_salasana'); ?>
+		<?php echo $form->passwordField($model,'adm_salasana',array('size'=>60,'maxlength'=>100,'class'=>'form-control', 'AUTOCOMPLETE'=>'off')); ?>
+		<?php echo $form->error($model,'adm_salasana'); ?>
+	</div>
+	<?php endif; ?>
 <br>
 
 	<div class="section fill mb5">
