@@ -62,6 +62,16 @@
 		<?php echo $form->error($model,'huoltokatko'); ?>
 	</div>
 
+	<div class="row">
+		<?php echo $form->labelEx($model,'aktiivinen'); ?>
+		<?php
+		$list = array(0=>'Ei',1=>'Kyllä');
+        	echo $form->dropDownList($model, 'aktiivinen', $list,
+		array('class'=>'form-control'));	
+        	?>
+		<?php echo $form->error($model,'aktiivinen'); ?>
+	</div>
+
 	<div class="row buttons">
 		<?php echo CHtml::submitButton($model->isNewRecord ? 'Luo' : 'Tallenna',array('class'=>'btn btn-primary')); ?>
 	</div>

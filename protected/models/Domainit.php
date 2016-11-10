@@ -88,7 +88,7 @@ public $viesti;
 		// will receive user inputs.
 		return array(
 			array('domain', 'required'),
-			array('huoltokatko, palveluhinta_persiivoja, tyovuorohinta_persiivoja, muut_tyokaluhinta', 'numerical', 'integerOnly'=>true),
+			array('huoltokatko, palveluhinta_persiivoja, tyovuorohinta_persiivoja, muut_tyokaluhinta, aktiivinen', 'numerical', 'integerOnly'=>true),
 			array('domain, paketti, yritys, pakettin_nimetus', 'length', 'max'=>100),
 			array('puhelin, sahkoposti', 'length', 'max'=>255),
 			// The following rule is used by search().

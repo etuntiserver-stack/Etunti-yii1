@@ -289,7 +289,16 @@ class SiteController extends Controller
 	{
        		$criteria = new CDbCriteria();
 	        $criteria->order = " id DESC ";
-	        $criteria->condition = " domain!='defdb' ";
+	        $criteria->condition = " domain!='defdb'  ";
+
+		if(isset($_POST['aktiivinen']) and $_POST['aktiivinen'] == 0 and $_POST['aktiivinen'] != 'kaikki')
+	        	$criteria->addCondition (" aktiivinen=0 ");
+		elseif(isset($_POST['aktiivinen']) and $_POST['aktiivinen'] == 1 and $_POST['aktiivinen'] != 'kaikki')
+	        	$criteria->addCondition (" aktiivinen=1 ");
+		elseif(isset($_POST['aktiivinen']) and $_POST['aktiivinen'] == 'kaikki')
+	        	$criteria->addCondition (" aktiivinen=1 OR aktiivinen=0 ");
+		elseif(!isset($_POST['aktiivinen']))
+	        	$criteria->addCondition (" aktiivinen=1 ");
 
 		if(isset($_POST['domain_nimi']) and !empty($_POST['domain_nimi']))
 	        $criteria->addCondition (" domain LIKE '%".$_POST['domain_nimi']."%' ");
