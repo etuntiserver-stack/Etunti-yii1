@@ -67,7 +67,20 @@ if( $curpage == 'tyovuoroot/tv2' )
 
 
 	<!-- Haku -->
-        <li class="dropdown menu-merge">
+	<?php
+		$hakuPainike = "";
+	if(
+		isset(Yii::app()->session['asiakas'])
+		or isset(Yii::app()->session['kohde'])
+		or isset(Yii::app()->session['tyo_toimialue'])
+		or isset(Yii::app()->session['kohteiden_tyonimike'])
+	)
+	{
+		$hakuPainike = "bg-warning";
+	}
+	?>
+
+        <li class="dropdown menu-merge <?php echo $hakuPainike; ?>">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown"> 
 		 <?php echo Yii::t('main','HAKU'); ?>
             <span class="caret caret-tp hidden-xs"></span>
