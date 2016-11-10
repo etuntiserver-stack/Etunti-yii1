@@ -166,43 +166,6 @@
 	<input type="hidden" id="taulunKorko" value="140">
 <?php endif; ?>
 
-<?php
-
-	$kohteenArr = array();
-	if(isset($_POST['siivous']) and !empty($_POST['siivous']))
-	{
-
-		echo '
-		<script type="text/javascript">
-		$(document).ready(function(){
-
-		  $("#siivousTyonimike option[value=\''.$_POST['siivous'].'\']").attr(\'selected\',\'selected\');
-		});
-		</script>';
-
-		$criteria = new CDbCriteria();
-       		$criteria->select = "id";
-       		$criteria->condition = " 
-			siivous LIKE '%".$_POST['siivous']."%' 
-			AND id IN(
-				SELECT kohde FROM sivex_tvuoro 
-				WHERE YEARWEEK(DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d')) = '".$year.$week."'
-			)
-		";
-		$k = Kohteet::model()->findAll($criteria);
-		foreach($k as $kohde)
-		 $kohteenArr[] = $kohde->id;
-
-		if(count($kohteenArr) > 0)
-		$checkSiivous = true;
-		else
-		$checkSiivous = false;
-
-	}
-
-
-?>
-
 <?php if( count($tyontekijat_model) == 0 ) : ?>
 	<div class="alert alert-danger"><?php echo Yii::t('main', 'Ei tuloksia, tarkasta haku.'); ?></div>
 <?php endif; ?>
@@ -225,7 +188,7 @@
 	for($day= 1; $day <= $numDays; $day++)
 	{
   	  $d = strtotime($year ."W". $week . $day);
-	  $date = date('d.m',$d);
+	  $date = date('d.m.Y',$d);
 	  echo '<th>'.$paivat[date('N',$d)].', '.$date.'</th>';
 	}
         ?>
@@ -261,7 +224,15 @@
 	     $clPyhat = 'style="background:#ddd"';
 
 	     echo '<td '.$clPyhat.' id="'.$did.'_0" valign="top">';
- 	     $did = $this->renderPartial('//tyovuoroot/did',array('pvm'=>$date,'tid'=>0,'from'=>'tvuoro', 'kohteenArr'=>$kohteenArr, 'asetukset'=>$asetukset), true);
+ 	     $did = $this->renderPartial('//tyovuoroot/did',array(
+					'pvm'=>$date,
+					'tid'=>0,
+					'from'=>'tvuoro', 
+					'kohteet_siivous'=>$kohteet_siivous, 
+					'asetukset'=>$asetukset,
+					'asiakas'=>$asiakas,
+					'kohde'=>$kohde,
+	     ), true);
 	     echo json_decode($did, true);
 	     echo '</td>';
 	  }
@@ -315,7 +286,15 @@
 	     $clPyhat = 'style="background:#ddd"';
 
 	     echo '<td '.$clPyhat.' id="'.$did.'_'.$t->id.'" valign="top">';
- 	     $did = $this->renderPartial('//tyovuoroot/did',array('pvm'=>$date,'tid'=>$t->id,'from'=>'tvuoro', 'kohteenArr'=>$kohteenArr, 'asetukset'=>$asetukset), true);
+ 	     $did = $this->renderPartial('//tyovuoroot/did',array(
+					'pvm'=>$date,
+					'tid'=>$t->id,
+					'from'=>'tvuoro', 
+					'kohteet_siivous'=>$kohteet_siivous, 
+					'asetukset'=>$asetukset,
+					'asiakas'=>$asiakas,
+					'kohde'=>$kohde,
+	     ), true);
 	     echo json_decode($did, true);
 	     echo '</td>';
 	  }

@@ -72,89 +72,67 @@ if( $curpage == 'tyovuoroot/tv2' )
 		 <?php echo Yii::t('main','HAKU'); ?>
             <span class="caret caret-tp hidden-xs"></span>
           </a>
-          <ul class="dropdown-menu list-group dropdown-persist w300" role="menu">
+          <ul class="dropdown-menu list-group dropdown-persist" role="menu" style="width:600px">
 	  <form action="#" class="admin-form" method="POST">
             <li class="list-group-item">
-              <div class="form-group">
+            <div class="row">
+             <div class="col-sm-6">
+	     <legend><?php echo Yii::t('main','Haku'); ?></legend>
 
+              <div class="form-group">
 		<?php if($curpage == 'tyovuoroot/tv2') : ?>
 		    <label><?php echo Yii::t('main','Aikaväli'); ?></label>
-		     <div class="input-group">
-   			<input type="text" name="from" class="form-control datepickerFI" value="<?php if(isset(Yii::app()->session['from'])) echo date('d.m.Y', strtotime(Yii::app()->session['from'])); ?>" placeholder="<?php echo Yii::t('main' ,'Päivämäärä'); ?>">
-   			<input type="text" name="to" class="form-control datepickerFI" value="<?php if(isset(Yii::app()->session['to'])) echo date('d.m.Y', strtotime(Yii::app()->session['to'])); ?>" placeholder="<?php echo Yii::t('main' ,'Päivämäärä'); ?>">
-		     </div>
+			<div class="row">
+			 <div class="col-sm-6">
+	   			<input type="text" name="from" class="form-control datepickerFI" value="<?php if(isset(Yii::app()->session['from'])) echo date('d.m.Y', strtotime(Yii::app()->session['from'])); ?>" placeholder="<?php echo Yii::t('main' ,'Päivämäärä'); ?>">
+			 </div><div class="col-sm-6">
+	   			<input type="text" name="to" class="form-control datepickerFI" value="<?php if(isset(Yii::app()->session['to'])) echo date('d.m.Y', strtotime(Yii::app()->session['to'])); ?>" placeholder="<?php echo Yii::t('main' ,'Päivämäärä'); ?>">
+			 </div>
+			</div>
 		<?php endif; ?>
 
 		<?php if($curpage == 'tyovuoroot/index') : ?>
-		    <label><?php echo Yii::t('main','Viikko'); ?></label>
-			<select class="form-control" name="yearWeek">
-			<?php
-			define('NL', "\n");
-			$year           = (int)Yii::app()->session['year'];
-			$week           = (int)Yii::app()->session['week'];
+			<div class="row">
+			 <div class="col-sm-5">
+		    	  <label><?php echo Yii::t('main','Vuosi'); ?></label>
+			  <select class="form-control" name="year">
+				<?php
+				$year           = (int)Yii::app()->session['year'];
+				$week           = (int)Yii::app()->session['week'];
 
-			$firstDayOfYear = mktime(0, 0, 0, 1, 1, $year);
-			$nextMonday     = strtotime('monday', $firstDayOfYear);
-			$nextSunday     = strtotime('sunday', $nextMonday);
-			
-			    echo '<option value="'.$year.'/'.$week.'">'.Yii::t('main', 'Viikko').': '.$week.', '.date('d.m', strtotime($year ."W". $week . '1')), NL.'-'.date('d.m', strtotime($year ."W". $week . '7')), NL.'</option>';
+				$v = date('Y',strtotime('-5 year'));
+				for ($i = 1; $i <= 10; $i++) {
+					if($year == ($v+$i))
+			    			echo '<option value="'.(int)($v+$i).'" selected>'.(int)($v+$i).'</option>';
+					else
+			    			echo '<option value="'.(int)($v+$i).'">'.(int)($v+$i).'</option>';
+				}
+				?>
+		 	  </select>
+			 </div><div class="col-sm-7">
+		    	  <label><?php echo Yii::t('main','Viikko'); ?></label>
+			  <select class="form-control" name="week">
+				<?php
+				define('NL', "\n");
+				$firstDayOfYear = mktime(0, 0, 0, 1, 1, $year);
+				$nextMonday     = strtotime('monday', $firstDayOfYear);
+				$nextSunday     = strtotime('sunday', $nextMonday);
+				
+				    echo '<option value="'.$week.'">'.$week.', '.date('d.m', strtotime($year ."W". $week . '1')), NL.'-'.date('d.m', strtotime($year ."W". $week . '7')), NL.'</option>';
 
-			while (date('Y', $nextMonday) == $year) {
-			    echo '<option value="'.$year.'/'.date('W', $nextMonday), NL.'">'.Yii::t('main', 'Viikko').': '.date('W', $nextMonday), NL.', '.date('d.m', $nextMonday), NL.'-'.date('d.m', $nextSunday), NL.'</option>';
+				while (date('Y', $nextMonday) == $year) {
+				    echo '<option value="'.date('W', $nextMonday), NL.'">'.date('W', $nextMonday), NL.', '.date('d.m', $nextMonday), NL.'-'.date('d.m', $nextSunday), NL.'</option>';
 	
-			    $nextMonday = strtotime('+1 week', $nextMonday);
-			    $nextSunday = strtotime('+1 week', $nextSunday);
-			}
-			?>
-			</select>
+				    $nextMonday = strtotime('+1 week', $nextMonday);
+				    $nextSunday = strtotime('+1 week', $nextSunday);
+				}
+				?>
+			  </select>
+			 </div>
+			</div>
 		<?php endif; ?>
-
 	      </div>
 
-              <div class="form-group">
-		    <label><?php echo Yii::t('main','Asiakas'); ?></label>
-		      <input type="text" class="form-control" name="asiakas" placeholder="<?php echo Yii::t('main','Yritys, Yhteyshenkilö, Puhelin'); ?>..." value="<?php if(isset(Yii::app()->session['asiakas'])) echo Yii::app()->session['asiakas']; ?>">
-	      </div>
-
-              <div class="form-group">
-		    <label><?php echo Yii::t('main','Kohde'); ?></label>
-		      <input type="text" class="form-control" name="kohde" placeholder="<?php echo Yii::t('main','Osoite, Puhelin'); ?>..." value="<?php if(isset(Yii::app()->session['kohde'])) echo Yii::app()->session['kohde']; ?>">
-	      </div>
-
-              <div class="form-group">
-		 <label><?php echo Yii::t('main','Toimialue'); ?></label>
-		        <?php
-			// Toimialue
-			$list = array();
-			$criteria = new CDbCriteria();
-			$criteria->order = " select_type ";
-			$criteria->condition = " select_type='tyo_toimialue' ";
-			$l = Valikkoot::model()->findAll($criteria);
-			foreach($l as $v)
-			$list[$v->value] = $v->value;
-			
-			echo CHtml::dropDownList('siivous', 'siivous', $list,
-			array('empty'=>Yii::t('main', 'Valitse'),'class'=>'form-control','id'=>'tekijanToimialue')).' ';
-		       ?>
-	      </div>
-<!--
-              <div class="form-group">
-		    <label><?php echo Yii::t('main','Työnimike'); ?></label>
-		    <?php
-			// Kohteen ryhman mukaan
-			$list = array();
-			$criteria = new CDbCriteria();
-			$criteria->order = " select_type ";
-			$criteria->condition = " select_type='siivous' ";
-			$l = Valikkoot::model()->findAll($criteria);
-			foreach($l as $v)
-			$list[$v->value] = $v->value;
-
-			echo CHtml::dropDownList('siivous', 'siivous', $list,
-			array('empty'=>Yii::t('main', 'Valitse'),'class'=>'form-control','id'=>'siivousTyonimike'));
-		    ?>
-	      </div>
--->
 
               <div class="form-group">
 		    <label><?php echo Yii::t('main','Työntekijät'); ?></label>
@@ -176,13 +154,81 @@ if( $curpage == 'tyovuoroot/tv2' )
 		    ?>
 	      </div>
 
+             </div><div class="col-sm-6">
+	     <legend><?php echo Yii::t('main','Ekstrat'); ?></legend>
 
+              <div class="form-group">
+		    <label><?php echo Yii::t('main','Asiakas'); ?></label>
+		      <input type="text" class="form-control" name="asiakas" placeholder="<?php echo Yii::t('main','Yritys, Yhteyshenkilö, Puhelin'); ?>..." value="<?php if(isset(Yii::app()->session['asiakas'])) echo Yii::app()->session['asiakas']; ?>">
+	      </div>
+
+              <div class="form-group">
+		    <label><?php echo Yii::t('main','Kohde'); ?></label>
+		      <input type="text" class="form-control" name="kohde" placeholder="<?php echo Yii::t('main','Osoite, Puhelin'); ?>..." value="<?php if(isset(Yii::app()->session['kohde'])) echo Yii::app()->session['kohde']; ?>">
+	      </div>
+
+              <div class="form-group">
+		 <label><?php echo Yii::t('main','Työntekijän toimialue'); ?></label>
+		        <?php
+			// Toimialue
+			$list = array();
+			$criteria = new CDbCriteria();
+			$criteria->order = " select_type ";
+			$criteria->condition = " select_type='tyo_toimialue' ";
+			$l = Valikkoot::model()->findAll($criteria);
+			foreach($l as $v)
+			$list[$v->value] = $v->value;
+			
+			echo '<select name="tyo_toimialue[]" class="multToimialue" multiple title="Toimialue">';
+			foreach($list as $key=>$val){
+			  if(isset(Yii::app()->session['tyo_toimialue']) and in_array($key, Yii::app()->session['tyo_toimialue']))
+			    echo '<option value="'.$key.'" selected>'.$val.'</option>';
+			  else
+			    echo '<option value="'.$key.'">'.$val.'</option>';
+			}
+			echo '</select>';
+		       ?>
+	      </div>
+
+              <div class="form-group">
+		    <label><?php echo Yii::t('main','Kohteiden työnimike'); ?></label>
+		    <?php
+			// Kohteen ryhman mukaan
+			$list = array();
+			$criteria = new CDbCriteria();
+			$criteria->order = " select_type ";
+			$criteria->condition = " select_type='siivous' ";
+			$l = Valikkoot::model()->findAll($criteria);
+			foreach($l as $v)
+			$list[$v->value] = $v->value;
+
+			echo '<select name="kohteiden_tyonimike" class="form-control">';
+			    echo '<option value="">'.Yii::t('main','Kaikki').'</option>';
+			foreach($list as $key=>$val){
+			  if(isset(Yii::app()->session['kohteiden_tyonimike']) and $key ==Yii::app()->session['kohteiden_tyonimike'])
+			    echo '<option value="'.$key.'" selected>'.$val.'</option>';
+			  else
+			    echo '<option value="'.$key.'">'.$val.'</option>';
+			}
+			echo '</select>';
+		    ?>
+	      </div>
+
+             </div>
             </li>
+
+
             <li class="list-group-item">
               <span class="animated animated-short fadeInUp">
-		        <button type="submit" class="btn btn-default btn-block" controller="<?php echo $curpage; ?>" type="button"><?php echo Yii::t('main','Hae'); ?></button>
+		<div class="row">
+		 <div class="col-sm-12">
+		        <button type="submit" class="col-sm-10 btn btn-primary" name="haku" controller="<?php echo $curpage; ?>" type="button"><?php echo Yii::t('main','Hae'); ?></button>
+			<a class="col-sm-2 btn btn-default" href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/<?php echo $curpage; ?>?reset"><i class="fa fa-remove"></i></a>
+		 </div>
+		</div>
 	      </span>
             </li>
+
 	  </form>
           </ul>
         </li>
@@ -200,10 +246,41 @@ if( $curpage == 'tyovuoroot/tv2' )
 	<!-- Nakyma -->
 
 
+	<!-- Viikonloput -->
+	<?php if($curpage == 'tyovuoroot/index') : ?>
+        <li class="p10" data-toggle="tooltip">
+	 <div class="btn btn-default" id="vkolopput"><?php echo Yii::t('main', 'Viikonloput'); ?></div>
+        </li>
+	<?php endif; ?>
+	<!-- Viikonloput -->
+
+
+	<!-- Tilaus -->
+        <li class="p10" data-toggle="tooltip">
+		<button class="btn btn-default" id="uusiTilaus"><?php echo Yii::t('main', 'Tilaus'); ?></button>
+        </li>
+	<!-- Tilaus -->
+
 
 
 <script type="text/javascript">
 $(document).ready(function(){
+
+$("#uusiTilaus").click(function(){
+
+   $.ajax({
+	url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/uusitilaus',
+	data:$(this).serialize(),
+	type:'POST',
+	success:function(data){
+		$('#showres').modal().html(data);
+   	},
+	error:function(data){
+		console.log(data);
+    	}
+    });
+
+});
 
 $('.multTyontekijat').multiselect({
 	//inheritClass: true,
@@ -211,10 +288,24 @@ $('.multTyontekijat').multiselect({
         includeSelectAllOption: true,
 	nonSelectedText: '<?php echo Yii::t("main", "Tyhjä"); ?>',
 	selectAllText: '<?php echo Yii::t("main", "Valitse kaikki"); ?>',
-	allSelectedText: '<?php echo Yii::t("main", "Työntekijät"); ?>',
+	allSelectedText: '<?php echo Yii::t("main", "Kaikki työntekijät"); ?>',
 	nSelectedText: '<?php echo Yii::t("main", "valittu"); ?>',
 	numberDisplayed: 0,
 	buttonWidth: '100%',
+        maxHeight: 300,
+});
+
+$('.multToimialue').multiselect({
+	//inheritClass: true,
+	//enableFiltering: true,
+        includeSelectAllOption: true,
+	nonSelectedText: '<?php echo Yii::t("main", "Tyhjä"); ?>',
+	selectAllText: '<?php echo Yii::t("main", "Valitse kaikki"); ?>',
+	allSelectedText: '<?php echo Yii::t("main", "Kaikki toimialueet"); ?>',
+	nSelectedText: '<?php echo Yii::t("main", "valittu"); ?>',
+	numberDisplayed: 0,
+	buttonWidth: '100%',
+        maxHeight: 300,
 });
 
 

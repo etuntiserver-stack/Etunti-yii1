@@ -53,35 +53,6 @@
 	<input type="hidden" id="taulunKorko" value="140">
 <?php endif; ?>
 
-
-<?php
-	$kohteenArr = array();
-	if(isset($_GET['siivous']) and !empty($_GET['siivous']))
-	{
-
-		echo '
-		<script type="text/javascript">
-		$(document).ready(function(){
-		  $("#siivousTyonimike option[value=\''.$_GET['siivous'].'\']").attr(\'selected\',\'selected\');
-		});
-		</script>';
-
-		$criteria = new CDbCriteria();
-       		$criteria->select = "id";
-       		$criteria->condition = " siivous LIKE '%".$_GET['siivous']."%' ";
-		$k = Kohteet::model()->findAll($criteria);
-		foreach($k as $kohde)
-		$kohteenArr[] = $kohde->id;
-
-		if(count($kohteenArr) > 0)
-		$checkSiivous = true;
-		else
-		$checkSiivous = false;
-	}
-?>
-
-
-
 <?php if( count($tyontekijat_model) == 0 ) : ?>
 	<div class="alert alert-danger"><?php echo Yii::t('main', 'Ei tuloksia, tarkasta haku.'); ?></div>
 <?php endif; ?>
@@ -140,14 +111,30 @@
 
 		// VARAUS
 		  echo '<td '.$clPyhat.' id="'.$did.'_0">';
-		  $tv = $this->renderPartial('//tyovuoroot/did',array('pvm'=>$date,'tid'=>0,'from'=>'tvuoro', 'kohteenArr'=>$kohteenArr, 'asetukset'=>$asetukset), true);
+		  $tv = $this->renderPartial('//tyovuoroot/did',array(
+					'pvm'=>$date,
+					'tid'=>0,
+					'from'=>'tvuoro', 
+					'kohteet_siivous'=>$kohteet_siivous, 
+					'asetukset'=>$asetukset,
+					'asiakas'=>$asiakas,
+					'kohde'=>$kohde,
+		  ), true);
 		  echo json_decode($tv, true);
 		  echo '</td>';
 		// VARAUS
 
 		foreach($tyontekijat_model as $t){
 		  echo '<td '.$clPyhat.' id="'.$did.'_'.$t->id.'">';
-		  $tv = $this->renderPartial('//tyovuoroot/did',array('pvm'=>$date,'tid'=>$t->id,'from'=>'tvuoro', 'kohteenArr'=>$kohteenArr, 'asetukset'=>$asetukset), true);
+		  $tv = $this->renderPartial('//tyovuoroot/did',array(
+					'pvm'=>$date,
+					'tid'=>$t->id,
+					'from'=>'tvuoro', 
+					'kohteet_siivous'=>$kohteet_siivous, 
+					'asetukset'=>$asetukset,
+					'asiakas'=>$asiakas,
+					'kohde'=>$kohde,
+		  ), true);
 		  echo json_decode($tv, true);
 		  echo '</td>';
 		}
