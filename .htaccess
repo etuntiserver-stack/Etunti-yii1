@@ -1,7 +1,7 @@
 #Rewrite rules
-#<IfModule mod_rewrite.c>
-#  RewriteEngine on
-#  RewriteCond %{HTTPS} off
-#  RewriteRule .* https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
-#</IfModule>
+<IfModule mod_rewrite.c>
+  RewriteRule ^ - [E=protossl]
+  RewriteCond %{HTTPS} on
+  RewriteRule ^ - [E=protossl:s]
+</IfModule>
 
