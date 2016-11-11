@@ -5,6 +5,19 @@
 
 <tr>
 	<td>
+		<?php echo CHtml::link('<i class="fa fa-pencil-square-o" aria-hidden="true" style="font-size: 110%"></i>', 
+				array('update_etunnin_asiakas', 'id'=>$data->id), 
+				array(
+					'class'=>'btn btn-primary myBgColors', 
+					'style'=>'color:white', 
+					'data-toggle'=>'tooltip', 
+					'data-placement'=>'top', 
+					'title'=>Yii::t('main', 'Muokkaa') 
+				)
+			); 
+		?>
+	</td>
+	<td>
 		<?php echo $data->domain; ?>
 	</td>
 	<td>
@@ -33,7 +46,5 @@
 	<td>
 		<?php echo CHtml::link('Näytä', array('etunnin_asiakas_kk_laskuri', 'id'=>$data->id), array('class'=>'btn btn-sm btn-primary myBgColors', 'style'=>'color:white')); ?>
 	</td>
-	<td>
-		<?php echo CHtml::link('', array('update_etunnin_asiakas', 'id'=>$data->id), array('class'=>'fa fa-pencil-square-o')); ?>
-	</td>
+
 </tr>

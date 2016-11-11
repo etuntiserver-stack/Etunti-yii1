@@ -76,7 +76,7 @@ if(isset($model->id))
 
   <div class="col-sm-3">
 		<label><?php echo Yii::t('main', 'Asiakas'); ?></label><br>
-		<input type="text" id="asiakas" class="form-control">
+		<input type="text" id="asiakas" class="form-control" AUTOCOMPLETE="off">
 		<div id="asiakasAutocompleteResult"></div>
   </div>
 

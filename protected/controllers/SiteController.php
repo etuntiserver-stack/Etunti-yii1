@@ -41,7 +41,7 @@ class SiteController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', 
-				'actions'=>array('etusivu','ohjesivu','etusivu_esimerki', 'change_color', 'valiko', 'valiko_ajax', 'kohderyhma', 'ohjevideot', 'mobemu', 'etusivu_ajax', 'ulkonaky', 'autocomplete'),
+				'actions'=>array('etusivu','ohjesivu','etusivu_esimerki', 'change_color', 'valiko', 'valiko_ajax', 'kohderyhma', 'ohjevideot', 'mobemu', 'etusivu_ajax', 'ulkonaky', 'autocomplete', 'synkronoi_gps_sijainti'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('allow', 
@@ -94,6 +94,49 @@ class SiteController extends Controller
         }
 
 
+	public function actionSynkronoi_gps_sijainti()
+	{
+		//header("Content-Type: text/html; charset=utf-8");
+		$count = 0;
+		if(isset($_POST['sunc']))
+		{
+			$asetuksetForAll = AsetuksetForAll::model()->findByPk(1);
+			if(isset($asetuksetForAll->googlemaps_apikey) and !empty($asetuksetForAll->googlemaps_apikey))
+			{
+			    $model = Kohteet::model()->findAll();
+			    foreach($model as $data)
+			    {
+				if(!empty($data->osoite) and !empty($data->kaupunki) and !empty($data->pnumero) and is_numeric($data->pnumero))
+				{	
+					$count++;
+					//$address = $data->id.' '.$data->pnumero.'+'.$data->kaupunki.'+'.$data->osoite.'<br>';
+
+
+					$address = urlencode($data->pnumero.'+'.$data->kaupunki.'+'.$data->osoite);
+					$content = file_get_contents('https://maps.googleapis.com/maps/api/geocode/json?address='.$address.'&key=AIzaSyAsoAPXKSe3LfIiOYSerAotxCdC-jOFS2o');
+
+					$response = json_decode($content, true);
+					if(isset($response['status']) and $response['status'] == 'OK')
+					{
+						$lat = $response['results'][0]['geometry']['location']['lat'];
+						$lng = $response['results'][0]['geometry']['location']['lng'];
+
+						Kohteet::model()->updateByPk($data->id, array('gps_sijainti'=>$lat.','.$lng));
+
+						//echo '<pre>';
+						//print_r($response); //$response['results'][0]['geometry']['location']['lat']
+						//echo '</pre>';
+						//exit;
+					}
+
+
+				}			
+			    }
+			}
+		}
+
+		echo urldecode($count);
+	}
 
 	public function actionUlkonaky()
 	{
@@ -289,7 +332,16 @@ class SiteController extends Controller
 	{
        		$criteria = new CDbCriteria();
 	        $criteria->order = " id DESC ";
-	        $criteria->condition = " domain!='defdb' ";
+	        $criteria->condition = " domain!='defdb'  ";
+
+		if(isset($_POST['aktiivinen']) and $_POST['aktiivinen'] == 0 and $_POST['aktiivinen'] != 'kaikki')
+	        	$criteria->addCondition (" aktiivinen=0 ");
+		elseif(isset($_POST['aktiivinen']) and $_POST['aktiivinen'] == 1 and $_POST['aktiivinen'] != 'kaikki')
+	        	$criteria->addCondition (" aktiivinen=1 ");
+		elseif(isset($_POST['aktiivinen']) and $_POST['aktiivinen'] == 'kaikki')
+	        	$criteria->addCondition (" aktiivinen=1 OR aktiivinen=0 ");
+		elseif(!isset($_POST['aktiivinen']))
+	        	$criteria->addCondition (" aktiivinen=1 ");
 
 		if(isset($_POST['domain_nimi']) and !empty($_POST['domain_nimi']))
 	        $criteria->addCondition (" domain LIKE '%".$_POST['domain_nimi']."%' ");

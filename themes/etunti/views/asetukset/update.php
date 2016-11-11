@@ -192,7 +192,7 @@ exit;
 <div class="row">
  <div class="col-sm-12">
 
- <div class="admin-form col-sm-6">
+ <div class="admin-form col-sm-6" id="onlinevarausehdot">
   <form id="uploadimage" action="#" class="form-input" method="post" enctype="multipart/form-data">
      <div class="section input-group">
        <label class="field prepend-icon append-button file">

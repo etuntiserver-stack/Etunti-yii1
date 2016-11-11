@@ -386,7 +386,7 @@
 	
    }
    ?>
-		<p><a href="#onlinevarausehdot"><?php echo Yii::t('main','Onlinevarausehdot lat'); ?> </a></p>
+		<p><a href="#onlinevarausehdot"><?php echo Yii::t('main','Onlinevarausehdot lataa'); ?> </a></p>
 
 	</div>
 
@@ -538,6 +538,13 @@
 		array('class'=>'form-control')) ?>
 		<?php echo $form->error($model,'app_lopettaa_vain_tagilla'); ?>
 	</div>
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'ilmoitus_uudesta_kuvasta_saajat'); ?>
+		<?php echo $form->textarea($model,'ilmoitus_uudesta_kuvasta_saajat',array('rows'=>8,'maxlength'=>3000,'class'=>'form-control', 'placeholder' => "sähköposti1@testi.fi\nsähköposti2@testi.fi")); ?>
+		<?php echo $form->error($model,'ilmoitus_uudesta_kuvasta_saajat'); ?>
+	</div>
+
    </div>
 
 

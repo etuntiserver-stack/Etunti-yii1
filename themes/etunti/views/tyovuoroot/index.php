@@ -17,110 +17,23 @@
 	);
 
 
-  $wkMaara = 53;
-  $year = (isset($_GET['year'])) ? $_GET['year'] : date("Y");
-  $week = (isset($_GET['week'])) ? $_GET['week'] : date('W');
-
-  if($week > $wkMaara) {
-    $year++;
-    $week = 1;
-  } elseif($week < 1) {
-    $year--;
-    $week = $wkMaara;
-  }
-    $week = sprintf("%02d", $week);
-
 
    $dTVfrom = date("Y-m-d",strtotime($year ."W". $week. '1'));
    echo '<input type="hidden" id="fromTV" value="'.$dTVfrom.'">';
    $dTVto = date("Y-m-d",strtotime($year ."W". $week. '7'));
    echo '<input type="hidden" id="toTV" value="'.$dTVto.'">';
 
-   $nbsp = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
-?>
-
-<?php
-// oletus arvot
-   if(!isset(Yii::app()->session['TekijaVuoro'])){
-
-       		$criteria = new CDbCriteria();
-        	$criteria->order = "tekijan_nimi";
-        	$criteria->select = "id,tekijan_nimi";
-        	$criteria->condition = " aktiivinen = '1' ";
-		$tt = Tyontekijat::model()->findAll($criteria);
-		$tekijatOletuksena = array();
-		foreach($tt as $t)
-		$tekijatOletuksena[] = $t->id;
-
-		Yii::app()->session['TekijaVuoro'] = $tekijatOletuksena;
-   }
-
-
-
-		if(Yii::app()->request->getPost('TekijaVuoro'))
-		Yii::app()->session['TekijaVuoro'] = Yii::app()->request->getPost('TekijaVuoro');
-
-       		$criteria = new CDbCriteria();
-        	$criteria->order = "tekijan_nimi";
-        	$criteria->select = "id,tekijan_nimi";
-        	$criteria->condition = " aktiivinen = '1' ";
-
-		if(Yii::app()->session['TekijaVuoro'] and (!isset($_GET['asiakas']) and !isset($_GET['kohde']))){
-		  if(count(Yii::app()->session['TekijaVuoro']) > 1)
-		    $ids = implode(",",Yii::app()->session['TekijaVuoro']);
-		  else
-		    $ids = Yii::app()->session['TekijaVuoro'][0];
-
-	        $criteria->addCondition ('id IN ('.$ids.') ');
-		}
-		// <-- Asiakas
-		if(isset($_GET['asiakas']) and !empty($_GET['asiakas']))
-		{
-	           $criteria->addCondition ("
-		   id IN (  
-		     SELECT tid FROM sivex_tvuoro WHERE DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '$dTVfrom' AND '$dTVto'
-		       AND kohde IN 
-		       (
-			    SELECT id FROM sivex_kohdet WHERE asiakas_id IN
-   			    (
-			       SELECT id FROM asiakkaat WHERE yrityksen_nimi LIKE '%".$_GET['asiakas']."%' OR yhteyshenkilo LIKE '%".$_GET['asiakas']."%' OR puhelin LIKE '%".$_GET['asiakas']."%'
-			    )
-		       )
-		   )
-		   ");
-		}
-		// Asiakas -->
-
-		// <-- Kohde
-		if(isset($_GET['kohde']) and !empty($_GET['kohde']))
-		{
-	           $criteria->addCondition ("
-		   id IN (  
-		     SELECT tid FROM sivex_tvuoro WHERE DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '$dTVfrom' AND '$dTVto'
-		       AND kohde IN 
-		       (
-			    SELECT id FROM sivex_kohdet WHERE osoite LIKE '%".$_GET['kohde']."%' OR puh_nro LIKE '%".$_GET['kohde']."%'
-		       )
-		   )
-		   ");
-		}
-		//  Kohde -->
-
-		$tt = Tyontekijat::model()->findAll($criteria);
-
-
-
 ?>
 
 
-<?php if(count(Yii::app()->session['TekijaVuoro']) > 0 and Yii::app()->session['TekijaVuoro'][0] != 0) : ?>
 
 
+<?php /*
 <div id="ylapalkki" style="display:none">
  <div class="form-inline">
   <div class="form-group">
 
-	<label><?php echo Yii::t('main', 'Haku'); ?></label><br>
+	<label><?php echo Yii::t('main', 'Työntekijät'); ?></label><br>
 
   <form action="index" id="yhtveto" method="POST">
 
@@ -233,7 +146,6 @@
 	<select class="form-control tvchange">
  	  <option value="index" selected><?php echo Yii::t('main', 'Viikko'); ?></option>
  	  <option value="tv2"><?php echo Yii::t('main', 'Työntekijä'); ?></option>
- 	  <!--<option value="tv_kohteet"><?php echo Yii::t('main', 'Kohde'); ?></option>-->
 	</select>
       </div>
      </div>
@@ -244,61 +156,30 @@
 </div>
 
 <br>
+*/ ?>
 
 
 
+<?php if(!isset($_GET['fullscreen'])) : ?>
+	<input type="hidden" id="taulunKorko" value="160">
+<?php else: ?>
+	<input type="hidden" id="taulunKorko" value="140">
+<?php endif; ?>
 
+<?php if( count($tyontekijat_model) == 0 ) : ?>
+	<div class="alert alert-danger"><?php echo Yii::t('main', 'Ei tuloksia, tarkasta haku.'); ?></div>
+<?php endif; ?>
+
+
+<?php if( !empty($year) and !empty($week) and count($tyontekijat_model) > 0 ) : ?>
+<div class="row">
             <div class="admin-form">
               <div class="panel heading-border myBgColors">
                 <div class="panel-body bg-light">
                  <div class="row">
 
-<?php
-if(!isset($_SESSION['vkolopput']))
-$numDays = 5;
-else
-$numDays = 7;
-?>
 
-<?php
-
-	$kohteenArr = array();
-	if(isset($_POST['siivous']) and !empty($_POST['siivous']))
-	{
-
-		echo '
-		<script type="text/javascript">
-		$(document).ready(function(){
-
-		  $("#siivousTyonimike option[value=\''.$_POST['siivous'].'\']").attr(\'selected\',\'selected\');
-		});
-		</script>';
-
-		$criteria = new CDbCriteria();
-       		$criteria->select = "id";
-       		$criteria->condition = " 
-			siivous LIKE '%".$_POST['siivous']."%' 
-			AND id IN(
-				SELECT kohde FROM sivex_tvuoro 
-				WHERE YEARWEEK(DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d')) = '".$year.$week."'
-			)
-		";
-		$k = Kohteet::model()->findAll($criteria);
-		foreach($k as $kohde)
-		 $kohteenArr[] = $kohde->id;
-
-		if(count($kohteenArr) > 0)
-		$checkSiivous = true;
-		else
-		$checkSiivous = false;
-
-	}
-
-
-?>
-
-<?php if((isset($checkSiivous) and $checkSiivous == true) or !isset($checkSiivous)) : ?>
-<div class="row table-responsive">
+<div class="table-responsive">
   <table class="table table-striped table-condensed table-bordered" style="background: white">
      <thead>
      <tr>
@@ -307,7 +188,7 @@ $numDays = 7;
 	for($day= 1; $day <= $numDays; $day++)
 	{
   	  $d = strtotime($year ."W". $week . $day);
-	  $date = date('d.m',$d);
+	  $date = date('d.m.Y',$d);
 	  echo '<th>'.$paivat[date('N',$d)].', '.$date.'</th>';
 	}
         ?>
@@ -343,7 +224,15 @@ $numDays = 7;
 	     $clPyhat = 'style="background:#ddd"';
 
 	     echo '<td '.$clPyhat.' id="'.$did.'_0" valign="top">';
- 	     $did = $this->renderPartial('//tyovuoroot/did',array('pvm'=>$date,'tid'=>0,'from'=>'tvuoro', 'kohteenArr'=>$kohteenArr, 'asetukset'=>$asetukset), true);
+ 	     $did = $this->renderPartial('//tyovuoroot/did',array(
+					'pvm'=>$date,
+					'tid'=>0,
+					'from'=>'tvuoro', 
+					'kohteet_siivous'=>$kohteet_siivous, 
+					'asetukset'=>$asetukset,
+					'asiakas'=>$asiakas,
+					'kohde'=>$kohde,
+	     ), true);
 	     echo json_decode($did, true);
 	     echo '</td>';
 	  }
@@ -354,7 +243,7 @@ $numDays = 7;
 
 
 
-	foreach($tt as $t)
+	foreach($tyontekijat_model as $t)
 	{
 	  echo '<tr>';
 	  echo '<td width=1 id="first_'.$t->id.'">';
@@ -397,7 +286,15 @@ $numDays = 7;
 	     $clPyhat = 'style="background:#ddd"';
 
 	     echo '<td '.$clPyhat.' id="'.$did.'_'.$t->id.'" valign="top">';
- 	     $did = $this->renderPartial('//tyovuoroot/did',array('pvm'=>$date,'tid'=>$t->id,'from'=>'tvuoro', 'kohteenArr'=>$kohteenArr, 'asetukset'=>$asetukset), true);
+ 	     $did = $this->renderPartial('//tyovuoroot/did',array(
+					'pvm'=>$date,
+					'tid'=>$t->id,
+					'from'=>'tvuoro', 
+					'kohteet_siivous'=>$kohteet_siivous, 
+					'asetukset'=>$asetukset,
+					'asiakas'=>$asiakas,
+					'kohde'=>$kohde,
+	     ), true);
 	     echo json_decode($did, true);
 	     echo '</td>';
 	  }
@@ -407,14 +304,13 @@ $numDays = 7;
      </tbody>
   </table>
 </div>
-<?php endif; ?>
+
 
                  </div>
                 </div>
               </div>
             </div>
-
-
+</div>
 <?php endif; ?>
 
 
@@ -450,7 +346,7 @@ $(function () {
 
     var onResize = function () {
         var oSettings = dataTable.fnSettings();
-        oSettings.oScroll.sY = tableHeight()-260; 
+        oSettings.oScroll.sY = tableHeight()-$('#taulunKorko').val(); 
         dataTable.fnDraw();
     };
 
@@ -471,21 +367,6 @@ $(function () {
 	$('#ylapalkki').show('slow');
 
 
-$('#tyontekijat').multiselect({
-	//inheritClass: true,
-	//enableFiltering: true,
-        includeSelectAllOption: true,
-	nonSelectedText: '<?php echo Yii::t("main", "Tyhjä"); ?>',
-	selectAllText: '<?php echo Yii::t("main", "Valitse kaikki"); ?>',
-	allSelectedText: '<?php echo Yii::t("main", "Työntekijät"); ?>',
-	nSelectedText: '<?php echo Yii::t("main", "valittu"); ?>',
-	numberDisplayed: 0,
-});
-
-$('.tvchange').change(function(){
-	var thisVal = $(this).val();
-	window.location.href=thisVal;
-});
 
 
 });

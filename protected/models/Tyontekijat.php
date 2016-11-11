@@ -120,7 +120,7 @@ public $tunnus;
 			'ayjasenyys' => Yii::t('main', 'Ay-jäsenyys'),
 			'gcm_reg_id'=> Yii::t('main', 'Google Cloud Messaging ID'),
 			'position' => Yii::t('main', 'Viimeinen sijainti'),
-			'tyo_toimialue' => Yii::t('main', 'Toimialue (onlinevaraus)'),
+			'tyo_toimialue' => Yii::t('main', 'Toimialue'),
 			'sukunimi' => Yii::t('main', 'Sukunimi'),
 		);
 	}

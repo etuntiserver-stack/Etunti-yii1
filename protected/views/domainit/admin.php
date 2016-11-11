@@ -65,6 +65,7 @@ $('.search-form form').submit(function(){
 		'domain',
 		'paketti',
 		'huoltokatko',
+		'aktiivinen',
 		array(
 			'class'=>'CButtonColumn',
 		),

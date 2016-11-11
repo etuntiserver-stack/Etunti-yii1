@@ -58,50 +58,396 @@ if( $curpage == 'tyovuoroot/tv2' )
             </li>
 	    <?php if( !empty($tyovuorot_sivut) ) : ?>
 
+<!--
             <li>
               <a href="#">
                 <span class="mr10"></span> <?php echo $tyovuorot_sivut; ?> </a>
             </li>
+-->
 
-        <li class="dropdown menu-merge <?php if((isset($_GET['asiakas']) and !empty($_GET['asiakas'])) or (isset($_GET['kohde']) and !empty($_GET['kohde']))) echo 'open'; ?>">
-          <a href="#" class="dropdown-toggle <?php if((isset($_GET['asiakas']) and !empty($_GET['asiakas'])) or (isset($_GET['kohde']) and !empty($_GET['kohde']))) echo 'bg-danger'; ?>" data-toggle="dropdown"> 
+
+	<!-- Haku -->
+	<?php
+		$hakuPainike = "";
+	if(
+		isset(Yii::app()->session['asiakas'])
+		or isset(Yii::app()->session['kohde'])
+		or isset(Yii::app()->session['tyo_toimialue'])
+		or isset(Yii::app()->session['kohteiden_tyonimike'])
+		or isset(Yii::app()->session['tyoryhma'])
+	)
+	{
+		$hakuPainike = "bg-warning";
+	}
+	?>
+
+        <li class="dropdown menu-merge <?php echo $hakuPainike; ?>">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown"> 
 		 <?php echo Yii::t('main','HAKU'); ?>
             <span class="caret caret-tp hidden-xs"></span>
           </a>
-          <ul class="dropdown-menu list-group dropdown-persist w300" role="menu">
+          <ul class="dropdown-menu list-group dropdown-persist" role="menu" style="width:600px">
+	  <form action="#" class="admin-form" method="POST">
             <li class="list-group-item">
-              <a href="#" class="animated animated-short fadeInUp">
+            <div class="row">
+             <div class="col-sm-6">
+	     <legend><?php echo Yii::t('main','Haku'); ?></legend>
+
+              <div class="form-group">
+		<?php if($curpage == 'tyovuoroot/tv2') : ?>
+		    <label><?php echo Yii::t('main','Aikaväli'); ?></label>
+			<div class="row">
+			 <div class="col-sm-6">
+	   			<input type="text" name="from" class="form-control datepickerFI" value="<?php if(isset(Yii::app()->session['from'])) echo date('d.m.Y', strtotime(Yii::app()->session['from'])); ?>" placeholder="<?php echo Yii::t('main' ,'Päivämäärä'); ?>">
+			 </div><div class="col-sm-6">
+	   			<input type="text" name="to" class="form-control datepickerFI" value="<?php if(isset(Yii::app()->session['to'])) echo date('d.m.Y', strtotime(Yii::app()->session['to'])); ?>" placeholder="<?php echo Yii::t('main' ,'Päivämäärä'); ?>">
+			 </div>
+			</div>
+		<?php endif; ?>
+
+		<?php if($curpage == 'tyovuoroot/index') : ?>
+			<div class="row">
+			 <div class="col-sm-5">
+		    	  <label><?php echo Yii::t('main','Vuosi'); ?></label>
+			  <select class="form-control" name="year">
+				<?php
+				$year           = (int)Yii::app()->session['year'];
+				$week           = (int)Yii::app()->session['week'];
+
+				$v = date('Y',strtotime('-5 year'));
+				for ($i = 1; $i <= 10; $i++) {
+					if($year == ($v+$i))
+			    			echo '<option value="'.(int)($v+$i).'" selected>'.(int)($v+$i).'</option>';
+					else
+			    			echo '<option value="'.(int)($v+$i).'">'.(int)($v+$i).'</option>';
+				}
+				?>
+		 	  </select>
+			 </div><div class="col-sm-7">
+		    	  <label><?php echo Yii::t('main','Viikko'); ?></label>
+			  <select class="form-control" name="week">
+				<?php
+				define('NL', "\n");
+				$firstDayOfYear = mktime(0, 0, 0, 1, 1, $year);
+				$nextMonday     = strtotime('monday', $firstDayOfYear);
+				$nextSunday     = strtotime('sunday', $nextMonday);
+				
+				    echo '<option value="'.$week.'">'.$week.', '.date('d.m', strtotime($year ."W". $week . '1')), NL.'-'.date('d.m', strtotime($year ."W". $week . '7')), NL.'</option>';
+
+				while (date('Y', $nextMonday) == $year) {
+				    echo '<option value="'.date('W', $nextMonday), NL.'">'.date('W', $nextMonday), NL.', '.date('d.m', $nextMonday), NL.'-'.date('d.m', $nextSunday), NL.'</option>';
+	
+				    $nextMonday = strtotime('+1 week', $nextMonday);
+				    $nextSunday = strtotime('+1 week', $nextSunday);
+				}
+				?>
+			  </select>
+			 </div>
+			</div>
+		<?php endif; ?>
+	      </div>
+
+
+              <div class="form-group">
+		    <label><?php echo Yii::t('main','Työntekijät'); ?></label>
+		    <?php
+			//
+			$criteria = new CDbCriteria();
+			$criteria->order = " tekijan_nimi ";
+			$criteria->condition = " aktiivinen='1' ";
+
+			$list = CHtml::listData(Tyontekijat::model()->findAll($criteria), 'id', 'tekijan_nimi');
+			echo '<select name="tyontekijat[]" class="multTyontekijat" multiple title="Työntekijät">';
+			foreach($list as $key=>$val){
+			  if(isset(Yii::app()->session['tyontekijat']) and in_array($key, Yii::app()->session['tyontekijat']))
+			    echo '<option value="'.$key.'" selected>'.$val.'</option>';
+			  else
+			    echo '<option value="'.$key.'">'.$val.'</option>';
+			}
+			echo '</select>';
+		    ?>
+	      </div>
+
+             </div><div class="col-sm-6">
+	     <legend><?php echo Yii::t('main','Ekstrat'); ?></legend>
+
+              <div class="form-group">
 		    <label><?php echo Yii::t('main','Asiakas'); ?></label>
-		    <div class="input-group">
-		      <input type="text" class="form-control" id="EtsiAsiakas" placeholder="<?php echo Yii::t('main','Yritys, Yhteyshenkilö, Puhelin'); ?>..." value="<?php if(isset($_GET['asiakas'])) echo $_GET['asiakas']; ?>">
-		      <span class="input-group-btn">
-		        <button class="btn btn-default EtsiAsiakas" controller="<?php echo $curpage; ?>" type="button"><li class="fa fa-search"></i></button>
-		      </span>
-		    </div>
-	      </a>
-            </li>
-            <li class="list-group-item">
-              <a href="#" class="animated animated-short fadeInUp">
+		      <input type="text" class="form-control" name="asiakas" id="asiakasHakussa" placeholder="<?php echo Yii::t('main','Yritys, Yhteyshenkilö, Puhelin'); ?>..." value="<?php if(isset(Yii::app()->session['asiakas'])) echo Yii::app()->session['asiakas']; ?>" AUTOCOMPLETE="off">
+			<div id="asiakasAutocompleteResultHakussa"></div>
+	      </div>
+
+              <div class="form-group">
 		    <label><?php echo Yii::t('main','Kohde'); ?></label>
-		    <div class="input-group">
-		      <input type="text" class="form-control" id="EtsiKohde" placeholder="<?php echo Yii::t('main','Osoite, Puhelin'); ?>..." value="<?php if(isset($_GET['kohde'])) echo $_GET['kohde']; ?>">
-		      <span class="input-group-btn">
-		        <button class="btn btn-default EtsiKohde" controller="<?php echo $curpage; ?>" type="button"><li class="fa fa-search"></i></button>
-		      </span>
-		    </div>
-	      </a>
+		      <input type="text" class="form-control" name="kohde" id="kohdeHakussa" placeholder="<?php echo Yii::t('main','Osoite, Puhelin'); ?>..." value="<?php if(isset(Yii::app()->session['kohde'])) echo Yii::app()->session['kohde']; ?>" AUTOCOMPLETE="off">
+			<div id="kohdeAutocompleteResultHakussa"></div>
+	      </div>
+
+              <div class="form-group">
+		 <label><?php echo Yii::t('main','Työntekijän toimialue'); ?></label>
+		        <?php
+			// Toimialue
+			$list = array();
+			$criteria = new CDbCriteria();
+			$criteria->order = " select_type ";
+			$criteria->condition = " select_type='tyo_toimialue' ";
+			$l = Valikkoot::model()->findAll($criteria);
+			foreach($l as $v)
+			$list[$v->value] = $v->value;
+			
+			echo '<select name="tyo_toimialue[]" class="multToimialue" multiple title="Toimialue">';
+			foreach($list as $key=>$val){
+			  if(isset(Yii::app()->session['tyo_toimialue']) and in_array($key, Yii::app()->session['tyo_toimialue']))
+			    echo '<option value="'.$key.'" selected>'.$val.'</option>';
+			  else
+			    echo '<option value="'.$key.'">'.$val.'</option>';
+			}
+			echo '</select>';
+		       ?>
+	      </div>
+
+              <div class="form-group">
+		 <label><?php echo Yii::t('main','Työntekijän työryhmä'); ?></label>
+		        <?php
+			// Toimialue
+			$list = array();
+			$criteria = new CDbCriteria();
+			$criteria->order = " select_type ";
+			$criteria->condition = " select_type='tyoryhma' ";
+			$l = Valikkoot::model()->findAll($criteria);
+			foreach($l as $v)
+			$list[$v->value] = $v->value;
+			
+			echo '<select name="tyoryhma[]" class="multTyoryhma" multiple title="Työryhmät">';
+			foreach($list as $key=>$val){
+			  if(isset(Yii::app()->session['tyoryhma']) and in_array($key, Yii::app()->session['tyoryhma']))
+			    echo '<option value="'.$key.'" selected>'.$val.'</option>';
+			  else
+			    echo '<option value="'.$key.'">'.$val.'</option>';
+			}
+			echo '</select>';
+		       ?>
+	      </div>
+
+              <div class="form-group">
+		    <label><?php echo Yii::t('main','Kohteiden työnimike'); ?></label>
+		    <?php
+			// Kohteen ryhman mukaan
+			$list = array();
+			$criteria = new CDbCriteria();
+			$criteria->order = " select_type ";
+			$criteria->condition = " select_type='siivous' ";
+			$l = Valikkoot::model()->findAll($criteria);
+			foreach($l as $v)
+			$list[$v->value] = $v->value;
+
+			echo '<select name="kohteiden_tyonimike" class="form-control">';
+			    echo '<option value="">'.Yii::t('main','Kaikki').'</option>';
+			foreach($list as $key=>$val){
+			  if(isset(Yii::app()->session['kohteiden_tyonimike']) and $key ==Yii::app()->session['kohteiden_tyonimike'])
+			    echo '<option value="'.$key.'" selected>'.$val.'</option>';
+			  else
+			    echo '<option value="'.$key.'">'.$val.'</option>';
+			}
+			echo '</select>';
+		    ?>
+	      </div>
+
+             </div>
             </li>
 
-	    <?php if((isset($_GET['asiakas']) and !empty($_GET['asiakas'])) or (isset($_GET['kohde']) and !empty($_GET['kohde']))) : ?>
+
             <li class="list-group-item">
-              <a href="#" class="animated animated-short fadeInUp">
-		        <button class="btn btn-default btn-block PalautaTvEtusivulle" controller="<?php echo $curpage; ?>" type="button"><?php echo Yii::t('main','Palauta'); ?></button>
-	      </a>
+              <span class="animated animated-short fadeInUp">
+		<div class="row">
+		 <div class="col-sm-12">
+		        <button type="submit" class="col-sm-10 btn btn-primary" name="haku" controller="<?php echo $curpage; ?>" type="button"><?php echo Yii::t('main','Hae'); ?></button>
+			<a class="col-sm-2 btn btn-default" href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/<?php echo $curpage; ?>?reset"><i class="fa fa-remove"></i></a>
+		 </div>
+		</div>
+	      </span>
             </li>
-	    <?php endif; ?>
 
+	  </form>
           </ul>
         </li>
+	<!-- Haku -->
+
+
+	<!-- Nakyma -->
+        <li class="p10" data-toggle="tooltip">
+	<select class="form-control tvchange">
+ 	  <option value="index" <?php if($curpage == 'tyovuoroot/index') echo 'selected'; ?>><?php echo Yii::t('main', 'Viikko'); ?></option>
+ 	  <option value="tv2" <?php if($curpage == 'tyovuoroot/tv2') echo 'selected'; ?>><?php echo Yii::t('main', 'Työntekijä'); ?></option>
+ 	  <!--<option value="tv_kohteet"><?php echo Yii::t('main', 'Kohde'); ?></option>-->
+	</select>
+        </li>
+	<!-- Nakyma -->
+
+
+	<!-- Viikonloput -->
+	<?php if($curpage == 'tyovuoroot/index') : ?>
+        <li class="p10" data-toggle="tooltip">
+	 <div class="btn btn-default" id="vkolopput"><?php echo Yii::t('main', 'Viikonloput'); ?></div>
+        </li>
+	<?php endif; ?>
+	<!-- Viikonloput -->
+
+
+	<!-- Tilaus -->
+        <li class="p10" data-toggle="tooltip">
+		<button class="btn btn-default" id="uusiTilaus"><?php echo Yii::t('main', 'Tilaus'); ?></button>
+        </li>
+	<!-- Tilaus -->
+
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+
+// <-- Asiakas Autocomplete
+  $('#asiakasHakussa').keyup(function(){
+	var thisVal = $(this).val();
+
+	if( thisVal.length >= 2 )
+	{
+
+	  	 $.ajax({
+			url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/asiakas_autocomplete',
+			type:'GET',
+			async : false,
+			data: { "key" : thisVal },
+			  success:function(data){
+				data = JSON.parse(data);
+			  	//console.log(data);
+				if(data)
+					$('#asiakasAutocompleteResultHakussa').html(data).show();
+
+			  },
+			  error:function(data){
+			  	console.log(data);
+			  }
+	 	});
+
+	} else {
+					$('#asiakasAutocompleteResultHakussa').html('');
+	}
+
+     $('.asiakasSelecter').click(function(){
+		var thisAsiakas = $(this).text();
+		$('#asiakasHakussa').val(thisAsiakas);
+		$('#asiakasAutocompleteResultHakussa').html('');
+     });
+
+  });
+// Asiakas Autocomplete -->
+
+
+// <-- Kohde Autocomplete
+  $('#kohdeHakussa').keyup(function(){
+	var thisVal = $(this).val();
+
+	if( thisVal.length >= 2 )
+	{
+
+	  	 $.ajax({
+			url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/kohde_autocomplete',
+			type:'GET',
+			async : false,
+			data: { "key" : thisVal },
+			  success:function(data){
+				data = JSON.parse(data);
+			  	//console.log(data);
+				if(data)
+					$('#kohdeAutocompleteResultHakussa').html(data).show();
+
+			  },
+			  error:function(data){
+			  	console.log(data);
+			  }
+	 	});
+
+	} else {
+					$('#kohdeAutocompleteResultHakussa').html('');
+	}
+
+     $('.kohdeSelecter').click(function(){
+		var thisAsiakas = $(this).text();
+		$('#kohdeHakussa').val(thisAsiakas);
+		$('#kohdeAutocompleteResultHakussa').html('');
+     });
+
+  });
+// Kohde Autocomplete -->
+
+
+
+
+$("#uusiTilaus").click(function(){
+
+   $.ajax({
+	url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/uusitilaus',
+	data:$(this).serialize(),
+	type:'POST',
+	success:function(data){
+		$('#showres').modal().html(data);
+   	},
+	error:function(data){
+		console.log(data);
+    	}
+    });
+
+});
+
+$('.multTyontekijat').multiselect({
+	//inheritClass: true,
+	//enableFiltering: true,
+        includeSelectAllOption: true,
+	nonSelectedText: '<?php echo Yii::t("main", "Tyhjä"); ?>',
+	selectAllText: '<?php echo Yii::t("main", "Valitse kaikki"); ?>',
+	allSelectedText: '<?php echo Yii::t("main", "Kaikki työntekijät"); ?>',
+	nSelectedText: '<?php echo Yii::t("main", "valittu"); ?>',
+	numberDisplayed: 0,
+	buttonWidth: '100%',
+        maxHeight: 300,
+});
+
+$('.multToimialue').multiselect({
+	//inheritClass: true,
+	//enableFiltering: true,
+        includeSelectAllOption: true,
+	nonSelectedText: '<?php echo Yii::t("main", "Tyhjä"); ?>',
+	selectAllText: '<?php echo Yii::t("main", "Valitse kaikki"); ?>',
+	allSelectedText: '<?php echo Yii::t("main", "Kaikki toimialueet"); ?>',
+	nSelectedText: '<?php echo Yii::t("main", "valittu"); ?>',
+	numberDisplayed: 0,
+	buttonWidth: '100%',
+        maxHeight: 300,
+});
+
+$('.multTyoryhma').multiselect({
+	//inheritClass: true,
+	//enableFiltering: true,
+        includeSelectAllOption: true,
+	nonSelectedText: '<?php echo Yii::t("main", "Tyhjä"); ?>',
+	selectAllText: '<?php echo Yii::t("main", "Valitse kaikki"); ?>',
+	allSelectedText: '<?php echo Yii::t("main", "Kaikki työryhmät"); ?>',
+	nSelectedText: '<?php echo Yii::t("main", "valittu"); ?>',
+	numberDisplayed: 0,
+	buttonWidth: '100%',
+        maxHeight: 300,
+});
+
+
+$('.tvchange').change(function(){
+	var thisVal = $(this).val();
+	window.location.href=thisVal;
+});
+
+});
+</script>
+
+
 
 	    <li class="muokkausLi" style="display:none">
 	     <a href="#" class="bg-warning">

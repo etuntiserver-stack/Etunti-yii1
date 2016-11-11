@@ -78,6 +78,7 @@ Yii::app()->clientScript->registerPackage('bootstrapJS');
 Yii::app()->clientScript->registerPackage('bootstrapCSS');
 */
 
+// <-- Huoltokatko
 if(isset(Yii::app()->user->domain))
 {
   $domainit = Domainit::model()->find(" domain='".Yii::app()->user->domain."' ");
@@ -91,15 +92,15 @@ if(isset(Yii::app()->user->domain))
       <div class="jumbotron">
         <h1><i class="fa fa-wrench" aria-hidden="true"></i> '.Yii::t('main', 'HUOLTOKATKO').'</h1>
         <p class="lead">
-<p>
-Palvelussamme on huoltokatko<br>
-Verkkopalvelumme ovat tilapäisesti poissa käytöstä. Pahoittelemme katkosta aiheutuvaa häiriötä.<br>
-</p>
+		<p>
+		Palvelussamme on huoltokatko<br>
+		Verkkopalvelumme ovat tilapäisesti poissa käytöstä. Pahoittelemme katkosta aiheutuvaa häiriötä.<br>
+		</p>
 
-<p>
-Service is temporarily unavailable
-Our service is temporarily unavailable. We apologize for any inconvenience this might cause for You.
-</p>
+		<p>
+		Service is temporarily unavailable
+		Our service is temporarily unavailable. We apologize for any inconvenience this might cause for You.
+		</p>
 	</p>
       </div>
 
@@ -110,6 +111,42 @@ Our service is temporarily unavailable. We apologize for any inconvenience this 
 	exit;
   }
 }
+// Huoltokatko -->
+
+
+
+// <-- Aktiivinen
+if(isset(Yii::app()->user->domain))
+{
+  $domainit = Domainit::model()->find(" domain='".Yii::app()->user->domain."' ");
+  if(isset($domainit->aktiivinen) and $domainit->aktiivinen == 0)
+  {
+	echo '
+
+    <div class="container">
+      <div class="header clearfix">
+
+      <div class="jumbotron">
+        <h1><i class="fa fa-wrench" aria-hidden="true"></i> '.Yii::t('main', 'VIRHE').'</h1>
+        <p class="lead">
+		<p>
+		Yrityksenne domain on lukittu. Ota yhteyttä tukeemme tuki@etunti.fi.<br>
+		</p>
+
+		<p>
+		Your company\'s domain is locked. Please contact our service tuki@etunti.fi.
+		</p>
+	</p>
+      </div>
+
+        </div>
+      </div>
+
+	';
+	exit;
+  }
+}
+// Aktiivinen -->
 
 
 if(isset(Yii::app()->user->nimi))

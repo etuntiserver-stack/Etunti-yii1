@@ -167,36 +167,6 @@ if(empty($model->position) and isset($model->id))
 	</div>
 
 	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'tyoryhma'); ?>
-
-		<?php
-		$list = array();
-      		$l = Valikkoot::model()->findAll(" select_type='tyoryhma' ",array('order' => "select_type"));
-
-		$ryhmat = array();
-		if(is_array(json_decode($model->tyoryhma)))
-			$ryhmat = json_decode($model->tyoryhma);
-		else
-			array_push($ryhmat, $model->tyoryhma);
-
-
-		if(isset($l[0]))
-		{
-			echo '<select class="mult" name="Tyontekijat[tyoryhma][]" multiple id="Tyontekijat_tyoryhma">';
-			foreach($l as $ryhma){
-			    if(in_array($ryhma->value, $ryhmat))
-				echo '<option value="'.$ryhma->value.'" selected>'.$ryhma->value.'</option>';
-			    else
-				echo '<option value="'.$ryhma->value.'">'.$ryhma->value.'</option>';
-			}
-			echo '</select>';
-		}
-        	?>
-		<?php echo $form->error($model,'tyoryhma'); ?>
-	</div>
-
-
-	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'tyo_toimialue'); ?>
 
 	   <div class="input-group">
@@ -226,6 +196,7 @@ if(empty($model->position) and isset($model->id))
 		echo '</select>';
 /*
 		foreach($l as $v)
+
 		$list[$v->value] = $v->value;
 
         	echo $form->dropDownList($model, 'tyo_toimialue', $list,
@@ -239,6 +210,37 @@ if(empty($model->position) and isset($model->id))
 
 		<?php echo $form->error($model,'tyo_toimialue'); ?>
 	</div>
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'tyoryhma'); ?>
+
+		<?php
+		$list = array();
+      		$l = Valikkoot::model()->findAll(" select_type='tyoryhma' ",array('order' => "select_type"));
+
+		$ryhmat = array();
+		if(is_array(json_decode($model->tyoryhma)))
+			$ryhmat = json_decode($model->tyoryhma);
+		else
+			array_push($ryhmat, $model->tyoryhma);
+
+
+		if(isset($l[0]))
+		{
+			echo '<select class="mult" name="Tyontekijat[tyoryhma][]" multiple id="Tyontekijat_tyoryhma">';
+			foreach($l as $ryhma){
+			    if(in_array($ryhma->value, $ryhmat))
+				echo '<option value="'.$ryhma->value.'" selected>'.$ryhma->value.'</option>';
+			    else
+				echo '<option value="'.$ryhma->value.'">'.$ryhma->value.'</option>';
+			}
+			echo '</select>';
+		}
+        	?>
+		<?php echo $form->error($model,'tyoryhma'); ?>
+	</div>
+
+
 
    </div>
    <div class="col-sm-3">

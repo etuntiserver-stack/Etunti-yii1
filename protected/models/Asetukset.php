@@ -46,7 +46,7 @@ class Asetukset extends DB2ActiveRecord
 			array('trust_url, checkout_salasana, trust_ws_api_url, netvisor_customer_id, netvisor_partner_id, netvisor_userkey, netvisor_partnerkey, netvisor_organisation_identifier, merkkipaivailmoitukset_sahkoposti', 'length', 'max'=>255),
 			array('viikonloppulisa_la, viikonloppulisa_su, vinkki_tunnit, vinkki_prosentti', 'length', 'max'=>10),
 			array('aikavali_halytys', 'length', 'max'=>3),
-			array('oikeudet, pyhapaivat, erikoislauantai, tilausvahvistus, rekisteriseloste, onlinevaraus_laatu_luotettavuus, onlinevaraus_takuu_turvallisuus, onlinevaraus_asiakaspalvelu, onlinevaraus_arvio_siivouksesta, ilmoitus_toistuvien_tyovuorojen_paattymisesta_saajat', 'length', 'max'=>10000),
+			array('oikeudet, pyhapaivat, erikoislauantai, tilausvahvistus, rekisteriseloste, onlinevaraus_laatu_luotettavuus, onlinevaraus_takuu_turvallisuus, onlinevaraus_asiakaspalvelu, onlinevaraus_arvio_siivouksesta, ilmoitus_toistuvien_tyovuorojen_paattymisesta_saajat, ilmoitus_uudesta_kuvasta_saajat', 'length', 'max'=>10000),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('id, syntyrin_emails, paivan_uutinen, logon_polkku, logon_korkeus, johtaja, viivastyskorko, tilinumero, iban, bic, trust_cid, trust_api, palvelu_tyyppi, trust_url, pyhapaivat, erikoislauantai, sovellus_tyovuorot', 'safe', 'on'=>'search'),
@@ -87,8 +87,8 @@ class Asetukset extends DB2ActiveRecord
 			'pyhapaivat'=> Yii::t('main', 'Viralliset pyhäpäivät / pp.kk.vvvv'),
 			'erikoislauantai' => Yii::t('main', 'Erikoislauantai'),
 			'sovellus_tyovuorot'=> Yii::t('main', 'Työvuorojen näyttäminen'),
-			'checkout_id'=> Yii::t('main', 'Checkout tunnus'),
-			'checkout_salasana'=> Yii::t('main', 'Checkout salasana'),
+			'checkout_id'=> Yii::t('main', 'Kauppiastunnus'),
+			'checkout_salasana'=> Yii::t('main', 'Turva-avain'),
 			'viikonloppulisa_la'=> Yii::t('main', 'Lauantai %'),
 			'viikonloppulisa_su'=> Yii::t('main', 'Sunnuntai %'),
 			'lasku_asiakasnumero'=> Yii::t('main', 'Syöttääkö itse asiakasnumeron vai lasketaan edellisestä automaattisesti'),
@@ -98,7 +98,7 @@ class Asetukset extends DB2ActiveRecord
 			'onlinevaraus_laatu_luotettavuus' => Yii::t('main', 'Laatu ja luotettavuus'),
 			'onlinevaraus_takuu_turvallisuus' => Yii::t('main', 'Takuu ja turvallisuus'),
 			'onlinevaraus_asiakaspalvelu' => Yii::t('main', 'Asiakaspalvelu'),
-			'onlinevaraus_arvio_siivouksesta' => Yii::t('main', 'Arvio siivouksesta'),
+			'onlinevaraus_arvio_siivouksesta' => Yii::t('main', 'Arvio palvelusta'),
 			'aikavali_halytys' => Yii::t('main', 'Aikaväli hälytys (min)'),
 			'ilmoitus_avoimista_kohteesta_sahkopostiin' => Yii::t('main', 'Ilmoitus määräajan ylittäneistä kohteista sähköpostiin'),
 			'ilmoitus_myohastyneista_kohteesta_sahkopostiin' => Yii::t('main', 'Ilmoitus myöhästyneistä kohteesta sähköpostiin'),
@@ -106,8 +106,8 @@ class Asetukset extends DB2ActiveRecord
 			'asiakas_tyovuorossa'=>Yii::t('main', 'Näytetäänkö asiakas työvuorossa'),
 			'paikkakunta_tyovuorossa' => Yii::t('main', 'Näytetäänkö paikkakunta työvuorossa'),
 			'onlinevaraus_aikaisintaan_paivamaara'=>Yii::t('main', 'Monenko päivän päästä vuoroja voi varata.'),
-			'onlinevaraus_alku'=>Yii::t('main', 'Varaukset alku'),
-			'onlinevaraus_loppu'=>Yii::t('main', 'Varaukset loppu'),
+			'onlinevaraus_alku'=>Yii::t('main', 'Varauksen alku kellon aika'),
+			'onlinevaraus_loppu'=>Yii::t('main', 'Varauksen loppu kellon aika'),
 			'app_lopettaa_vain_tagilla' => Yii::t('main', 'Kohde mahdollista lopettaa vain aloitetulla Tagilla'),
 			'ilmoitus_toistuvien_tyovuorojen_paattymisesta' => Yii::t('main', 'Ilmoitus toistuvien työvuorojen päättymisestä'),
 			'ilmoitus_toistuvien_tyovuorojen_paattymisesta_paivat_ennen' => Yii::t('main', 'Ilmoitus päättymisestä päivät ennen'),
@@ -115,6 +115,7 @@ class Asetukset extends DB2ActiveRecord
 			'tyovuorolahetys_naytetaanko_asiakas' => Yii::t('main', 'Työvuorolahetys näytetäänkö asiakas'),
 			'tyovuorolahetys_naytetaanko_kohteen_postitoimipaikka' => Yii::t('main', 'Työvuorolahetys näytetäänkö postitoimipaikka'),
 			'ilmoitus_merkkipaivasta'=>Yii::t('main', 'Ilmoitus merkkipäivästä sähköpostiin'),
+			'ilmoitus_uudesta_kuvasta_saajat'=>Yii::t('main', 'Sähköpostit johon lähetetään ilmoitus uudesta kuvasta.'),
 		);
 	}
 

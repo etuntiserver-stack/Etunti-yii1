@@ -83,7 +83,7 @@ class AdministratorsController extends Controller
 	   $site[0]->checkOikeus($checkOikeus);
 	//  Oikeudet -->
 
-		$model=new Administrators;
+		$model=new Administrators('create');
 
 		// Uncomment the following line if AJAX validation is needed
 		$this->performAjaxValidation($model);
@@ -146,10 +146,23 @@ class AdministratorsController extends Controller
 		if(isset($_POST['Administrators']))
 		{
 
-			if($model->adm_salasana != $_POST['Administrators']['adm_salasana'])
-			$_POST['Administrators']['adm_salasana']=md5($_POST['Administrators']['adm_salasana']);
+			$vaihdo = false;
+			$vanha_salasana = $model->adm_salasana;
+			if($vanha_salasana != $_POST['Administrators']['adm_salasana'] 
+				and !empty($_POST['Administrators']['adm_salasana'])
+				and !empty($_POST['Administrators']['adm_salasana_repeat'])
+				and $_POST['Administrators']['adm_salasana_repeat'] == $_POST['Administrators']['adm_salasana']
+			)
+			{
+				$vaihdo = true;
+			} 	
 
 			$model->attributes=$_POST['Administrators'];
+			if($vaihdo == false)
+				$model->adm_salasana=$vanha_salasana;
+			else
+				$model->adm_salasana=md5($_POST['Administrators']['adm_salasana']);
+
 			if($model->save())
 				$this->redirect(array('index'));
 		}

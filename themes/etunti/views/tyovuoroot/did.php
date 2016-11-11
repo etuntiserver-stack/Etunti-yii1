@@ -54,37 +54,42 @@ if(!isset($_POST['tulosta']))
 	$criteria->condition = " tid = '".$tid."' and pvm = '".date("d.m.Y",strtotime($pvm))."' ";
 
 	// <-- Asiakas
-		if(isset($_GET['asiakas']) and !empty($_GET['asiakas']))
-		{
-	           $criteria->addCondition ("
-		   kohde IN 
+	if(isset($asiakas) and !empty($asiakas))
+	{
+		$criteria->addCondition ("
+		kohde IN 
 		       (
 			    SELECT id FROM sivex_kohdet WHERE asiakas_id IN
    			    (
-			       SELECT id FROM asiakkaat WHERE yrityksen_nimi LIKE '%".$_GET['asiakas']."%' OR yhteyshenkilo LIKE '%".$_GET['asiakas']."%' OR puhelin LIKE '%".$_GET['asiakas']."%'
+			       SELECT id FROM asiakkaat WHERE 
+				yrityksen_nimi LIKE '%".$asiakas."%' 
+				OR yhteyshenkilo LIKE '%".$asiakas."%' 
+				OR puhelin LIKE '%".$asiakas."%'
 			    )
 		       )
 		   ");
-		}
+	}
 	// Asiakas -->
 
 	// <-- Kohde
-		if(isset($_GET['kohde']) and !empty($_GET['kohde']))
-		{
+	if(isset($kohde) and !empty($kohde))
+	{
 	           $criteria->addCondition ("
 		   kohde IN 
 		       (
-			    SELECT id FROM sivex_kohdet WHERE osoite LIKE '%".$_GET['kohde']."%' OR puh_nro LIKE '%".$_GET['kohde']."%'
+			    SELECT id FROM sivex_kohdet WHERE 
+				osoite LIKE '%".$kohde."%' 
+				OR puh_nro LIKE '%".$kohde."%'
 		       )
 		   ");
-		}
+	}
 	// Kohde -->
 
 
-	if(isset($kohteenArr) and count($kohteenArr) > 0)
+	if(isset($kohteet_siivous) and count($kohteet_siivous) > 0)
 	{
-		$kohteenArr = implode(',',$kohteenArr);
-		$criteria->addCondition  (" kohde IN ($kohteenArr) ");
+		$impl = implode(',',$kohteet_siivous);
+		$criteria->addCondition  (" kohde IN ($impl) ");
 	}
 
 	$tv = Tyovuoroot::model()->findAll($criteria); 

@@ -13,6 +13,9 @@
  */
 class Administrators extends DB2ActiveRecord
 {
+
+public $adm_salasana_repeat;
+
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
@@ -39,7 +42,9 @@ class Administrators extends DB2ActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('adm_login, adm_salasana, adm_email, adm_nimi', 'required'),
+			array('adm_login, adm_email, adm_nimi', 'required'),
+			array('adm_salasana', 'required', 'on'=>'create'),
+			//array('adm_salasana', 'compare', 'compareAttribute'=>'adm_salasana_repeat' , 'on'=>'update'),
 			array('status', 'numerical', 'integerOnly'=>true),
 			array('adm_login, adm_salasana, adm_email, adm_nimi', 'length', 'max'=>100),
 			array('ulkonaky', 'length', 'max'=>3000),
@@ -69,6 +74,7 @@ class Administrators extends DB2ActiveRecord
 			'id' => Yii::t('main', 'ID'),
 			'adm_login' => Yii::t('main', 'Käyttäjätunnus'),
 			'adm_salasana' => Yii::t('main', 'Uusi salasana'),
+			'adm_salasana2' => Yii::t('main', 'Toista uusi salasana'),
 			'adm_email' => Yii::t('main', 'Sähköposti'),
 			'adm_nimi' => Yii::t('main', 'Nimi'),
 			'status' => Yii::t('main', 'Ryhmä'),
