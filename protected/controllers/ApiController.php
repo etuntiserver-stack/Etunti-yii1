@@ -290,11 +290,26 @@ public function actionTiedosto($dom)
 
 
 		$firma = FirmanTiedot::model()->findbypk(1);
+		$asetukset = Asetukset::model()->findbypk(1);
 		if(isset($firma->sahkoposti) and !empty($firma->sahkoposti))
 		{
-			$message = Yii::t('main', 'Hei. Valokuva on saapunut kohteista: ').$k->osoite;
-			$headers = "From: ". $firma->sahkoposti;
-			mail($firma->sahkoposti,Yii::t('main', 'Uusi valokuva kohteista. Lähettäjä: '). ' '.$ttekija->tekijan_nimi,$message,$headers);
+			
+			if(!empty($asetukset->ilmoitus_uudesta_kuvasta_saajat))
+			{
+				$ex = explode("\n", $asetukset->ilmoitus_uudesta_kuvasta_saajat);
+				if(is_array($ex))
+					$saajat = implode(",", $ex);
+				else
+					$saajat = $asetukset->ilmoitus_uudesta_kuvasta_saajat;
+
+
+				$message = Yii::t('main', 'Hei. Valokuva on saapunut kohteista: ').$k->osoite;
+				$headers = "From: ". $firma->sahkoposti;
+				mail($saajat,Yii::t('main', 'Uusi valokuva kohteista. Lähettäjä: '). ' '.$ttekija->tekijan_nimi,$message,$headers);
+
+			}
+
+
 		}
 
 		} //if(isset($k->id))
@@ -1405,6 +1420,7 @@ public function actionUpdate()
     }
     // Try to save the model
     if($model->save())
+
         $this->_sendResponse(200, CJSON::encode($model));
     else
         // prepare the error $msg
