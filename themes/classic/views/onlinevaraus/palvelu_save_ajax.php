@@ -78,8 +78,10 @@
 	<div class="row">
 	 <div class="col-xs-2">
 	   <i class="fa fa-home"></i> 
-	 </div><div class="col-xs-10">
-		<span id="nimikejanelio">'.$model->nimike.' '.$model->nelio.' m²</span>';
+	 </div><div class="col-xs-10">';
+
+		if(!empty($model->nelio)) $nelio = ' '.$model->nelio.' m²'; else $nelio = '';
+		$body .= '<span id="nimikejanelio">'.$model->nimike.$nelio.'</span>';
 
 		$tilauksenKuvaus = array();
 		$tilauksenKuvaus['paa'][$model->nimike] = $model->nelio;

@@ -145,7 +145,7 @@ if(isset($asetukset->checkout_id) and !empty($asetukset->checkout_id) and !empty
 
 		<?php
 	       	$criteria = new CDbCriteria();
-	       	$criteria->condition = " palvelu=0 ";
+	       	$criteria->condition = " palvelu=0 AND nayta_sivuilla=1 ";
 	       	$criteria->group = " nimike ";
 		$onlineTuotteet = OnlinevarausTuotteet::model()->findAll($criteria);
 		foreach($onlineTuotteet as $data)
@@ -234,7 +234,7 @@ if(isset($asetukset->checkout_id) and !empty($asetukset->checkout_id) and !empty
 	   <table class="tblisat">
 	    <tr>
 	     <td width=1>
-		<input class="checkbox" for="'.$data->id.'" type="checkbox" '.$checked.'>
+		<input class="checkbox lisat" for="'.$data->id.'" type="checkbox" '.$checked.'>
 	     </td><td>
 	        <a href="#" data-toggle="modal" data-target="#myModal_'.$data->id.'">'.$data->nimike.'</a>
 
@@ -392,13 +392,14 @@ $("#palvelu").change(function(){
 	data:{ "word" : palvelu },
 	type:'POST',
 	success:function(data){
-		//console.log(data);
-		if(data)
-		{
-			$('#nelioValikko').html(JSON.parse(data));
+		data = JSON.parse(data);
+		console.log(data);
+
+			$('#nelioValikko').html(data);
 			$('#huoneistonkoko').show('slow');
 			checker();
-		}
+			$('#lispalvimg').show('slow');
+
    	},
 	error:function(data){
 		console.log(data);
@@ -411,7 +412,6 @@ $("#palvelu").change(function(){
 });
 
 $(document).delegate("#nelio","change",function(){
-	$('#lispalvimg').show('slow');
 	checker();
 });
 
@@ -440,10 +440,13 @@ checker();
 function checker(){
 
 	var palvelu = $("#palvelu").val();
-	var nelio = $("#nelio").val();
+	var nelio = '';
+	if($("#nelio").val())
+		nelio = $("#nelio").val();
+
 	var tyo_toimialue = $('#tyo_toimialue').val();
 
-	if(palvelu && nelio)
+	if(palvelu)
 	{
 	console.log(palvelu+ " " + nelio);
 
@@ -456,7 +459,6 @@ function checker(){
 		if(data)
 		{
 			$('#panGetContent').html(JSON.parse(data));
-			lisat();
 		}
    	},
 	error:function(data){
@@ -469,9 +471,8 @@ function checker(){
 }
 
 
-function lisat()
-{
-$(".checkbox").click(function(){
+
+$(document).delegate(".lisat","click",function(){
 
    var lisapalveluID = $(this).attr("for");
    var checked = '';
@@ -500,7 +501,7 @@ $(".checkbox").click(function(){
     }
 
 });
-}
+
 
 
 

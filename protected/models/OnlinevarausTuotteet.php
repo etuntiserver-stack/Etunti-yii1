@@ -40,7 +40,7 @@ class OnlinevarausTuotteet extends DB2ActiveRecord
 		// will receive user inputs.
 		return array(
 			array('nimike, palvelu, kesto, hinta', 'required'),
-			array('palvelu, nayta_sivuilla', 'numerical', 'integerOnly'=>true),
+			array('palvelu, nayta_sivuilla, paa_palvelu', 'numerical', 'integerOnly'=>true),
 			array('nimike, selitysteksti', 'length', 'max'=>255),
 			array('hinta, kesto, nelio, kotitalousvahennys', 'length', 'max'=>20),
 			// The following rule is used by search().
@@ -74,7 +74,8 @@ class OnlinevarausTuotteet extends DB2ActiveRecord
 			'kesto' => Yii::t('main', 'Kesto (tunnilla)'),
 			'nelio' => Yii::t('main', 'Neliömetri m²'),
 			'kotitalousvahennys' => Yii::t('main', 'Kotitalousvähennys %'),
-			'nayta_sivuilla' => Yii::t('main', 'Julkaise'),
+			'nayta_sivuilla' => Yii::t('main', 'Aktiivinen'),
+			'paa_palvelu'=> Yii::t('main', 'Pääpalvelu'),
 		);
 	}
 

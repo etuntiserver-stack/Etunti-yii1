@@ -1,6 +1,6 @@
 <?php
 
-  if(isset($data[0]))
+  if(isset($dataHuoneet[0]))
   {
 	$d2 = array();
 
@@ -13,7 +13,7 @@
 	<select class="form-control input-lg" id="nelio">
 		<option value="">Huoneisten koko m²</option>';
 
-	foreach($data as $d)
+	foreach($dataHuoneet as $d)
 	{
 	  $ex = explode("-",$d->nelio);
 	  $d2[$ex[0]] =  $d->nelio.'//'.$d->nelio;
@@ -32,4 +32,13 @@
 	echo json_encode($body);
 
   } 
+
+
+
+  if(isset($dataMuut[0]))
+  {
+	$body = '';
+	echo json_encode($body);
+  }
+
 ?>

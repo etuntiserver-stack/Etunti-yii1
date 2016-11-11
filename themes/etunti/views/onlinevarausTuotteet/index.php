@@ -24,6 +24,21 @@
                     <!-- Input Icons -->
                     <div class="row">
 
+		      <?php if(isset($_POST['nayta_sivuilla'])) echo '<input type="hidden" id="akt" value="'.$_POST['nayta_sivuilla'].'">'; ?>
+                      <div class="col-md-2">
+                        <div class="section">
+                          <label class="field select">
+			   <select class="gui-input" name="nayta_sivuilla" id="nayta_sivuilla">
+       				<option value=1><?php echo Yii::t('main', 'Aktiiviset'); ?></option>
+       				<option value=0><?php echo Yii::t('main', 'Passiviset'); ?></option>
+       				<option value="kaikki"><?php echo Yii::t('main', 'Kaikki'); ?></option>
+			   </select>
+                            <i class="arrow double"></i>
+                            </label>
+                          </label>
+                        </div>
+                      </div>
+
                       <div class="col-md-2">
                         <div class="section">
                           <label class="field prepend-icon">
@@ -62,13 +77,13 @@
   <table class="table table-striped" id="mobileTable">
   <thead class="myBgColors">
   <tr>
+  <th></th>
   <th><?php echo Yii::t('main', 'Nimike'); ?></th>
   <th><?php echo Yii::t('main', 'Hinta'); ?></th>
   <th><?php echo Yii::t('main', 'Selitysteksti'); ?></th>
   <th><?php echo Yii::t('main', 'Kesto'); ?></th>
   <th><?php echo Yii::t('main', 'Neliö'); ?></th>
   <th><?php echo Yii::t('main', 'Palvelu'); ?></th>
-  <th></th>
   </tr>
   </thead>
   <?php $this->widget('zii.widgets.CListView', array(
@@ -99,9 +114,9 @@
 $(document).ready(function(){
 
 if($("#akt").val())
-$("#aktiivinen").val($("#akt").val());
+$("#nayta_sivuilla").val($("#akt").val());
 else
-$("#aktiivinen").val(1);
+$("#nayta_sivuilla").val(1);
 
 $(".haemob").click(function(){
 	$("#mobForm").submit();

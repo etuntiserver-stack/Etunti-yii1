@@ -352,18 +352,29 @@ class OnlinevarausController extends Controller
 	   if(isset($_POST['word']))
 	   {
 		$word = trim($_POST['word']);
+
+		// <-- Huoneet ja nelio
 		$criteria=new CDbCriteria;
 		$criteria->order = " SUBSTRING_INDEX(nelio,'-',1) ";
-		$criteria->condition = " nimike='".$word."' AND nayta_sivuilla=1 ";
-		$data = OnlinevarausTuotteet::model()->findAll($criteria);
+		$criteria->condition = " nimike='".$word."' AND nayta_sivuilla=1 AND nelio!='' ";
+		$dataHuoneet = OnlinevarausTuotteet::model()->findAll($criteria);
 
 		$criteria=new CDbCriteria;
 		$criteria->condition = " palvelu=0 AND nayta_sivuilla=1 AND nimike='".$word."' AND selitysteksti!='' ";
 		$dataThis = OnlinevarausTuotteet::model()->find($criteria);
+		//  Huoneet ja nelio -->
+
+
+		// <-- Muut ilman nelio
+		$criteria=new CDbCriteria;
+		$criteria->condition = " nimike='".$word."' AND nayta_sivuilla=1 AND nelio='' ";
+		$dataMuut = OnlinevarausTuotteet::model()->findAll($criteria);
+		// Muut ilman nelio -->
 
 		$this->renderPartial('palvelu_ajax',array(
-			'data'=>$data,
-			'dataThis'=>$dataThis
+			'dataHuoneet'=>$dataHuoneet,
+			'dataMuut'=>$dataMuut,
+			'dataThis'=>$dataThis,
 		));
 	   }
 	}

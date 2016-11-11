@@ -31,6 +31,22 @@
 		<?php echo $form->error($model,'palvelu'); ?>
 	</div>
 
+	<div class="section fill mb5 paaPalveluValiko" style="display:none">
+		<?php echo $form->labelEx($model,'paa_palvelu'); ?>
+		<?php
+		
+		$criteria=new CDbCriteria;
+		$criteria->order=" nimike ";
+		$criteria->group=" nimike ";
+		$criteria->condition=" palvelu=0 ";
+		$ot = CHtml::listData(OnlinevarausTuotteet::model()->findAll($criteria), 'id', 'nimike');
+
+        	echo $form->dropDownList($model, 'paa_palvelu', $ot,
+		array('empty'=>Yii::t('main', 'Valitse'), 'class'=>'form-control'));	
+        	?>
+		<?php echo $form->error($model,'palvelu'); ?>
+	</div>
+
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'selitysteksti'); ?>
 		<?php echo $form->textArea($model,'selitysteksti',array('rows'=>6, 'cols'=>50, 'class'=>'form-control')); ?>
@@ -92,3 +108,25 @@
 <?php $this->endWidget(); ?>
  </div>
 </div><!-- form -->
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+
+	checkPalvelu();
+  $('#OnlinevarausTuotteet_palvelu').change(function(){
+	checkPalvelu();
+  });
+
+  function checkPalvelu(){
+
+	var thisVal = parseInt($($('#OnlinevarausTuotteet_palvelu option:selected')).val());
+
+	if(thisVal == 1)
+		$('.paaPalveluValiko').show(375);
+	else
+		$('.paaPalveluValiko').hide(375);
+
+  }
+});
+</script>

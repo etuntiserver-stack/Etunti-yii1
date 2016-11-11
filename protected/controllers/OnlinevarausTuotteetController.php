@@ -110,7 +110,7 @@ class OnlinevarausTuotteetController extends Controller
 		{
 			$model->attributes=$_POST['OnlinevarausTuotteet'];
 			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+				$this->redirect(array('index'));
 		}
 
 		$this->render('create',array(
@@ -141,7 +141,7 @@ class OnlinevarausTuotteetController extends Controller
 		{
 			$model->attributes=$_POST['OnlinevarausTuotteet'];
 			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+				$this->redirect(array('index'));
 		}
 
 		$this->render('update',array(
@@ -184,6 +184,17 @@ class OnlinevarausTuotteetController extends Controller
 
        		$criteria = new CDbCriteria();
 	        $criteria->order = " palvelu=0 DESC,nimike ASC ";
+
+
+		if(isset($_POST['nayta_sivuilla']) and $_POST['nayta_sivuilla'] == 0 and $_POST['nayta_sivuilla'] != 'kaikki')
+	        	$criteria->addCondition (" nayta_sivuilla=0 ");
+		elseif(isset($_POST['nayta_sivuilla']) and $_POST['nayta_sivuilla'] == 1 and $_POST['nayta_sivuilla'] != 'kaikki')
+	        	$criteria->addCondition (" nayta_sivuilla=1 ");
+		elseif(isset($_POST['nayta_sivuilla']) and $_POST['nayta_sivuilla'] == 'kaikki')
+	        	$criteria->addCondition (" nayta_sivuilla=1 OR nayta_sivuilla=0 ");
+		elseif(!isset($_POST['nayta_sivuilla']))
+	        	$criteria->addCondition (" nayta_sivuilla=1 ");
+
 
 		if(isset($_POST['nimike']) and !empty(trim($_POST['nimike'])))
 	        $criteria->addCondition (" nimike LIKE '%".$_POST['nimike']."%' ");
