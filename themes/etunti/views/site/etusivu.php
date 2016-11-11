@@ -618,6 +618,11 @@ var etusivuAjax = function(){
 
 	<div class="row">
 	 <div class="form-inline">
+
+		<div class="pull-right">
+			 <button class="synkronoi_gps_sijainti btn btn-primary myBgColors"><?php echo Yii::t('main', 'Synkronoi kohteet kartalle'); ?></button>
+		</div>
+
 		<?php echo Yii::t('main', 'Alue/Kaupunki'); ?> <input type="text" class="form-control form-group" id="alueKaupunki">
 		 <button class="tallennaLatLng btn btn-primary myBgColors"><?php echo Yii::t('main', 'Hae'); ?></button>
 
@@ -640,6 +645,25 @@ var etusivuAjax = function(){
 
 <script type="text/javascript">
 $(document).ready(function(){
+
+
+$(".synkronoi_gps_sijainti").click(function(){
+
+	$(".synkronoi_gps_sijainti").html('Odota..');
+
+        $.ajax({
+           url: location.protocol + "//" + location.host + '/index.php/site/synkronoi_gps_sijainti',
+           type: "POST",
+           data: { sunc : "true" },
+           success: function(data){
+		data = JSON.parse(data);
+		console.log(data);
+		if(data)
+		$(".synkronoi_gps_sijainti").html('Synkronoitu '+data+' kohdetta');
+           }
+        });
+
+});
 
 $(".tallennaLatLng").click(function(){
 	localStorage.setItem('alueKaupunki', $("#alueKaupunki").val());

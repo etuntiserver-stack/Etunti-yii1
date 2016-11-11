@@ -41,7 +41,7 @@ class SiteController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', 
-				'actions'=>array('etusivu','ohjesivu','etusivu_esimerki', 'change_color', 'valiko', 'valiko_ajax', 'kohderyhma', 'ohjevideot', 'mobemu', 'etusivu_ajax', 'ulkonaky', 'autocomplete'),
+				'actions'=>array('etusivu','ohjesivu','etusivu_esimerki', 'change_color', 'valiko', 'valiko_ajax', 'kohderyhma', 'ohjevideot', 'mobemu', 'etusivu_ajax', 'ulkonaky', 'autocomplete', 'synkronoi_gps_sijainti'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('allow', 
@@ -94,6 +94,43 @@ class SiteController extends Controller
         }
 
 
+	public function actionSynkronoi_gps_sijainti()
+	{
+		$count = 0;
+		if(isset($_POST['sunc']))
+		{
+			$asetuksetForAll = AsetuksetForAll::model()->findByPk(1);
+			if(isset($asetuksetForAll->googlemaps_apikey) and !empty($asetuksetForAll->googlemaps_apikey))
+			{
+			    $model = Kohteet::model()->findAll();
+			    foreach($model as $data)
+			    {
+				if(!empty($data->osoite) and !empty($data->kaupunki) and !empty($data->pnumero))
+				{	
+					$count++;
+					$address = urlencode($data->kaupunki.'+'.$data->osoite);	
+					$get = file_get_contents('https://maps.googleapis.com/maps/api/geocode/json?address='.$address.'&key=AIzaSyAsoAPXKSe3LfIiOYSerAotxCdC-jOFS2o');
+					$response = json_decode($get, true);
+					if(isset($response['status']) and $response['status'] == 'OK')
+					{
+						$lat = $response['results'][0]['geometry']['location']['lat'];
+						$lng = $response['results'][0]['geometry']['location']['lng'];
+
+						Kohteet::model()->updateByPk($data->id, array('gps_sijainti'=>$lat.','.$lng));
+
+						//echo '<pre>';
+						//print_r($response); //$response['results'][0]['geometry']['location']['lat']
+						//echo '</pre>';
+						//exit;
+
+					}
+				}			
+			    }
+			}
+		}
+
+		echo json_encode($count);
+	}
 
 	public function actionUlkonaky()
 	{
