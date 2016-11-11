@@ -108,7 +108,7 @@ class SiteController extends Controller
 				if(!empty($data->osoite) and !empty($data->kaupunki) and !empty($data->pnumero))
 				{	
 					$count++;
-					$address = urlencode($data->kaupunki.'+'.$data->osoite);	
+					$address = urlencode($data->pnumero.'+'.$data->kaupunki.'+'.$data->osoite);	
 					$get = file_get_contents('https://maps.googleapis.com/maps/api/geocode/json?address='.$address.'&key=AIzaSyAsoAPXKSe3LfIiOYSerAotxCdC-jOFS2o');
 					$response = json_decode($get, true);
 					if(isset($response['status']) and $response['status'] == 'OK')
