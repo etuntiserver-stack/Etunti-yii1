@@ -656,11 +656,14 @@ $(".synkronoi_gps_sijainti").click(function(){
            type: "POST",
            data: { sunc : "true" },
            success: function(data){
-		data = JSON.parse(data);
+		//data = JSON.parse(data);
 		console.log(data);
 		if(data)
 		$(".synkronoi_gps_sijainti").html('Synkronoitu '+data+' kohdetta');
-           }
+           },
+    	   error: function(XMLHttpRequest, textStatus, errorThrown) {
+	    	console.log(XMLHttpRequest);
+ 	   }
         });
 
 });

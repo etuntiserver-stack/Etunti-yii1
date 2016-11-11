@@ -96,6 +96,7 @@ class SiteController extends Controller
 
 	public function actionSynkronoi_gps_sijainti()
 	{
+		//header("Content-Type: text/html; charset=utf-8");
 		$count = 0;
 		if(isset($_POST['sunc']))
 		{
@@ -105,12 +106,16 @@ class SiteController extends Controller
 			    $model = Kohteet::model()->findAll();
 			    foreach($model as $data)
 			    {
-				if(!empty($data->osoite) and !empty($data->kaupunki) and !empty($data->pnumero))
+				if(!empty($data->osoite) and !empty($data->kaupunki) and !empty($data->pnumero) and is_numeric($data->pnumero))
 				{	
 					$count++;
-					$address = urlencode($data->pnumero.'+'.$data->kaupunki.'+'.$data->osoite);	
-					$get = file_get_contents('https://maps.googleapis.com/maps/api/geocode/json?address='.$address.'&key=AIzaSyAsoAPXKSe3LfIiOYSerAotxCdC-jOFS2o');
-					$response = json_decode($get, true);
+					//$address = $data->id.' '.$data->pnumero.'+'.$data->kaupunki.'+'.$data->osoite.'<br>';
+
+
+					$address = urlencode($data->pnumero.'+'.$data->kaupunki.'+'.$data->osoite);
+					$content = file_get_contents('https://maps.googleapis.com/maps/api/geocode/json?address='.$address.'&key=AIzaSyAsoAPXKSe3LfIiOYSerAotxCdC-jOFS2o');
+
+					$response = json_decode($content, true);
 					if(isset($response['status']) and $response['status'] == 'OK')
 					{
 						$lat = $response['results'][0]['geometry']['location']['lat'];
@@ -122,14 +127,15 @@ class SiteController extends Controller
 						//print_r($response); //$response['results'][0]['geometry']['location']['lat']
 						//echo '</pre>';
 						//exit;
-
 					}
+
+
 				}			
 			    }
 			}
 		}
 
-		echo json_encode($count);
+		echo urldecode($count);
 	}
 
 	public function actionUlkonaky()
