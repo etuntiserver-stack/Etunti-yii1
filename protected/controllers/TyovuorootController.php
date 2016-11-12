@@ -1547,6 +1547,25 @@ class TyovuorootController extends Controller
 		}
 		//     Reset -->
 
+
+		// <-- GET haku
+		if(isset($_GET['year']) or isset($_GET['week']))
+		{
+
+			if(isset($_GET['year']) and !empty($_GET['year']))
+				Yii::app()->session['year'] = $_GET['year'];
+			
+			if(isset($_GET['week']) and !empty($_GET['week']))
+				Yii::app()->session['week'] = $_GET['week'];
+
+
+
+
+			$this->redirect(array('index'));
+		}		
+		//  GET haku -->
+
+
 		// <-- Post haku
 		if(isset($_POST['haku']))
 		{
@@ -1611,6 +1630,9 @@ class TyovuorootController extends Controller
 
 
 		$wkMaara = 53;
+		if(!isset(Yii::app()->session['wkMaara']))
+			Yii::app()->session['wkMaara'] = $wkMaara;
+
 		$year = Yii::app()->session['year'];
 		$week = Yii::app()->session['week'];
 		
@@ -1794,6 +1816,7 @@ class TyovuorootController extends Controller
 			'kohteet_siivous'	=>$kohteet_siivous,
 			'asiakas'		=>$asiakas,
 			'kohde'			=>$kohde,
+			'wkMaara'		=>$wkMaara,
 		));
 
 	}

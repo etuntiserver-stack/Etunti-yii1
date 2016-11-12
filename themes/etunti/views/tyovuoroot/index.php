@@ -161,7 +161,7 @@
 
 
 <?php if(!isset($_GET['fullscreen'])) : ?>
-	<input type="hidden" id="taulunKorko" value="160">
+	<input type="hidden" id="taulunKorko" value="180">
 <?php else: ?>
 	<input type="hidden" id="taulunKorko" value="140">
 <?php endif; ?>
@@ -177,6 +177,41 @@
               <div class="panel heading-border myBgColors">
                 <div class="panel-body bg-light">
                  <div class="row">
+
+		<!-- Viikko hyppaminen -->
+		<div class="row">
+		 <div class="col-sm-3 col-sm-offset-4">
+
+		  <div class="input-group">
+		  <span class="input-group-btn">
+		     	<a href="<?php echo $_SERVER['PHP_SELF'].'?week='.($week == 1 ? $wkMaara : $week -1).'&year='.($week == 1 ? $year - 1 : $year); ?>"><i class="fa fa-arrow-left btn btn-primary btn-sm myBgColors"></i></a>
+		  </span>
+
+			<select class="form-control input-sm" id="viikkonhyppaminen">
+			<?php
+			$year           = $year;
+			$firstDayOfYear = mktime(0, 0, 0, 1, 1, $year);
+			$nextMonday     = strtotime('monday', $firstDayOfYear);
+			$nextSunday     = strtotime('sunday', $nextMonday);
+	
+			    echo '<option value="'.$_SERVER['PHP_SELF'].'?week='.$week.'&year='.$year.'">'.date('W', strtotime($year ."W". $week . '1')).', '.date('d.m', strtotime($year ."W". $week . '1')).' - '.date('d.m', strtotime($year ."W". $week . '7')).'</option>';
+
+			while (date('Y', $nextMonday) == $year) {
+			    echo '<option value="'.$_SERVER['PHP_SELF'].'?week='.date('W', $nextMonday).'&year='.$year.'">'.date('W', $nextMonday).', '.date('d.m', $nextMonday).' - '.date('d.m', $nextSunday).'</option>';
+	
+			    $nextMonday = strtotime('+1 week', $nextMonday);
+			    $nextSunday = strtotime('+1 week', $nextSunday);
+			}
+			?>
+			</select>
+		  <span class="input-group-btn">
+		     	<a href="<?php echo $_SERVER['PHP_SELF'].'?week='.($week == $wkMaara ? 1 : 1 + $week).'&year='.($week == $wkMaara ? 1 + $year : $year); ?>"><i class="fa fa-arrow-right btn btn-primary btn-sm myBgColors"></i></a> 
+		  </span>
+		  </div>
+
+		 </div>
+		</div>
+		<!-- Viikko hyppaminen -->
 
 
 <div class="table-responsive">
