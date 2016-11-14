@@ -39,10 +39,11 @@ class OnlinevarausTuotteet extends DB2ActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('nimike, palvelu, kesto, hinta', 'required'),
+			array('nimike', 'required'),
 			array('palvelu, nayta_sivuilla, paa_palvelu', 'numerical', 'integerOnly'=>true),
 			array('nimike, selitysteksti', 'length', 'max'=>255),
 			array('hinta, kesto, nelio, kotitalousvahennys', 'length', 'max'=>20),
+			array('toinen_valikko_rakenne, lisapalvelut', 'length', 'max'=>10000),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('id, nimike, hinta, selitysteksti, palvelu, kesto, nelio', 'safe', 'on'=>'search'),

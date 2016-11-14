@@ -108,7 +108,15 @@ class OnlinevarausTuotteetController extends Controller
 
 		if(isset($_POST['OnlinevarausTuotteet']))
 		{
+
+			//echo '<pre>';
+			//print_r($_POST['toinen_valiko']);
+			//echo '</pre>';
+			//exit;
+
 			$model->attributes=$_POST['OnlinevarausTuotteet'];
+			$model->toinen_valikko_rakenne=json_encode($_POST['toinen_valiko']);
+			$model->lisapalvelut=json_encode($_POST['lisapalvelut']);
 			if($model->save())
 				$this->redirect(array('index'));
 		}
@@ -140,6 +148,8 @@ class OnlinevarausTuotteetController extends Controller
 		if(isset($_POST['OnlinevarausTuotteet']))
 		{
 			$model->attributes=$_POST['OnlinevarausTuotteet'];
+			$model->toinen_valikko_rakenne=json_encode($_POST['toinen_valiko']);
+			$model->lisapalvelut=json_encode($_POST['lisapalvelut']);
 			if($model->save())
 				$this->redirect(array('index'));
 		}

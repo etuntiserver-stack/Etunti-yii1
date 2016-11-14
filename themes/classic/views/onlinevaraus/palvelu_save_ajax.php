@@ -80,11 +80,11 @@
 	   <i class="fa fa-home"></i> 
 	 </div><div class="col-xs-10">';
 
-		if(!empty($model->nelio)) $nelio = ' '.$model->nelio.' m²'; else $nelio = '';
-		$body .= '<span id="nimikejanelio">'.$model->nimike.$nelio.'</span>';
+		if(isset($_SESSION['onlinevaraus']['paa_nimike'])) $otsikko = ', '.$_SESSION['onlinevaraus']['paa_nimike']; else $otsikko = '';
+		$body .= '<span id="nimikejanelio">'.$model->nimike.$otsikko.'</span>';
 
 		$tilauksenKuvaus = array();
-		$tilauksenKuvaus['paa'][$model->nimike] = $model->nelio;
+		$tilauksenKuvaus['paa'][$model->nimike] = $_SESSION['onlinevaraus']['paa_nimike'];
 
 		if(isset($_SESSION['onlinevaraus']['lisapalvelut']))
 		foreach($_SESSION['onlinevaraus']['lisapalvelut'] as $p)
@@ -129,7 +129,7 @@
 	   <i class="fa fa-clock-o"></i> 
 	 </div><div class="col-xs-10">';
 
-	$sumTunti = $lisaTunti+$model->kesto;
+	$sumTunti = $lisaTunti+$_SESSION['onlinevaraus']['paa_kesto'];
 	$_SESSION['onlinevaraus']['sumTunti'] = $sumTunti;
 	$body .= '<span id="clock">'.number_format($sumTunti, 1, '.', '').'</span> tuntia';
 
@@ -142,9 +142,9 @@
 	 </div><div class="col-xs-10">';
 
 	if($vkolisa > 0)
-	$sum = ($lisaHinta+$model->hinta)*$vkolisa;
+	$sum = ($lisaHinta+$_SESSION['onlinevaraus']['paa_hinta'])*$vkolisa;
 	else
-	$sum = $lisaHinta+$model->hinta;
+	$sum = $lisaHinta+$_SESSION['onlinevaraus']['paa_hinta'];
 
 	$body .= '<span id="hinta">'.number_format($sum, 2, ',', '').'</span> &euro;';
 	$_SESSION['onlinevaraus']['amount'] = $sum;

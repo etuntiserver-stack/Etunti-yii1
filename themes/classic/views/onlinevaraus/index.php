@@ -80,27 +80,6 @@ Asetukset::model()->updatebypk(1, array('onlinevaraus_loppu'=>18));
 
 
 
-<?php 
-$asetukset = Asetukset::model()->findbypk(1);
-if(isset($asetukset->checkout_id) and !empty($asetukset->checkout_id) and !empty($asetukset->checkout_salasana))
-{
-
-} else {
-		echo '<h3 class="alert alert-danger"><center>Checkout tunnukset puuttuu!</center></h3>';
-}
-?>
-
-<div class="row">
- <div class="col-sm-8">
-  <div class="well">
-   <center>
-
-	<div class="row">
-	  <div class="col-sm-4 col-sm-offset-4">
-
-		<h4>Valitse palvelu</h4>
-
-
                             <!-- Modal -->
                             <div class="modal fade kysymys">
                               <div class="modal-dialog">
@@ -131,6 +110,26 @@ if(isset($asetukset->checkout_id) and !empty($asetukset->checkout_id) and !empty
                             </div><!-- /.modal -->
 
 
+<?php 
+$asetukset = Asetukset::model()->findbypk(1);
+if(isset($asetukset->checkout_id) and !empty($asetukset->checkout_id) and !empty($asetukset->checkout_salasana))
+{
+
+} else {
+		echo '<h3 class="alert alert-danger"><center>Checkout tunnukset puuttuu!</center></h3>';
+}
+?>
+
+<div class="row">
+ <div class="col-sm-8">
+  <div class="well">
+   <center>
+
+	<div class="row">
+	  <div class="col-sm-4 col-sm-offset-4">
+
+		<h4>Valitse palvelu</h4>
+
 		<select class="form-control input-lg" id="palvelu">
 		<?php
 		if(isset($_SESSION['onlinevaraus']['paapalvelu']))
@@ -145,14 +144,14 @@ if(isset($asetukset->checkout_id) and !empty($asetukset->checkout_id) and !empty
 
 		<?php
 	       	$criteria = new CDbCriteria();
-	       	$criteria->condition = " palvelu=0 AND nayta_sivuilla=1 ";
-	       	$criteria->group = " nimike ";
+	       	$criteria->condition = " nayta_sivuilla=1 ";
+	       	$criteria->order = " nimike ";
 		$onlineTuotteet = OnlinevarausTuotteet::model()->findAll($criteria);
 		foreach($onlineTuotteet as $data)
 		{
 		  echo 
 		  '
-			<option value="'.$data->nimike.'">'.$data->nimike.'</option>
+			<option value="'.$data->id.'">'.$data->nimike.'</option>
 		  ';
 		}
 		?>
@@ -160,24 +159,7 @@ if(isset($asetukset->checkout_id) and !empty($asetukset->checkout_id) and !empty
 	  </div>
 	</div>
 
-	<div class="row" id="huoneistonkoko">
-	  <div class="col-sm-4 col-sm-offset-4">
-	    <div id="nelioValikko">
-		<select class="form-control input-lg" id="nelio">
-		<?php
-		if(isset($_SESSION['onlinevaraus']['paapalvelu']))
-		{
-		  $onlineTuotteet = OnlinevarausTuotteet::model()->findbypk($_SESSION['onlinevaraus']['paapalvelu']);
-		    if(isset($onlineTuotteet->id))
-		  	echo '<option value="'.$onlineTuotteet->nelio.'">'.$onlineTuotteet->nelio.'</option>';
-		}
-		?>
-		<option value="">Huoneisten koko m²</option>
-		<option value="">Palvelu puuttuu</option>
-		</select>
-	    </div>
-	  </div>
-	</div>
+	<div class="row" id="toinen_valiko"></div>
 
 
 	<div class="row" id="toimialueRow">
@@ -213,63 +195,8 @@ if(isset($asetukset->checkout_id) and !empty($asetukset->checkout_id) and !empty
 	</div>
 <br>
 
+	<div id="lisapalvelulista"></div>
 
-
-	<div id="lisapalvelulista">
-	<p><h4>Valitse lisäpalvelu</h4></p>
-	<?php
-       	$criteria = new CDbCriteria();
-       	$criteria->condition = " palvelu=1 AND nayta_sivuilla=1 ";
-	$onlineTuotteet = OnlinevarausTuotteet::model()->findAll($criteria);
-
-	echo '<div class="row">';
-	foreach($onlineTuotteet as $data)
-	{
-	  $checked = '';
-	  if(isset($_SESSION['onlinevaraus']['lisapalvelut']) and in_array($data->id, $_SESSION['onlinevaraus']['lisapalvelut'], true))
-	  $checked = 'checked';
-	  echo 
-	  '
-	  <div class="col-sm-6">
-	   <table class="tblisat">
-	    <tr>
-	     <td width=1>
-		<input class="checkbox lisat" for="'.$data->id.'" type="checkbox" '.$checked.'>
-	     </td><td>
-	        <a href="#" data-toggle="modal" data-target="#myModal_'.$data->id.'">'.$data->nimike.'</a>
-
-
-<!-- Modal -->
-<div id="myModal_'.$data->id.'" class="modal fade" role="dialog">
-  <div class="modal-dialog">
-
-    <!-- Modal content-->
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">'.Yii::t('main', 'Selitysteksti').'</h4>
-      </div>
-      <div class="modal-body">
-        <p>'.$data->selitysteksti.'</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">'.Yii::t('main', 'Sulje').'</button>
-      </div>
-    </div>
-
-  </div>
-</div>
-
-
-	     </td>
-	    </tr>
-	   </table>
-	  </div>
-	  ';
-	}
-	echo '</div>';
-	?>
-	</div>
    </center>
   </div>
  </div>
@@ -363,6 +290,7 @@ $(document).ready(function(){
 $("#lispalvimg").click(function(){
 	$('#lisapalvelulista').show('slow');
 });
+
 /*
 $( "#lispalvimg" ).hover(
   function() {
@@ -377,43 +305,37 @@ $( "#lispalvimg" ).hover(
 */
 
 
-$("#tyo_toimialue").change(function(){
-	checker();
-});
+
+
 
 $("#palvelu").change(function(){
 
    clearAll();
-   var palvelu = $(this).val();
-   if(palvelu)
-   {
+   var id = $(this).val();
    $.ajax({
 	url: 'palvelu_ajax',
-	data:{ "word" : palvelu },
+	data:{ "id" : id },
 	type:'POST',
 	success:function(data){
 		data = JSON.parse(data);
 		console.log(data);
 
-			$('#nelioValikko').html(data);
-			$('#huoneistonkoko').show('slow');
-			checker();
-			$('#lispalvimg').show('slow');
+		if(data[0])
+		$("#toinen_valiko").html(data[0]).show('slow');
+			//checker();
+		if(data[0]){
+			$("#lispalvimg").show('slow');
+			$('#lisapalvelulista').html(data[1]);
+		}
 
    	},
 	error:function(data){
 		console.log(data);
     	}
     });
-    } else {
-			checker();
-    }
 
 });
 
-$(document).delegate("#nelio","change",function(){
-	checker();
-});
 
 
 function clearAll(){
@@ -435,24 +357,16 @@ function clearAll(){
 }
 
 
-
+/*
 checker();
 function checker(){
 
-	var palvelu = $("#palvelu").val();
-	var nelio = '';
-	if($("#nelio").val())
-		nelio = $("#nelio").val();
-
-	var tyo_toimialue = $('#tyo_toimialue').val();
-
-	if(palvelu)
-	{
-	console.log(palvelu+ " " + nelio);
+   var id = $("#palvelu").val();
+   var tyo_toimialue = $('#tyo_toimialue').val();
 
    $.ajax({
 	url: 'palvelu_save_ajax',
-	data:{ "palvelu" : palvelu, "nelio" : nelio, "tyo_toimialue" : tyo_toimialue },
+	data:{ "id" : id, "tyo_toimialue" : tyo_toimialue },
 	type:'POST',
 	success:function(data){
 		//console.log(data);
@@ -466,15 +380,63 @@ function checker(){
     	}
     });
 
-
-	}
 }
+*/
+
+
+$(document).delegate("#toinen_valiko_values","change",function(){
+
+	var thisVal 	= $(this).val().split("//");
+	var otsikko 	= thisVal[0];
+	var nimike 	= thisVal[1];
+	var hinta 	= thisVal[2];
+	var kesto 	= thisVal[3];
+	var tyo_toimialue = $('#tyo_toimialue').val();
+
+   $.ajax({
+	url: 'palvelu_save_ajax',
+	data:{ toinen_valiko : "true", nimike : nimike, hinta : hinta, kesto : kesto, tyo_toimialue : tyo_toimialue },
+	type:'POST',
+	success:function(data){
+		//console.log(data);
+		if(data)
+		{
+			$('#panGetContent').html(JSON.parse(data));
+		}
+   	},
+	error:function(data){
+		console.log(data);
+    	}
+    });
+
+});
+
+
+$("#tyo_toimialue").change(function(){
+	var tyo_toimialue = $(this).val();
+
+   $.ajax({
+	url: 'palvelu_save_ajax',
+	data:{ toinen_valiko : "true", tyo_toimialue : tyo_toimialue },
+	type:'POST',
+	success:function(data){
+		//console.log(data);
+		if(data)
+		{
+			$('#panGetContent').html(JSON.parse(data));
+		}
+   	},
+	error:function(data){
+		console.log(data);
+    	}
+    });
+});
 
 
 
 $(document).delegate(".lisat","click",function(){
 
-   var lisapalveluID = $(this).attr("for");
+   var lisapalvelut = $(this).attr("for").split("//");
    var checked = '';
    if ($(this).is(':checked')) {
 	checked = 1;
@@ -482,16 +444,14 @@ $(document).delegate(".lisat","click",function(){
 	checked = 0;
    }
 
-   if(lisapalveluID)
+   if(lisapalvelut)
    {
    $.ajax({
 	url: 'lisat_ajax',
-	data:{ "id" : lisapalveluID, "checked" : checked },
+	data:{ "lisapalvelut" : lisapalvelut, "checked" : checked },
 	type:'POST',
 	success:function(data){
 		console.log(data);
-		if(data)
-		    checker();
 
    	},
 	error:function(data){

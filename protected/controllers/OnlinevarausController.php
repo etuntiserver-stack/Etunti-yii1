@@ -314,26 +314,36 @@ class OnlinevarausController extends Controller
 
 	public function actionLisat_ajax()
 	{
-	   if(isset($_POST['id']))
+	   if(isset($_POST['lisapalvelut']))
 	   {
-		$model = OnlinevarausTuotteet::model()->findbypk($_POST['id']);
-		if(isset($model->id))
-		{
+
 		    if($_POST['checked'] == 1)
 		    {
-			$_SESSION['onlinevaraus']['lisapalvelut'][$model->id] = $model->id;
+
+			$_SESSION['onlinevaraus']['lisapalvelut'] = $_POST['lisapalvelut'];
+/*
+		if(isset($_POST['otsikko_lisat']))
+			$_SESSION['onlinevaraus']['lisat_nimike'] = $_POST['otsikko_lisat'];
+		if(isset($_POST['hinta_lisat']))
+			$_SESSION['onlinevaraus']['lisat_hinta'] = $_POST['hinta_lisat'];
+		if(isset($_POST['kesto_lisat']))
+			$_SESSION['onlinevaraus']['lisat_kesto'] = $_POST['kesto_lisat'];
+*/
+
+
 			echo 'save';
 		    }
 		    if($_POST['checked'] == 0)
 		    {
-			unset($_SESSION['onlinevaraus']['lisapalvelut'][$model->id]);
+
+			if($_SESSION['onlinevaraus']['lisapalvelut'] == $_POST['lisapalvelut'])
+			unset($_SESSION['onlinevaraus']['lisapalvelut']);
 			echo 'deleted';
 		    }
 
-
-		}
 	   }
 	}
+
 
 	public function actionPalvelu_ajax()
 	{
@@ -349,50 +359,41 @@ class OnlinevarausController extends Controller
 		exit;
 	   }
 
-	   if(isset($_POST['word']))
+	   if(isset($_POST['id']))
 	   {
-		$word = trim($_POST['word']);
 
-		// <-- Huoneet ja nelio
-		$criteria=new CDbCriteria;
-		$criteria->order = " SUBSTRING_INDEX(nelio,'-',1) ";
-		$criteria->condition = " nimike='".$word."' AND nayta_sivuilla=1 AND nelio!='' ";
-		$dataHuoneet = OnlinevarausTuotteet::model()->findAll($criteria);
-
-		$criteria=new CDbCriteria;
-		$criteria->condition = " palvelu=0 AND nayta_sivuilla=1 AND nimike='".$word."' AND selitysteksti!='' ";
-		$dataThis = OnlinevarausTuotteet::model()->find($criteria);
-		//  Huoneet ja nelio -->
-
-
-		// <-- Muut ilman nelio
-		$criteria=new CDbCriteria;
-		$criteria->condition = " nimike='".$word."' AND nayta_sivuilla=1 AND nelio='' ";
-		$dataMuut = OnlinevarausTuotteet::model()->findAll($criteria);
-		// Muut ilman nelio -->
+		// <-- Data
+		$data = OnlinevarausTuotteet::model()->findByPk($_POST['id']);
+		if(isset($data->id))
+		$_SESSION['onlinevaraus']['paapalvelu'] = $data->id;
 
 		$this->renderPartial('palvelu_ajax',array(
-			'dataHuoneet'=>$dataHuoneet,
-			'dataMuut'=>$dataMuut,
-			'dataThis'=>$dataThis,
+			'data'=>$data,
 		));
 	   }
 	}
 
 	public function actionPalvelu_save_ajax()
 	{
-	   if(isset($_POST['palvelu']) and isset($_POST['nelio']) and isset($_POST['tyo_toimialue']))
-	   {
-		$criteria=new CDbCriteria;
-		$criteria->condition = " 
-			palvelu=0 AND nayta_sivuilla=1 AND nimike='".$_POST['palvelu']."' AND nelio='".$_POST['nelio']."' 
-		";
-		$model = OnlinevarausTuotteet::model()->find($criteria);
-		if(isset($model->id))
-		{
-			$_SESSION['onlinevaraus']['paapalvelu'] = $model->id;
+
+		if(isset($_POST['tyo_toimialue']))
 			$_SESSION['onlinevaraus']['tyo_toimialue'] = $_POST['tyo_toimialue'];
-		}
+
+		if(isset($_POST['otsikko']))
+			$_SESSION['onlinevaraus']['paa_otsikko'] = $_POST['otsikko'];
+		if(isset($_POST['nimike']))
+			$_SESSION['onlinevaraus']['paa_nimike'] = $_POST['nimike'];
+		if(isset($_POST['hinta']))
+			$_SESSION['onlinevaraus']['paa_hinta'] = $_POST['hinta'];
+		if(isset($_POST['nimike']))
+			$_SESSION['onlinevaraus']['paa_kesto'] = $_POST['kesto'];
+
+
+
+	   if(isset($_POST['toinen_valiko']))
+	   {
+
+		$model = OnlinevarausTuotteet::model()->findByPk($_SESSION['onlinevaraus']['paapalvelu']);
 
 		$this->renderPartial('palvelu_save_ajax',array(
 			'model'=>$model,
