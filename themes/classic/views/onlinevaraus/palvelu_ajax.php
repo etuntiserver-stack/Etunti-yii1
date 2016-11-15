@@ -81,7 +81,7 @@
 				     <td width=1>
 					<input class="checkbox lisat" fordata="'.$data->id.$i.'" for="'.$otsikko[$key].'//'.$hinta[$key].'//'.$kesto[$key].'" type="checkbox">
 				     </td><td>
-				        <a href="#" data-toggle="modal" data-target="#myModal_'.$data->id.'">'.$otsikko[$key].'</a>
+				        <a href="#" data-toggle="modal" data-target="#myModal_'.$data->id.$i.'">'.$otsikko[$key].'</a>
 			
 				     </td>
 				    </tr>
@@ -93,7 +93,7 @@
 
 				$lisat .= '
 				<!-- Modal -->
-				<div id="myModal_'.$data->id.'" class="modal fade" role="dialog">
+				<div id="myModal_'.$data->id.$i.'" class="modal fade" role="dialog">
 				  <div class="modal-dialog">
 				
 				    <!-- Modal content-->
