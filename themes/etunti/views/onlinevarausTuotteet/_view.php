@@ -70,7 +70,7 @@
 
 			   $i = 0;
 			
-			   $lisapalvelut .= '
+			   $lisapalvelut .= '<br>
 			 	<table class="table">
 				 <tr>
 					<th>'.Yii::t('main', 'Otsikko').'</th>

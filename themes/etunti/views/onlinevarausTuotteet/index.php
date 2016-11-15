@@ -70,6 +70,11 @@
         <!-- loppu: .tray-center -->
         </div>
 
+<style>
+.table > tbody > tr > td {
+     vertical-align: top;
+}
+</style>
 
   <div class="panel heading-border">
    <div class="panel-body">
