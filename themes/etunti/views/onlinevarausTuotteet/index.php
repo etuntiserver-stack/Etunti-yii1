@@ -79,11 +79,9 @@
   <tr>
   <th></th>
   <th><?php echo Yii::t('main', 'Nimike'); ?></th>
-  <th><?php echo Yii::t('main', 'Hinta'); ?></th>
   <th><?php echo Yii::t('main', 'Selitysteksti'); ?></th>
-  <th><?php echo Yii::t('main', 'Kesto'); ?></th>
-  <th><?php echo Yii::t('main', 'Neliö'); ?></th>
-  <th><?php echo Yii::t('main', 'Palvelu'); ?></th>
+  <th><?php echo Yii::t('main', 'Alasvetovalikon rakenne'); ?></th>
+  <th><?php echo Yii::t('main', 'Lisäpalvelut rakenne'); ?></th>
   </tr>
   </thead>
   <?php $this->widget('zii.widgets.CListView', array(

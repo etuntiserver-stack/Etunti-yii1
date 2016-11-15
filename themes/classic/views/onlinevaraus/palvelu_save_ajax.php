@@ -65,98 +65,137 @@
 
   if(isset($model))
   {
-	$lisaHinta = 0;
-	$lisaTunti = 0;
+	$tilauksenKuvaus = array();
+	$lisaHinta 	= 0;
+	$lisaTunti 	= 0;
+	$lisapalvelut 	= '';
+	$nimike 	= '';
+	$otsikko 	= '';
+	$tyo_toimialue	= '';
+	$kotitalousvahennys = '';
 
-	$body = 
-	'
-		<div class="panel panel-success">
-		  <div class="panel-heading"><b>'.Yii::t('main', 'Yhteenveto').'</b></div>
-		  <div class="panel-body">
 
+	if(isset($_SESSION['onlinevaraus']['paa_otsikko'])) 	$otsikko 	= $_SESSION['onlinevaraus']['paa_otsikko']; 
+	if(isset($_SESSION['onlinevaraus']['paa_nimike'])) 	$nimike 	= ': '.$_SESSION['onlinevaraus']['paa_nimike']; 
+	if(isset($_SESSION['onlinevaraus']['tyo_toimialue'])) 	$tyo_toimialue 	= $_SESSION['onlinevaraus']['tyo_toimialue'];
+	$tilauksenKuvaus['paa'][$model->nimike] 		= $otsikko.$nimike;
 
-	<div class="row">
-	 <div class="col-xs-2">
-	   <i class="fa fa-home"></i> 
-	 </div><div class="col-xs-10">';
-
-		if(isset($_SESSION['onlinevaraus']['paa_nimike'])) $otsikko = ', '.$_SESSION['onlinevaraus']['paa_nimike']; else $otsikko = '';
-		$body .= '<span id="nimikejanelio">'.$model->nimike.$otsikko.'</span>';
-
-		$tilauksenKuvaus = array();
-		$tilauksenKuvaus['paa'][$model->nimike] = $_SESSION['onlinevaraus']['paa_nimike'];
-
-		if(isset($_SESSION['onlinevaraus']['lisapalvelut']))
+	if(isset($_SESSION['onlinevaraus']['lisapalvelut']) and !empty($_SESSION['onlinevaraus']['lisapalvelut']))
+	{
 		foreach($_SESSION['onlinevaraus']['lisapalvelut'] as $p)
 		{
-		    $onlineTuotteet = OnlinevarausTuotteet::model()->findbypk($p);
-		    if(isset($onlineTuotteet->id))
-		    {
-			$lisaHinta += (float)$onlineTuotteet->hinta;
-			$lisaTunti += (float)$onlineTuotteet->kesto;
-			$body .= '
-			<div class="row">
-			 + '.$onlineTuotteet->nimike.' <span style="opacity:0.6">'.$onlineTuotteet->kesto.'</span>
-			<span style="opacity:0.6">h</span></span>
-			</div>
-			';
-			$tilauksenKuvaus['lisa'][$onlineTuotteet->nimike] = $onlineTuotteet->kesto;
-
-		    }
+		    	if(isset($p[0]) and isset($p[1]) and isset($p[2]))
+		    	{
+				$lisaHinta += $p[1];
+				$lisaTunti += $p[2];
+				$lisapalvelut .= '
+				'.$p[0].' <span style="opacity:0.6">'.$p[2].'</span>
+				<span style="opacity:0.6">h</span></span><br>
+				';
+				$tilauksenKuvaus['lisa'][$p[0]] = $p[2];
+		    	}
 		}
-	$body .= '
-	 </div>
-	</div>';
-
-	$_SESSION['onlinevaraus']['tilauksenKuvaus'] = $tilauksenKuvaus;
-
-	if(isset($_SESSION['onlinevaraus']['tyo_toimialue']) and !empty($_SESSION['onlinevaraus']['tyo_toimialue']))
-	{
-	$body .= '
-	<div class="row">
-	 <div class="col-xs-2">
-	   <i class="fa fa-map-marker"></i> 
-	 </div><div class="col-xs-10">';
-	$body .= $_SESSION['onlinevaraus']['tyo_toimialue'];
-	$body .= '
-	 </div>
-	</div>';
 	}
 
-	$body .= '
-	<div class="row">
-	 <div class="col-xs-2">
-	   <i class="fa fa-clock-o"></i> 
-	 </div><div class="col-xs-10">';
 
-	$sumTunti = $lisaTunti+$_SESSION['onlinevaraus']['paa_kesto'];
-	$_SESSION['onlinevaraus']['sumTunti'] = $sumTunti;
-	$body .= '<span id="clock">'.number_format($sumTunti, 1, '.', '').'</span> tuntia';
 
-	$body .= '
-	 </div>
-	</div>
-	<div class="row">
-	 <div class="col-xs-2">
-	   <i class="fa fa-eur"></i> 
-	 </div><div class="col-xs-10">';
+	if(isset($_SESSION['onlinevaraus']['paa_hinta'])) $paa_hinta = $_SESSION['onlinevaraus']['paa_hinta']; else $paa_hinta = 0;
+	if(isset($_SESSION['onlinevaraus']['paa_kesto'])) $paa_kesto = $_SESSION['onlinevaraus']['paa_kesto']; else $paa_kesto = 0;
+
+	$sumTunti = $lisaTunti+$paa_kesto;
+	$_SESSION['onlinevaraus']['sumTunti'] 	= $sumTunti;
+	$tilauksenKuvaus['sumTunti'] 		= $sumTunti;
+
 
 	if($vkolisa > 0)
-	$sum = ($lisaHinta+$_SESSION['onlinevaraus']['paa_hinta'])*$vkolisa;
+	$sum = ((float)$lisaHinta+$paa_hinta)*$vkolisa;
 	else
-	$sum = $lisaHinta+$_SESSION['onlinevaraus']['paa_hinta'];
+	$sum = (float)$lisaHinta+$paa_hinta;
 
-	$body .= '<span id="hinta">'.number_format($sum, 2, ',', '').'</span> &euro;';
-	$_SESSION['onlinevaraus']['amount'] = $sum;
+	$_SESSION['onlinevaraus']['amount'] 	= $sum;
+	$tilauksenKuvaus['sum'] 		= $sum;
 
 
 	if(isset($model->kotitalousvahennys) and !empty($model->kotitalousvahennys))
 	{
-	$s = $sum-(($sum*$model->kotitalousvahennys)/100);
-	$body .= '<br><span>Kotitalousvähennys: '.number_format($s, 2, ',', '').'</span> &euro;';
+		$s = $sum-(($sum*$model->kotitalousvahennys)/100);
+		$kotitalousvahennys = '<br><span>Kotitalousvähennys: '.number_format($s, 2, ',', '').'</span> &euro;';
+		$tilauksenKuvaus['KotitalousVahennys'] = number_format($s, 2, ',', '');
+	}
+
+
+	$_SESSION['onlinevaraus']['tilauksenKuvaus'] = $tilauksenKuvaus;
+
+
+
+	$body = 
+	'
+	<div class="panel panel-success">
+	 <div class="panel-heading"><b>'.Yii::t('main', 'Yhteenveto').'</b></div>
+	 <div class="panel-body">';
+
+
+	$body .= '
+	<div class="row">
+	 <div class="col-xs-2">
+	   	<i class="fa fa-home"></i> 
+	 </div><div class="col-xs-10">
+		<span>'.$model->nimike.'</span>
+	 </div>
+	</div>';
+
+	if( !empty($otsikko) and !empty($nimike) )
+	{
+	$body .= '
+	<div class="row">
+	 <div class="col-xs-2">
+	   <i class="fa fa-plus"></i> 
+	 </div><div class="col-xs-10">
+		<span>'.$otsikko.$nimike.'</span>
+	 </div>
+	</div>';
+	}
+
+	if(!empty($lisapalvelut))
+	{
+	$body .= '
+	<div class="row">
+	 <div class="col-xs-2">
+	   	<i class="fa fa-plus"></i> 
+	 </div><div class="col-xs-10">
+		'.$lisapalvelut.'
+	 </div>
+	</div>';
+	}
+
+	if(!empty($tyo_toimialue))
+	{
+	$body .= '
+	<div class="row">
+	 <div class="col-xs-2">
+	   	<i class="fa fa-map-marker"></i> 
+	 </div><div class="col-xs-10">
+		'.$tyo_toimialue.'
+	 </div>
+	</div>';
 	}
 
 	$body .= '
+	<div class="row">
+	 <div class="col-xs-2">
+	   	<i class="fa fa-clock-o"></i> 
+	 </div><div class="col-xs-10">
+		<span id="clock">'.number_format($sumTunti, 1, ',', '').'</span> tuntia
+	 </div>
+	</div>';
+
+	$body .= '
+	<div class="row">
+	 <div class="col-xs-2">
+	   	<i class="fa fa-eur"></i> 
+	 </div><div class="col-xs-10">
+		<span id="hinta">'.number_format($sum, 2, ',', '').'</span> &euro;
+		'.$kotitalousvahennys.'
 	 </div>
 	</div>';
 
@@ -165,7 +204,7 @@
 	$body .= $blockKohde;
 
 	$body .= '
-	   </div>
+	 </div>
 	</div>';
 
 	if(isset($sivu) and $sivu == 'index'){

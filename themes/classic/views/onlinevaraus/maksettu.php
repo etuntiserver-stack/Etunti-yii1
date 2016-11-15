@@ -183,13 +183,13 @@ if(isset($tilauksen_kuvaus['paa']) and is_array($tilauksen_kuvaus['paa']))
 
   $message .= '<tr><td valign="top">Tilattu tuote</td><td>';
   foreach($tilauksen_kuvaus['paa'] as $k=>$v){
-	$message .=  $k.' '.$v.' m²<br>';
+	$message .=  $k.', '.$v.'<br>';
   }
 
   if(isset($tilauksen_kuvaus['lisa']) and is_array($tilauksen_kuvaus['lisa']))
   {
      foreach($tilauksen_kuvaus['lisa'] as $k=>$v){
-	$message .=  $k.' '.$v.' h<br>';
+	$message .=  $k.', '.$v.'h<br>';
      }
   }
   $message .= '<br></td></tr>';

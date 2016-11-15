@@ -69,7 +69,7 @@
 
 
 
-			   $i = 0;
+			   $i = 999;
 			   foreach($otsikko as $key=>$rivi)
 			   {
 			   $i++;
@@ -79,7 +79,7 @@
 				   <table class="tblisat">
 				    <tr>
 				     <td width=1>
-					<input class="checkbox lisat" for="'.$otsikko[$key].'//'.$hinta[$key].'//'.$kesto[$key].'" type="checkbox">
+					<input class="checkbox lisat" fordata="'.$data->id.$i.'" for="'.$otsikko[$key].'//'.$hinta[$key].'//'.$kesto[$key].'" type="checkbox">
 				     </td><td>
 				        <a href="#" data-toggle="modal" data-target="#myModal_'.$data->id.'">'.$otsikko[$key].'</a>
 			

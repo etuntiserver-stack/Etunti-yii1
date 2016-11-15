@@ -39,7 +39,7 @@ Asetukset::model()->updatebypk(1, array('onlinevaraus_loppu'=>18));
 
 // clear
   if(isset($_SESSION['onlinevaraus']['onlinevarausID']))
-	$this->loadModel($_SESSION['onlinevaraus']['onlinevarausID'])->delete();
+	Onlinevaraus::model()->deletebypk($_SESSION['onlinevaraus']['onlinevarausID']);
 
   if(isset($_SESSION['onlinevaraus']['modelTV']))
 	Tyovuoroot::model()->deletebypk($_SESSION['onlinevaraus']['modelTV']);
@@ -131,15 +131,6 @@ if(isset($asetukset->checkout_id) and !empty($asetukset->checkout_id) and !empty
 		<h4>Valitse palvelu</h4>
 
 		<select class="form-control input-lg" id="palvelu">
-		<?php
-		if(isset($_SESSION['onlinevaraus']['paapalvelu']))
-		{
-		  $onlineTuotteet = OnlinevarausTuotteet::model()->findbypk($_SESSION['onlinevaraus']['paapalvelu']);
-		    if(isset($onlineTuotteet->id))
-		  	echo '<option value="'.$onlineTuotteet->nimike.'">'.$onlineTuotteet->nimike.'</option>';
-		}
-		?>
-
 		<option value="">Valitse palvelu</option>
 
 		<?php
@@ -389,13 +380,13 @@ $(document).delegate("#toinen_valiko_values","change",function(){
 	var thisVal 	= $(this).val().split("//");
 	var otsikko 	= thisVal[0];
 	var nimike 	= thisVal[1];
-	var hinta 	= thisVal[2];
-	var kesto 	= thisVal[3];
+	var hinta 	= parseFloat(thisVal[2]);
+	var kesto 	= parseFloat(thisVal[3]);
 	var tyo_toimialue = $('#tyo_toimialue').val();
 
    $.ajax({
 	url: 'palvelu_save_ajax',
-	data:{ toinen_valiko : "true", nimike : nimike, hinta : hinta, kesto : kesto, tyo_toimialue : tyo_toimialue },
+	data:{ toinen_valiko : "true", otsikko : otsikko, nimike : nimike, hinta : hinta, kesto : kesto, tyo_toimialue : tyo_toimialue },
 	type:'POST',
 	success:function(data){
 		//console.log(data);
@@ -437,6 +428,9 @@ $("#tyo_toimialue").change(function(){
 $(document).delegate(".lisat","click",function(){
 
    var lisapalvelut = $(this).attr("for").split("//");
+   //console.log(lisapalvelut);
+   var fordata = $(this).attr("fordata");
+
    var checked = '';
    if ($(this).is(':checked')) {
 	checked = 1;
@@ -448,10 +442,29 @@ $(document).delegate(".lisat","click",function(){
    {
    $.ajax({
 	url: 'lisat_ajax',
-	data:{ "lisapalvelut" : lisapalvelut, "checked" : checked },
+	data:{ fordata : fordata, lisapalvelut : lisapalvelut, checked : checked },
+	type:'POST',
+	success:function(data){
+		//console.log(data);
+
+
+
+   $.ajax({
+	url: 'palvelu_save_ajax',
+	data:{ toinen_valiko : "true" },
 	type:'POST',
 	success:function(data){
 		console.log(data);
+		if(data)
+		{
+			$('#panGetContent').html(JSON.parse(data));
+		}
+   	},
+	error:function(data){
+		console.log(data);
+    	}
+    });
+
 
    	},
 	error:function(data){

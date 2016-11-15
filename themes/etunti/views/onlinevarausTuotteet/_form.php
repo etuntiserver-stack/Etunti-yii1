@@ -15,7 +15,7 @@
 	<?php echo $form->errorSummary($model); ?>
 
 <div class="row">
- <div class="col-sm-3">
+ <div class="col-sm-6">
 	<legend><?php echo Yii::t('main', 'Perus tiedot'); ?></legend>
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'nimike'); ?>
@@ -108,7 +108,7 @@
 		<?php echo $form->error($model,'nayta_sivuilla'); ?>
 	</div>
 
- </div><div class="col-sm-4">
+ </div><div class="col-sm-6">
 	<legend><?php echo Yii::t('main', 'Toinen alasvetovalikko rakenne'); ?></legend>
 	<div class="section fill mb5">
 		<?php
@@ -122,17 +122,21 @@
 		<div id="toinenRakenne">
 		<?php if( !is_array($rakenne) ): ?>
 		 <div class="row" id="rivi_1">
-		  <div class="col-sm-4">
+		  <div class="col-sm-3">
 			<label><?php echo Yii::t('main', 'Nimike'); ?></label>
 			<input type="text" class="form-control" name="toinen_valiko[values][nimike][]">
 		  </div>
-		  <div class="col-sm-4">
+		  <div class="col-sm-3">
 			<label><?php echo Yii::t('main', 'Hinta'); ?></label>
-			<input type="number" class="form-control" name="toinen_valiko[values][hinta][]">
+			<input type="number" class="form-control" name="toinen_valiko[values][hinta][]" step="any">
 		  </div>
-		  <div class="col-sm-4">
+		  <div class="col-sm-3">
 			<label><?php echo Yii::t('main', 'Kesto'); ?></label>
-			<input type="number" class="form-control" name="toinen_valiko[values][kesto][]">
+			<input type="number" class="form-control" name="toinen_valiko[values][kesto][]" step="any">
+		  </div>
+		  <div class="col-sm-3">
+			<label></label><br>
+			<span class="btn btn-danger poistaRivi pull-right" for="rivi_1"><i class="fa fa-trash-o" aria-hidden="true"></i></span>
 		  </div>
 		 </div>
 		<input type="hidden" id="lastRivi" value=1>
@@ -159,17 +163,21 @@
 			   $i++;
 				echo '
 				 <div class="row" id="rivi_'.$i.'">
-				  <div class="col-sm-4">
+				  <div class="col-sm-3">
 					<label>'.Yii::t('main', 'Nimike').'</label>
 					<input type="text" class="form-control" name="toinen_valiko[values][nimike][]" value="'.$nimike[$key].'">
 				  </div>
-				  <div class="col-sm-4">
+				  <div class="col-sm-3">
 					<label>'.Yii::t('main', 'Hinta').'</label>
-					<input type="number" class="form-control" name="toinen_valiko[values][hinta][]" value="'.$hinta[$key].'">
+					<input type="number" class="form-control" name="toinen_valiko[values][hinta][]" value="'.$hinta[$key].'" step="any">
 				  </div>
-				  <div class="col-sm-4">
+				  <div class="col-sm-3">
 					<label>'.Yii::t('main', 'Kesto').'</label>
-					<input type="number" class="form-control" name="toinen_valiko[values][kesto][]" value="'.$kesto[$key].'">
+					<input type="number" class="form-control" name="toinen_valiko[values][kesto][]" value="'.$kesto[$key].'" step="any">
+				  </div>
+				  <div class="col-sm-3">
+					<label></label><br>
+					<span class="btn btn-danger poistaRivi pull-right" for="rivi_'.$i.'"><i class="fa fa-trash-o" aria-hidden="true"></i></span>
 				  </div>
 				 </div>
 				';
@@ -182,11 +190,16 @@
 
 
 		<br>
-		<p><span class="btn btn-default btn-sm uusiRivi"><i class="fa fa-plus" aria-hidden="true"></i></span></p>
+		<p><span class="btn btn-success btn-sm uusiRivi"><i class="fa fa-plus" aria-hidden="true"></i></span></p>
 
 	</div>
 
- </div><div class="col-sm-5">
+ </div>
+</div>
+<hr>
+
+<div class="row">
+	<div class="col-sm-6">
 	<legend><?php echo Yii::t('main', 'Lisäpalvelut rakenne'); ?></legend>
 
 	<div class="section fill mb5">
@@ -207,11 +220,15 @@
 		  </div>
 		  <div class="col-sm-4">
 			<label><?php echo Yii::t('main', 'Hinta'); ?></label>
-			<input type="number" class="form-control" name="lisapalvelut[values][hinta][]">
+			<input type="number" class="form-control" name="lisapalvelut[values][hinta][]" step="any">
 		  </div>
 		  <div class="col-sm-4">
 			<label><?php echo Yii::t('main', 'Kesto'); ?></label>
-			<input type="number" class="form-control" name="lisapalvelut[values][kesto][]">
+			<input type="number" class="form-control" name="lisapalvelut[values][kesto][]" step="any">
+		  </div>
+		  <div class="col-sm-4">
+			<label></label><br>
+			<span class="btn btn-danger poistaLisapalvelutRivi pull-right" for="rivi_1"><i class="fa fa-trash-o" aria-hidden="true"></i></span>
 		  </div>
 		 </div>
 		<hr>
@@ -253,11 +270,15 @@
 				  </div>
 				  <div class="col-sm-4">
 					<label>'.Yii::t('main', 'Hinta').'</label>
-					<input type="number" class="form-control" name="lisapalvelut[values][hinta][]" value="'.$hinta[$key].'">
+					<input type="number" class="form-control" name="lisapalvelut[values][hinta][]" value="'.$hinta[$key].'" step="any">
 				  </div>
 				  <div class="col-sm-4">
 					<label>'.Yii::t('main', 'Kesto').'</label>
-					<input type="number" class="form-control" name="lisapalvelut[values][kesto][]" value="'.$kesto[$key].'">
+					<input type="number" class="form-control" name="lisapalvelut[values][kesto][]" value="'.$kesto[$key].'" step="any">
+				  </div>
+				  <div class="col-sm-4">
+					<label></label><br>
+					<span class="btn btn-danger poistaLisapalvelutRivi pull-right" for="lisapalvelut_rivi_'.$i.'"><i class="fa fa-trash-o" aria-hidden="true"></i></span>
 				  </div>
 				 </div>
 				<hr>
@@ -272,7 +293,7 @@
 
 
 		<br>
-		<p><span class="btn btn-default btn-sm uusiLisapalvelutRivi"><i class="fa fa-plus" aria-hidden="true"></i></span></p>
+		<p><span class="btn btn-success btn-sm uusiLisapalvelutRivi"><i class="fa fa-plus" aria-hidden="true"></i></span></p>
 
 	</div>
 
@@ -291,24 +312,6 @@
 <script type="text/javascript">
 $(document).ready(function(){
 
-/*
-	checkPalvelu();
-  $('#OnlinevarausTuotteet_palvelu').change(function(){
-	checkPalvelu();
-  });
-
-  function checkPalvelu(){
-
-	var thisVal = parseInt($($('#OnlinevarausTuotteet_palvelu option:selected')).val());
-
-	if(thisVal == 1){
-		$('.paaPalveluValiko').show(375);
-	} else {
-		$('.paaPalveluValiko').hide(375);
-	}
-
-  }
-*/
 
   var rivi = parseInt($('#lastRivi').val());
   $('.uusiRivi').click(function(){
@@ -317,17 +320,21 @@ $(document).ready(function(){
 
 	$('#toinenRakenne').append(''+
 		 '<div class="row" id="rivi_'+rivi+'">'+
-		  '<div class="col-sm-4">'+
+		  '<div class="col-sm-3">'+
 			'<label><?php echo Yii::t("main", "Nimike"); ?></label>'+
 			'<input type="text" class="form-control" name="toinen_valiko[values][nimike][]">'+
 		  '</div>'+
-		  '<div class="col-sm-4">'+
+		  '<div class="col-sm-3">'+
 			'<label><?php echo Yii::t("main", "Hinta"); ?></label>'+
-			'<input type="number" class="form-control" name="toinen_valiko[values][hinta][]">'+
+			'<input type="number" class="form-control" name="toinen_valiko[values][hinta][]" step="any">'+
 		  '</div>'+
-		  '<div class="col-sm-4">'+
+		  '<div class="col-sm-3">'+
 			'<label><?php echo Yii::t("main", "Kesto"); ?></label>'+
-			'<input type="number" class="form-control" name="toinen_valiko[values][kesto][]">'+
+			'<input type="number" class="form-control" name="toinen_valiko[values][kesto][]" step="any">'+
+		  '</div>'+
+		  '<div class="col-sm-3">'+
+			'<label></label><br>'+
+			'<span class="btn btn-danger poistaRivi pull-right" for="rivi_'+rivi+'"><i class="fa fa-trash-o" aria-hidden="true"></i></span>'+
 		  '</div>'+
 		 '</div>');
   });
@@ -350,15 +357,34 @@ $(document).ready(function(){
 		  '</div>'+
 		  '<div class="col-sm-4">'+
 			'<label><?php echo Yii::t("main", "Hinta"); ?></label>'+
-			'<input type="number" class="form-control" name="lisapalvelut[values][hinta][]">'+
+			'<input type="number" class="form-control" name="lisapalvelut[values][hinta][]" step="any">'+
 		  '</div>'+
 		  '<div class="col-sm-4">'+
 			'<label><?php echo Yii::t("main", "Kesto"); ?></label>'+
-			'<input type="number" class="form-control" name="lisapalvelut[values][kesto][]">'+
+			'<input type="number" class="form-control" name="lisapalvelut[values][kesto][]" step="any">'+
+		  '</div>'+
+		  '<div class="col-sm-4">'+
+			'<label></label><br>'+
+			'<span class="btn btn-danger poistaLisapalvelutRivi pull-right" for="lisapalvelut_rivi_'+rivi+'"><i class="fa fa-trash-o" aria-hidden="true"></i></span>'+
 		  '</div>'+
 		 '</div><hr>');
   });
 
+
+
+   $(document).delegate(".poistaRivi","click",function(){
+	var thisID = $(this).attr("for");
+	var r = confirm('Haluatko varmaasti poista?');
+	if(r)
+	$('#'+thisID).remove();
+   });
+
+   $(document).delegate(".poistaLisapalvelutRivi","click",function(){
+	var thisID = $(this).attr("for");
+	var r = confirm('Haluatko varmaasti poista?');
+	if(r)
+	$('#'+thisID).remove();
+   });
 
 
 });

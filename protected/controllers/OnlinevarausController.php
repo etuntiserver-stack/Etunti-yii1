@@ -320,24 +320,14 @@ class OnlinevarausController extends Controller
 		    if($_POST['checked'] == 1)
 		    {
 
-			$_SESSION['onlinevaraus']['lisapalvelut'] = $_POST['lisapalvelut'];
-/*
-		if(isset($_POST['otsikko_lisat']))
-			$_SESSION['onlinevaraus']['lisat_nimike'] = $_POST['otsikko_lisat'];
-		if(isset($_POST['hinta_lisat']))
-			$_SESSION['onlinevaraus']['lisat_hinta'] = $_POST['hinta_lisat'];
-		if(isset($_POST['kesto_lisat']))
-			$_SESSION['onlinevaraus']['lisat_kesto'] = $_POST['kesto_lisat'];
-*/
-
-
+			$_SESSION['onlinevaraus']['lisapalvelut'][$_POST['fordata']] = $_POST['lisapalvelut'];
 			echo 'save';
 		    }
 		    if($_POST['checked'] == 0)
 		    {
 
-			if($_SESSION['onlinevaraus']['lisapalvelut'] == $_POST['lisapalvelut'])
-			unset($_SESSION['onlinevaraus']['lisapalvelut']);
+			if($_SESSION['onlinevaraus']['lisapalvelut'][$_POST['fordata']] == $_POST['lisapalvelut'])
+			unset($_SESSION['onlinevaraus']['lisapalvelut'][$_POST['fordata']]);
 			echo 'deleted';
 		    }
 
@@ -356,7 +346,6 @@ class OnlinevarausController extends Controller
 		$this->loadModel($_SESSION['onlinevaraus']['onlinevarausID'])->delete();
 
 		echo 'cleared';
-		exit;
 	   }
 
 	   if(isset($_POST['id']))
@@ -393,12 +382,19 @@ class OnlinevarausController extends Controller
 	   if(isset($_POST['toinen_valiko']))
 	   {
 
-		$model = OnlinevarausTuotteet::model()->findByPk($_SESSION['onlinevaraus']['paapalvelu']);
+		if(isset($_SESSION['onlinevaraus']['paapalvelu']))
+		{
+			$model = OnlinevarausTuotteet::model()->findByPk($_SESSION['onlinevaraus']['paapalvelu']);
 
-		$this->renderPartial('palvelu_save_ajax',array(
-			'model'=>$model,
-			'sivu'=>'index',
-		));
+			$this->renderPartial('palvelu_save_ajax',array(
+				'model'=>$model,
+				'sivu'=>'index',
+			));
+
+		} else {
+			echo json_encode('paapalvelu puutuu');
+			exit;
+		}
 
 	   } elseif(isset($_POST['tid']) and isset($_POST['pvm'])) {
 
@@ -658,6 +654,7 @@ $months=array(
 
      $calendar .= "</tr><tr>";
 
+
      // The variable $dayOfWeek is used to
      // ensure that the calendar
      // display consists of exactly 7 columns.
@@ -756,8 +753,11 @@ $months=array(
 		$on 		= 'kiinni';
 
 		$asetukset = Asetukset::model()->findbypk(1);
-		$alkuAstetuksesta = strtotime($asetukset->onlinevaraus_alku.":00");
-		$loppuAstetuksesta = strtotime($asetukset->onlinevaraus_loppu.":00");
+		$onlinevaraus_alku	= sprintf('%02d', $asetukset->onlinevaraus_alku);
+		$onlinevaraus_loppu	= sprintf('%02d', $asetukset->onlinevaraus_loppu);
+
+		$alkuAstetuksesta = strtotime($onlinevaraus_alku.":00");
+		$loppuAstetuksesta = strtotime($onlinevaraus_loppu.":00");
 		$aikavali_1t = 3600;
 		$aikavali_2t = 7200;
 
@@ -765,9 +765,9 @@ $months=array(
    		$sumTunti = (float)$_SESSION['onlinevaraus']['sumTunti'];
 		$sumTuntiMin = $sumTunti*60;
 		$sumTuntiSec = $sumTunti*3600;
-		$start = $asetukset->onlinevaraus_alku.":00";
+		$start = $onlinevaraus_alku.":00";
 		$stop = date("H:i",strtotime($start." +".$sumTuntiMin." minutes"));
-		$countStop = strtotime($asetukset->onlinevaraus_loppu.":00");
+		$countStop = strtotime($onlinevaraus_loppu.":00");
 
 		$criteria=new CDbCriteria;
 		$criteria->condition = "
@@ -863,7 +863,7 @@ $months=array(
 
 
 		// <-- Ihan viimeinen vuoro tietynä päivänä
-		$countStop = strtotime($asetukset->onlinevaraus_loppu.":00");
+		$countStop = strtotime($onlinevaraus_loppu.":00");
 		foreach($allTyontekijat as $k=>$t)
 		{
 				$alku = '';
