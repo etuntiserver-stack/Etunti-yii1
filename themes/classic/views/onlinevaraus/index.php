@@ -282,20 +282,6 @@ $("#lispalvimg").click(function(){
 	$('#lisapalvelulista').show('slow');
 });
 
-/*
-$( "#lispalvimg" ).hover(
-  function() {
-	$('#lispalvimg img').replaceWith('<img src="<?php echo Yii::app()->request->baseUrl; ?>/ylapalkki/haluan.png">');
-
-
-
-  }, function() {
-	$('#lispalvimg img').replaceWith('<img src="<?php echo Yii::app()->request->baseUrl; ?>/ylapalkki/lisapalv.png">');
-  }
-);
-*/
-
-
 
 
 
@@ -303,27 +289,38 @@ $("#palvelu").change(function(){
 
    clearAll();
    var id = $(this).val();
+
+var t = setTimeout( function() {
    $.ajax({
 	url: 'palvelu_ajax',
 	data:{ "id" : id },
 	type:'POST',
 	success:function(data){
 		data = JSON.parse(data);
-		console.log(data);
+		//console.log(data);
 
-		if(data[0])
-		$("#toinen_valiko").html(data[0]).show('slow');
+		if(data[0] != ''){
+			$("#toinen_valiko").html(data[0]).show('slow');
+		} else {
+			$("#toinen_valiko").html('').hide('slow');
+		}
 			//checker();
-		if(data[0]){
+		if(data[1] != ''){
 			$("#lispalvimg").show('slow');
 			$('#lisapalvelulista').html(data[1]);
+		} else {
+			$("#lispalvimg").hide('slow');
 		}
+
+		ajaaPalveluSave();
 
    	},
 	error:function(data){
 		console.log(data);
     	}
     });
+
+}, 100 );
 
 });
 
@@ -348,33 +345,6 @@ function clearAll(){
 }
 
 
-/*
-checker();
-function checker(){
-
-   var id = $("#palvelu").val();
-   var tyo_toimialue = $('#tyo_toimialue').val();
-
-   $.ajax({
-	url: 'palvelu_save_ajax',
-	data:{ "id" : id, "tyo_toimialue" : tyo_toimialue },
-	type:'POST',
-	success:function(data){
-		//console.log(data);
-		if(data)
-		{
-			$('#panGetContent').html(JSON.parse(data));
-		}
-   	},
-	error:function(data){
-		console.log(data);
-    	}
-    });
-
-}
-*/
-
-
 $(document).delegate("#toinen_valiko_values","change",function(){
 
 	var thisVal 	= $(this).val().split("//");
@@ -394,6 +364,8 @@ $(document).delegate("#toinen_valiko_values","change",function(){
 		{
 			$('#panGetContent').html(JSON.parse(data));
 		}
+		tuntienTarkistus();
+
    	},
 	error:function(data){
 		console.log(data);
@@ -416,6 +388,7 @@ $("#tyo_toimialue").change(function(){
 		{
 			$('#panGetContent').html(JSON.parse(data));
 		}
+		tuntienTarkistus();
    	},
 	error:function(data){
 		console.log(data);
@@ -446,26 +419,7 @@ $(document).delegate(".lisat","click",function(){
 	type:'POST',
 	success:function(data){
 		//console.log(data);
-
-
-
-   $.ajax({
-	url: 'palvelu_save_ajax',
-	data:{ toinen_valiko : "true" },
-	type:'POST',
-	success:function(data){
-		console.log(data);
-		if(data)
-		{
-			$('#panGetContent').html(JSON.parse(data));
-		}
-   	},
-	error:function(data){
-		console.log(data);
-    	}
-    });
-
-
+		ajaaPalveluSave();
    	},
 	error:function(data){
 		console.log(data);
@@ -476,7 +430,32 @@ $(document).delegate(".lisat","click",function(){
 });
 
 
+ function ajaaPalveluSave(){
 
+   $.ajax({
+	url: 'palvelu_save_ajax',
+	data:{ toinen_valiko : "true" },
+	type:'POST',
+	success:function(data){
+		//console.log(data);
+		if(data)
+		{
+			$('#panGetContent').html(JSON.parse(data));
+		}
+		tuntienTarkistus();
+   	},
+	error:function(data){
+		console.log(data);
+    	}
+    });
+
+  }
+
+  function tuntienTarkistus(){
+	var clock = parseFloat($('#clock').attr('val'));
+	if(clock > 0)
+	$('.seuraava').removeClass('disabled');
+  }
 
 });
 </script>

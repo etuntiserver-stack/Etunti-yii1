@@ -35,6 +35,19 @@
 		<?php echo $form->error($model,'kotitalousvahennys'); ?>
 	</div>
 
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'hinta'); ?>
+		<?php echo $form->numberField($model,'hinta',array('size'=>20,'maxlength'=>20, 'class'=>'form-control', 'step'=>'any')); ?>
+		<?php echo $form->error($model,'hinta'); ?>
+
+	</div>
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'kesto'); ?>
+		<?php echo $form->numberField($model,'kesto',array('maxlength'=>20, 'class'=>'form-control', 'placeholder'=>'Esimerkiksi.. 0.5', 'step'=>'any')); ?>
+		<?php echo $form->error($model,'kesto'); ?>
+	</div>
+
 <?php /*
 
 	<div class="section fill mb5">
@@ -63,12 +76,6 @@
 		<?php echo $form->error($model,'palvelu'); ?>
 	</div>
 
-	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'hinta'); ?>
-		<?php echo $form->numberField($model,'hinta',array('size'=>20,'maxlength'=>20, 'class'=>'form-control', 'step'=>'0.01')); ?>
-		<?php echo $form->error($model,'hinta'); ?>
-	</div>
-
 	<div class="section fill mb5 nelio">
 		<?php echo $form->labelEx($model,'nelio'); ?>
 		<?php
@@ -86,11 +93,7 @@
 		<?php echo $form->error($model,'nelio'); ?>
 	</div>
 
-	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'kesto'); ?>
-		<?php echo $form->numberField($model,'kesto',array('size'=>20,'maxlength'=>20, 'class'=>'form-control', 'placeholder'=>'Esimerkiksi.. 0.5', 'step'=>'0.5')); ?>
-		<?php echo $form->error($model,'kesto'); ?>
-	</div>
+
 */ ?>
 
 

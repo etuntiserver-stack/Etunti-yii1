@@ -5,7 +5,7 @@
 
 	$body = '';
 
-	if( is_array($toinen_valikko_rakenne))
+	if( isset($toinen_valikko_rakenne['values']) and is_array($toinen_valikko_rakenne) and !empty($toinen_valikko_rakenne['otsikko']) )
 	{
 
 		if(isset($data->selitysteksti))
@@ -49,7 +49,7 @@
 
 	$lisapalvelut = json_decode($data->lisapalvelut, true);
 	$lisat = '';
-	if( is_array($lisapalvelut) )
+	if( isset($lisapalvelut['values']['otsikko'][0]) and is_array($lisapalvelut['values']) and !empty($lisapalvelut['values']['otsikko'][0]) )
 	{
 	$lisat .= '<p><h4>Valitse lisäpalvelu</h4></p>
 	<div class="row">';

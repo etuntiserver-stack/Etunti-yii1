@@ -63,9 +63,11 @@
 
 
 
-  if(isset($model))
+  if(isset($model->id))
   {
 	$tilauksenKuvaus = array();
+	$perusHinta	= 0;
+	$perusKesto	= 0;
 	$lisaHinta 	= 0;
 	$lisaTunti 	= 0;
 	$lisapalvelut 	= '';
@@ -74,7 +76,8 @@
 	$tyo_toimialue	= '';
 	$kotitalousvahennys = '';
 
-
+	if(!empty($model->hinta) and $model->hinta != 0)	$perusHinta	= $model->hinta;
+	if(!empty($model->kesto) and $model->kesto != 0)	$perusKesto	= $model->kesto;
 	if(isset($_SESSION['onlinevaraus']['paa_otsikko'])) 	$otsikko 	= $_SESSION['onlinevaraus']['paa_otsikko']; 
 	if(isset($_SESSION['onlinevaraus']['paa_nimike'])) 	$nimike 	= ': '.$_SESSION['onlinevaraus']['paa_nimike']; 
 	if(isset($_SESSION['onlinevaraus']['tyo_toimialue'])) 	$tyo_toimialue 	= $_SESSION['onlinevaraus']['tyo_toimialue'];
@@ -102,15 +105,16 @@
 	if(isset($_SESSION['onlinevaraus']['paa_hinta'])) $paa_hinta = $_SESSION['onlinevaraus']['paa_hinta']; else $paa_hinta = 0;
 	if(isset($_SESSION['onlinevaraus']['paa_kesto'])) $paa_kesto = $_SESSION['onlinevaraus']['paa_kesto']; else $paa_kesto = 0;
 
-	$sumTunti = $lisaTunti+$paa_kesto;
+	$sumTunti = $perusKesto+$lisaTunti+$paa_kesto;
 	$_SESSION['onlinevaraus']['sumTunti'] 	= $sumTunti;
 	$tilauksenKuvaus['sumTunti'] 		= $sumTunti;
 
 
+	$paa_hinta = $perusHinta+$paa_hinta;
 	if($vkolisa > 0)
-	$sum = ((float)$lisaHinta+$paa_hinta)*$vkolisa;
+		$sum = ((float)$lisaHinta+$paa_hinta)*$vkolisa;
 	else
-	$sum = (float)$lisaHinta+$paa_hinta;
+		$sum = (float)$lisaHinta+$paa_hinta;
 
 	$_SESSION['onlinevaraus']['amount'] 	= $sum;
 	$tilauksenKuvaus['sum'] 		= $sum;
@@ -185,7 +189,7 @@
 	 <div class="col-xs-2">
 	   	<i class="fa fa-clock-o"></i> 
 	 </div><div class="col-xs-10">
-		<span id="clock">'.number_format($sumTunti, 1, ',', '').'</span> tuntia
+		<span id="clock" val="'.$sumTunti.'">'.number_format($sumTunti, 1, ',', '').'</span> tuntia
 	 </div>
 	</div>';
 
@@ -209,7 +213,7 @@
 
 	if(isset($sivu) and $sivu == 'index'){
 
-	$body .= CHtml::link('Valitse aika','aika', array('class'=>'btn btn-lg seuraava')).'<br>';
+	$body .= CHtml::link('Valitse aika','aika', array('class'=>'btn btn-lg seuraava disabled')).'<br>';
 
 	} elseif(isset($sivu) and $sivu == 'aika' and isset($_SESSION['onlinevaraus']['modelTV'])){
 	$body .= '

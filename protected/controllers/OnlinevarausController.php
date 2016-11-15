@@ -340,11 +340,10 @@ class OnlinevarausController extends Controller
 
 	   if(isset($_POST['clear']) and $_POST['clear'] == 'all')
 	   {
+  		if(isset($_SESSION['onlinevaraus']['onlinevarausID']))
+			Onlinevaraus::model()->deletebypk($_SESSION['onlinevaraus']['onlinevarausID']);
+
 		unset($_SESSION['onlinevaraus']);
-
-		if(isset($_SESSION['onlinevaraus']['onlinevarausID']))
-		$this->loadModel($_SESSION['onlinevaraus']['onlinevarausID'])->delete();
-
 		echo 'cleared';
 	   }
 
