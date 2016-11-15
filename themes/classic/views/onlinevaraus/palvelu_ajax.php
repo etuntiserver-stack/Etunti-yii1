@@ -1,17 +1,18 @@
 <?php
 
 	$d2 = array();
-
-	$body = '';
-	if(isset($data->selitysteksti))
-	$body .= '<p class="small">'.$data->selitysteksti.'</p>';
-
 	$toinen_valikko_rakenne = json_decode($data->toinen_valikko_rakenne, true);
 
-	$body .='<div class="col-sm-4 col-sm-offset-4">';
+	$body = '';
 
-	if( is_array($toinen_valikko_rakenne) )
+	if( is_array($toinen_valikko_rakenne))
 	{
+
+		if(isset($data->selitysteksti))
+		$body .= '<p class="small">'.$data->selitysteksti.'</p>';
+
+		$body .='<div class="col-sm-4 col-sm-offset-4">';
+
 		if(isset($toinen_valikko_rakenne['otsikko']))
 		$body .='<h4>'.$toinen_valikko_rakenne['otsikko'].'</h4>';
 
@@ -35,9 +36,12 @@
 			$body .= '<option value="'.$toinen_valikko_rakenne['otsikko'].'//'.$nimike[$key].'//'.$hinta[$key].'//'.$kesto[$key].'">'.$nimike[$key].'</option>';
 
 		$body .= ' </select>';
+
+		$body .= '</div>';
+
 	}
 
-	$body .= '</div>';
+
 
 
 

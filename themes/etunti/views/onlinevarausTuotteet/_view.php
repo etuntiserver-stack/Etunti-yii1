@@ -6,6 +6,8 @@
 			$rakenne = json_decode($data->toinen_valikko_rakenne, true);
 			$alasvetovaliko = '';
 
+			if(isset($rakenne['values']))
+			{
 			   $nimike = array();
 			   foreach($rakenne['values']['nimike'] as $key=>$item)
 				$nimike[] = $item;
@@ -45,12 +47,15 @@
 			   $alasvetovaliko .= '
 			 	</table>
 			   ';
+			}
 
 
 
 			$rakenne = json_decode($data->lisapalvelut, true);
 			$lisapalvelut = '';
 
+			if(isset($rakenne['values']))
+			{
 			   $otsikko = array();
 			   foreach($rakenne['values']['otsikko'] as $key=>$item)
 				$otsikko[] = $item;
@@ -95,6 +100,7 @@
 			   $lisapalvelut .= '
 			 	</table>
 			   ';
+			}
 ?>
 
 <tr>
@@ -112,7 +118,7 @@
 		?>
 	</td>
 	<td>
-		<?php echo $data->nimike; ?>
+		<h3><?php echo $data->nimike; ?></h3>
 	</td>
 	<td>
 		<?php echo $data->selitysteksti; ?>

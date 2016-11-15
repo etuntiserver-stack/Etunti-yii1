@@ -120,7 +120,7 @@
 
 		<br>
 		<div id="toinenRakenne">
-		<?php if( !is_array($rakenne) ): ?>
+		<?php if( !is_array($rakenne) or !isset($rakenne['values']) ): ?>
 		 <div class="row" id="rivi_1">
 		  <div class="col-sm-3">
 			<label><?php echo Yii::t('main', 'Nimike'); ?></label>
@@ -208,7 +208,7 @@
 		?>
 
 		<div id="lisapalveluRakenne">
-		<?php if(!is_array($lisapalvelut)): ?>
+		<?php if(!is_array($lisapalvelut) or !isset($lisapalvelut['values'])): ?>
 		 <div class="row" id="lisapalvelut_rivi_1">
 		  <div class="col-sm-12">
 			<label><?php echo Yii::t('main', 'Otsikko'); ?></label>
@@ -228,7 +228,7 @@
 		  </div>
 		  <div class="col-sm-4">
 			<label></label><br>
-			<span class="btn btn-danger poistaLisapalvelutRivi pull-right" for="rivi_1"><i class="fa fa-trash-o" aria-hidden="true"></i></span>
+			<span class="btn btn-danger poistaLisapalvelutRivi pull-right" for="lisapalvelut_rivi_1"><i class="fa fa-trash-o" aria-hidden="true"></i></span>
 		  </div>
 		 </div>
 		<hr>
