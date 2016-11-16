@@ -1559,8 +1559,6 @@ class TyovuorootController extends Controller
 				Yii::app()->session['week'] = $_GET['week'];
 
 
-
-
 			$this->redirect(array('index'));
 		}		
 		//  GET haku -->

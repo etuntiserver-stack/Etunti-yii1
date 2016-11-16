@@ -52,10 +52,14 @@ if( $curpage == 'tyovuoroot/tv2' )
             <span class="ad ad-screen-full fs18"></span>
           </a>
         </li>
+<?php 
+/*
             <li id="domainTila">
               <a href="#">
                 <span class="mr10"></span> <?php echo strtoupper(Yii::app()->user->domain); ?> </a>
             </li>
+*/
+?>
 	    <?php if( !empty($tyovuorot_sivut) ) : ?>
 
 <!--
@@ -288,15 +292,59 @@ if( $curpage == 'tyovuoroot/tv2' )
 	<!-- Viikonloput -->
 	<?php if($curpage == 'tyovuoroot/index') : ?>
         <li class="p10" data-toggle="tooltip">
-	 <div class="btn btn-default" id="vkolopput"><?php echo Yii::t('main', 'Viikonloput'); ?></div>
+              <div class="form-group">
+               <div class="form-inline">
+
+		     	<a href="<?php echo $_SERVER['PHP_SELF'].'?week='.($week == 1 ? $wkMaara : $week -1).'&year='.($week == 1 ? $year - 1 : $year); ?>"><i class="fa fa-arrow-left btn btn-default btn-group"></i></a>
+
+			<?php
+				$wkMaara	=  Yii::app()->session['wkMaara'];
+
+				if($week > $wkMaara) {
+				    $year++;
+				    $week = 1;
+				} elseif($week < 1) {
+				    $year--;
+				    $week = $wkMaara;
+				}
+				$week = sprintf("%02d", $week);
+
+				$firstDayOfYear = mktime(0, 0, 0, 1, 1, $year);
+				$nextMonday     = strtotime('monday', $firstDayOfYear);
+				$nextSunday     = strtotime('sunday', $nextMonday);
+			?>
+
+			<select class="form-control form-group" id="viikkonhyppaminen">
+			<?php
+			    echo '<option value="'.$_SERVER['PHP_SELF'].'?week='.$week.'&year='.$year.'">'.Yii::t('main', 'Viikko').': '.date('W', strtotime($year ."W". $week . '1')).', '.date('d.m', strtotime($year ."W". $week . '1')).' - '.date('d.m', strtotime($year ."W". $week . '7')).'</option>';
+
+			while (date('Y', $nextMonday) == $year) {
+			    echo '<option value="'.$_SERVER['PHP_SELF'].'?week='.date('W', $nextMonday).'&year='.$year.'">'.Yii::t('main', 'Viikko').': '.date('W', $nextMonday).', '.date('d.m', $nextMonday).' - '.date('d.m', $nextSunday).'</option>';
+	
+			    $nextMonday = strtotime('+1 week', $nextMonday);
+			    $nextSunday = strtotime('+1 week', $nextSunday);
+			}
+			?>
+			</select>
+
+		     	<a href="<?php echo $_SERVER['PHP_SELF'].'?week='.($week == $wkMaara ? 1 : 1 + $week).'&year='.($week == $wkMaara ? 1 + $year : $year); ?>"><i class="fa fa-arrow-right btn btn-default btn-group"></i></a> 
+
+               </div>
+              </div>
         </li>
+
+        <li class="p10" data-toggle="tooltip">
+              <div class="form-group">
+	 	<div class="btn btn-default fa fa-calendar-check-o" id="vkolopput"></div>
+	      </div>
+	</li>
 	<?php endif; ?>
 	<!-- Viikonloput -->
 
 
 	<!-- Tilaus -->
         <li class="p10" data-toggle="tooltip">
-		<button class="btn btn-default" id="uusiTilaus"><?php echo Yii::t('main', 'Tilaus'); ?></button>
+		<button class="btn btn-default fa fa-shopping-cart" id="uusiTilaus"></button>
         </li>
 	<!-- Tilaus -->
 
