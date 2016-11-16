@@ -27,139 +27,6 @@
 
 
 
-
-<?php /*
-<div id="ylapalkki" style="display:none">
- <div class="form-inline">
-  <div class="form-group">
-
-	<label><?php echo Yii::t('main', 'Työntekijät'); ?></label><br>
-
-  <form action="index" id="yhtveto" method="POST">
-
-   <?php
-   // Toimialue
-   $list = array();
-   $criteria = new CDbCriteria();
-   $criteria->order = " select_type ";
-   $criteria->condition = " select_type='tyo_toimialue' ";
-   $l = Valikkoot::model()->findAll($criteria);
-   foreach($l as $v)
-   $list[$v->value] = $v->value;
-
-   echo CHtml::dropDownList('siivous', 'siivous', $list,
-   array('empty'=>Yii::t('main', 'Toimialue'),'class'=>'form-control form-group','id'=>'tekijanToimialue')).' ';
-
-
-   // Kohteen ryhman mukaan
-   $list = array();
-   $criteria = new CDbCriteria();
-   $criteria->order = " select_type ";
-   $criteria->condition = " select_type='siivous' ";
-   $l = Valikkoot::model()->findAll($criteria);
-   foreach($l as $v)
-   $list[$v->value] = $v->value;
-
-   echo CHtml::dropDownList('siivous', 'siivous', $list,
-   array('empty'=>Yii::t('main', 'Työnimike'),'class'=>'form-control form-group','id'=>'siivousTyonimike')).' ';
-
-
-   //
-   $criteria = new CDbCriteria();
-   $criteria->order = " tekijan_nimi ";
-   $criteria->condition = " aktiivinen='1' ";
-
-    $list = CHtml::listData(Tyontekijat::model()->findAll($criteria), 'id', 'tekijan_nimi');
-    echo '<select name="TekijaVuoro[]" id="tyontekijat" multiple title="Työntekijät">';
-    foreach($list as $key=>$val){
-       if(isset(Yii::app()->session['TekijaVuoro']) and in_array($key,Yii::app()->session['TekijaVuoro']))
-       	 echo '<option value="'.$key.'" selected>'.$val.'</option>';
-       else
-       	 echo '<option value="'.$key.'">'.$val.'</option>';
-    }
-    echo '</select>';
-   ?>
-   <button type="submit" class="btn btn-primary fa fa-search myBgColors"></button><?php echo $nbsp; ?>
-   </form>
-
-
-   </div><div class="form-group">
-
-	<label><?php echo Yii::t('main', 'Viikot'); ?></label><br>
-
-
-	<select class="form-control" id="vuodenhyppaminen">
-	<?php
-	$v = date('Y',strtotime('-5 year'));
-	for ($i = 1; $i <= 10; $i++) {
-		if($year == ($v+$i))
-    			echo '<option value="'.$_SERVER['PHP_SELF'].'?week='.$week.'&year='.(int)($v+$i).'" selected>'.(int)($v+$i).'</option>';
-		else
-    			echo '<option value="'.$_SERVER['PHP_SELF'].'?week='.$week.'&year='.(int)($v+$i).'">'.(int)($v+$i).'</option>';
-	}
-	?>
-	</select>
-
-<div class="input-group">
-  <span class="input-group-btn">
-     	<a href="<?php echo $_SERVER['PHP_SELF'].'?week='.($week == 1 ? $wkMaara : $week -1).'&year='.($week == 1 ? $year - 1 : $year); ?>"><i class="fa fa-arrow-left btn btn-primary myBgColors"></i></a>
-  </span>
-
-	<select class="form-control" id="viikkonhyppaminen">
-	<?php
-	define('NL', "\n");
-	$year           = $year;
-	$firstDayOfYear = mktime(0, 0, 0, 1, 1, $year);
-	$nextMonday     = strtotime('monday', $firstDayOfYear);
-	$nextSunday     = strtotime('sunday', $nextMonday);
-	
-	    echo '<option value="'.$_SERVER['PHP_SELF'].'?week='.$week.'&year='.$year.'">'.date('d', strtotime($year ."W". $week . '1')), NL.'-'.date('d.m', strtotime($year ."W". $week . '7')), NL.'</option>';
-
-	while (date('Y', $nextMonday) == $year) {
-	    echo '<option value="'.$_SERVER['PHP_SELF'].'?week='.date('W', $nextMonday), NL.'&year='.$year.'">'.date('d', $nextMonday), NL.'-'.date('d.m', $nextSunday), NL.'</option>';
-	
-	    $nextMonday = strtotime('+1 week', $nextMonday);
-	    $nextSunday = strtotime('+1 week', $nextSunday);
-	}
-	?>
-	</select>
-  <span class="input-group-btn">
-     	<a href="<?php echo $_SERVER['PHP_SELF'].'?week='.($week == $wkMaara ? 1 : 1 + $week).'&year='.($week == $wkMaara ? 1 + $year : $year); ?>"><i class="fa fa-arrow-right btn btn-primary myBgColors"></i></a> <?php echo $nbsp; ?>
-  </span>
-</div>
-
-
-   </div><div class="form-group">
-	
-	<label><?php echo Yii::t('main', 'Viikkonloput'); ?></label><br>
-	<div class="btn" id="vkolopput"><?php echo Yii::t('main', 'Viikonloput'); ?></div>
-
-   </div><div class="form-group">
-
-    <div class="">
-     <div class="form-inline">
-      <div class="form-group">
-	<label><?php echo Yii::t('main', 'Uusi tilaus'); ?></label><br>
-	<button class="btn btn-primary myBgColors" id="uusiTilaus"><?php echo Yii::t('main', 'Tilaus'); ?></button><?php echo $nbsp; ?>
-      </div><div class="form-group">
-	<label><?php echo Yii::t('main', 'Valitse näkymä'); ?></label><br>
-	<select class="form-control tvchange">
- 	  <option value="index" selected><?php echo Yii::t('main', 'Viikko'); ?></option>
- 	  <option value="tv2"><?php echo Yii::t('main', 'Työntekijä'); ?></option>
-	</select>
-      </div>
-     </div>
-    </div>
-
-   </div>
- </div>
-</div>
-
-<br>
-*/ ?>
-
-
-
 <?php if(!isset($_GET['fullscreen'])) : ?>
 	<input type="hidden" id="taulunKorko" value="180">
 <?php else: ?>
@@ -180,7 +47,7 @@
 
 		<!-- Viikko hyppaminen -->
 		<div class="row">
-		 <div class="col-sm-3 col-sm-offset-4">
+		 <div class="col-sm-4 col-sm-offset-4">
 
 		  <div class="input-group">
 		  <span class="input-group-btn">
@@ -194,10 +61,10 @@
 			$nextMonday     = strtotime('monday', $firstDayOfYear);
 			$nextSunday     = strtotime('sunday', $nextMonday);
 	
-			    echo '<option value="'.$_SERVER['PHP_SELF'].'?week='.$week.'&year='.$year.'">'.date('W', strtotime($year ."W". $week . '1')).', '.date('d.m', strtotime($year ."W". $week . '1')).' - '.date('d.m', strtotime($year ."W". $week . '7')).'</option>';
+			    echo '<option value="'.$_SERVER['PHP_SELF'].'?week='.$week.'&year='.$year.'">'.Yii::t('main', 'Viikko').': '.date('W', strtotime($year ."W". $week . '1')).', '.date('d.m', strtotime($year ."W". $week . '1')).' - '.date('d.m', strtotime($year ."W". $week . '7')).'</option>';
 
 			while (date('Y', $nextMonday) == $year) {
-			    echo '<option value="'.$_SERVER['PHP_SELF'].'?week='.date('W', $nextMonday).'&year='.$year.'">'.date('W', $nextMonday).', '.date('d.m', $nextMonday).' - '.date('d.m', $nextSunday).'</option>';
+			    echo '<option value="'.$_SERVER['PHP_SELF'].'?week='.date('W', $nextMonday).'&year='.$year.'">'.Yii::t('main', 'Viikko').': '.date('W', $nextMonday).', '.date('d.m', $nextMonday).' - '.date('d.m', $nextSunday).'</option>';
 	
 			    $nextMonday = strtotime('+1 week', $nextMonday);
 			    $nextSunday = strtotime('+1 week', $nextSunday);
@@ -231,6 +98,7 @@
      </thead>
      <tbody>
         <?php
+
 
 	// VARAUS
 	  echo '<tr>';
