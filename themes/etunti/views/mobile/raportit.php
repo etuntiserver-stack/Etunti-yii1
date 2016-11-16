@@ -127,7 +127,7 @@
        <?php
    	$kohdenTnimike = Valikkoot::model()->findAll(" select_type='siivous' ",array('order' => "select_type"));
     	echo '<select class="form-control" name="siivousPaaSivulla">';
-        echo '<option value="">'.Yii::t('main', 'Kohden työnimike').'</option>';
+        echo '<option value="">'.Yii::t('main', 'Kohteen työnimike').'</option>';
     	foreach($kohdenTnimike as $key=>$val){
     		echo '<option value="'.$val->value.'">'.$val->value.'</option>';
     	}
@@ -221,7 +221,7 @@
        <div class="col-sm-6">
        <?php
     	echo '<select class="form-control" name="siivousPaaSivulla">';
-        echo '<option value="">'.Yii::t('main', 'Kohden työnimike').'</option>';
+        echo '<option value="">'.Yii::t('main', 'Kohteen työnimike').'</option>';
     	foreach($kohdenTnimike as $key=>$val){
     		echo '<option value="'.$val->value.'">'.$val->value.'</option>';
     	}
@@ -317,7 +317,7 @@
        <div class="col-sm-6">
    	<?php
     	echo '<select class="form-control" name="siivousPaaSivulla">';
-        echo '<option value="">'.Yii::t('main', 'Kohden työnimike').'</option>';
+        echo '<option value="">'.Yii::t('main', 'Kohteen työnimike').'</option>';
     	foreach($kohdenTnimike as $key=>$val){
     		echo '<option value="'.$val->value.'">'.$val->value.'</option>';
     	}
