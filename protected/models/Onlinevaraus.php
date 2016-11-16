@@ -37,6 +37,7 @@ class Onlinevaraus extends DB2ActiveRecord
 		return array(
 			//array('time', 'required'),
 			array('tv_id, asiakas_id, kohde_id', 'length', 'max'=>11),
+			array('alv', 'numerical', 'integerOnly'=>true),
 			array('tila', 'length', 'max'=>1),
 			array('yhteyshenkilo, puhelin', 'length', 'max'=>100),
 			array('osoite, postinumero, kaupunki, sahkoposti', 'length', 'max'=>255),

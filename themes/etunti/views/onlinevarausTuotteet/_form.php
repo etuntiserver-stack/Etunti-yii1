@@ -15,7 +15,7 @@
 	<?php echo $form->errorSummary($model); ?>
 
 <div class="row">
- <div class="col-sm-6">
+ <div class="col-sm-4">
 	<legend><?php echo Yii::t('main', 'Perustiedot'); ?></legend>
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'nimike'); ?>
@@ -40,6 +40,26 @@
 		<?php echo $form->numberField($model,'hinta',array('size'=>20,'maxlength'=>20, 'class'=>'form-control', 'step'=>'any')); ?>
 		<?php echo $form->error($model,'hinta'); ?>
 
+	</div>
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'alv'); ?>
+		<?php
+		$list = array();
+		for ($i = 1; $i <= 24; $i++) {
+		    $list[$i] = $i;
+		}
+
+		if(isset($model->id) and $model->alv != 0)
+			$alv = $model->alv;
+		else
+			$alv = 24;
+
+        	echo $form->dropDownList($model,'alv',$list, 
+		array('class'=>'form-control','options' => array($alv=>array('selected'=>true))));
+	
+        	?>
+		<?php echo $form->error($model,'alv'); ?>
 	</div>
 
 	<div class="section fill mb5">
@@ -111,7 +131,7 @@
 		<?php echo $form->error($model,'nayta_sivuilla'); ?>
 	</div>
 
- </div><div class="col-sm-6">
+ </div><div class="col-sm-8">
 	<legend><?php echo Yii::t('main', 'Toinen alasvetovalikko rakenne'); ?></legend>
 	<div class="section fill mb5">
 		<?php
@@ -129,15 +149,19 @@
 			<label><?php echo Yii::t('main', 'Nimike'); ?></label>
 			<input type="text" class="form-control" name="toinen_valiko[values][nimike][]">
 		  </div>
+		  <div class="col-sm-2">
+			<label><?php echo Yii::t('main', 'Hinta (ALV 0)'); ?></label>
+			<input type="number" class="form-control hinta_veroton" for="rivi_1" name="toinen_valiko[values][hinta_veroton][]" step="any">
+		  </div>
 		  <div class="col-sm-3">
-			<label><?php echo Yii::t('main', 'Hinta'); ?></label>
-			<input type="number" class="form-control" name="toinen_valiko[values][hinta][]" step="any">
+			<label><?php echo Yii::t('main', 'Hinta (ALV '.$alv.'%)'); ?></label>
+			<input type="number" class="form-control hinta" for="rivi_1" name="toinen_valiko[values][hinta][]" step="any">
 		  </div>
 		  <div class="col-sm-3">
 			<label><?php echo Yii::t('main', 'Kesto'); ?></label>
-			<input type="number" class="form-control" name="toinen_valiko[values][kesto][]" step="any">
+			<input type="number" class="form-control" name="toinen_valiko[values][kesto][]" step="any" placeholder="h">
 		  </div>
-		  <div class="col-sm-3">
+		  <div class="col-sm-1">
 			<label></label><br>
 			<span class="btn btn-danger poistaRivi pull-right" for="rivi_1"><i class="fa fa-trash-o" aria-hidden="true"></i></span>
 		  </div>
@@ -150,6 +174,10 @@
 			   $nimike = array();
 			   foreach($rakenne['values']['nimike'] as $key=>$item)
 				$nimike[] = $item;
+
+			   $hinta_veroton = array();
+			   foreach($rakenne['values']['hinta_veroton'] as $key=>$item)
+				$hinta_veroton[] = $item;
 
 			   $hinta = array();
 			   foreach($rakenne['values']['hinta'] as $key=>$item)
@@ -170,15 +198,19 @@
 					<label>'.Yii::t('main', 'Nimike').'</label>
 					<input type="text" class="form-control" name="toinen_valiko[values][nimike][]" value="'.$nimike[$key].'">
 				  </div>
+				  <div class="col-sm-2">
+					<label>'.Yii::t('main', 'Hinta (ALV 0)').'</label>
+					<input type="number" class="form-control hinta_veroton" for="rivi_'.$i.'" name="toinen_valiko[values][hinta_veroton][]" value="'.$hinta_veroton[$key].'" step="any">
+				  </div>
 				  <div class="col-sm-3">
-					<label>'.Yii::t('main', 'Hinta').'</label>
-					<input type="number" class="form-control" name="toinen_valiko[values][hinta][]" value="'.$hinta[$key].'" step="any">
+					<label>'.Yii::t('main', 'Hinta (ALV '.$alv.'%)').'</label>
+					<input type="number" class="form-control hinta" for="rivi_'.$i.'" name="toinen_valiko[values][hinta][]" value="'.$hinta[$key].'" step="any">
 				  </div>
 				  <div class="col-sm-3">
 					<label>'.Yii::t('main', 'Kesto').'</label>
-					<input type="number" class="form-control" name="toinen_valiko[values][kesto][]" value="'.$kesto[$key].'" step="any">
+					<input type="number" class="form-control" name="toinen_valiko[values][kesto][]" value="'.$kesto[$key].'" step="any" placeholder="h">
 				  </div>
-				  <div class="col-sm-3">
+				  <div class="col-sm-1">
 					<label></label><br>
 					<span class="btn btn-danger poistaRivi pull-right" for="rivi_'.$i.'"><i class="fa fa-trash-o" aria-hidden="true"></i></span>
 				  </div>
@@ -327,15 +359,19 @@ $(document).ready(function(){
 			'<label><?php echo Yii::t("main", "Nimike"); ?></label>'+
 			'<input type="text" class="form-control" name="toinen_valiko[values][nimike][]">'+
 		  '</div>'+
+		  '<div class="col-sm-2">'+
+			'<label><?php echo Yii::t("main", "Hinta (ALV 0)"); ?></label>'+
+			'<input type="number" class="form-control hinta_veroton" for="rivi_'+rivi+'" name="toinen_valiko[values][hinta][]" step="any">'+
+		  '</div>'+
 		  '<div class="col-sm-3">'+
-			'<label><?php echo Yii::t("main", "Hinta"); ?></label>'+
-			'<input type="number" class="form-control" name="toinen_valiko[values][hinta][]" step="any">'+
+			'<label><?php echo Yii::t("main", "Hinta (ALV '+$('#OnlinevarausTuotteet_alv').val()+'%)"); ?></label>'+
+			'<input type="number" class="form-control hinta" for="rivi_'+rivi+'" name="toinen_valiko[values][hinta][]" step="any">'+
 		  '</div>'+
 		  '<div class="col-sm-3">'+
 			'<label><?php echo Yii::t("main", "Kesto"); ?></label>'+
 			'<input type="number" class="form-control" name="toinen_valiko[values][kesto][]" step="any">'+
 		  '</div>'+
-		  '<div class="col-sm-3">'+
+		  '<div class="col-sm-1">'+
 			'<label></label><br>'+
 			'<span class="btn btn-danger poistaRivi pull-right" for="rivi_'+rivi+'"><i class="fa fa-trash-o" aria-hidden="true"></i></span>'+
 		  '</div>'+
@@ -389,6 +425,37 @@ $(document).ready(function(){
 	$('#'+thisID).remove();
    });
 
+   $(document).delegate(".hinta_veroton","keyup",function(){
+	var forID = $(this).attr('for');
+	laskuriPlus(forID);
+   });
+
+   $(document).delegate(".hinta","keyup",function(){
+	var forID = $(this).attr('for');
+	laskuriMiinus(forID);
+   });
+
+   function laskuriPlus(forID){
+	var alv = parseFloat( $('#OnlinevarausTuotteet_alv').val() );
+	var hinta_veroton = parseFloat( $('#'+forID).find('.hinta_veroton').val() );
+	var hinta = $('#'+forID).find('.hinta');
+	if(hinta_veroton > 0){
+		result = (hinta_veroton*alv)/100;
+		result = result+hinta_veroton;
+		hinta.val(result);
+	}
+   }
+
+   function laskuriMiinus(forID){
+	var alv = parseFloat( $('#OnlinevarausTuotteet_alv').val() );
+	var hinta = parseFloat( $('#'+forID).find('.hinta').val() );
+	var hinta_veroton = $('#'+forID).find('.hinta_veroton');
+	if(hinta > 0){
+		result = (hinta*alv)/100;
+		//result = hinta-result;
+		hinta_veroton.val(result);
+	}
+   }
 
 });
 </script>

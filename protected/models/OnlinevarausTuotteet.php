@@ -40,7 +40,7 @@ class OnlinevarausTuotteet extends DB2ActiveRecord
 		// will receive user inputs.
 		return array(
 			array('nimike', 'required'),
-			array('palvelu, nayta_sivuilla, paa_palvelu', 'numerical', 'integerOnly'=>true),
+			array('palvelu, nayta_sivuilla, paa_palvelu, alv', 'numerical', 'integerOnly'=>true),
 			array('nimike, selitysteksti', 'length', 'max'=>255),
 			array('hinta, kesto, nelio, kotitalousvahennys', 'length', 'max'=>20),
 			array('toinen_valikko_rakenne, lisapalvelut', 'length', 'max'=>10000),
