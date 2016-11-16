@@ -16,7 +16,7 @@
 
 <div class="row">
  <div class="col-sm-6">
-	<legend><?php echo Yii::t('main', 'Perus tiedot'); ?></legend>
+	<legend><?php echo Yii::t('main', 'Perustiedot'); ?></legend>
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'nimike'); ?>
 		<?php echo $form->textField($model,'nimike',array('size'=>60,'maxlength'=>255, 'class'=>'form-control')); ?>
