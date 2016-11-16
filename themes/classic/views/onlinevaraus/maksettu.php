@@ -43,7 +43,7 @@ ini_set('display_errors', 1);
 		if(isset($_SESSION['onlinevaraus']))
 		{
 			echo $_SESSION['onlinevaraus']['message'];
-			unset($_SESSION['onlinevaraus']);
+			//unset($_SESSION['onlinevaraus']);
 		}
 		exit;
 	}
@@ -201,7 +201,9 @@ $message .= '
 <tr><td>Ajankohta</td><td>'.$tv->pvm.'</td></tr>
 <tr><td>Aika</td><td>KLO '.$tv->alku.'-'.$tv->loppu.'</td></tr>				
 <tr><td>Paikka</td><td>'.$ov->osoite.', '.$ov->postinumero.' '.$ov->kaupunki.'</td></tr>
-<tr><td>Hinta</td><td>'.number_format($ov->hinta, 2, ',', '').' euroa</td></tr>
+<tr><td>Hinta</td><td>euroa</td></tr>
+<tr><td>ALV</td><td>euroa</td></tr>
+<tr><td>Yhteeensä</td><td>'.number_format($ov->hinta, 2, ',', '').' euroa</td></tr>
 <tr><td>Maksu</td><td>Maksu on vahvistettu</td></tr>
 </table>
 

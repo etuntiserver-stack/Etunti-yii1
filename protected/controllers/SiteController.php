@@ -212,6 +212,11 @@ class SiteController extends Controller
 				$uusiSalasana = $this->rand_pass(8);
 				Administrators::model()->updateByPk($model->id, array('adm_salasana'=>md5($uusiSalasana)));
 				$message = Yii::t('main', 'Uusi salasana').': '.$uusiSalasana;
+				$message .= '<p>Kirjaudu sisään uudella salasanalla ja turvallisuussyistä vaihda tässä viestissä oleva salasana.
+ 				Painamalla oikeassa yläkulmassa olevaa käyttäjätunnusta pääset omiin asetuksiisi, josta voit vaihtaa salasanan. 
+				Muista painaa tallennusta, jotta uusi salasana tulee voimaan.</p><br>
+				Ystävällisin terveisin <br> 
+				Etunti';
 
 
 				$mail = new YiiMailer();
@@ -296,6 +301,7 @@ class SiteController extends Controller
 			'model'=>$model,
 		));
 	}
+
 
 
 	public function actionEtunnin_asiakas_kk($id)
