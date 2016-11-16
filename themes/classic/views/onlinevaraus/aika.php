@@ -125,6 +125,11 @@ $(document).ready(function(){
 $(document).delegate(".day","click",function(){
 	$('.day').removeClass('orangeColor');
 	$(this).addClass('orangeColor');
+
+	$('html,body').animate({
+	   scrollTop: $("#aikoja").offset().top
+	});
+
 });
 
 
