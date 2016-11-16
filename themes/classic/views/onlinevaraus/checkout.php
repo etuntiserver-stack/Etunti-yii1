@@ -106,7 +106,7 @@ else {
 ?>
 
 
-
+<?php /*
     <style>
         .C1 {
              width: 180px;
@@ -149,43 +149,48 @@ else {
              font-size: 11pt;
             }
     </style>
+*/
+?>
 
 
 
         <?php 
         if($xml and isset($xml->id))
         {
-            $html = '';
+            $html = '
+	     <div class="row">
+	      <div class="col-sm-12">';
 
             foreach($xml->payments->payment->banks as $bankX) 
             {
                 foreach($bankX as $bank) 
                 {
-                    $html .= "<div class='C1'>
-			     <form action='{$bank['url']}' method='post'><p>\n";
+                    $html .= '<div class="col-xs-4" style="margin-bottom:10px">
+			<form action="'.$bank['url'].'" method="POST">';
                     foreach($bank as $key => $value) 
                     {
                         $html .= "<input type='hidden' name='$key' value='$value' />\n";
                     }
-                    $html .= "<span><input type='image' src='{$bank['icon']}' /></span>
-				<div><p>{$bank['name']}</p></div>
-			     </form></div>\n";
+                    $html .= '
+				<div style="height:130px">
+				 <div style="min-height:80px">
+				  <input type="image" src="'.$bank['icon'].'" class="img-thumbnail" />
+				 </div>
+				  <p><small>'.$bank['name'].'</small></p>
+				</div>
+			 </form></div>';
                 }
             }
+
+            $html .= '
+	      </div>
+	     </div>';
         }
 
 	//$html .= $return_url;
 
         echo "<div>$html</div>";
         ?>
-
-    <br><br>
-<div class="row"></div>
-<p>
-    <div class="small">
-        <p></p>
-    </div>
-</p>
 
 
 

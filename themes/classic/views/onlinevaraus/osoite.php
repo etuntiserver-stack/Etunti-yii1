@@ -159,9 +159,9 @@ $asetukset = Asetukset::model()->findbypk(1);
 <?php
 	echo '
 	<div class="row">
-	  <div class="col-sm-6">
+	  <div class="col-xs-6">
 			'.CHtml::link('Edellinen','aika', array('class'=>'btn btn-lg edellinen')).'
-	  </div><div class="col-sm-6">
+	  </div><div class="col-xs-6">
 			<button class="btn btn-lg seuraava tallennaUusi">Maksu</button>
 	  </div>
 	</div>';
