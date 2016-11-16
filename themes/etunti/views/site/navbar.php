@@ -280,7 +280,7 @@ if( $curpage == 'tyovuoroot/tv2' )
 
 	<!-- Nakyma -->
         <li class="p10" data-toggle="tooltip">
-	<select class="form-control tvchange">
+	<select class="form-control tvchange" data-toggle="tooltip" data-placement="bottom" title="<?php echo Yii::t('main', 'Valitse näkymä'); ?>">
  	  <option value="index" <?php if($curpage == 'tyovuoroot/index') echo 'selected'; ?>><?php echo Yii::t('main', 'Viikko'); ?></option>
  	  <option value="tv2" <?php if($curpage == 'tyovuoroot/tv2') echo 'selected'; ?>><?php echo Yii::t('main', 'Työntekijä'); ?></option>
  	  <!--<option value="tv_kohteet"><?php echo Yii::t('main', 'Kohde'); ?></option>-->
@@ -295,7 +295,9 @@ if( $curpage == 'tyovuoroot/tv2' )
               <div class="form-group">
                <div class="form-inline">
 
-		     	<a href="<?php echo $_SERVER['PHP_SELF'].'?week='.($week == 1 ? $wkMaara : $week -1).'&year='.($week == 1 ? $year - 1 : $year); ?>"><i class="fa fa-arrow-left btn btn-default btn-group"></i></a>
+		     	<a href="<?php echo $_SERVER['PHP_SELF'].'?week='.($week == 1 ? $wkMaara : $week -1).'&year='.($week == 1 ? $year - 1 : $year); ?>">
+				<i class="fa fa-arrow-left btn btn-default btn-group" data-toggle="tooltip" data-placement="bottom" title="<?php echo Yii::t('main', 'Edellinen viikko'); ?>"></i>
+			</a>
 
 			<?php
 				$wkMaara	=  Yii::app()->session['wkMaara'];
@@ -327,7 +329,9 @@ if( $curpage == 'tyovuoroot/tv2' )
 			?>
 			</select>
 
-		     	<a href="<?php echo $_SERVER['PHP_SELF'].'?week='.($week == $wkMaara ? 1 : 1 + $week).'&year='.($week == $wkMaara ? 1 + $year : $year); ?>"><i class="fa fa-arrow-right btn btn-default btn-group"></i></a> 
+		     	<a href="<?php echo $_SERVER['PHP_SELF'].'?week='.($week == $wkMaara ? 1 : 1 + $week).'&year='.($week == $wkMaara ? 1 + $year : $year); ?>">
+				<i class="fa fa-arrow-right btn btn-default btn-group" data-toggle="tooltip" data-placement="bottom" title="<?php echo Yii::t('main', 'Seuraava viikko'); ?>"></i>
+			</a> 
 
                </div>
               </div>
@@ -335,7 +339,7 @@ if( $curpage == 'tyovuoroot/tv2' )
 
         <li class="p10" data-toggle="tooltip">
               <div class="form-group">
-	 	<div class="btn btn-default fa fa-calendar-check-o" id="vkolopput"></div>
+	 	<div class="btn btn-default fa fa-calendar-check-o" id="vkolopput" data-toggle="tooltip" data-placement="bottom" title="<?php echo Yii::t('main', 'Viikonloput'); ?>"></div>
 	      </div>
 	</li>
 	<?php endif; ?>
@@ -344,7 +348,7 @@ if( $curpage == 'tyovuoroot/tv2' )
 
 	<!-- Tilaus -->
         <li class="p10" data-toggle="tooltip">
-		<button class="btn btn-default fa fa-shopping-cart" id="uusiTilaus"></button>
+		<button class="btn btn-default fa fa-shopping-cart" id="uusiTilaus" data-toggle="tooltip" data-placement="bottom" title="<?php echo Yii::t('main', 'Uusi tilaus'); ?>"></button>
         </li>
 	<!-- Tilaus -->
 
