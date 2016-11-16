@@ -368,7 +368,7 @@ $(document).ready(function(){
 		  '</div>'+
 		  '<div class="col-sm-4">'+
 			'<label></label><br>'+
-			'<span class="btn btn-danger poistaLisapalvelutRivi pull-right" for="lisapalvelut_rivi_'+rivi+'"><i class="fa fa-trash-o" aria-hidden="true"></i></span>'+
+			'<span class="btn btn-danger poistaLisapalvelutRivi pull-right" for="lisapalvelut_rivi_'+Lisapalvelutrivi+'"><i class="fa fa-trash-o" aria-hidden="true"></i></span>'+
 		  '</div>'+
 		 '</div><hr>');
   });
