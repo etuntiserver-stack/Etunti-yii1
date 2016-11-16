@@ -319,8 +319,8 @@ function osoiteAjax(id)
 
 
 
-$("#sahkoposti").keyup(function(){
 
+$(document).delegate('#sahkoposti', 'keyup', function() {
 
    var sahkoposti = $(this).val();
 
