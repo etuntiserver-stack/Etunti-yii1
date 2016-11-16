@@ -66,6 +66,7 @@
   if(isset($model->id))
   {
 	$tilauksenKuvaus = array();
+	$perusAlv	= 0;
 	$perusHinta	= 0;
 	$perusKesto	= 0;
 	$lisaHinta 	= 0;
@@ -76,12 +77,16 @@
 	$tyo_toimialue	= '';
 	$kotitalousvahennys = '';
 
+	if(!empty($model->alv) and $model->alv != 0)		$perusAlv	= $model->alv;
+	$_SESSION['onlinevaraus']['alv'] 					= $perusAlv;
+
 	if(!empty($model->hinta) and $model->hinta != 0)	$perusHinta	= $model->hinta;
 	if(!empty($model->kesto) and $model->kesto != 0)	$perusKesto	= $model->kesto;
 	if(isset($_SESSION['onlinevaraus']['paa_otsikko'])) 	$otsikko 	= $_SESSION['onlinevaraus']['paa_otsikko']; 
 	if(isset($_SESSION['onlinevaraus']['paa_nimike'])) 	$nimike 	= ': '.$_SESSION['onlinevaraus']['paa_nimike']; 
 	if(isset($_SESSION['onlinevaraus']['tyo_toimialue'])) 	$tyo_toimialue 	= $_SESSION['onlinevaraus']['tyo_toimialue'];
 	$tilauksenKuvaus['paa'][$model->nimike] 		= $otsikko.$nimike;
+	$tilauksenKuvaus['alv']			 		= $perusAlv;
 
 	if(isset($_SESSION['onlinevaraus']['lisapalvelut']) and !empty($_SESSION['onlinevaraus']['lisapalvelut']))
 	{

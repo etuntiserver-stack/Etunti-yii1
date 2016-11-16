@@ -41,7 +41,7 @@ class Onlinevaraus extends DB2ActiveRecord
 			array('tila', 'length', 'max'=>1),
 			array('yhteyshenkilo, puhelin', 'length', 'max'=>100),
 			array('osoite, postinumero, kaupunki, sahkoposti', 'length', 'max'=>255),
-			array('kesto, hinta', 'length', 'max'=>50),
+			array('kesto, hinta, veroton_hinta', 'length', 'max'=>50),
 			array('maksun_onnistu_koodi', 'length', 'max'=>1000),
 			array('tilauksen_kuvaus, lisatietoja', 'length', 'max'=>5000),
 			// The following rule is used by search().

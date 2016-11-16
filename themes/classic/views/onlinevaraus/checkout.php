@@ -9,7 +9,7 @@ require 'CheckoutFinland/Client.php';
 use CheckoutFinland\Payment;
 use CheckoutFinland\Client;
 //use CheckoutFinland\Exceptions\AmountUnderMinimumException;
-
+$html = '';
 
 
 $asetukset = Asetukset::model()->findbypk(1);
@@ -82,10 +82,23 @@ if($response)
 
 	if(isset($_SESSION['onlinevaraus']['onlinevarausID']))
 	{
+		$veroton_hinta = 0;
+
+		if(isset($_SESSION['onlinevaraus']['alv']))
+		{
+		$alv = $_SESSION['onlinevaraus']['alv'];
+		$alv_hinta = ($_SESSION['onlinevaraus']['amount']*$alv)/100;
+		$veroton_hinta = $_SESSION['onlinevaraus']['amount']-$alv_hinta;
+		$veroton_hinta = round((float)str_replace(",",".",$veroton_hinta), 2);
+		}
+
+
 		$ov = Onlinevaraus::model()->findbypk($_SESSION['onlinevaraus']['onlinevarausID']);
 		$ov->tv_id = $_SESSION['onlinevaraus']['modelTV'];
 		$ov->maksun_onnistu_koodi = $xml->delayedMAC;
 		$ov->kesto = $kesto;
+		$ov->alv = $alv;
+		$ov->veroton_hinta = $veroton_hinta;
 		$ov->hinta = $_SESSION['onlinevaraus']['amount'];
 		$ov->tilauksen_kuvaus = json_encode($_SESSION['onlinevaraus']['tilauksenKuvaus']);
 		$ov->save();

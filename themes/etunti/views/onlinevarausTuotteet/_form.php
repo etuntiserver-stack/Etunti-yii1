@@ -172,19 +172,23 @@
 
 
 			   $nimike = array();
-			   foreach($rakenne['values']['nimike'] as $key=>$item)
+			   if(isset($rakenne['values']['nimike']))
+			     foreach($rakenne['values']['nimike'] as $key=>$item)
 				$nimike[] = $item;
 
 			   $hinta_veroton = array();
-			   foreach($rakenne['values']['hinta_veroton'] as $key=>$item)
+			   if(isset($rakenne['values']['hinta_veroton']))
+			     foreach($rakenne['values']['hinta_veroton'] as $key=>$item)
 				$hinta_veroton[] = $item;
 
 			   $hinta = array();
-			   foreach($rakenne['values']['hinta'] as $key=>$item)
+			   if(isset($rakenne['values']['nimike']))
+			     foreach($rakenne['values']['hinta'] as $key=>$item)
 				$hinta[] = $item;
 
 			   $kesto = array();
-			   foreach($rakenne['values']['kesto'] as $key=>$item)
+			   if(isset($rakenne['values']['kesto']))
+			     foreach($rakenne['values']['kesto'] as $key=>$item)
 				$kesto[] = $item;
 
 
@@ -192,15 +196,21 @@
 			   foreach($nimike as $key=>$rivi)
 			   {
 			   $i++;
+
+				if(isset($nimike[$key])) $nimike_value = $nimike[$key]; else $nimike_value = '';
+				if(isset($hinta[$key])) $hinta_value = $hinta[$key]; else $hinta_value = '';
+				if(isset($hinta_veroton[$key])) $hinta_veroton_value = $hinta_veroton[$key]; else $hinta_veroton_value = '';
+				if(isset($kesto[$key])) $kesto_value = $kesto[$key]; else $kesto_value = '';
+
 				echo '
 				 <div class="row" id="rivi_'.$i.'">
 				  <div class="col-sm-3">
 					<label>'.Yii::t('main', 'Nimike').'</label>
-					<input type="text" class="form-control" name="toinen_valiko[values][nimike][]" value="'.$nimike[$key].'">
+					<input type="text" class="form-control" name="toinen_valiko[values][nimike][]" value="'.$nimike_value.'">
 				  </div>
 				  <div class="col-sm-2">
 					<label>'.Yii::t('main', 'Hinta (ALV 0)').'</label>
-					<input type="number" class="form-control hinta_veroton" for="rivi_'.$i.'" name="toinen_valiko[values][hinta_veroton][]" value="'.$hinta_veroton[$key].'" step="any">
+					<input type="number" class="form-control hinta_veroton" for="rivi_'.$i.'" name="toinen_valiko[values][hinta_veroton][]" value="'.$hinta_veroton_value.'" step="any">
 				  </div>
 				  <div class="col-sm-3">
 					<label>'.Yii::t('main', 'Hinta (ALV '.$alv.'%)').'</label>
@@ -208,7 +218,7 @@
 				  </div>
 				  <div class="col-sm-3">
 					<label>'.Yii::t('main', 'Kesto').'</label>
-					<input type="number" class="form-control" name="toinen_valiko[values][kesto][]" value="'.$kesto[$key].'" step="any" placeholder="h">
+					<input type="number" class="form-control" name="toinen_valiko[values][kesto][]" value="'.$kesto_value.'" step="any" placeholder="h">
 				  </div>
 				  <div class="col-sm-1">
 					<label></label><br>
@@ -253,17 +263,22 @@
 			<label><?php echo Yii::t('main', 'Kuvaus'); ?></label>
 			<textarea class="form-control" name="lisapalvelut[values][kuvaus][]"></textarea>
 		  </div>
+		 <div class="row">
 		  <div class="col-sm-4">
-			<label><?php echo Yii::t('main', 'Hinta'); ?></label>
-			<input type="number" class="form-control" name="lisapalvelut[values][hinta][]" step="any">
+			<label><?php echo Yii::t('main', 'Hinta (ALV '.$alv.')'); ?></label>
+			<input type="number" class="form-control hinta_veroton" for="lisapalvelut_rivi_1" name="lisapalvelut[values][hinta_veroton][]" step="any">
 		  </div>
 		  <div class="col-sm-4">
+			<label><?php echo Yii::t('main', 'Hinta (ALV 0)'); ?></label>
+			<input type="number" class="form-control hinta" for="lisapalvelut_rivi_1" name="lisapalvelut[values][hinta][]" step="any">
+		  </div>
+		  <div class="col-sm-3">
 			<label><?php echo Yii::t('main', 'Kesto'); ?></label>
-			<input type="number" class="form-control" name="lisapalvelut[values][kesto][]" step="any">
+			<input type="number" class="form-control" name="lisapalvelut[values][kesto][]" step="any" placeholder="h">
 		  </div>
-		  <div class="col-sm-4">
+		  <div class="col-sm-1">
 			<label></label><br>
-			<span class="btn btn-danger poistaLisapalvelutRivi pull-right" for="lisapalvelut_rivi_1"><i class="fa fa-trash-o" aria-hidden="true"></i></span>
+			<span class="btn btn-danger poistaLisapalvelutRivi" for="lisapalvelut_rivi_1"><i class="fa fa-trash-o" aria-hidden="true"></i></span>
 		  </div>
 		 </div>
 		<hr>
@@ -273,19 +288,28 @@
 
 
 			   $otsikko = array();
-			   foreach($lisapalvelut['values']['otsikko'] as $key=>$item)
+			   if(isset($lisapalvelut['values']['otsikko']))
+			     foreach($lisapalvelut['values']['otsikko'] as $key=>$item)
 				$otsikko[] = $item;
 
 			   $kuvaus = array();
-			   foreach($lisapalvelut['values']['kuvaus'] as $key=>$item)
+			   if(isset($lisapalvelut['values']['kuvaus']))
+			     foreach($lisapalvelut['values']['kuvaus'] as $key=>$item)
 				$kuvaus[] = $item;
 
+			   $hinta_veroton = array();
+			   if(isset($lisapalvelut['values']['hinta_veroton']))
+			     foreach($lisapalvelut['values']['hinta_veroton'] as $key=>$item)
+				$hinta_veroton[] = $item;
+
 			   $hinta = array();
-			   foreach($lisapalvelut['values']['hinta'] as $key=>$item)
+			   if(isset($lisapalvelut['values']['hinta']))
+			     foreach($lisapalvelut['values']['hinta'] as $key=>$item)
 				$hinta[] = $item;
 
 			   $kesto = array();
-			   foreach($lisapalvelut['values']['kesto'] as $key=>$item)
+			   if(isset($lisapalvelut['values']['kesto']))
+			     foreach($lisapalvelut['values']['kesto'] as $key=>$item)
 				$kesto[] = $item;
 
 
@@ -293,25 +317,36 @@
 			   foreach($otsikko as $key=>$rivi)
 			   {
 			   $i++;
+
+				if(isset($otsikko[$key])) $otsikko_value = $otsikko[$key]; else $otsikko_value = '';
+				if(isset($kuvaus[$key])) $kuvaus_value = $kuvaus[$key]; else $kuvaus_value = '';
+				if(isset($hinta[$key])) $hinta_value = $hinta[$key]; else $hinta_value = '';
+				if(isset($hinta_veroton[$key])) $hinta_veroton_value = $hinta_veroton[$key]; else $hinta_veroton_value = '';
+				if(isset($kesto[$key])) $kesto_value = $kesto[$key]; else $kesto_value = '';
+
 				echo '
 				 <div class="row" id="lisapalvelut_rivi_'.$i.'">
 				  <div class="col-sm-12">
 					<label>'.Yii::t('main', 'Otsikko').'</label>
-					<input type="text" class="form-control" name="lisapalvelut[values][otsikko][]" value="'.$otsikko[$key].'">
+					<input type="text" class="form-control" name="lisapalvelut[values][otsikko][]" value="'.$otsikko_value.'">
 				  </div>
 				  <div class="col-sm-12">
 					<label>'.Yii::t('main', 'Kuvaus').'</label>
-					<textarea class="form-control" name="lisapalvelut[values][kuvaus][]">'.$kuvaus[$key].'</textarea>
+					<textarea class="form-control" name="lisapalvelut[values][kuvaus][]">'.$kuvaus_value.'</textarea>
 				  </div>
 				  <div class="col-sm-4">
-					<label>'.Yii::t('main', 'Hinta').'</label>
-					<input type="number" class="form-control" name="lisapalvelut[values][hinta][]" value="'.$hinta[$key].'" step="any">
+					<label>'.Yii::t('main', 'Hinta (ALV 0)').'</label>
+					<input type="number" class="form-control hinta_veroton" for="lisapalvelut_rivi_'.$i.'" name="lisapalvelut[values][hinta_veroton][]" value="'.$hinta[$key].'" step="any">
 				  </div>
 				  <div class="col-sm-4">
+					<label>'.Yii::t('main', 'Hinta (ALV '.$alv.'%)').'</label>
+					<input type="number" class="form-control hinta" for="lisapalvelut_rivi_'.$i.'" name="lisapalvelut[values][hinta][]" value="'.$hinta[$key].'" step="any">
+				  </div>
+				  <div class="col-sm-3">
 					<label>'.Yii::t('main', 'Kesto').'</label>
-					<input type="number" class="form-control" name="lisapalvelut[values][kesto][]" value="'.$kesto[$key].'" step="any">
+					<input type="number" class="form-control" name="lisapalvelut[values][kesto][]" value="'.$kesto[$key].'" step="any" placeholder="h">
 				  </div>
-				  <div class="col-sm-4">
+				  <div class="col-sm-1">
 					<label></label><br>
 					<span class="btn btn-danger poistaLisapalvelutRivi pull-right" for="lisapalvelut_rivi_'.$i.'"><i class="fa fa-trash-o" aria-hidden="true"></i></span>
 				  </div>
@@ -395,14 +430,18 @@ $(document).ready(function(){
 			'<textarea class="form-control" name="lisapalvelut[values][kuvaus][]"></textarea>'+
 		  '</div>'+
 		  '<div class="col-sm-4">'+
-			'<label><?php echo Yii::t("main", "Hinta"); ?></label>'+
-			'<input type="number" class="form-control" name="lisapalvelut[values][hinta][]" step="any">'+
+			'<label><?php echo Yii::t("main", "Hinta (ALV 0)"); ?></label>'+
+			'<input type="number" class="form-control hinta_veroton" for="lisapalvelut_rivi_'+Lisapalvelutrivi+'" name="lisapalvelut[values][hinta_veroton][]" step="any">'+
 		  '</div>'+
 		  '<div class="col-sm-4">'+
+			'<label><?php echo Yii::t("main", "Hinta (ALV '+$('#OnlinevarausTuotteet_alv').val()+'%)"); ?></label>'+
+			'<input type="number" class="form-control hinta" for="lisapalvelut_rivi_'+Lisapalvelutrivi+'" name="lisapalvelut[values][hinta][]" step="any">'+
+		  '</div>'+
+		  '<div class="col-sm-3">'+
 			'<label><?php echo Yii::t("main", "Kesto"); ?></label>'+
-			'<input type="number" class="form-control" name="lisapalvelut[values][kesto][]" step="any">'+
+			'<input type="number" class="form-control" name="lisapalvelut[values][kesto][]" step="any" placeholder="h">'+
 		  '</div>'+
-		  '<div class="col-sm-4">'+
+		  '<div class="col-sm-1">'+
 			'<label></label><br>'+
 			'<span class="btn btn-danger poistaLisapalvelutRivi pull-right" for="lisapalvelut_rivi_'+Lisapalvelutrivi+'"><i class="fa fa-trash-o" aria-hidden="true"></i></span>'+
 		  '</div>'+
@@ -442,7 +481,7 @@ $(document).ready(function(){
 	if(hinta_veroton > 0){
 		result = (hinta_veroton*alv)/100;
 		result = result+hinta_veroton;
-		hinta.val(result);
+		hinta.val(result.toFixed(2));
 	}
    }
 
@@ -452,8 +491,8 @@ $(document).ready(function(){
 	var hinta_veroton = $('#'+forID).find('.hinta_veroton');
 	if(hinta > 0){
 		result = (hinta*alv)/100;
-		//result = hinta-result;
-		hinta_veroton.val(result);
+		result = hinta-result;
+		hinta_veroton.val(result.toFixed(2));
 	}
    }
 
