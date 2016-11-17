@@ -132,10 +132,33 @@ class LogController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$dataProvider=new CActiveDataProvider('Log');
-		$this->render('index',array(
-			'dataProvider'=>$dataProvider,
+
+		if(isset($_POST['kohteetPerSivu']))
+		{
+			Yii::app()->user->setState('kohteetPerSivu', $_POST['kohteetPerSivu']);
+			echo json_encode($_POST['kohteetPerSivu']);
+			exit;
+		}
+
+       		$criteria = new CDbCriteria();
+	        $criteria->order = " id DESC ";
+
+		if(isset($_POST['log_category']) and $_POST['log_category'] != 'kaikki')
+	        $criteria->addCondition (" log_category='".(int)$_POST['log_category']."' ");
+
+
+		$dataProvider=new CActiveDataProvider('Log', array(
+			'criteria'=>$criteria,
+			//'pagination'=>false
 		));
+
+		$perSivu = 50;
+		if(isset(Yii::app()->user->kohteetPerSivu))
+		$perSivu = Yii::app()->user->kohteetPerSivu;
+
+		$dataProvider->pagination->pageSize = $perSivu;
+
+		$this->render('index', array('dataProvider' => $dataProvider, 'perSivu' => $perSivu));
 	}
 
 	/**

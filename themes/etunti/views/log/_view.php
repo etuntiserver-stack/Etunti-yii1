@@ -1,47 +1,39 @@
 <?php
-/* @var $this LogController */
-/* @var $data Log */
+/* @var $this KohteetController */
+/* @var $data Kohteet */
+
+
 ?>
 
-<div class="view">
+<tr>
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('id')); ?>:</b>
-	<?php echo CHtml::link(CHtml::encode($data->id), array('view', 'id'=>$data->id)); ?>
-	<br />
+	<td>
+		<?php echo CHtml::link('<i class="fa fa-pencil-square-o" aria-hidden="true" style="font-size: 110%"></i>', 
+				array('update', 'id'=>$data->id), 
+				array(
+					'class'=>'btn btn-primary myBgColors', 
+					'style'=>'color:white', 
+					'data-toggle'=>'tooltip', 
+					'data-placement'=>'top', 
+					'title'=>Yii::t('main', 'Muokkaa') 
+				)
+			); 
+		?>
+	</td>
+	<td>
+		<?php echo date("d.m.Y", strtotime($data->time)); ?>
+	</td>
+	<td>
+		<?php echo $data->email_to; ?>
+	</td>
+	<td>
+		<?php echo $data->email_subject; ?>
+	</td>
+	<td>
+		<?php echo json_decode($data->email_message); ?>
+	</td>
+	<td>
+		<?php echo $data->email_attachment; ?>
+	</td>
+</tr>
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('time')); ?>:</b>
-	<?php echo CHtml::encode($data->time); ?>
-	<br />
-
-	<b><?php echo CHtml::encode($data->getAttributeLabel('text')); ?>:</b>
-	<?php echo CHtml::encode($data->text); ?>
-	<br />
-
-	<b><?php echo CHtml::encode($data->getAttributeLabel('kuka')); ?>:</b>
-	<?php echo CHtml::encode($data->kuka); ?>
-	<br />
-
-	<b><?php echo CHtml::encode($data->getAttributeLabel('log_category')); ?>:</b>
-	<?php echo CHtml::encode($data->log_category); ?>
-	<br />
-
-	<b><?php echo CHtml::encode($data->getAttributeLabel('email_to')); ?>:</b>
-	<?php echo CHtml::encode($data->email_to); ?>
-	<br />
-
-	<b><?php echo CHtml::encode($data->getAttributeLabel('email_subject')); ?>:</b>
-	<?php echo CHtml::encode($data->email_subject); ?>
-	<br />
-
-	<?php /*
-	<b><?php echo CHtml::encode($data->getAttributeLabel('email_message')); ?>:</b>
-	<?php echo CHtml::encode($data->email_message); ?>
-	<br />
-
-	<b><?php echo CHtml::encode($data->getAttributeLabel('email_attachment')); ?>:</b>
-	<?php echo CHtml::encode($data->email_attachment); ?>
-	<br />
-
-	*/ ?>
-
-</div>

@@ -578,6 +578,10 @@ $('.tvchange').change(function(){
               <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/site/ohjesivu" class="animated animated-short fadeInUp">
                 <span class="fa fa-gear"></span> <?php echo Yii::t('main','Ohjeet'); ?> </a>
             </li>
+            <li class="list-group-item">
+              <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/log/index" class="animated animated-short fadeInUp">
+                <span class="fa fa-gear"></span> <?php echo Yii::t('main','Log'); ?> </a>
+            </li>
           </ul>
         </li>
 
