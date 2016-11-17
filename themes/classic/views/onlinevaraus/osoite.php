@@ -5,6 +5,56 @@ $asetukset = Asetukset::model()->findbypk(1);
 
 //print_r($_SESSION['onlinevaraus']);
 ?>
+
+<?php
+if(isset($_POST['poistaTamaTiedosto'])){
+	unlink($_POST['poistaTamaTiedosto']);
+	exit;
+}
+if(isset($_POST['getMyPictures']) and isset($_SESSION['onlinevaraus']['kuvat']))
+{
+	$i = 0;
+  	$kuvat = '';
+	foreach(array_reverse(glob('tiedostot/onlinevaraus_temp/'.Yii::app()->user->domain.'/'.$_SESSION['onlinevaraus']['kuvat'].'_*.*')) as $file) {
+	$i++;
+	$explNimi = explode("/",$file);
+ 	$kuvat .= '
+		<div class="form-inline" id="t_'.$_SESSION['onlinevaraus']['kuvat'].$i.'">
+	  		<div class="btn btn-xs btn-danger poistaTiedosto" this="'.$file.'" for="t_'.$_SESSION['onlinevaraus']['kuvat'].$i.'">X</div>
+	  		&nbsp;&nbsp;&nbsp;<a href="../../'.$file.'">'.end($explNimi).'</a>
+		</div>
+	';
+	}
+	echo json_encode($kuvat);
+	exit;
+}
+
+if(isset($_POST['kuvanLisaaminen']))
+{
+	function rand_string( $length ) {
+		$chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+		return substr(str_shuffle($chars),0,$length);
+	}
+	if(!isset($_SESSION['onlinevaraus']['kuvat']))
+		$_SESSION['onlinevaraus']['kuvat'] = rand_string(8);
+
+	if (!file_exists(Yii::app()->basePath."/../tiedostot/onlinevaraus_temp/".Yii::app()->user->domain)) {
+	  	mkdir(Yii::app()->basePath."/../tiedostot/onlinevaraus_temp/".Yii::app()->user->domain, 0777, true);
+	}
+
+	$uploaddir = Yii::app()->basePath.'/../tiedostot/onlinevaraus_temp/'.Yii::app()->user->domain.'/';
+	$uploadfile = $uploaddir . basename($_SESSION['onlinevaraus']['kuvat'].'_'.$_FILES['file']['name']);
+	if (move_uploaded_file($_FILES['file']['tmp_name'], $uploadfile)) {
+		//echo "";
+	}
+	exit;
+}
+?>
+
+
+
+
+
 <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/onlinevaraus_2.css">
 
 <div class="container-fluid">
@@ -153,6 +203,89 @@ $asetukset = Asetukset::model()->findbypk(1);
 
        </div>
       </div>
+
+      <br>
+      <div id="getMyPictures"></div>
+      <br>
+
+      <div class="row">
+       <div class="col-sm-6">
+	<label><?php echo Yii::t('main', 'Kuvien lisääminen'); ?></label>
+	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/bootstrap-filestyle.js"> </script>
+
+  	<form id="uploadKuva" action="#" method="post" enctype="multipart/form-data">
+     	  <div class="input-group">
+		<input type="hidden" name="kuvanLisaaminen">
+		<input type="file" name="file" class="filestyle" data-icon="false" data-size="lg" data-buttonName="btn-primary" data-buttonText="<?php echo Yii::t('main', 'Lisää kuva'); ?>">
+		<span class="input-group-btn">
+          		<input type="submit" value="Lataa" class="btn btn-primary btn-lg btn-group myBgColors" />
+		</span>
+    	  </div>
+	</form>
+       </div>
+      </div>
+
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+
+ $("#uploadKuva").submit(function(e){
+    e.preventDefault();
+    var formData = new FormData($(this)[0]);
+
+    $.ajax({
+        url: window.location.pathname,
+        type: 'POST',
+        data: formData,
+        success: function (data) {
+            getKuvat();
+        },
+        cache: false,
+        contentType: false,
+        processData: false
+    });
+
+    return false;
+
+ });
+
+ getKuvat();
+
+ function getKuvat(){
+
+   $.ajax({
+	url: 'osoite',
+	type : 'POST',
+	data : { getMyPictures : "true" },
+	success:function(data){
+		var data = JSON.parse(data);
+		$('#getMyPictures').html(data);
+   	},
+	error:function(data){
+		console.log(data);
+    	}
+    });
+  }
+
+  $(document).delegate(".poistaTiedosto","click",function(){
+
+	var forThis = $(this).attr("this");
+	var forID = $(this).attr("for");
+
+        $.ajax({
+           url: window.location.pathname,
+	   type:'POST',
+	   data: { "poistaTamaTiedosto" : forThis },
+           success: function(data){
+		console.log(data);
+		$("#"+forID).remove();
+           }
+        });
+  });
+
+});
+</script>
 
 
 	<br>

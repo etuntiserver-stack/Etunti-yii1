@@ -82,6 +82,9 @@ class OnlinevarausController extends Controller
 	{
 
 		$model = Kohteet::model()->findbypk($id);
+		if(isset($model->id))
+			$_SESSION['onlinevaraus']['kohdeID'] = $model->id;
+
 		$this->renderPartial('get_lomake_ajax', array('model'=>$model));
 	}
 
@@ -240,7 +243,9 @@ class OnlinevarausController extends Controller
 			$kohteet->email = $asiakkaat->sahkoposti;
 			$kohteet->muut = "Onlinevaraus ".date("d.m.Y");
 			$kohteet->tietoja = $_POST['lisatietoja'];
-		  	$kohteet->save();
+
+			if($kohteet->save())
+				$_SESSION['onlinevaraus']['kohdeID'] = $kohteet->id;
 
 		  }
 
@@ -281,6 +286,32 @@ class OnlinevarausController extends Controller
 							'onlinevaraus_id' => $ov->id
 						));
 					}
+
+					// <-- Kuvat siirretaan templatesta kohteeseen
+					if(isset($_SESSION['onlinevaraus']['kohdeID']) and isset($_SESSION['onlinevaraus']['kuvat']))
+					{
+
+						if (!file_exists(Yii::app()->basePath."/../img/uploadedfromphone/".Yii::app()->user->domain)) {
+						  	mkdir(Yii::app()->basePath."/../img/uploadedfromphone/".Yii::app()->user->domain, 0777, true);
+						}
+						$uploaddir = Yii::app()->basePath.'/../img/uploadedfromphone/'.Yii::app()->user->domain.'/';
+						foreach(array_reverse(glob('tiedostot/onlinevaraus_temp/'.Yii::app()->user->domain.'/'.$_SESSION['onlinevaraus']['kuvat'].'_*.*')) as $file) {
+							$explNimi = explode("/",$file);
+							$newname = $_SESSION['onlinevaraus']['kohdeID']."_".end($explNimi);
+							copy($file, $uploaddir.$newname);
+
+							$kuvk = new KuviaKohteesta;
+							$kuvk->kohde_id = $_SESSION['onlinevaraus']['kohdeID'];
+							$kuvk->tid = 0;
+							$kuvk->osoite = $ov->osoite;
+							$kuvk->tekijan_nimi = $ov->yhteyshenkilo;
+							$kuvk->tiedosto = $newname;
+							$kuvk->kuvaus = Yii::t('main', 'Tämä kuva saappunut onlinevarauksesta');
+							if(!$kuvk->save())
+								print_r($kuvk->getErrors());
+						}
+					}
+					//     Kuvat siirretaan templatesta kohteeseen -->
 
 					$bd = 'nytRedirectMaksulle';
 				} else {
@@ -935,6 +966,7 @@ $months=array(
 		{
 		$ti++;
 		$on = 'vapaa';
+
 		$criteria=new CDbCriteria;
 		$criteria->order = " alku ASC";
 		$criteria->condition = " 

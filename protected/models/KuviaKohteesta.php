@@ -31,7 +31,7 @@ class KuviaKohteesta extends DB2ActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('kohde_id, osoite, tid, tekijan_nimi, tiedosto', 'required'),
+			array('kohde_id, osoite, tekijan_nimi, tiedosto', 'required'),
 			array('kohde_id, tid', 'numerical', 'integerOnly'=>true),
 			array('osoite, tiedosto, tekijan_nimi', 'length', 'max'=>255),
 			array('kuvaus', 'length', 'max'=>5000),
