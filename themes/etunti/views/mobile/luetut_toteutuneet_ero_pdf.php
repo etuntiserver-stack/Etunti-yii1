@@ -1,5 +1,5 @@
 <?php
-
+ini_set('max_execution_time', 900);
 ?>
 <link rel="stylesheet" type="text/css" href="css/pdf_table.css">
 
@@ -12,7 +12,7 @@
  </td><td valign="right" style="width:20%">
   <?php echo Yii::t('main', 'Toteutuneen ja suunnitellun työn erot'); ?>
   <?php if(isset(Yii::app()->session['from']) and isset(Yii::app()->session['to'])) : ?>
-    <?php echo date("d.m.Y",strtotime(Yii::app()->session['from'])).'-'.date("d.m.Y",strtotime(Yii::app()->session['to'])); ?>
+    <?php echo date("d.m.Y",strtotime($from)).'-'.date("d.m.Y",strtotime($to)); ?>
   <?php endif; ?>
  </td>
  </tr>

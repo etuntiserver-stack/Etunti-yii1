@@ -279,7 +279,7 @@ function num($val){
 
 		        $html2pdf = Yii::app()->ePdf->HTML2PDF('P', 'A4', 'en');
 			$html2pdf->setDefaultFont('Arial');
-		        $html2pdf->WriteHTML($this->renderPartial('luetut_toteutuneet_ero_pdf', array('model' => $model),true));
+		        $html2pdf->WriteHTML($this->renderPartial('luetut_toteutuneet_ero_pdf', array('model' => $model, 'from'=>$_POST['from'],'to'=>$_POST['to']),true));
 		        $html2pdf->Output();
 
 			//$this->render('luetut_toteutuneet_ero_pdf', array('model' => $model));
