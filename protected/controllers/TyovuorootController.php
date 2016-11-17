@@ -279,20 +279,14 @@ class TyovuorootController extends Controller
 		$firma = FirmanTiedot::model()->findbypk(1);
 		if(isset($firma->sahkoposti) and !empty($firma->sahkoposti))
 		$saaja = array($tt->tekijan_email,$firma->sahkoposti);
+	
+		$subject = Yii::t('main', 'TYÖVUOROT'). ' '.$tt->tekijan_nimi;
 
 		$mail = new YiiMailer();
 		//$mail->clearLayout();//if layout is already set in config
 		$mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
-
-
-
-
-
-
-
-
 		$mail->setTo($saaja);
-		$mail->setSubject(Yii::t('main', 'TYÖVUOROT'). ' '.$tt->tekijan_nimi);
+		$mail->setSubject($subject);
 		$mail->setBody($message);
 		$mail->setAttachment($path.'/'.$file);
 	
@@ -300,6 +294,17 @@ class TyovuorootController extends Controller
 		  $this->render('laheta',array('tid'=>$tid,'week'=>$week,'year'=>$year,'tulosta'=>false,'tt'=>$tt));
 		else
 		  echo 'Send error';
+
+							// <-- LOG
+							$log=new Log;
+							$log->log_category 	= 1; // 1-email
+							$log->email_to 		= $saaja;
+							$log->email_subject	= $subject;
+							$log->email_message	= json_encode($message);
+							$log->email_attachment	= $path.'/'.$file;
+							$log->save();
+							//     LOG -->
+
 
 		} else {
 		  $this->render('laheta',array('tid'=>$tid,'week'=>$week,'year'=>$year,'tulosta'=>false,'tt'=>$tt));
@@ -848,11 +853,6 @@ class TyovuorootController extends Controller
 
 	public function actionViikko($tid,$viikko,$year)
 	{
-
-	function sprint($val){
-	    if($val > 0)
-		return sprintf('%02d:%02d', $val/3600, ($val % 3600)/60);
-	}
 
 		$this->renderPartial('viikko',array(
 			'tid'=>$tid,

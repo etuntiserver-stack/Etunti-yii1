@@ -144,9 +144,10 @@ for($day= 1; $day <= 7; $day++) {
 	$k = Kohteet::model()->findbypk($t->kohde,array("select"=>"asiakas_id,osoite,avain,kaupunki"));
 
 	// <-- Asiakas Tiedot
-	$as = Asiakkaat::model()->findbypk($k->asiakas_id);
 	$asiakasTiedot = '';
-	if(isset($k->asiakas_id) and $as->id > 0){
+	if(isset($k->asiakas_id)){
+
+	$as = Asiakkaat::model()->findbypk($k->asiakas_id);
 		
 		if(isset($as->yrityksen_nimi) and !empty($as->yrityksen_nimi) and $asetukset->tyovuorolahetys_naytetaanko_asiakas == 1){
 			$asiakasTiedot = '<br><b>'.Yii::t('main', 'Asiakas').':</b> '.$as->yrityksen_nimi;
@@ -197,10 +198,10 @@ for($day= 1; $day <= 7; $day++) {
   {
 	$k = Kohteet::model()->findbypk($t->kohde,array("select"=>"osoite,avain"));
 
-    if($t->pvm == $date and (!empty($t->tietoja) or !empty($k['avain'])))
+    if(isset($k->osoite) and $t->pvm == $date and (!empty($t->tietoja) or !empty($k->avain)))
     {
 
-	echo '<b>'.$k['osoite'].':</b> <br>'.$t->tietoja;
+	echo '<b>'.$k->osoite.':</b> <br>'.$t->tietoja;
 	echo '<p>------</p>';
     }
   }
