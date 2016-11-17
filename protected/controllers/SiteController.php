@@ -218,13 +218,22 @@ class SiteController extends Controller
 				Ystävällisin terveisin <br> 
 				Etunti';
 
-
+				$subject = Yii::t('main', 'Uusi salasana'). ' '.$model->adm_nimi;
 				$mail = new YiiMailer();
 				$mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
 				$mail->setTo($model->adm_email);
-				$mail->setSubject(Yii::t('main', 'Uusi salasana'). ' '.$model->adm_nimi);
+				$mail->setSubject($subject);
 				$mail->setBody($message);
 				$mail->send();
+
+							// <-- LOG
+							$log=new Log;
+							$log->log_category 	= 1; // 1-email
+							$log->email_to 		= $model->adm_email;
+							$log->email_subject	= $subject;
+							$log->email_message	= json_encode($message);
+							$log->save();
+							//     LOG -->
 
 				echo json_encode(array('ok',$model->adm_email));
 
@@ -277,6 +286,14 @@ class SiteController extends Controller
 			$mail->setBody($message);
 
 
+							// <-- LOG
+							$log=new Log;
+							$log->log_category 	= 1; // 1-email
+							$log->email_to 		= $sahkoposti;
+							$log->email_subject	= Yii::t('main', 'ETUNTI.FI');
+							$log->email_message	= json_encode($message);
+							$log->save();
+							//     LOG -->
 			}
 
 				$this->redirect(array('etunnin_asiakkaat'));

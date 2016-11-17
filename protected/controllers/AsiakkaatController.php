@@ -146,15 +146,25 @@ class AsiakkaatController extends Controller
 			}
 			$bd .= '</table>';
 
+			$subject = Yii::t('main', 'Osoitteen muutos'). ' '.Yii::t('main', 'Asiakas').': '.$model->id;
 			$ft = FirmanTiedot::model()->findbypk(1);
 			$mail = new YiiMailer();
 			//$mail->clearLayout();//if layout is already set in config
 			$mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
 			$mail->setTo($ft->sahkoposti);
-			$mail->setSubject(Yii::t('main', 'Osoitteen muutos'). ' '.Yii::t('main', 'Asiakas').': '.$model->id);
+			$mail->setSubject($subject);
 			$mail->setBody($bd);
 			$mail->send();
 			
+							// <-- LOG
+							$log=new Log;
+							$log->log_category 	= 1; // 1-email
+							$log->email_to 		= $ft->sahkoposti;
+							$log->email_subject	= $subject;
+							$log->email_message	= json_encode($message);
+							$log->save();
+							//     LOG -->
+
 				$this->redirect(array('//site/index'));
 				exit;
 

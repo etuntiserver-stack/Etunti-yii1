@@ -225,6 +225,16 @@ $message .= '
 			$mail->setSubject('Online varaus');
 			$mail->setBody($message);
 			$mail->send();
+
+							// <-- LOG
+							$log=new Log;
+							$log->log_category 	= 1; // 1-email
+							$log->email_to 		= $_SESSION['onlinevaraus']['sahkoposti'];
+							$log->email_subject	= 'Online varaus';
+							$log->email_message	= json_encode($message);
+							$log->save();
+							//     LOG -->
+
 			// Lähetetään asiakkaalle -->
 
 			$firmanTiedot = FirmanTiedot::model()->findbypk(1);
@@ -239,6 +249,17 @@ $message .= '
 			$mail->setSubject('Online varaus');
 			$mail->setBody($message);
 			$mail->send();
+
+
+							// <-- LOG
+							$log=new Log;
+							$log->log_category 	= 1; // 1-email
+							$log->email_to 		= $firmanTiedot->sahkoposti;
+							$log->email_subject	= 'Online varaus';
+							$log->email_message	= json_encode($message);
+							$log->save();
+							//     LOG -->
+
 			}
 			// Lähetetään toimistoon -->
 

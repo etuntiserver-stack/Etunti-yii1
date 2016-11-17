@@ -289,6 +289,20 @@ class TyovuorootController extends Controller
 		$mail->setSubject($subject);
 		$mail->setBody($message);
 		$mail->setAttachment($path.'/'.$file);
+
+							if(is_array($saaja)) $saaja = implode(",",$saaja); 
+ 
+							// <-- LOG
+							$log=new Log;
+							$log->log_category 	= 1; // 1-email
+							$log->email_to 		= $saaja;
+							$log->email_subject	= $subject;
+							$log->email_message	= json_encode($message);
+							$log->email_attachment	= $path.'/'.$file;
+							$log->save();
+							//     LOG -->
+
+
 	
 		if($mail->send())
 		  $this->render('laheta',array('tid'=>$tid,'week'=>$week,'year'=>$year,'tulosta'=>false,'tt'=>$tt));
@@ -364,17 +378,29 @@ class TyovuorootController extends Controller
 		if(isset($_POST['kirjenBody']) and !empty($_POST['kirjenBody']))
 		$message .= '<br>'.str_replace("\n", "<br>", $_POST['kirjenBody']);
 		
+		$subject = Yii::t('main', 'TYÖVUOROT'). ' '.$tt->tekijan_nimi;
 
 		  $firma = FirmanTiedot::model()->findbypk(1);		
 		  $mail = new YiiMailer();
 		  //$mail->clearLayout();//if layout is already set in config
 		  $mail->setFrom($firma->sahkoposti, 'ETUNTI.FI');
 		  $mail->setTo($tt->tekijan_email);
-		  $mail->setSubject(Yii::t('main', 'TYÖVUOROT'). ' '.$tt->tekijan_nimi);
+		  $mail->setSubject($subject);
 		  $mail->setBody($message);
 		  $mail->setAttachment($path.'/'.$file);
 		  $mail->send();
 		
+
+							// <-- LOG
+							$log=new Log;
+							$log->log_category 	= 1; // 1-email
+							$log->email_to 		= $tt->tekijan_email;
+							$log->email_subject	= $subject;
+							$log->email_message	= json_encode($message);
+							$log->email_attachment	= $path.'/'.$file;
+							$log->save();
+							//     LOG -->
+
 		 }
 		}
 
@@ -409,15 +435,27 @@ class TyovuorootController extends Controller
 		if(isset($_POST['kirjenBody']) and !empty($_POST['kirjenBody']))
 		$message .= '<br>'.str_replace("\n", "<br>", $_POST['kirjenBody']);
 
+		$subject = Yii::t('main', 'TYÖVUOROT ').$week.'-'.$year;
 
 		  $mail = new YiiMailer();
 		  //$mail->clearLayout();//if layout is already set in config
 		  $mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
 		  $mail->setTo($saaja);
-		  $mail->setSubject(Yii::t('main', 'TYÖVUOROT ').$week.'-'.$year);
+		  $mail->setSubject($subject);
 		  $mail->setBody($message);
 		  $mail->setAttachment($path.'/'.$file);
 		  $mail->send();
+
+							// <-- LOG
+							$log=new Log;
+							$log->log_category 	= 1; // 1-email
+							$log->email_to 		= $saaja;
+							$log->email_subject	= $subject;
+							$log->email_message	= json_encode($message);
+							$log->email_attachment	= $path.'/'.$file;
+							$log->save();
+							//     LOG -->
+
 		}
 		//
 

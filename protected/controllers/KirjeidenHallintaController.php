@@ -109,14 +109,25 @@ class KirjeidenHallintaController extends Controller
    		{
 		//echo $as->sahkoposti;
 
+		$subject = Yii::t('main', 'Kirje'). ', '.$firma->tyonantaja;
 		$mail = new YiiMailer();
 		$mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
 		$mail->setTo($as->sahkoposti);
-		$mail->setSubject(Yii::t('main', 'Kirje'). ', '.$firma->tyonantaja);
+		$mail->setSubject($subject);
 		$mail->setBody($message);
 		$mail->setAttachment($path.'/'.$file);
 		$mail->send();
 
+
+							// <-- LOG
+							$log=new Log;
+							$log->log_category 	= 1; // 1-email
+							$log->email_to 		= $as->sahkoposti;
+							$log->email_subject	= $subject;
+							$log->email_message	= json_encode($message);
+							$log->email_attachment	= $path.'/'.$file;
+							$log->save();
+							//     LOG -->
 
    		}
 

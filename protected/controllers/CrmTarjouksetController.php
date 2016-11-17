@@ -150,16 +150,27 @@ $randstring = generateRandomString();
 		
    if(file_exists(Yii::app()->basePath."/../tiedostot/crm/tarjoukset/".Yii::app()->user->domain."/".$crm->liite.".pdf"))
    {
+		$subject = Yii::t('main', 'Tarjous'). ', '.$firma->tyonantaja;
 		$mail = new YiiMailer();
 		//$mail->clearLayout();//if layout is already set in config
 		$mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
 		$mail->setTo($as->sahkoposti);
-		$mail->setSubject(Yii::t('main', 'Tarjous'). ', '.$firma->tyonantaja);
+		$mail->setSubject($subject);
 		$mail->setBody($message);
 		$mail->setAttachment($path.'/'.$file);
 
 		   if($mail->send())
 		   {
+
+							// <-- LOG
+							$log=new Log;
+							$log->log_category 	= 1; // 1-email
+							$log->email_to 		= $as->sahkoposti;
+							$log->email_subject	= $subject;
+							$log->email_message	= json_encode($message);
+							$log->save();
+							//     LOG -->
+
 
 			CrmTarjoukset::model()->updatebypk($_POST['id'], array('status'=>1,'hyvaksyn_koodi'=>$randstring));
 			$this->redirect(array('index'));

@@ -305,7 +305,17 @@ public function actionTiedosto($dom)
 
 				$message = Yii::t('main', 'Hei. Valokuva on saapunut kohteista: ').$k->osoite;
 				$headers = "From: ". $firma->sahkoposti;
-				mail($saajat,Yii::t('main', 'Uusi valokuva kohteista. Lähettäjä: '). ' '.$ttekija->tekijan_nimi,$message,$headers);
+				$subject = Yii::t('main', 'Uusi valokuva kohteista. Lähettäjä: '). ' '.$ttekija->tekijan_nimi;
+				mail($saajat,$subject,$message,$headers);
+
+							// <-- LOG
+							$log=new Log;
+							$log->log_category 	= 1; // 1-email
+							$log->email_to 		= $saajat;
+							$log->email_subject	= $subject;
+							$log->email_message	= json_encode($message);
+							$log->save();
+							//     LOG -->
 
 			}
 

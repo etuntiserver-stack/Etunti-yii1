@@ -375,15 +375,27 @@ class LaskuHistoriaController extends Controller
 
 		$message = '<br> Laskut ajalta '.$from.' - '.$to;
 		$saaja = $_POST['sahkoposti'];
-
+		$subject = Yii::t('main', 'Laskut'). ' '.$from.' - '.$to;
 		$mail = new YiiMailer();
 		$mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
 		$mail->setTo($saaja);
-		$mail->setSubject(Yii::t('main', 'Laskut'). ' '.$from.' - '.$to);
+		$mail->setSubject($subject);
 		$mail->setBody($message);
 		$mail->setAttachment($path.'/'.$file);
-		if($mail->send())
+		if($mail->send()){
+
+							// <-- LOG
+							$log=new Log;
+							$log->log_category 	= 1; // 1-email
+							$log->email_to 		= $saaja;
+							$log->email_subject	= $subject;
+							$log->email_message	= json_encode($message);
+							$log->email_attachment	= $path.'/'.$file;
+							$log->save();
+							//     LOG -->
+
 			$this->redirect(array('reskontraluettelo','mail'=>'sent'));
+		}
 
 
 		} else {

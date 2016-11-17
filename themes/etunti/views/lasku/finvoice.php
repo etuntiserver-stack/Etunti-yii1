@@ -1204,16 +1204,26 @@ if(isset($_GET['lahetaSahkopostilla']) and !empty($lasku['sahkoposti']))
 
 		$message = Yii::t('main', 'Liitteenä uusi lasku');
 		$saaja = $lasku['sahkoposti'];
-
+		$subject = Yii::t('main', 'Ilmoitus saapuneesta laskusta');
 		$mail = new YiiMailer();
 		$mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
 		$mail->setTo($saaja);
-		$mail->setSubject(Yii::t('main', 'Ilmoitus saapuneesta laskusta'));
+		$mail->setSubject($subject);
 		$mail->setBody($message);
 		$mail->setAttachment($path.'/'.$file);
 	
 		if($mail->send())
 		{
+
+							// <-- LOG
+							$log=new Log;
+							$log->log_category 	= 1; // 1-email
+							$log->email_to 		= $saaja;
+							$log->email_subject	= $subject;
+							$log->email_message	= json_encode($message);
+							$log->email_attachment	= $path.'/'.$file;
+							$log->save();
+							//     LOG -->
 
      		$tapahtumapvm = date("Y-m-d H:i:s");
      		Lasku::model()->updatebypk($id, array('tilanne'=>2,'tapahtumapvm'=>$tapahtumapvm));

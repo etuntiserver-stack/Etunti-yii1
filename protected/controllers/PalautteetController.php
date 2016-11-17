@@ -125,22 +125,44 @@ class PalautteetController extends Controller
 
 				if(isset($firma->sahkoposti) and !empty($firma->sahkoposti))
 				{
+				$subject = Yii::t('main', 'Palaute'). ': '.$nimi;
 				$mail = new YiiMailer();
 				$mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
 				$mail->setTo($firma->sahkoposti);
-				$mail->setSubject(Yii::t('main', 'Palaute'). ': '.$nimi);
+				$mail->setSubject($subject);
 				$mail->setBody($message);
 				$mail->send();
+
+							// <-- LOG
+							$log=new Log;
+							$log->log_category 	= 1; // 1-email
+							$log->email_to 		= $firma->sahkoposti;
+							$log->email_subject	= $subject;
+							$log->email_message	= json_encode($message);
+							$log->save();
+							//     LOG -->
+
 				}
 
 				if(isset($as->sahkoposti) and !empty($as->sahkoposti))
 				{
+				$subject = Yii::t('main', 'Palaute'). ': '.$nimi;
 				$mail = new YiiMailer();
 				$mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
 				$mail->setTo($as->sahkoposti);
-				$mail->setSubject(Yii::t('main', 'Palaute'). ': '.$nimi);
+				$mail->setSubject($subject);
 				$mail->setBody($message);
 				$mail->send();
+
+							// <-- LOG
+							$log=new Log;
+							$log->log_category 	= 1; // 1-email
+							$log->email_to 		= $as->sahkoposti;
+							$log->email_subject	= $subject;
+							$log->email_message	= json_encode($message);
+							$log->save();
+							//     LOG -->
+
 				}
 
 				$this->redirect(array('lahetetty','asiakas_id'=>$as->id));
@@ -204,12 +226,23 @@ class PalautteetController extends Controller
 
 				if(isset($firma->sahkoposti) and !empty($firma->sahkoposti))
 				{
+				$subject = Yii::t('main', 'Palaute'). ': '.$nimi;
 				$mail = new YiiMailer();
 				$mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
 				$mail->setTo($firma->sahkoposti);
-				$mail->setSubject(Yii::t('main', 'Palaute'). ': '.$nimi);
+				$mail->setSubject($subject);
 				$mail->setBody($message);
 				$mail->send();
+
+							// <-- LOG
+							$log=new Log;
+							$log->log_category 	= 1; // 1-email
+							$log->email_to 		= $firma->sahkoposti;
+							$log->email_subject	= $subject;
+							$log->email_message	= json_encode($message);
+							$log->save();
+							//     LOG -->
+
 				}
 
 				$this->redirect(array('lahetetty','asiakas_id'=>$as->id));

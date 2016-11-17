@@ -344,6 +344,15 @@ class TyontekijatController extends Controller
 				$mail->setBody($message);
 				$mail->send();
 
+							// <-- LOG
+							$log=new Log;
+							$log->log_category 	= 1; // 1-email
+							$log->email_to 		= $model->tekijan_email;
+							$log->email_subject	= $subject;
+							$log->email_message	= json_encode($message);
+							$log->save();
+							//     LOG -->
+
 				$this->redirect(array('index'));
 			}
 		}

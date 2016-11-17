@@ -138,12 +138,22 @@
 
 						if( $_SERVER['REMOTE_ADDR'] != '::1' and $_SERVER['REMOTE_ADDR'] != '127.0.0.1' )
 						{
+							$subject = Yii::t('main', 'Ilmoitus avoimista kohteesta '.date("d.m.Y H:i"));
 							$mail = new YiiMailer();
 							$mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
 							$mail->setTo($sahkopostiArray);
-							$mail->setSubject(Yii::t('main', 'Ilmoitus avoimista kohteesta '.date("d.m.Y H:i")));
+							$mail->setSubject($subject);
 							$mail->setBody($mailMessage);
 							$mail->send();
+
+							// <-- LOG
+							$log=new Log;
+							$log->log_category 	= 1; // 1-email
+							$log->email_to 		= implode(",", $sahkopostiArray);
+							$log->email_subject	= $subject;
+							$log->email_message	= json_encode($message);
+							$log->save();
+							//     LOG -->
 						}
 
 						//print_r($sahkopostiArray);
@@ -265,12 +275,22 @@
 
 						if( $_SERVER['REMOTE_ADDR'] != '::1' and $_SERVER['REMOTE_ADDR'] != '127.0.0.1' )
 						{
+							$subject = Yii::t('main', 'Ilmoitus myöhästyneistä kohteesta '.date("d.m.Y H:i"));
 							$mail = new YiiMailer();
 							$mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
 							$mail->setTo($sahkopostiArray);
-							$mail->setSubject(Yii::t('main', 'Ilmoitus myöhästyneistä kohteesta '.date("d.m.Y H:i")));
+							$mail->setSubject();
 							$mail->setBody($mailMessage);
 							$mail->send();
+
+							// <-- LOG
+							$log=new Log;
+							$log->log_category 	= 1; // 1-email
+							$log->email_to 		= implode(",", $sahkopostiArray);
+							$log->email_subject	= $subject;
+							$log->email_message	= json_encode($message);
+							$log->save();
+							//     LOG -->
 						}
 
 						//print_r($sahkopostiArray);
@@ -372,12 +392,22 @@
 
 						if( $_SERVER['REMOTE_ADDR'] != '::1' and $_SERVER['REMOTE_ADDR'] != '127.0.0.1' )
 						{
+							$subject = Yii::t('main', 'Ilmoitus merkkipäivästä '.date("d.m.Y H:i"));
 							$mail = new YiiMailer();
 							$mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
 							$mail->setTo($sahkopostiArray);
-							$mail->setSubject(Yii::t('main', 'Ilmoitus merkkipäivästä '.date("d.m.Y H:i")));
+							$mail->setSubject($subject);
 							$mail->setBody($mailMessage);
 							$mail->send();
+
+							// <-- LOG
+							$log=new Log;
+							$log->log_category 	= 1; // 1-email
+							$log->email_to 		= implode(",", $sahkopostiArray);
+							$log->email_subject	= $subject;
+							$log->email_message	= json_encode($message);
+							$log->save();
+							//     LOG -->
 						}
 
 						//print_r($sahkopostiArray);
@@ -465,14 +495,26 @@
 			if( $_SERVER['REMOTE_ADDR'] != '::1' and $_SERVER['REMOTE_ADDR'] != '127.0.0.1' and count($saaja) > 0 and !empty($message) )
 			{
 			   foreach($saaja as $key=>$sahkoposti)
-			   {			
+			   {		
+				$subject = Yii::t('main', 'lmoitus toistuvien työvuorojen päättymisestä');
 				$mail = new YiiMailer();
 				$mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
 				$mail->setTo($sahkoposti);
-				$mail->setSubject(Yii::t('main', 'lmoitus toistuvien työvuorojen päättymisestä'));
+				$mail->setSubject($subject);
 				$mail->setBody($message);
-				if(!$mail->send())
-				echo 'Mail send error to '.$sahkoposti;
+				if(!$mail->send()){
+					echo 'Mail send error to '.$sahkoposti;
+
+							// <-- LOG
+							$log=new Log;
+							$log->log_category 	= 1; // 1-email
+							$log->email_to 		= $sahkoposti;
+							$log->email_subject	= $subject;
+							$log->email_message	= json_encode($message);
+							$log->save();
+							//     LOG -->
+
+				}
 			   }
 			}
 			print_r($message);
