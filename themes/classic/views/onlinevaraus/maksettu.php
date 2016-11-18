@@ -128,6 +128,55 @@ if(isset($ov->id))
 if(isset($ov->id) and isset($tv->id))
 {
 
+
+
+	// <-- Uusi asiakas ja kohde
+		if(isset($_POST) and !isset($k->id))
+		{
+
+		  $asiakkaat = new Asiakkaat;
+		  $asiakkaat->attributes=$_POST;
+		  $asiakkaat->tyyppi = 'henkilo';
+		  $asiakkaat->onlinevarauksen_asiakas=1;
+		  $asiakkaat->aktiivinen = 1;
+
+		  if($asiakkaat->save())
+		  {
+
+			$kohteet = new Kohteet;
+			$kohteet->asiakas_id = $asiakkaat->id;
+			$kohteet->etu_suku_nimet = $asiakkaat->yhteyshenkilo;
+			$kohteet->osoite = $asiakkaat->osoite;
+			$kohteet->pnumero = $asiakkaat->postinumero;
+			$kohteet->kaupunki = $asiakkaat->kaupunki;
+			$kohteet->puh_nro = $asiakkaat->puhelin;
+			$kohteet->email = $asiakkaat->sahkoposti;
+			$kohteet->muut = "Onlinevaraus ".date("d.m.Y");
+			$kohteet->tietoja = $_POST['lisatietoja'];
+
+			if($kohteet->save()) {
+
+				$_SESSION['onlinevaraus']['asiakas_id'] = $kohteet->asiakas_id;
+				$_SESSION['onlinevaraus']['kohdeID'] = $kohteet->id;
+
+			} else {
+
+				echo json_encode(var_dump($kohteet->errors));
+				exit;
+			}
+
+
+		  } else {
+			echo json_encode(var_dump($asiakkaat->errors));
+			exit;
+		  }
+
+
+		} 
+	// Uusi asiakas ja kohde -->
+
+
+
 	// <-- Kuvat siirretaan templatesta kohteeseen
 	if(isset($_SESSION['onlinevaraus']['kuvat']))
 	{

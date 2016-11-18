@@ -8,6 +8,7 @@
   if( $_SERVER['REMOTE_ADDR'] !== '::1' and $_SERVER['REMOTE_ADDR'] !== '127.0.0.1' )
   {
 	echo 'Huoltokatko';
+	exit;
   }
 
 
