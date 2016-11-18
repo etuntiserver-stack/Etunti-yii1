@@ -93,9 +93,10 @@ if($response)
 		}
 
 
+		array_push( $_SESSION['onlinevaraus']['tilauksenKuvaus'], array('asiakas_tiedot'=>$_SESSION['onlinevaraus']['asiakas_tiedot']) );
+
 		$ov = Onlinevaraus::model()->findbypk($_SESSION['onlinevaraus']['onlinevarausID']);
 		$ov->tv_id = $_SESSION['onlinevaraus']['modelTV'];
-		$ov->kohde_id = $_SESSION['onlinevaraus']['kohdeID'];
 		$ov->maksun_onnistu_koodi = $xml->delayedMAC;
 		$ov->kesto = $kesto;
 		$ov->alv = $alv;

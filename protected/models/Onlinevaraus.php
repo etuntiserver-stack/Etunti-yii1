@@ -39,11 +39,11 @@ class Onlinevaraus extends DB2ActiveRecord
 			array('tv_id, asiakas_id, kohde_id', 'length', 'max'=>11),
 			array('alv', 'numerical', 'integerOnly'=>true),
 			array('tila', 'length', 'max'=>1),
-			array('yhteyshenkilo, puhelin', 'length', 'max'=>100),
-			array('osoite, postinumero, kaupunki, sahkoposti', 'length', 'max'=>255),
+			array('yhteyshenkilo, puhelin, tyyppi, y_tunnus', 'length', 'max'=>100),
+			array('osoite, postinumero, kaupunki, sahkoposti, yrityksen_nimi', 'length', 'max'=>255),
 			array('kesto, hinta, veroton_hinta', 'length', 'max'=>50),
 			array('maksun_onnistu_koodi', 'length', 'max'=>1000),
-			array('tilauksen_kuvaus, lisatietoja', 'length', 'max'=>5000),
+			array('tilauksen_kuvaus, lisatietoja, valokuvat', 'length', 'max'=>20000),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('id, time', 'safe', 'on'=>'search'),

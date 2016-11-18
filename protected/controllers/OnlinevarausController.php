@@ -82,10 +82,41 @@ class OnlinevarausController extends Controller
 	{
 
 		$model = Kohteet::model()->findbypk($id);
-		if(isset($model->id))
-			$_SESSION['onlinevaraus']['kohdeID'] = $model->id;
+		if(isset($model->id)){
 
-		$this->renderPartial('get_lomake_ajax', array('model'=>$model));
+			$modelAsiakas = Asiakkaat::model()->findbypk($model->asiakas_id);
+
+			$m = array();
+			if(isset($model->id))
+			{
+				$_SESSION['onlinevaraus']['kohde_id']	= $model->id;
+				$m['kohde_id']		= $model->id;
+				$m['puhelin']		= $model->puh_nro;
+				$m['osoite']		= $model->osoite;
+				$m['postinumero']	= $model->pnumero;
+				$m['kaupunki']		= $model->kaupunki;
+				$m['lisatietoja']	= $model->tietoja;
+			}
+
+			if(isset($modelAsiakas->id))
+			{
+				$_SESSION['onlinevaraus']['asiakas_id']	= $modelAsiakas->id;
+				$m['asiakas_id']	= $modelAsiakas->id;
+				$m['tyyppi'] 		= $modelAsiakas->tyyppi;
+				$m['yrityksen_nimi'] 	= $modelAsiakas->yrityksen_nimi;
+				$m['y_tunnus'] 		= $modelAsiakas->y_tunnus;
+				$m['yhteyshenkilo']	= $modelAsiakas->yhteyshenkilo;
+			}
+
+		
+			echo json_encode($m);
+			exit;
+
+			//$this->renderPartial('get_lomake_ajax', array('model'=>$model, 'modelAsiakas'=>$modelAsiakas));
+
+		} else {
+			echo json_encode('Get_lomake_ajax: error');
+		}
 	}
 
 
@@ -220,15 +251,17 @@ class OnlinevarausController extends Controller
 	public function actionLuouusi()
 	{
 
+/*
 		$k = Kohteet::model()->find(" email='".$_POST['sahkoposti']."' ");
 
 		if(isset($_POST) and !isset($k->id))
 		{
 
-		$asiakkaat = new Asiakkaat;
-		$asiakkaat->attributes=$_POST;
-		$asiakkaat->tyyppi = 'henkilo';
-		$asiakkaat->aktiivinen = 1;
+		  $asiakkaat = new Asiakkaat;
+		  $asiakkaat->attributes=$_POST;
+		  $asiakkaat->tyyppi = 'henkilo';
+		  $asiakkaat->onlinevarauksen_asiakas=1;
+		  $asiakkaat->aktiivinen = 1;
 
 		  if($asiakkaat->save())
 		  {
@@ -244,17 +277,28 @@ class OnlinevarausController extends Controller
 			$kohteet->muut = "Onlinevaraus ".date("d.m.Y");
 			$kohteet->tietoja = $_POST['lisatietoja'];
 
-			if($kohteet->save())
+			if($kohteet->save()) {
+
+				$_SESSION['onlinevaraus']['asiakas_id'] = $kohteet->asiakas_id;
 				$_SESSION['onlinevaraus']['kohdeID'] = $kohteet->id;
 
+			} else {
+
+				echo json_encode(var_dump($kohteet->errors));
+				exit;
+			}
+
+
 		  } else {
-			echo json_encode($kohteet->errors);
+			echo json_encode(var_dump($asiakkaat->errors));
 			exit;
 		  }
 
+
 		} 
 
-			$bd = 'onOlemassa';
+*/
+
 			if(isset($_SESSION['onlinevaraus']['onlinevarausID']))
 			{
 				$ov = Onlinevaraus::model()->findbypk($_SESSION['onlinevaraus']['onlinevarausID']);
@@ -263,20 +307,24 @@ class OnlinevarausController extends Controller
 				$ov = new Onlinevaraus;
 			}
 
-			if(isset($_POST['asiakas_id']) and !empty($_POST['asiakas_id']))
-			$asiakas_id = $_POST['asiakas_id'];
-			elseif(isset($_POST['asiakas_id']) and empty($_POST['asiakas_id']) and isset($asiakkaat->id))
-			$asiakas_id = $asiakkaat->id;
+				if(isset($_SESSION['onlinevaraus']['kohde_id']))
+				$ov->kohde_id 		= $_SESSION['onlinevaraus']['kohde_id'];
 
+				if(isset($_SESSION['onlinevaraus']['asiakas_id']))
+				$ov->asiakas_id		= $_SESSION['onlinevaraus']['asiakas_id'];
 
-				$ov->asiakas_id = $asiakas_id;
-				$ov->yhteyshenkilo = $_POST['yhteyshenkilo'];
-				$ov->puhelin = $_POST['puhelin'];
-				$ov->osoite = $_POST['osoite'];
-				$ov->postinumero = $_POST['postinumero'];
-				$ov->kaupunki = $_POST['kaupunki'];
-				$ov->lisatietoja = $_POST['lisatietoja'];
-				$ov->sahkoposti = $_POST['sahkoposti'];
+				$ov->yhteyshenkilo 	= $_POST['yhteyshenkilo'];
+				$ov->puhelin 		= $_POST['puhelin'];
+				$ov->osoite 		= $_POST['osoite'];
+				$ov->postinumero 	= $_POST['postinumero'];
+				$ov->kaupunki 		= $_POST['kaupunki'];
+				$ov->lisatietoja 	= $_POST['lisatietoja'];
+				$ov->sahkoposti 	= $_POST['sahkoposti'];
+
+				$ov->tyyppi 		= $_POST['tyyppi'];
+				$ov->yrityksen_nimi 	= $_POST['yrityksen_nimi'];
+				$ov->y_tunnus 		= $_POST['y_tunnus'];
+
 
 				if($ov->save())
 				{
@@ -284,46 +332,21 @@ class OnlinevarausController extends Controller
 
 					if(isset($_SESSION['onlinevaraus']['modelTV']))
 					{
-				        $tv = Tyovuoroot::model()->updatebypk($_SESSION['onlinevaraus']['modelTV'], 
+				        	$tv = Tyovuoroot::model()->updatebypk($_SESSION['onlinevaraus']['modelTV'], 
 						array(
 							'onlinevaraus_id' => $ov->id
 						));
 					}
 
-					// <-- Kuvat siirretaan templatesta kohteeseen
-					if(isset($_SESSION['onlinevaraus']['kohdeID']) and isset($_SESSION['onlinevaraus']['kuvat']))
-					{
+					echo json_encode('nytRedirectMaksulle');
+					exit;
 
-						if (!file_exists(Yii::app()->basePath."/../img/uploadedfromphone/".Yii::app()->user->domain)) {
-						  	mkdir(Yii::app()->basePath."/../img/uploadedfromphone/".Yii::app()->user->domain, 0777, true);
-						}
-						$uploaddir = Yii::app()->basePath.'/../img/uploadedfromphone/'.Yii::app()->user->domain.'/';
-						foreach(array_reverse(glob('tiedostot/onlinevaraus_temp/'.Yii::app()->user->domain.'/'.$_SESSION['onlinevaraus']['kuvat'].'_*.*')) as $file) {
-							$explNimi = explode("/",$file);
-							$newname = $_SESSION['onlinevaraus']['kohdeID']."_".end($explNimi);
-							copy($file, $uploaddir.$newname);
-
-							$kuvk = new KuviaKohteesta;
-							$kuvk->kohde_id = $_SESSION['onlinevaraus']['kohdeID'];
-							$kuvk->tid = 0;
-							$kuvk->osoite = $ov->osoite;
-							$kuvk->tekijan_nimi = $ov->yhteyshenkilo;
-							$kuvk->tiedosto = $newname;
-							$kuvk->kuvaus = Yii::t('main', 'Tämä kuva saappunut onlinevarauksesta');
-							if(!$kuvk->save())
-								print_r($kuvk->getErrors());
-						}
-					}
-					//     Kuvat siirretaan templatesta kohteeseen -->
-
-					$bd = 'nytRedirectMaksulle';
 				} else {
 					var_dump($ov->errors);
 				}
 
 
-				echo json_encode($bd);
-		
+	
 
 	}
 

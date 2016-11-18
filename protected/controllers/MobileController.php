@@ -831,10 +831,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		{
 	        $criteria->addCondition ("  
 			tid IN ( 
-			SELECT id FROM sivex_ttekijat WHERE tyoryhma IN 
-				( SELECT value FROM sivex_selects 
-					WHERE value LIKE '%".Yii::app()->session['tyontekijanRyhma']."%'
-				)
+			SELECT id FROM sivex_ttekijat WHERE tyoryhma LIKE '%".Yii::app()->session['tyontekijanRyhma']."%'
 			)
 		");
 		}
@@ -1423,6 +1420,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		";
 
 
+
 		if(Yii::app()->session['Tekija']){
 		  if(count(Yii::app()->session['Tekija']) > 1)
 		    $ids = implode(",",Yii::app()->session['Tekija']);
@@ -1731,6 +1729,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		$this->totLuYhteensa($cr1,3,$from,$to);
 		$cr1->addCondition (" id NOT IN (SELECT kid FROM sivexkuitti_repaired) ");
 		$tt = Mobile::model()->find($cr1);
+
 
        		$cr2 = new CDbCriteria();
 		$this->totLuYhteensa($cr2,3,$from,$to);

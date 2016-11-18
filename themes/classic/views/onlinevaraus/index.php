@@ -4,6 +4,13 @@
 /* @var $this OnlinevarausController */
 /* @var $dataProvider CActiveDataProvider */
 
+
+  if( $_SERVER['REMOTE_ADDR'] !== '::1' and $_SERVER['REMOTE_ADDR'] !== '127.0.0.1' )
+  {
+	echo 'Huoltokatko';
+  }
+
+
   if(!isset($_SESSION['domain']))
   {
     echo '  <link rel="stylesheet" type="text/css" href="'.Yii::app()->request->baseUrl.'/css/bootstrap.min.css">';

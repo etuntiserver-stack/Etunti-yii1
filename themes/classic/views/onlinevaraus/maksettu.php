@@ -114,28 +114,45 @@ try {
 
 
 
-	if($status_string == 'PAID' and !isset($_GET['check']))
+if($status_string == 'PAID' and !isset($_GET['check']))
+{
+	$ov = Onlinevaraus::model()->find(" id='".$_GET['REFERENCE']."' and tila=0 ");
+
+
+
+
+
+if(isset($ov->id))
+	$tv = Tyovuoroot::model()->find(" onlinevaraus_id='".$ov->id."' ");
+
+if(isset($ov->id) and isset($tv->id))
+{
+
+	// <-- Kuvat siirretaan templatesta kohteeseen
+	if(isset($_SESSION['onlinevaraus']['kuvat']))
 	{
-		$ov = Onlinevaraus::model()->find(" id='".$_GET['REFERENCE']."' and tila=0 ");
+			if (!file_exists(Yii::app()->basePath."/../img/uploadedfromphone/".Yii::app()->user->domain)) {
+			  	mkdir(Yii::app()->basePath."/../img/uploadedfromphone/".Yii::app()->user->domain, 0777, true);
+			}
+			$uploaddir = Yii::app()->basePath.'/../img/uploadedfromphone/'.Yii::app()->user->domain.'/';
+			foreach(array_reverse(glob('tiedostot/onlinevaraus_temp/'.Yii::app()->user->domain.'/'.$_SESSION['onlinevaraus']['kuvat'].'_*.*')) as $file) 
+			{
+				$explNimi = explode("/",$file);
+				$newname = $_SESSION['onlinevaraus']['kohdeID']."_".end($explNimi);
+				rename($file, $uploaddir.$newname);
+				$kuvk = new KuviaKohteesta;
+				$kuvk->kohde_id = $_SESSION['onlinevaraus']['kohdeID'];
+				$kuvk->tid = 0;
+				$kuvk->osoite = $ov->osoite;
+				$kuvk->tekijan_nimi = $ov->yhteyshenkilo;
+				$kuvk->tiedosto = $newname;
+				$kuvk->kuvaus = Yii::t('main', 'Tämä kuva saappunut onlinevarauksesta');
+				if(!$kuvk->save())
+				print_r($kuvk->getErrors());
+			}
+	}
+	//     Kuvat siirretaan templatesta kohteeseen -->
 
-		if(isset($ov->id))
-		$tv = Tyovuoroot::model()->find(" onlinevaraus_id='".$ov->id."' ");
-
-		if(isset($ov->id) and isset($tv->id))
-		{
-
-
-			$asiakas = Asiakkaat::model()->findbypk($ov->asiakas_id);
-			$asetukset = Asetukset::model()->findbypk(1);
-
-
-$nimi = '';
-if(!empty($asiakas->yrityksen_nimi) and empty($asiakas->yhteyshenkilo))
-$nimi = $asiakas->yrityksen_nimi;
-if(empty($asiakas->yrityksen_nimi) and !empty($asiakas->yhteyshenkilo))
-$nimi = $asiakas->yhteyshenkilo;
-
-$tilauksen_kuvaus = json_decode($ov->tilauksen_kuvaus, true);
 
 
 $message = '';
@@ -164,12 +181,12 @@ Olemme vastaanottaneet tilauksesi ja tästä voit tulostaa tilausvahvistuksen.
 
 <table>
 <tr><td>Nimi</td><td>'.$nimi.'</td></tr>
-<tr><td>Osoite</td><td>'.$asiakas->osoite.'</td></tr>
-<tr><td>Puhelin</td><td>'.$asiakas->puhelin.'</td></tr>
-<tr><td>S-posti</td><td>'.$asiakas->sahkoposti.'</td></tr>';
+<tr><td>Osoite</td><td>'.$ov->osoite.'</td></tr>
+<tr><td>Puhelin</td><td>'.$ov->puhelin.'</td></tr>
+<tr><td>S-posti</td><td>'.$ov->sahkoposti.'</td></tr>';
 
 if(!empty($asiakas->y_tunnus))
-$message .= '<tr><td>Y-tunnus</td><td>'.$asiakas->y_tunnus.'</td></tr>';
+$message .= '<tr><td>Y-tunnus</td><td>'.$ov->y_tunnus.'</td></tr>';
 
 $message .= '
 </table>
@@ -178,6 +195,7 @@ $message .= '
 <tr><td>Tilausnumero</td><td>'.$ov->id.'</td></tr>';
 
 
+$tilauksen_kuvaus = json_decode($ov->tilauksen_kuvaus, true);
 if(isset($tilauksen_kuvaus['paa']) and is_array($tilauksen_kuvaus['paa']))
 {
 
@@ -211,10 +229,7 @@ $message .= '
 
                 </div>
             </div>
-        </section>  
-
-
-			';
+        </section>';
 
 			$_SESSION['onlinevaraus']['message'] = $message;
 
@@ -224,8 +239,8 @@ $message .= '
 			$mail->setTo($_SESSION['onlinevaraus']['sahkoposti']);
 			$mail->setSubject('Online varaus');
 			$mail->setBody($message);
-			$mail->send();
-
+			if($mail->send())
+			{
 							// <-- LOG
 							$log=new Log;
 							$log->log_category 	= 1; // 1-email
@@ -234,6 +249,7 @@ $message .= '
 							$log->email_message	= json_encode($message);
 							$log->save();
 							//     LOG -->
+			}
 
 			// Lähetetään asiakkaalle -->
 
@@ -248,9 +264,8 @@ $message .= '
 			$mail->setTo($firmanTiedot->sahkoposti);
 			$mail->setSubject('Online varaus');
 			$mail->setBody($message);
-			$mail->send();
-
-
+			if($mail->send())
+			{
 							// <-- LOG
 							$log=new Log;
 							$log->log_category 	= 1; // 1-email
@@ -259,10 +274,12 @@ $message .= '
 							$log->email_message	= json_encode($message);
 							$log->save();
 							//     LOG -->
-
+			}
 			}
 			// Lähetetään toimistoon -->
 
+echo 'korja';
+exit;
 			
 			$t = Tyovuoroot::model()->findbypk($tv->id);
 			$t->osoiteOnline=2;
@@ -275,9 +292,11 @@ $message .= '
 			$this->redirect(Yii::app()->request->baseUrl.'/index.php/onlinevaraus/maksettu?check=ok');
 	
 
-		}
-	}
-	?>
+}
+
+
+}
+?>
 
 
 

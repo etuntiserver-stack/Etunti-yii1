@@ -4,6 +4,21 @@
 $asetukset = Asetukset::model()->findbypk(1);
 
 //print_r($_SESSION['onlinevaraus']);
+
+/*
+				$_SESSION['onlinevaraus']['asiakas_tiedot']['kohde_id']		= $model->id;
+				$_SESSION['onlinevaraus']['asiakas_tiedot']['puhelin']		= $model->puh_nro;
+				$_SESSION['onlinevaraus']['asiakas_tiedot']['osoite']		= $model->osoite;
+				$_SESSION['onlinevaraus']['asiakas_tiedot']['postinumero']	= $model->pnumero;
+				$_SESSION['onlinevaraus']['asiakas_tiedot']['kaupunki']		= $model->kaupunki;
+				$_SESSION['onlinevaraus']['asiakas_tiedot']['lisatietoja']	= $model->tietoja;
+
+				$_SESSION['onlinevaraus']['asiakas_tiedot']['asiakas_id']	= $modelAsiakas->id;
+				$_SESSION['onlinevaraus']['asiakas_tiedot']['tyyppi'] 		= $modelAsiakas->tyyppi;
+				$_SESSION['onlinevaraus']['asiakas_tiedot']['yrityksen_nimi'] 	= $modelAsiakas->yrityksen_nimi;
+				$_SESSION['onlinevaraus']['asiakas_tiedot']['y_tunnus'] 	= $modelAsiakas->y_tunnus;
+				$_SESSION['onlinevaraus']['asiakas_tiedot']['yhteyshenkilo']	= $modelAsiakas->yhteyshenkilo;
+*/
 ?>
 
 <?php
@@ -154,58 +169,70 @@ if(isset($_POST['kuvanLisaaminen']))
      <br>
 
      <div id="lomake">
+
+      <div class="row">
+       <div class="col-sm-6">
+	<label><?php echo Yii::t('main', 'Asiakastyyppi '); ?></label>
+	  <select id="tyyppi" class="form-control input-lg">
+	  <option value="yritys">Yritys</option>
+	  <option value="henkilo">Yksityishenkilö</option>
+	  </select>
+
+       </div>
+      </div>
+
       <div class="row">
        <div class="col-sm-6">
 
-	<input type="hidden" id="asiakas_id">
-
-	<label><?php echo Yii::t('main', 'Etu- ja sukunimi'); ?></label>
-	<input type="text" id="yhteyshenkilo" class="form-control input-lg" value="<?php if(isset($_SESSION['onlinevaraus']['modelKohde_etu_suku_nimet'])) echo $_SESSION['onlinevaraus']['modelKohde_etu_suku_nimet'] ;?>">
-
-       </div><div class="col-sm-6">
+	<label><?php echo Yii::t('main', 'Yhteyshenkilö'); ?></label>
+	  <input type="text" id="yhteyshenkilo" class="form-control input-lg">
 
 	<label><?php echo Yii::t('main', 'Puhelin'); ?></label>
-	<input type="text" id="puhelin" class="form-control input-lg" value="<?php if(isset($_SESSION['onlinevaraus']['modelKohde_puh_nro'])) echo $_SESSION['onlinevaraus']['modelKohde_puh_nro'] ;?>">
+	  <input type="text" id="puhelin" class="form-control input-lg">
+
+       </div><div class="col-sm-6">
+
+        <div class="yritys">
+	<label><?php echo Yii::t('main', 'Yrityksen Nimi'); ?></label>
+	  <input type="text" id="yrityksen_nimi" class="form-control input-lg">
+	</div>
+
+        <div class="yritys">
+	<label><?php echo Yii::t('main', 'Y-tunnus'); ?></label>
+	  <input type="text" id="y_tunnus" class="form-control input-lg">
+	</div>
 
        </div>
       </div>
 
-	<br>
-	<center><h4><?php echo Yii::t('main', 'Osoite'); ?></h4></center>
+      <br>
+      <center><h4><?php echo Yii::t('main', 'Osoite'); ?></h4></center>
 
       <div class="row">
        <div class="col-sm-12">
-
 	<label><?php echo Yii::t('main', 'Osoite'); ?></label>
-	<input type="text" id="osoite" class="form-control input-lg" value="<?php if(isset($_SESSION['onlinevaraus']['modelKohde_osoite'])) echo $_SESSION['onlinevaraus']['modelKohde_osoite'] ;?>">
-
+	  <input type="text" id="osoite" class="form-control input-lg">
        </div>
       </div>
 
 
       <div class="row">
        <div class="col-sm-6">
-
 	<label><?php echo Yii::t('main', 'Postinumero'); ?></label>
-	<input type="text" id="postinumero" class="form-control input-lg" value="<?php if(isset($_SESSION['onlinevaraus']['modelKohde_pnumero'])) echo $_SESSION['onlinevaraus']['modelKohde_pnumero'] ;?>">
-
+	  <input type="text" id="postinumero" class="form-control input-lg">
        </div><div class="col-sm-6">
-
 	<label><?php echo Yii::t('main', 'Postitoimipaikka'); ?></label>
-	<input type="text" id="kaupunki" class="form-control input-lg" value="<?php if(isset($_SESSION['onlinevaraus']['modelKohde_kaupunki'])) echo $_SESSION['onlinevaraus']['modelKohde_kaupunki'] ;?>">
-
+	  <input type="text" id="kaupunki" class="form-control input-lg">
        </div>
       </div>
 
-	<br>
-	<center><h4><?php echo Yii::t('main', 'Lisätietoja'); ?></h4></center>
+      <br>
+      <center><h4><?php echo Yii::t('main', 'Lisätietoja'); ?></h4></center>
 
       <div class="row">
        <div class="col-sm-12">
-
 	<label><?php echo Yii::t('main', 'Lisätietoja'); ?></label>
-	<textarea id="lisatietoja" class="form-control input-lg" placeholder="<?php echo Yii::t('main', 'Lemmikkejä, ovikoodi ja muuta lisätietoa'); ?>" rows="5"><?php if(isset($_SESSION['onlinevaraus']['modelKohde_tietoja'])) echo $_SESSION['onlinevaraus']['modelKohde_tietoja'] ;?></textarea>
-
+	  <textarea id="lisatietoja" class="form-control input-lg" placeholder="<?php echo Yii::t('main', 'Lemmikkejä, ovikoodi ja muuta lisätietoa'); ?>" rows="5"></textarea>
        </div>
       </div>
 
@@ -217,7 +244,6 @@ if(isset($_POST['kuvanLisaaminen']))
        <div class="col-sm-6">
 	<label><?php echo Yii::t('main', 'Kuvien lisääminen'); ?></label>
 	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/bootstrap-filestyle.js"> </script>
-
   	<form id="uploadKuva" action="#" method="post" enctype="multipart/form-data">
      	  <div class="input-group">
 		<input type="hidden" name="kuvanLisaaminen">
@@ -371,6 +397,25 @@ $(document).ready(function(){
 <script type="text/javascript">
 $(document).ready(function(){
 
+$("#tyyppi").change(function() {
+    var value = $(this).val();
+    tyyppi(value);
+});
+
+function tyyppi(v){
+
+	if(v == 'henkilo')
+	{
+		$('.yritys').hide(375);
+		$('#yrityksen_nimi').val('');
+		$('#y_tunnus').val('');
+
+	}
+	if(v == 'yritys')
+	{
+		$('.yritys').show(375);
+	}
+}
 
 
 var step = 41;
@@ -392,8 +437,12 @@ setInterval(counter, "15000");
 
 
 
-		if(localStorage.getItem('asiakas_id') !== null)
-			$('#asiakas_id').val(localStorage.getItem('asiakas_id'));
+		if(localStorage.getItem('tyyppi') !== null)
+			$('#tyyppi').val(localStorage.getItem('tyyppi'));
+		if(localStorage.getItem('yrityksen_nimi') !== null)
+			$('#yrityksen_nimi').val(localStorage.getItem('yrityksen_nimi'));
+		if(localStorage.getItem('y_tunnus') !== null)
+			$('#y_tunnus').val(localStorage.getItem('y_tunnus'));
 		if(localStorage.getItem('yhteyshenkilo') !== null)
 			$('#yhteyshenkilo').val(localStorage.getItem('yhteyshenkilo'));
 		if(localStorage.getItem('puhelin') !== null)
@@ -437,16 +486,18 @@ function osoiteAjax(id)
 		if(d)
 		{
 
-			$('#asiakas_id').val(d['asiakas_id']);
-			$('#yhteyshenkilo').val(d['etu_suku_nimet']);
-			$('#puhelin').val(d['puh_nro']);
-			$('#osoite').val(d['osoite']);
-			$('#postinumero').val(d['pnumero']);
-			$('#kaupunki').val(d['kaupunki']);
-			$('#lisatietoja').val(d['tietoja']);
 
-			//$('#loytynytOsoitteet').hide('slow');
-			//$('#panGetContent').html(JSON.parse(data));
+			$('#tyyppi').val(d['tyyppi']);
+			$('#yrityksen_nimi').val(d['yrityksen_nimi']);
+			$('#y_tunnus').val(d['y_tunnus']);
+
+			$('#yhteyshenkilo').val(d['yhteyshenkilo']);
+			$('#puhelin').val(d['puhelin']);
+			$('#osoite').val(d['osoite']);
+			$('#postinumero').val(d['postinumero']);
+			$('#kaupunki').val(d['kaupunki']);
+			$('#lisatietoja').val(d['lisatietoja']);
+
 		}
    	},
 	error:function(data){
@@ -501,14 +552,18 @@ $(document).delegate('#sahkoposti', 'keyup', function() {
 
 $(".tallennaUusi").click(function(){
 
-   var asiakas_id = $('#asiakas_id').val();
-   var sahkoposti = $('#sahkoposti').val();
-   var osoite = $('#osoite').val();
-   var postinumero = $('#postinumero').val();
-   var kaupunki = $('#kaupunki').val();
-   var puhelin = $('#puhelin').val();
-   var yhteyshenkilo = $('#yhteyshenkilo').val();
-   var lisatietoja = $('#lisatietoja').val();
+
+   var tyyppi 		= $('#tyyppi').val();
+   var yrityksen_nimi 	= $('#yrityksen_nimi').val();
+   var y_tunnus 	= $('#y_tunnus').val();
+
+   var sahkoposti 	= $('#sahkoposti').val();
+   var osoite 		= $('#osoite').val();
+   var postinumero 	= $('#postinumero').val();
+   var kaupunki 	= $('#kaupunki').val();
+   var puhelin 		= $('#puhelin').val();
+   var yhteyshenkilo 	= $('#yhteyshenkilo').val();
+   var lisatietoja 	= $('#lisatietoja').val();
 
    if(sahkoposti === '')
    {
@@ -534,7 +589,7 @@ $(".tallennaUusi").click(function(){
 
    $.ajax({
 	url: 'luouusi',
-	data:{ "sahkoposti" : sahkoposti, "osoite" : osoite, "postinumero" : postinumero, "kaupunki" : kaupunki, "puhelin" : puhelin, "yhteyshenkilo" : yhteyshenkilo, "lisatietoja" : lisatietoja, "asiakas_id" : asiakas_id },
+	data:{ "sahkoposti" : sahkoposti, osoite : osoite, postinumero : postinumero, kaupunki : kaupunki, puhelin : puhelin, yhteyshenkilo : yhteyshenkilo, lisatietoja : lisatietoja, tyyppi : tyyppi, yrityksen_nimi : yrityksen_nimi, y_tunnus : y_tunnus },
 	type:'POST',
 	success:function(data){
 		console.log(data);
@@ -543,7 +598,10 @@ $(".tallennaUusi").click(function(){
 		if(data == 'nytRedirectMaksulle')
 		{
 
-			localStorage.setItem('asiakas_id', $('#asiakas_id').val());
+			localStorage.setItem('tyyppi', $('#tyyppi').val());
+			localStorage.setItem('yrityksen_nimi', $('#yrityksen_nimi').val());
+			localStorage.setItem('y_tunnus', $('#y_tunnus').val());
+
 			localStorage.setItem('yhteyshenkilo', $('#yhteyshenkilo').val());
 			localStorage.setItem('puhelin', $('#puhelin').val());
 			localStorage.setItem('osoite', $('#osoite').val());
@@ -553,6 +611,8 @@ $(".tallennaUusi").click(function(){
 
 
 			window.location.href="maksu";
+		} else {
+			alert(data);
 		}
 
    	},
