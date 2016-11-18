@@ -131,17 +131,26 @@ if(isset($ov->id) and isset($tv->id))
 
 
 	// <-- Uusi asiakas ja kohde
-		if(isset($_POST) and !isset($k->id))
-		{
+	if(!isset($_SESSION['onlinevaraus']['asiakas_id']) and !isset($_SESSION['onlinevaraus']['kohde_id']))
+	{
 
 		  $asiakkaat = new Asiakkaat;
-		  $asiakkaat->attributes=$_POST;
-		  $asiakkaat->tyyppi = 'henkilo';
+		  $asiakkaat->kaupunki = $ov->kaupunki;
+		  $asiakkaat->postinumero = $ov->postinumero;
+		  $asiakkaat->osoite = $ov->osoite;
+		  $asiakkaat->puhelin = $ov->puhelin;
+		  $asiakkaat->sahkoposti = $ov->sahkoposti;
+		  $asiakkaat->tyyppi = $ov->tyyppi;
+		  $asiakkaat->yrityksen_nimi = $ov->yrityksen_nimi;
+		  $asiakkaat->y_tunnus = $ov->y_tunnus;
+		  $asiakkaat->yhteyshenkilo = $ov->yhteyshenkilo;
 		  $asiakkaat->onlinevarauksen_asiakas=1;
 		  $asiakkaat->aktiivinen = 1;
 
 		  if($asiakkaat->save())
 		  {
+
+			Onlinevaraus::model()->updateByPk($ov->id, array('asiakas_id'=>$asiakkaat->id));
 
 			$kohteet = new Kohteet;
 			$kohteet->asiakas_id = $asiakkaat->id;
@@ -152,17 +161,13 @@ if(isset($ov->id) and isset($tv->id))
 			$kohteet->puh_nro = $asiakkaat->puhelin;
 			$kohteet->email = $asiakkaat->sahkoposti;
 			$kohteet->muut = "Onlinevaraus ".date("d.m.Y");
-			$kohteet->tietoja = $_POST['lisatietoja'];
+			$kohteet->tietoja = $ov->lisatietoja;
 
-			if($kohteet->save()) {
-
-				$_SESSION['onlinevaraus']['asiakas_id'] = $kohteet->asiakas_id;
-				$_SESSION['onlinevaraus']['kohdeID'] = $kohteet->id;
-
-			} else {
-
+			if(!$kohteet->save()) {
 				echo json_encode(var_dump($kohteet->errors));
 				exit;
+			} else {
+				Onlinevaraus::model()->updateByPk($ov->id, array('kohde_id'=>$kohteet->id));
 			}
 
 
@@ -172,7 +177,7 @@ if(isset($ov->id) and isset($tv->id))
 		  }
 
 
-		} 
+	} 
 	// Uusi asiakas ja kohde -->
 
 
@@ -184,13 +189,15 @@ if(isset($ov->id) and isset($tv->id))
 			  	mkdir(Yii::app()->basePath."/../img/uploadedfromphone/".Yii::app()->user->domain, 0777, true);
 			}
 			$uploaddir = Yii::app()->basePath.'/../img/uploadedfromphone/'.Yii::app()->user->domain.'/';
+			$ov_updated = Onlinevaraus::model()->findByPk($ov->id);
+
 			foreach(array_reverse(glob('tiedostot/onlinevaraus_temp/'.Yii::app()->user->domain.'/'.$_SESSION['onlinevaraus']['kuvat'].'_*.*')) as $file) 
 			{
 				$explNimi = explode("/",$file);
-				$newname = $_SESSION['onlinevaraus']['kohdeID']."_".end($explNimi);
+				$newname = $ov_updated->kohde_id."_".end($explNimi);
 				rename($file, $uploaddir.$newname);
 				$kuvk = new KuviaKohteesta;
-				$kuvk->kohde_id = $_SESSION['onlinevaraus']['kohdeID'];
+				$kuvk->kohde_id = $ov_updated->kohde_id;
 				$kuvk->tid = 0;
 				$kuvk->osoite = $ov->osoite;
 				$kuvk->tekijan_nimi = $ov->yhteyshenkilo;
@@ -229,12 +236,14 @@ Olemme vastaanottaneet tilauksesi ja tästä voit tulostaa tilausvahvistuksen.
 
 
 <table>
-<tr><td>Nimi</td><td>'.$nimi.'</td></tr>
+<tr><td>Nimi</td><td>'.$ov->yhteyshenkilo.'</td></tr>
 <tr><td>Osoite</td><td>'.$ov->osoite.'</td></tr>
 <tr><td>Puhelin</td><td>'.$ov->puhelin.'</td></tr>
 <tr><td>S-posti</td><td>'.$ov->sahkoposti.'</td></tr>';
 
-if(!empty($asiakas->y_tunnus))
+if(!empty($ov->yrityksen_nimi))
+$message .= '<tr><td>Yritys</td><td>'.$ov->yrityksen_nimi.'</td></tr>';
+if(!empty($ov->y_tunnus))
 $message .= '<tr><td>Y-tunnus</td><td>'.$ov->y_tunnus.'</td></tr>';
 
 $message .= '
@@ -327,8 +336,7 @@ $message .= '
 			}
 			// Lähetetään toimistoon -->
 
-echo 'korja';
-exit;
+
 			
 			$t = Tyovuoroot::model()->findbypk($tv->id);
 			$t->osoiteOnline=2;

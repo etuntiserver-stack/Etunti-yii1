@@ -93,7 +93,6 @@ if($response)
 		}
 
 
-		array_push( $_SESSION['onlinevaraus']['tilauksenKuvaus'], array('asiakas_tiedot'=>$_SESSION['onlinevaraus']['asiakas_tiedot']) );
 
 		$ov = Onlinevaraus::model()->findbypk($_SESSION['onlinevaraus']['onlinevarausID']);
 		$ov->tv_id = $_SESSION['onlinevaraus']['modelTV'];
