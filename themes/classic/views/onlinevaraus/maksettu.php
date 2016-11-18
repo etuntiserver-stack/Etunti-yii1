@@ -191,8 +191,10 @@ if(isset($ov->id) and isset($tv->id))
 			$uploaddir = Yii::app()->basePath.'/../img/uploadedfromphone/'.Yii::app()->user->domain.'/';
 			$ov_updated = Onlinevaraus::model()->findByPk($ov->id);
 
+			$kuvatArr = array();
 			foreach(array_reverse(glob('tiedostot/onlinevaraus_temp/'.Yii::app()->user->domain.'/'.$_SESSION['onlinevaraus']['kuvat'].'_*.*')) as $file) 
 			{
+				$kuvatArr[] = $file;
 				$explNimi = explode("/",$file);
 				$newname = $ov_updated->kohde_id."_".end($explNimi);
 				rename($file, $uploaddir.$newname);
@@ -206,6 +208,7 @@ if(isset($ov->id) and isset($tv->id))
 				if(!$kuvk->save())
 				print_r($kuvk->getErrors());
 			}
+			Onlinevaraus::model()->updateByPk($ov->id, array('valokuvat'=>json_encode($kuvatArr)));
 	}
 	//     Kuvat siirretaan templatesta kohteeseen -->
 
