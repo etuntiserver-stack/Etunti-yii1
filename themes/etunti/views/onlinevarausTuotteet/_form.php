@@ -68,53 +68,6 @@
 		<?php echo $form->error($model,'kesto'); ?>
 	</div>
 
-<?php /*
-
-	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'palvelu'); ?>
-		<?php
-		$list = array(0=>'Pääpalvelu',1=>'Lisäpalvelu');
-        	echo $form->dropDownList($model, 'palvelu', $list,
-		array('class'=>'form-control'));	
-        	?>
-		<?php echo $form->error($model,'palvelu'); ?>
-	</div>
-
-	<div class="section fill mb5 paaPalveluValiko" style="display:none">
-		<?php echo $form->labelEx($model,'paa_palvelu'); ?>
-		<?php
-		
-		$criteria=new CDbCriteria;
-		$criteria->order=" nimike ";
-		$criteria->group=" nimike ";
-		$criteria->condition=" palvelu=0 ";
-		$ot = CHtml::listData(OnlinevarausTuotteet::model()->findAll($criteria), 'id', 'nimike');
-
-        	echo $form->dropDownList($model, 'paa_palvelu', $ot,
-		array('empty'=>Yii::t('main', 'Valitse'), 'class'=>'form-control'));	
-        	?>
-		<?php echo $form->error($model,'palvelu'); ?>
-	</div>
-
-	<div class="section fill mb5 nelio">
-		<?php echo $form->labelEx($model,'nelio'); ?>
-		<?php
-		$list = array(
-			'0-50'=>'0-50',
-			'50-80'=>'50-80',
-			'80-120'=>'80-120',
-			'120-160'=>'120-160',
-			'160-200'=>'160-200',
-			'200-250'=>'200-250',
-		);
-        	echo $form->dropDownList($model, 'nelio', $list,
-		array('empty'=>'Valitse neliö', 'class'=>'form-control'));	
-        	?>
-		<?php echo $form->error($model,'nelio'); ?>
-	</div>
-
-
-*/ ?>
 
 
 
@@ -198,8 +151,8 @@
 			   $i++;
 
 				if(isset($nimike[$key])) $nimike_value = $nimike[$key]; else $nimike_value = '';
-				if(isset($hinta[$key])) $hinta_value = $hinta[$key]; else $hinta_value = '';
 				if(isset($hinta_veroton[$key])) $hinta_veroton_value = $hinta_veroton[$key]; else $hinta_veroton_value = '';
+				if(isset($hinta[$key])) $hinta_value = $hinta[$key]; else $hinta_value = '';
 				if(isset($kesto[$key])) $kesto_value = $kesto[$key]; else $kesto_value = '';
 
 				echo '
@@ -263,7 +216,6 @@
 			<label><?php echo Yii::t('main', 'Kuvaus'); ?></label>
 			<textarea class="form-control" name="lisapalvelut[values][kuvaus][]"></textarea>
 		  </div>
-		 <div class="row">
 		  <div class="col-sm-4">
 			<label><?php echo Yii::t('main', 'Hinta (ALV '.$alv.')'); ?></label>
 			<input type="number" class="form-control hinta_veroton" for="lisapalvelut_rivi_1" name="lisapalvelut[values][hinta_veroton][]" step="any">
@@ -396,7 +348,7 @@ $(document).ready(function(){
 		  '</div>'+
 		  '<div class="col-sm-2">'+
 			'<label><?php echo Yii::t("main", "Hinta (ALV 0)"); ?></label>'+
-			'<input type="number" class="form-control hinta_veroton" for="rivi_'+rivi+'" name="toinen_valiko[values][hinta][]" step="any">'+
+			'<input type="number" class="form-control hinta_veroton" for="rivi_'+rivi+'" name="toinen_valiko[values][hinta_veroton][]" step="any">'+
 		  '</div>'+
 		  '<div class="col-sm-3">'+
 			'<label><?php echo Yii::t("main", "Hinta (ALV '+$('#OnlinevarausTuotteet_alv').val()+'%)"); ?></label>'+

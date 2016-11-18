@@ -79,6 +79,7 @@
   <div class="panel heading-border">
    <div class="panel-body">
 
+<div class="table-responsive">
   <table class="table table-striped" id="mobileTable">
   <thead class="myBgColors">
   <tr>
@@ -107,6 +108,8 @@
 
   )); ?>
   </table>
+</div>
+
    </div>
   </div>
 
