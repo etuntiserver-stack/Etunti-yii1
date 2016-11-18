@@ -294,7 +294,7 @@ $message .= '
 			// <-- Lähetetään asiakkaalle
 	          	$mail = new YiiMailer();
 			$mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
-			$mail->setTo($_SESSION['onlinevaraus']['sahkoposti']);
+			$mail->setTo($ov->sahkoposti);
 			$mail->setSubject('Online varaus');
 			$mail->setBody($message);
 			if($mail->send())
@@ -302,7 +302,7 @@ $message .= '
 							// <-- LOG
 							$log=new Log;
 							$log->log_category 	= 1; // 1-email
-							$log->email_to 		= $_SESSION['onlinevaraus']['sahkoposti'];
+							$log->email_to 		= $ov->sahkoposti;
 							$log->email_subject	= 'Online varaus';
 							$log->email_message	= json_encode($message);
 							$log->save();
