@@ -11,20 +11,25 @@ if(isset($_POST['poistaTamaTiedosto'])){
 	unlink($_POST['poistaTamaTiedosto']);
 	exit;
 }
-if(isset($_POST['getMyPictures']) and isset($_SESSION['onlinevaraus']['kuvat']))
+if(isset($_POST['getMyPictures']))
 {
+
 	$i = 0;
   	$kuvat = '';
-	foreach(array_reverse(glob('tiedostot/onlinevaraus_temp/'.Yii::app()->user->domain.'/'.$_SESSION['onlinevaraus']['kuvat'].'_*.*')) as $file) {
-	$i++;
-	$explNimi = explode("/",$file);
- 	$kuvat .= '
-		<div class="form-inline" id="t_'.$_SESSION['onlinevaraus']['kuvat'].$i.'">
-	  		<div class="btn btn-xs btn-danger poistaTiedosto" this="'.$file.'" for="t_'.$_SESSION['onlinevaraus']['kuvat'].$i.'">X</div>
-	  		&nbsp;&nbsp;&nbsp;<a href="../../'.$file.'">'.end($explNimi).'</a>
-		</div>
-	';
-	}
+
+    	if(isset($_SESSION['onlinevaraus']['kuvat']))
+    	{
+		foreach(array_reverse(glob('tiedostot/onlinevaraus_temp/'.Yii::app()->user->domain.'/'.$_SESSION['onlinevaraus']['kuvat'].'_*.*')) as $file) {
+		$i++;
+		$explNimi = explode("/",$file);
+	 	$kuvat .= '
+			<div class="form-inline" id="t_'.$_SESSION['onlinevaraus']['kuvat'].$i.'">
+		  		<div class="btn btn-xs btn-danger poistaTiedosto" this="'.$file.'" for="t_'.$_SESSION['onlinevaraus']['kuvat'].$i.'">X</div>
+		  		&nbsp;&nbsp;&nbsp;<a href="../../'.$file.'">'.end($explNimi).'</a>
+			</div>
+		';
+	 	}
+    	}
 	echo json_encode($kuvat);
 	exit;
 }

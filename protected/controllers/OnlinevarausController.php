@@ -247,6 +247,9 @@ class OnlinevarausController extends Controller
 			if($kohteet->save())
 				$_SESSION['onlinevaraus']['kohdeID'] = $kohteet->id;
 
+		  } else {
+			echo json_encode($kohteet->errors);
+			exit;
 		  }
 
 		} 
