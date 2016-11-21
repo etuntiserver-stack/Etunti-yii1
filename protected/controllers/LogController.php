@@ -218,7 +218,7 @@ class LogController extends Controller
 	protected function nimikeMuutos($str){
 
 		if($str == 'tyovuoro_lahetys')
-		$str = Yii::t('main', 'Työvuotojen lähetys');
+		$str = Yii::t('main', 'Työvuorojen lähetys');
 
 		return $str;
 	}
