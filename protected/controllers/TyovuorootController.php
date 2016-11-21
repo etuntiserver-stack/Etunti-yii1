@@ -313,7 +313,9 @@ class TyovuorootController extends Controller
 		$mail->setSubject($subject);
 		$mail->setBody($message);
 		$mail->setAttachment($path.'/'.$file);
+
 			if($mail->send()){
+
 
 							if(is_array($saaja)) $saaja = implode(",",$saaja); 
  
@@ -328,7 +330,6 @@ class TyovuorootController extends Controller
 							$log->log_nimike	= 'tyovuoro_lahetys';
 							$log->save();
 							//     LOG -->
-
 
 	
 
@@ -380,7 +381,8 @@ class TyovuorootController extends Controller
 
 	        $html2pdf = Yii::app()->ePdf->HTML2PDF('P', 'A4', 'en');
 		$html2pdf->setDefaultFont('Arial');
-	        $html2pdf->WriteHTML($this->renderPartial('laheta',array('tid'=>$tt->id,'week'=>$week,'year'=>$year,'tulosta'=>true,'tt'=>$tt),true));
+		$thisHtml = $this->renderPartial('laheta',array('tid'=>$tt->id,'week'=>$week,'year'=>$year,'tulosta'=>true,'tt'=>$tt),true);
+	        $html2pdf->WriteHTML($thisHtml);
          	$content_PDF = $html2pdf->Output('my_doc.pdf', EYiiPdf::OUTPUT_TO_STRING);
 
 
@@ -410,6 +412,7 @@ class TyovuorootController extends Controller
 		  $mail->send();
 		
 
+ 
 							// <-- LOG
 							$log=new Log;
 							$log->log_category 	= 1; // 1-email
@@ -417,6 +420,8 @@ class TyovuorootController extends Controller
 							$log->email_subject	= $subject;
 							$log->email_message	= json_encode($message);
 							$log->email_attachment	= $path.'/'.$file;
+							$log->email_attachment_sisalto	= json_encode($thisHtml);
+							$log->log_nimike	= 'tyovuoro_lahetys';
 							$log->save();
 							//     LOG -->
 
@@ -437,7 +442,8 @@ class TyovuorootController extends Controller
 
 	        $html2pdf = Yii::app()->ePdf->HTML2PDF('P', 'A4', 'en');
 		$html2pdf->setDefaultFont('Arial');
-	        $html2pdf->WriteHTML($this->renderPartial('laheta_k',array('week'=>$week,'year'=>$year,'tulosta'=>'lista'),true));
+		$thisHtml = $this->renderPartial('laheta_k',array('week'=>$week,'year'=>$year,'tulosta'=>'lista'),true);
+	        $html2pdf->WriteHTML($thisHtml);
          	$content_PDF = $html2pdf->Output('my_doc.pdf', EYiiPdf::OUTPUT_TO_STRING);
 
 		// file 
@@ -472,6 +478,8 @@ class TyovuorootController extends Controller
 							$log->email_subject	= $subject;
 							$log->email_message	= json_encode($message);
 							$log->email_attachment	= $path.'/'.$file;
+							$log->email_attachment_sisalto	= json_encode($thisHtml);
+							$log->log_nimike	= 'tyovuoro_lahetys';
 							$log->save();
 							//     LOG -->
 

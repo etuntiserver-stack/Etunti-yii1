@@ -93,7 +93,6 @@
   <th><?php echo Yii::t('main', 'Saaja'); ?></th>
   <th><?php echo Yii::t('main', 'Otsikko'); ?></th>
   <th><?php echo Yii::t('main', 'Viesti'); ?></th>
-  <th><?php echo Yii::t('main', 'Liite'); ?></th>
   <th><?php echo Yii::t('main', 'Liitteen sisältö'); ?></th>
   </tr>
   </thead>
@@ -123,9 +122,49 @@
 </div>
 
 
+	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/bootstrap.modal.js"></script>
+	<div id="showres" class="modal fade" tabindex="-1" role="dialog"></div>
+
+
+
 
 <script type="text/javascript">
 $(document).ready(function(){
+
+
+$(".nayta").click(function(){
+	var id = $(this).attr('for');
+	var get = $(this).attr('get');
+
+        $.ajax({
+           url: 'index',
+           type: "POST",
+           data: { naytaModal : "true", id : id, get : get },
+           success: function(data){
+		$('#showres').modal().html(''+
+		  '<div class="modal-dialog">'+
+		
+		    '<!-- Modal content-->'+
+		    '<div class="modal-content">'+
+		      '<div class="modal-header">'+
+		        '<button type="button" class="close" data-dismiss="modal">&times;</button>'+
+		        '<h4 class="modal-title">'+get+'</h4>'+
+		      '</div>'+
+		      '<div class="modal-body">'+
+		        '<p>'+data+'</p>'+
+		      '</div>'+
+		      '<div class="modal-footer">'+
+		        '<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>'+
+		      '</div>'+
+		    '</div>'+
+		
+		  '</div>'
+		);
+           }
+        });
+
+});
+
 
 if($("#akt").val())
 $("#aktiivinen").val($("#akt").val());

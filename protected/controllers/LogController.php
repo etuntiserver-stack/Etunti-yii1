@@ -133,6 +133,17 @@ class LogController extends Controller
 	public function actionIndex()
 	{
 
+		if(isset($_POST['naytaModal']))
+		{
+			$model=$this->loadModel($_POST['id']);
+			if(isset($model->id)){
+				//$model->$_POST['get'] = strip_tags(json_decode($model->$_POST['get']), '<style>');
+				echo json_decode($model->$_POST['get']);
+			}
+			exit;
+		}
+
+
 		if(isset($_POST['kohteetPerSivu']))
 		{
 			Yii::app()->user->setState('kohteetPerSivu', $_POST['kohteetPerSivu']);

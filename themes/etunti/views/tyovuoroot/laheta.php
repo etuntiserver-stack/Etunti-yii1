@@ -14,15 +14,16 @@ $paivat=array(
 ?>
 
 <style>
-table{
+.LahetettyTable table{
 	width: 290px;
 	font-size: 80%;
 }
-td,th{
+.LahetettyTable td, .LahetettyTable th{
 	padding:3px 7px;
 	border:1px #333 solid;
 }
 </style>
+
 
 <?php if(!$tulosta) : ?>
 <legend>
@@ -30,7 +31,7 @@ td,th{
 </legend>
 
 <div class="form-inline">
-  <form action="#" class="form-group" target="_blank" method="POST">
+  <form action="#" class="form-group" method="POST">
     <input type="submit" class="btn btn-success btn-sm" name="pdf" value="PDF">
   </form>
 
@@ -38,7 +39,7 @@ td,th{
 	$file = $week.'_'.$year.'_'.$tid.'.pdf';
 	$path = Yii::app()->request->baseUrl."emails/tyovuorot/".Yii::app()->user->domain;
 	if (file_exists($path.'/'.$file))
-	echo CHtml::link(Yii::t('main', 'Lähetetty'),'../../emails/tyovuorot/'.Yii::app()->user->domain.'/'.$file,array('target'=>'_blank','class'=>'btn btn-sm btn-danger'));
+	echo CHtml::link(Yii::t('main', 'Lähetetty'),'../../emails/tyovuorot/'.Yii::app()->user->domain.'/'.$file,array('class'=>'btn btn-sm btn-danger'));
 
   ?>
 </div>
@@ -121,7 +122,7 @@ td,th{
 ?>
 
 <br>
-<table class="table">
+<table class="table LahetettyTable">
 <tr>
 <th><?php echo Yii::t('main', 'Viikonpäivä'); ?></th>
 <th><?php echo Yii::t('main', 'Aika/Kohde'); ?></th>

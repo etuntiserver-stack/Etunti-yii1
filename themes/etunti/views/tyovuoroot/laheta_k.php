@@ -27,11 +27,11 @@ td,th{
 
 <?php if($tulosta == 'lista') : ?>
 <style>
-table{
+.LahetettyTable table{
 	width: 100%;
 	font-size: 80%;
 }
-td,th{
+.LahetettyTable td, .LahetettyTable th{
 	padding:3px 7px;
 	border:1px #333 solid;
 }
@@ -47,7 +47,7 @@ td,th{
 <div class="form-inline">
 
   <?php if(!empty($tt->tekijan_email)): ?>
-  <form action="#" id="pdf_email" class="form-group" target="_blank" method="POST">
+  <form action="#" id="pdf_email" class="form-group" method="POST">
     <input type="hidden" name="pdf_email" value="true">
     <button class="btn btn-success btn-sm laheta">PDF >>> KAIKILLE</button>
   </form>
@@ -55,7 +55,7 @@ td,th{
 	$file = $week.'_'.$year.'_'.$tid.'.pdf';
 	$path = Yii::app()->request->baseUrl."emails/tyovuorot/".Yii::app()->user->domain;
 	if (file_exists($path.'/'.$file))
-	echo CHtml::link(Yii::t('main', ' Lähetetty'),'../../emails/tyovuorot/'.Yii::app()->user->domain.'/'.$file,array('target'=>'_blank','class'=>'btn btn-danger btn-sm glyphicon glyphicon-file'));
+	echo CHtml::link(Yii::t('main', ' Lähetetty'),'../../emails/tyovuorot/'.Yii::app()->user->domain.'/'.$file,array('class'=>'btn btn-danger btn-sm glyphicon glyphicon-file'));
 
   ?>
   <?php endif; ?>
@@ -99,13 +99,13 @@ $ids .= $tt->id.',';
 <h2><?php echo $tt->tekijan_nimi; ?></h2>
 
 <?php if($tulosta != 'lista') : ?>
-  <form action="#" class="form-group" target="_blank" method="POST">
+  <form action="#" class="form-group" method="POST">
     <input type="hidden" name="kuka" value="<?php echo $t->tid; ?>">
     <input type="submit" class="btn btn-success btn-sm" name="pdf" value="PDF">
   </form>
 <?php endif; ?>
 
-<table class="table">
+<table class="table LahetettyTable">
 <tr>
 <th><?php echo Yii::t('main', 'Viikonpäivä'); ?></th>
 <th><?php echo Yii::t('main', 'Aika/Kohde'); ?></th>
@@ -227,7 +227,7 @@ $totalWeek = $this->renderPartial('//tyovuoroot/viikko',array('tid'=>$tt->id,'vi
 <br>
 <div class="row">
  <div class="col-sm-5">
-  <form action="#" id="pdf_email" class="form-group" target="_blank" method="POST">
+  <form action="#" id="pdf_email" class="form-group" method="POST">
     <input type="hidden" name="pdf_email" value="true">
     <input type="hidden" name="kenelle" value="<?php echo $ids; ?>">
     <label><?php echo Yii::t('main','Lähetettävän viestin sisältö'); ?></label>
