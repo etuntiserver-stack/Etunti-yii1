@@ -409,8 +409,7 @@ class TyovuorootController extends Controller
 		  $mail->setSubject($subject);
 		  $mail->setBody($message);
 		  $mail->setAttachment($path.'/'.$file);
-		  $mail->send();
-		
+		  	if($mail->send()){
 
  
 							// <-- LOG
@@ -424,6 +423,7 @@ class TyovuorootController extends Controller
 							$log->log_nimike	= 'tyovuoro_lahetys';
 							$log->save();
 							//     LOG -->
+			}
 
 		 }
 		}
@@ -469,7 +469,7 @@ class TyovuorootController extends Controller
 		  $mail->setSubject($subject);
 		  $mail->setBody($message);
 		  $mail->setAttachment($path.'/'.$file);
-		  $mail->send();
+		  	if($mail->send()){
 
 							// <-- LOG
 							$log=new Log;
@@ -482,6 +482,7 @@ class TyovuorootController extends Controller
 							$log->log_nimike	= 'tyovuoro_lahetys';
 							$log->save();
 							//     LOG -->
+			}
 
 		}
 		//
