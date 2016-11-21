@@ -89,10 +89,12 @@
   <tr>
   <th></th>
   <th><?php echo Yii::t('main', 'Pvm'); ?></th>
+  <th><?php echo Yii::t('main', 'Tehtävän nimike'); ?></th>
   <th><?php echo Yii::t('main', 'Saaja'); ?></th>
   <th><?php echo Yii::t('main', 'Otsikko'); ?></th>
   <th><?php echo Yii::t('main', 'Viesti'); ?></th>
   <th><?php echo Yii::t('main', 'Liite'); ?></th>
+  <th><?php echo Yii::t('main', 'Liitteen sisältö'); ?></th>
   </tr>
   </thead>
   <?php $this->widget('zii.widgets.CListView', array(

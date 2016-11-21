@@ -35,9 +35,10 @@ class Log extends DB2ActiveRecord
 			//array('text, kuka, log_category', 'required'),
 			array('log_category', 'numerical', 'integerOnly'=>true),
 			array('kuka', 'length', 'max'=>50),
+			array('log_nimike', 'length', 'max'=>100),
 			array('email_to, email_subject', 'length', 'max'=>255),
 			array('email_attachment', 'length', 'max'=>500),
-			array('text, email_message', 'length', 'max'=>30000),
+			array('text, email_message, email_attachment_sisalto', 'length', 'max'=>30000),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('id, time, text, kuka, log_category, email_to, email_subject, email_message, email_attachment', 'safe', 'on'=>'search'),

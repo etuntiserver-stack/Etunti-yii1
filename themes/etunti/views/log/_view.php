@@ -24,6 +24,9 @@
 		<?php echo date("d.m.Y", strtotime($data->time)); ?>
 	</td>
 	<td>
+		<?php echo $this->nimikeMuutos($data->log_nimike); ?>
+	</td>
+	<td>
 		<?php echo $data->email_to; ?>
 	</td>
 	<td>
@@ -34,6 +37,9 @@
 	</td>
 	<td>
 		<?php echo $data->email_attachment; ?>
+	</td>
+	<td>
+		<?php echo json_decode($data->email_attachment_sisalto); ?>
 	</td>
 </tr>
 

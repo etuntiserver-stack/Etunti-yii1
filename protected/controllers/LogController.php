@@ -203,4 +203,12 @@ class LogController extends Controller
 			Yii::app()->end();
 		}
 	}
+
+	protected function nimikeMuutos($str){
+
+		if($str == 'tyovuoro_lahetys')
+		$str = Yii::t('main', 'Työvuotojen lähetys');
+
+		return $str;
+	}
 }
