@@ -1096,7 +1096,6 @@ $('.tvchange').change(function(){
 	<?php endif; ?>
 
 	<?php if(in_array('999',$tas)) : ?>
-
           <li>
             <a class="accordion-toggle crm" href="#">
               <span class="fa fa-users"></span>
@@ -1111,6 +1110,14 @@ $('.tvchange').change(function(){
             </ul>
           </li>
 	<?php endif; ?>
+
+
+          <li>
+            <a class="accordion-toggle" href="#">
+              <center><h3><?php echo strtoupper(Yii::app()->user->domain); ?></h3></center>
+            </a>
+          </li>
+
 
             </ul>
           </li>
