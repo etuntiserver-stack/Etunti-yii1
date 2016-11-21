@@ -28,7 +28,7 @@ class TyovuorootController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','updatetime','showohje','did','muisti','operatio','viikko','fromto','autoinsert','autoremove','viikkottain', 'viikkottain_pdf', 'laheta','kk','pvmtid','laheta_k', 'muistin', 'muisticlear', 'muistissa', 'vkolopput', 'vkolopchange', 'uusitilaus', 'tv2', 'PoistaTv', 'valitse_kokopaiva', 'tv_kohteet', 'siivous_tyonimike', 'getKohdeByAsiakas', 'getAsiakasByKohde', 'paivita_laatikot', 'onko_sama', 'asiakas_autocomplete', 'kohde_autocomplete'),
+				'actions'=>array('admin','delete','create','update','index','view','updatetime','showohje','did','muisti','operatio','viikko','fromto','autoinsert','autoremove','viikkottain', 'viikkottain_pdf', 'laheta','kk','pvmtid','laheta_k', 'muistin', 'muisticlear', 'muistissa', 'vkolopput', 'vkolopchange', 'uusitilaus', 'tv2', 'PoistaTv', 'valitse_kokopaiva', 'tv_kohteet', 'siivous_tyonimike', 'getKohdeByAsiakas', 'getAsiakasByKohde', 'paivita_laatikot', 'onko_sama', 'asiakas_autocomplete', 'kohde_autocomplete', 'check_paallekkain'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny', // allow admin user to perform 'admin' and 'delete' actions
@@ -134,6 +134,29 @@ class TyovuorootController extends Controller
 
 		if(!empty($return))
 		return $return;
+	}
+
+
+	public function actionCheck_paallekkain()
+	{
+		$count	= 0;
+		$tid	= $_POST['tid'];
+		$pvm	= $_POST['pvm'];
+		$alku	= date("Y-m-d H:i:s", strtotime($_POST['alku']));
+		$loppu	= date("Y-m-d H:i:s", strtotime($_POST['loppu']));
+		
+
+		$criteria=new CDbCriteria;
+		$criteria->condition="
+			tid='".$tid."' AND pvm='".date("d.m.Y", strtotime($pvm))."'
+			AND (
+				DATE_FORMAT(STR_TO_DATE(alku, '%H:%i'), '%Y-%m-%d %H:%i:%s') BETWEEN '".$alku."' AND '".$loppu."'
+				OR DATE_FORMAT(STR_TO_DATE(loppu, '%H:%i'), '%Y-%m-%d %H:%i:%s') BETWEEN '".$alku."' AND '".$loppu."'
+			)
+		";
+		$model = Tyovuoroot::model()->findAll($criteria);
+		$count = count($model);
+		echo json_encode($count);
 	}
 
 
@@ -1245,6 +1268,7 @@ class TyovuorootController extends Controller
 					$toistuva->kohde, 
 					$toistuva->alku, 
 					$toistuva->loppu,
+
 					$toistuva->pituus, 
 					$toistuva->tyoajanmerkinta, 
 					$toistuva->tietoja,

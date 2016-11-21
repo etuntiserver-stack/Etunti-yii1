@@ -383,6 +383,8 @@ if(!empty($t->gcm_reg_id)) :
 
 </div><!-- toistuvaAll -->
 
+
+
 		</div> <!-- end modal-content -->
 	</div> <!-- end modal-dialog -->
 
@@ -546,7 +548,7 @@ $('.mult').multiselect({
 	$('#tyovuoroot-form').on('submit',function(e) {
 
 	if( ($('#submitButton').val() === 'Luo') || ($('#submitButton').val() === 'Tallenna') ) 
-		$('#submitButton').remove();
+		$('#submitButton').hide();
 
 	// <-- tarkistetaan tietoja pituus
 	var leng = $('#Tyovuoroot_tietoja').val().length;
@@ -557,6 +559,38 @@ $('.mult').multiselect({
 		return false;
 	}
 	// tarkistetaan tietoja -->
+
+	// <-- tarkistetaan ajaat päällekäin
+	var tid		= $('#Tyovuoroot_tid').val();
+	var pvm		= $('#Tyovuoroot_pvm').val();
+	var alku 	= $("#alku").val();
+	var loppu 	= $("#loppu").val();
+	var count	= 0;
+	  $.ajax({
+		  url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/check_paallekkain',
+		  data:{ tid : tid, pvm : pvm, alku : alku, loppu : loppu },
+		  type:'POST',
+		  async: false,
+		  success:function(data){
+			data = JSON.parse(data);
+			console.log(data);
+			if(data > 0)
+			count = data;
+	   	},
+		error:function(data){
+			console.log(data);
+	    	}
+	  });
+
+	  if(count > 0){
+		var r = confirm('Aika päällekkäin, haluatko jatkaa');
+		if(!r){
+			$('#submitButton').show();
+			return false;
+		}
+	  }
+	//     tarkistetaan ajaat päällekäin -->
+
 
 	if(($('#toistuva_aktiivinen').bootstrapSwitch('state') === true) && ($('#pto').val() === ''))
 	{
@@ -717,10 +751,7 @@ $('.mult').multiselect({
 
 
 
-
-	//var pvmFromPost = e.target[7].value; 
-	//alert(pvmFromPost)
-
+		// <-- Viikko update total
 	  	$.ajax({
 			url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/viikko',
 			type:'GET',
@@ -734,6 +765,7 @@ $('.mult').multiselect({
 			  console.log(data);
 			  }
 	 	});
+		//     Viikko update total -->
 
 
 
