@@ -17,6 +17,7 @@ $paivat=array(
 .LahetettyTable table{
 	width: 290px;
 	font-size: 80%;
+
 }
 .LahetettyTable td, .LahetettyTable th{
 	padding:3px 7px;
@@ -27,7 +28,7 @@ $paivat=array(
 
 <?php if(!$tulosta) : ?>
 <legend>
-<h1> <?php echo Yii::t('main', 'TYÖVUOROT'). ' '.$tt->tekijan_nimi.', '.Yii::t('main', 'VIIKKO').'-'.$week; ?></h1>
+<h1> <?php echo Yii::t('main', 'TYÖVUOROT'). ' '.$tt->tekijan_nimi.', '.Yii::t('main', 'VIIKKO').' - '.$week; ?></h1>
 </legend>
 
 <div class="form-inline">
@@ -98,7 +99,7 @@ $paivat=array(
 
 
 <?php if($tulosta) : ?>
-<h1> <?php echo Yii::t('main', 'TYÖVUOROT'). ' '.Yii::t('main', 'VIIKKO').'-'.$week; ?></h1>
+<h1> <?php echo Yii::t('main', 'TYÖVUOROT'). ' '.Yii::t('main', 'VIIKKO').' - '.$week; ?></h1>
 <?php echo Yii::t('main', 'Tulostettu '). ' '.date("d.m.Y H:i"); ?>
 <h3><?php echo $tt->tekijan_nimi.', ',date('d.m.Y',strtotime($year ."W". $week .'1')).' - '.date('d.m.Y',strtotime($year ."W". $week .'7')); ?></h3>
 <?php endif; ?>
@@ -122,7 +123,7 @@ $paivat=array(
 ?>
 
 <br>
-<table class="table LahetettyTable">
+<table class="table LahetettyTable"  cellspacing="0" cellpadding="0">
 <tr>
 <th><?php echo Yii::t('main', 'Viikonpäivä'); ?></th>
 <th><?php echo Yii::t('main', 'Aika/Kohde'); ?></th>

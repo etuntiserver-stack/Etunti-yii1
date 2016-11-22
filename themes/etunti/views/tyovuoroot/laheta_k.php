@@ -12,18 +12,7 @@ $paivat=array(
 	);
 
 ?>
-<?php if($tulosta != 'lista') : ?>
-<style>
-table{
-	width: 290px;
-	font-size: 80%;
-}
-td,th{
-	padding:3px 7px;
-	border:1px #333 solid;
-}
-</style>
-<?php endif; ?>
+
 
 <?php if($tulosta == 'lista') : ?>
 <style>
@@ -41,7 +30,7 @@ td,th{
 
 <?php if(!$tulosta) : ?>
 <legend>
-<h1> <?php echo Yii::t('main', 'TYÖVUOROT'). ', '.Yii::t('main', 'VIIKKO').'-'.$week; ?></h1>
+<h1> <?php echo Yii::t('main', 'TYÖVUOROT'). ', '.Yii::t('main', 'VIIKKO').' - '.$week; ?></h1>
 </legend>
 
 <div class="form-inline">
@@ -105,7 +94,7 @@ $ids .= $tt->id.',';
   </form>
 <?php endif; ?>
 
-<table class="table LahetettyTable">
+<table class="table table-bordered LahetettyTable">
 <tr>
 <th><?php echo Yii::t('main', 'Viikonpäivä'); ?></th>
 <th><?php echo Yii::t('main', 'Aika/Kohde'); ?></th>
