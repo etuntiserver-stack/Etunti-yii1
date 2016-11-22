@@ -17,7 +17,6 @@ $paivat=array(
 .LahetettyTable table{
 	width: 290px;
 	font-size: 80%;
-
 }
 .LahetettyTable td, .LahetettyTable th{
 	padding:3px 7px;
@@ -123,7 +122,7 @@ $paivat=array(
 ?>
 
 <br>
-<table class="table LahetettyTable" cellspacing="0" cellpadding="0">
+<table class="table table-bordered LahetettyTable" cellspacing="0" cellpadding="0">
 <tr>
 <th><?php echo Yii::t('main', 'Viikonpäivä'); ?></th>
 <th><?php echo Yii::t('main', 'Aika/Kohde'); ?></th>
