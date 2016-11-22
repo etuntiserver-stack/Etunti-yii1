@@ -887,3 +887,18 @@ $("#tilanneKartalla").change(function(){
   <!-- End: Main -->
 
 
+
+
+  <!-- HighCharts Plugin -->
+  <script src="<?php echo Yii::app()->request->baseUrl; ?>/assets_etunti/vendor/plugins/highcharts/highcharts.js"></script>
+
+  <!-- Sparklines Plugin -->
+  <script src="<?php echo Yii::app()->request->baseUrl; ?>/assets_etunti/vendor/plugins/sparkline/jquery.sparkline.min.js"></script>
+
+  <!-- Simple Circles Plugin -->
+  <script src="<?php echo Yii::app()->request->baseUrl; ?>/assets_etunti/vendor/plugins/circles/circles.js"></script>
+
+  <!-- JvectorMap Plugin + US Map (more maps in plugin/assets folder) -->
+  <script src="<?php echo Yii::app()->request->baseUrl; ?>/assets_etunti/vendor/plugins/jvectormap/jquery.jvectormap.min.js"></script>
+  <script src="<?php echo Yii::app()->request->baseUrl; ?>/assets_etunti/vendor/plugins/jvectormap/assets/jquery-jvectormap-us-lcc-en.js"></script> 
+

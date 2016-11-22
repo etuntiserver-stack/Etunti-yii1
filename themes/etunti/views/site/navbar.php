@@ -1223,7 +1223,7 @@ $('.tvchange').change(function(){
 
   <!-- jQuery -->
 
-
+<?php /*
   <!-- HighCharts Plugin -->
   <script src="<?php echo Yii::app()->request->baseUrl; ?>/assets_etunti/vendor/plugins/highcharts/highcharts.js"></script>
 
@@ -1236,6 +1236,10 @@ $('.tvchange').change(function(){
   <!-- JvectorMap Plugin + US Map (more maps in plugin/assets folder) -->
   <script src="<?php echo Yii::app()->request->baseUrl; ?>/assets_etunti/vendor/plugins/jvectormap/jquery.jvectormap.min.js"></script>
   <script src="<?php echo Yii::app()->request->baseUrl; ?>/assets_etunti/vendor/plugins/jvectormap/assets/jquery-jvectormap-us-lcc-en.js"></script> 
+
+nyt ne ovat etusivu.php ssa
+*/
+?>
 
   <!-- Theme Javascript -->
   <script src="<?php echo Yii::app()->request->baseUrl; ?>/assets_etunti/assets/js/utility/utility.js"></script>

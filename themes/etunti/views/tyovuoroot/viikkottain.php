@@ -108,12 +108,43 @@ td .tp{
     </div>
 </h2>
 
-
-
-
         <!-- loppu: .tray-center -->
         </div>
 
+
+
+
+
+		<!-- Fixed Table -->
+		<!-- http://www.jqueryscript.net/table/jQuery-Plugin-For-Fixed-Table-Header-Footer-Columns-TableHeadFixer.html -->
+		<script src="<?php echo Yii::app()->request->baseUrl; ?>/js/tableHeadFixer.js"></script>
+
+		<style>	
+			#fixTable {
+				width: 1800px !important;
+			}
+		</style>
+
+		<script>
+			$(document).ready(function() {
+				window.onload = function(event) { resizeDiv(); }
+				//window.onresize = function(event) { resizeDiv(); }
+
+				function resizeDiv() {
+				    vpw = $(window).width()-100; 
+				    vph = $(window).height()-250;
+
+				    $('#lahetysTable').css({'height': vph + 'px', 'overflow-y' : 'hidden'});
+
+				    $("#fixTable").tableHeadFixer({
+					"left" : 1,
+					'z-index': 99999
+				    }); 
+				}
+
+			});
+		</script>
+		<!-- Fixed Table -->
 
 
 
@@ -126,7 +157,7 @@ td .tp{
 
 
 <div class="table-responsive" id="lahetysTable">
-  <table class="table table-bordered table-striped small" style="background: white">
+  <table class="table table-bordered table-striped small" id="fixTable">
   <thead>
   <tr>
   <th><?php echo Yii::t('main', 'Työntekijä'); ?></th>
@@ -212,8 +243,6 @@ td .tp{
 	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/bootstrap.modal.js"></script>
 	<div id="showres" class="modal fade" tabindex="-1" role="dialog"></div>
 	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/tvuoroot.js"></script>
-	<?php Yii::app()->clientScript->registerPackage('fixedTable'); ?>
-
 
 
 
@@ -274,6 +303,18 @@ $(document).delegate(".valitseKaikki","click",function(){
 	valitseTaiPiilota();
 });
 
+
+});
+</script>
+
+
+<?php
+/*
+	<?php Yii::app()->clientScript->registerPackage('fixedTable'); ?>
+
+<script type="text/javascript">
+$(document).ready(function(){
+
 $(function () {
 
     var tableHeight = function () {
@@ -316,8 +357,8 @@ $(function () {
 
 });
 </script>
-
-
+*/
+?>
 
 
 

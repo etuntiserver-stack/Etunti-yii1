@@ -58,6 +58,38 @@
 <?php endif; ?>
 
 
+
+
+
+
+		<!-- Fixed Table -->
+		<!-- http://www.jqueryscript.net/table/jQuery-Plugin-For-Fixed-Table-Header-Footer-Columns-TableHeadFixer.html -->
+		<script src="<?php echo Yii::app()->request->baseUrl; ?>/js/tableHeadFixer.js"></script>
+		<script>
+			$(document).ready(function() {
+				window.onload = function(event) { resizeDiv(); }
+				//window.onresize = function(event) { resizeDiv(); }
+
+				function resizeDiv() {
+				    vpw = $(window).width()-100; 
+				    vph = $(window).height()-150;
+
+				    $('#parent').css({'height': vph + 'px', 'overflow-y' : 'hidden'});
+
+				    $("#fixTable").tableHeadFixer({
+					"left" : 1,
+					"foot" : 1,
+					'z-index': 0
+				    }); 
+				}
+
+			});
+		</script>
+		<!-- Fixed Table -->
+
+
+
+
 <?php if( !empty($from) and !empty($to) and count($tyontekijat_model) > 0 ) : ?>
 <div class="row">
             <div class="admin-form">
@@ -66,25 +98,25 @@
                  <div class="row">
 
 
-<div class="table-responsive">
-  <table class="table table-striped table-condensed table-bordered" style="background: white">
+<div class="table-responsive" id="parent">
+  <table class="table table-bordered" id="fixTable">
      <thead class="">
      <tr>
      <th></th>
         <?php 
 
 	// VARAUS
-	  echo '<th><div class="latikkoAsetukset">';
+	  echo '<th>';
  	  echo '<b class="text-warning">'.Yii::t('main', 'VARAUS').'</b>';	
-	  echo '</div></th>';
+	  echo '</th>';
 	// VARAUS
 
 	$asetukset = Asetukset::model()->findByPk(1);
 
 	foreach($tyontekijat_model as $t){
-	  echo '<th><div class="latikkoAsetukset">';
+	  echo '<th>';
  	  echo $t->tekijan_nimi;	
-	  echo '</div></th>';
+	  echo '</th>';
 	}
         ?>
      </tr>
@@ -224,9 +256,13 @@
 	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/bootstrap.modal.js"></script>
 
 	<div id="showres" class="modal fade" tabindex="-1" role="dialog"></div>
-	<?php Yii::app()->clientScript->registerPackage('fixedTable'); ?>
 	<?php Yii::app()->clientScript->registerPackage('tyovuoroot'); ?>
 
+
+
+<?php
+/*
+<?php Yii::app()->clientScript->registerPackage('fixedTable'); ?>
 
 <script type="text/javascript">
 $(document).ready(function(){
@@ -272,8 +308,8 @@ $(function () {
 });
 
 
-
 });
 </script>
-
+*/
+?>
 

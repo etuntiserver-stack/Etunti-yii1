@@ -64,23 +64,45 @@ echo	'<input type=hidden id=number value='.cal_days_in_month(CAL_GREGORIAN, $mon
         </div>
 
 
+
+
+		<!-- Fixed Table -->
+		<!-- http://www.jqueryscript.net/table/jQuery-Plugin-For-Fixed-Table-Header-Footer-Columns-TableHeadFixer.html -->
+		<script src="<?php echo Yii::app()->request->baseUrl; ?>/js/tableHeadFixer.js"></script>
+
+		<style>	
+			#fixTable {
+				width: 1800px !important;
+			}
+			.laatikot{
+				min-width: 30px;
+				text-align: center;
+			}
+		</style>
+
+		<script>
+			$(document).ready(function() {
+				window.onload = function(event) { resizeDiv(); }
+				//window.onresize = function(event) { resizeDiv(); }
+
+				function resizeDiv() {
+				    vpw = $(window).width()-100; 
+				    vph = $(window).height()-310;
+
+				    $('#parent').css({'height': vph + 'px', 'overflow-y' : 'hidden'});
+
+				    $("#fixTable").tableHeadFixer({
+					"left" : 1,
+					'z-index': 0
+				    }); 
+				}
+
+			});
+		</script>
+		<!-- Fixed Table -->
+
 <br>
 
-<style>
-/*
-body{
-    overflow-y: hidden;
-}
-*/
-.table{
-    height: 100%;
-}
-.laatikot{
-	min-width: 30px;
-	text-align: center;
-}
-
-</style>
 
 <div class="row">
  <div class="col-sm-10">
@@ -90,8 +112,8 @@ body{
                 <div class="panel-body bg-light">
                  <div class="row">
 
-<div class="tvuoro table-responsive">
-  <table class="table table-striped table-condensed table-bordered">
+<div class="tvuoro table-responsive" id="parent">
+  <table class="table table-striped table-condensed table-bordered" id="fixTable">
   <?php 
   echo '<thead><tr>';
   echo '<th>Nimi</th>';
@@ -188,6 +210,11 @@ body{
 
 	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/bootstrap.modal.js"></script>
 	<div id="showres" class="modal fade" tabindex="-1" role="dialog"></div>
+
+
+
+
+<?php /*
 	<?php Yii::app()->clientScript->registerPackage('fixedTable'); ?>
 
 
@@ -237,6 +264,9 @@ $(function () {
 
 });
 </script>
+
+*/
+?>
 
 
 <script type="text/javascript">

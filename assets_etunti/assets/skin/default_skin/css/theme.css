@@ -897,6 +897,7 @@ Copyright (c) 2014 Daniel Eden
 .glyphicon-qrcode:before {
   content: "\e039";
 
+
 }
 .glyphicon-barcode:before {
   content: "\e040";
@@ -4037,6 +4038,7 @@ tr.shown td.details-control {
   direction: ltr;
   cursor: pointer;
 }
+
 .fileupload .uneditable-input {
   display: inline-block;
   margin-bottom: 0px;
@@ -9999,6 +10001,7 @@ select[multiple].input-lg {
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.025), 0 0 3px #9fc1ed;
 }
 .has-primary .input-group-addon {
+
   color: #1f57a1;
   border-color: #4a89dc;
   background-color: #caddf5;
@@ -16366,6 +16369,7 @@ ol.timeline-list li.timeline-item .timeline-date {
   margin-top: 20px !important;
 }
 .mt25 {
+
   margin-top: 25px !important;
 }
 .mt30 {
@@ -17813,6 +17817,7 @@ body.sidebar-collapsed #sidebar:before {
 body.sb-top #toggle_sidemenu_t {
   display: block;
 }
+
 /*==========================================================
   Navbar Left/Right Containers
 =========================================================== */
@@ -19535,6 +19540,7 @@ body.sb-top.sb-top-collapsed .navbar[class*='bg-'] #toggle_sidemenu_t .fa-caret-
 }
 .sidebar-widget.search-widget input::-moz-placeholder {
   color: #70829a;
+
 }
 .sidebar-widget.search-widget input:-moz-placeholder {
   color: #70829a;
