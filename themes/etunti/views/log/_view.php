@@ -21,7 +21,7 @@
 		?>
 	</td>
 	<td>
-		<?php echo date("d.m.Y", strtotime($data->time)); ?>
+		<?php echo date("d.m.Y H:i", strtotime($data->time)); ?>
 	</td>
 	<td>
 		<?php echo $this->nimikeMuutos($data->log_nimike); ?>
