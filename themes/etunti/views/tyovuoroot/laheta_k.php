@@ -94,7 +94,7 @@ $ids .= $tt->id.',';
   </form>
 <?php endif; ?>
 
-<table class="table table-bordered LahetettyTable">
+<table class="table table-bordered LahetettyTable" cellspacing="0" cellpadding="0">
 <tr>
 <th><?php echo Yii::t('main', 'Viikonpäivä'); ?></th>
 <th><?php echo Yii::t('main', 'Aika/Kohde'); ?></th>

@@ -123,7 +123,7 @@ $paivat=array(
 ?>
 
 <br>
-<table class="table LahetettyTable"  cellspacing="0" cellpadding="0">
+<table class="table LahetettyTable" cellspacing="0" cellpadding="0">
 <tr>
 <th><?php echo Yii::t('main', 'Viikonpäivä'); ?></th>
 <th><?php echo Yii::t('main', 'Aika/Kohde'); ?></th>
