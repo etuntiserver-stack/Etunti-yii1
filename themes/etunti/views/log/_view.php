@@ -33,10 +33,14 @@
 		<?php echo $data->email_subject; ?>
 	</td>
 	<td>
-		<span class="btn btn-default nayta" for="<?php echo $data->id; ?>" get="email_message"><?php echo Yii::t('main', 'Näytä'); ?></span>
+		<?php if(!empty($data->email_message)): ?>
+			<span class="btn btn-default nayta" for="<?php echo $data->id; ?>" get="email_message"><?php echo Yii::t('main', 'Näytä'); ?></span>
+		<?php endif; ?>
 	</td>
 	<td>
-		<span class="btn btn-default nayta" for="<?php echo $data->id; ?>" get="email_attachment_sisalto"><?php echo Yii::t('main', 'Näytä'); ?></span>
+		<?php if(!empty($data->email_attachment_sisalto)): ?>
+			<span class="btn btn-default nayta" for="<?php echo $data->id; ?>" get="email_attachment_sisalto"><?php echo Yii::t('main', 'Näytä'); ?></span>
+		<?php endif; ?>
 	</td>
 </tr>
 
