@@ -181,6 +181,8 @@
   <table class="table table-striped" id="mobileTable">
   <thead class="myBgColors">
   <tr>
+  <th></th>
+  <th></th>
   <th><?php echo Yii::t('main', 'Nro.'); ?></th>
   <th><?php echo Yii::t('main', 'Asiakas'); ?></th>
   <th><?php echo Yii::t('main', 'Osoite'); ?></th>
@@ -191,7 +193,6 @@
   <th><?php echo Yii::t('main', 'Yhteensä'); ?></th>
   <th><?php echo Yii::t('main', 'Avoinna'); ?></th>
   <th><?php echo Yii::t('main', 'Laskun tyyppi'); ?></th>
-  <th></th>
   </tr>
   </thead>
   <?php $this->widget('zii.widgets.CListView', array(
@@ -237,6 +238,7 @@ $(".haemob").click(function(){
 $(".fa-history").click(function(){
 
 	var thisid = $(this).attr("for");
+
 
         $.ajax({
 
