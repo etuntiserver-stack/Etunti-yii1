@@ -157,6 +157,14 @@ class LogController extends Controller
 		if(isset($_POST['log_category']) and $_POST['log_category'] != 'kaikki')
 	        $criteria->addCondition (" log_category='".(int)$_POST['log_category']."' ");
 
+		if(isset($_POST['email_to']))
+	        $criteria->addCondition (" email_to LIKE '%".$_POST['email_to']."%' ");
+
+		if(isset($_POST['from']) and isset($_POST['to']))
+		{
+	        	$criteria->addCondition (" DATE(time) BETWEEN '".date("Y-m-d H:i:s", strtotime($_POST['from']))."' AND '".date("Y-m-d H:i:s", strtotime($_POST['to']))."' ");
+		}
+
 
 		$dataProvider=new CActiveDataProvider('Log', array(
 			'criteria'=>$criteria,

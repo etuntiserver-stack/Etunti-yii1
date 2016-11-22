@@ -39,7 +39,7 @@
                     <!-- Input Icons -->
                     <div class="row">
 
-                      <div class="col-md-2">
+                      <div class="col-md-4">
 
 		      <?php if(isset($_POST['aktiivinen'])) echo '<input type="hidden" id="akt" value="'.$_POST['aktiivinen'].'">'; ?>
                         <div class="section">
@@ -57,7 +57,51 @@
                           </label>
                         </div>
 
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="section">
+                          <label class="field prepend-icon">
+
+   			    <input type="text" class="gui-input datepicker" name="from" value="<?php if(isset($_POST['from'])) echo $_POST['from']; ?>" placeholder="<?php echo Yii::t('main', 'Mistä'); ?>...">
+
+                            <label for="firstname" class="field-icon">
+                              <i class="glyphicon glyphicon-calendar"></i>
+                            </label>
+                          </label>
+                        </div>
                       </div>
+
+                      <div class="col-md-6">
+                        <div class="section">
+                          <label class="field prepend-icon">
+
+   			    <input type="text" class="gui-input datepicker" name="to" value="<?php if(isset($_POST['to'])) echo $_POST['to']; ?>" placeholder="<?php echo Yii::t('main', 'Mihin'); ?>...">
+
+                            <label for="firstname" class="field-icon">
+                              <i class="glyphicon glyphicon-calendar"></i>
+                            </label>
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+
+                      </div>
+
+
+                      <div class="col-md-3">
+                        <div class="section">
+                          <label class="field prepend-icon">
+
+   			    <input type="text" class="gui-input" name="email_to" value="<?php if(isset($_POST['email_to'])) echo $_POST['email_to']; ?>" placeholder="<?php echo Yii::t('main', 'Sähköpostin saaja'); ?>...">
+
+                            <label for="firstname" class="field-icon">
+                              <i class="glyphicon glyphicon-calendar"></i>
+                            </label>
+                          </label>
+                        </div>
+                      </div>
+
+
 
 
                       <div class="col-md-2">
