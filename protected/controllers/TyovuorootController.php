@@ -1536,15 +1536,28 @@ class TyovuorootController extends Controller
 					$message .= str_replace("\n", "<br>",$kohteet->toimenpiteet);
 
 					$message .= '<h2>Kiitos tilauksesta.</h2>';
-
+					$subject = Yii::t('main', 'Kiitos tilauksesta');
 
 					$mail = new YiiMailer();
 					//$mail->clearLayout();//if layout is already set in config
 					$mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
 					$mail->setTo($_POST['sahkoposti']);
-					$mail->setSubject(Yii::t('main', 'Kiitos tilauksesta'));
+					$mail->setSubject($subject);
 					$mail->setBody($message);
-					$mail->send();
+					if($mail->send())
+					{
+
+
+							// <-- LOG
+							$log=new Log;
+							$log->log_category 	= 1; // 1-email
+							$log->email_to 		= $_POST['sahkoposti'];
+							$log->email_subject	= $subject;
+							$log->email_message	= json_encode($message);
+							$log->log_nimike	= 'uusi_tilaus';
+							$log->save();
+							//     LOG -->
+					}
 				   }
 				
 					$return[] = array('tid'=>$model->tid, 'pvm'=>$model->pvm, 'ymd'=>date("Ymd",strtotime($model->pvm)));
