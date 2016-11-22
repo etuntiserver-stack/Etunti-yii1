@@ -1237,6 +1237,7 @@ class TyovuorootController extends Controller
 				Tyovuoroot::model()->deleteAll(" toistuva_id='".$model->toistuva_id."' ");
 			}
 
+
 			$return[] = $this->toistuvaInsert(
 				$toistuva->id,
 				$toistuva->pfrom, 
@@ -1510,6 +1511,8 @@ class TyovuorootController extends Controller
 			$kohteet->etu_suku_nimet = $asiakkaat->yhteyshenkilo;
 			$kohteet->osoite = $asiakkaat->osoite;
 			$kohteet->puh_nro = $asiakkaat->puhelin;
+			$kohteet->pnumero = $asiakkaat->postinumero;
+			$kohteet->kaupunki = $asiakkaat->kaupunki;
 			$kohteet->email = $asiakkaat->sahkoposti;
 			$kohteet->toimenpiteet = $_POST['Tyovuoroot']['toimenpiteet'];
 			$kohteet->muut = date("d.m.Y",strtotime($_POST['Tyovuoroot']['pvm']))."\n".date("H:i",strtotime($_POST['Tyovuoroot']['alku']))."-".date("H:i",strtotime($_POST['Tyovuoroot']['loppu']))."\nHinta: ".$_POST['hinta'];
