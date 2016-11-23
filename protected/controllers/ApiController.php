@@ -496,9 +496,9 @@ public function actionImei($dom)
 		    $kesto = (strtotime($val->loppui)-strtotime($val->aloitan));
 
 		      $sel .= '<div class="well">
-				  '.Yii::t('app', 'Päivämäärä').': <b>'.date("d.m.Y",strtotime($val->aloitan)).'</b><br> 
-				  '.Yii::t('app', 'Klo').': '.date("H:i",strtotime($val->aloitan)).'-'.date("H:i",strtotime($val->loppui)).'<br> 
-				  <h4>'.Yii::t('app', 'Osoite').': '.$val->kohde_kannasta.'</h4>
+				  <b>'.Yii::t('app', 'Päivämäärä').':</b> '.date("d.m.Y",strtotime($val->aloitan)).'<br> 
+				  <b>'.Yii::t('app', 'Klo').':</b> '.date("H:i",strtotime($val->aloitan)).' - '.date("H:i",strtotime($val->loppui)).'<br> 
+				  <b>'.Yii::t('app', 'Osoite').':</b> '.$val->kohde_kannasta.'
 				  <hr>
 				  <h3>'.Yii::t('app', 'Kesto').': '.sprint($kesto).'</h3>
 				</div>';
