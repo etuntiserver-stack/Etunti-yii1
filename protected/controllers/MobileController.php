@@ -1109,6 +1109,9 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 	protected function TidfromtoSL($from,$to,$tid)
 	{
 
+		$from = date("Y-m-d", strtotime($from));
+		$to = date("Y-m-d", strtotime($to));
+
 		$result = '';
 
        		$criteria = new CDbCriteria();
@@ -1160,6 +1163,9 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 
 	protected function TidfromtoLS($from,$to,$tid)
 	{
+
+		$from = date("Y-m-d", strtotime($from));
+		$to = date("Y-m-d", strtotime($to));
 
 		$result = '';
 
@@ -1219,6 +1225,9 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 	protected function TidfromtoSPL($from,$to,$tid)
 	{
 
+		$from = date("Y-m-d", strtotime($from));
+		$to = date("Y-m-d", strtotime($to));
+
 		$result = '';
 
        		$criteria = new CDbCriteria();
@@ -1258,8 +1267,12 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 
 	protected function TidfromtoVuosiloma($from,$to,$tid)
 	{
-		$result = 0;
 
+		$from = date("Y-m-d", strtotime($from));
+		$to = date("Y-m-d", strtotime($to));
+
+		$result = 0;
+	/*
        		$criteria = new CDbCriteria();
 		$criteria->group = " DATE(DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d')) ";
 
@@ -1277,8 +1290,19 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		   foreach($tv as $t)
 			$result++;
 		}
+	*/
 
-		return $result;
+       		$criteria = new CDbCriteria();
+	        $criteria->condition = "
+			DATE(pvm) 
+			BETWEEN '".$from."' AND '".$to."' 
+			AND tid='".$tid."'
+			AND status LIKE '%VL//%'
+		";
+
+		$tv = Vuosilomat::model()->findAll($criteria);
+
+		return count($tv);
 	}
 
 
@@ -1999,6 +2023,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
         	$criteria->select = "kohdenID,kohde_kannasta";
         	$criteria->order = "kohde_kannasta";
         	$criteria->group = "kohdenID";
+
 
         	$criteria->condition = "
 			status='3'

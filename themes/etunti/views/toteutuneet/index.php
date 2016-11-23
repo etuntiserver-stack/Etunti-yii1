@@ -10,7 +10,7 @@ $this->breadcrumbs=array(
 
 ?>
 <style>
-.well.fullRivi{
+.did.fullRivi{
 	height: 100%;
 	margin-bottom: 2px;
 	border:1px #ccc solid;
@@ -93,7 +93,7 @@ $this->breadcrumbs=array(
     $matka = '';
     $matka = ( isset(Yii::app()->session['MATKA']))  ? 'selected' : '';
 
-    echo '<select name="ilman[]" class="mult ilman"  multiple="multiple"  title="'.Yii::t('main', 'Ei lasketa').'">';
+    echo '<select name="ilman[]" class="selectpicker ilman"  multiple="multiple"  title="'.Yii::t('main', 'Ei lasketa').'">';
     echo '<option value="Lounastauko" '.$lounas.'>'.Yii::t('main', 'Lounastauko').'</option>';
     echo '<option value="MATKA" '.$matka.'>'.Yii::t('main', 'Matka').'</option>';
     echo '</select>';
@@ -150,7 +150,6 @@ $this->breadcrumbs=array(
 
 
 
-<br>
 
 <?php if(Yii::app()->session['tekija']) : ?>
 
@@ -174,7 +173,7 @@ function dateDiff($start, $end) {
   <div class="panel heading-border">
    <div class="panel-body">
 
-  <table class="table table-striped">
+  <table class="table" cellspacing="0" cellpadding="0">
   <thead class="myBgColors">
   <tr>
   <th width=1><?php echo Yii::t('main', 'Pvm'); ?></th>
@@ -189,12 +188,6 @@ function dateDiff($start, $end) {
   <th><?php echo Yii::t('main', 'Luettu'); ?></th>
   <th><?php echo Yii::t('main', 'Toteutuneet'); ?></th>
   <th><?php echo Yii::t('main', 'Yhteensä'); ?></th>
-  <th><?php echo Yii::t('main', 'Ma'); ?></th>
-  <th><?php echo Yii::t('main', 'Ilta'); ?></th>
-  <th><?php echo Yii::t('main', 'Yö'); ?></th>
-  <th><?php echo Yii::t('main', 'Su'); ?></th>
-  <th><?php echo Yii::t('main', 'Py'); ?></th>
-  <th><?php echo Yii::t('main', 'El'); ?></th>
   </tr>
   </thead>
   <tbody>
@@ -222,6 +215,16 @@ function dateDiff($start, $end) {
   $suunnittelut = 0;
   $yhtSuunnittelut = 0;
   $yhtSuunnittelutWeek = 0;
+
+  $yhteensaLuetut = 0;
+  $yhteensaToteutuneet = 0;
+
+  $mobile = Yii::app()->createController('Mobile');
+  $sl = 0;
+  $spl = 0;
+  $ls = 0;
+  $vl = 0;
+
 
   for ($i = 0; $i <= $dateDiff; $i++) 
   {
@@ -275,6 +278,10 @@ function dateDiff($start, $end) {
 
   	<td id="yht_'.$did.'_'.$explTekija[0].'">'.$this->renderPartial('yhteensapvm',array('pvm'=>date("Y-m-d",strtotime($date)),'tid'=>$explTekija[0],'from'=>'mobiili'),true).'</td>';
 
+    echo '</tr>';
+
+
+
     $matka = '';
     $matka = $this->renderPartial('//mobile/tidfromtomatkat',array(
 		'from'=>date("Y-m-d",strtotime($date)),
@@ -282,34 +289,64 @@ function dateDiff($start, $end) {
 		'tid'=>$explTekija[0]
 		),true);
     $yhtMatka += $matka;
-    echo '<td>'.$this->sprint($matka).'</td>';
 
     $tyoIlta = 0;
     $tyoIlta = $this->tyoIlta($explTekija[0],date("Y-m-d",strtotime($date)),'ilta');
     $yhtIlta += $tyoIlta;
-    echo '<td>'.$this->sprint($tyoIlta).'</td>';
 
     $tyoYo = 0;
     $tyoYo = $this->tyoIlta($explTekija[0],date("Y-m-d",strtotime($date)),'yo');
     $yhtYo += $tyoYo;
-    echo '<td>'.$this->sprint($tyoYo).'</td>';
 
     $tyoSu = 0;
     $tyoSu = $this->tyoIlta($explTekija[0],date("Y-m-d",strtotime($date)),'su');
     $yhtSu += $tyoSu;
-    echo '<td>'.$this->sprint($tyoSu).'</td>';
 
     $tyoPy = 0;
     $tyoPy = $this->pyhapaivat($explTekija[0],$date,"pyhat");
     $yhtPy += $tyoPy;
-    echo '<td>'.$this->sprint($tyoPy).'</td>';
 
     $tyoEl = 0;
     $tyoEl = $this->pyhapaivat($explTekija[0],$date,"el");
     $yhtEl += $tyoEl;
-    echo '<td>'.$this->sprint($tyoEl).'</td>';
+
+    $sl = $mobile[0]->TidfromtoSL($date,$date,$explTekija[0]);
+    $spl = $mobile[0]->TidfromtoSPL($date,$date,$explTekija[0]);
+    $ls = $mobile[0]->TidfromtoLS($date,$date,$explTekija[0]);
+    $vl = $mobile[0]->TidfromtoVuosiloma($date,$date,$explTekija[0]);
 
 
+    echo '
+	<tr><td colspan="5">
+		<table class="table table-bordered" cellspacing="0" cellpadding="0">
+		 <thead>
+		  <tr>
+		   <th>'.Yii::t('main', 'Matka').'</th>
+		   <th>'.Yii::t('main', 'Ilta').'</th>
+		   <th>'.Yii::t('main', 'Yö').'</th>
+		   <th>'.Yii::t('main', 'Su').'</th>
+		   <th>'.Yii::t('main', 'Py').'</th>
+		   <th>'.Yii::t('main', 'El').'</th>
+		   <th>'.Yii::t('main', 'SL').'</th>
+		   <th>'.Yii::t('main', 'SPL').'</th>
+		   <th>'.Yii::t('main', 'LS').'</th>
+		   <th>'.Yii::t('main', 'VL').'</th>
+		  </tr>
+		 </thead>
+		  <tr>
+		   <td>'.$this->sprint($matka).'</td>
+		   <td>'.$this->sprint($tyoIlta).'</td>
+		   <td>'.$this->sprint($tyoYo).'</td>
+		   <td>'.$this->sprint($tyoSu).'</td>
+		   <td>'.$this->sprint($tyoPy).'</td>
+		   <td>'.$this->sprint($tyoEl).'</td>
+		   <td>'.$this->sprint($sl).'</td>
+		   <td>'.$spl.'</td>
+		   <td>'.$this->sprint($ls).'</td>
+		   <td>'.$vl.'</td>
+		  </tr>
+		</table>
+	</td></tr>';
 
 
 
@@ -319,17 +356,22 @@ function dateDiff($start, $end) {
     $yhtSuWeek 		+= $tyoSu;
     $yhtPyWeek 		+= $tyoPy;
     $yhtElWeek 		+= $tyoEl;
-    if(isset($exLatiko[1]))
-    $yhtTotpvmtid 	+= $exLatiko[1];
-    if(isset($exLatikoLu[1]))
-    $yhtLuetutpvmtid 	+= $exLatikoLu[1];
+    if(isset($exLatiko[1])){
+		$yhtTotpvmtid 		+= $exLatiko[1];
+		$yhteensaToteutuneet	+= $exLatiko[1];
+    }
+    if(isset($exLatikoLu[1])){
+		$yhtLuetutpvmtid 	+= $exLatikoLu[1];
+		$yhteensaLuetut 	+= $exLatikoLu[1];
+    }
 
     $yhtSuunnittelutWeek += $suunnittelut;
 
 
 
 
-    echo '</tr>';
+
+
 
 
 
@@ -338,52 +380,38 @@ function dateDiff($start, $end) {
 
 	    if(date('N', strtotime($date)) == 7)
 	    {
-  	    echo '<tr>';
 
-
-  		echo '<td style="background: #669999;color: white" class="text-center viikkoRivi small myBgColors"><b>'.Yii::t('main', 'Viikko').' '.date("W",strtotime($date)).'</b></td>';
-
-/*
-		 $vktyoaika = '';
-		 $ts = Tyosuhdet::model()->find(" tid = '".$tid."' ");
-		 if(isset($ts->id) and !empty($ts['vktyoaika']))
-		  $vktyoaika = $ts['vktyoaika'];
-
-		  echo '<td style="background: #669999;color: white; text-align:center" class="viikkoRivi small myBgColors" id="vk_'.date("W",strtotime($date)).'_'.$tid.'">';
-		  $kokoViikko = '';
-		  $vko = '';
-		  $vko = date("W",strtotime($date));
-		  $year = date("Y",strtotime($date));
-		  $kokoViikko = $this->renderPartial('//tyovuoroot/viikko',array('tid'=>$tid,'viikko'=>$vko,'year'=>$year),true);
-
-		  $cl = '';
-		  if(	(int)str_replace(":","",$kokoViikko) > (int)str_replace(":","",$vktyoaika)
-			and (int)str_replace(":","",$kokoViikko) > 0
-			and (int)str_replace(":","",$vktyoaika) > 0
-		  )
-		  $cl = 'class="btn btn-xs btn-danger"';
-
-		  echo '<span '.$cl.'>'.$kokoViikko. '<br>('.$vktyoaika.')</span>';
-
-		  echo '</td>';
-*/
-
-    	if(in_array('2',$tas))
-    	{
-
-		  echo '<td style="background: #669999;color: white; text-align:center" class="small myBgColors">'.$this->sprint($yhtSuunnittelut).'<br>('.$this->num($yhtSuunnittelut).')</td>';
-	}
-
-		  echo '<td style="background: #669999;color: white; text-align:center" class="small myBgColors">'.$this->sprint($yhtLuetutpvmtid).'<br>('.$this->num($yhtLuetutpvmtid).')</td>';
-		  echo '<td style="background: #669999;color: white; text-align:center" class="small myBgColors">'.$this->sprint($yhtTotpvmtid).'<br>('.$this->num($yhtTotpvmtid).')</td>';
-		  echo '<td style="background: #669999;color: white; text-align:center" class="small myBgColors"></td>';
-		  echo '<td style="background: #669999;color: white; text-align:center" class="small myBgColors">'.$this->sprint($yhtMatkaWeek).'<br>('.$this->num($yhtMatkaWeek).')</td>';
-		  echo '<td style="background: #669999;color: white; text-align:center" class="small myBgColors">'.$this->sprint($yhtIltaWeek).'<br>('.$this->num($yhtIltaWeek).')</td>';
-		  echo '<td style="background: #669999;color: white; text-align:center" class="small myBgColors">'.$this->sprint($yhtYoWeek).'<br>('.$this->num($yhtYoWeek).')</td>';
-		  echo '<td style="background: #669999;color: white; text-align:center" class="small myBgColors">'.$this->sprint($yhtSuWeek).'<br>('.$this->num($yhtSuWeek).')</td>';
-		  echo '<td style="background: #669999;color: white; text-align:center" class="small myBgColors">'.$this->sprint($yhtPyWeek).'<br>('.$this->num($yhtPyWeek).')</td>';
-		  echo '<td style="background: #669999;color: white; text-align:center" class="small myBgColors">'.$this->sprint($yhtElWeek).'<br>('.$this->num($yhtElWeek).')</td>';
-	    echo '</tr>';
+    echo '
+	<tr><td colspan="5">
+		<table class="table" cellspacing="0" cellpadding="0">
+		 <thead class="myBgColors">
+		  <tr>
+		   <th></th>
+		   <th>'.Yii::t('main', 'Suunnitellut viikko').'</th>
+		   <th>'.Yii::t('main', 'Luetut viikko').'</th>
+		   <th>'.Yii::t('main', 'Toteutuneet viikko').'</th>
+		   <th>'.Yii::t('main', 'Matka viikko').'</th>
+		   <th>'.Yii::t('main', 'Ilta viikko').'</th>
+		   <th>'.Yii::t('main', 'Yö viikko').'</th>
+		   <th>'.Yii::t('main', 'Su viikko').'</th>
+		   <th>'.Yii::t('main', 'Py viikko').'</th>
+		   <th>'.Yii::t('main', 'El viikko').'</th>
+		  </tr>
+		 </thead>
+		  <tr>
+		   <td><b>'.Yii::t('main', 'Viikko').' '.date("W",strtotime($date)).'</b></td>
+		   <td>'.$this->sprint($yhtSuunnittelut).'<br>('.$this->num($yhtSuunnittelut).')</td>
+		   <td>'.$this->sprint($yhtLuetutpvmtid).'<br>('.$this->num($yhtLuetutpvmtid).')</td>
+		   <td>'.$this->sprint($yhtTotpvmtid).'<br>('.$this->num($yhtTotpvmtid).')</td>
+		   <td>'.$this->sprint($yhtMatkaWeek).'<br>('.$this->num($yhtMatkaWeek).')</td>
+		   <td>'.$this->sprint($yhtIltaWeek).'<br>('.$this->num($yhtIltaWeek).')</td>
+		   <td>'.$this->sprint($yhtYoWeek).'<br>('.$this->num($yhtYoWeek).')</td>
+		   <td>'.$this->sprint($yhtSuWeek).'<br>('.$this->num($yhtSuWeek).')</td>
+		   <td>'.$this->sprint($yhtPyWeek).'<br>('.$this->num($yhtPyWeek).')</td>
+		   <td>'.$this->sprint($yhtElWeek).'<br>('.$this->num($yhtElWeek).')</td>
+		  </tr>
+		</table>
+	</td></tr>';
 
 
 		$yhtMatkaWeek 	= 0;
@@ -402,41 +430,40 @@ function dateDiff($start, $end) {
 
   }
   ?>
+
   </tbody>
-
   <tfoot>
-  <tr>
-  <th><?php echo Yii::t('main', 'Yhteensä'); ?></th>
 
-  <?php
-  $tas = explode(",",Yii::app()->user->adminPaketti);
-  if(in_array('2',$tas) and isset($explTekija[0])){
 
-  //$total_sunniteltu = $this->renderPartial('//mobile/suunniteltu',array('id'=>$explTekija[0],'kohde_tid'=>'tid','from'=>Yii::app()->session['from'], 'to'=>Yii::app()->session['to']),true);
+	<tr><td colspan="5">
+		<table class="table" cellspacing="0" cellpadding="0">
+		 <thead class="myBgColors">
+		  <tr>
+		   <th><?php echo Yii::t('main', 'Yhteensä Suunnitellut'); ?></th>
+		   <th><?php echo Yii::t('main', 'Yhteensä Luetut'); ?></th>
+		   <th><?php echo Yii::t('main', 'Yhteensä Toteutuneet'); ?></th>
+		   <th><?php echo Yii::t('main', 'Yhteensä Matka'); ?></th>
+		   <th><?php echo Yii::t('main', 'Yhteensä Ilta'); ?></th>
+		   <th><?php echo Yii::t('main', 'Yhteensä Yö'); ?></th>
+		   <th><?php echo Yii::t('main', 'Yhteensä Su'); ?></th>
+		   <th><?php echo Yii::t('main', 'Yhteensä Py'); ?></th>
+		   <th><?php echo Yii::t('main', 'Yhteensä El'); ?></th>
+		  </tr>
+		 </thead>
+		  <tr>
+		   <td><?php echo $this->sprint($yhtSuunnittelutWeek); ?></td>
+		   <td><?php echo $this->sprint($yhteensaLuetut); ?></td>
+		   <td><?php echo $this->sprint($yhteensaToteutuneet); ?></td>
+		   <td><?php echo $this->sprint($yhtMatka); ?></td>
+		   <td><?php echo $this->sprint($yhtIlta); ?></td>
+		   <td><?php echo $this->sprint($yhtYo); ?></td>
+		   <td><?php echo $this->sprint($yhtSu); ?></td>
+		   <td><?php echo $this->sprint($yhtPy); ?></td>
+		   <td><?php echo $this->sprint($yhtEl); ?></td>
+		  </tr>
+		</table>
+	</td></tr>
 
-  echo '<th><center>'.sprint($yhtSuunnittelutWeek).'</center></th>';
-  }
-  ?>
-
-  <?php
-  $total_luettu = 0;
-  $total_luettu = $this->renderPartial('//mobile/total_luettu',array('tid'=>$explTekija[0]),true);
-  echo '<th><center>'.sprint($total_luettu).'</center></th>';
-  ?>
-
-  <?php
-  $total_toteutu = $this->renderPartial('//mobile/total_toteutu',array('tid'=>$explTekija[0]),true);
-  echo '<th><center>'.sprint($total_toteutu).'</center></th>';
-  ?>
-
-  <th></th>
-  <th><?php echo $this->sprint($yhtMatka); ?></th>
-  <th><?php echo $this->sprint($yhtIlta); ?></th>
-  <th><?php echo $this->sprint($yhtYo); ?></th>
-  <th><?php echo $this->sprint($yhtSu); ?></th>
-  <th><?php echo $this->sprint($yhtPy); ?></th>
-  <th><?php echo $this->sprint($yhtEl); ?></th>
-  </tr>
   </tfoot>
 
   </table>
@@ -487,10 +514,6 @@ $("#yhtveto").on('submit',function(e){
 });
 
 
-$('.mult').selectpicker({
-      style: 'gui-input',
-      //size: 4
-  });
 
 
 });
