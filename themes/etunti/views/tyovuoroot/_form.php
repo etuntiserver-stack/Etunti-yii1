@@ -561,6 +561,8 @@ $('.mult').multiselect({
 	// tarkistetaan tietoja -->
 
 	// <-- tarkistetaan ajaat päällekäin
+	if( e.target[0].value === '')
+	{
 	var tid		= $('#Tyovuoroot_tid').val();
 	var pvm		= $('#Tyovuoroot_pvm').val();
 	var alku 	= $("#alku").val();
@@ -589,6 +591,7 @@ $('.mult').multiselect({
 			return false;
 		}
 	  }
+	}
 	//     tarkistetaan ajaat päällekäin -->
 
 
