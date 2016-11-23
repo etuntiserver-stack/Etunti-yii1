@@ -2,9 +2,8 @@
 	opacity: 0.4;
 }
 td .latikkoAsetukset{
-	min-width: 70px;
-	width: 230px;
-	white-space: normal;
+	min-width: 40px;
+	white-space: nowrap;
 }
 .forCut, .forCopy{ 
 	display: none;
