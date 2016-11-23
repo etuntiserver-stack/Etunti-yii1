@@ -1114,7 +1114,7 @@ $('.tvchange').change(function(){
 
           <li>
             <a class="accordion-toggle" href="#">
-              <center><h3><?php echo strtoupper(Yii::app()->user->domain); ?></h3></center>
+              <span class="sidebar-title"><?php echo strtoupper(Yii::app()->user->domain); ?></span>
             </a>
           </li>
 

@@ -53,9 +53,15 @@ echo	'<input type=hidden id=number value='.cal_days_in_month(CAL_GREGORIAN, $mon
         <!-- begin: .tray-center -->
         <div class="tray-center">
 
-	   <h2 class="myBgColors p10"> <i class="fa fa-table"></i> <?php echo Yii::t('main', 'Lomat'); ?> 
+	   <h2 class="myBgColors p10">
 
-		<a href="index?pvm=<?php echo $previous; ?>"><<</a> <?php echo $months[$month].' '.$year; ?> <a href="index?pvm=<?php echo $next; ?>">>></a>
+               <div class="form-inline">
+		<i class="fa fa-table"></i> <?php echo Yii::t('main', 'Lomat'); ?> 
+
+		<a href="index?pvm=<?php echo $previous; ?>" class="fa fa-arrow-left btn btn-default btn-group" data-toggle="tooltip" data-placement="bottom" title="<?php echo Yii::t('main', 'Edellinen kuukausi'); ?>"></a> 
+		<span class="btn btn-default"><?php echo $months[$month].' '.$year; ?></span>
+		<a href="index?pvm=<?php echo $next; ?>" class="fa fa-arrow-right btn btn-default btn-group" data-toggle="tooltip" data-placement="bottom" title="<?php echo Yii::t('main', 'Seuraava kuukausi'); ?>"></a>
+               </div>
 
 	   </h2>
 
