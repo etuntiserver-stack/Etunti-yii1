@@ -580,7 +580,7 @@ $('.tvchange').change(function(){
             </li>
             <li class="list-group-item">
               <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/log/index" class="animated animated-short fadeInUp">
-                <span class="fa fa-gear"></span> <?php echo Yii::t('main','Log'); ?> </a>
+                <span class="fa fa-gear"></span> <?php echo Yii::t('main','Historia'); ?> </a>
             </li>
           </ul>
         </li>

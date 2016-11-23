@@ -21,7 +21,7 @@
 
 	   ?>
 	 </div>
-        <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-home"></i> <?php echo Yii::t('main', 'Log'); ?> 
+        <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-home"></i> <?php echo Yii::t('main', 'Historia'); ?> 
 
 
 
