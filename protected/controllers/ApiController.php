@@ -497,7 +497,7 @@ public function actionImei($dom)
 
 		      $sel .= '<div class="well">
 				  '.Yii::t('app', 'Päivämäärä').': <b>'.date("d.m.Y",strtotime($val->aloitan)).'</b><br> 
-				  '.Yii::t('app', 'Klo').': '.$val->aloitan.'-'.$val->loppui.'<br> 
+				  '.Yii::t('app', 'Klo').': '.date("H:i",strtotime($val->aloitan)).'-'.date("H:i",strtotime($val->loppui)).'<br> 
 				  <h4>'.Yii::t('app', 'Osoite').': '.$val->kohde_kannasta.'</h4>
 				  <hr>
 				  <h3>'.Yii::t('app', 'Kesto').': '.sprint($kesto).'</h3>
