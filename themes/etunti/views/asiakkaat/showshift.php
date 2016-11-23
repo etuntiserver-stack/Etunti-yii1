@@ -129,13 +129,19 @@
 	$k=Kohteet::model()->findbypk($data->kohde);
 	if(isset($k->id)) $osoite = $k->osoite; else $osoite = '';
 
+	$tt=Tyontekijat::model()->findbypk($data->tid);
+	if(isset($tt->id)) $tekijan_nimi = $tt->tekijan_nimi; else $tekijan_nimi = '';
+
+
   	$path = Yii::app()->basePath.'/../img/tekijat/'.Yii::app()->user->domain.'/'. $data->tid.'.jpg';
-  	if (file_exists($path) and isset($_POST['tulosta']))
-	$img =  '<img src="img/tekijat/'.Yii::app()->user->domain.'/'. $data->tid.'.jpg" height="30">';
-  	elseif (file_exists($path) and !isset($_POST['tulosta']))
-	$img =  '<img src="'.Yii::app()->request->baseUrl.'/img/tekijat/'.Yii::app()->user->domain.'/'. $data->tid.'.jpg" height="60">';
-	else
-	$img =  $data->tid;
+  	if (file_exists($path) and isset($_POST['tulosta'])){
+		$img =  '<img src="img/tekijat/'.Yii::app()->user->domain.'/'. $data->tid.'.jpg" height="30">';
+  	} elseif (file_exists($path) and !isset($_POST['tulosta'])){
+		$img =  '<img src="'.Yii::app()->request->baseUrl.'/img/tekijat/'.Yii::app()->user->domain.'/'. $data->tid.'.jpg" height="60">
+			<p>'.$tekijan_nimi.'</p>';
+	} else {
+		$img =  $tekijan_nimi;
+	}
 
 	$kesto = strtotime($data->loppu)-strtotime($data->alku);
 
