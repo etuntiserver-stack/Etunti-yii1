@@ -272,41 +272,6 @@ $(document).ready(function(){
 
 
 
-  function blockUpdater(divID){
-
-	  	$.ajax({
-			url: location.protocol + "//" + location.host + '/index.php/toteutuneet/totpvmtid',
-			type:'GET',
-			data: { "pvm" : divID[0], "tid" : divID[1], "from" : "ajax" },
-			  success:function(data){
-			  //console.log(data);
-			  var sp = data.split('explode999');
-
-			  $('#'+divID[0]+'_'+divID[1]).html(sp[0]);
-			  },
-			  error:function(data){
-			  console.log(data);
-			  }
-	 	});
-
-	  	$.ajax({
-			url: location.protocol + "//" + location.host + '/index.php/toteutuneet/yhteensapvm',
-			type:'GET',
-			data: { "pvm" : divID[0], "tid" : divID[1], "from" : "ajax" },
-			  success:function(data){
-			  //console.log(data);
-
-			  $('#yht_'+divID[0]+'_'+divID[1]).html(data);
-			  },
-			  error:function(data){
-			  console.log(data);
-			  }
-	 	});
-  }
-
-
-
-
 
 $("#showres").draggable();
 
@@ -357,37 +322,7 @@ $(document).delegate(".poistaTot","click",function(){
            success: function(data){
 		//console.log(data);
 
-
-	  	$.ajax({
-			url: location.protocol + "//" + location.host + '/index.php/toteutuneet/totpvmtid',
-			type:'GET',
-			data: { "pvm" : divID[0], "tid" : divID[1], "from" : "ajax" },
-			  success:function(data){
-			  //console.log(data);
-			  var sp = data.split('explode999');
-
-			  $('#'+divID[0]+'_'+divID[1]).html(sp[0]);
-
-			  },
-			  error:function(data){
-			  console.log(data);
-			  }
-	 	});
-
-	  	$.ajax({
-			url: location.protocol + "//" + location.host + '/index.php/toteutuneet/yhteensapvm',
-			type:'GET',
-			data: { "pvm" : divID[0], "tid" : divID[1], "from" : "ajax" },
-			  success:function(data){
-			  //console.log(data);
-
-			  $('#yht_'+divID[0]+'_'+divID[1]).html(data);
-			  },
-			  error:function(data){
-			  console.log(data);
-			  }
-	 	});
-
+	  	blockUpdater(divID);
 
            },
 	        error:function(data){
@@ -399,9 +334,196 @@ $(document).delegate(".poistaTot","click",function(){
 });
 
 
+$(document).delegate(".poistaRivit","click",function(){
+
+	var thisVal = $(this).attr('id');
+	var divID = $(this).attr("for").split("_");
+
+	var r = confirm('Oletko varmaa?');
+	if(r){
+        $.ajax({
+           url: location.protocol + "//" + location.host + '/index.php/toteutuneet/poista_luetut_toteutuneet',
+           type: "POST",
+           data: { "id" : thisVal },
+           success: function(data){
+		var d = JSON.parse(data);
+		console.log(d);
+
+	  	blockUpdater(divID);
+		$('#showres').modal('hide');
+
+           }
+        });
+	}
+});
 
 
 
+  function blockUpdater(divID){
+
+		var thisDID = divID[0]+'_'+divID[1];
+
+	  	$.ajax({
+			url: location.protocol + "//" + location.host + '/index.php/toteutuneet/totpvmtid',
+			type:'GET',
+			data: { "pvm" : divID[0], "tid" : divID[1] },
+			  success:function(data){
+			  data = JSON.parse(data);
+			  //console.log(data);
+
+				dataUpdater(thisDID, data);
+
+			  },
+			  error:function(data){
+			  console.log(data);
+			  }
+	 	});
+
+  }
+
+  function dataUpdater(thisDID, data)
+  {
+		var pvmSuunn 		= $('#yhteensaPvm_'+thisDID).find('.pvmSuunn').attr('total');
+		var toteutuneetTunnit 	= parseFloat(data['toteutuneetTunnit']);
+		var ero 		= eroaika(pvmSuunn, toteutuneetTunnit);
+
+	 	$('#'+thisDID).html(data['laatikot']);
+	 	$('#yhteensaPvm_'+thisDID).find('.pvmTot').attr('total', data['toteutuneetTunnit']).html(sprint(toteutuneetTunnit));
+	 	$('#yhteensaPvm_'+thisDID).find('.pvmEro').attr('total', data['toteutuneetTunnit']).html(sprint(ero));
+	  	$('#yhteensaPvmAllaTaulu_'+thisDID).find('.allaMatkat').attr('total', data['matkat']).html(sprint(data['matkat']));
+	  	$('#yhteensaPvmAllaTaulu_'+thisDID).find('.allaIlta').attr('total', data['ilta']).html(sprint(data['ilta']));
+	  	$('#yhteensaPvmAllaTaulu_'+thisDID).find('.allaYo').attr('total', data['yo']).html(sprint(data['yo']));
+	  	$('#yhteensaPvmAllaTaulu_'+thisDID).find('.allaSu').attr('total', data['su']).html(sprint(data['su']));
+	  	$('#yhteensaPvmAllaTaulu_'+thisDID).find('.allaSL').attr('total', data['sl']).html(sprint(data['sl']));
+	  	$('#yhteensaPvmAllaTaulu_'+thisDID).find('.allaSPL').attr('total', data['spl']).html(sprint(data['spl']));
+	  	$('#yhteensaPvmAllaTaulu_'+thisDID).find('.allaLS').attr('total', data['ls']).html(sprint(data['ls']));
+
+
+		// <-- Week
+  		var suunnWeek 	= 0;
+  		var totWeek 	= 0;
+  		var matkatWeek 	= 0;
+		var iltaWeek	= 0;
+		var yoWeek	= 0;
+		var suWeek	= 0;
+		var SLWeek	= 0;
+		var SPLWeek	= 0;
+		var LSWeek	= 0;
+
+  		$( ".yhteensaPvm_"+data['week'] ).each(function( i ) {
+			suunnWeek += parseFloat($(this).find('.pvmSuunn').attr('total'));
+			totWeek += parseFloat($(this).find('.pvmTot').attr('total'));
+		});
+
+  		$( ".yhteensaPvmAllaTaulu_"+data['week'] ).each(function( i ) {
+			matkatWeek += parseFloat($(this).find('.allaMatkat').attr('total'));
+			iltaWeek += parseFloat($(this).find('.allaIlta').attr('total'));
+			yoWeek += parseFloat($(this).find('.allaYo').attr('total'));
+			suWeek += parseFloat($(this).find('.allaSu').attr('total'));
+
+			SLWeek += parseFloat($(this).find('.allaSL').attr('total'));
+			SPLWeek += parseFloat($(this).find('.allaSPL').attr('total'));
+			LSWeek += parseFloat($(this).find('.allaLS').attr('total'));
+
+		});
+
+	  	$('.suunnWeek_'+data['week']).html(sprint(suunnWeek)+'<br>'+num(suunnWeek));
+	  	$('.totWeek_'+data['week']).html(sprint(totWeek)+'<br>'+num(totWeek));
+	  	$('.matkatWeek_'+data['week']).html(sprint(matkatWeek)+'<br>'+num(matkatWeek));
+
+	  	$('.iltaWeek_'+data['week']).html(sprint(iltaWeek)+'<br>'+num(iltaWeek));
+	  	$('.yoWeek_'+data['week']).html(sprint(yoWeek)+'<br>'+num(yoWeek));
+	  	$('.suWeek_'+data['week']).html(sprint(suWeek)+'<br>'+num(suWeek));
+
+	  	$('.SLWeek_'+data['week']).html(sprint(SLWeek)+'<br>'+num(SLWeek));
+	  	$('.SPLWeek_'+data['week']).html(sprint(SPLWeek)+'<br>'+num(SPLWeek));
+	  	$('.LSWeek_'+data['week']).html(sprint(LSWeek)+'<br>'+num(LSWeek));
+		//     Week -->
+
+
+
+		// <-- Footer
+  		var suunnFoot 	= 0;
+  		var totFoot 	= 0;
+  		var matkatFoot 	= 0;
+		var iltaFoot	= 0;
+		var yoFoot	= 0;
+		var suFoot	= 0;
+		var SLFoot	= 0;
+		var SPLFoot	= 0;
+		var LSFoot	= 0;
+
+
+  		$( ".forFooter" ).each(function( i ) {
+			suunnFoot += parseFloat($(this).find('.pvmSuunn').attr('total'));
+			totFoot += parseFloat($(this).find('.pvmTot').attr('total'));
+		});
+
+  		$( ".forFooterAlla" ).each(function( i ) {
+			matkatFoot += parseFloat($(this).find('.allaMatkat').attr('total'));
+			iltaFoot += parseFloat($(this).find('.allaIlta').attr('total'));
+			yoFoot += parseFloat($(this).find('.allaYo').attr('total'));
+			suFoot += parseFloat($(this).find('.allaSu').attr('total'));
+
+			SLFoot += parseFloat($(this).find('.allaSL').attr('total'));
+			SPLFoot += parseFloat($(this).find('.allaSPL').attr('total'));
+			LSFoot += parseFloat($(this).find('.allaLS').attr('total'));
+		});
+
+	  	$('#yhteensaFooterTaulu').find('.suunnFoot').html(sprint(suunnFoot)+'<br>'+num(suunnFoot));
+	  	$('#yhteensaFooterTaulu').find('.totFoot').html(sprint(totFoot)+'<br>'+num(totFoot));
+	  	$('#yhteensaFooterTaulu').find('.matkatFoot').html(sprint(matkatFoot)+'<br>'+num(matkatFoot));
+
+	  	$('#yhteensaFooterTaulu').find('.iltaFoot').html(sprint(iltaFoot)+'<br>'+num(iltaFoot));
+	  	$('#yhteensaFooterTaulu').find('.yoFoot').html(sprint(yoFoot)+'<br>'+num(yoFoot));
+	  	$('#yhteensaFooterTaulu').find('.suFoot').html(sprint(suFoot)+'<br>'+num(suFoot));
+
+	  	$('#yhteensaFooterTaulu').find('.SLFoot').html(sprint(SLFoot)+'<br>'+num(SLFoot));
+	  	$('#yhteensaFooterTaulu').find('.SPLFoot').html(sprint(SPLFoot)+'<br>'+num(SPLFoot));
+	  	$('#yhteensaFooterTaulu').find('.LSFoot').html(sprint(LSFoot)+'<br>'+num(LSFoot));
+		//     Footer -->
+
+
+  }
+
+
+
+  function eroaika(pvmSuunn, toteutuneetTunnit)
+  {
+	if(pvmSuunn > toteutuneetTunnit)
+		return pvmSuunn-toteutuneetTunnit;
+	else
+		return toteutuneetTunnit-pvmSuunn;
+  }
+
+  function sprint(Myseconds)
+  {
+	var totalNumberOfSeconds = Myseconds;
+	var hours = parseInt( totalNumberOfSeconds / 3600 );
+	var minutes = parseInt( (totalNumberOfSeconds - (hours * 3600)) / 60 );
+	var seconds = Math.floor((totalNumberOfSeconds - ((hours * 3600) + (minutes * 60))));
+	var result = (hours < 10 ? "0" + hours : hours) + ":" + (minutes < 10 ? "0" + minutes : minutes);
+
+	if(Myseconds > 0)
+		var res = result;
+	else
+		var res = '';
+
+	return res;
+  }
+
+  function num(Myseconds)
+  {
+	var totalNumberOfSeconds = Myseconds;
+	var hours = parseFloat( totalNumberOfSeconds / 3600 ).toFixed(2);
+
+	if(Myseconds > 0)
+		var res = hours;
+	else
+		var res = '';
+
+	return res;
+  }
 
 
 });

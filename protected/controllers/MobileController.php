@@ -996,8 +996,9 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 
 		//echo $al[0].' '.$al[1].' - '.$lop[0].' '.$lop[1].'<br>';
 
-	  	if(strtotime($al[0]." ".$al[1]) >= strtotime($al[0]." 23:00")
-		and strtotime($lop[0]." ".$lop[1]) <= strtotime($lop[0]." 06:00"))
+	  	if(strtotime($al[0]." ".$al[1]) > strtotime($al[0]." 23:00")
+		and strtotime($lop[0]." ".$lop[1]) <= strtotime($lop[0]." 06:00")
+		)
 		{
 	   	  $strAl0 = strtotime($al[0]." ".$al[1]);
 	   	  $strLop0 = strtotime($lop[0]." ".$lop[1]);
@@ -1007,7 +1008,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		}
 
 	  	if(strtotime($al[0]." ".$al[1]) <= strtotime($al[0]." 23:00")
-		and strtotime($lop[0]." ".$lop[1]) >= strtotime($lop[0]." 23:00")
+		and strtotime($lop[0]." ".$lop[1]) > strtotime($lop[0]." 23:00")
 		and $al[0] == $lop[0]
 		)
 		{
@@ -1019,7 +1020,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		}
 
 	  	if(strtotime($al[0]." ".$al[1]) <= strtotime($al[0]." 23:00")
-		and strtotime($lop[0]." ".$lop[1]) >= strtotime($lop[0]." 06:00")
+		and strtotime($lop[0]." ".$lop[1]) > strtotime($lop[0]." 06:00")
 		and $al[0] != $lop[0]
 		)
 		{
@@ -1043,8 +1044,8 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 	      	  $totalYo += $str;
 		}
 
-	  	if(strtotime($al[0]." ".$al[1]) >= strtotime($al[0]." 23:00")
-		and strtotime($lop[0]." ".$lop[1]) >= strtotime($lop[0]." 06:00"))
+	  	if(strtotime($al[0]." ".$al[1]) > strtotime($al[0]." 23:00")
+		and strtotime($lop[0]." ".$lop[1]) > strtotime($lop[0]." 06:00"))
 		{
 	   	  $strAl0 = strtotime($al[0]." ".$al[1]);
 	   	  $strLop0 = strtotime($lop[0]." 06:00");
@@ -1106,6 +1107,72 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 	*/
 	}
 
+
+	public function TidfromtoSairaus($from,$to,$tid,$sairaus)
+	{
+
+		if($sairaus == 'SPL') 	$sairaus = 1; // Palkaton
+		if($sairaus == 'SL') 	$sairaus = 2; // Palkallinen
+		if($sairaus == 'LS') 	$sairaus = 3; // Lapsen sairaus
+
+
+		$from = date("Y-m-d", strtotime($from));
+		$to = date("Y-m-d", strtotime($to));
+
+		$result = '';
+
+       		$criteria = new CDbCriteria();
+        	$criteria->select = "
+			SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
+
+			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit
+		";
+
+	        $criteria->condition = " 
+			aloitan!='' AND loppui!=''
+
+			AND tid='".$tid."'
+			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
+			BETWEEN '".$from."' AND '".$to."'
+			AND sairaus='".$sairaus."'
+			AND id NOT IN (SELECT kid FROM sivexkuitti_repaired)
+
+		";
+
+
+		$lu = Mobile::model()->find($criteria);
+
+
+       		$criteria = new CDbCriteria();
+        	$criteria->select = "
+			SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
+
+			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit
+		";
+
+	        $criteria->condition = " 
+			aloitan!='' AND loppui!=''
+
+			AND tid='".$tid."'
+			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
+			BETWEEN '".$from."' AND '".$to."'
+			AND sairaus='".$sairaus."'
+		";
+
+
+		$tot = Toteutuneet::model()->find($criteria);
+
+		if(isset($lu->l_tunnit))
+		$result = $lu->l_tunnit;
+
+		if(isset($tot->l_tunnit))
+		$result = $result+$tot->l_tunnit;
+
+
+		return $result;
+	}
+
+/*
 	protected function TidfromtoSL($from,$to,$tid)
 	{
 
@@ -1263,7 +1330,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 
 		return $result;
 	}
-
+*/
 
 	protected function TidfromtoVuosiloma($from,$to,$tid)
 	{
@@ -1732,6 +1799,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 	protected function yhtLU($from,$to){
 
 		$from = date("Y-m-d", strtotime($from));
+
 		$to = date("Y-m-d", strtotime($to));
 
        		$cr1 = new CDbCriteria();

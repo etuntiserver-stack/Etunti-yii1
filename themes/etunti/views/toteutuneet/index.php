@@ -18,8 +18,11 @@ $this->breadcrumbs=array(
 	background: white;
 	border-radius:5px;
 }
-.oikeallaPlusV{
+.oikeallaPlusV, .tp{
 	display:none;
+}
+.table tbody>tr>td{
+    	vertical-align: top;
 }
 </style>
 
@@ -176,15 +179,7 @@ function dateDiff($start, $end) {
   <table class="table" cellspacing="0" cellpadding="0">
   <thead class="myBgColors">
   <tr>
-  <th width=1><?php echo Yii::t('main', 'Pvm'); ?></th>
-
-  <?php
-  $tas = explode(",",Yii::app()->user->adminPaketti);
-  if(in_array('2',$tas)) : 
-  ?>
   <th><?php echo Yii::t('main', 'Suunnitellut'); ?></th>
-  <?php endif; ?>
-
   <th><?php echo Yii::t('main', 'Luettu'); ?></th>
   <th><?php echo Yii::t('main', 'Toteutuneet'); ?></th>
   <th><?php echo Yii::t('main', 'Yhteensä'); ?></th>
@@ -192,7 +187,7 @@ function dateDiff($start, $end) {
   </thead>
   <tbody>
   <?php 
-  $arrDate = array(1=>"Ma",2=>"Ti",3=>"Ke",4=>"To",5=>"Pe",6=>"La",7=>"Su");
+  $arrDate = array(1=>"Maanantai",2=>"Tiistai",3=>"Keskiviikko",4=>"Torstai",5=>"Perjantai",6=>"Lauantai",7=>"Sunnuntai");
   $yhtMatka 	= 0;
   $yhtIlta 	= 0;
   $yhtYo 	= 0;
@@ -212,6 +207,7 @@ function dateDiff($start, $end) {
   $yhtPyWeek	= 0;
   $yhtElWeek	= 0;
 
+
   $suunnittelut = 0;
   $yhtSuunnittelut = 0;
   $yhtSuunnittelutWeek = 0;
@@ -220,10 +216,20 @@ function dateDiff($start, $end) {
   $yhteensaToteutuneet = 0;
 
   $mobile = Yii::app()->createController('Mobile');
-  $sl = 0;
-  $spl = 0;
-  $ls = 0;
-  $vl = 0;
+  $sl 		= 0;
+  $spl 		= 0;
+  $ls 		= 0;
+  $vl 		= 0;
+
+  $yhtSPLWeek	= 0;
+  $yhtSLWeek	= 0;
+  $yhtLSWeek	= 0;
+  $yhtVLWeek	= 0;
+
+  $yhtSPL	= 0;
+  $yhtSL	= 0;
+  $yhtLS	= 0;
+  $yhtVL	= 0;
 
 
   for ($i = 0; $i <= $dateDiff; $i++) 
@@ -237,12 +243,20 @@ function dateDiff($start, $end) {
     $explColDate = explode("/",$columnDate);
     $did = date("Ymd",strtotime($date));
 
+
+
     echo '
-    <tr>
-  	<td width=1 class="small">'.$arrDate[$explColDate[0]].'<br>'.date("d.m",strtotime($date)).'</td>';
+	<tr><td colspan="4">
+		<table class="" cellspacing="0" cellpadding="0">
+		  <tr>
+		   <td><h3>'.$arrDate[$explColDate[0]].' '.date("d.m",strtotime($date)).'</h3></td>
+		  </tr>
+		</table>
+	</td></tr>';
+
+    echo '<tr>';
   
-    if(in_array('2',$tas))
-    {
+
 	$dido = '';
 	$dido = $this->renderPartial('//tyovuoroot/did',array('pvm'=>$date,'tid'=>$explTekija[0],'from'=>'mobiili','yhteensa'=>true),true);
 	
@@ -259,7 +273,7 @@ function dateDiff($start, $end) {
 	}
 
     	echo '<td>'.$didoResult.'</td>';
-    }
+
 
     echo '<td>';
 	   $luetutpvmtid = $this->renderPartial('luetutpvmtid',array('pvm'=>$date,'tid'=>$explTekija[0],'from'=>'mobiili'),true);
@@ -270,58 +284,68 @@ function dateDiff($start, $end) {
 
     echo '<td id="'.$did.'_'.$explTekija[0].'">';
 
-	   $totpvmtid = $this->renderPartial('totpvmtid',array('pvm'=>$date,'tid'=>$explTekija[0],'from'=>'mobiili'),true);
-	   $exLatiko = explode('explode999', $totpvmtid);
-	   echo $exLatiko[0];
+	   $totpvmtid = $this->TotPvmTid($date,$explTekija[0]);
+	   echo $totpvmtid['laatikot'];
 
-    echo '</td>
+    echo '</td>';
 
-  	<td id="yht_'.$did.'_'.$explTekija[0].'">'.$this->renderPartial('yhteensapvm',array('pvm'=>date("Y-m-d",strtotime($date)),'tid'=>$explTekija[0],'from'=>'mobiili'),true).'</td>';
+    if($suunnittelut > $totpvmtid['toteutuneetTunnit'])
+    	$eroAika = $suunnittelut-$totpvmtid['toteutuneetTunnit'];
+    else
+    	$eroAika = ($totpvmtid['toteutuneetTunnit']-$suunnittelut);
+
+    echo '<td class="yhteensaPvm_'.date("W",strtotime($date)).' forFooter" id="yhteensaPvm_'.$did.'_'.$explTekija[0].'">
+		'.Yii::t('main', 'Suunn.: ').'<span class="pvmSuunn" total="'.(int)$suunnittelut.'">'.$this->sprint($suunnittelut).'</span><br>
+		'.Yii::t('main', 'Tot.: ').'<span class="pvmTot" total="'.(int)$totpvmtid['toteutuneetTunnit'].'">'.$this->sprint($totpvmtid['toteutuneetTunnit']).'</span><br>
+		'.Yii::t('main', 'Ero aika: ').'<span class="pvmEro">'.$this->sprint($eroAika).'</span><br>
+	 </td>';
 
     echo '</tr>';
 
 
 
-    $matka = '';
-    $matka = $this->renderPartial('//mobile/tidfromtomatkat',array(
-		'from'=>date("Y-m-d",strtotime($date)),
-		'to'=>date("Y-m-d",strtotime($date)),
-		'tid'=>$explTekija[0]
-		),true);
+
+    $matka = $totpvmtid['matkat'];
     $yhtMatka += $matka;
 
-    $tyoIlta = 0;
-    $tyoIlta = $this->tyoIlta($explTekija[0],date("Y-m-d",strtotime($date)),'ilta');
-    $yhtIlta += $tyoIlta;
+    $return 	= $this->IltaYoSu($explTekija[0],$date);
 
-    $tyoYo = 0;
-    $tyoYo = $this->tyoIlta($explTekija[0],date("Y-m-d",strtotime($date)),'yo');
-    $yhtYo += $tyoYo;
+    if(isset($return[0])){
+    $tyoIlta 	= $return[0];
+    $yhtIlta 	+= $tyoIlta;
+    }
+    if(isset($return[1])){
+    $tyoYo 	= $return[1];
+    $yhtYo 	+= $tyoYo;
+    }
+    if(isset($return[2])){
+    $tyoSu 	= $return[2];
+    $yhtSu 	+= $tyoSu;
+    }
 
-    $tyoSu = 0;
-    $tyoSu = $this->tyoIlta($explTekija[0],date("Y-m-d",strtotime($date)),'su');
-    $yhtSu += $tyoSu;
+    $tyoPy 	= $this->pyhapaivat($explTekija[0],$date,"pyhat");
+    $yhtPy 	+= $tyoPy;
 
-    $tyoPy = 0;
-    $tyoPy = $this->pyhapaivat($explTekija[0],$date,"pyhat");
-    $yhtPy += $tyoPy;
+    $tyoEl 	= $this->pyhapaivat($explTekija[0],$date,"el");
+    $yhtEl 	+= $tyoEl;
 
-    $tyoEl = 0;
-    $tyoEl = $this->pyhapaivat($explTekija[0],$date,"el");
-    $yhtEl += $tyoEl;
+    $spl 	= $totpvmtid['spl']; // Palkaton
+    $sl 	= $totpvmtid['sl']; // Palkallinen
+    $ls 	= $totpvmtid['ls']; // Lapsen sairaus
+    $vl 	= $mobile[0]->TidfromtoVuosiloma($date,$date,$explTekija[0]);
 
-    $sl = $mobile[0]->TidfromtoSL($date,$date,$explTekija[0]);
-    $spl = $mobile[0]->TidfromtoSPL($date,$date,$explTekija[0]);
-    $ls = $mobile[0]->TidfromtoLS($date,$date,$explTekija[0]);
-    $vl = $mobile[0]->TidfromtoVuosiloma($date,$date,$explTekija[0]);
 
+    $yhtSPL 	+= $spl;
+    $yhtSL 	+= $sl;
+    $yhtLS 	+= $ls;
+    $yhtVL 	+= $vl;
 
     echo '
-	<tr><td colspan="5">
-		<table class="table table-bordered" cellspacing="0" cellpadding="0">
+	<tr><td colspan="4">
+		<table class="yhteensaPvmAllaTaulu_'.date("W",strtotime($date)).' forFooterAlla table table-bordered" cellspacing="0" cellpadding="0" id="yhteensaPvmAllaTaulu_'.$did.'_'.$explTekija[0].'">
 		 <thead>
 		  <tr>
-		   <th>'.Yii::t('main', 'Matka').'</th>
+		   <th>'.Yii::t('main', 'Matkat').'</th>
 		   <th>'.Yii::t('main', 'Ilta').'</th>
 		   <th>'.Yii::t('main', 'Yö').'</th>
 		   <th>'.Yii::t('main', 'Su').'</th>
@@ -334,21 +358,30 @@ function dateDiff($start, $end) {
 		  </tr>
 		 </thead>
 		  <tr>
-		   <td>'.$this->sprint($matka).'</td>
-		   <td>'.$this->sprint($tyoIlta).'</td>
-		   <td>'.$this->sprint($tyoYo).'</td>
-		   <td>'.$this->sprint($tyoSu).'</td>
+		   <td><span class="allaMatkat" total="'.(int)$matka.'">'.$this->sprint($matka).'</span></td>
+		   <td><span class="allaIlta" total="'.(int)$tyoIlta.'">'.$this->sprint($tyoIlta).'</span></td>
+		   <td><span class="allaYo" total="'.(int)$tyoYo.'">'.$this->sprint($tyoYo).'</span></td>
+		   <td><span class="allaSu" total="'.(int)$tyoSu.'">'.$this->sprint($tyoSu).'</span></td>
 		   <td>'.$this->sprint($tyoPy).'</td>
 		   <td>'.$this->sprint($tyoEl).'</td>
-		   <td>'.$this->sprint($sl).'</td>
-		   <td>'.$spl.'</td>
-		   <td>'.$this->sprint($ls).'</td>
+		   <td><span class="allaSL" total="'.(int)$sl.'">'.$this->sprint($sl).'</span></td>
+		   <td><span class="allaSPL" total="'.(int)$spl.'">'.$this->sprint($spl).'</span></td>
+		   <td><span class="allaLS" total="'.(int)$ls.'">'.$this->sprint($ls).'</span></td>
 		   <td>'.$vl.'</td>
 		  </tr>
 		</table>
 	</td></tr>';
 
 
+    $yhtSuunnittelutWeek += $suunnittelut;
+    if(isset($totpvmtid['toteutuneetTunnit'])){
+		$yhtTotpvmtid 		+= $totpvmtid['toteutuneetTunnit'];
+		$yhteensaToteutuneet	+= $totpvmtid['toteutuneetTunnit'];
+    }
+    if(isset($exLatikoLu[1])){
+		$yhtLuetutpvmtid 	+= $exLatikoLu[1];
+		$yhteensaLuetut 	+= $exLatikoLu[1];
+    }
 
     $yhtMatkaWeek 	+= $matka;
     $yhtIltaWeek 	+= $tyoIlta;
@@ -356,16 +389,14 @@ function dateDiff($start, $end) {
     $yhtSuWeek 		+= $tyoSu;
     $yhtPyWeek 		+= $tyoPy;
     $yhtElWeek 		+= $tyoEl;
-    if(isset($exLatiko[1])){
-		$yhtTotpvmtid 		+= $exLatiko[1];
-		$yhteensaToteutuneet	+= $exLatiko[1];
-    }
-    if(isset($exLatikoLu[1])){
-		$yhtLuetutpvmtid 	+= $exLatikoLu[1];
-		$yhteensaLuetut 	+= $exLatikoLu[1];
-    }
+    $yhtSLWeek 		+= $sl;
+    $yhtSPLWeek		+= $spl;
+    $yhtLSWeek 		+= $ls;
+    $yhtVLWeek 		+= $vl;
 
-    $yhtSuunnittelutWeek += $suunnittelut;
+
+
+
 
 
 
@@ -381,37 +412,55 @@ function dateDiff($start, $end) {
 	    if(date('N', strtotime($date)) == 7)
 	    {
 
+
     echo '
-	<tr><td colspan="5">
+	<tr><td colspan="4">
 		<table class="table" cellspacing="0" cellpadding="0">
-		 <thead class="myBgColors">
 		  <tr>
-		   <th></th>
-		   <th>'.Yii::t('main', 'Suunnitellut viikko').'</th>
-		   <th>'.Yii::t('main', 'Luetut viikko').'</th>
-		   <th>'.Yii::t('main', 'Toteutuneet viikko').'</th>
-		   <th>'.Yii::t('main', 'Matka viikko').'</th>
-		   <th>'.Yii::t('main', 'Ilta viikko').'</th>
-		   <th>'.Yii::t('main', 'Yö viikko').'</th>
-		   <th>'.Yii::t('main', 'Su viikko').'</th>
-		   <th>'.Yii::t('main', 'Py viikko').'</th>
-		   <th>'.Yii::t('main', 'El viikko').'</th>
-		  </tr>
-		 </thead>
-		  <tr>
-		   <td><b>'.Yii::t('main', 'Viikko').' '.date("W",strtotime($date)).'</b></td>
-		   <td>'.$this->sprint($yhtSuunnittelut).'<br>('.$this->num($yhtSuunnittelut).')</td>
-		   <td>'.$this->sprint($yhtLuetutpvmtid).'<br>('.$this->num($yhtLuetutpvmtid).')</td>
-		   <td>'.$this->sprint($yhtTotpvmtid).'<br>('.$this->num($yhtTotpvmtid).')</td>
-		   <td>'.$this->sprint($yhtMatkaWeek).'<br>('.$this->num($yhtMatkaWeek).')</td>
-		   <td>'.$this->sprint($yhtIltaWeek).'<br>('.$this->num($yhtIltaWeek).')</td>
-		   <td>'.$this->sprint($yhtYoWeek).'<br>('.$this->num($yhtYoWeek).')</td>
-		   <td>'.$this->sprint($yhtSuWeek).'<br>('.$this->num($yhtSuWeek).')</td>
-		   <td>'.$this->sprint($yhtPyWeek).'<br>('.$this->num($yhtPyWeek).')</td>
-		   <td>'.$this->sprint($yhtElWeek).'<br>('.$this->num($yhtElWeek).')</td>
+		   <td><h3>'.Yii::t('main', 'Viikko').' '.date("W",strtotime($date)).'</h3></td>
 		  </tr>
 		</table>
 	</td></tr>';
+
+    echo '
+	<tr><td colspan="4">
+		<table class="table" cellspacing="0" cellpadding="0">
+		 <thead class="myBgColors">
+		  <tr>
+		   <th>'.Yii::t('main', 'Suunn.').'</th>
+		   <th>'.Yii::t('main', 'Luetut').'</th>
+		   <th>'.Yii::t('main', 'Tot.').'</th>
+		   <th>'.Yii::t('main', 'Matkat').'</th>
+		   <th>'.Yii::t('main', 'Ilta').'</th>
+		   <th>'.Yii::t('main', 'Yö').'</th>
+		   <th>'.Yii::t('main', 'Su').'</th>
+		   <th>'.Yii::t('main', 'Py').'</th>
+		   <th>'.Yii::t('main', 'El').'</th>
+		   <th>'.Yii::t('main', 'SL').'</th>
+		   <th>'.Yii::t('main', 'SPL').'</th>
+		   <th>'.Yii::t('main', 'LS').'</th>
+		   <th>'.Yii::t('main', 'VL').'</th>
+		  </tr>
+		 </thead>
+		  <tr>
+		   <td class="suunnWeek_'.date("W",strtotime($date)).'">'.$this->sprint($yhtSuunnittelut).'<br>'.$this->num($yhtSuunnittelut).'</td>
+		   <td class="luetutWeek_'.date("W",strtotime($date)).'">'.$this->sprint($yhtLuetutpvmtid).'<br>'.$this->num($yhtLuetutpvmtid).'</td>
+		   <td class="totWeek_'.date("W",strtotime($date)).'">'.$this->sprint($yhtTotpvmtid).'<br>'.$this->num($yhtTotpvmtid).'</td>
+		   <td class="matkatWeek_'.date("W",strtotime($date)).'">'.$this->sprint($yhtMatkaWeek).'<br>'.$this->num($yhtMatkaWeek).'</td>
+		   <td class="iltaWeek_'.date("W",strtotime($date)).'">'.$this->sprint($yhtIltaWeek).'<br>'.$this->num($yhtIltaWeek).'</td>
+		   <td class="yoWeek_'.date("W",strtotime($date)).'">'.$this->sprint($yhtYoWeek).'<br>'.$this->num($yhtYoWeek).'</td>
+		   <td class="suWeek_'.date("W",strtotime($date)).'">'.$this->sprint($yhtSuWeek).'<br>'.$this->num($yhtSuWeek).'</td>
+		   <td>'.$this->sprint($yhtPyWeek).'<br>'.$this->num($yhtPyWeek).'</td>
+		   <td>'.$this->sprint($yhtElWeek).'<br>'.$this->num($yhtElWeek).'</td>
+
+		   <td class="SLWeek_'.date("W",strtotime($date)).'">'.$this->sprint($yhtSLWeek).'<br>'.$this->num($yhtSLWeek).'</td>
+		   <td class="SPLWeek_'.date("W",strtotime($date)).'">'.$this->sprint($yhtSPLWeek).'<br>'.$this->num($yhtSPLWeek).'</td>
+		   <td class="LSWeek_'.date("W",strtotime($date)).'">'.$this->sprint($yhtLSWeek).'<br>'.$this->num($yhtLSWeek).'</td>
+		   <td>'.$yhtVLWeek.'</td>
+		  </tr>
+		</table>
+	</td></tr>';
+
 
 
 		$yhtMatkaWeek 	= 0;
@@ -423,6 +472,10 @@ function dateDiff($start, $end) {
 		$yhtTotpvmtid 	= 0;
 	 	$yhtLuetutpvmtid = 0;
 		$yhtSuunnittelut = 0;
+    		$yhtSLWeek 	= 0;
+		$yhtSPLWeek	= 0;
+		$yhtLSWeek 	= 0;
+		$yhtVLWeek 	= 0;
 
 	    }
 
@@ -435,37 +488,46 @@ function dateDiff($start, $end) {
   <tfoot>
 
 
-	<tr><td colspan="5">
-		<table class="table" cellspacing="0" cellpadding="0">
+	<tr><td colspan="4">
+		<table class="table" cellspacing="0" cellpadding="0" id="yhteensaFooterTaulu">
 		 <thead class="myBgColors">
 		  <tr>
-		   <th><?php echo Yii::t('main', 'Yhteensä Suunnitellut'); ?></th>
-		   <th><?php echo Yii::t('main', 'Yhteensä Luetut'); ?></th>
-		   <th><?php echo Yii::t('main', 'Yhteensä Toteutuneet'); ?></th>
-		   <th><?php echo Yii::t('main', 'Yhteensä Matka'); ?></th>
-		   <th><?php echo Yii::t('main', 'Yhteensä Ilta'); ?></th>
-		   <th><?php echo Yii::t('main', 'Yhteensä Yö'); ?></th>
-		   <th><?php echo Yii::t('main', 'Yhteensä Su'); ?></th>
-		   <th><?php echo Yii::t('main', 'Yhteensä Py'); ?></th>
-		   <th><?php echo Yii::t('main', 'Yhteensä El'); ?></th>
+		   <th><?php echo Yii::t('main', 'Yhteensä'); ?></th>
+		   <th><?php echo Yii::t('main', 'Suunn.'); ?></th>
+		   <th><?php echo Yii::t('main', 'Luetut'); ?></th>
+		   <th><?php echo Yii::t('main', 'Tot'); ?></th>
+		   <th><?php echo Yii::t('main', 'Matkat'); ?></th>
+		   <th><?php echo Yii::t('main', 'Ilta'); ?></th>
+		   <th><?php echo Yii::t('main', 'Yö'); ?></th>
+		   <th><?php echo Yii::t('main', 'Su'); ?></th>
+		   <th><?php echo Yii::t('main', 'Py'); ?></th>
+		   <th><?php echo Yii::t('main', 'El'); ?></th>
+		   <th><?php echo Yii::t('main', 'SL'); ?></th>
+		   <th><?php echo Yii::t('main', 'SPL'); ?></th>
+		   <th><?php echo Yii::t('main', 'LS'); ?></th>
+		   <th><?php echo Yii::t('main', 'VL'); ?></th>
 		  </tr>
 		 </thead>
 		  <tr>
-		   <td><?php echo $this->sprint($yhtSuunnittelutWeek); ?></td>
+		   <td></td>
+		   <td><span class="suunnFoot"><?php echo $this->sprint($yhtSuunnittelutWeek); ?></span></td>
 		   <td><?php echo $this->sprint($yhteensaLuetut); ?></td>
-		   <td><?php echo $this->sprint($yhteensaToteutuneet); ?></td>
-		   <td><?php echo $this->sprint($yhtMatka); ?></td>
-		   <td><?php echo $this->sprint($yhtIlta); ?></td>
-		   <td><?php echo $this->sprint($yhtYo); ?></td>
-		   <td><?php echo $this->sprint($yhtSu); ?></td>
+		   <td><span class="totFoot"><?php echo $this->sprint($yhteensaToteutuneet); ?></span></td>
+		   <td><span class="matkatFoot"><?php echo $this->sprint($yhtMatka); ?></span></td>
+		   <td><span class="iltaFoot"><?php echo $this->sprint($yhtIlta); ?></span></td>
+		   <td><span class="yoFoot"><?php echo $this->sprint($yhtYo); ?></span></td>
+		   <td><span class="suFoot"><?php echo $this->sprint($yhtSu); ?></span></td>
 		   <td><?php echo $this->sprint($yhtPy); ?></td>
 		   <td><?php echo $this->sprint($yhtEl); ?></td>
+		   <td><span class="SLFoot"><?php echo $this->sprint($yhtSL); ?></span></td>
+		   <td><span class="SPLFoot"><?php echo $this->sprint($yhtSPL); ?></span></td>
+		   <td><span class="LSFoot"><?php echo $this->sprint($yhtLS); ?></span></td>
+		   <td><?php echo $this->sprint($yhtVL); ?></td>
 		  </tr>
 		</table>
 	</td></tr>
 
   </tfoot>
-
   </table>
 
    </div>

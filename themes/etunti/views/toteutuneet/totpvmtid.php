@@ -1,4 +1,5 @@
 <?php
+/*
 $did = date("Ymd",strtotime($pvm));
 //echo '<div id="'.$did.'_'.$tid.'">';
 	$laatikot = '<div class="small">';
@@ -62,13 +63,6 @@ $did = date("Ymd",strtotime($pvm));
 	   }
 	}
 
-/*
-	if( $from == 'kk' ){
-		if($tun > 0)
-		echo $this->sprint($tun)."//".$tun;
-
-	} else {
-*/
 
 		   ksort($get);
 		   foreach($get as $v){
@@ -81,17 +75,27 @@ $did = date("Ymd",strtotime($pvm));
 	$laatikot .= '&nbsp;&nbsp;<b class="link glyphicon glyphicon-plus uusirivi" for="'.$did.'_'.$tid.'"></b>';
 	$laatikot .= '</div>';
 
-	//if($from != 'kk')
-        echo $laatikot.'explode999'.$tun;
 
 
-/*
-	if( $from == 'ajax' ){
-	?>
-	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/totrivi_poista.js"></script>
-	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/toteuma.js"></script>
-	<?php
+	$yhtIlta= 0;
+	$yhtYo 	= 0;
+	$yhtSu 	= 0;
+
+	$return 	= $this->IltaYoSu($tid,$pvm);
+
+	if(isset($return[0])){
+	    $tyoIlta 	= $return[0];
 	}
+	if(isset($return[1])){
+	    $tyoYo 	= $return[1];
+	}
+	if(isset($return[2])){
+	    $tyoSu 	= $return[2];
+	}
+
+	$arr = array($laatikot,$tun,$tyoIlta,$tyoYo,$tyoSu);
+        return $arr;
+
 */
 ?>
 

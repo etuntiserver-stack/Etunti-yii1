@@ -248,19 +248,13 @@ if(!isset($_POST['tulosta']))
 	}
 	$bod .=  '</div>';
 
-/*
-	if( $from == 'ajax' )
-	{
-	$ajax = '';
-	$ajax = '<script type="text/javascript" src="'.Yii::app()->request->baseUrl.'/js/tvuoroot.js"></script>';
-	$bod .=  $ajax;
-	}
-*/
 
-	if(isset($yhteensa) and $yhteensa == true)
+
+	if(isset($yhteensa) and $yhteensa == true){
 		echo json_encode($bod.'//'.$yht);
-	else
+	} else {
 		echo json_encode($bod);
+	}
 
 
 ?>

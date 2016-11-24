@@ -1,4 +1,5 @@
 <?php
+/*
 	$getSun = 0;
 	$getTot = 0;
 	$ero = 0;
@@ -17,10 +18,6 @@
 	$getSun = $sun->l_tunnit;
 
 
-	if($getSun > 0){
-	$sun = $getSun;
-	echo Yii::t('main', 'Sun. ').sprint($sun).'<br>';
-	}
 
 
        	$criteria = new CDbCriteria();
@@ -59,6 +56,12 @@
 	$mob = Mobile::model()->find($criteria); 
 	$getTot += $mob->l_tunnit;
 
+
+	if($getSun > 0){
+	$sun = $getSun;
+	echo Yii::t('main', 'Suunn. ').sprint($sun).'<br>';
+	}
+
 	if($getTot > 0){
 	$tot = $getTot;
 	echo Yii::t('main', 'Tot. ').sprint($tot).'<br>';
@@ -74,5 +77,5 @@
 	  $ero = $getSun-$getTot;
 	  echo '<span class="text-danger">'.Yii::t('main', 'Ero aika: -').sprint($ero).'</span>'; 
 	}
-
+*/
 ?>
