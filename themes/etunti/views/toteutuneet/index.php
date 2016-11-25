@@ -554,20 +554,20 @@ function dateDiff($start, $end) {
 		 </thead>
 		  <tr>
 		   <td></td>
-		   <td><span class="suunnFoot"><?php echo $this->sprint($yhtSuunnittelutWeek); ?></span></td>
-		   <td><?php echo $this->sprint($yhteensaLuetut); ?></td>
-		   <td><span class="totFoot"><?php echo $this->sprint($yhteensaToteutuneet); ?></span></td>
-		   <td><span class="tyotunnitFoot"><?php echo $this->sprint($yhtTyotunnit); ?></span></td>
-		   <td><span class="matkatFoot"><?php echo $this->sprint($yhtMatka); ?></span></td>
-		   <td><span class="lounaatFoot"><?php echo $this->sprint($yhtLounaat); ?></span></td>
-		   <td><span class="iltaFoot"><?php echo $this->sprint($yhtIlta); ?></span></td>
-		   <td><span class="yoFoot"><?php echo $this->sprint($yhtYo); ?></span></td>
-		   <td><span class="suFoot"><?php echo $this->sprint($yhtSu); ?></span></td>
+		   <td><span class="suunnFoot"><?php echo $this->sprint($yhtSuunnittelutWeek); ?><br><?php echo $this->num($yhtSuunnittelutWeek); ?></span></td>
+		   <td><?php echo $this->sprint($yhteensaLuetut); ?><br><?php echo $this->num($yhteensaLuetut); ?></td>
+		   <td><span class="totFoot"><?php echo $this->sprint($yhteensaToteutuneet); ?><br><?php echo $this->num($yhteensaToteutuneet); ?></span></td>
+		   <td><span class="tyotunnitFoot"><?php echo $this->sprint($yhtTyotunnit); ?><br><?php echo $this->num($yhtTyotunnit); ?></span></td>
+		   <td><span class="matkatFoot"><?php echo $this->sprint($yhtMatka); ?><br><?php echo $this->num($yhtMatka); ?></span></td>
+		   <td><span class="lounaatFoot"><?php echo $this->sprint($yhtLounaat); ?><br><?php echo $this->num($yhtLounaat); ?></span></td>
+		   <td><span class="iltaFoot"><?php echo $this->sprint($yhtIlta); ?><br><?php echo $this->num($yhtIlta); ?></span></td>
+		   <td><span class="yoFoot"><?php echo $this->sprint($yhtYo); ?><br><?php echo $this->num($yhtYo); ?></span></td>
+		   <td><span class="suFoot"><?php echo $this->sprint($yhtSu); ?><br><?php echo $this->num($yhtSu); ?></span></td>
 		   <td><?php echo $this->sprint($yhtPy); ?></td>
 		   <td><?php echo $this->sprint($yhtEl); ?></td>
-		   <td><span class="SLFoot"><?php echo $this->sprint($yhtSL); ?></span></td>
-		   <td><span class="SPLFoot"><?php echo $this->sprint($yhtSPL); ?></span></td>
-		   <td><span class="LSFoot"><?php echo $this->sprint($yhtLS); ?></span></td>
+		   <td><span class="SLFoot"><?php echo $this->sprint($yhtSL); ?><br><?php echo $this->num($yhtSL); ?></span></td>
+		   <td><span class="SPLFoot"><?php echo $this->sprint($yhtSPL); ?><br><?php echo $this->num($yhtSPL); ?></span></td>
+		   <td><span class="LSFoot"><?php echo $this->sprint($yhtLS); ?><br><?php echo $this->num($yhtLS); ?></span></td>
 		   <td><?php echo $this->sprint($yhtVL); ?></td>
 		  </tr>
 		</table>
