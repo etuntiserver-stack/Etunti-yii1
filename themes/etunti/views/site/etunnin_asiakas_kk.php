@@ -88,7 +88,9 @@ echo	'<input type=hidden id=number value='.cal_days_in_month(CAL_GREGORIAN, $mon
 </div>
 <br>
 
-
+<?php
+		$tot = Yii::app()->createController('Toteutuneet');
+?>
             <div class="admin-form">
               <div class="panel heading-border">
                 <div class="panel-body bg-light">
@@ -121,18 +123,18 @@ echo	'<input type=hidden id=number value='.cal_days_in_month(CAL_GREGORIAN, $mon
      $thisDate = $year.'-'.$month.'-'.$i;
      $date = $i.'.'.$month;
 
-	$tot[$i] = $this->renderPartial('//toteutuneet/totpvmtid',array('pvm'=>$thisDate,'tid'=>$v->id,'from'=>'kk'),true);
-	$explT = explode("//",$tot[$i]);
-	if(isset($explT[1]))
-	$yht += $explT[1];
+	$tot[$i] = $tot[0]->TotPvmTid($date,$v->id);
+	$toteutuneet = $tot[$i]['toteutuneetTunnit'];
+
+	$yht += $toteutuneet;
 
 	$cl = "";
-	if(isset($explT[1]) and (int)$explT[1] < 18000)
+	if($toteutuneet < 18000)
 	$cl = "btn btn-xs btn-warning";
-	elseif(isset($explT[1]) and (int)$explT[1] > 28800)
+	elseif($toteutuneet > 28800)
 	$cl = "btn btn-xs btn-danger";
 
-	echo '<TD class="text-small" style="font-size:90%"><span class="'.$cl.'">'.$explT[0].'</span></TD>';
+	echo '<TD class="text-small" style="font-size:90%"><span class="'.$cl.'">'.$this->sprint($toteutuneet).'</span></TD>';
 
    }
   echo '<TD class="text-small"><b>'.$this->sprint($yht).'</b></TD>';

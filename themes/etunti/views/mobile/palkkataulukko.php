@@ -216,11 +216,11 @@ $this->breadcrumbs=array(
   {
 	$tids[] = $data->id;
 	$tp = $this->Tp($data->id,$from,$to);
-  	$sl = $this->TidfromtoSL($from,$to,$data->id);
+  	$sl = $this->TidfromtoSairaus($from,$to,$data->id,'SL');
 	$slYht += $sl;
-  	$ls = $this->TidfromtoLS($from,$to,$data->id);
+  	$ls = $this->TidfromtoSairaus($from,$to,$data->id,'LS');
 	$lsYht += $ls;
-  	$spl = $this->TidfromtoSPL($from,$to,$data->id);
+  	$spl = $this->TidfromtoSairaus($from,$to,$data->id,'SPL');
 	$splYht += $spl;
   	$vl = $this->TidfromtoVuosiloma($from,$to,$data->id);
 	$vlYht += $vl;
