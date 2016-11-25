@@ -293,7 +293,7 @@ function dateDiff($start, $end) {
 
     echo '<td id="'.$did.'_'.$explTekija[0].'">';
 
-	   $totpvmtid = $this->TotPvmTid($date,$explTekija[0]);
+	   $totpvmtid = $this->TotPvmTid($date,$explTekija[0],$mobile);
 	   echo $totpvmtid['laatikot'];
 
     echo '</td>';

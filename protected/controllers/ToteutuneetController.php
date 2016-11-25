@@ -197,7 +197,7 @@ class ToteutuneetController extends Controller
 		echo json_encode($arr);
 	}
 
-	public function TotPvmTid($pvm,$tid)
+	public function TotPvmTid($pvm,$tid,$mobile)
 	{
 	
 		$did = date("Ymd",strtotime($pvm));
@@ -275,7 +275,7 @@ class ToteutuneetController extends Controller
 		$laatikot .= '&nbsp;&nbsp;<b class="link glyphicon glyphicon-plus uusirivi" for="'.$did.'_'.$tid.'"></b>';
 		$laatikot .= '</div>';
 	
-		$mobile = Yii::app()->createController('Mobile');
+		//$mobile = Yii::app()->createController('Mobile');
 
 		// <-- Tyotunnit	
 		$tyotunnit = $mobile[0]->TidfromtoStatus($pvm,$pvm,$tid,3);
