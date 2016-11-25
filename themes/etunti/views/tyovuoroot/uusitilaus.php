@@ -53,16 +53,16 @@
   </div>
   <div class="col-sm-3">
     <div class="section">
-		<label><?php echo Yii::t('main', 'Asiakkaan osoite'); ?></label>
-		<input type="text" name="osoite" class="form-control">
+		<label><?php echo Yii::t('main', 'Asiakkaan osoite'); ?> <span class="required">*</span></label>
+		<input type="text" name="osoite" id="Asiakas_osoite" class="form-control">
     </div>
     <div class="section">
-		<label><?php echo Yii::t('main', 'Asiakkaan postinumero'); ?></label>
-		<input type="text" name="postinumero" class="form-control">
+		<label><?php echo Yii::t('main', 'Asiakkaan postinumero'); ?> <span class="required">*</span></label>
+		<input type="text" name="postinumero" id="Asiakas_postinumero" class="form-control">
     </div>
     <div class="section">
-		<label><?php echo Yii::t('main', 'Asiakkaan postitoimipaikka'); ?></label>
-		<input type="text" name="kaupunki" class="form-control">
+		<label><?php echo Yii::t('main', 'Asiakkaan postitoimipaikka'); ?> <span class="required">*</span></label>
+		<input type="text" name="kaupunki" id="Asiakas_kaupunki" class="form-control">
     </div>
   </div>
   <div class="col-sm-3">
@@ -226,6 +226,23 @@ $(document).ready(function(){
   });
 
 	$('#submitButton').click(function(){
+
+		if( $('#Asiakas_osoite').val() === '' )
+		{
+			$('#Asiakas_osoite').css({"border":"2px red solid"}).focus();
+			return false;
+		}
+		if( $('#Asiakas_postinumero').val() === '' )
+		{
+			$('#Asiakas_postinumero').css({"border":"2px red solid"}).focus();
+			return false;
+		}
+		if( $('#Asiakas_kaupunki').val() === '' )
+		{
+			$('#Asiakas_kaupunki').css({"border":"2px red solid"}).focus();
+			return false;
+		}
+
 		var r = confirm('Olet myös luomassa uuden asiakkaan ja kohteen.\n Haluatko jatkaa?');
 		if(r)
 		$('#tyovuoroot-form').submit();
