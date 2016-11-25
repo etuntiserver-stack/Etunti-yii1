@@ -89,7 +89,7 @@ echo	'<input type=hidden id=number value='.cal_days_in_month(CAL_GREGORIAN, $mon
 <br>
 
 <?php
-		$tot = Yii::app()->createController('Toteutuneet');
+		$mob = Yii::app()->createController('Mobile');
 ?>
             <div class="admin-form">
               <div class="panel heading-border">
@@ -123,8 +123,10 @@ echo	'<input type=hidden id=number value='.cal_days_in_month(CAL_GREGORIAN, $mon
      $thisDate = $year.'-'.$month.'-'.$i;
      $date = $i.'.'.$month;
 
-	$tot[$i] = $tot[0]->TotPvmTid($date,$v->id);
-	$toteutuneet = $tot[$i]['toteutuneetTunnit'];
+
+	$toteutuneet = 0;
+	$tot[$i] = $mob[0]->TidfromtoStatus($thisDate,$thisDate,$v->id,3);
+	$toteutuneet = $tot[$i];
 
 	$yht += $toteutuneet;
 
