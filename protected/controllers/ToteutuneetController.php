@@ -193,7 +193,8 @@ class ToteutuneetController extends Controller
 
 	public function actionTotpvmtid($pvm,$tid)
 	{
-		$arr = $this->TotPvmTid($pvm,$tid);
+		$mobile = Yii::app()->createController('Mobile');
+		$arr = $this->TotPvmTid($pvm,$tid,$mobile);
 		echo json_encode($arr);
 	}
 
