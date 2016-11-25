@@ -57,7 +57,7 @@
 
   if(isset($muutos) and $muutos == true  and !isset($_POST['tulosta'])){
     $mod = 'update';
-    $ap = ' <i class="link text-danger poistaTot" rivi="'.$rivi.'" for="'.$did.'_'.$tid.'">AP</i>';
+    $ap = ' <i class="link text-danger fa fa-refresh poistaTot" rivi="'.$rivi.'" for="'.$did.'_'.$tid.'" data-toggle="tooltip" title="'.Yii::t('main', 'Palauta alkuperäinen').'" aria-hidden="true"></i>';
   } else {
     $mod = 'create';
     $ap = '';
@@ -81,13 +81,13 @@
 
 
 	   echo '
-	   <div id="'.$rivi.'_'.$did.'_'.$tid.'" class="fullRivi form-inline">';
-	   echo '&nbsp;
+	   <div id="'.$rivi.'_'.$did.'_'.$tid.'" class="fullRivi form-inline">
+	   <div class="pull-right">'.$ap.'</div>';
+	   echo '
 		<span class="form-group">
 			<input type="checkbox" class="chckbxHyvaksynta" id="hyv_'.$rivi.'" '.$chk[$rivi].' kuka="'.Yii::app()->user->username.'///'.date('d.m.Y').'">&nbsp; 
 		</span><span class="form-group">
-			'.$isEripaivat.'<i class="form-group link totRivi '.$admin.'" mod="'.$mod.'" id="tot_'.$rivi.'">'.$al.$spl.' '.$kohde.'</i>
-			'.$ap.'
+			'.$isEripaivat.'<i class="form-group link totRivi '.$admin.'" mod="'.$mod.'" id="tot_'.$rivi.'">'.$al.$spl.'<br>'.$kohde.'</i>
 		</span>
 		'.$asiakas_hyvaksy.'
 		'.$riviTietoja.'

@@ -1107,6 +1107,60 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 	*/
 	}
 
+	public function TidfromtoStatus($from,$to,$tid,$status)
+	{
+		$from = date("Y-m-d", strtotime($from));
+		$to = date("Y-m-d", strtotime($to));
+
+		$result = '';
+
+       		$criteria = new CDbCriteria();
+        	$criteria->select = "
+			SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
+			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit
+		";
+
+	        $criteria->condition = " 
+			aloitan!='' AND loppui!=''
+			AND tid='".$tid."'
+			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
+			BETWEEN '".$from."' AND '".$to."'
+			AND status='".$status."'
+			AND id NOT IN (SELECT kid FROM sivexkuitti_repaired)
+
+		";
+
+
+		$lu = Mobile::model()->find($criteria);
+
+
+       		$criteria = new CDbCriteria();
+        	$criteria->select = "
+			SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
+			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit
+		";
+
+	        $criteria->condition = " 
+			aloitan!='' AND loppui!=''
+			AND tid='".$tid."'
+			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
+			BETWEEN '".$from."' AND '".$to."'
+			AND status='".$status."'
+		";
+
+
+		$tot = Toteutuneet::model()->find($criteria);
+
+		if(isset($lu->l_tunnit))
+		$result = $lu->l_tunnit;
+
+		if(isset($tot->l_tunnit))
+		$result = $result+$tot->l_tunnit;
+
+
+		return $result;
+	}
+
 
 	public function TidfromtoSairaus($from,$to,$tid,$sairaus)
 	{
@@ -1124,13 +1178,11 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
        		$criteria = new CDbCriteria();
         	$criteria->select = "
 			SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
-
 			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit
 		";
 
 	        $criteria->condition = " 
 			aloitan!='' AND loppui!=''
-
 			AND tid='".$tid."'
 			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
 			BETWEEN '".$from."' AND '".$to."'
@@ -1146,13 +1198,11 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
        		$criteria = new CDbCriteria();
         	$criteria->select = "
 			SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
-
 			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit
 		";
 
 	        $criteria->condition = " 
 			aloitan!='' AND loppui!=''
-
 			AND tid='".$tid."'
 			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
 			BETWEEN '".$from."' AND '".$to."'
@@ -2569,6 +2619,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			tid = '".$tid."' and aloitan !='' and loppui !='' 
 			AND status = '10'
 			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$from."' AND '".$to."'
+
 		";
 
 

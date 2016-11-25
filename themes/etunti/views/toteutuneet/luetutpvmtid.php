@@ -38,7 +38,7 @@
 
 	   $luetutpvmtid .= '
 	   <div id="'.$tvVal->id.'_'.$did.'_'.$tid.'" class="fullRivi">';
-	   $luetutpvmtid .= '&nbsp;<span class="" id="tv_'.$tvVal->id.'">'.$al.' '.$tvVal->kohde_kannasta.'</span><br>
+	   $luetutpvmtid .= '&nbsp;<span class="" id="tv_'.$tvVal->id.'">'.$al.'<br>'.$tvVal->kohde_kannasta.'</span><br>
 	   </div>';
 	}
 	$luetutpvmtid .= '</div>';

@@ -390,7 +390,9 @@ $(document).delegate(".poistaRivit","click",function(){
 	 	$('#'+thisDID).html(data['laatikot']);
 	 	$('#yhteensaPvm_'+thisDID).find('.pvmTot').attr('total', data['toteutuneetTunnit']).html(sprint(toteutuneetTunnit));
 	 	$('#yhteensaPvm_'+thisDID).find('.pvmEro').attr('total', data['toteutuneetTunnit']).html(sprint(ero));
+	  	$('#yhteensaPvmAllaTaulu_'+thisDID).find('.allaTyotunnit').attr('total', data['tyotunnit']).html(sprint(data['tyotunnit']));
 	  	$('#yhteensaPvmAllaTaulu_'+thisDID).find('.allaMatkat').attr('total', data['matkat']).html(sprint(data['matkat']));
+	  	$('#yhteensaPvmAllaTaulu_'+thisDID).find('.allaLounaat').attr('total', data['lounaat']).html(sprint(data['lounaat']));
 	  	$('#yhteensaPvmAllaTaulu_'+thisDID).find('.allaIlta').attr('total', data['ilta']).html(sprint(data['ilta']));
 	  	$('#yhteensaPvmAllaTaulu_'+thisDID).find('.allaYo').attr('total', data['yo']).html(sprint(data['yo']));
 	  	$('#yhteensaPvmAllaTaulu_'+thisDID).find('.allaSu').attr('total', data['su']).html(sprint(data['su']));
@@ -402,7 +404,9 @@ $(document).delegate(".poistaRivit","click",function(){
 		// <-- Week
   		var suunnWeek 	= 0;
   		var totWeek 	= 0;
+  		var tyotunnitWeek = 0;
   		var matkatWeek 	= 0;
+  		var lounaatWeek = 0;
 		var iltaWeek	= 0;
 		var yoWeek	= 0;
 		var suWeek	= 0;
@@ -416,7 +420,9 @@ $(document).delegate(".poistaRivit","click",function(){
 		});
 
   		$( ".yhteensaPvmAllaTaulu_"+data['week'] ).each(function( i ) {
+			tyotunnitWeek += parseFloat($(this).find('.allaTyotunnit').attr('total'));
 			matkatWeek += parseFloat($(this).find('.allaMatkat').attr('total'));
+			lounaatWeek += parseFloat($(this).find('.allaLounaat').attr('total'));
 			iltaWeek += parseFloat($(this).find('.allaIlta').attr('total'));
 			yoWeek += parseFloat($(this).find('.allaYo').attr('total'));
 			suWeek += parseFloat($(this).find('.allaSu').attr('total'));
@@ -429,7 +435,9 @@ $(document).delegate(".poistaRivit","click",function(){
 
 	  	$('.suunnWeek_'+data['week']).html(sprint(suunnWeek)+'<br>'+num(suunnWeek));
 	  	$('.totWeek_'+data['week']).html(sprint(totWeek)+'<br>'+num(totWeek));
+	  	$('.tyotunnitWeek_'+data['week']).html(sprint(tyotunnitWeek)+'<br>'+num(tyotunnitWeek));
 	  	$('.matkatWeek_'+data['week']).html(sprint(matkatWeek)+'<br>'+num(matkatWeek));
+	  	$('.lounaatWeek_'+data['week']).html(sprint(lounaatWeek)+'<br>'+num(lounaatWeek));
 
 	  	$('.iltaWeek_'+data['week']).html(sprint(iltaWeek)+'<br>'+num(iltaWeek));
 	  	$('.yoWeek_'+data['week']).html(sprint(yoWeek)+'<br>'+num(yoWeek));
@@ -445,7 +453,9 @@ $(document).delegate(".poistaRivit","click",function(){
 		// <-- Footer
   		var suunnFoot 	= 0;
   		var totFoot 	= 0;
+  		var tyotunnitFoot = 0;
   		var matkatFoot 	= 0;
+  		var lounaatFoot = 0;
 		var iltaFoot	= 0;
 		var yoFoot	= 0;
 		var suFoot	= 0;
@@ -460,7 +470,9 @@ $(document).delegate(".poistaRivit","click",function(){
 		});
 
   		$( ".forFooterAlla" ).each(function( i ) {
+			tyotunnitFoot += parseFloat($(this).find('.allaTyotunnit').attr('total'));
 			matkatFoot += parseFloat($(this).find('.allaMatkat').attr('total'));
+			lounaatFoot += parseFloat($(this).find('.allaLounaat').attr('total'));
 			iltaFoot += parseFloat($(this).find('.allaIlta').attr('total'));
 			yoFoot += parseFloat($(this).find('.allaYo').attr('total'));
 			suFoot += parseFloat($(this).find('.allaSu').attr('total'));
@@ -472,7 +484,9 @@ $(document).delegate(".poistaRivit","click",function(){
 
 	  	$('#yhteensaFooterTaulu').find('.suunnFoot').html(sprint(suunnFoot)+'<br>'+num(suunnFoot));
 	  	$('#yhteensaFooterTaulu').find('.totFoot').html(sprint(totFoot)+'<br>'+num(totFoot));
+	  	$('#yhteensaFooterTaulu').find('.tyotunnitFoot').html(sprint(tyotunnitFoot)+'<br>'+num(tyotunnitFoot));
 	  	$('#yhteensaFooterTaulu').find('.matkatFoot').html(sprint(matkatFoot)+'<br>'+num(matkatFoot));
+	  	$('#yhteensaFooterTaulu').find('.lounaatFoot').html(sprint(lounaatFoot)+'<br>'+num(lounaatFoot));
 
 	  	$('#yhteensaFooterTaulu').find('.iltaFoot').html(sprint(iltaFoot)+'<br>'+num(iltaFoot));
 	  	$('#yhteensaFooterTaulu').find('.yoFoot').html(sprint(yoFoot)+'<br>'+num(yoFoot));

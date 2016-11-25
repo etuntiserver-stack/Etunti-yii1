@@ -275,12 +275,23 @@ class ToteutuneetController extends Controller
 		$laatikot .= '&nbsp;&nbsp;<b class="link glyphicon glyphicon-plus uusirivi" for="'.$did.'_'.$tid.'"></b>';
 		$laatikot .= '</div>';
 	
-	
+		$mobile = Yii::app()->createController('Mobile');
+
+		// <-- Tyotunnit	
+		$tyotunnit = $mobile[0]->TidfromtoStatus($pvm,$pvm,$tid,3);
+		//     Tyotunnit -->
+
+		// <-- Lounaat	
+		$lounaat = $mobile[0]->TidfromtoStatus($pvm,$pvm,$tid,10);
+		//     Lounaat -->
+
+		// <-- Matkat	
 		$matkat = $this->renderPartial('//mobile/tidfromtomatkat',array(
 		'from'=>date("Y-m-d",strtotime($pvm)),
 		'to'=>date("Y-m-d",strtotime($pvm)),
 		'tid'=>$tid
 		),true);
+		// <-- Matkat
 
 		// <-- Ilta, Yo, Sunnuntai
 		$yhtIlta= 0;
@@ -301,7 +312,6 @@ class ToteutuneetController extends Controller
 		//     Ilta, Yo, Sunnuntai -->
 
 		// <-- SPL, SL, LS
-		$mobile = Yii::app()->createController('Mobile');
 		$spl 	= $mobile[0]->TidfromtoSairaus($pvm,$pvm,$tid,'SPL'); // Palkaton
 		$sl 	= $mobile[0]->TidfromtoSairaus($pvm,$pvm,$tid,'SL'); // Palkallinen
 		$ls 	= $mobile[0]->TidfromtoSairaus($pvm,$pvm,$tid,'LS'); // Lapsen sairaus
@@ -317,7 +327,9 @@ class ToteutuneetController extends Controller
 			'spl'=>(int)$spl,
 			'sl'=>(int)$sl,
 			'ls'=>(int)$ls,
+			'tyotunnit'=>$tyotunnit,
 			'matkat'=>$matkat,
+			'lounaat'=>$lounaat,
 			'week'=>date("W", strtotime($pvm)),
 		);
 	        return $arr;
@@ -564,6 +576,7 @@ class ToteutuneetController extends Controller
 		$to = '';
 		if(isset(Yii::app()->session['from']))
 		$from = Yii::app()->session['from'];
+
 
 		if(isset(Yii::app()->session['to']))
 		$to = Yii::app()->session['to'];
