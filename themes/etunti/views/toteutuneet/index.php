@@ -25,6 +25,7 @@ $this->breadcrumbs=array(
 .table tbody>tr>td{
     	vertical-align: top;
 }
+table { width: 100%; }
 </style>
 
         <!-- begin: .tray-center -->
@@ -32,6 +33,12 @@ $this->breadcrumbs=array(
 
 
    <!-- tulostus -->
+
+   <div class="pull-right">
+     <button class="btn btn-primary btn-sm myBgColors tuntienHyvaksyntaTaulu"><?php echo Yii::t('main', 'Tulosta'); ?></button>
+   </div>
+<?php
+/*
    <div class="pull-right">
      <form action="#" target="_blank" method="POST">
       <input type="hidden" name="from" value="<?php echo $from; ?>">
@@ -39,6 +46,8 @@ $this->breadcrumbs=array(
       <input type="submit" name="tulosta" class="btn btn-primary btn-sm myBgColors" value="PDF">
      </form>
    </div>
+*/
+?>
    <!-- tulostus -->
 
               <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-time"></i> <?php echo Yii::t('main', 'TUNTIEN HYVÄKSYNTÄ'); ?> 
@@ -177,7 +186,7 @@ function dateDiff($start, $end) {
   <div class="panel heading-border">
    <div class="panel-body">
 
-  <table class="table" cellspacing="0" cellpadding="0">
+  <table class="table table-bordered" cellspacing="0" cellpadding="0" id="tuntienHyvaksyntaTaulu">
   <thead class="myBgColors">
   <tr>
   <th><?php echo Yii::t('main', 'Suunnitellut'); ?></th>

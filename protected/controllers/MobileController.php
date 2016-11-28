@@ -1112,7 +1112,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		$from = date("Y-m-d", strtotime($from));
 		$to = date("Y-m-d", strtotime($to));
 
-		$result = '';
+		$result = 0;
 
        		$criteria = new CDbCriteria();
         	$criteria->select = "

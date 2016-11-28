@@ -2,6 +2,17 @@ $(document).ready(function(){
 
 
 
+$(document).delegate(".tuntienHyvaksyntaTaulu","click",function(){
+	
+	$('#tuntienHyvaksyntaTaulu td,#tuntienHyvaksyntaTaulu th').css({"border":"1px #333 solid", "padding":"3px 5px"});
+
+	var divToPrint = document.getElementById('tuntienHyvaksyntaTaulu');
+	newWin = window.open("");
+	newWin.document.write(divToPrint.outerHTML);
+	newWin.print();
+	newWin.close();
+});
+
 
 $(document).delegate(".uusirivi","click",function(){
 

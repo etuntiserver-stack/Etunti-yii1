@@ -74,7 +74,7 @@ class ToteutuneetController extends Controller
         }
 
 	protected function sprint($val){
-	    if($val > 0)
+	    //if($val > 0)
 		return sprintf('%02d:%02d', $val/3600, ($val % 3600)/60);
 	}
 
@@ -618,7 +618,7 @@ class ToteutuneetController extends Controller
 
 	          $html2pdf = Yii::app()->ePdf->HTML2PDF('L', 'A4', 'en');
 		  $html2pdf->setDefaultFont('Arial');
-	          $html2pdf->WriteHTML($this->renderPartial('tulosta',array('from'=>$from,'to'=>$to,'tekija'=>$tekija),true));
+	          $html2pdf->WriteHTML($this->renderPartial('index',array('from'=>$from,'to'=>$to,'tekija'=>$tekija,'tulosta'=>true),true));
 	          $html2pdf->Output();
 
 		  //$this->renderPartial('tulosta',array('from'=>$from,'to'=>$to, 'tekija'=>$tekija));//
