@@ -25,6 +25,11 @@ $this->breadcrumbs=array(
 
    <!-- tulostus -->
    <div class="pull-right">
+     <button class="btn btn-primary btn-sm myBgColors palkkatauluTaulu"><?php echo Yii::t('main', 'Tulosta'); ?></button>
+   </div>
+<?php
+/*
+   <div class="pull-right">
     <div class="form-inline">
      <form action="#" target="_blank" class="form-group" method="POST">
       <input type="hidden" name="from" value="<?php echo $from; ?>">
@@ -34,6 +39,8 @@ $this->breadcrumbs=array(
      <button class="btn btn-primary btn-sm btn-group myBgColors" data-toggle="collapse"  data-target="#haku"><?php echo Yii::t('main', 'Ekstrat'); ?> <b class="caret"></b></button>
     </div>
    </div>
+*/
+?>
    <!-- tulostus -->
 	</h2>
 
@@ -161,7 +168,7 @@ $this->breadcrumbs=array(
 
 <div class="table-responsive">
 
-  <table class="table table-bordered small">
+  <table class="table table-bordered small" id="palkkatauluTaulu">
   <thead class="myBgColors">
   <tr>
   <th><?php echo Yii::t('main', 'Työntekijä'); ?></th>
@@ -307,6 +314,7 @@ $this->breadcrumbs=array(
 	<td><?php echo $splYht; ?></td>
 	<td><?php echo $this->num($lsYht); ?></td>
 	<td><?php echo $vlYht; ?></td>
+	<td><?php echo $vklYht; ?></td>
 	<td></td>
 	<td></td>
 	<td></td>
@@ -375,6 +383,20 @@ $('#tyontekijat').multiselect({
 	allSelectedText: '<?php echo Yii::t("main", "Työntekijät"); ?>',
 	nSelectedText: '<?php echo Yii::t("main", "valittu"); ?>',
 });
+
+
+// <-- Tulostus
+$(document).delegate(".palkkatauluTaulu","click",function(){
+	
+	$('#palkkatauluTaulu td,#palkkatauluTaulu th').css({"border":"1px #333 solid", "padding":"3px 5px"});
+
+	var divToPrint = document.getElementById('palkkatauluTaulu');
+	newWin = window.open("");
+	newWin.document.write(divToPrint.outerHTML);
+	newWin.print();
+	newWin.close();
+});
+//    Tulostus -->
 
 
 });

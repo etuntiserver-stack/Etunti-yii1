@@ -33,7 +33,6 @@ table { width: 100%; }
 
 
    <!-- tulostus -->
-
    <div class="pull-right">
      <button class="btn btn-primary btn-sm myBgColors tuntienHyvaksyntaTaulu"><?php echo Yii::t('main', 'Tulosta'); ?></button>
    </div>
