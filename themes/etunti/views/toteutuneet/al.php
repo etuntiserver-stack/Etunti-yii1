@@ -75,7 +75,7 @@
 	    $al = '';
 
 	   if( date("d",strtotime($aloitan)) != date("d",strtotime($loppui)) ) 
-	    $isEripaivat = '<i class="fa fa-retweet text-danger" aria-hidden="true" style="font-size: 130%" title="'.Yii::t('main', 'Päivämäärät  eivät täsmää').'"></i> '; 
+	    $isEripaivat = '<i class="fa fa-retweet text-danger" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" style="font-size: 130%" title="'.Yii::t('main', 'Päivämäärät  eivät täsmää').'"></i> '; 
 	   else 
 	    $isEripaivat = '';
 
@@ -85,7 +85,7 @@
 	   <div class="pull-right">'.$ap.'</div>';
 	   echo '
 		<span class="form-group">
-			<input type="checkbox" class="chckbxHyvaksynta" id="hyv_'.$rivi.'" '.$chk[$rivi].' kuka="'.Yii::app()->user->username.'///'.date('d.m.Y').'">&nbsp; 
+			<input type="checkbox" class="chckbxHyvaksynta" id="hyv_'.$rivi.'" '.$chk[$rivi].' kuka="'.Yii::app()->user->username.'///'.date('d.m.Y').'" data-toggle="tooltip" data-placement="bottom" title="'.Yii::t('main', 'Hyväksy').'">&nbsp; 
 		</span><span class="form-group">
 			'.$isEripaivat.'<i class="form-group link totRivi '.$admin.'" mod="'.$mod.'" id="tot_'.$rivi.'">'.$al.$spl.'<br>'.$kohde.'</i>
 		</span>

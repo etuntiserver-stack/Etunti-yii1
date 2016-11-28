@@ -229,16 +229,19 @@ function dateDiff($start, $end) {
   $spl 		= 0;
   $ls 		= 0;
   $vl 		= 0;
+  $vkl 		= 0;
 
   $yhtSPLWeek	= 0;
   $yhtSLWeek	= 0;
   $yhtLSWeek	= 0;
   $yhtVLWeek	= 0;
+  $yhtVKLWeek	= 0;
 
   $yhtSPL	= 0;
   $yhtSL	= 0;
   $yhtLS	= 0;
   $yhtVL	= 0;
+  $yhtVKL	= 0;
 
 
   for ($i = 0; $i <= $dateDiff; $i++) 
@@ -363,13 +366,28 @@ function dateDiff($start, $end) {
     $spl 	= $totpvmtid['spl']; // Palkaton
     $sl 	= $totpvmtid['sl']; // Palkallinen
     $ls 	= $totpvmtid['ls']; // Lapsen sairaus
-    $vl 	= $mobile[0]->TidfromtoVuosiloma($date,$date,$explTekija[0],'VL');
 
+    $mVuosilomaVL = $mobile[0]->TidPvmVuosiloma($date,$explTekija[0],'VL');
+    $mVuosilomaVKL = $mobile[0]->TidPvmVuosiloma($date,$explTekija[0],'VKL');
+    $vlChecked	= '';
+    $vklChecked	= '';
+    if(isset($mVuosilomaVL['count']))
+    {
+    	$vl = $mVuosilomaVL['count'];
+    	if(isset($mVuosilomaVL['hyvaksytty']) and $mVuosilomaVL['hyvaksytty'] == 1) $vlChecked = 'checked';
+    }
+
+    if(isset($mVuosilomaVKL['count']))
+    {
+    	$vkl = $mVuosilomaVKL['count'];
+    	if(isset($mVuosilomaVKL['hyvaksytty']) and $mVuosilomaVKL['hyvaksytty'] == 1) $vklChecked = 'checked';
+    }
 
     $yhtSPL 	+= $spl;
     $yhtSL 	+= $sl;
     $yhtLS 	+= $ls;
     $yhtVL 	+= $vl;
+    $yhtVKL 	+= $vkl;
 
     echo '
 	<tr><td colspan="4">
@@ -388,6 +406,7 @@ function dateDiff($start, $end) {
 		   <th>'.Yii::t('main', 'SPL').'</th>
 		   <th>'.Yii::t('main', 'LS').'</th>
 		   <th>'.Yii::t('main', 'VL').'</th>
+		   <th>'.Yii::t('main', 'VKL').'</th>
 		  </tr>
 		 </thead>
 		  <tr>
@@ -402,7 +421,20 @@ function dateDiff($start, $end) {
 		   <td><span class="allaSL" total="'.(int)$sl.'">'.$this->sprint($sl).'</span></td>
 		   <td><span class="allaSPL" total="'.(int)$spl.'">'.$this->sprint($spl).'</span></td>
 		   <td><span class="allaLS" total="'.(int)$ls.'">'.$this->sprint($ls).'</span></td>
-		   <td>'.$vl.'</td>
+		   <td>';
+
+		   if($vl > 0)
+    		   echo '<input type="checkbox" class="vuosilomaHyvaksynta" tila="VL" pvm="'.$date.'" tid="'.$explTekija[0].'" data-toggle="tooltip" data-placement="bottom" title="'.Yii::t('main', 'Hyväksy').'" '.$vlChecked.'> '.$vl;
+
+    echo '
+		   </td><td>';
+
+		   if($vkl > 0)
+		   echo '<input type="checkbox" class="vuosilomaHyvaksynta" tila="VKL" pvm="'.$date.'" tid="'.$explTekija[0].'" data-toggle="tooltip" data-placement="bottom" title="'.Yii::t('main', 'Hyväksy').'" '.$vklChecked.'> '.$vkl;
+
+
+    echo '
+		   </td>
 		  </tr>
 		</table>
 	</td></tr>';
@@ -430,6 +462,7 @@ function dateDiff($start, $end) {
     $yhtSPLWeek		+= $spl;
     $yhtLSWeek 		+= $ls;
     $yhtVLWeek 		+= $vl;
+    $yhtVKLWeek 	+= $vkl;
 
 
 
@@ -479,6 +512,7 @@ function dateDiff($start, $end) {
 		   <th>'.Yii::t('main', 'SPL').'</th>
 		   <th>'.Yii::t('main', 'LS').'</th>
 		   <th>'.Yii::t('main', 'VL').'</th>
+		   <th>'.Yii::t('main', 'VKL').'</th>
 		  </tr>
 		 </thead>
 		  <tr>
@@ -498,6 +532,7 @@ function dateDiff($start, $end) {
 		   <td class="SPLWeek_'.date("W",strtotime($date)).'">'.$this->sprint($yhtSPLWeek).'<br>'.$this->num($yhtSPLWeek).'</td>
 		   <td class="LSWeek_'.date("W",strtotime($date)).'">'.$this->sprint($yhtLSWeek).'<br>'.$this->num($yhtLSWeek).'</td>
 		   <td>'.$yhtVLWeek.'</td>
+		   <td>'.$yhtVKLWeek.'</td>
 		  </tr>
 		</table>
 	</td></tr>';
@@ -518,6 +553,7 @@ function dateDiff($start, $end) {
 		$yhtSPLWeek	= 0;
 		$yhtLSWeek 	= 0;
 		$yhtVLWeek 	= 0;
+		$yhtVKLWeek 	= 0;
 
 	    }
 
@@ -550,6 +586,7 @@ function dateDiff($start, $end) {
 		   <th><?php echo Yii::t('main', 'SPL'); ?></th>
 		   <th><?php echo Yii::t('main', 'LS'); ?></th>
 		   <th><?php echo Yii::t('main', 'VL'); ?></th>
+		   <th><?php echo Yii::t('main', 'VKL'); ?></th>
 		  </tr>
 		 </thead>
 		  <tr>
@@ -568,7 +605,8 @@ function dateDiff($start, $end) {
 		   <td><span class="SLFoot"><?php echo $this->sprint($yhtSL); ?><br><?php echo $this->num($yhtSL); ?></span></td>
 		   <td><span class="SPLFoot"><?php echo $this->sprint($yhtSPL); ?><br><?php echo $this->num($yhtSPL); ?></span></td>
 		   <td><span class="LSFoot"><?php echo $this->sprint($yhtLS); ?><br><?php echo $this->num($yhtLS); ?></span></td>
-		   <td><?php echo $this->sprint($yhtVL); ?></td>
+		   <td><?php echo $yhtVL; ?></td>
+		   <td><?php echo $yhtVKL; ?></td>
 		  </tr>
 		</table>
 	</td></tr>

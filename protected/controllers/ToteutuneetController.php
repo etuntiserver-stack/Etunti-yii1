@@ -29,7 +29,7 @@ class ToteutuneetController extends Controller
 		return array(
 
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index', 'view','luetutpvmtid', 'totpvmtid','al', 'yhteensapvm', 'deletebyajax', 'kk','hyvaksy', 'poista_luetut_toteutuneet'),
+				'actions'=>array('admin','delete','create','update','index', 'view','luetutpvmtid', 'totpvmtid','al', 'yhteensapvm', 'deletebyajax', 'kk','hyvaksy', 'poista_luetut_toteutuneet', 'vuosiloma_hyvaksy'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -125,6 +125,37 @@ class ToteutuneetController extends Controller
 		}
 
 		exit;
+	}
+
+
+	public function actionVuosiloma_hyvaksy()
+	{
+	
+		$pvm 	= date("Y-m-d", strtotime($_POST['pvm']));
+		$tid 	= $_POST['tid'];
+		$tila 	= $_POST['tila'];
+
+		//echo $pvm.' '.$tid.' '.$tila;
+
+	       	$criteria = new CDbCriteria();
+		$criteria->condition = " 
+			DATE(pvm)='".$pvm."' AND tid='".(int)$tid."' 
+			AND status LIKE '%".$tila."//%' 
+		";
+		$vl = Vuosilomat::model()->find($criteria);
+
+		if(isset($vl->id) and $_POST['hyvaksy'] == 'kylla')
+		{
+			Vuosilomat::model()->updatebypk($vl->id,array('hyvaksytty'=>1));
+			echo 'kylla';
+		}
+
+		if(isset($vl->id) and $_POST['hyvaksy'] == 'ei')
+		{
+			Vuosilomat::model()->updatebypk($vl->id,array('hyvaksytty'=>0));
+			echo 'ei';
+		}
+
 	}
 
 

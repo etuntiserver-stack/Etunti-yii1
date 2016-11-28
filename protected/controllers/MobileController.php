@@ -1382,44 +1382,46 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 	}
 */
 
-	protected function TidfromtoVuosiloma($from,$to,$tid,$tila)
+	protected function TidfromtoVuosilomaPalkkatauluko($from,$to,$tid,$tila)
 	{
 
-		$from = date("Y-m-d", strtotime($from));
-		$to = date("Y-m-d", strtotime($to));
+		$from 	= date("Y-m-d", strtotime($from));
+		$to 	= date("Y-m-d", strtotime($to));
 
 		$result = 0;
-	/*
-       		$criteria = new CDbCriteria();
-		$criteria->group = " DATE(DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d')) ";
-
-	        $criteria->condition = "
-			DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') 
-			BETWEEN '".$from."' AND '".$to."' 
-			AND tid='".$tid."'
-			AND tyoajanlaatu LIKE '%(VL)%'
-		";
-
-		$tv = Tyovuoroot::model()->findAll($criteria);
-
-		if(isset($tv[0]))
-		{
-		   foreach($tv as $t)
-			$result++;
-		}
-	*/
-
        		$criteria = new CDbCriteria();
 	        $criteria->condition = "
 			DATE(pvm) 
 			BETWEEN '".$from."' AND '".$to."' 
 			AND tid='".$tid."'
 			AND status LIKE '%".$tila."//%'
+			AND hyvaksytty=1
 		";
 
 		$tv = Vuosilomat::model()->findAll($criteria);
 
 		return count($tv);
+	}
+
+	protected function TidPvmVuosiloma($pvm,$tid,$tila)
+	{
+
+		$pvm 	= date("Y-m-d", strtotime($pvm));
+
+		$result = 0;
+       		$criteria = new CDbCriteria();
+	        $criteria->condition = "
+			DATE(pvm) = '".$pvm."' 
+			AND tid='".$tid."'
+			AND status LIKE '%".$tila."//%'
+		";
+		$vl = Vuosilomat::model()->find($criteria);
+
+		$arr = array('count'=>0);
+		if(isset($vl->id))
+			$arr = array('id'=>$vl->id,'hyvaksytty'=>$vl->hyvaksytty,'count'=>1);
+
+		return $arr;
 	}
 
 

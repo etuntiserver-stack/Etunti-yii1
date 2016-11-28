@@ -42,7 +42,7 @@ public $tekijan_nimi;
 		// will receive user inputs.
 		return array(
 			array('tid, pvm', 'required'),
-			array('tid', 'numerical', 'integerOnly'=>true),
+			array('tid, hyvaksytty', 'numerical', 'integerOnly'=>true),
 			array('pvm', 'length', 'max'=>50),
 			array('status', 'length', 'max'=>100),
 			// The following rule is used by search().

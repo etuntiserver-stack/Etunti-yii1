@@ -79,6 +79,36 @@ $(document).delegate(".chckbxHyvaksynta","click",function(){
 
 
 
+$(document).delegate(".vuosilomaHyvaksynta","click",function(){
+
+  $(this).each(function() {
+      var label = $(this).prop("checked");
+      var pvm = $(this).attr("pvm");
+      var tid = $(this).attr("tid");
+      var tila = $(this).attr("tila");
+      if(label)
+      {
+        $.ajax({
+           url: location.protocol + "//" + location.host + '/index.php/toteutuneet/vuosiloma_hyvaksy',
+           type: "POST",
+	   data: { hyvaksy : "kylla", pvm : pvm, tid : tid, tila : tila },
+           success: function(data){
+		console.log(data);
+           }
+        });
+      } else {
+        $.ajax({
+           url: location.protocol + "//" + location.host + '/index.php/toteutuneet/vuosiloma_hyvaksy',
+           type: "POST",
+	   data: { hyvaksy : "ei", pvm : pvm, tid : tid, tila : tila },
+           success: function(data){
+		console.log(data);
+           }
+        });
+      }
+  });
+});
+
 
 
 
