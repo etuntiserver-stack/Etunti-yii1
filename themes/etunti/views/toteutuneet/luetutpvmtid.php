@@ -9,6 +9,7 @@
 		tid = '".$tid."' 
 		AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = '".date("Y-m-d",strtotime($pvm))."' 
 		AND admin!='1'
+		AND aloitan!='' AND loppui!=''
 	";
 
 	if(Yii::app()->session['Lounastauko'])
