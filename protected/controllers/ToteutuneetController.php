@@ -244,6 +244,7 @@ class ToteutuneetController extends Controller
 		$criteria->condition = " 
 			tid = '".$tid."' 
 			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = '".date("Y-m-d",strtotime($pvm))."' 
+			AND aloitan!='' AND loppui!=''
 		 ";
 		if(Yii::app()->session['Lounastauko'])
 		$criteria->addCondition (" status != '10' ");
@@ -272,6 +273,7 @@ class ToteutuneetController extends Controller
 			tid = '".$tid."' 
 			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = '".date("Y-m-d",strtotime($pvm))."' 
 			AND id NOT IN (SELECT kid FROM sivexkuitti_repaired) 
+			AND aloitan!='' AND loppui!=''
 		";
 		if(Yii::app()->session['Lounastauko'])
 		$criteria->addCondition (" status != '10' ");
