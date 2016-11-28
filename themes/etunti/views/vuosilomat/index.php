@@ -184,6 +184,19 @@ echo	'<input type=hidden id=number value='.cal_days_in_month(CAL_GREGORIAN, $mon
 
  </div>
  <div class="col-sm-2">
+
+    <div class="form-inline valikot">
+	<input type=radio name="valikko" class="valikko" value="VL//green//Vuosiloma" checked> 
+	<span class="col-sm-1 btn btn-xs btn-group btn-primary btn-group-justified" style="background: green">VL</span>  Vuosiloma
+    </div>
+    <div class="form-inline valikot">
+	<input type=radio name="valikko" class="valikko" value="VKL//blue//Viikkolomapäivä"> 
+	<span class="col-sm-1 btn btn-xs btn-group btn-primary btn-group-justified" style="background: blue">VKL</span>  Viikkolomapäivä
+    </div>
+
+    <br><br>
+    <legend><?php echo Yii::t('main', 'Ekstrat'); ?></legend>
+
  <?php
   $valikkoot = Valikkoot::model()->findAll("select_type = 'vuosilomat'");
   foreach($valikkoot as $vl){
@@ -192,14 +205,10 @@ echo	'<input type=hidden id=number value='.cal_days_in_month(CAL_GREGORIAN, $mon
     if(isset($expl[0]) and isset($expl[1]) and isset($expl[2]))
     {
     $back = " style='background:".$expl[2].";color: white;'";
-    if($expl[0] == 'VL')
-    $checked = 'checked';
-    else
-    $checked = '';
 
     echo '
     <div class="form-inline valikot">
-	<input type=radio name="valikko" class="valikko" value="'.$expl[0].'//'.$expl[2].'//'.$expl[1].'" '.$checked.'> 
+	<input type=radio name="valikko" class="valikko" value="'.$expl[0].'//'.$expl[2].'//'.$expl[1].'"> 
 	<span class="col-sm-1 btn btn-xs btn-group btn-primary btn-group-justified" style="background: '.$expl[2].'">'.$expl[0].'</span>  '.$expl[1].'
     </div>';
     }
@@ -219,60 +228,6 @@ echo	'<input type=hidden id=number value='.cal_days_in_month(CAL_GREGORIAN, $mon
 
 
 
-
-<?php /*
-	<?php Yii::app()->clientScript->registerPackage('fixedTable'); ?>
-
-
-<script type="text/javascript">
-$(document).ready(function(){
-
-
-$(function () {
-
-    var tableHeight = function () {
-        var $tableHeader = $('.dataTables_scrollHeadInner thead tr');
-        return $(window).height() - 4 - ($tableHeader.length ? $tableHeader.height() : 0);
-    };
-
-    var dataTable = $('table').dataTable({
-        sDom: 'frtiS',
-        sScrollY: tableHeight(),
-        sScrollX: '100%',
-        bAutoWidth: false,
-        bScrollCollapse: true,
-        bPaginate: false,
-        bFilter: false,
-        bInfo: false,
-        bSort: false,
-        bDeferRender: true
-    });
-
-    var onResize = function () {
-        var oSettings = dataTable.fnSettings();
-        oSettings.oScroll.sY = tableHeight()-180; 
-        dataTable.fnDraw();
-    };
-
-    var firstDraw = false;
-    new FixedColumns(dataTable, {
-        iLeftWidth: 100,
-        fnDrawCallback: function () {
-            if (firstDraw) return;
-            firstDraw = true;
-            onResize();
-        }
-    });
-
-    $(window).resize(onResize);
-});
-
-
-});
-</script>
-
-*/
-?>
 
 
 <script type="text/javascript">
@@ -344,19 +299,6 @@ $('input[type="radio"]').change(function() {
 		   $("#"+thisID).attr("method", "new");
 		   $("#"+thisID).html('<div class="link laatikot"></div>');
 		}
-
-/*
-    		if(thisTXT == ''){
-		    $("#lisattyTyovuoroon").html("<h3>Lisätty työvuoroon</h3>").fadeToggle("fade", function() {
-			$("#lisattyTyovuoroon").fadeOut(2000);
-  		    });
-		 
-	   	} else {
-		    $("#lisattyTyovuoroon").html("<h3>Poistettu</h3>").fadeToggle("fade", function() {
-			$("#lisattyTyovuoroon").fadeOut(2000);
-  		    });
-		}
-*/
     
 
            },
