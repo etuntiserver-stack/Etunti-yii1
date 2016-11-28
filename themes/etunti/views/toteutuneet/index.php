@@ -363,7 +363,7 @@ function dateDiff($start, $end) {
     $spl 	= $totpvmtid['spl']; // Palkaton
     $sl 	= $totpvmtid['sl']; // Palkallinen
     $ls 	= $totpvmtid['ls']; // Lapsen sairaus
-    $vl 	= $mobile[0]->TidfromtoVuosiloma($date,$date,$explTekija[0]);
+    $vl 	= $mobile[0]->TidfromtoVuosiloma($date,$date,$explTekija[0],'VL');
 
 
     $yhtSPL 	+= $spl;

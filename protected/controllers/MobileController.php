@@ -1382,7 +1382,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 	}
 */
 
-	protected function TidfromtoVuosiloma($from,$to,$tid)
+	protected function TidfromtoVuosiloma($from,$to,$tid,$tila)
 	{
 
 		$from = date("Y-m-d", strtotime($from));
@@ -1414,7 +1414,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			DATE(pvm) 
 			BETWEEN '".$from."' AND '".$to."' 
 			AND tid='".$tid."'
-			AND status LIKE '%VL//%'
+			AND status LIKE '%".$tila."//%'
 		";
 
 		$tv = Vuosilomat::model()->findAll($criteria);

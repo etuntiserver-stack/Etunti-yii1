@@ -75,6 +75,7 @@
 	<td class="col11"><?php if($spl > 0) echo $spl; ?></td>
 	<td class="col12"><?php echo $this->num($ls); ?></td>
 	<td class="col12"><?php if($vl > 0) echo $vl; ?></td>
+	<td class="col12"><?php if($vkl > 0) echo $vkl; ?></td>
 	<td class="col13"><?php echo $korv; ?></td>
 	<td class="col14"><?php echo $lisatt; ?></td>
 	<td class="col15"><?php echo $ennakko; ?></td>

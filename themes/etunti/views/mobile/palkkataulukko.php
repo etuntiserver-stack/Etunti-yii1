@@ -180,6 +180,7 @@ $this->breadcrumbs=array(
   <th><?php echo Yii::t('main', 'SPL<br>Pvm'); ?></th>
   <th><?php echo Yii::t('main', 'LS'); ?></th>
   <th><?php echo Yii::t('main', 'VL'); ?></th>
+  <th><?php echo Yii::t('main', 'VKL'); ?></th>
   <th><?php echo Yii::t('main', 'Korvaus'); ?></th>
   <th><?php echo Yii::t('main', 'Lisätyötunnit'); ?></th>
   <th><?php echo Yii::t('main', 'Ennakko'); ?></th>
@@ -196,6 +197,7 @@ $this->breadcrumbs=array(
   $spl 		= 0;
   $vl 		= 0;
   $vlYht	= 0;
+  $vklYht	= 0;
   $slYht	= 0;
   $splYht	= 0;
   $lsYht	= 0;
@@ -222,8 +224,10 @@ $this->breadcrumbs=array(
 	$lsYht += $ls;
   	$spl = $this->TidfromtoSairaus($from,$to,$data->id,'SPL');
 	$splYht += $spl;
-  	$vl = $this->TidfromtoVuosiloma($from,$to,$data->id);
+  	$vl = $this->TidfromtoVuosiloma($from,$to,$data->id, 'VL');
 	$vlYht += $vl;
+  	$vkl = $this->TidfromtoVuosiloma($from,$to,$data->id, 'VKL');
+	$vklYht += $vkl;
 	$totalTp += $tp;
   	$pyhat = $this->pyhapaivat($data->id,$from,$to,"pyhat");
 	$pyhatYht += $pyhat;
@@ -267,6 +271,7 @@ $this->breadcrumbs=array(
 			'spl'=>$spl,
 			'ls'=>$ls,
 			'vl'=>$vl,
+			'vkl'=>$vkl,
 			'from'=>$from,
 			'to'=>$to,
 			'pyhat'=>$pyhat,
