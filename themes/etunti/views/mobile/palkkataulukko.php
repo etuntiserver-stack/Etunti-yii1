@@ -26,6 +26,7 @@ $this->breadcrumbs=array(
    <!-- tulostus -->
    <div class="pull-right">
      <button class="btn btn-primary btn-sm myBgColors palkkatauluTaulu"><?php echo Yii::t('main', 'Tulosta'); ?></button>
+     <button class="btn btn-primary btn-sm btn-group myBgColors" data-toggle="collapse"  data-target="#haku"><?php echo Yii::t('main', 'Ekstrat'); ?> <b class="caret"></b></button>
    </div>
 <?php
 /*
