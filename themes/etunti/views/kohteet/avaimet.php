@@ -136,7 +136,10 @@ legend{  padding: 3px 7px; }
     {
     $i++;
 	$avaimet .= '<div class="row">
-			<div class="col-sm-6">'.$i.'. '.$kohde->osoite.'</div>
+			<div class="col-sm-6"> 
+				<b>'.$kohde->etu_suku_nimet.'</b><br>
+				'.$kohde->osoite.', '.$kohde->pnumero.', '.$kohde->kaupunki.'
+			</div>
 			<div class="col-sm-6"><b>'.$kohde->avain.'</b></div>
 		     </div>';
     }
