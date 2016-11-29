@@ -182,7 +182,7 @@ class ViestintaController extends Controller
 			$model->tekija=$tekija;
 			$model->save();
 			if($model->tekija != 'toimisto')
-			Domainit::PushNotify($model->tekija,"ETUNTI",$model->viesti,'beep');
+			Domainit::sendGCM($model->tekija,"",$model->viesti, null);
 			}
 		    } else {
 			$model=new Viestinta;
@@ -190,7 +190,7 @@ class ViestintaController extends Controller
 			$model->viesti=date("d.m H:i").", ".Yii::app()->user->nimi.": ".$_POST['Viestinta']['viesti'];
 			$model->save();
 			if($model->tekija != 'toimisto')
-			Domainit::PushNotify($model->tekija,"ETUNTI",$model->viesti,'beep');
+			Domainit::sendGCM($model->tekija,"",$model->viesti, null);
 		    }
 
 			$this->redirect(array('index'));
@@ -230,7 +230,8 @@ class ViestintaController extends Controller
 			if($model->save()){
 
 			if($model->tekija != 'toimisto')
-			Domainit::PushNotify($model->tekija,"ETUNTI",$model->viesti,'beep');
+			Domainit::sendGCM($model->tekija,"",$model->viesti, null);
+
 			$this->redirect(array('index'));
 
 			}

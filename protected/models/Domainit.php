@@ -31,7 +31,7 @@ public $viesti;
 		return 'domainit';
 	}
 
-
+/*
 	public static function PushNotify($tid,$title,$message,$sound){
 
 		$t = Tyontekijat::model()->findbypk($tid); 
@@ -77,6 +77,59 @@ public $viesti;
 		//var_dump($result->success);
 
 		return $result;
+	}
+*/
+
+	public static function sendGCM($tid, $subject, $message, $sound) 
+	{
+		$t = Tyontekijat::model()->findbypk($tid);
+		$a = FirmanTiedot::model()->findbypk(1);
+		$ApiKey = 'AIzaSyAPd72xCXt93mjgCq2gQu7F0Dg6BvLZ1tg';
+
+		if(!isset($t->gcm_reg_id) or empty($t->gcm_reg_id))
+		{
+			echo 'Push nitification error';
+			return false;
+		}
+	
+		$json_data = '{ 
+			"data": { 
+			  "Viesti": "'.$message.'"
+	                },
+	                "notification": {
+	                  "title": "'.$a->tyonantaja.': '.$subject.'",
+	                  "body": "'.$message.'",
+	                  "sound": "default",
+	                  "click_action": "FCM_PLUGIN_ACTIVITY",
+	                  "icon": "icon_name"
+	                },
+	                "to": "'.$t->gcm_reg_id.'",
+	                "priority": "high"
+	              }';
+
+		/*
+		"data": { 
+  	                  "price": "0",
+	                  "currency": "EUR" 
+	                },
+		"to": "/topics/all",
+		*/
+	
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send');
+		curl_setopt($ch, CURLOPT_POST, 1);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, array(                                                                          
+                                            'Content-Type: application/json',                                                                                
+                                            'Content-Length: '.strlen($json_data),
+                                            'Authorization:key='.$ApiKey  
+                                          ));           
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $json_data);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+		$output = curl_exec($ch);
+		curl_close($ch);
+		//echo $output;
 	}
 
 	/**

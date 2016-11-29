@@ -1239,6 +1239,7 @@ class TyovuorootController extends Controller
 
 
 
+
 			$return[] = $this->toistuvaInsert(
 				$toistuva->id,
 				$toistuva->pfrom, 
@@ -1457,8 +1458,8 @@ class TyovuorootController extends Controller
 				".$m->pvm."
 				".$m->alku."-".$m->loppu." ".$k->osoite."
 				".$m->tietoja;
-		
-			Domainit::PushNotify($t->id,"Hei ".$t->tekijan_nimi,$pushviesti, 'beep');
+
+			Domainit::sendGCM($t->id,"Hei ".$t->tekijan_nimi,$pushviesti, null);
 		}
 	}
 

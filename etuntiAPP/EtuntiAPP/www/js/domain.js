@@ -64,29 +64,6 @@ setTimeout(function() {
     document.addEventListener("deviceready", onServerReady1, false);
     function onServerReady1() {
 
-	// <-- GET FCM Token
-	FCMPlugin.getToken(
-	  function(token){
-
-        	$.ajax({
-	           url: url+'/paivita_tiedot?dom='+domain,
-		   type:'POST',
-	 	   data: { email : email, salasana : salasana, token : token },
-	           success: function(data){
-			var d = JSON.parse(data);
-			//alert(d)
-	    	},
-	    		error:function (xhr, ajaxOptions, thrownError){
-	        	console.log(xhr.responseText);
-	    	}
-	        });
-
-	  },
-	  function(err){
-	    console.log('error retrieving token: ' + err);
-	  }
-	);
-	//    GET FCM Token -->
 
 	// <-- Test Alert
 	/*
@@ -158,6 +135,76 @@ setTimeout(function() {
     // <-- On device Reay
     document.addEventListener("deviceready", onServerReady2, false);
     function onServerReady2() {
+
+
+
+	// <-- GET FCM Token
+	FCMPlugin.getToken(
+	  function(token){
+
+        	$.ajax({
+	           url: url+'/paivita_tiedot?dom='+domain,
+		   type:'POST',
+	 	   data: { email : email, salasana : salasana, token : token },
+	           success: function(data){
+			var d = JSON.parse(data);
+			//alert(d)
+	    	},
+	    		error:function (xhr, ajaxOptions, thrownError){
+	        	console.log(xhr.responseText);
+	    	}
+	        });
+
+	  },
+	  function(err){
+	    console.log('error retrieving token: ' + err);
+	  }
+	);
+	//    GET FCM Token -->
+
+
+	// <-- GET FCM message
+	FCMPlugin.onNotification(
+	  function(data){
+	    if(data.wasTapped){
+	      //Notification was received on device tray and tapped by the user.
+	        //alert( JSON.stringify(data) );
+		//data = JSON.stringify(data);
+
+		function alertDismissed() {
+		    // do something
+		}
+		navigator.notification.alert(
+		    data['Viesti']+' \nOlen katsonut',
+		    alertDismissed,
+		    'Viesti',
+		    'OK'
+		);
+
+	    }else{
+	      //Notification was received in foreground. Maybe the user needs to be notified.
+		//data = JSON.stringify(data);
+		function alertDismissed() {
+		    // do something
+		}
+		navigator.notification.alert(
+		    data['Viesti'],
+		    alertDismissed,
+		    'Viesti',
+		    'OK'
+		);
+	    }
+	  },
+	  function(msg){
+	    console.log('onNotification callback successfully registered: ' + msg);
+	  },
+	  function(err){
+	    console.log('Error registering onNotification callback: ' + err);
+	  }
+	);
+	//    GET FCM message -->
+
+
 
 	function showAppVersion() {
 		  cordova.getAppVersion(function(version) {

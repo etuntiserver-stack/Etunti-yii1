@@ -1,5 +1,6 @@
 <?php
 
+
 $criteria=new CDbCriteria;
 $criteria->condition = " 
 	DATE(time) < (DATE_SUB(CURDATE(), INTERVAL 2 DAY)) 

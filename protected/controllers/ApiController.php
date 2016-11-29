@@ -170,7 +170,7 @@ public function actionPaivita_tiedot($dom)
 			AND salasana = '".$_POST['salasana']."' 
 		";
 		$ttekija = Tyontekijat::model()->find($criteria);
-		if(isset($_POST['token']) and isset($ttekija->id))
+		if(isset($_POST['token']) and !empty($_POST['token']) and isset($ttekija->id))
 		{
 			$token = $_POST['token'];
 			Tyontekijat::model()->updatebypk($ttekija->id, array('gcm_reg_id'=>$token));
