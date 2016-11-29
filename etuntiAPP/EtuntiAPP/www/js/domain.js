@@ -69,7 +69,6 @@ setTimeout(function() {
 	  function(token){
 
         	$.ajax({
-		   async: false,
 	           url: url+'/paivita_tiedot?dom='+domain,
 		   type:'POST',
 	 	   data: { token : token },
@@ -79,7 +78,7 @@ setTimeout(function() {
 	
 	    	},
 	    		error:function (xhr, ajaxOptions, thrownError){
-	        	console.log(xhr.responseText);
+	        	alert(xhr.responseText);
 	    	}
 	        });
 
