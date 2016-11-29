@@ -22,6 +22,9 @@
         "cordova-plugin-dialogs": {
             "PACKAGE_NAME": "fi.etunti.local"
         },
+        "cordova-plugin-fcm": {
+            "PACKAGE_NAME": "fi.etunti.local"
+        },
         "cordova-plugin-file": {
             "PACKAGE_NAME": "fi.etunti.local"
         },
@@ -38,9 +41,6 @@
             "PACKAGE_NAME": "fi.etunti.local"
         },
         "de.appplant.cordova.plugin.local-notification": {
-            "PACKAGE_NAME": "fi.etunti.local"
-        },
-        "phonegap-plugin-push": {
             "PACKAGE_NAME": "fi.etunti.local"
         }
     },

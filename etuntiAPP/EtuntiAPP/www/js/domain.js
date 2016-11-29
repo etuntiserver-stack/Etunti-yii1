@@ -64,6 +64,31 @@ setTimeout(function() {
     document.addEventListener("deviceready", onServerReady1, false);
     function onServerReady1() {
 
+	// <-- GET FCM Token
+	FCMPlugin.getToken(
+	  function(token){
+
+        	$.ajax({
+		   async: false,
+	           url: url+'/paivita_tiedot?dom='+domain,
+		   type:'POST',
+	 	   data: { token : token },
+	           success: function(data){
+			var d = JSON.parse(data);
+			alert(d)
+	
+	    	},
+	    		error:function (xhr, ajaxOptions, thrownError){
+	        	console.log(xhr.responseText);
+	    	}
+	        });
+
+	  },
+	  function(err){
+	    console.log('error retrieving token: ' + err);
+	  }
+	);
+	//    GET FCM Token -->
 
 	// <-- Test Alert
 	/*

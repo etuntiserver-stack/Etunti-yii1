@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "231206864677",
+    "firebase_url": "https://etunti-push-151006.firebaseio.com",
+    "project_id": "etunti-push-151006",
+    "storage_bucket": "etunti-push-151006.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:231206864677:android:d15fbe74c8628ed2",
+        "android_client_info": {
+          "package_name": "fi.etunti.local"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "231206864677-hngmltdj09078smbceafqjthjv5cg2bj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB1Psi9teucmzjFPNw5nyv5IEVLnq_L73I"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

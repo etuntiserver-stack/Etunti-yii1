@@ -147,9 +147,6 @@
         },
         "phonegap-plugin-push": {
             "PACKAGE_NAME": "fi.etunti.local"
-        },
-        "uk.co.whiteoctober.cordova.appversion": {
-            "PACKAGE_NAME": "fi.etunti.local"
         }
     },
     "dependent_plugins": {
