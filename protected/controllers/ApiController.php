@@ -163,15 +163,21 @@ public function actionPaivita_tiedot($dom)
     {
         case 'mob':
 
-		$return = '';
-		if(isset($_POST['token']))
+		$criteria = new CDbCriteria();
+		$criteria->condition = " 
+			salasana!='' 
+			AND tekijan_email = '".$_POST['email']."' 
+			AND salasana = '".$_POST['salasana']."' 
+		";
+		$ttekija = Tyontekijat::model()->find($criteria);
+		if(isset($_POST['token']) and isset($ttekija->id))
 		{
 			$token = $_POST['token'];
-			$return = 'token '.$token;
+			Tyontekijat::model()->updatebypk($ttekija->id, array('gcm_reg_id'=>$token));
+        		$this->_sendResponse(200, CJSON::encode('token updated'));
 		}
-        	$this->_sendResponse(200, CJSON::encode($return));
 
-
+		exit;
 
             break;
         default:
@@ -462,17 +468,6 @@ public function actionImei($dom)
               	   $this->_sendResponse(200, "eiLoytyTekija//Työntekijää ei löydy");
 	         exit;
 	    	}
-
-	    	if(isset($ttekija->id) and !empty($ttekija->id))
-	    	{
-		   if(isset($_POST['gcm_reg_id']) and !empty($_POST['gcm_reg_id']) and $ttekija->gcm_reg_id != $_POST['gcm_reg_id'])
-	   		Tyontekijat::model()->updatebypk($ttekija->id, array('gcm_reg_id'=>$_POST['gcm_reg_id']));
-
-		   if(isset($_POST['gcm_reg_id']))
-			unset($_POST['gcm_reg_id']);
-
-		}
-
 	    }
 
 

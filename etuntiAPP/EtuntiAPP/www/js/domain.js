@@ -71,14 +71,13 @@ setTimeout(function() {
         	$.ajax({
 	           url: url+'/paivita_tiedot?dom='+domain,
 		   type:'POST',
-	 	   data: { token : token },
+	 	   data: { email : email, salasana : salasana, token : token },
 	           success: function(data){
 			var d = JSON.parse(data);
-			alert(d)
-	
+			//alert(d)
 	    	},
 	    		error:function (xhr, ajaxOptions, thrownError){
-	        	alert(xhr.responseText);
+	        	console.log(xhr.responseText);
 	    	}
 	        });
 

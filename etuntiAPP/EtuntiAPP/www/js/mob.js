@@ -241,7 +241,7 @@ function row(tilanne,st){
 		loppui: lp,
 		viesti: viesti,
 		status: st,
-		gcm_reg_id : $("#regId").text(),
+		//gcm_reg_id : $("#regId").text(),
 		avoinID : avoinID,
 		appVersio : $("#version").text()
 	};
