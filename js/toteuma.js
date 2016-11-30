@@ -65,6 +65,7 @@ $(document).delegate(".chckbxHyvaksynta","click",function(){
       var label = $(this).prop("checked");
       var kuka = $(this).attr("kuka");
       var thisID = $(this).attr("id").split("_");
+
       if(label)
       {
         $.ajax({
@@ -95,8 +96,14 @@ $(document).delegate(".vuosilomaHyvaksynta","click",function(){
   $(this).each(function() {
       var label = $(this).prop("checked");
       var pvm = $(this).attr("pvm");
+      var week = $(this).attr("week");
       var tid = $(this).attr("tid");
       var tila = $(this).attr("tila");
+      var thisDID = $(this).attr("did");
+
+	var VLFoot	= 0;
+	var VKLFoot	= 0;
+
       if(label)
       {
         $.ajax({
@@ -105,6 +112,7 @@ $(document).delegate(".vuosilomaHyvaksynta","click",function(){
 	   data: { hyvaksy : "kylla", pvm : pvm, tid : tid, tila : tila },
            success: function(data){
 		console.log(data);
+		VL_VKL_JNE(thisDID, tila, week, 1);
            }
         });
       } else {
@@ -114,6 +122,7 @@ $(document).delegate(".vuosilomaHyvaksynta","click",function(){
 	   data: { hyvaksy : "ei", pvm : pvm, tid : tid, tila : tila },
            success: function(data){
 		console.log(data);
+		VL_VKL_JNE(thisDID, tila, week, 0);
            }
         });
       }
@@ -121,6 +130,27 @@ $(document).delegate(".vuosilomaHyvaksynta","click",function(){
 });
 
 
+
+function VL_VKL_JNE(thisDID, tila, week, count){
+
+	  	$('#yhteensaPvmAllaTaulu_'+thisDID).find('.alla'+tila).attr('total', count).html(count);
+
+		// <-- Week
+		var forWeek = 0;
+  		$( ".yhteensaPvmAllaTaulu_"+week ).each(function( i ) {
+			forWeek += parseFloat($(this).find('.alla'+tila).attr('total'));
+		});
+	  	$('.'+tila+'Week_'+week).html(forWeek);
+		//     Week -->
+
+		// <-- Footer
+		var forFoot = 0;
+  		$( ".forFooterAlla" ).each(function( i ) {
+			forFoot += parseFloat($(this).find('.alla'+tila).attr('total'));
+		});
+	  	$('#yhteensaFooterTaulu').find('.'+tila+'Foot').html(forFoot);
+		//     Footer -->
+}
 
 
 

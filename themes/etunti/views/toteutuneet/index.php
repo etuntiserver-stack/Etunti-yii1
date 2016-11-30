@@ -377,18 +377,15 @@ function dateDiff($start, $end) {
 
     $mVuosilomaVL = $mobile[0]->TidPvmVuosiloma($date,$explTekija[0],'VL');
     $mVuosilomaVKL = $mobile[0]->TidPvmVuosiloma($date,$explTekija[0],'VKL');
-    $vlChecked	= '';
-    $vklChecked	= '';
+
     if(isset($mVuosilomaVL['count']))
     {
     	$vl = $mVuosilomaVL['count'];
-    	if(isset($mVuosilomaVL['hyvaksytty']) and $mVuosilomaVL['hyvaksytty'] == 1) $vlChecked = 'checked';
     }
 
     if(isset($mVuosilomaVKL['count']))
     {
     	$vkl = $mVuosilomaVKL['count'];
-    	if(isset($mVuosilomaVKL['hyvaksytty']) and $mVuosilomaVKL['hyvaksytty'] == 1) $vklChecked = 'checked';
     }
 
     $yhtSPL 	+= $spl;
@@ -429,20 +426,8 @@ function dateDiff($start, $end) {
 		   <td><span class="allaSL" total="'.(int)$sl.'">'.$this->sprint($sl).'</span></td>
 		   <td><span class="allaSPL" total="'.(int)$spl.'">'.$this->sprint($spl).'</span></td>
 		   <td><span class="allaLS" total="'.(int)$ls.'">'.$this->sprint($ls).'</span></td>
-		   <td>';
-
-		   if($vl > 0)
-    		   echo '<input type="checkbox" class="vuosilomaHyvaksynta" tila="VL" pvm="'.$date.'" tid="'.$explTekija[0].'" data-toggle="tooltip" data-placement="bottom" title="'.Yii::t('main', 'Hyväksy').'" '.$vlChecked.'> '.$vl;
-
-    echo '
-		   </td><td>';
-
-		   if($vkl > 0)
-		   echo '<input type="checkbox" class="vuosilomaHyvaksynta" tila="VKL" pvm="'.$date.'" tid="'.$explTekija[0].'" data-toggle="tooltip" data-placement="bottom" title="'.Yii::t('main', 'Hyväksy').'" '.$vklChecked.'> '.$vkl;
-
-
-    echo '
-		   </td>
+		   <td><span class="allaVL" total="'.(int)$vl.'">'.$vl.'</span></td>
+		   <td><span class="allaVKL" total="'.(int)$vkl.'">'.$vkl.'</span></td>
 		  </tr>
 		</table>
 	</td></tr>';
@@ -539,8 +524,8 @@ function dateDiff($start, $end) {
 		   <td class="SLWeek_'.date("W",strtotime($date)).'">'.$this->sprint($yhtSLWeek).'<br>'.$this->num($yhtSLWeek).'</td>
 		   <td class="SPLWeek_'.date("W",strtotime($date)).'">'.$this->sprint($yhtSPLWeek).'<br>'.$this->num($yhtSPLWeek).'</td>
 		   <td class="LSWeek_'.date("W",strtotime($date)).'">'.$this->sprint($yhtLSWeek).'<br>'.$this->num($yhtLSWeek).'</td>
-		   <td>'.$yhtVLWeek.'</td>
-		   <td>'.$yhtVKLWeek.'</td>
+		   <td class="VLWeek_'.date("W",strtotime($date)).'">'.$yhtVLWeek.'</td>
+		   <td class="VKLWeek_'.date("W",strtotime($date)).'">'.$yhtVKLWeek.'</td>
 		  </tr>
 		</table>
 	</td></tr>';
@@ -613,8 +598,8 @@ function dateDiff($start, $end) {
 		   <td><span class="SLFoot"><?php echo $this->sprint($yhtSL); ?><br><?php echo $this->num($yhtSL); ?></span></td>
 		   <td><span class="SPLFoot"><?php echo $this->sprint($yhtSPL); ?><br><?php echo $this->num($yhtSPL); ?></span></td>
 		   <td><span class="LSFoot"><?php echo $this->sprint($yhtLS); ?><br><?php echo $this->num($yhtLS); ?></span></td>
-		   <td><?php echo $yhtVL; ?></td>
-		   <td><?php echo $yhtVKL; ?></td>
+		   <td><span class="VLFoot"><?php echo $yhtVL; ?></span></td>
+		   <td><span class="VKLFoot"><?php echo $yhtVKL; ?></span></td>
 		  </tr>
 		</table>
 	</td></tr>

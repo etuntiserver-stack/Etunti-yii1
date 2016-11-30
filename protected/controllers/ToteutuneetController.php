@@ -304,7 +304,33 @@ class ToteutuneetController extends Controller
 			   }
 	
 	
-		//}
+		// <-- check Vuosilomat
+	       	$criteria = new CDbCriteria();
+		$criteria->condition = " 
+			tid = '".$tid."' 
+			AND DATE(pvm) = '".date("Y-m-d",strtotime($pvm))."'
+			AND (status LIKE '%VL//%' OR status LIKE '%VKL//%')
+		";
+		$vuosilomat = Vuosilomat::model()->find($criteria);
+		if(isset($vuosilomat->id))
+		{
+			$checked = '';
+			if($vuosilomat->hyvaksytty == 1) $checked = 'checked';
+
+			$exVl = explode("//", $vuosilomat->status);
+		   	$laatikot .= '
+			   <div class="fullRivi form-inline">
+				<span class="form-group">
+					<input type="checkbox" class="vuosilomaHyvaksynta" tila="'.$exVl[0].'" pvm="'.date("Y-m-d",strtotime($pvm)).'" tid="'.$tid.'" data-toggle="tooltip" data-placement="bottom" title="'.Yii::t('main', 'Hyväksy').'" '.$checked.' did="'.date("Ymd",strtotime($pvm)).'_'.$tid.'" week="'.date("W",strtotime($pvm)).'">&nbsp; 
+				</span><span class="form-group">
+					<i class="form-group link" style="color:'.$exVl[1].'">'.$exVl[2].'</i>
+				</span>
+			   </div>';
+
+		}
+		//     check Vuosilomat -->
+
+
 		
 		$laatikot .= '&nbsp;&nbsp;<b class="link glyphicon glyphicon-plus uusirivi" for="'.$did.'_'.$tid.'"></b>';
 		$laatikot .= '</div>';
