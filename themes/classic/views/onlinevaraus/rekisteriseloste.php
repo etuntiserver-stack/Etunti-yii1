@@ -35,11 +35,11 @@ Laatimispäivä<br>
 <span class="small"><?php if(isset($r['laatimispaiva'])) echo $r['laatimispaiva']; ?></span><br>
 </div>
 
+<?php if($this->isEtuntiAdmin()): ?>
 <p class="small">Lue <a href="<?php echo Yii::app()->request->baseUrl.'/tiedostot/tayttoohjeet.pdf'; ?>" target="_blank">täyttöohjeet</a> ennen rekisteriselosteen<br>
 täyttämistä. Käytä tarvittaessa liitettä.</p><br>
-
 <br>
-
+<?php endif; ?>
 
 <table class="table table-bordered">
 <tr>
