@@ -25,11 +25,62 @@ legend{  padding: 3px 7px; }
 
    <!-- tulostus -->
    <div class="pull-right">
+     <button class="btn btn-primary btn-sm myBgColors tulosta"><?php echo Yii::t('main', 'Tulosta'); ?></button>
+     <?php /*
      <form action="#" target="_blank" method="POST">
       <input type="submit" name="tulosta" class="btn btn-success btn-sm myBgColors" value="PDF">
      </form>
+     */ ?>
    </div>
    <!-- tulostus -->
+
+	<!-- Tulostus -->
+	<script src="<?php echo Yii::app()->request->baseUrl; ?>/js/jspdf.debug.js"></script>
+	<script src="<?php echo Yii::app()->request->baseUrl; ?>/js/jspdf_standard_fonts_metrics.js"></script>
+	<script src="<?php echo Yii::app()->request->baseUrl; ?>/js/jspdf_from_html.js"></script>
+	<script type="text/javascript">
+	$(document).ready(function(){
+	
+
+
+		$(".tulosta").click(function(){
+			tableFromHTML()
+		});
+
+
+function tableFromHTML() {
+      var pdf = new jsPDF('p', 'pt', 'a4');
+      var source = $('#taulu').get(0);  // #main_content is a container of my table
+      var specialElementHandlers = {
+          '#bypassme': function(element, renderer) {
+              return true
+          }
+      };
+      var margins = {
+          top: 50,
+          bottom: 50,
+          left: 20,
+          width: 500
+      };
+      pdf.fromHTML(
+              source, // HTML string or DOM elem ref.
+              margins.left, // x coord
+              margins.top, {// y coord
+                  'width': margins.width, // max width of content on PDF
+                  'elementHandlers': specialElementHandlers
+              },
+      function(dispose) {
+          pdf.save('Example.pdf');
+      }
+      , margins);
+    }
+
+	
+	});
+	</script>
+	<!-- Tulostus -->
+
+
               <h2 class="myBgColors p10"> <i class="fa fa-key"></i> <?php echo Yii::t('main', 'Avaimet'); ?> 
 		</h2>
 
@@ -117,7 +168,7 @@ legend{  padding: 3px 7px; }
    <div class="panel-body">
 
 	<div class="row">
- 	 <div class="table-responsive">
+ 	 <div class="table-responsive" id="taulu">
 	  <table class="table table-stripped">
 	   <thead class="myBgColors">
 		 <tr>
@@ -159,6 +210,9 @@ legend{  padding: 3px 7px; }
   </div>
 </div>
 
+
+
+
 <?php if(!isset($_POST['tulosta'])) : ?>
 <script type="text/javascript">
 $(document).ready(function(){
@@ -187,6 +241,7 @@ $('#tyontekijat').multiselect({
 	allSelectedText: 'Kaikki',
 	nSelectedText: 'valittu',
 });
+
 
 });
 </script>

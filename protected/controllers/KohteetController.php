@@ -149,6 +149,7 @@ class KohteetController extends Controller
 
 		$model = Tyontekijat::model()->findAll($criteria);
 
+		/*
 		if(Yii::app()->request->getPost('tulosta'))
 		{
 	          $html2pdf = Yii::app()->ePdf->HTML2PDF('P', 'A4', 'en');
@@ -156,10 +157,11 @@ class KohteetController extends Controller
 	          $html2pdf->WriteHTML($this->renderPartial('avaimet', array('model' => $model),true));
 	          $html2pdf->Output();
 		} else {
+		*/
 		$this->render('avaimet',array(
 			'model'=>$model,
 		));
-		}
+		
 
 	}
 
