@@ -185,11 +185,11 @@ echo	'<input type=hidden id=number value='.cal_days_in_month(CAL_GREGORIAN, $mon
  </div>
  <div class="col-sm-2">
 
-    <div class="form-inline valikot">
+    <div class="form-inline valikot" data-toggle="tooltip" data-placement="left" title="<?php echo Yii::t('main', 'Vuosilomat siirtyvät merkinnän jälkeen tuntien hyväksyntään, josta hyväksynnän jälkeen palkkatauluun.'); ?>">
 	<input type=radio name="valikko" class="valikko" value="VL//green//Vuosiloma" checked> 
 	<span class="col-sm-1 btn btn-xs btn-group btn-primary btn-group-justified" style="background: green">VL</span>  Vuosiloma
     </div>
-    <div class="form-inline valikot">
+    <div class="form-inline valikot" data-toggle="tooltip" data-placement="left" title="<?php echo Yii::t('main', 'Viikkolomapäivät siirtyvät merkinnän jälkeen tuntien hyväksyntään, josta hyväksynnän jälkeen palkkatauluun.'); ?>">
 	<input type=radio name="valikko" class="valikko" value="VKL//blue//Viikkolomapäivä"> 
 	<span class="col-sm-1 btn btn-xs btn-group btn-primary btn-group-justified" style="background: blue">VKL</span>  Viikkolomapäivä
     </div>

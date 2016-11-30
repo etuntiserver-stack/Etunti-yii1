@@ -321,7 +321,7 @@ class ToteutuneetController extends Controller
 		   	$laatikot .= '
 			   <div class="fullRivi form-inline">
 				<span class="form-group">
-					<input type="checkbox" class="vuosilomaHyvaksynta" tila="'.$exVl[0].'" pvm="'.date("Y-m-d",strtotime($pvm)).'" tid="'.$tid.'" data-toggle="tooltip" data-placement="bottom" title="'.Yii::t('main', 'Hyväksy').'" '.$checked.' did="'.date("Ymd",strtotime($pvm)).'_'.$tid.'" week="'.date("W",strtotime($pvm)).'">&nbsp; 
+					<input type="checkbox" class="vuosilomaHyvaksynta" tila="'.$exVl[0].'" pvm="'.date("Y-m-d",strtotime($pvm)).'" tid="'.$tid.'" '.$checked.' did="'.date("Ymd",strtotime($pvm)).'_'.$tid.'" week="'.date("W",strtotime($pvm)).'" data-toggle="tooltip" data-placement="bottom" title="'.Yii::t('main', 'Hyväksy').'">&nbsp; 
 				</span><span class="form-group">
 					<i class="form-group link" style="color:'.$exVl[1].'">'.$exVl[2].'</i>
 				</span>
