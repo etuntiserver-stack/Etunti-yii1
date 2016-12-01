@@ -1,15 +1,13 @@
 <?php
 
 ?>
-<?php if(isset($_POST['tulosta'])) : ?>
+
 <style>
-table{ width: 640px}
-td{ border:1px #333 solid; padding: 3px 7px; }
-legend{  padding: 3px 7px; }
+.table tbody>tr>td{
+    	vertical-align: top;
+}
 </style>
-<?php echo Yii::t('main','Tulostus pvm: ').date("d.m.Y"); ?>
-<br>
-<?php endif; ?>
+
 
 
 
@@ -25,7 +23,7 @@ legend{  padding: 3px 7px; }
 
    <!-- tulostus -->
    <div class="pull-right">
-     <button class="btn btn-primary btn-sm myBgColors tulosta"><?php echo Yii::t('main', 'Tulosta'); ?></button>
+     <button class="btn btn-primary btn-sm myBgColors avaimetHyvaksyntaTaulu"><?php echo Yii::t('main', 'Tulosta'); ?></button>
      <?php /*
      <form action="#" target="_blank" method="POST">
       <input type="submit" name="tulosta" class="btn btn-success btn-sm myBgColors" value="PDF">
@@ -34,51 +32,6 @@ legend{  padding: 3px 7px; }
    </div>
    <!-- tulostus -->
 
-	<!-- Tulostus -->
-	<script src="<?php echo Yii::app()->request->baseUrl; ?>/js/jspdf.debug.js"></script>
-	<script src="<?php echo Yii::app()->request->baseUrl; ?>/js/jspdf_standard_fonts_metrics.js"></script>
-	<script src="<?php echo Yii::app()->request->baseUrl; ?>/js/jspdf_from_html.js"></script>
-	<script type="text/javascript">
-	$(document).ready(function(){
-	
-
-
-		$(".tulosta").click(function(){
-			tableFromHTML()
-		});
-
-
-function tableFromHTML() {
-      var pdf = new jsPDF('p', 'pt', 'a4');
-      var source = $('#taulu').get(0);  // #main_content is a container of my table
-      var specialElementHandlers = {
-          '#bypassme': function(element, renderer) {
-              return true
-          }
-      };
-      var margins = {
-          top: 50,
-          bottom: 50,
-          left: 20,
-          width: 500
-      };
-      pdf.fromHTML(
-              source, // HTML string or DOM elem ref.
-              margins.left, // x coord
-              margins.top, {// y coord
-                  'width': margins.width, // max width of content on PDF
-                  'elementHandlers': specialElementHandlers
-              },
-      function(dispose) {
-          pdf.save('Example.pdf');
-      }
-      , margins);
-    }
-
-	
-	});
-	</script>
-	<!-- Tulostus -->
 
 
               <h2 class="myBgColors p10"> <i class="fa fa-key"></i> <?php echo Yii::t('main', 'Avaimet'); ?> 
@@ -168,8 +121,8 @@ function tableFromHTML() {
    <div class="panel-body">
 
 	<div class="row">
- 	 <div class="table-responsive" id="taulu">
-	  <table class="table table-stripped">
+ 	 <div class="table-responsive">
+	  <table class="table table-stripped" id="avaimetHyvaksyntaTaulu">
 	   <thead class="myBgColors">
 		 <tr>
 		  <th><?php echo Yii::t('main','Työntekijä'); ?></th>
@@ -216,6 +169,30 @@ function tableFromHTML() {
 <?php if(!isset($_POST['tulosta'])) : ?>
 <script type="text/javascript">
 $(document).ready(function(){
+
+
+$(".avaimetHyvaksyntaTaulu").click(function(){
+    var divToPrint = document.getElementById('avaimetHyvaksyntaTaulu');
+    var htmlToPrint = '' +
+        '<style type="text/css">' +
+        'table {' +
+	'border-collapse: collapse;' +
+	'border: 0;' +
+        '}' +
+        'table th, table td {' +
+        'border:1px solid #333;' +
+        'padding:3px 5px;' +
+        '}' +
+        '</style>';
+    htmlToPrint += divToPrint.outerHTML;
+    newWin = window.open("");
+    newWin.document.write(htmlToPrint);
+    newWin.print();
+    newWin.close();
+});
+
+
+
 
 $(".haemob").click(function(){
 	$("#yhtveto").submit();

@@ -4,13 +4,23 @@ $(document).ready(function(){
 
 $(document).delegate(".tuntienHyvaksyntaTaulu","click",function(){
 	
-	$('#tuntienHyvaksyntaTaulu td,#tuntienHyvaksyntaTaulu th').css({"border":"1px #333 solid", "padding":"3px 5px"});
-
-	var divToPrint = document.getElementById('tuntienHyvaksyntaTaulu');
-	newWin = window.open("");
-	newWin.document.write(divToPrint.outerHTML);
-	newWin.print();
-	newWin.close();
+    var divToPrint = document.getElementById('tuntienHyvaksyntaTaulu');
+    var htmlToPrint = '' +
+        '<style type="text/css">' +
+        'table {' +
+	'border-collapse: collapse;' +
+	'border: 0;' +
+        '}' +
+        'table th, table td {' +
+        'border:1px solid #333;' +
+        'padding:3px 5px;' +
+        '}' +
+        '</style>';
+    htmlToPrint += divToPrint.outerHTML;
+    newWin = window.open("");
+    newWin.document.write(htmlToPrint);
+    newWin.print();
+    newWin.close();
 });
 
 
