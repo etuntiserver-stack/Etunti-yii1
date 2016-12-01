@@ -175,6 +175,9 @@ $(".avaimetHyvaksyntaTaulu").click(function(){
     var divToPrint = document.getElementById('avaimetHyvaksyntaTaulu');
     var htmlToPrint = '' +
         '<style type="text/css">' +
+	'.table tbody>tr>td{' +
+	    	'vertical-align: top;' +
+	'}' +
         'table {' +
 	'border-collapse: collapse;' +
 	'border: 0;' +

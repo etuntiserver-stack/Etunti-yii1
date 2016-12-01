@@ -7,6 +7,9 @@ $(document).delegate(".tuntienHyvaksyntaTaulu","click",function(){
     var divToPrint = document.getElementById('tuntienHyvaksyntaTaulu');
     var htmlToPrint = '' +
         '<style type="text/css">' +
+	'.table tbody>tr>td{' +
+	    	'vertical-align: top;' +
+	'}' +
         'table {' +
 	'border-collapse: collapse;' +
 	'border: 0;' +
