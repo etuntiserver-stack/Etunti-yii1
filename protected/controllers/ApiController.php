@@ -559,6 +559,7 @@ public function actionImei($dom)
 				tid = '".$ttekija->id."' 
 				and DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE() 
 				AND $eilasketa
+				AND piilota_mobiilista!=1
 		    ";
 
 	            $tvuoro = Tyovuoroot::model()->findAll($criteria);
@@ -626,6 +627,7 @@ public function actionImei($dom)
 				tid = '".$ttekija->id."' 
 				and DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') 
 				BETWEEN CURDATE() AND '".$aikaVali."'
+				AND piilota_mobiilista!=1
 		    ";
 	            $tvuoro = Tyovuoroot::model()->findAll($criteria);
 

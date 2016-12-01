@@ -232,17 +232,31 @@ $(document).ready(function(){
   <div class="col-sm-6">
 
 
-<?php 
-$t = Tyontekijat::model()->findbypk($model->tid);
-if(!empty($t->gcm_reg_id)) :
-?>
+
     <div class="pull-right">
     <br>
-		<?php echo Yii::t('main','Ilmoita työntekijää viestillä'); ?> 
-			<input type="checkbox" name="Tyovuoroot[PushNotify]" class="sw" id="Tyovuoroot_PushNotify">
+  	<div class="section">
+		<?php echo $form->labelEx($model,'piilota_mobiilista'); ?>
+		<?php 
+        	$l = array(0=>'Kyllä',1=>'Ei');
+		echo $form->dropDownList($model,'piilota_mobiilista', $l, 
+		array('class'=>'form-control')) ?>
 
+	</div>
+	<?php 
+	$t = Tyontekijat::model()->findbypk($model->tid);
+	if(!empty($t->gcm_reg_id)) :
+	?>
+	<br>
+  	<div class="section">
+		<label><?php echo Yii::t('main','Ilmoita työntekijää viestillä'); ?></label><br>
+		<input type="checkbox" name="Tyovuoroot[PushNotify]" class="sw" id="Tyovuoroot_PushNotify">
+	</div>
+	<?php endif; ?>
     </div>
-<?php endif; ?>
+
+
+
   </div>
 </div>
 
