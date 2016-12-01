@@ -1,18 +1,5 @@
 $(document).ready(function(){
 
-// modal siirtaminen
-/*
-  $("#showres").draggable({
-        revert:"invalid",
-        stop: function(event, ui){
-          console.log(event);
-          console.log($(ui.helper[0]).children().attr('id'));
-     }
-    });
-*/
-
-
-// modal siirtaminen
 
 $('td').hover(function()
 {

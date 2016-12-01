@@ -1045,5 +1045,20 @@ function laatikonPaivays(thisDataReturn){
   }
 
 
+
+
+// <-- modal siirtaminen
+	$(".modal-header").hover(function() {
+	    $(this).css('cursor','pointer');
+	}, function() {
+	    $(this).css('cursor','auto');
+	});
+        $('.modal-dialog').draggable({
+            handle: ".modal-header",
+	    revert:"invalid",
+        });
+// modal siirtaminen -->
+
+
 });
 </script>
