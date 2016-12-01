@@ -210,6 +210,34 @@ $(document).ready(function(){
 	// tarkista , aloitus ja lopetus -->
 
 
+	// <-- check paallekain
+	var count	= 0;
+	  $.ajax({
+		  url: location.protocol + "//" + location.host + '/index.php/mobile/check_paallekkainMobile',
+		  data:{ tid : $('#Mobile_tid').val(), pvm : $('#pvm').val(), alku : $("#Mobile_aloitan").val(), loppu : $("#Mobile_loppui").val() },
+		  type:'POST',
+		  async: false,
+		  success:function(data){
+			data = JSON.parse(data);
+			console.log(data);
+			if(data > 0)
+			count = data;
+	   	},
+		error:function(data){
+			console.log(data);
+	    	}
+	  });
+
+	  if(count > 0){
+		var r = confirm('Aika päällekkäin, haluatko jatkaa');
+		if(!r){
+			return false;
+		}
+	  }
+	// check paallekain -->
+
+
+
 
     var Mobile_aloitan = $("#Mobile_aloitan").val();
     var Mobile_loppui = $("#Mobile_loppui").val();

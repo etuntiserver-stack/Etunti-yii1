@@ -43,7 +43,7 @@ $t = Tyontekijat::model()->findbypk($ex[1]);
 
 
   <?php if(Yii::app()->user->adminStatus == 1) : ?>
-  <input type="hidden" name="pvm" value="<?php echo $pvm; ?>">
+  <input type="hidden" name="pvm" id="pvm" value="<?php echo $pvm; ?>">
   <div class="row">
     <div class="col-sm-12">
     <legend>
@@ -192,6 +192,10 @@ function checkMaxValues(val){
 }
 
 	// toteuma.js on toimimassa
+
+
+
+
 
 });
 </script>
