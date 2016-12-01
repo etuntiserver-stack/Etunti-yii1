@@ -138,6 +138,11 @@ if(!empty($model->alku))
 $model->alku = date("d.m.Y",strtotime($model->alku));
 if(!empty($model->loppu))
 $model->loppu = date("d.m.Y",strtotime($model->loppu));
+
+if(isset($model->id))
+echo '<input type="hidden" id="modelID" value="'.$model->id.'">';
+if(isset($_GET['id']))
+$model->tid = $_GET['id'];
 ?>
 
 
@@ -284,8 +289,9 @@ $model->loppu = date("d.m.Y",strtotime($model->loppu));
   </div>
 </div><!-- form -->
 
-	<div class="buttons">
-		<?php echo CHtml::submitButton($model->isNewRecord ? 'Luo' : 'Tallenna',array('class'=>'btn btn-primary myBgColors')); ?>
+	<br>
+	<div class="section buttons">
+		<?php echo CHtml::submitButton('Tallenna',array('class'=>'btn btn-primary myBgColors tallennaKaksiLomaketta')); ?>
 	</div>
 
 <?php $this->endWidget(); ?>
@@ -301,6 +307,44 @@ $(document).ready(function(){
 
   $('#Tyosuhdet_vktyoaika').mask('00:00',{
         placeholder: "__:__"
+  });
+
+
+  $('#tyosuhdet-form').on('submit',function(e) {
+
+     if( $('#modelID').val() )
+     {
+	  $.ajax({
+		  url: location.protocol + "//" + location.host + '/index.php/tyosuhdet/update?id='+$('#modelID').val(),
+		  data:$(this).serialize(),
+		  type:'POST',
+		  success:function(data){
+			data = JSON.parse(data);
+			//alert(data);
+			$('#tyontekijat-form').submit();
+	   	},
+		error:function(data){
+		console.log(data);
+	    	}
+	  });
+
+     } else {
+	  $.ajax({
+		  url: location.protocol + "//" + location.host + '/index.php/tyosuhdet/create',
+		  data:$(this).serialize(),
+		  type:'POST',
+		  success:function(data){
+			data = JSON.parse(data);
+			//alert(data);
+			$('#tyontekijat-form').submit();
+	   	},
+		error:function(data){
+		console.log(data);
+	    	}
+	  });
+     }
+
+	  e.preventDefault();
   });
 
 });

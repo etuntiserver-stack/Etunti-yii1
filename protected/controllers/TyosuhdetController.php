@@ -87,8 +87,12 @@ class TyosuhdetController extends Controller
 		if(isset($_POST['Tyosuhdet']))
 		{
 			$model->attributes=$_POST['Tyosuhdet'];
-			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+			if($model->save()){
+				echo json_encode('saveOK');
+			} else {
+				echo json_encode('saveError');
+			}
+			exit;
 		}
 
 		$this->render('create',array(
@@ -111,8 +115,13 @@ class TyosuhdetController extends Controller
 		if(isset($_POST['Tyosuhdet']))
 		{
 			$model->attributes=$_POST['Tyosuhdet'];
-			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+			if($model->save()){
+				echo json_encode('saveOK');
+			} else {
+				echo json_encode('saveError');
+			}
+			exit;
+				//$this->redirect(array('view','id'=>$model->id));
 		}
 
 		$this->render('update',array(

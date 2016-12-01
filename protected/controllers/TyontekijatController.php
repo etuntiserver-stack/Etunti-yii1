@@ -353,7 +353,7 @@ class TyontekijatController extends Controller
 							$log->save();
 							//     LOG -->
 
-				$this->redirect(array('index'));
+				$this->redirect(array('update', 'id'=>$model->id));
 			}
 		}
 

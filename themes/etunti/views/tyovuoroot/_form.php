@@ -773,7 +773,7 @@ $('.mult').multiselect({
 
 
 
-	e.preventDefault(); 
+	e.preventDefault();
 
 	});
 

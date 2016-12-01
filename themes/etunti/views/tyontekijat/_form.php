@@ -522,7 +522,9 @@ window.initialize = function() {
 <br>
 
 	<div class="buttons">
-		<?php echo CHtml::submitButton($model->isNewRecord ? 'Luo' : 'Tallenna',array('class'=>'btn btn-primary myBgColors')); ?>
+	<?php if(!isset($model->id)): ?>
+		<?php echo CHtml::submitButton('Luo' ,array('class'=>'btn btn-primary myBgColors')); ?>
+	<?php endif; ?>
 	</div>
 
 <?php $this->endWidget(); ?>
