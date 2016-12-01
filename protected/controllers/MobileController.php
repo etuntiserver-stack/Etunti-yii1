@@ -1728,6 +1728,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		$site = Yii::app()->createController('Site');
 		$eilasketa = $site[0]->eiLasketa();
 
+
        		$criteria = new CDbCriteria();
         	$criteria->select = "
 			SUM(TIME_TO_SEC(TIMEDIFF(loppu, alku))) as l_tunnit
@@ -1955,7 +1956,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		  $d->aloitan = date("d.m.Y H:i",strtotime($d->aloitan));
 
 			$kesto = strtotime($d->loppui)-strtotime($d->aloitan);
-			$lu[$d->id.strtotime($d->aloitan)] = $d->tekijan_nimi."//".date("d.m",strtotime($d->aloitan))."//".$kesto."//mobile_".$d->id."//".$d->asiakas_hyvaksy."//".date("H:i",strtotime($d->aloitan))."//".date("H:i",strtotime($d->loppui))."//////".$d->sairaus;
+			$lu[strtotime($d->aloitan)] = $d->tekijan_nimi."//".date("d.m",strtotime($d->aloitan))."//".$kesto."//mobile_".$d->id."//".$d->asiakas_hyvaksy."//".date("H:i",strtotime($d->aloitan))."//".date("H:i",strtotime($d->loppui))."//////".$d->sairaus;
 		}
 
 
@@ -1977,7 +1978,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		  $d->loppui = date("d.m.Y H:i",strtotime($d->loppui));
 		  $d->aloitan = date("d.m.Y H:i",strtotime($d->aloitan));
 			$kesto = strtotime($d->loppui)-strtotime($d->aloitan);
-			$lu[$d->id.strtotime($d->aloitan)] = $d->tekijan_nimi."//".date("d.m",strtotime($d->aloitan))."//".$kesto."//toteutu_".$d->id."//".$d->asiakas_hyvaksy."//".date("H:i",strtotime($d->aloitan))."//".date("H:i",strtotime($d->loppui))."//".$d->osoite."//".$d->tietoja."//".$d->sairaus;
+			$lu[strtotime($d->aloitan)] = $d->tekijan_nimi."//".date("d.m",strtotime($d->aloitan))."//".$kesto."//toteutu_".$d->id."//".$d->asiakas_hyvaksy."//".date("H:i",strtotime($d->aloitan))."//".date("H:i",strtotime($d->loppui))."//".$d->osoite."//".$d->tietoja."//".$d->sairaus;
 		}
 
 		//if(count($lu) > 0)
