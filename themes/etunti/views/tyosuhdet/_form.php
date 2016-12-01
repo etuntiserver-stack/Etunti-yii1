@@ -133,6 +133,11 @@ $result2 = (int)abs((strtotime($d3) - strtotime($d4))/(60*60*24*30));
 	<hr>';
 
 }
+
+if(!empty($model->alku))
+$model->alku = date("d.m.Y",strtotime($model->alku));
+if(!empty($model->loppu))
+$model->loppu = date("d.m.Y",strtotime($model->loppu));
 ?>
 
 
@@ -153,13 +158,13 @@ $result2 = (int)abs((strtotime($d3) - strtotime($d4))/(60*60*24*30));
   </legend>
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'alku'); ?>
-		<?php echo $form->textField($model,'alku',array('size'=>20,'maxlength'=>20,'class'=>'form-control datepicker')); ?>
+		<?php echo $form->textField($model,'alku',array('size'=>20,'maxlength'=>20,'class'=>'form-control datepickerFI')); ?>
 		<?php echo $form->error($model,'alku'); ?>
 	</div>
 
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'loppu'); ?>
-		<?php echo $form->textField($model,'loppu',array('size'=>20,'maxlength'=>20,'class'=>'form-control datepicker')); ?>
+		<?php echo $form->textField($model,'loppu',array('size'=>20,'maxlength'=>20,'class'=>'form-control datepickerFI')); ?>
 		<?php echo $form->error($model,'loppu'); ?>
 	</div>
 
