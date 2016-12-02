@@ -111,10 +111,14 @@ class LaskuHistoriaController extends Controller
 		$pvm = date("Y-m-d",strtotime($_POST['from']));
 
         	$criteria->condition = " 
-			id IN ( SELECT lid FROM lasku_historia
-			WHERE  time > '".$pvm."'
-			AND yht_euro > 0 AND trust_statuscode!=101
-			ORDER BY id DESC)
+			id IN 
+			( 
+				SELECT lid FROM lasku_historia
+				WHERE  time > '".$pvm."'
+				AND yht_euro > 0 AND trust_statuscode!=101
+				AND palvelu='".$palvelu."'
+				ORDER BY id DESC
+			)
 			AND tilanne!=999			
 		";
 
