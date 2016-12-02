@@ -218,11 +218,14 @@ if(isset(Yii::app()->user->nimi))
 	  </div>
 	 </div>
 	</footer>
+
+<script type="text/javascript" src="https://etunti.atlassian.net/s/d41d8cd98f00b204e9800998ecf8427e-T/-3x7nu4/100023/c/1000.0.11/_/download/batch/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector.js?locale=en-US&collectorId=f67c367e"></script>
+
 </div><!-- page -->
 
 
 
-<script type="text/javascript" src="https://etunti.atlassian.net/s/d41d8cd98f00b204e9800998ecf8427e-T/-3x7nu4/100023/c/1000.0.11/_/download/batch/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector.js?locale=en-US&collectorId=f67c367e"></script>
+
 
 
 <script>
