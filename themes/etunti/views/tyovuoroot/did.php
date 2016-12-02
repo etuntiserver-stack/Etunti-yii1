@@ -230,7 +230,7 @@ if(!isset($_POST['tulosta']))
 
 	   $bod .=  '<div id="'.$tvVal->id.'_'.$did.'_'.$tid.'" class="did fullRivi" style="color:'.$color.'">';
 	   if( $from != 'mobiili' )
-	   $bod .=  '<span class="link text-danger fa fa-pencil-square-o muistin" for="'.$tvVal->id.'_'.$did.'_'.$tid.'"></span>';
+	   $bod .=  '<span class="link text-danger fa fa-pencil-square-o muistin" for="'.$tvVal->id.'_'.$did.'_'.$tid.'" data-toggle="tooltip" data-placement="top" title="'.Yii::t('main', 'Valinta kopiontia tai siirtämistä varten').'"></span>';
 	   $bod .=  '&nbsp;<span class="link tv_edit" id="tv_'.$tvVal->id.'">'.$al.' '.$osoite.'</span>';
 
 	   if(!empty($tvVal->kohteet->avain))

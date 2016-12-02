@@ -200,7 +200,7 @@ td .tp{
     {
 	echo '<tr>';
 	echo '<td>'.$t->tekijan_nimi.'<br>
-	<input type="checkbox" for="'.$t->id.'" title="Määrittele lähetettäväksi"><br>';
+	<input type="checkbox" for="'.$t->id.'" data-toggle="tooltip" data-placement="right" title="'.Yii::t('main', 'Määrittele lähetettäväksi').'"><br>';
 	//CHtml::link(Yii::t('main', 'Lähetä'),'/index.php/tyovuoroot/laheta?tid='.$t->id.'&week='.$week.'&year='.$year.'&tulosta=false',array('target'=>'_blank','class'=>'btn btn-sm btn-success'))
 
 	$file = $week.'_'.$year.'_'.$t->id.'.pdf';

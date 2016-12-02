@@ -60,6 +60,7 @@
   <th><?php echo Yii::t('main', 'SPL<br>Pvm'); ?></th>
   <th><?php echo Yii::t('main', 'LS'); ?></th>
   <th><?php echo Yii::t('main', 'VL'); ?></th>
+  <th><?php echo Yii::t('main', 'VKL'); ?></th>
   <th><?php echo Yii::t('main', 'Korvaus'); ?></th>
   <th><?php echo Yii::t('main', 'Lisätyötunnit'); ?></th>
   <th><?php echo Yii::t('main', 'Ennakko'); ?></th>
@@ -76,6 +77,7 @@
   $spl 		= 0;
   $vl 		= 0;
   $vlYht	= 0;
+  $vklYht	= 0;
   $slYht	= 0;
   $splYht	= 0;
   $lsYht	= 0;
@@ -96,14 +98,16 @@
   {
 	$tids[] = $data->id;
 	$tp = $this->Tp($data->id,$from,$to);
-  	$sl = $this->TidfromtoSL($from,$to,$data->id);
+  	$sl = $this->TidfromtoSairaus($from,$to,$data->id,'SL');
 	$slYht += $sl;
-  	$ls = $this->TidfromtoLS($from,$to,$data->id);
+  	$ls = $this->TidfromtoSairaus($from,$to,$data->id,'LS');
 	$lsYht += $ls;
-  	$spl = $this->TidfromtoSPL($from,$to,$data->id);
+  	$spl = $this->TidfromtoSairaus($from,$to,$data->id,'SPL');
 	$splYht += $spl;
-  	$vl = $this->TidfromtoVuosiloma($from,$to,$data->id);
+  	$vl = $this->TidfromtoVuosilomaPalkkatauluko($from,$to,$data->id, 'VL');
 	$vlYht += $vl;
+  	$vkl = $this->TidfromtoVuosilomaPalkkatauluko($from,$to,$data->id, 'VKL');
+	$vklYht += $vkl;
 	$totalTp += $tp;
   	$pyhat = $this->pyhapaivat($data->id,$from,$to,"pyhat");
 	$pyhatYht += $pyhat;
@@ -147,6 +151,7 @@
 			'spl'=>$spl,
 			'ls'=>$ls,
 			'vl'=>$vl,
+			'vkl'=>$vkl,
 			'from'=>$from,
 			'to'=>$to,
 			'pyhat'=>$pyhat,
@@ -182,6 +187,7 @@
 	<td><?php echo $splYht; ?></td>
 	<td><?php echo $this->num($lsYht); ?></td>
 	<td><?php echo $vlYht; ?></td>
+	<td><?php echo $vklYht; ?></td>
 	<td></td>
 	<td></td>
 	<td></td>

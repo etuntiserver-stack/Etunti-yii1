@@ -106,7 +106,7 @@
         <?php 
 
 	// VARAUS
-	  echo '<th>';
+	  echo '<th data-toggle="tooltip" data-placement="bottom" title="'.Yii::t('main', 'Keskeneräinen varaus').'">';
  	  echo '<b class="text-warning">'.Yii::t('main', 'VARAUS').'</b>';	
 	  echo '</th>';
 	// VARAUS

@@ -25,12 +25,6 @@ $this->breadcrumbs=array(
 
    <!-- tulostus -->
    <div class="pull-right">
-     <button class="btn btn-primary btn-sm myBgColors palkkatauluTaulu"><?php echo Yii::t('main', 'Tulosta'); ?></button>
-     <button class="btn btn-primary btn-sm btn-group myBgColors" data-toggle="collapse"  data-target="#haku"><?php echo Yii::t('main', 'Ekstrat'); ?> <b class="caret"></b></button>
-   </div>
-<?php
-/*
-   <div class="pull-right">
     <div class="form-inline">
      <form action="#" target="_blank" class="form-group" method="POST">
       <input type="hidden" name="from" value="<?php echo $from; ?>">
@@ -40,8 +34,6 @@ $this->breadcrumbs=array(
      <button class="btn btn-primary btn-sm btn-group myBgColors" data-toggle="collapse"  data-target="#haku"><?php echo Yii::t('main', 'Ekstrat'); ?> <b class="caret"></b></button>
     </div>
    </div>
-*/
-?>
    <!-- tulostus -->
 	</h2>
 

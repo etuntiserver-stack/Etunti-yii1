@@ -98,7 +98,7 @@
 
 	// VARAUS
 	  echo '<tr>';
-	  echo '<td width=1 id="first_0">';
+	  echo '<td width=1 id="first_0" data-toggle="tooltip" data-placement="right" title="'.Yii::t('main', 'Keskeneräinen varaus').'">';
 
 		echo '
 		<div class="row">
