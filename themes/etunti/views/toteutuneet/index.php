@@ -404,14 +404,14 @@ function dateDiff($start, $end) {
 		   <th>'.Yii::t('main', 'Lounaat').'</th>
 		   <th>'.Yii::t('main', 'Ilta').'</th>
 		   <th>'.Yii::t('main', 'Yö').'</th>
-		   <th>'.Yii::t('main', 'Su').'</th>
-		   <th>'.Yii::t('main', 'Py').'</th>
-		   <th>'.Yii::t('main', 'El').'</th>
-		   <th>'.Yii::t('main', 'SL').'</th>
-		   <th>'.Yii::t('main', 'SPL').'</th>
-		   <th>'.Yii::t('main', 'LS').'</th>
-		   <th>'.Yii::t('main', 'VL').'</th>
-		   <th>'.Yii::t('main', 'VKL').'</th>
+		   <th data-toggle="tooltip" data-placement="top" title="'.Yii::t('main', 'Sunnuntaitunnit').'">'.Yii::t('main', 'Su').'</th>
+		   <th data-toggle="tooltip" data-placement="top" title="'.Yii::t('main', 'Pyhäpäivätunnit').'">'.Yii::t('main', 'Py').'</th>
+		   <th data-toggle="tooltip" data-placement="top" title="'.Yii::t('main', 'Erikoislauantaitunnit').'">'.Yii::t('main', 'El').'</th>
+		   <th data-toggle="tooltip" data-placement="top" title="'.Yii::t('main', 'Palkkalinen sairasloma').'">'.Yii::t('main', 'SL').'</th>
+		   <th data-toggle="tooltip" data-placement="top" title="'.Yii::t('main', 'Palkaton sairasloma').'">'.Yii::t('main', 'SPL').'</th>
+		   <th data-toggle="tooltip" data-placement="top" title="'.Yii::t('main', 'Lapsen sairaus').'">'.Yii::t('main', 'LS').'</th>
+		   <th data-toggle="tooltip" data-placement="top" title="'.Yii::t('main', 'Vuosiloma').'">'.Yii::t('main', 'VL').'</th>
+		   <th data-toggle="tooltip" data-placement="top" title="'.Yii::t('main', 'Viikkolomapäivä').'">'.Yii::t('main', 'VKL').'</th>
 		  </tr>
 		 </thead>
 		  <tr>
