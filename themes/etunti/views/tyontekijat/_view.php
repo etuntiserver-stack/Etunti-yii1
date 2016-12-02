@@ -41,7 +41,7 @@
 	<td>
 		<?php 
 			if(is_array(json_decode($data->tyoryhma)))
-				echo implode(",", json_decode($data->tyoryhma));
+				echo implode("<br>", json_decode($data->tyoryhma));
 			else
 				echo $data->tyoryhma; 
 		?>
