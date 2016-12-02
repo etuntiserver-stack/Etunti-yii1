@@ -364,13 +364,26 @@ class TyovuorootController extends Controller
 		} elseif(Yii::app()->request->getPost('pdf_email'))
 		{
 
+		$kenelle = json_decode(Yii::app()->request->getPost('kenelle'));
+
+		// <-- Update piilota_mobiilista nollaksi
+		$tids = implode(",", $kenelle);
+		$criteria=new CDbCriteria;
+		$criteria->condition = " 
+			YEARWEEK(DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d'))='".$_POST['year'].$_POST['week']."' 
+			AND tid IN ('$tids')
+		";
+		$tv = Tyovuoroot::model()->findAll($criteria);
+		Tyovuoroot::model()->updateAll(array('piilota_mobiilista'=>0), $criteria);
+		//    Update piilota_mobiilista nollaksi -->
+
 
   		if(!isset($_POST['P'])) {
 		    echo 'Days error';
 		    exit;
 		}
 
-		$kenelle = explode(",",Yii::app()->request->getPost('kenelle'));
+
 
 
 		foreach($kenelle as $key)
@@ -1236,6 +1249,7 @@ class TyovuorootController extends Controller
 				$toistuva->save();
 				Tyovuoroot::model()->deleteAll(" toistuva_id='".$model->toistuva_id."' ");
 			}
+
 
 
 

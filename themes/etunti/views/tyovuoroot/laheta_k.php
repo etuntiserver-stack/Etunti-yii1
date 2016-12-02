@@ -213,12 +213,17 @@ $totalWeek = $this->renderPartial('//tyovuoroot/viikko',array('tid'=>$tt->id,'vi
 <?php } ?>
 
 <?php if($tulosta != 'lista') : ?>
+<?php
+$ids = json_encode(explode(",",$ids));
+?>
 <br>
 <div class="row">
  <div class="col-sm-5">
   <form action="#" id="pdf_email" class="form-group" method="POST">
     <input type="hidden" name="pdf_email" value="true">
-    <input type="hidden" name="kenelle" value="<?php echo $ids; ?>">
+    <input type="hidden" name="year" value="<?php echo $year; ?>">
+    <input type="hidden" name="week" value="<?php echo $week; ?>">
+    <textarea name="kenelle" style="display:none"><?php echo $ids; ?></textarea>
     <label><?php echo Yii::t('main','Lähetettävän viestin sisältö'); ?></label>
     <textarea name="kirjenBody" class="form-control" rows="6"></textarea>
     <br>
