@@ -102,7 +102,6 @@ $.each(checkedMuisti, function( index, value ) {
 
 $(".tallennaOikeudet").click(function(){
 
-    event.preventDefault();
     var searchIDs = $(".oikeudet input:checkbox:checked").map(function(){
       return $(this).attr('id');
     }).get(); 
