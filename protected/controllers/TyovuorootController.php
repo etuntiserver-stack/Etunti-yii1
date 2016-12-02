@@ -373,7 +373,9 @@ class TyovuorootController extends Controller
 			YEARWEEK(DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d'))='".$_POST['year'].$_POST['week']."' 
 			AND tid IN ('$tids')
 		";
-		$tv = Tyovuoroot::model()->findAll($criteria);
+		if(isset($_POST['P']))
+		$criteria->Addcondition ( " DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%w') IN (".implode(",",$_POST['P']).") ");
+
 		Tyovuoroot::model()->updateAll(array('piilota_mobiilista'=>0), $criteria);
 		//    Update piilota_mobiilista nollaksi -->
 
