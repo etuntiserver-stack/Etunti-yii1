@@ -57,7 +57,7 @@ class Tyosuhdet extends DB2ActiveRecord
 			//array('tid, alku, loppu, vktyoaika, nimike, palkkausmuoto, tuntihinta, matka_thinta, lippu_kuumaks, koe_loppu, koe_hinta, tuloraja_ajalle, perusprosentti, lisaprosentti, kuukaudessa, kahdessa_viikossa, viikossa, paivassa, atk_varten, yksi_tuloraja', 'required'),
 			array('tid, tyopvm_kk', 'numerical', 'integerOnly'=>true),
 			array('alku, loppu, koe_loppu', 'length', 'max'=>20),
-			array('vktyoaika, tuntihinta, matka_thinta, lippu_kuumaks, koe_hinta, perusprosentti, lisaprosentti, kuukaudessa, kahdessa_viikossa, viikossa, paivassa, atk_varten, yksi_tuloraja', 'length', 'max'=>10),
+			array('vktyoaika, tuntihinta, matka_thinta, lippu_kuumaks, koe_hinta, perusprosentti, lisaprosentti, kuukaudessa, kahdessa_viikossa, viikossa, paivassa, atk_varten, yksi_tuloraja, palkka_tyyppi', 'length', 'max'=>10),
 			array('nimike', 'length', 'max'=>40),
 			array('palkkausmuoto', 'length', 'max'=>30),
 			array('tuloraja_ajalle', 'length', 'max'=>100),
@@ -91,7 +91,7 @@ class Tyosuhdet extends DB2ActiveRecord
 			'vktyoaika' => Yii::t('main', 'Viikkotyöaika'),
 			'nimike' => Yii::t('main', 'Nimike'),
 			'palkkausmuoto' => Yii::t('main', 'Palkanmaksu. Esimerkiksi ( 1xkk 10.päivä )'),
-			'tuntihinta' => Yii::t('main', 'Tuntihinta'),
+			'tuntihinta' => Yii::t('main', 'Palkka'),
 			'matka_thinta' => Yii::t('main', 'Matka tuntihinta'),
 			'lippu_kuumaks' => Yii::t('main', 'Matkalipun kuukausihinta'),
 			'koe_loppu' => Yii::t('main', 'Koeaika kk'),
@@ -106,6 +106,7 @@ class Tyosuhdet extends DB2ActiveRecord
 			'atk_varten' => Yii::t('main', 'Laskennallinen tuloraja ATK-järjestelmiä varten'),
 			'yksi_tuloraja' => Yii::t('main', 'B Ennakonpidätys yhden tulorajan mukaan'),
 			'tyopvm_kk'=> Yii::t('main', 'Työpäiviä kuukaudessa'),
+			'palkka_tyyppi'=>Yii::t('main', 'Palkkatyyppi'),
 		);
 	}
 

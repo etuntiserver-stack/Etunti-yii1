@@ -197,9 +197,20 @@ $model->tid = $_GET['id'];
 		<?php echo $form->error($model,'palkkausmuoto'); ?>
 	</div>
 
+	<div class="section fill mb5 tyyppi">
+		<?php echo $form->labelEx($model,'palkka_tyyppi'); ?>
+		<?php
+		$list = array('kk'=>Yii::t('main', 'Kuukausipalkka'),'h'=>Yii::t('main', 'Tuntipalkka'));
+        	echo $form->dropDownList($model, 'palkka_tyyppi', $list,
+		array('class'=>'form-control'));	
+        	?>
+		<?php echo $form->error($model,'palkka_tyyppi'); ?>
+	</div>
+
 	<div class="section fill mb5">
+		<?php $model->tuntihinta = str_replace(",",".",$model->tuntihinta); ?>
 		<?php echo $form->labelEx($model,'tuntihinta'); ?>
-		<?php echo $form->textField($model,'tuntihinta',array('size'=>10,'maxlength'=>10,'class'=>'form-control')); ?>
+		<?php echo $form->numberField($model,'tuntihinta',array('size'=>10,'maxlength'=>10,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'tuntihinta'); ?>
 	</div>
 
