@@ -17,6 +17,16 @@
 /* Roman */
 .required, .errorMessage { color: red; }
 .link{ cursor: pointer }
+
+/* Tooltip */
+.tooltip .tooltip-inner {
+    /*background-color:#2fa5fb;*/
+    padding: 7px;
+}
+.tooltip.left > .tooltip-arrow {
+   /*border-left-color: #2fa5fb;*/
+}
+/* Tooltip */
 /* Roman */
 
 .sparkline-delay {
@@ -896,6 +906,7 @@ Copyright (c) 2014 Daniel Eden
 }
 .glyphicon-qrcode:before {
   content: "\e039";
+
 
 
 }
@@ -3247,6 +3258,7 @@ Copyright (c) 2014 Daniel Eden
 .fa-simplybuilt:before {
   content: "\f215";
 }
+
 .fa-skyatlas:before {
   content: "\f216";
 }
@@ -12928,6 +12940,7 @@ a.list-group-item:focus {
   padding-left: 35px;
 }
 .panel-group .accordion-icon:after {
+
   position: absolute;
   content: "\f068";
   font-family: "FontAwesome";
@@ -17540,6 +17553,7 @@ body.sidebar-collapsed #sidebar:before {
   content: "\f107";
   font-family: FontAwesome;
   font-style: normal;
+
   font-weight: normal;
   text-decoration: inherit;
 }

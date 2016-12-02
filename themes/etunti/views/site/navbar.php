@@ -26,6 +26,7 @@ if( $curpage == 'tyovuoroot/tv2' )
    $tyovuorot_sivut = Yii::t('main','Työvuorot työntekijöiden mukaan');
 ?>
   
+
        
   <!-- Start: Header -->
     <header class="navbar navbar-fixed-top navbar-shadow">
@@ -47,7 +48,7 @@ if( $curpage == 'tyovuoroot/tv2' )
             <span class="ad ad-wand fs16"></span>
           </a>
         </li>
-        <li class="hidden-xs" id="fullscreenTila" data-toggle="tooltip" title="<?php echo Yii::t('main', 'Kokoruuduntila'); ?>">
+        <li class="hidden-xs" id="fullscreenTila" data-toggle="tooltip" data-placement="bottom" title="<?php echo Yii::t('main', 'Kokoruuduntila'); ?>">
           <a class="request-fullscreen toggle-active" href="#">
             <span class="ad ad-screen-full fs18"></span>
           </a>
@@ -525,7 +526,7 @@ $('.tvchange').change(function(){
       </form>
 -->
       <ul class="nav navbar-nav navbar-right">
-        <li class="dropdown menu-merge" data-toggle="tooltip" title="<?php echo Yii::t('main', 'Uusimmat viestit'); ?>">
+        <li class="dropdown menu-merge" data-toggle="tooltip" data-placement="bottom" title="<?php echo Yii::t('main', 'Uusimmat viestit'); ?>">
           <a class="dropdown-toggle" data-toggle="dropdown" href="#">
             <span class="ad ad-radio-tower fs18" id="notiFyClick"></span>
           </a>
@@ -538,7 +539,7 @@ $('.tvchange').change(function(){
 	    	
           </ul>
         </li>
-        <li class="dropdown menu-merge" data-toggle="tooltip" title="<?php echo Yii::t('main', 'Valitse kieli'); ?>">
+        <li class="dropdown menu-merge" data-toggle="tooltip" data-placement="bottom" title="<?php echo Yii::t('main', 'Valitse kieli'); ?>">
           <a class="dropdown-toggle" data-toggle="dropdown" href="#">
              <span class=""></span> 
 		<?php
@@ -560,7 +561,7 @@ $('.tvchange').change(function(){
           </ul>
         </li>
 
-        <li class="dropdown menu-merge" data-toggle="tooltip" title="<?php echo Yii::t('main', 'Asetukset'); ?>">
+        <li class="dropdown menu-merge" data-toggle="tooltip" data-placement="bottom" title="<?php echo Yii::t('main', 'Asetukset'); ?>">
           <a href="#" class="dropdown-toggle " data-toggle="dropdown"> 
 	    <i class="fa fa-gear"></i>
             <span class="caret caret-tp hidden-xs"></span>
@@ -586,7 +587,7 @@ $('.tvchange').change(function(){
         </li>
 
 
-        <li class="dropdown menu-merge" data-toggle="tooltip" title="<?php echo Yii::t('main', 'Katso ohjevideot'); ?>">
+        <li class="dropdown menu-merge" data-toggle="tooltip" data-placement="bottom" title="<?php echo Yii::t('main', 'Katso ohjevideot'); ?>">
           <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/site/ohjevideot">
             <span class="fa fa-question-circle"></span>
           </a>
@@ -594,7 +595,7 @@ $('.tvchange').change(function(){
 
 
 
-        <li class="dropdown menu-merge" data-toggle="tooltip" title="<?php echo Yii::t('main', 'Valitse värit'); ?>">
+        <li class="dropdown menu-merge" data-toggle="tooltip" data-placement="bottom" title="<?php echo Yii::t('main', 'Valitse värit'); ?>">
           <a class="dropdown-toggle" data-toggle="dropdown" href="#">
              <span class="fa fa-eyedropper"></span> 
 
