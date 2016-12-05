@@ -104,28 +104,35 @@ class LaskuHistoriaController extends Controller
 
 
        		$criteria = new CDbCriteria();
-       		$criteria->order = " id DESC ";
 
 		$pvm = date("Y-m-d");
 		if(isset($_POST['from']))
 		$pvm = date("Y-m-d",strtotime($_POST['from']));
 
+		// <!-- Trust
+		if($palvelu == 'trust')
+		{
+        	$criteria->select = " 
+			( SELECT viitenumero FROM laskut WHERE t.lid=id ) as viitenumero,
+			( SELECT laskunumero FROM laskut WHERE t.lid=id ) as laskunumero,
+			t.* 
+		"; 
+        	$criteria->group = " lid "; 
+        	$criteria->order = " lid DESC "; 
         	$criteria->condition = " 
-			id IN 
-			( 
-				SELECT lid FROM lasku_historia
-				WHERE  time > '".$pvm."'
-				AND yht_euro > 0 AND trust_statuscode!=101
-				AND palvelu='".$palvelu."'
-				ORDER BY id DESC
-			)
-			AND tilanne!=999			
+			DATE(time) < '".$pvm."'
+			AND palvelu='".$palvelu."'
+			AND id NOT IN ( SELECT id FROM lasku_historia WHERE trust_statuscode='101' )
+			AND yht_euro > 0
+		
 		";
+		}
+		//      Trust -->
 
 
 		if(isset($_POST['tulosta']))
 		{
-		  $model = Lasku::model()->findAll($criteria);
+		  $model = LaskuHistoria::model()->findAll($criteria);
 	          $html2pdf = Yii::app()->ePdf->HTML2PDF('P', 'A4', 'en');
 		  $html2pdf->setDefaultFont('Arial');
 	          $html2pdf->WriteHTML($this->renderPartial('avoimet',array('model'=>$model,'palvelu'=>$palvelu), true));
@@ -133,12 +140,18 @@ class LaskuHistoriaController extends Controller
 
 		} else {
 
-		$dataProvider=new CActiveDataProvider('Lasku',array('criteria'=>$criteria));
+		$dataProvider=new CActiveDataProvider('LaskuHistoria', array(
+			'criteria'=>$criteria,
+			//'pagination'=>false
+		));
+
+		$dataProvider->pagination->pageSize = 250;
 		$this->render('avoimet',array(
 			'dataProvider'=>$dataProvider,
 			'palvelu'=>$palvelu,
 			'pvm'=>$pvm
 		));
+
 
 		}
 

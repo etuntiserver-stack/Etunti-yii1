@@ -102,7 +102,7 @@
                         <div class="section">
                           <label class="field prepend-icon">
 
-   			    <input type="text" class="gui-input datepicker" name="from" value="<?php echo $from; ?>" >
+   			    <input type="text" class="gui-input datepickerFI" name="from" value="<?php echo date('d.m.Y', strtotime($from)); ?>" >
 
                             <label for="firstname" class="field-icon">
                               <i class="fa fa-calendar"></i>
@@ -126,7 +126,7 @@
                         <div class="section">
                           <label class="field prepend-icon">
 
-   			    <input type="text" class="gui-input datepicker" name="to" value="<?php echo $to; ?>" >
+   			    <input type="text" class="gui-input datepickerFI" name="to" value="<?php echo date('d.m.Y', strtotime($to)); ?>" >
 
                             <label for="firstname" class="field-icon">
                               <i class="fa fa-calendar"></i>

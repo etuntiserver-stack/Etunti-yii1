@@ -2,6 +2,7 @@
 /* @var $this LaskuHistoriaController */
 /* @var $data LaskuHistoria */
 
+/*
        	$criteria = new CDbCriteria();
        	$criteria->select = " palvelu,id,status ";
        	$criteria->order = " id DESC ";
@@ -14,7 +15,14 @@
 	$nimi = $data->nimi;
    if($data->tyyppi == 'yritys')
 	$nimi = $data->yritys;
+*/
 
+	$l = Lasku::model()->findbypk($data->lid);
+	$nimi = '';
+   if(isset($l->tyyppi) and $l->tyyppi == 'henkilo')
+	$nimi = $l->nimi;
+   if(isset($l->tyyppi) and $l->tyyppi == 'yritys')
+	$nimi = $l->yritys;
 ?>
 
 <tr>
@@ -27,34 +35,38 @@
 	<?php echo CHtml::encode($data->laskunumero); ?>
 	</td>
 
+<?php /*
 	<td>
 	<?php 
 
-		  if(isset($l->palvelu) and $l->palvelu == 'trust')
+		  if(isset($data->palvelu) and $data->palvelu == 'trust')
 		  {
 
-		    $json = json_decode($l->status, true);
+		    $json = json_decode($data->status, true);
 
-		    if(isset($json['statustext']) and !empty($json['statustext']))
+		    if(is_array($json))
 		    {
-		      	echo '<b>'.date("d.m.Y H:i",strtotime($json['statustime'])).'</b><br> '.$json['statustext'];
+			echo '<pre>';
+		      	print_r($json);
+			echo '</pre>';
 		    }
 
 		  }
 
+
 	?>
 	</td>
+*/ ?>
 
 	<td>
 	<?php echo $data->viitenumero; ?>
 	</td>
 
 	<td>
-		<?php echo number_format($data->yhteensa_total, 2, ",", " "); ?>
+	<?php echo number_format($data->yht_euro, 2, ",", " "); ?>
 	</td>
 
-
 	<td>
-	<?php echo CHtml::encode($l->palvelu); ?>
+	<?php echo CHtml::encode($data->palvelu); ?>
 	</td>
 </tr>

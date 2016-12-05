@@ -60,7 +60,7 @@ th{
                         <div class="section">
                           <label class="field prepend-icon">
 
-   			    <input type="text" name="from" id="from" class="gui-input datepicker" value="<?php echo $pvm; ?>">
+   			    <input type="text" name="from" id="from" class="gui-input datepickerFI" value="<?php echo date('d.m.Y', strtotime($pvm)); ?>">
                             <label for="firstname" class="field-icon">
                               <i class="fa fa-calendar"></i>
                             </label>
@@ -88,16 +88,16 @@ th{
 <?php endif; ?>
 
 
-<?php if(Yii::app()->request->getPost('from')) : ?>
+
   <div class="panel heading-border">
    <div class="panel-body">
-
+    <div class="table-responsive">
 <table class="table table-bordered table-striped small">
  <tr>
   <thead class="myBgColors">
   <th><?php echo Yii::t('main','Asiakas'); ?></th>
   <th><?php echo Yii::t('main','Laskunro'); ?></th>
-  <th><?php echo Yii::t('main','Viimeinen tapahtuma'); ?></th>
+<!--  <th><?php echo Yii::t('main','Viimeinen tapahtuma'); ?></th> -->
   <th><?php echo Yii::t('main','Viitenumero'); ?></th>
   <th><?php echo Yii::t('main','Yhteensä'); ?></th>
   <th><?php echo Yii::t('main','Palvelu'); ?></th>
@@ -122,8 +122,8 @@ th{
 )); 
  ?>
 </table>
-
+    </div>
    </div>
   </div>
-<?php endif; ?>
+
 
