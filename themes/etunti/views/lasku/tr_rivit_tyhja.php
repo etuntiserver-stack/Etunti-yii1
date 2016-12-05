@@ -10,7 +10,10 @@ if(isset($_POST['num'])){
 	<TD>
 <input type="text" size="1" name="tkoodi[<?php echo $num; ?>]" id="tkoodi_<?php echo $num; ?>" class="for_tkoodi form-control" value="" data-toggle="collapse"  data-target="#lt_<?php echo $num; ?>">
 	<?php
-	echo CHtml::dropdownList('','palvelu', CHtml::listData(LaskutusTuotteet::model()->findAll(), 'id', 'tuotenimi'), array('empty'=>'Valitse tuote/palvelu','class'=>'form-control collapse valitseTuote input-sm','id'=>'lt_'.$num,'num'=>$num));
+		$criteria = new CDbCriteria();
+       		$criteria->condition = " is_active=1 ";
+		echo CHtml::dropdownList('','palvelu', CHtml::listData(LaskutusTuotteet::model()->findAll($criteria), 'id', 'tuotenimi'), 
+		array('empty'=>'Valitse tuote/palvelu','class'=>'form-control collapse valitseTuote input-sm','id'=>'lt_'.$num,'num'=>$num));
 	?>
 	</TD>
 

@@ -108,6 +108,24 @@
 
 		<?php echo $form->error($model,'ryhma'); ?>
 	</div>
+
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'is_active'); ?>
+		<?php 
+        	$l = array(0=>Yii::t('main', 'Ei'),1=>Yii::t('main', 'Kyllä'));
+		echo $form->dropDownList($model,'is_active',$l, 
+			array('class'=>'form-control','options' => array('24'=>array('selected'=>true)))
+		);
+
+		?>
+
+		<?php echo $form->error($model,'is_active'); ?>
+	</div>
+
+
+
+
 <br>
 	<div class="buttons">
 		<?php echo CHtml::submitButton($model->isNewRecord ? 'Luo' : 'Tallenna',array('class'=>'btn btn-primary')); ?>
