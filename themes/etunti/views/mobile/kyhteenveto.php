@@ -235,6 +235,9 @@ $this->breadcrumbs=array(
 	<input type="hidden" id="to" value="<?php echo $to; ?>">
 
 
+<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/moment.js"></script>
+<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/bootstrap-sortable.js"></script>
+
 <script type="text/javascript">
 $(document).ready(function(){
 
@@ -271,8 +274,10 @@ $(".showKuka").click(function(){
            type: "GET",
 	   data: { kohdenID : kohde_kannasta[1], from : from, to : to, asiakkalle : 0 },
            success: function(data){
-		console.log(data);
+		data = JSON.parse(data);
+		//console.log(data);
 		$("#showtyo_"+thisID[1]).html(data);
+		$.bootstrapSortable({ applyLast: true }); //bootstrap-sortable.js
            }
         });
 	

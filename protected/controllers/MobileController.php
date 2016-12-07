@@ -1927,9 +1927,9 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 
 	public function actionTyobykohde($kohdenID,$from,$to)
 	{
-
-		$from = date("Y-m-d", strtotime($from));
-		$to = date("Y-m-d", strtotime($to));
+		$body 	= '<table class="table table-bordered sortable">';
+		$from 	= date("Y-m-d", strtotime($from));
+		$to 	= date("Y-m-d", strtotime($to));
 
 		$lu = array();
 		$ids = array();
@@ -1937,9 +1937,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		$fromTo = " DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$from."' AND '".$to."' ";
 
        		$criteria = new CDbCriteria();
-        	$criteria->select = "id,tid,tekijan_nimi,aloitan,loppui,asiakas_hyvaksy,osoite,sairaus";
         	$criteria->order = "kohde_kannasta";
-        	//$criteria->group = "kohde_kannasta";
         	$criteria->condition = "
 			id NOT IN (select kid from sivexkuitti_repaired) 
 			AND status='3'
@@ -1949,22 +1947,19 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		";
 
 		$model = Mobile::model()->findAll($criteria);
-
 		foreach($model as $d){
 			$kesto = 0;
 
-		  $d->loppui = date("d.m.Y H:i",strtotime($d->loppui));
-		  $d->aloitan = date("d.m.Y H:i",strtotime($d->aloitan));
+		  	$d->loppui 	= date("d.m.Y H:i",strtotime($d->loppui));
+		  	$d->aloitan 	= date("d.m.Y H:i",strtotime($d->aloitan));
+			$kesto 		= strtotime($d->loppui)-strtotime($d->aloitan);
 
-			$kesto = strtotime($d->loppui)-strtotime($d->aloitan);
-			$lu[strtotime($d->aloitan)] = $d->tekijan_nimi."//".date("d.m",strtotime($d->aloitan))."//".$kesto."//mobile_".$d->id."//".$d->asiakas_hyvaksy."//".date("H:i",strtotime($d->aloitan))."//".date("H:i",strtotime($d->loppui))."//////".$d->sairaus;
+			$lu[] = $d->tekijan_nimi."//".date("d.m.Y",strtotime($d->aloitan))."//".$kesto."//mobile_".$d->id."//".$d->asiakas_hyvaksy."//".date("H:i",strtotime($d->aloitan))."//".date("H:i",strtotime($d->loppui))."//////".$d->sairaus.'//'.strtotime($d->aloitan);
 		}
 
 
        		$criteria = new CDbCriteria();
-        	$criteria->select = "id,tid,tekijan_nimi,aloitan,loppui,asiakas_hyvaksy,osoite,tietoja,sairaus";
         	$criteria->order = "kohde_kannasta";
-        	//$criteria->group = "kohde_kannasta";
         	$criteria->condition = "
 			status='3'
 			AND sairaus!=1
@@ -1976,15 +1971,28 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		foreach($model as $d){
 			$kesto = 0;
 
-		  $d->loppui = date("d.m.Y H:i",strtotime($d->loppui));
-		  $d->aloitan = date("d.m.Y H:i",strtotime($d->aloitan));
-			$kesto = strtotime($d->loppui)-strtotime($d->aloitan);
-			$lu[strtotime($d->aloitan)] = $d->tekijan_nimi."//".date("d.m",strtotime($d->aloitan))."//".$kesto."//toteutu_".$d->id."//".$d->asiakas_hyvaksy."//".date("H:i",strtotime($d->aloitan))."//".date("H:i",strtotime($d->loppui))."//".$d->osoite."//".$d->tietoja."//".$d->sairaus;
+		  	$d->loppui 	= date("d.m.Y H:i",strtotime($d->loppui));
+		  	$d->aloitan 	= date("d.m.Y H:i",strtotime($d->aloitan));
+		  	$kesto 		= strtotime($d->loppui)-strtotime($d->aloitan);
+
+			$lu[] = $d->tekijan_nimi."//".date("d.m.Y",strtotime($d->aloitan))."//".$kesto."//toteutu_".$d->id."//".$d->asiakas_hyvaksy."//".date("H:i",strtotime($d->aloitan))."//".date("H:i",strtotime($d->loppui))."//".$d->osoite."//".$d->tietoja."//".$d->sairaus.'//'.strtotime($d->aloitan);
 		}
 
 		//if(count($lu) > 0)
-		ksort($lu);
+		//ksort($lu);
 
+			$body .= 
+			'<thead>
+			 <tr>
+			  <th>Pvm</th>
+			  <th data-defaultsort="asc">Aloitus</th>
+			  <th>Lopetus</th>
+			  <th>Kesto</th>
+			  <th>Työntekijä</th>
+			  <th>Tietoja</th>
+			 </tr>
+			 </thead>
+			 <tbody>';
 
 
 		foreach($lu as $k=>$v)
@@ -2012,38 +2020,43 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 
 			$tietoja = '';
 			if(isset($explV[7]) and !empty($explV[8]))
-			$tietoja = trim($explV[8]);
+			$tietoja = '<br><p>'.trim($explV[8]).'</p>';
 
 			$spl = $this->sairausMerkki($explV[9]);
 
-			echo 
-			'<div class="row">
-			  <div class="row">
-			   <div class="col-sm-6"><b>'.$explV[1].' '.$explV[5].'-'.$explV[6].'</b> kesto: '.$this->sprint($explV[2]).' '.$asiakas_hyvaksy.'</div>
-			   <div class="col-sm-6">'.$explV[0].$kertaosoite.$spl.'</div>
-			  </div>
-			'.$tietoja.'
-			</div>';
+			$body .= 
+			'<tr>
+			  <td>'.$explV[1].'</td>
+			  <td data-value="'.$explV[10].'">'.$explV[5].'</td>
+			  <td>'.$explV[6].'</td>
+			  <td>'.$this->sprint($explV[2]).' '.$asiakas_hyvaksy.'</td>
+			  <td>'.$explV[0].$kertaosoite.$spl.'</td>
+			  <td>'.$tietoja.'</td>
+			</tr>';
 			}
 			if(isset($explV[3]))
 			$ids[] = $explV[3];
 		}
 
+		$body 	.= '</tbody></table>';
+
 		if(isset($_GET['asiakkalle']) and $_GET['asiakkalle'] == 1)
 		{
-		echo '<br>';
-		echo '<div class="pull-right">';
-		echo '<form action="asiakas_hyvaksyminen" method="POST">';
-		echo '<input type="hidden" name="fromPosti" value="'.$from.'">';
-		echo '<input type="hidden" name="toPosti" value="'.$to.'">';
-		echo '<input type="hidden" name="ids" value="'.implode(",",$ids).'">';
-		echo '<input type="hidden" name="kohdenID" value="'.$kohdenID.'">';
-		echo '<input type="submit" class="btn btn-sm btn-success" value="'.Yii::t('main','Lähetä asiakkaalle hyväksyttäväksi').'">';
-		echo '</form>';
-		echo '</div>';
+		$body .= '<br>';
+		$body .= '<div class="pull-right">';
+		$body .= '<form action="asiakas_hyvaksyminen" method="POST">';
+		$body .= '<input type="hidden" name="fromPosti" value="'.$from.'">';
+		$body .= '<input type="hidden" name="toPosti" value="'.$to.'">';
+		$body .= '<input type="hidden" name="ids" value="'.implode(",",$ids).'">';
+		$body .= '<input type="hidden" name="kohdenID" value="'.$kohdenID.'">';
+		$body .= '<input type="submit" class="btn btn-sm btn-success" value="'.Yii::t('main','Lähetä asiakkaalle hyväksyttäväksi').'">';
+		$body .= '</form>';
+		$body .= '</div>';
 		}
 
 
+
+		echo json_encode($body);
 	}
 
 
