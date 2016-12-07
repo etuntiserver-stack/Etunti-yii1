@@ -32,7 +32,7 @@ class OnlinevarausController extends Controller
                 		'users'=>array("*"),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update', 'kaikki'),
+				'actions'=>array('create','update', 'kaikki', 'varaukset_raportti'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -185,17 +185,43 @@ class OnlinevarausController extends Controller
 	        $criteria->addCondition (" DATE(time) BETWEEN '".$from."' AND '".$to."' ");
 
 
-		$dataProvider=new CActiveDataProvider('Onlinevaraus', array(
-			'criteria'=>$criteria,
-			//'pagination'=>false
-		));
 
-		$dataProvider->pagination->pageSize = 50;
-		$this->render('kaikki', array(
-			'dataProvider' => $dataProvider,
-			'from' => $from,
-			'to' => $to
-		));
+		if(Yii::app()->request->getPost('tulosta'))
+		{
+			$model = Onlinevaraus::model()->findAll($criteria);
+
+
+	          	$html2pdf = Yii::app()->ePdf->HTML2PDF('P', 'A4', 'en');
+			$html2pdf->setDefaultFont('Arial');
+		        $html2pdf->WriteHTML($this->renderPartial('varaukset_raportti', array(
+				'model' => $model,
+				'from' => $from,
+				'to' => $to
+			),true));
+		        $html2pdf->Output();
+
+			/*
+			$this->render('varaukset_raportti', array(
+				'model' => $model,
+				'from' => $from,
+				'to' => $to
+			));
+			*/
+
+		} else {
+
+			$dataProvider=new CActiveDataProvider('Onlinevaraus', array(
+				'criteria'=>$criteria,
+				//'pagination'=>false
+			));
+
+			$dataProvider->pagination->pageSize = 50;
+			$this->render('kaikki', array(
+				'dataProvider' => $dataProvider,
+				'from' => $from,
+				'to' => $to
+			));
+		}
 	}
 
 

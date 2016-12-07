@@ -8,6 +8,16 @@
         <!-- begin: .tray-center -->
         <div class="tray-center">
 
+   <!-- tulostus -->
+   <div class="pull-right">
+     <form action="#" target="_blank" method="POST">
+      <input type="hidden" name="from" value="<?php echo $from; ?>">
+      <input type="hidden" name="to" value="<?php echo $to; ?>">
+      <input type="submit" name="tulosta" class="btn btn-default btn-sm" value="<?php echo Yii::t('main', 'ALV raportti'); ?>">
+     </form>
+   </div>
+   <!-- tulostus -->
+
 
               <h2 class="myBgColors p10"> <?php echo Yii::t('main', 'Onlinevaraukset'); ?></h2>
 
@@ -28,7 +38,7 @@
                         <div class="section">
                           <label class="field prepend-icon">
 
-   			    <input type="text" class="gui-input datepicker" name="from" value="<?php echo $from; ?>">
+   			    <input type="text" class="gui-input datepickerFI" name="from" value="<?php echo date('d.m.Y', strtotime($from)); ?>">
 
                             <label for="firstname" class="field-icon">
                               <i class="glyphicon glyphicon-calendar"></i>
@@ -41,7 +51,7 @@
                         <div class="section">
                           <label class="field prepend-icon">
 
-   			    <input type="text" class="gui-input datepicker" name="to" value="<?php echo $to; ?>">
+   			    <input type="text" class="gui-input datepickerFI" name="to" value="<?php echo date('d.m.Y', strtotime($to)); ?>">
 
                             <label for="firstname" class="field-icon">
                               <i class="glyphicon glyphicon-calendar"></i>

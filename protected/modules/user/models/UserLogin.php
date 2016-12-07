@@ -38,7 +38,7 @@ class UserLogin extends CFormModel
 			'rememberMe'=>UserModule::t("Muista minut"),
 			'username'=>UserModule::t("Käyttäjätunnus"),
 			'password'=>UserModule::t("Salasana"),
-			'domain'=>UserModule::t("Domain"),
+			'domain'=>UserModule::t("Yritystunnus"),
 		);
 	}
 
