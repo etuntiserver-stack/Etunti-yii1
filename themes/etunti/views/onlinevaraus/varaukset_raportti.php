@@ -3,13 +3,19 @@
 ?>
 <link rel="stylesheet" type="text/css" href="css/pdf_table.css">
 
+<style>
+#ylataulu{
+	width: 750px;
+}
+</style>
+
 <table id="ylataulu">
- <tr><td style="width:200px">
+ <tr><td style="width:60%">
   <?php $asetukset=Asetukset::model()->findbypk(1); ?>
   <img src="<?php echo $asetukset->logon_polkku; ?>" height="<?php echo $asetukset->logon_korkeus; ?>">
- </td><td valign="right" style="width:20%">
-    <h2><?php echo Yii::t('main', 'Onlinevaraus ALV-raportti'); ?></h2><br>
-    <?php echo date("d.m.Y",strtotime($from)).' - '.date("d.m.Y",strtotime($to)); ?>
+ </td><td  style="text-align: right; width:40%">
+    <b><?php echo Yii::t('main', 'Onlinevaraus ALV-raportti'); ?></b>
+    <p><?php echo date("d.m.Y",strtotime($from)).' - '.date("d.m.Y",strtotime($to)); ?></p>
  </td>
  </tr>
 </table>
