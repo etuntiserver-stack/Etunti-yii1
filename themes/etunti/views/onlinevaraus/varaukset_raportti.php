@@ -42,6 +42,15 @@
   $yhtVerollinen= 0;
   foreach($model as $data){
 	
+	if(empty($data->hinta))
+	$data->hinta 		= 0;
+
+	if(empty($data->veroton_hinta))
+	$data->veroton_hinta	= 0;
+
+	$data->hinta 		= str_replace(",",".",$data->hinta);
+	$data->veroton_hinta	= str_replace(",",".",$data->veroton_hinta);
+
 	$tuote = '';
 	$t = json_decode($data->tilauksen_kuvaus, true);
 	if(isset($t['paa']))
@@ -49,11 +58,11 @@
 		if(isset($t2[0]))
 		   $tuote = $t2[0];
 
-	$alvMaara 	= str_replace(",",".",$data->hinta)-str_replace(",",".",$data->veroton_hinta);
+	$alvMaara 	= $data->hinta-$data->veroton_hinta;
 
-	$yhtVeroton	+= str_replace(",",".",$data->veroton_hinta);
+	$yhtVeroton	+= $data->veroton_hinta;
   	$yhtalvMaara	+= $alvMaara;
-	$yhtVerollinen	+= str_replace(",",".",$data->hinta);
+	$yhtVerollinen	+= $data->hinta;
 
 	echo '<tr>';
 	echo '<td align="left">'.$tuote.'</td>';
