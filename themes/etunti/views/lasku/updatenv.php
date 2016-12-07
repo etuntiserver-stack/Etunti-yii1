@@ -4,8 +4,7 @@
         <!-- begin: .tray-center -->
         <div class="tray-center">
 
-        <h2 class="myBgColors p10"> <i class="fa fa-barcode"></i> <?php echo Yii::t('main', 'Lasku netvisor ID#: ').$id; ?> 
-		<?php echo CHtml::link('',Yii::app()->request->baseUrl.'/index.php/lasku/create',array('class'=>'btn btn-default fa fa-plus')); ?>
+        <h2 class="myBgColors p10"> <i class="fa fa-barcode"></i> <?php echo Yii::t('main', 'Laskunumero ').$id; ?> 
 	</h2>
 
 

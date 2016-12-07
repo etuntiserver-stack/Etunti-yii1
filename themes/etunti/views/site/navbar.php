@@ -954,18 +954,10 @@ $('.tvchange').change(function(){
             <ul class="nav sub-nav">
 
 	<?php $a = Asetukset::model()->findbypk(1); ?>
-	<?php if($a->netvisor_kaytto == 1 and $a->palvelu_tyyppi == 4) : ?>
-              <li>
-                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/lasku/indexnv">
-                  <span class="glyphicon glyphicon-barcode"></span> <?php echo Yii::t('main', 'Laskut netvisor'); ?></a>
-              </li>
-	<?php else : ?>
               <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/lasku/index">
                   <span class="glyphicon glyphicon-barcode"></span> <?php echo Yii::t('main', 'Laskut'); ?></a>
               </li>
-	<?php endif ?>
-
               <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/LaskutusTuotteet/index">
                   <span class="fa fa-shopping-cart"></span> <?php echo Yii::t('main', 'Tuotteet ja palvelut'); ?></a>

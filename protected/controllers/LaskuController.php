@@ -572,7 +572,7 @@ class LaskuController extends Controller
 					$InsertedDataIdentifier = $this->netvisorLasku("add", $m);
 					if(!empty($InsertedDataIdentifier))
 					Lasku::model()->updateByPk($model->id, array('netvisorkey'=>$InsertedDataIdentifier));
-					$this->redirect(array('indexnv'));
+					$this->redirect(array('index'));
 			    }
 			   //  Netvisor -->
 
@@ -693,6 +693,20 @@ class LaskuController extends Controller
 
 	$info =  '';
 	$asetukset=Asetukset::model()->findbypk(1);
+
+
+	// <-- Netvisor updater
+	//if($asetukset->palvelu_tyyppi == 4 and !isset(Yii::app()->user->laskunTarkistus))
+	//{
+		Yii::app()->user->setState('laskunTarkistus', true);
+
+       		$criteria = new CDbCriteria();
+	        $criteria->order = "  id DESC ";
+	        $criteria->condition = "  netvisorkey!=0 ";
+
+	//}
+	//     Netvisor updater -->
+
 
 if( $_SERVER['REMOTE_ADDR'] != '::1' and $_SERVER['REMOTE_ADDR'] != '127.0.0.1' )
 {
