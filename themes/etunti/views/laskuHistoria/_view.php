@@ -60,7 +60,7 @@
 
 
 		// <-- Local
-		if(isset($data->palvelu) and $data->palvelu == 'local') 
+		if( isset($data->palvelu) and ($data->palvelu == 'local' or $data->palvelu == 'netvisor') ) 
 		{
 
 		    $str = $data->status;

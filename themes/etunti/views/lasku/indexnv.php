@@ -13,8 +13,11 @@
 
 
 <?php
-
-	
+/*
+echo '<pre>';
+print_r($result->SalesInvoiceList->SalesInvoice);
+echo '</pre>';
+*/	
  if($result->ResponseStatus->Status == 'OK')
  {
 

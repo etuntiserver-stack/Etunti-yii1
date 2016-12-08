@@ -691,25 +691,73 @@ class LaskuController extends Controller
 	public function actionIndex()
 	{
 
-	$info =  '';
-	$asetukset=Asetukset::model()->findbypk(1);
+		$info =  '';
+		$asetukset=Asetukset::model()->findbypk(1);
+
+		$from = date("Y-m-d", strtotime("first day of this month"));
+		$to = date("Y-m-d");
+
+		if(isset($_POST['from']) and isset($_POST['to'])){
+		$from 	= date("Y-m-d",strtotime($_POST['from']));
+		$to 	= date("Y-m-d",strtotime($_POST['to']));
+		}
 
 
-	// <-- Netvisor updater
-	//if($asetukset->palvelu_tyyppi == 4 and !isset(Yii::app()->user->laskunTarkistus))
-	//{
-		Yii::app()->user->setState('laskunTarkistus', true);
-
-       		$criteria = new CDbCriteria();
-	        $criteria->order = "  id DESC ";
-	        $criteria->condition = "  netvisorkey!=0 ";
-
-	//}
-	//     Netvisor updater -->
 
 
 if( $_SERVER['REMOTE_ADDR'] != '::1' and $_SERVER['REMOTE_ADDR'] != '127.0.0.1' )
 {
+
+
+	// <-- Netvisor updater
+	if($asetukset->palvelu_tyyppi == 4)
+	{
+
+		$netvisorList = $this->netvisorList(date("Y-m-d",strtotime($from)),date("Y-m-d",strtotime($to.' +1 day')));
+		if($netvisorList->ResponseStatus->Status == 'OK')
+		{
+			foreach($netvisorList->SalesInvoiceList->SalesInvoice as $list)
+			{
+		       		$criteria = new CDbCriteria();
+			        $criteria->condition = " netvisorkey='".(int)$list->NetvisorKey."' ";
+				$l = Lasku::model()->find($criteria);
+
+				if(isset($l->id))
+				{
+		       		$criteria = new CDbCriteria();
+			        $criteria->order = " id DESC ";
+			        $criteria->condition = " lid='".$l->id."' ";
+				$h = LaskuHistoria::model()->find($criteria);
+				}
+
+				if( isset($h->id) and 
+					(
+					$h->status != $list->InvoiceStatus 
+					or $h->yht_euro != str_replace(",",".",$list->OpenSum)
+					)
+				)
+				{
+
+					//echo '<pre>';
+					//print_r( $list );
+					//echo '</pre>';
+
+		    			// Lasku historia 
+					$historia = new LaskuHistoria;
+					$historia->time = date("Y-m-d H:i:s", strtotime($list->Invoicedate));
+					$historia->lid = $l->id;
+					$historia->status = $list->InvoiceStatus;
+					$historia->palvelu = "netvisor";
+					$historia->yht_euro = str_replace(",",".",$list->OpenSum);
+					$historia->save();
+
+				}
+
+			}
+		}
+
+	}
+	//     Netvisor updater -->
 
 
 	// <-- Postita
@@ -959,15 +1007,6 @@ exit;
 		if(Yii::app()->request->getPost('asiakasLaskulle'))
        		$criteria->addCondition ( " as_nro='".Yii::app()->request->getPost('asiakasLaskulle')."' " );
 
-		$from = date("Y-m-d", strtotime("first day of this month"));
-		$to = date("Y-m-d");
-
-		if(isset($_POST['from']) and isset($_POST['to'])){
-		$from 	= date("Y-m-d",strtotime($_POST['from']));
-		$to 	= date("Y-m-d",strtotime($_POST['to']));
-		}
-
-
         	$criteria->addCondition ("DATE(paivays) BETWEEN 
 			'".$from."' AND '".$to."' 
 		");
@@ -1143,7 +1182,6 @@ exit;
 	{ 
 
        		$criteria = new CDbCriteria();
-       		$criteria->select = " time,palvelu,postita_statuscode,status ";
        		$criteria->order = " id DESC ";
        		$criteria->condition = " lid='".$data->id."' ";
 		$l = LaskuHistoria::model()->find($criteria);
@@ -1237,8 +1275,33 @@ exit;
 
 		}
 		//  Local -->
-		  
-		    $tilanne = ''; 
+		
+
+
+		// <-- Netvisor
+		$netvisor = false;
+		$netvisorStr = '';
+		if(isset($l->palvelu) and $l->palvelu == 'netvisor')
+		{
+
+		  if($l->status == 'unsent'){
+		   $netvisorStr = 'Lasku lähettämätön';
+		   $netvisor = true;
+		  } elseif($l->status == 'open'){
+		   $netvisorStr = 'Lasku avoin';
+		   $netvisor = true;
+		  } elseif($l->status == 'paid'){
+		   $netvisorStr = 'Lasku maksettu';
+		   $netvisor = true;
+		  } elseif($l->status == 'rejected'){
+		   $netvisorStr = 'Lasku rejected';
+		   $netvisor = true;
+		  }
+
+		}
+		//  Netvisor -->
+  
+		$tilanne = ''; 
 
 		if($trust == true)
 		    $tilanne = $trustStr; 
@@ -1246,7 +1309,8 @@ exit;
 		    $tilanne = $postitaStr;
 		elseif($local == true)
 		    $tilanne = $localStr;
-
+		elseif($netvisor == true)
+		    $tilanne = $netvisorStr;
 
             	return $tilanne;
 	}
@@ -1546,9 +1610,8 @@ $xml .= '
 
 	}
 
-
-
-	public function actionIndexnv()
+/*
+	protected function netvisorGetsalesinvoice($netvisorkey)
 	{
 
 		$return = '';
@@ -1557,7 +1620,7 @@ $xml .= '
 
 	  if(isset($n[0]))
 	  {
-		$url		= $n[0].'/salesinvoicelist.nv';
+		$url		= $n[0].'/getsalesinvoice.nv?netvisorkey='.$netvisorkey;
 		$host 		= $n[1];
 
 		$sender 	= $n[2];
@@ -1609,14 +1672,88 @@ $xml .= '
 		$context = stream_context_create($optsGET);
 		
 		$response = file_get_contents($url, false, $context);
-		$result = new SimpleXMLElement($response);
-	
-		$this->render('indexnv', array('result'=>$result));
+		$return = new SimpleXMLElement($response);
+	   }
 
-	  }
+		return $return;
+	}
+*/
+
+	protected function netvisorList($lastmodifiedstart, $lastmodifiedend)
+	{
+
+		$return = '';
+		$site = Yii::app()->createController('Site');
+		$n = $site[0]->netvisorYhteys();
+
+	  if(isset($n[0]))
+	  {
+		$url		= $n[0].'/salesinvoicelist.nv?lastmodifiedstart='.$lastmodifiedstart.'&lastmodifiedend='.$lastmodifiedend;
+		$host 		= $n[1];
+
+		$sender 	= $n[2];
+		$customerId	= $n[3];
+		$partnerId	= $n[4];
+		$timestamp	= $n[5];
+		$language	= $n[6];
+		$organisationIdentifier	= $n[7];
+		$transactionIdentifier	= $n[8];
+		$userKey 	= $n[9];
+		$partnerKey	= $n[10];
+
+
+
+		$getMAC = md5(
+			$url.'&'.
+			$sender.'&'.
+			$customerId.'&'.
+			$timestamp.'&'.
+			$language.'&'.
+			$organisationIdentifier.'&'.
+			$transactionIdentifier.'&'.
+			$userKey.'&'.
+			$partnerKey
+		 	);
+	
+		$auth_data = 
+		    "Host: $host\r\n".  
+		    "X-Netvisor-Authentication-Sender: $sender\r\n".  
+		    "X-Netvisor-Authentication-CustomerId: $customerId\r\n".  
+		    "X-Netvisor-Authentication-PartnerId: $partnerId\r\n".  
+		    "X-Netvisor-Authentication-Timestamp: $timestamp\r\n".
+		    "X-Netvisor-Interface-Language: $language\r\n".
+		    "X-Netvisor-Organisation-ID: $organisationIdentifier\r\n".  
+		    "X-Netvisor-Authentication-TransactionId: $transactionIdentifier\r\n".
+		    "X-Netvisor-Authentication-MAC: $getMAC\r\n"; 
+		
+	
+		$optsGET = array(
+		  'http'=>array(
+		    'method'=>"GET",
+		    'header'=>"Accept: text/plain\r\n" .
+		              "Content-Type: application/x-www-form-urlencoded\r\n".
+			      $auth_data,
+		    'content'=> ''
+		  )
+		);
+	
+		$context = stream_context_create($optsGET);
+		
+		$response = file_get_contents($url, false, $context);
+		$return = new SimpleXMLElement($response);
+	   }
+
+		return $return;
+	}
+
+	public function actionIndexnv()
+	{
+		$result = $this->netvisorList(null,null);
+		$this->render('indexnv', array('result'=>$result));
 	}
 
 
+	
 	public function actionUpdatenv($id)
 	{
 
