@@ -1294,7 +1294,10 @@ exit;
 		   $netvisorStr = 'Lasku maksettu';
 		   $netvisor = true;
 		  } elseif($l->status == 'rejected'){
-		   $netvisorStr = 'Lasku rejected';
+		   $netvisorStr = 'Lasku hylätty';
+		   $netvisor = true;
+		  } elseif($l->status == 'creditloss'){
+		   $netvisorStr = 'Luottotappio';
 		   $netvisor = true;
 		  }
 
