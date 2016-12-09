@@ -661,11 +661,11 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 		<?php endif; ?>
 
 
-		<?php if(
+		<?php /* if(
 			isset($model->id) 
 		) : ?>
 		<a href="lasku_pdf?id=<?php echo $model->id; ?>" target="_blank" class="btn  btn-primary btn-group myBgColors"><?php echo Yii::t('main','Esikatselu'); ?></a>
-		<?php endif; ?>
+		<?php endif; */?>
 
 
 
@@ -704,7 +704,26 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
   }
   ?>
 
+		<?php if(isset($model->id) 
+			and $model->tilanne == 1 
+			and $asetukset->palvelu_tyyppi == 4
+			and $asetukset->netvisor_kaytto == 1
+			and $model->netvisorkey == 0
+			//and $model->laskun_nimetys != "Hyvityslasku"
+			and $model->tilanne != 999
+		): ?>
+		<a href="finvoice?id=<?php echo $model->id; ?>&lahetaNetvisor=true" class="btn  btn-success btn-group myBgColors" data-toggle="tooltip" data-placement="top" title="<?php echo Yii::t('main', 'Lähetä Netvisoriin'); ?>"><?php echo Yii::t('main','Lähetä'); ?></a>
+		<?php endif; ?>
 
+		<?php if(isset($model->id) 
+			and $model->tilanne == 1 
+			and empty($model->trust_jobid) 
+			and $asetukset->palvelu_tyyppi == 2 
+			and $model->laskun_nimetys != "Hyvityslasku"
+			and $model->tilanne != 999
+		): ?>
+		<a href="finvoice?id=<?php echo $model->id; ?>&finvoiceTrust=true" class="btn  btn-success btn-group myBgColors" data-toggle="tooltip" data-placement="top" title="<?php echo Yii::t('main', 'Lähetä Trustiin'); ?>"><?php echo Yii::t('main','Lähetä'); ?></a>
+		<?php endif; ?>
 
 		<?php if(isset($model->id) and $model->tilanne == '0') : ?>
 		<a href="finvoice?id=<?php echo $model->id; ?>&hyvaksyminen=true" class="btn  btn-success btn-group myBgColors"><?php echo Yii::t('main','Hyväksy'); ?></a>
@@ -712,6 +731,7 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 
 		<?php if(
 			isset($model->id)
+			and $asetukset->palvelu_tyyppi != 4
 			and $model->tilanne != 999
 		) : ?>
 		<a href="lasku_pdf?id=<?php echo $model->id; ?>&muistutuslasku=true" target="_blank" class="btn  btn-primary btn-group myBgColors"><?php echo Yii::t('main','Maksumuistutus'); ?></a>
@@ -719,8 +739,8 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 
 		<?php if(isset($model->id) 
 			and $model->laskun_nimetys != "Hyvityslasku" 
-			and $asetukset->palvelu_tyyppi == 2
-			and $model->trust_jobid != ''
+			//and $asetukset->palvelu_tyyppi == 2
+			//and $model->trust_jobid != ''
 			and $model->tilanne != 999
 			)
 		: ?>
@@ -748,20 +768,11 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 		<?php endif; */ ?>
 
 
-		<?php if(isset($model->id) 
-			and $model->tilanne == 1 
-			and empty($model->trust_jobid) 
-			and $asetukset->palvelu_tyyppi == 2 
-			and $model->laskun_nimetys != "Hyvityslasku"
-			and $model->tilanne != 999
-		): ?>
-		<a href="finvoice?id=<?php echo $model->id; ?>&finvoiceTrust=true" class="btn  btn-success btn-group myBgColors"><?php echo Yii::t('main','Lähetä finvoice (TRUST.FI)'); ?></a>
-		<?php endif; ?>
-
 		<?php if(
 			isset($model->id) 
 			and $model->tilanne != 0 
 			and $asetukset->palvelu_tyyppi != 2
+			and $asetukset->palvelu_tyyppi != 4
 			and $model->tilanne != 999
 		) : ?>
 		<a href="finvoice?id=<?php echo $model->id; ?>&lahetaSahkopostilla=true" class="btn  btn-success btn-group myBgColors"><?php echo Yii::t('main','Lähetä sähköpostilla'); ?></a>
@@ -772,6 +783,7 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 			isset($model->id) 
 			and $model->tilanne != 0 
 			and $asetukset->palvelu_tyyppi != 2
+			and $asetukset->palvelu_tyyppi != 4
 			and !empty($asetukset->trust_url)
 			and !empty($asetukset->trust_cid)
 			and !empty($asetukset->trust_api)

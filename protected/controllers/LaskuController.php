@@ -130,6 +130,7 @@ class LaskuController extends Controller
 		$model->hyvityslasku=$lasku->id;
 		$model->laskun_nimetys="Hyvityslasku";
 		$model->yhteensa_total='-'.$lasku->yhteensa_total;
+		$model->netvisorkey='';
 		if($model->save()){
 
 		$laskunRivit=LaskunRivit::model()->findAll("lid='".$lasku->id."'");
@@ -138,8 +139,22 @@ class LaskuController extends Controller
 		$lm=new LaskunRivit;
 		$lm->attributes=$rivit->attributes;
 		$lm->lid=$model->id;
+		//$lm->hinta='-'.$rivit->hinta;
+		$lm->kpl='-'.$rivit->kpl;
+		$lm->hinta_alv='-'.$rivit->hinta_alv;
+		$lm->veroton='-'.$rivit->veroton;
+		$lm->yhteensa_alv='-'.$rivit->yhteensa_alv;
 		$lm->save();
 		}
+
+
+		// Lasku historia
+		$historia = new LaskuHistoria;
+		$historia->lid = $model->id;
+		$historia->status = 'HYVITYSLASKU';
+		$historia->palvelu = "local";
+		$historia->yht_euro = $model->yhteensa_total;
+		$historia->save();
 
 		$this->redirect(array('update','id'=>$model->id));
 
@@ -561,24 +576,6 @@ class LaskuController extends Controller
 		    $historia->yht_euro = $model->yhteensa_total;
 		    $historia->save();
 
-
-
-
-			   // <-- Netvisor
-			   $a = Asetukset::model()->findbypk(1);
-			   if($a->netvisor_kaytto == 1 and $a->palvelu_tyyppi == 4)
-			   {
-					$m = Lasku::model()->findbypk($model->id);
-					$InsertedDataIdentifier = $this->netvisorLasku("add", $m);
-					if(!empty($InsertedDataIdentifier))
-					Lasku::model()->updateByPk($model->id, array('netvisorkey'=>$InsertedDataIdentifier));
-					$this->redirect(array('index'));
-			    }
-			   //  Netvisor -->
-
-
-
-
 				$this->redirect(array('update','id'=>$model->id));
 				//$this->redirect(array('admin'));
 			}
@@ -637,29 +634,6 @@ class LaskuController extends Controller
 			}
 		}
 
-
-
-
-			   // <-- Netvisor
-			   $a = Asetukset::model()->findbypk(1);
-			   if($a->netvisor_kaytto == 1 and $a->palvelu_tyyppi == 4)
-			   {
-				if($model->netvisorkey == 0)
-				{
-					$InsertedDataIdentifier = $this->netvisorLasku("add", $model);
-					if(!empty($InsertedDataIdentifier))
-					Lasku::model()->updateByPk($model->id, array('netvisorkey'=>$InsertedDataIdentifier));
-
-				} else {
-
-					$InsertedDataIdentifier = $this->netvisorLasku("edit", $model);
-
-				}
-			    }
-			   //  Netvisor -->
-
-
-
 				$this->redirect(array('update','id'=>$model->id));
 			}
 		}
@@ -705,10 +679,6 @@ class LaskuController extends Controller
 
 
 
-if( $_SERVER['REMOTE_ADDR'] != '::1' and $_SERVER['REMOTE_ADDR'] != '127.0.0.1' )
-{
-
-
 	// <-- Netvisor updater
 	if($asetukset->palvelu_tyyppi == 4)
 	{
@@ -718,38 +688,56 @@ if( $_SERVER['REMOTE_ADDR'] != '::1' and $_SERVER['REMOTE_ADDR'] != '127.0.0.1' 
 		{
 			foreach($netvisorList->SalesInvoiceList->SalesInvoice as $list)
 			{
-		       		$criteria = new CDbCriteria();
-			        $criteria->condition = " netvisorkey='".(int)$list->NetvisorKey."' ";
-				$l = Lasku::model()->find($criteria);
 
-				if(isset($l->id))
+				//echo '<pre>';
+				//print_r( $list );
+				//echo '</pre>';
+
+				$getLaskun = $this->netvisorGetsalesinvoice($list->NetvisorKey);
+				if($getLaskun->ResponseStatus->Status == 'OK')
 				{
-		       		$criteria = new CDbCriteria();
-			        $criteria->order = " id DESC ";
-			        $criteria->condition = " lid='".$l->id."' ";
-				$h = LaskuHistoria::model()->find($criteria);
-				}
-
-				if( isset($h->id) and 
-					(
-					$h->status != $list->InvoiceStatus 
-					or $h->yht_euro != str_replace(",",".",$list->OpenSum)
-					)
-				)
-				{
-
 					//echo '<pre>';
-					//print_r( $list );
-					//echo '</pre>';
+					//print_r( $getLaskun );
+					//echo '</pre><hr>';
 
-		    			// Lasku historia 
-					$historia = new LaskuHistoria;
-					$historia->time = date("Y-m-d H:i:s", strtotime($list->Invoicedate));
-					$historia->lid = $l->id;
-					$historia->status = $list->InvoiceStatus;
-					$historia->palvelu = "netvisor";
-					$historia->yht_euro = str_replace(",",".",$list->OpenSum);
-					$historia->save();
+	
+			       		$criteria = new CDbCriteria();
+				        $criteria->condition = " netvisorkey='".$list->NetvisorKey."' ";
+					$l = Lasku::model()->find($criteria);
+
+					if(isset($l->id))
+					{
+					//echo $l->id.'<br>';
+			       		$criteria = new CDbCriteria();
+				        $criteria->order = " id DESC ";
+				        $criteria->condition = " lid='".$l->id."' ";
+					$h = LaskuHistoria::model()->find($criteria);
+					}
+	
+					if( isset($l->id) and isset($h->id) and $l->id == $h->lid
+						and 
+						(
+						$h->status != $getLaskun->SalesInvoice->InvoiceStatus 
+						or $h->yht_euro != str_replace(",",".",$list->OpenSum)
+						)
+					)
+					{
+	
+						//echo '<pre>';
+						//print_r( $list );
+						//echo '</pre>';
+	
+			    			// Lasku historia 
+						$historia = new LaskuHistoria;
+						$historia->time = date("Y-m-d H:i:s", strtotime($list->Invoicedate));
+						$historia->lid = $l->id;
+						$historia->status = $getLaskun->SalesInvoice->InvoiceStatus;
+						$historia->palvelu = "netvisor";
+						$historia->yht_euro = str_replace(",",".",$list->OpenSum);
+						$historia->save();
+	
+					}
+
 
 				}
 
@@ -757,7 +745,15 @@ if( $_SERVER['REMOTE_ADDR'] != '::1' and $_SERVER['REMOTE_ADDR'] != '127.0.0.1' 
 		}
 
 	}
+	//exit;
 	//     Netvisor updater -->
+
+
+if( $_SERVER['REMOTE_ADDR'] != '::1' and $_SERVER['REMOTE_ADDR'] != '127.0.0.1' )
+{
+
+
+
 
 
 	// <-- Postita
@@ -1283,24 +1279,8 @@ exit;
 		$netvisorStr = '';
 		if(isset($l->palvelu) and $l->palvelu == 'netvisor')
 		{
-
-		  if($l->status == 'unsent'){
-		   $netvisorStr = 'Lasku lähettämätön';
+		   $netvisorStr = $l->status;
 		   $netvisor = true;
-		  } elseif($l->status == 'open'){
-		   $netvisorStr = 'Lasku avoin';
-		   $netvisor = true;
-		  } elseif($l->status == 'paid'){
-		   $netvisorStr = 'Lasku maksettu';
-		   $netvisor = true;
-		  } elseif($l->status == 'rejected'){
-		   $netvisorStr = 'Lasku hylätty';
-		   $netvisor = true;
-		  } elseif($l->status == 'creditloss'){
-		   $netvisorStr = 'Luottotappio';
-		   $netvisor = true;
-		  }
-
 		}
 		//  Netvisor -->
   
@@ -1515,6 +1495,7 @@ exit;
 $xml = '
 <root>
   <SalesInvoice>
+    <SalesInvoiceNumber>'.$model->laskunumero.'</SalesInvoiceNumber>
     <SalesInvoiceDate format="ansi">'.date("Y-m-d", strtotime($model->paivays)).'</SalesInvoiceDate>
     <SalesInvoiceDeliveryDate format="ansi">'.date("Y-m-d", strtotime($model->paivays)).'</SalesInvoiceDeliveryDate>
     <SalesInvoiceReferenceNumber>'.$model->viitenumero.'</SalesInvoiceReferenceNumber>
@@ -1613,7 +1594,7 @@ $xml .= '
 
 	}
 
-/*
+
 	protected function netvisorGetsalesinvoice($netvisorkey)
 	{
 
@@ -1680,7 +1661,7 @@ $xml .= '
 
 		return $return;
 	}
-*/
+
 
 	protected function netvisorList($lastmodifiedstart, $lastmodifiedend)
 	{
