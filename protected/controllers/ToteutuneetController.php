@@ -947,6 +947,7 @@ class ToteutuneetController extends Controller
 			tid = '".$tid."' and aloitan !='' and loppui !='' 
 			AND id NOT IN(select kid from sivexkuitti_repaired)
 			AND (status='2' OR status='3')
+			AND DAYOFWEEK(DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d'))!=1
 			$pvmSTR
 		";
 
@@ -967,6 +968,7 @@ class ToteutuneetController extends Controller
         	$criteria->condition = "  
 			tid = '".$tid."' and aloitan !='' and loppui !='' 
 			AND (status='2' OR status='3')
+			AND DAYOFWEEK(DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d'))!=1
 			$pvmSTR
 		";
 
