@@ -512,6 +512,8 @@ class LaskuController extends Controller
 			$model->attributes=$_POST['Lasku'];
 			$model->tilanne=0;
 			$model->tapahtumapvm=date("Y-m-d H:i:s");
+			$model->paivays=date("Y-m-d", strtotime($_POST['Lasku']['paivays']));
+			$model->erapaiva=date("Y-m-d", strtotime($_POST['Lasku']['erapaiva']));
 			$model->laskun_nimetys="Lasku";
 			if($model->save()){
 
@@ -607,6 +609,8 @@ class LaskuController extends Controller
 		if(isset($_POST['Lasku']))
 		{
 			$model->attributes=$_POST['Lasku'];
+			$model->paivays=date("Y-m-d", strtotime($_POST['Lasku']['paivays']));
+			$model->erapaiva=date("Y-m-d", strtotime($_POST['Lasku']['erapaiva']));
 			if($model->save()){
 
 

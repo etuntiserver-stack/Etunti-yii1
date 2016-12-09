@@ -50,7 +50,9 @@ $model->viivastyskorko = $asetukset->viivastyskorko;
 
 
 if(isset($model->id)){
-$paivays = $model->paivays;
+$model->paivays = date("d.m.Y", strtotime($model->paivays));
+$model->erapaiva = date("d.m.Y", strtotime($model->erapaiva));
+
 echo '<input type="hidden" id="modelID" value="1">';
 echo '<input type="hidden" id="forLaskutusTyyppi" value="'.$model->laskutus.'">';
 echo '<input type="hidden" id="forTilanne" value="'.$model->tilanne.'">';
@@ -319,13 +321,13 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
   <legend><?php echo Yii::t('main', 'LASKUN TIEDOT'); ?></legend>
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'paivays'); ?>
-		<?php echo $form->textField($model,'paivays',array('value'=>$paivays,'size'=>20,'maxlength'=>20,'class'=>'form-control  datepicker')); ?>
+		<?php echo $form->textField($model,'paivays',array('size'=>20,'maxlength'=>20,'class'=>'form-control  datepickerFI')); ?>
 		<?php echo $form->error($model,'paivays'); ?>
 	</div>
 
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'erapaiva'); ?>
-		<?php echo $form->textField($model,'erapaiva',array('size'=>20,'maxlength'=>20,'class'=>'form-control datepicker')); ?>
+		<?php echo $form->textField($model,'erapaiva',array('size'=>20,'maxlength'=>20,'class'=>'form-control datepickerFI')); ?>
 		<?php echo $form->error($model,'erapaiva'); ?>
 	</div>
 
