@@ -365,7 +365,9 @@ function dateDiff($start, $end) {
     $yhtSu 	+= $tyoSu;
     }
 
+    if(date('N', strtotime($date)) != 7)
     $tyoPy 	= $this->pyhapaivat($explTekija[0],$date,"pyhat");
+
     $yhtPy 	+= $tyoPy;
 
     $tyoEl 	= $this->pyhapaivat($explTekija[0],$date,"el");
