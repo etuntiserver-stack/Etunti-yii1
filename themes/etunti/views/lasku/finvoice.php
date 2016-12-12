@@ -176,7 +176,6 @@ if(isset($_GET['finvoiceTrust']) or isset($_GET['hyvityslasku'])){
    $rowsArray = array();
      foreach($laskunRivit as $rivi){
 
-	if(isset($_GET['hyvityslasku']) and isset($_GET['refundtojobid']) and !empty($_GET['refundtojobid']))
 
         $rowsArray[] =  array(
                         "productid" => $rivi->id, # tuotenro
@@ -280,6 +279,7 @@ $xml = encodeXml (array(
                 "company" => $lasku['yritys'], # yrityksen nimi
                 //"addressaddline2" => "Edunvalvoja Essi Vuori",
                 "address" => $lasku['osoite'], # katuosoite
+
                 "postcode" => $lasku['postinumero'],
                 "city" => $lasku['toimipaikka'],
                 "addresscountry" => "FIN",

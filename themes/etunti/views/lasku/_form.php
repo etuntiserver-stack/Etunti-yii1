@@ -59,7 +59,7 @@ echo '<input type="hidden" id="forTilanne" value="'.$model->tilanne.'">';
 echo '<input type="hidden" id="trust_jobid" value="'.$model->trust_jobid.'">';
 echo '<input type="hidden" id="postita_jobid" value="'.$model->postita_jobid.'">';
 } else {
-$paivays = date("Y-m-d");
+$model->paivays = date("d.m.Y");
 echo '<input type="hidden" id="forTilanne" value="0">';
 }
 

@@ -451,7 +451,7 @@ class LaskuController extends Controller
 
 		$erapaiva = '';
 		if(!empty($a->maksuehto))
-		$erapaiva = date("Y-m-d",strtotime("+$a->maksuehto day"));
+		$erapaiva = date("d.m.Y",strtotime("+$a->maksuehto day"));
 
 		echo json_encode($a->laskutus_kanava."//".$a->maksuehto."//".$tyyppi."//".$a->osoite."//".$a->postinumero."//".$a->kaupunki."//".$a->yhteyshenkilo."//".$a->puhelin."//".$kodeOn."//".$erapaiva."//".$a->valittajan_tunnus."//".$a->verkkolaskuosoite."//".$a->muistutuslasku_auto."//".$a->kirjeenluokka."//".$a->sahkoposti."//".$a->viivastyskorko);
 	}
