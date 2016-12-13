@@ -120,11 +120,9 @@ class LaskuHistoriaController extends Controller
         	$criteria->group = " lid "; 
         	$criteria->order = " lid DESC "; 
         	$criteria->condition = " 
-			DATE(time) < '".$pvm."'
+			DATE(time) <= '".$pvm."'
 			AND palvelu='".$palvelu."'
-			AND id NOT IN ( SELECT id FROM lasku_historia WHERE trust_statuscode='101' )
-			AND yht_euro > 0
-		
+			AND id NOT IN ( SELECT id FROM lasku_historia WHERE trust_statuscode='101' AND yht_euro!='0' AND yht_euro!='' )		
 		";
 		}
 		//      Trust -->
