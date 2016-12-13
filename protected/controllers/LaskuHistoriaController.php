@@ -230,6 +230,9 @@ class LaskuHistoriaController extends Controller
 		if(isset($_POST['lid']) and !empty(trim($_POST['lid'])))
 	        $criteria->addCondition (" lid LIKE '%".$_POST['lid']."%' ");
 	
+		if(isset($_POST['palvelu']) and !empty(trim($_POST['palvelu'])))
+	        $criteria->addCondition (" palvelu='".$_POST['palvelu']."' ");
+
 		$dataProvider=new CActiveDataProvider('LaskuHistoria', array(
 			'criteria'=>$criteria,
 			//'pagination'=>false

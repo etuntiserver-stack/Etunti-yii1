@@ -35,6 +35,19 @@
                       </div>
 
                       <div class="col-md-2">
+                        <div class="section">
+                          <label class="field prepend-icon">
+
+   			    <input type="text" class="gui-input" name="palvelu" value="<?php if(isset($_POST['palvelu'])) echo $_POST['palvelu']; ?>" placeholder="Lasku palvelu..">
+
+                            <label for="firstname" class="field-icon">
+                              <i class="fa fa-user"></i>
+                            </label>
+                          </label>
+                        </div>
+                      </div>
+
+                      <div class="col-md-2">
         	        <input type="submit" class="btn btn-primary btn-lg haemob btn-block myBgColors" value="Hae">
 		      </div>
 
