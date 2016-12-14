@@ -287,7 +287,7 @@ class LaskuController extends Controller
 	public function actionValitsetuote()
 	{
 		$tuote = LaskutusTuotteet::model()->findbypk($_POST['tuoteID']);
-		echo $tuote->tuotenimi."//".$tuote->hinta_alv_0."//".$tuote->alv."//".$tuote->yksikko."//".$tuote->hinta_alv_sis;
+		echo $tuote->tuotenimi."//".$tuote->hinta_alv_0."//".$tuote->alv."//".$tuote->yksikko."//".$tuote->hinta_alv_sis."//".$tuote->id;
 
 	}
 
@@ -551,6 +551,7 @@ class LaskuController extends Controller
 				$lr->alv	=$_POST['alv'][$key];
 				$lr->hinta_alv	=$_POST['hinta_alv'][$key];
 				$lr->ale	=$_POST['ale'][$key];
+				$lr->tuoteID	=$_POST['tuoteID'][$key];
 
 				if(	isset($as->id) 
 					and (int)$as->vinkki_tunnit > 0 
@@ -632,6 +633,7 @@ class LaskuController extends Controller
 				$lr->alv	=$_POST['alv'][$key];
 				$lr->hinta_alv	=$_POST['hinta_alv'][$key];
 				$lr->ale	=$_POST['ale'][$key];
+				$lr->tuoteID	=$_POST['tuoteID'][$key];
 				$lr->veroton	=$_POST['veroton'][$key];
 				$lr->yhteensa_alv=$_POST['yhteensa_alv'][$key];
 				$lr->save();
@@ -1214,10 +1216,15 @@ $xml .= '<InvoiceLines>';
 foreach($laskunRivit as $rivit)
 {
 
+	$ProductIdentifier = '';
+	$tuotteet = LaskutusTuotteet::model()->findByPk($rivit->tuoteID);
+	if(isset($tuotteet->id) and $tuotteet->netvisorkey)
+		$ProductIdentifier = $tuotteet->netvisorkey;
+
 $xml .= '
        <InvoiceLine>
           <SalesInvoiceProductLine>
-             <ProductIdentifier type="netvisor">8</ProductIdentifier>
+             <ProductIdentifier type="netvisor">'.$ProductIdentifier.'</ProductIdentifier>
              <ProductName>'.$rivit->tkoodi.'</ProductName>
              <ProductUnitPrice type="net">'.$rivit->hinta.'</ProductUnitPrice>
              <ProductVatPercentage vatcode="KOMY">'.$rivit->alv.'</ProductVatPercentage>

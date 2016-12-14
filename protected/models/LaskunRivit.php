@@ -48,7 +48,7 @@ class LaskunRivit extends DB2ActiveRecord
 		// will receive user inputs.
 		return array(
 			array('lid, rivi, tkoodi, kpl, alv', 'required'),
-			array('lid, rivi', 'numerical', 'integerOnly'=>true),
+			array('lid, rivi, tuoteID', 'numerical', 'integerOnly'=>true),
 			array('nimike,kpl', 'length', 'max'=>100),
 			array('tkoodi, nimike', 'length', 'max'=>255),
 			array('yksikko, hinta, alv, hinta_alv, ale, veroton, yhteensa_alv', 'length', 'max'=>20),

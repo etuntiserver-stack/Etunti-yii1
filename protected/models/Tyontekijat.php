@@ -110,7 +110,7 @@ public $tunnus;
 			'tyoehtosopimus' => Yii::t('main', 'Työehtosopimus'),
 			'tekijan_kulunvalvonta' => Yii::t('main', 'Kulunvalvonta'),
 			'tekijan_pankkitili' => Yii::t('main', 'Pankkitili'),
-			'tekijan_konttori' => Yii::t('main', 'Konttori'),
+			'tekijan_konttori' => Yii::t('main', 'BIC'),
 			'aktiivinen' => Yii::t('main', 'Työntekijän tila'),
 			'tekijan_tietoja' => Yii::t('main', 'Tietoja'),
 			'tekijan_muisti' => Yii::t('main', 'Muistiinpanoja'),

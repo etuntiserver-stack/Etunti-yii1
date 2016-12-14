@@ -539,6 +539,7 @@ class TyontekijatController extends Controller
 	protected function netvisorTyontekija($tila, $model)
 	{
 
+		$modelTyosuhteet = Tyosuhdet::model()->find(" tid='".$model->id."' ");
 
 		$return = '';
 		$site = Yii::app()->createController('Site');
@@ -589,6 +590,11 @@ class TyontekijatController extends Controller
 	    "X-Netvisor-Authentication-MAC: $getMAC\r\n"
 	; 
 	
+		$payrollrulegroupname = '';
+	if($modelTyosuhteet->palkka_tyyppi == 'kk')
+		$payrollrulegroupname = 'Kuukausipalkkalaiset';
+	if($modelTyosuhteet->palkka_tyyppi == 'h')
+		$payrollrulegroupname = 'Tuntipalkkalaiset';
 
 // <-- XML
 $xml = '
@@ -596,25 +602,25 @@ $xml = '
   <employee>
     <employeebaseinformation>
       <employeeidentifier>'.$model->tekijan_henkilotunnus.'</employeeidentifier>
-      <firstname>Anna</firstname>
-      <lastname>Asiakas</lastname>
-      <phonenumber>050 123 456</phonenumber>
-      <email>anna.asiakas@yritys.fi</email>
+      <firstname>'.$model->tekijan_nimi.'</firstname>
+      <lastname>Työntekijä</lastname>
+      <phonenumber>'.$model->tekijan_puh.'</phonenumber>
+      <email>'.$model->tekijan_email.'</email>
     </employeebaseinformation>
     <employeepayrollinformation>
-      <streetaddress>Keisarinnankatu 1</streetaddress>
-      <postnumber>56120</postnumber>
-      <city>Lappeenranta</city>
-      <municipality>Lappeenranta</municipality>
+      <streetaddress>'.$model->tekijan_katuosoite.'</streetaddress>
+      <postnumber>'.$model->tekijan_pnumero.'</postnumber>
+      <city>'.$model->tekijan_ptoimipaikka.'</city>
+      <municipality>'.$model->tekijan_ptoimipaikka.'</municipality>
       <country>FI</country>
-      <nationality>SE</nationality>
+      <nationality>FI</nationality>
       <language>FI</language>
-      <employeenumber>13</employeenumber>
-      <profession>Myyjä</profession>
-      <jobbegindate format="ansi">2011-09-03</jobbegindate>
-      <payrollrulegroupname>Kuukausipalkkaiset</payrollrulegroupname>
-      <bankaccountnumber>FI211234xxxx xxxx xx</bankaccountnumber>
-      <bankidentificationcode>NDEAFIHH</bankidentificationcode>
+      <employeenumber>'.$model->id.'</employeenumber>
+      <profession>Työntekijä</profession>
+      <jobbegindate format="ansi">'.date("Y-m-d", strtotime($modelTyosuhteet->alku)).'</jobbegindate>
+      <payrollrulegroupname>'.$modelTyosuhteet->palkka_tyyppi.'</payrollrulegroupname>
+      <bankaccountnumber>'.$model->tekijan_pankkitili.'</bankaccountnumber>
+      <bankidentificationcode>'.$model->tekijan_konttori.'</bankidentificationcode>
    </employeepayrollinformation>
   </employee>
 </root>';

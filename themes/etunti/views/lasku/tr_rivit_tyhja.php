@@ -8,6 +8,9 @@ if(isset($_POST['num'])){
      <TR class="kaikkiTR" id="trRivi_<?php echo $num; ?>">
 	<TD><span class="link text-danger poista" for="poista_<?php echo $num; ?>" style="font-size:150%"><i class="fa fa-times"></i></span></TD>
 	<TD>
+
+<input type="hidden" size="1" name="tuoteID[<?php echo $num; ?>]" id="tuoteID_<?php echo $num; ?>" class="form-control">
+
 <input type="text" size="1" name="tkoodi[<?php echo $num; ?>]" id="tkoodi_<?php echo $num; ?>" class="for_tkoodi form-control" value="" data-toggle="collapse"  data-target="#lt_<?php echo $num; ?>">
 	<?php
 		$criteria = new CDbCriteria();

@@ -998,6 +998,9 @@ $("table#TableRivit .valitseTuote").change(function() {
 		if(sp[2])
 		$("#alv_"+num+" option[value="+sp[2]+"]").attr('selected','selected');
 
+		if(sp[5])
+		$("#tuoteID_"+num).val(sp[5]);
+
 		eachLaskenta();
 		$("#lt_"+num).hide();
 		console.log(data)
