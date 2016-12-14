@@ -1049,8 +1049,8 @@ $(document).ready(function(){
 	   if($a->netvisor_kaytto == 1)
 	   {
 
-		$url		= "http://integrationdemo.netvisor.fi"; 
-		$host 		= 'integrationdemo.netvisor.fi';
+		$url		= "https://integration.netvisor.fi"; 
+		$host 		= 'integration.netvisor.fi';
 
 		$sender 	= $fm->tyonantaja;
 		$customerId	= $a->netvisor_customer_id;
