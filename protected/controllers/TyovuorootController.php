@@ -1726,29 +1726,9 @@ class TyovuorootController extends Controller
 		if(!isset(Yii::app()->session['week']))
 			Yii::app()->session['week'] = date("W");
 
-
-		
-
-
-		//if(!isset(Yii::app()->session['wkMaara']))
-
 		$year = Yii::app()->session['year'];
 		$week = sprintf("%02d", Yii::app()->session['week']);
-
-		//Yii::app()->session['wkMaara'] = $wkMaara;
-		
-/*
-		if($week > $wkMaara) {
-		    $year++;
-		    $week = 1;
-		} elseif($week < 1) {
-		    $year--;
-		    $week = $wkMaara;
-		}
-		$week = sprintf("%02d", $week);
-		$week = sprintf("%02d", $week);
-*/
-
+		Yii::app()->session['week'] = $week;
 		//    Year Week -->
 
 
