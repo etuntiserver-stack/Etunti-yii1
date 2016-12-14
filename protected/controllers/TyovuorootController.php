@@ -1727,14 +1727,17 @@ class TyovuorootController extends Controller
 			Yii::app()->session['week'] = date("W");
 
 
+		
 
-		$wkMaara = 53;
-		if(!isset(Yii::app()->session['wkMaara']))
-			Yii::app()->session['wkMaara'] = $wkMaara;
+
+		//if(!isset(Yii::app()->session['wkMaara']))
 
 		$year = Yii::app()->session['year'];
-		$week = Yii::app()->session['week'];
+		$week = sprintf("%02d", Yii::app()->session['week']);
+
+		//Yii::app()->session['wkMaara'] = $wkMaara;
 		
+/*
 		if($week > $wkMaara) {
 		    $year++;
 		    $week = 1;
@@ -1743,6 +1746,9 @@ class TyovuorootController extends Controller
 		    $week = $wkMaara;
 		}
 		$week = sprintf("%02d", $week);
+		$week = sprintf("%02d", $week);
+*/
+
 		//    Year Week -->
 
 
@@ -1915,7 +1921,7 @@ class TyovuorootController extends Controller
 			'kohteet_siivous'	=>$kohteet_siivous,
 			'asiakas'		=>$asiakas,
 			'kohde'			=>$kohde,
-			'wkMaara'		=>$wkMaara,
+			//'wkMaara'		=>$wkMaara,
 		));
 
 	}

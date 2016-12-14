@@ -72,6 +72,17 @@ if( $curpage == 'tyovuoroot/tv2' )
 
 
 	<!-- Haku -->
+	<?php if($curpage == 'tyovuoroot/tv2' or $curpage == 'tyovuoroot/index') : ?>
+	<?php 
+		$year           = Yii::app()->session['year'];
+		$week           = Yii::app()->session['week'];
+		$previousWeek 	= date("W",strtotime($year ."W". $week.' -1 week'));
+		$previousYear	= date("Y",strtotime($year ."W". $week.' -1 week'));
+		$nextWeek 	= date("W",strtotime($year ."W". $week.' +1 week'));
+		$nextYear 	= date("Y",strtotime($year ."W". $week.' +1 week'));
+	?>
+	<?php endif; ?>
+
 	<?php
 		$hakuPainike = "";
 	if(
@@ -116,9 +127,6 @@ if( $curpage == 'tyovuoroot/tv2' )
 		    	  <label><?php echo Yii::t('main','Vuosi'); ?></label>
 			  <select class="form-control" name="year">
 				<?php
-				$year           = (int)Yii::app()->session['year'];
-				$week           = (int)Yii::app()->session['week'];
-
 				$v = date('Y',strtotime('-5 year'));
 				for ($i = 1; $i <= 10; $i++) {
 					if($year == ($v+$i))
@@ -296,22 +304,11 @@ if( $curpage == 'tyovuoroot/tv2' )
               <div class="form-group">
                <div class="form-inline">
 
-		     	<a href="<?php echo $_SERVER['PHP_SELF'].'?week='.($week == 1 ? $wkMaara : $week -1).'&year='.($week == 1 ? $year - 1 : $year); ?>">
+		     	<a href="<?php echo $_SERVER['PHP_SELF'].'?week='.$previousWeek.'&year='.$previousYear; ?>">
 				<i class="fa fa-arrow-left btn btn-default btn-group" data-toggle="tooltip" data-placement="bottom" title="<?php echo Yii::t('main', 'Edellinen viikko'); ?>"></i>
 			</a>
 
 			<?php
-				$wkMaara	=  Yii::app()->session['wkMaara'];
-
-				if($week > $wkMaara) {
-				    $year++;
-				    $week = 1;
-				} elseif($week < 1) {
-				    $year--;
-				    $week = $wkMaara;
-				}
-				$week = sprintf("%02d", $week);
-
 				$firstDayOfYear = mktime(0, 0, 0, 1, 1, $year);
 				$nextMonday     = strtotime('monday', $firstDayOfYear);
 				$nextSunday     = strtotime('sunday', $nextMonday);
@@ -330,7 +327,7 @@ if( $curpage == 'tyovuoroot/tv2' )
 			?>
 			</select>
 
-		     	<a href="<?php echo $_SERVER['PHP_SELF'].'?week='.($week == $wkMaara ? 1 : 1 + $week).'&year='.($week == $wkMaara ? 1 + $year : $year); ?>">
+		     	<a href="<?php echo $_SERVER['PHP_SELF'].'?week='.$nextWeek.'&year='.$nextYear; ?>">
 				<i class="fa fa-arrow-right btn btn-default btn-group" data-toggle="tooltip" data-placement="bottom" title="<?php echo Yii::t('main', 'Seuraava viikko'); ?>"></i>
 			</a> 
 

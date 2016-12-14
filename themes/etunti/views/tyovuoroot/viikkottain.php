@@ -10,11 +10,18 @@ $paivat=array(
 	7=>Yii::t('main', 'Sunnuntai'),
 	);
 
-$wkMaara = 53;
+//$wkMaara = 53;
 
 $year = (isset($_GET['year'])) ? $_GET['year'] : date("Y");
 $week = (isset($_GET['week'])) ? $_GET['week'] : date('W');
+$week = sprintf("%02d", $week);
 
+$previousWeek 	= date("W",strtotime($year ."W". $week.' -1 week'));
+$previousYear	= date("Y",strtotime($year ."W". $week.' -1 week'));
+$nextWeek 	= date("W",strtotime($year ."W". $week.' +1 week'));
+$nextYear 	= date("Y",strtotime($year ."W". $week.' +1 week'));
+
+/*
 if($week > $wkMaara) {
     $year++;
     $week = 1;
@@ -22,8 +29,8 @@ if($week > $wkMaara) {
     $year--;
     $week = $wkMaara;
 }
-
-    $week = sprintf("%02d", $week);
+*/
+    
 
 ?>
 <style>
@@ -86,9 +93,9 @@ td .tp{
 
 
   <b>
-  <a href="<?php echo $_SERVER['PHP_SELF'].'?week='.($week == 1 ? $wkMaara : $week -1).'&year='.($week == 1 ? $year - 1 : $year); ?>"><i class="fa fa-arrow-left btn btn-default"></i></a> 
+  <a href="<?php echo $_SERVER['PHP_SELF'].'?week='.$previousWeek.'&year='.$previousYear; ?>"><i class="fa fa-arrow-left btn btn-default"></i></a> 
   <span class="btn btn-default"><?php echo date('d.m.Y',strtotime($year ."W".$week .'1')).' - '.date('d.m.Y',strtotime($year ."W". $week .'7')); ?></span>
-  <a href="<?php echo $_SERVER['PHP_SELF'].'?week='.($week == $wkMaara ? 1 : 1 + $week).'&year='.($week == $wkMaara ? 1 + $year : $year); ?>"><i class="fa fa-arrow-right btn btn-default"></i></a> 
+  <a href="<?php echo $_SERVER['PHP_SELF'].'?week='.$nextWeek.'&year='.$nextYear; ?>"><i class="fa fa-arrow-right btn btn-default"></i></a> 
   </b>
 
 
@@ -171,7 +178,7 @@ td .tp{
   $asetukset = Asetukset::model()->findByPk(1);
   for($day= 1; $day <= 7; $day++) {
     $d = strtotime($year ."W". $week . $day);
-    echo "<th>". $paivat[date('N', sprintf("%02d", $d))] ."<br>". date('d.m', $d) ."</th>";
+    echo "<th>". $paivat[date('N', sprintf("%02d", $d))] ."<br>". date('d.m.Y', $d) ."</th>";
   }
   ?>
   </tr>

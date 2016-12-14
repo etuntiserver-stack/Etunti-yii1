@@ -1,10 +1,12 @@
 <?php
 
+	//echo $week.' '.$year.'<br>';
 ?>
 
 <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/tyovuorot.css">
 
 <?php
+
   $paivat=array(
 	1=>Yii::t('main', 'Ma'),
 	2=>Yii::t('main', 'Ti'),

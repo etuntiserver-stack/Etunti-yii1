@@ -7,8 +7,9 @@
         <div class="tray-center">
 
 
-
-	<?php echo $info; ?>
+	<?php if($info != ''): ?>
+	<div class="alert alert-success"><?php echo $info; ?></div>
+	<?php endif; ?>
 
         <h2 class="myBgColors p10"> <i class="fa fa-barcode"></i> <?php echo Yii::t('main', 'LASKU'); ?> 
 		<?php echo CHtml::link('',Yii::app()->request->baseUrl.'/index.php/lasku/create',array('class'=>'btn btn-default fa fa-plus')); ?>

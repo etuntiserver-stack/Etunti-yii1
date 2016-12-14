@@ -669,7 +669,6 @@ class LaskuController extends Controller
 	public function actionIndex()
 	{
 
-		$info =  '';
 		$asetukset=Asetukset::model()->findbypk(1);
 
 		$from = date("Y-m-d", strtotime("first day of this month"));
@@ -681,324 +680,10 @@ class LaskuController extends Controller
 		}
 
 
-
-
-	// <-- Netvisor updater
-	if($asetukset->palvelu_tyyppi == 4)
-	{
-
-		$netvisorList = $this->netvisorList(date("Y-m-d",strtotime($from)),date("Y-m-d",strtotime($to.' +1 day')));
-		if($netvisorList->ResponseStatus->Status == 'OK')
-		{
-			foreach($netvisorList->SalesInvoiceList->SalesInvoice as $list)
-			{
-
-				//echo '<pre>';
-				//print_r( $list );
-				//echo '</pre>';
-
-				$getLaskun = $this->netvisorGetsalesinvoice($list->NetvisorKey);
-				if($getLaskun->ResponseStatus->Status == 'OK')
-				{
-					//echo '<pre>';
-					//print_r( $getLaskun );
-					//echo '</pre><hr>';
-
-	
-			       		$criteria = new CDbCriteria();
-				        $criteria->condition = " netvisorkey='".$list->NetvisorKey."' ";
-					$l = Lasku::model()->find($criteria);
-
-					if(isset($l->id))
-					{
-					//echo $l->id.'<br>';
-			       		$criteria = new CDbCriteria();
-				        $criteria->order = " id DESC ";
-				        $criteria->condition = " lid='".$l->id."' ";
-					$h = LaskuHistoria::model()->find($criteria);
-					}
-	
-					if( isset($l->id) and isset($h->id) and $l->id == $h->lid
-						and 
-						(
-						$h->status != $getLaskun->SalesInvoice->InvoiceStatus 
-						or $h->yht_euro != str_replace(",",".",$list->OpenSum)
-						)
-					)
-					{
-	
-						//echo '<pre>';
-						//print_r( $list );
-						//echo '</pre>';
-	
-			    			// Lasku historia 
-						$historia = new LaskuHistoria;
-						$historia->time = date("Y-m-d H:i:s", strtotime($list->Invoicedate));
-						$historia->lid = $l->id;
-						$historia->status = $getLaskun->SalesInvoice->InvoiceStatus;
-						$historia->palvelu = "netvisor";
-						$historia->yht_euro = str_replace(",",".",$list->OpenSum);
-						$historia->save();
-	
-					}
-
-
-				}
-
-			}
-		}
-
-	}
-	//exit;
-	//     Netvisor updater -->
-
-
-if( $_SERVER['REMOTE_ADDR'] != '::1' and $_SERVER['REMOTE_ADDR'] != '127.0.0.1' )
-{
-
-
-
-
-
-	// <-- Postita
-	if($asetukset->palvelu_tyyppi == 1 and !isset(Yii::app()->user->laskunTarkistus))
-	{
-	Yii::app()->user->setState('laskunTarkistus', true);
-
-	$username = $asetukset->postita_username;
-	$password = $asetukset->postita_password;
-	$auth_string = $username . ":" . $password;
-
-
-
-		$url = 'https://postita.fi/api/job_list';
-		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-		curl_setopt($ch, CURLOPT_URL, $url);
-		curl_setopt($ch, CURLOPT_USERPWD, $auth_string);
-		curl_setopt($ch, CURLOPT_FAILONERROR, 1);
-		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
-		curl_setopt($ch, CURLOPT_TIMEOUT, 100);
-
-		$send_response = curl_exec($ch);
-		curl_close($ch);
-
-		$resultJson = json_encode($send_response);
-		$job_ids = array();
-		$postita_statuscode = array();
-		$send_response = json_decode($send_response, true);
-		if(isset($send_response[0]))
-		{
-		     foreach($send_response as $k => $v ) {
-		       if($v['id'])
-		       {
-		          $job_ids[] = $v['id'];
-		          $postita_statuscode[$v['id']] = $v['status'];
-		       }
-		     }
-		}
-		/*
-		echo '<pre>';
-		print_r($postita_statuscode);
-		echo '</pre>';
-		*/
-
-		$ids = implode(",",$job_ids);
-		$criteria = new CDbCriteria();
-	    	$criteria->order = " id DESC ";
-	    	//$criteria->group = " lid ";
-
-		if(isset($ids[0]))
-		{
-		$ids = implode(",",$job_ids);
-	    	$criteria->condition = " 
-			id IN (SELECT MAX(id) FROM lasku_historia GROUP BY lid )
-			AND lid IN (SELECT id FROM laskut where postita_jobid IN ($ids) ) 
-		";
-		}
-
-		$lh=LaskuHistoria::model()->findAll($criteria);
-
-		$ch = curl_init();
-		foreach($lh as $h)
-		{
-
-		$l = Lasku::model()->findbypk($h->lid);
-
-		if(
-			isset($l->postita_jobid) 
-			and isset($postita_statuscode[$l->postita_jobid]) 
-			and $postita_statuscode[$l->postita_jobid] != $h->postita_statuscode
-		)
-		{
-
-		$url = 'https://postita.fi/api/job_info/'.(int)$l->postita_jobid;
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-		curl_setopt($ch, CURLOPT_URL, $url);
-		curl_setopt($ch, CURLOPT_USERPWD, $auth_string);
-		curl_setopt($ch, CURLOPT_FAILONERROR, 1);
-		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
-		curl_setopt($ch, CURLOPT_TIMEOUT, 100);
-		
-		$send_response = curl_exec($ch);
-		$resultJson = json_encode($send_response);
-		$send_response = json_decode($send_response, true);
-		/*
-		echo '<pre>';
-		print_r($send_response);
-		echo '</pre>';
-		*/
-
-		  if(isset($send_response['status']))
-		  {
-		       $job_id = '';
-		       $created = '';
-		     foreach($send_response as $k => $v ) {
-		       $prep[$k] = $k.":".$v;
-		       if($k == 'id')
-		       $job_id = $v;
-		       if($k == 'created')
-		       $created = $v;
-		     }
-		     $tapahtumapvm = date("Y-m-d H:i:s",strtotime(trim($created)));
-		     Lasku::model()->updatebypk($l->id, array('tapahtumapvm'=>$tapahtumapvm));
-		
-				    // Lasku historia
-		    $historia = new LaskuHistoria;
-		    $historia->time = $tapahtumapvm;
-		    $historia->lid = $l->id;
-		    $historia->status = $resultJson;
-		    $historia->postita_statuscode = $send_response['status'];
-		    $historia->palvelu = "postita";
-		    $historia->yht_euro = $l->yhteensa_total;
-		    $historia->save();
-		  }
-
-
-
-		} // (isset($l->postita_jobid))
-		} // foreach
-		curl_close($ch);
-
-
-	}
-	// Postita -->
-
-
-
-	// <-- Trust
-	if($asetukset->palvelu_tyyppi == 2)
-	{
-
-
-	$cid = $asetukset['trust_cid'];
-	$api = $asetukset['trust_api'];
-	$trust_url = $asetukset['trust_url'];
-
-	$ch = curl_init();
-	$data = array('cid'=>$cid, 'apicode'=>$api);
-	curl_setopt($ch, CURLOPT_URL, $trust_url.'/API/statusupdates.php');
-    	curl_setopt($ch, CURLOPT_HEADER, 0);
-    	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-	curl_setopt($ch, CURLOPT_POST, TRUE);
-	curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-	
-    	$rss = curl_exec($ch);
-    	curl_close($ch);
-
-	if($xml = simplexml_load_string($rss, 'SimpleXMLElement', LIBXML_NOCDATA))
-	{
-
-	 if($xml->commonerror != 'No statusupdates')
-	 {
-
-		libxml_use_internal_errors(true);
-		$sxe = simplexml_load_string($rss);
-		if ($sxe) 
-		{
-/*
-
-echo '<textarea class="form-control" rows="10">';
-print_r($rss);
-echo '</textarea>';
-*/
-	  	foreach ($sxe->status as $r) {
-/*
-echo '<textarea class="form-control" rows="10">';
-print_r(json_encode($r));
-echo '</textarea>';
-exit;
-*/
-
-		$str = '';
-	    	$str = 'statustime:'.trim($r->statustime).'//jobid:'.trim($r->jobid).'//billnum:'.trim($r->billnum).'//statusref:'.trim($r->statusref).'//statustext:'.trim($r->statustext).'//statuscode:'.trim($r->statuscode).'//statusid:'.trim($r->statusid).'//paydate:'.trim($r->paydate).'//amount:'.trim($r->amount).'//statustype:'.trim($r->statustype);
-	
-
-		$l = Lasku::model()->find(" trust_jobid='".trim($r->jobid)."' ");
-		if(isset($l['id']))
-		{
-		    $tapahtumapvm = date("Y-m-d H:i:s",strtotime(trim($r->statustime)));
-	     	    Lasku::model()->updatebypk($l['id'], array('laskunumero'=>$r->billnum,'tilanne'=>$r->statuscode,'response_finvoice'=>$str,'tapahtumapvm'=>$tapahtumapvm));
-
-		    $paydate = '';
-		    if(isset($r->paydate) and !empty($r->paydate))
-		    $paydate = $r->paydate;
-
-		    $amount = 0;
-		    $yhteensa_total = '';
-		    if(isset($r->amount) and !empty($r->amount))
-		    $amount = $r->amount;
-
-
-		    // Lasku historia 
-		    $historia = new LaskuHistoria;
-		    $historia->time = $tapahtumapvm;
-		    $historia->lid = $l['id'];
-		    $historia->status = json_encode($r);
-		    $historia->trust_statuscode = $r->statuscode;
-		    $historia->palvelu = "trust";
-		    $historia->paydate = $paydate;
-
-
-	    	    $criteria = new CDbCriteria();
-	    	    $criteria->order = "id DESC";
-	    	    $criteria->condition = " lid='".$l['id']."' ";
-		    $lh = LaskuHistoria::model()->find($criteria);
-		    if(isset($lh->id))
-		    {
-			$amount = str_replace(",",".",$amount);
-			$lh->yht_euro = str_replace(",",".",$lh->yht_euro);
-
-		    	$historia->yht_euro = (float)$lh->yht_euro-(float)$amount;
-		    } else {
-		    	$historia->yht_euro = $l['yhteensa_total'];
-		    }
-
-		    $historia->amount = $amount;
-		    $historia->save();
-
-
-		}
-
-
-		}
-
-		}
-
-
-
-
-	 }
-	}
-	}
-	// Trust -->
-
-
-} else { // jos ei localhost
-	$info =  '<h1>Ei päivitetään laskun tietoja, koska olet localhostina</h1>';
-}
-
-
+		// <!-- Lasku updater
+		$info 	= '';
+		$info 	.= $this->LaskuUpdater($from,$to);
+		// Lasku updater -->
 
        		$criteria = new CDbCriteria();
 	        $criteria->order = "  id DESC ";
@@ -1985,5 +1670,337 @@ $xml .= '
 	}
 
 
+
+	public function LaskuUpdater($from,$to)
+	{
+		$return = '';
+		$asetukset=Asetukset::model()->findbypk(1);
+
+		// <-- Netvisor updater
+		$netvisorUpdateCheck = false;
+		if($asetukset->palvelu_tyyppi == 4)
+		{
+
+			$netvisorList = $this->netvisorList(date("Y-m-d",strtotime($from)),date("Y-m-d",strtotime($to.' +1 day')));
+			if($netvisorList->ResponseStatus->Status == 'OK')
+			{
+				foreach($netvisorList->SalesInvoiceList->SalesInvoice as $list)
+				{
+	
+					//echo '<pre>';
+					//print_r( $list );
+					//echo '</pre>';
+	
+					$getLaskun = $this->netvisorGetsalesinvoice($list->NetvisorKey);
+	
+					if($getLaskun->ResponseStatus->Status == 'OK')
+					{
+						//echo '<pre>';
+						//print_r( $getLaskun );
+						//echo '</pre><hr>';
+	
+		
+				       		$criteria = new CDbCriteria();
+					        $criteria->condition = " netvisorkey='".$list->NetvisorKey."' ";
+						$l = Lasku::model()->find($criteria);
+	
+						if(isset($l->id))
+						{
+						//echo $l->id.'<br>';
+				       		$criteria = new CDbCriteria();
+					        $criteria->order = " id DESC ";
+					        $criteria->condition = " lid='".$l->id."' ";
+						$h = LaskuHistoria::model()->find($criteria);
+						}
+		
+						if( isset($l->id) and isset($h->id) and $l->id == $h->lid
+							and 
+							(
+							$h->status != $getLaskun->SalesInvoice->InvoiceStatus 
+							or $h->yht_euro != str_replace(",",".",$list->OpenSum)
+							)
+						)
+						{
+		
+							//echo '<pre>';
+							//print_r( $list );
+							//echo '</pre>';
+		
+				    			// Lasku historia 
+							$historia = new LaskuHistoria;
+							$historia->time = date("Y-m-d H:i:s", strtotime($list->Invoicedate));
+							$historia->lid = $l->id;
+							$historia->status = $getLaskun->SalesInvoice->InvoiceStatus;
+							$historia->palvelu = "netvisor";
+							$historia->yht_euro = str_replace(",",".",$list->OpenSum);
+							$historia->save();
+
+							$netvisorUpdateCheck = true;
+						}
+	
+	
+					}
+	
+				}
+			}
+	
+		}
+		//exit;
+		if($netvisorUpdateCheck == true)
+		$return .= '<p>Netvisor laskut on päivitetty.</p>';
+		//     Netvisor updater -->
+
+
+
+		if( $_SERVER['REMOTE_ADDR'] != '::1' and $_SERVER['REMOTE_ADDR'] != '127.0.0.1' )
+		{
+	
+	
+	
+	
+		// <-- Postita
+		if($asetukset->palvelu_tyyppi == 1 and !isset(Yii::app()->user->laskunTarkistus))
+		{
+		Yii::app()->user->setState('laskunTarkistus', true);
+	
+		$username = $asetukset->postita_username;
+		$password = $asetukset->postita_password;
+		$auth_string = $username . ":" . $password;
+	
+	
+	
+			$url = 'https://postita.fi/api/job_list';
+			$ch = curl_init();
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+			curl_setopt($ch, CURLOPT_URL, $url);
+			curl_setopt($ch, CURLOPT_USERPWD, $auth_string);
+			curl_setopt($ch, CURLOPT_FAILONERROR, 1);
+			curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+			curl_setopt($ch, CURLOPT_TIMEOUT, 100);
+	
+			$send_response = curl_exec($ch);
+			curl_close($ch);
+	
+			$resultJson = json_encode($send_response);
+			$job_ids = array();
+			$postita_statuscode = array();
+			$send_response = json_decode($send_response, true);
+			if(isset($send_response[0]))
+			{
+			     foreach($send_response as $k => $v ) {
+			       if($v['id'])
+			       {
+			          $job_ids[] = $v['id'];
+			          $postita_statuscode[$v['id']] = $v['status'];
+			       }
+			     }
+			}
+			/*
+			echo '<pre>';
+			print_r($postita_statuscode);
+			echo '</pre>';
+	
+			*/
+	
+			$ids = implode(",",$job_ids);
+			$criteria = new CDbCriteria();
+		    	$criteria->order = " id DESC ";
+		    	//$criteria->group = " lid ";
+	
+			if(isset($ids[0]))
+			{
+			$ids = implode(",",$job_ids);
+		    	$criteria->condition = " 
+				id IN (SELECT MAX(id) FROM lasku_historia GROUP BY lid )
+				AND lid IN (SELECT id FROM laskut where postita_jobid IN ($ids) ) 
+			";
+			}
+	
+			$lh=LaskuHistoria::model()->findAll($criteria);	
+		
+			$ch = curl_init();
+			foreach($lh as $h)
+			{
+	
+			$l = Lasku::model()->findbypk($h->lid);
+	
+			if(
+				isset($l->postita_jobid) 
+				and isset($postita_statuscode[$l->postita_jobid]) 
+				and $postita_statuscode[$l->postita_jobid] != $h->postita_statuscode
+			)
+			{
+	
+			$url = 'https://postita.fi/api/job_info/'.(int)$l->postita_jobid;
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+			curl_setopt($ch, CURLOPT_URL, $url);
+			curl_setopt($ch, CURLOPT_USERPWD, $auth_string);
+			curl_setopt($ch, CURLOPT_FAILONERROR, 1);
+			curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+			curl_setopt($ch, CURLOPT_TIMEOUT, 100);
+			
+			$send_response = curl_exec($ch);
+			$resultJson = json_encode($send_response);
+			$send_response = json_decode($send_response, true);
+			/*
+			echo '<pre>';
+	
+			print_r($send_response);
+			echo '</pre>';
+			*/
+	
+			  if(isset($send_response['status']))
+			  {
+			       $job_id = '';
+			       $created = '';
+			     foreach($send_response as $k => $v ) {
+			       $prep[$k] = $k.":".$v;
+			       if($k == 'id')
+			       $job_id = $v;
+			       if($k == 'created')
+			       $created = $v;
+			     }
+			     $tapahtumapvm = date("Y-m-d H:i:s",strtotime(trim($created)));
+			     Lasku::model()->updatebypk($l->id, array('tapahtumapvm'=>$tapahtumapvm));
+			
+					    // Lasku historia
+			    $historia = new LaskuHistoria;
+			    $historia->time = $tapahtumapvm;
+			    $historia->lid = $l->id;
+			    $historia->status = $resultJson;
+			    $historia->postita_statuscode = $send_response['status'];
+			    $historia->palvelu = "postita";
+			    $historia->yht_euro = $l->yhteensa_total;
+			    $historia->save();
+			  }
+	
+	
+	
+			} // (isset($l->postita_jobid))
+			} // foreach
+			curl_close($ch);
+	
+	
+		}
+		// Postita -->
+	
+
+
+		// <-- Trust
+		if($asetukset->palvelu_tyyppi == 2)
+		{
+	
+	
+		$cid = $asetukset['trust_cid'];
+		$api = $asetukset['trust_api'];
+		$trust_url = $asetukset['trust_url'];
+	
+		$ch = curl_init();
+		$data = array('cid'=>$cid, 'apicode'=>$api);
+		curl_setopt($ch, CURLOPT_URL, $trust_url.'/API/statusupdates.php');
+	    	curl_setopt($ch, CURLOPT_HEADER, 0);
+	    	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($ch, CURLOPT_POST, TRUE);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+	
+		
+	    	$rss = curl_exec($ch);
+	    	curl_close($ch);
+	
+		if($xml = simplexml_load_string($rss, 'SimpleXMLElement', LIBXML_NOCDATA))
+		{
+	
+		 if($xml->commonerror != 'No statusupdates')
+		 {
+	
+			libxml_use_internal_errors(true);
+			$sxe = simplexml_load_string($rss);
+			if ($sxe) 
+			{
+		/*
+		echo '<textarea class="form-control" rows="10">';
+		print_r($rss);
+		echo '</textarea>';
+		*/
+		  	foreach ($sxe->status as $r) {
+		/*
+		echo '<textarea class="form-control" rows="10">';
+		print_r(json_encode($r));
+		
+		echo '</textarea>';
+		exit;
+		*/
+	
+			$str = '';
+		    	$str = 'statustime:'.trim($r->statustime).'//jobid:'.trim($r->jobid).'//billnum:'.trim($r->billnum).'//statusref:'.trim($r->statusref).'//statustext:'.trim($r->statustext).'//statuscode:'.trim($r->statuscode).'//statusid:'.trim($r->statusid).'//paydate:'.trim($r->paydate).'//amount:'.trim($r->amount).'//statustype:'.trim($r->statustype);
+	
+
+			$l = Lasku::model()->find(" trust_jobid='".trim($r->jobid)."' ");
+			if(isset($l['id']))
+			{
+			    $tapahtumapvm = date("Y-m-d H:i:s",strtotime(trim($r->statustime)));
+		     	    Lasku::model()->updatebypk($l['id'], array('laskunumero'=>$r->billnum,'tilanne'=>$r->statuscode,'response_finvoice'=>	$str,'tapahtumapvm'=>$tapahtumapvm));
+	
+			    $paydate = '';
+			    if(isset($r->paydate) and !empty($r->paydate))
+			    $paydate = $r->paydate;
+	
+			    $amount = 0;
+			    $yhteensa_total = '';
+			    if(isset($r->amount) and !empty($r->amount))
+			    $amount = $r->amount;
+	
+	
+			    // Lasku historia 
+			    $historia = new LaskuHistoria;
+			    $historia->time = $tapahtumapvm;
+			    $historia->lid = $l['id'];
+			    $historia->status = json_encode($r);
+			    $historia->trust_statuscode = $r->statuscode;
+			    $historia->palvelu = "trust";
+			    $historia->paydate = $paydate;
+	
+	
+		    	    $criteria = new CDbCriteria();
+		    	    $criteria->order = "id DESC";
+		    	    $criteria->condition = " lid='".$l['id']."' ";
+			    $lh = LaskuHistoria::model()->find($criteria);
+			    if(isset($lh->id))
+			    {
+				$amount = str_replace(",",".",$amount);
+				$lh->yht_euro = str_replace(",",".",$lh->yht_euro);
+	
+			    	$historia->yht_euro = (float)$lh->yht_euro-(float)$amount;
+			    } else {
+			    	$historia->yht_euro = $l['yhteensa_total'];
+			    }
+	
+			    $historia->amount = $amount;
+			    $historia->save();
+	
+	
+			}
+	
+	
+			}
+	
+			}
+	
+	
+	
+	
+		 }
+		}
+		}
+		// Trust -->
+
+
+		} else { // jos ei localhost
+			$return .= '<h1>Ei päivitetään laskun tietoja, koska olet localhostina</h1>';
+		}
+
+		return $return;
+
+	}
 
 }
