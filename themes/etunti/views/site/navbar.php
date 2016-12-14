@@ -76,10 +76,16 @@ if( $curpage == 'tyovuoroot/tv2' )
 	<?php 
 		$year           = Yii::app()->session['year'];
 		$week           = Yii::app()->session['week'];
-		$previousWeek 	= date("W",strtotime($year ."W". $week.' -1 week'));
-		$previousYear	= date("Y",strtotime($year ."W". $week.' -1 week'));
-		$nextWeek 	= date("W",strtotime($year ."W". $week.' +1 week'));
-		$nextYear 	= date("Y",strtotime($year ."W". $week.' +1 week'));
+
+		// <-- Previous Next Weeks
+	   	$tv = Yii::app()->createController('Tyovuoroot');
+	   	$getWeeks = $tv[0]->previousNextWeeks($year,$week);
+
+		$previousWeek 	= $getWeeks['previousWeek'];
+		$previousYear	= $getWeeks['previousYear'];
+		$nextWeek 	= $getWeeks['nextWeek'];
+		$nextYear 	= $getWeeks['nextYear'];
+		//     Previous Next Weeks -->
 	?>
 	<?php endif; ?>
 

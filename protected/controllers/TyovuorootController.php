@@ -2418,4 +2418,33 @@ class TyovuorootController extends Controller
 		echo json_encode($return);
 
 	}
+
+
+	public function previousNextWeeks($year,$week)
+	{
+
+		$previousWeek 	= date("W",strtotime($year ."W". $week.' -1 week'));
+
+		if($previousWeek == '01') 
+			$previousYear = $year;
+		else
+			$previousYear	= date("Y",strtotime($year ."W". $week.' -1 week'));
+
+		$nextWeek 	= date("W",strtotime($year ."W". $week.' +1 week'));
+
+		if($nextWeek == '01') 
+			$nextYear = $year+1;
+		else
+			$nextYear 	= date("Y",strtotime($year ."W". $week.' +1 week'));
+
+		$arr = array(
+			'previousWeek' 	=> $previousWeek,
+			'previousYear' 	=> $previousYear,
+			'nextWeek' 	=> $nextWeek,
+			'nextYear' 	=> $nextYear,
+		);
+		return $arr;
+	}
+
+
 }

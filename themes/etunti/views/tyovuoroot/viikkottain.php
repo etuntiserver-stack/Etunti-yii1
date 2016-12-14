@@ -16,22 +16,15 @@ $year = (isset($_GET['year'])) ? $_GET['year'] : date("Y");
 $week = (isset($_GET['week'])) ? $_GET['week'] : date('W');
 $week = sprintf("%02d", $week);
 
-$previousWeek 	= date("W",strtotime($year ."W". $week.' -1 week'));
-$previousYear	= date("Y",strtotime($year ."W". $week.' -1 week'));
-$nextWeek 	= date("W",strtotime($year ."W". $week.' +1 week'));
-$nextYear 	= date("Y",strtotime($year ."W". $week.' +1 week'));
+		// <-- Previous Next Weeks
+	   	$tv = Yii::app()->createController('Tyovuoroot');
+	   	$getWeeks = $tv[0]->previousNextWeeks($year,$week);
 
-/*
-if($week > $wkMaara) {
-    $year++;
-    $week = 1;
-} elseif($week < 1) {
-    $year--;
-    $week = $wkMaara;
-}
-*/
-    
-
+		$previousWeek 	= $getWeeks['previousWeek'];
+		$previousYear	= $getWeeks['previousYear'];
+		$nextWeek 	= $getWeeks['nextWeek'];
+		$nextYear 	= $getWeeks['nextYear'];
+		//     Previous Next Weeks -->
 ?>
 <style>
 .mennytPaivat{

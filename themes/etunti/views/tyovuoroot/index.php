@@ -1,6 +1,6 @@
 <?php
 
-	//echo $week.' '.$year.'<br>';
+	echo $week.' '.$year.'<br>';
 ?>
 
 <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/tyovuorot.css">
