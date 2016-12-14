@@ -77,13 +77,18 @@ $paivat=array(
 ?>
 
 <?php $ids = ''; ?>
-<?php foreach ($tv as $t) { ?>
+<?php 
+$kenelleLahetetaan = array();
+foreach ($tv as $t) { 
+?>
 <br>
 <?php
 $tt = Tyontekijat::model()->findbypk($t->tid);
 
-if(isset($tt->tekijan_email))
+if(isset($tt->tekijan_email)){
 $ids .= $tt->id.',';
+array_push($kenelleLahetetaan,$tt->tekijan_nimi);
+}
 ?>
 <h2><?php echo $tt->tekijan_nimi; ?></h2>
 
@@ -260,13 +265,17 @@ $ids = json_encode(explode(",",$ids));
 </div>
 <?php endif; ?>
 
+<textarea id="kenelleLahetetaan" class="form-control" style="display:none"><?php echo implode(", ", $kenelleLahetetaan); ?></textarea>
 
 <?php if(!$tulosta) : ?>
 <script type="text/javascript">
 $(document).ready(function(){
 
 $(".laheta").click(function(){
-        var r=confirm("Oletko varmaa?")
+
+	var kenelleLahetetaan = $('#kenelleLahetetaan').val();
+
+        var r=confirm("Haluatko varmasti lähettää viikon <?php echo $week; ?> työvuorot henkilöille: \n"+kenelleLahetetaan+"?")
         if (!r){
 	   return false;
 	} else {
