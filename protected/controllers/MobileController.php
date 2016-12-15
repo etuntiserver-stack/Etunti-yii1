@@ -2217,7 +2217,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 
 
        		$criteria = new CDbCriteria();
-        	$criteria->select = "kohdenID,kohde_kannasta";
+        	$criteria->select = "kohdenID";
         	$criteria->order = "kohde_kannasta";
         	$criteria->group = "kohdenID";
         	$criteria->condition = "
@@ -2247,7 +2247,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 
 
        		$criteria = new CDbCriteria();
-        	$criteria->select = "kohdenID,kohde_kannasta";
+        	$criteria->select = "kohdenID";
         	$criteria->order = "kohde_kannasta";
         	$criteria->group = "kohdenID";
 
