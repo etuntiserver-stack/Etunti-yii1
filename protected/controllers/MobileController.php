@@ -2236,7 +2236,12 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		$model = Mobile::model()->findAll($criteria);
 		$lu = array();
 		foreach($model as $d){
-			$lu[$d->kohde_kannasta] = $d->kohdenID;
+			$osoite = '';
+			$k = Kohteet::model()->findBypk($d->kohdenID);
+			if(isset($k->id))
+			$osoite = $k->osoite;
+
+			$lu[$osoite] = $d->kohdenID;
 		}
 
 
@@ -2259,7 +2264,11 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 
 		$model = Toteutuneet::model()->findAll($criteria);
 		foreach($model as $d){
-			$lu[$d->kohde_kannasta] = $d->kohdenID;
+			$osoite = '';
+			$k = Kohteet::model()->findBypk($d->kohdenID);
+			if(isset($k->id))
+			$osoite = $k->osoite;
+			$lu[$osoite] = $d->kohdenID;
 		}
 
 		if(count($lu) >0)
