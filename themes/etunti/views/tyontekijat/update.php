@@ -1,6 +1,6 @@
 <?php
 
-	//$this->netvisorTyontekija('add', $model);
+	$this->netvisorTyontekija('add', $model);
 
 
 if(isset($_POST['uploaded']))

@@ -618,7 +618,7 @@ $xml = '
       <employeenumber>'.$model->id.'</employeenumber>
       <profession>Työntekijä</profession>
       <jobbegindate format="ansi">'.date("Y-m-d", strtotime($modelTyosuhteet->alku)).'</jobbegindate>
-      <payrollrulegroupname>'.$modelTyosuhteet->palkka_tyyppi.'</payrollrulegroupname>
+      <payrollrulegroupname>'.$payrollrulegroupname.'</payrollrulegroupname>
       <bankaccountnumber>'.$model->tekijan_pankkitili.'</bankaccountnumber>
       <bankidentificationcode>'.$model->tekijan_konttori.'</bankidentificationcode>
    </employeepayrollinformation>

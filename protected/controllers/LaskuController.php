@@ -1454,7 +1454,7 @@ $xml .= '
 	
 	public function actionUpdatenv($id)
 	{
-
+/*
 
 		$return = '';
 		$site = Yii::app()->createController('Site');
@@ -1691,7 +1691,7 @@ $xml .= '
 		$this->render('updatenv', array('id'=>$id, 'result'=>$result));
 
 	  }
-
+*/
 	}
 
 
