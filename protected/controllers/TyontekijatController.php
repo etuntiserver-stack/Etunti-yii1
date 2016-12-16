@@ -353,6 +353,7 @@ class TyontekijatController extends Controller
 							$log->save();
 							//     LOG -->
 
+				$this->netvisorTyontekija('add', $model);
 				$this->redirect(array('update', 'id'=>$model->id));
 			}
 		}
@@ -402,8 +403,10 @@ class TyontekijatController extends Controller
 			else
 				$model->kortit = "";
 
-			if($model->save())
+			if($model->save()){
+				$this->netvisorTyontekija('edit', $model);
 				$this->redirect(array('index'));
+			}
 		}
 
 		$this->render('update',array(
@@ -550,7 +553,7 @@ class TyontekijatController extends Controller
 		if( $tila == 'add' )
 		$url		= $n[0].'/employee.nv?method=add';
 		if( $tila == 'edit')
-		$url		= $n[0].'/employee.nv?id='.$model->id.'&method=edit';
+		$url		= $n[0].'/employee.nv?method=edit';
 
 		$host 		= $n[1];
 
@@ -596,6 +599,10 @@ class TyontekijatController extends Controller
 	if($modelTyosuhteet->palkka_tyyppi == 'h')
 		$payrollrulegroupname = 'Tuntipalkkalaiset';
 
+      	$lisat = '';
+	if($tila == 'add')
+      	$lisat .= '<employeenumber>'.$model->id.'</employeenumber>';
+
 // <-- XML
 $xml = '
 <root>
@@ -615,7 +622,7 @@ $xml = '
       <country>FI</country>
       <nationality>FI</nationality>
       <language>FI</language>
-      <employeenumber>'.$model->id.'</employeenumber>
+      '.$lisat.'
       <profession>Työntekijä</profession>
       <jobbegindate format="ansi">'.date("Y-m-d", strtotime($modelTyosuhteet->alku)).'</jobbegindate>
       <payrollrulegroupname>'.$payrollrulegroupname.'</payrollrulegroupname>
@@ -646,10 +653,9 @@ $xml = '
 	
 	  if($result->ResponseStatus->Status == 'OK')
 	  {
-		if( $tila == 'add' )
-		$return=$result->Replies->InsertedDataIdentifier;
-		if( $tila == 'edit' )
-		$return=$result;
+		//if( $tila == 'add' )
+		//$return=$result->Replies->InsertedDataIdentifier;
+		//if( $tila == 'edit' )
 
 	  } else {
 
