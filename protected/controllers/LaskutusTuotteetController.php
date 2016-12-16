@@ -325,6 +325,9 @@ class LaskutusTuotteetController extends Controller
 	   $ryhma = $r->value;
 	}
 
+$model->hinta_alv_0 = str_replace(",",".",$model->hinta_alv_0);
+$model->hinta_alv_sis = str_replace(",",".",$model->hinta_alv_0);
+
 $xml = '
 <root>
   <product>
@@ -333,10 +336,10 @@ $xml = '
       <productgroup>'.$ryhma.'</productgroup>
       <name>'.$model->tuotenimi.'</name>
       <description></description>
-      <unitprice type="net">'.$model->hinta_alv_sis.'</unitprice>
+      <unitprice type="net">'.$model->hinta_alv_0.'</unitprice>
       <unit>'.$model->yksikko.'</unit>
       <unitweight>1</unitweight>
-      <purchaseprice>'.$model->hinta_alv_0.'</purchaseprice>
+      <purchaseprice>'.$model->hinta_alv_sis.'</purchaseprice>
       <tariffheading></tariffheading>
       <comissionpercentage>0</comissionpercentage>
       <isactive>1</isactive>
