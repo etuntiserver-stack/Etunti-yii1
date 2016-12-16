@@ -101,6 +101,12 @@ if(empty($model->position) and isset($model->id))
 	</div>
 
 	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'ammattinimike'); ?>
+		<?php echo $form->textField($model,'ammattinimike',array('size'=>50,'maxlength'=>255,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'ammattinimike'); ?>
+	</div>
+
+	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'aktiivinen'); ?>
 
 	   <div class="input-group">

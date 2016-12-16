@@ -395,6 +395,7 @@ class TyontekijatController extends Controller
 		if(isset($_POST['Tyontekijat']))
 		{
 
+
 			$model->attributes=$_POST['Tyontekijat'];
 			$model->tyo_toimialue=json_encode($model->tyo_toimialue);
 		
@@ -414,7 +415,6 @@ class TyontekijatController extends Controller
 				$model->kortit = "";
 
 			if($model->save()){
-
 				// <-- Netvisor updater
 				$asetukset = Asetukset::model()->findByPk(1);
 				if($asetukset->netvisor_kaytto == 1)
@@ -641,7 +641,7 @@ $xml = '
       <nationality>FI</nationality>
       <language>FI</language>
       '.$lisat.'
-      <profession>Työntekijä</profession>
+      <profession>'.$model->ammattinimike.'</profession>
       <jobbegindate format="ansi">'.date("Y-m-d", strtotime($modelTyosuhteet->alku)).'</jobbegindate>
       <payrollrulegroupname>'.$payrollrulegroupname.'</payrollrulegroupname>
       <bankaccountnumber>'.$model->tekijan_pankkitili.'</bankaccountnumber>
