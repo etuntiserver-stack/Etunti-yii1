@@ -1245,17 +1245,19 @@ foreach($laskunRivit as $rivit)
 
 $xml .= '
        <InvoiceLine>
-          <SalesInvoiceProductLine>
+         <SalesInvoiceProductLine>
              <ProductIdentifier type="netvisor">'.$ProductIdentifier.'</ProductIdentifier>
              <ProductName>'.$rivit->tkoodi.'</ProductName>
              <ProductUnitPrice type="net">'.$rivit->hinta.'</ProductUnitPrice>
              <ProductVatPercentage vatcode="KOMY">'.$rivit->alv.'</ProductVatPercentage>
              <SalesInvoiceProductLineQuantity>'.$rivit->kpl.'</SalesInvoiceProductLineQuantity>
              <SalesInvoiceProductLineDiscountPercentage>'.$rivit->ale.'</SalesInvoiceProductLineDiscountPercentage>
-           </SalesInvoiceProductLine>
-           <SalesInvoiceCommentLine>
+         </SalesInvoiceProductLine>
+       </InvoiceLine>
+       <InvoiceLine>
+         <SalesInvoiceCommentLine>
             <Comment>'.$rivit->free_text.'</Comment>
-           </SalesInvoiceCommentLine>
+         </SalesInvoiceCommentLine>
        </InvoiceLine>';
 }
 
