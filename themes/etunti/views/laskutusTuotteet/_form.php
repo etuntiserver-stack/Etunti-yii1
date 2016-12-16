@@ -22,13 +22,13 @@
 
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'hinta_alv_0'); ?>
-		<?php echo $form->textField($model,'hinta_alv_0',array('size'=>20,'maxlength'=>20,'class'=>'form-control')); ?>
+		<?php echo $form->numberField($model,'hinta_alv_0',array('size'=>20,'maxlength'=>20,'class'=>'form-control', 'step'=>'0.01')); ?>
 		<?php echo $form->error($model,'hinta_alv_0'); ?>
 	</div>
 
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'hinta_alv_sis'); ?>
-		<?php echo $form->textField($model,'hinta_alv_sis',array('size'=>20,'maxlength'=>20,'class'=>'form-control')); ?>
+		<?php echo $form->numberField($model,'hinta_alv_sis',array('size'=>20,'maxlength'=>20,'class'=>'form-control', 'step'=>'0.01')); ?>
 		<?php echo $form->error($model,'hinta_alv_sis'); ?>
 	</div>
 
