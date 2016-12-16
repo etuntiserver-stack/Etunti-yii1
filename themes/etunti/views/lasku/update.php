@@ -11,6 +11,17 @@ $this->menu=array(
         <!-- begin: .tray-center -->
         <div class="tray-center">
 
+	   <div class="pull-right">
+	   <?php
+		echo CHtml::link("poista", '#', array(
+		'submit'=>array('delete', "id"=>$model->id), 
+		'confirm' => 'Haluatko varmaasti poistaa laskun?',
+		'class'=>'btn btn-primary myBgColors'
+		));
+
+	   ?>
+	   </div>
+
 	   <h2 class="myBgColors p10"> <i class="fa fa-barcode"></i> <?php echo $model->laskun_nimetys; ?> <?php echo $model->laskunumero; ?> </h2>
 
 
