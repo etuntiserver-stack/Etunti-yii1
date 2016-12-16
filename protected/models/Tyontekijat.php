@@ -53,6 +53,17 @@ public $tunnus;
 		return 'sivex_ttekijat';
 	}
 
+
+	public function netvisorCheck($attribute,$params)
+	{
+
+		$asetukset = Asetukset::model()->findByPk(1);
+		if($asetukset->netvisor_kaytto == 1)
+		{
+			$this->addError($attribute, $this->attributeLabels()[$attribute].' '.Yii::t('main', ' on pakkolinen'));
+		}
+	}
+
 	/**
 	 * @return array validation rules for model attributes.
 	 */
@@ -62,6 +73,7 @@ public $tunnus;
 		// will receive user inputs.
 		return array(
 			array('tekijan_nimi, aktiivinen', 'required'),
+			array('tekijan_pankkitili, tekijan_konttori', 'netvisorCheck'),
 			array('online_varauksen_valmina, ilmoitus_merkkipaivasta_vuosi, tyontekijan_numero', 'numerical', 'integerOnly'=>true),
 			array('imei', 'length', 'max'=>100),
 			array('tyo_toimialue, laiten_puh, tekijan_nimi, tekijan_katuosoite, tekijan_pankkitili, salasana', 'length', 'max'=>100),

@@ -283,6 +283,7 @@ class TyontekijatController extends Controller
 	   $site[0]->checkOikeus($checkOikeus);
 	//  Oikeudet -->
 
+
 		$model=new Tyontekijat;
 
 		// Uncomment the following line if AJAX validation is needed
@@ -353,13 +354,21 @@ class TyontekijatController extends Controller
 							$log->save();
 							//     LOG -->
 
-				$this->netvisorTyontekija('add', $model);
+
+				// <-- Netvisor updater
+				$asetukset = Asetukset::model()->findByPk(1);
+				if($asetukset->netvisor_kaytto == 1)
+				{
+					$netvisorResponse = $this->netvisorTyontekija('add', $model);
+				}
+				//     Netvisor updater -->
+
 				$this->redirect(array('update', 'id'=>$model->id));
 			}
 		}
 
 		$this->render('create',array(
-			'model'=>$model,
+			'model'=>$model
 		));
 	}
 
@@ -377,6 +386,7 @@ class TyontekijatController extends Controller
 	   $site[0]->checkOikeus($checkOikeus);
 	//  Oikeudet -->
 
+		$netvisorResponse = '';
 		$model=$this->loadModel($id);
 
 		// Uncomment the following line if AJAX validation is needed
@@ -404,7 +414,15 @@ class TyontekijatController extends Controller
 				$model->kortit = "";
 
 			if($model->save()){
-				$this->netvisorTyontekija('edit', $model);
+
+				// <-- Netvisor updater
+				$asetukset = Asetukset::model()->findByPk(1);
+				if($asetukset->netvisor_kaytto == 1)
+				{
+					$netvisorResponse = $this->netvisorTyontekija('edit', $model);
+				}
+				//     Netvisor updater -->
+
 				$this->redirect(array('index'));
 			}
 		}
@@ -656,12 +674,15 @@ $xml = '
 		//if( $tila == 'add' )
 		//$return=$result->Replies->InsertedDataIdentifier;
 		//if( $tila == 'edit' )
+		$return = $response;
+
 
 	  } else {
 
 		echo '<pre>';
 		print_r( $response );
 		echo '</pre>';
+		exit;
 
 	  }
 
