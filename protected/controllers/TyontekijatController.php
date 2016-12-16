@@ -628,7 +628,7 @@ $xml = '
     <employeebaseinformation>
       <employeeidentifier>'.$model->tekijan_henkilotunnus.'</employeeidentifier>
       <firstname>'.$model->tekijan_nimi.'</firstname>
-      <lastname>Työntekijä</lastname>
+      <lastname>'.$model->sukunimi.'</lastname>
       <phonenumber>'.$model->tekijan_puh.'</phonenumber>
       <email>'.$model->tekijan_email.'</email>
     </employeebaseinformation>
@@ -679,8 +679,13 @@ $xml = '
 
 	  } else {
 
+		if($tila == 'edit'){
+			$this->netvisorTyontekija('add', $model);
+			$this->redirect(array('index'));
+		}
+
 		echo '<pre>';
-		print_r( $response );
+		print_r( $result->ResponseStatus->Status );
 		echo '</pre>';
 		exit;
 
