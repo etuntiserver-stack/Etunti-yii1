@@ -1184,6 +1184,12 @@ class LaskuController extends Controller
 	elseif(empty($model->yritys) and !empty($model->nimi))
 	$name = $model->nimi;
 
+	$InvoicingCustomerIdentifier = '';
+	$asiakas = Asiakkaat::model::()->findbypk($model->as_nro);
+	if(isset($asiakas->id) and $asiakas->netvisorkey != 0)
+	{
+	$InvoicingCustomerIdentifier = $asiakas->netvisorkey;
+	}
 
 $xml = '
 <root>
@@ -1195,7 +1201,7 @@ $xml = '
     <SalesInvoiceAmount>'.$model->yhteensa_total.'</SalesInvoiceAmount>
     <SellerIdentifier type="netvisor">32</SellerIdentifier> 
     <SalesInvoiceStatus type="netvisor">unsent</SalesInvoiceStatus>
-    <InvoicingCustomerIdentifier type="netvisor">1</InvoicingCustomerIdentifier>
+    <InvoicingCustomerIdentifier type="netvisor">'.$InvoicingCustomerIdentifier.'</InvoicingCustomerIdentifier>
     <InvoicingCustomerName>'.$name.'</InvoicingCustomerName>
     <InvoicingCustomerNameExtension></InvoicingCustomerNameExtension>
     <InvoicingCustomerAddressLine>'.$model->osoite.'</InvoicingCustomerAddressLine>

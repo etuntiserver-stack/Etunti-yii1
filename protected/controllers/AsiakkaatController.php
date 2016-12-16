@@ -573,7 +573,7 @@ $xml = '
 		if( $tila == 'add' )
 		$return=$result->Replies->InsertedDataIdentifier;
 		if( $tila == 'edit' )
-		$return=$result;
+		$return=$result->Replies->InsertedDataIdentifier;
 	  } else {
 
 		echo '<pre>';
@@ -1122,6 +1122,8 @@ $xml = '
 
 		} elseif($tila == 'edit') {
 		   $return = $this->netvisorCustomer("edit", $model);
+		   if(!empty($return))
+		   Asiakkaat::model()->updateByPk($id, array('netvisorkey'=>$return));
 		}
 
 		//echo $return;
