@@ -1223,12 +1223,14 @@ foreach($laskunRivit as $rivit)
 	if(isset($tuotteet->id) and $tuotteet->netvisorkey)
 		$ProductIdentifier = $tuotteet->netvisorkey;
 
+//             <SalesInvoiceProductLineFreeText>'.$rivit->free_text.'</SalesInvoiceProductLineFreeText>
+
 $xml .= '
        <InvoiceLine>
           <SalesInvoiceProductLine>
              <ProductIdentifier type="netvisor">'.$ProductIdentifier.'</ProductIdentifier>
              <ProductName>'.$rivit->tkoodi.'</ProductName>
-             <SalesInvoiceProductLineFreeText>'.$rivit->free_text.'</SalesInvoiceProductLineFreeText>
+
              <ProductUnitPrice type="net">'.$rivit->hinta.'</ProductUnitPrice>
              <ProductVatPercentage vatcode="KOMY">'.$rivit->alv.'</ProductVatPercentage>
              <SalesInvoiceProductLineQuantity>'.$rivit->kpl.'</SalesInvoiceProductLineQuantity>
