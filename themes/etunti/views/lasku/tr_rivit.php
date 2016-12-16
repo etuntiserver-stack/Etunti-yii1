@@ -17,15 +17,25 @@
 	}
 
 	$tuotePalvelu = '';
-	if(isset($_POST['tuotePalvelu']) and !empty($_POST['tuotePalvelu']))
-	$tuotePalvelu = $_POST['tuotePalvelu'].', ';
+	$tuote = LaskutusTuotteet::model()->findbypk($_POST['tuotePalvelu']);
+	if(isset($tuote->id))
+	{
+		$tuoteID	= $tuote->id;
+		$tuotePalvelu 	= $tuote->tuotenimi.', ';
+	} else {
+		$tuoteID	= '';
+		$tuotePalvelu 	= '';
+	}
 
 	$osoite = $tuotePalvelu.$osoite;
 ?>
 
      <TR class="kaikkiTR" id="trRivi_<?php echo $num; ?>">
 	<TD><b class="link text-danger poista" for="poista_<?php echo $num; ?>" style="font-size:150%"><i class="fa fa-times"></i></b></TD>
-	<TD><input type="text" size="1" name="tkoodi[<?php echo $num; ?>]" id="tkoodi_<?php echo $num; ?>" class="for_tkoodi form-control" value="<?php echo $osoite.' '.date('d.m',strtotime($_POST['from'])).'-'.date('d.m',strtotime($_POST['to'])); ?>"></TD>
+	<TD>
+		<input type="hidden" size="1" name="tuoteID[<?php echo $num; ?>]" id="tuoteID_<?php echo $num; ?>" class="form-control" value="<?php echo $tuoteID; ?>">
+		<input type="text" size="1" name="tkoodi[<?php echo $num; ?>]" id="tkoodi_<?php echo $num; ?>" class="for_tkoodi form-control" value="<?php echo $osoite.' '.date('d.m',strtotime($_POST['from'])).'-'.date('d.m',strtotime($_POST['to'])); ?>">
+	</TD>
 	<TD><input type="text" size="5" name="kpl[<?php echo $num; ?>]" id="kpl_<?php echo $num; ?>" class="onlyDigits form-control" value="<?php echo $kpl; ?>"><span class="errmsg"></span></TD>
 	<TD>
 		<select type="text" name="yksikko[<?php echo $num; ?>]" id="yksikko_<?php echo $num; ?>" class="form-control">

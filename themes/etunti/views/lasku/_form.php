@@ -518,7 +518,7 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 	</div><div class="col-sm-6">
 	<br>
 	<?php
-	echo CHtml::dropdownList('tuntipalvelu','palvelu', CHtml::listData(LaskutusTuotteet::model()->findAll(), 'tuotenimi', 'tuotenimi'), 
+	echo CHtml::dropdownList('tuntipalvelu','palvelu', CHtml::listData(LaskutusTuotteet::model()->findAll(), 'id', 'tuotenimi'), 
 	array('empty'=>'Valitse tuote/palvelu','class'=>'form-control valitseTuote'));
 	?>
 	</div>
