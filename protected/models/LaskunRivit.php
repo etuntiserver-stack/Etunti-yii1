@@ -50,7 +50,7 @@ class LaskunRivit extends DB2ActiveRecord
 			array('lid, rivi, tkoodi, kpl, alv', 'required'),
 			array('lid, rivi, tuoteID', 'numerical', 'integerOnly'=>true),
 			array('nimike,kpl', 'length', 'max'=>100),
-			array('tkoodi, nimike', 'length', 'max'=>255),
+			array('tkoodi, nimike, free_text', 'length', 'max'=>255),
 			array('yksikko, hinta, alv, hinta_alv, ale, veroton, yhteensa_alv', 'length', 'max'=>20),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.

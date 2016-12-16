@@ -546,7 +546,7 @@ class LaskuController extends Controller
 				$lr->lid	=$model->id;
 				$lr->rivi	=$key;
 				$lr->tkoodi	=$_POST['tkoodi'][$key];
-				//$lr->nimike	=$_POST['nimike'][$key];
+				$lr->free_text	=$_POST['free_text'][$key];
 				$lr->kpl	=$_POST['kpl'][$key];
 				$lr->yksikko	=$_POST['yksikko'][$key];
 				$lr->hinta	=$_POST['hinta'][$key];
@@ -628,7 +628,7 @@ class LaskuController extends Controller
 				$lr->lid	=$model->id;
 				$lr->rivi	=$key;
 				$lr->tkoodi	=$_POST['tkoodi'][$key];
-				//$lr->nimike	=$_POST['nimike'][$key];
+				$lr->free_text	=$_POST['free_text'][$key];
 				$lr->kpl	=$_POST['kpl'][$key];
 				$lr->yksikko	=$_POST['yksikko'][$key];
 				$lr->hinta	=$_POST['hinta'][$key];
@@ -1228,6 +1228,7 @@ $xml .= '
           <SalesInvoiceProductLine>
              <ProductIdentifier type="netvisor">'.$ProductIdentifier.'</ProductIdentifier>
              <ProductName>'.$rivit->tkoodi.'</ProductName>
+             <SalesInvoiceProductLineFreeText>'.$rivit->free_text.'</SalesInvoiceProductLineFreeText>
              <ProductUnitPrice type="net">'.$rivit->hinta.'</ProductUnitPrice>
              <ProductVatPercentage vatcode="KOMY">'.$rivit->alv.'</ProductVatPercentage>
              <SalesInvoiceProductLineQuantity>'.$rivit->kpl.'</SalesInvoiceProductLineQuantity>

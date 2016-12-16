@@ -505,10 +505,10 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
       <div class="section fill mb5">
 	<div class="col-sm-6">
 		<b class="glyphicon glyphicon-calendar"></b> 
-   		<input type="text" id="from" class="form-control form-group datepicker" value="<?php echo date('Y-m-d',strtotime('first day of last month', time())); ?>">
+   		<input type="text" id="from" class="form-control form-group datepickerFI" value="<?php echo date('d.m.Y',strtotime('first day of last month', time())); ?>">
 	</div><div class="col-sm-6">
 		<b class="glyphicon glyphicon-calendar"></b> 
-   		<input type="text" id="to" class="form-control form-group datepicker" value="<?php echo date('Y-m-d',strtotime('last day of last month', time())); ?>">
+   		<input type="text" id="to" class="form-control form-group datepickerFI" value="<?php echo date('d.m.Y',strtotime('last day of last month', time())); ?>">
 	</div>
       </div>
 
@@ -554,10 +554,10 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
       <div class="section fill mb5">
 	<div class="col-sm-6">
 		<b class="glyphicon glyphicon-calendar"></b> 
-   		<input type="text" id="fromkk" class="form-control form-group datepicker" value="<?php echo date('Y-m-d',strtotime('first day of last month', time())); ?>">
+   		<input type="text" id="fromkk" class="form-control form-group datepickerFI" value="<?php echo date('d.m.Y',strtotime('first day of last month', time())); ?>">
 	</div><div class="col-sm-6">
 		<b class="glyphicon glyphicon-calendar"></b> 
-   		<input type="text" id="tokk" class="form-control form-group datepicker" value="<?php echo date('Y-m-d',strtotime('last day of last month', time())); ?>">
+   		<input type="text" id="tokk" class="form-control form-group datepickerFI" value="<?php echo date('d.m.Y',strtotime('last day of last month', time())); ?>">
 	</div>
       </div>
 
@@ -617,6 +617,7 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 	<TH class="col-sm-1">Ale %</TH>
 	<TH class="col-sm-1">Veroton</TH>
 	<TH class="col-sm-1">Yhteensä</TH>
+	<TH class="col-sm-1">Viesti</TH>
      </thead>
      </TR>
 
@@ -648,6 +649,7 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 	<TD></TD>
 	<TD><input type="text" class="form-control" size="10" name="Lasku[yhteensa_total_veroton]" id="yhteensa_total_veroton" readonly></TD>
 	<TD><input type="text" class="form-control" size="10" name="Lasku[yhteensa_total]" id="yhteensa_total" readonly></TD>
+	<TD></TD>
      </TR>
      </tfoot>
 </TABLE>
