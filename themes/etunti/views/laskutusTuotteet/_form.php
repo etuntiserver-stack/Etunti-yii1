@@ -57,7 +57,7 @@
 		$list = array();
       		$l = Valikkoot::model()->findAll(" select_type='laskutus_yksikko' ",array('order' => "select_type"));
 		foreach($l as $v)
-		$list[$v->id] = $v->value;
+		$list[$v->value] = $v->value;
 
 		if(count($list) > 0)
 		{
