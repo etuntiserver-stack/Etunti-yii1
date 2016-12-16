@@ -1231,17 +1231,7 @@ foreach($laskunRivit as $rivit)
 		$ProductIdentifier = $tuotteet->netvisorkey;
 
 //             <SalesInvoiceProductLineFreeText>'.$rivit->free_text.'</SalesInvoiceProductLineFreeText>
-
-$xml .= '
-       <InvoiceLine>
-          <SalesInvoiceProductLine>
-             <ProductIdentifier type="netvisor">'.$ProductIdentifier.'</ProductIdentifier>
-             <ProductName>'.$rivit->tkoodi.'</ProductName>
-
-             <ProductUnitPrice type="net">'.$rivit->hinta.'</ProductUnitPrice>
-             <ProductVatPercentage vatcode="KOMY">'.$rivit->alv.'</ProductVatPercentage>
-             <SalesInvoiceProductLineQuantity>'.$rivit->kpl.'</SalesInvoiceProductLineQuantity>
-             <SalesInvoiceProductLineDiscountPercentage>'.$rivit->ale.'</SalesInvoiceProductLineDiscountPercentage>
+/*
              <AccountingAccountSuggestion>3000</AccountingAccountSuggestion> 
              <Dimension>
                 <DimensionName>Liiketoimintayksikkö laskentakohteena</DimensionName>
@@ -1251,7 +1241,21 @@ $xml .= '
                 <DimensionName>Severan "työ" laskentakohteena</DimensionName>
                 <DimensionItem>Makkaran paisto</DimensionItem>
              </Dimension>
+*/
+
+$xml .= '
+       <InvoiceLine>
+          <SalesInvoiceProductLine>
+             <ProductIdentifier type="netvisor">'.$ProductIdentifier.'</ProductIdentifier>
+             <ProductName>'.$rivit->tkoodi.'</ProductName>
+             <ProductUnitPrice type="net">'.$rivit->hinta.'</ProductUnitPrice>
+             <ProductVatPercentage vatcode="KOMY">'.$rivit->alv.'</ProductVatPercentage>
+             <SalesInvoiceProductLineQuantity>'.$rivit->kpl.'</SalesInvoiceProductLineQuantity>
+             <SalesInvoiceProductLineDiscountPercentage>'.$rivit->ale.'</SalesInvoiceProductLineDiscountPercentage>
            </SalesInvoiceProductLine>
+           <SalesInvoiceCommentLine>
+            <Comment>'.$rivit->free_text.'</Comment>
+           </SalesInvoiceCommentLine>
        </InvoiceLine>';
 }
 
