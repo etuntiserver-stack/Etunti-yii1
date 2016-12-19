@@ -88,7 +88,7 @@ if(empty($model->position) and isset($model->id))
 	</div>
 
 	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'tekijan_pnumero'); ?>
+		<?php echo $form->labelEx($model,'tekijan_pnumero'); ?> 
 		<?php echo $form->textField($model,'tekijan_pnumero',array('size'=>7,'maxlength'=>7,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'tekijan_pnumero'); ?>
 	</div>
@@ -133,13 +133,13 @@ if(empty($model->position) and isset($model->id))
 
 
 	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'laiten_puh'); ?>
+		<?php echo $form->labelEx($model,'laiten_puh'); ?> <?php if(!empty($model->laiten_puh)): ?><a href="tel:<?php echo $model->laiten_puh; ?>">***soita***</a><?php endif; ?>
 		<?php echo $form->textField($model,'laiten_puh',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'laiten_puh'); ?>
 	</div>
 
 	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'tekijan_puh'); ?>
+		<?php echo $form->labelEx($model,'tekijan_puh'); ?> <?php if(!empty($model->tekijan_puh)): ?><a href="tel:<?php echo $model->tekijan_puh; ?>">***soita***</a><?php endif; ?>
 		<?php echo $form->textField($model,'tekijan_puh',array('size'=>20,'maxlength'=>20,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'tekijan_puh'); ?>
 	</div>
