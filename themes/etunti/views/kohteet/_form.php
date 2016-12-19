@@ -10,6 +10,15 @@
 
 if(isset($model->id))
 $model->hinta = str_replace(",",".",$model->hinta);
+
+
+$site = Yii::app()->createController('Site');
+$ismobile = $site[0]->check_user_agent();
+
+if($ismobile and !empty($model->puh_nro)) {
+	echo '<h2><a href="'.$model->puh_nro.'">Soitaa</a></h2>';
+}
+
 ?>
 <div class="row">
 
