@@ -16,7 +16,7 @@ $site = Yii::app()->createController('Site');
 $ismobile = $site[0]->check_user_agent();
 
 if($ismobile and !empty($model->puh_nro)) {
-	echo '<h2><a href="'.$model->puh_nro.'">Soitaa</a></h2>';
+
 }
 
 ?>
@@ -106,7 +106,7 @@ if($ismobile and !empty($model->puh_nro)) {
 	</div>
 
 	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'puh_nro'); ?>
+		<?php echo $form->labelEx($model,'puh_nro'); ?> <?php if(!empty($model->puh_nro)): ?><a href="tel:<?php echo $model->puh_nro; ?>">***soita***</a><?php endif; ?>
 		<?php echo $form->textField($model,'puh_nro',array('size'=>50,'maxlength'=>50,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'puh_nro'); ?>
 	</div>
