@@ -67,7 +67,7 @@
   <form action="#" class="form-input" method="post" enctype="multipart/form-data">
      <div class="section input-group">
        <label class="field prepend-icon append-button file">
-         <span class="button">'.Yii::t('main', 'Varoitus template').'</span>
+         <span class="button">'.Yii::t('main', 'Template tiedosto').'</span>
          <input type="file" class="gui-file" name="file" onChange="document.getElementById(\'tiedostoUP\').value = this.value;">
          <input type="text" class="gui-input" name="'.$template.'" id="tiedostoUP" placeholder="Valitse tiedosto..">
          <label class="field-icon">
