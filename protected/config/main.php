@@ -328,7 +328,7 @@ return array(
 		// uncomment the following to use a MySQL database
 		
 		'db'=>array(
-			'connectionString' => 'mysql:host='.$db_host.';dbname='.$db,
+			'connectionString' => 'mysql:host='.$db_host.';dbname=demo',
 			'emulatePrepare' => true,
 			'username' => $etuntifw_user,
 			'password' => $etuntifw_pass,
