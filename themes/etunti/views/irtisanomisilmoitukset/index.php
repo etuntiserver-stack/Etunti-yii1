@@ -34,7 +34,7 @@
         <div class="tray-center">
 
 
-	<h2 class="myBgColors p10"> <?php echo Yii::t('main', 'Irtisanomisilmoitus'); ?> 
+	<h2 class="myBgColors p10"> <?php echo Yii::t('main', 'Irtisanomisilmoitukset'); ?> 
 		<?php echo CHtml::link('',Yii::app()->request->baseUrl.'/index.php/irtisanomisilmoitukset/create',array('class'=>'btn btn-default fa fa-plus')); ?>
 		<button class="btn btn-default" data-toggle="collapse" data-target="#admin-form"><?php echo Yii::t('main', 'Extrat'); ?></button>
 	</h2>

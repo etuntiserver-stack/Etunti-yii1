@@ -1,21 +1,32 @@
 <?php
-/* @var $this TyosopimuksetController */
-/* @var $model Tyosopimukset */
 
-$this->breadcrumbs=array(
-	'Tyosopimuksets'=>array('index'),
-	$model->id=>array('view','id'=>$model->id),
-	'Update',
-);
-
-$this->menu=array(
-	array('label'=>'List Tyosopimukset', 'url'=>array('index')),
-	array('label'=>'Create Tyosopimukset', 'url'=>array('create')),
-	array('label'=>'View Tyosopimukset', 'url'=>array('view', 'id'=>$model->id)),
-	array('label'=>'Manage Tyosopimukset', 'url'=>array('admin')),
-);
 ?>
 
-<h1>Update Tyosopimukset <?php echo $model->id; ?></h1>
+        <!-- begin: .tray-center -->
+        <div class="tray-center">
 
-<?php $this->renderPartial('_form', array('model'=>$model)); ?>
+	   <div class="pull-right">
+	   <?php     
+		echo CHtml::link("poista", '#', array(
+		'submit'=>array('delete', "id"=>$model->id), 
+		'confirm' => 'Haluatko varmaasti poistaa?',
+		'class'=>'btn btn-primary myBgColors'
+		));
+	   ?>
+	   </div>
+	   <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-home"></i> <?php echo Yii::t('main', 'Muoka työsopimus'); ?> </h2>
+
+
+            <div class="admin-form">
+              <div class="panel heading-border">
+                <div class="panel-body bg-light">
+                 <div class="row">
+		  <?php echo $this->renderPartial('_form', array('model'=>$model)); ?>
+                 </div>
+                </div>
+              </div>
+            </div>
+
+        <!-- loppu: .tray-center -->
+        </div>
+

@@ -146,6 +146,8 @@ class TyosopimuksetController extends Controller
 
 		if(isset($_POST['Tyosopimukset']))
 		{
+			//print_r($_POST['Tyosopimukset']);
+			//exit;
 
 			$model->attributes=$_POST['Tyosopimukset'];
 			if($model->save())
@@ -153,6 +155,8 @@ class TyosopimuksetController extends Controller
 				$tiedosto = $model->tiedosto;
 				$this->docxsave($model, $tiedosto);
 				//$this->redirect(array('view','id'=>$model->id));
+			} else {
+				var_dump($model->getErrors());
 			}
 		}
 
@@ -227,7 +231,20 @@ class TyosopimuksetController extends Controller
 	public function actionIndex()
 	{
        		$criteria = new CDbCriteria();
-		$criteria->order = " id DESC ";
+	        $criteria->order = "  id DESC ";
+
+
+		if(isset($_POST['tekijan_katuosoite']) and !empty($_POST['tekijan_katuosoite']))
+	        $criteria->addCondition (" tekijan_katuosoite LIKE '%".$_POST['tekijan_katuosoite']."%' ");
+
+		if(isset($_POST['tekijan_nimi']) and !empty(trim($_POST['tekijan_nimi'])))
+	        $criteria->addCondition (" tekijan_nimi LIKE '%".$_POST['tekijan_nimi']."%' ");
+
+		if(isset($_POST['tekijan_puh']) and !empty(trim($_POST['tekijan_puh'])))
+	        $criteria->addCondition (" laiten_puh LIKE '%".$_POST['tekijan_puh']."%' OR tekijan_puh LIKE '%".$_POST['tekijan_puh']."%' ");
+
+		if(isset($_POST['tekijan_email']) and !empty(trim($_POST['tekijan_email'])))
+	        $criteria->addCondition (" tekijan_email LIKE '%".$_POST['tekijan_email']."%' ");
 
 		$dataProvider=new CActiveDataProvider('Tyosopimukset', array(
 			'criteria'=>$criteria,
