@@ -1,0 +1,265 @@
+<?php
+
+/**
+ * This is the model class for table "sivex_tyosopimukset".
+ *
+ * The followings are the available columns in table 'sivex_tyosopimukset':
+ * @property integer $id
+ * @property string $time
+ * @property integer $key
+ * @property string $tyonantaja
+ * @property string $osoite
+ * @property string $postinumero
+ * @property string $postitoimipaikka
+ * @property string $puhelin
+ * @property string $y_tunnus
+ * @property string $sahkoposti
+ * @property string $tekijan_email
+ * @property integer $tid
+ * @property string $tekijan_nimi
+ * @property string $tekijan_katuosoite
+ * @property string $tekijan_pnumero
+ * @property string $tekijan_ptoimipaikka
+ * @property string $tekijan_puh
+ * @property string $tekijan_henkilotunnus
+ * @property string $sopimus
+ * @property string $ToistaVoimaSopimus
+ * @property string $MaaraVoimaSopimusAlkaa
+ * @property string $MaaraVoimaSopimusPaattyy
+ * @property string $peruste
+ * @property string $koeaika
+ * @property string $SoveltavaSopimus
+ * @property string $Tyotehtavat
+ * @property string $tyonSuorittamisPaikka
+ * @property string $PalkanMaaraytymisperuste
+ * @property string $PalkanMaaraytymisperusteMuu
+ * @property string $TyokokemusVuotta
+ * @property string $TyokokemusKuu
+ * @property string $palkka_kk
+ * @property string $Palkkaluokka
+ * @property string $palkka_h
+ * @property string $Luontaiseudut
+ * @property string $Raha_arvo
+ * @property string $Verotusarvo
+ * @property string $palkka_muu2
+ * @property string $Palkanmaksukausi
+ * @property string $Palkanmaksupaivat
+ * @property string $Palkka_tilille
+ * @property string $tyoaika_hvrk
+ * @property string $tyoaika_hvko
+ * @property string $tyoaika_h_jakso
+ * @property string $tyoaika_vko_jaksossa
+ * @property string $RuokataukonPituus
+ * @property string $Muu_tyoaika
+ * @property string $lomasta_sovittu
+ * @property string $Salassapito
+ * @property string $IrtisanomisaikaM
+ * @property string $Muut_sopimusehdot
+ * @property string $Muutospaiva
+ * @property string $LisayksetSopimukseen
+ * @property string $Paivays
+ * @property string $Paikka
+ * @property string $TyonantajanEdustaja
+ * @property string $NimikeTehtava
+ */
+class Tyosopimukset extends DB2ActiveRecord
+{
+	/**
+	 * @return string the associated database table name
+	 */
+	public function tableName()
+	{
+		return 'sivex_tyosopimukset';
+	}
+
+	/**
+	 * @return array validation rules for model attributes.
+	 */
+	public function rules()
+	{
+		// NOTE: you should only define rules for those attributes that
+		// will receive user inputs.
+		return array(
+			array('time, tyonantaja, osoite, postinumero, postitoimipaikka, puhelin, y_tunnus, sahkoposti, tekijan_email, tid, tekijan_nimi, tekijan_katuosoite, tekijan_pnumero, tekijan_ptoimipaikka, tekijan_puh, tekijan_henkilotunnus, sopimus, ToistaVoimaSopimus, MaaraVoimaSopimusAlkaa, MaaraVoimaSopimusPaattyy, peruste, koeaika, SoveltavaSopimus, Tyotehtavat, tyonSuorittamisPaikka, PalkanMaaraytymisperuste, PalkanMaaraytymisperusteMuu, TyokokemusVuotta, TyokokemusKuu, palkka_kk, Palkkaluokka, palkka_h, Luontaiseudut, Raha_arvo, Verotusarvo, palkka_muu2, Palkanmaksukausi, Palkanmaksupaivat, Palkka_tilille, tyoaika_hvrk, tyoaika_hvko, tyoaika_h_jakso, tyoaika_vko_jaksossa, RuokataukonPituus, Muu_tyoaika, lomasta_sovittu, Salassapito, IrtisanomisaikaM, Muut_sopimusehdot, Muutospaiva, LisayksetSopimukseen, Paivays, Paikka, TyonantajanEdustaja, NimikeTehtava', 'required'),
+			array('key, tid', 'numerical', 'integerOnly'=>true),
+			array('tyonantaja, tekijan_nimi, Raha_arvo, Verotusarvo, palkka_muu2', 'length', 'max'=>70),
+			array('osoite', 'length', 'max'=>255),
+			array('postinumero, tekijan_pnumero', 'length', 'max'=>7),
+			array('postitoimipaikka, sahkoposti, tekijan_email, tekijan_katuosoite, ToistaVoimaSopimus, MaaraVoimaSopimusAlkaa, MaaraVoimaSopimusPaattyy, koeaika, SoveltavaSopimus, PalkanMaaraytymisperusteMuu, Palkka_tilille, Paikka, TyonantajanEdustaja, NimikeTehtava', 'length', 'max'=>100),
+			array('puhelin, y_tunnus, tekijan_ptoimipaikka, tekijan_puh, tekijan_henkilotunnus, sopimus, PalkanMaaraytymisperuste, Palkkaluokka, Palkanmaksukausi, Palkanmaksupaivat, tyoaika_hvrk, tyoaika_hvko, tyoaika_h_jakso, tyoaika_vko_jaksossa, RuokataukonPituus, IrtisanomisaikaM, Muutospaiva, Paivays', 'length', 'max'=>50),
+			array('TyokokemusVuotta, TyokokemusKuu, palkka_kk, palkka_h', 'length', 'max'=>20),
+			// The following rule is used by search().
+			// @todo Please remove those attributes that should not be searched.
+			array('id, time, key, tyonantaja, osoite, postinumero, postitoimipaikka, puhelin, y_tunnus, sahkoposti, tekijan_email, tid, tekijan_nimi, tekijan_katuosoite, tekijan_pnumero, tekijan_ptoimipaikka, tekijan_puh, tekijan_henkilotunnus, sopimus, ToistaVoimaSopimus, MaaraVoimaSopimusAlkaa, MaaraVoimaSopimusPaattyy, peruste, koeaika, SoveltavaSopimus, Tyotehtavat, tyonSuorittamisPaikka, PalkanMaaraytymisperuste, PalkanMaaraytymisperusteMuu, TyokokemusVuotta, TyokokemusKuu, palkka_kk, Palkkaluokka, palkka_h, Luontaiseudut, Raha_arvo, Verotusarvo, palkka_muu2, Palkanmaksukausi, Palkanmaksupaivat, Palkka_tilille, tyoaika_hvrk, tyoaika_hvko, tyoaika_h_jakso, tyoaika_vko_jaksossa, RuokataukonPituus, Muu_tyoaika, lomasta_sovittu, Salassapito, IrtisanomisaikaM, Muut_sopimusehdot, Muutospaiva, LisayksetSopimukseen, Paivays, Paikka, TyonantajanEdustaja, NimikeTehtava', 'safe', 'on'=>'search'),
+		);
+	}
+
+	/**
+	 * @return array relational rules.
+	 */
+	public function relations()
+	{
+		// NOTE: you may need to adjust the relation name and the related
+		// class name for the relations automatically generated below.
+		return array(
+		);
+	}
+
+	/**
+	 * @return array customized attribute labels (name=>label)
+	 */
+	public function attributeLabels()
+	{
+		return array(
+			'id' => 'ID',
+			'time' => 'Time',
+			'key' => 'Key',
+			'tyonantaja' => 'Tyonantaja',
+			'osoite' => 'Osoite',
+			'postinumero' => 'Postinumero',
+			'postitoimipaikka' => 'Postitoimipaikka',
+			'puhelin' => 'Puhelin',
+			'y_tunnus' => 'Y Tunnus',
+			'sahkoposti' => 'Sahkoposti',
+			'tekijan_email' => 'Tekijan Email',
+			'tid' => 'Tid',
+			'tekijan_nimi' => 'Tekijan Nimi',
+			'tekijan_katuosoite' => 'Tekijan Katuosoite',
+			'tekijan_pnumero' => 'Tekijan Pnumero',
+			'tekijan_ptoimipaikka' => 'Tekijan Ptoimipaikka',
+			'tekijan_puh' => 'Tekijan Puh',
+			'tekijan_henkilotunnus' => 'Tekijan Henkilotunnus',
+			'sopimus' => 'Sopimus',
+			'ToistaVoimaSopimus' => 'Toista Voima Sopimus',
+			'MaaraVoimaSopimusAlkaa' => 'Maara Voima Sopimus Alkaa',
+			'MaaraVoimaSopimusPaattyy' => 'Maara Voima Sopimus Paattyy',
+			'peruste' => 'Peruste',
+			'koeaika' => 'Koeaika',
+			'SoveltavaSopimus' => 'Soveltava Sopimus',
+			'Tyotehtavat' => 'Tyotehtavat',
+			'tyonSuorittamisPaikka' => 'Tyon Suorittamis Paikka',
+			'PalkanMaaraytymisperuste' => 'Palkan Maaraytymisperuste',
+			'PalkanMaaraytymisperusteMuu' => 'Palkan Maaraytymisperuste Muu',
+			'TyokokemusVuotta' => 'Tyokokemus Vuotta',
+			'TyokokemusKuu' => 'Tyokokemus Kuu',
+			'palkka_kk' => 'Palkka Kk',
+			'Palkkaluokka' => 'Palkkaluokka',
+			'palkka_h' => 'Palkka H',
+			'Luontaiseudut' => 'Luontaiseudut',
+			'Raha_arvo' => 'Raha Arvo',
+			'Verotusarvo' => 'Verotusarvo',
+			'palkka_muu2' => 'Palkka Muu2',
+			'Palkanmaksukausi' => 'Palkanmaksukausi',
+			'Palkanmaksupaivat' => 'Palkanmaksupaivat',
+			'Palkka_tilille' => 'Palkka Tilille',
+			'tyoaika_hvrk' => 'Tyoaika Hvrk',
+			'tyoaika_hvko' => 'Tyoaika Hvko',
+			'tyoaika_h_jakso' => 'Tyoaika H Jakso',
+			'tyoaika_vko_jaksossa' => 'Tyoaika Vko Jaksossa',
+			'RuokataukonPituus' => 'Ruokataukon Pituus',
+			'Muu_tyoaika' => 'Muu Tyoaika',
+			'lomasta_sovittu' => 'Lomasta Sovittu',
+			'Salassapito' => 'Salassapito',
+			'IrtisanomisaikaM' => 'Irtisanomisaika M',
+			'Muut_sopimusehdot' => 'Muut Sopimusehdot',
+			'Muutospaiva' => 'Muutospaiva',
+			'LisayksetSopimukseen' => 'Lisaykset Sopimukseen',
+			'Paivays' => 'Paivays',
+			'Paikka' => 'Paikka',
+			'TyonantajanEdustaja' => 'Tyonantajan Edustaja',
+			'NimikeTehtava' => 'Nimike Tehtava',
+		);
+	}
+
+	/**
+	 * Retrieves a list of models based on the current search/filter conditions.
+	 *
+	 * Typical usecase:
+	 * - Initialize the model fields with values from filter form.
+	 * - Execute this method to get CActiveDataProvider instance which will filter
+	 * models according to data in model fields.
+	 * - Pass data provider to CGridView, CListView or any similar widget.
+	 *
+	 * @return CActiveDataProvider the data provider that can return the models
+	 * based on the search/filter conditions.
+	 */
+	public function search()
+	{
+		// @todo Please modify the following code to remove attributes that should not be searched.
+
+		$criteria=new CDbCriteria;
+
+		$criteria->compare('id',$this->id);
+		$criteria->compare('time',$this->time,true);
+		$criteria->compare('key',$this->key);
+		$criteria->compare('tyonantaja',$this->tyonantaja,true);
+		$criteria->compare('osoite',$this->osoite,true);
+		$criteria->compare('postinumero',$this->postinumero,true);
+		$criteria->compare('postitoimipaikka',$this->postitoimipaikka,true);
+		$criteria->compare('puhelin',$this->puhelin,true);
+		$criteria->compare('y_tunnus',$this->y_tunnus,true);
+		$criteria->compare('sahkoposti',$this->sahkoposti,true);
+		$criteria->compare('tekijan_email',$this->tekijan_email,true);
+		$criteria->compare('tid',$this->tid);
+		$criteria->compare('tekijan_nimi',$this->tekijan_nimi,true);
+		$criteria->compare('tekijan_katuosoite',$this->tekijan_katuosoite,true);
+		$criteria->compare('tekijan_pnumero',$this->tekijan_pnumero,true);
+		$criteria->compare('tekijan_ptoimipaikka',$this->tekijan_ptoimipaikka,true);
+		$criteria->compare('tekijan_puh',$this->tekijan_puh,true);
+		$criteria->compare('tekijan_henkilotunnus',$this->tekijan_henkilotunnus,true);
+		$criteria->compare('sopimus',$this->sopimus,true);
+		$criteria->compare('ToistaVoimaSopimus',$this->ToistaVoimaSopimus,true);
+		$criteria->compare('MaaraVoimaSopimusAlkaa',$this->MaaraVoimaSopimusAlkaa,true);
+		$criteria->compare('MaaraVoimaSopimusPaattyy',$this->MaaraVoimaSopimusPaattyy,true);
+		$criteria->compare('peruste',$this->peruste,true);
+		$criteria->compare('koeaika',$this->koeaika,true);
+		$criteria->compare('SoveltavaSopimus',$this->SoveltavaSopimus,true);
+		$criteria->compare('Tyotehtavat',$this->Tyotehtavat,true);
+		$criteria->compare('tyonSuorittamisPaikka',$this->tyonSuorittamisPaikka,true);
+		$criteria->compare('PalkanMaaraytymisperuste',$this->PalkanMaaraytymisperuste,true);
+		$criteria->compare('PalkanMaaraytymisperusteMuu',$this->PalkanMaaraytymisperusteMuu,true);
+		$criteria->compare('TyokokemusVuotta',$this->TyokokemusVuotta,true);
+		$criteria->compare('TyokokemusKuu',$this->TyokokemusKuu,true);
+		$criteria->compare('palkka_kk',$this->palkka_kk,true);
+		$criteria->compare('Palkkaluokka',$this->Palkkaluokka,true);
+		$criteria->compare('palkka_h',$this->palkka_h,true);
+		$criteria->compare('Luontaiseudut',$this->Luontaiseudut,true);
+		$criteria->compare('Raha_arvo',$this->Raha_arvo,true);
+		$criteria->compare('Verotusarvo',$this->Verotusarvo,true);
+		$criteria->compare('palkka_muu2',$this->palkka_muu2,true);
+		$criteria->compare('Palkanmaksukausi',$this->Palkanmaksukausi,true);
+		$criteria->compare('Palkanmaksupaivat',$this->Palkanmaksupaivat,true);
+		$criteria->compare('Palkka_tilille',$this->Palkka_tilille,true);
+		$criteria->compare('tyoaika_hvrk',$this->tyoaika_hvrk,true);
+		$criteria->compare('tyoaika_hvko',$this->tyoaika_hvko,true);
+		$criteria->compare('tyoaika_h_jakso',$this->tyoaika_h_jakso,true);
+		$criteria->compare('tyoaika_vko_jaksossa',$this->tyoaika_vko_jaksossa,true);
+		$criteria->compare('RuokataukonPituus',$this->RuokataukonPituus,true);
+		$criteria->compare('Muu_tyoaika',$this->Muu_tyoaika,true);
+		$criteria->compare('lomasta_sovittu',$this->lomasta_sovittu,true);
+		$criteria->compare('Salassapito',$this->Salassapito,true);
+		$criteria->compare('IrtisanomisaikaM',$this->IrtisanomisaikaM,true);
+		$criteria->compare('Muut_sopimusehdot',$this->Muut_sopimusehdot,true);
+		$criteria->compare('Muutospaiva',$this->Muutospaiva,true);
+		$criteria->compare('LisayksetSopimukseen',$this->LisayksetSopimukseen,true);
+		$criteria->compare('Paivays',$this->Paivays,true);
+		$criteria->compare('Paikka',$this->Paikka,true);
+		$criteria->compare('TyonantajanEdustaja',$this->TyonantajanEdustaja,true);
+		$criteria->compare('NimikeTehtava',$this->NimikeTehtava,true);
+
+		return new CActiveDataProvider($this, array(
+			'criteria'=>$criteria,
+		));
+	}
+
+	/**
+	 * Returns the static model of the specified AR class.
+	 * Please note that you should have this exact method in all your CActiveRecord descendants!
+	 * @param string $className active record class name.
+	 * @return Tyosopimukset the static model class
+	 */
+	public static function model($className=__CLASS__)
+	{
+		return parent::model($className);
+	}
+}
