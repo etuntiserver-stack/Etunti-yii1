@@ -82,7 +82,7 @@
   </form>
  ';
 
-  echo '<a href="/../tiedostot/templates/mallit/tyotodistus.docx">'.Yii::t('main', 'Tässä').'</a> '.Yii::t('main', 'on templaten esimerkki.');
+  echo '<a href="/../lib/mallit/tyotodistus.docx">'.Yii::t('main', 'Tässä').'</a> '.Yii::t('main', 'on templaten esimerkki.');
 ?>
                         </div>
                       </div>

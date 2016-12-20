@@ -185,7 +185,7 @@ foreach($tal as $k=>$v)
 	</span>
     </div>
   </form>
-  <p><a href="/../tiedostot/templates/mallit/'.$nimike.'">'.Yii::t('main', 'Tässä').'</a> '.Yii::t('main', 'on '.$nimike.' templaten esimerkki.').'</p>
+  <p><a href="/../lib/mallit/'.$nimike.'">'.Yii::t('main', 'Tässä').'</a> '.Yii::t('main', 'on '.$nimike.' templaten esimerkki.').'</p>
   <br>
  </div>
  ';
