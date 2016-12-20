@@ -1,21 +1,32 @@
 <?php
-/* @var $this IrtisanomisilmoituksetController */
-/* @var $model Irtisanomisilmoitukset */
 
-$this->breadcrumbs=array(
-	'Irtisanomisilmoituksets'=>array('index'),
-	$model->id=>array('view','id'=>$model->id),
-	'Update',
-);
-
-$this->menu=array(
-	array('label'=>'List Irtisanomisilmoitukset', 'url'=>array('index')),
-	array('label'=>'Create Irtisanomisilmoitukset', 'url'=>array('create')),
-	array('label'=>'View Irtisanomisilmoitukset', 'url'=>array('view', 'id'=>$model->id)),
-	array('label'=>'Manage Irtisanomisilmoitukset', 'url'=>array('admin')),
-);
 ?>
 
-<h1>Update Irtisanomisilmoitukset <?php echo $model->id; ?></h1>
+        <!-- begin: .tray-center -->
+        <div class="tray-center">
 
-<?php $this->renderPartial('_form', array('model'=>$model)); ?>
+	   <div class="pull-right">
+	   <?php     
+		echo CHtml::link("poista", '#', array(
+		'submit'=>array('delete', "id"=>$model->id), 
+		'confirm' => 'Haluatko varmaasti poistaa?',
+		'class'=>'btn btn-primary myBgColors'
+		));
+	   ?>
+	   </div>
+	   <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-home"></i> <?php echo Yii::t('main', 'Muoka irtisanomisilmoitus'); ?> </h2>
+
+
+            <div class="admin-form">
+              <div class="panel heading-border">
+                <div class="panel-body bg-light">
+                 <div class="row">
+		  <?php echo $this->renderPartial('_form', array('model'=>$model)); ?>
+                 </div>
+                </div>
+              </div>
+            </div>
+
+        <!-- loppu: .tray-center -->
+        </div>
+

@@ -20,6 +20,22 @@ class IrtisanomisilmoituksetController extends Controller
 	}
 
 	/**
+	 * @return string the associated database table name
+	 */
+	public function polkku()
+	{
+		return 'tiedostot/irtisanomisilmoitukset/'.Yii::app()->user->domain;
+	}
+
+	/**
+	 * @return string the associated database table name
+	 */
+	public function tiedostonNimike()
+	{
+		return 'irtisanomisilmoitus';
+	}
+
+	/**
 	 * Specifies the access control rules.
 	 * This method is used by the 'accessControl' filter.
 	 * @return array access control rules
@@ -28,16 +44,16 @@ class IrtisanomisilmoituksetController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view'),
-				'users'=>array('*'),
+				'actions'=>array('index','view','tekijan_tiedot'),
+                		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
 				'actions'=>array('create','update'),
-				'users'=>array('@'),
+                		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
 				'actions'=>array('admin','delete'),
-				'users'=>array('admin'),
+                		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
 				'users'=>array('*'),
@@ -45,10 +61,33 @@ class IrtisanomisilmoituksetController extends Controller
 		);
 	}
 
-	/**
-	 * Displays a particular model.
-	 * @param integer $id the ID of the model to be displayed
-	 */
+
+
+	public function isEtuntiAdmin() {
+
+		if(isset(Yii::app()->user->adminID))
+		{
+		$m = Administrators::model()->findbypk(Yii::app()->user->adminID);
+	        if($m->id == Yii::app()->user->adminID)
+	            return true;
+		} else {
+	            return false;
+		}
+	}
+
+        public function init()
+        {
+
+                if (Yii::app()->controller->isEtuntiAdmin() and !isset(Yii::app()->user->user_theme)) {
+                        Yii::app()->theme = 'etunti';
+                } elseif (Yii::app()->controller->isEtuntiAdmin() and isset(Yii::app()->user->user_theme)) {
+                        Yii::app()->theme = Yii::app()->user->user_theme;
+                } else {
+                        Yii::app()->theme = 'classic';
+                }
+                parent::init();
+        }
+
 	public function actionView($id)
 	{
 		$this->render('view',array(
@@ -56,10 +95,22 @@ class IrtisanomisilmoituksetController extends Controller
 		));
 	}
 
-	/**
-	 * Creates a new model.
-	 * If creation is successful, the browser will be redirected to the 'view' page.
-	 */
+	public function actionTekijan_tiedot()
+	{
+		$model = Tyontekijat::model()->findbypk($_POST['tid']);
+		$tiedot = array(
+			'tekijan_email' => $model->tekijan_email,
+			'tekijan_nimi' => $model->tekijan_nimi,
+			'tekijan_katuosoite' => $model->tekijan_katuosoite,
+			'tekijan_pnumero' => $model->tekijan_pnumero,
+			'tekijan_ptoimipaikka' => $model->tekijan_ptoimipaikka,
+			'tekijan_puh' => $model->tekijan_puh,
+			'tekijan_henkilotunnus' => $model->tekijan_henkilotunnus
+		);
+		echo json_encode($tiedot);
+	}
+
+
 	public function actionCreate()
 	{
 		$model=new Irtisanomisilmoitukset;
@@ -69,9 +120,16 @@ class IrtisanomisilmoituksetController extends Controller
 
 		if(isset($_POST['Irtisanomisilmoitukset']))
 		{
+
+			$tiedosto = date('Y-m-d').'_'.$_POST['Irtisanomisilmoitukset']['tid'];
 			$model->attributes=$_POST['Irtisanomisilmoitukset'];
+			$model->tiedosto=$tiedosto;
 			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+			{
+				$this->docxsave($model, $tiedosto);
+				//$this->redirect(array('view','id'=>$model->id));
+			}
+
 		}
 
 		$this->render('create',array(
@@ -79,11 +137,6 @@ class IrtisanomisilmoituksetController extends Controller
 		));
 	}
 
-	/**
-	 * Updates a particular model.
-	 * If update is successful, the browser will be redirected to the 'view' page.
-	 * @param integer $id the ID of the model to be updated
-	 */
 	public function actionUpdate($id)
 	{
 		$model=$this->loadModel($id);
@@ -93,9 +146,14 @@ class IrtisanomisilmoituksetController extends Controller
 
 		if(isset($_POST['Irtisanomisilmoitukset']))
 		{
+
 			$model->attributes=$_POST['Irtisanomisilmoitukset'];
 			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+			{
+				$tiedosto = $model->tiedosto;
+				$this->docxsave($model, $tiedosto);
+				//$this->redirect(array('view','id'=>$model->id));
+			}
 		}
 
 		$this->render('update',array(
@@ -103,18 +161,64 @@ class IrtisanomisilmoituksetController extends Controller
 		));
 	}
 
-	/**
-	 * Deletes a particular model.
-	 * If deletion is successful, the browser will be redirected to the 'admin' page.
-	 * @param integer $id the ID of the model to be deleted
-	 */
+
+
+	protected function docxsave($model, $tiedosto)
+	{
+
+
+			Yii::import('ext.yiiword.YiiWord', true);
+			Yii::registerAutoloader(array('YiiWord', 'autoload'), true);
+
+			if (!file_exists(Yii::app()->basePath."/../".$this->polkku() )) {
+			 	mkdir(Yii::app()->basePath."/../".$this->polkku(), 0777, true);
+			}
+
+		
+			$PHPWord = new PHPWord();
+			$document = $PHPWord->loadTemplate('tiedostot/templates/'.Yii::app()->user->domain.'/'.$this->tiedostonNimike().'.docx');
+
+
+			$document->setValue('tyonantaja', iconv('UTF-8','ISO-8859-1',$model->tyonantaja));
+			$document->setValue('tyonantaja_osoite', iconv('UTF-8','ISO-8859-1',$model->osoite));
+			$document->setValue('tyonantaja_y_tunnus', $model->y_tunnus);
+			$document->setValue('tyonantaja_puhelin', $model->puhelin);
+			$document->setValue('tyonantaja_sahkoposti', $model->sahkoposti);
+
+
+			$document->setValue('tyontekija_nimi', iconv('UTF-8','ISO-8859-1',$model->tekijan_nimi));
+			$document->setValue('tyontekija_osoite', iconv('UTF-8','ISO-8859-1',$model->tekijan_katuosoite));
+			$document->setValue('tyontekija_henkilotunnus', $model->tekijan_henkilotunnus);
+			$document->setValue('tyontekija_puhelin', $model->tekijan_puh);
+			$document->setValue('tyontekija_sahkoposti', $model->tekijan_email);
+
+			$document->setValue('aika', $model->Paivays);
+			$document->setValue('paikka', iconv('UTF-8','ISO-8859-1', $model->Paikka));
+			$document->setValue('johtajan_nimi', iconv('UTF-8','ISO-8859-1', $model->TyonantajanEdustaja));
+			$document->setValue('teksti', iconv('UTF-8','ISO-8859-1', $model->teksti));
+
+			$file = $this->polkku().'/'.$tiedosto;
+		  	$document->save($file.'.docx');
+
+			shell_exec('unoconv -f pdf '.$file.'.docx'); // ei localhostina
+			$this->redirect(array('index'));
+
+
+	}
+
 	public function actionDelete($id)
 	{
-		$this->loadModel($id)->delete();
+		$model=$this->loadModel($id);
+		$t = $this->polkku().'/'.$model->tiedosto;
+		if(file_exists(Yii::app()->basePath."/../".$t.".*"))
+			unlink($t.".*");
+
+	
+		$model->delete();
 
 		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
 		if(!isset($_GET['ajax']))
-			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
+			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('index'));
 	}
 
 	/**
@@ -122,10 +226,17 @@ class IrtisanomisilmoituksetController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$dataProvider=new CActiveDataProvider('Irtisanomisilmoitukset');
-		$this->render('index',array(
-			'dataProvider'=>$dataProvider,
+       		$criteria = new CDbCriteria();
+		$criteria->order = " id DESC ";
+
+		$dataProvider=new CActiveDataProvider('Irtisanomisilmoitukset', array(
+			'criteria'=>$criteria,
+			//'pagination'=>false
 		));
+
+		$dataProvider->pagination->pageSize = 50;
+		$this->render('index', array('dataProvider' => $dataProvider));
+
 	}
 
 	/**

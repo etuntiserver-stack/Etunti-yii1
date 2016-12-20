@@ -897,6 +897,10 @@ $('.tvchange').change(function(){
                   <span class="fa fa-indent"></span> <?php echo Yii::t('main', 'Kirjallinen varoitus'); ?></a>
               </li>
               <li>
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/irtisanomisilmoitukset/index">
+                  <span class="fa fa-indent"></span> <?php echo Yii::t('main', 'Irtisanomisilmoitus'); ?></a>
+              </li>
+              <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/tyotodistus/index">
                   <span class="fa fa-indent"></span> <?php echo Yii::t('main', 'Työtodistus'); ?></a>
               </li>

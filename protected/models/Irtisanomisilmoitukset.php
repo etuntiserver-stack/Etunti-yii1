@@ -29,8 +29,9 @@
  * @property string $NimikeTehtava
  * @property string $tiedosto
  */
-class Irtisanomisilmoitukset extends CActiveRecord
+class Irtisanomisilmoitukset extends DB2ActiveRecord
 {
+
 	/**
 	 * @return string the associated database table name
 	 */
@@ -47,12 +48,13 @@ class Irtisanomisilmoitukset extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('time, tyonantaja, osoite, postinumero, postitoimipaikka, puhelin, y_tunnus, sahkoposti, tekijan_email, tid, tekijan_nimi, tekijan_katuosoite, tekijan_pnumero, tekijan_ptoimipaikka, tekijan_puh, tekijan_henkilotunnus, teksti, Paivays, Paikka, TyonantajanEdustaja, NimikeTehtava, tiedosto', 'required'),
+			//array('time, tyonantaja, osoite, postinumero, postitoimipaikka, puhelin, y_tunnus, sahkoposti, tekijan_email, tid, tekijan_nimi, tekijan_katuosoite, tekijan_pnumero, tekijan_ptoimipaikka, tekijan_puh, tekijan_henkilotunnus, teksti, Paivays, Paikka, TyonantajanEdustaja, NimikeTehtava, tiedosto', 'required'),
 			array('key, tid', 'numerical', 'integerOnly'=>true),
 			array('tyonantaja, tekijan_nimi', 'length', 'max'=>70),
 			array('osoite, tiedosto', 'length', 'max'=>255),
 			array('postinumero, tekijan_pnumero', 'length', 'max'=>7),
 			array('postitoimipaikka, sahkoposti, tekijan_email, tekijan_katuosoite, Paikka, TyonantajanEdustaja, NimikeTehtava', 'length', 'max'=>100),
+			array('teksti', 'length', 'max'=>3000),
 			array('puhelin, y_tunnus, tekijan_ptoimipaikka, tekijan_puh, tekijan_henkilotunnus, Paivays', 'length', 'max'=>50),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
@@ -80,25 +82,25 @@ class Irtisanomisilmoitukset extends CActiveRecord
 			'id' => 'ID',
 			'time' => 'Time',
 			'key' => 'Key',
-			'tyonantaja' => 'Tyonantaja',
-			'osoite' => 'Osoite',
-			'postinumero' => 'Postinumero',
-			'postitoimipaikka' => 'Postitoimipaikka',
-			'puhelin' => 'Puhelin',
-			'y_tunnus' => 'Y Tunnus',
-			'sahkoposti' => 'Sahkoposti',
-			'tekijan_email' => 'Tekijan Email',
+			'tyonantaja' => 'Työnantaja',
+			'osoite' => 'Työnantaja osoite',
+			'postinumero' => 'Työnantaja postinumero',
+			'postitoimipaikka' => 'Työnantaja postitoimipaikka',
+			'puhelin' => 'Työnantaja puhelin',
+			'y_tunnus' => 'Työnantaja Y-tunnus',
+			'sahkoposti' => 'Työnantaja sähköposti',
+			'tekijan_email' => 'Työntekijä sähköposti',
 			'tid' => 'Tid',
-			'tekijan_nimi' => 'Tekijan Nimi',
-			'tekijan_katuosoite' => 'Tekijan Katuosoite',
-			'tekijan_pnumero' => 'Tekijan Pnumero',
-			'tekijan_ptoimipaikka' => 'Tekijan Ptoimipaikka',
-			'tekijan_puh' => 'Tekijan Puh',
-			'tekijan_henkilotunnus' => 'Tekijan Henkilotunnus',
+			'tekijan_nimi' => 'Työntekijä nimi',
+			'tekijan_katuosoite' => 'Työntekijä osoite',
+			'tekijan_pnumero' => 'Työntekijä postinumero',
+			'tekijan_ptoimipaikka' => 'Työntekijä postitoimipaikka',
+			'tekijan_puh' => 'Työntekijä puhelin',
+			'tekijan_henkilotunnus' => 'Työntekijä henkilötunnus',
 			'teksti' => 'Teksti',
-			'Paivays' => 'Paivays',
+			'Paivays' => 'Päiväys',
 			'Paikka' => 'Paikka',
-			'TyonantajanEdustaja' => 'Tyonantajan Edustaja',
+			'TyonantajanEdustaja' => 'Työnantajan edustaja',
 			'NimikeTehtava' => 'Nimike Tehtava',
 			'tiedosto' => 'Tiedosto',
 		);
@@ -121,6 +123,7 @@ class Irtisanomisilmoitukset extends CActiveRecord
 		// @todo Please modify the following code to remove attributes that should not be searched.
 
 		$criteria=new CDbCriteria;
+		$criteria->order = " id DESC ";
 
 		$criteria->compare('id',$this->id);
 		$criteria->compare('time',$this->time,true);
@@ -156,7 +159,7 @@ class Irtisanomisilmoitukset extends CActiveRecord
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return Irtisanomisilmoitukset the static model class
+	 * @return KirjallinenVaroitus the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{

@@ -149,11 +149,10 @@ ${varoitus_teksti}</textarea>
   <table class="table table-striped" id="mobileTable">
   <thead class="myBgColors">
   <tr>
-
+  <th></th>
   <th><?php echo Yii::t('main', 'Nimi'); ?></th>
   <th><?php echo Yii::t('main', 'Kirjallinen varoitus'); ?></th>
   <th><?php echo Yii::t('main', 'Tiedosto'); ?></th>
-  <th></th>
   </tr>
   </thead>
   <?php $this->widget('zii.widgets.CListView', array(
