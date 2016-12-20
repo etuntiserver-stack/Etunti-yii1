@@ -19,7 +19,7 @@
               <div class="panel heading-border">
                 <div class="panel-body bg-light">
 
-<?php if (file_exists(Yii::app()->basePath.'/../'.$this->polkku().'/'.$this->tiedostonNimike().'.docx')) : ?>
+<?php if (file_exists(Yii::app()->basePath.'/../tiedostot/templates/'.Yii::app()->user->domain.'/'.$this->tiedostonNimike().'.docx')) : ?>
 
                  <div class="row">
                   <div class="col-sm-4">

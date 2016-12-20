@@ -58,7 +58,7 @@
 <?php
   $nimike	= $template.'.docx';
   $polku 	= Yii::app()->basePath;
-  $tiedosto 	= "/../".$this->polkku()."/".$nimike;
+  $tiedosto 	= "/../tiedostot/templates/".Yii::app()->user->domain."/".$nimike;
 
   if (file_exists($polku.$tiedosto))
   echo '<a href="'.$tiedosto.'">'.$nimike.'</a> <span class="poista btn btn-xs btn-danger" for="'.$polku.$tiedosto.'">X</span>';
