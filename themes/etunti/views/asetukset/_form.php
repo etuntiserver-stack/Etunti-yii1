@@ -571,6 +571,12 @@
 	</div>
 
 	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'netvisor_host'); ?>
+		<?php echo $form->textField($model,'netvisor_host',array('maxlength'=>500,'class'=>'form-control', 'placeholder'=>'integration.netvisor.fi')); ?>
+		<?php echo $form->error($model,'netvisor_host'); ?>
+	</div>
+
+	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'netvisor_organisation_identifier'); ?>
 		<?php echo $form->textField($model,'netvisor_organisation_identifier',array('maxlength'=>255,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'netvisor_organisation_identifier'); ?>

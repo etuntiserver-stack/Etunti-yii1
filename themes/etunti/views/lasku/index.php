@@ -11,6 +11,21 @@
 	<div class="alert alert-success"><?php echo $info; ?></div>
 	<?php endif; ?>
 
+
+        <div class="pull-right myBgColors p10">
+	<?php echo CHtml::link(Yii::t('main', 'Lähettämättömät'), 
+		array('index', 'lahettamattomat'=>'true'), 
+		array(
+			'class'=>'btn btn-primary myBgColors', 
+			'style'=>'color:white', 
+			'data-toggle'=>'tooltip', 
+			'data-placement'=>'top', 
+			'title'=>Yii::t('main', 'Hyväksytyt lähettämättömät laskut') 
+		)
+	); 
+	?>
+        </div>
+
         <h2 class="myBgColors p10"> <i class="fa fa-barcode"></i> <?php echo Yii::t('main', 'LASKU'); ?> 
 		<?php echo CHtml::link('',Yii::app()->request->baseUrl.'/index.php/lasku/create',array('class'=>'btn btn-default fa fa-plus')); ?>
 	</h2>
@@ -83,17 +98,16 @@
 
 				<select name="tilaLaskulle" id="tilaLaskulle" class="gui-input">
 				<option>Tila</option>
-				<option value="1">Luotu/hyväksytty</option>
-				<option value="2">Lähetetty</option>
-				<option value="3">Maksettu</option>
+				<option value="0"><?php echo Yii::t('main', 'Luotu'); ?></option>
+				<option value="1"><?php echo Yii::t('main', 'Hyväksytty (Lähettämätömät)'); ?></option>
+				<option value="2"><?php echo Yii::t('main', 'Lähetetty'); ?></option>
+				<option value="3"><?php echo Yii::t('main', 'Maksettu'); ?></option>
 				</select>
 
                             <i class="arrow double"></i>
                             </label>
                           </label>
                         </div>
-
-
 
 
                       </div>
@@ -176,12 +190,23 @@
         </div>
 
 
+	<?php if($lahettamattomat == true): ?>
+	<h3 class="alert alert-primary myBgColors"><?php echo Yii::t('main', 'Lähettämättömät laskut'); ?>
+		<button class="col-sm-offset-1 valitseKaikki btn btn-sm btn-default btn-group"><?php echo Yii::t('main', 'Valitse kaikki'); ?></button>
+		<span id="lahetaValitsemmat"></span>
+	</h3>
+	<?php endif; ?>
+
+
   <div class="panel heading-border">
    <div class="panel-body">
 
   <table class="table table-striped" id="mobileTable">
   <thead class="myBgColors">
   <tr>
+  <?php if($lahettamattomat == true): ?>
+  <th></th>
+  <?php endif; ?>
   <th></th>
   <th></th>
   <th><?php echo Yii::t('main', 'Nro.'); ?></th>
@@ -199,6 +224,7 @@
   <?php $this->widget('zii.widgets.CListView', array(
 	'dataProvider'=>$dataProvider,
 	'itemView'=>'_view',
+	'viewData' => array( 'lahettamattomat'=>$lahettamattomat ), // YOUR OWN VARIABLES
   	'template'=>'{items}<table class="table table-striped table-condensed"></table><br/>{pager}',
 
 
@@ -225,6 +251,57 @@
 
 <script type="text/javascript">
 $(document).ready(function(){
+
+
+$(".valitseKaikki").click(function(){
+	var $chk=$('#mobileTable input:checkbox');
+	$chk.prop('checked',$chk.is(':checked') ? null:'checked');
+	if($chk.is(':checked'))
+	{
+		$('#lahetaValitsemmat').html('<button class="btn btn-sm btn-default btn-group lahetaNamat">Lähetä</button>');
+	} else {
+		$('#lahetaValitsemmat').html('');
+	}
+});
+
+$(".valitseLahetettavaksi").click(function(){
+	var onkoChecked = false;
+	$('#mobileTable input:checkbox').each(function () {
+           if (this.checked) {
+		onkoChecked = true;
+	   }
+	});
+	if(onkoChecked)
+	{
+		$('#lahetaValitsemmat').html('<button class="btn btn-sm btn-default btn-group lahetaNamat">Lähetä</button>');
+	} else {
+		$('#lahetaValitsemmat').html('');
+	}
+});
+
+
+
+$(document).delegate(".lahetaNamat","click",function(){
+	$('#mobileTable input:checkbox').each(function () {
+           if (this.checked) {
+
+		var thisFor = $(this).attr('for');
+
+	        $.ajax({
+	           url: 'laheta_valitsemmat?id='+thisFor,
+	           /*type: "POST",
+	           data: { id : thisFor },*/
+	           success: function(data){
+			console.log(data);
+	           }
+	        });
+
+           }
+	});
+	window.location.reload();
+});
+
+
 
 if($('#getTila').val())
 {

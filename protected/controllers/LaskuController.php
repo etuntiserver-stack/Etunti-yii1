@@ -23,7 +23,7 @@ class LaskuController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','etsikohde','etsiasiakas', 'etsisaaja','luoKohteista', 'luoAsiakaasta', 'tr_rivit', 'tr_rivitkk','lasku_pdf', 'finvoice', 'postita', 'tr_rivit_tyhja','valitsetuote', 'hyvityslasku', 'postita_pdf', 'get_historia', 'kohteen_tieto', 'osoite_haku', 'indexnv', 'updatenv'),
+				'actions'=>array('admin','delete','create','update','index','view','etsikohde','etsiasiakas', 'etsisaaja','luoKohteista', 'luoAsiakaasta', 'tr_rivit', 'tr_rivitkk','lasku_pdf', 'finvoice', 'postita', 'tr_rivit_tyhja','valitsetuote', 'hyvityslasku', 'postita_pdf', 'get_historia', 'kohteen_tieto', 'osoite_haku', 'indexnv', 'updatenv', 'laheta_valitsemmat'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny', // allow admin user to perform 'admin' and 'delete' actions
@@ -194,7 +194,7 @@ class LaskuController extends Controller
 		$firmanTiedot=FirmanTiedot::model()->find("id=1");
 
 
-		$this->render('finvoice', 
+		$this->renderPartial('finvoice', 
 
 			array(
 			'lasku'=>$lasku,
@@ -553,7 +553,10 @@ class LaskuController extends Controller
 				$lr->alv	=$_POST['alv'][$key];
 				$lr->hinta_alv	=$_POST['hinta_alv'][$key];
 				$lr->ale	=$_POST['ale'][$key];
-				$lr->tuoteID	=$_POST['tuoteID'][$key];
+
+				if(isset($_POST['tuoteID']))
+					$lr->tuoteID	=$_POST['tuoteID'][$key];
+
 
 				if(	isset($as->id) 
 					and (int)$as->vinkki_tunnit > 0 
@@ -573,13 +576,13 @@ class LaskuController extends Controller
 			}
 
 
-		    // Lasku historia
-		    $historia = new LaskuHistoria;
-		    $historia->lid = $model->id;
-		    $historia->status = "Lasku luotu";
-		    $historia->palvelu = "local";
-		    $historia->yht_euro = $model->yhteensa_total;
-		    $historia->save();
+		    		// Lasku historia
+				$historia = new LaskuHistoria;
+				$historia->lid = $model->id;
+				$historia->status = "Lasku luotu";
+				$historia->palvelu = "local";
+				$historia->yht_euro = $model->yhteensa_total;
+				$historia->save();
 
 				$this->redirect(array('update','id'=>$model->id));
 				//$this->redirect(array('admin'));
@@ -620,10 +623,10 @@ class LaskuController extends Controller
 			LaskunRivit::model()->deleteAll("lid='".$id."'");
 
 
-		if(isset($_POST['tkoodi']))
-		{
-			foreach($_POST['tkoodi'] as $key=>$val)
+			if(isset($_POST['tkoodi']))
 			{
+			  foreach($_POST['tkoodi'] as $key=>$val)
+			  {
 				$lr = new LaskunRivit;
 				$lr->lid	=$model->id;
 				$lr->rivi	=$key;
@@ -635,12 +638,23 @@ class LaskuController extends Controller
 				$lr->alv	=$_POST['alv'][$key];
 				$lr->hinta_alv	=$_POST['hinta_alv'][$key];
 				$lr->ale	=$_POST['ale'][$key];
-				$lr->tuoteID	=$_POST['tuoteID'][$key];
+
+				if(isset($_POST['tuoteID']))
+					$lr->tuoteID	=$_POST['tuoteID'][$key];
+
 				$lr->veroton	=$_POST['veroton'][$key];
 				$lr->yhteensa_alv=$_POST['yhteensa_alv'][$key];
 				$lr->save();
+			  }
 			}
-		}
+
+		    		// Lasku historia
+				$historia = new LaskuHistoria;
+				$historia->lid = $model->id;
+				$historia->status = "Lasku on muokattu";
+				$historia->palvelu = "local";
+				$historia->yht_euro = $model->yhteensa_total;
+				$historia->save();
 
 				$this->redirect(array('update','id'=>$model->id));
 			}
@@ -673,7 +687,7 @@ class LaskuController extends Controller
 	 */
 	public function actionIndex()
 	{
-
+		$lahettamattomat = false;
 		$asetukset=Asetukset::model()->findbypk(1);
 
 		$from = date("Y-m-d", strtotime("first day of this month"));
@@ -710,19 +724,23 @@ class LaskuController extends Controller
 		if(isset($_POST['laskuosoite']) and !empty(trim($_POST['laskuosoite'])))
 	        $criteria->addCondition (" osoite LIKE '%".$_POST['laskuosoite']."%' ");
 
-		// POSTITA Luotu
-		if(isset($_POST['tilaLaskulle']) and $_POST['tilaLaskulle'] == 1 
-			and ($asetukset->palvelu_tyyppi == 1 or $asetukset->palvelu_tyyppi == 2 or $asetukset->palvelu_tyyppi == 3)
-		)
+		// <-- Luotu
+		if( isset($_POST['tilaLaskulle']) and $_POST['tilaLaskulle'] == 0 )
 		{
-		$criteria->addCondition ("
-		id in (SELECT lid FROM 
-			(SELECT lid FROM lasku_historia 
-			   WHERE id IN (SELECT MAX(id) FROM lasku_historia GROUP BY lid)
-			   AND (status='Lasku luotu' OR status='HYVÄKSYTTY')
-			) as lid)
-		");
+		$criteria->addCondition (" tilanne=0 ");
 		}
+		//  Luotu -->
+
+
+		// <-- Lahetamattomat hyväksyttyt
+		if( (isset($_POST['tilaLaskulle']) and $_POST['tilaLaskulle'] == 1) or (isset($_GET['lahettamattomat'])) )
+		{
+		$criteria->addCondition (" 
+			tilanne=1 AND postita_jobid='' AND trust_jobid='' AND netvisorkey=0 
+		");
+		$lahettamattomat = true;
+		}
+		//     Lahetamattomat hyväksyttyt -->
 
 
 		// POSTITA Lahetetty
@@ -788,7 +806,6 @@ class LaskuController extends Controller
 
 
 
-
 		$dataProvider=new CActiveDataProvider('Lasku', array(
 			'criteria'=>$criteria,
 			//'pagination'=>false
@@ -800,7 +817,8 @@ class LaskuController extends Controller
 				'from'=>$from, 
 				'to'=>$to, 
 				'asetukset' => $asetukset,
-				'info' => $info
+				'info' => $info,
+				'lahettamattomat' => $lahettamattomat
 		));
 	}
 
@@ -1189,7 +1207,9 @@ class LaskuController extends Controller
 	$asiakas = Asiakkaat::model()->findbypk($model->as_nro);
 	if(isset($asiakas->id) and $asiakas->netvisorkey != 0)
 	{
-	$InvoicingCustomerIdentifier = $asiakas->netvisorkey;
+		$InvoicingCustomerIdentifier = $asiakas->netvisorkey;
+	} else if ($host == 'integrationdemo.netvisor.fi') {
+		$InvoicingCustomerIdentifier = 1;
 	}
 
 $xml = '
@@ -1227,8 +1247,11 @@ foreach($laskunRivit as $rivit)
 
 	$ProductIdentifier = '';
 	$tuotteet = LaskutusTuotteet::model()->findByPk($rivit->tuoteID);
-	if(isset($tuotteet->id) and $tuotteet->netvisorkey)
+	if(isset($tuotteet->id) and $tuotteet->netvisorkey){
 		$ProductIdentifier = $tuotteet->netvisorkey;
+	} else if ($host == 'integrationdemo.netvisor.fi') {
+		$ProductIdentifier = 1;
+	}
 
 //             <SalesInvoiceProductLineFreeText>'.$rivit->free_text.'</SalesInvoiceProductLineFreeText>
 /*
@@ -1242,6 +1265,8 @@ foreach($laskunRivit as $rivit)
                 <DimensionItem>Makkaran paisto</DimensionItem>
              </Dimension>
 */
+
+
 
 $xml .= '
        <InvoiceLine>
@@ -1439,6 +1464,7 @@ $xml .= '
 		
 		$response = file_get_contents($url, false, $context);
 		$return = new SimpleXMLElement($response);
+
 	   }
 
 		return $return;
@@ -1454,6 +1480,7 @@ $xml .= '
 	
 	public function actionUpdatenv($id)
 	{
+
 /*
 
 		$return = '';
@@ -2026,6 +2053,43 @@ $xml .= '
 
 		return $return;
 
+	}
+
+
+	protected function lahetaNetvisoriin($id)
+	{
+		$return = false;
+		$tapahtumapvm = date("Y-m-d H:i:s");
+		Lasku::model()->updatebypk($id, array('tapahtumapvm'=>$tapahtumapvm));
+
+	     	$l = Lasku::model()->findbypk($id);
+		//$InsertedDataIdentifier = $this->netvisorLasku("edit", $model);
+		$InsertedDataIdentifier = $this->netvisorLasku("add", $l);
+		if(!empty($InsertedDataIdentifier)){
+			Lasku::model()->updateByPk($id, array('netvisorkey'=>$InsertedDataIdentifier));
+			$return = true;
+		}
+
+		return $return;
+	}
+
+	public function actionLaheta_valitsemmat($id)
+	{
+		$bod = '';
+		$asetukset = Asetukset::model()->findByPk(1);
+
+		// <-- Netvisor
+		if($asetukset->palvelu_tyyppi == 4)
+		{
+			$return = $this->lahetaNetvisoriin($id);
+			if($return != false)
+				$bod = "OK";
+			else
+				$bod = "Error";
+		}
+		//     Netvisor -->
+
+		return $bod;
 	}
 
 }

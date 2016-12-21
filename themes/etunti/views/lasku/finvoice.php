@@ -145,17 +145,9 @@ if(isset($_GET['mitatointi'])){
 // <-- laheta Netvisor
 if(isset($_GET['lahetaNetvisor']))
 {
-	$tapahtumapvm = date("Y-m-d H:i:s");
-	Lasku::model()->updatebypk($id, array('tapahtumapvm'=>$tapahtumapvm));
-
-     	$l = Lasku::model()->findbypk($id);
-	//$InsertedDataIdentifier = $this->netvisorLasku("edit", $model);
-	$InsertedDataIdentifier = $this->netvisorLasku("add", $l);
-	if(!empty($InsertedDataIdentifier))
-		Lasku::model()->updateByPk($id, array('netvisorkey'=>$InsertedDataIdentifier));
-
-	$this->redirect(array('index'));
-
+	$return = $this->lahetaNetvisoriin($id);
+	if($return != false)
+		$this->redirect(array('index'));
 }
 //  laheta Netvisor -->
 

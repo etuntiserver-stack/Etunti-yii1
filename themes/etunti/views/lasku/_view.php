@@ -12,6 +12,12 @@
 
 ?>
 <tr>
+        <?php if($lahettamattomat == true): ?>
+	<td>
+		<span class="btn btn-primary myBgColors" data-toggle="tooltip" data-placement="top" title="<?php echo Yii::t('main', 'Valitse lähetettäväksi'); ?>"><input type="checkbox" class="valitseLahetettavaksi" for="<?php echo $data->id; ?>"></span>
+	</td>
+   	<?php endif; ?>
+
 	<td>
 		<?php echo CHtml::link('<i class="fa fa-pencil-square-o" aria-hidden="true" style="font-size: 110%"></i>', 
 				array('update', 'id'=>$data->id), 

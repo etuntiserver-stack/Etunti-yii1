@@ -1048,9 +1048,11 @@ $(document).ready(function(){
 
 	   if($a->netvisor_kaytto == 1)
 	   {
+		if(empty($a->netvisor_host))
+		die('Netvisor HOST ei ole määritetty asetuksessa.');
 
-		$url		= "https://integration.netvisor.fi"; 
-		$host 		= 'integration.netvisor.fi';
+		$url		= "https://".$a->netvisor_host; 
+		$host 		= $a->netvisor_host;
 
 		$sender 	= $fm->tyonantaja;
 		$customerId	= $a->netvisor_customer_id;

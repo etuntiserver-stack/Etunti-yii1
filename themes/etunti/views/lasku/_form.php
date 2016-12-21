@@ -78,17 +78,18 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 		<?php echo $form->textField($model,'as_nro',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'as_nro'); ?>
 	</div>
-	<?php else : ?> 
+	<?php endif; ?> 
 
-	<?php //if($asetukset->palvelu_tyyppi != 2) : ?>
+
 	<?php
        		$criteria = new CDbCriteria();
-       		$criteria->order = "id DESC,laskunumero DESC";
-       		$criteria->condition = "laskunumero!=0";
+       		$criteria->order = " laskunumero!='' DESC,id DESC ";
 		$ln = 0;
 		$vm = Lasku::model()->find($criteria);
-		if(isset($vm->id))
+		if(isset($vm->id) and empty($model->laskunumero))
 		$ln = $vm->laskunumero+1;
+		elseif(isset($model->laskunumero) and !empty($model->laskunumero))
+		$ln = $model->laskunumero;
 
 	?>
 	<div class="section fill mb5">
@@ -96,7 +97,7 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 		<?php echo $form->textField($model,'laskunumero',array('value'=>$ln,'size'=>60,'maxlength'=>11,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'laskunumero'); ?>
 	</div>
-	<?php //endif; ?>
+
 
 	<?php if(!isset($model->id)) : ?>
 	<div class="section fill mb5">
@@ -106,6 +107,7 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 	</div>
 	<?php endif; ?>
 
+	<?php if(!isset($model->id)) : ?> 
 	<div class="section fill mb5 asiakas">
 		<?php echo $form->labelEx($model,'as_nro'); ?>
     		<?php 
@@ -142,7 +144,7 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 		?>
 		<?php echo $form->error($model,'as_nro'); ?>
 	</div>
-	<?php endif; ?> 
+	<?php endif; ?>
 
 
 	<div class="section fill mb5 tyyppi">
