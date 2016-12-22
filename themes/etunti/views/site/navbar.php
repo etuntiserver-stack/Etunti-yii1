@@ -529,6 +529,7 @@ $('.tvchange').change(function(){
       </form>
 -->
       <ul class="nav navbar-nav navbar-right">
+<?php /*
         <li class="dropdown menu-merge" data-toggle="tooltip" data-placement="bottom" title="<?php echo Yii::t('main', 'Uusimmat viestit'); ?>">
           <a class="dropdown-toggle" data-toggle="dropdown" href="#">
             <span class="ad ad-radio-tower fs18" id="notiFyClick"></span>
@@ -542,6 +543,33 @@ $('.tvchange').change(function(){
 	    	
           </ul>
         </li>
+*/ ?>
+
+        <li class="dropdown menu-merge" data-toggle="tooltip" data-placement="bottom" title="<?php echo Yii::t('main', 'Luo uusi'); ?>">
+          <a href="#" class="dropdown-toggle " data-toggle="dropdown"> 
+	    <i class="fa fa-plus"></i>
+            <span class="caret caret-tp hidden-xs"></span>
+          </a>
+          <ul class="dropdown-menu list-group dropdown-persist w250" role="menu">
+            <li class="list-group-item">
+              <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/asiakkaat/create" class="animated animated-short fadeInUp">
+                <span class="fa fa-gear"></span> <?php echo Yii::t('main','Asiakas'); ?> </a>
+            </li>
+            <li class="list-group-item">
+              <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/kohteet/create" class="animated animated-short fadeInUp">
+                <span class="fa fa-gear"></span> <?php echo Yii::t('main','Kohde'); ?> </a>
+            </li>
+            <li class="list-group-item">
+              <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/tyontekijat/create" class="animated animated-short fadeInUp">
+                <span class="fa fa-gear"></span> <?php echo Yii::t('main','Työntekijä'); ?> </a>
+            </li>
+            <li class="list-group-item">
+              <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/viestinta/create" class="animated animated-short fadeInUp">
+                <span class="fa fa-gear"></span> <?php echo Yii::t('main','Viesti'); ?> </a>
+            </li>
+          </ul>
+        </li>
+
         <li class="dropdown menu-merge" data-toggle="tooltip" data-placement="bottom" title="<?php echo Yii::t('main', 'Valitse kieli'); ?>">
           <a class="dropdown-toggle" data-toggle="dropdown" href="#">
              <span class=""></span> 
