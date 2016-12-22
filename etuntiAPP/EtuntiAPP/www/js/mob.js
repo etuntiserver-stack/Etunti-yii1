@@ -365,7 +365,7 @@ setTimeout(function() {
 
 		if(sp[0] == 'eiLoytyTekija')
 		{
-		  $("#tekija").html("<div class='alert alert-danger'>"+sp[1]+"</div>").show();
+		  $("#eiLoytyTekija").html("<div class='alert alert-danger'>"+sp[1]+"</div>").show();
 		  $("#odotta").fadeOut(370);
 		  $("#all").hide();
 		  $("#domainBlokki").show();
@@ -377,6 +377,7 @@ setTimeout(function() {
 		  $("#domainBlokki").hide();
 		  $("#result").append(sp+"\n");
 		  $("#tekija").html(domain.toUpperCase() + '<br>' + sp[5]);
+		  $("#eiLoytyTekija").html('');
 
 
 		if((sp[0] == '3') || (sp[0] == '2') || (sp[0] == '10')){
