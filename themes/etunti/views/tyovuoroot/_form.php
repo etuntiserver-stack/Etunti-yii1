@@ -179,6 +179,20 @@ $(document).ready(function(){
 </script>
 
 <div class="row">
+
+  <div class="col-sm-3">
+		<?php echo $form->labelEx($model,'tuoteID'); ?>
+		<?php
+		$criteria = new CDbCriteria();
+       		$criteria->condition = " is_active=1 ";
+		echo $form->dropDownList($model,'tuoteID', CHtml::listData(LaskutusTuotteet::model()->findAll($criteria), 'id', 'tuotenimi'), 
+		array('empty'=>'Valitse','class'=>'form-control'));
+		?>
+  </div>
+
+</div>
+
+<div class="row">
   <div class="col-sm-6">
 		<?php echo $form->labelEx($model,'tietoja'); ?>
 		<?php 
@@ -566,6 +580,7 @@ $('.mult').multiselect({
 
 	// <-- tarkistetaan tietoja pituus
 	var leng = $('#Tyovuoroot_tietoja').val().length;
+
 	var raja = 10000;
 	if(leng > raja)
 	{
