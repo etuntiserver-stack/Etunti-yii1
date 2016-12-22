@@ -33,9 +33,9 @@
     $list = CHtml::listData($model, 'id', 'tekijan_nimi');
 
     echo '<select class="gui-input" name="tekijaPaaSivulla">';
-    if(isset($_POST['tekijaPaaSivulla']))
+    if(isset(Yii::app()->session['tekijaPaaSivulla']))
     {
-       $tekija = Tyontekijat::model()->findbypk($_POST['tekijaPaaSivulla']);
+       $tekija = Tyontekijat::model()->findbypk(Yii::app()->session['tekijaPaaSivulla']);
        if(isset($tekija->tekijan_nimi))
        echo '<option value="'.$tekija->id.'">'.$tekija->tekijan_nimi.'</option>';
     } else {
@@ -65,8 +65,7 @@
 				$mod = 'Asiakkaat';
 				$sarake = 'yrityksen_nimi';
 				$placeholder = 'Asiakas';
-				if(isset($_POST[$sarake])) 			$postvalue = $_POST[$sarake]; 
-				else if(isset(Yii::app()->session[$sarake])) 	$postvalue = Yii::app()->session[$sarake]; 
+				if(isset(Yii::app()->session[$sarake]))	$postvalue = Yii::app()->session[$sarake]; 
 				else $postvalue='';				
 		 	        $site[0]->autocompleteFor($mod, $sarake, $placeholder, $postvalue);
 			    ?>
@@ -84,7 +83,7 @@
                         <div class="section">
                           <label class="field prepend-icon">
 
-   			    <input type="text" class="gui-input" name="etsi_kohteet" value="<?php if(isset($_POST['etsi_kohteet'])) echo $_POST['etsi_kohteet']; ?>" placeholder="<?php echo Yii::t('main', 'Osoite'); ?>">
+   			    <input type="text" class="gui-input" name="etsi_kohteet" value="<?php if(isset(Yii::app()->session['etsi_kohteet'])) echo Yii::app()->session['etsi_kohteet']; ?>" placeholder="<?php echo Yii::t('main', 'Osoite'); ?>">
 
                             <label for="firstname" class="field-icon">
                               <i class="fa fa-user"></i>
@@ -101,9 +100,9 @@
    $l = Valikkoot::model()->findAll(" select_type='siivous' ",array('order' => "select_type"));
 
     echo '<select class="gui-input" name="siivousPaaSivulla">';
-    if(isset($_POST['siivousPaaSivulla']))
+    if(isset(Yii::app()->session['siivousPaaSivulla']))
     {
-       echo '<option value="'.$_POST['siivousPaaSivulla'].'">'.$_POST['siivousPaaSivulla'].'</option>';
+       echo '<option value="'.Yii::app()->session['siivousPaaSivulla'].'">'.Yii::app()->session['siivousPaaSivulla'].'</option>';
 
     } else {
        echo '<option value="">'.Yii::t('main', 'Kohteen työnimike').'</option>';
@@ -129,7 +128,7 @@
                         <div class="section">
                           <label class="field prepend-icon">
 
-   			    <input type="text" name="fromP" id="from" class="gui-input datepicker" value="<?php if(isset($_POST['fromP'])) echo $_POST['fromP']; ?>">
+   			    <input type="text" name="fromP" id="from" class="gui-input datepickerFI" value="<?php if(isset(Yii::app()->session['fromP'])) echo date('d.m.Y', strtotime(Yii::app()->session['fromP'])); ?>">
                             <label for="firstname" class="field-icon">
                               <i class="fa fa-calendar"></i>
                             </label>
@@ -140,22 +139,21 @@
                         <div class="section">
                           <label class="field prepend-icon">
 
-   			    <input type="text" name="toP" id="to" class="gui-input datepicker" value="<?php if(isset($_POST['toP'])) echo $_POST['toP']; ?>">
+   			    <input type="text" name="toP" id="to" class="gui-input datepickerFI" value="<?php if(isset(Yii::app()->session['toP'])) echo date('d.m.Y', strtotime(Yii::app()->session['toP'])); ?>">
                             <label for="firstname" class="field-icon">
                               <i class="fa fa-calendar"></i>
                             </label>
                           </label>
                         </div>
                       </div>
-
                       <div class="col-md-2">
                         <div class="section">
                           <label class="field select">
 			    <select name="laskutettu" class="gui-input">
-			     <?php
-			     if(isset($_POST['laskutettu']) and $_POST['laskutettu'] == '1')
+			     <?php 
+			     if(isset(Yii::app()->session['laskutettu']) and Yii::app()->session['laskutettu'] == '1')
 			     echo '<option value="1">Laskutettu</option>';
-			     if(isset($_POST['laskutettu']) and $_POST['laskutettu'] == '0')
+			     if(isset(Yii::app()->session['laskutettu']) and Yii::app()->session['laskutettu'] == '0')
 			     echo '<option value="0">Laskuttamatta</option>';
 			     ?>
 			     <option value=""><?php echo Yii::t('main', 'Tilanne'); ?></option>
@@ -169,7 +167,7 @@
                       </div>
 
                       <div class="col-md-2">
-        	        <input type="submit" class="btn btn-primary btn-lg haemob btn-block myBgColors" value="<?php echo Yii::t('main', 'Hae'); ?>">
+        	        <input type="submit" name="submit" class="btn btn-primary btn-lg haemob btn-block myBgColors" value="<?php echo Yii::t('main', 'Hae'); ?>">
 		      </div>
 
                     </div>
