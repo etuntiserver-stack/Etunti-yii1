@@ -429,16 +429,17 @@ public function actionImei($dom)
         case 'mob':
 
 
-		    function sprint($val)
- 		    {
-			if($val > 0)
-		    return sprintf('%02d:%02d', $val/3600, ($val % 3600)/60);
-		    }
+	function sprint($val)
+	{
+		if($val > 0)
+		return sprintf('%02d:%02d', $val/3600, ($val % 3600)/60);
+	}
 
 
-	    if(isset($_POST['lang']))
-	  	$_SESSION['lang'] = $_POST['lang'];
+	if(isset($_POST['lang']))
+	$_SESSION['lang'] = $_POST['lang'];
 
+	/*
 	    if(isset($_POST['imei']) and !isset($_POST['salasana']))
 	    {
 	    $criteria = new CDbCriteria();
@@ -452,41 +453,35 @@ public function actionImei($dom)
 	     	}
 
 	    }
+	*/
 
-	    if(isset($_POST['email']) and isset($_POST['salasana']))
-	    {
-	    $criteria = new CDbCriteria();
-	    $criteria->condition = " 
-			salasana!='' 
+	// <-- Check Tyontekija
+	if(isset($_POST['email']) and isset($_POST['salasana']))
+	{
+		$criteria = new CDbCriteria();
+		$criteria->condition = " 
+			aktiivinen=1 
 			AND tekijan_email = '".$_POST['email']."' 
 			AND salasana = '".$_POST['salasana']."' 
-	    ";
-            $ttekija = Tyontekijat::model()->find($criteria);
-
-	    	if(empty($ttekija->id))
-	    	{
-              	   $this->_sendResponse(200, "eiLoytyTekija//Työntekijää ei löydy");
-	         exit;
-	    	}
-	    }
-
-
+		";
+		$ttekija = Tyontekijat::model()->find($criteria);
+	}
 
     	if(!isset($ttekija->id))
 	{
-              	   $this->_sendResponse(200, "eiLoytyTekija//Työntekijää ei löydy");
-	         exit;
+		$this->_sendResponse(200, "eiLoytyTekija//Työntekijää ei löydy");
+		exit;
 	}
+	//     Check Tyontekija -->
 
 
 	    if(isset($_POST['check'])){
 
 	        if($_POST['check'] == 'sendLocation'){
 
-		      Tyontekijat::model()->updatebypk($ttekija->id, array('position'=>$_POST['my_location']."//".date("d.m.Y H:i")));
-
-		      $this->_sendResponse(200, $ttekija->id."//".date("d.m.Y H:i")."//".$_POST['my_location']);
-		exit;
+			Tyontekijat::model()->updatebypk($ttekija->id, array('position'=>$_POST['my_location']."//".date("d.m.Y H:i")));
+			$this->_sendResponse(200, $ttekija->id."//".date("d.m.Y H:i")."//".$_POST['my_location']);
+			exit;
 	        }
 
 
