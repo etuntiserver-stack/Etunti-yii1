@@ -684,6 +684,7 @@ $xml = '
 			$this->redirect(array('index'));
 		}
 
+		echo $tila.' '.$model->id.'<br>';
 		echo '<pre>';
 		print_r( $result->ResponseStatus->Status );
 		echo '</pre>';
