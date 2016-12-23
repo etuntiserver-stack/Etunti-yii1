@@ -679,7 +679,7 @@ $xml = '
 
 	  } else {
 
-		if($tila == 'edit'){
+		if (strpos($result->ResponseStatus->Status[1], 'Työntekijää ei löydy') !== false and $tila == 'edit') {
 			$this->netvisorTyontekija('add', $model);
 			$this->redirect(array('index'));
 		}
