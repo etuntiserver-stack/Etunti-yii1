@@ -185,7 +185,7 @@ function dateDiff($start, $end) {
   <div class="panel heading-border">
    <div class="panel-body">
 
-  <table class="table table-bordered" cellspacing="0" cellpadding="0" id="tuntienHyvaksyntaTaulu">
+  <table class="table" cellspacing="0" cellpadding="0" id="tuntienHyvaksyntaTaulu">
   <thead class="myBgColors">
   <tr>
   <th><?php echo Yii::t('main', 'Suunnitellut'); ?></th>
@@ -428,6 +428,25 @@ function dateDiff($start, $end) {
 		   <td><span class="allaLS" total="'.(int)$ls.'">'.$this->sprint($ls).'</span></td>
 		   <td><span class="allaVL" total="'.(int)$vl.'">'.$vl.'</span></td>
 		   <td><span class="allaVKL" total="'.(int)$vkl.'">'.$vkl.'</span></td>
+		  </tr>
+		  <tr>
+		   <td colspan="13">			
+			<button class="btn btn-default btn-sm btn-block esittele_tyotunnit" 
+				pvm="'.$date.'"
+				tid="'.$explTekija[0].'"
+				tyotunnit	="'.(int)$tyotunnit.'"
+				matka		="'.(int)$matka.'"
+				lounaat		="'.(int)$lounaat.'"
+				tyoIlta		="'.(int)$tyoIlta.'"
+				tyoYo		="'.(int)$tyoYo.'"
+				tyoSu		="'.(int)$tyoSu.'"
+				tyoPy		="'.(int)$tyoPy.'"
+				tyoEl		="'.(int)$tyoEl.'"
+				sl		="'.(int)$sl.'"
+				spl		="'.(int)$spl.'"
+				ls		="'.(int)$ls.'"
+			>'.Yii::t('main', 'Hyväksyn').'</button>
+		   </td>
 		  </tr>
 		</table>
 	</td></tr>';

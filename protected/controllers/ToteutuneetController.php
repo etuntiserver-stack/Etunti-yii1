@@ -29,7 +29,7 @@ class ToteutuneetController extends Controller
 		return array(
 
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index', 'view','luetutpvmtid', 'totpvmtid','al', 'yhteensapvm', 'deletebyajax', 'kk','hyvaksy', 'poista_luetut_toteutuneet', 'vuosiloma_hyvaksy'),
+				'actions'=>array('admin','delete','create','update','index', 'view','luetutpvmtid', 'totpvmtid','al', 'yhteensapvm', 'deletebyajax', 'kk','hyvaksy', 'poista_luetut_toteutuneet', 'vuosiloma_hyvaksy', 'hyvaksy_pvm_tid'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -82,6 +82,180 @@ class ToteutuneetController extends Controller
 	    if($val > 0)
 		return  number_format((float)$val/3600, 2, '.', '');
 	}
+
+
+	public function actionHyvaksy_pvm_tid()
+	{
+
+		$criteria=new CDbCriteria;
+		$criteria->condition = " 
+			tid='".$_POST['json'][0]['tid']."'
+			AND pvm='".date("Y-m-d", strtotime($_POST['json'][0]['pvm']))."'
+		";
+		$m = HyvaksyttamatPvmTunnit::model()->find($criteria);
+
+		if(!isset($m->id))
+			$model = new HyvaksyttamatPvmTunnit;
+		else
+			$model = $m;
+
+		$model->pvm = date("Y-m-d", strtotime($_POST['json'][0]['pvm']));
+		$model->tid = $_POST['json'][0]['tid'];
+		if(isset(Yii::app()->user->adminID))
+			$model->admin = Yii::app()->user->adminID;
+		unset($_POST['json'][0]['pvm'],$_POST['json'][0]['tid']);
+		$model->json_arvot = json_encode($_POST['json'][0]);
+
+		if(!$model->save())
+		{
+			var_dump($model->getErrors());
+		} else {
+
+		}
+
+			foreach($_POST['json'][0] as $key=>$value)
+			{
+				if($value > 0)
+				{
+					echo $key.' - '.$value."\n";
+					$this->netvisorWorkday($key,$value,$model);
+				}
+			}
+
+
+	}
+
+
+	protected function netvisorWorkday($nimike,$sekuntti,$model)
+	{
+		//$tyontekija = Tyontekijat::model()->findByPk($model->tid);
+		$tunti = $sekuntti/3600;
+		$return = '';
+		$site = Yii::app()->createController('Site');
+		$n = $site[0]->netvisorYhteys();
+
+	if(isset($n[0]))
+	{
+
+		$url		= $n[0].'/workday.nv';
+
+		$host 		= $n[1];
+
+		$sender 	= $n[2];
+		$customerId	= $n[3];
+		$partnerId	= $n[4];
+		$timestamp	= $n[5];
+		$language	= $n[6];
+		$organisationIdentifier	= $n[7];
+		$transactionIdentifier	= $n[8];
+		$userKey 	= $n[9];
+		$partnerKey	= $n[10];
+
+
+
+	$getMAC = md5(
+		$url.'&'.
+		$sender.'&'.
+		$customerId.'&'.
+		$timestamp.'&'.
+		$language.'&'.
+		$organisationIdentifier.'&'.
+		$transactionIdentifier.'&'.
+		$userKey.'&'.
+		$partnerKey
+	 	);
+	
+	$auth_data = 
+	    "Host: $host\r\n".  
+	    "X-Netvisor-Authentication-Sender: $sender\r\n".  
+	    "X-Netvisor-Authentication-CustomerId: $customerId\r\n".  
+	    "X-Netvisor-Authentication-PartnerId: $partnerId\r\n".  
+	    "X-Netvisor-Authentication-Timestamp: $timestamp\r\n".
+	    "X-Netvisor-Interface-Language: $language\r\n".
+	    "X-Netvisor-Organisation-ID: $organisationIdentifier\r\n".  
+	    "X-Netvisor-Authentication-TransactionId: $transactionIdentifier\r\n".
+	    "X-Netvisor-Authentication-MAC: $getMAC\r\n"
+	; 
+	
+		$netvisor_ok_list = json_decode($model->netvisor_ok_list);
+
+		if(is_array($netvisor_ok_list) and isset($netvisor_ok_list[$nimike]))
+		$method = 'replace';
+		else
+		$method = 'increment';
+
+		if(is_array($netvisor_ok_list) and !isset($netvisor_ok_list[$nimike]))
+		array_push($nimike,$netvisor_ok_list);
+
+		HyvaksyttamatPvmTunnit::model()->updateByPk($model->id, array('netvisor_ok_list'=>json_encode($netvisor_ok_list)));
+
+/*
+// <-- XML
+$xml = '
+<root>
+  <workday>
+    <date format="ansi" method="'.$method.'">'.date("Y-m-d").'</date>
+    <employeeidentifier type="number" defaultdimensionhandlingtype="usedefault">'.$model->tid.'</employeeidentifier>
+    <workdayhour>
+      <hours>'.$tunti.'</hours>
+      <collectorratio type="number">1</collectorratio>
+      <acceptancestatus>confirmed</acceptancestatus>
+      <description>'.$nimike.'</description>
+    </workdayhour>
+  </workday>
+</root>';
+//  XML -->
+	
+
+	$optsPOST = array(
+	  'http'=>array(
+	    'method'=>"POST",
+	    'header'=>"Accept: text/plain\r\n" .
+	              "Content-Type: application/x-www-form-urlencoded\r\n".
+	              "Content-Length: ".strlen($xml)."\r\n".
+		      $auth_data,
+	    'content'=> $xml
+	  )
+	);
+	
+	$context = stream_context_create($optsPOST);
+	
+	$response = file_get_contents($url, false, $context);
+	$result = new SimpleXMLElement($response);
+	
+	
+	  if($result->ResponseStatus->Status == 'OK')
+	  {
+
+	
+
+		
+
+		$return = $response;
+
+
+	  } else {
+
+		echo '<pre>';
+		print_r( $result );
+		echo '</pre>';
+		exit;
+
+	  }
+
+
+		echo '<pre>';
+		print_r( $result );
+		echo '</pre>';
+*/
+
+
+	} // if isset $n[0]
+
+		return $return;
+
+	}
+
 
 	public function actionKk()
 	{

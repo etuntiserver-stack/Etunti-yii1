@@ -1143,5 +1143,36 @@ $(document).ready(function(){
         	return false;
 	}	
 
-	
+
+	public function tyontekiatLista($selectedArray)
+	{	
+		$return = '<div class="input-group">';
+
+		$return .= '
+				<span class="btn btn-default input-group-btn">
+				 <input type="checkbox" id="valikoIsAll">
+				</span>';
+
+
+		$isAll = false;
+		$criteria = new CDbCriteria();
+		$criteria->order = " tekijan_nimi ";
+		if(!$isAll)
+		$criteria->condition = " aktiivinen=1 ";
+
+		$list = CHtml::listData(Tyontekijat::model()->findAll($criteria), 'id', 'tekijan_nimi');
+		$return .= '<select name="TekijaVuoro[]" class="" id="tyontekijat" multiple title="Työntekijät">';
+		foreach($list as $key=>$val){
+
+			if(is_array($selectedArray) and in_array($key,$selectedArray))
+				$return .= '<option value="'.$key.'" selected>'.$val.'</option>';
+			else
+				$return .= '<option value="'.$key.'">'.$val.'</option>';
+		    }
+		$return .= '</select>';
+		$return .= '</div>';
+
+		return $return;
+	}
+
 }

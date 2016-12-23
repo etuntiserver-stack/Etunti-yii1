@@ -1,6 +1,34 @@
 $(document).ready(function(){
 
 
+ $(".esittele_tyotunnit").click(function(){
+
+  var json = new Array();
+  var object = {};
+  $(this).each(function() {
+    $.each(this.attributes, function() {
+      if(this.specified) {
+	if(this.name !== 'class'){
+		object[this.name] = this.value;
+	}
+      }
+    });
+  });
+	json.push(object);
+        //console.log( json );
+        $.ajax({
+           url: 'hyvaksy_pvm_tid',
+           type: "POST",
+	   data: { json : json },
+           success: function(data){
+		console.log(data);
+           }
+        });
+
+
+ });
+
+
 
 $(document).delegate(".tuntienHyvaksyntaTaulu","click",function(){
 	

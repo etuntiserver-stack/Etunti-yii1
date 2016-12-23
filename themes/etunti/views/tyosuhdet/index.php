@@ -52,21 +52,11 @@ $this->menu=array(
                         <div class="section">
                           <label class="field prepend-icon">
 
-   <?php
-   $criteria = new CDbCriteria();
-   $criteria->order = " tekijan_nimi ";
-   //$criteria->condition = " aktiivinen='1' ";
-
-    $list = CHtml::listData(Tyontekijat::model()->findAll($criteria), 'id', 'tekijan_nimi');
-    echo '<select name="TekijaVuoro[]" id="tyontekijat" multiple title="Työntekijät">';
-    foreach($list as $key=>$val){
-       if(isset(Yii::app()->session['TekijaVuoro']) and in_array($key,Yii::app()->session['TekijaVuoro']))
-       	 echo '<option value="'.$key.'" selected>'.$val.'</option>';
-       else
-       	 echo '<option value="'.$key.'">'.$val.'</option>';
-    }
-    echo '</select>';
-   ?>
+			<?php
+	   		$site = Yii::app()->createController('Site');
+	   		$tyontekiatLista = $site[0]->tyontekiatLista(Yii::app()->session['TekijaVuoro']); //$selected
+			echo $tyontekiatLista;
+			?>
 
 
                           </label>
@@ -270,6 +260,8 @@ $('#tyontekijat').multiselect({
 	selectAllText: 'Valitse kaikki',
 	allSelectedText: 'Kaikki',
 	nSelectedText: 'valittu',
+	numberDisplayed: 0,
+	buttonWidth: '100%',
 });
 
 $('#sarakkeet').multiselect({
@@ -280,6 +272,8 @@ $('#sarakkeet').multiselect({
 	selectAllText: 'Valitse kaikki',
 	allSelectedText: 'Kaikki',
 	nSelectedText: 'valittu',
+	numberDisplayed: 0,
+	buttonWidth: '100%',
 });
 
 
