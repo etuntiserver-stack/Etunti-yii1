@@ -47,16 +47,17 @@ $this->breadcrumbs=array(
 
 
    <?php
-    $list = CHtml::listData(Mobile::model()->findAll(array('order' => 'tekijan_nimi','group'=>'tekijan_nimi')), 'tid', 'tekijan_nimi');
+    $list = Mobile::model()->findAll(array('order' => 'tid','group'=>'tid'));
 
     echo '<select name="Tekija[]" class="mult" id="tyontekijat" class="mult" multiple title="Työntekijät">';
-    foreach($list as $key=>$val){
-     if(!empty($val))
+    foreach($list as $data){
+     $t = Tyontekijat::model()->findbypk($data->tid);
+     if(isset($t->id))
      {
-       if(isset(Yii::app()->session['Tekija']) and in_array($key,Yii::app()->session['Tekija']))
-       	 echo '<option value="'.$key.'" selected>'.$val.'</option>';
+       if(isset(Yii::app()->session['Tekija']) and in_array($t->id,Yii::app()->session['Tekija']))
+       	 echo '<option value="'.$t->id.'" selected>'.$this->etuSukunimi($t->id).'</option>';
        else
-       	 echo '<option value="'.$key.'">'.$val.'</option>';
+       	 echo '<option value="'.$t->id.'">'.$this->etuSukunimi($t->id).'</option>';
      }
     }
     echo '</select>';
