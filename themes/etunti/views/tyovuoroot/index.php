@@ -166,7 +166,7 @@
 		echo '
 		<div class="row">
 		  <div class="col-sm-12">
-		    	<b>'.$t->tekijan_nimi.'</b>
+		    	<b>'.$this->etuSukunimi($t->id).'</b>
 			<br>
 			<span '.$cl.'><b id="vk_'.$week.'_'.$t->id.'">'.$kokoViikko. '</b> ('.$vktyoaika.')</span>
 		  </div>

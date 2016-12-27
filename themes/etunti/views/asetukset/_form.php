@@ -111,6 +111,18 @@
 		<?php echo $form->error($model,'pyhapaivat'); ?>
 	</div>
 
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'tyontekijan_etunimi_sukunimi_jarjestys'); ?>
+		<?php 
+        	$l = array(
+			0=>'Ensin Etunimi',
+			1=>'Ensin Sukunimi'
+		);
+		echo $form->dropDownList($model,'tyontekijan_etunimi_sukunimi_jarjestys', $l, 
+		array('class'=>'form-control')) ?>
+		<?php echo $form->error($model,'tyontekijan_etunimi_sukunimi_jarjestys'); ?>
+	</div>
+
 <!--
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'merkkipaivailmoitukset_sahkoposti'); ?>
@@ -647,6 +659,7 @@
 	<p><div class="buttons">
 		<?php echo CHtml::submitButton($model->isNewRecord ? 'Luo' : 'Tallenna',array('class'=>'btn btn-success')); ?>
 	</div></p>
+
 
 <?php $this->endWidget(); ?>
 

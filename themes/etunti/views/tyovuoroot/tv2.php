@@ -115,7 +115,7 @@
 
 	foreach($tyontekijat_model as $t){
 	  echo '<th>';
- 	  echo $t->tekijan_nimi;	
+ 	  echo $this->etuSukunimi($t->id);	
 	  echo '</th>';
 	}
         ?>

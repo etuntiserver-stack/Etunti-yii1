@@ -1144,35 +1144,44 @@ $(document).ready(function(){
 	}	
 
 
-	public function tyontekiatLista($selectedArray)
+	public function tyontekiatLista($name, $class, $id, $selectedArray, $aktiivinen)
 	{	
-		$return = '<div class="input-group">';
+		$return = '';
 
-		$return .= '
-				<span class="btn btn-default input-group-btn">
-				 <input type="checkbox" id="valikoIsAll">
-				</span>';
-
-
-		$isAll = false;
 		$criteria = new CDbCriteria();
 		$criteria->order = " tekijan_nimi ";
-		if(!$isAll)
+		if($aktiivinen == 1)
 		$criteria->condition = " aktiivinen=1 ";
 
-		$list = CHtml::listData(Tyontekijat::model()->findAll($criteria), 'id', 'tekijan_nimi');
-		$return .= '<select name="TekijaVuoro[]" class="" id="tyontekijat" multiple title="Työntekijät">';
-		foreach($list as $key=>$val){
+		if($class != null) $cl = ' class="'.$class.'" '; else $cl = '';
+		if($id != null)	$i = ' id="'.$id.'" '; else 	$i = '';
 
-			if(is_array($selectedArray) and in_array($key,$selectedArray))
-				$return .= '<option value="'.$key.'" selected>'.$val.'</option>';
-			else
-				$return .= '<option value="'.$key.'">'.$val.'</option>';
-		    }
+		$list = Tyontekijat::model()->findAll($criteria);
+		$return .= '<select name="'.$name.'[]" '.$cl.' '.$i.' multiple title="Työntekijät">';
+		foreach($list as $val){
+		  if(isset($selectedArray) and in_array($val->id, $selectedArray))
+		    $return .= '<option value="'.$val->id.'" selected>'.$this->etuSukunimi($val->id).'</option>';
+		  else
+		    $return .= '<option value="'.$val->id.'">'.$this->etuSukunimi($val->id).'</option>';
+		}
 		$return .= '</select>';
-		$return .= '</div>';
+
 
 		return $return;
+	}
+
+
+	public function etuSukunimi($tid)
+	{
+		$t = Tyontekijat::model()->findByPk($tid);
+		if(isset($t->id))
+		{
+			$asetukset = Asetukset::model()->findByPk(1);
+			if($asetukset->tyontekijan_etunimi_sukunimi_jarjestys == 0)
+				return $t->tekijan_nimi.' '.$t->sukunimi;
+			else
+				return $t->sukunimi.' '.$t->tekijan_nimi;
+		}
 	}
 
 }

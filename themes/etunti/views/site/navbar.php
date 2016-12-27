@@ -169,22 +169,13 @@ if( $curpage == 'tyovuoroot/tv2' )
 
               <div class="form-group">
 		    <label><?php echo Yii::t('main','Työntekijät'); ?></label>
-		    <?php
-			//
-			$criteria = new CDbCriteria();
-			$criteria->order = " tekijan_nimi ";
-			$criteria->condition = " aktiivinen='1' ";
 
-			$list = CHtml::listData(Tyontekijat::model()->findAll($criteria), 'id', 'tekijan_nimi');
-			echo '<select name="tyontekijat[]" class="multTyontekijat" multiple title="Työntekijät">';
-			foreach($list as $key=>$val){
-			  if(isset(Yii::app()->session['tyontekijat']) and in_array($key, Yii::app()->session['tyontekijat']))
-			    echo '<option value="'.$key.'" selected>'.$val.'</option>';
-			  else
-			    echo '<option value="'.$key.'">'.$val.'</option>';
-			}
-			echo '</select>';
-		    ?>
+			<?php
+	   		$site = Yii::app()->createController('Site');
+	   		$tyontekiatLista = $site[0]->tyontekiatLista( 'tyontekijat', 'multTyontekijat', null, Yii::app()->session['tyontekijat'], 1 );
+			echo $tyontekiatLista;
+			?>
+
 	      </div>
 
              </div><div class="col-sm-6">
@@ -1155,6 +1146,7 @@ $('.tvchange').change(function(){
 
             </ul>
           </li>
+
 
         </ul>
         <!-- End: Sidebar Menu -->

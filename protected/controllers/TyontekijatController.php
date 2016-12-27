@@ -482,7 +482,7 @@ class TyontekijatController extends Controller
 	        $criteria->addCondition (" tekijan_katuosoite LIKE '%".$_POST['tekijan_katuosoite']."%' ");
 
 		if(isset($_POST['tekijan_nimi']) and !empty(trim($_POST['tekijan_nimi'])))
-	        $criteria->addCondition (" tekijan_nimi LIKE '%".$_POST['tekijan_nimi']."%' ");
+	        $criteria->addCondition (" tekijan_nimi LIKE '%".$_POST['tekijan_nimi']."%' OR sukunimi LIKE '%".$_POST['tekijan_nimi']."%' ");
 
 		if(isset($_POST['tekijan_puh']) and !empty(trim($_POST['tekijan_puh'])))
 	        $criteria->addCondition (" laiten_puh LIKE '%".$_POST['tekijan_puh']."%' OR tekijan_puh LIKE '%".$_POST['tekijan_puh']."%' ");
@@ -698,4 +698,9 @@ $xml = '
 
 	}
 
+	protected function etuSukunimi($tid)
+	{
+	   $site = Yii::app()->createController('Site');
+	   return $site[0]->etuSukunimi($tid);
+	}
 }

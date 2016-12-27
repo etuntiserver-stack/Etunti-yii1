@@ -54,7 +54,7 @@ $this->menu=array(
 
 			<?php
 	   		$site = Yii::app()->createController('Site');
-	   		$tyontekiatLista = $site[0]->tyontekiatLista(Yii::app()->session['TekijaVuoro']); //$selected
+	   		$tyontekiatLista = $site[0]->tyontekiatLista( 'TekijaVuoro', null, 'tyontekijat', Yii::app()->session['TekijaVuoro'], 1 );
 			echo $tyontekiatLista;
 			?>
 
