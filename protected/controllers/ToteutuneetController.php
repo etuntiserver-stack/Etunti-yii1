@@ -113,6 +113,12 @@ class ToteutuneetController extends Controller
 
 		}
 
+
+		// <-- Netvisor lahetys
+		$asetukset=Asetukset::model()->findbypk(1);
+		if($asetukset->netvisor_kaytto == 1)
+		{
+
 			$update = false;
 			$lastArr = json_decode($model->netvisor_ok_list, true);
 			foreach($_POST['json'][0] as $key=>$value)
@@ -136,7 +142,11 @@ class ToteutuneetController extends Controller
 			{
 				HyvaksyttamatPvmTunnit::model()->updateByPk($model->id, array('netvisor_ok_list'=>json_encode($lastArr)));
 				echo json_encode('netvisorOK');
-			}			
+			}
+		}
+		//     Netvisor lahetys -->
+
+		
 	}
 
 
