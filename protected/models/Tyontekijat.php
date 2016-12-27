@@ -116,7 +116,7 @@ public $tunnus;
 			'id' => Yii::t('main', 'ID'),
 			'imei' => Yii::t('main', 'Imei'),
 			'laiten_puh' => Yii::t('main', 'Työpuhelin'),
-			'tekijan_nimi' => Yii::t('main', 'Etu- ja sukunimi'),
+			'tekijan_nimi' => Yii::t('main', 'Etunimi'),
 			'tekijan_henkilotunnus' => Yii::t('main', 'Henkilötunnus'),
 			'tekijan_puh' => Yii::t('main', 'Oma puhelin'),
 			'tekijan_email' => Yii::t('main', 'Sähköposti'),

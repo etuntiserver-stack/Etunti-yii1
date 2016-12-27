@@ -25,7 +25,7 @@ $(document).ready(function(){
 		console.log(data);
 		if(data != 'netvisorOK')
 		{
-			alert( 'Netvisor ERROR: \n'+JSON.stringify(data) );
+			alert( JSON.stringify(data) );
 		}
            }
         });

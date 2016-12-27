@@ -142,11 +142,14 @@ class ToteutuneetController extends Controller
 			{
 				HyvaksyttamatPvmTunnit::model()->updateByPk($model->id, array('netvisor_ok_list'=>json_encode($lastArr)));
 				echo json_encode('netvisorOK');
+				exit;
 			}
 		}
 		//     Netvisor lahetys -->
 
 		
+		echo json_encode('Tallennettu');
+
 	}
 
 
