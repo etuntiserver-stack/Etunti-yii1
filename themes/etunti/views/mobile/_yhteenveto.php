@@ -14,7 +14,7 @@
 
 		<?php 
 			$tnimi = Tyontekijat::model()->findbypk($data->tid); 
-			echo $tnimi->tekijan_nimi;
+			echo $this->etuSukunimi($tnimi->id);
 		?>
 
 		<div class="collapse col-sm-offset-1" id="<?php echo 'tyotShow_'.$data->tid; ?>">

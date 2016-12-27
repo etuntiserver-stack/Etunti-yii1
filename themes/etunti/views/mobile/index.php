@@ -35,23 +35,22 @@
     $criteria = new CDbCriteria();
     $criteria->order = " tekijan_nimi ASC ";
     $criteria->condition = " aktiivinen=1 ";
-    $model = Tyontekijat::model()->findAll($criteria);
-    $list = CHtml::listData($model, 'id', 'tekijan_nimi');
+    $tt = Tyontekijat::model()->findAll($criteria);
 
     echo '<select class="gui-input" name="tekijaPaaSivulla">';
     if(Yii::app()->session['tekijaPaaSivulla'])
     {
        $tekija = Tyontekijat::model()->findbypk(Yii::app()->session['tekijaPaaSivulla']);
        if(isset($tekija->tekijan_nimi))
-       echo '<option value="'.$tekija->id.'">'.$tekija->tekijan_nimi.'</option>';
+       echo '<option value="'.$tekija->id.'">'.$this->etuSukunimi($t->id).'</option>';
     } else {
        echo '<option value="kaikki">'.Yii::t('main', 'Työntekijät').'</option>';
     }
 
        echo '<option value="kaikki">Kaikki</option>';
 
-    foreach($list as $key=>$val){
-    echo '<option value="'.$key.'">'.$val.'</option>';
+    foreach($tt as $data){
+    echo '<option value="'.$data->id.'">'.$this->etuSukunimi($data->id).'</option>';
 
     }
     echo '</select>';
