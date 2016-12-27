@@ -113,16 +113,30 @@ class ToteutuneetController extends Controller
 
 		}
 
+			$update = false;
+			$lastArr = json_decode($model->netvisor_ok_list, true);
 			foreach($_POST['json'][0] as $key=>$value)
 			{
 				if($value > 0)
 				{
-					echo $key.' - '.$value."\n";
-					$this->netvisorWorkday($key,$value,$model);
+					$return = $this->netvisorWorkday($key,$value,$model);
+					if(isset($return['statusOK'])){
+						$update = true;
+						$lastArr[$key] = $value;
+					}
+
+					if(isset($return['statusError'])){
+						echo json_encode($return['statusError']);
+						exit;
+					}
 				}
 			}
 
-
+			if($update == true)
+			{
+				HyvaksyttamatPvmTunnit::model()->updateByPk($model->id, array('netvisor_ok_list'=>json_encode($lastArr)));
+				echo json_encode('netvisorOK');
+			}			
 	}
 
 
@@ -130,7 +144,7 @@ class ToteutuneetController extends Controller
 	{
 		//$tyontekija = Tyontekijat::model()->findByPk($model->tid);
 		$tunti = $sekuntti/3600;
-		$return = '';
+		$return = array();
 		$site = Yii::app()->createController('Site');
 		$n = $site[0]->netvisorYhteys();
 
@@ -177,19 +191,26 @@ class ToteutuneetController extends Controller
 	    "X-Netvisor-Authentication-MAC: $getMAC\r\n"
 	; 
 	
-		$netvisor_ok_list = json_decode($model->netvisor_ok_list);
+		$netvisor_ok_list = array();
+		if( is_array(json_decode($model->netvisor_ok_list, true)) )
+		$netvisor_ok_list = json_decode($model->netvisor_ok_list, true);
 
-		if(is_array($netvisor_ok_list) and isset($netvisor_ok_list[$nimike]))
+
+		if(isset($netvisor_ok_list[$nimike]))
 		$method = 'replace';
 		else
 		$method = 'increment';
 
-		if(is_array($netvisor_ok_list) and !isset($netvisor_ok_list[$nimike]))
-		array_push($nimike,$netvisor_ok_list);
+		
+		//echo $method."\n";
 
-		HyvaksyttamatPvmTunnit::model()->updateByPk($model->id, array('netvisor_ok_list'=>json_encode($netvisor_ok_list)));
+		/*
+		if(!isset($netvisor_ok_list[$nimike])){
+			$return = array('statusOK'=>$nimike);
+		}
+		*/
 
-/*
+
 // <-- XML
 $xml = '
 <root>
@@ -226,28 +247,15 @@ $xml = '
 	
 	  if($result->ResponseStatus->Status == 'OK')
 	  {
-
-	
-
-		
-
-		$return = $response;
-
+		if(!isset($netvisor_ok_list[$nimike])){
+			$return = array('statusOK'=>$nimike);
+		}
 
 	  } else {
-
-		echo '<pre>';
-		print_r( $result );
-		echo '</pre>';
-		exit;
-
+			$return = array('statusError'=>$result);
 	  }
 
 
-		echo '<pre>';
-		print_r( $result );
-		echo '</pre>';
-*/
 
 
 	} // if isset $n[0]

@@ -21,7 +21,12 @@ $(document).ready(function(){
            type: "POST",
 	   data: { json : json },
            success: function(data){
+		data = JSON.parse(data);
 		console.log(data);
+		if(data != 'netvisorOK')
+		{
+			alert( 'Netvisor ERROR: \n'+JSON.stringify(data) );
+		}
            }
         });
 
@@ -539,6 +544,18 @@ $(document).delegate(".poistaRivit","click",function(){
 	  	$('#yhteensaPvmAllaTaulu_'+thisDID).find('.allaSL').attr('total', data['sl']).html(sprint(data['sl']));
 	  	$('#yhteensaPvmAllaTaulu_'+thisDID).find('.allaSPL').attr('total', data['spl']).html(sprint(data['spl']));
 	  	$('#yhteensaPvmAllaTaulu_'+thisDID).find('.allaLS').attr('total', data['ls']).html(sprint(data['ls']));
+
+		// <-- Hyvaksyn nappin varten
+	  	$('#yhteensaPvmAllaTaulu_'+thisDID).find('.esittele_tyotunnit').attr('tyotunnit', data['tyotunnit']);
+	  	$('#yhteensaPvmAllaTaulu_'+thisDID).find('.esittele_tyotunnit').attr('matka', data['matkat']);
+	  	$('#yhteensaPvmAllaTaulu_'+thisDID).find('.esittele_tyotunnit').attr('lounaat', data['lounaat']);
+	  	$('#yhteensaPvmAllaTaulu_'+thisDID).find('.esittele_tyotunnit').attr('tyoIlta', data['ilta']);
+	  	$('#yhteensaPvmAllaTaulu_'+thisDID).find('.esittele_tyotunnit').attr('tyoYo', data['yo']);
+	  	$('#yhteensaPvmAllaTaulu_'+thisDID).find('.esittele_tyotunnit').attr('tyoSu', data['su']);
+	  	$('#yhteensaPvmAllaTaulu_'+thisDID).find('.esittele_tyotunnit').attr('sl', data['sl']);
+	  	$('#yhteensaPvmAllaTaulu_'+thisDID).find('.esittele_tyotunnit').attr('spl', data['spl']);
+	  	$('#yhteensaPvmAllaTaulu_'+thisDID).find('.esittele_tyotunnit').attr('ls', data['ls']);
+		//     Hyvaksyn nappin varten -->
 
 
 		// <-- Week
