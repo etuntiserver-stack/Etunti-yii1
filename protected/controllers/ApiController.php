@@ -1212,7 +1212,7 @@ public function actionImei($dom)
 
                 $mobinsert->imei = $ttekija->imei;
                 $mobinsert->tid = $ttekija->id;
-                $mobinsert->tekijan_nimi = $ttekija->tekijan_nimi;
+                $mobinsert->tekijan_nimi = $ttekija->tekijan_nimi.' '.$ttekija->sukunimi;
                 $mobinsert->tietoja = $_POST['tietoja'];
                 $mobinsert->aloitan = date("d.m.Y H:i:s");
 
