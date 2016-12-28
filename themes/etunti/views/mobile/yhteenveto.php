@@ -41,7 +41,7 @@ $this->breadcrumbs=array(
                     <div class="row">
 
 
-                      <div class="col-md-4">
+                      <div class="col-md-2">
                         <div class="section">
                           <label class="field">
 
@@ -62,6 +62,18 @@ $this->breadcrumbs=array(
     }
     echo '</select>';
    ?>
+
+
+
+                          </label>
+                        </div>
+                      </div>
+
+
+                      <div class="col-md-2">
+                        <div class="section">
+                          <label class="field">
+
 
 
    <?php
@@ -301,6 +313,8 @@ $('.ilman').multiselect({
 	allSelectedText: '<?php echo Yii::t("main", "Kaikki"); ?>',
 	nSelectedText: '<?php echo Yii::t("main", "valittu"); ?>',
 	numberDisplayed: 0,
+	buttonWidth: '100%',
+        maxHeight: 300,
 });
 
 
@@ -314,6 +328,8 @@ $('.mult').multiselect({
 	allSelectedText: '<?php echo Yii::t("main", "Kaikki"); ?>',
 	nSelectedText: '<?php echo Yii::t("main", "valittu"); ?>',
 	numberDisplayed: 0,
+	buttonWidth: '100%',
+        maxHeight: 300,
 });
 
 
