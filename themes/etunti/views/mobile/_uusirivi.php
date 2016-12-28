@@ -61,7 +61,7 @@ $t = Tyontekijat::model()->findbypk($ex[1]);
 
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'tekijan_nimi'); ?>
-		<?php echo $form->textField($model,'tekijan_nimi',array('value'=>$t->tekijan_nimi,'class'=>'form-control input-sm','readonly'=>'yes')); ?>
+		<?php echo $form->textField($model,'tekijan_nimi',array('value'=>$this->etuSukunimi($t->id),'class'=>'form-control input-sm','readonly'=>'yes')); ?>
 		<?php echo $form->error($model,'tekijan_nimi'); ?>
 	</div>
 

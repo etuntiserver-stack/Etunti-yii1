@@ -1211,7 +1211,28 @@ $(document).ready(function(){
 	}
 
 
-	public function etuSukunimi($tid)
+	public function tyontekiatArrayList($aktiivinen)
+	{
+		$list = array();
+
+		$asetukset = Asetukset::model()->findByPk(1);
+		$criteria = new CDbCriteria();
+		if($asetukset->tyontekijan_etunimi_sukunimi_jarjestys == 0)
+			$criteria->order = " tekijan_nimi ";
+		else
+			$criteria->order = " sukunimi ";
+
+		$criteria->condition = " aktiivinen=1 ";
+
+		$tt = Tyontekijat::model()->findAll($criteria);
+		foreach($tt as $t)
+		$list[$t->id] = $this->etuSukunimi($t->id);
+
+		return $list;
+	}
+
+
+	public function etuSukunimi($tid) // $this->etuSukunimi($model->id)
 	{
 		$t = Tyontekijat::model()->findByPk($tid);
 		if(isset($t->id))

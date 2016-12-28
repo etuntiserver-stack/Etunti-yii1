@@ -133,11 +133,16 @@
   </div>
   <div class="col-sm-6">
 		<?php echo $form->labelEx($model,'tid'); ?>
-		<?php
-		$list = array(0=>Yii::t('main', 'VARAUS'));
-        	$list[] = CHtml::listData(Tyontekijat::model()->findAll(array('order' => 'tekijan_nimi')), 'id', 'tekijan_nimi');
-        	echo $form->dropDownList($model, 'tid', $list,array('empty'=>'Valitse','class'=>'form-control'));
-        	?>
+
+
+				<?php
+				$list = array(0=>Yii::t('main', 'VARAUS'));
+		   		$site = Yii::app()->createController('Site');
+		   		$returnList = $site[0]->tyontekiatArrayList(1);
+				array_push($list, $returnList);
+				?>
+
+        	<?php echo $form->dropDownList($model, 'tid', $list,array('empty'=>'Valitse','class'=>'form-control'));	?>
   </div>
 
   <div class="col-sm-6">
@@ -266,6 +271,7 @@ $(document).ready(function(){
 			console.log(data);
 			laatikonPaivays(thisDataReturn);
 			$('#showres').modal('hide');
+
 	   	},
 		error:function(data){
 		console.log(data);

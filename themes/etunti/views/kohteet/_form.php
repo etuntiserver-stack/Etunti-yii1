@@ -241,7 +241,7 @@ if($ismobile and !empty($model->puh_nro)) {
 		<?php
       		$l = Tyontekijat::model()->findAll(array('order' => "tekijan_nimi"));
 		foreach($l as $v)
-		$listt[$v->id."//".$v->tekijan_nimi] = $v->tekijan_nimi;
+		$listt[$v->id."//".$this->etuSukunimi($v->id)] = $this->etuSukunimi($v->id);
 
         	echo $form->dropDownList($model, 'kenella_on_avain', $listt,
 		array('empty'=>'','class'=>'form-control'));

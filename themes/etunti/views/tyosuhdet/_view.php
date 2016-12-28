@@ -2,17 +2,13 @@
 /* @var $this TyosuhdetController */
 /* @var $data Tyosuhdet */
 
-$tekijan_nimi = '';
-$tt = Tyontekijat::model()->find(" id='".$data->tid."' ");
-if(isset($tt['tekijan_nimi']))
- $tekijan_nimi = $tt['tekijan_nimi']
 ?>
 
 
         <div class="col-md-3">
             <div class="panel">
                 <div class="panel-heading myBgColors">
-                    <h4 class="text-center"><?php echo CHtml::encode($tekijan_nimi); ?></h4>
+                    <h4 class="text-center"><?php echo $this->etuSukunimi($model->tid); ?></h4>
                 </div>
                 <div class="panel-body text-center">
                     <p class="lead">

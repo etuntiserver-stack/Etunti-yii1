@@ -100,7 +100,7 @@ class IrtisanomisilmoituksetController extends Controller
 		$model = Tyontekijat::model()->findbypk($_POST['tid']);
 		$tiedot = array(
 			'tekijan_email' => $model->tekijan_email,
-			'tekijan_nimi' => $model->tekijan_nimi,
+			'tekijan_nimi' => $this->etuSukunimi($model->id),
 			'tekijan_katuosoite' => $model->tekijan_katuosoite,
 			'tekijan_pnumero' => $model->tekijan_pnumero,
 			'tekijan_ptoimipaikka' => $model->tekijan_ptoimipaikka,

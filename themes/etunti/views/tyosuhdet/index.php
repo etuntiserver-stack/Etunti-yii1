@@ -208,7 +208,7 @@ $this->menu=array(
      }
 
 	echo '<tr>';
-	echo '<td>'.$t->tekijan_nimi.'</td>';
+	echo '<td>'.$this->etuSukunimi($t->id).'</td>';
 if(isset($_POST['sarakkeet']) and in_array('hetu',$_POST['sarakkeet']))
 	echo '<td>'.$t->tekijan_henkilotunnus.'</td>';
 if(isset($_POST['sarakkeet']) and in_array('osoite',$_POST['sarakkeet']))
@@ -262,6 +262,7 @@ $('#tyontekijat').multiselect({
 	nSelectedText: 'valittu',
 	numberDisplayed: 0,
 	buttonWidth: '100%',
+        maxHeight: 300,
 });
 
 $('#sarakkeet').multiselect({
@@ -274,6 +275,7 @@ $('#sarakkeet').multiselect({
 	nSelectedText: 'valittu',
 	numberDisplayed: 0,
 	buttonWidth: '100%',
+        maxHeight: 300,
 });
 
 
