@@ -43,37 +43,29 @@ $this->breadcrumbs=array(
                     <div class="row">
 
 
-                      <div class="col-md-1">
+                      <div class="col-md-2">
                         <div class="section">
                           <label class="field">
 
 
-   <?php
-    $criteria = new CDbCriteria();
-    $criteria->order = " tekijan_nimi ";
-    $criteria->condition = " aktiivinen=1 ";
-    $list = CHtml::listData(Tyontekijat::model()->findAll($criteria), 'id', 'tekijan_nimi');
-
-    echo '<select name="Tekija[]" class="mult" id="tyontekijat" multiple title="Työntekijät">';
-    foreach($list as $key=>$val){
-     if(!empty($val))
-     {
-       if(isset(Yii::app()->session['Tekija']) and in_array($key,Yii::app()->session['Tekija']))
-       	 echo '<option value="'.$key.'" selected>'.$val.'</option>';
-       else
-       	 echo '<option value="'.$key.'">'.$val.'</option>';
-     }
-    }
-    echo '</select>';
-   ?>
-
+				<?php
+		   		$site = Yii::app()->createController('Site');
+		   		$tyontekiatLista = $site[0]->tyontekiatLista( 
+					'Tekija', // name
+					'mult', // class
+					'tyontekijat', // id
+					Yii::app()->session['Tekija'], //selected
+					1 // aktiivinen
+				);
+				echo $tyontekiatLista;
+				?>
 
                           </label>
 
 
                         </div>
                       </div>
-                      <div class="col-md-2 col-md-offset-1">
+                      <div class="col-md-2">
                         <div class="section">
                           <label class="field prepend-icon">
 
@@ -99,7 +91,7 @@ $this->breadcrumbs=array(
                         </div>
                       </div>
 
-                      <div class="col-md-2 col-md-offset-3">
+                      <div class="col-md-2 col-md-offset-4">
         	        <input type="submit" class="btn btn-primary btn-lg haemob btn-block myBgColors" value="<?php echo Yii::t('main', 'Hae'); ?>">
 		      </div>
 
@@ -175,7 +167,7 @@ $this->breadcrumbs=array(
 		$this->renderPartial('_yhteenveto_m',array(
 					'luetut'=>$luetut,
 					'toteutuneet'=>$toteutuneet,
-					'tekijan_nimi'=>$data->tekijan_nimi
+					'tekijan_nimi'=>$this->etuSukunimi($data->id)
 		));
 
 		$luetutYht += $luetut;
@@ -252,6 +244,8 @@ $('.ilman').multiselect({
 	allSelectedText: '<?php echo Yii::t("main", "Kaikki"); ?>',
 	nSelectedText: '<?php echo Yii::t("main", "valittu"); ?>',
 	numberDisplayed: 0,
+	buttonWidth: '100%',
+        maxHeight: 300,
 });
 
 $('.mult').multiselect({
@@ -263,6 +257,8 @@ $('.mult').multiselect({
 	allSelectedText: '<?php echo Yii::t("main", "Kaikki"); ?>',
 	nSelectedText: '<?php echo Yii::t("main", "valittu"); ?>',
 	numberDisplayed: 0,
+	buttonWidth: '100%',
+        maxHeight: 300,
 });
 
 });
