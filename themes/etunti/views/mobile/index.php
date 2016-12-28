@@ -31,30 +31,18 @@
                           <label class="field select">
 
 
-   <?php
-    $criteria = new CDbCriteria();
-    $criteria->order = " tekijan_nimi ASC ";
-    $criteria->condition = " aktiivinen=1 ";
-    $tt = Tyontekijat::model()->findAll($criteria);
+				<?php
+		   		$site = Yii::app()->createController('Site');
+		   		$tyontekiatLista = $site[0]->tyontekiatListaNoMulti( 
+						'tekijaPaaSivulla', // name
+						'gui-input', //class
+						null, // id
+						Yii::app()->session['tekijaPaaSivulla'], //selected
+						1 // aktiivinen
+				);
+				echo $tyontekiatLista;
+				?>
 
-    echo '<select class="gui-input" name="tekijaPaaSivulla">';
-    if(Yii::app()->session['tekijaPaaSivulla'])
-    {
-       $tekija = Tyontekijat::model()->findbypk(Yii::app()->session['tekijaPaaSivulla']);
-       if(isset($tekija->tekijan_nimi))
-       echo '<option value="'.$tekija->id.'">'.$this->etuSukunimi($t->id).'</option>';
-    } else {
-       echo '<option value="kaikki">'.Yii::t('main', 'Työntekijät').'</option>';
-    }
-
-       echo '<option value="kaikki">Kaikki</option>';
-
-    foreach($tt as $data){
-    echo '<option value="'.$data->id.'">'.$this->etuSukunimi($data->id).'</option>';
-
-    }
-    echo '</select>';
-   ?>
 
                             <i class="arrow double"></i>
                             </label>

@@ -172,7 +172,13 @@ if( $curpage == 'tyovuoroot/tv2' )
 
 			<?php
 	   		$site = Yii::app()->createController('Site');
-	   		$tyontekiatLista = $site[0]->tyontekiatLista( 'tyontekijat', 'multTyontekijat', null, Yii::app()->session['tyontekijat'], 1 );
+	   		$tyontekiatLista = $site[0]->tyontekiatLista( 
+					'tyontekijat', // name
+					'multTyontekijat', // class
+					null, // id
+					Yii::app()->session['tyontekijat'], //selected
+					1 // aktiivinen
+			);
 			echo $tyontekiatLista;
 			?>
 

@@ -1154,7 +1154,7 @@ $(document).ready(function(){
 		$criteria->condition = " aktiivinen=1 ";
 
 		if($class != null) $cl = ' class="'.$class.'" '; else $cl = '';
-		if($id != null)	$i = ' id="'.$id.'" '; else 	$i = '';
+		if($id != null)	$i = ' id="'.$id.'" '; else $i = '';
 
 		$list = Tyontekijat::model()->findAll($criteria);
 		$return .= '<select name="'.$name.'[]" '.$cl.' '.$i.' multiple title="Työntekijät">';
@@ -1166,6 +1166,46 @@ $(document).ready(function(){
 		}
 		$return .= '</select>';
 
+
+		return $return;
+	}
+
+
+	public function tyontekiatListaNoMulti($name, $class, $id, $selected, $aktiivinen)
+	{	
+		$return = '';
+		$asetukset = Asetukset::model()->findByPk(1);
+
+		$criteria = new CDbCriteria();
+		if($asetukset->tyontekijan_etunimi_sukunimi_jarjestys == 0)
+			$criteria->order = " tekijan_nimi ";
+		else
+			$criteria->order = " sukunimi ";
+
+		if($aktiivinen == 1)
+			$criteria->condition = " aktiivinen=1 ";
+
+		if($name != null) 	$nm = ' name="'.$name.'" '; else $nm = '';
+		if($class != null) 	$cl = ' class="'.$class.'" '; else $cl = '';
+		if($id != null)		$i = ' id="'.$id.'" '; else $i = '';
+
+		$list = Tyontekijat::model()->findAll($criteria);
+		$return .= '<select '.$nm.' '.$cl.' '.$i.' title="Työntekijät">';
+
+			if(empty($selected)){
+				$return .= '<option value="kaikki">'.Yii::t('main', 'Työntekijät').'</option>';
+			} else {
+				$return .= '<option value="kaikki">'.Yii::t('main', 'Kaikki').'</option>';
+			}
+
+		foreach($list as $val){
+			if(!empty($selected) and $val->id == $selected){
+				$return .= '<option value="'.$val->id.'" selected>'.$this->etuSukunimi($val->id).'</option>';
+			} else {
+				$return .= '<option value="'.$val->id.'">'.$this->etuSukunimi($val->id).'</option>';
+			}
+		}
+		$return .= '</select>';
 
 		return $return;
 	}
