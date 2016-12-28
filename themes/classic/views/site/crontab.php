@@ -8,11 +8,13 @@
 
 
    $koodi_aktiivinen = 1;
+   if( $_SERVER['REMOTE_ADDR'] == '::1' or $_SERVER['REMOTE_ADDR'] == '127.0.0.1' )
+   	$list = Domainit::model()->findAll(" domain!='defdb' AND domain='demo' ");
+   else
+   	$list = Domainit::model()->findAll(" domain!='defdb' ");
 
-   $list = Domainit::model()->findAll(" domain!='defdb' ");
    foreach($list as $d)
    {
-
 
 	
 	Yii::app()->db1->setActive(false);
@@ -75,7 +77,7 @@
 
 			$tt = Tyontekijat::model()->findbypk($data->tid);
 			if(isset($tt->id)){
-				$tekijan_nimi = Yii::t('main', 'Työntekijä').':  <b>'.$tt->tekijan_nimi.'</b><br>';
+				$tekijan_nimi = Yii::t('main', 'Työntekijä').':  <b>'.$this->etuSukunimi($tt->id).'</b><br>';
 				$tyoryhmaForArr = $tt->tyoryhma;
 			}
 
@@ -214,7 +216,7 @@
 
 			$tt = Tyontekijat::model()->findbypk($data->tid);
 			if(isset($tt->id)){
-				$tekijan_nimi = Yii::t('main', 'Työntekijä').':  <b>'.$tt->tekijan_nimi.'</b><br>';
+				$tekijan_nimi = Yii::t('main', 'Työntekijä').':  <b>'.$this->etuSukunimi($tt->id).'</b><br>';
 				$tyoryhmaForArr = $tt->tyoryhma;
 			}
 
@@ -339,7 +341,7 @@
 			$bod 		= '';
 			$tyoryhmaForArr = $data->tyoryhma;
 
-			$bod 	.= Yii::t('main', 'Merkkipäivä').': <b>'.date("d.m.Y", strtotime($data->tekijan_henkilotunnus)).', '.$data->tekijan_nimi.'</b><br>';
+			$bod 	.= Yii::t('main', 'Merkkipäivä').': <b>'.date("d.m.Y", strtotime($data->tekijan_henkilotunnus)).', '.$this->etuSukunimi($data->id).'</b><br>';
 
 			$arr[$tyoryhmaForArr] 	= $tyoryhmaForArr;
 			array_push($forMessage, array(
@@ -452,7 +454,7 @@
 
 			$t = Tyontekijat::model()->findbypk($data->tid);
 			$tekijan_nimi = '';
-			if(isset($t->tekijan_nimi)) $tekijan_nimi = $t->tekijan_nimi;
+			if(isset($t->tekijan_nimi)) $tekijan_nimi = $this->etuSukunimi($t->id);
 
 			$m .= '<hr><b>'.Yii::t('main', 'Osoite').':</b> '.$osoite.'<br>';
 			$m .= '<b>'.Yii::t('main', 'Aikaväli').':</b> '.$data->pfrom.'-'.$data->pto.'<br>';
@@ -468,7 +470,7 @@
 					$t2 = Tyontekijat::model()->findbypk($tid);
 					if(isset($t2->tekijan_nimi) and $tid != $data->tid)
 					{
-						$tekijan_nimi2 = $t2->tekijan_nimi;
+						$tekijan_nimi2 = $this->etuSukunimi($t2->id);
 						$m .= '<b>'.Yii::t('main', 'Työpari').':</b> '.$tekijan_nimi2.'<br>';
 					}
 				}
