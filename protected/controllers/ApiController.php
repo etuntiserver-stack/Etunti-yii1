@@ -332,7 +332,7 @@ public function actionTiedosto($dom)
 		$kuva->kohde_id=$_POST['kohdenID'];
 		$kuva->osoite=$k->osoite;
 		$kuva->tid=$ttekija->id;
-		$kuva->tekijan_nimi=$ttekija->tekijan_nimi;
+		$kuva->tekijan_nimi=$this->etuSukunimi($ttekija->id);
 		$kuva->tiedosto=$tiedosto;
 		if(isset($_POST['kuvaus']))
 		$kuva->kuvaus=$_POST['kuvaus'];
@@ -355,7 +355,7 @@ public function actionTiedosto($dom)
 
 				$message = Yii::t('main', 'Hei. Valokuva on saapunut kohteista: ').$k->osoite;
 				$headers = "From: ". $firma->sahkoposti;
-				$subject = Yii::t('main', 'Uusi valokuva kohteista. Lähettäjä: '). ' '.$ttekija->tekijan_nimi;
+				$subject = Yii::t('main', 'Uusi valokuva kohteista. Lähettäjä: '). ' '.$this->etuSukunimi($ttekija->id);
 				mail($saajat,$subject,$message,$headers);
 
 							// <-- LOG
@@ -660,7 +660,7 @@ public function actionImei($dom)
 			{
 		      	   $tpID = Tyontekijat::model()->findbypk($tp);
 			   if(isset($tpID->tekijan_nimi))
-			   $tplista .= Yii::t('main', 'Työpari').': '.$tpID->tekijan_nimi.'<br>';
+			   $tplista .= Yii::t('main', 'Työpari').': '.$this->etuSukunimi($tpID->id).'<br>';
 			}
 		      }
 		      
@@ -730,14 +730,14 @@ public function actionImei($dom)
 	        if($_POST['check'] == 'uusiviesti'){
 
 		    $model = new Viestinta;
-		    $model->admin = "tt_".$ttekija->id.",".$ttekija->tekijan_nimi;
+		    $model->admin = "tt_".$ttekija->id.",".$this->etuSukunimi($ttekija->id);
 		    $model->tekija = "toimisto";
 	
 		    $viesti = '';
 		    if(isset($_POST['viesti']))
 		    $viesti .= $_POST['viesti'];
 
-		    $model->viesti = date("d.m H:i").", ".$ttekija->tekijan_nimi.": ".$viesti;
+		    $model->viesti = date("d.m H:i").", ".$this->etuSukunimi($ttekija->id).": ".$viesti;
 
 		    if($model->save())
 		       $this->_sendResponse(200, "Viestisi vastaanotettu");
@@ -750,7 +750,7 @@ public function actionImei($dom)
 	        if($_POST['check'] == 'oleneksynyt'){
 
 		    $model = new Viestinta;
-		    $model->admin = "tt_".$ttekija->id.",".$ttekija->tekijan_nimi;
+		    $model->admin = "tt_".$ttekija->id.",".$this->etuSukunimi($ttekija->id);
 		    $model->tekija = "toimisto";
 	
 		    $viesti = '';
@@ -764,7 +764,7 @@ public function actionImei($dom)
 		    }
 		    
 
-		    $model->viesti = date("d.m H:i").", ".$ttekija->tekijan_nimi.": ".$viesti;
+		    $model->viesti = date("d.m H:i").", ".$this->etuSukunimi($ttekija->id).": ".$viesti;
 
 		    if($model->save())
 		       $this->_sendResponse(200, "Viestisi vastaanotettu");
@@ -877,7 +877,7 @@ public function actionImei($dom)
 		    $tekija = Tyontekijat::model()->findbypk($viestinta->tekija);
 
 
-	            $viestinta->viesti = $viestinta->viesti."\n".date("d.m H:i").", ".$tekija->tekijan_nimi.": ".$_POST['vastText'];
+	            $viestinta->viesti = $viestinta->viesti."\n".date("d.m H:i").", ".$this->etuSukunimi($ttekija->id).": ".$_POST['vastText'];
 	            $viestinta->save();
 		    // lahetta sahkopostiin
 		    $admin = '';
@@ -892,8 +892,8 @@ public function actionImei($dom)
 
 			
 				$name='=?UTF-8?B?'.base64_encode($viestinta->id).'?=';
-				$subject='=?UTF-8?B?'.base64_encode("Työntekijä ".$tekija->tekijan_nimi." vastaa").'?=';
-				$headers="From: $tekija->tekijan_nimi <etunti@etunti.fi>\r\n".
+				$subject='=?UTF-8?B?'.base64_encode("Työntekijä ".$this->etuSukunimi($ttekija->id)." vastaa").'?=';
+				$headers="From: ".$this->etuSukunimi($ttekija->id)." <etunti@etunti.fi>\r\n".
 					"Reply-To: no_replay@etunti.fi\r\n".
 					"MIME-Version: 1.0\r\n".
 					"Content-type: text/html; charset=UTF-8";
@@ -1032,10 +1032,10 @@ public function actionImei($dom)
 					$nykyinenKesto = sprint($nykyinenKesto);
 				}
 
-				$this->_sendResponse(200, $mobCheck->status."//".$mobCheck->kohde_kannasta."<br>".$nykyinenKesto."//".$mobCheck->aloitan."//".$mobCheck->loppui."//".$get_osoite."//".$ttekija->tekijan_nimi."//".$kohdenID."//".$tag."//".$mobCheck->id."_".$tila."//uusi versio");
+				$this->_sendResponse(200, $mobCheck->status."//".$mobCheck->kohde_kannasta."<br>".$nykyinenKesto."//".$mobCheck->aloitan."//".$mobCheck->loppui."//".$get_osoite."//".$this->etuSukunimi($ttekija->id)."//".$kohdenID."//".$tag."//".$mobCheck->id."_".$tila."//uusi versio");
 
 			} else {
-                     		$this->_sendResponse(200, "3//mull//null//null//".$get_osoite."//".$ttekija->tekijan_nimi."//".$kohdenID."//".$tag."//uusi versio");
+                     		$this->_sendResponse(200, "3//mull//null//null//".$get_osoite."//".$this->etuSukunimi($ttekija->id)."//".$kohdenID."//".$tag."//uusi versio");
 			}
 
 		exit;
@@ -1073,10 +1073,10 @@ public function actionImei($dom)
 				$nykyinenKesto = sprint($nykyinenKesto);
 			}
 
-                       	$this->_sendResponse(200, $mobCheck->status."//".$mobCheck->kohde_kannasta."<br>".$nykyinenKesto."//".$mobCheck->aloitan."//".$mobCheck->loppui."//".$get_osoite."//".$ttekija->tekijan_nimi."//".$kohdenID."//".$tag."//".$mobCheck->id."_".$tila."//vanha versio");
+                       	$this->_sendResponse(200, $mobCheck->status."//".$mobCheck->kohde_kannasta."<br>".$nykyinenKesto."//".$mobCheck->aloitan."//".$mobCheck->loppui."//".$get_osoite."//".$this->etuSukunimi($ttekija->id)."//".$kohdenID."//".$tag."//".$mobCheck->id."_".$tila."//vanha versio");
 
 		  } else {
-                     	$this->_sendResponse(200, "3//mull//null//null//".$get_osoite."//".$ttekija->tekijan_nimi."//".$kohdenID."//".$tag."//vanha versio");
+                     	$this->_sendResponse(200, "3//mull//null//null//".$get_osoite."//".$this->etuSukunimi($ttekija->id)."//".$kohdenID."//".$tag."//vanha versio");
 		  }
 		// Jos versio vanhempi kun  0.0.57 -->
 
