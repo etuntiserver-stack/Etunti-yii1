@@ -87,10 +87,10 @@ $tt = Tyontekijat::model()->findbypk($t->tid);
 
 if(isset($tt->tekijan_email)){
 $ids .= $tt->id.',';
-array_push($kenelleLahetetaan,$tt->tekijan_nimi);
+array_push($kenelleLahetetaan, $this->etuSukunimi($tt->id));
 }
 ?>
-<h2><?php echo $tt->tekijan_nimi; ?></h2>
+<h2><?php echo $this->etuSukunimi($tt->id); ?></h2>
 
 <?php if($tulosta != 'lista') : ?>
   <form action="#" class="form-group" method="POST">

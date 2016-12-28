@@ -234,13 +234,14 @@ $(document).ready(function(){
 			foreach($tt as $tekija)
 			{
 			  if(is_array($tyopaari) and in_array($tekija->id,$tyopaari, true))
-			    echo '<option value="'.$tekija->id.'" selected>'.$tekija->tekijan_nimi.'</option>';
+			    echo '<option value="'.$tekija->id.'" selected>'.$this->etuSukunimi($tekija->id).'</option>';
 			  else
-			    echo '<option value="'.$tekija->id.'">'.$tekija->tekijan_nimi.'</option>';
+			    echo '<option value="'.$tekija->id.'">'.$this->etuSukunimi($tekija->id).'</option>';
 			}
 			echo '</select>';
 		}
 		?>
+
 
   </div>
   <div class="col-sm-6">
@@ -281,6 +282,7 @@ $(document).ready(function(){
   {
     $to = ToistuvatTyovuorot::model()->findByPk($model->toistuva_id);
     $pfrom = $to->pfrom;
+
     $viikkoja = $to->viikkoja;
     $viikko_paivat = json_decode($to->viikko_paivat, true);
     $pto = $to->pto;
@@ -546,6 +548,9 @@ $('.mult').multiselect({
 	selectAllText: '<?php echo Yii::t("main", "Valitse kaikki"); ?>',
 	allSelectedText: '<?php echo Yii::t("main", "Kaikki"); ?>',
 	nSelectedText: '<?php echo Yii::t("main", "valittu"); ?>',
+	numberDisplayed: 0,
+	buttonWidth: '100%',
+        maxHeight: 300,
 });
 
 

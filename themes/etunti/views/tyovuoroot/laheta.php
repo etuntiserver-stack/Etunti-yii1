@@ -27,7 +27,7 @@ $paivat=array(
 
 <?php if(!$tulosta) : ?>
 <legend>
-<h1> <?php echo Yii::t('main', 'TYÖVUOROT'). ' '.$tt->tekijan_nimi.', '.Yii::t('main', 'VIIKKO').' - '.$week; ?></h1>
+<h1> <?php echo Yii::t('main', 'TYÖVUOROT'). ' '.$this->etuSukunimi($tt->id).', '.Yii::t('main', 'VIIKKO').' - '.$week; ?></h1>
 </legend>
 
 <div class="form-inline">
@@ -100,7 +100,7 @@ $paivat=array(
 <?php if($tulosta) : ?>
 <h1> <?php echo Yii::t('main', 'TYÖVUOROT'). ' '.Yii::t('main', 'VIIKKO').' - '.$week; ?></h1>
 <?php echo Yii::t('main', 'Tulostettu '). ' '.date("d.m.Y H:i"); ?>
-<h3><?php echo $tt->tekijan_nimi.', ',date('d.m.Y',strtotime($year ."W". $week .'1')).' - '.date('d.m.Y',strtotime($year ."W". $week .'7')); ?></h3>
+<h3><?php echo $this->etuSukunimi($tt->id).', ',date('d.m.Y',strtotime($year ."W". $week .'1')).' - '.date('d.m.Y',strtotime($year ."W". $week .'7')); ?></h3>
 <?php endif; ?>
 
 <?php
