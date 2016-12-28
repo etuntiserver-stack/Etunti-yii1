@@ -261,4 +261,10 @@ class VuosilomatController extends Controller
 
 	}
 
+	protected function etuSukunimi($tid)
+	{
+	   $site = Yii::app()->createController('Site');
+	   return $site[0]->etuSukunimi($tid);
+	}
+
 }
