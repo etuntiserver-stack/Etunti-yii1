@@ -454,7 +454,7 @@
 
 			$t = Tyontekijat::model()->findbypk($data->tid);
 			$tekijan_nimi = '';
-			if(isset($t->tekijan_nimi)) $tekijan_nimi = $this->etuSukunimi($t->id);
+			if(isset($t->id)) $tekijan_nimi = $this->etuSukunimi($t->id);
 
 			$m .= '<hr><b>'.Yii::t('main', 'Osoite').':</b> '.$osoite.'<br>';
 			$m .= '<b>'.Yii::t('main', 'Aikaväli').':</b> '.$data->pfrom.'-'.$data->pto.'<br>';
@@ -468,7 +468,7 @@
 				{
 					$tekijan_nimi2 = '';
 					$t2 = Tyontekijat::model()->findbypk($tid);
-					if(isset($t2->tekijan_nimi) and $tid != $data->tid)
+					if(isset($t2->id) and $tid != $data->tid)
 					{
 						$tekijan_nimi2 = $this->etuSukunimi($t2->id);
 						$m .= '<b>'.Yii::t('main', 'Työpari').':</b> '.$tekijan_nimi2.'<br>';

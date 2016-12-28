@@ -23,19 +23,19 @@
 
                  <div class="row">
                   <div class="col-sm-4">
-   <?php 
-   $criteria = new CDbCriteria();
-   $criteria->order = " tekijan_nimi ";
-   $criteria->condition = " aktiivinen='1' ";
 
-    $list = CHtml::listData(Tyontekijat::model()->findAll($criteria), 'id', 'tekijan_nimi');
-    echo '<select name="tyontekija" id="tyontekijat" title="Työntekijät" class="form-control">';
-       	 echo '<option>'.Yii::t('main', 'Valitse työntekijä').'</option>';
-    foreach($list as $key=>$val){
-       	 echo '<option value="'.$key.'">'.$val.'</option>';
-    }
-    echo '</select>';
-   ?>
+				<?php
+		   		$site = Yii::app()->createController('Site');
+		   		$tyontekiatLista = $site[0]->tyontekiatListaNoMulti( 
+						'tyontekija', // name
+						'form-control', //class
+						'tyontekijat', // id
+						null, //selected
+						1 // aktiivinen
+				);
+				echo $tyontekiatLista;
+				?>
+
 
                   </div>
                  </div>

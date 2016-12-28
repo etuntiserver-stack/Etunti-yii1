@@ -130,7 +130,7 @@
 	if(isset($k->id)) $osoite = $k->osoite; else $osoite = '';
 
 	$tt=Tyontekijat::model()->findbypk($data->tid);
-	if(isset($tt->id)) $tekijan_nimi = $tt->tekijan_nimi; else $tekijan_nimi = '';
+	if(isset($tt->id)) $tekijan_nimi = $this->etuSukunimi($tt->id); else $tekijan_nimi = '';
 
 
   	$path = Yii::app()->basePath.'/../img/tekijat/'.Yii::app()->user->domain.'/'. $data->tid.'.jpg';
