@@ -50,31 +50,24 @@
                     <div class="row">
 
 
-                      <div class="col-md-3">
+                      <div class="col-md-2">
                         <div class="section">
                           <label class="field">
 
 
-   <?php
-    $criteria = new CDbCriteria();
-    $criteria->order = "tekijan_nimi";
-    $criteria->condition = "aktiivinen=1";
-    $m = Tyontekijat::model()->findAll($criteria);
-
-    $list = CHtml::listData($m, 'id', 'tekijan_nimi');
-
-    echo '<select name="Tekija[]" id="tyontekijat" multiple title="Työntekijät">';
-    foreach($list as $key=>$val){
-     if(!empty($val))
-     {
-       if(isset($_POST['Tekija']) and in_array($key,$_POST['Tekija']))
-       	 echo '<option value="'.$key.'" selected>'.$val.'</option>';
-       else
-       	 echo '<option value="'.$key.'">'.$val.'</option>';
-     }
-    }
-    echo '</select>';
-   ?>
+				<?php
+				$selected = array();
+				if(isset($_POST['Tekija'])) $selected = $_POST['Tekija'];
+		   		$site = Yii::app()->createController('Site');
+		   		$tyontekiatLista = $site[0]->tyontekiatLista( 
+					'Tekija', // name
+					null, // class
+					'tyontekijat', // id
+					$selected, //selected
+					1 // aktiivinen
+				);
+				echo $tyontekiatLista;
+				?>
 
 
                           </label>
@@ -149,7 +142,7 @@
     }
 
     echo '<tr>';
-    echo '<td>'.$data->tekijan_nimi.'</td>';
+    echo '<td>'.$this->etuSukunimi($data->id).'</td>';
     echo '<td>'.$avaimet.'</td>';
     echo '</tr>';
   }
@@ -220,6 +213,9 @@ $('#tyontekijat').multiselect({
 	selectAllText: 'Valitse kaikki',
 	allSelectedText: 'Kaikki',
 	nSelectedText: 'valittu',
+	numberDisplayed: 0,
+	buttonWidth: '100%',
+        maxHeight: 300,
 });
 
 
