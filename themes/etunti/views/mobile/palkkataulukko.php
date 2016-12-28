@@ -81,27 +81,17 @@ $this->breadcrumbs=array(
                           <label class="field">
 
 
-   <?php
-    $criteria=new CDbCriteria;
-    $criteria->order=" tekijan_nimi ";
-
-    if(!isset($_GET['kaikki_tyontekijat']))
-    $criteria->condition = " aktiivinen=1 ";
-
-    $list = CHtml::listData(Tyontekijat::model()->findAll($criteria), 'id', 'tekijan_nimi');
-
-    echo '<select name="Tekija[]" id="tyontekijat" multiple title="Työntekijät">';
-    foreach($list as $key=>$val){
-     if(!empty($val))
-     {
-       if(isset(Yii::app()->session['Tekija']) and in_array($key,Yii::app()->session['Tekija']))
-       	 echo '<option value="'.$key.'" selected>'.$val.'</option>';
-       else
-       	 echo '<option value="'.$key.'">'.$val.'</option>';
-     }
-    }
-    echo '</select>';
-   ?>
+				<?php
+		   		$site = Yii::app()->createController('Site');
+		   		$tyontekiatLista = $site[0]->tyontekiatLista( 
+					'Tekija', // name
+					null, // class
+					'tyontekijat', // id
+					Yii::app()->session['Tekija'], //selected
+					1 // aktiivinen
+				);
+				echo $tyontekiatLista;
+				?>
 
 
                           </label>
@@ -375,6 +365,9 @@ $('#tyontekijat').multiselect({
 	selectAllText: '<?php echo Yii::t("main", "Valitse kaikki"); ?>',
 	allSelectedText: '<?php echo Yii::t("main", "Työntekijät"); ?>',
 	nSelectedText: '<?php echo Yii::t("main", "valittu"); ?>',
+	numberDisplayed: 0,
+	buttonWidth: '100%',
+        maxHeight: 300,
 });
 
 

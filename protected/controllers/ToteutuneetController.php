@@ -780,9 +780,15 @@ $xml = '
 
 		if(isset($_POST['tekija']))
 		{
-		unset(Yii::app()->session['Lounastauko']);
-		unset(Yii::app()->session['MATKA']);
+			unset(Yii::app()->session['Lounastauko']);
+			unset(Yii::app()->session['MATKA']);
 		}
+
+		if(isset($_POST['tekija']) and $_POST['tekija'] == 'kaikki')
+		{
+			unset(Yii::app()->session['tekija']);
+		}
+
 
 		if(isset($_POST['ilman']))
 		{
