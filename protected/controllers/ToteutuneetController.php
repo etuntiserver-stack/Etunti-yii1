@@ -772,14 +772,11 @@ $xml = '
 		return sprintf('%02d:%02d', $val/3600, ($val % 3600)/60);
 	}
 
-		if(Yii::app()->request->getPost('tekija') == 'kaikki')
-		unset(Yii::app()->session['tekija']);
-		if(Yii::app()->request->getPost('tekija') and Yii::app()->request->getPost('tekija') != 'kaikki'){
+
+		if(Yii::app()->request->getPost('tekija')){
 		Yii::app()->session['tekija'] = Yii::app()->request->getPost('tekija');
 		}
 
-		if(Yii::app()->session['tekija'])
-		   $explTekija = explode("//",Yii::app()->session['tekija']);
 
 		if(isset($_POST['tekija']))
 		{
@@ -805,8 +802,10 @@ $xml = '
 		Yii::app()->session['to'] = date("Y-m-d",strtotime(Yii::app()->request->getPost('to')));
 
 		$tekija = '';
-		if(isset($explTekija[1]))
-		$tekija = $explTekija[1];
+		if(isset(Yii::app()->session['tekija']))
+		{
+			$tekija = $this->etuSukunimi(Yii::app()->session['tekija']);
+		}
 
 /*
        		$criteria = new CDbCriteria();
@@ -1217,6 +1216,12 @@ $xml = '
 
 	}
 
+
+	protected function etuSukunimi($tid)
+	{
+	   $site = Yii::app()->createController('Site');
+	   return $site[0]->etuSukunimi($tid);
+	}
 
 
 }

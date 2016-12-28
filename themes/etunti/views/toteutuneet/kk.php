@@ -121,7 +121,7 @@ echo	'<input type=hidden id=number value='.cal_days_in_month(CAL_GREGORIAN, $mon
   {
   $yht = 0;
   echo '<TR>';
-  echo '<TD>'.$v->tekijan_nimi.'</TD>';
+  echo '<TD>'.$this->etuSukunimi($v->id).'</TD>';
 
    for ($i = 1; $i <= $number; $i++) 
    {

@@ -170,17 +170,17 @@ if( $curpage == 'tyovuoroot/tv2' )
               <div class="form-group">
 		    <label><?php echo Yii::t('main','Työntekijät'); ?></label>
 
-			<?php
-	   		$site = Yii::app()->createController('Site');
-	   		$tyontekiatLista = $site[0]->tyontekiatLista( 
+				<?php
+		   		$site = Yii::app()->createController('Site');
+		   		$tyontekiatLista = $site[0]->tyontekiatLista( 
 					'tyontekijat', // name
 					'multTyontekijat', // class
 					null, // id
 					Yii::app()->session['tyontekijat'], //selected
 					1 // aktiivinen
-			);
-			echo $tyontekiatLista;
-			?>
+				);
+				echo $tyontekiatLista;
+				?>
 
 	      </div>
 

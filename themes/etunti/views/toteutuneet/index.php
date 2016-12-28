@@ -69,25 +69,19 @@ table { width: 100%; }
                         <div class="section">
                           <label class="field select">
 
-   <?php
-    $criteria = new CDbCriteria();
-    $criteria->order = " tekijan_nimi ";
-    $criteria->condition = " aktiivinen=1 ";
-    $list = CHtml::listData(Tyontekijat::model()->findAll($criteria), 'id', 'tekijan_nimi');
-    echo '<select name="tekija" id="nimi" class="gui-input">';
-    $explTekija = explode("//",Yii::app()->session['tekija']);
 
-    if(isset($explTekija[0]) and isset($explTekija[1])){
-       echo '<option value="'.$explTekija[0].'//'.$explTekija[1].'">'.$explTekija[1].'</option>';
-    } else {
-       echo '<option value="">'.Yii::t('main', 'Työntekijät').'</option>';
-    }
+				<?php
+		   		$site = Yii::app()->createController('Site');
+		   		$tyontekiatLista = $site[0]->tyontekiatListaNoMulti( 
+						'tekija', // name
+						'gui-input', //class
+						'nimi', // id
+						Yii::app()->session['tekija'], //selected
+						1 // aktiivinen
+				);
+				echo $tyontekiatLista;
+				?>
 
-    foreach($list as $key=>$val){
-    echo '<option value="'.$key.'//'.$val.'">'.$val.'</option>';
-    }
-    echo '</select>';
-   ?>
 
 
                             <i class="arrow double"></i>
@@ -166,6 +160,8 @@ table { width: 100%; }
 <?php if(Yii::app()->session['tekija']) : ?>
 
 <?php
+
+$tid = Yii::app()->session['tekija'];
 
 function dateDiff($start, $end) {
   $start_ts = strtotime($start);
@@ -278,7 +274,7 @@ function dateDiff($start, $end) {
   
 
 	$dido = '';
-	$dido = $this->renderPartial('//tyovuoroot/did',array('pvm'=>$date,'tid'=>$explTekija[0],'from'=>'mobiili','yhteensa'=>true),true);
+	$dido = $this->renderPartial('//tyovuoroot/did',array('pvm'=>$date,'tid'=>$tid,'from'=>'mobiili','yhteensa'=>true),true);
 	
 	$dido = explode("//", json_decode($dido, true));
 	if(isset($dido[1]))
@@ -296,15 +292,15 @@ function dateDiff($start, $end) {
 
 
     echo '<td>';
-	   $luetutpvmtid = $this->renderPartial('luetutpvmtid',array('pvm'=>$date,'tid'=>$explTekija[0],'from'=>'mobiili'),true);
+	   $luetutpvmtid = $this->renderPartial('luetutpvmtid',array('pvm'=>$date,'tid'=>$tid,'from'=>'mobiili'),true);
 	   $exLatikoLu = explode('explode999', $luetutpvmtid);
 	   echo $exLatikoLu[0];
 
     echo '</td>';
 
-    echo '<td id="'.$did.'_'.$explTekija[0].'">';
+    echo '<td id="'.$did.'_'.$tid.'">';
 
-	   $totpvmtid = $this->TotPvmTid($date,$explTekija[0],$mobile);
+	   $totpvmtid = $this->TotPvmTid($date,$tid,$mobile);
 	   echo $totpvmtid['laatikot'];
 
     echo '</td>';
@@ -315,7 +311,7 @@ function dateDiff($start, $end) {
     else
     	$eroAika = ($totpvmtid['toteutuneetTunnit']-$suunnittelut);
 
-    echo '<td class="yhteensaPvm_'.date("W",strtotime($date)).' forFooter" id="yhteensaPvm_'.$did.'_'.$explTekija[0].'">
+    echo '<td class="yhteensaPvm_'.date("W",strtotime($date)).' forFooter" id="yhteensaPvm_'.$did.'_'.$tid.'">
 	   <div class="row">
 	    <div class="col-sm-5">
 		'.Yii::t('main', 'Suunnitellut: ').'
@@ -350,7 +346,7 @@ function dateDiff($start, $end) {
     $lounaat = $totpvmtid['lounaat'];
     $yhtLounaat += $lounaat;
 
-    $return 	= $this->IltaYoSu($explTekija[0],$date);
+    $return 	= $this->IltaYoSu($tid,$date);
 
     if(isset($return[0])){
     $tyoIlta 	= $return[0];
@@ -365,18 +361,18 @@ function dateDiff($start, $end) {
     $yhtSu 	+= $tyoSu;
     }
 
-    $tyoPy 	= $this->pyhapaivat($explTekija[0],$date,"pyhat");
+    $tyoPy 	= $this->pyhapaivat($tid,$date,"pyhat");
     $yhtPy 	+= $tyoPy;
 
-    $tyoEl 	= $this->pyhapaivat($explTekija[0],$date,"el");
+    $tyoEl 	= $this->pyhapaivat($tid,$date,"el");
     $yhtEl 	+= $tyoEl;
 
     $spl 	= $totpvmtid['spl']; // Palkaton
     $sl 	= $totpvmtid['sl']; // Palkallinen
     $ls 	= $totpvmtid['ls']; // Lapsen sairaus
 
-    $mVuosilomaVL = $mobile[0]->TidPvmVuosiloma($date,$explTekija[0],'VL');
-    $mVuosilomaVKL = $mobile[0]->TidPvmVuosiloma($date,$explTekija[0],'VKL');
+    $mVuosilomaVL = $mobile[0]->TidPvmVuosiloma($date,$tid,'VL');
+    $mVuosilomaVKL = $mobile[0]->TidPvmVuosiloma($date,$tid,'VKL');
 
     if(isset($mVuosilomaVL['count']))
     {
@@ -396,7 +392,7 @@ function dateDiff($start, $end) {
 
     echo '
 	<tr><td colspan="4">
-		<table class="yhteensaPvmAllaTaulu_'.date("W",strtotime($date)).' forFooterAlla table table-bordered" cellspacing="0" cellpadding="0" id="yhteensaPvmAllaTaulu_'.$did.'_'.$explTekija[0].'">
+		<table class="yhteensaPvmAllaTaulu_'.date("W",strtotime($date)).' forFooterAlla table table-bordered" cellspacing="0" cellpadding="0" id="yhteensaPvmAllaTaulu_'.$did.'_'.$tid.'">
 		 <thead>
 		  <tr>
 		   <th>'.Yii::t('main', 'Työtynnit').'</th>
@@ -433,7 +429,7 @@ function dateDiff($start, $end) {
 		   <td colspan="13">			
 			<button class="btn btn-default btn-sm btn-block esittele_tyotunnit" 
 				pvm="'.$date.'"
-				tid="'.$explTekija[0].'"
+				tid="'.$tid.'"
 				tyotunnit	="'.(int)$tyotunnit.'"
 				matka		="'.(int)$matka.'"
 				lounaat		="'.(int)$lounaat.'"
@@ -489,7 +485,7 @@ function dateDiff($start, $end) {
 
 
 
-    		$tid = $explTekija[0];
+    		$tid = $tid;
 
 	    if(date('N', strtotime($date)) == 7)
 	    {

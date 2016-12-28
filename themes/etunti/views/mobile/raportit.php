@@ -94,9 +94,9 @@
 	   echo '<select name="tekija[]" multiple class="mult">';
 	   foreach($tlist as $val){
 		if(count($tyoryhmat) > 0 and in_array($val->tyoryhma, $tyoryhmat))
-			echo '<option value="'.$val->id.'" selected>'.$val->tekijan_nimi.'</option>';
+			echo '<option value="'.$val->id.'" selected>'.$this->etuSukunimi($val->id).'</option>';
 		else
-			echo '<option value="'.$val->id.'">'.$val->tekijan_nimi.'</option>';
+			echo '<option value="'.$val->id.'">'.$this->etuSukunimi($val->id).'</option>';
 	   }
 	   echo '</select>';
 	?>
@@ -190,9 +190,9 @@
 	   echo '<select name="tekija[]" multiple class="mult">';
 	   foreach($tlist as $val){
 		if(count($tyoryhmat) > 0 and in_array($val->tyoryhma, $tyoryhmat))
-			echo '<option value="'.$val->id.'" selected>'.$val->tekijan_nimi.'</option>';
+			echo '<option value="'.$val->id.'" selected>'.$this->etuSukunimi($val->id).'</option>';
 		else
-			echo '<option value="'.$val->id.'">'.$val->tekijan_nimi.'</option>';
+			echo '<option value="'.$val->id.'">'.$this->etuSukunimi($val->id).'</option>';
 	   }
 	   echo '</select>';
 	?>
@@ -226,6 +226,7 @@
     		echo '<option value="'.$val->value.'">'.$val->value.'</option>';
     	}
    	echo '</select>';
+
    	?>
        </div>
 
@@ -289,9 +290,9 @@
 	   echo '<select name="tekija[]" multiple class="mult">';
 	   foreach($tlist as $val){
 		if(count($tyoryhmat) > 0 and in_array($val->tyoryhma, $tyoryhmat))
-			echo '<option value="'.$val->id.'" selected>'.$val->tekijan_nimi.'</option>';
+			echo '<option value="'.$val->id.'" selected>'.$this->etuSukunimi($val->id).'</option>';
 		else
-			echo '<option value="'.$val->id.'">'.$val->tekijan_nimi.'</option>';
+			echo '<option value="'.$val->id.'">'.$this->etuSukunimi($val->id).'</option>';
 	   }
 	   echo '</select>';
 	?>
@@ -386,7 +387,7 @@
 	   echo '<select name="tekija" class="form-control">';
 	   echo '<option value="kaikki">'.Yii::t('main', 'Kaikki työntekijät').'</option>';
 	   foreach($tlist as $val){
-			echo '<option value="'.$val->id.'">'.$val->tekijan_nimi.'</option>';
+			echo '<option value="'.$val->id.'">'.$this->etuSukunimi($val->id).'</option>';
 	   }
 	   echo '</select>';
 	?>
