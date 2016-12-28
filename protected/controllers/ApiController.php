@@ -1212,7 +1212,7 @@ public function actionImei($dom)
 
                 $mobinsert->imei = $ttekija->imei;
                 $mobinsert->tid = $ttekija->id;
-                $mobinsert->tekijan_nimi = $ttekija->tekijan_nimi.' '.$ttekija->sukunimi;
+                $mobinsert->tekijan_nimi = $this->etuSukunimi($ttekija->id);
                 $mobinsert->tietoja = $_POST['tietoja'];
                 $mobinsert->aloitan = date("d.m.Y H:i:s");
 
@@ -1265,6 +1265,14 @@ public function actionImei($dom)
 
 }
 
+
+
+
+	protected function etuSukunimi($tid)
+	{
+	   $site = Yii::app()->createController('Site');
+	   return $site[0]->etuSukunimi($tid);
+	}
 
 
 /*
