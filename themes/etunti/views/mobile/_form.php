@@ -135,7 +135,10 @@ if(isset($model->tietoja))
 
 	<div class="section">
 		<?php echo $form->labelEx($model,'tid'); ?>
-		<?php echo $form->dropDownList($model, 'tid', CHtml::listData(Tyontekijat::model()->findAll(), 'id', 'tekijan_nimi'), array('class'=>'form-control')); ?>
+		<?php
+			$site = Yii::app()->createController('Site');
+			$list = $site[0]->tyontekiatArrayList(1); 
+			echo $form->dropDownList($model, 'tid', $list, array('class'=>'form-control')); ?>
 		<?php echo $form->hiddenField($model,'tekijan_nimi',array('size'=>20,'maxlength'=>20,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'tid'); ?>
 	</div>
