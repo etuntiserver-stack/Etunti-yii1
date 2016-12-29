@@ -37,7 +37,7 @@
 
 <tr>
 	<td class="col1">
-		<?php echo $data->tekijan_nimi; ?>
+		<?php echo  $this->etuSukunimi($data->id); ?>
 	</td>
 	<td class="col2">
 	<?php if($tulostus): ?>

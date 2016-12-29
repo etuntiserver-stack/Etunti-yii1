@@ -44,11 +44,11 @@ $tek = '';
 				foreach($tyontekijat as $tekija)
 				{
 					if( is_array(json_decode($tekija->tyoryhma)) and in_array($data->value, json_decode($tekija->tyoryhma)) )
-						$tek .= '<option value="'.$tekija->id.'" selected>'.$tekija->tekijan_nimi.'</option>';
+						$tek .= '<option value="'.$tekija->id.'" selected>'.$this->etuSukunimi($tekija->id).'</option>';
 					elseif( !is_array(json_decode($tekija->tyoryhma)) and $data->value == $tekija->tyoryhma)
-						$tek .= '<option value="'.$tekija->id.'" selected>'.$tekija->tekijan_nimi.'</option>';
+						$tek .= '<option value="'.$tekija->id.'" selected>'.$this->etuSukunimi($tekija->id).'</option>';
 					else
-						$tek .= '<option value="'.$tekija->id.'">'.$tekija->tekijan_nimi.'</option>';
+						$tek .= '<option value="'.$tekija->id.'">'.$this->etuSukunimi($tekija->id).'</option>';
 				}
 				$tek .= '</select>';
 				echo $tek;
