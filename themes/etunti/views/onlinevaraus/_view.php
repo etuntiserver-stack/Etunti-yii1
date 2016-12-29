@@ -18,7 +18,7 @@ $tilauksen_kuvaus = json_decode($data->tilauksen_kuvaus, true);
 			if(isset($tekija->id))
 			{
 			   echo '
-				<b>'.$tekija->tekijan_nimi.'</b><br>
+				<b>'.$this->etuSukunimi($tekija->id).'</b><br>
 				'.$tv->pvm.'<br>
 				'.$tv->alku.'-'.$tv->loppu.'
 			   ';

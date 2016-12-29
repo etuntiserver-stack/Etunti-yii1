@@ -130,7 +130,7 @@ class OnlinevarausController extends Controller
 
 		$tietoja = '
 		<div class="panel panel-success">
-		  <div class="panel-heading"><b>'.$tt->tekijan_nimi.'</b></div>
+		  <div class="panel-heading"><b>'.$this->etuSukunimi($tt->id).'</b></div>
 		  <div class="panel-body">
 
 		 <div class="row col-sm-4">
@@ -1063,5 +1063,12 @@ $months=array(
 	return 'lauantai';
 
  	}
+
+
+	protected function etuSukunimi($tid)
+	{
+	   $site = Yii::app()->createController('Site');
+	   return $site[0]->etuSukunimi($tid);
+	}
 
 }
