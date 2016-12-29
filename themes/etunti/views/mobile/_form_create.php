@@ -25,7 +25,10 @@ $model->hinta = str_replace(",",".",$model->hinta);
 
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'tid'); ?>
-		<?php echo $form->dropDownList($model, 'tid', CHtml::listData(Tyontekijat::model()->findAll(array('order'=>'tekijan_nimi')), 'id', 'tekijan_nimi'), 
+		<?php 
+		$site = Yii::app()->createController('Site');
+		$list = $site[0]->tyontekiatArrayList(1);
+		echo $form->dropDownList($model, 'tid', $list, 
 		array('empty'=>'Valitse', 'class'=>'form-control')); 
 		?>
 		<?php echo $form->error($model,'tid'); ?>
@@ -46,7 +49,7 @@ $model->hinta = str_replace(",",".",$model->hinta);
 		      //array_unshift($list, $list[$s->status]);
 		      echo $form->dropDownList($model,'status', 
 			 	$list, 
-				array('options' => array(3=>array('selected'=>true)),'class'=>'form-control input-sm'));
+				array('options' => array(3=>array('selected'=>true)),'class'=>'form-control'));
 		?>
 		<?php echo $form->error($model,'status'); ?>
 	</div>
