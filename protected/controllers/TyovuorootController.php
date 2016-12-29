@@ -1118,7 +1118,7 @@ class TyovuorootController extends Controller
   	$tnimi = '';
 	if(isset($_POST['tid']) and $_POST['tid'] != 0){
   	  $tekija = Tyontekijat::model()->findbypk($_POST['tid']);
-	  $tnimi = $tekija->tekijan_nimi;
+	  $tnimi = $this->etuSukunimi($tekija->id);
 
 
 		// Tyosuhde oikeus
@@ -1430,9 +1430,9 @@ class TyovuorootController extends Controller
 		   foreach($t as $tekijanData)
 		   {
 			if($tekijanData->id == $model->tid)
-			$tekijan_nimi .= '<option value="'.$tekijanData->id.'" selected>'.$tekijanData->tekijan_nimi.'</option>';
+			$tekijan_nimi .= '<option value="'.$tekijanData->id.'" selected>'.$this->etuSukunimi($tekijanData->id).'</option>';
 			else
-			$tekijan_nimi .= '<option value="'.$tekijanData->id.'">'.$tekijanData->tekijan_nimi.'</option>';
+			$tekijan_nimi .= '<option value="'.$tekijanData->id.'">'.$this->etuSukunimi($tekijanData->id).'</option>';
 		   }
 		}
 		$tekijan_nimi .= '</select>';
