@@ -33,12 +33,14 @@ if(isset($ad->adm_nimi))
   <div class="col-sm-4">
 	<div class="section fill mb5">
 		<?php
+		$site = Yii::app()->createController('Site');
+
 		if(isset($_GET['tid']))
 		{
 
 		  $tt = Tyontekijat::model()->findbypk($_GET['tid']);
 		  if(isset($tt->tekijan_nimi))
-		  echo '<label>'.Yii::t('main','Saaja: ').' '.$tt->tekijan_nimi.'</label>';
+		  echo '<label>'.Yii::t('main','Saaja: ').' '.$this->etuSukunimi($tt->id).'</label>';
 
 		  echo $form->hiddenField($model,'tekija',array('value'=>$_GET['tid'],'class'=>'form-control','readonly'=>'yes'));
 		} else {
@@ -52,7 +54,8 @@ if(isset($ad->adm_nimi))
 
 		  echo $form->labelEx($model,'tekija').'<br>';
 
-        	  $list = CHtml::listData(Tyontekijat::model()->findAll(array('order' => 'tekijan_nimi')), 'id', 'tekijan_nimi');
+		  $list = $site[0]->tyontekiatArrayList(1);
+
         	  echo $form->dropDownList($model, 'tekija', $list,
 			array('class'=>'form-control','readonly'=>'yes'));
 
@@ -75,7 +78,7 @@ if(isset($ad->adm_nimi))
 
 
 		  echo $form->labelEx($model,'tekija').'<br>';
-        	  $list = CHtml::listData(Tyontekijat::model()->findAll(array('order' => 'tekijan_nimi')), 'id', 'tekijan_nimi');
+		  $list = $site[0]->tyontekiatArrayList(1);
         	  echo $form->dropDownList($model, 'tekija', $list,array('class'=>'form-control', 'multiple'=>'yes'));
 
 ?>
@@ -115,6 +118,9 @@ $('#Viestinta_tekija').multiselect({
 	selectAllText: 'Valitse kaikki',
 	allSelectedText: 'Kaikki',
 	nSelectedText: 'valittu',
+	numberDisplayed: 0,
+	buttonWidth: '100%',
+        maxHeight: 300,
 });
 
 });
