@@ -71,7 +71,7 @@ ini_set('max_execution_time', 900);
   <tr>
     <td><?php echo $data->pvm; ?></td>
     <td style="text-align:left"><?php echo $data->osoite; ?></td>
-    <td style="text-align:left"><?php echo $data->tekijan_nimi; ?></td>
+    <td style="text-align:left"><?php echo $this->etuSukunimi($data->tid); ?></td>
     <td><?php echo $this->sprint($data->suunnittellut); ?></td>
     <td><?php echo $this->sprint($toteutuneet); ?></td>
     <td><?php echo $ero; ?></td>

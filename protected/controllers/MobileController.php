@@ -265,8 +265,14 @@ function num($val){
 
 			}
 
-			if(isset($_POST['tekija']) and  $_POST['tekija'] != 'kaikki')
-	        	$criteria->addCondition (" tid = '".$_POST['tekija']."'");
+
+			$tids = array();
+			if(false != Yii::app()->request->getPost('tekija') and is_array(Yii::app()->request->getPost('tekija')) )
+			{
+				$tids = "tid='".implode("' OR tid='", Yii::app()->request->getPost('tekija'))."'";
+	        		$criteria->addCondition ($tids);
+			}
+
 
 			if(isset($_POST['kohteet']) and  $_POST['kohteet'] != 'kaikki')
 	        	$criteria->addCondition (" kohde = '".$_POST['kohteet']."'");
