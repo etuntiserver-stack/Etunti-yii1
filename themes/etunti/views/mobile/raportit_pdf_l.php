@@ -33,24 +33,6 @@
 <br>
 
 
-<?php
-
-function rivit($data, $kesto, $viesti, $spl){
-
-	$r = '';
-	$r .=  '<tr>';
-	$r .= '<td style="width:5%">'.date("d.m",strtotime($data->aloitan)).'</td>';
-	$r .= '<td style="width:20%;text-align:left">'.$data->tekijan_nimi.$spl.'</td>';
-	$r .= '<td style="width:34%;text-align:left">'.$data->kohde_kannasta.'</td>';
-	$r .= '<td style="width:5%">'.date("H:i",strtotime($data->aloitan)).'</td>';
-	$r .= '<td style="width:5%">'.date("H:i",strtotime($data->loppui)).'</td>';
-	$r .= '<td style="width:5%">'.sprint($kesto).' <b>('.num($kesto).')</b></td>';
-	$r .= '<td style="width:27%">'.$viesti.'</td>';
-	$r .= '</tr>';
-	return $r;
-}
-?>
-
 <div class="tb">
 <table>
   <thead>
@@ -109,7 +91,7 @@ function rivit($data, $kesto, $viesti, $spl){
 	// Vain jos ero on 1 päivä, erotellaan rivit -->
 
 
-		echo rivit($data, $kesto, $viesti, $spl);
+		echo $this->rivit($data, $kesto, $viesti, $spl);
 
 
   }

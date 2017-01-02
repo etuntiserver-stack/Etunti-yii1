@@ -169,7 +169,7 @@ function num($val){
 			allSess();
 
 		       	$criteria = new CDbCriteria();
-			$criteria->select = " aloitan,loppui,tekijan_nimi,kohde_kannasta,viesti,sairaus ";
+			$criteria->select = " aloitan,loppui,tid,tekijan_nimi,kohde_kannasta,viesti,sairaus ";
 			$criteria->order = " DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i') ASC ";
 			$criteria->condition = " 
 				aloitan!='' and loppui!='' 
@@ -197,7 +197,7 @@ function num($val){
 
 			/* lu */
 		       	$criteria = new CDbCriteria();
-			$criteria->select = " time,aloitan,loppui,tekijan_nimi,kohde_kannasta,viesti,sairaus ";
+			$criteria->select = " time,aloitan,loppui,tid,tekijan_nimi,kohde_kannasta,viesti,sairaus ";
 			$criteria->order = " DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i') ASC ";
 			$criteria->condition = " aloitan!='' and loppui!='' AND id NOT IN (SELECT kid FROM sivexkuitti_repaired) ";
 
@@ -1991,7 +1991,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		  	$d->aloitan 	= date("d.m.Y H:i",strtotime($d->aloitan));
 			$kesto 		= strtotime($d->loppui)-strtotime($d->aloitan);
 
-			$lu[] = $d->tekijan_nimi."//".date("d.m.Y",strtotime($d->aloitan))."//".$kesto."//mobile_".$d->id."//".$d->asiakas_hyvaksy."//".date("H:i",strtotime($d->aloitan))."//".date("H:i",strtotime($d->loppui))."//////".$d->sairaus.'//'.strtotime($d->aloitan);
+			$lu[] = $this->etuSukunimi($d->tid)."//".date("d.m.Y",strtotime($d->aloitan))."//".$kesto."//mobile_".$d->id."//".$d->asiakas_hyvaksy."//".date("H:i",strtotime($d->aloitan))."//".date("H:i",strtotime($d->loppui))."//////".$d->sairaus.'//'.strtotime($d->aloitan);
 		}
 
 
@@ -2012,7 +2012,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		  	$d->aloitan 	= date("d.m.Y H:i",strtotime($d->aloitan));
 		  	$kesto 		= strtotime($d->loppui)-strtotime($d->aloitan);
 
-			$lu[] = $d->tekijan_nimi."//".date("d.m.Y",strtotime($d->aloitan))."//".$kesto."//toteutu_".$d->id."//".$d->asiakas_hyvaksy."//".date("H:i",strtotime($d->aloitan))."//".date("H:i",strtotime($d->loppui))."//".$d->osoite."//".$d->tietoja."//".$d->sairaus.'//'.strtotime($d->aloitan);
+			$lu[] = $this->etuSukunimi($d->tid)."//".date("d.m.Y",strtotime($d->aloitan))."//".$kesto."//toteutu_".$d->id."//".$d->asiakas_hyvaksy."//".date("H:i",strtotime($d->aloitan))."//".date("H:i",strtotime($d->loppui))."//".$d->osoite."//".$d->tietoja."//".$d->sairaus.'//'.strtotime($d->aloitan);
 		}
 
 		//if(count($lu) > 0)
@@ -2937,4 +2937,22 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 	   $site = Yii::app()->createController('Site');
 	   return $site[0]->etuSukunimi($tid);
 	}
+
+
+	protected function rivit($data, $kesto, $viesti, $spl){
+
+	$r = '';
+	$r .=  '<tr>';
+	$r .= '<td style="width:5%">'.date("d.m",strtotime($data->aloitan)).'</td>';
+	$r .= '<td style="width:20%;text-align:left">'.$this->etuSukunimi($data->tid).$spl.'</td>';
+	$r .= '<td style="width:34%;text-align:left">'.$data->kohde_kannasta.'</td>';
+	$r .= '<td style="width:5%">'.date("H:i",strtotime($data->aloitan)).'</td>';
+	$r .= '<td style="width:5%">'.date("H:i",strtotime($data->loppui)).'</td>';
+	$r .= '<td style="width:5%">'.sprint($kesto).' <b>('.num($kesto).')</b></td>';
+	$r .= '<td style="width:27%">'.$viesti.'</td>';
+	$r .= '</tr>';
+	return $r;
+	}
+
+
 }
