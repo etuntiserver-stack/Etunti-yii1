@@ -1234,15 +1234,24 @@ $(document).ready(function(){
 
 	public function etuSukunimi($tid) // $this->etuSukunimi($model->id)
 	{
+		$return = '';
 		$t = Tyontekijat::model()->findByPk($tid);
 		if(isset($t->id))
 		{
 			$asetukset = Asetukset::model()->findByPk(1);
-			if($asetukset->tyontekijan_etunimi_sukunimi_jarjestys == 0)
-				return $t->tekijan_nimi.' '.$t->sukunimi;
-			else
-				return $t->sukunimi.' '.$t->tekijan_nimi;
+			if($asetukset->tyontekijan_etunimi_sukunimi_jarjestys == 0){
+				$return .= $t->tekijan_nimi;
+				if(!empty($t->sukunimi))
+					$return .= ' '.$t->sukunimi;
+			} else {
+				if(!empty($t->sukunimi))
+					$return .= $t->sukunimi.' ';
+
+				$return .= $t->tekijan_nimi;
+			}
 		}
+
+		return $return;
 	}
 
 }

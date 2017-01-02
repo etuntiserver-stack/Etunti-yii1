@@ -21,7 +21,7 @@
 
 
 <tr>
-	<td <?php echo $varo; ?>><?php echo CHtml::encode($data->tekijan_nimi); ?></td>
+	<td <?php echo $varo; ?>><?php echo CHtml::encode($this->etuSukunimi($data->id)); ?></td>
 	<td><?php echo CHtml::encode(date("d.m.Y",strtotime($string))); ?></td>
 	<td><?php echo CHtml::encode($data->tunnus); ?></td>
 </tr>
