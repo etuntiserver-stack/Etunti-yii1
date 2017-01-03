@@ -690,15 +690,6 @@ function num($val){
 		if(isset($_POST['submit']))
 		{
 
-		if(Yii::app()->request->getPost('etsi_kohteet') == '') unset(Yii::app()->session['etsi_kohteet']);
-		if(Yii::app()->request->getPost('fromP') == '') unset(Yii::app()->session['fromP']);
-		if(Yii::app()->request->getPost('toP') == '') unset(Yii::app()->session['toP']);
-		if(Yii::app()->request->getPost('tekijaPaaSivulla') == '') unset(Yii::app()->session['tekijaPaaSivulla']);
-		if(Yii::app()->request->getPost('siivousPaaSivulla') == '') unset(Yii::app()->session['siivousPaaSivulla']);
-		if(Yii::app()->request->getPost('yrityksen_nimi') == '') unset(Yii::app()->session['yrityksen_nimi']);
-		if(Yii::app()->request->getPost('laskutettu') == '') unset(Yii::app()->session['laskutettu']);
-
-
 		if(Yii::app()->request->getPost('etsi_kohteet'))
 		Yii::app()->session['etsi_kohteet'] = Yii::app()->request->getPost('etsi_kohteet');
 
@@ -719,6 +710,19 @@ function num($val){
 
 		if(Yii::app()->request->getPost('laskutettu'))
 		Yii::app()->session['laskutettu'] = Yii::app()->request->getPost('laskutettu');
+
+
+
+		if(Yii::app()->request->getPost('etsi_kohteet') == '') unset(Yii::app()->session['etsi_kohteet']);
+		if(Yii::app()->request->getPost('fromP') == '') unset(Yii::app()->session['fromP']);
+		if(Yii::app()->request->getPost('toP') == '') unset(Yii::app()->session['toP']);
+
+		if(Yii::app()->request->getPost('tekijaPaaSivulla') == '' or Yii::app()->request->getPost('tekijaPaaSivulla') == 'kaikki') 
+			unset(Yii::app()->session['tekijaPaaSivulla']);
+
+		if(Yii::app()->request->getPost('siivousPaaSivulla') == '') unset(Yii::app()->session['siivousPaaSivulla']);
+		if(Yii::app()->request->getPost('yrityksen_nimi') == '') unset(Yii::app()->session['yrityksen_nimi']);
+		if(Yii::app()->request->getPost('laskutettu') == '') unset(Yii::app()->session['laskutettu']);
 	
 		}
 
