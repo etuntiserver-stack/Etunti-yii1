@@ -61,7 +61,7 @@
 
 
 <?php else : ?>
-	<?php echo Yii::t('main', 'Template tiedosto puutuu'); ?>
+	<?php echo Yii::t('main', 'Mallitiedosto puutuu, jos haluat ominaisuuden käyttöön ota yhteyttä'); ?> <a href="mailto:tuki@etunti.fi">tuki@etunti.fi<a>
 <?php endif; ?>
 
 
