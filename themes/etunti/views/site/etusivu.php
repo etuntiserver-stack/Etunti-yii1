@@ -368,7 +368,7 @@ echo '
 			     echo '<tr>
 	                        <td>
 	                          '.$data->alku.'-'.$data->loppu.'</td>
-	                        <td>'.$t->tekijan_nimi.'<br>'.$k->osoite.'</td>
+	                        <td>'.$this->etuSukunimi($t->id).'<br>'.$k->osoite.'</td>
 	                      </tr>
 				  ';
 			   }
