@@ -24,6 +24,10 @@
 </span>
                         </h1>
                         <hr>
+
+KOTA teksti
+			<hr>
+
                     <!-- End Titles Heading -->
                     <div class="row">
                         <div class="col-md-12">
@@ -31,11 +35,13 @@
 <div class="text-center">
 <p>
 
-                        <ul class="stars">
-			<li></li>Yrityksessä A otettiin käyttöön Etunti työvuorosuunnitteluohjelma. Sen avulla suunniteltiin yrityksessä uusiksi kohteiden siirtymäajat. Kolmessa kuukaudessa yritys säästi ohjelman avulla yhden työntekijän kuukausipalkan verran rahaa.
-			<li></li>Yrityksessä B tehostettiin Etunnin avulla työajaseurantaa. Puolessa vuodessa yritys sai kolme prosenttia lisää liikevoittoa.
-			<li></li>Yrityksessä C Etunnin avulla saatiin aikavarkaudet kitkettyä pois ja yritys säästi rahaa, kun tehdyistä tunneista maksettiin oikein työntekijöille.
-			<li></li>Yritys D joutui ikävään tilanteeseen, kun asiakas väitti työntekijöiden huijanneen ja häntä veloitettiin tunneista, joita ei asiakkaan mukaan ollut. Asiakas vei asian kuluttajariitalautakuntaan, mutta yritys todisti siivoojien olleen kohteessa Etunnin RFID-tarran ja sähköisen työajanseurannan avulla.
+                        <h3 class="title-subtitle text-left">Mitä asiakkaamme ovat Etunnilla saavuttaneet:</h3>
+
+                        <ul class="stars text-left">
+			<li>Etunnilla avulla suunniteltiin yrityksessä uusiksi kohteiden siirtymäajat. Kolmessa kuukaudessa yritys säästi ohjelman avulla yhden työntekijän kuukausipalkan verran rahaa.</li>
+			<li>Etunnilla tehostettiin työajanseurantaa. Puolessa vuodessa yritys sai kolme prosenttia lisää liikevoittoa.</li>
+			<li>Etunnilla saatiin aikavarkaudet kitkettyä pois ja yritys säästi rahaa, kun tehdyistä tunneista maksettiin työntekijöille oikein.</li>
+			<li>Etunnilla tehtyjen kirjausten avulla on todistettu työaikakirjanpito päteväksi, kun asiakas väitti työntekijöiden huijanneen ja häntä veloitettiin tunneista, joita ei asiakkaan mukaan ollut. Asiakas vei asian kuluttajariitalautakuntaan, mutta yritys todisti siivoojien olleen kohteessa Etunnin RFID-tarran ja sähköisen työajanseurannan avulla.</li>
 
                         </ul>
 
