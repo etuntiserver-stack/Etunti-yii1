@@ -25,4 +25,5 @@ protected/data/*.db
 etuntiAPP/.DS_Store
 etuntiAPP/EtuntiAPP/platforms/*
 etuntiAPP/EtuntiAdmin/platforms/*
+etuntiAPP/dico/platforms/*
 error_log

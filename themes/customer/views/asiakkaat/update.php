@@ -163,9 +163,9 @@ $head = $model->osoite;
             <div class="admin-form">
               <div class="panel heading-border">
                 <div class="panel-body bg-light">
-
+		 <div class="table-responsive">
 		  <?php echo $this->tyovuorotCRM($model, $from, $to); ?>
-
+		 </div>
                 </div>
               </div>
             </div>
@@ -176,9 +176,9 @@ $head = $model->osoite;
             <div class="admin-form">
               <div class="panel heading-border">
                 <div class="panel-body bg-light">
-
+		 <div class="table-responsive">
 		  <?php echo $this->laskutuksetCRM($model, $from, $to); ?>
-
+		 </div>
                 </div>
               </div>
             </div>
@@ -189,9 +189,9 @@ $head = $model->osoite;
             <div class="admin-form">
               <div class="panel heading-border">
                 <div class="panel-body bg-light">
-
+		 <div class="table-responsive">
 		  <?php echo $this->tarjouksetCRM($model, $from, $to); ?>
-
+		 </div>
                 </div>
               </div>
             </div>
@@ -202,9 +202,9 @@ $head = $model->osoite;
             <div class="admin-form">
               <div class="panel heading-border">
                 <div class="panel-body bg-light">
-
+		 <div class="table-responsive">
 		  <?php echo $this->palautteetCRM($model, $from, $to); ?>
-
+		 </div>
                 </div>
               </div>
             </div>
@@ -215,9 +215,9 @@ $head = $model->osoite;
             <div class="admin-form">
               <div class="panel heading-border">
                 <div class="panel-body bg-light">
-
+		 <div class="table-responsive">
 		  <?php echo $this->vinkitCRM($model, $from, $to); ?>
-
+		 </div>
                 </div>
               </div>
             </div>

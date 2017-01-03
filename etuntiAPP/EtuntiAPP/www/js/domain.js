@@ -226,7 +226,7 @@ setTimeout(function() {
 
 	var options;
 	options = {
-	    maximumAge: 60000,
+	    //maximumAge: 60000,
 	    timeout: 30000,
 	    enableHighAccuracy: false
 	};
@@ -239,6 +239,7 @@ setTimeout(function() {
 	function onSuccessLocation(position) {
 	        document.getElementById('location').value = position.coords.latitude + '/' + position.coords.longitude;
 	        my_location = position.coords.latitude + '/' + position.coords.longitude;
+		//alert(my_location);
 	}
 	function onErrorLocation(error) {
 	
@@ -253,6 +254,7 @@ setTimeout(function() {
 	    	document.getElementById('location').value = position.coords.latitude + '/' + position.coords.longitude;
 	        my_location = position.coords.latitude + '/' + position.coords.longitude;
 		sendMyLocation(my_location);
+		//alert(my_location);
 	}
 
 	function onErrorWatch(error) {
