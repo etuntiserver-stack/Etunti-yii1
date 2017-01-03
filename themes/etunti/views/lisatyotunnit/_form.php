@@ -19,19 +19,18 @@
 
 	<?php echo $form->errorSummary($model); ?>
 
-<?php
-    $criteria=new CDbCriteria;
-    $criteria->order=" tekijan_nimi ";
-    $criteria->condition = " aktiivinen=1 ";
-?>
+
 
                 <ul class="list-group list-group-flush text-center">
                     <li class="list-group-item">
 	<div class="row">
 		<?php echo $form->labelEx($model,'tid'); ?>
-		<?php echo $form->dropDownList($model,'tid', 
-			CHtml::listData(Tyontekijat::model()->findAll($criteria), 'id', 'tekijan_nimi'), 
-			array('empty'=>'Valitse työntekijä','class'=>'form-control')) ?>
+		<?php 
+		   	$site = Yii::app()->createController('Site');
+			$list = $site[0]->tyontekiatArrayList(1);
+			echo $form->dropDownList($model,'tid', $list, 
+			array('empty'=>'Valitse työntekijä','class'=>'form-control')) 
+		?>
 		<?php echo $form->error($model,'tid'); ?>
 	</div>
                     </li>
