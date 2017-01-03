@@ -902,7 +902,7 @@ $(document).ready(function(){
 		$total_l = array();
 
        		$criteria = new CDbCriteria();
-        	$criteria->select = " COUNT(*) as count,tekijan_nimi";
+        	$criteria->select = " COUNT(*) as count,tid";
         	$criteria->order = " tekijan_nimi ";
         	$criteria->group = " tid ";
         	$criteria->condition = "  
@@ -918,7 +918,7 @@ $(document).ready(function(){
 		/* ////////////////////////// */
 
        		$criteria = new CDbCriteria();
-        	$criteria->select = " COUNT(*) as count,tekijan_nimi";
+        	$criteria->select = " COUNT(*) as count,tid";
         	$criteria->order = " COUNT(*) LIMIT 4 ";
         	$criteria->group = " tid ";
         	$criteria->condition = "  
@@ -928,7 +928,7 @@ $(document).ready(function(){
 		$tot = Toteutuneet::model()->findAll($criteria);
 		foreach($tot as $l)
 		{
-		    $total_l[] = array($l->tekijan_nimi,(int)$l->count);
+		    $total_l[] = array($this->etuSukunimi($l->tid),(int)$l->count);
 		}
 
 
