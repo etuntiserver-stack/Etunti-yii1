@@ -913,7 +913,7 @@ $(document).ready(function(){
 		$lu = Mobile::model()->findAll($criteria);
 		foreach($lu as $l)
 		{
-		    $total_l[] = array($l->tekijan_nimi,(int)$l->count);
+		    $total_l[] = array($this->etuSukunimi($l->tid),(int)$l->count);
 		}
 		/* ////////////////////////// */
 
