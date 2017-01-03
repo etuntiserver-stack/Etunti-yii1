@@ -36,7 +36,7 @@ if($suoritus == 'cronin_asiat')
 		elseif( isset($mob->id) and $mob->status == 3 )
 		$tilanne = '<span class="text-success">'.Yii::t('main', 'Lopetettu klo:').' '.date("H:i", strtotime($mob->loppui)).'</span>';
 
-		$ylittaneet .= '<tr><td><span class=""></span> '.$t->tekijan_nimi.'<br>'.$k->osoite.'</td><td>'.$dat->alku.'-'.$dat->loppu.'<br>'.$tilanne.'</td></tr>';
+		$ylittaneet .= '<tr><td><span class=""></span> '.$this->etuSukunimi($t->id).'<br>'.$k->osoite.'</td><td>'.$dat->alku.'-'.$dat->loppu.'<br>'.$tilanne.'</td></tr>';
 
 		}
 	  }
@@ -74,7 +74,7 @@ if($suoritus == 'cronin_asiat')
 		if( !isset($mob->id) )
 		$tilanne = '<span class="text-danger">'.Yii::t('main', 'Myöhässä:').' '.$this->sprint(time()-strtotime($dat->alku)).'</span>';
 
-		$myohastyneet .= '<tr><td><span class=""></span> '.$t->tekijan_nimi.'<br>'.$k->osoite.'</td><td>'.$dat->alku.'-'.$dat->loppu.'<br>'.$tilanne.'</td></tr>';
+		$myohastyneet .= '<tr><td><span class=""></span> '.$this->etuSukunimi($t->id).'<br>'.$k->osoite.'</td><td>'.$dat->alku.'-'.$dat->loppu.'<br>'.$tilanne.'</td></tr>';
 		}
 	  }
 	
