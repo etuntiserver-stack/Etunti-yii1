@@ -9,6 +9,7 @@
 	'tyontekijat'=>array(0=>'Työntekijät taulu',1=>'Luo työntekijä',2=>'Muokaa työntekijä',3=>'Poista työntekijä'),
 	'viestinta'=>array(0=>'Viestinta taulu',1=>'Luo viesti',2=>'Muokaa viesti',3=>'Poista viesti'),
 	'administrators'=>array(0=>'Järjestelmänvalvoja taulu',1=>'Luo järjestelmänvalvoja',2=>'Muokaa järjestelmänvalvoja',3=>'Poista järjestelmänvalvoja'),
+	'mallitiedostot'=>array(0=>null,1=>null,2=>'Mallitiedostot',3=>null),
  );
 
 	$tas = '';

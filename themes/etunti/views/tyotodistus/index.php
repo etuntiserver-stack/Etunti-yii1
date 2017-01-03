@@ -37,7 +37,17 @@
 
 	<h2 class="myBgColors p10"> <?php echo Yii::t('main', 'Työtodistus'); ?> 
 		<?php echo CHtml::link('',Yii::app()->request->baseUrl.'/index.php/tyotodistus/create',array('class'=>'btn btn-default fa fa-plus')); ?>
-		<button class="btn btn-default" data-toggle="collapse" data-target="#admin-form"><?php echo Yii::t('main', 'Extrat'); ?></button>
+
+	<!-- Mallitiedoston oikeus -->
+	<?php
+	   $checkOikeus = "mallitiedostot_2_".Yii::app()->user->adminStatus;
+	   $site = Yii::app()->createController('Site');
+	   $oikeusMallitiedoston = $site[0]->checkOikeusFields($checkOikeus);
+	?>
+	<?php if($oikeusMallitiedoston == 1) : ?>
+		<button class="btn btn-default" data-toggle="collapse" data-target="#admin-form"><?php echo Yii::t('main', 'Mallitiedosto'); ?></button>
+	<?php endif; ?>
+	<!-- Mallitiedoston oikeus -->
 	</h2>
 
 
