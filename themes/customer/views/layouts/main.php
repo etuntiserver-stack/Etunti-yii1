@@ -87,24 +87,67 @@ Yii::app()->clientScript->registerPackage('bootstrapCSS');
 
 <body>
 
-<style>
-@media screen and (min-width: 480px) {
-    aside#sidebar_left, .topbar-left, .navbar-branding {
-        display: none;
-    }
-    .tray-center {
-	width : 100%;
-    }
-}
-</style>
-
 <?php 
 	if(isset(Yii::app()->user->asiakas))
 	echo $this->renderPartial('//site/navbar'); 
 ?>
 <div class="container-fluid">
 	<?php echo $content; ?>
-</div><!-- page -->
+</div>
+
+
+<!-- Sovelluksen Footer -->
+<div id="sovelluksenFooter" style="display:none">
+
+<nav class="nav  navbar-fixed-bottom myBgColors">
+  <div class="container-fluid">
+    <ul class="nav navbar-nav">
+          <li>
+            <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/site/index" class="myBgColors">
+              <span class="fa fa-home"></span>
+              <span class="sidebar-title"><?php echo Yii::t('main', 'Etusivu'); ?></span>
+            </a>
+          </li>
+
+              <li>
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/vinkkiExtranet/create" class="myBgColors">
+                  <span class="fa fa-paper-plane-o"></span> 
+ 		  <span class="sidebar-title"><?php echo Yii::t('main', 'Lähetä vinkki'); ?></span>
+		</a>
+              </li>
+              <li>
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/palautteet/create" class="myBgColors">
+                  <span class="fa fa-paper-plane"></span> 
+		  <span class="sidebar-title"><?php echo Yii::t('main', 'Lähetä palaute'); ?></span>
+		</a>
+              </li>
+
+          <li>
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/asiakkaat/asiakas_tila" class="myBgColors">
+                  <span class="glyphicon glyphicon-home"></span> <?php echo Yii::t('main', 'Minun tiedot'); ?></a>
+          </li>
+          <li>
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/kohteet/asiakas_kohteet" class="myBgColors">
+                  <span class="glyphicon glyphicon-home"></span> <?php echo Yii::t('main', 'Minun kohteet'); ?></a>
+          </li>
+
+              <li>
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/asiakkaat/osoitteen_muutos" class="myBgColors">
+                  <span class="fa fa-gear"></span> 
+		  <span class="sidebar-title"><?php echo Yii::t('main', 'Osoitteen muutos'); ?></span>
+		</a>
+              </li>
+
+
+            </ul>
+          </li>
+
+    </ul>
+  </div>
+</nav>
+
+</div>
+<!-- Sovelluksen Footer -->
 
 
 <script>
