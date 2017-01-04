@@ -109,17 +109,17 @@ Yii::app()->clientScript->registerPackage('bootstrapCSS');
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a href="#" class="navbar-brand">Brand</a>
+            <a href="#" class="navbar-brand">ETUNTI</a>
         </div>
         <!-- Collection of nav links and other content for toggling -->
         <div id="navbarCollapse" class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
-                <li class="active"><a href="#">Home</a></li>
+                <li><a href="#">Home</a></li>
                 <li><a href="#">Profile</a></li>
                 <li><a href="#">Messages</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="#">Login</a></li>
+                <li><a href="#">TEST</a></li>
             </ul>
         </div>
     </div>
