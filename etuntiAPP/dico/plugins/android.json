@@ -9,6 +9,9 @@
     "installed_plugins": {
         "cordova-plugin-inappbrowser": {
             "PACKAGE_NAME": "fi.etunti.dico"
+        },
+        "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "fi.etunti.dico"
         }
     },
     "dependent_plugins": {}

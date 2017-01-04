@@ -92,14 +92,18 @@ class AsiakkaatController extends Controller
 		   $this->redirect(array('login','domain'=>$dm));
 	}
 
-	public function actionLogin($domain)
+	public function actionLogin()
 	{
+
 		Yii::app()->theme = 'customer';
-		$dm=Domainit::model()->find(" domain='".$domain."' ");
-		if(!isset($dm->id))
-		exit;
-		else
-		Yii::app()->user->setState('domain', $dm->domain);
+
+		if(isset($_POST['domain']))
+		{
+	  		Yii::app()->user->setState('domain', $_POST['domain']);
+			$dm=Domainit::model()->find(" domain='".Yii::app()->user->domain."' ");
+			if(isset($dm->paketti))
+			Yii::app()->user->setState('adminPaketti', $dm->paketti);
+		}
 
 		if(isset($_POST['sahkoposti']) and isset($_POST['salasana']))
 		{
@@ -112,17 +116,13 @@ class AsiakkaatController extends Controller
 			$model=Asiakkaat::model()->find($criteria);
 			if(isset($model->id))
 			{
-
-			    	if(isset($dm->paketti))
-			    	Yii::app()->user->setState('adminPaketti', $dm->paketti);
-
 				Yii::app()->user->setState('asiakas', $model->id);
 				$this->redirect(array('asiakas_tila','id'=>$model->id));
 			}
 		}
 
 
-		$this->render('login', array('dm'=>$dm));
+		$this->render('login');
 	}
 
 

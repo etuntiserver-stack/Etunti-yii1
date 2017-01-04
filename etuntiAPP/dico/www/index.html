@@ -13,7 +13,7 @@
     // device APIs are available
     //
     function onDeviceReady() {
-         var ref = window.open('http://etunti.fi/index.php/asiakkaat/login?domain=demo', '_blank', 'location=no');
+         var ref = window.open('http://etunti.fi/index.php/asiakkaat/login', '_blank', 'location=no');
          ref.addEventListener('loadstart', function(event) { /*alert('start: ' + event.url);*/ });
          ref.addEventListener('loadstop', function(event) { /*alert('stop: ' + event.url);*/ });
          ref.addEventListener('loaderror', function(event) { alert('error: ' + event.message); });
