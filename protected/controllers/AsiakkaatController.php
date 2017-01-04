@@ -121,6 +121,8 @@ class AsiakkaatController extends Controller
 			}
 		}
 
+		if(isset(Yii::app()->user->asiakas))
+				$this->redirect(array('asiakas_tila','id'=>Yii::app()->user->asiakas));
 
 		$this->render('login');
 	}
