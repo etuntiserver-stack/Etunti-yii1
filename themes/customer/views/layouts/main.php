@@ -96,56 +96,34 @@ Yii::app()->clientScript->registerPackage('bootstrapCSS');
 </div>
 
 
-<!-- Sovelluksen Footer -->
-<div id="sovelluksenFooter" style="display:none">
+<!-- Sovelluksen Footer -->style="display:none"
+<div id="sovelluksenFooter">
 
-<nav class="nav  navbar-fixed-bottom myBgColors">
-  <div class="container-fluid">
-    <ul class="nav navbar-nav">
-          <li>
-            <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/site/index" class="myBgColors">
-              <span class="fa fa-home"></span>
-              <span class="sidebar-title"><?php echo Yii::t('main', 'Etusivu'); ?></span>
-            </a>
-          </li>
-
-              <li>
-                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/vinkkiExtranet/create" class="myBgColors">
-                  <span class="fa fa-paper-plane-o"></span> 
- 		  <span class="sidebar-title"><?php echo Yii::t('main', 'Lähetä vinkki'); ?></span>
-		</a>
-              </li>
-              <li>
-                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/palautteet/create" class="myBgColors">
-                  <span class="fa fa-paper-plane"></span> 
-		  <span class="sidebar-title"><?php echo Yii::t('main', 'Lähetä palaute'); ?></span>
-		</a>
-              </li>
-
-          <li>
-                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/asiakkaat/asiakas_tila" class="myBgColors">
-                  <span class="glyphicon glyphicon-home"></span> <?php echo Yii::t('main', 'Minun tiedot'); ?></a>
-          </li>
-          <li>
-                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/kohteet/asiakas_kohteet" class="myBgColors">
-                  <span class="glyphicon glyphicon-home"></span> <?php echo Yii::t('main', 'Minun kohteet'); ?></a>
-          </li>
-
-              <li>
-                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/asiakkaat/osoitteen_muutos" class="myBgColors">
-                  <span class="fa fa-gear"></span> 
-		  <span class="sidebar-title"><?php echo Yii::t('main', 'Osoitteen muutos'); ?></span>
-		</a>
-              </li>
-
-
+<nav role="navigation" class="nav navbar-default navbar-fixed-bottom">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" data-target="#navbarCollapse" data-toggle="collapse" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a href="#" class="navbar-brand">Brand</a>
+        </div>
+        <!-- Collection of nav links and other content for toggling -->
+        <div id="navbarCollapse" class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="#">Home</a></li>
+                <li><a href="#">Profile</a></li>
+                <li><a href="#">Messages</a></li>
             </ul>
-          </li>
-
-    </ul>
-  </div>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="#">Login</a></li>
+            </ul>
+        </div>
+    </div>
 </nav>
-
 </div>
 <!-- Sovelluksen Footer -->
 
