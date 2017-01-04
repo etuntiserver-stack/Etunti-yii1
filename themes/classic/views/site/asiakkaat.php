@@ -23,17 +23,27 @@
 
 </span>
                         </h1>
-                        <hr>
 
-KOTA teksti
-			<hr>
+
+
+<!-- Asiakkaat -->
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-7">
+
+
+                        </div>
+                        <div class="col-md-5">
+				<img src="<?php echo Yii::app()->request->baseUrl; ?>/etusivuimg/siivouspalvelukota.png" class="img-thumbnail">
+				<p class="small">Kuvassa: Juha Mannermaa, Petteri Kotamäki ja Anna Kotamäki</p>
+                        </div>
+                    </div>
+		    <hr>
 
                     <!-- End Titles Heading -->
                     <div class="row">
                         <div class="col-md-12">
-                        
-<div class="text-center">
-<p>
+			<p>
 
                         <h3 class="title-subtitle text-left">Mitä asiakkaamme ovat Etunnilla saavuttaneet:</h3>
 
@@ -45,12 +55,16 @@ KOTA teksti
 
                         </ul>
 
-</p>
-</div>
-                        <hr>
-
+			</p>
                         </div>
                     </div>
+<!-- Asiakkaat -->
+
+
+                    <hr>
+
+
+
                 </div>
                 <!-- End Container-->
             </div>

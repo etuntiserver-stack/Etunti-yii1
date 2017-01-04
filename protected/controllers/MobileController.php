@@ -1492,7 +1492,12 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 
        		$criteria = new CDbCriteria();
 		$criteria->select = " id,tekijan_nimi ";
-        	$criteria->order = " tekijan_nimi "; //SUBSTR(LTRIM(tekijan_nimi), LOCATE(' ',LTRIM(tekijan_nimi)))
+
+		// <-- Return order etu ja sukunimella
+		$site = Yii::app()->createController('Site');
+		$criteria = $site[0]->etuSukunimiCriteria($criteria);
+		//     Return order etu ja sukunimella -->
+
         	$criteria->condition = " aktiivinen=1 "; 
 
 		if(Yii::app()->session['Tekija']){
