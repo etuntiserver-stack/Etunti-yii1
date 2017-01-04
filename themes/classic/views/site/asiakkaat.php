@@ -27,41 +27,30 @@
 
 
 <!-- Asiakkaat -->
-                    <hr>
-                    <div class="row">
-                        <div class="col-md-7">
-
-
-                        </div>
-                        <div class="col-md-5">
-				<img src="<?php echo Yii::app()->request->baseUrl; ?>/etusivuimg/siivouspalvelukota.png" class="img-thumbnail">
-				<p class="small">Kuvassa: Juha Mannermaa, Petteri Kotamäki ja Anna Kotamäki</p>
-                        </div>
-                    </div>
-		    <hr>
-
-                    <!-- End Titles Heading -->
-                    <div class="row">
-                        <div class="col-md-12">
-			<p>
-
-                        <h3 class="title-subtitle text-left">Mitä asiakkaamme ovat Etunnilla saavuttaneet:</h3>
-
-                        <ul class="stars text-left">
-			<li>Etunnilla avulla suunniteltiin yrityksessä uusiksi kohteiden siirtymäajat. Kolmessa kuukaudessa yritys säästi ohjelman avulla yhden työntekijän kuukausipalkan verran rahaa.</li>
-			<li>Etunnilla tehostettiin työajanseurantaa. Puolessa vuodessa yritys sai kolme prosenttia lisää liikevoittoa.</li>
-			<li>Etunnilla saatiin aikavarkaudet kitkettyä pois ja yritys säästi rahaa, kun tehdyistä tunneista maksettiin työntekijöille oikein.</li>
-			<li>Etunnilla tehtyjen kirjausten avulla on todistettu työaikakirjanpito päteväksi, kun asiakas väitti työntekijöiden huijanneen ja häntä veloitettiin tunneista, joita ei asiakkaan mukaan ollut. Asiakas vei asian kuluttajariitalautakuntaan, mutta yritys todisti siivoojien olleen kohteessa Etunnin RFID-tarran ja sähköisen työajanseurannan avulla.</li>
-
-                        </ul>
-
-			</p>
-                        </div>
-                    </div>
+<?php
+	$asiakkaat = AsiakkaatSivu::model()->findAll();
+	foreach($asiakkaat as $item)
+	echo $item->html_content;
+?>
 <!-- Asiakkaat -->
 
 
-                    <hr>
+<hr>
+
+<div class="row">
+ <div class="col-md-12">
+  <p>
+   <h3 class="title-subtitle text-left">Mitä asiakkaamme ovat Etunnilla saavuttaneet:</h3>
+
+   <ul class="stars text-left">
+   <li>Etunnilla avulla suunniteltiin yrityksessä uusiksi kohteiden siirtymäajat. Kolmessa kuukaudessa yritys säästi ohjelman avulla yhden työntekijän kuukausipalkan verran rahaa.</li>
+   <li>Etunnilla tehostettiin työajanseurantaa. Puolessa vuodessa yritys sai kolme prosenttia lisää liikevoittoa.</li>
+   <li>Etunnilla saatiin aikavarkaudet kitkettyä pois ja yritys säästi rahaa, kun tehdyistä tunneista maksettiin työntekijöille oikein.</li>
+   <li>Etunnilla tehtyjen kirjausten avulla on todistettu työaikakirjanpito päteväksi, kun asiakas väitti työntekijöiden huijanneen ja häntä veloitettiin tunneista, joita ei asiakkaan mukaan ollut. Asiakas vei asian kuluttajariitalautakuntaan, mutta yritys todisti siivoojien olleen kohteessa Etunnin RFID-tarran ja sähköisen työajanseurannan avulla.</li>
+   </ul>
+   </p>
+  </div>
+ </div>
 
 
 

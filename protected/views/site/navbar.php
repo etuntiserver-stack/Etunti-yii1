@@ -54,6 +54,7 @@
         	<li><?php echo CHtml::link(Yii::t('main', 'Blogit'),array('/blog/admin')); ?></li>
         	<li><?php echo CHtml::link(Yii::t('main', 'Blogin kommentit'),array('/blogComments/admin')); ?></li>
         	<li><?php echo CHtml::link(Yii::t('main', 'Ohjevideot'),array('/ohjevideot/admin')); ?></li>
+        	<li><?php echo CHtml::link(Yii::t('main', 'Asiakkaat'),array('/asiakkaatSivu/admin')); ?></li>
           </ul>
         </li>
 	<?php endif; ?>
@@ -136,6 +137,7 @@
         	<li><?php echo CHtml::link(Yii::t('main', 'Työvuorot'),array('/tyovuoroot/index'),array('target'=>'_blank')); ?></li>
         	<li><?php echo CHtml::link(Yii::t('main', 'Työvuorojen lähetys'),array('/tyovuoroot/viikkottain')); ?></li>
         	<li><?php echo CHtml::link(Yii::t('main', 'Kuukausinäkymä'),array('/tyovuoroot/kk')); ?></li>
+
 	        <li role="separator" class="divider"></li>
         	<li><?php echo CHtml::link(Yii::t('main', 'Vuosilomat'),array('/vuosilomat/index')); ?></li>
           </ul>
