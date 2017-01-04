@@ -1763,7 +1763,12 @@ class TyovuorootController extends Controller
 
 		if(Yii::app()->session['tyontekijat'])
 		{
-        		$criteria->order = "tekijan_nimi";
+
+		// <-- Return order etu ja sukunimella
+		$site = Yii::app()->createController('Site');
+		$criteria = $site[0]->etuSukunimiCriteria($criteria);
+		//     Return order etu ja sukunimella -->
+
         		$criteria->select = "id,tekijan_nimi";
         		$criteria->condition = " aktiivinen = '1' ";
 

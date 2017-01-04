@@ -214,7 +214,12 @@ class TyontekijatController extends Controller
 	public function actionVerotustiedot()
 	{
        		$criteria = new CDbCriteria();
-	        $criteria->order = "  id DESC ";
+
+		// <-- Return order etu ja sukunimella
+		$site = Yii::app()->createController('Site');
+		$criteria = $site[0]->etuSukunimiCriteria($criteria);
+		//     Return order etu ja sukunimella -->
+
 
 		if(isset($_POST['aktiivinen']) and $_POST['aktiivinen'] != 'kaikki' and !empty($_POST['aktiivinen']))
 	        $criteria->addCondition (" aktiivinen ='".(int)$_POST['aktiivinen']."' ");
@@ -471,7 +476,11 @@ class TyontekijatController extends Controller
 	//  Oikeudet -->
 
        		$criteria = new CDbCriteria();
-	        $criteria->order = "  id DESC ";
+
+		// <-- Return order etu ja sukunimella
+		$site = Yii::app()->createController('Site');
+		$criteria = $site[0]->etuSukunimiCriteria($criteria);
+		//     Return order etu ja sukunimella -->
 
 		if(isset($_POST['aktiivinen']) and $_POST['aktiivinen'] != 'kaikki')
 	        $criteria->addCondition (" aktiivinen ='".(int)$_POST['aktiivinen']."' ");

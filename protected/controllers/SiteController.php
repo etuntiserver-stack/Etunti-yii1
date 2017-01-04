@@ -923,6 +923,7 @@ $(document).ready(function(){
         	$criteria->group = " tid ";
         	$criteria->condition = "  
 			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d')  = CURDATE()
+
 		";
 
 		$tot = Toteutuneet::model()->findAll($criteria);
@@ -1149,7 +1150,11 @@ $(document).ready(function(){
 		$return = '';
 
 		$criteria = new CDbCriteria();
-		$criteria->order = " tekijan_nimi ";
+
+		// <-- Return order etu ja sukunimella
+		$criteria = $this->etuSukunimiCriteria($criteria);
+		//     Return order etu ja sukunimella -->
+
 		if($aktiivinen == 1)
 		$criteria->condition = " aktiivinen=1 ";
 
@@ -1177,10 +1182,10 @@ $(document).ready(function(){
 		$asetukset = Asetukset::model()->findByPk(1);
 
 		$criteria = new CDbCriteria();
-		if($asetukset->tyontekijan_etunimi_sukunimi_jarjestys == 0)
-			$criteria->order = " tekijan_nimi ";
-		else
-			$criteria->order = " sukunimi ";
+
+		// <-- Return order etu ja sukunimella
+		$criteria = $this->etuSukunimiCriteria($criteria);
+		//     Return order etu ja sukunimella -->
 
 		if($aktiivinen == 1)
 			$criteria->condition = " aktiivinen=1 ";
@@ -1252,6 +1257,18 @@ $(document).ready(function(){
 		}
 
 		return $return;
+	}
+
+	public function etuSukunimiCriteria($criteria) // $this->etuSukunimi($model->id)
+	{
+
+		$asetukset = Asetukset::model()->findByPk(1);
+		if($asetukset->tyontekijan_etunimi_sukunimi_jarjestys == 0)
+		$criteria->order = " tekijan_nimi ";
+		else
+		$criteria->order = " sukunimi ";
+
+		return $criteria;
 	}
 
 }
