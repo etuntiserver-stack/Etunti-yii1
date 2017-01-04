@@ -89,7 +89,7 @@
 
 		// <-- Return order etu ja sukunimella
 		$site = Yii::app()->createController('Site');
-		$criteriaT = $site[0]->etuSukunimiCriteria($criteria);
+		$criteriaT = $site[0]->etuSukunimiCriteria($criteriaT);
 		//     Return order etu ja sukunimella -->
 
 	   if(!isset($_GET['kaikki_tyontekijat']))
