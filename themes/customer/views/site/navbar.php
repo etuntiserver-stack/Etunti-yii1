@@ -292,6 +292,7 @@ echo '<input type="hidden" id="curpage" value="'.$curpage.'">';
       </div>
       <!-- End: Topbar-Dropdown -->
 
+
       <!-- Start: Topbar -->
       <header id="topbar" class="hidden">
         <div class="topbar-left">

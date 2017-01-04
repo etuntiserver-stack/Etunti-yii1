@@ -8,6 +8,7 @@ $head = $model->osoite;
 
 ?>
 
+
         <!-- begin: .tray-center -->
         <div class="tray-center">
 
@@ -16,51 +17,35 @@ $head = $model->osoite;
 	   <?php echo $this->VinkiTahdet($model->id); ?>   
 
 
+	<div class="admin-form">
+	 <div class="panel heading-border">
+          <div class="panel-body">
 
-  <div class="panel heading-border">
-   <div class="panel-body">
+	   <div class="row">
+	     <?php echo Yii::t('main', 'Yritys'); ?> : <b><?php echo $model->yrityksen_nimi; ?></b>
+	   </div>
+	   <div class="row">
+	     <?php echo Yii::t('main', 'Yhteyshenkilö'); ?>: <b><?php echo $model->yhteyshenkilo; ?></b>
+	   </div>
+	   <div class="row">
+	     <?php echo Yii::t('main', 'Toimipaikka'); ?>: <b><?php echo $model->kaupunki; ?></b>
+	   </div>
+	   <div class="row">
+	     <?php echo Yii::t('main', 'Osoite'); ?>: <b><?php echo $model->osoite; ?></b>
+	   </div>
+	   <div class="row">
+	     <?php echo Yii::t('main', 'Postinumero'); ?>: <b><?php echo $model->postinumero; ?></b>
+	   </div>
+	   <div class="row">
+	     <?php echo Yii::t('main', 'Sähköposti'); ?>: <b><?php echo $model->sahkoposti; ?></b>
+	   </div>
+	   <div class="row">
+	     <?php echo Yii::t('main', 'Puhelin'); ?>: <b><?php echo $model->puhelin; ?></b>
+	   </div>
 
-<div class="table-responsive">
-  <table class="table table-striped" id="mobileTable">
-  <thead class="myBgColors">
-  <tr>
-  <th><?php echo Yii::t('main', 'Yritys'); ?></th>
-  <th><?php echo Yii::t('main', 'Yhteyshenkilö'); ?></th>
-  <th><?php echo Yii::t('main', 'Toimipaikka'); ?></th>
-  <th><?php echo Yii::t('main', 'Osoite'); ?></th>
-  <th><?php echo Yii::t('main', 'Postinumero'); ?></th>
-  <th><?php echo Yii::t('main', 'Sähköposti'); ?></th>
-  <th><?php echo Yii::t('main', 'Puhelin'); ?></th>
-  </tr>
-  </thead>
-<tr>
-	<td>
-		<?php echo $model->yrityksen_nimi; ?>
-	</td>
-	<td>
-		<?php echo $model->yhteyshenkilo; ?>
-	</td>
-	<td>
-		<?php echo $model->kaupunki; ?>
-	</td>
-	<td>
-		<?php echo $model->osoite; ?>
-	</td>
-	<td>
-		<?php echo $model->postinumero; ?>
-	</td>
-	<td>
-		<?php echo $model->sahkoposti; ?>
-	</td>
-	<td>
-		<?php echo $model->puhelin; ?>
-	</td>
-</tr>
-  </table>
-</div>
-
-   </div>
-  </div>
+	  </div>
+	 </div>
+	</div>
 
 
 

@@ -3788,6 +3788,7 @@ not([type="multiple"]) {
 .admin-form.theme-alert .select-multiple select:hover,
 .admin-form.theme-alert .gui-input:hover ~ .input-footer,
 .admin-form.theme-alert .file .gui-file:hover + .gui-input,
+
 .admin-form.theme-alert .gui-textarea:hover ~ .input-footer {
   border-color: #ac92ec;
 }

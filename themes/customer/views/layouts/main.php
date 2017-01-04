@@ -87,6 +87,17 @@ Yii::app()->clientScript->registerPackage('bootstrapCSS');
 
 <body>
 
+<style>
+@media screen and (min-width: 480px) {
+    aside#sidebar_left, .topbar-left, .navbar-branding {
+        display: none;
+    }
+    .tray-center {
+	width : 100%;
+    }
+}
+</style>
+
 <?php 
 	if(isset(Yii::app()->user->asiakas))
 	echo $this->renderPartial('//site/navbar'); 
