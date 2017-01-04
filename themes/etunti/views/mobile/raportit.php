@@ -86,7 +86,12 @@
        <div class="col-sm-6">
       	<?php
 	   $criteriaT = new CDbCriteria();
-	   $criteriaT->order = " tekijan_nimi ";
+
+		// <-- Return order etu ja sukunimella
+		$site = Yii::app()->createController('Site');
+		$criteriaT = $site[0]->etuSukunimiCriteria($criteria);
+		//     Return order etu ja sukunimella -->
+
 	   if(!isset($_GET['kaikki_tyontekijat']))
 	   $criteriaT->condition = " aktiivinen=1 ";
 	   $tlist = Tyontekijat::model()->findAll($criteriaT);
