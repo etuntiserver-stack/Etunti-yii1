@@ -118,10 +118,13 @@ h1 {
   color: #fff;
 }
 
-.head{
+#header{
   margin-top:10px;
-  //border-bottom:1px #ccc solid;
+  border-bottom:1px #ccc solid;
   margin-bottom: 10px;
+}
+#loginLomake{
+  margin-top: 30px;
 }
 /*
 #version{

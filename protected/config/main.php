@@ -204,6 +204,12 @@ return array(
         array('api/paivita_tiedot', 'pattern'=>'api/<model:\w+>/paivita_tiedot', 'verb'=>'POST'),
         array('api/check_admin', 'pattern'=>'api/<model:\w+>/check_admin', 'verb'=>'POST'),
         array('api/adminkalut', 'pattern'=>'api/<model:\w+>/adminkalut', 'verb'=>'POST'),
+
+	// <-- DICO
+        array('dico/login', 'pattern'=>'dico/<model:\w+>/login', 'verb'=>'POST'),
+        array('dico/toteutuneet', 'pattern'=>'dico/<model:\w+>/toteutuneet', 'verb'=>'POST'),
+	//     DICO -->
+
         //array('api/update', 'pattern'=>'api/<model:\w+>/<id:\d+>', 'verb'=>'PUT'),
         //array('api/updaterow', 'pattern'=>'api/<model:\w+>/updaterow/<id:\d+>', 'verb'=>'POST'),
         //array('api/delete', 'pattern'=>'api/<model:\w+>/<id:\d+>', 'verb'=>'DELETE'),

@@ -1,8 +1,9 @@
 <?php
-
+/*
 ?>
 <br><br><br><br>
 
+    <!-- /container -->
     <div class="container-fluid">
      <div class="col-sm-4 col-sm-offset-4">
       <form action="#" class="form-signin" method="POST">
@@ -18,6 +19,7 @@
         <button class="btn btn-lg btn-primary btn-block" type="submit"><?php echo Yii::t('main', 'Kirjaudu sisään'); ?></button>
       </form>
      </div>
-    </div> <!-- /container -->
+    </div> 
+    <!-- /container -->
 
 
