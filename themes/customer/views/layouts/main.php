@@ -95,6 +95,23 @@ Yii::app()->clientScript->registerPackage('bootstrapCSS');
 	<?php echo $content; ?>
 </div>
 
+<script>
+$(document).ready(function(){
+
+	$('#sidebar_left').show();
+
+});
+
+/*
+$(function() {
+
+	$('#sidebar_left, .navbar-branding').css({'display':'none'});
+	$('#sidebar_left, .navbar-branding').css({'display':'none'});
+	$('#content_wrapper').css({'margin':'0'});
+
+});
+*/
+</script>
 
 <!-- Sovelluksen Footer -->
 <div id="sovelluksenFooter" style="display:none">
@@ -116,7 +133,7 @@ Yii::app()->clientScript->registerPackage('bootstrapCSS');
             <ul class="nav navbar-nav">
 
 		<li>
-            	<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/site/index">
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/asiakkaat/asiakas_tila">
               	<span class="fa fa-home"></span>
               	<span class="sidebar-title"><?php echo Yii::t('main', 'Etusivu'); ?></span>
             	</a>
@@ -133,12 +150,6 @@ Yii::app()->clientScript->registerPackage('bootstrapCSS');
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/palautteet/create">
                 <span class="fa fa-paper-plane"></span> 
 		<span class="sidebar-title"><?php echo Yii::t('main', 'Lähetä palaute'); ?></span>
-		</a>
-              	</li>
-
-              	<li>
-                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/asiakkaat/asiakas_tila">
-                <span class="glyphicon glyphicon-home"></span> <?php echo Yii::t('main', 'Minun tiedot'); ?>
 		</a>
               	</li>
 

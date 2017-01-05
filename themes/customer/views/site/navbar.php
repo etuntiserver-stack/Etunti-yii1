@@ -209,7 +209,7 @@ echo '<input type="hidden" id="curpage" value="'.$curpage.'">';
     <!-- End: Header -->
 
     <!-- Start: Sidebar -->
-    <aside id="sidebar_left" class="">
+    <aside id="sidebar_left" class="" style="display:none">
 
       <!-- Start: Sidebar Left Content -->
       <div class="sidebar-left-content nano-content">
