@@ -25,7 +25,7 @@
                     <div class="row">
                         <div class="col-md-12">
                         
-<div class="text-center">
+<div class="text-center lead">
 <p>
 
 
@@ -35,7 +35,7 @@ Idea Etunnista syntyi, kun eräs yritys ei löytänyt markkinoilta sopivaa ohjel
  
 
 
-<p class="text-center">
+<p class="text-center lead">
 			<div class="row">
                         <ul class="stars">
 			<li></li>
@@ -58,7 +58,7 @@ Etunti on ohjelma, joka kehittyy koko ajan asiakkaiden mukana ja asiakkailta saa
 </div>
 <br>
 
-                        <h1 class="title-subtitle text-center">Digistenin arvot, missio ja visio
+                        <h1 class="title-subtitle text-center lead">Digistenin arvot, missio ja visio
 			<span>Arvot – Luotettavasti, Nopeasti, Ekologisesti</span>
                         </h1>
 
@@ -67,7 +67,7 @@ Etunti on ohjelma, joka kehittyy koko ajan asiakkaiden mukana ja asiakkailta saa
 Arvomme ovat asiakaslähtöiset. Ymmärrämme, tuemme ja autamme asiakkaitamme ja haluamme toimia luetettavana kumppanina yritystoiminnan kehityksessä ekologisesti. Ekologisuus korostuu, kun Etunnin ansiosta ei tarvitse erikseen käydä hyväksyttämässä työtunteja ja matka-aikoja voidaan lyhentää tehokkaan työvuorosuunnittelun ansiosta. Sähköisen ohjelman ansiosta paperityötä tulee huomattavasti vähemmän, mitkä kaikki yhdessä tukevat meidän ekologisia arvoja.
 </p>
  
-			<h1 class="title-subtitle text-center">
+			<h1 class="title-subtitle text-center lead">
 			<span>Missio</span>
 			</h1>
  
