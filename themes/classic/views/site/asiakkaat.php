@@ -38,11 +38,11 @@
 <hr>
 
 <div class="row">
- <div class="col-md-12">
+ <div class="col-md-12 lead">
   <p>
    <h3 class="title-subtitle text-left">Mitä asiakkaamme ovat Etunnilla saavuttaneet:</h3>
 
-   <ul class="stars text-left">
+   <ul class="stars text-left lead">
    <li>Etunnilla avulla suunniteltiin yrityksessä uusiksi kohteiden siirtymäajat. Kolmessa kuukaudessa yritys säästi ohjelman avulla yhden työntekijän kuukausipalkan verran rahaa.</li>
    <li>Etunnilla tehostettiin työajanseurantaa. Puolessa vuodessa yritys sai kolme prosenttia lisää liikevoittoa.</li>
    <li>Etunnilla saatiin aikavarkaudet kitkettyä pois ja yritys säästi rahaa, kun tehdyistä tunneista maksettiin työntekijöille oikein.</li>
