@@ -1,5 +1,6 @@
 <?php
 
+echo Yii::app()->request->getPost('laskutettu');
 ?>
 
         <!-- begin: .tray-center -->
@@ -140,12 +141,12 @@
 			     <?php 
 			     if(isset(Yii::app()->session['laskutettu']) and Yii::app()->session['laskutettu'] == '1')
 			     echo '<option value="1">Laskutettu</option>';
-			     if(isset(Yii::app()->session['laskutettu']) and Yii::app()->session['laskutettu'] == '0')
+			     if(isset(Yii::app()->session['laskutettu']) and Yii::app()->session['laskutettu'] == '3')
 			     echo '<option value="0">Laskuttamatta</option>';
 			     ?>
 			     <option value=""><?php echo Yii::t('main', 'Tilanne'); ?></option>
 			     <option value="1"><?php echo Yii::t('main', 'Laskutettu'); ?></option>
-			     <option value="0"><?php echo Yii::t('main', 'Laskuttamatta'); ?></option>
+			     <option value="3"><?php echo Yii::t('main', 'Laskuttamatta'); ?></option>
 			    </select>
                             <i class="arrow double"></i>
                             </label>

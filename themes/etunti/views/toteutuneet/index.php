@@ -177,6 +177,13 @@ function dateDiff($start, $end) {
 
 		$dateDiff = dateDiff($from, $to);
 ?>
+  
+  <div id="forTulostus">
+	<h3>
+		<?php echo $this->etuSukunimi(Yii::app()->session['tekija']); ?>, 
+		<?php echo date("d.m.Y",strtotime(Yii::app()->session['from'])); ?> - <?php echo date("d.m.Y",strtotime(Yii::app()->session['to'])); ?>
+	</h3>
+  </div>
 
   <div class="panel heading-border">
    <div class="panel-body">

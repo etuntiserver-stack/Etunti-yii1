@@ -52,6 +52,7 @@ $(document).delegate(".tuntienHyvaksyntaTaulu","click",function(){
         'padding:3px 5px;' +
         '}' +
         '</style>';
+    htmlToPrint += $('#forTulostus').html();
     htmlToPrint += divToPrint.outerHTML;
     newWin = window.open("");
     newWin.document.write(htmlToPrint);

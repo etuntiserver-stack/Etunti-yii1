@@ -764,7 +764,7 @@ function num($val){
 		if(isset(Yii::app()->session['laskutettu']) and Yii::app()->session['laskutettu'] == '1')
 	        $criteria->addCondition (" laskutettu = '1' ");
 
-		if(isset(Yii::app()->session['laskutettu']) and Yii::app()->session['laskutettu'] == '0')
+		if(isset(Yii::app()->session['laskutettu']) and Yii::app()->session['laskutettu'] == '3')
 	        $criteria->addCondition (" laskutettu = '0' ");
 
 
