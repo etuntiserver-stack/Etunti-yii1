@@ -96,8 +96,8 @@ Yii::app()->clientScript->registerPackage('bootstrapCSS');
 </div>
 
 
-<!-- Sovelluksen Footer -->style="display:none"
-<div id="sovelluksenFooter">
+<!-- Sovelluksen Footer -->
+<div id="sovelluksenFooter" style="display:none">
 
 <nav role="navigation" class="nav navbar-default navbar-fixed-bottom">
     <div class="container-fluid">
@@ -114,12 +114,50 @@ Yii::app()->clientScript->registerPackage('bootstrapCSS');
         <!-- Collection of nav links and other content for toggling -->
         <div id="navbarCollapse" class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
-                <li><a href="#">Home</a></li>
-                <li><a href="#">Profile</a></li>
-                <li><a href="#">Messages</a></li>
+
+		<li>
+            	<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/site/index">
+              	<span class="fa fa-home"></span>
+              	<span class="sidebar-title"><?php echo Yii::t('main', 'Etusivu'); ?></span>
+            	</a>
+          	</li>
+
+              	<li>
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/vinkkiExtranet/create">
+                <span class="fa fa-paper-plane-o"></span> 
+ 		<span class="sidebar-title"><?php echo Yii::t('main', 'Lähetä vinkki'); ?></span>
+		</a>
+              	</li>
+
+              	<li>
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/palautteet/create">
+                <span class="fa fa-paper-plane"></span> 
+		<span class="sidebar-title"><?php echo Yii::t('main', 'Lähetä palaute'); ?></span>
+		</a>
+              	</li>
+
+              	<li>
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/asiakkaat/asiakas_tila">
+                <span class="glyphicon glyphicon-home"></span> <?php echo Yii::t('main', 'Minun tiedot'); ?>
+		</a>
+              	</li>
+
+              	<li>
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/kohteet/asiakas_kohteet">
+                <span class="glyphicon glyphicon-home"></span> <?php echo Yii::t('main', 'Minun kohteet'); ?>
+		</a>
+          	</li>
+
+              	<li>
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/asiakkaat/osoitteen_muutos">
+                <span class="fa fa-gear"></span> 
+		<span class="sidebar-title"><?php echo Yii::t('main', 'Osoitteen muutos'); ?></span>
+		</a>
+          	</li>
+
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="#">TEST</a></li>
+                <li><a href="#">Oikealla</a></li>
             </ul>
         </div>
     </div>
