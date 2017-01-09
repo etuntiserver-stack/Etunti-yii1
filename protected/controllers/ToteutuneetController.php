@@ -228,7 +228,7 @@ class ToteutuneetController extends Controller
 $xml = '
 <root>
   <workday>
-    <date format="ansi" method="'.$method.'">'.date("Y-m-d").'</date>
+    <date format="ansi" method="'.$method.'">'.date("Y-m-d", strtotime($model->pvm)).'</date>
     <employeeidentifier type="number" defaultdimensionhandlingtype="usedefault">'.$model->tid.'</employeeidentifier>
     <workdayhour>
       <hours>'.$tunti.'</hours>
