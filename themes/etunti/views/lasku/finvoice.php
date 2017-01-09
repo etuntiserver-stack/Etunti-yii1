@@ -7,6 +7,14 @@ if(isset($_GET['id']))
 
 if(isset($_GET['kopio'])){
 
+     $criteria = new CDbCriteria();
+     $criteria->order = " laskunumero!='' DESC,id DESC ";
+     $ln = 0;
+     $vm = Lasku::model()->find($criteria);
+     if(isset($vm->id) and empty($model->laskunumero))
+     $ln = $vm->laskunumero+1;
+
+
      $tapahtumapvm = date("Y-m-d H:i:s");
      $l = Lasku::model()->findbypk($id);
 
@@ -14,8 +22,8 @@ if(isset($_GET['kopio'])){
      $uusi->attributes = $l->attributes;
      $uusi->paivays = date("Y-m-d");
      $uusi->erapaiva = date("Y-m-d", strtotime("+".$l->maksuehto." day"));
-     $uusi->tilanne = 0;
-     $uusi->laskunumero = '';
+     $uusi->tilanne = '0';
+     $uusi->laskunumero = $ln;
      $uusi->viitenumero = '';
      $uusi->trust_jobid = '';
      $uusi->save();
