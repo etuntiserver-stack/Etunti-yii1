@@ -3,13 +3,10 @@ $(document).ready(function(){
 
   if(localStorage.getItem('loginOK'))
   {
-	var loginArr = JSON.parse(localStorage.getItem('loginOK')).loginOK[0];
-	var asiakasID = JSON.parse(localStorage.getItem('loginOK')).loginOK['asiakasID'];
-	console.log(asiakasID);
 
-
+	console.log(loginArr);
         $.ajax({
-           url: url+'/toteutuneet?domain='+loginArr['domain'],
+           url: url+'/toteutuneet?domain='+domain,
 	   type:'POST',
  	   data: {loginArr, asiakasID : asiakasID},
            success: function(data){
@@ -23,7 +20,6 @@ $(document).ready(function(){
         	console.log(xhr.responseText);
     	   }
         });
-
 
   }
     

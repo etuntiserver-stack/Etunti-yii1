@@ -39,7 +39,7 @@ public function actionLogin($domain)
         case 'asiakkaat':
 
 		$return			= array();
-		if(isset($_POST['tunnus']) and isset($_POST['salasana']))
+		if($this->kirjautuminen($_POST['tunnus'], $_POST['salasana']) == true)
 		{
 			$criteria=new CDbCriteria;
 			$criteria->condition = " 
@@ -76,15 +76,17 @@ public function actionToteutuneet($domain)
         case 'asiakkaat':
 
 		$return = '';
-		$model=Asiakkaat::model()->findByPk($_POST['asiakasID']);
-		if(isset($model->id))
+		if($this->kirjautuminen($_POST['tunnus'], $_POST['salasana']) == true)
 		{
-			Yii::app()->theme = 'etunti';
-			$return .= $this->renderPartial('//asiakkaat/tunnin_historia', array('id'=>$model->id), true);
+			$model=Asiakkaat::model()->findByPk($_POST['asiakasID']);
+			if(isset($model->id))
+			{
+				Yii::app()->theme = 'etunti';
+				$return .= $this->renderPartial('//asiakkaat/tunnin_historia', array('id'=>$model->id), true);
+			}
+
 		}
-
-		$this->_sendResponse(200, CJSON::encode($return));
-
+			$this->_sendResponse(200, CJSON::encode($return));
             break;
         default:
             // Model not implemented error
@@ -96,7 +98,26 @@ public function actionToteutuneet($domain)
 
 }
 
-//$this->render('update', array('model'=>$model));
+
+
+	protected function kirjautuminen($tunnus, $salasana)
+	{
+
+		$criteria=new CDbCriteria;
+		$criteria->condition = " 
+			sahkoposti='".$_POST['tunnus']."' 
+			AND salasana='".$_POST['salasana']."'
+			AND salasana!=''
+		";
+		$model=Asiakkaat::model()->find($criteria);
+		if(isset($model->id))
+		{
+			return true;
+		} else {
+			return false;
+		}
+
+	}
 
 
 

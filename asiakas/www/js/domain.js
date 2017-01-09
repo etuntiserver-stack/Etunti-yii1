@@ -22,18 +22,17 @@ $(document).ready(function(){
     var salasana = '';
 
 
-    if(localStorage.getItem('domain'))
-	  domain=localStorage.getItem('domain');
-    if(localStorage.getItem('tunnus'))
-	  email=localStorage.getItem('tunnus');
-    if(localStorage.getItem('salasana'))
-	  salasana=localStorage.getItem('salasana');
-
-
+    if(localStorage.getItem('loginOK'))
+    {
+	var loginArr = JSON.parse(localStorage.getItem('loginOK')).loginOK[0];
+	var asiakasID = JSON.parse(localStorage.getItem('loginOK')).loginOK['asiakasID'];
+	
+	domain = loginArr['domain'];
+    }
 
     // <-- Palvelin
-    var server = 'https://etunti.fi/';
-    //var server = '../../';
+    //var server = 'https://etunti.fi/';
+    var server = '../../';
     var url = server+"index.php/dico/asiakkaat";
     var versio = "";
     // Palvelin -->
@@ -90,9 +89,7 @@ $(document).ready(function(){
    $("body").ready(function(){
 
        $("#footlinks").html(
-	'<div class="row">'+
-	'<footer id="footer">'+
-	'<div class="navbar navbar-default navbar-fixed-bottom">' +
+	'<div class="navbar navbar-default navbar-fixed-bottom myBgColors">' +
 	'<div class="" id="footer-body">' +
 	    '<center>' +
 		'<a href="#" id="home"><h2 class="glyphicon glyphicon-home"></h2></a>&nbsp;&nbsp;&nbsp;' +
@@ -101,8 +98,6 @@ $(document).ready(function(){
 		'<a href="#" id="exitPainike" onclick="exitFromApp()"></a>' +
 	    '</center>' +
 	'</div>' +
-	'</div>' +
-	'</footer>' +
 	'</div>');
 
    });

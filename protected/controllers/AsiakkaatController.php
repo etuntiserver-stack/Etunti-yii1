@@ -517,7 +517,7 @@ $xml = '
 <root>
   <customer>
     <customerbaseinformation>
-      <internalidentifier>'.$model->id.'</internalidentifier>
+      <internalidentifier>'.$model->asiakasnumero.'</internalidentifier>
       <externalidentifier>'.$model->y_tunnus.'</externalidentifier>
       <name>'.$name.'</name>
       <nameextension></nameextension>

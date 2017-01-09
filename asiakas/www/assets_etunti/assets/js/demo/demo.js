@@ -251,9 +251,9 @@ $("#notiFyClick").click(function(){
         var settingsParse = JSON.parse(themeGet);
         settingsObj = settingsParse;
 
-
+/*
         $.ajax({
-           url: location.protocol + "//" + location.host + '/index.php/site/ulkonaky',
+           url: url+'/login?domain='+domain,
            type: "POST",
 	   async: false,
 	   data: { getSkins : "true" },
@@ -267,6 +267,7 @@ $("#notiFyClick").click(function(){
 		settingsObj['headerSkin'] = data['headerSkin'];
            }
         });
+*/
 
 
 	$('.myBgColors').removeClass(headerSkins);
