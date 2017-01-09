@@ -50,7 +50,13 @@ public function actionLogin($domain)
 			$model=Asiakkaat::model()->find($criteria);
 			if(isset($model->id))
 			{
-				$return['loginOK'] = array('asiakasID'=>$model->id,$_POST);
+				$asiakasNimi = '';
+				if(!empty($model->yrityksen_nimi))
+				$asiakasNimi = $model->yrityksen_nimi;
+				elseif(empty($model->yrityksen_nimi) and !empty($model->yhteyshenkilo))
+				$asiakasNimi = $model->yhteyshenkilo;
+
+				$return['loginOK'] = array('asiakasID'=>$model->id, 'asiakasNimi'=>$asiakasNimi, $_POST);
 			}
 		}
 

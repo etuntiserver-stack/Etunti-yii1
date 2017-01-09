@@ -7,13 +7,14 @@ if(isset($_GET['id']))
 
 if(isset($_GET['kopio'])){
 
+     // <-- Viimeinen laskunumero taulusta
      $criteria = new CDbCriteria();
      $criteria->order = " laskunumero!='' DESC,id DESC ";
      $ln = 0;
      $vm = Lasku::model()->find($criteria);
      if(isset($vm->id) and empty($model->laskunumero))
      $ln = $vm->laskunumero+1;
-
+     // Viimeinen laskunumero taulusta -->
 
      $tapahtumapvm = date("Y-m-d H:i:s");
      $l = Lasku::model()->findbypk($id);

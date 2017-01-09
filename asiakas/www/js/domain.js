@@ -6,6 +6,7 @@ $(document).ready(function(){
     {
 	loginArr = JSON.parse(localStorage.getItem('loginOK')).loginOK;
 	$('#laatikot').show(370);
+	$('#asiakasNimi').html(loginArr['asiakasNimi']);
 
     } else {
 	$('#loginLomake').show(370);
@@ -87,21 +88,6 @@ $(document).ready(function(){
   //  Login -->
 
 
-   $("body").ready(function(){
-
-       $("#footlinks").html(
-	'<div class="navbar navbar-default navbar-fixed-bottom myBgColors">' +
-	'<div class="" id="footer-body">' +
-	    '<center>' +
-		'<a href="#" id="home"><h2 class="glyphicon glyphicon-home"></h2></a>&nbsp;&nbsp;&nbsp;' +
-		'<a href="#" id="asetukset"><h2 class="glyphicon glyphicon-cog"></h2></a>&nbsp;&nbsp;&nbsp;' +
-		'<a href="#" id="vaihdaTunnus"><h2 class="glyphicon glyphicon-user"></h2></a>&nbsp;&nbsp;&nbsp;' +
-		'<a href="#" id="exitPainike" onclick="exitFromApp()"></a>' +
-	    '</center>' +
-	'</div>' +
-	'</div>');
-
-   });
 
 	
 
@@ -122,7 +108,8 @@ $("body").ready(function(){
   });
 
   $("#vaihdaTunnus").click(function(){
- 	localStorage.removeItem('loginOK');
+ 	//localStorage.removeItem('loginOK');
+	localStorage.clear();
 	window.location.href='index.html';
   });
 

@@ -364,7 +364,7 @@ $("#notiFyClick").click(function(){
 	  if(settingsObj['headerSkin'] == '')
 	  {
 		$('.ad-lines').css({"color":"white"});
-		$('.navbar-branding').css({"background":"#888888"});
+		//$('.navbar-branding').css({"background":"#888888"});
 	  }
 
         });
