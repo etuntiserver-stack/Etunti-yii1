@@ -1,6 +1,5 @@
 <?php
 
-echo $this->renderPartial('//asiakkaat/tunnin_historia', array('id'=>9));
 
 $head = '';
 
@@ -48,6 +47,14 @@ exit;
 		'class'=>'btn btn-primary myBgColors'
 		));
 	   }
+	   ?>
+
+	   <?php     
+		echo CHtml::link("poista", '#', array(
+		'submit'=>array('delete', "id"=>$model->id), 
+		'confirm' => 'Haluatko varmaasti poistaa?',
+		'class'=>'btn btn-primary myBgColors'
+		));
 	   ?>
 	   </div>
 	   <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-user"></i> <?php echo Yii::t('main', 'Asiakkaiden hallinta'); ?>: <?php echo $head; ?> </h2>
