@@ -1265,8 +1265,9 @@ foreach($laskunRivit as $rivit)
                 <DimensionItem>Makkaran paisto</DimensionItem>
              </Dimension>
 */
-
-
+	$Comment = '';
+	if(!empty($rivit->free_text))
+	$Comment = '<Comment>'.$rivit->free_text.'</Comment>';
 
 $xml .= '
        <InvoiceLine>
@@ -1281,7 +1282,7 @@ $xml .= '
        </InvoiceLine>
        <InvoiceLine>
          <SalesInvoiceCommentLine>
-            <Comment>'.$rivit->free_text.'</Comment>
+            '.$Comment.'
          </SalesInvoiceCommentLine>
        </InvoiceLine>';
 }
