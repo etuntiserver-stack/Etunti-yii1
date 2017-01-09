@@ -86,6 +86,12 @@ class ToteutuneetController extends Controller
 
 	public function actionHyvaksy_pvm_tid()
 	{
+		/*
+		echo '<pre>';
+		print_r($_POST['json']);
+		echo '</pre>';
+		exit;
+		*/
 
 		$criteria=new CDbCriteria;
 		$criteria->condition = " 
@@ -109,6 +115,7 @@ class ToteutuneetController extends Controller
 		if(!$model->save())
 		{
 			var_dump($model->getErrors());
+
 		} else {
 
 		}
@@ -120,13 +127,15 @@ class ToteutuneetController extends Controller
 		{
 
 			$update = false;
+			$lastArr = array();
 			$lastArr = json_decode($model->netvisor_ok_list, true);
 			foreach($_POST['json'][0] as $key=>$value)
 			{
 				if($value > 0)
 				{
+					$return = array();
 					$return = $this->netvisorWorkday($key,$value,$model);
-					if(isset($return['statusOK'])){
+					if(isset($return['statusOK']) and isset($lastArr[$key])){
 						$update = true;
 						$lastArr[$key] = $value;
 					}
@@ -268,7 +277,11 @@ $xml = '
 			$return = array('statusError'=>$result);
 	  }
 
-
+		/*
+		echo '<pre>';
+		print_r($response);
+		echo '</pre>';
+		*/
 
 
 	} // if isset $n[0]
