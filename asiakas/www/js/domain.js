@@ -62,12 +62,13 @@ $(document).ready(function(){
   $("#form-signin").on('submit', function(e){
 
         $.ajax({
-           url: url+'/login?domain='+domain,
+           url: url+'/login?domain='+$('#domain').val(),
 	   type:'POST',
  	   data: $(this).serialize(),
            success: function(data){
 		var d = JSON.parse(data);
-		
+		//console.log(d)
+		//return false;
 		if(d['loginOK'])
 		{
 			localStorage.setItem('loginOK', JSON.stringify(d));

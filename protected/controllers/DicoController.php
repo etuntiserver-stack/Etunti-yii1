@@ -38,7 +38,7 @@ public function actionLogin($domain)
     {
         case 'asiakkaat':
 
-		$return			= array();
+		$return	= array();
 		if($this->kirjautuminen($_POST['tunnus'], $_POST['salasana']) == true)
 		{
 			$criteria=new CDbCriteria;
@@ -68,15 +68,11 @@ public function actionLogin($domain)
 }
 
 
-public function actionToteutuneet($domain)
-{
-
-    switch($_GET['model'])
-    {
-        case 'asiakkaat':
+	public function actionToteutuneet($domain)
+	{
 
 		$return = '';
-		if($this->kirjautuminen($_POST['tunnus'], $_POST['salasana']) == true)
+		if(isset($_POST['tunnus']) and $this->kirjautuminen($_POST['tunnus'], $_POST['salasana']) == true)
 		{
 			$model=Asiakkaat::model()->findByPk($_POST['asiakasID']);
 			if(isset($model->id))
@@ -87,16 +83,8 @@ public function actionToteutuneet($domain)
 
 		}
 			$this->_sendResponse(200, CJSON::encode($return));
-            break;
-        default:
-            // Model not implemented error
-            $this->_sendResponse(501, sprintf(
-                'Error: Mode <b>list</b> is not implemented for model <b>%s</b>',
-                $_GET['model']) );
-            Yii::app()->end();
-    }
 
-}
+	}
 
 
 
@@ -105,8 +93,8 @@ public function actionToteutuneet($domain)
 
 		$criteria=new CDbCriteria;
 		$criteria->condition = " 
-			sahkoposti='".$_POST['tunnus']."' 
-			AND salasana='".$_POST['salasana']."'
+			sahkoposti='".$tunnus."' 
+			AND salasana='".$salasana."'
 			AND salasana!=''
 		";
 		$model=Asiakkaat::model()->find($criteria);

@@ -3,12 +3,13 @@ $(document).ready(function(){
 
   if(localStorage.getItem('loginOK'))
   {
+	loginArr['asiakasID'] = asiakasID;
+	//console.log(loginArr);
 
-	console.log(loginArr);
         $.ajax({
            url: url+'/toteutuneet?domain='+domain,
 	   type:'POST',
- 	   data: {loginArr, asiakasID : asiakasID},
+ 	   data: loginArr,
            success: function(data){
 		var d = JSON.parse(data);
 		if(d)

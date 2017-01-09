@@ -274,8 +274,8 @@ $("#notiFyClick").click(function(){
 	$('.myBgColors').addClass(settingsObj['headerSkin']);
 	var backgroundColor = $('.myBgColors').css('backgroundColor');
 	$('head').append('<style>.admin-form .heading-border:before{background-color: '+backgroundColor+';}</style>');
-
 	localStorage.setItem('headerSkin', settingsObj['headerSkin']);
+
 
 
         $.each(settingsParse, function(i, e) {
@@ -393,13 +393,13 @@ $("#notiFyClick").click(function(){
 	{
 		$('#skin-toolbox').css({"color":"#333333"});
 		$('.ad-lines').css({"color":"white"});
-		$('.navbar-branding').css({"background":"#888888"});
+		//$('.navbar-branding').css({"background":"#888888"});
 	}
 
 	var backgroundColor = $('.myBgColors').css('backgroundColor');
 	$('head').append('<style>.admin-form .heading-border:before{background-color: '+backgroundColor+';}</style>');
 
-
+	/*
         $.ajax({
            url: location.protocol + "//" + location.host + '/index.php/site/ulkonaky',
            type: "POST",
@@ -409,7 +409,7 @@ $("#notiFyClick").click(function(){
 		console.log(data);
            }
         });
-
+	*/
 
       });
 
@@ -425,6 +425,7 @@ $("#notiFyClick").click(function(){
 
         localStorage.setItem(themeKey, JSON.stringify(settingsObj));
 
+	/*
         $.ajax({
            url: location.protocol + "//" + location.host + '/index.php/site/ulkonaky',
            type: "POST",
@@ -434,7 +435,7 @@ $("#notiFyClick").click(function(){
 		console.log(data);
            }
         });
-
+	*/
 
       });
 
