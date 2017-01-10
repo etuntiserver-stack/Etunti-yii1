@@ -1,3 +1,7 @@
+<?php
+	//print_r($_POST);
+?>
+
 	<h2 class="myBgColors p10" id="historia"> <i class="glyphicon glyphicon-user"></i> <?php echo Yii::t('main', 'Asiakas historia'); ?> </h2>
 
         <div class="tray-center">
@@ -13,7 +17,7 @@
                         <div class="section">
                           <label class="field prepend-icon">
 
-   			    <input type="text" class="gui-input datepickerFI" name="from" value="<?php if(isset($_POST['from'])) echo date('d.m.Y', strtotime($_POST['from'])); ?>" placeholder="<?php echo Yii::t('main', 'Aloitus'); ?>..">
+   			    <input type="text" class="gui-input datepickerFI" name="from" value="<?php if(isset($_POST['from']) and !empty($_POST['from'])) echo date('d.m.Y', strtotime($_POST['from'])); ?>" placeholder="<?php echo Yii::t('main', 'Aloitus'); ?>..">
 
                             <label for="firstname" class="field-icon">
                               <i class="fa fa-calendar"></i>
@@ -26,7 +30,7 @@
                         <div class="section">
                           <label class="field prepend-icon">
 
-   			    <input type="text" class="gui-input datepickerFI" name="to" value="<?php if(isset($_POST['to'])) echo date('d.m.Y', strtotime($_POST['to'])); ?>" placeholder="<?php echo Yii::t('main', 'Lopetus'); ?>..">
+   			    <input type="text" class="gui-input datepickerFI" name="to" value="<?php if(isset($_POST['to']) and !empty($_POST['to'])) echo date('d.m.Y', strtotime($_POST['to'])); ?>" placeholder="<?php echo Yii::t('main', 'Lopetus'); ?>..">
 
                             <label for="firstname" class="field-icon">
                               <i class="fa fa-calendar"></i>
@@ -36,7 +40,7 @@
                    </div>
 
 
-                      <div class="col-md-2">
+                      <div class="col-md-2 col-md-offset-6">
         	        <input type="submit" class="btn btn-primary btn-lg haemob btn-block myBgColors" value="Hae">
 		      </div>
 

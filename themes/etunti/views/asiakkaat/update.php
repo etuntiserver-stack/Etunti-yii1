@@ -129,80 +129,20 @@ exit;
 
 
 
-	<?php echo $this->renderPartial('tunnin_historia'); ?>
+	<?php 
+	echo $this->renderPartial('asiakas_historia', 
+		array(
+			'model'=>$model,
+			'naytaTyovuorot'=>true,
+			'naytaLaskut'=>true,
+			'naytaTarjoukset'=>true,
+			'naytaPalautteet'=>true,
+			'naytaVinkit'=>true
+		)
+	); 
+	?>
 
 	
-<?php
-	$from = '';
-	$to = '';
-	if(isset($_POST['from'])) $from = date("Y-m-d", strtotime($_POST['from']));
-	if(isset($_POST['to'])) $to = date("Y-m-d", strtotime($_POST['to']));
-?>
-
-	<h3><?php echo Yii::t('main', 'Työvuorot'); ?></h3>
-        <div class="tray-center">
-            <div class="admin-form">
-              <div class="panel heading-border">
-                <div class="panel-body bg-light">
-
-		  <?php echo $this->tyovuorotCRM($model, $from, $to); ?>
-
-                </div>
-              </div>
-            </div>
-        </div>
-
-	<h3><?php echo Yii::t('main', 'Laskut'); ?></h3>
-        <div class="tray-center">
-            <div class="admin-form">
-              <div class="panel heading-border">
-                <div class="panel-body bg-light">
-
-		  <?php echo $this->laskutuksetCRM($model, $from, $to); ?>
-
-                </div>
-              </div>
-            </div>
-        </div>
-
-	<h3><?php echo Yii::t('main', 'Tarjoukset'); ?></h3>
-        <div class="tray-center">
-            <div class="admin-form">
-              <div class="panel heading-border">
-                <div class="panel-body bg-light">
-
-		  <?php echo $this->tarjouksetCRM($model, $from, $to); ?>
-
-                </div>
-              </div>
-            </div>
-        </div>
-
-	<h3><?php echo Yii::t('main', 'Palautteet'); ?></h3>
-        <div class="tray-center">
-            <div class="admin-form">
-              <div class="panel heading-border">
-                <div class="panel-body bg-light">
-
-		  <?php echo $this->palautteetCRM($model, $from, $to); ?>
-
-                </div>
-              </div>
-            </div>
-        </div>
-
-	<h3><?php echo Yii::t('main', 'Vinkit'); ?></h3>
-        <div class="tray-center">
-            <div class="admin-form">
-              <div class="panel heading-border">
-                <div class="panel-body bg-light">
-
-		  <?php echo $this->vinkitCRM($model, $from, $to); ?>
-
-                </div>
-              </div>
-            </div>
-        </div>
 
 <br><br>
 

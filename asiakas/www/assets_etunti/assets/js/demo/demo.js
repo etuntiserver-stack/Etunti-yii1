@@ -273,7 +273,13 @@ $("#notiFyClick").click(function(){
 	$('.myBgColors').removeClass(headerSkins);
 	$('.myBgColors').addClass(settingsObj['headerSkin']);
 	var backgroundColor = $('.myBgColors').css('backgroundColor');
-	$('head').append('<style>.admin-form .heading-border:before{background-color: '+backgroundColor+';}</style>');
+
+	if(settingsObj['headerSkin']){
+		$('head').append('<style>' +
+		'.admin-form .heading-border:before{ background-color: '+backgroundColor+';}' +
+		'</style>');
+	}
+
 	localStorage.setItem('headerSkin', settingsObj['headerSkin']);
 
 
@@ -385,19 +391,21 @@ $("#notiFyClick").click(function(){
         settingsObj['headerSkin'] = Val;
         localStorage.setItem(themeKey, JSON.stringify(settingsObj));
 
+	$('.myBgColors').css({"background-color": "none","color":"none"});
+	$('#skin-toolbox').css({"color":"#333333"});
+	$('.ad-lines').css({"color":"white"});
 
 	$('.myBgColors').removeClass(headerSkins);
 	$('.myBgColors').addClass(Val);
 
-	if(Val == '')
-	{
-		$('#skin-toolbox').css({"color":"#333333"});
-		$('.ad-lines').css({"color":"white"});
-		//$('.navbar-branding').css({"background":"#888888"});
-	}
 
 	var backgroundColor = $('.myBgColors').css('backgroundColor');
-	$('head').append('<style>.admin-form .heading-border:before{background-color: '+backgroundColor+';}</style>');
+	if(Val !== '')
+	{
+		$('head').append('<style>' +
+		'.admin-form .heading-border:before{ background-color: '+backgroundColor+';}' +
+		'</style>');
+	} 
 
 	/*
         $.ajax({

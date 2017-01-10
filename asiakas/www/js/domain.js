@@ -6,6 +6,7 @@ $(document).ready(function(){
     {
 	loginArr = JSON.parse(localStorage.getItem('loginOK')).loginOK;
 	$('#laatikot').show(370);
+	$('#kirjauduOikealla').show(370);
 	$('#asiakasNimi').html(loginArr['asiakasNimi']);
 
     } else {
@@ -108,8 +109,8 @@ $("body").ready(function(){
   });
 
   $("#vaihdaTunnus").click(function(){
- 	//localStorage.removeItem('loginOK');
-	localStorage.clear();
+ 	localStorage.removeItem('loginOK');
+	//localStorage.clear();
 	window.location.href='index.html';
   });
 

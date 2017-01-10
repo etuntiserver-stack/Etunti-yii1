@@ -80,16 +80,33 @@ public function actionLogin($domain)
 		$return = '';
 		if(isset($_POST['tunnus']) and $this->kirjautuminen($_POST['tunnus'], $_POST['salasana']) == true)
 		{
-			$model=Asiakkaat::model()->findByPk($_POST['asiakasID']);
-			if(isset($model->id))
+
+		   $model=Asiakkaat::model()->findByPk($_POST['asiakasID']);
+		   if(isset($model->id))
+		   {
+
+			if(isset($_POST['hakuHeader']))
 			{
 				Yii::app()->theme = 'etunti';
-				$return .= $this->renderPartial('//asiakkaat/tunnin_historia', array('id'=>$model->id), true);
+				$return = $this->renderPartial('//asiakkaat/asiakas_historia', 
+				array(
+					'model'=>$model,
+					//'naytaTyovuorot'=>true,
+					//'naytaLaskut'=>true,
+					//'naytaTarjoukset'=>true,
+					//'naytaPalautteet'=>true,
+					//'naytaVinkit'=>true
+				)
+				, true);
+				$this->_sendResponse(200, CJSON::encode($return));
+				exit;
 			}
 
-		}
-			$this->_sendResponse(200, CJSON::encode($return));
+		   } // $model->id
 
+		}
+
+				$this->_sendResponse(200, CJSON::encode('Ei tuloksia'));
 	}
 
 
