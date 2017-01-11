@@ -1511,29 +1511,50 @@ class TyovuorootController extends Controller
 		{
 
 		$asiakkaat = new Asiakkaat;
-		$asiakkaat->tyyppi = $_POST['asiakas_tyyppi'];
-		$asiakkaat->yrityksen_nimi = $_POST['yrityksen_nimi'];
-		$asiakkaat->y_tunnus = $_POST['y_tunnus'];
-		$asiakkaat->yhteyshenkilo = $_POST['yhteyshenkilo'];
-		$asiakkaat->postinumero = $_POST['postinumero'];
-		$asiakkaat->kaupunki = $_POST['kaupunki'];
-		$asiakkaat->osoite = $_POST['osoite'];
-		$asiakkaat->puhelin = $_POST['puhelin'];
-		$asiakkaat->sahkoposti = $_POST['sahkoposti'];
+		$asiakkaat->attributes = $_POST['Asiakkaat'];
 		$asiakkaat->aktiivinen = 1;
 
 		  if($asiakkaat->save())
 		  {
 			$kohteet = new Kohteet;
 			$kohteet->asiakas_id = $asiakkaat->id;
-			$kohteet->etu_suku_nimet = $asiakkaat->yhteyshenkilo;
-			$kohteet->osoite = $asiakkaat->osoite;
+
+			if(!empty($asiakkaat->yrityksen_nimi))
+				$kohteet->etu_suku_nimet =$asiakkaat->yrityksen_nimi;
+			elseif(empty($asiakkaat->yrityksen_nimi) and !empty($asiakkaat->yhteyshenkilo))
+				$kohteet->etu_suku_nimet = $asiakkaat->yhteyshenkilo;
+
+			if($_POST['onkoAsOsoiteSamaKunKohde'] == 'ei')
+				$kohteet->osoite = $_POST['kohteenOsoite'];
+			else
+				$kohteet->osoite = $asiakkaat->osoite;
+
 			$kohteet->puh_nro = $asiakkaat->puhelin;
 			$kohteet->pnumero = $asiakkaat->postinumero;
 			$kohteet->kaupunki = $asiakkaat->kaupunki;
 			$kohteet->email = $asiakkaat->sahkoposti;
-			$kohteet->toimenpiteet = $_POST['Tyovuoroot']['toimenpiteet'];
-			$kohteet->muut = date("d.m.Y",strtotime($_POST['Tyovuoroot']['pvm']))."\n".date("H:i",strtotime($_POST['Tyovuoroot']['alku']))."-".date("H:i",strtotime($_POST['Tyovuoroot']['loppu']))."\nHinta: ".$_POST['hinta'];
+
+			$toimenpiteet = $_POST['Tyovuoroot']['toimenpiteet'];
+			if(isset($_POST['onkoKokeilusiivous']) and !empty($_POST['onkoKokeilusiivous']))
+			$toimenpiteet .= "\n".Yii::t('main', 'Onko kokeilusiivous').": ".$_POST['onkoKokeilusiivous']."\n";
+			if(isset($_POST['oven_avaaminen']) and !empty($_POST['oven_avaaminen']))
+			$toimenpiteet .= "\n".Yii::t('main', 'Oven avaaminen').": ".$_POST['oven_avaaminen']."\n";
+			if(isset($_POST['mihin_avain_palautetaan']) and !empty($_POST['mihin_avain_palautetaan']))
+			$toimenpiteet .= "\n".Yii::t('main', 'Mihin avain palautetaan').": ".$_POST['mihin_avain_palautetaan']."\n";
+			if(isset($_POST['mihin_pysakoida_auto']) and !empty($_POST['mihin_pysakoida_auto']))
+			$toimenpiteet .= "\n".Yii::t('main', 'Mihin työntekijä voi pysäköidä auton').": ".$_POST['mihin_pysakoida_auto']."\n";
+			if(isset($_POST['onkoMaksajanTiedotSama']) and $_POST['onkoMaksajanTiedotSama'] == 'Ei'){
+			$toimenpiteet .= "\n".Yii::t('main', 'Maksajan tiedot sama kuin tilaaja').": ".$_POST['onkoMaksajanTiedotSama']."\n";
+			$toimenpiteet .= Yii::t('main', 'Maksajan tiedot').": ".$_POST['MaksajanTiedot']."\n";
+			}
+			if(isset($_POST['LahjakortinNumero']) and !empty($_POST['LahjakortinNumero']))
+			$toimenpiteet .= "\n".Yii::t('main', 'Lahjakortin numero').": ".$_POST['LahjakortinNumero']."\n";
+
+
+
+			$kohteet->toimenpiteet = $toimenpiteet;
+
+			$kohteet->muut = date("d.m.Y",strtotime($_POST['Tyovuoroot']['pvm']))."\n".date("H:i",strtotime($_POST['Tyovuoroot']['alku']))."-".date("H:i",strtotime($_POST['Tyovuoroot']['loppu']))."\nHinta: ".$_POST['Asiakkaat']['hinta'];
 
 		  	   if($kohteet->save())
 		  	   {

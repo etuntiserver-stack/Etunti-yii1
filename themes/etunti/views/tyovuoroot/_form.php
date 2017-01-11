@@ -32,7 +32,7 @@ if(isset($model->id))
 		if(!empty($m->aikataulu))
 		  $ohje .= "\nAikataulu: ".$m->aikataulu;
 		if(!empty($m->toimenpiteet))
-		  $ohje .= "\nToimenpiteet: ".$m->toimenpiteet;
+		  $ohje .= "\nToimenpiteet: ".str_replace("\n","<br>",$m->toimenpiteet)."<br>";
 		if(!empty($m->tietoja))
 		  $ohje .= "\nTietoja: ".$m->tietoja;
 		if(!empty($m->muut))
