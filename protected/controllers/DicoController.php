@@ -74,7 +74,7 @@ public function actionLogin($domain)
 }
 
 
-	public function actionToteutuneet($domain)
+	public function actionHistoria($domain)
 	{
 
 		$return = '';
@@ -84,23 +84,20 @@ public function actionLogin($domain)
 		   $model=Asiakkaat::model()->findByPk($_POST['asiakasID']);
 		   if(isset($model->id))
 		   {
-
-			if(isset($_POST['hakuHeader']))
-			{
 				Yii::app()->theme = 'etunti';
+
+				$naytaMita = '';
+				if(isset($_POST['tyyppi']) and !empty($_POST['tyyppi']))
+				$naytaMita = $_POST['tyyppi'];
+
 				$return = $this->renderPartial('//asiakkaat/asiakas_historia', 
 				array(
 					'model'=>$model,
-					//'naytaTyovuorot'=>true,
-					//'naytaLaskut'=>true,
-					//'naytaTarjoukset'=>true,
-					//'naytaPalautteet'=>true,
-					//'naytaVinkit'=>true
+					$naytaMita=>true,
 				)
 				, true);
 				$this->_sendResponse(200, CJSON::encode($return));
 				exit;
-			}
 
 		   } // $model->id
 

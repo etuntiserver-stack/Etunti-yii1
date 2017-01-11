@@ -864,6 +864,98 @@ $xml = '
 	}
 
 
+	protected function toteutuneetTunnitCRM($model, $from, $to)
+	{
+		$bod = '<div>';
+
+		$dataArr = array();
+
+		// <-- luetut
+		$criteria=new CDbCriteria;
+		$criteria->condition = " 
+			id NOT IN (SELECT kid FROM sivexkuitti_repaired)
+			AND kohdenID IN
+			(
+				SELECT id FROM sivex_kohdet
+				WHERE asiakas_id IN(SELECT id FROM asiakkaat WHERE id='".$model->id."')
+			) 
+			AND loppui!=''
+		";
+
+		if(!empty($from) and !empty($to))
+		{
+		$criteria->addCondition (" 
+			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".date("Y-m-d", strtotime($from))."' AND '".date("Y-m-d", strtotime($to))."'
+		");
+		}
+
+		$m = Mobile::model()->findAll($criteria);
+
+		foreach($m as $data)
+		{
+		$kesto = strtotime($data->loppui)-strtotime($data->aloitan);
+	  	$dataArr[strtotime($data->aloitan)] = '
+		<table class="row table">
+		  <tr><td width="50%">'.Yii::t('main', 'Päiväys').'</td> <td>'.date("d.m.Y", strtotime($data->aloitan)).'</td></tr>
+		  <tr><td width="50%">'.Yii::t('main', 'Osoite').'</td> <td>'.$data->kohde_kannasta.'</td></tr>
+		  <tr><td width="50%">'.Yii::t('main', 'Aloitus').'</td> <td>'.date("H:i", strtotime($data->aloitan)).'</td></tr>
+		  <tr><td width="50%">'.Yii::t('main', 'Lopetus').'</td> <td>'.date("H:i", strtotime($data->loppui)).'</td></tr>
+		  <tr><td width="50%">'.Yii::t('main', 'Kesto').'</td> <td>'.$this->sprint($kesto).'</td></tr>
+		</table>
+		<hr>
+		';
+	  	}
+		//  luetut -->
+
+
+		// <-- toteutuneet
+		$criteria=new CDbCriteria;
+		$criteria->condition = " 
+			id NOT IN (SELECT kid FROM sivexkuitti_repaired)
+			AND kohdenID IN
+			(
+				SELECT id FROM sivex_kohdet
+				WHERE asiakas_id IN(SELECT id FROM asiakkaat WHERE id='".$model->id."')
+			) 
+			AND loppui!=''
+		";
+
+		if(!empty($from) and !empty($to))
+		{
+		$criteria->addCondition (" 
+			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".date("Y-m-d", strtotime($from))."' AND '".date("Y-m-d", strtotime($to))."'
+		");
+		}
+
+		$m = Toteutuneet::model()->findAll($criteria);
+
+		foreach($m as $data)
+		{
+		$kesto = strtotime($data->loppui)-strtotime($data->aloitan);
+	  	$dataArr[strtotime($data->aloitan)] = '
+		<tr>
+			<td>'.date("d.m.Y", strtotime($data->aloitan)).'</td>
+			<td>'.$data->kohde_kannasta.'</td>
+			<td>'.date("H:i", strtotime($data->aloitan)).'</td>
+			<td>'.date("H:i", strtotime($data->loppui)).'</td>
+			<td>'.$this->sprint($kesto).'</td>
+		</tr>';
+	  	}
+		//  toteutuneet -->
+
+		ksort($dataArr);
+
+		foreach($dataArr as $data)
+		{
+	  	$bod .= $data;
+	  	}
+
+		$bod .= '</div>';
+	
+		return $bod;
+	}
+
+
 	protected function tyovuorotCRM($model, $from, $to)
 	{
 

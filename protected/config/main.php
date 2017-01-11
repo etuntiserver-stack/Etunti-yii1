@@ -207,7 +207,7 @@ return array(
 
 	// <-- DICO
         array('dico/login', 'pattern'=>'dico/<model:\w+>/login', 'verb'=>'POST'),
-        array('dico/toteutuneet', 'pattern'=>'dico/<model:\w+>/toteutuneet', 'verb'=>'POST'),
+        array('dico/historia', 'pattern'=>'dico/<model:\w+>/historia', 'verb'=>'POST'),
 	//     DICO -->
 
         //array('api/update', 'pattern'=>'api/<model:\w+>/<id:\d+>', 'verb'=>'PUT'),

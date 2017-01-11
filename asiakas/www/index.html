@@ -207,8 +207,10 @@
                 <div class="panel-body bg-light">
 
 		     <div class="col-sm-4 col-sm-offset-4">
+		     <h3>Kirjaudu sisään</h3>
 		      <form action="#" class="form-signin" id="form-signin" method="POST" autocomplete='off'>
 		        <label>Yritystunnus</label>
+
 		        <input type="text" name="domain" id="domain" class="form-control input-lg" required autofocus />
 		
 		        <label>Sähköposti</label>
@@ -217,7 +219,7 @@
 		        <label>Salasana</label>
 		        <input type="password" id="inputPassword" name="salasana" class="form-control input-lg" required autocomplete="off" />
 			<br>
-		        <button class="btn btn-lg btn-primary btn-block" type="submit">Kirjaudu sisään</button>
+		        <button class="btn btn-lg btn-primary btn-block myBgColors" type="submit">Kirjaudu sisään</button>
 		      </form>
 		     </div>
 
@@ -238,7 +240,22 @@
         <div class="row mb10">
 
           <div class="col-sm-6 col-md-3">
-	   <a href="toteutuneet.html" class="link">
+	   <a href="historia.html?tyyppi=naytaTyovuorot" class="link">
+            <div class="panel bg-danger light of-h mb10">
+              <div class="pn pl20 p5">
+                <div class="icon-bg">
+                  <i class="fa fa-bar-chart-o"></i>
+                </div>
+                <h2 class="mt15 lh15">
+                  <b>0</b>
+                </h2>
+                <h5 class="text-muted">Työvuorot</h5>
+              </div>
+            </div>
+	   </a>
+          </div>
+          <div class="col-sm-6 col-md-3">
+	   <a href="historia.html?tyyppi=naytaToteutuneetTunnit" class="link">
             <div class="panel bg-alert light of-h mb10">
               <div class="pn pl20 p5">
                 <div class="icon-bg">
@@ -254,7 +271,7 @@
 	   </a>
           </div>
           <div class="col-sm-6 col-md-3">
-	   <a href="toteutuneet.html" class="link">
+	   <a href="historia.html?tyyppi=naytaVinkit" class="link">
             <div class="panel bg-info light of-h mb10">
               <div class="pn pl20 p5">
                 <div class="icon-bg">
@@ -269,22 +286,7 @@
 	   </a>
           </div>
           <div class="col-sm-6 col-md-3">
-	   <a href="toteutuneet.html" class="link">
-            <div class="panel bg-danger light of-h mb10">
-              <div class="pn pl20 p5">
-                <div class="icon-bg">
-                  <i class="fa fa-bar-chart-o"></i>
-                </div>
-                <h2 class="mt15 lh15">
-                  <b>0</b>
-                </h2>
-                <h5 class="text-muted">Työvuorot</h5>
-              </div>
-            </div>
-	   </a>
-          </div>
-          <div class="col-sm-6 col-md-3">
-	   <a href="toteutuneet.html" class="link">
+	   <a href="historia.html?tyyppi=naytaPalautteet" class="link">
             <div class="panel bg-warning light of-h mb10">
               <div class="pn pl20 p5">
                 <div class="icon-bg">
@@ -296,10 +298,24 @@
                 <h5 class="text-muted">Palautteen antaminen</h5>
               </div>
             </div>
-          </div>
 	   </a>
+          </div>
+          <div class="col-sm-6 col-md-3">
+	   <a href="historia.html?tyyppi=naytaLaskut" class="link">
+            <div class="panel bg-warning light of-h mb10">
+              <div class="pn pl20 p5">
+                <div class="icon-bg">
+                  <i class="glyphicon glyphicon-barcode"></i>
+                </div>
+                <h2 class="mt15 lh15">
+                  <b>0</b>
+                </h2>
+                <h5 class="text-muted">Laskut</h5>
+              </div>
+            </div>
+	   </a>
+          </div>
         </div>
-
     </div> 
     <!-- Kirjautuminen jalkeen -->
 
@@ -315,10 +331,10 @@
      <div class="" id="footer-body">
       <center>
 	<ul class="list-inline">
-	 <li><a href="index.html"><h2 class="glyphicon glyphicon-home"></h2></a></li>
-	 <li><a href="asetukset.html"><h2 class="glyphicon glyphicon-cog"></h2></a></li>
-	 <li><a href="#" id="vaihdaTunnus"><h2 class="glyphicon glyphicon-user"></h2></a></li>
-	 <li><a href="#" id="exitPainike" onclick="exitFromApp()"><h2 class="fa fa-exit"></h2></a></li>
+	 <li><a class="myBgColors" href="index.html"><h2 class="glyphicon glyphicon-home"></h2></a></li>
+	 <li><a class="myBgColors" href="asetukset.html"><h2 class="glyphicon glyphicon-cog"></h2></a></li>
+	 <li><a class="myBgColors" href="#" id="vaihdaTunnus"><h2 class="glyphicon glyphicon-user"></h2></a></li>
+	 <li><a class="myBgColors" href="#" id="exitPainike" onclick="exitFromApp()"><h2 class="fa fa-exit"></h2></a></li>
 	</ul>
       </center>
      </div>

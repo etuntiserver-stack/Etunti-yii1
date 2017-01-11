@@ -1,17 +1,29 @@
 $(document).ready(function(){
 
+function getUrlVars() {
+    var vars = {};
+    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi,    
+    function(m,key,value) {
+      vars[key] = value;
+    });
+    return vars;
+  }
+
 
   if(localStorage.getItem('loginOK'))
   {
+	var tyyppi = '';
+	if(getUrlVars()["tyyppi"])
+		tyyppi = getUrlVars()["tyyppi"];
 
 	var sendData = loginArr;
-	sendData['hakuHeader'] = "true";
 	sendData['asiakasID'] = asiakasID;
+	sendData['tyyppi'] = tyyppi;
 
 	//console.log(sendData);
 
         $.ajax({
-           url: url+'/toteutuneet?domain='+domain,
+           url: url+'/historia?domain='+domain,
 	   type:'POST',
  	   data: sendData,
            success: function(data){
@@ -36,11 +48,12 @@ $(document).ready(function(){
 	$.each(loginArr, function( index, value ) {
 		sendDataPost.push({name: index, value: value});
 	});
+		sendDataPost.push({name: tyyppi, value: tyyppi});
 
 	//console.log(sendDataPost);
 
         $.ajax({
-           url: url+'/toteutuneet?domain='+domain,
+           url: url+'/historia?domain='+domain,
 	   type:'POST',
  	   data: sendDataPost,
            success: function(data){

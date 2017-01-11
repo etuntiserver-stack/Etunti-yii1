@@ -391,7 +391,7 @@ $("#notiFyClick").click(function(){
         settingsObj['headerSkin'] = Val;
         localStorage.setItem(themeKey, JSON.stringify(settingsObj));
 
-	$('.myBgColors').css({"background-color": "none","color":"none"});
+
 	$('#skin-toolbox').css({"color":"#333333"});
 	$('.ad-lines').css({"color":"white"});
 
@@ -405,7 +405,11 @@ $("#notiFyClick").click(function(){
 		$('head').append('<style>' +
 		'.admin-form .heading-border:before{ background-color: '+backgroundColor+';}' +
 		'</style>');
-	} 
+	} else {
+		$('head').append('<style>' +
+		'.admin-form .heading-border:before{ background-color: transparent;}' +
+		'</style>');
+	}
 
 	/*
         $.ajax({

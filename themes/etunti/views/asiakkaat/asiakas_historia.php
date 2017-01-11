@@ -61,6 +61,21 @@
         </div>
 
 
+	<?php if(isset($naytaToteutuneetTunnit)) : ?>
+	<h3><?php echo Yii::t('main', 'Toteutuneet tunnit'); ?></h3>
+        <div class="tray-center">
+            <div class="admin-form">
+              <div class="panel heading-border">
+                <div class="panel-body bg-light">
+
+		  <?php echo $asiakkaat[0]->toteutuneetTunnitCRM($model, $from, $to); ?>
+
+                </div>
+              </div>
+            </div>
+        </div>
+	<?php endif; ?>
+
 
 	<?php if(isset($naytaTyovuorot)) : ?>
 	<h3><?php echo Yii::t('main', 'Työvuorot'); ?></h3>
