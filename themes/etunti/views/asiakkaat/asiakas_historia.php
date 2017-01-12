@@ -123,6 +123,13 @@
 	<?php endif; ?>
 
 	<?php if(isset($naytaPalautteet)) : ?>
+	<?php
+		if(isset($_POST['PalautteetVastaus']['this_id']))
+		{
+			$return = $this->palautteetVastaus($_POST);
+			echo json_encode($return);
+		}
+	?>
 	<h3><?php echo Yii::t('main', 'Palautteet'); ?></h3>
         <div class="tray-center">
             <div class="admin-form">

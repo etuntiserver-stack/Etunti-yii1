@@ -1,6 +1,6 @@
 <?php
 
-$model->keskustelu_id = $keskustelu_id;
+
 ?>
 
         <!-- begin: .tray-center -->
@@ -13,7 +13,7 @@ $model->keskustelu_id = $keskustelu_id;
                 <div class="panel-body bg-light">
 
                  <div class="row">
-		  <?php echo $this->renderPartial('_vastaus', array('model'=>$model)); ?>
+		  <?php echo $this->renderPartial('_vastaus', array('model'=>$model, 'keskustelu_id'=>$keskustelu_id)); ?>
                  </div>
 
                 </div>

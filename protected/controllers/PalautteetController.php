@@ -84,17 +84,17 @@ class PalautteetController extends Controller
         }
 
 
-	public function actionVastaus($id)
+	public function Vastaus($id, $post)
 	{
 		Yii::app()->theme = 'customer';
 		$model = new Palautteet;
 
 
-		if(isset($_POST['Palautteet']))
+		if(isset($post['Palautteet']))
 		{
 			$p = Palautteet::model()->findbypk($id);
 
-			$model->attributes=$_POST['Palautteet'];
+			$model->attributes=$post['Palautteet'];
 			$model->otsikko=$p->otsikko;
 			$model->asiakas_id=$p->asiakas_id;
 
@@ -165,15 +165,16 @@ class PalautteetController extends Controller
 
 				}
 
-				$this->redirect(array('lahetetty','asiakas_id'=>$as->id));
+				//$this->redirect(array('lahetetty','asiakas_id'=>$as->id));
 			}
 		}
 
-
+/*
 		$this->render('vastaus',array(
 			'model'=>$model,
 			'keskustelu_id'=>$id,
 		));
+*/
 	}
 
 	public function actionLahetetty($asiakas_id)
@@ -193,6 +194,59 @@ class PalautteetController extends Controller
 	 * Creates a new model.
 	 * If creation is successful, the browser will be redirected to the 'view' page.
 	 */
+
+	public function UusiPalaute($mod, $post)
+	{
+
+						$as = Asiakkaat::model()->findbypk(Yii::app()->user->asiakas);
+						$firma = FirmanTiedot::model()->findbypk(1);
+							
+						$nimi = '';
+						if(isset($as->yrityksen_nimi) and !empty($as->yrityksen_nimi))
+						$nimi = $as->yrityksen_nimi;
+						elseif(isset($as->yhteyshenkilo) and !empty($as->yhteyshenkilo))
+						$nimi = $as->yhteyshenkilo;
+
+						$mod->attributes=$post['Palautteet'];
+						$mod->teksti = '<b>'.$nimi.'</b>: '.$mod->teksti;
+						if($mod->save())
+						{
+
+							Palautteet::model()->updatebypk($mod->id, array('keskustelu_id'=>$mod->id));
+			
+
+							$message = Yii::t('main', 'Asiakas').': '.$nimi.'<br>';
+							$message .= Yii::t('main', 'Keskustelu ID:').': '.$mod->id.'<br>';
+							$message .= Yii::t('main', 'Palaute:').': '.$mod->teksti;
+			
+							if(isset($firma->sahkoposti) and !empty($firma->sahkoposti))
+							{
+							$subject = Yii::t('main', 'Palaute'). ': '.$nimi;
+							$mail = new YiiMailer();
+							$mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
+							$mail->setTo($firma->sahkoposti);
+							$mail->setSubject($subject);
+							$mail->setBody($message);
+							$mail->send();
+
+								// <-- LOG
+								$log=new Log;
+								$log->log_category 	= 1; // 1-email
+								$log->email_to 		= $firma->sahkoposti;
+								$log->email_subject	= $subject;
+								$log->email_message	= json_encode($message);
+								$log->save();
+								//     LOG -->
+
+							}
+
+							return true;
+						} else {
+							return $mod->getErrors();
+						}
+	}
+
+
 	public function actionCreate()
 	{
                 Yii::app()->theme = 'customer';
@@ -304,6 +358,14 @@ class PalautteetController extends Controller
 	   $site[0]->checkOikeus($checkOikeus);
 	//  Oikeudet -->
 */
+
+		if(isset($_POST['PalautteetVastaus']['this_id']))
+		{
+	   		$asiakkaat = Yii::app()->createController('Asiakkaat');
+			$asiakkaat[0]->palautteetVastaus($_POST);
+		}
+
+
        		$criteria = new CDbCriteria();
 	        $criteria->order = " id DESC ";
 		$criteria->condition = "

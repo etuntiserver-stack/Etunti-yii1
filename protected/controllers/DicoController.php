@@ -116,59 +116,30 @@ public function actionLogin($domain)
 					if(isset($_POST['Palautteet']))
 					{
 
-			$as = Asiakkaat::model()->findbypk(Yii::app()->user->asiakas);
-			$firma = FirmanTiedot::model()->findbypk(1);
-				
-			$nimi = '';
-			if(isset($as->yrityksen_nimi) and !empty($as->yrityksen_nimi))
-			$nimi = $as->yrityksen_nimi;
-			elseif(isset($as->yhteyshenkilo) and !empty($as->yhteyshenkilo))
-			$nimi = $as->yhteyshenkilo;
+						$palauteResponse = $this->luo_palaute($mod, $_POST);
 
-						$mod->attributes=$_POST['Palautteet'];
-			$model->teksti = '<b>'.$nimi.'</b>: '.$model->teksti;
-						if($mod->save())
+						if($palauteResponse)
 						{
-
-				Palautteet::model()->updatebypk($model->id, array('keskustelu_id'=>$model->id));
-			
-
-				$message = Yii::t('main', 'Asiakas').': '.$nimi.'<br>';
-				$message .= Yii::t('main', 'Keskustelu ID:').': '.$model->id.'<br>';
-				$message .= Yii::t('main', 'Palaute:').': '.$model->teksti;
-
-				if(isset($firma->sahkoposti) and !empty($firma->sahkoposti))
-				{
-				$subject = Yii::t('main', 'Palaute'). ': '.$nimi;
-				$mail = new YiiMailer();
-				$mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
-				$mail->setTo($firma->sahkoposti);
-				$mail->setSubject($subject);
-				$mail->setBody($message);
-				$mail->send();
-
-							// <-- LOG
-							$log=new Log;
-							$log->log_category 	= 1; // 1-email
-							$log->email_to 		= $firma->sahkoposti;
-							$log->email_subject	= $subject;
-							$log->email_message	= json_encode($message);
-							$log->save();
-							//     LOG -->
-
-				}
-
-
 							$this->_sendResponse(200, CJSON::encode(array('OK'=>Yii::t('main', 'Palaute lähetetty.'))));
 							exit;
 						} else {
-							$this->_sendResponse(200, CJSON::encode(array('Error'=>$mod->getErrors())));
+							$this->_sendResponse(200, CJSON::encode(array('Error'=>$palauteResponse)));
 							exit;
 						}
 
 					} else {
 						$return .= $this->renderPartial('//palautteet/_form', array('model'=>$mod), true);
 					}
+
+					// <-- Palaute vastaus
+					if(isset($_POST['PalautteetVastaus']['this_id']))
+					{
+						$return = $this->Send_vastaus($_POST);
+						$this->_sendResponse(200, CJSON::encode(array('OK'=>Yii::t('main', 'Palaute vastaus lähetetty.'))));
+						exit;
+					}
+					//     Palaute vastaus -->
+
 				}
 				//  naytaPalautteet -->
 
@@ -182,7 +153,7 @@ public function actionLogin($domain)
 				$return .= $this->renderPartial('//asiakkaat/asiakas_historia', 
 				array(
 					'model'=>$model,
-					$naytaMita=>true,
+					$naytaMita=>true
 				)
 				, true);
 				$this->_sendResponse(200, CJSON::encode($return));
@@ -215,6 +186,18 @@ public function actionLogin($domain)
 			return false;
 		}
 
+	}
+
+	protected function luo_palaute($mod, $post)
+	{
+		$palauteet = Yii::app()->createController('Palautteet');
+		return $palauteet[0]->UusiPalaute($mod, $post);
+	}
+
+	protected function Send_vastaus($post)
+	{
+	   	$asiakkaat = Yii::app()->createController('Asiakkaat');
+		$asiakkaat[0]->palautteetVastaus($post);
 	}
 
 

@@ -32,11 +32,11 @@ class AsiakkaatController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', 
-				'actions'=>array('asiakas_tila', 'ulos', 'osoitteen_muutos'),
+				'actions'=>array('asiakas_tila', 'ulos', 'osoitteen_muutos', 'send_vastaus'),
                 		'expression'=>"Yii::app()->controller->isAsiakas()",
 			),
 			array('allow',
-				'actions'=>array('admin', 'delete', 'create', 'update', 'index', 'view', 'checkLastAsiakasID', 'showshift', 'netvisor_sync'),
+				'actions'=>array('admin', 'delete', 'create', 'update', 'index', 'view', 'checkLastAsiakasID', 'showshift', 'netvisor_sync', 'send_vastaus'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -1028,13 +1028,6 @@ $xml = '
 		$p = Palautteet::model()->findAll($criteria);
 
 
-		$criteria=new CDbCriteria;
-		$criteria->order = " DATE(time) DESC ";
-		$criteria->condition = "
-			asiakas_id='".$model->id."' 
-			AND keskustelu_id!=id
-		";
-		$p_juttelu = Palautteet::model()->findAll($criteria);
 
 		$bod = '';
 
@@ -1059,13 +1052,34 @@ $xml = '
 
 	  	$bod .= '<td>';
 		$bod .= '<p>'.$data->teksti.'</p>';
+
+		$criteria=new CDbCriteria;
+		$criteria->order = " DATE(time) DESC ";
+		$criteria->condition = "
+			asiakas_id='".$model->id."' 
+			AND keskustelu_id='".$data->keskustelu_id."'
+			AND keskustelu_id!=id
+		";
+		$p_juttelu = Palautteet::model()->findAll($criteria);
+
 		   foreach($p_juttelu as $data2)
 		   {
 			$bod .= '<p>'.$data2->teksti.'</p>';
 		   }
 
 		if($data->status == 0)
-		$bod .= CHtml::link(Yii::t('main', 'Vasta'), Yii::app()->request->baseUrl.'/index.php/palautteet/vastaus?id='.$data->keskustelu_id,array('class'=>'btn btn-primary btn-sm'));
+		{
+
+			$bod .= '<form action="#" class="palautteet-form-vastaus" method="POST">'; 
+			$bod .= '<input type="hidden" name="PalautteetVastaus[this_id]" value="'.$data->id.'" class="form-control">';
+			$bod .= '<input type="hidden" name="PalautteetVastaus[keskustelu_id]" value="'.$data->keskustelu_id.'" class="form-control">';
+			$bod .= '<textarea name="PalautteetVastaus[teksti]" rows=4 class="form-control"></textarea>';
+			$bod .= CHtml::submitButton('Lähetä vastaus',array('class'=>'btn btn-primary myBgColors'));
+			$bod .= '</form>'; 
+
+
+		//$bod .= CHtml::link(Yii::t('main', 'Vasta'), Yii::app()->request->baseUrl.'/index.php/palautteet/vastaus?id='.$data->keskustelu_id,array('class'=>'btn btn-primary btn-sm'));
+		}
 	  	$bod .= '</td>';
 
 	  	$bod .= '<td>';
@@ -1088,6 +1102,7 @@ $xml = '
 		$bod .= '</tr>';
 	  	}
 		$bod .= '</table>';
+
 		}
 	
 		if(empty($bod))
@@ -1096,6 +1111,100 @@ $xml = '
 		return $bod;
 	}
 
+	public function actionSend_vastaus()
+	{
+		$return = $this->palautteetVastaus($_POST);
+		echo json_encode($return);
+	}
+
+
+	public function palautteetVastaus($post)
+	{
+		//Yii::app()->theme = 'customer';
+		$model = new Palautteet;
+		//print_r($post);
+
+		if(isset($post['PalautteetVastaus']))
+		{
+			$p = Palautteet::model()->findbypk($post['PalautteetVastaus']['this_id']);
+
+			$model->attributes=$post['PalautteetVastaus'];
+			$model->otsikko=$p->otsikko;
+			$model->asiakas_id=$p->asiakas_id;
+
+
+			$nimi = '';
+			$as = Asiakkaat::model()->findbypk($p->asiakas_id);
+			$firma = FirmanTiedot::model()->findbypk(1);
+
+			if(isset($as->yrityksen_nimi) and !empty($as->yrityksen_nimi))
+			$nimi = $as->yrityksen_nimi;
+			elseif(isset($as->yhteyshenkilo) and !empty($as->yhteyshenkilo))
+			$nimi = $as->yhteyshenkilo;
+
+			if(isset(Yii::app()->user->asiakas))
+				$model->teksti = '<b>'.$nimi.'</b>: '.$model->teksti;
+			elseif(isset(Yii::app()->user->nimi))
+				$model->teksti = '<b>'.Yii::app()->user->nimi.'</b>: '.$model->teksti;
+
+			if($model->save())
+			{
+
+
+				$firma = FirmanTiedot::model()->findbypk(1);
+
+				$message = Yii::t('main', 'Asiakas').': '.$nimi.'<br>';
+				$message .= Yii::t('main', 'Keskustelu ID:').': '.$model->keskustelu_id.'<br>';
+				$message .= Yii::t('main', 'Palaute:').': '.$model->teksti;
+
+				if(isset($firma->sahkoposti) and !empty($firma->sahkoposti))
+				{
+				$subject = Yii::t('main', 'Palaute'). ': '.$nimi;
+				$mail = new YiiMailer();
+				$mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
+				$mail->setTo($firma->sahkoposti);
+				$mail->setSubject($subject);
+				$mail->setBody($message);
+				$mail->send();
+
+							// <-- LOG
+							$log=new Log;
+							$log->log_category 	= 1; // 1-email
+							$log->email_to 		= $firma->sahkoposti;
+							$log->email_subject	= $subject;
+							$log->email_message	= json_encode($message);
+							$log->save();
+							//     LOG -->
+
+				}
+
+				if(isset($as->sahkoposti) and !empty($as->sahkoposti))
+				{
+				$subject = Yii::t('main', 'Palaute'). ': '.$nimi;
+				$mail = new YiiMailer();
+				$mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
+				$mail->setTo($as->sahkoposti);
+				$mail->setSubject($subject);
+				$mail->setBody($message);
+				$mail->send();
+
+							// <-- LOG
+							$log=new Log;
+							$log->log_category 	= 1; // 1-email
+							$log->email_to 		= $as->sahkoposti;
+							$log->email_subject	= $subject;
+							$log->email_message	= json_encode($message);
+							$log->save();
+							//     LOG -->
+
+				}
+
+				//$this->redirect(array('lahetetty','asiakas_id'=>$as->id));
+
+			}
+		}
+
+	}
 
 	protected function vinkitCRM($model, $from, $to)
 	{

@@ -15,6 +15,7 @@
 		$criteria->order = " DATE(time) DESC ";
 		$criteria->condition = "
 			asiakas_id='".$data->asiakas_id."' 
+			AND keskustelu_id='".$data->keskustelu_id."'
 			AND keskustelu_id!=id
 		";
 		$p_juttelu = Palautteet::model()->findAll($criteria);
@@ -40,8 +41,18 @@
 			$bod .= '<p>'.$data2->teksti.'</p>';
 		   }
 
+
 		if($data->status == 0)
-		$bod .= CHtml::link(Yii::t('main', 'Vasta'), Yii::app()->request->baseUrl.'/index.php/palautteet/vastaus?id='.$data->keskustelu_id,array('class'=>'btn btn-primary btn-sm', 'style'=>'color:white'));
+		{
+
+			$bod .= '<form action="#" class="palautteet-form-vastaus" method="POST">'; 
+			$bod .= '<input type="hidden" name="PalautteetVastaus[this_id]" value="'.$data->id.'" class="form-control">';
+			$bod .= '<input type="hidden" name="PalautteetVastaus[keskustelu_id]" value="'.$data->keskustelu_id.'" class="form-control">';
+			$bod .= '<textarea name="PalautteetVastaus[teksti]" rows=4 class="form-control"></textarea>';
+			$bod .= CHtml::submitButton('Lähetä vastaus',array('class'=>'btn btn-primary myBgColors'));
+			$bod .= '</form>'; 
+		}
+
 	  	$bod .= '</td>';
 
 	  	$bod .= '<td>';

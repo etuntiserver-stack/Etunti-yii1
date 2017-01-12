@@ -137,7 +137,7 @@ exit;
 			'naytaLaskut'=>true,
 			'naytaTarjoukset'=>true,
 			'naytaPalautteet'=>true,
-			'naytaVinkit'=>true
+			'naytaVinkit'=>true,
 		)
 	); 
 	?>
