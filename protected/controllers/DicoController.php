@@ -84,13 +84,102 @@ public function actionLogin($domain)
 		   $model=Asiakkaat::model()->findByPk($_POST['asiakasID']);
 		   if(isset($model->id))
 		   {
+
+				// <-- naytaVinkit
+				if(isset($_POST['tyyppi']) and $_POST['tyyppi'] == 'naytaVinkit')
+				{
+			                Yii::app()->theme = 'customer';
+					$mod = new VinkkiExtranet;
+					if(isset($_POST['VinkkiExtranet']))
+					{
+						$mod->attributes=$_POST['VinkkiExtranet'];
+						if($mod->save())
+						{
+							$this->_sendResponse(200, CJSON::encode(array('OK'=>Yii::t('main', 'Vinkki lähetetty.'))));
+							exit;
+						} else {
+							$this->_sendResponse(200, CJSON::encode(array('Error'=>$mod->getErrors())));
+							exit;
+						}
+
+					} else {
+						$return .= $this->renderPartial('//vinkkiExtranet/_form', array('model'=>$mod), true);
+					}
+				}
+				//  naytaVinkit -->
+
+				// <-- naytaPalautteet
+				if(isset($_POST['tyyppi']) and $_POST['tyyppi'] == 'naytaPalautteet')
+				{
+			                Yii::app()->theme = 'customer';
+					$mod = new Palautteet;
+					if(isset($_POST['Palautteet']))
+					{
+
+			$as = Asiakkaat::model()->findbypk(Yii::app()->user->asiakas);
+			$firma = FirmanTiedot::model()->findbypk(1);
+				
+			$nimi = '';
+			if(isset($as->yrityksen_nimi) and !empty($as->yrityksen_nimi))
+			$nimi = $as->yrityksen_nimi;
+			elseif(isset($as->yhteyshenkilo) and !empty($as->yhteyshenkilo))
+			$nimi = $as->yhteyshenkilo;
+
+						$mod->attributes=$_POST['Palautteet'];
+			$model->teksti = '<b>'.$nimi.'</b>: '.$model->teksti;
+						if($mod->save())
+						{
+
+				Palautteet::model()->updatebypk($model->id, array('keskustelu_id'=>$model->id));
+			
+
+				$message = Yii::t('main', 'Asiakas').': '.$nimi.'<br>';
+				$message .= Yii::t('main', 'Keskustelu ID:').': '.$model->id.'<br>';
+				$message .= Yii::t('main', 'Palaute:').': '.$model->teksti;
+
+				if(isset($firma->sahkoposti) and !empty($firma->sahkoposti))
+				{
+				$subject = Yii::t('main', 'Palaute'). ': '.$nimi;
+				$mail = new YiiMailer();
+				$mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
+				$mail->setTo($firma->sahkoposti);
+				$mail->setSubject($subject);
+				$mail->setBody($message);
+				$mail->send();
+
+							// <-- LOG
+							$log=new Log;
+							$log->log_category 	= 1; // 1-email
+							$log->email_to 		= $firma->sahkoposti;
+							$log->email_subject	= $subject;
+							$log->email_message	= json_encode($message);
+							$log->save();
+							//     LOG -->
+
+				}
+
+
+							$this->_sendResponse(200, CJSON::encode(array('OK'=>Yii::t('main', 'Palaute lähetetty.'))));
+							exit;
+						} else {
+							$this->_sendResponse(200, CJSON::encode(array('Error'=>$mod->getErrors())));
+							exit;
+						}
+
+					} else {
+						$return .= $this->renderPartial('//palautteet/_form', array('model'=>$mod), true);
+					}
+				}
+				//  naytaPalautteet -->
+
+
 				Yii::app()->theme = 'etunti';
 
 				$naytaMita = '';
 				if(isset($_POST['tyyppi']) and !empty($_POST['tyyppi']))
 				$naytaMita = $_POST['tyyppi'];
 
-				$return = $this->renderPartial('//asiakkaat/asiakas_historia', 
+				$return .= $this->renderPartial('//asiakkaat/asiakas_historia', 
 				array(
 					'model'=>$model,
 					$naytaMita=>true,
@@ -120,6 +209,7 @@ public function actionLogin($domain)
 		$model=Asiakkaat::model()->find($criteria);
 		if(isset($model->id))
 		{
+			Yii::app()->user->setState('asiakas', $model->id);
 			return true;
 		} else {
 			return false;

@@ -17,6 +17,21 @@
   <link rel='stylesheet' type='text/css' href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,600'>
   <link rel="stylesheet" type="text/css" href="css/index.css">
 
+  <!-- Jquery Javascript -->
+  <script type="text/javascript" src="js/jquery-1.11.2.min.js"></script>
+
+  <!-- Theme Javascript -->
+  <script src="cordova.js"></script>
+  <script src="js/domain.js"></script>
+
+  <script src="js/jquery-ui.min.js"></script>
+  <script src="assets_etunti/assets/js/utility/utility.js"></script>
+  <script src="assets_etunti/assets/js/demo/demo.js"></script>
+  <script src="assets_etunti/assets/js/main.js"></script>
+
+  <!-- Widget Javascript -->
+  <script src="assets_etunti/assets/js/demo/widgets.js"></script>
+
 </head>
 
 <body class="sb-l-o sb-r-c onload-check">
@@ -33,7 +48,8 @@
 
       <ul class="nav navbar-nav navbar-right">
 
-        <li class="dropdown menu-merge" data-toggle="tooltip" data-placement="bottom" title="Valitse kieli>">
+	<!--
+        <li class="dropdown menu-merge" data-toggle="tooltip" data-placement="bottom" title="Valitse kieli">
           <a class="dropdown-toggle" data-toggle="dropdown" href="#">
              <span class="">Kieli</span> 
           </a>
@@ -48,7 +64,7 @@
             </li>
           </ul>
         </li>
-
+	-->
 
         <li class="dropdown menu-merge" data-toggle="tooltip" data-placement="bottom" title="Valitse värit">
           <a class="dropdown-toggle" data-toggle="dropdown" href="#">
@@ -109,25 +125,6 @@
               </div>
             </form>
           </div>
-          <div class="col-sm-6">
-            <form id="toolbox-sidebar-skin">
-              <h4 class="mv20">Sivupalkin väri</h4>
-              <div class="skin-toolbox-swatches">
-                <div class="checkbox-custom fill mb5">
-                  <input type="radio" name="sidebarSkin" checked id="sidebarSkin3" value="">
-                  <label for="sidebarSkin3">Dark</label>
-                </div>
-                <div class="checkbox-custom fill checkbox-disabled mb5">
-                  <input type="radio" name="sidebarSkin" id="sidebarSkin1" value="sidebar-light">
-                  <label for="sidebarSkin1">Light</label>
-                </div>
-                <div class="checkbox-custom fill checkbox-light mb5">
-                  <input type="radio" name="sidebarSkin" id="sidebarSkin2" value="sidebar-light light">
-                  <label for="sidebarSkin2">Lighter</label>
-                </div>
-              </div>
-            </form>
-          </div>
         </div>
 
       </div>
@@ -155,8 +152,8 @@
                 <span class="fa fa-gear"></span> Omat asetukset </a>
             </li>
             <li class="list-group-item">
-              <a href="#" class="animated animated-short fadeInUp">
-                <span class="fa fa-power-off"></span> Kirjaudu ulos </a>
+              <a id="vaihdaTunnus" href="#" class="animated animated-short fadeInUp">
+                <span class="fa fa-sign-out"></span> Kirjaudu ulos </a>
             </li>
           </ul>
         </li>
@@ -239,7 +236,7 @@
         <!-- Dashboard Tiles -->
         <div class="row mb10">
 
-          <div class="col-sm-6 col-md-3">
+          <div class="col-sm-6 col-md-4">
 	   <a href="historia.html?tyyppi=naytaTyovuorot" class="link">
             <div class="panel bg-danger light of-h mb10">
               <div class="pn pl20 p5">
@@ -247,14 +244,14 @@
                   <i class="fa fa-bar-chart-o"></i>
                 </div>
                 <h2 class="mt15 lh15">
-                  <b>0</b>
+                  <b>Työvuorot</b>
                 </h2>
                 <h5 class="text-muted">Työvuorot</h5>
               </div>
             </div>
 	   </a>
           </div>
-          <div class="col-sm-6 col-md-3">
+          <div class="col-sm-6 col-md-4">
 	   <a href="historia.html?tyyppi=naytaToteutuneetTunnit" class="link">
             <div class="panel bg-alert light of-h mb10">
               <div class="pn pl20 p5">
@@ -263,14 +260,14 @@
                 </div>
 
                 <h2 class="mt15 lh15">
-                  <b>0</b>
+                  <b>Toteutuneet työt</b>
                 </h2>
-                <h5 class="text-muted">Toteutuneet työt</h5>
+                <h5 class="text-muted">Tunnit</h5>
               </div>
             </div>
 	   </a>
           </div>
-          <div class="col-sm-6 col-md-3">
+          <div class="col-sm-6 col-md-4">
 	   <a href="historia.html?tyyppi=naytaVinkit" class="link">
             <div class="panel bg-info light of-h mb10">
               <div class="pn pl20 p5">
@@ -278,14 +275,14 @@
                   <i class="fa fa-twitter"></i>
                 </div>
                 <h2 class="mt15 lh15">
-                  <b>0</b>
+                  <b>Vinkit</b>
                 </h2>
                 <h5 class="text-muted">Minun vinkit</h5>
               </div>
             </div>
 	   </a>
           </div>
-          <div class="col-sm-6 col-md-3">
+          <div class="col-sm-6 col-md-4">
 	   <a href="historia.html?tyyppi=naytaPalautteet" class="link">
             <div class="panel bg-warning light of-h mb10">
               <div class="pn pl20 p5">
@@ -293,14 +290,14 @@
                   <i class="fa fa-envelope"></i>
                 </div>
                 <h2 class="mt15 lh15">
-                  <b>0</b>
+                  <b>Palautteet</b>
                 </h2>
                 <h5 class="text-muted">Palautteen antaminen</h5>
               </div>
             </div>
 	   </a>
           </div>
-          <div class="col-sm-6 col-md-3">
+          <div class="col-sm-6 col-md-4">
 	   <a href="historia.html?tyyppi=naytaLaskut" class="link">
             <div class="panel bg-warning light of-h mb10">
               <div class="pn pl20 p5">
@@ -308,7 +305,7 @@
                   <i class="glyphicon glyphicon-barcode"></i>
                 </div>
                 <h2 class="mt15 lh15">
-                  <b>0</b>
+                  <b>Laskut</b>
                 </h2>
                 <h5 class="text-muted">Laskut</h5>
               </div>
@@ -331,10 +328,9 @@
      <div class="" id="footer-body">
       <center>
 	<ul class="list-inline">
-	 <li><a class="myBgColors" href="index.html"><h2 class="glyphicon glyphicon-home"></h2></a></li>
-	 <li><a class="myBgColors" href="asetukset.html"><h2 class="glyphicon glyphicon-cog"></h2></a></li>
-	 <li><a class="myBgColors" href="#" id="vaihdaTunnus"><h2 class="glyphicon glyphicon-user"></h2></a></li>
-	 <li><a class="myBgColors" href="#" id="exitPainike" onclick="exitFromApp()"><h2 class="fa fa-exit"></h2></a></li>
+	 <li><a class="myBgColors" href="index.html"><h2 class="fa fa-home" style="font-size: 180%"></h2></a></li>
+	 <li><a class="myBgColors" href="asetukset.html"><h2 class="fa fa-cogs" style="font-size: 180%"></h2></a></li>
+	 <li><a class="myBgColors" href="#" id="exitPainike" onclick="exitFromApp()"><h2 class="fa fa-power-off" style="font-size: 180%"></h2></a></li>
 	</ul>
       </center>
      </div>
@@ -342,21 +338,7 @@
     <!-- footer -->
 
 
-  <!-- Jquery Javascript -->
-  <script type="text/javascript" src="js/jquery-1.11.2.min.js"></script>
 
-  <!-- Theme Javascript -->
-  <script src="cordova.js"></script>
-  <script src="js/domain.js"></script>
-  <script src="js/toteutuneet.js"></script>
-
-  <script src="js/jquery-ui.min.js"></script>
-  <script src="assets_etunti/assets/js/utility/utility.js"></script>
-  <script src="assets_etunti/assets/js/demo/demo.js"></script>
-  <script src="assets_etunti/assets/js/main.js"></script>
-
-  <!-- Widget Javascript -->
-  <script src="assets_etunti/assets/js/demo/widgets.js"></script>
 
   <script type="text/javascript">
   jQuery(document).ready(function() {

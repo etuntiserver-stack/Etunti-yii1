@@ -75,14 +75,14 @@
 		$loppuiOrigin = $data->loppui;
 		$data->loppui = date("Y-m-d 00:00",strtotime($data->loppui));
 		$kesto = strtotime($data->loppui)-strtotime($data->aloitan);
-		echo rivit($data, $kesto, $viesti, $spl);
+		echo $this->rivit($data, $kesto, $viesti, $spl);
 		// Ensimmäinen osa -->
 
 		// <--Toinen osa
 		$data->aloitan = date("Y-m-d 00:00",strtotime($data->loppui));
 		$data->loppui = date("Y-m-d H:i",strtotime($loppuiOrigin));
 		$kesto = strtotime($data->loppui)-strtotime($data->aloitan);
-		echo rivit($data, $kesto, $viesti, $spl);
+		echo $this->rivit($data, $kesto, $viesti, $spl);
 		// Toinen osa -->
 
 		continue;

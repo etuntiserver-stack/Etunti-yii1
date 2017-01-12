@@ -1090,6 +1090,9 @@ $xml = '
 		$bod .= '</table>';
 		}
 	
+		if(empty($bod))
+		return 'Ei tuloksia';
+		else
 		return $bod;
 	}
 
@@ -1139,6 +1142,9 @@ $xml = '
 		$bod .= '</table>';
 		}
 	
+		if(empty($bod))
+		return 'Ei tuloksia';
+		else
 		return $bod;
 	}
 
@@ -1200,6 +1206,7 @@ $xml = '
 		'class'=>'btn btn-success btn-block'
 		));
 		}
+
 
 		return $return;
 	}

@@ -17,6 +17,28 @@
   <link rel='stylesheet' type='text/css' href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,600'>
   <link rel="stylesheet" type="text/css" href="css/index.css">
 
+  <!-- Jquery Javascript -->
+  <script type="text/javascript" src="js/jquery-1.11.2.min.js"></script>
+
+  <!-- Datepicker Javascript -->
+  <script type="text/javascript" src="js/moment-with-locales.js"></script>
+  <script type="text/javascript" src="js/bootstrap-datepicker.js"></script>
+  <script type="text/javascript" src="js/bootstrap-datetimepicker.js"></script>
+  <script type="text/javascript" src="js/bootstrap-datetimepicker.fi.js"></script>
+  <!-- Datepicker Javascript -->
+
+  <!-- Theme Javascript -->
+  <script src="cordova.js"></script>
+  <script src="js/domain.js"></script>
+  <script src="js/historia.js"></script>
+
+  <script src="js/jquery-ui.min.js"></script>
+  <script src="assets_etunti/assets/js/utility/utility.js"></script>
+  <script src="assets_etunti/assets/js/demo/demo.js"></script>
+  <script src="assets_etunti/assets/js/main.js"></script>
+
+  <!-- Widget Javascript -->
+  <script src="assets_etunti/assets/js/demo/widgets.js"></script>
 </head>
 
 <body class="sb-l-o sb-r-c onload-check">
@@ -33,6 +55,7 @@
 
       <ul class="nav navbar-nav navbar-right">
 
+	<!--
         <li class="dropdown menu-merge" data-toggle="tooltip" data-placement="bottom" title="Valitse kieli>">
           <a class="dropdown-toggle" data-toggle="dropdown" href="#">
              <span class="">Kieli</span> 
@@ -48,6 +71,7 @@
             </li>
           </ul>
         </li>
+	-->
 
 
         <li class="dropdown menu-merge" data-toggle="tooltip" data-placement="bottom" title="Valitse värit">
@@ -105,25 +129,6 @@
                 <div class="checkbox-custom fill mb5">
                   <input type="radio" name="headerSkin" id="headerSkin9" value="bg-dark">
                   <label for="headerSkin9">Dark</label>
-                </div>
-              </div>
-            </form>
-          </div>
-          <div class="col-sm-6">
-            <form id="toolbox-sidebar-skin">
-              <h4 class="mv20">Sivupalkin väri</h4>
-              <div class="skin-toolbox-swatches">
-                <div class="checkbox-custom fill mb5">
-                  <input type="radio" name="sidebarSkin" checked id="sidebarSkin3" value="">
-                  <label for="sidebarSkin3">Dark</label>
-                </div>
-                <div class="checkbox-custom fill checkbox-disabled mb5">
-                  <input type="radio" name="sidebarSkin" id="sidebarSkin1" value="sidebar-light">
-                  <label for="sidebarSkin1">Light</label>
-                </div>
-                <div class="checkbox-custom fill checkbox-light mb5">
-                  <input type="radio" name="sidebarSkin" id="sidebarSkin2" value="sidebar-light light">
-                  <label for="sidebarSkin2">Lighter</label>
                 </div>
               </div>
             </form>
@@ -202,7 +207,7 @@
       </header>
       <!-- End: Topbar -->
 
-
+      <div id="forAlert"></div>
       <div id="resultLaatiko"></div>
      </div>
     </div>
@@ -224,28 +229,7 @@
     <!-- footer -->
 
 
-  <!-- Jquery Javascript -->
-  <script type="text/javascript" src="js/jquery-1.11.2.min.js"></script>
 
-  <!-- Datepicker Javascript -->
-  <script type="text/javascript" src="js/moment-with-locales.js"></script>
-  <script type="text/javascript" src="js/bootstrap-datepicker.js"></script>
-  <script type="text/javascript" src="js/bootstrap-datetimepicker.js"></script>
-  <script type="text/javascript" src="js/bootstrap-datetimepicker.fi.js"></script>
-  <!-- Datepicker Javascript -->
-
-  <!-- Theme Javascript -->
-  <script src="cordova.js"></script>
-  <script src="js/domain.js"></script>
-  <script src="js/historia.js"></script>
-
-  <script src="js/jquery-ui.min.js"></script>
-  <script src="assets_etunti/assets/js/utility/utility.js"></script>
-  <script src="assets_etunti/assets/js/demo/demo.js"></script>
-  <script src="assets_etunti/assets/js/main.js"></script>
-
-  <!-- Widget Javascript -->
-  <script src="assets_etunti/assets/js/demo/widgets.js"></script>
 
   <script type="text/javascript">
   jQuery(document).ready(function() {
