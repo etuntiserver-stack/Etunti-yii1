@@ -150,13 +150,6 @@ exit;
 
 
 
-
-
-
-
-
-
-
 <script type="text/javascript">
 $(document).ready(function(){
 
@@ -164,6 +157,22 @@ $("#historiaSiirto").click(function(){
 	var divPosition = $('#historia').offset();
 	$('html, body').animate({scrollTop: divPosition.top}, "slow");
 });
+
+$(".getLaskuPDF").click(function(){
+	var thisID = $(this).attr('id');
+
+        $.ajax({
+           url: "getLaskuPDF",
+	   type:'POST',
+	   data: { id : thisID },
+           success: function(data){
+		//data = JSON.parse(data);
+		console.log(data);
+		//window.location = data;
+           }
+        });
+});
+
 
 
 $(".poistaTiedosto").click(function(){

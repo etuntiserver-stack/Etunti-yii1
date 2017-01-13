@@ -32,11 +32,11 @@ class AsiakkaatController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', 
-				'actions'=>array('asiakas_tila', 'ulos', 'osoitteen_muutos', 'send_vastaus'),
+				'actions'=>array('asiakas_tila', 'ulos', 'osoitteen_muutos', 'send_vastaus', 'getLaskuPDF'),
                 		'expression'=>"Yii::app()->controller->isAsiakas()",
 			),
 			array('allow',
-				'actions'=>array('admin', 'delete', 'create', 'update', 'index', 'view', 'checkLastAsiakasID', 'showshift', 'netvisor_sync', 'send_vastaus'),
+				'actions'=>array('admin', 'delete', 'create', 'update', 'index', 'view', 'checkLastAsiakasID', 'showshift', 'netvisor_sync', 'send_vastaus', 'getLaskuPDF'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -84,6 +84,13 @@ class AsiakkaatController extends Controller
                 }
                 parent::init();
         }
+
+
+	public function actionGetLaskuPDF()
+	{
+		$lasku = Yii::app()->createController('Lasku');
+		echo $lasku[0]->Lasku_pdf($_POST['id']);
+	}
 
 	public function actionUlos()
 	{
@@ -843,13 +850,13 @@ $xml = '
 			{
 		  		$bod .= '
 				<table class="table table-bordered">
-				<tr><td colspan="2"><h3>'.date("d.m.Y", strtotime($data->paivays)).', '.CHtml::link('PDF', array('//lasku/lasku_pdf', 'id'=>$data->id), array('target'=>'_blank')).'</h3></td></tr>
+				<tr><td colspan="2"><h3>'.date("d.m.Y", strtotime($data->paivays)).', '.CHtml::button('PDF', array('class'=>'btn btn-primary myBgColors getLaskuPDF','id'=>$data->id)).'</h3></td></tr>
 				<tr><th>'.Yii::t('main', 'Tilanne').'</th><td>'.$lasku[0]->tilanneCheck($data).'</td></tr>
 				<tr><th>'.Yii::t('main', 'Yhteensä').'</th><td>'.number_format((int)$data->yhteensa_total, 2, ",", " ").'</td></tr>
 				</table>
 				<br>';
 		  	}
-
+//'.CHtml::link('PDF', array('//lasku/lasku_pdf', 'id'=>$data->id), array('target'=>'_blank')).'
 		}
 	
 		if(empty($bod))

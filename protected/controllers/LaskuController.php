@@ -206,6 +206,37 @@ class LaskuController extends Controller
 
 	}
 
+	public function Lasku_pdf($id)
+	{
+
+		$lasku=$this->loadModel($id);
+		$laskunRivit=LaskunRivit::model()->findAll("lid='".$id."'");
+		$asetukset=Asetukset::model()->find("id=1");
+		$firmanTiedot=FirmanTiedot::model()->find("id=1");
+
+
+	        $html2pdf = Yii::app()->ePdf->HTML2PDF('P', 'A4', 'en');
+		$html2pdf->setDefaultFont('Arial');
+	        $html2pdf->WriteHTML($this->renderPartial('lasku_pdf', 
+			array(
+			'lasku'=>$lasku,
+			'asetukset'=>$asetukset,
+			'laskunRivit'=>$laskunRivit,
+			'yritys'=>$firmanTiedot,
+			),true));
+		$content_PDF = $html2pdf->Output('my_doc.pdf', EYiiPdf::OUTPUT_TO_STRING);
+		$file = $id.'_my_temp_pdf.pdf';
+		$path = Yii::app()->request->baseUrl."temp/lasku_pdf/".Yii::app()->user->domain;
+
+  		if (!file_exists($path))
+		  	mkdir($path, 0777, true);
+
+		file_put_contents($path.'/'.$file, $content_PDF);
+
+		return $path.'/'.$file;
+	}
+
+
 	public function actionLasku_pdf($id)
 	{
 
