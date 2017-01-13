@@ -838,28 +838,23 @@ $xml = '
 		$bod = '';
 
 		if(isset($tar[0])){
-
-		$bod .= '<table class="table table-bordered">
-		 <tr>
-		  <th>'.Yii::t('main', 'Päiväys').'</th>
-		  <th>'.Yii::t('main', 'Tiedosto').'</th>
-		  <th>'.Yii::t('main', 'Tilanne').'</th>
-		  <th>'.Yii::t('main', 'Yhteensä').'</th>
-		 </tr>';
 	
-		foreach($tar as $data)
-		{
-	  	$bod .= '
-		<tr>
-			<td>'.date("d.m.Y", strtotime($data->paivays)).'</td>
-			<td>'.CHtml::link('PDF', array('//lasku/lasku_pdf', 'id'=>$data->id), array('target'=>'_blank')).'</td>
-			<td>'.$lasku[0]->tilanneCheck($data).'</td>
-			<td>'.number_format((int)$data->yhteensa_total, 2, ",", " ").'</td>
-		</tr>';
-	  	}
-		$bod .= '</table>';
+			foreach($tar as $data)
+			{
+		  		$bod .= '
+				<table class="table table-bordered">
+				<tr><td colspan="2"><h3>'.date("d.m.Y", strtotime($data->paivays)).', '.CHtml::link('PDF', array('//lasku/lasku_pdf', 'id'=>$data->id), array('target'=>'_blank')).'</h3></td></tr>
+				<tr><th>'.Yii::t('main', 'Tilanne').'</th><td>'.$lasku[0]->tilanneCheck($data).'</td></tr>
+				<tr><th>'.Yii::t('main', 'Yhteensä').'</th><td>'.number_format((int)$data->yhteensa_total, 2, ",", " ").'</td></tr>
+				</table>
+				<br>';
+		  	}
+
 		}
 	
+		if(empty($bod))
+		return Yii::t('main', 'Ei tuloksia');
+		else
 		return $bod;
 	}
 
@@ -895,14 +890,13 @@ $xml = '
 		{
 		$kesto = strtotime($data->loppui)-strtotime($data->aloitan);
 	  	$dataArr[strtotime($data->aloitan)] = '
-		<table class="row table">
-		  <tr><td width="50%">'.Yii::t('main', 'Päiväys').'</td> <td>'.date("d.m.Y", strtotime($data->aloitan)).'</td></tr>
-		  <tr><td width="50%">'.Yii::t('main', 'Osoite').'</td> <td>'.$data->kohde_kannasta.'</td></tr>
+		<table class="table table-bordered">
+		  <tr><td colspan="2"><h3>'.date("d.m.Y", strtotime($data->aloitan)).', '.$data->kohde_kannasta.'</h3></td></tr>
 		  <tr><td width="50%">'.Yii::t('main', 'Aloitus').'</td> <td>'.date("H:i", strtotime($data->aloitan)).'</td></tr>
 		  <tr><td width="50%">'.Yii::t('main', 'Lopetus').'</td> <td>'.date("H:i", strtotime($data->loppui)).'</td></tr>
 		  <tr><td width="50%">'.Yii::t('main', 'Kesto').'</td> <td>'.$this->sprint($kesto).'</td></tr>
 		</table>
-		<hr>
+		<br>
 		';
 	  	}
 		//  luetut -->
@@ -933,13 +927,14 @@ $xml = '
 		{
 		$kesto = strtotime($data->loppui)-strtotime($data->aloitan);
 	  	$dataArr[strtotime($data->aloitan)] = '
-		<tr>
-			<td>'.date("d.m.Y", strtotime($data->aloitan)).'</td>
-			<td>'.$data->kohde_kannasta.'</td>
-			<td>'.date("H:i", strtotime($data->aloitan)).'</td>
-			<td>'.date("H:i", strtotime($data->loppui)).'</td>
-			<td>'.$this->sprint($kesto).'</td>
-		</tr>';
+		<table class="table table-bordered">
+		  <tr><td colspan="2"><h3>'.date("d.m.Y", strtotime($data->aloitan)).', '.$data->kohde_kannasta.'</h3></td></tr>
+		  <tr><td width="50%">'.Yii::t('main', 'Aloitus').'</td> <td>'.date("H:i", strtotime($data->aloitan)).'</td></tr>
+		  <tr><td width="50%">'.Yii::t('main', 'Lopetus').'</td> <td>'.date("H:i", strtotime($data->loppui)).'</td></tr>
+		  <tr><td width="50%">'.Yii::t('main', 'Kesto').'</td> <td>'.$this->sprint($kesto).'</td></tr>
+		</table>
+		<br>
+		';
 	  	}
 		//  toteutuneet -->
 
@@ -981,28 +976,24 @@ $xml = '
 
 		if(isset($tar[0])){
 
-		$bod .= '<table class="table table-bordered">
-		 <tr>
-		  <th>'.Yii::t('main', 'Päiväys').'</th>
-		  <th>'.Yii::t('main', 'Osoite').'</th>
-		  <th>'.Yii::t('main', 'Aloitus').'</th>
-		  <th>'.Yii::t('main', 'Lopetus').'</th>
-		 </tr>';
 	
-		foreach($tar as $data)
-		{
-		$k = Kohteet::model()->findbypk($data->kohde);
-	  	$bod .= '
-		<tr>
-			<td>'.date("d.m.Y", strtotime($data->pvm)).'</td>
-			<td>'.$k->osoite.'</td>
-			<td>'.$data->alku.'</td>
-			<td>'.$data->loppu.'</td>
-		</tr>';
-	  	}
-		$bod .= '</table>';
+			foreach($tar as $data)
+			{
+				$kesto = strtotime($data->loppu)-strtotime($data->alku);
+				$k = Kohteet::model()->findbypk($data->kohde);
+			  	$bod .= '
+				<table class="table table-bordered">
+					<tr><td colspan="2"><h3>'.date("d.m.Y", strtotime($data->pvm)).', '.$k->osoite.'</h3></td></tr>
+					<td>'.Yii::t('main', 'Aloitus').'</td><td>'.$data->alku.'</td></tr>
+					<td>'.Yii::t('main', 'Lopetus').'</td><td>'.$data->loppu.'</td></tr>
+					<td>'.Yii::t('main', 'Kesto').'</td><td>'.$this->sprint($kesto).'</td></tr>
+				</table><br>';
+		  	}
+
 		}
-	
+		if(empty($bod))
+		return Yii::t('main', 'Ei tuloksia');
+		else
 		return $bod;
 	}
 
