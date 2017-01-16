@@ -159,7 +159,7 @@ class KirjeidenHallintaController extends Controller
 			$tiedosto 	= "/../tiedostot/templates/".Yii::app()->user->domain."/".$nimike;
 
 		if(!file_exists($polku.$tiedosto))
-			$tm = '<h2 class="alert alert-danger">'.Yii::t('main', 'Template puuttuu').'</h2>';
+			$tm = '<h2 class="alert alert-danger">'.Yii::t('main', 'Mallitiedosto puutuu, jos haluat ominaisuuden käyttöön ota yhteyttä'). ' <a href="mailto:tuki@etunti.fi">tuki@etunti.fi<a></h2>';
 
 
 		if(isset($_POST['KirjeidenHallinta']))
