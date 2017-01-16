@@ -305,9 +305,9 @@ $(document).ready(function(){
 <div class="row">
  <div class="col-sm-12">
 
-	<?php if((isset($model->id) and $model->toistuva_id != 0) or !isset($model->id)) : ?>
+	<?php //if((isset($model->id) and $model->toistuva_id != 0) or !isset($model->id)) : ?>
   	<a href="#" class="btn btn-sm btn-primary" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample"> <?php echo Yii::t('main','Toistuva työvuoro'); ?></a>
-	<?php endif; ?>
+	<?php //endif; ?>
 
 	<div class="<?php echo $classCol; ?>" id="collapseExample">
 	<br>

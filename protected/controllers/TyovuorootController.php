@@ -1192,13 +1192,17 @@ class TyovuorootController extends Controller
 
 		$return = array();
 
-		if(isset($_POST['ToistuvatTyovuorot']) and isset($_POST['ToistuvatTyovuorot']['toistuva_aktiivinen']) and $_POST['ToistuvatTyovuorot']['toistuva_aktiivinen'] == 'on' and $model->toistuva_id != 0)
+		if(isset($_POST['ToistuvatTyovuorot']) and isset($_POST['ToistuvatTyovuorot']['toistuva_aktiivinen']) and $_POST['ToistuvatTyovuorot']['toistuva_aktiivinen'] == 'on')
 		{
 
 
 			$saankoSuoritta = $_POST['ToistuvatTyovuorot']['sopivatPaivat'];
 
+			if($model->toistuva_id != 0)
 			$toistuva= ToistuvatTyovuorot::model()->findByPk($model->toistuva_id);
+			else
+			$toistuva= new ToistuvatTyovuorot;
+
 			$toistuva->attributes=$_POST['ToistuvatTyovuorot'];
 			$toistuva->pvm = date("d.m.Y",strtotime($_POST['Tyovuoroot']['pvm']));
 			$toistuva->alku=$_POST['Tyovuoroot']['alku'];
