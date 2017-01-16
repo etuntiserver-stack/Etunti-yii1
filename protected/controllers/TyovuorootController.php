@@ -1427,6 +1427,9 @@ class TyovuorootController extends Controller
 		$tekijan_nimi = '<select id="tekijanVaihdo" class="form-control">';
 		if(count($t) > 0)
 		{
+		   if($model->tid == 0)
+		   $tekijan_nimi .= '<option value="'.$model->id.'">'.Yii::t('main', 'Valitse').'</option>';
+
 		   foreach($t as $tekijanData)
 		   {
 			if($tekijanData->id == $model->tid)

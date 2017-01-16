@@ -1025,7 +1025,7 @@ function laatikonPaivays(thisDataReturn){
 
 
   $('#tekijanVaihdo').change(function(){
-	var thisId = $(this).val();
+	var thisId = $('#tekijanVaihdo option:selected').val();
 	$('#Tyovuoroot_tid').val(thisId);
   });
 
