@@ -160,17 +160,7 @@ $("#historiaSiirto").click(function(){
 
 $(".getLaskuPDF").click(function(){
 	var thisID = $(this).attr('id');
-
-        $.ajax({
-           url: "getLaskuPDF",
-	   type:'POST',
-	   data: { id : thisID },
-           success: function(data){
-		//data = JSON.parse(data);
-		console.log(data);
-		//window.location = data;
-           }
-        });
+	window.location.href="getLaskuPDF?id=" + thisID;
 });
 
 

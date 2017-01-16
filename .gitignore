@@ -5,6 +5,7 @@ staging
 staging/*
 assets/*
 emails/*
+temp/*
 emails
 backup/*
 tiedostot/*

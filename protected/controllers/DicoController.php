@@ -167,6 +167,27 @@ public function actionLogin($domain)
 	}
 
 
+	public function actionGetlaskupdf($domain, $id)
+	{
+
+		$return = '';
+		if(isset($_POST['tunnus']) and $this->kirjautuminen($_POST['tunnus'], $_POST['salasana']) == true)
+		{
+
+		   $model=Asiakkaat::model()->findByPk($_POST['asiakasID']);
+		   if(isset($model->id))
+		   {
+
+			$lasku = Yii::app()->createController('Lasku');
+			$result = $lasku[0]->Lasku_pdf($id);
+			$this->_sendResponse(200, $result);
+
+		   } // $model->id
+
+		}
+
+				$this->_sendResponse(200, CJSON::encode('Ei tuloksia'));
+	}
 
 	protected function kirjautuminen($tunnus, $salasana)
 	{

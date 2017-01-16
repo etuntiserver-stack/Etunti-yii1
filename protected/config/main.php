@@ -208,6 +208,7 @@ return array(
 	// <-- DICO
         array('dico/login', 'pattern'=>'dico/<model:\w+>/login', 'verb'=>'POST'),
         array('dico/historia', 'pattern'=>'dico/<model:\w+>/historia', 'verb'=>'POST'),
+        array('dico/getlaskupdf', 'pattern'=>'dico/<model:\w+>/getlaskupdf', 'verb'=>'POST'),
 	//     DICO -->
 
         //array('api/update', 'pattern'=>'api/<model:\w+>/<id:\d+>', 'verb'=>'PUT'),

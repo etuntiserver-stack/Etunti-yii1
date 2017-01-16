@@ -224,7 +224,10 @@ class LaskuController extends Controller
 			'laskunRivit'=>$laskunRivit,
 			'yritys'=>$firmanTiedot,
 			),true));
-		$content_PDF = $html2pdf->Output('my_doc.pdf', EYiiPdf::OUTPUT_TO_STRING);
+		//$content_PDF = $html2pdf->Output('my_doc.pdf', EYiiPdf::OUTPUT_TO_STRING);
+		return $html2pdf->Output();
+
+/*
 		$file = $id.'_my_temp_pdf.pdf';
 		$path = Yii::app()->request->baseUrl."temp/lasku_pdf/".Yii::app()->user->domain;
 
@@ -234,6 +237,7 @@ class LaskuController extends Controller
 		file_put_contents($path.'/'.$file, $content_PDF);
 
 		return $path.'/'.$file;
+*/
 	}
 
 
@@ -1445,6 +1449,7 @@ $xml .= '
 	  {
 		$url		= $n[0].'/salesinvoicelist.nv?lastmodifiedstart='.$lastmodifiedstart.'&lastmodifiedend='.$lastmodifiedend;
 		$host 		= $n[1];
+
 
 		$sender 	= $n[2];
 		$customerId	= $n[3];

@@ -86,10 +86,10 @@ class AsiakkaatController extends Controller
         }
 
 
-	public function actionGetLaskuPDF()
+	public function actionGetLaskuPDF($id)
 	{
 		$lasku = Yii::app()->createController('Lasku');
-		echo $lasku[0]->Lasku_pdf($_POST['id']);
+		echo $lasku[0]->Lasku_pdf($id);
 	}
 
 	public function actionUlos()
