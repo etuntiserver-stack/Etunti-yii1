@@ -27,6 +27,22 @@
 <div class="text-left">
   <div class="row">
    <div class="col-md-1">
+    <img src="<?php echo Yii::app()->request->baseUrl; ?>/etusivuimg/ari.png" class="img-thumbnail">
+   </div>
+   <div class="col-md-8">
+    <span class="small yhteysInfo">
+	<p>
+	Myyjä<br>
+	Ari Hirvimäki<br>
+	etuntimyynti@etunti.fi<br>
+	+358 40 124 9081
+	</p>
+    </span>
+   </div>
+  </div>
+  <br>
+  <div class="row">
+   <div class="col-md-1">
     <img src="<?php echo Yii::app()->request->baseUrl; ?>/etusivuimg/johtaja.jpg" class="img-thumbnail">
    </div>
    <div class="col-md-8">
@@ -52,22 +68,6 @@
 	Turkka Rantanen<br>
 	turkka.rantanen@etunti.fi<br>
 	+358 40 124 9082
-	</p>
-    </span>
-   </div>
-  </div>
-  <br>
-  <div class="row">
-   <div class="col-md-1">
-    <img src="<?php echo Yii::app()->request->baseUrl; ?>/etusivuimg/ari.png" class="img-thumbnail">
-   </div>
-   <div class="col-md-8">
-    <span class="small yhteysInfo">
-	<p>
-	Myyjä<br>
-	Ari Hirvimäki<br>
-	etuntimyynti@etunti.fi<br>
-	+358 40 124 9081
 	</p>
     </span>
    </div>
