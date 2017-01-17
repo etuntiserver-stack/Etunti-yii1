@@ -168,7 +168,7 @@ if(!isset($_POST['tulosta']))
 	   // toistuva
 	   $toistuva = '';
 	   if($tvVal->toistuva_id != 0){
-		$toistuva = '<i class="p5 pull-right fa fa-repeat text-success" style="font-size:120%"></i>';
+		$toistuva = '<i class="p5 pull-right fa fa-repeat text-success" style="font-size:120%"> '.$tvVal->toistuva_id.'</i>';
 	   }
 
 	   // <-- Tarvittavien työntekijöiden määrä

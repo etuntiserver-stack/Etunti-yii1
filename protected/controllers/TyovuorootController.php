@@ -1186,8 +1186,7 @@ class TyovuorootController extends Controller
 	{
 
 		$model=$this->loadModel($id);
-
-
+		$edellinenToistuva= ToistuvatTyovuorot::model()->findByPk($model->toistuva_id);
 
 
 		$return = array();
@@ -1199,9 +1198,68 @@ class TyovuorootController extends Controller
 			$saankoSuoritta = $_POST['ToistuvatTyovuorot']['sopivatPaivat'];
 
 			if($model->toistuva_id != 0)
-			$toistuva= ToistuvatTyovuorot::model()->findByPk($model->toistuva_id);
-			else
-			$toistuva= new ToistuvatTyovuorot;
+			{
+				if($edellinenToistuva->pfrom != $_POST['ToistuvatTyovuorot']['pfrom'])
+				{
+					$toistuva = new ToistuvatTyovuorot;
+					$uusiPTO = date("d.m.Y", strtotime($_POST['ToistuvatTyovuorot']['pfrom'].' -1 day'));
+					ToistuvatTyovuorot::model()->updateByPk($edellinenToistuva->id, array('pto'=>$uusiPTO));
+				} else {
+					$toistuva = $edellinenToistuva;
+				}
+
+			} else {
+				$toistuva = new ToistuvatTyovuorot;
+			}
+
+
+			// <-- Poisto jos Aloitus paiva on eri kun edellisen criteria
+			if($saankoSuoritta == 1 and $edellinenToistuva->pfrom != $_POST['ToistuvatTyovuorot']['pfrom'])
+			{
+				$poistoCriteria = new CDbCriteria;
+				$poistoCriteria->condition = " 
+					toistuva_id='".$model->toistuva_id."' 
+					AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y%m%d') >= '".date("Ymd", strtotime($_POST['ToistuvatTyovuorot']['pfrom']))."'
+				";
+				Tyovuoroot::model()->deleteAll($poistoCriteria);
+			}
+			//     Poisto jos Aloitus paiva on eri kun edellisen criteria -->
+
+
+			// <-- Poisto jos Viikkon paiva on eri kun edellisen criteria
+			if($saankoSuoritta == 1 and isset($_POST['P']) and $edellinenToistuva->viikko_paivat != json_encode($_POST['P']))
+			{
+
+				// <-- Vertailu arraista
+				$edellinenArr = json_decode($edellinenToistuva->viikko_paivat, true);
+				$uusiArr = $_POST['P'];
+				$resultArr = array_diff($edellinenArr, $uusiArr);
+
+				if( count($resultArr) > 0 )
+				{
+				$implodeResult = " DAYOFWEEK( DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') )=".implode(" AND DAYOFWEEK( DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') )=", $resultArr);
+				//     Vertailu arraista -->
+
+
+				$poistoCriteria = new CDbCriteria;
+				$poistoCriteria->condition = " 
+					toistuva_id='".$model->toistuva_id."' 
+					AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN 
+					'".date("Y-m-d", strtotime($_POST['ToistuvatTyovuorot']['pfrom']))."'
+						AND '".date("Y-m-d", strtotime($_POST['ToistuvatTyovuorot']['pto']))."'
+					AND ($implodeResult)
+				";
+				Tyovuoroot::model()->deleteAll($poistoCriteria);
+
+
+
+//echo json_encode($implodeResult);
+				}
+//exit;
+
+			}
+			//     Poisto jos Viikkon paiva on eri kun edellisen criteria -->
+
 
 			$toistuva->attributes=$_POST['ToistuvatTyovuorot'];
 			$toistuva->pvm = date("d.m.Y",strtotime($_POST['Tyovuoroot']['pvm']));
@@ -1253,7 +1311,6 @@ class TyovuorootController extends Controller
 			if($saankoSuoritta == 1)
 			{
 				$toistuva->save();
-				Tyovuoroot::model()->deleteAll(" toistuva_id='".$model->toistuva_id."' ");
 			}
 
 
