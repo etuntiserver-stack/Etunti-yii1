@@ -185,9 +185,6 @@
 		 ?>
 		<?php endif; ?>
 		</div><!--toinenRakenne-->
-
-
-		<br>
 		<p><span class="btn btn-success btn-sm uusiRivi"><i class="fa fa-plus" aria-hidden="true"></i></span></p>
 
 	</div>
@@ -312,9 +309,6 @@
 		 ?>
 		<?php endif; ?>
 		</div><!--toinenRakenne-->
-
-
-		<br>
 		<p><span class="btn btn-success btn-sm uusiLisapalvelutRivi"><i class="fa fa-plus" aria-hidden="true"></i></span></p>
 
 	</div>

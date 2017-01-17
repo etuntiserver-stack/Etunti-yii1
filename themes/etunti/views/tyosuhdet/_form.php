@@ -210,13 +210,13 @@ $model->tid = $_GET['id'];
 	<div class="section fill mb5">
 		<?php $model->tuntihinta = str_replace(",",".",$model->tuntihinta); ?>
 		<?php echo $form->labelEx($model,'tuntihinta'); ?>
-		<?php echo $form->numberField($model,'tuntihinta',array('size'=>10,'maxlength'=>10,'class'=>'form-control')); ?>
+		<?php echo $form->numberField($model,'tuntihinta',array('size'=>10,'maxlength'=>10,'class'=>'form-control', "step"=>"any")); ?>
 		<?php echo $form->error($model,'tuntihinta'); ?>
 	</div>
 
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'matka_thinta'); ?>
-		<?php echo $form->textField($model,'matka_thinta',array('size'=>10,'maxlength'=>10,'class'=>'form-control')); ?>
+		<?php echo $form->textField($model,'matka_thinta',array('size'=>10,'maxlength'=>10,'class'=>'form-control', "step"=>"any")); ?>
 		<?php echo $form->error($model,'matka_thinta'); ?>
 	</div>
 
