@@ -25,6 +25,9 @@ $asiakasnumero = 'voidaan käyttää oleva ID numero';
 
 if(isset($model->id))
 $model->hinta = str_replace(",",".",$model->hinta);
+
+if(empty($model->salasana))
+$uusiSalasana = $this->generatePassword();
 ?>
 
 <style>
@@ -151,6 +154,12 @@ $model->hinta = str_replace(",",".",$model->hinta);
 <?php if(in_array('5',$tas)) : ?>
 	<div class="section fill mb5 ashidd_a">
 		<?php echo $form->labelEx($model,'salasana'); ?>
+
+		<?php if(isset($uusiSalasana)) : ?>
+		<div class="alert bg-warning"><?php echo Yii::t('main', 'Uusi salasana generoitu ja ei viellä tallennettu'); ?></div>
+		<?php $model->salasana = $uusiSalasana; ?>
+		<?php endif ; ?>
+
 		<?php echo $form->textField($model,'salasana',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'salasana'); ?>
 	</div>
