@@ -1214,7 +1214,7 @@ class TyovuorootController extends Controller
 
 
 			// <-- Poisto jos Aloitus paiva on eri kun edellisen criteria
-			if($saankoSuoritta == 1 and $edellinenToistuva->pfrom != $_POST['ToistuvatTyovuorot']['pfrom'])
+			if($saankoSuoritta == 1 and $edellinenToistuva->pfrom != $_POST['ToistuvatTyovuorot']['pfrom'] and $model->toistuva_id != 0)
 			{
 				$poistoCriteria = new CDbCriteria;
 				$poistoCriteria->condition = " 
@@ -1236,7 +1236,7 @@ class TyovuorootController extends Controller
 				$resultArr = array_diff($edellinenArr, $uusiArr);
 				//     Vertailu arraista -->
 
-				if( count($resultArr) > 0 )
+				if( count($resultArr) > 0 and $model->toistuva_id != 0)
 				{
 
 				$poistoCriteria = new CDbCriteria;
