@@ -752,7 +752,7 @@ $('.mult').multiselect({
 				if( isSaved === true )
 				{
 					laatikonPaivays(thisDataReturn);
-					$('#showres').modal('hide');
+
 				} else {
 
 					$('#sopivatPaivat').html('<br><h3>Toistuvien työvuorojen päivämäärät</h3><div class="col-sm-offset-1">').show('slow');
@@ -781,9 +781,11 @@ $('.mult').multiselect({
 			} else {
 
 					laatikonPaivays(thisDataReturn);
-					$('#showres').modal('hide');
 			}
 
+
+			if( $('#submitButton').attr('pvmTarkistus') !== "true" ) 
+					$('#showres').modal('hide');
   }
 
 
@@ -1033,7 +1035,7 @@ function laatikonPaivays(thisDataReturn){
 	$(this).remove();
 	$('#sopivatPaivatInput').val(1);
 	$('#toistuvaAll').hide('slow');
-	$('#submitButton').val('Luo');
+	$('#submitButton').val('Luo').removeAttr( "pvmTarkistus" );
 	$('#toistuvaAllsijaan').html('<h3 class="alert alert-success">Toistuvien työvuorojen päivät tallennettu.<br>Paina Luo-painikketta lisätäksesi työvuorot työvuorolistaan.</h3>').show('slow');
   });
 
@@ -1048,9 +1050,9 @@ function laatikonPaivays(thisDataReturn){
 		if( $('#pto').val() === '' )
 		$('#pto').removeClass('bg-success').addClass('bg-danger');
 
-		$('#submitButton').val('Tarkista päivämäärät');
+		$('#submitButton').val('Tarkista päivämäärät').attr("pvmTarkistus",true);
 	} else {
-		$('#submitButton').val('Luo');
+		$('#submitButton').val('Luo').removeAttr( "pvmTarkistus" );
 	}
 	switchesPvm();
   });
