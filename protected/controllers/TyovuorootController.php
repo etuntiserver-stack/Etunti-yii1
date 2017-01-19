@@ -606,10 +606,23 @@ class TyovuorootController extends Controller
 		$model = Tyovuoroot::model()->findbypk($_POST['poistaTv']);
 
 
-		if(isset($_POST['toistuva_aktiivinen']) and $_POST['toistuva_aktiivinen'] == 'true' and $model->toistuva_id != 0)
+		if(	isset($_POST['toistuva_aktiivinen']) 
+			and $_POST['toistuva_aktiivinen'] == 'true'
+			and isset($model->toistuva_id)
+			and $model->toistuva_id != 0
+			and isset($_POST['pfrom']) and !empty($_POST['pfrom'])
+			and isset($_POST['pto']) and !empty($_POST['pto'])
+		)
 		{
 
-			Tyovuoroot::model()->deleteAll(" toistuva_id='".$model->toistuva_id."' ");
+			$poistoCriteria = new CDbCriteria;
+			$poistoCriteria->condition = " 
+				toistuva_id='".$model->toistuva_id."' 
+				AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN 
+				'".date("Y-m-d", strtotime($_POST['pfrom']))."'
+					AND '".date("Y-m-d", strtotime($_POST['pto']))."'
+			";
+			Tyovuoroot::model()->deleteAll($poistoCriteria);
 			exit;
 		}
 

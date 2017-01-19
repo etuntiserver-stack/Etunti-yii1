@@ -850,7 +850,7 @@ $('#poistaTv').click(function(){
         $.ajax({
            url: 'poistaTv',
 	   type:'POST',
-	   data: { "poistaTv" : model, toistuva_aktiivinen : toistuva_aktiivinen },
+	   data: { "poistaTv" : model, toistuva_aktiivinen : toistuva_aktiivinen, pfrom : $('#pfrom').val(), pto : $('#pto').val() },
            success: function(data){
         	//console.log(data);
 		parent.postMessage( "doit//"+thisID, "*");
