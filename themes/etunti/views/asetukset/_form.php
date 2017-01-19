@@ -437,6 +437,7 @@
 		<?php echo $form->error($model,'onlinevaraus_alku'); ?>
 	</div>
 
+
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'onlinevaraus_loppu'); ?>
 		<?php 
@@ -608,6 +609,31 @@
 		<?php echo $form->labelEx($model,'netvisor_partner_id'); ?>
 		<?php echo $form->textField($model,'netvisor_partner_id',array('maxlength'=>255,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'netvisor_partner_id'); ?>
+	</div>
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'netvisor_mita_lahetetaan'); ?>
+		<?php 
+        	$l = array(
+			3=>Yii::t('main', 'Työtunnit'),
+			2=>Yii::t('main', 'Matkat'),
+			10=>Yii::t('main', 'Lounastauot')
+		);
+		echo $form->dropDownList($model,'netvisor_mita_lahetetaan', $l, 
+		array('class'=>'form-control')) ?>
+		<?php echo $form->error($model,'netvisor_mita_lahetetaan'); ?>
+	</div>
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'netvisor_acceptancestatus'); ?>
+		<?php 
+        	$l = array(
+			'accepted'=>Yii::t('main', 'Hyväksytty'),
+			'confirmed'=>Yii::t('main', 'Kirjattu')
+		);
+		echo $form->dropDownList($model,'netvisor_acceptancestatus', $l, 
+		array('class'=>'form-control')) ?>
+		<?php echo $form->error($model,'netvisor_acceptancestatus'); ?>
 	</div>
 
    </div>
