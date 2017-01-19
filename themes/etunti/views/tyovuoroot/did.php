@@ -173,7 +173,7 @@ if(!isset($_POST['tulosta']))
 
 	   // Tyopari
 	   $tyopari = '';
-	   if($tvVal->tyopaari != ''){
+	   if($tvVal->tyopaari != '' and $tvVal->tyopaari != "[\"$tvVal->tid\"]"){
 		$tyopari = '<i class="p5 pull-right fa fa-male text-success" style="font-size:120%" data-toggle="tooltip" data-placement="top" title="'. Yii::t('main', 'Työpari').'"></i>';
 	   }
 
