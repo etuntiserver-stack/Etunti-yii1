@@ -1257,9 +1257,8 @@ class TyovuorootController extends Controller
 				$poistoCriteria->condition = " 
 					toistuva_id='".$model->toistuva_id."' 
 					AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN 
-					'".date("Y-m-d", strtotime($_POST['ToistuvatTyovuorot']['pfrom']))."'
+						'".date("Y-m-d", strtotime($_POST['ToistuvatTyovuorot']['pfrom']))."'
 						AND '".date("Y-m-d", strtotime($_POST['ToistuvatTyovuorot']['pto']))."'
-
 					AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%w') IN (".implode(",",$resultArr).")
 				";
 				Tyovuoroot::model()->deleteAll($poistoCriteria);

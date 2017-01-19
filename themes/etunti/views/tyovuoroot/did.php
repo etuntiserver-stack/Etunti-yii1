@@ -168,7 +168,13 @@ if(!isset($_POST['tulosta']))
 	   // toistuva
 	   $toistuva = '';
 	   if($tvVal->toistuva_id != 0){
-		$toistuva = '<i class="p5 pull-right fa fa-repeat text-success" style="font-size:120%">'.$tvVal->toistuva_id.'</i>';
+		$toistuva = '<i class="p5 pull-right fa fa-repeat text-success" style="font-size:120%" data-toggle="tooltip" data-placement="top" title="'. Yii::t('main', 'Toistuva työvuoro').'"></i>';
+	   }
+
+	   // Tyopari
+	   $tyopari = '';
+	   if($tvVal->tyopaari != ''){
+		$tyopari = '<i class="p5 pull-right fa fa-male text-success" style="font-size:120%" data-toggle="tooltip" data-placement="top" title="'. Yii::t('main', 'Työpari').'"></i>';
 	   }
 
 	   // <-- Tarvittavien työntekijöiden määrä
@@ -207,7 +213,7 @@ if(!isset($_POST['tulosta']))
 
 	    //if(!isset($_POST['tulosta'])) $br = '<br>'; else $br = '';
 
-	    $al = '<b>'.$tvVal->alku.'-'.$tvVal->loppu.$toistuva.$status.$tarvittavien_tyontekijoiden_maara.'</b>';
+	    $al = '<b>'.$tvVal->alku.'-'.$tvVal->loppu.$toistuva.$tyopari.$status.$tarvittavien_tyontekijoiden_maara.'</b>';
 	   } else {
 	    $al = '';
 	   }
