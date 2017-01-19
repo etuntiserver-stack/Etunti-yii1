@@ -624,7 +624,7 @@ class TyontekijatController extends Controller
 	if($modelTyosuhteet->palkka_tyyppi == 'kk')
 		$payrollrulegroupname = 'Kuukausipalkkalaiset';
 	if($modelTyosuhteet->palkka_tyyppi == 'h')
-		$payrollrulegroupname = 'Tuntipalkkaiset';
+		$payrollrulegroupname = 'Tuntipalkkalaiset, teknologiateollisuus';
 
       	$lisat = '';
 	if($tila == 'add')
