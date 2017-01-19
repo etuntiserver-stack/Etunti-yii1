@@ -242,7 +242,7 @@ $xml = '
     <workdayhour>
       <hours>'.$tunti.'</hours>
       <collectorratio type="number">1</collectorratio>
-      <acceptancestatus>confirmed</acceptancestatus>
+      <acceptancestatus>accepted</acceptancestatus>
       <description>'.$nimike.'</description>
     </workdayhour>
   </workday>
