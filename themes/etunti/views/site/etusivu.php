@@ -78,8 +78,11 @@ $months=array(
                 </div>
                 <h2 class="mt15 lh15">
                   <b>	<?php 
-			$kktunnint = $this->toteutuThisMonth(date("Ym"));
-			echo $this->sprint($kktunnint); 
+				$kktunnint = $this->toteutuThisMonth(date("Ym"));
+				if($kktunnint == 0)
+				echo '00:00'; 
+				else
+				echo $this->sprint($kktunnint); 
 			?>
 		  </b>
                 </h2>

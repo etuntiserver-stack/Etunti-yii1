@@ -761,10 +761,11 @@ $(document).ready(function(){
 	{
 		$month = $k;
 		$total_l = 0;
+		$total_t = 0;
 
        		$criteria = new CDbCriteria();
         	$criteria->select = "
-		TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'))) as l_tunnit,aloitan,loppui
+		SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit,aloitan,loppui
 		";
 
         	$criteria->condition = "  
@@ -773,21 +774,14 @@ $(document).ready(function(){
 			AND id NOT IN(select kid from sivexkuitti_repaired)
 		";
 
-		$lu = Mobile::model()->findAll($criteria);
-		foreach($lu as $l)
-		{
+		$lu = Mobile::model()->find($criteria);
+		$total_l = $lu->l_tunnit;
 
-		    $l->loppui = date("d.m.Y H:i",strtotime($l->loppui));
-		    $l->aloitan = date("d.m.Y H:i",strtotime($l->aloitan));
-
-		    $l->l_tunnit = (strtotime($l->loppui)-strtotime($l->aloitan));
-		    $total_l += $l->l_tunnit;
-		}
 		/* ////////////////////////// */
 
        		$criteria = new CDbCriteria();
         	$criteria->select = "
-		TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'))) as l_tunnit,aloitan,loppui 
+		SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit,aloitan,loppui 
 		";
 
         	$criteria->condition = "  
@@ -795,19 +789,13 @@ $(document).ready(function(){
 			AND EXTRACT(YEAR_MONTH FROM DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y.%m.%d'))  = '".$month."'
 		";
 
-		$tot = Toteutuneet::model()->findAll($criteria);
-		foreach($tot as $l)
-		{
-
-		    $l->loppui = date("d.m.Y H:i",strtotime($l->loppui));
-		    $l->aloitan = date("d.m.Y H:i",strtotime($l->aloitan));
-
-		    $l->l_tunnit = (strtotime($l->loppui)-strtotime($l->aloitan));
-		    $total_l += $l->l_tunnit;
-		}
+		$tot = Toteutuneet::model()->find($criteria);
+		$total_t = $tot->l_tunnit;
 
 
-		return $total_l;
+		$result = $total_l+$total_t;
+
+		return $result;
 
 	}
 
@@ -923,6 +911,7 @@ $(document).ready(function(){
         	$criteria->group = " tid ";
         	$criteria->condition = "  
 			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d')  = CURDATE()
+
 
 		";
 
