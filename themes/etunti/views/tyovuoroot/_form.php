@@ -42,8 +42,20 @@ if(isset($model->id))
 
 }
 
+
+$ov = Onlinevaraus::model()->findbypk($model->onlinevaraus_id);
+if(isset($ov->id) and !empty($ov->kohde_id) and empty($model->kohde)){
+	Tyovuoroot::model()->updatebypk($model->id, array('kohde'=>$ov->kohde_id));
+	$model->kohde = $ov->kohde_id;
+}
+
 ?>
 
+	<?php if(isset($ov->id)) : ?>
+	<div class="section alert bg-warning">
+	<?php echo Yii::t('main', 'Tämä kohde on onlinevarauksesta.'); ?>
+	</div>
+	<?php endif; ?>
 
 
 <div class="section">
@@ -83,18 +95,8 @@ if(isset($model->id))
   <div class="col-sm-3">
 		<?php echo $form->labelEx($model,'kohde'); ?>
 		<?php
-		if($model->onlinevaraus_id == 0)
-		{
         		$list = CHtml::listData(Kohteet::model()->findAll(array('order' => 'osoite')), 'id', 'osoite');
         		echo $form->dropDownList($model, 'kohde', $list,array('empty'=>'Valitse','class'=>'form-control kohde'));
-
-		} else {
-
-	 		$ov = Onlinevaraus::model()->findbypk($model->onlinevaraus_id);
-			if(isset($ov->id))
-			echo '<input type="text" class="form-control" value="'.$ov->osoite.'">';
-
-		}
         	?>
   </div>
 
@@ -196,14 +198,7 @@ $(document).ready(function(){
   <div class="col-sm-6">
 		<?php echo $form->labelEx($model,'tietoja'); ?>
 		<?php 
-
-	 		$ov = Onlinevaraus::model()->findbypk($model->onlinevaraus_id);
-			if(isset($ov->id))
-				$model->tietoja = $ov->lisatietoja;
-			elseif(!isset($ov->id) and isset($model->tietoja))
-				$model->tietoja = $model->tietoja;
-
-			echo $form->textarea($model,'tietoja',array('rows'=>4,'class'=>'form-control', 'placeholder'=>'Esim. Avainten tiedot tai kohteesa olevat rajoitukset.')); 
+		echo $form->textarea($model,'tietoja',array('rows'=>4,'class'=>'form-control', 'placeholder'=>'Esim. Avainten tiedot tai kohteesa olevat rajoitukset.')); 
 		?>
 		<?php echo $form->error($model,'tietoja'); ?>
   </div>

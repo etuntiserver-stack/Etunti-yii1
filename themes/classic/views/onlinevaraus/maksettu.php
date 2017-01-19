@@ -168,6 +168,7 @@ if(isset($ov->id) and isset($tv->id))
 				exit;
 			} else {
 				Onlinevaraus::model()->updateByPk($ov->id, array('kohde_id'=>$kohteet->id));
+				Tyovuoroot::model()->updateByPk($tv->id, array('kohde'=>$kohteet->id));
 			}
 
 

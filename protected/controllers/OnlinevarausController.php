@@ -313,7 +313,8 @@ class OnlinevarausController extends Controller
 					{
 				        	$tv = Tyovuoroot::model()->updatebypk($_SESSION['onlinevaraus']['modelTV'], 
 						array(
-							'onlinevaraus_id' => $ov->id
+							'onlinevaraus_id' => $ov->id,
+							'kohde' => $ov->kohde_id
 						));
 					}
 
