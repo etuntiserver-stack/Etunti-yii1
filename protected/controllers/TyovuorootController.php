@@ -1214,21 +1214,34 @@ class TyovuorootController extends Controller
 
 
 			// <-- Poisto jos Aloitus paiva on eri kun edellisen criteria
-			if($saankoSuoritta == 1 and isset($edellinenToistuva->id) and $edellinenToistuva->pfrom != $_POST['ToistuvatTyovuorot']['pfrom'] and isset($model->toistuva_id) and $model->toistuva_id != 0)
+			if(	$saankoSuoritta == 1 
+				//and isset($edellinenToistuva->id) 
+				//and $edellinenToistuva->pfrom != $_POST['ToistuvatTyovuorot']['pfrom'] 
+				and isset($model->toistuva_id) 
+				and $model->toistuva_id != 0
+			)
 			{
 				$poistoCriteria = new CDbCriteria;
 				$poistoCriteria->condition = " 
 					toistuva_id='".$model->toistuva_id."' 
-					AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y%m%d') >= '".date("Ymd", strtotime($_POST['ToistuvatTyovuorot']['pfrom']))."'
+					AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN 
+					'".date("Y-m-d", strtotime($_POST['ToistuvatTyovuorot']['pfrom']))."'
+						AND '".date("Y-m-d", strtotime($_POST['ToistuvatTyovuorot']['pto']))."'
 				";
 				Tyovuoroot::model()->deleteAll($poistoCriteria);
+
+				// AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y%m%d') >= '".date("Ymd", strtotime($_POST['ToistuvatTyovuorot']['pfrom']))."'
 
 			}
 			//     Poisto jos Aloitus paiva on eri kun edellisen criteria -->
 
 
 			// <-- Poisto jos Viikkon paiva on eri kun edellisen criteria
-			if($saankoSuoritta == 1 and isset($_POST['P']) and isset($edellinenToistuva->id) and $edellinenToistuva->viikko_paivat != json_encode($_POST['P']))
+			if(	$saankoSuoritta == 1 
+				and isset($_POST['P']) 
+				and isset($edellinenToistuva->id) 
+				and $edellinenToistuva->viikko_paivat != json_encode($_POST['P'])
+			)
 			{
 
 				// <-- Vertailu arraista
