@@ -1210,13 +1210,22 @@ class TyovuorootController extends Controller
 
 			$saankoSuoritta = $_POST['ToistuvatTyovuorot']['sopivatPaivat'];
 
+			if( $saankoSuoritta == 1 and $model->toistuva_id == 0 )
+			{
+				Tyovuoroot::model()->deleteByPk($model->id);
+			}
+
+
 			if(isset($model->toistuva_id) and $model->toistuva_id != 0)
 			{
 				if(isset($edellinenToistuva->id) and $edellinenToistuva->pfrom != $_POST['ToistuvatTyovuorot']['pfrom'])
 				{
 					$toistuva = new ToistuvatTyovuorot;
 					$uusiPTO = date("d.m.Y", strtotime($_POST['ToistuvatTyovuorot']['pfrom'].' -1 day'));
+
+					if($saankoSuoritta == 1)
 					ToistuvatTyovuorot::model()->updateByPk($edellinenToistuva->id, array('pto'=>$uusiPTO));
+
 				} else {
 					$toistuva = $edellinenToistuva;
 				}
@@ -1228,8 +1237,6 @@ class TyovuorootController extends Controller
 
 			// <-- Poisto jos Aloitus paiva on eri kun edellisen criteria
 			if(	$saankoSuoritta == 1 
-				//and isset($edellinenToistuva->id) 
-				//and $edellinenToistuva->pfrom != $_POST['ToistuvatTyovuorot']['pfrom'] 
 				and isset($model->toistuva_id) 
 				and $model->toistuva_id != 0
 			)
@@ -1242,9 +1249,6 @@ class TyovuorootController extends Controller
 						AND '".date("Y-m-d", strtotime($_POST['ToistuvatTyovuorot']['pto']))."'
 				";
 				Tyovuoroot::model()->deleteAll($poistoCriteria);
-
-				// AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y%m%d') >= '".date("Ymd", strtotime($_POST['ToistuvatTyovuorot']['pfrom']))."'
-
 			}
 			//     Poisto jos Aloitus paiva on eri kun edellisen criteria -->
 
