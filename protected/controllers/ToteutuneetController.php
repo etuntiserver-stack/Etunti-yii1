@@ -249,7 +249,7 @@ class ToteutuneetController extends Controller
 
 		$collectorratio = 1;
 		if($nimike == 'tyoilta') $collectorratio =  2;
-		if($nimike == 'matka') $collectorratio =  6;
+		//if($nimike == 'matka') $collectorratio =  6;
 		if($nimike == 'tyoyo') $collectorratio =  3;
 		if($nimike == 'tyosu') $collectorratio =  5;
 
