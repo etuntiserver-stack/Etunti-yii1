@@ -297,7 +297,7 @@ $message .= '
 
 			// <-- Lähetetään asiakkaalle
 	          	$mail = new YiiMailer();
-			$mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
+			$mail->setFrom($firmanTiedot->sahkoposti, 'ETUNTI.FI');
 			$mail->setTo($ov->sahkoposti);
 			$mail->setSubject('Online varaus');
 			$mail->setBody($message);
@@ -322,7 +322,7 @@ $message .= '
 			{
 			$message .= '<p><h3>Kopio</h3></p>';
 	          	$mail = new YiiMailer();
-			$mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
+			$mail->setFrom($firmanTiedot->sahkoposti, 'ETUNTI.FI');
 			$mail->setTo($firmanTiedot->sahkoposti);
 			$mail->setSubject('Online varaus');
 			$mail->setBody($message);
