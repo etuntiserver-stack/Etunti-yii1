@@ -294,6 +294,8 @@ $message .= '
         </section>';
 
 			$_SESSION['onlinevaraus']['message'] = $message;
+			$firmanTiedot = FirmanTiedot::model()->findbypk(1);
+
 
 			// <-- Lähetetään asiakkaalle
 	          	$mail = new YiiMailer();
@@ -316,7 +318,6 @@ $message .= '
 
 			// Lähetetään asiakkaalle -->
 
-			$firmanTiedot = FirmanTiedot::model()->findbypk(1);
 
 			// <-- Lähetetään toimistoon
 			if(isset($firmanTiedot->sahkoposti) and !empty($firmanTiedot->sahkoposti))
