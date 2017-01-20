@@ -123,21 +123,24 @@ class ToteutuneetController extends Controller
 
 		// <-- Netvisor lahetys
 		$asetukset=Asetukset::model()->findbypk(1);
-		if($asetukset->netvisor_kaytto == 1)
+		if($asetukset->netvisor_kaytto == 1 and empty($model->netvisor_ok_list))
 		{
+
+			$mitaLahetetaan = json_decode($asetukset->netvisor_mita_lahetetaan, true);
+			//print_r($mitaLahetetaan);
 
 			$update = false;
 			$lastArr = array();
-			$lastArr = json_decode($model->netvisor_ok_list, true);
 			foreach($_POST['json'][0] as $key=>$value)
 			{
-				$mitaLahetetaan = json_decode($asetukset->netvisor_mita_lahetetaan, true);
 
-				if($value > 0 and is_array($mitaLahetetaan) and in_array($key, $mitaLahetetaan) )
+				if($value > 0 and in_array($key,$mitaLahetetaan) )
 				{
 					$return = array();
+					//echo $key." ".$value."\n";
+
 					$return = $this->netvisorWorkday($key,$value,$model);
-					if(isset($return['statusOK']) and isset($lastArr[$key])){
+					if(isset($return['statusOK'])){
 						$update = true;
 						$lastArr[$key] = $value;
 					}
@@ -152,9 +155,12 @@ class ToteutuneetController extends Controller
 			if($update == true)
 			{
 				HyvaksyttamatPvmTunnit::model()->updateByPk($model->id, array('netvisor_ok_list'=>json_encode($lastArr)));
-				echo json_encode('netvisorOK');
+				echo json_encode(array('netvisorOK'=>'Tiedot on lähetetty netvisoriin'));
 				exit;
 			}
+		} elseif($asetukset->netvisor_kaytto == 1 and !empty($model->netvisor_ok_list)) {
+				echo json_encode('Tiedot ovat jo lähetetty');
+				exit;
 		}
 		//     Netvisor lahetys -->
 
@@ -241,6 +247,13 @@ class ToteutuneetController extends Controller
 		else
 			$acceptancestatus = $asetukset->netvisor_acceptancestatus;
 
+		$collectorratio = 1;
+		if($nimike == 'tyoilta') $collectorratio =  2;
+		if($nimike == 'matka') $collectorratio =  6;
+		if($nimike == 'tyoyo') $collectorratio =  3;
+		if($nimike == 'tyosu') $collectorratio =  5;
+
+
 // <-- XML
 $xml = '
 <root>
@@ -249,7 +262,7 @@ $xml = '
     <employeeidentifier type="number" defaultdimensionhandlingtype="usedefault">'.$model->tid.'</employeeidentifier>
     <workdayhour>
       <hours>'.$tunti.'</hours>
-      <collectorratio type="number">1</collectorratio>
+      <collectorratio type="number">'.$collectorratio.'</collectorratio>
       <acceptancestatus>'.$acceptancestatus.'</acceptancestatus>
       <description>'.$nimike.'</description>
     </workdayhour>

@@ -440,11 +440,11 @@ function dateDiff($start, $end) {
 				tyotunnit	="'.(int)$tyotunnit.'"
 				matka		="'.(int)$matka.'"
 				lounaat		="'.(int)$lounaat.'"
-				tyoIlta		="'.(int)$tyoIlta.'"
-				tyoYo		="'.(int)$tyoYo.'"
-				tyoSu		="'.(int)$tyoSu.'"
-				tyoPy		="'.(int)$tyoPy.'"
-				tyoEl		="'.(int)$tyoEl.'"
+				tyoilta		="'.(int)$tyoIlta.'"
+				tyoyo		="'.(int)$tyoYo.'"
+				tyosu		="'.(int)$tyoSu.'"
+				tyopy		="'.(int)$tyoPy.'"
+				tyoel		="'.(int)$tyoEl.'"
 				sl		="'.(int)$sl.'"
 				spl		="'.(int)$spl.'"
 				ls		="'.(int)$ls.'"
@@ -690,7 +690,9 @@ $("#yhtveto").on('submit',function(e){
     });
   });
 	json.push(object);
-        //console.log( json );
+        console.log( json );
+	//return false;	
+
         $.ajax({
            url: 'hyvaksy_pvm_tid',
            type: "POST",
@@ -698,8 +700,10 @@ $("#yhtveto").on('submit',function(e){
            success: function(data){
 		data = JSON.parse(data);
 		console.log(data);
-		if(data != 'netvisorOK')
+		if(data['netvisorOK'] )
 		{
+			alert( JSON.stringify(data['netvisorOK']) );
+		} else {
 			alert( JSON.stringify(data) );
 		}
            }

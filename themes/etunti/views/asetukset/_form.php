@@ -439,6 +439,7 @@
 
 
 
+
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'onlinevaraus_loppu'); ?>
 		<?php 
@@ -617,8 +618,11 @@
 		<?php 
         	$l = array(
 			'tyotunnit'=>Yii::t('main', 'Työtunnit'),
+			'tyoilta'=>Yii::t('main', 'Työtunnit ilta'),
 			'matka'=>Yii::t('main', 'Matkat'),
-			'lounaat'=>Yii::t('main', 'Lounastauot')
+			'lounaat'=>Yii::t('main', 'Lounastauot'),
+			'tyoyo'=>Yii::t('main', 'Työtunnit yö'),
+			'tyosu'=>Yii::t('main', 'Työtunnit sunnuntai'),
 		);
 
 		$selected   = array();
