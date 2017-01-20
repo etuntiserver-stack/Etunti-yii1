@@ -438,6 +438,7 @@
 	</div>
 
 
+
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'onlinevaraus_loppu'); ?>
 		<?php 
@@ -615,9 +616,9 @@
 		<?php echo $form->labelEx($model,'netvisor_mita_lahetetaan'); ?>
 		<?php 
         	$l = array(
-			3=>Yii::t('main', 'Työtunnit'),
-			2=>Yii::t('main', 'Matkat'),
-			10=>Yii::t('main', 'Lounastauot')
+			'tyotunnit'=>Yii::t('main', 'Työtunnit'),
+			'matka'=>Yii::t('main', 'Matkat'),
+			'lounaat'=>Yii::t('main', 'Lounastauot')
 		);
 
 		$selected   = array();

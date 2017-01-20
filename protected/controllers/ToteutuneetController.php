@@ -131,7 +131,9 @@ class ToteutuneetController extends Controller
 			$lastArr = json_decode($model->netvisor_ok_list, true);
 			foreach($_POST['json'][0] as $key=>$value)
 			{
-				if($value > 0)
+				$mitaLahetetaan = json_decode($asetukset->netvisor_mita_lahetetaan, true);
+
+				if($value > 0 and is_array($mitaLahetetaan) and in_array($key, $mitaLahetetaan) )
 				{
 					$return = array();
 					$return = $this->netvisorWorkday($key,$value,$model);
@@ -166,13 +168,6 @@ class ToteutuneetController extends Controller
 	{
 		//$tyontekija = Tyontekijat::model()->findByPk($model->tid);
 		$asetukset = Asetukset::model()->findByPk(1);
-
-		$mitaLahetetaan = json_decode($asetukset->netvisor_mita_lahetetaan, true);
-
-		if( is_array($mitaLahetetaan) and in_array($model->status, $mitaLahetetaan, false))
-		{
-			break;
-		}
 
 		$tunti = $sekuntti/3600;
 		$return = array();
