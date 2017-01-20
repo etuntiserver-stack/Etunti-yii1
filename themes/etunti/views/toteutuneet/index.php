@@ -267,12 +267,70 @@ function dateDiff($start, $end) {
     $did = date("Ymd",strtotime($date));
 
 
+    $korv = $this->korvauksetPvmTid(date("Y-m-d",strtotime($date)),$tid);
+    if(!empty($korv))
+    {
+	$korv = '
+		<div class="col-sm-4">
+			<h3>'.Yii::t('main', 'Korvaukset').'</h3>
+			'.$korv.
+		'</div>';
+    }
+    $lisatt = $this->lisatyotunnitPvmTid(date("Y-m-d",strtotime($date)),$tid);
+    if(!empty($lisatt))
+    {
+	$lisatt = '
+		<div class="col-sm-4">
+			<h3>'.Yii::t('main', 'Ylityötunnit').'</h3>
+			'.$lisatt.
+		'</div>';
+    }
+    $ennakko = $this->ennakkoPvmTid(date("Y-m-d",strtotime($date)),$tid);
+    if(!empty($ennakko))
+    {
+	$ennakko = '
+		<div class="col-sm-4">
+			<h3>'.Yii::t('main', 'Ennakko').'</h3>
+			'.$ennakko.
+		'</div>';
+    }
+
 
     echo '
 	<tr><td colspan="4">
 		<table class="" cellspacing="0" cellpadding="0">
 		  <tr>
 		   <td><h3>'.$arrDate[$explColDate[0]].' '.date("d.m",strtotime($date)).'</h3></td>
+		  </tr>
+		  <tr>	
+		   <td>
+			'.CHtml::button(Yii::t('main', 'Korvaus'), 
+				array(
+					'class'=>'btn btn-sm btn-primary btn-group myBgColors avaaModalFor', 
+					'taulu'=>'korvaukset',
+					'pvm'=>date("Y-m-d",strtotime($date)),
+					'tid'=>$tid,
+			)).'
+			'.CHtml::button(Yii::t('main', 'Ylityötunnit'), 
+				array(
+					'class'=>'btn btn-sm btn-primary btn-group myBgColors avaaModalFor', 
+					'taulu'=>'lisatyotunnit',
+					'pvm'=>date("Y-m-d",strtotime($date)),
+					'tid'=>$tid,
+			)).'
+			'.CHtml::button(Yii::t('main', 'Ennakko'), 
+				array(
+					'class'=>'btn btn-sm btn-primary btn-group myBgColors avaaModalFor', 
+					'taulu'=>'ennakko',
+					'pvm'=>date("Y-m-d",strtotime($date)),
+					'tid'=>$tid,
+			)).'
+
+			<br>
+			<div class="row">
+			  '.$korv.$lisatt.$ennakko.'
+			</div>
+		   </td>
 		  </tr>
 		</table>
 	</td></tr>';
@@ -713,6 +771,29 @@ $("#yhtveto").on('submit',function(e){
  });
 
 
+ $(".avaaModalFor").click(function(){
+
+      	var forThis = $(this).attr("taulu");
+      	var pvm = $(this).attr("pvm");
+      	var tid = $(this).attr("tid");
+
+	avaaModalFor(forThis, pvm, tid)
+ });
+
+ 
+ function avaaModalFor(avaaSen, pvm, tid)
+ {
+        $.ajax({
+           url: 'korvaus_ylitunnit_ennakko',
+           type: "POST",
+	   data: { taulu : avaaSen, pvm : pvm, tid : tid },
+           success: function(data){
+		data = JSON.parse(data);
+		//console.log(data);
+		$('#showres').modal().html(data);
+           }
+        });
+ }
 
 });
 </script>

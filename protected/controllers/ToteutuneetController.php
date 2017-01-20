@@ -29,7 +29,7 @@ class ToteutuneetController extends Controller
 		return array(
 
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index', 'view','luetutpvmtid', 'totpvmtid','al', 'yhteensapvm', 'deletebyajax', 'kk','hyvaksy', 'poista_luetut_toteutuneet', 'vuosiloma_hyvaksy', 'hyvaksy_pvm_tid'),
+				'actions'=>array('admin','delete','create','update','index', 'view','luetutpvmtid', 'totpvmtid','al', 'yhteensapvm', 'deletebyajax', 'kk','hyvaksy', 'poista_luetut_toteutuneet', 'vuosiloma_hyvaksy', 'hyvaksy_pvm_tid', 'korvaus_ylitunnit_ennakko'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -83,6 +83,18 @@ class ToteutuneetController extends Controller
 		return  number_format((float)$val/3600, 2, '.', '');
 	}
 
+	public function actionKorvaus_ylitunnit_ennakko()
+	{
+		$taulu 	= $_POST['taulu'];
+		$pvm 	= $_POST['pvm'];
+		$tid 	= $_POST['tid'];
+
+
+		$return = $this->renderPartial('korvaus_ylitunnit_ennakko', 
+			array('taulu'=>$taulu, 'pvm'=>$pvm, 'tid'=>$tid)
+		, true);
+		echo json_encode($return);
+	}
 
 	public function actionHyvaksy_pvm_tid()
 	{
@@ -92,6 +104,8 @@ class ToteutuneetController extends Controller
 		echo '</pre>';
 		exit;
 		*/
+
+		$returnPayroll = '';
 
 		$criteria=new CDbCriteria;
 		$criteria->condition = " 
@@ -117,6 +131,8 @@ class ToteutuneetController extends Controller
 			var_dump($model->getErrors());
 
 		} else {
+
+			//$returnPayroll .= $this->netvisorPayrollperiodcollector($model);
 
 		}
 
@@ -155,17 +171,18 @@ class ToteutuneetController extends Controller
 			if($update == true)
 			{
 				HyvaksyttamatPvmTunnit::model()->updateByPk($model->id, array('netvisor_ok_list'=>json_encode($lastArr)));
-				echo json_encode(array('netvisorOK'=>'Tiedot on lähetetty netvisoriin'));
+				echo json_encode(array('netvisorOK'=>'Tiedot on lähetetty netvisoriin '.$returnPayroll));
 				exit;
 			}
+
 		} elseif($asetukset->netvisor_kaytto == 1 and !empty($model->netvisor_ok_list)) {
-				echo json_encode('Tiedot ovat jo lähetetty');
+				echo json_encode('Tiedot ovat jo lähetetty '.$returnPayroll);
 				exit;
 		}
 		//     Netvisor lahetys -->
 
 		
-		echo json_encode('Tallennettu');
+		echo json_encode('Tallennettu '.$returnPayroll);
 
 	}
 
@@ -303,6 +320,107 @@ $xml = '
 		print_r($response);
 		echo '</pre>';
 		*/
+
+
+	} // if isset $n[0]
+
+		return $return;
+
+	}
+
+
+	protected function netvisorPayrollperiodcollector($model)
+	{
+
+		$asetukset = Asetukset::model()->findByPk(1);
+
+		$return = array();
+		$site = Yii::app()->createController('Site');
+		$n = $site[0]->netvisorYhteys();
+
+	if(isset($n[0]))
+	{
+
+		$url		= $n[0].'/payrollperiodcollector.nv';
+
+		$host 		= $n[1];
+
+		$sender 	= $n[2];
+		$customerId	= $n[3];
+		$partnerId	= $n[4];
+		$timestamp	= $n[5];
+		$language	= $n[6];
+		$organisationIdentifier	= $n[7];
+		$transactionIdentifier	= $n[8];
+		$userKey 	= $n[9];
+		$partnerKey	= $n[10];
+
+
+
+	$getMAC = md5(
+		$url.'&'.
+		$sender.'&'.
+		$customerId.'&'.
+		$timestamp.'&'.
+		$language.'&'.
+		$organisationIdentifier.'&'.
+		$transactionIdentifier.'&'.
+		$userKey.'&'.
+		$partnerKey
+	 	);
+	
+	$auth_data = 
+	    "Host: $host\r\n".  
+	    "X-Netvisor-Authentication-Sender: $sender\r\n".  
+	    "X-Netvisor-Authentication-CustomerId: $customerId\r\n".  
+	    "X-Netvisor-Authentication-PartnerId: $partnerId\r\n".  
+	    "X-Netvisor-Authentication-Timestamp: $timestamp\r\n".
+	    "X-Netvisor-Interface-Language: $language\r\n".
+	    "X-Netvisor-Organisation-ID: $organisationIdentifier\r\n".  
+	    "X-Netvisor-Authentication-TransactionId: $transactionIdentifier\r\n".
+	    "X-Netvisor-Authentication-MAC: $getMAC\r\n"
+	; 
+	
+
+
+// <-- XML
+$xml = '
+<root>
+  <payrollperiodcollector>
+    <date>'.date("Y-m-d").'</date>
+    <employeeidentifier type="number" defaultdimensionhandlingtype="usedefault">'.$model->tid.'</employeeidentifier>
+  </payrollperiodcollector>
+</root>';
+//  XML -->
+	
+
+	$optsPOST = array(
+	  'http'=>array(
+	    'method'=>"POST",
+	    'header'=>"Accept: text/plain\r\n" .
+	              "Content-Type: application/x-www-form-urlencoded\r\n".
+	              "Content-Length: ".strlen($xml)."\r\n".
+		      $auth_data,
+	    'content'=> $xml
+	  )
+	);
+	
+	$context = stream_context_create($optsPOST);
+	
+	$response = file_get_contents($url, false, $context);
+	$result = new SimpleXMLElement($response);
+	
+	
+	  if($result->ResponseStatus->Status == 'OK')
+	  {
+
+	  } else {
+
+		$return .= '<pre>';
+		$return .= json_encode($response);
+		$return .= '</pre>';
+
+	  }
 
 
 	} // if isset $n[0]
@@ -807,6 +925,23 @@ $xml = '
 	}
 
 
+		if(isset($_GET['deleteKorvaus']))
+		{
+			Korvaukset::model()->findByPk($_GET['id'])->delete();
+			$this->redirect('index');
+		}
+		if(isset($_GET['deleteLisatyotunnit']))
+		{
+			Lisatyotunnit::model()->findByPk($_GET['id'])->delete();
+			$this->redirect('index');
+		}
+		if(isset($_GET['deleteEnnakko']))
+		{
+			Ennakko::model()->findByPk($_GET['id'])->delete();
+			$this->redirect('index');
+		}
+
+
 		if(Yii::app()->request->getPost('tekija')){
 		Yii::app()->session['tekija'] = Yii::app()->request->getPost('tekija');
 		}
@@ -1264,4 +1399,91 @@ $xml = '
 	}
 
 
+	protected function korvauksetPvmTid($pvm,$tid)
+	{
+		$bod = '';
+	  	$criteria = new CDbCriteria();
+		$criteria->order = " pvm DESC ";
+		$criteria->condition = " 
+			tid='".$tid."'
+			AND pvm='".$pvm."'
+		";
+	
+		$m = Korvaukset::model()->findAll($criteria);
+		foreach($m as $v)
+		{
+			$bod .= '<p>'.
+			$v->getAttributeLabel('syy').': '.$v->syy.'<br>'.
+			$v->getAttributeLabel('korvaus').': '.$v->korvaus.'<br>';
+	
+			$bod .=  CHtml::link("Poista", '#', array(
+			  	'submit'=>array('index', "deleteKorvaus"=>true, "id"=>$v->id), 
+			  	'confirm' => 'Oletko varmaa?')
+			);
+
+			$bod .= '</p>';
+			$bod .=  '<br>';
+		}
+	
+		return $bod;
+	}
+
+	protected function lisatyotunnitPvmTid($pvm,$tid)
+	{
+		$bod = '';
+	  	$criteria = new CDbCriteria();
+		$criteria->order = " pvm DESC ";
+		$criteria->condition = " 
+			tid='".$tid."'
+			AND pvm='".$pvm."'
+		";
+	
+		$m = Lisatyotunnit::model()->findAll($criteria);
+		foreach($m as $v)
+		{
+			$bod .= '<p>'.
+			$v->getAttributeLabel('syy').': '.$v->syy.'<br>'.
+			$v->getAttributeLabel('prosentti').': '.$v->prosentti.'<br>'.
+			$v->getAttributeLabel('tunnimaara').': '.$v->tunnimaara.'<br>';
+	
+			$bod .=  CHtml::link("Poista", '#', array(
+			  	'submit'=>array('index', "deleteLisatyotunnit"=>true, "id"=>$v->id), 
+			  	'confirm' => 'Oletko varmaa?')
+			);
+
+			$bod .= '</p>';
+			$bod .=  '<br>';
+		}
+	
+		return $bod;
+	}
+
+	protected function ennakkoPvmTid($pvm,$tid)
+	{
+		$bod = '';
+	  	$criteria = new CDbCriteria();
+		$criteria->order = " pvm DESC ";
+		$criteria->condition = " 
+			tid='".$tid."'
+			AND pvm='".$pvm."'
+		";
+	
+		$m = Ennakko::model()->findAll($criteria);
+		foreach($m as $v)
+		{
+			$bod .= '<p>'.
+			$v->getAttributeLabel('syy').': '.$v->syy.'<br>'.
+			$v->getAttributeLabel('ennakko').': '.$v->ennakko.'<br>';
+	
+			$bod .=  CHtml::link("Poista", '#', array(
+			  	'submit'=>array('index', "deleteEnnakko"=>true, "id"=>$v->id), 
+			  	'confirm' => 'Oletko varmaa?')
+			);
+
+			$bod .= '</p>';
+			$bod .=  '<br>';
+		}
+	
+		return $bod;
+	}
 }
