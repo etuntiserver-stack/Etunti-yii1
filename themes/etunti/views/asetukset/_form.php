@@ -619,8 +619,25 @@
 			2=>Yii::t('main', 'Matkat'),
 			10=>Yii::t('main', 'Lounastauot')
 		);
-		echo $form->dropDownList($model,'netvisor_mita_lahetetaan', $l, 
-		array('class'=>'form-control')) ?>
+
+		$selected   = array();
+
+		if( is_array(json_decode($model->netvisor_mita_lahetetaan, true)) )
+		{
+			foreach(json_decode($model->netvisor_mita_lahetetaan, true) as $item)
+			{
+				$selected[$item] = array('selected' => 'selected');
+			}
+		}
+/*
+		$selected   = array(
+		      '2' => array('selected' => 'selected'),
+		      '3' => array('selected' => 'selected'),
+		);
+*/
+		$htmlOptions = array('class'=>'form-control selectpicker', 'multiple' => 'true', 'options' => $selected);
+
+		echo $form->dropDownList( $model,'netvisor_mita_lahetetaan', $l, $htmlOptions ); ?>
 		<?php echo $form->error($model,'netvisor_mita_lahetetaan'); ?>
 	</div>
 

@@ -165,6 +165,15 @@ class ToteutuneetController extends Controller
 	protected function netvisorWorkday($nimike,$sekuntti,$model)
 	{
 		//$tyontekija = Tyontekijat::model()->findByPk($model->tid);
+		$asetukset = Asetukset::model()->findByPk(1);
+
+		$mitaLahetetaan = json_decode($asetukset->netvisor_mita_lahetetaan, true);
+
+		if( is_array($mitaLahetetaan) and in_array($model->status, $mitaLahetetaan, false))
+		{
+			break;
+		}
+
 		$tunti = $sekuntti/3600;
 		$return = array();
 		$site = Yii::app()->createController('Site');
@@ -232,6 +241,10 @@ class ToteutuneetController extends Controller
 		}
 		*/
 
+		if(empty($asetukset->netvisor_acceptancestatus))
+			$acceptancestatus = 'confirmed';
+		else
+			$acceptancestatus = $asetukset->netvisor_acceptancestatus;
 
 // <-- XML
 $xml = '
@@ -242,7 +255,7 @@ $xml = '
     <workdayhour>
       <hours>'.$tunti.'</hours>
       <collectorratio type="number">1</collectorratio>
-      <acceptancestatus>accepted</acceptancestatus>
+      <acceptancestatus>'.$acceptancestatus.'</acceptancestatus>
       <description>'.$nimike.'</description>
     </workdayhour>
   </workday>
