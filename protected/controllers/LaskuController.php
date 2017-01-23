@@ -124,7 +124,23 @@ class LaskuController extends Controller
 
 	public function actionHyvityslasku($id)
 	{
+
 		$lasku = $this->loadModel($id);
+
+		$asetukset=Asetukset::model()->findbypk(1);
+
+		// <-- Jos netvisor niin laskunumero on seurava
+		if($asetukset->palvelu_tyyppi == 4)
+		{
+       			$criteria = new CDbCriteria();
+	       		$criteria->order = " laskunumero!='' DESC,id DESC ";
+			$vm = Lasku::model()->find($criteria);
+			if(isset($vm->id) and empty($model->laskunumero))
+			$lasku->laskunumero = $vm->laskunumero+1;
+		}
+		//     Jos netvisor niin laskunumero on seurava -->
+
+
 		$model=new Lasku;
 		$model->attributes=$lasku->attributes;
 		$model->hyvityslasku=$lasku->id;
