@@ -93,13 +93,14 @@ class KorvauksetController extends Controller
 		{
 			$model->attributes=$_POST['Korvaukset'];
 
-			$returnNV = $this->netvisorPayrollperiodcollector($model);
-/*
+
+			//$returnNV = $this->netvisorPayrollperiodcollector($model);
+			//echo json_encode($returnNV);
+
 			if($model->save()){
 				echo 'ok';
 			}
-*/
-			echo json_encode($returnNV);
+
 			exit;
 		}
 
