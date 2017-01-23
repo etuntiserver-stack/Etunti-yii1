@@ -1247,6 +1247,7 @@ class LaskuController extends Controller
 		die('ERROR: Tämä asiakas ei saanut netvisorkey viellä');
 	}
 
+
 $xml = '
 <root>
   <SalesInvoice>
@@ -1284,8 +1285,8 @@ foreach($laskunRivit as $rivit)
 	$tuotteet = LaskutusTuotteet::model()->findByPk($rivit->tuoteID);
 	if(isset($tuotteet->id) and $tuotteet->netvisorkey){
 		$ProductIdentifier = $tuotteet->netvisorkey;
-	} else if ($host == 'integrationdemo.netvisor.fi') {
-		$ProductIdentifier = 1;
+	} else {
+		die('ERROR: ProductIdentifier');
 	}
 
 //             <SalesInvoiceProductLineFreeText>'.$rivit->free_text.'</SalesInvoiceProductLineFreeText>
