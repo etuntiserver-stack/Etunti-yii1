@@ -29,15 +29,15 @@ class HyvaksyttamatPvmTunnitController extends Controller
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
 				'actions'=>array('index','view'),
-                		'expression'=>"Yii::app()->controller->isAsiakas()",
+                		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
 				'actions'=>array('create','update'),
-                		'expression'=>"Yii::app()->controller->isAsiakas()",
+                		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
 				'actions'=>array('admin','delete'),
-                		'expression'=>"Yii::app()->controller->isAsiakas()",
+                		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
 				'users'=>array('*'),
@@ -45,6 +45,18 @@ class HyvaksyttamatPvmTunnitController extends Controller
 		);
 	}
 
+        public function init()
+        {
+
+                if (Yii::app()->controller->isEtuntiAdmin() and !isset(Yii::app()->user->user_theme)) {
+                        Yii::app()->theme = 'etunti';
+                } elseif (Yii::app()->controller->isEtuntiAdmin() and isset(Yii::app()->user->user_theme)) {
+                        Yii::app()->theme = Yii::app()->user->user_theme;
+                } else {
+                        Yii::app()->theme = 'classic';
+                }
+                parent::init();
+        }
 
 	public function isEtuntiAdmin() {
 

@@ -760,7 +760,7 @@ $("#yhtveto").on('submit',function(e){
   $(this).each(function() {
     $.each(this.attributes, function() {
       if(this.specified) {
-	if(this.name !== 'class'){
+	if((this.name !== 'class') && (this.name !== 'NVtilanne')){
 		object[this.name] = this.value;
 	}
       }
