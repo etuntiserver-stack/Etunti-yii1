@@ -1239,7 +1239,7 @@ class LaskuController extends Controller
 	$name = $model->nimi;
 
 	$InvoicingCustomerIdentifier = '';
-	$asiakas = Asiakkaat::model()->findbypk($model->as_nro);
+	$asiakas = Asiakkaat::model()->find(" asiakasnumero='".$model->as_nro."' ");
 	if(isset($asiakas->id) and $asiakas->netvisorkey != 0)
 	{
 		$InvoicingCustomerIdentifier = $asiakas->netvisorkey;
