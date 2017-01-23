@@ -1302,9 +1302,12 @@ foreach($laskunRivit as $rivit)
 */
 	$Comment = '';
 	if(!empty($rivit->free_text)){
-	$Comment = '<SalesInvoiceCommentLine>
+	$Comment = '
+	<InvoiceLine>
+		<SalesInvoiceCommentLine>
 			<Comment>'.$rivit->free_text.'</Comment>
-		    </SalesInvoiceCommentLine>';
+		    </SalesInvoiceCommentLine>
+	</InvoiceLine>';
 	}
 
 $xml .= '
@@ -1318,9 +1321,8 @@ $xml .= '
              <SalesInvoiceProductLineDiscountPercentage>'.$rivit->ale.'</SalesInvoiceProductLineDiscountPercentage>
          </SalesInvoiceProductLine>
        </InvoiceLine>
-       <InvoiceLine>
             '.$Comment.'
-       </InvoiceLine>';
+       ';
 }
 
 if(count($laskunRivit) > 0)
