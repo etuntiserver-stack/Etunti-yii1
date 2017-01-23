@@ -26,7 +26,7 @@
 
 	<div class="section">
 		<?php echo $form->labelEx($model,'korvaus'); ?>
-		<?php echo $form->textField($model,'korvaus',array('size'=>30,'maxlength'=>20,'class'=>'form-control')); ?>
+		<?php echo $form->numberField($model,'korvaus',array('size'=>30,'maxlength'=>20,'class'=>'form-control',"step"=>"any")); ?>
 		<?php echo $form->error($model,'korvaus'); ?>
 	</div>
 	<br>
@@ -74,9 +74,10 @@ $('#korvaukset-form').on('submit',function(e) {
      data:$(this).serialize(),
      type:'POST',
      success:function(data){
+	//data = JSON.parse(data);
     	console.log(data);
 	//$('#showres').modal('hide');
-	window.location.href=location.protocol + "//" + location.host + '/index.php/toteutuneet/index'
+	//window.location.href=location.protocol + "//" + location.host + '/index.php/toteutuneet/index'
 	return false;
      },
      error:function(data){

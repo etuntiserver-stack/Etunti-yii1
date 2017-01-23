@@ -295,11 +295,21 @@ function dateDiff($start, $end) {
 		'</div>';
     }
 
+/*
+			'.CHtml::button(Yii::t('main', 'Ylityötunnit'), 
+				array(
+					'class'=>'btn btn-sm btn-primary btn-group myBgColors avaaModalFor', 
+					'taulu'=>'lisatyotunnit',
+					'pvm'=>date("Y-m-d",strtotime($date)),
+					'tid'=>$tid,
+			)).'
+*/
 
     echo '
 	<tr><td colspan="4">
 		<table class="" cellspacing="0" cellpadding="0">
 		  <tr>
+
 		   <td><h3>'.$arrDate[$explColDate[0]].' '.date("d.m",strtotime($date)).'</h3></td>
 		  </tr>
 		  <tr>	
@@ -308,13 +318,6 @@ function dateDiff($start, $end) {
 				array(
 					'class'=>'btn btn-sm btn-primary btn-group myBgColors avaaModalFor', 
 					'taulu'=>'korvaukset',
-					'pvm'=>date("Y-m-d",strtotime($date)),
-					'tid'=>$tid,
-			)).'
-			'.CHtml::button(Yii::t('main', 'Ylityötunnit'), 
-				array(
-					'class'=>'btn btn-sm btn-primary btn-group myBgColors avaaModalFor', 
-					'taulu'=>'lisatyotunnit',
 					'pvm'=>date("Y-m-d",strtotime($date)),
 					'tid'=>$tid,
 			)).'
@@ -455,6 +458,12 @@ function dateDiff($start, $end) {
     $yhtVL 	+= $vl;
     $yhtVKL 	+= $vkl;
 
+    $hyvaksytty = HyvaksyttamatPvmTunnit::model()->find(" pvm='".date("Y-m-d",strtotime($date))."' AND netvisor_ok_list!='' ");
+    if(isset($hyvaksytty->id))
+	$NVtilanne = 1;
+    else
+	$NVtilanne = 0;
+
     echo '
 	<tr><td colspan="4">
 		<table class="yhteensaPvmAllaTaulu_'.date("W",strtotime($date)).' forFooterAlla table table-bordered" cellspacing="0" cellpadding="0" id="yhteensaPvmAllaTaulu_'.$did.'_'.$tid.'">
@@ -492,7 +501,7 @@ function dateDiff($start, $end) {
 		  </tr>
 		  <tr>
 		   <td colspan="13">			
-			<button class="btn btn-default btn-sm btn-block esittele_tyotunnit" 
+			<button class="btn btn-default btn-sm btn-block esittele_tyotunnit" NVtilanne="'.$NVtilanne.'"
 				pvm="'.$date.'"
 				tid="'.$tid.'"
 				tyotunnit	="'.(int)$tyotunnit.'"
@@ -506,7 +515,7 @@ function dateDiff($start, $end) {
 				sl		="'.(int)$sl.'"
 				spl		="'.(int)$spl.'"
 				ls		="'.(int)$ls.'"
-			>'.Yii::t('main', 'Hyväksyn').'</button>
+			></button>
 		   </td>
 		  </tr>
 		</table>
@@ -733,9 +742,19 @@ $("#yhtveto").on('submit',function(e){
 });
 
 
+ LahetaPainike();
+ function LahetaPainike(){
+    $(".esittele_tyotunnit").each(function() {
+      if( $(this).attr('NVtilanne') === '1') {
+		$(this).text('Lähetetty').removeClass('btn-default').addClass('btn-success');
+      } else {
+		$(this).text('Lähetä').removeClass('btn-success');
+      }
+    });
+ }
 
  $(".esittele_tyotunnit").click(function(){
-
+  var thisButton = this;
   var json = new Array();
   var object = {};
   $(this).each(function() {
@@ -751,6 +770,7 @@ $("#yhtveto").on('submit',function(e){
         console.log( json );
 	//return false;	
 
+
         $.ajax({
            url: 'hyvaksy_pvm_tid',
            type: "POST",
@@ -761,11 +781,15 @@ $("#yhtveto").on('submit',function(e){
 		if(data['netvisorOK'] )
 		{
 			alert( JSON.stringify(data['netvisorOK']) );
+			$(thisButton).attr('NVtilanne', '1');
+			LahetaPainike();
+
 		} else {
 			alert( JSON.stringify(data) );
 		}
            }
         });
+
 
 
  });
