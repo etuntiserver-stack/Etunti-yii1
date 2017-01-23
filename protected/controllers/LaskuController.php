@@ -1301,8 +1301,11 @@ foreach($laskunRivit as $rivit)
              </Dimension>
 */
 	$Comment = '';
-	if(!empty($rivit->free_text))
-	$Comment = '<Comment>'.$rivit->free_text.'</Comment>';
+	if(!empty($rivit->free_text)){
+	$Comment = '<SalesInvoiceCommentLine>
+			<Comment>'.$rivit->free_text.'</Comment>
+		    </SalesInvoiceCommentLine>';
+	}
 
 $xml .= '
        <InvoiceLine>
@@ -1316,9 +1319,7 @@ $xml .= '
          </SalesInvoiceProductLine>
        </InvoiceLine>
        <InvoiceLine>
-         <SalesInvoiceCommentLine>
             '.$Comment.'
-         </SalesInvoiceCommentLine>
        </InvoiceLine>';
 }
 
