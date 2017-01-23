@@ -833,6 +833,7 @@ $months=array(
 		$criteria->condition = "
 			pvm='".date("d.m.Y", strtotime($date))."'
 			AND tid IN ( SELECT id FROM sivex_ttekijat WHERE online_varauksen_valmina=1 )
+			AND alku!='00:00' AND loppu!='00:00'
 		";
 		if(!empty($tyo_toimialue))
 		{
