@@ -1243,8 +1243,8 @@ class LaskuController extends Controller
 	if(isset($asiakas->id) and $asiakas->netvisorkey != 0)
 	{
 		$InvoicingCustomerIdentifier = $asiakas->netvisorkey;
-	} else if ($host == 'integrationdemo.netvisor.fi') {
-		$InvoicingCustomerIdentifier = 1;
+	} else {
+		die('ERROR: Tämä asiakas ei saanut netvisorkey viellä');
 	}
 
 $xml = '
