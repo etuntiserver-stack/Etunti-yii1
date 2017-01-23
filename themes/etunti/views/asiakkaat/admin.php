@@ -66,6 +66,7 @@ $('.search-form form').submit(function(){
 		    CHtml::listData(Valikkoot::model()->findAll(" select_type='asiakas_ryhma' ",array('order' => "select_type")), 'id', 'value'),array('empty'=>'valitse')),
                     
 		),
+		'netvisorkey',
 		/*
 		'postinumero',
 		'puhelin',
