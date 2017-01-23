@@ -27,7 +27,11 @@ if(isset($_GET['kopio'])){
      $uusi->laskunumero = $ln;
      $uusi->viitenumero = '';
      $uusi->trust_jobid = '';
-     $uusi->save();
+     if($uusi->save())
+     {
+	$viite = $this->Viite($uusi->as_nro."00".$uusi->id);
+	Lasku::model()->updatebypk($uusi->id, array('viitenumero'=>$viite));
+     }
 
      $lr = LaskunRivit::model()->findAll(" lid='".$id."' ");
      foreach($lr as $rivi)

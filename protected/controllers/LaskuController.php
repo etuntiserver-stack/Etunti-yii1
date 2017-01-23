@@ -548,6 +548,21 @@ class LaskuController extends Controller
 		return $body;
 	}
 
+	protected function Viite($string)
+	{
+
+		$string = strval($string);
+		$paino = array(7, 3, 1);
+		$summa = 0;
+
+		  for($i=strlen($string)-1, $j=0; $i>=0; $i--,$j++){
+		    $summa += (int) $string[$i] * (int) $paino[$j%3];
+		  }
+		$tarkiste = (10-($summa%10))%10;
+		return $string.$tarkiste;
+
+	}
+
 	public function actionCreate()
 	{
 
@@ -572,20 +587,7 @@ class LaskuController extends Controller
 
 
 			// Viite
-			function Viitenumero($string) {
-			  $string = strval($string);
-			  $paino = array(7, 3, 1);
-			  $summa = 0;
-
-			  for($i=strlen($string)-1, $j=0; $i>=0; $i--,$j++){
-			    $summa += (int) $string[$i] * (int) $paino[$j%3];
-			  }
-			  $tarkiste = (10-($summa%10))%10;
-			  return $string.$tarkiste;
-			}
-
-
-			$viite = Viitenumero($model->as_nro."00".$model->id);
+			$viite = $this->Viite($model->as_nro."00".$model->id);
 			Lasku::model()->updatebypk($model->id, array('viitenumero'=>$viite));
 
 			$as = Asiakkaat::model()->find(" asiakasnumero='".$model->as_nro."'  ");
