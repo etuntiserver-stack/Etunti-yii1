@@ -460,9 +460,9 @@ function dateDiff($start, $end) {
 
     $hyvaksytty = HyvaksyttamatPvmTunnit::model()->find(" pvm='".date("Y-m-d",strtotime($date))."' AND netvisor_ok_list!='' ");
     if(isset($hyvaksytty->id))
-	$NVtilanne = 1;
+	$nvtilanne = 1;
     else
-	$NVtilanne = 0;
+	$nvtilanne = 0;
 
     echo '
 	<tr><td colspan="4">
@@ -501,7 +501,7 @@ function dateDiff($start, $end) {
 		  </tr>
 		  <tr>
 		   <td colspan="13">			
-			<button class="btn btn-default btn-sm btn-block esittele_tyotunnit" NVtilanne="'.$NVtilanne.'"
+			<button class="btn btn-default btn-sm btn-block esittele_tyotunnit" nvtilanne="'.$nvtilanne.'"
 				pvm="'.$date.'"
 				tid="'.$tid.'"
 				tyotunnit	="'.(int)$tyotunnit.'"
@@ -745,7 +745,7 @@ $("#yhtveto").on('submit',function(e){
  LahetaPainike();
  function LahetaPainike(){
     $(".esittele_tyotunnit").each(function() {
-      if( $(this).attr('NVtilanne') === '1') {
+      if( $(this).attr('nvtilanne') === '1') {
 		$(this).text('Lähetetty').removeClass('btn-default').addClass('btn-success');
       } else {
 		$(this).text('Lähetä').removeClass('btn-success');
@@ -760,7 +760,7 @@ $("#yhtveto").on('submit',function(e){
   $(this).each(function() {
     $.each(this.attributes, function() {
       if(this.specified) {
-	if((this.name !== 'class') && (this.name !== 'NVtilanne')){
+	if((this.name !== 'class') && (this.name !== 'nvtilanne')){
 		object[this.name] = this.value;
 	}
       }
