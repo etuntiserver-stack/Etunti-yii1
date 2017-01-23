@@ -92,16 +92,20 @@ class KorvauksetController extends Controller
 		if(isset($_POST['Korvaukset']))
 		{
 			$model->attributes=$_POST['Korvaukset'];
-
-
-			//$returnNV = $this->netvisorPayrollperiodcollector($model);
-			//echo json_encode($returnNV);
-
 			if($model->save()){
-				echo 'ok';
+
+				$asetukset=Asetukset::model()->findbypk(1);
+				if($asetukset->netvisor_kaytto == 1)
+				{
+					$returnNV = $this->netvisorPayrollperiodcollector($model);
+					echo json_encode($returnNV);
+					exit;
+				}
+				echo json_encode('ok');
+				exit;
 			}
 
-			exit;
+
 		}
 
 		$this->render('create',array(
@@ -114,7 +118,7 @@ class KorvauksetController extends Controller
 
 		$asetukset = Asetukset::model()->findByPk(1);
 
-		$return = '';
+		$return = array();
 		$site = Yii::app()->createController('Site');
 		$n = $site[0]->netvisorYhteys();
 
@@ -171,7 +175,7 @@ $xml = '
     <employeeidentifier type="number">'.$model->tid.'</employeeidentifier>
     <payrollratioline>
     	<amount>'.$model->korvaus.'</amount>
-    	<payrollratio>10</payrollratio>
+    	<payrollratio type="number">10</payrollratio>
     </payrollratioline>
   </payrollperiodcollector>
 </root>';
@@ -197,20 +201,15 @@ $xml = '
 	
 		if($result->ResponseStatus->Status == 'OK')
 		{
-
+			$return = array('OK'=>$response);
 		} else {
-
+			$return = array('ERROR'=>$response);
 		}
-
-
-		echo '<pre>';
-		print_r($response);
-		echo '</pre>';
 
 
 	   } // if isset $n[0]
 
-		//return $return;
+		return $return;
 
 	}
 

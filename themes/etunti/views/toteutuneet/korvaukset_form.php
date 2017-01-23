@@ -74,10 +74,17 @@ $('#korvaukset-form').on('submit',function(e) {
      data:$(this).serialize(),
      type:'POST',
      success:function(data){
-	//data = JSON.parse(data);
+	data = JSON.parse(data);
     	console.log(data);
 	//$('#showres').modal('hide');
-	//window.location.href=location.protocol + "//" + location.host + '/index.php/toteutuneet/index'
+	if(data['OK'])
+	{
+		window.location.href=location.protocol + "//" + location.host + '/index.php/toteutuneet/index';
+	}
+	if(data['ERROR'])
+	{
+		alert(data['ERROR']);
+	}
 	return false;
      },
      error:function(data){
