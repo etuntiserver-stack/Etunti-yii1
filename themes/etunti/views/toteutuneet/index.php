@@ -819,5 +819,24 @@ $("#yhtveto").on('submit',function(e){
         });
  }
 
+
+ $('.fullRivi').append('<i class="link fa fa-arrow-right pull-right sirraToteutuun" style="margin-top:-30px; font-size: 130%" data-toggle="tooltip" data-placement="top" title="Siirrä toteutuun"></i>');
+
+ $(".sirraToteutuun").click(function(){
+
+      	var forThis = $(this).prevAll('span').attr('id').split("_");
+        $.ajax({
+           url: 'siirra_toteutuun?id=' + forThis[1],
+           //type: "POST",
+	   //data: { id : forThis[1] },
+           success: function(data){
+		data = JSON.parse(data);
+		console.log(data);
+           }
+        });
+ });
+
+
+
 });
 </script>

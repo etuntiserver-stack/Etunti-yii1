@@ -29,7 +29,7 @@ class ToteutuneetController extends Controller
 		return array(
 
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index', 'view','luetutpvmtid', 'totpvmtid','al', 'yhteensapvm', 'deletebyajax', 'kk','hyvaksy', 'poista_luetut_toteutuneet', 'vuosiloma_hyvaksy', 'hyvaksy_pvm_tid', 'korvaus_ylitunnit_ennakko'),
+				'actions'=>array('admin','delete','create','update','index', 'view','luetutpvmtid', 'totpvmtid','al', 'yhteensapvm', 'deletebyajax', 'kk','hyvaksy', 'poista_luetut_toteutuneet', 'vuosiloma_hyvaksy', 'hyvaksy_pvm_tid', 'korvaus_ylitunnit_ennakko', 'siirra_toteutuun'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -81,6 +81,31 @@ class ToteutuneetController extends Controller
 	protected function num($val){
 	    if($val > 0)
 		return  number_format((float)$val/3600, 2, '.', '');
+	}
+
+
+
+	public function actionSiirra_toteutuun($id)
+	{
+		$tv = Tyovuoroot::model()->findByPk($id);
+		if(isset($tv->id))
+		{
+			$k = Kohteet::model()->findByPk($tv->kohde);
+			$tt = Tyontekijat::model()->findByPk($tv->tid);
+
+			if(isset($k->id))
+			{
+				$mobiili = new Mobiili;
+				$mobiili->tid = $tv->tid;
+				$mobiili->kohdenID = $tv->kohde;
+				$mobiili->kohde_kannasta = $k->osoite;
+				$mobiili->tekijan_nimi = $this->etuSukunimi($tv->tid);
+	
+				//echo json_encode($tv->kohde);
+				exit;
+			}
+		}
+			echo json_encode('Error: ei löyty');
 	}
 
 	public function actionKorvaus_ylitunnit_ennakko()
