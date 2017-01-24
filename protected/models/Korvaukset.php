@@ -71,7 +71,7 @@ class Korvaukset extends DB2ActiveRecord
 			'tid' => Yii::t('main', 'Työntekijä'),
 			'time' => Yii::t('main', 'Luotu'),
 			'pvm' => Yii::t('main', 'Päivämäärä'),
-			'syy' => Yii::t('main', 'Syy'),
+			'syy' => Yii::t('main', 'Nimike'),
 			'korvaus' => Yii::t('main', 'Korvaus'),
 		);
 	}

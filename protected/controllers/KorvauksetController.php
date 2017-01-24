@@ -175,7 +175,7 @@ $xml = '
     <employeeidentifier type="number">'.$model->tid.'</employeeidentifier>
     <payrollratioline>
     	<amount>'.$model->korvaus.'</amount>
-    	<payrollratio type="number">10</payrollratio>
+    	<payrollratio type="number">'.(int)$model->syy.'</payrollratio>
     </payrollratioline>
   </payrollperiodcollector>
 </root>';

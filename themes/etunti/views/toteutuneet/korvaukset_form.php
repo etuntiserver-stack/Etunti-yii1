@@ -20,7 +20,17 @@
  
 	<div class="section">
 		<?php echo $form->labelEx($model,'syy'); ?>
-		<?php echo $form->textField($model,'syy',array('size'=>30,'maxlength'=>1000,'class'=>'form-control')); ?>
+		<?php 
+        	$l = array(
+			80=>Yii::t('main', 'Kilometrikorvaus'),
+			76=>Yii::t('main', 'Kokopäiväraha'),
+			77=>Yii::t('main', 'Puolipäiväraha'),
+			127=>Yii::t('main', 'Ateriakorvauksen määrä'),
+			148=>Yii::t('main', 'Muut korvaukset'),
+			140=>Yii::t('main', 'Lomaraha'),
+		);
+		echo $form->dropDownList($model,'syy', $l, 
+		array('class'=>'form-control')) ?>
 		<?php echo $form->error($model,'syy'); ?>
 	</div>
 
