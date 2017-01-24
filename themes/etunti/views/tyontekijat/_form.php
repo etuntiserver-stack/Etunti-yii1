@@ -188,7 +188,7 @@ if(empty($model->position) and isset($model->id))
       		$l = Valikkoot::model()->findAll(" select_type='tyo_toimialue' ",array('order' => "select_type"));
 		$arr = json_decode($model->tyo_toimialue);
 
-		echo '<select name="Tyontekijat[tyo_toimialue][]" class="mult form-control" multiple title="Valitse">';
+		echo '<select name="tyo_toimialue[]" class="mult form-control" multiple title="Valitse">';
 		foreach($l as $val)
 		{
 			if(is_array($arr) and in_array($val->value,$arr))

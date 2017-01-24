@@ -297,7 +297,9 @@ class TyontekijatController extends Controller
 		if(isset($_POST['Tyontekijat']))
 		{
 			$model->attributes=$_POST['Tyontekijat'];
-			$model->tyo_toimialue=json_encode($model->tyo_toimialue);
+
+			if(isset($_POST['tyo_toimialue']))
+			$model->tyo_toimialue=json_encode($_POST['tyo_toimialue']);
 
 			if(isset($_POST['kortitVoimassaolo']))
 				$model->kortit_voimassaolo=json_encode($_POST['kortitVoimassaolo']);
@@ -402,8 +404,10 @@ class TyontekijatController extends Controller
 
 
 			$model->attributes=$_POST['Tyontekijat'];
-			$model->tyo_toimialue=json_encode($model->tyo_toimialue);
-		
+
+			if(isset($_POST['tyo_toimialue']))
+			$model->tyo_toimialue=json_encode($_POST['tyo_toimialue']);
+
 			if(isset($_POST['kortitVoimassaolo']))
 				$model->kortit_voimassaolo=json_encode($_POST['kortitVoimassaolo']);
 			else
