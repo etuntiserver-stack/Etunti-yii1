@@ -611,6 +611,10 @@ $('.tvchange').change(function(){
               <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/log/index" class="animated animated-short fadeInUp">
                 <span class="fa fa-gear"></span> <?php echo Yii::t('main','Historia'); ?> </a>
             </li>
+            <li class="list-group-item">
+              <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/laskuHistoria/index" class="animated animated-short fadeInUp">
+                <span class="fa fa-gear"></span> <?php echo Yii::t('main','Lasku historia'); ?> </a>
+            </li>
           </ul>
         </li>
 
@@ -801,10 +805,6 @@ $('.tvchange').change(function(){
 	      <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/mobile/laskutettu">
                   <span class="glyphicon glyphicon-phone"></span> <?php echo Yii::t('main', 'Laskutettavat kohteet'); ?></a>
-              </li>
-              <li>
-                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/palautteet/index">
-                  <span class="fa fa-map"></span> <?php echo Yii::t('main', 'Palautteet'); ?></a>
               </li>
             </ul>
           </li>
@@ -1037,10 +1037,6 @@ $('.tvchange').change(function(){
 
 
               <li>
-                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/laskuHistoria/index">
-                  <span class="glyphicon glyphicon-barcode"></span> <?php echo Yii::t('main', 'Lasku historia'); ?></a>
-              </li>
-              <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/laskuHistoria/reskontraluettelo">
                   <span class="fa fa-shopping-cart"></span> <?php echo Yii::t('main', 'Reskontraluettelo'); ?></a>
               </li>
@@ -1078,7 +1074,7 @@ $('.tvchange').change(function(){
           <li>
             <a class="accordion-toggle crm" href="#">
               <span class="fa fa-users"></span>
-              <span class="sidebar-title"><?php echo Yii::t('main', 'CRM'); ?></span>
+              <span class="sidebar-title"><?php echo Yii::t('main', 'eDico'); ?></span>
               <span class="caret"></span>
             </a>
             <ul class="nav sub-nav">
@@ -1086,10 +1082,10 @@ $('.tvchange').change(function(){
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/yhteystiedot/index">
                   <span class="fa fa-clock-o"></span> <?php echo Yii::t('main', 'Yhteystiedot'); ?></a>
               </li>
-              <li>
+              <!--<li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/site/kohderyhma">
                   <span class="fa fa-clock-o"></span> <?php echo Yii::t('main', 'Kohderyhmä'); ?></a>
-              </li>
+              </li>-->
               <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/crmTarjoukset/index">
                   <span class="fa fa-clock-o"></span> <?php echo Yii::t('main', 'Tarjoukset'); ?></a>
@@ -1105,6 +1101,10 @@ $('.tvchange').change(function(){
               <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/vinkkiExtranet/index">
                   <span class="fa fa-clock-o"></span> <?php echo Yii::t('main', 'Vinkit'); ?></a>
+              </li>
+              <li>
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/palautteet/index">
+                  <span class="fa fa-map"></span> <?php echo Yii::t('main', 'Palautteet'); ?></a>
               </li>
             </ul>
           </li>
@@ -1430,7 +1430,6 @@ nyt ne ovat etusivu.php ssa
 	|| curpage === 'kohteet/avaimet'
 	|| curpage === 'kohteet/googlemap'
 	|| curpage === 'mobile/laskutettu'
-	|| curpage === 'palautteet/index'
     ){  $('.asiakkaidenHallinta').addClass('menu-open'); }
     else if(
 	curpage === 'mobile/index' 
@@ -1494,6 +1493,7 @@ nyt ne ovat etusivu.php ssa
 	|| curpage === 'crmSopimukset/index'
 	|| curpage === 'kirjeidenHallinta/index'
 	|| curpage === 'vinkkiExtranet/index'
+	|| curpage === 'palautteet/index'
     ){  $('.crm').addClass('menu-open'); }
 
 

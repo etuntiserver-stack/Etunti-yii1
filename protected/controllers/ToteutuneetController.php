@@ -306,6 +306,8 @@ class ToteutuneetController extends Controller
 		//if($nimike == 'matka') $collectorratio =  6;
 		if($nimike == 'tyoyo') $collectorratio =  3;
 		if($nimike == 'tyosu') $collectorratio =  5;
+		if($nimike == 'sl') $collectorratio =  8;
+		if($nimike == 'ls') $collectorratio =  9;
 
 
 // <-- XML

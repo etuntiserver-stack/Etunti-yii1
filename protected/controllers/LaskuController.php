@@ -1789,7 +1789,7 @@ $xml .= '
 
 		// <-- Netvisor updater
 		$netvisorUpdateCheck = false;
-		if($asetukset->palvelu_tyyppi == 4)
+		if($asetukset->palvelu_tyyppi == 4 and $asetukset->netvisor_kaytto == 1)
 		{
 
 			$netvisorList = $this->netvisorList(date("Y-m-d",strtotime($from)),date("Y-m-d",strtotime($to.' +1 day')));

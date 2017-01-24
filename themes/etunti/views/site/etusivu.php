@@ -27,7 +27,7 @@ if (!file_exists(Yii::app()->basePath."/../backup/".Yii::app()->user->domain.'/'
   	    exec("/usr/bin/mysqldump -u mulgikapsas -pKristinA1 ".Yii::app()->user->domain." | gzip -c > backup/".Yii::app()->user->domain."/".date("Y-m-d")."_".Yii::app()->user->domain.".sql.gz");
 
 
-      	    echo '<span id="uusiVarmuskopioText">uusi varmuskopio on tehty</span>';
+      	    //echo '<span id="uusiVarmuskopioText">uusi varmuskopio on tehty</span>';
 
    	    foreach(array_reverse(glob(Yii::app()->baseUrl.'backup/'.Yii::app()->user->domain.'/*')) as $file) 
 	    {
