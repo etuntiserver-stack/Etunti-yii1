@@ -459,7 +459,7 @@ function dateDiff($start, $end) {
     $yhtVL 	+= $vl;
     $yhtVKL 	+= $vkl;
 
-    $hyvaksytty = HyvaksyttamatPvmTunnit::model()->find(" pvm='".date("Y-m-d",strtotime($date))."' AND netvisor_ok_list!='' ");
+    $hyvaksytty = HyvaksyttamatPvmTunnit::model()->find(" tid='".$tid."' AND pvm='".date("Y-m-d",strtotime($date))."' AND netvisor_ok_list!='' ");
     if(isset($hyvaksytty->id))
 	$nvtilanne = 1;
     else
