@@ -95,13 +95,26 @@ class ToteutuneetController extends Controller
 
 			if(isset($k->id))
 			{
-				$mobiili = new Mobiili;
+				$mobiili = new Mobile;
 				$mobiili->tid = $tv->tid;
 				$mobiili->kohdenID = $tv->kohde;
 				$mobiili->kohde_kannasta = $k->osoite;
 				$mobiili->tekijan_nimi = $this->etuSukunimi($tv->tid);
-	
-				//echo json_encode($tv->kohde);
+				$mobiili->admin = 1;
+				$mobiili->aloitan = date("d.m.Y H:i:s", strtotime($tv->pvm." ".$tv->alku));
+				$mobiili->loppui = date("d.m.Y H:i:s", strtotime($tv->pvm." ".$tv->loppu));
+				if($tv->status == 0)
+					$mobiili->status = 3;
+				else
+					$mobiili->status = $tv->status;
+
+				if($mobiili->save())
+				{
+					$did = $tv->id.'_'.date("Ymd", strtotime($tv->pvm)).'_'.$tv->tid;
+					echo json_encode(array('OK'=>$mobiili, 'did'=>$did));
+				} else {
+					echo json_encode(array('OK'=>getErrors($mobiili)));
+				}
 				exit;
 			}
 		}

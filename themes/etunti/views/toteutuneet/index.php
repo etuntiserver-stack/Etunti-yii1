@@ -820,7 +820,9 @@ $("#yhtveto").on('submit',function(e){
  }
 
 
- $('.fullRivi').append('<i class="link fa fa-arrow-right pull-right sirraToteutuun" style="margin-top:-30px; font-size: 130%" data-toggle="tooltip" data-placement="top" title="Siirrä toteutuun"></i>');
+ $('.did').append('<i class="link fa fa-arrow-right pull-right sirraToteutuun" style="margin-top:-30px; font-size: 130%" data-toggle="tooltip" data-placement="top" title="Siirrä toteutuun"></i>');
+
+
 
  $(".sirraToteutuun").click(function(){
 
@@ -831,7 +833,13 @@ $("#yhtveto").on('submit',function(e){
 	   //data: { id : forThis[1] },
            success: function(data){
 		data = JSON.parse(data);
-		console.log(data);
+		//console.log(data);
+		if(data['OK'])
+		{
+			window.location.href="index#" + data['did'];
+			window.location.reload();
+
+		}
            }
         });
  });
