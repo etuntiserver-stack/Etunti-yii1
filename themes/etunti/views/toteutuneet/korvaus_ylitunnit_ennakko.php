@@ -13,7 +13,7 @@
       <div class="modal-body">
         <p>
 	   <?php
-		$m = lcfirst($taulu);
+		$m = ucfirst($taulu);
 		$model = new $m;
 		echo $this->renderPartial($taulu.'_form',array('model'=>$model, 'pvm'=>$pvm, 'tid'=>$tid)); 
 	   ?>
