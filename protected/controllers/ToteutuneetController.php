@@ -1346,10 +1346,13 @@ $xml = '
 		";
 	
 		$m = Korvaukset::model()->findAll($criteria);
+
+		$korvArr = $this->korvauksetArray();
+
 		foreach($m as $v)
 		{
 			$bod .= '<p>'.
-			$v->getAttributeLabel('syy').': '.$v->syy.'<br>'.
+			$v->getAttributeLabel('syy').': '.$korvArr[$v->syy].'<br>'.
 			$v->getAttributeLabel('korvaus').': '.$v->korvaus.'<br>';
 	
 			$bod .=  CHtml::link("Poista", '#', array(
@@ -1362,6 +1365,23 @@ $xml = '
 		}
 	
 		return $bod;
+	}
+
+
+	protected function korvauksetArray()
+	{
+        	$l = array(
+			7=>Yii::t('main', 'Ateriakorvauksen määrä'),
+			1=>Yii::t('main', 'Kilometrikorvaus'),
+			2=>Yii::t('main', 'Kokopäiväraha'),
+			3=>Yii::t('main', 'Puolipäiväraha'),
+			4=>Yii::t('main', 'Lomaraha'),
+			5=>Yii::t('main', 'Palkkaennakko'),
+			6=>Yii::t('main', 'Muu vähennys esim. lasku'),
+			100=>Yii::t('main', 'Muut kustannukset'),
+		);
+
+		return $l;
 	}
 
 	protected function lisatyotunnitPvmTid($pvm,$tid)

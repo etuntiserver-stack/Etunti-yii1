@@ -272,10 +272,11 @@ function dateDiff($start, $end) {
     {
 	$korv = '
 		<div class="col-sm-4">
-			<h3>'.Yii::t('main', 'Korvaukset').'</h3>
+			<h3>'.Yii::t('main', 'Korvaukset ja ennakot').'</h3>
 			'.$korv.
 		'</div>';
     }
+/*
     $lisatt = $this->lisatyotunnitPvmTid(date("Y-m-d",strtotime($date)),$tid);
     if(!empty($lisatt))
     {
@@ -294,12 +295,20 @@ function dateDiff($start, $end) {
 			'.$ennakko.
 		'</div>';
     }
+*/
 
 /*
 			'.CHtml::button(Yii::t('main', 'Ylityötunnit'), 
 				array(
 					'class'=>'btn btn-sm btn-primary btn-group myBgColors avaaModalFor', 
 					'taulu'=>'lisatyotunnit',
+					'pvm'=>date("Y-m-d",strtotime($date)),
+					'tid'=>$tid,
+			)).'
+			'.CHtml::button(Yii::t('main', 'Ennakko'), 
+				array(
+					'class'=>'btn btn-sm btn-primary btn-group myBgColors avaaModalFor', 
+					'taulu'=>'ennakko',
 					'pvm'=>date("Y-m-d",strtotime($date)),
 					'tid'=>$tid,
 			)).'
@@ -314,24 +323,16 @@ function dateDiff($start, $end) {
 		  </tr>
 		  <tr>	
 		   <td>
-			'.CHtml::button(Yii::t('main', 'Korvaus'), 
+			'.CHtml::button(Yii::t('main', 'Korvaukset ja ennakot'), 
 				array(
 					'class'=>'btn btn-sm btn-primary btn-group myBgColors avaaModalFor', 
 					'taulu'=>'korvaukset',
 					'pvm'=>date("Y-m-d",strtotime($date)),
 					'tid'=>$tid,
 			)).'
-			'.CHtml::button(Yii::t('main', 'Ennakko'), 
-				array(
-					'class'=>'btn btn-sm btn-primary btn-group myBgColors avaaModalFor', 
-					'taulu'=>'ennakko',
-					'pvm'=>date("Y-m-d",strtotime($date)),
-					'tid'=>$tid,
-			)).'
-
 			<br>
 			<div class="row">
-			  '.$korv.$lisatt.$ennakko.'
+			  '.$korv.' 
 			</div>
 		   </td>
 		  </tr>
@@ -820,8 +821,14 @@ $("#yhtveto").on('submit',function(e){
  }
 
 
- $('.did').append('<i class="link fa fa-arrow-right pull-right sirraToteutuun" style="margin-top:-30px; font-size: 130%" data-toggle="tooltip" data-placement="top" title="Siirrä toteutuun"></i>');
+ $('.did').append('<i class="link fa fa-arrow-right pull-right sirraToteutuun" style="margin-top:-15px;  font-size: 130%" data-toggle="tooltip" data-placement="top" title="Siirrä toteutuun"></i>');
 
+
+$( ".sirraToteutuun" ).tooltip({
+  classes: {
+    "ui-tooltip": "highlight"
+  }
+});
 
 
  $(".sirraToteutuun").click(function(){
