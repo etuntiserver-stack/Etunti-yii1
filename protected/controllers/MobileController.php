@@ -238,10 +238,22 @@ function num($val){
 			ksort($model);
 
 
-		        $html2pdf = Yii::app()->ePdf->HTML2PDF('P', 'A4', 'en');
-			$html2pdf->setDefaultFont('Arial');
-		        $html2pdf->WriteHTML($this->renderPartial('raportit_pdf_l', array('model' => $model, 'tyyppi' => 'Toteutuneet'),true));
-		        $html2pdf->Output();
+			if(isset($_POST['luoPDF']))
+			{
+			        $html2pdf = Yii::app()->ePdf->HTML2PDF('P', 'A4', 'en');
+				$html2pdf->setDefaultFont('Arial');
+			        $html2pdf->WriteHTML($this->renderPartial('raportit_pdf_l', array('model' => $model, 'tyyppi' => 'Toteutuneet'),true));
+			        $html2pdf->Output();
+			        exit;
+			}
+
+			if(isset($_POST['luoExcel']))
+			{
+			        $html = $this->renderPartial('raportit_pdf_l', array('model' => $model, 'tyyppi' => 'Toteutuneet'),true);
+				preg_match_all('/<div class=\"tb\">(.*?)<\/div>/s',$html,$match);
+				$this->htmlToXls($match[0][0]);
+			        exit;
+			}
 
 		  }
 		//  Toteutuneet -->
@@ -295,12 +307,23 @@ function num($val){
 			$model = Tyovuoroot::model()->findAll($criteria); 
 
 
-		        $html2pdf = Yii::app()->ePdf->HTML2PDF('P', 'A4', 'en');
-			$html2pdf->setDefaultFont('Arial');
-		        $html2pdf->WriteHTML($this->renderPartial('luetut_toteutuneet_ero_pdf', array('model' => $model, 'from'=>$_POST['from'],'to'=>$_POST['to']),true));
-		        $html2pdf->Output();
 
-			//$this->render('luetut_toteutuneet_ero_pdf', array('model' => $model));
+			if(isset($_POST['luoPDF']))
+			{
+			        $html2pdf = Yii::app()->ePdf->HTML2PDF('P', 'A4', 'en');
+				$html2pdf->setDefaultFont('Arial');
+			        $html2pdf->WriteHTML($this->renderPartial('luetut_toteutuneet_ero_pdf', array('model' => $model, 'from'=>$_POST['from'],'to'=>$_POST['to']),true));
+			        $html2pdf->Output();
+			        exit;
+			}
+
+			if(isset($_POST['luoExcel']))
+			{
+			        $html = $this->renderPartial('luetut_toteutuneet_ero_pdf', array('model' => $model, 'from'=>$_POST['from'],'to'=>$_POST['to']),true);
+				preg_match_all('/<div class=\"tb\">(.*?)<\/div>/s',$html,$match);
+				$this->htmlToXls($match[0][0]);
+			        exit;
+			}
 
 		  }
 		// Toteutuneen ja suunnitellun työn erot -->
@@ -336,13 +359,22 @@ function num($val){
 			$model = Vuosilomat::model()->findAll($criteria); 
 
 
-		        $html2pdf = Yii::app()->ePdf->HTML2PDF('P', 'A4', 'en');
-			$html2pdf->setDefaultFont('Arial');
-		        $html2pdf->WriteHTML($this->renderPartial('vuosilomat_pdf', array('model' => $model),true));
-		        $html2pdf->Output();
+			if(isset($_POST['luoPDF']))
+			{
+			        $html2pdf = Yii::app()->ePdf->HTML2PDF('P', 'A4', 'en');
+				$html2pdf->setDefaultFont('Arial');
+			        $html2pdf->WriteHTML($this->renderPartial('vuosilomat_pdf', array('model' => $model),true));
+			        $html2pdf->Output();
+			        exit;
+			}
 
-
-			//$this->render('vuosilomat_pdf', array('model' => $model));
+			if(isset($_POST['luoExcel']))
+			{
+			        $html = $this->renderPartial('vuosilomat_pdf', array('model' => $model),true);
+				preg_match_all('/<div class=\"tb\">(.*?)<\/div>/s',$html,$match);
+				$this->htmlToXls($match[0][0]);
+			        exit;
+			}
 
 		  }
 		//  lomat Ja Poissaolot -->

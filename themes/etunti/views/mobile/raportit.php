@@ -194,7 +194,7 @@ $(document).ready(function(){
                  <div class="row">
 
 
-    <form action="#" target="_blank" method=POST>
+    <form action="#" id="toteutuneetForm" target="_blank" method=POST>
     <input type="hidden" name="method" value="toteutuneet">
 
       <div class="row">
@@ -269,10 +269,16 @@ $(document).ready(function(){
 
       </div>
       <br>
-
-	   <input type="submit" class="btn btn-primary pull-right myBgColors" value="<?php echo Yii::t('main', 'Luo raportti'); ?>">
-
     </form>
+
+
+      <div class="row">
+        <div class="col-sm-6">
+    	  <button class="btn btn-primary btn-block myBgColors submitExceltoteutuneet"><?php echo Yii::t('main', 'Luo Excel raportti'); ?></button>
+        </div><div class="col-sm-6">
+    	  <button class="btn btn-primary btn-block myBgColors submitPDFtoteutuneet"><?php echo Yii::t('main', 'Luo PDF raportti'); ?></button>
+        </div>
+      </div>
 
 
                  </div>
@@ -280,6 +286,32 @@ $(document).ready(function(){
               </div>
             </div>
 
+
+
+<script>
+$(document).ready(function(){
+
+
+  $('.submitPDFtoteutuneet').click(function(){
+
+	var input = $("<input id='luoPDF'>")
+               .attr({"type":"text","name":"luoPDF"}).val("true");
+	$('#toteutuneetForm').append(input).submit();
+	$('#luoPDF').remove();
+
+  });
+
+  $('.submitExceltoteutuneet').click(function(){
+
+	var input = $("<input id='luoExcel'>")
+               .attr({"type":"text","name":"luoExcel"}).val("true");
+	$('#toteutuneetForm').append(input).submit();
+	$('#luoExcel').remove();
+
+  });
+
+});
+</script>
 
 
 <?php if(in_array('2',$tas)) : ?>
@@ -293,7 +325,7 @@ $(document).ready(function(){
                  <div class="row">
 
 
-    <form action="#" target="_blank" method=POST>
+    <form action="#" id="totJasunEroForm" target="_blank" method=POST>
     <input type="hidden" name="method" value="LuetutToteutuneetEro">
 
       <div class="row">
@@ -364,11 +396,15 @@ $(document).ready(function(){
        </div>
       </div>
       <br>
-
-
-	   <input type="submit" class="btn btn-primary pull-right myBgColors" value="<?php echo Yii::t('main', 'Luo raportti'); ?>">
-
     </form>
+
+      <div class="row">
+        <div class="col-sm-6">
+    	  <button class="btn btn-primary btn-block myBgColors submitExceltotEro"><?php echo Yii::t('main', 'Luo Excel raportti'); ?></button>
+        </div><div class="col-sm-6">
+    	  <button class="btn btn-primary btn-block myBgColors submitPDFtotEro"><?php echo Yii::t('main', 'Luo PDF raportti'); ?></button>
+        </div>
+      </div>
 
 
                  </div>
@@ -377,6 +413,31 @@ $(document).ready(function(){
             </div>
 
 
+
+<script>
+$(document).ready(function(){
+
+
+  $('.submitPDFtotEro').click(function(){
+
+	var input = $("<input id='luoPDF'>")
+               .attr({"type":"text","name":"luoPDF"}).val("true");
+	$('#totJasunEroForm').append(input).submit();
+	$('#luoPDF').remove();
+
+  });
+
+  $('.submitExceltotEro').click(function(){
+
+	var input = $("<input id='luoExcel'>")
+               .attr({"type":"text","name":"luoExcel"}).val("true");
+	$('#totJasunEroForm').append(input).submit();
+	$('#luoExcel').remove();
+
+  });
+
+});
+</script>
 
 
 
@@ -390,7 +451,7 @@ $(document).ready(function(){
                  <div class="row">
 
 
-    <form action="#" target="_blank" method=POST>
+    <form action="#" id="lomatForm" target="_blank" method=POST>
     <input type="hidden" name="method" value="lomatJaPoissaolot">
 
       <div class="row">
@@ -446,16 +507,48 @@ $(document).ready(function(){
       </div>
       <br>
 
-
-	   <input type="submit" class="btn btn-primary pull-right myBgColors" value="<?php echo Yii::t('main', 'Luo raportti'); ?>">
-
     </form>
+
+      <div class="row">
+        <div class="col-sm-6">
+    	  <button class="btn btn-primary btn-block myBgColors submitExcellomat"><?php echo Yii::t('main', 'Luo Excel raportti'); ?></button>
+        </div><div class="col-sm-6">
+    	  <button class="btn btn-primary btn-block myBgColors submitPDFlomat"><?php echo Yii::t('main', 'Luo PDF raportti'); ?></button>
+        </div>
+      </div>
 
 
                  </div>
                 </div>
               </div>
             </div>
+
+
+
+<script>
+$(document).ready(function(){
+
+
+  $('.submitPDFlomat').click(function(){
+
+	var input = $("<input id='luoPDF'>")
+               .attr({"type":"text","name":"luoPDF"}).val("true");
+	$('#lomatForm').append(input).submit();
+	$('#luoPDF').remove();
+
+  });
+
+  $('.submitExcellomat').click(function(){
+
+	var input = $("<input id='luoExcel'>")
+               .attr({"type":"text","name":"luoExcel"}).val("true");
+	$('#lomatForm').append(input).submit();
+	$('#luoExcel').remove();
+
+  });
+
+});
+</script>
 
 <?php endif; ?>
 
