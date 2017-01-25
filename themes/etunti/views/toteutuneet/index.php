@@ -88,19 +88,15 @@ table { width: 100%; }
                         </div>
 
 
+			<?php
+			$asetukset=Asetukset::model()->findbypk(1);
+			if($asetukset->netvisor_kaytto == 1 and Yii::app()->session['tekija']) : ?>
                         <div class="section">
                           <label class="field select">
-
-				<?php
-				$asetukset=Asetukset::model()->findbypk(1);
-				if($asetukset->netvisor_kaytto == 1 and Yii::app()->session['tekija'])
-				{
-					echo '<span class="btn btn-primary btn-lg lahetaKaikki btn-block myBgColors">'.Yii::t('main', 'Lähetä kaikki netvisoriin').'</span>';
-				}
-				?>
-
+				<span class="btn btn-primary btn-lg lahetaKaikki btn-block myBgColors"><?php echo Yii::t('main', 'Lähetä kaikki netvisoriin'); ?></span>
                           </label>
                         </div>
+			<?php endif; ?>
 
                       </div>
                       <div class="col-md-2">
@@ -200,7 +196,18 @@ function dateDiff($start, $end) {
 	</h3>
   </div>
 
+
   <div class="panel heading-border">
+   <div class="panel-heading"><?php echo Yii::t('main', 'Yhteensä'); ?> <?php echo date("d.m.Y",strtotime(Yii::app()->session['from'])); ?> - <?php echo date("d.m.Y",strtotime(Yii::app()->session['to'])); ?></div>
+   <div class="panel-body">
+	<div id="yhteensaTfootContent"></div>
+   </div>
+  </div>
+
+
+
+  <div class="panel heading-border">
+   <div class="panel-heading"><?php echo Yii::t('main', 'Lista'); ?></div>
    <div class="panel-body">
 
   <table class="table" cellspacing="0" cellpadding="0" id="tuntienHyvaksyntaTaulu">
@@ -661,7 +668,7 @@ function dateDiff($start, $end) {
   ?>
 
   </tbody>
-  <tfoot>
+  <tfoot id="yhteensaTfoot">
 
 
 	<tr><td colspan="4">
@@ -731,11 +738,17 @@ function dateDiff($start, $end) {
 <script type="text/javascript">
 $(document).ready(function(){
 
-$(".haemob").click(function(){
-	$("#yhtveto").submit();
-});
+ yhteensaTfoot();
+ function yhteensaTfoot(){
+	var getContent = $('#yhteensaTfoot').html();
+	$('#yhteensaTfootContent').html('<div class="row table-responsive"><table class="table">' + getContent + '</table></div>');
+ }
 
-$("#yhtveto").on('submit',function(e){
+ $(".haemob").click(function(){
+	$("#yhtveto").submit();
+ });
+
+ $("#yhtveto").on('submit',function(e){
 
   var from = $("#from").val();
   var to = $("#to").val();
@@ -755,7 +768,7 @@ $("#yhtveto").on('submit',function(e){
     }
 
 
-});
+ });
 
 
  $(".lahetaKaikki").click(function(){
