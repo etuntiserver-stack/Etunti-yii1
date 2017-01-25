@@ -179,6 +179,12 @@ class ToteutuneetController extends Controller
 		if($asetukset->netvisor_kaytto == 1 and empty($model->netvisor_ok_list))
 		{
 
+			if(isset($asetukset->netvisor_mita_lahetetaan) and empty($asetukset->netvisor_mita_lahetetaan))
+			{
+				echo json_encode(array('ERROR'=>'Valitse asetuksessa mitä lähetetään'));
+				exit;
+			}
+
 			$mitaLahetetaan = json_decode($asetukset->netvisor_mita_lahetetaan, true);
 			//print_r($mitaLahetetaan);
 
@@ -208,7 +214,7 @@ class ToteutuneetController extends Controller
 			if($update == true)
 			{
 				HyvaksyttamatPvmTunnit::model()->updateByPk($model->id, array('netvisor_ok_list'=>json_encode($lastArr)));
-				echo json_encode(array('netvisorOK'=>'Tiedot on lähetetty netvisoriin '.$returnPayroll));
+				echo json_encode(array('netvisorOK'=>date("d.m.Y", strtotime($model->pvm)). ' - Tiedot on lähetetty netvisoriin '.$returnPayroll));
 				exit;
 			}
 
@@ -219,7 +225,7 @@ class ToteutuneetController extends Controller
 		//     Netvisor lahetys -->
 
 		
-		echo json_encode('Tallennettu '.$returnPayroll);
+		echo json_encode(array('TallennettuMuttaEiLahetetty'=>date("d.m.Y", strtotime($model->pvm)).' - Tallennettu tietokantaan, mutta ei lähetetty netvisoriin.'));
 
 	}
 
@@ -351,7 +357,7 @@ $xml = '
 		}
 
 	  } else {
-			$return = array('statusError'=>$result);
+			$return = array('statusError'=>$nimike.' '.$model->pvm.'<br> '.json_encode($result));
 	  }
 
 		/*

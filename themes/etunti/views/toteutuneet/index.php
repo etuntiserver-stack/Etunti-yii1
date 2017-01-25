@@ -82,12 +82,26 @@ table { width: 100%; }
 				echo $tyontekiatLista;
 				?>
 
-
-
                             <i class="arrow double"></i>
                             </label>
                           </label>
                         </div>
+
+
+                        <div class="section">
+                          <label class="field select">
+
+				<?php
+				$asetukset=Asetukset::model()->findbypk(1);
+				if($asetukset->netvisor_kaytto == 1 and Yii::app()->session['tekija'])
+				{
+					echo '<span class="btn btn-primary btn-lg lahetaKaikki btn-block myBgColors">'.Yii::t('main', 'Lähetä kaikki netvisoriin').'</span>';
+				}
+				?>
+
+                          </label>
+                        </div>
+
                       </div>
                       <div class="col-md-2">
                         <div class="section">
@@ -106,7 +120,6 @@ table { width: 100%; }
    ?>
 
 
-                            </label>
                           </label>
                         </div>
                       </div>
@@ -155,6 +168,8 @@ table { width: 100%; }
         </div>
 
 
+
+	<div id="ilmoitusLahetysta"></div>
 
 
 <?php if(Yii::app()->session['tekija']) : ?>
@@ -743,6 +758,15 @@ $("#yhtveto").on('submit',function(e){
 });
 
 
+ $(".lahetaKaikki").click(function(){
+    $(".esittele_tyotunnit").each(function() {
+      if( $(this).attr('nvtilanne') !== '1') {
+		$(this).click();
+      }
+    });
+  });
+
+
  LahetaPainike();
  function LahetaPainike(){
     $(".esittele_tyotunnit").each(function() {
@@ -779,14 +803,16 @@ $("#yhtveto").on('submit',function(e){
            success: function(data){
 		data = JSON.parse(data);
 		console.log(data);
-		if(data['netvisorOK'] )
-		{
-			alert( JSON.stringify(data['netvisorOK']) );
+		if(data['netvisorOK'] ){
+			$('#ilmoitusLahetysta').append( '<div class="alert bg-success">' + data['netvisorOK'] + '</div>' );
 			$(thisButton).attr('NVtilanne', '1');
 			LahetaPainike();
-
+		} else if(data['TallennettuMuttaEiLahetetty'] ) {
+			$('#ilmoitusLahetysta').append( '<div class="alert bg-warning">' + data['TallennettuMuttaEiLahetetty'] + '</div>' );
+		} else if(data['statusError'] ) {
+			$('#ilmoitusLahetysta').append( '<div class="alert bg-danger">' + data + '</div>' );
 		} else {
-			alert( JSON.stringify(data) );
+			$('#ilmoitusLahetysta').append( '<div class="alert bg-danger">' + JSON.stringify(data) + '</div>' );
 		}
            }
         });
