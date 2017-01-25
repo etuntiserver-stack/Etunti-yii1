@@ -179,10 +179,22 @@ function num($val){
 
 			$model = Mobile::model()->findAll($criteria); 
 	
-		        $html2pdf = Yii::app()->ePdf->HTML2PDF('P', 'A4', 'en');
-			$html2pdf->setDefaultFont('Arial');
-		        $html2pdf->WriteHTML($this->renderPartial('raportit_pdf_l', array('model' => $model, 'tyyppi' => 'Luetut'),true));
-		        $html2pdf->Output();
+			if(isset($_POST['luoPDF']))
+			{
+			        $html2pdf = Yii::app()->ePdf->HTML2PDF('P', 'A4', 'en');
+				$html2pdf->setDefaultFont('Arial');
+			        $html2pdf->WriteHTML($this->renderPartial('raportit_pdf_l', array('model' => $model, 'tyyppi' => 'Luetut'),true));
+			        $html2pdf->Output();
+			        exit;
+			}
+
+			if(isset($_POST['luoExcel']))
+			{
+			        $html = $this->renderPartial('raportit_pdf_l', array('model' => $model, 'tyyppi' => 'Luetut'),true);
+				preg_match_all('/<div class=\"tb\">(.*?)<\/div>/s',$html,$match);
+				$this->htmlToXls($match[0][0]);
+			        exit;
+			}
 
 		  }
 		//  Luetut -->
@@ -344,6 +356,27 @@ function num($val){
 
 	}
 
+	protected function htmlToXls($html)
+	{
+			Yii::import('ext.phpexcel.PHPExcel',true);
+			$tmpfile = 'temp.html';
+			file_put_contents($tmpfile, mb_convert_encoding($html, 'ISO-8859-1', 'UTF-8'));
+			
+			$inputFileType = 'HTML';
+			$inputFileName = $tmpfile;
+			$outputFileType = 'Excel5';
+			$outputFileName = 'myExcelFile.xlsx';
+			
+			$objPHPExcelReader = PHPExcel_IOFactory::createReader($inputFileType);
+			$objPHPExcel = $objPHPExcelReader->load($inputFileName);
+		
+			$objPHPExcelWriter = PHPExcel_IOFactory::createWriter($objPHPExcel,$outputFileType);
+
+			header('Content-type: application/vnd.ms-excel;');
+			header('Content-Disposition: attachment; filename="file.xls"');
+			$objPHPExcelWriter->save('php://output');
+			unlink($tmpfile);
+	}
 
 	public function actionTotal_suunniteltu($id,$kohde_tid,$from,$to)
 	{

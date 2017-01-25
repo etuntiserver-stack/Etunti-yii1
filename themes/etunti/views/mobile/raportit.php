@@ -53,7 +53,7 @@
                  <div class="row">
 
 
-    <form action="#" target="_blank" method=POST>
+    <form action="#" id="luetutForm" target="_blank" method=POST>
     <input type="hidden" name="method" value="luetut">
 
       <div class="row">
@@ -142,16 +142,48 @@
 
       </div>
       <br>
-
-
-	   <input type="submit" class="btn btn-primary pull-right myBgColors" value="<?php echo Yii::t('main', 'Luo raportti'); ?>">
-
     </form>
+
+      <div class="row">
+        <div class="col-sm-6">
+    	  <button class="btn btn-primary btn-block myBgColors submitExcelluetut"><?php echo Yii::t('main', 'Luo Excel raportti'); ?></button>
+        </div><div class="col-sm-6">
+    	  <button class="btn btn-primary btn-block myBgColors submitPDFluetut"><?php echo Yii::t('main', 'Luo PDF raportti'); ?></button>
+        </div>
+      </div>
 
                  </div>
                 </div>
               </div>
             </div>
+
+
+<script>
+$(document).ready(function(){
+
+
+  $('.submitPDFluetut').click(function(){
+
+	var input = $("<input id='luoPDF'>")
+               .attr({"type":"text","name":"luoPDF"}).val("true");
+	$('#luetutForm').append(input).submit();
+	$('#luoPDF').remove();
+
+  });
+
+  $('.submitExcelluetut').click(function(){
+
+	var input = $("<input id='luoExcel'>")
+               .attr({"type":"text","name":"luoExcel"}).val("true");
+	$('#luetutForm').append(input).submit();
+	$('#luoExcel').remove();
+
+  });
+
+});
+</script>
+
+
 
 
 	  <!-- Toteutuneet -->
