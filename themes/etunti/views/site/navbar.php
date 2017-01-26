@@ -858,7 +858,10 @@ $('.tvchange').change(function(){
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/mobile/raportit">
                   <span class="fa fa-th-list"></span> <?php echo Yii::t('main', 'Raportit'); ?></a>
               </li>
-
+              <li>
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/mobile/tyoajan_seuranta">
+                  <span class="fa fa-th-list"></span> <?php echo Yii::t('main', 'Työajan seuranta'); ?></a>
+              </li>
           <li>
             <a class="accordion-toggle Yhteenvedot" href="#">
               <span class="fa fa-bars"></span>

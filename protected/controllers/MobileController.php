@@ -33,7 +33,7 @@ class MobileController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin', 'delete', 'create', 'update', 'index', 'index_a', 'view', 'updatetime', 'showkohteet', 'yhteenveto', 'kyhteenveto', 'yhteenveto_m', 'historia', 'poistaKohde', 'total_suunniteltu', 'total_toteutu', 'total_luettu', 'kesto', 'index_ajax', 'raportit', 'uusirivi', 'palkkataulukko', 'tidfromtomatkat', 'tidfromtoSL', 'tidfromtoSPL', 'tyobykohde', 'asiakas_hyvaksyminen', 'kohdebytekija' ,'kyhteenveto_tuntemattomat', 'laskutettu', 'lahetys_asiakkaalle', 'get_tyovuorot_day', 'on_olemassa', 'luetut_toteutuneet_ero_pdf', 'vuosilomat_pdf', 'check_paallekkainMobile'),
+				'actions'=>array('admin', 'delete', 'create', 'update', 'index', 'index_a', 'view', 'updatetime', 'showkohteet', 'yhteenveto', 'kyhteenveto', 'yhteenveto_m', 'historia', 'poistaKohde', 'total_suunniteltu', 'total_toteutu', 'total_luettu', 'kesto', 'index_ajax', 'raportit', 'uusirivi', 'palkkataulukko', 'tidfromtomatkat', 'tidfromtoSL', 'tidfromtoSPL', 'tyobykohde', 'asiakas_hyvaksyminen', 'kohdebytekija' ,'kyhteenveto_tuntemattomat', 'laskutettu', 'lahetys_asiakkaalle', 'get_tyovuorot_day', 'on_olemassa', 'luetut_toteutuneet_ero_pdf', 'vuosilomat_pdf', 'check_paallekkainMobile', 'tyoajan_seuranta'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -3034,5 +3034,25 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 	return $r;
 	}
 
+
+	public function actionTyoajan_seuranta()
+	{
+		$tid = '';
+		$year = '';
+		if(isset($_POST['tid']))
+		{
+			$t = Tyontekijat::model()->findByPk($_POST['tid']);
+			if(isset($t->id))
+			$tid = $t->id;
+			if(isset($_POST['vuosi']))
+			$year = $_POST['vuosi'];
+		}
+
+		$this->render('tyoajan_seuranta',array(
+			'tid'=>$tid,
+			'year'=>$year,
+		));
+
+	}
 
 }
