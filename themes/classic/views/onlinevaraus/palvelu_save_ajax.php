@@ -208,6 +208,16 @@
 	 </div>
 	</div>';
 
+	$path = Yii::app()->basePath."/../tiedostot/onlinevaraus_tuote/".Yii::app()->user->domain;
+	if(file_exists($path."/".$model->id.".jpg"))
+	{
+	$body .= '
+	<div class="row">
+	 <div class="col-xs-12">
+		<br><p><img src="../../tiedostot/onlinevaraus_tuote/'.Yii::app()->user->domain.'/'.$model->id.'.jpg" class="img-thumbnail"></p>
+	 </div>
+	</div>';
+	}
 
 	$body .= $blockAika;
 	$body .= $blockKohde;

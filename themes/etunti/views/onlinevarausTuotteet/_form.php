@@ -8,6 +8,9 @@
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'onlinevaraus-tuotteet-form',
 	'enableAjaxValidation'=>true,
+	'htmlOptions' => array(
+	        'enctype' => 'multipart/form-data',
+	),
 )); ?>
 
 
@@ -194,7 +197,63 @@
 <hr>
 
 <div class="row">
-	<div class="col-sm-6">
+
+	<div class="col-sm-4">
+
+	<div class="section fill mb5">
+	        <?php echo $form->labelEx($model,'image'); ?>
+         	<input type="file" class="form-control" name="image" id="t_file" onChange="document.getElementById('tiedostoUP').value = this.value;" accept=".jpg">
+         	<input type="hidden" class="gui-input" name="uploaded_image" id="tiedostoUP" placeholder="Valitse tiedosto..">
+	        <?php echo $form->error($model,'image'); ?>
+	</div>
+	<?php
+	 $path = Yii::app()->basePath."/../tiedostot/onlinevaraus_tuote/".Yii::app()->user->domain;
+	 if($model->isNewRecord!='1' and file_exists($path."/".$model->id.".jpg")): 
+	?>
+	<div class="section fill mb5" id="kuva_<?php echo $model->id; ?>">
+		<img src="../../tiedostot/onlinevaraus_tuote/<?php echo Yii::app()->user->domain.'/'.$model->id; ?>.jpg" class="img-thumbnail">
+		<small class="poistaKuva link pull-right" this="tiedostot/onlinevaraus_tuote/<?php echo Yii::app()->user->domain.'/'.$model->id; ?>.jpg" model="<?php echo $model->id; ?>" for="kuva_<?php echo $model->id; ?>"><?php echo Yii::t('main', 'Poista valokuva'); ?></small>	
+
+
+
+		<?php
+		if(isset($_POST['poistaTamaTiedosto'])){
+			unlink($_POST['poistaTamaTiedosto']);
+			exit;
+		}
+		?>
+		<script type="text/javascript">
+		$(document).ready(function(){
+		
+		  $(".poistaKuva").click(function(){
+
+			if(!confirm('Haluatko varmaasti poista?'))
+			return false;
+
+			var forThis = $(this).attr("this");
+			var model = $(this).attr("model");
+			var forID = $(this).attr("for");
+
+		        $.ajax({
+		           url: "update?id="+model,
+			   type:'POST',
+			   data: { "poistaTamaTiedosto" : forThis },
+		           success: function(data){
+				console.log(data);
+				$("#"+forID).remove();
+		           }
+		        });
+		  });
+		
+		});
+		</script>
+	</div>
+
+	<?php endif; ?>
+
+	</div>
+
+	<div class="col-sm-8">
 	<legend><?php echo Yii::t('main', 'Lisäpalvelut rakenne'); ?></legend>
 
 	<div class="section fill mb5">

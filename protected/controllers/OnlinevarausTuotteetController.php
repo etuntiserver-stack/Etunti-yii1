@@ -152,7 +152,7 @@ class OnlinevarausTuotteetController extends Controller
 		$model=$this->loadModel($id);
 
 		// Uncomment the following line if AJAX validation is needed
-		// $this->performAjaxValidation($model);
+		$this->performAjaxValidation($model);
 
 		if(isset($_POST['OnlinevarausTuotteet']))
 		{
@@ -167,6 +167,22 @@ class OnlinevarausTuotteetController extends Controller
 				$model->lisapalvelut=json_encode($_POST['lisapalvelut']);
 			else
 				$model->lisapalvelut='';
+
+
+			if(isset($_POST['uploaded_image']) and !empty($_POST['uploaded_image']))
+			{
+
+			  	$path = Yii::app()->basePath."/../tiedostot/onlinevaraus_tuote/".Yii::app()->user->domain;
+			  	if (!file_exists($path)) {
+			  		mkdir($path, 0777, true);
+			  	}
+
+			  	$uploadfile = $path. '/' . basename($model->id.'.jpg');
+			  	if (move_uploaded_file($_FILES['image']['tmp_name'], $uploadfile)) {
+			     		//echo "";
+			  	} 
+			}
+
 
 			if($model->save())
 				$this->redirect(array('index'));

@@ -13,6 +13,9 @@
  */
 class OnlinevarausTuotteet extends DB2ActiveRecord
 {
+
+public $image;
+
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
@@ -40,6 +43,7 @@ class OnlinevarausTuotteet extends DB2ActiveRecord
 		// will receive user inputs.
 		return array(
 			array('nimike', 'required'),
+			array('image', 'file','types'=>'jpg', 'allowEmpty'=>true, 'on'=>'update'),
 			array('palvelu, nayta_sivuilla, paa_palvelu, alv', 'numerical', 'integerOnly'=>true),
 			array('nimike, selitysteksti', 'length', 'max'=>255),
 			array('hinta, kesto, nelio, kotitalousvahennys', 'length', 'max'=>20),
@@ -77,6 +81,7 @@ class OnlinevarausTuotteet extends DB2ActiveRecord
 			'kotitalousvahennys' => Yii::t('main', 'Kotitalousvähennys %'),
 			'nayta_sivuilla' => Yii::t('main', 'Aktiivinen'),
 			'paa_palvelu'=> Yii::t('main', 'Pääpalvelu'),
+			'image'=> Yii::t('main', 'Valokuva'),
 		);
 	}
 
