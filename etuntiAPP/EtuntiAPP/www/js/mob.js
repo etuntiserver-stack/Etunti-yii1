@@ -152,7 +152,7 @@ function allShow(){
 	$('#tyo').show(370);
 	$('#matka').show(370);
 	$('#lounas').show(370);
-	$("#alLop").html('<h2>'+ lang['ALOITA'] +'</h2>');
+	/*$("#alLop").html('<h2>'+ lang['ALOITA'] +'</h2>');*/
 	$("#getTyovuorotToday").show(370);
 }
 function allTilasetHide(){
@@ -387,6 +387,7 @@ setTimeout(function() {
 			if(localStorage.getItem('avoinID'))
 				localStorage.removeItem('avoinID');
 
+			$("#alLop").html('<h2>'+sp[5]+'</h2>');
 		}
 
 
