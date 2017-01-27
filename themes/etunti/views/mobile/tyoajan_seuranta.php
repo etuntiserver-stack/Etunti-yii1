@@ -101,7 +101,7 @@ ini_set('max_execution_time', 900);
 <style>
 #kokoTaulu { width:100% }
 .vkopvm, .paaTable { width: 100%; } 
-.vkopvm th, .vkopvm td{ width: 152px; }
+.vkopvm td span { width: 65px; }
 .paaTable td{ text-align: center; }
 </style>
 
@@ -114,13 +114,7 @@ ini_set('max_execution_time', 900);
 	  <table class="paaTable" border="1" cellpadding="0" cellspacing="0" >
 	   <tr>
 	    <th style="width:80px;border-right:3px #333 solid"><?php echo Yii::t('main', 'Viikot'); ?></th>
-	    <th>
-	     <table class="vkopvm" cellpadding="0" cellspacing="0">
-		<tr>
-		  <th colspan="14"><?php echo Yii::t('main', 'Tehdyt tunnit'); ?></th>
-		</tr>
-	     </table>
-	    </th>
+	    <th colspan="14"><?php echo Yii::t('main', 'Tehdyt tunnit'); ?></th>
 	    <th style="border-left:3px #333 solid"><?php echo Yii::t('main', 'Tun-<br>nit<br>yht'); ?></th>
 	    <th><?php echo Yii::t('main', 'Sun-<br>nuntai<br>työ'); ?></th>
 	    <th><?php echo Yii::t('main', 'Ilta-<br>työ'); ?></th>
@@ -132,33 +126,34 @@ ini_set('max_execution_time', 900);
 		$startVko = array(1,2);
 	   ?>
 
+
+		<tr>
+		  <th></th>
+		  <th style="border-left:3px #333 solid"><?php echo Yii::t('main', 'ma'); ?></th>
+		  <th><?php echo Yii::t('main', 'ti'); ?></th>
+		  <th><?php echo Yii::t('main', 'ke'); ?></th>
+		  <th><?php echo Yii::t('main', 'to'); ?></th>
+		  <th><?php echo Yii::t('main', 'pe'); ?></th>
+		  <th><?php echo Yii::t('main', 'la'); ?></th>
+		  <th><?php echo Yii::t('main', 'su'); ?></th>
+		  <th><?php echo Yii::t('main', 'ma'); ?></th>
+		  <th><?php echo Yii::t('main', 'ti'); ?></th>
+		  <th><?php echo Yii::t('main', 'ke'); ?></th>
+		  <th><?php echo Yii::t('main', 'to'); ?></th>
+		  <th><?php echo Yii::t('main', 'pe'); ?></th>
+		  <th><?php echo Yii::t('main', 'la'); ?></th>
+		  <th style="border-right:3px #333 solid"><?php echo Yii::t('main', 'su'); ?></th>
+		  <th></th>
+		  <th></th>
+		  <th></th>
+		  <th></th>
+		</tr>
+
 	   <?php for ($i = 1; $i <= 27; $i++) : ?>
 	   
 	   <tr>
 	    <td style="width:80px; border-right:3px #333 solid"><?php echo $startVko[0]; ?>-<?php echo $startVko[1]; ?></td>
-	    <td>
-	     <table class="vkopvm" cellpadding="0" cellspacing="0">
 
-		<?php if($startVko[0] == 1): ?> 
-		<tr>
-		  <th><?php echo Yii::t('main', 'ma'); ?></th>
-		  <th><?php echo Yii::t('main', 'ti'); ?></th>
-		  <th><?php echo Yii::t('main', 'ke'); ?></th>
-		  <th><?php echo Yii::t('main', 'to'); ?></th>
-		  <th><?php echo Yii::t('main', 'pe'); ?></th>
-		  <th><?php echo Yii::t('main', 'la'); ?></th>
-		  <th><?php echo Yii::t('main', 'su'); ?></th>
-		  <th><?php echo Yii::t('main', 'ma'); ?></th>
-		  <th><?php echo Yii::t('main', 'ti'); ?></th>
-		  <th><?php echo Yii::t('main', 'ke'); ?></th>
-		  <th><?php echo Yii::t('main', 'to'); ?></th>
-		  <th><?php echo Yii::t('main', 'pe'); ?></th>
-		  <th><?php echo Yii::t('main', 'la'); ?></th>
-		  <th><?php echo Yii::t('main', 'su'); ?></th>
-		</tr>
-		<?php endif; ?>
-
-		<tr>
 	  	<?php 
 		$tunnitYht = 0;
 		for($day= 1; $day <= 7; $day++) {
@@ -177,7 +172,7 @@ ini_set('max_execution_time', 900);
 			else
 				$border = 'border-right:1px #333 solid';
 
-			echo '<td style="'.$border.'">'.$toteutu.'</td>';
+			echo '<td style="'.$border.'"><span>'.$toteutu.'</span></td>';
 
 		}
 	        ?>
@@ -196,12 +191,11 @@ ini_set('max_execution_time', 900);
 			if($day != 7)
 			$border = 'border-right:1px #333 solid';
 
-			echo '<td style="'.$border.'">'.$toteutu.'</td>';
+			echo '<td style="'.$border.'"><span>'.$toteutu.'</span></td>';
 		}
 	        ?>
-		</tr>
-	     </table>
-	    </td>
+
+
 	    <?php
 	  	$from = date("d.m.Y", strtotime($year ."W". sprintf("%02d", $startVko[0]) . '1'));
 	  	$to = date("d.m.Y", strtotime($year ."W". sprintf("%02d", $startVko[1]) . '7'));
