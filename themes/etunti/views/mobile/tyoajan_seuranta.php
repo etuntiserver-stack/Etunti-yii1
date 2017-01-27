@@ -1,7 +1,5 @@
 <?php
-/* @var $this KohteetController */
-/* @var $dataProvider CActiveDataProvider */
-
+ini_set('max_execution_time', 900);
 ?>
 
 
@@ -9,7 +7,15 @@
         <div class="tray-center">
 
 
-        <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-home"></i> <?php echo Yii::t('main', 'Työajan seuranta'); ?></h2>
+        <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-home"></i> <?php echo Yii::t('main', 'Työajan seuranta'); ?>
+
+   <!-- tulostus -->
+   <div class="pull-right">
+      <button name="tulosta" class="btn btn-primary btn-sm myBgColors tulosta" value="PDF"><?php echo Yii::t('main', 'Tulosta'); ?></button>
+   </div>
+   <!-- tulostus -->
+
+	</h2>
 
 
 
@@ -93,8 +99,9 @@
 <?php if( !empty($tid) and !empty($year) ) : ?>
 
 <style>
+#kokoTaulu { width:100% }
 .vkopvm, .paaTable { width: 100%; } 
-.vkopvm th, .vkopvm td{ min-width: 52px; }
+.vkopvm th, .vkopvm td{ width: 152px; }
 .paaTable td{ text-align: center; }
 </style>
 
@@ -103,7 +110,7 @@
    <div class="panel-body">
 
 	<div class="row">
-	 <div class="table-responsive">
+	 <div class="table-responsive" id="kokoTaulu">
 	  <table class="paaTable" border="1" cellpadding="0" cellspacing="0" >
 	   <tr>
 	    <th style="width:80px;border-right:3px #333 solid"><?php echo Yii::t('main', 'Viikot'); ?></th>
@@ -111,22 +118,6 @@
 	     <table class="vkopvm" cellpadding="0" cellspacing="0">
 		<tr>
 		  <th colspan="14"><?php echo Yii::t('main', 'Tehdyt tunnit'); ?></th>
-		</tr>
-		<tr>
-		  <th><?php echo Yii::t('main', 'ma'); ?></th>
-		  <th><?php echo Yii::t('main', 'ti'); ?></th>
-		  <th><?php echo Yii::t('main', 'ke'); ?></th>
-		  <th><?php echo Yii::t('main', 'to'); ?></th>
-		  <th><?php echo Yii::t('main', 'pe'); ?></th>
-		  <th><?php echo Yii::t('main', 'la'); ?></th>
-		  <th><?php echo Yii::t('main', 'su'); ?></th>
-		  <th><?php echo Yii::t('main', 'ma'); ?></th>
-		  <th><?php echo Yii::t('main', 'ti'); ?></th>
-		  <th><?php echo Yii::t('main', 'ke'); ?></th>
-		  <th><?php echo Yii::t('main', 'to'); ?></th>
-		  <th><?php echo Yii::t('main', 'pe'); ?></th>
-		  <th><?php echo Yii::t('main', 'la'); ?></th>
-		  <th><?php echo Yii::t('main', 'su'); ?></th>
 		</tr>
 	     </table>
 	    </th>
@@ -147,6 +138,26 @@
 	    <td style="width:80px; border-right:3px #333 solid"><?php echo $startVko[0]; ?>-<?php echo $startVko[1]; ?></td>
 	    <td>
 	     <table class="vkopvm" cellpadding="0" cellspacing="0">
+
+		<?php if($startVko[0] == 1): ?> 
+		<tr>
+		  <th><?php echo Yii::t('main', 'ma'); ?></th>
+		  <th><?php echo Yii::t('main', 'ti'); ?></th>
+		  <th><?php echo Yii::t('main', 'ke'); ?></th>
+		  <th><?php echo Yii::t('main', 'to'); ?></th>
+		  <th><?php echo Yii::t('main', 'pe'); ?></th>
+		  <th><?php echo Yii::t('main', 'la'); ?></th>
+		  <th><?php echo Yii::t('main', 'su'); ?></th>
+		  <th><?php echo Yii::t('main', 'ma'); ?></th>
+		  <th><?php echo Yii::t('main', 'ti'); ?></th>
+		  <th><?php echo Yii::t('main', 'ke'); ?></th>
+		  <th><?php echo Yii::t('main', 'to'); ?></th>
+		  <th><?php echo Yii::t('main', 'pe'); ?></th>
+		  <th><?php echo Yii::t('main', 'la'); ?></th>
+		  <th><?php echo Yii::t('main', 'su'); ?></th>
+		</tr>
+		<?php endif; ?>
+
 		<tr>
 	  	<?php 
 		$tunnitYht = 0;
@@ -160,7 +171,14 @@
 			else
 				$toteutu = $this->sprint($toteutu);
 
-			echo '<td style="border-right:1px #333 solid">'.$toteutu.'</td>';
+			$border = '';
+			if($day == 7)
+				$border = 'border-right:3px #333 solid';
+			else
+				$border = 'border-right:1px #333 solid';
+
+			echo '<td style="'.$border.'">'.$toteutu.'</td>';
+
 		}
 	        ?>
 	  	<?php 
@@ -174,7 +192,6 @@
 			else
 				$toteutu = $this->sprint($toteutu);
 
-
 			$border = '';
 			if($day != 7)
 			$border = 'border-right:1px #333 solid';
@@ -184,7 +201,7 @@
 	        ?>
 		</tr>
 	     </table>
-	    </th>
+	    </td>
 	    <?php
 	  	$from = date("d.m.Y", strtotime($year ."W". sprintf("%02d", $startVko[0]) . '1'));
 	  	$to = date("d.m.Y", strtotime($year ."W". sprintf("%02d", $startVko[1]) . '7'));
@@ -209,4 +226,37 @@
   </div>
 </div>
 <?php endif; ?>
+
+
+<script>
+$(document).ready(function(){
+
+
+ $(document).delegate(".tulosta","click",function(){
+	
+    var divToPrint = document.getElementById('kokoTaulu');
+    var htmlToPrint = '' +
+        '<style type="text/css">' +
+	'.table tbody>tr>td{' +
+	    	'vertical-align: top;' +
+	'}' +
+        'table {' +
+	'border-collapse: collapse;' +
+	'border: 0;' +
+        '}' +
+        'table th, table td {' +
+        'border:1px solid #333;' +
+        'padding:3px 5px;' +
+        '}' +
+        '</style>';
+    htmlToPrint += divToPrint.outerHTML;
+    newWin = window.open("");
+    newWin.document.write(htmlToPrint);
+    newWin.print();
+    newWin.close();
+ });
+
+
+});
+</script>
 
