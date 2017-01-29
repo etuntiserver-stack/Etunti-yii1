@@ -132,7 +132,13 @@ echo	'<input type=hidden id=number value='.cal_days_in_month(CAL_GREGORIAN, $mon
   echo '</tr></thead><tbody>';
 
   $criteria = new CDbCriteria();
-  $criteria->order = " tekijan_nimi ";
+
+  $asetukset = Asetukset::model()->findByPk(1);
+  if($asetukset->tyontekijan_etunimi_sukunimi_jarjestys == 0)
+	$criteria->order = " tekijan_nimi ";
+  else
+	$criteria->order = " sukunimi ";
+
   $criteria->condition = " aktiivinen = '1' ";
   $t = Tyontekijat::model()->findAll($criteria);
   foreach($t as $v)
