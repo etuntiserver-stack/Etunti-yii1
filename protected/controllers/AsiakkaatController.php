@@ -409,7 +409,7 @@ class AsiakkaatController extends Controller
 			   $a = Asetukset::model()->findbypk(1);
 			   if($a->netvisor_kaytto == 1)
 			   {
-				if($model->netvisorkey == 0)
+				if($model->netvisorkey == 0 and $model->netvisorkey == 0)
 				{
 					$InsertedDataIdentifier = $this->netvisorCustomer("add", $model);
 					if(!empty($InsertedDataIdentifier))
