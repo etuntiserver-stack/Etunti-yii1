@@ -321,7 +321,6 @@ function num($val){
 			{
 			        $html = $this->renderPartial('luetut_toteutuneet_ero_pdf', array('model' => $model, 'from'=>$_POST['from'],'to'=>$_POST['to']),true);
 				preg_match_all('/<div class=\"tb\">(.*?)<\/div>/s',$html,$match);
-				$this->htmlToXls($match[0][0]);
 				$this->htmlToXls($match[0][0], 'LuetutToteutuneetEro');
 			        exit;
 			}
