@@ -345,12 +345,12 @@ class AsiakkaatController extends Controller
 			{
 
 
-			   // <-- Netvisor
-			   if($asetukset->netvisor_kaytto == 1)
-			   {
-				$this->netvisorCustomer("add", $model);
-			   }
-			   //  Netvisor -->
+			   	// <-- Netvisor
+				if($asetukset->netvisor_kaytto == 1)
+				{
+					$this->netvisorCustomer("add", $model);
+				}
+				//  Netvisor -->
 
 
 				if(empty($model->asiakasnumero))
