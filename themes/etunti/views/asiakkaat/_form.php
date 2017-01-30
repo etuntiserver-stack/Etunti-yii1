@@ -149,6 +149,13 @@ $uusiSalasana = $this->generatePassword();
 
 		<?php echo $form->error($model,'ryhma'); ?>
 	</div>
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'netvisorkey'); ?>
+		<?php echo $form->numberField($model,'netvisorkey',array('size'=>10,'maxlength'=>100,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'netvisorkey'); ?>
+	</div>
+
 <?php endif ; ?>
 
 <?php if(in_array('5',$tas)) : ?>
