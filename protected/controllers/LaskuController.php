@@ -1301,8 +1301,10 @@ foreach($laskunRivit as $rivit)
 
 	$ProductIdentifier = '';
 	$tuotteet = LaskutusTuotteet::model()->findByPk($rivit->tuoteID);
-	if(isset($tuotteet->id) and $tuotteet->netvisorkey){
+	if(isset($tuotteet->id) and $tuotteet->netvisorkey != 0){
 		$ProductIdentifier = $tuotteet->netvisorkey;
+	} elseif( $this->netvisorProductDefault() != 0 and !isset($tuotteet->id) or (isset($tuotteet->id) and $tuotteet->netvisorkey == 0) ){
+		$ProductIdentifier = $this->netvisorProductDefault();
 	} else {
 		die('ERROR: ProductIdentifier');
 	}
@@ -2150,5 +2152,141 @@ $xml .= '
 
 		return $bod;
 	}
+
+
+	protected function netvisorProductDefault()
+	{
+
+       		$criteria = new CDbCriteria();
+	        $criteria->condition = " tuotenimi='Oletus tuote' AND netvisorkey!=0 ";
+		$chkLT = LaskutusTuotteet::model()->find($criteria);
+		if(isset($chkLT->id))
+		{
+			return $chkLT->netvisorkey;
+		}
+
+
+
+		$site = Yii::app()->createController('Site');
+		$n = $site[0]->netvisorYhteys();
+
+	if(isset($n[0]))
+	{
+
+		$url		= $n[0].'/product.nv?method=add';
+		$host 		= $n[1];
+		$sender 	= $n[2];
+		$customerId	= $n[3];
+		$partnerId	= $n[4];
+		$timestamp	= $n[5];
+		$language	= $n[6];
+		$organisationIdentifier	= $n[7];
+		$transactionIdentifier	= $n[8];
+		$userKey 	= $n[9];
+		$partnerKey	= $n[10];
+
+
+
+	$getMAC = md5(
+		$url.'&'.
+		$sender.'&'.
+		$customerId.'&'.
+		$timestamp.'&'.
+		$language.'&'.
+		$organisationIdentifier.'&'.
+		$transactionIdentifier.'&'.
+		$userKey.'&'.
+		$partnerKey
+	 	);
+	
+	$auth_data = 
+	    "Host: $host\r\n".  
+	    "X-Netvisor-Authentication-Sender: $sender\r\n".  
+	    "X-Netvisor-Authentication-CustomerId: $customerId\r\n".  
+	    "X-Netvisor-Authentication-PartnerId: $partnerId\r\n".  
+	    "X-Netvisor-Authentication-Timestamp: $timestamp\r\n".
+	    "X-Netvisor-Interface-Language: $language\r\n".
+	    "X-Netvisor-Organisation-ID: $organisationIdentifier\r\n".  
+	    "X-Netvisor-Authentication-TransactionId: $transactionIdentifier\r\n".
+	    "X-Netvisor-Authentication-MAC: $getMAC\r\n"
+	; 
+	
+
+$xml = '
+<root>
+  <product>
+    <productbaseinformation>
+      <productcode>-</productcode>
+      <productgroup>-</productgroup>
+      <name>Tuote</name>
+      <description></description>
+      <unitprice type="net">0</unitprice>
+      <unit>kpl</unit>
+      <unitweight>1</unitweight>
+      <purchaseprice>0</purchaseprice>
+      <tariffheading></tariffheading>
+      <comissionpercentage>0</comissionpercentage>
+      <isactive>1</isactive>
+      <issalesproduct>0</issalesproduct>
+      <inventoryenabled>1</inventoryenabled>
+    </productbaseinformation>
+    <productbookkeepingdetails>
+      <defaultvatpercentage>24</defaultvatpercentage>
+    </productbookkeepingdetails>
+  </product>
+</root>';
+	
+	$optsPOST = array(
+	  'http'=>array(
+	    'method'=>"POST",
+	    'header'=>"Accept: text/plain\r\n" .
+	              "Content-Type: application/x-www-form-urlencoded\r\n".
+	              "Content-Length: ".strlen($xml)."\r\n".
+		      $auth_data,
+	    'content'=> $xml
+	  )
+	);
+	
+	$context = stream_context_create($optsPOST);
+	
+	$response = file_get_contents($url, false, $context);
+	$result = new SimpleXMLElement($response);
+	
+	
+	  if($result->ResponseStatus->Status == 'OK' and !isset($chkLT->id))
+	  {
+
+		$lt = new LaskutusTuotteet;
+		$lt->tuotenimi='Oletus tuote';
+		$lt->hinta_alv_0='0';
+		$lt->alv='24';
+		$lt->yksikko='kpl';
+		$lt->ryhma='1';
+		$lt->is_active='0';
+		$lt->netvisorkey=(int)$result->Replies->InsertedDataIdentifier;
+		if($lt->save())
+			return $lt->netvisorkey;
+		else
+			var_dump($lt->getErrors());
+
+
+	  } else {
+
+		echo '<pre>';
+		print_r( $response );
+		echo '</pre>';
+		exit;
+
+	  }
+
+	
+
+
+	} // if isset $n[0]
+
+
+
+	}
+
 
 }
