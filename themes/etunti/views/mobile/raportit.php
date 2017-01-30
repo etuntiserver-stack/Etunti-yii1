@@ -145,11 +145,12 @@
     </form>
 
       <div class="row">
-        <div class="col-sm-6">
-    	  <button class="btn btn-primary btn-block myBgColors submitExcelluetut"><?php echo Yii::t('main', 'Luo Excel raportti'); ?></button>
-        </div><div class="col-sm-6">
-    	  <button class="btn btn-primary btn-block myBgColors submitPDFluetut"><?php echo Yii::t('main', 'Luo PDF raportti'); ?></button>
+       <div class="col-sm-12">
+        <div class="pull-right">
+    	  <button class="btn btn-primary myBgColors submitExcelluetut"><i class="fa fa-file-excel-o" aria-hidden="true"></i></button>
+    	  <button class="btn btn-primary myBgColors submitPDFluetut"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></button>
         </div>
+       </div>
       </div>
 
                  </div>
@@ -273,11 +274,12 @@ $(document).ready(function(){
 
 
       <div class="row">
-        <div class="col-sm-6">
-    	  <button class="btn btn-primary btn-block myBgColors submitExceltoteutuneet"><?php echo Yii::t('main', 'Luo Excel raportti'); ?></button>
-        </div><div class="col-sm-6">
-    	  <button class="btn btn-primary btn-block myBgColors submitPDFtoteutuneet"><?php echo Yii::t('main', 'Luo PDF raportti'); ?></button>
+       <div class="col-sm-12">
+        <div class="pull-right">
+    	  <button class="btn btn-primary myBgColors submitExceltoteutuneet"><i class="fa fa-file-excel-o" aria-hidden="true"></i></button>
+    	  <button class="btn btn-primary myBgColors submitPDFtoteutuneet"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></button>
         </div>
+       </div>
       </div>
 
 
@@ -399,11 +401,12 @@ $(document).ready(function(){
     </form>
 
       <div class="row">
-        <div class="col-sm-6">
-    	  <button class="btn btn-primary btn-block myBgColors submitExceltotEro"><?php echo Yii::t('main', 'Luo Excel raportti'); ?></button>
-        </div><div class="col-sm-6">
-    	  <button class="btn btn-primary btn-block myBgColors submitPDFtotEro"><?php echo Yii::t('main', 'Luo PDF raportti'); ?></button>
+       <div class="col-sm-12">
+        <div class="pull-right">
+    	  <button class="btn btn-primary myBgColors submitExceltotEro"><i class="fa fa-file-excel-o" aria-hidden="true"></i></button>
+    	  <button class="btn btn-primary myBgColors submitPDFtotEro"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></button>
         </div>
+       </div>
       </div>
 
 
@@ -510,11 +513,12 @@ $(document).ready(function(){
     </form>
 
       <div class="row">
-        <div class="col-sm-6">
-    	  <button class="btn btn-primary btn-block myBgColors submitExcellomat"><?php echo Yii::t('main', 'Luo Excel raportti'); ?></button>
-        </div><div class="col-sm-6">
-    	  <button class="btn btn-primary btn-block myBgColors submitPDFlomat"><?php echo Yii::t('main', 'Luo PDF raportti'); ?></button>
+       <div class="col-sm-12">
+        <div class="pull-right">
+    	  <button class="btn btn-primary myBgColors submitExcellomat"><i class="fa fa-file-excel-o" aria-hidden="true"></i></button>
+    	  <button class="btn btn-primary myBgColors submitPDFlomat"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></button>
         </div>
+       </div>
       </div>
 
 

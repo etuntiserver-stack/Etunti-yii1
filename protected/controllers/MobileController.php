@@ -192,7 +192,7 @@ function num($val){
 			{
 			        $html = $this->renderPartial('raportit_pdf_l', array('model' => $model, 'tyyppi' => 'Luetut'),true);
 				preg_match_all('/<div class=\"tb\">(.*?)<\/div>/s',$html,$match);
-				$this->htmlToXls($match[0][0]);
+				$this->htmlToXls($match[0][0], 'luetut');
 			        exit;
 			}
 
@@ -251,7 +251,7 @@ function num($val){
 			{
 			        $html = $this->renderPartial('raportit_pdf_l', array('model' => $model, 'tyyppi' => 'Toteutuneet'),true);
 				preg_match_all('/<div class=\"tb\">(.*?)<\/div>/s',$html,$match);
-				$this->htmlToXls($match[0][0]);
+				$this->htmlToXls($match[0][0], 'toteutuneet');
 			        exit;
 			}
 
@@ -322,6 +322,7 @@ function num($val){
 			        $html = $this->renderPartial('luetut_toteutuneet_ero_pdf', array('model' => $model, 'from'=>$_POST['from'],'to'=>$_POST['to']),true);
 				preg_match_all('/<div class=\"tb\">(.*?)<\/div>/s',$html,$match);
 				$this->htmlToXls($match[0][0]);
+				$this->htmlToXls($match[0][0], 'LuetutToteutuneetEro');
 			        exit;
 			}
 
@@ -372,7 +373,7 @@ function num($val){
 			{
 			        $html = $this->renderPartial('vuosilomat_pdf', array('model' => $model),true);
 				preg_match_all('/<div class=\"tb\">(.*?)<\/div>/s',$html,$match);
-				$this->htmlToXls($match[0][0]);
+				$this->htmlToXls($match[0][0], 'lomatJaPoissaolot');
 			        exit;
 			}
 
@@ -388,8 +389,9 @@ function num($val){
 
 	}
 
-	protected function htmlToXls($html)
+	protected function htmlToXls($html, $nimike)
 	{
+
 			Yii::import('ext.phpexcel.PHPExcel',true);
 			$tmpfile = 'temp.html';
 			file_put_contents($tmpfile, mb_convert_encoding($html, 'ISO-8859-1', 'UTF-8'));
@@ -405,7 +407,7 @@ function num($val){
 			$objPHPExcelWriter = PHPExcel_IOFactory::createWriter($objPHPExcel,$outputFileType);
 
 			header('Content-type: application/vnd.ms-excel;');
-			header('Content-Disposition: attachment; filename="file.xls"');
+			header('Content-Disposition: attachment; filename="'.$nimike.'.xls"');
 			$objPHPExcelWriter->save('php://output');
 			unlink($tmpfile);
 	}

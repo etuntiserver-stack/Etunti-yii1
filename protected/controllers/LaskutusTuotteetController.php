@@ -274,9 +274,9 @@ class LaskutusTuotteetController extends Controller
 
 	if(isset($n[0]))
 	{
-		if( $tila == 'add' )
+		if( $tila == 'add' and $model->netvisorkey == 0)
 		$url		= $n[0].'/product.nv?method=add';
-		if( $tila == 'edit' and !empty($model->netvisorkey))
+		elseif( $tila == 'edit' and $model->netvisorkey != 0)
 		$url		= $n[0].'/product.nv?id='.$model->netvisorkey.'&method=edit';
 
 		$host 		= $n[1];
