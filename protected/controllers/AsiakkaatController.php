@@ -409,7 +409,7 @@ class AsiakkaatController extends Controller
 			   $a = Asetukset::model()->findbypk(1);
 			   if($a->netvisor_kaytto == 1)
 			   {
-				if($model->netvisorkey == 0 and $model->netvisorkey == 0)
+				if($model->netvisorkey == 0)
 				{
 					$InsertedDataIdentifier = $this->netvisorCustomer("add", $model);
 					if(!empty($InsertedDataIdentifier))
@@ -466,10 +466,11 @@ class AsiakkaatController extends Controller
 
 	if(isset($n[0]))
 	{
-		if( $tila == 'add' )
+		if( $tila == 'add' and $model->netvisorkey == 0){
 		$url		= $n[0].'/customer.nv?method=add';
-		if( $tila == 'edit' and !empty($model->netvisorkey))
+		} elseif( $tila == 'edit' and $model->netvisorkey != 0) {
 		$url		= $n[0].'/customer.nv?id='.$model->netvisorkey.'&method=edit';
+		}
 
 		$host 		= $n[1];
 
