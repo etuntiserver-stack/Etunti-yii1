@@ -55,11 +55,6 @@
 		<?php echo $tyyppi; ?>
 	</td>
 
-<?php if($netvisor == true) : ?>
-	<td>
-		<?php echo $this->onkoNetvisor($data->id); ?>
-	</td>
-<?php endif; ?>
 
 <?php if($this->tas(2)) : ?>
 	<td align="center">

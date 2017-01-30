@@ -36,7 +36,7 @@ class AsiakkaatController extends Controller
                 		'expression'=>"Yii::app()->controller->isAsiakas()",
 			),
 			array('allow',
-				'actions'=>array('admin', 'delete', 'create', 'update', 'index', 'view', 'checkLastAsiakasID', 'showshift', 'netvisor_sync', 'send_vastaus', 'getLaskuPDF'),
+				'actions'=>array('admin', 'delete', 'create', 'update', 'index', 'view', 'checkLastAsiakasID', 'showshift', 'send_vastaus', 'getLaskuPDF'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -348,9 +348,7 @@ class AsiakkaatController extends Controller
 			   // <-- Netvisor
 			   if($asetukset->netvisor_kaytto == 1)
 			   {
-					$InsertedDataIdentifier = $this->netvisorCustomer("add", $model);
-					if(!empty($InsertedDataIdentifier))
-					Asiakkaat::model()->updateByPk($model->id, array('netvisorkey'=>$InsertedDataIdentifier));
+				$this->netvisorCustomer("add", $model);
 			   }
 			   //  Netvisor -->
 
@@ -411,14 +409,9 @@ class AsiakkaatController extends Controller
 			   {
 				if($model->netvisorkey == 0)
 				{
-					$InsertedDataIdentifier = $this->netvisorCustomer("add", $model);
-					if(!empty($InsertedDataIdentifier))
-					Asiakkaat::model()->updateByPk($model->id, array('netvisorkey'=>$InsertedDataIdentifier));
-
+					$this->netvisorCustomer("add", $model);
 				} else {
-
-					$InsertedDataIdentifier = $this->netvisorCustomer("edit", $model);
-
+					$this->netvisorCustomer("edit", $model);
 				}
 			    }
 			   //  Netvisor -->
@@ -460,15 +453,17 @@ class AsiakkaatController extends Controller
 	protected function netvisorCustomer($tila, $model)
 	{
 
-		$return = '';
+
 		$site = Yii::app()->createController('Site');
 		$n = $site[0]->netvisorYhteys();
 
 	if(isset($n[0]))
 	{
+
 		if( $tila == 'add' and $model->netvisorkey == 0){
 		$url		= $n[0].'/customer.nv?method=add';
-		} elseif( $tila == 'edit' and $model->netvisorkey != 0) {
+		}
+		if( $tila == 'edit' and $model->netvisorkey != 0) {
 		$url		= $n[0].'/customer.nv?id='.$model->netvisorkey.'&method=edit';
 		}
 
@@ -581,10 +576,12 @@ $xml = '
 
 	  if($result->ResponseStatus->Status == 'OK')
 	  {
+
 		if( $tila == 'add' )
-		$return=$result->Replies->InsertedDataIdentifier;
-		if( $tila == 'edit' )
-		$return=$result->Replies->InsertedDataIdentifier;
+		Asiakkaat::model()->updateByPk($model->id, array('netvisorkey'=>(int)$result->Replies->InsertedDataIdentifier));
+
+		return 'OK';
+
 	  } else {
 
 		echo '<pre>';
@@ -597,7 +594,7 @@ $xml = '
 	
 	} // if isset $n[0]
 
-		return $return;
+
 
 
 	}
@@ -1294,53 +1291,6 @@ $xml = '
 		  }
 	}
 
-
-	protected function onkoNetvisor($id)
-	{
-
-		$return = 'vv';
-		$as = Asiakkaat::model()->findbypk($id);
-		if(isset($as->id) and $as->netvisorkey != 0)
-		{
-		$return = CHtml::Button(Yii::t('main', 'Sync'), array(
-		'submit'=>array('netvisor_sync', "tila"=>"edit", "id"=>$id), 
-		'confirm' => 'Haluatko varmaasti synkronoida Netvisoriin?',
-		'class'=>'btn btn-warning btn-block'
-		));
-		} elseif(isset($as->id) and empty($as->netvisorkey)){
-		$return = CHtml::Button(Yii::t('main', 'Tuonti'), array(
-		'submit'=>array('netvisor_sync', "tila"=>"add", "id"=>$id), 
-		'confirm' => 'Haluatko varmaasti synkronoida Netvisoriin?',
-		'class'=>'btn btn-success btn-block'
-		));
-		}
-
-
-		return $return;
-	}
-
-
-	public function actionNetvisor_sync($tila, $id)
-	{
-		$model = Asiakkaat::model()->findbypk($id);
-		$return = '';
-		if($tila == 'add')
-		{
-		   $return = $this->netvisorCustomer("add", $model);
-		   if(!empty($return))
-		   Asiakkaat::model()->updateByPk($id, array('netvisorkey'=>$return));
-
-		} elseif($tila == 'edit') {
-		   $return = $this->netvisorCustomer("edit", $model);
-		   if(!empty($return))
-		   Asiakkaat::model()->updateByPk($id, array('netvisorkey'=>$return));
-		}
-
-		//echo $return;
-		//exit;
-
-		$this->redirect(array('index'));
-	}
 
 	protected function ryhmaMuutos($ryhma)
 	{

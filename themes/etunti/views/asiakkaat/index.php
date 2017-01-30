@@ -306,10 +306,6 @@
 
 
   <th><?php echo Yii::t('main', 'Tyyppi'); ?></th>
-  <?php
-    if($netvisor == true)
-    echo '<th>'.Yii::t('main', 'Netvisor').'</th>';
-  ?>
   
   <?php
 	if($this->tas(2))
