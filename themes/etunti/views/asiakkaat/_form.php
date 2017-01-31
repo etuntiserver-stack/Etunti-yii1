@@ -41,7 +41,7 @@ $uusiSalasana = $this->generatePassword();
 
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'asiakkaat-form',
-	'enableAjaxValidation'=>true,
+	'enableAjaxValidation'=>false,
 )); ?>
 
 
@@ -407,7 +407,7 @@ $(".muokaValiko").click(function() {
 	   type:'POST',
 	   data: { "select_type" : thisFor },
            success: function(data){
-		//console.log(data);
+		console.log(data);
 		$('#showres').modal().html(JSON.parse(data));
            }
         });
