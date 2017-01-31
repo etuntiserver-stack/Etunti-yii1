@@ -1,4 +1,16 @@
 <?php
+$criteria=new CDbCriteria;
+$criteria->condition=" netvisorkey!=0 AND tyyppi='henkilo' AND yhteyshenkilo!=''";
+$ask = Asiakkaat::model()->findAll($criteria);
+foreach($ask as $d)
+{
+echo $d->yhteyshenkilo.'<br>';
+//netvisorCustomer($tila, $model);
+}
+
+
+exit;
+
 /* @var $this AsiakkaatController */
 /* @var $model Asiakkaat */
 Yii::app()->clientScript->registerScript('search', "
