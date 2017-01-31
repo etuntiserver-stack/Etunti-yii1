@@ -5,7 +5,7 @@ $ask = Asiakkaat::model()->findAll($criteria);
 foreach($ask as $d)
 {
 echo $d->yhteyshenkilo.'<br>';
-//netvisorCustomer($tila, $model);
+$this->netvisorCustomer('edit', $d);
 }
 
 
