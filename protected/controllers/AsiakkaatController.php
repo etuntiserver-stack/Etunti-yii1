@@ -449,7 +449,7 @@ class AsiakkaatController extends Controller
 			$this->redirect(array('index'));
 	}
 
-/*
+
 	protected function netvisorCustomer($tila, $model)
 	{
 
@@ -598,7 +598,7 @@ $xml = '
 
 
 	}
-*/
+
 
 	public function actionIndex()
 	{
