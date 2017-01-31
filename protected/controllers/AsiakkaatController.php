@@ -507,15 +507,20 @@ class AsiakkaatController extends Controller
 	
 	
 	$name = 'Ei tietoja';
-	if(!empty($model->yrityksen_nimi))
+	if(!empty($model->yrityksen_nimi) and $model->tyyppi == 'yritys')
 	$name = $model->yrityksen_nimi;
-	elseif(empty($model->yrityksen_nimi) and !empty($model->yhteyshenkilo))
+	elseif(!empty($model->yhteyshenkilo) and $model->tyyppi == 'henkilo')
 	$name = $model->yhteyshenkilo;
 
 	$ryhma = '';
 	$r = Valikkoot::model()->findbypk($model->ryhma);
 	if(isset($r->id))
 	$ryhma = $r->value;
+
+	if($model->tyyppi == 'yritys')
+		$isprivatecustomer = '0';
+	if($model->tyyppi == 'henkilo')
+		$isprivatecustomer = '1';
 
 $xml = '
 <root>
@@ -534,6 +539,7 @@ $xml = '
       <faxnumber></faxnumber>
       <email>'.$model->sahkoposti.'</email>
       <isactive>'.$model->aktiivinen.'</isactive>
+      <isprivatecustomer>'.$isprivatecustomer.'</isprivatecustomer>
     </customerbaseinformation>
     <customerfinvoicedetails>
       <finvoiceaddress>'.$model->verkkolaskuosoite.'</finvoiceaddress>
