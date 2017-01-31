@@ -1,11 +1,24 @@
 <?php
 
 ?>
+
+<!-- Style -->
+<?php if(isset($_POST['luoPrintSivu'])) : ?>
+<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/bootstrap.min.css">
+<script>
+window.onload = function () {
+    window.print();
+}
+</script>
+<?php else : ?>
 <link rel="stylesheet" type="text/css" href="css/pdf_table.css">
+<?php endif; ?>
+<!-- Style -->
+
 
 <div style="100%">
 
-<table id="ylataulu">
+<table id="ylataulu" class="table">
  <tr><td style="width:80%">
   <?php $asetukset=Asetukset::model()->find("id=1"); ?>
   <img src="<?php echo $asetukset->logon_polkku; ?>" height="<?php echo $asetukset->logon_korkeus; ?>">
@@ -23,7 +36,7 @@
 
 
 <div class="tb">
-<table>
+<table class="table table-bordered table-striped">
   <thead>
   <tr>
     <th><?php echo Yii::t('main', 'Työntekijä'); ?></th>

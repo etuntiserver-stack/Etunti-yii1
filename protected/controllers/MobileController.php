@@ -185,6 +185,7 @@ function num($val){
 				$html2pdf->setDefaultFont('Arial');
 			        $html2pdf->WriteHTML($this->renderPartial('raportit_pdf_l', array('model' => $model, 'tyyppi' => 'Luetut'),true));
 			        $html2pdf->Output();
+				//$this->renderPartial('raportit_pdf_l', array('model' => $model, 'tyyppi' => 'Luetut'));
 			        exit;
 			}
 
@@ -193,6 +194,14 @@ function num($val){
 			        $html = $this->renderPartial('raportit_pdf_l', array('model' => $model, 'tyyppi' => 'Luetut'),true);
 				preg_match_all('/<div class=\"tb\">(.*?)<\/div>/s',$html,$match);
 				$this->htmlToXls($match[0][0], 'luetut');
+			        exit;
+			}
+
+			if(isset($_POST['luoPrintSivu']))
+			{
+				$html = '';
+			        $html .= $this->renderPartial('raportit_pdf_l', array('model' => $model, 'tyyppi' => 'Luetut'),true);
+				echo $html;
 			        exit;
 			}
 
@@ -252,6 +261,14 @@ function num($val){
 			        $html = $this->renderPartial('raportit_pdf_l', array('model' => $model, 'tyyppi' => 'Toteutuneet'),true);
 				preg_match_all('/<div class=\"tb\">(.*?)<\/div>/s',$html,$match);
 				$this->htmlToXls($match[0][0], 'toteutuneet');
+			        exit;
+			}
+
+			if(isset($_POST['luoPrintSivu']))
+			{
+				$html = '';
+			        $html .= $this->renderPartial('raportit_pdf_l', array('model' => $model, 'tyyppi' => 'Toteutuneet'),true);
+				echo $html;
 			        exit;
 			}
 
@@ -325,6 +342,14 @@ function num($val){
 			        exit;
 			}
 
+			if(isset($_POST['luoPrintSivu']))
+			{
+				$html = '';
+			        $html .= $this->renderPartial('luetut_toteutuneet_ero_pdf', array('model' => $model, 'from'=>$_POST['from'],'to'=>$_POST['to']),true);
+				echo $html;
+			        exit;
+			}
+
 		  }
 		// Toteutuneen ja suunnitellun työn erot -->
 
@@ -373,6 +398,14 @@ function num($val){
 			        $html = $this->renderPartial('vuosilomat_pdf', array('model' => $model),true);
 				preg_match_all('/<div class=\"tb\">(.*?)<\/div>/s',$html,$match);
 				$this->htmlToXls($match[0][0], 'lomatJaPoissaolot');
+			        exit;
+			}
+
+			if(isset($_POST['luoPrintSivu']))
+			{
+				$html = '';
+			        $html .= $this->renderPartial('vuosilomat_pdf', array('model' => $model),true);
+				echo $html;
 			        exit;
 			}
 

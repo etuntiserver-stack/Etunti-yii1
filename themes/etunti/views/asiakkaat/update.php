@@ -36,19 +36,6 @@ exit;
 
 	   <div class="pull-right">
 	   <button class="btn btn-primary myBgColors" id="historiaSiirto"><?php echo Yii::t('main', 'Historia'); ?></button>
-
-	   <?php
-	   $a = Asetukset::model()->findbypk(1);
-	   if($a->netvisor_kaytto != 1)
-	   {
-		echo CHtml::link("poista", '#', array(
-		'submit'=>array('delete', "id"=>$model->id), 
-		'confirm' => 'Haluatko varmaasti poistaa?',
-		'class'=>'btn btn-primary myBgColors'
-		));
-	   }
-	   ?>
-
 	   <?php     
 		echo CHtml::link("poista", '#', array(
 		'submit'=>array('delete', "id"=>$model->id), 

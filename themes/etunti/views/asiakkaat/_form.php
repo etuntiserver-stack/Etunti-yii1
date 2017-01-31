@@ -41,7 +41,7 @@ $uusiSalasana = $this->generatePassword();
 
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'asiakkaat-form',
-	'enableAjaxValidation'=>false,
+	'enableAjaxValidation'=>false, // ala laita true, saat monta asiakaita update aikana netvisorissa
 )); ?>
 
 
