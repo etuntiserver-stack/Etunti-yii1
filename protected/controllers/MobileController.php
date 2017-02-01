@@ -3117,6 +3117,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			aloitan!='' AND loppui!=''
 			AND id='".$id."'
 			AND id NOT IN (SELECT kid FROM sivexkuitti_repaired)
+			AND hyvaksytty!=''
 		";
 
 
@@ -3131,6 +3132,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 
 	        $criteria->condition = " 
 			kid='".$id."'
+			AND hyvaksytty!=''
 		";
 		$tot = Toteutuneet::model()->find($criteria);
 
