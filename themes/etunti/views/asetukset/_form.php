@@ -441,6 +441,7 @@
 
 
 
+
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'onlinevaraus_loppu'); ?>
 		<?php 
@@ -563,6 +564,16 @@
 
    </div>
 
+   <div class="col-sm-4">
+    <legend><h2><?php echo Yii::t('main','Sovelluksen asetukset'); ?></h2></legend>
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'app_hyvaksytyt_tyot_vkomaara'); ?>
+		<?php echo $form->numberField($model,'app_hyvaksytyt_tyot_vkomaara',array('class'=>'form-control')); ?>
+		<?php echo $form->error($model,'app_hyvaksytyt_tyot_vkomaara'); ?>
+	</div>
+
+   </div>
 
   </div>
 

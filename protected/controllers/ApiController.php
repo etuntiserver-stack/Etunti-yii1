@@ -474,6 +474,7 @@ public function actionImei($dom)
 	}
 	//     Check Tyontekija -->
 
+	$asetukset = Asetukset::model()->findbypk(1);
 
 	    if(isset($_POST['check'])){
 
@@ -510,7 +511,7 @@ public function actionImei($dom)
 		    $criteria->condition = " 
 			tid = '".$ttekija->id."' 
 			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
-			BETWEEN '".date("Y-m-d", strtotime("-1 week"))."' AND '".date("Y-m-d")."' 
+			BETWEEN '".date("Y-m-d", strtotime("-".$asetuklset->app_hyvaksytyt_tyot_vkomaara." week"))."' AND '".date("Y-m-d")."' 
 			AND loppui!=''
 		    ";
 	            $mob = Mob::model()->findAll($criteria);
@@ -522,7 +523,7 @@ public function actionImei($dom)
 		    }
 
 
-		    $sel = '<h2>'.Yii::t('app', 'Tänään tekemasi työt').'</h2>';
+		    $sel = '<h2>'.Yii::t('app', 'Tekemasi työt').'</h2>';
 		    foreach($mob as $val)
 		    {
 		    $kesto = '00:00';
@@ -604,7 +605,7 @@ public function actionImei($dom)
 		    exit;
 		    } 
 
-		    $asetukset = Asetukset::model()->findbypk(1);
+
 
 		    if(isset($asetukset->sovellus_tyovuorot) and $asetukset->sovellus_tyovuorot == '1')
 		    $aikaVali = date('Y-m-d',strtotime('sunday this week'));
