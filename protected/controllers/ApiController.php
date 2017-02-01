@@ -523,7 +523,7 @@ public function actionImei($dom)
 		    }
 
 
-		    $sel = '<h2>'.Yii::t('app', 'Tekemasi työt. Vko määrä:').' '.$asetuklset->app_hyvaksytyt_tyot_vkomaara.'</h2>';
+		    $sel = '<h2>'.Yii::t('app', 'Tekemasi työt. Vko määrä:').' '.(int)$asetuklset->app_hyvaksytyt_tyot_vkomaara.'</h2>';
 		    foreach($mob as $val)
 		    {
 		    $kesto = '00:00';
