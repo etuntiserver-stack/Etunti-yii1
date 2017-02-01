@@ -510,7 +510,7 @@ public function actionImei($dom)
 		    $criteria->condition = " 
 			tid = '".$ttekija->id."' 
 			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
-			BETWEEN '".date("Y-m-d", strtotime("first day of this month"))."' AND '".date("Y-m-d")."' 
+			BETWEEN '".date("Y-m-d", strtotime("-1 week"))."' AND '".date("Y-m-d")."' 
 			AND loppui!=''
 		    ";
 	            $mob = Mob::model()->findAll($criteria);
