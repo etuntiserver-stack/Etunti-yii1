@@ -1040,6 +1040,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 	protected function performAjaxValidation($model)
 	{
 		if(isset($_POST['ajax']) && $_POST['ajax']==='mobile-form')
+
 		{
 			echo CActiveForm::validate($model);
 			Yii::app()->end();
@@ -3100,6 +3101,48 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 
 	}
 
+
+	public function onkoRiviHyvaksytty($id)
+	{
+
+		$result = 0;
+
+       		$criteria = new CDbCriteria();
+        	$criteria->select = "
+			TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
+			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'))) as l_tunnit
+		";
+
+	        $criteria->condition = " 
+			aloitan!='' AND loppui!=''
+			AND id='".$id."'
+			AND id NOT IN (SELECT kid FROM sivexkuitti_repaired)
+		";
+
+
+		$lu = Mobile::model()->find($criteria);
+
+
+       		$criteria = new CDbCriteria();
+        	$criteria->select = "
+			TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
+			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'))) as l_tunnit
+		";
+
+	        $criteria->condition = " 
+			kid='".$id."'
+		";
+		$tot = Toteutuneet::model()->find($criteria);
+
+		if(isset($lu->l_tunnit))
+		$result = $lu->l_tunnit;
+
+		if(isset($tot->l_tunnit))
+		$result = $result+$tot->l_tunnit;
+
+
+		return $result;
+	}
 
 
 }
