@@ -442,6 +442,7 @@
 
 
 
+
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'onlinevaraus_loppu'); ?>
 		<?php 
@@ -571,6 +572,18 @@
 		<?php echo $form->labelEx($model,'app_hyvaksytyt_tyot_vkomaara'); ?>
 		<?php echo $form->numberField($model,'app_hyvaksytyt_tyot_vkomaara',array('class'=>'form-control')); ?>
 		<?php echo $form->error($model,'app_hyvaksytyt_tyot_vkomaara'); ?>
+	</div>
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'app_naytetaanko_hyvaksyttyt_tunnit'); ?>
+		<?php 
+        	$tal = array(
+			0=>'Ei',
+			1=>'Kyllä'
+		);
+		echo $form->dropDownList($model,'app_naytetaanko_hyvaksyttyt_tunnit', $tal, 
+		array('class'=>'form-control')) ?>
+		<?php echo $form->error($model,'app_naytetaanko_hyvaksyttyt_tunnit'); ?>
 	</div>
 
    </div>

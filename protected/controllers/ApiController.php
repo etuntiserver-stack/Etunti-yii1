@@ -530,23 +530,31 @@ public function actionImei($dom)
 		    if(!empty($val->loppui))
 		    $kesto = (strtotime($val->loppui)-strtotime($val->aloitan));
 
-				// <-- check Hyvaksytty
-				$mobile = Yii::app()->createController('Mobile');
-				$hyvaksytty_return = $mobile[0]->onkoRiviHyvaksytty($val->id);
-				if( $hyvaksytty_return > 0 )
-					$hyvaksytty = sprint($hyvaksytty_return);
-				else
-					$hyvaksytty = '--:--';
-				// check Hyvaksytty -->
-
 
 				$sel .= '<div class="well">
 				  <b>'.Yii::t('app', 'Päivämäärä').':</b> '.date("d.m.Y",strtotime($val->aloitan)).'<br> 
 				  <b>'.Yii::t('app', 'Klo').':</b> '.date("H:i",strtotime($val->aloitan)).' - '.date("H:i",strtotime($val->loppui)).'<br> 
 				  <b>'.Yii::t('app', 'Osoite').':</b> '.$val->kohde_kannasta.'
 				  <hr>
-				  <h3>'.Yii::t('app', 'Kesto').': '.sprint($kesto).'</h3>
-				  <h3 style="color:green">'.Yii::t('app', 'Hyväksytty').': '.$hyvaksytty.'</h3>
+				  <h3>'.Yii::t('app', 'Kesto').': '.sprint($kesto).'</h3>';
+
+
+				// <-- check Hyvaksytty
+				if($asetukset->app_naytetaanko_hyvaksyttyt_tunnit == 1)
+				{
+				$mobile = Yii::app()->createController('Mobile');
+				$hyvaksytty_return = $mobile[0]->onkoRiviHyvaksytty($val->id);
+				if( $hyvaksytty_return > 0 )
+					$hyvaksytty = sprint($hyvaksytty_return);
+				else
+					$hyvaksytty = '--:--';
+
+				$sel .= '<h3 style="color:green">'.Yii::t('app', 'Hyväksytty').': '.$hyvaksytty.'</h3>';
+				}
+				// check Hyvaksytty -->
+
+
+				$sel .= '
 				</div>';
 		    }
 
