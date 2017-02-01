@@ -1204,6 +1204,31 @@ class TyovuorootController extends Controller
 
 		$return = array();
 
+
+		// <-- tyopaari vaihto per pvm
+		if(!isset($_POST['ToistuvatTyovuorot']['toistuva_aktiivinen']) and isset($_POST['tyopaari']) and count($_POST['tyopaari']) > 0 and !empty($model->tyopaari))
+		{
+
+			$vanha_paari = json_decode($model->tyopaari, true);
+			$result = "tyopaari LIKE '%".implode("%' AND tyopaari LIKE '%", $vanha_paari)."%'";
+
+			$poistoCriteria = new CDbCriteria;
+			$poistoCriteria->condition = " 
+				tyopaari!='' 
+				AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d')='".date("Y-m-d", strtotime($model->pvm))."'
+				AND tid!='".$model->tid."'
+				AND ($result)
+			";
+			$tpCheck = Tyovuoroot::model()->findAll($poistoCriteria);
+			foreach($tpCheck as $item)
+				$return[] = array('tid'=>$item->tid, 'pvm'=>$item->pvm, 'ymd'=>date("Ymd",strtotime($item->pvm)));
+
+			Tyovuoroot::model()->deleteAll($poistoCriteria);
+			$_POST['Tyovuoroot']['toistuva_id']='';
+		}
+		//  tyopaari vaihto per pvm -->
+
+
 		if(isset($_POST['ToistuvatTyovuorot']) and isset($_POST['ToistuvatTyovuorot']['toistuva_aktiivinen']) and $_POST['ToistuvatTyovuorot']['toistuva_aktiivinen'] == 'on')
 		{
 
