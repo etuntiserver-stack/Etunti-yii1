@@ -17,6 +17,8 @@ if($result < 12)
 else
   $l = 2.5;
 
+
+
 	$year = date("Y");
 	$a_year = date("Y");
 	$l_year = date("Y");
@@ -44,6 +46,7 @@ $result2 = (int)abs((strtotime($d3) - strtotime($d4))/(60*60*24*30));
   //echo 'L: '.$l.'<br>';
   $kkmaara = $c;
   $pv = $c*$l;
+  $green=0;
 
   echo '<br><br>';
 
@@ -83,6 +86,7 @@ $result2 = (int)abs((strtotime($d3) - strtotime($d4))/(60*60*24*30));
 		$tulos = "false";
   	   } else {
 		echo '<span class="btn btn-success btn-block btn-sm">'.$tp.'</span>';
+		$green++;
 	   }
 	echo '</td>';
 	}
@@ -97,6 +101,7 @@ $result2 = (int)abs((strtotime($d3) - strtotime($d4))/(60*60*24*30));
 		$tulos = "false";
   	   } else {
 		echo '<span class="btn btn-success btn-block btn-sm">'.(float)$m[0]->num($toteutu[0]).'</span>';
+		$green++;
 	   }
 	echo '</td>';
 	}
@@ -114,7 +119,7 @@ $result2 = (int)abs((strtotime($d3) - strtotime($d4))/(60*60*24*30));
   if($tulos == 'true')
   $t = '<h3>'.Yii::t('main', 'Vuosiloma päiviä').': '.$pv.'</h3>';
   else
-  $t = '<h3>'.Yii::t('main', 'Vuosiloma päiviä').': '.$kkmaara.'</h3>';
+  $t = '<h3>'.Yii::t('main', 'Vuosiloma päiviä').': '.($l*$green).'</h3>';
 
 	echo '<tr>
 		<th></th>
