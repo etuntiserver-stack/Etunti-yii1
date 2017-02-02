@@ -631,8 +631,8 @@ class TyontekijatController extends Controller
 		$payrollrulegroupname = 'Tuntipalkkalaiset, teknologiateollisuus';
 
       	$lisat = '';
-	if($tila == 'add')
-      	$lisat .= '<employeenumber>'.$model->id.'</employeenumber>';
+	//if($tila == 'add')
+      	//$lisat .= '<employeenumber>'.$model->id.'</employeenumber>';
 
 // <-- XML
 $xml = '
@@ -653,7 +653,7 @@ $xml = '
       <country>FI</country>
       <nationality>FI</nationality>
       <language>FI</language>
-      '.$lisat.'
+      <employeenumber>'.$model->id.'</employeenumber>
       <profession>'.$model->ammattinimike.'</profession>
       <jobbegindate format="ansi">'.date("Y-m-d", strtotime($modelTyosuhteet->alku)).'</jobbegindate>
       <payrollrulegroupname>'.$payrollrulegroupname.'</payrollrulegroupname>
@@ -693,6 +693,11 @@ $xml = '
 	  } else {
 
 		if (strpos($result->ResponseStatus->Status[1], 'Työntekijää ei löydy') !== false and $tila == 'edit') {
+			$this->netvisorTyontekija('add', $model);
+			$this->redirect(array('index'));
+		}
+
+		if (strpos($result->ResponseStatus->Status[1], 'Palkkalaskelmatietoja ei löydy') !== false and $tila == 'edit') {
 			$this->netvisorTyontekija('add', $model);
 			$this->redirect(array('index'));
 		}
