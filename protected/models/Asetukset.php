@@ -120,7 +120,7 @@ class Asetukset extends DB2ActiveRecord
 			'netvisor_mita_lahetetaan'=>Yii::t('main', 'Mitä lähetetään'),
 			'netvisor_acceptancestatus'=>Yii::t('main', 'Acceptancestatus'),
 			'app_hyvaksytyt_tyot_vkomaara'=>Yii::t('main', 'Hyväksytyt työt vko määrä'),
-			'app_naytetaanko_hyvaksyttyt_tunnit'=>Yii::t('main', 'Näytetäänkö hyväksyttyt tunnit'),
+			'app_naytetaanko_hyvaksyttyt_tunnit'=>Yii::t('main', 'Näytetäänkö hyväksytyt tunnit'),
 
 		);
 	}
