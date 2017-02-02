@@ -1,3 +1,9 @@
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <title></title>
+</head>
+<body>
 <?php 
 
 ?>
@@ -11,7 +17,7 @@ window.onload = function () {
 }
 </script>
 <?php else : ?>
-<link rel="stylesheet" type="text/css" href="css/pdf_table.css">
+<link rel="stylesheet" type="text/css" href="css/raportit_table.css">
 <?php endif; ?>
 <!-- Style -->
 
@@ -20,7 +26,7 @@ window.onload = function () {
 <?php if($tyyppi == 'Toteutuneet') : ?>
 <style>
 #ylataulu{
-	width: 675px;
+	width: 100%;
 }
 </style>
 <?php endif; ?>
@@ -28,7 +34,7 @@ window.onload = function () {
 
 
 <table id="ylataulu" class="table">
- <tr><td style="width:80%">
+ <tr><td style="width:70%">
   <?php $asetukset=Asetukset::model()->find("id=1"); ?>
   <img src="<?php echo $asetukset->logon_polkku; ?>" height="<?php echo $asetukset->logon_korkeus; ?>">
  </td><td valign="right" style="width:20%">
@@ -44,7 +50,7 @@ window.onload = function () {
 
 
 <div class="tb">
-<table class="table table-bordered table-striped">
+<table class="table table-bordered">
   <thead>
   <tr>
     <th><?php echo Yii::t('main', 'Pvm.'); ?></th>
@@ -53,7 +59,7 @@ window.onload = function () {
     <th><?php echo Yii::t('main', 'Aloitus'); ?></th>
     <th><?php echo Yii::t('main', 'Lopetus'); ?></th>
     <th><?php echo Yii::t('main', 'Kesto'); ?></th>
-    <th><?php echo Yii::t('main', 'Viesti'); ?></th>
+    <!--<th><?php echo Yii::t('main', 'Viesti'); ?></th>-->
   </tr>
   </thead>
   <tbody>
@@ -114,9 +120,13 @@ window.onload = function () {
     <th></th>
     <th></th>
     <th></th>
-    <th><?php echo sprint($kkesto); ?> <b>(<?php echo num($kkesto); ?>)</b></th>
-    <th></th>
+    <th><?php echo sprint($kkesto); ?><!--<b>(<?php echo num($kkesto); ?>)</b>--></th>
+    <!--<th></th>-->
   </tr>
   </tfoot>
 </table>
 </div>
+
+
+</body>
+</html>

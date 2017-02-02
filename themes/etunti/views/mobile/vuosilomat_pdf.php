@@ -11,7 +11,7 @@ window.onload = function () {
 }
 </script>
 <?php else : ?>
-<link rel="stylesheet" type="text/css" href="css/pdf_table.css">
+<link rel="stylesheet" type="text/css" href="css/raportit_table.css">
 <?php endif; ?>
 <!-- Style -->
 
@@ -19,7 +19,7 @@ window.onload = function () {
 <div style="100%">
 
 <table id="ylataulu" class="table">
- <tr><td style="width:80%">
+ <tr><td style="width:60%">
   <?php $asetukset=Asetukset::model()->find("id=1"); ?>
   <img src="<?php echo $asetukset->logon_polkku; ?>" height="<?php echo $asetukset->logon_korkeus; ?>">
  </td><td valign="right" style="width:20%">

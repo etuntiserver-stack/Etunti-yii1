@@ -181,7 +181,8 @@ function num($val){
 	
 			if(isset($_POST['luoPDF']))
 			{
-			        $html2pdf = Yii::app()->ePdf->HTML2PDF('P', 'A4', 'en');
+
+			        $html2pdf = Yii::app()->ePdf->HTML2PDF('P', 'A4', 'en', 'true', 'UTF-8', array(3,10,5,10));
 				$html2pdf->setDefaultFont('Arial');
 			        $html2pdf->WriteHTML($this->renderPartial('raportit_pdf_l', array('model' => $model, 'tyyppi' => 'Luetut'),true));
 			        $html2pdf->Output();
@@ -249,7 +250,7 @@ function num($val){
 
 			if(isset($_POST['luoPDF']))
 			{
-			        $html2pdf = Yii::app()->ePdf->HTML2PDF('P', 'A4', 'en');
+			        $html2pdf = Yii::app()->ePdf->HTML2PDF('P', 'A4', 'en', 'true', 'UTF-8', array(3,10,5,10));
 				$html2pdf->setDefaultFont('Arial');
 			        $html2pdf->WriteHTML($this->renderPartial('raportit_pdf_l', array('model' => $model, 'tyyppi' => 'Toteutuneet'),true));
 			        $html2pdf->Output();
@@ -327,7 +328,7 @@ function num($val){
 
 			if(isset($_POST['luoPDF']))
 			{
-			        $html2pdf = Yii::app()->ePdf->HTML2PDF('P', 'A4', 'en');
+			        $html2pdf = Yii::app()->ePdf->HTML2PDF('P', 'A4', 'en', 'true', 'UTF-8', array(3,10,5,10));
 				$html2pdf->setDefaultFont('Arial');
 			        $html2pdf->WriteHTML($this->renderPartial('luetut_toteutuneet_ero_pdf', array('model' => $model, 'from'=>$_POST['from'],'to'=>$_POST['to']),true));
 			        $html2pdf->Output();
@@ -1040,6 +1041,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 	protected function performAjaxValidation($model)
 	{
 		if(isset($_POST['ajax']) && $_POST['ajax']==='mobile-form')
+
 
 		{
 			echo CActiveForm::validate($model);
@@ -3058,13 +3060,13 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 
 	$r = '';
 	$r .=  '<tr>';
-	$r .= '<td style="width:5%">'.date("d.m.Y",strtotime($data->aloitan)).'</td>';
-	$r .= '<td style="width:20%;text-align:left">'.$this->etuSukunimi($data->tid).$spl.'</td>';
-	$r .= '<td style="width:34%;text-align:left">'.$data->kohde_kannasta.'</td>';
-	$r .= '<td style="width:5%">'.date("H:i",strtotime($data->aloitan)).'</td>';
-	$r .= '<td style="width:5%">'.date("H:i",strtotime($data->loppui)).'</td>';
-	$r .= '<td style="width:5%">'.sprint($kesto).' <b>('.num($kesto).')</b></td>';
-	$r .= '<td style="width:27%">'.$viesti.'</td>';
+	$r .= '<td style="width:11%">'.date("d.m.Y",strtotime($data->aloitan)).'</td>';
+	$r .= '<td style="width:28%">'.$this->etuSukunimi($data->tid).$spl.'</td>';
+	$r .= '<td style="width:28%">'.$data->kohde_kannasta.'</td>';
+	$r .= '<td style="width:10%">'.date("H:i",strtotime($data->aloitan)).'</td>';
+	$r .= '<td style="width:10%">'.date("H:i",strtotime($data->loppui)).'</td>';
+	$r .= '<td style="width:10%">'.sprint($kesto).'</td>'; //<br><b>('.num($kesto).')</b>
+	//$r .= '<td>'.$viesti.'</td>';
 	$r .= '</tr>';
 	return $r;
 	}

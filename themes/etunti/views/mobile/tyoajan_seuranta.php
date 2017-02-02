@@ -7,7 +7,7 @@ ini_set('max_execution_time', 900);
         <div class="tray-center">
 
 
-        <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-home"></i> <?php echo Yii::t('main', 'Työajanseuranta'); ?>
+        <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-home"></i> <?php echo Yii::t('main', 'Vuosityöaika'); ?>
 
    <!-- tulostus -->
    <div class="pull-right">
@@ -98,7 +98,9 @@ ini_set('max_execution_time', 900);
 
 <?php if( !empty($tid) and !empty($year) ) : ?>
 
-
+<?php
+	$ft = FirmanTiedot::model()->findByPk(1);
+?>
 
 <div class="admin-form">
   <div class="panel heading-border">
@@ -106,6 +108,7 @@ ini_set('max_execution_time', 900);
 
 	<div class="row">
 	 <div class="table-responsive" id="kokoTaulu">
+	 <h3><?php echo $ft->tyonantaja.', '.$this->etuSukunimi($tid).', '.$year; ?>.</h3>
 	  <table class="table table-bordered table-striped table-hover"  cellpadding="0" cellspacing="0" >
 	   <tr>
 	    <th><?php echo Yii::t('main', 'Viikot'); ?></th>
@@ -215,6 +218,7 @@ $(document).ready(function(){
  $(document).delegate(".tulosta","click",function(){
 	
     var divToPrint = document.getElementById('kokoTaulu');
+
     var htmlToPrint = '' +
         '<style type="text/css">' +
 	'.table tbody>tr>td{' +
