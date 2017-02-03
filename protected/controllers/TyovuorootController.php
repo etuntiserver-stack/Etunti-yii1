@@ -1623,6 +1623,7 @@ class TyovuorootController extends Controller
 		if(isset($_POST['Tyovuoroot']))
 		{
 
+
 		$asiakkaat = new Asiakkaat;
 		$asiakkaat->attributes = $_POST['Asiakkaat'];
 		$asiakkaat->aktiivinen = 1;
@@ -1667,7 +1668,7 @@ class TyovuorootController extends Controller
 
 			$kohteet->toimenpiteet = $toimenpiteet;
 
-			$kohteet->muut = date("d.m.Y",strtotime($_POST['Tyovuoroot']['pvm']))."\n".date("H:i",strtotime($_POST['Tyovuoroot']['alku']))."-".date("H:i",strtotime($_POST['Tyovuoroot']['loppu']))."\nHinta: ".$_POST['Asiakkaat']['hinta'];
+			$kohteet->muut = date("d.m.Y",strtotime($_POST['Tyovuoroot']['pvm']))."\n".date("H:i",strtotime($_POST['Tyovuoroot']['alku']))."-".date("H:i",strtotime($_POST['Tyovuoroot']['loppu']))."\nHinta: ".$asiakkaat->hinta;
 
 		  	   if($kohteet->save())
 		  	   {
@@ -1677,12 +1678,14 @@ class TyovuorootController extends Controller
 				if($model->save())
 				{
 
-				   if(isset($_POST['vieposti']))
+				   if(isset($_POST['vieposti']) and isset($asiakkaat->sahkoposti) and !empty($asiakkaat->sahkoposti))
 				   {
 					$message = '
 					Asiakas: '.$asiakkaat->yhteyshenkilo.'<br>
-					Työvuorot:  '.$model->pvm.', '.$model->alku.'-'.$model->loppu.'<br>
-					Hinta: '.$_POST['hinta'].'<br>';
+					Työvuorot:  '.$model->pvm.', '.$model->alku.'-'.$model->loppu.'<br>';
+
+					if(!empty($asiakkaat->hinta))
+					$message .= 'Hinta: '.$asiakkaat->hinta.'<br>';
 
 					if(!empty($kohteet->toimenpiteet))
 					$message .= str_replace("\n", "<br>",$kohteet->toimenpiteet);
@@ -1693,7 +1696,7 @@ class TyovuorootController extends Controller
 					$mail = new YiiMailer();
 					//$mail->clearLayout();//if layout is already set in config
 					$mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
-					$mail->setTo($_POST['sahkoposti']);
+					$mail->setTo($asiakkaat->sahkoposti);
 					$mail->setSubject($subject);
 					$mail->setBody($message);
 					if($mail->send())
@@ -1703,7 +1706,7 @@ class TyovuorootController extends Controller
 							// <-- LOG
 							$log=new Log;
 							$log->log_category 	= 1; // 1-email
-							$log->email_to 		= $_POST['sahkoposti'];
+							$log->email_to 		= $asiakkaat->sahkoposti;
 							$log->email_subject	= $subject;
 							$log->email_message	= json_encode($message);
 							$log->log_nimike	= 'uusi_tilaus';
