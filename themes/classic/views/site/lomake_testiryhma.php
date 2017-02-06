@@ -49,29 +49,7 @@ $kentat[] = array(
 'REQUIRED' => true,
 'TYPE' => 'text',
 );
-$kentat[] = array(
-'NAME' => 'Yrityksen toimiala',
-'REQUIRED' => true,
-'TYPE' => 'text',
-'PLACEHOLDER' => '',
-);
-$kentat[] = array(
-'NAME' => 'Työntekijöiden määrä',
-'REQUIRED' => true,
-'TYPE' => 'text',
-);
-$kentat[] = array(
-'NAME' => 'Liikevaihto vuodessa',
-'REQUIRED' => true,
-'TYPE' => 'select',
-'OPTIONS' => array("alle 500 000 €", "500 000 - 800 000 €", "800 000 - 1 000 000 €", "1 000 000 - 1 500 000 €", "1 500 000 € - 2 000 000 €", "Yli 2 000 000 €"),
-);
-$kentat[] = array(
-'NAME' => 'Tilaan uutiskirjeen',
-'REQUIRED' => true,
-'TYPE' => 'select',
-'OPTIONS' => array("Kyllä", "Ei"),
-);
+
 
 $kentat[] = array(
 'VALUE' => 'Lähetä',
