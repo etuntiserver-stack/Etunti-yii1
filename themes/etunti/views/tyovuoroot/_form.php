@@ -762,8 +762,11 @@ $('.mult').multiselect({
 					   {
 					   	$('#sopivatPaivat').append('<div class="row"><b class="text-warning"><div class="col-sm-3">Kaikki</div><div class="col-sm-3">Kaikki</div><div class="col-sm-3">'+d['tekijan_nimi']+'</div><div class="col-sm-3">Pois taulusta</div></b></div>');
 					   }
-					   else {
-					   	$('#sopivatPaivat').append('<div class="row"><b class="text-success"><div class="col-sm-3">'+d['pvm']+'</div><div class="col-sm-3">'+d['vkopvm']+'</div><div class="col-sm-3">'+d['tekijan_nimi']+'</div><div class="col-sm-3">Uusi/Muokkaus</div></b></div>');
+					   else if(d['uusi']) {
+					   	$('#sopivatPaivat').append('<div class="row"><b class="text-success"><div class="col-sm-3">'+d['pvm']+'</div><div class="col-sm-3">'+d['vkopvm']+'</div><div class="col-sm-3">'+d['tekijan_nimi']+'</div><div class="col-sm-3">Uusi</div></b></div>');
+					   }
+					   else if(d['muokkaus']) {
+					   	$('#sopivatPaivat').append('<div class="row"><b class="text-warning"><div class="col-sm-3">'+d['pvm']+'</div><div class="col-sm-3">'+d['vkopvm']+'</div><div class="col-sm-3">'+d['tekijan_nimi']+'</div><div class="col-sm-3">Muokkaus</div></b></div>');
 					   }
 
 					 });
@@ -825,7 +828,7 @@ $('#poistaTv').click(function(){
 	  {
 	  var toistuva_id = $('#Tyovuoroot_toistuva_id').val();
 	  $.ajax({
-		  url: 'paivita_laatikot',
+		  url: 'poista_toistuva',
 		  data:{ toistuva_id : toistuva_id },
 		  type:'POST',
 		  success:function(data){
