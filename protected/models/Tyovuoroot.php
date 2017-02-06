@@ -142,7 +142,7 @@ public $suunnittellut;
 		$criteria->compare('kesto',$this->kesto,true);
 		$criteria->compare('tyoajanlaatu',$this->tyoajanlaatu,true);
 		$criteria->compare('tyoajanmerkinta',$this->tyoajanmerkinta,true);
-		$criteria->compare('tietoja',$this->tietoja,true);
+		$criteria->compare('t.tietoja',$this->tietoja,true);
 		$criteria->compare('osoiteOnline',$this->osoiteOnline,true);
 
 		return new CActiveDataProvider($this, array(
