@@ -4,6 +4,10 @@
 /* @var $form CActiveForm */
 ?>
 
+<style>
+.yritys, .henkilo{ display: none }
+</style>
+
 <div class="row">
  <div class="col-sm-3">
 
@@ -23,18 +27,24 @@
 		<?php
 		$list = array('yritys'=>Yii::t('main', 'Yritys'),'henkilo'=>Yii::t('main', 'Yksityishenkilö'));
         	echo $form->dropDownList($model, 'yhteystieto_tyyppi', $list,
-		array('empty'=>'Valitse tyyppi','class'=>'form-control'));	
+		array('class'=>'form-control'));	
         	?>
 		<?php echo $form->error($model,'yhteystieto_tyyppi'); ?>
 	</div>
 
-	<div class="section fill mb5">
+	<div class="section fill mb5 yritys">
 		<?php echo $form->labelEx($model,'yrityksen_nimi'); ?>
 		<?php echo $form->textField($model,'yrityksen_nimi',array('size'=>60,'maxlength'=>100, 'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'yrityksen_nimi'); ?>
 	</div>
 
-	<div class="section fill mb5">
+	<div class="section fill mb5 yritys">
+		<?php echo $form->labelEx($model,'y_tunnus'); ?>
+		<?php echo $form->textField($model,'y_tunnus',array('size'=>60,'maxlength'=>50, 'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'y_tunnus'); ?>
+	</div>
+
+	<div class="section fill mb5 henkilo">
 		<?php echo $form->labelEx($model,'yhteyshenkilo'); ?>
 		<?php echo $form->textField($model,'yhteyshenkilo',array('size'=>60,'maxlength'=>100, 'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'yhteyshenkilo'); ?>
@@ -134,6 +144,29 @@ $(".muokaValiko").click(function() {
         });
 });
 /* valikot */
+
+
+ $('#Yhteystiedot_yhteystieto_tyyppi').change(function(){
+	openShow();
+ });
+
+ openShow();
+ function openShow()
+ {
+	var tyyppi = $('#Yhteystiedot_yhteystieto_tyyppi option:selected').val();
+	if( tyyppi == 'yritys' )
+	{
+		$('.yritys').show(370);
+		$('.henkilo').hide(370);
+	}
+
+	if( tyyppi == 'henkilo' )
+	{
+		$('.yritys').hide(370);
+		$('.henkilo').show(370);
+	}
+
+ }
 
 
 });

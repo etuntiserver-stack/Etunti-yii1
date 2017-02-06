@@ -121,6 +121,7 @@
   <th><?php echo Yii::t('main', 'Kesto'); ?></th>
   <th><?php echo Yii::t('main', 'Osoite'); ?></th>
   <th><?php echo Yii::t('main', 'Työntekijä'); ?></th>
+  <th><?php echo Yii::t('main', 'Tietoja'); ?></th>
   </tr>
   </thead>
   <?php 
@@ -151,6 +152,7 @@
 	echo '<td class="col1">'.$this->sprint($kesto).'</td>';
 	echo '<td class="col3">'.$osoite.'</td>';
 	echo '<td class="col4">'.$img.'</td>';
+	echo '<td class="col1">'.$data->tietoja.'</td>';
 	echo '</tr>';
   }
   ?>

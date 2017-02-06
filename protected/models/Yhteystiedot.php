@@ -67,18 +67,18 @@ class Yhteystiedot extends DB2ActiveRecord
 		return array(
 			'id' => 'ID',
 			'time' => 'Time',
-			'yhteystieto_tyyppi' => 'Yhteystieto Tyyppi',
-			'yrityksen_nimi' => 'Yrityksen Nimi',
-			'y_tunnus' => 'Y Tunnus',
-			'yhteyshenkilo' => 'Yhteyshenkilo',
+			'yhteystieto_tyyppi' => Yii::t('main', 'Yhteystieto tyyppi'),
+			'yrityksen_nimi' => Yii::t('main', 'Yrityksen nimi'),
+			'y_tunnus' => Yii::t('main', 'Y-tunnus'),
+			'yhteyshenkilo' => Yii::t('main', 'Yhteyshenkilö'),
 			'osoite' => 'Osoite',
 			'postitoimipaikka' => 'Postitoimipaikka',
 			'postinumero' => 'Postinumero',
 			'puhelin' => 'Puhelin',
-			'sahkoposti' => 'Sahkoposti',
-			'ryhma' => 'Ryhma',
-			'myyja' => 'Myyja',
-			'status' => 'Status',
+			'sahkoposti' => Yii::t('main', 'Sähköposti'),
+			'ryhma' => Yii::t('main', 'Ryhmä'),
+			'myyja' => Yii::t('main', 'Myyjä'),
+			'status' => Yii::t('main', 'Tila'),
 		);
 	}
 
