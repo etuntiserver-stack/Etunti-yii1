@@ -993,12 +993,17 @@ $xml = '
 			{
 				$kesto = strtotime($data->loppu)-strtotime($data->alku);
 				$k = Kohteet::model()->findbypk($data->kohde);
+				if(isset($k->id)) $osoite = $k->osoite; else $osoite = '';
+				$tt = Tyontekijat::model()->findbypk($data->tid);
+				if(isset($tt->id)) $tekijan_nimi = $this->etuSukunimi($tt->id); else $tekijan_nimi = '';
 			  	$bod .= '
 				<table class="table table-bordered">
-					<tr><td colspan="2"><h3>'.date("d.m.Y", strtotime($data->pvm)).', '.$k->osoite.'</h3></td></tr>
+					<tr><td colspan="2"><h3>'.date("d.m.Y", strtotime($data->pvm)).', '.$osoite.'</h3></td></tr>
+					<td>'.Yii::t('main', 'Työntekijä').'</td><td>'.$tekijan_nimi.'</td></tr>
 					<td>'.Yii::t('main', 'Aloitus').'</td><td>'.$data->alku.'</td></tr>
 					<td>'.Yii::t('main', 'Lopetus').'</td><td>'.$data->loppu.'</td></tr>
 					<td>'.Yii::t('main', 'Kesto').'</td><td>'.$this->sprint($kesto).'</td></tr>
+					<td>'.Yii::t('main', 'Tietoja').'</td><td>'.$data->tietoja.'</td></tr>
 				</table><br>';
 		  	}
 
