@@ -744,11 +744,18 @@ $('.mult').multiselect({
 				 });
 				});
 
+
+
+
 				if( isSaved === true )
 				{
 					laatikonPaivays(thisDataReturn);
 
 				} else {
+
+					$('input').attr('readonly','yes');
+					$("select").prop('disabled',true);
+
 
 					$('#sopivatPaivat').html('<br><h3>Toistuvien työvuorojen päivämäärät</h3><div class="col-sm-offset-1">').show('slow');
 					$(thisDataReturn).each(function( iarr, arr ) {
@@ -771,6 +778,17 @@ $('.mult').multiselect({
 					   else if(d['poistaminen']) {
 					   	$('#sopivatPaivat').append('<div class="row"><b class="text-danger"><div class="col-sm-3">'+d['pvm']+'</div><div class="col-sm-3">'+d['vkopvm']+'</div><div class="col-sm-3">'+d['tekijan_nimi']+'</div><div class="col-sm-3">Poistetaan</div></b></div>');
 					   }
+					   else if(d['poistaminenVkoPvm']) {
+					   	$('#sopivatPaivat').append('<div class="row"><b class="text-danger"><div class="col-sm-3">'+d['pvm']+'</div><div class="col-sm-3">'+d['vkopvm']+'</div><div class="col-sm-3">'+d['tekijan_nimi']+'</div><div class="col-sm-3">Poistetaan viikkon pvm</div></b></div>');
+					   }
+					   else if(d['uusiKetju']) {
+					   	$('#sopivatPaivat').append('<div class="row"><b class="text-success"><div class="col-sm-3">'+d['pvm']+'</div><div class="col-sm-3">'+d['vkopvm']+'</div><div class="col-sm-3">'+d['tekijan_nimi']+'</div><div class="col-sm-3">Uusi ketju</div></b></div>');
+					   }
+					   else if(d['ERROR']) {
+						   	$('#sopivatPaivat').append(d['ERROR']);
+					   }
+
+
 
 					 });
 					});

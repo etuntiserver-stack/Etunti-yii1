@@ -1258,40 +1258,57 @@ class TyovuorootController extends Controller
 			$tv->attributes=$_POST['Tyovuoroot'];
 			//     Uudet POST tiedot -->
 
-			// <-- Jos ei ole muutoksia toistuva ja tyoparilla
+
 			$fi = $this->vkoPaivat();
 
 			$result_diff_lisaaminen = array();
 			$result_diff_poistaminen = array();
 			$post_tyopaari_plus_paa = array();
-			$edellisetArr = json_decode($edellinenToistuva->tyopaari, true);
+			$edelliset_tyoparit_Arr = json_decode($edellinenToistuva->tyopaari, true);
 
+
+			// <-- POST tyopaari
 			if( isset($_POST['tyopaari']))
 			{
 				$post_tyopaari_plus_paa = $_POST['tyopaari'];
 				$post_tyopaari_plus_paa[] = $model->tid;
 				
-				if( is_array($edellisetArr) )
+				if( is_array($edelliset_tyoparit_Arr) )
 				{
-					$result_diff_lisaaminen = array_diff($post_tyopaari_plus_paa, $edellisetArr);
-					$result_diff_poistaminen = array_diff($edellisetArr, $post_tyopaari_plus_paa);
+					$result_diff_lisaaminen = array_diff($_POST['tyopaari'], $edelliset_tyoparit_Arr);
+					$result_diff_poistaminen = array_diff($edelliset_tyoparit_Arr, $post_tyopaari_plus_paa);
 				} else {
-					$result_diff_lisaaminen = $post_tyopaari_plus_paa;
+					$result_diff_lisaaminen = $_POST['tyopaari'];
 				}
 
 			} else {
 
-				if( is_array($edellisetArr) )
+				if( is_array($edelliset_tyoparit_Arr) )
 				{
-					$result_diff_poistaminen = array_diff($edellisetArr, array($model->tid));
+					$result_diff_poistaminen = array_diff($edelliset_tyoparit_Arr, array($model->tid));
 				}
 			}
 
+			// <-- For Updater
+			if( count($post_tyopaari_plus_paa) > 0 )
+			{
+				$tyopaari_forUpdater = json_encode($post_tyopaari_plus_paa);
+			} else {
+				$tyopaari_forUpdater = '';
+			}
+			//     For Updater -->
+			//     POST tyopaari -->
 
 
+
+
+
+
+			// <-- Jos ei ole muutoksia toistuva ja tyoparilla
 			if(
 				!empty($edellinenToistuva->tvuoro_ids) and is_array($edelliset_tvuoro_ids)
 				and $edellinenToistuva->pfrom == $_POST['ToistuvatTyovuorot']['pfrom']
+				and $edellinenToistuva->pto == $_POST['ToistuvatTyovuorot']['pto']
 				and $edellinenToistuva->viikko_paivat == json_encode($_POST['P'])
 			)
 			{
@@ -1404,17 +1421,15 @@ class TyovuorootController extends Controller
 					// <-- Lisätään pää TID työpariin
 					//$_POST['tyopaari'][] = $model->tid;
 
-					if( is_array($edelliset_tvuoro_ids) )
+					$tvuoro_ids_implode = implode(",", $edelliset_tvuoro_ids);
+					$criteria = new CDBcriteria;
+					$criteria->group=" pvm ";
+					$criteria->condition=" id IN ($tvuoro_ids_implode) ";
+				  	$t = Tyovuoroot::model()->findAll($criteria);
+					foreach($t as $item)
 					{
-						$tvuoro_ids_implode = implode(",", $edelliset_tvuoro_ids);
-						$criteria = new CDBcriteria;
-						$criteria->group=" pvm ";
-						$criteria->condition=" id IN ($tvuoro_ids_implode) ";
-					  	$t = Tyovuoroot::model()->findAll($criteria);
-						foreach($t as $item)
+						foreach($result_diff_lisaaminen as $tid)
 						{
-						    foreach($result_diff_lisaaminen as $tid)
-						    {
 							if( $saankoSuoritta != 1 )
 							{
 
@@ -1436,13 +1451,9 @@ class TyovuorootController extends Controller
 									$newTv = new Tyovuoroot;
 									$newTv->attributes = $item->attributes;
 									$newTv->tid = $tid;
-									$newTv->tyopaari = json_encode($post_tyopaari_plus_paa);
+									$newTv->tyopaari = $tyopaari_forUpdater;
 									if($newTv->save())
 									{
-										Tyovuoroot::model()->updateByPk($t->id, array(
-											'tyopaari'=>json_encode($post_tyopaari_plus_paa)
-										));
-
 										$return[] = array(
 											'tid'=>$newTv->tid, 
 											'pvm'=>$newTv->pvm, 
@@ -1461,27 +1472,11 @@ class TyovuorootController extends Controller
 								}
 
 							}
-						    }
 						}
 					}
-
 					
-					if( $saankoSuoritta == 1 and is_array($tvuoro_ids) and count($tvuoro_ids) > 0)
-					{
-
-						Tyovuoroot::model()->updateByPk($model->id, array(
-							'tyopaari'=>json_encode($post_tyopaari_plus_paa)
-						));
-
-						ToistuvatTyovuorot::model()->updateByPk($edellinenToistuva->id, array(
-							'tyopaari'=>json_encode($post_tyopaari_plus_paa),
-							'tvuoro_ids'=>json_encode($edelliset_tvuoro_ids)
-						));
-					}
-
 				}
 				//     Kun lisätään työpari ketjuun -->
-
 
 
 			}
@@ -1491,25 +1486,218 @@ class TyovuorootController extends Controller
 
 
 
-/*
-			if(isset($model->toistuva_id) and $model->toistuva_id != 0)
+			// <-- Jos on muutos Alkaen tai Loppuen päivällä
+			if(
+				!empty($edellinenToistuva->tvuoro_ids) and is_array($edelliset_tvuoro_ids)
+				and $edellinenToistuva->viikko_paivat == json_encode($_POST['P'])
+				and 
+				(
+				$edellinenToistuva->pfrom != $_POST['ToistuvatTyovuorot']['pfrom']
+				or $edellinenToistuva->pto != $_POST['ToistuvatTyovuorot']['pto']
+				)
+			)
 			{
-				if(isset($edellinenToistuva->id) and $edellinenToistuva->pfrom != $_POST['ToistuvatTyovuorot']['pfrom'])
+
+				$uusiPfrom = $_POST['ToistuvatTyovuorot']['pfrom'];
+				$uusiPto = $_POST['ToistuvatTyovuorot']['pto'];
+
+				$tvuoro_ids_implode = implode(",", $edelliset_tvuoro_ids);
+				$criteria = new CDBcriteria;
+				$criteria->condition=" 
+					id IN ($tvuoro_ids_implode) 
+					AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') 
+						BETWEEN '".date("Y-m-d", strtotime($uusiPfrom))."' AND '".date("Y-m-d", strtotime($uusiPto))."'
+				";
+			  	$t = Tyovuoroot::model()->findAll($criteria);
+				$uusiKetju = array();
+				foreach($t as $item)
 				{
-					$toistuva = new ToistuvatTyovuorot;
-					$uusiPTO = date("d.m.Y", strtotime($_POST['ToistuvatTyovuorot']['pfrom'].' -1 day'));
 
-					if($saankoSuoritta == 1)
-					ToistuvatTyovuorot::model()->updateByPk($edellinenToistuva->id, array('pto'=>$uusiPTO));
+					$uusiKetju[]	= $item->id;
+					$ketjustaPois[] = $item->id;
+					$edelliset_tvuoro_ids = array_values( array_diff($edelliset_tvuoro_ids, $ketjustaPois) );
 
-				} else {
-					$toistuva = $edellinenToistuva;
+					if( $saankoSuoritta != 1 )
+					{
+					    $return[] = array(
+						'tid'=>$item->tid, 
+						'pvm'=>$item->pvm, 
+						'ymd'=>date("Ymd",strtotime($item->pvm)), 
+						'isSaved'=>false,
+						'uusiKetju'=>true, 
+						'tekijan_nimi'=>$this->etuSukunimi($item->tid), 
+						'vkopvm' => $fi[date("N",strtotime($item->pvm))]
+					    );
+
+					} else {
+
+					    $return[] = array(
+						'tid'=>$item->tid, 
+						'pvm'=>$item->pvm, 
+						'ymd'=>date("Ymd",strtotime($item->pvm)), 
+						'isSaved'=>true
+					    );
+
+					}
 				}
 
-			} else {
+				// <-- Uusi toistuva ketju
+				$toistuva = new ToistuvatTyovuorot;
+				$toistuva->attributes=$_POST['ToistuvatTyovuorot'];
+				$toistuva->attributes=$_POST['Tyovuoroot'];
+				$toistuva->tvuoro_ids=json_encode($uusiKetju);
+				$toistuva->tyopaari=$tyopaari_forUpdater;
+
+				if(isset($_POST['P']))
+				$toistuva->viikko_paivat=json_encode($_POST['P']);
+		
+				if($saankoSuoritta == 1 and count($uusiKetju) > 0)
+				{
+					$toistuva->save();
+
+					if( date("Ymd", strtotime($uusiPfrom)) > date("Ymd", strtotime($edellinenToistuva->pfrom)) )
+					{
+					    ToistuvatTyovuorot::model()->updateByPk($edellinenToistuva->id, array(
+						'pto'=>date("d.m.Y", strtotime($uusiPfrom.' -1 day'))
+					    ));
+					}
+
+					    ToistuvatTyovuorot::model()->updateByPk($edellinenToistuva->id, array(
+						'tyopaari'=>$tyopaari_forUpdater,
+						'tvuoro_ids'=>json_encode($edelliset_tvuoro_ids)
+					    ));
+
+					$tvuoro_ids_implode = implode(",", $uusiKetju);
+					$criteria = new CDBcriteria;
+					$criteria->condition=" id IN ($tvuoro_ids_implode) ";
+					Tyovuoroot::model()->updateAll(array(
+						'tyopaari'=>$tyopaari_forUpdater,
+						'toistuva_id'=>$toistuva->id
+					), $criteria);
+
+				}
+				//     Uusi toistuva ketju -->
+
+
+				//$return[] = array('ERROR'=>$toistuva);
+			}
+			//     Jos on muutos Alkaen tai Loppuen päivällä -->
+
+
+
+
+			// <-- Jos on Viikkon päivä on otettu pois
+			$edelliset_viikko_paivat = json_decode($edellinenToistuva->viikko_paivat, true);
+			$uudet_viikko_paivat = $_POST['P'];
+			$viikko_paiva_otettupois = array_diff($edelliset_viikko_paivat, $uudet_viikko_paivat);
+			$viikko_paiva_uusiPVMarray = array_diff($edelliset_viikko_paivat, $viikko_paiva_otettupois);
+
+			if(
+				!empty($edellinenToistuva->tvuoro_ids) and is_array($edelliset_tvuoro_ids)
+				and count($viikko_paiva_otettupois) > 0
+				and $edellinenToistuva->pfrom == $_POST['ToistuvatTyovuorot']['pfrom']
+				and $edellinenToistuva->pto == $_POST['ToistuvatTyovuorot']['pto']
+			)
+			{
+
+
+
+				$tvuoro_ids_implode = implode(",", $edelliset_tvuoro_ids);
+				$tvuoro_vkopvm_implode = implode(",", array_values($viikko_paiva_otettupois));
+
+				$criteria = new CDBcriteria;
+				$criteria->condition=" 
+					id IN ($tvuoro_ids_implode) 
+					AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%w') IN ($tvuoro_vkopvm_implode) 
+				";
+			  	$t = Tyovuoroot::model()->findAll($criteria);
+				$uusiKetju = array();
+				foreach($t as $item)
+				{
+
+					$ketjustaPois[] = $item->id;
+					$edelliset_tvuoro_ids = array_values( array_diff($edelliset_tvuoro_ids, $ketjustaPois) );
+
+					if( $saankoSuoritta != 1 )
+					{
+					    $return[] = array(
+						'tid'=>$item->tid, 
+						'pvm'=>$item->pvm, 
+						'ymd'=>date("Ymd",strtotime($item->pvm)), 
+						'isSaved'=>false,
+						'poistaminenVkoPvm'=>true, 
+						'tekijan_nimi'=>$this->etuSukunimi($item->tid), 
+						'vkopvm' => $fi[date("N",strtotime($item->pvm))]
+					    );
+
+					} else {
+
+					    Tyovuoroot::model()->findByPk($item->id)->delete();
+					    $return[] = array(
+						'tid'=>$item->tid, 
+						'pvm'=>$item->pvm, 
+						'ymd'=>date("Ymd",strtotime($item->pvm)), 
+						'isSaved'=>true
+					    );
+
+					}
+				}
+
+				//$return[] = array('ERROR'=>$edelliset_tvuoro_ids);
+				if( $saankoSuoritta == 1 )
+				{
+
+					ToistuvatTyovuorot::model()->updateByPk($edellinenToistuva->id, array(
+						'viikko_paivat'=>json_encode($viikko_paiva_uusiPVMarray)
+					));
+				}
+
 
 			}
-*/
+			//     Jos on Viikkon päivä on otettu pois -->
+
+
+
+
+			// <-- Jos on Viikkon päivä on lisääntynyt
+			$edelliset_viikko_paivat = json_decode($edellinenToistuva->viikko_paivat, true);
+			$uudet_viikko_paivat = $_POST['P'];
+			$viikko_paiva_lisaantynyt = array_diff($uudet_viikko_paivat, $edelliset_viikko_paivat);
+			//$return[] = array('ERROR'=>json_encode($viikko_paiva_lisaantynyt));
+
+			if(
+				!empty($edellinenToistuva->tvuoro_ids) and is_array($edelliset_tvuoro_ids)
+				and count($viikko_paiva_lisaantynyt) > 0
+				and $edellinenToistuva->pfrom == $_POST['ToistuvatTyovuorot']['pfrom']
+				and $edellinenToistuva->pto == $_POST['ToistuvatTyovuorot']['pto']
+			)
+			{
+				$return[] = array('ERROR'=>'<div class="alert bg-warning">Viikonpäivien lisääminen olevan ketjun ei viellä toimi</div>');
+			}
+			//     Jos on Viikkon päivä on lisääntynyt -->
+
+
+
+
+			// <-- Updater kaikki
+			if( $saankoSuoritta == 1 and is_array($edelliset_tvuoro_ids) and count($edelliset_tvuoro_ids) > 0)
+			{
+
+				$tvuoro_ids_implode = implode(",", $edelliset_tvuoro_ids);
+				$criteria = new CDBcriteria;
+				$criteria->condition=" id IN ($tvuoro_ids_implode) ";
+				Tyovuoroot::model()->updateAll(array(
+					'tyopaari'=>$tyopaari_forUpdater
+				), $criteria);
+
+				ToistuvatTyovuorot::model()->updateByPk($edellinenToistuva->id, array(
+					'tyopaari'=>$tyopaari_forUpdater,
+					'tvuoro_ids'=>json_encode($edelliset_tvuoro_ids)
+				));
+			}
+			//     Updater kaikki -->
+
+
 
 
 /*
@@ -1538,10 +1726,15 @@ class TyovuorootController extends Controller
 			if( count($return) > 0 )
 				echo json_encode($return);
 			else
-				echo json_encode('Ei muutoksia');
+				echo json_encode(array('ERROR'=>'Ei muutoksia'));
 			exit;
 		}
 		//     Toistuva tyovuorot ja tyopaarit -->
+
+
+
+
+
 
 
 
