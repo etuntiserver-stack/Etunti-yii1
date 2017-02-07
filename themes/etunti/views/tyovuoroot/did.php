@@ -248,7 +248,7 @@ if(!isset($_POST['tulosta']))
 	   if(!empty($tvVal->tietoja) and isset($tietoja) and $tietoja == 1)
 	   $bod .=  '<p><span style="color: blue; border: 1px #333 solid">'.str_replace("\n","<br>",$tvVal->tietoja).'</span></p>';
 
-	   $bod .=  '<br>
+	   $bod .=  '<br>'.$tvVal->id.'
 	   </div>';
 
 	}
