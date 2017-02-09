@@ -1540,6 +1540,7 @@ class TyovuorootController extends Controller
 				and $edellinenToistuva->pfrom == $_POST['ToistuvatTyovuorot']['pfrom']
 				and $edellinenToistuva->pto == $_POST['ToistuvatTyovuorot']['pto']
 				and $edellinenToistuva->viikko_paivat == json_encode($_POST['P'])
+				and $edellinenToistuva->viikkoja == $_POST['ToistuvatTyovuorot']['viikkoja']
 			)
 			{
 
@@ -1718,6 +1719,7 @@ class TyovuorootController extends Controller
 			if(
 				!empty($edellinenToistuva->tvuoro_ids) and is_array($edelliset_tvuoro_ids)
 				and $edellinenToistuva->viikko_paivat == json_encode($_POST['P'])
+				and $edellinenToistuva->viikkoja == $_POST['ToistuvatTyovuorot']['viikkoja']
 				and 
 				(
 				$edellinenToistuva->pfrom != $_POST['ToistuvatTyovuorot']['pfrom']
@@ -1879,6 +1881,7 @@ class TyovuorootController extends Controller
 				!empty($edellinenToistuva->tvuoro_ids) and is_array($edelliset_tvuoro_ids)
 				and $edellinenToistuva->viikko_paivat == json_encode($_POST['P'])
 				and $edellinenToistuva->pfrom == $_POST['ToistuvatTyovuorot']['pfrom']
+				and $edellinenToistuva->viikkoja == $_POST['ToistuvatTyovuorot']['viikkoja']
 				and strtotime($_POST['ToistuvatTyovuorot']['pto']) > strtotime($edellinenToistuva->pto)
 			)
 			{
@@ -1957,6 +1960,7 @@ class TyovuorootController extends Controller
 
 
 
+
 			// <-- Jos on Viikkon päivä on otettu pois
 			$edelliset_viikko_paivat = json_decode($edellinenToistuva->viikko_paivat, true);
 			$uudet_viikko_paivat = $_POST['P'];
@@ -1968,6 +1972,7 @@ class TyovuorootController extends Controller
 				and count($viikko_paiva_otettupois) > 0
 				and $edellinenToistuva->pfrom == $_POST['ToistuvatTyovuorot']['pfrom']
 				and $edellinenToistuva->pto == $_POST['ToistuvatTyovuorot']['pto']
+				and $edellinenToistuva->viikkoja == $_POST['ToistuvatTyovuorot']['viikkoja']
 			)
 			{
 
@@ -2041,6 +2046,7 @@ class TyovuorootController extends Controller
 				and count($viikko_paiva_lisaantynyt) > 0
 				and $edellinenToistuva->pfrom == $_POST['ToistuvatTyovuorot']['pfrom']
 				and $edellinenToistuva->pto == $_POST['ToistuvatTyovuorot']['pto']
+				and $edellinenToistuva->viikkoja == $_POST['ToistuvatTyovuorot']['viikkoja']
 			)
 			{
 
@@ -2117,6 +2123,17 @@ class TyovuorootController extends Controller
 
 			}
 			//     Jos on Viikkon päivä on lisääntynyt -->
+
+
+
+			// <-- Jos Työvuorojen viikkoväli ei sama kun edellisessa
+			if(
+				$edellinenToistuva->viikkoja != $_POST['ToistuvatTyovuorot']['viikkoja']
+			)
+			{
+				$return[] = array('ERROR'=>'<div class="alert bg-danger">Työvuorojen viikkoväli ei sama kun edellisessa. Suunnittelemassa</div>');
+			}
+			//     Jos Työvuorojen viikkoväli ei sama kun edellisessa -->
 
 
 
