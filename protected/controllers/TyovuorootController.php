@@ -93,16 +93,15 @@ class TyovuorootController extends Controller
 
 	public function actionOnko_sama($id, $pvm, $tid, $kohde, $alku, $loppu)
 	{
-		$return = '';
+		$return = array();
 		$return = $this->onko_sama($id, $pvm, $tid, $kohde, $alku, $loppu);
-		if(!empty($return))
 		echo json_encode($return);
 	}
 
 
 	public function onko_sama($id, $pvm, $tid, $kohde, $alku, $loppu)
 	{
-		$return = '';
+		$return = array();
 
 			$criteria=new CDbCriteria;
 			$criteria->condition="
@@ -128,11 +127,17 @@ class TyovuorootController extends Controller
 				if(isset($k->id))
 				$tt = $k->tekijan_nimi;
 
-				$return .= $data->pvm.", ".$data->alku."-".$data->loppu.", ".$tt.", ".$osoite."\n";
+				$return[] = array(
+					'id'=>$data->id,
+					'pvm'=>$data->pvm,
+					'alku'=>$data->alku,
+					'loppu'=>$data->loppu,
+					'tekijan_nimi'=>$tt,
+					'osoite'=>$osoite
+				);
 			}
 			
 
-		if(!empty($return))
 		return $return;
 	}
 
@@ -626,6 +631,8 @@ class TyovuorootController extends Controller
 
 			$toistuva = ToistuvatTyovuorot::model()->findByPk($model->toistuva_id);
 			$edelliset_tvuoro_arr = json_decode($toistuva->tvuoro_ids, true);
+
+			$edelliset_tvuoro_ids = array();
 			if(is_array($edelliset_tvuoro_arr))
 			$edelliset_tvuoro_ids = $edelliset_tvuoro_arr;
 
@@ -1834,6 +1841,7 @@ class TyovuorootController extends Controller
 
 
 
+
 				// <-- Uusi toistuva ketju
 				$toistuva = new ToistuvatTyovuorot;
 				$toistuva->attributes=$_POST['ToistuvatTyovuorot'];
@@ -2133,56 +2141,16 @@ class TyovuorootController extends Controller
 				and $edellinenToistuva->pto == $_POST['ToistuvatTyovuorot']['pto']
 			)
 			{
-				$return[] = array('ERROR'=>'<div class="alert bg-danger">Työvuorojen viikkoväli ei sama kun edellisessa. Suunnittelemassa</div>');
+				//$return[] = array('ERROR'=>'<div class="alert bg-danger">Työvuorojen viikkoväli ei sama kun edellisessa. Suunnittelemassa</div>');
 
 
 				$updateTyoparia = false;
 
-/*
 
-				$tvuoro_ids_implode = implode(",", $edelliset_tvuoro_ids);
-				$criteria = new CDBcriteria;
-				$criteria->condition=" 
-					id IN ($tvuoro_ids_implode) 
-				";
-			  	$t = Tyovuoroot::model()->findAll($criteria);
-				$uusiKetju = array();
+
+
+
 				$r = array();
-				foreach($t as $item)
-				{
-
-					$uusiKetju[]	= $item->id;
-					$ketjustaPois[] = $item->id;
-					$edelliset_tvuoro_ids = array_values( array_diff($edelliset_tvuoro_ids, $ketjustaPois) );
-
-					if( $saankoSuoritta != 1 )
-					{
-					    $r[] = array(
-						'tid'=>$item->tid, 
-						'pvm'=>$item->pvm, 
-						'ymd'=>date("Ymd",strtotime($item->pvm)), 
-						'isSaved'=>false,
-						'poistaminen'=>true, 
-						'tekijan_nimi'=>$this->etuSukunimi($item->tid), 
-						'vkopvm' => $fi[date("N",strtotime($item->pvm))]
-					    );
-
-					} else {
-
-					    $r[] = array(
-						'tid'=>$item->tid, 
-						'pvm'=>$item->pvm, 
-						'ymd'=>date("Ymd",strtotime($item->pvm)), 
-						'isSaved'=>true
-					    );
-
-					}
-
-				}
-*/
-
-/*
-
 				if( $tyopaari_forUpdater == '')
 				{
 					$r[] = $this->toistuvaInsert(
@@ -2223,25 +2191,84 @@ class TyovuorootController extends Controller
 						$edellinenToistuva->tyopaari,
 						$saankoSuoritta
 						);
+
 				    }
+
 				}
 
-$return[] = array('ERROR'=>$r);
 
-				$return = $r;
+
 				$ids_otetan_pois = array();
 				foreach($r as $k=>$item)
 				{
+
 					foreach($item as $k=>$item2)
 					{
-						if(isset($item2['tvuoro_id']))
-						$ids_otetan_pois[] = $item2['tvuoro_id'];
+						if(isset($item2['onkosama']) and is_array($item2['onkosama']))
+						{
+							foreach($item2['onkosama'] as $samat)
+								if(isset($samat['id']))
+									$ids_otetan_pois[] = $samat['id'];
+
+						}
 					}
+
 				}
 
-*/
+
+				//$return[] = array('ERROR'=>json_encode($ids_otetan_pois));
 
 
+
+
+
+
+				$edelliset_tvuoro_ids_pois = array_values( array_diff($edelliset_tvuoro_ids, $ids_otetan_pois) );
+
+
+				$tvuoro_ids_implode = implode(",", $edelliset_tvuoro_ids_pois);
+				$criteria = new CDBcriteria;
+				$criteria->condition=" 
+					id IN ($tvuoro_ids_implode) 
+				";
+			  	$t = Tyovuoroot::model()->findAll($criteria);
+				$uusiKetju = array();
+				$r2 = array();
+				foreach($t as $item)
+				{
+
+					//$uusiKetju[]	= $item->id;
+					//$ketjustaPois[] = $item->id;
+					//$edelliset_tvuoro_ids = array_values( array_diff($edelliset_tvuoro_ids, $ketjustaPois) );
+
+					if( $saankoSuoritta != 1 )
+					{
+					    $return[] = array(
+						'tid'=>$item->tid, 
+						'pvm'=>$item->pvm, 
+						'ymd'=>date("Ymd",strtotime($item->pvm)), 
+						'isSaved'=>false,
+						'poistaminen'=>true, 
+						'tekijan_nimi'=>$this->etuSukunimi($item->tid), 
+						'vkopvm' => $fi[date("N",strtotime($item->pvm))]
+					    );
+
+					} else {
+
+					    $return[] = array(
+						'tid'=>$item->tid, 
+						'pvm'=>$item->pvm, 
+						'ymd'=>date("Ymd",strtotime($item->pvm)), 
+						'isSaved'=>true
+					    );
+
+					}
+
+				}
+
+
+
+//$return[] = array('ERROR'=>$r2);
 
 
 			}
@@ -3385,7 +3412,7 @@ $return[] = array('ERROR'=>$r);
 					}
 
 				} else {
-					$return[] = array('tid'=>$tid, 'pvm'=>$pvm, 'ymd'=>date("Ymd",strtotime($pvm)),'onkosama'=>$onkosama, 'isSaved'=>false, 'tekijan_nimi'=>$tt->tekijan_nimi, 'vkopvm' => $fi[date("N",strtotime($pvm))] );
+					$return[] = array('tid'=>$tid, 'pvm'=>$pvm, 'ymd'=>date("Ymd",strtotime($pvm)),'onkosama'=>$onkosama, 'isSaved'=>false, 'tekijan_nimi'=>$tt->tekijan_nimi, 'vkopvm' => $fi[date("N",strtotime($pvm))], 'onkosama'=>$onkosama );
 				}
 
 			}
