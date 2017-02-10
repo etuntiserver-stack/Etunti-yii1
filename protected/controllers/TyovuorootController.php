@@ -1729,8 +1729,8 @@ class TyovuorootController extends Controller
 				and $edellinenToistuva->viikkoja == $_POST['ToistuvatTyovuorot']['viikkoja']
 				and 
 				(
-				$edellinenToistuva->pfrom != $_POST['ToistuvatTyovuorot']['pfrom']
-				or $edellinenToistuva->pto != $_POST['ToistuvatTyovuorot']['pto']
+				$edellinenToistuva->pto == $_POST['ToistuvatTyovuorot']['pto']
+				or strtotime($_POST['ToistuvatTyovuorot']['pto']) > strtotime($edellinenToistuva->pto)
 				)
 				and strtotime($_POST['ToistuvatTyovuorot']['pfrom']) > strtotime($edellinenToistuva->pfrom)
 			)
