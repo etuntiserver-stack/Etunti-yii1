@@ -2147,9 +2147,6 @@ class TyovuorootController extends Controller
 				$updateTyoparia = false;
 
 
-
-
-
 				$r = array();
 				if( $tyopaari_forUpdater == '')
 				{
@@ -2198,33 +2195,50 @@ class TyovuorootController extends Controller
 
 
 
+				// <-- Valmistetaan Ids jotka emme koske
 				$ids_otetan_pois = array();
+				$lisataan = array();
 				foreach($r as $k=>$item)
 				{
 
 					foreach($item as $k=>$item2)
 					{
-						if(isset($item2['onkosama']) and is_array($item2['onkosama']))
+
+						if(isset($item2['tvuoro_id']))
 						{
+							$lisataan[] = $item2['tvuoro_id'];
+						} else {
+
+
+						    if(isset($item2['onkosama']) and is_array($item2['onkosama']))
+						    {
 							foreach($item2['onkosama'] as $samat)
+							{
 								if(isset($samat['id']))
 									$ids_otetan_pois[] = $samat['id'];
+							}
+						    }
 
 						}
 					}
 
 				}
-
-
-				//$return[] = array('ERROR'=>json_encode($ids_otetan_pois));
-
+				//     Valmistetaan Ids jotka emme koske -->
 
 
 
 
 
+				$edelliset_tvuoro_ids_pois = array();
 				$edelliset_tvuoro_ids_pois = array_values( array_diff($edelliset_tvuoro_ids, $ids_otetan_pois) );
+				//$return[] = array('ERROR'=>count($edelliset_tvuoro_ids_pois));
 
+
+				if( count($edelliset_tvuoro_ids_pois) == 0 )
+				{
+					$return = $r;
+
+				} else {
 
 				$tvuoro_ids_implode = implode(",", $edelliset_tvuoro_ids_pois);
 				$criteria = new CDBcriteria;
@@ -2234,12 +2248,13 @@ class TyovuorootController extends Controller
 			  	$t = Tyovuoroot::model()->findAll($criteria);
 				$uusiKetju = array();
 				$r2 = array();
-				foreach($t as $item)
-				{
 
-					//$uusiKetju[]	= $item->id;
-					//$ketjustaPois[] = $item->id;
-					//$edelliset_tvuoro_ids = array_values( array_diff($edelliset_tvuoro_ids, $ketjustaPois) );
+				    foreach($t as $item)
+				    {
+
+
+					$ketjustaPois[] = $item->id;
+					$edelliset_tvuoro_ids = array_values( array_diff($edelliset_tvuoro_ids, $ketjustaPois) );
 
 					if( $saankoSuoritta != 1 )
 					{
@@ -2261,15 +2276,26 @@ class TyovuorootController extends Controller
 						'ymd'=>date("Ymd",strtotime($item->pvm)), 
 						'isSaved'=>true
 					    );
-
+					    Tyovuoroot::model()->deleteByPk($item->id);
 					}
 
+				    }
+
+				} // if count ids
+
+
+				if( $saankoSuoritta == 1 )
+				{
+
+					$edelliset_tvuoro_ids = array_merge($edelliset_tvuoro_ids, $lisataan);
+
+					//echo json_encode($edelliset_tvuoro_ids);
+					//exit;
+
+					ToistuvatTyovuorot::model()->updatebypk($edellinenToistuva->id, array(
+						'viikkoja'=>$_POST['ToistuvatTyovuorot']['viikkoja']
+					));
 				}
-
-
-
-//$return[] = array('ERROR'=>$r2);
-
 
 			}
 			//     Jos Työvuorojen viikkoväli ei sama kun edellisessa -->
