@@ -248,6 +248,9 @@ if(!isset($_POST['tulosta']))
 	   if(!empty($tvVal->tietoja) and isset($tietoja) and $tietoja == 1)
 	   $bod .=  '<p><span style="color: blue; border: 1px #333 solid">'.str_replace("\n","<br>",$tvVal->tietoja).'</span></p>';
 
+	   //if($tvVal->toistuva_id != 0)
+	   //$bod .=  '<br><span class="text-warning">Ketjun numero:'.$tvVal->toistuva_id.'</span> '.$tvVal->id;
+
 	   $bod .=  '<br>
 	   </div>';
 

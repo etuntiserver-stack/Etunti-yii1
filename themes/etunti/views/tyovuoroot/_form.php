@@ -40,6 +40,9 @@ if(isset($model->id))
 
 	}
 
+	echo '<input type="hidden" id="updateMuoto" value="true">';
+} else {
+	echo '<input type="hidden" id="updateMuoto" value="false">';
 }
 
 
@@ -273,23 +276,28 @@ $(document).ready(function(){
 <br>
 
 <?php
-  if(isset($model->id) and $model->toistuva_id != 0)
-  {
-    $to = ToistuvatTyovuorot::model()->findByPk($model->toistuva_id);
-    $pfrom = $to->pfrom;
-
-    $viikkoja = $to->viikkoja;
-    $viikko_paivat = json_decode($to->viikko_paivat, true);
-    $pto = $to->pto;
-    $classCol = 'collapse in';
-    $toistuvaID =  '<span id="toistuvaID">'.$model->toistuva_id.'</span>';
-  } else {
-    $pfrom = $model->pvm;
+    $pfrom = '';
     $pto = '';
     $viikkoja = '';
     $viikko_paivat = array();
     $classCol = 'collapse';
     $toistuvaID =  '<span id="toistuvaID"></span>';
+
+  if(isset($model->id) and $model->toistuva_id != 0)
+  {
+    $toistuva = ToistuvatTyovuorot::model()->findByPk($model->toistuva_id);
+    if(isset($toistuva->id))
+    {
+    	$pfrom = $toistuva->pfrom;
+    	$viikkoja = $toistuva->viikkoja;
+    	$viikko_paivat = json_decode($toistuva->viikko_paivat, true);
+    	$pto = $toistuva->pto;
+    	$classCol = 'collapse in';
+    	$toistuvaID =  '<span id="toistuvaID">'.$model->toistuva_id.'</span>';
+    }
+
+  } else {
+    $pfrom = $model->pvm;
   }
 ?>
 <hr>
@@ -341,58 +349,58 @@ $(document).ready(function(){
   <label><?php echo Yii::t('main', 'Ma'); ?></label>
 
   <?php if(in_array(1, $viikko_paivat)): ?>
-  <input type="checkbox" class="sw" name="P[1]" id="ma" value="1" checked>
+  <input type="checkbox" class="sw vkopvmswitch" name="P[1]" id="ma" value="1" checked>
   <?php else: ?>
-  <input type="checkbox" class="sw" name="P[1]" id="ma" value="1">
+  <input type="checkbox" class="sw vkopvmswitch" name="P[1]" id="ma" value="1">
   <?php endif; ?>
 
   <label><?php echo Yii::t('main', 'Ti'); ?></label>
 
   <?php if(in_array(2, $viikko_paivat)): ?>
-  <input type="checkbox" class="sw" name="P[2]" id="ti" value="2" checked>
+  <input type="checkbox" class="sw vkopvmswitch" name="P[2]" id="ti" value="2" checked>
   <?php else: ?>
-  <input type="checkbox" class="sw" name="P[2]" id="ti" value="2">
+  <input type="checkbox" class="sw vkopvmswitch" name="P[2]" id="ti" value="2">
   <?php endif; ?>
 
 
   <label><?php echo Yii::t('main', 'Ke'); ?></label>
 
   <?php if(in_array(3, $viikko_paivat)): ?>
-  <input type="checkbox" class="sw" name="P[3]" id="ke" value="3" checked>
+  <input type="checkbox" class="sw vkopvmswitch" name="P[3]" id="ke" value="3" checked>
   <?php else: ?>
-  <input type="checkbox" class="sw" name="P[3]" id="ke" value="3">
+  <input type="checkbox" class="sw vkopvmswitch" name="P[3]" id="ke" value="3">
   <?php endif; ?>
 
   <label><?php echo Yii::t('main', 'To'); ?></label>
 
   <?php if(in_array(4, $viikko_paivat)): ?>
-  <input type="checkbox" class="sw" name="P[4]" id="to" value="4" checked>
+  <input type="checkbox" class="sw vkopvmswitch" name="P[4]" id="to" value="4" checked>
   <?php else: ?>
-  <input type="checkbox" class="sw" name="P[4]" id="to" value="4">
+  <input type="checkbox" class="sw vkopvmswitch" name="P[4]" id="to" value="4">
   <?php endif; ?>
 
   <label><?php echo Yii::t('main', 'Pe'); ?></label>
 
   <?php if(in_array(5, $viikko_paivat)): ?>
-  <input type="checkbox" class="sw" name="P[5]" id="pe" value="5" checked>
+  <input type="checkbox" class="sw vkopvmswitch" name="P[5]" id="pe" value="5" checked>
   <?php else: ?>
-  <input type="checkbox" class="sw" name="P[5]" id="pe" value="5">
+  <input type="checkbox" class="sw vkopvmswitch" name="P[5]" id="pe" value="5">
   <?php endif; ?>
 
   <label><?php echo Yii::t('main', 'La'); ?></label>
 
   <?php if(in_array(6, $viikko_paivat)): ?>
-  <input type="checkbox" class="sw" name="P[6]" id="la" value="6" checked>
+  <input type="checkbox" class="sw vkopvmswitch" name="P[6]" id="la" value="6" checked>
   <?php else: ?>
-  <input type="checkbox" class="sw" name="P[6]" id="la" value="6">
+  <input type="checkbox" class="sw vkopvmswitch" name="P[6]" id="la" value="6">
   <?php endif; ?>
 
   <label><?php echo Yii::t('main', 'Su'); ?></label>
 
   <?php if(in_array(7, $viikko_paivat)): ?>
-  <input type="checkbox" class="sw" name="P[7]" id="su" value="7" checked>
+  <input type="checkbox" class="sw vkopvmswitch" name="P[7]" id="su" value="7" checked>
   <?php else: ?>
-  <input type="checkbox" class="sw" name="P[7]" id="su" value="7">
+  <input type="checkbox" class="sw vkopvmswitch" name="P[7]" id="su" value="7">
   <?php endif; ?>
 
   </div>
@@ -561,6 +569,20 @@ $('.mult').multiselect({
 	onText: "Kyllä",
 	offText: "Ei"
   });
+
+/* ei toimi kun haluan luoda toistuva olevasta tyovuorosta
+  if( $('#updateMuoto').val() == "true" )
+  {
+    $('.vkopvmswitch').on('switchChange.bootstrapSwitch', function () {
+    	$('#pfrom').attr('readonly', 'yes');
+    	$('#pto').attr('readonly', 'yes');
+    });
+
+    $('#pfrom, #pto').on('blur', function () {
+    	$(".vkopvmswitch").bootstrapSwitch('toggleDisabled',true,true);
+    });
+  }
+*/
 
 	var pfrom = '';
 	var pto = '';
@@ -744,11 +766,17 @@ $('.mult').multiselect({
 				 });
 				});
 
+
+
+
 				if( isSaved === true )
 				{
 					laatikonPaivays(thisDataReturn);
 
 				} else {
+
+					//$('input').attr('readonly','yes');
+
 
 					$('#sopivatPaivat').html('<br><h3>Toistuvien työvuorojen päivämäärät</h3><div class="col-sm-offset-1">').show('slow');
 					$(thisDataReturn).each(function( iarr, arr ) {
@@ -762,9 +790,29 @@ $('.mult').multiselect({
 					   {
 					   	$('#sopivatPaivat').append('<div class="row"><b class="text-warning"><div class="col-sm-3">Kaikki</div><div class="col-sm-3">Kaikki</div><div class="col-sm-3">'+d['tekijan_nimi']+'</div><div class="col-sm-3">Pois taulusta</div></b></div>');
 					   }
-					   else {
-					   	$('#sopivatPaivat').append('<div class="row"><b class="text-success"><div class="col-sm-3">'+d['pvm']+'</div><div class="col-sm-3">'+d['vkopvm']+'</div><div class="col-sm-3">'+d['tekijan_nimi']+'</div><div class="col-sm-3">Uusi/Muokkaus</div></b></div>');
+					   else if(d['uusi']) {
+					   	$('#sopivatPaivat').append('<div class="row"><b class="text-success"><div class="col-sm-3">'+d['pvm']+'</div><div class="col-sm-3">'+d['vkopvm']+'</div><div class="col-sm-3">'+d['tekijan_nimi']+'</div><div class="col-sm-3">Uusi</div></b></div>');
 					   }
+					   else if(d['muokkaus']) {
+					   	$('#sopivatPaivat').append('<div class="row"><b class="text-warning"><div class="col-sm-3">'+d['pvm']+'</div><div class="col-sm-3">'+d['vkopvm']+'</div><div class="col-sm-3">'+d['tekijan_nimi']+'</div><div class="col-sm-3">Muokkaus</div></b></div>');
+					   }
+					   else if(d['poistaminen']) {
+					   	$('#sopivatPaivat').append('<div class="row"><b class="text-danger"><div class="col-sm-3">'+d['pvm']+'</div><div class="col-sm-3">'+d['vkopvm']+'</div><div class="col-sm-3">'+d['tekijan_nimi']+'</div><div class="col-sm-3">Poistetaan</div></b></div>');
+					   }
+					   else if(d['poistaminenVkoPvm']) {
+					   	$('#sopivatPaivat').append('<div class="row"><b class="text-danger"><div class="col-sm-3">'+d['pvm']+'</div><div class="col-sm-3">'+d['vkopvm']+'</div><div class="col-sm-3">'+d['tekijan_nimi']+'</div><div class="col-sm-3">Poistetaan viikkon pvm</div></b></div>');
+					   }
+					   else if(d['lisaaminenVkoPvm']) {
+					   	$('#sopivatPaivat').append('<div class="row"><b class="text-success"><div class="col-sm-3">'+d['pvm']+'</div><div class="col-sm-3">'+d['vkopvm']+'</div><div class="col-sm-3">'+d['tekijan_nimi']+'</div><div class="col-sm-3">Lisätään viikkon pvm</div></b></div>');
+					   }
+					   else if(d['ketjunMuutos']) {
+					   	$('#sopivatPaivat').append('<div class="row"><b class="text-warning"><div class="col-sm-3">'+d['pvm']+'</div><div class="col-sm-3">'+d['vkopvm']+'</div><div class="col-sm-3">'+d['tekijan_nimi']+'</div><div class="col-sm-3">Ketjun muutos</div></b></div>');
+					   }
+					   else if(d['ERROR']) {
+						   	$('#sopivatPaivat').append(d['ERROR']);
+					   }
+
+
 
 					 });
 					});
@@ -821,11 +869,12 @@ $('#poistaTv').click(function(){
 	{
 
 	// paivita vanhat
+/*
 	  if(toistuva_aktiivinen === true)
 	  {
 	  var toistuva_id = $('#Tyovuoroot_toistuva_id').val();
 	  $.ajax({
-		  url: 'paivita_laatikot',
+		  url: 'poista_toistuva',
 		  data:{ toistuva_id : toistuva_id },
 		  type:'POST',
 		  success:function(data){
@@ -839,6 +888,7 @@ $('#poistaTv').click(function(){
 	    	}
 	  });
   	  }
+*/
 	// paivita vanhat
 
 
@@ -847,8 +897,10 @@ $('#poistaTv').click(function(){
 	   type:'POST',
 	   data: { "poistaTv" : model, toistuva_aktiivinen : toistuva_aktiivinen, pfrom : $('#pfrom').val(), pto : $('#pto').val() },
            success: function(data){
-        	//console.log(data);
-		parent.postMessage( "doit//"+thisID, "*");
+		data = JSON.parse(data);
+		console.log('paivita laatikot, poisto > ' +data);
+		laatikonPaivays(data);
+		//parent.postMessage( "doit//"+thisID, "*");
 
     	   },
     	   error: function(XMLHttpRequest, textStatus, errorThrown) {
@@ -1030,7 +1082,7 @@ function laatikonPaivays(thisDataReturn){
 	$(this).remove();
 	$('#sopivatPaivatInput').val(1);
 	$('#toistuvaAll').hide('slow');
-	$('#submitButton').val('Luo').removeAttr( "pvmTarkistus" );
+	$('#submitButton').val('Tallenna').removeAttr( "pvmTarkistus" );
 	$('#toistuvaAllsijaan').html('<h3 class="alert alert-success">Toistuvien työvuorojen päivät tallennettu.<br>Paina Luo-painikketta lisätäksesi työvuorot työvuorolistaan.</h3>').show('slow');
   });
 
@@ -1047,7 +1099,7 @@ function laatikonPaivays(thisDataReturn){
 
 		$('#submitButton').val('Tarkista päivämäärät').attr("pvmTarkistus",true);
 	} else {
-		$('#submitButton').val('Luo').removeAttr( "pvmTarkistus" );
+		$('#submitButton').val('Tallenna').removeAttr( "pvmTarkistus" );
 	}
 	switchesPvm();
   });
