@@ -1406,6 +1406,7 @@ class TyovuorootController extends Controller
 					);
 			    }
 
+				if($saankoSuoritta == 1)
 				ToistuvatTyovuorot::model()->updatebypk($toistuva->id, array('tyopaari' => json_encode($_POST['tyopaari'])));
 			}
 			// jos on tyopaari -->
@@ -2962,6 +2963,7 @@ class TyovuorootController extends Controller
 
 		// <-- Asiakas
 		if(isset(Yii::app()->session['asiakas']))
+
 		{
 	           $criteria->addCondition ("
 		   id IN (  
