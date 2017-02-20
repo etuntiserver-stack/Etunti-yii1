@@ -35,10 +35,12 @@
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'alv'); ?>
 		<?php 
-        	$l = array();
-		for ($i = 1; $i <= 50; $i++) {
+        	$l = array(0,10,14,24);
+		/*
+		for ($i = 0; $i <= 50; $i++) {
 		    $l[$i] = $i;
 		}
+		*/
 
 		echo $form->dropDownList($model,'alv',$l, 
 			array('class'=>'form-control','options' => array('24'=>array('selected'=>true)))
