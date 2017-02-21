@@ -872,9 +872,7 @@ $( ".sirraToteutuun" ).tooltip({
 
  $(document).delegate(".sirraToteutuun","click",function(){
 
-      	var forThis = $(this).prevAll('span').attr('id').split("_");
-	if(forThis)
-	{
+      	var forThis = $(this).prevAll('.tv_edit').attr('id').split("_");
         $.ajax({
            url: 'siirra_toteutuun?id=' + forThis[1],
            //type: "POST",
@@ -890,9 +888,7 @@ $( ".sirraToteutuun" ).tooltip({
 		}
            }
         });
-	} else {
-		console.log('ERROR: sirraToteutuun');
-	}
+
  });
 
 

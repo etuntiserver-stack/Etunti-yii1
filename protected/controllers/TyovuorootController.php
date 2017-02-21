@@ -1475,6 +1475,7 @@ class TyovuorootController extends Controller
 			$saankoSuoritta = $_POST['ToistuvatTyovuorot']['sopivatPaivat'];
 
 			$edelliset_tvuoro_ids = json_decode($edellinenToistuva->tvuoro_ids, true);
+			$updateTyovuoroja = true;
 
 			// <-- Uudet POST tiedot
 			$tv = new Tyovuoroot;
@@ -1488,6 +1489,7 @@ class TyovuorootController extends Controller
 			$result_diff_poistaminen = array();
 			$post_tyopaari_plus_paa = array();
 			$edelliset_tyoparit_Arr = json_decode($edellinenToistuva->tyopaari, true);
+
 
 
 			// <-- POST tyopaari
@@ -1591,7 +1593,13 @@ class TyovuorootController extends Controller
 								);
 
 							} else {
-								Tyovuoroot::model()->findByPk($item->id)->delete();
+								Tyovuoroot::model()->deleteByPk($item->id);
+								$return[] = array(
+								'tid'=>$item->tid, 
+								'pvm'=>$item->pvm, 
+								'ymd'=>date("Ymd",strtotime($item->pvm)),
+								'isSaved'=>true
+								);
 							}
 	
 						}
@@ -1667,7 +1675,7 @@ class TyovuorootController extends Controller
 						continue;
 
 					}
-
+/*
 				    	if( $saankoSuoritta == 1 and isset($t->id) )
 				    	{
 
@@ -1682,7 +1690,10 @@ class TyovuorootController extends Controller
 
 
 				    	} elseif( $saankoSuoritta != 1 and isset($t->id) ) {
-						
+*/
+
+				    	if( $saankoSuoritta != 1 and isset($t->id) )
+					{
 						$return[] = array(
 							'tid'=>$t->tid, 
 							'pvm'=>$t->pvm, 
@@ -1693,7 +1704,8 @@ class TyovuorootController extends Controller
 							'vkopvm' => $fi[date("N",strtotime($t->pvm))]
 						);
 						
-				    	} 
+				    	}
+ 
 			   	}
 
 
@@ -1833,6 +1845,8 @@ class TyovuorootController extends Controller
 
 
 				$updateTyoparia = false;
+				$updateTyovuoroja = false;
+
 				$uusiPfrom = $_POST['ToistuvatTyovuorot']['pfrom'];
 				$uusiPto = $_POST['ToistuvatTyovuorot']['pto'];
 
@@ -2034,6 +2048,36 @@ class TyovuorootController extends Controller
 						'tyopaari'=>$tyopaari_forUpdater,
 						'toistuva_id'=>$toistuva->id
 					), $criteria);
+
+
+					// <-- Kortti update
+					$newPostArr = array(
+						'kohde'=>$tv->kohde,
+						'alku'=>$tv->alku,
+						'loppu'=>$tv->loppu,
+						'pituus'=>$tv->pituus,
+						'tyoajanmerkinta'=>$tv->tyoajanmerkinta,
+						'tietoja'=>$tv->tietoja,
+						'status'=>$tv->status,
+					);
+
+					Tyovuoroot::model()->updateAll($newPostArr, $criteria);
+				  	$t = Tyovuoroot::model()->findAll($criteria);
+
+					foreach($t as $item)
+					{
+
+					    $return[] = array(
+						'tid'=>$item->tid, 
+						'pvm'=>$item->pvm, 
+						'ymd'=>date("Ymd",strtotime($item->pvm)), 
+						'isSaved'=>true
+					    );
+
+					}
+					//     Kortti update -->
+
+
 
 				}
 				//     Uusi toistuva ketju -->
@@ -2633,6 +2677,41 @@ class TyovuorootController extends Controller
 					ToistuvatTyovuorot::model()->updateByPk($edellinenToistuva->id, array(
 						'tvuoro_ids'=>json_encode($edelliset_tvuoro_ids)
 					));
+
+
+				if($updateTyovuoroja == true)
+				{
+					$tvuoro_ids_implode = implode(",", $edelliset_tvuoro_ids);
+					$criteria = new CDBcriteria;
+					$criteria->condition=" id IN ($tvuoro_ids_implode) ";
+
+					$newPostArr = array(
+						'kohde'=>$tv->kohde,
+						'alku'=>$tv->alku,
+						'loppu'=>$tv->loppu,
+						'pituus'=>$tv->pituus,
+						'tyoajanmerkinta'=>$tv->tyoajanmerkinta,
+						'tietoja'=>$tv->tietoja,
+						'status'=>$tv->status,
+					);
+
+					Tyovuoroot::model()->updateAll($newPostArr, $criteria);
+				  	$t = Tyovuoroot::model()->findAll($criteria);
+
+					foreach($t as $item)
+					{
+
+					    $return[] = array(
+						'tid'=>$item->tid, 
+						'pvm'=>$item->pvm, 
+						'ymd'=>date("Ymd",strtotime($item->pvm)), 
+						'isSaved'=>true
+					    );
+
+					}
+				}
+
+
 			}
 			//     Updater kaikki -->
 
