@@ -54,7 +54,7 @@ window.onload = function () {
   <thead>
   <tr>
     <th><?php echo Yii::t('main', 'Pvm.'); ?></th>
-    <th width=1><?php echo Yii::t('main', 'Työntekijä'); ?></th>
+    <th><?php echo Yii::t('main', 'Työntekijä'); ?></th>
     <th><?php echo Yii::t('main', 'Osoite'); ?></th>
     <th><?php echo Yii::t('main', 'Aloitus'); ?></th>
     <th><?php echo Yii::t('main', 'Lopetus'); ?></th>
