@@ -192,8 +192,8 @@ return array(
 
 'urlManager'=>array(
     'urlFormat'=>'path',
-    'showScriptName'=>false,
-    'caseSensitive'=>false, 
+    //'showScriptName'=>false,
+    //'caseSensitive'=>false, 
     'rules'=>array(
         'mob/<id:\d+>/<title:.*?>'=>'mob/view',
         'posts/<tag:.*?>'=>'mob/index',
