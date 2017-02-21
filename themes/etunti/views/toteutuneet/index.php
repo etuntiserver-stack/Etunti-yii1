@@ -870,9 +870,11 @@ $( ".sirraToteutuun" ).tooltip({
 });
 
 
- $(".sirraToteutuun").click(function(){
+ $(document).delegate(".sirraToteutuun","click",function(){
 
       	var forThis = $(this).prevAll('span').attr('id').split("_");
+	if(forThis)
+	{
         $.ajax({
            url: 'siirra_toteutuun?id=' + forThis[1],
            //type: "POST",
@@ -888,6 +890,9 @@ $( ".sirraToteutuun" ).tooltip({
 		}
            }
         });
+	} else {
+		console.log('ERROR: sirraToteutuun');
+	}
  });
 
 

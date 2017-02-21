@@ -1713,6 +1713,17 @@ class TyovuorootController extends Controller
 						}
 					}
 				}
+
+
+				// <-- Poistetaan uudesta ketjusta jos tyontekija olisi vaihtanut
+				if( $model->tid != $tv->tid )
+				{
+					$tvpupd = json_decode($tyopaari_forUpdater, true);
+					$tvpupd[] = $tv->tid;
+					$tyopaari_forUpdater = json_encode(array_values( array_diff($tvpupd, array($model->tid)) ));
+				}
+				//     Poistetaan uudesta ketjusta jos tyontekija olisi vaihtanut -->
+
 				//     Muokkaus -->
 
 
