@@ -10,7 +10,6 @@ $sub = explode(".",$_SERVER['HTTP_HOST']);
 if (
 		(! isset($_SERVER['HTTPS']) or $_SERVER['HTTPS'] == 'off') 
 		and ($_SERVER['REMOTE_ADDR'] != '::1' and $_SERVER['REMOTE_ADDR'] != '127.0.0.1')
-		and $sub[0] != 'staging'
 ) {
 
     if (strlen(strstr($agent, 'Firefox')) > 0) {
