@@ -23,6 +23,7 @@
 class Tyovuoroot extends DB2ActiveRecord
 {
 public $osoite;
+public $kaupunki;
 public $tekijan_nimi;
 public $toimenpiteet;
 public $l_tunnit;

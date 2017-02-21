@@ -147,7 +147,7 @@
       <div class="row">
        <div class="col-sm-12">
         <div class="pull-right">
-    	  <button class="btn btn-primary myBgColors submitPrintSivu"><i class="fa fa-print" aria-hidden="true"></i></button>
+    	  <button class="btn btn-primary myBgColors submitPrintSivuLuetut"><i class="fa fa-print" aria-hidden="true"></i></button>
     	  <button class="btn btn-primary myBgColors submitExcelluetut"><i class="fa fa-file-excel-o" aria-hidden="true"></i></button>
     	  <button class="btn btn-primary myBgColors submitPDFluetut"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></button>
         </div>
@@ -163,7 +163,7 @@
 <script>
 $(document).ready(function(){
 
-  $('.submitPrintSivu').click(function(){
+  $('.submitPrintSivuLuetut').click(function(){
 
 	var input = $("<input id='luoPrintSivu'>")
                .attr({"type":"text","name":"luoPrintSivu"}).val("true");
@@ -285,7 +285,7 @@ $(document).ready(function(){
       <div class="row">
        <div class="col-sm-12">
         <div class="pull-right">
-    	  <button class="btn btn-primary myBgColors submitPrintSivu"><i class="fa fa-print" aria-hidden="true"></i></button>
+    	  <button class="btn btn-primary myBgColors submitPrintSivuToteutuneet"><i class="fa fa-print" aria-hidden="true"></i></button>
     	  <button class="btn btn-primary myBgColors submitExceltoteutuneet"><i class="fa fa-file-excel-o" aria-hidden="true"></i></button>
     	  <button class="btn btn-primary myBgColors submitPDFtoteutuneet"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></button>
         </div>
@@ -303,7 +303,7 @@ $(document).ready(function(){
 <script>
 $(document).ready(function(){
 
-  $('.submitPrintSivu').click(function(){
+  $('.submitPrintSivuToteutuneet').click(function(){
 
 	var input = $("<input id='luoPrintSivu'>")
                .attr({"type":"text","name":"luoPrintSivu"}).val("true");
@@ -421,7 +421,7 @@ $(document).ready(function(){
       <div class="row">
        <div class="col-sm-12">
         <div class="pull-right">
-    	  <button class="btn btn-primary myBgColors submitPrintSivu"><i class="fa fa-print" aria-hidden="true"></i></button>
+    	  <button class="btn btn-primary myBgColors submitPrintSivutotEro"><i class="fa fa-print" aria-hidden="true"></i></button>
     	  <button class="btn btn-primary myBgColors submitExceltotEro"><i class="fa fa-file-excel-o" aria-hidden="true"></i></button>
     	  <button class="btn btn-primary myBgColors submitPDFtotEro"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></button>
         </div>
@@ -439,7 +439,7 @@ $(document).ready(function(){
 <script>
 $(document).ready(function(){
 
-  $('.submitPrintSivu').click(function(){
+  $('.submitPrintSivutotEro').click(function(){
 
 	var input = $("<input id='luoPrintSivu'>")
                .attr({"type":"text","name":"luoPrintSivu"}).val("true");
@@ -542,7 +542,7 @@ $(document).ready(function(){
       <div class="row">
        <div class="col-sm-12">
         <div class="pull-right">
-    	  <button class="btn btn-primary myBgColors submitPrintSivu"><i class="fa fa-print" aria-hidden="true"></i></button>
+    	  <button class="btn btn-primary myBgColors submitPrintSivulomat"><i class="fa fa-print" aria-hidden="true"></i></button>
     	  <button class="btn btn-primary myBgColors submitExcellomat"><i class="fa fa-file-excel-o" aria-hidden="true"></i></button>
     	  <button class="btn btn-primary myBgColors submitPDFlomat"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></button>
         </div>
@@ -560,7 +560,7 @@ $(document).ready(function(){
 <script>
 $(document).ready(function(){
 
-  $('.submitPrintSivu').click(function(){
+  $('.submitPrintSivulomat').click(function(){
 
 	var input = $("<input id='luoPrintSivu'>")
                .attr({"type":"text","name":"luoPrintSivu"}).val("true");

@@ -66,8 +66,8 @@ window.onload = function () {
   </tbody>
   <tfoot>
   <tr>
-    <td><?php echo Yii::t('main', 'Yhteenssä'); ?></td>
     <td></td>
+    <td><?php echo Yii::t('main', 'Yhteensä'); ?></td>
     <td><?php echo $kplYht; ?></td>
   </tr>
   </tfoot>

@@ -119,7 +119,7 @@ window.onload = function () {
     <th></th>
     <th></th>
     <th></th>
-    <th></th>
+    <th><?php echo Yii::t('main', 'Yhteensä'); ?></th>
     <th><?php echo sprint($kkesto); ?><!--<b>(<?php echo num($kkesto); ?>)</b>--></th>
     <!--<th></th>-->
   </tr>

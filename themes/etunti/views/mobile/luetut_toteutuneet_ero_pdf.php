@@ -57,6 +57,8 @@ window.onload = function () {
   $ero			= 0;
   $osoite 		= '';
   $tyontekija 		= '';
+  $eroLaskin		= 0;
+  $eroLaskinYht		= 0;
   ?>
   <?php foreach($model as $data) : ?>
 
@@ -67,9 +69,13 @@ window.onload = function () {
 	$toteutuneet = $this->toteutuneet($data->tid,$data->pvm,$data->status,$data->kohde);
 
 	if($data->suunnittellut > $toteutuneet) {
-		$ero = '<b style="color:red">-'.$this->sprint($data->suunnittellut-$toteutuneet).'</b>';
+		$eroLaskin = $data->suunnittellut-$toteutuneet;
+		$ero = '<b style="color:red">-'.$this->sprint($eroLaskin).'</b>';
+		$eroLaskinYht	-= $eroLaskin;
 	} elseif($data->suunnittellut < $toteutuneet) {
-		$ero = '<b style="color:green">+'.$this->sprint($toteutuneet-$data->suunnittellut).'</b>';
+		$eroLaskin = $toteutuneet-$data->suunnittellut;
+		$ero = '<b style="color:green">+'.$this->sprint($eroLaskin).'</b>';
+		$eroLaskinYht	+= $eroLaskin;
 	} elseif($data->suunnittellut == $toteutuneet and $_POST['is_kaikki'] == 'erot') {
 		$ero = '<b>00:00</b>';
 		continue;
@@ -79,10 +85,11 @@ window.onload = function () {
 	$suunnittellutYht += $data->suunnittellut;
 	$toteutuneetYht += $toteutuneet;
 
+
   ?>
   <tr>
     <td><?php echo $data->pvm; ?></td>
-    <td style="width:27%"><?php echo $data->osoite; ?></td>
+    <td style="width:27%"><?php echo $data->osoite; if(!empty($data->kaupunki)) echo ', '.$data->kaupunki; ?></td>
     <td style="width:27%"><?php echo $this->etuSukunimi($data->tid); ?></td>
     <td><?php echo $this->sprint($data->suunnittellut); ?></td>
     <td><?php echo $this->sprint($toteutuneet); ?></td>
@@ -90,15 +97,22 @@ window.onload = function () {
   </tr>
 
   <?php endforeach; ?>
+
+  <?php 
+		$yhtEro = $this->sprint($eroLaskinYht);
+	if($eroLaskinYht < 0)
+		$yhtEro = '-'.$this->sprint(str_replace("-", "", $eroLaskinYht));
+  ?>
+
   </tbody>
   <tfoot>
   <tr>
-    <td><?php echo Yii::t('main', 'Yhteenssä'); ?></td>
     <td></td>
     <td></td>
+    <td><?php echo Yii::t('main', 'Yhteensä'); ?></td>
     <td><?php echo $this->sprint($suunnittellutYht); ?></td>
     <td><?php echo $this->sprint($toteutuneetYht); ?></td>
-    <td></td>
+    <td><?php echo $yhtEro; ?></td>
   </tr>
   </tfoot>
 </table>

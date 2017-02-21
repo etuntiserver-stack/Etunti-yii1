@@ -285,6 +285,7 @@ function num($val){
 		       	$criteria->group = " CONCAT(pvm,kohde,tid) ";
 		       	$criteria->select = " 
 				( SELECT osoite FROM sivex_kohdet WHERE t.kohde=id ) as osoite, 
+				( SELECT kaupunki FROM sivex_kohdet WHERE t.kohde=id ) as kaupunki, 
 				( SELECT tekijan_nimi FROM sivex_ttekijat WHERE t.tid=id ) as tekijan_nimi, 
 
 				SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(CONCAT(pvm, loppu), '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
