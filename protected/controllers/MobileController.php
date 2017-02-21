@@ -182,7 +182,7 @@ function num($val){
 			if(isset($_POST['luoPDF']))
 			{
 
-			        $html2pdf = Yii::app()->ePdf->HTML2PDF('P', 'A4', 'en', 'true', 'UTF-8', array(3,10,5,10));
+			        $html2pdf = Yii::app()->ePdf->HTML2PDF('L', 'A4', 'en', 'true', 'UTF-8', array(3,10,5,10));
 				$html2pdf->setDefaultFont('Arial');
 			        $html2pdf->WriteHTML($this->renderPartial('raportit_pdf_l', array('model' => $model, 'tyyppi' => 'Luetut'),true));
 			        $html2pdf->Output();
@@ -250,7 +250,7 @@ function num($val){
 
 			if(isset($_POST['luoPDF']))
 			{
-			        $html2pdf = Yii::app()->ePdf->HTML2PDF('P', 'A4', 'en', 'true', 'UTF-8', array(3,10,5,10));
+			        $html2pdf = Yii::app()->ePdf->HTML2PDF('L', 'A4', 'en', 'true', 'UTF-8', array(3,10,5,10));
 				$html2pdf->setDefaultFont('Arial');
 			        $html2pdf->WriteHTML($this->renderPartial('raportit_pdf_l', array('model' => $model, 'tyyppi' => 'Toteutuneet'),true));
 			        $html2pdf->Output();
@@ -3062,12 +3062,12 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 	$r = '';
 	$r .=  '<tr>';
 	$r .= '<td style="width:11%">'.date("d.m.Y",strtotime($data->aloitan)).'</td>';
-	$r .= '<td style="width:28%">'.$this->etuSukunimi($data->tid).$spl.'</td>';
-	$r .= '<td style="width:28%">'.$data->kohde_kannasta.'</td>';
+	$r .= '<td style="width:10%">'.$this->etuSukunimi($data->tid).$spl.'</td>';
+	$r .= '<td style="width:18%">'.$data->kohde_kannasta.'</td>';
 	$r .= '<td style="width:10%">'.date("H:i",strtotime($data->aloitan)).'</td>';
 	$r .= '<td style="width:10%">'.date("H:i",strtotime($data->loppui)).'</td>';
 	$r .= '<td style="width:10%">'.sprint($kesto).'</td>'; //<br><b>('.num($kesto).')</b>
-	//$r .= '<td>'.$viesti.'</td>';
+	$r .= '<td style="width:25%">'.$viesti.'</td>';
 	$r .= '</tr>';
 	return $r;
 	}
