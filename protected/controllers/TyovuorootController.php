@@ -1618,55 +1618,71 @@ class TyovuorootController extends Controller
 				$ketjustaPois = array();
 			   	foreach($edelliset_tvuoro_ids as $tvuoro_id)
 			   	{
-					
+
 					$criteria = new CDBcriteria;
 					$criteria->condition=" id='".$tvuoro_id."' ";
-					if( $model->tid != $tv->tid )
-						$criteria->addCondition(" tid='".$model->tid."' ");
-
-					//$return[] = array('ERROR'=>json_encode($tv->tid));
-
 				  	$t = Tyovuoroot::model()->find($criteria);
 
-					if( isset($t->id)  and $model->tid != $tv->tid )
+					if( isset($t->id)  and $model->tid != $tv->tid and $model->tid == $t->tid )
 					{
-						$ketjustaPois[] = $t->id;
-						$edelliset_tvuoro_ids = array_values( array_diff($edelliset_tvuoro_ids, $ketjustaPois) );
+
+						$criteria = new CDBcriteria;
+						$criteria->condition=" 
+							id='".$tvuoro_id."' 
+							AND tid='".$model->tid."'
+							AND toistuva_id='".$edellinenToistuva->id."'
+						";
+					  	$t2 = Tyovuoroot::model()->findAll($criteria);
+						foreach($t2 as $item2)
+						{
+
+							$return[] = array(
+							'tid'=>$item2->tid, 
+							'pvm'=>$item2->pvm, 
+							'ymd'=>date("Ymd",strtotime($item2->pvm)), 
+							'isSaved'=>false,
+							'poistaminen'=>true, 
+							'tekijan_nimi'=>$this->etuSukunimi($item2->tid), 
+							'vkopvm' => $fi[date("N",strtotime($item2->pvm))]
+							);
+
+
+							$ketjustaPois[] = $item2->id;
+							$edelliset_tvuoro_ids = array_values( array_diff($edelliset_tvuoro_ids, $ketjustaPois) );
+
+
+							if( $saankoSuoritta == 1 )
+							{
+								Tyovuoroot::model()->deleteByPk($item2->id);
+								$return[] = array(
+								'tid'=>$item2->tid, 
+								'pvm'=>$item2->pvm, 
+								'ymd'=>date("Ymd",strtotime($item2->pvm)),
+								'isSaved'=>true
+								);
+
+							}
+						}
+
+						continue;
+
 					}
 
 				    	if( $saankoSuoritta == 1 and isset($t->id) )
 				    	{
-						if( $model->tid != $tv->tid )
-						{
-					     		Tyovuoroot::model()->deleteByPk($t->id);
-						} else {
-					     		Tyovuoroot::model()->updateByPk($t->id, $newPostArr);
-						}
 
+					     	Tyovuoroot::model()->updateByPk($t->id, $newPostArr);
 
-							$return[] = array(
-							'tid'=>$t->tid, 
-							'pvm'=>$t->pvm, 
-							'ymd'=>date("Ymd",strtotime($t->pvm)),
-							'isSaved'=>true
-							);
+						$return[] = array(
+						'tid'=>$t->tid, 
+						'pvm'=>$t->pvm, 
+						'ymd'=>date("Ymd",strtotime($t->pvm)),
+						'isSaved'=>true
+						);
 
 
 				    	} elseif( $saankoSuoritta != 1 and isset($t->id) ) {
 						
-
-						if( $model->tid != $tv->tid )
-						{
-						$return[] = array(
-							'tid'=>$t->tid, 
-							'pvm'=>$t->pvm, 
-							'ymd'=>date("Ymd",strtotime($t->pvm)), 
-							'isSaved'=>false,
-							'poistaminen'=>true, 
-							'tekijan_nimi'=>$this->etuSukunimi($t->tid), 
-							'vkopvm' => $fi[date("N",strtotime($t->pvm))]
-						);
-						} else {
 						$return[] = array(
 							'tid'=>$t->tid, 
 							'pvm'=>$t->pvm, 
@@ -1676,7 +1692,7 @@ class TyovuorootController extends Controller
 							'tekijan_nimi'=>$this->etuSukunimi($t->tid), 
 							'vkopvm' => $fi[date("N",strtotime($t->pvm))]
 						);
-						}
+						
 				    	} 
 			   	}
 
