@@ -2200,6 +2200,65 @@ class TyovuorootController extends Controller
 
 
 
+			// <-- Jos on Alkaen on sama kun edellinen  mutta Loppuen on vähempi kun edellinen
+			if(
+				!empty($edellinenToistuva->tvuoro_ids) and is_array($edelliset_tvuoro_ids)
+				and $edellinenToistuva->viikko_paivat == json_encode($_POST['P'])
+				and $edellinenToistuva->viikkoja == $_POST['ToistuvatTyovuorot']['viikkoja']
+				and $edellinenToistuva->pfrom == $_POST['ToistuvatTyovuorot']['pfrom']
+				and strtotime($_POST['ToistuvatTyovuorot']['pto']) < strtotime($edellinenToistuva->pto)
+			)
+			{
+
+				$uusiPto = $_POST['ToistuvatTyovuorot']['pto'];
+				$criteria = new CDBcriteria;
+				$criteria->condition=" 
+					toistuva_id='".$edellinenToistuva->id."'
+					AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') > '".date("Y-m-d", strtotime($uusiPto))."'
+				";
+			  	$t = Tyovuoroot::model()->findAll($criteria);
+				$ketjustaPois = array();
+				foreach($t as $item)
+				{
+					$ketjustaPois[] = $item->id;
+					$edelliset_tvuoro_ids = array_values( array_diff($edelliset_tvuoro_ids, $ketjustaPois) );
+
+					if( $saankoSuoritta != 1 )
+					{
+				    	    	$return[] = array(
+						'tid'=>$item->tid, 
+						'pvm'=>$item->pvm, 
+						'ymd'=>date("Ymd",strtotime($item->pvm)), 
+						'isSaved'=>false,
+						'poistaminen'=>true, 
+						'tekijan_nimi'=>$this->etuSukunimi($item->tid), 
+						'vkopvm' => $fi[date("N",strtotime($item->pvm))]
+				    	    	);
+
+					} else {
+						Tyovuoroot::model()->deleteByPk($item->id);
+				    	    	$return[] = array(
+						'tid'=>$item->tid, 
+						'pvm'=>$item->pvm, 
+						'ymd'=>date("Ymd",strtotime($item->pvm)), 
+						'isSaved'=>true
+					    	);
+					}
+				}
+
+				//$return[] = array('ERROR'=>json_encode($edelliset_tvuoro_ids));
+
+				if( $saankoSuoritta == 1 )
+				{
+				    	ToistuvatTyovuorot::model()->updateByPk($edellinenToistuva->id, array(
+						'pto'=>$uusiPto
+				    	));
+				}
+
+			}
+			//     Jos on Alkaen on sama kun edellinen  mutta Loppuen on vähempi kun edellinen -->
+
+
 
 			// <-- Jos on Viikkon päivä on otettu pois
 			$edelliset_viikko_paivat = json_decode($edellinenToistuva->viikko_paivat, true);
