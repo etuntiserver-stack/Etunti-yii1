@@ -53,7 +53,7 @@ ini_set('display_errors', 1);
 
 
 
-require 'CheckoutFinland/Response.php';
+require 'lib/CheckoutFinland/Response.php';
 
 use CheckoutFinland\Response;
 
