@@ -28,9 +28,9 @@ function getUrlVars() {
  	   data: sendData,
            success: function(data){
 		var d = JSON.parse(data);
-		if(d)
+		if(d['lista'])
 		{
-			$('#resultLaatiko').html(d);
+			$('#resultLaatiko').html(d['lista']);
 			reloadSkin();
 			reloadDatepicker();
 		}
@@ -41,6 +41,36 @@ function getUrlVars() {
         });
 
 
+    $(document).delegate('.avaaPDF', 'click', function() {
+
+	var liite = $(this).attr('liite');
+	sendData['liite'] = liite;
+
+        $.ajax({
+           url: url+'/tarjoukset?domain='+domain,
+	   type:'POST',
+ 	   data: sendData,
+           success: function(data){
+		var d = JSON.parse(data);
+		if(d['lista'])
+		{
+			$('#resultLaatiko').html(d['lista']);
+			reloadSkin();
+			reloadDatepicker();
+		}
+
+		if(d['liite'] !== '')
+		{
+			window.open("data:application/pdf;base64," + escape(d['liite'])); 
+
+		}
+    	   },
+    		error:function (xhr, ajaxOptions, thrownError){
+        	console.log(xhr.responseText);
+    	   }
+        });
+
+    });
 
 
     function reloadSkin()
