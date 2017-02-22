@@ -62,7 +62,7 @@ function getUrlVars() {
 		if(d['liite'] !== '')
 		{
 
-			var myBase64 = escape(d['liite']);
+			var myBase64 = d['liite'];
 			var contentType = "application/pdf";
 			// if cordova.file is not available use instead :
 			// var folderpath = "file:///storage/emulated/0/";
@@ -150,10 +150,30 @@ function savebase64AsPDF(folderpath,filename,content,contentType){
 		            console.log('Error status: ' + e.status + ' - Error message: ' + e.message);
 		        },
 		        success : function () {
-		            console.log('file opened successfully');                
+		            console.log('file opened successfully');    
+            
+
+				// <-- remove 
+				window.resolveLocalFileSystemURL(folderpath, function(dir) {
+					dir.getFile(filename, {create:false}, function(fileEntry) {
+				              fileEntry.remove(function(){
+				                  // The file has been removed succesfully
+				              },function(error){
+			                  // Error deleting the file
+				              },function(){
+				                 // The file doesn't exist
+				              });
+					});
+				});
+				//     remove -->
+
 		        }
 		    }
 		);
+
+
+
+
 
 
 

@@ -251,6 +251,9 @@ public function actionLogin($domain)
 				asiakas_id='".$model->id."' 
 			";
 			$m2 = CrmTarjoukset::model()->findAll($criteria);
+
+			if(count($m2) > 0)
+			{
 			$lista = '<br><div class="lista">';
 			foreach($m2 as $item)
 			{
@@ -273,6 +276,7 @@ public function actionLogin($domain)
 				$return = array('lista'=>$lista, 'liite'=>$liite);
 				$this->_sendResponse(200, CJSON::encode($return));
 				exit;
+			}
 
 		   } // $model->id
 
@@ -312,6 +316,8 @@ public function actionLogin($domain)
 				asiakas_id='".$model->id."' 
 			";
 			$m2 = CrmSopimukset::model()->findAll($criteria);
+			if(count($m2) > 0)
+			{
 			$lista = '<br><div class="lista">';
 			foreach($m2 as $item)
 			{
@@ -334,6 +340,7 @@ public function actionLogin($domain)
 				$return = array('lista'=>$lista, 'liite'=>$liite);
 				$this->_sendResponse(200, CJSON::encode($return));
 				exit;
+			}
 
 		   } // $model->id
 
