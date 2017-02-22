@@ -241,7 +241,7 @@ public function actionLogin($domain)
 				$t = $_POST['liite'];
    				if(file_exists(Yii::app()->basePath."/../tiedostot/crm/tarjoukset/".$domain."/".$t.".pdf"))
    				{
-					$liite = file_get_contents(Yii::app()->basePath."/../tiedostot/crm/tarjoukset/".$domain."/".$t.".pdf");
+					$liite = base64_encode(file_get_contents(Yii::app()->basePath."/../tiedostot/crm/tarjoukset/".$domain."/".$t.".pdf"));
 				}
 			}
 
