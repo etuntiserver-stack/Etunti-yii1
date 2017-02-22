@@ -223,6 +223,31 @@ public function actionLogin($domain)
 
 
 
+	public function actionTarjoukset($domain)
+	{
+
+		$return = '';
+		if(isset($_POST['tunnus']) and $this->kirjautuminen($_POST['tunnus'], $_POST['salasana']) == true)
+		{
+
+		   $model=Asiakkaat::model()->findByPk($_POST['asiakasID']);
+		   if(isset($model->id))
+		   {
+
+
+
+		   } // $model->id
+
+		}
+
+				$this->_sendResponse(200, CJSON::encode('Ei tuloksia'));
+				exit;
+	}
+
+
+
+
+
 private function _sendResponse($status = 200, $body = '', $content_type = 'text/html')
 {
     // set the status

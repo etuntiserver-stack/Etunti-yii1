@@ -37,9 +37,9 @@ if(isset($_POST['poistaTemplate'])){
 	   $site = Yii::app()->createController('Site');
 	   $oikeusMallitiedoston = $site[0]->checkOikeusFields($checkOikeus);
 	?>
-	<?php if($oikeusMallitiedoston == 1) : ?>
+	<?php //if($oikeusMallitiedoston == 1) : ?>
 		<button class="btn btn-default" data-toggle="collapse" data-target="#admin-form"><?php echo Yii::t('main', 'Mallitiedosto'); ?></button>
-	<?php endif; ?>
+	<?php //endif; ?>
 	<!-- Mallitiedoston oikeus -->
 	</h2>
 
