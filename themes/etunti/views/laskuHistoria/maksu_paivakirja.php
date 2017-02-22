@@ -71,7 +71,7 @@ th{
                         <div class="section">
                           <label class="field prepend-icon">
 
-   			    <input type="text" name="from" class="gui-input datepicker" value="<?php echo $from; ?>">
+   			    <input type="text" name="from" class="gui-input datepickerFI" value="<?php echo $from; ?>">
                             <label for="firstname" class="field-icon">
                               <i class="fa fa-calendar"></i>
                             </label>
@@ -83,7 +83,7 @@ th{
                         <div class="section">
                           <label class="field prepend-icon">
 
-   			    <input type="text" name="to" class="gui-input datepicker" value="<?php echo $to; ?>">
+   			    <input type="text" name="to" class="gui-input datepickerFI" value="<?php echo $to; ?>">
                             <label for="firstname" class="field-icon">
                               <i class="fa fa-calendar"></i>
                             </label>

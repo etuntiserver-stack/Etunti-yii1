@@ -51,10 +51,11 @@ if(isset($l->id))
 		}
 
 		// Postita tai Local
-		if($asetukset->palvelu_tyyppi == 1 or $asetukset->palvelu_tyyppi == 3)
+		if($asetukset->palvelu_tyyppi == 1 or $asetukset->palvelu_tyyppi == 3 or $asetukset->palvelu_tyyppi == 4)
 		{
 		      	echo '<b>'.date("d.m.Y H:i",strtotime($data->time)).'</b>';
 		}
+
 
 	?>
 	</td>

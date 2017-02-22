@@ -542,15 +542,15 @@ class LaskuHistoriaController extends Controller
 		}
 
 
-		$from = date("Y-m-d", strtotime("first day of this month"));
-		$to = date("Y-m-d");
+		$from = date("d.m.Y", strtotime("first day of this month"));
+		$to = date("d.m.Y");
 
 		if(isset($_POST['from']) and isset($_POST['to'])){
-		$from 	= date("Y-m-d",strtotime($_POST['from']));
-		$to 	= date("Y-m-d",strtotime($_POST['to']));
+		$from 	= date("d.m.Y",strtotime($_POST['from']));
+		$to 	= date("d.m.Y",strtotime($_POST['to']));
 		}
 
-        	$criteria->addCondition ("DATE(time) BETWEEN '".$from."' AND '".$to."' ");
+        	$criteria->addCondition ("DATE(time) BETWEEN '".date("Y-m-d",strtotime($from))."' AND '".date("Y-m-d",strtotime($to))."' ");
 
 		$model = LaskuHistoria::model()->findAll($criteria);
 
