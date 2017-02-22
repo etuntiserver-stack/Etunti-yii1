@@ -78,6 +78,7 @@ public $adm_salasana_repeat;
 			'adm_email' => Yii::t('main', 'Sähköposti'),
 			'adm_nimi' => Yii::t('main', 'Nimi'),
 			'status' => Yii::t('main', 'Ryhmä'),
+			'adm_salasana_repeat' => Yii::t('main', 'Vahvista uusi salasana'),
 		);
 	}
 

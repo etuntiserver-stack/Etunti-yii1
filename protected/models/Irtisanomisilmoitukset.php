@@ -55,7 +55,7 @@ class Irtisanomisilmoitukset extends DB2ActiveRecord
 			array('postinumero, tekijan_pnumero', 'length', 'max'=>7),
 			array('postitoimipaikka, sahkoposti, tekijan_email, tekijan_katuosoite, Paikka, TyonantajanEdustaja, NimikeTehtava', 'length', 'max'=>100),
 			array('teksti', 'length', 'max'=>3000),
-			array('puhelin, y_tunnus, tekijan_ptoimipaikka, tekijan_puh, tekijan_henkilotunnus, Paivays', 'length', 'max'=>50),
+			array('puhelin, y_tunnus, tekijan_ptoimipaikka, tekijan_puh, tekijan_henkilotunnus, Paivays, alku_pvm, loppu_pvm', 'length', 'max'=>50),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('id, time, key, tyonantaja, osoite, postinumero, postitoimipaikka, puhelin, y_tunnus, sahkoposti, tekijan_email, tid, tekijan_nimi, tekijan_katuosoite, tekijan_pnumero, tekijan_ptoimipaikka, tekijan_puh, tekijan_henkilotunnus, teksti, Paivays, Paikka, TyonantajanEdustaja, NimikeTehtava, tiedosto', 'safe', 'on'=>'search'),
@@ -103,6 +103,8 @@ class Irtisanomisilmoitukset extends DB2ActiveRecord
 			'TyonantajanEdustaja' => 'Työnantajan edustaja',
 			'NimikeTehtava' => 'Nimike Tehtava',
 			'tiedosto' => 'Tiedosto',
+			'alku_pvm' => Yii::t('main', 'Alku pvm'),
+			'loppu_pvm' => Yii::t('main', 'Loppu pvm'),
 		);
 	}
 

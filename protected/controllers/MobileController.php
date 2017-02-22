@@ -252,14 +252,14 @@ function num($val){
 			{
 			        $html2pdf = Yii::app()->ePdf->HTML2PDF('L', 'A4', 'en', 'true', 'UTF-8', array(3,10,5,10));
 				$html2pdf->setDefaultFont('Arial');
-			        $html2pdf->WriteHTML($this->renderPartial('raportit_pdf_l', array('model' => $model, 'tyyppi' => 'Toteutuneet'),true));
+			        $html2pdf->WriteHTML($this->renderPartial('raportit_pdf_l', array('model' => $model, 'tyyppi' => 'Hyväksytyt'),true));
 			        $html2pdf->Output();
 			        exit;
 			}
 
 			if(isset($_POST['luoExcel']))
 			{
-			        $html = $this->renderPartial('raportit_pdf_l', array('model' => $model, 'tyyppi' => 'Toteutuneet'),true);
+			        $html = $this->renderPartial('raportit_pdf_l', array('model' => $model, 'tyyppi' => 'Hyväksytyt'),true);
 				preg_match_all('/<div class=\"tb\">(.*?)<\/div>/s',$html,$match);
 				$this->htmlToXls($match[0][0], 'toteutuneet');
 			        exit;
@@ -268,7 +268,7 @@ function num($val){
 			if(isset($_POST['luoPrintSivu']))
 			{
 				$html = '';
-			        $html .= $this->renderPartial('raportit_pdf_l', array('model' => $model, 'tyyppi' => 'Toteutuneet'),true);
+			        $html .= $this->renderPartial('raportit_pdf_l', array('model' => $model, 'tyyppi' => 'Hyväksytyt'),true);
 				echo $html;
 			        exit;
 			}
@@ -1982,6 +1982,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 
 		$from = date("Y-m-d", strtotime($from));
 		$to = date("Y-m-d", strtotime($to));
+
 
 		if($status != 2 and $status != 10)
 		$kid = " AND kohdenID !='' ";

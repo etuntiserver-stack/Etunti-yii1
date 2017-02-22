@@ -197,6 +197,9 @@ class IrtisanomisilmoituksetController extends Controller
 			$document->setValue('johtajan_nimi', iconv('UTF-8','ISO-8859-1', $model->TyonantajanEdustaja));
 			$document->setValue('teksti', iconv('UTF-8','ISO-8859-1', $model->teksti));
 
+			$document->setValue('alku_pvm', $model->alku_pvm);
+			$document->setValue('loppu_pvm', $model->loppu_pvm);
+
 			$file = $this->polkku().'/'.$tiedosto;
 		  	$document->save($file.'.docx');
 

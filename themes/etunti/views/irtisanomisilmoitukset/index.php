@@ -116,7 +116,9 @@ ${tyontekija_sahkoposti}
 ${aika}
 ${paikka}
 ${johtajan_nimi}
-${teksti}</textarea>
+${teksti}
+${alku_pvm}
+${loppu_pvm}</textarea>
 
                         </div>
                       </div>

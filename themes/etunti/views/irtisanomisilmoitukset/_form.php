@@ -138,6 +138,17 @@
 		<?php echo $form->error($model,'Paikka'); ?>
 	</div>
 
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'alku_pvm'); ?>
+		<?php echo $form->textField($model,'alku_pvm',array('size'=>60,'maxlength'=>50, 'class'=>'form-control datepickerFI')); ?>
+		<?php echo $form->error($model,'alku_pvm'); ?>
+	</div>
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'loppu_pvm'); ?>
+		<?php echo $form->textField($model,'loppu_pvm',array('size'=>60,'maxlength'=>50, 'class'=>'form-control datepickerFI')); ?>
+		<?php echo $form->error($model,'loppu_pvm'); ?>
+	</div>
 
   </div>
 </div><!-- form -->

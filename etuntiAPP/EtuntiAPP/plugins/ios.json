@@ -118,9 +118,6 @@
         }
     },
     "installed_plugins": {
-        "com.chariotsolutions.nfc.plugin": {
-            "PACKAGE_NAME": "fi.etunti.local"
-        },
         "cordova-plugin-camera": {
             "PACKAGE_NAME": "fi.etunti.local"
         },
@@ -140,12 +137,6 @@
             "PACKAGE_NAME": "fi.etunti.local"
         },
         "cordova-plugin-whitelist": {
-            "PACKAGE_NAME": "fi.etunti.local"
-        },
-        "de.appplant.cordova.plugin.local-notification": {
-            "PACKAGE_NAME": "fi.etunti.local"
-        },
-        "phonegap-plugin-push": {
             "PACKAGE_NAME": "fi.etunti.local"
         }
     },
