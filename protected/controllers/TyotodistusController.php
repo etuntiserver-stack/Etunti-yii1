@@ -178,6 +178,7 @@ class TyotodistusController extends Controller
 			$document->setValue('Kaytos', iconv('UTF-8','ISO-8859-1', $model->Kaytos));
 			$document->setValue('Arvio', iconv('UTF-8','ISO-8859-1', $model->Arvio));
 			$document->setValue('NimikeTehtava', iconv('UTF-8','ISO-8859-1', $model->NimikeTehtava));
+			$document->setValue('Tyotehtavat', iconv('UTF-8','ISO-8859-1', $model->Tyotehtavat));
 
 			$file = 'tiedostot/tyotodistukset/'.Yii::app()->user->domain.'/'.$tiedosto;
 		  	$document->save($file.'.docx');
