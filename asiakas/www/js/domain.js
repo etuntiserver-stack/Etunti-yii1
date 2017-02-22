@@ -33,8 +33,8 @@ $(document).ready(function(){
     }
 
     // <-- Palvelin
-    var server = 'https://staging.etunti.fi/';
-    //var server = '../../';
+    //var server = 'https://staging.etunti.fi/';
+    var server = '../../';
     var url = server+"index.php/dico/asiakkaat";
     var versio = "";
     // Palvelin -->

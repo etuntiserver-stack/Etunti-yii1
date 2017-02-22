@@ -35,7 +35,7 @@
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'alv'); ?>
 		<?php 
-        	$l = array(0,10,14,24);
+        	$l = array(0=>0,10=>10,14=>14,24=>24);
 		/*
 		for ($i = 0; $i <= 50; $i++) {
 		    $l[$i] = $i;
@@ -173,7 +173,7 @@ $(".muokaValiko").click(function() {
 
  function lasketa(){
 	var hinta_alv_0 = parseFloat($('#LaskutusTuotteet_hinta_alv_0').val());
-	var alv = parseFloat($('#LaskutusTuotteet_alv').val());
+	var alv = parseFloat($('#LaskutusTuotteet_alv option:selected').val());
 
 	var result = ((hinta_alv_0*alv)/100)+hinta_alv_0;
 	var result = Math.round(result * 100) / 100;

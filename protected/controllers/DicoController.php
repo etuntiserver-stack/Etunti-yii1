@@ -234,7 +234,23 @@ public function actionLogin($domain)
 		   if(isset($model->id))
 		   {
 
+			$criteria=new CDbCriteria;
+			$criteria->condition = " 
+				asiakas_id='".$model->id."' 
+			";
+			$m2 = CrmTarjoukset::model()->findAll($criteria);
+			$lista = '';
+			foreach($m2 as $item)
+			{
+   				if(file_exists("tiedostot/crm/tarjoukset/".Yii::app()->user->domain."/".$item->liite.".pdf"))
+   				{
+					$lista .= $item->liite;
+				}
+					$lista .= "tiedostot/crm/tarjoukset/".Yii::app()->user->domain."/".$item->liite.".pdf";
+			}
 
+				$this->_sendResponse(200, CJSON::encode($lista));
+				exit;
 
 		   } // $model->id
 
