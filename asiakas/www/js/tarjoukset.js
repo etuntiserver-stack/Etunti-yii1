@@ -59,7 +59,7 @@ function getUrlVars() {
 			reloadDatepicker();
 		}
 
-		if(d['liite'] !== '')
+		if((d['liite'] !== '') && (d['nimike'] !== ''))
 		{
 
 			var myBase64 = d['liite'];
@@ -67,7 +67,7 @@ function getUrlVars() {
 			// if cordova.file is not available use instead :
 			// var folderpath = "file:///storage/emulated/0/";
 			var folderpath = cordova.file.externalRootDirectory;
-			var filename = "temp_etunti.pdf";
+			var filename = "etunti_" + d['nimike'] + ".pdf";
 			savebase64AsPDF(folderpath,filename,myBase64,contentType);
 
 		}
@@ -143,7 +143,7 @@ function savebase64AsPDF(folderpath,filename,content,contentType){
 
 
 		cordova.plugins.fileOpener2.open(
-		    '/sdcard/temp_etunti.pdf',
+		    '/sdcard/'+ filename,
 		    'application/pdf', 
 		    { 
 		        error : function(e) { 
@@ -153,7 +153,7 @@ function savebase64AsPDF(folderpath,filename,content,contentType){
 		            console.log('file opened successfully');    
             
 
-				// <-- remove 
+				/*// <-- remove 
 				window.resolveLocalFileSystemURL(folderpath, function(dir) {
 					dir.getFile(filename, {create:false}, function(fileEntry) {
 				              fileEntry.remove(function(){
@@ -165,7 +165,7 @@ function savebase64AsPDF(folderpath,filename,content,contentType){
 				              });
 					});
 				});
-				//     remove -->
+				//     remove -->*/
 
 		        }
 		    }
