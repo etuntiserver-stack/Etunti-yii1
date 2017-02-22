@@ -284,6 +284,65 @@ public function actionLogin($domain)
 
 
 
+	public function actionSopimukset($domain)
+	{
+
+		$return = '';
+		if(isset($_POST['tunnus']) and $this->kirjautuminen($_POST['tunnus'], $_POST['salasana']) == true)
+		{
+
+		   $model=Asiakkaat::model()->findByPk($_POST['asiakasID']);
+		   if(isset($model->id))
+		   {
+
+			$liite = '';
+			if(isset($_POST['liite']))
+			{
+
+				$t = $_POST['liite'];
+   				if(file_exists(Yii::app()->basePath."/../tiedostot/crm/sopimukset/".Yii::app()->user->domain."/".$t.".pdf"))
+   				{
+					$liite = base64_encode(file_get_contents(Yii::app()->basePath."/../tiedostot/crm/sopimukset/".Yii::app()->user->domain."/".$t.".pdf"));
+				}
+			}
+
+
+			$criteria=new CDbCriteria;
+			$criteria->condition = " 
+				asiakas_id='".$model->id."' 
+			";
+			$m2 = CrmSopimukset::model()->findAll($criteria);
+			$lista = '<br><div class="lista">';
+			foreach($m2 as $item)
+			{
+   				if(file_exists(Yii::app()->basePath."/../tiedostot/crm/sopimukset/".Yii::app()->user->domain."/".$item->liite.".pdf"))
+   				{
+					$lista .= '
+					<div class="row link avaaPDF" liite="'.$item->liite.'">
+					 <div class="col-sm-12">
+					';
+						$lista .= '<div class="alert bg-warning text-center"><h2>'.Yii::t('main', 'Tarjous').'</h2> '.date("d.m.Y H:i", strtotime($item->time)).'</div>';
+					$lista .= '
+					 </div>
+					</div>
+					';
+				}
+
+			}
+			$lista .= '</div>';
+
+				$return = array('lista'=>$lista, 'liite'=>$liite);
+				$this->_sendResponse(200, CJSON::encode($return));
+				exit;
+
+		   } // $model->id
+
+		}
+
+				$this->_sendResponse(200, CJSON::encode('Ei tuloksia'));
+				exit;
+	}
+
 
 
 private function _sendResponse($status = 200, $body = '', $content_type = 'text/html')
