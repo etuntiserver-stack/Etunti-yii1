@@ -321,7 +321,7 @@ public function actionLogin($domain)
 					<div class="row link avaaPDF" liite="'.$item->liite.'">
 					 <div class="col-sm-12">
 					';
-						$lista .= '<div class="alert bg-warning text-center"><h2>'.Yii::t('main', 'Sopimus').'</h2> '.date("d.m.Y H:i", strtotime($item->time)).'</div>';
+						$lista .= '<div class="alert bg-warning text-center"><h2>'.Yii::t('main', 'Sopimus').'</h2> '.date("d.m.Y H:i", strtotime($item->time)).' '.$item->template.'</div>';
 					$lista .= '
 					 </div>
 					</div>
