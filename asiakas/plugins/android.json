@@ -9,7 +9,17 @@
     "installed_plugins": {
         "cordova-plugin-whitelist": {
             "PACKAGE_NAME": "fi.etunti.dico"
+        },
+        "cordova-plugin-file": {
+            "PACKAGE_NAME": "fi.etunti.dico"
+        },
+        "cordova-plugin-file-opener2": {
+            "PACKAGE_NAME": "fi.etunti.dico"
         }
     },
-    "dependent_plugins": {}
+    "dependent_plugins": {
+        "cordova-plugin-compat": {
+            "PACKAGE_NAME": "fi.etunti.dico"
+        }
+    }
 }

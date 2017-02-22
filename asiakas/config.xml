@@ -17,6 +17,7 @@
     <allow-intent href="mailto:*" />
     <allow-intent href="geo:*" />
     <platform name="android">
+	<preference name="AndroidPersistentFileLocation" value="Compatibility" />
         <allow-intent href="market:*" />
 	<icon src="icon.png" />
     	<icon src="res/android/icones/ldpi.png" density="ldpi" />
