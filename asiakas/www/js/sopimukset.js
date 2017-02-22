@@ -154,7 +154,7 @@ function savebase64AsPDF(folderpath,filename,content,contentType){
 		        success : function () {
 		            console.log('file opened successfully');     
 
-				// <-- remove
+				/* // <-- remove
 				window.resolveLocalFileSystemURL(folderpath, function(dir) {
 					dir.getFile(filename, {create:false}, function(fileEntry) {
 				              fileEntry.remove(function(){
@@ -166,7 +166,7 @@ function savebase64AsPDF(folderpath,filename,content,contentType){
 				              });
 					});
 				});
-				//     remove -->  
+				//     remove -->  */
        
 		        }
 		    }

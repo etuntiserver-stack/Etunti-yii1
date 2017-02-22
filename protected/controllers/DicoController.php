@@ -235,9 +235,10 @@ public function actionLogin($domain)
 		   {
 
 			$liite = '';
+			$nimike = '';
 			if(isset($_POST['liite']))
 			{
-
+				$nimike = $_POST['liite'];
 				$t = $_POST['liite'];
    				if(file_exists(Yii::app()->basePath."/../tiedostot/crm/tarjoukset/".$domain."/".$t.".pdf"))
    				{
@@ -273,7 +274,7 @@ public function actionLogin($domain)
 			}
 			$lista .= '</div>';
 
-				$return = array('lista'=>$lista, 'liite'=>$liite);
+				$return = array('lista'=>$lista, 'liite'=>$liite, 'nimike'=>$nimike);
 				$this->_sendResponse(200, CJSON::encode($return));
 				exit;
 			}
@@ -300,9 +301,10 @@ public function actionLogin($domain)
 		   {
 
 			$liite = '';
+			$nimike = '';
 			if(isset($_POST['liite']))
 			{
-
+				$nimike = $_POST['liite'];
 				$t = $_POST['liite'];
    				if(file_exists(Yii::app()->basePath."/../tiedostot/crm/sopimukset/".$domain."/".$t.".pdf"))
    				{
@@ -337,7 +339,7 @@ public function actionLogin($domain)
 			}
 			$lista .= '</div>';
 
-				$return = array('lista'=>$lista, 'liite'=>$liite);
+				$return = array('lista'=>$lista, 'liite'=>$liite, 'nimike'=>$nimike);
 				$this->_sendResponse(200, CJSON::encode($return));
 				exit;
 			}
