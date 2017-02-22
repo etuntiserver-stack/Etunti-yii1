@@ -20,9 +20,6 @@
 		?>
 	</td>
 	<td>
-		<?php echo $data->id; ?>
-	</td>
-	<td>
 		<?php echo $data->adm_login; ?>
 	</td>
 	<td>
@@ -30,9 +27,6 @@
 	</td>
 	<td>
 		<?php echo $data->adm_nimi; ?>
-	</td>
-	<td>
-		<?php echo $data->status; ?>
 	</td>
 </tr>
 

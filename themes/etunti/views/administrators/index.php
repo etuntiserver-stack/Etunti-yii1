@@ -88,11 +88,9 @@
   <thead class="myBgColors">
   <tr>
   <th></th>
-  <th><?php echo Yii::t('main', 'ID'); ?></th>
   <th><?php echo Yii::t('main', 'Käyttäjätunnus'); ?></th>
   <th><?php echo Yii::t('main', 'Sähköposti'); ?></th>
   <th><?php echo Yii::t('main', 'Nimi'); ?></th>
-  <th><?php echo Yii::t('main', 'Status'); ?></th>
   </tr>
   </thead>
   <?php $this->widget('zii.widgets.CListView', array(
