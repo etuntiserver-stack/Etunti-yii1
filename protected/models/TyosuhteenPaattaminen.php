@@ -1,12 +1,15 @@
 <?php
 
 /**
- * This is the model class for table "irtisanomisilmoitus".
+ * This is the model class for table "tyosuhteen_paattaminen".
  *
- * The followings are the available columns in table 'irtisanomisilmoitus':
+ * The followings are the available columns in table 'tyosuhteen_paattaminen':
  * @property integer $id
  * @property string $time
  * @property integer $key
+ * @property string $titteli
+ * @property string $kuuleminen
+ * @property string $tyosuhteen_paattaminen
  * @property string $tyonantaja
  * @property string $osoite
  * @property string $postinumero
@@ -28,16 +31,17 @@
  * @property string $TyonantajanEdustaja
  * @property string $NimikeTehtava
  * @property string $tiedosto
+ * @property string $alku_pvm
+ * @property string $loppu_pvm
  */
-class Irtisanomisilmoitukset extends DB2ActiveRecord
+class TyosuhteenPaattaminen extends DB2ActiveRecord
 {
-
 	/**
 	 * @return string the associated database table name
 	 */
 	public function tableName()
 	{
-		return 'irtisanomisilmoitus';
+		return 'tyosuhteen_paattaminen';
 	}
 
 	/**
@@ -48,17 +52,18 @@ class Irtisanomisilmoitukset extends DB2ActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			//array('time, tyonantaja, osoite, postinumero, postitoimipaikka, puhelin, y_tunnus, sahkoposti, tekijan_email, tid, tekijan_nimi, tekijan_katuosoite, tekijan_pnumero, tekijan_ptoimipaikka, tekijan_puh, tekijan_henkilotunnus, teksti, Paivays, Paikka, TyonantajanEdustaja, NimikeTehtava, tiedosto', 'required'),
+			array('titteli, kuuleminen, tyosuhteen_paattaminen, tyonantaja, osoite, postinumero, postitoimipaikka, tekijan_email, tid, tekijan_nimi, tekijan_katuosoite, tekijan_henkilotunnus, Paivays, Paikka, TyonantajanEdustaja, alku_pvm, loppu_pvm', 'required'),
+			//array('time, titteli, kuuleminen, tyosuhteen_paattaminen, tyonantaja, osoite, postinumero, postitoimipaikka, puhelin, y_tunnus, sahkoposti, tekijan_email, tid, tekijan_nimi, tekijan_katuosoite, tekijan_pnumero, tekijan_ptoimipaikka, tekijan_puh, tekijan_henkilotunnus, teksti, Paivays, Paikka, TyonantajanEdustaja, NimikeTehtava, tiedosto, alku_pvm, loppu_pvm', 'required'),
 			array('key, tid', 'numerical', 'integerOnly'=>true),
+			array('titteli, osoite, tiedosto', 'length', 'max'=>255),
 			array('tyonantaja, tekijan_nimi', 'length', 'max'=>70),
-			array('osoite, tiedosto', 'length', 'max'=>255),
 			array('postinumero, tekijan_pnumero', 'length', 'max'=>7),
 			array('postitoimipaikka, sahkoposti, tekijan_email, tekijan_katuosoite, Paikka, TyonantajanEdustaja, NimikeTehtava', 'length', 'max'=>100),
-			array('teksti', 'safe'),
 			array('puhelin, y_tunnus, tekijan_ptoimipaikka, tekijan_puh, tekijan_henkilotunnus, Paivays, alku_pvm, loppu_pvm', 'length', 'max'=>50),
+			array('teksti, kuuleminen, tyosuhteen_paattaminen', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, time, key, tyonantaja, osoite, postinumero, postitoimipaikka, puhelin, y_tunnus, sahkoposti, tekijan_email, tid, tekijan_nimi, tekijan_katuosoite, tekijan_pnumero, tekijan_ptoimipaikka, tekijan_puh, tekijan_henkilotunnus, teksti, Paivays, Paikka, TyonantajanEdustaja, NimikeTehtava, tiedosto', 'safe', 'on'=>'search'),
+			array('id, time, key, titteli, kuuleminen, tyosuhteen_paattaminen, tyonantaja, osoite, postinumero, postitoimipaikka, puhelin, y_tunnus, sahkoposti, tekijan_email, tid, tekijan_nimi, tekijan_katuosoite, tekijan_pnumero, tekijan_ptoimipaikka, tekijan_puh, tekijan_henkilotunnus, teksti, Paivays, Paikka, TyonantajanEdustaja, NimikeTehtava, tiedosto, alku_pvm, loppu_pvm', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -82,6 +87,9 @@ class Irtisanomisilmoitukset extends DB2ActiveRecord
 			'id' => 'ID',
 			'time' => 'Time',
 			'key' => 'Key',
+			'titteli' => 'Titteli',
+			'kuuleminen' => 'Kuuleminen',
+			'tyosuhteen_paattaminen' => Yii::t('main', 'Työsuhteen päättäminen'),
 			'tyonantaja' => 'Työnantaja',
 			'osoite' => 'Työnantaja osoite',
 			'postinumero' => 'Työnantaja postinumero',
@@ -103,8 +111,8 @@ class Irtisanomisilmoitukset extends DB2ActiveRecord
 			'TyonantajanEdustaja' => 'Työnantajan edustaja',
 			'NimikeTehtava' => 'Nimike Tehtava',
 			'tiedosto' => 'Tiedosto',
-			'alku_pvm' => Yii::t('main', 'Alku pvm'),
-			'loppu_pvm' => Yii::t('main', 'Loppu pvm'),
+			'alku_pvm' => Yii::t('main', 'Työsuhteen alkamispäivä'),
+			'loppu_pvm' => Yii::t('main', 'Työsuhteen päättymispäivä'),
 		);
 	}
 
@@ -125,11 +133,13 @@ class Irtisanomisilmoitukset extends DB2ActiveRecord
 		// @todo Please modify the following code to remove attributes that should not be searched.
 
 		$criteria=new CDbCriteria;
-		$criteria->order = " id DESC ";
 
 		$criteria->compare('id',$this->id);
 		$criteria->compare('time',$this->time,true);
 		$criteria->compare('key',$this->key);
+		$criteria->compare('titteli',$this->titteli,true);
+		$criteria->compare('kuuleminen',$this->kuuleminen,true);
+		$criteria->compare('tyosuhteen_paattaminen',$this->tyosuhteen_paattaminen,true);
 		$criteria->compare('tyonantaja',$this->tyonantaja,true);
 		$criteria->compare('osoite',$this->osoite,true);
 		$criteria->compare('postinumero',$this->postinumero,true);
@@ -151,6 +161,8 @@ class Irtisanomisilmoitukset extends DB2ActiveRecord
 		$criteria->compare('TyonantajanEdustaja',$this->TyonantajanEdustaja,true);
 		$criteria->compare('NimikeTehtava',$this->NimikeTehtava,true);
 		$criteria->compare('tiedosto',$this->tiedosto,true);
+		$criteria->compare('alku_pvm',$this->alku_pvm,true);
+		$criteria->compare('loppu_pvm',$this->loppu_pvm,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -161,7 +173,7 @@ class Irtisanomisilmoitukset extends DB2ActiveRecord
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return KirjallinenVaroitus the static model class
+	 * @return TyosuhteenPaattaminen the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{

@@ -34,8 +34,8 @@
         <div class="tray-center">
 
 
-	<h2 class="myBgColors p10"> <?php echo Yii::t('main', 'Irtisanomisilmoitukset'); ?> 
-		<?php echo CHtml::link('',Yii::app()->request->baseUrl.'/index.php/irtisanomisilmoitukset/create',array('class'=>'btn btn-default fa fa-plus')); ?>
+	<h2 class="myBgColors p10"> <?php echo Yii::t('main', 'Työsuhteen päättäminen'); ?> 
+		<?php echo CHtml::link('',Yii::app()->request->baseUrl.'/index.php/tyosuhteenPaattaminen/create',array('class'=>'btn btn-default fa fa-plus')); ?>
 
 	<!-- Mallitiedoston oikeus -->
 	<?php
@@ -101,6 +101,8 @@
 			<h3><?php echo Yii::t('main', 'Template variables'); ?></h3>
 
 <textarea class="form-control" rows="17" cols="60">
+${titteli}
+
 ${tyonantaja}
 ${tyonantaja_osoite}
 ${tyonantaja_y_tunnus}
@@ -115,10 +117,14 @@ ${tyontekija_sahkoposti}
 
 ${aika}
 ${paikka}
-${johtajan_nimi}
+${tyonantajan_edustaja}
 ${teksti}
 ${alku_pvm}
-${loppu_pvm}</textarea>
+${loppu_pvm}
+
+${kuuleminen}
+${tyosuhteen_paattaminen}
+</textarea>
 
                         </div>
                       </div>

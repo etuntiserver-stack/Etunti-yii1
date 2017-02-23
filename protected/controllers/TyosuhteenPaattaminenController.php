@@ -1,6 +1,6 @@
 <?php
 
-class IrtisanomisilmoituksetController extends Controller
+class TyosuhteenPaattaminenController extends Controller
 {
 	/**
 	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
@@ -22,13 +22,14 @@ class IrtisanomisilmoituksetController extends Controller
 
 	public function polkku()
 	{
-		return 'tiedostot/irtisanomisilmoitukset/'.Yii::app()->user->domain;
+		return 'tiedostot/tyosuhteen_paattaminen/'.Yii::app()->user->domain;
 	}
 
 	public function tiedostonNimike()
 	{
-		return 'irtisanomisilmoitus';
+		return 'tyosuhteen_paattaminen';
 	}
+
 
 	/**
 	 * Specifies the access control rules.
@@ -38,16 +39,8 @@ class IrtisanomisilmoituksetController extends Controller
 	public function accessRules()
 	{
 		return array(
-			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view','tekijan_tiedot'),
-                		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
-			),
-			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update'),
-                		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
-			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete'),
+				'actions'=>array('admin','delete','create','update','index','view','tekijan_tiedot'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -77,18 +70,26 @@ class IrtisanomisilmoituksetController extends Controller
                         Yii::app()->theme = 'etunti';
                 } elseif (Yii::app()->controller->isEtuntiAdmin() and isset(Yii::app()->user->user_theme)) {
                         Yii::app()->theme = Yii::app()->user->user_theme;
+                } elseif (isset(Yii::app()->user->asiakas)) {
+                        Yii::app()->theme = 'customer';
                 } else {
                         Yii::app()->theme = 'classic';
                 }
                 parent::init();
         }
 
+
+	/**
+	 * Displays a particular model.
+	 * @param integer $id the ID of the model to be displayed
+	 */
 	public function actionView($id)
 	{
 		$this->render('view',array(
 			'model'=>$this->loadModel($id),
 		));
 	}
+
 
 	public function actionTekijan_tiedot()
 	{
@@ -105,26 +106,27 @@ class IrtisanomisilmoituksetController extends Controller
 		echo json_encode($tiedot);
 	}
 
-
+	/**
+	 * Creates a new model.
+	 * If creation is successful, the browser will be redirected to the 'view' page.
+	 */
 	public function actionCreate()
 	{
-		$model=new Irtisanomisilmoitukset;
+		$model=new TyosuhteenPaattaminen;
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['Irtisanomisilmoitukset']))
+		if(isset($_POST['TyosuhteenPaattaminen']))
 		{
-
-			$tiedosto = date('Y-m-d').'_'.$_POST['Irtisanomisilmoitukset']['tid'];
-			$model->attributes=$_POST['Irtisanomisilmoitukset'];
+			$tiedosto = date('Y-m-d').'_'.$_POST['TyosuhteenPaattaminen']['tid'];
+			$model->attributes=$_POST['TyosuhteenPaattaminen'];
 			$model->tiedosto=$tiedosto;
 			if($model->save())
 			{
 				$this->docxsave($model, $tiedosto);
 				//$this->redirect(array('view','id'=>$model->id));
 			}
-
 		}
 
 		$this->render('create',array(
@@ -132,6 +134,11 @@ class IrtisanomisilmoituksetController extends Controller
 		));
 	}
 
+	/**
+	 * Updates a particular model.
+	 * If update is successful, the browser will be redirected to the 'view' page.
+	 * @param integer $id the ID of the model to be updated
+	 */
 	public function actionUpdate($id)
 	{
 		$model=$this->loadModel($id);
@@ -139,10 +146,9 @@ class IrtisanomisilmoituksetController extends Controller
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['Irtisanomisilmoitukset']))
+		if(isset($_POST['TyosuhteenPaattaminen']))
 		{
-
-			$model->attributes=$_POST['Irtisanomisilmoitukset'];
+			$model->attributes=$_POST['TyosuhteenPaattaminen'];
 			if($model->save())
 			{
 				$tiedosto = $model->tiedosto;
@@ -155,7 +161,6 @@ class IrtisanomisilmoituksetController extends Controller
 			'model'=>$model,
 		));
 	}
-
 
 
 	protected function docxsave($model, $tiedosto)
@@ -189,8 +194,11 @@ class IrtisanomisilmoituksetController extends Controller
 
 			$document->setValue('aika', $model->Paivays);
 			$document->setValue('paikka', iconv('UTF-8','ISO-8859-1', $model->Paikka));
-			$document->setValue('johtajan_nimi', iconv('UTF-8','ISO-8859-1', $model->TyonantajanEdustaja));
+			$document->setValue('tyonantajan_edustaja', iconv('UTF-8','ISO-8859-1', $model->TyonantajanEdustaja));
 			$document->setValue('teksti', iconv('UTF-8','ISO-8859-1', $model->teksti));
+
+			$document->setValue('kuuleminen', iconv('UTF-8','ISO-8859-1', $model->kuuleminen));
+			$document->setValue('tyosuhteen_paattaminen', iconv('UTF-8','ISO-8859-1', $model->tyosuhteen_paattaminen));
 
 			$document->setValue('alku_pvm', $model->alku_pvm);
 			$document->setValue('loppu_pvm', $model->loppu_pvm);
@@ -204,6 +212,12 @@ class IrtisanomisilmoituksetController extends Controller
 
 	}
 
+
+	/**
+	 * Deletes a particular model.
+	 * If deletion is successful, the browser will be redirected to the 'admin' page.
+	 * @param integer $id the ID of the model to be deleted
+	 */
 	public function actionDelete($id)
 	{
 		$model=$this->loadModel($id);
@@ -227,14 +241,13 @@ class IrtisanomisilmoituksetController extends Controller
        		$criteria = new CDbCriteria();
 		$criteria->order = " id DESC ";
 
-		$dataProvider=new CActiveDataProvider('Irtisanomisilmoitukset', array(
+		$dataProvider=new CActiveDataProvider('TyosuhteenPaattaminen', array(
 			'criteria'=>$criteria,
 			//'pagination'=>false
 		));
 
 		$dataProvider->pagination->pageSize = 50;
 		$this->render('index', array('dataProvider' => $dataProvider));
-
 	}
 
 	/**
@@ -242,10 +255,10 @@ class IrtisanomisilmoituksetController extends Controller
 	 */
 	public function actionAdmin()
 	{
-		$model=new Irtisanomisilmoitukset('search');
+		$model=new TyosuhteenPaattaminen('search');
 		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['Irtisanomisilmoitukset']))
-			$model->attributes=$_GET['Irtisanomisilmoitukset'];
+		if(isset($_GET['TyosuhteenPaattaminen']))
+			$model->attributes=$_GET['TyosuhteenPaattaminen'];
 
 		$this->render('admin',array(
 			'model'=>$model,
@@ -256,12 +269,12 @@ class IrtisanomisilmoituksetController extends Controller
 	 * Returns the data model based on the primary key given in the GET variable.
 	 * If the data model is not found, an HTTP exception will be raised.
 	 * @param integer $id the ID of the model to be loaded
-	 * @return Irtisanomisilmoitukset the loaded model
+	 * @return TyosuhteenPaattaminen the loaded model
 	 * @throws CHttpException
 	 */
 	public function loadModel($id)
 	{
-		$model=Irtisanomisilmoitukset::model()->findByPk($id);
+		$model=TyosuhteenPaattaminen::model()->findByPk($id);
 		if($model===null)
 			throw new CHttpException(404,'The requested page does not exist.');
 		return $model;
@@ -269,11 +282,11 @@ class IrtisanomisilmoituksetController extends Controller
 
 	/**
 	 * Performs the AJAX validation.
-	 * @param Irtisanomisilmoitukset $model the model to be validated
+	 * @param TyosuhteenPaattaminen $model the model to be validated
 	 */
 	protected function performAjaxValidation($model)
 	{
-		if(isset($_POST['ajax']) && $_POST['ajax']==='irtisanomisilmoitukset-form')
+		if(isset($_POST['ajax']) && $_POST['ajax']==='tyosuhteen-paattaminen-form')
 		{
 			echo CActiveForm::validate($model);
 			Yii::app()->end();
@@ -285,5 +298,4 @@ class IrtisanomisilmoituksetController extends Controller
 	   $site = Yii::app()->createController('Site');
 	   return $site[0]->etuSukunimi($tid);
 	}
-
 }
