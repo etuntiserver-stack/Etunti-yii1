@@ -3488,13 +3488,19 @@ class TyovuorootController extends Controller
 
 
 
-
+		$asetukset = Asetukset::model()->findByPk(1);
        		$criteria = new CDbCriteria();
 
 		// <-- Oletus arvot
 		if(!isset(Yii::app()->session['tyontekijat']))
 		{
-        		$criteria->order = "id DESC LIMIT 5";
+
+			if($asetukset->tyontekijan_etunimi_sukunimi_jarjestys == 0)
+				$criteria->order = " tekijan_nimi,id DESC LIMIT 5 ";
+			else
+				$criteria->order = " sukunimi,id DESC LIMIT 5 ";
+
+
 	        	$criteria->select = "id,tekijan_nimi";
 	        	$criteria->condition = " aktiivinen = '1' ";
 			$tt = Tyontekijat::model()->findAll($criteria);
@@ -3509,7 +3515,13 @@ class TyovuorootController extends Controller
 
 		if(Yii::app()->session['tyontekijat'])
 		{
-        		$criteria->order = "tekijan_nimi";
+
+			if($asetukset->tyontekijan_etunimi_sukunimi_jarjestys == 0)
+				$criteria->order = " tekijan_nimi ";
+			else
+				$criteria->order = " sukunimi ";
+
+
         		$criteria->select = "id,tekijan_nimi";
         		$criteria->condition = " aktiivinen = '1' ";
 
