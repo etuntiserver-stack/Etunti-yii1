@@ -336,12 +336,20 @@ function dateDiff($start, $end) {
 			)).'
 */
 
+    $vlChecker = '';
+    if($this->vuosilomaChecker($tid, $date))
+    {
+	$returnChecker = $this->vuosilomaChecker($tid, $date);
+	if(is_array($returnChecker) and isset($returnChecker[1]) and isset($returnChecker[2]))
+    	$vlChecker = '  <span style="color:'.$returnChecker[1].'"> ( '.$returnChecker[2].' )</span>';
+    }
+
     echo '
 	<tr><td colspan="4">
 		<table class="" cellspacing="0" cellpadding="0">
 		  <tr>
 
-		   <td><h3>'.$arrDate[$explColDate[0]].' '.date("d.m",strtotime($date)).'</h3></td>
+		   <td><h3>'.$arrDate[$explColDate[0]].' '.date("d.m",strtotime($date)).$vlChecker.'</h3></td>
 		  </tr>
 		  <tr>	
 		   <td>

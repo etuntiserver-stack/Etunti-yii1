@@ -1450,4 +1450,24 @@ $xml = '
 	
 		return $bod;
 	}
+
+	protected function vuosilomaChecker($tid, $pvm)
+	{
+
+	       	$criteria = new CDbCriteria();
+		$criteria->condition = " 
+			tid = '".$tid."' 
+			AND DATE(pvm) = '".date("Y-m-d",strtotime($pvm))."'
+		";
+		$vuosilomat = Vuosilomat::model()->find($criteria);
+		if(isset($vuosilomat->status))
+		{
+			$vl = array();
+			$vl = explode("//", $vuosilomat->status);
+			return $vl;
+		}
+
+		return null;
+
+	}
 }
