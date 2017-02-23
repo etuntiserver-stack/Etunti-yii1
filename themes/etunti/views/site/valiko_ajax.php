@@ -186,7 +186,7 @@
 		$mod .= '
 			<span class="form-group">
 			   <input type="button" class="btn btn-warning muokkaSelectValikoja" for="m_'.$u->id.'" id="'.$u->id.'" value="Tallenna"></button>
-			   <input type="button" class="btn btn-danger deleteFromSelect" id="poista_'.$u->id.'" select_type="'.$u->select_type.'" value="X"></button>
+			   <input type="button" class="btn btn-danger deleteFromSelect" id="poista_'.$u->id.'" select_type="'.$u->select_type.'" value="X" variable="'.$u->value.'"></button>
 			</span>
 
 		   </div>
@@ -317,9 +317,16 @@ $(document).ready(function(){
 
 	var thisID = $(this).attr("id").split("poista_");
 	var select_type = $(this).attr("select_type");
+	var variable = $(this).attr("variable");
+
+	if( ( select_type == 'tyoajanmerkinta' ) && ( variable == 'Ei lasketa/red' ) )
+	{
+		alert('Estetty!!!');
+		return false;
+	}
+
         var r=confirm("Oletko varmaa?")
         if (r)
-
 	{
         $.ajax({
            url: location.protocol + "//" + location.host + "/index.php/site/valiko_ajax",

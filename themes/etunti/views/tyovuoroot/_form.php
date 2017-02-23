@@ -141,6 +141,8 @@ if(isset($ov->id) and !empty($ov->kohde_id) and empty($model->kohde)){
 
   <div class="col-sm-3">
 		<?php echo $form->labelEx($model,'tyoajanmerkinta'); ?>
+
+		<div class="input-group">
 		<?php
         	$tal = Valikkoot::model()->findAll(" select_type='tyoajanmerkinta' ", array('order' => 'select_type'));
 		echo '<select name="Tyovuoroot[tyoajanmerkinta]" class="form-control" id="Tyovuoroot_tyoajanmerkinta">';
@@ -165,6 +167,10 @@ if(isset($ov->id) and !empty($ov->kohde_id) and empty($model->kohde)){
 		echo '</select>';
         	?>
 
+		<span class="input-group-btn">
+		  <span class="btn btn-primary myBgColors muokaValiko" for="tyoajanmerkinta"><i class="fa fa-pencil-square-o"></i></span>
+		</span>
+		</div>
   </div>
 
 </div>
@@ -172,6 +178,22 @@ if(isset($ov->id) and !empty($ov->kohde_id) and empty($model->kohde)){
 
 <script type="text/javascript">
 $(document).ready(function(){
+
+
+/* valikot */
+$(".muokaValiko").click(function() {
+    var thisFor = $(this).attr("for");
+        $.ajax({
+           url: location.protocol + "//" + location.host + "/index.php/site/valiko",
+	   type:'POST',
+	   data: { "select_type" : thisFor },
+           success: function(data){
+		//console.log(data);
+		$('#showres').modal().html(JSON.parse(data));
+           }
+        });
+});
+/* valikot */
 
  $('#Tyovuoroot_status').change(function(){
 	if($(this).val() == '10')
