@@ -208,18 +208,56 @@ exit;
 
 
 
+            <div class="admin-form">
+              <div class="panel heading-border">
+                <div class="panel-heading"><h2><?php echo Yii::t('main', 'Tehdyt työvuorot'); ?></h2></div>
+                <div class="panel-body bg-light">
+
+
+  <table class="table table-striped" id="mobileTable">
+  <thead class="myBgColors">
+  <tr>
+  <th><?php echo Yii::t('main', 'Pvm'); ?></th>
+  <th><?php echo Yii::t('main', 'Osoite'); ?></th>
+  <th><?php echo Yii::t('main', 'Aloitus'); ?></th>
+  <th><?php echo Yii::t('main', 'Lopetus'); ?></th>
+  <th><?php echo Yii::t('main', 'Kesto'); ?></th>
+  </tr>
+  </thead>
+  <?php $this->widget('zii.widgets.CListView', array(
+	'dataProvider'=>$dataProviderTehdytTyovuorot,
+	'itemView'=>'_view_tehdyt_tyovuorot',
+  	'template'=>'{items}<table class="table table-striped table-condensed"></table><br/>{pager}',
+
+
+	'pager' => array(
+           'firstPageLabel'=>'<<',
+           'prevPageLabel'=>'< Edellinen',
+           'nextPageLabel'=>'Seuraava >',
+           'lastPageLabel'=>'>>',
+           //'maxButtonCount'=>'10',
+           'header'=>'<h3>Siirry sivulle:</h3>',
+           'cssFile'=>false,
+       ), 
+
+  )); ?>
+  </table>
+
+
+                </div>
+              </div>
+            </div>
 
 
 
             <div class="admin-form">
               <div class="panel heading-border">
+                <div class="panel-heading"><h2><?php echo Yii::t('main', 'Kirjallinen varoitus'); ?></h2></div>
                 <div class="panel-body bg-light">
 
 
 <div class="row">
   <div class="col-sm-4">
-   <legend><?php echo Yii::t('main', 'Kirjallinen varoitus'); ?></legend>
-
 <?php
 
 	$i = 0;
@@ -244,6 +282,8 @@ exit;
                 </div>
               </div>
             </div>
+
+
 
         <!-- loppu: .tray-center -->
         </div>

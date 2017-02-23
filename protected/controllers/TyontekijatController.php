@@ -436,9 +436,33 @@ class TyontekijatController extends Controller
 			}
 		}
 
+
+
+	       	$criteria = new CDbCriteria();
+		$criteria->with=array('kohteet','tt');
+		$criteria->order = " DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') DESC ";
+		$criteria->condition = " 
+			tid='".$id."' 
+			AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') <= CURDATE()
+			AND alku!='00:00' AND loppu!='00:00'
+		";
+
+		$dataProviderTehdytTyovuorot=new CActiveDataProvider('Tyovuoroot', array(
+			'criteria'=>$criteria,
+			//'pagination'=>false
+		));
+		$dataProviderTehdytTyovuorot->pagination->pageSize = 50;
+
+
 		$this->render('update',array(
 			'model'=>$model,
+			'dataProviderTehdytTyovuorot'=>$dataProviderTehdytTyovuorot
 		));
+	}
+
+	protected function sprint($val){
+	   	    if($val > 0)
+		   	   return sprintf('%02d:%02d', $val/3600, ($val % 3600)/60);
 	}
 
 	/**
