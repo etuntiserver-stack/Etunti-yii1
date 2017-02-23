@@ -732,7 +732,7 @@ public function actionImei($dom)
 				  <b>'.$val->pvm.'</b>, '.Yii::t('main', 'Klo').': '.$alkLop.'<br>
 				  <b><span class="text" style="color:'.$color.'">'.$osoite.'</span></b>';
 
-		      if(!empty($nm) or !empty($puh_nro)){
+		      if(!empty($nm) or !empty($puh_nro) or !empty($avaimet)){
 		      $sel .= '
 		      <br>
 		      <p>
