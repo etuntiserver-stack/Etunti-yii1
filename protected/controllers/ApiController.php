@@ -728,17 +728,17 @@ public function actionImei($dom)
 
 
 
-		      $sel .= '<div class="well">
-				  <b>'.$val->pvm.'</b>, '.Yii::t('main', 'Klo').': '.$alkLop.'<br>
-				  <b><span class="text" style="color:'.$color.'">'.$osoite.'</span></b>';
-
+		      $sel .= '<div class="well">';
 
 		      $tvController = Yii::app()->createController('Tyovuoroot');
 	   	      $tilanteet = $tvController[0]->tilanteet();
-
-
 		      if( isset($tilanteet[$val->status]) and $tilanteet[$val->status] != "0" )
-		      $sel .= '<br>'. $tilanteet[$val->status];
+		      $sel .= '<h3 class="text-center">'. $tilanteet[$val->status].'</h3>';
+
+		      $sel .= '
+				  <b>'.$val->pvm.'</b>, '.Yii::t('main', 'Klo').': '.$alkLop.'<br>
+				  <b><span class="text" style="color:'.$color.'">'.$osoite.'</span></b>';
+
 
 		      if(!empty($nm) or !empty($puh_nro) or !empty($avaimet)){
 		      $sel .= '
