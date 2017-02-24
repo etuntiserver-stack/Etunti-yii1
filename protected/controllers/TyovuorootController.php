@@ -3743,7 +3743,7 @@ class TyovuorootController extends Controller
 
  	}
 
-	protected function tilanteet()
+	public function tilanteet()
 	{
         	$l = array(
 			3=>Yii::t('main', 'Työ'),

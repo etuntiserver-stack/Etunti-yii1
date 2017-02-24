@@ -692,10 +692,6 @@ public function actionImei($dom)
 		      if($val->alku > 0 and $val->loppu > 0)
 		      $alkLop = $val->alku.'-'.$val->loppu.' ';
 
-		      $tvController = Yii::app()->createController('Tyovuoroot');
-	   	      $tilanteet = $tvController[0]->tilanteet();
-
-
 		      $color = '';
 	 	      if(!empty($val->tyoajanlaatu) and empty($osoite))
 	 	      {
@@ -735,6 +731,10 @@ public function actionImei($dom)
 		      $sel .= '<div class="well">
 				  <b>'.$val->pvm.'</b>, '.Yii::t('main', 'Klo').': '.$alkLop.'<br>
 				  <b><span class="text" style="color:'.$color.'">'.$osoite.'</span></b>';
+
+
+		      $tvController = Yii::app()->createController('Tyovuoroot');
+	   	      $tilanteet = $tvController[0]->tilanteet();
 
 		      if( isset($tilanteet[$val->status]) and $tilanteet[$val->status] > 0 )
 		      $sel .= '<br>'. $tilanteet[$val->status];
