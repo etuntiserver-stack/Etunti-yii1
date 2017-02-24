@@ -92,6 +92,7 @@ class KorvauksetController extends Controller
 		if(isset($_POST['Korvaukset']))
 		{
 			$model->attributes=$_POST['Korvaukset'];
+			$model->pvm=date("Y-m-d", strtotime($_POST['Korvaukset']['pvm']));
 			if($model->save()){
 
 				$asetukset=Asetukset::model()->findbypk(1);

@@ -71,6 +71,7 @@ class EnnakkoController extends Controller
 		if(isset($_POST['Ennakko']))
 		{
 			$model->attributes=$_POST['Ennakko'];
+			$model->pvm=date("Y-m-d", strtotime($_POST['Ennakko']['pvm']));
 			if($model->save()){
 				echo 'ok';
 				exit;

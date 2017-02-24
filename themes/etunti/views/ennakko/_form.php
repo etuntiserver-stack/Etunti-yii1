@@ -36,7 +36,7 @@
                     <li class="list-group-item">
 	<div class="row">
 		<?php echo $form->labelEx($model,'pvm'); ?>
-		<?php echo $form->textField($model,'pvm',array('value'=>date("Y-m-d"),'size'=>30,'maxlength'=>20,'class'=>'form-control datepicker')); ?>
+		<?php echo $form->textField($model,'pvm',array('value'=>date("d.m.Y"),'size'=>30,'maxlength'=>20,'class'=>'form-control datepickerFI')); ?>
 		<?php echo $form->error($model,'pvm'); ?>
 	</div>
                     </li>

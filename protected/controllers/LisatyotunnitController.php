@@ -79,6 +79,7 @@ class LisatyotunnitController extends Controller
 		if(isset($_POST['Lisatyotunnit']))
 		{
 			$model->attributes=$_POST['Lisatyotunnit'];
+			$model->pvm=date("Y-m-d", strtotime($_POST['Lisatyotunnit']['pvm']));
 			if($model->save()){
 				echo 'ok';
 				exit;
