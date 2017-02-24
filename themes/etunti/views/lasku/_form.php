@@ -579,7 +579,7 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 	</div><div class="col-sm-6">
 	<br>
 	<?php
-	echo CHtml::dropdownList('kkpalvelu','palvelu', CHtml::listData(LaskutusTuotteet::model()->findAll(), 'tuotenimi', 'tuotenimi'), 
+	echo CHtml::dropdownList('kkpalvelu','palvelu', CHtml::listData(LaskutusTuotteet::model()->findAll(), 'id', 'tuotenimi'), 
 	array('empty'=>'Valitse tuote/palvelu','class'=>'form-control valitseTuote'));
 	?>
 	</div>
@@ -1151,7 +1151,7 @@ $(".luoRiviKk").click(function() {
 	var from = $("#fromkk").val();
 	var to = $("#tokk").val();
 	var kohteet = $(".selectpicker.kk").val();
-	var tuotePalvelu = $("#kkpalvelu").val();
+	var tuotePalvelu = $("#kkpalvelu option:selected").val();
 
 
 	if (from  === '') 
