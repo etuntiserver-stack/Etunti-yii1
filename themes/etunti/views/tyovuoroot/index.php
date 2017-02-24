@@ -147,7 +147,7 @@
 	foreach($tyontekijat_model as $t)
 	{
 	  echo '<tr>';
-	  echo '<td width=1 id="first_'.$t->id.'" style="z-index: 99999999">';
+	  echo '<td width=1 id="first_'.$t->id.'" style="z-index: 999">';
 
 	     $vktyoaika = '';
 	     $ts = Tyosuhdet::model()->find(" tid = '".$t->id."' ");
