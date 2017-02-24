@@ -736,9 +736,8 @@ public function actionImei($dom)
 		      $tvController = Yii::app()->createController('Tyovuoroot');
 	   	      $tilanteet = $tvController[0]->tilanteet();
 
-		    $this->_sendResponse(200, json_encode($tilanteet));
 
-		      if( isset($tilanteet[$val->status]) and $tilanteet[$val->status] > 0 )
+		      if( isset($tilanteet[$val->status]) and $tilanteet[$val->status] != "0" )
 		      $sel .= '<br>'. $tilanteet[$val->status];
 
 		      if(!empty($nm) or !empty($puh_nro) or !empty($avaimet)){
