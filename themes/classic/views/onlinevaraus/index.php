@@ -248,7 +248,7 @@ if(isset($asetukset->checkout_id) and !empty($asetukset->checkout_id) and !empty
 <?php if(!empty($asetukset->onlinevaraus_arvio_siivouksesta)) : ?>
 <div class="">
   <div class="well sininen">
-	<center><h4><?php echo Yii::t('main', 'Arvio siivouksesta'); ?></h4></center>
+	<center><h4><?php echo Yii::t('main', 'Arvio palvelusta'); ?></h4></center>
         <p class="small"><?php echo str_replace("\n", "<br>", $asetukset->onlinevaraus_arvio_siivouksesta); ?></p>	
   </div>
 </div>
