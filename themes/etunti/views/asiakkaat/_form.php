@@ -305,14 +305,10 @@ $uusiSalasana = $this->generatePassword();
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'alv'); ?>
 		<?php
-		$list = array();
-		for ($i = 0; $i <= 36 ; $i++) {
-		    $list[$i] = $i;
-		}
+        	$l = array(0=>0,10=>10,14=>14,24=>24);
 
-        	echo $form->dropDownList($model, 'alv', $list,
-		array('empty'=>'Valitse','class'=>'form-control',
-		'options' => array('24'=>array('selected'=>true))
+        	echo $form->dropDownList($model, 'alv', $l,
+		array('empty'=>'Valitse','class'=>'form-control'
 		));
         	?>
 		<?php echo $form->error($model,'alv'); ?>
