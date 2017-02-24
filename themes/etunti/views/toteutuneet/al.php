@@ -19,6 +19,8 @@
      $riviTietoja = '';
   if(!empty($tietoja) and isset($_POST['tulosta']))
      $riviTietoja = '<br><br>&nbsp;&nbsp;&nbsp;<b>'.Yii::t('main','Tietoja: ').'</b> '.$tietoja.'<hr>';
+  elseif(!empty($tietoja) and !isset($_POST['tulosta']))
+     $riviTietoja =  '<br> <b class="fa fa-file-text-o text-warning" title="Tietoja"></b>';
 
   $spl = $this->sairausMerkki($sairaus);
 
