@@ -82,7 +82,7 @@ class TyovuorootController extends Controller
 	{
 		$model = Kohteet::model()->findAll(" asiakas_id='".$id."' ");
 			$bd = '';
-			$bd .= '<option>'.Yii::t('main', 'Valitse kohde').'</option>';
+			$bd .= '<option value>'.Yii::t('main', 'Valitse kohde').'</option>';
 			foreach($model as $k)
 			$bd .= '<option value="'.$k->id.'">'.$k->osoite.'</option>';
 
@@ -1073,7 +1073,12 @@ class TyovuorootController extends Controller
 
 
 			if($saankoSuoritta == 1)
-			$toistuva->save();
+			{
+				if(!$toistuva->save())
+				{
+					$return[] = array('ERROR'=>json_encode(var_dump($toistuva->getErrors())));
+				}
+			}
 
 	
 			if(!isset($_POST['tyopaari']))
