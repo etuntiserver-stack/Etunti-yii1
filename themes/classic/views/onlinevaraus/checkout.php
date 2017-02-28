@@ -87,8 +87,8 @@ if($response)
 		if(isset($_SESSION['onlinevaraus']['alv']))
 		{
 		$alv = $_SESSION['onlinevaraus']['alv'];
-		$alv_hinta = ($_SESSION['onlinevaraus']['amount']*$alv)/100;
-		$veroton_hinta = $_SESSION['onlinevaraus']['amount']-$alv_hinta;
+		$veroton_hinta = ($_SESSION['onlinevaraus']['amount']/(1+($alv/100)));
+		$alv_hinta = $_SESSION['onlinevaraus']['amount']-$veroton_hinta;
 		$veroton_hinta = round((float)str_replace(",",".",$veroton_hinta), 2);
 		}
 
