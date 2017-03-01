@@ -64,6 +64,7 @@
 	elseif($_POST['select_type'] == 'laskutus_yksikko') $selType = 'Laskutusyksikkö';
 	elseif($_POST['select_type'] == 'YLITYÖTUNNIT') $selType = 'YLITYÖTUNNIT';
 	elseif($_POST['select_type'] == 'tyo_toimialue') $selType = 'Työntekijä toimialue';
+	elseif($_POST['select_type'] == 'tyonkuvaus_tilat') $selType = 'Työnkuvaus tilat';
 	else $selType = $r->select_type;
 
 /*

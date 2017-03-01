@@ -445,6 +445,7 @@
 
 
 
+
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'onlinevaraus_loppu'); ?>
 		<?php 
@@ -780,12 +781,13 @@
 		<?php if(is_array(json_decode($model->edico_muut_kulut, true))) : ?>
 		<?php
 		$tb = json_decode($model->edico_muut_kulut, true);
+		ksort($tb['otsikko']);
 		foreach($tb['otsikko'] as $key=>$items)
 		{
 		echo '
-		    <tr class="rivi">
+		    <tr class="rivi" num="'.$key.'">
 		        <td>
-		            <i class="link fa fa-trash" aria-hidden="true"></i>
+		            <i class="link fa fa-trash poistaAuthorRivi" aria-hidden="true"></i>
 		        </td>
 		        <td>
 		            <input class="form-control" type="text" name="Asetukset[edico_muut_kulut][otsikko]['.$key.']" value="'.$items.'" />
@@ -798,9 +800,9 @@
 		}
 		?>
 		<?php else : ?>
-		    <tr class="rivi">
+		    <tr class="rivi" num="0">
 		        <td>
-		            <i class="link fa fa-trash" aria-hidden="true"></i>
+		            <i class="link fa fa-trash poistaAuthorRivi" aria-hidden="true"></i>
 		        </td>
 		        <td>
 		            <input class="form-control" type="text" name="Asetukset[edico_muut_kulut][otsikko][0]" />
@@ -817,19 +819,19 @@
 
 <script>
 jQuery(function(){
-    var counter = $('.rivi').length;
+    var counter = parseInt($('.authors-list tr:last').attr('num'))+1;
     $('a.add-author').click(function(event){
         event.preventDefault();
 
-        var newRow = jQuery('<tr><td><i class="link fa fa-trash" aria-hidden="true"></i></td><td><input type="text" class="form-control" name="Asetukset[edico_muut_kulut][otsikko][' +
+        var newRow = jQuery('<tr class="rivi" num="'+ counter +'"><td><i class="link fa fa-trash poistaAuthorRivi" aria-hidden="true"></i></td><td><input type="text" class="form-control" name="Asetukset[edico_muut_kulut][otsikko][' +
             counter + ']"/></td><td><input type="text" class="form-control" name="Asetukset[edico_muut_kulut][hinta][' +
             counter + ']"/></td></tr>');
             counter++;
         jQuery('table.authors-list').append(newRow);
 
     });
-    $('.authors-list').find('.fa-trash').click(function(){
-	$(this).closest('tr').remove();
+    $(document).delegate(".poistaAuthorRivi","click",function(){
+	$(this).closest('tr.rivi').remove();
     });
 });
 </script>

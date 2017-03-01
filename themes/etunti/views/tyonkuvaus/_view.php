@@ -1,0 +1,33 @@
+<?php
+/* @var $this TarjouslaskentaController */
+/* @var $data Tarjouslaskenta */
+	$asiakas='';
+	$a = Asiakkaat::model()->findbypk($data->asiakas_id);
+	if(isset($a->id) and !empty($a->yrityksen_nimi))
+	$asiakas = $a->yrityksen_nimi;
+	elseif(isset($a->id) and empty($a->yrityksen_nimi) and !empty($a->yhteyshenkilo))
+	$asiakas = $a->yhteyshenkilo;
+
+?>
+
+<tr>
+
+	<td>
+		<?php echo CHtml::link('<i class="fa fa-pencil-square-o" aria-hidden="true" style="font-size: 110%"></i>', 
+				array('update', 'id'=>$data->id), 
+				array(
+					'class'=>'btn btn-primary myBgColors', 
+					'style'=>'color:white', 
+					'data-toggle'=>'tooltip', 
+					'data-placement'=>'top', 
+					'title'=>Yii::t('main', 'Muokkaa') 
+				)
+			); 
+		?>
+	</td>
+	<td>
+		<?php echo $asiakas; ?>
+	</td>
+
+</tr>
+

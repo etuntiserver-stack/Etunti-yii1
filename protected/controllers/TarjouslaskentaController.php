@@ -1,6 +1,6 @@
 <?php
 
-class AsetuksetController extends Controller
+class TarjouslaskentaController extends Controller
 {
 	/**
 	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
@@ -19,12 +19,16 @@ class AsetuksetController extends Controller
 		);
 	}
 
+	/**
+	 * Specifies the access control rules.
+	 * This method is used by the 'accessControl' filter.
+	 * @return array access control rules
+	 */
 	public function accessRules()
 	{
 		return array(
-
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('update','oikeudet', 'rekisteriseloste'),
+				'actions'=>array('index','view', 'create','update', 'admin','delete'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -34,22 +38,24 @@ class AsetuksetController extends Controller
 	}
 
 
-
-
 	public function isEtuntiAdmin() {
 
-		if(isset(Yii::app()->user->adminID))
+	$tas = '';
+	if(isset(Yii::app()->user->adminPaketti))
+	$tas = explode(",",Yii::app()->user->adminPaketti);
+
+		if(isset(Yii::app()->user->adminID) and in_array('5',$tas))
 		{
 		$m = Administrators::model()->findbypk(Yii::app()->user->adminID);
-	        if($m->id == Yii::app()->user->adminID)
-	            return true;
+	       	if($m->id == Yii::app()->user->adminID)
+	       	  return true;
 		else
-	            return false;
+	       	   return false;		
+
 		} else {
 	            return false;
 		}
 	}
-
 
         public function init()
         {
@@ -64,36 +70,10 @@ class AsetuksetController extends Controller
                 parent::init();
         }
 
-	public function actionOikeudet()
-	{
-		if(isset($_POST['oikeudet']))
-		{
-			$as = Asetukset::model()->updatebypk(1,array('oikeudet' => json_encode($_POST['oikeudet'])));
-			exit;
-		} else {
-
-			$this->render('oikeudet');
-		}
-	}
-
-
-	public function actionRekisteriseloste()
-	{
-
-		if(isset($_POST['rekisteriseloste']))
-		{
-			$as = Asetukset::model()->updatebypk(1,array('rekisteriseloste' => json_encode($_POST['rekisteriseloste'])));
-			exit;
-		} else {
-			$rt = Asetukset::model()->findbypk(1);
-			$rekisteriseloste = json_decode($rt->rekisteriseloste);
-			$this->render('rekisteriseloste',array(
-				'rekisteriseloste'=>$rekisteriseloste
-			));
-		}
-
-	}
-
+	/**
+	 * Displays a particular model.
+	 * @param integer $id the ID of the model to be displayed
+	 */
 	public function actionView($id)
 	{
 		$this->render('view',array(
@@ -107,24 +87,22 @@ class AsetuksetController extends Controller
 	 */
 	public function actionCreate()
 	{
-		$model=new Asetukset;
+		$model=new Tarjouslaskenta;
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['Asetukset']))
+		if(isset($_POST['Tarjouslaskenta']))
 		{
-			$model->attributes=$_POST['Asetukset'];
-			if(isset($_POST['Asetukset']['netvisor_mita_lahetetaan']))
-			$model->netvisor_mita_lahetetaan=json_encode($_POST['Asetukset']['netvisor_mita_lahetetaan']);
+			$model->attributes=$_POST['Tarjouslaskenta'];
 
-			if(isset($_POST['Asetukset']['edico_muut_kulut']))
-				$model->edico_muut_kulut=json_encode($_POST['Asetukset']['edico_muut_kulut']);
+			if(isset($_POST['Tarjouslaskenta']['muut_kulut']))
+				$model->muut_kulut=json_encode($_POST['Tarjouslaskenta']['muut_kulut']);
 			else
-				$model->edico_muut_kulut='';
+				$model->muut_kulut='';
 
 			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+				$this->redirect(array('index'));
 		}
 
 		$this->render('create',array(
@@ -139,44 +117,27 @@ class AsetuksetController extends Controller
 	 */
 	public function actionUpdate($id)
 	{
-
-	// <-- Oikeudet
-	   $checkOikeus = "asetukset_2_".Yii::app()->user->adminStatus;
-	   $site = Yii::app()->createController('Site');
-	   $site[0]->checkOikeus($checkOikeus);
-	//  Oikeudet -->
-
 		$model=$this->loadModel($id);
-		$f = FirmanTiedot::model()->findbypk(1);
+
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['FirmanTiedot']))
-		{
-			$f->attributes=$_POST['FirmanTiedot'];
-			$f->save();
-
-		}
-
-		if(isset($_POST['Asetukset']))
+		if(isset($_POST['Tarjouslaskenta']))
 		{
 
-			$model->attributes=$_POST['Asetukset'];
-			if(isset($_POST['Asetukset']['netvisor_mita_lahetetaan']))
-			$model->netvisor_mita_lahetetaan=json_encode($_POST['Asetukset']['netvisor_mita_lahetetaan']);
+			$model->attributes=$_POST['Tarjouslaskenta'];
 
-			if(isset($_POST['Asetukset']['edico_muut_kulut']))
-				$model->edico_muut_kulut=json_encode($_POST['Asetukset']['edico_muut_kulut']);
+			if(isset($_POST['Tarjouslaskenta']['muut_kulut']))
+				$model->muut_kulut=json_encode($_POST['Tarjouslaskenta']['muut_kulut']);
 			else
-				$model->edico_muut_kulut='';
+				$model->muut_kulut='';
 
 			if($model->save())
-				$this->redirect(array('update','id'=>$model->id));
+				$this->redirect(array('index'));
 		}
 
 		$this->render('update',array(
 			'model'=>$model,
-			'f'=>$f,
 		));
 	}
 
@@ -191,7 +152,7 @@ class AsetuksetController extends Controller
 
 		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
 		if(!isset($_GET['ajax']))
-			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
+			$this->redirect( array('index'));
 	}
 
 	/**
@@ -199,7 +160,7 @@ class AsetuksetController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$dataProvider=new CActiveDataProvider('Asetukset');
+		$dataProvider=new CActiveDataProvider('Tarjouslaskenta');
 		$this->render('index',array(
 			'dataProvider'=>$dataProvider,
 		));
@@ -210,10 +171,10 @@ class AsetuksetController extends Controller
 	 */
 	public function actionAdmin()
 	{
-		$model=new Asetukset('search');
+		$model=new Tarjouslaskenta('search');
 		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['Asetukset']))
-			$model->attributes=$_GET['Asetukset'];
+		if(isset($_GET['Tarjouslaskenta']))
+			$model->attributes=$_GET['Tarjouslaskenta'];
 
 		$this->render('admin',array(
 			'model'=>$model,
@@ -224,12 +185,12 @@ class AsetuksetController extends Controller
 	 * Returns the data model based on the primary key given in the GET variable.
 	 * If the data model is not found, an HTTP exception will be raised.
 	 * @param integer $id the ID of the model to be loaded
-	 * @return Asetukset the loaded model
+	 * @return Tarjouslaskenta the loaded model
 	 * @throws CHttpException
 	 */
 	public function loadModel($id)
 	{
-		$model=Asetukset::model()->findByPk($id);
+		$model=Tarjouslaskenta::model()->findByPk($id);
 		if($model===null)
 			throw new CHttpException(404,'The requested page does not exist.');
 		return $model;
@@ -237,23 +198,14 @@ class AsetuksetController extends Controller
 
 	/**
 	 * Performs the AJAX validation.
-	 * @param Asetukset $model the model to be validated
+	 * @param Tarjouslaskenta $model the model to be validated
 	 */
 	protected function performAjaxValidation($model)
 	{
-		if(isset($_POST['ajax']) && $_POST['ajax']==='asetukset-form')
+		if(isset($_POST['ajax']) && $_POST['ajax']==='tarjouslaskenta-form')
 		{
 			echo CActiveForm::validate($model);
 			Yii::app()->end();
 		}
 	}
-
-	protected function oikeudenOtsikot()
-	{
-		$model = OikeusRyhmat::model()->findAll();
-		foreach($model as $data)
-		$otsiko[$data->id] = $data->nimike;
-		return $otsiko;
-	}
-
 }
