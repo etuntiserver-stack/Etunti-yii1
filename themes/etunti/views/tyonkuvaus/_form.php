@@ -95,6 +95,16 @@
 	foreach($a as $v){
 	   $tal[$v->value] = $v->value;
 	}
+	
+	$pvm_arr = array(
+		'MA' => 'MA',
+		'TI' => 'TI',
+		'KE' => 'KE',
+		'TO' => 'TO',
+		'PE' => 'PE',
+		'LA' => 'LA',
+		'SU' => 'SU',
+	);
 	?>
 
 	<?php
@@ -109,6 +119,15 @@
 	   </div>';
 	?>
 
+	<?php
+	$vko_pvm = '
+	   <div class="" id="vkoPvm">
+		'.CHtml::dropDownList('', '', $pvm_arr, 
+			array('multiple' => 'multiple', 'class'=> 'selectpicker vkoPvm_selecter')
+		).'
+	   </div>';
+	?>
+
 
 	      <a href="#" title="" class="add-author"><i class="fa fa-plus" aria-hidden="true"></i></a>
 
@@ -116,7 +135,6 @@
 		    <tr>
 		        <td></td><td><?php echo Yii::t('main','Tilat'); ?></td>
 			<td><?php echo Yii::t('main','Työtehtävät'); ?></td>
-			<td><?php echo Yii::t('main','Vko. päivät'); ?></td>
 			<td><?php echo Yii::t('main','Laatutaso'); ?></td>
 			<td><?php echo Yii::t('main','Kommenti'); ?></td>
 		    </tr>
@@ -141,10 +159,29 @@
 		            <textarea class="form-control tilat" name="TyonkuvausRivit[tilat][0]" /></textarea>
 		        </td>
 		        <td>
-		            <textarea class="form-control" name="TyonkuvausRivit[tyontehtavat][0]" /></textarea>
-		        </td>
-		        <td>
-		            <textarea class="form-control" name="TyonkuvausRivit[viikkon_paivat][0]" /></textarea>
+
+
+		        <a href="#" title="" class="add-author-tyotehtavat" num="0"><i class="fa fa-plus" aria-hidden="true"></i></a>
+			<table class="table authors-list-tyotehtavat">
+			    <tr>
+			        <td></td><td><?php echo Yii::t('main','Työtehtävä'); ?></td><td><?php echo Yii::t('main','Vko. päivämäärät'); ?></td>
+			    </tr>
+			    <tr class="rivi-tyotehtavat" num="0">
+			        <td>
+			            <i class="link fa fa-trash poistaAuthorRiviT2" aria-hidden="true"></i>
+			        </td>
+			        <td>
+			            <input class="form-control" type="text" name="TyonkuvausRivit[tyotehtava][0][0]" />
+			        </td>
+			        <td>
+				    <div class="vkopvm_tilat"><?php echo $vko_pvm; ?>
+			            	<input type="hidden" class="form-control" type="text" name="TyonkuvausRivit[vkopvm][0][0]" />
+				    </div>
+			        </td>
+			    </tr>
+			</table>
+
+
 		        </td>
 		        <td>
 		            <textarea class="form-control" name="TyonkuvausRivit[laatutaso][0]" /></textarea>
@@ -162,14 +199,36 @@
 <script>
 jQuery(function(){
     var counter = parseInt($('.authors-list tr:last').attr('num'))+1;
-    var kuvauksetTuoteesta = $('#kuvauksetTuoteesta').html()
+    var kuvauksetTuoteesta = $('#kuvauksetTuoteesta').html();
+    var vkoPvm = $('#vkoPvm').html();
+
     $('a.add-author').click(function(event){
         event.preventDefault();
 
         var newRow = jQuery('<tr class="rivi" num="'+ counter +'">' +
 	    '<td><i class="link fa fa-trash poistaAuthorRivi" aria-hidden="true"></i></td><td><div class="input-group">'+ kuvauksetTuoteesta +'</div><textarea class="form-control tilat" name="TyonkuvausRivit[tilat][' + counter + ']"/></textarea></td>' +
-	    '<td><textarea class="form-control" name="TyonkuvausRivit[tyontehtavat][' + counter + ']"/></textarea></td>' +
-	    '<td><textarea class="form-control" name="TyonkuvausRivit[viikkon_paivat][' + counter + ']"/></textarea></td>' +
+	    '<td>' +
+
+		        '<a href="#" title="" class="add-author-tyotehtavat" num="0"><i class="fa fa-plus" aria-hidden="true"></i></a>' +
+			'<table class="table authors-list-tyotehtavat">' +
+			    '<tr>' +
+			        '<td></td><td><?php echo Yii::t('main','Työtehtävä'); ?></td><td><?php echo Yii::t('main','Vko. päivämäärät'); ?></td>' +
+			    '</tr>' +
+			    '<tr class="rivi-tyotehtavat" num="0">' +
+			        '<td>' +
+			            '<i class="link fa fa-trash poistaAuthorRiviT2" aria-hidden="true"></i>' +
+			        '</td>' +
+			        '<td>' +
+			            '<input class="form-control" type="text" name="TyonkuvausRivit[tyotehtava][0][0]" />' +
+			        '</td>' +
+			        '<td>' +
+				    '<div class="vkopvm_tilat">' + vkoPvm +
+			            	'<input type="hidden" class="form-control" type="text" name="TyonkuvausRivit[vkopvm][0][0]" />' +
+				    '</div>' +
+			        '</td>' +
+			    '</tr>' +
+			'</table>' +
+	    '</td>' +
 	    '<td><textarea class="form-control" name="TyonkuvausRivit[laatutaso][' + counter + ']"/></textarea></td>' +
 	    '<td><textarea class="form-control" name="TyonkuvausRivit[kommenti][' + counter + ']"/></textarea></td>' +
 	    '</tr>');
@@ -189,12 +248,50 @@ jQuery(function(){
 	buttonWidth: '100%',
 	}); 
 
+	$('.selectpicker').selectpicker({
+	  //style: 'btn-info',
+	  size: 4
+	});
+
     });
     $(document).delegate(".poistaAuthorRivi","click",function(){
 	$(this).closest('tr.rivi').remove();
     });
 });
 </script>
+
+<script>
+jQuery(function(){
+    var counter = parseInt($('.authors-list-tyotehtavat tr:last').attr('num'))+1;
+    var vkoPvm = $('#vkoPvm').html();
+
+    $('a.add-author-tyotehtavat').click(function(event){
+	var num = $(this).attr('num');
+
+        event.preventDefault();
+
+        var newRow = jQuery('<tr class="rivi-tyotehtavat" num="'+ counter +'">' +
+	    '<td><i class="link fa fa-trash poistaAuthorRiviT2" aria-hidden="true"></i></td>' +
+	    '<td><input type="text" class="form-control" name="TyonkuvausRivit[tyotehtava][' + num + ']['+ counter +']"/></td>' +
+	    '<td><div class="vkopvm_tilat">'+ vkoPvm +'<input type="hidden" class="form-control" name="TyonkuvausRivit[vkopvm][' + num + ']['+ counter +']"/></div></td>' +
+	    '</tr>');
+            counter++;
+        jQuery('table.authors-list-tyotehtavat').append(newRow);
+
+
+	$('.selectpicker').selectpicker({
+	  //style: 'btn-info',
+	  size: 4
+	});
+
+
+    });
+    $(document).delegate(".poistaAuthorRiviT2","click",function(){
+	$(this).closest('tr.rivi-tyotehtavat').remove();
+    });
+});
+</script>
+
 	</div>
 
 
@@ -244,10 +341,21 @@ $(".muokaValiko").click(function() {
 	buttonWidth: '100%',
  }); 
 
+ $('.selectpicker').selectpicker({
+	  //style: 'btn-info',
+	  size: 4
+ });
+
  $(document).delegate(".tyonkuvaus_tilat_selecter","change",function(){
 	var thisVal = $(this).val().join('\n');
     	$(this).closest('tr').find('textarea.tilat').val(thisVal);
  });
+
+ $(document).delegate(".vkoPvm_selecter","change",function(){
+	var thisVal = $(this).val();
+    	$(this).closest('div.vkopvm_tilat').find('input').val(thisVal);
+ });
+
 
 
 });

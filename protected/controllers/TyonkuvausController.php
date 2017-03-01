@@ -120,13 +120,31 @@ class TyonkuvausController extends Controller
 		{
 			$model->attributes=$_POST['Tyonkuvaus'];
 
-			if(isset($_POST['TyonkuvausRivit']))
+			if(isset($_POST['TyonkuvausRivit']['tilat']))
 			{
-				foreach($_POST['TyonkuvausRivit'] as $items)
+				foreach($_POST['TyonkuvausRivit']['tilat'] as $key=>$items)
 				{
-					print_r($items);
+					//$tk_rivit = new TyonkuvausRivit;
+					echo '<pre>';
+					echo $items.' '.$key;
+					echo '</pre>';
+
+					if(isset($_POST['TyonkuvausRivit']['tyotehtava'][$key]))
+					{
+						foreach($_POST['TyonkuvausRivit']['tyotehtava'][$key] as $k2=>$items)
+						{
+							//$tk_rivit = new TyonkuvausRivit;
+							echo '<pre>';
+							echo $items ;
+							echo $_POST['TyonkuvausRivit']['vkopvm'][$key][$k2];
+							echo '</pre>';
+						}
+					}
+				echo '<hr>';
 				}
 			}
+
+
 			exit;
 
 
