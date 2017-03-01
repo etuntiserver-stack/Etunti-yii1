@@ -158,6 +158,12 @@ class AsetuksetController extends Controller
 			$model->attributes=$_POST['Asetukset'];
 			if(isset($_POST['Asetukset']['netvisor_mita_lahetetaan']))
 			$model->netvisor_mita_lahetetaan=json_encode($_POST['Asetukset']['netvisor_mita_lahetetaan']);
+
+			if(isset($_POST['Asetukset']['edico_muut_kulut']))
+				$model->edico_muut_kulut=json_encode($_POST['Asetukset']['edico_muut_kulut']);
+			else
+				$model->edico_muut_kulut='';
+
 			if($model->save())
 				$this->redirect(array('update','id'=>$model->id));
 		}

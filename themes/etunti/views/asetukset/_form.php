@@ -444,6 +444,7 @@
 
 
 
+
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'onlinevaraus_loppu'); ?>
 		<?php 
@@ -740,6 +741,140 @@
 
    </div>
   </div>
+
+
+
+<br>
+<div class="btn btn-primary btn-block myBgColors" data-toggle="collapse" data-target="#eDico"><h3><?php echo Yii::t('main','eDico'); ?>&nbsp; <i class="fa fa-caret-square-o-down" aria-hidden="true"></i></h3></div>
+
+  <div class="row form collapse" id="eDico">
+   <div class="col-sm-4">
+    <legend><h2><?php echo Yii::t('main','eDico'); ?></h2></legend>
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'edico_laatutaso_1'); ?>
+		<?php echo $form->textarea($model,'edico_laatutaso_1',array('rows'=>4, 'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'edico_laatutaso_1'); ?>
+	</div>
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'edico_laatutaso_2'); ?>
+		<?php echo $form->textarea($model,'edico_laatutaso_2',array('rows'=>4,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'edico_laatutaso_2'); ?>
+	</div>
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'edico_laatutaso_3'); ?>
+		<?php echo $form->textarea($model,'edico_laatutaso_3',array('rows'=>4,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'edico_laatutaso_3'); ?>
+	</div>
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'edico_muut_kulut'); ?>
+
+
+		<table class="table authors-list">
+		    <tr>
+		        <td></td><td><?php echo Yii::t('main','Otsikko'); ?></td><td><?php echo Yii::t('main','Hinta'); ?></td>
+		    </tr>
+		<?php if(is_array(json_decode($model->edico_muut_kulut, true))) : ?>
+		<?php
+		$tb = json_decode($model->edico_muut_kulut, true);
+		foreach($tb['otsikko'] as $key=>$items)
+		{
+		echo '
+		    <tr class="rivi">
+		        <td>
+		            <i class="link fa fa-trash" aria-hidden="true"></i>
+		        </td>
+		        <td>
+		            <input class="form-control" type="text" name="Asetukset[edico_muut_kulut][otsikko]['.$key.']" value="'.$items.'" />
+		        </td>
+		        <td>
+		            <input class="form-control" type="text" name="Asetukset[edico_muut_kulut][hinta]['.$key.']" value="'.$tb['hinta'][$key].'" />
+		        </td>
+		    </tr>';
+
+		}
+		?>
+		<?php else : ?>
+		    <tr class="rivi">
+		        <td>
+		            <i class="link fa fa-trash" aria-hidden="true"></i>
+		        </td>
+		        <td>
+		            <input class="form-control" type="text" name="Asetukset[edico_muut_kulut][otsikko][0]" />
+		        </td>
+		        <td>
+		            <input class="form-control" type="text" name="Asetukset[edico_muut_kulut][hinta][0]" />
+		        </td>
+		    </tr>
+		<?php endif; ?>
+		</table>
+
+
+		<a href="#" title="" class="add-author"><i class="fa fa-plus" aria-hidden="true"></i></a>
+
+<script>
+jQuery(function(){
+    var counter = $('.rivi').length;
+    $('a.add-author').click(function(event){
+        event.preventDefault();
+
+        var newRow = jQuery('<tr><td><i class="link fa fa-trash" aria-hidden="true"></i></td><td><input type="text" class="form-control" name="Asetukset[edico_muut_kulut][otsikko][' +
+            counter + ']"/></td><td><input type="text" class="form-control" name="Asetukset[edico_muut_kulut][hinta][' +
+            counter + ']"/></td></tr>');
+            counter++;
+        jQuery('table.authors-list').append(newRow);
+
+    });
+    $('.authors-list').find('.fa-trash').click(function(){
+	$(this).closest('tr').remove();
+    });
+});
+</script>
+
+		<?php echo $form->error($model,'edico_muut_kulut'); ?>
+	</div>
+
+   </div>
+
+
+   <div class="col-sm-4">
+    <legend><h2><?php echo Yii::t('main','eDico'); ?></h2></legend>
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'tapaturmavakuutus'); ?>
+		<?php echo $form->numberField($model,'tapaturmavakuutus',array('maxlength'=>11,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'tapaturmavakuutus'); ?>
+	</div>
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'ryhmahenkivakuutus'); ?>
+		<?php echo $form->numberField($model,'ryhmahenkivakuutus',array('maxlength'=>11,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'ryhmahenkivakuutus'); ?>
+	</div>
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'tyottomyysvakuutusmaksu'); ?>
+		<?php echo $form->numberField($model,'tyottomyysvakuutusmaksu',array('maxlength'=>11,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'tyottomyysvakuutusmaksu'); ?>
+	</div>
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'sosiaaliturvamaksu'); ?>
+		<?php echo $form->numberField($model,'sosiaaliturvamaksu',array('maxlength'=>11,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'sosiaaliturvamaksu'); ?>
+	</div>
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'tyel_maksun_osuus_palkkansummasta'); ?>
+		<?php echo $form->numberField($model,'tyel_maksun_osuus_palkkansummasta',array('maxlength'=>11,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'tyel_maksun_osuus_palkkansummasta'); ?>
+	</div>
+   </div>
+  </div>
+
 <?php endif; ?>
 
 
