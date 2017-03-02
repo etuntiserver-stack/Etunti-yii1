@@ -393,8 +393,14 @@ $randstring = generateRandomString();
 		
 		if( count($model) > 0 )
 		{
-		$bd = '<h1>'.Yii::t('main', 'Työnkuvaus').'</h1>';
-		$bd .= '
+		$bd = '<h1>'.Yii::t('main', 'Valitse työnkuvaus').'</h1>';
+
+		foreach($model as $data)
+		{
+
+		$bd .= '<div class="tyokuvauksetValinta" id="tyokuvaus_'.$data->id.'"><h2>'.$data->otsikko.' <input type="radio" name="kuvaus" for="tablekuvaus_'.$data->id.'"></h2></div>
+
+		<div id="tablekuvaus_'.$data->id.'">
 		<table class="table table-bordered" style="background:white">
 		    <tr>
 		        <th>'.Yii::t('main','Tilat').'</th>
@@ -402,10 +408,7 @@ $randstring = generateRandomString();
 			<th>'.Yii::t('main','Laatutaso').'</th>
 			<th>'.Yii::t('main','Kommenti').'</th>
 		    </tr>';
-		foreach($model as $data)
-		{
 
-		$bd .= '<tr><td colspan=4><h2>'.$data->otsikko.'</h2></td></tr>';
 
 		$rivit = TyonkuvausRivit::model()->findAll(" tyonkuvaus_id='".$data->id."' ");
 		foreach($rivit as $key=>$r)
@@ -455,9 +458,13 @@ $randstring = generateRandomString();
 		    </tr>
 		';
 		}
+
+		$bd .= '</table>
+		</div>
+		<hr>';
 		}
 
-		$bd .= '</table>';
+
 		}
 
 		return $bd;
