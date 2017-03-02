@@ -162,7 +162,7 @@
 					<span class="input-group-btn">
 					  <span class="btn btn-primary myBgColors muokaValiko" for="tyonkuvaus_tilat"><i class="fa fa-pencil-square-o"></i></span>
 					</span>
-				   </div>
+				</div>
 			    </div>
 		            <textarea class="form-control tilat" rows="4" name="TyonkuvausRivit[tilat]['.$key.']" />'.json_decode($r->tilat).'</textarea>
 		        </td>

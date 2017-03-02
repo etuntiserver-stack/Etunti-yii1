@@ -32,7 +32,7 @@ class CrmTarjouksetController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view', 'laheta'),
+				'actions'=>array('admin','delete','create','update','index','view', 'laheta', 'get_tyonkuvaus_by_asiakas'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -381,6 +381,86 @@ $randstring = generateRandomString();
 
 		$dataProvider->pagination->pageSize = 50;
 		$this->render('index', array('dataProvider' => $dataProvider));
+	}
+
+	protected function get_tyonkuvaus_by_asiakas($id)
+	{
+		$bd = '';
+       		$criteria = new CDbCriteria();
+	        $criteria->order = " id DESC ";
+	        $criteria->condition = " asiakas_id='".$id."' ";
+		$model = Tyonkuvaus::model()->findAll($criteria);
+		
+		if( count($model) > 0 )
+		{
+		$bd = '<h1>'.Yii::t('main', 'Työnkuvaus').'</h1>';
+		$bd .= '
+		<table class="table table-bordered" style="background:white">
+		    <tr>
+		        <th>'.Yii::t('main','Tilat').'</th>
+			<th>'.Yii::t('main','Työtehtävät').'</th>
+			<th>'.Yii::t('main','Laatutaso').'</th>
+			<th>'.Yii::t('main','Kommenti').'</th>
+		    </tr>';
+		foreach($model as $data)
+		{
+
+		$bd .= '<tr><td colspan=4><h2>'.$data->otsikko.'</h2></td></tr>';
+
+		$rivit = TyonkuvausRivit::model()->findAll(" tyonkuvaus_id='".$data->id."' ");
+		foreach($rivit as $key=>$r)
+		{
+
+		$bd .= '
+		    <tr class="rivi" num="'.$key.'">
+		        <td>
+		            '.str_replace("\n", "<br>", json_decode($r->tilat)).'
+		        </td>
+		        <td class="tyotehtavatVkoPvmTD">
+
+
+			<table class="table authors-list-tyotehtavat">
+			    <tr>
+			        <th>'.Yii::t('main','Työtehtävä').'</th><th>'.Yii::t('main','Vko. päivämäärät').'</th>
+			    </tr>';
+
+			$tyontehtavat = json_decode($r->tyontehtavat, true);
+			foreach($tyontehtavat as $k2=>$r2)
+			{
+
+			$bd .= '
+			    <tr class="rivi-tyotehtavat" num="'.$key.'">
+			        <td>
+			            '.$r2['tyotehtava'].'
+			        </td>
+			        <td>
+			            '.$r2['vkopvm'].'
+			        </td>
+			    </tr>';
+			}
+
+
+		$laatutaso = json_decode($r->laatutaso, true);
+
+		$bd .= '
+			</table>
+
+		        </td>
+		        <td>
+		            '.str_replace("\n", "<br>", $laatutaso).'
+		        </td>
+		        <td>
+		            '.str_replace("\n", "<br>", $r->kommenti).'
+		        </td>
+		    </tr>
+		';
+		}
+		}
+
+		$bd .= '</table>';
+		}
+
+		return $bd;
 	}
 
 	/**
