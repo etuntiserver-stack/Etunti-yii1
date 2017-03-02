@@ -122,34 +122,56 @@ class TyonkuvausController extends Controller
 
 			if(isset($_POST['TyonkuvausRivit']['tilat']))
 			{
+
+				// <-- Poistetaan edelliset
+				TyonkuvausRivit::model()->deleteAll("tyonkuvaus_id='".$id."'");
+
 				foreach($_POST['TyonkuvausRivit']['tilat'] as $key=>$items)
 				{
-					//$tk_rivit = new TyonkuvausRivit;
-					echo '<pre>';
-					echo $items.' '.$key;
-					echo '</pre>';
-
+					$tilat = $items;
 					if(isset($_POST['TyonkuvausRivit']['tyotehtava'][$key]))
 					{
-						foreach($_POST['TyonkuvausRivit']['tyotehtava'][$key] as $k2=>$items)
+						$tyontehtavat = array();
+						foreach($_POST['TyonkuvausRivit']['tyotehtava'][$key] as $k2=>$i2)
 						{
-							//$tk_rivit = new TyonkuvausRivit;
-							echo '<pre>';
-							echo $items ;
-							echo $_POST['TyonkuvausRivit']['vkopvm'][$key][$k2];
-							echo '</pre>';
+							$tyontehtavat[$k2] = array('tyotehtava'=>$i2, 'vkopvm' => $_POST['TyonkuvausRivit']['vkopvm'][$key][$k2]);
 						}
 					}
-				echo '<hr>';
+
+					$laatutasot = '';
+					if(isset($_POST['TyonkuvausRivit']['laatutaso'][$key]))
+					{
+						$laatutasot = $_POST['TyonkuvausRivit']['laatutaso'][$key];
+					}
+
+					$kommenti = '';
+					if(isset($_POST['TyonkuvausRivit']['kommenti'][$key]))
+					{
+						$kommenti = $_POST['TyonkuvausRivit']['kommenti'][$key];
+					}
+
+
+					$tk_rivit = new TyonkuvausRivit;
+					$tk_rivit->tyonkuvaus_id = $model->id;
+					$tk_rivit->tilat = json_encode($tilat);
+					$tk_rivit->tyontehtavat = json_encode($tyontehtavat);
+					$tk_rivit->laatutaso = json_encode($laatutasot);
+					$tk_rivit->kommenti = $kommenti;
+					$tk_rivit->save();
+
+					/*
+					echo '<pre>';
+					print_r($laatutasot);
+					echo '</pre>';
+					echo '<hr>';
+					*/
 				}
 			}
-
-
-			exit;
+			//exit;
 
 
 			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+				$this->redirect(array('index'));
 		}
 
 		$this->render('update',array(
@@ -165,10 +187,11 @@ class TyonkuvausController extends Controller
 	public function actionDelete($id)
 	{
 		$this->loadModel($id)->delete();
+		TyonkuvausRivit::model()->deleteAll("tyonkuvaus_id='".$id."'");
 
 		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
 		if(!isset($_GET['ajax']))
-			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
+			$this->redirect(array('index'));
 	}
 
 	/**

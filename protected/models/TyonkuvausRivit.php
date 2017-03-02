@@ -30,9 +30,9 @@ class TyonkuvausRivit extends DB2ActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('tyonkuvaus_id, tilat, tyontehtavat, viikkon_paivat, laatutaso, kommenti', 'required'),
+			array('tyonkuvaus_id', 'required'),
 			array('tyonkuvaus_id', 'numerical', 'integerOnly'=>true),
-			array('viikkon_paivat', 'length', 'max'=>255),
+			array('tilat, tyontehtavat, laatutaso, kommenti', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('id, tyonkuvaus_id, tilat, tyontehtavat, viikkon_paivat, laatutaso, kommenti', 'safe', 'on'=>'search'),
