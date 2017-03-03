@@ -192,6 +192,7 @@ ${asiakkaan_osoite}
 ${asiakkaan_postinumero} ${asiakkaan_toimipaikka}
 
 ${teksti}
+${tyonkuvaus}
 </textarea>
 </div>
 

@@ -8,6 +8,11 @@
 	elseif(isset($a->id) and empty($a->yrityksen_nimi) and !empty($a->yhteyshenkilo))
 	$asiakas = $a->yhteyshenkilo;
 
+	$y = Yhteystiedot::model()->findbypk($data->yhteystiedot_id);
+	if(isset($y->id) and !empty($y->yrityksen_nimi))
+	$asiakas = $y->yrityksen_nimi;
+	elseif(isset($y->id) and empty($y->yrityksen_nimi) and !empty($y->yhteyshenkilo))
+	$asiakas = $y->yhteyshenkilo;
 ?>
 
 <tr>

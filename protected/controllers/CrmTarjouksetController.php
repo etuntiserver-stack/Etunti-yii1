@@ -218,11 +218,17 @@ $randstring = generateRandomString();
 		if(file_exists($polku.$tiedosto))
 		{
 			$model->attributes=$_POST['CrmTarjoukset'];
-
+			//$model->tyonkuvaus=json_encode($_POST['CrmTarjoukset']['tyonkuvaus']);
 			if($model->save()){
 
 				$as = Asiakkaat::model()->findbypk($model->asiakas_id);
-				CrmTarjoukset::model()->updatebypk($model->id, array('asiakkaan_sahkoposti'=>$as->sahkoposti));
+				$y = Yhteystiedot::model()->findbypk($model->yhteystiedot_id);
+				if(isset($as->sahkoposti))
+					CrmTarjoukset::model()->updatebypk($model->id, array('asiakkaan_sahkoposti'=>$as->sahkoposti));
+
+				if(isset($y->sahkoposti))
+					CrmTarjoukset::model()->updatebypk($model->id, array('asiakkaan_sahkoposti'=>$y->sahkoposti));
+
 				$this->docx($model);
 
 		}
@@ -250,10 +256,16 @@ $randstring = generateRandomString();
 			{
 
 			$model->attributes=$_POST['CrmTarjoukset'];
-			$as = Asiakkaat::model()->findbypk($model->asiakas_id);
-			$model->asiakkaan_sahkoposti=$as->sahkoposti;
-
 			if($model->save()){
+
+				$as = Asiakkaat::model()->findbypk($model->asiakas_id);
+				$y = Yhteystiedot::model()->findbypk($model->yhteystiedot_id);
+				if(isset($as->sahkoposti))
+					CrmTarjoukset::model()->updatebypk($model->id, array('asiakkaan_sahkoposti'=>$as->sahkoposti));
+
+				if(isset($y->sahkoposti))
+					CrmTarjoukset::model()->updatebypk($model->id, array('asiakkaan_sahkoposti'=>$y->sahkoposti));
+
 				$this->docx($model);
 			}
 		}
@@ -284,8 +296,45 @@ $randstring = generateRandomString();
 
 
 			$firma = FirmanTiedot::model()->findbypk(1);
+
+			// <-- Jos se on Asiakas
 			$as = Asiakkaat::model()->findbypk($model->asiakas_id);
-		
+			if(isset($as->id))
+			{
+				if(isset($as->id) and !empty($as->yrityksen_nimi))
+				   $asiakas = $as->yrityksen_nimi;
+				elseif(isset($as->id) and empty($as->yrityksen_nimi) and !empty($as->yhteyshenkilo)) 
+				   $asiakas = $as->yhteyshenkilo;
+				else
+				   $asiakas = '';
+
+			$document->setValue('asiakas', iconv('UTF-8','ISO-8859-1',$asiakas));
+			$document->setValue('asiakkaan_osoite', iconv('UTF-8','ISO-8859-1',$as->osoite));
+			$document->setValue('asiakkaan_postinumero', iconv('UTF-8','ISO-8859-1',$as->postinumero));
+			$document->setValue('asiakkaan_toimipaikka', iconv('UTF-8','ISO-8859-1',$as->kaupunki));
+			}
+			//     Jos se on Asiakas -->
+
+
+			// <-- Jos se on yhteystiedot
+			$y = Yhteystiedot::model()->findbypk($model->yhteystiedot_id);
+			if(isset($y->id))
+			{
+				if(isset($y->id) and !empty($y->yrityksen_nimi))
+				   $asiakas = $y->yrityksen_nimi;
+				elseif(isset($y->id) and empty($y->yrityksen_nimi) and !empty($y->yhteyshenkilo)) 
+				   $asiakas = $y->yhteyshenkilo;
+				else
+				   $asiakas = '';
+
+			$document->setValue('asiakas', iconv('UTF-8','ISO-8859-1',$asiakas));
+			$document->setValue('asiakkaan_osoite', iconv('UTF-8','ISO-8859-1',$y->osoite));
+			$document->setValue('asiakkaan_postinumero', iconv('UTF-8','ISO-8859-1',$y->postinumero));
+			$document->setValue('asiakkaan_toimipaikka', iconv('UTF-8','ISO-8859-1',$y->postitoimipaikka));
+			}
+			//     Jos se on yhteystiedot -->
+
+
 
 			$document->setValue('paivays', iconv('UTF-8','ISO-8859-1',date("d.m.Y")));
 
@@ -296,20 +345,12 @@ $randstring = generateRandomString();
 			$document->setValue('yrityksen_toimipaikka', iconv('UTF-8','ISO-8859-1',$firma->postitoimipaikka));
 			$document->setValue('yrityksen_y_tunnus', iconv('UTF-8','ISO-8859-1',$firma->y_tunnus));
 			$document->setValue('yrityksen_puhelin', iconv('UTF-8','ISO-8859-1',$firma->puhelin));
-			// Asiakas
-			if(!empty($as->yrityksen_nimi))
-			   $asiakas = $as->yrityksen_nimi;
-			elseif(empty($as->yrityksen_nimi) and !empty($as->yhteyshenkilo)) 
-			   $asiakas = $as->yhteyshenkilo;
-			else
-			   $asiakas = '';
 
-			$document->setValue('asiakas', iconv('UTF-8','ISO-8859-1',$asiakas));
-			$document->setValue('asiakkaan_osoite', iconv('UTF-8','ISO-8859-1',$as->osoite));
-			$document->setValue('asiakkaan_postinumero', iconv('UTF-8','ISO-8859-1',$as->postinumero));
-			$document->setValue('asiakkaan_toimipaikka', iconv('UTF-8','ISO-8859-1',$as->kaupunki));
+
 
 			$document->setValue('teksti', htmlspecialchars(iconv('UTF-8','ISO-8859-1',$model->tarjous)));
+			$document->setValue('tyonkuvaus', iconv('UTF-8','ISO-8859-1', $model->tyonkuvaus));
+
 
 			$path = 'tiedostot/crm/tarjoukset/'.Yii::app()->user->domain.'/'.$liite;
 		  	$document->save($path.'.docx');
@@ -383,12 +424,18 @@ $randstring = generateRandomString();
 		$this->render('index', array('dataProvider' => $dataProvider));
 	}
 
-	protected function get_tyonkuvaus_by_asiakas($id)
+	protected function get_tyonkuvaus($asiakas_id, $yhteystiedot_id, $id)
 	{
+	
+		if( $asiakas_id != null )
+			$tb = 'asiakas_id';
+		if( $yhteystiedot_id != null )
+			$tb = 'yhteystiedot_id';
+
 		$bd = '';
        		$criteria = new CDbCriteria();
 	        $criteria->order = " id DESC ";
-	        $criteria->condition = " asiakas_id='".$id."' ";
+	        $criteria->condition = " $tb='".$id."' ";
 		$model = Tyonkuvaus::model()->findAll($criteria);
 		
 		if( count($model) > 0 )
@@ -398,7 +445,7 @@ $randstring = generateRandomString();
 		foreach($model as $data)
 		{
 
-		$bd .= '<div class="tyokuvauksetValinta" id="tyokuvaus_'.$data->id.'"><h2>'.$data->otsikko.' <input type="radio" name="kuvaus" for="tablekuvaus_'.$data->id.'"></h2></div>
+		$bd .= '<div class="tyokuvauksetValinta" id="tyokuvaus_'.$data->id.'"><h2>'.$data->otsikko.' <input type="radio" name="tyokuvaus" class="tyokuvaus" for="tablekuvaus_'.$data->id.'"></h2></div>
 
 		<div id="tablekuvaus_'.$data->id.'">
 		<table class="table table-bordered" style="background:white">

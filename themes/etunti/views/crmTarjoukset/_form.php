@@ -4,11 +4,18 @@
 /* @var $form CActiveForm */
 
  $asiakas_selected = array();
+ $yhteystiedot_selected = array();
  $tyonkuvaus = '';
- if(isset($_GET['asiakas_id']))
+ if(isset($_GET['asiakas_id']) and !empty($_GET['asiakas_id']))
  {
 	$asiakas_selected[$_GET['asiakas_id']] = array('selected' => 'selected');
-	$tyonkuvaus = $this->get_tyonkuvaus_by_asiakas($_GET['asiakas_id'], true);
+	$tyonkuvaus = $this->get_tyonkuvaus($_GET['asiakas_id'], null, $_GET['asiakas_id']);
+ }
+
+ if(isset($_GET['yhteystiedot_id']) and !empty($_GET['yhteystiedot_id']))
+ {
+	$yhteystiedot_selected[$_GET['yhteystiedot_id']] = array('selected' => 'selected');
+	$tyonkuvaus = $this->get_tyonkuvaus(null, $_GET['yhteystiedot_id'], $_GET['yhteystiedot_id']);
  }
 ?>
 
@@ -47,7 +54,7 @@
 		}
 
         		echo $form->dropDownList($model, 'yhteystiedot_id', $list,
-			array('empty'=>'Valitse','class'=>'form-control'));
+			array('empty'=>'Valitse','class'=>'form-control', 'options'=>$yhteystiedot_selected));
 		
         	?>
 		<?php echo $form->error($model,'yhteystiedot_id'); ?>
@@ -82,6 +89,9 @@
 </div><!-- form -->
 
 
+		<?php echo $form->textArea($model,'tyonkuvaus',array('rows'=>6, 'cols'=>50, 'class'=>'form-control')); ?>
+
+
 	<div class="section fill mb5">
 		<?php echo $tyonkuvaus; ?>
 	</div>
@@ -106,23 +116,51 @@
 $(document).ready(function(){
 
  $('#CrmTarjoukset_asiakas_id').change(function(){
-
 	window.location.href= "create?asiakas_id=" + $(this).val();
+ });
+
+ $('#CrmTarjoukset_yhteystiedot_id').change(function(){
+	window.location.href= "create?yhteystiedot_id=" + $(this).val();
+ });
+
+ $('.tyokuvaus').change(function(){
+
+    if ($("input[name='tyokuvaus']:checked").val()) {
+	var thisFor = $(this).attr('for');
+	var tablekuvaus = $('#'+thisFor).html();
+	$('#CrmTarjoukset_tyonkuvaus').val(tablekuvaus);
+    }
+
+ });
+
+
+ $('#crm-tarjoukset-form').on("submit", function(e){
+
+    if ($("#CrmTarjoukset_tyonkuvaus").val() === '') {
+       	alert('Valitse työnkuvaus.');
+        return false;
+    }
+
+    $(this).submit();
+    e.preventDefault();
+
+ });
+
+
 /*
         $.ajax({
            url: 'get_tyonkuvaus_by_asiakas?id=' + $(this).val(),
            //type: "POST",
+
            //data: { },
            success: function(data){
 		var d = JSON.parse(data);
 		console.log(d);
 
+
            }
         });
 */
-
- });
-
 
 
 });
