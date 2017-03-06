@@ -23,8 +23,13 @@
 
  if(isset($model->id))
  {
-	$model->tyonkuvaus = json_decode($model->tyonkuvaus);
-	$model->tarjouslaskenta = json_decode($model->tarjouslaskenta);
+	$tyonkuvaus_arr = json_decode($model->tyonkuvaus, true);
+	$tarjouslaskenta_arr = json_decode($model->tarjouslaskenta, true);
+
+	echo '<pre>';
+	print_r($tarjouslaskenta_arr);
+	echo '</pre>';
+	//print_r($model->tarjouslaskenta);
  }
 ?>
 
@@ -148,8 +153,17 @@ $(document).ready(function(){
 
     if ($("input[name='tyokuvaus']:checked").val()) {
 	var thisFor = $(this).attr('for');
-	var tablekuvaus = $('#'+thisFor).html();
-	$('#CrmTarjoukset_tyonkuvaus').val(tablekuvaus);
+        $.ajax({
+           url: 'get_tyonkuvaus_by_id?id=' + thisFor,
+           //type: "POST",
+           //data: { },
+           success: function(data){
+		//var data = JSON.parse(data);
+		//console.log(data);
+		$('#CrmTarjoukset_tyonkuvaus').val(data);
+           }
+        });
+	
     }
 
  });
@@ -158,8 +172,16 @@ $(document).ready(function(){
 
     if ($("input[name='tarjouslaskenta']:checked").val()) {
 	var thisFor = $(this).attr('for');
-	var tablekuvaus = $('#'+thisFor).html();
-	$('#CrmTarjoukset_tarjouslaskenta').val(tablekuvaus);
+        $.ajax({
+           url: 'get_tarjouslaskenta_by_id?id=' + thisFor,
+           //type: "POST",
+           //data: { },
+           success: function(data){
+		//var data = JSON.parse(data);
+		//console.log(data);
+		$('#CrmTarjoukset_tarjouslaskenta').val(data);
+           }
+        });
     }
 
  });

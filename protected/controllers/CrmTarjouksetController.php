@@ -32,7 +32,7 @@ class CrmTarjouksetController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view', 'laheta', 'get_tyonkuvaus_by_asiakas'),
+				'actions'=>array('admin','delete','create','update','index','view', 'laheta', 'get_tyonkuvaus_by_asiakas', 'get_tyonkuvaus_by_id', 'get_tarjouslaskenta_by_id'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -218,8 +218,6 @@ $randstring = generateRandomString();
 		if(file_exists($polku.$tiedosto))
 		{
 			$model->attributes=$_POST['CrmTarjoukset'];
-			$model->tyonkuvaus=json_encode($_POST['CrmTarjoukset']['tyonkuvaus']);
-			$model->tarjouslaskenta=json_encode($_POST['CrmTarjoukset']['tarjouslaskenta']);
 			if($model->save()){
 
 				$as = Asiakkaat::model()->findbypk($model->asiakas_id);
@@ -255,10 +253,7 @@ $randstring = generateRandomString();
 	
 			if(isset($_POST['CrmTarjoukset']))
 			{
-
 			$model->attributes=$_POST['CrmTarjoukset'];
-			$model->tyonkuvaus=json_encode($_POST['CrmTarjoukset']['tyonkuvaus']);
-			$model->tarjouslaskenta=json_encode($_POST['CrmTarjoukset']['tarjouslaskenta']);
 			if($model->save()){
 
 				$as = Asiakkaat::model()->findbypk($model->asiakas_id);
@@ -300,17 +295,71 @@ $randstring = generateRandomString();
 			$file = '';
 
 			// <-- Tyonkuvaus
-			$tyonkuvaus = json_decode($model->tyonkuvaus);
+			$tyonkuvaus = json_decode($model->tyonkuvaus, true);
+
+			$section = $PHPWord->createSection();
+			$table = $section->addTable();
+			$table->addRow(900);
+			// Add cells
+			$table->addCell(2000)->addText('Tilat');
+			$table->addCell(3000)->addText('Työtehtävät');
+			$table->addCell(3000)->addText('Laatutaso');
+			$table->addCell(2000)->addText('Kommenti');
+
+
+			foreach($tyonkuvaus['tilat'] as $key=>$items)
+			{
+				$tyontehtavat = $tyonkuvaus['tyontehtavat'][$key];
+				$tt_result = '';
+				foreach($tyontehtavat as $kt=>$it)
+					$tt_result .= $it['tyotehtava'].': '.$it['vkopvm']."\n";
+
+				$table->addRow(900);
+				$table->addCell(2000)->addText( implode("\n", $items));
+				$table->addCell(3000)->addText($tt_result);
+				$table->addCell(3000)->addText(implode("\n", $tyonkuvaus['laatutaso'][$key]));
+				$table->addCell(2000)->addText(implode("\n", $tyonkuvaus['kommenti'][$key]));
+
+			}
+
+			$objWriter = PHPWord_IOFactory::createWriter($PHPWord, 'Word2007');
+			$sTableText = $objWriter->getWriterPart('document')->getObjectAsText($table);
+			$document->setValue('tyonkuvaus', $sTableText);
+			//     Tyonkuvaus -->
+
+
+			// <-- Tarjouslaskenta
 			$tarjouslaskenta = json_decode($model->tarjouslaskenta);
 
-			require_once('HTMLtoOpenXML/HTMLtoOpenXML.php');
-			$toOpenXML = HTMLtoOpenXML::getInstance()->fromHTML(iconv('UTF-8','ISO-8859-1',$tyonkuvaus));
-			$document->setValue('tyonkuvaus', $toOpenXML);
+			$section = $PHPWord->createSection();
+			$table = $section->addTable();
+			$table->addRow(900);
+			// Add cells
+			$table->addCell(2000)->addText('Kuvaus');
+			$table->addCell(3000)->addText('Arvo');
 
-			$toOpenXML = HTMLtoOpenXML::getInstance()->fromHTML(iconv('UTF-8','ISO-8859-1',$tarjouslaskenta));
-			$document->setValue('tarjouslaskenta', $toOpenXML);
+			foreach($tarjouslaskenta as $key=>$item)
+			{
+				if( $key == 'muut_kulut' and is_array(json_decode($item, true)['otsikko']))
+				{
+					$uusiItem = '';
+					foreach(json_decode($item, true)['otsikko'] as $k2=>$muut)
+					{
+						$uusiItem .= $muut.": ".json_decode($item, true)['hinta'][$k2]."\n";
 
-			//     Tyonkuvaus -->
+					}
+					$item = $uusiItem;
+				}
+
+				$table->addRow(900);
+				$table->addCell(2000)->addText( $key );
+				$table->addCell(3000)->addText( $item );
+			}
+
+			$objWriter = PHPWord_IOFactory::createWriter($PHPWord, 'Word2007');
+			$sTableText = $objWriter->getWriterPart('document')->getObjectAsText($table);
+			$document->setValue('tarjouslaskenta', $sTableText);
+			//     Tarjouslaskenta -->
 
 
 			$firma = FirmanTiedot::model()->findbypk(1);
@@ -458,9 +507,8 @@ $randstring = generateRandomString();
 		foreach($model as $data)
 		{
 
-		$bd .= '<div class="tyokuvauksetValinta" id="tyokuvaus_'.$data->id.'"><h2>'.$data->otsikko.' <input type="radio" name="tyokuvaus" class="tyokuvaus" for="tablekuvaus_'.$data->id.'"></h2></div>
+		$bd .= '<div class="tyokuvauksetValinta" id="tyokuvaus_'.$data->id.'"><h2>'.$data->otsikko.' <input type="radio" name="tyokuvaus" class="tyokuvaus" for="'.$data->id.'"></h2></div>
 
-		<div id="tablekuvaus_'.$data->id.'">
 		<table class="table table-bordered" style="background:white">
 		    <tr>
 		        <th>'.Yii::t('main','Tilat').'</th>
@@ -474,53 +522,42 @@ $randstring = generateRandomString();
 		foreach($rivit as $key=>$r)
 		{
 
+		$exTilat = explode("\n", json_decode($r->tilat));
+		$tilat = '';
+		foreach($exTilat as $itm)
+			$tilat .= '<p>'.trim($itm).'</p>';
+
 		$bd .= '
 		    <tr class="rivi" num="'.$key.'">
-		        <td>
-		            '.str_replace("\n", "<br>", json_decode($r->tilat)).'
-		        </td>
-		        <td class="tyotehtavatVkoPvmTD">
-
-
-			<table class="table authors-list-tyotehtavat">
-			    <tr>
-			        <th>'.Yii::t('main','Työtehtävä').'</th><th>'.Yii::t('main','Vko. päivämäärät').'</th>
-			    </tr>';
+		        <td>'.$tilat.'</td>
+		        <td class="tyotehtavatVkoPvmTD">';
 
 			$tyontehtavat = json_decode($r->tyontehtavat, true);
 			foreach($tyontehtavat as $k2=>$r2)
 			{
 
-			$bd .= '
-			    <tr class="rivi-tyotehtavat" num="'.$key.'">
-			        <td>
-			            '.$r2['tyotehtava'].'
-			        </td>
-			        <td>
-			            '.$r2['vkopvm'].'
-			        </td>
-			    </tr>';
+			$bd .= '<p>'.$r2['tyotehtava'].': '.$r2['vkopvm'].'</p>';
 			}
 
 
-		$laatutaso = json_decode($r->laatutaso, true);
+		$exLaatutaso = explode("\n", json_decode($r->laatutaso));
+		$tasot = '';
+		foreach($exLaatutaso as $itm)
+			$tasot .= '<p>'.trim($itm).'</p>';
 
-		$bd .= '
-			</table>
+		$exKommenti = explode("\n", json_decode($r->laatutaso));
+		$kommentit = '';
+		foreach($exKommenti as $itm)
+			$kommentit .= '<p>'.trim($itm).'</p>';
 
-		        </td>
-		        <td>
-		            '.str_replace("\n", "<br>", $laatutaso).'
-		        </td>
-		        <td>
-		            '.str_replace("\n", "<br>", $r->kommenti).'
-		        </td>
+		$bd .= '</td>
+		        <td>'.$tasot.'</td>
+		        <td>'.$kommentit.'</td>
 		    </tr>
 		';
 		}
 
 		$bd .= '</table>
-		</div>
 		<hr>';
 		}
 
@@ -528,6 +565,62 @@ $randstring = generateRandomString();
 		}
 
 		return trim($bd);
+	}
+
+
+	public function actionGet_tyonkuvaus_by_id($id)
+	{
+	
+		$bd = array();
+		$data = Tyonkuvaus::model()->findByPk($id);
+		if(isset($data->id))
+		{
+		$bd['otsikko'] = $data->otsikko;
+
+		$rivit = TyonkuvausRivit::model()->findAll(" tyonkuvaus_id='".$data->id."' ");
+		foreach($rivit as $key=>$r)
+		{
+
+		$exTilat = explode("\n", json_decode($r->tilat));
+		$tilat = array();
+		foreach($exTilat as $itm)
+			$tilat[] = trim($itm);
+
+		$bd['tilat'][] = $tilat;
+
+			$tyontehtavat = json_decode($r->tyontehtavat, true);
+			$tt = array();
+			foreach($tyontehtavat as $k2=>$r2)
+			{
+
+			$tt[] = array('tyotehtava'=>$r2['tyotehtava'],'vkopvm'=>$r2['vkopvm']);
+			}
+
+		$bd['tyontehtavat'][] = $tt;
+
+
+
+		$exLaatutaso = explode("\n", json_decode($r->laatutaso));
+		$tasot = array();
+		foreach($exLaatutaso as $itm)
+			$tasot[] = trim($itm);
+
+		$bd['laatutaso'][] = $tasot;
+
+		$exKommenti = explode("\n", $r->kommenti);
+		$kommentit = array();
+		foreach($exKommenti as $itm)
+			$kommentit[] = trim($itm);
+
+		$bd['kommenti'][] = $kommentit;
+
+		}
+
+		}
+
+
+
+		echo json_encode($bd);
 	}
 
 
@@ -549,9 +642,9 @@ $randstring = generateRandomString();
 			$tl = $this->renderPartial('//tarjouslaskenta/view', array('model'=>$data), true);
 
 			$bd .= '<div class="tyokuvauksetValinta" id="tarjouslaskenta_'.$data->id.'">
-				<h2>'.Yii::t('main', 'Valitse tarjouslaskenta').' '.$data->id.' <input type="radio" name="tarjouslaskenta" class="tarjouslaskenta" for="tableTarjouslaskentaKuvaus_'.$data->id.'"></h2>
+				<h2>'.Yii::t('main', 'Valitse tarjouslaskenta').' '.$data->id.' <input type="radio" name="tarjouslaskenta" class="tarjouslaskenta" for="'.$data->id.'"></h2>
 			</div>';
-			$bd .= '<div id="tableTarjouslaskentaKuvaus_'.$data->id.'">'.$tl.'</div>';
+			$bd .= $tl;
 			$bd .= '<hr>';
 		}
 
@@ -561,6 +654,23 @@ $randstring = generateRandomString();
 		return trim($bd);
 	}
 
+
+	public function actionGet_tarjouslaskenta_by_id($id)
+	{
+
+		$bd = array();
+		$model = Tarjouslaskenta::model()->findByPk($id);
+		
+		if( isset($model->id) )
+		{
+
+                		$bd = array_filter($model->attributes);
+
+
+		}
+
+		echo json_encode($bd);
+	}
 
 
 	/**

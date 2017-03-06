@@ -8,22 +8,13 @@
 	{
 		$muut .= '
 		<div class="row">
-		 <div class="col-sm-4">
-		  <table class="table">';
+		 <div class="col-sm-4">';
 		foreach($tb['otsikko'] as $key=>$items)
 		{
-		$muut .= '
-		    <tr class="rivi" num="'.$key.'">
-		        <td>
-		            '.$items.'
-		        </td>
-		        <td>
-		            '.$tb['hinta'][$key].'
-		        </td>
-		    </tr>';
+		$muut .= $items.': '.$tb['hinta'][$key].'<br>';
 
 		}
-		$muut .= '</table>
+		$muut .= '
 		 </div>
 		</div>';
 	}
