@@ -218,7 +218,8 @@ $randstring = generateRandomString();
 		if(file_exists($polku.$tiedosto))
 		{
 			$model->attributes=$_POST['CrmTarjoukset'];
-			//$model->tyonkuvaus=json_encode($_POST['CrmTarjoukset']['tyonkuvaus']);
+			$model->tyonkuvaus=json_encode($_POST['CrmTarjoukset']['tyonkuvaus']);
+			$model->tarjouslaskenta=json_encode($_POST['CrmTarjoukset']['tarjouslaskenta']);
 			if($model->save()){
 
 				$as = Asiakkaat::model()->findbypk($model->asiakas_id);
@@ -256,6 +257,8 @@ $randstring = generateRandomString();
 			{
 
 			$model->attributes=$_POST['CrmTarjoukset'];
+			$model->tyonkuvaus=json_encode($_POST['CrmTarjoukset']['tyonkuvaus']);
+			$model->tarjouslaskenta=json_encode($_POST['CrmTarjoukset']['tarjouslaskenta']);
 			if($model->save()){
 
 				$as = Asiakkaat::model()->findbypk($model->asiakas_id);
@@ -267,6 +270,7 @@ $randstring = generateRandomString();
 					CrmTarjoukset::model()->updatebypk($model->id, array('asiakkaan_sahkoposti'=>$y->sahkoposti));
 
 				$this->docx($model);
+			
 			}
 		}
 
@@ -291,8 +295,22 @@ $randstring = generateRandomString();
 			}
 	
 			$PHPWord = new PHPWord();
+			//$objWriter = PHPWord_IOFactory::createWriter($PHPWord, 'Word2007');
 			$document = $PHPWord->loadTemplate('tiedostot/templates/'.Yii::app()->user->domain.'/crm_tarjous.docx');
 			$file = '';
+
+			// <-- Tyonkuvaus
+			$tyonkuvaus = json_decode($model->tyonkuvaus);
+			$tarjouslaskenta = json_decode($model->tarjouslaskenta);
+
+			require_once('HTMLtoOpenXML/HTMLtoOpenXML.php');
+			$toOpenXML = HTMLtoOpenXML::getInstance()->fromHTML(iconv('UTF-8','ISO-8859-1',$tyonkuvaus));
+			$document->setValue('tyonkuvaus', $toOpenXML);
+
+			$toOpenXML = HTMLtoOpenXML::getInstance()->fromHTML(iconv('UTF-8','ISO-8859-1',$tarjouslaskenta));
+			$document->setValue('tarjouslaskenta', $toOpenXML);
+
+			//     Tyonkuvaus -->
 
 
 			$firma = FirmanTiedot::model()->findbypk(1);
@@ -349,7 +367,7 @@ $randstring = generateRandomString();
 
 
 			$document->setValue('teksti', htmlspecialchars(iconv('UTF-8','ISO-8859-1',$model->tarjous)));
-			$document->setValue('tyonkuvaus', iconv('UTF-8','ISO-8859-1', $model->tyonkuvaus));
+			//$document->setValue('tyonkuvaus', iconv('UTF-8','ISO-8859-1', $model->tyonkuvaus));
 
 
 			$path = 'tiedostot/crm/tarjoukset/'.Yii::app()->user->domain.'/'.$liite;
@@ -424,14 +442,9 @@ $randstring = generateRandomString();
 		$this->render('index', array('dataProvider' => $dataProvider));
 	}
 
-	protected function get_tyonkuvaus($asiakas_id, $yhteystiedot_id, $id)
+	protected function get_tyonkuvaus($tb, $id)
 	{
 	
-		if( $asiakas_id != null )
-			$tb = 'asiakas_id';
-		if( $yhteystiedot_id != null )
-			$tb = 'yhteystiedot_id';
-
 		$bd = '';
        		$criteria = new CDbCriteria();
 	        $criteria->order = " id DESC ";
@@ -514,8 +527,41 @@ $randstring = generateRandomString();
 
 		}
 
-		return $bd;
+		return trim($bd);
 	}
+
+
+	protected function get_tarjouslaskenta($tb, $id)
+	{
+
+		$bd = '';
+       		$criteria = new CDbCriteria();
+	        $criteria->order = " id DESC ";
+	        $criteria->condition = " $tb='".$id."' ";
+		$model = Tarjouslaskenta::model()->findAll($criteria);
+		
+		if( count($model) > 0 )
+		{
+		$bd = '<h1>'.Yii::t('main', 'Valitse tarjouslaskenta').'</h1>';
+
+		foreach($model as $data)
+		{
+			$tl = $this->renderPartial('//tarjouslaskenta/view', array('model'=>$data), true);
+
+			$bd .= '<div class="tyokuvauksetValinta" id="tarjouslaskenta_'.$data->id.'">
+				<h2>'.Yii::t('main', 'Valitse tarjouslaskenta').' '.$data->id.' <input type="radio" name="tarjouslaskenta" class="tarjouslaskenta" for="tableTarjouslaskentaKuvaus_'.$data->id.'"></h2>
+			</div>';
+			$bd .= '<div id="tableTarjouslaskentaKuvaus_'.$data->id.'">'.$tl.'</div>';
+			$bd .= '<hr>';
+		}
+
+
+		}
+
+		return trim($bd);
+	}
+
+
 
 	/**
 	 * Manages all models.

@@ -2,24 +2,39 @@
 /* @var $this TarjouslaskentaController */
 /* @var $model Tarjouslaskenta */
 
-$this->breadcrumbs=array(
-	'Tarjouslaskentas'=>array('index'),
-	$model->id,
-);
+	$tb = json_decode($model->muut_kulut, true);
+	$muut = '';
+	if(is_array(json_decode($model->muut_kulut, true)))
+	{
+		$muut .= '
+		<div class="row">
+		 <div class="col-sm-4">
+		  <table class="table">';
+		foreach($tb['otsikko'] as $key=>$items)
+		{
+		$muut .= '
+		    <tr class="rivi" num="'.$key.'">
+		        <td>
+		            '.$items.'
+		        </td>
+		        <td>
+		            '.$tb['hinta'][$key].'
+		        </td>
+		    </tr>';
 
-$this->menu=array(
-	array('label'=>'List Tarjouslaskenta', 'url'=>array('index')),
-	array('label'=>'Create Tarjouslaskenta', 'url'=>array('create')),
-	array('label'=>'Update Tarjouslaskenta', 'url'=>array('update', 'id'=>$model->id)),
-	array('label'=>'Delete Tarjouslaskenta', 'url'=>'#', 'linkOptions'=>array('submit'=>array('delete','id'=>$model->id),'confirm'=>'Are you sure you want to delete this item?')),
-	array('label'=>'Manage Tarjouslaskenta', 'url'=>array('admin')),
-);
+		}
+		$muut .= '</table>
+		 </div>
+		</div>';
+	}
+
+$model->muut_kulut = $muut;
 ?>
 
-<h1>View Tarjouslaskenta #<?php echo $model->id; ?></h1>
 
 <?php $this->widget('zii.widgets.CDetailView', array(
 	'data'=>$model,
+	'cssFile' => Yii::app()->request->baseUrl.'/css/profile.css',
 	'attributes'=>array(
 		'id',
 		'time',
@@ -36,6 +51,10 @@ $this->menu=array(
 		'matkat',
 		'iltalisa',
 		'yolisa',
-		'muut_kulut',
+                        array
+                        (
+                                'name'=>'muut_kulut',
+                                'type'=>'raw',
+                        ),
 	),
 )); ?>

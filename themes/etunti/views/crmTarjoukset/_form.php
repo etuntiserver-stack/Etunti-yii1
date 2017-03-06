@@ -6,16 +6,25 @@
  $asiakas_selected = array();
  $yhteystiedot_selected = array();
  $tyonkuvaus = '';
+ $tarjouslaskenta = '';
  if(isset($_GET['asiakas_id']) and !empty($_GET['asiakas_id']))
  {
 	$asiakas_selected[$_GET['asiakas_id']] = array('selected' => 'selected');
-	$tyonkuvaus = $this->get_tyonkuvaus($_GET['asiakas_id'], null, $_GET['asiakas_id']);
+	$tyonkuvaus = $this->get_tyonkuvaus('asiakas_id', $_GET['asiakas_id']);
+	$tarjouslaskenta = $this->get_tarjouslaskenta('asiakas_id', $_GET['asiakas_id']);
  }
 
  if(isset($_GET['yhteystiedot_id']) and !empty($_GET['yhteystiedot_id']))
  {
 	$yhteystiedot_selected[$_GET['yhteystiedot_id']] = array('selected' => 'selected');
-	$tyonkuvaus = $this->get_tyonkuvaus(null, $_GET['yhteystiedot_id'], $_GET['yhteystiedot_id']);
+	$tyonkuvaus = $this->get_tyonkuvaus('yhteystiedot_id', $_GET['yhteystiedot_id']);
+	$tarjouslaskenta = $this->get_tarjouslaskenta('yhteystiedot_id', $_GET['yhteystiedot_id']);
+ }
+
+ if(isset($model->id))
+ {
+	$model->tyonkuvaus = json_decode($model->tyonkuvaus);
+	$model->tarjouslaskenta = json_decode($model->tarjouslaskenta);
  }
 ?>
 
@@ -30,14 +39,12 @@
 	'enableAjaxValidation'=>false,
 )); ?>
 
-
+<?php if(!isset($model->id)) : ?>
 <div class="row">
   <div class="col-sm-5">
 
-	<p class="note">Fields with <span class="required">*</span> are required.</p>
 
-	<?php echo $form->errorSummary($model); ?>
-
+	
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'yhteystiedot_id'); ?>
 		<?php
@@ -87,14 +94,28 @@
 
  </div>
 </div><!-- form -->
-
-
-		<?php echo $form->textArea($model,'tyonkuvaus',array('rows'=>6, 'cols'=>50, 'class'=>'form-control')); ?>
+<?php endif; ?>
 
 
 	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'tyonkuvaus'); ?>
+		<?php echo $form->textArea($model,'tyonkuvaus',array('rows'=>6, 'cols'=>50, 'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'tyonkuvaus'); ?>
+	</div>
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'tarjouslaskenta'); ?>
+		<?php echo $form->textArea($model,'tarjouslaskenta',array('rows'=>6, 'cols'=>50, 'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'tarjouslaskenta'); ?>
+	</div>
+
+
+	<div class="section fill mb5">
+		<?php echo $tarjouslaskenta; ?>
 		<?php echo $tyonkuvaus; ?>
 	</div>
+
+
 <!--
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'tarjous'); ?>
@@ -111,7 +132,7 @@
 
 
 
-
+<?php if(!isset($model->id)) : ?>
 <script type="text/javascript">
 $(document).ready(function(){
 
@@ -133,11 +154,25 @@ $(document).ready(function(){
 
  });
 
+ $('.tarjouslaskenta').change(function(){
+
+    if ($("input[name='tarjouslaskenta']:checked").val()) {
+	var thisFor = $(this).attr('for');
+	var tablekuvaus = $('#'+thisFor).html();
+	$('#CrmTarjoukset_tarjouslaskenta').val(tablekuvaus);
+    }
+
+ });
 
  $('#crm-tarjoukset-form').on("submit", function(e){
 
     if ($("#CrmTarjoukset_tyonkuvaus").val() === '') {
        	alert('Valitse työnkuvaus.');
+        return false;
+    }
+
+    if ($("#CrmTarjoukset_tarjouslaskenta").val() === '') {
+       	alert('Valitse tarjouslaskenta.');
         return false;
     }
 
@@ -165,4 +200,4 @@ $(document).ready(function(){
 
 });
 </script>
-
+<?php endif; ?>
