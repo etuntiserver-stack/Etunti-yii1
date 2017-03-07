@@ -27,7 +27,7 @@
 <div class="text-left">
   <div class="row">
    <div class="col-md-1">
-    <img src="<?php echo Yii::app()->request->baseUrl; ?>/etusivuimg/ari.png" class="img-thumbnail">
+    <img src="<?php echo Yii::app()->request->baseUrl; ?>/etusivuimg/etuntipikkulogo.jpg" class="img-thumbnail">
    </div>
    <div class="col-md-8">
     <span class="small yhteysInfo">

@@ -352,7 +352,7 @@ $randstring = generateRandomString();
 				}
 
 				$table->addRow(900);
-				$table->addCell(2000)->addText( $key );
+				$table->addCell(2000)->addText( Tarjouslaskenta::model()->getAttributeLabel($key) );
 				$table->addCell(3000)->addText( $item );
 			}
 
