@@ -186,17 +186,19 @@ class ToteutuneetController extends Controller
 			}
 
 			$mitaLahetetaan = json_decode($asetukset->netvisor_mita_lahetetaan, true);
-			//print_r($mitaLahetetaan);
+			//echo json_encode($mitaLahetetaan);
+			//exit;
 
 			$update = false;
 			$lastArr = array();
 			foreach($_POST['json'][0] as $key=>$value)
 			{
 
+
 				if($value > 0 and in_array($key,$mitaLahetetaan) )
 				{
 					$return = array();
-					//echo $key." ".$value."\n";
+					//$lastArr[] = array($key=>$value);
 
 					$return = $this->netvisorWorkday($key,$value,$model);
 					if(isset($return['statusOK'])){
@@ -208,8 +210,14 @@ class ToteutuneetController extends Controller
 						echo json_encode($return['statusError']);
 						exit;
 					}
+
 				}
+
 			}
+
+			//echo json_encode($lastArr);
+			//exit;
+
 
 			if($update == true)
 			{
