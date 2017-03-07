@@ -277,7 +277,24 @@ class KohteetController extends Controller
 		{
 			$model->attributes=$_POST['Kohteet'];
 			if($model->save())
+			{
+
+				// <-- Koordinatiit
+				$model=$this->loadModel($model->id);
+			        $latAuto = '';
+			        $lngAuto = '';
+			    	$coordinates = $this->getlatlong($model->osoite);
+				if(isset($coordinates->results[0]->geometry->location->lat))
+			        $latAuto = $coordinates->results[0]->geometry->location->lat.',';
+				if(isset($coordinates->results[0]->geometry->location->lng))
+			        $lngAuto = $coordinates->results[0]->geometry->location->lng;
+			
+				if( isset($model->id) and empty($model->gps_sijainti) and !empty($latAuto.$lngAuto))
+					Kohteet::model()->updateBypk($model->id, array('gps_sijainti' => $latAuto.$lngAuto));
+				// Koordinatiit -->
+
 				$this->redirect(array('view','id'=>$model->id));
+			}
 		}
 
 		$this->render('create',array(
@@ -299,6 +316,22 @@ class KohteetController extends Controller
 	   $site[0]->checkOikeus($checkOikeus);
 	//  Oikeudet -->
 
+
+		// <-- Koordinatiit
+		$model=$this->loadModel($id);
+	        $latAuto = '';
+	        $lngAuto = '';
+	    	$coordinates = $this->getlatlong($model->osoite);
+		if(isset($coordinates->results[0]->geometry->location->lat))
+	        $latAuto = $coordinates->results[0]->geometry->location->lat.',';
+		if(isset($coordinates->results[0]->geometry->location->lng))
+	        $lngAuto = $coordinates->results[0]->geometry->location->lng;
+	
+		if( isset($model->id) and empty($model->gps_sijainti) and !empty($latAuto.$lngAuto))
+			Kohteet::model()->updateBypk($model->id, array('gps_sijainti' => $latAuto.$lngAuto));
+		// Koordinatiit -->
+
+
 		$model=$this->loadModel($id);
 
 		// Uncomment the following line if AJAX validation is needed
@@ -314,6 +347,17 @@ class KohteetController extends Controller
 		$this->render('update',array(
 			'model'=>$model,
 		));
+	}
+
+	protected function getlatlong($address)
+	{
+	        $url = 'http://maps.googleapis.com/maps/api/geocode/json?address=' . urlencode($address) . '&sensor=true';
+	        $json = @file_get_contents($url);
+	        $data = json_decode($json);
+	        if ($data->status == "OK")
+	            return $data;
+	        else
+	            return false;
 	}
 
 	/**

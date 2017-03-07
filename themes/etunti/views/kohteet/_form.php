@@ -33,6 +33,7 @@ if($ismobile and !empty($model->puh_nro)) {
 
   <div class="col-sm-3">
 
+		<?php echo $form->hiddenField($model,'gps_sijainti',array('size'=>50,'maxlength'=>50,'class'=>'form-control')); ?>
 
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'asiakas_id'); ?>
@@ -149,38 +150,6 @@ if($ismobile and !empty($model->puh_nro)) {
 		<?php echo $form->textField($model,'tag_id',array('size'=>20,'maxlength'=>20,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'tag_id'); ?>
 	</div>
-
-	<?php if(isset($model->id)) : ?>
-	<div class="section fill mb5">
-		<?php 
-
-	    function getlatlong($address)
-	    {
-	        $url = 'http://maps.googleapis.com/maps/api/geocode/json?address=' . urlencode($address) . '&sensor=true';
-	        $json = @file_get_contents($url);
-	        $data = json_decode($json);
-	        if ($data->status == "OK")
-	            return $data;
-	        else
-	            return false;
-	    }
-	
-	        $latAuto = '';
-	        $lngAuto = '';
-	    	$coordinates = getlatlong($model->osoite);
-		if(isset($coordinates->results[0]->geometry->location->lat))
-	        $latAuto = '('.$coordinates->results[0]->geometry->location->lat.',';
-		if(isset($coordinates->results[0]->geometry->location->lng))
-	        $lngAuto = $coordinates->results[0]->geometry->location->lng.')';
-	
-    		//print_r($coordinates);
-
-		echo '<label>GPS-sijainti '.$latAuto.$lngAuto.'</label>';
-		?>
-		<?php echo $form->textField($model,'gps_sijainti',array('size'=>50,'maxlength'=>50,'class'=>'form-control')); ?>
-		<?php echo $form->error($model,'gps_sijainti'); ?>
-	</div>
-	<?php endif; ?>
 
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'siivous'); ?>
