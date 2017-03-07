@@ -302,7 +302,7 @@ $randstring = generateRandomString();
 			$table->addRow(900);
 			// Add cells
 			$table->addCell(2000)->addText('Tilat');
-			$table->addCell(3000)->addText('Työtehtävät');
+			$table->addCell(3000)->addText( iconv('UTF-8','ISO-8859-1', 'Työtehtävät') );
 			$table->addCell(3000)->addText('Laatutaso');
 			$table->addCell(2000)->addText('Kommenti');
 
@@ -315,10 +315,10 @@ $randstring = generateRandomString();
 					$tt_result .= $it['tyotehtava'].': '.$it['vkopvm']."\n";
 
 				$table->addRow(900);
-				$table->addCell(2000)->addText( implode("\n", $items));
-				$table->addCell(3000)->addText($tt_result);
-				$table->addCell(3000)->addText(implode("\n", $tyonkuvaus['laatutaso'][$key]));
-				$table->addCell(2000)->addText(implode("\n", $tyonkuvaus['kommenti'][$key]));
+				$table->addCell(2000)->addText( iconv('UTF-8','ISO-8859-1', implode("\n", $items)) );
+				$table->addCell(3000)->addText( iconv('UTF-8','ISO-8859-1', $tt_result) );
+				$table->addCell(3000)->addText( iconv('UTF-8','ISO-8859-1', implode("\n", $tyonkuvaus['laatutaso'][$key])) );
+				$table->addCell(2000)->addText( iconv('UTF-8','ISO-8859-1', implode("\n", $tyonkuvaus['kommenti'][$key])) );
 
 			}
 
@@ -351,9 +351,10 @@ $randstring = generateRandomString();
 					$item = $uusiItem;
 				}
 
+				$label = Tarjouslaskenta::model()->getAttributeLabel($key);
 				$table->addRow(900);
-				$table->addCell(2000)->addText( Tarjouslaskenta::model()->getAttributeLabel($key) );
-				$table->addCell(3000)->addText( $item );
+				$table->addCell(2000)->addText(  iconv('UTF-8','ISO-8859-1',$label) );
+				$table->addCell(3000)->addText( iconv('UTF-8','ISO-8859-1', $item) );
 			}
 
 			$objWriter = PHPWord_IOFactory::createWriter($PHPWord, 'Word2007');

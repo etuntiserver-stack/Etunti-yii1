@@ -60,7 +60,7 @@ public function getObjectAsText($element){
     } elseif($element instanceof PHPWord_TOC) {
         $this->_writeTOC($objWriter);
     }
-    return trim(preg_replace("/[\x1-\x8\xB-\xC\xE-\x1F-\t+]/", "", $objWriter->getData()));
+    return trim(preg_replace("/[\x1-\x8\xB-\xC\xE-\x1F-\t+]/", "", iconv('UTF-8','ISO-8859-1',$objWriter->getData()) ));
 
 }
 
