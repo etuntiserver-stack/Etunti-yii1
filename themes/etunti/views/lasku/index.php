@@ -53,22 +53,17 @@
 		//$criteria->select = " COALESCE(NULLIF(yhteyshenkilo,yhteyshenkilo),'gg') AS yht ";
 		$criteria->order = " yhteyshenkilo ";
 
+
         	$a = Asiakkaat::model()->findAll($criteria);
-		echo '<select name="asiakasLaskulle" class="gui-input">';
 
-		if(isset($_POST['asiakasLaskulle']) and !empty($_POST['asiakasLaskulle']))
-		{
-        	  $aon = Asiakkaat::model()->findbypk($_POST['asiakasLaskulle']);
-		  if(!empty($aon->yrityksen_nimi))
-		    echo '<option value="'.$aon->asiakasnumero.'">'.$aon->yrityksen_nimi.'</option>';
-		  elseif(empty($aon->yhteyshenkilo) and empty($aon->yrityksen_nimi))
-		    echo '<option value="'.$aon->asiakasnumero.'">nimet puutuu '.$aon->id.'</option>';
-		  else
-		    echo '<option value="'.$aon->asiakasnumero.'">'.$aon->yhteyshenkilo.' ID:'.$aon->id.'</option>';
-		} else {
-	        echo '<option></option>';
-		}
+		if(isset($_POST['asiakasLaskulle']))
+			$asiakasLaskulle = $_POST['asiakasLaskulle']; 
+		else 
+			$asiakasLaskulle = '';
 
+		echo '<input type="hidden" id="asiakasSelected" value="'.$asiakasLaskulle.'">';
+		echo '<select name="asiakasLaskulle" id="asiakaatLista" class="gui-input">';
+		echo '<option value=>'.Yii::t('main', 'Valitse asiakas').'</option>';
 		foreach($a as $aa)
 		{
 		  if(!empty($aa->yrityksen_nimi))
@@ -97,7 +92,6 @@
 				?>
 
 				<select name="tilaLaskulle" id="tilaLaskulle" class="gui-input">
-				<option>Tila</option>
 				<option value="0"><?php echo Yii::t('main', 'Luotu'); ?></option>
 				<option value="1"><?php echo Yii::t('main', 'Hyväksytty (Lähettämätömät)'); ?></option>
 				<option value="2"><?php echo Yii::t('main', 'Lähetetty'); ?></option>
@@ -252,6 +246,7 @@
 <script type="text/javascript">
 $(document).ready(function(){
 
+$('#asiakaatLista').val($('#asiakasSelected').val());
 
 $(".valitseKaikki").click(function(){
 	var $chk=$('#mobileTable input:checkbox');
