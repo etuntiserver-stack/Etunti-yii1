@@ -782,10 +782,6 @@ class LaskuController extends Controller
 		{
 			$criteria->addCondition (" tilanne=0 ");
 		}
-		if( !isset($_POST['tilaLaskulle']) )
-		{
-			$criteria->addCondition (" tilanne=0 ");
-		}
 		//  Luotu -->
 
 

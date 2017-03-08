@@ -92,6 +92,7 @@
 				?>
 
 				<select name="tilaLaskulle" id="tilaLaskulle" class="gui-input">
+				<option value=><?php echo Yii::t('main', 'Valitse tilanne'); ?></option>
 				<option value="0"><?php echo Yii::t('main', 'Luotu'); ?></option>
 				<option value="1"><?php echo Yii::t('main', 'Hyväksytty (Lähettämätömät)'); ?></option>
 				<option value="2"><?php echo Yii::t('main', 'Lähetetty'); ?></option>
