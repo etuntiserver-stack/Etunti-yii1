@@ -26,8 +26,29 @@
 		<?php echo $form->textField($model,'api_access_key',array('size'=>60,'maxlength'=>500,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'api_access_key'); ?>
 	</div>
+
+	<div class="row">
+		<?php echo $form->labelEx($model,'googlemaps_apikey'); ?>
+		<?php echo $form->textField($model,'googlemaps_apikey',array('size'=>60,'maxlength'=>500,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'googlemaps_apikey'); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->labelEx($model,'viralliset_pyhapaivat'); ?>
+		<?php echo $form->textarea($model,'viralliset_pyhapaivat',array('rows'=>8,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'viralliset_pyhapaivat'); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->labelEx($model,'erikoislauantai'); ?>
+		<?php echo $form->textarea($model,'erikoislauantai',array('rows'=>8,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'erikoislauantai'); ?>
+	</div>
+
   </div>
 </div><!-- form -->
+
+
 
 <div class="row form">
   <div class="col-sm-12">

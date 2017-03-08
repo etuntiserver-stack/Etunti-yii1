@@ -1,10 +1,16 @@
 <?php
 	$head = '';
 	$as = Asiakkaat::model()->findbypk($data->asiakas_id);
-	if(!empty($as->yrityksen_nimi) and empty($as->yhteyshenkilo))
+	$yht = Yhteystiedot::model()->findbypk($data->yhteystiedot_id);
+
+	if(isset($as->id) and !empty($as->yrityksen_nimi) and empty($as->yhteyshenkilo))
 	$head= $as->yrityksen_nimi.', '.$as->osoite;
-	elseif(empty($as->yrityksen_nimi) and !empty($as->yhteyshenkilo))
+	elseif(isset($as->id) and empty($as->yrityksen_nimi) and !empty($as->yhteyshenkilo))
 	$head = $as->yhteyshenkilo.', '.$as->osoite;
+	elseif(isset($yht->id) and !empty($yht->yrityksen_nimi) and empty($yht->yhteyshenkilo))
+	$head= $yht->yrityksen_nimi.', '.$yht->osoite;
+	elseif(isset($yht->id) and empty($yht->yrityksen_nimi) and !empty($yht->yhteyshenkilo))
+	$head = $yht->yhteyshenkilo.', '.$yht->osoite;
 ?>
 
 <tr>

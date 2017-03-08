@@ -3734,13 +3734,13 @@ class TyovuorootController extends Controller
 	$pyh = array();
 
 	$dateMonth = date("d.m.Y",strtotime($date));
-	$asetukset = Asetukset::model()->findbypk(1);
-	$pyh = explode("\n",$asetukset->pyhapaivat);
+	$asetukset = AsetuksetForAll::model()->findbypk(1);
+	$pyh = explode("\n",$asetukset->viralliset_pyhapaivat);
 
 	if(
 	   date("N",strtotime($date)) == 6 
 	   or date("N",strtotime($date)) == 7
-	   or strstr($asetukset->pyhapaivat, $dateMonth)
+	   or strstr($asetukset->viralliset_pyhapaivat, $dateMonth)
 	)
 	return true;
 	else

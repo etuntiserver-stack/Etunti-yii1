@@ -39,8 +39,8 @@ class AsetuksetForAll extends CActiveRecord
 		return array(
 			array('asetus, api_access_key', 'required'),
 			array('asetus', 'length', 'max'=>255),
-			array('api_access_key', 'length', 'max'=>500),
-			array('ohjesivu', 'length', 'max'=>50000),
+			array('api_access_key, googlemaps_apikey', 'length', 'max'=>500),
+			array('ohjesivu, viralliset_pyhapaivat, erikoislauantai', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('id, asetus, api_access_key, ohjesivu', 'safe', 'on'=>'search'),

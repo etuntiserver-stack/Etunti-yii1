@@ -2953,9 +2953,9 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 
 		$pvmSTR = '';
 
-		$asetukset = Asetukset::model()->findbypk(1);
+		$asetukset = AsetuksetForAll::model()->findbypk(1);
 		if($m == "pyhat")
-		$pvms = explode("\n",$asetukset->pyhapaivat);
+		$pvms = explode("\n",$asetukset->viralliset_pyhapaivat);
 		elseif($m == "el")
 		$pvms = explode("\n",$asetukset->erikoislauantai);
 

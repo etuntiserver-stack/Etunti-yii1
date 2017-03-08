@@ -30,6 +30,69 @@
 	//print_r($tarjouslaskenta_arr);
 	//echo '</pre>';
 	//print_r($model->tarjouslaskenta);
+
+			$tl_table = '';
+			$tl_table .= '<h2>'.Yii::t('main', 'Tarjouslaskenta').'</h2>';
+			$tl_table .= '<table class="table table-bordered bg-white">';
+			$tl_table .= '<tr>';
+			$tl_table .= '<th>'.Yii::t('main', 'Kuvaus').'</th>';
+			$tl_table .= '<th>'.Yii::t('main', 'Arvo').'</th>';
+			$tl_table .= '</tr>';
+
+			foreach($tarjouslaskenta_arr as $key=>$item)
+			{
+				if( $key == 'muut_kulut' and is_array(json_decode($item, true)['otsikko']))
+				{
+					$uusiItem = '';
+					foreach(json_decode($item, true)['otsikko'] as $k2=>$muut)
+					{
+						$uusiItem .= $muut.": ".json_decode($item, true)['hinta'][$k2]."<br>";
+
+					}
+					$item = $uusiItem;
+				}
+
+				$label = Tarjouslaskenta::model()->getAttributeLabel($key);
+
+				$tl_table .= '<tr>';
+				$tl_table .= '<td>'.$label.'</td>';
+				$tl_table .= '<td>'.$item.'</td>';
+				$tl_table .= '</tr>';
+
+			}
+			$tl_table .= '</table>';
+
+			echo $tl_table;
+
+
+			$tk_table = '';
+			$tk_table .= '<h2>'.Yii::t('main', 'Työnkuvaus').'</h2>';
+			$tk_table .= '<table class="table table-bordered bg-white">';
+			$tk_table .= '<tr>';
+			$tk_table .= '<th>'.Yii::t('main', 'Tilat').'</th>';
+			$tk_table .= '<th>'.Yii::t('main', 'Työtehtävät').'</th>';
+			$tk_table .= '<th>'.Yii::t('main', 'Laatutaso').'</th>';
+			$tk_table .= '<th>'.Yii::t('main', 'Kommenti').'</th>';
+			$tk_table .= '</tr>';
+
+			foreach($tyonkuvaus_arr['tilat'] as $key=>$items)
+			{
+				$tyontehtavat = $tyonkuvaus_arr['tyontehtavat'][$key];
+				$tt_result = '';
+				foreach($tyontehtavat as $kt=>$it)
+					$tt_result .= $it['tyotehtava'].': '.$it['vkopvm']."\n";
+
+				$tk_table .= '<tr>';
+				$tk_table .= '<td>'.implode("<br>", $items).'</td>';
+				$tk_table .= '<td>'.$tt_result.'</td>';
+				$tk_table .= '<td>'.implode("<br>", $tyonkuvaus_arr['laatutaso'][$key]).'</td>';
+				$tk_table .= '<td>'.implode("<br>", $tyonkuvaus_arr['kommenti'][$key]).'</td>';
+				$tk_table .= '</tr>';
+
+			}
+			$tk_table .= '</table>';
+
+			echo $tk_table;
  }
 ?>
 
@@ -102,17 +165,9 @@
 <?php endif; ?>
 
 
-	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'tyonkuvaus'); ?>
-		<?php echo $form->textArea($model,'tyonkuvaus',array('rows'=>6, 'cols'=>50, 'class'=>'form-control')); ?>
-		<?php echo $form->error($model,'tyonkuvaus'); ?>
-	</div>
 
-	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'tarjouslaskenta'); ?>
-		<?php echo $form->textArea($model,'tarjouslaskenta',array('rows'=>6, 'cols'=>50, 'class'=>'form-control')); ?>
-		<?php echo $form->error($model,'tarjouslaskenta'); ?>
-	</div>
+		<?php echo $form->textArea($model,'tyonkuvaus',array('rows'=>6, 'cols'=>50, 'class'=>'form-control', 'style'=>'display:none')); ?>
+		<?php echo $form->textArea($model,'tarjouslaskenta',array('rows'=>6, 'cols'=>50, 'class'=>'form-control', 'style'=>'display:none')); ?>
 
 
 	<div class="section fill mb5">
