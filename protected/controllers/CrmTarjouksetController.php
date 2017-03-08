@@ -294,77 +294,7 @@ $randstring = generateRandomString();
 			$document = $PHPWord->loadTemplate('tiedostot/templates/'.Yii::app()->user->domain.'/crm_tarjous.docx');
 			$file = '';
 
-			// <-- Tyonkuvaus
-			$tyonkuvaus = json_decode($model->tyonkuvaus, true);
 
-			$section = $PHPWord->createSection();
-			$table = $section->addTable();
-			$table->addRow(900);
-			// Add cells
-			$table->addCell(2000)->addText('Tilat');
-			$table->addCell(3000)->addText( iconv('UTF-8','ISO-8859-1', 'Työtehtävät') );
-			$table->addCell(3000)->addText('Laatutaso');
-			$table->addCell(2000)->addText('Kommenti');
-
-
-			foreach($tyonkuvaus['tilat'] as $key=>$items)
-			{
-				$tyontehtavat = $tyonkuvaus['tyontehtavat'][$key];
-				$tt_result = '';
-				foreach($tyontehtavat as $kt=>$it)
-					$tt_result .= $it['tyotehtava'].': '.$it['vkopvm']."\n";
-
-				$table->addRow(900);
-				$table->addCell(2000)->addText( iconv('UTF-8','ISO-8859-1', implode("\n", $items)) );
-				$table->addCell(3000)->addText( iconv('UTF-8','ISO-8859-1', $tt_result) );
-				$table->addCell(3000)->addText( iconv('UTF-8','ISO-8859-1', implode("\n", $tyonkuvaus['laatutaso'][$key])) );
-				$table->addCell(2000)->addText( iconv('UTF-8','ISO-8859-1', implode("\n", $tyonkuvaus['kommenti'][$key])) );
-
-			}
-
-			$objWriter = PHPWord_IOFactory::createWriter($PHPWord, 'Word2007');
-			$sTableText = $objWriter->getWriterPart('document')->getObjectAsText($table);
-			$document->setValue('tyonkuvaus', $sTableText);
-			//     Tyonkuvaus -->
-
-
-			// <-- Tarjouslaskenta
-			$tarjouslaskenta = json_decode($model->tarjouslaskenta);
-
-			$section = $PHPWord->createSection();
-
-
-
-
-			$table = $section->addTable();
-			$table->addRow(900);
-			// Add cells
-			$table->addCell(2000)->addText('Kuvaus');
-			$table->addCell(3000)->addText('Arvo');
-
-			foreach($tarjouslaskenta as $key=>$item)
-			{
-				if( $key == 'muut_kulut' and is_array(json_decode($item, true)['otsikko']))
-				{
-					$uusiItem = '';
-					foreach(json_decode($item, true)['otsikko'] as $k2=>$muut)
-					{
-						$uusiItem .= $muut.": ".json_decode($item, true)['hinta'][$k2]."\n";
-
-					}
-					$item = $uusiItem;
-				}
-
-				$label = Tarjouslaskenta::model()->getAttributeLabel($key);
-				$table->addRow(900);
-				$table->addCell(2000)->addText(  iconv('UTF-8','ISO-8859-1',$label) );
-				$table->addCell(3000)->addText( iconv('UTF-8','ISO-8859-1', $item) );
-			}
-
-			$objWriter = PHPWord_IOFactory::createWriter($PHPWord, 'Word2007');
-			$sTableText = $objWriter->getWriterPart('document')->getObjectAsText($table);
-			$document->setValue('tarjouslaskenta', $sTableText);
-			//     Tarjouslaskenta -->
 
 
 			$firma = FirmanTiedot::model()->findbypk(1);
