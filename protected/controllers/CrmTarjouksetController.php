@@ -437,7 +437,7 @@ $randstring = generateRandomString();
 		  	$document->save($path.'.docx');
 
 			shell_exec('unoconv -f pdf '.$path.'.docx');
-			$this->redirect(array('index'));
+			//$this->redirect(array('index'));
 
 	}
 
