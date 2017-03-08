@@ -207,7 +207,7 @@ class ToteutuneetController extends Controller
 					}
 
 					if(isset($return['statusError'])){
-						echo json_encode(array('statusError'=>json_encode($return['statusError'])));
+						echo json_encode($return['statusError']);
 						exit;
 					}
 
