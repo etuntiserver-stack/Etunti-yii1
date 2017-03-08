@@ -190,6 +190,7 @@ class ToteutuneetController extends Controller
 			//exit;
 
 			$update = false;
+			$errors = array();
 			$lastArr = array();
 			foreach($_POST['json'][0] as $key=>$value)
 			{
@@ -207,16 +208,18 @@ class ToteutuneetController extends Controller
 					}
 
 					if(isset($return['statusError'])){
-						echo json_encode($return['statusError']);
-						exit;
+\						array_push($errors, $return['statusError']);
 					}
 
 				}
 
 			}
 
-			//echo json_encode($lastArr);
-			//exit;
+			if( count($errors) > 0 )
+			{
+				echo json_encode($errors);
+				exit;
+			}
 
 
 			if($update == true)
@@ -324,6 +327,7 @@ class ToteutuneetController extends Controller
 		if($nimike == 'ls') $collectorratio =  9;
 
 
+
 // <-- XML
 $xml = '
 <root>
@@ -354,6 +358,7 @@ $xml = '
 	
 	$context = stream_context_create($optsPOST);
 	
+
 	$response = file_get_contents($url, false, $context);
 	$result = new SimpleXMLElement($response);
 	
@@ -365,14 +370,11 @@ $xml = '
 		}
 
 	  } else {
-			$return = array('statusError'=>$nimike.' '.$model->pvm.'<br> '.json_encode($result));
+			$return = array('statusError'=>$model->pvm.'<br> '.json_encode($result).', nimike: '.$nimike.', collectorratio: '.$collectorratio);
 	  }
 
-		/*
-		echo '<pre>';
-		print_r($response);
-		echo '</pre>';
-		*/
+
+	   // $return = array('statusError'=>$nimike.' '.$collectorratio.' '.$sekuntti); // tarkistamiseksi
 
 
 	} // if isset $n[0]
@@ -1169,6 +1171,7 @@ $xml = '
 	    {
   	    echo '<tr>';
   		echo '<td style="background: #669999;color: white" class="text-center viikkoRivi small myBgColors"><b>'.Yii::t('main', 'Viikko').' '.date("W",strtotime($date)).'</b></td>';
+
 
 		 $vktyoaika = '';
 		 $ts = Tyosuhdet::model()->find(" tid = '".$tid."' ");

@@ -813,7 +813,7 @@ $(document).ready(function(){
     });
   });
 	json.push(object);
-        console.log( json );
+        //console.log( json );
 	//return false;	
 
 
