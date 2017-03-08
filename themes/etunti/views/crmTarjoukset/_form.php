@@ -96,7 +96,9 @@
  }
 ?>
 
-
+<style>
+.kohdeHide { display:none }
+</style>
 
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'crm-tarjoukset-form',
@@ -109,7 +111,7 @@
 
 <?php if(!isset($model->id)) : ?>
 <div class="row">
-  <div class="col-sm-5">
+  <div class="col-sm-4">
 
 
 	
@@ -159,6 +161,52 @@
 		<?php echo $form->error($model,'asiakas_id'); ?>
 	</div>
 
+	<?php if(isset($_GET['asiakas_id'])) : ?>
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'kohde_id'); ?>
+		<?php
+		$list = array();
+		$criteria=new CDbCriteria;
+		$criteria->condition=" asiakas_id='".$_GET['asiakas_id']."' ";
+      		$l = Kohteet::model()->findAll($criteria);
+		if( $l != null )
+		{
+		    foreach($l as $v)
+		    {
+			$list[$v->id] = $v->osoite;
+		    }
+		}
+
+		if(count($list) > 0)
+		{
+        		echo $form->dropDownList($model, 'kohde_id', $list,
+			array('empty'=>'Valitse','class'=>'form-control required', 'options'=>$asiakas_selected));
+		}		
+        	?>
+		<?php echo $form->error($model,'kohde_id'); ?>
+	</div>
+	<?php endif; ?>
+
+ </div><div class="col-sm-4">
+
+
+	<div class="section fill mb5 kohdeHide">
+		<?php echo $form->labelEx($model,'kohteen_osoite'); ?>
+		<?php echo $form->textField($model,'kohteen_osoite',array('maxlength'=>255,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'kohteen_osoite'); ?>
+	</div>
+
+	<div class="section fill mb5 kohdeHide">
+		<?php echo $form->labelEx($model,'kohteen_postinumero'); ?>
+		<?php echo $form->numberField($model,'kohteen_postinumero',array('maxlength'=>50,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'kohteen_postinumero'); ?>
+	</div>
+
+	<div class="section fill mb5 kohdeHide">
+		<?php echo $form->labelEx($model,'kohteen_postitoimipaikka'); ?>
+		<?php echo $form->textField($model,'kohteen_postitoimipaikka',array('maxlength'=>255,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'kohteen_postitoimipaikka'); ?>
+	</div>
 
  </div>
 </div><!-- form -->
@@ -259,20 +307,27 @@ $(document).ready(function(){
  });
 
 
-/*
-        $.ajax({
-           url: 'get_tyonkuvaus_by_asiakas?id=' + $(this).val(),
-           //type: "POST",
+ $('#CrmTarjoukset_kohde_id').change(function(){
 
+	var thisVal = $(this).val();
+        $.ajax({
+           url: 'get_kohteentiedot?id=' + thisVal,
+           //type: "POST",
            //data: { },
            success: function(data){
-		var d = JSON.parse(data);
-		console.log(d);
-
-
+		var data = JSON.parse(data);
+		console.log(data);
+		if(data['id'])
+		{
+			$('.kohdeHide').show();
+			$('#CrmTarjoukset_kohteen_osoite').val(data['osoite']).attr('readonly', 'yes');
+			$('#CrmTarjoukset_kohteen_postinumero').val(data['pnumero']).attr('readonly', 'yes');
+			$('#CrmTarjoukset_kohteen_postitoimipaikka').val(data['kaupunki']).attr('readonly', 'yes');
+		}
            }
         });
-*/
+
+ });
 
 
 });

@@ -32,8 +32,8 @@ class CrmTarjoukset extends DB2ActiveRecord
 		return array(
 			//array('asiakas_id', 'required'),
 			array('asiakas_id, yhteystiedot_id, status', 'numerical', 'integerOnly'=>true),
-			array('hyvaksyn_koodi, liite', 'length', 'max'=>255),
-			array('asiakkaan_sahkoposti', 'length', 'max'=>100),
+			array('hyvaksyn_koodi, liite, kohteen_osoite, kohteen_postitoimipaikka', 'length', 'max'=>255),
+			array('asiakkaan_sahkoposti, kohteen_postinumero', 'length', 'max'=>100),
 			array('tarjous, tyonkuvaus, tarjouslaskenta', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
@@ -66,6 +66,11 @@ class CrmTarjoukset extends DB2ActiveRecord
 			'asiakkaan_sahkoposti' => 'Asiakkaan Sahkoposti',
 			'status' => 'Status',
 			'tyonkuvaus' => Yii::t('main', 'Työnkuvaus'),
+			'yhteystiedot_id' => Yii::t('main', 'Yhteystiedot'),
+			'kohde_id' => Yii::t('main', 'Kohde'),
+			'kohteen_osoite' => Yii::t('main', 'Kohteen osoite'),
+			'kohteen_postinumero' => Yii::t('main', 'Kohteen postinumero'),
+			'kohteen_postitoimipaikka' => Yii::t('main', 'Kohteen postitoimipaikka'),
 		);
 	}
 

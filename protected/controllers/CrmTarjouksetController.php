@@ -32,7 +32,7 @@ class CrmTarjouksetController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view', 'laheta', 'get_tyonkuvaus_by_asiakas', 'get_tyonkuvaus_by_id', 'get_tarjouslaskenta_by_id'),
+				'actions'=>array('admin','delete','create','update','index','view', 'laheta', 'get_tyonkuvaus_by_asiakas', 'get_tyonkuvaus_by_id', 'get_tarjouslaskenta_by_id', 'get_kohteentiedot'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -180,6 +180,17 @@ $randstring = generateRandomString();
 
 
 		}
+	}
+
+
+	public function actionGet_kohteentiedot($id)
+	{
+		$model = Kohteet::model()->findByPk($id);
+		$arr = array();
+		if(isset($model->id))
+		$arr = $model->attributes;
+
+		echo json_encode($arr);
 	}
 
 	public function actionView($id)
@@ -656,7 +667,7 @@ $randstring = generateRandomString();
 			$tl = $this->renderPartial('//tarjouslaskenta/view', array('model'=>$data), true);
 
 			$bd .= '<div class="tyokuvauksetValinta" id="tarjouslaskenta_'.$data->id.'">
-				<h2>'.Yii::t('main', 'Valitse tarjouslaskenta').' '.$data->id.' <input type="radio" name="tarjouslaskenta" class="tarjouslaskenta" for="'.$data->id.'"></h2>
+				<h2>'.Yii::t('main', 'Tarjouslaskenta').' #'.$data->id.' <input type="radio" name="tarjouslaskenta" class="tarjouslaskenta" for="'.$data->id.'"></h2>
 			</div>';
 			$bd .= $tl;
 			$bd .= '<hr>';
