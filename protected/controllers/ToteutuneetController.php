@@ -190,7 +190,6 @@ class ToteutuneetController extends Controller
 			//exit;
 
 			$update = false;
-			$errors = array();
 			$lastArr = array();
 			foreach($_POST['json'][0] as $key=>$value)
 			{
@@ -208,18 +207,14 @@ class ToteutuneetController extends Controller
 					}
 
 					if(isset($return['statusError'])){
-\						array_push($errors, $return['statusError']);
+						echo json_encode(array('statusError'=>json_encode($return['statusError'])));
+						exit;
 					}
 
 				}
 
 			}
 
-			if( count($errors) > 0 )
-			{
-				echo json_encode($errors);
-				exit;
-			}
 
 
 			if($update == true)
