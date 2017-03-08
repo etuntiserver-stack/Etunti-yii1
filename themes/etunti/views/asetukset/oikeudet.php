@@ -10,6 +10,7 @@
 	'viestinta'=>array(0=>'Viestinta taulu',1=>'Luo viesti',2=>'Muokaa viesti',3=>'Poista viesti'),
 	'administrators'=>array(0=>'Järjestelmänvalvoja taulu',1=>'Luo järjestelmänvalvoja',2=>'Muokaa järjestelmänvalvoja',3=>'Poista järjestelmänvalvoja'),
 	'mallitiedostot'=>array(0=>null,1=>null,2=>'Mallitiedostot',3=>null),
+	'lasku'=>array(0=>'Laskutus taulu',1=>'Luo lasku',2=>'Muokaa lasku',3=>'Poista lasku'),
  );
 
 	$tas = '';

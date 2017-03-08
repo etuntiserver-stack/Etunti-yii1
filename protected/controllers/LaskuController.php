@@ -566,6 +566,11 @@ class LaskuController extends Controller
 	public function actionCreate()
 	{
 
+	// <-- Oikeudet
+	   $checkOikeus = "lasku_1_".Yii::app()->user->adminStatus;
+	   $site = Yii::app()->createController('Site');
+	   $site[0]->checkOikeus($checkOikeus);
+	//  Oikeudet -->
 
 		$model=new Lasku;
 
@@ -654,6 +659,14 @@ class LaskuController extends Controller
 	 */
 	public function actionUpdate($id)
 	{
+
+	// <-- Oikeudet
+	   $checkOikeus = "lasku_2_".Yii::app()->user->adminStatus;
+	   $site = Yii::app()->createController('Site');
+	   $site[0]->checkOikeus($checkOikeus);
+	//  Oikeudet -->
+
+
 		$model=$this->loadModel($id);
 		$laskunRivit=LaskunRivit::model()->findAll("lid='".$id."'");
 		// Uncomment the following line if AJAX validation is needed
@@ -726,6 +739,13 @@ class LaskuController extends Controller
 	 */
 	public function actionDelete($id)
 	{
+
+	// <-- Oikeudet
+	   $checkOikeus = "lasku_3_".Yii::app()->user->adminStatus;
+	   $site = Yii::app()->createController('Site');
+	   $site[0]->checkOikeus($checkOikeus);
+	//  Oikeudet -->
+
 		$this->loadModel($id)->delete();
 		LaskunRivit::model()->deleteAll(" lid='".$id."' ");
 		LaskuHistoria::model()->deleteAll("lid='".$id."'");
@@ -740,6 +760,13 @@ class LaskuController extends Controller
 	 */
 	public function actionIndex()
 	{
+
+	// <-- Oikeudet
+	   $checkOikeus = "lasku_0_".Yii::app()->user->adminStatus;
+	   $site = Yii::app()->createController('Site');
+	   $site[0]->checkOikeus($checkOikeus);
+	//  Oikeudet -->
+
 		$lahettamattomat = false;
 		$asetukset=Asetukset::model()->findbypk(1);
 
