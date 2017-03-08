@@ -26,9 +26,9 @@
 	$tyonkuvaus_arr = json_decode($model->tyonkuvaus, true);
 	$tarjouslaskenta_arr = json_decode($model->tarjouslaskenta, true);
 
-	echo '<pre>';
-	print_r($tarjouslaskenta_arr);
-	echo '</pre>';
+	//echo '<pre>';
+	//print_r($tarjouslaskenta_arr);
+	//echo '</pre>';
 	//print_r($model->tarjouslaskenta);
  }
 ?>

@@ -333,23 +333,14 @@ $randstring = generateRandomString();
 
 			$section = $PHPWord->createSection();
 
-			// Define table style arrays
-			$styleTable = array('borderSize'=>6, 'borderColor'=>'006699', 'cellMargin'=>80);
-			$styleFirstRow = array('borderBottomSize'=>18, 'borderBottomColor'=>'0000FF', 'bgColor'=>'66BBFF');
-			// Define cell style arrays
-			$styleCell = array('borderBottomSize'=>2, 'borderBottomColor'=>'333333', 'bgColor'=>'CCCCC', 'cellMargin'=>10);
-			$styleCellBTLR = array('valign'=>'center', 'textDirection'=>PHPWord_Style_Cell::TEXT_DIR_BTLR);
-			// Define font style for first row
-			$fontStyle = array('bold'=>true, 'align'=>'center');
-			// Add table style
-			$PHPWord->addTableStyle('myOwnTableStyle', $styleTable, $styleFirstRow);
 
 
-			$table = $section->addTable('myOwnTableStyle');
+
+			$table = $section->addTable();
 			$table->addRow(900);
 			// Add cells
-			$table->addCell(2000, $styleFirstRow)->addText('Kuvaus', $fontStyle);
-			$table->addCell(3000, $styleFirstRow)->addText('Arvo', $fontStyle);
+			$table->addCell(2000)->addText('Kuvaus');
+			$table->addCell(3000)->addText('Arvo');
 
 			foreach($tarjouslaskenta as $key=>$item)
 			{
@@ -366,8 +357,8 @@ $randstring = generateRandomString();
 
 				$label = Tarjouslaskenta::model()->getAttributeLabel($key);
 				$table->addRow(900);
-				$table->addCell(2000, $styleCell)->addText(  iconv('UTF-8','ISO-8859-1',$label) );
-				$table->addCell(3000, $styleCell)->addText( iconv('UTF-8','ISO-8859-1', $item) );
+				$table->addCell(2000)->addText(  iconv('UTF-8','ISO-8859-1',$label) );
+				$table->addCell(3000)->addText( iconv('UTF-8','ISO-8859-1', $item) );
 			}
 
 			$objWriter = PHPWord_IOFactory::createWriter($PHPWord, 'Word2007');
