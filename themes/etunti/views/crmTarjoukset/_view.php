@@ -11,6 +11,13 @@
 	$head= $yht->yrityksen_nimi.', '.$yht->osoite;
 	elseif(isset($yht->id) and empty($yht->yrityksen_nimi) and !empty($yht->yhteyshenkilo))
 	$head = $yht->yhteyshenkilo.', '.$yht->osoite;
+
+	$sahkoposti = '';
+	if(isset($as->id) and $data->asiakas_id != 0)
+	$sahkoposti = $as->sahkoposti;
+
+	if(isset($yht->id) and $data->yhteystiedot_id != 0)
+	$sahkoposti = $yht->sahkoposti;
 ?>
 
 <tr>
@@ -32,7 +39,7 @@
 	</td>
 	<td>
 		<?php 
-			if(isset($as->sahkoposti) and $data->status == 0 and
+			if(!empty($sahkoposti) and $data->status == 0 and
    		(file_exists(Yii::app()->basePath."/../tiedostot/crm/tarjoukset/".Yii::app()->user->domain."/".$data->liite.".pdf"))
 			)
 			{
