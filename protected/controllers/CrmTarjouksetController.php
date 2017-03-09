@@ -116,8 +116,6 @@ class CrmTarjouksetController extends Controller
 		if(isset($_POST['id']))
 		{
 			$crm = CrmTarjoukset::model()->findbypk($_POST['id']);
-			$as = Asiakkaat::model()->findbypk($crm->asiakas_id);
-
 
 
 function generateRandomString($length = 40) {
@@ -154,7 +152,7 @@ $randstring = generateRandomString();
 		$mail = new YiiMailer();
 		//$mail->clearLayout();//if layout is already set in config
 		$mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
-		$mail->setTo($as->sahkoposti);
+		$mail->setTo($crm->sahkoposti);
 		$mail->setSubject($subject);
 		$mail->setBody($message);
 		$mail->setAttachment($path.'/'.$file);
@@ -165,7 +163,7 @@ $randstring = generateRandomString();
 							// <-- LOG
 							$log=new Log;
 							$log->log_category 	= 1; // 1-email
-							$log->email_to 		= $as->sahkoposti;
+							$log->email_to 		= $crm->sahkoposti;
 							$log->email_subject	= $subject;
 							$log->email_message	= json_encode($message);
 							$log->save();

@@ -35,7 +35,7 @@
 	?>
 	</td>
 	<td>
-		<?php if(isset($as->sahkoposti)) echo $as->sahkoposti; ?>
+		<?php if(!empty($sahkoposti)) echo $sahkoposti; ?>
 	</td>
 	<td>
 		<?php 
