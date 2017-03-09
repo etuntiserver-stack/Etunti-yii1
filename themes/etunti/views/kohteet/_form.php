@@ -55,7 +55,7 @@ if($ismobile and !empty($model->puh_nro)) {
 		  elseif(empty($aon->yhteyshenkilo) and empty($aon->yrityksen_nimi))
 		    echo '<option value="'.$aon->id.'">nimet puutuu '.$aon->id.'</option>';
 		  else
-		    echo '<option value="'.$aon->id.'">'.$aon->yhteyshenkilo.' ID:'.$aon->id.'</option>';
+		    echo '<option value="'.$aon->id.'">'.$aon->yhteyshenkilo.'</option>';
 		  }
 
 		} else {
@@ -69,7 +69,7 @@ if($ismobile and !empty($model->puh_nro)) {
 		  elseif(empty($aa->yhteyshenkilo) and empty($aa->yrityksen_nimi))
 		    echo '<option value="'.$aa->id.'">nimet puutuu '.$aa->id.'</option>';
 		  else
-		    echo '<option value="'.$aa->id.'">'.$aa->yhteyshenkilo.' ID:'.$aa->id.'</option>';
+		    echo '<option value="'.$aa->id.'">'.$aa->yhteyshenkilo.'</option>';
 		}
 		echo '</select>';
 		?>
