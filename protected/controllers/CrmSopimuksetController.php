@@ -96,7 +96,7 @@ class CrmSopimuksetController extends Controller
 					$asiakkaat = new Asiakkaat;
 					$asiakkaat->attributes=$yhteystiedot->attributes;
 					$asiakkaat->aktiivinen=1;
-					$asiakkaat->yhteystieto_tyyppi=$yhteystiedot->yhteystieto_tyyppi;
+					$asiakkaat->tyyppi=$yhteystiedot->yhteystieto_tyyppi;
 					$asiakkaat->kaupunki=$yhteystiedot->postitoimipaikka;
 					if($asiakkaat->save())
 					{
