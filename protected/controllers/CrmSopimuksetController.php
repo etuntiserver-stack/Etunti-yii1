@@ -274,10 +274,10 @@ $randstring = generateRandomString();
 				$as = Asiakkaat::model()->findbypk($model->asiakas_id);
 				$y = Yhteystiedot::model()->findbypk($model->yhteystiedot_id);
 				if(isset($as->sahkoposti))
-					CrmTarjoukset::model()->updatebypk($model->id, array('asiakkaan_sahkoposti'=>$as->sahkoposti));
+					CrmSopimukset::model()->updatebypk($model->id, array('asiakkaan_sahkoposti'=>$as->sahkoposti));
 
 				if(isset($y->sahkoposti))
-					CrmTarjoukset::model()->updatebypk($model->id, array('asiakkaan_sahkoposti'=>$y->sahkoposti));
+					CrmSopimukset::model()->updatebypk($model->id, array('asiakkaan_sahkoposti'=>$y->sahkoposti));
 
 				$this->docx($model);
 
@@ -322,10 +322,10 @@ $randstring = generateRandomString();
 				$as = Asiakkaat::model()->findbypk($model->asiakas_id);
 				$y = Yhteystiedot::model()->findbypk($model->yhteystiedot_id);
 				if(isset($as->sahkoposti))
-					CrmTarjoukset::model()->updatebypk($model->id, array('asiakkaan_sahkoposti'=>$as->sahkoposti));
+					CrmSopimukset::model()->updatebypk($model->id, array('asiakkaan_sahkoposti'=>$as->sahkoposti));
 
 				if(isset($y->sahkoposti))
-					CrmTarjoukset::model()->updatebypk($model->id, array('asiakkaan_sahkoposti'=>$y->sahkoposti));
+					CrmSopimukset::model()->updatebypk($model->id, array('asiakkaan_sahkoposti'=>$y->sahkoposti));
 
 				$this->docx($model);
 			}
