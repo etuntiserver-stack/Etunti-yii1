@@ -81,6 +81,60 @@ class CrmSopimuksetController extends Controller
 		if($asia == 'hyvaksy' and isset($crm->id) and $crm->hyvaksyn_koodi == $code and $crm->status == 1){
 
 			CrmSopimukset::model()->updatebypk($id, array('status'=>2));
+
+			// <-- Luodaan Asiakas ja kohde jos Yhteystiedot kautta
+			if($crm->yhteystiedot_id != 0 and $crm->tarjous_id != 0)
+			{
+				$tarjous = CrmTarjoukset::model()->findbypk($crm->tarjous_id);
+				$yhteystiedot = Yhteystiedot::model()->findbypk($crm->yhteystiedot_id);
+
+				if(isset($tarjous->id) and $tarjous->status != 2)
+				die('Tarjous ei hyväksytty');
+
+				if(isset($tarjous->id) and isset($yhteystiedot->id) and $tarjous->status == 2)
+				{
+					$asiakkaat = new Asiakkaat;
+					$asiakkaat->attributes=$yhteystiedot->attributes;
+					$asiakkaat->aktiivinen=1;
+					$asiakkaat->yhteystieto_tyyppi=$yhteystiedot->yhteystieto_tyyppi;
+					$asiakkaat->kaupunki=$yhteystiedot->postitoimipaikka;
+					if($asiakkaat->save())
+					{
+
+						$kohteet = new Kohteet;
+						$kohteet->asiakas_id = $asiakkaat->id;
+						if(!empty($asiakkaat->yrityksen_nimi))
+							$kohteet->etu_suku_nimet = $asiakkaat->yrityksen_nimi;
+						elseif(empty($asiakkaat->yrityksen_nimi) and !empty($asiakkaat->yhteyshenkilo))
+							$kohteet->etu_suku_nimet = $asiakkaat->yhteyshenkilo;
+					
+						if( $tarjous->onko_osoite_sama == 'ei')
+						{
+							$kohteet->osoite = $tarjous->kohteen_osoite;
+							$kohteet->pnumero = $tarjous->kohteen_postinumero;
+							$kohteet->kaupunki = $tarjous->kohteen_postitoimipaikka;
+
+						} else {
+							$kohteet->osoite = $asiakkaat->osoite;
+							$kohteet->pnumero = $asiakkaat->postinumero;
+							$kohteet->kaupunki = $asiakkaat->kaupunki;
+						}
+						$kohteet->puh_nro = $asiakkaat->puhelin;
+						$kohteet->email = $asiakkaat->sahkoposti;
+						if(!$kohteet->save())
+						{
+							var_dump($kohteet->getErrors());
+							exit;
+						}
+
+					} else {
+						var_dump($asiakkaat->getErrors());
+						exit;
+					}
+				}
+			}
+			// Luodaan Asiakas ja kohde jos Yhteystiedot kautta -->
+
 			$this->redirect(array('success'));
 
 		} elseif($asia == 'hylatty' and isset($crm->id) and $crm->hyvaksyn_koodi == $code and $crm->status == 1){
@@ -116,7 +170,6 @@ class CrmSopimuksetController extends Controller
 		if(isset($_POST['id']))
 		{
 			$crm = CrmSopimukset::model()->findbypk($_POST['id']);
-			$as = Asiakkaat::model()->findbypk($crm->asiakas_id);
 
 
 
@@ -154,7 +207,7 @@ $randstring = generateRandomString();
 		$mail = new YiiMailer();
 		//$mail->clearLayout();//if layout is already set in config
 		$mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
-		$mail->setTo($as->sahkoposti);
+		$mail->setTo($crm->asiakkaan_sahkoposti);
 		$mail->setSubject($subject);
 		$mail->setBody($message);
 		$mail->setAttachment($path.'/'.$file);
@@ -165,7 +218,7 @@ $randstring = generateRandomString();
 							// <-- LOG
 							$log=new Log;
 							$log->log_category 	= 1; // 1-email
-							$log->email_to 		= $as->sahkoposti;
+							$log->email_to 		= $crm->asiakkaan_sahkoposti;
 							$log->email_subject	= $subject;
 							$log->email_message	= json_encode($message);
 							$log->save();
@@ -219,7 +272,13 @@ $randstring = generateRandomString();
 			if($model->save()){
 
 				$as = Asiakkaat::model()->findbypk($model->asiakas_id);
-				CrmSopimukset::model()->updatebypk($model->id, array('asiakkaan_sahkoposti'=>$as->sahkoposti));
+				$y = Yhteystiedot::model()->findbypk($model->yhteystiedot_id);
+				if(isset($as->sahkoposti))
+					CrmTarjoukset::model()->updatebypk($model->id, array('asiakkaan_sahkoposti'=>$as->sahkoposti));
+
+				if(isset($y->sahkoposti))
+					CrmTarjoukset::model()->updatebypk($model->id, array('asiakkaan_sahkoposti'=>$y->sahkoposti));
+
 				$this->docx($model);
 
 			}
@@ -258,10 +317,16 @@ $randstring = generateRandomString();
 		{
 
 			$model->attributes=$_POST['CrmSopimukset'];
-			$as = Asiakkaat::model()->findbypk($model->asiakas_id);
-			$model->asiakkaan_sahkoposti=$as->sahkoposti;
-
 			if($model->save()){
+
+				$as = Asiakkaat::model()->findbypk($model->asiakas_id);
+				$y = Yhteystiedot::model()->findbypk($model->yhteystiedot_id);
+				if(isset($as->sahkoposti))
+					CrmTarjoukset::model()->updatebypk($model->id, array('asiakkaan_sahkoposti'=>$as->sahkoposti));
+
+				if(isset($y->sahkoposti))
+					CrmTarjoukset::model()->updatebypk($model->id, array('asiakkaan_sahkoposti'=>$y->sahkoposti));
+
 				$this->docx($model);
 			}
 		}
@@ -295,8 +360,7 @@ $randstring = generateRandomString();
 
 
 			$firma = FirmanTiedot::model()->findbypk(1);
-			$as = Asiakkaat::model()->findbypk($model->asiakas_id);
-		
+
 
 			$document->setValue('paivays', iconv('UTF-8','ISO-8859-1',date("d.m.Y")));
 
@@ -309,20 +373,44 @@ $randstring = generateRandomString();
 			$document->setValue('yrityksen_puhelin', iconv('UTF-8','ISO-8859-1',$firma->puhelin));
 			$document->setValue('yrityksen_sahkoposti', iconv('UTF-8','ISO-8859-1',$firma->sahkoposti));
 			$document->setValue('yrityksen_johtaja', iconv('UTF-8','ISO-8859-1',$firma->johtaja));
-			// Asiakas
-			if(!empty($as->yrityksen_nimi))
-			   $asiakas = $as->yrityksen_nimi;
-			elseif(empty($as->yrityksen_nimi) and !empty($as->yhteyshenkilo)) 
-			   $asiakas = $as->yhteyshenkilo;
-			else
-			   $asiakas = '';
+
+			// <-- Jos se on Asiakas
+			$as = Asiakkaat::model()->findbypk($model->asiakas_id);
+			if(isset($as->id))
+			{
+				if(isset($as->id) and !empty($as->yrityksen_nimi))
+				   $asiakas = $as->yrityksen_nimi;
+				elseif(isset($as->id) and empty($as->yrityksen_nimi) and !empty($as->yhteyshenkilo)) 
+				   $asiakas = $as->yhteyshenkilo;
+				else
+				   $asiakas = '';
 
 			$document->setValue('asiakas', iconv('UTF-8','ISO-8859-1',$asiakas));
 			$document->setValue('asiakkaan_osoite', iconv('UTF-8','ISO-8859-1',$as->osoite));
 			$document->setValue('asiakkaan_postinumero', iconv('UTF-8','ISO-8859-1',$as->postinumero));
 			$document->setValue('asiakkaan_toimipaikka', iconv('UTF-8','ISO-8859-1',$as->kaupunki));
-			$document->setValue('asiakkaan_puhelin', iconv('UTF-8','ISO-8859-1',$as->puhelin));
-			$document->setValue('asiakkaan_sahkoposti', iconv('UTF-8','ISO-8859-1',$as->sahkoposti));
+			}
+			//     Jos se on Asiakas -->
+
+
+			// <-- Jos se on yhteystiedot
+			$y = Yhteystiedot::model()->findbypk($model->yhteystiedot_id);
+			if(isset($y->id))
+			{
+				if(isset($y->id) and !empty($y->yrityksen_nimi))
+				   $asiakas = $y->yrityksen_nimi;
+				elseif(isset($y->id) and empty($y->yrityksen_nimi) and !empty($y->yhteyshenkilo)) 
+				   $asiakas = $y->yhteyshenkilo;
+				else
+				   $asiakas = '';
+
+			$document->setValue('asiakas', iconv('UTF-8','ISO-8859-1',$asiakas));
+			$document->setValue('asiakkaan_osoite', iconv('UTF-8','ISO-8859-1',$y->osoite));
+			$document->setValue('asiakkaan_postinumero', iconv('UTF-8','ISO-8859-1',$y->postinumero));
+			$document->setValue('asiakkaan_toimipaikka', iconv('UTF-8','ISO-8859-1',$y->postitoimipaikka));
+			}
+			//     Jos se on yhteystiedot -->
+
 
 			$path = 'tiedostot/crm/sopimukset/'.Yii::app()->user->domain.'/'.$liite;
 			$document->setValue('teksti', htmlspecialchars(iconv('UTF-8','ISO-8859-1',$model->teksti)));

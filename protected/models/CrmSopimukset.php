@@ -31,8 +31,9 @@ class CrmSopimukset extends DB2ActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
+			array('tarjous_id', 'required'),
 			//array('time, asiakas_id, teksti, hyvaksyn_koodi, asiakkaan_sahkoposti, status, liite', 'required'),
-			array('asiakas_id, status', 'numerical', 'integerOnly'=>true),
+			array('asiakas_id, status, yhteystiedot_id', 'numerical', 'integerOnly'=>true),
 			array('hyvaksyn_koodi, liite, template', 'length', 'max'=>255),
 			array('asiakkaan_sahkoposti', 'length', 'max'=>100),
 			array('teksti', 'length', 'max'=>3000),
@@ -67,6 +68,8 @@ class CrmSopimukset extends DB2ActiveRecord
 			'asiakkaan_sahkoposti' => 'Asiakkaan Sahkoposti',
 			'status' => 'Status',
 			'liite' => 'Liite',
+			'tarjous_id' => Yii::t('main', 'Tarjous'),
+			'yhteystiedot_id' => Yii::t('main', 'Yhteystiedot'),
 		);
 	}
 
