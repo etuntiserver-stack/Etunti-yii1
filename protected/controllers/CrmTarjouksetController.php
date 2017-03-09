@@ -152,7 +152,7 @@ $randstring = generateRandomString();
 		$mail = new YiiMailer();
 		//$mail->clearLayout();//if layout is already set in config
 		$mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
-		$mail->setTo($crm->sahkoposti);
+		$mail->setTo($crm->asiakkaan_sahkoposti);
 		$mail->setSubject($subject);
 		$mail->setBody($message);
 		$mail->setAttachment($path.'/'.$file);
@@ -163,7 +163,7 @@ $randstring = generateRandomString();
 							// <-- LOG
 							$log=new Log;
 							$log->log_category 	= 1; // 1-email
-							$log->email_to 		= $crm->sahkoposti;
+							$log->email_to 		= $crm->asiakkaan_sahkoposti;
 							$log->email_subject	= $subject;
 							$log->email_message	= json_encode($message);
 							$log->save();
