@@ -94,11 +94,25 @@
 
 			echo $tk_table;
  }
+
+ if(!isset($model->id) and isset($_GET['yhteystiedot_id']))
+ {
+	$yt = Yhteystiedot::model()->findByPk($_GET['yhteystiedot_id']);
+	if(isset($yt->id))
+	{
+		$model->kohteen_osoite = $yt->osoite;
+		$model->kohteen_postinumero = $yt->postinumero;
+		$model->kohteen_postitoimipaikka = $yt->postitoimipaikka;
+	}
+ }
+
 ?>
+
 
 <style>
 .kohdeHide { display:none }
 </style>
+
 
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'crm-tarjoukset-form',
@@ -189,6 +203,33 @@
 
  </div><div class="col-sm-4">
 
+	<?php if(isset($_GET['yhteystiedot_id'])) : ?>
+	<script type="text/javascript">
+	$(document).ready(function(){
+	
+	  // <-- onkoAsOsoiteSamaKunKohde
+	  $(".onkoAsOsoiteSamaKunKohde").change(function() {
+	    var value = $(this).val();
+	    if(value == 'ei')
+	    {
+		$('.kohdeHide').show();
+	    } else {
+		$('#CrmTarjoukset_kohteen_osoite').val('');
+		$('#CrmTarjoukset_kohteen_postinumero').val('');
+		$('#CrmTarjoukset_kohteen_postitoimipaikka').val('');
+		$('.kohdeHide').hide();
+	    }
+	  });
+	
+	});
+	</script>
+
+	<div class="section fill mb5">
+		<label><?php echo Yii::t('main', 'Onko kohteen osoite sama kuin asiakkaan osoite?'); ?> </label><br>
+		<input type="radio" name="CrmTarjoukset[onko_osoite_sama]" class="onkoAsOsoiteSamaKunKohde" checked value="kylla"> <?php echo Yii::t('main', 'Kyllä'); ?><br>
+		<input type="radio" name="CrmTarjoukset[onko_osoite_sama]" class="onkoAsOsoiteSamaKunKohde" value="ei"> <?php echo Yii::t('main', 'Ei'); ?>
+	</div>
+	<?php endif; ?>
 
 	<div class="section fill mb5 kohdeHide">
 		<?php echo $form->labelEx($model,'kohteen_osoite'); ?>
@@ -198,7 +239,7 @@
 
 	<div class="section fill mb5 kohdeHide">
 		<?php echo $form->labelEx($model,'kohteen_postinumero'); ?>
-		<?php echo $form->numberField($model,'kohteen_postinumero',array('maxlength'=>50,'class'=>'form-control')); ?>
+		<?php echo $form->textField($model,'kohteen_postinumero',array('maxlength'=>50,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'kohteen_postinumero'); ?>
 	</div>
 

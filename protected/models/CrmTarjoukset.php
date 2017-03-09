@@ -34,7 +34,7 @@ class CrmTarjoukset extends DB2ActiveRecord
 			array('asiakas_id, yhteystiedot_id, status', 'numerical', 'integerOnly'=>true),
 			array('hyvaksyn_koodi, liite, kohteen_osoite, kohteen_postitoimipaikka', 'length', 'max'=>255),
 			array('asiakkaan_sahkoposti, kohteen_postinumero', 'length', 'max'=>100),
-			array('tarjous, tyonkuvaus, tarjouslaskenta', 'safe'),
+			array('tarjous, tyonkuvaus, tarjouslaskenta, onko_osoite_sama', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('id, time, asiakas_id, tarjous, hyvaksyn_koodi, asiakkaan_sahkoposti, status', 'safe', 'on'=>'search'),
