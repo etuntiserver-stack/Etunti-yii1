@@ -138,7 +138,7 @@ class CrmTarjouksetController extends Controller
 		$message .= '<center>';
 
 		// <-- Tyonkuvaus ja Tarjouslaskenta
-		$message .= '<div class="tb">';
+		$message .= '<div class="">';
 
 			$tyonkuvaus_arr = json_decode($crm->tyonkuvaus, true);
 			$tarjouslaskenta_arr = json_decode($crm->tarjouslaskenta, true);
@@ -224,8 +224,8 @@ class CrmTarjouksetController extends Controller
 		';
 		$message .= '</center>';
 		
-		//echo $message;
-		//exit;
+		echo $message;
+		exit;
 
    		if(file_exists(Yii::app()->basePath."/../tiedostot/crm/tarjoukset/".Yii::app()->user->domain."/".$crm->liite.".pdf"))
    		{

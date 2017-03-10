@@ -1,4 +1,4 @@
-.tb table { 
+table { 
   color: #333;
   font-family: Helvetica, Arial, sans-serif;
   width: 650px; 
@@ -6,19 +6,19 @@
   collapse; border-spacing: 0; 
 }
 
-.tb td, .tb th { 
+td, th { 
   border: 1px solid #CCC; 
-  /*text-align:center; */
+  text-align:left; 
   vertical-align:top;
 }
 
-.tb th {
+th {
   background: #F3F3F3; 
   font-weight: bold;
   padding: 5px 7px; 
 }
 
-.tb td {
+td {
   //background: #FAFAFA;
   padding: 3px 7px;
 }
