@@ -135,7 +135,7 @@ class CrmTarjouksetController extends Controller
 		$message = Yii::t('main', 'Tarjous');
 		$get_css = file_get_contents('css/email_send_table.css');
 		$message .= '<style>'.$get_css.'</style>';
-
+		$message .= '<center>';
 
 		// <-- Tyonkuvaus ja Tarjouslaskenta
 		$message .= '<div class="tb">';
@@ -222,6 +222,7 @@ class CrmTarjouksetController extends Controller
 		</div>
 		</center>
 		';
+		$message .= '</center>';
 		
 		echo $message;
 		exit;
