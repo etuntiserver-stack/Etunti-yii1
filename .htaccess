@@ -10,7 +10,7 @@ RewriteEngine on
 
 # SSL 
 RewriteRule ^ - [E=protossl]
-RewriteCond %{HTTPS}!on
+RewriteCond %{HTTPS} on
 RewriteRule ^ - [E=protossl:s]
 
  # RewriteCond %{HTTPS} off
