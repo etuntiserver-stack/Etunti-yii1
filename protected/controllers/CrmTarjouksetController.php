@@ -224,8 +224,8 @@ class CrmTarjouksetController extends Controller
 		';
 		$message .= '</center>';
 		
-		echo $message;
-		exit;
+		//echo $message;
+		//exit;
 
    		if(file_exists(Yii::app()->basePath."/../tiedostot/crm/tarjoukset/".Yii::app()->user->domain."/".$crm->liite.".pdf"))
    		{
