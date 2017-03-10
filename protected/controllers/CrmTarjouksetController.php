@@ -132,9 +132,14 @@ class CrmTarjouksetController extends Controller
 		$path = Yii::app()->request->baseUrl."tiedostot/crm/tarjoukset/".Yii::app()->user->domain;
 
 		$firma = FirmanTiedot::model()->findbypk(1);
-		$message = Yii::t('main', 'Tarjous');
 		$get_css = file_get_contents('css/email_send_table.css');
-		$message .= '<style>'.$get_css.'</style>';
+
+		$message = '<html xmlns="http://www.w3.org/1999/xhtml">
+		<head>
+		    <title></title>
+		    <style type="text/css">'.$get_css.'</style>
+		</head>
+		<body>';
 		$message .= '<center>';
 
 		// <-- Tyonkuvaus ja Tarjouslaskenta
@@ -222,7 +227,10 @@ class CrmTarjouksetController extends Controller
 		</div>
 		</center>
 		';
-		$message .= '</center>';
+		$message .= '
+		</center>
+		</body>
+		</html>';
 		
 		//echo $message;
 		//exit;
