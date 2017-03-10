@@ -1099,7 +1099,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 
 	  	if(
 			strtotime($al[0]." ".$al[1]) >= strtotime($al[0]." 18:00")
-			and strtotime($lop[0]." ".$lop[1]) > strtotime($lop[0]." 23:00")
+			and strtotime($lop[0]." ".$lop[1]) > strtotime($lop[0]." 23:00") // 10.03.2017
 			and $al[0] == $lop[0]
 		)
 		{
