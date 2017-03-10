@@ -1111,7 +1111,8 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		}
 
 	  	if(
-			strtotime($al[0]." ".$al[1]) > strtotime($al[0]."18:00")
+			strtotime($al[0]." ".$al[1]) > strtotime($al[0]." 18:00")
+			and strtotime($al[0]." ".$al[1]) < strtotime($al[0]." 23:00")
 			and $al[0] != $lop[0]
 		)
 		{
@@ -1201,6 +1202,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 	   	  $strLop0 = strtotime($lop[0]." 06:00");
 
 	 	  $str = ($strLop0-$strAl0);
+		  //echo 'bb '. $al[0]." ".$al[1].' '.$lop[0]." ".$lop[1].' == '.$this->sprint($str);
 	      	  $totalYo += $str;
 		}
 
