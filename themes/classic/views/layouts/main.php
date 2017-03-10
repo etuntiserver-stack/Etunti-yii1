@@ -16,6 +16,15 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <?php
+   if ((isset($_SERVER['HTTPS']) and strlen(strstr($agent, 'Firefox')) > 0)) 
+   {
+    $redirect_url = "http://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+    header("Location: $redirect_url");
+    exit();
+   }
+
+
+
     if (isset($_SERVER['HTTP_USER_AGENT'])) {
     	$agent = $_SERVER['HTTP_USER_AGENT'];
     }
