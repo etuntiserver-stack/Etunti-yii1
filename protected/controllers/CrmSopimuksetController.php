@@ -357,9 +357,94 @@ $randstring = generateRandomString();
 			$PHPWord = new PHPWord();
 			$document = $PHPWord->loadTemplate('tiedostot/templates/'.Yii::app()->user->domain.'/'.$tiedosto);
 			$file = '';
-
-
 			$firma = FirmanTiedot::model()->findbypk(1);
+
+
+			$tarjous = CrmTarjoukset::model()->findbypk($model->tarjous_id);
+
+			if(isset($tarjous->id))
+			{
+			$tyonkuvaus = json_decode($tarjous->tyonkuvaus, true);
+			$tarjouslaskenta = json_decode($tarjous->tarjouslaskenta, true);
+
+			// <-- Tyonkuvaus
+			$section = $PHPWord->createSection();
+			$table = $section->addTable();
+			$table->addRow(900);
+			// Add cells
+			$table->addCell(2000)->addText('Tilat');
+			$table->addCell(3000)->addText( iconv('UTF-8','ISO-8859-1', 'Työtehtävät') );
+			$table->addCell(3000)->addText('Laatutaso');
+			$table->addCell(2000)->addText('Kommenti');
+
+
+			foreach($tyonkuvaus['tilat'] as $key=>$items)
+			{
+				$tyontehtavat = $tyonkuvaus['tyontehtavat'][$key];
+				$tt_result = '';
+				foreach($tyontehtavat as $kt=>$it)
+					$tt_result .= $it['tyotehtava'].': '.$it['vkopvm']."\n";
+
+				$table->addRow(900);
+				$table->addCell(2000)->addText( iconv('UTF-8','ISO-8859-1', implode("\n", $items)) );
+				$table->addCell(3000)->addText( iconv('UTF-8','ISO-8859-1', $tt_result) );
+				$table->addCell(3000)->addText( iconv('UTF-8','ISO-8859-1', implode("\n", $tyonkuvaus['laatutaso'][$key])) );
+				$table->addCell(2000)->addText( iconv('UTF-8','ISO-8859-1', implode("\n", $tyonkuvaus['kommenti'][$key])) );
+
+			}
+
+			$objWriter = PHPWord_IOFactory::createWriter($PHPWord, 'Word2007');
+			$sTableText = $objWriter->getWriterPart('document')->getObjectAsText($table);
+			$document->setValue('tyonkuvaus', $sTableText);
+			//     Tyonkuvaus -->
+
+
+			// <-- Tarjouslaskenta
+			$section = $PHPWord->createSection();
+
+			// Define table style arrays
+			$styleTable = array('borderSize'=>6, 'borderColor'=>'006699', 'cellMargin'=>80);
+			$styleFirstRow = array('borderBottomSize'=>18, 'borderBottomColor'=>'0000FF', 'bgColor'=>'66BBFF');
+			// Define cell style arrays
+			$styleCell = array('borderBottomSize'=>2, 'borderBottomColor'=>'333333', 'bgColor'=>'CCCCC', 'cellMargin'=>10);
+			$styleCellBTLR = array('valign'=>'center', 'textDirection'=>PHPWord_Style_Cell::TEXT_DIR_BTLR);
+			// Define font style for first row
+			$fontStyle = array('bold'=>true, 'align'=>'center');
+			// Add table style
+			$PHPWord->addTableStyle('myOwnTableStyle', $styleTable, $styleFirstRow);
+
+
+			$table = $section->addTable('myOwnTableStyle');
+			$table->addRow(900);
+			// Add cells
+			$table->addCell(2000, $styleFirstRow)->addText('Kuvaus', $fontStyle);
+			$table->addCell(3000, $styleFirstRow)->addText('Arvo', $fontStyle);
+
+			foreach($tarjouslaskenta as $key=>$item)
+			{
+				if( $key == 'muut_kulut' and is_array(json_decode($item, true)['otsikko']))
+				{
+					$uusiItem = '';
+					foreach(json_decode($item, true)['otsikko'] as $k2=>$muut)
+					{
+						$uusiItem .= $muut.": ".json_decode($item, true)['hinta'][$k2]."\n";
+
+					}
+					$item = $uusiItem;
+				}
+
+				$label = Tarjouslaskenta::model()->getAttributeLabel($key);
+				$table->addRow(900);
+				$table->addCell(2000, $styleCell)->addText(  iconv('UTF-8','ISO-8859-1',$label) );
+				$table->addCell(3000, $styleCell)->addText( iconv('UTF-8','ISO-8859-1', $item) );
+			}
+
+			$objWriter = PHPWord_IOFactory::createWriter($PHPWord, 'Word2007');
+			$sTableText = $objWriter->getWriterPart('document')->getObjectAsText($table);
+			$document->setValue('tarjouslaskenta', $sTableText);
+			//     Tarjouslaskenta -->
+			} // if(isset($tarjous->id))
+
 
 
 			$document->setValue('paivays', iconv('UTF-8','ISO-8859-1',date("d.m.Y")));

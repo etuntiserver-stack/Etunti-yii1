@@ -385,6 +385,7 @@ $randstring = generateRandomString();
 			//     Tarjouslaskenta -->
 
 
+
 			$firma = FirmanTiedot::model()->findbypk(1);
 
 			// <-- Jos se on Asiakas
