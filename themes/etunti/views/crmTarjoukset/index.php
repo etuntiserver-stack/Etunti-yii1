@@ -277,7 +277,8 @@ $(".haemob").click(function(){
 
 $(".laheta").click(function(){
 	var id = $(this).attr('for');
-
+	window.location.href="laheta?id=" + id;
+/*
         $.ajax({
            url: 'laheta',
            type: "POST",
@@ -287,6 +288,8 @@ $(".laheta").click(function(){
 		window.location.reload();
            }
         });
+*/
+
 });
 
 });

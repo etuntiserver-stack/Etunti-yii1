@@ -38,7 +38,7 @@
 		<?php if(!empty($sahkoposti)) echo $sahkoposti; ?>
 	</td>
 	<td>
-		<?php 
+		<?php 				echo '<button class="btn btn-primary btn-block laheta" for="'.$data->id.'">'.Yii::t('main', 'Lähetä').'</button>';
 			if(!empty($sahkoposti) and $data->status == 0 and
    		(file_exists(Yii::app()->basePath."/../tiedostot/crm/tarjoukset/".Yii::app()->user->domain."/".$data->liite.".pdf"))
 			)

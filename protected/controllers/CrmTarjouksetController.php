@@ -111,43 +111,123 @@ class CrmTarjouksetController extends Controller
 		$this->render('vanhentunut');		
 	}
 
-	public function actionLaheta()
+	protected function generateRandomString($length = 40) {
+	    $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+	    $charactersLength = strlen($characters);
+	    $randomString = '';
+	    for ($i = 0; $i < $length; $i++) {
+	        $randomString .= $characters[rand(0, $charactersLength - 1)];
+	    }
+	    return $randomString;
+	}
+
+	public function actionLaheta($id)
 	{
-		if(isset($_POST['id']))
-		{
-			$crm = CrmTarjoukset::model()->findbypk($_POST['id']);
 
-
-function generateRandomString($length = 40) {
-    $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    $charactersLength = strlen($characters);
-    $randomString = '';
-    for ($i = 0; $i < $length; $i++) {
-        $randomString .= $characters[rand(0, $charactersLength - 1)];
-    }
-    return $randomString;
-}
-$randstring = generateRandomString();
-
-
+		$crm = CrmTarjoukset::model()->findbypk($id);
+		$randstring = $this->generateRandomString();
 
 		/* file */
 		$file = $crm->liite.'.pdf';
 		$path = Yii::app()->request->baseUrl."tiedostot/crm/tarjoukset/".Yii::app()->user->domain;
 
 		$firma = FirmanTiedot::model()->findbypk(1);
-		$message = Yii::t('main', 'CRM tarjous body');
+		$message = Yii::t('main', 'Tarjous');
+		$get_css = file_get_contents('css/email_send_table.css');
+		$message .= '<style>'.$get_css.'</style>';
+
+
+		// <-- Tyonkuvaus ja Tarjouslaskenta
+		$message .= '<div class="tb">';
+
+			$tyonkuvaus_arr = json_decode($crm->tyonkuvaus, true);
+			$tarjouslaskenta_arr = json_decode($crm->tarjouslaskenta, true);
+
+
+			$tl_table = '';
+			$tl_table .= '<h2>'.Yii::t('main', 'Tarjouslaskenta').'</h2>';
+			$tl_table .= '<table class="table table-bordered bg-white">';
+			$tl_table .= '<tr>';
+			$tl_table .= '<th>'.Yii::t('main', 'Kuvaus').'</th>';
+			$tl_table .= '<th>'.Yii::t('main', 'Arvo').'</th>';
+			$tl_table .= '</tr>';
+
+			foreach($tarjouslaskenta_arr as $key=>$item)
+			{
+				if( $key == 'muut_kulut' and is_array(json_decode($item, true)['otsikko']))
+				{
+					$uusiItem = '';
+					foreach(json_decode($item, true)['otsikko'] as $k2=>$muut)
+					{
+						$uusiItem .= $muut.": ".json_decode($item, true)['hinta'][$k2]."<br>";
+
+					}
+					$item = $uusiItem;
+				}
+
+				$label = Tarjouslaskenta::model()->getAttributeLabel($key);
+
+				$tl_table .= '<tr>';
+				$tl_table .= '<td>'.$label.'</td>';
+				$tl_table .= '<td>'.$item.'</td>';
+				$tl_table .= '</tr>';
+
+			}
+			$tl_table .= '</table>';
+
+			$message .= $tl_table;
+
+
+			$tk_table = '';
+			$tk_table .= '<h2>'.Yii::t('main', 'Työnkuvaus').'</h2>';
+			$tk_table .= '<table class="table table-bordered bg-white">';
+			$tk_table .= '<tr>';
+			$tk_table .= '<th>'.Yii::t('main', 'Tilat').'</th>';
+			$tk_table .= '<th>'.Yii::t('main', 'Työtehtävät').'</th>';
+			$tk_table .= '<th>'.Yii::t('main', 'Laatutaso').'</th>';
+			$tk_table .= '<th>'.Yii::t('main', 'Kommenti').'</th>';
+			$tk_table .= '</tr>';
+
+			foreach($tyonkuvaus_arr['tilat'] as $key=>$items)
+			{
+				$tyontehtavat = $tyonkuvaus_arr['tyontehtavat'][$key];
+				$tt_result = '';
+				foreach($tyontehtavat as $kt=>$it)
+					$tt_result .= $it['tyotehtava'].': '.$it['vkopvm']."\n";
+
+				$tk_table .= '<tr>';
+				$tk_table .= '<td>'.implode("<br>", $items).'</td>';
+				$tk_table .= '<td>'.$tt_result.'</td>';
+				$tk_table .= '<td>'.implode("<br>", $tyonkuvaus_arr['laatutaso'][$key]).'</td>';
+				$tk_table .= '<td>'.implode("<br>", $tyonkuvaus_arr['kommenti'][$key]).'</td>';
+				$tk_table .= '</tr>';
+
+			}
+			$tk_table .= '</table>';
+			$message .= $tk_table;
+
+		$message .= '</div>';
+		//  Tyonkuvaus ja Tarjouslaskenta -->
+
+
 		$message .= '<br>
-		<a href="http://'.$_SERVER['SERVER_NAME'].'/index.php/crmTarjoukset/vastaus?asia=hyvaksy&id='.$_POST['id'].'&code='.$randstring.'">
-				<h2>'.Yii::t('main', 'Hyväksy').'
+		<center>
+		<div id="outer">
+		<a class="hyvaksy_button inner" href="http://'.$_SERVER['SERVER_NAME'].'/index.php/crmTarjoukset/vastaus?asia=hyvaksy&id='.$id.'&code='.$randstring.'">
+				<h2>'.Yii::t('main', 'Hyväksy').'</h2>
 		</a>
-		<a href="http://'.$_SERVER['SERVER_NAME'].'/index.php/crmTarjoukset/vastaus?asia=hylatty&id='.$_POST['id'].'&code='.$randstring.'">
-				<h2>'.Yii::t('main', 'Hylkää').'
+		<a class="hylkaa_button inner" href="http://'.$_SERVER['SERVER_NAME'].'/index.php/crmTarjoukset/vastaus?asia=hylatty&id='.$id.'&code='.$randstring.'">
+				<h2>'.Yii::t('main', 'Hylkää').'</h2>
 		</a>
+		</div>
+		</center>
 		';
 		
-   if(file_exists(Yii::app()->basePath."/../tiedostot/crm/tarjoukset/".Yii::app()->user->domain."/".$crm->liite.".pdf"))
-   {
+		echo $message;
+		exit;
+
+   		if(file_exists(Yii::app()->basePath."/../tiedostot/crm/tarjoukset/".Yii::app()->user->domain."/".$crm->liite.".pdf"))
+   		{
 		$subject = Yii::t('main', 'Tarjous'). ', '.$firma->tyonantaja;
 		$mail = new YiiMailer();
 		//$mail->clearLayout();//if layout is already set in config
@@ -170,14 +250,12 @@ $randstring = generateRandomString();
 							//     LOG -->
 
 
-			CrmTarjoukset::model()->updatebypk($_POST['id'], array('status'=>1,'hyvaksyn_koodi'=>$randstring));
+			CrmTarjoukset::model()->updatebypk($id, array('status'=>1,'hyvaksyn_koodi'=>$randstring));
 			$this->redirect(array('index'));
 		   }
-   }
+   		}
 
 
-
-		}
 	}
 
 
