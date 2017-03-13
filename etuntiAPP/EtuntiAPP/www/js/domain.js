@@ -55,7 +55,7 @@ setTimeout(function() {
     if(localStorage.getItem('server'))
     {
 	if( localStorage.getItem('server') == 'staging.etunti.fi' )
-    		var server = 'http://staging.etunti.fi';
+    		var server = 'https://staging.etunti.fi';
 	else
     		var server = 'https://'+localStorage.getItem('server');
     } else {
