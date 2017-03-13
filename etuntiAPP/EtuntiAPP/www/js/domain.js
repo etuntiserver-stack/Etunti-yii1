@@ -54,7 +54,10 @@ setTimeout(function() {
     // <-- Palvelin
     if(localStorage.getItem('server'))
     {
-    	var server = 'https://'+localStorage.getItem('server');
+	if( localStorage.getItem('server') == 'staging.etunti.fi' )
+    		var server = 'http://staging.etunti.fi';
+	else
+    		var server = 'https://'+localStorage.getItem('server');
     } else {
     	var server = 'https://etunti.fi';
     }
