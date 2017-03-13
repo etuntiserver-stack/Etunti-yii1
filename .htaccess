@@ -9,9 +9,9 @@ RewriteEngine on
 # RewriteRule . index.php
 
 # SSL 
-# RewriteRule ^ - [E=protossl]
-# RewriteCond %{HTTPS} on
-# RewriteRule ^ - [E=protossl:s]
+RewriteRule ^ - [E=protossl]
+RewriteCond %{HTTPS} on
+RewriteRule ^ - [E=protossl:s]
 
  # RewriteCond %{HTTPS} off
  # RewriteRule .* https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
