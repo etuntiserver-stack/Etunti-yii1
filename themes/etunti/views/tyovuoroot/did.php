@@ -168,13 +168,13 @@ if(!isset($_POST['tulosta']))
 	   // toistuva
 	   $toistuva = '';
 	   if($tvVal->toistuva_id != 0){
-		$toistuva = '<i class="p5 pull-right fa fa-repeat text-success" style="font-size:120%" data-toggle="tooltip" data-placement="top" title="'. Yii::t('main', 'Toistuva työvuoro').'"></i>';
+		$toistuva = '<i class="p5 fa fa-repeat text-success" style="font-size:120%" data-toggle="tooltip" data-placement="top" title="'. Yii::t('main', 'Toistuva työvuoro').'"></i>';
 	   }
 
 	   // Tyopari
 	   $tyopari = '';
 	   if($tvVal->tyopaari != '' and $tvVal->tyopaari != "[\"$tvVal->tid\"]"){
-		$tyopari = '<i class="p5 pull-right fa fa-male text-success" style="font-size:120%" data-toggle="tooltip" data-placement="top" title="'. Yii::t('main', 'Työpari').'"></i>';
+		$tyopari = '<i class="p5 fa fa-male text-success" style="font-size:120%" data-toggle="tooltip" data-placement="top" title="'. Yii::t('main', 'Työpari').'"></i>';
 	   }
 
 	   // <-- Tarvittavien työntekijöiden määrä
@@ -191,11 +191,11 @@ if(!isset($_POST['tulosta']))
 
         	$l = $tvController[0]->tilanteet();
 		if($tvVal->status == 10)
-		$status = ' <i class="p3 pull-right fa fa-cutlery text-danger"></i>';
+		$status = ' <i class="p3 fa fa-cutlery text-danger"></i>';
 		elseif($tvVal->status == 2)
-		$status = ' <i class="p3 pull-right fa fa-bus text-warning"></i>';
+		$status = ' <i class="p3 fa fa-bus text-warning"></i>';
 		elseif($tvVal->status == 3)
-		$status = ' <i class="p3 pull-right fa fa-home text-info" style="font-size:120%"></i>';
+		$status = ' <i class="p3 fa fa-home text-info" style="font-size:120%"></i>';
 		else
 	   	$status = ' ('.$l[$tvVal['status']].') ';
 	   }

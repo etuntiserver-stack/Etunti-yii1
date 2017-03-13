@@ -285,7 +285,7 @@ setTimeout(function() {
 
 $(document).ready(function(){
 
-	if(server == 'http://staging.etunti.fi'){
+	if(server == 'https://staging.etunti.fi'){
 		$('#server').html('<h1 class="text-danger">STAGING</h1>').show();
 	}
 
