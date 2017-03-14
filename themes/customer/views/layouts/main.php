@@ -1,7 +1,7 @@
 <?php
 $curpage = Yii::app()->getController()->getAction()->controller->id;
 $curpage .= '/'.Yii::app()->getController()->getAction()->controller->action->id;
-
+/*
     if (isset($_SERVER['HTTP_USER_AGENT'])) {
     	$agent = $_SERVER['HTTP_USER_AGENT'];
     }
@@ -22,6 +22,7 @@ if (
     }
 
 }
+*/
 ?>
 
 <?php if($curpage != 'kohteet/googlemap') : ?>
