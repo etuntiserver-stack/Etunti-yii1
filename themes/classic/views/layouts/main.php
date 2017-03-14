@@ -54,6 +54,7 @@
       height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <!-- End Google Tag Manager (noscript) -->
 <?php
+/*
 $sub = explode(".",$_SERVER['HTTP_HOST']);
 if (
 		(! isset($_SERVER['HTTPS']) or $_SERVER['HTTPS'] == 'off') 
@@ -70,6 +71,7 @@ if (
     }
 
 }
+*/
 ?>
 
 

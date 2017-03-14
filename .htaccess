@@ -13,7 +13,7 @@ RewriteRule ^ - [E=protossl]
 RewriteCond %{HTTPS} on
 RewriteRule ^ - [E=protossl:s]
 
- # RewriteCond %{HTTPS} off
- # RewriteRule .* https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
- # RewriteCond %{HTTP_HOST} !^www\. [NC]
- # RewriteRule .* https://www.%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+  RewriteCond %{HTTPS} off
+  RewriteRule .* https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+  RewriteCond %{HTTP_HOST} !^www\. [NC]
+  RewriteRule .* https://www.%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
