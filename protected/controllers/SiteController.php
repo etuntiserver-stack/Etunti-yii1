@@ -1038,10 +1038,15 @@ $(document).ready(function(){
 
 	   if($a->netvisor_kaytto == 1)
 	   {
+		if( Yii::app()->user->domain == 'demo' )
+			$http = 'http';
+		else
+			$http = 'https';
+
 		if(empty($a->netvisor_host))
 		die('Netvisor HOST ei ole määritetty asetuksessa.');
 
-		$url		= $a->netvisor_host; 
+		$url		= $http."://".$a->netvisor_host; 
 		$host 		= $a->netvisor_host;
 
 		$sender 	= $fm->tyonantaja;
