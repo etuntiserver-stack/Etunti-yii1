@@ -1041,7 +1041,7 @@ $(document).ready(function(){
 		if(empty($a->netvisor_host))
 		die('Netvisor HOST ei ole määritetty asetuksessa.');
 
-		$url		= "https://".$a->netvisor_host; 
+		$url		= $a->netvisor_host; 
 		$host 		= $a->netvisor_host;
 
 		$sender 	= $fm->tyonantaja;
