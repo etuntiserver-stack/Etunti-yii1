@@ -120,10 +120,10 @@
   <th><?php echo Yii::t('main', 'Hinta Alv Sis'); ?></th>
   <th><?php echo Yii::t('main', 'Alv'); ?></th>
   <th><?php echo Yii::t('main', 'Yksikko'); ?></th>
-  <?php
+  <?php /*
     if($netvisor == true)
     echo '<th>'.Yii::t('main', 'Netvisor').'</th>';
-  ?>
+  */ ?>
   </tr>
   </thead>
 <?php $this->widget('zii.widgets.CListView', array(

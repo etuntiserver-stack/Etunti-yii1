@@ -33,9 +33,11 @@
 		<?php echo $data->yksikko; ?>
 	</td>
 <?php if($netvisor == true) : ?>
+<!--
 	<td>
 		<?php echo $this->onkoNetvisor($data->id); ?>
 	</td>
+-->
 <?php endif; ?>
 
 </tr>
