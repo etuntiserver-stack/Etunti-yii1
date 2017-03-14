@@ -106,7 +106,7 @@
         <?php 
 
 	// VARAUS
-	  echo '<th data-toggle="tooltip" data-placement="bottom" title="'.Yii::t('main', 'Keskeneräinen varaus').'">';
+	  echo '<th style="z-index: 999" data-toggle="tooltip" data-placement="bottom" title="'.Yii::t('main', 'Keskeneräinen varaus').'">';
  	  echo '<b class="text-warning">'.Yii::t('main', 'VARAUS').'</b>';	
 	  echo '</th>';
 	// VARAUS
@@ -114,7 +114,7 @@
 	$asetukset = Asetukset::model()->findByPk(1);
 
 	foreach($tyontekijat_model as $t){
-	  echo '<th>';
+	  echo '<th style="z-index: 999">';
  	  echo $this->etuSukunimi($t->id);	
 	  echo '</th>';
 	}
