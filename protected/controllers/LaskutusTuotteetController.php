@@ -342,9 +342,9 @@ $xml = '
       <purchaseprice>'.$model->hinta_alv_sis.'</purchaseprice>
       <tariffheading></tariffheading>
       <comissionpercentage>0</comissionpercentage>
-      <isactive>1</isactive>
-      <issalesproduct>0</issalesproduct>
-      <inventoryenabled>1</inventoryenabled>
+      <isactive>'.$model->is_active.'</isactive>
+      <issalesproduct>'.$model->myyntituote.'</issalesproduct>
+      <inventoryenabled>'.$model->varastoitava.'</inventoryenabled>
     </productbaseinformation>
     <productbookkeepingdetails>
       <defaultvatpercentage>'.$model->alv.'</defaultvatpercentage>
