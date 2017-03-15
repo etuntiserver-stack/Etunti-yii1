@@ -255,10 +255,11 @@ if($ismobile and !empty($model->puh_nro)) {
 
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'arvioitu_kesto'); ?>
-		<?php echo $form->textField($model,'arvioitu_kesto',array('maxlength'=>5,'class'=>'form-control')); ?>
+		<?php echo $form->numberField($model,'arvioitu_kesto',array('maxlength'=>5,'class'=>'form-control', 'step' => "any")); ?>
 		<?php echo $form->error($model,'arvioitu_kesto'); ?>
 	</div>
 
+<?php /*
 	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/jquery.mask.js"></script>
 	<script type="text/javascript">
 	$(document).ready(function(){
@@ -267,7 +268,7 @@ if($ismobile and !empty($model->puh_nro)) {
 	  });
 	});
 	</script>
-
+*/ ?>
 
   </div><div class="col-sm-6">
 
