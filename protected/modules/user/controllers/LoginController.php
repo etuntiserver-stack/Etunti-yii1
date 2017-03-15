@@ -13,23 +13,53 @@ class LoginController extends Controller
 			$model=new UserLogin;
 			// collect user input data
 			if(
-				isset($_POST['UserLogin']) 
-				and $_POST['UserLogin']['domain'] != 'superadmin'
-				and $_POST['UserLogin']['domain'] != 'etusivu'
+				Yii::app()->request->getPost('UserLogin')
+				and Yii::app()->request->getPost('UserLogin')['domain'] != 'superadmin'
+				and Yii::app()->request->getPost('UserLogin')['domain'] != 'etusivu'
+				and Yii::app()->request->getPost('UserLogin')['domain'] != ''
 			)
 			{
 
-			$mod=Administrators::model()->find(" adm_login = '".$_POST['UserLogin']['username']."' and adm_salasana = '".md5($_POST['UserLogin']['password'])."' ");
+
+	       		$criteria = new CDbCriteria();
+		        $criteria->condition = " 
+				adm_login='".Yii::app()->request->getPost('UserLogin')['username']."' 
+			";
+			$mod=Administrators::model()->find($criteria);
+
+
 
 			  if(isset($mod->id))
 			  {
+
+				// <-- Check password
+				$login = false;
+
+				if( strlen($mod->adm_salasana) < 60 ){
+
+		        		if(md5(Yii::app()->request->getPost('UserLogin')['password']) == $mod->adm_salasana)
+					$login = true;
+
+				} elseif( strlen($mod->adm_salasana) == 60 ){
+
+					if (password_verify(Yii::app()->request->getPost('UserLogin')['password'], $mod->adm_salasana))
+					$login = true;
+				}
+				
+				if(!$login)
+				{
+					$this->redirect(Yii::app()->request->baseUrl.'/index.php/user/login?InvalidPassword');
+					exit;
+				}
+				//     Check password -->
+
 
 			    Yii::app()->user->setState('id', $mod->id);
 			    Yii::app()->user->setState('adminID', $mod->id);
 			    Yii::app()->user->setState('adminStatus', $mod->status);
 			    Yii::app()->user->setState('username', $mod->adm_login);
 			    Yii::app()->user->setState('nimi', $mod->adm_nimi);
-			    Yii::app()->user->setState('domain', $_POST['UserLogin']['domain']);
+			    Yii::app()->user->setState('domain', Yii::app()->request->getPost('UserLogin')['domain']);
 
 
 

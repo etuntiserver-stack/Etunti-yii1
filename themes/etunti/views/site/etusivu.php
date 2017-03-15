@@ -1,4 +1,12 @@
 <?php
+	// <-- Change password to bcrypt
+	$adm = Administrators::model()->findByPk(Yii::app()->user->id);
+	if( isset($adm->id) and strlen($adm->adm_salasana) < 60 )
+	{
+		$this->redirect(array('change_password'));
+		exit;
+	}
+	// Change password to bcrypt -->
 
 
 $criteria=new CDbCriteria;

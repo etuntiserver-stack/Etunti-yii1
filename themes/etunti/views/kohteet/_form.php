@@ -18,7 +18,6 @@ $ismobile = $site[0]->check_user_agent();
 if($ismobile and !empty($model->puh_nro)) {
 
 }
-
 ?>
 <div class="row">
 

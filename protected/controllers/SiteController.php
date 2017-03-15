@@ -37,7 +37,7 @@ class SiteController extends Controller
                 		'expression'=>"Yii::app()->controller->isDigisten()",
 			),
 			array('allow', 
-				'actions'=>array( 'header', 'footer', 'lomake_tarjouspyynto', 'lomake_testiryhma', 'ajankohtaista', 'asiakkaat', 'yritys', 'yhteystiedot', 'lomake_lataailmainen', 'uusi_kommento', 'crontab', 'logout', 'salasanan_palauttaminen'),
+				'actions'=>array( 'header', 'footer', 'lomake_tarjouspyynto', 'lomake_testiryhma', 'ajankohtaista', 'asiakkaat', 'yritys', 'yhteystiedot', 'lomake_lataailmainen', 'uusi_kommento', 'crontab', 'logout', 'salasanan_palauttaminen', 'change_password'),
 				'users'=>array('*'),
 			),
 			array('allow', 
@@ -188,6 +188,69 @@ class SiteController extends Controller
 	}
 
 
+	public function actionChange_password()
+	{
+
+
+		if( Yii::app()->request->getPost('vanha_salasana') )
+		{
+
+			$m1 = Administrators::model()->findByPk(Yii::app()->user->id);
+
+	       		$criteria = new CDbCriteria();
+		        $criteria->condition = " 
+				id='".Yii::app()->user->id."' 
+			";
+
+			if( isset($m1->id) and strlen($m1->adm_salasana) < 60 ){
+		        $criteria->addCondition (" adm_salasana='".md5(Yii::app()->request->getPost('vanha_salasana'))."' ");
+			} elseif( isset($m1->id) and strlen($m1->adm_salasana) == 60 ){
+				if (password_verify(Yii::app()->request->getPost('vanha_salasana'), $m1->adm_salasana)) {
+
+				} else {
+				    	echo json_encode( 'InvalidPassword');
+					exit;
+				}
+			}
+
+			$model = Administrators::model()->find($criteria);
+
+
+
+
+			if(
+				isset($model->id) 
+				and !empty(Yii::app()->request->getPost('uusi_salasana'))
+				and Yii::app()->request->getPost('uusi_salasana') == Yii::app()->request->getPost('varmista_uusi_salasana')
+			)
+			{
+				$uusi_salasana = password_hash(Yii::app()->request->getPost('uusi_salasana'), PASSWORD_BCRYPT);
+				$upd = Administrators::model()->updateByPk($model->id, array('adm_salasana' => $uusi_salasana ));
+				if( $upd != null )
+				echo json_encode(array('ok'));
+			} elseif(
+				isset($model->id) 
+				and !empty(Yii::app()->request->getPost('uusi_salasana'))
+				and Yii::app()->request->getPost('uusi_salasana') != Yii::app()->request->getPost('varmista_uusi_salasana')
+			)
+			{
+				echo json_encode('varmistaUusi');
+			} elseif(
+				isset($model->id) 
+				and ( empty(Yii::app()->request->getPost('uusi_salasana')) or empty(Yii::app()->request->getPost('varmista_uusi_salasana')) )
+			)
+			{
+				echo json_encode('emptyUusi');
+
+			} else {
+				echo json_encode('error');
+			}
+			exit;
+		}
+
+                Yii::app()->theme = 'classic';
+		$this->render('change_password');
+	}
 
 	public function actionSalasanan_palauttaminen()
 	{
@@ -210,7 +273,8 @@ class SiteController extends Controller
 			{
 
 				$uusiSalasana = $this->rand_pass(8);
-				Administrators::model()->updateByPk($model->id, array('adm_salasana'=>md5($uusiSalasana)));
+				$bcrypt = password_hash($uusiSalasana, PASSWORD_BCRYPT);
+				Administrators::model()->updateByPk($model->id, array('adm_salasana'=>$bcrypt));
 				$message = Yii::t('main', 'Uusi salasana').': '.$uusiSalasana;
 				$message .= '<p>Kirjaudu sisään uudella salasanalla ja turvallisuussyistä vaihda tässä viestissä oleva salasana.
  				Painamalla oikeassa yläkulmassa olevaa käyttäjätunnusta pääset omiin asetuksiisi, josta voit vaihtaa salasanan. 

@@ -171,7 +171,7 @@ class AdministratorsController extends Controller
 			if($vaihdo == false)
 				$model->adm_salasana=$vanha_salasana;
 			else
-				$model->adm_salasana=md5($_POST['Administrators']['adm_salasana']);
+				$model->adm_salasana=password_hash(Yii::app()->request->getPost('Administrators')['adm_salasana'], PASSWORD_BCRYPT);
 
 			if($model->save())
 				$this->redirect(array('index'));
