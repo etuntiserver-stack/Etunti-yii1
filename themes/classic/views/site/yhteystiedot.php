@@ -33,7 +33,6 @@
     <span class="small yhteysInfo">
 	<p>
 	Myynti<br>
-	Ari Hirvimäki<br>
 	etuntimyynti@etunti.fi<br>
 	+358 40 124 9081
 	</p>
