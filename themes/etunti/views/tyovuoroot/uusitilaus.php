@@ -236,7 +236,7 @@ $(document).ready(function(){
 
   <div class="col-sm-3">
 		<?php echo $form->labelEx($model,'alku'); ?>
-		<input type="text" name="Tyovuoroot[alku]" class="form-control laske timeVuorot" id="alku" autofocus>
+		<input type="text" name="Tyovuoroot[alku]" class="form-control laske timeVuorot" id="alku">
   </div>
 
   <div class="col-sm-3">
@@ -315,7 +315,7 @@ $(document).ready(function(){
 
 <br>
 
-	<div class="modal-footer">
+	<div class="panel-footer text-right">
 		<?php echo CHtml::Button('Sulje',array('class'=>'btn btn-default','data-dismiss'=>'modal')); ?>
 		<?php 
 		if(Yii::app()->user->adminStatus != 2)

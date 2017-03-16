@@ -267,6 +267,9 @@
         <div id="modal-form" class=" popup-basic popup-lg admin-form mfp-with-anim mfp-hide">
           <div class="panel">
             <div class="panel-heading">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
               <span class="panel-title"></span>
             </div>
             <!-- end .panel-heading section -->

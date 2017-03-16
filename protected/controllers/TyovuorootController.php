@@ -1269,29 +1269,39 @@ class TyovuorootController extends Controller
 
 	}
 	?>
-	<div class="modal-dialog modal-lg">
-	    <div class="modal-content">
-		<div class="modal-header">
-			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+
+
+        <!-- Admin Form Popup -->
+        <div id="modal-form" class=" popup-basic popup-xl admin-form mfp-with-anim mfp-hide">
+          <div class="panel">
+            <div class="panel-heading">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="font-size:170%">
 				<span aria-hidden="true">&times;</span>
 			</button>
-		<h2 class="modal-title"><?php echo Yii::t('main', 'Työvuoron suunnittelu').': '.$tnimi; ?></h2>
-	
-		</div>
-		<div class="modal-body">
+              <span class="panel-title"><i class="fa fa-clock-o"></i> 
+		<?php echo Yii::t('main', 'Työvuoron suunnittelu').': '.$tnimi; ?>
+	      </span>
+            </div>
+            <!-- end .panel-heading section -->
 
-	<div class="dialogTable clearfix modal-osio">
-	<?php
+              <div class="panel-body p25">
+		<?php
 		if(isset($oikeus)) echo $oikeus;
-
-
-
-		$this->renderPartial('create',array(
+		$this->renderPartial('_form',array(
 			'model'=>$model,
 		));
-	?>
-	</div>
-	</div> <!-- end modal-body -->
+		?>
+              </div>
+              <!-- end .form-body section -->
+
+
+          </div>
+          <!-- end: .panel -->
+        </div>
+        <!-- end: .admin-form -->
+
+
+
 	<?php
 	}
 
@@ -2927,26 +2937,36 @@ class TyovuorootController extends Controller
 		$tekijan_nimi .= '</select>';
 
 	?>
-	<div class="modal-dialog modal-lg">
-	    <div class="modal-content">
-		<div class="modal-header">
-			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+
+
+        <!-- Admin Form Popup -->
+        <div id="modal-form" class=" popup-basic popup-xl admin-form mfp-with-anim mfp-hide">
+          <div class="panel">
+            <div class="panel-heading">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="font-size:170%">
 				<span aria-hidden="true">&times;</span>
 			</button>
-		<h2 class="modal-title form-inline"><?php echo Yii::t('main', 'Työvuoron suunnittelu').': '.$tekijan_nimi; ?></h2>
-	
-		</div>
-		<div class="modal-body">
+              <span class="panel-title"><i class="fa fa-clock-o"></i> 
+		<?php echo Yii::t('main', 'Työvuoron suunnittelu').': '.$tekijan_nimi; ?>
+	      </span>
+            </div>
+            <!-- end .panel-heading section -->
 
-	<div class="dialogTable clearfix modal-osio">
-	<?php
-
+              <div class="panel-body p25">
+		<?php
 		$this->renderPartial('_form',array(
 			'model'=>$model,
 		));
-	?>
-	</div>
-	</div> <!-- end modal-body -->
+		?>
+              </div>
+              <!-- end .form-body section -->
+
+
+          </div>
+          <!-- end: .panel -->
+        </div>
+        <!-- end: .admin-form -->
+
 	<?php
 	}
 
@@ -2974,19 +2994,21 @@ class TyovuorootController extends Controller
 	if(!isset($_POST['Tyovuoroot']))
 	{
 	?>
-	<div class="modal-dialog modal-lg">
-	    <div class="modal-content">
-		<div class="modal-header">
-			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+
+        <!-- Admin Form Popup -->
+        <div id="modal-form" class=" popup-basic popup-xl admin-form mfp-with-anim mfp-hide">
+          <div class="panel">
+            <div class="panel-heading">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="font-size:170%">
 				<span aria-hidden="true">&times;</span>
 			</button>
+              <span class="panel-title"><i class="fa fa-clock-o"></i> 
+		<?php echo Yii::t('main', 'Uusi tilaus'); ?>
+	      </span>
+            </div>
+            <!-- end .panel-heading section -->
 
-		<h2 class="modal-title"><?php echo Yii::t('main', 'Uusi tilaus'); ?></h2>
-	
-		</div>
-		<div class="modal-body">
-
-	<div class="dialogTable clearfix modal-osio">
+              <div class="panel-body p25">
 	<?php
 	}
 
@@ -3120,8 +3142,10 @@ class TyovuorootController extends Controller
 			'model'=>$model,
 		));
 	?>
-	</div>
-	</div> <!-- end modal-body -->
+          </div>
+          <!-- end: .panel -->
+        </div>
+        <!-- end: .admin-form -->
 	<?php
 	}
 	}

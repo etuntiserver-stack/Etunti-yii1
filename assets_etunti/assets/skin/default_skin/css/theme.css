@@ -10324,6 +10324,7 @@ select[multiple].input-lg {
   border: 0;
   background: transparent;
   z-index: 3;
+
   font-size: 18px;
 }
 .input-group.input-hero .input-group-addon + input.form-control {
@@ -18294,6 +18295,7 @@ body.sb-top #toggle_sidemenu_t {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     -webkit-user-select: none;
+
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;

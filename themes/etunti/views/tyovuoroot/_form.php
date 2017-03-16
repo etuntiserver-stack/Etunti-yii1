@@ -271,6 +271,7 @@ $(".muokaValiko").click(function() {
     <div class="pull-right">
     <br>
   	<div class="section">
+
 		<?php echo $form->labelEx($model,'piilota_mobiilista'); ?>
 		<?php 
         	$l = array(0=>'Kyllä',1=>'Ei');
@@ -445,7 +446,7 @@ $(".muokaValiko").click(function() {
 
 <br>
 
-	<div class="modal-footer">
+	<div class="panel-footer text-right">
 		<?php 
 	   	$site = Yii::app()->createController('Site');
 
@@ -1153,13 +1154,13 @@ function laatikonPaivays(thisDataReturn){
 
 
 // <-- modal siirtaminen
-	$(".modal-header").hover(function() {
+	$("#modal-form").find(".panel-heading").hover(function() {
 	    $(this).css('cursor','pointer');
 	}, function() {
 	    $(this).css('cursor','auto');
 	});
-        $('.modal-dialog').draggable({
-            handle: ".modal-header",
+        $('#modal-form').draggable({
+            handle: ".panel-heading",
 	    revert:"invalid",
         });
 // modal siirtaminen -->
