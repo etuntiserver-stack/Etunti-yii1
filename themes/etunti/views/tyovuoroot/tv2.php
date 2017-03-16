@@ -115,7 +115,7 @@
 
 	foreach($tyontekijat_model as $t){
 	  echo '<th style="z-index: 999">';
- 	  echo $this->etuSukunimi($t->id);	
+ 	  echo '<a href="#" class="getTekijanTiedot" for="'.$t->id.'">'.$this->etuSukunimi($t->id).'</a>';	
 	  echo '</th>';
 	}
         ?>
@@ -260,56 +260,54 @@
 
 
 
-<?php
-/*
-<?php Yii::app()->clientScript->registerPackage('fixedTable'); ?>
+
+
+     <div id="temaus-modal" class="modal fade" tabindex="-1" role="dialog">
+        <!-- Admin Form Popup -->
+        <div id="modal-form" class=" popup-basic popup-lg admin-form mfp-with-anim mfp-hide">
+          <div class="panel">
+            <div class="panel-heading">
+              <span class="panel-title"></span>
+            </div>
+            <!-- end .panel-heading section -->
+
+            <form method="post" action="/" id="comment">
+              <div class="panel-body p25">
+
+
+              </div>
+              <!-- end .form-body section -->
+
+              <div class="panel-footer">
+		<button type="button" class="button btn-default" data-dismiss="modal" aria-label="Close">Sulje</button>
+                <!--<button type="submit" class="button btn-primary">Post Comment</button>-->
+              </div>
+              <!-- end .form-footer section -->
+            </form>
+          </div>
+          <!-- end: .panel -->
+        </div>
+        <!-- end: .admin-form -->
+     </div>
+
 
 <script type="text/javascript">
 $(document).ready(function(){
 
+  $(".getTekijanTiedot").click(function(e){
+	e.preventDefault();
+	var id = $(this).attr('for');
+        $.ajax({
+           url: 'get_tekijantiedot?id='+id,
+           success: function(data){
+		data = JSON.parse(data);
 
-$(function () {
-
-    var tableHeight = function () {
-        var $tableHeader = $('.dataTables_scrollHeadInner thead tr');
-        return $(window).height() - 4 - ($tableHeader.length ? $tableHeader.height() : 0);
-    };
-
-    var dataTable = $('table').dataTable({
-        sDom: 'frtiS',
-        sScrollY: tableHeight(),
-        sScrollX: '100%',
-        bAutoWidth: false,
-        bScrollCollapse: true,
-        bPaginate: false,
-        bFilter: false,
-        bInfo: false,
-        bSort: false,
-        bDeferRender: true
-    });
-
-    var onResize = function () {
-        var oSettings = dataTable.fnSettings();
-        oSettings.oScroll.sY = tableHeight()-parseInt($('#taulunKorko').val()); 
-        dataTable.fnDraw();
-    };
-
-    var firstDraw = false;
-    new FixedColumns(dataTable, {
-        iLeftWidth: 100,
-        fnDrawCallback: function () {
-            if (firstDraw) return;
-            firstDraw = true;
-            onResize();
-        }
-    });
-
-    $(window).resize(onResize);
-});
+		$('#temaus-modal').find('.panel-title').html('<i class="fa fa-rocket"></i>Työntekijä');
+		$('#temaus-modal').modal().find('.panel-body').html(data);
+           }
+        });
+  });
 
 
 });
 </script>
-*/
-?>
-

@@ -166,7 +166,7 @@
 		echo '
 		<div class="row">
 		  <div class="col-sm-12">
-		    	<b>'.$this->etuSukunimi($t->id).'</b>
+		    	<a href="#" class="getTekijanTiedot" for="'.$t->id.'">'.$this->etuSukunimi($t->id).'</a>
 			<br>
 			<span '.$cl.'><b id="vk_'.$week.'_'.$t->id.'">'.$kokoViikko. '</b> ('.$vktyoaika.')</span>
 		  </div>
@@ -222,56 +222,57 @@
 
 
 
-<?php
-/*
 
-<?php Yii::app()->clientScript->registerPackage('fixedTable'); ?>
+     <div id="temaus-modal" class="modal fade" tabindex="-1" role="dialog">
+        <!-- Admin Form Popup -->
+        <div id="modal-form" class=" popup-basic popup-lg admin-form mfp-with-anim mfp-hide">
+          <div class="panel">
+            <div class="panel-heading">
+              <span class="panel-title"></span>
+            </div>
+            <!-- end .panel-heading section -->
+
+            <form method="post" action="/" id="comment">
+              <div class="panel-body p25">
+
+
+              </div>
+              <!-- end .form-body section -->
+
+              <div class="panel-footer">
+		<button type="button" class="button btn-default" data-dismiss="modal" aria-label="Close">Sulje</button>
+                <!--<button type="submit" class="button btn-primary">Post Comment</button>-->
+              </div>
+              <!-- end .form-footer section -->
+            </form>
+          </div>
+          <!-- end: .panel -->
+        </div>
+        <!-- end: .admin-form -->
+     </div>
 
 
 <script type="text/javascript">
 $(document).ready(function(){
 
-$(function () {
+  $(".getTekijanTiedot").click(function(e){
+	e.preventDefault();
+	var id = $(this).attr('for');
+        $.ajax({
+           url: 'get_tekijantiedot?id='+id,
+           success: function(data){
+		data = JSON.parse(data);
 
-    var tableHeight = function () {
-        var $tableHeader = $('.dataTables_scrollHeadInner thead tr');
-        return $(window).height() - 4 - ($tableHeader.length ? $tableHeader.height() : 0);
-    };
+		$('#temaus-modal').find('.panel-title').html('<i class="fa fa-rocket"></i>Työntekijä');
+		$('#temaus-modal').modal().find('.panel-body').html(data);
+           }
+        });
+  });
 
-    var dataTable = $('table').dataTable({
-        sDom: 'frtiS',
-        sScrollY: tableHeight(),
-        sScrollX: '100%',
-        bAutoWidth: true,
-        bScrollCollapse: true,
-        bPaginate: false,
-        bFilter: false,
-        bInfo: false,
-        bSort: false,
-        bDeferRender: true
-    });
-
-    var onResize = function () {
-        var oSettings = dataTable.fnSettings();
-        oSettings.oScroll.sY = tableHeight()-$('#taulunKorko').val(); 
-        dataTable.fnDraw();
-    };
-
-    var firstDraw = false;
-    new FixedColumns(dataTable, {
-        iLeftWidth: 100,
-        fnDrawCallback: function () {
-            if (firstDraw) return;
-            firstDraw = true;
-            onResize();
-        }
-    });
-
-    $(window).resize(onResize);
-});
 
 });
 </script>
 
-*/
-?>
+
+
+
