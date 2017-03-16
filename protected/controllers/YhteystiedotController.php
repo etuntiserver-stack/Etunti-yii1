@@ -103,7 +103,7 @@ class YhteystiedotController extends Controller
 		{
 			$model->attributes=$_POST['Yhteystiedot'];
 			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+				$this->redirect(array('index'));
 		}
 
 		$this->render('create',array(
@@ -134,7 +134,7 @@ class YhteystiedotController extends Controller
 		{
 			$model->attributes=$_POST['Yhteystiedot'];
 			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+				$this->redirect(array('index'));
 		}
 
 		$this->render('update',array(
