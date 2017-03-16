@@ -225,7 +225,7 @@
 
      <div id="temaus-modal" class="modal fade" tabindex="-1" role="dialog">
         <!-- Admin Form Popup -->
-        <div id="modal-form" class=" popup-basic popup-lg admin-form mfp-with-anim mfp-hide">
+        <div id="modal-form" class=" popup-basic popup-xl admin-form mfp-with-anim mfp-hide">
           <div class="panel">
             <div class="panel-heading">
 			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
