@@ -228,7 +228,7 @@
         <div id="modal-form" class=" popup-basic popup-xl admin-form mfp-with-anim mfp-hide">
           <div class="panel">
             <div class="panel-heading">
-			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="font-size:170%">
 				<span aria-hidden="true">&times;</span>
 			</button>
               <span class="panel-title"></span>
@@ -266,7 +266,7 @@ $(document).ready(function(){
            success: function(data){
 		data = JSON.parse(data);
 
-		$('#temaus-modal').find('.panel-title').html('<i class="fa fa-rocket"></i>Työntekijä');
+		$('#temaus-modal').find('.panel-title').html('<i class="fa fa-male"></i>Työntekijä');
 		$('#temaus-modal').modal().find('.panel-body').html(data);
            }
         });
