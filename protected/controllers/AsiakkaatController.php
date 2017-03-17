@@ -518,9 +518,18 @@ class AsiakkaatController extends Controller
 	$ryhma = $r->value;
 
 	if($model->tyyppi == 'yritys')
+	{
 		$isprivatecustomer = '0';
+		$finvoiceaddress = '<finvoiceaddress>'.$model->verkkolaskuosoite.'</finvoiceaddress>';
+		$finvoiceroutercode = '<finvoiceroutercode>'.$model->valittajan_tunnus.'</finvoiceroutercode>';
+	}
 	if($model->tyyppi == 'henkilo')
+	{
 		$isprivatecustomer = '1';
+		$finvoiceaddress = '<finvoiceaddress></finvoiceaddress>';
+		$finvoiceroutercode = '<finvoiceroutercode></finvoiceroutercode>';
+	}
+
 
 $xml = '
 <root>
@@ -542,8 +551,8 @@ $xml = '
       <isprivatecustomer>'.$isprivatecustomer.'</isprivatecustomer>
     </customerbaseinformation>
     <customerfinvoicedetails>
-      <finvoiceaddress>'.$model->verkkolaskuosoite.'</finvoiceaddress>
-      <finvoiceroutercode>'.$model->valittajan_tunnus.'</finvoiceroutercode>
+      '.$finvoiceaddress.'
+      '.$finvoiceroutercode.'
     </customerfinvoicedetails>
     <customerdeliverydetails>
       <deliveryname>'.$name.'</deliveryname>
