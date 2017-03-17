@@ -77,6 +77,7 @@ $(document).ready(function(){
 		}
 		if(data[0] == 'ok')
 		{
+			window.location.href="etusivu";
 			$('input').val('');
 			$('#success').html('<br><span class="alert alert-success btn-block">Salasanasi vaihdettu. Kirjaudu ulos ja käytä uusi salasana.</span>');
 			$('.submit').remove();
