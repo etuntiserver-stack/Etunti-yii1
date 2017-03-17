@@ -66,7 +66,7 @@ class Tarjouslaskenta extends DB2ActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'time' => 'Time',
+			'time' => Yii::t('main', 'Päivämäärä'),
 			'yhteystiedot_id' => Yii::t('main', 'Yhteystiedot'),
 			'asiakas_id' => Yii::t('main', 'Asiakas'),
 			'tuote_palvelu_id' => Yii::t('main', 'Tuote/Palvelu'),

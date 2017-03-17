@@ -2,15 +2,6 @@
 /* @var $this TarjouslaskentaController */
 /* @var $model Tarjouslaskenta */
 /* @var $form CActiveForm */
-
-
-		$mail = new YiiMailer();
-		//$mail->clearLayout();//if layout is already set in config
-		$mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
-		$mail->setTo('laptopsr@gmail.com');
-		$mail->setSubject('test subj');
-		$mail->setBody('testi viesti');
-		$mail->send();
 ?>
 
 
