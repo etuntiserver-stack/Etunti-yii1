@@ -22,7 +22,7 @@
 	<?php echo $form->errorSummary($model); ?>
 
 
-	<div class="section fill mb5">
+	<div class="section fill mb5 yhteystiedot">
 		<?php echo $form->labelEx($model,'yhteystiedot_id'); ?>
 		<?php
 		$list = array();
@@ -38,13 +38,13 @@
 		}
 
         		echo $form->dropDownList($model, 'yhteystiedot_id', $list,
-			array('empty'=>'Valitse','class'=>'form-control'));
+			array('empty'=>'Valitse','class'=>'form-control valittu'));
 		
         	?>
 		<?php echo $form->error($model,'yhteystiedot_id'); ?>
 	</div>
 
-	<div class="section fill mb5">
+	<div class="section fill mb5 asiakas">
 		<?php echo $form->labelEx($model,'asiakas_id'); ?>
 		<?php
 		$list = array();
@@ -60,7 +60,7 @@
 		}
 
         		echo $form->dropDownList($model, 'asiakas_id', $list,
-			array('empty'=>'Valitse','class'=>'form-control'));
+			array('empty'=>'Valitse','class'=>'form-control valittu'));
 		
         	?>
 		<?php echo $form->error($model,'asiakas_id'); ?>
@@ -246,3 +246,18 @@ jQuery(function(){
 <?php $this->endWidget(); ?>
 
 
+
+
+
+<script>
+jQuery(function(){
+
+    $(".valittu").change(function(){
+	var valittu = $(this).attr('id');
+	if(valittu == 'Tarjouslaskenta_yhteystiedot_id')
+		$('.asiakas').hide();
+	if(valittu == 'Tarjouslaskenta_asiakas_id')
+		$('.yhteystiedot').hide();
+    });
+});
+</script>
