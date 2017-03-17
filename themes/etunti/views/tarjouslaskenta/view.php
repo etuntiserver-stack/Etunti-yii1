@@ -20,6 +20,10 @@
 	}
 
 $model->muut_kulut = $muut;
+
+$tp = LaskutusTuotteet::model()->findByPk($model->tuote_palvelu_id);
+if(isset($tp->id))
+$model->tuote_palvelu_id = $tp->tuotenimi;
 ?>
 
 
@@ -27,18 +31,18 @@ $model->muut_kulut = $muut;
 	'data'=>$model,
 	'cssFile' => Yii::app()->request->baseUrl.'/css/profile.css',
 	'attributes'=>array(
-		'id',
-		'time',
-		'yhteystiedot_id',
-		'asiakas_id',
+		//'id',
+		//'time',
+		//'yhteystiedot_id',
+		//'asiakas_id',
 		'tuote_palvelu_id',
 		'hinta_tyyppi',
 		'neliot',
 		'kayntikerrat',
 		'tuntien_maara',
 		'yhteensa',
-		'tavoite_myyntikate',
-		'palkkakustannus',
+		//'tavoite_myyntikate',
+		//'palkkakustannus',
 		'matkat',
 		'iltalisa',
 		'yolisa',
@@ -49,3 +53,13 @@ $model->muut_kulut = $muut;
                         ),
 	),
 )); ?>
+
+
+<script>
+jQuery(function(){
+
+    $("table.detail-view").addClass('table table-bordered');
+});
+</script>
+
+
