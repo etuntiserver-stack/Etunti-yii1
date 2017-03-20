@@ -45,7 +45,7 @@ class SiteController extends Controller
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('allow', 
-				'actions'=>array('index','test','hyvaksy','hylkaa'),
+				'actions'=>array('index','test','hyvaksy','hylkaa', 'confirm'),
 				'users'=>array('*'),
 			),
 			array('deny',  // deny all users
@@ -193,6 +193,52 @@ class SiteController extends Controller
 
 	}
 
+	public function actionConfirm($token)
+	{
+
+		$model = Administrators::model()->find(" token!='' AND token='".$token."' ");
+		if(!isset($model->id))
+			die('Aktivointi linkki ei ole enää voimassa.');
+
+		if( Yii::app()->request->getPost('uusi_salasana') )
+		{
+
+			if(
+				isset($model->id) 
+				and !empty(Yii::app()->request->getPost('uusi_salasana'))
+				and Yii::app()->request->getPost('uusi_salasana') == Yii::app()->request->getPost('varmista_uusi_salasana')
+			)
+			{
+				$uusi_salasana = password_hash(Yii::app()->request->getPost('uusi_salasana'), PASSWORD_BCRYPT);
+				$upd = Administrators::model()->updateByPk($model->id, array('adm_salasana' => $uusi_salasana, 'token' => ''));
+				if( $upd != null )
+				echo json_encode(array('ok'));
+			} elseif(
+				isset($model->id) 
+				and !empty(Yii::app()->request->getPost('uusi_salasana'))
+				and Yii::app()->request->getPost('uusi_salasana') != Yii::app()->request->getPost('varmista_uusi_salasana')
+			)
+			{
+				echo json_encode('varmistaUusi');
+			} elseif(
+				isset($model->id) 
+				and ( empty(Yii::app()->request->getPost('uusi_salasana')) or empty(Yii::app()->request->getPost('varmista_uusi_salasana')) )
+			)
+			{
+				echo json_encode('emptyUusi');
+
+			} else {
+				echo json_encode('error');
+			}
+			exit;
+		}
+
+                Yii::app()->theme = 'classic';
+		$this->render('confirm', array(
+			'token' => $token
+		));
+
+	}
 
 	public function actionChange_password()
 	{

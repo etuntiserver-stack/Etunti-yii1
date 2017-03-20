@@ -24,6 +24,8 @@ class LoginController extends Controller
 	       		$criteria = new CDbCriteria();
 		        $criteria->condition = " 
 				adm_login='".Yii::app()->request->getPost('UserLogin')['username']."' 
+				AND token=''
+				AND adm_salasana!=''
 			";
 			$mod=Administrators::model()->find($criteria);
 

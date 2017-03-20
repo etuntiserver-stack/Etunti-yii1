@@ -7,7 +7,7 @@
 
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'administrators-form',
-	'enableAjaxValidation'=>true,
+	'enableAjaxValidation'=>false,
 )); ?>
 
 
@@ -72,13 +72,16 @@
 		<?php echo $form->error($model,'adm_salasana_repeat'); ?>
 	</div>
 	</div>
-	<?php else: ?>
+<?php /*
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'adm_salasana'); ?>
 		<?php echo $form->passwordField($model,'adm_salasana',array('size'=>60,'maxlength'=>100,'class'=>'form-control', 'AUTOCOMPLETE'=>'off')); ?>
 		<?php echo $form->error($model,'adm_salasana'); ?>
 	</div>
+	<div id="adm_salasana_error"></div>
+*/ ?>
 	<?php endif; ?>
+
 <br>
 
 	<div class="section fill mb5">
@@ -125,6 +128,38 @@
 
 <script type="text/javascript">
 $(document).ready(function(){
+
+/*
+$("#Administrators_adm_salasana").blur(function() {
+	validatePassword( $(this).val() );
+});
+
+function validatePassword(p) {
+
+        errors = [];
+    if (p.length < 8) {
+        errors.push("Salasanan pitää olla vähintään 8 merkkiä pitkä."); 
+    }
+    if (p.search(/[a-z]/i) < 0) {
+        errors.push("Salasanan pitää sisältää vähintään yksi kirjain.");
+    }
+    if (p.search(/[0-9]/) < 0) {
+        errors.push("Salasanan pitää sisältää vähintään yksi numero."); 
+    }
+    if (p.search(/[a-z]/) < 0) { 
+	errors.push("Your password must contain at least one lowercase letter.") 
+    } 
+    if (p.search(/[A-Z]/) < 0) { 
+	errors.push("Your password must contain at least one uppercase letter.") 
+    }
+    if (errors.length > 0) {
+        $('#adm_salasana_error').html('<div class="alert bg-danger">' + errors.join("<br>") + '</div>' ).show();
+        return false;
+    }
+        $('#adm_salasana_error').html('').hide();
+    return true;
+}
+*/
 
 /* valikot */
 $(".muokaValiko").click(function() {

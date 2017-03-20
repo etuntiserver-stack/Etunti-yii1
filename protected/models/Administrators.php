@@ -43,11 +43,11 @@ public $adm_salasana_repeat;
 		// will receive user inputs.
 		return array(
 			array('adm_login, adm_email, adm_nimi', 'required'),
-			array('adm_salasana', 'required', 'on'=>'create'),
+			//array('adm_salasana', 'required', 'on'=>'create'),
 			//array('adm_salasana', 'compare', 'compareAttribute'=>'adm_salasana_repeat' , 'on'=>'update'),
 			array('status', 'numerical', 'integerOnly'=>true),
 			array('adm_login, adm_salasana, adm_email, adm_nimi', 'length', 'max'=>100),
-			array('ulkonaky', 'length', 'max'=>3000),
+			array('ulkonaky, token', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('id, adm_login, adm_salasana, adm_email, adm_nimi, status', 'safe', 'on'=>'search'),

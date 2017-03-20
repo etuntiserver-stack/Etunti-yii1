@@ -86,13 +86,14 @@ class AdministratorsController extends Controller
 		$model=new Administrators('create');
 
 		// Uncomment the following line if AJAX validation is needed
-		$this->performAjaxValidation($model);
+		//$this->performAjaxValidation($model);
 
 		if(isset($_POST['Administrators']))
 		{
 
 			$model->attributes=$_POST['Administrators'];
-			$model->adm_salasana=md5($_POST['Administrators']['adm_salasana']);
+			$model->token = sha1(uniqid(time().$model->adm_nimi, true));
+			$model->adm_salasana='';
 			if($model->save())
 			{
 
@@ -100,7 +101,7 @@ class AdministratorsController extends Controller
 				$message = 'Hei '.$model->adm_nimi.'!<br>
 				<b>'.Yii::t('main', 'Yritystunnus').':</b> '.Yii::app()->user->domain.'<br>
 				<b>'.Yii::t('main', 'Käyttäjätunnus').':</b> '.$model->adm_login.'<br>
-				<b>'.Yii::t('main', 'Salasana').':</b> '.$_POST['Administrators']['adm_salasana'].'<br>
+				Aktivoi käyttäjätunnuksesi <a href="'.Yii::app()->getBaseUrl(true).'/index.php/site/confirm?token='.$model->token.'">tästä</a><br>
 				<p>
 				Tervetuloa Etunnin käyttäjäksi. 
 				</p><br>

@@ -17,7 +17,7 @@
                 <div class="panel-body bg-light">
                  <div class="row">
 
-		  <div class="col-sm-3">
+		  <div class="col-sm-4">
 		  <?php echo $this->renderPartial('_form', array('model'=>$model)); ?>
 		  </div>
 
