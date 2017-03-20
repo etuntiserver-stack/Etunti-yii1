@@ -67,9 +67,18 @@ $this->menu=array(
                       <div class="col-md-3">
                         <div class="section">
                           <label class="field prepend-icon">
+<?php
+	// <-- Oikeudet
+	   $checkOikeus = "henkilotunnukset_2_".Yii::app()->user->adminStatus;
+	   $site = Yii::app()->createController('Site');
+	   $vastaus = $site[0]->checkOikeusFields($checkOikeus);
+	//  Oikeudet -->
+?>
 
 <select name="sarakkeet[]" id="sarakkeet" multiple>
+   <?php if($vastaus != 0) : ?>
    <option value="hetu"><?php echo Yii::t('main', 'Hetu'); ?></option>
+   <?php endif; ?>
    <option value="osoite"><?php echo Yii::t('main', 'Osoite'); ?></option>
    <option value="sosoite"><?php echo Yii::t('main', 'S-osoite'); ?></option>
    <option value="alkaen"><?php echo Yii::t('main', 'Työsuhde alkaen'); ?></option>
