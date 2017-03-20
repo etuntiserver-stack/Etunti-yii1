@@ -7,7 +7,7 @@
                     <!-- Logo-->
                     <div class="col-md-3">
                         <div class="logo">
-  			<?php $asetukset=Asetukset::model()->find("id=1"); ?>
+  			<?php $asetukset=Asetukset::model()->findByPk(1); ?>
   			<img src="<?php echo $asetukset->logon_polkku; ?>" height="<?php echo $asetukset->logon_korkeus; ?>">
                         </div>
                     </div>
@@ -32,9 +32,9 @@ echo '
                 <div class="container">
                     <!-- Icon Big -->
                     <!-- End Icon Big -->
-                        <h1 class="title-subtitle text-center">Olet hyväksynyt tarjous.
+                        <h1 class="title-subtitle text-center">Olet hyväksynyt tarjouksen.
                             <span>
-                              Kiitos.
+                              Kiitos!
                             </span>
                         </h1>
                         <hr>
