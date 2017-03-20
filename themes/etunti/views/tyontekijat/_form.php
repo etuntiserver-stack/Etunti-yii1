@@ -40,8 +40,16 @@ if(empty($model->position) and isset($model->id))
 	
 	}
 }
-
 ?>
+
+<!-- Piilotetaan -->
+<?php if( isset($from) and $from == 'tyovuorot' ) : ?>
+<style>
+.piilotetaan{ display: none; }
+</style>
+<?php endif; ?>
+<!-- Piilotetaan -->
+
 
 <input type="hidden" id="position" value="<?php echo $position; ?>">
 
@@ -75,25 +83,25 @@ if(empty($model->position) and isset($model->id))
 		<?php echo $form->error($model,'tekijan_email'); ?>
 	</div>
 
-	<div class="section fill mb5">
+	<div class="section fill mb5 piilotetaan">
 		<?php echo $form->labelEx($model,'salasana'); ?>
 		<?php echo $form->textField($model,'salasana',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'salasana'); ?>
 	</div>
 
-	<div class="section fill mb5">
+	<div class="section fill mb5 piilotetaan">
 		<?php echo $form->labelEx($model,'tekijan_katuosoite'); ?>
 		<?php echo $form->textField($model,'tekijan_katuosoite',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'tekijan_katuosoite'); ?>
 	</div>
 
-	<div class="section fill mb5">
+	<div class="section fill mb5 piilotetaan">
 		<?php echo $form->labelEx($model,'tekijan_pnumero'); ?> 
 		<?php echo $form->textField($model,'tekijan_pnumero',array('size'=>7,'maxlength'=>7,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'tekijan_pnumero'); ?>
 	</div>
 
-	<div class="section fill mb5">
+	<div class="section fill mb5 piilotetaan">
 		<?php echo $form->labelEx($model,'tekijan_ptoimipaikka'); ?>
 		<?php echo $form->textField($model,'tekijan_ptoimipaikka',array('size'=>50,'maxlength'=>50,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'tekijan_ptoimipaikka'); ?>
@@ -144,7 +152,7 @@ if(empty($model->position) and isset($model->id))
 		<?php echo $form->error($model,'tekijan_puh'); ?>
 	</div>
 
-	<div class="section fill mb5">
+	<div class="section fill mb5 piilotetaan">
 		<?php echo $form->labelEx($model,'tekijan_henkilotunnus'); ?>
 		<?php 
 
@@ -266,13 +274,13 @@ if(empty($model->position) and isset($model->id))
 	</div>
 -->
 
-	<div class="section fill mb5">
+	<div class="section fill mb5 piilotetaan">
 		<?php echo $form->labelEx($model,'tekijan_pankkitili'); ?>
 		<?php echo $form->textField($model,'tekijan_pankkitili',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'tekijan_pankkitili'); ?>
 	</div>
 
-	<div class="section fill mb5">
+	<div class="section fill mb5 piilotetaan">
 		<?php echo $form->labelEx($model,'tekijan_konttori'); ?>
 		<?php echo $form->textField($model,'tekijan_konttori',array('size'=>50,'maxlength'=>50,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'tekijan_konttori'); ?>
@@ -413,20 +421,20 @@ $(document).ready(function(){
    </div>
 	</div>
 
-	<div class="section fill mb5">
+	<div class="section fill mb5 piilotetaan">
 		<?php echo $form->labelEx($model,'tyontekijan_numero'); ?>
 		<?php echo $form->numberField($model,'tyontekijan_numero',array('size'=>60,'maxlength'=>10,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'tyontekijan_numero'); ?>
 	</div>
 
-	<div class="section fill mb5">
+	<div class="section fill mb5 piilotetaan">
 		<?php echo $form->labelEx($model,'gcm_reg_id'); ?>
 		<?php echo $form->textField($model,'gcm_reg_id',array('size'=>60,'maxlength'=>500,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'gcm_reg_id'); ?>
 
 	</div>
 
-	<div class="section fill mb5">
+	<div class="section fill mb5 piilotetaan">
 		<?php echo $form->labelEx($model,'position'); ?>
 		<?php echo $form->textField($model,'position',array('size'=>60,'maxlength'=>500,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'position'); ?>
@@ -434,7 +442,7 @@ $(document).ready(function(){
 
 
 	<br>
-	<div class="section fill mb5">
+	<div class="section fill mb5 piilotetaan">
 		<?php echo $form->labelEx($model,'ayjasenyys'); ?>
 		<?php echo $form->checkbox($model,'ayjasenyys',array('size'=>10,'maxlength'=>10,'class'=>'sw')); ?>
 		<?php echo $form->error($model,'ayjasenyys'); ?>
@@ -451,13 +459,13 @@ $(document).ready(function(){
 <div class="row form">
    <div class="col-sm-6">
 
-	<div class="section fill mb5">
+	<div class="section fill mb5 piilotetaan">
 		<?php echo $form->labelEx($model,'tekijan_tietoja'); ?>
 		<?php echo $form->textArea($model,'tekijan_tietoja',array('rows'=>6, 'cols'=>50,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'tekijan_tietoja'); ?>
 	</div>
 
-	<div class="section fill mb5">
+	<div class="section fill mb5 piilotetaan">
 		<?php echo $form->labelEx($model,'tekijan_muisti'); ?>
 		<?php echo $form->textArea($model,'tekijan_muisti',array('rows'=>6, 'cols'=>50,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'tekijan_muisti'); ?>
@@ -479,9 +487,7 @@ $(document).ready(function(){
    </div><div class="col-sm-6">
 
 <label><?php echo Yii::t('','Viimeinen sijainti kartalla').' '.$viimeinenAika; ?> </label>
-<!DOCTYPE html>
-<html>
-  <head>
+
     <style>
       #map-canvas {
         width: 100%;
@@ -513,11 +519,8 @@ window.initialize = function() {
   google.maps.event.addDomListener(window, 'load', initialize);
 
     </script>
-  </head>
-  <body>
     <div id="map-canvas"></div>
-  </body>
-</html>
+
 
 
    </div>

@@ -97,7 +97,7 @@ class TyovuorootController extends Controller
 
 		$bd = '';
 		$bd .= '<div class="row section">';
-		$bd .= $this->renderPartial('//tyontekijat/_form', array('model'=>$model), true);
+		$bd .= $this->renderPartial('//tyontekijat/_form', array('model'=>$model, 'from' => 'tyovuorot'), true);
 		$bd .= '</div>';
 
 		echo json_encode($bd);	
