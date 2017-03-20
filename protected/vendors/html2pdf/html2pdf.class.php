@@ -46,7 +46,7 @@ if (!defined('__CLASS_HTML2PDF__')) {
         protected $_encoding         = '';          // charset encoding
         protected $_unicode          = true;        // means that the input text is unicode (default = true)
 
-        protected $_testTdInOnepage  = true;        // test of TD that can not take more than one page
+        protected $_testTdInOnepage  = false;        // test of TD that can not take more than one page // Roman 20.03.2017
         protected $_testIsImage      = true;        // test if the images exist or not
         protected $_testIsDeprecated = false;       // test the deprecated functions
 

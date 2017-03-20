@@ -1536,6 +1536,7 @@ class TyovuorootController extends Controller
 
 			} else {
 
+
 				if( is_array($edelliset_tyoparit_Arr) )
 				{
 					$result_diff_poistaminen = array_diff($edelliset_tyoparit_Arr, array($model->tid));
@@ -3003,6 +3004,7 @@ class TyovuorootController extends Controller
 				<span aria-hidden="true">&times;</span>
 			</button>
               <span class="panel-title"><i class="fa fa-clock-o"></i> 
+
 		<?php echo Yii::t('main', 'Uusi tilaus'); ?>
 	      </span>
             </div>
