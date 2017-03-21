@@ -105,6 +105,16 @@ $forPVM = date('d.m.Y',strtotime($model->aloitan));
 		<?php echo $form->error($model,'sairaus'); ?>
 	</div>
 
+	<div class="section">
+		<?php echo $form->labelEx($model,'laskutetaan'); ?>
+		<?php 
+        	$tal = array(1=>'Kyllä',0=>'Ei');
+
+		echo $form->dropDownList($model,'laskutetaan', $tal, 
+		array('class'=>'form-control input-sm')) ?>
+		<?php echo $form->error($model,'laskutetaan'); ?>
+	</div>
+
 		<input type="hidden" name="forPVM" value="<?php echo $forPVM; ?>">
 
 
