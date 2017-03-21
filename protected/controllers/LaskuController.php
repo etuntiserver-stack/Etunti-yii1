@@ -369,6 +369,7 @@ class LaskuController extends Controller
 		'".date("Y-m-d",strtotime($_POST['from']))."' AND '".date("Y-m-d",strtotime($_POST['to']))."'
 		AND status='3'
 		AND sairaus!=1
+		AND laskutetaan=1
 		";
 		$tot = Toteutuneet::model()->find($criteria); 
 	
@@ -383,6 +384,7 @@ class LaskuController extends Controller
 		'".date("Y-m-d",strtotime($_POST['from']))."' AND '".date("Y-m-d",strtotime($_POST['to']))."'
 		AND status='3'
 		AND sairaus!=1
+		AND laskutetaan=1
 		AND id NOT IN (SELECT kid FROM sivexkuitti_repaired) ";	
 		$lu = Mobile::model()->find($criteria); 
 	

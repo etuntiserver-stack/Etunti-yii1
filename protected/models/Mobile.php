@@ -67,7 +67,7 @@ public $tkohde_kannasta;
 		// will receive user inputs.
 		return array(
 			//array('asiakas_num, osoite, kohde_kannasta, kohdenID, aloitan, loppui, viesti, tekijan_nimi, tid, etaisyys, status, tietoja, hyvaksytty', 'required'),
-			array('requests, kohdenID, tid, status, admin, sairaus', 'numerical', 'integerOnly'=>true),
+			array('requests, kohdenID, tid, status, admin, sairaus, laskutetaan', 'numerical', 'integerOnly'=>true),
 			array('asiakas_num, puh_numero, bluetooth_name, subscriber_id, tekijan_nimi', 'length', 'max'=>50),
 			array('domain, asiakas_hyvaksy, imei, sim_serial_number, kohde_kannasta, hyvaksytty', 'length', 'max'=>100),
 			array('my_location, tietoja', 'length', 'max'=>20000),

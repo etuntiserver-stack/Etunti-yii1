@@ -42,7 +42,7 @@ $t = Tyontekijat::model()->findbypk($ex[1]);
 	<?php echo $form->errorSummary($model); ?>
 
 
-  <?php if(Yii::app()->user->adminStatus == 1) : ?>
+
   <input type="hidden" name="pvm" id="pvm" value="<?php echo $pvm; ?>">
   <div class="row">
     <div class="col-sm-12">
@@ -119,7 +119,7 @@ $t = Tyontekijat::model()->findbypk($ex[1]);
 
     </div>
   </div>
-  <?php endif; ?>
+
 
 <?php $this->endWidget(); ?>
 
