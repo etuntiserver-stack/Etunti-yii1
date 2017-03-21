@@ -19,7 +19,7 @@
         <label for="username"><?php echo Yii::t('main', 'Käyttäjätunnus')?></label>
         <input type="text" id="username" class="form-control input-lg" required>
 	<br>
-        <button class="btn btn-lg btn-primary btn-group submit" type="submit"><?php echo Yii::t('main', 'Lähetä uusi salasana'); ?></button>
+        <button class="btn btn-lg btn-primary btn-group submit" type="submit"><?php echo Yii::t('main', 'Lähetä'); ?></button>
         <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php" class="btn btn-lg btn-primary btn-group"><?php echo Yii::t('main', 'Etusivulle'); ?></a>
 	<div id="success"></div>
     </div>
@@ -36,7 +36,7 @@
 $(document).ready(function(){
 
   $(".submit").click(function(){
-
+	$('#success').html('Odota..');
 	$.ajax({
 	  url: 'salasanan_palauttaminen?check=true&domain='+$('#domain').val(),
 	  data: { username: $('#username').val() },

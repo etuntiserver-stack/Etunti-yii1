@@ -307,15 +307,15 @@ class SiteController extends Controller
 	public function actionSalasanan_palauttaminen()
 	{
 
-		if(isset($_GET['check']))
+		if(Yii::app()->getRequest()->getParam('check'))
 		{
-			if(empty($_GET['domain'])){
+			if(empty(Yii::app()->getRequest()->getParam('domain'))){
 				echo json_encode('domainEmpty');
 				exit;
 			}			
 
-			$domain 	= $_GET['domain'];
-			$username	= $_POST['username'];
+			$domain 	= Yii::app()->getRequest()->getParam('domain');
+			$username	= Yii::app()->request->getPost('username');
 
 	       		$criteria = new CDbCriteria();
 		        $criteria->condition = " adm_login='".$username."' ";
@@ -323,16 +323,10 @@ class SiteController extends Controller
 
 			if(isset($model->id) and !empty($model->adm_email))
 			{
-
-				$uusiSalasana = $this->rand_pass(8);
-				$bcrypt = password_hash($uusiSalasana, PASSWORD_BCRYPT);
-				Administrators::model()->updateByPk($model->id, array('adm_salasana'=>$bcrypt));
-				$message = Yii::t('main', 'Uusi salasana').': '.$uusiSalasana;
-				$message .= '<p>Kirjaudu sisään uudella salasanalla ja turvallisuussyistä vaihda tässä viestissä oleva salasana.
- 				Painamalla oikeassa yläkulmassa olevaa käyttäjätunnusta pääset omiin asetuksiisi, josta voit vaihtaa salasanan. 
-				Muista painaa tallennusta, jotta uusi salasana tulee voimaan.</p><br>
-				Ystävällisin terveisin <br> 
-				Etunti';
+				$token = sha1(uniqid(time().$model->adm_nimi, true));
+				Administrators::model()->updateByPk($model->id, array('adm_salasana'=>'', 'token' => $token));
+				$message = '';
+				$message .= '<p>Aktivoi käyttäjätunnuksesi <a href="'.Yii::app()->getBaseUrl(true).'/index.php/site/confirm?token='.$token.'">tästä</a><br>';
 
 				$subject = Yii::t('main', 'Uusi salasana'). ' '.$model->adm_nimi;
 				$mail = new YiiMailer();
