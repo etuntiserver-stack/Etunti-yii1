@@ -130,9 +130,10 @@ $forPVM = date('d.m.Y',strtotime($s->aloitan));
 		<?php echo $form->labelEx($model,'laskutetaan'); ?>
 		<?php 
         	$tal = array(1=>'Kyllä',0=>'Ei');
+		$optS = array($s->laskutetaan=>array('selected'=>true));
 
 		echo $form->dropDownList($model,'laskutetaan', $tal, 
-		array('class'=>'form-control input-sm')) ?>
+		array('class'=>'form-control input-sm', 'options'=>$optS)) ?>
 		<?php echo $form->error($model,'laskutetaan'); ?>
 	</div>
 
