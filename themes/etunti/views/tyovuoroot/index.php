@@ -266,8 +266,12 @@ $(document).ready(function(){
            success: function(data){
 		data = JSON.parse(data);
 
-		$('#temaus-modal').find('.panel-title').html('<i class="fa fa-male"></i>Työntekijä');
-		$('#temaus-modal').modal().find('.panel-body').html(data);
+		if( data['bd'] )
+		{
+		$('#temaus-modal').find('.panel-title').html('<i class="fa fa-male"></i>'+data['etusuku']);
+		$('#temaus-modal').modal().find('.panel-body').html(data['bd']);
+		}
+
            }
         });
   });

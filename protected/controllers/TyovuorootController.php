@@ -100,7 +100,7 @@ class TyovuorootController extends Controller
 		$bd .= $this->renderPartial('//tyontekijat/_form', array('model'=>$model, 'from' => 'tyovuorot'), true);
 		$bd .= '</div>';
 
-		echo json_encode($bd);	
+		echo json_encode(array('bd'=>$bd, 'etusuku' => $this->etuSukunimi($model->id)));	
 	}
 
 
@@ -554,6 +554,7 @@ class TyovuorootController extends Controller
 		else
 		   echo 0;
 		exit;
+
 	}
 
 	public function actionVkolopchange()
@@ -1837,6 +1838,7 @@ class TyovuorootController extends Controller
 
 										$return[] = array(
 											'ERROR'=>$this->etuSukunimi($tid). 'työpari lisääminen ei onnistunut. '
+
 											);
 										exit;
 									}
