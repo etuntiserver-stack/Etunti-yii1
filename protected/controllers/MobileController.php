@@ -603,7 +603,6 @@ function num($val){
 			$model->time = date("Y-m-d H:i:s",strtotime($_POST['Mobile']['aloitan']));
 			$model->kohde_kannasta=$k->osoite;
 			$model->admin=1;
-			$model->laskutetaan='0';
 
 			if($model->save()){
 			   $did = date("Ymd",strtotime($model->aloitan));
