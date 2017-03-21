@@ -488,38 +488,41 @@ $(document).ready(function(){
 
 <label><?php echo Yii::t('','Viimeinen sijainti kartalla').' '.$viimeinenAika; ?> </label>
 
+
+
+
+<!DOCTYPE html>
+<html>
+  <head>
     <style>
-      #map-canvas {
+      #map {
         width: 100%;
         height: 400px;
       }
     </style>
-    <script src="https://maps.googleapis.com/maps/api/js"></script>
+  </head>
+  <body>
+    <div id="map"></div>
     <script>
-
-window.initialize = function() {
-    var Mypos = document.getElementById("position").value.split("/");
-    var myLatlng = new google.maps.LatLng(Mypos[0], Mypos[1]);
-    var mapCanvas = document.getElementById('map-canvas');
-    var mapOptions = {
-        center: myLatlng,          
-        zoom: 14,
-    }
-    var map = new google.maps.Map(mapCanvas, mapOptions);
-    var marker = new google.maps.Marker({
-      position: myLatlng,
-      map: map,
-      title:"123"
-      });
-    var latLng = marker.getPosition(); 
-    map.setCenter(latLng);
-
-  }
-
-  google.maps.event.addDomListener(window, 'load', initialize);
-
+      function initMap() {
+	var Mypos = document.getElementById("position").value.split("/");
+	console.log(Mypos)
+        var uluru = {lat: parseFloat(Mypos[0]), lng: parseFloat(Mypos[1])};
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 14,
+          center: uluru
+        });
+        var marker = new google.maps.Marker({
+          position: uluru,
+          map: map
+        });
+      }
     </script>
-    <div id="map-canvas"></div>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCq7M2XrDo8cr43lu1wohJ4rZAEGIyAdsw&callback=initMap">
+    </script>
+  </body>
+</html>
 
 
 
