@@ -100,7 +100,7 @@
                           <label class="field select">
 			<?php
 					$list = array();
-			      		$l = Valikkoot::model()->findAll(" select_type='asiakas_ryhma' ",array('order' => "select_type"));
+			      		$l = Valikkoot::model()->findAll(" select_type='asiakas_ryhma_real' ",array('order' => "select_type"));
 					foreach($l as $v)
 					$list[$v->id] = $v->value;
 			
