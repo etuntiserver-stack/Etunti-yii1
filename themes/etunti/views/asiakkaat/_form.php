@@ -56,6 +56,37 @@ $uusiSalasana = $this->generatePassword();
 		<?php echo $form->error($model,'asiakasnumero'); ?>
 	</div>
 
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'asiakastila'); ?>
+
+	   <div class="input-group">
+		<?php
+		$list = array();
+      		$l = Valikkoot::model()->findAll(" select_type='asiakastila' ",array('order' => "select_type"));
+		if(count($l) == 0)
+      		{
+			$new_val = new Valikkoot;
+			$new_val->select_type = "asiakastila";
+			$new_val->value = "Aktiivinen";
+			if($new_val->save())
+	      			$l = Valikkoot::model()->findAll(" select_type='asiakastila' ",array('order' => "select_type"));
+			else
+				var_dump($new_val->getErrors());
+		}
+		foreach($l as $val)
+			$list[$val->id] = $val->value;
+
+        		echo $form->dropDownList($model, 'asiakastila', $list,
+			array('empty'=>'Valitse', 'class'=>'form-control'));
+        	?>
+		<span class="input-group-btn">
+			<span class="btn btn-primary myBgColors muokaValiko" for="asiakastila"><i class="fa fa-pencil-square-o"></i></span>
+		</span>
+	   </div>
+
+		<?php echo $form->error($model,'asiakastila'); ?>
+	</div>
+
 	<div class="section fill mb5 tyyppi">
 		<?php echo $form->labelEx($model,'tyyppi'); ?>
 		<?php

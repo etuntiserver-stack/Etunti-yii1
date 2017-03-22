@@ -75,8 +75,10 @@
 			$tk_table .= '<th>'.Yii::t('main', 'Kommenti').'</th>';
 			$tk_table .= '</tr>';
 
-			foreach($tyonkuvaus_arr['tilat'] as $key=>$items)
+			if( is_array($tyonkuvaus_arr) and isset($tyonkuvaus_arr['tilat']) )
 			{
+			    foreach($tyonkuvaus_arr['tilat'] as $key=>$items)
+			    {
 				$tyontehtavat = $tyonkuvaus_arr['tyontehtavat'][$key];
 				$tt_result = '';
 				foreach($tyontehtavat as $kt=>$it)
@@ -89,6 +91,7 @@
 				$tk_table .= '<td>'.implode("<br>", $tyonkuvaus_arr['kommenti'][$key]).'</td>';
 				$tk_table .= '</tr>';
 
+			    }
 			}
 			$tk_table .= '</table>';
 
@@ -153,31 +156,34 @@
 	</div>
 */ ?>
 
+	<?php if(!isset($_GET['asiakas_id'])) : ?>
 	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'asiakas_id'); ?>
+		<?php echo $form->labelEx($model,'asiakastila'); ?>
 		<?php
 		$list = array();
-		$criteria=new CDbCriteria;
-		//$criteria->condition="";
-      		$l = Asiakkaat::model()->findAll($criteria);
-		foreach($l as $v)
-		{
-			if(!empty($v->yrityksen_nimi) and empty($v->yhteyshenkilo))
-			$list[$v->id] = $v->yrityksen_nimi;
-			elseif(empty($v->yrityksen_nimi) and !empty($v->yhteyshenkilo))
-			$list[$v->id] = $v->yhteyshenkilo;
-		}
+      		$l = Valikkoot::model()->findAll(" select_type='asiakastila' ",array('order' => "select_type"));
+		foreach($l as $val)
+			$list[$val->id] = $val->value;
 
-		if(count($list) > 0)
-		{
-        		echo $form->dropDownList($model, 'asiakas_id', $list,
-			array('empty'=>'Valitse','class'=>'form-control', 'options'=>$asiakas_selected));
-		}		
+		$list[0] = 'Muut';
+
+        		echo $form->dropDownList($model, 'asiakastila', $list,
+			array('empty'=>'Valitse', 'class'=>'form-control'));
         	?>
+		<?php echo $form->error($model,'asiakastila'); ?>
+	</div>
+	<?php endif; ?>
+
+	<div class="section fill mb5 asiakas" style="display:none">
+		<?php echo $form->labelEx($model,'asiakas_id'); ?>
+		<div id="asiakasListResult"></div>
 		<?php echo $form->error($model,'asiakas_id'); ?>
 	</div>
 
 	<?php if(isset($_GET['asiakas_id'])) : ?>
+
+	<?php echo $form->hiddenField($model,'asiakas_id', array('value'=>$_GET['asiakas_id'])); ?>
+
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'kohde_id'); ?>
 		<?php
@@ -276,7 +282,7 @@
 -->
 <br>
 	<div class="section">
-		<?php echo CHtml::submitButton($model->isNewRecord ? 'Luo' : 'Tallenna',array('class'=>'btn btn-primary myBgColors')); ?>
+		<?php echo CHtml::submitButton($model->isNewRecord ? 'Luo' : 'Tallenna',array('class'=>'btn btn-primary myBgColors submitButton disabled')); ?>
 	</div>
 
 <?php $this->endWidget(); ?>
@@ -287,7 +293,28 @@
 <script type="text/javascript">
 $(document).ready(function(){
 
- $('#CrmTarjoukset_asiakas_id').change(function(){
+ $('#CrmTarjoukset_asiakastila').change(function(){
+	var asiakastila = $(this).val();
+        $.ajax({
+           url: 'get_asiakastilat?asiakastila=' + parseInt(asiakastila),
+           //type: "POST",
+           //data: { },
+           success: function(data){
+		var data = JSON.parse(data);
+		console.log(data);
+		if( data !== '')
+		{
+			$('.asiakas').show();
+			$('#asiakasListResult').html(data);
+		} else {
+			$('.asiakas').hide();
+			$('#asiakasListResult').html('');
+		}
+           }
+        });
+ });
+
+ $(document).delegate("#CrmTarjoukset_asiakas_id","change",function(){
 	window.location.href= "create?asiakas_id=" + $(this).val();
  });
 
@@ -306,6 +333,7 @@ $(document).ready(function(){
            success: function(data){
 		//var data = JSON.parse(data);
 		//console.log(data);
+		$('.submitButton').removeClass('disabled');
 		$('#CrmTarjoukset_tyonkuvaus').val(data);
            }
         });

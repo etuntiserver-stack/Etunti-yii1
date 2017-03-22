@@ -14,6 +14,9 @@
  */
 class CrmTarjoukset extends DB2ActiveRecord
 {
+
+public $asiakastila;
+
 	/**
 	 * @return string the associated database table name
 	 */
@@ -71,6 +74,7 @@ class CrmTarjoukset extends DB2ActiveRecord
 			'kohteen_osoite' => Yii::t('main', 'Kohteen osoite'),
 			'kohteen_postinumero' => Yii::t('main', 'Kohteen postinumero'),
 			'kohteen_postitoimipaikka' => Yii::t('main', 'Kohteen postitoimipaikka'),
+			'asiakastila' => Yii::t('main', 'Asiakastila'),
 		);
 	}
 

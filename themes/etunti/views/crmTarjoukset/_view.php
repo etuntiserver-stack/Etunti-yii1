@@ -1,23 +1,20 @@
 <?php
 	$head = '';
 	$as = Asiakkaat::model()->findbypk($data->asiakas_id);
-	$yht = Yhteystiedot::model()->findbypk($data->yhteystiedot_id);
+	//$yht = Yhteystiedot::model()->findbypk($data->yhteystiedot_id);
 
-	if(isset($as->id) and !empty($as->yrityksen_nimi) and empty($as->yhteyshenkilo))
-	$head= $as->yrityksen_nimi.', '.$as->osoite;
-	elseif(isset($as->id) and empty($as->yrityksen_nimi) and !empty($as->yhteyshenkilo))
+	if(isset($as->id) and $as->tyyppi == 'yritys' and !empty($as->yrityksen_nimi))
+	$head = $as->yrityksen_nimi.', '.$as->osoite;
+	elseif(isset($as->id) and $as->tyyppi == 'henkilo' and !empty($as->yhteyshenkilo))
 	$head = $as->yhteyshenkilo.', '.$as->osoite;
-	elseif(isset($yht->id) and !empty($yht->yrityksen_nimi) and empty($yht->yhteyshenkilo))
-	$head= $yht->yrityksen_nimi.', '.$yht->osoite;
-	elseif(isset($yht->id) and empty($yht->yrityksen_nimi) and !empty($yht->yhteyshenkilo))
-	$head = $yht->yhteyshenkilo.', '.$yht->osoite;
+
 
 	$sahkoposti = '';
 	if(isset($as->id) and $data->asiakas_id != 0)
 	$sahkoposti = $as->sahkoposti;
 
-	if(isset($yht->id) and $data->yhteystiedot_id != 0)
-	$sahkoposti = $yht->sahkoposti;
+	//if(isset($yht->id) and $data->yhteystiedot_id != 0)
+	//$sahkoposti = $yht->sahkoposti;
 ?>
 
 <tr>
