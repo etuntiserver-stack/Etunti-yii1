@@ -6,12 +6,12 @@
  $asiakas_selected = array();
  $yhteystiedot_selected = array();
  $tyonkuvaus = '';
- $tarjouslaskenta = '';
+ //$tarjouslaskenta = '';
  if(isset($_GET['asiakas_id']) and !empty($_GET['asiakas_id']))
  {
 	$asiakas_selected[$_GET['asiakas_id']] = array('selected' => 'selected');
 	$tyonkuvaus = $this->get_tyonkuvaus('asiakas_id', $_GET['asiakas_id']);
-	$tarjouslaskenta = $this->get_tarjouslaskenta('asiakas_id', $_GET['asiakas_id']);
+	//$tarjouslaskenta = $this->get_tarjouslaskenta('asiakas_id', $_GET['asiakas_id']);
  }
 
 /*
@@ -26,7 +26,7 @@
  if(isset($model->id))
  {
 	$tyonkuvaus_arr = json_decode($model->tyonkuvaus, true);
-	$tarjouslaskenta_arr = json_decode($model->tarjouslaskenta, true);
+	//$tarjouslaskenta_arr = json_decode($model->tarjouslaskenta, true);
 
 
 			$tl_table = '';
@@ -258,11 +258,11 @@
 
 
 		<?php echo $form->textArea($model,'tyonkuvaus',array('rows'=>6, 'cols'=>50, 'class'=>'form-control', 'style'=>'display:none')); ?>
-		<?php echo $form->textArea($model,'tarjouslaskenta',array('rows'=>6, 'cols'=>50, 'class'=>'form-control', 'style'=>'display:none')); ?>
+		<?php //echo $form->textArea($model,'tarjouslaskenta',array('rows'=>6, 'cols'=>50, 'class'=>'form-control', 'style'=>'display:none')); ?>
 
 
 	<div class="section fill mb5">
-		<?php echo $tarjouslaskenta; ?>
+		<?php //echo $tarjouslaskenta; ?>
 		<?php echo $tyonkuvaus; ?>
 	</div>
 
@@ -314,6 +314,7 @@ $(document).ready(function(){
 
  });
 
+/*
  $('.tarjouslaskenta').change(function(){
 
     if ($("input[name='tarjouslaskenta']:checked").val()) {
@@ -331,6 +332,7 @@ $(document).ready(function(){
     }
 
  });
+*/
 
  $('#crm-tarjoukset-form').on("submit", function(e){
 
@@ -339,10 +341,12 @@ $(document).ready(function(){
         return false;
     }
 
+/*
     if ($("#CrmTarjoukset_tarjouslaskenta").val() === '') {
        	alert('Valitse tarjouslaskenta.');
         return false;
     }
+*/
 
     $(this).submit();
     e.preventDefault();

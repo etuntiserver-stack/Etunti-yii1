@@ -150,6 +150,8 @@ class CrmTarjouksetController extends Controller
 
 
 			$tl_table = '';
+
+/*
 			$tl_table .= '<h2>'.Yii::t('main', 'Tarjouslaskenta').'</h2>';
 			$tl_table .= '<table class="table table-bordered bg-white">';
 			$tl_table .= '<tr>';
@@ -181,6 +183,7 @@ class CrmTarjouksetController extends Controller
 			$tl_table .= '</table>';
 
 			$message .= $tl_table;
+*/
 
 
 			$tk_table = '';
@@ -423,7 +426,7 @@ class CrmTarjouksetController extends Controller
 			$document->setValue('tyonkuvaus', $sTableText);
 			//     Tyonkuvaus -->
 
-
+/*
 			// <-- Tarjouslaskenta
 			$tarjouslaskenta = json_decode($model->tarjouslaskenta);
 
@@ -470,7 +473,7 @@ class CrmTarjouksetController extends Controller
 			$sTableText = $objWriter->getWriterPart('document')->getObjectAsText($table);
 			$document->setValue('tarjouslaskenta', $sTableText);
 			//     Tarjouslaskenta -->
-
+*/
 
 
 			$firma = FirmanTiedot::model()->findbypk(1);
