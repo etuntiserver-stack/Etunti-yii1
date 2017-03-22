@@ -1084,10 +1084,12 @@ $('.tvchange').change(function(){
               <span class="caret"></span>
             </a>
             <ul class="nav sub-nav">
+<!--
               <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/yhteystiedot/index">
                   <span class="fa fa-clock-o"></span> <?php echo Yii::t('main', 'Yhteystiedot'); ?></a>
               </li>
+-->
               <!--<li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/site/kohderyhma">
                   <span class="fa fa-clock-o"></span> <?php echo Yii::t('main', 'Kohderyhmä'); ?></a>

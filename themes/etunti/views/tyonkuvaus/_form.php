@@ -21,7 +21,7 @@
 
 	<?php echo $form->errorSummary($model); ?>
 
-
+<?php /*
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'yhteystiedot_id'); ?>
 		<?php
@@ -43,6 +43,7 @@
         	?>
 		<?php echo $form->error($model,'yhteystiedot_id'); ?>
 	</div>
+*/ ?>
 
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'asiakas_id'); ?>

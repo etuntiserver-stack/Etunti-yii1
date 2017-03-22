@@ -14,12 +14,14 @@
 	$tarjouslaskenta = $this->get_tarjouslaskenta('asiakas_id', $_GET['asiakas_id']);
  }
 
+/*
  if(isset($_GET['yhteystiedot_id']) and !empty($_GET['yhteystiedot_id']))
  {
 	$yhteystiedot_selected[$_GET['yhteystiedot_id']] = array('selected' => 'selected');
 	$tyonkuvaus = $this->get_tyonkuvaus('yhteystiedot_id', $_GET['yhteystiedot_id']);
 	$tarjouslaskenta = $this->get_tarjouslaskenta('yhteystiedot_id', $_GET['yhteystiedot_id']);
  }
+*/
 
  if(isset($model->id))
  {
@@ -28,6 +30,8 @@
 
 
 			$tl_table = '';
+
+/*
 			$tl_table .= '<h2>'.Yii::t('main', 'Tarjouslaskenta').'</h2>';
 			$tl_table .= '<table class="table table-bordered bg-white">';
 			$tl_table .= '<tr>';
@@ -59,7 +63,7 @@
 			$tl_table .= '</table>';
 
 			echo $tl_table;
-
+*/
 
 			$tk_table = '';
 			$tk_table .= '<h2>'.Yii::t('main', 'Työnkuvaus').'</h2>';
@@ -91,6 +95,7 @@
 			echo $tk_table;
  }
 
+/*
  if(!isset($model->id) and isset($_GET['yhteystiedot_id']))
  {
 	$yt = Yhteystiedot::model()->findByPk($_GET['yhteystiedot_id']);
@@ -101,7 +106,7 @@
 		$model->kohteen_postitoimipaikka = $yt->postitoimipaikka;
 	}
  }
-
+*/
 ?>
 
 
@@ -124,7 +129,7 @@
   <div class="col-sm-4">
 
 
-	
+<?php /*
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'yhteystiedot_id'); ?>
 		<?php
@@ -146,6 +151,7 @@
         	?>
 		<?php echo $form->error($model,'yhteystiedot_id'); ?>
 	</div>
+*/ ?>
 
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'asiakas_id'); ?>
