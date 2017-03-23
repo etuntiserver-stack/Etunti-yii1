@@ -85,6 +85,12 @@ class CrmTarjouksetController extends Controller
 
 		} elseif($asia == 'hylatty' and isset($crm->id) and $crm->hyvaksyn_koodi == $code and $crm->status == 1){
 
+			if( $crm->tyonkuvaus_id != 0 )
+			Tyonkuvaus::model()->updatebypk($crm->tyonkuvaus_id, array('aktiivinen'=>0));
+
+			if( $crm->kohde_id != 0 )
+			Kohteet::model()->updatebypk($crm->kohde_id, array('aktiivinen'=>0));
+
 			CrmTarjoukset::model()->updatebypk($id, array('status'=>3));
 			$this->redirect(array('cancel'));
 		} else {
@@ -267,8 +273,7 @@ class CrmTarjouksetController extends Controller
 		//echo $message;
 		//exit;
 
-   		if(file_exists(Yii::app()->basePath."/../tiedostot/crm/tarjoukset/".Yii::app()->user->domain."/".$crm->liite.".pdf"))
-   		{
+
 		$subject = Yii::t('main', 'Tarjous'). ', '.$firma->tyonantaja;
 		$mail = new YiiMailer();
 		//$mail->clearLayout();//if layout is already set in config
@@ -276,6 +281,8 @@ class CrmTarjouksetController extends Controller
 		$mail->setTo($crm->asiakkaan_sahkoposti);
 		$mail->setSubject($subject);
 		$mail->setBody($message);
+
+   		if(file_exists(Yii::app()->basePath."/../tiedostot/crm/tarjoukset/".Yii::app()->user->domain."/".$crm->liite.".pdf"))
 		$mail->setAttachment($path.'/'.$file);
 
 		   if($mail->send())
@@ -294,7 +301,7 @@ class CrmTarjouksetController extends Controller
 			CrmTarjoukset::model()->updatebypk($id, array('status'=>1,'hyvaksyn_koodi'=>$randstring));
 			$this->redirect(array('index'));
 		   }
-   		}
+   		
 
 
 	}
@@ -341,7 +348,6 @@ class CrmTarjouksetController extends Controller
 
 		if(isset($_POST['CrmTarjoukset']))
 		{
-
 
 		if(file_exists($polku.$tiedosto))
 		{

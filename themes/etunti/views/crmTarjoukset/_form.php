@@ -280,6 +280,7 @@
 		<?php echo $form->error($model,'tarjous'); ?>
 	</div>
 -->
+		<?php echo $form->hiddenField($model,'tyonkuvaus_id'); ?>
 <br>
 	<div class="section">
 		<?php echo CHtml::submitButton($model->isNewRecord ? 'Luo' : 'Tallenna',array('class'=>'btn btn-primary myBgColors submitButton disabled')); ?>
@@ -335,6 +336,7 @@ $(document).ready(function(){
 		//console.log(data);
 		$('.submitButton').removeClass('disabled');
 		$('#CrmTarjoukset_tyonkuvaus').val(data);
+		$('#CrmTarjoukset_tyonkuvaus_id').val(thisFor);
            }
         });
 	

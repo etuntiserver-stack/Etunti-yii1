@@ -22,6 +22,9 @@
 		<?php echo $head; ?>
 	</td>
 	<td>
+		<?php echo $data->kohteen_osoite; ?>
+	</td>
+	<td>
 	<?php
 		if(file_exists(Yii::app()->basePath."/../tiedostot/crm/tarjoukset/".Yii::app()->user->domain."/".$data->liite.".docx"))
 	 	echo '<a href="../../tiedostot/crm/tarjoukset/'.Yii::app()->user->domain.'/'.$data->liite.'.docx">'.$data->liite.'.docx</a>';
@@ -36,9 +39,8 @@
 	</td>
 	<td>
 		<?php 
-			if(!empty($sahkoposti) and $data->status == 0 and
-   		(file_exists(Yii::app()->basePath."/../tiedostot/crm/tarjoukset/".Yii::app()->user->domain."/".$data->liite.".pdf"))
-			)
+			//  and	(file_exists(Yii::app()->basePath."/../tiedostot/crm/tarjoukset/".Yii::app()->user->domain."/".$data->liite.".pdf")
+			if(!empty($sahkoposti) and $data->status == 0)
 			{
 				echo '<button class="btn btn-primary btn-block laheta" for="'.$data->id.'">'.Yii::t('main', 'Lähetä').'</button>';
 			} elseif($data->status == 1){
