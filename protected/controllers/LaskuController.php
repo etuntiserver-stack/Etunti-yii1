@@ -598,6 +598,7 @@ class LaskuController extends Controller
 			Lasku::model()->updatebypk($model->id, array('viitenumero'=>$viite));
 
 
+
 			$as = Asiakkaat::model()->find(" asiakasnumero='".$model->as_nro."'  ");
 
 
@@ -808,7 +809,7 @@ class LaskuController extends Controller
 	        $criteria->addCondition (" osoite LIKE '%".$_POST['laskuosoite']."%' ");
 
 		// <-- Luotu
-		if( isset($_POST['tilaLaskulle']) and $_POST['tilaLaskulle'] == 0 )
+		if( isset($_POST['tilaLaskulle']) and !empty($_POST['tilaLaskulle']) and $_POST['tilaLaskulle'] == 0 )
 		{
 			$criteria->addCondition (" tilanne=0 ");
 		}
@@ -816,7 +817,7 @@ class LaskuController extends Controller
 
 
 		// <-- Lahetamattomat hyväksyttyt
-		if( (isset($_POST['tilaLaskulle']) and $_POST['tilaLaskulle'] == 1) or (isset($_GET['lahettamattomat'])) )
+		if( (isset($_POST['tilaLaskulle']) and !empty($_POST['tilaLaskulle']) and $_POST['tilaLaskulle'] == 1) or (isset($_GET['lahettamattomat'])) )
 		{
 		$criteria->addCondition (" 
 			tilanne=1 AND postita_jobid='' AND trust_jobid='' AND netvisorkey=0 
@@ -827,7 +828,7 @@ class LaskuController extends Controller
 
 
 		// POSTITA Lahetetty
-		if(isset($_POST['tilaLaskulle']) and $_POST['tilaLaskulle'] == 2 and $asetukset->palvelu_tyyppi == 1)
+		if(isset($_POST['tilaLaskulle']) and !empty($_POST['tilaLaskulle']) and $_POST['tilaLaskulle'] == 2 and $asetukset->palvelu_tyyppi == 1)
 		{
 		$criteria->addCondition ("
 		id in (SELECT lid FROM 
@@ -839,7 +840,7 @@ class LaskuController extends Controller
 		}
 
 		// POSTITA Maksettu
-		if(isset($_POST['tilaLaskulle']) and $_POST['tilaLaskulle'] == 3 and $asetukset->palvelu_tyyppi == 1)
+		if(isset($_POST['tilaLaskulle']) and !empty($_POST['tilaLaskulle']) and $_POST['tilaLaskulle'] == 3 and $asetukset->palvelu_tyyppi == 1)
 		{
 		$criteria->addCondition ("
 		id in (SELECT lid FROM 
@@ -852,7 +853,7 @@ class LaskuController extends Controller
 
 
 		// Trust Lahetetty
-		if(isset($_POST['tilaLaskulle']) and $_POST['tilaLaskulle'] == 2 and $asetukset->palvelu_tyyppi == 2)
+		if(isset($_POST['tilaLaskulle']) and !empty($_POST['tilaLaskulle']) and $_POST['tilaLaskulle'] == 2 and $asetukset->palvelu_tyyppi == 2)
 		{
 		$criteria->addCondition ("
 		id in (SELECT lid FROM 
@@ -864,7 +865,7 @@ class LaskuController extends Controller
 		}
 
 		// Trust Maksettu
-		if(isset($_POST['tilaLaskulle']) and $_POST['tilaLaskulle'] == 3 and $asetukset->palvelu_tyyppi == 2)
+		if(isset($_POST['tilaLaskulle']) and !empty($_POST['tilaLaskulle']) and $_POST['tilaLaskulle'] == 3 and $asetukset->palvelu_tyyppi == 2)
 		{
 		$criteria->addCondition ("
 		id in (SELECT lid FROM 
@@ -876,7 +877,7 @@ class LaskuController extends Controller
 		}
 
 		// LOCAL Lahetetty
-		if(isset($_POST['tilaLaskulle']) and $_POST['tilaLaskulle'] == 2 and $asetukset->palvelu_tyyppi == 3)
+		if(isset($_POST['tilaLaskulle']) and !empty($_POST['tilaLaskulle']) and $_POST['tilaLaskulle'] == 2 and $asetukset->palvelu_tyyppi == 3)
 		{
 		$criteria->addCondition ("
 		id in (SELECT lid FROM 
