@@ -597,6 +597,7 @@ class LaskuController extends Controller
 			$viite = $this->Viite($model->as_nro."00".$model->id);
 			Lasku::model()->updatebypk($model->id, array('viitenumero'=>$viite));
 
+
 			$as = Asiakkaat::model()->find(" asiakasnumero='".$model->as_nro."'  ");
 
 
@@ -772,7 +773,7 @@ class LaskuController extends Controller
 		$lahettamattomat = false;
 		$asetukset=Asetukset::model()->findbypk(1);
 
-		$from = date("Y-m-d", strtotime("first day of this month"));
+		$from = date("Y-m-d");
 		$to = date("Y-m-d");
 
 		if(isset($_POST['from']) and isset($_POST['to'])){
