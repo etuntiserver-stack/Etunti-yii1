@@ -641,7 +641,7 @@ class CrmTarjouksetController extends Controller
 		$bd = '';
        		$criteria = new CDbCriteria();
 	        $criteria->order = " id DESC ";
-	        $criteria->condition = " $tb='".$id."' ";
+	        $criteria->condition = " $tb='".$id."' AND aktiivinen=1 ";
 		$model = Tyonkuvaus::model()->findAll($criteria);
 		
 		if( count($model) > 0 )

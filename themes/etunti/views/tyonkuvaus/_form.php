@@ -73,6 +73,14 @@
 		<?php echo $form->error($model,'otsikko'); ?>
 	</div>
 
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'aktiivinen'); ?>
+		<?php 
+        	$tal = array(0=>'Ei',1=>'Kyllä');
+		echo $form->dropDownList($model,'aktiivinen', $tal, 
+		array('class'=>'form-control','id'=>'osoite')) ?>
+		<?php echo $form->error($model,'aktiivinen'); ?>
+	</div>
 
  </div>
 </div>
