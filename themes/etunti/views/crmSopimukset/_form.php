@@ -14,7 +14,7 @@
  {
 	$asiakas_selected[$_GET['asiakas_id']] = array('selected' => 'selected');
 	$tyonkuvaus = $crmTarjoukset[0]->get_tyonkuvaus('asiakas_id', $_GET['asiakas_id']);
-	$tarjouslaskenta = $crmTarjoukset[0]->get_tarjouslaskenta('asiakas_id', $_GET['asiakas_id']);
+	//$tarjouslaskenta = $crmTarjoukset[0]->get_tarjouslaskenta('asiakas_id', $_GET['asiakas_id']);
  }
 /*
  if(isset($_GET['yhteystiedot_id']) and !empty($_GET['yhteystiedot_id']))
@@ -97,10 +97,10 @@
 		<?php
 		$list = array();
 		$criteria=new CDbCriteria;
-		if(isset($_GET['yhteystiedot_id']))
-			$criteria->condition=" yhteystiedot_id='".$_GET['yhteystiedot_id']."' ";
+		//if(isset($_GET['yhteystiedot_id']))
+			//$criteria->condition=" yhteystiedot_id='".$_GET['yhteystiedot_id']."' ";
 		if(isset($_GET['asiakas_id']))
-			$criteria->condition=" asiakas_id='".$_GET['asiakas_id']."' ";
+			$criteria->condition=" asiakas_id='".$_GET['asiakas_id']."' AND status=3 ";
       		$l = CrmTarjoukset::model()->findAll($criteria);
 		foreach($l as $v)
 		{
