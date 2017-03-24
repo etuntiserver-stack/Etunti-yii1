@@ -297,12 +297,12 @@ class LaskuHistoriaController extends Controller
 		$to = date("Y-m-d");
 
 		if(isset($_POST['from']) and isset($_POST['to'])){
-		$from 	= date("Y-m-d",strtotime($_POST['from']));
-		$to 	= date("Y-m-d",strtotime($_POST['to']));
+		$from 	= $_POST['from'];
+		$to 	= $_POST['to'];
 		}
 
         	$criteria->condition = " 
-			DATE(paivays) BETWEEN '".$from."' AND '".$to."'
+			DATE(paivays) BETWEEN '".date("Y-m-d",strtotime($from))."' AND '".date("Y-m-d",strtotime($to))."'
 			AND tilanne!=999
 		";
 
@@ -344,12 +344,12 @@ class LaskuHistoriaController extends Controller
 		$to = date("Y-m-d");
 
 		if(isset($_POST['from']) and isset($_POST['to'])){
-		$from 	= date("Y-m-d",strtotime($_POST['from']));
-		$to 	= date("Y-m-d",strtotime($_POST['to']));
+		$from 	= $_POST['from'];
+		$to 	= $_POST['to'];
 		}
 
         	$criteria->condition = " 
-			DATE(paivays) BETWEEN '".$from."' AND '".$to."'
+			DATE(paivays) BETWEEN '".date("Y-m-d",strtotime($from))."' AND '".date("Y-m-d",strtotime($to))."'
 			AND tilanne!=999
 		";
 
