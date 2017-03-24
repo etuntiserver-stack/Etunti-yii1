@@ -201,8 +201,7 @@ $randstring = generateRandomString();
 		</a>
 		';
 		
-   if(file_exists(Yii::app()->basePath."/../tiedostot/crm/sopimukset/".Yii::app()->user->domain."/".$crm->liite.".pdf"))
-   {
+
 		$subject = Yii::t('main', 'Sopimus'). ', '.$firma->tyonantaja;
 		$mail = new YiiMailer();
 		//$mail->clearLayout();//if layout is already set in config
@@ -210,6 +209,8 @@ $randstring = generateRandomString();
 		$mail->setTo($crm->asiakkaan_sahkoposti);
 		$mail->setSubject($subject);
 		$mail->setBody($message);
+
+		if(file_exists(Yii::app()->basePath."/../tiedostot/crm/sopimukset/".Yii::app()->user->domain."/".$crm->liite.".pdf"))
 		$mail->setAttachment($path.'/'.$file);
 
 		   if($mail->send())
@@ -227,7 +228,7 @@ $randstring = generateRandomString();
 			CrmSopimukset::model()->updatebypk($_POST['id'], array('status'=>1,'hyvaksyn_koodi'=>$randstring));
 			$this->redirect(array('index'));
 		   }
-   }
+
 
 
 
@@ -398,7 +399,7 @@ $randstring = generateRandomString();
 			$document->setValue('tyonkuvaus', $sTableText);
 			//     Tyonkuvaus -->
 
-
+/*
 			// <-- Tarjouslaskenta
 			$section = $PHPWord->createSection();
 
@@ -443,6 +444,8 @@ $randstring = generateRandomString();
 			$sTableText = $objWriter->getWriterPart('document')->getObjectAsText($table);
 			$document->setValue('tarjouslaskenta', $sTableText);
 			//     Tarjouslaskenta -->
+*/
+
 			} // if(isset($tarjous->id))
 
 

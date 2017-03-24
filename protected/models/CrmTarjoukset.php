@@ -14,6 +14,9 @@
  */
 class CrmTarjoukset extends DB2ActiveRecord
 {
+
+public $asiakastila;
+
 	/**
 	 * @return string the associated database table name
 	 */
@@ -30,8 +33,8 @@ class CrmTarjoukset extends DB2ActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			//array('asiakas_id', 'required'),
-			array('asiakas_id, yhteystiedot_id, status', 'numerical', 'integerOnly'=>true),
+			array('kohde_id', 'required'),
+			array('asiakas_id, yhteystiedot_id, status, kohde_id, tyonkuvaus_id', 'numerical', 'integerOnly'=>true),
 			array('hyvaksyn_koodi, liite, kohteen_osoite, kohteen_postitoimipaikka', 'length', 'max'=>255),
 			array('asiakkaan_sahkoposti, kohteen_postinumero', 'length', 'max'=>100),
 			array('tarjous, tyonkuvaus, tarjouslaskenta, onko_osoite_sama', 'safe'),
@@ -71,6 +74,7 @@ class CrmTarjoukset extends DB2ActiveRecord
 			'kohteen_osoite' => Yii::t('main', 'Kohteen osoite'),
 			'kohteen_postinumero' => Yii::t('main', 'Kohteen postinumero'),
 			'kohteen_postitoimipaikka' => Yii::t('main', 'Kohteen postitoimipaikka'),
+			'asiakastila' => Yii::t('main', 'Asiakastila'),
 		);
 	}
 

@@ -14,16 +14,16 @@
  {
 	$asiakas_selected[$_GET['asiakas_id']] = array('selected' => 'selected');
 	$tyonkuvaus = $crmTarjoukset[0]->get_tyonkuvaus('asiakas_id', $_GET['asiakas_id']);
-	$tarjouslaskenta = $crmTarjoukset[0]->get_tarjouslaskenta('asiakas_id', $_GET['asiakas_id']);
+	//$tarjouslaskenta = $crmTarjoukset[0]->get_tarjouslaskenta('asiakas_id', $_GET['asiakas_id']);
  }
-
+/*
  if(isset($_GET['yhteystiedot_id']) and !empty($_GET['yhteystiedot_id']))
  {
 	$yhteystiedot_selected[$_GET['yhteystiedot_id']] = array('selected' => 'selected');
 	$tyonkuvaus = $crmTarjoukset[0]->get_tyonkuvaus('yhteystiedot_id', $_GET['yhteystiedot_id']);
 	$tarjouslaskenta = $crmTarjoukset[0]->get_tarjouslaskenta('yhteystiedot_id', $_GET['yhteystiedot_id']);
  }
-
+*/
 ?>
 
 <div lass="row">
@@ -42,7 +42,7 @@
 
 	<?php echo $form->errorSummary($model); ?>
 
-
+<?php /*
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'yhteystiedot_id'); ?>
 		<?php
@@ -64,7 +64,7 @@
         	?>
 		<?php echo $form->error($model,'yhteystiedot_id'); ?>
 	</div>
-
+*/ ?>
 
 	<div lass="section fill mb5">
 		<?php echo $form->labelEx($model,'asiakas_id'); ?>
@@ -97,10 +97,10 @@
 		<?php
 		$list = array();
 		$criteria=new CDbCriteria;
-		if(isset($_GET['yhteystiedot_id']))
-			$criteria->condition=" yhteystiedot_id='".$_GET['yhteystiedot_id']."' ";
+		//if(isset($_GET['yhteystiedot_id']))
+			//$criteria->condition=" yhteystiedot_id='".$_GET['yhteystiedot_id']."' ";
 		if(isset($_GET['asiakas_id']))
-			$criteria->condition=" asiakas_id='".$_GET['asiakas_id']."' ";
+			$criteria->condition=" asiakas_id='".$_GET['asiakas_id']."' AND status=3 ";
       		$l = CrmTarjoukset::model()->findAll($criteria);
 		foreach($l as $v)
 		{
@@ -146,10 +146,11 @@ $(document).ready(function(){
 	window.location.href= "create?asiakas_id=" + $(this).val();
  });
 
+/*
  $('#CrmSopimukset_yhteystiedot_id').change(function(){
 	window.location.href= "create?yhteystiedot_id=" + $(this).val();
  });
-
+*/
 
 });
 </script>

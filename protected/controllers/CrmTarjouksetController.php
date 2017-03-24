@@ -32,7 +32,7 @@ class CrmTarjouksetController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view', 'laheta', 'get_tyonkuvaus_by_asiakas', 'get_tyonkuvaus_by_id', 'get_tarjouslaskenta_by_id', 'get_kohteentiedot'),
+				'actions'=>array('admin','delete','create','update','index','view', 'laheta', 'get_tyonkuvaus_by_asiakas', 'get_tyonkuvaus_by_id', 'get_tarjouslaskenta_by_id', 'get_kohteentiedot', 'get_asiakastilat'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -85,12 +85,47 @@ class CrmTarjouksetController extends Controller
 
 		} elseif($asia == 'hylatty' and isset($crm->id) and $crm->hyvaksyn_koodi == $code and $crm->status == 1){
 
+			if( $crm->tyonkuvaus_id != 0 )
+			Tyonkuvaus::model()->updatebypk($crm->tyonkuvaus_id, array('aktiivinen'=>0));
+
+			if( $crm->kohde_id != 0 )
+			Kohteet::model()->updatebypk($crm->kohde_id, array('aktiivinen'=>0));
+
 			CrmTarjoukset::model()->updatebypk($id, array('status'=>3));
 			$this->redirect(array('cancel'));
 		} else {
 			$this->redirect(array('vanhentunut'));
 		}
 	
+	}
+
+
+	public function actionGet_asiakastilat($asiakastila)
+	{
+		$return = '';
+
+		$criteria=new CDbCriteria;
+		$criteria->condition=" asiakastila='".$asiakastila."' ";
+      		$l = Asiakkaat::model()->findAll($criteria);
+		$list = array();
+		foreach($l as $v)
+		{
+			if($v->tyyppi == 'yritys' and !empty($v->yrityksen_nimi))
+			$list[$v->id] = $v->yrityksen_nimi;
+			elseif($v->tyyppi == 'henkilo' and !empty($v->yhteyshenkilo))
+			$list[$v->id] = $v->yhteyshenkilo;
+			else
+			$list[$v->id] = 'Asiakasnumero: '.$v->asiakasnumero;
+		}
+
+		if(count($list) > 0)
+		{
+        		$return .= CHtml::dropDownList('CrmTarjoukset[asiakas_id]', 'asiakas_id', $list,
+			array('empty'=>'Valitse','class'=>'form-control'));
+		}
+		
+		echo json_encode($return);
+
 	}
 
 	public function actionSuccess()
@@ -150,6 +185,8 @@ class CrmTarjouksetController extends Controller
 
 
 			$tl_table = '';
+
+/*
 			$tl_table .= '<h2>'.Yii::t('main', 'Tarjouslaskenta').'</h2>';
 			$tl_table .= '<table class="table table-bordered bg-white">';
 			$tl_table .= '<tr>';
@@ -181,6 +218,7 @@ class CrmTarjouksetController extends Controller
 			$tl_table .= '</table>';
 
 			$message .= $tl_table;
+*/
 
 
 			$tk_table = '';
@@ -235,8 +273,7 @@ class CrmTarjouksetController extends Controller
 		//echo $message;
 		//exit;
 
-   		if(file_exists(Yii::app()->basePath."/../tiedostot/crm/tarjoukset/".Yii::app()->user->domain."/".$crm->liite.".pdf"))
-   		{
+
 		$subject = Yii::t('main', 'Tarjous'). ', '.$firma->tyonantaja;
 		$mail = new YiiMailer();
 		//$mail->clearLayout();//if layout is already set in config
@@ -244,6 +281,8 @@ class CrmTarjouksetController extends Controller
 		$mail->setTo($crm->asiakkaan_sahkoposti);
 		$mail->setSubject($subject);
 		$mail->setBody($message);
+
+   		if(file_exists(Yii::app()->basePath."/../tiedostot/crm/tarjoukset/".Yii::app()->user->domain."/".$crm->liite.".pdf"))
 		$mail->setAttachment($path.'/'.$file);
 
 		   if($mail->send())
@@ -262,7 +301,7 @@ class CrmTarjouksetController extends Controller
 			CrmTarjoukset::model()->updatebypk($id, array('status'=>1,'hyvaksyn_koodi'=>$randstring));
 			$this->redirect(array('index'));
 		   }
-   		}
+   		
 
 
 	}
@@ -310,20 +349,19 @@ class CrmTarjouksetController extends Controller
 		if(isset($_POST['CrmTarjoukset']))
 		{
 
-
 		if(file_exists($polku.$tiedosto))
 		{
 			$model->attributes=$_POST['CrmTarjoukset'];
 			if($model->save()){
 
 				$as = Asiakkaat::model()->findbypk($model->asiakas_id);
-				$y = Yhteystiedot::model()->findbypk($model->yhteystiedot_id);
+				//$y = Yhteystiedot::model()->findbypk($model->yhteystiedot_id);
 				if(isset($as->sahkoposti))
 					CrmTarjoukset::model()->updatebypk($model->id, array('asiakkaan_sahkoposti'=>$as->sahkoposti));
-
+/*
 				if(isset($y->sahkoposti))
 					CrmTarjoukset::model()->updatebypk($model->id, array('asiakkaan_sahkoposti'=>$y->sahkoposti));
-
+*/
 				$this->docx($model);
 
 		}
@@ -402,9 +440,10 @@ class CrmTarjouksetController extends Controller
 			$table->addCell(3000)->addText('Laatutaso');
 			$table->addCell(2000)->addText('Kommenti');
 
-
-			foreach($tyonkuvaus['tilat'] as $key=>$items)
+			if( is_array($tyonkuvaus) and isset($tyonkuvaus['tilat']) )
 			{
+			    foreach($tyonkuvaus['tilat'] as $key=>$items)
+			    {
 				$tyontehtavat = $tyonkuvaus['tyontehtavat'][$key];
 				$tt_result = '';
 				foreach($tyontehtavat as $kt=>$it)
@@ -416,14 +455,14 @@ class CrmTarjouksetController extends Controller
 				$table->addCell(3000)->addText( iconv('UTF-8','ISO-8859-1', implode("\n", $tyonkuvaus['laatutaso'][$key])) );
 				$table->addCell(2000)->addText( iconv('UTF-8','ISO-8859-1', implode("\n", $tyonkuvaus['kommenti'][$key])) );
 
+			    }
 			}
-
 			$objWriter = PHPWord_IOFactory::createWriter($PHPWord, 'Word2007');
 			$sTableText = $objWriter->getWriterPart('document')->getObjectAsText($table);
 			$document->setValue('tyonkuvaus', $sTableText);
 			//     Tyonkuvaus -->
 
-
+/*
 			// <-- Tarjouslaskenta
 			$tarjouslaskenta = json_decode($model->tarjouslaskenta);
 
@@ -470,7 +509,7 @@ class CrmTarjouksetController extends Controller
 			$sTableText = $objWriter->getWriterPart('document')->getObjectAsText($table);
 			$document->setValue('tarjouslaskenta', $sTableText);
 			//     Tarjouslaskenta -->
-
+*/
 
 
 			$firma = FirmanTiedot::model()->findbypk(1);
@@ -608,7 +647,7 @@ class CrmTarjouksetController extends Controller
 		$bd = '';
        		$criteria = new CDbCriteria();
 	        $criteria->order = " id DESC ";
-	        $criteria->condition = " $tb='".$id."' ";
+	        $criteria->condition = " $tb='".$id."' AND aktiivinen=1 ";
 		$model = Tyonkuvaus::model()->findAll($criteria);
 		
 		if( count($model) > 0 )

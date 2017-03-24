@@ -21,7 +21,7 @@
 
 	<?php echo $form->errorSummary($model); ?>
 
-
+<?php /*
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'yhteystiedot_id'); ?>
 		<?php
@@ -43,6 +43,7 @@
         	?>
 		<?php echo $form->error($model,'yhteystiedot_id'); ?>
 	</div>
+*/ ?>
 
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'asiakas_id'); ?>
@@ -72,6 +73,14 @@
 		<?php echo $form->error($model,'otsikko'); ?>
 	</div>
 
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'aktiivinen'); ?>
+		<?php 
+        	$tal = array(0=>'Ei',1=>'Kyllä');
+		echo $form->dropDownList($model,'aktiivinen', $tal, 
+		array('class'=>'form-control','id'=>'osoite')) ?>
+		<?php echo $form->error($model,'aktiivinen'); ?>
+	</div>
 
  </div>
 </div>
@@ -230,8 +239,8 @@
 		    	    <div class="laatutasot_tilat">
 				'.CHtml::dropDownList('', '', $laatutasot, 
 					array(
-						'multiple' => 'multiple',
-						'class'=> 'selectpickerTasot laatutasot_selecter',
+						'empty' => Yii::t('main', 'Valitse laatutaso'),
+						'class'=> 'laatutasot_selecter form-control',
 						'options' => $selectedValuesLaatutasot,
 				)).'
 		            <textarea class="form-control" rows="4" name="TyonkuvausRivit[laatutaso][0]" />'.$laatutaso.'</textarea>
@@ -290,7 +299,7 @@
 		        <td>
 		    	    <div class="laatutasot_tilat">
 				<?php echo CHtml::dropDownList('', '', $laatutasot, 
-					array('multiple' => 'multiple', 'class'=> 'selectpickerTasot laatutasot_selecter')
+					array('empty' => Yii::t('main', 'Valitse laatutaso'), 'class'=> 'laatutasot_selecter form-control')
 				); ?>
 		            	<textarea class="form-control" rows="4" name="TyonkuvausRivit[laatutaso][0]" /></textarea>
 			    </div>
@@ -319,7 +328,7 @@
 
 		<div id="laatutasotAlasveto" style="display:none">
 			<?php echo CHtml::dropDownList('', '', $laatutasot, 
-				array('multiple' => 'multiple', 'class'=> 'selectpickerTasot laatutasot_selecter')
+				array('empty' => Yii::t('main', 'Valitse laatutaso'), 'class'=> 'laatutasot_selecter form-control')
 			); ?>
 		</div>
 
@@ -389,12 +398,13 @@ jQuery(function(){
 	  title: 'Vko. pvm',
 	  size: 4
 	});
-
+	/*
 	$('.selectpickerTasot').selectpicker({
 	  //style: 'btn-info',
 	  title: 'Laatutasot',
 	  size: 4
 	});
+	*/
 
     });
     $(document).delegate(".poistaAuthorRivi","click",function(){
@@ -494,13 +504,13 @@ $(".muokaValiko").click(function() {
 	  title: 'Vko. pvm',
 	  size: 4
  });
-
+/*
  $('.selectpickerTasot').selectpicker({
 	  //style: 'btn-info',
 	  title: 'Laatutasot',
 	  size: 4
  });
-
+*/
  $(document).delegate(".tyonkuvaus_tilat_selecter","change",function(){
 	var thisVal = $(this).val().join('\n');
     	$(this).closest('tr').find('textarea.tilat').val(thisVal);
@@ -512,7 +522,7 @@ $(".muokaValiko").click(function() {
  });
 
  $(document).delegate(".laatutasot_selecter","change",function(){
-	var thisVal = $(this).val().join('\n');
+	var thisVal = $(this).val();
     	$(this).closest('div.laatutasot_tilat').find('textarea').val(thisVal);
  });
 

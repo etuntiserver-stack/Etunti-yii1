@@ -6,28 +6,32 @@
  $asiakas_selected = array();
  $yhteystiedot_selected = array();
  $tyonkuvaus = '';
- $tarjouslaskenta = '';
+ //$tarjouslaskenta = '';
  if(isset($_GET['asiakas_id']) and !empty($_GET['asiakas_id']))
  {
 	$asiakas_selected[$_GET['asiakas_id']] = array('selected' => 'selected');
 	$tyonkuvaus = $this->get_tyonkuvaus('asiakas_id', $_GET['asiakas_id']);
-	$tarjouslaskenta = $this->get_tarjouslaskenta('asiakas_id', $_GET['asiakas_id']);
+	//$tarjouslaskenta = $this->get_tarjouslaskenta('asiakas_id', $_GET['asiakas_id']);
  }
 
+/*
  if(isset($_GET['yhteystiedot_id']) and !empty($_GET['yhteystiedot_id']))
  {
 	$yhteystiedot_selected[$_GET['yhteystiedot_id']] = array('selected' => 'selected');
 	$tyonkuvaus = $this->get_tyonkuvaus('yhteystiedot_id', $_GET['yhteystiedot_id']);
 	$tarjouslaskenta = $this->get_tarjouslaskenta('yhteystiedot_id', $_GET['yhteystiedot_id']);
  }
+*/
 
  if(isset($model->id))
  {
 	$tyonkuvaus_arr = json_decode($model->tyonkuvaus, true);
-	$tarjouslaskenta_arr = json_decode($model->tarjouslaskenta, true);
+	//$tarjouslaskenta_arr = json_decode($model->tarjouslaskenta, true);
 
 
 			$tl_table = '';
+
+/*
 			$tl_table .= '<h2>'.Yii::t('main', 'Tarjouslaskenta').'</h2>';
 			$tl_table .= '<table class="table table-bordered bg-white">';
 			$tl_table .= '<tr>';
@@ -59,7 +63,7 @@
 			$tl_table .= '</table>';
 
 			echo $tl_table;
-
+*/
 
 			$tk_table = '';
 			$tk_table .= '<h2>'.Yii::t('main', 'Työnkuvaus').'</h2>';
@@ -71,8 +75,10 @@
 			$tk_table .= '<th>'.Yii::t('main', 'Kommenti').'</th>';
 			$tk_table .= '</tr>';
 
-			foreach($tyonkuvaus_arr['tilat'] as $key=>$items)
+			if( is_array($tyonkuvaus_arr) and isset($tyonkuvaus_arr['tilat']) )
 			{
+			    foreach($tyonkuvaus_arr['tilat'] as $key=>$items)
+			    {
 				$tyontehtavat = $tyonkuvaus_arr['tyontehtavat'][$key];
 				$tt_result = '';
 				foreach($tyontehtavat as $kt=>$it)
@@ -85,12 +91,14 @@
 				$tk_table .= '<td>'.implode("<br>", $tyonkuvaus_arr['kommenti'][$key]).'</td>';
 				$tk_table .= '</tr>';
 
+			    }
 			}
 			$tk_table .= '</table>';
 
 			echo $tk_table;
  }
 
+/*
  if(!isset($model->id) and isset($_GET['yhteystiedot_id']))
  {
 	$yt = Yhteystiedot::model()->findByPk($_GET['yhteystiedot_id']);
@@ -101,7 +109,7 @@
 		$model->kohteen_postitoimipaikka = $yt->postitoimipaikka;
 	}
  }
-
+*/
 ?>
 
 
@@ -124,7 +132,7 @@
   <div class="col-sm-4">
 
 
-	
+<?php /*
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'yhteystiedot_id'); ?>
 		<?php
@@ -146,32 +154,36 @@
         	?>
 		<?php echo $form->error($model,'yhteystiedot_id'); ?>
 	</div>
+*/ ?>
 
+	<?php if(!isset($_GET['asiakas_id'])) : ?>
 	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'asiakas_id'); ?>
+		<?php echo $form->labelEx($model,'asiakastila'); ?>
 		<?php
 		$list = array();
-		$criteria=new CDbCriteria;
-		//$criteria->condition="";
-      		$l = Asiakkaat::model()->findAll($criteria);
-		foreach($l as $v)
-		{
-			if(!empty($v->yrityksen_nimi) and empty($v->yhteyshenkilo))
-			$list[$v->id] = $v->yrityksen_nimi;
-			elseif(empty($v->yrityksen_nimi) and !empty($v->yhteyshenkilo))
-			$list[$v->id] = $v->yhteyshenkilo;
-		}
+      		$l = Valikkoot::model()->findAll(" select_type='asiakastila' ",array('order' => "select_type"));
+		foreach($l as $val)
+			$list[$val->id] = $val->value;
 
-		if(count($list) > 0)
-		{
-        		echo $form->dropDownList($model, 'asiakas_id', $list,
-			array('empty'=>'Valitse','class'=>'form-control', 'options'=>$asiakas_selected));
-		}		
+		$list[0] = 'Muut';
+
+        		echo $form->dropDownList($model, 'asiakastila', $list,
+			array('empty'=>'Valitse', 'class'=>'form-control'));
         	?>
+		<?php echo $form->error($model,'asiakastila'); ?>
+	</div>
+	<?php endif; ?>
+
+	<div class="section fill mb5 asiakas" style="display:none">
+		<?php echo $form->labelEx($model,'asiakas_id'); ?>
+		<div id="asiakasListResult"></div>
 		<?php echo $form->error($model,'asiakas_id'); ?>
 	</div>
 
 	<?php if(isset($_GET['asiakas_id'])) : ?>
+
+	<?php echo $form->hiddenField($model,'asiakas_id', array('value'=>$_GET['asiakas_id'])); ?>
+
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'kohde_id'); ?>
 		<?php
@@ -252,11 +264,11 @@
 
 
 		<?php echo $form->textArea($model,'tyonkuvaus',array('rows'=>6, 'cols'=>50, 'class'=>'form-control', 'style'=>'display:none')); ?>
-		<?php echo $form->textArea($model,'tarjouslaskenta',array('rows'=>6, 'cols'=>50, 'class'=>'form-control', 'style'=>'display:none')); ?>
+		<?php //echo $form->textArea($model,'tarjouslaskenta',array('rows'=>6, 'cols'=>50, 'class'=>'form-control', 'style'=>'display:none')); ?>
 
 
 	<div class="section fill mb5">
-		<?php echo $tarjouslaskenta; ?>
+		<?php //echo $tarjouslaskenta; ?>
 		<?php echo $tyonkuvaus; ?>
 	</div>
 
@@ -268,9 +280,10 @@
 		<?php echo $form->error($model,'tarjous'); ?>
 	</div>
 -->
+		<?php echo $form->hiddenField($model,'tyonkuvaus_id'); ?>
 <br>
 	<div class="section">
-		<?php echo CHtml::submitButton($model->isNewRecord ? 'Luo' : 'Tallenna',array('class'=>'btn btn-primary myBgColors')); ?>
+		<?php echo CHtml::submitButton($model->isNewRecord ? 'Luo' : 'Tallenna',array('class'=>'btn btn-primary myBgColors submitButton disabled')); ?>
 	</div>
 
 <?php $this->endWidget(); ?>
@@ -281,7 +294,28 @@
 <script type="text/javascript">
 $(document).ready(function(){
 
- $('#CrmTarjoukset_asiakas_id').change(function(){
+ $('#CrmTarjoukset_asiakastila').change(function(){
+	var asiakastila = $(this).val();
+        $.ajax({
+           url: 'get_asiakastilat?asiakastila=' + parseInt(asiakastila),
+           //type: "POST",
+           //data: { },
+           success: function(data){
+		var data = JSON.parse(data);
+		console.log(data);
+		if( data !== '')
+		{
+			$('.asiakas').show();
+			$('#asiakasListResult').html(data);
+		} else {
+			$('.asiakas').hide();
+			$('#asiakasListResult').html('');
+		}
+           }
+        });
+ });
+
+ $(document).delegate("#CrmTarjoukset_asiakas_id","change",function(){
 	window.location.href= "create?asiakas_id=" + $(this).val();
  });
 
@@ -300,7 +334,9 @@ $(document).ready(function(){
            success: function(data){
 		//var data = JSON.parse(data);
 		//console.log(data);
+		$('.submitButton').removeClass('disabled');
 		$('#CrmTarjoukset_tyonkuvaus').val(data);
+		$('#CrmTarjoukset_tyonkuvaus_id').val(thisFor);
            }
         });
 	
@@ -308,6 +344,7 @@ $(document).ready(function(){
 
  });
 
+/*
  $('.tarjouslaskenta').change(function(){
 
     if ($("input[name='tarjouslaskenta']:checked").val()) {
@@ -325,6 +362,7 @@ $(document).ready(function(){
     }
 
  });
+*/
 
  $('#crm-tarjoukset-form').on("submit", function(e){
 
@@ -333,10 +371,12 @@ $(document).ready(function(){
         return false;
     }
 
+/*
     if ($("#CrmTarjoukset_tarjouslaskenta").val() === '') {
        	alert('Valitse tarjouslaskenta.');
         return false;
     }
+*/
 
     $(this).submit();
     e.preventDefault();

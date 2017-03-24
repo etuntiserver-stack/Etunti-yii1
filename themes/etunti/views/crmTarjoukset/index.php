@@ -217,6 +217,7 @@ ${tyonkuvaus}
   <thead class="myBgColors">
   <tr>
   <th><?php echo Yii::t('main', 'Asiakas'); ?></th>
+  <th><?php echo Yii::t('main', 'Tarjouksen kohde'); ?></th>
   <th><?php echo Yii::t('main', 'Tarjous'); ?></th>
   <th><?php echo Yii::t('main', 'Sähköposti'); ?></th>
   <th><?php echo Yii::t('main', 'Lähettäminen'); ?></th>

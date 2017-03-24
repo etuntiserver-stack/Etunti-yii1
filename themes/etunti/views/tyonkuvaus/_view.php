@@ -33,6 +33,11 @@
 	<td>
 		<?php echo $asiakas; ?>
 	</td>
-
+	<td>
+		<?php echo $data->otsikko; ?>
+	</td>
+	<td>
+		<?php echo ($data->aktiivinen == 1) ? 'Aktiivinen' : 'Passivinen'; ?>
+	</td>
 </tr>
 
