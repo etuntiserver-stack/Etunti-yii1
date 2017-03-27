@@ -374,7 +374,7 @@ return array(
 				),
             			array(
 			                'class'=>'ext.yii-debug-toolbar.YiiDebugToolbarRoute',
-			                //'ipFilters'=>array('::1','127.0.0.1','192.168.10.73'),
+			                'ipFilters'=>array('*'),//'ipFilters'=>array('::1','127.0.0.1','192.168.10.73'),
 				),
 				/*
 			        array(
