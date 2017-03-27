@@ -371,7 +371,7 @@ return array(
 					'class'=>'CFileLogRoute',
 					'levels'=>'error, warning, info',
 					'enabled'=>YII_DEBUG,
-                    			'categories'=>'system.*',
+                    			//'categories'=>'system.*',
 				),
             			array(
 			                'class'=>'ext.yii-debug-toolbar.YiiDebugToolbarRoute',
