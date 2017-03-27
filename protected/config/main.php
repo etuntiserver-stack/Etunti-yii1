@@ -366,11 +366,12 @@ return array(
 		),
 		'log'=>array(
 			'class'=>'CLogRouter',
-			'enabled'=>YII_DEBUG,
 			'routes'=>array(
 				array(
 					'class'=>'CFileLogRoute',
 					'levels'=>'error, warning, info',
+					'enabled'=>YII_DEBUG,
+                    			'categories'=>'system.*',
 				),
             			array(
 			                'class'=>'ext.yii-debug-toolbar.YiiDebugToolbarRoute',
