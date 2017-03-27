@@ -56,14 +56,16 @@ function validatePassword(p) {
     if (p.search(/[A-Z]/) < 0) { 
 	errors.push("Salasanan pitää sisältää vähintään yksi iso kirjain.") 
     }
+    if ( $('#uusi_salasana').val() != $('#varmista_uusi_salasana').val() ) {
+	errors.push("Salasanat eivät täsmää.") 
+    }
     if (errors.length > 0) {
         $('#adm_salasana_error').html('<br><div class="alert alert-danger">' + errors.join("<br>") + '</div>' ).show();
         return false;
     }
 
-    if ( $('#uusi_salasana').val() == $('#varmista_uusi_salasana').val() ) {
+
 	$(".submit").removeClass('hidden');
-    }
         $('#adm_salasana_error').html('').hide();
 
 
