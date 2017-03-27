@@ -18,7 +18,7 @@
         <label><?php echo Yii::t('main', 'Varmista uusi salasana')?></label>
         <input type="password" id="varmista_uusi_salasana" name="varmista_uusi_salasana" class="form-control input-lg checkpass" required>
 	<br>
-        <button class="btn btn-lg btn-primary btn-group submit" type="submit"><?php echo Yii::t('main', 'Lähetä'); ?></button>
+        <button class="btn btn-lg btn-primary btn-group submit hidden" type="submit"><?php echo Yii::t('main', 'Lähetä'); ?></button>
 	<div id="success"></div>
 	<div id="adm_salasana_error"></div>
     </div>
@@ -34,7 +34,7 @@
 <script type="text/javascript">
 $(document).ready(function(){
 
-$(".checkpass").blur(function() {
+$(".checkpass").keyup(function() {
 	validatePassword( $(this).val() );
 });
 
@@ -60,7 +60,13 @@ function validatePassword(p) {
         $('#adm_salasana_error').html('<br><div class="alert alert-danger">' + errors.join("<br>") + '</div>' ).show();
         return false;
     }
+
+    if ( $('#uusi_salasana').val() == $('#varmista_uusi_salasana').val() ) {
+	$(".submit").removeClass('hidden');
+    }
         $('#adm_salasana_error').html('').hide();
+
+
     return true;
 }
 
