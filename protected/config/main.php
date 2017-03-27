@@ -7,7 +7,7 @@ session_start();
 // This is the main Web application configuration. Any writable
 // CWebApplication properties can be configured here.
 
-Yii::setPathOfAlias('chartjs', dirname(__FILE__).'/../extensions/yii-chartjs');
+//Yii::setPathOfAlias('chartjs', dirname(__FILE__).'/../extensions/yii-chartjs');
 
 
   if(isset($_POST['UserLogin']['domain']) and !empty($_POST['UserLogin']['domain']) and $_POST['UserLogin']['domain'] != 'superadmin')
@@ -81,7 +81,7 @@ return array(
 	'name'=>'Etunti',
 	//'defaultController'=>'mobile/index',
 	// preloading 'log' component
-	'preload'=>array('chartjs'), //'log'
+	'preload'=>array('log'), //'log'
 	'language' => $lang,
 
   	//'theme' => $theme,
@@ -345,7 +345,8 @@ return array(
 			'username' => $etuntifw_user,
 			'password' => $etuntifw_pass,
 		        'tablePrefix' => 'tbl_',
-
+			'enableProfiling'=>true,
+			'enableParamLogging'=>true,
 		),
         	'db1'=>array(
 	            	'connectionString' => 'mysql:host='.$db2_host.';dbname='.$db2,
@@ -354,7 +355,9 @@ return array(
 	            	'password' => $db2_pass,
 	            	'tablePrefix' => '',
 			//'charset' => 'utf8',
-		    	'class'=> 'CDbConnection'
+		    	'class'=> 'CDbConnection',
+			'enableProfiling'=>true,
+			'enableParamLogging'=>true,
         	),
 		
 		'errorHandler'=>array(
@@ -363,16 +366,23 @@ return array(
 		),
 		'log'=>array(
 			'class'=>'CLogRouter',
+			'enabled'=>YII_DEBUG,
 			'routes'=>array(
 				array(
 					'class'=>'CFileLogRoute',
-					'levels'=>'error, warning',
+					'levels'=>'error, warning, info',
 				),
-				// uncomment the following to show log messages on web pages
+            			array(
+			                'class'=>'ext.yii-debug-toolbar.YiiDebugToolbarRoute',
+			                //'ipFilters'=>array('::1','127.0.0.1','192.168.10.73'),
+				),
 				/*
-				array(
-					'class'=>'CWebLogRoute',
-				),
+			        array(
+				        'class'=>'CWebLogRoute',
+				        //'levels'=>'trace',
+				        'enabled'=>YII_DEBUG,
+					//'emails'=>'elias.luoma@santelo.fi, laptopsr@gmail.com',
+			        ),
 				*/
 			),
 		),

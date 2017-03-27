@@ -249,7 +249,7 @@ $(document).ready(function($) {
         var hash = $(this).prop("hash");
         if (hash){
             e.preventDefault();
-            $('html,body').animate({scrollTop:$(hash).offset().top -100}, 1500);
+            //$('html,body').animate({scrollTop:$(hash).offset().top -100}, 1500); //Roman 27.03.2017
         }
     });
     $('a.sulje').click(function(event) {
