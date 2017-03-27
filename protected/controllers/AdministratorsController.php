@@ -101,7 +101,7 @@ class AdministratorsController extends Controller
 				$message = 'Hei '.$model->adm_nimi.'!<br>
 				<b>'.Yii::t('main', 'Yritystunnus').':</b> '.Yii::app()->user->domain.'<br>
 				<b>'.Yii::t('main', 'Käyttäjätunnus').':</b> '.$model->adm_login.'<br>
-				Aktivoi käyttäjätunnuksesi <a href="'.Yii::app()->getBaseUrl(true).'/index.php/site/confirm?token='.$model->token.'">tästä</a><br>
+				Aktivoi käyttäjätunnuksesi <a href="'.Yii::app()->getBaseUrl(true).'/index.php/site/confirm?domain='.Yii::app()->user->domain.'&token='.$model->token.'">tästä</a><br>
 				<p>
 				Tervetuloa Etunnin käyttäjäksi. 
 				</p><br>
