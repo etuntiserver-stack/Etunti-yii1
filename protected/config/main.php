@@ -7,7 +7,16 @@ session_start();
 // This is the main Web application configuration. Any writable
 // CWebApplication properties can be configured here.
 
-//Yii::setPathOfAlias('chartjs', dirname(__FILE__).'/../extensions/yii-chartjs');
+  if( $_SERVER['REMOTE_ADDR'] == '::1' or $_SERVER['REMOTE_ADDR'] == '127.0.0.1' or strpos($_SERVER['HTTP_REFERER'], "staging") !== false)
+  {
+	$for_log = array(
+				        'class'=>'CWebLogRoute',
+                			'levels'=>'error, warning', //'trace, info, error, warning, vardump'
+	);
+
+  } else {
+	$for_log = array();
+  }
 
 
   if(isset($_POST['UserLogin']['domain']) and !empty($_POST['UserLogin']['domain']) and $_POST['UserLogin']['domain'] != 'superadmin')
@@ -369,22 +378,21 @@ return array(
 			'routes'=>array(
 				array(
 					'class'=>'CFileLogRoute',
-					'levels'=>'error, warning, info',
+                			'levels'=>'error, warning', //'trace, info, error, warning, vardump'
 					'enabled'=>YII_DEBUG,
                     			//'categories'=>'system.*',
-				),
+				), 
             			array(
 			                'class'=>'ext.yii-debug-toolbar.YiiDebugToolbarRoute',
 			                'ipFilters'=>array('*'),//'ipFilters'=>array('::1','127.0.0.1','192.168.10.73'),
 				),
-				/*
 			        array(
-				        'class'=>'CWebLogRoute',
-				        //'levels'=>'trace',
-				        'enabled'=>YII_DEBUG,
-					//'emails'=>'elias.luoma@santelo.fi, laptopsr@gmail.com',
+				        'class'=>'CEmailLogRoute',
+                			'levels'=>'error, warning', //'trace, info, error, warning, vardump'
+					'emails'=>'elias.luoma@santelo.fi, laptopsr@gmail.com',
 			        ),
-				*/
+			        $for_log,
+			
 			),
 		),
 	),

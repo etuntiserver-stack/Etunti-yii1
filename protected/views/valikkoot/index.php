@@ -1,4 +1,5 @@
 <?php
+echo $virhen_variable;
 /* @var $this ValikkootController */
 /* @var $dataProvider CActiveDataProvider */
 
