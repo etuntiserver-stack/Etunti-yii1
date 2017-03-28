@@ -7,7 +7,12 @@ session_start();
 // This is the main Web application configuration. Any writable
 // CWebApplication properties can be configured here.
 
-  if( $_SERVER['REMOTE_ADDR'] == '::1' or $_SERVER['REMOTE_ADDR'] == '127.0.0.1' or strpos($_SERVER['HTTP_REFERER'], "staging") !== false)
+  if( 
+	$_SERVER['REMOTE_ADDR'] == '::1' 
+	or $_SERVER['REMOTE_ADDR'] == '127.0.0.1' 
+	or strpos($_SERVER['HTTP_REFERER'], "staging") !== false
+	and strpos($_SERVER['HTTP_REFERER'], "api/mob") == false
+  )
   {
 	$for_log = array(
 				array(
@@ -41,10 +46,6 @@ session_start();
 					'enabled'=>YII_DEBUG,
                     			//'categories'=>'system.*',
 				), 
-            			array(
-			                'class'=>'ext.yii-debug-toolbar.YiiDebugToolbarRoute',
-			                'ipFilters'=>array('*'),//'ipFilters'=>array('::1','127.0.0.1','192.168.10.73'),
-				),
 			        array(
 				        'class'=>'CEmailLogRoute',
                 			'levels'=>'error', //'trace, info, error, warning, vardump'
