@@ -76,6 +76,7 @@ if (
 
 <?php 
 Yii::app()->clientScript->registerPackage('bootstrapCSS');
+Yii::app()->clientScript->registerPackage('jquery');
 /*
 Yii::app()->clientScript->registerPackage('jquery');
 Yii::app()->clientScript->registerPackage('bootstrapJS');

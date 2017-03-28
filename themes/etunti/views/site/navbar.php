@@ -1338,13 +1338,14 @@ nyt ne ovat etusivu.php ssa
         // have had a chance to be moved and organized.
         // It's less taxing to organize empty panels
         demoHighCharts.init();
-        runVectorMaps(); // function below
+        //runVectorMaps(); // function below
       },
       onSave: function() {
         $(window).trigger('resize');
       }
     });
 
+/*
     // Widget VectorMap
     function runVectorMaps() {
 
@@ -1431,7 +1432,7 @@ nyt ne ovat etusivu.php ssa
         runJvectorMap();
       }
     }
-
+*/
 
   });
   </script>

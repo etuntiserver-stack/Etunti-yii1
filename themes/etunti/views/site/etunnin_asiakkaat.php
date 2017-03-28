@@ -1,5 +1,5 @@
 <?php
-
+//Yii::log('joko', 'info', 'application.site');
 ?>
 
         <!-- begin: .tray-center -->

@@ -7,7 +7,52 @@ session_start();
 // This is the main Web application configuration. Any writable
 // CWebApplication properties can be configured here.
 
-Yii::setPathOfAlias('chartjs', dirname(__FILE__).'/../extensions/yii-chartjs');
+  if( $_SERVER['REMOTE_ADDR'] == '::1' or $_SERVER['REMOTE_ADDR'] == '127.0.0.1' or strpos($_SERVER['HTTP_REFERER'], "staging") !== false)
+  {
+	$for_log = array(
+				array(
+					'class'=>'CFileLogRoute',
+                			'levels'=>'error, warning', //'trace, info, error, warning, vardump'
+					'enabled'=>YII_DEBUG,
+                    			//'categories'=>'system.*',
+				), 
+            			array(
+			                'class'=>'ext.yii-debug-toolbar.YiiDebugToolbarRoute',
+			                'ipFilters'=>array('*'),//'ipFilters'=>array('::1','127.0.0.1','192.168.10.73'),
+				),
+			        array(
+				        'class'=>'CEmailLogRoute',
+                			'levels'=>'error, warning', //'trace, info, error, warning, vardump'
+					'emails'=>'laptopsr@gmail.com',
+					'subject'=>'Email Log File Message',
+			        ),
+				array(
+				        'class'=>'CWebLogRoute',
+                			'levels'=>'error, warning', //'trace, info, error, warning, vardump'
+				)
+	);
+
+  } else {
+
+	$for_log = array(
+				array(
+					'class'=>'CFileLogRoute',
+                			'levels'=>'error, warning', //'trace, info, error, warning, vardump'
+					'enabled'=>YII_DEBUG,
+                    			//'categories'=>'system.*',
+				), 
+            			array(
+			                'class'=>'ext.yii-debug-toolbar.YiiDebugToolbarRoute',
+			                'ipFilters'=>array('*'),//'ipFilters'=>array('::1','127.0.0.1','192.168.10.73'),
+				),
+			        array(
+				        'class'=>'CEmailLogRoute',
+                			'levels'=>'error, warning', //'trace, info, error, warning, vardump'
+					'emails'=>'laptopsr@gmail.com',
+					'subject'=>'Email Log File Message',
+			        )
+	);
+  }
 
 
   if(isset($_POST['UserLogin']['domain']) and !empty($_POST['UserLogin']['domain']) and $_POST['UserLogin']['domain'] != 'superadmin')
@@ -81,7 +126,7 @@ return array(
 	'name'=>'Etunti',
 	//'defaultController'=>'mobile/index',
 	// preloading 'log' component
-	'preload'=>array('chartjs'), //'log'
+	'preload'=>array('log'), //'log'
 	'language' => $lang,
 
   	//'theme' => $theme,
@@ -345,7 +390,8 @@ return array(
 			'username' => $etuntifw_user,
 			'password' => $etuntifw_pass,
 		        'tablePrefix' => 'tbl_',
-
+			'enableProfiling'=>true,
+			'enableParamLogging'=>true,
 		),
         	'db1'=>array(
 	            	'connectionString' => 'mysql:host='.$db2_host.';dbname='.$db2,
@@ -354,7 +400,9 @@ return array(
 	            	'password' => $db2_pass,
 	            	'tablePrefix' => '',
 			//'charset' => 'utf8',
-		    	'class'=> 'CDbConnection'
+		    	'class'=> 'CDbConnection',
+			'enableProfiling'=>true,
+			'enableParamLogging'=>true,
         	),
 		
 		'errorHandler'=>array(
@@ -363,18 +411,7 @@ return array(
 		),
 		'log'=>array(
 			'class'=>'CLogRouter',
-			'routes'=>array(
-				array(
-					'class'=>'CFileLogRoute',
-					'levels'=>'error, warning',
-				),
-				// uncomment the following to show log messages on web pages
-				/*
-				array(
-					'class'=>'CWebLogRoute',
-				),
-				*/
-			),
+			'routes'=>$for_log,
 		),
 	),
 
