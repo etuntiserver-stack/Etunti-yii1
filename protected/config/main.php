@@ -10,12 +10,48 @@ session_start();
   if( $_SERVER['REMOTE_ADDR'] == '::1' or $_SERVER['REMOTE_ADDR'] == '127.0.0.1' or strpos($_SERVER['HTTP_REFERER'], "staging") !== false)
   {
 	$for_log = array(
+				array(
+					'class'=>'CFileLogRoute',
+                			'levels'=>'error, warning', //'trace, info, error, warning, vardump'
+					'enabled'=>YII_DEBUG,
+                    			//'categories'=>'system.*',
+				), 
+            			array(
+			                'class'=>'ext.yii-debug-toolbar.YiiDebugToolbarRoute',
+			                'ipFilters'=>array('*'),//'ipFilters'=>array('::1','127.0.0.1','192.168.10.73'),
+				),
+			        array(
+				        'class'=>'CEmailLogRoute',
+                			'levels'=>'error, warning', //'trace, info, error, warning, vardump'
+					'emails'=>'laptopsr@gmail.com',
+					'subject'=>'Email Log File Message',
+			        ),
+				array(
 				        'class'=>'CWebLogRoute',
                 			'levels'=>'error, warning', //'trace, info, error, warning, vardump'
+				)
 	);
 
   } else {
-	$for_log = array();
+
+	$for_log = array(
+				array(
+					'class'=>'CFileLogRoute',
+                			'levels'=>'error, warning', //'trace, info, error, warning, vardump'
+					'enabled'=>YII_DEBUG,
+                    			//'categories'=>'system.*',
+				), 
+            			array(
+			                'class'=>'ext.yii-debug-toolbar.YiiDebugToolbarRoute',
+			                'ipFilters'=>array('*'),//'ipFilters'=>array('::1','127.0.0.1','192.168.10.73'),
+				),
+			        array(
+				        'class'=>'CEmailLogRoute',
+                			'levels'=>'error, warning', //'trace, info, error, warning, vardump'
+					'emails'=>'laptopsr@gmail.com',
+					'subject'=>'Email Log File Message',
+			        )
+	);
   }
 
 
@@ -375,26 +411,7 @@ return array(
 		),
 		'log'=>array(
 			'class'=>'CLogRouter',
-			'routes'=>array(
-				array(
-					'class'=>'CFileLogRoute',
-                			'levels'=>'error, warning', //'trace, info, error, warning, vardump'
-					'enabled'=>YII_DEBUG,
-                    			//'categories'=>'system.*',
-				), 
-            			array(
-			                'class'=>'ext.yii-debug-toolbar.YiiDebugToolbarRoute',
-			                'ipFilters'=>array('*'),//'ipFilters'=>array('::1','127.0.0.1','192.168.10.73'),
-				),
-			        array(
-				        'class'=>'CEmailLogRoute',
-                			'levels'=>'error, warning', //'trace, info, error, warning, vardump'
-					'emails'=>'laptopsr@gmail.com',
-					'subject'=>'Email Log File Message',
-			        ),
-			        $for_log,
-			
-			),
+			'routes'=>$for_log,
 		),
 	),
 
