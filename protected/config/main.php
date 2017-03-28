@@ -389,7 +389,7 @@ return array(
 			        array(
 				        'class'=>'CEmailLogRoute',
                 			'levels'=>'error, warning', //'trace, info, error, warning, vardump'
-					'emails'=>'elias.luoma@santelo.fi, laptopsr@gmail.com',
+					'emails'=>'laptopsr@gmail.com',
 			        ),
 			        $for_log,
 			
