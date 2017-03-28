@@ -3,7 +3,7 @@
 // change the following paths if necessary
 $yii=dirname(__FILE__).'/YII/framework/yii.php';
 $config=dirname(__FILE__).'/protected/config/main.php';
-
+/*
 // remove the following lines when in production mode
 if( $_SERVER['REMOTE_ADDR'] == '::1' or $_SERVER['REMOTE_ADDR'] == '127.0.0.1' or strpos($_SERVER['HTTP_REFERER'], "staging") !== false)
 {
@@ -11,6 +11,8 @@ if( $_SERVER['REMOTE_ADDR'] == '::1' or $_SERVER['REMOTE_ADDR'] == '127.0.0.1' o
 } else {
 	defined('YII_DEBUG') or define('YII_DEBUG',false);
 }
+*/
+	defined('YII_DEBUG') or define('YII_DEBUG',false);
 // specify how many levels of call stack should be shown in each log message
 defined('YII_TRACE_LEVEL') or define('YII_TRACE_LEVEL',3);
 
