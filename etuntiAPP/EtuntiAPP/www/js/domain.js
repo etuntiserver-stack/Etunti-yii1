@@ -300,8 +300,7 @@ $(document).ready(function(){
 	   type:'POST',
  	   data: { lang : etunti_language },
            success: function(data){
-		//var d = JSON.parse(data);
-	d = data;
+		var d = JSON.parse(data);
 		//console.log(d);
 		localStorage.setItem('lang', JSON.stringify(d));
 
