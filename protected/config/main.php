@@ -28,7 +28,7 @@ session_start();
 			        ),
 				array(
 				        'class'=>'CWebLogRoute',
-                			'levels'=>'error, warning', //'trace, info, error, warning, vardump'
+                			'levels'=>'error', //'trace, info, error, warning, vardump'
 				)
 	);
 

@@ -1293,10 +1293,6 @@ public function actionImei($dom)
 	      exit;
 	    }
 	    // uusi rivi -->
-
-
-	    exit;
-
             break;
         default:
             $this->_sendResponse(501, 
