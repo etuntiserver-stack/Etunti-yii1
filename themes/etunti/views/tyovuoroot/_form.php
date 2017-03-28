@@ -272,6 +272,7 @@ $(".muokaValiko").click(function() {
     <br>
   	<div class="section">
 
+
 		<?php echo $form->labelEx($model,'piilota_mobiilista'); ?>
 		<?php 
         	$l = array(0=>'Kyllä',1=>'Ei');
@@ -492,7 +493,7 @@ $(document).ready(function(){
   {
 	var kohdeOn = $('#Tyovuoroot_kohde option:selected').val();
 	  	 $.ajax({
-			url: 'getAsiakasByKohde',
+			url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/getAsiakasByKohde',
 			type:'GET',
 			data: { "id" : kohdeOn },
 			  success:function(data){
