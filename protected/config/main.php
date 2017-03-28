@@ -8,10 +8,11 @@ session_start();
 // CWebApplication properties can be configured here.
 
   if( 
-	$_SERVER['REMOTE_ADDR'] == '::1' 
+	($_SERVER['REMOTE_ADDR'] == '::1' 
 	or $_SERVER['REMOTE_ADDR'] == '127.0.0.1' 
 	or strpos($_SERVER['HTTP_REFERER'], "staging") !== false
-
+	)
+	and (isset($_SERVER['HTTP_REFERER']) and strpos($_SERVER['HTTP_REFERER'], "api/mob") === false )
   )
   {
 	$for_log = array(
