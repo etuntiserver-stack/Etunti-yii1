@@ -6,9 +6,10 @@ $config=dirname(__FILE__).'/protected/config/main.php';
 
 // remove the following lines when in production mode
 if( 
-	$_SERVER['REMOTE_ADDR'] == '::1' 
+	($_SERVER['REMOTE_ADDR'] == '::1' 
 	or $_SERVER['REMOTE_ADDR'] == '127.0.0.1' 
 	or strpos($_SERVER['HTTP_REFERER'], "staging") !== false
+	)
 	and strpos($_SERVER['HTTP_REFERER'], "api/mob") == false
 )
 {
