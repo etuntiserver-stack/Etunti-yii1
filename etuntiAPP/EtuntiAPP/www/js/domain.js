@@ -56,6 +56,8 @@ setTimeout(function() {
     {
 	if( localStorage.getItem('server') == 'staging.etunti.fi' )
     		var server = 'https://staging.etunti.fi';
+	else if( localStorage.getItem('server') == 'dev.etunti.fi' )
+    		var server = 'http://dev.etunti.fi';
 	else
     		var server = 'https://'+localStorage.getItem('server');
     } else {
