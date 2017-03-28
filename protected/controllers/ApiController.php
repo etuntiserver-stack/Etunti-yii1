@@ -1,5 +1,5 @@
 <?php
-	header("Access-Control-Allow-Origin: *");
+	//header("Access-Control-Allow-Origin: *");
 
 
 
@@ -265,7 +265,7 @@ public function actionLang($dom)
 	    }
 
         	$this->_sendResponse(200, CJSON::encode($lang));
-
+		exit;
 
 
             break;
