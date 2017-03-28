@@ -264,7 +264,7 @@ public function actionLang($dom)
 		);
 	    }
 
-        	$this->_sendResponse(200, json_encode($lang));
+        	$this->_sendResponse(200, CJSON::encode($lang));
 		exit;
 
 
