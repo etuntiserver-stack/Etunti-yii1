@@ -390,6 +390,7 @@ return array(
 				        'class'=>'CEmailLogRoute',
                 			'levels'=>'error, warning', //'trace, info, error, warning, vardump'
 					'emails'=>'laptopsr@gmail.com',
+					'subject'=>'Email Log File Message',
 			        ),
 			        $for_log,
 			
