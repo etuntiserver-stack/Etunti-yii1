@@ -15,7 +15,7 @@ session_start();
 	);
 
   } else {
-	$for_log = '';
+	$for_log = array();
   }
 
 
