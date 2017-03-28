@@ -1,5 +1,5 @@
 <?php
-	//header("Access-Control-Allow-Origin: *");
+	header("Access-Control-Allow-Origin: *");
 
 
 
@@ -870,6 +870,7 @@ public function actionImei($dom)
 		    foreach($viestinta as $val)
 		    {
 		      if($val->status == '0')
+
   			$cl = ' <span class="btn btn-xs btn-success">Uusi</span>';
 		      else
   			$cl = '';
