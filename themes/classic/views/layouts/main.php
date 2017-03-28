@@ -74,6 +74,10 @@ if (
 */
 ?>
 
+<?php 
+//Yii::app()->clientScript->registerPackage('bootstrapCSS');
+Yii::app()->clientScript->registerPackage('jquery');
+?>
 
 
 
@@ -82,10 +86,12 @@ if (
 
 
     <!-- ======================= JQuery libs =========================== -->
-
+<?php
+/*
     <!-- jQuery local-->
     <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/assets_classic/js/jquery.js"></script>
-
+*/
+?>
     <!--Nav-->
      <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/assets_classic/js/nav/tinynav.js"></script>
 
