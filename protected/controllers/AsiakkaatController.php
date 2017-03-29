@@ -520,14 +520,16 @@ class AsiakkaatController extends Controller
 	if($model->tyyppi == 'yritys')
 	{
 		$isprivatecustomer = '0';
-		$finvoiceaddress = '<finvoiceaddress>'.$model->verkkolaskuosoite.'</finvoiceaddress>';
-		$finvoiceroutercode = '<finvoiceroutercode>'.$model->valittajan_tunnus.'</finvoiceroutercode>';
+		$customerfinvoicedetails = '
+		<customerfinvoicedetails>
+			<finvoiceaddress>'.$model->verkkolaskuosoite.'</finvoiceaddress>
+			<finvoiceroutercode>'.$model->valittajan_tunnus.'</finvoiceroutercode>
+		</customerfinvoicedetails>';
 	}
 	if($model->tyyppi == 'henkilo')
 	{
 		$isprivatecustomer = '1';
-		$finvoiceaddress = '<finvoiceaddress></finvoiceaddress>';
-		$finvoiceroutercode = '<finvoiceroutercode></finvoiceroutercode>';
+		$customerfinvoicedetails = '';
 	}
 
 
@@ -550,10 +552,7 @@ $xml = '
       <isactive>'.$model->aktiivinen.'</isactive>
       <isprivatecustomer>'.$isprivatecustomer.'</isprivatecustomer>
     </customerbaseinformation>
-    <customerfinvoicedetails>
-      '.$finvoiceaddress.'
-      '.$finvoiceroutercode.'
-    </customerfinvoicedetails>
+	'.$customerfinvoicedetails.'
     <customerdeliverydetails>
       <deliveryname>'.$name.'</deliveryname>
       <deliverystreetaddress>'.$model->osoite.'</deliverystreetaddress>
@@ -624,6 +623,7 @@ $xml = '
 			echo json_encode($_POST['asiakkaatPerSivu']);
 			exit;
 		}
+
 
 
 	// <-- Oikeudet
