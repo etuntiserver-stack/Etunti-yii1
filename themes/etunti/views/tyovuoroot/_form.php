@@ -273,6 +273,7 @@ $(".muokaValiko").click(function() {
   	<div class="section">
 
 
+
 		<?php echo $form->labelEx($model,'piilota_mobiilista'); ?>
 		<?php 
         	$l = array(0=>'Kyllä',1=>'Ei');
@@ -1082,6 +1083,7 @@ function laatikonPaivays(thisDataReturn){
 
 
 			$('.ohje').html(d[0]);
+			if( $('#Tyovuoroot_tietoja').val() === '' )
 			$('#Tyovuoroot_tietoja').val(d[1]);
 
 			if(d[2] !== '')
