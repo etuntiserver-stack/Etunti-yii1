@@ -69,7 +69,8 @@ $(document).ready(function(){
   <div class="col-sm-3">
     <div class="section yritys ashidd">
 		<label><?php echo Yii::t('main', 'Yrityksen nimi'); ?></label>
-		<input type="text" name="Asiakkaat[yrityksen_nimi]" class="form-control">
+		<input type="text" name="Asiakkaat[yrityksen_nimi]" id="yrityksen_nimi" class="form-control">
+		<div id="yrityksen_nimi_error"></div>
     </div>
     <div class="section y_tunnus ashidd">
 		<label><?php echo Yii::t('main', 'Y-tunnus'); ?></label>
@@ -103,6 +104,27 @@ $(document).ready(function(){
 
 <script type="text/javascript">
 $(document).ready(function(){
+
+  $("#yrityksen_nimi").blur(function() {
+    var value = $(this).val();
+	  $.ajax({
+		  url: 'is_asiakas',
+		  data:{ yrityksen_nimi : value },
+		  type:'POST',
+		  success:function(data){
+			data = JSON.parse(data);
+			//console.log(data);
+			if( data !== '')
+				$('#yrityksen_nimi_error').addClass('errorMessage').show().html(data);
+			else
+				$('#yrityksen_nimi_error').removeClass('errorMessage').hide().html('');
+	   	},
+		error:function(data){
+		console.log(data);
+	    	}
+	  });
+  });
+
 
   // <-- onkoAsOsoiteSamaKunKohde
   $(".onkoAsOsoiteSamaKunKohde").change(function() {
