@@ -32,12 +32,41 @@
         <div class="tray-center">
 
 
-        <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-th-list"></i> <?php echo Yii::t('main', 'Raportit'); ?>
-	<?php if(!isset($_GET['kaikki_tyontekijat'])): ?>
-	<?php echo ', '.Yii::t('main', 'aktiiviset työntekijät'); ?>
-	<?php echo CHtml::link(Yii::t('main', 'Näytä kaikki'),'raportit?kaikki_tyontekijat', array('class'=>'btn btn-primary')); ?>
-	<?php endif; ?>
+        <h2 class="myBgColors p10"> 
+	<div class="form-inline">
+	 <div class="form-group">
+		<i class="glyphicon glyphicon-th-list"></i> <?php echo Yii::t('main', 'Raportit'); ?>
+	 </div><div class="form-group col-sm-offset-1">
+		<?php
+		( Yii::app()->request->getParam('aktiivinen') ) ? $selectedAktiivinen = Yii::app()->request->getParam('aktiivinen') : $selectedAktiivinen = 'kaikki';
+
+		$a = Valikkoot::model()->findAll(" select_type='aktiivinen' ");
+		   $tal = array();
+		   $tal['kaikki'] = 'Kaikki';
+		foreach($a as $v){
+		$exV = explode("/",$v->value);
+		   if(isset($exV[0]) and isset($exV[1]))
+		   $tal[$exV[1]] = $exV[0];
+		}
+		//ksort($tal);
+		echo CHtml::dropDownList('aktiivinen','aktiivinen', $tal, array('class'=>'form-control', 'options' => array( $selectedAktiivinen => array('selected'=>true))));
+		?>
+	 </div>
+	</div>
 	</h2>
+
+
+<script>
+$(document).ready(function(){
+
+  $('#aktiivinen').change(function(){
+	var thisVal = $(this).val();
+	window.location.href="raportit?aktiivinen=" + thisVal;
+  });
+
+
+});
+</script>
 
 
 	<?php echo $ryhmaBody; ?>	
@@ -92,8 +121,8 @@
 		$criteriaT = $site[0]->etuSukunimiCriteria($criteriaT);
 		//     Return order etu ja sukunimella -->
 
-	   if(!isset($_GET['kaikki_tyontekijat']))
-	   $criteriaT->condition = " aktiivinen=1 ";
+	   if( Yii::app()->request->getParam('aktiivinen') and Yii::app()->request->getParam('aktiivinen') != 'kaikki')
+	   $criteriaT->condition = " aktiivinen='".$selectedAktiivinen."' ";
 	   $tlist = Tyontekijat::model()->findAll($criteriaT);
 
 	   echo '<select name="tekija[]" multiple class="mult">';
