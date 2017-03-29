@@ -196,6 +196,8 @@ if(!isset($_POST['tulosta']))
 		$status = ' <i class="p3 fa fa-bus text-warning"></i>';
 		elseif($tvVal->status == 3)
 		$status = ' <i class="p3 fa fa-hourglass text-info"></i>';
+		elseif($tvVal->status == 11)
+		$status = ' <i class="p3 fa fa-clock-o text-info"></i>';
 		else
 	   	$status = ' ('.$l[$tvVal['status']].') ';
 	   }
