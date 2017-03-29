@@ -136,6 +136,33 @@ if(empty($model->position) and isset($model->id))
 		<?php echo $form->error($model,'aktiivinen'); ?>
 	</div>
 
+
+<?php if(isset($model->id)) : ?>
+<script type="text/javascript">
+$(document).ready(function(){
+
+ $('#Tyontekijat_aktiivinen').change( function() {
+  	var thisVal = $(this).val();
+	if( thisVal != 1)
+	{
+        $.ajax({
+           url: location.protocol + "//" + location.host + "/index.php/tyontekijat/check_tyovuorot?id=<?php echo $model->id; ?>",
+           success: function(data){
+		data = JSON.parse(data);
+		console.log(data);
+		if(data !== '')
+		alert('Työntekijällä on tulevaisuudessa merkittyjä työvuoroja. Oletko varma, että haluat muuttaa työntekijän passiiviseksi?');
+           }
+        });
+	}
+ });
+
+});
+</script>
+<?php endif; ?>
+
+
+
    </div>
    <div class="col-sm-3">
 
@@ -514,6 +541,7 @@ $(document).ready(function(){
         var uluru = {lat: parseFloat(Mypos[0]), lng: parseFloat(Mypos[1])};
         var map = new google.maps.Map(document.getElementById('map'), {
           zoom: 14,
+
           center: uluru
         });
         var marker = new google.maps.Marker({

@@ -28,7 +28,7 @@ class TyontekijatController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin', 'admin_ajax', 'delete', 'create', 'update', 'index', 'view','merkkipaivat', 'tulosta', 'migraatio', 'verotustiedot', 'muuta_suhteet', 'tyoryhmat_hallinta'),
+				'actions'=>array('admin', 'admin_ajax', 'delete', 'create', 'update', 'index', 'view','merkkipaivat', 'tulosta', 'migraatio', 'verotustiedot', 'muuta_suhteet', 'tyoryhmat_hallinta', 'check_tyovuorot'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -61,6 +61,21 @@ class TyontekijatController extends Controller
                 }
                 parent::init();
         }
+
+	public function actionCheck_tyovuorot($id)
+	{
+		$bd = '';
+       		$criteria = new CDbCriteria();
+		$criteria->condition = " 
+			tid='".$id."' 
+			AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') >= CURDATE()
+		";
+		$model=Tyovuoroot::model()->find($criteria);
+		if(isset($model->id))
+		$bd .= $model->id;
+
+		echo json_encode($bd);
+	}
 
 	public function actionMuuta_suhteet()
 	{
