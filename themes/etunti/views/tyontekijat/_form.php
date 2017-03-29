@@ -229,7 +229,11 @@ if(empty($model->position) and isset($model->id))
 
 		<?php
 		$list = array();
-      		$l = Valikkoot::model()->findAll(" select_type='tyoryhma' ",array('order' => "select_type"));
+
+		$criteria=new CDbCriteria;
+		$criteria->order = " value ";
+		$criteria->condition = " select_type='tyoryhma' ";
+      		$l = Valikkoot::model()->findAll($criteria);
 
 		$ryhmat = array();
 		if(is_array(json_decode($model->tyoryhma)))
