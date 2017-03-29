@@ -339,15 +339,29 @@
 		   {
 
 			$bod 		= '';
-			$tyoryhmaForArr = $data->tyoryhma;
-
 			$bod 	.= Yii::t('main', 'Merkkipäivä').': <b>'.date("d.m.Y", strtotime($data->tekijan_henkilotunnus)).', '.$this->etuSukunimi($data->id).'</b><br>';
 
-			$arr[$tyoryhmaForArr] 	= $tyoryhmaForArr;
-			array_push($forMessage, array(
+			$tyoryhmaForArr = $data->tyoryhma;
+
+			if( is_array(json_decode($tyoryhmaForArr , true)) )
+			{
+
+			    foreach( json_decode($tyoryhmaForArr , true) as $ryhma_item)
+			    {
+				$arr[$ryhma_item] 	= $ryhma_item;
+				array_push($forMessage, array(
+						'tyoryhma'=>$ryhma_item, 
+						'message'=>$bod) 
+				);
+			    }
+
+			} else {
+				$arr[$tyoryhmaForArr] 	= $tyoryhmaForArr;
+				array_push($forMessage, array(
 						'tyoryhma'=>$tyoryhmaForArr, 
 						'message'=>$bod) 
-			);
+				);
+			}
 
 			if( $_SERVER['REMOTE_ADDR'] != '::1' and $_SERVER['REMOTE_ADDR'] != '127.0.0.1' )
 			Tyontekijat::model()->updateByPk($data->id, array('ilmoitus_merkkipaivasta_vuosi'=>date("Y")));
