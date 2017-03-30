@@ -64,8 +64,6 @@ setTimeout(function() {
     	var server = 'https://etunti.fi';
     }
 
-    		var server = 'https://staging.etunti.fi';
-
     localStorage.removeItem('platform');
     // <-- On device Ready
     document.addEventListener("deviceready", onServerReady1, false);
