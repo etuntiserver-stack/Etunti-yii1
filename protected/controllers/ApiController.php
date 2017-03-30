@@ -513,6 +513,7 @@ public function actionImei($dom)
 			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
 			BETWEEN '".date("Y-m-d", strtotime("-$asetukset->app_hyvaksytyt_tyot_vkomaara week"))."' AND '".date("Y-m-d")."' 
 			AND loppui!=''
+			AND admin!=1
 		    ";
 	            $mob = Mob::model()->findAll($criteria);
 
@@ -870,6 +871,7 @@ public function actionImei($dom)
 		    foreach($viestinta as $val)
 		    {
 		      if($val->status == '0')
+
 
   			$cl = ' <span class="btn btn-xs btn-success">Uusi</span>';
 		      else
