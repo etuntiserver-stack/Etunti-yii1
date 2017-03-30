@@ -9,7 +9,28 @@ if(isset($_POST['uploaded']))
 
   $uploaddir = Yii::app()->basePath.'/../img/tekijat/'.Yii::app()->user->domain.'/';
   $uploadfile = $uploaddir . basename($model->id.'.jpg');
+
   if (move_uploaded_file($_FILES['file']['tmp_name'], $uploadfile)) {
+
+
+	// <-- Image resize
+	//header('Content-Type: image/jpeg');
+	$url = $uploadfile;
+	$width = 640;
+	$image = imagecreatefromjpeg($url);
+	$orig_width = imagesx($image);
+	$orig_height = imagesy($image);
+	$height = (($orig_height * $width) / $orig_width);
+	$new_image = imagecreatetruecolor($width, $height);
+	imagecopyresized($new_image, $image,
+		0, 0, 0, 0,
+		$width, $height,
+		$orig_width, $orig_height);
+	
+	imagejpeg($new_image, $uploadfile);
+	//     Image resize -->
+
+
      echo "";
   } 
 }

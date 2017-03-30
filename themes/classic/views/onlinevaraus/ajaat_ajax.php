@@ -12,9 +12,31 @@
    function kuva($vapaaTid){
 	$filename = "../../img/tekijat/".Yii::app()->user->domain."/".$vapaaTid.".jpg";
 	   if (file_exists(Yii::app()->request->baseUrl."img/tekijat/".Yii::app()->user->domain."/".$vapaaTid.".jpg"))
-	   $kuva = '<img src="'.$filename.'" class="img-thumbnail">';
-	   else
-	   $kuva = '<img src="../../img/tekijat/noname.jpg" class="img-thumbnail">';
+	   {
+		$url = Yii::app()->request->baseUrl."img/tekijat/".Yii::app()->user->domain."/".$vapaaTid.".jpg";
+		$size = getimagesize($url);
+		if( $size[0] > 640 )
+		{
+			// <-- Image resize
+			//header('Content-Type: image/jpeg');
+			$width = 640;
+			$image = imagecreatefromjpeg($url);
+			$orig_width = imagesx($image);
+			$orig_height = imagesy($image);
+			$height = (($orig_height * $width) / $orig_width);
+			$new_image = imagecreatetruecolor($width, $height);
+			imagecopyresized($new_image, $image,
+				0, 0, 0, 0,
+				$width, $height,
+				$orig_width, $orig_height);
+		
+			imagejpeg($new_image, $url);
+			//     Image resize -->
+		}
+	   	$kuva = '<img src="'.$filename.'" class="img-thumbnail">';
+	   } else {
+	   	$kuva = '<img src="../../img/tekijat/noname.jpg" class="img-thumbnail">';
+	   }
    	return $kuva;
    }
    // kuva
