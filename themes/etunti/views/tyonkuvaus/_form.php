@@ -15,6 +15,7 @@
 	'enableAjaxValidation'=>false,
 )); ?>
 
+
 <div class="row">
   <div class="col-sm-4">
 
@@ -48,6 +49,7 @@
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'asiakas_id'); ?>
 		<?php
+		$asiakas_selected[Yii::app()->request->getParam('asiakas_id')] = array('selected' => 'selected');
 		$list = array();
 		$criteria=new CDbCriteria;
 		//$criteria->condition="";
@@ -61,18 +63,75 @@
 		}
 
         		echo $form->dropDownList($model, 'asiakas_id', $list,
-			array('empty'=>'Valitse','class'=>'form-control'));
+			array('empty'=>'Valitse','class'=>'form-control', 'options'=>$asiakas_selected));
 		
         	?>
 		<?php echo $form->error($model,'asiakas_id'); ?>
 	</div>
 
+<script type="text/javascript">
+$(document).ready(function(){
+
+ $("#Tyonkuvaus_asiakas_id").change(function(){
+	window.location.href= "create?asiakas_id=" + $(this).val();
+ });
+
+});
+</script>
+
+	<?php if(isset($_GET['asiakas_id'])) : ?>
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'kohde_id'); ?>
+		<?php
+		$list = array();
+		$criteria=new CDbCriteria;
+		$criteria->condition=" asiakas_id='".$_GET['asiakas_id']."' ";
+      		$l = Kohteet::model()->findAll($criteria);
+		if( $l != null )
+		{
+		    foreach($l as $v)
+		    {
+			$list[$v->id] = $v->osoite;
+		    }
+		}
+
+		if(count($list) > 0)
+		{
+        		echo $form->dropDownList($model, 'kohde_id', $list,
+			array('empty'=>'Valitse','class'=>'form-control'));
+		}		
+        	?>
+		<?php echo $form->error($model,'kohde_id'); ?>
+	</div>
+<script type="text/javascript">
+$(document).ready(function(){
+
+	checkKohde();
+ $("#Tyonkuvaus_kohde_id").change(function(){
+	checkKohde();
+ });
+
+ function checkKohde(){
+	if( $("#Tyonkuvaus_kohde_id option:selected").val() !== '' )
+	    $('#openTable').addClass('in');
+	else
+	    $('#openTable').removeClass('in');
+ }
+
+});
+</script>
+	<?php endif; ?>
+
+
+<?php /*
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'otsikko'); ?>
 		<?php echo $form->textField($model,'otsikko',array('size'=>60,'maxlength'=>255, 'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'otsikko'); ?>
 	</div>
+*/ ?>
 
+	<?php if(isset($model->id)) : ?>
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'aktiivinen'); ?>
 		<?php 
@@ -81,11 +140,12 @@
 		array('class'=>'form-control','id'=>'osoite')) ?>
 		<?php echo $form->error($model,'aktiivinen'); ?>
 	</div>
+	<?php endif; ?>
 
  </div>
 </div>
 
-	<?php if( isset($model->id)) : ?>
+	<div id="openTable" class="collapse">
 	<hr>
 	<div class="section fill mb5">
 
@@ -243,11 +303,11 @@
 						'class'=> 'laatutasot_selecter form-control',
 						'options' => $selectedValuesLaatutasot,
 				)).'
-		            <textarea class="form-control" rows="4" name="TyonkuvausRivit[laatutaso][0]" />'.$laatutaso.'</textarea>
+		            <textarea class="form-control" rows="4" name="TyonkuvausRivit[laatutaso]['.$key.']" />'.$laatutaso.'</textarea>
 			    </div>
 		        </td>
 		        <td>
-		            <textarea class="form-control" name="TyonkuvausRivit[kommenti][0]" />'.$r->kommenti.'</textarea>
+		            <textarea class="form-control" name="TyonkuvausRivit[kommenti]['.$key.']" />'.$r->kommenti.'</textarea>
 		        </td>
 		    </tr>
 		';
@@ -451,10 +511,10 @@ jQuery(function(){
 </script>
 
 	</div>
-	<?php endif; ?>
+	</div>
 
 
-
+	<br>
 	<div class="section">
 		<?php echo CHtml::submitButton($model->isNewRecord ? 'Luo' : 'Tallenna',array('class'=>'btn btn-primary myBgColors')); ?>
 	</div>
@@ -495,6 +555,7 @@ $(".muokaValiko").click(function() {
 	selectAllText: '<?php echo Yii::t("main", "Valitse kaikki"); ?>',
 	allSelectedText: '<?php echo Yii::t("main", "Kaikki"); ?>',
 	nSelectedText: '<?php echo Yii::t("main", "valittu"); ?>',
+
 	numberDisplayed: 0,
 	buttonWidth: '100%',
  }); 

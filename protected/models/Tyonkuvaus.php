@@ -28,8 +28,8 @@ class Tyonkuvaus extends DB2ActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('otsikko', 'required'),
-			array('yhteystiedot_id, asiakas_id, aktiivinen', 'numerical', 'integerOnly'=>true),
+			array('asiakas_id, kohde_id', 'required'),
+			array('yhteystiedot_id, asiakas_id, kohde_id, aktiivinen', 'numerical', 'integerOnly'=>true),
 			array('otsikko', 'length', 'max'=>255),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
@@ -59,6 +59,7 @@ class Tyonkuvaus extends DB2ActiveRecord
 			'yhteystiedot_id' => 'Yhteystiedot',
 			'asiakas_id' => 'Asiakas',
 			'otsikko' => 'Otsikko',
+			'kohde_id' => 'Kohde',
 		);
 	}
 

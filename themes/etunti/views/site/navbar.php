@@ -1517,6 +1517,9 @@ nyt ne ovat etusivu.php ssa
 	|| curpage === 'kirjeidenHallinta/index'
 	|| curpage === 'vinkkiExtranet/index'
 	|| curpage === 'palautteet/index'
+	|| curpage === 'tyonkuvaus/index'
+	|| curpage === 'tyonkuvaus/update'
+	|| curpage === 'tyonkuvaus/create'
     ){  $('.crm').addClass('menu-open'); }
 
 
