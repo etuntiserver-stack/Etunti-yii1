@@ -303,6 +303,7 @@ class TyovuorootController extends Controller
 		{
 	          $html2pdf = Yii::app()->ePdf->HTML2PDF('P', 'A4', 'en');
 		  $html2pdf->setDefaultFont('Arial');
+		  $html2pdf->setTestTdInOnePage(false);
 	          $html2pdf->WriteHTML($this->renderPartial('laheta',array('tid'=>$tid,'week'=>$week,'year'=>$year,'tulosta'=>true,'tt'=>$tt),true));
 	          $html2pdf->Output();
 
@@ -312,6 +313,7 @@ class TyovuorootController extends Controller
 
 	          $html2pdf = Yii::app()->ePdf->HTML2PDF('P', 'A4', 'en');
 		  $html2pdf->setDefaultFont('Arial');
+		  $html2pdf->setTestTdInOnePage(false);
 		  $thisHtml = $this->renderPartial('laheta',array('tid'=>$tid,'week'=>$week,'year'=>$year,'tulosta'=>true,'tt'=>$tt),true);
 	          $html2pdf->WriteHTML($thisHtml);
          	  $content_PDF = $html2pdf->Output('my_doc.pdf', EYiiPdf::OUTPUT_TO_STRING);
@@ -390,6 +392,7 @@ class TyovuorootController extends Controller
 
 	          $html2pdf = Yii::app()->ePdf->HTML2PDF('P', 'A4', 'en');
 		  $html2pdf->setDefaultFont('Arial');
+		  $html2pdf->setTestTdInOnePage(false);
 	          $html2pdf->WriteHTML($this->renderPartial('laheta',array('tid'=>$_POST['kuka'],'week'=>$week,'year'=>$year,'tulosta'=>true,'tt'=>$tt),true));
 	          $html2pdf->Output();
 
@@ -428,9 +431,12 @@ class TyovuorootController extends Controller
 
 	        $html2pdf = Yii::app()->ePdf->HTML2PDF('P', 'A4', 'en');
 		$html2pdf->setDefaultFont('Arial');
+		$html2pdf->setTestTdInOnePage(false);
 		$thisHtml = $this->renderPartial('laheta',array('tid'=>$tt->id,'week'=>$week,'year'=>$year,'tulosta'=>true,'tt'=>$tt),true);
 	        $html2pdf->WriteHTML($thisHtml);
          	$content_PDF = $html2pdf->Output('my_doc.pdf', EYiiPdf::OUTPUT_TO_STRING);
+
+
 
 
 		// file 
@@ -489,6 +495,7 @@ class TyovuorootController extends Controller
 
 	        $html2pdf = Yii::app()->ePdf->HTML2PDF('P', 'A4', 'en');
 		$html2pdf->setDefaultFont('Arial');
+		$html2pdf->setTestTdInOnePage(false);
 		$thisHtml = $this->renderPartial('laheta_k',array('week'=>$week,'year'=>$year,'tulosta'=>'lista'),true);
 	        $html2pdf->WriteHTML($thisHtml);
          	$content_PDF = $html2pdf->Output('my_doc.pdf', EYiiPdf::OUTPUT_TO_STRING);
