@@ -42,10 +42,11 @@ session_start();
 
 
 
-  // <-- LOG
+// <-- LOG
+if( isset($_SESSION['domain']) )
+{
   if( 
-	isset($_SESSION['domain'])
-	and ($_SERVER['REMOTE_ADDR'] == '::1' 
+	($_SERVER['REMOTE_ADDR'] == '::1' 
 	or $_SERVER['REMOTE_ADDR'] == '127.0.0.1' 
 	or strpos($_SERVER['HTTP_REFERER'], "staging") !== false
 	)
@@ -93,7 +94,9 @@ session_start();
 			        )
 	);
   }
-  //     LOG -->
+
+}
+//     LOG -->
 
 
 
