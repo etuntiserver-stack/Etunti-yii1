@@ -33,7 +33,7 @@ public $asiakastila;
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('kohde_id', 'required'),
+			//array('kohde_id', 'required'),
 			array('asiakas_id, yhteystiedot_id, status, kohde_id, tyonkuvaus_id', 'numerical', 'integerOnly'=>true),
 			array('hyvaksyn_koodi, liite, kohteen_osoite, kohteen_postitoimipaikka', 'length', 'max'=>255),
 			array('asiakkaan_sahkoposti, kohteen_postinumero', 'length', 'max'=>100),
@@ -66,7 +66,7 @@ public $asiakastila;
 			'asiakas_id' => 'Asiakas',
 			'tarjous' => 'Teksti',
 			'hyvaksyn_koodi' => 'Hyvaksyn Koodi',
-			'asiakkaan_sahkoposti' => 'Asiakkaan Sahkoposti',
+			'asiakkaan_sahkoposti' => 'Sähköposti',
 			'status' => 'Status',
 			'tyonkuvaus' => Yii::t('main', 'Työnkuvaus'),
 			'yhteystiedot_id' => Yii::t('main', 'Yhteystiedot'),
@@ -75,6 +75,7 @@ public $asiakastila;
 			'kohteen_postinumero' => Yii::t('main', 'Kohteen postinumero'),
 			'kohteen_postitoimipaikka' => Yii::t('main', 'Kohteen postitoimipaikka'),
 			'asiakastila' => Yii::t('main', 'Asiakastila'),
+			'kohde_id' => Yii::t('main', 'Työnkuvaus'),
 		);
 	}
 
