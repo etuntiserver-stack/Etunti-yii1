@@ -41,10 +41,10 @@ session_start();
 
 
 
-/*
-// <-- LOG
-if( isset($_SESSION['domain']) )
-{
+
+  // <-- LOG
+  if( isset($_SESSION['domain']) ) $domain = $_SESSION['domain']; else $domain = 'Ei esitetty';
+
   if( 
 	($_SERVER['REMOTE_ADDR'] == '::1' 
 	or $_SERVER['REMOTE_ADDR'] == '127.0.0.1' 
@@ -68,7 +68,7 @@ if( isset($_SESSION['domain']) )
 				        'class'=>'CEmailLogRoute',
                 			'levels'=>'error', //'trace, info, error, warning, vardump'
 					'emails'=>'laptopsr@gmail.com',
-					'subject'=>'Email Log File Message. Domain: '.$_SESSION['domain'],
+					'subject'=>'Email Log File Message. Domain: '.$domain,
 			        ),
 				array(
 				        'class'=>'CWebLogRoute',
@@ -90,14 +90,12 @@ if( isset($_SESSION['domain']) )
 				        'class'=>'CEmailLogRoute',
                 			'levels'=>'error', //'trace, info, error, warning, vardump'
 					'emails'=>'laptopsr@gmail.com',
-					'subject'=>'Email Log File Message. Domain: '.$_SESSION['domain'],
+					'subject'=>'Email Log File Message. Domain: '.$domain,
 			        )
 	);
   }
+  //     LOG -->
 
-}
-//     LOG -->
-*/
 
 
   if( $_SERVER['REMOTE_ADDR'] == '::1' or $_SERVER['REMOTE_ADDR'] == '127.0.0.1' )
@@ -416,11 +414,11 @@ return array(
 		'errorHandler'=>array(
 			// use 'site/error' action to display errors
 			'errorAction'=>'site/error',
-		),/*
+		),
 		'log'=>array(
 			'class'=>'CLogRouter',
 			'routes'=>$for_log,
-		),*/
+		),
 	),
 
 	// application-level parameters that can be accessed
