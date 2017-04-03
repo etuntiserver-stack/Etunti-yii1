@@ -96,7 +96,53 @@ class TyonkuvausController extends Controller
 		{
 			$model->attributes=$_POST['Tyonkuvaus'];
 			if($model->save())
-				$this->redirect(array('update','id'=>$model->id));
+			{
+
+				foreach($_POST['TyonkuvausRivit']['tilat'] as $key=>$items)
+				{
+					$tilat = $items;
+					if(isset($_POST['TyonkuvausRivit']['tyotehtava'][$key]))
+					{
+						$tyontehtavat = array();
+						foreach($_POST['TyonkuvausRivit']['tyotehtava'][$key] as $k2=>$i2)
+						{
+							$tyontehtavat[$k2] = array('tyotehtava'=>$i2, 'vkopvm' => $_POST['TyonkuvausRivit']['vkopvm'][$key][$k2]);
+						}
+					}
+
+					$laatutasot = '';
+					if(isset($_POST['TyonkuvausRivit']['laatutaso'][$key]))
+					{
+						$laatutasot = $_POST['TyonkuvausRivit']['laatutaso'][$key];
+					}
+
+					$kommenti = '';
+					if(isset($_POST['TyonkuvausRivit']['kommenti'][$key]))
+					{
+						$kommenti = $_POST['TyonkuvausRivit']['kommenti'][$key];
+					}
+
+
+					$tk_rivit = new TyonkuvausRivit;
+					$tk_rivit->tyonkuvaus_id = $model->id;
+					$tk_rivit->tilat = json_encode($tilat);
+					$tk_rivit->tyontehtavat = json_encode($tyontehtavat);
+					$tk_rivit->laatutaso = json_encode($laatutasot);
+					$tk_rivit->kommenti = $kommenti;
+					$tk_rivit->save();
+
+					/*
+					echo '<pre>';
+
+					print_r($laatutasot);
+					echo '</pre>';
+					echo '<hr>';
+					*/
+				}
+			}
+			//exit;
+				$this->redirect(array('index'));
+			
 		}
 
 		$this->render('create',array(
