@@ -24,9 +24,11 @@
 			); 
 		?>
 	</td>
+<!--
 	<td>
 		<?php echo $head; ?>
 	</td>
+-->
 	<td>
 		<?php echo $data->kohteen_osoite; ?>
 	</td>
