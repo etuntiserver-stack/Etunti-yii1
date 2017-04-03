@@ -41,7 +41,7 @@ session_start();
 
 
 
-
+/*
 // <-- LOG
 if( isset($_SESSION['domain']) )
 {
@@ -97,7 +97,7 @@ if( isset($_SESSION['domain']) )
 
 }
 //     LOG -->
-
+*/
 
 
   if( $_SERVER['REMOTE_ADDR'] == '::1' or $_SERVER['REMOTE_ADDR'] == '127.0.0.1' )
@@ -416,11 +416,11 @@ return array(
 		'errorHandler'=>array(
 			// use 'site/error' action to display errors
 			'errorAction'=>'site/error',
-		),
+		),/*
 		'log'=>array(
 			'class'=>'CLogRouter',
 			'routes'=>$for_log,
-		),
+		),*/
 	),
 
 	// application-level parameters that can be accessed
