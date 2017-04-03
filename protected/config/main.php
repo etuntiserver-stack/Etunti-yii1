@@ -58,7 +58,7 @@ session_start();
 
 
   if(isset($_POST['UserLogin']['domain']) and !empty($_POST['UserLogin']['domain']) and $_POST['UserLogin']['domain'] != 'superadmin')
-  $_SESSION['domain'] = $_POST['UserLogin']['domain'];
+  $_SESSION['domain'] = strtolower($_POST['UserLogin']['domain']);
 
 /*
   if(isset($_POST['domain'])){
@@ -74,13 +74,13 @@ session_start();
   	$_SESSION['lang'] = $_GET['lang'];
 
 	if(isset($_GET['dom']))
-  	$_SESSION['domain'] = $_GET['dom'];
+  	$_SESSION['domain'] = strtolower($_GET['dom']);
 
 	if(isset($_GET['domain']))
-  	$_SESSION['domain'] = $_GET['domain'];
+  	$_SESSION['domain'] = strtolower($_GET['domain']);
 
 	if(isset($_POST['domain']))
-  	$_SESSION['domain'] = $_POST['domain'];
+  	$_SESSION['domain'] = strtolower($_POST['domain']);
 
 	$lang = 'fi';
 	if(isset($_SESSION['lang']) and !empty($_SESSION['lang']))
