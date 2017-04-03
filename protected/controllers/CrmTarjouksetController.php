@@ -32,7 +32,7 @@ class CrmTarjouksetController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view', 'laheta', 'get_tyonkuvaus_by_asiakas', 'get_tyonkuvaus_by_id', 'get_tarjouslaskenta_by_id', 'get_kohteentiedot', 'get_asiakastilat'),
+				'actions'=>array('admin','delete','create','update','index','view', 'laheta', 'get_tyonkuvaus_by_asiakas', 'get_tyonkuvaus_by_id', 'get_tarjouslaskenta_by_id', 'get_kohteentiedot', 'get_asiakastilat', 'view_tyonkuvaus'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -180,74 +180,8 @@ class CrmTarjouksetController extends Controller
 		// <-- Tyonkuvaus ja Tarjouslaskenta
 		$message .= '<div class="">';
 
-			$tyonkuvaus_arr = json_decode($crm->tyonkuvaus, true);
-			$tarjouslaskenta_arr = json_decode($crm->tarjouslaskenta, true);
-
-
-			$tl_table = '';
-
-/*
-			$tl_table .= '<h2>'.Yii::t('main', 'Tarjouslaskenta').'</h2>';
-			$tl_table .= '<table class="table table-bordered bg-white">';
-			$tl_table .= '<tr>';
-			$tl_table .= '<th>'.Yii::t('main', 'Kuvaus').'</th>';
-			$tl_table .= '<th>'.Yii::t('main', 'Arvo').'</th>';
-			$tl_table .= '</tr>';
-
-			foreach($tarjouslaskenta_arr as $key=>$item)
-			{
-				if( $key == 'muut_kulut' and is_array(json_decode($item, true)['otsikko']))
-				{
-					$uusiItem = '';
-					foreach(json_decode($item, true)['otsikko'] as $k2=>$muut)
-					{
-						$uusiItem .= $muut.": ".json_decode($item, true)['hinta'][$k2]."<br>";
-
-					}
-					$item = $uusiItem;
-				}
-
-				$label = Tarjouslaskenta::model()->getAttributeLabel($key);
-
-				$tl_table .= '<tr>';
-				$tl_table .= '<td>'.$label.'</td>';
-				$tl_table .= '<td>'.$item.'</td>';
-				$tl_table .= '</tr>';
-
-			}
-			$tl_table .= '</table>';
-
-			$message .= $tl_table;
-*/
-
-
-			$tk_table = '';
-			$tk_table .= '<h2>'.Yii::t('main', 'Työnkuvaus').'</h2>';
-			$tk_table .= '<table class="table table-bordered bg-white">';
-			$tk_table .= '<tr>';
-			$tk_table .= '<th>'.Yii::t('main', 'Tilat').'</th>';
-			$tk_table .= '<th>'.Yii::t('main', 'Työtehtävät').'</th>';
-			$tk_table .= '<th>'.Yii::t('main', 'Laatutaso').'</th>';
-			$tk_table .= '<th>'.Yii::t('main', 'Kommenti').'</th>';
-			$tk_table .= '</tr>';
-
-			foreach($tyonkuvaus_arr['tilat'] as $key=>$items)
-			{
-				$tyontehtavat = $tyonkuvaus_arr['tyontehtavat'][$key];
-				$tt_result = '';
-				foreach($tyontehtavat as $kt=>$it)
-					$tt_result .= $it['tyotehtava'].': '.$it['vkopvm']."\n";
-
-				$tk_table .= '<tr>';
-				$tk_table .= '<td>'.implode("<br>", $items).'</td>';
-				$tk_table .= '<td>'.$tt_result.'</td>';
-				$tk_table .= '<td>'.implode("<br>", $tyonkuvaus_arr['laatutaso'][$key]).'</td>';
-				$tk_table .= '<td>'.implode("<br>", $tyonkuvaus_arr['kommenti'][$key]).'</td>';
-				$tk_table .= '</tr>';
-
-			}
-			$tk_table .= '</table>';
-			$message .= $tk_table;
+			if($crm->tyonkuvaus_id != 0)
+			$message .= $this->get_tyonkuvaus($crm->tyonkuvaus_id);
 
 		$message .= '</div>';
 		//  Tyonkuvaus ja Tarjouslaskenta -->
@@ -309,12 +243,22 @@ class CrmTarjouksetController extends Controller
 
 	public function actionGet_kohteentiedot($id)
 	{
-		$model = Kohteet::model()->findByPk($id);
+		$model = Tyonkuvaus::model()->findByPk($id);
+		$k = Kohteet::model()->findByPk($model->kohde_id);
 		$arr = array();
-		if(isset($model->id))
-		$arr = $model->attributes;
+		if(isset($k->id))
+		{
+			$arr = $k->attributes;
+			$arr['tyonkuvaus_id'] = $id;
+			$arr['tyonkuvaus'] = $this->get_tyonkuvaus($id);
+		}
 
 		echo json_encode($arr);
+	}
+
+	public function actionView_tyonkuvaus($id)
+	{
+		echo json_encode($this->get_tyonkuvaus($id));
 	}
 
 	public function actionView($id)
@@ -641,24 +585,13 @@ class CrmTarjouksetController extends Controller
 		$this->render('index', array('dataProvider' => $dataProvider));
 	}
 
-	protected function get_tyonkuvaus($tb, $id)
+	protected function get_tyonkuvaus($id)
 	{
 	
 		$bd = '';
-       		$criteria = new CDbCriteria();
-	        $criteria->order = " id DESC ";
-	        $criteria->condition = " $tb='".$id."' AND aktiivinen=1 ";
-		$model = Tyonkuvaus::model()->findAll($criteria);
+		$data = Tyonkuvaus::model()->findByPk($id);
 		
-		if( count($model) > 0 )
-		{
-		$bd = '<h1>'.Yii::t('main', 'Valitse työnkuvaus').'</h1>';
-
-		foreach($model as $data)
-		{
-
-		$bd .= '<div class="tyokuvauksetValinta" id="tyokuvaus_'.$data->id.'"><h2>'.$data->otsikko.' <input type="radio" name="tyokuvaus" class="tyokuvaus" for="'.$data->id.'"></h2></div>
-
+		$bd .= '
 		<table class="table table-bordered" style="background:white">
 		    <tr>
 		        <th>'.Yii::t('main','Tilat').'</th>
@@ -707,18 +640,15 @@ class CrmTarjouksetController extends Controller
 		';
 		}
 
-		$bd .= '</table>
-		<hr>';
-		}
+		$bd .= '</table>';
+		
 
-
-		}
 
 		return trim($bd);
 	}
 
 
-	public function actionGet_tyonkuvaus_by_id($id)
+	protected function get_tyonkuvaus_by_id($id)
 	{
 	
 		$bd = array();
