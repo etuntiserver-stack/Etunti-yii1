@@ -33,7 +33,7 @@ $tilauksen_kuvaus = json_decode($data->tilauksen_kuvaus, true);
 		<?php echo $data->hinta.'&euro;'; ?>
 	</td>
 	<td>
-		<?php if($data->tila == 1) echo 'Maksettu'; ?>
+		<?php if($data->tila == 1) echo 'Maksettu'; else echo '<span class="text-danger">Ei maksettu</span>';?>
 	</td>
 	<td>
 		<?php

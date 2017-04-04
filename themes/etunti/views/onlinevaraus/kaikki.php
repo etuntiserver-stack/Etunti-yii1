@@ -33,6 +33,23 @@
                     <!-- Input Icons -->
                     <div class="row">
 
+                      <div class="col-md-2">
+                        <div class="section">
+                          <label class="field select">
+
+			    <?php if( Yii::app()->request->getPost('tila') ) : ?>
+			    <input type="hidden" id="posttila" value="<?php echo Yii::app()->request->getPost('tila'); ?>">
+			    <?php endif; ?>
+
+			    <select name="tila" id="tila" class="gui-input">
+			     <option value="Kaikki"><?php echo Yii::t('main', 'Kaikki'); ?></option>
+			     <option value="1"><?php echo Yii::t('main', 'Maksettu'); ?></option>
+			    </select>
+                            <i class="arrow double"></i>
+                            </label>
+                          </label>
+                        </div>
+                      </div>
 
                       <div class="col-md-2">
                         <div class="section">
@@ -130,6 +147,10 @@
 
 <script type="text/javascript">
 $(document).ready(function(){
+
+if( $('#posttila').val() ){
+	$('#tila').val( $('#posttila').val() );
+}
 
 $(".haemob").click(function(){
 	$("#mobForm").submit();

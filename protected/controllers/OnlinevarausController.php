@@ -188,6 +188,8 @@ class OnlinevarausController extends Controller
 
 		if(Yii::app()->request->getPost('tulosta'))
 		{
+
+	        	$criteria->addCondition (" tila=1 ");
 			$model = Onlinevaraus::model()->findAll($criteria);
 
 
