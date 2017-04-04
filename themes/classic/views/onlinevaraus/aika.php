@@ -121,6 +121,8 @@ $asetukset = Asetukset::model()->findbypk(1);
 <script type="text/javascript">
 $(document).ready(function(){
 
+var step = 41;
+var count1 = step;
 
 $(document).delegate(".day","click",function(){
 	$('.day').removeClass('orangeColor');
@@ -141,8 +143,7 @@ $(document).delegate(".day","click",function(){
 
 
 kaksiKalenteria();
-var step = 41;
-var count1 = step;
+
 
 function kaksiKalenteria()
 {
