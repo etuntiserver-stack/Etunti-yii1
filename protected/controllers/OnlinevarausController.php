@@ -184,7 +184,8 @@ class OnlinevarausController extends Controller
 
 	        $criteria->addCondition (" DATE(time) BETWEEN '".$from."' AND '".$to."' ");
 
-
+		if(Yii::app()->request->getPost('tila') == 1)
+	        	$criteria->addCondition (" tila=1 ");
 
 		if(Yii::app()->request->getPost('tulosta'))
 		{
