@@ -418,9 +418,12 @@ $(document).ready(function(){
 
 		var r = confirm('Olet myös luomassa uuden asiakkaan ja kohteen.\n Haluatko jatkaa?');
 		if(r)
-		$('#tyovuoroot-form').submit();
-		else
-		return false;
+		{
+			$(this).remove();
+			$('#tyovuoroot-form').submit();
+		} else {
+			return false;
+		}
 	});
 
 	$('#tyovuoroot-form').on('submit',function(e) {
