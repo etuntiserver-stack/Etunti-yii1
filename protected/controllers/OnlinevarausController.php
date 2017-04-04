@@ -413,7 +413,7 @@ class OnlinevarausController extends Controller
 			$_SESSION['onlinevaraus']['paa_nimike'] = $_POST['nimike'];
 		if(isset($_POST['hinta']))
 			$_SESSION['onlinevaraus']['paa_hinta'] = $_POST['hinta'];
-		if(isset($_POST['nimike']))
+		if(isset($_POST['kesto']))
 			$_SESSION['onlinevaraus']['paa_kesto'] = $_POST['kesto'];
 
 

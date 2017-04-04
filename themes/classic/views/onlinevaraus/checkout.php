@@ -24,6 +24,9 @@ $return_url             = 'http://' .$_SERVER['SERVER_NAME'] .str_replace('maksu
 $payment = new  Payment($demo_merchant_id, $demo_merchant_secret);
 $payment->setUrls($return_url);
 
+if(!isset($_SESSION['onlinevaraus']['modelTV']))
+$this->redirect(array('index'));
+
 $tv = Tyovuoroot::model()->findbypk($_SESSION['onlinevaraus']['modelTV']);
 
 

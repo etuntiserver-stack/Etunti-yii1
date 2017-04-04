@@ -359,7 +359,9 @@ $(document).delegate("#toinen_valiko_values","change",function(){
 	var otsikko 	= thisVal[0];
 	var nimike 	= thisVal[1];
 	var hinta 	= parseFloat(thisVal[2]);
-	var kesto 	= parseFloat(thisVal[3]);
+	var kesto 	= 0;
+	if(thisVal[3])
+	kesto = parseFloat(thisVal[3]);
 	var tyo_toimialue = $('#tyo_toimialue').val();
 
    $.ajax({
@@ -367,7 +369,7 @@ $(document).delegate("#toinen_valiko_values","change",function(){
 	data:{ toinen_valiko : "true", otsikko : otsikko, nimike : nimike, hinta : hinta, kesto : kesto, tyo_toimialue : tyo_toimialue },
 	type:'POST',
 	success:function(data){
-		//console.log(data);
+		console.log(kesto);
 		if(data)
 		{
 			$('#panGetContent').html(JSON.parse(data));
@@ -461,8 +463,11 @@ $(document).delegate(".lisat","click",function(){
 
   function tuntienTarkistus(){
 	var clock = parseFloat($('#clock').attr('val'));
-	if(clock > 0)
+	if((clock > 0) && ( $('#toinen_valiko_values option:selected').val() !== '' ))
 	$('.seuraava').removeClass('disabled');
+
+	if( $('#toinen_valiko_values option:selected').val() === '' )
+	$('.seuraava').addClass('disabled');
   }
 
 });
