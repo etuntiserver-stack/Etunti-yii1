@@ -53,6 +53,9 @@ session_start();
 	and (isset($_SERVER['HTTP_REFERER']) and strpos($_SERVER['HTTP_REFERER'], "api/mob") === false )
   )
   {
+	if( isset($_POST) )
+	$domain .= implode(", ", $_POST);
+
 	$for_log = array(
 				array(
 					'class'=>'CFileLogRoute',
