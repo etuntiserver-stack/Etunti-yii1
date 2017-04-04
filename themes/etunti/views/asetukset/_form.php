@@ -388,6 +388,12 @@
 		<?php echo $form->error($model,'checkout_salasana'); ?>
 	</div>
 
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'gtm'); ?>
+		<?php echo $form->textField($model,'gtm',array('size'=>20,'maxlength'=>255,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'gtm'); ?>
+	</div>
+
 	<br>
 	<div class="section fill mb5">
 
@@ -442,15 +448,6 @@
 	</div>
 
 
-
-
-
-
-
-
-
-
-
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'onlinevaraus_loppu'); ?>
 		<?php 
@@ -496,6 +493,7 @@
 		<?php echo $form->textarea($model,'tilausvahvistus',array('rows'=>4,'maxlength'=>5000,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'tilausvahvistus'); ?>
 	</div>
+
 
     </div>
 
