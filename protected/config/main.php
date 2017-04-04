@@ -68,7 +68,7 @@ session_start();
 				        'class'=>'CEmailLogRoute',
                 			'levels'=>'error', //'trace, info, error, warning, vardump'
 					'emails'=>'laptopsr@gmail.com',
-					'subject'=>'Email Log File Message DEV. Domain: '.$domain,
+					'subject'=>'Email Log File Message (DEV). Domain: '.$domain,
 			        ),
 				array(
 				        'class'=>'CWebLogRoute',
@@ -90,7 +90,7 @@ session_start();
 				        'class'=>'CEmailLogRoute',
                 			'levels'=>'error', //'trace, info, error, warning, vardump'
 					'emails'=>'laptopsr@gmail.com',
-					'subject'=>'Email Log File Message. Domain: '.$domain,
+					'subject'=>'Email Log File Message (No DEV). Domain: '.$domain,
 			        )
 	);
   }
