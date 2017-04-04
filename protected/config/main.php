@@ -54,8 +54,8 @@ session_start();
   )
   {
 
-	if( isset($_POST['email']) )
-	$domain .= ', e-mail: '.$_POST['email'];
+	if( isset($_POST) )
+	$domain .= implode(", ", $_POST);
 
 	$for_log = array(
 				array(
@@ -83,8 +83,8 @@ session_start();
 
   } else {
 
-	if( isset($_POST['email']) )
-	$domain .= ', e-mail: '.$_POST['email'];
+	if( isset($_POST) )
+	$domain .= implode(", ", $_POST);
 
 	$for_log = array(
 				array(
