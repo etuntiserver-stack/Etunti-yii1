@@ -126,6 +126,11 @@ $(document).delegate(".day","click",function(){
 	$('.day').removeClass('orangeColor');
 	$(this).addClass('orangeColor');
 
+  localStorage.setItem('valinnuPvm', $(this).attr("pvm"));
+  aikoja();
+  setInterval(aikoja, "15000");
+  count1 = step;
+
 	$('html,body').animate({
 	   scrollTop: $("#aikoja").offset().top
 	});
@@ -218,7 +223,7 @@ $(document).delegate(".ajaanClick","click",function(){
 
 });
 
-
+/*
 $(document).delegate(".cal","click",function(){
 
   localStorage.setItem('valinnuPvm', $(this).attr("pvm"));
@@ -226,7 +231,7 @@ $(document).delegate(".cal","click",function(){
   setInterval(aikoja, "15000");
   count1 = step;
 });
-
+*/
 
   clearInterval(aikoja);
   localStorage.setItem('valinnuPvm', null);
