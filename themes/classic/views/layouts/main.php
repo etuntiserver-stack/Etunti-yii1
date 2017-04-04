@@ -3,8 +3,11 @@
     <head>
       
 <?php
-$asetukset = Asetukset::model()->findByPk(1);
-$curpage_controller = Yii::app()->getController()->getAction()->controller->id;
+if( isset(Yii::app()->user->domain) )
+{
+	$asetukset = Asetukset::model()->findByPk(1);
+	$curpage_controller = Yii::app()->getController()->getAction()->controller->id;
+}
 ?>
 
 	<?php if(
