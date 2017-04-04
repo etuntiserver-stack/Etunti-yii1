@@ -72,10 +72,16 @@
 			$tyoryhmaForArr = '';
 
 			$k = Kohteet::model()->findbypk($data->kohde);
+			$tt = Tyontekijat::model()->findbypk($data->tid);
+
+			if(isset($tt->id) and $tt->aktiivinen == 0){
+			continue;
+			}
+
 			if(isset($k->osoite))
 				$osoite = Yii::t('main', 'Osoite').': <b>'. $k->osoite.'</b><br>';
 
-			$tt = Tyontekijat::model()->findbypk($data->tid);
+
 			if(isset($tt->id)){
 				$tekijan_nimi = Yii::t('main', 'Työntekijä').':  <b>'.$this->etuSukunimi($tt->id).'</b><br>';
 				$tyoryhmaForArr = $tt->tyoryhma;
@@ -211,10 +217,16 @@
 			$tyoryhmaForArr = '';
 
 			$k = Kohteet::model()->findbypk($data->kohde);
+			$tt = Tyontekijat::model()->findbypk($data->tid);
+
+			if(isset($tt->id) and $tt->aktiivinen == 0){
+			continue;
+			}
+
 			if(isset($k->osoite))
 				$osoite = Yii::t('main', 'Osoite').': <b>'. $k->osoite.'</b><br>';
 
-			$tt = Tyontekijat::model()->findbypk($data->tid);
+
 			if(isset($tt->id)){
 				$tekijan_nimi = Yii::t('main', 'Työntekijä').':  <b>'.$this->etuSukunimi($tt->id).'</b><br>';
 				$tyoryhmaForArr = $tt->tyoryhma;
@@ -461,12 +473,16 @@
 		{
 
 
-
 			$k = Kohteet::model()->findbypk($data->kohde);
+			$t = Tyontekijat::model()->findbypk($data->tid);
+
+			if(isset($t->id) and $t->aktiivinen == 0){
+			continue;
+			}
+
 			$osoite = '';
 			if(isset($k->osoite)) $osoite = $k->osoite;
 
-			$t = Tyontekijat::model()->findbypk($data->tid);
 			$tekijan_nimi = '';
 			if(isset($t->id)) $tekijan_nimi = $this->etuSukunimi($t->id);
 
