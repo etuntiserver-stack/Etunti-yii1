@@ -79,6 +79,9 @@ session_start();
 
   } else {
 
+	if( isset($_SERVER['HTTP_REFERER']) and strpos($_SERVER['HTTP_REFERER'], "api/mob") !== false and isset($_POST['email']) )
+	$domain .= ', e-mail: '.$_POST['email'];
+
 	$for_log = array(
 				array(
 					'class'=>'CFileLogRoute',
