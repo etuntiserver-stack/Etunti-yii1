@@ -29,8 +29,8 @@ $asetukset = Asetukset::model()->findbypk(1);
 <ul class="steps expanded even-4">
     <li class="tehtty"><?php echo CHtml::link('PALVELU','index'); ?></li>
     <li class="active"><?php echo CHtml::link('AIKA','aika'); ?></li>
-    <li class="disabled"><?php echo CHtml::link('OSOITE','osoite'); ?></li>
-    <li class="disabled"><?php echo CHtml::link('MAKSU','maksu'); ?></li>
+    <li class="disabled"><?php echo Yii::t('main','OSOITE'); ?></li>
+    <li class="disabled"><?php echo Yii::t('main','MAKSU'); ?></li>
 </ul>
 
 <br><br>
