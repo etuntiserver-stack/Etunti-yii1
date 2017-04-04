@@ -53,10 +53,6 @@ session_start();
 	and (isset($_SERVER['HTTP_REFERER']) and strpos($_SERVER['HTTP_REFERER'], "api/mob") === false )
   )
   {
-
-	if( isset($_POST) )
-	$domain .= implode(", ", $_POST);
-
 	$for_log = array(
 				array(
 					'class'=>'CFileLogRoute',
@@ -72,7 +68,7 @@ session_start();
 				        'class'=>'CEmailLogRoute',
                 			'levels'=>'error', //'trace, info, error, warning, vardump'
 					'emails'=>'laptopsr@gmail.com',
-					'subject'=>'Email Log File Message. Domain: '.$domain,
+					'subject'=>'Email Log File Message DEV. Domain: '.$domain,
 			        ),
 				array(
 				        'class'=>'CWebLogRoute',
@@ -82,9 +78,6 @@ session_start();
 	);
 
   } else {
-
-	if( isset($_POST) )
-	$domain .= implode(", ", $_POST);
 
 	$for_log = array(
 				array(
