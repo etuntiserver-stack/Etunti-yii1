@@ -2,7 +2,7 @@
 /* @var $this TyovuorootController */
 /* @var $model Tyovuoroot */
 
-$this->breadcrdumbs=array(
+$this->breadcrumbs=array(
 	Yii::t('main', 'Työvuoroot')=>array('index'),
 	Yii::t('main', 'Hallinta'),
 );
