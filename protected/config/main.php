@@ -66,7 +66,7 @@ session_start();
 				),
 			        array(
 				        'class'=>'CEmailLogRoute',
-                			'levels'=>'error', //'trace, info, error, warning, vardump'
+                			'levels'=>'error, warning', //'trace, info, error, warning, vardump'
 					'emails'=>'laptopsr@gmail.com',
 					'subject'=>'Email Log File Message. Domain: '.$domain,
 			        ),
