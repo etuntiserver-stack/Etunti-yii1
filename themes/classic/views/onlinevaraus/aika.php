@@ -117,6 +117,7 @@ $asetukset = Asetukset::model()->findbypk(1);
 
 <?php echo $this->renderPartial('_footer'); ?>
 
+<input type="hidden" id="valinnuPvm">
 
 <script type="text/javascript">
 $(document).ready(function(){
@@ -128,7 +129,7 @@ $(document).delegate(".day","click",function(){
 	$('.day').removeClass('orangeColor');
 	$(this).addClass('orangeColor');
 
-	window.localStorage.setItem('valinnuPvm', $(this).attr('pvm'));
+	$('#valinnuPvm').val( $(this).attr('pvm') );
 	aikoja();
 	setInterval(aikoja, "15000");
 	count1 = step;
@@ -235,11 +236,13 @@ $(document).delegate(".cal","click",function(){
 */
 
   clearInterval(aikoja);
-  localStorage.setItem('valinnuPvm', null);
+  $('#valinnuPvm').val('');
   function aikoja()
   {
 
-   var pvm = localStorage.getItem('valinnuPvm');
+   if( $('#valinnuPvm').val() )
+   {
+   var pvm = $('#valinnuPvm').val();
    $.ajax({
 	url: 'ajaat_ajax',
 	data:{ "pvm" : pvm },
@@ -253,6 +256,7 @@ $(document).delegate(".cal","click",function(){
 		console.log(data);
     	}
     });
+    }
   }
 
 
