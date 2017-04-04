@@ -11,7 +11,8 @@ if( isset(Yii::app()->user->domain) )
 ?>
 
 	<?php if(
-		$curpage_controller == 'onlinevaraus' 
+		isset($curpage_controller)
+		and $curpage_controller == 'onlinevaraus' 
 		and isset($asetukset->gtm) 
 		and !empty($asetukset->gtm) 
 		and isset(Yii::app()->user->domain)
@@ -81,7 +82,8 @@ if( isset(Yii::app()->user->domain) )
 
 
 	<?php if(
-		$curpage_controller == 'onlinevaraus' 
+		isset($curpage_controller)
+		and $curpage_controller == 'onlinevaraus' 
 		and isset($asetukset->gtm) 
 		and !empty($asetukset->gtm) 
 		and isset(Yii::app()->user->domain)
