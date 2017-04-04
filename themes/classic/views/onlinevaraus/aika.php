@@ -127,8 +127,8 @@ var count1 = step;
 $(document).delegate(".day","click",function(){
 	$('.day').removeClass('orangeColor');
 	$(this).addClass('orangeColor');
-
-  localStorage.setItem('valinnuPvm', $(this).attr("pvm"));
+alert( $(this).attr('pvm') )
+  localStorage.setItem('valinnuPvm', $(this).attr('pvm'));
   aikoja();
   setInterval(aikoja, "15000");
   count1 = step;
