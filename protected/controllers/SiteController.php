@@ -934,8 +934,7 @@ $(document).ready(function(){
 		$lu = Mobile::model()->findAll($criteria);
 		foreach($lu as $l)
 		{
-			$total_l[] = array('month' => date("m", strtotime($l->aloitan)), 'kaupunki'=>$l->kohteet->kaupunki,  'count'=>$l->count);
-			$toimipaikkaat[$l->kohteet->kaupunki][date("m", strtotime($l->aloitan))] = array('kaupunki'=>$l->kohteet->kaupunki, 'count'=>$l->count);
+			$toimipaikkaat[$l->kohteet->kaupunki][(int)date("m", strtotime($l->aloitan))] = array('kaupunki'=>$l->kohteet->kaupunki, 'count'=>$l->count);
 		}
 
 		/* ////////////////////////// */
@@ -955,12 +954,11 @@ $(document).ready(function(){
 		$tot = Toteutuneet::model()->findAll($criteria);
 		foreach($tot as $l)
 		{
-			$total_l[] = array('month' => date("m", strtotime($l->aloitan)), 'kaupunki'=>$l->kohteet->kaupunki,  'count'=>$l->count);
-			$toimipaikkaat[$l->kohteet->kaupunki][date("m", strtotime($l->aloitan))] = array('kaupunki'=>$l->kohteet->kaupunki, 'count'=>$l->count);
+			$toimipaikkaat[$l->kohteet->kaupunki][(int)date("m", strtotime($l->aloitan))] = array('kaupunki'=>$l->kohteet->kaupunki, 'count'=>$l->count);
 		}
 
 
-		echo json_encode(array('total'=>$total_l, 'toimipaikkaat'=>$toimipaikkaat));
+		echo json_encode(array('toimipaikkaat'=>$toimipaikkaat));
 
 	}
 /*

@@ -278,10 +278,12 @@ var demoHighCharts = function () {
             var demoHighBars = function() {
 
                 var bars1 = $('#high-bars');
-                var m1 = $('#month1').attr('m');
-                var m2 = $('#month2').attr('m');
+                var m1 = parseInt($('#month1').attr('m'));
+                var m2 = parseInt($('#month2').attr('m'));
                 var month1 = $('#month1').attr('month');
                 var month2 = $('#month2').attr('month');
+                var month_1_val = $('#month1').val();
+                var month_2_val = $('#month2').val();
 
                 var dataSeries = [];
 		var returnData = [];
@@ -297,51 +299,28 @@ var demoHighCharts = function () {
 	        });
 
 
-		var data1 = 0;
-		var data2 = 0;
+
 		var painikkeet = '';
 		var toimipaikkaat = [];
 		var i = 0;
 		$.each(returnData['toimipaikkaat'], function( k, d ) {
-			i++;
-			console.log( d );
-			painikkeet += '<a data-chart-id="'+ i +'" class="legend-item btn btn-info btn-sm mr5">'+ k +'</a>';
-/*
-			if(d[m1].count)
+			//console.log( d[m1] );
+			painikkeet += '<a data-chart-id="'+ i +'" class="legend-item btn btn-info btn-sm mr5" style="background:'+ highColors[i] +'">'+ k +'</a>';
+
+			var data1 = 0;
+			var data2 = 0;
+			if(d[m1])
 			data2 = parseInt(d[m1].count);
 
-			if(d[m2].count)
+			if(d[m2])
 			data1 = parseInt(d[m2].count);
-*/
-			dataSeries.push({ id:i, name: k, data: [56, 12] });
+
+			dataSeries.push({ id:i, name: k, data: [data1, data2], color: highColors[i] });
+			i++;
 		});
 		if( painikkeet !== '' )
 		$('#toimipakat_bars').replaceWith(painikkeet);
 
-
-		/* dataSeries */
-		$.each([m1, m2], function( d, i ) {
-			//console.log( i );
-			//dataSeries.push({ id:d, name: i.kaupunki, data: i.count })
-		});
-		/* dataSeries */
-
-			console.log( dataSeries );
-/*
-dataSeries = [{
-                            id: 0,
-                            name: 'Helsinki',
-                            data: [34, 343]
-                        }, {
-                            id: 1,
-                            name: 'Espoo',
-                            data: [76, 234]
-                        }, {
-                            id: 2,
-                            name: 'Vantaa',
-                            data: [24, 87]
-                        }];
-*/
 
                  if (bars1.length) {
 
@@ -370,7 +349,7 @@ dataSeries = [{
                             lineColor: '#EEE',
                             tickColor: '#EEE',
                             offset: 1,
-                            categories: [month1, month2],
+                            categories: [month_1_val, month_2_val],
                             title: {
                                 text: null
                             },
