@@ -277,17 +277,71 @@ var demoHighCharts = function () {
 
             var demoHighBars = function() {
 
-                 var bars1 = $('#high-bars');
-                 var month1 = $('#month1').val();
-                 var month2 = $('#month2').val();
+                var bars1 = $('#high-bars');
+                var m1 = $('#month1').attr('m');
+                var m2 = $('#month2').attr('m');
+                var month1 = $('#month1').attr('month');
+                var month2 = $('#month2').attr('month');
 
-                 var hesari1 = parseInt($('#hesari1').val());
-                 var hesari2 = parseInt($('#hesari2').val());
-                 var espoo1 = parseInt($('#espoo1').val());
-                 var espoo2 = parseInt($('#espoo2').val());
-                 var vantaa1 = parseInt($('#vantaa1').val());
-                 var vantaa2 = parseInt($('#vantaa2').val());
+                var dataSeries = [];
+		var returnData = [];
+        	$.ajax({
+	           url: location.protocol + "//" + location.host + '/index.php/site/getcityes',
+	           type: "POST",
+		   async: false,
+		   data: { month1 : month1, month2 : month2 },
+	           success: function(data){
+			returnData = JSON.parse(data);
+			//console.log( returnData['total'] );
+	           }
+	        });
 
+
+		var data1 = 0;
+		var data2 = 0;
+		var painikkeet = '';
+		var toimipaikkaat = [];
+		var i = 0;
+		$.each(returnData['toimipaikkaat'], function( k, d ) {
+			i++;
+			console.log( d );
+			painikkeet += '<a data-chart-id="'+ i +'" class="legend-item btn btn-info btn-sm mr5">'+ k +'</a>';
+/*
+			if(d[m1].count)
+			data2 = parseInt(d[m1].count);
+
+			if(d[m2].count)
+			data1 = parseInt(d[m2].count);
+*/
+			dataSeries.push({ id:i, name: k, data: [56, 12] });
+		});
+		if( painikkeet !== '' )
+		$('#toimipakat_bars').replaceWith(painikkeet);
+
+
+		/* dataSeries */
+		$.each([m1, m2], function( d, i ) {
+			//console.log( i );
+			//dataSeries.push({ id:d, name: i.kaupunki, data: i.count })
+		});
+		/* dataSeries */
+
+			console.log( dataSeries );
+/*
+dataSeries = [{
+                            id: 0,
+                            name: 'Helsinki',
+                            data: [34, 343]
+                        }, {
+                            id: 1,
+                            name: 'Espoo',
+                            data: [76, 234]
+                        }, {
+                            id: 2,
+                            name: 'Vantaa',
+                            data: [24, 87]
+                        }];
+*/
 
                  if (bars1.length) {
 
@@ -341,21 +395,11 @@ var demoHighCharts = function () {
                         plotOptions: {
                             bar: {}
                         },
-                        series: [{
-                            id: 0,
-                            name: 'Helsinki',
-                            data: [hesari1, hesari2]
-                        }, {
-                            id: 1,
-                            name: 'Espoo',
-                            data: [espoo1, espoo2]
-                        }, {
-                            id: 2,
-                            name: 'Vantaa',
-                            data: [vantaa1, vantaa2]
-                        }]
+                        series: dataSeries
                     });
                 }
+
+
             }
 
             var demoHighLines = function() {
