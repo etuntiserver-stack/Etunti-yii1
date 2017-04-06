@@ -3053,6 +3053,9 @@ class TyovuorootController extends Controller
 
 		  if($asiakkaat->save())
 		  {
+			Asiakkaat::model()->updateByPk($asiakkaat->id, array( 'asiakasnumero' => $asiakkaat->id ));
+
+
 			$kohteet = new Kohteet;
 			$kohteet->asiakas_id = $asiakkaat->id;
 
