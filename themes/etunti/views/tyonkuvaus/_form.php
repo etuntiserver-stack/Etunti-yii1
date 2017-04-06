@@ -164,10 +164,10 @@ $(document).ready(function(){
 
 		<table class="table table-bordered authors-list">
 		    <tr>
-		        <td></td><td><?php echo Yii::t('main','Tilat'); ?></td>
-			<td><?php echo Yii::t('main','Työtehtävät'); ?></td>
-			<td><?php echo Yii::t('main','Laatutaso'); ?></td>
-			<td><?php echo Yii::t('main','Kommenti'); ?></td>
+		        <th></td><td><?php echo Yii::t('main','Tilat'); ?></th>
+			<th><?php echo Yii::t('main','Työtehtävät ja päivät'); ?></th>
+			<th><?php echo Yii::t('main','Laatutaso'); ?></th>
+			<th><?php echo Yii::t('main','Kommenti'); ?></th>
 		    </tr>
 		<?php
 		if(isset($model->id))
@@ -218,10 +218,7 @@ $(document).ready(function(){
 		        <td class="tyotehtavatVkoPvmTD">
 
 		        <a href="#" title="" class="add-author-tyotehtavat" num="0"><i class="fa fa-plus" aria-hidden="true"></i></a>
-			<table class="table authors-list-tyotehtavat">
-			    <tr>
-			        <td></td><td>'.Yii::t('main','Työtehtävä').'</td><td>'.Yii::t('main','Vko. päivämäärät').'</td>
-			    </tr>';
+			<table class="table authors-list-tyotehtavat">';
 
 			$tyontehtavat = json_decode($r->tyontehtavat, true);
 			foreach($tyontehtavat as $k2=>$r2)
@@ -316,9 +313,6 @@ $(document).ready(function(){
 
 		        <a href="#" title="" class="add-author-tyotehtavat" num="0"><i class="fa fa-plus" aria-hidden="true"></i></a>
 			<table class="table authors-list-tyotehtavat">
-			    <tr>
-			        <td></td><td><?php echo Yii::t('main','Työtehtävä'); ?></td><td><?php echo Yii::t('main','Vko. päivämäärät'); ?></td>
-			    </tr>
 			    <tr class="rivi-tyotehtavat" num="0">
 			        <td>
 			            <i class="link fa fa-trash poistaAuthorRiviT2" aria-hidden="true"></i>
@@ -397,9 +391,6 @@ jQuery(function(){
 
 		        '<a href="#" title="" class="add-author-tyotehtavat" num="'+ counter +'"><i class="fa fa-plus" aria-hidden="true"></i></a>' +
 			'<table class="table authors-list-tyotehtavat">' +
-			    '<tr>' +
-			        '<td></td><td><?php echo Yii::t('main','Työtehtävä'); ?></td><td><?php echo Yii::t('main','Vko. päivämäärät'); ?></td>' +
-			    '</tr>' +
 			    '<tr class="rivi-tyotehtavat" num="'+ counter +'">' +
 			        '<td>' +
 			            '<i class="link fa fa-trash poistaAuthorRiviT2" aria-hidden="true"></i>' +
