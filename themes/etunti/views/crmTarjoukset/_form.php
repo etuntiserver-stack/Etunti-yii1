@@ -19,7 +19,54 @@
   <div class="col-sm-4">
 
 	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'asiakas_id'); ?>
+		<?php
+		$list = array();
+		$criteria=new CDbCriteria;
+		//$criteria->condition="";
+      		$l = Asiakkaat::model()->findAll($criteria);
+		foreach($l as $v)
+		{
+			if(!empty($v->yrityksen_nimi) and empty($v->yhteyshenkilo))
+			$list[$v->id] = $v->yrityksen_nimi;
+			elseif(empty($v->yrityksen_nimi) and !empty($v->yhteyshenkilo))
+			$list[$v->id] = $v->yhteyshenkilo;
+		}
+
+        		echo $form->dropDownList($model, 'asiakas_id', $list,
+			array('empty'=>'Valitse','class'=>'form-control'));
+		
+        	?>
+		<?php echo $form->error($model,'asiakas_id'); ?>
+	</div>
+
+	<div class="section fill mb5 kohdeHide">
+		<?php echo $form->labelEx($model,'asiakkaan_sahkoposti'); ?>
+		<?php echo $form->textField($model,'asiakkaan_sahkoposti',array('maxlength'=>255,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'asiakkaan_sahkoposti'); ?>
+	</div>
+
+	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'kohde_id'); ?>
+		<?php
+		$list = array();
+
+		if( $model->asiakas_id != 0 )
+		{
+		$criteria=new CDbCriteria;
+		$criteria->condition=" asiakas_id='".$model->asiakas_id."' ";
+      		$l = Kohteet::model()->findAll($criteria);
+		    foreach($l as $v)
+			$list[$v->id] = $v->osoite;
+		}
+        	echo $form->dropDownList($model, 'kohde_id', $list,
+			array('empty'=>'Valitse','class'=>'form-control'));		
+        	?>
+		<?php echo $form->error($model,'kohde_id'); ?>
+	</div>
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'tyonkuvaus_id'); ?>
 		<?php
 		$list = array();
 		$criteria=new CDbCriteria;
@@ -37,12 +84,13 @@
 
 		if(count($list) > 0)
 		{
-        		echo $form->dropDownList($model, 'kohde_id', $list,
+        		echo $form->dropDownList($model, 'tyonkuvaus_id', $list,
 			array('empty'=>'Valitse','class'=>'form-control required'));
 		}		
         	?>
-		<?php echo $form->error($model,'kohde_id'); ?>
+		<?php echo $form->error($model,'tyonkuvaus_id'); ?>
 	</div>
+
 
 
 	<div class="section fill mb5">
@@ -69,12 +117,6 @@
 		<?php echo $form->labelEx($model,'kohteen_postitoimipaikka'); ?>
 		<?php echo $form->textField($model,'kohteen_postitoimipaikka',array('maxlength'=>255,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'kohteen_postitoimipaikka'); ?>
-	</div>
-
-	<div class="section fill mb5 kohdeHide">
-		<?php echo $form->labelEx($model,'asiakkaan_sahkoposti'); ?>
-		<?php echo $form->textField($model,'asiakkaan_sahkoposti',array('maxlength'=>255,'class'=>'form-control')); ?>
-		<?php echo $form->error($model,'asiakkaan_sahkoposti'); ?>
 	</div>
 
  </div>
@@ -136,6 +178,26 @@ $(document).ready(function(){
  });
 
 
+ $('#CrmTarjoukset_tyonkuvaus_id').change(function(){
+
+	var thisVal = $(this).val();
+        $.ajax({
+           url: 'get_tyonkuvaus?id=' + thisVal,
+           //type: "POST",
+           //data: { },
+           success: function(data){
+		var data = JSON.parse(data);
+		//console.log(data);
+		if(data)
+		{
+			$('#tyonkuvaus').html('<br>' + data);
+		}
+           }
+        });
+
+ });
+
+
  $('#CrmTarjoukset_kohde_id').change(function(){
 
 	var thisVal = $(this).val();
@@ -145,18 +207,38 @@ $(document).ready(function(){
            //data: { },
            success: function(data){
 		var data = JSON.parse(data);
-		console.log(data);
+		//console.log(data);
 		if(data['id'])
 		{
-			$('.kohdeHide').show();
 			$('#CrmTarjoukset_kohteen_osoite').val(data['osoite']).attr('readonly', 'yes');
 			$('#CrmTarjoukset_kohteen_postinumero').val(data['pnumero']).attr('readonly', 'yes');
 			$('#CrmTarjoukset_kohteen_postitoimipaikka').val(data['kaupunki']).attr('readonly', 'yes');
-			$('#CrmTarjoukset_asiakkaan_sahkoposti').val(data['email']).attr('readonly', 'yes');
-			//$('#CrmTarjoukset_tyonkuvaus').val(data['tyonkuvaus']);
-			$('#CrmTarjoukset_tyonkuvaus_id').val(data['tyonkuvaus_id']);
-			$('#tyonkuvaus').html('<br>' + data['tyonkuvaus']);
 		}
+           }
+        });
+
+ });
+
+
+ $('#CrmTarjoukset_asiakas_id').change(function(){
+
+	var thisVal = $(this).val();
+        $.ajax({
+           url: 'get_kohde?id=' + thisVal,
+           //type: "POST",
+           //data: { },
+           success: function(data){
+		var data = JSON.parse(data);
+		console.log(data);
+		if(data['options'])
+		{
+			$('#CrmTarjoukset_kohde_id').html(data['options']);
+		}
+		if(data['asiakas'])
+		{
+			$('#CrmTarjoukset_asiakkaan_sahkoposti').val(data['asiakas'].sahkoposti);
+		}
+
            }
         });
 

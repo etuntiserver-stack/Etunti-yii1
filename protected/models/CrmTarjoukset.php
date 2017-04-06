@@ -75,7 +75,8 @@ public $asiakastila;
 			'kohteen_postinumero' => Yii::t('main', 'Kohteen postinumero'),
 			'kohteen_postitoimipaikka' => Yii::t('main', 'Kohteen postitoimipaikka'),
 			'asiakastila' => Yii::t('main', 'Asiakastila'),
-			'kohde_id' => Yii::t('main', 'Työnkuvaus'),
+			'kohde_id' => Yii::t('main', 'Kohde'),
+			'tyonkuvaus_id' => Yii::t('main', 'Työnkuvaus'),
 		);
 	}
 

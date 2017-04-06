@@ -32,7 +32,7 @@ class CrmTarjouksetController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view', 'laheta', 'get_tyonkuvaus_by_asiakas', 'get_tyonkuvaus_by_id', 'get_tarjouslaskenta_by_id', 'get_kohteentiedot', 'get_asiakastilat', 'view_tyonkuvaus'),
+				'actions'=>array('admin','delete','create','update','index','view', 'laheta', 'get_tyonkuvaus_by_asiakas', 'get_tyonkuvaus_by_id', 'get_tarjouslaskenta_by_id', 'get_tyonkuvaus', 'get_kohteentiedot', 'get_asiakastilat', 'view_tyonkuvaus', 'get_kohde'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -241,19 +241,37 @@ class CrmTarjouksetController extends Controller
 	}
 
 
-	public function actionGet_kohteentiedot($id)
+	public function actionGet_kohde($id)
 	{
-		$model = Tyonkuvaus::model()->findByPk($id);
-		$k = Kohteet::model()->findByPk($model->kohde_id);
-		$arr = array();
-		if(isset($k->id))
-		{
-			$arr = $k->attributes;
-			$arr['tyonkuvaus_id'] = $id;
-			$arr['tyonkuvaus'] = $this->get_tyonkuvaus($id);
+		$asiakas = array();
+		$a = Asiakkaat::model()->findByPk($id);
+		if(isset($a->id))
+		$asiakas = $a->attributes;
+
+		$bd = '<option value="0">Valitse</option>';
+		$data = Kohteet::model()->findAll(" asiakas_id='".$id."' ");
+		foreach($data as $item){
+			$bd .= '<option value="'.$item->id.'">'.$item->osoite.'</option>';
 		}
 
-		echo json_encode($arr);
+		$result = array('options'=>$bd, 'asiakas' => $asiakas );
+		echo json_encode($result);
+	}
+
+	public function actionGet_tyonkuvaus($id)
+	{
+		$model = Tyonkuvaus::model()->findByPk($id);
+		if(isset($model->id))
+			echo json_encode($this->get_tyonkuvaus($id));
+
+	}
+
+	public function actionGet_kohteentiedot($id)
+	{
+		$k = Kohteet::model()->findByPk($id);
+		if(isset($k->id))
+			echo json_encode($k->attributes);
+	
 	}
 
 	public function actionView_tyonkuvaus($id)
