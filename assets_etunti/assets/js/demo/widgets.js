@@ -277,16 +277,49 @@ var demoHighCharts = function () {
 
             var demoHighBars = function() {
 
-                 var bars1 = $('#high-bars');
-                 var month1 = $('#month1').val();
-                 var month2 = $('#month2').val();
+                var bars1 = $('#high-bars');
+                var m1 = parseInt($('#month1').attr('m'));
+                var m2 = parseInt($('#month2').attr('m'));
+                var month1 = $('#month1').attr('month');
+                var month2 = $('#month2').attr('month');
+                var month_1_val = $('#month1').val();
+                var month_2_val = $('#month2').val();
 
-                 var hesari1 = parseInt($('#hesari1').val());
-                 var hesari2 = parseInt($('#hesari2').val());
-                 var espoo1 = parseInt($('#espoo1').val());
-                 var espoo2 = parseInt($('#espoo2').val());
-                 var vantaa1 = parseInt($('#vantaa1').val());
-                 var vantaa2 = parseInt($('#vantaa2').val());
+                var dataSeries = [];
+		var returnData = [];
+        	$.ajax({
+	           url: location.protocol + "//" + location.host + '/index.php/site/getcityes',
+	           type: "POST",
+		   async: false,
+		   data: { month1 : month1, month2 : month2 },
+	           success: function(data){
+			returnData = JSON.parse(data);
+			//console.log( returnData['total'] );
+	           }
+	        });
+
+
+
+		var painikkeet = '';
+		var toimipaikkaat = [];
+		var i = 0;
+		$.each(returnData['toimipaikkaat'], function( k, d ) {
+			//console.log( d[m1] );
+			painikkeet += '<a data-chart-id="'+ i +'" class="legend-item btn btn-info btn-sm mr5" style="background:'+ highColors[i] +'">'+ k +'</a>';
+
+			var data1 = 0;
+			var data2 = 0;
+			if(d[m1])
+			data2 = parseInt(d[m1].count);
+
+			if(d[m2])
+			data1 = parseInt(d[m2].count);
+
+			dataSeries.push({ id:i, name: k, data: [data1, data2], color: highColors[i] });
+			i++;
+		});
+		if( painikkeet !== '' )
+		$('#toimipakat_bars').replaceWith(painikkeet);
 
 
                  if (bars1.length) {
@@ -316,7 +349,7 @@ var demoHighCharts = function () {
                             lineColor: '#EEE',
                             tickColor: '#EEE',
                             offset: 1,
-                            categories: [month1, month2],
+                            categories: [month_1_val, month_2_val],
                             title: {
                                 text: null
                             },
@@ -341,21 +374,11 @@ var demoHighCharts = function () {
                         plotOptions: {
                             bar: {}
                         },
-                        series: [{
-                            id: 0,
-                            name: 'Helsinki',
-                            data: [hesari1, hesari2]
-                        }, {
-                            id: 1,
-                            name: 'Espoo',
-                            data: [espoo1, espoo2]
-                        }, {
-                            id: 2,
-                            name: 'Vantaa',
-                            data: [vantaa1, vantaa2]
-                        }]
+                        series: dataSeries
                     });
                 }
+
+
             }
 
             var demoHighLines = function() {

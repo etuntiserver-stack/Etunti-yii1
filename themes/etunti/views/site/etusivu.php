@@ -306,35 +306,47 @@ echo '
 
 
 
+
               <!-- Bar Graph -->
               <div class="panel" id="p12">
                 <div class="panel-heading">
                   <span class="panel-title"><?php echo Yii::t('main', 'Toimipaikat'); ?></span>
-		  <?php 
-		    $month1 = $months[date("m")];
-		    $month2 = $months[date("m",strtotime("-1 month"))];
+		  <?php /*
 		    $hesari1 = $this->toteutuThisMonthByCity(date("Ym"), "helsinki"); 
 		    $hesari2 = $this->toteutuThisMonthByCity(date("Ym",strtotime("-1 month")), "helsinki"); 
 		    $espoo1 = $this->toteutuThisMonthByCity(date("Ym"), "espoo"); 
 		    $espoo2 = $this->toteutuThisMonthByCity(date("Ym",strtotime("-1 month")), "espoo");
 		    $vantaa1 = $this->toteutuThisMonthByCity(date("Ym"), "vantaa"); 
 		    $vantaa2 = $this->toteutuThisMonthByCity(date("Ym",strtotime("-1 month")), "vantaa");
+		  */ ?>
+
+		  <?php 
+		    $month1 = $months[date("m")];
+		    $month2 = $months[date("m",strtotime("-1 month"))];
+
+		    $m1 = date("Y-m-d");
+		    $m2 = date("Y-m-d", strtotime($m1.'first day of this month -1 month'));
 		  ?>
-                  <input type="hidden" id="month1" value="<?php echo $month1; ?>">
-                  <input type="hidden" id="month2" value="<?php echo $month2; ?>">
+                  <input type="hidden" id="month1" value="<?php echo $month1; ?>" month="<?php echo $m1; ?>" m="<?php echo date('m'); ?>">
+                  <input type="hidden" id="month2" value="<?php echo $month2; ?>" month="<?php echo $m2; ?>" m="<?php echo date('m',strtotime('-1 month')); ?>">
+<?php /*
                   <input type="hidden" id="hesari1" value="<?php echo $hesari1; ?>">
                   <input type="hidden" id="hesari2" value="<?php echo $hesari2; ?>">
                   <input type="hidden" id="espoo1" value="<?php echo $espoo1; ?>">
                   <input type="hidden" id="espoo2" value="<?php echo $espoo2; ?>">
                   <input type="hidden" id="vantaa1" value="<?php echo $vantaa1; ?>">
                   <input type="hidden" id="vantaa2" value="<?php echo $vantaa2; ?>">
+*/ ?>
                 </div>
                 <div class="panel-menu">
 
                   <div class="chart-legend" data-chart-id="#high-bars">
+		    <div id="toimipakat_bars"></div>
+		<?php /*
                     <a data-chart-id="0" class="legend-item btn btn-warning btn-sm mr5">Data 1</a>
                     <a data-chart-id="1" class="legend-item btn btn-primary btn-sm mr5">Data 2</a>
                     <a data-chart-id="2" class="legend-item btn btn-info btn-sm">Data 3</a>
+		*/ ?>
                   </div>
                 </div>
                 <div class="panel-body pn">
