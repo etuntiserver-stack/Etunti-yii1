@@ -46,6 +46,9 @@
 		<?php echo $osoite; ?>
 	</td>
 	<td>
+		<?php echo date("d.m.Y", strtotime($data->time)); ?>
+	</td>
+	<td>
 		<?php echo ($data->aktiivinen == 1) ? 'Aktiivinen' : 'Passivinen'; ?>
 	</td>
 </tr>

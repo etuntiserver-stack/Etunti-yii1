@@ -22,29 +22,6 @@
 
 	<?php echo $form->errorSummary($model); ?>
 
-<?php /*
-	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'yhteystiedot_id'); ?>
-		<?php
-		$list = array();
-		$criteria=new CDbCriteria;
-		//$criteria->condition="";
-      		$l = Yhteystiedot::model()->findAll($criteria);
-		foreach($l as $v)
-		{
-			if(!empty($v->yrityksen_nimi) and empty($v->yhteyshenkilo))
-			$list[$v->id] = $v->yrityksen_nimi;
-			elseif(empty($v->yrityksen_nimi) and !empty($v->yhteyshenkilo))
-			$list[$v->id] = $v->yhteyshenkilo;
-		}
-
-        		echo $form->dropDownList($model, 'yhteystiedot_id', $list,
-			array('empty'=>'Valitse','class'=>'form-control'));
-		
-        	?>
-		<?php echo $form->error($model,'yhteystiedot_id'); ?>
-	</div>
-*/ ?>
 
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'asiakas_id'); ?>
@@ -230,10 +207,13 @@ $(document).ready(function(){
 					).'
 					<span class="input-group-btn">
 					  <span class="btn btn-primary myBgColors muokaValiko" for="tyonkuvaus_tilat"><i class="fa fa-pencil-square-o"></i></span>
+					  <span class="btn btn-primary myBgColors" data-toggle="collapse" data-target="#tilat_caret_'.$key.'"><i class="caret"></i></span>
 					</span>
 				</div>
 			    </div>
+			    <div class="collapse" id="tilat_caret_'.$key.'">
 		            <textarea class="form-control tilat" rows="4" name="TyonkuvausRivit[tilat]['.$key.']" />'.json_decode($r->tilat).'</textarea>
+			    </div>
 		        </td>
 		        <td class="tyotehtavatVkoPvmTD">
 
@@ -303,11 +283,11 @@ $(document).ready(function(){
 						'class'=> 'laatutasot_selecter form-control',
 						'options' => $selectedValuesLaatutasot,
 				)).'
-		            <textarea class="form-control" rows="4" name="TyonkuvausRivit[laatutaso]['.$key.']" />'.$laatutaso.'</textarea>
+		            <input type="hidden" class="form-control" name="TyonkuvausRivit[laatutaso]['.$key.']" value="'.$laatutaso.'" />
 			    </div>
 		        </td>
 		        <td>
-		            <textarea class="form-control" name="TyonkuvausRivit[kommenti]['.$key.']" />'.$r->kommenti.'</textarea>
+		            <textarea class="form-control" rows="1" name="TyonkuvausRivit[kommenti]['.$key.']" />'.$r->kommenti.'</textarea>
 		        </td>
 		    </tr>
 		';
@@ -325,9 +305,12 @@ $(document).ready(function(){
 				); ?>
 				<span class="input-group-btn">
 				  <span class="btn btn-primary myBgColors muokaValiko" for="tyonkuvaus_tilat"><i class="fa fa-pencil-square-o"></i></span>
+				  <span class="btn btn-primary myBgColors" data-toggle="collapse" data-target="#tilat_caret_0"><i class="caret"></i></span>
 				</span>
 			    </div>
+			    <div class="collapse" id="tilat_caret_0">
 		            <textarea class="form-control tilat" rows="4" name="TyonkuvausRivit[tilat][0]" /></textarea>
+			    </div>
 		        </td>
 		        <td class="tyotehtavatVkoPvmTD">
 
@@ -361,11 +344,11 @@ $(document).ready(function(){
 				<?php echo CHtml::dropDownList('', '', $laatutasot, 
 					array('empty' => Yii::t('main', 'Valitse laatutaso'), 'class'=> 'laatutasot_selecter form-control')
 				); ?>
-		            	<textarea class="form-control" rows="4" name="TyonkuvausRivit[laatutaso][0]" /></textarea>
+		            	<input type="hidden" class="form-control" name="TyonkuvausRivit[laatutaso][0]" />
 			    </div>
 		        </td>
 		        <td>
-		            <textarea class="form-control" name="TyonkuvausRivit[kommenti][0]" /></textarea>
+		            <textarea class="form-control" rows="1" name="TyonkuvausRivit[kommenti][0]" /></textarea>
 		        </td>
 		    </tr>
 		<?php endif; ?>
@@ -377,6 +360,7 @@ $(document).ready(function(){
 		 <?php echo CHtml::dropDownList("", "", $tal, array("multiple" => "multiple", "class"=> "form-control mult tyonkuvaus_tilat_selecter")); ?>
 		 <span class="input-group-btn">
 		  <span class="btn btn-primary myBgColors muokaValiko" for="tyonkuvaus_tilat"><i class="fa fa-pencil-square-o"></i></span>
+		  <span class="btn btn-primary myBgColors for_tilat_collapse" data-toggle="collapse"><i class="caret"></i></span>
 		 </span>
 		</div>
 
@@ -395,9 +379,9 @@ $(document).ready(function(){
 <script>
 jQuery(function(){
     var counter = parseInt($('.authors-list tr:last').attr('num'))+1;
-    var kuvauksetTuoteesta = $('#kuvauksetTuoteesta').html();
     var vkoPvm = $('#vkoPvm').html();
     var laatutasotAlasveto = $('#laatutasotAlasveto').html();
+    var kuvauksetTuoteesta = $('#kuvauksetTuoteesta').html();
 
     $('a.add-author').click(function(event){
         event.preventDefault();
@@ -405,7 +389,9 @@ jQuery(function(){
         var newRow = jQuery('<tr class="rivi" num="'+ counter +'">' +
 	    '<td><i class="link fa fa-trash poistaAuthorRivi" aria-hidden="true"></i></td>' +
 	    '<td><div class="input-group">'+ kuvauksetTuoteesta +'</div>' +
+		'<div class="collapse" id="tilat_caret_'+ counter +'">' +
 		'<textarea class="form-control tilat" rows="4" name="TyonkuvausRivit[tilat][' + counter + ']"/></textarea>' +
+		'</div>' +
 	    '</td>' +
 	    '<td class="tyotehtavatVkoPvmTD">' +
 
@@ -432,13 +418,17 @@ jQuery(function(){
 	    '<td>' +
 		    	'<div class="laatutasot_tilat">' +
 				laatutasotAlasveto +
-				'<textarea class="form-control" rows="4" name="TyonkuvausRivit[laatutaso][' + counter + ']"/></textarea>' +
+				'<input type="hidden" name="TyonkuvausRivit[laatutaso][' + counter + ']"/>' +
 			'</div>' +
 	    '</td>' +
-	    '<td><textarea class="form-control" name="TyonkuvausRivit[kommenti][' + counter + ']"/></textarea></td>' +
+	    '<td><textarea class="form-control" rows="1" name="TyonkuvausRivit[kommenti][' + counter + ']"/></textarea></td>' +
 	    '</tr>');
-            counter++;
+
+        counter++;
         jQuery('table.authors-list').append(newRow);
+
+	var num = jQuery(newRow).find('.rivi-tyotehtavat').attr('num');
+	jQuery(newRow).find('.for_tilat_collapse').attr('data-target', '#tilat_caret_' + num);
 
 
  	$(".mult").multiselect({
@@ -458,13 +448,6 @@ jQuery(function(){
 	  title: 'Vko. pvm',
 	  size: 4
 	});
-	/*
-	$('.selectpickerTasot').selectpicker({
-	  //style: 'btn-info',
-	  title: 'Laatutasot',
-	  size: 4
-	});
-	*/
 
     });
     $(document).delegate(".poistaAuthorRivi","click",function(){
@@ -565,13 +548,7 @@ $(".muokaValiko").click(function() {
 	  title: 'Vko. pvm',
 	  size: 4
  });
-/*
- $('.selectpickerTasot').selectpicker({
-	  //style: 'btn-info',
-	  title: 'Laatutasot',
-	  size: 4
- });
-*/
+
  $(document).delegate(".tyonkuvaus_tilat_selecter","change",function(){
 	var thisVal = $(this).val().join('\n');
     	$(this).closest('tr').find('textarea.tilat').val(thisVal);
@@ -584,7 +561,7 @@ $(".muokaValiko").click(function() {
 
  $(document).delegate(".laatutasot_selecter","change",function(){
 	var thisVal = $(this).val();
-    	$(this).closest('div.laatutasot_tilat').find('textarea').val(thisVal);
+    	$(this).closest('div.laatutasot_tilat').find('input').val(thisVal);
  });
 
 
