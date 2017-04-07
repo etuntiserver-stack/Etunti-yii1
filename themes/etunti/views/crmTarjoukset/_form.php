@@ -67,6 +67,34 @@
 		<?php echo $form->error($model,'kohde_id'); ?>
 	</div>
 
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'alv'); ?>
+		<?php
+        	$l = array(0=>0,10=>10,14=>14,24=>24);
+
+        	echo $form->dropDownList($model, 'alv', $l,
+		array('empty'=>'Valitse','class'=>'form-control'
+		));
+        	?>
+		<?php echo $form->error($model,'alv'); ?>
+	</div>
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'hinta_tyyppi'); ?>
+		<?php
+		$list = array(1=>'tunti',2=>'kk',3=>'kpl');
+        	echo $form->dropDownList($model, 'hinta_tyyppi', $list,
+		array('class'=>'form-control'));	
+        	?>
+		<?php echo $form->error($model,'hinta_tyyppi'); ?>
+	</div>
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'hinta'); ?>
+		<?php echo $form->numberField($model,'hinta',array('size'=>10,'maxlength'=>100,'class'=>'form-control', 'step'=>'any')); ?>
+		<?php echo $form->error($model,'hinta'); ?>
+	</div>
+
 	<div class="section fill mb5 tyonkuvaus collapse">
 		<?php echo $form->labelEx($model,'tyonkuvaus_id'); ?>
 		<?php
