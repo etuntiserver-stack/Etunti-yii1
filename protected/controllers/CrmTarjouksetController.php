@@ -413,7 +413,7 @@ class CrmTarjouksetController extends Controller
 			//$objWriter = PHPWord_IOFactory::createWriter($PHPWord, 'Word2007');
 			$document = $PHPWord->loadTemplate('tiedostot/templates/'.Yii::app()->user->domain.'/crm_tarjous.docx');
 			$file = '';
-
+/*
 			// <-- Tyonkuvaus
 			if( $model->tyonkuvaus_id != 0 )
 			{
@@ -450,6 +450,7 @@ class CrmTarjouksetController extends Controller
 			$document->setValue('tyonkuvaus', $sTableText);
 			}
 			//     Tyonkuvaus -->
+*/
 
 /*
 			// <-- Tarjouslaskenta
@@ -501,6 +502,61 @@ class CrmTarjouksetController extends Controller
 */
 
 
+			$firma = FirmanTiedot::model()->findbypk(1);
+
+			// <-- Jos se on Asiakas
+			$as = Asiakkaat::model()->findbypk($model->asiakas_id);
+			if(isset($as->id))
+			{
+				if(isset($as->id) and !empty($as->yrityksen_nimi))
+				   $asiakas = $as->yrityksen_nimi;
+				elseif(isset($as->id) and empty($as->yrityksen_nimi) and !empty($as->yhteyshenkilo)) 
+				   $asiakas = $as->yhteyshenkilo;
+				else
+				   $asiakas = '';
+
+			$document->setValue('asiakas', iconv('UTF-8','ISO-8859-1',$asiakas));
+			$document->setValue('asiakkaan_osoite', iconv('UTF-8','ISO-8859-1',$as->osoite));
+			$document->setValue('asiakkaan_postinumero', iconv('UTF-8','ISO-8859-1',$as->postinumero));
+			$document->setValue('asiakkaan_toimipaikka', iconv('UTF-8','ISO-8859-1',$as->kaupunki));
+			}
+			//     Jos se on Asiakas -->
+
+
+			// <-- Jos se on yhteystiedot
+			$y = Yhteystiedot::model()->findbypk($model->yhteystiedot_id);
+			if(isset($y->id))
+			{
+				if(isset($y->id) and !empty($y->yrityksen_nimi))
+				   $asiakas = $y->yrityksen_nimi;
+				elseif(isset($y->id) and empty($y->yrityksen_nimi) and !empty($y->yhteyshenkilo)) 
+				   $asiakas = $y->yhteyshenkilo;
+				else
+				   $asiakas = '';
+
+			$document->setValue('asiakas', iconv('UTF-8','ISO-8859-1',$asiakas));
+			$document->setValue('asiakkaan_osoite', iconv('UTF-8','ISO-8859-1',$y->osoite));
+			$document->setValue('asiakkaan_postinumero', iconv('UTF-8','ISO-8859-1',$y->postinumero));
+			$document->setValue('asiakkaan_toimipaikka', iconv('UTF-8','ISO-8859-1',$y->postitoimipaikka));
+			}
+			//     Jos se on yhteystiedot -->
+
+
+
+			$document->setValue('paivays', iconv('UTF-8','ISO-8859-1',date("d.m.Y")));
+
+			// Yritys
+			$document->setValue('yritys', iconv('UTF-8','ISO-8859-1',$firma->tyonantaja));
+			$document->setValue('yrityksen_osoite', iconv('UTF-8','ISO-8859-1',$firma->osoite));
+			$document->setValue('yrityksen_postinumero', iconv('UTF-8','ISO-8859-1',$firma->postinumero));
+			$document->setValue('yrityksen_toimipaikka', iconv('UTF-8','ISO-8859-1',$firma->postitoimipaikka));
+			$document->setValue('yrityksen_y_tunnus', iconv('UTF-8','ISO-8859-1',$firma->y_tunnus));
+			$document->setValue('yrityksen_puhelin', iconv('UTF-8','ISO-8859-1',$firma->puhelin));
+
+
+
+			$document->setValue('teksti', htmlspecialchars(iconv('UTF-8','ISO-8859-1',$model->tarjous)));
+			//$document->setValue('tyonkuvaus', iconv('UTF-8','ISO-8859-1', $model->tyonkuvaus));
 
 
 			$path = 'tiedostot/crm/tarjoukset/'.Yii::app()->user->domain.'/'.$liite;
