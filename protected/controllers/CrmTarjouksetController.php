@@ -410,10 +410,9 @@ class CrmTarjouksetController extends Controller
 			}
 	
 			$PHPWord = new PHPWord();
-			//$objWriter = PHPWord_IOFactory::createWriter($PHPWord, 'Word2007');
 			$document = $PHPWord->loadTemplate('tiedostot/templates/'.Yii::app()->user->domain.'/crm_tarjous.docx');
 			$file = '';
-/*
+
 			// <-- Tyonkuvaus
 			if( $model->tyonkuvaus_id != 0 )
 			{
@@ -450,7 +449,7 @@ class CrmTarjouksetController extends Controller
 			$document->setValue('tyonkuvaus', $sTableText);
 			}
 			//     Tyonkuvaus -->
-*/
+
 
 /*
 			// <-- Tarjouslaskenta
@@ -500,6 +499,7 @@ class CrmTarjouksetController extends Controller
 			$document->setValue('tarjouslaskenta', $sTableText);
 			//     Tarjouslaskenta -->
 */
+			$document->setValue('tarjouslaskenta', ''); // poista sitten
 
 
 			$firma = FirmanTiedot::model()->findbypk(1);
