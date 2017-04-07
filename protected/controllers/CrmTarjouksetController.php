@@ -415,7 +415,7 @@ class CrmTarjouksetController extends Controller
 			$file = '';
 
 			// <-- Tyonkuvaus
-			$tyonkuvaus = json_decode($model->tyonkuvaus, true);
+			$tyonkuvaus = $this->get_tyonkuvaus_by_id($model->tyonkuvaus_id);
 
 			$section = $PHPWord->createSection();
 			$table = $section->addTable();
@@ -742,7 +742,7 @@ class CrmTarjouksetController extends Controller
 
 
 
-		echo json_encode($bd);
+		return $bd;
 	}
 
 

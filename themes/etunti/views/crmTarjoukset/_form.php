@@ -18,6 +18,8 @@
 <div class="row">
   <div class="col-sm-3">
 
+	<legend><?php echo Yii::t('main', 'Perus tiedot'); ?></legend>
+
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'asiakas_id'); ?>
 		<?php
@@ -104,6 +106,8 @@
 
  </div><div class="col-sm-3">
 
+	<legend><?php echo Yii::t('main', 'Kohde'); ?></legend>
+
 	<div class="section fill mb5 kohdeHide">
 		<?php echo $form->labelEx($model,'kohteen_osoite'); ?>
 		<?php echo $form->textField($model,'kohteen_osoite',array('maxlength'=>255,'class'=>'form-control')); ?>
@@ -124,8 +128,20 @@
 
  </div><div class="col-sm-6">
 
+	<legend><?php echo Yii::t('main', 'Asiakkaan tiedot'); ?></legend>
 	<div class="section fill mb5 kohdeHide">
-		<div id="asiakas_tiedot"></div>
+
+		<div id="asiakas_tiedot">
+		<?php
+		if( $model->asiakas_id != 0 )
+		{
+			$a = Asiakkaat::model()->findByPk($model->asiakas_id);
+			echo $this->renderPartial('//asiakkaat/view', 
+				array('id'=>$a->id, 'model'=>$a)
+			, true);
+		}
+		?>
+		</div>
 	</div>
 
  </div>
