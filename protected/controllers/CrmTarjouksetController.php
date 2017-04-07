@@ -243,10 +243,16 @@ class CrmTarjouksetController extends Controller
 
 	public function actionGet_kohde($id)
 	{
-		$asiakas = array();
+		$asiakas_tiedot = '';
+		$asiakas_sahkoposti = '';
 		$a = Asiakkaat::model()->findByPk($id);
 		if(isset($a->id))
-		$asiakas = $a->attributes;
+		{
+			$asiakas_sahkoposti = $a->sahkoposti;
+			$asiakas_tiedot = $this->renderPartial('//asiakkaat/view', 
+				array('id'=>$a->id, 'model'=>$a)
+			, true);
+		}
 
 		$bd = '<option value="0">Valitse</option>';
 		$data = Kohteet::model()->findAll(" asiakas_id='".$id."' ");
@@ -254,7 +260,11 @@ class CrmTarjouksetController extends Controller
 			$bd .= '<option value="'.$item->id.'">'.$item->osoite.'</option>';
 		}
 
-		$result = array('options'=>$bd, 'asiakas' => $asiakas );
+		$result = array(
+			'options'=>$bd, 
+			'asiakas_sahkoposti' => $asiakas_sahkoposti,
+			'asiakas_tiedot' => $asiakas_tiedot
+		);
 		echo json_encode($result);
 	}
 

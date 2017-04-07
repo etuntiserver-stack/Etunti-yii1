@@ -122,8 +122,16 @@
 		<?php echo $form->error($model,'kohteen_postitoimipaikka'); ?>
 	</div>
 
+ </div><div class="col-sm-6">
+
+	<div class="section fill mb5 kohdeHide">
+		<div id="asiakas_tiedot"></div>
+	</div>
+
  </div>
 </div><!-- form -->
+
+
 
 
 
@@ -246,9 +254,13 @@ $(document).ready(function(){
 		{
 			$('#CrmTarjoukset_kohde_id').html(data['options']);
 		}
-		if(data['asiakas'])
+		if(data['asiakas_sahkoposti'])
 		{
-			$('#CrmTarjoukset_asiakkaan_sahkoposti').val(data['asiakas'].sahkoposti);
+			$('#CrmTarjoukset_asiakkaan_sahkoposti').val(data['asiakas_sahkoposti']);
+		}
+		if(data['asiakas_tiedot'])
+		{
+			$('#asiakas_tiedot').html(data['asiakas_tiedot']);
 		}
 
            }
