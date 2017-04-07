@@ -100,7 +100,7 @@
 		<?php
 		$list = array();
 
-		if( $model->tyonkuvaus_id != 0 and $model->kohde_id != 0 )
+		if( $model->kohde_id != 0 )
 		{
 			echo '<script>$(document).ready(function(){$(\'.tyonkuvaus\').addClass(\'in\');});</script>';
 			$criteria=new CDbCriteria;
