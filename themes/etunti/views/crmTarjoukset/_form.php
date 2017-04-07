@@ -16,7 +16,7 @@
 
 
 <div class="row">
-  <div class="col-sm-4">
+  <div class="col-sm-3">
 
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'asiakas_id'); ?>
@@ -65,28 +65,31 @@
 		<?php echo $form->error($model,'kohde_id'); ?>
 	</div>
 
-	<div class="section fill mb5">
+	<div class="section fill mb5 tyonkuvaus collapse">
 		<?php echo $form->labelEx($model,'tyonkuvaus_id'); ?>
 		<?php
 		$list = array();
-		$criteria=new CDbCriteria;
-		//$criteria->condition=" ";
-      		$l = Tyonkuvaus::model()->findAll($criteria);
-		if( $l != null )
+
+		if( $model->tyonkuvaus_id != 0 and $model->kohde_id != 0 )
 		{
-		    foreach($l as $v)
-		    {
-			$k = Kohteet::model()->findByPk($v->kohde_id);
-			if(isset($k->id))
-			$list[$v->id] = date("d.m.Y", strtotime($v->time)).' - '.$k->osoite;
-		    }
+			echo '<script>$(document).ready(function(){$(\'.tyonkuvaus\').addClass(\'in\');});</script>';
+			$criteria=new CDbCriteria;
+			$criteria->condition=" kohde_id='".$model->kohde_id."' ";
+	      		$l = Tyonkuvaus::model()->findAll($criteria);
+			if( $l != null )
+			{
+			    foreach($l as $v)
+			    {
+				$k = Kohteet::model()->findByPk($v->kohde_id);
+				if(isset($k->id))
+				$list[$v->id] = date("d.m.Y", strtotime($v->time)).' - '.$k->osoite;
+			    }
+			}
 		}
 
-		if(count($list) > 0)
-		{
-        		echo $form->dropDownList($model, 'tyonkuvaus_id', $list,
+        	echo $form->dropDownList($model, 'tyonkuvaus_id', $list,
 			array('empty'=>'Valitse','class'=>'form-control required'));
-		}		
+		
         	?>
 		<?php echo $form->error($model,'tyonkuvaus_id'); ?>
 	</div>
@@ -95,11 +98,11 @@
 
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'tarjous'); ?>
-		<?php echo $form->textArea($model,'tarjous',array('class'=>'form-control', 'rows'=>7)); ?>
+		<?php echo $form->textArea($model,'tarjous',array('class'=>'form-control', 'rows'=>4)); ?>
 		<?php echo $form->error($model,'kohteen_osoite'); ?>
 	</div>
 
- </div><div class="col-sm-4">
+ </div><div class="col-sm-3">
 
 	<div class="section fill mb5 kohdeHide">
 		<?php echo $form->labelEx($model,'kohteen_osoite'); ?>
@@ -133,7 +136,7 @@
 		<div id="tyonkuvaus"></div>
 	</div>
 
-		<?php echo $form->hiddenField($model,'tyonkuvaus_id'); ?>
+
 <br>
 	<div class="section">
 		<?php echo CHtml::submitButton($model->isNewRecord ? 'Luo' : 'Tallenna',array('class'=>'btn btn-primary myBgColors submitButton')); ?>
@@ -207,12 +210,21 @@ $(document).ready(function(){
            //data: { },
            success: function(data){
 		var data = JSON.parse(data);
-		//console.log(data);
-		if(data['id'])
+		console.log(data);
+		if(data['kohde'])
 		{
-			$('#CrmTarjoukset_kohteen_osoite').val(data['osoite']).attr('readonly', 'yes');
-			$('#CrmTarjoukset_kohteen_postinumero').val(data['pnumero']).attr('readonly', 'yes');
-			$('#CrmTarjoukset_kohteen_postitoimipaikka').val(data['kaupunki']).attr('readonly', 'yes');
+			$('#CrmTarjoukset_kohteen_osoite').val(data['kohde']['osoite']);
+			$('#CrmTarjoukset_kohteen_postinumero').val(data['kohde']['pnumero']);
+			$('#CrmTarjoukset_kohteen_postitoimipaikka').val(data['kohde']['kaupunki']);
+		}
+
+		if(data['tk'] !== '')
+		{
+			$('.tyonkuvaus').addClass('in');
+			$('#CrmTarjoukset_tyonkuvaus_id').html(data['tk']);
+		} else {
+			$('.tyonkuvaus').removeClass('in');
+			$('#CrmTarjoukset_tyonkuvaus_id').html(data['tk']);
 		}
            }
         });

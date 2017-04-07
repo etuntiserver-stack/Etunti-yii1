@@ -268,10 +268,24 @@ class CrmTarjouksetController extends Controller
 
 	public function actionGet_kohteentiedot($id)
 	{
+		$kohde = array();
+		$tk = '';
 		$k = Kohteet::model()->findByPk($id);
 		if(isset($k->id))
-			echo json_encode($k->attributes);
-	
+		{
+			$kohde = $k->attributes;
+
+			$data = Tyonkuvaus::model()->findAll(" kohde_id='".$k->id."' ");
+			if( count($data) > 0 )
+			{
+			   $tk .= '<option value="0">Valitse</option>';
+			   foreach($data as $item){
+				$tk .= '<option value="'.$item->id.'">'.date("d.m.Y", strtotime($item->time)).' - '.$k->osoite.'</option>';
+			   }
+			}
+		}
+		$result = array('kohde'=>$kohde, 'tk'=>$tk);
+		echo json_encode($result);
 	}
 
 	public function actionView_tyonkuvaus($id)
