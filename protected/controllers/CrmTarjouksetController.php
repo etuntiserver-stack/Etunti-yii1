@@ -177,15 +177,6 @@ class CrmTarjouksetController extends Controller
 		<body>';
 		$message .= '<center>';
 
-		// <-- Tyonkuvaus ja Tarjouslaskenta
-		$message .= '<div class="">';
-
-			if($crm->tyonkuvaus_id != 0)
-			$message .= $this->get_tyonkuvaus($crm->tyonkuvaus_id);
-
-		$message .= '</div>';
-		//  Tyonkuvaus ja Tarjouslaskenta -->
-
 
 		$message .= '<br>
 		<center>
