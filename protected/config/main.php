@@ -64,13 +64,13 @@ session_start();
             			array(
 			                'class'=>'ext.yii-debug-toolbar.YiiDebugToolbarRoute',
 			                'ipFilters'=>array('*'),//'ipFilters'=>array('::1','127.0.0.1','192.168.10.73'),
-				),
+				),/*
 			        array(
 				        'class'=>'CEmailLogRoute',
                 			'levels'=>'error', //'trace, info, error, warning, vardump'
 					'emails'=>'laptopsr@gmail.com',
 					'subject'=>'Email Log File Message (DEV). Domain: '.$domain,
-			        ),
+			        ),*/
 				array(
 				        'class'=>'CWebLogRoute',
                 			'levels'=>'error, warning', //'trace, info, error, warning, vardump'

@@ -401,18 +401,55 @@ class CrmTarjouksetController extends Controller
 			$liite = $model->id.'_'.date("d.m.Y");
 			$crm = CrmTarjoukset::model()->updatebypk($model->id, array('liite'=>$liite));
 
-			Yii::import('ext.yiiword.YiiWord', true);
-			Yii::registerAutoloader(array('YiiWord', 'autoload'), true);
-
+			//Yii::import('ext.yiiword.YiiWord', true);
+			//Yii::registerAutoloader(array('YiiWord', 'autoload'), true);
+			//$PHPWord = new PHPWord();
 	
 			if (!file_exists(Yii::app()->basePath."/../tiedostot/crm/tarjoukset/".Yii::app()->user->domain)) {
 			 	mkdir(Yii::app()->basePath."/../tiedostot/crm/tarjoukset/".Yii::app()->user->domain, 0777, true);
 			}
 	
-			$PHPWord = new PHPWord();
+
+			Yii::import('ext.phpword.XPHPWord');
+			$PHPWord = XPHPWord::createPHPWord();
 			$document = $PHPWord->loadTemplate('tiedostot/templates/'.Yii::app()->user->domain.'/crm_tarjous.docx');
 			$file = '';
 
+
+
+include "H2OXML/HTMLtoOpenXML.php";
+$htm = '<table width="50%" align="center" border="1">
+    <tr>
+        <td rowspan="2">Anime Studio</td>
+        <td>Pixar</td>
+    </tr>
+    <tr>
+        <td>Studio Ghibli</td>
+    </tr>
+</table>
+
+<table width="100%" border="1">
+    <tr style="font-weight: bold">
+        <td>Studio</td>
+        <td colspan="2">Animes</td>
+    </tr>
+    <tr>
+        <td>Pixar</td>
+        <td>The incredibles</td>
+        <td>Ratatouille</td>
+    </tr>
+    <tr>
+        <td>Studio Ghibli</td>
+        <td>Grave of the Fireflies</td>
+        <td>Spirited Away</td>
+    </tr>
+</table>';
+$toOpenXML = HTMLtoOpenXML::getInstance()->fromHTML($htm);
+$document->setValue('tyonkuvaus', $toOpenXML);
+
+
+
+/*
 			// <-- Tyonkuvaus
 			if( $model->tyonkuvaus_id != 0 )
 			{
@@ -449,7 +486,7 @@ class CrmTarjouksetController extends Controller
 			$document->setValue('tyonkuvaus', $sTableText);
 			}
 			//     Tyonkuvaus -->
-
+*/
 
 /*
 			// <-- Tarjouslaskenta
@@ -530,6 +567,7 @@ class CrmTarjouksetController extends Controller
 				if(isset($y->id) and !empty($y->yrityksen_nimi))
 				   $asiakas = $y->yrityksen_nimi;
 				elseif(isset($y->id) and empty($y->yrityksen_nimi) and !empty($y->yhteyshenkilo)) 
+
 				   $asiakas = $y->yhteyshenkilo;
 				else
 				   $asiakas = '';
