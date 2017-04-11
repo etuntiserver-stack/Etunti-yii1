@@ -405,7 +405,7 @@ class CrmTarjouksetController extends Controller
 			$document = $PHPWord->loadTemplate('tiedostot/templates/'.Yii::app()->user->domain.'/crm_tarjous.docx');
 			$file = '';
 
-
+/*
 
 			// <-- Tyonkuvaus
 			if( $model->tyonkuvaus_id != 0 )
@@ -445,6 +445,64 @@ class CrmTarjouksetController extends Controller
 			$document->cloneRow('TK', $data4);
 			//     Tyonkuvaus -->
 	
+*/
+
+
+
+			// <-- Tyonkuvaus
+			$section = $PHPWord->createSection();
+			$table = $section->addTable();
+			$table->addRow(900);
+			// Add cells
+			$table->addCell(2000)->addText('Tilat');
+			$table->addCell(3000)->addText( 'Työtehtävät' );
+			$table->addCell(3000)->addText('Laatutaso');
+			$table->addCell(2000)->addText('Kommenti');
+
+			if( $model->tyonkuvaus_id != 0 )
+			{
+			$tyonkuvaus = $this->get_tyonkuvaus_by_id($model->tyonkuvaus_id);
+			  if( is_array($tyonkuvaus) and isset($tyonkuvaus['tilat']) )
+			  {
+
+			    foreach($tyonkuvaus['tilat'] as $key=>$items)
+			    {
+
+				$items_result = '';
+				foreach($items as $v)
+					$items_result .= $v."\r\n";
+
+				$tyontehtavat = $tyonkuvaus['tyontehtavat'][$key];
+				$tt_result = '';
+				foreach($tyontehtavat as $kt=>$it)
+					$tt_result .= $it['tyotehtava'].': '.$it['vkopvm']."\r\n";
+
+				$laatutaso_result = '';
+				foreach($tyonkuvaus['laatutaso'][$key] as $v)
+					$laatutaso_result .= $v."\n";
+
+				$kommenti_result = '';
+				foreach($tyonkuvaus['kommenti'][$key] as $v)
+					$kommenti_result .= $v."\n";
+
+
+				$table->addRow(900);
+				$table->addCell(2000)->addText( $items_result );
+				$table->addCell(3000)->addText( $tt_result );
+				$table->addCell(3000)->addText( $laatutaso_result );
+				$table->addCell(2000)->addText( $kommenti_result );
+
+			    }
+			  }
+			}
+
+			$objWriter = PHPWord_IOFactory::createWriter($PHPWord, 'Word2007');
+			$sTableText = $objWriter->getWriterPart('document')->getObjectAsText($table);
+			$document->setValue('{tyonkuvaus}', $sTableText);
+			//     Tyonkuvaus -->
+
+
+
 
 
 			$firma = FirmanTiedot::model()->findbypk(1);
