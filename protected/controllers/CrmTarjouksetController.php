@@ -392,118 +392,18 @@ class CrmTarjouksetController extends Controller
 			$liite = $model->id.'_'.date("d.m.Y");
 			$crm = CrmTarjoukset::model()->updatebypk($model->id, array('liite'=>$liite));
 
-			//Yii::import('ext.yiiword.YiiWord', true);
-			//Yii::registerAutoloader(array('YiiWord', 'autoload'), true);
-			//$PHPWord = new PHPWord();
 	
 			if (!file_exists(Yii::app()->basePath."/../tiedostot/crm/tarjoukset/".Yii::app()->user->domain)) {
 			 	mkdir(Yii::app()->basePath."/../tiedostot/crm/tarjoukset/".Yii::app()->user->domain, 0777, true);
 			}
 
 
-			Yii::import('ext.phpword.XPHPWord');
-			$PHPWord = XPHPWord::createPHPWord();
-			$document = $PHPWord->loadTemplate('tiedostot/templates/'.Yii::app()->user->domain.'/crm_tarjous.docx');
-			$file = '';
-
-
-/*
-
 			// <-- Tyonkuvaus
 			if( $model->tyonkuvaus_id != 0 )
 			{
-			$data4 = array();
-			$tyonkuvaus = $this->get_tyonkuvaus_by_id($model->tyonkuvaus_id);
-			  if( is_array($tyonkuvaus) and isset($tyonkuvaus['tilat']) )
-			  {
-			    foreach($tyonkuvaus['tilat'] as $key=>$items)
-			    {
 
-				$items_result = '';
-				foreach($items as $v)
-					$items_result .= $v."\n";
-
-				$tyontehtavat = $tyonkuvaus['tyontehtavat'][$key];
-				$tyontehtavat_result = '';
-				foreach($tyontehtavat as $kt=>$it)
-					$tyontehtavat_result .= $it['tyotehtava'].': '.$it['vkopvm']."\n";
-				
-				$laatutaso_result = '';
-				foreach($tyonkuvaus['laatutaso'][$key] as $v)
-					$laatutaso_result .= $v."\n";
-
-				$kommenti_result = '';
-				foreach($tyonkuvaus['kommenti'][$key] as $v)
-					$kommenti_result .= $v."\n";
-
-				$data4['val1'][] = $items_result;
-				$data4['val2'][] = $tyontehtavat_result;
-				$data4['val3'][] = $laatutaso_result;
-				$data4['val4'][] = $kommenti_result;
-
-			    }
-			  }
 			}
-			$document->cloneRow('TK', $data4);
 			//     Tyonkuvaus -->
-	
-*/
-
-
-
-			// <-- Tyonkuvaus
-			$section = $PHPWord->createSection();
-			$table = $section->addTable();
-			$table->addRow(900);
-			// Add cells
-			$table->addCell(2000)->addText('Tilat');
-			$table->addCell(3000)->addText( 'Työtehtävät' );
-			$table->addCell(3000)->addText('Laatutaso');
-			$table->addCell(2000)->addText('Kommenti');
-
-			if( $model->tyonkuvaus_id != 0 )
-			{
-			$tyonkuvaus = $this->get_tyonkuvaus_by_id($model->tyonkuvaus_id);
-			  if( is_array($tyonkuvaus) and isset($tyonkuvaus['tilat']) )
-			  {
-
-			    foreach($tyonkuvaus['tilat'] as $key=>$items)
-			    {
-
-				$items_result = '';
-				foreach($items as $v)
-					$items_result .= $v."\r\n";
-
-				$tyontehtavat = $tyonkuvaus['tyontehtavat'][$key];
-				$tt_result = '';
-				foreach($tyontehtavat as $kt=>$it)
-					$tt_result .= $it['tyotehtava'].': '.$it['vkopvm']."\r\n";
-
-				$laatutaso_result = '';
-				foreach($tyonkuvaus['laatutaso'][$key] as $v)
-					$laatutaso_result .= $v."\n";
-
-				$kommenti_result = '';
-				foreach($tyonkuvaus['kommenti'][$key] as $v)
-					$kommenti_result .= $v."\n";
-
-
-				$table->addRow(900);
-				$table->addCell(2000)->addText( $items_result );
-				$table->addCell(3000)->addText( $tt_result );
-				$table->addCell(3000)->addText( $laatutaso_result );
-				$table->addCell(2000)->addText( $kommenti_result );
-
-			    }
-			  }
-			}
-
-			$objWriter = PHPWord_IOFactory::createWriter($PHPWord, 'Word2007');
-			$sTableText = $objWriter->getWriterPart('document')->getObjectAsText($table);
-			$document->setValue('tyonkuvaus', $sTableText);
-			//     Tyonkuvaus -->
-
-
 
 			$firma = FirmanTiedot::model()->findbypk(1);
 
@@ -518,10 +418,9 @@ class CrmTarjouksetController extends Controller
 				else
 				   $asiakas = '';
 
-			$document->setValue('{asiakas}', iconv('UTF-8','ISO-8859-1',$asiakas));
-			$document->setValue('{asiakkaan_osoite}', iconv('UTF-8','ISO-8859-1',$as->osoite));
-			$document->setValue('{asiakkaan_postinumero}', iconv('UTF-8','ISO-8859-1',$as->postinumero));
-			$document->setValue('{asiakkaan_toimipaikka}', iconv('UTF-8','ISO-8859-1',$as->kaupunki));
+				$asiakkaan_osoite = $as->osoite;
+				$asiakkaan_postinumero = $as->postinumero;
+				$asiakkaan_toimipaikka = $as->kaupunki;
 			}
 			//     Jos se on Asiakas -->
 
@@ -538,34 +437,52 @@ class CrmTarjouksetController extends Controller
 				else
 				   $asiakas = '';
 
-			$document->setValue('{asiakas}', $asiakas);
-			$document->setValue('{asiakkaan_osoite}', $y->osoite);
-			$document->setValue('{asiakkaan_postinumero}', $y->postinumero);
-			$document->setValue('{asiakkaan_toimipaikka}', $y->postitoimipaikka);
+				$asiakkaan_osoite = $y->osoite;
+				$asiakkaan_postinumero = $y->postinumero;
+				$asiakkaan_toimipaikka = $y->kaupunki;
 			}
 			//     Jos se on yhteystiedot -->
 
 
 
-			$document->setValue('{paivays}', date("d.m.Y"));
 
-			// Yritys
-			$document->setValue('{yritys}', $firma->tyonantaja);
-			$document->setValue('{yrityksen_osoite}', $firma->osoite);
-			$document->setValue('{yrityksen_postinumero}', $firma->postinumero);
-			$document->setValue('{yrityksen_toimipaikka}', $firma->postitoimipaikka);
-			$document->setValue('{yrityksen_y_tunnus}', $firma->y_tunnus);
-			$document->setValue('{yrityksen_puhelin}', $firma->puhelin);
+			define('PHPDOCX_INCLUDE_PATH', (dirname(Yii::app()->basePath)).'/protected/vendors/phpdocx');
+			spl_autoload_unregister(array('YiiBase','autoload'));
+			require_once PHPDOCX_INCLUDE_PATH.'/classes/CreateDocx.inc';
+			require_once PHPDOCX_INCLUDE_PATH.'/classes/TransformDoc.inc';
+			spl_autoload_register(array('AutoLoader','load'));
+			spl_autoload_register(array('YiiBase', 'autoload'));
 
-			$document->setValue('{teksti}', htmlspecialchars($model->tarjous));
+			$template_tiedosto = 'tiedostot/templates/'.Yii::app()->user->domain.'/crm_tarjous.docx';
 
-
+			$docx = new CreateDocxFromTemplate($template_tiedosto);
+			$docx->setTemplateSymbol('#');
+			$variables = array(
+				'tyonkuvaus' => 'sdsd',
+				'paivays' => date("d.m.Y"),
+				'asiakas' => $asiakas,
+				'asiakkaan_osoite' => $asiakkaan_osoite,
+				'asiakkaan_postinumero' => $asiakkaan_postinumero,
+				'asiakkaan_toimipaikka' => $asiakkaan_toimipaikka,
+				'yritys' => $firma->tyonantaja,
+				'yrityksen_osoite' => $firma->osoite,
+				'yrityksen_postinumero' => $firma->postinumero,
+				'yrityksen_toimipaikka' => $firma->postitoimipaikka,
+				'yrityksen_y_tunnus' => $firma->y_tunnus,
+				'yrityksen_puhelin' => $firma->puhelin,
+				'teksti' => $model->tarjous,
+			);
+			$docx->replaceVariableByText($variables);
 			$path = 'tiedostot/crm/tarjoukset/'.Yii::app()->user->domain.'/'.$liite;
-		  	$document->save($path.'.docx');
+			$docx->createDocx($path);
 
-			shell_exec('unoconv -f pdf '.$path.'.docx');
+
+			$document = new TransformDoc();
+			$document->setStrFile($path.'.docx');
+			$document->generatePDF();
+
+
 			$this->redirect(array('index'));
-
 	}
 
 
