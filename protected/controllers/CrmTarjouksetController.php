@@ -557,8 +557,6 @@ class CrmTarjouksetController extends Controller
 			$document->setValue('{yrityksen_y_tunnus}', $firma->y_tunnus);
 			$document->setValue('{yrityksen_puhelin}', $firma->puhelin);
 
-
-
 			$document->setValue('{teksti}', htmlspecialchars($model->tarjous));
 
 
