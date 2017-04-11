@@ -568,7 +568,7 @@ class CrmTarjouksetController extends Controller
 //($path.'.docx', $path.'.pdf');
 
 			//shell_exec('unoconv -f pdf '.$path.'.docx');
-shell_exec('soffice --convert-to pdf '.$path.'.docx --headless');
+shell_exec('soffice --headless --convert-to pdf '.$path.'.docx');
 			$this->redirect(array('index'));
 
 	}
