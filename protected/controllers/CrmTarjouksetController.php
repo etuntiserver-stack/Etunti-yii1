@@ -498,7 +498,7 @@ class CrmTarjouksetController extends Controller
 
 			$objWriter = PHPWord_IOFactory::createWriter($PHPWord, 'Word2007');
 			$sTableText = $objWriter->getWriterPart('document')->getObjectAsText($table);
-			$document->setValue('{tyonkuvaus}', $sTableText);
+			$document->setValue('{tyonkuvaus}', 'pers');
 			//     Tyonkuvaus -->
 
 
