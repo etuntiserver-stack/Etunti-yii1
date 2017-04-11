@@ -400,6 +400,7 @@ class CrmTarjouksetController extends Controller
 			 	mkdir(Yii::app()->basePath."/../tiedostot/crm/tarjoukset/".Yii::app()->user->domain, 0777, true);
 			}
 
+
 			Yii::import('ext.phpword.XPHPWord');
 			$PHPWord = XPHPWord::createPHPWord();
 			$document = $PHPWord->loadTemplate('tiedostot/templates/'.Yii::app()->user->domain.'/crm_tarjous.docx');
@@ -504,8 +505,6 @@ class CrmTarjouksetController extends Controller
 
 
 
-
-
 			$firma = FirmanTiedot::model()->findbypk(1);
 
 			// <-- Jos se on Asiakas
@@ -564,11 +563,7 @@ class CrmTarjouksetController extends Controller
 			$path = 'tiedostot/crm/tarjoukset/'.Yii::app()->user->domain.'/'.$liite;
 		  	$document->save($path.'.docx');
 
-
-//($path.'.docx', $path.'.pdf');
-
-			//shell_exec('unoconv -f pdf '.$path.'.docx');
-shell_exec('soffice --headless --convert-to pdf '.$path.'.docx --outdir PDFDIR');
+			shell_exec('unoconv -f pdf '.$path.'.docx');
 			$this->redirect(array('index'));
 
 	}
