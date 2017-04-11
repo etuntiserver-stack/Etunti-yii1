@@ -405,6 +405,7 @@ class CrmTarjouksetController extends Controller
 			$document = $PHPWord->loadTemplate('tiedostot/templates/'.Yii::app()->user->domain.'/crm_tarjous.docx');
 			$file = '';
 
+
 /*
 
 			// <-- Tyonkuvaus
@@ -563,7 +564,11 @@ class CrmTarjouksetController extends Controller
 			$path = 'tiedostot/crm/tarjoukset/'.Yii::app()->user->domain.'/'.$liite;
 		  	$document->save($path.'.docx');
 
-			shell_exec('unoconv -f pdf '.$path.'.docx');
+
+//($path.'.docx', $path.'.pdf');
+
+			//shell_exec('unoconv -f pdf '.$path.'.docx');
+shell_exec('soffice --headless --convert-to pdf --outdir '.$path.'.pdf '.$path.'.docx');
 			$this->redirect(array('index'));
 
 	}
