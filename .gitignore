@@ -29,3 +29,4 @@ etuntiAPP/EtuntiAdmin/platforms/*
 asiakas/platforms/*
 error_log
 .htaccess
+protected/vendors/phpdocx/lib/pdf/lib/fonts/log.htm
