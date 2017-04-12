@@ -6,7 +6,9 @@
 	elseif(empty($as->yrityksen_nimi) and !empty($as->yhteyshenkilo))
 	$head = $as->yhteyshenkilo;
 ?>
-
+<?php
+phpinfo();
+?>
         <!-- begin: .tray-center -->
         <div class="tray-center">
 
