@@ -425,40 +425,21 @@ class CrmTarjouksetController extends Controller
 			//     Jos se on Asiakas -->
 
 
-			// <-- Jos se on yhteystiedot
-			$y = Yhteystiedot::model()->findbypk($model->yhteystiedot_id);
-			if(isset($y->id))
-			{
-				if(isset($y->id) and !empty($y->yrityksen_nimi))
-				   $asiakas = $y->yrityksen_nimi;
-				elseif(isset($y->id) and empty($y->yrityksen_nimi) and !empty($y->yhteyshenkilo)) 
-
-				   $asiakas = $y->yhteyshenkilo;
-				else
-				   $asiakas = '';
-
-				$asiakkaan_osoite = $y->osoite;
-				$asiakkaan_postinumero = $y->postinumero;
-				$asiakkaan_toimipaikka = $y->kaupunki;
-			}
-			//     Jos se on yhteystiedot -->
-
-
-
 
 			define('PHPDOCX_INCLUDE_PATH', (dirname(Yii::app()->basePath)).'/protected/vendors/phpdocx');
 			spl_autoload_unregister(array('YiiBase','autoload'));
+			require_once PHPDOCX_INCLUDE_PATH.'/lib/pdf/dompdf_config.inc.php';
+			//require_once PHPDOCX_INCLUDE_PATH.'/classes/TransformDoc.inc';
 			require_once PHPDOCX_INCLUDE_PATH.'/classes/CreateDocx.inc';
-			require_once PHPDOCX_INCLUDE_PATH.'/classes/TransformDoc.inc';
 			spl_autoload_register(array('AutoLoader','load'));
 			spl_autoload_register(array('YiiBase', 'autoload'));
 
 			$template_tiedosto = 'tiedostot/templates/'.Yii::app()->user->domain.'/crm_tarjous.docx';
 
 			$docx = new CreateDocxFromTemplate($template_tiedosto);
+			//$docx->enableCompatibilityMode();
 			$docx->setTemplateSymbol('#');
 			$variables = array(
-				'tyonkuvaus' => 'sdsd',
 				'paivays' => date("d.m.Y"),
 				'asiakas' => $asiakas,
 				'asiakkaan_osoite' => $asiakkaan_osoite,
@@ -473,13 +454,41 @@ class CrmTarjouksetController extends Controller
 				'teksti' => $model->tarjous,
 			);
 			$docx->replaceVariableByText($variables);
+
+			if( $model->tyonkuvaus_id != 0 )
+			{
+				$tb = '<style>
+				table { 
+				  color: #333;
+				  width: 650px;
+				  border: 1px solid #CCC; 
+				}
+				th {
+				  width: 162px;
+				  background: #F3F3F3; 
+				  font-weight: bold;
+				}
+				th,td {
+				  border: 1px solid #CCC; 
+				  padding: 15px;
+				  text-align: center;
+				}
+				</style>';
+				$tb .= $this->get_tyonkuvaus($model->tyonkuvaus_id);
+
+				$docx->replaceVariableByHTML('tyonkuvaus', 'block', $tb, 
+					array('isFile' => false, 'parseDivsAsPs' => true, 'downloadImages' => false)
+				);
+			}
+
+
 			$path = 'tiedostot/crm/tarjoukset/'.Yii::app()->user->domain.'/'.$liite;
 			$docx->createDocx($path);
 
 
 			$document = new TransformDoc();
 			$document->setStrFile($path.'.docx');
-			$document->generatePDF();
+			$document->generatePDF($path.'.pdf');
 
 
 			$this->redirect(array('index'));
@@ -572,7 +581,7 @@ class CrmTarjouksetController extends Controller
 		$exTilat = explode("\n", json_decode($r->tilat));
 		$tilat = '';
 		foreach($exTilat as $itm)
-			$tilat .= '<p>'.trim($itm).'</p>';
+			$tilat .= '<br>'.trim($itm);
 
 		$bd .= '
 		    <tr class="rivi" num="'.$key.'">
@@ -581,21 +590,19 @@ class CrmTarjouksetController extends Controller
 
 			$tyontehtavat = json_decode($r->tyontehtavat, true);
 			foreach($tyontehtavat as $k2=>$r2)
-			{
+				$bd .= '<br>'.$r2['tyotehtava'].': '.$r2['vkopvm'];
 
-			$bd .= '<p>'.$r2['tyotehtava'].': '.$r2['vkopvm'].'</p>';
-			}
 
 
 		$exLaatutaso = explode("\n", json_decode($r->laatutaso));
 		$tasot = '';
 		foreach($exLaatutaso as $itm)
-			$tasot .= '<p>'.trim($itm).'</p>';
+			$tasot .= '<br>'.trim($itm);
 
 		$exKommenti = explode("\n", json_decode($r->laatutaso));
 		$kommentit = '';
 		foreach($exKommenti as $itm)
-			$kommentit .= '<p>'.trim($itm).'</p>';
+			$kommentit .= '<br>'.trim($itm);
 
 		$bd .= '</td>
 		        <td>'.$tasot.'</td>
