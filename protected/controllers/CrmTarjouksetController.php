@@ -512,8 +512,11 @@ class CrmTarjouksetController extends Controller
 			$document->setStrFile($path.'.docx');
 			$document->generatePDF($path.'.pdf');
 */
+			if( $_SERVER['REMOTE_ADDR'] != '::1' and $_SERVER['REMOTE_ADDR'] != '127.0.0.1' )
+			{
 			$transform = new TransformDocAdvLibreOffice();
 			$transform->transformDocument($path.'.docx', $path.'.pdf');
+			}
 
 			$this->redirect(array('index'));
 	}
