@@ -213,7 +213,7 @@ function num($val){
 			{
 			header('Content-type: application/pdf');
 			readfile('temp/'.$tiedosto.'.pdf');
-			unlink('temp/'.$tiedosto.'.pdf');
+			//unlink('temp/'.$tiedosto.'.pdf');
 			}
 
 exit;
