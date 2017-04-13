@@ -32,7 +32,7 @@ class CrmTarjouksetController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view', 'laheta', 'get_tyonkuvaus_by_asiakas', 'get_tyonkuvaus_by_id', 'get_tarjouslaskenta_by_id', 'get_kohteentiedot', 'get_asiakastilat', 'view_tyonkuvaus'),
+				'actions'=>array('admin','delete','create','update','index','view', 'laheta', 'get_tyonkuvaus_by_asiakas', 'get_tyonkuvaus_by_id', 'get_tarjouslaskenta_by_id', 'get_tyonkuvaus', 'get_kohteentiedot', 'get_asiakastilat', 'view_tyonkuvaus', 'get_kohde'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -177,15 +177,6 @@ class CrmTarjouksetController extends Controller
 		<body>';
 		$message .= '<center>';
 
-		// <-- Tyonkuvaus ja Tarjouslaskenta
-		$message .= '<div class="">';
-
-			if($crm->tyonkuvaus_id != 0)
-			$message .= $this->get_tyonkuvaus($crm->tyonkuvaus_id);
-
-		$message .= '</div>';
-		//  Tyonkuvaus ja Tarjouslaskenta -->
-
 
 		$message .= '<br>
 		<center>
@@ -241,19 +232,61 @@ class CrmTarjouksetController extends Controller
 	}
 
 
-	public function actionGet_kohteentiedot($id)
+	public function actionGet_kohde($id)
 	{
-		$model = Tyonkuvaus::model()->findByPk($id);
-		$k = Kohteet::model()->findByPk($model->kohde_id);
-		$arr = array();
-		if(isset($k->id))
+		$asiakas_tiedot = '';
+		$asiakas_sahkoposti = '';
+		$a = Asiakkaat::model()->findByPk($id);
+		if(isset($a->id))
 		{
-			$arr = $k->attributes;
-			$arr['tyonkuvaus_id'] = $id;
-			$arr['tyonkuvaus'] = $this->get_tyonkuvaus($id);
+			$asiakas_sahkoposti = $a->sahkoposti;
+			$asiakas_tiedot = $this->renderPartial('//asiakkaat/view', 
+				array('id'=>$a->id, 'model'=>$a)
+			, true);
 		}
 
-		echo json_encode($arr);
+		$bd = '<option value="0">Valitse</option>';
+		$data = Kohteet::model()->findAll(" asiakas_id='".$id."' ");
+		foreach($data as $item){
+			$bd .= '<option value="'.$item->id.'">'.$item->osoite.'</option>';
+		}
+
+		$result = array(
+			'options'=>$bd, 
+			'asiakas_sahkoposti' => $asiakas_sahkoposti,
+			'asiakas_tiedot' => $asiakas_tiedot
+		);
+		echo json_encode($result);
+	}
+
+	public function actionGet_tyonkuvaus($id)
+	{
+		$model = Tyonkuvaus::model()->findByPk($id);
+		if(isset($model->id))
+			echo json_encode($this->get_tyonkuvaus($id));
+
+	}
+
+	public function actionGet_kohteentiedot($id)
+	{
+		$kohde = array();
+		$tk = '';
+		$k = Kohteet::model()->findByPk($id);
+		if(isset($k->id))
+		{
+			$kohde = $k->attributes;
+
+			$data = Tyonkuvaus::model()->findAll(" kohde_id='".$k->id."' ");
+			if( count($data) > 0 )
+			{
+			   $tk .= '<option value="0">Valitse</option>';
+			   foreach($data as $item){
+				$tk .= '<option value="'.$item->id.'">'.date("d.m.Y", strtotime($item->time)).' - '.$k->osoite.'</option>';
+			   }
+			}
+		}
+		$result = array('kohde'=>$kohde, 'tk'=>$tk);
+		echo json_encode($result);
 	}
 
 	public function actionView_tyonkuvaus($id)
@@ -359,102 +392,18 @@ class CrmTarjouksetController extends Controller
 			$liite = $model->id.'_'.date("d.m.Y");
 			$crm = CrmTarjoukset::model()->updatebypk($model->id, array('liite'=>$liite));
 
-			Yii::import('ext.yiiword.YiiWord', true);
-			Yii::registerAutoloader(array('YiiWord', 'autoload'), true);
-
 	
 			if (!file_exists(Yii::app()->basePath."/../tiedostot/crm/tarjoukset/".Yii::app()->user->domain)) {
 			 	mkdir(Yii::app()->basePath."/../tiedostot/crm/tarjoukset/".Yii::app()->user->domain, 0777, true);
 			}
-	
-			$PHPWord = new PHPWord();
-			//$objWriter = PHPWord_IOFactory::createWriter($PHPWord, 'Word2007');
-			$document = $PHPWord->loadTemplate('tiedostot/templates/'.Yii::app()->user->domain.'/crm_tarjous.docx');
-			$file = '';
+
 
 			// <-- Tyonkuvaus
-			$tyonkuvaus = json_decode($model->tyonkuvaus, true);
-
-			$section = $PHPWord->createSection();
-			$table = $section->addTable();
-			$table->addRow(900);
-			// Add cells
-			$table->addCell(2000)->addText('Tilat');
-			$table->addCell(3000)->addText( iconv('UTF-8','ISO-8859-1', 'Työtehtävät') );
-			$table->addCell(3000)->addText('Laatutaso');
-			$table->addCell(2000)->addText('Kommenti');
-
-			if( is_array($tyonkuvaus) and isset($tyonkuvaus['tilat']) )
+			if( $model->tyonkuvaus_id != 0 )
 			{
-			    foreach($tyonkuvaus['tilat'] as $key=>$items)
-			    {
-				$tyontehtavat = $tyonkuvaus['tyontehtavat'][$key];
-				$tt_result = '';
-				foreach($tyontehtavat as $kt=>$it)
-					$tt_result .= $it['tyotehtava'].': '.$it['vkopvm']."\n";
 
-				$table->addRow(900);
-				$table->addCell(2000)->addText( iconv('UTF-8','ISO-8859-1', implode("\n", $items)) );
-				$table->addCell(3000)->addText( iconv('UTF-8','ISO-8859-1', $tt_result) );
-				$table->addCell(3000)->addText( iconv('UTF-8','ISO-8859-1', implode("\n", $tyonkuvaus['laatutaso'][$key])) );
-				$table->addCell(2000)->addText( iconv('UTF-8','ISO-8859-1', implode("\n", $tyonkuvaus['kommenti'][$key])) );
-
-			    }
 			}
-			$objWriter = PHPWord_IOFactory::createWriter($PHPWord, 'Word2007');
-			$sTableText = $objWriter->getWriterPart('document')->getObjectAsText($table);
-			$document->setValue('tyonkuvaus', $sTableText);
 			//     Tyonkuvaus -->
-
-/*
-			// <-- Tarjouslaskenta
-			$tarjouslaskenta = json_decode($model->tarjouslaskenta);
-
-			$section = $PHPWord->createSection();
-
-			// Define table style arrays
-			$styleTable = array('borderSize'=>6, 'borderColor'=>'006699', 'cellMargin'=>80);
-			$styleFirstRow = array('borderBottomSize'=>18, 'borderBottomColor'=>'0000FF', 'bgColor'=>'66BBFF');
-			// Define cell style arrays
-			$styleCell = array('borderBottomSize'=>2, 'borderBottomColor'=>'333333', 'bgColor'=>'CCCCC', 'cellMargin'=>10);
-			$styleCellBTLR = array('valign'=>'center', 'textDirection'=>PHPWord_Style_Cell::TEXT_DIR_BTLR);
-			// Define font style for first row
-			$fontStyle = array('bold'=>true, 'align'=>'center');
-			// Add table style
-			$PHPWord->addTableStyle('myOwnTableStyle', $styleTable, $styleFirstRow);
-
-
-			$table = $section->addTable('myOwnTableStyle');
-			$table->addRow(900);
-			// Add cells
-			$table->addCell(2000, $styleFirstRow)->addText('Kuvaus', $fontStyle);
-			$table->addCell(3000, $styleFirstRow)->addText('Arvo', $fontStyle);
-
-			foreach($tarjouslaskenta as $key=>$item)
-			{
-				if( $key == 'muut_kulut' and is_array(json_decode($item, true)['otsikko']))
-				{
-					$uusiItem = '';
-					foreach(json_decode($item, true)['otsikko'] as $k2=>$muut)
-					{
-						$uusiItem .= $muut.": ".json_decode($item, true)['hinta'][$k2]."\n";
-
-					}
-					$item = $uusiItem;
-				}
-
-				$label = Tarjouslaskenta::model()->getAttributeLabel($key);
-				$table->addRow(900);
-				$table->addCell(2000, $styleCell)->addText(  iconv('UTF-8','ISO-8859-1',$label) );
-				$table->addCell(3000, $styleCell)->addText( iconv('UTF-8','ISO-8859-1', $item) );
-			}
-
-			$objWriter = PHPWord_IOFactory::createWriter($PHPWord, 'Word2007');
-			$sTableText = $objWriter->getWriterPart('document')->getObjectAsText($table);
-			$document->setValue('tarjouslaskenta', $sTableText);
-			//     Tarjouslaskenta -->
-*/
-
 
 			$firma = FirmanTiedot::model()->findbypk(1);
 
@@ -469,56 +418,100 @@ class CrmTarjouksetController extends Controller
 				else
 				   $asiakas = '';
 
-			$document->setValue('asiakas', iconv('UTF-8','ISO-8859-1',$asiakas));
-			$document->setValue('asiakkaan_osoite', iconv('UTF-8','ISO-8859-1',$as->osoite));
-			$document->setValue('asiakkaan_postinumero', iconv('UTF-8','ISO-8859-1',$as->postinumero));
-			$document->setValue('asiakkaan_toimipaikka', iconv('UTF-8','ISO-8859-1',$as->kaupunki));
+				$asiakkaan_osoite = $as->osoite;
+				$asiakkaan_postinumero = $as->postinumero;
+				$asiakkaan_toimipaikka = $as->kaupunki;
 			}
 			//     Jos se on Asiakas -->
 
 
-			// <-- Jos se on yhteystiedot
-			$y = Yhteystiedot::model()->findbypk($model->yhteystiedot_id);
-			if(isset($y->id))
+
+			define('PHPDOCX_INCLUDE_PATH', (dirname(Yii::app()->basePath)).'/protected/vendors/phpdocx');
+			spl_autoload_unregister(array('YiiBase','autoload'));
+			require_once PHPDOCX_INCLUDE_PATH.'/lib/pdf/dompdf_config.inc.php';
+			//require_once PHPDOCX_INCLUDE_PATH.'/classes/TransformDocAdv.inc';
+			require_once PHPDOCX_INCLUDE_PATH.'/classes/CreateDocx.inc';
+			spl_autoload_register(array('AutoLoader','load'));
+			spl_autoload_register(array('YiiBase', 'autoload'));
+
+			$template_tiedosto = 'tiedostot/templates/'.Yii::app()->user->domain.'/crm_tarjous.docx';
+
+			$docx = new CreateDocxFromTemplate($template_tiedosto);
+			//$docx->enableCompatibilityMode();
+			$docx->setTemplateSymbol('#');
+			$variables = array(
+				'paivays' => date("d.m.Y"),
+				'asiakas' => $asiakas,
+				'asiakkaan_osoite' => $asiakkaan_osoite,
+				'asiakkaan_postinumero' => $asiakkaan_postinumero,
+				'asiakkaan_toimipaikka' => $asiakkaan_toimipaikka,
+				'yritys' => $firma->tyonantaja,
+				'yrityksen_osoite' => $firma->osoite,
+				'yrityksen_postinumero' => $firma->postinumero,
+				'yrityksen_toimipaikka' => $firma->postitoimipaikka,
+				'yrityksen_y_tunnus' => $firma->y_tunnus,
+				'yrityksen_puhelin' => $firma->puhelin,
+				'teksti' => $model->tarjous,
+			);
+			$docx->replaceVariableByText($variables);
+
+			if( $model->tyonkuvaus_id != 0 )
 			{
-				if(isset($y->id) and !empty($y->yrityksen_nimi))
-				   $asiakas = $y->yrityksen_nimi;
-				elseif(isset($y->id) and empty($y->yrityksen_nimi) and !empty($y->yhteyshenkilo)) 
-				   $asiakas = $y->yhteyshenkilo;
-				else
-				   $asiakas = '';
+			/*
+				$tb = $this->get_tyonkuvaus($model->tyonkuvaus_id);
+				$docx->replaceVariableByHTML('tyonkuvaus', 'block', $tb, 
+					array('isFile' => false, 'parseDivsAsPs' => true, 'downloadImages' => false)
+				);
+			*/
+			$tyonkuvaus = $this->get_tyonkuvaus_by_id($model->tyonkuvaus_id);
 
-			$document->setValue('asiakas', iconv('UTF-8','ISO-8859-1',$asiakas));
-			$document->setValue('asiakkaan_osoite', iconv('UTF-8','ISO-8859-1',$y->osoite));
-			$document->setValue('asiakkaan_postinumero', iconv('UTF-8','ISO-8859-1',$y->postinumero));
-			$document->setValue('asiakkaan_toimipaikka', iconv('UTF-8','ISO-8859-1',$y->postitoimipaikka));
+			$valuesTable = array(
+			    array(
+			        'Tilat','Työtehtävät','Laatutaso','Kommenti'
+			    )
+			);
+
+				if( is_array($tyonkuvaus) and isset($tyonkuvaus['tilat']) )
+				{
+				    foreach($tyonkuvaus['tilat'] as $key=>$items)
+				    {
+					$tyontehtavat = $tyonkuvaus['tyontehtavat'][$key];
+					$tt_result = '';
+					foreach($tyontehtavat as $kt=>$it)
+						$tt_result .= $it['tyotehtava'].': '.$it['vkopvm']."\r\n";
+	
+					$valuesTable[] = array(
+						implode("\r\n", $items),
+						$tt_result,
+						implode("\r\n", $tyonkuvaus['laatutaso'][$key]),
+						implode("\r\n", $tyonkuvaus['kommenti'][$key])
+					);
+	
+				    }
+				}
+
+			$paramsTable = array(
+			    //'border' => 'single',
+			    //'tableAlign' => 'center',
+			    //'borderWidth' => 10,
+			    //'borderColor' => 'B70000',
+			    //'textProperties' => array('bold' => true, 'font' => 'Algerian', 'fontSize' => 18),
+			);
+			$docx->addTable($valuesTable, $paramsTable);
+
 			}
-			//     Jos se on yhteystiedot -->
-
-
-
-			$document->setValue('paivays', iconv('UTF-8','ISO-8859-1',date("d.m.Y")));
-
-			// Yritys
-			$document->setValue('yritys', iconv('UTF-8','ISO-8859-1',$firma->tyonantaja));
-			$document->setValue('yrityksen_osoite', iconv('UTF-8','ISO-8859-1',$firma->osoite));
-			$document->setValue('yrityksen_postinumero', iconv('UTF-8','ISO-8859-1',$firma->postinumero));
-			$document->setValue('yrityksen_toimipaikka', iconv('UTF-8','ISO-8859-1',$firma->postitoimipaikka));
-			$document->setValue('yrityksen_y_tunnus', iconv('UTF-8','ISO-8859-1',$firma->y_tunnus));
-			$document->setValue('yrityksen_puhelin', iconv('UTF-8','ISO-8859-1',$firma->puhelin));
-
-
-
-			$document->setValue('teksti', htmlspecialchars(iconv('UTF-8','ISO-8859-1',$model->tarjous)));
-			//$document->setValue('tyonkuvaus', iconv('UTF-8','ISO-8859-1', $model->tyonkuvaus));
 
 
 			$path = 'tiedostot/crm/tarjoukset/'.Yii::app()->user->domain.'/'.$liite;
-		  	$document->save($path.'.docx');
+			$docx->createDocx($path);
 
-			shell_exec('unoconv -f pdf '.$path.'.docx');
+			if( $_SERVER['REMOTE_ADDR'] != '::1' and $_SERVER['REMOTE_ADDR'] != '127.0.0.1' )
+			{
+			$transform = new TransformDocAdvLibreOffice();
+			$transform->transformDocument($path.'.docx', $path.'.pdf');
+			}
+
 			$this->redirect(array('index'));
-
 	}
 
 
@@ -608,7 +601,7 @@ class CrmTarjouksetController extends Controller
 		$exTilat = explode("\n", json_decode($r->tilat));
 		$tilat = '';
 		foreach($exTilat as $itm)
-			$tilat .= '<p>'.trim($itm).'</p>';
+			$tilat .= '<br>'.trim($itm);
 
 		$bd .= '
 		    <tr class="rivi" num="'.$key.'">
@@ -617,21 +610,19 @@ class CrmTarjouksetController extends Controller
 
 			$tyontehtavat = json_decode($r->tyontehtavat, true);
 			foreach($tyontehtavat as $k2=>$r2)
-			{
+				$bd .= '<br>'.$r2['tyotehtava'].': '.$r2['vkopvm'];
 
-			$bd .= '<p>'.$r2['tyotehtava'].': '.$r2['vkopvm'].'</p>';
-			}
 
 
 		$exLaatutaso = explode("\n", json_decode($r->laatutaso));
 		$tasot = '';
 		foreach($exLaatutaso as $itm)
-			$tasot .= '<p>'.trim($itm).'</p>';
+			$tasot .= '<br>'.trim($itm);
 
 		$exKommenti = explode("\n", json_decode($r->laatutaso));
 		$kommentit = '';
 		foreach($exKommenti as $itm)
-			$kommentit .= '<p>'.trim($itm).'</p>';
+			$kommentit .= '<br>'.trim($itm);
 
 		$bd .= '</td>
 		        <td>'.$tasot.'</td>
@@ -671,10 +662,7 @@ class CrmTarjouksetController extends Controller
 			$tyontehtavat = json_decode($r->tyontehtavat, true);
 			$tt = array();
 			foreach($tyontehtavat as $k2=>$r2)
-			{
-
-			$tt[] = array('tyotehtava'=>$r2['tyotehtava'],'vkopvm'=>$r2['vkopvm']);
-			}
+				$tt[] = array('tyotehtava'=>$r2['tyotehtava'],'vkopvm'=>$r2['vkopvm']);
 
 		$bd['tyontehtavat'][] = $tt;
 
@@ -700,7 +688,7 @@ class CrmTarjouksetController extends Controller
 
 
 
-		echo json_encode($bd);
+		return $bd;
 	}
 
 
