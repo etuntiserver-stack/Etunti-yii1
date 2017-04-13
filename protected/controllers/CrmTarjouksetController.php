@@ -497,11 +497,11 @@ $valuesTable = array(
     ),
 );
 $paramsTable = array(
-    'border' => 'single',
-    'tableAlign' => 'center',
-    'borderWidth' => 10,
-    'borderColor' => 'B70000',
-    'textProperties' => array('bold' => true, 'font' => 'Algerian', 'fontSize' => 18),
+    //'border' => 'single',
+    //'tableAlign' => 'center',
+    //'borderWidth' => 10,
+    //'borderColor' => 'B70000',
+    //'textProperties' => array('bold' => true, 'font' => 'Algerian', 'fontSize' => 18),
 );
 $docx->addTable($valuesTable, $paramsTable);
 
