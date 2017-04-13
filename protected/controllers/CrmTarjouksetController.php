@@ -505,7 +505,7 @@ $paramsTable = array(
 );
 $docx->addTable($valuesTable, $paramsTable);
 
-			$path = '../../tiedostot/crm/tarjoukset/'.Yii::app()->user->domain.'/'.$liite;
+			$path = 'tiedostot/crm/tarjoukset/'.Yii::app()->user->domain.'/'.$liite;
 			$docx->createDocx($path);
 
 /*
@@ -514,9 +514,7 @@ $docx->addTable($valuesTable, $paramsTable);
 			$document->generatePDF($path.'.pdf');
 */
 			$transform = new TransformDocAdvLibreOffice();
-			try {$transform->transformDocument($path.'.docx', $path.'.pdf');} catch (Exception $e) {
-    echo 'Выброшено исключение: ',  $e->getMessage(), "\n";
-}
+			$transform->transformDocument($path.'.docx', $path.'.pdf');
 
 			$this->redirect(array('index'));
 	}
