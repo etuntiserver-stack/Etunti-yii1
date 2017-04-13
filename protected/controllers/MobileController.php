@@ -192,10 +192,28 @@ function num($val){
 
 			$html = $this->renderPartial('raportit_pdf_l', array('model' => $model, 'tyyppi' => 'Luetut'),true);
 
+			if (!file_exists(Yii::app()->basePath."/../temp")) {
+			 	mkdir(Yii::app()->basePath."/../temp", 0777, true);
+			}
+			$tiedosto = time().'_temp';
+			$temp_tiedosto = (dirname(Yii::app()->basePath)).'/temp/'.$tiedosto;
+			$docx = new CreateDocx();
+			$docx->embedHTML($html);
+			$docx->createDocx( $temp_tiedosto );
+
+
 			if( $_SERVER['REMOTE_ADDR'] != '::1' and $_SERVER['REMOTE_ADDR'] != '127.0.0.1' )
 			{
 			$transform = new TransformDocAdvLibreOffice();
-			$transform->transformDocument($html, $path.'.pdf');
+			$transform->transformDocument('temp/'.$tiedosto.'.docx', 'temp/'.$tiedosto.'.pdf');
+			}
+			unlink('temp/'.$tiedosto.'.docx');
+
+			if (file_exists(Yii::app()->basePath.'/../temp'.$tiedosto.'.pdf'))
+			{
+			header('Content-type: application/pdf');
+			readfile('temp/'.$tiedosto.'.pdf');
+			unlink('temp/'.$tiedosto.'.pdf');
 			}
 exit;
 
