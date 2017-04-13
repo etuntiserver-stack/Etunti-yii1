@@ -514,7 +514,9 @@ $docx->addTable($valuesTable, $paramsTable);
 			$document->generatePDF($path.'.pdf');
 */
 			$transform = new TransformDocAdvLibreOffice();
-			$transform->transformDocument($path.'.docx', $path.'.pdf');
+			try {$transform->transformDocument($path.'.docx', $path.'.pdf');} catch (Exception $e) {
+    echo 'Выброшено исключение: ',  $e->getMessage(), "\n";
+}
 
 			$this->redirect(array('index'));
 	}
