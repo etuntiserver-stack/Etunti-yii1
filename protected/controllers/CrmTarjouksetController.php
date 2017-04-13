@@ -457,53 +457,52 @@ class CrmTarjouksetController extends Controller
 
 			if( $model->tyonkuvaus_id != 0 )
 			{
-				/*
-				$tb = '<style>
-				table { 
-				  color: #333;
-				  width: 650px;
-				  border: 1px solid #CCC; 
-				}
-				th {
-				  width: 162px;
-				  background: #F3F3F3; 
-				  font-weight: bold;
-				}
-				th,td {
-				  border: 1px solid #CCC; 
-				  padding: 15px;
-				  text-align: center;
-				}
-				</style>';
-				*/
+			/*
 				$tb = $this->get_tyonkuvaus($model->tyonkuvaus_id);
-
 				$docx->replaceVariableByHTML('tyonkuvaus', 'block', $tb, 
 					array('isFile' => false, 'parseDivsAsPs' => true, 'downloadImages' => false)
 				);
+			*/
+			$tyonkuvaus = $this->get_tyonkuvaus_by_id($model->tyonkuvaus_id);
+
+			$valuesTable = array(
+			    array(
+			        'Tilat','Työtehtävät','Laatutaso','Kommenti'
+			    )
+			);
+
+				if( is_array($tyonkuvaus) and isset($tyonkuvaus['tilat']) )
+				{
+				    foreach($tyonkuvaus['tilat'] as $key=>$items)
+				    {
+					$tyontehtavat = $tyonkuvaus['tyontehtavat'][$key];
+					$tt_result = '';
+					foreach($tyontehtavat as $kt=>$it)
+						$tt_result .= $it['tyotehtava'].': '.$it['vkopvm']."\r\n";
+	
+					$valuesTable[] = array(
+						implode("\r\n", $items),
+						$tt_result,
+						implode("\r\n", $tyonkuvaus['laatutaso'][$key]),
+						implode("\r\n", $tyonkuvaus['kommenti'][$key])
+					);
+	
+				    }
+				}
+
+			$paramsTable = array(
+			    //'border' => 'single',
+			    //'tableAlign' => 'center',
+			    //'borderWidth' => 10,
+			    //'borderColor' => 'B70000',
+			    //'textProperties' => array('bold' => true, 'font' => 'Algerian', 'fontSize' => 18),
+			);
+			$docx->addTable($valuesTable, $paramsTable);
+
 			}
 
 
 
-$valuesTable = array(
-    array(
-        'Tilat','Työtehtävät','Laatutaso','Kommenti'
-    ),
-    array(
-        21,22,23,24
-    ),
-    array(
-        31,32,33,34
-    ),
-);
-$paramsTable = array(
-    //'border' => 'single',
-    //'tableAlign' => 'center',
-    //'borderWidth' => 10,
-    //'borderColor' => 'B70000',
-    //'textProperties' => array('bold' => true, 'font' => 'Algerian', 'fontSize' => 18),
-);
-$docx->addTable($valuesTable, $paramsTable);
 
 			$path = 'tiedostot/crm/tarjoukset/'.Yii::app()->user->domain.'/'.$liite;
 			$docx->createDocx($path);
@@ -667,10 +666,7 @@ $docx->addTable($valuesTable, $paramsTable);
 			$tyontehtavat = json_decode($r->tyontehtavat, true);
 			$tt = array();
 			foreach($tyontehtavat as $k2=>$r2)
-			{
-
-			$tt[] = array('tyotehtava'=>$r2['tyotehtava'],'vkopvm'=>$r2['vkopvm']);
-			}
+				$tt[] = array('tyotehtava'=>$r2['tyotehtava'],'vkopvm'=>$r2['vkopvm']);
 
 		$bd['tyontehtavat'][] = $tt;
 
