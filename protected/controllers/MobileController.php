@@ -2510,9 +2510,10 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 
 		  ';		 
 
+		  $ft = FirmanTiedot::model()->findByPk(1);
 	          $mail = new YiiMailer();
 		  //$mail->clearLayout();//if layout is already set in config
-		  $mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
+		  $mail->setFrom($ft->sahkoposti, $ft->tyonantaja);
 		  $mail->setTo($_POST['sahkoposti']);
 		  $mail->setSubject($_POST['otsikko']);
 		  $mail->setBody($message);
