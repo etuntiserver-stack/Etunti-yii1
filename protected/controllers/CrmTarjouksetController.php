@@ -502,16 +502,9 @@ class CrmTarjouksetController extends Controller
 			}
 
 
-
-
 			$path = 'tiedostot/crm/tarjoukset/'.Yii::app()->user->domain.'/'.$liite;
 			$docx->createDocx($path);
 
-/*
-			$document = new TransformDoc();
-			$document->setStrFile($path.'.docx');
-			$document->generatePDF($path.'.pdf');
-*/
 			if( $_SERVER['REMOTE_ADDR'] != '::1' and $_SERVER['REMOTE_ADDR'] != '127.0.0.1' )
 			{
 			$transform = new TransformDocAdvLibreOffice();
