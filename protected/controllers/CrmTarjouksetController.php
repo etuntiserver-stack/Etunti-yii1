@@ -503,8 +503,8 @@ class CrmTarjouksetController extends Controller
 
 
 
-
-			$path = 'tiedostot/crm/tarjoukset/'.Yii::app()->user->domain.'/'.$liite;
+			$basepath = (dirname(Yii::app()->basePath));
+			$path = $basepath.'/../tiedostot/crm/tarjoukset/'.Yii::app()->user->domain.'/'.$liite;
 			$docx->createDocx($path);
 
 /*
