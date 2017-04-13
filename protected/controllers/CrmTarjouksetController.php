@@ -429,7 +429,7 @@ class CrmTarjouksetController extends Controller
 			define('PHPDOCX_INCLUDE_PATH', (dirname(Yii::app()->basePath)).'/protected/vendors/phpdocx');
 			spl_autoload_unregister(array('YiiBase','autoload'));
 			require_once PHPDOCX_INCLUDE_PATH.'/lib/pdf/dompdf_config.inc.php';
-			//require_once PHPDOCX_INCLUDE_PATH.'/classes/TransformDoc.inc';
+			//require_once PHPDOCX_INCLUDE_PATH.'/classes/TransformDocAdv.inc';
 			require_once PHPDOCX_INCLUDE_PATH.'/classes/CreateDocx.inc';
 			spl_autoload_register(array('AutoLoader','load'));
 			spl_autoload_register(array('YiiBase', 'autoload'));
@@ -474,7 +474,7 @@ class CrmTarjouksetController extends Controller
 				  text-align: center;
 				}
 				</style>';
-				$tb .= $this->get_tyonkuvaus($model->tyonkuvaus_id);
+				$tb = $this->get_tyonkuvaus($model->tyonkuvaus_id);
 
 				$docx->replaceVariableByHTML('tyonkuvaus', 'block', $tb, 
 					array('isFile' => false, 'parseDivsAsPs' => true, 'downloadImages' => false)
@@ -482,14 +482,37 @@ class CrmTarjouksetController extends Controller
 			}
 
 
+
+$valuesTable = array(
+    array(
+        'Tilat','Työtehtävät','Laatutaso','Kommenti'
+    ),
+    array(
+        21,22,23,24
+    ),
+    array(
+        31,32,33,34
+    ),
+);
+$paramsTable = array(
+    'border' => 'single',
+    'tableAlign' => 'center',
+    'borderWidth' => 10,
+    'borderColor' => 'B70000',
+    'textProperties' => array('bold' => true, 'font' => 'Algerian', 'fontSize' => 18),
+);
+$docx->addTable($valuesTable, $paramsTable);
+
 			$path = 'tiedostot/crm/tarjoukset/'.Yii::app()->user->domain.'/'.$liite;
 			$docx->createDocx($path);
 
-
+/*
 			$document = new TransformDoc();
 			$document->setStrFile($path.'.docx');
 			$document->generatePDF($path.'.pdf');
-
+*/
+			$transform = new TransformDoc();
+			$transform->transformDocument($path.'.docx', $path.'.pdf');
 
 			$this->redirect(array('index'));
 	}
