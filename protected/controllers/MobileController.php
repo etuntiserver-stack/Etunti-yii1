@@ -201,7 +201,7 @@ function num($val){
 			$docx->embedHTML($html);
 			$docx->createDocx( $temp_tiedosto );
 
-
+/*
 			if( $_SERVER['REMOTE_ADDR'] != '::1' and $_SERVER['REMOTE_ADDR'] != '127.0.0.1' )
 			{
 			$transform = new TransformDocAdvLibreOffice();
@@ -215,6 +215,7 @@ function num($val){
 			readfile('temp/'.$tiedosto.'.pdf');
 			unlink('temp/'.$tiedosto.'.pdf');
 			}
+*/
 exit;
 
 			        $html2pdf = Yii::app()->ePdf->HTML2PDF('L', 'A4', 'en', 'true', 'UTF-8', array(3,10,5,10));
