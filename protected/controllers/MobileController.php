@@ -207,7 +207,7 @@ function num($val){
 			$transform = new TransformDocAdvLibreOffice();
 			$transform->transformDocument('temp/'.$tiedosto.'.docx', 'temp/'.$tiedosto.'.pdf');
 			}
-			unlink('temp/'.$tiedosto.'.docx');
+			//unlink('temp/'.$tiedosto.'.docx');
 
 			if (file_exists(Yii::app()->basePath.'/../temp'.$tiedosto.'.pdf'))
 			{
