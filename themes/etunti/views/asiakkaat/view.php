@@ -15,9 +15,9 @@
 	'data'=>$model,
 	'cssFile' => Yii::app()->request->baseUrl.'/css/profile.css',
 	'attributes'=>array(
-		'id',
+		//'id',
 		'asiakasnumero',
-		'time',
+		//'time',
 		'yrityksen_nimi',
 		'y_tunnus',
 		'yhteyshenkilo',
@@ -27,7 +27,7 @@
 		'puhelin',
 		'sahkoposti',
 		'ryhma',
-		'aktiivinen',
+		//'aktiivinen',
 	),
 )); ?>
 
