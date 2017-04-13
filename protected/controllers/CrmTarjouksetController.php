@@ -457,6 +457,7 @@ class CrmTarjouksetController extends Controller
 
 			if( $model->tyonkuvaus_id != 0 )
 			{
+				/*
 				$tb = '<style>
 				table { 
 				  color: #333;
@@ -474,6 +475,7 @@ class CrmTarjouksetController extends Controller
 				  text-align: center;
 				}
 				</style>';
+				*/
 				$tb = $this->get_tyonkuvaus($model->tyonkuvaus_id);
 
 				$docx->replaceVariableByHTML('tyonkuvaus', 'block', $tb, 
@@ -503,7 +505,7 @@ $paramsTable = array(
 );
 $docx->addTable($valuesTable, $paramsTable);
 
-			$path = 'tiedostot/crm/tarjoukset/'.Yii::app()->user->domain.'/'.$liite;
+			$path = '../../tiedostot/crm/tarjoukset/'.Yii::app()->user->domain.'/'.$liite;
 			$docx->createDocx($path);
 
 /*
@@ -511,7 +513,7 @@ $docx->addTable($valuesTable, $paramsTable);
 			$document->setStrFile($path.'.docx');
 			$document->generatePDF($path.'.pdf');
 */
-			$transform = new TransformDoc();
+			$transform = new TransformDocAdvLibreOffice();
 			$transform->transformDocument($path.'.docx', $path.'.pdf');
 
 			$this->redirect(array('index'));
