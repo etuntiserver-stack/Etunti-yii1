@@ -119,7 +119,7 @@
 				AND value2!=''
 			";
 			$valikot = Valikkoot::model()->findAll($criteria);
-
+		  	$ft = FirmanTiedot::model()->findbypk(1);
 			foreach($arr as $ryhma){
 				
 				foreach($valikot as $data){
@@ -148,7 +148,7 @@
 						{
 							$subject = Yii::t('main', 'Ilmoitus avoimista kohteesta '.date("d.m.Y H:i"));
 							$mail = new YiiMailer();
-							$mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
+							$mail->setFrom($ft->sahkoposti, $ft->tyonantaja);
 							$mail->setTo($sahkopostiArray);
 							$mail->setSubject($subject);
 							$mail->setBody($mailMessage);
@@ -262,7 +262,7 @@
 				AND value2!=''
 			";
 			$valikot = Valikkoot::model()->findAll($criteria);
-
+		  	$ft = FirmanTiedot::model()->findbypk(1);
 			foreach($arr as $ryhma){
 				
 				foreach($valikot as $data){
@@ -291,7 +291,7 @@
 						{
 							$subject = Yii::t('main', 'Ilmoitus myöhästyneistä kohteesta '.date("d.m.Y H:i"));
 							$mail = new YiiMailer();
-							$mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
+							$mail->setFrom($ft->sahkoposti, $ft->tyonantaja);
 							$mail->setTo($sahkopostiArray);
 							$mail->setSubject();
 							$mail->setBody($mailMessage);
@@ -393,7 +393,7 @@
 				AND value2!=''
 			";
 			$valikot = Valikkoot::model()->findAll($criteria);
-
+		  	$ft = FirmanTiedot::model()->findbypk(1);
 			foreach($arr as $ryhma){
 				
 				foreach($valikot as $data){
@@ -422,7 +422,7 @@
 						{
 							$subject = Yii::t('main', 'Ilmoitus merkkipäivästä '.date("d.m.Y H:i"));
 							$mail = new YiiMailer();
-							$mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
+							$mail->setFrom($ft->sahkoposti, $ft->tyonantaja);
 							$mail->setTo($sahkopostiArray);
 							$mail->setSubject($subject);
 							$mail->setBody($mailMessage);
@@ -526,11 +526,13 @@
 
 			if( $_SERVER['REMOTE_ADDR'] != '::1' and $_SERVER['REMOTE_ADDR'] != '127.0.0.1' and count($saaja) > 0 and !empty($message) )
 			{
+
+			$ft = FirmanTiedot::model()->findbypk(1);
 			   foreach($saaja as $key=>$sahkoposti)
 			   {		
 				$subject = Yii::t('main', 'lmoitus toistuvien työvuorojen päättymisestä');
 				$mail = new YiiMailer();
-				$mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
+				$mail->setFrom($ft->sahkoposti, $ft->tyonantaja);
 				$mail->setTo($sahkoposti);
 				$mail->setSubject($subject);
 				$mail->setBody($message);
