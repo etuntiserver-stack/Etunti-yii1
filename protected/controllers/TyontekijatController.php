@@ -360,8 +360,9 @@ class TyontekijatController extends Controller
 </p>
 				';
 
+				$ft = FirmanTiedot::model()->findByPk(1);
 				$mail = new YiiMailer();
-				$mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
+				$mail->setFrom($ft->sahkoposti, $ft->tyonantaja);
 				$mail->setTo($model->tekijan_email);
 				$mail->setSubject($subject);
 				$mail->setBody($message);
