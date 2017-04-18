@@ -139,7 +139,7 @@ public function email()
 		</html>";
 		if(!empty($value1['osoite'])){
 			mail ($value1['osoite'], $otsikko, $viesti, $headers);
-			echo $value1['osoite'].'<br>';
+			//echo $value1['osoite'].'<br>';
 		} else {
 			echo "<h3>$otsikko</h3>";
 			echo $viesti;
