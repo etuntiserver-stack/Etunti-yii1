@@ -139,6 +139,7 @@ public function email()
 		</html>";
 		if(!empty($value1['osoite'])){
 			mail ($value1['osoite'], $otsikko, $viesti, $headers);
+			echo $value1['osoite'].'<br>';
 		} else {
 			echo "<h3>$otsikko</h3>";
 			echo $viesti;
@@ -158,6 +159,7 @@ public function email()
 			$mail->setBody($message);
 			$mail->setAttachment($liite);
 			$mail->send();
+			//echo $this->kentat[2]['VALUE'].'<br>';
 		}
 
 	}
@@ -225,7 +227,7 @@ public function tulosta_kentat()
 					break;
 
 				case 'submit':
-					print "<div class=\"$FIELD_class\"><input type=\"submit\" name=\"submit\" value=\"{$value['VALUE']}\" class=\"button $INPUT_class\"></div>";
+					print "<div class=\"$FIELD_class\"><input type=\"submit\" name=\"submit\" value=\"{$value['VALUE']}\" class=\"button button_submit $INPUT_class\"><div id='odottaus'></div></div>";
 					break;
 
 				case 'hidden':

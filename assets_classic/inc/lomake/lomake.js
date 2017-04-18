@@ -42,6 +42,8 @@ jQuery(document).ready(function(){
         form.submit(function(event){
             cont = lomake_validointi(form);
             if(cont == true && form.hasClass('ajax')){
+		$('.button_submit').remove();
+		$('#odottaus').html('<img src="etusivuimg/odottaus.gif" height="50">').show();
                 event.preventDefault();
                 $.ajax({
                   type: form.attr('method'),
@@ -54,7 +56,7 @@ jQuery(document).ready(function(){
                   // Optionally alert the user of success here...
                   form.closest('div').html(data);
 
-
+		  $('#odottaus').hide();
 		  $('#lataaMenestyvan').html('Kiitos oppaan lataamisesta.');		
 		  $('#taytapyydetytKentaat').html('Ilmainen opas on lähetetty sähköpostisi.');		
 
