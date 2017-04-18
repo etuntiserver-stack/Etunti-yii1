@@ -265,8 +265,10 @@
   </style>
 </head>
 
+<?php if(isset(Yii::app()->user->domain)) : ?>
 <?php $asetukset=Asetukset::model()->findByPk(1); ?>
-<?php $firmanTiedot=FirmanTiedot::model()->findByPk(1); ?> 
+<?php $firmanTiedot=FirmanTiedot::model()->findByPk(1); ?>
+<?php endif; ?>
 
 <body bgcolor="#f7f7f7">
 <table align="center" cellpadding="0" cellspacing="0" class="container-for-gmail-android" width="100%">
@@ -281,6 +283,7 @@
               <v:fill type="tile" src="http://s3.amazonaws.com/swu-filepicker/4E687TRe69Ld95IDWyEg_bg_top_02.jpg" color="#ffffff" />
               <v:textbox inset="0,0,0,0">
             <![endif]-->
+	      <?php if(isset(Yii::app()->user->domain)) : ?>
               <center>
                 <table cellpadding="0" cellspacing="0" width="600" class="w320">
                   <tr>
@@ -293,6 +296,7 @@
                   </tr>
                 </table>
               </center>
+	      <?php endif; ?>
               <!--[if gte mso 9]>
               </v:textbox>
             </v:rect>
@@ -314,6 +318,7 @@
   </tr>
   <tr>
     <td align="center" valign="top" width="100%" style="background-color: #f7f7f7; height: 100px;">
+      <?php if(isset(Yii::app()->user->domain)) : ?>
       <center>
         <table cellspacing="0" cellpadding="0" width="600" class="w320">
           <tr>
@@ -325,6 +330,7 @@
           </tr>
         </table>
       </center>
+      <?php endif; ?>
     </td>
   </tr>
 </table>
