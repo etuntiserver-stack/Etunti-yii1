@@ -141,51 +141,61 @@ class TyotodistusController extends Controller
 	protected function docxsave($model, $tiedosto)
 	{
 
-
-			Yii::import('ext.yiiword.YiiWord', true);
-			Yii::registerAutoloader(array('YiiWord', 'autoload'), true);
-
 			if (!file_exists(Yii::app()->basePath."/../tiedostot/tyotodistukset/".Yii::app()->user->domain)) {
 			 	mkdir(Yii::app()->basePath."/../tiedostot/tyotodistukset/".Yii::app()->user->domain, 0777, true);
 			}
 
-		
-			$PHPWord = new PHPWord();
-			$document = $PHPWord->loadTemplate('tiedostot/templates/'.Yii::app()->user->domain.'/template_tyotodistus.docx');
+			define('PHPDOCX_INCLUDE_PATH', (dirname(Yii::app()->basePath)).'/protected/vendors/phpdocx');
+			spl_autoload_unregister(array('YiiBase','autoload'));
+			require_once PHPDOCX_INCLUDE_PATH.'/lib/pdf/dompdf_config.inc.php';
+			//require_once PHPDOCX_INCLUDE_PATH.'/classes/TransformDocAdv.inc';
+			require_once PHPDOCX_INCLUDE_PATH.'/classes/CreateDocx.inc';
+			spl_autoload_register(array('AutoLoader','load'));
+			spl_autoload_register(array('YiiBase', 'autoload'));
 
+			$template_tiedosto = 'tiedostot/templates/'.Yii::app()->user->domain.'/template_tyotodistus.docx';
 
-			$document->setValue('tyonantaja', iconv('UTF-8','ISO-8859-1',$model->tyonantaja));
-			$document->setValue('tyonantaja_osoite', iconv('UTF-8','ISO-8859-1',$model->osoite));
-			$document->setValue('tyonantaja_y_tunnus', $model->y_tunnus);
-			$document->setValue('tyonantaja_puhelin', $model->puhelin);
-			$document->setValue('tyonantaja_sahkoposti', $model->sahkoposti);
+			$docx = new CreateDocxFromTemplate($template_tiedosto);
+			$docx->setTemplateSymbol('#');
+			$variables = array(
+				'tyonantaja' => $model->tyonantaja,
+				'tyonantaja_osoite' => $model->osoite,
+				'tyonantaja_y_tunnus' => $model->y_tunnus,
+				'tyonantaja_puhelin' => $model->puhelin,
+				'tyonantaja_sahkoposti' => $model->sahkoposti,
+				'tyontekija_nimi' => $model->tekijan_nimi,
+				'tyontekija_osoite' => $model->tekijan_katuosoite,
+				'tyontekija_henkilotunnus' => $model->tekijan_henkilotunnus,
+				'tyontekija_puhelin' => $model->tekijan_puh,
+				'tyontekija_sahkoposti' => $model->tekijan_email,
+				'aika' => $model->Paivays,
+				'paikka' => $model->Paikka,
+				'johtajan_nimi' => $model->TyonantajanEdustaja,
+			);
+			$docx->replaceVariableByText($variables);
 
+			$variables_2 = array(
+				'Alku' => $model->Alku,
+				'Loppu' => $model->Loppu,
+				'Tyokohde' => $model->Tyokohde,
+				'TyosuhteenPaattamisenSyy' => $model->TyosuhteenPaattamisenSyy,
+				'Kaytos' => $model->Kaytos,
+				'Arvio' => $model->Arvio,
+				'NimikeTehtava' => $model->NimikeTehtava,
+				'Tyotehtavat' => $model->Tyotehtavat,
+			);
+			$docx->replaceVariableByText($variables_2);
 
-			$document->setValue('tyontekija_nimi', iconv('UTF-8','ISO-8859-1',$model->tekijan_nimi));
-			$document->setValue('tyontekija_osoite', iconv('UTF-8','ISO-8859-1',$model->tekijan_katuosoite));
-			$document->setValue('tyontekija_henkilotunnus', $model->tekijan_henkilotunnus);
-			$document->setValue('tyontekija_puhelin', $model->tekijan_puh);
-			$document->setValue('tyontekija_sahkoposti', $model->tekijan_email);
+			$path = 'tiedostot/tyotodistukset/'.Yii::app()->user->domain.'/'.$tiedosto;
+			$docx->createDocx($path);
 
-			$document->setValue('aika', $model->Paivays);
-			$document->setValue('paikka', iconv('UTF-8','ISO-8859-1', $model->Paikka));
-			$document->setValue('johtajan_nimi', iconv('UTF-8','ISO-8859-1', $model->TyonantajanEdustaja));
+			if( $_SERVER['REMOTE_ADDR'] != '::1' and $_SERVER['REMOTE_ADDR'] != '127.0.0.1' )
+			{
+			$transform = new TransformDocAdvLibreOffice();
+			$transform->transformDocument($path.'.docx', $path.'.pdf');
+			}
 
-			$document->setValue('Alku', iconv('UTF-8','ISO-8859-1', $model->Alku));
-			$document->setValue('Loppu', iconv('UTF-8','ISO-8859-1', $model->Loppu));
-			$document->setValue('Tyokohde', iconv('UTF-8','ISO-8859-1', $model->Tyokohde));
-			$document->setValue('TyosuhteenPaattamisenSyy', iconv('UTF-8','ISO-8859-1', $model->TyosuhteenPaattamisenSyy));
-			$document->setValue('Kaytos', iconv('UTF-8','ISO-8859-1', $model->Kaytos));
-			$document->setValue('Arvio', iconv('UTF-8','ISO-8859-1', $model->Arvio));
-			$document->setValue('NimikeTehtava', iconv('UTF-8','ISO-8859-1', $model->NimikeTehtava));
-			$document->setValue('Tyotehtavat', iconv('UTF-8','ISO-8859-1', $model->Tyotehtavat));
-
-			$file = 'tiedostot/tyotodistukset/'.Yii::app()->user->domain.'/'.$tiedosto;
-		  	$document->save($file.'.docx');
-
-			shell_exec('unoconv -f pdf '.$file.'.docx'); // ei localhostina
 			$this->redirect(array('index'));
-
 	}
 
 
@@ -265,6 +275,12 @@ class TyotodistusController extends Controller
 			'tekijan_henkilotunnus' => $model->tekijan_henkilotunnus
 		);
 		echo json_encode($tiedot);
+	}
+
+	protected function etuSukunimi($tid)
+	{
+	   $site = Yii::app()->createController('Site');
+	   return $site[0]->etuSukunimi($tid);
 	}
 
 }

@@ -102,30 +102,30 @@
 			<h3><?php echo Yii::t('main', 'Template variables'); ?></h3>
 
 <textarea class="form-control" rows="17" cols="60">
-${tyonantaja}
-${tyonantaja_osoite}
-${tyonantaja_y_tunnus}
-${tyonantaja_puhelin}
-${tyonantaja_sahkoposti}
+#tyonantaja#
+#tyonantaja_osoite#
+#tyonantaja_y_tunnus#
+#tyonantaja_puhelin#
+#tyonantaja_sahkoposti#
 
-${tyontekija_nimi}
-${tyontekija_osoite}
-${tyontekija_henkilotunnus}
-${tyontekija_puhelin}
-${tyontekija_sahkoposti}
+#tyontekija_nimi#
+#tyontekija_osoite#
+#tyontekija_henkilotunnus#
+#tyontekija_puhelin#
+#tyontekija_sahkoposti#
 
-${aika}
-${paikka}
-${johtajan_nimi}
+#aika#
+#paikka#
+#johtajan_nimi#
 
-${Alku}
-${Loppu}
-${Tyokohde}
-${TyosuhteenPaattamisenSyy}
-${Kaytos}
-${Arvio}
-${NimikeTehtava}
-${Tyotehtavat}
+#Alku#
+#Loppu#
+#Tyokohde#
+#TyosuhteenPaattamisenSyy#
+#Kaytos#
+#Arvio#
+#NimikeTehtava#
+#Tyotehtavat#
 </textarea>
 
                         </div>
@@ -168,10 +168,9 @@ ${Tyotehtavat}
   <table class="table table-striped" id="mobileTable">
   <thead class="myBgColors">
   <tr>
-
+  <th></th>
   <th><?php echo Yii::t('main', 'Nimi'); ?></th>
   <th><?php echo Yii::t('main', 'Tiedosto'); ?></th>
-  <th></th>
   </tr>
   </thead>
   <?php $this->widget('zii.widgets.CListView', array(

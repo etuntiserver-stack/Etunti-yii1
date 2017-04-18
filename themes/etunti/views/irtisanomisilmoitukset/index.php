@@ -101,24 +101,24 @@
 			<h3><?php echo Yii::t('main', 'Template variables'); ?></h3>
 
 <textarea class="form-control" rows="17" cols="60">
-${tyonantaja}
-${tyonantaja_osoite}
-${tyonantaja_y_tunnus}
-${tyonantaja_puhelin}
-${tyonantaja_sahkoposti}
+#tyonantaja#
+#tyonantaja_osoite#
+#tyonantaja_y_tunnus#
+#tyonantaja_puhelin#
+#tyonantaja_sahkoposti#
 
-${tyontekija_nimi}
-${tyontekija_osoite}
-${tyontekija_henkilotunnus}
-${tyontekija_puhelin}
-${tyontekija_sahkoposti}
+#tyontekija_nimi#
+#tyontekija_osoite#
+#tyontekija_henkilotunnus#
+#tyontekija_puhelin#
+#tyontekija_sahkoposti#
 
-${aika}
-${paikka}
-${johtajan_nimi}
-${teksti}
-${alku_pvm}
-${loppu_pvm}</textarea>
+#aika#
+#paikka#
+#johtajan_nimi#
+#teksti#
+#alku_pvm#
+#loppu_pvm#</textarea>
 
                         </div>
                       </div>
