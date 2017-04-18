@@ -41,7 +41,7 @@ class SiteController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', 
-				'actions'=>array('etusivu','ohjesivu','etusivu_esimerki', 'change_color', 'valiko', 'valiko_ajax', 'kohderyhma', 'ohjevideot', 'mobemu', 'etusivu_ajax', 'ulkonaky', 'autocomplete', 'synkronoi_gps_sijainti', 'mail_template'),
+				'actions'=>array('etusivu','ohjesivu','etusivu_esimerki', 'change_color', 'valiko', 'valiko_ajax', 'kohderyhma', 'ohjevideot', 'mobemu', 'etusivu_ajax', 'ulkonaky', 'autocomplete', 'synkronoi_gps_sijainti', 'mail_template', 'getcityes'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('allow', 
@@ -71,7 +71,7 @@ class SiteController extends Controller
 		if(isset(Yii::app()->user->adminID))
 		{
 		$m = Administrators::model()->findbypk(Yii::app()->user->adminID);
-	        if($m->id == Yii::app()->user->adminID)
+	        if( isset($m->id) and $m->id == Yii::app()->user->adminID )
 	            return true;
 		} else {
 	            return false;
@@ -910,6 +910,58 @@ $(document).ready(function(){
 	}
 
 
+	public function actionGetcityes()
+	{
+
+		$m1 = Yii::app()->request->getPost('month1');
+		$m2 = Yii::app()->request->getPost('month2');
+		$total_l = array();
+		$toimipaikkaat = array();
+
+       		$criteria = new CDbCriteria();
+		$criteria->with=array('kohteet');
+        	$criteria->select = " COUNT(*) as count, aloitan";
+        	$criteria->group = " MONTH(DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d')), kohteet.kaupunki ";
+        	$criteria->condition = "  
+			aloitan !='' and loppui !='' and status ='3'
+			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d')  
+			BETWEEN '".$m2."' AND '".$m1."'
+			AND kohteet.kaupunki!=''
+			AND t.id NOT IN(select kid from sivexkuitti_repaired)
+			AND kohdenID!=0
+		";
+
+		$lu = Mobile::model()->findAll($criteria);
+		foreach($lu as $l)
+		{
+			$toimipaikkaat[$l->kohteet->kaupunki][(int)date("m", strtotime($l->aloitan))] = array('kaupunki'=>$l->kohteet->kaupunki, 'count'=>$l->count);
+		}
+
+		/* ////////////////////////// */
+
+       		$criteria = new CDbCriteria();
+		$criteria->with=array('kohteet');
+        	$criteria->select = " COUNT(*) as count, aloitan";
+        	$criteria->group = " kohteet.kaupunki ";
+        	$criteria->condition = "  
+			aloitan !='' and loppui !='' and status ='3'
+			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d')  
+			BETWEEN '".$m2."' AND '".$m1."'
+			AND kohteet.kaupunki!=''
+			AND kohdenID!=0
+		";
+
+		$tot = Toteutuneet::model()->findAll($criteria);
+		foreach($tot as $l)
+		{
+			$toimipaikkaat[$l->kohteet->kaupunki][(int)date("m", strtotime($l->aloitan))] = array('kaupunki'=>$l->kohteet->kaupunki, 'count'=>$l->count);
+		}
+
+
+		echo json_encode(array('toimipaikkaat'=>$toimipaikkaat));
+
+	}
+/*
 	public function toteutuThisMonthByCity($k,$city)
 	{
 		$month = $k;
@@ -932,7 +984,7 @@ $(document).ready(function(){
 		    $total_l += $l->count;
 		}
 
-		/* ////////////////////////// */
+
 
        		$criteria = new CDbCriteria();
 		$criteria->with=array('kohteet');
@@ -954,7 +1006,7 @@ $(document).ready(function(){
 		return $total_l;
 
 	}
-
+*/
 
 
 	public function tilatTanaan($tila)

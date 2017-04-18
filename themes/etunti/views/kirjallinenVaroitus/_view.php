@@ -18,7 +18,7 @@
 		?>
 	</td>
 	<td>
-		<?php echo $data->tekijan_nimi; ?>
+		<?php echo $this->etuSukunimi($data->tid); ?>
 	</td>
 	<td>
 		<?php echo $data->kirjallisen_varoituksen; ?>

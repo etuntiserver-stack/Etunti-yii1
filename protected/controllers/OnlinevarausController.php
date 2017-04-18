@@ -800,6 +800,14 @@ $months=array(
 		$aikavali_1t = 3600;
 		$aikavali_2t = 7200;
 
+/*
+		// <-- Ei lasketa
+		$site = Yii::app()->createController('Site');
+		$eilasketa = $site[0]->eiLasketa();
+		// Ei lasketa -->
+		//AND $eilasketa
+*/
+
 		// <-- Täysin vapaana
    		$sumTunti = (float)$_SESSION['onlinevaraus']['sumTunti'];
 		$sumTuntiMin = $sumTunti*60;

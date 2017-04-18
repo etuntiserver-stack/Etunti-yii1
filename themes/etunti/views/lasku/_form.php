@@ -967,7 +967,7 @@ if($("#modelID").val() != '1'){
 
 $("#uusiRivi").click(function() {
     var rivi = $("#samaRivi").html();
-    var rowCount = $('table#TableRivit tbody tr').length;
+    var rowCount = makeid();
 
         $.ajax({
            url: location.protocol + "//" + location.host + '/index.php/lasku/tr_rivit_tyhja',
@@ -980,6 +980,17 @@ $("#uusiRivi").click(function() {
         });
 });
 
+
+function makeid()
+{
+    var text = "";
+    var possible = "0123456789";
+
+    for( var i=0; i < 7; i++ )
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+    return text;
+}
 
 function jumpToPageBottom() {
     $('html, body').animate({scrollTop:1000}, 'slow');
@@ -1023,18 +1034,16 @@ $("table#TableRivit .valitseTuote").change(function() {
 
 });
 
-	poista();
+
 }
 
 
-poista();
-function poista(){
-  $(".poista").click(function() {
-	var forID = $(this).attr("for").split("_");
-	$("#trRivi_"+forID[1]).remove();
+
+  $(document).delegate(".poista","click",function(){
+	$(this).closest('tr').remove();
 	yhteensaTotal();
   });
-}
+
 
 
 Rivi();
@@ -1226,7 +1235,6 @@ function pyyntoRiville(kohteet,from,to,tuotePalvelu,tuntiVaiKk){
 		           success: function(data){
 				console.log(value);
 				$("table#TableRivit tbody tr").last().after(data);
-				poista();
 				eachLaskenta();
 				Rivi();
 				$("#tuntienTulos").removeClass("alert alert-danger").html('');

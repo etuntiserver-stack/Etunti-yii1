@@ -340,9 +340,10 @@ class TyovuorootController extends Controller
 	
 		$subject = Yii::t('main', 'TYÖVUOROT'). ' '.$tt->tekijan_nimi;
 
+		$ft = FirmanTiedot::model()->findByPk(1);
 		$mail = new YiiMailer();
 		//$mail->clearLayout();//if layout is already set in config
-		$mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
+		$mail->setFrom($ft->sahkoposti, $ft->tyonantaja);
 		$mail->setTo($saaja);
 		$mail->setSubject($subject);
 		$mail->setBody($message);
@@ -454,10 +455,10 @@ class TyovuorootController extends Controller
 		
 		$subject = Yii::t('main', 'TYÖVUOROT'). ' '.$tt->tekijan_nimi;
 
-		  $firma = FirmanTiedot::model()->findbypk(1);		
+		  $ft = FirmanTiedot::model()->findbypk(1);
 		  $mail = new YiiMailer();
 		  //$mail->clearLayout();//if layout is already set in config
-		  $mail->setFrom($firma->sahkoposti, 'ETUNTI.FI');
+		  $mail->setFrom($ft->sahkoposti, $ft->tyonantaja);
 		  $mail->setTo($tt->tekijan_email);
 		  $mail->setSubject($subject);
 		  $mail->setBody($message);
@@ -516,9 +517,10 @@ class TyovuorootController extends Controller
 
 		$subject = Yii::t('main', 'TYÖVUOROT ').$week.'-'.$year;
 
+		  $ft = FirmanTiedot::model()->findByPk(1);
 		  $mail = new YiiMailer();
 		  //$mail->clearLayout();//if layout is already set in config
-		  $mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
+		  $mail->setFrom($ft->sahkoposti, $ft->tyonantaja);
 		  $mail->setTo($saaja);
 		  $mail->setSubject($subject);
 		  $mail->setBody($message);
@@ -3053,6 +3055,9 @@ class TyovuorootController extends Controller
 
 		  if($asiakkaat->save())
 		  {
+			Asiakkaat::model()->updateByPk($asiakkaat->id, array( 'asiakasnumero' => $asiakkaat->id ));
+
+
 			$kohteet = new Kohteet;
 			$kohteet->asiakas_id = $asiakkaat->id;
 
@@ -3116,9 +3121,10 @@ class TyovuorootController extends Controller
 					$message .= '<h2>Kiitos tilauksesta.</h2>';
 					$subject = Yii::t('main', 'Kiitos tilauksesta');
 
+					$ft = FirmanTiedot::model()->findByPk(1);
 					$mail = new YiiMailer();
 					//$mail->clearLayout();//if layout is already set in config
-					$mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
+					$mail->setFrom($ft->sahkoposti, $ft->tyonantaja);
 					$mail->setTo($asiakkaat->sahkoposti);
 					$mail->setSubject($subject);
 					$mail->setBody($message);

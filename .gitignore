@@ -7,8 +7,10 @@ assets/*
 emails/*
 temp/*
 emails
+files/*
 backup/*
 tiedostot/*
+files/*
 tiedostot
 ohjevideot/*
 ohjevideot
@@ -28,3 +30,4 @@ etuntiAPP/EtuntiAdmin/platforms/*
 asiakas/platforms/*
 error_log
 .htaccess
+protected/vendors/phpdocx/lib/pdf/lib/fonts/log.htm

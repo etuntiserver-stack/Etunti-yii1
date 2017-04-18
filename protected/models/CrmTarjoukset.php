@@ -34,9 +34,10 @@ public $asiakastila;
 		// will receive user inputs.
 		return array(
 			//array('kohde_id', 'required'),
-			array('asiakas_id, yhteystiedot_id, status, kohde_id, tyonkuvaus_id', 'numerical', 'integerOnly'=>true),
+			array('asiakas_id, yhteystiedot_id, status, kohde_id, tyonkuvaus_id, alv, hinta', 'numerical', 'integerOnly'=>true),
 			array('hyvaksyn_koodi, liite, kohteen_osoite, kohteen_postitoimipaikka', 'length', 'max'=>255),
 			array('asiakkaan_sahkoposti, kohteen_postinumero', 'length', 'max'=>100),
+			array('hinta_tyyppi', 'length', 'max'=>50),
 			array('tarjous, tyonkuvaus, tarjouslaskenta, onko_osoite_sama', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
@@ -75,7 +76,8 @@ public $asiakastila;
 			'kohteen_postinumero' => Yii::t('main', 'Kohteen postinumero'),
 			'kohteen_postitoimipaikka' => Yii::t('main', 'Kohteen postitoimipaikka'),
 			'asiakastila' => Yii::t('main', 'Asiakastila'),
-			'kohde_id' => Yii::t('main', 'Työnkuvaus'),
+			'kohde_id' => Yii::t('main', 'Kohde'),
+			'tyonkuvaus_id' => Yii::t('main', 'Työnkuvaus'),
 		);
 	}
 
