@@ -92,7 +92,7 @@
   </form>
  ';
 
-  echo '<a href="/../lib/mallit/kirjallinen_varoitus.docx">'.Yii::t('main', 'Tässä').'</a> '.Yii::t('main', 'on templaten esimerkki.');
+  echo '<a href="/../lib/mallit/'.$template.'.docx">'.Yii::t('main', 'Tässä').'</a> '.Yii::t('main', 'on templaten esimerkki.');
 ?>
                         </div>
                       </div>

@@ -150,10 +150,6 @@ class KirjallinenVaroitusController extends Controller
 	protected function docxsave($model, $tiedosto)
 	{
 
-
-			Yii::import('ext.yiiword.YiiWord', true);
-			Yii::registerAutoloader(array('YiiWord', 'autoload'), true);
-
 			if (!file_exists(Yii::app()->basePath."/../tiedostot/varoitukset/".Yii::app()->user->domain)) {
 			 	mkdir(Yii::app()->basePath."/../tiedostot/varoitukset/".Yii::app()->user->domain, 0777, true);
 			}
@@ -198,7 +194,6 @@ class KirjallinenVaroitusController extends Controller
 			$transform = new TransformDocAdvLibreOffice();
 			$transform->transformDocument($path.'.docx', $path.'.pdf');
 			}
-
 
 			$this->redirect(array('index'));
 

@@ -18,7 +18,7 @@
 <div class="row">
   <div class="col-sm-3">
 
-	<legend><?php echo Yii::t('main', 'Perus tiedot'); ?></legend>
+	<legend><?php echo Yii::t('main', 'Perustiedot'); ?></legend>
 
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'asiakas_id'); ?>
@@ -49,6 +49,16 @@
 	</div>
 
 	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'tarjous'); ?>
+		<?php echo $form->textArea($model,'tarjous',array('class'=>'form-control', 'rows'=>4)); ?>
+		<?php echo $form->error($model,'kohteen_osoite'); ?>
+	</div>
+
+ </div><div class="col-sm-3">
+
+	<legend><?php echo Yii::t('main', 'Kohde'); ?></legend>
+
+	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'kohde_id'); ?>
 		<?php
 		$list = array();
@@ -65,34 +75,6 @@
 			array('empty'=>'Valitse','class'=>'form-control'));		
         	?>
 		<?php echo $form->error($model,'kohde_id'); ?>
-	</div>
-
-	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'alv'); ?>
-		<?php
-        	$l = array(0=>0,10=>10,14=>14,24=>24);
-
-        	echo $form->dropDownList($model, 'alv', $l,
-		array('empty'=>'Valitse','class'=>'form-control'
-		));
-        	?>
-		<?php echo $form->error($model,'alv'); ?>
-	</div>
-
-	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'hinta_tyyppi'); ?>
-		<?php
-		$list = array(1=>'tunti',2=>'kk',3=>'kpl');
-        	echo $form->dropDownList($model, 'hinta_tyyppi', $list,
-		array('class'=>'form-control'));	
-        	?>
-		<?php echo $form->error($model,'hinta_tyyppi'); ?>
-	</div>
-
-	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'hinta'); ?>
-		<?php echo $form->numberField($model,'hinta',array('size'=>10,'maxlength'=>100,'class'=>'form-control', 'step'=>'any')); ?>
-		<?php echo $form->error($model,'hinta'); ?>
 	</div>
 
 	<div class="section fill mb5 tyonkuvaus collapse">
@@ -124,18 +106,6 @@
 		<?php echo $form->error($model,'tyonkuvaus_id'); ?>
 	</div>
 
-
-
-	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'tarjous'); ?>
-		<?php echo $form->textArea($model,'tarjous',array('class'=>'form-control', 'rows'=>4)); ?>
-		<?php echo $form->error($model,'kohteen_osoite'); ?>
-	</div>
-
- </div><div class="col-sm-3">
-
-	<legend><?php echo Yii::t('main', 'Kohde'); ?></legend>
-
 	<div class="section fill mb5 kohdeHide">
 		<?php echo $form->labelEx($model,'kohteen_osoite'); ?>
 		<?php echo $form->textField($model,'kohteen_osoite',array('maxlength'=>255,'class'=>'form-control')); ?>
@@ -154,7 +124,41 @@
 		<?php echo $form->error($model,'kohteen_postitoimipaikka'); ?>
 	</div>
 
- </div><div class="col-sm-6">
+
+ </div><div class="col-sm-2">
+
+	<legend><?php echo Yii::t('main', 'Hinta'); ?></legend>
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'hinta_tyyppi'); ?>
+		<?php
+		$list = array(1=>'tunti',2=>'kk',3=>'kpl');
+        	echo $form->dropDownList($model, 'hinta_tyyppi', $list,
+		array('class'=>'form-control'));	
+        	?>
+		<?php echo $form->error($model,'hinta_tyyppi'); ?>
+	</div>
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'hinta'); ?>
+		<?php echo $form->numberField($model,'hinta',array('size'=>10,'maxlength'=>100,'class'=>'form-control', 'step'=>'any')); ?>
+		<?php echo $form->error($model,'hinta'); ?>
+	</div>
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'alv'); ?>
+		<?php
+        	$l = array(0=>0,10=>10,14=>14,24=>24);
+
+
+        	echo $form->dropDownList($model, 'alv', $l,
+		array('empty'=>'Valitse','class'=>'form-control'
+		));
+        	?>
+		<?php echo $form->error($model,'alv'); ?>
+	</div>
+
+ </div><div class="col-sm-4">
 
 	<legend><?php echo Yii::t('main', 'Asiakkaan tiedot'); ?></legend>
 	<div class="section fill mb5 kohdeHide">
