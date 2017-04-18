@@ -18,7 +18,7 @@
 		?>
 	</td>
 	<td>
-		<?php echo $this->etuSukunimi($data->id); ?>
+		<?php echo $this->etuSukunimi($data->tid); ?>
 	</td>
 	<td>
 		<?php echo $data->teksti; ?>

@@ -197,7 +197,7 @@ class IrtisanomisilmoituksetController extends Controller
 			$docx->replaceVariableByText($variables);
 
 
-			$path = 'tiedostot/irtisanomisilmoitukset/'.Yii::app()->user->domain.'/'.$tiedosto.'.docx';
+			$path = 'tiedostot/irtisanomisilmoitukset/'.Yii::app()->user->domain.'/'.$tiedosto;
 			$docx->createDocx($path);
 
 			if( $_SERVER['REMOTE_ADDR'] != '::1' and $_SERVER['REMOTE_ADDR'] != '127.0.0.1' )
