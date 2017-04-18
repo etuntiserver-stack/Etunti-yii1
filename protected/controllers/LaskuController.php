@@ -599,6 +599,7 @@ class LaskuController extends Controller
 
 
 
+
 			$as = Asiakkaat::model()->find(" asiakasnumero='".$model->as_nro."'  ");
 
 
@@ -672,7 +673,7 @@ class LaskuController extends Controller
 
 
 		$model=$this->loadModel($id);
-		$laskunRivit=LaskunRivit::model()->findAll("lid='".$id."'");
+		$laskunRivit=LaskunRivit::model()->findAll("lid='".$id."'", array('order'=>'id'));
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
@@ -684,11 +685,16 @@ class LaskuController extends Controller
 
 		if(isset($_POST['Lasku']))
 		{
+		/*
+		echo '<pre>';
+		print_r($_POST['tkoodi']);
+		echo '</pre>';
+		exit;
+		*/
 			$model->attributes=$_POST['Lasku'];
 			$model->paivays=date("Y-m-d", strtotime($_POST['Lasku']['paivays']));
 			$model->erapaiva=date("Y-m-d", strtotime($_POST['Lasku']['erapaiva']));
 			if($model->save()){
-
 
 			LaskunRivit::model()->deleteAll("lid='".$id."'");
 
