@@ -784,9 +784,14 @@ $months=array(
 
 	protected function pmvCal($date)
 	{
-		$tyo_toimialue 	= '';
+		$tyo_toimialue = '';
 		if(isset($_SESSION['onlinevaraus']['tyo_toimialue']) and !empty($_SESSION['onlinevaraus']['tyo_toimialue']))
 		$tyo_toimialue 	= $_SESSION['onlinevaraus']['tyo_toimialue'];
+
+		$sopiiva_tuotteet = '';
+		if(isset($_SESSION['onlinevaraus']['paapalvelu']) and !empty($_SESSION['onlinevaraus']['paapalvelu']))
+		$sopiiva_tuotteet = $_SESSION['onlinevaraus']['paapalvelu'];
+
 
 		$tekija 	= array();
 		$on 		= 'kiinni';
@@ -828,6 +833,13 @@ $months=array(
 			");
 		}
 
+		if(!empty($sopiiva_tuotteet))
+		{
+			$criteria->addCondition ("
+				onlinevaraus_tuotteet LIKE '%\"".$_SESSION['onlinevaraus']['paapalvelu']."\"%'
+			");
+		}
+
 		$tyontekijat = Tyontekijat::model()->findAll($criteria);
 		foreach($tyontekijat as $t)
 		{
@@ -854,6 +866,14 @@ $months=array(
 				tid IN ( SELECT id FROM sivex_ttekijat WHERE tyo_toimialue LIKE '%".$tyo_toimialue."%' )
 			");
 		}
+
+		if(!empty($sopiiva_tuotteet))
+		{
+			$criteria->addCondition ("
+				tid IN ( SELECT id FROM sivex_ttekijat WHERE onlinevaraus_tuotteet LIKE '%\"".$_SESSION['onlinevaraus']['paapalvelu']."\"%' )
+			");
+		}
+
 
 		$tv = Tyovuoroot::model()->findAll($criteria);
 		$i = 0;

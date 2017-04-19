@@ -326,6 +326,11 @@ class TyontekijatController extends Controller
 			else
 				$model->tyoryhma="";
 
+			if(isset($_POST['Tyontekijat']['onlinevaraus_tuotteet']))
+				$model->onlinevaraus_tuotteet=json_encode($_POST['Tyontekijat']['onlinevaraus_tuotteet']);
+			else
+				$model->onlinevaraus_tuotteet="";
+
 			if(isset($_POST['kortit'])) 
 				$model->kortit = implode("##***",$_POST['kortit']);
 			else
@@ -433,6 +438,11 @@ class TyontekijatController extends Controller
 				$model->tyoryhma=json_encode($_POST['Tyontekijat']['tyoryhma']);
 			else
 				$model->tyoryhma="";
+
+			if(isset($_POST['Tyontekijat']['onlinevaraus_tuotteet']))
+				$model->onlinevaraus_tuotteet=json_encode($_POST['Tyontekijat']['onlinevaraus_tuotteet']);
+			else
+				$model->onlinevaraus_tuotteet="";
 
 			if(isset($_POST['kortit'])) 
 				$model->kortit = implode("##***",$_POST['kortit']);
