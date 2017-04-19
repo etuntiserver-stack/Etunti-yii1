@@ -309,6 +309,11 @@ class CrmTarjouksetController extends Controller
 	{
 		$model=new CrmTarjoukset;
 
+			if(isset($_POST['CrmTarjoukset']['tarvikkeet']))
+				$model->tarvikkeet=json_encode($_POST['CrmTarjoukset']['tarvikkeet']);
+			else
+				$model->tarvikkeet="";
+
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
@@ -365,6 +370,12 @@ class CrmTarjouksetController extends Controller
 			if(isset($_POST['CrmTarjoukset']))
 			{
 			$model->attributes=$_POST['CrmTarjoukset'];
+
+			if(isset($_POST['CrmTarjoukset']['tarvikkeet']))
+				$model->tarvikkeet=json_encode($_POST['CrmTarjoukset']['tarvikkeet']);
+			else
+				$model->tarvikkeet="";
+
 			if($model->save()){
 
 				$as = Asiakkaat::model()->findbypk($model->asiakas_id);

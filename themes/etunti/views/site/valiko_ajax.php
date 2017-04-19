@@ -66,6 +66,7 @@
 	elseif($_POST['select_type'] == 'tyo_toimialue') $selType = 'Työntekijä toimialue';
 	elseif($_POST['select_type'] == 'tyonkuvaus_tilat') $selType = 'Työnkuvaus tilat';
 	elseif($_POST['select_type'] == 'asiakastila') $selType = 'Asiakastila';
+	elseif($_POST['select_type'] == 'tarjous_tarvikkeet') $selType = 'Tarvikkeet';
 	else $selType = $r->select_type;
 
 /*
