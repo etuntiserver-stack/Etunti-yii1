@@ -207,6 +207,28 @@ $(document).ready(function(){
 	</div>
 
 	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'onlinevaraus_tuotteet'); ?>
+
+		<?php
+		$list = array();
+	       	$criteria = new CDbCriteria();
+	       	$criteria->condition = " nayta_sivuilla=1 ";
+	       	$criteria->order = " nimike ";
+		$onlineTuotteet = OnlinevarausTuotteet::model()->findAll($criteria);
+
+		echo '<select class="mult" name="Tyontekijat[onlinevaraus_tuotteet][]" multiple>';
+		foreach($onlineTuotteet as $item){
+		    if(is_array(json_decode($model->onlinevaraus_tuotteet, true)) and in_array($item->id, json_decode($model->onlinevaraus_tuotteet, true)))
+			echo '<option value="'.$item->id.'" selected>'.$item->nimike.'</option>';
+		    else
+			echo '<option value="'.$item->id.'">'.$item->nimike.'</option>';
+		}
+		echo '</select>';
+        	?>
+		<?php echo $form->error($model,'onlinevaraus_tuotteet'); ?>
+	</div>
+
+	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'tyo_toimialue'); ?>
 
 	   <div class="input-group">
