@@ -390,12 +390,12 @@ class LaskuHistoriaController extends Controller
 
 		file_put_contents($path.'/'.$file, $content_PDF);
 
-
+		$ft = FirmanTiedot::model()->findbypk(1);
 		$message = '<br> Laskut ajalta '.$from.' - '.$to;
 		$saaja = $_POST['sahkoposti'];
 		$subject = Yii::t('main', 'Laskut'). ' '.$from.' - '.$to;
 		$mail = new YiiMailer();
-		$mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
+		$mail->setFrom($ft->sahkoposti, $ft->tyonantaja);
 		$mail->setTo($saaja);
 		$mail->setSubject($subject);
 		$mail->setBody($message);

@@ -334,13 +334,12 @@ class TyovuorootController extends Controller
 		
 
 		$saaja = $tt->tekijan_email;
-		$firma = FirmanTiedot::model()->findbypk(1);
-		if(isset($firma->sahkoposti) and !empty($firma->sahkoposti))
-		$saaja = array($tt->tekijan_email,$firma->sahkoposti);
+		$ft = FirmanTiedot::model()->findbypk(1);
+		if(isset($ft->sahkoposti) and !empty($ft->sahkoposti))
+		$saaja = array($tt->tekijan_email,$ft->sahkoposti);
 	
 		$subject = Yii::t('main', 'TYÖVUOROT'). ' '.$tt->tekijan_nimi;
 
-		$ft = FirmanTiedot::model()->findByPk(1);
 		$mail = new YiiMailer();
 		//$mail->clearLayout();//if layout is already set in config
 		$mail->setFrom($ft->sahkoposti, $ft->tyonantaja);
@@ -487,10 +486,10 @@ class TyovuorootController extends Controller
 
 
 		// firmalle kaikki
-		$firma = FirmanTiedot::model()->findbypk(1);
-		if(isset($firma->sahkoposti) and !empty($firma->sahkoposti))
+		$ft = FirmanTiedot::model()->findbypk(1);
+		if(isset($ft->sahkoposti) and !empty($ft->sahkoposti))
 		{
-		$saaja = $firma->sahkoposti;
+		$saaja = $ft->sahkoposti;
 
 
 
@@ -517,7 +516,6 @@ class TyovuorootController extends Controller
 
 		$subject = Yii::t('main', 'TYÖVUOROT ').$week.'-'.$year;
 
-		  $ft = FirmanTiedot::model()->findByPk(1);
 		  $mail = new YiiMailer();
 		  //$mail->clearLayout();//if layout is already set in config
 		  $mail->setFrom($ft->sahkoposti, $ft->tyonantaja);

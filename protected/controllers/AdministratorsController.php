@@ -94,6 +94,7 @@ class AdministratorsController extends Controller
 			$model->attributes=$_POST['Administrators'];
 			$model->token = sha1(uniqid(time().$model->adm_nimi, true));
 			$model->adm_salasana='';
+			$ft = FirmanTiedot::model()->findbypk(1);
 			if($model->save())
 			{
 
@@ -110,7 +111,7 @@ class AdministratorsController extends Controller
 				Etunti<br>';
 				$subject = Yii::t('main', 'Tervetuloa Etunnin käyttäjäksi.');
 				$mail = new YiiMailer();
-				$mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
+				$mail->setFrom($ft->sahkoposti, $ft->tyonantaja);
 				$mail->setTo($model->adm_email);
 				$mail->setSubject($subject);
 				$mail->setBody($message);

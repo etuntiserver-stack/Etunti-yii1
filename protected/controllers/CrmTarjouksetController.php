@@ -166,7 +166,7 @@ class CrmTarjouksetController extends Controller
 		$file = $crm->liite.'.pdf';
 		$path = Yii::app()->request->baseUrl."tiedostot/crm/tarjoukset/".Yii::app()->user->domain;
 
-		$firma = FirmanTiedot::model()->findbypk(1);
+		$ft = FirmanTiedot::model()->findbypk(1);
 		$get_css = file_get_contents('css/email_send_table.css');
 
 		$message = '<html xmlns="http://www.w3.org/1999/xhtml">
@@ -199,10 +199,10 @@ class CrmTarjouksetController extends Controller
 		//exit;
 
 
-		$subject = Yii::t('main', 'Tarjous'). ', '.$firma->tyonantaja;
+		$subject = Yii::t('main', 'Tarjous'). ', '.$ft->tyonantaja;
 		$mail = new YiiMailer();
 		//$mail->clearLayout();//if layout is already set in config
-		$mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
+		$mail->setFrom($ft->sahkoposti, $ft->tyonantaja);
 		$mail->setTo($crm->asiakkaan_sahkoposti);
 		$mail->setSubject($subject);
 		$mail->setBody($message);

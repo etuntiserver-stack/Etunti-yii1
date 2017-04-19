@@ -102,16 +102,16 @@ class KirjeidenHallintaController extends Controller
 		$file = $crm->liite.'.pdf';
 		$path = Yii::app()->request->baseUrl."tiedostot/crm/kirje/".Yii::app()->user->domain;
 
-		$firma = FirmanTiedot::model()->findbypk(1);
+		$ft = FirmanTiedot::model()->findbypk(1);
 		$message = Yii::t('main', 'Kirje body');
 		
    		if(file_exists(Yii::app()->basePath."/../tiedostot/crm/kirje/".Yii::app()->user->domain."/".$crm->liite.".pdf") and !empty($as->sahkoposti))
    		{
 		//echo $as->sahkoposti;
 
-		$subject = Yii::t('main', 'Kirje'). ', '.$firma->tyonantaja;
+		$subject = Yii::t('main', 'Kirje'). ', '.$ft->tyonantaja;
 		$mail = new YiiMailer();
-		$mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
+		$mail->setFrom($ft->sahkoposti, $ft->tyonantaja);
 		$mail->setTo($as->sahkoposti);
 		$mail->setSubject($subject);
 		$mail->setBody($message);
