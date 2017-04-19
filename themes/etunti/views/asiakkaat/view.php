@@ -27,6 +27,8 @@
 		'puhelin',
 		'sahkoposti',
 		'ryhma',
+		'maksuehto',
+		'viivastyskorko',
 		//'aktiivinen',
 	),
 )); ?>

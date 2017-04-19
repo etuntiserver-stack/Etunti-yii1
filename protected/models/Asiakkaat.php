@@ -97,6 +97,7 @@ class Asiakkaat extends DB2ActiveRecord
 			'aktiivinen' => Yii::t('main', 'Aktiivinen'),
 			'laskutus_kanava' => Yii::t('main', 'Laskutus kanava'),
 			'maksuehto' => Yii::t('main', 'Maksuehto'),
+			'viivastyskorko' => Yii::t('main', 'Viivästyskorko'),
 			'tyyppi' => Yii::t('main', 'Asiakastyyppi'),
 			'ovt_tunnus' => Yii::t('main', 'Yrityksen OVT-tunnus'),
 			'valittajan_tunnus' => Yii::t('main', 'Operaattorin välittäjän tunnus'),
