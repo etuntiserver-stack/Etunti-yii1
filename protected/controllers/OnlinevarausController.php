@@ -345,6 +345,10 @@ class OnlinevarausController extends Controller
 
 	public function actionAjaat_ajax()
 	{
+
+		if(!isset(Yii::app()->user->domain))
+		die('Error: domain');
+
 		if(isset($_POST['pvm']))
 		$_SESSION['onlinevaraus']['valittuPVM'] = $_POST['pvm'];
 
