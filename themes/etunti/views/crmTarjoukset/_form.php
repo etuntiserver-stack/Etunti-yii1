@@ -54,6 +54,47 @@
 		<?php echo $form->error($model,'kohteen_osoite'); ?>
 	</div>
 
+
+	<div class="section fill mb5 ashidd_a">
+		<?php echo $form->labelEx($model,'tarvikkeet'); ?>
+
+	   <div class="input-group">
+		<?php
+		$list = array();
+      		$l = Valikkoot::model()->findAll(" select_type='tarjous_tarvikkeet' ",array('order' => "select_type"));
+		if(count($l) == 0)
+      		{
+			$new_val = new Valikkoot;
+			$new_val->select_type = "tarjous_tarvikkeet";
+			$new_val->value = "Testi tarvike";
+			if($new_val->save())
+	      			$l = Valikkoot::model()->findAll(" select_type='tarjous_tarvikkeet' ",array('order' => "select_type"));
+			else
+				var_dump($new_val->getErrors());
+		}
+
+			$arr = json_decode($model->tarvikkeet);
+			echo '<select name="CrmTarjoukset[tarvikkeet][]" class="tarvikkeet form-control" multiple title="Valitse">';
+			foreach($l as $data)
+			{
+				if(is_array($arr) and in_array($data->id, $arr))
+			    		echo '<option value="'.$data->id.'" selected>'.$data->value.'</option>';
+				elseif(!is_array($arr) and $model->tarvikkeet == $data->id)
+			    		echo '<option value="'.$data->id.'" selected>'.$data->value.'</option>';
+				else
+			    		echo '<option value="'.$data->id.'">'.$data->value.'</option>';
+			}
+			echo '</select>';
+		
+        	?>
+		<span class="input-group-btn">
+			<span class="btn btn-primary myBgColors muokaValiko" for="tarjous_tarvikkeet"><i class="fa fa-pencil-square-o"></i></span>
+		</span>
+	   </div>
+
+		<?php echo $form->error($model,'ryhma'); ?>
+	</div>
+
  </div><div class="col-sm-3">
 
 	<legend><?php echo Yii::t('main', 'Kohde'); ?></legend>
@@ -224,9 +265,43 @@ $(document).ready(function(){
 </script>
 <?php endif; ?>
 
+
+
+	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/bootstrap.modal.js"></script>
+	<div id="showres" class="modal fade" tabindex="-1" role="dialog"></div>
+
+
+
 <script type="text/javascript">
 $(document).ready(function(){
 
+
+/* valikot */
+$(".muokaValiko").click(function() {
+    var thisFor = $(this).attr("for");
+        $.ajax({
+           url: location.protocol + "//" + location.host + "/index.php/site/valiko",
+	   type:'POST',
+	   data: { "select_type" : thisFor },
+           success: function(data){
+		console.log(data);
+		$('#showres').modal().html(JSON.parse(data));
+           }
+        });
+});
+/* valikot */
+
+$('.tarvikkeet').multiselect({
+	//inheritClass: true,
+	//enableFiltering: true,
+        includeSelectAllOption: true,
+	nonSelectedText: '<?php echo Yii::t("main", "Tyhjä"); ?>',
+	selectAllText: '<?php echo Yii::t("main", "Valitse kaikki"); ?>',
+	allSelectedText: '<?php echo Yii::t("main", "Tarvikkeet"); ?>',
+	nSelectedText: '<?php echo Yii::t("main", "valittu"); ?>',
+	numberDisplayed: 0,
+	buttonWidth: '100%',
+});
 
 
  $('#crm-tarjoukset-form').on("submit", function(e){

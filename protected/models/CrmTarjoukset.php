@@ -38,7 +38,7 @@ public $asiakastila;
 			array('hyvaksyn_koodi, liite, kohteen_osoite, kohteen_postitoimipaikka', 'length', 'max'=>255),
 			array('asiakkaan_sahkoposti, kohteen_postinumero', 'length', 'max'=>100),
 			array('hinta_tyyppi', 'length', 'max'=>50),
-			array('tarjous, tyonkuvaus, tarjouslaskenta, onko_osoite_sama', 'safe'),
+			array('tarjous, tyonkuvaus, tarjouslaskenta, onko_osoite_sama, tarvikkeet', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('id, time, asiakas_id, tarjous, hyvaksyn_koodi, asiakkaan_sahkoposti, status', 'safe', 'on'=>'search'),
