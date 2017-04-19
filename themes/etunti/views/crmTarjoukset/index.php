@@ -183,16 +183,27 @@ if(isset($_POST['poistaTemplate'])){
 <p><b>Template variables</b></p><br>
 
 <textarea class="form-control" rows="10" cols="60">
-${yritys}
-${yrityksen_osoite}
-${yrityksen_postinumero} ${yrityksen_toimipaikka} ${paivays}
+#paivays#
 
-${asiakas}
-${asiakkaan_osoite}
-${asiakkaan_postinumero} ${asiakkaan_toimipaikka}
+#yritys#
+#yrityksen_osoite#
+#yrityksen_postinumero#
+#yrityksen_toimipaikka#
 
-${teksti}
-${tyonkuvaus}
+#asiakas#
+#asiakkaan_osoite#
+#asiakkaan_postinumero#
+#asiakkaan_toimipaikka#
+
+#teksti#
+#tyonkuvaus#
+
+#hinta_tyyppi#
+#hinta#
+#alv#
+#kohteen_osoite#
+#kohteen_postinumero#
+#kohteen_postitoimipaikka#
 </textarea>
 </div>
 

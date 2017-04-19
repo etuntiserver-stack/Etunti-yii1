@@ -466,6 +466,23 @@ class CrmTarjouksetController extends Controller
 			);
 			$docx->replaceVariableByText($variables);
 
+
+			$k = Kohteet::model()->findByPk($model->kohde_id);
+			if(isset($k->id))
+			{
+
+			}
+
+			$variables_2 = array(
+				'hinta_tyyppi' => $model->hinta_tyyppi,
+				'hinta' => $model->hinta,
+				'alv' => $model->alv,
+				'kohteen_osoite' => $model->kohteen_osoite,
+				'kohteen_postinumero' => $model->kohteen_postinumero,
+				'kohteen_postitoimipaikka' => $model->kohteen_postitoimipaikka,
+			);
+			$docx->replaceVariableByText($variables_2);
+
 			if( $model->tyonkuvaus_id != 0 )
 			{
 			/*
