@@ -159,7 +159,7 @@ class AsiakkaatController extends Controller
 			$ft = FirmanTiedot::model()->findbypk(1);
 			$mail = new YiiMailer();
 			//$mail->clearLayout();//if layout is already set in config
-			$mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
+			$mail->setFrom($ft->sahkoposti, $ft->tyonantaja);
 			$mail->setTo($ft->sahkoposti);
 			$mail->setSubject($subject);
 			$mail->setBody($bd);
@@ -1168,18 +1168,18 @@ $xml = '
 			{
 
 
-				$firma = FirmanTiedot::model()->findbypk(1);
+				$ft = FirmanTiedot::model()->findbypk(1);
 
 				$message = Yii::t('main', 'Asiakas').': '.$nimi.'<br>';
 				$message .= Yii::t('main', 'Keskustelu ID:').': '.$model->keskustelu_id.'<br>';
 				$message .= Yii::t('main', 'Palaute:').': '.$model->teksti;
 
-				if(isset($firma->sahkoposti) and !empty($firma->sahkoposti))
+				if(isset($ft->sahkoposti) and !empty($ft->sahkoposti))
 				{
 				$subject = Yii::t('main', 'Palaute'). ': '.$nimi;
 				$mail = new YiiMailer();
-				$mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
-				$mail->setTo($firma->sahkoposti);
+				$mail->setFrom($ft->sahkoposti, $ft->tyonantaja);
+				$mail->setTo($ft->sahkoposti);
 				$mail->setSubject($subject);
 				$mail->setBody($message);
 				$mail->send();
@@ -1187,7 +1187,7 @@ $xml = '
 							// <-- LOG
 							$log=new Log;
 							$log->log_category 	= 1; // 1-email
-							$log->email_to 		= $firma->sahkoposti;
+							$log->email_to 		= $ft->sahkoposti;
 							$log->email_subject	= $subject;
 							$log->email_message	= json_encode($message);
 							$log->save();
@@ -1199,7 +1199,7 @@ $xml = '
 				{
 				$subject = Yii::t('main', 'Palaute'). ': '.$nimi;
 				$mail = new YiiMailer();
-				$mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
+				$mail->setFrom($ft->sahkoposti, $ft->tyonantaja);
 				$mail->setTo($as->sahkoposti);
 				$mail->setSubject($subject);
 				$mail->setBody($message);

@@ -190,7 +190,7 @@ $randstring = generateRandomString();
 		$file = $crm->liite.'.pdf';
 		$path = Yii::app()->request->baseUrl."tiedostot/crm/sopimukset/".Yii::app()->user->domain;
 
-		$firma = FirmanTiedot::model()->findbypk(1);
+		$ft = FirmanTiedot::model()->findbypk(1);
 		$message = Yii::t('main', 'CRM sopimus body');
 		$message .= '<br>
 		<a href="http://'.$_SERVER['SERVER_NAME'].'/index.php/CrmSopimukset/vastaus?asia=hyvaksy&id='.$_POST['id'].'&code='.$randstring.'">
@@ -202,10 +202,10 @@ $randstring = generateRandomString();
 		';
 		
 
-		$subject = Yii::t('main', 'Sopimus'). ', '.$firma->tyonantaja;
+		$subject = Yii::t('main', 'Sopimus'). ', '.$ft->tyonantaja;
 		$mail = new YiiMailer();
 		//$mail->clearLayout();//if layout is already set in config
-		$mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
+		$mail->setFrom($ft->sahkoposti, $ft->tyonantaja);
 		$mail->setTo($crm->asiakkaan_sahkoposti);
 		$mail->setSubject($subject);
 		$mail->setBody($message);

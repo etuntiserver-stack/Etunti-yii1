@@ -328,9 +328,11 @@ class SiteController extends Controller
 				$message = '';
 				$message .= '<p>Aktivoi käyttäjätunnuksesi <a href="'.Yii::app()->getBaseUrl(true).'/index.php/site/confirm?token='.$token.'">tästä</a><br>';
 
+				$ft = FirmanTiedot::model()->findbypk(1);
+
 				$subject = Yii::t('main', 'Uusi salasana'). ' '.$model->adm_nimi;
 				$mail = new YiiMailer();
-				$mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
+				$mail->setFrom($ft->sahkoposti, $ft->tyonantaja);
 				$mail->setTo($model->adm_email);
 				$mail->setSubject($subject);
 				$mail->setBody($message);
@@ -382,15 +384,14 @@ class SiteController extends Controller
 
 		if(isset($_POST['Domainit']))
 		{
-
+			$ft = FirmanTiedot::model()->findbypk(1);
 
 			$message = str_replace("\n", "<br>", $_POST['Domainit']['viesti']);
 			foreach($_POST['Domainit']['sahkoposti'] as $sahkoposti)
-			{
-			
+			{			
 	
 			$mail = new YiiMailer();
-			$mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
+			$mail->setFrom($ft->sahkoposti, $ft->tyonantaja);
 			$mail->setTo($sahkoposti);
 			$mail->setSubject(Yii::t('main', 'ETUNTI.FI'));
 			$mail->setBody($message);
