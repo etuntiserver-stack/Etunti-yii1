@@ -336,6 +336,9 @@ class OnlinevarausController extends Controller
 
 	public function actionAika_ajax()
 	{
+		if(!isset(Yii::app()->user->domain))
+		die('Error: domain');
+
 		$this->renderPartial('aika_ajax');
 	}
 
@@ -559,6 +562,10 @@ class OnlinevarausController extends Controller
 	 */
 	public function actionIndex()
 	{
+
+		if(!isset(Yii::app()->user->domain))
+		die('Error: domain');
+
 		if(isset($_GET['keskeyta']))
 		{
 			if(isset($_SESSION['onlinevaraus']['modelTV']))
@@ -577,16 +584,26 @@ class OnlinevarausController extends Controller
 
 	public function actionAika()
 	{
+		if(!isset(Yii::app()->user->domain))
+		die('Error: domain');
+
 		$this->render('aika');
 	}
 
 	public function actionOsoite()
 	{
+		if(!isset(Yii::app()->user->domain))
+		die('Error: domain');
+
 		$this->render('osoite');
 	}
 
 	public function actionMaksu()
 	{
+
+		if(!isset(Yii::app()->user->domain))
+		die('Error: domain');
+
 		$this->render('maksu');
 	}
 	/**

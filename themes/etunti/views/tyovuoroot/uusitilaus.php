@@ -11,7 +11,7 @@
 }
 </style>
 
-<div class="section">
+<div class="sectionfill mb5">
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'tyovuoroot-form',
 	'enableAjaxValidation'=>false,
@@ -25,19 +25,19 @@
 <legend><h2><?php echo Yii::t('main', 'Asiakas'); ?></h2></legend>
 <div class="row">
   <div class="col-sm-3">
-    <div class="section">
+    <div class="sectionfill mb5">
 		<label>Asiakkaan tyyppi</label>
 		<select name="Asiakkaat[tyyppi]" id="Asiakkaat_tyyppi" class="form-control tyyppi">
 		<option value="yritys"><?php echo Yii::t('main', 'Yritys'); ?></option>
 		<option value="henkilo"><?php echo Yii::t('main', 'Henkilö'); ?></option>
 		</select>
     </div>
-    <div class="section">
+    <div class="sectionfill mb5">
 		<label><?php echo Yii::t('main', 'Onko kokeilusiivous?'); ?> </label><br>
 		<input type="radio" name="onkoKokeilusiivous" class="onkoKokeilusiivous" value="Kyllä"> <?php echo Yii::t('main', 'Kyllä'); ?><br>
 		<input type="radio" name="onkoKokeilusiivous" class="onkoKokeilusiivous" checked value="Ei"> <?php echo Yii::t('main', 'Ei'); ?>
     </div>
-    <div class="section">
+    <div class="sectionfill mb5">
 		<label><?php echo Yii::t('main', 'Onko lahjakortti?'); ?> </label><br>
 		<input type="radio" name="onkoLahjakortti" class="onkoLahjakortti" value="kylla"> <?php echo Yii::t('main', 'Kyllä'); ?><br>
 		<input type="radio" name="onkoLahjakortti" class="onkoLahjakortti" checked value="Ei"> <?php echo Yii::t('main', 'Ei'); ?>
@@ -77,26 +77,26 @@ $(document).ready(function(){
 		<input type="text" name="Asiakkaat[y_tunnus]" class="form-control">
     </div>
     <div class="section nimi ashidd">
-		<label><?php echo Yii::t('main', 'Yhteyshenkilo'); ?></label>
-		<input type="text" name="Asiakkaat[yhteyshenkilo]" class="form-control">
+		<label><?php echo Yii::t('main', 'Yhteyshenkilö'); ?> <span class="required">*</span></label>
+		<input type="text" name="Asiakkaat[yhteyshenkilo]" id="Asiakas_yhteyshenkilo" class="form-control" required>
     </div>
-    <div class="section">
+    <div class="sectionfill mb5">
 		<label><?php echo Yii::t('main', 'Asiakkaan osoite'); ?> <span class="required">*</span></label>
-		<input type="text" name="Asiakkaat[osoite]" id="Asiakas_osoite" class="form-control">
+		<input type="text" name="Asiakkaat[osoite]" id="Asiakas_osoite" class="form-control" required>
     </div>
-    <div class="section">
+    <div class="sectionfill mb5">
 		<label><?php echo Yii::t('main', 'Asiakkaan postinumero'); ?> <span class="required">*</span></label>
-		<input type="number" name="Asiakkaat[postinumero]" id="Asiakas_postinumero" class="form-control">
+		<input type="number" name="Asiakkaat[postinumero]" id="Asiakas_postinumero" class="form-control" required>
     </div>
-    <div class="section">
+    <div class="sectionfill mb5">
 		<label><?php echo Yii::t('main', 'Asiakkaan postitoimipaikka'); ?> <span class="required">*</span></label>
-		<input type="text" name="Asiakkaat[kaupunki]" id="Asiakas_kaupunki" class="form-control">
+		<input type="text" name="Asiakkaat[kaupunki]" id="Asiakas_kaupunki" class="form-control" required>
     </div>
-    <div class="section">
+    <div class="sectionfill mb5">
 		<label><?php echo Yii::t('main', 'Asiakkaan puhelin'); ?></label>
 		<input type="text" name="Asiakkaat[puhelin]" class="form-control">
     </div>
-    <div class="section">
+    <div class="sectionfill mb5">
 		<label><?php echo Yii::t('main', 'Asiakkaan sähköposti'); ?></label>
 		<input type="text" name="Asiakkaat[sahkoposti]" class="form-control">
     </div>
@@ -142,7 +142,7 @@ $(document).ready(function(){
 </script>
 
   <div class="col-sm-3">
-    <div class="section">
+    <div class="sectionfill mb5">
 		<label><?php echo Yii::t('main', 'Onko kohteen osoite sama kuin asiakkaan osoite?'); ?> </label><br>
 		<input type="radio" name="onkoAsOsoiteSamaKunKohde" class="onkoAsOsoiteSamaKunKohde" checked value="kylla"> <?php echo Yii::t('main', 'Kyllä'); ?><br>
 		<input type="radio" name="onkoAsOsoiteSamaKunKohde" class="onkoAsOsoiteSamaKunKohde" value="ei"> <?php echo Yii::t('main', 'Ei'); ?>
@@ -151,7 +151,7 @@ $(document).ready(function(){
 		<label><?php echo Yii::t('main', 'Kohteen osoite'); ?> </label>
 		<input type="text" name="kohteenOsoite" id="kohteenOsoite" class="form-control">
     </div>
-    <div class="section">
+    <div class="sectionfill mb5">
 		<label><?php echo Yii::t('main', 'Oven avaaminen'); ?></label>
 		<select name="oven_avaaminen" class="form-control tyyppi">
 		<option value=""><?php echo Yii::t('main', 'Valitse'); ?></option>
@@ -160,11 +160,11 @@ $(document).ready(function(){
 		<option value="<?php echo Yii::t('main', 'Avain toimitetaan toimistolle'); ?>"><?php echo Yii::t('main', 'Avain toimitetaan toimistolle'); ?></option>
 		</select>
     </div>
-    <div class="section">
+    <div class="sectionfill mb5">
 		<label><?php echo Yii::t('main', 'Mihin avain palautetaan?'); ?> </label>
 		<input type="text" name="mihin_avain_palautetaan" class="form-control">
     </div>
-    <div class="section">
+    <div class="sectionfill mb5">
 		<label><?php echo Yii::t('main', 'Mihin työntekijä voi pysäköidä auton?'); ?> </label>
 		<textarea name="mihin_pysakoida_auto" class="form-control"></textarea>
     </div>
@@ -189,7 +189,7 @@ $(document).ready(function(){
 </script>
 
   <div class="col-sm-3">
-    <div class="section">
+    <div class="sectionfill mb5">
 		<label><?php echo Yii::t('main', 'Onko laskun maksajan tiedot sama kuin tilaaja?'); ?> </label><br>
 		<input type="radio" name="onkoMaksajanTiedotSama" class="onkoMaksajanTiedotSama" checked value="Kyllä"> <?php echo Yii::t('main', 'Kyllä'); ?><br>
 		<input type="radio" name="onkoMaksajanTiedotSama" class="onkoMaksajanTiedotSama" value="Ei"> <?php echo Yii::t('main', 'Ei'); ?>
@@ -198,7 +198,7 @@ $(document).ready(function(){
 		<label><?php echo Yii::t('main', 'Anna laskun maksajan tiedot'); ?> </label>
 		<input type="text" name="MaksajanTiedot" id="MaksajanTiedot" class="form-control">
     </div>
-    <div class="section">
+    <div class="sectionfill mb5">
 		<label><?php echo Yii::t('main', 'Laskutus kanava'); ?> </label>
 		<?php
 		$list = array(	'posti'=>Yii::t('main','Posti'),
@@ -209,35 +209,44 @@ $(document).ready(function(){
 		array('empty'=>'Valitse','class'=>'form-control'));
         	?>
     </div>
-    <div class="section">
+    <div class="sectionfill mb5">
 		<label><?php echo Yii::t('main', 'Yrityksen OVT-tunnus'); ?> </label>
 		<input type="text" name="Asiakkaat[ovt_tunnus]" class="form-control">
     </div>
-    <div class="section">
+    <div class="sectionfill mb5">
 		<label><?php echo Yii::t('main', 'Verkkolaskuosoite'); ?> </label>
 		<input type="text" name="Asiakkaat[verkkolaskuosoite]" class="form-control">
     </div>
-    <div class="section">
+    <div class="sectionfill mb5">
 		<label><?php echo Yii::t('main', 'Operaattorin välittäjän tunnus'); ?> </label>
 		<input type="text" name="Asiakkaat[valittajan_tunnus]" class="form-control">
     </div>
-    <div class="section">
+    <div class="sectionfill mb5">
 		<label><?php echo Yii::t('main', 'Viivästyskorko'); ?> </label>
 		<input type="number" name="Asiakkaat[viivastyskorko]" class="form-control">
     </div>
-    <div class="section">
+    <div class="sectionfill mb5">
 		<label><?php echo Yii::t('main', 'Maksuehto'); ?> </label>
 		<input type="number" name="Asiakkaat[maksuehto]" class="form-control">
     </div>
-    <div class="section">
+    <div class="sectionfill mb5">
 		<label><?php echo Yii::t('main', 'Hinta tyyppi'); ?> </label>
 		<?php
 		$list = array(1=>'tunti',2=>'kk',3=>'kpl');
         	echo CHtml::dropDownList('Asiakkaat[hinta_tyyppi]', 'hinta_tyyppi', $list,
-		array('empty'=>'Valitse','class'=>'form-control'));
+		array('class'=>'form-control'));
         	?>
     </div>
-    <div class="section">
+    <div class="section fill mb5">
+		<label><?php echo Yii::t('main', 'Alv'); ?> </label>
+		<?php
+        	$l = array(0=>0,10=>10,14=>14,24=>24);
+        	echo CHtml::dropDownList('Asiakkaat[alv]', 'alv', $l,
+		array('class'=>'form-control', 'options' => array('24'=>array('selected'=>true))));
+        	?>
+		<?php echo $form->error($model,'alv'); ?>
+    </div>
+    <div class="section fill mb5">
 		<label><?php echo Yii::t('main', 'Hinta'); ?></label>
 		<input type="number" name="Asiakkaat[hinta]" class="form-control">
     </div>
@@ -400,6 +409,12 @@ $(document).ready(function(){
 
 	$('#submitButton').click(function(){
 
+
+		if( $('#Asiakas_yhteyshenkilo').val() === '' )
+		{
+			$('#Asiakas_yhteyshenkilo').css({"border":"2px red solid"}).focus();
+			return false;
+		}
 		if( $('#Asiakas_osoite').val() === '' )
 		{
 			$('#Asiakas_osoite').css({"border":"2px red solid"}).focus();

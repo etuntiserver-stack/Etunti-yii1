@@ -549,6 +549,7 @@ class TyovuorootController extends Controller
 		  $this->redirect('viikkottain');
 
 		} else {
+
 		  $this->render('laheta_k',array('week'=>$week,'year'=>$year,'tulosta'=>false));
 		}
 
@@ -1220,6 +1221,7 @@ class TyovuorootController extends Controller
 			if(isset($_POST['Tyovuoroot']['PushNotify']) and $_POST['Tyovuoroot']['PushNotify'] == 'on')
 			$this->pushNotifySending($model->id);
 			// PushNotify -->
+
 
 
 			// <-- jos on tyopaari
@@ -3103,15 +3105,20 @@ class TyovuorootController extends Controller
 				$model->pvm = date("d.m.Y",strtotime($_POST['Tyovuoroot']['pvm']));
 				if($model->save())
 				{
-
+				
+				$sum = 0;
 				   if(isset($_POST['vieposti']) and isset($asiakkaat->sahkoposti) and !empty($asiakkaat->sahkoposti))
 				   {
 					$message = '
 					Asiakas: '.$asiakkaat->yhteyshenkilo.'<br>
 					Työvuorot:  '.$model->pvm.', '.$model->alku.'-'.$model->loppu.'<br>';
 
-					if(!empty($asiakkaat->hinta))
-					$message .= 'Hinta: '.$asiakkaat->hinta.'<br>';
+					if(!empty($asiakkaat->hinta) and $asiakkaat->hinta_tyyppi == 1)
+					{
+						$tuntia = (strtotime($model->loppu)-strtotime($model->alku))/3600;
+						$sum = ($asiakkaat->hinta*$tuntia) + (($asiakkaat->hinta*$asiakkaat->alv)/100);
+						$message .= 'Hinta: '.number_format($sum, 2, ',', ' ').' &euro;<br>';
+					}
 
 					if(!empty($kohteet->toimenpiteet))
 					$message .= str_replace("\n", "<br>",$kohteet->toimenpiteet);
@@ -3142,7 +3149,7 @@ class TyovuorootController extends Controller
 					}
 				   }
 				
-					$return[] = array('tid'=>$model->tid, 'pvm'=>$model->pvm, 'ymd'=>date("Ymd",strtotime($model->pvm)));
+					$return[] = array('tid'=>$model->tid, 'pvm'=>$model->pvm, 'ymd'=>date("Ymd",strtotime($model->pvm)), 'sum' => $sum);
 				  	echo json_encode($return);
 					exit;
 				}
@@ -3522,6 +3529,7 @@ class TyovuorootController extends Controller
 
 			// <-- Asiakas
 			if(isset($_POST['asiakas']) and !empty($_POST['asiakas']))
+
 				Yii::app()->session['asiakas'] = $_POST['asiakas'];
 			if(isset($_POST['asiakas']) and empty($_POST['asiakas']))
 				unset(Yii::app()->session['asiakas']);
