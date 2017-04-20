@@ -24,11 +24,9 @@
 			); 
 		?>
 	</td>
-<!--
 	<td>
-		<?php echo $head; ?>
+		<?php echo $data->voimassa; ?>
 	</td>
--->
 	<td>
 		<?php echo $data->kohteen_osoite; ?>
 	</td>

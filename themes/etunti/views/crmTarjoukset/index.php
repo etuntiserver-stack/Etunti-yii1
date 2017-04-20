@@ -114,7 +114,7 @@
   <thead class="myBgColors">
   <tr>
   <th></th>
-  <!--<th><?php echo Yii::t('main', 'Asiakas'); ?></th>-->
+  <th><?php echo Yii::t('main', 'Voimassa'); ?></th>
   <th><?php echo Yii::t('main', 'Tarjouksen kohde'); ?></th>
   <th><?php echo Yii::t('main', 'Tarjous'); ?></th>
   <th><?php echo Yii::t('main', 'Sähköposti'); ?></th>
@@ -151,6 +151,8 @@ $(document).ready(function(){
 
 $(".poista").click(function(){
 	var polku = $(this).attr('for');
+	if(confirm('Haluatko varmaasti poista?'))
+	{
         $.ajax({
            url: 'index',
            type: "POST",
@@ -160,6 +162,7 @@ $(".poista").click(function(){
 		window.location.href="index";
            }
         });
+	}
 });
 
 

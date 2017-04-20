@@ -39,6 +39,7 @@ public $template;
 			array('hyvaksyn_koodi, liite, kohteen_osoite, kohteen_postitoimipaikka', 'length', 'max'=>255),
 			array('asiakkaan_sahkoposti, kohteen_postinumero', 'length', 'max'=>100),
 			array('hinta_tyyppi', 'length', 'max'=>50),
+			array('voimassa', 'length', 'max'=>20),
 			array('tarjous, tyonkuvaus, tarjouslaskenta, onko_osoite_sama, tarvikkeet', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.

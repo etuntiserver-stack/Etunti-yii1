@@ -321,7 +321,7 @@ class CrmTarjouksetController extends Controller
 				$model->tarvikkeet="";
 			if($model->save()){
 
-				$tiedosto = $this->kansio().'_'.str_replace(" ", "_", $model->kohteen_osoite).'_'.date('Y-m-d').'_'.$model->id;
+				$tiedosto = str_replace(" ", "_", $model->kohteen_osoite).'_'.date('Y-m-d').'_'.$model->id;
 				CrmTarjoukset::model()->updateByPk($model->id, array('liite'=>$tiedosto));
 
 				$as = Asiakkaat::model()->findbypk($model->asiakas_id);
@@ -358,7 +358,7 @@ class CrmTarjouksetController extends Controller
 
 			if($model->save()){
 
-				$tiedosto = $this->kansio().'_'.str_replace(" ", "_", $model->kohteen_osoite).'_'.date('Y-m-d').'_'.$model->id;
+				$tiedosto = str_replace(" ", "_", $model->kohteen_osoite).'_'.date('Y-m-d').'_'.$model->id;
 				CrmTarjoukset::model()->updateByPk($model->id, array('liite'=>$tiedosto));
 
 				$as = Asiakkaat::model()->findbypk($model->asiakas_id);
@@ -384,6 +384,7 @@ class CrmTarjouksetController extends Controller
 	{
 		$var = '
 		#paivays#
+		#voimassa#
 	
 		#yritys#
 		#yrityksen_osoite#
@@ -401,9 +402,14 @@ class CrmTarjouksetController extends Controller
 		#hinta_tyyppi#
 		#hinta#
 		#alv#
+		#viivastyskorko#
+		#maksuehto#
 		#kohteen_osoite#
 		#kohteen_postinumero#
-		#kohteen_postitoimipaikka#';
+		#kohteen_postitoimipaikka#
+
+		#tyonantajan_edustaja#
+		';
 
 		return $var;
 
@@ -463,11 +469,14 @@ class CrmTarjouksetController extends Controller
 
 			$template_tiedosto = $this->templates_polkku().$model->template;
 
+			$asetukset = Asetukset::model()->findByPk(1);
+
 			$docx = new CreateDocxFromTemplate($template_tiedosto);
 			//$docx->enableCompatibilityMode();
 			$docx->setTemplateSymbol('#');
 			$variables = array(
 				'paivays' => date("d.m.Y"),
+				'voimassa' => $model->voimassa,
 				'asiakas' => $asiakas,
 				'asiakkaan_osoite' => $asiakkaan_osoite,
 				'asiakkaan_postinumero' => $asiakkaan_postinumero,
@@ -482,11 +491,17 @@ class CrmTarjouksetController extends Controller
 			);
 			$docx->replaceVariableByText($variables);
 
-
+			$a = Asiakkaat::model()->findByPk($model->asiakas_id);
 			$k = Kohteet::model()->findByPk($model->kohde_id);
-			if(isset($k->id))
+			$tarvikkeet = array();
+			if( is_array(json_decode($model->tarvikkeet, true)) )
 			{
-
+				foreach(json_decode($model->tarvikkeet, true) as $l)
+				{
+	      				$v = Valikkoot::model()->findByPk($l);
+					if( isset($v->id) )
+					array_push($tarvikkeet, $v->value);
+				}
 			}
 
 			$variables_2 = array(
@@ -496,6 +511,10 @@ class CrmTarjouksetController extends Controller
 				'kohteen_osoite' => $model->kohteen_osoite,
 				'kohteen_postinumero' => $model->kohteen_postinumero,
 				'kohteen_postitoimipaikka' => $model->kohteen_postitoimipaikka,
+				'tyonantajan_edustaja' => $asetukset->johtaja,
+				'tarvikkeet' => implode(", ", $tarvikkeet),
+				'maksuehto' => $a->maksuehto,
+				'viivastyskorko' => $a->viivastyskorko,
 			);
 			$docx->replaceVariableByText($variables_2);
 

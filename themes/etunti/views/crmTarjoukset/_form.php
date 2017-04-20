@@ -17,7 +17,7 @@
 
 <!-- hattu -->
 <div class="row">
-     <div class="col-sm-4">
+     <div class="col-sm-3">
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'template'); ?>
 		<?php
@@ -33,6 +33,14 @@
 			array('empty'=>'Valitse', 'class'=>'form-control'));
 		?>
 		<?php echo $form->error($model,'template'); ?>
+	</div>
+
+     </div><div class="col-sm-3">
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'voimassa'); ?>
+		<?php echo $form->textField($model,'voimassa',array('size'=>20,'maxlength'=>20,'class'=>'form-control datepickerFI')); ?>
+		<?php echo $form->error($model,'voimassa'); ?>
 	</div>
 
      </div>
@@ -198,7 +206,7 @@
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'hinta_tyyppi'); ?>
 		<?php
-		$list = array(1=>'tunti',2=>'kk',3=>'kpl');
+		$list = array('Tuntihinta'=>'Tuntihinta','kk'=>'kk','kpl'=>'kpl');
         	echo $form->dropDownList($model, 'hinta_tyyppi', $list,
 		array('class'=>'form-control'));	
         	?>
