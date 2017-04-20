@@ -206,7 +206,7 @@
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'hinta_tyyppi'); ?>
 		<?php
-		$list = array('Tuntihinta'=>'Tuntihinta','kk'=>'kk','kpl'=>'kpl');
+		$list = array('Tuntihinta'=>'Tuntihinta','Kuukausihinta'=>'Kuukausihinta','Kappale'=>'Kappale');
         	echo $form->dropDownList($model, 'hinta_tyyppi', $list,
 		array('class'=>'form-control'));	
         	?>
