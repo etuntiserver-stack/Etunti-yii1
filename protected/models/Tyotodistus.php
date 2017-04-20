@@ -38,6 +38,11 @@
  */
 class Tyotodistus extends DB2ActiveRecord
 {
+
+public $template;
+public $tyontekijat;
+
+
 	/**
 	 * @return string the associated database table name
 	 */
@@ -54,6 +59,8 @@ class Tyotodistus extends DB2ActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
+			array('template', 'required'),
+
 			//array('time, tyonantaja, osoite, postinumero, postitoimipaikka, puhelin, y_tunnus, sahkoposti, tekijan_email, tid, tekijan_nimi, tekijan_katuosoite, tekijan_pnumero, tekijan_ptoimipaikka, tekijan_puh, tekijan_henkilotunnus, Alku, Loppu, Tyokohde, Tyotehtavat, TyosuhteenPaattamisenSyy, Tyotaito, Kaytos, Arvio, Paivays, Paikka, TyonantajanEdustaja, NimikeTehtava, tiedosto', 'required'),
 
 			array('Tyokohde, Tyotehtavat, TyosuhteenPaattamisenSyy, Tyotaito, Kaytos, Arvio', 'length', 'max'=>1000),
@@ -118,6 +125,8 @@ class Tyotodistus extends DB2ActiveRecord
 			'TyonantajanEdustaja' => Yii::t('main', 'Työnantajan edustaja'),
 			'NimikeTehtava' => Yii::t('main', 'Nimike/Tehtävä'),
 			'tiedosto' => Yii::t('main', 'Tiedosto'),
+			'tyontekijat' => Yii::t('main', 'Työntekijät'),
+
 		);
 	}
 

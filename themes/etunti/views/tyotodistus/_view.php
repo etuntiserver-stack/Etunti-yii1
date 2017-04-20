@@ -22,11 +22,11 @@
 	</td>
 	<td>
 	<?php
-		if(file_exists(Yii::app()->basePath."/../tiedostot/tyotodistukset/".Yii::app()->user->domain."/".$data->tiedosto.".docx"))
-	 	echo '<a href="../../tiedostot/tyotodistukset/'.Yii::app()->user->domain.'/'.$data->tiedosto.'.docx">'.$data->tiedosto.'.docx</a>';
+		if(file_exists( Yii::app()->basePath.'/../'.$this->valmiit_polkku().'/'.$data->tiedosto.'.docx' ))
+	 	echo '<a href="../../'.Yii::app()->baseUrl.$this->valmiit_polkku().'/'.$data->tiedosto.'.docx">'.$data->tiedosto.'.docx</a>';
 		echo '<br>';
-		if(file_exists(Yii::app()->basePath."/../tiedostot/tyotodistukset/".Yii::app()->user->domain."/".$data->tiedosto.".pdf"))
-		echo '<a href="../../tiedostot/tyotodistukset/'.Yii::app()->user->domain.'/'.$data->tiedosto.'.pdf">'.$data->tiedosto.'.pdf</a>';
+		if(file_exists( Yii::app()->basePath.'/../'.$this->valmiit_polkku().'/'.$data->tiedosto.'.pdf' ))
+		echo '<a href="../../'.Yii::app()->baseUrl.$this->valmiit_polkku().'/'.$data->tiedosto.'.pdf">'.$data->tiedosto.'.pdf</a>';
 		
 	?>
 	</td>
