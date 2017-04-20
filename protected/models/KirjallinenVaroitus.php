@@ -31,6 +31,10 @@
  */
 class KirjallinenVaroitus extends DB2ActiveRecord
 {
+
+public $template;
+public $tyontekijat;
+
 	/**
 	 * @return string the associated database table name
 	 */
@@ -47,6 +51,7 @@ class KirjallinenVaroitus extends DB2ActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
+			array('template', 'required'),
 			//array('time, tyonantaja, osoite, postinumero, postitoimipaikka, puhelin, y_tunnus, sahkoposti, tekijan_email, tid, tekijan_nimi, tekijan_katuosoite, tekijan_pnumero, tekijan_ptoimipaikka, tekijan_puh, tekijan_henkilotunnus, kirjallisen_varoituksen, Paivays, Paikka, TyonantajanEdustaja, NimikeTehtava, tiedosto', 'required'),
 			array('key, tid', 'numerical', 'integerOnly'=>true),
 			array('tyonantaja, tekijan_nimi', 'length', 'max'=>70),
@@ -102,6 +107,8 @@ class KirjallinenVaroitus extends DB2ActiveRecord
 			'TyonantajanEdustaja' => 'Työnantajan edustaja',
 			'NimikeTehtava' => 'Nimike Tehtava',
 			'tiedosto' => 'Tiedosto',
+			'template' => Yii::t('main', 'Malli'),
+			'tyontekijat' => Yii::t('main', 'Työntekijät'),
 		);
 	}
 

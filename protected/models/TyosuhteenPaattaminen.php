@@ -36,6 +36,10 @@
  */
 class TyosuhteenPaattaminen extends DB2ActiveRecord
 {
+
+public $template;
+public $tyontekijat;
+
 	/**
 	 * @return string the associated database table name
 	 */
@@ -52,7 +56,7 @@ class TyosuhteenPaattaminen extends DB2ActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('titteli, kuuleminen, tyosuhteen_paattaminen, tyonantaja, osoite, postinumero, postitoimipaikka, tekijan_email, tid, tekijan_nimi, tekijan_katuosoite, tekijan_henkilotunnus, Paivays, Paikka, TyonantajanEdustaja, alku_pvm, loppu_pvm', 'required'),
+			array('template, titteli, kuuleminen, tyosuhteen_paattaminen, tyonantaja, osoite, postinumero, postitoimipaikka, tekijan_email, tid, tekijan_nimi, tekijan_katuosoite, tekijan_henkilotunnus, Paivays, Paikka, TyonantajanEdustaja, alku_pvm, loppu_pvm', 'required'),
 			//array('time, titteli, kuuleminen, tyosuhteen_paattaminen, tyonantaja, osoite, postinumero, postitoimipaikka, puhelin, y_tunnus, sahkoposti, tekijan_email, tid, tekijan_nimi, tekijan_katuosoite, tekijan_pnumero, tekijan_ptoimipaikka, tekijan_puh, tekijan_henkilotunnus, teksti, Paivays, Paikka, TyonantajanEdustaja, NimikeTehtava, tiedosto, alku_pvm, loppu_pvm', 'required'),
 			array('key, tid', 'numerical', 'integerOnly'=>true),
 			array('titteli, osoite, tiedosto', 'length', 'max'=>255),
@@ -113,6 +117,8 @@ class TyosuhteenPaattaminen extends DB2ActiveRecord
 			'tiedosto' => 'Tiedosto',
 			'alku_pvm' => Yii::t('main', 'Työsuhteen alkamispäivä'),
 			'loppu_pvm' => Yii::t('main', 'Työsuhteen päättymispäivä'),
+			'template' => Yii::t('main', 'Malli'),
+			'tyontekijat' => Yii::t('main', 'Työntekijät'),
 		);
 	}
 

@@ -93,11 +93,12 @@ class TyotodistusController extends Controller
 
 		if(isset($_POST['Tyotodistus']))
 		{
-			$tiedosto = date('Y-m-d').'_'.$_POST['Tyotodistus']['tid'];
 			$model->attributes=$_POST['Tyotodistus'];
-			$model->tiedosto=$tiedosto;
 			if($model->save())
 			{
+				$tiedosto = str_replace(" ", "_", $this->etuSukunimi($model->tid)).'_'.date('Y-m-d').'_'.$model->id;
+				Tyotodistus::model()->updateByPk($model->id, array('tiedosto'=>$tiedosto));
+
 				$this->docxsave($model, $tiedosto);
 				$this->redirect(array('view','id'=>$model->id));
 			}
@@ -122,11 +123,12 @@ class TyotodistusController extends Controller
 
 		if(isset($_POST['Tyotodistus']))
 		{
-			$tiedosto = date('Y-m-d').'_'.$_POST['Tyotodistus']['tid'];
 			$model->attributes=$_POST['Tyotodistus'];
-			$model->tiedosto=$tiedosto;
 			if($model->save())
 			{
+				$tiedosto = str_replace(" ", "_", $this->etuSukunimi($model->tid)).'_'.date('Y-m-d').'_'.$model->id;
+				Tyotodistus::model()->updateByPk($model->id, array('tiedosto'=>$tiedosto));
+
 				$this->docxsave($model, $tiedosto);
 				$this->redirect(array('view','id'=>$model->id));
 			}
@@ -137,12 +139,58 @@ class TyotodistusController extends Controller
 		));
 	}
 
+	protected function template_variables()
+	{
+		$var = '
+			#tyonantaja#
+			#tyonantaja_osoite#
+			#tyonantaja_y_tunnus#
+			#tyonantaja_puhelin#
+			#tyonantaja_sahkoposti#
+
+			#tyontekija_nimi#
+			#tyontekija_osoite#
+			#tyontekija_henkilotunnus#
+			#tyontekija_puhelin#
+			#tyontekija_sahkoposti#
+
+			#aika#
+			#paikka#
+			#johtajan_nimi#
+
+			#Alku#
+			#Loppu#
+			#Tyokohde#
+			#TyosuhteenPaattamisenSyy#
+			#Kaytos#
+			#Arvio#
+			#NimikeTehtava#
+			#Tyotehtavat#';
+
+		return $var;
+
+	}
+
+	protected function kansio()
+	{
+		return 'tyotodistukset';
+	}
+
+	protected function templates_polkku()
+	{
+		return 'tiedostot/templates/'.Yii::app()->user->domain.'/'.$this->kansio().'/';
+	}
+
+	protected function valmiit_polkku()
+	{
+		return 'tiedostot/'.$this->kansio().'/'.Yii::app()->user->domain;
+	}
 
 	protected function docxsave($model, $tiedosto)
 	{
 
-			if (!file_exists(Yii::app()->basePath."/../tiedostot/tyotodistukset/".Yii::app()->user->domain)) {
-			 	mkdir(Yii::app()->basePath."/../tiedostot/tyotodistukset/".Yii::app()->user->domain, 0777, true);
+			if (!file_exists( Yii::app()->basePath.'/../'.$this->valmiit_polkku() )) {
+			 	mkdir( Yii::app()->basePath.'/../'.$this->valmiit_polkku(), 0777, true );
 			}
 
 			define('PHPDOCX_INCLUDE_PATH', (dirname(Yii::app()->basePath)).'/protected/vendors/phpdocx');
@@ -153,7 +201,7 @@ class TyotodistusController extends Controller
 			spl_autoload_register(array('AutoLoader','load'));
 			spl_autoload_register(array('YiiBase', 'autoload'));
 
-			$template_tiedosto = 'tiedostot/templates/'.Yii::app()->user->domain.'/template_tyotodistus.docx';
+			$template_tiedosto = $this->templates_polkku().$model->template;
 
 			$docx = new CreateDocxFromTemplate($template_tiedosto);
 			$docx->setTemplateSymbol('#');
@@ -186,7 +234,7 @@ class TyotodistusController extends Controller
 			);
 			$docx->replaceVariableByText($variables_2);
 
-			$path = 'tiedostot/tyotodistukset/'.Yii::app()->user->domain.'/'.$tiedosto;
+			$path = 'tiedostot/'.$this->kansio().'/'.Yii::app()->user->domain.'/'.$tiedosto;
 			$docx->createDocx($path);
 
 			if( $_SERVER['REMOTE_ADDR'] != '::1' and $_SERVER['REMOTE_ADDR'] != '127.0.0.1' )
@@ -198,10 +246,16 @@ class TyotodistusController extends Controller
 			$this->redirect(array('index'));
 	}
 
-
 	public function actionDelete($id)
 	{
-		$this->loadModel($id)->delete();
+		// <-- tiedoston poistaminen
+		$model = $this->loadModel($id);
+		$model->delete();
+		if (file_exists( Yii::app()->basePath.'/../'.$this->valmiit_polkku().'/'.$model->tiedosto.'.docx' )) 
+			unlink(Yii::app()->baseUrl.$this->valmiit_polkku().'/'.$model->tiedosto.'.docx');
+		if (file_exists( Yii::app()->basePath.'/../'.$this->valmiit_polkku().'/'.$model->tiedosto.'.pdf' )) 
+			unlink(Yii::app()->baseUrl.$this->valmiit_polkku().'/'.$model->tiedosto.'.pdf');
+		//     tiedoston poistaminen -->
 
 		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
 		if(!isset($_GET['ajax']))
@@ -213,6 +267,29 @@ class TyotodistusController extends Controller
 	 */
 	public function actionIndex()
 	{
+
+		if( Yii::app()->request->getPost('poistaTemplate') ){
+			unlink( Yii::app()->request->getPost('poistaTemplate') );
+			exit;
+		}
+
+		if( isset($_POST['file_upload']) )
+		{
+
+			if (!file_exists( Yii::app()->basePath.'/../'.$this->templates_polkku() )) {
+				mkdir( Yii::app()->basePath.'/../'.$this->templates_polkku(), 0777, true );
+			}
+
+			$uploaddir = Yii::app()->basePath.'/../'.$this->templates_polkku();
+			$uploadfile = $uploaddir . basename($_FILES["file"]["name"]);
+			if (move_uploaded_file($_FILES['file']['tmp_name'], $uploadfile)) {
+		
+			} else {
+				echo Yii::t('main', 'Lataaminen ei onnistuu');
+		    	}
+		}
+
+
 		$dataProvider=new CActiveDataProvider('Tyotodistus');
 		$this->render('index',array(
 			'dataProvider'=>$dataProvider,

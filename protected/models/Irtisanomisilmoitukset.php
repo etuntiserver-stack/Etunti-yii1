@@ -32,6 +32,9 @@
 class Irtisanomisilmoitukset extends DB2ActiveRecord
 {
 
+public $template;
+public $tyontekijat;
+
 	/**
 	 * @return string the associated database table name
 	 */
@@ -48,6 +51,7 @@ class Irtisanomisilmoitukset extends DB2ActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
+			array('template', 'required'),
 			//array('time, tyonantaja, osoite, postinumero, postitoimipaikka, puhelin, y_tunnus, sahkoposti, tekijan_email, tid, tekijan_nimi, tekijan_katuosoite, tekijan_pnumero, tekijan_ptoimipaikka, tekijan_puh, tekijan_henkilotunnus, teksti, Paivays, Paikka, TyonantajanEdustaja, NimikeTehtava, tiedosto', 'required'),
 			array('key, tid', 'numerical', 'integerOnly'=>true),
 			array('tyonantaja, tekijan_nimi', 'length', 'max'=>70),
@@ -105,6 +109,8 @@ class Irtisanomisilmoitukset extends DB2ActiveRecord
 			'tiedosto' => 'Tiedosto',
 			'alku_pvm' => Yii::t('main', 'Alku pvm'),
 			'loppu_pvm' => Yii::t('main', 'Loppu pvm'),
+			'template' => Yii::t('main', 'Malli'),
+			'tyontekijat' => Yii::t('main', 'Työntekijät'),
 		);
 	}
 

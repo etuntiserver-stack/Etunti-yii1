@@ -19,28 +19,6 @@
               <div class="panel heading-border">
                 <div class="panel-body bg-light">
 
-<?php if (file_exists(Yii::app()->basePath.'/../tiedostot/templates/'.Yii::app()->user->domain.'/template_varoitus.docx')) : ?>
-
-                 <div class="row">
-                  <div class="col-sm-4">
-
-				<?php
-		   		$site = Yii::app()->createController('Site');
-		   		$tyontekiatLista = $site[0]->tyontekiatListaNoMulti( 
-						'tyontekija', // name
-						'form-control', //class
-						'tyontekijat', // id
-						null, //selected
-						1 // aktiivinen
-				);
-				echo $tyontekiatLista;
-				?>
-
-                  </div>
-                 </div>
-
-		<hr>
-
 		<?php
 			$firma = FirmanTiedot::model()->findbypk(1);
 			$model->tyonantaja = $firma->tyonantaja;
@@ -57,11 +35,6 @@
 
 			echo $this->renderPartial('_form', array('model'=>$model)); 
 		?>
-
-
-<?php else : ?>
-	<?php echo Yii::t('main', 'Mallitiedosto puutuu, jos haluat ominaisuuden käyttöön ota yhteyttä'); ?> <a href="mailto:tuki@etunti.fi">tuki@etunti.fi<a>
-<?php endif; ?>
 
 
                 </div>

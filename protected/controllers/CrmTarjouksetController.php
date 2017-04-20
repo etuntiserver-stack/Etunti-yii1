@@ -309,51 +309,31 @@ class CrmTarjouksetController extends Controller
 	{
 		$model=new CrmTarjoukset;
 
+		// Uncomment the following line if AJAX validation is needed
+		// $this->performAjaxValidation($model);
+		if(isset($_POST['CrmTarjoukset']))
+		{
+
+			$model->attributes=$_POST['CrmTarjoukset'];
 			if(isset($_POST['CrmTarjoukset']['tarvikkeet']))
 				$model->tarvikkeet=json_encode($_POST['CrmTarjoukset']['tarvikkeet']);
 			else
 				$model->tarvikkeet="";
-
-		// Uncomment the following line if AJAX validation is needed
-		// $this->performAjaxValidation($model);
-
-			$tm = '';
-
-
-			$nimike		= 'crm_tarjous.docx';
-			$polku 		= Yii::app()->basePath;
-			$tiedosto 	= "/../tiedostot/templates/".Yii::app()->user->domain."/".$nimike;
-
-		if(!file_exists($polku.$tiedosto))
-			$tm = '<h2 class="alert alert-danger">'.Yii::t('main', 'Mallitiedosto puutuu, jos haluat ominaisuuden käyttöön ota yhteyttä'). ' <a href="mailto:tuki@etunti.fi">tuki@etunti.fi<a></h2>';
-
-
-		if(isset($_POST['CrmTarjoukset']))
-		{
-
-		if(file_exists($polku.$tiedosto))
-		{
-			$model->attributes=$_POST['CrmTarjoukset'];
 			if($model->save()){
 
+				$tiedosto = $this->kansio().'_'.str_replace(" ", "_", $model->kohteen_osoite).'_'.date('Y-m-d').'_'.$model->id;
+				CrmTarjoukset::model()->updateByPk($model->id, array('liite'=>$tiedosto));
+
 				$as = Asiakkaat::model()->findbypk($model->asiakas_id);
-				//$y = Yhteystiedot::model()->findbypk($model->yhteystiedot_id);
 				if(isset($as->sahkoposti))
 					CrmTarjoukset::model()->updatebypk($model->id, array('asiakkaan_sahkoposti'=>$as->sahkoposti));
-/*
-				if(isset($y->sahkoposti))
-					CrmTarjoukset::model()->updatebypk($model->id, array('asiakkaan_sahkoposti'=>$y->sahkoposti));
-*/
-				$this->docx($model);
 
-		}
-
+				$this->docx($model, $tiedosto);
 			}
 		}
 
 		$this->render('create',array(
-			'model'=>$model,
-			'tm'=>$tm,
+			'model'=>$model
 		));
 	}
 
@@ -367,8 +347,8 @@ class CrmTarjouksetController extends Controller
 		$model=$this->loadModel($id);
 
 	
-			if(isset($_POST['CrmTarjoukset']))
-			{
+		if(isset($_POST['CrmTarjoukset']))
+		{
 			$model->attributes=$_POST['CrmTarjoukset'];
 
 			if(isset($_POST['CrmTarjoukset']['tarvikkeet']))
@@ -378,6 +358,9 @@ class CrmTarjouksetController extends Controller
 
 			if($model->save()){
 
+				$tiedosto = $this->kansio().'_'.str_replace(" ", "_", $model->kohteen_osoite).'_'.date('Y-m-d').'_'.$model->id;
+				CrmTarjoukset::model()->updateByPk($model->id, array('liite'=>$tiedosto));
+
 				$as = Asiakkaat::model()->findbypk($model->asiakas_id);
 				$y = Yhteystiedot::model()->findbypk($model->yhteystiedot_id);
 				if(isset($as->sahkoposti))
@@ -386,7 +369,7 @@ class CrmTarjouksetController extends Controller
 				if(isset($y->sahkoposti))
 					CrmTarjoukset::model()->updatebypk($model->id, array('asiakkaan_sahkoposti'=>$y->sahkoposti));
 
-				$this->docx($model);
+				$this->docx($model, $tiedosto);
 			
 			}
 		}
@@ -397,24 +380,57 @@ class CrmTarjouksetController extends Controller
 	}
 
 
-	protected function docx($model)
+	protected function template_variables()
 	{
-
-			$liite = $model->id.'_'.date("d.m.Y");
-			$crm = CrmTarjoukset::model()->updatebypk($model->id, array('liite'=>$liite));
-
+		$var = '
+		#paivays#
 	
-			if (!file_exists(Yii::app()->basePath."/../tiedostot/crm/tarjoukset/".Yii::app()->user->domain)) {
-			 	mkdir(Yii::app()->basePath."/../tiedostot/crm/tarjoukset/".Yii::app()->user->domain, 0777, true);
+		#yritys#
+		#yrityksen_osoite#
+		#yrityksen_postinumero#
+		#yrityksen_toimipaikka#
+
+		#asiakas#
+		#asiakkaan_osoite#
+		#asiakkaan_postinumero#
+		#asiakkaan_toimipaikka#
+
+		#teksti#
+		#tyonkuvaus#
+		
+		#hinta_tyyppi#
+		#hinta#
+		#alv#
+		#kohteen_osoite#
+		#kohteen_postinumero#
+		#kohteen_postitoimipaikka#';
+
+		return $var;
+
+	}
+
+	protected function kansio()
+	{
+		return 'tarjoukset';
+	}
+
+	protected function templates_polkku()
+	{
+		return 'tiedostot/templates/'.Yii::app()->user->domain.'/'.$this->kansio().'/';
+	}
+
+	protected function valmiit_polkku()
+	{
+		return 'tiedostot/'.$this->kansio().'/'.Yii::app()->user->domain;
+	}
+
+
+	protected function docx($model, $tiedosto)
+	{
+	
+			if (!file_exists( Yii::app()->basePath.'/../'.$this->valmiit_polkku() )) {
+			 	mkdir( Yii::app()->basePath.'/../'.$this->valmiit_polkku(), 0777, true );
 			}
-
-
-			// <-- Tyonkuvaus
-			if( $model->tyonkuvaus_id != 0 )
-			{
-
-			}
-			//     Tyonkuvaus -->
 
 			$firma = FirmanTiedot::model()->findbypk(1);
 
@@ -445,7 +461,7 @@ class CrmTarjouksetController extends Controller
 			spl_autoload_register(array('AutoLoader','load'));
 			spl_autoload_register(array('YiiBase', 'autoload'));
 
-			$template_tiedosto = 'tiedostot/templates/'.Yii::app()->user->domain.'/crm_tarjous.docx';
+			$template_tiedosto = $this->templates_polkku().$model->template;
 
 			$docx = new CreateDocxFromTemplate($template_tiedosto);
 			//$docx->enableCompatibilityMode();
@@ -530,7 +546,7 @@ class CrmTarjouksetController extends Controller
 			}
 
 
-			$path = 'tiedostot/crm/tarjoukset/'.Yii::app()->user->domain.'/'.$liite;
+			$path = 'tiedostot/'.$this->kansio().'/'.Yii::app()->user->domain.'/'.$tiedosto;
 			$docx->createDocx($path);
 
 			if( $_SERVER['REMOTE_ADDR'] != '::1' and $_SERVER['REMOTE_ADDR'] != '127.0.0.1' )
@@ -546,13 +562,14 @@ class CrmTarjouksetController extends Controller
 	public function actionDelete($id)
 	{
 
-		$model=$this->loadModel($id);
-		$t = 'tiedostot/crm/tarjoukset/'.Yii::app()->user->domain.'/'.$model->liite;
-		if(file_exists(Yii::app()->basePath."/../".$t.".docx"))
-			unlink($t.".docx");
-		if(file_exists(Yii::app()->basePath."/../".$t.".pdf"))
-			unlink($t.".pdf");
+		// <-- tiedoston poistaminen
+		$model = $this->loadModel($id);
 		$model->delete();
+		if (file_exists( Yii::app()->basePath.'/../'.$this->valmiit_polkku().'/'.$model->liite.'.docx' )) 
+			unlink(Yii::app()->baseUrl.$this->valmiit_polkku().'/'.$model->liite.'.docx');
+		if (file_exists( Yii::app()->basePath.'/../'.$this->valmiit_polkku().'/'.$model->liite.'.pdf' )) 
+			unlink(Yii::app()->baseUrl.$this->valmiit_polkku().'/'.$model->liite.'.pdf');
+		//     tiedoston poistaminen -->
 
 		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
 		if(!isset($_GET['ajax']))
@@ -571,31 +588,31 @@ class CrmTarjouksetController extends Controller
 	   $site[0]->checkOikeus($checkOikeus);
 	//  Oikeudet -->
 */
+
+		if( Yii::app()->request->getPost('poistaTemplate') ){
+			unlink( Yii::app()->request->getPost('poistaTemplate') );
+			exit;
+		}
+
+		if( isset($_POST['file_upload']) )
+		{
+
+			if (!file_exists( Yii::app()->basePath.'/../'.$this->templates_polkku() )) {
+				mkdir( Yii::app()->basePath.'/../'.$this->templates_polkku(), 0777, true );
+			}
+
+			$uploaddir = Yii::app()->basePath.'/../'.$this->templates_polkku();
+			$uploadfile = $uploaddir . basename($_FILES["file"]["name"]);
+			if (move_uploaded_file($_FILES['file']['tmp_name'], $uploadfile)) {
+		
+			} else {
+				echo Yii::t('main', 'Lataaminen ei onnistuu');
+		    	}
+		}
+
+
        		$criteria = new CDbCriteria();
 	        $criteria->order = "  id DESC ";
-/*
-		if(isset($_POST['osoite']) and !empty($_POST['osoite']))
-	        $criteria->addCondition (" osoite LIKE '%".$_POST['osoite']."%' ");
-
-		if(isset($_POST['aktiivinen']) and $_POST['aktiivinen'] != 'kaikki')
-	        $criteria->addCondition (" aktiivinen ='".(int)$_POST['aktiivinen']."' ");
-		elseif(isset($_POST['aktiivinen']) and $_POST['aktiivinen'] == 'kaikki')
-	        $criteria->addCondition (" (aktiivinen=1 OR aktiivinen=0) ");
-		else
-	        $criteria->addCondition (" aktiivinen=1 ");
-
-		if(isset($_POST['yrityksen_nimi']) and !empty(trim($_POST['yrityksen_nimi'])))
-	        $criteria->addCondition (" yrityksen_nimi LIKE '%".$_POST['yrityksen_nimi']."%' ");
-
-		if(isset($_POST['yhteyshenkilo']) and !empty(trim($_POST['yhteyshenkilo'])))
-	        $criteria->addCondition (" yhteyshenkilo LIKE '%".$_POST['yhteyshenkilo']."%' ");
-
-		if(isset($_POST['puhelin']) and !empty(trim($_POST['puhelin'])))
-	        $criteria->addCondition (" puhelin LIKE '%".$_POST['puhelin']."%' ");
-
-		if(isset($_POST['sahkoposti']) and !empty(trim($_POST['sahkoposti'])))
-	        $criteria->addCondition (" sahkoposti LIKE '%".$_POST['sahkoposti']."%' ");
-*/
 
 		$dataProvider=new CActiveDataProvider('CrmTarjoukset', array(
 			'criteria'=>$criteria,
