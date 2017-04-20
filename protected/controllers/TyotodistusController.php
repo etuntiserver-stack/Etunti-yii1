@@ -96,7 +96,7 @@ class TyotodistusController extends Controller
 			$model->attributes=$_POST['Tyotodistus'];
 			if($model->save())
 			{
-				$tiedosto = $this->kansio().'_'.str_replace(" ", "_", $this->etuSukunimi($model->tid)).'_'.date('Y-m-d').'_'.$model->id;
+				$tiedosto = str_replace(" ", "_", $this->etuSukunimi($model->tid)).'_'.date('Y-m-d').'_'.$model->id;
 				Tyotodistus::model()->updateByPk($model->id, array('tiedosto'=>$tiedosto));
 
 				$this->docxsave($model, $tiedosto);
@@ -126,7 +126,7 @@ class TyotodistusController extends Controller
 			$model->attributes=$_POST['Tyotodistus'];
 			if($model->save())
 			{
-				$tiedosto = $this->kansio().'_'.str_replace(" ", "_", $this->etuSukunimi($model->tid)).'_'.date('Y-m-d').'_'.$model->id;
+				$tiedosto = str_replace(" ", "_", $this->etuSukunimi($model->tid)).'_'.date('Y-m-d').'_'.$model->id;
 				Tyotodistus::model()->updateByPk($model->id, array('tiedosto'=>$tiedosto));
 
 				$this->docxsave($model, $tiedosto);

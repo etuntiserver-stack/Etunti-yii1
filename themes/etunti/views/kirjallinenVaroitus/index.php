@@ -167,6 +167,8 @@ $(document).ready(function(){
 
 $(".poista").click(function(){
 	var polku = $(this).attr('for');
+	if(confirm('Haluatko varmaasti poista?'))
+	{
         $.ajax({
            url: 'index',
            type: "POST",
@@ -176,6 +178,7 @@ $(".poista").click(function(){
 		window.location.href="index";
            }
         });
+	}
 });
 
 
