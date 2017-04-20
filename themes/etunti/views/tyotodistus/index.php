@@ -1,28 +1,5 @@
 <?php
 
-  $template = 'template_tyotodistus';
-
-
-  if(isset($_POST['poistaTemplate'])){
-	unlink($_POST['poistaTemplate']);
-	exit;
-  }
-
-  if(isset($_POST['file_upload']))
-  {
-
-	if (!file_exists( Yii::app()->basePath.'/../'.$this->templates_polkku() )) {
-		mkdir( Yii::app()->basePath.'/../'.$this->templates_polkku(), 0777, true );
-	}
-
-	$uploaddir = Yii::app()->basePath.'/../'.$this->templates_polkku();
-	$uploadfile = $uploaddir . basename($_FILES["file"]["name"]);
-	if (move_uploaded_file($_FILES['file']['tmp_name'], $uploadfile)) {
-
-	} else {
-		echo Yii::t('main', 'Lataaminen ei onnistuu');
-    	}
-  }
 ?>
 
 
@@ -188,6 +165,8 @@ $(document).ready(function(){
 
 $(".poista").click(function(){
 	var polku = $(this).attr('for');
+	if(confirm('Haluatko varmaasti poista?'))
+	{
         $.ajax({
            url: 'index',
            type: "POST",
@@ -197,6 +176,7 @@ $(".poista").click(function(){
 		window.location.href="index";
            }
         });
+	}
 });
 
 

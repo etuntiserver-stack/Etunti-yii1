@@ -93,11 +93,12 @@ class TyotodistusController extends Controller
 
 		if(isset($_POST['Tyotodistus']))
 		{
-			$tiedosto = date('Y-m-d').'_'.$_POST['Tyotodistus']['tid'];
 			$model->attributes=$_POST['Tyotodistus'];
-			$model->tiedosto=$tiedosto;
 			if($model->save())
 			{
+				$tiedosto = $this->kansio().'_'.str_replace(" ", "_", $this->etuSukunimi($model->tid)).'_'.date('Y-m-d').'_'.$model->id;
+				Tyotodistus::model()->updateByPk($model->id, array('tiedosto'=>$tiedosto));
+
 				$this->docxsave($model, $tiedosto);
 				$this->redirect(array('view','id'=>$model->id));
 			}
@@ -122,11 +123,12 @@ class TyotodistusController extends Controller
 
 		if(isset($_POST['Tyotodistus']))
 		{
-			$tiedosto = date('Y-m-d').'_'.$_POST['Tyotodistus']['tid'];
 			$model->attributes=$_POST['Tyotodistus'];
-			$model->tiedosto=$tiedosto;
 			if($model->save())
 			{
+				$tiedosto = $this->kansio().'_'.str_replace(" ", "_", $this->etuSukunimi($model->tid)).'_'.date('Y-m-d').'_'.$model->id;
+				Tyotodistus::model()->updateByPk($model->id, array('tiedosto'=>$tiedosto));
+
 				$this->docxsave($model, $tiedosto);
 				$this->redirect(array('view','id'=>$model->id));
 			}
@@ -265,6 +267,29 @@ class TyotodistusController extends Controller
 	 */
 	public function actionIndex()
 	{
+
+		if( Yii::app()->request->getPost('poistaTemplate') ){
+			unlink( Yii::app()->request->getPost('poistaTemplate') );
+			exit;
+		}
+
+		if( isset($_POST['file_upload']) )
+		{
+
+			if (!file_exists( Yii::app()->basePath.'/../'.$this->templates_polkku() )) {
+				mkdir( Yii::app()->basePath.'/../'.$this->templates_polkku(), 0777, true );
+			}
+
+			$uploaddir = Yii::app()->basePath.'/../'.$this->templates_polkku();
+			$uploadfile = $uploaddir . basename($_FILES["file"]["name"]);
+			if (move_uploaded_file($_FILES['file']['tmp_name'], $uploadfile)) {
+		
+			} else {
+				echo Yii::t('main', 'Lataaminen ei onnistuu');
+		    	}
+		}
+
+
 		$dataProvider=new CActiveDataProvider('Tyotodistus');
 		$this->render('index',array(
 			'dataProvider'=>$dataProvider,

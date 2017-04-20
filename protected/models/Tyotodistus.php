@@ -125,6 +125,7 @@ public $tyontekijat;
 			'TyonantajanEdustaja' => Yii::t('main', 'Työnantajan edustaja'),
 			'NimikeTehtava' => Yii::t('main', 'Nimike/Tehtävä'),
 			'tiedosto' => Yii::t('main', 'Tiedosto'),
+			'template' => Yii::t('main', 'Malli'),
 			'tyontekijat' => Yii::t('main', 'Työntekijät'),
 
 		);
