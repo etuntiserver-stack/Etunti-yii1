@@ -1,26 +1,4 @@
 <?php
-if(isset($_POST['poistaTemplate'])){
-	unlink($_POST['poistaTemplate']);
-	exit;
-}
-
-  if(isset($_POST['crm_tarjous']))
-  {
-
-    if (!file_exists(Yii::app()->basePath."/../tiedostot/templates/".Yii::app()->user->domain)) {
-  	mkdir(Yii::app()->basePath."/../tiedostot/templates/".Yii::app()->user->domain, 0777, true);
-    }
-
-  $uploaddir = Yii::app()->basePath.'/../tiedostot/templates/'.Yii::app()->user->domain.'/';
-  $tiedosto = 'crm_tarjous.docx';
-
-  $uploadfile = $uploaddir . basename($tiedosto);
-    if (move_uploaded_file($_FILES['file']['tmp_name'], $uploadfile)) {
-
-    } else {
-	echo Yii::t('main', 'Lataaminen ei onnistuu');
-    }
-  }
 
 ?>
 
@@ -51,161 +29,69 @@ if(isset($_POST['poistaTemplate'])){
                 <div class="panel-body">
 
 
-<?php /*
-
-                    <!-- Input Icons -->
-                    <div class="row">
-
-                      <div class="col-md-2">
-
+                      <div class="col-md-6">
                         <div class="section">
-                          <label class="field prepend-icon">
 
-   			    <input type="text" class="gui-input" name="osoite" value="<?php if(isset($_POST['osoite'])) echo $_POST['osoite']; ?>" placeholder="Osoite..">
+			<!-- lataus lomake -->
+			<form action="#" class="form-input" method="post" enctype="multipart/form-data">
+			     <div class="section input-group">
+			       <label class="field prepend-icon append-button file">
+			         <span class="button"><?=Yii::t('main', 'Työtodistus template')?></span>
+			         <input type="file" class="gui-file" name="file" onChange="document.getElementById(\'tiedostoUP\').value = this.value;">
+			         <input type="text" class="gui-input" name="file_upload" id="tiedostoUP" placeholder="Valitse tiedosto..">
+			         <label class="field-icon">
+			          <i class="fa fa-upload"></i>
+			         </label>
+			       </label>
+				<span class="input-group-btn">
+			          <input type="submit" value="Lataa docx" class="btn btn-primary btn-group myBgColors" />
+				</span>
+			    </div>
+			</form>
+			<!-- lataus lomake -->
 
-                            <label for="firstname" class="field-icon">
-                              <i class="fa fa-user"></i>
-                            </label>
-                          </label>
-                        </div>
-
-                        <div class="section">
-                          <label class="field prepend-icon">
-
-   			    <input type="text" class="gui-input" name="yrityksen_nimi" value="<?php if(isset($_POST['yrityksen_nimi'])) echo $_POST['yrityksen_nimi']; ?>" placeholder="Yritys..">
-
-                            <label for="firstname" class="field-icon">
-                              <i class="fa fa-user"></i>
-                            </label>
-                          </label>
-                        </div>
-
-                      </div>
-
-		      <?php if(isset($_POST['aktiivinen'])) echo '<input type="hidden" id="akt" value="'.$_POST['aktiivinen'].'">'; ?>
-                      <div class="col-md-2">
-                        <div class="section">
-                          <label class="field select">
+			<!-- uploaded tiedostot -->
+			<legend><?=Yii::t('main', 'Ladatut tiedostot')?></legend>
+			<div class="row">
+			 <div class="col-sm-12">
+			  <table class="table table-striped">
+			  <?php
+			  foreach(glob(Yii::app()->baseUrl.$this->templates_polkku().'/*.docx') as $file) 
+			  {
+				$explNimi = explode("/",$file);
+			 	echo '
+				<tr>
+				  <td><a href="../../'.$file.'">'.end($explNimi).'</a></td>
+				  <td><i class="poista text-danger fa fa-trash link" for="'.Yii::app()->baseUrl.$this->templates_polkku().end($explNimi).'"></i></td>
+				</tr>
+				';
+			  }
+			  ?>
+			  </table>
+			 </div>
+			</div>
+			<!-- uploaded tiedostot -->
 
 
-			   <select class="gui-input" name="aktiivinen" id="aktiivinen">
-       				<option value="1">Aktiiviset</option>
-       				<option value="0">Passiviset</option>
-       				<option value="kaikki">Kaikki</option>
-			   </select>
-
-
-                            <i class="arrow double"></i>
-                            </label>
-                          </label>
                         </div>
                       </div>
 
-                      <div class="col-md-2">
+                      <div class="col-md-4">
                         <div class="section">
-                          <label class="field prepend-icon">
-
-   			    <input type="text" class="gui-input" name="yhteyshenkilo" value="<?php if(isset($_POST['yhteyshenkilo'])) echo $_POST['yhteyshenkilo']; ?>" placeholder="Yhteyshenkilö">
-
-                            <label for="firstname" class="field-icon">
-                              <i class="fa fa-user"></i>
-                            </label>
-                          </label>
-                        </div>
-                      </div>
-                      <div class="col-md-2">
-                        <div class="section">
-                          <label class="field prepend-icon">
-
-   			    <input type="text" name="puhelin"  class="gui-input" value="<?php if(isset($_POST['puhelin'])) echo $_POST['puhelin']; ?>" placeholder="Puhelin">
-                            <label for="firstname" class="field-icon">
-                              <i class="fa fa-phone"></i>
-                            </label>
-                          </label>
+			  <a class="btn btn-primary myBgColors" href="/../lib/mallit/crm_tarjous.docx"><?=Yii::t('main', 'Esimerkki tiedosto')?></a> 
+			  <button class="btn btn-primary myBgColors" data-toggle="collapse" data-target="#tmpl_vars">
+				<?=Yii::t('main', 'Käytettävät muuttujat'); ?> <i class="caret"></i>
+			  </button>
+			  <div class="collapse" id="tmpl_vars"><?=str_replace("\n", "<br>", $this->template_variables())?></div>
                         </div>
                       </div>
 
-                      <div class="col-md-2">
-                        <div class="section">
-                          <label class="field prepend-icon">
 
-   			    <input type="text" name="sahkoposti" class="gui-input" value="<?php if(isset($_POST['sahkoposti'])) echo $_POST['sahkoposti']; ?>" placeholder="<?php echo Yii::t('main','Sähköposti'); ?>">
-                            <label for="firstname" class="field-icon">
-                              <i class="fa fa-at"></i>
-                            </label>
-                          </label>
-                        </div>
-                      </div>
-
-                      <div class="col-md-2">
-        	        <input type="submit" class="btn btn-primary btn-lg haemob btn-block myBgColors" value="Hae">
-		      </div>
 
                     </div>
-*/ ?>
 
 
-
-
-<div class="col-sm-6">
-<?php
-  $nimike	= 'crm_tarjous.docx';
-  $polku 	= Yii::app()->basePath;
-  $tiedosto 	= "/../tiedostot/templates/".Yii::app()->user->domain."/".$nimike;
-
-  if (file_exists($polku.$tiedosto))
-  echo '<a href="'.$tiedosto.'">'.$nimike.'</a> <span class="poista btn btn-xs btn-danger" for="'.$polku.$tiedosto.'">X</span>';
-
-  echo '
-  <form action="#" class="form-input" method="post" enctype="multipart/form-data">
-     <div class="section input-group">
-       <label class="field prepend-icon append-button file">
-         <span class="button">'.Yii::t('main', 'Tarjous template').'</span>
-         <input type="file" class="gui-file" name="file" onChange="document.getElementById(\'tiedostoUP\').value = this.value;">
-         <input type="text" class="gui-input" name="crm_tarjous" id="tiedostoUP" placeholder="Valitse tiedosto..">
-         <label class="field-icon">
-          <i class="fa fa-upload"></i>
-         </label>
-       </label>
-	<span class="input-group-btn">
-          <input type="submit" value="Lataa docx" class="btn btn-primary btn-group myBgColors" />
-	</span>
-    </div>
-  </form>
- ';
-
-  echo '<a href="/../lib/mallit/crm_tarjous.docx">'.Yii::t('main', 'Tässä').'</a> '.Yii::t('main', 'on templaten esimerkki.');
-?>
-</div>
-
-
-<div class="col-sm-6">
-<p><b>Template variables</b></p><br>
-
-<textarea class="form-control" rows="10" cols="60">
-#paivays#
-
-#yritys#
-#yrityksen_osoite#
-#yrityksen_postinumero#
-#yrityksen_toimipaikka#
-
-#asiakas#
-#asiakkaan_osoite#
-#asiakkaan_postinumero#
-#asiakkaan_toimipaikka#
-
-#teksti#
-#tyonkuvaus#
-
-#hinta_tyyppi#
-#hinta#
-#alv#
-#kohteen_osoite#
-#kohteen_postinumero#
-#kohteen_postitoimipaikka#
-</textarea>
-</div>
+<br>
 
 
 

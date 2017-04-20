@@ -34,11 +34,11 @@
 	</td>
 	<td>
 	<?php
-		if(file_exists(Yii::app()->basePath."/../tiedostot/crm/tarjoukset/".Yii::app()->user->domain."/".$data->liite.".docx"))
-	 	echo '<a href="../../tiedostot/crm/tarjoukset/'.Yii::app()->user->domain.'/'.$data->liite.'.docx">'.$data->liite.'.docx</a>';
+		if(file_exists( Yii::app()->basePath.'/../'.$this->valmiit_polkku().'/'.$data->liite.'.docx' ))
+	 	echo '<a href="../../'.Yii::app()->baseUrl.$this->valmiit_polkku().'/'.$data->liite.'.docx">'.$data->liite.'.docx</a>';
 		echo '<br>';
-		if(file_exists(Yii::app()->basePath."/../tiedostot/crm/tarjoukset/".Yii::app()->user->domain."/".$data->liite.".pdf"))
-		echo '<a href="../../tiedostot/crm/tarjoukset/'.Yii::app()->user->domain.'/'.$data->liite.'.pdf" target="_blank">'.$data->liite.'.pdf</a>';
+		if(file_exists( Yii::app()->basePath.'/../'.$this->valmiit_polkku().'/'.$data->liite.'.pdf' ))
+		echo '<a href="../../'.Yii::app()->baseUrl.$this->valmiit_polkku().'/'.$data->liite.'.pdf">'.$data->liite.'.pdf</a>';
 		
 	?>
 	</td>

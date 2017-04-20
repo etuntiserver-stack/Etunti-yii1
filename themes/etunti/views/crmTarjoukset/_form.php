@@ -15,6 +15,31 @@
 )); ?>
 
 
+<!-- hattu -->
+<div class="row">
+     <div class="col-sm-4">
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'template'); ?>
+		<?php
+		$tmp_list = array();
+		foreach(glob(Yii::app()->baseUrl.$this->templates_polkku().'/*.docx') as $file) 
+		{
+			$explNimi = explode("/",$file);
+		 	$tmp_list[end($explNimi)] = end($explNimi);
+		}
+		?>
+		<?php
+        		echo $form->dropDownList($model, 'template', $tmp_list,
+			array('empty'=>'Valitse', 'class'=>'form-control'));
+		?>
+		<?php echo $form->error($model,'template'); ?>
+	</div>
+
+     </div>
+</div>
+<hr>
+<!-- hattu -->
+
 <div class="row">
   <div class="col-sm-3">
 
