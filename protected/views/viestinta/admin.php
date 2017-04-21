@@ -28,10 +28,10 @@ $('.search-form form').submit(function(){
 		$ft = FirmanTiedot::model()->findbypk(1);
 		$mail = new YiiMailer();
 		$mail->setFrom($ft->sahkoposti, $ft->tyonantaja);
-		$mail->addReplyTo('replyto@email.com', 'Reply to name');
-		$mail->setTo('laptopsr@gmail.com');
-		$mail->setSubject('test');
-		$mail->setBody('testi');
+		$mail->addReplyTo($ft->sahkoposti, 'Reply to name');
+		$mail->setTo('veiko.poldkivi@sivex.fi');
+		$mail->setSubject('test viesti');
+		$mail->setBody('onko se spamissa?');
 		$mail->send();
 ?>
 
