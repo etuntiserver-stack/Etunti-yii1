@@ -24,15 +24,6 @@ $('.search-form form').submit(function(){
 	return false;
 });
 ");
-
-		$ft = FirmanTiedot::model()->findbypk(1);
-		$mail = new YiiMailer();
-		$mail->setFrom($ft->sahkoposti, $ft->tyonantaja);
-		$mail->addReplyTo($ft->sahkoposti, 'Reply to name');
-		$mail->setTo('veiko.poldkivi@sivex.fi');
-		$mail->setSubject('test viesti');
-		$mail->setBody('onko se spamissa?');
-		$mail->send();
 ?>
 
 
