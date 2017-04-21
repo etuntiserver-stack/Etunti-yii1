@@ -25,9 +25,9 @@ $('.search-form form').submit(function(){
 });
 ");
 
+		$ft = FirmanTiedot::model()->findbypk(1);
 		$mail = new YiiMailer();
-		//$mail->clearLayout();//if layout is already set in config
-		$mail->setFrom('info@email.com', 'ETUNTI.FI');
+		$mail->setFrom('pekka.ylimartimo@vetel.fi', $ft->tyonantaja);
 		$mail->addReplyTo('replyto@email.com', 'Reply to name');
 		$mail->setTo('laptopsr@gmail.com');
 		$mail->setSubject('test');
