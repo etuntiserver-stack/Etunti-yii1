@@ -1476,4 +1476,24 @@ $xml = '
 		return null;
 
 	}
+
+	protected function pyhat($date){
+
+	$dateMonth = '';
+	$pyh = array();
+
+	$dateMonth = date("d.m.Y",strtotime($date));
+	$asetukset = AsetuksetForAll::model()->findbypk(1);
+	$pyh = explode("\n",$asetukset->viralliset_pyhapaivat);
+
+	if(
+	   date("N",strtotime($date)) == 6 
+	   or date("N",strtotime($date)) == 7
+	   or strstr($asetukset->viralliset_pyhapaivat, $dateMonth)
+	)
+	return true;
+	else
+	return false;
+
+ 	}
 }

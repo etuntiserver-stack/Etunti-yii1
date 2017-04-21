@@ -89,7 +89,8 @@
 	{
   	  $d = strtotime($year ."W". $week . $day);
 	  $date = date('d.m.Y',$d);
-	  echo '<th>'.$paivat[date('N',$d)].', '.$date.'</th>';
+	 ($this->pyhat($date))? $ispyha = ' <i class="text-warning fa fa-flag-o" aria-hidden="true" style="font-size:150%"></i>' : $ispyha = '';
+	  echo '<th>'.$paivat[date('N',$d)].', '.$date.$ispyha.'</th>';
 	}
         ?>
      </tr>

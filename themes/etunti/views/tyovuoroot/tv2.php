@@ -135,11 +135,14 @@
 
 	  $clPyhat = '';
 	  $pyhat = $this->pyhat($date);
-	  if($pyhat == true)
-	  $clPyhat = 'style="background:#ddd"';
+	  $ispyha = '';
+	  if($pyhat == true){
+		$clPyhat = 'style="background:#ddd"';
+		$ispyha = ' <i class="text-warning fa fa-flag-o" aria-hidden="true" style="font-size:150%"></i>';
+	  }
 
   	    echo '<tr>';
-  		echo '<td '.$clPyhat.' class="fixed-column" id="first_'.$did.'"><b>'.$arrDate[$explColDate[0]].", ".$explColDate[1].'</b></td>';
+  		echo '<td '.$clPyhat.' class="fixed-column" id="first_'.$did.'"><b>'.$arrDate[$explColDate[0]].", ".$explColDate[1].$ispyha.'</b></td>';
 
 		// VARAUS
 		  echo '<td '.$clPyhat.' id="'.$did.'_0">';

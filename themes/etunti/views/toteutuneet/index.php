@@ -344,12 +344,14 @@ function dateDiff($start, $end) {
     	$vlChecker = '  <span style="color:'.$returnChecker[1].'"> ( '.$returnChecker[2].' )</span>';
     }
 
+    ($this->pyhat($date))? $ispyha = ' <i class="text-warning fa fa-flag-o" aria-hidden="true" style="font-size:150%"></i>' : $ispyha = '';
+
     echo '
 	<tr><td colspan="4">
 		<table class="" cellspacing="0" cellpadding="0">
 		  <tr>
 
-		   <td><h3>'.$arrDate[$explColDate[0]].' '.date("d.m",strtotime($date)).$vlChecker.'</h3></td>
+		   <td><h3>'.$arrDate[$explColDate[0]].' '.date("d.m",strtotime($date)).$vlChecker.$ispyha.'</h3></td>
 		  </tr>
 		  <tr>	
 		   <td>
