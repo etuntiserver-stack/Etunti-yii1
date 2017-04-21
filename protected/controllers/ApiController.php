@@ -748,7 +748,7 @@ public function actionImei($dom)
 				  <b><span class="text" style="color:'.$color.'">'.$osoite.'</span></b>';
 
 
-		      if(!empty($nm) or !empty($puh_nro) or !empty($avaimet)){
+		      if(!empty($nm) or !empty($puh_nro) or !empty($avaimet) or !empty($kohteen_yhteyshenkilo)){
 		      $sel .= '
 		      <br>
 		      <p>
