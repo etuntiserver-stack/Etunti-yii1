@@ -437,6 +437,7 @@
 
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'onlinevaraus_alku'); ?>
+
 		<?php 
         	$l = array();
 		for ($i = 1; $i <= 24; $i++) {
@@ -546,6 +547,18 @@
 		echo $form->dropDownList($model,'app_show_phone', $tal, 
 		array('class'=>'form-control')) ?>
 		<?php echo $form->error($model,'app_show_phone'); ?>
+	</div>
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'app_naytetaanko_kohteen_yhteyshenkilo'); ?>
+		<?php 
+        	$tal = array(
+			0=>'Ei',
+			1=>'Kyllä'
+		);
+		echo $form->dropDownList($model,'app_naytetaanko_kohteen_yhteyshenkilo', $tal, 
+		array('class'=>'form-control')) ?>
+		<?php echo $form->error($model,'app_naytetaanko_kohteen_yhteyshenkilo'); ?>
 	</div>
 
 	<div class="section fill mb5">

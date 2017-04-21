@@ -728,6 +728,13 @@ public function actionImei($dom)
 		      // Nayta kohteen avaimet -->
 
 
+		      // <-- app_naytetaanko_kohteen_yhteyshenkilo
+		      $kohteen_yhteyshenkilo = '';
+		      if(isset($asetukset->app_naytetaanko_kohteen_yhteyshenkilo) and $asetukset->app_naytetaanko_kohteen_yhteyshenkilo == 1 and $kohde->etu_suku_nimet != ''){
+		      			$kohteen_yhteyshenkilo = '<br>'.Yii::t('main', 'Kohteen yhteyshenkilö').': <b>'.$kohde->etu_suku_nimet.'</b>';
+		      }
+		      // app_naytetaanko_kohteen_yhteyshenkilo -->
+
 
 		      $sel .= '<div class="well">';
 
@@ -746,6 +753,7 @@ public function actionImei($dom)
 		      <br>
 		      <p>
 				  '.$nm.'
+				  '.$kohteen_yhteyshenkilo.'
 				  '.$puh_nro.'
 				  '.$avaimet.'
 		      </p>';
