@@ -27,7 +27,7 @@ $('.search-form form').submit(function(){
 
 		$ft = FirmanTiedot::model()->findbypk(1);
 		$mail = new YiiMailer();
-		$mail->setFrom('pekka.ylimartimo@vetel.fi', $ft->tyonantaja);
+		$mail->setFrom($ft->sahkoposti, $ft->tyonantaja);
 		$mail->addReplyTo('replyto@email.com', 'Reply to name');
 		$mail->setTo('laptopsr@gmail.com');
 		$mail->setSubject('test');
