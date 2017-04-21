@@ -27,7 +27,7 @@ $('.search-form form').submit(function(){
 
 		$mail = new YiiMailer();
 		//$mail->clearLayout();//if layout is already set in config
-		$mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
+		$mail->setFrom('info@email.com', 'ETUNTI.FI');
 		$mail->addReplyTo('replyto@email.com', 'Reply to name');
 		$mail->setTo('laptopsr@gmail.com');
 		$mail->setSubject('test');
