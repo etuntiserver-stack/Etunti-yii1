@@ -14,12 +14,13 @@ class LoginController extends Controller
 			// collect user input data
 			if(
 				Yii::app()->request->getPost('UserLogin')
-				and Yii::app()->request->getPost('UserLogin')['domain'] != 'superadmin'
-				and Yii::app()->request->getPost('UserLogin')['domain'] != 'etusivu'
-				and Yii::app()->request->getPost('UserLogin')['domain'] != ''
+				and trim(Yii::app()->request->getPost('UserLogin')['domain']) != 'superadmin'
+				and trim(Yii::app()->request->getPost('UserLogin')['domain']) != 'etusivu'
+				and trim(Yii::app()->request->getPost('UserLogin')['domain']) != ''
 			)
 			{
 
+			$domain = trim(Yii::app()->request->getPost('UserLogin')['domain']);
 
 	       		$criteria = new CDbCriteria();
 		        $criteria->condition = " 
@@ -61,11 +62,11 @@ class LoginController extends Controller
 			    Yii::app()->user->setState('adminStatus', $mod->status);
 			    Yii::app()->user->setState('username', $mod->adm_login);
 			    Yii::app()->user->setState('nimi', $mod->adm_nimi);
-			    Yii::app()->user->setState('domain', Yii::app()->request->getPost('UserLogin')['domain']);
+			    Yii::app()->user->setState('domain', $domain);
 
 
 
-			    $domainit=Domainit::model()->find(" domain = '".$_POST['UserLogin']['domain']."' ");
+			    $domainit=Domainit::model()->find(" domain = '".$domain."' ");
 			    if(isset($domainit->paketti))
 			    Yii::app()->user->setState('adminPaketti', $domainit->paketti);
 
@@ -78,14 +79,14 @@ class LoginController extends Controller
 
 			if(
 				isset($_POST['UserLogin']) 
-				and ($_POST['UserLogin']['domain'] == 'superadmin' or $_POST['UserLogin']['domain'] == 'etusivu')
+				and (trim($_POST['UserLogin']['domain']) == 'superadmin' or trim($_POST['UserLogin']['domain']) == 'etusivu')
 			)
 			{
 
 				$model->attributes=$_POST['UserLogin'];
 				// validate user input and redirect to previous page if valid
 				if($model->validate()) {
-				Yii::app()->user->setState($_POST['UserLogin']['domain'], true);
+				Yii::app()->user->setState(trim($_POST['UserLogin']['domain']), true);
 					$this->lastViset();
 					if (Yii::app()->user->returnUrl=='/index.php')
 						$this->redirect(Yii::app()->request->baseUrl.'/index.php/user/profile');
