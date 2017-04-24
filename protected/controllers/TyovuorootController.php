@@ -550,6 +550,7 @@ class TyovuorootController extends Controller
 
 		} else {
 
+
 		  $this->render('laheta_k',array('week'=>$week,'year'=>$year,'tulosta'=>false));
 		}
 
@@ -1221,6 +1222,7 @@ class TyovuorootController extends Controller
 			if(isset($_POST['Tyovuoroot']['PushNotify']) and $_POST['Tyovuoroot']['PushNotify'] == 'on')
 			$this->pushNotifySending($model->id);
 			// PushNotify -->
+
 
 
 
@@ -3060,6 +3062,7 @@ class TyovuorootController extends Controller
 
 			$kohteet = new Kohteet;
 			$kohteet->asiakas_id = $asiakkaat->id;
+			$kohteet->uusi_tilaus = 1;
 
 			if(!empty($asiakkaat->yrityksen_nimi))
 				$kohteet->etu_suku_nimet =$asiakkaat->yrityksen_nimi;
