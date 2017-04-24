@@ -1,12 +1,4 @@
 <?php
-	$head = '';
-	$as = Asiakkaat::model()->findbypk($data->asiakas_id);
-	//$yht = Yhteystiedot::model()->findbypk($data->yhteystiedot_id);
-
-	if(isset($as->id) and $as->tyyppi == 'yritys' and !empty($as->yrityksen_nimi))
-	$head = $as->yrityksen_nimi.', '.$as->osoite;
-	elseif(isset($as->id) and $as->tyyppi == 'henkilo' and !empty($as->yhteyshenkilo))
-	$head = $as->yhteyshenkilo.', '.$as->osoite;
 
 ?>
 
@@ -41,7 +33,7 @@
 	?>
 	</td>
 	<td>
-		<?php if(!empty($sahkoposti)) echo $sahkoposti; ?>
+		<?php echo $data->asiakkaan_sahkoposti; ?>
 	</td>
 	<td>
 		<?php 
