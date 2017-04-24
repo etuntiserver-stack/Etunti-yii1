@@ -705,7 +705,7 @@ class CrmTarjouksetController extends Controller
 	}
 
 
-	protected function get_tyonkuvaus_by_id($id)
+	public function get_tyonkuvaus_by_id($id)
 	{
 	
 		$bd = array();

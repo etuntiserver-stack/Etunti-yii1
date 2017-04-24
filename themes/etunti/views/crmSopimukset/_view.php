@@ -1,47 +1,43 @@
 <?php
-	$head = '';
-	$as = Asiakkaat::model()->findbypk($data->asiakas_id);
-	$yht = Yhteystiedot::model()->findbypk($data->yhteystiedot_id);
 
-	if(isset($as->id) and !empty($as->yrityksen_nimi) and empty($as->yhteyshenkilo))
-	$head= $as->yrityksen_nimi.', '.$as->osoite;
-	elseif(isset($as->id) and empty($as->yrityksen_nimi) and !empty($as->yhteyshenkilo))
-	$head = $as->yhteyshenkilo.', '.$as->osoite;
-	elseif(isset($yht->id) and !empty($yht->yrityksen_nimi) and empty($yht->yhteyshenkilo))
-	$head= $yht->yrityksen_nimi.', '.$yht->osoite;
-	elseif(isset($yht->id) and empty($yht->yrityksen_nimi) and !empty($yht->yhteyshenkilo))
-	$head = $yht->yhteyshenkilo.', '.$yht->osoite;
-
-	$sahkoposti = '';
-	if(isset($as->id) and $data->asiakas_id != 0)
-	$sahkoposti = $as->sahkoposti;
-
-	if(isset($yht->id) and $data->yhteystiedot_id != 0)
-	$sahkoposti = $yht->sahkoposti;
 ?>
 
 <tr>
 	<td>
-		<?php echo $head; ?>
+		<?php echo CHtml::link('<i class="fa fa-pencil-square-o" aria-hidden="true" style="font-size: 110%"></i>', 
+				array('update', 'id'=>$data->id), 
+				array(
+					'class'=>'btn btn-primary myBgColors', 
+					'style'=>'color:white', 
+					'data-toggle'=>'tooltip', 
+					'data-placement'=>'top', 
+					'title'=>Yii::t('main', 'Muokkaa') 
+				)
+			); 
+		?>
+	</td>
+	<td>
+		<?php echo $data->tarjous->voimassa; ?>
+	</td>
+	<td>
+		<?php echo $data->tarjous->kohteen_osoite; ?>
 	</td>
 	<td>
 	<?php
-		if(file_exists(Yii::app()->basePath."/../tiedostot/crm/sopimukset/".Yii::app()->user->domain."/".$data->liite.".docx"))
-	 	echo '<a href="../../tiedostot/crm/sopimukset/'.Yii::app()->user->domain.'/'.$data->liite.'.docx">'.$data->liite.'.docx</a>';
+		if(file_exists( Yii::app()->basePath.'/../'.$this->valmiit_polkku().'/'.$data->liite.'.docx' ))
+	 	echo '<a href="../../'.Yii::app()->baseUrl.$this->valmiit_polkku().'/'.$data->liite.'.docx">'.$data->liite.'.docx</a>';
 		echo '<br>';
-		if(file_exists(Yii::app()->basePath."/../tiedostot/crm/sopimukset/".Yii::app()->user->domain."/".$data->liite.".pdf"))
-		echo '<a href="../../tiedostot/crm/sopimukset/'.Yii::app()->user->domain.'/'.$data->liite.'.pdf">'.$data->liite.'.pdf</a>';
+		if(file_exists( Yii::app()->basePath.'/../'.$this->valmiit_polkku().'/'.$data->liite.'.pdf' ))
+		echo '<a href="../../'.Yii::app()->baseUrl.$this->valmiit_polkku().'/'.$data->liite.'.pdf">'.$data->liite.'.pdf</a>';
 		
 	?>
 	</td>
 	<td>
-		<?php if(!empty($sahkoposti)) echo $sahkoposti; ?>
+		<?php echo $data->asiakkaan_sahkoposti; ?>
 	</td>
 	<td>
 		<?php 
-			if(!empty($sahkoposti) and $data->status == 0 and
-   		(file_exists(Yii::app()->basePath."/../tiedostot/crm/sopimukset/".Yii::app()->user->domain."/".$data->liite.".pdf"))
-			)
+			if(!empty($data->asiakkaan_sahkoposti) and $data->status == 0)
 			{
 				echo '<button class="btn btn-primary btn-block laheta" for="'.$data->id.'">'.Yii::t('main', 'lähetä').'</button>';
 			} elseif($data->status == 1){
@@ -52,9 +48,6 @@
 				echo '<button class="btn btn-danger btn-block">'.Yii::t('main', 'Hylätty').'</button>';
 			}
 		?>
-	</td>
-	<td>
-		<?php echo CHtml::link('', array('update', 'id'=>$data->id), array('class'=>'fa fa-pencil-square-o')); ?>
 	</td>
 </tr>
 

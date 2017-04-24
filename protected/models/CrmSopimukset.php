@@ -15,6 +15,9 @@
  */
 class CrmSopimukset extends DB2ActiveRecord
 {
+
+public $template;
+
 	/**
 	 * @return string the associated database table name
 	 */
@@ -31,7 +34,7 @@ class CrmSopimukset extends DB2ActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('tarjous_id', 'required'),
+			array('template, tarjous_id', 'required'),
 			//array('time, asiakas_id, teksti, hyvaksyn_koodi, asiakkaan_sahkoposti, status, liite', 'required'),
 			array('asiakas_id, status, yhteystiedot_id', 'numerical', 'integerOnly'=>true),
 			array('hyvaksyn_koodi, liite, template', 'length', 'max'=>255),
@@ -51,6 +54,7 @@ class CrmSopimukset extends DB2ActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+		        'tarjous' => array(self::BELONGS_TO, 'CrmTarjoukset', 'tarjous_id'),
 		);
 	}
 

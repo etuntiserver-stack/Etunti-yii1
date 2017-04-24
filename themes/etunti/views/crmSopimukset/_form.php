@@ -26,8 +26,7 @@
 */
 ?>
 
-<div lass="row">
-  <div class="col-sm-5">
+
 
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'crm-tarjoukset-form',
@@ -38,35 +37,38 @@
 	'enableAjaxValidation'=>false,
 )); ?>
 
-	<p class="note">Fields with <span class="required">*</span> are required.</p>
+
+
+<!-- hattu -->
+<div class="row">
+     <div class="col-sm-4">
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'template'); ?>
+		<?php
+		$tmp_list = array();
+		foreach(glob(Yii::app()->baseUrl.$this->templates_polkku().'/*.docx') as $file) 
+		{
+			$explNimi = explode("/",$file);
+		 	$tmp_list[end($explNimi)] = end($explNimi);
+		}
+		?>
+		<?php
+        		echo $form->dropDownList($model, 'template', $tmp_list,
+			array('empty'=>'Valitse', 'class'=>'form-control'));
+		?>
+		<?php echo $form->error($model,'template'); ?>
+	</div>
+     </div>
+</div>
+<hr>
+<!-- hattu -->
+
+<div class="row">
+  <div class="col-sm-4">
 
 	<?php echo $form->errorSummary($model); ?>
 
-<?php /*
 	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'yhteystiedot_id'); ?>
-		<?php
-		$list = array();
-		$criteria=new CDbCriteria;
-		//$criteria->condition="";
-      		$l = Yhteystiedot::model()->findAll($criteria);
-		foreach($l as $v)
-		{
-			if(!empty($v->yrityksen_nimi) and empty($v->yhteyshenkilo))
-			$list[$v->id] = $v->yrityksen_nimi;
-			elseif(empty($v->yrityksen_nimi) and !empty($v->yhteyshenkilo))
-			$list[$v->id] = $v->yhteyshenkilo;
-		}
-
-        		echo $form->dropDownList($model, 'yhteystiedot_id', $list,
-			array('empty'=>'Valitse','class'=>'form-control', 'options'=>$yhteystiedot_selected));
-		
-        	?>
-		<?php echo $form->error($model,'yhteystiedot_id'); ?>
-	</div>
-*/ ?>
-
-	<div lass="section fill mb5">
 		<?php echo $form->labelEx($model,'asiakas_id'); ?>
 		<?php
 		$list = array();
@@ -89,8 +91,6 @@
         	?>
 		<?php echo $form->error($model,'asiakas_id'); ?>
 	</div>
-
-
 
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'tarjous_id'); ?>
@@ -115,36 +115,27 @@
 	</div>
 
 	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'template'); ?>
-		<?php 
-        	$tal = $this->tal();
-		echo $form->dropDownList($model,'template', $tal, 
-		array('class'=>'form-control')) ?>
-		<?php echo $form->error($model,'template'); ?>
-	</div>
-
-	<div lass="section fill mb5">
 		<?php echo $form->labelEx($model,'teksti'); ?>
 		<?php echo $form->textArea($model,'teksti',array('rows'=>6, 'cols'=>50, 'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'teksti'); ?>
 	</div>
+
+ </div>
+</div><!-- form -->
+
 <br>
 	<div class="section">
 		<?php echo CHtml::submitButton($model->isNewRecord ? 'Luo' : 'Tallenna',array('class'=>'btn btn-primary myBgColors')); ?>
 	</div>
 
 <?php $this->endWidget(); ?>
- </div>
-</div><!-- form -->
 
 
-<?php if(!isset($model->id)) : ?>
+
+
 <script type="text/javascript">
 $(document).ready(function(){
 
- $('#CrmSopimukset_asiakas_id').change(function(){
-	window.location.href= "create?asiakas_id=" + $(this).val();
- });
 
 /*
  $('#CrmSopimukset_yhteystiedot_id').change(function(){
@@ -154,4 +145,3 @@ $(document).ready(function(){
 
 });
 </script>
-<?php endif; ?>
