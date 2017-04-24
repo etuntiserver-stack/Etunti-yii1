@@ -163,6 +163,14 @@ public function actionPaivita_tiedot($dom)
     {
         case 'mob':
 
+		// <-- check domain is not empty
+		if(!isset($dom) or empty($dom))
+		{
+        		$this->_sendResponse(200, CJSON::encode('domain error'));
+			exit;
+		}
+		// check domain is not empty -->
+
 		$criteria = new CDbCriteria();
 		$criteria->condition = " 
 			salasana!='' 
@@ -304,6 +312,14 @@ public function actionTiedosto($dom)
     {
         case 'mob':
 
+		// <-- check domain is not empty
+		if(!isset($dom) or empty($dom))
+		{
+        		$this->_sendResponse(200, CJSON::encode('domain error'));
+			exit;
+		}
+		// check domain is not empty -->
+
 	  	if (!file_exists(Yii::app()->basePath."/../img/uploadedfromphone/".$dom)) {
 		  	mkdir(Yii::app()->basePath."/../img/uploadedfromphone/".$dom, 0777, true);
 		}
@@ -427,6 +443,15 @@ public function actionImei($dom)
     {
         // Get an instance of the respective model
         case 'mob':
+
+
+		// <-- check domain is not empty
+		if(!isset($dom) or empty($dom))
+		{
+        		$this->_sendResponse(200, CJSON::encode('domain error'));
+			exit;
+		}
+		// check domain is not empty -->
 
 
 	function sprint($val)
@@ -1128,6 +1153,7 @@ public function actionImei($dom)
                      	$this->_sendResponse(200, "3//mull//null//null//".$get_osoite."//".$this->etuSukunimi($ttekija->id)."//".$kohdenID."//".$tag."//vanha versio");
 		  }
 		// Jos versio vanhempi kun  0.0.57 -->
+
 
 
 
