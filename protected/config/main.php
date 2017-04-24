@@ -10,7 +10,7 @@ session_start();
 
 
 
-  if(isset($_POST['UserLogin']['domain']) and !empty($_POST['UserLogin']['domain']) and $_POST['UserLogin']['domain'] != 'superadmin')
+  if(isset($_POST['UserLogin']['domain']) and !empty($_POST['UserLogin']['domain']) and trim($_POST['UserLogin']['domain']) != 'superadmin')
   $_SESSION['domain'] = trim(strtolower($_POST['UserLogin']['domain']));
 
 /*
