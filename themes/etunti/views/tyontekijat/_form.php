@@ -464,10 +464,12 @@ $(document).ready(function(){
 	<div class="section fill mb5">
 		<?php
 		$filename = Yii::app()->request->baseUrl."/img/tekijat/".Yii::app()->user->domain."/".$model->id.".jpg";
-		if (file_exists(Yii::app()->basePath."/../img/tekijat/".Yii::app()->user->domain."/".$model->id.".jpg"))
-		   echo '<img src="'.$filename.'" class="img-thumbnail">';
-		else
+		if (file_exists(Yii::app()->basePath."/../img/tekijat/".Yii::app()->user->domain."/".$model->id.".jpg")){
+		   echo '<img src="'.$filename.'" class="img-thumbnail"><br>
+			<p><span class="link poistaKuva text-warning" link="'.Yii::app()->basePath.'/../img/tekijat/'.Yii::app()->user->domain.'/'.$model->id.'.jpg" request="update?id='.$model->id.'">'.Yii::t("main", "poista kuva").'</span></p>';
+		} else {
 		   echo '<img src="'.Yii::app()->request->baseUrl.'/img/tekijat/noname.jpg" class="img-thumbnail">';
+		}
 		?>		
 	</div>
 	<?php endif; ?>
@@ -625,6 +627,23 @@ $(".muokaValiko").click(function() {
 	offText: "Ei"
   });
 
+$(".poistaKuva").click(function() {
+
+    var request = $(this).attr("request");
+    var thisLink = $(this).attr("link");
+
+	if( confirm('Haluatko varmaasti poista?') )
+	{
+        $.ajax({
+           url: request,
+	   type:'POST',
+	   data: { "poista_kuva" : true, link : thisLink },
+           success: function(data){
+		window.location.href=request;
+           }
+        });
+	}
+});
 
 
 });
