@@ -335,11 +335,11 @@ function tableAjax(){
            url: 'index_ajax',
            success: function(data){
 
-        var date = new Date();
-        var hours = date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
-        var minutes = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
-        var seconds = date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
-        time = hours + ":" + minutes + ":" + seconds;
+        	var date = new Date();
+	        var hours = date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
+	        var minutes = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
+	        var seconds = date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
+	        time = hours + ":" + minutes + ":" + seconds;
 
 
 	  	$('.klo').text( time );	
@@ -366,7 +366,11 @@ function tableAjax(){
 		  }
 		}
 		$("#dataChange").val(data);
-           }
+           },
+	   error:function(data){
+			//console.log('domain error');
+			window.location.href=location.protocol + "//" + location.host + '/index.php';
+	   }
         });
     }
     setInterval(updateRivi, "5000");
