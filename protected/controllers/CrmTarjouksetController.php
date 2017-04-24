@@ -409,6 +409,7 @@ class CrmTarjouksetController extends Controller
 		#kohteen_postitoimipaikka#
 
 		#tyonantajan_edustaja#
+		#tuote_palvelu#
 		';
 
 		return $var;
@@ -515,6 +516,7 @@ class CrmTarjouksetController extends Controller
 				'tarvikkeet' => implode(", ", $tarvikkeet),
 				'maksuehto' => $a->maksuehto,
 				'viivastyskorko' => $a->viivastyskorko,
+				'tuote_palvelu' => $model->tuote_palvelu,
 			);
 			$docx->replaceVariableByText($variables_2);
 

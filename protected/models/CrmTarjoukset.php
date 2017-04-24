@@ -36,7 +36,7 @@ public $template;
 		return array(
 			array('template, asiakas_id, kohde_id, kohteen_osoite, asiakkaan_sahkoposti', 'required'),
 			array('asiakas_id, yhteystiedot_id, status, kohde_id, tyonkuvaus_id, alv, hinta', 'numerical', 'integerOnly'=>true),
-			array('hyvaksyn_koodi, liite, kohteen_osoite, kohteen_postitoimipaikka', 'length', 'max'=>255),
+			array('hyvaksyn_koodi, liite, kohteen_osoite, kohteen_postitoimipaikka, tuote_palvelu', 'length', 'max'=>255),
 			array('asiakkaan_sahkoposti, kohteen_postinumero', 'length', 'max'=>100),
 			array('hinta_tyyppi', 'length', 'max'=>50),
 			array('voimassa', 'length', 'max'=>20),
@@ -81,6 +81,7 @@ public $template;
 			'kohde_id' => Yii::t('main', 'Kohde'),
 			'tyonkuvaus_id' => Yii::t('main', 'Työnkuvaus'),
 			'template' => Yii::t('main', 'Malli'),
+			'tuote_palvelu' => Yii::t('main', 'Tuote / Palvelu'),
 		);
 	}
 

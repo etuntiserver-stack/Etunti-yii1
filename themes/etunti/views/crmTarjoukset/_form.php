@@ -43,6 +43,17 @@
 		<?php echo $form->error($model,'voimassa'); ?>
 	</div>
 
+     </div><div class="col-sm-3">
+
+	<div class="section fill mb5">
+
+		<?php echo $form->labelEx($model,'tuote_palvelu'); ?>
+		<?php echo $form->dropDownList($model, 'tuote_palvelu', CHtml::listData(LaskutusTuotteet::model()->findAll(), 'tuotenimi', 'tuotenimi'), 
+		array('empty'=>'Valitse', 'class'=>'form-control')); 
+		?>
+		<?php echo $form->error($model,'tuote_palvelu'); ?>
+	</div>
+
      </div>
 </div>
 <hr>
