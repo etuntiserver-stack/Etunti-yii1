@@ -414,6 +414,16 @@ class TyontekijatController extends Controller
 	   $site[0]->checkOikeus($checkOikeus);
 	//  Oikeudet -->
 
+
+		// <-- Kuvan poistaminen
+		if(isset($_POST['poista_kuva']) and isset($_POST['link']) and file_exists($_POST['link']))
+		{
+			unlink($_POST['link']);
+			exit;
+		}
+		//     Kuvan poistaminen -->
+
+
 		$netvisorResponse = '';
 		$model=$this->loadModel($id);
 
