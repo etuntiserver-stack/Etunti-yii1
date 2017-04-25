@@ -17,10 +17,10 @@
 		?>
 	</td>
 	<td>
-		<?php echo $data->tarjous->voimassa; ?>
+		<?php echo $data->voimassa; ?>
 	</td>
 	<td>
-		<?php echo $data->tarjous->kohteen_osoite; ?>
+		<?php //echo $data->kohteen_osoite; ?>
 	</td>
 	<td>
 	<?php

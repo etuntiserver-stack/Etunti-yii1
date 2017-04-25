@@ -410,7 +410,7 @@ $randstring = generateRandomString();
 			$docx->setTemplateSymbol('#');
 			$variables = array(
 				'paivays' => date("d.m.Y"),
-				'voimassa' => $model->tarjous->voimassa,
+				'voimassa' => $model->voimassa,
 				'asiakas' => $asiakas,
 				'asiakkaan_osoite' => $asiakkaan_osoite,
 				'asiakkaan_postinumero' => $asiakkaan_postinumero,
