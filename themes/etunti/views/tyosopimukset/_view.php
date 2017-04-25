@@ -18,18 +18,15 @@
 		?>
 	</td>
 	<td>
-		<?php echo $data->tekijan_nimi; ?>
-	</td>
-	<td>
-		<?php echo $data->teksti; ?>
+		<?php echo $this->etuSukunimi($data->tid); ?>
 	</td>
 	<td>
 	<?php
-		if(file_exists(Yii::app()->basePath."/../".$this->polkku()."/".$data->tiedosto.".docx"))
-	 	echo '<a href="../../'.$this->polkku().'/'.$data->tiedosto.'.docx">'.$data->tiedosto.'.docx</a>';
+		if(file_exists( Yii::app()->basePath.'/../'.$this->valmiit_polkku().'/'.$data->tiedosto.'.docx' ))
+	 	echo '<a href="../../'.Yii::app()->baseUrl.$this->valmiit_polkku().'/'.$data->tiedosto.'.docx">'.$data->tiedosto.'.docx</a>';
 		echo '<br>';
-		if(file_exists(Yii::app()->basePath."/../".$this->polkku()."/".$data->tiedosto.".pdf"))
-		echo '<a href="../../'.$this->polkku().'/'.$data->tiedosto.'.pdf">'.$data->tiedosto.'.pdf</a>';
+		if(file_exists( Yii::app()->basePath.'/../'.$this->valmiit_polkku().'/'.$data->tiedosto.'.pdf' ))
+		echo '<a href="../../'.Yii::app()->baseUrl.$this->valmiit_polkku().'/'.$data->tiedosto.'.pdf">'.$data->tiedosto.'.pdf</a>';
 		
 	?>
 	</td>

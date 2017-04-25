@@ -121,13 +121,13 @@ class TyosopimuksetController extends Controller
 		if(isset($_POST['Tyosopimukset']))
 		{
 
-			$tiedosto = date('Y-m-d').'_'.$_POST['Tyosopimukset']['tid'];
 			$model->attributes=$_POST['Tyosopimukset'];
-			$model->tiedosto=$tiedosto;
 			if($model->save())
 			{
+				$tiedosto = str_replace(" ", "_", $this->etuSukunimi($model->tid)).'_'.date('Y-m-d').'_'.$model->id;
+				Tyosopimukset::model()->updateByPk($model->id, array('tiedosto'=>$tiedosto));
+
 				$this->docxsave($model, $tiedosto);
-				//$this->redirect(array('view','id'=>$model->id));
 			}
 
 		}
@@ -152,9 +152,10 @@ class TyosopimuksetController extends Controller
 			$model->attributes=$_POST['Tyosopimukset'];
 			if($model->save())
 			{
-				$tiedosto = $model->tiedosto;
+				$tiedosto = str_replace(" ", "_", $this->etuSukunimi($model->tid)).'_'.date('Y-m-d').'_'.$model->id;
+				Tyosopimukset::model()->updateByPk($model->id, array('tiedosto'=>$tiedosto));
+
 				$this->docxsave($model, $tiedosto);
-				//$this->redirect(array('view','id'=>$model->id));
 			} else {
 				var_dump($model->getErrors());
 			}
@@ -165,60 +166,105 @@ class TyosopimuksetController extends Controller
 		));
 	}
 
+	protected function template_variables()
+	{
+		$var = '
+			#tyonantaja#
+			#tyonantaja_osoite#
+			#tyonantaja_y_tunnus#
+			#tyonantaja_puhelin#
+			#tyonantaja_sahkoposti#
+
+			#tyontekija_nimi#
+			#tyontekija_osoite#
+			#tyontekija_henkilotunnus#
+			#tyontekija_puhelin#
+			#tyontekija_sahkoposti#
+
+			#aika#
+			#paikka#
+			#johtajan_nimi#';
+
+		return $var;
+
+	}
+
+	protected function kansio()
+	{
+		return 'tyosopimukset';
+	}
+
+	protected function templates_polkku()
+	{
+		return 'tiedostot/templates/'.Yii::app()->user->domain.'/'.$this->kansio().'/';
+	}
+
+	protected function valmiit_polkku()
+	{
+		return 'tiedostot/'.$this->kansio().'/'.Yii::app()->user->domain;
+	}
 
 
 	protected function docxsave($model, $tiedosto)
 	{
 
 
-			Yii::import('ext.yiiword.YiiWord', true);
-			Yii::registerAutoloader(array('YiiWord', 'autoload'), true);
-
-			if (!file_exists(Yii::app()->basePath."/../".$this->polkku() )) {
-			 	mkdir(Yii::app()->basePath."/../".$this->polkku(), 0777, true);
+			if (!file_exists( Yii::app()->basePath.'/../'.$this->valmiit_polkku() )) {
+			 	mkdir( Yii::app()->basePath.'/../'.$this->valmiit_polkku(), 0777, true );
 			}
 
-		
-			$PHPWord = new PHPWord();
-			$document = $PHPWord->loadTemplate('tiedostot/templates/'.Yii::app()->user->domain.'/'.$this->tiedostonNimike().'.docx');
+			define('PHPDOCX_INCLUDE_PATH', (dirname(Yii::app()->basePath)).'/protected/vendors/phpdocx');
+			spl_autoload_unregister(array('YiiBase','autoload'));
+			require_once PHPDOCX_INCLUDE_PATH.'/lib/pdf/dompdf_config.inc.php';
+			//require_once PHPDOCX_INCLUDE_PATH.'/classes/TransformDocAdv.inc';
+			require_once PHPDOCX_INCLUDE_PATH.'/classes/CreateDocx.inc';
+			spl_autoload_register(array('AutoLoader','load'));
+			spl_autoload_register(array('YiiBase', 'autoload'));
+
+			$template_tiedosto = $this->templates_polkku().$model->template;
+
+			$docx = new CreateDocxFromTemplate($template_tiedosto);
+			$docx->setTemplateSymbol('#');
+			$variables = array(
+				'tyonantaja' => $model->tyonantaja,
+				'tyonantaja_osoite' => $model->osoite,
+				'tyonantaja_y_tunnus' => $model->y_tunnus,
+				'tyonantaja_puhelin' => $model->puhelin,
+				'tyonantaja_sahkoposti' => $model->sahkoposti,
+				'tyontekija_nimi' => $model->tekijan_nimi,
+				'tyontekija_osoite' => $model->tekijan_katuosoite,
+				'tyontekija_henkilotunnus' => $model->tekijan_henkilotunnus,
+				'tyontekija_puhelin' => $model->tekijan_puh,
+				'tyontekija_sahkoposti' => $model->tekijan_email,
+				'aika' => $model->Paivays,
+				'paikka' => $model->Paikka,
+				'johtajan_nimi' => $model->TyonantajanEdustaja,
+			);
+			$docx->replaceVariableByText($variables);
 
 
-			$document->setValue('tyonantaja', iconv('UTF-8','ISO-8859-1',$model->tyonantaja));
-			$document->setValue('tyonantaja_osoite', iconv('UTF-8','ISO-8859-1',$model->osoite));
-			$document->setValue('tyonantaja_y_tunnus', $model->y_tunnus);
-			$document->setValue('tyonantaja_puhelin', $model->puhelin);
-			$document->setValue('tyonantaja_sahkoposti', $model->sahkoposti);
+			$path = 'tiedostot/'.$this->kansio().'/'.Yii::app()->user->domain.'/'.$tiedosto;
+			$docx->createDocx($path);
 
+			if( $_SERVER['REMOTE_ADDR'] != '::1' and $_SERVER['REMOTE_ADDR'] != '127.0.0.1' )
+			{
+			$transform = new TransformDocAdvLibreOffice();
+			$transform->transformDocument($path.'.docx', $path.'.pdf');
+			}
 
-			$document->setValue('tyontekija_nimi', iconv('UTF-8','ISO-8859-1',$model->tekijan_nimi));
-			$document->setValue('tyontekija_osoite', iconv('UTF-8','ISO-8859-1',$model->tekijan_katuosoite));
-			$document->setValue('tyontekija_henkilotunnus', $model->tekijan_henkilotunnus);
-			$document->setValue('tyontekija_puhelin', $model->tekijan_puh);
-			$document->setValue('tyontekija_sahkoposti', $model->tekijan_email);
-
-			$document->setValue('aika', $model->Paivays);
-			$document->setValue('paikka', iconv('UTF-8','ISO-8859-1', $model->Paikka));
-			$document->setValue('johtajan_nimi', iconv('UTF-8','ISO-8859-1', $model->TyonantajanEdustaja));
-			$document->setValue('teksti', iconv('UTF-8','ISO-8859-1', $model->teksti));
-
-			$file = $this->polkku().'/'.$tiedosto;
-		  	$document->save($file.'.docx');
-
-			shell_exec('unoconv -f pdf '.$file.'.docx'); // ei localhostina
 			$this->redirect(array('index'));
-
-
 	}
 
 	public function actionDelete($id)
 	{
-		$model=$this->loadModel($id);
-		$t = $this->polkku().'/'.$model->tiedosto;
-		if(file_exists(Yii::app()->basePath."/../".$t.".*"))
-			unlink($t.".*");
-
-	
+		// <-- tiedoston poistaminen
+		$model = $this->loadModel($id);
 		$model->delete();
+		if (file_exists( Yii::app()->basePath.'/../'.$this->valmiit_polkku().'/'.$model->tiedosto.'.docx' )) 
+			unlink(Yii::app()->baseUrl.$this->valmiit_polkku().'/'.$model->tiedosto.'.docx');
+		if (file_exists( Yii::app()->basePath.'/../'.$this->valmiit_polkku().'/'.$model->tiedosto.'.pdf' )) 
+			unlink(Yii::app()->baseUrl.$this->valmiit_polkku().'/'.$model->tiedosto.'.pdf');
+		//     tiedoston poistaminen -->
 
 		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
 		if(!isset($_GET['ajax']))
@@ -230,6 +276,29 @@ class TyosopimuksetController extends Controller
 	 */
 	public function actionIndex()
 	{
+
+		if( Yii::app()->request->getPost('poistaTemplate') ){
+			unlink( Yii::app()->request->getPost('poistaTemplate') );
+			exit;
+		}
+
+		if( isset($_POST['file_upload']) )
+		{
+
+			if (!file_exists( Yii::app()->basePath.'/../'.$this->templates_polkku() )) {
+				mkdir( Yii::app()->basePath.'/../'.$this->templates_polkku(), 0777, true );
+			}
+
+			$uploaddir = Yii::app()->basePath.'/../'.$this->templates_polkku();
+			$uploadfile = $uploaddir . basename($_FILES["file"]["name"]);
+			if (move_uploaded_file($_FILES['file']['tmp_name'], $uploadfile)) {
+		
+			} else {
+				echo Yii::t('main', 'Lataaminen ei onnistuu');
+		    	}
+		}
+
+
        		$criteria = new CDbCriteria();
 	        $criteria->order = "  id DESC ";
 
@@ -298,4 +367,11 @@ class TyosopimuksetController extends Controller
 			Yii::app()->end();
 		}
 	}
+
+	protected function etuSukunimi($tid)
+	{
+	   $site = Yii::app()->createController('Site');
+	   return $site[0]->etuSukunimi($tid);
+	}
+
 }

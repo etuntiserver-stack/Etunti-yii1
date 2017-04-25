@@ -19,6 +19,49 @@
 	<?php echo $form->errorSummary($model); ?>
 
 
+<!-- hattu -->
+<div class="row">
+     <div class="col-sm-4">
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'tyontekijat'); ?>
+		<?php
+		$site = Yii::app()->createController('Site');
+		$tyontekiatLista = $site[0]->tyontekiatListaNoMulti( 
+			'tyontekija', // name
+			'form-control', //class
+			'tyontekijat', // id
+			null, //selected
+			1 // aktiivinen
+		);
+		echo $tyontekiatLista;
+		?>
+		<?php echo $form->error($model,'tyontekijat'); ?>
+	</div>
+     </div>
+     <div class="col-sm-4">
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'template'); ?>
+		<?php
+		$tmp_list = array();
+		foreach(glob(Yii::app()->baseUrl.$this->templates_polkku().'/*.docx') as $file) 
+		{
+			$explNimi = explode("/",$file);
+		 	$tmp_list[end($explNimi)] = end($explNimi);
+		}
+		?>
+		<?php
+        		echo $form->dropDownList($model, 'template', $tmp_list,
+			array('empty'=>'Valitse', 'class'=>'form-control'));
+		?>
+		<?php echo $form->error($model,'template'); ?>
+	</div>
+
+     </div>
+</div>
+<hr>
+<!-- hattu -->
+
+
 <div class="row">
   <div class="col-sm-6">
 
