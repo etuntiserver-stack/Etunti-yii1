@@ -482,6 +482,12 @@ function num($val){
 	public function actionIndex_ajax()
 	{
 
+		if(!isset($_SESSION['domain']))
+		{
+			die('Error domain');
+			exit;
+		}
+
 		$model = Mobile::model()->find("id!='' order by id DESC");
 		if(isset($_POST['setRivi']))
 		$this->renderPartial('_view', array('data' => $model));
