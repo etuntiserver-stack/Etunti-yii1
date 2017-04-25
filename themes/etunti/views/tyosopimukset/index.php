@@ -1,31 +1,5 @@
 <?php
 
-  $template = $this->tiedostonNimike();
-
-
-  if(isset($_POST['poistaTemplate'])){
-	unlink($_POST['poistaTemplate']);
-	exit;
-  }
-
-  if(isset($_POST[$template]))
-  {
-
-    if (!file_exists(Yii::app()->basePath."/../tiedostot/templates/".Yii::app()->user->domain)) {
-  	mkdir(Yii::app()->basePath."/../tiedostot/templates/".Yii::app()->user->domain, 0777, true);
-    }
-
-  $uploaddir = Yii::app()->basePath.'/../tiedostot/templates/'.Yii::app()->user->domain.'/';
-  $template = $template.'.docx';
-
-  $uploadfile = $uploaddir . basename($template);
-    if (move_uploaded_file($_FILES['file']['tmp_name'], $uploadfile)) {
-
-    } else {
-	echo Yii::t('main', 'Lataaminen ei onnistuu');
-    }
-
-  }
 ?>
 
 
@@ -177,60 +151,57 @@
                       <div class="col-md-6">
                         <div class="section">
 
+			<!-- lataus lomake -->
+			<form action="#" class="form-input" method="post" enctype="multipart/form-data">
+			     <div class="section input-group">
+			       <label class="field prepend-icon append-button file">
+			         <span class="button"><?=Yii::t('main', 'Työtodistus template')?></span>
+			         <input type="file" class="gui-file" name="file" onChange="document.getElementById(\'tiedostoUP\').value = this.value;">
+			         <input type="text" class="gui-input" name="file_upload" id="tiedostoUP" placeholder="Valitse tiedosto..">
+			         <label class="field-icon">
+			          <i class="fa fa-upload"></i>
+			         </label>
+			       </label>
+				<span class="input-group-btn">
+			          <input type="submit" value="Lataa docx" class="btn btn-primary btn-group myBgColors" />
+				</span>
+			    </div>
+			</form>
+			<!-- lataus lomake -->
 
-<?php
-  $nimike	= $template.'.docx';
-  $polku 	= Yii::app()->basePath;
-  $tiedosto 	= "/../tiedostot/templates/".Yii::app()->user->domain."/".$nimike;
+			<!-- uploaded tiedostot -->
+			<legend><?=Yii::t('main', 'Ladatut tiedostot')?></legend>
+			<div class="row">
+			 <div class="col-sm-12">
+			  <table class="table table-striped">
+			  <?php
+			  foreach(glob(Yii::app()->baseUrl.$this->templates_polkku().'/*.docx') as $file) 
+			  {
+				$explNimi = explode("/",$file);
+			 	echo '
+				<tr>
+				  <td><a href="../../'.$file.'">'.end($explNimi).'</a></td>
+				  <td><i class="poista text-danger fa fa-trash link" for="'.Yii::app()->baseUrl.$this->templates_polkku().end($explNimi).'"></i></td>
+				</tr>
+				';
+			  }
+			  ?>
+			  </table>
+			 </div>
+			</div>
+			<!-- uploaded tiedostot -->
 
-  if (file_exists($polku.$tiedosto))
-  echo '<a href="'.$tiedosto.'">'.$nimike.'</a> <span class="poista btn btn-xs btn-danger" for="'.$polku.$tiedosto.'">X</span>';
 
-  echo '
-  <form action="#" class="form-input" method="post" enctype="multipart/form-data">
-     <div class="section input-group">
-       <label class="field prepend-icon append-button file">
-         <span class="button">'.Yii::t('main', 'Template tiedosto').'</span>
-         <input type="file" class="gui-file" name="file" onChange="document.getElementById(\'tiedostoUP\').value = this.value;">
-         <input type="text" class="gui-input" name="'.$template.'" id="tiedostoUP" placeholder="Valitse tiedosto..">
-         <label class="field-icon">
-          <i class="fa fa-upload"></i>
-         </label>
-       </label>
-	<span class="input-group-btn">
-          <input type="submit" value="Lataa docx" class="btn btn-primary btn-group myBgColors" />
-	</span>
-    </div>
-  </form>
- ';
-
-  echo '<a href="/../lib/mallit/'.$this->tiedostonNimike().'.docx">'.Yii::t('main', 'Tässä').'</a> '.Yii::t('main', 'on templaten esimerkki.');
-?>
                         </div>
                       </div>
 
                       <div class="col-md-4">
                         <div class="section">
-			<h3><?php echo Yii::t('main', 'Template variables'); ?></h3>
-
-<textarea class="form-control" rows="17" cols="60">
-${tyonantaja}
-${tyonantaja_osoite}
-${tyonantaja_y_tunnus}
-${tyonantaja_puhelin}
-${tyonantaja_sahkoposti}
-
-${tyontekija_nimi}
-${tyontekija_osoite}
-${tyontekija_henkilotunnus}
-${tyontekija_puhelin}
-${tyontekija_sahkoposti}
-
-${aika}
-${paikka}
-${johtajan_nimi}
-${teksti}</textarea>
-
+			  <a class="btn btn-primary myBgColors" href="/../lib/mallit/tyosopimus.docx"><?=Yii::t('main', 'Esimerkki tiedosto')?></a> 
+			  <button class="btn btn-primary myBgColors" data-toggle="collapse" data-target="#tmpl_vars">
+				<?=Yii::t('main', 'Käytettävät muuttujat'); ?> <i class="caret"></i>
+			  </button>
+			  <div class="collapse" id="tmpl_vars"><?=str_replace("\n", "<br>", $this->template_variables())?></div>
                         </div>
                       </div>
 
@@ -238,13 +209,8 @@ ${teksti}</textarea>
 
                     </div>
 
-                      <div class="">
-        	        <!--<input type="submit" class="btn btn-primary btn-lg haemob myBgColors" value="<?php echo Yii::t('main', 'Luo'); ?>">-->
-		      </div>
 
 <br>
-
-
 
 
                 </div>
@@ -273,7 +239,6 @@ ${teksti}</textarea>
   <tr>
   <th></th>
   <th><?php echo Yii::t('main', 'Nimi'); ?></th>
-  <th><?php echo Yii::t('main', 'Kirjallinen varoitus'); ?></th>
   <th><?php echo Yii::t('main', 'Tiedosto'); ?></th>
   </tr>
   </thead>
@@ -311,6 +276,8 @@ $(document).ready(function(){
 
 $(".poista").click(function(){
 	var polku = $(this).attr('for');
+	if(confirm('Haluatko varmaasti poista?'))
+	{
         $.ajax({
            url: 'index',
            type: "POST",
@@ -320,6 +287,7 @@ $(".poista").click(function(){
 		window.location.href="index";
            }
         });
+	}
 });
 
 

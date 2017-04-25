@@ -64,6 +64,9 @@
  */
 class Tyosopimukset extends DB2ActiveRecord
 {
+
+public $template;
+
 	/**
 	 * @return string the associated database table name
 	 */
@@ -80,6 +83,7 @@ class Tyosopimukset extends DB2ActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
+			array('template', 'required'),
 /*
 			array('tyonantaja, osoite, postinumero, postitoimipaikka, puhelin, y_tunnus, sahkoposti, tekijan_email, tid, tekijan_nimi, tekijan_katuosoite, tekijan_pnumero, tekijan_ptoimipaikka, tekijan_puh, tekijan_henkilotunnus, sopimus, ToistaVoimaSopimus, MaaraVoimaSopimusAlkaa, MaaraVoimaSopimusPaattyy, peruste, koeaika, SoveltavaSopimus, Tyotehtavat, tyonSuorittamisPaikka, PalkanMaaraytymisperuste, PalkanMaaraytymisperusteMuu, TyokokemusVuotta, TyokokemusKuu, palkka_kk, Palkkaluokka, palkka_h, Luontaiseudut, Raha_arvo, Verotusarvo, palkka_muu2, Palkanmaksukausi, Palkanmaksupaivat, Palkka_tilille, tyoaika_hvrk, tyoaika_hvko, tyoaika_h_jakso, tyoaika_vko_jaksossa, RuokataukonPituus, Muu_tyoaika, lomasta_sovittu, Salassapito, IrtisanomisaikaM, Muut_sopimusehdot, Muutospaiva, LisayksetSopimukseen, Paivays, Paikka, TyonantajanEdustaja, NimikeTehtava', 'required'),
 */
@@ -164,6 +168,7 @@ class Tyosopimukset extends DB2ActiveRecord
 			'lomasta_sovittu' => 'Vuosilomasta lisäksi sovittu',
 			'Salassapito' => 'Salassapito',
 			'IrtisanomisaikaM' => 'Irtisanomisaika M',
+
 			'Muut_sopimusehdot' => 'Muut Sopimusehdot',
 			'Muutospaiva' => 'Muutospäivä',
 			'LisayksetSopimukseen' => 'Lisäykset työsopimukseen',
