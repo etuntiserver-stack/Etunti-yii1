@@ -58,6 +58,15 @@
 		?>
 		<?php echo $form->error($model,'template'); ?>
 	</div>
+
+     </div><div class="col-sm-3">
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'voimassa'); ?>
+		<?php echo $form->textField($model,'voimassa',array('size'=>20,'maxlength'=>20,'class'=>'form-control datepickerFI')); ?>
+		<?php echo $form->error($model,'voimassa'); ?>
+	</div>
+
      </div>
 </div>
 <hr>

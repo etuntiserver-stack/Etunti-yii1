@@ -39,7 +39,8 @@ public $template;
 			array('asiakas_id, status, yhteystiedot_id', 'numerical', 'integerOnly'=>true),
 			array('hyvaksyn_koodi, liite, template', 'length', 'max'=>255),
 			array('asiakkaan_sahkoposti', 'length', 'max'=>100),
-			array('teksti', 'length', 'max'=>3000),
+			array('teksti', 'safe'),
+			array('voimassa', 'length', 'max'=>20),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('id, time, asiakas_id, teksti, hyvaksyn_koodi, asiakkaan_sahkoposti, status, liite', 'safe', 'on'=>'search'),
