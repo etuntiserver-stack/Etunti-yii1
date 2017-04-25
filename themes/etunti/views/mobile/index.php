@@ -227,6 +227,7 @@
   <div class="panel heading-border">
    <div class="panel-body">
     <div class="row">
+     <div id="vanhetuneet"></div>
      <div id="tb" class="table-responsive"></div>
     </div>
    </div>
@@ -262,75 +263,58 @@ $(".haemob").click(function(){
 });
 
 
-// Send form by ajax
-$('#mobForm').on('submit',function(e) {
 
-  $('#tb').html('Odota..');
+    /* <-- Taulu updater */
+    var interval = 60000;
+    var count_updater = 0;
+    var tableAjax = function(){
 
-  $.ajax({
-  url: 'index?Mobile_page='+mobnum,
-  data:$(this).serialize(),
-  type:'POST',
-  success:function(data){
-  	//console.log(data);
-	tableAjax();
-	return false;
-  },
-  error:function(data){
-  	console.log(data); 
-  }
-  });
+	count_updater++;
+	//console.log('Count update table: '+ count_updater);
+	if( count_updater >  60 )
+	{
+		console.log('stop count table');
+	        clearInterval(timer_updater);
+		$("#vanhetuneet").html('<div class="alert bg-danger">Tiedot ovat vanhetuneet</div>');
+		return false;
+	} 
 
-e.preventDefault(); 
-});
+	$.ajax({
+	      url: 'index?Mobile_page='+mobnum,
+	      type: "POST",
+	      data: { index_ajax : "true" },
+	      	success: function(data){
+	  	  	//console.log(data);
+		  	$('#tb').html(data);
+			$('.myBgColors').addClass(localStorage.getItem('headerSkin'));
+	      	},
+	  	error:function(data){
+	  		console.log(data); 
+	  	}
+	});
 
+    };
 
-
-function tableAjax(){
-
-   $.ajax({
-   url: 'index?Mobile_page='+mobnum,
-      type: "POST",
-      data: { index_ajax : "true" },
-      	success: function(data){
-  	  	//console.log(data);
-  	  	console.log('tableAjax updated');
-	  	$('#tb').html(data);
-		$('.myBgColors').addClass(localStorage.getItem('headerSkin'));
-      	},
-  	error:function(data){
-  		console.log(data); 
-  	}
-   });
-
-}
-
-   setTimeout(function(){tableAjax();},100);
-   
-   // <-- Start and stop Table update
-   var interval = 60000;
-   var tableAjaxInterval = setInterval(tableAjax, interval);
-
-   $(document).delegate(".muokkaminen","click",function(){
-  	console.log('tableAjax pysähtynyt');
-	window.clearInterval(tableAjaxInterval);
-   });
-
-   $(document).delegate(".pvmupdate","click",function(){
-  	console.log('tableAjax updated');
-   	setInterval(tableAjax, interval);
-   });
-
-   $(document).delegate("#Kohteet_id","change",function(){
-  	console.log('tableAjax updated');
-   	setInterval(tableAjax, interval);
-   });
-   // Start and stop Table update -->
+    tableAjax();
+    var timer_updater = setInterval(tableAjax, interval);
+    /* Taulu updater --> */
 
 
+    /* <-- Rivi updater */
+    var count = 0;
+    var updateRivi = function(){
 
-    updateRivi();
-    function updateRivi() {
+	count++;
+	//console.log('Count update rivi: '+ count);
+	if( count >  720 )
+	{
+		console.log('stop count rivi');
+	        clearInterval(timerID);
+		$("#vanhetuneet").html('<div class="alert alert-danger">Tiedot ovat vanhetuneet</div>');
+		return false;
+	} 
+
+
         $.ajax({
            url: 'index_ajax',
            success: function(data){
@@ -372,8 +356,57 @@ function tableAjax(){
 			window.location.href=location.protocol + "//" + location.host + '/index.php';
 	   }
         });
-    }
-    setInterval(updateRivi, "5000");
+    };
+
+    updateRivi();
+    var timerID = setInterval(updateRivi,5000);
+    /* Rivi updater --> */
+
+
+
+// Send form by ajax
+$('#mobForm').on('submit',function(e) {
+
+  $('#tb').html('Odota..');
+
+  $.ajax({
+  url: 'index?Mobile_page='+mobnum,
+  data:$(this).serialize(),
+  type:'POST',
+  success:function(data){
+  	//console.log(data);
+	tableAjax();
+	return false;
+  },
+  error:function(data){
+  	console.log(data); 
+  }
+  });
+
+e.preventDefault(); 
+});
+
+
+   // <-- Start and stop Table update
+   $(document).delegate(".muokkaminen","click",function(){
+  	console.log('tableAjax pysähtynyt');
+	window.clearInterval(timer_updater);
+   });
+
+   $(document).delegate(".pvmupdate","click",function(){
+  	console.log('tableAjax updated');
+   	setInterval(tableAjax, interval);
+   });
+
+   $(document).delegate("#Kohteet_id","change",function(){
+  	console.log('tableAjax updated');
+   	setInterval(tableAjax, interval);
+   });
+   // Start and stop Table update -->
+
+
+
+
 
    if($('#tunni_status').val())
    $('#tunni_status_select').val($('#tunni_status').val());
