@@ -922,6 +922,16 @@ $('.tvchange').change(function(){
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/tyontekijat/merkkipaivat">
                   <span class="fa fa-indent"></span> <?php echo Yii::t('main', 'Merkkipäivät'); ?></a>
               </li>
+
+
+          <li>
+            <a class="accordion-toggle tyosuhdelomakkeet" href="#">
+              <span class="fa fa-bars"></span>
+              <span><?php echo Yii::t('main', 'Työsuhdelomakkeet'); ?></span>
+              <span class="caret"></span>
+            </a>
+            <ul class="nav sub-nav">
+
               <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/kirjallinenVaroitus/index">
                   <span class="fa fa-indent"></span> <?php echo Yii::t('main', 'Kirjallinen varoitus'); ?></a>
@@ -938,11 +948,13 @@ $('.tvchange').change(function(){
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/tyosopimukset/index">
                   <span class="fa fa-indent"></span> <?php echo Yii::t('main', 'Työsopimukset'); ?></a>
               </li>
-
               <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/tyotodistus/index">
                   <span class="fa fa-indent"></span> <?php echo Yii::t('main', 'Työtodistus'); ?></a>
               </li>
+            </ul>
+          </li>
+
             </ul>
           </li>
 
