@@ -108,7 +108,7 @@ class KirjallinenVaroitusController extends Controller
 			$model->attributes=$_POST['KirjallinenVaroitus'];
 			if($model->save())
 			{
-				$tiedosto = $this->kansio().'_'.str_replace(" ", "_", $this->etuSukunimi($model->tid)).'_'.date('Y-m-d').'_'.$model->id;
+				$tiedosto = str_replace(" ", "_", $this->etuSukunimi($model->tid)).'_'.date('Y-m-d').'_'.$model->id;
 				KirjallinenVaroitus::model()->updateByPk($model->id, array('tiedosto'=>$tiedosto));
 				$this->docxsave($model, $tiedosto);
 				$this->redirect(array('view','id'=>$model->id));
@@ -134,7 +134,7 @@ class KirjallinenVaroitusController extends Controller
 			$model->attributes=$_POST['KirjallinenVaroitus'];
 			if($model->save())
 			{
-				$tiedosto = $this->kansio().'_'.str_replace(" ", "_", $this->etuSukunimi($model->tid)).'_'.date('Y-m-d').'_'.$model->id;
+				$tiedosto = str_replace(" ", "_", $this->etuSukunimi($model->tid)).'_'.date('Y-m-d').'_'.$model->id;
 				KirjallinenVaroitus::model()->updateByPk($model->id, array('tiedosto'=>$tiedosto));
 				$this->docxsave($model, $tiedosto);
 				$this->redirect(array('view','id'=>$model->id));
