@@ -274,6 +274,7 @@ $(".muokaValiko").click(function() {
 
 
 
+
 		<?php echo $form->labelEx($model,'piilota_mobiilista'); ?>
 		<?php 
         	$l = array(0=>'Kyllä',1=>'Ei');
@@ -747,7 +748,8 @@ $('.mult').multiselect({
 			paivaysTarkistus(thisDataReturn);
 	   	},
 		error:function(data){
-		console.log(data);
+			console.log(data);
+			window.location.href=location.protocol + "//" + location.host + '/index.php';
 	    	}
 	  });
 
@@ -764,7 +766,8 @@ $('.mult').multiselect({
 			paivaysTarkistus(thisDataReturn);
 	   	},
 		error:function(data){
-		console.log(data);
+			console.log(data);
+			window.location.href=location.protocol + "//" + location.host + '/index.php';
 	    	}
 	  });
 
@@ -929,7 +932,8 @@ $('#poistaTv').click(function(){
 
     	   },
     	   error: function(XMLHttpRequest, textStatus, errorThrown) {
-	    	console.log(XMLHttpRequest);
+	    		console.log(XMLHttpRequest);
+			window.location.href=location.protocol + "//" + location.host + '/index.php';
  	   }
         });
 	}
@@ -975,7 +979,8 @@ function laatikonPaivays(thisDataReturn){
 
 			  },
 			  error:function(data){
-			  console.log(data);
+			  	console.log(data);
+				window.location.href=location.protocol + "//" + location.host + '/index.php';
 			  }
 	 	    });
 
