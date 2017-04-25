@@ -201,7 +201,7 @@
 			  <button class="btn btn-primary myBgColors" data-toggle="collapse" data-target="#tmpl_vars">
 				<?=Yii::t('main', 'Käytettävät muuttujat'); ?> <i class="caret"></i>
 			  </button>
-			  <div class="collapse" id="tmpl_vars"><?=str_replace("\n", "<br>", $this->template_variables())?></div>
+			  <div class="collapse" id="tmpl_vars"><?=implode("<br>", $this->template_variables()[1])?></div>
                         </div>
                       </div>
 

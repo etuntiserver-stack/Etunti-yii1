@@ -30,7 +30,7 @@
 			'tyontekija', // name
 			'form-control', //class
 			'tyontekijat', // id
-			null, //selected
+			$model->tid, //selected
 			1 // aktiivinen
 		);
 		echo $tyontekiatLista;

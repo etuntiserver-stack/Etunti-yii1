@@ -168,24 +168,19 @@ class TyosopimuksetController extends Controller
 
 	protected function template_variables()
 	{
-		$var = '
-			#tyonantaja#
-			#tyonantaja_osoite#
-			#tyonantaja_y_tunnus#
-			#tyonantaja_puhelin#
-			#tyonantaja_sahkoposti#
 
-			#tyontekija_nimi#
-			#tyontekija_osoite#
-			#tyontekija_henkilotunnus#
-			#tyontekija_puhelin#
-			#tyontekija_sahkoposti#
+		$var_1 = array();
+		$var_2 = array();
 
-			#aika#
-			#paikka#
-			#johtajan_nimi#';
+		$m = new Tyosopimukset;
+		$m->attributes = $m;
+		foreach($m->attributes as $key=>$item)
+		{
+			$var_1[] = $key;
+			$var_2[] = '#'.$key.'#';
+		}
 
-		return $var;
+		return array($var_1, $var_2);
 
 	}
 
@@ -207,7 +202,6 @@ class TyosopimuksetController extends Controller
 
 	protected function docxsave($model, $tiedosto)
 	{
-
 
 			if (!file_exists( Yii::app()->basePath.'/../'.$this->valmiit_polkku() )) {
 			 	mkdir( Yii::app()->basePath.'/../'.$this->valmiit_polkku(), 0777, true );
@@ -241,6 +235,18 @@ class TyosopimuksetController extends Controller
 				'johtajan_nimi' => $model->TyonantajanEdustaja,
 			);
 			$docx->replaceVariableByText($variables);
+
+
+			$sopimus_tyyppi = '';
+			if($model->sopimus == 'ToistaVoimaSopimus')
+			$sopimus_tyyppi = 'Toistaiseksi voimassa oleva työsopimus';
+			if($model->sopimus == 'MaaraSopimus')
+			$sopimus_tyyppi = 'Määräaikainen työsopimus';
+
+			$variables_2 = array(
+				'sopimus_tyyppi' => $sopimus_tyyppi,
+			);
+			$docx->replaceVariableByText($variables_2);
 
 
 			$path = 'tiedostot/'.$this->kansio().'/'.Yii::app()->user->domain.'/'.$tiedosto;
