@@ -344,7 +344,7 @@ function dateDiff($start, $end) {
     	$vlChecker = '  <span style="color:'.$returnChecker[1].'"> ( '.$returnChecker[2].' )</span>';
     }
 
-    ($this->pyhat($date))? $ispyha = ' <i class="text-warning fa fa-flag-o" aria-hidden="true" style="font-size:150%"></i>' : $ispyha = '';
+    ($this->pyhat($date))? $ispyha = ' <i class="text-warning fa fa-flag-o" aria-hidden="true" style="font-size:150%" data-toggle="tooltip" data-placement="bottom" title="'.Yii::t('main', 'Pyhäpäivä').'"></i>' : $ispyha = '';
 
     echo '
 	<tr><td colspan="4">

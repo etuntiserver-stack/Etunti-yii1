@@ -138,7 +138,7 @@
 	  $ispyha = '';
 	  if($pyhat == true){
 		$clPyhat = 'style="background:#ddd"';
-		$ispyha = ' <i class="text-warning fa fa-flag-o" aria-hidden="true" style="font-size:150%"></i>';
+		$ispyha = ' <i class="text-warning fa fa-flag-o" aria-hidden="true" style="font-size:150%" data-toggle="tooltip" data-placement="bottom" title="'.Yii::t('main', 'Pyhäpäivä').'"></i>';
 	  }
 
   	    echo '<tr>';
