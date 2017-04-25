@@ -91,7 +91,7 @@ session_start();
 				        'class'=>'CEmailLogRoute',
                 			'levels'=>'error', //'trace, info, error, warning, vardump'
 					'emails'=>'laptopsr@gmail.com',
-					'subject'=>'Email Log File Message (No DEV). Domain: '.$domain.', IP: '.$_SERVER['REMOTE_ADDR'],
+					'subject'=>'Email Log File Message (No DEV). Domain: '.$domain.', IP: '.$_SERVER['REMOTE_ADDR'].', Kone: '.gethostname(),
 			        )
 	);
   }
@@ -249,6 +249,7 @@ return array(
     //'showScriptName'=>false,
     //'caseSensitive'=>false, 
     'rules'=>array(
+
         'mob/<id:\d+>/<title:.*?>'=>'mob/view',
         'posts/<tag:.*?>'=>'mob/index',
         // REST patterns
