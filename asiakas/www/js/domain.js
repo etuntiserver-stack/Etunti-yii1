@@ -19,29 +19,38 @@ $(document).ready(function(){
 
     //localStorage.clear();
 
+    var server = 'https://etunti.fi/';
     var domain = '';
     var tunnus = '';
     var salasana = '';
-
+    var loginArr = [];
 
     if(localStorage.getItem('loginOK'))
     {
-	var loginArr = JSON.parse(localStorage.getItem('loginOK')).loginOK[0];
+	loginArr = JSON.parse(localStorage.getItem('loginOK')).loginOK[0];
 	var asiakasID = JSON.parse(localStorage.getItem('loginOK')).loginOK['asiakasID'];
 	
 	domain = loginArr['domain'];
 
 	$(document).ready(function(){
+		if(loginArr['palvelin']){
+			$('#palvelin').val(loginArr['palvelin']);
+		}
 		$('#domain').val(loginArr['domain']);
 		$('#inputEmail').val(loginArr['tunnus']);
 		$('#inputPassword').val(loginArr['salasana']);
 	});
 
-	//console.log(loginArr);
+	console.log(loginArr);
+
+    }
+
+    if(loginArr['palvelin']){
+		server = 'https://'+loginArr['palvelin']+'/';
     }
 
     // <-- Palvelin
-    var server = 'https://etunti.fi/';
+
     //var server = '../../';
     var url = server+"index.php/dico/asiakkaat";
     var versio = "";
@@ -83,7 +92,7 @@ $(document).ready(function(){
 		{
 			localStorage.setItem('loginOK', JSON.stringify(d));
 			window.location.href="index.html";
-			console.log(data);
+			//console.log(data);
 		} else {
 			$('#yllaIlmoitus').html('<h3 class="alert alert-danger">Kirjautuminen ei onnistunut. Tarkasta yritystunnus, sähköposti ja salasana</h3>');
 		}
