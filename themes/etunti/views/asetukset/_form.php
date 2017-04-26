@@ -438,6 +438,7 @@
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'onlinevaraus_alku'); ?>
 
+
 		<?php 
         	$l = array();
 		for ($i = 1; $i <= 24; $i++) {
@@ -459,6 +460,18 @@
 		echo $form->dropDownList($model,'onlinevaraus_loppu', $l, 
 		array('class'=>'form-control')) ?>
 		<?php echo $form->error($model,'onlinevaraus_loppu'); ?>
+	</div>
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'onlinevaraus_viikonlopput'); ?>
+		<?php 
+        	$tal = array(
+			1=>'Ei',
+			0=>'Kyllä'
+		);
+		echo $form->dropDownList($model,'onlinevaraus_viikonlopput', $tal, 
+		array('class'=>'form-control')) ?>
+		<?php echo $form->error($model,'onlinevaraus_viikonlopput'); ?>
 	</div>
 
     </div><div class="col-sm-5">
