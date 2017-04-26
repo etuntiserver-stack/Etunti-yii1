@@ -1,8 +1,11 @@
 <?php
 	$from = date("Y-m-d", strtotime('first day of this month'));
 	$to = date("Y-m-d");
+	$naytaId = 0;
 	if(isset($_POST['from'])) $from = $_POST['from'];
 	if(isset($_POST['to'])) $to = $_POST['to'];
+	if(isset($id) and !empty($id)) $naytaId = $id;
+
 
 	$asiakkaat = Yii::app()->createController('Asiakkaat');
 ?>
@@ -136,7 +139,7 @@
               <div class="panel heading-border">
                 <div class="panel-body bg-light">
                  <div class="table-responsive">
-		  <?php echo $asiakkaat[0]->palautteetCRM($model, $from, $to); ?>
+		  <?php echo $asiakkaat[0]->palautteetCRM($model, $from, $to, $naytaId, $kayttaja); ?>
 		 </div>
                 </div>
               </div>

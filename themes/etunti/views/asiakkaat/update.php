@@ -125,6 +125,7 @@ exit;
 			'naytaTarjoukset'=>true,
 			'naytaPalautteet'=>true,
 			'naytaVinkit'=>true,
+			'kayttaja' => 'admin',
 		)
 	); 
 	?>

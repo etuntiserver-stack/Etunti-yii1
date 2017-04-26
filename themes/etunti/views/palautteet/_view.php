@@ -59,8 +59,9 @@
 		{
 
 			$bod .= '<form action="#" class="palautteet-form-vastaus" method="POST">'; 
-			$bod .= '<input type="hidden" name="PalautteetVastaus[this_id]" value="'.$data->id.'" class="form-control">';
-			$bod .= '<input type="hidden" name="PalautteetVastaus[keskustelu_id]" value="'.$data->keskustelu_id.'" class="form-control">';
+			$bod .= '<input type="hidden" name="palaute_id" value="'.$data->id.'" class="form-control">';
+			$bod .= '<input type="hidden" name="PalautteetVastaus[keskustelu_id]" value="'.$data->keskustelu_id.'">';
+			$bod .= '<input type="hidden" name="PalautteetVastaus[lahettaja]" value="admin">';
 			$bod .= '<textarea name="PalautteetVastaus[teksti]" rows=4 class="form-control"></textarea>';
 			$bod .= CHtml::submitButton('Lähetä vastaus',array('class'=>'btn btn-primary myBgColors'));
 			$bod .= '</form>'; 
