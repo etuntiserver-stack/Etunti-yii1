@@ -654,7 +654,7 @@ class OnlinevarausController extends Controller
 	}
 
 
-protected function build_calendar($month, $year, $dateArray, $pvmRaja) {
+protected function build_calendar($month, $year, $dateArray, $pvmRaja, $numOfWeek) {
 
 
 $months=array(
@@ -674,7 +674,11 @@ $months=array(
 
 
      // Create array containing abbreviations of days of week.
+     if($numOfWeek == 7)
      $daysOfWeek = array('Ma','Ti','Ke','To','Pe','La','Su');
+
+     if($numOfWeek == 5)
+     $daysOfWeek = array('Ma','Ti','Ke','To','Pe');
 
      // What is the first day of the month in question?
      $firstDayOfMonth = mktime(0,0,0,$month,7,$year);
@@ -729,7 +733,7 @@ $months=array(
 
           // Seventh column (Saturday) reached. Start a new row.
 
-          if ($dayOfWeek == 7) {
+          if ($dayOfWeek == $numOfWeek) {
 
                $dayOfWeek = 0;
                $calendar .= "</tr><tr>";
@@ -780,9 +784,9 @@ $months=array(
 
      // Complete the row of the last week in month, if necessary
 
-     if ($dayOfWeek != 7) { 
+     if ($dayOfWeek != $numOfWeek) { 
      
-          $remainingDays = 7 - $dayOfWeek;
+          $remainingDays = $numOfWeek - $dayOfWeek;
           $calendar .= "<td colspan='$remainingDays'>&nbsp;</td>"; 
 
      }
