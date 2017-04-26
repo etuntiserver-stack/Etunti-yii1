@@ -30,6 +30,14 @@ $(document).ready(function(){
 	var asiakasID = JSON.parse(localStorage.getItem('loginOK')).loginOK['asiakasID'];
 	
 	domain = loginArr['domain'];
+
+	$(document).ready(function(){
+		$('#domain').val(loginArr['domain']);
+		$('#inputEmail').val(loginArr['tunnus']);
+		$('#inputPassword').val(loginArr['salasana']);
+	});
+
+	//console.log(loginArr);
     }
 
     // <-- Palvelin
