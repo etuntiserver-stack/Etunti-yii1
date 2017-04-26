@@ -49,6 +49,7 @@ $model->asiakas_id = Yii::app()->user->asiakas;
 
 
 	<?php echo $form->hiddenField($model,'emoji_tila',array('value'=>1, 'size'=>60,'maxlength'=>255, 'class'=>'form-control')); ?>
+	<?php echo $form->hiddenField($model,'lahettaja',array('value'=>'asiakas', 'class'=>'form-control')); ?>
 
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'otsikko'); ?>
@@ -64,7 +65,7 @@ $model->asiakas_id = Yii::app()->user->asiakas;
 
 
 	<div class="buttons">
-		<?php echo CHtml::submitButton($model->isNewRecord ? 'Lähetä' : 'Tallenna',array('class'=>'btn btn-primary myBgColors')); ?>
+		<?php echo CHtml::submitButton($model->isNewRecord ? 'Lähetä' : 'Tallenna',array('class'=>'btn btn-primary myBgColors submitButton')); ?>
 	</div>
 
 <?php $this->endWidget(); ?>

@@ -232,6 +232,7 @@
 
 
 
+	<div id="lukematonPalaute"></div>
 
         <!-- Dashboard Tiles -->
         <div class="row mb10">
@@ -397,6 +398,30 @@
       }
     });
 
+
+    // <-- check
+	var sendData = loginArr;
+	sendData['asiakasID'] = asiakasID;
+
+	//console.log(sendData);
+
+        $.ajax({
+           url: url+'/check?domain='+domain,
+	   type:'POST',
+ 	   data: sendData,
+           success: function(data){
+		var d = JSON.parse(data);
+		if(d !== '')
+		{
+			//console.log(d);
+			$('#lukematonPalaute').html('<div class="alert bg-danger"><a class="text-white" href="historia.html?tyyppi=naytaPalautteet&id='+d+'">Olet saanut vastauksen palautteeseen</a></div>');
+		}
+    	   },
+    		error:function (xhr, ajaxOptions, thrownError){
+        	console.log(xhr.responseText);
+    	   }
+        });
+    //     check palautteet -->
 
   });
   </script>

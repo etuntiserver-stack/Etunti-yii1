@@ -16,9 +16,14 @@ function getUrlVars() {
 	if(getUrlVars()["tyyppi"])
 		tyyppi = getUrlVars()["tyyppi"];
 
+	var id = '';
+	if(getUrlVars()["id"])
+		id = getUrlVars()["id"];
+
 	var sendData = loginArr;
 	sendData['asiakasID'] = asiakasID;
 	sendData['tyyppi'] = tyyppi;
+	sendData['id'] = id;
 
 	//console.log(sendData);
 
@@ -119,6 +124,7 @@ function getUrlVars() {
 
     // <-- on submit Palaute
     $(document).delegate('#palautteet-form', 'submit', function(e) {
+
 
 	var sendDataPost = $(this).serializeArray();
 	$.each(loginArr, function( index, value ) {
@@ -227,6 +233,9 @@ function getUrlVars() {
     //     get Lasku PDF -->
 
 
+    $(document).delegate('.submitButton', 'click', function() {
+	$(this).hide();
+    });
 
     function reloadSkin()
     {

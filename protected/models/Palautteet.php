@@ -31,8 +31,9 @@ class Palautteet extends DB2ActiveRecord
 		// will receive user inputs.
 		return array(
 			array('asiakas_id, teksti, otsikko', 'required'),
-			array('keskustelu_id, asiakas_id, status, emoji_tila', 'numerical', 'integerOnly'=>true),
+			array('keskustelu_id, asiakas_id, status, emoji_tila, asiakas_luettu', 'numerical', 'integerOnly'=>true),
 			array('otsikko', 'length', 'max'=>255),
+			array('lahettaja', 'length', 'max'=>20),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('id, keskustelu_id, time, asiakas_id, teksti, otsikko, status', 'safe', 'on'=>'search'),

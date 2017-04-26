@@ -379,6 +379,11 @@ class AsiakkaatController extends Controller
 			Palautteet::model()->updatebypk($_GET['suljeJuttelu'], array('status'=>3));
 			$this->redirect(array('update','id'=>$id));
 		}
+		if(isset($_POST['palaute_id']))
+		{
+			$this->palautteetVastaus($_POST);
+			$this->redirect(array('update','id'=>$id));
+		}
 
 	// <-- Oikeudet
 	   $checkOikeus = "asiakkaat_2_".Yii::app()->user->adminStatus;
@@ -1025,12 +1030,12 @@ $xml = '
 
 
 
-	protected function palautteetCRM($model, $from, $to)
+	protected function palautteetCRM($model, $from, $to, $naytaId, $kayttaja)
 	{
 
 
 		$criteria=new CDbCriteria;
-		$criteria->order = " DATE(time) DESC ";
+		$criteria->order = " DATE(time) DESC, id DESC ";
 		$criteria->condition = "
 			asiakas_id='".$model->id."' 
 			AND keskustelu_id=id
@@ -1042,6 +1047,14 @@ $xml = '
 			DATE(time) BETWEEN '".date("Y-m-d", strtotime($from))."' AND '".date("Y-m-d", strtotime($to))."'
 		");
 		}
+
+		if($naytaId != 0)
+		{
+		$criteria->addCondition (" 
+			id='".$naytaId."'
+		");
+		}
+
 		$p = Palautteet::model()->findAll($criteria);
 
 
@@ -1088,10 +1101,11 @@ $xml = '
 		{
 
 			$bod .= '<form action="#" class="palautteet-form-vastaus" method="POST">'; 
-			$bod .= '<input type="hidden" name="PalautteetVastaus[this_id]" value="'.$data->id.'" class="form-control">';
+			$bod .= '<input type="hidden" name="palaute_id" value="'.$data->id.'" class="form-control">';
 			$bod .= '<input type="hidden" name="PalautteetVastaus[keskustelu_id]" value="'.$data->keskustelu_id.'" class="form-control">';
-			$bod .= '<textarea name="PalautteetVastaus[teksti]" rows=4 class="form-control"></textarea>';
-			$bod .= CHtml::submitButton('Lähetä vastaus',array('class'=>'btn btn-primary myBgColors'));
+			$bod .= '<input type="hidden" name="PalautteetVastaus[lahettaja]" value="'.$kayttaja.'">';
+			$bod .= '<textarea name="PalautteetVastaus[teksti]" class="form-control"></textarea>';
+			$bod .= CHtml::submitButton('Lähetä vastaus',array('class'=>'btn btn-primary myBgColors submitButton'));
 			$bod .= '</form>'; 
 
 
@@ -1105,7 +1119,7 @@ $xml = '
 		elseif($data->status == 3)
 	  	$bod .= '<span class="btn btn-sm btn-success btn-block">'.Yii::t('main', 'suljettu').'</span>';
 
-		if(isset(Yii::app()->user->adminID) and $data->status != 3)
+		if($kayttaja == 'admin' and $data->status != 3)
 		{
 		$bod .= CHtml::link('Sulje', '#', array(
 		'submit'=>array('update', "suljeJuttelu"=>$data->keskustelu_id, "id"=>$data->asiakas_id), 
@@ -1143,7 +1157,7 @@ $xml = '
 
 		if(isset($post['PalautteetVastaus']))
 		{
-			$p = Palautteet::model()->findbypk($post['PalautteetVastaus']['this_id']);
+			$p = Palautteet::model()->findbypk($post['palaute_id']);
 
 			$model->attributes=$post['PalautteetVastaus'];
 			$model->otsikko=$p->otsikko;

@@ -340,6 +340,7 @@ class PalautteetController extends Controller
 	public function actionDelete($id)
 	{
 		Palautteet::model()->deleteAll(" keskustelu_id='".$id."' ");
+		Palautteet::model()->deleteByPk($id);
 
 		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
 		if(!isset($_GET['ajax']))
@@ -359,7 +360,7 @@ class PalautteetController extends Controller
 	//  Oikeudet -->
 */
 
-		if(isset($_POST['PalautteetVastaus']['this_id']))
+		if(isset($_POST['palaute_id']))
 		{
 	   		$asiakkaat = Yii::app()->createController('Asiakkaat');
 			$asiakkaat[0]->palautteetVastaus($_POST);

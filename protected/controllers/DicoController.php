@@ -73,6 +73,36 @@ public function actionLogin($domain)
 
 }
 
+	public function actionCheck($domain)
+	{
+
+		$return = '';
+		if(isset($_POST['tunnus']) and $this->kirjautuminen($_POST['tunnus'], $_POST['salasana']) == true)
+		{
+		   $model=Asiakkaat::model()->findByPk($_POST['asiakasID']);
+		   if(isset($model->id))
+		   {
+			$criteria=new CDbCriteria;
+			$criteria->condition = " 
+				asiakas_id='".$model->id."' 
+				AND lahettaja='admin'
+				AND asiakas_luettu=0
+			";
+			$pal=Palautteet::model()->find($criteria);
+	
+			if(isset($pal->id))
+			{
+				$this->_sendResponse(200, CJSON::encode($pal->keskustelu_id));
+				exit;
+			}
+
+		   }
+		}
+		
+		$this->_sendResponse(200, CJSON::encode($return));
+		exit;
+	}
+
 
 	public function actionHistoria($domain)
 	{
@@ -132,7 +162,7 @@ public function actionLogin($domain)
 					}
 
 					// <-- Palaute vastaus
-					if(isset($_POST['PalautteetVastaus']['this_id']))
+					if(isset($_POST['palaute_id']))
 					{
 						$return = $this->Send_vastaus($_POST);
 						$this->_sendResponse(200, CJSON::encode(array('OK'=>Yii::t('main', 'Palaute vastaus lähetetty.'))));
@@ -150,10 +180,19 @@ public function actionLogin($domain)
 				if(isset($_POST['tyyppi']) and !empty($_POST['tyyppi']))
 				$naytaMita = $_POST['tyyppi'];
 
+				$naytaId = '';
+				if(isset($_POST['id']) and !empty($_POST['id']))
+				{
+					$naytaId = $_POST['id'];
+					Palautteet::model()->updateAll(array('asiakas_luettu'=>1),'keskustelu_id="'.$_POST['id'].'"');
+				}
+
 				$return .= $this->renderPartial('//asiakkaat/asiakas_historia', 
 				array(
 					'model'=>$model,
-					$naytaMita=>true
+					$naytaMita=>true,
+					'id' => $naytaId,
+					'kayttaja' => 'asiakas',
 				)
 				, true);
 				$this->_sendResponse(200, CJSON::encode($return));
