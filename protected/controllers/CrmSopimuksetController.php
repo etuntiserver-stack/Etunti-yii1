@@ -32,7 +32,7 @@ class CrmSopimuksetController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view', 'laheta'),
+				'actions'=>array('admin','delete','create','update','index','view', 'laheta', 'get_tarjous'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -581,6 +581,20 @@ $randstring = generateRandomString();
 			'dataProvider' => $dataProvider,
 			'tal' => $tal,
 		));
+	}
+
+	public function actionGet_tarjous($asiakas_id)
+	{
+		$bd = '<option value=>'.Yii::t('main', 'Valitse').'</options>';
+		$data = CrmTarjoukset::model()->findAll(" asiakas_id='".$asiakas_id."' ");
+		foreach($data as $item){
+			$bd .= '<option value="'.$item->id.'">'.date("d.m.Y H:i", strtotime($item->time)).', '.$item->kohteen_osoite.'</option>';
+		}
+
+		$result = array(
+			'options'=>$bd
+		);
+		echo json_encode($result);
 	}
 
 
