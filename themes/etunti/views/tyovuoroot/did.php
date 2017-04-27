@@ -20,6 +20,8 @@
 if(!isset($_POST['tulosta']))
 {
 
+	if( $from != 'mobiili' )
+	{
 	$bod .=  '
 	<div class="pull-right oikeallaPlusV">
 	  <div class="form-inline">
@@ -34,6 +36,7 @@ if(!isset($_POST['tulosta']))
 
 	  </div>
 	</div>';
+	}
 
 
 	$bod .=  '
