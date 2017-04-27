@@ -106,10 +106,8 @@
 		<?php
 		$list = array();
 		$criteria=new CDbCriteria;
-		//if(isset($_GET['yhteystiedot_id']))
-			//$criteria->condition=" yhteystiedot_id='".$_GET['yhteystiedot_id']."' ";
-		if(isset($_GET['asiakas_id']))
-			$criteria->condition=" asiakas_id='".$_GET['asiakas_id']."' AND status=3 ";
+
+		$criteria->condition=" asiakas_id='".$model->asiakas_id."' ";
       		$l = CrmTarjoukset::model()->findAll($criteria);
 		foreach($l as $v)
 		{
@@ -146,11 +144,24 @@
 $(document).ready(function(){
 
 
-/*
- $('#CrmSopimukset_yhteystiedot_id').change(function(){
-	window.location.href= "create?yhteystiedot_id=" + $(this).val();
+ $('#CrmSopimukset_asiakas_id').change(function(){
+
+	var thisVal = $(this).val();
+        $.ajax({
+           url: 'get_tarjous?asiakas_id=' + thisVal,
+           //type: "POST",
+           //data: { },
+           success: function(data){
+		var data = JSON.parse(data);
+		console.log(data);
+		if(data['options'])
+		{
+			$('#CrmSopimukset_tarjous_id').html(data['options']);
+		}
+           }
+        });
+
  });
-*/
 
 });
 </script>
