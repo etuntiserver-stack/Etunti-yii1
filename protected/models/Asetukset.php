@@ -133,7 +133,7 @@ class Asetukset extends DB2ActiveRecord
 			'tyel_maksun_osuus_palkkansummasta' => Yii::t('main', 'TyEL-MAKSUN OSUUS PALKKASUMMASTA'),
 			'gtm' => Yii::t('main', 'Google Tag Manager'),
 			'app_naytetaanko_kohteen_yhteyshenkilo' => Yii::t('main', 'Näytetäänkö kohteen yhteyshenkilö'),
-			'onlinevaraus_viikonlopput'=>Yii::t('main', 'Näytetäänkö viikonlopput'),
+			'onlinevaraus_viikonlopput'=>Yii::t('main', 'Näytetäänkö viikonloput'),
 		);
 	}
 
