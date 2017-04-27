@@ -147,7 +147,7 @@ $(document).delegate(".latikkoAsetukset .fullRivi","click",function(){
            success: function(html){
 		html = JSON.parse(html);
 		console.log(html)
-		window.location.href= location.protocol + "//" + location.host + "/index.php/tyovuoroot/index?week="+html['week']+"&year="+html['year'];
+		window.location.href= location.protocol + "//" + location.host + "/index.php/tyovuoroot/index?week="+html['week']+"&year="+html['year']+"&tid="+thisId[2];
            }
         });
 });

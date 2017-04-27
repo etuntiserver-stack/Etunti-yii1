@@ -551,6 +551,7 @@ class TyovuorootController extends Controller
 		} else {
 
 
+
 		  $this->render('laheta_k',array('week'=>$week,'year'=>$year,'tulosta'=>false));
 		}
 
@@ -1222,6 +1223,7 @@ class TyovuorootController extends Controller
 			if(isset($_POST['Tyovuoroot']['PushNotify']) and $_POST['Tyovuoroot']['PushNotify'] == 'on')
 			$this->pushNotifySending($model->id);
 			// PushNotify -->
+
 
 
 
@@ -3234,6 +3236,9 @@ class TyovuorootController extends Controller
 			
 			if(isset($_GET['week']) and !empty($_GET['week']))
 				Yii::app()->session['week'] = $_GET['week'];
+
+			if(isset($_GET['tid']) and !empty($_GET['tid']))
+				Yii::app()->session['tyontekijat'] = array($_GET['tid']);
 
 
 			$this->redirect(array('index'));
