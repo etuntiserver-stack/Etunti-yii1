@@ -169,18 +169,64 @@ class TyosopimuksetController extends Controller
 	protected function template_variables()
 	{
 
-		$var_1 = array();
-		$var_2 = array();
+		$var = '
+		#tyonantaja#
+		#tyonantaja_osoite#
+		#tyonantaja_y_tunnus#
+		#tyonantaja_puhelin#
+		#tyonantaja_sahkoposti#
 
-		$m = new Tyosopimukset;
-		$m->attributes = $m;
-		foreach($m->attributes as $key=>$item)
-		{
-			$var_1[] = $key;
-			$var_2[] = '#'.$key.'#';
-		}
+		#tyontekija_nimi#
+		#tyontekija_osoite#
+		#tyontekija_henkilotunnus#
+		#tyontekija_puhelin#
+		#tyontekija_sahkoposti#
+		
+		#aika#
+		#paikka#
+		#johtajan_nimi#
 
-		return array($var_1, $var_2);
+		#sopimus_tyyppi#
+		#ToistaVoimaSopimus#
+		#MaaraVoimaSopimusAlkaa#
+		#MaaraVoimaSopimusPaattyy#
+		#peruste#
+		#koeaika#
+		#SoveltavaSopimus#
+		#Tyotehtavat#
+		#tyonSuorittamisPaikka#
+		#PalkanMaaraytymisperuste#
+		#PalkanMaaraytymisperusteMuu#
+		#TyokokemusVuotta#
+		#TyokokemusKuu#
+		#palkka_kk#
+		#Palkkaluokka#
+		#palkka_h#
+		#Luontaiseudut#
+		#Raha_arvo#
+		#Verotusarvo#
+		#palkka_muu2#
+		#Palkanmaksukausi#
+		#Palkanmaksupaivat#
+		#Palkka_tilille#
+		#tyoaika_hvrk#
+		#tyoaika_hvko#
+		#tyoaika_h_jakso#
+		#tyoaika_vko_jaksossa#
+		#RuokataukonPituus#
+		#Muu_tyoaika#
+		#lomasta_sovittu#
+		#Salassapito#
+		#IrtisanomisaikaM#
+		#Muut_sopimusehdot#
+		#Muutospaiva#
+		#LisayksetSopimukseen#
+		#NimikeTehtava#
+		#teksti#
+
+		';
+
+		return $var;
 
 	}
 
@@ -245,6 +291,43 @@ class TyosopimuksetController extends Controller
 
 			$variables_2 = array(
 				'sopimus_tyyppi' => $sopimus_tyyppi,
+				'ToistaVoimaSopimus' => $model->ToistaVoimaSopimus,
+				'MaaraVoimaSopimusAlkaa' => $model->MaaraVoimaSopimusAlkaa,
+				'MaaraVoimaSopimusPaattyy' => $model->MaaraVoimaSopimusPaattyy,
+				'peruste' => $model->peruste,
+				'koeaika' => $model->koeaika,
+				'SoveltavaSopimus' => $model->SoveltavaSopimus,
+				'Tyotehtavat' => $model->Tyotehtavat,
+				'tyonSuorittamisPaikka' => $model->tyonSuorittamisPaikka,
+				'PalkanMaaraytymisperuste' => $model->PalkanMaaraytymisperuste,
+				'PalkanMaaraytymisperusteMuu' => $model->PalkanMaaraytymisperusteMuu,
+				'TyokokemusVuotta' => $model->TyokokemusVuotta,
+				'TyokokemusKuu' => $model->TyokokemusKuu,
+				'palkka_kk' => $model->palkka_kk,
+				'Palkkaluokka' => $model->Palkkaluokka,
+				'palkka_h' => $model->palkka_h,
+				'Luontaiseudut' => $model->Luontaiseudut,
+				'Raha_arvo' => $model->Raha_arvo,
+				'Verotusarvo' => $model->Verotusarvo,
+				'palkka_muu2' => $model->palkka_muu2,
+				'Palkanmaksukausi' => $model->Palkanmaksukausi,
+				'Palkanmaksupaivat' => $model->Palkanmaksupaivat,
+				'Palkka_tilille' => $model->Palkka_tilille,
+				'tyoaika_hvrk' => $model->tyoaika_hvrk,
+				'tyoaika_hvko' => $model->tyoaika_hvko,
+				'tyoaika_h_jakso' => $model->tyoaika_h_jakso,
+				'tyoaika_vko_jaksossa' => $model->tyoaika_vko_jaksossa,
+				'RuokataukonPituus' => $model->RuokataukonPituus,
+				'Muu_tyoaika' => $model->Muu_tyoaika,
+				'lomasta_sovittu' => $model->lomasta_sovittu,
+				'Salassapito' => $model->Salassapito,
+				'IrtisanomisaikaM' => $model->IrtisanomisaikaM,
+				'Muut_sopimusehdot' => $model->Muut_sopimusehdot,
+				'Muutospaiva' => $model->Muutospaiva,
+				'LisayksetSopimukseen' => $model->LisayksetSopimukseen,
+				'NimikeTehtava' => $model->NimikeTehtava,
+				'teksti' => $model->teksti,
+
 			);
 			$docx->replaceVariableByText($variables_2);
 
