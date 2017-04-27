@@ -4,6 +4,7 @@
 
 ?>
 
+<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/tyovuorot.css">
 
         <!-- begin: .tray-center -->
         <div class="tray-center">

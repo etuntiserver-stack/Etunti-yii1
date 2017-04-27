@@ -215,12 +215,14 @@ else
 	  </a>
 
 	    <div style="position:absolute;width:300px;z-index: 2;" class="collapse" id="<?php echo 'sushow_'.$data->id; ?>">
-	     <div class="well row">
+	     <div class="row">
+	      <div class="panel col-sm-12">
 	     <?php 
 		$did = '';
 		$did = $this->renderPartial('//tyovuoroot/did',array('pvm'=>$data->aloitan,'tid'=>$data->tid,'from'=>'mobiili'), true); 
 		echo json_decode($did, true);
 	     ?>
+	      </div>
 	     </div>
 	    </div>
 
