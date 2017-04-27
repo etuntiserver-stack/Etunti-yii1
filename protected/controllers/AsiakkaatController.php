@@ -631,6 +631,7 @@ $xml = '
 
 
 
+
 	// <-- Oikeudet
 	   $checkOikeus = "asiakkaat_0_".Yii::app()->user->adminStatus;
 	   $site = Yii::app()->createController('Site');
@@ -1066,19 +1067,43 @@ $xml = '
 		$bod .= '<table class="table table-bordered">
 
 		 <tr>
-		  <th>'.Yii::t('main', 'Päiväys').'</th>
-		  <th>'.Yii::t('main', 'Otsikko').'</th>
 		  <th>'.Yii::t('main', 'Palaute').'</th>
-		  <th>'.Yii::t('main', 'Tila').'</th>
+		  <th>'.Yii::t('main', 'Keskustelu').'</th>
 		 </tr>';
 	
 		foreach($p as $data)
 		{
-	  	$bod .= '
-		<tr>
+	  	$bod .= '<tr>';
 
-			<td>'.date("d.m.Y", strtotime($data->time)).'</td>
-			<td>'.$data->otsikko.'</td>';
+		$bod .= '<td>';
+
+		$bod .= '<center>';
+		if($kayttaja == 'admin' and file_exists( Yii::app()->basePath.'/../lib/img/emoji/'.$data->emoji_tila.'.png' ))
+		$bod .= '<p><img src="../../lib/img/emoji/'.$data->emoji_tila.'.png" height="100"></p>';
+
+		if($kayttaja == 'asiakas')
+		$bod .= '<p><img src="img/emoji/'.$data->emoji_tila.'.png" height="100"></p>';
+
+		$bod .= '</center>';
+
+		$bod .= '<p><b>'.date("d.m.Y", strtotime($data->time)).'</b></p>';
+		$bod .= '<p>'.$data->otsikko.'</p>';
+
+		if($data->status == 0)
+	  	$bod .= '<span class="btn btn-sm btn-warning btn-block">'.Yii::t('main', 'avoin').'</span>';
+		elseif($data->status == 3)
+	  	$bod .= '<span class="btn btn-sm btn-success btn-block">'.Yii::t('main', 'suljettu').'</span>';
+
+		if($kayttaja == 'admin' and $data->status != 3)
+		{
+		$bod .= CHtml::link('Sulje', '#', array(
+		'submit'=>array('update', "suljeJuttelu"=>$data->keskustelu_id, "id"=>$data->asiakas_id), 
+		'class'=>'btn btn-danger btn-sm btn-block'
+		));
+		}
+
+		$bod .= '</td>';
+
 
 	  	$bod .= '<td>';
 		$bod .= '<p>'.$data->teksti.'</p>';
@@ -1105,30 +1130,13 @@ $xml = '
 			$bod .= '<input type="hidden" name="PalautteetVastaus[keskustelu_id]" value="'.$data->keskustelu_id.'" class="form-control">';
 			$bod .= '<input type="hidden" name="PalautteetVastaus[lahettaja]" value="'.$kayttaja.'">';
 			$bod .= '<textarea name="PalautteetVastaus[teksti]" class="form-control"></textarea>';
-			$bod .= CHtml::submitButton('Lähetä vastaus',array('class'=>'btn btn-primary myBgColors submitButton'));
+			$bod .= CHtml::submitButton('Lähetä vastaus',array('class'=>'btn btn-primary  btn-block myBgColors submitButton'));
 			$bod .= '</form>'; 
 
 
 		//$bod .= CHtml::link(Yii::t('main', 'Vasta'), Yii::app()->request->baseUrl.'/index.php/palautteet/vastaus?id='.$data->keskustelu_id,array('class'=>'btn btn-primary btn-sm'));
 		}
 	  	$bod .= '</td>';
-
-	  	$bod .= '<td>';
-		if($data->status == 0)
-	  	$bod .= '<span class="btn btn-sm btn-warning btn-block">'.Yii::t('main', 'avoin').'</span>';
-		elseif($data->status == 3)
-	  	$bod .= '<span class="btn btn-sm btn-success btn-block">'.Yii::t('main', 'suljettu').'</span>';
-
-		if($kayttaja == 'admin' and $data->status != 3)
-		{
-		$bod .= CHtml::link('Sulje', '#', array(
-		'submit'=>array('update', "suljeJuttelu"=>$data->keskustelu_id, "id"=>$data->asiakas_id), 
-		'class'=>'btn btn-danger btn-sm btn-block'
-		));
-		}
-
-	  	$bod .= '</td>';
-
 
 		$bod .= '</tr>';
 	  	}

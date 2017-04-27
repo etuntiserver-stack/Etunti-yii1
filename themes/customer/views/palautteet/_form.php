@@ -19,13 +19,13 @@ $model->asiakas_id = Yii::app()->user->asiakas;
 </style>
 
 <div class="row" id="emoji">
- <div class="col-sm-2">
+ <div class="col-xs-4">
 	<img src="img/emoji/1.png" class="img-thumbnail emoji_active" tila="1">
  </div>
- <div class="col-sm-2">
+ <div class="col-xs-4">
 	<img src="img/emoji/2.png" class="img-thumbnail emoji_passive" tila="2">
  </div>
- <div class="col-sm-2">
+ <div class="col-xs-4">
 	<img src="img/emoji/3.png" class="img-thumbnail emoji_passive" tila="3">
  </div>
 </div>
