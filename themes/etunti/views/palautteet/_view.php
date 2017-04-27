@@ -36,6 +36,9 @@
 		?>
 	</td>
 	<td>
+		<?php if(file_exists( Yii::app()->basePath.'/../lib/img/emoji/'.$data->emoji_tila.'.png' )) : ?>
+		<p><img src="<?php echo '../../lib/img/emoji/'.$data->emoji_tila.'.png'; ?>" height="100"></p>
+		<?php endif; ?>
 		<?php echo date("d.m.Y H:i", strtotime($data->time)); ?>
 	</td>
 	<td>
