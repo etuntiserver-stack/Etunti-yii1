@@ -91,7 +91,7 @@ session_start();
 				        'class'=>'CEmailLogRoute',
                 			'levels'=>'error', //'trace, info, error, warning, vardump'
 					'emails'=>'laptopsr@gmail.com',
-					'subject'=>'Email Log File Message (No DEV). Domain: '.$domain.', IP: '.$_SERVER['REMOTE_ADDR'].', Kone: '.php_uname('n'),
+					'subject'=>'Log File Message. Domain: '.$domain.', IP: '.$_SERVER['REMOTE_ADDR'],
 			        )
 	);
   }
