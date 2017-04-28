@@ -29,12 +29,17 @@ if(isset($_POST['poistaTamaTiedosto'])){
 	unlink($_POST['poistaTamaTiedosto']);
 exit;
 }
+
+$asetukset = Asetukset::model()->findbypk(1);
 ?>
 
         <!-- begin: .tray-center -->
         <div class="tray-center">
 
 	   <div class="pull-right">
+	   <?php if($asetukset->netvisor_kaytto == 1) : ?>
+	   <button class="btn btn-primary myBgColors" data-toggle="collapse" data-target="#netvisorTiedot"><?php echo Yii::t('main', 'Netvisor tiedot'); ?></button>
+	   <?php endif; ?>
 	   <button class="btn btn-primary myBgColors" id="historiaSiirto"><?php echo Yii::t('main', 'Historia'); ?></button>
 	   <?php     
 		echo CHtml::link("poista", '#', array(
@@ -48,6 +53,10 @@ exit;
 
 	   <?php echo $this->VinkiTahdet($model->id); ?>
 
+
+	   <div id="netvisorTiedot" class="collapse">
+	   <div class="alert alert-default"><?php $this->netvisorAsiakasNouto($model->netvisorkey); ?></div>
+	   </div>
 
             <div class="admin-form">
               <div class="panel heading-border">
