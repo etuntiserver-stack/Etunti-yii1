@@ -3122,6 +3122,36 @@ class TyovuorootController extends Controller
 				if($model->save())
 				{
 				
+
+			// <-- jos on tyopaari
+			$luotu = array();
+			if(isset($_POST['tyopaari']) and count($_POST['tyopaari']) > 0)
+			{
+
+			    $luotu[$model->id] = $model->tid;
+
+			    foreach($_POST['tyopaari'] as $tid)
+			    {
+				$m=new Tyovuoroot;
+				$m->attributes=$_POST['Tyovuoroot'];
+				$m->kohde = $kohteet->id;
+				$m->pvm = date("d.m.Y",strtotime($_POST['Tyovuoroot']['pvm']));
+				$m->tid=$tid;
+				if($m->save())
+				{
+					$luotu[$m->id] = $m->tid;
+					$return[] = array('tid'=>$m->tid, 'pvm'=>$m->pvm, 'ymd'=>date("Ymd",strtotime($m->pvm)));
+
+				}
+
+			    }
+			    foreach($luotu as $k=>$v)
+					Tyovuoroot::model()->updatebypk($k, array('tyopaari' => json_encode($luotu)));
+
+
+			}
+			// jos on tyopaari -->
+
 				$sum = 0;
 				   if(isset($_POST['vieposti']) and isset($asiakkaat->sahkoposti) and !empty($asiakkaat->sahkoposti))
 				   {
@@ -3131,7 +3161,10 @@ class TyovuorootController extends Controller
 
 					if(!empty($asiakkaat->hinta) and $asiakkaat->hinta_tyyppi == 1)
 					{
-						$tuntia = (strtotime($model->loppu)-strtotime($model->alku))/3600;
+						$tuntia = ((strtotime($model->loppu)-strtotime($model->alku))/3600);
+						if( count($luotu) > 0 )
+						$tuntia = $tuntia * count($luotu);
+
 						$sum = ($asiakkaat->hinta*$tuntia) + (($asiakkaat->hinta*$asiakkaat->alv)/100);
 						$message .= 'Hinta: '.number_format($sum, 2, ',', ' ').' &euro;<br>';
 					}
