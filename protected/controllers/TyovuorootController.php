@@ -43,9 +43,18 @@ class TyovuorootController extends Controller
 
 	public function isEtuntiAdmin() {
 
-	$tas = '';
-	if(isset(Yii::app()->user->adminPaketti))
-	$tas = explode(",",Yii::app()->user->adminPaketti);
+		if(!isset(Yii::app()->user->adminID))
+		{
+			//die('login error');
+		  	echo '<script type="text/javascript">
+				window.location.href=location.protocol + "//" + location.host + "/index.php/site/index";
+			</script>';
+			exit;
+		}
+
+		$tas = '';
+		if(isset(Yii::app()->user->adminPaketti))
+		$tas = explode(",",Yii::app()->user->adminPaketti);
 
 		if(isset(Yii::app()->user->adminID) and in_array('2',$tas))
 		{
@@ -62,6 +71,7 @@ class TyovuorootController extends Controller
 
         public function init()
         {
+
 
                 if (Yii::app()->controller->isEtuntiAdmin() and !isset(Yii::app()->user->user_theme)) {
                         Yii::app()->theme = 'etunti';
@@ -549,6 +559,7 @@ class TyovuorootController extends Controller
 		  $this->redirect('viikkottain');
 
 		} else {
+
 
 
 
