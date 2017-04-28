@@ -145,7 +145,7 @@ if(!isset($_POST['tulosta']))
 	   // <-- uusi_tilaus
 	   $uusi_tilaus = '';
 	   if( $tvVal->kohteet->uusi_tilaus == 1 ){
-	   	$uusi_tilaus = 'text-warning';
+	   	$uusi_tilaus = 'color:#ff1aff';
 	   }
 	   // uusi_tilaus -->
 
@@ -249,7 +249,7 @@ if(!isset($_POST['tulosta']))
 	   $bod .=  '<div id="'.$tvVal->id.'_'.$did.'_'.$tid.'" class="did fullRivi" style="color:'.$color.'">';
 	   if( $from != 'mobiili' )
 	   $bod .=  '<span class="link text-danger fa fa-pencil-square-o muistin" for="'.$tvVal->id.'_'.$did.'_'.$tid.'" data-toggle="tooltip" data-placement="top" title="'.Yii::t('main', 'Valinta kopiontia tai siirtämistä varten').'"></span>';
-	   $bod .=  '&nbsp;<span class="link tv_edit '.$uusi_tilaus.'" id="tv_'.$tvVal->id.'">'.$al.' '.$osoite.'</span>';
+	   $bod .=  '&nbsp;<span class="link tv_edit" id="tv_'.$tvVal->id.'" style="'.$uusi_tilaus.'">'.$al.' '.$osoite.'</span>';
 
 	   if(!empty($tvVal->kohteet->avain))
 	   $bod .=  ' <b class="fa fa-key text-warning"></b>';
