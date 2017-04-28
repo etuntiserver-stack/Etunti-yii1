@@ -47,6 +47,15 @@ class MobileController extends Controller
 
 	public function isEtuntiAdmin() {
 
+		if(!isset(Yii::app()->user->adminID))
+		{
+			//die('login error');
+		  	echo '<script type="text/javascript">
+				window.location.href=location.protocol + "//" + location.host + "/index.php/site/index";
+			</script>';
+			exit;
+		}
+
 		if(isset(Yii::app()->user->adminID))
 		{
 		$m = Administrators::model()->findbypk(Yii::app()->user->adminID);
@@ -1680,6 +1689,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		//unset(Yii::app()->session['Tekija']);
 		if(Yii::app()->request->getPost('Tekija'))
 		Yii::app()->session['Tekija'] = Yii::app()->request->getPost('Tekija');
+
 
 		if(isset($_POST['yhtvetoform']))
 		{
