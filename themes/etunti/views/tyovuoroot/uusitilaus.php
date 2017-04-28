@@ -284,8 +284,7 @@ $(document).ready(function(){
 
 
 <div class="row">
-
-  <div class="col-sm-6">
+  <div class="col-sm-3">
 		<?php echo $form->labelEx($model,'tyoajanmerkinta'); ?>
 		<?php
         	$tal = Valikkoot::model()->findAll(" select_type='tyoajanmerkinta' ", array('order' => 'select_type'));
@@ -308,6 +307,34 @@ $(document).ready(function(){
         	?>
 
   </div>
+
+  <div class="col-sm-3">
+		<label><?php echo Yii::t('main', 'Työpari'); ?></label><br>
+		<?php 
+		$tyopaari = json_decode($model->tyopaari, true);
+
+		$criteria=new CDbCriteria;
+		$criteria->order =" tekijan_nimi ";
+		$criteria->condition =" aktiivinen=1 and id!='".$model->tid."' ";
+
+ 		$tt = Tyontekijat::model()->findAll($criteria);
+		if(isset($tt[0]))
+		{
+			echo '<select name="tyopaari[]" id="tyopaari" class="mult" multiple>';
+			foreach($tt as $tekija)
+			{
+			  if(is_array($tyopaari) and in_array($tekija->id,$tyopaari, true))
+			    echo '<option value="'.$tekija->id.'" selected>'.$this->etuSukunimi($tekija->id).'</option>';
+			  else
+			    echo '<option value="'.$tekija->id.'">'.$this->etuSukunimi($tekija->id).'</option>';
+			}
+			echo '</select>';
+		}
+		?>
+
+
+  </div>
+
   <div class="col-sm-6">
 		<?php echo $form->labelEx($model,'tid'); ?>
 
@@ -321,7 +348,9 @@ $(document).ready(function(){
 
         	<?php echo $form->dropDownList($model, 'tid', $list,array('empty'=>'Valitse','class'=>'form-control'));	?>
   </div>
+</div>
 
+<div class="row">
   <div class="col-sm-6">
 		<?php echo $form->labelEx($model,'toimenpiteet'); ?>
 		<?php echo $form->textarea($model,'toimenpiteet',array('rows'=>4,'class'=>'form-control', 
@@ -581,7 +610,18 @@ function laatikonPaivays(thisDataReturn){
   });
 
 
-
+  $('.mult').multiselect({
+	//inheritClass: true,
+	//enableFiltering: true,
+        includeSelectAllOption: true,
+	nonSelectedText: '<?php echo Yii::t("main", "Tyhjä"); ?>',
+	selectAllText: '<?php echo Yii::t("main", "Valitse kaikki"); ?>',
+	allSelectedText: '<?php echo Yii::t("main", "Kaikki"); ?>',
+	nSelectedText: '<?php echo Yii::t("main", "valittu"); ?>',
+	numberDisplayed: 0,
+	buttonWidth: '100%',
+        maxHeight: 300,
+  });
 
 
 
