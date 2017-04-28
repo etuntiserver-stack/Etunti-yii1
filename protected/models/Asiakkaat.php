@@ -50,7 +50,7 @@ class Asiakkaat extends DB2ActiveRecord
 			//array('etunimi, sukunimi, osoite, kaupunki, postinumero, puhelin, sahkoposti, ryhma, aktiivinen', 'required'),
 			array('kirjeenluokka, muistutuslasku_auto, aktiivinen, netvisorkey, onlinevarauksen_asiakas, asiakastila', 'numerical', 'integerOnly'=>true),
 			array('myyja, postinumero, k_postinumero, yhteyshenkilo, yrityksen_nimi, y_tunnus, kaupunki, k_kaupunki, puhelin, sahkoposti', 'length', 'max'=>100),
-			array('tyyppi, laskutus_kanava, osoite, k_osoite, verkkolaskuosoite, salasana, ryhma', 'length', 'max'=>255),
+			array('tyyppi, laskutus_kanava, osoite, k_osoite, verkkolaskuosoite, salasana, ryhma, sahkopostilaskuosoite', 'length', 'max'=>255),
 			array('maksuehto, viivastyskorko', 'length', 'max'=>20),
 			array('alv', 'length', 'max'=>3),
 			array('hinta_tyyppi', 'length', 'max'=>50),
@@ -109,6 +109,7 @@ class Asiakkaat extends DB2ActiveRecord
 			'kirjeenluokka'=> Yii::t('main', 'Kirjeenluokka'),
 			'myyja'=> Yii::t('main', 'Myyjä'),
 			'salasana'=> Yii::t('main', 'Extranet-salasana'),
+			'sahkopostilaskuosoite'=> Yii::t('main', 'Sähköpostilaskuosoite'),
 		);
 	}
 

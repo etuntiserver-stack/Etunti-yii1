@@ -508,7 +508,13 @@ class LaskuController extends Controller
 		if(!empty($a->maksuehto))
 		$erapaiva = date("d.m.Y",strtotime("+$a->maksuehto day"));
 
-		echo json_encode($a->laskutus_kanava."//".$a->maksuehto."//".$tyyppi."//".$a->osoite."//".$a->postinumero."//".$a->kaupunki."//".$a->yhteyshenkilo."//".$a->puhelin."//".$kodeOn."//".$erapaiva."//".$a->valittajan_tunnus."//".$a->verkkolaskuosoite."//".$a->muistutuslasku_auto."//".$a->kirjeenluokka."//".$a->sahkoposti."//".$a->viivastyskorko);
+		$sahkoposti = '';
+		if(!empty($a->sahkopostilaskuosoite))
+			$sahkoposti = $a->sahkopostilaskuosoite;
+		else
+			$sahkoposti = $a->sahkoposti;
+
+		echo json_encode($a->laskutus_kanava."//".$a->maksuehto."//".$tyyppi."//".$a->osoite."//".$a->postinumero."//".$a->kaupunki."//".$a->yhteyshenkilo."//".$a->puhelin."//".$kodeOn."//".$erapaiva."//".$a->valittajan_tunnus."//".$a->verkkolaskuosoite."//".$a->muistutuslasku_auto."//".$a->kirjeenluokka."//".$sahkoposti."//".$a->viivastyskorko);
 	}
 
 
@@ -596,6 +602,7 @@ class LaskuController extends Controller
 			// Viite
 			$viite = $this->Viite($model->as_nro."00".$model->id);
 			Lasku::model()->updatebypk($model->id, array('viitenumero'=>$viite));
+
 
 
 

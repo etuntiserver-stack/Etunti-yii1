@@ -280,6 +280,12 @@ $uusiSalasana = $this->generatePassword();
 	</div>
 
 	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'sahkopostilaskuosoite'); ?>
+		<?php echo $form->textField($model,'sahkopostilaskuosoite',array('class'=>'form-control')); ?>
+		<?php echo $form->error($model,'sahkopostilaskuosoite'); ?>
+	</div>
+
+	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'kirjeenluokka'); ?>
 		<?php
 		$list = array(	'1'=>Yii::t('main','Luokka 1'),
