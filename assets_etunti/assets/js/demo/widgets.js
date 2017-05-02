@@ -621,6 +621,7 @@ var demoHighCharts = function () {
                             }
                         },
                         yAxis: {
+
                             title: {
                                 text: null
                             },
@@ -1317,10 +1318,39 @@ var demoHighCharts = function () {
 		}
 
 
+	var eDico = function() {
+
+                var tb = '';
+
+        	$.ajax({
+	           url: location.protocol + "//" + location.host + '/index.php/site/edico_etusivulle',
+	           //type: "POST",
+		   //async: false,
+		   //data: { month1 : month1, month2 : month2 },
+	           success: function(data){
+			data = JSON.parse(data);
+
+			if(data['avoin_vinkit'])
+			$('#edico').show();
+
+			if(data['avoin_vinkit'] !== ''){
+			$('#edico table tbody').append('<tr><td>'+ data['avoin_vinkit'] +'</td><td><a href="'+location.protocol + '//' + location.host + '/index.php/vinkkiExtranet">Avoimet vinkit</a></td></tr>');
+			}
+			if(data['kasittelyt_vinkit'] !== '')
+			$('#edico table tbody').append('<tr><td>'+ data['kasittelyt_vinkit'] +'</td><td><a href="'+location.protocol + '//' + location.host + '/index.php/vinkkiExtranet">Käsittelyt vinkit</a></td></tr>');
+	           }
+	        });
+
+
+	}
+
+
 	return {
         init: function () {
 
             // Init Demo Charts 
+	    eDico();
+
             demoHighCharts();
             demoHighChartMenus();
 

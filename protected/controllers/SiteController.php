@@ -41,7 +41,7 @@ class SiteController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', 
-				'actions'=>array('etusivu','ohjesivu','etusivu_esimerki', 'change_color', 'valiko', 'valiko_ajax', 'kohderyhma', 'ohjevideot', 'mobemu', 'etusivu_ajax', 'ulkonaky', 'autocomplete', 'synkronoi_gps_sijainti', 'mail_template', 'getcityes'),
+				'actions'=>array('etusivu','ohjesivu','etusivu_esimerki', 'change_color', 'valiko', 'valiko_ajax', 'kohderyhma', 'ohjevideot', 'mobemu', 'etusivu_ajax', 'ulkonaky', 'autocomplete', 'synkronoi_gps_sijainti', 'mail_template', 'getcityes', 'edico_etusivulle'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('allow', 
@@ -142,6 +142,33 @@ class SiteController extends Controller
 	public function actionMail_template()
 	{
 		$this->renderPartial('mail_template');
+	}
+
+	protected function tasot($num)
+	{
+		$tas = array();
+		if(isset(Yii::app()->user->adminPaketti)) 
+		$tas = explode(",",Yii::app()->user->adminPaketti);
+		if(in_array($num,$tas))
+		return true;
+		else
+		return false;
+	}
+
+	public function actionEdico_etusivulle()
+	{
+		$return = array();
+
+		if($this->tasot(5)) // crm
+		{
+			$avoin_vinkit = VinkkiExtranet::model()->findAll(" tila=1 ");
+			$kasittelyt_vinkit = VinkkiExtranet::model()->findAll(" tila!=1 ");
+			$return['avoin_vinkit'] = count($avoin_vinkit);
+			$return['kasittelyt_vinkit'] = count($kasittelyt_vinkit);
+		}
+
+		echo json_encode($return);
+		exit;
 	}
 
 	public function actionUlkonaky()
@@ -662,6 +689,40 @@ $(document).ready(function(){
 
 	public function actionEtusivu()
 	{
+
+
+
+		// <-- Backup
+		if (!file_exists(Yii::app()->basePath."/../backup/".Yii::app()->user->domain.'/'.date("Y-m-d").'_'.Yii::app()->user->domain.'.sql.gz')
+		and $_SERVER['REMOTE_ADDR'] != '::1' and $_SERVER['REMOTE_ADDR'] != '127.0.0.1'
+		)
+		{
+
+		   if (!file_exists(Yii::app()->basePath."/../backup/".Yii::app()->user->domain)) {
+		  	mkdir(Yii::app()->basePath."/../backup/".Yii::app()->user->domain, 0777, true);
+		   }
+
+
+		  	    exec("/usr/bin/mysqldump -u mulgikapsas -pKristinA1 ".Yii::app()->user->domain." | gzip -c > backup/".Yii::app()->user->domain."/".date("Y-m-d")."_".Yii::app()->user->domain.".sql.gz");
+
+
+		      	    //echo '<span id="uusiVarmuskopioText">uusi varmuskopio on tehty</span>';
+
+		   	    foreach(array_reverse(glob(Yii::app()->baseUrl.'backup/'.Yii::app()->user->domain.'/*')) as $file) 
+			    {
+				$explNimi = explode("/",$file);
+				$explNimi2 = explode("_",end($explNimi));
+				if($explNimi2[0] < date("Y-m-d", strtotime("-7 day")))
+				{
+					//echo $explNimi2[0].' '.date("Y-m-d", strtotime("-7 day")).'<br>';
+					unlink(Yii::app()->basePath.'/../backup/'.Yii::app()->user->domain.'/'.end($explNimi));
+				}
+		   	    }
+		
+		
+		}
+		// Backup -->
+
 
 		if(isset($_POST['currentBody']))
 		Yii::app()->user->setState('currentBody',$_POST['currentBody']);

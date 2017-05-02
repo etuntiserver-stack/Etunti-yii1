@@ -9,51 +9,6 @@
 	// Change password to bcrypt -->
 
 
-$criteria=new CDbCriteria;
-$criteria->condition = " 
-	DATE(time) < (DATE_SUB(CURDATE(), INTERVAL 2 DAY)) 
-	AND tila=0
-";
-$vinkki = VinkkiExtranet::model()->find($criteria);
-if(isset($vinkki->id))
-echo '<p><div class="alert alert-danger">'.Yii::t('main', 'Käsittelemättömiä vinkkejä').' ID: '.$vinkki->id.'</div></p>';
-
-// <-- Backup
-if (!file_exists(Yii::app()->basePath."/../backup/".Yii::app()->user->domain.'/'.date("Y-m-d").'_'.Yii::app()->user->domain.'.sql.gz'))
-{
-
-   if (!file_exists(Yii::app()->basePath."/../backup/".Yii::app()->user->domain)) {
-  	mkdir(Yii::app()->basePath."/../backup/".Yii::app()->user->domain, 0777, true);
-  }
-
-
-  	if( $_SERVER['REMOTE_ADDR'] == '::1' or $_SERVER['REMOTE_ADDR'] == '127.0.0.1' )
-  	{
-	
-  	} else {
-
-  	    exec("/usr/bin/mysqldump -u mulgikapsas -pKristinA1 ".Yii::app()->user->domain." | gzip -c > backup/".Yii::app()->user->domain."/".date("Y-m-d")."_".Yii::app()->user->domain.".sql.gz");
-
-
-      	    //echo '<span id="uusiVarmuskopioText">uusi varmuskopio on tehty</span>';
-
-   	    foreach(array_reverse(glob(Yii::app()->baseUrl.'backup/'.Yii::app()->user->domain.'/*')) as $file) 
-	    {
-		$explNimi = explode("/",$file);
-		$explNimi2 = explode("_",end($explNimi));
-		if($explNimi2[0] < date("Y-m-d", strtotime("-7 day")))
-		{
-			//echo $explNimi2[0].' '.date("Y-m-d", strtotime("-7 day")).'<br>';
-			unlink(Yii::app()->basePath.'/../backup/'.Yii::app()->user->domain.'/'.end($explNimi));
-		}
-   	    }
-
-  	}
-
-}
-// Backup -->
-
-
 $months=array(
 	'01'=>Yii::t('main', 'Tammikuu'),
 	'02'=>Yii::t('main', 'Helmikuu'),
@@ -543,6 +498,26 @@ var etusivuAjax = function(){
 
             <div class="col-md-6 col-lg-3 admin-grid">
 
+
+              <!-- Text List -->
+              <div class="panel" id="edico" style="display:none">
+                <div class="panel-heading">
+                  <span class="panel-title"><?php echo Yii::t('main', 'eDico'); ?></span>
+                </div>
+                <div class="panel-body pn">
+                  <table class="table mbn tc-list-1 tc-text-muted-2 tc-fw600-2">
+                    <thead>
+                      <tr class="hidden">
+                        <th class="w30">#</th>
+                        <th>First Name</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
               <!-- Text List -->
               <div class="panel" id="p21">
                 <div class="panel-heading">
@@ -925,4 +900,7 @@ $("#tilanneKartalla").change(function(){
   <!-- JvectorMap Plugin + US Map (more maps in plugin/assets folder) -->
   <script src="<?php echo Yii::app()->request->baseUrl; ?>/assets_etunti/vendor/plugins/jvectormap/jquery.jvectormap.min.js"></script>
   <script src="<?php echo Yii::app()->request->baseUrl; ?>/assets_etunti/vendor/plugins/jvectormap/assets/jquery-jvectormap-us-lcc-en.js"></script> 
+
+  <!-- Widget Javascript -->
+  <script src="<?php echo Yii::app()->request->baseUrl; ?>/assets_etunti/assets/js/demo/widgets.js"></script>
 
