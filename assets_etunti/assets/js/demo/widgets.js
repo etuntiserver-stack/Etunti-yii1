@@ -622,6 +622,7 @@ var demoHighCharts = function () {
                         },
                         yAxis: {
 
+
                             title: {
                                 text: null
                             },
@@ -1320,8 +1321,8 @@ var demoHighCharts = function () {
 
 	var eDico = function() {
 
-                var tb = '';
-
+	   if( $('#p22').length )
+	   {
         	$.ajax({
 	           url: location.protocol + "//" + location.host + '/index.php/site/edico_etusivulle',
 	           //type: "POST",
@@ -1329,18 +1330,20 @@ var demoHighCharts = function () {
 		   //data: { month1 : month1, month2 : month2 },
 	           success: function(data){
 			data = JSON.parse(data);
-
-			if(data['avoin_vinkit'])
-			$('#edico').show();
+			console.log(data);
 
 			if(data['avoin_vinkit'] !== ''){
-			$('#edico table tbody').append('<tr><td>'+ data['avoin_vinkit'] +'</td><td><a href="'+location.protocol + '//' + location.host + '/index.php/vinkkiExtranet">Avoimet vinkit</a></td></tr>');
+			$('#p22 table tbody').append('<tr><td>'+ data['avoin_vinkit'] +'</td><td><a href="'+location.protocol + '//' + location.host + '/index.php/vinkkiExtranet">Avoimet vinkit</a></td></tr>');
 			}
 			if(data['kasittelyt_vinkit'] !== '')
-			$('#edico table tbody').append('<tr><td>'+ data['kasittelyt_vinkit'] +'</td><td><a href="'+location.protocol + '//' + location.host + '/index.php/vinkkiExtranet">Käsittelyt vinkit</a></td></tr>');
+			$('#p22 table tbody').append('<tr><td>'+ data['kasittelyt_vinkit'] +'</td><td><a href="'+location.protocol + '//' + location.host + '/index.php/vinkkiExtranet">Käsittelyt vinkit</a></td></tr>');
+
+			if(data['avoin_vinkit'])
+			$('#p22').show();
+
 	           }
 	        });
-
+	   }
 
 	}
 

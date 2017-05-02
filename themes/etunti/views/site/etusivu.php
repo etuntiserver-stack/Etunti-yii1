@@ -500,7 +500,8 @@ var etusivuAjax = function(){
 
 
               <!-- Text List -->
-              <div class="panel" id="edico" style="display:none">
+	      <?php if($this->tasot(5)) : ?>
+              <div class="panel" id="p22">
                 <div class="panel-heading">
                   <span class="panel-title"><?php echo Yii::t('main', 'eDico'); ?></span>
                 </div>
@@ -517,6 +518,7 @@ var etusivuAjax = function(){
                   </table>
                 </div>
               </div>
+	      <?php endif; ?>
 
               <!-- Text List -->
               <div class="panel" id="p21">
@@ -745,6 +747,7 @@ $("#tilanneKartalla").change(function(){
             </li>
             <li>
               <a href="#sidebar-right-tab3" data-toggle="tab">Tab 3</a>
+
             </li>
           </ul>
           <div class="tab-content br-n">
