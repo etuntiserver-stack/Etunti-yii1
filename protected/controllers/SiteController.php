@@ -41,7 +41,7 @@ class SiteController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', 
-				'actions'=>array('etusivu','ohjesivu','etusivu_esimerki', 'change_color', 'valiko', 'valiko_ajax', 'kohderyhma', 'ohjevideot', 'mobemu', 'etusivu_ajax', 'ulkonaky', 'autocomplete', 'synkronoi_gps_sijainti', 'mail_template', 'getcityes'),
+				'actions'=>array('etusivu','ohjesivu','etusivu_esimerki', 'change_color', 'valiko', 'valiko_ajax', 'kohderyhma', 'ohjevideot', 'mobemu', 'etusivu_ajax', 'ulkonaky', 'autocomplete', 'synkronoi_gps_sijainti', 'mail_template', 'getcityes', 'edico_etusivulle'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('allow', 
@@ -142,6 +142,18 @@ class SiteController extends Controller
 	public function actionMail_template()
 	{
 		$this->renderPartial('mail_template');
+	}
+
+	public function actionEdico_etusivulle()
+	{
+		$return = array();
+		$avoin_vinkit = VinkkiExtranet::model()->findAll(" tila=1 ");
+		$kasittelyt_vinkit = VinkkiExtranet::model()->findAll(" tila!=1 ");
+		$return['avoin_vinkit'] = count($avoin_vinkit);
+		$return['kasittelyt_vinkit'] = count($kasittelyt_vinkit);
+
+		echo json_encode($return);
+		exit;
 	}
 
 	public function actionUlkonaky()

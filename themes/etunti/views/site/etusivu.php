@@ -508,6 +508,26 @@ var etusivuAjax = function(){
 
             <div class="col-md-6 col-lg-3 admin-grid">
 
+
+              <!-- Text List -->
+              <div class="panel" id="edico">
+                <div class="panel-heading">
+                  <span class="panel-title"><?php echo Yii::t('main', 'eDico'); ?></span>
+                </div>
+                <div class="panel-body pn">
+                  <table class="table mbn tc-list-1 tc-text-muted-2 tc-fw600-2">
+                    <thead>
+                      <tr class="hidden">
+                        <th class="w30">#</th>
+                        <th>First Name</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
               <!-- Text List -->
               <div class="panel" id="p21">
                 <div class="panel-heading">
