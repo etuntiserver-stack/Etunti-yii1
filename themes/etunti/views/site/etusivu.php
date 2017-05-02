@@ -9,16 +9,6 @@
 	// Change password to bcrypt -->
 
 
-$criteria=new CDbCriteria;
-$criteria->condition = " 
-	DATE(time) < (DATE_SUB(CURDATE(), INTERVAL 2 DAY)) 
-	AND tila=0
-";
-$vinkki = VinkkiExtranet::model()->find($criteria);
-if(isset($vinkki->id))
-echo '<p><div class="alert alert-danger">'.Yii::t('main', 'Käsittelemättömiä vinkkejä').' ID: '.$vinkki->id.'</div></p>';
-
-
 $months=array(
 	'01'=>Yii::t('main', 'Tammikuu'),
 	'02'=>Yii::t('main', 'Helmikuu'),
