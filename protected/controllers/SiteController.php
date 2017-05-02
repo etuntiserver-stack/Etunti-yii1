@@ -163,8 +163,12 @@ class SiteController extends Controller
 		{
 			$avoin_vinkit = VinkkiExtranet::model()->findAll(" tila=1 ");
 			$kasittelyt_vinkit = VinkkiExtranet::model()->findAll(" tila!=1 ");
+			$avoin_palautteet = Palautteet::model()->findAll(" status=0 ");
+			$kasittelyt_palautteet = Palautteet::model()->findAll(" status!=0 ");
 			$return['avoin_vinkit'] = count($avoin_vinkit);
 			$return['kasittelyt_vinkit'] = count($kasittelyt_vinkit);
+			$return['avoin_palautteet'] = count($avoin_palautteet);
+			$return['kasittelyt_palautteet'] = count($kasittelyt_palautteet);
 		}
 
 		echo json_encode($return);

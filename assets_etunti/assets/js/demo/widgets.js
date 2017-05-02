@@ -1335,8 +1335,15 @@ var demoHighCharts = function () {
 			if(data['avoin_vinkit'] !== ''){
 			$('#p22 table tbody').append('<tr><td>'+ data['avoin_vinkit'] +'</td><td><a href="'+location.protocol + '//' + location.host + '/index.php/vinkkiExtranet">Avoimet vinkit</a></td></tr>');
 			}
-			if(data['kasittelyt_vinkit'] !== '')
+			if(data['kasittelyt_vinkit'] !== ''){
 			$('#p22 table tbody').append('<tr><td>'+ data['kasittelyt_vinkit'] +'</td><td><a href="'+location.protocol + '//' + location.host + '/index.php/vinkkiExtranet">Käsittelyt vinkit</a></td></tr>');
+			}
+			if(data['avoin_palautteet'] !== ''){
+			$('#p22 table tbody').append('<tr><td>'+ data['avoin_palautteet'] +'</td><td><a href="'+location.protocol + '//' + location.host + '/index.php/vinkkiExtranet">Avoimet palautteet</a></td></tr>');
+			}
+			if(data['kasittelyt_palautteet'] !== ''){
+			$('#p22 table tbody').append('<tr><td>'+ data['kasittelyt_palautteet'] +'</td><td><a href="'+location.protocol + '//' + location.host + '/index.php/vinkkiExtranet">Käsittelyt palautteet</a></td></tr>');
+			}
 
 			if(data['avoin_vinkit'])
 			$('#p22').show();
