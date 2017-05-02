@@ -3,6 +3,7 @@
    if(isset(Yii::app()->user->adminPaketti)) 
      $tas = explode(",",Yii::app()->user->adminPaketti);
 
+/*
 	// <-- Järjestelmanvalvojan kuluvia ryhmiä
 	$criteria = new CDbCriteria();
 	$criteria->order = " value ";
@@ -22,15 +23,15 @@
 		$ryhmaBody .= '
 		<div class="alert alert-default">
 			<h3>'.Yii::app()->user->nimi.'</h3> '.Yii::t('main', 'Työntekijöiden työryhmät').': <b>'.implode(", ", $tyoryhmat).'</b>
-		</div';
+		</div>';
 	}
 	// Järjestelmanvalvojan kuluvia ryhmiä -->
+*/
 ?>
 
 
         <!-- begin: .tray-center -->
         <div class="tray-center">
-
 
         <h2 class="myBgColors p10"> 
 	<div class="form-inline">
@@ -68,8 +69,32 @@ $(document).ready(function(){
 });
 </script>
 
+<?php /*
+          <div class="row">
+           <div class="col-sm-12">
+		<?php echo $ryhmaBody; ?>
+           </div>
+	  </div>	
+	  <br>
+*/ ?>
 
-	<?php echo $ryhmaBody; ?>	
+<!--
+          <div class="row">
+           <div class="col-sm-12">
+		<table class="table table-striped table-bordered">
+		 <tr>
+		  <th>blaa</th>
+		  <th>blaa 2</th>
+		 </tr>
+		 <tr>
+		  <th>45</th>
+		  <th>78</th>
+		 </tr>
+		</table>
+           </div>
+	  </div>
+	  <br>
+-->
 
           <div class="row">
 
@@ -127,9 +152,11 @@ $(document).ready(function(){
 
 	   echo '<select name="tekija[]" multiple class="mult">';
 	   foreach($tlist as $val){
+/*
 		if(count($tyoryhmat) > 0 and in_array($val->tyoryhma, $tyoryhmat))
 			echo '<option value="'.$val->id.'" selected>'.$this->etuSukunimi($val->id).'</option>';
 		else
+*/
 			echo '<option value="'.$val->id.'">'.$this->etuSukunimi($val->id).'</option>';
 	   }
 	   echo '</select>';
@@ -265,9 +292,11 @@ $(document).ready(function(){
       	<?php
 	   echo '<select name="tekija[]" multiple class="mult">';
 	   foreach($tlist as $val){
+/*
 		if(count($tyoryhmat) > 0 and in_array($val->tyoryhma, $tyoryhmat))
 			echo '<option value="'.$val->id.'" selected>'.$this->etuSukunimi($val->id).'</option>';
 		else
+*/
 			echo '<option value="'.$val->id.'">'.$this->etuSukunimi($val->id).'</option>';
 	   }
 	   echo '</select>';
@@ -407,9 +436,11 @@ $(document).ready(function(){
       	<?php
 	   echo '<select name="tekija[]" multiple class="mult">';
 	   foreach($tlist as $val){
+/*
 		if(count($tyoryhmat) > 0 and in_array($val->tyoryhma, $tyoryhmat))
 			echo '<option value="'.$val->id.'" selected>'.$this->etuSukunimi($val->id).'</option>';
 		else
+*/
 			echo '<option value="'.$val->id.'">'.$this->etuSukunimi($val->id).'</option>';
 	   }
 	   echo '</select>';
