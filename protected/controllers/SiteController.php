@@ -663,6 +663,40 @@ $(document).ready(function(){
 	public function actionEtusivu()
 	{
 
+
+
+		// <-- Backup
+		if (!file_exists(Yii::app()->basePath."/../backup/".Yii::app()->user->domain.'/'.date("Y-m-d").'_'.Yii::app()->user->domain.'.sql.gz')
+		and $_SERVER['REMOTE_ADDR'] != '::1' and $_SERVER['REMOTE_ADDR'] != '127.0.0.1'
+		)
+		{
+
+		   if (!file_exists(Yii::app()->basePath."/../backup/".Yii::app()->user->domain)) {
+		  	mkdir(Yii::app()->basePath."/../backup/".Yii::app()->user->domain, 0777, true);
+		   }
+
+
+		  	    exec("/usr/bin/mysqldump -u mulgikapsas -pKristinA1 ".Yii::app()->user->domain." | gzip -c > backup/".Yii::app()->user->domain."/".date("Y-m-d")."_".Yii::app()->user->domain.".sql.gz");
+
+
+		      	    //echo '<span id="uusiVarmuskopioText">uusi varmuskopio on tehty</span>';
+
+		   	    foreach(array_reverse(glob(Yii::app()->baseUrl.'backup/'.Yii::app()->user->domain.'/*')) as $file) 
+			    {
+				$explNimi = explode("/",$file);
+				$explNimi2 = explode("_",end($explNimi));
+				if($explNimi2[0] < date("Y-m-d", strtotime("-7 day")))
+				{
+					//echo $explNimi2[0].' '.date("Y-m-d", strtotime("-7 day")).'<br>';
+					unlink(Yii::app()->basePath.'/../backup/'.Yii::app()->user->domain.'/'.end($explNimi));
+				}
+		   	    }
+		
+		
+		}
+		// Backup -->
+
+
 		if(isset($_POST['currentBody']))
 		Yii::app()->user->setState('currentBody',$_POST['currentBody']);
 		

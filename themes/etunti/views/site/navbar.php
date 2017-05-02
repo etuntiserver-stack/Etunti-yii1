@@ -1312,8 +1312,7 @@ nyt ne ovat etusivu.php ssa
   <script src="<?php echo Yii::app()->request->baseUrl; ?>/assets_etunti/assets/js/demo/demo.js"></script>
   <script src="<?php echo Yii::app()->request->baseUrl; ?>/assets_etunti/assets/js/main.js"></script>
 
-  <!-- Widget Javascript -->
-  <script src="<?php echo Yii::app()->request->baseUrl; ?>/assets_etunti/assets/js/demo/widgets.js"></script>
+
   <script type="text/javascript">
   jQuery(document).ready(function() {
 
