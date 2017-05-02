@@ -4,7 +4,6 @@
 /* @var $form CActiveForm */
 ?>
 
-<div class="form">
 
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'digisten-tunnit-kk-form',
@@ -15,56 +14,54 @@
 	'enableAjaxValidation'=>false,
 )); ?>
 
-	<p class="note">Fields with <span class="required">*</span> are required.</p>
+<div class="row">
+ <div class="col-sm-4">
 
 	<?php echo $form->errorSummary($model); ?>
 
-	<div class="row">
-		<?php echo $form->labelEx($model,'time'); ?>
-		<?php echo $form->textField($model,'time'); ?>
-		<?php echo $form->error($model,'time'); ?>
-	</div>
-
-	<div class="row">
+	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'domain'); ?>
-		<?php echo $form->textField($model,'domain',array('size'=>60,'maxlength'=>255)); ?>
+		<?php echo $form->textField($model,'domain',array('size'=>60,'maxlength'=>255, 'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'domain'); ?>
 	</div>
 
-	<div class="row">
+	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'year'); ?>
-		<?php echo $form->textField($model,'year'); ?>
+		<?php echo $form->textField($model,'year', array('class'=>'form-control')); ?>
 		<?php echo $form->error($model,'year'); ?>
 	</div>
 
-	<div class="row">
+	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'month'); ?>
-		<?php echo $form->textField($model,'month'); ?>
+		<?php echo $form->textField($model,'month', array('class'=>'form-control')); ?>
 		<?php echo $form->error($model,'month'); ?>
 	</div>
 
-	<div class="row">
+	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'tunnit'); ?>
-		<?php echo $form->textField($model,'tunnit'); ?>
+		<?php echo $form->textField($model,'tunnit', array('class'=>'form-control')); ?>
 		<?php echo $form->error($model,'tunnit'); ?>
 	</div>
 
-	<div class="row">
+	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'tasot'); ?>
-		<?php echo $form->textArea($model,'tasot',array('rows'=>6, 'cols'=>50)); ?>
+		<?php echo $form->textArea($model,'tasot',array('rows'=>6, 'cols'=>50, 'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'tasot'); ?>
 	</div>
 
-	<div class="row">
+	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'maksettu'); ?>
-		<?php echo $form->textField($model,'maksettu'); ?>
+		<?php echo $form->textField($model,'maksettu', array('class'=>'form-control')); ?>
 		<?php echo $form->error($model,'maksettu'); ?>
 	</div>
 
-	<div class="row buttons">
-		<?php echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save'); ?>
+ </div>
+</div><!-- form -->
+
+	<div class="section buttons">
+		<?php echo CHtml::submitButton($model->isNewRecord ? 'Luo' : 'Tallenna', array('class'=>'btn btn-primary')); ?>
 	</div>
 
 <?php $this->endWidget(); ?>
 
-</div><!-- form -->
+

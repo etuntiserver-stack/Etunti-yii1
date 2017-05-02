@@ -31,7 +31,7 @@ class DigistenTunnitKk extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('time, year, month, tunnit, tasot', 'required'),
+			array('year, month, tunnit, tasot', 'required'),
 			array('year, month, tunnit, maksettu', 'numerical', 'integerOnly'=>true),
 			array('domain', 'length', 'max'=>255),
 			// The following rule is used by search().
