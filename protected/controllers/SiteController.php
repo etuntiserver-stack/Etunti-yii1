@@ -144,13 +144,28 @@ class SiteController extends Controller
 		$this->renderPartial('mail_template');
 	}
 
+	protected function tasot($num)
+	{
+		$tas = array();
+		if(isset(Yii::app()->user->adminPaketti)) 
+		$tas = explode(",",Yii::app()->user->adminPaketti);
+		if(in_array($num,$tas))
+		return true;
+		else
+		return false;
+	}
+
 	public function actionEdico_etusivulle()
 	{
 		$return = array();
-		$avoin_vinkit = VinkkiExtranet::model()->findAll(" tila=1 ");
-		$kasittelyt_vinkit = VinkkiExtranet::model()->findAll(" tila!=1 ");
-		$return['avoin_vinkit'] = count($avoin_vinkit);
-		$return['kasittelyt_vinkit'] = count($kasittelyt_vinkit);
+
+		if($this->tasot(5)) // crm
+		{
+			$avoin_vinkit = VinkkiExtranet::model()->findAll(" tila=1 ");
+			$kasittelyt_vinkit = VinkkiExtranet::model()->findAll(" tila!=1 ");
+			$return['avoin_vinkit'] = count($avoin_vinkit);
+			$return['kasittelyt_vinkit'] = count($kasittelyt_vinkit);
+		}
 
 		echo json_encode($return);
 		exit;

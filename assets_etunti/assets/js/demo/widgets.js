@@ -1329,9 +1329,12 @@ var demoHighCharts = function () {
 		   //data: { month1 : month1, month2 : month2 },
 	           success: function(data){
 			data = JSON.parse(data);
-			//console.log( data );
+
+			if(data['avoin_vinkit'])
+			$('#edico').show();
+
 			if(data['avoin_vinkit'] !== ''){
-			$('#edico table tbody').append('<tr><td>'+ data['avoin_vinkit'] +'</td><td><a href="'+location.protocol + '//' + location.host + '/index.php/vinkkiExtranet">Avoin vinkit</a></td></tr>');
+			$('#edico table tbody').append('<tr><td>'+ data['avoin_vinkit'] +'</td><td><a href="'+location.protocol + '//' + location.host + '/index.php/vinkkiExtranet">Avoimet vinkit</a></td></tr>');
 			}
 			if(data['kasittelyt_vinkit'] !== '')
 			$('#edico table tbody').append('<tr><td>'+ data['kasittelyt_vinkit'] +'</td><td><a href="'+location.protocol + '//' + location.host + '/index.php/vinkkiExtranet">Käsittelyt vinkit</a></td></tr>');

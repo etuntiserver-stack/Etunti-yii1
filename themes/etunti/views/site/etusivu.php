@@ -500,7 +500,7 @@ var etusivuAjax = function(){
 
 
               <!-- Text List -->
-              <div class="panel" id="edico">
+              <div class="panel" id="edico" style="display:none">
                 <div class="panel-heading">
                   <span class="panel-title"><?php echo Yii::t('main', 'eDico'); ?></span>
                 </div>
