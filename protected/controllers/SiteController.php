@@ -156,6 +156,13 @@ class SiteController extends Controller
 	public function TuntiaYhteensa()
 	{
 
+
+		//$from = date("Y-m-d", strtotime($from));
+		//$to = date("Y-m-d", strtotime($to));
+
+		$from = '2017-01-01';
+		$to = date("Y-m-d");
+
 		$result = 0;
 
        		$criteria = new CDbCriteria();
@@ -165,7 +172,7 @@ class SiteController extends Controller
 		";
 	        $criteria->condition = " 
 			aloitan!='' AND loppui!=''
-			AND tid='".$tid."'
+			BETWEEN '".$from."' AND '".$to."'
 			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
 			AND id NOT IN (SELECT kid FROM sivexkuitti_repaired)
 
@@ -180,7 +187,7 @@ class SiteController extends Controller
 		";
 	        $criteria->condition = " 
 			aloitan!='' AND loppui!=''
-			AND tid='".$tid."'
+			BETWEEN '".$from."' AND '".$to."'
 			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
 		";
 		$tot = Toteutuneet::model()->find($criteria);
@@ -540,6 +547,7 @@ class SiteController extends Controller
 		if(isset($_POST['Domainit']))
 		{
 			$model->attributes=$_POST['Domainit'];
+			$model->time=date("Y-m-d H:i:s", strtotime($model->time));
 			if(isset($_POST['tasot'])) $model->paketti = implode(",",$_POST['tasot']);
 			if($model->save())
 				$this->redirect(array('etunnin_asiakkaat'));
