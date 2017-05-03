@@ -187,9 +187,9 @@ if(isset(Yii::app()->user->nimi))
 <script type="text/javascript">
 $(document).ready(function(){
 
-	$('input[type="text"]').attr('readonly', 'yes').attr('data-toggle', 'tooltip').attr('title', 'Kokeiluversion on päättänyt');
-	$("select").attr('disabled', 'yes').attr('data-toggle', 'tooltip').attr('title', 'Kokeiluversion on päättänyt');
-	$('input[type="submit"]').attr('disabled', 'yes').attr('data-toggle', 'tooltip').attr('title', 'Kokeiluversion on päättänyt');
+	$('input[type="text"]').attr('readonly', 'yes').attr('data-toggle', 'tooltip').attr('title', 'Kokeiluversion käyttäminen on päättänyt');
+	$("select").attr('disabled', 'yes').attr('data-toggle', 'tooltip').attr('title', 'Kokeiluversion käyttäminen on päättänyt');
+	$('input[type="submit"]').attr('disabled', 'yes').attr('data-toggle', 'tooltip').attr('title', 'Kokeiluversion käyttäminen on päättänyt');
 });
 </script>
 <?php endif; ?>

@@ -445,6 +445,16 @@ public function actionImei($dom)
         case 'mob':
 
 
+	$asetukset = Asetukset::model()->findbypk(1);
+
+		// <-- check kokeiluversion
+		if( $asetukset->maksullinen == 0 and $asetukset->ilmainen_versio_kayttotunnit > 500 )
+		{
+        		$this->_sendResponse(200, CJSON::encode('Kokeiluversion käyttäminen on päättänyt'));
+			exit;
+		}
+		//    check kokeiluversion -->
+
 		// <-- check domain is not empty
 		if(!isset($dom) or empty($dom))
 		{
@@ -499,7 +509,7 @@ public function actionImei($dom)
 	}
 	//     Check Tyontekija -->
 
-	$asetukset = Asetukset::model()->findbypk(1);
+
 
 	    if(isset($_POST['check'])){
 
