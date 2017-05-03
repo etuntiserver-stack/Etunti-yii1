@@ -190,7 +190,7 @@ $(document).ready(function(){
 	$('input[type="text"]').attr('readonly', 'yes').attr('data-toggle', 'tooltip').attr('title', 'Kokeiluversion aikaraja on täyttynyt.');
 	$("select").attr('disabled', 'yes').attr('data-toggle', 'tooltip').attr('title', 'Kokeiluversion aikaraja on täyttynyt.');
 	$('input[type="submit"]').attr('disabled', 'yes').attr('data-toggle', 'tooltip').attr('title', 'Kokeiluversion aikaraja on täyttynyt.');
-	$('.plussa').remove();
+	$('.plussa, #uusiTilaus').remove();
 
 });
 </script>
