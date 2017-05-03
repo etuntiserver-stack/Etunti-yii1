@@ -41,7 +41,7 @@ class SiteController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', 
-				'actions'=>array('etusivu','ohjesivu','etusivu_esimerki', 'change_color', 'valiko', 'valiko_ajax', 'kohderyhma', 'ohjevideot', 'mobemu', 'etusivu_ajax', 'ulkonaky', 'autocomplete', 'synkronoi_gps_sijainti', 'mail_template', 'getcityes', 'edico_etusivulle'),
+				'actions'=>array('etusivu','ohjesivu','etusivu_esimerki', 'change_color', 'valiko', 'valiko_ajax', 'kohderyhma', 'ohjevideot', 'mobemu', 'etusivu_ajax', 'ulkonaky', 'autocomplete', 'synkronoi_gps_sijainti', 'mail_template', 'getcityes', 'edico_etusivulle', 'maksullinen'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('allow', 
@@ -136,6 +136,63 @@ class SiteController extends Controller
 		}
 
 		echo urldecode($count);
+	}
+
+	public function actionMaksullinen()
+	{
+		$state = '';
+		if(isset($_POST['state']))
+		{
+			if($_POST['state'] == 'false')
+			$state = 0;
+			if($_POST['state'] == 'true')
+			$state = 1;
+			Asetukset::model()->updateByPk(1, array('maksullinen' => $state));
+		}
+		echo json_encode($state);
+		exit;
+	}
+
+	public function TuntiaYhteensa()
+	{
+
+		$result = 0;
+
+       		$criteria = new CDbCriteria();
+        	$criteria->select = "
+			SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
+			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit
+		";
+	        $criteria->condition = " 
+			aloitan!='' AND loppui!=''
+			AND tid='".$tid."'
+			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
+			AND id NOT IN (SELECT kid FROM sivexkuitti_repaired)
+
+		";
+		$lu = Mobile::model()->find($criteria);
+
+
+       		$criteria = new CDbCriteria();
+        	$criteria->select = "
+			SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
+			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit
+		";
+	        $criteria->condition = " 
+			aloitan!='' AND loppui!=''
+			AND tid='".$tid."'
+			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
+		";
+		$tot = Toteutuneet::model()->find($criteria);
+
+		if(isset($lu->l_tunnit))
+		$result += $lu->l_tunnit;
+
+		if(isset($tot->l_tunnit))
+		$result += $tot->l_tunnit;
+
+
+		return $result;
 	}
 
 
