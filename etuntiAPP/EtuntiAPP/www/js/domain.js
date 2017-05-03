@@ -157,6 +157,7 @@ setTimeout(function() {
 	    	},
 	    		error:function (xhr, ajaxOptions, thrownError){
 	        	console.log(xhr.responseText);
+			$("#result2").html(xhr.responseText).show();
 	    	}
 	        });
 

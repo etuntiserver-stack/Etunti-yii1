@@ -459,7 +459,7 @@ public function actionImei($dom)
 		// <-- kokeiluversion
 		if(!$this->checkKokeiluversion())
 		{
-        		$this->_sendResponse(200, "eiLoytyTekija//Kokeiluversion käyttäminen on päättänyt");
+        		$this->_sendResponse(200, "eiLoytyTekija//Kokeiluversion aikaraja on täyttynyt.");
 			exit;
 		}
 		//     kokeiluversion -->
