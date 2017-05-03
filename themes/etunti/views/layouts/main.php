@@ -181,8 +181,19 @@ if(isset(Yii::app()->user->nimi))
 
 ?>
 
-<?php // endif; ?>
+<!-- Kokeiluversio -->
+<?php $asetukset = Asetukset::model()->findByPk(1); ?>
+<?php if( $asetukset->maksullinen == 0 and $asetukset->ilmainen_versio_kayttotunnit > 500 ) : ?>
+<script type="text/javascript">
+$(document).ready(function(){
 
+	$('input[type="text"]').attr('readonly', 'yes').attr('data-toggle', 'tooltip').attr('title', 'Kokeiluversion on päättänyt');
+	$("select").attr('disabled', 'yes').attr('data-toggle', 'tooltip').attr('title', 'Kokeiluversion on päättänyt');
+	$('input[type="submit"]').attr('disabled', 'yes').attr('data-toggle', 'tooltip').attr('title', 'Kokeiluversion on päättänyt');
+});
+</script>
+<?php endif; ?>
+<!-- Kokeiluversio -->
 
 	<title><?php echo CHtml::encode($this->pageTitle); ?></title>
 </head>

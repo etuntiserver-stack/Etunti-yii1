@@ -64,10 +64,6 @@ exit;
 
 
 		<!-- Maksullinen changer -->
-<?php
-	   $site = Yii::app()->createController('Site');
-	   echo $this->sprint( $site[0]->TuntiaYhteensa() );
-?>
 		<div class="row">
 		 <div class="col-lg-3 col-md-offset-4">
 		  <input type="checkbox" class="sw" id="maksullinen" <?php echo ($model->maksullinen == 1)? 'checked' : ''; ?>>

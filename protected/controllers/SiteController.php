@@ -153,51 +153,80 @@ class SiteController extends Controller
 		exit;
 	}
 
-	public function TuntiaYhteensa()
+	public function ilmainenLaskuri()
 	{
-
-
-		//$from = date("Y-m-d", strtotime($from));
-		//$to = date("Y-m-d", strtotime($to));
-
-		$from = '2017-01-01';
-		$to = date("Y-m-d");
 
 		$result = 0;
 
-       		$criteria = new CDbCriteria();
-        	$criteria->select = "
-			SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
-			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit
-		";
-	        $criteria->condition = " 
-			aloitan!='' AND loppui!=''
-			BETWEEN '".$from."' AND '".$to."'
-			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
-			AND id NOT IN (SELECT kid FROM sivexkuitti_repaired)
+		$domain = Domainit::model()->find(" domain='".Yii::app()->user->domain."' ");
 
-		";
-		$lu = Mobile::model()->find($criteria);
+		$begin = new DateTime( date("Y-m-d", strtotime($domain->time)) );
+		$end = new DateTime( date("Y-m-d") );
+
+		$interval = DateInterval::createFromDateString('1 day');
+		$period = new DatePeriod($begin, $interval, $end);
+
+		foreach ( $period as $dt )
+		{
+			$mobile = 0;
+			$pvm = $dt->format( "Y-m-d" );
+
+			// <-- Ensin katsotaan mobile taulusta toteutuneet
+	       		$criteria = new CDbCriteria();
+	        	$criteria->select = "
+				SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
+				DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit
+			";
+		        $criteria->condition = " 
+				aloitan!='' AND loppui!=''
+				AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = '".$pvm."'
+				AND id NOT IN (SELECT kid FROM sivexkuitti_repaired)
+	
+			";
+			$lu = Mobile::model()->find($criteria);
 
 
-       		$criteria = new CDbCriteria();
-        	$criteria->select = "
-			SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
-			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit
-		";
-	        $criteria->condition = " 
-			aloitan!='' AND loppui!=''
-			BETWEEN '".$from."' AND '".$to."'
-			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
-		";
-		$tot = Toteutuneet::model()->find($criteria);
+	       		$criteria = new CDbCriteria();
+	        	$criteria->select = "
+				SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
+				DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit
+			";
+		        $criteria->condition = " 
+				aloitan!='' AND loppui!=''
+				AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = '".$pvm."'
+			";
+			$tot = Toteutuneet::model()->find($criteria);
+	
+			if(isset($lu->l_tunnit))
+			$mobile += $lu->l_tunnit;
+	
+			if(isset($tot->l_tunnit))
+			$mobile += $tot->l_tunnit;
+			// Ensin katsotaan mobile taulusta toteutuneet -->
 
-		if(isset($lu->l_tunnit))
-		$result += $lu->l_tunnit;
+			if( $mobile > 0 )
+			{
+				$result += $mobile;
+			} else {
 
-		if(isset($tot->l_tunnit))
-		$result += $tot->l_tunnit;
+	       			$criteria = new CDbCriteria();
+		        	$criteria->select = "
+					SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppu, '%H:%i'), '%H:%i'), 
+					DATE_FORMAT(STR_TO_DATE(alku, '%H:%i'), '%H:%i')))) as l_tunnit
+				";
+			        $criteria->condition = " 
+					alku!='' AND loppu!=''
+					AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = '".$pvm."'
+				";
+				$tv = Tyovuoroot::model()->find($criteria);
 
+				if(isset($tv->l_tunnit))
+				$result += $tv->l_tunnit;
+
+			}
+	
+		}
+	
 
 		return $result;
 	}
@@ -759,6 +788,15 @@ $(document).ready(function(){
 	public function actionEtusivu()
 	{
 
+		$asetukset = Asetukset::model()->findByPk(1);
+
+		// <-- Ilmainen laskuri
+		if( $asetukset->maksullinen == 0 )
+		{
+			$ilmainen_tunti = ($this->ilmainenLaskuri()/3600);
+			Asetukset::model()->updateByPk(1, array('ilmainen_versio_kayttotunnit'=>$ilmainen_tunti));
+		}
+		//     Ilmainen laskuri -->
 
 
 		// <-- Backup

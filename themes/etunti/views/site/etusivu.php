@@ -9,6 +9,8 @@
 	// Change password to bcrypt -->
 
 
+	$asetukset = Asetukset::model()->findByPk(1);
+
 $months=array(
 	'01'=>Yii::t('main', 'Tammikuu'),
 	'02'=>Yii::t('main', 'Helmikuu'),
@@ -519,6 +521,48 @@ var etusivuAjax = function(){
                 </div>
               </div>
 	      <?php endif; ?>
+
+
+	      <?php
+		$prosentti = 0;
+		$ilmainen_tunti = 0;
+		if( $asetukset->ilmainen_versio_kayttotunnit > 0 )
+		$ilmainen_tunti = $asetukset->ilmainen_versio_kayttotunnit;
+		if( $ilmainen_tunti > 0 )
+		$prosentti = ($ilmainen_tunti*100)/500;
+
+		$pr_class = 'success';
+		if( $prosentti > 100 ){
+			$pr_class = 'danger';
+			Yii::app()->user->setState('ilmainen', false);
+		} else {
+			Yii::app()->user->setState('ilmainen', true);
+		}
+	      ?>
+	      <?php if($asetukset->maksullinen == 0) : ?>
+              <div class="panel" id="p_ilmainen">
+                <div class="panel-heading">
+                  <span class="panel-title"><?php echo Yii::t('main', 'Kokeiluversion'); ?></span>
+                </div>
+                <div class="panel-body pn">
+                  <table class="table mbn tc-list-1 tc-text-muted-2 tc-fw600-2">
+                    <thead>
+                      <tr class="hidden">
+                        <th class="w30">#</th>
+                        <th>First Name</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+		      <tr>
+			<td><h3 class="text-primary mn pl5"><?=$ilmainen_tunti?>h</h3></td>
+			<td><h3 class="text-<?=$pr_class?>-dark mn"> <i class="fa fa-caret-up"></i> <?=$prosentti?>% </h3></td>
+		      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+	      <?php endif; ?>
+
 
               <!-- Text List -->
               <div class="panel" id="p21">
