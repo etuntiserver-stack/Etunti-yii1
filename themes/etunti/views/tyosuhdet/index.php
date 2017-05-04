@@ -4,8 +4,8 @@
 
 
 $servername = "localhost";
-$username = "dbmanager";
-$password = "fv4-qcy-Gba-m9b";
+$username = "estromfi";
+$password = "Estrom2016!"; //fv4-qcy-Gba-m9b
 
 // Create connection
 $conn = new mysqli($servername, $username, $password);
