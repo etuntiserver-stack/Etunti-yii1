@@ -2,15 +2,25 @@
 /* @var $this TyosuhdetController */
 /* @var $dataProvider CActiveDataProvider */
 
-$this->breadcrumbs=array(
-	'Tyosuhdets',
-);
-/*
-$this->menu=array(
-	array('label'=>'Create Tyosuhdet', 'url'=>array('create')),
-	array('label'=>'Manage Tyosuhdet', 'url'=>array('admin')),
-);
-*/
+
+$servername = "localhost";
+$username = "mulgikapsas";
+$password = "KristinA1";
+
+// Create connection
+$conn = new mysqli($servername, $username, $password);
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+} 
+
+// Create database
+$sql = "CREATE DATABASE blaaaa";
+if ($conn->query($sql) === TRUE) {
+    echo "Database created successfully";
+} else {
+    echo "Error creating database: " . $conn->error;
+}
 ?>
 
 <?php if(!Yii::app()->request->getPost('tulosta')) : ?>
