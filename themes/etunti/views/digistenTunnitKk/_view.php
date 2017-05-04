@@ -18,13 +18,39 @@
 		?>
 	</td>
 	<td>
-		<?php echo $data->domain; ?>
+		<?php echo date("d.m.Y H:i", strtotime($data->time)); ?>
+	</td>
+	<td>
+		<?php if(isset($data->domainit->yritys)) echo $data->domainit->yritys; ?>
 	</td>
 	<td>
 		<?php echo $data->year.' / '.$data->month; ?>
 	</td>
 	<td>
 		<?php echo $data->tunnit; ?>
+	</td>
+	<td>
+		<?php 
+			echo $this->tuntihinta_laskin($data->id).' &euro;';
+		?>
+	</td>
+	<td>
+		<?php 
+			echo ($this->tuntihinta_laskin($data->id)*$data->tunnit).' &euro;';
+		?>
+	</td>
+	<td>
+		<?php echo CHtml::link(Yii::t('main', 'Luo lasku'), 
+				array('//lasku/create', 'digisten_tunnit_id'=>$data->id), 
+				array(
+					'class'=>'btn btn-warning', 
+					'style'=>'color:white', 
+					'data-toggle'=>'tooltip', 
+					'data-placement'=>'top', 
+					'title'=>Yii::t('main', 'Luo lasku') 
+				)
+			); 
+		?>
 	</td>
 </tr>
 

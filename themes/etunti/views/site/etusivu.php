@@ -542,7 +542,7 @@ var etusivuAjax = function(){
 	      <?php if($asetukset->maksullinen == 0) : ?>
               <div class="panel" id="p_ilmainen">
                 <div class="panel-heading">
-                  <span class="panel-title"><?php echo Yii::t('main', 'Kokeiluversion'); ?></span>
+                  <span class="panel-title"><?php echo Yii::t('main', 'Ilmainen käyttö'); ?></span>
                 </div>
                 <div class="panel-body pn">
                   <table class="table mbn tc-list-1 tc-text-muted-2 tc-fw600-2">

@@ -37,6 +37,51 @@
 
 	$ft = FirmanTiedot::model()->findByPk(1);
 
+	// <-- ilmainen versio laskuri
+		if( $asetukset->maksullinen == 0 )
+		{ 
+	   		$site = Yii::app()->createController('Site');
+			$site[0]->laskuri();
+		}
+	//     ilmainen versio laskuri -->
+
+	// <-- maksullinen versio
+		if( $asetukset->maksullinen == 1 )
+		{ 
+			$snapshot_paiva = 4;
+
+			if( date("j")  == $snapshot_paiva )
+			{
+				$criteria=new CDbCriteria;
+				$criteria->condition = " 
+					domain='".$d->domain."'
+					AND year = '".date("Y")."'
+					AND month = '".date("n")."'
+				";
+				$digisten_tunnit = DigistenTunnitKk::model()->find($criteria);
+	
+				if(!isset($digisten_tunnit->id))
+				{
+		   			$site = Yii::app()->createController('Site');
+					$tunnit = ($site[0]->laskuri())/3600;
+
+					$domainit = Domainit::model()->find(" domain='".$d->domain."' ");
+					(isset($domainit->id))? $paketti = $domainit->paketti : $paketti = '';
+
+					$dt = new DigistenTunnitKk;
+					$dt->domain_id = $d->id;
+					$dt->domain = $d->domain;
+					$dt->tunnit = $tunnit;
+					$dt->year = date("Y");
+					$dt->month = date("n");
+					$dt->tasot = $paketti;
+					$dt->save();
+				}
+	
+			}
+		}
+	//     maksullinen versio -->
+
 	// <-- Ilmoitus määräajan ylittäneistä kohteista
 		$message 	= '';
 		$arr 		= array();

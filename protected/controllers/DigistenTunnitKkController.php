@@ -53,6 +53,107 @@ class DigistenTunnitKkController extends Controller
                 parent::init();
         }
 
+	protected function tilanne($taso, $maara)
+	{
+		$return = 0;
+
+		// <-- eTyö
+		$val = 1; // Tunti ja työvuorot
+		if( $taso == $val and $maara <= 1000 ){
+			$return += 0.28;
+		} elseif( $taso == $val and ($maara > 1000 and $maara <= 2000) ){
+			$return += 0.25;
+		} elseif( $taso == $val and ($maara > 2000 and $maara <= 3000) ){
+			$return += 0.22;
+		} elseif( $taso == $val and ($maara > 3000 and $maara <= 6000) ){
+			$return += 0.20;
+		} elseif( $taso == $val and ($maara > 6000 and $maara <= 9000) ){
+			$return += 0.18;
+		} elseif( $taso == $val and $maara > 9000 ){
+			$return += 0.17;
+		}
+		//     eTyö -->
+
+		// <-- eLasku
+		$val = 3; // Laskutus
+		if( $taso == $val and $maara <= 1000 ){
+			$return += 0.05;
+		} elseif( $taso == $val and ($maara > 1000 and $maara <= 2000) ){
+			$return += 0.05;
+		} elseif( $taso == $val and ($maara > 2000 and $maara <= 3000) ){
+			$return += 0.04;
+		} elseif( $taso == $val and ($maara > 3000 and $maara <= 6000) ){
+			$return += 0.03;
+		} elseif( $taso == $val and ($maara > 6000 and $maara <= 9000) ){
+			$return += 0.03;
+		} elseif( $taso == $val and $maara > 9000 ){
+			$return += 0.02;
+		}
+		//     eLasku -->
+
+		// <-- eOnline
+		$val = 4; // Onlinevaraus
+		if( $taso == $val and $maara <= 1000 ){
+			$return += 0.03;
+		} elseif( $taso == $val and ($maara > 1000 and $maara <= 2000) ){
+			$return += 0.03;
+		} elseif( $taso == $val and ($maara > 2000 and $maara <= 3000) ){
+			$return += 0.02;
+		} elseif( $taso == $val and ($maara > 3000 and $maara <= 6000) ){
+			$return += 0.02;
+		} elseif( $taso == $val and ($maara > 6000 and $maara <= 9000) ){
+			$return += 0.02;
+		} elseif( $taso == $val and $maara > 9000 ){
+			$return += 0.02;
+		}
+		//     eOnline -->
+
+		// <-- eDico
+		$val = 5; // CRM / eDico
+		if( $taso == $val and $maara <= 1000 ){
+			$return += 0.05;
+		} elseif( $taso == $val and ($maara > 1000 and $maara <= 2000) ){
+			$return += 0.05;
+		} elseif( $taso == $val and ($maara > 2000 and $maara <= 3000) ){
+			$return += 0.04;
+		} elseif( $taso == $val and ($maara > 3000 and $maara <= 6000) ){
+			$return += 0.04;
+		} elseif( $taso == $val and ($maara > 6000 and $maara <= 9000) ){
+			$return += 0.03;
+		} elseif( $taso == $val and $maara > 9000 ){
+			$return += 0.02;
+		}
+		//     eDico -->
+
+
+		if($return > 0)
+			return $return;
+		else
+			return false;
+	}
+
+	protected function tuntihinta_laskin($id)
+	{
+
+		$model = $this->loadModel($id);
+		$return = 0;
+		if(isset($model->id))
+		{
+			$tasot = explode(",", $model->tasot);
+			if( is_array($tasot) )
+			{
+				foreach($tasot as $k=>$v)
+				{
+					if($v == 2) continue; // tyovuorot ei tarvitse erikseen
+					if($this->tilanne($v, $model->tunnit))
+					$return += $this->tilanne($v, $model->tunnit);
+				}
+			}
+		}
+		return $return;
+	}
+
+
 	protected function tasot($num)
 	{
 		$tas = array();

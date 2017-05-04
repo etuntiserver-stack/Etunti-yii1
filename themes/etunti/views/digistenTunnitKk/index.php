@@ -43,9 +43,13 @@
   <thead class="myBgColors">
   <tr>
   <th></th>
-  <th><?php echo Yii::t('main', 'Domain'); ?></th>
+  <th><?php echo Yii::t('main', 'Luotu'); ?></th>
+  <th><?php echo Yii::t('main', 'Yritys'); ?></th>
   <th><?php echo Yii::t('main', 'Vuosi / kk'); ?></th>
   <th><?php echo Yii::t('main', 'Tunnit'); ?></th>
+  <th><?php echo Yii::t('main', 'Tuntihinta'); ?></th>
+  <th><?php echo Yii::t('main', 'Hinta'); ?></th>
+  <th><?php echo Yii::t('main', 'Lasku'); ?></th>
   </tr>
   </thead>
   <?php $this->widget('zii.widgets.CListView', array(

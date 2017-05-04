@@ -153,14 +153,12 @@ class SiteController extends Controller
 		exit;
 	}
 
-	public function ilmainenLaskuri()
+	public function laskuri()
 	{
 
 		$result = 0;
 
-		$domain = Domainit::model()->find(" domain='".Yii::app()->user->domain."' ");
-
-		$begin = new DateTime( date("Y-m-d", strtotime($domain->time)) );
+		$begin = new DateTime( date("Y-m-d", strtotime('first day of this month')) );
 		$end = new DateTime( date("Y-m-d") );
 
 		$interval = DateInterval::createFromDateString('1 day');
@@ -227,10 +225,15 @@ class SiteController extends Controller
 	
 		}
 	
+		if($result > 0)
+		{
+			$ilmainen_tunti = ($result/3600);
+			Asetukset::model()->updateByPk(1, array('ilmainen_versio_kayttotunnit'=>$ilmainen_tunti));
+		}
 
 		return $result;
-	}
 
+	}
 
 	public function actionMail_template()
 	{
@@ -787,17 +790,6 @@ $(document).ready(function(){
 
 	public function actionEtusivu()
 	{
-
-		$asetukset = Asetukset::model()->findByPk(1);
-
-		// <-- Ilmainen laskuri
-		if( $asetukset->maksullinen == 0 )
-		{
-			$ilmainen_tunti = ($this->ilmainenLaskuri()/3600);
-			Asetukset::model()->updateByPk(1, array('ilmainen_versio_kayttotunnit'=>$ilmainen_tunti));
-		}
-		//     Ilmainen laskuri -->
-
 
 		// <-- Backup
 		if (!file_exists(Yii::app()->basePath."/../backup/".Yii::app()->user->domain.'/'.date("Y-m-d").'_'.Yii::app()->user->domain.'.sql.gz')

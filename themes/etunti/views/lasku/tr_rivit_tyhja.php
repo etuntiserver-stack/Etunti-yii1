@@ -1,8 +1,26 @@
 <?php
-if(isset($_POST['num'])){
-	$num = $_POST['num'];
-}
+	if(isset($_POST['num'])){
+		$num = $_POST['num'];
+	}
+	
+	$tuote = '';
+	$hinta = '';
+	$maara = '';
+	$yksikkot = $this->yksikkot(null);
 
+	if(isset($_POST['digisten_tunnit_id'])){
+		$digisten_tunnit_id = $_POST['digisten_tunnit_id'];
+		$model = DigistenTunnitKk::model()->findByPk($digisten_tunnit_id);
+		if(isset($model->id))
+		{
+			$DigistenTunnitKk = Yii::app()->createController('DigistenTunnitKk');
+			$hinta = $DigistenTunnitKk[0]->tuntihinta_laskin($model->id);
+			$maara = $model->tunnit;
+			$yksikkot = '<option value="h">h</option>';
+			$tuote = 'Etunti '.$model->month.'.'.$model->year;
+		}
+
+	}
 ?>
 
      <TR class="kaikkiTR" id="trRivi_<?php echo $num; ?>">
@@ -11,7 +29,7 @@ if(isset($_POST['num'])){
 
 	<input type="hidden" size="1" name="tuoteID[<?php echo $num; ?>]" id="tuoteID_<?php echo $num; ?>" class="form-control">
 
-	<input type="text" size="1" name="tkoodi[<?php echo $num; ?>]" id="tkoodi_<?php echo $num; ?>" class="for_tkoodi form-control" value="" data-toggle="collapse"  data-target="#lt_<?php echo $num; ?>">
+	<input type="text" size="1" name="tkoodi[<?php echo $num; ?>]" id="tkoodi_<?php echo $num; ?>" class="for_tkoodi form-control" value="<?=$tuote?>" data-toggle="collapse"  data-target="#lt_<?php echo $num; ?>">
 	<?php
 		$criteria = new CDbCriteria();
        		$criteria->condition = " is_active=1 ";
@@ -20,13 +38,13 @@ if(isset($_POST['num'])){
 	?>
 	</TD>
 
-	<TD><input type="text" size="5" name="kpl[<?php echo $num; ?>]" id="kpl_<?php echo $num; ?>" class="onlyDigits form-control" value=""><span class="errmsg"></span></TD>
+	<TD><input type="text" size="5" name="kpl[<?php echo $num; ?>]" id="kpl_<?php echo $num; ?>" class="onlyDigits form-control" value="<?=$maara?>"><span class="errmsg"></span></TD>
 	<TD>
 		<select type="text" name="yksikko[<?php echo $num; ?>]" id="yksikko_<?php echo $num; ?>" class="form-control">
-		<?php echo $this->yksikkot(null); ?>
+		<?php echo $yksikkot; ?>
 		</select>
 	</TD>
-	<TD><input type="text" size="10" name="hinta[<?php echo $num; ?>]" id="hinta_<?php echo $num; ?>" class="onlyDigits form-control" value="" step="0.01"><span class="errmsg"></span></TD>
+	<TD><input type="text" size="10" name="hinta[<?php echo $num; ?>]" id="hinta_<?php echo $num; ?>" class="onlyDigits form-control" value="<?=$hinta?>" step="0.01"><span class="errmsg"></span></TD>
 	<TD>
 		<select type="text" name="alv[<?php echo $num; ?>]" id="alv_<?php echo $num; ?>" class="form-control">
 		<?php echo $this->alv(null); ?>
