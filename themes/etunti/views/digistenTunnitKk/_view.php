@@ -31,12 +31,13 @@
 	</td>
 	<td>
 		<?php 
-			echo $this->tuntihinta_laskin($data->id).' &euro;';
+			echo number_format($this->tuntihinta_laskin($data->id), 2, ',', ' ').' &euro;';
 		?>
 	</td>
 	<td>
 		<?php 
-			echo ($this->tuntihinta_laskin($data->id)*$data->tunnit).' &euro;';
+			$sum = ($this->tuntihinta_laskin($data->id)*$data->tunnit);
+			echo number_format($sum, 2, ',', ' ').' &euro;';
 		?>
 	</td>
 	<td>
