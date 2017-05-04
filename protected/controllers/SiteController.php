@@ -45,7 +45,7 @@ class SiteController extends Controller
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('allow', 
-				'actions'=>array('index','test','hyvaksy','hylkaa', 'confirm'),
+				'actions'=>array('index','test','hyvaksy','hylkaa', 'confirm', 'aloita'),
 				'users'=>array('*'),
 			),
 			array('deny',  // deny all users
@@ -174,6 +174,12 @@ class SiteController extends Controller
 		echo json_encode($return);
 		exit;
 	}
+  
+  public function actionAloita(){
+    
+    $this->render('aloita');
+    
+  }
 
 	public function actionUlkonaky()
 	{
