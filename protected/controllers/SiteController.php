@@ -271,11 +271,37 @@ class SiteController extends Controller
 		exit;
 	}
   
-  public function actionAloita(){
+  	public function actionAloita()
+	{
+
+		$vastaus = '';
+
+		if(isset($_POST['yrityksen_nimi']))
+		{
+ 
+			$servername = "localhost";
+			$username = "dbmanager";
+			$password = "fv4-qcy-Gba-m9b"; //fv4-qcy-Gba-m9b
+	
+			// Create connection
+			$conn = new mysqli($servername, $username, $password);
+			// Check connection
+			if ($conn->connect_error) {
+			    die("Connection failed: " . $conn->connect_error);
+			} 
+	
+			// Create database
+			$sql = "CREATE DATABASE blaaaa";
+			if ($conn->query($sql) === TRUE) {
+			    $vastaus = "Database created successfully";
+			} else {
+			    $vastaus = "Error creating database: " . $conn->error;
+			}
+		}
+
+		$this->render('aloita', array('vastaus'=>$vastaus));
     
-    $this->render('aloita');
-    
-  }
+	}
 
 	public function actionUlkonaky()
 	{

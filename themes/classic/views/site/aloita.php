@@ -16,9 +16,8 @@
 <div class="container">
 
 <?php
-
-echo exec('ls -la');
-
+	if(isset($vastaus))
+		echo $vastaus;
 ?> 
   
 
@@ -27,7 +26,7 @@ echo exec('ls -la');
   <div class="panel panel-default">
     <div class="panel-heading"><?php echo Yii::t('main', 'Aloita Etunnin käyttäminen'); ?></div>
     <div class="panel-body">
-      <form action="#" method="POST">
+      	<form action="#" method="POST">
         <label><?php echo Yii::t('main', 'Yrityksen nimi')?></label>
         <input type="text" id="yrityksen_nimi" name="yrityksen_nimi" class="form-control input-lg" required autofocus>
         <label><?php echo Yii::t('main', 'Yritystunnus')?></label>
@@ -43,7 +42,7 @@ echo exec('ls -la');
         
 	<br>
         <button class="btn btn-lg btn-primary btn-group submit" type="submit"><?php echo Yii::t('main', 'Aloita'); ?></button>
-    </form>
+    	</form>
 	<div id="success"></div>
 
     </div>
