@@ -62,21 +62,25 @@
 	
 				if(!isset($digisten_tunnit->id))
 				{
+
 		   			$site = Yii::app()->createController('Site');
+					$tunnit = 0;
 					$tunnit = ($site[0]->laskuri())/3600;
 
 					$domainit = Domainit::model()->find(" domain='".$d->domain."' ");
 					(isset($domainit->id))? $paketti = $domainit->paketti : $paketti = '';
 
-					$dt = new DigistenTunnitKk;
-					$dt->domain_id = $d->id;
-					$dt->domain = $d->domain;
-					$dt->tunnit = $tunnit;
-					$dt->year = date("Y", strtotime('first day of last month'));
-					$dt->month = date("n", strtotime('first day of last month'));
-					$dt->tasot = $paketti;
 					if( $tunnit > 0 )
 					{
+
+						$dt = new DigistenTunnitKk;
+						$dt->domain_id = $d->id;
+						$dt->domain = $d->domain;
+						$dt->tunnit = $tunnit;
+						$dt->year = date("Y", strtotime('first day of last month'));
+						$dt->month = date("n", strtotime('first day of last month'));
+						$dt->tasot = $paketti;
+
 						if(!$dt->save())
 						var_dump($dt->getErrors());
 					}
