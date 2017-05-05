@@ -75,7 +75,8 @@
 					$dt->year = date("Y", strtotime('first day of last month'));
 					$dt->month = date("n", strtotime('first day of last month'));
 					$dt->tasot = $paketti;
-					$dt->save();
+					if( $tunnit > 0 )
+						$dt->save();
 				}
 	
 			}
