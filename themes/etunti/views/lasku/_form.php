@@ -72,6 +72,16 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
   <div class="col-sm-3">
   <legend><?php echo Yii::t('main', 'ASIAKAS'); ?></legend>
 
+	<?php if(isset($_GET['digisten_tunnit_id'])) : ?>
+	<div class="section fill mb5">
+		<?php
+		$digisten_tunnit_id = $_GET['digisten_tunnit_id'];
+		?>
+		<?php echo $form->hiddenField($model,'digisten_tunnit_id',array('value'=>$digisten_tunnit_id, 'class'=>'form-control')); ?>
+	</div>
+	<?php endif; ?>
+
+
 	<?php if(isset($model->id)) : ?> 
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'as_nro'); ?>
@@ -953,14 +963,19 @@ if(parseInt($("#forTilanne").val()) !== 0){
 if($("#modelID").val() != '1'){
     var rivi = $("#samaRivi").html();
     var rowCount = $('table#TableRivit tbody tr').length;
+    var digisten_tunnit_id = 0;
 
+    if( $('#Lasku_digisten_tunnit_id').length ){
+	digisten_tunnit_id = parseInt($('#Lasku_digisten_tunnit_id').val());
+    }
         $.ajax({
            url: location.protocol + "//" + location.host + '/index.php/lasku/tr_rivit_tyhja',
            type: "POST",
-           data: {num : rowCount},
+           data: {num : rowCount, digisten_tunnit_id : digisten_tunnit_id},
            success: function(html){
          	$("table#TableRivit tbody tr").last().after(html);
 	  	Rivi();
+		eachLaskenta();
            }
         });
 }

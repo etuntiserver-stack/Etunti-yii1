@@ -1,16 +1,6 @@
 <?php
 /* @var $this TyosuhdetController */
 /* @var $dataProvider CActiveDataProvider */
-
-$this->breadcrumbs=array(
-	'Tyosuhdets',
-);
-/*
-$this->menu=array(
-	array('label'=>'Create Tyosuhdet', 'url'=>array('create')),
-	array('label'=>'Manage Tyosuhdet', 'url'=>array('admin')),
-);
-*/
 ?>
 
 <?php if(!Yii::app()->request->getPost('tulosta')) : ?>

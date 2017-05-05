@@ -143,7 +143,7 @@ public $viesti;
 		return array(
 			array('domain', 'required'),
 			array('huoltokatko, palveluhinta_persiivoja, tyovuorohinta_persiivoja, muut_tyokaluhinta, aktiivinen', 'numerical', 'integerOnly'=>true),
-			array('domain, paketti, yritys, pakettin_nimetus', 'length', 'max'=>100),
+			array('time, domain, paketti, yritys, pakettin_nimetus', 'length', 'max'=>100),
 			array('puhelin, sahkoposti', 'length', 'max'=>255),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
@@ -178,6 +178,7 @@ public $viesti;
 			'palveluhinta_persiivoja'=> Yii::t('main', 'Palveluhinta per siivoja'),
 			'tyovuorohinta_persiivoja'=> Yii::t('main', 'Työvuorot hinta per siivoja'),
 			'muut_tyokaluhinta'=> Yii::t('main', 'Muut työkalut hinta'),
+			'time' => Yii::t('main', 'Perustettu'),
 		);
 	}
 

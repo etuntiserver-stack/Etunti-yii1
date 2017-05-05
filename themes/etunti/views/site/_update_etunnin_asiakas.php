@@ -2,6 +2,7 @@
 /* @var $this DomainitController */
 /* @var $model Domainit */
 /* @var $form CActiveForm */
+$model->time = date("d.m.Y", strtotime($model->time));
 ?>
 
 <div class="row">
@@ -16,8 +17,14 @@
 
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'domain'); ?>
-		<?php echo $form->textField($model,'domain',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
+		<?php echo $form->textField($model,'domain',array('size'=>60,'maxlength'=>100,'class'=>'form-control', 'readonly' => 'yes')); ?>
 		<?php echo $form->error($model,'domain'); ?>
+	</div>
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'time'); ?>
+		<?php echo $form->textField($model,'time',array('size'=>60,'maxlength'=>100,'class'=>'form-control datepickerFI')); ?>
+		<?php echo $form->error($model,'time'); ?>
 	</div>
 
 	<div class="section fill mb5">

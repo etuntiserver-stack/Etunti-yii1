@@ -37,6 +37,60 @@
 
 	$ft = FirmanTiedot::model()->findByPk(1);
 
+	// <-- ilmainen versio laskuri
+		if( $asetukset->maksullinen == 0 )
+		{ 
+	   		$site = Yii::app()->createController('Site');
+			$site[0]->laskuri();
+		}
+	//     ilmainen versio laskuri -->
+
+	// <-- maksullinen versio
+		if( $asetukset->maksullinen == 1 )
+		{ 
+			$snapshot_paiva = 5;
+
+			if( date("j")  == $snapshot_paiva )
+			{
+				$criteria=new CDbCriteria;
+				$criteria->condition = " 
+					domain='".$d->domain."'
+					AND year = '".date("Y", strtotime('first day of last month'))."'
+					AND month = '".date("n", strtotime('first day of last month'))."'
+				";
+				$digisten_tunnit = DigistenTunnitKk::model()->find($criteria);
+	
+				if(!isset($digisten_tunnit->id))
+				{
+
+		   			$site = Yii::app()->createController('Site');
+					$tunnit = 0;
+					$tunnit = ($site[0]->laskuri())/3600;
+
+					$domainit = Domainit::model()->find(" domain='".$d->domain."' ");
+					(isset($domainit->id))? $paketti = $domainit->paketti : $paketti = '';
+
+					if( $tunnit > 0 )
+					{
+
+						$dt = new DigistenTunnitKk;
+						$dt->domain_id = $d->id;
+						$dt->domain = $d->domain;
+						$dt->tunnit = (int)$tunnit;
+						$dt->year = date("Y", strtotime('first day of last month'));
+						$dt->month = date("n", strtotime('first day of last month'));
+						$dt->tasot = $paketti;
+
+						if(!$dt->save())
+						var_dump($dt->getErrors());
+					}
+
+				}
+	
+			}
+		}
+	//     maksullinen versio -->
+
 	// <-- Ilmoitus määräajan ylittäneistä kohteista
 		$message 	= '';
 		$arr 		= array();

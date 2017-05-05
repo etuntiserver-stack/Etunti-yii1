@@ -433,6 +433,18 @@ public function actionTiedosto($dom)
 }
 
 
+protected function checkKokeiluversion()
+{
+
+	$asetukset = Asetukset::model()->findbypk(1);
+	if( $asetukset->maksullinen == 0 and $asetukset->ilmainen_versio_kayttotunnit > 500 )
+	{
+        	return false;
+	} else {
+        	return true;
+	}
+
+}
 
 public function actionImei($dom)
 {
@@ -444,6 +456,13 @@ public function actionImei($dom)
         // Get an instance of the respective model
         case 'mob':
 
+		// <-- kokeiluversion
+		if(!$this->checkKokeiluversion())
+		{
+        		$this->_sendResponse(200, "eiLoytyTekija//Kokeiluversion aikaraja on täyttynyt.");
+			exit;
+		}
+		//     kokeiluversion -->
 
 		// <-- check domain is not empty
 		if(!isset($dom) or empty($dom))

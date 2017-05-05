@@ -63,6 +63,49 @@ exit;
 	   <h2 class="myBgColors p20"> <i class="fa fa-gear"></i> <?php echo Yii::t('main', 'ASETUKSET'); ?> </h2>
 
 
+		<!-- Maksullinen changer -->
+		<div class="row">
+		 <div class="col-lg-3 col-md-offset-4">
+		  <input type="checkbox" class="sw" id="maksullinen" <?php echo ($model->maksullinen == 1)? 'checked' : ''; ?>>
+		  <script type="text/javascript">
+		  $(document).ready(function(){
+
+		    $(".sw").bootstrapSwitch({
+			size: "large",
+			onColor: "success",
+			offColor: "warning",
+			onText: "Maksullinen",
+			offText: "Ilmainen"
+		    });
+
+    		    $('#maksullinen').on('switchChange.bootstrapSwitch', function (event, state) {
+    			console.log(state);
+
+		        $.ajax({
+		           url: location.protocol + "//" + location.host + '/index.php/site/maksullinen',
+		           type: "POST",
+		           data: { state : state },
+		           success: function(data){
+				var d = JSON.parse(data);
+				console.log(d);
+				if(d == '0')
+				$('#sw_result').html('<br><div class="alert bg-warning">Ilmainen palvelu</div>');
+				if(d == '1')
+				$('#sw_result').html('<br><div class="alert bg-success">Maksullinen palvelu</div>');
+		           }
+		        });
+
+    		    });
+
+
+		  });
+		  </script>
+		 </div>
+		</div>
+		<div id="sw_result"></div>
+		<!-- Maksullinen changer -->
+
+
 	   <p><div class="btn btn-primary btn-block myBgColors" data-toggle="collapse" data-target="#yrityksentiedot"><h3><?php echo Yii::t('main','Yrityksen tiedot'); ?> &nbsp; <i class="fa fa-caret-square-o-down" aria-hidden="true"></i> </h3></div></p>
 
             <div class="admin-form collapse" id="yrityksentiedot">

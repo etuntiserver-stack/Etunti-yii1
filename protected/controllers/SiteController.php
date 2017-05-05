@@ -41,11 +41,11 @@ class SiteController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', 
-				'actions'=>array('etusivu','ohjesivu','etusivu_esimerki', 'change_color', 'valiko', 'valiko_ajax', 'kohderyhma', 'ohjevideot', 'mobemu', 'etusivu_ajax', 'ulkonaky', 'autocomplete', 'synkronoi_gps_sijainti', 'mail_template', 'getcityes', 'edico_etusivulle'),
+				'actions'=>array('etusivu','ohjesivu','etusivu_esimerki', 'change_color', 'valiko', 'valiko_ajax', 'kohderyhma', 'ohjevideot', 'mobemu', 'etusivu_ajax', 'ulkonaky', 'autocomplete', 'synkronoi_gps_sijainti', 'mail_template', 'getcityes', 'edico_etusivulle', 'maksullinen'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('allow', 
-				'actions'=>array('index','test','hyvaksy','hylkaa', 'confirm'),
+				'actions'=>array('index','test','hyvaksy','hylkaa', 'confirm', 'aloita'),
 				'users'=>array('*'),
 			),
 			array('deny',  // deny all users
@@ -138,6 +138,102 @@ class SiteController extends Controller
 		echo urldecode($count);
 	}
 
+	public function actionMaksullinen()
+	{
+		$state = '';
+		if(isset($_POST['state']))
+		{
+			if($_POST['state'] == 'false')
+			$state = 0;
+			if($_POST['state'] == 'true')
+			$state = 1;
+			Asetukset::model()->updateByPk(1, array('maksullinen' => $state));
+		}
+		echo json_encode($state);
+		exit;
+	}
+
+	public function laskuri()
+	{
+
+		$result = 0;
+
+		$begin = new DateTime( date("Y-m-d", strtotime('first day of last month')) );
+		$end = new DateTime( date("Y-m-d", strtotime('last day of last month')) );
+
+		$interval = DateInterval::createFromDateString('1 day');
+		$period = new DatePeriod($begin, $interval, $end);
+
+		foreach ( $period as $dt )
+		{
+			$mobile = 0;
+			$pvm = $dt->format( "Y-m-d" );
+
+			// <-- Ensin katsotaan mobile taulusta toteutuneet
+	       		$criteria = new CDbCriteria();
+	        	$criteria->select = "
+				SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
+				DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit
+			";
+		        $criteria->condition = " 
+				aloitan!='' AND loppui!=''
+				AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = '".$pvm."'
+				AND id NOT IN (SELECT kid FROM sivexkuitti_repaired)
+	
+			";
+			$lu = Mobile::model()->find($criteria);
+
+
+	       		$criteria = new CDbCriteria();
+	        	$criteria->select = "
+				SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
+				DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit
+			";
+		        $criteria->condition = " 
+				aloitan!='' AND loppui!=''
+				AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = '".$pvm."'
+			";
+			$tot = Toteutuneet::model()->find($criteria);
+	
+			if(isset($lu->l_tunnit))
+			$mobile += $lu->l_tunnit;
+	
+			if(isset($tot->l_tunnit))
+			$mobile += $tot->l_tunnit;
+			// Ensin katsotaan mobile taulusta toteutuneet -->
+
+			if( $mobile > 0 )
+			{
+				$result += $mobile;
+			} else {
+
+	       			$criteria = new CDbCriteria();
+		        	$criteria->select = "
+					SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppu, '%H:%i'), '%H:%i'), 
+					DATE_FORMAT(STR_TO_DATE(alku, '%H:%i'), '%H:%i')))) as l_tunnit
+				";
+			        $criteria->condition = " 
+					alku!='' AND loppu!=''
+					AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = '".$pvm."'
+				";
+				$tv = Tyovuoroot::model()->find($criteria);
+
+				if(isset($tv->l_tunnit))
+				$result += $tv->l_tunnit;
+
+			}
+	
+		}
+	
+		if($result > 0)
+		{
+			$ilmainen_tunti = ($result/3600);
+			Asetukset::model()->updateByPk(1, array('ilmainen_versio_kayttotunnit'=>$ilmainen_tunti));
+		}
+
+		return $result;
+
+	}
 
 	public function actionMail_template()
 	{
@@ -173,6 +269,38 @@ class SiteController extends Controller
 
 		echo json_encode($return);
 		exit;
+	}
+  
+  	public function actionAloita()
+	{
+
+		$vastaus = '';
+
+		if(isset($_POST['yrityksen_nimi']))
+		{
+ 
+			$servername = "localhost";
+			$username = "dbmanager";
+			$password = "fv4-qcy-Gba-m9b"; //fv4-qcy-Gba-m9b
+	
+			// Create connection
+			$conn = new mysqli($servername, $username, $password);
+			// Check connection
+			if ($conn->connect_error) {
+			    die("Connection failed: " . $conn->connect_error);
+			} 
+	
+			// Create database
+			$sql = "CREATE DATABASE blaaaa";
+			if ($conn->query($sql) === TRUE) {
+			    $vastaus = "Database created successfully";
+			} else {
+			    $vastaus = "Error creating database: " . $conn->error;
+			}
+		}
+
+		$this->render('aloita', array('vastaus'=>$vastaus));
+    
 	}
 
 	public function actionUlkonaky()
@@ -483,6 +611,7 @@ class SiteController extends Controller
 		if(isset($_POST['Domainit']))
 		{
 			$model->attributes=$_POST['Domainit'];
+			$model->time=date("Y-m-d H:i:s", strtotime($model->time));
 			if(isset($_POST['tasot'])) $model->paketti = implode(",",$_POST['tasot']);
 			if($model->save())
 				$this->redirect(array('etunnin_asiakkaat'));
@@ -693,8 +822,6 @@ $(document).ready(function(){
 
 	public function actionEtusivu()
 	{
-
-
 
 		// <-- Backup
 		if (!file_exists(Yii::app()->basePath."/../backup/".Yii::app()->user->domain.'/'.date("Y-m-d").'_'.Yii::app()->user->domain.'.sql.gz')

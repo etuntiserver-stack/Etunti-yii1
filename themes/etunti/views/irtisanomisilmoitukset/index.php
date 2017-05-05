@@ -1,31 +1,5 @@
 <?php
 
-  $template = $this->tiedostonNimike();
-
-
-  if(isset($_POST['poistaTemplate'])){
-	unlink($_POST['poistaTemplate']);
-	exit;
-  }
-
-  if(isset($_POST[$template]))
-  {
-
-    if (!file_exists(Yii::app()->basePath."/../tiedostot/templates/".Yii::app()->user->domain)) {
-  	mkdir(Yii::app()->basePath."/../tiedostot/templates/".Yii::app()->user->domain, 0777, true);
-    }
-
-  $uploaddir = Yii::app()->basePath.'/../tiedostot/templates/'.Yii::app()->user->domain.'/';
-  $template = $template.'.docx';
-
-  $uploadfile = $uploaddir . basename($template);
-    if (move_uploaded_file($_FILES['file']['tmp_name'], $uploadfile)) {
-
-    } else {
-	echo Yii::t('main', 'Lataaminen ei onnistuu');
-    }
-
-  }
 ?>
 
 
