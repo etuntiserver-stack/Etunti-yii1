@@ -41,6 +41,7 @@
 		?>
 	</td>
 	<td>
+		<?php if($data->laskutettu == 0 and $data->lasku_id == 0) : ?>
 		<?php echo CHtml::link(Yii::t('main', 'Luo lasku'), 
 				array('//lasku/create', 'digisten_tunnit_id'=>$data->id), 
 				array(
@@ -52,6 +53,19 @@
 				)
 			); 
 		?>
+		<?php else : ?>
+		<?php echo CHtml::link(Yii::t('main', 'Laskutettu'), 
+				array('//lasku/update', 'id'=>$data->lasku_id), 
+				array(
+					'class'=>'btn btn-success', 
+					'style'=>'color:white', 
+					'data-toggle'=>'tooltip', 
+					'data-placement'=>'top', 
+					'title'=>Yii::t('main', 'Luo lasku') 
+				)
+			); 
+		?>
+		<?php endif; ?>
 	</td>
 </tr>
 

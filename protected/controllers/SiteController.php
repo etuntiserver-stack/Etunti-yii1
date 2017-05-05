@@ -158,8 +158,8 @@ class SiteController extends Controller
 
 		$result = 0;
 
-		$begin = new DateTime( date("Y-m-d", strtotime('first day of this month')) );
-		$end = new DateTime( date("Y-m-d") );
+		$begin = new DateTime( date("Y-m-d", strtotime('first day of last month')) );
+		$end = new DateTime( date("Y-m-d", strtotime('last day of last month')) );
 
 		$interval = DateInterval::createFromDateString('1 day');
 		$period = new DatePeriod($begin, $interval, $end);

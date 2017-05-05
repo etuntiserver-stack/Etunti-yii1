@@ -32,7 +32,7 @@ class DigistenTunnitKk extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('year, month, tunnit, tasot', 'required'),
-			array('year, month, tunnit, maksettu, domain_id, laskutettu', 'numerical', 'integerOnly'=>true),
+			array('year, month, tunnit, maksettu, domain_id, laskutettu, lasku_id', 'numerical', 'integerOnly'=>true),
 			array('domain', 'length', 'max'=>255),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.

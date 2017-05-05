@@ -48,15 +48,15 @@
 	// <-- maksullinen versio
 		if( $asetukset->maksullinen == 1 )
 		{ 
-			$snapshot_paiva = 4;
+			$snapshot_paiva = 5;
 
 			if( date("j")  == $snapshot_paiva )
 			{
 				$criteria=new CDbCriteria;
 				$criteria->condition = " 
 					domain='".$d->domain."'
-					AND year = '".date("Y")."'
-					AND month = '".date("n")."'
+					AND year = '".date("Y", strtotime('first day of last month'))."'
+					AND month = '".date("n", strtotime('first day of last month'))."'
 				";
 				$digisten_tunnit = DigistenTunnitKk::model()->find($criteria);
 	
@@ -72,8 +72,8 @@
 					$dt->domain_id = $d->id;
 					$dt->domain = $d->domain;
 					$dt->tunnit = $tunnit;
-					$dt->year = date("Y");
-					$dt->month = date("n");
+					$dt->year = date("Y", strtotime('first day of last month'));
+					$dt->month = date("n", strtotime('first day of last month'));
 					$dt->tasot = $paketti;
 					$dt->save();
 				}

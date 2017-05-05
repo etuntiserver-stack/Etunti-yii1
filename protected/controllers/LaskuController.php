@@ -598,6 +598,10 @@ class LaskuController extends Controller
 			$model->laskun_nimetys="Lasku";
 			if($model->save()){
 
+				// <-- digisten_tunnit_id
+				if(isset($_POST['Lasku']['digisten_tunnit_id']) and $_POST['Lasku']['digisten_tunnit_id'] != '')
+				DigistenTunnitKk::model()->updateByPk($_POST['Lasku']['digisten_tunnit_id'], array('laskutettu' => 1, 'lasku_id' => $model->id));
+				//     digisten_tunnit_id -->
 
 			// Viite
 			$viite = $this->Viite($model->as_nro."00".$model->id);
