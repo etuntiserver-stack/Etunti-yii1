@@ -76,7 +76,11 @@
 					$dt->month = date("n", strtotime('first day of last month'));
 					$dt->tasot = $paketti;
 					if( $tunnit > 0 )
-						$dt->save();
+					{
+						if(!$dt->save())
+						var_dump($dt->getErrors());
+					}
+
 				}
 	
 			}
