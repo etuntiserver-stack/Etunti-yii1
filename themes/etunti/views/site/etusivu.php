@@ -137,7 +137,7 @@ $months=array(
                 <h2 class="mt15 lh15">
                   <b><?php echo $viestit; ?></b>
                 </h2>
-                <h5 class="text-muted"><?php echo Yii::t('main', 'Viestit tänään'); ?></h5>
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/viestinta"><h5 class="text-muted"><?php echo Yii::t('main', 'Viestit tänään'); ?></h5></a>
               </div>
             </div>
           </div>
