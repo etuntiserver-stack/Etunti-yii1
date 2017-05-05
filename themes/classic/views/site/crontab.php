@@ -76,7 +76,7 @@
 						$dt = new DigistenTunnitKk;
 						$dt->domain_id = $d->id;
 						$dt->domain = $d->domain;
-						$dt->tunnit = $tunnit;
+						$dt->tunnit = (int)$tunnit;
 						$dt->year = date("Y", strtotime('first day of last month'));
 						$dt->month = date("n", strtotime('first day of last month'));
 						$dt->tasot = $paketti;
