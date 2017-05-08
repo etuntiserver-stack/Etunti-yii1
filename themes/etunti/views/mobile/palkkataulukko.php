@@ -282,11 +282,11 @@ $this->breadcrumbs=array(
   <tfoot>
   <tr>
   	<th><?php echo Yii::t('main', 'Yhteensä'); ?></th>
-	<td><?php echo $totalTp; ?></td>
+	<td><?php if($totalTp != 0) echo $totalTp; ?></td>
 	<td><?php echo $this->num($matkaYht); ?></td>
 	<td><?php echo $this->num($yht[0]); ?></td>
 	<td><?php echo $this->num($mPlusTYht); ?></td>
-	<td><?php echo '<b>Työt</b>:<br>'.$this->num($yht[1]).$matkaIltaYht; ?></td>
+	<td><?php if($matkaIltaYht != 0 or $this->num($yht[1]) != 0) echo '<b>Työt</b>:<br>'.$this->num($yht[1]).$matkaIltaYht; ?></td>
 	<td><?php echo $this->num($iltaMatkaPlusIltatunnitYht); ?></td>
 	<td><?php echo $this->num($lounYht); ?></td>
 	<td><?php echo $this->num($yht[2]); ?></td>
@@ -294,10 +294,10 @@ $this->breadcrumbs=array(
 	<td><?php echo $this->num($pyhatYht); ?></td>
 	<td><?php echo $this->num($elYht); ?></td>
 	<td><?php echo $this->num($slYht); ?></td>
-	<td><?php echo $splYht; ?></td>
+	<td><?php if($splYht != 0) echo $splYht; ?></td>
 	<td><?php echo $this->num($lsYht); ?></td>
-	<td><?php echo $vlYht; ?></td>
-	<td><?php echo $vklYht; ?></td>
+	<td><?php if($vlYht != 0) echo $vlYht; ?></td>
+	<td><?php if($vklYht != 0) echo $vklYht; ?></td>
 	<td></td>
 	<td></td>
 	<td></td>
