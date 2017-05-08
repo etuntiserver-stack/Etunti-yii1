@@ -68,6 +68,45 @@ echo	'<input type=hidden id=number value='.cal_days_in_month(CAL_GREGORIAN, $mon
         </div>
 
 
+
+
+		<!-- Fixed Table -->
+		<!-- http://www.jqueryscript.net/table/jQuery-Plugin-For-Fixed-Table-Header-Footer-Columns-TableHeadFixer.html -->
+		<script src="<?php echo Yii::app()->request->baseUrl; ?>/js/tableHeadFixer.js"></script>
+
+		<style>	
+			#verkko {
+				width: 1800px !important;
+			}
+			.laatikot{
+				min-width: 30px;
+				text-align: center;
+			}
+		</style>
+
+		<script>
+			$(document).ready(function() {
+				window.onload = function(event) { resizeDiv(); }
+				//window.onresize = function(event) { resizeDiv(); }
+
+				function resizeDiv() {
+				    vpw = $(window).width()-100; 
+				    vph = $(window).height()-240;
+
+				    $('#taulukkoPaa').css({'height': vph + 'px', 'overflow-y' : 'hidden'});
+
+				    $("#verkko").tableHeadFixer({
+					"left" : 1,
+					'z-index': 0
+				    }); 
+				}
+
+			});
+		</script>
+		<!-- Fixed Table -->
+
+
+
             <div class="admin-form">
               <div class="panel heading-border">
                 <div class="panel-body bg-light">

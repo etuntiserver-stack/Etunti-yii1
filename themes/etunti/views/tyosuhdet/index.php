@@ -42,12 +42,17 @@
                         <div class="section">
                           <label class="field prepend-icon">
 
-			<?php
-	   		$site = Yii::app()->createController('Site');
-	   		$tyontekiatLista = $site[0]->tyontekiatLista( 'TekijaVuoro', null, 'tyontekijat', Yii::app()->session['TekijaVuoro'], 1 );
-			echo $tyontekiatLista;
-			?>
-
+				<?php
+		   		$site = Yii::app()->createController('Site');
+		   		$tyontekiatLista = $site[0]->tyontekiatLista( 
+					'TekijaVuoro', // name
+					'mult', // class
+					'tyontekijat', // id
+					Yii::app()->session['TekijaVuoro'], //selected
+					1 // aktiivinen
+				);
+				echo $tyontekiatLista;
+				?>
 
                           </label>
                         </div>
