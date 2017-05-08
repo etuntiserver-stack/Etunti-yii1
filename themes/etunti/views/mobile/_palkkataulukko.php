@@ -60,15 +60,15 @@
 <tr>
 
 	<td class="tulostus_tekija col1"><?php echo $this->etuSukunimi($data->id); ?></td>
-	<td class="col2"><?php echo $tp; ?></td>
-	<td class="col3"><?php echo $this->num($matka); ?></td>
-	<td class="col4"><?php echo $return[0]; ?></td>
+	<td class="col2"><?php if($tp != 0) echo $tp; ?></td>
+	<td class="col3"><?php if($this->num($matka) != 0) echo $this->num($matka); ?></td>
+	<td class="col4"><?php if($return[0] != 0) echo $return[0]; ?></td>
 	<td class="col5"><?php echo $sum; ?></td>
 	<td class="col6"><?php echo $return[1].$matkaIlta; ?></td>
 	<td class="col7"><?php echo $this->num($iltaMatkaPlusIltatunnit); ?></td>
 	<td class="col8"><?php echo $this->num($loun); ?></td>
-	<td class="col8"><?php echo $return[2]; ?></td>
-	<td class="col9"><?php echo $return[3]; ?></td>
+	<td class="col8"><?php if($return[2] != 0) echo $return[2]; ?></td>
+	<td class="col9"><?php if($return[3] != 0) echo $return[3]; ?></td>
 	<td class="col10"><?php echo $this->num($pyhat); ?></td>
 	<td class="col10"><?php echo $this->num($el); ?></td>
 	<td class="col10"><?php echo $this->num($sl); ?></td>
