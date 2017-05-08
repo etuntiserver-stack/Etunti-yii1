@@ -28,8 +28,8 @@
     <div class="sectionfill mb5">
 		<label>Asiakkaan tyyppi</label>
 		<select name="Asiakkaat[tyyppi]" id="Asiakkaat_tyyppi" class="form-control tyyppi">
-		<option value="yritys"><?php echo Yii::t('main', 'Yritys'); ?></option>
 		<option value="henkilo"><?php echo Yii::t('main', 'Henkilö'); ?></option>
+		<option value="yritys"><?php echo Yii::t('main', 'Yritys'); ?></option>
 		</select>
     </div>
     <div class="sectionfill mb5">
@@ -624,6 +624,17 @@ function laatikonPaivays(thisDataReturn){
   });
 
 
+// <-- modal siirtaminen
+	$("#modal-form").find(".panel-heading").hover(function() {
+	    $(this).css('cursor','pointer');
+	}, function() {
+	    $(this).css('cursor','auto');
+	});
+        $('#modal-form').draggable({
+            handle: ".panel-heading",
+	    revert:"invalid",
+        });
+// modal siirtaminen -->
 
 });
 </script>

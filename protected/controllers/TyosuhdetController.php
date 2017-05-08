@@ -151,6 +151,7 @@ class TyosuhdetController extends Controller
 
 	       	$criteria = new CDbCriteria();
 		$criteria->order = 'tekijan_nimi ASC';
+        	$criteria->condition = " aktiivinen=1 ";
 
 		if(Yii::app()->request->getPost('TekijaVuoro'))
 		{
