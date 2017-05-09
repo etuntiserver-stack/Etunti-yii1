@@ -388,16 +388,7 @@ class SiteController extends Controller
 
 				$sql = explode(";",$contents);// 
 	                            foreach($sql as $query){
-        	                        $result=mysql_query($query, $connection);
-        	                        if ($result){
-					/*
-        	                         echo '<tr><td><BR></td></tr>';
-        	                         echo '<tr><td>' . $query . ' <b>SUCCESS</b></td></tr>';
-        	                         echo '<tr><td><BR></td></tr>';
-					*/
-        	                        } else {
-						die('Error result');
-					}
+        	                        $result=mysql_query($query, $connection) or die(mysql_error());
         	                    }
 				fclose($handle);
 
