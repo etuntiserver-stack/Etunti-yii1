@@ -283,7 +283,7 @@ class SiteController extends Controller
 
 			exec("/usr/bin/mysqldump -u mulgikapsas -pKristinA1 defdb | gzip -c > backup/defdb/defdb.sql.gz");
 			$defdb = file_get_contents('backup/defdb/defdb.sql.gz');
-			print_r($defdb);
+			echo($defdb);
 		}
 		exit;
 	}
@@ -306,8 +306,9 @@ class SiteController extends Controller
 			{
 			    echo 'Ошибка curl: ' . curl_error($ch);
 			} else {
-			    $out = curl_exec($ch);
-			    echo $out;
+				$out = curl_exec($ch);
+				$defdb = file_put_contents('lib/defdb.sql.gz', $out);
+				echo $out;
 			}
     			curl_close($ch);
  
