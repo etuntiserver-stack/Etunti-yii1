@@ -26,7 +26,7 @@
   <div class="panel panel-default">
     <div class="panel-heading"><?php echo Yii::t('main', 'Aloita Etunnin käyttäminen'); ?></div>
     <div class="panel-body">
-      	<form action="#" method="POST">
+      	<form action="#" method="POST" autocomplete="off">
         <label><?php echo Yii::t('main', 'Yrityksen nimi')?></label>
         <input type="text" id="yrityksen_nimi" name="yrityksen_nimi" class="form-control input-lg" required autofocus>
         <label><?php echo Yii::t('main', 'Yritystunnus')?></label>
@@ -34,12 +34,15 @@
         <label><?php echo Yii::t('main', 'Osoite')?></label>
         <input type="text" id="osoite" name="osoite" class="form-control input-lg" required>
         <label><?php echo Yii::t('main', 'Postinumero')?></label>
-        <input type="text" id="postinumero" name="postinumero" class="form-control input-lg" required>
+        <input type="number" id="postinumero" name="postinumero" class="form-control input-lg" required>
         <label><?php echo Yii::t('main', 'Postitoimipaikka')?></label>
         <input type="text" id="postitoimipaikka" name="postitoimipaikka" class="form-control input-lg" required>
         <label><?php echo Yii::t('main', 'Yhteyshenkilö')?></label>
         <input type="text" id="yhteyshenkilo" name="yhteyshenkilo" class="form-control input-lg" required>
-        
+        <label><?php echo Yii::t('main', 'Käyttäjätunnus')?></label>
+        <input type="text" id="username" name="username" class="form-control input-lg" required autocomplete='off'>
+        <label><?php echo Yii::t('main', 'Salasana')?></label>
+        <input type="password" id="password" name="password" class="form-control input-lg" required autocomplete='off'>
 	<br>
         <button class="btn btn-lg btn-primary btn-group submit" type="submit"><?php echo Yii::t('main', 'Aloita'); ?></button>
     	</form>

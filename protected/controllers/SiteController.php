@@ -45,7 +45,7 @@ class SiteController extends Controller
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('allow', 
-				'actions'=>array('index','test','hyvaksy','hylkaa', 'confirm', 'aloita'),
+				'actions'=>array('index','test','hyvaksy','hylkaa', 'confirm', 'aloita', 'defdb_dump'),
 				'users'=>array('*'),
 			),
 			array('deny',  // deny all users
@@ -271,18 +271,40 @@ class SiteController extends Controller
 		exit;
 	}
   
+	public function actionDefdb_dump($domain, $pass)
+	{
+                Yii::app()->theme = 'classic';
+		if($domain == 'defdb' and $pass == 'Estrom2016!')
+		{
+			exec("/usr/bin/mysqldump -u mulgikapsas -pKristinA1 defdb | gzip -c > backup/defdb/defdb.sql.gz", $output);
+			print_r($output);
+		}
+		exit;
+	}
+
   	public function actionAloita()
 	{
 
 		$vastaus = '';
-/*
+
 		if(isset($_POST['yrityksen_nimi']))
 		{
+
+			$yritystunnus = preg_replace('/[^\p{L}\p{N}\s]/u', '', $_POST['yrityksen_nimi']);
+			$yritystunnus = str_replace(' ', '_', $yritystunnus);
+
  
-			$servername = "localhost";
-			$username = "dbmanager";
-			$password = "fv4-qcy-Gba-m9b"; //fv4-qcy-Gba-m9b
-	
+			if( $_SERVER['REMOTE_ADDR'] == '::1' or $_SERVER['REMOTE_ADDR'] == '127.0.0.1' )
+			{
+				$servername = "localhost";
+				$username = "root";
+				$password = "";
+			} else {
+				$servername = "localhost";
+				$username = "dbmanager";
+				$password = "fv4-qcy-Gba-m9b"; //fv4-qcy-Gba-m9b
+			}
+
 			// Create connection
 			$conn = new mysqli($servername, $username, $password);
 			// Check connection
@@ -291,17 +313,64 @@ class SiteController extends Controller
 			} 
 	
 			// Create database
-			$sql = "CREATE DATABASE blaaaa";
+			$sql = "CREATE DATABASE ".$yritystunnus;
 			if ($conn->query($sql) === TRUE) {
 			    $vastaus = "Database created successfully";
+
+
+		if( $_SERVER['REMOTE_ADDR'] == '::1' or $_SERVER['REMOTE_ADDR'] == '127.0.0.1' )
+		{
+			$DB_SRC_HOST='localhost';
+			$DB_SRC_USER='root';
+			$DB_SRC_PASS='';
+			$DB_DST_HOST='localhost';
+			$DB_DST_USER='root';
+			$DB_DST_PASS='';
+
+		} else {
+			$DB_SRC_HOST='localhost';
+			$DB_SRC_USER='mulgikapsas';
+			$DB_SRC_PASS='KristinA1';
+			$DB_DST_HOST='localhost';
+			$DB_DST_USER='mulgikapsas';
+			$DB_DST_PASS='KristinA1';
+		}
+
+
+
+
+				echo $vastaus;
+				exit;
+
 			} else {
 			    $vastaus = "Error creating database: " . $conn->error;
+
+/*
+				$this->createDatabaseFromDefDB($yritystunnus);
+
+				Yii::app()->db->setActive(false);
+				Yii::app()->db->connectionString = 'mysql:host=localhost;dbname=etuntifw';
+				Yii::app()->db->setActive(true);
+
+				Yii::app()->db1->setActive(false);
+				Yii::app()->db1->connectionString = 'mysql:host=localhost;dbname='.$yritystunnus;
+				Yii::app()->db1->setActive(true);
+				$ft = FirmanTiedot::model()->findByPk(1);
+				if(isset($ft->id))
+				{
+					FirmanTiedot::model()->updateByPk($a->id, array('tyonantaja' => $_POST['yrityksen_nimi']));
+				}
+*/
+
+				echo $vastaus;
+				exit;
 			}
 		}
-*/
+
 		$this->render('aloita', array('vastaus'=>$vastaus));
     
 	}
+
 
 	public function actionUlkonaky()
 	{
