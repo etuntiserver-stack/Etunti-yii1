@@ -48,7 +48,7 @@
 	// <-- maksullinen versio
 		if( $asetukset->maksullinen == 1 )
 		{ 
-			$snapshot_paiva = 5;
+			$snapshot_paiva = 15;
 
 			if( date("j")  == $snapshot_paiva )
 			{
