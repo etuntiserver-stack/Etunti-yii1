@@ -312,8 +312,8 @@ class SiteController extends Controller
 				$password = "";
 			} else {
 				$servername = "localhost";
-				$username = "mulgikapsas";
-				$password = "KristinA1"; //fv4-qcy-Gba-m9b
+				$username = "dbmanager";
+				$password = "fv4-qcy-Gba-m9b"; //fv4-qcy-Gba-m9b
 			}
 
 			// Create connection
