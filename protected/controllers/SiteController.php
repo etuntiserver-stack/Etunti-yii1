@@ -377,6 +377,10 @@ class SiteController extends Controller
 				//echo $out;
 
 
+				$servername = "localhost";
+				$username = "mulgikapsas";
+				$password = "KristinA1"; //fv4-qcy-Gba-m9b
+
 				$connection = mysql_connect($servername,$username,$password)
 				or die("Database Connection Failed");
 				$selectdb = mysql_select_db($yritystunnus, $connection) or die("Database could not be selected"); 
