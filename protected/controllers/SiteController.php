@@ -276,6 +276,11 @@ class SiteController extends Controller
                 Yii::app()->theme = 'classic';
 		if($domain == 'defdb' and $pass == 'Estrom2016!')
 		{
+
+			if (!file_exists( Yii::app()->basePath.'/../backup/defdb' )) {
+			 	mkdir( Yii::app()->basePath.'/../backup/defdb', 0755, true );
+			}
+
 			exec("/usr/bin/mysqldump -u mulgikapsas -pKristinA1 defdb | gzip -c > backup/defdb/defdb.sql.gz", $output);
 			print_r($output);
 		}
