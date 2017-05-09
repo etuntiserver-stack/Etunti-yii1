@@ -275,7 +275,7 @@ class SiteController extends Controller
 	{
 
 		$vastaus = '';
-
+/*
 		if(isset($_POST['yrityksen_nimi']))
 		{
  
@@ -298,7 +298,7 @@ class SiteController extends Controller
 			    $vastaus = "Error creating database: " . $conn->error;
 			}
 		}
-
+*/
 		$this->render('aloita', array('vastaus'=>$vastaus));
     
 	}
