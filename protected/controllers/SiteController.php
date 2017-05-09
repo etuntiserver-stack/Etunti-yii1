@@ -281,8 +281,9 @@ class SiteController extends Controller
 			 	mkdir( Yii::app()->basePath.'/../backup/defdb', 0755, true );
 			}
 
-			exec("/usr/bin/mysqldump -u mulgikapsas -pKristinA1 defdb | gzip -c > backup/defdb/defdb.sql.gz", $output);
-			print_r($output);
+			exec("/usr/bin/mysqldump -u mulgikapsas -pKristinA1 defdb | gzip -c > backup/defdb/defdb.sql.gz");
+			$defdb = file_get_contents('backup/defdb/defdb.sql.gz');
+			print_r($defdb);
 		}
 		exit;
 	}
@@ -294,6 +295,25 @@ class SiteController extends Controller
 
 		if(isset($_POST['yrityksen_nimi']))
 		{
+
+			$url = 'https://staging.etunti.fi/index.php/site/defdb_dump?domain=defdb&pass=Estrom2016!';
+			$ch = curl_init();
+			curl_setopt($ch, CURLOPT_URL, $url);
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER,true);
+			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+
+			if(curl_exec($ch) === false)
+			{
+			    echo 'Ошибка curl: ' . curl_error($ch);
+			} else {
+			    $out = curl_exec($ch);
+			    echo $out;
+			}
+    			curl_close($ch);
+ 
+
+
+exit;
 
 			$yritystunnus = preg_replace('/[^\p{L}\p{N}\s]/u', '', $_POST['yrityksen_nimi']);
 			$yritystunnus = str_replace(' ', '_', $yritystunnus);
