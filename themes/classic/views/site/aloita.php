@@ -16,8 +16,11 @@
 <div class="container">
 
 <?php
-	if(isset($vastaus))
-		echo $vastaus;
+	//if(isset($vastaus))
+		//echo $vastaus;
+
+	if($database and !empty($yritystunnus))
+	echo '<div class="alert bg-success">'.Yii::t('main', 'Kirjaudu sisään käymällä "Yritystunnus": <b>'.$yritystunnus.'</b> '.CHtml::link('tästä linkistä',array('user/login', 'target'=>'_blank')) ).'</div>';
 ?> 
   
 
@@ -39,6 +42,10 @@
         <input type="text" id="postitoimipaikka" name="postitoimipaikka" class="form-control input-lg" required>
         <label><?php echo Yii::t('main', 'Yhteyshenkilö')?></label>
         <input type="text" id="yhteyshenkilo" name="yhteyshenkilo" class="form-control input-lg" required>
+        <label><?php echo Yii::t('main', 'Puhelinnumero')?></label>
+        <input type="text" id="puhelinnumero" name="puhelinnumero" class="form-control input-lg">
+        <label><?php echo Yii::t('main', 'Sähköpostiosoite')?></label>
+        <input type="text" id="sahkoposti" name="sahkoposti" class="form-control input-lg" required>
         <label><?php echo Yii::t('main', 'Käyttäjätunnus')?></label>
         <input type="text" id="username" name="username" class="form-control input-lg" required autocomplete='off'>
         <label><?php echo Yii::t('main', 'Salasana')?></label>

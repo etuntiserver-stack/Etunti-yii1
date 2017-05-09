@@ -291,33 +291,18 @@ class SiteController extends Controller
   	public function actionAloita()
 	{
 
+		$database = false;
 		$vastaus = '';
+		$yritystunnus = '';
 
 		if(isset($_POST['yrityksen_nimi']))
 		{
 
-			$url = 'https://staging.etunti.fi/index.php/site/defdb_dump?domain=defdb&pass=Estrom2016!';
-			$ch = curl_init();
-			curl_setopt($ch, CURLOPT_URL, $url);
-			curl_setopt($ch, CURLOPT_RETURNTRANSFER,true);
-			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 
-			if(curl_exec($ch) === false)
-			{
-			    echo 'Ошибка curl: ' . curl_error($ch);
-			} else {
-				$out = curl_exec($ch);
-				$defdb = file_put_contents('lib/defdb.sql.gz', $out);
-				echo $out;
-			}
-    			curl_close($ch);
- 
-
-
-exit;
 
 			$yritystunnus = preg_replace('/[^\p{L}\p{N}\s]/u', '', $_POST['yrityksen_nimi']);
 			$yritystunnus = str_replace(' ', '_', $yritystunnus);
+			$yritystunnus = strtolower($yritystunnus);
 
  
 			if( $_SERVER['REMOTE_ADDR'] == '::1' or $_SERVER['REMOTE_ADDR'] == '127.0.0.1' )
@@ -341,38 +326,84 @@ exit;
 			// Create database
 			$sql = "CREATE DATABASE ".$yritystunnus;
 			if ($conn->query($sql) === TRUE) {
-			    $vastaus = "Database created successfully";
-
-
-		if( $_SERVER['REMOTE_ADDR'] == '::1' or $_SERVER['REMOTE_ADDR'] == '127.0.0.1' )
-		{
-			$DB_SRC_HOST='localhost';
-			$DB_SRC_USER='root';
-			$DB_SRC_PASS='';
-			$DB_DST_HOST='localhost';
-			$DB_DST_USER='root';
-			$DB_DST_PASS='';
-
-		} else {
-			$DB_SRC_HOST='localhost';
-			$DB_SRC_USER='mulgikapsas';
-			$DB_SRC_PASS='KristinA1';
-			$DB_DST_HOST='localhost';
-			$DB_DST_USER='mulgikapsas';
-			$DB_DST_PASS='KristinA1';
-		}
-
-
-
-
-				echo $vastaus;
-				exit;
+			    	$vastaus = "Database created successfully";
+				$this->createNewTable($yritystunnus, $servername, $username, $password);
+				$database = true;
 
 			} else {
-			    $vastaus = "Error creating database: " . $conn->error;
+			    	$vastaus = "Error creating database: " . $conn->error;
+			}
+		}
 
-/*
-				$this->createDatabaseFromDefDB($yritystunnus);
+		$this->render('aloita', array(
+			'vastaus' => $vastaus,
+			'database' => $database,
+			'yritystunnus' => $yritystunnus,
+		));
+    
+	}
+
+
+	protected function createNewTable($yritystunnus, $servername, $username, $password)
+	{
+
+			$url = 'https://staging.etunti.fi/index.php/site/defdb_dump?domain=defdb&pass=Estrom2016!';
+			$ch = curl_init();
+			curl_setopt($ch, CURLOPT_URL, $url);
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER,true);
+			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+
+			if(curl_exec($ch) === false)
+			{		
+				echo 'Error curl: ' . curl_error($ch);
+			} else {
+				$out = curl_exec($ch);
+
+				if (!file_exists( Yii::app()->basePath.'/../tiedostot/temp' )) {
+			 		mkdir( Yii::app()->basePath.'/../tiedostot/temp', 0777, true );
+				}
+				$defdb = file_put_contents('tiedostot/temp/defdb.sql.gz', $out);
+
+				$file_name = 'tiedostot/temp/defdb.sql.gz';
+				$buffer_size = 4096;
+				$out_file_name = str_replace('.gz', '', $file_name); 
+				$file = gzopen($file_name, 'rb');
+				$out_file = fopen($out_file_name, 'wb'); 
+				while (!gzeof($file)) {
+				    fwrite($out_file, gzread($file, $buffer_size));
+				}
+				fclose($out_file);
+				gzclose($file);
+				//echo $out;
+
+
+				$connection = mysql_connect($servername,$username,$password)
+				or die("Database Connection Failed");
+				$selectdb = mysql_select_db($yritystunnus, $connection) or die("Database could not be selected"); 
+
+
+				$filename = 'tiedostot/temp/defdb.sql';
+				$handle = fopen($filename, "r+");
+				$contents = fread($handle, filesize($filename));
+
+				$sql = explode(";",$contents);// 
+	                            foreach($sql as $query){
+        	                        $result=mysql_query($query, $connection);
+        	                        if ($result){
+					/*
+        	                         echo '<tr><td><BR></td></tr>';
+        	                         echo '<tr><td>' . $query . ' <b>SUCCESS</b></td></tr>';
+        	                         echo '<tr><td><BR></td></tr>';
+					*/
+        	                        } else {
+						die('Error result');
+					}
+        	                    }
+				fclose($handle);
+
+			}
+    			curl_close($ch);
+
 
 				Yii::app()->db->setActive(false);
 				Yii::app()->db->connectionString = 'mysql:host=localhost;dbname=etuntifw';
@@ -381,22 +412,48 @@ exit;
 				Yii::app()->db1->setActive(false);
 				Yii::app()->db1->connectionString = 'mysql:host=localhost;dbname='.$yritystunnus;
 				Yii::app()->db1->setActive(true);
+
+				$chk_domain = Domainit::model()->find(" domain='".$yritystunnus."' ");
+				if(!isset($chk_domain->id))
+				{
+					$new_domain = new Domainit;
+					$new_domain->domain = $yritystunnus;
+					$new_domain->yritys = $_POST['yrityksen_nimi'];
+					$new_domain->paketti = '1,2,3,4,5,6';
+					$new_domain->sahkoposti = $_POST['sahkoposti'];
+					$new_domain->aktiivinen = 1;
+					$new_domain->save();
+				}
+
+				$adm = Administrators::model()->findByPk(1);
+				if(isset($adm->id))
+				{
+					Administrators::model()->updateByPk($adm->id, array(
+						'adm_login' => $_POST['username'],
+						'adm_salasana' => password_hash($_POST['password'], PASSWORD_BCRYPT),
+						'adm_email' => $_POST['sahkoposti'],
+						'adm_nimi' => $_POST['yhteyshenkilo'],
+					));
+
+				}
 				$ft = FirmanTiedot::model()->findByPk(1);
 				if(isset($ft->id))
 				{
-					FirmanTiedot::model()->updateByPk($a->id, array('tyonantaja' => $_POST['yrityksen_nimi']));
+					FirmanTiedot::model()->updateByPk($ft->id, array(
+						'tyonantaja' => $_POST['yrityksen_nimi'],
+						'osoite' => $_POST['osoite'],
+						'postinumero' => $_POST['postinumero'],
+						'postitoimipaikka' => $_POST['postitoimipaikka'],
+						'johtaja' => $_POST['yhteyshenkilo'],
+						'y_tunnus' => $_POST['yritys_tunnus'],
+						'puhelin' => $_POST['puhelinnumero'],
+						'sahkoposti' => $_POST['sahkoposti'],
+					));
 				}
-*/
 
-				echo $vastaus;
-				exit;
-			}
+
+			return true;
 		}
-
-		$this->render('aloita', array('vastaus'=>$vastaus));
-    
-	}
-
 
 	public function actionUlkonaky()
 	{

@@ -62,7 +62,7 @@ exit;
 
 	   <h2 class="myBgColors p20"> <i class="fa fa-gear"></i> <?php echo Yii::t('main', 'ASETUKSET'); ?> </h2>
 
-
+<?php /*
 		<!-- Maksullinen changer -->
 		<div class="row">
 		 <div class="col-lg-3 col-md-offset-4">
@@ -104,6 +104,7 @@ exit;
 		</div>
 		<div id="sw_result"></div>
 		<!-- Maksullinen changer -->
+*/ ?>
 
 
 	   <p><div class="btn btn-primary btn-block myBgColors" data-toggle="collapse" data-target="#yrityksentiedot"><h3><?php echo Yii::t('main','Yrityksen tiedot'); ?> &nbsp; <i class="fa fa-caret-square-o-down" aria-hidden="true"></i> </h3></div></p>
