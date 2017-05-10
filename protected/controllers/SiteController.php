@@ -80,15 +80,6 @@ class SiteController extends Controller
 
         public function init()
         {
-
-		if(!isset(Yii::app()->user->adminID))
-		{
-			//die('login error');
-		  	echo '<script type="text/javascript">
-				window.location.href=location.protocol + "//" + location.host + "/index.php/user/login";
-			</script>';
-			exit;
-		}
                 if (Yii::app()->controller->isEtuntiAdmin() and !isset(Yii::app()->user->user_theme)) {
                         Yii::app()->theme = 'etunti';
                 } elseif (Yii::app()->controller->isEtuntiAdmin() and isset(Yii::app()->user->user_theme)) {
@@ -99,6 +90,7 @@ class SiteController extends Controller
                         Yii::app()->theme = 'classic';
                 }
                 parent::init();
+
         }
 
 
@@ -1173,6 +1165,7 @@ $(document).ready(function(){
 					"Reply-To: {$model->email}\r\n".
 					"MIME-Version: 1.0\r\n".
 					"Content-type: text/plain; charset=UTF-8";
+
 
 				mail(Yii::app()->params['adminEmail'],$subject,$model->body,$headers);
 				Yii::app()->user->setFlash('contact','Thank you for contacting us. We will respond to you as soon as possible.');

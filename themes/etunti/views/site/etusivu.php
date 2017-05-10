@@ -482,7 +482,10 @@ var etusivuAjax = function(){
 		$("#myohastyneet").html(d[1]);
 
 
-           }
+           },
+           error: function(data){
+		        window.location.href=location.protocol + "//" + location.host + '/index.php/user/login'
+	   }
         });
 
      } else {
