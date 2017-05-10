@@ -1,5 +1,5 @@
 <?php
-ini_set('session.gc_maxlifetime', 86400);
+ini_set('session.gc_divisor ', 1000);
 
 // change the following paths if necessary
 $yii=dirname(__FILE__).'/YII/framework/yii.php';
