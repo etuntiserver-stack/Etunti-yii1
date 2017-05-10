@@ -16,7 +16,8 @@
    foreach($list as $d)
    {
 
-	
+
+
 	Yii::app()->db1->setActive(false);
 	Yii::app()->db1->connectionString = 'mysql:host=localhost;dbname='.$d->domain;
         if( $_SERVER['REMOTE_ADDR'] == '::1' or $_SERVER['REMOTE_ADDR'] == '127.0.0.1' )
@@ -36,6 +37,7 @@
 	$aikavali_halytys = $asetukset->aikavali_halytys;
 
 	$ft = FirmanTiedot::model()->findByPk(1);
+	$dh = DigistenHinnasto::model()->findByPk(1);
 
 	// <-- ilmainen versio laskuri
 		if( $asetukset->maksullinen == 0 )
@@ -46,9 +48,9 @@
 	//     ilmainen versio laskuri -->
 
 	// <-- maksullinen versio
-		if( $asetukset->maksullinen == 1 )
+		if( $asetukset->maksullinen == 1 and isset($dh->snapshot_pvm) and $dh->snapshot_pvm > 0 )
 		{ 
-			$snapshot_paiva = 15;
+			$snapshot_paiva = $dh->snapshot_pvm;
 
 			if( date("j")  == $snapshot_paiva )
 			{
@@ -82,7 +84,9 @@
 						$dt->tasot = $paketti;
 
 						if(!$dt->save())
-						var_dump($dt->getErrors());
+							var_dump($dt->getErrors());
+						else
+							echo '<p>Snapshot '.$d->domain.', Tunnit: '.(int)$tunnit.'</p>';
 					}
 
 				}

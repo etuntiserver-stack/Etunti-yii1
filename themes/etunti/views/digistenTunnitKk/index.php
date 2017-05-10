@@ -47,6 +47,7 @@
   <th><?php echo Yii::t('main', 'Vuosi / kk'); ?></th>
   <th><?php echo Yii::t('main', 'Tunnit'); ?></th>
   <th><?php echo Yii::t('main', 'Tuntihinta'); ?></th>
+  <th><?php echo Yii::t('main', 'Järjestelmävalvojat'); ?></th>
   <th><?php echo Yii::t('main', 'Hinta'); ?></th>
   <th><?php echo Yii::t('main', 'Lasku'); ?></th>
   </tr>

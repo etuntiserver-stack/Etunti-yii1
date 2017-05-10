@@ -624,6 +624,14 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 
 <br>
 
+
+	<!-- Digisten -->
+        <?php if(isset($_GET['jv']) and $_GET['jv'] > 0) : ?>
+		<input type="hidden" id="tr_rivit_jarjestelmavalvojat" value="1">
+        <?php endif; ?>
+	<!-- Digisten -->
+
+
 <div id="rivit" class="table-responsive">
 <TABLE class="table well" id="TableRivit">
 
@@ -645,7 +653,7 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 
      <tbody>
      <?php if(!isset($model->id)) : ?> 
-     <div class="tr_rivit"></div>
+     	<div class="tr_rivit"></div>
      <?php else : ?>
 
      <?php 
@@ -656,7 +664,7 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 	}
      ?>
 
-     <?php endif; ?>  
+     <?php endif; ?>
      </tbody>
 
      <tfoot>
@@ -968,6 +976,7 @@ if($("#modelID").val() != '1'){
     if( $('#Lasku_digisten_tunnit_id').length ){
 	digisten_tunnit_id = parseInt($('#Lasku_digisten_tunnit_id').val());
     }
+
         $.ajax({
            url: location.protocol + "//" + location.host + '/index.php/lasku/tr_rivit_tyhja',
            type: "POST",
@@ -978,6 +987,24 @@ if($("#modelID").val() != '1'){
 		eachLaskenta();
            }
         });
+
+
+    if( $('#tr_rivit_jarjestelmavalvojat').length )
+    {
+    	rowCount = rowCount+1;
+        $.ajax({
+           url: location.protocol + "//" + location.host + '/index.php/lasku/tr_rivit_jarjestelmavalvojat',
+           type: "POST",
+           data: {num : rowCount},
+           success: function(html){
+         	$("table#TableRivit tbody tr").last().after(html);
+	  	Rivi();
+		eachLaskenta();
+           }
+        });
+
+    }
+
 }
 
 $("#uusiRivi").click(function() {
@@ -1558,6 +1585,7 @@ $(".muokaValiko").click(function() {
 	   type:'POST',
 	   data: { "select_type" : thisFor },
            success: function(data){
+
 		////console.log(data);
 		$('#showres').modal().html(JSON.parse(data));
            }

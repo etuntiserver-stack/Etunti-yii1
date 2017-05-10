@@ -1176,6 +1176,10 @@ $('.tvchange').change(function(){
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/digistenTunnitKk">
                   <span class="fa fa-clock-o"></span> <?php echo Yii::t('main', 'Digisten tunnit kk'); ?></a>
               </li>
+              <li>
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/digistenTunnitKk/digisten_hinnasto">
+                  <span class="fa fa-clock-o"></span> <?php echo Yii::t('main', 'Digisten hintaat'); ?></a>
+              </li>
             </ul>
           </li>
 	<?php endif; ?>
