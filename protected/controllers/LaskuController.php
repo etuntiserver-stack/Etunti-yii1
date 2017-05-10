@@ -23,7 +23,7 @@ class LaskuController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','etsikohde','etsiasiakas', 'etsisaaja','luoKohteista', 'luoAsiakaasta', 'tr_rivit', 'tr_rivitkk','lasku_pdf', 'finvoice', 'postita', 'tr_rivit_tyhja','valitsetuote', 'hyvityslasku', 'postita_pdf', 'get_historia', 'kohteen_tieto', 'osoite_haku', 'indexnv', 'updatenv', 'laheta_valitsemmat'),
+				'actions'=>array('admin','delete','create','update','index','view','etsikohde','etsiasiakas', 'etsisaaja','luoKohteista', 'luoAsiakaasta', 'tr_rivit', 'tr_rivitkk','lasku_pdf', 'finvoice', 'postita', 'tr_rivit_tyhja','valitsetuote', 'hyvityslasku', 'postita_pdf', 'get_historia', 'kohteen_tieto', 'osoite_haku', 'indexnv', 'updatenv', 'laheta_valitsemmat', 'tr_rivit_jarjestelmavalvojat'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny', // allow admin user to perform 'admin' and 'delete' actions
@@ -71,6 +71,12 @@ class LaskuController extends Controller
 	protected function num($val){
 	    if($val > 0)
 		return  number_format((float)$val/3600, 2, '.', '');
+	}
+
+
+	public function actionTr_rivit_jarjestelmavalvojat()
+	{
+		$this->renderPartial('tr_rivit_jarjestelmavalvojat');
 	}
 
 	public function actionTr_rivit_tyhja()
@@ -598,6 +604,7 @@ class LaskuController extends Controller
 			$model->laskun_nimetys="Lasku";
 			if($model->save()){
 
+
 				// <-- digisten_tunnit_id
 				if(isset($_POST['Lasku']['digisten_tunnit_id']) and $_POST['Lasku']['digisten_tunnit_id'] != '')
 				DigistenTunnitKk::model()->updateByPk($_POST['Lasku']['digisten_tunnit_id'], array('laskutettu' => 1, 'lasku_id' => $model->id));
@@ -874,6 +881,7 @@ class LaskuController extends Controller
 		{
 		$criteria->addCondition ("
 		id in (SELECT lid FROM 
+
 			(SELECT lid FROM lasku_historia 
 			   WHERE id IN (SELECT MAX(id) FROM lasku_historia GROUP BY lid)
 			   AND trust_statuscode='98' AND palvelu='trust'

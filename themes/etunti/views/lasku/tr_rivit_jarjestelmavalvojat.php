@@ -2,26 +2,24 @@
 	if(isset($_POST['num'])){
 		$num = $_POST['num'];
 	}
-	
+
 	$tuote = '';
 	$hinta = '';
 	$maara = '';
 	$yksikkot = $this->yksikkot(null);
 
-	if(isset($_POST['digisten_tunnit_id'])){
-		$digisten_tunnit_id = $_POST['digisten_tunnit_id'];
-		$model = DigistenTunnitKk::model()->findByPk($digisten_tunnit_id);
-		if(isset($model->id))
-		{
-			$DigistenTunnitKk = Yii::app()->createController('DigistenTunnitKk');
-			$hinta = $DigistenTunnitKk[0]->tuntihinta_laskin($model->id);
-			$maara = $model->tunnit;
-			$yksikkot = '<option value="h">h</option>';
-			$tuote = 'Etunti (tunnit) '.$model->month.'.'.$model->year;
-		}
-
+	$dh = DigistenHinnasto::model()->findByPk(1);
+	$adm = Administrators::model()->findAll();
+	$jarj_valv_kpl = 0;
+	$jarj_valv = 0;
+	if( isset($dh->id) and count($adm) > 2 )
+	{
+		$tuote = 'Järjestelmävalvojat';
+		$hinta = $dh->jarjestelmanvalvoja;
+		$maara = (count($adm)-2);
 	}
 ?>
+
 
      <TR class="kaikkiTR" id="trRivi_<?php echo $num; ?>">
 	<TD><span class="link text-danger poista" for="poista_<?php echo $num; ?>" style="font-size:150%"><i class="fa fa-times"></i></span></TD>
@@ -56,3 +54,5 @@
 	<TD><input class="yhteensa_total form-control" type="text" size="10" name="yhteensa_alv[<?php echo $num; ?>]" id="yhteensa_alv_<?php echo $num; ?>" value="0.00" readonly></TD>
 	<TD><input type="text" size="5" name="free_text[<?php echo $num; ?>]" id="free_text_<?php echo $num; ?>" class="form-control"></TD>
      </TR>
+
+

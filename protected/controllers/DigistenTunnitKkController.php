@@ -28,7 +28,7 @@ class DigistenTunnitKkController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('index','view','create','update','admin','delete'),
+				'actions'=>array('index','view','create','update','admin','delete', 'digisten_hinnasto'),
 				'expression' => "Yii::app()->controller->isDigisten()",
 			),
 			array('deny',  // deny all users
@@ -53,75 +53,76 @@ class DigistenTunnitKkController extends Controller
                 parent::init();
         }
 
-	protected function tilanne($taso, $maara)
+	protected function tilanne($taso, $maara, $dh)
 	{
+
 		$return = 0;
 
 		// <-- eTyö
 		$val = 1; // Tunti ja työvuorot
 		if( $taso == $val and $maara <= 1000 ){
-			$return += 0.28;
+			$return += $dh->etyo_1000;
 		} elseif( $taso == $val and ($maara > 1000 and $maara <= 2000) ){
-			$return += 0.25;
+			$return += $dh->etyo_1000_2000;
 		} elseif( $taso == $val and ($maara > 2000 and $maara <= 3000) ){
-			$return += 0.22;
+			$return += $dh->etyo_2000_3000;
 		} elseif( $taso == $val and ($maara > 3000 and $maara <= 6000) ){
-			$return += 0.20;
+			$return += $dh->etyo_3000_6000;
 		} elseif( $taso == $val and ($maara > 6000 and $maara <= 9000) ){
-			$return += 0.18;
+			$return += $dh->etyo_6000_9000;
 		} elseif( $taso == $val and $maara > 9000 ){
-			$return += 0.17;
+			$return += $dh->etyo_9000_plus;
 		}
 		//     eTyö -->
 
 		// <-- eLasku
 		$val = 3; // Laskutus
 		if( $taso == $val and $maara <= 1000 ){
-			$return += 0.05;
+			$return += $dh->elasku_1000;
 		} elseif( $taso == $val and ($maara > 1000 and $maara <= 2000) ){
-			$return += 0.05;
+			$return += $dh->elasku_1000_2000;
 		} elseif( $taso == $val and ($maara > 2000 and $maara <= 3000) ){
-			$return += 0.04;
+			$return += $dh->elasku_2000_3000;
 		} elseif( $taso == $val and ($maara > 3000 and $maara <= 6000) ){
-			$return += 0.03;
+			$return += $dh->elasku_3000_6000;
 		} elseif( $taso == $val and ($maara > 6000 and $maara <= 9000) ){
-			$return += 0.03;
+			$return += $dh->elasku_6000_9000;
 		} elseif( $taso == $val and $maara > 9000 ){
-			$return += 0.02;
+			$return += $dh->elasku_9000_plus;
 		}
 		//     eLasku -->
 
 		// <-- eOnline
 		$val = 4; // Onlinevaraus
 		if( $taso == $val and $maara <= 1000 ){
-			$return += 0.03;
+			$return += $dh->eonline_1000;
 		} elseif( $taso == $val and ($maara > 1000 and $maara <= 2000) ){
-			$return += 0.03;
+			$return += $dh->eonline_1000_2000;
 		} elseif( $taso == $val and ($maara > 2000 and $maara <= 3000) ){
-			$return += 0.02;
+			$return += $dh->eonline_2000_3000;
 		} elseif( $taso == $val and ($maara > 3000 and $maara <= 6000) ){
-			$return += 0.02;
+			$return += $dh->eonline_3000_6000;
 		} elseif( $taso == $val and ($maara > 6000 and $maara <= 9000) ){
-			$return += 0.02;
+			$return += $dh->eonline_6000_9000;
 		} elseif( $taso == $val and $maara > 9000 ){
-			$return += 0.02;
+			$return += $dh->eonline_9000_plus;
 		}
 		//     eOnline -->
 
 		// <-- eDico
 		$val = 5; // CRM / eDico
 		if( $taso == $val and $maara <= 1000 ){
-			$return += 0.05;
+			$return += $dh->edico_1000;
 		} elseif( $taso == $val and ($maara > 1000 and $maara <= 2000) ){
-			$return += 0.05;
+			$return += $dh->edico_1000_2000;
 		} elseif( $taso == $val and ($maara > 2000 and $maara <= 3000) ){
-			$return += 0.04;
+			$return += $dh->edico_2000_3000;
 		} elseif( $taso == $val and ($maara > 3000 and $maara <= 6000) ){
-			$return += 0.04;
+			$return += $dh->edico_3000_6000;
 		} elseif( $taso == $val and ($maara > 6000 and $maara <= 9000) ){
-			$return += 0.03;
+			$return += $dh->edico_6000_9000;
 		} elseif( $taso == $val and $maara > 9000 ){
-			$return += 0.02;
+			$return += $dh->edico_9000_plus;
 		}
 		//     eDico -->
 
@@ -137,7 +138,12 @@ class DigistenTunnitKkController extends Controller
 
 		$model = $this->loadModel($id);
 		$return = 0;
-		if(isset($model->id))
+
+		$dh = DigistenHinnasto::model()->findByPk(1);
+		if(!isset($dh->id))
+		return 0;
+
+		if(isset($model->id) and isset($dh->id))
 		{
 			$tasot = explode(",", $model->tasot);
 			if( is_array($tasot) )
@@ -145,11 +151,12 @@ class DigistenTunnitKkController extends Controller
 				foreach($tasot as $k=>$v)
 				{
 					if($v == 2) continue; // tyovuorot ei tarvitse erikseen
-					if($this->tilanne($v, $model->tunnit))
-					$return += $this->tilanne($v, $model->tunnit);
+					if($this->tilanne($v, $model->tunnit, $dh))
+					$return += $this->tilanne($v, $model->tunnit, $dh);
 				}
 			}
 		}
+
 		return $return;
 	}
 
@@ -165,6 +172,27 @@ class DigistenTunnitKkController extends Controller
 		return false;
 	}
 
+
+	public function actionDigisten_hinnasto()
+	{
+
+		$chk = DigistenHinnasto::model()->findByPk(1);
+		if(isset($chk->id))
+			$model = $chk;
+		else
+			$model = new DigistenHinnasto;
+
+		if(isset($_POST['DigistenHinnasto']))
+		{
+			$model->attributes=$_POST['DigistenHinnasto'];
+			if($model->save())
+				Yii::app()->user->setFlash('success', "Hinnasto tallennettu!");
+		}
+
+		$this->render('digisten_hinnasto',array(
+			'model'=>$model,
+		));
+	}
 
 	/**
 	 * Displays a particular model.

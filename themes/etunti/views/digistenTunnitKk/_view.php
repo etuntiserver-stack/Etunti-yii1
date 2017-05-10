@@ -36,14 +36,29 @@
 	</td>
 	<td>
 		<?php 
-			$sum = ($this->tuntihinta_laskin($data->id)*$data->tunnit);
+			$dh = DigistenHinnasto::model()->findByPk(1);
+			$adm = Administrators::model()->findAll();
+			$jarj_valv_kpl = 0;
+			$jarj_valv = 0;
+			if( isset($dh->id) and count($adm) > 2 )
+			{
+				echo (count($adm)).' kpl (2 ilmaista)<br>'
+				.$dh->jarjestelmanvalvoja*(count($adm)-2).' &euro;';
+				$jarj_valv += $dh->jarjestelmanvalvoja*(count($adm)-2);
+				$jarj_valv_kpl = count($adm);
+			}
+		?>
+	</td>
+	<td>
+		<?php 
+			$sum = ($this->tuntihinta_laskin($data->id)*$data->tunnit)+$jarj_valv;
 			echo number_format($sum, 2, ',', ' ').' &euro;';
 		?>
 	</td>
 	<td>
 		<?php if($data->laskutettu == 0 and $data->lasku_id == 0) : ?>
 		<?php echo CHtml::link(Yii::t('main', 'Luo lasku'), 
-				array('//lasku/create', 'digisten_tunnit_id'=>$data->id), 
+				array('//lasku/create', 'digisten_tunnit_id'=>$data->id, 'jv' => $jarj_valv_kpl), 
 				array(
 					'class'=>'btn btn-warning', 
 					'style'=>'color:white', 
