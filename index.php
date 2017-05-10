@@ -1,4 +1,7 @@
 <?php
+ini_set('session.gc_maxlifetime', 86400);
+ini_set('session.cookie_lifetime', 86400);
+ini_set('session.save_path', $_SERVER['DOCUMENT_ROOT'] .'../sessions/');
 
 // change the following paths if necessary
 $yii=dirname(__FILE__).'/YII/framework/yii.php';
