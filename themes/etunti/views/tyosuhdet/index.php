@@ -84,6 +84,7 @@
    <option value="tilinumero"><?php echo Yii::t('main', 'Tilinumero'); ?></option>
    <option value="palkanmaksu"><?php echo Yii::t('main', 'Palkanmaksu'); ?></option>
    <option value="verokorti"><?php echo Yii::t('main', 'Verokortin tiedot'); ?></option>
+   <option value="tyontekijan_kortit"><?php echo Yii::t('main', 'Työntekijän kortit'); ?></option>
 </select>
 
 
@@ -165,6 +166,9 @@
    <?php if(isset($_POST['sarakkeet']) and in_array('verokorti',$_POST['sarakkeet'])) : ?>
      <th><?php echo Yii::t('main', 'Verokortin tiedot'); ?></th>
    <?php endif; ?>
+   <?php if(isset($_POST['sarakkeet']) and in_array('tyontekijan_kortit',$_POST['sarakkeet'])) : ?>
+     <th><?php echo Yii::t('main', 'Työntekijän kortit'); ?></th>
+   <?php endif; ?>
   </tr>
   </thead>
   <?php
@@ -209,6 +213,16 @@
 	$verotiedot .= $ts->getAttributeLabel('atk_varten').': '.$ts->atk_varten.'<br>';
 	if(!empty($ts->yksi_tuloraja))
 	$verotiedot .= $ts->getAttributeLabel('yksi_tuloraja').': '.$ts->yksi_tuloraja;
+
+	$tyontekijan_kortit = '';
+	$a = Valikkoot::model()->findAll(" select_type='kortit' ");
+	$check = explode("##***",$t->kortit);
+
+		  foreach($a as $val)
+		   foreach($check as $c)
+		     if(trim($c) == trim('kortti_'.$val->value))
+			$tyontekijan_kortit .= $val->value.'<br>';
+
      }
 
 	echo '<tr>';
@@ -235,6 +249,8 @@ if(isset($_POST['sarakkeet']) and in_array('palkanmaksu',$_POST['sarakkeet']))
 	echo '<td>'.$palkanmaksu.'</td>';
 if(isset($_POST['sarakkeet']) and in_array('verokorti',$_POST['sarakkeet']))
 	echo '<td>'.$verotiedot.'</td>';
+if(isset($_POST['sarakkeet']) and in_array('tyontekijan_kortit',$_POST['sarakkeet']))
+	echo '<td>'.$tyontekijan_kortit.'</td>';
 	echo '</tr>';
   }
   ?>
