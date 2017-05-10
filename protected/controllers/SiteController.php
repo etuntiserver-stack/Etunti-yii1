@@ -81,6 +81,14 @@ class SiteController extends Controller
         public function init()
         {
 
+		if(!isset(Yii::app()->user->adminID))
+		{
+			//die('login error');
+		  	echo '<script type="text/javascript">
+				window.location.href=location.protocol + "//" + location.host + "/index.php/user/login";
+			</script>';
+			exit;
+		}
                 if (Yii::app()->controller->isEtuntiAdmin() and !isset(Yii::app()->user->user_theme)) {
                         Yii::app()->theme = 'etunti';
                 } elseif (Yii::app()->controller->isEtuntiAdmin() and isset(Yii::app()->user->user_theme)) {

@@ -471,8 +471,13 @@ var etusivuAjax = function(){
            type: "POST",
            data: { "suoritus" : "cronin_asiat" , count : count },
            success: function(data){
-		var d = JSON.parse(data);
-		//console.log(d);
+
+		try {
+			var d = JSON.parse(data);
+		} catch (e) {
+		        window.location.href=location.protocol + "//" + location.host + '/index.php/user/login'
+		}
+
 		$("#ylittaneet").html(d[0]);
 		$("#myohastyneet").html(d[1]);
 
