@@ -200,7 +200,7 @@ return array(
 	'components'=>array(
 
         'session' => array(
-                'timeout' => 3,
+                'timeout' => 86400,
         ),
 
 /* pdf */
