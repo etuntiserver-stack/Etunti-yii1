@@ -204,7 +204,7 @@ return array(
 	'components'=>array(
 
         'session' => array(
-                'timeout' => 86400, // index.php ssa on käsin määritetty
+                'timeout' => 86400, // ylhällä on käsin määritetty
         ),
 
 /* pdf */
