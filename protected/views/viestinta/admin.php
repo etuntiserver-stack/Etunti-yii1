@@ -1,7 +1,6 @@
 <?php
 /* @var $this ViestintaController */
 /* @var $model Viestinta */
-session_set_cookie_params(86400);
 
 print_r(Yii::app()->getSession()->getSessionId());
 
