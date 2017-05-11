@@ -328,29 +328,38 @@ $create_database = $cpanel->api2(
  ) 
 );
 */
-
+// N5YBXZSXX245H3IL38U0CPGOMT7XGBTB
 
 $whmusername = "estromfi";
-$whmpassword = "Estrom2016!";
+$whmpassword = "6Qd5a2orS!7ae"; //6Qd5a2orS!7ae
  
-$query = "https://srv.etunti.fi:2087/json-api/listaccts?api.version=1";
- 
+$query = "https://srv.etunti.fi:2087/json-api/create_user_session?api.version=1&cp_security_token=N5YBXZSXX245H3IL38U0CPGOMT7XGBTB&service=cpaneld&locale=fr&app=awstats";
+//https://hostname.example.com:2087/cpsess##########/json-api/create_user_session?api.version=1&user=username&service=cpaneld&locale=fr&app=awstats 
+
 $curl = curl_init();                                // Create Curl Object
 curl_setopt($curl, CURLOPT_SSL_VERIFYPEER,0);       // Allow self-signed certs
 curl_setopt($curl, CURLOPT_SSL_VERIFYHOST,0);       // Allow certs that do not match the hostname
 curl_setopt($curl, CURLOPT_HEADER,0);               // Do not include header in output
 curl_setopt($curl, CURLOPT_RETURNTRANSFER,1);       // Return contents of transfer on curl_exec
-$header[0] = "Authorization: Basic " . base64_encode($whmusername.":".$whmpassword) . "\n\r";
-curl_setopt($curl, CURLOPT_HTTPHEADER, $header);    // set the username and password
+//$header[0] = "Authorization: Basic " . base64_encode($whmusername.":".$whmpassword) . "\n\r";
+//curl_setopt($curl, CURLOPT_HTTPHEADER, $header);    // set the username and password
 curl_setopt($curl, CURLOPT_URL, $query);            // execute the query
+
 $result = curl_exec($curl);
 if ($result == false) {
-    error_log("curl_exec threw error \"" . curl_error($curl) . "\" for $query");   
-                                                    // log error if curl exec fails
+    echo "curl_exec threw error \"" . curl_error($curl) . "\" for $query";   
+
 }
 curl_close($curl);
  
-print $result;
+echo '<pre>';
+print_r(json_decode($result, true));
+echo '</pre>';
+
+
+
+
+
 
 exit;
 
