@@ -1,7 +1,7 @@
 <?php
 /* @var $this ViestintaController */
 /* @var $model Viestinta */
-
+print_r(Yii::app()->user);
 $this->breadcrumbs=array(
 	Yii::t('main', 'Viestintä')=>array('index'),
 	Yii::t('main', 'Hallinta'),

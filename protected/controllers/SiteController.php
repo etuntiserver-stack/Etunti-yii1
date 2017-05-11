@@ -304,6 +304,13 @@ class SiteController extends Controller
 			$yritystunnus = str_replace(' ', '_', $yritystunnus);
 			$yritystunnus = strtolower($yritystunnus);
 
+			//$whmusername = "root";
+			//$whmpassword = "6Qd5a2orS!7ae"; //6Qd5a2orS!7ae
+
+			$c_panel_user = "estromfi";
+			$user = "root";
+			$token = "N5YBXZSXX245H3IL38U0CPGOMT7XGBTB";
+			$host = 'https://srv.etunti.fi:2087/';
  
 			if( $_SERVER['REMOTE_ADDR'] == '::1' or $_SERVER['REMOTE_ADDR'] == '127.0.0.1' )
 			{
@@ -316,51 +323,21 @@ class SiteController extends Controller
 				$password = "fv4-qcy-Gba-m9b"; //fv4-qcy-Gba-m9b
 			}
 
-/*
-require_once "/usr/local/cpanel/php/cpanel.php";
-$cpanel = new CPANEL(); // Connect to cPanel - only do this once.
-  
-// Create the database "example_database"
-$create_database = $cpanel->api2(
-    'MysqlFE', 'createdb', 
-    array(
-        'db' => $yritystunnus,
- ) 
-);
-*/
-// N5YBXZSXX245H3IL38U0CPGOMT7XGBTB
-
-$whmusername = "estromfi";
-$whmpassword = "6Qd5a2orS!7ae"; //6Qd5a2orS!7ae
- 
-$query = "https://srv.etunti.fi:2087/json-api/create_user_session?api.version=1&cp_security_token=N5YBXZSXX245H3IL38U0CPGOMT7XGBTB&service=cpaneld&locale=fr&app=awstats";
-//https://hostname.example.com:2087/cpsess##########/json-api/create_user_session?api.version=1&user=username&service=cpaneld&locale=fr&app=awstats 
-
-$curl = curl_init();                                // Create Curl Object
-curl_setopt($curl, CURLOPT_SSL_VERIFYPEER,0);       // Allow self-signed certs
-curl_setopt($curl, CURLOPT_SSL_VERIFYHOST,0);       // Allow certs that do not match the hostname
-curl_setopt($curl, CURLOPT_HEADER,0);               // Do not include header in output
-curl_setopt($curl, CURLOPT_RETURNTRANSFER,1);       // Return contents of transfer on curl_exec
-//$header[0] = "Authorization: Basic " . base64_encode($whmusername.":".$whmpassword) . "\n\r";
-//curl_setopt($curl, CURLOPT_HTTPHEADER, $header);    // set the username and password
-curl_setopt($curl, CURLOPT_URL, $query);            // execute the query
-
-$result = curl_exec($curl);
-if ($result == false) {
-    echo "curl_exec threw error \"" . curl_error($curl) . "\" for $query";   
-
-}
-curl_close($curl);
- 
-echo '<pre>';
-print_r(json_decode($result, true));
-echo '</pre>';
 
 
 
+			$connectCpanel = json_decode($this->cPanelConnect($host, $user, $token, $c_panel_user), true);
+			if(isset($connectCpanel['data']['session']))
+			{
+				$session = $connectCpanel['data']['cp_security_token'];
 
-
-
+				if($this->cPanelCreateDb($session, $host, $user, $token, $c_panel_user, $yritystunnus))
+				{
+					echo 'ok';
+				} else {
+					die('Error WHL');
+				}
+			}
 exit;
 
 /*
@@ -394,6 +371,92 @@ exit;
 	}
 
 
+	protected function cPanelConnect($host, $user, $token, $c_panel_user)
+	{
+
+		// token estromfi : N5YBXZSXX245H3IL38U0CPGOMT7XGBTB
+		$query = $host."json-api/create_user_session?api.version=1&user=".$c_panel_user."&service=cpaneld&locale=en&app=awstats";
+
+		$curl = curl_init();
+		curl_setopt($curl, CURLOPT_SSL_VERIFYHOST,0);
+		curl_setopt($curl, CURLOPT_SSL_VERIFYPEER,0);
+		curl_setopt($curl, CURLOPT_RETURNTRANSFER,1);
+ 
+		$header[0] = "Authorization: whm $user:$token";
+		curl_setopt($curl,CURLOPT_HTTPHEADER,$header);
+		curl_setopt($curl, CURLOPT_URL, $query);
+		$result = curl_exec($curl);
+
+		$result = curl_exec($curl);
+		if ($result == false) {
+		    echo "curl_exec threw error \"" . curl_error($curl) . "\" for $query";   
+		
+		}
+		curl_close($curl);
+ 
+		return $result;
+
+	}
+
+	protected function cPanelCreateDb($session, $host, $user, $token, $c_panel_user, $yritystunnus)
+	{
+
+			$query = $host.$session."/json-api/cpanel?cpanel_jsonapi_user=".$c_panel_user."&cpanel_jsonapi_apiversion=2&cpanel_jsonapi_module=MysqlFE&cpanel_jsonapi_func=createdb&db=".$yritystunnus;
+
+			$curl = curl_init();
+			curl_setopt($curl, CURLOPT_SSL_VERIFYHOST,0);
+			curl_setopt($curl, CURLOPT_SSL_VERIFYPEER,0);
+			curl_setopt($curl, CURLOPT_RETURNTRANSFER,1);
+ 
+			$header[0] = "Authorization: whm $user:$token";
+			curl_setopt($curl,CURLOPT_HTTPHEADER,$header);
+			curl_setopt($curl, CURLOPT_URL, $query);
+			$result = curl_exec($curl);
+			if ($result == false) {
+			    echo "curl_exec threw error \"" . curl_error($curl) . "\" for $query";   
+			
+			}
+			curl_close($curl);
+
+			$decode_result = json_decode($result, true);
+			if(
+				isset($decode_result['cpanelresult']['event']['result']) 
+				and $decode_result['cpanelresult']['event']['result'] == 1 
+			)
+			{
+
+
+				$query = $host.$session."/json-api/cpanel?cpanel_jsonapi_user=".$c_panel_user."&cpanel_jsonapi_apiversion=2&cpanel_jsonapi_module=MysqlFE&cpanel_jsonapi_func=setdbuserprivileges&db=".$yritystunnus."&dbuser=mulgikapsas&privileges=ALL PRIVILEGES";
+
+				$curl = curl_init();
+				curl_setopt($curl, CURLOPT_SSL_VERIFYHOST,0);
+				curl_setopt($curl, CURLOPT_SSL_VERIFYPEER,0);
+				curl_setopt($curl, CURLOPT_RETURNTRANSFER,1);
+ 
+				$header[0] = "Authorization: whm $user:$token";
+				curl_setopt($curl,CURLOPT_HTTPHEADER,$header);
+				curl_setopt($curl, CURLOPT_URL, $query);
+				$result_privelegies = curl_exec($curl);
+				if ($result_privelegies == false) {
+				    echo "curl_exec threw error \"" . curl_error($curl) . "\" for $query";   
+				
+				}
+				curl_close($curl);
+	
+				$decode_result_pr = json_decode($result_privelegies, true);
+				if(
+					isset($decode_result_pr['cpanelresult']['event']['result']) 
+					and $decode_result_pr['cpanelresult']['event']['result'] == 1 
+				)
+				{
+					return true;
+				}
+			}
+ 
+		return false;
+
+	}
+/*
 	protected function createNewTable($yritystunnus, $servername, $username, $password)
 	{
 
@@ -440,11 +503,11 @@ exit;
 	                            foreach($sql as $query){
         	                        $result=mysql_query($query, $connection) or die(mysql_error());
         	                        if ($result){
-					/*
-        	                         echo '<tr><td><BR></td></tr>';
-        	                         echo '<tr><td>' . $query . ' <b>SUCCESS</b></td></tr>';
-        	                         echo '<tr><td><BR></td></tr>';
-					*/
+					
+        	                        // echo '<tr><td><BR></td></tr>';
+        	                        // echo '<tr><td>' . $query . ' <b>SUCCESS</b></td></tr>';
+        	                        // echo '<tr><td><BR></td></tr>';
+					
         	                        } 
         	                    }
 				fclose($handle);
@@ -502,6 +565,8 @@ exit;
 
 			return true;
 		}
+*/
+
 
 	public function actionUlkonaky()
 	{
