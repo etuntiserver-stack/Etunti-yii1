@@ -2,8 +2,11 @@
 /* @var $this ViestintaController */
 /* @var $model Viestinta */
 session_set_cookie_params(86400);
-phpinfo();
+
 print_r(Yii::app()->getSession()->getSessionId());
+
+phpinfo();
+
 $this->breadcrumbs=array(
 	Yii::t('main', 'Viestintä')=>array('index'),
 	Yii::t('main', 'Hallinta'),
