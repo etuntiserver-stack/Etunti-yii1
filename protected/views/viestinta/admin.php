@@ -1,6 +1,7 @@
 <?php
 /* @var $this ViestintaController */
 /* @var $model Viestinta */
+//Yii::app()->user->authTimeout = 86400;
 print_r(Yii::app()->user);
 $this->breadcrumbs=array(
 	Yii::t('main', 'Viestintä')=>array('index'),
