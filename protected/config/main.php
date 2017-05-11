@@ -200,7 +200,9 @@ return array(
 	'components'=>array(
 
         'session' => array(
-                'timeout' => 86400, // ylhällä on käsin määritetty
+   		'class'=>'CHttpSession',
+                'timeout' => 86400,
+   		'autoStart'=>true,
         ),
 
 /* pdf */
@@ -375,7 +377,8 @@ return array(
             // enable cookie-based authentication
             'class' => 'WebUser',
             'allowAutoLogin'=>true,
-            'authTimeout'=>86400,
+            'autoRenewCookie' => true,
+            'authTimeout' => 31557600,
             'loginUrl' => array('/user/login'),
         ),
 		// uncomment the following to enable URLs in path-format
