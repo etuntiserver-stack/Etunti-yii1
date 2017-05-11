@@ -316,6 +316,20 @@ class SiteController extends Controller
 				$password = "fv4-qcy-Gba-m9b"; //fv4-qcy-Gba-m9b
 			}
 
+
+$cpanel = new CPANEL(); // Connect to cPanel - only do this once.
+  
+// Create the database "example_database"
+$create_database = $cpanel->api2(
+    'MysqlFE', 'createdb', 
+    array(
+        'db' => $yritystunnus,
+ ) 
+);
+
+exit;
+
+/*
 			// Create connection
 			$conn = new mysqli($servername, $username, $password);
 			// Check connection
@@ -333,6 +347,8 @@ class SiteController extends Controller
 			} else {
 			    	$vastaus = "Error creating database: " . $conn->error;
 			}
+*/
+
 		}
 
 		$this->render('aloita', array(
