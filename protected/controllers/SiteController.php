@@ -1078,8 +1078,10 @@ $(document).ready(function(){
 	{
 
 		// <-- Backup
-		if (!file_exists(Yii::app()->basePath."/../backup/".Yii::app()->user->domain.'/'.date("Y-m-d").'_'.Yii::app()->user->domain.'.sql.gz')
-		and $_SERVER['REMOTE_ADDR'] != '::1' and $_SERVER['REMOTE_ADDR'] != '127.0.0.1'
+		if (
+			isset(Yii::app()->user->domain) and 
+			!file_exists(Yii::app()->basePath."/../backup/".Yii::app()->user->domain.'/'.date("Y-m-d").'_'.Yii::app()->user->domain.'.sql.gz')
+			and $_SERVER['REMOTE_ADDR'] != '::1' and $_SERVER['REMOTE_ADDR'] != '127.0.0.1'
 		)
 		{
 
