@@ -1,9 +1,8 @@
 <?php
 /* @var $this ViestintaController */
 /* @var $model Viestinta */
-
-print_r(session_save_path());
-echo '<br>';
+session_set_cookie_params(86400);
+phpinfo();
 print_r(Yii::app()->getSession()->getSessionId());
 $this->breadcrumbs=array(
 	Yii::t('main', 'Viestintä')=>array('index'),
