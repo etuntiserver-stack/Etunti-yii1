@@ -316,7 +316,7 @@ class SiteController extends Controller
 				$password = "fv4-qcy-Gba-m9b"; //fv4-qcy-Gba-m9b
 			}
 
-require_once "cpanel.php";
+include "/usr/local/cpanel/php/cpanel.php";
 $cpanel = new CPANEL(); // Connect to cPanel - only do this once.
   
 // Create the database "example_database"
