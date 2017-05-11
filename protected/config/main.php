@@ -1,10 +1,6 @@
 <?php
 session_start();
 
-ini_set('session.gc_maxlifetime', 86400);
-ini_set('session.cookie_lifetime', 86400);
-ini_set('session.save_path', $_SERVER['DOCUMENT_ROOT'] .'../sessions/');
-
 // uncomment the following to define a path alias
 // Yii::setPathOfAlias('local','path/to/local-folder');
 
