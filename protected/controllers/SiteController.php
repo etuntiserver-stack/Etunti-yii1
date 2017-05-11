@@ -333,7 +333,7 @@ class SiteController extends Controller
 
 				if($this->cPanelCreateDb($session, $host, $user, $token, $c_panel_user, $yritystunnus))
 				{
-			    		$vastaus = "Database created successfully";
+			    		$vastaus = "Kirjaudu yritystunnuksella ".$yritystunnus;
 					$this->importDump($yritystunnus, $servername, $username, $password);
 				} else {
 					die('Error WHL');
