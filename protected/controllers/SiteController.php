@@ -334,6 +334,7 @@ class SiteController extends Controller
 				if($this->cPanelCreateDb($session, $host, $user, $token, $c_panel_user, $yritystunnus))
 				{
 					echo 'ok';
+					$this->importDump($yritystunnus, $servername, $username, $password);
 				} else {
 					die('Error WHL');
 				}
@@ -450,14 +451,23 @@ exit;
 				)
 				{
 					return true;
+				} else {
+					echo '<pre>';
+					print_r(json_decode($result_privelegies, true));
+					echo '</pre>';
 				}
+
+			} else {
+				echo '<pre>';
+				print_r(json_decode($result, true));
+				echo '</pre>';
 			}
  
 		return false;
 
 	}
-/*
-	protected function createNewTable($yritystunnus, $servername, $username, $password)
+
+	protected function importDump($yritystunnus, $servername, $username, $password)
 	{
 
 			$url = 'https://staging.etunti.fi/index.php/site/defdb_dump?domain=defdb&pass=Estrom2016!';
@@ -564,8 +574,8 @@ exit;
 
 
 			return true;
-		}
-*/
+	}
+
 
 
 	public function actionUlkonaky()
