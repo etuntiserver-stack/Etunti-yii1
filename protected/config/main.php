@@ -378,8 +378,6 @@ return array(
             // enable cookie-based authentication
             'class' => 'WebUser',
             'allowAutoLogin'=>true,
-            'autoRenewCookie' => true,
-            'authTimeout' => 31557600,
             'loginUrl' => array('/user/login'),
         ),
 		// uncomment the following to enable URLs in path-format

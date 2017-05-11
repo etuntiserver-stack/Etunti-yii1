@@ -2,7 +2,8 @@
 /* @var $this ViestintaController */
 /* @var $model Viestinta */
 
-
+print_r(session_save_path());
+echo '<br>';
 print_r(Yii::app()->getSession()->getSessionId());
 $this->breadcrumbs=array(
 	Yii::t('main', 'Viestintä')=>array('index'),
