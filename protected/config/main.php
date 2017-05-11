@@ -199,11 +199,6 @@ return array(
 	// application components
 	'components'=>array(
 
-        'session' => array(
-   		'class'=>'CHttpSession',
-                'timeout' => 86400,
-   		'autoStart'=>true,
-        ),
 
 /* pdf */
     'ePdf' => array(
@@ -371,7 +366,13 @@ return array(
 
 
 
-	'chartjs' => array('class' => 'chartjs.components.ChartJs'),
+	//'chartjs' => array('class' => 'chartjs.components.ChartJs'),
+
+        'session' => array(
+   		'class'=>'CHttpSession',
+                'timeout' => 86400,
+   		'autoStart'=>true,
+        ),
 
         'user'=>array(
             // enable cookie-based authentication
