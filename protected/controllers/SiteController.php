@@ -333,33 +333,12 @@ class SiteController extends Controller
 
 				if($this->cPanelCreateDb($session, $host, $user, $token, $c_panel_user, $yritystunnus))
 				{
-					echo 'ok';
+			    		$vastaus = "Database created successfully";
 					$this->importDump($yritystunnus, $servername, $username, $password);
 				} else {
 					die('Error WHL');
 				}
 			}
-exit;
-
-/*
-			// Create connection
-			$conn = new mysqli($servername, $username, $password);
-			// Check connection
-			if ($conn->connect_error) {
-			    die("Connection failed: " . $conn->connect_error);
-			} 
-	
-			// Create database
-			$sql = "CREATE DATABASE ".$yritystunnus;
-			if ($conn->query($sql) === TRUE) {
-			    	$vastaus = "Database created successfully";
-				$this->createNewTable($yritystunnus, $servername, $username, $password);
-				$database = true;
-
-			} else {
-			    	$vastaus = "Error creating database: " . $conn->error;
-			}
-*/
 
 		}
 
