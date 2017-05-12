@@ -91,7 +91,7 @@ session_start();
 				        'class'=>'CEmailLogRoute',
                 			'levels'=>'error', //'trace, info, error, warning, vardump'
 					'emails'=>'laptopsr@gmail.com',
-					'subject'=>'Log File Message. Domain: '.$domain.', IP: '.$_SERVER['REMOTE_ADDR'],
+					'subject'=>'Log File Message. Domain: '.$domain.', IP: '.$_SERVER['REMOTE_ADDR'].', SID: '.session_id(),
 			        )
 	);
   }
@@ -249,6 +249,7 @@ return array(
 
         'mob/<id:\d+>/<title:.*?>'=>'mob/view',
         'posts/<tag:.*?>'=>'mob/index',
+
         // REST patterns
         //array('api/list', 'pattern'=>'api/<model:\w+>', 'verb'=>'GET'),
         //array('api/view', 'pattern'=>'api/<model:\w+>/<id:\d+>', 'verb'=>'GET'),
