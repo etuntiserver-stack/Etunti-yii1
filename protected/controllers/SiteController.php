@@ -310,6 +310,7 @@ class SiteController extends Controller
 		$return = array(
 			'c_panel_user' => $c_panel_user,
 			'user' => $user,
+			'token' => $token,
 			'host' => $host,
 			'servername' => $servername,
 			'username' => $username,
