@@ -288,6 +288,38 @@ class SiteController extends Controller
 		exit;
 	}
 
+	protected function WHMtunnukset()
+	{
+
+			$c_panel_user = "estromfi";
+			$user = "root";
+			$token = "N5YBXZSXX245H3IL38U0CPGOMT7XGBTB";
+			$host = 'https://srv.etunti.fi:2087/';
+ 
+			if( $_SERVER['REMOTE_ADDR'] == '::1' or $_SERVER['REMOTE_ADDR'] == '127.0.0.1' )
+			{
+				$servername = "localhost";
+				$username = "root";
+				$password = "";
+			} else {
+				$servername = "localhost";
+				$username = "mulgikapsas";
+				$password = "KristinA1";
+			}
+
+		$return = array(
+			'c_panel_user' => $c_panel_user,
+			'user' => $user,
+			'host' => $host,
+			'servername' => $servername,
+			'username' => $username,
+			'password' => $password,
+		);
+
+		return $return;
+
+	}
+
   	public function actionAloita()
 	{
 
@@ -304,36 +336,16 @@ class SiteController extends Controller
 			$yritystunnus = str_replace(' ', '_', $yritystunnus);
 			$yritystunnus = strtolower($yritystunnus);
 
-			//$whmusername = "root";
-			//$whmpassword = "6Qd5a2orS!7ae"; //6Qd5a2orS!7ae
+			$t = WHMtunnukset();
 
-			$c_panel_user = "estromfi";
-			$user = "root";
-			$token = "N5YBXZSXX245H3IL38U0CPGOMT7XGBTB";
-			$host = 'https://srv.etunti.fi:2087/';
- 
-			if( $_SERVER['REMOTE_ADDR'] == '::1' or $_SERVER['REMOTE_ADDR'] == '127.0.0.1' )
-			{
-				$servername = "localhost";
-				$username = "root";
-				$password = "";
-			} else {
-				$servername = "localhost";
-				$username = "mulgikapsas"; // dbmanager
-				$password = "KristinA1"; //fv4-qcy-Gba-m9b
-			}
-
-
-
-
-			$connectCpanel = json_decode($this->cPanelConnect($host, $user, $token, $c_panel_user), true);
+			$connectCpanel = json_decode($this->cPanelConnect($t['host'], $t['user'], $t['token'], $t['c_panel_user']), true);
 			if(isset($connectCpanel['data']['session']))
 			{
 				$session = $connectCpanel['data']['cp_security_token'];
 
-				if($this->cPanelCreateDb($session, $host, $user, $token, $c_panel_user, $yritystunnus))
+				if($this->cPanelCreateDb($session, $t['host'], $t['user'], $t['token'], $t['c_panel_user'], $yritystunnus))
 				{
-					$this->importDump($yritystunnus, $servername, $username, $password);
+					$this->importDump($yritystunnus, $t['servername'], $t['username'], $t['password']);
 					$database = true;
 				} else {
 					die('Error WHL');
@@ -377,6 +389,34 @@ class SiteController extends Controller
 		return $result;
 
 	}
+
+
+	protected function cPanelDropDb($session, $host, $user, $token, $c_panel_user, $yritystunnus)
+	{
+
+			if(empty($yritystunnus))
+				return false;
+
+			$query = $host.$session."/json-api/cpanel?cpanel_jsonapi_user=".$c_panel_user."&cpanel_jsonapi_apiversion=2&cpanel_jsonapi_module=MysqlFE&cpanel_jsonapi_func=deletedb&db=".$yritystunnus;
+
+			$curl = curl_init();
+			curl_setopt($curl, CURLOPT_SSL_VERIFYHOST,0);
+			curl_setopt($curl, CURLOPT_SSL_VERIFYPEER,0);
+			curl_setopt($curl, CURLOPT_RETURNTRANSFER,1);
+ 
+			$header[0] = "Authorization: whm $user:$token";
+			curl_setopt($curl,CURLOPT_HTTPHEADER,$header);
+			curl_setopt($curl, CURLOPT_URL, $query);
+			$result = curl_exec($curl);
+			if ($result == false) {
+			    echo "curl_exec threw error \"" . curl_error($curl) . "\" for $query";   
+			
+			}
+			curl_close($curl);
+
+			$decode_result = json_decode($result, true);
+	}
+
 
 	protected function cPanelCreateDb($session, $host, $user, $token, $c_panel_user, $yritystunnus)
 	{
