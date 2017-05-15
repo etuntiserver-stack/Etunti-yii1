@@ -8,8 +8,8 @@
 	   <div class="pull-right">
 	   <?php     
 		echo CHtml::link("poista", '#', array(
-		'submit'=>array('delete', "id"=>$model->id), 
-		'confirm' => 'Haluatko varmaasti poistaa?',
+		'submit'=>array('delete_etunnin_asiakas', "id"=>$model->id), 
+		'confirm' => 'Haluatko varmaasti poistaa? !!!!DROP TABLE!!!',
 		'class'=>'btn btn-primary myBgColors'
 		));
 	   ?>

@@ -33,7 +33,7 @@ class SiteController extends Controller
 	{
 		return array(
 			array('allow', 
-				'actions'=>array('etunnin_asiakkaat', 'update_etunnin_asiakas', 'etunnin_asiakas_kk', 'laheta_et_kirje', 'etunnin_asiakas_kk_laskuri'),
+				'actions'=>array('etunnin_asiakkaat', 'update_etunnin_asiakas', 'etunnin_asiakas_kk', 'laheta_et_kirje', 'etunnin_asiakas_kk_laskuri', 'delete_etunnin_asiakas'),
                 		'expression'=>"Yii::app()->controller->isDigisten()",
 			),
 			array('allow', 
@@ -413,7 +413,7 @@ class SiteController extends Controller
 			}
 			curl_close($curl);
 
-			$decode_result = json_decode($result, true);
+			return true;
 	}
 
 
@@ -913,6 +913,36 @@ class SiteController extends Controller
 		$this->render('update_etunnin_asiakas',array(
 			'model'=>$model,
 		));
+	}
+
+	public function actionDelete_etunnin_asiakas($id)
+	{
+		$drop = false;
+		$model=Domainit::model()->findbypk($id);
+		if( isset($model->id)  ) //and $_SERVER['REMOTE_ADDR'] != '::1' and $_SERVER['REMOTE_ADDR'] != '127.0.0.1'
+		{
+			$yritystunnus = $model->domain;
+
+			$t = $this->WHMtunnukset();
+
+			$connectCpanel = json_decode($this->cPanelConnect($t['host'], $t['user'], $t['token'], $t['c_panel_user']), true);
+			if(!empty($yritystunnus) and isset($connectCpanel['data']['session']))
+			{
+				$session = $connectCpanel['data']['cp_security_token'];
+
+				if($this->cPanelDropDb($session, $t['host'], $t['user'], $t['token'], $t['c_panel_user'], $yritystunnus))
+				{
+					$model->delete();
+					$this->redirect(array('etunnin_asiakkaat'));
+				} else {
+					die('Error drop WHL');
+				}
+			}
+
+		} else {
+					die('Error drop WHL');
+		}	
+
 	}
 
 	public function actionEtunnin_asiakkaat()
