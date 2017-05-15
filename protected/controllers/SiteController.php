@@ -336,7 +336,7 @@ class SiteController extends Controller
 			$yritystunnus = str_replace(' ', '_', $yritystunnus);
 			$yritystunnus = strtolower($yritystunnus);
 
-			$t = WHMtunnukset();
+			$t = $this->WHMtunnukset();
 
 			$connectCpanel = json_decode($this->cPanelConnect($t['host'], $t['user'], $t['token'], $t['c_panel_user']), true);
 			if(isset($connectCpanel['data']['session']))
