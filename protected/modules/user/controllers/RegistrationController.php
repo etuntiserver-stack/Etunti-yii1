@@ -21,6 +21,10 @@ class RegistrationController extends Controller
 	 * Registration user
 	 */
 	public function actionRegistration() {
+
+		die('Estetty');
+		exit;
+
             $model = new RegistrationForm;
             $profile=new Profile;
             $profile->regMode = true;
