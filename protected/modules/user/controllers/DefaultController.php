@@ -8,6 +8,10 @@ class DefaultController extends Controller
 	 */
 	public function actionIndex()
 	{
+
+		die('Estetty');
+		exit;
+
 		$dataProvider=new CActiveDataProvider('User', array(
 			'criteria'=>array(
 		        'condition'=>'status>'.User::STATUS_BANNED,
