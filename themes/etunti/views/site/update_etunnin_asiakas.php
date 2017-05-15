@@ -6,12 +6,12 @@
         <div class="tray-center">
 
 	   <div class="pull-right">
-	   <?php     
+	   <?php   /*  
 		echo CHtml::link("poista", '#', array(
 		'submit'=>array('delete_etunnin_asiakas', "id"=>$model->id), 
 		'confirm' => 'Haluatko varmaasti poistaa? !!!!DROP TABLE!!!',
 		'class'=>'btn btn-primary myBgColors'
-		));
+		)); */
 	   ?>
 	   </div>
 	   <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-user"></i> <?php echo $model->yritys; ?> </h2>
