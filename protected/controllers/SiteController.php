@@ -919,7 +919,7 @@ class SiteController extends Controller
 	{
 		$drop = false;
 		$model=Domainit::model()->findbypk($id);
-		if( isset($model->id)  ) //and $_SERVER['REMOTE_ADDR'] != '::1' and $_SERVER['REMOTE_ADDR'] != '127.0.0.1'
+		if( isset($model->id) and $_SERVER['REMOTE_ADDR'] != '::1' and $_SERVER['REMOTE_ADDR'] != '127.0.0.1' )
 		{
 			$yritystunnus = $model->domain;
 
