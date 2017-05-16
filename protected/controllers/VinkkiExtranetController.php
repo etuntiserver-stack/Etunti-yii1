@@ -28,6 +28,10 @@ class VinkkiExtranetController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
+				'actions'=>array('vastaus'),
+				'users'=>array('*'),
+			),
+			array('allow',  // allow all users to perform 'index' and 'view' actions
 				'actions'=>array('index','view', 'lahetetty'),
                 		'expression'=>"Yii::app()->controller->isAsiakas() or Yii::app()->controller->isEtuntiAdmin()",
 			),
@@ -91,6 +95,53 @@ class VinkkiExtranetController extends Controller
 		));
 	}
 
+	public function actionVastaus($domain, $asia, $id, $token)
+	{
+		Yii::app()->theme = 'classic';
+		$vastaus = '';
+       		$criteria = new CDbCriteria();
+	        $criteria->condition = " id='".$id."' AND token='".$token."' ";
+		$model = VinkkiExtranet::model()->find($criteria);
+		$firma = FirmanTiedot::model()->findbypk(1);;
+		if( !isset($model->id) )
+		{
+			$vastaus = 'Error';
+
+		} elseif( isset($model->id) and $asia == 1) {
+
+			$vastaus = '
+			Olemme tallettaneet yhteystietonne rekisteriimme ja olemme teihin yhteydessä lähiaikoina.<br>
+			Terveisin<br>
+			'.$firma->tyonantaja;
+			VinkkiExtranet::model()->updateByPk($id, array('token' => ''));
+
+		} elseif( isset($model->id) and $asia == 0) {
+
+			if(!isset($_GET['confirm']))
+			{
+			$vastaus = 'Haluatko varmasti hylätä suosituksen? Mikäli hylkäät suosituksen tietojasi ei talleteta järjestelmään?';
+			$vastaus .= '<br>
+			<div class="col-sm-6 col-sm-offset-5">
+			  <div class="row">
+			    <div class="col-sm-4">
+			     <button class="btn-group btn btn-success btn-block yes">'.Yii::t('main', 'Kyllä').'</button>
+			    </div>
+			 </div>
+			</div>';
+			}
+
+			if(isset($_GET['confirm']) and $_GET['confirm'] == 1)
+			{
+			$vastaus = 'Olet hylännyt suosituksen. Tietojasi ei talletettu järjestelmään.<br> Kiitos';
+			$model->delete();
+			}
+		}
+
+		$this->render('vastaus', array(
+			'model'=>$model,
+			'vastaus'=>$vastaus
+		));
+	}
 
 	public function actionLahetetty($asiakas_id)
 	{
@@ -173,7 +224,7 @@ class VinkkiExtranetController extends Controller
 */
        		$criteria = new CDbCriteria();
 	        $criteria->order = " id DESC ";
-		//$criteria->condition = "";
+		$criteria->condition = " token='' ";
 
 		$from = date("d.m.Y", strtotime("-1 month"));
 		$to = date("d.m.Y");

@@ -32,19 +32,19 @@ $model->asiakas_id = Yii::app()->user->asiakas;
 
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'nimi'); ?>
-		<?php echo $form->textField($model,'nimi',array('size'=>60,'maxlength'=>100, 'class'=>'form-control')); ?>
+		<?php echo $form->textField($model,'nimi',array('size'=>60,'maxlength'=>100, 'class'=>'form-control', 'required'=>'yes')); ?>
 		<?php echo $form->error($model,'nimi'); ?>
 	</div>
 
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'puhelin'); ?>
-		<?php echo $form->textField($model,'puhelin',array('size'=>60,'maxlength'=>100, 'class'=>'form-control')); ?>
+		<?php echo $form->textField($model,'puhelin',array('size'=>60,'maxlength'=>100, 'class'=>'form-control', 'required'=>'yes')); ?>
 		<?php echo $form->error($model,'puhelin'); ?>
 	</div>
 
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'sahkoposti'); ?>
-		<?php echo $form->textField($model,'sahkoposti',array('size'=>60,'maxlength'=>255, 'class'=>'form-control')); ?>
+		<?php echo $form->textField($model,'sahkoposti',array('size'=>60,'maxlength'=>255, 'class'=>'form-control', 'required'=>'yes')); ?>
 		<?php echo $form->error($model,'sahkoposti'); ?>
 	</div>
 
@@ -55,7 +55,7 @@ $model->asiakas_id = Yii::app()->user->asiakas;
 	</div>
 
 	<div class="buttons">
-		<?php echo CHtml::submitButton($model->isNewRecord ? 'Lähetä' : 'Tallenna',array('class'=>'btn btn-primary myBgColors')); ?>
+		<?php echo CHtml::submitButton($model->isNewRecord ? 'Lähetä' : 'Tallenna',array('class'=>'btn btn-primary myBgColors submitButton')); ?>
 	</div>
 
 <?php $this->endWidget(); ?>

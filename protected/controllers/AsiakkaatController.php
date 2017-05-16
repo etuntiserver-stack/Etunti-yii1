@@ -1331,6 +1331,7 @@ $xml = '
 		$criteria->order = " DATE(time) DESC ";
 		$criteria->condition = "
 			asiakas_id='".$model->id."' 
+			AND token=''
 		";
 
 		if(!empty($from) and !empty($to))
