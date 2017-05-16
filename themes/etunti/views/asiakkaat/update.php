@@ -53,6 +53,36 @@ $asetukset = Asetukset::model()->findbypk(1);
 
 	   <?php echo $this->VinkiTahdet($model->id); ?>
 
+	   <!-- Vinkki -->
+	   <?php 
+		$vinkki = false;
+		if($model->vinkki_id != 0)
+		{
+			$v = VinkkiExtranet::model()->findbypk($model->vinkki_id);
+			if(isset($v->id))
+			{
+				$vinkki = true;
+				$as = Asiakkaat::model()->findbypk($v->asiakas_id);
+				$nimi = '';
+				$as_id = '';
+
+				if(isset($as->yrityksen_nimi) and !empty($as->yrityksen_nimi))
+					$nimi = $as->yrityksen_nimi;
+				elseif(isset($as->yhteyshenkilo) and !empty($as->yhteyshenkilo))
+					$nimi = $as->yhteyshenkilo;
+
+				$as_id = $as->id;
+			}
+		}
+	   ?>
+	   <?php if($vinkki): ?>
+	   <div class="alert alert-default">
+			<?=Yii::t('main', 'Suosittelija: ')?>
+			<?php echo CHtml::link($nimi, array('//asiakkaat/update', 'id'=>$as_id), array('class'=>'link')); ?>
+	   </div>
+	   <?php endif; ?>
+	   <!-- Vinkki -->
+
 
 	   <div id="netvisorTiedot" class="collapse">
 	   <div class="alert alert-default"><?php $this->netvisorAsiakasNouto($model->netvisorkey); ?></div>

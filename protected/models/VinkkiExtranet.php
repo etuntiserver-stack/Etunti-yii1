@@ -31,10 +31,10 @@ class VinkkiExtranet extends DB2ActiveRecord
 		// will receive user inputs.
 		return array(
 			array('asiakas_id, nimi, puhelin, sahkoposti', 'required'),
-			array('tila, asiakas_id', 'numerical', 'integerOnly'=>true),
+			array('tila, asiakas_id, vinkkaja_asiakas_id', 'numerical', 'integerOnly'=>true),
 			array('time, nimi, puhelin', 'length', 'max'=>100),
 			array('muutos_pvm', 'length', 'max'=>50),
-			array('sahkoposti', 'length', 'max'=>255),
+			array('sahkoposti, token', 'length', 'max'=>255),
 			array('teksti', 'length', 'max'=>3000),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.

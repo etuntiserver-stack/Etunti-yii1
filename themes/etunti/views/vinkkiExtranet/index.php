@@ -76,8 +76,7 @@
   <tr>
   <th></th>
   <th><?php echo Yii::t('main', 'Aika'); ?></th>
-  <th><?php echo Yii::t('main', 'Muutokset päivämäärä'); ?></th>
-  <th><?php echo Yii::t('main', 'Asiakas'); ?></th>
+  <th><?php echo Yii::t('main', 'Suosittelija'); ?></th>
   <th><?php echo Yii::t('main', 'Nimi'); ?></th>
   <th><?php echo Yii::t('main', 'Sähköposti'); ?></th>
   <th><?php echo Yii::t('main', 'Teksti'); ?></th>

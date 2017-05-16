@@ -20032,7 +20032,7 @@ body.sb-l-m.mobile-view .nano > .nano-pane {
   /* Adjust Navbar Logo/Branding - Adjust Width */
   body.sb-l-o .navbar-branding,
   body.sb-l-m .navbar-branding {
-    max-width: 45px;
+    max-width: 65px;
     margin-right: 5px;
   }
   /* Adjust Navbar Toggle - Sidebar Open */
