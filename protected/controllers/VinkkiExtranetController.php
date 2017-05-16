@@ -28,6 +28,10 @@ class VinkkiExtranetController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
+				'actions'=>array('vastaus'),
+				'users'=>array('*'),
+			),
+			array('allow',  // allow all users to perform 'index' and 'view' actions
 				'actions'=>array('index','view', 'lahetetty'),
                 		'expression'=>"Yii::app()->controller->isAsiakas() or Yii::app()->controller->isEtuntiAdmin()",
 			),
@@ -91,6 +95,36 @@ class VinkkiExtranetController extends Controller
 		));
 	}
 
+	public function actionVastaus($domain, $asia, $id, $token)
+	{
+		Yii::app()->theme = 'classic';
+		$vastaus = '';
+       		$criteria = new CDbCriteria();
+	        $criteria->condition = " id='".$id."' AND token='".$token."' ";
+		$model = VinkkiExtranet::model()->find($criteria);
+		$firma = FirmanTiedot::model()->findbypk(1);;
+		if( !isset($model->id) )
+		{
+			$vastaus = 'Error: ei toimi';
+
+		} elseif( isset($model->id) and $asia == 1) {
+
+			$vastaus = '
+			Olemme tallettaneet yhteystietonne rekisteriimme ja olemme teihin yhteydessä lähiaikoina.<br>
+			Terveisin<br>
+			'.$firma->tyonantaja;
+			VinkkiExtranet::model()->updateByPk($id, array('token' => ''));
+
+		} elseif( isset($model->id) and $asia == 0) {
+			$model->delete();
+			$vastaus = 'Poistettu';
+		}
+
+		$this->render('vastaus', array(
+			'model'=>$model,
+			'vastaus'=>$vastaus
+		));
+	}
 
 	public function actionLahetetty($asiakas_id)
 	{
@@ -173,7 +207,7 @@ class VinkkiExtranetController extends Controller
 */
        		$criteria = new CDbCriteria();
 	        $criteria->order = " id DESC ";
-		//$criteria->condition = "";
+		$criteria->condition = " token='' ";
 
 		$from = date("d.m.Y", strtotime("-1 month"));
 		$to = date("d.m.Y");

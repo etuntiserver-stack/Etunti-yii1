@@ -122,9 +122,74 @@ public function actionLogin($domain)
 					$mod = new VinkkiExtranet;
 					if(isset($_POST['VinkkiExtranet']))
 					{
+
+						$token = $this->generateRandomString($length = 40);
 						$mod->attributes=$_POST['VinkkiExtranet'];
+						$mod->token=$token;
+
 						if($mod->save())
 						{
+
+							// <-- Sahkoposti lahetys
+							$firma = FirmanTiedot::model()->findbypk(1);
+							$get_css = file_get_contents(Yii::app()->request->baseUrl.'css/email_send_table.css');
+
+
+		if($model->tyyppi == 'yritys')
+		$asiakas = $model->yrityksen_nimi;
+		if($model->tyyppi == 'henkilo')
+		$asiakas = $model->yhteyshenkilo;
+
+		$message = '<html xmlns="http://www.w3.org/1999/xhtml">
+		<head>
+		    <title></title>
+		    <style type="text/css">'.$get_css.'</style>
+		</head>
+		<body>';
+
+		$message .= '<br>
+		Hei,
+		<p>Olen '.$firma->tyonantaja.':n tyytyväinen asiakas ja haluan suositella heidän palvelujaan sinulle.
+		<br>Hyväksymällä tämän suosituksen, nimesi, puhelinnumerosi ja sähköpostiosoitteesi siirtyvät heidän asiakaskantaansa ja he ovat sinuun yhteydessä mahdollisista palveluista.
+		<br>Hylkäämällä tämän suosituksen, tietosi eivät näy heillä. Mikäli et hyväksy/hylkää suositustani 14 vrk sisällä, tietojasi ei siirretä heille.</p>
+		Terveisin, '.$asiakas;
+
+		$message .= '<br>
+		<center>
+		<div id="outer">
+		<a class="hyvaksy_button inner" href="http://'.$_SERVER['SERVER_NAME'].'/index.php/vinkkiExtranet/vastaus?domain='.$domain.'&asia=1&id='.$mod->id.'&token='.$token.'">
+				<h2>'.Yii::t('main', 'Hyväksy').'</h2>
+		</a>
+		<a class="hylkaa_button inner" href="http://'.$_SERVER['SERVER_NAME'].'/index.php/vinkkiExtranet/vastaus?domain='.$domain.'&asia=0&id='.$mod->id.'&token='.$token.'">
+				<h2>'.Yii::t('main', 'Hylkää').'</h2>
+		</a>
+		</div>
+		</center>
+		';
+		$message .= '
+		</center>
+		</body>
+		</html>';
+
+
+							$subject='=?UTF-8?B?'.base64_encode($asiakas ." suosittele").'?=';
+							$headers="From: ".$asiakas." <".$model->sahkoposti.">\r\n".
+								"Reply-To: no_replay@etunti.fi\r\n".
+								"MIME-Version: 1.0\r\n".
+								"Content-type: text/html; charset=UTF-8";
+
+							mail($mod->sahkoposti,$subject,$message,$headers);
+							//     Sahkoposti lahetys -->
+
+							// <-- LOG
+							$log=new Log;
+							$log->log_category 	= 1; // 1-email
+							$log->email_to 		= $mod->sahkoposti;
+							$log->email_subject	= $subject;
+							$log->email_message	= json_encode($message);
+							$log->save();
+							//     LOG -->
+
 							$this->_sendResponse(200, CJSON::encode(array('OK'=>Yii::t('main', 'Vinkki lähetetty.'))));
 							exit;
 						} else {
@@ -205,6 +270,16 @@ public function actionLogin($domain)
 				$this->_sendResponse(200, CJSON::encode('Ei tuloksia'));
 	}
 
+
+	protected function generateRandomString($length = 40) {
+	    $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+	    $charactersLength = strlen($characters);
+	    $randomString = '';
+	    for ($i = 0; $i < $length; $i++) {
+	        $randomString .= $characters[rand(0, $charactersLength - 1)];
+	    }
+	    return $randomString;
+	}
 
 	public function actionGetlaskupdf($domain, $id)
 	{

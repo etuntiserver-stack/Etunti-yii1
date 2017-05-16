@@ -34,7 +34,7 @@ if (
 <head>
   <!-- Meta, title, CSS, favicons, etc. -->
   <meta charset="utf-8">
-  <title>Etunti - voita siivousalan haasteet</title>
+  <title>Etunti - voita toiminnan haasteet</title>
   <meta name="keywords" content="etunti" />
   <meta name="description" content="AdminDesigns - A Responsive HTML5 Admin UI Framework">
   <meta name="author" content="AdminDesigns">

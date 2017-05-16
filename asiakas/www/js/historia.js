@@ -84,6 +84,7 @@ function getUrlVars() {
     // <-- on submit Vinkki
     $(document).delegate('#vinkki-extranet-form', 'submit', function(e) {
 
+	$('.submitButton').hide();
 	var sendDataPost = $(this).serializeArray();
 	$.each(loginArr, function( index, value ) {
 		sendDataPost.push({name: index, value: value});
