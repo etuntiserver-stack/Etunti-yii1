@@ -2,10 +2,17 @@
 <widget id="fi.etunti.dico" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>DICO</name>
     <description>
-        A sample Apache Cordova application that responds to the deviceready event.
+      EDICO-mobiili on helppo ja turvallinen tapa hoitaa asiakassuhteesi missä ja milloin tahansa. Sen käyttöönotto on nopeaa ja vaivatonta. EDICO-mobiilin lataaminen ja käyttö on asiakkaalle ilmaista. EDICO kulkee kätevästi mukanasi joka paikassa ja sillä asiointi sujuu juuri silloin kuin haluat.
+ 
+      EDICO-mobiililla voit muun muassa:
+      • tehdä uusia tilauksia
+      • tarkastella, sopimuksiasi, tulevia työsuoritteita ja asiakashistoriaasi
+      • antaa palautetta palveluntarjoajalle
+      • vinkata palveluista myös ystävillesi
+      • vastaanottaa sinulle räätälöityjä tarjouksia
     </description>
-    <author email="dev@cordova.apache.org" href="http://cordova.io">
-        Apache Cordova Team
+    <author email="tuki@etunti.fi" href="https://etunti.fi">
+        Etunti Team
     </author>
     <content src="index.html" />
     <plugin name="cordova-plugin-whitelist" spec="1" />
