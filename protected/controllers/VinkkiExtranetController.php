@@ -119,7 +119,7 @@ class VinkkiExtranetController extends Controller
 
 			if(!isset($_GET['confirm']))
 			{
-			$vastaus = 'Haluatko varmasti hylätä suosituksen? Mikäli hylkäät suosituksen tietojasi ei talleteta järjestelmään?';
+			$vastaus = 'Haluatko varmasti hylätä suosituksen? Mikäli hylkäät suosituksen tietojasi ei talleteta järjestelmään.';
 			$vastaus .= '<br>
 			<div class="col-sm-6 col-sm-offset-5">
 			  <div class="row">
@@ -286,6 +286,7 @@ class VinkkiExtranetController extends Controller
 	 */
 	protected function performAjaxValidation($model)
 	{
+
 		if(isset($_POST['ajax']) && $_POST['ajax']==='vinkki-extranet-form')
 		{
 			echo CActiveForm::validate($model);
