@@ -66,7 +66,10 @@
 
 	<div class="buttons">
 		<?php echo CHtml::submitButton($model->isNewRecord ? 'Lähetä' : 'Tallenna',array('class'=>'btn btn-primary myBgColors')); ?>
+
+		<?php if($model->vinkkaja_asiakas_id == 0): ?>
 		<?php echo CHtml::link('Luo asiakas', array('//asiakkaat/create', 'vinkki_id'=>$model->id), array('class'=>'btn btn-primary myBgColors')); ?>
+		<?php endif; ?>
 	</div>
 
 <?php $this->endWidget(); ?>

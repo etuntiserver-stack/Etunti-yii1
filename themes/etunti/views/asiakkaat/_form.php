@@ -28,6 +28,19 @@ $model->hinta = str_replace(",",".",$model->hinta);
 
 if(empty($model->salasana))
 $uusiSalasana = $this->generatePassword();
+
+if(isset($_GET['vinkki_id']))
+{
+	$vinkki = VinkkiExtranet::model()->findbypk($_GET['vinkki_id']);
+	if(isset($vinkki->id))
+	{
+		$model->vinkki_id = $_GET['vinkki_id'];
+		$model->yhteyshenkilo = $vinkki->nimi;
+		$model->tyyppi = 'henkilo';
+		$model->sahkoposti = $vinkki->sahkoposti;
+		$model->puhelin = $vinkki->puhelin;
+	}
+}
 ?>
 
 <style>
@@ -44,7 +57,7 @@ $uusiSalasana = $this->generatePassword();
 	'enableAjaxValidation'=>false, // ala laita true, saat monta asiakaita update aikana netvisorissa
 )); ?>
 
-
+	<?php echo $form->hiddenField($model,'vinkki_id'); ?>
 	<?php echo $form->errorSummary($model); ?>
 
   <div class="col-sm-3">
