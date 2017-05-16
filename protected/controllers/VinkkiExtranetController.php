@@ -105,7 +105,7 @@ class VinkkiExtranetController extends Controller
 		$firma = FirmanTiedot::model()->findbypk(1);;
 		if( !isset($model->id) )
 		{
-			$vastaus = 'Error: ei toimi';
+			$vastaus = 'Error';
 
 		} elseif( isset($model->id) and $asia == 1) {
 
@@ -116,8 +116,25 @@ class VinkkiExtranetController extends Controller
 			VinkkiExtranet::model()->updateByPk($id, array('token' => ''));
 
 		} elseif( isset($model->id) and $asia == 0) {
+
+			if(!isset($_GET['confirm']))
+			{
+			$vastaus = 'Haluatko varmasti hylätä suosituksen? Mikäli hylkäät suosituksen tietojasi ei talleteta järjestelmään?';
+			$vastaus .= '<br>
+			<div class="col-sm-6 col-sm-offset-5">
+			  <div class="row">
+			    <div class="col-sm-4">
+			     <button class="btn-group btn btn-success btn-block yes">'.Yii::t('main', 'Kyllä').'</button>
+			    </div>
+			 </div>
+			</div>';
+			}
+
+			if(isset($_GET['confirm']) and $_GET['confirm'] == 1)
+			{
+			$vastaus = 'Olet hylännyt suosituksen. Tietojasi ei talletettu järjestelmään.<br> Kiitos';
 			$model->delete();
-			$vastaus = 'Poistettu';
+			}
 		}
 
 		$this->render('vastaus', array(
