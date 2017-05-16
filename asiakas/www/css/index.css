@@ -1,5 +1,7 @@
-.navbar-fixed-top{
-  margin-top: 20px;
+@media only screen and (max-width: 500px) {
+  .navbar-fixed-top{
+    margin-top: 20px;
+  }
 }
 
 .well{
