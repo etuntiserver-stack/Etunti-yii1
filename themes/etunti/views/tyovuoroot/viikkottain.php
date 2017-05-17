@@ -74,7 +74,7 @@ td .tp{
 
 
         <!-- begin: .tray-center -->
-        <div class="row tray-center">
+        <div class="tray-center">
 
 
 
@@ -150,7 +150,7 @@ td .tp{
 
 
 
-<div class="row">
+
             <div class="admin-form">
               <div class="panel heading-border">
                 <div class="panel-body bg-light">
@@ -233,7 +233,7 @@ td .tp{
                 </div>
               </div>
             </div>
-</div>
+
 
 
 

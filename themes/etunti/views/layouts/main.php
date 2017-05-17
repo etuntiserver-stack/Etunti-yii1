@@ -210,32 +210,9 @@ $(document).ready(function(){
 
 
 
-<div class="container-fluid">
+<div class="">
 
 	<?php echo $content; ?>
-
-	<footer>
-	 <div class="row">
-	  <div class="col-sm-3 col-sm-offset-1">
-	  <?php
-
-		// <-- GIT version
-		    $version = array();
-		    exec('git describe --always',$version_mini_hash);
-		    exec('git rev-list HEAD | wc -l',$version_number);
-		    exec('git log -1',$line);
-	
-		if(isset($version_number[0]))
-		{
-		    $version['short'] = "v1.".trim($version_number[0]);
-		    $version['full'] = "v1.".trim($version_number[0]).".$version_mini_hash[0] (".str_replace('commit ','',$line[0]).")";
-		    echo Yii::t('main', 'Versio').':  '.$version['short'];
-		}
-		// GIT version -->
-	  ?>
-	  </div>
-	 </div>
-	</footer>
 
 <script type="text/javascript" src="https://etunti.atlassian.net/s/d41d8cd98f00b204e9800998ecf8427e-T/-3x7nu4/100023/c/1000.0.11/_/download/batch/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector.js?locale=en-US&collectorId=f67c367e"></script>
 

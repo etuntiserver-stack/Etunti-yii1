@@ -62,53 +62,6 @@ exit;
 
 	   <h2 class="myBgColors p20"> <i class="fa fa-gear"></i> <?php echo Yii::t('main', 'ASETUKSET'); ?> </h2>
 
-		<?php
-		$url = 'http://' . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];
-		if (strpos($url,'dev.') !== false or strpos($url,'.local') !== false) : 
-		?>
-		<!-- Maksullinen changer -->
-		<div class="row">
-		 <div class="col-lg-3 col-md-offset-4">
-		  <input type="checkbox" class="sw" id="maksullinen" <?php echo ($model->maksullinen == 1)? 'checked' : ''; ?>>
-		  <script type="text/javascript">
-		  $(document).ready(function(){
-
-		    $(".sw").bootstrapSwitch({
-			size: "large",
-			onColor: "success",
-			offColor: "warning",
-			onText: "Maksullinen",
-			offText: "Ilmainen"
-		    });
-
-    		    $('#maksullinen').on('switchChange.bootstrapSwitch', function (event, state) {
-    			console.log(state);
-
-		        $.ajax({
-		           url: location.protocol + "//" + location.host + '/index.php/site/maksullinen',
-		           type: "POST",
-		           data: { state : state },
-		           success: function(data){
-				var d = JSON.parse(data);
-				console.log(d);
-				if(d == '0')
-				$('#sw_result').html('<br><div class="alert bg-warning">Ilmainen palvelu</div>');
-				if(d == '1')
-				$('#sw_result').html('<br><div class="alert bg-success">Maksullinen palvelu</div>');
-		           }
-		        });
-
-    		    });
-
-
-		  });
-		  </script>
-		 </div>
-		</div>
-		<div id="sw_result"></div>
-		<!-- Maksullinen changer -->
-		<?php endif; ?>
-
 
 	   <p><div class="btn btn-primary btn-block myBgColors" data-toggle="collapse" data-target="#yrityksentiedot"><h3><?php echo Yii::t('main','Yrityksen tiedot'); ?> &nbsp; <i class="fa fa-caret-square-o-down" aria-hidden="true"></i> </h3></div></p>
 
@@ -277,6 +230,83 @@ exit;
 
  </div>
 </div>
+
+
+        <div class="tray-center">
+            <div class="admin-form">
+              <div class="panel heading-border">
+		<h2 class="p15"><?php echo Yii::t('main','Tietoja Etunnista');?></h2>
+                <div class="panel-body bg-light">
+
+                <div class="row">
+	  	<?php
+		// <-- GIT version
+		    $version = array();
+		    exec('git describe --always',$version_mini_hash);
+		    exec('git rev-list HEAD | wc -l',$version_number);
+		    exec('git log -1',$line);
+	
+		if(isset($version_number[0]))
+		{
+		    $version['short'] = "v1.".trim($version_number[0]);
+		    $version['full'] = "v1.".trim($version_number[0]).".$version_mini_hash[0] (".str_replace('commit ','',$line[0]).")";
+		    echo Yii::t('main', 'Versio').':  '.$version['short'];
+		}
+		// GIT version -->
+	  	?>
+                </div>
+
+
+		<!-- Maksullinen changer -->
+		<div class="row">
+		 <div class="col-lg-3 col-md-offset-4">
+		  <input type="checkbox" class="sw" id="maksullinen" <?php echo ($model->maksullinen == 1)? 'checked' : ''; ?>>
+		  <script type="text/javascript">
+		  $(document).ready(function(){
+
+		    $(".sw").bootstrapSwitch({
+			size: "large",
+			onColor: "success",
+			offColor: "warning",
+			onText: "Maksullinen",
+			offText: "Ilmainen"
+		    });
+
+    		    $('#maksullinen').on('switchChange.bootstrapSwitch', function (event, state) {
+    			console.log(state);
+
+		        $.ajax({
+		           url: location.protocol + "//" + location.host + '/index.php/site/maksullinen',
+		           type: "POST",
+		           data: { state : state },
+		           success: function(data){
+				var d = JSON.parse(data);
+				console.log(d);
+				if(d == '0')
+				$('#sw_result').html('<br><div class="alert bg-warning">Ilmainen palvelu</div>');
+				if(d == '1')
+				$('#sw_result').html('<br><div class="alert bg-success">Maksullinen palvelu</div>');
+		           }
+		        });
+
+    		    });
+
+
+		  });
+		  </script>
+		 </div>
+		</div>
+		<div id="sw_result"></div>
+		<!-- Maksullinen changer -->
+
+
+
+
+                </div>
+              </div>
+            </div>
+        </div><!--tray-center-->
+
 
 
 
