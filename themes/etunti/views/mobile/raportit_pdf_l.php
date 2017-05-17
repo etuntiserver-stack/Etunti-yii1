@@ -17,7 +17,7 @@ window.onload = function () {
 }
 </script>
 <?php else: ?>
-<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/raportit_tarble.css">
+<link rel="stylesheet" type="text/css" href="../../css/raportit_table.css">
 <?php endif; ?>
 <!-- Style -->
 
