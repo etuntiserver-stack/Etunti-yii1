@@ -47,7 +47,7 @@ window.onload = function () {
 <br>
 
 
-<div class="tb">
+<div class="tb table-responsive">
 <table class="table table-striped table-bordered">
   <thead>
   <tr>
