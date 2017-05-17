@@ -96,12 +96,12 @@
 }
 
 .table-hover .table-info:hover {
-  background-color: #c4e3f3;
+  /*background-color: #c4e3f3;*/
 }
 
 .table-hover .table-info:hover > td,
 .table-hover .table-info:hover > th {
-  background-color: #c4e3f3;
+  /*background-color: #c4e3f3;*/
 }
 
 .table-warning,
