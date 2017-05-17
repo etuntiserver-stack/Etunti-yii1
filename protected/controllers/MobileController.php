@@ -196,8 +196,8 @@ function num($val){
 			        $html2pdf->WriteHTML($this->renderPartial('raportit_pdf_l', array('model' => $model, 'tyyppi' => 'Luetut'),true));
 			        $html2pdf->Output();
 */
-				//$content = '<link rel="stylesheet" type="text/css" href="../../css/raportit_table2.css">';
-				$content = $this->renderPartial('raportit_pdf_l', array('model' => $model, 'tyyppi' => 'Luetut'), true);
+				$content = '<link rel="stylesheet" type="text/css" href="../../css/raportit_table2.css">';
+				$content .= $this->renderPartial('raportit_pdf_l', array('model' => $model, 'tyyppi' => 'Luetut'), true);
 				//echo $content;
 				$this->transformContentTo($content, 'pdf');
 			        exit;
