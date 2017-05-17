@@ -48,7 +48,7 @@ window.onload = function () {
 
 
 <div class="tb">
-<table class="table table-striped table-bordered">
+<table class="table table-striped table-bordered" border="1">
   <thead>
   <tr>
     <th><?php echo Yii::t('main', 'Pvm.'); ?></th>

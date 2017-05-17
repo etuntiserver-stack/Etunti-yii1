@@ -205,10 +205,9 @@ function num($val){
 
 			if(isset($_POST['luoExcel']))
 			{
-			        $content = $this->renderPartial('raportit_pdf_l', array('model' => $model, 'tyyppi' => 'Luetut'),true);
-				//preg_match_all('/<div class=\"tb\">(.*?)<\/div>/s',$html,$match);
-				//$this->htmlToXls($match[0][0], 'luetut');
-				$this->transformContentTo($content, 'xlsx');
+			        $html = $this->renderPartial('raportit_pdf_l', array('model' => $model, 'tyyppi' => 'Luetut'),true);
+				preg_match_all('/<div class=\"tb\">(.*?)<\/div>/s',$html,$match);
+				$this->htmlToXls($match[0][0], 'luetut');
 			        exit;
 			}
 
