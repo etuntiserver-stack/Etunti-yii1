@@ -196,51 +196,8 @@ function num($val){
 			        $html2pdf->WriteHTML($this->renderPartial('raportit_pdf_l', array('model' => $model, 'tyyppi' => 'Luetut'),true));
 			        $html2pdf->Output();
 */
-				$c = $this->renderPartial('raportit_pdf_l', array('model' => $model, 'tyyppi' => 'Luetut'), true);
-
-
-
-			$tiedosto = 'temp_raporti_'.Yii::app()->getSession()->getSessionId();
-			define('PHPDOCX_INCLUDE_PATH', (dirname(Yii::app()->basePath)).'/protected/vendors/phpdocx');
-			spl_autoload_unregister(array('YiiBase','autoload'));
-			require_once PHPDOCX_INCLUDE_PATH.'/lib/pdf/dompdf_config.inc.php';
-			//require_once PHPDOCX_INCLUDE_PATH.'/classes/TransformDocAdv.inc';
-			require_once PHPDOCX_INCLUDE_PATH.'/classes/CreateDocx.inc';
-			spl_autoload_register(array('AutoLoader','load'));
-			spl_autoload_register(array('YiiBase', 'autoload'));
-
-/*
-			$docx = new CreateDocx();
-			$docx->embedHTML($html);
-			if (!file_exists( Yii::app()->basePath.'/../tiedostot/temp' )) {
-			 	mkdir( Yii::app()->basePath.'/../tiedostot/temp', 0777, true );
-			}
-			$path = 'tiedostot/temp/'.$tiedosto;
-			$docx->createDocx($path);
-*/
-			$path = 'tiedostot/temp/'.$tiedosto;
-$html = file_put_contents($path.'.html', $c);
-
-			$transform = new TransformDocAdvLibreOffice();
-			$transform->transformDocument($path.'.html', $path.'.pdf');
-
-
-    $filename = $path.'.pdf';
-
-    $fileinfo = pathinfo($filename);
-    $sendname = $fileinfo['filename'] . '.' . strtoupper($fileinfo['extension']);
-
-    header('Content-Type: application/pdf');
-    header("Content-Disposition: attachment; filename=\"$sendname\"");
-    header('Content-Length: ' . filesize($filename));
-    readfile($filename);
-
-			unlink($path.'.html');
-			unlink($path.'.pdf');
-
-
-
-
+				$content = $this->renderPartial('raportit_pdf_l', array('model' => $model, 'tyyppi' => 'Luetut'), true);
+				$this->transformContentToPDF($content);
 			        exit;
 			}
 
@@ -475,6 +432,39 @@ $html = file_put_contents($path.'.html', $c);
 
 		}
 
+	}
+
+	protected function transformContentToPDF($content)
+	{
+
+			$tiedosto = 'temp_raporti_'.Yii::app()->getSession()->getSessionId();
+			define('PHPDOCX_INCLUDE_PATH', (dirname(Yii::app()->basePath)).'/protected/vendors/phpdocx');
+			spl_autoload_unregister(array('YiiBase','autoload'));
+			require_once PHPDOCX_INCLUDE_PATH.'/lib/pdf/dompdf_config.inc.php';
+			//require_once PHPDOCX_INCLUDE_PATH.'/classes/TransformDocAdv.inc';
+			require_once PHPDOCX_INCLUDE_PATH.'/classes/CreateDocx.inc';
+			spl_autoload_register(array('AutoLoader','load'));
+			spl_autoload_register(array('YiiBase', 'autoload'));
+
+			$path = 'tiedostot/temp/'.$tiedosto;
+			$html = file_put_contents($path.'.html', $content);
+
+			$transform = new TransformDocAdvLibreOffice();
+			$transform->transformDocument($path.'.html', $path.'.pdf');
+
+
+    			$filename = $path.'.pdf';
+
+			$fileinfo = pathinfo($filename);
+			$sendname = $fileinfo['filename'] . '.' . strtoupper($fileinfo['extension']);
+
+			header('Content-Type: application/pdf');
+			header("Content-Disposition: attachment; filename=\"$sendname\"");
+			header('Content-Length: ' . filesize($filename));
+			readfile($filename);
+
+			unlink($path.'.html');
+			unlink($path.'.pdf');
 	}
 
 	protected function htmlToXls($html, $nimike)
