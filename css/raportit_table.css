@@ -81,12 +81,12 @@
 }
 
 .table-hover .table-success:hover {
-  background-color: #d0e9c6;
+  /*background-color: #d0e9c6;*/
 }
 
 .table-hover .table-success:hover > td,
 .table-hover .table-success:hover > th {
-  background-color: #d0e9c6;
+  /*background-color: #d0e9c6;*/
 }
 
 .table-info,
@@ -107,7 +107,7 @@
 .table-warning,
 .table-warning > th,
 .table-warning > td {
-  background-color: #fcf8e3;
+  /*background-color: #fcf8e3;*/
 }
 
 .table-hover .table-warning:hover {
@@ -122,7 +122,7 @@
 .table-danger,
 .table-danger > th,
 .table-danger > td {
-  background-color: #f2dede;
+  /*background-color: #f2dede;*/
 }
 
 .table-hover .table-danger:hover {
