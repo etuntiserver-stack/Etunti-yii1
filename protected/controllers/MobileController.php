@@ -190,12 +190,16 @@ function num($val){
 	
 			if(isset($_POST['luoPDF']))
 			{
-
+/*
 			        $html2pdf = Yii::app()->ePdf->HTML2PDF('L', 'A4', 'en', 'true', 'UTF-8', array(3,10,5,10));
 				$html2pdf->setDefaultFont('Arial');
 			        $html2pdf->WriteHTML($this->renderPartial('raportit_pdf_l', array('model' => $model, 'tyyppi' => 'Luetut'),true));
 			        $html2pdf->Output();
-				//$this->renderPartial('raportit_pdf_l', array('model' => $model, 'tyyppi' => 'Luetut'));
+*/
+				$content = '<link rel="stylesheet" type="text/css" href="../../css/raportit_table2.css">';
+				$content .= $this->renderPartial('raportit_pdf_l', array('model' => $model, 'tyyppi' => 'Luetut'), true);
+				//echo $content;
+				$this->transformContentTo($content, 'pdf');
 			        exit;
 			}
 
@@ -259,10 +263,15 @@ function num($val){
 
 			if(isset($_POST['luoPDF']))
 			{
+				/*
 			        $html2pdf = Yii::app()->ePdf->HTML2PDF('L', 'A4', 'en', 'true', 'UTF-8', array(3,10,5,10));
 				$html2pdf->setDefaultFont('Arial');
 			        $html2pdf->WriteHTML($this->renderPartial('raportit_pdf_l', array('model' => $model, 'tyyppi' => 'Hyväksytyt'),true));
 			        $html2pdf->Output();
+				*/
+				$content = '<link rel="stylesheet" type="text/css" href="../../css/raportit_table2.css">';
+				$content .= $this->renderPartial('raportit_pdf_l', array('model' => $model, 'tyyppi' => 'Hyväksytyt'), true);
+				$this->transformContentTo($content, 'pdf');
 			        exit;
 			}
 
@@ -430,6 +439,39 @@ function num($val){
 
 		}
 
+	}
+
+	protected function transformContentTo($content, $ext)
+	{
+
+			$tiedosto = 'temp_raporti_'.Yii::app()->getSession()->getSessionId();
+			define('PHPDOCX_INCLUDE_PATH', (dirname(Yii::app()->basePath)).'/protected/vendors/phpdocx');
+			spl_autoload_unregister(array('YiiBase','autoload'));
+			require_once PHPDOCX_INCLUDE_PATH.'/lib/pdf/dompdf_config.inc.php';
+			//require_once PHPDOCX_INCLUDE_PATH.'/classes/TransformDocAdv.inc';
+			require_once PHPDOCX_INCLUDE_PATH.'/classes/CreateDocx.inc';
+			spl_autoload_register(array('AutoLoader','load'));
+			spl_autoload_register(array('YiiBase', 'autoload'));
+
+			$path = 'tiedostot/temp/'.$tiedosto;
+			$html = file_put_contents($path.'.html', $content);
+
+			$transform = new TransformDocAdvLibreOffice();
+			$transform->transformDocument($path.'.html', $path.'.'.$ext);
+
+
+    			$filename = $path.'.'.$ext;
+
+			$fileinfo = pathinfo($filename);
+			$sendname = $fileinfo['filename'] . '.' . strtoupper($fileinfo['extension']);
+
+			header('Content-Type: application/pdf');
+			header("Content-Disposition: attachment; filename=\"$sendname\"");
+			header('Content-Length: ' . filesize($filename));
+			readfile($filename);
+
+			unlink($path.'.html');
+			unlink($path.'.'.$ext);
 	}
 
 	protected function htmlToXls($html, $nimike)

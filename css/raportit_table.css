@@ -3,18 +3,17 @@
             margin:0px;
             padding:0;
             font-family:Arial;
-            font-size:10pt;
+            font-size:9pt;
             color:#000;
         }
         body
         {
             width:100%;
             font-family:Arial;
-            font-size:10pt;
+            font-size:9pt;
             margin:0;
             padding:0;
         }
-
 
 
 
@@ -32,16 +31,16 @@
 .table td {
   padding: 7px;
   vertical-align: top;
-  border-top: 1px solid #eceeef;
+  border-top: 1px solid #333333;
 }
 
 .table thead th {
   vertical-align: bottom;
-  border-bottom: 2px solid #eceeef;
+  border-bottom: 2px solid #333333;
 }
 
 .table tbody + tbody {
-  border-top: 2px solid #eceeef;
+  border-top: 2px solid #333333;
 }
 
 .table .table {
@@ -54,12 +53,12 @@
 }
 
 .table-bordered {
-  border: 1px solid #eceeef;
+  border: 1px solid #333333;
 }
 
 .table-bordered th,
 .table-bordered td {
-  border: 1px solid #eceeef;
+  border: 1px solid #333333;
 }
 
 .table-bordered thead th,
@@ -97,12 +96,12 @@
 }
 
 .table-hover .table-success:hover {
-  background-color: #d0e9c6;
+  /*background-color: #d0e9c6;*/
 }
 
 .table-hover .table-success:hover > td,
 .table-hover .table-success:hover > th {
-  background-color: #d0e9c6;
+  /*background-color: #d0e9c6;*/
 }
 
 .table-info,
@@ -112,42 +111,42 @@
 }
 
 .table-hover .table-info:hover {
-  background-color: #c4e3f3;
+  /*background-color: #c4e3f3;*/
 }
 
 .table-hover .table-info:hover > td,
 .table-hover .table-info:hover > th {
-  background-color: #c4e3f3;
+  /*background-color: #c4e3f3;*/
 }
 
 .table-warning,
 .table-warning > th,
 .table-warning > td {
-  background-color: #fcf8e3;
+  /*background-color: #fcf8e3;*/
 }
 
 .table-hover .table-warning:hover {
-  background-color: #faf2cc;
+  /*background-color: #faf2cc;*/
 }
 
 .table-hover .table-warning:hover > td,
 .table-hover .table-warning:hover > th {
-  background-color: #faf2cc;
+  /*background-color: #faf2cc;*/
 }
 
 .table-danger,
 .table-danger > th,
 .table-danger > td {
-  background-color: #f2dede;
+  /*background-color: #f2dede;*/
 }
 
 .table-hover .table-danger:hover {
-  background-color: #ebcccc;
+  /*background-color: #ebcccc;*/
 }
 
 .table-hover .table-danger:hover > td,
 .table-hover .table-danger:hover > th {
-  background-color: #ebcccc;
+  /*background-color: #ebcccc;*/
 }
 
 .thead-inverse th {
@@ -157,7 +156,7 @@
 
 .thead-default th {
   color: #464a4c;
-  background-color: #eceeef;
+  background-color: #333333;
 }
 
 .table-inverse {
