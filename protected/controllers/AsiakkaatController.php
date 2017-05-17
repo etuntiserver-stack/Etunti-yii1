@@ -317,15 +317,7 @@ class AsiakkaatController extends Controller
 		if(isset($_POST['Asiakkaat']))
 		{
 
-			$criteria=new CDbCriteria;
-			$criteria->condition = " sahkoposti='".$_POST['Asiakkaat']['sahkoposti']."' ";
-			$vinkki = VinkkiExtranet::model()->find($criteria);
-			if(isset($vinkki->id))
-				VinkkiExtranet::model()->updatebypk($vinkki->id, array('tila'=>2));
-
-
 			$asetukset = Asetukset::model()->findbypk(1);
-
 			$model->attributes=$_POST['Asiakkaat'];
 
 			if(isset($_POST['Asiakkaat']['ryhma']))
@@ -333,17 +325,19 @@ class AsiakkaatController extends Controller
 			else
 				$model->ryhma="";
 
-			if(isset($vinkki->id))
-			{
-				Asiakkaat::model()->updatebypk($vinkki->asiakas_id,
-				array('vinkki_tunnit'=>$asetukset->vinkki_tunnit, 'vinkki_prosentti'=>$asetukset->vinkki_prosentti
-				));
-
-			}
-
 			if($model->save())
 			{
 
+			   	// <-- Vinkki
+				$vinkki = VinkkiExtranet::model()->findByPk($model->vinkki_id);
+				if(isset($vinkki->id))
+				{
+					VinkkiExtranet::model()->updatebypk($vinkki->id, array('vinkkaja_asiakas_id' => $model->id, 'tila'=>2));
+					Asiakkaat::model()->updatebypk($vinkki->asiakas_id,
+					array('vinkki_tunnit'=>$asetukset->vinkki_tunnit, 'vinkki_prosentti'=>$asetukset->vinkki_prosentti
+				));
+				}
+			   	//     Vinkki -->
 
 			   	// <-- Netvisor
 				if($asetukset->netvisor_kaytto == 1)

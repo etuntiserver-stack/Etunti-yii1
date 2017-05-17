@@ -46,7 +46,7 @@
 		<?php echo $data->teksti; ?>
 	</td>
 	<td>
-		<?php echo $this->tilaMuutos($data->tila); ?>
+		<?php echo $this->tilaMuutos($data); ?>
 	</td>
 </tr>
 

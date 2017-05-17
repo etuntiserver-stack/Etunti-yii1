@@ -287,6 +287,7 @@ class VinkkiExtranetController extends Controller
 	protected function performAjaxValidation($model)
 	{
 
+
 		if(isset($_POST['ajax']) && $_POST['ajax']==='vinkki-extranet-form')
 		{
 			echo CActiveForm::validate($model);
@@ -294,15 +295,15 @@ class VinkkiExtranetController extends Controller
 		}
 	}
 
-	protected function tilaMuutos($tila)
+	protected function tilaMuutos($data)
 	{
-		if($tila == 0)
+		if($data->tila == 0)
 		{
 			echo '<span class="btn btn-sm btn-warning btn-block">'.Yii::t('main', 'Avoin').'</span>';
-		} elseif($tila == 1) {
+		} elseif($data->tila == 1) {
 			echo '<span class="btn btn-sm btn-success btn-block">'.Yii::t('main', 'Hoidettu').'</span>';
-		} elseif($tila == 2) {
-			echo '<span class="btn btn-sm btn-success btn-block">'.Yii::t('main', 'Asiakas').'</span>';
+		} elseif($data->tila == 2) {
+			echo CHtml::link('<span class="btn btn-sm btn-success btn-block">'.Yii::t('main', 'Asiakas').'</span>', array('//asiakkaat/update', 'id'=>$data->vinkkaja_asiakas_id), array('class'=>'link'));
 		}
 	}
 
