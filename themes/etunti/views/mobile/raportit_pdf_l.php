@@ -16,8 +16,6 @@ window.onload = function () {
     window.print();
 }
 </script>
-<?php else : ?>
-<link rel="stylesheet" type="text/css" href="css/raportit_table.css">
 <?php endif; ?>
 <!-- Style -->
 
