@@ -33,7 +33,7 @@ window.onload = function () {
 
 <table id="ylataulu" class="table">
  <tr><td>
-  <?php $asetukset=Asetukset::model()->find("id=1"); ?>
+  <?php $asetukset=Asetukset::model()->findByPk(1); ?>
   <img src="<?php echo $asetukset->logon_polkku; ?>" height="<?php echo $asetukset->logon_korkeus; ?>">
  </td><td align="right">
   <?php echo Yii::t('main', $tyyppi); ?>
