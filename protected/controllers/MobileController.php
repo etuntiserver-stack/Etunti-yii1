@@ -219,8 +219,22 @@ function num($val){
 
 			$transform = new TransformDocAdvLibreOffice();
 			$transform->transformDocument($path.'.docx', $path.'.pdf');
-			readfile($path.'.pdf');
-			unlink($path.'.pdf');
+
+
+    $filename = $path.'.pdf';
+
+    $fileinfo = pathinfo($filename);
+    $sendname = $fileinfo['filename'] . '.' . strtoupper($fileinfo['extension']);
+
+    header('Content-Type: application/pdf');
+    header("Content-Disposition: attachment; filename=\"$sendname\"");
+    header('Content-Length: ' . filesize($filename));
+    readfile($filename);
+
+			unlink($path.'.docx');
+
+
+
 
 			        exit;
 			}
