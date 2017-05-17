@@ -142,12 +142,12 @@
 }
 
 .table-hover .table-danger:hover {
-  background-color: #ebcccc;
+  /*background-color: #ebcccc;*/
 }
 
 .table-hover .table-danger:hover > td,
 .table-hover .table-danger:hover > th {
-  background-color: #ebcccc;
+  /*background-color: #ebcccc;*/
 }
 
 .thead-inverse th {
