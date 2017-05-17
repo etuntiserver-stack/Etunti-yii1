@@ -196,7 +196,7 @@ function num($val){
 			        $html2pdf->WriteHTML($this->renderPartial('raportit_pdf_l', array('model' => $model, 'tyyppi' => 'Luetut'),true));
 			        $html2pdf->Output();
 */
-				$html = $this->renderPartial('raportit_pdf_l', array('model' => $model, 'tyyppi' => 'Luetut'), true);
+				$c = $this->renderPartial('raportit_pdf_l', array('model' => $model, 'tyyppi' => 'Luetut'), true);
 
 
 
@@ -209,6 +209,7 @@ function num($val){
 			spl_autoload_register(array('AutoLoader','load'));
 			spl_autoload_register(array('YiiBase', 'autoload'));
 
+/*
 			$docx = new CreateDocx();
 			$docx->embedHTML($html);
 			if (!file_exists( Yii::app()->basePath.'/../tiedostot/temp' )) {
@@ -216,9 +217,12 @@ function num($val){
 			}
 			$path = 'tiedostot/temp/'.$tiedosto;
 			$docx->createDocx($path);
+*/
+			$path = 'tiedostot/temp/'.$tiedosto;
+$html = file_put_contents($path.'.html', $c);
 
 			$transform = new TransformDocAdvLibreOffice();
-			$transform->transformDocument($path.'.docx', $path.'.pdf');
+			$transform->transformDocument($path.'.html', $path.'.pdf');
 
 
     $filename = $path.'.pdf';
@@ -231,7 +235,8 @@ function num($val){
     header('Content-Length: ' . filesize($filename));
     readfile($filename);
 
-			unlink($path.'.docx');
+			unlink($path.'.html');
+			unlink($path.'.pdf');
 
 
 
