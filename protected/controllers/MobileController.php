@@ -190,12 +190,38 @@ function num($val){
 	
 			if(isset($_POST['luoPDF']))
 			{
-
+/*
 			        $html2pdf = Yii::app()->ePdf->HTML2PDF('L', 'A4', 'en', 'true', 'UTF-8', array(3,10,5,10));
 				$html2pdf->setDefaultFont('Arial');
 			        $html2pdf->WriteHTML($this->renderPartial('raportit_pdf_l', array('model' => $model, 'tyyppi' => 'Luetut'),true));
 			        $html2pdf->Output();
-				//$this->renderPartial('raportit_pdf_l', array('model' => $model, 'tyyppi' => 'Luetut'));
+*/
+				$html = $this->renderPartial('raportit_pdf_l', array('model' => $model, 'tyyppi' => 'Luetut'), true);
+
+
+
+			$tiedosto = 'temp_raporti_'.Yii::app()->getSession()->getSessionId();
+			define('PHPDOCX_INCLUDE_PATH', (dirname(Yii::app()->basePath)).'/protected/vendors/phpdocx');
+			spl_autoload_unregister(array('YiiBase','autoload'));
+			require_once PHPDOCX_INCLUDE_PATH.'/lib/pdf/dompdf_config.inc.php';
+			//require_once PHPDOCX_INCLUDE_PATH.'/classes/TransformDocAdv.inc';
+			require_once PHPDOCX_INCLUDE_PATH.'/classes/CreateDocx.inc';
+			spl_autoload_register(array('AutoLoader','load'));
+			spl_autoload_register(array('YiiBase', 'autoload'));
+
+			$docx = new CreateDocx();
+			$docx->embedHTML($html);
+			if (!file_exists( Yii::app()->basePath.'/../tiedostot/temp' )) {
+			 	mkdir( Yii::app()->basePath.'/../tiedostot/temp', 0777, true );
+			}
+			$path = 'tiedostot/temp/'.$tiedosto;
+			$docx->createDocx($path);
+
+			$transform = new TransformDocAdvLibreOffice();
+			$transform->transformDocument($path.'.docx', $path.'.pdf');
+			readfile($path.'.pdf');
+			unlink($path.'.pdf');
+
 			        exit;
 			}
 
