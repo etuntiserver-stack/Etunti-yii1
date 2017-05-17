@@ -16,6 +16,8 @@ window.onload = function () {
     window.print();
 }
 </script>
+<?php else: ?>
+<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/raportit_table.css">
 <?php endif; ?>
 <!-- Style -->
 
