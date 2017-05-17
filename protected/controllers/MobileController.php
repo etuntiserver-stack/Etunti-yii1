@@ -198,8 +198,8 @@ function num($val){
 */
 				$content = '<link rel="stylesheet" type="text/css" href="../../css/raportit_table.css">';
 				$content .= $this->renderPartial('raportit_pdf_l', array('model' => $model, 'tyyppi' => 'Luetut'), true);
-				//echo $content;
-				$this->transformContentToPDF($content);
+				echo $content;
+				//$this->transformContentToPDF($content);
 			        exit;
 			}
 

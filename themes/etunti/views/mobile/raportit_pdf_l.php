@@ -32,10 +32,10 @@ window.onload = function () {
 
 
 <table id="ylataulu" class="table">
- <tr><td style="width:70%">
+ <tr><td>
   <?php $asetukset=Asetukset::model()->find("id=1"); ?>
   <img src="<?php echo $asetukset->logon_polkku; ?>" height="<?php echo $asetukset->logon_korkeus; ?>">
- </td><td valign="right" style="width:20%">
+ </td><td align="right">
   <?php echo Yii::t('main', $tyyppi); ?>
   <?php if(isset(Yii::app()->session['from']) and isset(Yii::app()->session['to'])) : ?>
     <?php echo date("d.m.Y",strtotime(Yii::app()->session['from'])).'-'.date("d.m.Y",strtotime(Yii::app()->session['to'])); ?>
@@ -48,7 +48,7 @@ window.onload = function () {
 
 
 <div class="tb">
-<table class="table table-bordered">
+<table class="table table-striped table-bordered">
   <thead>
   <tr>
     <th><?php echo Yii::t('main', 'Pvm.'); ?></th>

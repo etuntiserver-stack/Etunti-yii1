@@ -127,12 +127,12 @@
 }
 
 .table-hover .table-warning:hover {
-  background-color: #faf2cc;
+  /*background-color: #faf2cc;*/
 }
 
 .table-hover .table-warning:hover > td,
 .table-hover .table-warning:hover > th {
-  background-color: #faf2cc;
+  /*background-color: #faf2cc;*/
 }
 
 .table-danger,
