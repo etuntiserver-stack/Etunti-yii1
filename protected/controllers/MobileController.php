@@ -199,15 +199,16 @@ function num($val){
 				$content = '<link rel="stylesheet" type="text/css" href="../../css/raportit_table.css">';
 				$content .= $this->renderPartial('raportit_pdf_l', array('model' => $model, 'tyyppi' => 'Luetut'), true);
 				//echo $content;
-				$this->transformContentToPDF($content);
+				$this->transformContentTo($content, 'pdf');
 			        exit;
 			}
 
 			if(isset($_POST['luoExcel']))
 			{
-			        $html = $this->renderPartial('raportit_pdf_l', array('model' => $model, 'tyyppi' => 'Luetut'),true);
-				preg_match_all('/<div class=\"tb\">(.*?)<\/div>/s',$html,$match);
-				$this->htmlToXls($match[0][0], 'luetut');
+			        $content = $this->renderPartial('raportit_pdf_l', array('model' => $model, 'tyyppi' => 'Luetut'),true);
+				//preg_match_all('/<div class=\"tb\">(.*?)<\/div>/s',$html,$match);
+				//$this->htmlToXls($match[0][0], 'luetut');
+				$this->transformContentTo($content, 'xls');
 			        exit;
 			}
 
@@ -436,7 +437,7 @@ function num($val){
 
 	}
 
-	protected function transformContentToPDF($content)
+	protected function transformContentTo($content, $ext)
 	{
 
 			$tiedosto = 'temp_raporti_'.Yii::app()->getSession()->getSessionId();
@@ -452,10 +453,10 @@ function num($val){
 			$html = file_put_contents($path.'.html', $content);
 
 			$transform = new TransformDocAdvLibreOffice();
-			$transform->transformDocument($path.'.html', $path.'.pdf');
+			$transform->transformDocument($path.'.html', $path.'.'.$ext);
 
 
-    			$filename = $path.'.pdf';
+    			$filename = $path.'.'.$ext;
 
 			$fileinfo = pathinfo($filename);
 			$sendname = $fileinfo['filename'] . '.' . strtoupper($fileinfo['extension']);
@@ -466,7 +467,7 @@ function num($val){
 			readfile($filename);
 
 			unlink($path.'.html');
-			unlink($path.'.pdf');
+			unlink($path.'.'.$ext);
 	}
 
 	protected function htmlToXls($html, $nimike)
