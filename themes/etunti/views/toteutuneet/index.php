@@ -1,4 +1,3 @@
-<div class="row">
 <?php ini_set("max_execution_time", "120"); ?>
 <?php
 /* @var $this MobileController */
@@ -734,7 +733,7 @@ function dateDiff($start, $end) {
 
 <?php endif; ?>
 
-</div>
+
 
 	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/bootstrap.modal.js"></script>
 
