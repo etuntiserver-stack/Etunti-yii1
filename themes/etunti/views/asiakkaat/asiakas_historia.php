@@ -24,7 +24,7 @@
                  <div class="row">
 		   <div class="input-group">
 
-      			<span class="input-group-btn">
+      			<span class="input-group-btn" style="padding-right:5px">
                           <label class="field prepend-icon">
 
    			    <input type="text" class="gui-input datepickerFI" name="from" value="<?php echo date('d.m.Y', strtotime($from)); ?>" placeholder="<?php echo Yii::t('main', 'Aloitus'); ?>..">
@@ -35,7 +35,7 @@
                           </label>
       			</span>
 
-      			<span class="input-group-btn">
+      			<span class="input-group-btn" style="padding-right:5px">
                           <label class="field prepend-icon">
 
    			    <input type="text" class="gui-input datepickerFI" name="to" value="<?php echo date('d.m.Y', strtotime($to)); ?>" placeholder="<?php echo Yii::t('main', 'Lopetus'); ?>..">
