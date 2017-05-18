@@ -15,6 +15,9 @@
         },
         "cordova-plugin-file-opener2": {
             "PACKAGE_NAME": "fi.etunti.dico"
+        },
+        "cordova-plugin-device": {
+            "PACKAGE_NAME": "fi.etunti.dico"
         }
     },
     "dependent_plugins": {

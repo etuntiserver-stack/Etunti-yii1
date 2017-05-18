@@ -65,6 +65,7 @@ $(document).ready(function(){
 	if(device.platform == 'iOS'){
 	  $(document).ready(function(){
 	    $('.navbar-fixed-top').css({'margin-top':'20px'});
+	    $('.powerButton').remove();
 	  });
 	}
 
