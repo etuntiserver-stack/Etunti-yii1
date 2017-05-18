@@ -11,10 +11,10 @@
 ?>
 
 
-	<h2 class="myBgColors p10" id="historia"> <i class="glyphicon glyphicon-user"></i> <?php echo Yii::t('main', 'Asiakas historia'); ?> </h2>
+<br>
 
         <div class="tray-center">
-   	    <form id="mobForm" action="#" class="form-inline" method="POST">
+   	    <form id="mobForm" action="#" class="form-horizontal" method="POST">
    	    <input type="hidden" name="mob_hae">
 
             <div class="admin-form">
@@ -22,8 +22,9 @@
                 <div class="panel-body bg-light">
 
                  <div class="row">
-                   <div class="col-sm-2">
-                        <div class="section">
+		   <div class="input-group">
+
+      			<span class="input-group-btn">
                           <label class="field prepend-icon">
 
    			    <input type="text" class="gui-input datepickerFI" name="from" value="<?php echo date('d.m.Y', strtotime($from)); ?>" placeholder="<?php echo Yii::t('main', 'Aloitus'); ?>..">
@@ -32,11 +33,9 @@
                               <i class="fa fa-calendar"></i>
                             </label>
                           </label>
-                        </div>
-                   </div>
+      			</span>
 
-                   <div class="col-sm-2">
-                        <div class="section">
+      			<span class="input-group-btn">
                           <label class="field prepend-icon">
 
    			    <input type="text" class="gui-input datepickerFI" name="to" value="<?php echo date('d.m.Y', strtotime($to)); ?>" placeholder="<?php echo Yii::t('main', 'Lopetus'); ?>..">
@@ -45,14 +44,13 @@
                               <i class="fa fa-calendar"></i>
                             </label>
                           </label>
-                        </div>
-                   </div>
+      			</span>
 
+      			<span class="input-group-btn">
+        	        <button type="submit" class="btn btn-primary haemob btn-block myBgColors" style="width:40px"><i class="fa fa-search" aria-hidden="true"></i></button>
+      			</span>
 
-                      <div class="col-md-2 col-md-offset-6">
-        	        <input type="submit" class="btn btn-primary btn-lg haemob btn-block myBgColors" value="Hae">
-		      </div>
-
+		   </div><!--input-group-->
                  </div>
 		
 
