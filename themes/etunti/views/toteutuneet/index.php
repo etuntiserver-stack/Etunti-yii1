@@ -879,26 +879,6 @@ $( ".sirraToteutuun" ).tooltip({
 });
 
 
- $(document).delegate(".sirraToteutuun","click",function(){
-
-      	var forThis = $(this).prevAll('.tv_edit').attr('id').split("_");
-        $.ajax({
-           url: 'siirra_toteutuun?id=' + forThis[1],
-           //type: "POST",
-	   //data: { id : forThis[1] },
-           success: function(data){
-		data = JSON.parse(data);
-		//console.log(data);
-		if(data['OK'])
-		{
-			window.location.href="index#" + data['did'];
-			window.location.reload();
-
-		}
-           }
-        });
-
- });
 
 
 
