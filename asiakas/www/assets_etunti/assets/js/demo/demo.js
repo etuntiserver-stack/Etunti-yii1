@@ -288,7 +288,7 @@ $("#notiFyClick").click(function(){
           switch (i) {
             case 'headerSkin':
               Header.removeClass(headerSkins).addClass(e);
-              Branding.removeClass(headerSkins).addClass(e + ' dark');
+              Branding.removeClass(headerSkins).addClass(e);
               if (e === "bg-light") {
                 Branding.removeClass(headerSkins);
               } else {
