@@ -476,6 +476,8 @@ $(document).delegate(".poistaRivit","click",function(){
 
  $(document).delegate(".sirraToteutuun","click",function(){
 
+	$(this).hide();
+	$(this).closest('.fullRivi').addClass('bg-success');
 	var laatikot = '';
       	var forThis = $(this).prevAll('.tv_edit').attr('id').split("_");
         $.ajax({
