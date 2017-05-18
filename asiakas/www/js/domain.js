@@ -62,10 +62,10 @@ $(document).ready(function(){
     document.addEventListener("deviceready", onServerReady1, false);
     function onServerReady1() {
 
-	if(device.platform == 'iOS'){
+	if(device.platform == 'Android'){
 	  $(document).ready(function(){
-	    $('.navbar-fixed-top').css({'margin-top':'20px'});
-	    $('.powerButton').remove();
+	    $('.navbar-fixed-top').css({'margin-top':'0px'});
+	    $('.powerButton').show();
 	  });
 	}
 

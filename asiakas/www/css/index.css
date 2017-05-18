@@ -1,6 +1,9 @@
 @media only screen and (max-width: 480px) {
   .navbar-fixed-top{
-    /*margin-top: 20px;*/
+    margin-top: 20px;
+  }
+  .powerButton{
+    display:none;
   }
 }
 
