@@ -62,6 +62,11 @@ $(document).ready(function(){
     document.addEventListener("deviceready", onServerReady1, false);
     function onServerReady1() {
 
+	if(device.platform == 'iOS'){
+	  $(document).ready(function(){
+	    $('.navbar-fixed-top').css({'margin-top':'20px'});
+	  });
+	}
 
     }
     // On device Ready -->
