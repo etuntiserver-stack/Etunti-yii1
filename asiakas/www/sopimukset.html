@@ -20,13 +20,6 @@
   <!-- Jquery Javascript -->
   <script type="text/javascript" src="js/jquery-1.11.2.min.js"></script>
 
-  <!-- Datepicker Javascript -->
-  <script type="text/javascript" src="js/moment-with-locales.js"></script>
-  <script type="text/javascript" src="js/bootstrap-datepicker.js"></script>
-  <script type="text/javascript" src="js/bootstrap-datetimepicker.js"></script>
-  <script type="text/javascript" src="js/bootstrap-datetimepicker.fi.js"></script>
-  <!-- Datepicker Javascript -->
-
   <!-- Theme Javascript -->
   <script src="cordova.js"></script>
   <script src="js/domain.js"></script>
@@ -37,8 +30,9 @@
   <script src="assets_etunti/assets/js/demo/demo.js"></script>
   <script src="assets_etunti/assets/js/main.js"></script>
 
-  <!-- Widget Javascript -->
-  <script src="assets_etunti/assets/js/demo/widgets.js"></script>
+  <!-- Widget Javascript 
+  <script src="assets_etunti/assets/js/demo/widgets.js"></script>-->
+
 </head>
 
 <body class="sb-l-o sb-r-c onload-check">
@@ -56,7 +50,7 @@
       <ul class="nav navbar-nav navbar-right">
 
 	<!--
-        <li class="dropdown menu-merge" data-toggle="tooltip" data-placement="bottom" title="Valitse kieli>">
+        <li class="dropdown menu-merge" data-toggle="tooltip" data-placement="bottom" title="Valitse kieli">
           <a class="dropdown-toggle" data-toggle="dropdown" href="#">
              <span class="">Kieli</span> 
           </a>
@@ -72,7 +66,6 @@
           </ul>
         </li>
 	-->
-
 
         <li class="dropdown menu-merge" data-toggle="tooltip" data-placement="bottom" title="Valitse värit">
           <a class="dropdown-toggle" data-toggle="dropdown" href="#">
@@ -150,28 +143,31 @@
 
 
 
-        <li class="dropdown menu-merge">
+        <li class="dropdown menu-merge" id="kirjauduOikealla">
           <a href="#" data-toggle="dropdown"> 
                  <span id="asiakasNimi"></span> </a>
           </a>
-
-
-
-
           <ul class="dropdown-menu list-group dropdown-persist w250" role="menu">
             <li class="list-group-item">
-              <a href="#" class="animated animated-short fadeInUp">
+              <a href="#" class="animated animated-short fadeInUp" id="asetukset">
                 <span class="fa fa-gear"></span> Omat asetukset </a>
             </li>
+            
+            <li class="list-group-item">
+              <a href="asetukset.html" class="animated animated-short fadeInUp">
+                <span class="fa fa-gear"></span> eDico asetukset </a>
+
             <li class="list-group-item">
               <a id="vaihdaTunnus" href="#" class="animated animated-short fadeInUp">
                 <span class="fa fa-sign-out"></span> Kirjaudu ulos </a>
             </li>
           </ul>
         </li>
+        <li class="powerButton"><a href="#" id="exitPainike" onclick="exitFromApp()"><span  style="font-size: 180%" class="fa fa-power-off"></span></a></li>
         <li id="toggle_sidemenu_t">  
         		<span class="fa fa-caret-up"></span>
         </li>
+        
       </ul>
 
     </header>
@@ -182,30 +178,6 @@
     <!-- container -->
     <div class="container">
      <div id="page">
-
-      <!-- Start: Topbar -->
-      <header id="topbar">
-        <div class="topbar-left">
-          <ol class="breadcrumb">
-            <li class="crumb-active">
-              <a href="index.html">Etusivu</a>
-            </li>
-            <li class="crumb-icon">
-              <a href="index.html">
-                <span class="glyphicon glyphicon-home"></span>
-              </a>
-            </li>
-            <li class="crumb-link">
-              <a href="index.html">Etusivu</a>
-            </li>
-            <li class="crumb-trail">Sopimukset</li>
-          </ol>
-        </div>
-        <div class="topbar-right">
-      	<!-- oikealla joku -->
-        </div>
-      </header>
-      <!-- End: Topbar -->
 
       <div id="forAlert"></div>
       <div id="resultLaatiko"></div>
@@ -222,16 +194,21 @@
      <div class="" id="footer-body">
       <center>
 	<ul class="list-inline">
-	 <li><a class="myBgColors" href="index.html"><h2 class="glyphicon glyphicon-home"></h2></a></li>
-	 <li><a class="myBgColors" href="asetukset.html"><h2 class="glyphicon glyphicon-cog"></h2></a></li>
-	 <li><a class="myBgColors" href="#" id="vaihdaTunnus"><h2 class="glyphicon glyphicon-user"></h2></a></li>
-	 <li><a class="myBgColors" href="#" id="exitPainike" onclick="exitFromApp()"><h2 class="fa fa-exit"></h2></a></li>
+	 <li><a class="myBgColors" href="index.html"><h2 class="fa fa-home" style="font-size: 180%"></h2></a></li>
+   <li><a class="myBgColors" href="historia.html?tyyppi=naytaTyovuorot"><h2 class="fa fa-calendar" style="font-size: 180%"></h2></a></li>
+   <li><a class="myBgColors" href="historia.html?tyyppi=naytaToteutuneetTunnit"><h2 class="fa fa-check-square" style="font-size: 180%"></h2></a></li>
+   <li><a class="myBgColors" href="historia.html?tyyppi=naytaVinkit"><h2 class="fa fa-comments" style="font-size: 180%"></h2></a></li>
+   <li><a class="myBgColors" href="historia.html?tyyppi=naytaPalautteet"><h2 class="fa fa-envelope" style="font-size: 180%"></h2></a></li>
+   <li><a class="myBgColors" href="historia.html?tyyppi=naytaLaskut"><h2 class="fa fa-credit-card" style="font-size: 180%"></h2></a></li>
+   <li><a class="myBgColors" href="tarjoukset.html"><h2 class="fa fa-calculator" style="font-size: 180%"></h2></a></li>
+   <li><a class="myBgColors" href="sopimukset.html"><h2 class="fa fa-file-text-o" style="font-size: 180%"></h2></a></li>
+	 
+	 
 	</ul>
       </center>
      </div>
     </div>
     <!-- footer -->
-
 
 
 
