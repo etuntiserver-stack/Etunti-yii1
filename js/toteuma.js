@@ -473,6 +473,48 @@ $(document).delegate(".poistaRivit","click",function(){
 
 
 
+
+ $(document).delegate(".sirraToteutuun","click",function(){
+
+	var laatikot = '';
+      	var forThis = $(this).prevAll('.tv_edit').attr('id').split("_");
+        $.ajax({
+           url: 'siirra_toteutuun?id=' + forThis[1],
+           //type: "POST",
+	   //data: { id : forThis[1] },
+           success: function(data){
+		data = JSON.parse(data);
+		console.log(data);
+		if(data['OK'])
+		{
+			var did = data['did'].split("_");
+			laatikot = did[1]+'_'+did[2];
+			var divID = [did[1],did[2]];
+
+		        $.ajax({
+		           url: 'totpvmtid',
+		           type: "GET",
+			   data: { pvm : did[1], tid : did[2] },
+		           success: function(data){
+				d = JSON.parse(data);
+				if(d['laatikot'])
+				{
+					//console.log(laatikot);
+					$('#'+laatikot).html(d['laatikot']);
+					blockUpdater(divID);
+		
+				}
+		           }
+		        });
+
+
+		}
+           }
+        });
+
+ });
+
+
   function blockUpdater(divID){
 
 		var thisDID = divID[0]+'_'+divID[1];
