@@ -64,7 +64,7 @@ class VinkkiExtranet extends DB2ActiveRecord
 			'asiakas_id' => 'Asiakas',
 			'nimi' => 'Nimi',
 			'puhelin' => 'Puhelin',
-			'sahkoposti' => 'Sahkoposti',
+			'sahkoposti' => Yii::t('main', 'Sähköposti'),
 			'teksti' => 'Teksti',
 			'muutos_pvm' => Yii::t('main', 'Muutokset päivämäärä'),
 		);
