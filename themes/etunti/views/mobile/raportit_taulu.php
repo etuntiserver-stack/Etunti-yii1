@@ -219,8 +219,20 @@
 $(document).ready(function(){
 
   $('.submitPDFluetut').click(function(){
-	var raporti_taulu = $(".raporti_taulu").html();
-	alert(raporti_taulu)
+	var raporti_taulu = '<table>' + $("#mobileTable").html() + '</table>';
+	console.log(raporti_taulu)
+
+        $.ajax({
+           url: 'create_pdf',
+           type: "POST",
+	   data: { content : raporti_taulu },
+           success: function(data){
+		data = JSON.parse(data);
+		console.log(data);
+
+           }
+        });
+
   });
 
   $(".haemob").click(function(){
