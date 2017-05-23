@@ -1,5 +1,5 @@
 <?php
-	//header("Access-Control-Allow-Origin: *");
+	header("Access-Control-Allow-Origin: *");
 
 
 
@@ -356,7 +356,7 @@ public function actionLogin($domain)
 				$t = $_POST['liite'];
    				if(file_exists(Yii::app()->basePath."/../tiedostot/tarjoukset/".$domain."/".$t.".pdf"))
    				{
-					$liite = base64_encode(file_get_contents(Yii::app()->basePath."/../tiedostot/crm/tarjoukset/".$domain."/".$t.".pdf"));
+					$liite = base64_encode(file_get_contents(Yii::app()->basePath."/../tiedostot/tarjoukset/".$domain."/".$t.".pdf"));
 				}
 			}
 
@@ -420,9 +420,9 @@ public function actionLogin($domain)
 			{
 				$nimike = $_POST['liite'];
 				$t = $_POST['liite'];
-   				if(file_exists(Yii::app()->basePath."/../tiedostot/crm/sopimukset/".$domain."/".$t.".pdf"))
+   				if(file_exists(Yii::app()->basePath."/../tiedostot/sopimukset/".$domain."/".$t.".pdf"))
    				{
-					$liite = base64_encode(file_get_contents(Yii::app()->basePath."/../tiedostot/crm/sopimukset/".$domain."/".$t.".pdf"));
+					$liite = base64_encode(file_get_contents(Yii::app()->basePath."/../tiedostot/sopimukset/".$domain."/".$t.".pdf"));
 				}
 			}
 
@@ -437,7 +437,7 @@ public function actionLogin($domain)
 			$lista = '<br><div class="lista">';
 			foreach($m2 as $item)
 			{
-   				if(file_exists(Yii::app()->basePath."/../tiedostot/crm/sopimukset/".$domain."/".$item->liite.".pdf"))
+   				if(file_exists(Yii::app()->basePath."/../tiedostot/sopimukset/".$domain."/".$item->liite.".pdf"))
    				{
 					$lista .= '
 					<div class="row link avaaPDF" liite="'.$item->liite.'">
