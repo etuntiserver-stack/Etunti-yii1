@@ -33,7 +33,7 @@ class MobileController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin', 'delete', 'create', 'update', 'index', 'index_a', 'view', 'updatetime', 'showkohteet', 'yhteenveto', 'kyhteenveto', 'yhteenveto_m', 'historia', 'poistaKohde', 'total_suunniteltu', 'total_toteutu', 'total_luettu', 'kesto', 'index_ajax', 'raportit', 'uusirivi', 'palkkataulukko', 'tidfromtomatkat', 'tidfromtoSL', 'tidfromtoSPL', 'tyobykohde', 'asiakas_hyvaksyminen', 'kohdebytekija' ,'kyhteenveto_tuntemattomat', 'laskutettu', 'lahetys_asiakkaalle', 'get_tyovuorot_day', 'on_olemassa', 'luetut_toteutuneet_ero_pdf', 'vuosilomat_pdf', 'check_paallekkainMobile', 'tyoajan_seuranta'),
+				'actions'=>array('admin', 'delete', 'create', 'update', 'index', 'index_a', 'view', 'updatetime', 'showkohteet', 'yhteenveto', 'kyhteenveto', 'yhteenveto_m', 'historia', 'poistaKohde', 'total_suunniteltu', 'total_toteutu', 'total_luettu', 'kesto', 'index_ajax', 'raportit', 'uusirivi', 'palkkataulukko', 'tidfromtomatkat', 'tidfromtoSL', 'tidfromtoSPL', 'tyobykohde', 'asiakas_hyvaksyminen', 'kohdebytekija' ,'kyhteenveto_tuntemattomat', 'laskutettu', 'lahetys_asiakkaalle', 'get_tyovuorot_day', 'on_olemassa', 'luetut_toteutuneet_ero_pdf', 'vuosilomat_pdf', 'check_paallekkainMobile', 'tyoajan_seuranta', 'raportit_taulu'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -510,6 +510,163 @@ function num($val){
 			'to'=>$to,
 		));
 
+	}
+
+
+	public function actionRaportit_taulu()
+	{
+
+		$raporti_tyyppi = 'Luetut';
+		if(Yii::app()->request->getPost('raporti_tyyppi'))
+		$raporti_tyyppi = Yii::app()->request->getPost('raporti_tyyppi');
+
+		$osoite = '';
+		if(Yii::app()->request->getPost('osoite'))
+		$osoite = Yii::app()->request->getPost('osoite');
+
+		$from = date("d.m.Y", strtotime('first day of this month'));
+		$to = date("d.m.Y");
+
+		if(Yii::app()->request->getPost('from'))
+		$from = date("d.m.Y", strtotime(Yii::app()->request->getPost('from')));
+		if(Yii::app()->request->getPost('to'))
+		$to = date("d.m.Y", strtotime(Yii::app()->request->getPost('to')));
+
+		$criteria = new CDBCriteria;
+		$criteria->condition = " 
+			id IN ( SELECT tid FROM sivexkuitti	
+				WHERE DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
+				BETWEEN '".date("Y-m-d", strtotime($from))."' AND '".date("Y-m-d", strtotime($to))."' 
+				)
+		";
+
+		if(Yii::app()->request->getPost('tekijaPaaSivulla'))
+		{
+			$impl = implode(",", Yii::app()->request->getPost('tekijaPaaSivulla'));
+	        	$criteria->addCondition (" id IN ($impl) ");
+		} else {
+	        	$criteria->addCondition (" id=0 ");
+		}
+
+		if(Yii::app()->request->getPost('osoite'))
+		{
+	        $criteria->addCondition (" 
+			id IN ( SELECT tid FROM sivexkuitti
+				WHERE kohde_kannasta LIKE '%".Yii::app()->request->getPost('osoite')."%'
+			) OR
+			id IN ( SELECT tid FROM sivexkuitti_repaired
+				WHERE kohde_kannasta LIKE '%".Yii::app()->request->getPost('osoite')."%'
+			)
+		");
+		}
+
+
+		$dataProvider=new CActiveDataProvider('Tyontekijat', array(
+			'criteria'=>$criteria,
+			'pagination'=>false
+		));
+
+		//$dataProvider->pagination->pageSize = 50;
+
+		$this->render('raportit_taulu', array(
+			'dataProvider' => $dataProvider,
+			'from' => $from,
+			'to' => $to,
+			'raporti_tyyppi' => $raporti_tyyppi,
+			'osoite' => $osoite
+		));
+
+
+	}
+
+	protected function tidFromTo_luetut($tid, $from, $to, $osoite)
+	{
+
+			$model = array();
+
+			/* lu */
+		       	$criteria = new CDbCriteria();
+        		$criteria->select = "
+			TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
+			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'))) as l_tunnit, t.*
+			";
+
+			$criteria->order = " DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i') ASC ";
+			$criteria->condition = " aloitan!='' and loppui!='' 
+				AND tid='".$tid."'
+				AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
+				BETWEEN '".date("Y-m-d", strtotime($from))."' AND '".date("Y-m-d", strtotime($to))."'
+			";
+
+			if(!empty($osoite))
+			$criteria->addCondition (" kohde_kannasta LIKE '%".$osoite."%' ");
+
+			$lu = Mobile::model()->findAll($criteria);
+  			foreach($lu as $data){
+				$model[strtotime($data->aloitan)] = $data;
+			}
+
+			if(count($model) > 0)
+			ksort($model);
+
+		return $model;
+	}
+
+
+	protected function tidFromTo_toteutuneet($tid, $from, $to, $osoite)
+	{
+
+			$model = array();
+
+			/* lu */
+		       	$criteria = new CDbCriteria();
+        		$criteria->select = "
+			TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
+			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'))) as l_tunnit, t.*
+			";
+			$criteria->order = " DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i') ASC ";
+			$criteria->condition = " aloitan!='' and loppui!='' 
+				AND tid='".$tid."'
+				AND id NOT IN (SELECT kid FROM sivexkuitti_repaired) 
+				AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
+				BETWEEN '".date("Y-m-d", strtotime($from))."' AND '".date("Y-m-d", strtotime($to))."'
+			";
+
+			if(!empty($osoite))
+			$criteria->addCondition (" kohde_kannasta LIKE '%".$osoite."%' ");
+
+			$lu = Mobile::model()->findAll($criteria);
+  			foreach($lu as $data){
+				$model[strtotime($data->aloitan)] = $data;
+			}
+
+			/* tot */
+		       	$criteria = new CDbCriteria();
+        		$criteria->select = "
+			TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
+			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'))) as l_tunnit, t.*
+			";
+			$criteria->order = " DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i') ASC ";
+			$criteria->condition = " aloitan!='' and loppui!='' 
+				AND tid='".$tid."'
+				AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
+				BETWEEN '".date("Y-m-d", strtotime($from))."' AND '".date("Y-m-d", strtotime($to))."'
+			";
+
+			if(!empty($osoite))
+			$criteria->addCondition (" kohde_kannasta LIKE '%".$osoite."%' ");
+
+			$tot = array();
+			$tot = Toteutuneet::model()->findAll($criteria); 
+
+  			foreach($tot as $data){
+				$model[strtotime($data->aloitan)] = $data;
+			}
+
+			if(count($model) > 0)
+			ksort($model);
+
+		return $model;
 	}
 
 	public function actionTotal_luettu($tid)

@@ -24,7 +24,7 @@ class SiteController extends Controller
 	public function filters()
 	{
 		return array(
-			'accessControl', // perform access control for CRUD operations
+			//'accessControl', // perform access control for CRUD operations
 			//'postOnly + delete', // we only allow deletion via POST request
 		);
 	}
@@ -1830,8 +1830,8 @@ $(document).ready(function(){
 		$criteria = $this->etuSukunimiCriteria($criteria);
 		//     Return order etu ja sukunimella -->
 
-		if($aktiivinen == 1)
-		$criteria->condition = " aktiivinen=1 ";
+		$criteria->condition = " aktiivinen='".$aktiivinen."' ";
+
 
 		if($class != null) $cl = ' class="'.$class.'" '; else $cl = '';
 		if($id != null)	$i = ' id="'.$id.'" '; else $i = '';
