@@ -73,9 +73,9 @@
       		$l = Asiakkaat::model()->findAll($criteria);
 		foreach($l as $v)
 		{
-			if(!empty($v->yrityksen_nimi) and empty($v->yhteyshenkilo))
+			if($v->tyyppi == 'yritys')
 			$list[$v->id] = $v->yrityksen_nimi;
-			elseif(empty($v->yrityksen_nimi) and !empty($v->yhteyshenkilo))
+			elseif($v->tyyppi == 'henkilo')
 			$list[$v->id] = $v->yhteyshenkilo;
 		}
 
