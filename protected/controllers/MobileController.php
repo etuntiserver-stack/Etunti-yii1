@@ -540,8 +540,13 @@ function num($val){
 				)
 		";
 
-		if(Yii::app()->request->getPost('tekijaPaaSivulla') and Yii::app()->request->getPost('tekijaPaaSivulla') != 'kaikki')
-	        $criteria->addCondition (" id='".Yii::app()->request->getPost('tekijaPaaSivulla')."' ");
+		if(Yii::app()->request->getPost('tekijaPaaSivulla'))
+		{
+			$impl = implode(",", Yii::app()->request->getPost('tekijaPaaSivulla'));
+	        	$criteria->addCondition (" id IN ($impl) ");
+		} else {
+	        	$criteria->addCondition (" id=0 ");
+		}
 
 		if(Yii::app()->request->getPost('osoite'))
 		{

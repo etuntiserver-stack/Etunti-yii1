@@ -26,24 +26,67 @@
                       <div class="col-md-3">
                         <div class="section">
                           <label class="field select">
-				<?php
-		   		$site = Yii::app()->createController('Site');
-		   		$tyontekiatLista = $site[0]->tyontekiatListaNoMulti( 
-						'tekijaPaaSivulla', // name
-						'gui-input', //class
-						null, // id
-						Yii::app()->request->getPost('tekijaPaaSivulla'), //selected
-						1 // aktiivinen
-				);
-				echo $tyontekiatLista;
-				?>
 
+				<?php 
+				$a = Valikkoot::model()->findAll(" select_type='aktiivinen' ");
+		        	$tal = '';
+				foreach($a as $v){
+				$exV = explode("/",$v->value);
+				   if(isset($exV[0]) and isset($exV[1]))
+				   $tal[$exV[1]] = $exV[0];
+				}
+				$selectedValues = 1;
+				if(isset($_POST['aktiivinen']))
+				$selectedValues = array($_POST['aktiivinen']=> Array('selected' => 'selected'));
+		
+				echo CHtml::dropDownList('aktiivinen','aktiivinen', $tal, 
+				array('class'=>'gui-input aktiivinen','options' => $selectedValues)) 
+				?>
 
                             <i class="arrow double"></i>
                             </label>
                           </label>
                         </div>
 
+                        <div class="section">
+                          <label class="field">
+                            <div id="tekijat_result"> 
+				<?php
+				$name_tyontekijat = 'tekijaPaaSivulla';
+				(isset($_POST['aktiivinen']))? $aktiivinen = $_POST['aktiivinen'] : $aktiivinen = 1;
+		   		$site = Yii::app()->createController('Site');
+		   		$tyontekiatLista = $site[0]->tyontekiatLista( 
+						$name_tyontekijat, // name
+						'null', //class
+						'tyontekijat', // id
+						Yii::app()->request->getPost('tekijaPaaSivulla'), //selected
+						$aktiivinen// aktiivinen
+				);
+				echo $tyontekiatLista;
+				?>
+                            </div> 
+                            <i class="arrow double"></i>
+                            </label>
+                          </label>
+                        </div>
+
+                      </div>
+
+
+                      <div class="col-md-3">
+                        <div class="section">
+                          <label class="field select">
+				<select name="raporti_tyyppi">
+				 <?php if(Yii::app()->request->getPost('raporti_tyyppi')): ?>
+				 <option value="<?=$raporti_tyyppi?>"><?=$raporti_tyyppi?></option>
+				 <?php endif; ?>
+				 <option value="Luetut"><?=Yii::t('main', 'Luetut')?></option>
+				 <option value="Toteutuneet"><?=Yii::t('main', 'Toteutuneet')?></option>
+				</select>
+                            <i class="arrow double"></i>
+                            </label>
+                          </label>
+                        </div>
 
                         <div class="section">
                           <label class="field prepend-icon">
@@ -65,22 +108,6 @@
                           </label>
                         </div>
 
-                      </div>
-
-                      <div class="col-md-2">
-                        <div class="section">
-                          <label class="field select">
-				<select name="raporti_tyyppi">
-				 <?php if(Yii::app()->request->getPost('raporti_tyyppi')): ?>
-				 <option value="<?=$raporti_tyyppi?>"><?=$raporti_tyyppi?></option>
-				 <?php endif; ?>
-				 <option value="Luetut"><?=Yii::t('main', 'Luetut')?></option>
-				 <option value="Toteutuneet"><?=Yii::t('main', 'Toteutuneet')?></option>
-				</select>
-                            <i class="arrow double"></i>
-                            </label>
-                          </label>
-                        </div>
                       </div>
 
                       <div class="col-md-2">
@@ -198,6 +225,38 @@ $(document).ready(function(){
 
   $(".haemob").click(function(){
 	$("#mobForm").submit();
+  });
+
+multi();
+function multi(){
+  $('#tyontekijat').multiselect({
+	//inheritClass: true,
+	//enableFiltering: true,
+        includeSelectAllOption: true,
+	nonSelectedText: '<?php echo Yii::t("main", "Tyhjä"); ?>',
+	selectAllText: '<?php echo Yii::t("main", "Valitse kaikki"); ?>',
+	allSelectedText: '<?php echo Yii::t("main", "Työntekijät"); ?>',
+	nSelectedText: '<?php echo Yii::t("main", "valittu"); ?>',
+	numberDisplayed: 0,
+	buttonWidth: '100%',
+        maxHeight: 300,
+  });
+}
+
+
+  $(".aktiivinen").change(function(){
+	var thisVal = parseInt($(this).val());
+        $.ajax({
+           url: location.protocol + "//" + location.host + '/index.php/tyontekijat/is_aktiivinen_multiple',
+           type: "GET",
+	   data: { name_tyontekijat : '<?=$name_tyontekijat?>', value : thisVal, selected : null },
+           success: function(data){
+		data = JSON.parse(data);
+		console.log(data);
+		$('#tekijat_result').html(data);
+		multi();
+           }
+        });
   });
 
 });

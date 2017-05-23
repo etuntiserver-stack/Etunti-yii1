@@ -28,7 +28,7 @@ class TyontekijatController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin', 'admin_ajax', 'delete', 'create', 'update', 'index', 'view','merkkipaivat', 'tulosta', 'migraatio', 'verotustiedot', 'muuta_suhteet', 'tyoryhmat_hallinta', 'check_tyovuorot'),
+				'actions'=>array('admin', 'admin_ajax', 'delete', 'create', 'update', 'index', 'view','merkkipaivat', 'tulosta', 'migraatio', 'verotustiedot', 'muuta_suhteet', 'tyoryhmat_hallinta', 'check_tyovuorot', 'is_aktiivinen_multiple'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -61,6 +61,23 @@ class TyontekijatController extends Controller
                 }
                 parent::init();
         }
+
+
+	public function actionIs_aktiivinen_multiple($name_tyontekijat, $value, $selected)
+	{
+		$bd = '';
+		$site = Yii::app()->createController('Site');
+		$tyontekiatLista = $site[0]->tyontekiatLista( 
+				$name_tyontekijat, // name
+				'null', //class
+				'tyontekijat', // id
+				null, //selected
+				$value // aktiivinen
+		);
+
+		echo json_encode($tyontekiatLista);
+		exit;
+	}
 
 	public function actionCheck_tyovuorot($id)
 	{

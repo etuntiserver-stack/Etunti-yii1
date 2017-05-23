@@ -861,6 +861,10 @@ $('.tvchange').change(function(){
                   <span class="fa fa-th-list"></span> <?php echo Yii::t('main', 'Raportit'); ?></a>
               </li>
               <li>
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/mobile/raportit_taulu">
+                  <span class="fa fa-th-list"></span> <?php echo Yii::t('main', 'Raportit taulu (Kehittelemassa)'); ?></a>
+              </li>
+              <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/mobile/tyoajan_seuranta">
                   <span class="fa fa-th-list"></span> <?php echo Yii::t('main', 'Vuosityöaika'); ?></a>
               </li>

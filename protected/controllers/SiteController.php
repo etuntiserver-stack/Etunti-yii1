@@ -1830,8 +1830,8 @@ $(document).ready(function(){
 		$criteria = $this->etuSukunimiCriteria($criteria);
 		//     Return order etu ja sukunimella -->
 
-		if($aktiivinen == 1)
-		$criteria->condition = " aktiivinen=1 ";
+		$criteria->condition = " aktiivinen='".$aktiivinen."' ";
+
 
 		if($class != null) $cl = ' class="'.$class.'" '; else $cl = '';
 		if($id != null)	$i = ' id="'.$id.'" '; else $i = '';
