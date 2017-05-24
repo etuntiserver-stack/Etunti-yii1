@@ -220,7 +220,7 @@ $(document).ready(function(){
 
   $('.submitPDFluetut').click(function(){
 	var raporti_taulu = '<table>' + $("#mobileTable").html() + '</table>';
-	//console.log(raporti_taulu)
+	console.log(raporti_taulu)
 
         $.ajax({
            url: 'create_pdf',
