@@ -111,9 +111,9 @@ class MobileController extends Controller
 
     			$filecontent = '';
 			$tiedosto = 'temp_raporti_'.Yii::app()->getSession()->getSessionId();
-			$path = 'tiedostot/temp/'.Yii::app()->user->domain.'/'.$tiedosto;
-			$html = file_put_contents($path.'.html', $content);
-			exec('soffice --headless --norestore --writer --convert-to '.$ext.' '.$path.'.html', $output, $return);
+			$path = 'tiedostot/temp/'.Yii::app()->user->domain.'/';
+			$html = file_put_contents($path.$tiedosto.'.html', $content);
+			exec('soffice --headless --norestore --writer --convert-to '.$ext.' '.$path.'.html --outdir '.$path, $output, $return);
 			if($return)
     			$filecontent = file_get_contents($path.'.'.$ext);
 /*
