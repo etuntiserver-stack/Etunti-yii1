@@ -231,7 +231,7 @@ $(document).ready(function(){
 		//console.log(data);
 		if(data)
 		{
-			window.location.href= location.protocol + "//" + location.host+ "/" + data; 
+			window.open(location.protocol + "//" + location.host+ "/" + data, 'Raportti', 'width=800,height=800');
 		}
            }
         });
