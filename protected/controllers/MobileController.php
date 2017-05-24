@@ -85,9 +85,9 @@ class MobileController extends Controller
 	public function actionCreate_pdf()
 	{
 		$pdf = '';
-		if(isset($_POST['content']))
+		if(isset($_POST['content']) and isset($_POST['ext']))
 		{
-			$pdf = $this->transformHtmlAndGetContent($_POST['content'], 'pdf');
+			$pdf = $this->transformHtmlAndGetContent($_POST['content'], $_POST['ext']);
 		}
 		echo json_encode($pdf);
 		exit;
