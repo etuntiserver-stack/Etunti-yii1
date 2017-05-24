@@ -109,15 +109,13 @@ class MobileController extends Controller
 			 	mkdir( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain, 0777, true );
 			}
 
-    			$filename = '';
+    			$filecontent = '';
 			$tiedosto = 'temp_raporti_'.Yii::app()->getSession()->getSessionId();
 			$path = 'tiedostot/temp/'.Yii::app()->user->domain.'/'.$tiedosto;
 			$html = file_put_contents($path.'.html', $content);
-			exec('soffice --headless --norestore --writer --convert-to pdf '.$path.'.html --outdir /'.$path.'.'.$ext, $output, $return);
-echo json_encode($return);
-exit;
+			exec('soffice --headless --norestore --writer --convert-to '.$ext.' '.$path.'.html', $output, $return);
 			if($return)
-    			$filename = file_get_contents($path.'.'.$ext);
+    			$filecontent = file_get_contents($path.'.'.$ext);
 /*
 			$transform = new TransformDocAdvLibreOffice();
 			$transform->transformDocument($path.'.html', $path.'.'.$ext);
@@ -125,7 +123,7 @@ exit;
 			unlink($path.'.html');
 			unlink($path.'.'.$ext);
 */
-			return $filename;
+			return $filecontent;
 	}
 
 	public function actionGet_tyovuorot_day($id)
