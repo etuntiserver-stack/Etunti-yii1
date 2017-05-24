@@ -110,6 +110,7 @@ class MobileController extends Controller
 			$c = '
 			<html>
 <head>
+<style>
         *
         {
             margin:0px;
@@ -137,6 +138,7 @@ class MobileController extends Controller
   collapse; border-spacing: 0; 
 	border: 1px #333 solid;
 }
+</style>
 </head>
 			';
 			$c .= $content;
