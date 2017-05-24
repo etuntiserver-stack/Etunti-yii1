@@ -114,7 +114,7 @@ class MobileController extends Controller
 			$path = 'tiedostot/temp/'.Yii::app()->user->domain.'/';
 			$html = file_put_contents($path.$tiedosto.'.html', $content);
 			exec('soffice --headless --norestore --writer --convert-to '.$ext.' '.$path.$tiedosto.'.html --outdir '.$path, $output, $return);
-			if($return)
+			if($output)
 			{
     				$filecontent = file_get_contents($path.$tiedosto.'.'.$ext);
 				echo json_encode($output);
