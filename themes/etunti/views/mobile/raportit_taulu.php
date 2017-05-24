@@ -155,6 +155,7 @@
         <!-- loppu: .tray-center -->
         </div>
 
+	<div id="odota"></div>
 
 <div class="admin-form">
   <div class="panel-header">
@@ -219,7 +220,8 @@
 $(document).ready(function(){
 
   $('.submitPDFluetut').click(function(){
-	var raporti_taulu = '<html><table>' + $("#mobileTable").html() + '</table></html>';
+	$('#odota').html('<div class="alert bg-warning"><h3>Pieni hetki...</h3></div>');
+	var raporti_taulu = '<html><table class="table" border="1">' + $("#mobileTable").html() + '</table></html>';
 	var ext = 'pdf';
 
         $.ajax({
@@ -229,10 +231,11 @@ $(document).ready(function(){
            success: function(data){
 		data = JSON.parse(data);
 		//console.log(data);
-		if(data)
+		if(data !== "false")
 		{
 			window.open(location.protocol + "//" + location.host+ "/" + data, 'Raportti', 'width=800,height=800');
 		}
+			$('#odota').html('');
            }
         });
 
