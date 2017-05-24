@@ -117,11 +117,12 @@ class MobileController extends Controller
 			if($output)
 			{
     				$filecontent = file_get_contents($path.$tiedosto.'.'.$ext);
-				echo json_encode($output);
-				exit;
+				unlink($path.$tiedosto.'.html');
+				unlink($path.$tiedosto.'.'.$ext);
+				//echo json_encode($output);
+				//exit;
 			}
-			//unlink($path.$tiedosto.'.html');
-			//unlink($path.$tiedosto.'.'.$ext);
+
 /*
 			$transform = new TransformDocAdvLibreOffice();
 			$transform->transformDocument($path.'.html', $path.'.'.$ext);
