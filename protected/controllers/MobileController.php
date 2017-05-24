@@ -96,7 +96,7 @@ class MobileController extends Controller
 	protected function transformHtmlTo($content, $ext)
 	{
 /*
-			$tiedosto = 'temp_raporti_'.Yii::app()->getSession()->getSessionId();
+
 			define('PHPDOCX_INCLUDE_PATH', (dirname(Yii::app()->basePath)).'/protected/vendors/phpdocx');
 			spl_autoload_unregister(array('YiiBase','autoload'));
 			require_once PHPDOCX_INCLUDE_PATH.'/lib/pdf/dompdf_config.inc.php';
@@ -109,6 +109,7 @@ class MobileController extends Controller
 			 	mkdir( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain, 0777, true );
 			}
 
+			$tiedosto = 'temp_raporti_'.Yii::app()->getSession()->getSessionId();
 			$path = 'tiedostot/temp/'.Yii::app()->user->domain.'/'.$tiedosto;
 			$html = file_put_contents($path.'.html', $content);
 			exec('soffice --headless --norestore --writer --convert-to pdf '.$path.'.html');
