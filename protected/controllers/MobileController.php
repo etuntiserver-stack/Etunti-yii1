@@ -112,8 +112,8 @@ class MobileController extends Controller
 			$tiedosto = 'temp_raporti_'.Yii::app()->getSession()->getSessionId();
 			$path = 'tiedostot/temp/'.Yii::app()->user->domain.'/'.$tiedosto;
 			$html = file_put_contents($path.'.html', $content);
-			echo json_encode(exec('soffice --headless --norestore --writer --convert-to pdf '.$path.'.html'));
-			exit;
+			exec('soffice --headless --norestore --writer --convert-to pdf '.$path.'.html '.$path.'.'.$ext);
+    			$filename = file_get_contents($path.'.'.$ext);
 /*
 			$transform = new TransformDocAdvLibreOffice();
 			$transform->transformDocument($path.'.html', $path.'.'.$ext);
@@ -121,7 +121,7 @@ class MobileController extends Controller
 			unlink($path.'.html');
 			unlink($path.'.'.$ext);
 */
-			return $html;
+			return $filename;
 	}
 
 	public function actionGet_tyovuorot_day($id)
