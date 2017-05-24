@@ -227,11 +227,11 @@ $(document).ready(function(){
            type: "POST",
 	   data: { content : raporti_taulu, ext : 'pdf' },
            success: function(data){
-		//data = JSON.parse(data);
+		data = JSON.parse(data);
 		//console.log(data);
 		if(data)
 		{
-			window.open("data:application/"+ext+";base64, " + data); 
+			window.location.href=data; 
 		}
            }
         });
