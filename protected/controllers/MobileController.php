@@ -107,13 +107,14 @@ class MobileController extends Controller
 
 			$path = 'tiedostot/temp/'.$tiedosto;
 			$html = file_put_contents($path.'.html', $content);
-
+/*
 			$transform = new TransformDocAdvLibreOffice();
 			$transform->transformDocument($path.'.html', $path.'.'.$ext);
     			$filename = file_get_contents($path.'.'.$ext);
 			unlink($path.'.html');
 			unlink($path.'.'.$ext);
-			return $filename;
+*/
+			return $html;
 	}
 
 	public function actionGet_tyovuorot_day($id)
