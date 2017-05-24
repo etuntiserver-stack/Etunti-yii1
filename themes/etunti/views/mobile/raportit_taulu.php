@@ -227,7 +227,7 @@ $(document).ready(function(){
         $.ajax({
            url: 'create_pdf',
            type: "POST",
-	   data: { content : raporti_taulu, ext : 'pdf' },
+	   data: { content : raporti_taulu, ext : ext },
            success: function(data){
 		data = JSON.parse(data);
 		//console.log(data);
