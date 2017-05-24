@@ -231,7 +231,7 @@ $(document).ready(function(){
 		//console.log(data);
 		if(data)
 		{
-			window.location.href=data; 
+			window.location.href= location.protocol + "//" + location.host+ "/" + data; 
 		}
            }
         });
