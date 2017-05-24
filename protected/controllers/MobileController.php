@@ -109,7 +109,35 @@ class MobileController extends Controller
 
 			$c = '
 			<html>
-			<link rel="stylesheet" type="text/css" href="../css/raportit_table2.css">
+<head>
+        *
+        {
+            margin:0px;
+            padding:0;
+            font-family:Arial;
+            font-size:9pt;
+            color:#000;
+        }
+        body
+        {
+            width:100%;
+            font-family:Arial;
+            font-size:9pt;
+            margin:0;
+            padding:0;
+        }
+
+
+
+
+.table {
+  width: 100%;
+  max-width: 100%;
+  border-collapse: 
+  collapse; border-spacing: 0; 
+	border: 1px #333 solid;
+}
+</head>
 			';
 			$c .= $content;
 			$c .= '</html>';
