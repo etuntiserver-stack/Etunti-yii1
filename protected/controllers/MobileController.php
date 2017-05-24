@@ -116,8 +116,8 @@ class MobileController extends Controller
 			exec('soffice --headless --norestore --writer --convert-to '.$ext.' '.$path.$tiedosto.'.html --outdir '.$path, $output, $return);
 			if($return)
     			$filecontent = file_get_contents($path.$tiedosto.'.'.$ext);
-			unlink($path.$tiedosto.'.html');
-			unlink($path.$tiedosto.'.'.$ext);
+			//unlink($path.$tiedosto.'.html');
+			//unlink($path.$tiedosto.'.'.$ext);
 /*
 			$transform = new TransformDocAdvLibreOffice();
 			$transform->transformDocument($path.'.html', $path.'.'.$ext);
