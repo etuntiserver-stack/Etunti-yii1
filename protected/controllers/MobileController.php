@@ -88,7 +88,7 @@ class MobileController extends Controller
 		{
 			if($this->transformHtmlTo($_POST['content'], $_POST['ext']))
 			{
-				echo $this->transformHtmlTo($_POST['content'], $_POST['ext']);
+				echo base64_encode($this->transformHtmlTo($_POST['content'], $_POST['ext']));
 				exit;
 			}
 		}
