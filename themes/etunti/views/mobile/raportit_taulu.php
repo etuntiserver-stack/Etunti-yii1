@@ -221,7 +221,7 @@ $(document).ready(function(){
 
   $('.submitPDFluetut').click(function(){
 	$('#odota').html('<div class="alert bg-warning"><h3>Pieni hetki...</h3></div>');
-	var raporti_taulu = '<html><table class="table" border="1">' + $("#mobileTable").html() + '</table></html>';
+	var raporti_taulu = '<table class="table">' + $("#mobileTable").html() + '</table>';
 	var ext = 'pdf';
 
         $.ajax({

@@ -106,11 +106,21 @@ class MobileController extends Controller
     			$filecontent = '';
 			$tiedosto = 'temp_raporti_'.str_replace(" ", "_", Yii::app()->user->nimi);
 			$path = 'tiedostot/temp/'.Yii::app()->user->domain.'/';
-			$html = file_put_contents($path.$tiedosto.'.html', $content);
+
+			$c = '
+			<html>
+			<link rel="stylesheet" type="text/css" href="../../css/raportit_table.css">
+			';
+			$c .= $content;
+			$c .= '</html>';
+
+			$html = file_put_contents($path.$tiedosto.'.html', $c);
+
+
 			exec('soffice --headless --norestore --writer --convert-to '.$ext.' '.$path.$tiedosto.'.html --outdir '.$path, $output, $return);
 			if($output)
 			{
-    				$filecontent = file_get_contents($path.$tiedosto.'.'.$ext);
+    				//$filecontent = file_get_contents($path.$tiedosto.'.'.$ext);
 				unlink($path.$tiedosto.'.html');
 				//unlink($path.$tiedosto.'.'.$ext);
 				//echo json_encode($output);
