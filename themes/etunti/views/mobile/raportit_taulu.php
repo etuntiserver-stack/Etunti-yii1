@@ -163,8 +163,8 @@
        <div class="col-sm-12">
         <div class="pull-right">
     	  <button class="btn btn-primary myBgColors submitPrintSivuLuetut"><i class="fa fa-print" aria-hidden="true"></i></button>
-    	  <button class="btn btn-primary myBgColors submitExcelluetut"><i class="fa fa-file-excel-o" aria-hidden="true"></i></button>
-    	  <button class="btn btn-primary myBgColors submitPDFluetut"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></button>
+    	  <button class="btn btn-primary myBgColors submitRaportti" ext="xlsx"><i class="fa fa-file-excel-o" aria-hidden="true"></i></button>
+    	  <button class="btn btn-primary myBgColors submitRaportti" ext="pdf"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></button>
         </div>
        </div>
       </div>
@@ -219,10 +219,10 @@
 <script type="text/javascript">
 $(document).ready(function(){
 
-  $('.submitPDFluetut').click(function(){
+  $('.submitRaportti').click(function(){
 	$('#odota').html('<div class="alert bg-warning"><h3>Pieni hetki...</h3></div>');
 	var raporti_taulu = '<table class="table">' + $("#mobileTable").html() + '</table>';
-	var ext = 'pdf';
+	var ext = $(this).attr('ext');
 
         $.ajax({
            url: 'create_pdf',
