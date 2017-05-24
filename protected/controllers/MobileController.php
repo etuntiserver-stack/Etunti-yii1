@@ -87,23 +87,16 @@ class MobileController extends Controller
 		$pdf = '';
 		if(isset($_POST['content']) and isset($_POST['ext']))
 		{
-			$tiedosto = 'temp_raporti_'.Yii::app()->getSession()->getSessionId();
-			$path = 'tiedostot/temp/'.$tiedosto;
-			$file = file_put_contents($path.'.html', $_POST['content']);
-			echo json_encode(array('path' => $path));
-			exit;
+			$pdf = $this->transformHtmlTo($_POST['content'], $_POST['ext']);
 		}
-
-		if(isset($_GET['path']))
-		{
-			$this->transformHtmlTo($_GET['path'], $_GET['ext']);
-			exit;
-		}
+		echo json_encode($pdf);
+		exit;
 	}
 
-	protected function transformHtmlTo($path, $ext)
+	protected function transformHtmlTo($content, $ext)
 	{
 
+			$tiedosto = 'temp_raporti_'.Yii::app()->getSession()->getSessionId();
 			define('PHPDOCX_INCLUDE_PATH', (dirname(Yii::app()->basePath)).'/protected/vendors/phpdocx');
 			spl_autoload_unregister(array('YiiBase','autoload'));
 			require_once PHPDOCX_INCLUDE_PATH.'/lib/pdf/dompdf_config.inc.php';
@@ -112,21 +105,15 @@ class MobileController extends Controller
 			spl_autoload_register(array('AutoLoader','load'));
 			spl_autoload_register(array('YiiBase', 'autoload'));
 
+			$path = 'tiedostot/temp/'.$tiedosto;
+			$html = file_put_contents($path.'.html', $content);
+
 			$transform = new TransformDocAdvLibreOffice();
 			$transform->transformDocument($path.'.html', $path.'.'.$ext);
-
-    			$filename = $path.'.'.$ext;
-
-			$fileinfo = pathinfo($filename);
-			$sendname = $fileinfo['filename'] . '.' . strtoupper($fileinfo['extension']);
-
-			header('Content-Type: application/pdf');
-			header("Content-Disposition: attachment; filename=\"$sendname\"");
-			header('Content-Length: ' . filesize($filename));
-			readfile($filename);
-
+    			$filename = file_get_contents($path.'.'.$ext);
 			unlink($path.'.html');
 			unlink($path.'.'.$ext);
+			return $filename;
 	}
 
 	public function actionGet_tyovuorot_day($id)

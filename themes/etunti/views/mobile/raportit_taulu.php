@@ -220,20 +220,16 @@ $(document).ready(function(){
 
   $('.submitPDFluetut').click(function(){
 	var raporti_taulu = '<table>' + $("#mobileTable").html() + '</table>';
-	var ext = 'pdf';
 	//console.log(raporti_taulu)
 
         $.ajax({
            url: 'create_pdf',
            type: "POST",
-	   data: { content : raporti_taulu, ext : ext },
+	   data: { content : raporti_taulu, ext : 'pdf' },
            success: function(data){
 		data = JSON.parse(data);
 		console.log(data);
-		if(data['path'])
-		{
-			window.open('create_pdf?path='+data['path']+'&ext='+ext,'_blank');
-		}
+
            }
         });
 
