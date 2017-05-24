@@ -90,15 +90,18 @@ class MobileController extends Controller
 			$tiedosto = 'temp_raporti_'.Yii::app()->getSession()->getSessionId();
 			$path = 'tiedostot/temp/'.$tiedosto;
 			$file = file_put_contents($path.'.html', $_POST['content']);
-			$return = $this->transformContentTo($path.'.html', $_POST['ext']);
-			echo json_encode($return);
-			//unlink($path.'.html');
-			//unlink($path.'.'.$ext);
+			echo json_encode(array('path' => $path));
+			exit;
 		}
-		exit;
+
+		if(isset($_GET['path']))
+		{
+			$this->transformHtmlTo($_GET['path'], $_GET['ext']);
+			exit;
+		}
 	}
 
-	protected function transformHtmlTo($filename, $ext)
+	protected function transformHtmlTo($path, $ext)
 	{
 
 			define('PHPDOCX_INCLUDE_PATH', (dirname(Yii::app()->basePath)).'/protected/vendors/phpdocx');
@@ -112,8 +115,18 @@ class MobileController extends Controller
 			$transform = new TransformDocAdvLibreOffice();
 			$transform->transformDocument($path.'.html', $path.'.'.$ext);
 
-    			$out_file = $path.'.'.$ext;
-			return $out_file;
+    			$filename = $path.'.'.$ext;
+
+			$fileinfo = pathinfo($filename);
+			$sendname = $fileinfo['filename'] . '.' . strtoupper($fileinfo['extension']);
+
+			header('Content-Type: application/pdf');
+			header("Content-Disposition: attachment; filename=\"$sendname\"");
+			header('Content-Length: ' . filesize($filename));
+			readfile($filename);
+
+			unlink($path.'.html');
+			unlink($path.'.'.$ext);
 	}
 
 	public function actionGet_tyovuorot_day($id)
