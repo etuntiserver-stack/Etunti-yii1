@@ -499,7 +499,7 @@ function num($val){
 			spl_autoload_register(array('YiiBase', 'autoload'));
 
 
-			$path = 'tiedostot/temp/'.$tiedosto;
+			$path = (dirname(Yii::app()->basePath)).'/tiedostot/temp/'.$tiedosto;
 			$html = file_put_contents($path.'.html', $content);
 
 			$transform = new TransformDocAdvLibreOffice();
