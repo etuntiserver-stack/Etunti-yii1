@@ -87,16 +87,20 @@ class MobileController extends Controller
 		$pdf = '';
 		if(isset($_POST['content']) and isset($_POST['ext']))
 		{
-			$pdf = $this->transformHtmlAndGetContent($_POST['content'], $_POST['ext']);
+			$tiedosto = 'temp_raporti_'.Yii::app()->getSession()->getSessionId();
+			$path = 'tiedostot/temp/'.$tiedosto;
+			$file = file_put_contents($path.'.html', $_POST['content']);
+			$return = $this->transformContentTo($path.'.html', $_POST['ext']);
+			echo json_encode($return);
+			//unlink($path.'.html');
+			//unlink($path.'.'.$ext);
 		}
-		echo json_encode($pdf);
-		//exit;
+		exit;
 	}
 
-	protected function transformHtmlAndGetContent($content, $ext)
+	protected function transformHtmlTo($filename, $ext)
 	{
 
-			$tiedosto = 'temp_raporti_'.Yii::app()->getSession()->getSessionId();
 			define('PHPDOCX_INCLUDE_PATH', (dirname(Yii::app()->basePath)).'/protected/vendors/phpdocx');
 			spl_autoload_unregister(array('YiiBase','autoload'));
 			require_once PHPDOCX_INCLUDE_PATH.'/lib/pdf/dompdf_config.inc.php';
@@ -105,16 +109,11 @@ class MobileController extends Controller
 			spl_autoload_register(array('AutoLoader','load'));
 			spl_autoload_register(array('YiiBase', 'autoload'));
 
-			$path = 'tiedostot/temp/'.$tiedosto;
-			$html = file_put_contents($path.'.html', $content);
-
 			$transform = new TransformDocAdvLibreOffice();
 			$transform->transformDocument($path.'.html', $path.'.'.$ext);
-    			//$file_content = file_get_contents($path.'.'.$ext);
-			//unlink($path.'.html');
-			//unlink($path.'.'.$ext);
 
-			//return $file_content;
+    			$out_file = $path.'.'.$ext;
+			return $out_file;
 	}
 
 	public function actionGet_tyovuorot_day($id)
