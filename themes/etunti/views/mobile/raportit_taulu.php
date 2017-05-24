@@ -231,7 +231,7 @@ $(document).ready(function(){
 		console.log(data);
 		if(data)
 		{
-window.open("data:application/pdf," + escape(data)); 
+window.open("data:application/pdf;base64, " + data); 
 
 		}
            }
