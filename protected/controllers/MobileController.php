@@ -89,7 +89,7 @@ class MobileController extends Controller
 		{
 			$pdf = $this->transformHtmlTo($_POST['content'], $_POST['ext']);
 		}
-		echo json_encode($pdf);
+		echo $pdf;
 		exit;
 	}
 
