@@ -112,7 +112,7 @@ class MobileController extends Controller
 			{
     				$filecontent = file_get_contents($path.$tiedosto.'.'.$ext);
 				unlink($path.$tiedosto.'.html');
-				unlink($path.$tiedosto.'.'.$ext);
+				//unlink($path.$tiedosto.'.'.$ext);
 				//echo json_encode($output);
 				//exit;
 				return $filecontent;
