@@ -109,7 +109,7 @@ class MobileController extends Controller
 
 			$c = '
 			<html>
-			<link rel="stylesheet" type="text/css" href="../../css/raportit_table.css">
+			<link rel="stylesheet" type="text/css" href="../css/raportit_table.css">
 			';
 			$c .= $content;
 			$c .= '</html>';
