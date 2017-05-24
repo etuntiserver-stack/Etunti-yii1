@@ -62,13 +62,13 @@ exit;
 
 	   <div class="pull-right">
 	    <div class="form-inline">
-	   <?php     
+	   <?php /*    
 		echo CHtml::link("poista", '#', array(
 		'submit'=>array('delete', "id"=>$model->id), 
 		'confirm' => 'Haluatko varmaasti poistaa?',
 		'class'=>'btn btn-primary myBgColors'
 		));
-	   ?>
+	   */ ?>
 
   	     <!-- tulostus -->
      	      <form action="tulosta?id=<?php echo $model->id; ?>" class="form-group" target="_blank" method="POST">
