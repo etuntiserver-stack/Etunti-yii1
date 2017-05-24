@@ -220,7 +220,7 @@ $(document).ready(function(){
 
   $('.submitPDFluetut').click(function(){
 	var raporti_taulu = '<html><table>' + $("#mobileTable").html() + '</table></html>';
-	//console.log(raporti_taulu)
+	var ext = 'pdf';
 
         $.ajax({
            url: 'create_pdf',
@@ -228,11 +228,10 @@ $(document).ready(function(){
 	   data: { content : raporti_taulu, ext : 'pdf' },
            success: function(data){
 		//data = JSON.parse(data);
-		console.log(data);
+		//console.log(data);
 		if(data)
 		{
-window.open("data:application/pdf;base64, " + data); 
-
+			window.open("data:application/"+ext+";base64, " + data); 
 		}
            }
         });
