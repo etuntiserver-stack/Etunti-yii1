@@ -219,7 +219,7 @@
 $(document).ready(function(){
 
   $('.submitPDFluetut').click(function(){
-	var raporti_taulu = '<table>' + $("#mobileTable").html() + '</table>';
+	var raporti_taulu = '<html><table>' + $("#mobileTable").html() + '</table></html>';
 	//console.log(raporti_taulu)
 
         $.ajax({

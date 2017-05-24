@@ -105,7 +105,11 @@ class MobileController extends Controller
 			spl_autoload_register(array('AutoLoader','load'));
 			spl_autoload_register(array('YiiBase', 'autoload'));
 
-			$path = 'tiedostot/temp/'.$tiedosto;
+			if (!file_exists( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain )) {
+			 	mkdir( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain, 0777, true );
+			}
+
+			$path = 'tiedostot/temp/'.Yii::app()->user->domain.'/'.$tiedosto;
 			$html = file_put_contents($path.'.html', $content);
 /*
 			$transform = new TransformDocAdvLibreOffice();
