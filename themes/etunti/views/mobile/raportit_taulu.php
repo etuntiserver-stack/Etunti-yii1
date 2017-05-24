@@ -228,7 +228,7 @@ $(document).ready(function(){
 	   data: { content : raporti_taulu },
            success: function(data){
 		data = JSON.parse(data);
-		console.log(data);
+		//console.log(data);
 
            }
         });
