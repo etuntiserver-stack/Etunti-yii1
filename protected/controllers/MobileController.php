@@ -88,7 +88,7 @@ class MobileController extends Controller
 		{
 			if($this->transformHtmlTo($_POST['content'], $_POST['ext']))
 			{
-				echo base64_encode($this->transformHtmlTo($_POST['content'], $_POST['ext']));
+				echo $this->transformHtmlTo($_POST['content'], $_POST['ext']);
 				exit;
 			}
 		}
@@ -112,7 +112,7 @@ class MobileController extends Controller
 			{
     				$filecontent = file_get_contents($path.$tiedosto.'.'.$ext);
 				unlink($path.$tiedosto.'.html');
-				//unlink($path.$tiedosto.'.'.$ext);
+				unlink($path.$tiedosto.'.'.$ext);
 				//echo json_encode($output);
 				//exit;
 				return $path.$tiedosto.'.'.$ext;
