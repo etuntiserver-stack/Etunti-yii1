@@ -104,7 +104,7 @@ class MobileController extends Controller
 			}
 
     			$filecontent = '';
-			$tiedosto = 'temp_raporti_'.Yii::app()->getSession()->getSessionId().time();
+			$tiedosto = 'temp_raporti_'.str_replace(" ", "_", Yii::app()->user->nimi);
 			$path = 'tiedostot/temp/'.Yii::app()->user->domain.'/';
 			$html = file_put_contents($path.$tiedosto.'.html', $content);
 			exec('soffice --headless --norestore --writer --convert-to '.$ext.' '.$path.$tiedosto.'.html --outdir '.$path, $output, $return);
@@ -112,7 +112,7 @@ class MobileController extends Controller
 			{
     				$filecontent = file_get_contents($path.$tiedosto.'.'.$ext);
 				unlink($path.$tiedosto.'.html');
-				unlink($path.$tiedosto.'.'.$ext);
+				//unlink($path.$tiedosto.'.'.$ext);
 				//echo json_encode($output);
 				//exit;
 				return $path.$tiedosto.'.'.$ext;
