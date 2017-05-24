@@ -92,7 +92,7 @@ class MobileController extends Controller
 				exit;
 			}
 		}
-		echo 'false';
+		echo json_encode('false');
 		exit;
 	}
 
@@ -112,10 +112,10 @@ class MobileController extends Controller
 			{
     				$filecontent = file_get_contents($path.$tiedosto.'.'.$ext);
 				unlink($path.$tiedosto.'.html');
-				unlink($path.$tiedosto.'.'.$ext);
+				//unlink($path.$tiedosto.'.'.$ext);
 				//echo json_encode($output);
 				//exit;
-				return $filecontent;
+				return $path.$tiedosto.'.'.$ext;
 			}
 
 			return false;

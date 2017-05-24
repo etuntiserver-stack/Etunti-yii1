@@ -229,7 +229,13 @@ $(document).ready(function(){
            success: function(data){
 		//data = JSON.parse(data);
 		console.log(data);
+		if(data)
+		{
+var print = window.open('data:application/pdf;base64,'+data, "print", "width=800,height=600,resizable=yes,scrollbars=yes,status=yes");
+print.print();
+print.close();
 
+		}
            }
         });
 
