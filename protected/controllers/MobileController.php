@@ -84,27 +84,21 @@ class MobileController extends Controller
 
 	public function actionCreate_pdf()
 	{
-		$pdf = '';
 		if(isset($_POST['content']) and isset($_POST['ext']))
 		{
-			$pdf = $this->transformHtmlTo($_POST['content'], $_POST['ext']);
+			if($this->transformHtmlTo($_POST['content'], $_POST['ext']))
+			{
+				echo base64_encode($this->transformHtmlTo($_POST['content'], $_POST['ext']));
+				exit;
+			}
 		}
-		echo $pdf;
+		echo 'false';
 		exit;
 	}
 
 	protected function transformHtmlTo($content, $ext)
 	{
-/*
 
-			define('PHPDOCX_INCLUDE_PATH', (dirname(Yii::app()->basePath)).'/protected/vendors/phpdocx');
-			spl_autoload_unregister(array('YiiBase','autoload'));
-			require_once PHPDOCX_INCLUDE_PATH.'/lib/pdf/dompdf_config.inc.php';
-			//require_once PHPDOCX_INCLUDE_PATH.'/classes/TransformDocAdv.inc';
-			require_once PHPDOCX_INCLUDE_PATH.'/classes/CreateDocx.inc';
-			spl_autoload_register(array('AutoLoader','load'));
-			spl_autoload_register(array('YiiBase', 'autoload'));
-*/
 			if (!file_exists( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain )) {
 			 	mkdir( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain, 0777, true );
 			}
@@ -121,16 +115,10 @@ class MobileController extends Controller
 				unlink($path.$tiedosto.'.'.$ext);
 				//echo json_encode($output);
 				//exit;
+				return $filecontent;
 			}
 
-/*
-			$transform = new TransformDocAdvLibreOffice();
-			$transform->transformDocument($path.'.html', $path.'.'.$ext);
-    			$filename = file_get_contents($path.'.'.$ext);
-			unlink($path.'.html');
-			unlink($path.'.'.$ext);
-*/
-			return $filecontent;
+			return false;
 	}
 
 	public function actionGet_tyovuorot_day($id)
