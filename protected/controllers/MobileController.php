@@ -113,8 +113,8 @@ class MobileController extends Controller
 			$tiedosto = 'temp_raporti_'.Yii::app()->getSession()->getSessionId();
 			$path = 'tiedostot/temp/'.Yii::app()->user->domain.'/'.$tiedosto;
 			$html = file_put_contents($path.'.html', $content);
-			exec('soffice --headless --norestore --writer --convert-to pdf '.$path.'.html --outdir '.$path.'.'.$ext, $output, $return);
-echo json_encode($output);
+			exec('soffice --headless --norestore --writer --convert-to pdf '.$path.'.html --outdir /'.$path.'.'.$ext, $output, $return);
+echo json_encode($return);
 exit;
 			if($return)
     			$filename = file_get_contents($path.'.'.$ext);
