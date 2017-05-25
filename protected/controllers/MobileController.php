@@ -161,7 +161,7 @@ class MobileController extends Controller
 
 			$html = file_put_contents($path.$tiedosto.'.html', $c);
 
-			exec('soffice --headless --norestore --writer --convert-to '.$ext.' '.$path.$tiedosto.'.html --outdir '.$path, $output, $return);
+			exec('soffice --headless --writer --convert-to '.$ext.' '.$path.$tiedosto.'.html --outdir '.$path, $output, $return); //--norestore
 			if($output)
 			{
     				//$filecontent = file_get_contents($path.$tiedosto.'.'.$ext);
