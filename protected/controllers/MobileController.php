@@ -172,6 +172,7 @@ class MobileController extends Controller
 			return $path.$tiedosto.'.'.$ext;
 
 /*
+//soffice --writer --convert-to pdf /home/estromfi/www/dev/etunti/tiedostot/temp/sivex/temp_raporti_Roman_Sizov.html --outdir  /home/estromfi/www/dev/etunti/tiedostot/temp/sivex/temp_raporti_Roman_Sizov.pdf
 			exec('soffice --headless --writer --convert-to '.$ext.' '.$path.$tiedosto.'.html --outdir '.$path, $output, $return); //--norestore
 			if($output)
 			{
