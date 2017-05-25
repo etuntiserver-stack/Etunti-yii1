@@ -83,7 +83,7 @@ session_start();
 	$for_log = array(
 				array(
 					'class'=>'CFileLogRoute',
-                			'levels'=>'error, warning', //'trace, info, error, warning, vardump'
+                			'levels'=>'error, warning, info', //'trace, info, error, warning, vardump'
 					'enabled'=>YII_DEBUG,
                     			//'categories'=>'system.*',
 				), 
