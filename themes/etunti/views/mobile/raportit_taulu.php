@@ -164,7 +164,13 @@
         <div class="pull-right">
     	  <button class="btn btn-primary myBgColors submitPrintSivuLuetut"><i class="fa fa-print" aria-hidden="true"></i></button>
     	  <button class="btn btn-primary myBgColors submitRaportti" ext="xlsx"><i class="fa fa-file-excel-o" aria-hidden="true"></i></button>
-    	  <button class="btn btn-primary myBgColors submitRaportti" ext="pdf"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></button>
+
+	  <form action="create_pdf" target="_blank" method="POST">
+	   <input type="hidden" name="ext" value="pdf">
+	   <textarea id="pdfContent" name="content"></textarea>
+    	   <button type="submit" class="btn btn-primary myBgColors submitRaportti" ext="pdf"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></button>
+	  </form>
+
         </div>
        </div>
       </div>
@@ -219,7 +225,14 @@
 <script type="text/javascript">
 $(document).ready(function(){
 
+  var raporti_taulu = '<table class="table">' + $("#mobileTable").html() + '</table>';
+  console.log(raporti_taulu);
+  $('#pdfContent').val(raporti_taulu);
+
   $('.submitRaportti').click(function(){
+
+
+/*
 	$('#odota').html('<div class="alert bg-warning"><h3>Pieni hetki...</h3></div>');
 	var raporti_taulu = '<table class="table">' + $("#mobileTable").html() + '</table>';
 	var ext = $(this).attr('ext');
@@ -238,6 +251,7 @@ $(document).ready(function(){
 			$('#odota').html('');
            }
         });
+*/
 
   });
 

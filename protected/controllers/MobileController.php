@@ -86,11 +86,6 @@ class MobileController extends Controller
 	{
 		if(isset($_POST['content']) and isset($_POST['ext']))
 		{
-			require_once (dirname(Yii::app()->basePath)).'/protected/vendors/phpdocx/classes/AutoLoader.inc';
-			spl_autoload_unregister(array('YiiBase','autoload'));
-			AutoLoader::load();
-			spl_autoload_register(array('YiiBase','autoload'));
-
 			$this->transformHtmlTo($_POST['content'], $_POST['ext']);
 			exit;
 		}
@@ -102,7 +97,10 @@ class MobileController extends Controller
 	{
 
 			// "pkill soffice.bin" linuksella, jos office menisi jumiin
-
+			require_once (dirname(Yii::app()->basePath)).'/protected/vendors/phpdocx/classes/AutoLoader.inc';
+			spl_autoload_unregister(array('YiiBase','autoload'));
+			AutoLoader::load();
+			spl_autoload_register(array('YiiBase','autoload'));
 
 			/*
 			define('PHPDOCX_INCLUDE_PATH', (dirname(Yii::app()->basePath)).'/protected/vendors/phpdocx');
