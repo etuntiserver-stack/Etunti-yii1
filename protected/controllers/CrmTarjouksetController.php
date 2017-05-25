@@ -470,6 +470,7 @@ class CrmTarjouksetController extends Controller
 */
 
 			require_once (dirname(Yii::app()->basePath)).'/protected/vendors/phpdocx/classes/AutoLoader.inc';
+			require_once (dirname(Yii::app()->basePath)).'/protected/vendors/phpdocx/lib/log4php/Logger.php';
 			spl_autoload_unregister(array('YiiBase','autoload'));
 			AutoLoader::load();
 			spl_autoload_register(array('YiiBase','autoload'));
