@@ -22,3 +22,5 @@ if(isset($_POST['commento']))
 <input type="text" name="commento">
 <input type="submit">
 </form>
+*/
+?>
