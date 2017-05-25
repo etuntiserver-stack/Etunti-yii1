@@ -459,6 +459,7 @@ class CrmTarjouksetController extends Controller
 			//     Jos se on Asiakas -->
 
 			define('PHPDOCX_INCLUDE_PATH', (dirname(Yii::app()->basePath)).'/protected/vendors/phpdocx');
+			require_once PHPDOCX_INCLUDE_PATH.'/lib/pdf/dompdf_config.inc.php';
 			require_once PHPDOCX_INCLUDE_PATH.'/classes/CreateDocx.inc';
 /*
 			define('PHPDOCX_INCLUDE_PATH', (dirname(Yii::app()->basePath)).'/protected/vendors/phpdocx');
