@@ -458,15 +458,8 @@ class CrmTarjouksetController extends Controller
 			}
 			//     Jos se on Asiakas -->
 
-define('PHPDOCX_INCLUDE_PATH', (dirname(Yii::app()->basePath)).'/protected/vendors/phpdocx');
 
-spl_autoload_unregister(array('YiiBase','autoload'));
-require_once PHPDOCX_INCLUDE_PATH.'/classes/AutoLoader.inc';
-require_once PHPDOCX_INCLUDE_PATH.'/classes/CreateDocx.inc';
-spl_autoload_register(array('AutoLoader','load'));
-spl_autoload_register(array('YiiBase', 'autoload'));
 
-/*
 			define('PHPDOCX_INCLUDE_PATH', (dirname(Yii::app()->basePath)).'/protected/vendors/phpdocx');
 			spl_autoload_unregister(array('YiiBase','autoload'));
 			require_once PHPDOCX_INCLUDE_PATH.'/lib/pdf/dompdf_config.inc.php';
@@ -475,13 +468,6 @@ spl_autoload_register(array('YiiBase', 'autoload'));
 			spl_autoload_register(array('AutoLoader','load'));
 			spl_autoload_register(array('YiiBase', 'autoload'));
 
-
-			require_once (dirname(Yii::app()->basePath)).'/protected/vendors/phpdocx/classes/AutoLoader.inc';
-			require_once (dirname(Yii::app()->basePath)).'/protected/vendors/phpdocx/lib/log4php/Logger.php';
-			spl_autoload_unregister(array('YiiBase','autoload'));
-			AutoLoader::load();
-			spl_autoload_register(array('YiiBase','autoload'));
-*/
 			$template_tiedosto = $this->templates_polkku().$model->template;
 
 			$asetukset = Asetukset::model()->findByPk(1);
