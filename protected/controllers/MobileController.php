@@ -86,11 +86,8 @@ class MobileController extends Controller
 	{
 		if(isset($_POST['content']) and isset($_POST['ext']))
 		{
-			if($this->transformHtmlTo($_POST['content'], $_POST['ext']))
-			{
-				// ok
-				exit;
-			}
+			$this->transformHtmlTo($_POST['content'], $_POST['ext']);
+			exit;
 		}
 		echo json_encode('false');
 		exit;
