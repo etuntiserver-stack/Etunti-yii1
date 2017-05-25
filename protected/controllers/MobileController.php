@@ -99,11 +99,18 @@ class MobileController extends Controller
 	protected function transformHtmlTo($content, $ext)
 	{
 
+			define('PHPDOCX_INCLUDE_PATH', (dirname(Yii::app()->basePath)).'/protected/vendors/phpdocx');
+			spl_autoload_unregister(array('YiiBase','autoload'));
+			require_once PHPDOCX_INCLUDE_PATH.'/lib/pdf/dompdf_config.inc.php';
+			//require_once PHPDOCX_INCLUDE_PATH.'/classes/TransformDocAdv.inc';
+			require_once PHPDOCX_INCLUDE_PATH.'/classes/CreateDocx.inc';
+			spl_autoload_register(array('AutoLoader','load'));
+			spl_autoload_register(array('YiiBase', 'autoload'));
+
 			if (!file_exists( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain )) {
 			 	mkdir( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain, 0777, true );
 			}
 
-    			$filecontent = '';
 			$tiedosto = 'temp_raporti_'.str_replace(" ", "_", Yii::app()->user->nimi);
 			$path = 'tiedostot/temp/'.Yii::app()->user->domain.'/';
 
@@ -148,7 +155,12 @@ class MobileController extends Controller
 
 			$html = file_put_contents($path.$tiedosto.'.html', $c);
 
+			$transform = new TransformDocAdvLibreOffice();
+			$transform->transformDocument($path.$tiedosto.'.html', $path.$tiedosto.'.'.$ext);
+			unlink($path.$tiedosto.'.html');
+			return $path.$tiedosto.'.'.$ext;
 
+/*
 			exec('soffice --headless --norestore --writer --convert-to '.$ext.' '.$path.$tiedosto.'.html --outdir '.$path, $output, $return);
 			if($output)
 			{
@@ -159,8 +171,9 @@ class MobileController extends Controller
 				//exit;
 				return $path.$tiedosto.'.'.$ext;
 			}
-
 			return false;
+*/
+
 	}
 
 	public function actionGet_tyovuorot_day($id)
