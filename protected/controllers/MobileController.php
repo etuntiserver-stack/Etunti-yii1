@@ -177,7 +177,7 @@ class MobileController extends Controller
 			//unlink($path.$tiedosto.'.html');
 
 			if (file_exists( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain.'/'.$tiedosto.'.'.$ext ))
-			echo $path.$tiedosto.'.'.$ext;
+			echo json_encode($path.$tiedosto.'.'.$ext);
 			else
 			return false;
 
