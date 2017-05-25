@@ -88,7 +88,7 @@ class MobileController extends Controller
 		{
 			if($this->transformHtmlTo($_POST['content'], $_POST['ext']))
 			{
-				echo json_encode($this->transformHtmlTo($_POST['content'], $_POST['ext']));
+				// ok
 				exit;
 			}
 		}
@@ -171,7 +171,11 @@ class MobileController extends Controller
 			$transform = new TransformDocAdvLibreOffice();
 			$transform->transformDocument($path.$tiedosto.'.html', $path.$tiedosto.'.'.$ext);
 			unlink($path.$tiedosto.'.html');
-			return $path.$tiedosto.'.'.$ext;
+
+			if (file_exists( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain.'/'.$tiedosto.'.'.$ext ))
+			echo $path.$tiedosto.'.'.$ext;
+			else
+			return false;
 
 /*
 //soffice --writer --convert-to pdf /home/estromfi/www/dev/etunti/tiedostot/temp/sivex/temp_raporti_Roman_Sizov.html --outdir  /home/estromfi/www/dev/etunti/tiedostot/temp/sivex/
