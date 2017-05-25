@@ -230,7 +230,7 @@ $(document).ready(function(){
 	   data: { content : raporti_taulu, ext : ext },
            success: function(data){
 		data = JSON.parse(data);
-		//console.log(data);
+		console.log(data);
 		if(data !== "false")
 		{
 			window.open(location.protocol + "//" + location.host+ "/" + data, 'Raportti', 'width=800,height=800');

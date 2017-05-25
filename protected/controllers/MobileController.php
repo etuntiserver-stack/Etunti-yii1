@@ -100,12 +100,10 @@ class MobileController extends Controller
 	{
 
 			// "pkill soffice.bin" linuksella, jos office menisi jumiin
-			/*
 			require_once (dirname(Yii::app()->basePath)).'/protected/vendors/phpdocx/classes/AutoLoader.inc';
 			spl_autoload_unregister(array('YiiBase','autoload'));
 			AutoLoader::load();
 			spl_autoload_register(array('YiiBase','autoload'));
-			*/
 
 			/*
 			define('PHPDOCX_INCLUDE_PATH', (dirname(Yii::app()->basePath)).'/protected/vendors/phpdocx');
@@ -169,13 +167,13 @@ class MobileController extends Controller
 			$c .= '</html>';
 
 			$html = file_put_contents($path.$tiedosto.'.html', $c);
-/*
+
 			$transform = new TransformDocAdvLibreOffice();
 			$transform->transformDocument($path.$tiedosto.'.html', $path.$tiedosto.'.'.$ext);
 			unlink($path.$tiedosto.'.html');
 			return $path.$tiedosto.'.'.$ext;
-*/
 
+/*
 //soffice --writer --convert-to pdf /home/estromfi/www/dev/etunti/tiedostot/temp/sivex/temp_raporti_Roman_Sizov.html --outdir  /home/estromfi/www/dev/etunti/tiedostot/temp/sivex/
 			exec('soffice --headless --writer --convert-to '.$ext.' '.$path.$tiedosto.'.html --outdir '.$path, $output, $return); //--norestore
 			if($output)
@@ -188,7 +186,7 @@ class MobileController extends Controller
 				return $path.$tiedosto.'.'.$ext;
 			}
 			return false;
-
+*/
 
 	}
 
