@@ -98,6 +98,11 @@ class MobileController extends Controller
 
 	protected function transformHtmlTo($content, $ext)
 	{
+			require_once (dirname(Yii::app()->basePath)).'/protected/vendors/phpdocx/classes/AutoLoader.inc';
+			spl_autoload_unregister(array('YiiBase','autoload'));
+			AutoLoader::load();
+			spl_autoload_register(array('YiiBase','autoload'));
+
 			/*
 			define('PHPDOCX_INCLUDE_PATH', (dirname(Yii::app()->basePath)).'/protected/vendors/phpdocx');
 			spl_autoload_unregister(array('YiiBase','autoload'));
@@ -161,6 +166,12 @@ class MobileController extends Controller
 
 			$html = file_put_contents($path.$tiedosto.'.html', $c);
 
+			$transform = new TransformDocAdvLibreOffice();
+			$transform->transformDocument($path.$tiedosto.'.html', $path.$tiedosto.'.'.$ext);
+			unlink($path.$tiedosto.'.html');
+			return $path.$tiedosto.'.'.$ext;
+
+/*
 			exec('soffice --headless --writer --convert-to '.$ext.' '.$path.$tiedosto.'.html --outdir '.$path, $output, $return); //--norestore
 			if($output)
 			{
@@ -172,6 +183,7 @@ class MobileController extends Controller
 				return $path.$tiedosto.'.'.$ext;
 			}
 			return false;
+*/
 
 	}
 

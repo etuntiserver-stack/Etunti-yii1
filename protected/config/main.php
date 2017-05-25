@@ -83,7 +83,7 @@ session_start();
 	$for_log = array(
 				array(
 					'class'=>'CFileLogRoute',
-                			'levels'=>'error, warning, info', //'trace, info, error, warning, vardump'
+                			'levels'=>'error, warning', //'trace, info, error, warning, vardump'
 					'enabled'=>YII_DEBUG,
                     			//'categories'=>'system.*',
 				), 
@@ -148,6 +148,21 @@ return array(
 	'ext.YiiMailer.YiiMailer',
 	'application.vendors.*',
 	//'application.extensions.EasySlider.*',
+
+	'application.vendors.phpdocx.classes.*',
+        'application.vendors.phpdocx.lib.*',
+        'application.vendors.phpdocx.lib.dompdfParser.*',
+        'application.vendors.phpdocx.lib.fpdf-tpl.*',
+        'application.vendors.phpdocx.lib.fpdi.*',
+        'application.vendors.phpdocx.lib.log4php.*',
+        'application.vendors.phpdocx.lib.log4php.appenders.*',
+        'application.vendors.phpdocx.lib.log4php.configurators.*',
+        'application.vendors.phpdocx.lib.log4php.filters.*',
+        'application.vendors.phpdocx.lib.log4php.helpers.*',
+        'application.vendors.phpdocx.lib.log4php.layouts.*',
+        'application.vendors.phpdocx.lib.log4php.pattern.*',
+        'application.vendors.phpdocx.lib.log4php.renderers.*',
+
 	),
 
     'modules'=>array(
