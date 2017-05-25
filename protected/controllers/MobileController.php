@@ -97,10 +97,13 @@ class MobileController extends Controller
 	{
 
 			// "pkill soffice.bin" linuksella, jos office menisi jumiin
-			require_once (dirname(Yii::app()->basePath)).'/protected/vendors/phpdocx/classes/AutoLoader.inc';
+			define('PHPDOCX_INCLUDE_PATH', (dirname(Yii::app()->basePath)).'/protected/vendors/phpdocx');
 			spl_autoload_unregister(array('YiiBase','autoload'));
-			AutoLoader::load();
-			spl_autoload_register(array('YiiBase','autoload'));
+			require_once PHPDOCX_INCLUDE_PATH.'/lib/pdf/dompdf_config.inc.php';
+			//require_once PHPDOCX_INCLUDE_PATH.'/classes/TransformDocAdv.inc';
+			require_once PHPDOCX_INCLUDE_PATH.'/classes/CreateDocx.inc';
+			spl_autoload_register(array('AutoLoader','load'));
+			spl_autoload_register(array('YiiBase', 'autoload'));
 
 			/*
 			define('PHPDOCX_INCLUDE_PATH', (dirname(Yii::app()->basePath)).'/protected/vendors/phpdocx');
@@ -163,11 +166,15 @@ class MobileController extends Controller
 			$c .= $content;
 			$c .= '</html>';
 
-			$html = file_put_contents($path.$tiedosto.'.html', $c);
+$docx = new CreateDocx();
+$docx->embedHTML($c);
+$docx->createDocx($path.$tiedosto.'.html');
+
+			//$html = file_put_contents($path.$tiedosto.'.html', $c);
 
 			$transform = new TransformDocAdvLibreOffice();
-			$transform->transformDocument($path.$tiedosto.'.html', $path.$tiedosto.'.'.$ext);
-			unlink($path.$tiedosto.'.html');
+			$transform->transformDocument($path.$tiedosto.'.docx', $path.$tiedosto.'.'.$ext);
+			//unlink($path.$tiedosto.'.html');
 
 			if (file_exists( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain.'/'.$tiedosto.'.'.$ext ))
 			echo $path.$tiedosto.'.'.$ext;
