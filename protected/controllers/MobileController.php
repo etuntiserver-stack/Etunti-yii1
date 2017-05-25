@@ -166,9 +166,9 @@ class MobileController extends Controller
 			$c .= $content;
 			$c .= '</html>';
 
-$docx = new CreateDocx();
-$docx->embedHTML($c);
-$docx->createDocx($path.$tiedosto.'.html');
+			$docx = new CreateDocx();
+			$docx->embedHTML($c);
+			$docx->createDocx($path.$tiedosto.'.html');
 
 			//$html = file_put_contents($path.$tiedosto.'.html', $c);
 
