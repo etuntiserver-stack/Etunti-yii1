@@ -109,7 +109,7 @@ class MobileController extends Controller
 
 			$tiedosto = 'temp_raporti_'.str_replace(" ", "_", Yii::app()->user->nimi);
 			$path = 'tiedostot/temp/'.Yii::app()->user->domain.'/';
-/*
+
 			$c = '
 			<html>
 			<head>
@@ -135,7 +135,7 @@ class MobileController extends Controller
 			    max-width: 100%;
 			    border-collapse: 
 			    collapse; border-spacing: 0; 
-				border: 1px #333 solid;
+				/*border: 1px #333 solid;*/
 			}
 			.table th,
 			.table td {
@@ -148,10 +148,10 @@ class MobileController extends Controller
 			';
 			$c .= $content;
 			$c .= '</html>';
-*/
+
 
 			$docx = new CreateDocx();
-			$docx->embedHTML($content);
+			$docx->embedHTML($c);
 			$docx->createDocx($path.$tiedosto);
 
 			$transform = new TransformDocAdvLibreOffice();
