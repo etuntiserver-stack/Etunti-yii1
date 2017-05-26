@@ -235,12 +235,21 @@ $(document).ready(function(){
            type: "POST",
 	   data: { content : raporti_taulu },
            success: function(data){
-		data = JSON.parse(data);
+
 		console.log(data);
+
+	    try 
+	    {
+		data = JSON.parse(data);
 		if((data['docx']) && (data['pdf']))
 		{
 			$('#odota').html('<a class="btn btn-primary myBgColors" href="../../'+data['docx']+'" target="_blank"><i class="fa fa-file-word-o" aria-hidden="true"></i></a> <a class="btn btn-primary myBgColors" href="../../'+data['pdf']+'" target="_blank"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></a>');
 		}
+
+	    } catch (e) {
+	        return false;
+	    }
+
 
            }
         });

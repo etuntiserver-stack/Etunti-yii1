@@ -164,6 +164,7 @@ class MobileController extends Controller
 			if (file_exists( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain.'/'.$tiedosto.'.pdf' ))
 			$files_return['pdf'] = $path.$tiedosto.'.pdf';
 
+
 			echo json_encode($files_return);
 
 			/*
