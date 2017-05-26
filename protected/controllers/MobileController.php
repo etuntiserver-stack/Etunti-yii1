@@ -96,7 +96,7 @@ class MobileController extends Controller
 	protected function transformHtmlTo($content)
 	{
 
-			// "pkill soffice.bin" linuksella, jos office menisi jumiin
+			// " ps aux  | grep soffice" "pkill soffice.bin" linuksella, jos office menisi jumiin
 			require_once (dirname(Yii::app()->basePath)).'/protected/vendors/phpdocx/classes/AutoLoader.inc';
 			spl_autoload_unregister(array('YiiBase','autoload'));
 			AutoLoader::load();
