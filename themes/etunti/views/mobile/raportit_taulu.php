@@ -168,6 +168,7 @@
         </div>
        </div>
       </div>
+      <br>
   </div>
   <div class="panel heading-border">
 
