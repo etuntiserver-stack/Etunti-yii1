@@ -84,16 +84,16 @@ class MobileController extends Controller
 
 	public function actionCreate_pdf()
 	{
-		if(isset($_POST['content']) and isset($_POST['ext']))
+		if(isset($_POST['content']))
 		{
-			$this->transformHtmlTo($_POST['content'], $_POST['ext']);
+			$this->transformHtmlTo($_POST['content']);
 			exit;
 		}
 		echo json_encode('false');
 		exit;
 	}
 
-	protected function transformHtmlTo($content, $ext)
+	protected function transformHtmlTo($content)
 	{
 
 			// "pkill soffice.bin" linuksella, jos office menisi jumiin
@@ -109,7 +109,7 @@ class MobileController extends Controller
 
 			$tiedosto = 'temp_raporti_'.str_replace(" ", "_", Yii::app()->user->nimi);
 			$path = 'tiedostot/temp/'.Yii::app()->user->domain.'/';
-
+/*
 			$c = '
 			<html>
 			<head>
@@ -148,24 +148,26 @@ class MobileController extends Controller
 			';
 			$c .= $content;
 			$c .= '</html>';
+*/
 
 			$docx = new CreateDocx();
-			$docx->embedHTML($c);
+			$docx->embedHTML($content);
 			$docx->createDocx($path.$tiedosto);
 
-			//$html = file_put_contents($path.$tiedosto.'.html', $c);
-
 			$transform = new TransformDocAdvLibreOffice();
-			$transform->transformDocument($path.$tiedosto.'.docx', $path.$tiedosto.'.'.$ext);
-			//unlink($path.$tiedosto.'.html');
+			$transform->transformDocument($path.$tiedosto.'.docx', $path.$tiedosto.'.pdf');
 
-			if (file_exists( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain.'/'.$tiedosto.'.'.$ext ))
-			echo json_encode($path.$tiedosto.'.'.$ext);
-			else
-			return false;
+			$files_return = array();
 
-/*
-//soffice --writer --convert-to pdf /home/estromfi/www/dev/etunti/tiedostot/temp/sivex/temp_raporti_Roman_Sizov.html --outdir  /home/estromfi/www/dev/etunti/tiedostot/temp/sivex/
+			if (file_exists( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain.'/'.$tiedosto.'.docx' ))
+			$files_return['docx'] = $path.$tiedosto.'.docx';
+			if (file_exists( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain.'/'.$tiedosto.'.pdf' ))
+			$files_return['pdf'] = $path.$tiedosto.'.pdf';
+
+			echo json_encode($files_return);
+
+			/*
+			//soffice --writer --convert-to pdf /home/estromfi/www/dev/etunti/tiedostot/temp/sivex/temp_raporti_Roman_Sizov.html --outdir  /home/estromfi/www/dev/etunti/tiedostot/temp/sivex/
 			exec('soffice --headless --writer --convert-to '.$ext.' '.$path.$tiedosto.'.html --outdir '.$path, $output, $return); //--norestore
 			if($output)
 			{
@@ -177,7 +179,7 @@ class MobileController extends Controller
 				return $path.$tiedosto.'.'.$ext;
 			}
 			return false;
-*/
+			*/
 
 	}
 
@@ -1284,6 +1286,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			)
 		");
 		}
+
 
 		if(isset(Yii::app()->session['siivousPaaSivulla']))
 	        $criteria->addCondition (" kohdenID IN ( SELECT id FROM sivex_kohdet WHERE siivous LIKE '%".Yii::app()->session['siivousPaaSivulla']."%' ) ");

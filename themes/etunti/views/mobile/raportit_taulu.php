@@ -162,8 +162,8 @@
       <div class="row">
        <div class="col-sm-12">
         <div class="pull-right">
-    	  <button class="btn btn-primary myBgColors submitPrintSivuLuetut"><i class="fa fa-print" aria-hidden="true"></i></button>
-    	  <button class="btn btn-primary myBgColors submitRaportti" ext="xlsx"><i class="fa fa-file-excel-o" aria-hidden="true"></i></button>
+    	  <!--<button class="btn btn-primary myBgColors submitPrintSivuLuetut"><i class="fa fa-print" aria-hidden="true"></i></button>
+    	  <button class="btn btn-primary myBgColors submitRaportti" ext="xlsx"><i class="fa fa-file-excel-o" aria-hidden="true"></i></button>-->
     	  <button class="btn btn-primary myBgColors submitRaportti" ext="pdf"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></button>
         </div>
        </div>
@@ -225,8 +225,6 @@ $(document).ready(function(){
 */
   $('.submitRaportti').click(function(){
 
-
-
 	$('#odota').html('<div class="alert bg-warning"><h3>Pieni hetki...</h3></div>');
 	var raporti_taulu = '<table class="table">' + $("#mobileTable").html() + '</table>';
 	var ext = $(this).attr('ext');
@@ -234,15 +232,15 @@ $(document).ready(function(){
         $.ajax({
            url: 'create_pdf',
            type: "POST",
-	   data: { content : raporti_taulu, ext : ext },
+	   data: { content : raporti_taulu },
            success: function(data){
 		data = JSON.parse(data);
 		console.log(data);
-		if(data !== "false")
+		if((data['docx']) && (data['pdf']))
 		{
-			window.open(location.protocol + "//" + location.host+ "/" + data, 'Raportti', 'width=800,height=800');
+			$('#odota').html('<a href="'+data['docx']+'"><i class="fa fa-file-word-o" aria-hidden="true"></i></a><br><a href="'+data['pdf']+'"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></a>');
 		}
-			$('#odota').html('');
+
            }
         });
 
