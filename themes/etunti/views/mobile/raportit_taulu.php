@@ -238,7 +238,7 @@ $(document).ready(function(){
 		console.log(data);
 		if((data['docx']) && (data['pdf']))
 		{
-			$('#odota').html('<a href="'+data['docx']+'"><i class="fa fa-file-word-o" aria-hidden="true"></i></a><br><a href="'+data['pdf']+'"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></a>');
+			$('#odota').html('<a class="btn btn-primary myBgColors" href="../../'+data['docx']+'" target="_blank"><i class="fa fa-file-word-o" aria-hidden="true"></i></a> <a class="btn btn-primary myBgColors" href="../../'+data['pdf']+'" target="_blank"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></a>');
 		}
 
            }
