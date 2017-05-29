@@ -88,7 +88,7 @@ public $viesti;
 
 		if(!isset($t->gcm_reg_id) or empty($t->gcm_reg_id))
 		{
-			echo 'Push nitification error';
+			//echo 'Push nitification error';
 			return false;
 		}
 	
