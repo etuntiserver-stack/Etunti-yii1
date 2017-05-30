@@ -162,9 +162,9 @@
       <div class="row">
        <div class="col-sm-12">
         <div class="pull-right">
-    	  <!--<button class="btn btn-primary myBgColors submitPrintSivuLuetut"><i class="fa fa-print" aria-hidden="true"></i></button>
-    	  <button class="btn btn-primary myBgColors submitRaportti" ext="xlsx"><i class="fa fa-file-excel-o" aria-hidden="true"></i></button>-->
-    	  <button class="btn btn-primary myBgColors submitRaportti" ext="pdf"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></button>
+    	  <!--<button class="btn btn-primary myBgColors submitPrintSivuLuetut"><i class="fa fa-print" aria-hidden="true"></i></button>-->
+    	  <button class="btn btn-primary myBgColors submitRaporttiWord" ext="xlsx"><i class="fa fa-file-word-o" aria-hidden="true"></i></button>
+    	  <button class="btn btn-primary myBgColors submitRaporttiPDF" ext="pdf"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></button>
         </div>
        </div>
       </div>
@@ -224,16 +224,25 @@ $(document).ready(function(){
   console.log(raporti_taulu);
   $('#pdfContent').val(raporti_taulu);
 */
-  $('.submitRaportti').click(function(){
+
+  $('.submitRaporttiWord').click(function(){
+	ajaxPDF('docx');
+  });
+
+  $('.submitRaporttiPDF').click(function(){
+	ajaxPDF('pdf');
+  });
+
+  function ajaxPDF(ext)
+  {
 
 	$('#odota').html('<div class="alert bg-warning"><h3>Pieni hetki...</h3></div>');
 	var raporti_taulu = '<table class="table">' + $("#mobileTable").html() + '</table>';
-	var ext = $(this).attr('ext');
 
         $.ajax({
            url: 'create_pdf',
            type: "POST",
-	   data: { content : raporti_taulu },
+	   data: { content : raporti_taulu, ext : ext },
            success: function(data){
 
 		console.log(data);
@@ -241,9 +250,13 @@ $(document).ready(function(){
 	    try 
 	    {
 		data = JSON.parse(data);
-		if((data['docx']) && (data['pdf']))
+		if(data['pdf'])
 		{
-			$('#odota').html('<a class="btn btn-primary myBgColors" href="../../'+data['docx']+'" target="_blank"><i class="fa fa-file-word-o" aria-hidden="true"></i></a> <a class="btn btn-primary myBgColors" href="../../'+data['pdf']+'" target="_blank"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></a>');
+			window.location.href='../../'+data['pdf'];
+		}
+		if((ext == 'docx') && (data['docx']))
+		{
+			window.location.href='../../'+data['docx'];
 		}
 
 	    } catch (e) {
@@ -253,9 +266,8 @@ $(document).ready(function(){
 
            }
         });
+  }
 
-
-  });
 
   $(".haemob").click(function(){
 	$("#mobForm").submit();

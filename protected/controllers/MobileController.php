@@ -86,14 +86,14 @@ class MobileController extends Controller
 	{
 		if(isset($_POST['content']))
 		{
-			$this->transformHtmlTo($_POST['content']);
+			$this->transformHtmlTo($_POST['content'], $_POST['ext']);
 			exit;
 		}
 		echo json_encode('false');
 		exit;
 	}
 
-	protected function transformHtmlTo($content)
+	protected function transformHtmlTo($content, $ext)
 	{
 
 			// " ps aux  | grep soffice" "pkill soffice.bin" linuksella, jos office menisi jumiin
@@ -150,20 +150,35 @@ class MobileController extends Controller
 			$c .= '</html>';
 
 
-			$docx = new CreateDocx();
-			$docx->embedHTML($c);
-			$docx->createDocx($path.$tiedosto);
 
-			$transform = new TransformDocAdvLibreOffice();
-			$transform->transformDocument($path.$tiedosto.'.docx', $path.$tiedosto.'.pdf');
+			if (file_exists( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain.'/'.$tiedosto.'.docx' ))
+			{
+				unlink($path.$tiedosto.'.docx');
+			}
+			if (file_exists( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain.'/'.$tiedosto.'.pdf' ))
+			{
+				unlink($path.$tiedosto.'.pdf');
+			}
 
 			$files_return = array();
 
+			$docx = new CreateDocx();
+			$docx->embedHTML($c);
+			$docx->createDocx($path.$tiedosto);
 			if (file_exists( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain.'/'.$tiedosto.'.docx' ))
-			$files_return['docx'] = $path.$tiedosto.'.docx';
-			if (file_exists( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain.'/'.$tiedosto.'.pdf' ))
-			$files_return['pdf'] = $path.$tiedosto.'.pdf';
+			{
+				$files_return['docx'] = $path.$tiedosto.'.docx';
+			}
 
+			if($ext == 'pdf')
+			{
+				$transform = new TransformDocAdvLibreOffice();
+				$transform->transformDocument($path.$tiedosto.'.docx', $path.$tiedosto.'.pdf');
+				if (file_exists( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain.'/'.$tiedosto.'.pdf' ))
+				{
+					$files_return['pdf'] = $path.$tiedosto.'.pdf';
+				}
+			}
 
 			echo json_encode($files_return);
 
