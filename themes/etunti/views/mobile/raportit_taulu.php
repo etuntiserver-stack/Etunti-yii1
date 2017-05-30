@@ -176,37 +176,88 @@
 
 <div class="row">
  <div class="table-responsive raporti_taulu">
+<?php
+  $tb = '
   <table class="table table-striped" id="mobileTable">
   <thead class="myBgColors">
   <tr>
-  <th><?php echo Yii::t('main', 'Työntekijä'); ?></th>
-  <th><?php echo Yii::t('main', 'Kohde'); ?></th>
-  <th><?php echo Yii::t('main', 'Pvm'); ?></th>
-  <th><?php echo Yii::t('main', 'Aloitus'); ?></th>
-  <th><?php echo Yii::t('main', 'Lopetus'); ?></th>
-  <th><?php echo Yii::t('main', 'Kesto'); ?></th>
-  <th><?php echo Yii::t('main', 'Viesti'); ?></th>
+  <th>'.Yii::t('main', 'Työntekijä').'</th>
+  <th>'.Yii::t('main', 'Kohde').'</th>
+  <th>'.Yii::t('main', 'Pvm').'</th>
+  <th>'.Yii::t('main', 'Aloitus').'</th>
+  <th>'.Yii::t('main', 'Lopetus').'</th>
+  <th>'.Yii::t('main', 'Kesto').'</th>
+  <th>'.Yii::t('main', 'Viesti').'</th>
   </tr>
-  </thead>
-  <?php $this->widget('zii.widgets.CListView', array(
-	'dataProvider'=>$dataProvider,
-	'itemView'=>'_raportit_taulu',
-	'viewData' => array( 'from' => $from, 'to' => $to, 'raporti_tyyppi' => $raporti_tyyppi, 'osoite' => $osoite ),
-  	'template'=>'{items}<table class="table table-striped table-condensed"></table><br/>{pager}',
+  </thead>';
+  foreach($model as $data)
+  {
+	$tb .= $this->renderPartial('_raportit_taulu', array( 
+			'data' => $data, 'from' => $from, 'to' => $to, 'raporti_tyyppi' => $raporti_tyyppi, 'osoite' => $osoite 
+	), true);
+  }
+  $tb .= '</table>';
+  echo $tb;
 
 
-	'pager' => array(
-           'firstPageLabel'=>'<<',
-           'prevPageLabel'=>'< Edellinen',
-           'nextPageLabel'=>'Seuraava >',
-           'lastPageLabel'=>'>>',
-           //'maxButtonCount'=>'10',
-           'header'=>'<h3>Siirry sivulle:</h3>',
-           'cssFile'=>false,
-       ), 
+  			$tiedosto = 'temp_raporti_'.str_replace(" ", "_", Yii::app()->user->nimi);
+  			$path = 'tiedostot/temp/'.Yii::app()->user->domain.'/';
 
-  )); ?>
-  </table>
+			// <-- Poistetaan edelliset
+			if (file_exists( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain.'/'.$tiedosto.'.html' ))
+			{
+			 	unlink($path.$tiedosto.'.html');
+			}
+			if (file_exists( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain.'/'.$tiedosto.'.docx' ))
+			{
+				unlink($path.$tiedosto.'.docx');
+			}
+			if (file_exists( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain.'/'.$tiedosto.'.pdf' ))
+			{
+				unlink($path.$tiedosto.'.pdf');
+			}
+			//     Poistetaan edelliset -->
+
+$c = '<html>
+<head>
+<style>
+*
+{
+           margin:0px;
+           padding:0;
+           font-family:Arial;
+           font-size:9pt;
+           color:#000;
+}
+body
+{
+           width:100%;
+           font-family:Arial;
+           font-size:9pt;
+           margin:0;
+           padding:0;
+}
+.table {
+	    width: 100%;
+	    max-width: 100%;
+	    border-collapse: 
+	    collapse; border-spacing: 0; 
+}
+.table th,
+.table td {
+  padding: 3px 5px;
+  vertical-align: top;
+  border-top: 1px solid #333333;
+}
+</style>
+</head>
+<body>';
+$c .= preg_replace("/(?=\>\s+\n|\n)+(\s+)/", '', $tb);
+$c .= '</body></html>';
+
+
+file_put_contents($path.$tiedosto.'.html', $c);
+?>
  </div>
 </div>
 
@@ -237,12 +288,10 @@ $(document).ready(function(){
   {
 
 	$('#odota').html('<div class="alert bg-warning"><h3>Pieni hetki...</h3></div>');
-	var raporti_taulu = '<table class="table">' + $("#mobileTable").html() + '</table>';
-
         $.ajax({
            url: 'create_pdf',
            type: "POST",
-	   data: { content : raporti_taulu, ext : ext },
+	   data: { ext : ext },
            success: function(data){
 
 		console.log(data);

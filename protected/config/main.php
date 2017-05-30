@@ -44,6 +44,7 @@ session_start();
 
   // <-- LOG
   if( isset($_SESSION['domain']) ) $domain = $_SESSION['domain']; else $domain = 'Ei esitetty';
+  if( isset($_SERVER['HTTP_REFERER']) ) $refer = $_SERVER['HTTP_REFERER']; else $refer = '';
 
   if( 
 	($_SERVER['REMOTE_ADDR'] == '::1' 
@@ -60,11 +61,11 @@ session_start();
                 			'levels'=>'error, warning', //'trace, info, error, warning, vardump'
 					'enabled'=>YII_DEBUG,
                     			//'categories'=>'system.*',
-				), 
+				), /*
             			array(
 			                'class'=>'ext.yii-debug-toolbar.YiiDebugToolbarRoute',
 			                'ipFilters'=>array('*'),//'ipFilters'=>array('::1','127.0.0.1','192.168.10.73'),
-				),/*
+				),*/ /*
 			        array(
 				        'class'=>'CEmailLogRoute',
                 			'levels'=>'error', //'trace, info, error, warning, vardump'
@@ -91,7 +92,7 @@ session_start();
 				        'class'=>'CEmailLogRoute',
                 			'levels'=>'error', //'trace, info, error, warning, vardump'
 					'emails'=>'laptopsr@gmail.com',
-					'subject'=>'Log File Message. Domain: '.$domain.', IP: '.$_SERVER['REMOTE_ADDR'].', SID: '.session_id(),
+					'subject'=>'Log File Message. Domain: '.$domain.', IP: '.$_SERVER['REMOTE_ADDR'].', SID: '.session_id().', refer: '.$refer,
 			        )
 	);
   }

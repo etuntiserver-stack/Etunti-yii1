@@ -84,25 +84,19 @@ class MobileController extends Controller
 
 	public function actionCreate_pdf()
 	{
-		if(isset($_POST['content']))
+		if(isset($_POST['ext']))
 		{
-			$this->transformHtmlTo($_POST['content'], $_POST['ext']);
+			$this->transformHtmlTo($_POST['ext']);
 			exit;
 		}
 		echo json_encode('false');
 		exit;
 	}
 
-	protected function transformHtmlTo($content, $ext)
+	protected function transformHtmlTo($ext)
 	{
 
 			// " ps aux  | grep soffice" "pkill soffice.bin" linuksella, jos office menisi jumiin
-			require_once (dirname(Yii::app()->basePath)).'/protected/vendors/phpdocx/classes/AutoLoader.inc';
-			spl_autoload_unregister(array('YiiBase','autoload'));
-			AutoLoader::load();
-			spl_autoload_register(array('YiiBase','autoload'));
-
-
 			if (!file_exists( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain )) {
 			 	mkdir( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain, 0777, true );
 			}
@@ -110,70 +104,43 @@ class MobileController extends Controller
 			$tiedosto = 'temp_raporti_'.str_replace(" ", "_", Yii::app()->user->nimi);
 			$path = 'tiedostot/temp/'.Yii::app()->user->domain.'/';
 
-			$c = '
-			<html>
-			<head>
-			<style>
-		        *
-		        {
-		            margin:0px;
-		            padding:0;
-		            font-family:Arial;
-		            font-size:9pt;
-		            color:#000;
-		        }
-		        body
-		        {
-		            width:100%;
-		            font-family:Arial;
-		            font-size:9pt;
-		            margin:0;
-		            padding:0;
-		        }
-			.table {
-			    width: 100%;
-			    max-width: 100%;
-			    border-collapse: 
-			    collapse; border-spacing: 0; 
-				/*border: 1px #333 solid;*/
-			}
-			.table th,
-			.table td {
-			  padding: 7px;
-			  vertical-align: top;
-			  border-top: 1px solid #333333;
-			}
-			</style>
-			</head>
-			';
-			$c .= $content;
-			$c .= '</html>';
-			$c = preg_replace("/(?=\>\s+\n|\n)+(\s+)/", '', $c);
-
-
-			if (file_exists( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain.'/'.$tiedosto.'.docx' ))
+			$c = '';
+			if (file_exists( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain.'/'.$tiedosto.'.html' ))
 			{
-				unlink($path.$tiedosto.'.docx');
-			}
-			if (file_exists( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain.'/'.$tiedosto.'.pdf' ))
-			{
-				unlink($path.$tiedosto.'.pdf');
+				$c = file_get_contents('tiedostot/temp/sivex/temp_raporti_Roman_Sizov.html');
 			}
 
 			$files_return = array();
 
-			$docx = new CreateDocx();
-			$docx->embedHTML($c);
-			$docx->createDocx($path.$tiedosto);
-			if (file_exists( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain.'/'.$tiedosto.'.docx' ))
+			if($ext == 'docx')
 			{
-				$files_return['docx'] = $path.$tiedosto.'.docx';
+				require_once (dirname(Yii::app()->basePath)).'/protected/vendors/phpdocx/classes/AutoLoader.inc';
+				spl_autoload_unregister(array('YiiBase','autoload'));
+				AutoLoader::load();
+				spl_autoload_register(array('YiiBase','autoload'));
+
+				$docx = new CreateDocx();
+				$docx->embedHTML($c);
+				$docx->createDocx($path.$tiedosto);
+				if (file_exists( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain.'/'.$tiedosto.'.docx' ))
+				{
+					$files_return['docx'] = $path.$tiedosto.'.docx';
+				}
 			}
 
 			if($ext == 'pdf')
 			{
+
+				$html2pdf = Yii::app()->ePdf->HTML2PDF('P', 'A4', 'en');
+				$html2pdf->setDefaultFont('Arial');
+				$html2pdf->setTestTdInOnePage(false);
+				$html2pdf->WriteHTML($c);
+				$content_PDF = $html2pdf->Output($path.$tiedosto.'.pdf', 'F');
+
+/*
 				$transform = new TransformDocAdvLibreOffice();
 				$transform->transformDocument($path.$tiedosto.'.docx', $path.$tiedosto.'.pdf');
+*/
 				if (file_exists( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain.'/'.$tiedosto.'.pdf' ))
 				{
 					$files_return['pdf'] = $path.$tiedosto.'.pdf';
@@ -679,15 +646,12 @@ function num($val){
 		}
 
 
-		$dataProvider=new CActiveDataProvider('Tyontekijat', array(
-			'criteria'=>$criteria,
-			'pagination'=>false
-		));
+		$model = Tyontekijat::model()->findAll($criteria);
 
 		//$dataProvider->pagination->pageSize = 50;
 
 		$this->render('raportit_taulu', array(
-			'dataProvider' => $dataProvider,
+			'model' => $model,
 			'from' => $from,
 			'to' => $to,
 			'raporti_tyyppi' => $raporti_tyyppi,
