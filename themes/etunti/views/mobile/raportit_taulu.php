@@ -199,6 +199,9 @@
   $tb .= '</table>';
   echo $tb;
 
+  if (!file_exists( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain )) {
+ 	mkdir( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain, 0777, true );
+  }
 
   			$tiedosto = 'temp_raporti_'.str_replace(" ", "_", Yii::app()->user->nimi);
   			$path = 'tiedostot/temp/'.Yii::app()->user->domain.'/';
