@@ -148,7 +148,7 @@ class MobileController extends Controller
 			';
 			$c .= $content;
 			$c .= '</html>';
-
+			$c = preg_replace("/(?=\>\s+\n|\n)+(\s+)/", '', $c);
 
 
 			if (file_exists( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain.'/'.$tiedosto.'.docx' ))

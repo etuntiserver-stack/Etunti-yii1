@@ -18,27 +18,13 @@
 	$viesti = $val->viesti;
 ?>
 <tr>
-	<td>
-		<?=$this->etuSukunimi($data->id)?>
-	</td>
-	<td>
-		<?=$val->kohde_kannasta;?>
-	</td>
-	<td>
-		<?=date("d.m.Y", strtotime($val->aloitan))?>
-	</td>
-	<td>
-		<?=date("H:i", strtotime($val->aloitan))?>
-	</td>
-	<td>
-		<?=date("H:i", strtotime($val->loppui))?>
-	</td>
-	<td>
-		<?=$this->sprint($val->l_tunnit);?>
-	</td>
-	<td>
-		<?=$viesti?>
-	</td>
+	<td><?=$this->etuSukunimi($data->id)?></td>
+	<td><?=$val->kohde_kannasta;?></td>
+	<td><?=date("d.m.Y", strtotime($val->aloitan))?></td>
+	<td><?=date("H:i", strtotime($val->aloitan))?></td>
+	<td><?=date("H:i", strtotime($val->loppui))?></td>
+	<td><?=$this->sprint($val->l_tunnit);?></td>
+	<td><?=$viesti?></td>
 </tr>
 <?php endforeach; ?>
 <?php endif; ?>
