@@ -107,7 +107,7 @@ class MobileController extends Controller
 			$c = '';
 			if (file_exists( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain.'/'.$tiedosto.'.html' ))
 			{
-				$c = file_get_contents('tiedostot/temp/sivex/temp_raporti_Roman_Sizov.html');
+				$c = file_get_contents($path.$tiedosto.'.html');
 			}
 
 			$files_return = array();
