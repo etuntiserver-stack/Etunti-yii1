@@ -43,9 +43,18 @@ class ToteutuneetController extends Controller
 
 	public function isEtuntiAdmin() {
 
-	$tas = '';
-	if(isset(Yii::app()->user->adminPaketti))
-	$tas = explode(",",Yii::app()->user->adminPaketti);
+		if(!isset(Yii::app()->user->adminID))
+		{
+			//die('login error');
+		  	echo '<script type="text/javascript">
+				window.location.href=location.protocol + "//" + location.host + "/index.php/site/index";
+			</script>';
+			exit;
+		}
+
+		$tas = '';
+		if(isset(Yii::app()->user->adminPaketti))
+		$tas = explode(",",Yii::app()->user->adminPaketti);
 
 		if(isset(Yii::app()->user->adminID) and in_array('2',$tas))
 		{
@@ -1434,6 +1443,7 @@ $xml = '
 	  	$criteria = new CDbCriteria();
 		$criteria->order = " pvm DESC ";
 		$criteria->condition = " 
+
 			tid='".$tid."'
 			AND pvm='".$pvm."'
 		";
