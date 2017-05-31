@@ -137,7 +137,7 @@ return array(
 	//'defaultController'=>'mobile/index',
 	// preloading 'log' component
 	'preload'=>array('log'), //'log'
-	'language' => 'en',
+	'language' => $lang,
 
   	//'theme' => $theme,
 
