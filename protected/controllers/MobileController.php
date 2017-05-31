@@ -130,12 +130,21 @@ class MobileController extends Controller
 
 			if($ext == 'pdf')
 			{
-
+				/*
 				$html2pdf = Yii::app()->ePdf->HTML2PDF('P', 'A4', 'en');
 				$html2pdf->setDefaultFont('Arial');
 				$html2pdf->setTestTdInOnePage(false);
 				$html2pdf->WriteHTML($c);
 				$content_PDF = $html2pdf->Output($path.$tiedosto.'.pdf', 'F');
+				*/
+
+				exec('wkhtmltopdf '.$path.$tiedosto.'.html '.$path.$tiedosto.'.pdf', $output, $return); //--norestore
+				if($output)
+				{
+					echo $output;
+				}
+
+
 
 /*
 				$transform = new TransformDocAdvLibreOffice();
