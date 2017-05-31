@@ -93,7 +93,7 @@ class LaskuController extends Controller
 		if(isset($_POST['word']))
 		{
        			$criteria = new CDbCriteria();
-       			$criteria->condition = " osoite LIKE '%".$_POST['word']."%' ";
+       			$criteria->condition = " osoite LIKE '%".$_POST['word']."%' AND aktiivinen=1 ";
 			$k=Kohteet::model()->findAll($criteria);
 			if(isset($k[0]))
 			{
@@ -435,6 +435,7 @@ class LaskuController extends Controller
        		$criteria->condition = " 
 			asiakas_id='".$as->id."' 
 			AND hinta_tyyppi='".$tuntiTaiKk."' AND (hinta='' or hinta='0')
+			AND aktiivinen=1
 		";
 		$k = Kohteet::model()->findAll($criteria);
 		foreach($k as $a)
@@ -461,6 +462,7 @@ class LaskuController extends Controller
        		$criteria->condition = " 
 			asiakas_id='".$as->id."' 
 			AND hinta_tyyppi!='".$tuntiTaiKk."' AND (hinta='' or hinta='0')
+			AND aktiivinen=1
 		";
 		$k = Kohteet::model()->findAll($criteria);
 		foreach($k as $a)
@@ -497,7 +499,7 @@ class LaskuController extends Controller
 	{
 
 		$a = Asiakkaat::model()->find(" asiakasnumero='".$id."' ");
-		$k = Kohteet::model()->findAll(" asiakas_id='".$id."' ");
+		$k = Kohteet::model()->findAll(" asiakas_id='".$id."' AND aktiivinen=1 ");
 
 		$tyyppi = '';
 		if(!empty($a->yrityksen_nimi))
