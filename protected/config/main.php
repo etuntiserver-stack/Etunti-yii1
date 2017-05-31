@@ -45,6 +45,7 @@ session_start();
   // <-- LOG
   if( isset($_SESSION['domain']) ) $domain = $_SESSION['domain']; else $domain = 'Ei esitetty';
   if( isset($_SERVER['HTTP_REFERER']) ) $refer = $_SERVER['HTTP_REFERER']; else $refer = '';
+  if( isset($_POST) ) $post = implode(",", $_POST); else $post = '';
 
   if( 
 	($_SERVER['REMOTE_ADDR'] == '::1' 
@@ -92,7 +93,7 @@ session_start();
 				        'class'=>'CEmailLogRoute',
                 			'levels'=>'error', //'trace, info, error, warning, vardump'
 					'emails'=>'laptopsr@gmail.com',
-					'subject'=>'Log File Message. Domain: '.$domain.', IP: '.$_SERVER['REMOTE_ADDR'].', SID: '.session_id().', refer: '.$refer,
+					'subject'=>'Log File Message. Domain: '.$domain.', IP: '.$_SERVER['REMOTE_ADDR'].', SID: '.session_id().', refer: '.$refer.', post: '.$post,
 			        )
 	);
   }
