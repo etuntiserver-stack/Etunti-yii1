@@ -33,7 +33,7 @@ class MobileController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin', 'delete', 'create', 'update', 'index', 'index_a', 'view', 'updatetime', 'showkohteet', 'yhteenveto', 'kyhteenveto', 'yhteenveto_m', 'historia', 'poistaKohde', 'total_suunniteltu', 'total_toteutu', 'total_luettu', 'kesto', 'index_ajax', 'raportit', 'uusirivi', 'palkkataulukko', 'tidfromtomatkat', 'tidfromtoSL', 'tidfromtoSPL', 'tyobykohde', 'asiakas_hyvaksyminen', 'kohdebytekija' ,'kyhteenveto_tuntemattomat', 'laskutettu', 'lahetys_asiakkaalle', 'get_tyovuorot_day', 'on_olemassa', 'luetut_toteutuneet_ero_pdf', 'vuosilomat_pdf', 'check_paallekkainMobile', 'tyoajan_seuranta', 'raportit_taulu', 'create_pdf'),
+				'actions'=>array('admin', 'delete', 'create', 'update', 'index', 'index_a', 'view', 'updatetime', 'showkohteet', 'yhteenveto', 'kyhteenveto', 'yhteenveto_m', 'historia', 'poistaKohde', 'total_suunniteltu', 'total_toteutu', 'total_luettu', 'kesto', 'index_ajax', 'raportit', 'uusirivi', 'palkkataulukko', 'tidfromtomatkat', 'tidfromtoSL', 'tidfromtoSPL', 'tyobykohde', 'asiakas_hyvaksyminen', 'kohdebytekija' ,'kyhteenveto_tuntemattomat', 'laskutettu', 'lahetys_asiakkaalle', 'get_tyovuorot_day', 'on_olemassa', 'luetut_toteutuneet_ero_pdf', 'vuosilomat_pdf', 'check_paallekkainMobile', 'tyoajan_seuranta', 'raportit_taulu', 'tulostus'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -82,7 +82,7 @@ class MobileController extends Controller
         }
 
 
-	public function actionCreate_pdf()
+	public function actionTulostus()
 	{
 		if(isset($_POST['ext']))
 		{
@@ -107,7 +107,7 @@ class MobileController extends Controller
 			$c = '';
 			if (file_exists( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain.'/'.$tiedosto.'.html' ))
 			{
-				$c = file_get_contents('tiedostot/temp/sivex/temp_raporti_Roman_Sizov.html');
+				$c = file_get_contents($path.$tiedosto.'.html');
 			}
 
 			$files_return = array();
@@ -130,39 +130,70 @@ class MobileController extends Controller
 
 			if($ext == 'pdf')
 			{
-
-				$html2pdf = Yii::app()->ePdf->HTML2PDF('P', 'A4', 'en');
-				$html2pdf->setDefaultFont('Arial');
-				$html2pdf->setTestTdInOnePage(false);
-				$html2pdf->WriteHTML($c);
-				$content_PDF = $html2pdf->Output($path.$tiedosto.'.pdf', 'F');
-
-/*
-				$transform = new TransformDocAdvLibreOffice();
-				$transform->transformDocument($path.$tiedosto.'.docx', $path.$tiedosto.'.pdf');
-*/
-				if (file_exists( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain.'/'.$tiedosto.'.pdf' ))
+				exec('xvfb-run -a wkhtmltopdf '.$path.$tiedosto.'.html '.$path.$tiedosto.'.pdf', $output, $return);
+				if($output)
 				{
-					$files_return['pdf'] = $path.$tiedosto.'.pdf';
+				    if (file_exists( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain.'/'.$tiedosto.'.pdf' ))
+				    {
+
+					header("Content-Length: " . filesize ( $path.$tiedosto.'.pdf' ) ); 
+			                header("Content-type: application/octet-stream"); 
+			                header("Content-disposition: attachment; filename=".basename($path.$tiedosto.'.pdf'));
+			                header('Expires: 0');
+			                header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+			                readfile($path.$tiedosto.'.pdf');
+					exit;
+
+				    }
 				}
+
 			}
 
-			echo json_encode($files_return);
-
-			/*
-			//soffice --writer --convert-to pdf /home/estromfi/www/dev/etunti/tiedostot/temp/sivex/temp_raporti_Roman_Sizov.html --outdir  /home/estromfi/www/dev/etunti/tiedostot/temp/sivex/
-			exec('soffice --headless --writer --convert-to '.$ext.' '.$path.$tiedosto.'.html --outdir '.$path, $output, $return); //--norestore
-			if($output)
+			if($ext == 'doc')
 			{
-    				//$filecontent = file_get_contents($path.$tiedosto.'.'.$ext);
-				unlink($path.$tiedosto.'.html');
-				//unlink($path.$tiedosto.'.'.$ext);
-				//echo json_encode($output);
-				//exit;
-				return $path.$tiedosto.'.'.$ext;
+				exec('libreoffice --headless --convert-to doc '.$path.$tiedosto.'.html --outdir '.$path, $output, $return);
+				if($output)
+				{
+				    if (file_exists( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain.'/'.$tiedosto.'.doc' ))
+				    {
+
+					header("Content-Length: " . filesize ( $path.$tiedosto.'.doc' ) ); 
+			                header("Content-type: application/octet-stream"); 
+			                header("Content-disposition: attachment; filename=".basename($path.$tiedosto.'.doc'));
+			                header('Expires: 0');
+			                header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+			                readfile($path.$tiedosto.'.doc');
+					exit;
+
+				    }
+				}
+
 			}
+
+			if($ext == 'xlsx')
+			{
+
+				Yii::import('ext.phpexcel.PHPExcel',true);
+				$tmpfile = $path.$tiedosto.'.html';
+			
+				$inputFileType = 'HTML';
+				$inputFileName = $tmpfile;
+				$outputFileType = 'Excel5';
+				$outputFileName = 'myExcelFile.xlsx';
+			
+				$objPHPExcelReader = PHPExcel_IOFactory::createReader($inputFileType);
+				$objPHPExcel = $objPHPExcelReader->load($inputFileName);
+		
+				$objPHPExcelWriter = PHPExcel_IOFactory::createWriter($objPHPExcel,$outputFileType);
+
+				header('Content-type: application/vnd.ms-excel;');
+				header('Content-Disposition: attachment; filename="'.$path.$tiedosto.'.xlsx"');
+				$objPHPExcelWriter->save('php://output');
+				exit;
+			}
+
+
 			return false;
-			*/
 
 	}
 
