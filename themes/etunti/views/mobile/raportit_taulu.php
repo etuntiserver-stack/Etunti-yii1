@@ -165,12 +165,16 @@
          <div class="form-inline">
     	  <!--<button class="btn btn-primary myBgColors submitPrintSivuLuetut"><i class="fa fa-print" aria-hidden="true"></i></button>-->
 	  <form action="tulostus" class="form-group" target="_blank" method="POST">
-	    <input type="hidden" name="ext" value="excel">
-    	    <button type="submit" class="btn btn-primary myBgColors" ext="pdf"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></button>
+	    <input type="hidden" name="ext" value="doc">
+    	    <button type="submit" class="btn btn-primary myBgColors"><i class="fa fa-file-word-o" aria-hidden="true"></i></button>
+	  </form>
+	  <form action="tulostus" class="form-group" target="_blank" method="POST">
+	    <input type="hidden" name="ext" value="xlsx">
+    	    <button type="submit" class="btn btn-primary myBgColors"><i class="fa fa-file-excel-o" aria-hidden="true"></i></button>
 	  </form>
 	  <form action="tulostus" class="form-group" target="_blank" method="POST">
 	    <input type="hidden" name="ext" value="pdf">
-    	    <button type="submit" class="btn btn-primary myBgColors" ext="pdf"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></button>
+    	    <button type="submit" class="btn btn-primary myBgColors"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></button>
 	  </form>
          </div>
         </div>
@@ -218,6 +222,14 @@
 			if (file_exists( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain.'/'.$tiedosto.'.html' ))
 			{
 			 	unlink($path.$tiedosto.'.html');
+			}
+			if (file_exists( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain.'/'.$tiedosto.'.xlsx' ))
+			{
+			 	unlink($path.$tiedosto.'.xlsx');
+			}
+			if (file_exists( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain.'/'.$tiedosto.'.doc' ))
+			{
+			 	unlink($path.$tiedosto.'.doc');
 			}
 			if (file_exists( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain.'/'.$tiedosto.'.docx' ))
 			{
