@@ -130,14 +130,6 @@ class MobileController extends Controller
 
 			if($ext == 'pdf')
 			{
-				/*
-				$html2pdf = Yii::app()->ePdf->HTML2PDF('P', 'A4', 'en');
-				$html2pdf->setDefaultFont('Arial');
-				$html2pdf->setTestTdInOnePage(false);
-				$html2pdf->WriteHTML($c);
-				$content_PDF = $html2pdf->Output($path.$tiedosto.'.pdf', 'F');
-				*/
-
 				exec('xvfb-run -a wkhtmltopdf '.$path.$tiedosto.'.html '.$path.$tiedosto.'.pdf', $output, $return);
 				if($output)
 				{
@@ -150,21 +142,6 @@ class MobileController extends Controller
 			}
 
 			echo json_encode($files_return);
-
-			/*
-			//soffice --writer --convert-to pdf /home/estromfi/www/dev/etunti/tiedostot/temp/sivex/temp_raporti_Roman_Sizov.html --outdir  /home/estromfi/www/dev/etunti/tiedostot/temp/sivex/
-			exec('soffice --headless --writer --convert-to '.$ext.' '.$path.$tiedosto.'.html --outdir '.$path, $output, $return); //--norestore
-			if($output)
-			{
-    				//$filecontent = file_get_contents($path.$tiedosto.'.'.$ext);
-				unlink($path.$tiedosto.'.html');
-				//unlink($path.$tiedosto.'.'.$ext);
-				//echo json_encode($output);
-				//exit;
-				return $path.$tiedosto.'.'.$ext;
-			}
-			return false;
-			*/
 
 	}
 
