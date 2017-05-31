@@ -138,7 +138,7 @@ class MobileController extends Controller
 				$content_PDF = $html2pdf->Output($path.$tiedosto.'.pdf', 'F');
 				*/
 
-				exec('wkhtmltopdf '.$path.$tiedosto.'.html '.$path.$tiedosto.'.pdf', $output, $return); //--norestore
+				exec('xvfb-run -a wkhtmltopdf '.$path.$tiedosto.'.html '.$path.$tiedosto.'.pdf', $output, $return);
 				if($output)
 				{
 					echo $output;
