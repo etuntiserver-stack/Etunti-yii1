@@ -141,19 +141,12 @@ class MobileController extends Controller
 				exec('xvfb-run -a wkhtmltopdf '.$path.$tiedosto.'.html '.$path.$tiedosto.'.pdf', $output, $return);
 				if($output)
 				{
-					echo $output;
-				}
-
-
-
-/*
-				$transform = new TransformDocAdvLibreOffice();
-				$transform->transformDocument($path.$tiedosto.'.docx', $path.$tiedosto.'.pdf');
-*/
-				if (file_exists( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain.'/'.$tiedosto.'.pdf' ))
-				{
+				    if (file_exists( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain.'/'.$tiedosto.'.pdf' ))
+				    {
 					$files_return['pdf'] = $path.$tiedosto.'.pdf';
+				    }
 				}
+
 			}
 
 			echo json_encode($files_return);
