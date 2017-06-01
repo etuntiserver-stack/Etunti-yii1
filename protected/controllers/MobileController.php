@@ -126,7 +126,7 @@ class MobileController extends Controller
 		$c .= '<link rel="stylesheet" type="text/css" href="'.Yii::app()->request->baseUrl.'/css/raportit_table.css">';
 		$c .= '</head><body>'.preg_replace("/(?=\>\s+\n|\n)+(\s+)/", '', $html_content).'</body>';
 		$c .= '</html>';
-		echo $c;
+		//echo $c;
 
 		file_put_contents($path.$tiedosto.'.html', $c);
 
