@@ -112,22 +112,6 @@ class MobileController extends Controller
 
 			$files_return = array();
 
-			if($ext == 'docx')
-			{
-				require_once (dirname(Yii::app()->basePath)).'/protected/vendors/phpdocx/classes/AutoLoader.inc';
-				spl_autoload_unregister(array('YiiBase','autoload'));
-				AutoLoader::load();
-				spl_autoload_register(array('YiiBase','autoload'));
-
-				$docx = new CreateDocx();
-				$docx->embedHTML($c);
-				$docx->createDocx($path.$tiedosto);
-				if (file_exists( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain.'/'.$tiedosto.'.docx' ))
-				{
-					$files_return['docx'] = $path.$tiedosto.'.docx';
-				}
-			}
-
 			if($ext == 'pdf')
 			{
 				exec('xvfb-run -a wkhtmltopdf '.$path.$tiedosto.'.html '.$path.$tiedosto.'.pdf', $output, $return);
@@ -2213,6 +2197,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 	protected function yhtSUUNN($from,$to){
 
 		$from = date("Y-m-d", strtotime($from));
+
 		$to = date("Y-m-d", strtotime($to));
 
 		$site = Yii::app()->createController('Site');
