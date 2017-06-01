@@ -21,8 +21,8 @@
 	<td><?=$this->etuSukunimi($data->id)?></td>
 	<td><?=$val->kohde_kannasta;?></td>
 	<td><?=date("d.m.Y", strtotime($val->aloitan))?></td>
-	<td><?=date("H:i", strtotime($val->aloitan))?></td>
-	<td><?=date("H:i", strtotime($val->loppui))?></td>
+	<td data-order="<?=strtotime($val->aloitan)?>"><?=date("H:i", strtotime($val->aloitan))?></td>
+	<td data-order="<?=strtotime($val->loppui)?>"><?=date("H:i", strtotime($val->loppui))?></td>
 	<td><?=$this->sprint($val->l_tunnit);?></td>
 	<td><?=$viesti?></td>
 </tr>

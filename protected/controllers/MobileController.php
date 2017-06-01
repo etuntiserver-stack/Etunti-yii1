@@ -100,66 +100,33 @@ class MobileController extends Controller
 		 	mkdir( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain, 0777, true );
 		}
 
-  			$tiedosto = 'temp_raporti_'.str_replace(" ", "_", Yii::app()->user->nimi);
-  			$path = 'tiedostot/temp/'.Yii::app()->user->domain.'/';
+  		$tiedosto = 'temp_raporti_'.str_replace(" ", "_", Yii::app()->user->nimi);
+		$path = 'tiedostot/temp/'.Yii::app()->user->domain.'/';
 
-			// <-- Poistetaan edelliset
-			if (file_exists( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain.'/'.$tiedosto.'.html' ))
-			{
-			 	unlink($path.$tiedosto.'.html');
-			}
-			if (file_exists( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain.'/'.$tiedosto.'.xlsx' ))
-			{
-			 	unlink($path.$tiedosto.'.xlsx');
-			}
-			if (file_exists( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain.'/'.$tiedosto.'.doc' ))
-			{
-			 	unlink($path.$tiedosto.'.doc');
-			}
-			if (file_exists( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain.'/'.$tiedosto.'.pdf' ))
-			{
-				unlink($path.$tiedosto.'.pdf');
-			}
-			//     Poistetaan edelliset -->
+		// <-- Poistetaan edelliset
+		if (file_exists( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain.'/'.$tiedosto.'.html' ))
+		{
+		 	unlink($path.$tiedosto.'.html');
+		}
+		if (file_exists( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain.'/'.$tiedosto.'.xlsx' ))
+		{
+		 	unlink($path.$tiedosto.'.xlsx');
+		}
+		if (file_exists( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain.'/'.$tiedosto.'.doc' ))
+		{
+		 	unlink($path.$tiedosto.'.doc');
+		}
+		if (file_exists( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain.'/'.$tiedosto.'.pdf' ))
+		{
+			unlink($path.$tiedosto.'.pdf');
+		}
+		//     Poistetaan edelliset -->
 
-$c = '<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<style>
-*
-{
-           margin:0px;
-           padding:0;
-           font-family:Arial;
-           font-size:9pt;
-           color:#000;
-}
-body
-{
-           width:100%;
-           font-family:Arial;
-           font-size:9pt;
-           margin:0;
-           padding:0;
-}
-.table {
-	    width: 100%;
-	    max-width: 100%;
-	    border-collapse: 
-	    collapse; border-spacing: 0; 
-}
-.table th,
-.table td {
-  padding: 3px 5px;
-  vertical-align: top;
-  border-top: 1px solid #333333;
-}
-</style>
-</head>
-<body>';
-$c .= preg_replace("/(?=\>\s+\n|\n)+(\s+)/", '', $html_content);
-$c .= '</body></html>';
-
+		$c = '<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">';
+		$c .= '<link rel="stylesheet" type="text/css" href="'.Yii::app()->request->baseUrl.'/css/raportit_table.css">';
+		$c .= '</head><body>'.preg_replace("/(?=\>\s+\n|\n)+(\s+)/", '', $html_content).'</body>';
+		$c .= '</html>';
+		echo $c;
 
 		file_put_contents($path.$tiedosto.'.html', $c);
 
