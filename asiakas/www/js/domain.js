@@ -86,8 +86,13 @@ $(document).ready(function(){
   // <-- Login
   $("#form-signin").on('submit', function(e){
 
+	var values = $(this).serializeArray();
+	console.log(values);
+	var url = 'https://' + values[0]['value']+'/index.php/dico/asiakkaat';
+	domain = values[1]['value'];
+
         $.ajax({
-           url: url+'/login?domain='+$('#domain').val(),
+           url: url+'/login?domain='+domain,
 	   type:'POST',
  	   data: $(this).serialize(),
            success: function(data){
@@ -103,8 +108,8 @@ $(document).ready(function(){
 			$('#yllaIlmoitus').html('<h3 class="alert alert-danger">Kirjautuminen ei onnistunut. Tarkasta yritystunnus, sähköposti ja salasana</h3>');
 		}
     	},
-    		error: function (jqXHR, exception){
-        	console.log("------------------------------\n" + jqXHR);
+    		error: function (xhr, status, error){
+        	console.log(url+'/login?domain='+domain);
     	}
         });
 	e.preventDefault();
