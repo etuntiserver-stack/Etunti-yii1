@@ -45,7 +45,7 @@ class Client
             'MAC'           => ''. $payment->calculateMac()
         ];
 
-        return $this->postData("https://payment.checkout.fi", $postData);
+        return $this->postData("https://payment2017.checkout.fi", $postData);
     }
 
     /**
