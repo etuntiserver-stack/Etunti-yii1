@@ -123,7 +123,7 @@ class MobileController extends Controller
 		//     Poistetaan edelliset -->
 
 		$c = '<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">';
-		$c .= '<link rel="stylesheet" type="text/css" href="'.Yii::app()->request->baseUrl.'/css/raportit_table.css">';
+		$c .= '<link rel="stylesheet" type="text/css" href="'.Yii::app()->request->baseUrl.'/css/raportit_table2.css">';
 		$c .= '</head><body>'.preg_replace("/(?=\>\s+\n|\n)+(\s+)/", '', $html_content).'</body>';
 		$c .= '</html>';
 		//echo $c;
