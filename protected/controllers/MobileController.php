@@ -84,100 +84,147 @@ class MobileController extends Controller
 
 	public function actionTulostus()
 	{
-		if(isset($_POST['ext']))
+		if(isset($_POST['html_content']) and isset($_POST['ext']))
 		{
-			$this->transformHtmlTo($_POST['ext']);
+			$this->transformHtmlTo(json_decode($_POST['html_content']), $_POST['ext']);
 			exit;
 		}
 		echo json_encode('false');
 		exit;
 	}
 
-	protected function transformHtmlTo($ext)
+	protected function transformHtmlTo($html_content, $ext)
 	{
 
-			// " ps aux  | grep soffice" "pkill soffice.bin" linuksella, jos office menisi jumiin
-			if (!file_exists( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain )) {
-			 	mkdir( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain, 0777, true );
-			}
+		if (!file_exists( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain )) {
+		 	mkdir( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain, 0777, true );
+		}
 
-			$tiedosto = 'temp_raporti_'.str_replace(" ", "_", Yii::app()->user->nimi);
-			$path = 'tiedostot/temp/'.Yii::app()->user->domain.'/';
+  			$tiedosto = 'temp_raporti_'.str_replace(" ", "_", Yii::app()->user->nimi);
+  			$path = 'tiedostot/temp/'.Yii::app()->user->domain.'/';
 
-			$c = '';
+			// <-- Poistetaan edelliset
 			if (file_exists( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain.'/'.$tiedosto.'.html' ))
 			{
-				$c = file_get_contents($path.$tiedosto.'.html');
+			 	unlink($path.$tiedosto.'.html');
 			}
-
-			$files_return = array();
-
-			if($ext == 'pdf')
+			if (file_exists( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain.'/'.$tiedosto.'.xlsx' ))
 			{
-				exec('xvfb-run -a wkhtmltopdf '.$path.$tiedosto.'.html '.$path.$tiedosto.'.pdf', $output, $return);
-				if($output)
-				{
-				    if (file_exists( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain.'/'.$tiedosto.'.pdf' ))
-				    {
-
-					header("Content-Length: " . filesize ( $path.$tiedosto.'.pdf' ) ); 
-			                header("Content-type: application/octet-stream"); 
-			                header("Content-disposition: attachment; filename=".basename($path.$tiedosto.'.pdf'));
-			                header('Expires: 0');
-			                header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
-			                readfile($path.$tiedosto.'.pdf');
-					exit;
-
-				    }
-				}
-
+			 	unlink($path.$tiedosto.'.xlsx');
 			}
-
-			if($ext == 'doc')
+			if (file_exists( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain.'/'.$tiedosto.'.doc' ))
 			{
-				exec('libreoffice --headless --convert-to doc '.$path.$tiedosto.'.html --outdir '.$path, $output, $return);
-				if($output)
-				{
-				    if (file_exists( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain.'/'.$tiedosto.'.doc' ))
-				    {
-
-					header("Content-Length: " . filesize ( $path.$tiedosto.'.doc' ) ); 
-			                header("Content-type: application/octet-stream"); 
-			                header("Content-disposition: attachment; filename=".basename($path.$tiedosto.'.doc'));
-			                header('Expires: 0');
-			                header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
-			                readfile($path.$tiedosto.'.doc');
-					exit;
-
-				    }
-				}
-
+			 	unlink($path.$tiedosto.'.doc');
 			}
-
-			if($ext == 'xlsx')
+			if (file_exists( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain.'/'.$tiedosto.'.pdf' ))
 			{
+				unlink($path.$tiedosto.'.pdf');
+			}
+			//     Poistetaan edelliset -->
 
-				Yii::import('ext.phpexcel.PHPExcel',true);
-				$tmpfile = $path.$tiedosto.'.html';
-			
-				$inputFileType = 'HTML';
-				$inputFileName = $tmpfile;
-				$outputFileType = 'Excel5';
-				$outputFileName = 'myExcelFile.xlsx';
-			
-				$objPHPExcelReader = PHPExcel_IOFactory::createReader($inputFileType);
-				$objPHPExcel = $objPHPExcelReader->load($inputFileName);
-		
-				$objPHPExcelWriter = PHPExcel_IOFactory::createWriter($objPHPExcel,$outputFileType);
+$c = '<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<style>
+*
+{
+           margin:0px;
+           padding:0;
+           font-family:Arial;
+           font-size:9pt;
+           color:#000;
+}
+body
+{
+           width:100%;
+           font-family:Arial;
+           font-size:9pt;
+           margin:0;
+           padding:0;
+}
+.table {
+	    width: 100%;
+	    max-width: 100%;
+	    border-collapse: 
+	    collapse; border-spacing: 0; 
+}
+.table th,
+.table td {
+  padding: 3px 5px;
+  vertical-align: top;
+  border-top: 1px solid #333333;
+}
+</style>
+</head>
+<body>';
+$c .= preg_replace("/(?=\>\s+\n|\n)+(\s+)/", '', $html_content);
+$c .= '</body></html>';
 
-				header('Content-type: application/vnd.ms-excel;');
-				header('Content-Disposition: attachment; filename="'.$path.$tiedosto.'.xlsx"');
-				$objPHPExcelWriter->save('php://output');
+
+		file_put_contents($path.$tiedosto.'.html', $c);
+
+		$files_return = array();
+
+		if($ext == 'pdf')
+		{
+			exec('xvfb-run -a wkhtmltopdf '.$path.$tiedosto.'.html '.$path.$tiedosto.'.pdf', $output, $return);
+			if($output)
+			{
+			    if (file_exists( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain.'/'.$tiedosto.'.pdf' ))
+			    {
+
+				header("Content-Length: " . filesize ( $path.$tiedosto.'.pdf' ) ); 
+		                header("Content-type: application/octet-stream"); 
+		                header("Content-disposition: attachment; filename=".basename($path.$tiedosto.'.pdf'));
+		                header('Expires: 0');
+		                header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+		                readfile($path.$tiedosto.'.pdf');
 				exit;
+
+			    }
 			}
+		}
 
+		if($ext == 'doc')
+		{
+			exec('libreoffice --headless --convert-to doc '.$path.$tiedosto.'.html --outdir '.$path, $output, $return);
+			if($output)
+			{
+			    if (file_exists( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain.'/'.$tiedosto.'.doc' ))
+			    {
+				header("Content-Length: " . filesize ( $path.$tiedosto.'.doc' ) ); 
+		                header("Content-type: application/octet-stream"); 
+		                header("Content-disposition: attachment; filename=".basename($path.$tiedosto.'.doc'));
+		                header('Expires: 0');
+		                header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+		                readfile($path.$tiedosto.'.doc');
+				exit;
+			    }
+			}
+		}
 
-			return false;
+		if($ext == 'xlsx')
+		{
+			Yii::import('ext.phpexcel.PHPExcel',true);
+			$tmpfile = $path.$tiedosto.'.html';
+		
+			$inputFileType = 'HTML';
+			$inputFileName = $tmpfile;
+			$outputFileType = 'Excel5';
+			$outputFileName = 'myExcelFile.xlsx';
+	
+			$objPHPExcelReader = PHPExcel_IOFactory::createReader($inputFileType);
+			$objPHPExcel = $objPHPExcelReader->load($inputFileName);
+		
+			$objPHPExcelWriter = PHPExcel_IOFactory::createWriter($objPHPExcel,$outputFileType);
+
+			header('Content-type: application/vnd.ms-excel;');
+			header('Content-Disposition: attachment; filename="'.$path.$tiedosto.'.xlsx"');
+			$objPHPExcelWriter->save('php://output');
+			exit;
+		}
+
+		return false;
 
 	}
 

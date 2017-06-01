@@ -166,14 +166,17 @@
     	  <!--<button class="btn btn-primary myBgColors submitPrintSivuLuetut"><i class="fa fa-print" aria-hidden="true"></i></button>-->
 	  <form action="tulostus" class="form-group" target="_blank" method="POST">
 	    <input type="hidden" name="ext" value="doc">
+	    <textarea name="html_content" class="form-control" style="display:none"></textarea>
     	    <button type="submit" class="btn btn-primary myBgColors submitForm"><i class="fa fa-file-word-o" aria-hidden="true"></i></button>
 	  </form>
 	  <form action="tulostus" class="form-group" target="_blank" method="POST">
 	    <input type="hidden" name="ext" value="xlsx">
+	    <textarea name="html_content" class="form-control" style="display:none"></textarea>
     	    <button type="submit" class="btn btn-primary myBgColors submitForm"><i class="fa fa-file-excel-o" aria-hidden="true"></i></button>
 	  </form>
 	  <form action="tulostus" class="form-group" target="_blank" method="POST">
 	    <input type="hidden" name="ext" value="pdf">
+	    <textarea name="html_content" class="form-control" style="display:none"></textarea>
     	    <button type="submit" class="btn btn-primary myBgColors submitForm"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></button>
 	  </form>
          </div>
@@ -188,98 +191,30 @@
 
 <div class="row">
  <div class="table-responsive raporti_taulu">
-<?php
-  $tb = '
+
   <table class="table table-striped" id="mobileTable">
   <thead class="myBgColors">
   <tr>
-  <th>'.Yii::t('main', 'Työntekijä').'</th>
-  <th>'.Yii::t('main', 'Kohde').'</th>
-  <th>'.Yii::t('main', 'Pvm').'</th>
-  <th>'.Yii::t('main', 'Aloitus').'</th>
-  <th>'.Yii::t('main', 'Lopetus').'</th>
-  <th>'.Yii::t('main', 'Kesto').'</th>
-  <th>'.Yii::t('main', 'Viesti').'</th>
+  <th><?=Yii::t('main', 'Työntekijä')?></th>
+  <th><?=Yii::t('main', 'Kohde')?></th>
+  <th><?=Yii::t('main', 'Pvm')?></th>
+  <th><?=Yii::t('main', 'Aloitus')?></th>
+  <th><?=Yii::t('main', 'Lopetus')?></th>
+  <th><?=Yii::t('main', 'Kesto')?></th>
+  <th><?=Yii::t('main', 'Viesti')?></th>
   </tr>
-  </thead>';
+  </thead>
+  <?php
   foreach($model as $data)
   {
-	$tb .= $this->renderPartial('_raportit_taulu', array( 
+	echo $this->renderPartial('_raportit_taulu', array( 
 			'data' => $data, 'from' => $from, 'to' => $to, 'raporti_tyyppi' => $raporti_tyyppi, 'osoite' => $osoite 
 	), true);
   }
-  $tb .= '</table>';
-  echo $tb;
-?>
-
-<?php
-  if (!file_exists( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain )) {
- 	mkdir( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain, 0777, true );
-  }
-
-  			$tiedosto = 'temp_raporti_'.str_replace(" ", "_", Yii::app()->user->nimi);
-  			$path = 'tiedostot/temp/'.Yii::app()->user->domain.'/';
-
-			// <-- Poistetaan edelliset
-			if (file_exists( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain.'/'.$tiedosto.'.html' ))
-			{
-			 	unlink($path.$tiedosto.'.html');
-			}
-			if (file_exists( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain.'/'.$tiedosto.'.xlsx' ))
-			{
-			 	unlink($path.$tiedosto.'.xlsx');
-			}
-			if (file_exists( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain.'/'.$tiedosto.'.doc' ))
-			{
-			 	unlink($path.$tiedosto.'.doc');
-			}
-			if (file_exists( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain.'/'.$tiedosto.'.pdf' ))
-			{
-				unlink($path.$tiedosto.'.pdf');
-			}
-			//     Poistetaan edelliset -->
-
-$c = '<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<style>
-*
-{
-           margin:0px;
-           padding:0;
-           font-family:Arial;
-           font-size:9pt;
-           color:#000;
-}
-body
-{
-           width:100%;
-           font-family:Arial;
-           font-size:9pt;
-           margin:0;
-           padding:0;
-}
-.table {
-	    width: 100%;
-	    max-width: 100%;
-	    border-collapse: 
-	    collapse; border-spacing: 0; 
-}
-.table th,
-.table td {
-  padding: 3px 5px;
-  vertical-align: top;
-  border-top: 1px solid #333333;
-}
-</style>
-</head>
-<body>';
-$c .= preg_replace("/(?=\>\s+\n|\n)+(\s+)/", '', $tb);
-$c .= '</body></html>';
+  ?>
+  </table>
 
 
-file_put_contents($path.$tiedosto.'.html', $c);
-?>
  </div>
 </div>
 
@@ -295,6 +230,7 @@ $(document).ready(function(){
 
 
   $(".submitForm").on('click', function(e){
+	$(this).prev('textarea').val(JSON.stringify($('#mobileTable').html()));
 	$(this).closest('form').submit();
 	e.preventDefault();
   });
