@@ -860,10 +860,10 @@ $('.tvchange').change(function(){
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/mobile/raportit">
                   <span class="fa fa-th-list"></span> <?php echo Yii::t('main', 'Raportit'); ?></a>
               </li>
-              <li>
+              <!--<li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/mobile/raportit_taulu">
                   <span class="fa fa-th-list"></span> <?php echo Yii::t('main', 'Raportit taulu (Kehittelemassa)'); ?></a>
-              </li>
+              </li>-->
               <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/mobile/tyoajan_seuranta">
                   <span class="fa fa-th-list"></span> <?php echo Yii::t('main', 'Vuosityöaika'); ?></a>
@@ -1358,6 +1358,7 @@ nyt ne ovat etusivu.php ssa
       },
       onFinish: function() {
         $('.admin-panels').addClass('animated fadeIn').removeClass('fade-onload');
+
 
         // Init the rest of the plugins now that the panels
         // have had a chance to be moved and organized.

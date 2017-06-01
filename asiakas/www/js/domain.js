@@ -104,7 +104,7 @@ $(document).ready(function(){
 		}
     	},
     		error:function (xhr, ajaxOptions, thrownError){
-        	console.log(xhr.responseText);
+        	$('#yllaIlmoitus').html(xhr.responseText);
     	}
         });
 	e.preventDefault();
