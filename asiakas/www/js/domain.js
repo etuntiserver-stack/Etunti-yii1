@@ -92,7 +92,7 @@ $(document).ready(function(){
  	   data: $(this).serialize(),
            success: function(data){
 		var d = JSON.parse(data);
-		//console.log(d)
+		console.log("------------------------------\n" + d)
 		//return false;
 		if(d['loginOK'])
 		{
@@ -103,8 +103,8 @@ $(document).ready(function(){
 			$('#yllaIlmoitus').html('<h3 class="alert alert-danger">Kirjautuminen ei onnistunut. Tarkasta yritystunnus, sähköposti ja salasana</h3>');
 		}
     	},
-    		error:function (xhr, ajaxOptions, thrownError){
-        	$('#yllaIlmoitus').html(xhr.responseText);
+    		error: function (jqXHR, exception){
+        	console.log("------------------------------\n" + jqXHR);
     	}
         });
 	e.preventDefault();

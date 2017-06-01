@@ -61,6 +61,7 @@ public function actionLogin($domain)
 		}
 
 		$this->_sendResponse(200, CJSON::encode($return));
+		exit;
 
             break;
         default:
