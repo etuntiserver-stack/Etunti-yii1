@@ -126,10 +126,10 @@ class KohteetController extends Controller
 	public function actionAvaimet()
 	{
 
-
-
 	       	$criteria = new CDbCriteria();
-		$criteria->condition = "aktiivinen=1";
+		$criteria->condition = " aktiivinen=1
+			AND id IN (SELECT SUBSTRING_INDEX(kenella_on_avain, '//', 1) FROM sivex_kohdet)
+		";
 
 		if(isset($_POST['Tekija'])){
 		  if(count($_POST['Tekija']) > 1)

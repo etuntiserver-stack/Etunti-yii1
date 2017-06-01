@@ -119,30 +119,47 @@
 	   <thead class="myBgColors">
 		 <tr>
 		  <th><?php echo Yii::t('main','Työntekijä'); ?></th>
-		  <th><?php echo Yii::t('main','Avain'); ?></th>
+		  <th></th>
 		 </tr>
 	   </thead>
 	   <tbody>
   <?php
   foreach($model as $data)
   {
-    $k = Kohteet::model()->findAll(" SUBSTRING_INDEX(kenella_on_avain, '//', 1) = '".$data->id."' ");
+
+    $criteria = new CDbCriteria();
+    $criteria->condition = " 
+	SUBSTRING_INDEX(kenella_on_avain, '//', 1) = '".$data->id."'
+    ";
+
+    $k = Kohteet::model()->findAll($criteria);
 	$avaimet = '';
     $i = 0;
+    $avaimet = '<table class="table table-bordered table-striped">
+    <tr>
+	<th>'.Yii::t('main','Kohde').'</th>
+	<th>'.Yii::t('main','Avain').'</th>
+    </tr>
+    ';
     foreach($k as $kohde)
     {
     $i++;
-	$avaimet .= '<div class="row">
-			<div class="col-sm-6"> 
+	$avaimet .= '
+		      <tr><td> 
 				<b>'.$kohde->etu_suku_nimet.'</b><br>
 				'.$kohde->osoite.', '.$kohde->pnumero.', '.$kohde->kaupunki.'
-			</div>
-			<div class="col-sm-6"><b>'.$kohde->avain.'</b></div>
-		     </div>';
+			</td>
+			<td>
+				<b>'.$kohde->avain.'</b>
+			</td>
+		      </tr>
+		     ';
     }
+    $avaimet .= '</table>';
+
 
     echo '<tr>';
-    echo '<td>'.$this->etuSukunimi($data->id).'</td>';
+    echo '<td><h3>'.$this->etuSukunimi($data->id).'</h3></td>';
     echo '<td>'.$avaimet.'</td>';
     echo '</tr>';
   }
