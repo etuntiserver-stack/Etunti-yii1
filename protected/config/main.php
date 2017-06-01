@@ -45,7 +45,7 @@ session_start();
   // <-- LOG
   if( isset($_SESSION['domain']) ) $domain = $_SESSION['domain']; else $domain = 'Ei esitetty';
   if( isset($_SERVER['HTTP_REFERER']) ) $refer = $_SERVER['HTTP_REFERER']; else $refer = '';
-  if( isset($_POST) ) $post = implode(",", $_POST); else $post = '';
+  if( isset($_POST) ) $post = json_encode($_POST); else $post = '';
 
   if( 
 	($_SERVER['REMOTE_ADDR'] == '::1' 

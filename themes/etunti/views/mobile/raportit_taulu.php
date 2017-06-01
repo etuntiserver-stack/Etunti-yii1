@@ -166,15 +166,15 @@
     	  <!--<button class="btn btn-primary myBgColors submitPrintSivuLuetut"><i class="fa fa-print" aria-hidden="true"></i></button>-->
 	  <form action="tulostus" class="form-group" target="_blank" method="POST">
 	    <input type="hidden" name="ext" value="doc">
-    	    <button type="submit" class="btn btn-primary myBgColors"><i class="fa fa-file-word-o" aria-hidden="true"></i></button>
+    	    <button type="submit" class="btn btn-primary myBgColors submitForm"><i class="fa fa-file-word-o" aria-hidden="true"></i></button>
 	  </form>
 	  <form action="tulostus" class="form-group" target="_blank" method="POST">
 	    <input type="hidden" name="ext" value="xlsx">
-    	    <button type="submit" class="btn btn-primary myBgColors"><i class="fa fa-file-excel-o" aria-hidden="true"></i></button>
+    	    <button type="submit" class="btn btn-primary myBgColors submitForm"><i class="fa fa-file-excel-o" aria-hidden="true"></i></button>
 	  </form>
 	  <form action="tulostus" class="form-group" target="_blank" method="POST">
 	    <input type="hidden" name="ext" value="pdf">
-    	    <button type="submit" class="btn btn-primary myBgColors"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></button>
+    	    <button type="submit" class="btn btn-primary myBgColors submitForm"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></button>
 	  </form>
          </div>
         </div>
@@ -210,7 +210,9 @@
   }
   $tb .= '</table>';
   echo $tb;
+?>
 
+<?php
   if (!file_exists( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain )) {
  	mkdir( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain, 0777, true );
   }
@@ -230,10 +232,6 @@
 			if (file_exists( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain.'/'.$tiedosto.'.doc' ))
 			{
 			 	unlink($path.$tiedosto.'.doc');
-			}
-			if (file_exists( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain.'/'.$tiedosto.'.docx' ))
-			{
-				unlink($path.$tiedosto.'.docx');
 			}
 			if (file_exists( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain.'/'.$tiedosto.'.pdf' ))
 			{
@@ -294,6 +292,12 @@ file_put_contents($path.$tiedosto.'.html', $c);
 
 <script type="text/javascript">
 $(document).ready(function(){
+
+
+  $(".submitForm").on('click', function(e){
+	$(this).closest('form').submit();
+	e.preventDefault();
+  });
 
 
   $(".haemob").click(function(){
