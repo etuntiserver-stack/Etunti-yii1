@@ -230,7 +230,7 @@ $(document).ready(function(){
 
 
   $(".submitForm").on('click', function(e){
-	$(this).prev('textarea').val(JSON.stringify($('#mobileTable').html()));
+	$(this).prev('textarea').val(JSON.stringify('<table class="table">' + $('#mobileTable').html() + '</table>'));
 	$(this).closest('form').submit();
 	e.preventDefault();
   });
