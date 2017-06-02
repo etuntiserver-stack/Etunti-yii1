@@ -957,6 +957,71 @@ $xml = '
 		return $bod;
 	}
 
+	protected function toteutuneetTunnitArray($model)
+	{
+
+		$dataArr = array();
+
+		// <-- luetut
+		$criteria=new CDbCriteria;
+		$criteria->condition = " 
+			id NOT IN (SELECT kid FROM sivexkuitti_repaired)
+			AND kohdenID IN
+			(
+				SELECT id FROM sivex_kohdet
+				WHERE asiakas_id IN(SELECT id FROM asiakkaat WHERE id='".$model->id."')
+			) 
+			AND loppui!=''
+		";
+		$m = Mobile::model()->findAll($criteria);
+
+
+		foreach($m as $data)
+		{
+		$kesto = strtotime($data->loppui)-strtotime($data->aloitan);
+	  	$dataArr[strtotime($data->aloitan)] = array(
+			'pvm'=>date("d.m.Y", strtotime($data->aloitan)), 
+			'kohde_kannasta'=>$data->kohde_kannasta,
+			'aloitus'=>date("H:i", strtotime($data->aloitan)),
+			'lopetus'=>date("H:i", strtotime($data->loppui)),
+			'kesto'=>$this->sprint($kesto)
+		);
+	  	}
+		//  luetut -->
+
+
+		// <-- toteutuneet
+		$criteria=new CDbCriteria;
+		$criteria->condition = " 
+			id NOT IN (SELECT kid FROM sivexkuitti_repaired)
+			AND kohdenID IN
+			(
+				SELECT id FROM sivex_kohdet
+
+				WHERE asiakas_id IN(SELECT id FROM asiakkaat WHERE id='".$model->id."')
+			) 
+			AND loppui!=''
+		";
+		$m = Toteutuneet::model()->findAll($criteria);
+
+		foreach($m as $data)
+		{
+		$kesto = strtotime($data->loppui)-strtotime($data->aloitan);
+	  	$dataArr[strtotime($data->aloitan)] = array(
+			'pvm'=>date("d.m.Y", strtotime($data->aloitan)), 
+			'kohde_kannasta'=>$data->kohde_kannasta,
+			'aloitus'=>date("H:i", strtotime($data->aloitan)),
+			'lopetus'=>date("H:i", strtotime($data->loppui)),
+			'kesto'=>$this->sprint($kesto)
+		);
+	  	}
+		//  toteutuneet -->
+
+		ksort($dataArr);
+
+
+		return $dataArr;
+	}
 
 	protected function toteutuneetTunnitCRM($model, $from, $to)
 	{

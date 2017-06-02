@@ -216,8 +216,9 @@ class PalautteetController extends Controller
 			
 
 							$message = Yii::t('main', 'Asiakas').': '.$nimi.'<br>';
-							$message .= Yii::t('main', 'Keskustelu ID:').': '.$mod->id.'<br>';
-							$message .= Yii::t('main', 'Palaute:').': '.$mod->teksti;
+							$message .= Yii::t('main', 'Keskustelu ID').': '.$mod->id.'<br>';
+							$message .= Yii::t('main', 'Kohde').': '.$mod->viimeinen_tyo.'<br>';
+							$message .= Yii::t('main', 'Palaute').': '.$mod->teksti;
 			
 							if(isset($ft->sahkoposti) and !empty($ft->sahkoposti))
 							{
