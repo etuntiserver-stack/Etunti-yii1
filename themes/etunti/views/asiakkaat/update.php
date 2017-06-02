@@ -101,7 +101,7 @@ $asetukset = Asetukset::model()->findbypk(1);
 
 
 <div class="row">
-  <div class="col-sm-6">
+
 
 
 
@@ -140,7 +140,7 @@ $asetukset = Asetukset::model()->findbypk(1);
 	}
    ?>
      
-   </div>
+
 </div>
 
 

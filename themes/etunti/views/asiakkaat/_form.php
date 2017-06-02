@@ -49,7 +49,7 @@ if(isset($_GET['vinkki_id']))
 }
 </style>
 
-<div class="row">
+
 
 
 <?php $form=$this->beginWidget('CActiveForm', array(
@@ -60,6 +60,7 @@ if(isset($_GET['vinkki_id']))
 	<?php echo $form->hiddenField($model,'vinkki_id'); ?>
 	<?php echo $form->errorSummary($model); ?>
 
+<div class="row">
   <div class="col-sm-3">
 	<legend><h3><?php echo Yii::t('main', 'Asiakkaan tiedot'); ?></h3></legend>
 
@@ -433,8 +434,7 @@ if(isset($_GET['vinkki_id']))
 		<?php echo CHtml::submitButton($model->isNewRecord ? Yii::t('main', 'Luo') : Yii::t('main', 'Tallenna'),array('class'=>'btn btn-primary myBgColors luoTallennaAsiakas')); ?>
 	</div>
 
-  </div>
-</div>
+
 <?php $this->endWidget(); ?>
 
 
