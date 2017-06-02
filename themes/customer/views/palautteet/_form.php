@@ -32,7 +32,7 @@ $model->asiakas_id = Yii::app()->user->asiakas;
 
 <br>
 
-<div class="row">
+<div class="row collapse" id="lomake">
  <div class="col-sm-4">
 
 <?php $form=$this->beginWidget('CActiveForm', array(
@@ -55,6 +55,24 @@ $model->asiakas_id = Yii::app()->user->asiakas;
 		<?php echo $form->labelEx($model,'otsikko'); ?>
 		<?php echo $form->textField($model,'otsikko',array('size'=>60,'maxlength'=>255, 'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'otsikko'); ?>
+	</div>
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'viimeinen_tyo'); ?>
+		<?php
+		$a = Asiakkaat::model()->findByPk($model->asiakas_id);
+		$asiakkaat = Yii::app()->createController('Asiakkaat');
+		$dataArray = $asiakkaat[0]->toteutuneetTunnitArray($a);
+		$list = array();
+		foreach($dataArray as $item)
+		{
+			$txt = $item['pvm'].' '.$item['kohde_kannasta'].' klo: '.$item['aloitus'].'-'.$item['lopetus'];
+			$list[$txt] = $txt;
+		}
+        	echo $form->dropDownList($model, 'viimeinen_tyo', $list,
+		array('empty'=>'Valitse','class'=>'form-control'));	
+        	?>
+		<?php echo $form->error($model,'viimeinen_tyo'); ?>
 	</div>
 
 	<div class="section fill mb5">
@@ -84,6 +102,7 @@ $(function() {
 		$('#emoji img').removeClass('emoji_active emoji_passive').css({"opacity":"0.5"});
 		$(this).addClass('emoji_active').css({"opacity":"1"});
 		$('#Palautteet_emoji_tila').val( $(this).attr('tila') );
+		$('.collapse').addClass('in');
 	});
 });
 </script>

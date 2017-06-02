@@ -14,6 +14,8 @@
  */
 class Palautteet extends DB2ActiveRecord
 {
+
+
 	/**
 	 * @return string the associated database table name
 	 */
@@ -32,7 +34,7 @@ class Palautteet extends DB2ActiveRecord
 		return array(
 			array('asiakas_id, teksti, otsikko', 'required'),
 			array('keskustelu_id, asiakas_id, status, emoji_tila, asiakas_luettu', 'numerical', 'integerOnly'=>true),
-			array('otsikko', 'length', 'max'=>255),
+			array('otsikko, viimeinen_tyo', 'length', 'max'=>255),
 			array('lahettaja', 'length', 'max'=>20),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
@@ -64,6 +66,7 @@ class Palautteet extends DB2ActiveRecord
 			'teksti' => 'Teksti',
 			'otsikko' => 'Otsikko',
 			'status' => 'Status',
+			'viimeinen_tyo' => Yii::t('main', 'Viimeiset työt')
 		);
 	}
 
