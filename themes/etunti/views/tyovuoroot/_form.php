@@ -90,7 +90,7 @@ if(isset($ov->id) and !empty($ov->kohde_id) and empty($model->kohde)){
   </div>
 
   <div class="col-sm-3">
-		<label><?php echo Yii::t('main', 'Asiakas'); ?></label><br>
+		<label><?php echo Yii::t('main', 'Asiakas tai kohteen yhteyshenkilö'); ?></label><br>
 		<input type="text" id="asiakas" class="form-control" AUTOCOMPLETE="off">
 		<div id="asiakasAutocompleteResult"></div>
   </div>
@@ -271,6 +271,7 @@ $(".muokaValiko").click(function() {
     <div class="pull-right">
     <br>
   	<div class="section">
+
 
 
 
@@ -529,9 +530,10 @@ $(document).ready(function(){
 			  success:function(data){
 				data = JSON.parse(data);
 			  	//console.log(data);
-				if(data)
+				if(data !== '')
 					$('#asiakasAutocompleteResult').html(data).show();
-
+				else
+					$('#asiakasAutocompleteResult').html('').show();
 			  },
 			  error:function(data){
 			  	console.log(data);
@@ -563,6 +565,28 @@ $(document).ready(function(){
 			  }
 	 	});
      });
+
+     $('.kohteenSelecter').click(function(){
+	var thisVal = $(this).attr('for');
+	var thisAsiakas = $(this).text();
+	  	 $.ajax({
+			url: 'getKohdeById',
+			type:'GET',
+			data: { "id" : thisVal },
+			  success:function(data){
+				data = JSON.parse(data);
+			  	//console.log(data);
+				$('#Tyovuoroot_kohde').html(data);
+				$('#asiakasAutocompleteResult').html('').hide();
+				$('#asiakas').val(thisAsiakas);
+
+			  },
+			  error:function(data){
+			  	console.log(data);
+			  }
+	 	});
+     });
+
 
   });
 
