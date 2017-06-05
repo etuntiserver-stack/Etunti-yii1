@@ -28,7 +28,7 @@ class TyovuorootController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','updatetime','showohje','did','muisti','operatio','viikko','fromto','autoinsert','autoremove','viikkottain', 'viikkottain_pdf', 'laheta','kk','pvmtid','laheta_k', 'muistin', 'muisticlear', 'muistissa', 'vkolopput', 'vkolopchange', 'uusitilaus', 'tv2', 'PoistaTv', 'valitse_kokopaiva', 'tv_kohteet', 'siivous_tyonimike', 'getKohdeByAsiakas', 'getAsiakasByKohde', 'paivita_laatikot', 'poista_toistuva', 'onko_sama', 'asiakas_autocomplete', 'kohde_autocomplete', 'check_paallekkain', 'get_tekijantiedot', 'is_asiakas'),
+				'actions'=>array('admin','delete','create','update','index','view','updatetime','showohje','did','muisti','operatio','viikko','fromto','autoinsert','autoremove','viikkottain', 'viikkottain_pdf', 'laheta','kk','pvmtid','laheta_k', 'muistin', 'muisticlear', 'muistissa', 'vkolopput', 'vkolopchange', 'uusitilaus', 'tv2', 'PoistaTv', 'valitse_kokopaiva', 'tv_kohteet', 'siivous_tyonimike', 'getKohdeByAsiakas', 'getKohdeById', 'getAsiakasByKohde', 'paivita_laatikot', 'poista_toistuva', 'onko_sama', 'asiakas_autocomplete', 'kohde_autocomplete', 'check_paallekkain', 'get_tekijantiedot', 'is_asiakas'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny', // allow admin user to perform 'admin' and 'delete' actions
@@ -109,6 +109,17 @@ class TyovuorootController extends Controller
 			$bd .= '<option value>'.Yii::t('main', 'Valitse kohde').'</option>';
 			foreach($model as $k)
 			$bd .= '<option value="'.$k->id.'">'.$k->osoite.'</option>';
+
+
+		echo json_encode($bd);	
+	}
+
+	public function actionGetKohdeById($id)
+	{
+		$model = Kohteet::model()->findByPk($id);
+			$bd = '';
+			$bd .= '<option value>'.Yii::t('main', 'Valitse kohde').'</option>';
+			$bd .= '<option value="'.$model->id.'">'.$model->osoite.'</option>';
 
 
 		echo json_encode($bd);	
@@ -4009,12 +4020,12 @@ class TyovuorootController extends Controller
  		$as = Asiakkaat::model()->findAll($criteria);
 		$nm = array();
 		$return = '';
-		if( count($as) > 0 )
-		{
-
 		$return .= '
 			<div class="row" style="position:absolute; z-index:9999999;margin-left:0px">
 			  <div class="list-group">';
+
+		if( count($as) > 0 )
+		{
 			foreach($as as $a)
 			{
 				if(!empty($a->yrityksen_nimi))
@@ -4026,15 +4037,31 @@ class TyovuorootController extends Controller
 				
 				$return .= '<a href="#" class="list-group-item asiakasSelecter" for="'.$nm[1].'">'.$nm[0].'</a>';
 			}
-			$return .='</div></div>';
 		}
 
+		$criteria=new CDbCriteria;
+		$criteria->order =" etu_suku_nimet!='' DESC,etu_suku_nimet!='' DESC";
+		$criteria->condition =" 
+			aktiivinen=1 
+			AND etu_suku_nimet LIKE '%".$key."%'	
+		";
 
+ 		$k = Kohteet::model()->findAll($criteria);
+		if( count($k) > 0 )
+		{
+		$return .= '<a href="#" class="list-group-item bg-warning"><h4 style="color:white">'.Yii::t('main', 'Kohteen yhteyshenkilöt').'</h4></a>';
 
+			foreach($k as $item)
+			{
+				$return .= '<a href="#" class="list-group-item kohteenSelecter bg-warning" style="color:white" for="'.$item->id.'">'.$item->etu_suku_nimet.', '.$item->osoite.'</a>';
+			}
+		}
+		$return .='</div></div>';
 
-
-		echo json_encode($return);
-
+		if( count($as) > 0 or count($k) > 0 )
+			echo json_encode($return);
+		else
+			echo json_encode('');
 	}
 
 
