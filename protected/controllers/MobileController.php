@@ -108,9 +108,9 @@ class MobileController extends Controller
 		{
 		 	unlink($path.$tiedosto.'.html');
 		}
-		if (file_exists( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain.'/'.$tiedosto.'.xlsx' ))
+		if (file_exists( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain.'/'.$tiedosto.'.xls' ))
 		{
-		 	unlink($path.$tiedosto.'.xlsx');
+		 	unlink($path.$tiedosto.'.xls');
 		}
 		if (file_exists( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain.'/'.$tiedosto.'.doc' ))
 		{
@@ -170,7 +170,7 @@ class MobileController extends Controller
 			}
 		}
 
-		if($ext == 'xlsx')
+		if($ext == 'xls')
 		{
 			Yii::import('ext.phpexcel.PHPExcel',true);
 			$tmpfile = $path.$tiedosto.'.html';
@@ -186,7 +186,7 @@ class MobileController extends Controller
 			$objPHPExcelWriter = PHPExcel_IOFactory::createWriter($objPHPExcel,$outputFileType);
 
 			header('Content-type: application/vnd.ms-excel;');
-			header('Content-Disposition: attachment; filename="'.$path.$tiedosto.'.xlsx"');
+			header('Content-Disposition: attachment; filename="'.$path.$tiedosto.'.xls"');
 			$objPHPExcelWriter->save('php://output');
 			exit;
 		}

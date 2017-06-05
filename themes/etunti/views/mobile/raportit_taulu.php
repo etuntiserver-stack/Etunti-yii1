@@ -170,7 +170,7 @@
     	    <button type="submit" class="btn btn-primary myBgColors submitForm"><i class="fa fa-file-word-o" aria-hidden="true"></i></button>
 	  </form>
 	  <form action="tulostus" class="form-group" target="_blank" method="POST">
-	    <input type="hidden" name="ext" value="xlsx">
+	    <input type="hidden" name="ext" value="xls">
 	    <textarea name="html_content" class="form-control" style="display:none"></textarea>
     	    <button type="submit" class="btn btn-primary myBgColors submitForm"><i class="fa fa-file-excel-o" aria-hidden="true"></i></button>
 	  </form>
@@ -229,6 +229,7 @@
 $(document).ready(function() {
     $('#mobileTable').DataTable({
         "bPaginate": false,
+
         "bFilter": false,
         "bInfo": false
     });
