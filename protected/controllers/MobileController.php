@@ -591,10 +591,11 @@ function num($val){
 	protected function htmlToXls($html, $nimike)
 	{
 
+			libxml_use_internal_errors(true);
 			Yii::import('ext.phpexcel.PHPExcel',true);
 			$tmpfile = 'temp.html';
 			file_put_contents($tmpfile, mb_convert_encoding($html, 'ISO-8859-1', 'UTF-8'));
-			
+
 			$inputFileType = 'HTML';
 			$inputFileName = $tmpfile;
 			$outputFileType = 'Excel5';
@@ -609,6 +610,7 @@ function num($val){
 			header('Content-Disposition: attachment; filename="'.$nimike.'.xls"');
 			$objPHPExcelWriter->save('php://output');
 			unlink($tmpfile);
+			exit;
 	}
 
 	public function actionTotal_suunniteltu($id,$kohde_tid,$from,$to)
