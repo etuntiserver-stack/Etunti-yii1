@@ -48,12 +48,18 @@ $forPVM = date('d.m.Y',strtotime($s->aloitan));
 		<?php echo $form->hiddenField($model,'kid',array('value'=>$s->id)); ?>
 		<?php echo $form->hiddenField($model,'tid',array('value'=>$s->tid)); ?>
 		<?php echo $form->hiddenField($model,'tekijan_nimi',array('value'=>$s->tekijan_nimi)); ?>
-		<?php echo $form->hiddenField($model,'viesti',array('value'=>$s->viesti)); ?>
+		<?php //echo $form->hiddenField($model,'viesti',array('value'=>$s->viesti)); ?>
 		<?php echo $form->hiddenField($model,'asiakas_hyvaksy',array('value'=>$s->asiakas_hyvaksy)); ?>
 
 
 
   <div class="col-sm-12">
+	<div class="section">
+		<?php echo $form->labelEx($model,'viesti'); ?>
+		<?php echo $form->textarea($model,'viesti',array('value'=>$s->viesti, 'rows'=>4,'class'=>'form-control input-sm')); ?>
+		<?php echo $form->error($model,'viesti'); ?>
+	</div>
+
 	<div class="section">
 		<?php echo $form->labelEx($model,'tietoja'); ?>
 		<?php echo $form->textarea($model,'tietoja',array('rows'=>4,'class'=>'form-control input-sm')); ?>

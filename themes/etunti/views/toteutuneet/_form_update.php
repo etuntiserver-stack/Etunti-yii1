@@ -42,10 +42,15 @@ $forPVM = date('d.m.Y',strtotime($model->aloitan));
 		<?php echo $form->hiddenField($model,'id'); ?>
 		<?php echo $form->hiddenField($model,'kid'); ?>
 		<?php echo $form->hiddenField($model,'tid'); ?>
-		<?php echo $form->hiddenField($model,'viesti'); ?>
+		<?php //echo $form->hiddenField($model,'viesti'); ?>
 
 
   <div class="col-sm-12">
+	<div class="section">
+		<?php echo $form->labelEx($model,'viesti'); ?>
+		<?php echo $form->textarea($model,'viesti',array('rows'=>4,'class'=>'form-control input-sm')); ?>
+		<?php echo $form->error($model,'viesti'); ?>
+	</div>
 	<div class="section">
 		<?php echo $form->labelEx($model,'tietoja'); ?>
 		<?php echo $form->textarea($model,'tietoja',array('rows'=>4,'class'=>'form-control input-sm')); ?>
