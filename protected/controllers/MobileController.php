@@ -172,6 +172,7 @@ class MobileController extends Controller
 
 		if($ext == 'xls')
 		{
+			libxml_use_internal_errors(true);
 			Yii::import('ext.phpexcel.PHPExcel',true);
 			$tmpfile = $path.$tiedosto.'.html';
 		
