@@ -378,7 +378,6 @@ $(document).ready(function(){
 	<div class="panel-footer text-right">
 		<?php echo CHtml::Button('Sulje',array('class'=>'btn btn-default','data-dismiss'=>'modal')); ?>
 		<?php 
-		if(Yii::app()->user->adminStatus != 2)
 		echo CHtml::submitButton($model->isNewRecord ? 'Luo' : 'Tallenna',array('class'=>'btn  btn-primary','id'=>'submitButton')); 
 		?>
 	</div>		
