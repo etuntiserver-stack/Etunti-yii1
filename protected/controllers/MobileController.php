@@ -129,6 +129,7 @@ class MobileController extends Controller
 		$c .= '<style>'.file_get_contents(Yii::app()->basePath.'/../css/raportit_table2.css').'</style>';
 		$c .= '</head><body>';
 
+
 		if($ext == 'pdf')
 		{
 		$c .= '<table id="ylataulu">
@@ -153,17 +154,15 @@ class MobileController extends Controller
 
 		if($ext == 'pdf')
 		{
-			exec('xvfb-run -a wkhtmltopdf --margin-bottom 10 --margin-top 10 --page-size A4 '.$path.$tiedosto.'.html '.$path.$tiedosto.'.pdf', $output, $return); //--orientation Landscape --title "Titulo: do PDF"
+			exec('xvfb-run -a wkhtmltopdf --margin-bottom 10 --margin-top 10 '.$path.$tiedosto.'.html '.$path.$tiedosto.'.pdf', $output, $return); //--orientation Landscape --title "Titulo: do PDF"
 			if($output)
 			{
 			    if (file_exists( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain.'/'.$tiedosto.'.pdf' ))
 			    {
 
 				header("Content-Length: " . filesize ( $path.$tiedosto.'.pdf' ) ); 
-		                header("Content-type: application/octet-stream"); 
+		                header("Content-type: application/pdf"); 
 		                header("Content-disposition: attachment; filename=".basename($path.$tiedosto.'.pdf'));
-		                header('Expires: 0');
-		                header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
 		                readfile($path.$tiedosto.'.pdf');
 				exit;
 
