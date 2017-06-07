@@ -144,9 +144,11 @@ if(!isset($_POST['tulosta']))
 
 	   // <-- uusi_tilaus
 	   $uusi_tilaus = '';
+	   /*
 	   if( isset($tvVal->kohteet->uusi_tilaus) and $tvVal->kohteet->uusi_tilaus == 1 ){
 	   	$uusi_tilaus = 'color:#ff1aff';
 	   }
+	   */
 	   // uusi_tilaus -->
 
 	   // Asiakas nakyvissa

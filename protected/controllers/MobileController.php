@@ -172,6 +172,7 @@ class MobileController extends Controller
 
 		if($ext == 'doc')
 		{
+//echo 'libreoffice --headless --convert-to doc '.$path.$tiedosto.'.html --outdir '.$path;
 			exec('libreoffice --headless --convert-to doc '.$path.$tiedosto.'.html --outdir '.$path, $output, $return);
 			if($output)
 			{
