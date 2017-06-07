@@ -130,7 +130,7 @@ class MobileController extends Controller
 		$c .= '</head><body>';
 
 
-		if($ext == 'pdf')
+		if($ext == 'pdf' or $ext == 'doc')
 		{
 		$c .= '<table id="ylataulu">
 		 <tr><td>
@@ -172,43 +172,32 @@ class MobileController extends Controller
 
 		if($ext == 'doc')
 		{
-//echo 'libreoffice --headless --convert-to doc '.$path.$tiedosto.'.html --outdir '.$path;
-			exec('libreoffice --headless --convert-to doc '.$path.$tiedosto.'.html --outdir '.$path, $output, $return);
-			if($output)
+			exec('pandoc -s '.$path.$tiedosto.'.html -o '.$path.$tiedosto.'.doc', $output, $return);
+		        if (file_exists( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain.'/'.$tiedosto.'.doc' ))
 			{
-			    if (file_exists( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain.'/'.$tiedosto.'.doc' ))
-			    {
 				header("Content-Length: " . filesize ( $path.$tiedosto.'.doc' ) ); 
-		                header("Content-type: application/octet-stream"); 
+		                header("Content-type: application/vnd.ms-word"); 
 		                header("Content-disposition: attachment; filename=".basename($path.$tiedosto.'.doc'));
 		                header('Expires: 0');
 		                header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
 		                readfile($path.$tiedosto.'.doc');
 				exit;
-			    }
 			}
 		}
 
 		if($ext == 'xls')
 		{
-			libxml_use_internal_errors(true);
-			Yii::import('ext.phpexcel.PHPExcel',true);
-			$tmpfile = $path.$tiedosto.'.html';
-		
-			$inputFileType = 'HTML';
-			$inputFileName = $tmpfile;
-			$outputFileType = 'Excel5';
-			$outputFileName = 'myExcelFile.xlsx';
-	
-			$objPHPExcelReader = PHPExcel_IOFactory::createReader($inputFileType);
-			$objPHPExcel = $objPHPExcelReader->load($inputFileName);
-		
-			$objPHPExcelWriter = PHPExcel_IOFactory::createWriter($objPHPExcel,$outputFileType);
-
-			header('Content-type: application/vnd.ms-excel;');
-			header('Content-Disposition: attachment; filename="'.$path.$tiedosto.'.xls"');
-			$objPHPExcelWriter->save('php://output');
-			exit;
+			exec('pandoc -s '.$path.$tiedosto.'.html -o '.$path.$tiedosto.'.xls', $output, $return);
+		        if (file_exists( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain.'/'.$tiedosto.'.xls' ))
+			{
+				header("Content-Length: " . filesize ( $path.$tiedosto.'.xls' ) ); 
+		                header("Content-type: application/vnd.ms-excel;"); 
+		                header("Content-disposition: attachment; filename=".basename($path.$tiedosto.'.xls'));
+		                header('Expires: 0');
+		                header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+		                readfile($path.$tiedosto.'.xls');
+				exit;
+			}
 		}
 
 		return false;
