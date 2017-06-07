@@ -17,7 +17,11 @@
 
 
 
-
+#ylataulu{
+  border: none;
+  width: 100%;
+  margin-bottom: 2rem;
+}
 .table {
   width: 100%;
   max-width: 100%;
@@ -26,5 +30,12 @@
 	border: 1px #333 solid;
 }
 .table th, .table td{
+  text-align: left;
   border-bottom: 1px #333 solid;
+  padding: 3px 5px;
 }
+.table thead th {
+  vertical-align: bottom;
+  border-bottom: 2px solid #333333;
+}
+

@@ -175,6 +175,7 @@
     	    <button type="submit" class="btn btn-primary myBgColors submitForm"><i class="fa fa-file-excel-o" aria-hidden="true"></i></button>
 	  </form>
 	  <form action="tulostus" class="form-group" target="_blank" method="POST">
+	    <input type="hidden" name="header" value="<?php if(Yii::app()->request->getPost('raporti_tyyppi')) echo Yii::app()->request->getPost('raporti_tyyppi'); ?>, <?=$from?>-<?=$to?>">
 	    <input type="hidden" name="ext" value="pdf">
 	    <textarea name="html_content" class="form-control" style="display:none"></textarea>
     	    <button type="submit" class="btn btn-primary myBgColors submitForm"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></button>
@@ -190,10 +191,10 @@
    <div class="panel-body">
 
 <div class="row">
- <div class="table-responsive raporti_taulu">
+ <div class="table-responsive raporti_taulu" id="tableContent">
 
   <table class="table table-striped" id="mobileTable">
-  <thead class="myBgColors">
+  <thead>
   <tr>
   <th><?=Yii::t('main', 'Työntekijä')?></th>
   <th><?=Yii::t('main', 'Kohde')?></th>
@@ -204,6 +205,7 @@
   <th><?=Yii::t('main', 'Viesti')?></th>
   </tr>
   </thead>
+  <tbody>
   <?php
   foreach($model as $data)
   {
@@ -212,6 +214,7 @@
 	), true);
   }
   ?>
+  </tbody>
   </table>
 
 
@@ -239,7 +242,7 @@ $(document).ready(function(){
 
 
   $(".submitForm").on('click', function(e){
-	$(this).prev('textarea').val(JSON.stringify('<table class="table">' + $('#mobileTable').html() + '</table>'));
+	$(this).prev('textarea').val(JSON.stringify($('#tableContent').html()));
 	$(this).closest('form').submit();
 	e.preventDefault();
   });

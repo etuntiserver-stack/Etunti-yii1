@@ -86,14 +86,15 @@ class MobileController extends Controller
 	{
 		if(isset($_POST['html_content']) and isset($_POST['ext']))
 		{
-			$this->transformHtmlTo(json_decode($_POST['html_content']), $_POST['ext']);
+			(isset($_POST['header']))? $header = $_POST['header'] : $header = '';
+			$this->transformHtmlTo($header, json_decode($_POST['html_content']), $_POST['ext']);
 			exit;
 		}
 		echo json_encode('false');
 		exit;
 	}
 
-	protected function transformHtmlTo($html_content, $ext)
+	protected function transformHtmlTo($header, $html_content, $ext)
 	{
 
 		if (!file_exists( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain )) {
@@ -122,11 +123,29 @@ class MobileController extends Controller
 		}
 		//     Poistetaan edelliset -->
 
-		$c = '<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">';
-		$c .= '<link rel="stylesheet" type="text/css" href="'.Yii::app()->request->baseUrl.'/css/raportit_table2.css">';
-		$c .= '</head><body>'.preg_replace("/(?=\>\s+\n|\n)+(\s+)/", '', $html_content).'</body>';
+		$asetukset=Asetukset::model()->findByPk(1);
+
+		$c = '<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">';
+		$c .= '<style>'.file_get_contents(Yii::app()->basePath.'/../css/raportit_table2.css').'</style>';
+		$c .= '</head><body>';
+
+		if($ext == 'pdf')
+		{
+		$c .= '<table id="ylataulu">
+		 <tr><td>
+		  <img src="'.$asetukset->logon_polkku.'" height="'.$asetukset->logon_korkeus.'">
+		 </td><td align="right">
+		    '.$header.'
+		 </td>
+		 </tr>
+		</table>';
+		}
+
+		$c .= preg_replace("/(?=\>\s+\n|\n)+(\s+)/", '', $html_content);
+		$c .= '</body>';
 		$c .= '</html>';
 		//echo $c;
+		//exit;
 
 		file_put_contents($path.$tiedosto.'.html', $c);
 
@@ -134,7 +153,7 @@ class MobileController extends Controller
 
 		if($ext == 'pdf')
 		{
-			exec('xvfb-run -a wkhtmltopdf '.$path.$tiedosto.'.html '.$path.$tiedosto.'.pdf', $output, $return);
+			exec('xvfb-run -a wkhtmltopdf --margin-bottom 10 --margin-top 10 --page-size A4 '.$path.$tiedosto.'.html '.$path.$tiedosto.'.pdf', $output, $return); //--orientation Landscape --title "Titulo: do PDF"
 			if($output)
 			{
 			    if (file_exists( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain.'/'.$tiedosto.'.pdf' ))

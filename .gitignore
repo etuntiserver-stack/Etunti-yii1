@@ -36,3 +36,5 @@ error_log
 .htaccess
 protected/vendors/phpdocx/lib/pdf/lib/fonts/log.htm
 protected/modules/reportico/components/*
+access.log
+error.log
