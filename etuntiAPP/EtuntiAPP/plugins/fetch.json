@@ -1,24 +1,8 @@
 {
-    "cordova-plugin-file": {
+    "cordova-plugin-app-event": {
         "source": {
             "type": "registry",
-            "id": "cordova-plugin-file"
-        },
-        "is_top_level": true,
-        "variables": {}
-    },
-    "cordova-plugin-device": {
-        "source": {
-            "type": "registry",
-            "id": "cordova-plugin-device"
-        },
-        "is_top_level": false,
-        "variables": {}
-    },
-    "phonegap-nfc": {
-        "source": {
-            "type": "registry",
-            "id": "phonegap-nfc"
+            "id": "cordova-plugin-app-event"
         },
         "is_top_level": true,
         "variables": {}
@@ -39,10 +23,42 @@
         "is_top_level": true,
         "variables": {}
     },
+    "cordova-plugin-compat": {
+        "source": {
+            "type": "registry",
+            "id": "cordova-plugin-compat"
+        },
+        "is_top_level": true,
+        "variables": {}
+    },
+    "cordova-plugin-device": {
+        "source": {
+            "type": "registry",
+            "id": "cordova-plugin-device"
+        },
+        "is_top_level": true,
+        "variables": {}
+    },
+    "cordova-plugin-dialogs": {
+        "source": {
+            "type": "registry",
+            "id": "cordova-plugin-dialogs"
+        },
+        "is_top_level": true,
+        "variables": {}
+    },
     "cordova-plugin-fcm": {
         "source": {
             "type": "registry",
             "id": "cordova-plugin-fcm"
+        },
+        "is_top_level": true,
+        "variables": {}
+    },
+    "cordova-plugin-file": {
+        "source": {
+            "type": "registry",
+            "id": "cordova-plugin-file"
         },
         "is_top_level": true,
         "variables": {}
@@ -66,7 +82,7 @@
     "cordova-plugin-media": {
         "source": {
             "type": "registry",
-            "id": "cordova-plugin-media"
+            "id": "cordova-plugin-media@3.0.1"
         },
         "is_top_level": true,
         "variables": {}
@@ -81,35 +97,18 @@
     },
     "de.appplant.cordova.plugin.local-notification": {
         "source": {
-            "type": "git",
-            "url": "https://github.com/katzer/cordova-plugin-local-notifications",
-            "subdir": "."
+            "type": "registry",
+            "id": "de.appplant.cordova.plugin.local-notification"
         },
         "is_top_level": true,
         "variables": {}
     },
-    "cordova-plugin-dialogs": {
+    "phonegap-nfc": {
         "source": {
             "type": "registry",
-            "id": "cordova-plugin-dialogs"
+            "id": "phonegap-nfc"
         },
         "is_top_level": true,
-        "variables": {}
-    },
-    "cordova-plugin-compat": {
-        "source": {
-            "type": "registry",
-            "id": "cordova-plugin-compat"
-        },
-        "is_top_level": true,
-        "variables": {}
-    },
-    "cordova-plugin-app-event": {
-        "source": {
-            "type": "registry",
-            "id": "cordova-plugin-app-event"
-        },
-        "is_top_level": false,
         "variables": {}
     }
 }
