@@ -310,6 +310,7 @@ $('input[type="radio"]').change(function() {
            },
 	   error:function(data){
 		console.log(data);
+		window.location.href=location.protocol + "//" + location.host + "/index.php/site/index";
 	   }
         });
 
