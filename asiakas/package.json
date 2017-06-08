@@ -1,0 +1,25 @@
+{
+    "name": "fi.etunti.dico",
+    "version": "1.0.0",
+    "displayName": "DICO",
+    "cordova": {
+        "platforms": [
+            "android",
+            "ubuntu"
+        ],
+        "plugins": {
+            "cordova-plugin-device": {},
+            "cordova-plugin-whitelist": {},
+            "cordova-plugin-file-opener2": {},
+            "cordova-plugin-inappbrowser": {}
+        }
+    },
+    "dependencies": {
+        "cordova-android": "^6.2.3",
+        "cordova-plugin-device": "~1.1.6",
+        "cordova-plugin-file-opener2": "^2.0.19",
+        "cordova-plugin-inappbrowser": "^1.7.1",
+        "cordova-plugin-whitelist": "1",
+        "cordova-ubuntu": "~4.3.4"
+    }
+}

@@ -7,7 +7,7 @@
         "files": {}
     },
     "installed_plugins": {
-        "cordova-plugin-whitelist": {
+        "cordova-plugin-device": {
             "PACKAGE_NAME": "fi.etunti.dico"
         },
         "cordova-plugin-file": {
@@ -16,7 +16,10 @@
         "cordova-plugin-file-opener2": {
             "PACKAGE_NAME": "fi.etunti.dico"
         },
-        "cordova-plugin-device": {
+        "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "fi.etunti.dico"
+        },
+        "cordova-plugin-inappbrowser": {
             "PACKAGE_NAME": "fi.etunti.dico"
         }
     },

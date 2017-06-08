@@ -1,0 +1,31 @@
+{
+    "prepare_queue": {
+        "installed": [],
+        "uninstalled": []
+    },
+    "config_munge": {
+        "files": {}
+    },
+    "installed_plugins": {
+        "cordova-plugin-device": {
+            "PACKAGE_NAME": "fi.etunti.dico"
+        },
+        "cordova-plugin-file": {
+            "PACKAGE_NAME": "fi.etunti.dico"
+        },
+        "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "fi.etunti.dico"
+        },
+        "cordova-plugin-file-opener2": {
+            "PACKAGE_NAME": "fi.etunti.dico"
+        },
+        "cordova-plugin-inappbrowser": {
+            "PACKAGE_NAME": "fi.etunti.dico"
+        }
+    },
+    "dependent_plugins": {
+        "cordova-plugin-compat": {
+            "PACKAGE_NAME": "fi.etunti.dico"
+        }
+    }
+}

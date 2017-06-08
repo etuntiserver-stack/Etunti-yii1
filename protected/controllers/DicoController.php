@@ -350,6 +350,7 @@ public function actionLogin($domain)
 		   {
 
 			$liite = '';
+			$pdf_link = '';
 			$nimike = '';
 			if(isset($_POST['liite']))
 			{
@@ -357,7 +358,17 @@ public function actionLogin($domain)
 				$t = $_POST['liite'];
    				if(file_exists(Yii::app()->basePath."/../tiedostot/tarjoukset/".$domain."/".$t.".pdf"))
    				{
-					$liite = base64_encode(file_get_contents(Yii::app()->basePath."/../tiedostot/tarjoukset/".$domain."/".$t.".pdf"));
+
+					$rndm_str = $this->generateRandomString(20);
+					$file = Yii::app()->basePath."/../tiedostot/tarjoukset/".$domain."/".$t.".pdf";
+					$liite = Yii::app()->basePath.'/../tmp/'.$rndm_str.'.pdf';
+	
+					if (!copy($file, $liite)) {
+					    	$this->_sendResponse(200, CJSON::encode('Copy error'));
+						exit;
+					} else {
+						$pdf_link = Yii::app()->request->hostInfo .'/tmp/'.$rndm_str.'.pdf';
+					}
 				}
 			}
 
@@ -389,7 +400,7 @@ public function actionLogin($domain)
 			}
 			$lista .= '</div>';
 
-				$return = array('lista'=>$lista, 'liite'=>$liite, 'nimike'=>$nimike);
+				$return = array('lista'=>$lista, 'liite'=>$pdf_link, 'nimike'=>$nimike);
 				$this->_sendResponse(200, CJSON::encode($return));
 				exit;
 			}
@@ -401,7 +412,6 @@ public function actionLogin($domain)
 				$this->_sendResponse(200, CJSON::encode('Ei tuloksia'));
 				exit;
 	}
-
 
 
 	public function actionSopimukset($domain)

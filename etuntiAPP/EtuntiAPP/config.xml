@@ -69,6 +69,7 @@
         <splash height="800" src="res/wp8/SplashScreenImage.jpg" width="480" />
     </platform>
     <engine name="android" spec="^6.2.3" />
+    <engine name="ubuntu" spec="^4.3.4" />
     <plugin name="cordova-plugin-app-event" spec="~1.2.0" />
     <plugin name="cordova-plugin-app-version" spec="~0.1.9" />
     <plugin name="cordova-plugin-camera" spec="~2.4.1" />

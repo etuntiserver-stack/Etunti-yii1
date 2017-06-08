@@ -4,7 +4,8 @@
     "displayName": "Etunti.fi",
     "cordova": {
         "platforms": [
-            "android"
+            "android",
+            "ubuntu"
         ],
         "plugins": {
             "cordova-plugin-app-event": {},
@@ -37,6 +38,7 @@
         "cordova-plugin-geolocation": "~2.4.3",
         "cordova-plugin-media": "~3.0.1",
         "cordova-plugin-whitelist": "~1.3.2",
+        "cordova-ubuntu": "^4.3.4",
         "de.appplant.cordova.plugin.local-notification": "~0.8.5",
         "phonegap-nfc": "~0.6.6"
     }
