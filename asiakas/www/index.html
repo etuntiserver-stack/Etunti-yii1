@@ -225,8 +225,8 @@
         <!-- Dashboard Tiles -->
         <div class="row mb10">
 
-          <div class="col-md-12">
-	   <a href="historia.html?tyyppi=naytaTyovuorot" class="link">
+          <div class="col-md-12" id="tyovuorot_painike">
+	   <a href="#" class="link">
             <div class="panel bg-danger light of-h mb10">
               <div class="pn pl20 p5">
                 <div class="icon-bg">
@@ -240,7 +240,23 @@
             </div>
 	   </a>
           </div>
-          <div class="col-md-12">
+          <div class="col-md-12 collapse" id="tulevat_painike">
+	   <a href="historia.html?tyyppi=naytaTyovuorot" class="link">
+            <div class="panel bg-alert light of-h mb10">
+              <div class="pn pl20 p5">
+                <div class="icon-bg">
+                  <i class="fa fa-check-square"></i>
+                </div>
+
+                <h2 class="mt15 lh15">
+                  <b>Tulevat</b>
+                </h2>
+                <h5 class="text-muted">Tulevat työvuorot.</h5>
+              </div>
+            </div>
+	   </a>
+          </div>
+          <div class="col-md-12 collapse" id="toteutuneet_painike">
 	   <a href="historia.html?tyyppi=naytaToteutuneetTunnit" class="link">
             <div class="panel bg-alert light of-h mb10">
               <div class="pn pl20 p5">
@@ -256,37 +272,7 @@
             </div>
 	   </a>
           </div>
-          <div class="col-md-12">
-	   <a href="historia.html?tyyppi=naytaVinkit" class="link">
-            <div class="panel bg-info light of-h mb10">
-              <div class="pn pl20 p5">
-                <div class="icon-bg">
-                  <i class="fa fa-comments"></i>
-                </div>
-                <h2 class="mt15 lh15">
-                  <b>Vinkit</b>
-                </h2>
-                <h5 class="text-muted">Anna vinkki ja kerää hyötyjä.</h5>
-              </div>
-            </div>
-	   </a>
-          </div>
-          <div class="col-md-12">
-	   <a href="historia.html?tyyppi=naytaPalautteet" class="link">
-            <div class="panel bg-success light of-h mb10">
-              <div class="pn pl20 p5">
-                <div class="icon-bg">
-                  <i class="fa fa-envelope"></i>
-                </div>
-                <h2 class="mt15 lh15">
-                  <b>Palautteet</b>
-                </h2>
-                <h5 class="text-muted">Tästä voit antaa palautetta</h5>
-              </div>
-            </div>
-	   </a>
-          </div>
-          <div class="col-md-12">
+          <div class="col-md-12" id="tilaus_painike">
 	   <a href="historia.html?tyyppi=naytaLaskut" class="link">
             <div class="panel bg-warning light of-h mb10">
               <div class="pn pl20 p5">
@@ -294,15 +280,45 @@
                   <i class="fa fa-credit-card"></i>
                 </div>
                 <h2 class="mt15 lh15">
-                  <b>Laskut</b>
+                  <b>Tilaus</b>
                 </h2>
-                <h5 class="text-muted">Tästä näet omat laskusi</h5>
+                <h5 class="text-muted">Uusi tilaus</h5>
               </div>
             </div>
 	   </a>
           </div>
-          <div class="col-md-12">
-	   <a href="asiakirjat.html" class="link">
+          <div class="col-md-12" id="vinkit_painike">
+	   <a href="historia.html?tyyppi=naytaVinkit" class="link">
+            <div class="panel bg-info light of-h mb10">
+              <div class="pn pl20 p5">
+                <div class="icon-bg">
+                  <i class="fa fa-comments"></i>
+                </div>
+                <h2 class="mt15 lh15">
+                  <b>Vinki</b>
+                </h2>
+                <h5 class="text-muted">Anna vinkki ja kerää hyötyjä.</h5>
+              </div>
+            </div>
+	   </a>
+          </div>
+          <div class="col-md-12" id="palautteet_painike">
+	   <a href="historia.html?tyyppi=naytaPalautteet" class="link">
+            <div class="panel bg-success light of-h mb10">
+              <div class="pn pl20 p5">
+                <div class="icon-bg">
+                  <i class="fa fa-envelope"></i>
+                </div>
+                <h2 class="mt15 lh15">
+                  <b>Palaute</b>
+                </h2>
+                <h5 class="text-muted">Tästä voit antaa palautetta</h5>
+              </div>
+            </div>
+	   </a>
+          </div>
+          <div class="col-md-12" id="asiakirjat_painike">
+	   <a href="#" class="link">
             <div class="panel bg-info light of-h mb10">
               <div class="pn pl20 p5">
                 <div class="icon-bg">
@@ -316,7 +332,7 @@
             </div>
 	   </a>
           </div>
-          <div class="col-md-12">
+          <div class="col-md-12 collapse" id="tarjoukset_painike">
 	   <a href="tarjoukset.html" class="link">
             <div class="panel bg-system light of-h mb10">
               <div class="pn pl20 p5">
@@ -331,7 +347,7 @@
             </div>
 	   </a>
           </div>
-          <div class="col-md-12">
+          <div class="col-md-12 collapse" id="sopimukset_painike">
 	   <a href="sopimukset.html" class="link">
             <div class="panel bg-info light of-h mb10">
               <div class="pn pl20 p5">
@@ -346,7 +362,7 @@
             </div>
 	   </a>
           </div>
-          <div class="col-md-12">
+          <div class="col-md-12 collapse" id="tyonkuvaukset_painike">
 	   <a href="tyonkuvaukset.html" class="link">
             <div class="panel bg-info light of-h mb10">
               <div class="pn pl20 p5">
@@ -357,6 +373,21 @@
                   <b>Työnkuvaukset</b>
                 </h2>
                 <h5 class="text-muted">Tästä näet omat työnkuvaukset</h5>
+              </div>
+            </div>
+	   </a>
+          </div>
+          <div class="col-md-12" id="laskut_painike">
+	   <a href="historia.html?tyyppi=naytaLaskut" class="link">
+            <div class="panel bg-warning light of-h mb10">
+              <div class="pn pl20 p5">
+                <div class="icon-bg">
+                  <i class="fa fa-credit-card"></i>
+                </div>
+                <h2 class="mt15 lh15">
+                  <b>Laskut</b>
+                </h2>
+                <h5 class="text-muted">Tästä näet omat laskusi</h5>
               </div>
             </div>
 	   </a>
@@ -397,6 +428,36 @@
 
 
   <script type="text/javascript">
+  jQuery(document).ready(function() {
+
+	$("#asiakirjat_painike").click(function(e){
+		e.preventDefault();
+		$("#tyovuorot_painike").hide(370);
+		$("#tilaus_painike").hide(370);
+		$("#vinkit_painike").hide(370);
+		$("#palautteet_painike").hide(370);
+		$("#laskut_painike").hide(370);
+		$("#asiakirjat_painike").hide(370);
+
+		$("#tarjoukset_painike").show(370);
+		$("#sopimukset_painike").show(370);
+	});
+
+	$("#tyovuorot_painike").click(function(e){
+		e.preventDefault();
+		$("#tyovuorot_painike").hide(370);
+		$("#tilaus_painike").hide(370);
+		$("#vinkit_painike").hide(370);
+		$("#palautteet_painike").hide(370);
+		$("#laskut_painike").hide(370);
+		$("#asiakirjat_painike").hide(370);
+
+		$("#tulevat_painike").show(370);
+		$("#toteutuneet_painike").show(370);
+	});
+  });
+
+
   jQuery(document).ready(function() {
 
     "use strict";
