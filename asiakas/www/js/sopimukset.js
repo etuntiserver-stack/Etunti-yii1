@@ -43,6 +43,7 @@ function getUrlVars() {
 
     $(document).delegate('.avaaPDF', 'click', function() {
 
+	$(this).find('.bg-warning').removeClass('bg-warning').addClass('bg-success');
 	var liite = $(this).attr('liite');
 	sendData['liite'] = liite;
 

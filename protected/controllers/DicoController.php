@@ -441,7 +441,7 @@ public function actionLogin($domain)
 					 	mkdir( Yii::app()->basePath.'/../tmp', 0777, true );
 					}
 					$rndm_str = $this->generateRandomString(20);
-					$file = Yii::app()->basePath."/../tiedostot/tarjoukset/".$domain."/".$t.".pdf";
+					$file = Yii::app()->basePath."/../tiedostot/sopimukset/".$domain."/".$t.".pdf";
 					$liite = Yii::app()->basePath.'/../tmp/'.$rndm_str.'.pdf';
 	
 					if (!copy($file, $liite)) {
