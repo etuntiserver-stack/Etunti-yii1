@@ -359,6 +359,9 @@ public function actionLogin($domain)
    				if(file_exists(Yii::app()->basePath."/../tiedostot/tarjoukset/".$domain."/".$t.".pdf"))
    				{
 
+					if (!file_exists( Yii::app()->basePath.'/../tmp' )) {
+					 	mkdir( Yii::app()->basePath.'/../tmp', 0777, true );
+					}
 					$rndm_str = $this->generateRandomString(20);
 					$file = Yii::app()->basePath."/../tiedostot/tarjoukset/".$domain."/".$t.".pdf";
 					$liite = Yii::app()->basePath.'/../tmp/'.$rndm_str.'.pdf';
