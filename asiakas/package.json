@@ -8,18 +8,24 @@
             "ubuntu"
         ],
         "plugins": {
+            "cordova-plugin-android-support-v4-jar": {},
+            "cordova-plugin-compat": {},
             "cordova-plugin-device": {},
-            "cordova-plugin-whitelist": {},
-            "cordova-plugin-file-opener2": {},
-            "cordova-plugin-inappbrowser": {}
+            "cordova-plugin-dialogs": {},
+            "cordova-plugin-file": {},
+            "cordova-plugin-inappbrowser": {},
+            "cordova-plugin-whitelist": {}
         }
     },
     "dependencies": {
-        "cordova-android": "^6.2.3",
-        "cordova-plugin-device": "~1.1.6",
-        "cordova-plugin-file-opener2": "^2.0.19",
+        "cordova-android": "~6.2.3",
+        "cordova-plugin-android-support-v4-jar": "^23.2.1",
+        "cordova-plugin-compat": "^1.1.0",
+        "cordova-plugin-device": "^1.1.6",
+        "cordova-plugin-dialogs": "^1.3.3",
+        "cordova-plugin-file": "^4.3.3",
         "cordova-plugin-inappbrowser": "^1.7.1",
-        "cordova-plugin-whitelist": "1",
-        "cordova-ubuntu": "~4.3.4"
+        "cordova-plugin-whitelist": "^1.3.2",
+        "cordova-ubuntu": "^4.3.4"
     }
 }

@@ -43,6 +43,7 @@ function getUrlVars() {
 
     $(document).delegate('.avaaPDF', 'click', function() {
 
+	$(this).find('.bg-warning').removeClass('bg-warning').addClass('bg-success');
 	var liite = $(this).attr('liite');
 	sendData['liite'] = liite;
 
@@ -54,17 +55,15 @@ function getUrlVars() {
 		var d = JSON.parse(data);
 		if(d['lista'])
 		{
-			$('#resultLaatiko').html(d['lista']);
-			reloadSkin();
-			reloadDatepicker();
+			//$('#resultLaatiko').html(d['lista']);
+			//reloadSkin();
+			//reloadDatepicker();
 		}
 
 		if((d['liite'] !== '') && (d['nimike'] !== ''))
 		{
 
-			console.log(d['liite']);
-			var ref = cordova.InAppBrowser.open(d['liite'], '_blank', 'location=yes');
-			window.open = cordova.InAppBrowser.open;
+		cordova.InAppBrowser.open(encodeURI('https://docs.google.com/gview?embedded=true&url=' + d['liite']), '_blank', 'location=no'); 
 
 		}
     	   },

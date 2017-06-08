@@ -1,0 +1,56 @@
+<html>
+<body>
+<head>
+  <script type="text/javascript" src="cordova"></script>
+  <script type="text/javascript" src="js/jquery-1.11.2.min.js"></script>
+
+
+<script>
+$(document).ready(function(){
+
+function getUrlVars() {
+    var vars = {};
+    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi,    
+    function(m,key,value) {
+      vars[key] = value;
+    });
+    return vars;
+  }
+
+	var link = '';
+	if(getUrlVars()["link"]){
+		link = getUrlVars()["link"];
+
+
+var fileTransfer = new FileTransfer();
+var uri = encodeURI(link);
+
+fileTransfer.download(
+    uri,
+    fileURL,
+    function(entry) {
+        console.log("download complete: " + entry.fullPath);
+    },
+    function(error) {
+        console.log("download error source " + error.source);
+        console.log("download error target " + error.target);
+        console.log("upload error code" + error.code);
+    },
+    false,
+    {
+        headers: {
+            "Authorization": "Basic dGVzdHVzZXJuYW1lOnRlc3RwYXNzd29yZA=="
+        }
+    }
+);
+
+	}
+
+
+});
+</script>
+
+</head>
+
+</body>
+</html>
