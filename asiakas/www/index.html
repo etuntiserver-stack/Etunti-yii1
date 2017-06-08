@@ -404,7 +404,7 @@
 
 
     <!-- footer -->
-    <div class="nav navbar-fixed-bottom myBgColors">
+    <div class="nav navbar-fixed-bottom navbar-shadow myBgColors">
      <div class="" id="footer-body">
       <center>
 	<ul class="list-inline">
@@ -441,6 +441,8 @@
 
 		$("#tarjoukset_painike").show(370);
 		$("#sopimukset_painike").show(370);
+
+		$('body').scrollTop(0);
 	});
 
 	$("#tyovuorot_painike").click(function(e){
@@ -454,6 +456,8 @@
 
 		$("#tulevat_painike").show(370);
 		$("#toteutuneet_painike").show(370);
+
+		$('body').scrollTop(0);
 	});
   });
 
