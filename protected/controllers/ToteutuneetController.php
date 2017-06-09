@@ -329,6 +329,8 @@ class ToteutuneetController extends Controller
 		if($nimike == 'tyosu') $collectorratio =  5;
 		if($nimike == 'sl') $collectorratio =  8;
 		if($nimike == 'ls') $collectorratio =  9;
+		if($nimike == 'py') $collectorratio =  7;
+		if($nimike == 'el') $collectorratio =  4;
 
 
 

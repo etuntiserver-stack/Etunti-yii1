@@ -695,6 +695,8 @@
 			'tyosu'=>Yii::t('main', 'Työtunnit sunnuntai'),
 			'sl'=>Yii::t('main', 'Sairausajan palkka'),
 			'ls'=>Yii::t('main', 'Lapsen sairaus'),
+			'py'=>Yii::t('main', 'Arkipyhät'),
+			'el'=>Yii::t('main', 'Erikoislauantait'),
 		);
 
 		$selected   = array();
