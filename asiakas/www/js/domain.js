@@ -24,10 +24,20 @@ $(document).ready(function(){
     var tunnus = '';
     var salasana = '';
     var loginArr = [];
+    var paketti = [];
+
+    if(localStorage.getItem('login_paketti'))
+    {
+	var paketti = localStorage.getItem('login_paketti').split(',');
+	if(!paketti[3])
+	$("#laskut_painike").hide();
+
+    }
 
     if(localStorage.getItem('loginOK'))
     {
 	loginArr = JSON.parse(localStorage.getItem('loginOK')).loginOK[0];
+
 	var asiakasID = JSON.parse(localStorage.getItem('loginOK')).loginOK['asiakasID'];
 	
 	domain = loginArr['domain'];
@@ -51,7 +61,7 @@ $(document).ready(function(){
 
     // <-- Palvelin
 
-    var server = '../../';
+    //var server = '../../';
     var url = server+"index.php/dico/asiakkaat";
     var versio = "";
     // Palvelin -->
@@ -101,6 +111,7 @@ $(document).ready(function(){
 		if(d['loginOK'])
 		{
 			localStorage.setItem('loginOK', JSON.stringify(d));
+			localStorage.setItem('login_paketti', d['loginOK'].paketti);
 			window.location.href="index.html";
 			console.log(d);
 		} else {
