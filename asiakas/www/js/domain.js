@@ -51,7 +51,7 @@ $(document).ready(function(){
 
     // <-- Palvelin
 
-    //var server = '../../';
+    var server = '../../';
     var url = server+"index.php/dico/asiakkaat";
     var versio = "";
     // Palvelin -->
@@ -97,13 +97,12 @@ $(document).ready(function(){
  	   data: $(this).serialize(),
            success: function(data){
 		var d = JSON.parse(data);
-		console.log("------------------------------\n" + d)
 		//return false;
 		if(d['loginOK'])
 		{
 			localStorage.setItem('loginOK', JSON.stringify(d));
 			window.location.href="index.html";
-			//console.log(data);
+			console.log(d);
 		} else {
 			$('#yllaIlmoitus').html('<h3 class="alert alert-danger">Kirjautuminen ei onnistunut. Tarkasta yritystunnus, sähköposti ja salasana</h3>');
 		}
