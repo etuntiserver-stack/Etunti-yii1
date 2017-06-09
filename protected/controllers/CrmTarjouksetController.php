@@ -533,7 +533,7 @@ class CrmTarjouksetController extends Controller
 
 			$valuesTable = array(
 			    array(
-			        'Tilat','Työtehtävät','Laatutaso','Kommenti'
+			        'Tilat','Työtehtävät','Viikkoväli','Kommenti'
 			    )
 			);
 
@@ -653,7 +653,7 @@ class CrmTarjouksetController extends Controller
 		    <tr>
 		        <th>'.Yii::t('main','Tilat').'</th>
 			<th>'.Yii::t('main','Työtehtävät').'</th>
-			<th>'.Yii::t('main','Laatutaso').'</th>
+			<th>'.Yii::t('main','Viikkoväli').'</th>
 			<th>'.Yii::t('main','Kommenti').'</th>
 		    </tr>';
 

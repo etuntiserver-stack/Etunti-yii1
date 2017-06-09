@@ -245,7 +245,12 @@ class TyonkuvausController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$dataProvider=new CActiveDataProvider('Tyonkuvaus');
+
+		$criteria = new CDbcriteria;
+		$criteria->order = " id DESC ";
+		$dataProvider=new CActiveDataProvider('Tyonkuvaus',array(
+			'criteria'=>$criteria,
+		));
 		$this->render('index',array(
 			'dataProvider'=>$dataProvider,
 		));
