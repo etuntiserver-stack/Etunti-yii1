@@ -2,6 +2,7 @@
 /* @var $this TyonkuvausController */
 /* @var $model Tyonkuvaus */
 /* @var $form CActiveForm */
+/*  laatutasot muutetaan viikkovaliksi */
 ?>
 
 
@@ -153,10 +154,7 @@ $(document).ready(function(){
 	);
 
 	$asetukset = Asetukset::model()->findByPk(1);
-	$laatutasot = array(
-			$asetukset->edico_laatutaso_1 => $asetukset->edico_laatutaso_1,
-			$asetukset->edico_laatutaso_2 => $asetukset->edico_laatutaso_2,
-			$asetukset->edico_laatutaso_3 => $asetukset->edico_laatutaso_3);
+	$laatutasot = array(1 => 1, 2 => 2, 3 => 3, 4 => 4);
 	?>
 
 
@@ -166,7 +164,7 @@ $(document).ready(function(){
 		    <tr>
 		        <th></td><td><?php echo Yii::t('main','Tilat'); ?></th>
 			<th><?php echo Yii::t('main','Työtehtävät ja päivät'); ?></th>
-			<th><?php echo Yii::t('main','Laatutaso'); ?></th>
+			<th><?php echo Yii::t('main','Viikkoväli'); ?></th>
 			<th><?php echo Yii::t('main','Kommenti'); ?></th>
 		    </tr>
 		<?php
@@ -276,7 +274,7 @@ $(document).ready(function(){
 		    	    <div class="laatutasot_tilat">
 				'.CHtml::dropDownList('', '', $laatutasot, 
 					array(
-						'empty' => Yii::t('main', 'Valitse laatutaso'),
+						'empty' => Yii::t('main', 'Valitse viikkoväli'),
 						'class'=> 'laatutasot_selecter form-control',
 						'options' => $selectedValuesLaatutasot,
 				)).'
@@ -336,7 +334,7 @@ $(document).ready(function(){
 		        <td>
 		    	    <div class="laatutasot_tilat">
 				<?php echo CHtml::dropDownList('', '', $laatutasot, 
-					array('empty' => Yii::t('main', 'Valitse laatutaso'), 'class'=> 'laatutasot_selecter form-control')
+					array('empty' => Yii::t('main', 'Valitse viikkoväli'), 'class'=> 'laatutasot_selecter form-control')
 				); ?>
 		            	<input type="hidden" class="form-control" name="TyonkuvausRivit[laatutaso][0]" />
 			    </div>
@@ -366,7 +364,7 @@ $(document).ready(function(){
 
 		<div id="laatutasotAlasveto" style="display:none">
 			<?php echo CHtml::dropDownList('', '', $laatutasot, 
-				array('empty' => Yii::t('main', 'Valitse laatutaso'), 'class'=> 'laatutasot_selecter form-control')
+				array('empty' => Yii::t('main', 'Valitse viikkoväli'), 'class'=> 'laatutasot_selecter form-control')
 			); ?>
 		</div>
 
