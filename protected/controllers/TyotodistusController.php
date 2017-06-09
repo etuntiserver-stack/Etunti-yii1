@@ -144,12 +144,16 @@ class TyotodistusController extends Controller
 		$var = '
 			#tyonantaja#
 			#tyonantaja_osoite#
+			#tyonantaja_postinumero#
+			#tyonantaja_postitoimipaikka#
 			#tyonantaja_y_tunnus#
 			#tyonantaja_puhelin#
 			#tyonantaja_sahkoposti#
 
 			#tyontekija_nimi#
 			#tyontekija_osoite#
+			#tyontekija_postinumero#
+			#tyontekija_postitoimipaikka#
 			#tyontekija_henkilotunnus#
 			#tyontekija_puhelin#
 			#tyontekija_sahkoposti#
@@ -208,11 +212,15 @@ class TyotodistusController extends Controller
 			$variables = array(
 				'tyonantaja' => $model->tyonantaja,
 				'tyonantaja_osoite' => $model->osoite,
+				'tyonantaja_postinumero' => $model->postinumero,
+				'tyonantaja_postitoimipaikka' => $model->postitoimipaikka,
 				'tyonantaja_y_tunnus' => $model->y_tunnus,
 				'tyonantaja_puhelin' => $model->puhelin,
 				'tyonantaja_sahkoposti' => $model->sahkoposti,
 				'tyontekija_nimi' => $model->tekijan_nimi,
 				'tyontekija_osoite' => $model->tekijan_katuosoite,
+				'tyontekija_postinumero' => $model->tekijan_pnumero,
+				'tyontekija_postitoimipaikka' => $model->tekijan_ptoimipaikka,
 				'tyontekija_henkilotunnus' => $model->tekijan_henkilotunnus,
 				'tyontekija_puhelin' => $model->tekijan_puh,
 				'tyontekija_sahkoposti' => $model->tekijan_email,
@@ -237,11 +245,8 @@ class TyotodistusController extends Controller
 			$path = 'tiedostot/'.$this->kansio().'/'.Yii::app()->user->domain.'/'.$tiedosto;
 			$docx->createDocx($path);
 
-			if( $_SERVER['REMOTE_ADDR'] != '::1' and $_SERVER['REMOTE_ADDR'] != '127.0.0.1' )
-			{
 			$transform = new TransformDocAdvLibreOffice();
 			$transform->transformDocument($path.'.docx', $path.'.pdf');
-			}
 
 			$this->redirect(array('index'));
 	}
@@ -344,7 +349,7 @@ class TyotodistusController extends Controller
 		$model = Tyontekijat::model()->findbypk($_POST['tid']);
 		$tiedot = array(
 			'tekijan_email' => $model->tekijan_email,
-			'tekijan_nimi' => $model->tekijan_nimi,
+			'tekijan_nimi' => $this->etuSukunimi($model->id),
 			'tekijan_katuosoite' => $model->tekijan_katuosoite,
 			'tekijan_pnumero' => $model->tekijan_pnumero,
 			'tekijan_ptoimipaikka' => $model->tekijan_ptoimipaikka,
