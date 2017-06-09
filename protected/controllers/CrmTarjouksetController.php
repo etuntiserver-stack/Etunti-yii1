@@ -683,14 +683,10 @@ class CrmTarjouksetController extends Controller
 		foreach($exLaatutaso as $itm)
 			$tasot .= '<br>'.trim($itm);
 
-		$exKommenti = explode("\n", json_decode($r->laatutaso));
-		$kommentit = '';
-		foreach($exKommenti as $itm)
-			$kommentit .= '<br>'.trim($itm);
 
 		$bd .= '</td>
 		        <td>'.$tasot.'</td>
-		        <td>'.$kommentit.'</td>
+		        <td>'.$r->kommenti.'</td>
 		    </tr>
 		';
 		}
