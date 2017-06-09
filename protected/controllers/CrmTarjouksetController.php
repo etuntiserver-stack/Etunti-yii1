@@ -642,7 +642,7 @@ class CrmTarjouksetController extends Controller
 		$this->render('index', array('dataProvider' => $dataProvider));
 	}
 
-	protected function get_tyonkuvaus($id)
+	public function get_tyonkuvaus($id)
 	{
 	
 		$bd = '';

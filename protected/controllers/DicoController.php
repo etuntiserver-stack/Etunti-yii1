@@ -362,7 +362,7 @@ public function actionLogin($domain)
 					if (!file_exists( Yii::app()->basePath.'/../tmp' )) {
 					 	mkdir( Yii::app()->basePath.'/../tmp', 0777, true );
 					}
-					$rndm_str = $this->generateRandomString(20);
+					$rndm_str = $model->id.'_tarjous';
 					$file = Yii::app()->basePath."/../tiedostot/tarjoukset/".$domain."/".$t.".pdf";
 					$liite = Yii::app()->basePath.'/../tmp/'.$rndm_str.'.pdf';
 	
@@ -440,7 +440,7 @@ public function actionLogin($domain)
 					if (!file_exists( Yii::app()->basePath.'/../tmp' )) {
 					 	mkdir( Yii::app()->basePath.'/../tmp', 0777, true );
 					}
-					$rndm_str = $this->generateRandomString(20);
+					$rndm_str = $model->id.'_sopimus';
 					$file = Yii::app()->basePath."/../tiedostot/sopimukset/".$domain."/".$t.".pdf";
 					$liite = Yii::app()->basePath.'/../tmp/'.$rndm_str.'.pdf';
 	
@@ -494,6 +494,94 @@ public function actionLogin($domain)
 	}
 
 
+	public function actionTyonkuvaukset($domain)
+	{
+
+		$return = '';
+		if(isset($_POST['tunnus']) and $this->kirjautuminen($_POST['tunnus'], $_POST['salasana']) == true)
+		{
+
+		   $model=Asiakkaat::model()->findByPk($_POST['asiakasID']);
+		   if(isset($model->id))
+		   {
+
+			$liite = '';
+			$pdf_link = '';
+			$nimike = '';
+			if(isset($_POST['liite']))
+			{
+				$nimike = $_POST['liite'];
+				$t = $_POST['liite'];
+
+					if (!file_exists( Yii::app()->basePath.'/../tmp' )) {
+					 	mkdir( Yii::app()->basePath.'/../tmp', 0777, true );
+					}
+
+			  		$tiedosto = $model->id.'_tyonkuvaus';
+					$path = 'tmp';
+
+					$tk = Tyonkuvaus::model()->findByPk($_POST['liite']);
+					$k = Kohteet::model()->findByPk($tk->kohde_id);
+					(isset($k->id))? $kohde = $k->osoite:$kohde = '';
+	   				$tarjoukset = Yii::app()->createController('CrmTarjoukset');
+	   				$html = '<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">';
+					$html .= '<style>'.file_get_contents(Yii::app()->basePath.'/../css/raportit_table2.css').'</style>';
+					$html .= '</head><body>';
+					$html .= '<p><h2>'.Yii::t('main', 'Työnkuvaus').'</h2> '.date("d.m.Y H:i", strtotime($tk->time)).' '.$kohde.'</p><br>';
+	   				$html .= $tarjoukset[0]->get_tyonkuvaus($_POST['liite']);
+					$html .= '</body></html>';
+
+					file_put_contents($path.'/'.$tiedosto.'.html', $html);
+					exec('xvfb-run -a wkhtmltopdf --margin-bottom 10 --margin-top 10 '.$path.'/'.$tiedosto.'.html '.$path.'/'.$tiedosto.'.pdf', $output, $return); //--orientation Landscape --title "Titulo: do PDF"
+					if($output)
+					{
+					    if (file_exists( Yii::app()->basePath.'/../'.$path.'/'.$tiedosto.'.pdf' ))
+					    {
+						$pdf_link = Yii::app()->request->hostInfo .'/'.$path.'/'.$tiedosto.'.pdf';
+						unlink($path.'/'.$tiedosto.'.html');
+					    }
+					}
+
+			}
+
+
+			$criteria=new CDbCriteria;
+			$criteria->condition = " 
+				asiakas_id='".$model->id."' 
+			";
+			$m2 = Tyonkuvaus::model()->findAll($criteria);
+			if(count($m2) > 0)
+			{
+			$lista = '<br><div class="lista">';
+			foreach($m2 as $item)
+			{
+					$k = Kohteet::model()->findByPk($item->kohde_id);
+					(isset($k->id))? $kohde = $k->osoite:$kohde = '';
+					$lista .= '
+					<div class="row link avaaPDF" liite="'.$item->id.'">
+					 <div class="col-sm-12">
+					';
+						$lista .= '<div class="alert bg-warning text-center"><h2>'.Yii::t('main', 'Työnkuvaus').'</h2> '.date("d.m.Y H:i", strtotime($item->time)).' '.$kohde.'</div>';
+					$lista .= '
+					 </div>
+					</div>
+					';
+
+			}
+			$lista .= '</div>';
+
+				$return = array('lista'=>$lista, 'liite'=>$pdf_link, 'nimike'=>$nimike);
+				$this->_sendResponse(200, CJSON::encode($return));
+				exit;
+			}
+
+		   } // $model->id
+
+		}
+
+				$this->_sendResponse(200, CJSON::encode('Ei tuloksia'));
+				exit;
+	}
 
 private function _sendResponse($status = 200, $body = '', $content_type = 'text/html')
 {
