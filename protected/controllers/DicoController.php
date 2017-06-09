@@ -57,7 +57,7 @@ public function actionLogin($domain)
 				$asiakasNimi = $model->yhteyshenkilo;
 
 				$domainit=Domainit::model()->find(" domain = '".$domain."' ");
-				if(isset($domainit->paketti))? $paketti = $domainit->paketti: $paketti = '';
+				(isset($domainit->paketti))? $paketti = $domainit->paketti: $paketti = '';
 
 				$return['loginOK'] = array('asiakasID'=>$model->id, 'asiakasNimi'=>$asiakasNimi, $_POST, 'paketti'=>$paketti);
 			}
