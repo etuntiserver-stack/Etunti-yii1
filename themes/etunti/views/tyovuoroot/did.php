@@ -137,6 +137,8 @@ if(!isset($_POST['tulosta']))
 		   	$osoite = '<span style="color: red">Vuoroa varataan..<br>'.$osoite.'</span>';
 			elseif($tvVal->osoiteOnline == 2)
 	   		$osoite = $osoite.'<br><span style="color: green">Onlinevaraus maksettu</span>';
+			elseif($tvVal->osoiteOnline == 3)
+	   		$osoite = $osoite.'<br><span style="color: green">Tilaus eDicosta</span>';
 
 		}
 

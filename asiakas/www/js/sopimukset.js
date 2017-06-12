@@ -55,15 +55,18 @@ function getUrlVars() {
 		var d = JSON.parse(data);
 		if(d['lista'])
 		{
-			$('#resultLaatiko').html(d['lista']);
-			reloadSkin();
-			reloadDatepicker();
+			//$('#resultLaatiko').html(d['lista']);
+			//reloadSkin();
+			//reloadDatepicker();
 		}
 
 		if((d['liite'] !== '') && (d['nimike'] !== ''))
 		{
 
-		cordova.InAppBrowser.open(encodeURI('https://docs.google.com/gview?embedded=true&url=' + d['liite']), '_blank', 'location=no'); 
+			document.addEventListener("deviceready", onInAPPDeviceReady, false);
+			function onInAPPDeviceReady() {
+				cordova.InAppBrowser.open(encodeURI('https://docs.google.com/gview?embedded=true&url=' + d['liite']), '_blank', 'location=no'); 
+			}
 
 		}
     	   },

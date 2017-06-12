@@ -80,7 +80,11 @@ Asetukset::model()->updatebypk(1, array('onlinevaraus_loppu'=>18));
     <li class="active"><?php echo CHtml::link('PALVELU','index'); ?></li>
     <li class="disabled"><?php echo Yii::t('main','AIKA'); ?></li>
     <li class="disabled"><?php echo Yii::t('main','OSOITE'); ?></li>
+    <?php if(isset(Yii::app()->user->aid)): ?>
+    <li class="disabled"><?php echo Yii::t('main','VALMIS'); ?></li>
+    <?php else: ?>
     <li class="disabled"><?php echo Yii::t('main','MAKSU'); ?></li>
+    <?php endif; ?>
 </ul>
 
 <br><br>
