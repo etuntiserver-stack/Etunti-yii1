@@ -28,7 +28,7 @@ class OnlinevarausController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view', 'check', 'aika', 'osoite', 'maksu', 'palvelu_ajax', 'palvelu_save_ajax', 'lisat_ajax', 'ajaat_ajax', 'aika_ajax', 'onkokohde', 'luouusi', 'checkout', 'maksettu', 'rekisteriseloste', 'tidtietoja', 'get_lomake_ajax'),
+				'actions'=>array('index','view', 'check', 'aika', 'osoite', 'maksu', 'valmis', 'palvelu_ajax', 'palvelu_save_ajax', 'lisat_ajax', 'ajaat_ajax', 'aika_ajax', 'onkokohde', 'luouusi', 'checkout', 'maksettu', 'rekisteriseloste', 'tidtietoja', 'get_lomake_ajax'),
                 		'users'=>array("*"),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
@@ -71,8 +71,14 @@ class OnlinevarausController extends Controller
 		parent::init();
 		if(isset($_GET['domain']))
 		{
-		Yii::app()->user->setState('domain', $_GET['domain']);
-		$this->redirect(array('index'));
+			Yii::app()->user->setState('domain', $_GET['domain']);
+			if(isset($_GET['aid']))
+			{
+				Yii::app()->user->setState('aid', $_GET['aid']);
+
+			}
+
+			$this->redirect(array('index'));
 		}
         }
 
@@ -91,7 +97,6 @@ class OnlinevarausController extends Controller
 			{
 				$_SESSION['onlinevaraus']['kohde_id']	= $model->id;
 				$m['kohde_id']		= $model->id;
-				$m['puhelin']		= $model->puh_nro;
 				$m['osoite']		= $model->osoite;
 				$m['postinumero']	= $model->pnumero;
 				$m['kaupunki']		= $model->kaupunki;
@@ -106,6 +111,7 @@ class OnlinevarausController extends Controller
 				$m['yrityksen_nimi'] 	= $modelAsiakas->yrityksen_nimi;
 				$m['y_tunnus'] 		= $modelAsiakas->y_tunnus;
 				$m['yhteyshenkilo']	= $modelAsiakas->yhteyshenkilo;
+				$m['puhelin']		= $modelAsiakas->puhelin;
 			}
 
 		
@@ -238,6 +244,11 @@ class OnlinevarausController extends Controller
 		$this->render('maksettu');
 	}
 
+	public function actionValmis()
+	{
+		$this->render('valmis');
+	}
+
 	public function actionOnkokohde()
 	{
 		if(isset($_POST['sahkoposti']))
@@ -319,6 +330,12 @@ class OnlinevarausController extends Controller
 							'onlinevaraus_id' => $ov->id,
 							'kohde' => $ov->kohde_id
 						));
+					}
+
+					if(isset(Yii::app()->user->aid))
+					{
+						echo json_encode('nytRedirectValmis');
+						exit;
 					}
 
 					echo json_encode('nytRedirectMaksulle');

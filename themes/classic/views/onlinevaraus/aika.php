@@ -30,7 +30,11 @@ $asetukset = Asetukset::model()->findbypk(1);
     <li class="tehtty"><?php echo CHtml::link('PALVELU','index'); ?></li>
     <li class="active"><?php echo CHtml::link('AIKA','aika'); ?></li>
     <li class="disabled"><?php echo Yii::t('main','OSOITE'); ?></li>
+    <?php if(isset(Yii::app()->user->aid)): ?>
+    <li class="disabled"><?php echo Yii::t('main','VALMIS'); ?></li>
+    <?php else: ?>
     <li class="disabled"><?php echo Yii::t('main','MAKSU'); ?></li>
+    <?php endif; ?>
 </ul>
 
 <br><br>

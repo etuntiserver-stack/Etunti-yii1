@@ -129,7 +129,11 @@ if(isset($_POST['kuvanLisaaminen']))
     <li class="tehtty"><?php echo CHtml::link('PALVELU','index'); ?></li>
     <li class="tehtty"><?php echo CHtml::link('AIKA','aika'); ?></li>
     <li class="active"><?php echo CHtml::link('OSOITE','osoite'); ?></li>
+    <?php if(isset(Yii::app()->user->aid)): ?>
+    <li class="disabled"><?php echo Yii::t('main','VALMIS'); ?></li>
+    <?php else: ?>
     <li class="disabled"><?php echo Yii::t('main','MAKSU'); ?></li>
+    <?php endif; ?>
 </ul>
 
 <br><br>
@@ -394,6 +398,15 @@ $(document).ready(function(){
 
 <?php echo $this->renderPartial('_footer'); ?>
 
+
+<?php
+if(isset(Yii::app()->user->aid)){
+	$a = Asiakkaat::model()->findByPk(Yii::app()->user->aid);
+	if(isset($a->id) and !empty($a->sahkoposti))
+	echo '<input type="hidden" id="aid_sahkoposti" value="'.$a->sahkoposti.'">';
+}
+?>
+
 <script type="text/javascript">
 $(document).ready(function(){
 
@@ -507,14 +520,8 @@ function osoiteAjax(id)
 }
 
 
-
-
-$(document).delegate('#sahkoposti', 'keyup', function() {
-
-   var sahkoposti = $(this).val();
-
-   if(sahkoposti.length > 5)
-   {
+function onkokohde(sahkoposti)
+{
    $.ajax({
 	url: 'onkokohde',
 	data:{ "sahkoposti" : sahkoposti },
@@ -543,10 +550,26 @@ $(document).delegate('#sahkoposti', 'keyup', function() {
 		console.log(data);
     	}
     });
+}
+
+if($("#aid_sahkoposti").length)
+{
+	$("#sahkoposti").val( $("#aid_sahkoposti").val() );
+   	var sahkoposti = $("#aid_sahkoposti").val();
+	onkokohde(sahkoposti);
+	$('.tallennaUusi').html('Valmis');
+}
+
+$(document).delegate('#sahkoposti', 'keyup, blur', function() {
+
+   var sahkoposti = $(this).val();
+
+   if(sahkoposti.length > 5)
+   {
+	onkokohde(sahkoposti);
    }
 
 });
-
 
 
 
@@ -595,22 +618,23 @@ $(".tallennaUusi").click(function(){
 		console.log(data);
 		data = JSON.parse(data);
 
+		localStorage.setItem('tyyppi', $('#tyyppi').val());
+		localStorage.setItem('yrityksen_nimi', $('#yrityksen_nimi').val());
+		localStorage.setItem('y_tunnus', $('#y_tunnus').val());
+
+		localStorage.setItem('yhteyshenkilo', $('#yhteyshenkilo').val());
+		localStorage.setItem('puhelin', $('#puhelin').val());
+		localStorage.setItem('osoite', $('#osoite').val());
+		localStorage.setItem('postinumero', $('#postinumero').val());
+		localStorage.setItem('kaupunki', $('#kaupunki').val());
+		localStorage.setItem('lisatietoja', $('#lisatietoja').val());
+
+
 		if(data == 'nytRedirectMaksulle')
 		{
-
-			localStorage.setItem('tyyppi', $('#tyyppi').val());
-			localStorage.setItem('yrityksen_nimi', $('#yrityksen_nimi').val());
-			localStorage.setItem('y_tunnus', $('#y_tunnus').val());
-
-			localStorage.setItem('yhteyshenkilo', $('#yhteyshenkilo').val());
-			localStorage.setItem('puhelin', $('#puhelin').val());
-			localStorage.setItem('osoite', $('#osoite').val());
-			localStorage.setItem('postinumero', $('#postinumero').val());
-			localStorage.setItem('kaupunki', $('#kaupunki').val());
-			localStorage.setItem('lisatietoja', $('#lisatietoja').val());
-
-
 			window.location.href="maksu";
+		} else if(data == 'nytRedirectValmis'){
+			window.location.href="valmis";
 		} else {
 			alert(data);
 		}

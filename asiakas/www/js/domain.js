@@ -130,13 +130,31 @@ $(document).ready(function(){
 
 	
 
-painikkeet();
-
-
-
-function painikkeet(){
-
 $("body").ready(function(){
+
+
+
+  $(".to-tilaus").click(function(e){
+   if(asiakasID)
+   {
+	document.addEventListener("deviceready", onInAPPDeviceReady, false);
+	event.preventDefault();
+	function onInAPPDeviceReady() {
+	    var ref = cordova.InAppBrowser.open(encodeURI(server+'index.php/onlinevaraus/index?domain='+domain+'&aid='+asiakasID), '_blank', 'location=no');
+
+		/*
+		ref.addEventListener(
+		    'loadstop',
+		    function(event) {
+		        ref.executeScript({
+		            code: "document.getElementById('testbutton').onclick = function() {alert('button was clicked');}"
+		        });
+		    }
+		);
+		*/
+	}
+   }
+  });
 
   $("#home").click(function(){
 	window.location.href='index.html';
@@ -157,7 +175,7 @@ $("body").ready(function(){
   });
 
 });
-}
+
 
 
 
