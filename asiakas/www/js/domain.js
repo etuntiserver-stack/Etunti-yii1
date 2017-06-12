@@ -26,13 +26,6 @@ $(document).ready(function(){
     var loginArr = [];
     var paketti = [];
 
-    if(localStorage.getItem('login_paketti'))
-    {
-	var paketti = localStorage.getItem('login_paketti').split(',');
-	if(!paketti[3])
-	$("#laskut_painike").hide();
-
-    }
 
     if(localStorage.getItem('loginOK'))
     {
