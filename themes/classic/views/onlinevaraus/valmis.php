@@ -201,8 +201,11 @@ $message .= '<tr><td>Y-tunnus</td><td>'.$ov->y_tunnus.'</td></tr>';
 
 $message .= '
 </table>
+</div>
+
 <hr>
-<table>
+<div class="table-responsive">
+<table class="table">
 <tr><td>Tilausnumero</td><td>'.$ov->id.'</td></tr>';
 
 
