@@ -187,8 +187,8 @@ td{
 Olemme vastaanottaneet tilauksesi ja tästä voit tulostaa tilausvahvistuksen. 
 </h4></p>
 
-
-<table>
+<div class="table-responsive">
+<table class="table">
 <tr><td>Nimi</td><td>'.$ov->yhteyshenkilo.'</td></tr>
 <tr><td>Osoite</td><td>'.$ov->osoite.'</td></tr>
 <tr><td>Puhelin</td><td>'.$ov->puhelin.'</td></tr>
@@ -235,6 +235,7 @@ $message .= '
 <tr><td>Yhteeensä</td><td>'.number_format($ov->hinta, 2, ',', '').' &euro;</td></tr>
 <tr><td>Maksu</td><td>Maksu ei vahvistettu</td></tr>
 </table>
+</div>
 
 			<p><span>'.$asetukset->tilausvahvistus.'</span></p>
 
