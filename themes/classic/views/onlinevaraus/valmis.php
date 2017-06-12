@@ -307,12 +307,14 @@ $message .= '
 			$o->save();
 
 			echo $_SESSION['onlinevaraus']['message'];
-			//unset($_SESSION['onlinevaraus']);
+			unset($_SESSION['onlinevaraus']);
 
+			/*
 			echo '<div class="container">';
 			echo CHtml::button('Sulje', array('id'=>'sulje','class'=>'btn btn-primary'));
 			echo '</div>';
 			echo '<br><br>';
+			*/
 
 }
 

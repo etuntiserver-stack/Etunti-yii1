@@ -140,14 +140,14 @@ $("body").ready(function(){
 	document.addEventListener("deviceready", onInAPPDeviceReady, false);
 	event.preventDefault();
 	function onInAPPDeviceReady() {
-	    var ref = cordova.InAppBrowser.open(encodeURI(server+'index.php/onlinevaraus/index?domain='+domain+'&aid='+asiakasID), '_blank', 'location=no');
+	    var ref = cordova.InAppBrowser.open(encodeURI(server+'index.php/onlinevaraus/index?domain='+domain+'&aid='+asiakasID), '_blank', 'location=yes');
 
 		/*
 		ref.addEventListener(
 		    'loadstop',
 		    function(event) {
 		        ref.executeScript({
-		            code: "document.getElementById('testbutton').onclick = function() {alert('button was clicked');}"
+		            code: "document.getElementById('palvelu').onclick = function() {alert('button was clicked');}"
 		        });
 		    }
 		);
