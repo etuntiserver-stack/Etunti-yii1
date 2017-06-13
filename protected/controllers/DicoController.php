@@ -478,19 +478,19 @@ public function actionLogin($domain)
 		   {
 
 			$liite = '';
-			$pdf_link = '';
+			$link = '';
 			$nimike = '';
 			if(isset($_POST['liite']))
 			{
 				$nimike = $_POST['liite'];
 				$t = $_POST['liite'];
 
-					if (!file_exists( Yii::app()->basePath.'/../tmp' )) {
-					 	mkdir( Yii::app()->basePath.'/../tmp', 0777, true );
+					if (!file_exists( Yii::app()->basePath.'/../tmp/'.$domain )) {
+					 	mkdir( Yii::app()->basePath.'/../tmp/'.$domain, 0777, true );
 					}
 
 			  		$tiedosto = $model->id.'_tyonkuvaus';
-					$path = 'tmp';
+					$path = 'tmp/'.$domain;
 
 					$tk = Tyonkuvaus::model()->findByPk($_POST['liite']);
 					$k = Kohteet::model()->findByPk($tk->kohde_id);
@@ -509,8 +509,10 @@ public function actionLogin($domain)
 					{
 					    if (file_exists( Yii::app()->basePath.'/../'.$path.'/'.$tiedosto.'.pdf' ))
 					    {
-						$pdf_link = Yii::app()->request->hostInfo .'/'.$path.'/'.$tiedosto.'.pdf';
+
+						$link = Yii::app()->request->hostInfo .'/index.php/site/opentmp?domain='.$domain.'&file='.$tiedosto.'.pdf';
 						unlink($path.'/'.$tiedosto.'.html');
+
 					    }
 					}
 
@@ -542,7 +544,7 @@ public function actionLogin($domain)
 			}
 			$lista .= '</div>';
 
-				$return = array('lista'=>$lista, 'liite'=>$pdf_link, 'nimike'=>$nimike);
+				$return = array('lista'=>$lista, 'liite'=>$link, 'nimike'=>$nimike);
 				$this->_sendResponse(200, CJSON::encode($return));
 				exit;
 			}

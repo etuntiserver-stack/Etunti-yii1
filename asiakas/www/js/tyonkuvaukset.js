@@ -63,8 +63,8 @@ function getUrlVars() {
 
 		if((d['liite'] !== '') && (d['nimike'] !== ''))
 		{
-		console.log(d);
-		cordova.InAppBrowser.open(encodeURI('https://docs.google.com/gview?embedded=true&url=' + d['liite']), '_blank', 'location=no'); 
+			console.log(d['liite']);
+			window.open(d['liite'], '_system', 'location=no');
 		}
     	   },
     		error:function (xhr, ajaxOptions, thrownError){
