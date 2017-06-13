@@ -136,7 +136,8 @@ $asetukset = Asetukset::model()->findbypk(1);
 	  &nbsp;&nbsp;&nbsp;';
 
 		// <-- file_safe_opener
-		$ext = 'pdf';
+		$e = explode(".", end($explNimi));
+		$ext = $e[1];
 		$filepath = $file;
 		echo CHtml::link(end($explNimi),
 			array('/site/file_safe_opener', 'filepath' => $filepath, 'ext' => $ext),

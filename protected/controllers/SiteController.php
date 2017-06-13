@@ -41,8 +41,12 @@ class SiteController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', 
-				'actions'=>array('etusivu','ohjesivu','etusivu_esimerki', 'change_color', 'valiko', 'valiko_ajax', 'kohderyhma', 'ohjevideot', 'mobemu', 'etusivu_ajax', 'ulkonaky', 'autocomplete', 'synkronoi_gps_sijainti', 'mail_template', 'getcityes', 'edico_etusivulle', 'maksullinen', 'file_safe_opener'),
+				'actions'=>array('etusivu','ohjesivu','etusivu_esimerki', 'change_color', 'valiko', 'valiko_ajax', 'kohderyhma', 'ohjevideot', 'mobemu', 'etusivu_ajax', 'ulkonaky', 'autocomplete', 'synkronoi_gps_sijainti', 'mail_template', 'getcityes', 'edico_etusivulle', 'maksullinen'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
+			),
+			array('allow', 
+				'actions'=>array('file_safe_opener'),
+                		'expression'=>"Yii::app()->controller->isEtuntiAdmin() || Yii::app()->controller->isAsiakas()",
 			),
 			array('allow', 
 				'actions'=>array('index','test','hyvaksy','hylkaa', 'confirm', 'aloita', 'defdb_dump'),
@@ -52,6 +56,19 @@ class SiteController extends Controller
 				'users'=>array('*'),
 			),
 		);
+	}
+
+
+	public function isAsiakas() 
+	{
+		if(isset(Yii::app()->user->asiakas))
+		{
+		$m = Asiakkaat::model()->findbypk(Yii::app()->user->asiakas);
+	        if($m->id == Yii::app()->user->asiakas)
+	            return true;
+		} else {
+	            return false;
+		}
 	}
 
 	public function isDigisten() {
@@ -102,7 +119,7 @@ class SiteController extends Controller
 		if (copy($filepath, $newfile)) 
 		{
 				header("Content-Length: " . filesize ( $newfile ) ); 
-		                header("Content-type: application/pdf"); 
+		                header("Content-type: application/octet-stream"); 
 		                header("Content-disposition: attachment; filename=".basename($newfile));
 		                readfile($newfile);
 				unlink($newfile);

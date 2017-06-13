@@ -586,6 +586,64 @@ public function actionLogin($domain)
 				exit;
 	}
 
+
+
+
+	public function actionMuuttiedostot($domain)
+	{
+
+		$return = '';
+		if(isset($_POST['tunnus']) and $this->kirjautuminen($_POST['tunnus'], $_POST['salasana']) == true)
+		{
+
+		   $model=Asiakkaat::model()->findByPk($_POST['asiakasID']);
+		   if(isset($model->id))
+		   {
+
+			$liite = '';
+			$pdf_link = '';
+			$nimike = '';
+			if(isset($_POST['liite']))
+			{
+
+			}
+
+
+
+			$lista = '<br><div class="lista">';
+			foreach(array_reverse(glob('tiedostot/asiakkaat/'.$domain.'/'.$model->id.'_*.*')) as $file) 
+			{
+				$explNimi = explode("/",$file);
+
+					$lista .= '
+					<div class="row link avaaPDF" liite="'.$file.'">
+					 <div class="col-sm-12">
+					';
+						$lista .= '<div class="alert bg-warning text-center"><h2>'.end($explNimi).'</div>';
+					$lista .= '
+					 </div>
+					</div>
+					';
+
+			}
+			$lista .= '</div>';
+
+				$return = array('lista'=>$lista, 'liite'=>$pdf_link, 'nimike'=>$nimike);
+				$this->_sendResponse(200, CJSON::encode($return));
+				exit;
+			
+
+		   } // $model->id
+
+		}
+
+				$this->_sendResponse(200, CJSON::encode('Ei tuloksia'));
+				exit;
+	}
+
+
+
+
 private function _sendResponse($status = 200, $body = '', $content_type = 'text/html')
 {
     // set the status

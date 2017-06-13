@@ -270,6 +270,7 @@ return array(
         array('dico/tarjoukset', 'pattern'=>'dico/<model:\w+>/tarjoukset', 'verb'=>'POST'),
         array('dico/sopimukset', 'pattern'=>'dico/<model:\w+>/sopimukset', 'verb'=>'POST'),
         array('dico/tyonkuvaukset', 'pattern'=>'dico/<model:\w+>/tyonkuvaukset', 'verb'=>'POST'),
+        array('dico/muuttiedostot', 'pattern'=>'dico/<model:\w+>/muuttiedostot', 'verb'=>'POST'),
 	//     DICO -->
 
         //array('api/update', 'pattern'=>'api/<model:\w+>/<id:\d+>', 'verb'=>'PUT'),
