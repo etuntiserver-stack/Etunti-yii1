@@ -67,7 +67,8 @@ function getUrlVars() {
 			console.log(d['liite']);
 			document.addEventListener("deviceready", onInAPPDeviceReady, false);
 			function onInAPPDeviceReady() {
-				cordova.InAppBrowser.open(encodeURI('https://docs.google.com/gview?embedded=true&url=' + d['liite']), '_blank', 'location=no'); 
+				cordova.InAppBrowser.open(d['liite'], '_blank', 'location=no'); 
+				//'https://docs.google.com/gview?embedded=true&url=' + 
 			}
 
 		}
