@@ -99,15 +99,15 @@ class ToteutuneetController extends Controller
 		$tv = Tyovuoroot::model()->findByPk($id);
 		if(isset($tv->id))
 		{
-			$k = Kohteet::model()->findByPk($tv->kohde);
-			$tt = Tyontekijat::model()->findByPk($tv->tid);
 
-			if(isset($k->id))
-			{
+			$tt = Tyontekijat::model()->findByPk($tv->tid);
+			$k = Kohteet::model()->findByPk($tv->kohde);
+			(isset($k->id))? $osoite = $k->osoite:$osoite = '';
+
 				$mobiili = new Mobile;
 				$mobiili->tid = $tv->tid;
 				$mobiili->kohdenID = $tv->kohde;
-				$mobiili->kohde_kannasta = $k->osoite;
+				$mobiili->kohde_kannasta = $osoite;
 				$mobiili->tekijan_nimi = $this->etuSukunimi($tv->tid);
 				$mobiili->admin = 1;
 				$mobiili->aloitan = date("d.m.Y H:i:s", strtotime($tv->pvm." ".$tv->alku));
@@ -125,7 +125,6 @@ class ToteutuneetController extends Controller
 					echo json_encode(array('OK'=>getErrors($mobiili)));
 				}
 				exit;
-			}
 		}
 			echo json_encode('Error: ei löyty');
 	}
