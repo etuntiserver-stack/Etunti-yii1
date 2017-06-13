@@ -620,7 +620,7 @@ public function actionLogin($domain)
 					    	$this->_sendResponse(200, CJSON::encode('Copy error'));
 						exit;
 					} else {
-						$link = Yii::app()->request->hostInfo .'/index.php/site/opentmp?domain='.$domain.'&file='.$rndm_str.'.'.$_POST['ext'];
+						$link = Yii::app()->request->hostInfo .'/'.$rndm_str.'.'.$_POST['ext'];
 					}
 				}
 			}
