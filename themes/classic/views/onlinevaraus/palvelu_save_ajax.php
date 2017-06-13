@@ -75,7 +75,7 @@
 	$nimike 	= '';
 	$otsikko 	= '';
 	$tyo_toimialue	= '';
-	$kotitalousvahennys = '';
+	$kotitalousvahennys = 0;
 
 	if(!empty($model->alv) and $model->alv != 0)		$perusAlv	= $model->alv;
 	$_SESSION['onlinevaraus']['alv'] 					= $perusAlv;
@@ -127,7 +127,7 @@
 
 	if(isset($model->kotitalousvahennys) and !empty($model->kotitalousvahennys))
 	{
-		$s = $sum-(($sum*$model->kotitalousvahennys)/100);
+		$s = $sum-(($sum*(int)$model->kotitalousvahennys)/100);
 		$kotitalousvahennys = '<br><span>Kotitalousvähennys: '.number_format($s, 2, ',', '').'</span> &euro;';
 		$tilauksenKuvaus['KotitalousVahennys'] = number_format($s, 2, ',', '');
 	}

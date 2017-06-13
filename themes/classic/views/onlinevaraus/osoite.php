@@ -560,7 +560,7 @@ if($("#aid_sahkoposti").length)
 	$('.tallennaUusi').html('Valmis');
 }
 
-$(document).delegate('#sahkoposti', 'keyup, blur', function() {
+$(document).delegate('#sahkoposti', "keyup blur", function() {
 
    var sahkoposti = $(this).val();
 

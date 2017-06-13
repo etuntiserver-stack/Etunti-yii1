@@ -2,6 +2,8 @@
 /* @var $this OnlinevarausTuotteetController */
 /* @var $model OnlinevarausTuotteet */
 /* @var $form CActiveForm */
+
+$model->kotitalousvahennys = (int)$model->kotitalousvahennys;
 ?>
 
 
