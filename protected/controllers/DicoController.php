@@ -603,20 +603,15 @@ public function actionLogin($domain)
 			$liite = '';
 			$pdf_link = '';
 			$nimike = '';
-			if(isset($_POST['liite']))
-			{
-
-			}
-
-
 
 			$lista = '<br><div class="lista">';
 			foreach(array_reverse(glob('tiedostot/asiakkaat/'.$domain.'/'.$model->id.'_*.*')) as $file) 
 			{
-				$explNimi = explode("/",$file);
+				$explNimi = explode("/", $file);
+				$e = explode(".", end($explNimi));
 
 					$lista .= '
-					<div class="row link avaaPDF" liite="'.$file.'">
+					<div class="row link avaaPDF" liite="'.$file.'" ext="'.end($e).'">
 					 <div class="col-sm-12">
 					';
 						$lista .= '<div class="alert bg-warning text-center"><h2>'.end($explNimi).'</div>';

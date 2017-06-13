@@ -46,11 +46,9 @@ function getUrlVars() {
 	$(this).find('.bg-warning').removeClass('bg-warning').addClass('bg-success');
 	var liite = $(this).attr('liite');
 	
-alert(server)
-return false;
 	document.addEventListener("deviceready", onInAPPDeviceReady, false);
 	function onInAPPDeviceReady() {
-		cordova.InAppBrowser.open(encodeURI('https://docs.google.com/gview?embedded=true&url=' + d['liite']), '_blank', 'location=no'); 
+		cordova.InAppBrowser.open(encodeURI(server+''+liite), '_blank', 'location=no'); 
 	}
 
 
