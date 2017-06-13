@@ -206,7 +206,15 @@ td .tp{
 	$file = $week.'_'.$year.'_'.$t->id.'.pdf';
 	$path = Yii::app()->request->baseUrl."emails/tyovuorot/".Yii::app()->user->domain;
 	if (file_exists($path.'/'.$file))
-	echo CHtml::link(Yii::t('main', ' Lähetetty'),'../../emails/tyovuorot/'.Yii::app()->user->domain.'/'.$file,array('target'=>'_blank','class'=>'text-danger'));
+	{
+		// <-- file_safe_opener
+		$filepath = 'emails/tyovuorot/'.Yii::app()->user->domain.'/'.$file;
+		echo CHtml::link(Yii::t('main', ' Lähetetty'),
+			array('/site/file_safe_opener', 'filepath' => $filepath, 'ext' => 'pdf'),
+			array('target'=>'_blank','class'=>'text-danger'
+		));
+		//     file_safe_opener -->
+	}
 
 	echo '</td>';
 
