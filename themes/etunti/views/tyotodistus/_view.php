@@ -23,11 +23,29 @@
 	<td>
 	<?php
 		if(file_exists( Yii::app()->basePath.'/../'.$this->valmiit_polkku().'/'.$data->tiedosto.'.docx' ))
-	 	echo '<a href="../../'.Yii::app()->baseUrl.$this->valmiit_polkku().'/'.$data->tiedosto.'.docx">'.$data->tiedosto.'.docx</a>';
+		{
+		// <-- file_safe_opener
+		$ext = 'docx';
+		$filepath = Yii::app()->baseUrl.$this->valmiit_polkku().'/'.$data->tiedosto.'.'.$ext;
+		echo CHtml::link($data->tiedosto.'.'.$ext,
+			array('/site/file_safe_opener', 'filepath' => $filepath, 'ext' => $ext),
+			array('target'=>'_blank','class'=>'text-danger'
+		));
+		//     file_safe_opener -->
+		}
+
 		echo '<br>';
 		if(file_exists( Yii::app()->basePath.'/../'.$this->valmiit_polkku().'/'.$data->tiedosto.'.pdf' ))
-		echo '<a href="../../'.Yii::app()->baseUrl.$this->valmiit_polkku().'/'.$data->tiedosto.'.pdf">'.$data->tiedosto.'.pdf</a>';
-		
+		{
+		// <-- file_safe_opener
+		$ext = 'pdf';
+		$filepath = Yii::app()->baseUrl.$this->valmiit_polkku().'/'.$data->tiedosto.'.'.$ext;
+		echo CHtml::link($data->tiedosto.'.'.$ext,
+			array('/site/file_safe_opener', 'filepath' => $filepath, 'ext' => $ext),
+			array('target'=>'_blank','class'=>'text-danger'
+		));
+		//     file_safe_opener -->
+		}
 	?>
 	</td>
 
