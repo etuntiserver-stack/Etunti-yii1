@@ -601,8 +601,29 @@ public function actionLogin($domain)
 		   {
 
 			$liite = '';
-			$pdf_link = '';
+			$link = '';
 			$nimike = '';
+			if(isset($_POST['liite']))
+			{
+				$nimike = $_POST['liite'];
+				$t = $_POST['liite'];
+   				if(file_exists(Yii::app()->basePath."/../".$t))
+   				{
+					if (!file_exists( Yii::app()->basePath.'/../tmp/'.$domain )) {
+					 	mkdir( Yii::app()->basePath.'/../tmp/'.$domain, 0777, true );
+					}
+					$rndm_str = $this->generateRandomString($length = 40);
+					$file = Yii::app()->basePath."/../".$t;
+					$liite = Yii::app()->basePath.'/../tmp/'.$domain.'/'.$rndm_str.'.'.$_POST['ext'];
+	
+					if (!copy($file, $liite)) {
+					    	$this->_sendResponse(200, CJSON::encode('Copy error'));
+						exit;
+					} else {
+						$link = Yii::app()->request->hostInfo .'/index.php/site/opentmp?domain='.$domain.'&file='.$rndm_str.'.'.$_POST['ext'];
+					}
+				}
+			}
 
 			$lista = '<br><div class="lista">';
 			foreach(array_reverse(glob('tiedostot/asiakkaat/'.$domain.'/'.$model->id.'_*.*')) as $file) 
@@ -623,7 +644,7 @@ public function actionLogin($domain)
 			}
 			$lista .= '</div>';
 
-				$return = array('lista'=>$lista, 'liite'=>$pdf_link, 'nimike'=>$nimike);
+				$return = array('lista'=>$lista, 'liite'=>$link, 'nimike'=>$nimike);
 				$this->_sendResponse(200, CJSON::encode($return));
 				exit;
 			

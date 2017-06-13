@@ -49,7 +49,7 @@ class SiteController extends Controller
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin() || Yii::app()->controller->isAsiakas()",
 			),
 			array('allow', 
-				'actions'=>array('index','test','hyvaksy','hylkaa', 'confirm', 'aloita', 'defdb_dump'),
+				'actions'=>array('index','test','hyvaksy','hylkaa', 'confirm', 'aloita', 'defdb_dump', 'opentmp'),
 				'users'=>array('*'),
 			),
 			array('deny',  // deny all users
@@ -108,6 +108,20 @@ class SiteController extends Controller
 
         }
 
+	public function actionOpentmp($domain, $file)
+	{
+
+		$openfile = Yii::app()->basePath.'/../tmp/'.$domain.'/'.$file;
+		if (file_exists( $openfile ))
+		{
+				header("Content-Length: " . filesize ( $openfile ) ); 
+		                header("Content-type: application/octet-stream"); 
+		                header("Content-disposition: attachment; filename=".basename($openfile));
+		                readfile($openfile);
+				unlink($openfile);
+		}
+		exit;
+	}
 
 	public function actionFile_safe_opener($filepath, $ext)
 	{

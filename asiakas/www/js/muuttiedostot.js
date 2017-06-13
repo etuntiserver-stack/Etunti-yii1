@@ -45,12 +45,37 @@ function getUrlVars() {
 
 	$(this).find('.bg-warning').removeClass('bg-warning').addClass('bg-success');
 	var liite = $(this).attr('liite');
-	
-	document.addEventListener("deviceready", onInAPPDeviceReady, false);
-	function onInAPPDeviceReady() {
-		cordova.InAppBrowser.open(encodeURI(server+''+liite), '_blank', 'location=no'); 
-	}
+	var ext = $(this).attr('ext');
+	sendData['liite'] = liite;
+	sendData['ext'] = ext;
 
+        $.ajax({
+           url: url+'/muuttiedostot?domain='+domain,
+	   type:'POST',
+ 	   data: sendData,
+           success: function(data){
+		var d = JSON.parse(data);
+		if(d['lista'])
+		{
+			//$('#resultLaatiko').html(d['lista']);
+			//reloadSkin();
+			//reloadDatepicker();
+		}
+
+		if((d['liite'] !== '') && (d['nimike'] !== ''))
+		{
+			console.log(d['liite']);
+			document.addEventListener("deviceready", onInAPPDeviceReady, false);
+			function onInAPPDeviceReady() {
+				cordova.InAppBrowser.open(encodeURI('https://docs.google.com/gview?embedded=true&url=' + d['liite']), '_blank', 'location=no'); 
+			}
+
+		}
+    	   },
+    		error:function (xhr, ajaxOptions, thrownError){
+        	console.log(xhr.responseText);
+    	   }
+        });
 
     });
 
