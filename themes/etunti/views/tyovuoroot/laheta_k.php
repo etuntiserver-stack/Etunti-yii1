@@ -135,7 +135,7 @@ for($day= 1; $day <= 7; $day++) {
   {
     if($t->pvm == $date)
     {
-	$k = Kohteet::model()->findbypk($t->kohde,array("select"=>"asiakas_id,osoite,avain,kaupunki"));
+	$k = Kohteet::model()->findbypk($t->kohde);
 
 	// <-- Asiakas Tiedot
 	$asiakasTiedot = '';
@@ -168,14 +168,21 @@ for($day= 1; $day <= 7; $day++) {
 	  	$al = '';
  	}
 
+/*
 	$expl = explode("/",$t->tyoajanlaatu);
-	if(empty($k['osoite']) and isset($expl[0]))
+	if(isset($k->id) and empty($k->osoite) and isset($expl[0]))
 		$k['osoite'] = $expl[0];
+*/
 
-	echo $al.' '.$k['osoite'];
-	if(!empty($k['avain']))
+	if(isset($k->id))
+		$osoite = $k->osoite;
+	elseif(!isset($k->id) and $t->status != 0)
+		$osoite = $this->tilanteet()[$t->status];
+
+	echo $al.' '.$osoite;
+	if(isset($k->id) and !empty($k->avain))
 	echo ' &nbsp;<b class="fa fa-key text-warning"></b>';
-	elseif(!empty($k['avain']) and $tulosta)
+	elseif(isset($k->id) and !empty($k->avain) and $tulosta)
 	echo ' &nbsp;(avain on)';
 	echo $asiakasTiedot;
 	echo '<br>';

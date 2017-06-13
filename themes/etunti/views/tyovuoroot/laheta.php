@@ -177,19 +177,28 @@ for($day= 1; $day <= 7; $day++) {
 	  $al = '';
  	}
 
+/*
 	$expl = explode("/",$t->tyoajanlaatu);
 	if(empty($k['osoite']) and isset($expl[0]))
 		$k['osoite'] = $expl[0];
+*/
 
 	$expl2 = explode("/",$t->tyoajanmerkinta);
 		$cl = '';
 	if(isset($expl2[1]) and !empty($expl2[1]))
 		$cl = 'style="color:'.$expl2[1].'"';
 	
-	echo '<span '.$cl.'>'.$al.' '.$k['osoite'].'</span>';
-	if(!empty($k['avain']) and !$tulosta)
+	// <-- osoite
+	if(isset($k->id))
+		$osoite = $k->osoite;
+	elseif(!isset($k->id) and $t->status != 0)
+		$osoite = $this->tilanteet()[$t->status];
+	//     osoite -->
+
+	echo '<span '.$cl.'>'.$al.' '.$osoite.'</span>';
+	if(isset($k->id) and !empty($k->avain) and !$tulosta)
 	echo ' &nbsp;<b class="fa fa-key text-warning"></b>';
-	elseif(!empty($k['avain']) and $tulosta)
+	elseif(isset($k->id) and !empty($k->avain) and $tulosta)
 	echo ' &nbsp;(avain on)';
 	echo $asiakasTiedot;
 	echo '<br>';
