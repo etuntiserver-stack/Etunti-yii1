@@ -81,6 +81,8 @@
   <th><?php echo Yii::t('main', 'Kohde'); ?></th>
   <th><?php echo Yii::t('main', 'Päivämäärä'); ?></th>
   <th><?php echo Yii::t('main', 'Tila'); ?></th>
+  <th><i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+</th>
   </tr>
   </thead>
   <?php $this->widget('zii.widgets.CListView', array(

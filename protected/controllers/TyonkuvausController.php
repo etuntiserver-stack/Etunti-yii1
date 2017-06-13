@@ -28,7 +28,7 @@ class TyonkuvausController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('index','view', 'create','update', 'admin','delete'),
+				'actions'=>array('index','view', 'create','update', 'admin', 'delete', 'pdf'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -79,6 +79,46 @@ class TyonkuvausController extends Controller
 		$this->render('view',array(
 			'model'=>$this->loadModel($id),
 		));
+	}
+
+	public function actionPdf($id)
+	{
+		$tk = Tyonkuvaus::model()->findByPk($id);
+		$k = Kohteet::model()->findByPk($tk->kohde_id);
+		(isset($k->id))? $kohde = $k->osoite:$kohde = '';
+	   	$tarjoukset = Yii::app()->createController('CrmTarjoukset');
+	   	$html = '<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">';
+		$html .= '<style>'.file_get_contents(Yii::app()->basePath.'/../css/raportit_table2.css').'</style>';
+		$html .= '</head><body>';
+		$html .= '<p><h2>'.Yii::t('main', 'Työnkuvaus').'</h2> '.date("d.m.Y H:i", strtotime($tk->time)).' '.$kohde.'</p><br>';
+	   	$html .= $tarjoukset[0]->get_tyonkuvaus($id);
+		$html .= '</body></html>';
+
+		$basePath = Yii::app()->basePath.'/../tmp/'.Yii::app()->user->domain.'/';
+		$path = 'tmp/'.Yii::app()->user->domain.'/';
+
+		if (!file_exists( $basePath )) {
+		 	mkdir( $basePath, 0777, true );
+		}
+  		$tiedosto = $id.'_tyonkuvaus';
+
+		file_put_contents($path.'/'.$tiedosto.'.html', $html);
+		$output = exec('xvfb-run -a wkhtmltopdf --margin-bottom 10 --margin-top 10 '.$path.$tiedosto.'.html '.$path.$tiedosto.'.pdf 2>&1'); 
+		if (file_exists( $path.$tiedosto.'.pdf' ))
+		{
+
+			header("Content-Length: " . filesize ( $path.$tiedosto.'.pdf' ) ); 
+		        header("Content-type: application/pdf"); 
+		        header("Content-disposition: attachment; filename=".basename($path.$tiedosto.'.pdf'));
+		        readfile($path.$tiedosto.'.pdf');
+			unlink($path.$tiedosto.'.html');
+			unlink($path.$tiedosto.'.pdf');
+
+		} else {
+			echo $output;
+		}
+
+		exit;
 	}
 
 	/**

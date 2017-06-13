@@ -56,7 +56,10 @@ ini_set('display_errors', 1);
 		$ov = Onlinevaraus::model()->findbypk($_SESSION['onlinevaraus']['onlinevarausID']);
 		$ov->tv_id = $_SESSION['onlinevaraus']['modelTV'];
 		//$ov->maksun_onnistu_koodi = $xml->delayedMAC;
-		$ov->kesto = $_SESSION['onlinevaraus']['paa_kesto'];
+
+		if(isset($_SESSION['onlinevaraus']['paa_kesto']))
+			$ov->kesto = $_SESSION['onlinevaraus']['paa_kesto'];
+
 		$ov->alv = $alv;
 		$ov->veroton_hinta = $veroton_hinta;
 		$ov->hinta = $_SESSION['onlinevaraus']['amount'];

@@ -51,5 +51,17 @@
 	<td>
 		<?php echo ($data->aktiivinen == 1) ? 'Aktiivinen' : 'Passivinen'; ?>
 	</td>
+	<td>
+		<?php echo CHtml::link('<i class="fa fa-file-pdf-o" aria-hidden="true" style="font-size: 110%"></i>', 
+				array('pdf', 'id'=>$data->id), 
+				array(
+					'data-toggle'=>'tooltip', 
+					'data-placement'=>'top', 
+					'title'=>Yii::t('main', 'PDF'),
+					'target' => '_blank'
+				)
+			); 
+		?>
+	</td>
 </tr>
 
