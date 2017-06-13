@@ -133,7 +133,18 @@ $asetukset = Asetukset::model()->findbypk(1);
  	echo '
 	<div class="form-inline" id="t_'.$model->id.$i.'">
 	  <div class="btn btn-xs btn-danger poistaTiedosto" this="'.$file.'" model="'.$model->id.'" for="t_'.$model->id.$i.'">X</div>
-	  &nbsp;&nbsp;&nbsp;<a href="../../'.$file.'">'.end($explNimi).'</a>
+	  &nbsp;&nbsp;&nbsp;';
+
+		// <-- file_safe_opener
+		$ext = 'pdf';
+		$filepath = $file;
+		echo CHtml::link(end($explNimi),
+			array('/site/file_safe_opener', 'filepath' => $filepath, 'ext' => $ext),
+			array('target'=>'_blank','class'=>'text-danger'
+		));
+		//     file_safe_opener -->
+
+	echo '
 	</div>
 	';
 	$kuvat[$i] = $file;
