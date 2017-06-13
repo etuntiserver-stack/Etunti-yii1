@@ -41,7 +41,7 @@ class SiteController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', 
-				'actions'=>array('etusivu','ohjesivu','etusivu_esimerki', 'change_color', 'valiko', 'valiko_ajax', 'kohderyhma', 'ohjevideot', 'mobemu', 'etusivu_ajax', 'ulkonaky', 'autocomplete', 'synkronoi_gps_sijainti', 'mail_template', 'getcityes', 'edico_etusivulle', 'maksullinen'),
+				'actions'=>array('etusivu','ohjesivu','etusivu_esimerki', 'change_color', 'valiko', 'valiko_ajax', 'kohderyhma', 'ohjevideot', 'mobemu', 'etusivu_ajax', 'ulkonaky', 'autocomplete', 'synkronoi_gps_sijainti', 'mail_template', 'getcityes', 'edico_etusivulle', 'maksullinen', 'file_safe_opener'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('allow', 
@@ -91,6 +91,24 @@ class SiteController extends Controller
 
         }
 
+
+	public function actionFile_safe_opener($filepath, $ext)
+	{
+		//$file = file_get_contents($filepath);
+		if (!file_exists( Yii::app()->basePath.'/../tmp/'.Yii::app()->user->domain )) {
+		 	mkdir( Yii::app()->basePath.'/../tmp/'.Yii::app()->user->domain, 0777, true );
+		}
+		$newfile = Yii::app()->basePath.'/../tmp/'.Yii::app()->user->domain.'/'.md5(time()).'.'.$ext;
+		if (copy($filepath, $newfile)) 
+		{
+				header("Content-Length: " . filesize ( $newfile ) ); 
+		                header("Content-type: application/pdf"); 
+		                header("Content-disposition: attachment; filename=".basename($newfile));
+		                readfile($newfile);
+				unlink($newfile);
+		}
+		exit;
+	}
 
 	public function actionSynkronoi_gps_sijainti()
 	{
