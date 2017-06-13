@@ -25,11 +25,29 @@
 	<td>
 	<?php
 		if(file_exists( Yii::app()->basePath.'/../'.$this->valmiit_polkku().'/'.$data->liite.'.docx' ))
-	 	echo '<a href="../../'.Yii::app()->baseUrl.$this->valmiit_polkku().'/'.$data->liite.'.docx">'.$data->liite.'.docx</a>';
+		{
+		// <-- file_safe_opener
+		$ext = 'docx';
+		$filepath = Yii::app()->baseUrl.$this->valmiit_polkku().'/'.$data->liite.'.'.$ext;
+		echo CHtml::link($data->liite.'.'.$ext,
+			array('/site/file_safe_opener', 'filepath' => $filepath, 'ext' => $ext),
+			array('target'=>'_blank','class'=>'text-danger'
+		));
+		//     file_safe_opener -->
+		}
+
 		echo '<br>';
 		if(file_exists( Yii::app()->basePath.'/../'.$this->valmiit_polkku().'/'.$data->liite.'.pdf' ))
-		echo '<a href="../../'.Yii::app()->baseUrl.$this->valmiit_polkku().'/'.$data->liite.'.pdf">'.$data->liite.'.pdf</a>';
-		
+		{
+		// <-- file_safe_opener
+		$ext = 'pdf';
+		$filepath = Yii::app()->baseUrl.$this->valmiit_polkku().'/'.$data->liite.'.'.$ext;
+		echo CHtml::link($data->liite.'.'.$ext,
+			array('/site/file_safe_opener', 'filepath' => $filepath, 'ext' => $ext),
+			array('target'=>'_blank','class'=>'text-danger'
+		));
+		//     file_safe_opener -->
+		}
 	?>
 	</td>
 	<td>
