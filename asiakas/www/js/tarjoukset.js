@@ -45,7 +45,9 @@ function getUrlVars() {
 
 	$(this).find('.bg-warning').removeClass('bg-warning').addClass('bg-success');
 	var liite = $(this).attr('liite');
+	var ext = $(this).attr('ext');
 	sendData['liite'] = liite;
+	sendData['ext'] = ext;
 
         $.ajax({
            url: url+'/tarjoukset?domain='+domain,
@@ -62,12 +64,8 @@ function getUrlVars() {
 
 		if((d['liite'] !== '') && (d['nimike'] !== ''))
 		{
-	
-			document.addEventListener("deviceready", onInAPPDeviceReady, false);
-			function onInAPPDeviceReady() {
-				cordova.InAppBrowser.open(encodeURI('https://docs.google.com/gview?embedded=true&url=' + d['liite']), '_blank', 'location=no'); 
-			}
-
+			console.log(d['liite']);
+			window.open(d['liite'], '_system', 'location=no'); 
 		}
     	   },
     		error:function (xhr, ajaxOptions, thrownError){

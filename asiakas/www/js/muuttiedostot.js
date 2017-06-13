@@ -65,13 +65,7 @@ function getUrlVars() {
 		if((d['liite'] !== '') && (d['nimike'] !== ''))
 		{
 			console.log(d['liite']);
-			document.addEventListener("deviceready", onInAPPDeviceReady, false);
-			function onInAPPDeviceReady() {
-alert(d['liite'])
-				cordova.InAppBrowser.open(d['liite'], '_system', 'location=no'); 
-				//'https://docs.google.com/gview?embedded=true&url=' + 
-			}
-
+			window.open(d['liite'], '_system', 'location=no'); 
 		}
     	   },
     		error:function (xhr, ajaxOptions, thrownError){

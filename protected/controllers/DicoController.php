@@ -353,29 +353,12 @@ public function actionLogin($domain)
 		   {
 
 			$liite = '';
-			$pdf_link = '';
+			$link = '';
 			$nimike = '';
 			if(isset($_POST['liite']))
 			{
 				$nimike = $_POST['liite'];
-				$t = $_POST['liite'];
-   				if(file_exists(Yii::app()->basePath."/../tiedostot/tarjoukset/".$domain."/".$t.".pdf"))
-   				{
-
-					if (!file_exists( Yii::app()->basePath.'/../tmp' )) {
-					 	mkdir( Yii::app()->basePath.'/../tmp', 0777, true );
-					}
-					$rndm_str = $model->id.'_tarjous';
-					$file = Yii::app()->basePath."/../tiedostot/tarjoukset/".$domain."/".$t.".pdf";
-					$liite = Yii::app()->basePath.'/../tmp/'.$rndm_str.'.pdf';
-	
-					if (!copy($file, $liite)) {
-					    	$this->_sendResponse(200, CJSON::encode('Copy error'));
-						exit;
-					} else {
-						$pdf_link = Yii::app()->request->hostInfo .'/tmp/'.$rndm_str.'.pdf';
-					}
-				}
+				$link = $this->valmistaTMP($domain, $_POST['liite'], $_POST['ext']);
 			}
 
 
@@ -390,10 +373,11 @@ public function actionLogin($domain)
 			$lista = '<br><div class="lista">';
 			foreach($m2 as $item)
 			{
-   				if(file_exists(Yii::app()->basePath."/../tiedostot/tarjoukset/".$domain."/".$item->liite.".pdf"))
+				$f = "tiedostot/tarjoukset/".$domain."/".$item->liite.".pdf";
+   				if(file_exists(Yii::app()->basePath."/../".$f))
    				{
 					$lista .= '
-					<div class="row link avaaPDF" liite="'.$item->liite.'">
+					<div class="row link avaaPDF" liite="'.$f.'" ext="pdf">
 					 <div class="col-sm-12">
 					';
 						$lista .= '<div class="alert bg-warning text-center"><h2>'.Yii::t('main', 'Tarjous').'</h2> '.date("d.m.Y H:i", strtotime($item->time)).'</div>';
@@ -406,7 +390,7 @@ public function actionLogin($domain)
 			}
 			$lista .= '</div>';
 
-				$return = array('lista'=>$lista, 'liite'=>$pdf_link, 'nimike'=>$nimike);
+				$return = array('lista'=>$lista, 'liite'=>$link, 'nimike'=>$nimike);
 				$this->_sendResponse(200, CJSON::encode($return));
 				exit;
 			}
@@ -432,28 +416,12 @@ public function actionLogin($domain)
 		   {
 
 			$liite = '';
-			$pdf_link = '';
+			$link = '';
 			$nimike = '';
 			if(isset($_POST['liite']))
 			{
 				$nimike = $_POST['liite'];
-				$t = $_POST['liite'];
-   				if(file_exists(Yii::app()->basePath."/../tiedostot/sopimukset/".$domain."/".$t.".pdf"))
-   				{
-					if (!file_exists( Yii::app()->basePath.'/../tmp' )) {
-					 	mkdir( Yii::app()->basePath.'/../tmp', 0777, true );
-					}
-					$rndm_str = $model->id.'_sopimus';
-					$file = Yii::app()->basePath."/../tiedostot/sopimukset/".$domain."/".$t.".pdf";
-					$liite = Yii::app()->basePath.'/../tmp/'.$rndm_str.'.pdf';
-	
-					if (!copy($file, $liite)) {
-					    	$this->_sendResponse(200, CJSON::encode('Copy error'));
-						exit;
-					} else {
-						$pdf_link = Yii::app()->request->hostInfo .'/tmp/'.$rndm_str.'.pdf';
-					}
-				}
+				$link = $this->valmistaTMP($domain, $_POST['liite'], $_POST['ext']);
 			}
 
 
@@ -467,10 +435,11 @@ public function actionLogin($domain)
 			$lista = '<br><div class="lista">';
 			foreach($m2 as $item)
 			{
-   				if(file_exists(Yii::app()->basePath."/../tiedostot/sopimukset/".$domain."/".$item->liite.".pdf"))
+				$f = "tiedostot/sopimukset/".$domain."/".$item->liite.".pdf";
+   				if(file_exists(Yii::app()->basePath."/../".$f))
    				{
 					$lista .= '
-					<div class="row link avaaPDF" liite="'.$item->liite.'">
+					<div class="row link avaaPDF" liite="'.$f.'" ext="pdf">
 					 <div class="col-sm-12">
 					';
 						$lista .= '<div class="alert bg-warning text-center"><h2>'.Yii::t('main', 'Sopimus').'</h2> '.date("d.m.Y H:i", strtotime($item->time)).' '.$item->template.'</div>';
@@ -483,7 +452,7 @@ public function actionLogin($domain)
 			}
 			$lista .= '</div>';
 
-				$return = array('lista'=>$lista, 'liite'=>$pdf_link, 'nimike'=>$nimike);
+				$return = array('lista'=>$lista, 'liite'=>$link, 'nimike'=>$nimike);
 				$this->_sendResponse(200, CJSON::encode($return));
 				exit;
 			}
@@ -606,23 +575,7 @@ public function actionLogin($domain)
 			if(isset($_POST['liite']))
 			{
 				$nimike = $_POST['liite'];
-				$t = $_POST['liite'];
-   				if(file_exists(Yii::app()->basePath."/../".$t))
-   				{
-					if (!file_exists( Yii::app()->basePath.'/../tmp/'.$domain )) {
-					 	mkdir( Yii::app()->basePath.'/../tmp/'.$domain, 0777, true );
-					}
-					$rndm_str = $this->generateRandomString($length = 40);
-					$file = Yii::app()->basePath."/../".$t;
-					$liite = Yii::app()->basePath.'/../tmp/'.$domain.'/'.$rndm_str.'.'.$_POST['ext'];
-	
-					if (!copy($file, $liite)) {
-					    	$this->_sendResponse(200, CJSON::encode('Copy error'));
-						exit;
-					} else {
-						$link = Yii::app()->request->hostInfo .'/index.php/site/opentmp?domain='.$domain.'&file='.$rndm_str.'.'.$_POST['ext'];
-					}
-				}
+				$link = $this->valmistaTMP($domain, $_POST['liite'], $_POST['ext']);
 			}
 
 			$lista = '<br><div class="lista">';
@@ -658,6 +611,29 @@ public function actionLogin($domain)
 	}
 
 
+
+	protected function valmistaTMP($domain, $liite, $ext)
+	{
+
+		$link = '';
+		$t = $liite;
+   		if(file_exists(Yii::app()->basePath."/../".$t))
+   		{
+			if (!file_exists( Yii::app()->basePath.'/../tmp/'.$domain )) {
+			 	mkdir( Yii::app()->basePath.'/../tmp/'.$domain, 0777, true );
+			}
+			$rndm_str = $this->generateRandomString($length = 40);
+			$file = Yii::app()->basePath."/../".$t;
+			$liite = Yii::app()->basePath.'/../tmp/'.$domain.'/'.$rndm_str.'.'.$ext;
+			if (!copy($file, $liite)) {
+			    	$this->_sendResponse(200, CJSON::encode('Copy error'));
+				exit;
+			} else {
+				$link = Yii::app()->request->hostInfo .'/index.php/site/opentmp?domain='.$domain.'&file='.$rndm_str.'.'.$ext;
+			}
+		}
+		return $link;
+	}
 
 
 private function _sendResponse($status = 200, $body = '', $content_type = 'text/html')
