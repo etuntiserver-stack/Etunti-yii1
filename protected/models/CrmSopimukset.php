@@ -34,9 +34,9 @@ public $template;
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('template, tarjous_id', 'required'),
+			array('template', 'required'),
 			//array('time, asiakas_id, teksti, hyvaksyn_koodi, asiakkaan_sahkoposti, status, liite', 'required'),
-			array('asiakas_id, status, yhteystiedot_id', 'numerical', 'integerOnly'=>true),
+			array('tarjous_id, asiakas_id, status, yhteystiedot_id', 'numerical', 'integerOnly'=>true),
 			array('hyvaksyn_koodi, liite, template', 'length', 'max'=>255),
 			array('asiakkaan_sahkoposti', 'length', 'max'=>100),
 			array('teksti', 'safe'),
