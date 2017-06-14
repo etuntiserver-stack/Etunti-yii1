@@ -1,21 +1,31 @@
 <?php
-	$k = Kohteet::model()->findbypk($kohde);
-	if(isset($k->asiakas_id))
+	$alv = 0;
+
+	if($onkokohde == 'onkohde')
 	{
-	$a = Asiakkaat::model()->findbypk($k->asiakas_id);
-	} else {
-	echo 'asiakas_id puutuu';
-	exit;
+		$k = Kohteet::model()->findbypk($id);
 	}
+
+	if($onkokohde == 'eikohde')
+	{
+		$a = Asiakkaat::model()->findbypk($id);
+	}
+
 
 	// <-- Free text
 	$free_text = '';
-	if($onkokohde == 'onkohde')
-	$free_text = $k->osoite;
-	if($onkokohde == 'eikohde'){
-	$a = Asiakkaat::model()->findbypk($kohde);
-	$free_text = $a->osoite;
+	if(isset($k->id))
+	{
+		$free_text = $k->osoite;
+		$a = Asiakkaat::model()->findbypk($k->asiakas_id);
+		$alv = $a->alv;
 	}
+	if(isset($a->id))
+	{
+		$free_text = $a->osoite;
+		$alv = $a->alv;
+	}
+
 	$free_text = $free_text.', '.date('d.m.Y',strtotime($_POST['from'])).'-'.date('d.m.Y',strtotime($_POST['to']));
 	//     Free text -->
 
@@ -49,7 +59,7 @@
 	<TD><input type="text" size="10" name="hinta[<?php echo $num; ?>]" id="hinta_<?php echo $num; ?>" class="onlyDigits form-control" value="<?php echo $hinta; ?>" step="0.01"><span class="errmsg"></span></TD>
 	<TD>
 		<select type="text" name="alv[<?php echo $num; ?>]" id="alv_<?php echo $num; ?>" class="form-control">
-		<option value="<?php echo $a->alv; ?>"><?php echo $a->alv; ?></option>
+		<option value="<?php echo $alv; ?>"><?php echo $alv; ?></option>
 		<?php echo $this->alv(null); ?>
 		</select>
 	</TD>

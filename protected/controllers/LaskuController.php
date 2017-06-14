@@ -117,15 +117,17 @@ class LaskuController extends Controller
 
 	public function actionKohteen_tieto()
 	{
-
+		$return = '';
 		if(isset($_POST['id']))
 		{
 			$k=Kohteet::model()->findbypk($_POST['id']);
-			if(isset($k->id))
+			if(isset($k->id) and $k->hinnoittelu != '')
 			{
-				echo json_encode($k->hinnoittelu."//");
+				$return = 'Hinnoittelu: '.$k->hinnoittelu;
 			}	
 		}
+
+		echo json_encode($return);
 	}
 
 	public function actionHyvityslasku($id)
@@ -333,7 +335,7 @@ class LaskuController extends Controller
 			'from'=>$from,
 			'to'=>$to,
 			'num'=>$num,
-			'kohde'=>$id,
+			'id'=>$id,
 			'kpl'=>$kpl,
 			'hinta'=>$hinta,
 			'yksikko'=>$yksikko,
@@ -358,18 +360,24 @@ class LaskuController extends Controller
 	public function actionLuoKohteista($id)
 	{
 
-	function num($val){
-	    if($val > 0)
-		return  number_format((float)$val/3600, 2, '.', '');
-	}
-
+		$kohdet = array(); 
+		if($_POST['mistaLuo'] == 'luoAsiakaasta')
+		{
+			$as = Asiakkaat::model()->findByPk($id);
+			$k = Kohteet::model()->findAll(" asiakas_id='".$as->id."' AND aktiivinen=1 ");
+			foreach($k as $item)
+				$kohdet[] = $item->id;
+			$kohdet = "kohdenID=".implode(" OR kohdenID=", array_values($kohdet));
+		} else {
+			$kohdet = "kohdenID=$id"; 
+		}
 
 
        		$criteria = new CDbCriteria();
 		$criteria->select = "
-		SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as t_tunnit ";
+		SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as t_tunnit, COUNT(*) as count ";
 		$criteria->condition = " 
-		kohdenID = '".$id."'
+		($kohdet)
 		and DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
 		BETWEEN 
 		'".date("Y-m-d",strtotime($_POST['from']))."' AND '".date("Y-m-d",strtotime($_POST['to']))."'
@@ -382,9 +390,9 @@ class LaskuController extends Controller
 	
 	       	$criteria = new CDbCriteria();
 		$criteria->select = "
-		SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit ";
+		SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit, COUNT(*) as count ";
 		$criteria->condition = "
-		kohdenID = '".$id."'
+		($kohdet)
 		and DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
 		BETWEEN 
 		'".date("Y-m-d",strtotime($_POST['from']))."' AND '".date("Y-m-d",strtotime($_POST['to']))."'
@@ -394,7 +402,13 @@ class LaskuController extends Controller
 		AND id NOT IN (SELECT kid FROM sivexkuitti_repaired) ";	
 		$lu = Mobile::model()->find($criteria); 
 	
-		echo num($lu->l_tunnit+$tot->t_tunnit);
+		$return = array(
+			'tunnit'=>$this->num($lu->l_tunnit+$tot->t_tunnit),
+			'rivi_kpl'=>$lu->count+$tot->count,
+			'mistaLuo' => $_POST['mistaLuo'],
+			'kohdet' => $kohdet
+		);
+		echo json_encode($return);
 
 	}
 
@@ -410,8 +424,9 @@ class LaskuController extends Controller
 		$thisTrue = false;
 
 		$body = '';
-		$body .= '<br><select class="kohteet selectpicker" multiple title="Valitse kohteet">';
+		$body .= '<br><select class="selectpicker kohteet" id="etsikohde_alasvetovaliko" multiple title="Valitse kohteet">';
 
+		// <-- Kohteet
        		$criteria = new CDbCriteria();
        		$criteria->condition = " 
 			asiakas_id='".$as->id."' 
@@ -429,12 +444,11 @@ class LaskuController extends Controller
 				$yksikko_k = 'kpl';
 
 			$thisTrue = true;
-			$body .= '<option value="'.$a->id.'//'.$a->hinta.'//'.$yksikko_k.'//onkohde">'.$a->osoite.' ( '.$a->hinta.'&euro;/'.$yksikko_k.' )</option>';
+			$body .= '<option value="'.$a->id.'//'.$a->hinta.'//'.$yksikko_k.'//onkohde">Kohde: '.$a->osoite.' ( '.$a->hinta.'&euro;/'.$yksikko_k.' )</option>';
 		}
+		//     Kohteet -->
 
-/*
-		} else {
-
+		// <-- Asiakas
 		if($as->hinta_tyyppi == 1)
 		$yksikko_a = 'h';
 		if($as->hinta_tyyppi == 2)
@@ -442,11 +456,13 @@ class LaskuController extends Controller
 		if($as->hinta_tyyppi == 3)
 		$yksikko_a = 'kpl';
 
-		$thisTrue = true;
-		$onkoKohdeMaaritetty = false;
-		$body .= '<option value="'.$as->id.'//'.$as->hinta.'//'.$yksikko.'//eikohde">'.$as->osoite.' ( '.$as->hinta.'&euro;/'.$yksikko.' )</option>';
+		if($as->hinta_tyyppi != '' and $as->hinta != '')
+		{
+			$thisTrue = true;
+			$body .= '<option value="'.$as->id.'//'.$as->hinta.'//'.$yksikko_a.'//eikohde">Asiakas: '.$as->osoite.' ( '.$as->hinta.'&euro;/'.$yksikko_a.' )</option>';
 		}
-*/
+		//     Asiakas -->
+
 		$body .= '</select>';
 
 
