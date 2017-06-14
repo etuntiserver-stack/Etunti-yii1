@@ -2429,7 +2429,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 
 	public function actionTyobykohde($kohdenID,$from,$to)
 	{
-		$body 	= '<table class="table table-bordered sortable">';
+		$body 	= '<div class="table-responsive"><table class="table table-bordered sortable">';
 		$from 	= date("Y-m-d", strtotime($from));
 		$to 	= date("Y-m-d", strtotime($to));
 
@@ -2542,7 +2542,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			$ids[] = $explV[3];
 		}
 
-		$body 	.= '</tbody></table>';
+		$body 	.= '</tbody></table></div>';
 
 		if(isset($_GET['asiakkalle']) and $_GET['asiakkalle'] == 1)
 		{
