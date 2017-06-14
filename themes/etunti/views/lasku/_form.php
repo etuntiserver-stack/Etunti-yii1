@@ -523,7 +523,7 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
   <div class="panel heading-border">
    <div class="panel-body">
 
-    <legend><?php echo Yii::t('main', 'TUNNIT'); ?></legend>
+    <legend><?php echo Yii::t('main', 'TYÖKALUT'); ?></legend>
       <div class="section fill mb5">
 	<div class="col-sm-6">
 		<b class="glyphicon glyphicon-calendar"></b> 
@@ -540,7 +540,7 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 	</div><div class="col-sm-6">
 	<br>
 	<?php
-	echo CHtml::dropdownList('tuntipalvelu','palvelu', CHtml::listData(LaskutusTuotteet::model()->findAll(), 'id', 'tuotenimi'), 
+	echo CHtml::dropdownList('palvelu','palvelu', CHtml::listData(LaskutusTuotteet::model()->findAll(), 'id', 'tuotenimi'), 
 	array('empty'=>'Valitse tuote/palvelu','class'=>'form-control valitseTuote'));
 	?>
 	</div>
@@ -565,51 +565,7 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 
 
 
-<div id="kkKalut">
-    <div class="col-sm-6">
 
-  <div class="panel heading-border">
-   <div class="panel-body">
-
-    <legend><?php echo Yii::t('main', 'KUUKAUSI'); ?></legend>
- 
-      <div class="section fill mb5">
-	<div class="col-sm-6">
-		<b class="glyphicon glyphicon-calendar"></b> 
-   		<input type="text" id="fromkk" class="form-control form-group datepickerFI" value="<?php echo date('d.m.Y',strtotime('first day of last month', time())); ?>">
-	</div><div class="col-sm-6">
-		<b class="glyphicon glyphicon-calendar"></b> 
-   		<input type="text" id="tokk" class="form-control form-group datepickerFI" value="<?php echo date('d.m.Y',strtotime('last day of last month', time())); ?>">
-	</div>
-      </div>
-
-       <div class="section fill mb5">
-	<div class="col-sm-6">
-		<div id="getkohdeKk" class="form-group"></div>
-	</div><div class="col-sm-6">
-	<br>
-	<?php
-	echo CHtml::dropdownList('kkpalvelu','palvelu', CHtml::listData(LaskutusTuotteet::model()->findAll(), 'id', 'tuotenimi'), 
-	array('empty'=>'Valitse tuote/palvelu','class'=>'form-control valitseTuote'));
-	?>
-	</div>
-      </div>
-
-       <div class="section fill mb5">
-       <div class="col-sm-6">
-	
-       </div>
-       <div class="col-sm-6">
-	<br>
-        	<b class="btn btn-success pull-right luoRiviKk"><?php echo Yii::t('main', 'Luo rivit'); ?></b>
-       </div>
-       </div>
-
-   </div>
-  </div>
-
-    </div>
-</div>
 
 </div>
 
@@ -1172,8 +1128,10 @@ $(".luoRiviTunti").click(function() {
 
 	var from = $("#from").val();
 	var to = $("#to").val();
-	var kohteet = $(".selectpicker.h").val();
-	var tuotePalvelu = $("#tuntipalvelu").val();
+	var kohteet = $("#etsikohde_alasvetovaliko").val();
+	var tuotePalvelu = $("#palvelu").val();
+
+	console.log(kohteet);
 
 	if (from  === '') 
 	{
@@ -1192,42 +1150,13 @@ $(".luoRiviTunti").click(function() {
 
 	} 
 
-	    pyyntoRiville(kohteet,from,to,tuotePalvelu,"tunti");
+	    pyyntoRiville(kohteet,from,to,tuotePalvelu);
 });
 
 
 
-$(".luoRiviKk").click(function() {
 
-	var from = $("#fromkk").val();
-	var to = $("#tokk").val();
-	var kohteet = $(".selectpicker.kk").val();
-	var tuotePalvelu = $("#kkpalvelu option:selected").val();
-
-
-	if (from  === '') 
-	{
-	     $('#fromkk').css({"border" : "2px #f14010 solid"}).focus();
-	     return false;
-	}
-	if (to  === '') 
-	{
-	     $('#tokk').css({"border" : "2px #f14010 solid"}).focus();
-	     return false;
-	}
-	if (!kohteet) 
-	{ 
-	    alert('Valitse kohde')
-	    return false;
-
-	} 
-
-	    pyyntoRiville(kohteet,from,to,tuotePalvelu,"kk");
-
-});
-
-
-function pyyntoRiville(kohteet,from,to,tuotePalvelu,tuntiVaiKk){
+function pyyntoRiville(kohteet,from,to,tuotePalvelu){
 
 	    if($('#tkoodi_1').val() === '')
 	    $("#trRivi_1").remove();
@@ -1241,33 +1170,39 @@ function pyyntoRiville(kohteet,from,to,tuotePalvelu,tuntiVaiKk){
 	    if(spH[3] == 'eikohde')
 	    var mistaLuo = 'luoAsiakaasta';
 
+	    console.log(mistaLuo);
 
 	        $.ajax({
-	           url: mistaLuo+'?id='+spH[0],
+	           url: 'luoKohteista?id='+spH[0],
 		   type: 'POST',
-		   data: { from : from, to : to },
+		   data: { from : from, to : to, mistaLuo : mistaLuo },
 	           success: function(data){
 	               	console.log(data);
-			var tunnit = data;			
+
+			data = JSON.parse(data);
+
 			var num = 0;
-			if((tunnit == 0) && (tuntiVaiKk == "tunti"))
+			if((data['tunnit'] == 0) && (spH[2] == "h"))
 			{
 				$("#tuntienTulos").addClass("alert alert-danger").html('<b>Ei löydy tuntia</b>');
 				//$("#rivit").hide('slow');
 			}
 
-			if((tunnit > 0) || (tuntiVaiKk == "kk"))
+			if((data['tunnit'] > 0) || (data['rivi_kpl'] > 0) || (spH[2] == "kk"))
 			{
 			num = $("table#TableRivit tbody tr").length+index;
 			
 			var kpl = 0;
-			var yksikko = 0;
-			if(tuntiVaiKk == "kk"){
-			  yksikko = 'kk';
+			var yksikko = spH[2];
+
+			if((mistaLuo == 'luoAsiakaasta') && (yksikko == "kk")){
 			  kpl = '1';
-			} else {
-			  yksikko = spH[2];
-			  kpl = tunnit;
+			}
+			if(yksikko == "h"){
+			  kpl = data['tunnit'];
+			}
+			if(yksikko == "kpl"){
+			  kpl = data['rivi_kpl'];
 			}
 
 	        	$.ajax({
@@ -1277,8 +1212,10 @@ function pyyntoRiville(kohteet,from,to,tuotePalvelu,tuntiVaiKk){
 		           success: function(data){
 				console.log(value);
 				$("table#TableRivit tbody tr").last().after(data);
-				eachLaskenta();
+
 				Rivi();
+				eachLaskenta();
+
 				$("#tuntienTulos").removeClass("alert alert-danger").html('');
 				$("#rivit").show('slow');
 				$(".subm").show('slow');
@@ -1290,6 +1227,7 @@ function pyyntoRiville(kohteet,from,to,tuotePalvelu,tuntiVaiKk){
 
 			}
 	
+
 	           },
 	           error: function(XMLHttpRequest, textStatus, errorThrown){
 	               	console.log(XMLHttpRequest);
@@ -1335,50 +1273,33 @@ $("#Lasku_as_nro").change(function() {
 	$("#kalut").show('slow');
 
         $.ajax({
-           url: 'etsikohde?id='+asiakas+'&tuntiTaiKk=1',
+           url: 'etsikohde?id='+asiakas,
            success: function(data){
-		var spdata = JSON.parse(data).split("***");
-               	console.log(JSON.parse(data)+" asiakas:"+asiakas);
+		var spdata = JSON.parse(data);
+               	console.log(spdata);
 
-		if(spdata[1] == true)
+		if(spdata['is_true'] == true)
 		{
-		$("#getkohdeT").html(spdata[0]);
-		$('.selectpicker').selectpicker();
-		$("#tuntiKalut").show();
+
+			$("#getkohdeT").html(spdata['body']);
+			$("#tuntiKalut").show();
+
+			$('.selectpicker').selectpicker();
+
 		} else {
-		$("#tuntiKalut").hide();
+			$("#tuntiKalut").hide();
+			$("#kkKalut").hide();
 		}
 
 
-		if(spdata[2] !== ''){
+		if(spdata['vinkki'] !== ''){
 
-			var allennus = JSON.parse(spdata[2]);
+			var allennus = JSON.parse(spdata['vinkki']);
 			if(allennus['vinkki_tunnit'] && allennus['vinkki_prosentti'])
 			{
 				$('#ilmoitusAllennusta').addClass('text-success').html('<h1>Asiakas ALE: <span id="aleAsiakkaasta">'+ allennus['vinkki_tunnit'] +'</span> tunti, ' + allennus['vinkki_prosentti'] + '%</h1>');
 				$('#ale_1').val(parseInt(allennus['vinkki_prosentti']));
 			}
-		}
-
-           },
-           error: function(XMLHttpRequest, textStatus, errorThrown){
-               	console.log(XMLHttpRequest);
-	   }
-        });
-
-        $.ajax({
-           url: 'etsikohde?id='+asiakas+'&tuntiTaiKk=2',
-           success: function(data){
-               	console.log(JSON.parse(data)+" asiakas:"+asiakas);
-		var spdata = JSON.parse(data).split("***");
-
-		if(spdata[1] == true)
-		{
-		$("#getkohdeKk").html(spdata[0]);
-		$('.selectpicker').selectpicker();
-		$("#kkKalut").show();
-		} else {
-		$("#kkKalut").hide();
 		}
 
            },
@@ -1508,25 +1429,31 @@ $("#Lasku_toimitusosoite").change(function() {
 
 
 // hinnoitelu
-$(document).delegate(".selectpicker","change",function(){
+$(document).delegate("#etsikohde_alasvetovaliko","change",function(){
+
 
   if($(this).val())
   {
-	var thisVal = $(this).val();
+	var thisVal = $(this).val()[0].split("//");
+	if(thisVal[3] == 'onkohde')
+	{
+       	console.log(thisVal);
         $.ajax({
            url: 'kohteen_tieto',
 	   type: 'POST',
-	   data: { id : thisVal },
+	   data: { id : thisVal[0] },
            success: function(data){
-		var sp = JSON.parse(data).split("//");
-		if(sp[0])
-		$('#hinnoitelu').html('<div class="alert alert-success">'+sp[0]+'</div>');
+		var sp = JSON.parse(data);
+		if(sp !== '')
+		$('#hinnoitelu').html('<div class="alert alert-success">'+data+'</div>');
 
            },
            error: function(XMLHttpRequest, textStatus, errorThrown){
                	console.log(XMLHttpRequest);
 	   }
         });
+	}
+
    } else {
 		$('#hinnoitelu').html('');
    }
