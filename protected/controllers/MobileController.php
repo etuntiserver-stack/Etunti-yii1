@@ -2456,7 +2456,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		  	$d->aloitan 	= date("d.m.Y H:i",strtotime($d->aloitan));
 			$kesto 		= strtotime($d->loppui)-strtotime($d->aloitan);
 
-			$lu[] = $this->etuSukunimi($d->tid)."//".date("d.m.Y",strtotime($d->aloitan))."//".$kesto."//mobile_".$d->id."//".$d->asiakas_hyvaksy."//".date("H:i",strtotime($d->aloitan))."//".date("H:i",strtotime($d->loppui))."//////".$d->sairaus.'//'.strtotime($d->aloitan);
+			$lu[] = $this->etuSukunimi($d->tid)."//".date("d.m.Y",strtotime($d->aloitan))."//".$kesto."//mobile_".$d->id."//".$d->asiakas_hyvaksy."//".date("H:i",strtotime($d->aloitan))."//".date("H:i",strtotime($d->loppui))."//////".$d->sairaus.'//'.strtotime($d->aloitan).'//'.strtotime($d->viesti);
 		}
 
 
@@ -2477,7 +2477,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		  	$d->aloitan 	= date("d.m.Y H:i",strtotime($d->aloitan));
 		  	$kesto 		= strtotime($d->loppui)-strtotime($d->aloitan);
 
-			$lu[] = $this->etuSukunimi($d->tid)."//".date("d.m.Y",strtotime($d->aloitan))."//".$kesto."//toteutu_".$d->id."//".$d->asiakas_hyvaksy."//".date("H:i",strtotime($d->aloitan))."//".date("H:i",strtotime($d->loppui))."//".$d->osoite."//".$d->tietoja."//".$d->sairaus.'//'.strtotime($d->aloitan);
+			$lu[] = $this->etuSukunimi($d->tid)."//".date("d.m.Y",strtotime($d->aloitan))."//".$kesto."//toteutu_".$d->id."//".$d->asiakas_hyvaksy."//".date("H:i",strtotime($d->aloitan))."//".date("H:i",strtotime($d->loppui))."//".$d->osoite."//".$d->tietoja."//".$d->sairaus.'//'.strtotime($d->aloitan).'//'.strtotime($d->viesti);
 		}
 
 		//if(count($lu) > 0)
@@ -2492,6 +2492,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			  <th>Kesto</th>
 			  <th>Työntekijä</th>
 			  <th>Tietoja</th>
+			  <th>Viesti</th>
 			 </tr>
 			 </thead>
 			 <tbody>';
@@ -2534,6 +2535,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			  <td>'.$this->sprint($explV[2]).' '.$asiakas_hyvaksy.'</td>
 			  <td>'.$explV[0].$kertaosoite.$spl.'</td>
 			  <td>'.$tietoja.'</td>
+			  <td>'.$explV[8].'</td>
 			</tr>';
 			}
 			if(isset($explV[3]))
