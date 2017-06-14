@@ -398,94 +398,65 @@ class LaskuController extends Controller
 
 	}
 
-	public function actionEtsikohde($id, $tuntiTaiKk)
+	public function actionEtsikohde($id)
 	{
 
        		$criteria = new CDbCriteria();
        		$criteria->condition = " asiakasnumero='".$id."' ";
 		$as = Asiakkaat::model()->find($criteria);
 
-		if($tuntiTaiKk == 1)
-		$yksikko = 'h';
-		if($tuntiTaiKk == 2)
-		$yksikko = 'kk';
 
-		$body = '<b class="glyphicon glyphicon-home"></b><br>
-		<select class="kohteet selectpicker '.$yksikko.'" multiple title="Valitse kohteet">';
+
 		$thisTrue = false;
-		$onkoKohdeMaaritetty = false;
 
-
-       		$criteria = new CDbCriteria();
-       		$criteria->condition = " 
-			asiakas_id='".$as->id."' 
-			AND hinta_tyyppi='".$tuntiTaiKk."' AND (hinta!='' or hinta!='0')
-			AND aktiivinen=1
-		";
-		$k = Kohteet::model()->findAll($criteria);
-		foreach($k as $a)
-		{
-		$thisTrue = true;
-		$onkoKohdeMaaritetty = true;
-		$body .= '<option value="'.$a->id.'//'.$a->hinta.'//'.$yksikko.'//onkohde">'.$a->osoite.' ( '.$a->hinta.'&euro;/'.$yksikko.' )</option>';
-		}
-
+		$body = '';
+		$body .= '<br><select class="kohteet selectpicker" multiple title="Valitse kohteet">';
 
        		$criteria = new CDbCriteria();
        		$criteria->condition = " 
 			asiakas_id='".$as->id."' 
-			AND hinta_tyyppi='".$tuntiTaiKk."' AND (hinta='' or hinta='0')
 			AND aktiivinen=1
+			AND hinta_tyyppi!='' AND hinta!=''
 		";
 		$k = Kohteet::model()->findAll($criteria);
 		foreach($k as $a)
 		{
-		$thisTrue = true;
-		$onkoKohdeMaaritetty = true;
-		$body .= '<option value="'.$a->id.'//'.$as->hinta.'//'.$yksikko.'//onkohde">'.$a->osoite.' ( '.$as->hinta.'&euro;/'.$yksikko.' )</option>';
+			if($a->hinta_tyyppi == 1)
+				$yksikko_k = 'h';
+			if($a->hinta_tyyppi == 2)
+				$yksikko_k = 'kk';
+			if($a->hinta_tyyppi == 3)
+				$yksikko_k = 'kpl';
+
+			$thisTrue = true;
+			$body .= '<option value="'.$a->id.'//'.$a->hinta.'//'.$yksikko_k.'//onkohde">'.$a->osoite.' ( '.$a->hinta.'&euro;/'.$yksikko_k.' )</option>';
 		}
 
-
-
-
-		// jos kohde ei ole maariteltu, kokeilemme asiakasta ota tietoja
-		if(
-			isset($as->id) and $tuntiTaiKk == $as->hinta_tyyppi 
-			and $as->hinta != '' and $as->hinta > 0
-		)
-		{
-
-	
-		if($thisTrue == false)
-		{
-       		$criteria = new CDbCriteria();
-       		$criteria->condition = " 
-			asiakas_id='".$as->id."' 
-			AND hinta_tyyppi!='".$tuntiTaiKk."' AND (hinta='' or hinta='0')
-			AND aktiivinen=1
-		";
-		$k = Kohteet::model()->findAll($criteria);
-		foreach($k as $a)
-		{
-		$thisTrue = true;
-		$onkoKohdeMaaritetty = true;
-		$body .= '<option value="'.$a->id.'//'.$as->hinta.'//'.$yksikko.'//onkohde">'.$a->osoite.' ( '.$as->hinta.'&euro;/'.$yksikko.' )</option>';
-		}
-
+/*
 		} else {
+
+		if($as->hinta_tyyppi == 1)
+		$yksikko_a = 'h';
+		if($as->hinta_tyyppi == 2)
+		$yksikko_a = 'kk';
+		if($as->hinta_tyyppi == 3)
+		$yksikko_a = 'kpl';
+
 		$thisTrue = true;
 		$onkoKohdeMaaritetty = false;
 		$body .= '<option value="'.$as->id.'//'.$as->hinta.'//'.$yksikko.'//eikohde">'.$as->osoite.' ( '.$as->hinta.'&euro;/'.$yksikko.' )</option>';
 		}
-
-		}
+*/
 		$body .= '</select>';
+
 
 		$allennus = array();
 		if(isset($as->vinkki_tunnit) and !empty($as->vinkki_tunnit) and isset($as->vinkki_prosentti) and !empty($as->vinkki_prosentti))
 		$allennus = array('vinkki_tunnit'=>$as->vinkki_tunnit,'vinkki_prosentti'=>$as->vinkki_prosentti);
 
-		echo json_encode($body.'***'.$thisTrue.'***'.json_encode($allennus));
+		$return = array('body'=>$body,'is_true'=>$thisTrue, 'vinkki'=>json_encode($allennus));
+
+		echo json_encode($return);
 	}
 
 

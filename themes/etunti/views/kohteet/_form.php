@@ -176,7 +176,7 @@ if($ismobile and !empty($model->puh_nro)) {
 		<?php
 		$list = array(1=>'Kyllä',0=>'Ei');
         	echo $form->dropDownList($model, 'aktiivinen', $list,
-		array('class'=>'form-control'));
+		array('empty'=>'Valitse', 'class'=>'form-control'));
         	?>
 		<?php echo $form->error($model,'aktiivinen'); ?>
 	</div>

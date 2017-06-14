@@ -611,6 +611,9 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
     </div>
 </div>
 
+
+
+
 </div>
 
 
@@ -1335,50 +1338,36 @@ $("#Lasku_as_nro").change(function() {
 	$("#kalut").show('slow');
 
         $.ajax({
-           url: 'etsikohde?id='+asiakas+'&tuntiTaiKk=1',
+           url: 'etsikohde?id='+asiakas,
            success: function(data){
-		var spdata = JSON.parse(data).split("***");
-               	console.log(JSON.parse(data)+" asiakas:"+asiakas);
+		var spdata = JSON.parse(data);
+               	console.log(spdata);
 
-		if(spdata[1] == true)
+		if(spdata['is_true'] == true)
 		{
-		$("#getkohdeT").html(spdata[0]);
-		$('.selectpicker').selectpicker();
-		$("#tuntiKalut").show();
+
+			$("#getkohdeT").html(spdata['body']);
+			$("#tuntiKalut").show();
+
+			$("#getkohdeKk").html(spdata['body']);
+			$("#kkKalut").show();
+
+			$('.selectpicker').selectpicker();
+
 		} else {
-		$("#tuntiKalut").hide();
+			$("#tuntiKalut").hide();
+			$("#kkKalut").hide();
 		}
 
 
-		if(spdata[2] !== ''){
+		if(spdata['vinkki'] !== ''){
 
-			var allennus = JSON.parse(spdata[2]);
+			var allennus = JSON.parse(spdata['vinkki']);
 			if(allennus['vinkki_tunnit'] && allennus['vinkki_prosentti'])
 			{
 				$('#ilmoitusAllennusta').addClass('text-success').html('<h1>Asiakas ALE: <span id="aleAsiakkaasta">'+ allennus['vinkki_tunnit'] +'</span> tunti, ' + allennus['vinkki_prosentti'] + '%</h1>');
 				$('#ale_1').val(parseInt(allennus['vinkki_prosentti']));
 			}
-		}
-
-           },
-           error: function(XMLHttpRequest, textStatus, errorThrown){
-               	console.log(XMLHttpRequest);
-	   }
-        });
-
-        $.ajax({
-           url: 'etsikohde?id='+asiakas+'&tuntiTaiKk=2',
-           success: function(data){
-               	console.log(JSON.parse(data)+" asiakas:"+asiakas);
-		var spdata = JSON.parse(data).split("***");
-
-		if(spdata[1] == true)
-		{
-		$("#getkohdeKk").html(spdata[0]);
-		$('.selectpicker').selectpicker();
-		$("#kkKalut").show();
-		} else {
-		$("#kkKalut").hide();
 		}
 
            },
