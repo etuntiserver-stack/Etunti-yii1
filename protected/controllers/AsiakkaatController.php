@@ -1198,41 +1198,39 @@ $xml = '
 
 		$p = Palautteet::model()->findAll($criteria);
 
-
-
 		$bod = '';
 
 		if(isset($p[0])){
 
-		$bod .= '<table class="table table-bordered">
-
-		 <tr>
-		  <th>'.Yii::t('main', 'Palaute').'</th>
-		  <th>'.Yii::t('main', 'Keskustelu').'</th>
-		 </tr>';
 	
 		foreach($p as $data)
 		{
-	  	$bod .= '<tr>';
 
-		$bod .= '<td>';
 
 		$bod .= '<center>';
 		if($kayttaja == 'admin' and file_exists( Yii::app()->basePath.'/../lib/img/emoji/'.$data->emoji_tila.'.png' ))
 		$bod .= '<p><img src="../../lib/img/emoji/'.$data->emoji_tila.'.png" height="100"></p>';
 
+		$emoji_img = '';
 		if($kayttaja == 'asiakas')
-		$bod .= '<p><img src="img/emoji/'.$data->emoji_tila.'.png" height="100"></p>';
+		$emoji_img = '<img src="img/emoji/'.$data->emoji_tila.'.png" height="50" style="margin-right:10px">';
 
 		$bod .= '</center>';
 
-		$bod .= '<p><b>'.date("d.m.Y", strtotime($data->time)).'</b></p>';
-		$bod .= '<p>'.$data->otsikko.'</p>';
+		$bod .= '
+		<div class="row">
+		 <div class="form-inline">
+		  <div class="form-group">
+			'.$emoji_img.' 
+		  </div><div class="form-group">
+			<h3 style="line-height:30%"><b>'.$data->otsikko.'</b></h3>
+			<p><small>'.date("d.m.Y", strtotime($data->time)).'</small></p>
+		  </div>
+		 </div>
+		</div>';
 
-		if($data->status == 0)
-	  	$bod .= '<span class="btn btn-sm btn-warning btn-block">'.Yii::t('main', 'avoin').'</span>';
-		elseif($data->status == 3)
-	  	$bod .= '<span class="btn btn-sm btn-success btn-block">'.Yii::t('main', 'suljettu').'</span>';
+
+		$bod .= '<br>';
 
 		if($kayttaja == 'admin' and $data->status != 3)
 		{
@@ -1242,10 +1240,7 @@ $xml = '
 		));
 		}
 
-		$bod .= '</td>';
 
-
-	  	$bod .= '<td>';
 		$bod .= '<p>'.$data->teksti.'</p>';
 
 		$criteria=new CDbCriteria;
@@ -1276,14 +1271,22 @@ $xml = '
 
 		//$bod .= CHtml::link(Yii::t('main', 'Vasta'), Yii::app()->request->baseUrl.'/index.php/palautteet/vastaus?id='.$data->keskustelu_id,array('class'=>'btn btn-primary btn-sm'));
 		}
-	  	$bod .= '</td>';
 
-		$bod .= '</tr>';
+
+		$bod .= '<br>';
+		if($data->status == 0)
+	  	$bod .= '<span class="btn btn-sm btn-success btn-block">'.Yii::t('main', 'avoin').'</span>';
+		elseif($data->status == 3)
+	  	$bod .= '<span class="btn btn-sm btn-warning btn-block">'.Yii::t('main', 'suljettu').'</span>';
+
+		$bod .= '<hr>';
 	  	}
-		$bod .= '</table>';
+
+
 
 		}
 	
+
 		if(empty($bod))
 		return 'Ei tuloksia';
 		else
@@ -1322,9 +1325,9 @@ $xml = '
 			$nimi = $as->yhteyshenkilo;
 
 			if(isset(Yii::app()->user->asiakas))
-				$model->teksti = '<b>'.$nimi.'</b>: '.$model->teksti;
+				$model->teksti = '<b>'.$nimi.'</b>: '.$model->teksti.'<br><div class="aika">'.date('d.m.Y H:i').'</div>';
 			elseif(isset(Yii::app()->user->nimi))
-				$model->teksti = '<b>'.Yii::app()->user->nimi.'</b>: '.$model->teksti;
+				$model->teksti = '<b>'.Yii::app()->user->nimi.'</b>: '.$model->teksti.'<br><div class="aika">'.date('d.m.Y H:i').'</div>';
 
 			if($model->save())
 			{

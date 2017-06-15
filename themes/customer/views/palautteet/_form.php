@@ -14,12 +14,19 @@ $model->asiakas_id = Yii::app()->user->asiakas;
 
 
 <style>
+   @media screen and (min-width: 480px) {
+	.img-thumbnail{ width: 100px }
+	.col-xs-6{ width: 100px }
+   }
+
+	.img-thumbnail{ background: none; border: none }
+
 .emoji_passive{ opacity:0.5 }
-.emoji_active { border: 2px #37bc9b solid; }
+.emoji_active { /*border: 2px #37bc9b solid;*/ }
 </style>
 
 <div class="row" id="emoji">
- <div class="col-xs-4">
+ <div class="col-xs-6">
 	<img src="img/emoji/1.png" class="img-thumbnail emoji_passive" tila="1">
  </div>
 <!--
@@ -27,7 +34,7 @@ $model->asiakas_id = Yii::app()->user->asiakas;
 	<img src="img/emoji/2.png" class="img-thumbnail emoji_passive" tila="2">
  </div>
 -->
- <div class="col-xs-4">
+ <div class="col-xs-6">
 	<img src="img/emoji/3.png" class="img-thumbnail emoji_passive" tila="3">
  </div>
 </div>
