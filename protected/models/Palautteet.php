@@ -15,6 +15,7 @@
 class Palautteet extends DB2ActiveRecord
 {
 
+	public $sisainen;
 
 	/**
 	 * @return string the associated database table name

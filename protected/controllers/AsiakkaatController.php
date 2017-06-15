@@ -1331,9 +1331,9 @@ $xml = '
 			$nimi = $as->yhteyshenkilo;
 
 			if(isset(Yii::app()->user->asiakas))
-				$model->teksti = '<span class="'.$is_sisainen.'"><b>'.$nimi.'</b>: '.$model->teksti.'<br><div class="aika">'.date('d.m.Y H:i').'</div></span>';
+				$model->teksti = '<div class="'.$is_sisainen.'"><b>'.$nimi.'</b>: '.$model->teksti.'<br><div class="aika">'.date('d.m.Y H:i').'</div></div>';
 			elseif(isset(Yii::app()->user->nimi))
-				$model->teksti = '<span class="'.$is_sisainen.'"><b>'.Yii::app()->user->nimi.'</b>: '.$model->teksti.'<br><div class="aika">'.date('d.m.Y H:i').'</div></span>';
+				$model->teksti = '<div class="'.$is_sisainen.'"><b>'.Yii::app()->user->nimi.'</b>: '.$model->teksti.'<br><div class="aika">'.date('d.m.Y H:i').'</div></div>';
 
 			if($model->save())
 			{

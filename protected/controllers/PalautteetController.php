@@ -208,7 +208,7 @@ class PalautteetController extends Controller
 						$nimi = $as->yhteyshenkilo;
 
 						$mod->attributes=$post['Palautteet'];
-						$mod->teksti = '<b>'.$nimi.'</b>: '.$mod->teksti.'<br><div class="aika">'.date('d.m.Y H:i').'</div>';
+						$mod->teksti = '<div><b>'.$nimi.'</b>: '.$mod->teksti.'<br><div class="aika">'.date('d.m.Y H:i').'</div></div>';
 						if($mod->save())
 						{
 
