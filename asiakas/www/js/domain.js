@@ -45,6 +45,7 @@ $(document).ready(function(){
 	});
 
 	console.log(loginArr);
+	console.log('Asiakas: '+asiakasID);
 
     }
 
