@@ -1311,7 +1311,7 @@ $xml = '
 		if(isset($post['PalautteetVastaus']))
 		{
 			$is_sisainen = '';
-			if(isset($post['PalautteetVastaus']['sisainen']))
+			if(isset($post['sisainen']))
 			$is_sisainen = 'sisainen';
 
 			$p = Palautteet::model()->findbypk($post['palaute_id']);
