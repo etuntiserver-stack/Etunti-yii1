@@ -1213,26 +1213,19 @@ $xml = '
 
 		$emoji_img = '';
 		if($kayttaja == 'asiakas')
-		$emoji_img = '<img src="img/emoji/'.$data->emoji_tila.'.png" height="50" style="margin-right:10px">';
+		$emoji_img = '<img src="img/emoji/'.$data->emoji_tila.'.png" height="50" style="float:left;margin-right:10px">';
 
 		$bod .= '</center>';
 
 		$bod .= '
 		<div class="row">
-		 <div class="col-sm-12">
-		  <div class="form-inline">
-		   <div class="form-group">
+		 <div class="col-xs-12">
 			'.$emoji_img.' 
-		   </div><div class="form-group">
 			<h3 style="line-height:30%"><b>'.$data->otsikko.'</b></h3>
 			<p><small>'.date("d.m.Y", strtotime($data->time)).'</small></p>
-		   </div>
-		  </div>
 		 </div>
 		</div>';
 
-
-		$bod .= '<br>';
 
 		if($kayttaja == 'admin' and $data->status != 3)
 		{
