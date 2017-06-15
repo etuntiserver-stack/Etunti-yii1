@@ -377,8 +377,14 @@ if(isset($_GET['vinkki_id']))
 
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'hinta'); ?>
-		<?php echo $form->numberField($model,'hinta',array('size'=>10,'maxlength'=>100,'class'=>'form-control', 'step'=>'0.01')); ?>
+		<?php echo $form->numberField($model,'hinta',array('size'=>10,'maxlength'=>100,'class'=>'form-control', 'step'=>'any')); ?>
 		<?php echo $form->error($model,'hinta'); ?>
+	</div>
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'hinta_sis_alv'); ?>
+		<?php echo $form->numberField($model,'hinta_sis_alv',array('size'=>10,'maxlength'=>100,'class'=>'form-control', 'step'=>'any')); ?>
+		<?php echo $form->error($model,'hinta_sis_alv'); ?>
 	</div>
 
 

@@ -3164,6 +3164,8 @@ class TyovuorootController extends Controller
 			// jos on tyopaari -->
 
 				$sum = 0;
+				$alv_0 = 0;
+				$alv_sum = 0;
 				   if(isset($_POST['vieposti']) and isset($asiakkaat->sahkoposti) and !empty($asiakkaat->sahkoposti))
 				   {
 					$message = '
@@ -3176,7 +3178,12 @@ class TyovuorootController extends Controller
 						if( count($luotu) > 0 )
 						$tuntia = $tuntia * count($luotu);
 
-						$sum = ($asiakkaat->hinta*$tuntia) + (($asiakkaat->hinta*$asiakkaat->alv)/100);
+						$sum = ($asiakkaat->hinta*$tuntia) + ((($asiakkaat->hinta*$asiakkaat->alv)/100)*$tuntia);
+						$alv_0 = $asiakkaat->hinta*$tuntia;
+						$alv_sum = $sum-$asiakkaat->hinta;
+
+						$message .= 'Hinta ALV 0: '.number_format($alv_0, 2, ',', ' ').' &euro;<br>';
+						$message .= 'ALV: '.number_format($alv_sum, 2, ',', ' ').' &euro;<br>';
 						$message .= 'Hinta: '.number_format($sum, 2, ',', ' ').' &euro;<br>';
 					}
 
@@ -3209,7 +3216,7 @@ class TyovuorootController extends Controller
 					}
 				   }
 				
-					$return[] = array('tid'=>$model->tid, 'pvm'=>$model->pvm, 'ymd'=>date("Ymd",strtotime($model->pvm)), 'sum' => $sum);
+					$return[] = array('tid'=>$model->tid, 'pvm'=>$model->pvm, 'ymd'=>date("Ymd",strtotime($model->pvm)), 'alv'=>$alv_sum, 'alv_0' => $alv_0, 'sum' => $sum);
 				  	echo json_encode($return);
 					exit;
 				}

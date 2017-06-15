@@ -392,6 +392,8 @@ class AsiakkaatController extends Controller
 
 		if(isset($_POST['Asiakkaat']))
 		{
+//print_r($_POST['Asiakkaat']['hinta_sis_alv']);
+//exit;
 			$model->attributes=$_POST['Asiakkaat'];
 
 			if(isset($_POST['Asiakkaat']['ryhma']))

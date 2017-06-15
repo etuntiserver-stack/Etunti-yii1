@@ -238,7 +238,7 @@ $(document).ready(function(){
         	?>
     </div>
     <div class="section fill mb5">
-		<label><?php echo Yii::t('main', 'Alv'); ?> </label>
+		<label><?php echo Yii::t('main', 'Alv %'); ?> </label>
 		<?php
         	$l = array(0=>0,10=>10,14=>14,24=>24);
         	echo CHtml::dropDownList('Asiakkaat[alv]', 'alv', $l,
@@ -248,12 +248,48 @@ $(document).ready(function(){
     </div>
     <div class="section fill mb5">
 		<label><?php echo Yii::t('main', 'Hinta'); ?></label>
-		<input type="number" name="Asiakkaat[hinta]" class="form-control">
+		<input type="number" name="Asiakkaat[hinta]" class="form-control" id="hinta">
+    </div>
+    <div class="section fill mb5">
+		<label><?php echo Yii::t('main', 'Vero'); ?></label>
+		<input type="number" class="form-control" id="vero">
+    </div>
+    <div class="section fill mb5">
+		<label><?php echo Yii::t('main', 'Hinta (sis. ALV)'); ?></label>
+		<input type="number" name="Asiakkaat[hinta_sis_alv]" class="form-control" id="hinta_sis_alv" step="any">
     </div>
   </div>
 </div>
 
 
+<script type="text/javascript">
+$(document).ready(function(){
+
+  $("#Asiakkaat_alv").change(function() {
+	laskurin();
+  });
+  $("#hinta").keyup(function() {
+	laskurin();
+  });
+  $("#hinta_sis_alv").keyup(function() {
+	var hinta_sis_alv = parseInt($(this).val());
+	var alv = parseInt($("#Asiakkaat_alv").val());
+	var result = hinta_sis_alv/(1+(alv/100));
+	$("#hinta").val(result.toFixed(2));
+	$("#vero").val((hinta_sis_alv-result).toFixed(2));
+  });
+
+  function laskurin()
+  {
+	var alv = parseInt($("#Asiakkaat_alv").val());
+	var hinta = parseInt($("#hinta").val());
+	var hinta_sis_alv = ((alv/100)*hinta)+hinta;
+	$("#hinta_sis_alv").val(hinta_sis_alv.toFixed(2));
+	$("#vero").val((hinta_sis_alv-hinta).toFixed(2));
+  }
+
+});
+</script>
 
 
 

@@ -51,6 +51,7 @@ class Asiakkaat extends DB2ActiveRecord
 			array('kirjeenluokka, muistutuslasku_auto, aktiivinen, netvisorkey, onlinevarauksen_asiakas, asiakastila, vinkki_id', 'numerical', 'integerOnly'=>true),
 			array('myyja, postinumero, k_postinumero, yhteyshenkilo, yrityksen_nimi, y_tunnus, kaupunki, k_kaupunki, puhelin, sahkoposti', 'length', 'max'=>100),
 			array('tyyppi, laskutus_kanava, osoite, k_osoite, verkkolaskuosoite, salasana, ryhma, sahkopostilaskuosoite', 'length', 'max'=>255),
+			array('hinta_sis_alv', 'numerical', 'integerOnly'=>false),
 			array('maksuehto, viivastyskorko', 'length', 'max'=>20),
 			array('alv', 'length', 'max'=>3),
 			array('hinta_tyyppi', 'length', 'max'=>50),
@@ -104,12 +105,13 @@ class Asiakkaat extends DB2ActiveRecord
 			'verkkolaskuosoite' => Yii::t('main', 'Verkkolaskuosoite'),
 			'alv'=> Yii::t('main', 'ALV %'),
 			'hinta_tyyppi'=> Yii::t('main', 'Hinta tyyppi'),
-			'hinta'=> Yii::t('main', 'Hinta'),
+			'hinta'=> Yii::t('main', 'Hinta (ALV0)'),
 			'muistutuslasku_auto'=> Yii::t('main', 'Muistutuslasku automaatiseesti'),
 			'kirjeenluokka'=> Yii::t('main', 'Kirjeenluokka'),
 			'myyja'=> Yii::t('main', 'Myyjä'),
 			'salasana'=> Yii::t('main', 'Extranet-salasana'),
 			'sahkopostilaskuosoite'=> Yii::t('main', 'Sähköpostilaskuosoite'),
+			'hinta_sis_alv' => Yii::t('main', 'Hinta (sis. ALV)'),
 		);
 	}
 
