@@ -38,6 +38,7 @@ function getUrlVars() {
 			$('#resultLaatiko').html(d);
 			reloadSkin();
 			reloadDatepicker();
+			$('.sisainen').remove();
 		}
     	   },
     		error:function (xhr, ajaxOptions, thrownError){

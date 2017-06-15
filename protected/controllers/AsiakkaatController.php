@@ -1310,6 +1310,10 @@ $xml = '
 
 		if(isset($post['PalautteetVastaus']))
 		{
+			$is_sisainen = '';
+			if(isset($post['PalautteetVastaus']['sisainen']))
+			$is_sisainen = 'sisainen';
+
 			$p = Palautteet::model()->findbypk($post['palaute_id']);
 
 			$model->attributes=$post['PalautteetVastaus'];
@@ -1327,9 +1331,9 @@ $xml = '
 			$nimi = $as->yhteyshenkilo;
 
 			if(isset(Yii::app()->user->asiakas))
-				$model->teksti = '<b>'.$nimi.'</b>: '.$model->teksti.'<br><div class="aika">'.date('d.m.Y H:i').'</div>';
+				$model->teksti = '<span class="'.$is_sisainen.'"><b>'.$nimi.'</b>: '.$model->teksti.'<br><div class="aika">'.date('d.m.Y H:i').'</div></span>';
 			elseif(isset(Yii::app()->user->nimi))
-				$model->teksti = '<b>'.Yii::app()->user->nimi.'</b>: '.$model->teksti.'<br><div class="aika">'.date('d.m.Y H:i').'</div>';
+				$model->teksti = '<span class="'.$is_sisainen.'"><b>'.Yii::app()->user->nimi.'</b>: '.$model->teksti.'<br><div class="aika">'.date('d.m.Y H:i').'</div></span>';
 
 			if($model->save())
 			{

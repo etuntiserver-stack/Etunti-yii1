@@ -17,6 +17,11 @@
 /* Roman */
 .required, .errorMessage { color: red; }
 .link{ cursor: pointer }
+.sisainen{ color:red; }
+.aika{ 
+	line-height: 30%;
+	font-size: 80%;
+}
 
 /* Tooltip */
 .tooltip .tooltip-inner {
