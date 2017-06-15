@@ -253,9 +253,12 @@
 		if( $model->asiakas_id != 0 )
 		{
 			$a = Asiakkaat::model()->findByPk($model->asiakas_id);
+			if(isset($a->id))
+			{
 			echo $this->renderPartial('//asiakkaat/view', 
 				array('id'=>$a->id, 'model'=>$a)
 			, true);
+			}
 		}
 		?>
 		</div>
