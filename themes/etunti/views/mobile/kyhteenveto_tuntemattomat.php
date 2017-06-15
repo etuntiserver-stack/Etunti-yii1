@@ -15,7 +15,7 @@ $this->breadcrumbs=array(
         <div class="tray-center">
 
 
-              <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-home"></i> <?php echo Yii::t('main', 'Tuntuyhtenveto kohteet (Tuntemattomat)'); ?> 
+              <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-home"></i> <?php echo Yii::t('main', 'Tuntiyhtenveto kohteet (Tuntemattomat)'); ?> 
 		</h2>
 
 

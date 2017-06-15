@@ -1284,7 +1284,22 @@ $("#Lasku_as_nro").change(function() {
 			$("#getkohdeT").html(spdata['body']);
 			$("#tuntiKalut").show();
 
-			$('.selectpicker').selectpicker();
+			// <--multiselect
+			$('#etsikohde_alasvetovaliko').multiselect({
+				//inheritClass: true,
+				//enableFiltering: true,
+			        includeSelectAllOption: true,
+				nonSelectedText: '<?php echo Yii::t("main", "Tyhjä"); ?>',
+				selectAllText: '<?php echo Yii::t("main", "Valitse kaikki"); ?>',
+				allSelectedText: '<?php echo Yii::t("main", "Kaikki"); ?>',
+				nSelectedText: '<?php echo Yii::t("main", "valittu"); ?>',
+				numberDisplayed: 0,
+				buttonWidth: '100%',
+			        maxHeight: 300,
+			});
+			//    multiselect -->
+
+			//$('.selectpicker').selectpicker();
 
 		} else {
 			$("#tuntiKalut").hide();
