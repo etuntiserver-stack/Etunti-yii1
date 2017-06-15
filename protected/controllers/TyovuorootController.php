@@ -3180,7 +3180,7 @@ class TyovuorootController extends Controller
 
 						$sum = ($asiakkaat->hinta*$tuntia) + ((($asiakkaat->hinta*$asiakkaat->alv)/100)*$tuntia);
 						$alv_0 = $asiakkaat->hinta*$tuntia;
-						$alv_sum = $sum-$asiakkaat->hinta;
+						$alv_sum = $sum-$alv_0;
 
 						$message .= 'Hinta ALV 0: '.number_format($alv_0, 2, ',', ' ').' &euro;<br>';
 						$message .= 'ALV: '.number_format($alv_sum, 2, ',', ' ').' &euro;<br>';
