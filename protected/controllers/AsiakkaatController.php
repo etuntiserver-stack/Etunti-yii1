@@ -1219,12 +1219,14 @@ $xml = '
 
 		$bod .= '
 		<div class="row">
-		 <div class="form-inline">
-		  <div class="form-group">
+		 <div class="col-sm-12">
+		  <div class="form-inline">
+		   <div class="form-group">
 			'.$emoji_img.' 
-		  </div><div class="form-group">
+		   </div><div class="form-group">
 			<h3 style="line-height:30%"><b>'.$data->otsikko.'</b></h3>
 			<p><small>'.date("d.m.Y", strtotime($data->time)).'</small></p>
+		   </div>
 		  </div>
 		 </div>
 		</div>';

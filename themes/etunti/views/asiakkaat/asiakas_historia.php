@@ -99,7 +99,9 @@
             <div class="admin-form">
               <div class="panel heading-border">
                 <div class="panel-body bg-light">
+                 <div class="table-responsive">
 		  <?php echo $asiakkaat[0]->laskutuksetCRM($model, $from, $to); ?>
+		 </div>
                 </div>
               </div>
             </div>
