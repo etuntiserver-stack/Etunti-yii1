@@ -47,6 +47,10 @@
 	<td>
 		<?php echo $data->otsikko; ?>
 	</td>
+	<td>
+		<?php $cat = Valikkoot::model()->findbyPk($data->kategoria); ?>
+		<?=(isset($cat->id))? $cat->value: ''?>
+	</td>
 
 <?php
 	  	$bod = '';
