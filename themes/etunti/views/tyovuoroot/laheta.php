@@ -144,7 +144,7 @@ for($day= 1; $day <= 7; $day++) {
   {
     if($t->pvm == $date)
     {
-	$k = Kohteet::model()->findbypk($t->kohde,array("select"=>"asiakas_id,osoite,avain,kaupunki"));
+	$k = Kohteet::model()->findbypk($t->kohde);
 
 	// <-- Asiakas Tiedot
 	$asiakasTiedot = '';
@@ -191,7 +191,7 @@ for($day= 1; $day <= 7; $day++) {
 	// <-- osoite
 	if(isset($k->id))
 		$osoite = $k->osoite;
-	elseif(!isset($k->id) and $t->status != 0)
+	elseif(!isset($k->id) and $t->status != 0 and $t->status != 3)
 		$osoite = $this->tilanteet()[$t->status];
 	//     osoite -->
 

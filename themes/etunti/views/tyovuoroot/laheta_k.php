@@ -174,12 +174,19 @@ for($day= 1; $day <= 7; $day++) {
 		$k['osoite'] = $expl[0];
 */
 
+	$expl2 = explode("/",$t->tyoajanmerkinta);
+		$cl = '';
+	if(isset($expl2[1]) and !empty($expl2[1]))
+		$cl = 'style="color:'.$expl2[1].'"';
+
+	// <-- osoite
 	if(isset($k->id))
 		$osoite = $k->osoite;
-	elseif(!isset($k->id) and $t->status != 0)
+	elseif(!isset($k->id) and $t->status != 0 and $t->status != 3)
 		$osoite = $this->tilanteet()[$t->status];
+	//     osoite -->
 
-	echo $al.' '.$osoite;
+	echo '<span '.$cl.'>'.$al.' '.$osoite.'</span>';
 	if(isset($k->id) and !empty($k->avain))
 	echo ' &nbsp;<b class="fa fa-key text-warning"></b>';
 	elseif(isset($k->id) and !empty($k->avain) and $tulosta)
