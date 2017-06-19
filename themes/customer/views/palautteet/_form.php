@@ -67,6 +67,31 @@ $model->asiakas_id = Yii::app()->user->asiakas;
 	</div>
 
 	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'kategoria'); ?>
+
+		<?php
+		$list = array();
+      		$l = Valikkoot::model()->findAll(" select_type='kategoria' ",array('order' => "select_type"));
+		if(count($l) == 0)
+      		{
+			$new_val = new Valikkoot;
+			$new_val->select_type = "kategoria";
+			$new_val->value = "Testi kategoria";
+			if($new_val->save())
+	      			$l = Valikkoot::model()->findAll(" select_type='kategoria' ",array('order' => "select_type"));
+			else
+				var_dump($new_val->getErrors());
+		}
+		foreach($l as $val)
+			$list[$val->id] = $val->value;
+
+        		echo $form->dropDownList($model, 'kategoria', $list,
+			array('empty'=>'Valitse', 'class'=>'form-control'));
+        	?>
+		<?php echo $form->error($model,'kategoria'); ?>
+	</div>
+
+	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'viimeinen_tyo'); ?>
 		<?php
 		$a = Asiakkaat::model()->findByPk($model->asiakas_id);

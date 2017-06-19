@@ -34,6 +34,60 @@
                             </label>
                           </label>
                         </div>
+
+                        <div class="section">
+	
+			   <div class="input-group">
+				<?php
+				$list = array();
+		      		$l = Valikkoot::model()->findAll(" select_type='kategoria' ",array('order' => "select_type"));
+				if(count($l) == 0)
+		      		{
+					$new_val = new Valikkoot;
+					$new_val->select_type = "kategoria";
+					$new_val->value = "Testi kategoria";
+					if($new_val->save())
+			      			$l = Valikkoot::model()->findAll(" select_type='kategoria' ",array('order' => "select_type"));
+					else
+						var_dump($new_val->getErrors());
+				}
+				foreach($l as $val)
+					$list[$val->id] = $val->value;
+		
+		        		echo CHtml::dropDownList('kategoria', 'kategoria', $list,
+					array('empty'=>'Valitse', 'class'=>'form-control'));
+		        	?>
+				<span class="input-group-btn">
+					<span class="btn btn-primary myBgColors muokaValiko" for="kategoria"><i class="fa fa-pencil-square-o"></i></span>
+				</span>
+			   </div>
+                        </div>
+
+			<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/bootstrap.modal.js"></script>
+			<div id="showres" class="modal fade" tabindex="-1" role="dialog"></div>
+
+<script type="text/javascript">
+$(document).ready(function(){
+
+/* valikot */
+$(".muokaValiko").click(function() {
+    var thisFor = $(this).attr("for");
+        $.ajax({
+           url: location.protocol + "//" + location.host + "/index.php/site/valiko",
+	   type:'POST',
+	   data: { "select_type" : thisFor },
+           success: function(data){
+		console.log(data);
+		$('#showres').modal().html(JSON.parse(data));
+           }
+        });
+});
+/* valikot */
+
+});
+</script>
+
+
                       </div>
                       <div class="col-md-2">
                         <div class="section">
@@ -80,6 +134,7 @@
   <th><?php echo Yii::t('main', 'Aika'); ?></th>
   <th><?php echo Yii::t('main', 'Asiakas'); ?></th>
   <th><?php echo Yii::t('main', 'Otsikko'); ?></th>
+  <th><?php echo Yii::t('main', 'Kategoria'); ?></th>
   <th><?php echo Yii::t('main', 'Palaute'); ?></th>
   <th><?php echo Yii::t('main', 'Tila'); ?></th>
   </tr>
