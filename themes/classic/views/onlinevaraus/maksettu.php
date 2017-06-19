@@ -214,6 +214,14 @@ if(isset($ov->id) and isset($tv->id))
 	//     Kuvat siirretaan templatesta kohteeseen -->
 
 
+	if(isset($_SESSION['onlinevaraus']['kupongi']))
+	{
+		$kup = Kupongit::model()->findbypk($_SESSION['onlinevaraus']['kupongi']);
+        	if(isset($kup->id) and $kup->jatkuva == 0)
+		{
+			Kupongit::model()->updatebypk($kup->id, array('status'=>1)); // nyt on kaytetty
+		}
+	}
 
 $message = '';
 $message .= '

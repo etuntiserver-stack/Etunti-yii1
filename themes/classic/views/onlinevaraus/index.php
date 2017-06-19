@@ -189,6 +189,14 @@ if(isset($asetukset->checkout_id) and !empty($asetukset->checkout_id) and !empty
 	  </div>
 	</div>
 
+	<div class="row" id="toimialueRow">
+	  <div class="col-sm-4 col-sm-offset-4">
+		<h4><?php echo Yii::t('main', 'Syötä kupongi'); ?></h4>
+		<?=CHtml::textField('kupongi', '', array('class'=>'form-control input-lg'))?>
+		<div id="kupongi_result"></div>
+	  </div>
+	</div>
+
 <br>
 	<div class="row" id="lispalvimg">
 	  <div class="col-sm-4 col-sm-offset-4">
@@ -295,7 +303,32 @@ $("#lispalvimg").click(function(){
 });
 
 
+$("#kupongi").keyup(function(){
 
+   if( $(this).val().length >= 2 )
+   {
+   $.ajax({
+	url: 'kupongi_checker',
+	data:{ kupongi : $(this).val() },
+	type:'POST',
+	success:function(data){
+		data = JSON.parse(data);
+		console.log(data);
+		if(data !== '')
+		{
+			$("#kupongi_result").html('<span class="text-success">Kupongi on voimassa</span>');
+			ajaaPalveluSave();
+
+		} else {
+			$("#kupongi_result").html('<span class="text-danger">Kupongi ei ole voimassa</span>');
+		}
+   	},
+	error:function(data){
+		console.log(data);
+    	}
+    });
+    }
+});
 
 $("#palvelu").change(function(){
 

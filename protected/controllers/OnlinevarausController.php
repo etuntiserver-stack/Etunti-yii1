@@ -28,7 +28,7 @@ class OnlinevarausController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view', 'check', 'aika', 'osoite', 'maksu', 'valmis', 'palvelu_ajax', 'palvelu_save_ajax', 'lisat_ajax', 'ajaat_ajax', 'aika_ajax', 'onkokohde', 'luouusi', 'checkout', 'maksettu', 'rekisteriseloste', 'tidtietoja', 'get_lomake_ajax'),
+				'actions'=>array('index','view', 'check', 'aika', 'osoite', 'maksu', 'valmis', 'palvelu_ajax', 'palvelu_save_ajax', 'lisat_ajax', 'ajaat_ajax', 'aika_ajax', 'onkokohde', 'luouusi', 'checkout', 'maksettu', 'rekisteriseloste', 'tidtietoja', 'get_lomake_ajax', 'kupongi_checker'),
                 		'users'=>array("*"),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
@@ -83,6 +83,28 @@ class OnlinevarausController extends Controller
         }
 
 
+	public function actionKupongi_checker()
+	{
+
+		$result = '';
+		if(isset($_POST['kupongi']))
+		{
+			$kupongi = $_POST['kupongi'];
+	       		$criteria = new CDbCriteria();
+	       		$criteria->condition = " 
+				DATE(voimassa) > CURDATE()
+				AND kupongin_id='".$kupongi."'
+				AND status=0
+			";
+			$kup = Kupongit::model()->find($criteria);
+			if(isset($kup->id))
+			{
+				$_SESSION['onlinevaraus']['kupongi'] = $kup->id;
+				$result = $kup->id;
+			}
+		}
+		echo json_encode($result);
+	}
 
 	public function actionGet_lomake_ajax($id)
 	{
