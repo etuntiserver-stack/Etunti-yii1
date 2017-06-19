@@ -188,7 +188,7 @@ $randstring = generateRandomString();
 
 		/* file */
 		$file = $crm->liite.'.pdf';
-		$path = Yii::app()->request->baseUrl."tiedostot/crm/sopimukset/".Yii::app()->user->domain;
+		$path = Yii::app()->request->baseUrl."tiedostot/sopimukset/".Yii::app()->user->domain;
 
 		$ft = FirmanTiedot::model()->findbypk(1);
 		$message = Yii::t('main', 'CRM sopimus body');
@@ -210,7 +210,7 @@ $randstring = generateRandomString();
 		$mail->setSubject($subject);
 		$mail->setBody($message);
 
-		if(file_exists(Yii::app()->basePath."/../tiedostot/crm/sopimukset/".Yii::app()->user->domain."/".$crm->liite.".pdf"))
+		if(file_exists(Yii::app()->basePath."/../tiedostot/sopimukset/".Yii::app()->user->domain."/".$crm->liite.".pdf"))
 		$mail->setAttachment($path.'/'.$file);
 
 		   if($mail->send())

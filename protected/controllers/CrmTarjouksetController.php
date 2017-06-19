@@ -164,7 +164,7 @@ class CrmTarjouksetController extends Controller
 
 		/* file */
 		$file = $crm->liite.'.pdf';
-		$path = Yii::app()->request->baseUrl."tiedostot/crm/tarjoukset/".Yii::app()->user->domain;
+		$path = Yii::app()->request->baseUrl."tiedostot/tarjoukset/".Yii::app()->user->domain;
 
 		$ft = FirmanTiedot::model()->findbypk(1);
 		$get_css = file_get_contents('css/email_send_table.css');
@@ -195,8 +195,7 @@ class CrmTarjouksetController extends Controller
 		</body>
 		</html>';
 		
-		//echo $message;
-		//exit;
+
 
 
 		$subject = Yii::t('main', 'Tarjous'). ', '.$ft->tyonantaja;
@@ -207,8 +206,12 @@ class CrmTarjouksetController extends Controller
 		$mail->setSubject($subject);
 		$mail->setBody($message);
 
-   		if(file_exists(Yii::app()->basePath."/../tiedostot/crm/tarjoukset/".Yii::app()->user->domain."/".$crm->liite.".pdf"))
-		$mail->setAttachment($path.'/'.$file);
+   		if(file_exists(Yii::app()->basePath."/../tiedostot/tarjoukset/".Yii::app()->user->domain."/".$crm->liite.".pdf"))
+		{
+			$mail->setAttachment($path.'/'.$file);
+			//echo $message;
+			//exit;
+		}
 
 		   if($mail->send())
 		   {
