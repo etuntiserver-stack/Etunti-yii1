@@ -1144,6 +1144,10 @@ $('.tvchange').change(function(){
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/palautteet/index">
                   <span class="fa fa-map"></span> <?php echo Yii::t('main', 'Palautteet'); ?></a>
               </li>
+              <li>
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/kupongit/index">
+                  <span class="fa fa-map"></span> <?php echo Yii::t('main', 'Kupongit'); ?></a>
+              </li>
             </ul>
           </li>
 	<?php endif; ?>

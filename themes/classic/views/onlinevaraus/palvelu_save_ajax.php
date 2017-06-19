@@ -3,6 +3,33 @@
   if(isset($_SESSION['onlinevaraus']['paapalvelu']))
 	$model = OnlinevarausTuotteet::model()->findbypk($_SESSION['onlinevaraus']['paapalvelu']);
 
+  // <-- Kupongi
+  $blockKupongi = '';
+  if(isset($_SESSION['onlinevaraus']['kupongi']))
+  {
+	$kup = Kupongit::model()->findbypk($_SESSION['onlinevaraus']['kupongi']);
+
+        if(isset($kup->id))
+	{
+
+	if($kup->maara_tyyppi == 'euro')
+	$kup_maara = '-'.$kup->euro_maara.'&euro;';
+	if($kup->maara_tyyppi == 'prosentti')
+	$kup_maara = '-'.$kup->prosentti_maara.'%';
+
+	$blockKupongi .= '
+	<div class="row">
+	 <div class="col-xs-2">
+		<i class="fa fa-star" aria-hidden="true"></i>
+	 </div><div class="col-xs-10">
+		'.Yii::t('main', 'Kupongi').': '.$kup_maara.'
+	 </div>
+	</div>
+ 	';
+	}
+  }
+  //     Kupongi -->
+
   $blockAika = '';
   $vkolisa = 0;
 
@@ -111,6 +138,7 @@
 	if(isset($_SESSION['onlinevaraus']['paa_kesto'])) $paa_kesto = $_SESSION['onlinevaraus']['paa_kesto']; else $paa_kesto = 0;
 
 	$sumTunti = $perusKesto+$lisaTunti+$paa_kesto;
+
 	$_SESSION['onlinevaraus']['sumTunti'] 	= $sumTunti;
 	$tilauksenKuvaus['sumTunti'] 		= $sumTunti;
 
@@ -120,6 +148,17 @@
 		$sum = ((float)$lisaHinta+$paa_hinta)*$vkolisa;
 	else
 		$sum = (float)$lisaHinta+$paa_hinta;
+
+	// <-- kupongi
+	if(isset($kup->id) and $kup->maara_tyyppi == 'euro' and $sum > $kup->euro_maara)
+	{
+		$sum -= $kup->euro_maara;
+	}
+	if(isset($kup->id) and $kup->maara_tyyppi == 'prosentti' and $sum > 0)
+	{
+		$sum -= ($sum*$kup->prosentti_maara)/100;
+	}
+	//     kupongi -->
 
 	$_SESSION['onlinevaraus']['amount'] 	= $sum;
 	$tilauksenKuvaus['sum'] 		= $sum;
@@ -198,6 +237,8 @@
 	 </div>
 	</div>';
 
+	$body .= $blockKupongi;
+
 	$body .= '
 	<div class="row">
 	 <div class="col-xs-2">
@@ -207,6 +248,7 @@
 		'.$kotitalousvahennys.'
 	 </div>
 	</div>';
+
 
 	$path = Yii::app()->basePath."/../tiedostot/onlinevaraus_tuote/".Yii::app()->user->domain;
 	if(file_exists($path."/".$model->id.".jpg"))
@@ -221,6 +263,7 @@
 
 	$body .= $blockAika;
 	$body .= $blockKohde;
+
 
 	$body .= '
 	 </div>
