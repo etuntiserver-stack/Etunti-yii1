@@ -13,9 +13,17 @@
 	 locale: 'fi',
     });
 
-   $( ".datepickerFI" ).datetimepicker({
+    $( ".datepickerFI" ).datetimepicker({
          format : 'DD.MM.YYYY',
 	 locale: 'fi',
+    });
+
+
+    $(".datepickerMY").datepicker({
+    	format: "yyyy-mm",
+    	viewMode: "months", 
+    	minViewMode: "months",
+	language: 'fi',
     });
 
     $( ".timepicker" ).datetimepicker({

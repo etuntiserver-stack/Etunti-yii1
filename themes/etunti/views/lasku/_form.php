@@ -516,14 +516,11 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 <br>
 
 <div class="row form kht" id="kalut">
-
-<div id="tuntiKalut">
-    <div class="col-sm-6">
-
+ <div class="col-sm-6" id="tuntiKalut">
   <div class="panel heading-border">
    <div class="panel-body">
 
-    <legend><?php echo Yii::t('main', 'TYÖKALUT'); ?></legend>
+    <legend><?php echo Yii::t('main', 'TUNTI / KPL'); ?></legend>
       <div class="section fill mb5">
 	<div class="col-sm-6">
 		<b class="glyphicon glyphicon-calendar"></b> 
@@ -558,16 +555,50 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 
    </div>
   </div>
+ </div>
+ <div class="col-sm-6" id="kkKalut">
+  <div class="panel heading-border">
+   <div class="panel-body">
 
-    </div>
+    <legend><?php echo Yii::t('main', 'KK'); ?></legend>
+      <div class="section fill mb5">
+	<div class="col-sm-6">
+		<b class="glyphicon glyphicon-calendar"></b> 
+   		<input type="text" id="from" class="form-control form-group datepickerMY" value="<?php echo date('Y-m'); ?>">
+	</div><div class="col-sm-6">
+		<b class="glyphicon glyphicon-calendar"></b> 
+   		<input type="text" id="to" class="form-control form-group datepickerMY" value="<?php echo date('Y-m'); ?>">
+	</div>
+      </div>
+
+      <div class="section fill mb5">
+	<div class="col-sm-6">
+		<div id="getkohdeKK" class="form-group"></div>
+	</div><div class="col-sm-6">
+	<br>
+	<?php
+	echo CHtml::dropdownList('palvelu','palvelu', CHtml::listData(LaskutusTuotteet::model()->findAll(), 'id', 'tuotenimi'), 
+	array('empty'=>'Valitse tuote/palvelu','class'=>'form-control valitseTuote'));
+	?>
+	</div>
+      </div>
+      
+      <div class="section fill mb5">
+      <div class="col-sm-6">
+
+      </div>
+      <div class="col-sm-6">
+	<br>
+        	<b class="btn btn-success pull-right luoRiviTunti"><?php echo Yii::t('main', 'Luo rivit'); ?></b>
+      </div>
+      </div>
+
+   </div>
+  </div>
+ </div>
 </div>
 
 
-
-
-
-
-</div>
 
 
 	<input type="hidden" class="form-control" id="kohteistaRivit" readonly><br>
@@ -1126,9 +1157,9 @@ function yhteensaTotal(){
 
 $(".luoRiviTunti").click(function() {
 
-	var from = $("#from").val();
-	var to = $("#to").val();
-	var kohteet = $("#etsikohde_alasvetovaliko").val();
+	var from = $(this).closest('.panel-body').find("#from").val();
+	var to = $(this).closest('.panel-body').find("#to").val();
+	var kohteet = $(this).closest('.panel-body').find('.etsikohde_alasvetovaliko').val();
 	var tuotePalvelu = $("#palvelu").val();
 
 	console.log(kohteet);
@@ -1284,11 +1315,14 @@ $("#Lasku_as_nro").change(function() {
 		if(spdata['is_true'] == true)
 		{
 
-			$("#getkohdeT").html(spdata['body']);
+			$("#getkohdeT").html(spdata['body_t']);
+			$("#getkohdeKK").html(spdata['body_kk']);
 			$("#tuntiKalut").show();
 
+
+
 			// <--multiselect
-			$('#etsikohde_alasvetovaliko').multiselect({
+			$('.etsikohde_alasvetovaliko').multiselect({
 				//inheritClass: true,
 				//enableFiltering: true,
 			        includeSelectAllOption: true,
@@ -1447,7 +1481,7 @@ $("#Lasku_toimitusosoite").change(function() {
 
 
 // hinnoitelu
-$(document).delegate("#etsikohde_alasvetovaliko","change",function(){
+$(document).delegate(".etsikohde_alasvetovaliko","change",function(){
 
 
   if($(this).val())

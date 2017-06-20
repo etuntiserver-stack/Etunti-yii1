@@ -405,8 +405,8 @@ class LaskuController extends Controller
 		$kk_kpl = 0;
 		if( $_POST['mistaLuo'] == 'luoKohteista' )
 		{
-			$date1 = new DateTime($_POST['to']);
-			$date2 = new DateTime($_POST['from']);
+			$date1 = new DateTime(date("Y-m-d", strtotime($_POST['from'])));
+			$date2 = new DateTime(date("Y-m-d", strtotime($_POST['to'])));
 			$interval = date_diff($date1, $date2);
 			$kk_kpl =  $interval->m + ($interval->y * 12);
 		}
@@ -425,62 +425,94 @@ class LaskuController extends Controller
 	public function actionEtsikohde($id)
 	{
 
+		$thisTrue = false;
+
+		// <-- Body_t
        		$criteria = new CDbCriteria();
        		$criteria->condition = " asiakasnumero='".$id."' ";
 		$as = Asiakkaat::model()->find($criteria);
 
-
-
-		$thisTrue = false;
-
-		$body = '';
-		$body .= '<br><select class="selectpicker kohteet" id="etsikohde_alasvetovaliko" multiple title="Valitse kohteet">';
+		$body_t = '';
+		$body_t .= '<br><select class="selectpicker kohteet etsikohde_alasvetovaliko" multiple title="Valitse kohteet">';
 
 		// <-- Kohteet
        		$criteria = new CDbCriteria();
        		$criteria->condition = " 
 			asiakas_id='".$as->id."' 
 			AND aktiivinen=1
-			AND hinta_tyyppi!='' AND hinta!=''
+			AND hinta_tyyppi!=2 AND hinta!=''
 		";
 		$k = Kohteet::model()->findAll($criteria);
 		foreach($k as $a)
 		{
-			if($a->hinta_tyyppi == 1)
-				$yksikko_k = 'h';
-			if($a->hinta_tyyppi == 2)
-				$yksikko_k = 'kk';
-			if($a->hinta_tyyppi == 3)
-				$yksikko_k = 'kpl';
+			$yksikko_k = '';
+			if($a->hinta_tyyppi == 1) $yksikko_k = 'h';
+			if($a->hinta_tyyppi == 3) $yksikko_k = 'kpl';
 
 			$thisTrue = true;
-			$body .= '<option value="'.$a->id.'//'.$a->hinta.'//'.$yksikko_k.'//onkohde">Kohde: '.$a->osoite.' ( '.$a->hinta.'&euro;/'.$yksikko_k.' )</option>';
+			$body_t .= '<option value="'.$a->id.'//'.$a->hinta.'//'.$yksikko_k.'//onkohde">Kohde: '.$a->osoite.' ( '.$a->hinta.'&euro;/'.$yksikko_k.' )</option>';
 		}
 		//     Kohteet -->
 
 		// <-- Asiakas
-		if($as->hinta_tyyppi == 1)
-		$yksikko_a = 'h';
-		if($as->hinta_tyyppi == 2)
-		$yksikko_a = 'kk';
-		if($as->hinta_tyyppi == 3)
-		$yksikko_a = 'kpl';
+		$yksikko_a = '';
+		if($as->hinta_tyyppi == 1) $yksikko_a = 'h';
+		if($as->hinta_tyyppi == 3) $yksikko_a = 'kpl';
 
-		if($as->hinta_tyyppi != '' and $as->hinta != '')
+		if($yksikko_a != '' and $as->hinta != '')
 		{
 			$thisTrue = true;
-			$body .= '<option value="'.$as->id.'//'.$as->hinta.'//'.$yksikko_a.'//eikohde">Asiakas: '.$as->osoite.' ( '.$as->hinta.'&euro;/'.$yksikko_a.' )</option>';
+			$body_t .= '<option value="'.$as->id.'//'.$as->hinta.'//'.$yksikko_a.'//eikohde">Asiakas: '.$as->osoite.' ( '.$as->hinta.'&euro;/'.$yksikko_a.' )</option>';
 		}
 		//     Asiakas -->
+		$body_t .= '</select>';
+		//  Body_t -->
 
-		$body .= '</select>';
+
+		// <-- Body_kk
+       		$criteria = new CDbCriteria();
+       		$criteria->condition = " asiakasnumero='".$id."' ";
+		$as = Asiakkaat::model()->find($criteria);
+
+		$body_kk = '';
+		$body_kk .= '<br><select class="selectpicker kohteet etsikohde_alasvetovaliko" multiple title="Valitse kohteet">';
+
+		// <-- Kohteet
+       		$criteria = new CDbCriteria();
+       		$criteria->condition = " 
+			asiakas_id='".$as->id."' 
+			AND aktiivinen=1
+			AND hinta_tyyppi=2 AND hinta!=''
+		";
+		$k = Kohteet::model()->findAll($criteria);
+		foreach($k as $a)
+		{
+			$thisTrue = true;
+			$body_kk .= '<option value="'.$a->id.'//'.$a->hinta.'//kk//onkohde">Kohde: '.$a->osoite.' ( '.$a->hinta.'&euro;/kk )</option>';
+		}
+		//     Kohteet -->
+
+		// <-- Asiakas
+		if($as->hinta_tyyppi == 2 and $as->hinta != '')
+		{
+			$thisTrue = true;
+			$body_kk .= '<option value="'.$as->id.'//'.$as->hinta.'//kk//eikohde">Asiakas: '.$as->osoite.' ( '.$as->hinta.'&euro;/kk )</option>';
+		}
+		//     Asiakas -->
+		$body_kk .= '</select>';
+		//  body_kk -->
 
 
 		$allennus = array();
 		if(isset($as->vinkki_tunnit) and !empty($as->vinkki_tunnit) and isset($as->vinkki_prosentti) and !empty($as->vinkki_prosentti))
 		$allennus = array('vinkki_tunnit'=>$as->vinkki_tunnit,'vinkki_prosentti'=>$as->vinkki_prosentti);
 
-		$return = array('body'=>$body,'is_true'=>$thisTrue, 'vinkki'=>json_encode($allennus));
+		$return = array(
+			'body_t'=>$body_t,
+			'body_kk'=>$body_kk,
+			'is_true'=>$thisTrue,
+			'vinkki'=>json_encode($allennus)
+		);
 
 		echo json_encode($return);
 	}
