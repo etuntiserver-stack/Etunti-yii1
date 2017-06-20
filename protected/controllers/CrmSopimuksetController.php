@@ -191,7 +191,7 @@ $randstring = generateRandomString();
 		$path = Yii::app()->request->baseUrl."tiedostot/sopimukset/".Yii::app()->user->domain;
 
 		$ft = FirmanTiedot::model()->findbypk(1);
-		$message = Yii::t('main', 'Sopimus');
+		$message = '<h1>'.Yii::t('main', 'Sopimus').'</h1>';
 		$message .= '<br>
 		<a href="http://'.$_SERVER['SERVER_NAME'].'/index.php/CrmSopimukset/vastaus?asia=hyvaksy&id='.$_POST['id'].'&code='.$randstring.'">
 				<h2 style="color:green">'.Yii::t('main', 'Hyväksy').'</h2>

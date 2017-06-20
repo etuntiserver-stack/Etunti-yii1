@@ -169,7 +169,7 @@ class CrmTarjouksetController extends Controller
 		$ft = FirmanTiedot::model()->findbypk(1);
 
 		$message = '<h1>'.Yii::t('main', 'Tarjous').'</h1>';
-		$message = '
+		$message .= '
 		<a href="http://'.$_SERVER['SERVER_NAME'].'/index.php/crmTarjoukset/vastaus?asia=hyvaksy&id='.$id.'&code='.$randstring.'">
 				<h2 style="color:green">'.Yii::t('main', 'Hyväksy').'</h2>
 		</a>
