@@ -88,7 +88,7 @@ class Tyosuhdet extends DB2ActiveRecord
 			'tid' => Yii::t('main', 'Tid'),
 			'alku' => Yii::t('main', 'Aloitus'),
 			'loppu' => Yii::t('main', 'Lopetus'),
-			'vktyoaika' => Yii::t('main', 'Viikkotyöaika'),
+			'vktyoaika' => Yii::t('main', 'Viikkotyöaika (Esim. 37:30)'),
 			'nimike' => Yii::t('main', 'Nimike'),
 			'palkkausmuoto' => Yii::t('main', 'Palkanmaksu. Esimerkiksi ( 1xkk 10.päivä )'),
 			'tuntihinta' => Yii::t('main', 'Palkka'),
