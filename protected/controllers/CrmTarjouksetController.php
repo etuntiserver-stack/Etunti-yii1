@@ -168,23 +168,16 @@ class CrmTarjouksetController extends Controller
 
 		$ft = FirmanTiedot::model()->findbypk(1);
 
-		$message = '<br>
-		<center>
-		<div id="outer">
-		<a class="hyvaksy_button inner" href="http://'.$_SERVER['SERVER_NAME'].'/index.php/crmTarjoukset/vastaus?asia=hyvaksy&id='.$id.'&code='.$randstring.'">
+		$message = '<h1>'.Yii::t('main', 'Tarjous').'</h1>';
+		$message = '
+		<a href="http://'.$_SERVER['SERVER_NAME'].'/index.php/crmTarjoukset/vastaus?asia=hyvaksy&id='.$id.'&code='.$randstring.'">
 				<h2 style="color:green">'.Yii::t('main', 'Hyväksy').'</h2>
 		</a>
-		<a class="hylkaa_button inner" href="http://'.$_SERVER['SERVER_NAME'].'/index.php/crmTarjoukset/vastaus?asia=hylatty&id='.$id.'&code='.$randstring.'">
+		<a href="http://'.$_SERVER['SERVER_NAME'].'/index.php/crmTarjoukset/vastaus?asia=hylatty&id='.$id.'&code='.$randstring.'">
 				<h4 style="color:red">'.Yii::t('main', 'Hylkää').'</h4>
 		</a>
-		</div>
-		</center>
 		';
-		$message .= '
-		</center>
-		</body>
-		</html>';
-		
+	
 
 
 
