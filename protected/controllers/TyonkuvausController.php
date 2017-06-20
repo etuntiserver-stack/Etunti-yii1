@@ -220,15 +220,14 @@ class TyonkuvausController extends Controller
 						$tyontehtavat = array();
 						foreach($_POST['TyonkuvausRivit']['tyotehtava'][$key] as $k2=>$i2)
 						{
-							$tyontehtavat[$k2] = array('tyotehtava'=>$i2, 'vkopvm' => $_POST['TyonkuvausRivit']['vkopvm'][$key][$k2]);
+							$tyontehtavat[$k2] = array(
+								'tyotehtava'=>$i2, 
+								'vkopvm' => $_POST['TyonkuvausRivit']['vkopvm'][$key][$k2],
+								'vkovali' => $_POST['TyonkuvausRivit']['vkovali'][$key][$k2]
+							);
 						}
 					}
 
-					$laatutasot = '';
-					if(isset($_POST['TyonkuvausRivit']['laatutaso'][$key]))
-					{
-						$laatutasot = $_POST['TyonkuvausRivit']['laatutaso'][$key];
-					}
 
 					$kommenti = '';
 					if(isset($_POST['TyonkuvausRivit']['kommenti'][$key]))
@@ -241,7 +240,6 @@ class TyonkuvausController extends Controller
 					$tk_rivit->tyonkuvaus_id = $model->id;
 					$tk_rivit->tilat = json_encode($tilat);
 					$tk_rivit->tyontehtavat = json_encode($tyontehtavat);
-					$tk_rivit->laatutaso = json_encode($laatutasot);
 					$tk_rivit->kommenti = $kommenti;
 					$tk_rivit->save();
 
