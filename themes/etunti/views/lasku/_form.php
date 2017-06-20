@@ -1198,6 +1198,9 @@ function pyyntoRiville(kohteet,from,to,tuotePalvelu){
 			if((mistaLuo == 'luoAsiakaasta') && (yksikko == "kk")){
 			  kpl = '1';
 			}
+			if((mistaLuo == 'luoKohteista') && (yksikko == "kk") && (data['kk_kpl'] > 0)){
+			  kpl = data['kk_kpl'];
+			}
 			if(yksikko == "h"){
 			  kpl = data['tunnit'];
 			}

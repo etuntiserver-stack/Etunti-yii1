@@ -7,7 +7,7 @@
 
 	   <div class="pull-right">
 	   <?php     
-		echo CHtml::link(Yii::t('main', 'Poista kupongi'), '#', array(
+		echo CHtml::link(Yii::t('main', 'Poista alennuskoodi'), '#', array(
 		'submit'=>array('delete', "id"=>$model->id), 
 		'confirm' => 'Haluatko varmaasti poistaa?',
 		'class'=>'btn btn-primary myBgColors'

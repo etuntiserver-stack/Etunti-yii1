@@ -9,7 +9,7 @@
         <div class="tray-center">
 
 
-        <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-home"></i> <?php echo Yii::t('main', 'Kupongit'); ?>
+        <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-home"></i> <?php echo Yii::t('main', 'Alennuskoodit'); ?>
 	<?php echo CHtml::link('',Yii::app()->request->baseUrl.'/index.php/kupongit/create',array('class'=>'btn btn-default fa fa-plus','data-toggle'=>'tooltip', 'data-placement'=>'top', 'title' => Yii::t('main', 'Lisää kupongi') )); ?> 
 	</h2>
 
@@ -26,9 +26,66 @@
                     <div class="row">
 
 
+                      <div class="col-md-3">
+                        <div class="section">
+                          <label class="field prepend-icon">
 
-                      <div class="col-md-2">
-        	        <input type="submit" class="btn btn-primary btn-lg haemob btn-block myBgColors" value="<?php echo Yii::t('main', 'Hae'); ?>">
+			      <input type="number" class="gui-input" name="kupongin_maara" placeholder="Alennuskoodi määrä...">
+                            <label for="firstname" class="field-icon">
+                              <i class="fa fa-calendar"></i>
+                            </label>
+                          </label>			
+                        </div>
+
+
+                        <div class="section">
+                          <label class="field select">
+			   <select class="gui-input" name="Kupongit[maara_tyyppi]" id="maara_tyyppi">
+       				<option value="euro"><?php echo Yii::t('main', 'Euro'); ?></option>
+       				<option value="prosentti"><?php echo Yii::t('main', 'Prosentti'); ?></option>
+			   </select>
+                            <i class="arrow double"></i>
+                            </label>
+                          </label>
+                        </div>
+
+		      </div>
+
+                      <div class="col-md-3">
+                        <div class="section">
+                          <label class="field prepend-icon">
+
+			      <input type="number" class="gui-input datepickerFI" name="Kupongit[voimassa]" placeholder="Voimassa päivämäärä...">
+                            <label for="firstname" class="field-icon">
+                              <i class="fa fa-calendar"></i>
+                            </label>
+                          </label>			
+                        </div>
+                        <div class="section">
+                          <label class="field prepend-icon">
+
+			      <input type="number" class="gui-input" name="maara" placeholder="Syötä määrä...">
+                            <label for="firstname" class="field-icon">
+                              <i class="fa fa-calendar"></i>
+                            </label>
+                          </label>			
+                        </div>
+		      </div>
+
+                      <div class="col-md-3">
+                        <div class="section">
+                          <label class="field prepend-icon">
+
+			      <input type="number" class="gui-input" name="merkkien_maara" placeholder="Merkkien määrä...">
+                            <label for="firstname" class="field-icon">
+                              <i class="fa fa-calendar"></i>
+                            </label>
+                          </label>			
+                        </div>
+		      </div>
+
+                      <div class="col-md-3">
+        	        <input type="submit" class="btn btn-primary btn-lg haemob btn-block myBgColors" value="<?php echo Yii::t('main', 'Luo allenuskoodit'); ?>">
 		      </div>
 
                     </div>

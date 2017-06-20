@@ -33,6 +33,7 @@ class Kupongit extends DB2ActiveRecord
 		// will receive user inputs.
 		return array(
 			array('kupongin_id, voimassa, maara_tyyppi', 'required'),
+                        array('kupongin_id','unique', 'message'=>'Tämä alennuskoodi on varattu.'),
 			array('prosentti_maara, jatkuva, status', 'numerical', 'integerOnly'=>true),
 			array('euro_maara', 'numerical'),
 			array('kupongin_id, maara_tyyppi', 'length', 'max'=>255),

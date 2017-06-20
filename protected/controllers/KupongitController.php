@@ -84,7 +84,7 @@ class KupongitController extends Controller
 		$model=new Kupongit;
 
 		// Uncomment the following line if AJAX validation is needed
-		// $this->performAjaxValidation($model);
+		$this->performAjaxValidation($model);
 
 		if(isset($_POST['Kupongit']))
 		{
@@ -141,14 +141,42 @@ class KupongitController extends Controller
 	/**
 	 * Lists all models.
 	 */
+
+	protected function generateRandomString($length) {
+	    $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+	    $charactersLength = strlen($characters);
+	    $randomString = '';
+	    for ($i = 0; $i < $length; $i++) {
+	        $randomString .= $characters[rand(0, $charactersLength - 1)];
+	    }
+	    return $randomString;
+	}
+
 	public function actionIndex()
 	{
        		$criteria = new CDbCriteria();
 
-/*
-		if(isset($_POST['osoite']) and !empty($_POST['osoite']))
-	        $criteria->addCondition (" osoite LIKE '%".$_POST['osoite']."%' ");
-*/
+
+		if(isset($_POST['kupongin_maara']) and $_POST['kupongin_maara'] > 0)
+		{
+		    for ($i = 0; $i <= $_POST['kupongin_maara']; $i++)
+		    {
+			$model = new Kupongit;
+			$model->attributes=$_POST['Kupongit'];
+
+			$model->kupongin_id = $this->generateRandomString($_POST['merkkien_maara']);
+			if( $model->maara_tyyppi == 'euro' )
+			$model->euro_maara=$_POST['maara'];
+			if( $model->maara_tyyppi == 'prosentti' )
+			$model->prosentti_maara=$_POST['maara'];
+			$model->voimassa=date("Y-m-d", strtotime($_POST['Kupongit']['voimassa']));
+
+			if(!$model->save())
+				die(var_dump($model->getErrors()));
+		    }
+				$this->redirect(array('index'));
+		}
+
 		$dataProvider=new CActiveDataProvider('Kupongit', array(
 			'criteria'=>$criteria,
 			//'pagination'=>false

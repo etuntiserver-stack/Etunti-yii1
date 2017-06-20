@@ -402,11 +402,21 @@ class LaskuController extends Controller
 		AND id NOT IN (SELECT kid FROM sivexkuitti_repaired) ";	
 		$lu = Mobile::model()->find($criteria); 
 	
+		$kk_kpl = 0;
+		if( $_POST['mistaLuo'] == 'luoKohteista' )
+		{
+			$date1 = new DateTime($_POST['to']);
+			$date2 = new DateTime($_POST['from']);
+			$interval = date_diff($date1, $date2);
+			$kk_kpl =  $interval->m + ($interval->y * 12);
+		}
+
 		$return = array(
 			'tunnit'=>$this->num($lu->l_tunnit+$tot->t_tunnit),
 			'rivi_kpl'=>$lu->count+$tot->count,
 			'mistaLuo' => $_POST['mistaLuo'],
-			'kohdet' => $kohdet
+			'kohdet' => $kohdet,
+			'kk_kpl' => $kk_kpl,
 		);
 		echo json_encode($return);
 
