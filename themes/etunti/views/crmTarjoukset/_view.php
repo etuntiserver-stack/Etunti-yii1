@@ -60,7 +60,7 @@
 			{
 				echo '<button class="btn btn-primary btn-block laheta" for="'.$data->id.'">'.Yii::t('main', 'Lähetä').'</button>';
 			} elseif($data->status == 1){
-				echo '<button class="btn btn-warning btn-block laheta">'.Yii::t('main', 'Lähetetty').'</button>';
+				echo '<button class="btn btn-warning btn-block laheta" for="'.$data->id.'">'.Yii::t('main', 'Lähetetty').'</button>';
 			} elseif($data->status == 2){
 				echo '<button class="btn btn-success btn-block">'.Yii::t('main', 'Hyväksytty').'</button>';
 			} elseif($data->status == 3){
