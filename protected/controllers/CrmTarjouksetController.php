@@ -167,25 +167,15 @@ class CrmTarjouksetController extends Controller
 		$path = Yii::app()->request->baseUrl."tiedostot/tarjoukset/".Yii::app()->user->domain;
 
 		$ft = FirmanTiedot::model()->findbypk(1);
-		$get_css = ''; //
 
-		$message = '<html xmlns="http://www.w3.org/1999/xhtml">
-		<head>
-		    <title></title>
-		    <style type="text/css">'.$get_css.'</style>
-		</head>
-		<body>';
-		$message .= '<center>';
-
-
-		$message .= '<br>
+		$message = '<br>
 		<center>
 		<div id="outer">
 		<a class="hyvaksy_button inner" href="http://'.$_SERVER['SERVER_NAME'].'/index.php/crmTarjoukset/vastaus?asia=hyvaksy&id='.$id.'&code='.$randstring.'">
-				<h2>'.Yii::t('main', 'Hyväksy').'</h2>
+				<h2 style="color:green">'.Yii::t('main', 'Hyväksy').'</h2>
 		</a>
 		<a class="hylkaa_button inner" href="http://'.$_SERVER['SERVER_NAME'].'/index.php/crmTarjoukset/vastaus?asia=hylatty&id='.$id.'&code='.$randstring.'">
-				<h2>'.Yii::t('main', 'Hylkää').'</h2>
+				<h2 style="color:red">'.Yii::t('main', 'Hylkää').'</h2>
 		</a>
 		</div>
 		</center>

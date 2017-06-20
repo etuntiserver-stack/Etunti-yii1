@@ -194,10 +194,10 @@ $randstring = generateRandomString();
 		$message = Yii::t('main', 'CRM sopimus body');
 		$message .= '<br>
 		<a href="http://'.$_SERVER['SERVER_NAME'].'/index.php/CrmSopimukset/vastaus?asia=hyvaksy&id='.$_POST['id'].'&code='.$randstring.'">
-				<h2>'.Yii::t('main', 'Hyväksy').'
+				<h2 style="color:green">'.Yii::t('main', 'Hyväksy').'</h2>
 		</a>
 		<a href="http://'.$_SERVER['SERVER_NAME'].'/index.php/CrmSopimukset/vastaus?asia=hylatty&id='.$_POST['id'].'&code='.$randstring.'">
-				<h2>'.Yii::t('main', 'Hylkä').'
+				<h2 style="color:red">'.Yii::t('main', 'Hylkää').'</h2>
 		</a>
 		';
 		
