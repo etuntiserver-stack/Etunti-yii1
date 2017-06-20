@@ -519,7 +519,7 @@ class CrmTarjouksetController extends Controller
 
 			$valuesTable = array(
 			    array(
-			        'Tilat','Työtehtävät','Viikkoväli','Kommenti'
+			        'Tilat','Työtehtävät','Kommenti'
 			    )
 			);
 
@@ -530,12 +530,11 @@ class CrmTarjouksetController extends Controller
 					$tyontehtavat = $tyonkuvaus['tyontehtavat'][$key];
 					$tt_result = '';
 					foreach($tyontehtavat as $kt=>$it)
-						$tt_result .= $it['tyotehtava'].': '.$it['vkopvm']."\r\n";
+						$tt_result .= $it['tyotehtava'].': ('.$it['vkopvm'].'). Joka '.$it['vkovali']." vko.\r\n";
 	
 					$valuesTable[] = array(
 						implode("\r\n", $items),
 						$tt_result,
-						implode("\r\n", $tyonkuvaus['laatutaso'][$key]),
 						implode("\r\n", $tyonkuvaus['kommenti'][$key])
 					);
 	
@@ -639,7 +638,6 @@ class CrmTarjouksetController extends Controller
 		    <tr>
 		        <th>'.Yii::t('main','Tilat').'</th>
 			<th>'.Yii::t('main','Työtehtävät').'</th>
-			<th>'.Yii::t('main','Viikkoväli').'</th>
 			<th>'.Yii::t('main','Kommenti').'</th>
 		    </tr>';
 
@@ -660,18 +658,10 @@ class CrmTarjouksetController extends Controller
 
 			$tyontehtavat = json_decode($r->tyontehtavat, true);
 			foreach($tyontehtavat as $k2=>$r2)
-				$bd .= '<br>'.$r2['tyotehtava'].': '.$r2['vkopvm'];
-
-
-
-		$exLaatutaso = explode("\n", json_decode($r->laatutaso));
-		$tasot = '';
-		foreach($exLaatutaso as $itm)
-			$tasot .= '<br>'.trim($itm);
+				$bd .= '<br>'.$r2['tyotehtava'].': <b>('.$r2['vkopvm'].')</b>. Joka '.$r2['vkovali'].' vko.';
 
 
 		$bd .= '</td>
-		        <td>'.$tasot.'</td>
 		        <td>'.$r->kommenti.'</td>
 		    </tr>
 		';
@@ -708,7 +698,7 @@ class CrmTarjouksetController extends Controller
 			$tyontehtavat = json_decode($r->tyontehtavat, true);
 			$tt = array();
 			foreach($tyontehtavat as $k2=>$r2)
-				$tt[] = array('tyotehtava'=>$r2['tyotehtava'],'vkopvm'=>$r2['vkopvm']);
+				$tt[] = array('tyotehtava'=>$r2['tyotehtava'],'vkopvm'=>$r2['vkopvm'],'vkovali'=>$r2['vkovali']);
 
 		$bd['tyontehtavat'][] = $tt;
 

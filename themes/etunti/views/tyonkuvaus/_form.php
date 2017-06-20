@@ -154,7 +154,7 @@ $(document).ready(function(){
 	);
 
 	$asetukset = Asetukset::model()->findByPk(1);
-	$laatutasot = array(1 => 1, 2 => 2, 3 => 3, 4 => 4);
+	$viikkovali = array(1 => 1, 2 => 2, 3 => 3, 4 => 4);
 	?>
 
 
@@ -164,7 +164,6 @@ $(document).ready(function(){
 		    <tr>
 		        <th></td><td><?php echo Yii::t('main','Tilat'); ?></th>
 			<th><?php echo Yii::t('main','Työtehtävät ja päivät'); ?></th>
-			<th><?php echo Yii::t('main','Viikkoväli'); ?></th>
 			<th><?php echo Yii::t('main','Kommenti'); ?></th>
 		    </tr>
 		<?php
@@ -216,7 +215,14 @@ $(document).ready(function(){
 		        <td class="tyotehtavatVkoPvmTD">
 
 		        <a href="#" title="" class="add-author-tyotehtavat" num="0"><i class="fa fa-plus" aria-hidden="true"></i></a>
-			<table class="table authors-list-tyotehtavat">';
+			<table class="table authors-list-tyotehtavat">
+			   <tr>
+			    <th></th>
+			    <th>'.Yii::t('main', 'Työtehtävä').'</th>
+			    <th>'.Yii::t('main', 'Vko. Pvm').'</th>
+			    <th>'.Yii::t('main', 'Viikkoväli').'</th>
+			   </tr>
+			';
 
 			$tyontehtavat = json_decode($r->tyontehtavat, true);
 			foreach($tyontehtavat as $k2=>$r2)
@@ -230,6 +236,9 @@ $(document).ready(function(){
 				$selectedValuesVkoPvm[trim($itmVko)] = array('selected' => 'selected');
 			}
 
+			$selectedValuesViikkovali = array();
+			$selectedValuesViikkovali[$r2['vkovali']] = array('selected' => 'selected');
+
 			echo '
 			    <tr class="rivi-tyotehtavat" num="'.$key.'">
 			        <td>
@@ -238,7 +247,6 @@ $(document).ready(function(){
 			        <td>
 			            <input class="form-control" type="text" name="TyonkuvausRivit[tyotehtava]['.$key.']['.$k2.']" value="'.$r2['tyotehtava'].'" />
 			        </td>
-
 			        <td>
 					<div class="vkopvm_tilat">
 					'.CHtml::dropDownList('', '', $pvm_arr, 
@@ -247,39 +255,27 @@ $(document).ready(function(){
 						'class'=> 'selectpicker vkoPvm_selecter',
 						'options' => $selectedValuesVkoPvm,
 					)).'
-			            	<input type="hidden" class="form-control" name="TyonkuvausRivit[vkopvm]['.$key.']['.$k2.']" value="'.$r2['vkopvm'].'"/>
+			            	<input type="hidden" name="TyonkuvausRivit[vkopvm]['.$key.']['.$k2.']" value="'.$r2['vkopvm'].'"/>
 					</div>
-				    </div>
+
+			        </td>
+			        <td>
+					<div class="viikkovali_tilat">
+					'.CHtml::dropDownList('', '', $viikkovali, 
+					array(
+						'class'=> 'viikkovali_selecter form-control',
+						'options' => $selectedValuesViikkovali,
+					)).'
+					<input type="hidden" name="TyonkuvausRivit[vkovali]['.$key.']['.$k2.']" value="'.$r2['vkovali'].'"/>
+					</div>
+
 			        </td>
 			    </tr>';
 			}
 
 
-		$svLT = array();
-		$svLT = explode("\n",json_decode($r->laatutaso, true));
-		$selectedValuesLaatutasot = array();
-		foreach($svLT as $itmVko)
-		{
-			$selectedValuesLaatutasot[trim($itmVko)] = array('selected' => 'selected');
-		}
-
-		$laatutaso = json_decode($r->laatutaso, true);
-
 		echo '
 			</table>
-
-
-		        </td>
-		        <td>
-		    	    <div class="laatutasot_tilat">
-				'.CHtml::dropDownList('', '', $laatutasot, 
-					array(
-						'empty' => Yii::t('main', 'Valitse viikkoväli'),
-						'class'=> 'laatutasot_selecter form-control',
-						'options' => $selectedValuesLaatutasot,
-				)).'
-		            <input type="hidden" class="form-control" name="TyonkuvausRivit[laatutaso]['.$key.']" value="'.$laatutaso.'" />
-			    </div>
 		        </td>
 		        <td>
 		            <textarea class="form-control" rows="1" name="TyonkuvausRivit[kommenti]['.$key.']" />'.$r->kommenti.'</textarea>
@@ -320,24 +316,23 @@ $(document).ready(function(){
 			        </td>
 			        <td>
 					<div class="vkopvm_tilat">
-						<?php echo CHtml::dropDownList('', '', $pvm_arr, 
-							array('multiple' => 'multiple', 'class'=> 'selectpicker vkoPvm_selecter')
-						); ?>
+					<?php echo CHtml::dropDownList('', '', $pvm_arr, 
+						array('multiple' => 'multiple', 'class'=> 'selectpicker vkoPvm_selecter')
+					); ?>
 			            	<input type="hidden" class="form-control" name="TyonkuvausRivit[vkopvm][0][0]" />
 					</div>
 			        </td>
+			        <td>
+					<div class="viikkovali_tilat">
+					<?php echo CHtml::dropDownList('', '', $viikkovali, 
+						array('class'=> 'viikkovali_selecter form-control'
+					)); ?>
+			            	<input type="hidden" class="form-control" name="TyonkuvausRivit[vkovali][0][0]" />
+					</div>
+
+			        </td>
 			    </tr>
 			</table>
-
-
-		        </td>
-		        <td>
-		    	    <div class="laatutasot_tilat">
-				<?php echo CHtml::dropDownList('', '', $laatutasot, 
-					array('empty' => Yii::t('main', 'Valitse viikkoväli'), 'class'=> 'laatutasot_selecter form-control')
-				); ?>
-		            	<input type="hidden" class="form-control" name="TyonkuvausRivit[laatutaso][0]" />
-			    </div>
 		        </td>
 		        <td>
 		            <textarea class="form-control" rows="1" name="TyonkuvausRivit[kommenti][0]" /></textarea>
@@ -362,9 +357,9 @@ $(document).ready(function(){
 			); ?>
 		</div>
 
-		<div id="laatutasotAlasveto" style="display:none">
-			<?php echo CHtml::dropDownList('', '', $laatutasot, 
-				array('empty' => Yii::t('main', 'Valitse viikkoväli'), 'class'=> 'laatutasot_selecter form-control')
+		<div id="viikovaliAlasveto" style="display:none">
+			<?php echo CHtml::dropDownList('', '', $viikkovali, 
+				array('class'=> 'viikkovali_selecter form-control')
 			); ?>
 		</div>
 
@@ -372,7 +367,7 @@ $(document).ready(function(){
 jQuery(function(){
     var counter = parseInt($('.authors-list tr:last').attr('num'))+1;
     var vkoPvm = $('#vkoPvm').html();
-    var laatutasotAlasveto = $('#laatutasotAlasveto').html();
+    var viikovaliAlasveto = $('#viikovaliAlasveto').html();
     var kuvauksetTuoteesta = $('#kuvauksetTuoteesta').html();
 
     $('a.add-author').click(function(event){
@@ -401,14 +396,13 @@ jQuery(function(){
 			            	'<input type="hidden" class="form-control" name="TyonkuvausRivit[vkopvm]['+ counter +'][0]" />' +
 				    '</div>' +
 			        '</td>' +
+			        '<td>' +
+				    '<div class="viikkovali_tilat">' + viikovaliAlasveto +
+			            	'<input type="hidden" class="form-control" name="TyonkuvausRivit[vkovali]['+ counter +'][0]" />' +
+				    '</div>' +
+			        '</td>' +
 			    '</tr>' +
 			'</table>' +
-	    '</td>' +
-	    '<td>' +
-		    	'<div class="laatutasot_tilat">' +
-				laatutasotAlasveto +
-				'<input type="hidden" name="TyonkuvausRivit[laatutaso][' + counter + ']"/>' +
-			'</div>' +
 	    '</td>' +
 	    '<td><textarea class="form-control" rows="1" name="TyonkuvausRivit[kommenti][' + counter + ']"/></textarea></td>' +
 	    '</tr>');
@@ -449,6 +443,7 @@ jQuery(function(){
 jQuery(function(){
 
     var vkoPvm = $('#vkoPvm').html();
+    var viikovaliAlasveto = $('#viikovaliAlasveto').html();
 
     $(document).delegate(".add-author-tyotehtavat","click",function(event){
 
@@ -463,6 +458,7 @@ jQuery(function(){
 	    '<td><i class="link fa fa-trash poistaAuthorRiviT2" aria-hidden="true"></i></td>' +
 	    '<td><input type="text" class="form-control" name="TyonkuvausRivit[tyotehtava][' + num + ']['+ counter +']"/></td>' +
 	    '<td><div class="vkopvm_tilat">'+ vkoPvm +'<input type="hidden" class="form-control" name="TyonkuvausRivit[vkopvm][' + num + ']['+ counter +']"/></div></td>' +
+	    '<td><div class="viikkovali_tilat">'+ viikovaliAlasveto +'<input type="hidden" class="form-control" name="TyonkuvausRivit[vkovali][' + num + ']['+ counter +']"/></div></td>' +
 	    '</tr>');
             counter++;
         jQuery(this).closest('.tyotehtavatVkoPvmTD').find('table.authors-list-tyotehtavat').append(newRow);
@@ -548,9 +544,10 @@ $(".muokaValiko").click(function() {
     	$(this).closest('div.vkopvm_tilat').find('input').val(thisVal);
  });
 
- $(document).delegate(".laatutasot_selecter","change",function(){
+
+ $(document).delegate(".viikkovali_selecter","change",function(){
 	var thisVal = $(this).val();
-    	$(this).closest('div.laatutasot_tilat').find('input').val(thisVal);
+    	$(this).closest('div.viikkovali_tilat').find('input').val(thisVal);
  });
 
 
