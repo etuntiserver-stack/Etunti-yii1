@@ -188,7 +188,7 @@ if(isset($asetukset->checkout_id) and !empty($asetukset->checkout_id) and !empty
         	?>
 	  </div>
 	</div>
-
+<?php /*
 	<div class="row" id="toimialueRow">
 	  <div class="col-sm-4 col-sm-offset-4">
 		<h4><?php echo Yii::t('main', 'Alennuskoodi'); ?></h4>
@@ -196,6 +196,7 @@ if(isset($asetukset->checkout_id) and !empty($asetukset->checkout_id) and !empty
 		<div id="kupongi_result"></div>
 	  </div>
 	</div>
+*/ ?>
 
 <br>
 	<div class="row" id="lispalvimg">
