@@ -263,6 +263,7 @@ $(document).ready(function(){
 					<div class="viikkovali_tilat">
 					'.CHtml::dropDownList('', '', $viikkovali, 
 					array(
+						'empty'=>'Valitse viikkoväli',
 						'class'=> 'viikkovali_selecter form-control',
 						'options' => $selectedValuesViikkovali,
 					)).'
@@ -325,7 +326,7 @@ $(document).ready(function(){
 			        <td>
 					<div class="viikkovali_tilat">
 					<?php echo CHtml::dropDownList('', '', $viikkovali, 
-						array('class'=> 'viikkovali_selecter form-control'
+						array('empty'=>'Valitse viikkoväli','class'=> 'viikkovali_selecter form-control'
 					)); ?>
 			            	<input type="hidden" class="form-control" name="TyonkuvausRivit[vkovali][0][0]" />
 					</div>
@@ -357,9 +358,9 @@ $(document).ready(function(){
 			); ?>
 		</div>
 
-		<div id="viikovaliAlasveto" style="display:none">
+		<div id="viikovaliAlasveto" style="display:none"> 
 			<?php echo CHtml::dropDownList('', '', $viikkovali, 
-				array('class'=> 'viikkovali_selecter form-control')
+				array('empty'=>'Valitse viikkoväli', 'class'=> 'viikkovali_selecter form-control')
 			); ?>
 		</div>
 
@@ -484,7 +485,7 @@ jQuery(function(){
 
 	<br>
 	<div class="section">
-		<?php echo CHtml::submitButton($model->isNewRecord ? 'Luo' : 'Tallenna',array('class'=>'btn btn-primary myBgColors')); ?>
+		<?php echo CHtml::submitButton($model->isNewRecord ? 'Luo' : 'Tallenna',array('class'=>'btn btn-primary myBgColors submitKuvaus')); ?>
 	</div>
 
 <?php $this->endWidget(); ?>
@@ -550,7 +551,21 @@ $(".muokaValiko").click(function() {
     	$(this).closest('div.viikkovali_tilat').find('input').val(thisVal);
  });
 
+ $(document).delegate(".submitKuvaus","click",function(e){
+	e.preventDefault();
+	var returnThis = true;
+	$( ".authors-list-tyotehtavat" ).find('.viikkovali_selecter').removeClass('btn-danger');
+	$( ".authors-list-tyotehtavat" ).find('.viikkovali_selecter').each(function( index ) {
+	   if($(this).val() === '')
+	   {
+		$(this).addClass('btn-danger').focus();
+		returnThis = false;
+	   }
+	});
 
+	if(returnThis)
+	$('#tyonkuvaus-form').submit();
+ });
 
 });
 </script>
