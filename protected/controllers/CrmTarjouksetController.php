@@ -167,7 +167,7 @@ class CrmTarjouksetController extends Controller
 		$path = Yii::app()->request->baseUrl."tiedostot/tarjoukset/".Yii::app()->user->domain;
 
 		$ft = FirmanTiedot::model()->findbypk(1);
-		$get_css = file_get_contents('css/email_send_table.css');
+		$get_css = ''; //
 
 		$message = '<html xmlns="http://www.w3.org/1999/xhtml">
 		<head>
