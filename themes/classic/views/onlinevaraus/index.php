@@ -191,7 +191,7 @@ if(isset($asetukset->checkout_id) and !empty($asetukset->checkout_id) and !empty
 
 	<div class="row" id="toimialueRow">
 	  <div class="col-sm-4 col-sm-offset-4">
-		<h4><?php echo Yii::t('main', 'Syötä kupongi'); ?></h4>
+		<h4><?php echo Yii::t('main', 'Alennuskoodi'); ?></h4>
 		<?=CHtml::textField('kupongi', '', array('class'=>'form-control input-lg'))?>
 		<div id="kupongi_result"></div>
 	  </div>
