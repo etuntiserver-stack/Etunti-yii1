@@ -175,7 +175,7 @@ class CrmTarjouksetController extends Controller
 				<h2 style="color:green">'.Yii::t('main', 'Hyväksy').'</h2>
 		</a>
 		<a class="hylkaa_button inner" href="http://'.$_SERVER['SERVER_NAME'].'/index.php/crmTarjoukset/vastaus?asia=hylatty&id='.$id.'&code='.$randstring.'">
-				<h2 style="color:red">'.Yii::t('main', 'Hylkää').'</h2>
+				<h4 style="color:red">'.Yii::t('main', 'Hylkää').'</h4>
 		</a>
 		</div>
 		</center>

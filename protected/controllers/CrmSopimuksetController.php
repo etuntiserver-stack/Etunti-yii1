@@ -197,7 +197,7 @@ $randstring = generateRandomString();
 				<h2 style="color:green">'.Yii::t('main', 'Hyväksy').'</h2>
 		</a>
 		<a href="http://'.$_SERVER['SERVER_NAME'].'/index.php/CrmSopimukset/vastaus?asia=hylatty&id='.$_POST['id'].'&code='.$randstring.'">
-				<h2 style="color:red">'.Yii::t('main', 'Hylkää').'</h2>
+				<h4 style="color:red">'.Yii::t('main', 'Hylkää').'</h4>
 		</a>
 		';
 		
