@@ -361,7 +361,8 @@ return array(
                     'bootstrap-select.min.css',
                     'bootstrap-slider.css',
                     'multiselect.css',
-		    'datepicker.css',
+		    //'datepicker.css',
+		    'bootstrap-datepicker.css',
 		    'font-awesome.min.css',
                 ),
 
