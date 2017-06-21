@@ -365,9 +365,10 @@ class LaskuController extends Controller
 		{
 			$as = Asiakkaat::model()->findByPk($id);
 			$k = Kohteet::model()->findAll(" asiakas_id='".$as->id."' AND aktiivinen=1 ");
+			$koh = array(); 
 			foreach($k as $item)
-				$kohdet[] = $item->id;
-			$kohdet = "kohdenID=".implode(" OR kohdenID=", array_values($kohdet));
+				$koh[] = $item->id;
+			$kohdet = "kohdenID=".implode(" OR kohdenID=", array_values($koh));
 		}
 
 
