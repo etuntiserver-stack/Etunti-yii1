@@ -360,7 +360,7 @@ class LaskuController extends Controller
 	public function actionLuoKohteista($id)
 	{
 
-		$kohdet = array(); 
+		$kohdet = "kohdenID=$id"; 
 		if($_POST['mistaLuo'] == 'luoAsiakaasta')
 		{
 			$as = Asiakkaat::model()->findByPk($id);
@@ -368,8 +368,6 @@ class LaskuController extends Controller
 			foreach($k as $item)
 				$kohdet[] = $item->id;
 			$kohdet = "kohdenID=".implode(" OR kohdenID=", array_values($kohdet));
-		} else {
-			$kohdet = "kohdenID=$id"; 
 		}
 
 
