@@ -753,30 +753,6 @@
 
 <?php if(in_array('5',$tas)) : ?>
 <br>
-<div class="btn btn-primary btn-block myBgColors" data-toggle="collapse" data-target="#vinkkiAsetukset"><h3><?php echo Yii::t('main','Vinkki asetukset'); ?>&nbsp; <i class="fa fa-caret-square-o-down" aria-hidden="true"></i></h3></div>
-
-  <div class="row form collapse" id="vinkkiAsetukset">
-   <div class="col-sm-4">
-    <legend><h2><?php echo Yii::t('main','VINKKI'); ?></h2></legend>
-
-	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'vinkki_tunnit'); ?>
-		<?php echo $form->numberField($model,'vinkki_tunnit',array('maxlength'=>10,'class'=>'form-control')); ?>
-		<?php echo $form->error($model,'vinkki_tunnit'); ?>
-	</div>
-
-	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'vinkki_prosentti'); ?>
-		<?php echo $form->numberField($model,'vinkki_prosentti',array('maxlength'=>10,'class'=>'form-control')); ?>
-		<?php echo $form->error($model,'vinkki_prosentti'); ?>
-	</div>
-
-   </div>
-  </div>
-
-
-
-<br>
 <div class="btn btn-primary btn-block myBgColors" data-toggle="collapse" data-target="#eDico"><h3><?php echo Yii::t('main','eDico'); ?>&nbsp; <i class="fa fa-caret-square-o-down" aria-hidden="true"></i></h3></div>
 
   <div class="row form collapse" id="eDico">
@@ -906,6 +882,24 @@ jQuery(function(){
 		<?php echo $form->error($model,'tyel_maksun_osuus_palkkansummasta'); ?>
 	</div>
    </div>
+
+   <div class="col-sm-4">
+    <legend><h2><?php echo Yii::t('main','VINKKI'); ?></h2></legend>
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'vinkki_tunnit'); ?>
+		<?php echo $form->numberField($model,'vinkki_tunnit',array('maxlength'=>10,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'vinkki_tunnit'); ?>
+	</div>
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'vinkki_prosentti'); ?>
+		<?php echo $form->numberField($model,'vinkki_prosentti',array('maxlength'=>10,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'vinkki_prosentti'); ?>
+	</div>
+
+   </div>
+
   </div>
 
 <?php endif; ?>
