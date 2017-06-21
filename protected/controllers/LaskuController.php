@@ -445,6 +445,12 @@ class LaskuController extends Controller
 		foreach($k as $a)
 		{
 
+			if(empty($a->hinta) and empty($as->hinta))
+			break;
+
+			if(empty($a->hinta) and !empty($as->hinta) and $as->hinta_tyyppi == 2)
+			break;
+
 			$hinta_rivi = $a->hinta;
 			$id_rivi = '';
 			$hinta_rivi = '';
@@ -463,6 +469,7 @@ class LaskuController extends Controller
 				$yksikko_k = 'kpl';
 				$hinta_rivi = $as->hinta;
 			}
+
 			$thisTrue = true;
 			$body_t .= '<option value="'.$a->id.'//'.$hinta_rivi.'//'.$yksikko_k.'//onkohde">Kohde: '.$a->osoite.' ( '.$hinta_rivi.'&euro;/'.$yksikko_k.' )</option>';
 		}
@@ -496,13 +503,20 @@ class LaskuController extends Controller
        		$criteria->condition = " 
 			asiakas_id='".$as->id."' 
 			AND aktiivinen=1
-			AND hinta_tyyppi=2 AND hinta!=''
+			AND (hinta_tyyppi='' OR hinta_tyyppi=2)
 		";
 		$k = Kohteet::model()->findAll($criteria);
 		foreach($k as $a)
 		{
+			if(empty($a->hinta) and empty($as->hinta))
+			break;
+
+			$hinta_rivi = $a->hinta;
+			if(empty($a->hinta) and !empty($as->hinta) and $as->hinta_tyyppi == 2){
+				$hinta_rivi = $as->hinta;
+			}
 			$thisTrue = true;
-			$body_kk .= '<option value="'.$a->id.'//'.$a->hinta.'//kk//onkohde">Kohde: '.$a->osoite.' ( '.$a->hinta.'&euro;/kk )</option>';
+			$body_kk .= '<option value="'.$a->id.'//'.$hinta_rivi.'//kk//onkohde">Kohde: '.$a->osoite.' ( '.$hinta_rivi.'&euro;/kk )</option>';
 		}
 		//     Kohteet -->
 
