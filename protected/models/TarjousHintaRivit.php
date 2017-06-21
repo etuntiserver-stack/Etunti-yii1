@@ -40,7 +40,7 @@ class TarjousHintaRivit extends DB2ActiveRecord
 		// will receive user inputs.
 		return array(
 			//array('id, time, tarjous_id, rivi, tkoodi, nimike, kpl, yksikko, hinta, alv, hinta_alv, ale, veroton, yhteensa_alv, tuoteID', 'required'),
-			array('id, tarjous_id, rivi, tuoteID', 'numerical', 'integerOnly'=>true),
+			array('tarjous_id, rivi, tuoteID', 'numerical', 'integerOnly'=>true),
 			array('tkoodi', 'length', 'max'=>255),
 			array('nimike', 'length', 'max'=>100),
 			array('kpl, yksikko, hinta, alv, hinta_alv, ale, veroton, yhteensa_alv', 'length', 'max'=>20),
