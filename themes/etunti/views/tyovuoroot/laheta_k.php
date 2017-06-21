@@ -180,6 +180,7 @@ for($day= 1; $day <= 7; $day++) {
 		$cl = 'style="color:'.$expl2[1].'"';
 
 	// <-- osoite
+	$osoite = '';
 	if(isset($k->id))
 		$osoite = $k->osoite;
 	elseif(!isset($k->id) and $t->status != 0 and $t->status != 3)
