@@ -562,7 +562,7 @@ class LaskuController extends Controller
 		));
 	}
 
-	protected function yksikkot($row){
+	public function yksikkot($row){
 		$body = '';
 		if($row)
 		$body .= '<option value="'.$row.'">'.$row.' kpl</option>';

@@ -210,40 +210,8 @@
 	</div>
 
 
- </div><div class="col-sm-2">
 
-	<legend><?php echo Yii::t('main', 'Hinta'); ?></legend>
-
-	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'hinta_tyyppi'); ?>
-		<?php
-		$list = array('Tuntihinta'=>'Tuntihinta','Kuukausihinta'=>'Kuukausihinta','Kappale'=>'Kappale');
-        	echo $form->dropDownList($model, 'hinta_tyyppi', $list,
-		array('class'=>'form-control'));	
-        	?>
-		<?php echo $form->error($model,'hinta_tyyppi'); ?>
-	</div>
-
-	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'hinta'); ?>
-		<?php echo $form->numberField($model,'hinta',array('size'=>10,'maxlength'=>100,'class'=>'form-control', 'step'=>'any')); ?>
-		<?php echo $form->error($model,'hinta'); ?>
-	</div>
-
-	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'alv'); ?>
-		<?php
-        	$l = array(0=>0,10=>10,14=>14,24=>24);
-
-
-        	echo $form->dropDownList($model, 'alv', $l,
-		array('empty'=>'Valitse','class'=>'form-control'
-		));
-        	?>
-		<?php echo $form->error($model,'alv'); ?>
-	</div>
-
- </div><div class="col-sm-4">
+ </div><div class="col-sm-6">
 
 	<legend><?php echo Yii::t('main', 'Asiakkaan tiedot'); ?></legend>
 	<div class="section fill mb5 kohdeHide">
@@ -264,12 +232,234 @@
 		</div>
 	</div>
 
+ </div><div class="col-sm-12">
+
+<!-- HINTA -->
+<div id="rivit" class="table-responsive">
+<TABLE class="table well" id="TableRivit">
+
+     <TR>
+     <thead class="myBgColors">
+	<TH style="width:1%"><span id="uusiRivi" class="link" style="font-size: 150%;"><i class="fa fa-plus-square"></i></span></TH>
+	<TH class="col-sm-2">Tuote/Palvelu</TH>
+	<TH class="col-sm-1">Kpl</TH>
+	<TH class="col-sm-1">Yksikkö <span class="btn btn-primary btn-xs myBgColors muokaValiko" for="laskutus_yksikko"><i class="fa fa-pencil-square-o"></i></span></TH>
+	<TH class="col-sm-1">Hinta</TH>
+	<TH class="col-sm-1">ALV %</TH>
+	<TH class="col-sm-1">ALV</TH>
+	<TH class="col-sm-1">Ale %</TH>
+	<TH class="col-sm-1">Veroton</TH>
+	<TH class="col-sm-1">Yhteensä</TH>
+     </thead>
+     </TR>
+
+     <tbody>
+	<?php
+		$trRivit=TarjousHintaRivit::model()->findAll("tarjous_id='".$model->id."'", array('order'=>'id'));
+		if( count($trRivit) == 0 )
+		{
+			echo $this->renderPartial("tr_rivit_tyhja",array('num'=>0));
+		} else {
+			$num = 0;
+			foreach($trRivit as $rivi){ 
+			$num++;
+			echo $this->renderPartial("tr_rivi_update",array('num'=>$num,'rivi'=>$rivi));
+			}
+		}
+	?>
+
+     </tbody>
+
+     <tfoot>
+     <TR>
+	<TD></TD>
+	<TD></TD>
+	<TD></TD>
+	<TD></TD>
+	<TD></TD>
+	<TD></TD>
+	<TD><input type="text" class="form-control" size="10" name="CrmTarjoukset[yhteensa_total_verot]" id="yhteensa_total_verot" readonly></TD>
+	<TD></TD>
+	<TD><input type="text" class="form-control" size="10" name="CrmTarjoukset[yhteensa_total_veroton]" id="yhteensa_total_veroton" readonly></TD>
+	<TD><input type="text" class="form-control" size="10" name="CrmTarjoukset[yhteensa_total]" id="yhteensa_total" readonly></TD>
+     </TR>
+     </tfoot>
+</TABLE>
+</div>
+<!-- HINTA -->
+
+
  </div>
 </div><!-- form -->
 
 
 
 
+<!-- HINTA -->
+<script type="text/javascript">
+$(document).ready(function(){
+
+$("#uusiRivi").click(function() {
+    var rivi = $("#samaRivi").html();
+    var rowCount = makeid();
+
+        $.ajax({
+           url: 'tr_rivit_tyhja',
+           type: "POST",
+           data: {num : rowCount},
+           success: function(html){
+         	$("table#TableRivit tbody tr").last().after(html);
+	  	Rivi();
+           }
+        });
+});
+
+
+function makeid()
+{
+    var text = "";
+    var possible = "0123456789";
+
+    for( var i=0; i < 7; i++ )
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+    return text;
+}
+
+function jumpToPageBottom() {
+    $('html, body').animate({scrollTop:1000}, 'slow');
+    return false;
+}
+
+function valitseTuote(){
+
+$("table#TableRivit .valitseTuote").change(function() {
+    var tuoteID = $(this).val();
+    var num = $(this).attr("num");
+
+        $.ajax({
+           url: location.protocol + "//" + location.host + '/index.php/lasku/valitsetuote',
+           type: "POST",
+           data: { tuoteID : tuoteID },
+           success: function(data){
+		var sp = data.split("//");
+
+		$("#kpl_"+num).val("1");
+
+		if(sp[0])
+		$("#tkoodi_"+num).val(sp[0]);
+		if(sp[1])
+		$("#hinta_"+num).val(sp[1]);
+		if(sp[3])
+		$("#yksikko_"+num+" option[value="+sp[3]+"]").attr('selected','selected');
+		if(sp[2])
+		$("#alv_"+num+" option[value="+sp[2]+"]").attr('selected','selected');
+
+		if(sp[5])
+		$("#tuoteID_"+num).val(sp[5]);
+
+		eachLaskenta();
+		$("#lt_"+num).hide();
+		console.log(data)
+           }
+        });
+
+});
+
+
+}
+
+
+
+  $(document).delegate(".poista","click",function(){
+	$(this).closest('tr').remove();
+	yhteensaTotal();
+  });
+
+
+
+Rivi();
+function Rivi(){
+
+  valitseTuote();
+
+  $(".onlyDigits ").attr('type', 'number').attr('step', '0.01');
+
+  $('#rivit input[type="number"]').keyup(function() {
+  	eachLaskenta();
+    	yhteensaTotal();
+
+  });
+
+  $('.for_tkoodi').keyup(function(){
+	var forID = $(this).attr("id").split("_");
+	$('#lt_'+forID[1]).hide();
+  });
+
+}
+
+
+  eachLaskenta();
+
+  var aleAsiakkaasta = '';
+function eachLaskenta(){
+
+  $("#rivit input").each(function() {
+
+	var inputKenta = $(this).attr("id").split("_");
+	var hinta_alv_0 = parseFloat($("#hinta_"+inputKenta[1]).val());
+	var alv = parseFloat($("#alv_"+inputKenta[1]).val());
+	var kpl = parseFloat($("#kpl_"+inputKenta[1]).val());
+	var ale = parseFloat($("#ale_"+inputKenta[1]).val());
+
+	inputKenta[1] = parseFloat(inputKenta[1], 10);
+
+	var laske = parseFloat(((hinta_alv_0*kpl)/100*alv), 10);
+	//var laskeAleY = parseFloat((($("#yhteensa_alv_"+inputKenta[1]).val())/100*ale), 10);
+	//var laskeAleV = parseFloat((($("#veroton_"+inputKenta[1]).val())/100*ale), 10);
+
+	var veroton = parseFloat(hinta_alv_0, 10)*kpl;
+	yhteensa = laske+veroton;
+
+	$("#hinta_alv_"+inputKenta[1]).val((laske).toFixed(2));
+
+	//if(veroton-laskeAleV > 0)
+	  $("#veroton_"+inputKenta[1]).val(veroton.toFixed(2));
+	//else
+	  //$("#veroton_"+inputKenta[1]).val('0.00');
+
+	//if(yhteensa-laskeAleY > 0)
+	  $("#yhteensa_alv_"+inputKenta[1]).val(yhteensa.toFixed(2));
+	//else
+	  //$("#yhteensa_alv_"+inputKenta[1]).val('0.00');
+
+  });
+    	yhteensaTotal();
+
+}
+
+function yhteensaTotal(){
+
+	var sum = 0;
+	$('.yhteensa_total_verot').each(function(){
+	    sum += parseFloat(this.value);
+	    $('#yhteensa_total_verot').val(sum.toFixed(2));
+	});
+	var sum1 = 0;
+	$('.yhteensa_total_veroton').each(function(){
+	    sum1 += parseFloat(this.value);
+	    $('#yhteensa_total_veroton').val(sum1.toFixed(2));
+	});
+	var sum2 = 0;
+	$('.yhteensa_total').each(function(){
+	    sum2 += parseFloat(this.value);
+	    $('#yhteensa_total').val(sum2.toFixed(2));
+	});
+}
+
+});
+</script>
+<!-- HINTA -->
 
 
 		<?php //echo $form->textArea($model,'tyonkuvaus',array('rows'=>6, 'cols'=>50, 'class'=>'form-control', 'style'=>'display:none')); ?>

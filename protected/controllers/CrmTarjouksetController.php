@@ -32,7 +32,7 @@ class CrmTarjouksetController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view', 'laheta', 'get_tyonkuvaus_by_asiakas', 'get_tyonkuvaus_by_id', 'get_tarjouslaskenta_by_id', 'get_tyonkuvaus', 'get_kohteentiedot', 'get_asiakastilat', 'view_tyonkuvaus', 'get_kohde'),
+				'actions'=>array('admin','delete','create','update','index','view', 'laheta', 'get_tyonkuvaus_by_asiakas', 'get_tyonkuvaus_by_id', 'get_tarjouslaskenta_by_id', 'get_tyonkuvaus', 'get_kohteentiedot', 'get_asiakastilat', 'view_tyonkuvaus', 'get_kohde', 'tr_rivit_tyhja'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -287,6 +287,11 @@ class CrmTarjouksetController extends Controller
 		));
 	}
 
+	public function actionTr_rivit_tyhja()
+	{
+		$this->renderPartial('tr_rivit_tyhja');
+	}
+
 	/**
 	 * Creates a new model.
 	 * If creation is successful, the browser will be redirected to the 'view' page.
@@ -306,6 +311,34 @@ class CrmTarjouksetController extends Controller
 			else
 				$model->tarvikkeet="";
 			if($model->save()){
+
+
+				// <-- Hinta
+				if(isset($_POST['tkoodi']))
+				{
+				  foreach($_POST['tkoodi'] as $key=>$val)
+				  {
+					$lr = new TarjousHintaRivit;
+					$lr->tarjous_id	=$model->id;
+					$lr->rivi	=$key;
+					$lr->tkoodi	=$_POST['tkoodi'][$key];
+					//$lr->free_text	=$_POST['free_text'][$key];
+					$lr->kpl	=$_POST['kpl'][$key];
+					$lr->yksikko	=$_POST['yksikko'][$key];
+					$lr->hinta	=$_POST['hinta'][$key];
+					$lr->alv	=$_POST['alv'][$key];
+					$lr->hinta_alv	=$_POST['hinta_alv'][$key];
+					$lr->ale	=$_POST['ale'][$key];
+	
+					if(isset($_POST['tuoteID']))
+						$lr->tuoteID	=$_POST['tuoteID'][$key];
+	
+					$lr->veroton	=$_POST['veroton'][$key];
+					$lr->yhteensa_alv=$_POST['yhteensa_alv'][$key];
+					$lr->save();
+				  }
+				}
+				//     Hinta -->
 
 				$tiedosto = str_replace(" ", "_", $model->kohteen_osoite).'_'.date('Y-m-d').'_'.$model->id;
 				CrmTarjoukset::model()->updateByPk($model->id, array('liite'=>$tiedosto));
@@ -335,6 +368,7 @@ class CrmTarjouksetController extends Controller
 	
 		if(isset($_POST['CrmTarjoukset']))
 		{
+
 			$model->attributes=$_POST['CrmTarjoukset'];
 
 			if(isset($_POST['CrmTarjoukset']['tarvikkeet']))
@@ -343,6 +377,34 @@ class CrmTarjouksetController extends Controller
 				$model->tarvikkeet="";
 
 			if($model->save()){
+
+				// <-- Hinta
+				TarjousHintaRivit::model()->deleteAll("tarjous_id='".$model->id."'");
+				if(isset($_POST['tkoodi']))
+				{
+				  foreach($_POST['tkoodi'] as $key=>$val)
+				  {
+					$lr = new TarjousHintaRivit;
+					$lr->tarjous_id	=$model->id;
+					$lr->rivi	=$key;
+					$lr->tkoodi	=$_POST['tkoodi'][$key];
+					//$lr->free_text	=$_POST['free_text'][$key];
+					$lr->kpl	=$_POST['kpl'][$key];
+					$lr->yksikko	=$_POST['yksikko'][$key];
+					$lr->hinta	=$_POST['hinta'][$key];
+					$lr->alv	=$_POST['alv'][$key];
+					$lr->hinta_alv	=$_POST['hinta_alv'][$key];
+					$lr->ale	=$_POST['ale'][$key];
+	
+					if(isset($_POST['tuoteID']))
+						$lr->tuoteID	=$_POST['tuoteID'][$key];
+	
+					$lr->veroton	=$_POST['veroton'][$key];
+					$lr->yhteensa_alv=$_POST['yhteensa_alv'][$key];
+					$lr->save();
+				  }
+				}
+				//     Hinta -->
 
 				$tiedosto = str_replace(" ", "_", $model->kohteen_osoite).'_'.date('Y-m-d').'_'.$model->id;
 				CrmTarjoukset::model()->updateByPk($model->id, array('liite'=>$tiedosto));
@@ -574,6 +636,8 @@ class CrmTarjouksetController extends Controller
 		if (file_exists( Yii::app()->basePath.'/../'.$this->valmiit_polkku().'/'.$model->liite.'.pdf' )) 
 			unlink(Yii::app()->baseUrl.$this->valmiit_polkku().'/'.$model->liite.'.pdf');
 		//     tiedoston poistaminen -->
+
+		TarjousHintaRivit::model()->deleteAll("tarjous_id='".$id."'");
 
 		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
 		if(!isset($_GET['ajax']))
