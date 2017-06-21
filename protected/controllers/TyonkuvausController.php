@@ -83,6 +83,8 @@ class TyonkuvausController extends Controller
 
 	public function actionPdf($id)
 	{
+		$asetukset=Asetukset::model()->findByPk(1);
+		$ft = FirmanTiedot::model()->findByPk(1);
 		$tk = Tyonkuvaus::model()->findByPk($id);
 		$k = Kohteet::model()->findByPk($tk->kohde_id);
 		(isset($k->id))? $kohde = $k->osoite:$kohde = '';
@@ -90,6 +92,17 @@ class TyonkuvausController extends Controller
 	   	$html = '<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">';
 		$html .= '<style>'.file_get_contents(Yii::app()->basePath.'/../css/raportit_table2.css').'</style>';
 		$html .= '</head><body>';
+		$html .= '
+			<table id="ylataulu" class="table">
+			 <tr><td>
+			  	<img src="'.$asetukset->logon_polkku.'" height="'.$asetukset->logon_korkeus.'">
+			 </td><td align="right">
+				'.$ft->tyonantaja.'
+			 </td>
+			 </tr>
+			</table>
+			<hr>';
+
 		$html .= '<p><h2>'.Yii::t('main', 'Työnkuvaus').'</h2> '.date("d.m.Y H:i", strtotime($tk->time)).' '.$kohde.'</p><br>';
 	   	$html .= $tarjoukset[0]->get_tyonkuvaus($id);
 		$html .= '</body></html>';
