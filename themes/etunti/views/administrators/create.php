@@ -10,7 +10,7 @@
 		$site[0]->oikeudet($model->id,'noDelete');
 	   ?>
 	   </div>
-	   <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-user"></i> <?php echo Yii::t('main', 'Luo järjestelmävalvoja'); ?> </h2>
+	   <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-user"></i> <?php echo Yii::t('main', 'Luo käyttäjä'); ?> </h2>
 
             <div class="admin-form">
               <div class="panel heading-border">

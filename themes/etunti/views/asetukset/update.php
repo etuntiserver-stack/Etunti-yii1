@@ -90,11 +90,11 @@ exit;
             </div>
 
 
-	   <p><div class="btn btn-primary btn-block myBgColors" data-toggle="collapse" data-target="#kayttajienoikeus"><h3><?php echo Yii::t('main','Käyttäjien oikeudet'); ?>&nbsp; <i class="fa fa-caret-square-o-down" aria-hidden="true"></i></h3></div></p>
+	   <p><div class="btn btn-primary btn-block myBgColors" data-toggle="collapse" data-target="#kayttajienoikeus"><h3><?php echo Yii::t('main','Käyttöoikeudet'); ?>&nbsp; <i class="fa fa-caret-square-o-down" aria-hidden="true"></i></h3></div></p>
 
             <div class="admin-form collapse" id="kayttajienoikeus">
               <div class="panel heading-border">
-		<h2 class="p15"><?php echo Yii::t('main','Käyttäjien oikeudet');?></h2>
+		<h2 class="p15"><?php echo Yii::t('main','Käyttöoikeudet');?></h2>
                 <div class="panel-body bg-light">
 
 
