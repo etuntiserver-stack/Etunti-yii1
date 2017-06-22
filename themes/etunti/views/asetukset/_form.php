@@ -898,6 +898,18 @@ jQuery(function(){
 		<?php echo $form->error($model,'vinkki_prosentti'); ?>
 	</div>
 
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'alennus_max_euro'); ?>
+		<?php echo $form->numberField($model,'alennus_max_euro',array('maxlength'=>10,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'alennus_max_euro'); ?>
+	</div>
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'alennus_max_prosentti'); ?>
+		<?php echo $form->numberField($model,'alennus_max_prosentti',array('maxlength'=>10,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'alennus_max_prosentti'); ?>
+	</div>
+
    </div>
 
   </div>
