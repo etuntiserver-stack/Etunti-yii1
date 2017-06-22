@@ -256,7 +256,7 @@ exit;
 	  	?>
                 </div>
 
-
+<?php /*
 		<!-- Maksullinen changer -->
 		<div class="row">
 		 <div class="col-lg-3 col-md-offset-4">
@@ -298,6 +298,7 @@ exit;
 		</div>
 		<div id="sw_result"></div>
 		<!-- Maksullinen changer -->
+*/ ?>
 
 
 
