@@ -577,7 +577,7 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 	</div><div class="col-sm-6">
 	<br>
 	<?php
-	echo CHtml::dropdownList('palvelu','palvelu', CHtml::listData(LaskutusTuotteet::model()->findAll(), 'id', 'tuotenimi'), 
+	echo CHtml::dropdownList('','', CHtml::listData(LaskutusTuotteet::model()->findAll(), 'id', 'tuotenimi'), 
 	array('empty'=>'Valitse tuote/palvelu','class'=>'form-control valitseTuote'));
 	?>
 	</div>
@@ -1160,7 +1160,7 @@ $(".luoRiviTunti").click(function() {
 	var from = $(this).closest('.panel-body').find("#from").val();
 	var to = $(this).closest('.panel-body').find("#to").val();
 	var kohteet = $(this).closest('.panel-body').find('.etsikohde_alasvetovaliko').val();
-	var tuotePalvelu = $("#palvelu").val();
+	var tuotePalvelu = $(this).closest(".panel-body").find('.valitseTuote').val();
 
 	console.log(kohteet);
 
