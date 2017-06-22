@@ -28,7 +28,7 @@ class KupongitController extends Controller
 	{
 		return array(
 			array('allow',
-				'actions'=>array('admin', 'delete', 'create', 'update', 'index', 'view'),
+				'actions'=>array('admin', 'delete', 'create', 'update', 'index', 'view', 'laheta'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -74,6 +74,14 @@ class KupongitController extends Controller
 			'model'=>$this->loadModel($id),
 		));
 	}
+
+	public function actionLaheta($id)
+	{
+		$this->render('laheta',array(
+			'model'=>$this->loadModel($id),
+		));
+	}
+
 
 	/**
 	 * Creates a new model.

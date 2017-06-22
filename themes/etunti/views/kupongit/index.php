@@ -55,7 +55,7 @@
                         <div class="section">
                           <label class="field prepend-icon">
 
-			      <input type="number" class="gui-input datepickerFI" name="Kupongit[voimassa]" placeholder="Voimassa päivämäärä...">
+			      <input type="text" class="gui-input datepickerFI" name="Kupongit[voimassa]" placeholder="Voimassa päivämäärä...">
                             <label for="firstname" class="field-icon">
                               <i class="fa fa-calendar"></i>
                             </label>
@@ -120,6 +120,7 @@
   <th><?php echo Yii::t('main', 'Muoto'); ?></th>
   <th><?php echo Yii::t('main', 'Jatkuva'); ?></th>
   <th><?php echo Yii::t('main', 'Käytetty'); ?></th>
+  <th><?php echo Yii::t('main', 'Lähetä'); ?></th>
   </tr>
   </thead>
   <?php $this->widget('zii.widgets.CListView', array(

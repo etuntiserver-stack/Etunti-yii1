@@ -42,5 +42,18 @@
 	<td>
 		<?=$list[$data->status]?>
 	</td>
+	<td>
+		<?php echo CHtml::link('<i class="fa fa-paper-plane-o" aria-hidden="true" style="font-size: 110%"></i>', 
+				array('laheta', 'id'=>$data->id), 
+				array(
+					'class'=>'btn btn-primary myBgColors', 
+					'style'=>'color:white', 
+					'data-toggle'=>'tooltip', 
+					'data-placement'=>'top', 
+					'title'=>Yii::t('main', 'Lähetä') 
+				)
+			); 
+		?>
+	</td>
 </tr>
 

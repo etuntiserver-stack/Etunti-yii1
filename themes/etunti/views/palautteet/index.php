@@ -110,8 +110,8 @@ $(".muokaValiko").click(function() {
 			    <?php
 	   			$site = Yii::app()->createController('Site');
 				$mod = 'Asiakkaat';
-				$sarake = 'asiakas';
-				$placeholder = 'Asiakas';
+				$sarake = 'yrityksen_nimi';
+				$placeholder = 'Yritys';
 				if(isset($_POST[$sarake])) 			$postvalue = $_POST[$sarake]; 
 				else if(isset(Yii::app()->session[$sarake])) 	$postvalue = Yii::app()->session[$sarake]; 
 				else $postvalue='';				
