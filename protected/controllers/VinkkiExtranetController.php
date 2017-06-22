@@ -40,7 +40,7 @@ class VinkkiExtranetController extends Controller
                 		'expression'=>"Yii::app()->controller->isAsiakas()",
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('index','view','admin','delete','update'),
+				'actions'=>array('index','view','admin','delete','update', 'arvomuutos', 'arvohaku'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -299,13 +299,28 @@ class VinkkiExtranetController extends Controller
 	{
 		if($data->tila == 0)
 		{
-			echo '<span class="btn btn-sm btn-warning btn-block">'.Yii::t('main', 'Avoin').'</span>';
+			echo '<span class="btn btn-sm btn-danger btn-block painamalla" arvo="0" id="'.$data->id.'">'.Yii::t('main', 'Avoin').'</span>';
 		} elseif($data->tila == 1) {
-			echo '<span class="btn btn-sm btn-success btn-block">'.Yii::t('main', 'Hoidettu').'</span>';
+			echo '<span class="btn btn-sm btn-warning btn-block painamalla" arvo="1" id="'.$data->id.'">'.Yii::t('main', 'Hoidettu').'</span>';
 		} elseif($data->tila == 2) {
-			echo CHtml::link('<span class="btn btn-sm btn-success btn-block">'.Yii::t('main', 'Asiakas').'</span>', array('//asiakkaat/update', 'id'=>$data->vinkkaja_asiakas_id), array('class'=>'link'));
+			echo '<span class="btn btn-sm btn-success btn-block painamalla" arvo="2" id="'.$data->id.'">'.Yii::t('main', 'Asiakas').'</span>';
 		}
 	}
 
+
+	public function actionArvohaku($id)
+	{
+		$model=$this->loadModel($id);
+		echo $model->tila;
+	}
+
+	public function actionArvomuutos($id)
+	{
+	    if(isset($_POST['arvo']))
+	    {
+		VinkkiExtranet::model()->updateByPk($id, array('tila' => $_POST['arvo']));
+		echo 'ok';
+	    }
+	}
 
 }

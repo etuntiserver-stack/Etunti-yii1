@@ -106,7 +106,55 @@
    </div>
   </div>
 
+<script type="text/javascript">
+$(document).ready(function(){
 
+
+ $(".painamalla").click(function(){
+
+	var arvo = 0;
+
+        $.ajax({
+           url: 'arvohaku?id='+$(this).attr('id'),
+           async: false,
+           success: function(data){
+		console.log(data);
+		arvo = data;
+           }
+        });
+
+	if( arvo < 2 )
+	arvo = parseInt(arvo)+1;
+	else
+	arvo = 0;
+
+
+	$(this).removeClass('btn-danger btn-warning btn-success');
+	if( arvo == 0 )
+	$(this).addClass('btn-danger').text('Avoin');
+	if( arvo == 1 )
+	$(this).addClass('btn-warning').text('Hoidettu');
+	if( arvo == 2 )
+	$(this).addClass('btn-success').text('Asiakas');
+
+
+
+
+        $.ajax({
+           url: 'arvomuutos?id='+$(this).attr('id'),
+           type: "POST",
+           data: { arvo : arvo },
+           success: function(data){
+		console.log(data);
+
+           }
+        });
+
+
+ });
+
+});
+</script>
 
 
 <script type="text/javascript">
