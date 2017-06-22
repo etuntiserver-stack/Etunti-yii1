@@ -64,7 +64,8 @@
                         <div class="section">
                           <label class="field prepend-icon">
 
-			      <input type="number" class="gui-input" name="maara" placeholder="Syötä määrä...">
+			      <input type="number" class="gui-input maara" name="maara" placeholder="Syötä määrä...">
+			      <div id="maara_check_result"></div>
                             <label for="firstname" class="field-icon">
                               <i class="fa fa-calendar"></i>
                             </label>
@@ -146,7 +147,11 @@
   </div>
 </div>
 
-
+<?php
+	$asetukset = Asetukset::model()->findByPk(1);
+	$alennus_max_euro = $asetukset->alennus_max_euro;
+	$alennus_max_prosentti = $asetukset->alennus_max_prosentti;
+?>
 
 <script type="text/javascript">
 $(document).ready(function(){
@@ -159,6 +164,30 @@ $("#aktiivinen").val(1);
 $(".haemob").click(function(){
 	$("#mobForm").submit();
 });
+
+	var alennus_max_euro = parseInt("<?=$alennus_max_euro?>");
+	var alennus_max_prosentti = parseInt("<?=$alennus_max_prosentti?>");
+
+ $(document).delegate(".maara","keyup",function(){
+
+	if( ($("#maara_tyyppi").val() == 'euro' ) && ($(this).val() > alennus_max_euro) ){
+		$("#maara_check_result").html('<span class="required">Maksimi arvo on '+ alennus_max_euro +'</span>');
+		$('.haemob').attr('disabled', 'yes');
+	} else if($("#maara_tyyppi").val() == 'euro' ) {
+		$('.haemob').removeAttr('disabled');
+		$("#maara_check_result").html('');
+	}
+
+	if( ($("#maara_tyyppi").val() == 'prosentti' ) && ($(this).val() > alennus_max_prosentti) ){
+		$("#maara_check_result").html('<span class="required">Maksimi arvo on '+ alennus_max_prosentti +'</span>');
+		$('.haemob').attr('disabled', 'yes');
+	} else if($("#maara_tyyppi").val() == 'prosentti' ) {
+		$('.haemob').removeAttr('disabled');
+		$("#maara_check_result").html('');
+	}
+
+ });
+
 
 });
 </script>
