@@ -373,6 +373,19 @@ class PalautteetController extends Controller
 		$criteria->condition = "
 			keskustelu_id=id
 		";
+		if(isset($_POST['asiakas']))
+		{
+			$asiakaat = Asiakkaat::model()->findAll(" yrityksen_nimi='%".$_POST['asiakas']."%' OR yhteyshenkilo LIKE '%".$_POST['asiakas']."%' ");
+			$as_id = array();
+			foreach($asiakaat as $itm)
+				$as_id[] = $itm->id;
+			$ids =  "asiakas_id=".implode(" OR asiakas_id=", array_values($as_id));
+			if(count($as_id) == 0)
+			$criteria->addCondition("asiakas_id=0");
+			else
+			$criteria->addCondition($ids);
+
+		}
 
 		$from = date("d.m.Y", strtotime("-1 month"));
 		$to = date("d.m.Y");

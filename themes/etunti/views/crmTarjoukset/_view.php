@@ -17,6 +17,9 @@
 		?>
 	</td>
 	<td>
+		<?php echo date("d.m.Y", strtotime($data->time)); ?>
+	</td>
+	<td>
 		<?php echo $data->voimassa; ?>
 	</td>
 	<td>
