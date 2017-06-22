@@ -46,7 +46,7 @@ class SiteController extends Controller
 			),
 			array('allow', 
 				'actions'=>array('file_safe_opener'),
-                		'expression'=>"Yii::app()->controller->isEtuntiAdmin() || Yii::app()->controller->isAsiakas()",
+                		'expression'=>"Yii::app()->controller->isEtuntiAdmin() || Yii::app()->controller->isAsiakas() || isset(Yii::app()->user->domain)",
 			),
 			array('allow', 
 				'actions'=>array('index','test','hyvaksy','hylkaa', 'confirm', 'aloita', 'defdb_dump', 'opentmp'),

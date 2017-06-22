@@ -281,8 +281,14 @@ if(isset($asetukset->checkout_id) and !empty($asetukset->checkout_id) and !empty
    <?php
    foreach(array_reverse(glob(Yii::app()->baseUrl.'tiedostot/firma/'.Yii::app()->user->domain.'/onlinevarausehdot.*')) as $file) 
    {
-	$explNimi = explode("/",$file);
- 	echo '<a href="../../'.$file.'">'.end($explNimi).'</a>';
+		$explNimi = explode("/",$file);
+		// <-- file_safe_opener
+		$filepath = 'tiedostot/firma/'.Yii::app()->user->domain.'/'.end($explNimi);
+		echo CHtml::link(Yii::t('main', 'Onlinevarausehdot'),
+			array('/site/file_safe_opener', 'filepath' => $filepath, 'ext' => 'pdf'),
+			array('target'=>'_blank','class'=>'text-danger'
+		));
+		//     file_safe_opener -->
 	
    }
    ?>
