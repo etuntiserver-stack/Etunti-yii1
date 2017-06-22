@@ -898,6 +898,7 @@ jQuery(function(){
 		<?php echo $form->error($model,'vinkki_prosentti'); ?>
 	</div>
 
+	<legend><h2><?php echo Yii::t('main','Alennuskoodit'); ?></h2></legend>
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'alennus_max_euro'); ?>
 		<?php echo $form->numberField($model,'alennus_max_euro',array('maxlength'=>10,'class'=>'form-control')); ?>
@@ -911,7 +912,6 @@ jQuery(function(){
 	</div>
 
    </div>
-
   </div>
 
 <?php endif; ?>
