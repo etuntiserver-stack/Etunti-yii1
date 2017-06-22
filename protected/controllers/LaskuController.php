@@ -456,9 +456,11 @@ class LaskuController extends Controller
 			$hinta_rivi = '';
 			$yksikko_k = '';
 			if(!empty($a->hinta) and $a->hinta_tyyppi == 1){
+				$hinta_rivi = $a->hinta;
 				$yksikko_k = 'h';
 			}
 			if(!empty($a->hinta) and $a->hinta_tyyppi == 3){
+				$hinta_rivi = $a->hinta;
 				$yksikko_k = 'kpl';
 			}
 			if(empty($a->hinta) and !empty($as->hinta) and $as->hinta_tyyppi == 1){
