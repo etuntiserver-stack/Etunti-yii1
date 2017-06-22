@@ -60,11 +60,11 @@ class DigistenTunnitKkController extends Controller
 
 		// <-- eTyö
 		$val = 1; // Tunti ja työvuorot
-		if( $taso == $val and $maara <= 1000 ){
+		if( $taso == $val and $maara <= 500 ){
 			$return += $dh->etyo_1000;
-		} elseif( $taso == $val and ($maara > 1000 and $maara <= 2000) ){
+		} elseif( $taso == $val and ($maara > 500 and $maara <= 1500) ){
 			$return += $dh->etyo_1000_2000;
-		} elseif( $taso == $val and ($maara > 2000 and $maara <= 3000) ){
+		} elseif( $taso == $val and ($maara > 1500 and $maara <= 3000) ){
 			$return += $dh->etyo_2000_3000;
 		} elseif( $taso == $val and ($maara > 3000 and $maara <= 6000) ){
 			$return += $dh->etyo_3000_6000;
@@ -77,11 +77,11 @@ class DigistenTunnitKkController extends Controller
 
 		// <-- eLasku
 		$val = 3; // Laskutus
-		if( $taso == $val and $maara <= 1000 ){
+		if( $taso == $val and $maara <= 500 ){
 			$return += $dh->elasku_1000;
-		} elseif( $taso == $val and ($maara > 1000 and $maara <= 2000) ){
+		} elseif( $taso == $val and ($maara > 500 and $maara <= 1500) ){
 			$return += $dh->elasku_1000_2000;
-		} elseif( $taso == $val and ($maara > 2000 and $maara <= 3000) ){
+		} elseif( $taso == $val and ($maara > 1500 and $maara <= 3000) ){
 			$return += $dh->elasku_2000_3000;
 		} elseif( $taso == $val and ($maara > 3000 and $maara <= 6000) ){
 			$return += $dh->elasku_3000_6000;
@@ -94,11 +94,11 @@ class DigistenTunnitKkController extends Controller
 
 		// <-- eOnline
 		$val = 4; // Onlinevaraus
-		if( $taso == $val and $maara <= 1000 ){
+		if( $taso == $val and $maara <= 500 ){
 			$return += $dh->eonline_1000;
-		} elseif( $taso == $val and ($maara > 1000 and $maara <= 2000) ){
+		} elseif( $taso == $val and ($maara > 500 and $maara <= 1500) ){
 			$return += $dh->eonline_1000_2000;
-		} elseif( $taso == $val and ($maara > 2000 and $maara <= 3000) ){
+		} elseif( $taso == $val and ($maara > 1500 and $maara <= 3000) ){
 			$return += $dh->eonline_2000_3000;
 		} elseif( $taso == $val and ($maara > 3000 and $maara <= 6000) ){
 			$return += $dh->eonline_3000_6000;
@@ -111,11 +111,11 @@ class DigistenTunnitKkController extends Controller
 
 		// <-- eDico
 		$val = 5; // CRM / eDico
-		if( $taso == $val and $maara <= 1000 ){
+		if( $taso == $val and $maara <= 500 ){
 			$return += $dh->edico_1000;
-		} elseif( $taso == $val and ($maara > 1000 and $maara <= 2000) ){
+		} elseif( $taso == $val and ($maara > 500 and $maara <= 1500) ){
 			$return += $dh->edico_1000_2000;
-		} elseif( $taso == $val and ($maara > 2000 and $maara <= 3000) ){
+		} elseif( $taso == $val and ($maara > 1500 and $maara <= 3000) ){
 			$return += $dh->edico_2000_3000;
 		} elseif( $taso == $val and ($maara > 3000 and $maara <= 6000) ){
 			$return += $dh->edico_3000_6000;
