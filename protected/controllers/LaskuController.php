@@ -360,6 +360,12 @@ class LaskuController extends Controller
 	public function actionLuoKohteista($id)
 	{
 
+		if( $_POST['yksikko'] == 'kk' )
+		{
+			$_POST['from'] = date("Y-m-d",strtotime($_POST['from'].' first day of this month'));
+			$_POST['to'] = date("Y-m-d",strtotime($_POST['to'].' last day of this month'));
+		}
+
 		$kohdet = "kohdenID=$id"; 
 		if($_POST['mistaLuo'] == 'luoAsiakaasta')
 		{
@@ -416,6 +422,7 @@ class LaskuController extends Controller
 			'mistaLuo' => $_POST['mistaLuo'],
 			'kohdet' => $kohdet,
 			'kk_kpl' => $kk_kpl,
+			'fromto' => $_POST['from'].' - '.$_POST['to'],
 		);
 		echo json_encode($return);
 

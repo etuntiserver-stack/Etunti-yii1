@@ -1206,7 +1206,7 @@ function pyyntoRiville(kohteet,from,to,tuotePalvelu){
 	        $.ajax({
 	           url: 'luoKohteista?id='+spH[0],
 		   type: 'POST',
-		   data: { from : from, to : to, mistaLuo : mistaLuo },
+		   data: { from : from, to : to, mistaLuo : mistaLuo, yksikko : spH[2] },
 	           success: function(data){
 	               	console.log(data);
 
