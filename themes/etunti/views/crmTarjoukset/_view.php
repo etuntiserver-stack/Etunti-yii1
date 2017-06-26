@@ -26,6 +26,20 @@
 		<?php echo $data->kohteen_osoite; ?>
 	</td>
 	<td>
+		<?php if($data->tyonkuvaus_id != 0): ?>
+		<?php echo CHtml::link('<i class="fa fa-file-pdf-o" aria-hidden="true" style="font-size: 110%"></i>', 
+				array('tyonkuvaus/pdf', 'id'=>$data->tyonkuvaus_id), 
+				array(
+					'data-toggle'=>'tooltip', 
+					'data-placement'=>'top', 
+					'title'=>Yii::t('main', 'PDF'),
+					'target' => '_blank'
+				)
+			); 
+		?>
+		<?php endif; ?>
+	</td>
+	<td>
 	<?php
 		if(file_exists( Yii::app()->basePath.'/../'.$this->valmiit_polkku().'/'.$data->liite.'.docx' ))
 		{
