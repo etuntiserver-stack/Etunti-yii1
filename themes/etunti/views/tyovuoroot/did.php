@@ -185,6 +185,12 @@ if(!isset($_POST['tulosta']))
 		$toistuva = '<i class="p5 fa fa-repeat text-success" style="font-size:120%" data-toggle="tooltip" data-placement="top" title="'. Yii::t('main', 'Toistuva työvuoro').'"></i>';
 	   }
 
+	   // peruutettu
+	   $peruutettu = '';
+	   if($tvVal->peruutettu == 1){
+		$peruutettu = '<h3 class="text-danger">'. Yii::t('main', 'Peruutettu').'</h3>';
+	   }
+
 	   // Tyopari
 	   $tyopari = '';
 	   if($tvVal->tyopaari != '' and $tvVal->tyopaari != "[\"$tvVal->tid\"]"){
@@ -264,6 +270,7 @@ if(!isset($_POST['tulosta']))
 	   if(!empty($tvVal->tietoja) and isset($tietoja) and $tietoja == 1)
 	   $bod .=  '<p><span style="color: blue; border: 1px #333 solid">'.str_replace("\n","<br>",$tvVal->tietoja).'</span></p>';
 
+	   $bod .= $peruutettu;
 	   //if($tvVal->toistuva_id != 0)
 	   //$bod .=  '<br><span class="text-warning">Ketjun numero:'.$tvVal->toistuva_id.'</span> '; //$tvVal->id
 
