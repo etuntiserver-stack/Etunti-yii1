@@ -138,6 +138,7 @@ public function actionLogin($domain)
 					$tv = Tyovuoroot::model()->findByPk($_POST['id']);
 					if( isset($tv->id) )
 					{
+						$peruutettu = 0;
 						$r = $this->dateDifference(date("Y-m-d", strtotime($tv->pvm)), date("Y-m-d") );
 						$asetukset=Asetukset::model()->findByPk(1);
 						if( $asetukset->peruutta_paiva_ennen > 0 and $r > $asetukset->peruutta_paiva_ennen )

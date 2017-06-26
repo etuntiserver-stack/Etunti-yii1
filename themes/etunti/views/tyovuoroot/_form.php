@@ -220,7 +220,7 @@ $(".muokaValiko").click(function() {
   <div class="col-sm-3">
 		<?php echo $form->labelEx($model,'peruutettu'); ?>
 		<?php
-		$list = array(0=>'Ei', 1=>'Kyllä');
+		$list = array(0=>'Ei', 1=>'Peruutettu', 2=>'Peruutettu laskutettava');
 		echo $form->dropDownList($model,'peruutettu', $list, 
 		array('empty'=>'Valitse','class'=>'form-control'));
 		?>
