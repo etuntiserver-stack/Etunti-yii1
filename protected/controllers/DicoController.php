@@ -184,13 +184,13 @@ public function actionLogin($domain)
 								"MIME-Version: 1.0\r\n".
 								"Content-type: text/html; charset=UTF-8";
 
-							mail($mod->sahkoposti,$subject,$message,$headers);
+							mail($model->sahkoposti,$subject,$message,$headers);
 							//     Sahkoposti lahetys -->
 
 							// <-- LOG
 							$log=new Log;
 							$log->log_category 	= 1; // 1-email
-							$log->email_to 		= $mod->sahkoposti;
+							$log->email_to 		= $model->sahkoposti;
 							$log->email_subject	= $subject;
 							$log->email_message	= json_encode($message);
 							$log->save();
