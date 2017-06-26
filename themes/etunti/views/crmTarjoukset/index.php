@@ -77,7 +77,7 @@
 				'class'=>'text-danger poista',
 				'for' => Yii::app()->baseUrl.$this->templates_polkku().end($explNimi)
 		));
-		//     file_safe_opener -->
+		//     file_safe_opener// -->
 
 			  }
 			  ?>
