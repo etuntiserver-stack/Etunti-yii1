@@ -217,6 +217,15 @@ $(".muokaValiko").click(function() {
 		?>
   </div>
 
+  <div class="col-sm-3">
+		<?php echo $form->labelEx($model,'peruutettu'); ?>
+		<?php
+		$list = array(0=>'Ei', 1=>'Kyllä');
+		echo $form->dropDownList($model,'peruutettu', $list, 
+		array('empty'=>'Valitse','class'=>'form-control'));
+		?>
+  </div>
+
 </div>
 
 <div class="row">
