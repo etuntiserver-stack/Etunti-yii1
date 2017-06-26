@@ -138,6 +138,7 @@ public function actionLogin($domain)
 					$tv = Tyovuoroot::model()->findByPk($_POST['id']);
 					if( isset($tv->id) )
 					{
+						$k = Kohteet::model()->findByPk($tv->kohde);
 						$peruutettu = 0;
 						$r = $this->dateDifference(date("Y-m-d", strtotime($tv->pvm)), date("Y-m-d") );
 						$asetukset=Asetukset::model()->findByPk(1);
@@ -169,6 +170,7 @@ public function actionLogin($domain)
 							<body>';
 
 							$message .= '<br>Hei, <p>Työvuorosi on peruutettu.</p>';
+							$message .= '<p><b>'.$k->osoite.'</b>, '.$tv->pvm.' '.$tv->alku.'-'.$tv->loppu.'</p>';
 							if($peruutettu == 2)
 							{
 								$message .= '<p>On laskutettava</p>';
