@@ -68,7 +68,7 @@
 				';
 */
 
-			 	echo '<tr><td>b';
+			 	echo '<tr><td>';
 
 		// <-- file_safe_opener
 		$filepath = '../../'.$file;
@@ -76,10 +76,10 @@
 			array('/site/file_safe_opener', 'filepath' => $filepath, 'ext' => 'docx'),
 			array(
 				'target'=>'_blank',
-				'class'=>'text-danger'
+				'class'=>'link'
 		));
 		//     file_safe_opener// -->
-			 	echo '</td><i class="poista text-danger fa fa-trash link" for="'.Yii::app()->baseUrl.$this->templates_polkku().end($explNimi).'"></i><td>';
+			 	echo '</td><td><i class="poista text-danger fa fa-trash link" for="'.Yii::app()->baseUrl.$this->templates_polkku().end($explNimi).'"></i><td>';
 			 	echo '</tr>';
 
 			  }
