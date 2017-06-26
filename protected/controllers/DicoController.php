@@ -150,6 +150,52 @@ public function actionLogin($domain)
 							Tyovuoroot::model()->updateByPk($tv->id, array('peruutettu'=>2));
 						}
 
+
+
+							// <-- Sahkoposti lahetys
+							$firma = FirmanTiedot::model()->findbypk(1);
+							$get_css = file_get_contents(Yii::app()->request->baseUrl.'css/email_send_table.css');
+
+							if($model->tyyppi == 'yritys')
+							$asiakas = $model->yrityksen_nimi;
+							if($model->tyyppi == 'henkilo')
+							$asiakas = $model->yhteyshenkilo;
+	
+							$message = '<html xmlns="http://www.w3.org/1999/xhtml">
+							<head>
+							    <title></title>
+							    <style type="text/css">'.$get_css.'</style>
+							</head>
+							<body>';
+
+							$message .= '<br>Hei, <p>Työvuorosi on peruutettu.</p>';
+							if($peruutettu == 2)
+							{
+								$message .= '<p>On laskutettava</p>';
+							}
+							$message .= '
+							</body>
+							</html>';
+
+
+							$subject='=?UTF-8?B?'.base64_encode("Työvuoro peruutettu").'?=';
+							$headers="From: ".$asiakas." <".$model->sahkoposti.">\r\n".
+								"Reply-To: no_replay@etunti.fi\r\n".
+								"MIME-Version: 1.0\r\n".
+								"Content-type: text/html; charset=UTF-8";
+
+							mail($mod->sahkoposti,$subject,$message,$headers);
+							//     Sahkoposti lahetys -->
+
+							// <-- LOG
+							$log=new Log;
+							$log->log_category 	= 1; // 1-email
+							$log->email_to 		= $mod->sahkoposti;
+							$log->email_subject	= $subject;
+							$log->email_message	= json_encode($message);
+							$log->save();
+							//     LOG -->
+
 						$return = array('OK'=>$_POST['id'], 'pvm diff'=>$r, 'peruutettu'=>$peruutettu);
 					} else {
 						$return = array('Error'=>$_POST['id']);
