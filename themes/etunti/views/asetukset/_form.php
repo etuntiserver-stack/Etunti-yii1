@@ -911,6 +911,13 @@ jQuery(function(){
 		<?php echo $form->error($model,'alennus_max_prosentti'); ?>
 	</div>
 
+	<legend><h2><?php echo Yii::t('main','Työvuorot'); ?></h2></legend>
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'peruutta_paiva_ennen'); ?>
+		<?php echo $form->numberField($model,'peruutta_paiva_ennen',array('maxlength'=>10,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'peruutta_paiva_ennen'); ?>
+	</div>
+
    </div>
   </div>
 

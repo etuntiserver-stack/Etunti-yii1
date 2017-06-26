@@ -188,7 +188,10 @@ if(!isset($_POST['tulosta']))
 	   // peruutettu
 	   $peruutettu = '';
 	   if($tvVal->peruutettu == 1){
-		$peruutettu = '<h3 class="text-danger">'. Yii::t('main', 'Peruutettu').'</h3>';
+		$peruutettu = '<p><span class="text-danger">'. Yii::t('main', 'Peruutettu').'</span></p>';
+	   }
+	   if($tvVal->peruutettu == 2){
+		$peruutettu = '<p><span class="text-danger">'. Yii::t('main', 'Peruutettu laskutettava').'</span></p>';
 	   }
 
 	   // Tyopari

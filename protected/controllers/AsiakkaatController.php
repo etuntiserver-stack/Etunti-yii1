@@ -1163,6 +1163,8 @@ $xml = '
 
 				if($data->peruutettu ==1)
 			  	$bod .= '<td></td><td><span class="text-danger">'.Yii::t('main', 'Peruutettu').'</span></td></tr>';
+				elseif($data->peruutettu ==2)
+			  	$bod .= '<td></td><td><span class="text-danger">'.Yii::t('main', 'Peruutettu laskutettava').'</span></td></tr>';
 				else
 			  	$bod .= '<td></td><td><button class="btn btn-danger peruuttaa" for="'.$data->id.'">'.Yii::t('main', 'Peruuttaa').'</button></td></tr>';
 			  	$bod .= '

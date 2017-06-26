@@ -108,6 +108,17 @@ public function actionLogin($domain)
 	}
 
 
+	protected function dateDifference($date_1 , $date_2 , $differenceFormat = '%a' )
+	{
+	    $datetime1 = date_create($date_1);
+	    $datetime2 = date_create($date_2);
+	    
+	    $interval = date_diff($datetime1, $datetime2);
+	    
+	    return $interval->format($differenceFormat);
+	    
+	}
+
 	public function actionHistoria($domain)
 	{
 
@@ -127,8 +138,18 @@ public function actionLogin($domain)
 					$tv = Tyovuoroot::model()->findByPk($_POST['id']);
 					if( isset($tv->id) )
 					{
-						Tyovuoroot::model()->updateByPk($tv->id, array('peruutettu'=>1));
-						$return = array('OK'=>$_POST['id']);
+						$r = $this->dateDifference(date("Y-m-d", strtotime($tv->pvm)), date("Y-m-d") );
+						$asetukset=Asetukset::model()->findByPk(1);
+						if( $asetukset->peruutta_paiva_ennen > 0 and $r > $asetukset->peruutta_paiva_ennen )
+						{
+							$peruutettu = 1;
+							Tyovuoroot::model()->updateByPk($tv->id, array('peruutettu'=>1));
+						} else {
+							$peruutettu = 2;
+							Tyovuoroot::model()->updateByPk($tv->id, array('peruutettu'=>2));
+						}
+
+						$return = array('OK'=>$_POST['id'], 'pvm diff'=>$r, 'peruutettu'=>$peruutettu);
 					} else {
 						$return = array('Error'=>$_POST['id']);
 					}
