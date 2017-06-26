@@ -119,6 +119,26 @@ public function actionLogin($domain)
 		   if(isset($model->id))
 		   {
 
+
+
+				// <-- Peruuttaa tyovuoroa
+				if(isset($_POST['peruuttaa_tyovuoroa']))
+				{
+					$tv = Tyovuoroot::model()->findByPk($_POST['id']);
+					if( isset($tv->id) )
+					{
+						Tyovuoroot::model()->updateByPk($tv->id, array('peruutettu'=>1));
+						$return = array('OK'=>$_POST['id']);
+					} else {
+						$return = array('Error'=>$_POST['id']);
+					}
+					$this->_sendResponse(200, CJSON::encode($return));
+					exit;
+
+				}
+				//     Peruuttaa tyovuoroa -->
+
+
 				// <-- naytaVinkit
 				if(isset($_POST['tyyppi']) and $_POST['tyyppi'] == 'naytaVinkit')
 				{

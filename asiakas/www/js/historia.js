@@ -226,13 +226,48 @@ function getUrlVars() {
            success: function(data){
 		//data = JSON.parse(data);
 		//console.log(data);
-		//window.location = server +''+ data;
-
 
            }
         });
     });
     //     get Lasku PDF -->
+
+
+
+    //  <-- Peruuttaa tyovuoroa
+    $(document).delegate('.peruuttaa', 'click', function() {
+
+
+	var thisID = $(this).attr('for');
+
+
+	var sendDataPost = $(this).serializeArray();
+	$.each(loginArr, function( index, value ) {
+		sendDataPost.push({name: index, value: value});
+	});
+
+		sendDataPost.push({name: tyyppi, value: tyyppi});
+		sendDataPost.push({name: "id", value: thisID});
+		sendDataPost.push({name: "peruuttaa_tyovuoroa", value: "true"});
+
+	if( confirm('Haluatko varmaasti peruuttaa?') )
+	{
+        $.ajax({
+           url: url+'/historia?domain='+domain,
+	   type:'POST',
+	   data: sendDataPost,
+           success: function(data){
+		data = JSON.parse(data);
+		console.log(data);
+		if(data['OK'])
+		{
+			window.location.reload();
+		}
+           }
+        });
+	}
+    });
+    //     Peruuttaa tyovuoroa -->
 
 
     $(document).delegate('.submitButton', 'click', function() {

@@ -1129,6 +1129,7 @@ $xml = '
 				SELECT id FROM sivex_kohdet
 				WHERE asiakas_id IN(SELECT id FROM asiakkaat WHERE id='".$model->id."')
 			) 
+			AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') >= CURDATE()
 		";
 
 		if(!empty($from) and !empty($to))
@@ -1158,7 +1159,13 @@ $xml = '
 					<td>'.Yii::t('main', 'Aloitus').'</td><td>'.$data->alku.'</td></tr>
 					<td>'.Yii::t('main', 'Lopetus').'</td><td>'.$data->loppu.'</td></tr>
 					<td>'.Yii::t('main', 'Kesto').'</td><td>'.$this->sprint($kesto).'</td></tr>
-					<td>'.Yii::t('main', 'Tietoja').'</td><td>'.$data->tietoja.'</td></tr>
+					<td>'.Yii::t('main', 'Tietoja').'</td><td>'.$data->tietoja.'</td></tr>';
+
+				if($data->peruutettu ==1)
+			  	$bod .= '<td></td><td><span class="text-danger">'.Yii::t('main', 'Peruutettu').'</span></td></tr>';
+				else
+			  	$bod .= '<td></td><td><button class="btn btn-danger peruuttaa" for="'.$data->id.'">'.Yii::t('main', 'Peruuttaa').'</button></td></tr>';
+			  	$bod .= '
 				</table><br>';
 		  	}
 
