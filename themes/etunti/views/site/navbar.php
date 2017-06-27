@@ -1024,10 +1024,12 @@ $('.tvchange').change(function(){
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/LaskutusTuotteet/index">
                   <span class="fa fa-shopping-cart"></span> <?php echo Yii::t('main', 'Tuotteet ja palvelut'); ?></a>
               </li>
+<!--
               <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/laskuHistoria/avoimet">
                   <span class="glyphicon glyphicon-time"></span> <?php echo Yii::t('main', 'Avoimet laskut'); ?></a>
               </li>
+-->
 
           <li>
             <a class="accordion-toggle raportit" href="#">
@@ -1063,11 +1065,12 @@ $('.tvchange').change(function(){
             </ul>
           </li>
 
-
+<!--
               <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/laskuHistoria/reskontraluettelo">
                   <span class="fa fa-shopping-cart"></span> <?php echo Yii::t('main', 'Reskontraluettelo'); ?></a>
               </li>
+-->
 
             </ul>
           </li>
