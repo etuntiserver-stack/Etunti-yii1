@@ -20,15 +20,9 @@ $this->menu=array(
  $yritys = $f->tyonantaja.', ';
 ?>
 <style>
-table{
-	width: 200px;
-	font-size: 80%;
-}
-th{
-	width: 100%;	
-	padding:3px 7px;
-}
+<?php echo file_get_contents('css/raportit_table2.css'); ?>
 </style>
+
 <div style="text-align: center">
 <h1><?php echo Yii::t('main','Laskupäiväkirja'); ?></h1>
 <br>
@@ -115,7 +109,7 @@ th{
 <?php endif; ?>
 
   <div class="panel heading-border">
-   <div class="panel-body">
+   <div class="panel-body tb">
 
 <table class="table table-bordered table-striped">
  <tr>
@@ -128,6 +122,8 @@ th{
   <th><?php echo Yii::t('main','Asiakas'); ?></th>
   <th><?php echo Yii::t('main','Laskunro'); ?></th>
   <th><?php echo Yii::t('main','Laskupvm'); ?></th>
+  <th><?php echo Yii::t('main','Veroton'); ?></th>
+  <th><?php echo Yii::t('main','ALV'); ?></th>
   <th><?php echo Yii::t('main','Yhteensä'); ?></th>
 
 <?php if(!isset($_POST['tulosta'])) : ?>
@@ -137,18 +133,25 @@ th{
  </tr>
  <?php 
 	$saldo = 0;
+	$veroton = 0;
+	$alv = 0;
  foreach($model as $data)
  {
+	$veroton += $data->yhteensa_total_veroton;
+	$alv += $data->yhteensa_total_verot;
 	$saldo += $data->yhteensa_total;
 	$this->renderPartial('_paivakirja',array('data'=>$data));
  }
  ?>
-
+ <tr>
   <th></th>
   <th></th>
   <th></th>
   <th><?php echo Yii::t('main','Yhteensä'); ?></th>
+  <th><?=number_format($veroton, 2, ',', ' ')?></th>
+  <th><?=number_format($alv, 2, ',', ' ')?></th>
   <th><?php echo number_format($saldo, 2, ',', ' '); ?></th>
+ </tr>
 
 </table>
 

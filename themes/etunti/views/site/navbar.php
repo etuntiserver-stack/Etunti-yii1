@@ -1040,18 +1040,22 @@ $('.tvchange').change(function(){
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/laskuHistoria/paivakirja">
                   <span class="glyphicon glyphicon-time"></span> <?php echo Yii::t('main', 'Lasku päiväkirjа'); ?></a>
               </li>
+<!--
               <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/laskuHistoria/paakirja">
                   <span class="glyphicon glyphicon-time"></span> <?php echo Yii::t('main', 'Lasku pääkirja'); ?></a>
               </li>
+
               <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/laskuHistoria/maksu_paivakirja">
                   <span class="glyphicon glyphicon-time"></span> <?php echo Yii::t('main', 'Maksu päiväkirjа'); ?></a>
               </li>
+
               <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/laskuHistoria/maksu_paakirja">
                   <span class="glyphicon glyphicon-time"></span> <?php echo Yii::t('main', 'Maksu pääkirja'); ?></a>
               </li>
+-->
               <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/laskuHistoria/alv_raportti">
                   <span class="glyphicon glyphicon-time"></span> <?php echo Yii::t('main', 'ALV-raportti'); ?></a>

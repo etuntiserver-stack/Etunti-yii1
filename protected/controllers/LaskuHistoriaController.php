@@ -267,7 +267,7 @@ class LaskuHistoriaController extends Controller
 		{
 	          $html2pdf = Yii::app()->ePdf->HTML2PDF('P', 'A4', 'en');
 		  $html2pdf->setDefaultFont('Arial');
-	          $html2pdf->WriteHTML($this->renderPartial('paivakirja',array(
+	          $html2pdf->WriteHTML($this->renderPartial('alv_raportti',array(
 			'model'=>$model,
 			'from'=>$from,
 			'to'=>$to,

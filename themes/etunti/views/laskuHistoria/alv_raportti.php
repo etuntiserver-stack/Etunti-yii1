@@ -20,17 +20,11 @@ $this->menu=array(
  $yritys = $f->tyonantaja.', ';
 ?>
 <style>
-table{
-	width: 200px;
-	font-size: 80%;
-}
-th{
-	width: 100%;	
-	padding:3px 7px;
-}
+<?php echo file_get_contents('css/raportit_table2.css'); ?>
 </style>
+
 <div style="text-align: center">
-<h1><?php echo Yii::t('main','Laskupäiväkirja'); ?></h1>
+<h1><?php echo Yii::t('main','ALV-raportti'); ?></h1>
 <br>
 <?php echo $yritys.date("d.m.Y",strtotime($from)).' - '.date("d.m.Y",strtotime($to)); ?>
 </div>
@@ -115,7 +109,7 @@ th{
 <?php endif; ?>
 
   <div class="panel heading-border">
-   <div class="panel-body">
+   <div class="panel-body tb">
 
 <table class="table table-bordered table-striped">
  <tr>
@@ -149,7 +143,7 @@ th{
 	$this->renderPartial('_alv_raportti',array('data'=>$data));
  }
  ?>
-
+ <tr>
   <th></th>
   <th></th>
   <th></th>
@@ -157,7 +151,7 @@ th{
   <th><?php echo number_format($yhteensa_total_veroton, 2, ',', ' '); ?></th>
   <th><?php echo number_format($yhteensa_total_verot, 2, ',', ' '); ?></th>
   <th><?php echo number_format($saldo, 2, ',', ' '); ?></th>
-
+ </tr>
 </table>
 
    </div>

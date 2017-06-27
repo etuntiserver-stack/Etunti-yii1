@@ -13,7 +13,7 @@
 class LaskuHistoria extends DB2ActiveRecord
 {
 
-public $viitenumero, $laskunumero;
+public $viitenumero, $laskunumero, $yhteensa_total_veroton, $yhteensa_total_verot;
 
 
 	/**
