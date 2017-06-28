@@ -28,16 +28,10 @@
                         <div class="section">
                           <label class="field prepend-icon">
 			    <!-- Autocomplete -->
-			    <?php
-	   			$site = Yii::app()->createController('Site');
-				$mod = 'Asiakkaat';
-				$sarake = 'yrityksen_nimi';
-				$placeholder = 'Yritys';
-				if(isset($_POST[$sarake])) 			$postvalue = $_POST[$sarake]; 
-				else if(isset(Yii::app()->session[$sarake])) 	$postvalue = Yii::app()->session[$sarake]; 
-				else $postvalue='';				
-		 	        $site[0]->autocompleteFor($mod, $sarake, $placeholder, $postvalue);
-			    ?>
+				<input type="text" name="asiakas" id="asiakas" class="form-control" AUTOCOMPLETE="off">
+				<input type="hidden" name="asiakas_id" id="asiakas_id" class="form-control">
+				<input type="hidden" name="alennuskoodi" value="<?=$model->id?>">
+				<div id="asiakasAutocompleteResult"></div>
 			    <!-- Autocomplete -->
                             <label for="firstname" class="field-icon">
                               <i class="fa fa-calendar"></i>
@@ -46,28 +40,6 @@
                         </div>
 		      </div>
 
-
-                      <div class="col-md-3">
-                        <div class="section">
-                          <label class="field prepend-icon">
-			    <!-- Autocomplete -->
-			    <?php
-	   			$site = Yii::app()->createController('Site');
-				$mod = 'Asiakkaat';
-				$sarake = 'yhteyshenkilo';
-				$placeholder = 'Yhteyshenkilö';
-				if(isset($_POST[$sarake])) 			$postvalue = $_POST[$sarake]; 
-				else if(isset(Yii::app()->session[$sarake])) 	$postvalue = Yii::app()->session[$sarake]; 
-				else $postvalue='';				
-		 	        $site[0]->autocompleteFor($mod, $sarake, $placeholder, $postvalue);
-			    ?>
-			    <!-- Autocomplete -->
-                            <label for="firstname" class="field-icon">
-                              <i class="fa fa-calendar"></i>
-                            </label>
-                          </label>			
-                        </div>
-		      </div>
 
                       <div class="col-md-3 col-md-offset-1">
         	        <input type="submit" class="btn btn-primary btn-lg haemob btn-block myBgColors" value="<?php echo Yii::t('main', 'Lähetä'); ?>">
@@ -87,3 +59,44 @@
         <!-- loppu: .tray-center -->
         </div>
 
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+
+  $('#asiakas').keyup(function(){
+	var thisVal = $(this).val();
+
+	if( thisVal.length >= 2 )
+	{
+
+	  	 $.ajax({
+			url: '../tyovuoroot/asiakas_autocomplete',
+			type:'GET',
+			async : false,
+			data: { "key" : thisVal },
+			  success:function(data){
+				data = JSON.parse(data);
+			  	//console.log(data);
+				if(data !== '')
+					$('#asiakasAutocompleteResult').html(data).show();
+				else
+					$('#asiakasAutocompleteResult').html('').show();
+			  },
+			  error:function(data){
+			  	console.log(data);
+			  }
+	 	});
+
+	}
+    });
+
+    $(document).delegate(".asiakasSelecter","click",function(){
+	var thisVal = $(this).attr('for');
+	$('#asiakas').val($(this).text());
+	$('#asiakas_id').val(thisVal);
+	$('#asiakasAutocompleteResult').html('').hide();
+    });
+
+});
+</script>

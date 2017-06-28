@@ -77,6 +77,12 @@ class KupongitController extends Controller
 
 	public function actionLaheta($id)
 	{
+		if(isset($_POST['asiakas_id']))
+		{
+			print_r($_POST);
+			exit;
+		}
+
 		$this->render('laheta',array(
 			'model'=>$this->loadModel($id),
 		));
