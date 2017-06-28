@@ -209,6 +209,13 @@ public function actionLogin($domain)
 				//     Peruuttaa tyovuoroa -->
 
 
+				// <-- naytaAlennuskoodit
+				if(isset($_POST['tyyppi']) and $_POST['tyyppi'] == 'naytaAlennuskoodit')
+				{
+
+				}
+				//     naytaAlennuskoodit -->
+
 				// <-- naytaVinkit
 				if(isset($_POST['tyyppi']) and $_POST['tyyppi'] == 'naytaVinkit')
 				{

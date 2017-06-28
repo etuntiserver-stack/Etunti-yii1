@@ -30,7 +30,8 @@
 			    <!-- Autocomplete -->
 				<input type="text" name="asiakas" id="asiakas" class="form-control" AUTOCOMPLETE="off">
 				<input type="hidden" name="asiakas_id" id="asiakas_id" class="form-control">
-				<input type="hidden" name="alennuskoodi" value="<?=$model->id?>">
+				<input type="hidden" name="id" value="<?=$model->id?>">
+				<input type="hidden" name="kupongin_id" value="<?=$model->kupongin_id?>">
 				<div id="asiakasAutocompleteResult"></div>
 			    <!-- Autocomplete -->
                             <label for="firstname" class="field-icon">

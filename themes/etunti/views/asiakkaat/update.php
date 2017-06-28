@@ -171,6 +171,7 @@ $asetukset = Asetukset::model()->findbypk(1);
 	echo $this->renderPartial('asiakas_historia', 
 		array(
 			'model'=>$model,
+			'naytaAlennuskoodit'=>true,
 			'naytaTyovuorot'=>true,
 			'naytaLaskut'=>true,
 			'naytaTarjoukset'=>true,

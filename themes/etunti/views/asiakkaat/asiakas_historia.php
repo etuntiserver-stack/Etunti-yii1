@@ -78,6 +78,22 @@
 	<?php endif; ?>
 
 
+	<?php if(isset($naytaAlennuskoodit)) : ?>
+	<h3><?php echo Yii::t('main', 'Alennuskoodit'); ?></h3>
+        <div class="tray-center">
+            <div class="admin-form">
+              <div class="panel heading-border">
+                <div class="panel-body bg-light">
+                 <div class="table-responsive">
+		  <?php echo $asiakkaat[0]->alennuskooditCRM($model, $from, $to); ?>
+		 </div>
+                </div>
+              </div>
+            </div>
+        </div>
+	<?php endif; ?>
+
+
 	<?php if(isset($naytaTyovuorot)) : ?>
 	<h3><?php echo Yii::t('main', 'Työvuorot'); ?></h3>
         <div class="tray-center">

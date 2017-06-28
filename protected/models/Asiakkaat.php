@@ -57,6 +57,7 @@ class Asiakkaat extends DB2ActiveRecord
 			array('hinta_tyyppi', 'length', 'max'=>50),
 			array('hinta, vinkki_tunnit, vinkki_prosentti', 'length', 'max'=>10),
 			array('asiakasnumero, ovt_tunnus, valittajan_tunnus', 'length', 'max'=>100),
+			array('alennuskoodit', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('id, time, etunimi, sukunimi, osoite, kaupunki, postinumero, puhelin, sahkoposti, ryhma, aktiivinen, laskutus_kanava,maksuehto, tyyppi, asiakasnumero, ovt_tunnus, valittajan_tunnus, myyja, kirjeenluokka, muistutuslasku_auto', 'safe', 'on'=>'search'),

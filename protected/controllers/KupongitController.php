@@ -79,8 +79,52 @@ class KupongitController extends Controller
 	{
 		if(isset($_POST['asiakas_id']))
 		{
-			print_r($_POST);
-			exit;
+
+	       		$criteria = new CDbCriteria();
+	       		$criteria->condition = "
+				id='".$_POST['asiakas_id']."'
+				AND alennuskoodit NOT LIKE '%".$_POST['kupongin_id']."%'
+			";
+
+			$asiakkaat = Asiakkaat::model()->find($criteria);
+			if(isset($asiakkaat->id))
+			{
+				$alennuskoodit = array();
+
+				if(is_array(json_decode($asiakkaat->alennuskoodit, true)))
+				$alennuskoodit = json_decode($asiakkaat->alennuskoodit, true);
+
+				array_push($alennuskoodit, array($_POST['id']=>$_POST['kupongin_id']));
+				Asiakkaat::model()->updateByPk($asiakkaat->id, array('alennuskoodit' => json_encode($alennuskoodit)));
+
+				// <-- Lahetys
+				$ft = FirmanTiedot::model()->findbypk(1);
+
+				$message = Yii::t('main', 'Uusi alennuskoodi on').': '.$_POST['kupongin_id'].'<br>';
+
+				if(isset($ft->sahkoposti) and !empty($ft->sahkoposti))
+				{
+				$subject = Yii::t('main', 'Uusi alennuskoodi'). ': '.$nimi;
+				$mail = new YiiMailer();
+				$mail->setFrom($ft->sahkoposti, $ft->tyonantaja);
+				$mail->setTo($ft->sahkoposti);
+				$mail->setSubject($subject);
+				$mail->setBody($message);
+				$mail->send();
+
+							// <-- LOG
+							$log=new Log;
+							$log->log_category 	= 1; // 1-email
+							$log->email_to 		= $ft->sahkoposti;
+							$log->email_subject	= $subject;
+							$log->email_message	= json_encode($message);
+							$log->save();
+							//     LOG -->
+				//     Lahetys -->
+				}
+
+			}
+				$this->redirect(array('index'));
 		}
 
 		$this->render('laheta',array(
