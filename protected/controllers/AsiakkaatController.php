@@ -367,6 +367,14 @@ class AsiakkaatController extends Controller
 	public function actionUpdate($id)
 	{
 
+	// <-- Oikeudet
+	   $checkOikeus = "asiakkaat_2_".Yii::app()->user->adminStatus;
+	   $site = Yii::app()->createController('Site');
+	   $site[0]->checkOikeus($checkOikeus);
+	//  Oikeudet -->
+
+		$model=$this->loadModel($id);
+
 
 		if(isset($_GET['suljeJuttelu']))
 		{
@@ -379,13 +387,65 @@ class AsiakkaatController extends Controller
 			$this->redirect(array('update','id'=>$id));
 		}
 
-	// <-- Oikeudet
-	   $checkOikeus = "asiakkaat_2_".Yii::app()->user->adminStatus;
-	   $site = Yii::app()->createController('Site');
-	   $site[0]->checkOikeus($checkOikeus);
-	//  Oikeudet -->
 
-		$model=$this->loadModel($id);
+		// <-- Tunnukset lahetys
+		if(isset($_GET['laheta_tunnukset']))
+		{
+				$d = Domainit::model()->find("domain='".Yii::app()->user->domain."'");
+				$yr =  '';
+				if(isset($d->yritys))
+				$yr =  $d->yritys;
+
+				$asiakas = '';
+				if($model->tyyppi == 'yritys')
+					$asiakas = $model->yrityksen_nimi;
+				if($model->tyyppi == 'henkilo')
+					$asiakas = $model->yhteyshenkilo;
+
+				$subject = 'Tervetuloa Etunnin käyttäjäksi.';
+				$message = 'Hei '.$asiakas.'!<br>
+				<b>Domain:</b> '.Yii::app()->user->domain.'<br>
+				<b>Käyttäjätunnus:</b> '.$model->sahkoposti.'<br>
+				<b>Salasana:</b> '.$model->salasana.'<br>
+<p>
+				Tervetuloa Etunnin käyttäjäksi. '.$yr.' on lisännyt sinulle profiilin Etuntiin. Lataa sovellus puhelimeesi alla olevien linkkien kautta.
+</p><br>
+				<br>
+				<p>Ystävällisin terveisin</p>
+				Etunti<br>
+
+<p>
+<a href="https://www.microsoft.com/store/apps/9nblggh4nd0w?ocid=badge"><img src="https://assets.windowsphone.com/85864462-9c82-451e-9355-a3d5f874397a/English_get-it-from-MS_InvariantCulture_Default.png" alt="Get it from Microsoft" height="70" /></a>
+
+<a href="https://play.google.com/store/apps/details?id=fi.etunti.local&utm_source=global_co&utm_medium=prtnr&utm_content=Mar2515&utm_campaign=PartBadge&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1"><img alt="Get it on Google Play" src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png" height="70" /></a>
+
+<a href="https://geo.itunes.apple.com/fi/app/etunti/id1100648690?mt=8"><img src="http://etunti.fi/etusivuimg/app_store.png" height="70" ></a>
+</p>
+				';
+
+				$ft = FirmanTiedot::model()->findByPk(1);
+				$mail = new YiiMailer();
+				$mail->setFrom($ft->sahkoposti, $ft->tyonantaja);
+				$mail->setTo($model->sahkoposti);
+				$mail->setSubject($subject);
+				$mail->setBody($message);
+				$mail->send();
+
+							// <-- LOG
+							$log=new Log;
+							$log->log_category 	= 1; // 1-email
+							$log->email_to 		= $model->sahkoposti;
+							$log->email_subject	= $subject;
+							$log->email_message	= json_encode($message);
+							$log->save();
+							//     LOG -->
+
+				$this->redirect(array('index'));
+		}
+		//     Tunnukset lahetys -->
+
+
+
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);

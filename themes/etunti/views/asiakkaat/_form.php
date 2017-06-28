@@ -217,6 +217,20 @@ if(isset($_GET['vinkki_id']))
 		<?php echo $form->textField($model,'salasana',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'salasana'); ?>
 	</div>
+
+	<div class="section fill mb5 ashidd_a">
+		<?php echo CHtml::link(Yii::t('main', 'Lähetä tunnukset asiakkaalle'), 
+				array('update', 'id'=>$model->id, 'laheta_tunnukset'=>true), 
+				array(
+					'class' => 'btn btn-primary myBgColors',
+					'data-toggle'=>'tooltip', 
+					'data-placement'=>'top', 
+					'title'=>Yii::t('main', 'Lähetä'),
+					'target' => '_blank'
+				)
+			); 
+		?>
+	</div>
 <?php endif ; ?>
 
 
