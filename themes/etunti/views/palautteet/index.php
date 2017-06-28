@@ -102,7 +102,7 @@ $(".muokaValiko").click(function() {
                       </div>
 
 
-                      <div class="col-md-2">
+                      <div class="col-md-3">
                         <div class="section">
                           <label class="field prepend-icon">
 
@@ -111,7 +111,7 @@ $(".muokaValiko").click(function() {
 	   			$site = Yii::app()->createController('Site');
 				$mod = 'Asiakkaat';
 				$sarake = 'yrityksen_nimi';
-				$placeholder = 'Yritys';
+				$placeholder = 'Yritys / Yhteyshenkilö';
 				if(isset($_POST[$sarake])) 			$postvalue = $_POST[$sarake]; 
 				else if(isset(Yii::app()->session[$sarake])) 	$postvalue = Yii::app()->session[$sarake]; 
 				else $postvalue='';				

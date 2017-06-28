@@ -373,9 +373,9 @@ class PalautteetController extends Controller
 		$criteria->condition = "
 			keskustelu_id=id
 		";
-		if(isset($_POST['asiakas']))
+		if(isset($_POST['yrityksen_nimi']) and !empty($_POST['yrityksen_nimi']))
 		{
-			$asiakaat = Asiakkaat::model()->findAll(" yrityksen_nimi='%".$_POST['asiakas']."%' OR yhteyshenkilo LIKE '%".$_POST['asiakas']."%' ");
+			$asiakaat = Asiakkaat::model()->findAll(" yrityksen_nimi LIKE '%".$_POST['yrityksen_nimi']."%' OR yhteyshenkilo LIKE '%".$_POST['yrityksen_nimi']."%' ");
 			$as_id = array();
 			foreach($asiakaat as $itm)
 				$as_id[] = $itm->id;
