@@ -366,8 +366,7 @@ class LaskuController extends Controller
 			$_POST['to'] = date("Y-m-d",strtotime($_POST['to'].' last day of this month'));
 		}
 
-		echo json_encode($id);
-exit;
+
 
 		$kohdet = "kohdenID!=''"; 
 		if(!empty($id))
@@ -382,7 +381,8 @@ exit;
 				$koh[] = $item->id;
 			$kohdet = "kohdenID=".implode(" OR kohdenID=", array_values($koh));
 		}
-
+		echo json_encode($kohdet);
+exit;
 
        		$criteria = new CDbCriteria();
 		$criteria->select = "
