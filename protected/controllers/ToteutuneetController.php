@@ -769,8 +769,12 @@ $xml = '
 			$model->attributes=$_POST['Toteutuneet'];
 			$model->aloitan = date("d.m.Y H:i:s",strtotime($_POST['Toteutuneet']['aloitan']));
 			$model->loppui = date("d.m.Y H:i:s",strtotime($_POST['Toteutuneet']['loppui']));
-			$model->kohdenID=$k->id;			
-			$model->kohde_kannasta=$k->osoite;
+
+			if(isset($k->id))
+			{
+				$model->kohdenID=$k->id;			
+				$model->kohde_kannasta=$k->osoite;
+			}
 
 			if($model->save()){
 
@@ -825,8 +829,12 @@ $xml = '
 			$model->attributes=$_POST['Toteutuneet'];
 			$model->aloitan = date("d.m.Y H:i:s",strtotime($_POST['Toteutuneet']['aloitan']));
 			$model->loppui = date("d.m.Y H:i:s",strtotime($_POST['Toteutuneet']['loppui']));
-			$model->kohdenID=$k->id;			
-			$model->kohde_kannasta=$k->osoite;
+
+			if(isset($k->id))
+			{
+				$model->kohdenID=$k->id;			
+				$model->kohde_kannasta=$k->osoite;
+			}
 
 
 			if($model->save()){

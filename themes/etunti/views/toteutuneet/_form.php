@@ -85,6 +85,7 @@ $forPVM = date('d.m.Y',strtotime($s->aloitan));
 		      echo $form->dropDownList($model,'kohde_kannasta', 
 			CHtml::listData(Kohteet::model()->findAll(array('order' => 'osoite ASC')), 'id', 'osoite'), 
 			    array(
+                		'empty'=>'Valitse',
                 		'class'=>'form-control input-sm',
 		                'options' => $opt,
 			    )
