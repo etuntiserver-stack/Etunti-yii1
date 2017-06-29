@@ -366,6 +366,9 @@ class LaskuController extends Controller
 			$_POST['to'] = date("Y-m-d",strtotime($_POST['to'].' last day of this month'));
 		}
 
+		echo json_encode($id);
+exit;
+
 		$kohdet = "kohdenID!=''"; 
 		if(!empty($id))
 		$kohdet = "kohdenID=$id";
