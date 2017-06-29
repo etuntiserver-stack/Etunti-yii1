@@ -379,10 +379,10 @@ class LaskuController extends Controller
 			$koh = array(); 
 			foreach($k as $item)
 				$koh[] = $item->id;
+			if(count($koh) > 0)
 			$kohdet = "kohdenID=".implode(" OR kohdenID=", array_values($koh));
 		}
-		echo json_encode($kohdet);
-exit;
+
 
        		$criteria = new CDbCriteria();
 		$criteria->select = "
