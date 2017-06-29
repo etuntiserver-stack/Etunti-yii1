@@ -1,28 +1,38 @@
 <?php
 /*
-$output = shell_exec("soffice --writer --convert-to pdf /home/estromfi/www/dev/etunti/tiedostot/temp/sivex/temp_raporti_Roman_Sizov.html --outdir  /home/estromfi/www/dev/etunti/tiedostot/temp/sivex/");
+$servername = "localhost";
+$username = "root";
+$password = "111111";
 
-echo $output;
-*/
-?>
+// Create connection
+$conn = new mysqli($servername, $username, $password);
 
-<?php
-/*
-if(isset($_POST['commento']))
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+} 
+
+mysqli_select_db($conn,"kotipuhtaaksi");
+
+
+$sql = mysqli_query($conn,"SELECT * FROM asiakkaat "); //WHERE hinta_sis_alv=0 AND alv!=0
+ 
+
+while($row=mysqli_fetch_array($sql))
 {
-  $output = shell_exec($_POST['commento']); //--norestore
+	echo $row['id'].' ALV: '.$row['alv'].', Hinta:'.$row['hinta'].', Hinta alv sis:'.$row['hinta_sis_alv'].'<br>';
 
-	echo '<pre>';
-	print_r($output);
-	echo '</pre>';
+	$hinta = 0;
+	$hinta_sis_alv = 0;
+
+	$hinta = $row['hinta']/(1+($row['alv']/100));
+	$hinta_sis_alv = $row['hinta'];
+
+	echo '<h3>'.$hinta.'</h3><br>';
+
+//mysqli_query($conn,"UPDATE asiakkaat SET hinta_sis_alv='".$hinta_sis_alv."', hinta='".$hinta."' WHERE id='".$row['id']."' ");
 
 }
-?>
-
-<form action="#" method="POST">
-<input type="text" name="commento">
-<input type="submit">
-</form>
-
 */
+
 ?>

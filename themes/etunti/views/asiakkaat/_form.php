@@ -41,6 +41,9 @@ if(isset($_GET['vinkki_id']))
 		$model->puhelin = $vinkki->puhelin;
 	}
 }
+
+$model->hinta = round($model->hinta, 2);
+$model->hinta_sis_alv = round($model->hinta_sis_alv, 2);
 ?>
 
 <style>
