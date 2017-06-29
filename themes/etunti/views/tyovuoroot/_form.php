@@ -253,7 +253,10 @@ $(".muokaValiko").click(function() {
 		$tyopaari = json_decode($model->tyopaari, true);
 
 		$criteria=new CDbCriteria;
-		$criteria->order =" tekijan_nimi ";
+		// <-- Return order etu ja sukunimella
+		$site = Yii::app()->createController('Site');
+		$criteria = $site[0]->etuSukunimiCriteria($criteria);
+		//     Return order etu ja sukunimella -->
 		$criteria->condition =" aktiivinen=1 and id!='".$model->tid."' ";
 
  		$tt = Tyontekijat::model()->findAll($criteria);
