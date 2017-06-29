@@ -272,8 +272,8 @@ $(document).ready(function(){
 	laskurin();
   });
   $("#hinta_sis_alv").keyup(function() {
-	var hinta_sis_alv = parseInt($(this).val());
-	var alv = parseInt($("#Asiakkaat_alv").val());
+	var hinta_sis_alv = parseFloat($(this).val());
+	var alv = parseFloat($("#Asiakkaat_alv").val());
 	var result = hinta_sis_alv/(1+(alv/100));
 	$("#hinta").val(result.toFixed(2));
 	$("#vero").val((hinta_sis_alv-result).toFixed(2));
@@ -281,8 +281,8 @@ $(document).ready(function(){
 
   function laskurin()
   {
-	var alv = parseInt($("#Asiakkaat_alv").val());
-	var hinta = parseInt($("#hinta").val());
+	var alv = parseFloat($("#Asiakkaat_alv").val());
+	var hinta = parseFloat($("#hinta").val());
 	var hinta_sis_alv = ((alv/100)*hinta)+hinta;
 	$("#hinta_sis_alv").val(hinta_sis_alv.toFixed(2));
 	$("#vero").val((hinta_sis_alv-hinta).toFixed(2));
