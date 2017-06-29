@@ -1103,18 +1103,24 @@ function eachLaskenta(){
 
   $("#rivit input").each(function() {
 
+	var hinta_alv_0 = 0;
+	var alv = 0;
+	var kpl = 0;
+	var ale = 0;
+
 	var inputKenta = $(this).attr("id").split("_");
-	var hinta_alv_0 = parseFloat($("#hinta_"+inputKenta[1]).val());
-	var alv = parseFloat($("#alv_"+inputKenta[1]).val());
-	var kpl = parseFloat($("#kpl_"+inputKenta[1]).val());
-	var ale = parseFloat($("#ale_"+inputKenta[1]).val());
+	if($("#hinta_"+inputKenta[1]).length) { hinta_alv_0 = parseFloat($("#hinta_"+inputKenta[1]).val()) };
+	if($("#alv_"+inputKenta[1]).length) { alv = parseFloat($("#alv_"+inputKenta[1]).val()) };
+	if($("#kpl_"+inputKenta[1]).length) { kpl = parseFloat($("#kpl_"+inputKenta[1]).val()) };
+	if($("#ale_"+inputKenta[1]).length) { ale = parseFloat($("#ale_"+inputKenta[1]).val()) };
+
 
 	inputKenta[1] = parseFloat(inputKenta[1], 10);
 
-	var laske = parseFloat(((hinta_alv_0*kpl)/100*alv), 10);
-	//var laskeAleY = parseFloat((($("#yhteensa_alv_"+inputKenta[1]).val())/100*ale), 10);
-	//var laskeAleV = parseFloat((($("#veroton_"+inputKenta[1]).val())/100*ale), 10);
+	if(ale > 0)
+	hinta_alv_0 = hinta_alv_0-((hinta_alv_0/100)*ale);
 
+	var laske = parseFloat(((hinta_alv_0*kpl)/100*alv), 10);
 	var veroton = parseFloat(hinta_alv_0, 10)*kpl;
 	yhteensa = laske+veroton;
 
