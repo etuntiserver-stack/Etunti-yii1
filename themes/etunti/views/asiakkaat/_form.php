@@ -396,11 +396,49 @@ if(isset($_GET['vinkki_id']))
 	</div>
 
 	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'verot'); ?>
+		<?php echo $form->numberField($model,'verot',array('size'=>10,'maxlength'=>100,'class'=>'form-control', 'step'=>'any')); ?>
+		<?php echo $form->error($model,'verot'); ?>
+	</div>
+
+	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'hinta_sis_alv'); ?>
 		<?php echo $form->numberField($model,'hinta_sis_alv',array('size'=>10,'maxlength'=>100,'class'=>'form-control', 'step'=>'any')); ?>
 		<?php echo $form->error($model,'hinta_sis_alv'); ?>
 	</div>
 
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+
+  laskurin();
+
+  $("#Asiakkaat_alv").change(function() {
+	laskurin();
+  });
+  $("#Asiakkaat_hinta").keyup(function() {
+	laskurin();
+  });
+  $("#Asiakkaat_hinta_sis_alv").keyup(function() {
+	var hinta_sis_alv = parseFloat($(this).val());
+	var alv = parseFloat($("#Asiakkaat_alv").val());
+	var result = hinta_sis_alv/(1+(alv/100));
+	$("#Asiakkaat_hinta").val(result.toFixed(2));
+	$("#Asiakkaat_verot").val((hinta_sis_alv-result).toFixed(2));
+  });
+
+  function laskurin()
+  {
+	var alv = parseFloat($("#Asiakkaat_alv").val());
+	var hinta = parseFloat($("#Asiakkaat_hinta").val());
+	var hinta_sis_alv = ((alv/100)*hinta)+hinta;
+	$("#Asiakkaat_hinta_sis_alv").val(hinta_sis_alv.toFixed(2));
+	$("#Asiakkaat_verot").val((hinta_sis_alv-hinta).toFixed(2));
+  }
+
+});
+</script>
 
 <?php if(in_array('5',$tas)) : ?>
 	<legend><h3><?php echo Yii::t('main', 'Allennukset'); ?></h3></legend>
