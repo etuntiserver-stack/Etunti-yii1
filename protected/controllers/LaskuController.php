@@ -366,7 +366,10 @@ class LaskuController extends Controller
 			$_POST['to'] = date("Y-m-d",strtotime($_POST['to'].' last day of this month'));
 		}
 
-		$kohdet = "kohdenID=$id"; 
+		$kohdet = "kohdenID!=''"; 
+		if(!empty($id))
+		$kohdet = "kohdenID=$id";
+
 		if($_POST['mistaLuo'] == 'luoAsiakaasta')
 		{
 			$as = Asiakkaat::model()->findByPk($id);
