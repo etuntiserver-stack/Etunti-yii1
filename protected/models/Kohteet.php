@@ -34,6 +34,9 @@
  */
 class Kohteet extends DB2ActiveRecord
 {
+
+public $verot;
+
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
@@ -61,9 +64,9 @@ class Kohteet extends DB2ActiveRecord
 		// will receive user inputs.
 		return array(
 			array('asiakas_id,etu_suku_nimet,osoite', 'required'),
-			array('asiakas_id, aktiivinen, maksuehto_paiva, avaimen_sijainti, tarvittavien_tyontekijoiden_maara, uusi_tilaus', 'numerical', 'integerOnly'=>true),
+			array('asiakas_id, aktiivinen, maksuehto_paiva, avaimen_sijainti, tarvittavien_tyontekijoiden_maara, uusi_tilaus, alv', 'numerical', 'integerOnly'=>true),
 			array('tag_id, kaupunki, toimipaikka, tyoryhma', 'length', 'max'=>20),
-			array('gps_sijainti, osoite, katuosoite, kenella_on_avain, puh_nro', 'length', 'max'=>50),
+			array('gps_sijainti, osoite, katuosoite, kenella_on_avain, puh_nro, hinta_sis_alv', 'length', 'max'=>50),
 			array('lyhenne', 'length', 'max'=>46),
 			array('pnumero', 'length', 'max'=>7),
 			array('email', 'length', 'max'=>72),
@@ -129,6 +132,9 @@ class Kohteet extends DB2ActiveRecord
 			'avaimen_sijainti'=>Yii::t('main', 'Avaimen sijainti'),
 			'tarvittavien_tyontekijoiden_maara'=>Yii::t('main', 'Tarvittavien työntekijöiden määrä'),
 			'arvioitu_kesto'=>Yii::t('main', 'Arvioitu kesto'),
+			'alv'=> Yii::t('main', 'ALV %'),
+			'hinta'=> Yii::t('main', 'Hinta (ALV0)'),
+			'hinta_sis_alv' => Yii::t('main', 'Hinta (sis. ALV)'),
 		);
 	}
 

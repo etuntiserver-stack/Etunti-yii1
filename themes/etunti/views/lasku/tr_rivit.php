@@ -18,13 +18,18 @@
 	{
 		$free_text = $k->osoite;
 		$a = Asiakkaat::model()->findbypk($k->asiakas_id);
-		$alv = $a->alv;
 	}
 	if(isset($a->id))
 	{
 		$free_text = $a->osoite;
-		$alv = $a->alv;
 	}
+
+
+	if(isset($k->id) and $k->alv != 0)
+		$alv = $k->alv;
+	else
+		$alv = $a->alv;
+
 
 	$free_text = $free_text.', '.date('d.m.Y',strtotime($_POST['from'])).'-'.date('d.m.Y',strtotime($_POST['to']));
 	//     Free text -->
