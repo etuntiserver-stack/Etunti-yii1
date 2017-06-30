@@ -766,7 +766,6 @@ $xml = '
 
 
 
-
 	// <-- Oikeudet
 	   $checkOikeus = "asiakkaat_0_".Yii::app()->user->adminStatus;
 	   $site = Yii::app()->createController('Site');

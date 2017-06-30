@@ -94,7 +94,7 @@ class MobileController extends Controller
 		exit;
 	}
 
-	protected function transformHtmlTo($header, $html_content, $ext)
+	public function transformHtmlTo($header, $html_content, $ext)
 	{
 
 		if (!file_exists( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain )) {

@@ -10,6 +10,27 @@
         <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-home"></i> <?php echo Yii::t('main', 'Asiakkaat'); ?> 
 	<?php echo CHtml::link('',Yii::app()->request->baseUrl.'/index.php/asiakkaat/create',array('class'=>'btn btn-default fa fa-plus','data-toggle'=>'tooltip', 'data-placement'=>'top', 'title' => Yii::t('main', 'Lisää asiakas') )); ?>
 
+	 <div class="pull-right">
+	  <form action="<?=Yii::app()->request->baseUrl?>/index.php/mobile/tulostus" class="form-group" target="_blank" method="POST">
+	    <input type="hidden" name="excel_list" value="true">
+	    <input type="hidden" name="ext" value="xls">
+	    <textarea name="html_content" class="form-control" style="display:none"></textarea>
+    	    <button type="submit" class="btn btn-primary myBgColors submitForm"><i class="fa fa-file-excel-o" aria-hidden="true"></i></button>
+	  </form>
+	 </div>
+
+<script type="text/javascript">
+$(document).ready(function() {
+
+  $(".submitForm").on('click', function(e){
+	$(this).prev('textarea').val(JSON.stringify($('#tableContent').html()));
+	$(this).closest('form').submit();
+	e.preventDefault();
+  });
+
+});
+</script>
+
 	 <div class="pull-right montakoRiviaSivulle">
 	   <?php
 	   ($perSivu == 10) ? $defcl10 = 'btn-success' : $defcl10 = 'btn-default';
@@ -215,7 +236,7 @@
    <div class="panel-body">
 
 <div class="row">
- <div class="table-responsive">
+ <div class="table-responsive" id="tableContent">
   <table class="table table-hovered" id="mobileTable">
   <thead class="myBgColors">
   <tr>
