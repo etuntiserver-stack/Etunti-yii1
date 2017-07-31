@@ -249,6 +249,12 @@ $model->tid = $_GET['id'];
   </legend>
 
 	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'veronumero'); ?>
+		<?php echo $form->textField($model,'veronumero',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'veronumero'); ?>
+	</div>
+
+	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'tuloraja_ajalle'); ?>
 		<?php echo $form->textField($model,'tuloraja_ajalle',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'tuloraja_ajalle'); ?>
