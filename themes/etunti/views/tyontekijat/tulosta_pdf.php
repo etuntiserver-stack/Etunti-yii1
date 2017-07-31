@@ -8,7 +8,7 @@
   <?php $asetukset=Asetukset::model()->findbypk(1); ?>
   <img src="<?php echo $asetukset->logon_polkku; ?>" height="<?php echo $asetukset->logon_korkeus; ?>">
  </td><td valign="right" style="width:40%">
-  <h1><?php echo CHtml::encode($model->tekijan_nimi); ?></h1>
+  <h1><?php echo $this->etuSukunimi($model->id); ?></h1>
  </td>
  </tr>
 </table>
