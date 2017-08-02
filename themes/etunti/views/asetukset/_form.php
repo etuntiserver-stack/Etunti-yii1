@@ -181,6 +181,18 @@
 		<?php echo $form->error($model,'paikkakunta_tyovuorossa'); ?>
 	</div>
 
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'lasketaanko_lounastauko'); ?>
+		<?php 
+        	$l = array(
+			0=>'Ei',
+			1=>'Kyllä'
+		);
+		echo $form->dropDownList($model,'lasketaanko_lounastauko', $l, 
+		array('empty'=>Yii::t('main', 'Valitse'), 'class'=>'form-control')) ?>
+		<?php echo $form->error($model,'lasketaanko_lounastauko'); ?>
+	</div>
+
    </div>
 
    <div class="col-sm-3">

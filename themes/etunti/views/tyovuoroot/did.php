@@ -7,6 +7,7 @@
     	$color = '';
 	$height = '';
 	$yht = 0;
+	$sum = 0;
 
 	$did = date("Ymd",strtotime($pvm));
 	$onkoMennyt = '';
@@ -25,11 +26,12 @@ if(!isset($_POST['tulosta']))
 	$bod .=  '
 	<div class="pull-right oikeallaPlusV">
 	  <div class="form-inline">
-
-	<div class="kokopaiva form-group">
-	<span class="valitseKokopaiva link glyphicon glyphicon-th-large" pvm="'.date("d.m.Y",strtotime($pvm)).'" tid="'.$tid.'"></span>
+	<div class="form-group">
+	   <span class="text-center" id="sum_tunnit_'.$did.'_'.$tid.'" style="text-align:center;opacity:0.6"></span>
 	</div>
-
+	<div class="kokopaiva form-group">
+	   <span class="valitseKokopaiva link glyphicon glyphicon-th-large" pvm="'.date("d.m.Y",strtotime($pvm)).'" tid="'.$tid.'"></span>
+	</div>
 	<div class="plussamerkki form-group">
 	<span class="plussa link glyphicon glyphicon-plus luominen" pvm="'.date("d.m.Y",strtotime($pvm)).'" tid="'.$tid.'"></span>
 	</div>
@@ -228,6 +230,11 @@ if(!isset($_POST['tulosta']))
 
 	   if($tvVal->alku != '' and $tvVal->loppu != '')
 	   {
+		if($tvVal->status == 10 and $asetukset->lasketaanko_lounastauko == 0)
+		{
+		} else {
+    			$sum += strtotime($tvVal->loppu)-strtotime($tvVal->alku);
+		}
 
 		if(isset($yhteensa) and $yhteensa == true)
 		{
@@ -283,6 +290,18 @@ if(!isset($_POST['tulosta']))
 	}
 	$bod .=  '</div>';
 
+	if($sum > 0){
+	$bod .= '
+	<script type="text/javascript">
+	$(document).ready(function(){
+	
+		setTimeout(function(){ $("#sum_tunnit_'.$did.'_'.$tid.'").html("'.$this->sprint($sum).'"); }, 500);
+		console.log("#sum_tunnit_'.$did.'_'.$tid.'");
+
+	});
+	</script>';
+	}
+
 
 
 	if(isset($yhteensa) and $yhteensa == true){
@@ -293,4 +312,3 @@ if(!isset($_POST['tulosta']))
 
 
 ?>
-
