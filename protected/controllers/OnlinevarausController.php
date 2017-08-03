@@ -713,11 +713,7 @@ $months=array(
 
 
      // Create array containing abbreviations of days of week.
-     if($numOfWeek == 7)
      $daysOfWeek = array('Ma','Ti','Ke','To','Pe','La','Su');
-
-     if($numOfWeek == 5)
-     $daysOfWeek = array('Ma','Ti','Ke','To','Pe');
 
      // What is the first day of the month in question?
      $firstDayOfMonth = mktime(0,0,0,$month,7,$year);
@@ -770,20 +766,19 @@ $months=array(
   
      while ($currentDay <= $numberDays) {
 
-          // Seventh column (Saturday) reached. Start a new row.
+          $currentDayRel = str_pad($currentDay, 2, "0", STR_PAD_LEFT);         
+          $date = "$year-$month-$currentDayRel";
 
-          if ($dayOfWeek == $numOfWeek) {
+          if ($dayOfWeek == 7) {
 
                $dayOfWeek = 0;
                $calendar .= "</tr><tr>";
 
           }
-          
-          $currentDayRel = str_pad($currentDay, 2, "0", STR_PAD_LEFT);
-          
-          $date = "$year-$month-$currentDayRel";
-	  $on = $this->pmvCal($date)[0];
 
+	  $on = $this->pmvCal($date)[0];
+	  if($numOfWeek == 5 and ( date("N",strtotime($date)) == 7 or date("N",strtotime($date)) == 6 ))
+	  $on = 'kiinni';
 
 	  $pyhat = $this->pyhatCheck($date);
 	  if($pyhat == 'pyhat')
@@ -795,12 +790,11 @@ $months=array(
 	     $tooltip = "";
  	  }
 
-
 	  $tila = '';
 	  if($date > date("Y-m-d", strtotime("+$pvmRaja day")) and $on == 'vapaa' and isset($_SESSION['onlinevaraus']['valittuPVM']) and $_SESSION['onlinevaraus']['valittuPVM'] != date("Y-m-d", strtotime($date)))
 		 $tila .= '<td class="day link vapaa cal" pvm="'.$date.'"><div class="toolt" '.$tooltip.'>'.$currentDay.'</div></td>';
 	  elseif($date > date("Y-m-d", strtotime("+$pvmRaja day")) and $on == 'vapaa' and !isset($_SESSION['onlinevaraus']['valittuPVM']))
-		 $tila .= '<td class="day link vapaa cal" pvm="'.$date.'"><div class="toolt" '.$tooltip.'>'.$currentDay.'</div>'.date("N",strtotime($date)).'</td>';
+		 $tila .= '<td class="day link vapaa cal" pvm="'.$date.'"><div class="toolt" '.$tooltip.'>'.$currentDay.'</div></td>';
 	  elseif($date > date("Y-m-d", strtotime("+$pvmRaja day")) and $on == 'vapaa' and isset($_SESSION['onlinevaraus']['valittuPVM']) and $_SESSION['onlinevaraus']['valittuPVM'] == date("Y-m-d", strtotime($date)))
 		 $tila .= '<td class="day link orangeColor cal" pvm="'.$date.'"><div class="toolt" '.$tooltip.'>'.$currentDay.'</div></td>';
 	  elseif($date < date("Y-m-d"))
@@ -1150,11 +1144,14 @@ $months=array(
 	$dateMonth = '';
 	$pyh = array();
 
-	//$datenew = date("Y-m-d",strtotime($date));
-	//$asetukset = AsetuksetForAll::model()->findbypk(1);
-	//$pyh = explode("\n",$asetukset->viralliset_pyhapaivat);
+	$dateMonth = date("d.m.Y",strtotime($date));
+	$asetukset = AsetuksetForAll::model()->findbypk(1);
+	$pyh = explode("\n",$asetukset->viralliset_pyhapaivat);
 
-	if(date("N",strtotime($date)) == 7)
+	if(
+	   date("N",strtotime($date)) == 7
+	   or strstr($asetukset->viralliset_pyhapaivat, $dateMonth)
+	)
 	return 'pyhat';
 	elseif(date("N",strtotime($date)) == 6)
 	return 'lauantai';
