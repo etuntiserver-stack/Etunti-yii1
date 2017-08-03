@@ -209,6 +209,7 @@ $model->hinta_sis_alv = round($model->hinta_sis_alv, 2);
 <?php endif ; ?>
 
 <?php if(in_array('5',$tas)) : ?>
+	<?php /*
 	<div class="section fill mb5 ashidd_a">
 		<?php echo $form->labelEx($model,'salasana'); ?>
 
@@ -220,16 +221,17 @@ $model->hinta_sis_alv = round($model->hinta_sis_alv, 2);
 		<?php echo $form->textField($model,'salasana',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'salasana'); ?>
 	</div>
+	*/ ?>
 
 	<div class="section fill mb5 ashidd_a">
 		<?php echo CHtml::link(Yii::t('main', 'Lähetä tunnukset asiakkaalle'), 
 				array('update', 'id'=>$model->id, 'laheta_tunnukset'=>true), 
 				array(
-					'class' => 'btn btn-primary myBgColors',
+					'class' => 'btn btn-primary btn-block myBgColors',
 					'data-toggle'=>'tooltip', 
 					'data-placement'=>'top', 
 					'title'=>Yii::t('main', 'Lähetä'),
-					'target' => '_blank'
+					//'target' => '_blank'
 				)
 			); 
 		?>

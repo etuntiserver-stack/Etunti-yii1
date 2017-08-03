@@ -28,7 +28,7 @@ class AsiakkaatController extends Controller
 	{
 		return array(
 			array('allow',
-				'actions'=>array('login'),
+				'actions'=>array('login', 'salasana'),
 				'users'=>array('*'),
 			),
 			array('allow', 
@@ -85,6 +85,28 @@ class AsiakkaatController extends Controller
                 parent::init();
         }
 
+
+	public function actionSalasana($domain, $token, $asiakasid)
+	{
+
+                Yii::app()->theme = 'classic';
+		$model=$this->loadModel($asiakasid);
+
+		if(isset($model->id) and !empty($model->token) and $model->token == $token) 
+			$tilanne = 1;
+		elseif(isset($model->id) and empty($model->token)) 
+			$tilanne = 2;  
+		else 
+			die('Error');
+
+		if(isset($model->id) and isset($_POST['password1']) and $_POST['password1'] == $_POST['password2'])
+		{
+			Asiakkaat::model()->updateByPk($model->id, array('salasana' => $_POST['password1'], 'token' => ''));
+			$tilanne = 2;
+		}
+
+		$this->render('salasana', array('tilanne' => $tilanne));
+	}
 
 	public function actionGetLaskuPDF($id)
 	{
@@ -402,11 +424,14 @@ class AsiakkaatController extends Controller
 				if($model->tyyppi == 'henkilo')
 					$asiakas = $model->yhteyshenkilo;
 
+				$token = sha1(uniqid(time().$model->id, true));
+				Asiakkaat::model()->updateByPk($model->id, array('token' => $token));
+
 				$subject = 'Tervetuloa Etunnin käyttäjäksi.';
 				$message = 'Hei '.$asiakas.'!<br>
 				<b>Domain:</b> '.Yii::app()->user->domain.'<br>
 				<b>Käyttäjätunnus:</b> '.$model->sahkoposti.'<br>
-				<b>Salasana:</b> '.$model->salasana.'<br>
+				<b>Luo oma salasana:</b> <a href='.Yii::app()->createAbsoluteUrl('asiakkaat/salasana', array('domain' => Yii::app()->user->domain, 'token' => $token, 'asiakasid' => $model->id)).'>url</a><br>
 <p>
 				Tervetuloa Etunnin käyttäjäksi. '.$yr.' on lisännyt sinulle profiilin Etuntiin. Lataa sovellus puhelimeesi alla olevien linkkien kautta.
 </p><br>
@@ -422,6 +447,9 @@ class AsiakkaatController extends Controller
 <a href="https://geo.itunes.apple.com/fi/app/etunti/id1100648690?mt=8"><img src="http://etunti.fi/etusivuimg/app_store.png" height="70" ></a>
 </p>
 				';
+
+				//echo $message;
+				//exit;
 
 				$ft = FirmanTiedot::model()->findByPk(1);
 				$mail = new YiiMailer();
