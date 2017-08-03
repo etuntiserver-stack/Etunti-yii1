@@ -1,6 +1,6 @@
 <?php
 	$from = date("Y-m-d", strtotime('first day of this month'));
-	$to = date("Y-m-d");
+	$to = date("Y-m-d", strtotime('last day of this month'));
 	$naytaId = 0;
 	if(isset($_POST['from'])) $from = $_POST['from'];
 	if(isset($_POST['to'])) $to = $_POST['to'];
