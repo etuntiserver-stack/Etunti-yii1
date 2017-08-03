@@ -795,11 +795,12 @@ $months=array(
 	     $tooltip = "";
  	  }
 
+
 	  $tila = '';
 	  if($date > date("Y-m-d", strtotime("+$pvmRaja day")) and $on == 'vapaa' and isset($_SESSION['onlinevaraus']['valittuPVM']) and $_SESSION['onlinevaraus']['valittuPVM'] != date("Y-m-d", strtotime($date)))
 		 $tila .= '<td class="day link vapaa cal" pvm="'.$date.'"><div class="toolt" '.$tooltip.'>'.$currentDay.'</div></td>';
 	  elseif($date > date("Y-m-d", strtotime("+$pvmRaja day")) and $on == 'vapaa' and !isset($_SESSION['onlinevaraus']['valittuPVM']))
-		 $tila .= '<td class="day link vapaa cal" pvm="'.$date.'"><div class="toolt" '.$tooltip.'>'.$currentDay.'</div></td>';
+		 $tila .= '<td class="day link vapaa cal" pvm="'.$date.'"><div class="toolt" '.$tooltip.'>'.$currentDay.'</div>'.date("N",strtotime($date)).'</td>';
 	  elseif($date > date("Y-m-d", strtotime("+$pvmRaja day")) and $on == 'vapaa' and isset($_SESSION['onlinevaraus']['valittuPVM']) and $_SESSION['onlinevaraus']['valittuPVM'] == date("Y-m-d", strtotime($date)))
 		 $tila .= '<td class="day link orangeColor cal" pvm="'.$date.'"><div class="toolt" '.$tooltip.'>'.$currentDay.'</div></td>';
 	  elseif($date < date("Y-m-d"))
@@ -1149,14 +1150,11 @@ $months=array(
 	$dateMonth = '';
 	$pyh = array();
 
-	$dateMonth = date("d.m.Y",strtotime($date));
-	$asetukset = AsetuksetForAll::model()->findbypk(1);
-	$pyh = explode("\n",$asetukset->viralliset_pyhapaivat);
+	//$datenew = date("Y-m-d",strtotime($date));
+	//$asetukset = AsetuksetForAll::model()->findbypk(1);
+	//$pyh = explode("\n",$asetukset->viralliset_pyhapaivat);
 
-	if(
-	   date("N",strtotime($date)) == 7
-	   or strstr($asetukset->viralliset_pyhapaivat, $dateMonth)
-	)
+	if(date("N",strtotime($date)) == 7)
 	return 'pyhat';
 	elseif(date("N",strtotime($date)) == 6)
 	return 'lauantai';

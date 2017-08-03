@@ -1378,7 +1378,7 @@ public function actionImei($dom)
 	protected function checkDBexists($db)
 	{
 		$connection=Yii::app()->db;
-		$sql = "SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = '".$db."'";
+		$sql = "SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = '".trim(strtolower($db))."'";
 		$command=$connection->createCommand($sql);
 		if($command->execute() != true){
 
