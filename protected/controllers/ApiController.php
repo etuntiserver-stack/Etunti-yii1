@@ -163,6 +163,8 @@ public function actionPaivita_tiedot($dom)
     {
         case 'mob':
 
+		$this->checkDBexists($dom);
+
 		// <-- check domain is not empty
 		if(!isset($dom) or empty($dom))
 		{
@@ -455,6 +457,8 @@ public function actionImei($dom)
     {
         // Get an instance of the respective model
         case 'mob':
+
+		$this->checkDBexists($dom);
 
 		// <-- kokeiluversion
 		if(!$this->checkKokeiluversion())
@@ -749,7 +753,7 @@ public function actionImei($dom)
 
 		      // <-- Nayta asiakas
 		      $nm = '';
-		      if(isset($asetukset->show_name) and $asetukset->show_name == 1 and $kohde->asiakas_id != 0){
+		      if(isset($kohde->id) and isset($asetukset->show_name) and $asetukset->show_name == 1 and $kohde->asiakas_id != 0){
 				$asiakas = Asiakkaat::model()->findbypk($kohde->asiakas_id);
 				if(isset($asiakas->id) and !empty($asiakas->yrityksen_nimi)){
 		      			$nm = Yii::t('main', 'Asiakas').': <b>'.$asiakas->yrityksen_nimi.'</b>';
@@ -761,14 +765,14 @@ public function actionImei($dom)
 
 		      // <-- Nayta kohteen puhelinnumero
 		      $puh_nro = '';
-		      if(isset($asetukset->app_show_phone) and $asetukset->app_show_phone == 1 and $kohde->puh_nro != ''){
+		      if(isset($kohde->id) and isset($asetukset->app_show_phone) and $asetukset->app_show_phone == 1 and $kohde->puh_nro != ''){
 		      			$puh_nro = '<br>'.Yii::t('main', 'Kohteen puhelinnumero').': <b>'.$kohde->puh_nro.'</b>';
 		      }
 		      // Nayta kohteen puhelinnumero -->
 
 		      // <-- Nayta kohteen avaimet
 		      $avaimet = '';
-		      if(isset($asetukset->app_naytta_avain) and $asetukset->app_naytta_avain == 1 and $kohde->avain != ''){
+		      if(isset($kohde->id) and isset($asetukset->app_naytta_avain) and $asetukset->app_naytta_avain == 1 and $kohde->avain != ''){
 		      			$avaimet = '<br>'.Yii::t('main', 'Kohteen avaimet').': <b>'.$kohde->avain.'</b>';
 		      }
 		      // Nayta kohteen avaimet -->
@@ -776,7 +780,7 @@ public function actionImei($dom)
 
 		      // <-- app_naytetaanko_kohteen_yhteyshenkilo
 		      $kohteen_yhteyshenkilo = '';
-		      if(isset($asetukset->app_naytetaanko_kohteen_yhteyshenkilo) and $asetukset->app_naytetaanko_kohteen_yhteyshenkilo == 1 and $kohde->etu_suku_nimet != ''){
+		      if(isset($kohde->id) and isset($asetukset->app_naytetaanko_kohteen_yhteyshenkilo) and $asetukset->app_naytetaanko_kohteen_yhteyshenkilo == 1 and $kohde->etu_suku_nimet != ''){
 		      			$kohteen_yhteyshenkilo = '<br>'.Yii::t('main', 'Kohteen yhteyshenkilö').': <b>'.$kohde->etu_suku_nimet.'</b>';
 		      }
 		      // app_naytetaanko_kohteen_yhteyshenkilo -->
@@ -1370,6 +1374,19 @@ public function actionImei($dom)
 	   return $site[0]->etuSukunimi($tid);
 	}
 
+
+	protected function checkDBexists($db)
+	{
+		$connection=Yii::app()->db;
+		$sql = "SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = '".$db."'";
+		$command=$connection->createCommand($sql);
+		if($command->execute() != true){
+
+			die(json_encode("Yritystunnus on virheellinen."));
+
+		}
+        		return true;
+	}
 
 /*
     // Actions
