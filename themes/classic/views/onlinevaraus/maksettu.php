@@ -269,18 +269,30 @@ $message .= '
 
 
 $tilauksen_kuvaus = json_decode($ov->tilauksen_kuvaus, true);
+$kuvaus = '';
 if(isset($tilauksen_kuvaus['paa']) and is_array($tilauksen_kuvaus['paa']))
 {
 
   $message .= '<tr><td valign="top">Tilattu tuote</td><td>';
+  $kuvaus .= "Tilattu tuote\n";
   foreach($tilauksen_kuvaus['paa'] as $k=>$v){
-	$message .=  $k.', '.$v.'<br>';
+
+	$message .=  $k;
+	$kuvaus .=  $k;
+	if(!empty($v)){
+		$message .=  ', '.$v;
+		$kuvaus .=  ', '.$v;
+	}
+
+	$message .=  '<br>';
+	$kuvaus .=  "\n";
   }
 
   if(isset($tilauksen_kuvaus['lisa']) and is_array($tilauksen_kuvaus['lisa']))
   {
      foreach($tilauksen_kuvaus['lisa'] as $k=>$v){
 	$message .=  $k.', '.$v.'h<br>';
+	$kuvaus .=  $k.", ".$v."h\n";
      }
   }
   $message .= '<br></td></tr>';
@@ -359,6 +371,7 @@ $message .= '
 			
 			$t = Tyovuoroot::model()->findbypk($tv->id);
 			$t->osoiteOnline=2;
+			$t->tietoja=$kuvaus;
 			$t->save();
 
 			$o = Onlinevaraus::model()->findbypk($ov->id);
