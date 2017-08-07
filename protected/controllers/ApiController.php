@@ -533,7 +533,8 @@ public function actionImei($dom)
 			exit;
 	        }
 
-
+		$get_osoite = '';
+		$kohdenID = 0;
 	        if($_POST['check'] == 'getObjbyTag'){
 
 		  if(isset($_POST['tag']) and $_POST['tag'] != '000000')
@@ -1112,7 +1113,8 @@ public function actionImei($dom)
 	    		$criteria->condition = " id='".(int)$avoinID."' AND tid = '".$ttekija->id."' ";
 	           	$mobCheck = Mob::model()->find($criteria);
 
-		 	if(isset($mobCheck->id))
+		  	if(isset($mobCheck->id) 
+				and ($mobCheck->status == 1 or $mobCheck->status == 2 or $mobCheck->status == 10))
 		  	{
 
 		    		if($mobCheck->loppui == '') $tila = 'avoina'; else $tila = 'suljettu';
@@ -1134,7 +1136,7 @@ public function actionImei($dom)
 				$this->_sendResponse(200, $mobCheck->status."//".$mobCheck->kohde_kannasta."<br>".$nykyinenKesto."//".$mobCheck->aloitan."//".$mobCheck->loppui."//".$get_osoite."//".$this->etuSukunimi($ttekija->id)."//".$kohdenID."//".$tag."//".$mobCheck->id."_".$tila."//uusi versio");
 
 			} else {
-                     		$this->_sendResponse(200, "3//mull//null//null//".$get_osoite."//".$this->etuSukunimi($ttekija->id)."//".$kohdenID."//".$tag."//uusi versio");
+                     		$this->_sendResponse(200, "3//null//null//null//".$get_osoite."//".$this->etuSukunimi($ttekija->id)."//".$kohdenID."//".$tag."//uusi versio");
 			}
 
 		exit;
@@ -1153,7 +1155,8 @@ public function actionImei($dom)
 		$get_osoite = '';
 
 
-		  if(isset($mobCheck->id))
+		  if(isset($mobCheck->id) 
+			and ($mobCheck->status == 1 or $mobCheck->status == 2 or $mobCheck->status == 10))
 		  {
 
 		    	if($mobCheck->loppui == '') $tila = 'avoina'; else $tila = 'suljettu';
@@ -1175,7 +1178,7 @@ public function actionImei($dom)
                        	$this->_sendResponse(200, $mobCheck->status."//".$mobCheck->kohde_kannasta."<br>".$nykyinenKesto."//".$mobCheck->aloitan."//".$mobCheck->loppui."//".$get_osoite."//".$this->etuSukunimi($ttekija->id)."//".$kohdenID."//".$tag."//".$mobCheck->id."_".$tila."//vanha versio");
 
 		  } else {
-                     	$this->_sendResponse(200, "3//mull//null//null//".$get_osoite."//".$this->etuSukunimi($ttekija->id)."//".$kohdenID."//".$tag."//vanha versio");
+                     	$this->_sendResponse(200, "3//null//null//null//".$get_osoite."//".$this->etuSukunimi($ttekija->id)."//".$kohdenID."//".$tag."//vanha versio");
 		  }
 		// Jos versio vanhempi kun  0.0.57 -->
 
@@ -1187,6 +1190,7 @@ public function actionImei($dom)
 	     	exit;
 	    } // if(isset($_POST['check']))
 	    // Check loppu -->
+
 
 
 	// <-- Mob finder
@@ -1201,12 +1205,13 @@ public function actionImei($dom)
 
 	    		$criteria = new CDbCriteria();
 	    		$criteria->condition = " id='".(int)$avoinID."' AND tid = '".$ttekija->id."' ";
-	           	$mob = Mob::model()->find($criteria);	
+	           	$mob = Mob::model()->find($criteria);
+			if(isset($explVersio[2]))
 			$checkVersio = (int)$explVersio[2];	
 
 	} else { // Jos versio yli 0.0.57 -->
 
-	
+
 	    		// <-- jos on avoin kohde
 			$criteria = new CDbCriteria();
 	    		$criteria->order = " 
@@ -1313,7 +1318,7 @@ public function actionImei($dom)
                 $mobinsert->imei = $ttekija->imei;
                 $mobinsert->tid = $ttekija->id;
                 $mobinsert->tekijan_nimi = $this->etuSukunimi($ttekija->id);
-                $mobinsert->tietoja = $_POST['tietoja'];
+                //$mobinsert->tietoja = $_POST['tietoja'];
                 $mobinsert->aloitan = date("d.m.Y H:i:s");
 
                 if($mobinsert->save())

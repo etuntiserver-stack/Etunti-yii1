@@ -431,6 +431,7 @@ setTimeout(function() {
 
 		  $("#result").hide();
 		  $("#osoite").show(370);
+        	  console.log(data);
 
     	},
     		error:function (xhr, ajaxOptions, thrownError){
