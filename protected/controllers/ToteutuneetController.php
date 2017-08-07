@@ -112,7 +112,7 @@ class ToteutuneetController extends Controller
 				$mobiili->admin = 1;
 				$mobiili->aloitan = date("d.m.Y H:i:s", strtotime($tv->pvm." ".$tv->alku));
 				$mobiili->loppui = date("d.m.Y H:i:s", strtotime($tv->pvm." ".$tv->loppu));
-				if($tv->status == 0)
+				if($tv->status != 2 or $tv->status != 3 or $tv->status != 10)
 					$mobiili->status = 3;
 				else
 					$mobiili->status = $tv->status;
