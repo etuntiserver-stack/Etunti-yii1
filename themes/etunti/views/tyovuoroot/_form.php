@@ -1124,7 +1124,6 @@ function laatikonPaivays(thisDataReturn){
 
 
 			$('.ohje').html(d[0]);
-			if( $('#Tyovuoroot_tietoja').val() === '' )
 			$('#Tyovuoroot_tietoja').val(d[1]);
 
 			if(d[2] !== '')
