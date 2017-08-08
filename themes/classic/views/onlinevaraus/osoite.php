@@ -509,7 +509,7 @@ function osoiteAjax(id)
 			$('#osoite').val(d['osoite']);
 			$('#postinumero').val(d['postinumero']);
 			$('#kaupunki').val(d['kaupunki']);
-			$('#lisatietoja').val(d['lisatietoja']);
+			//$('#lisatietoja').val(d['lisatietoja']);
 
 		}
    	},
