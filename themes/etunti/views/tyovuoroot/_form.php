@@ -240,7 +240,7 @@ $(".muokaValiko").click(function() {
   <div class="col-sm-3">
 
   </div>
-
+<?php /*
   <div class="col-sm-3">
 	<div id="apuaika_div" style="margin-top:5px">
 		<?php echo $form->labelEx($model,'apuaika'); ?>
@@ -249,7 +249,7 @@ $(".muokaValiko").click(function() {
 		?>
 	</div>
   </div>
-
+*/ ?>
 </div>
 
 <div class="row">
