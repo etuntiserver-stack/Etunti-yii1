@@ -205,7 +205,7 @@ if(isset($ov->id) and isset($tv->id))
 				$kuvk->osoite = $ov->osoite;
 				$kuvk->tekijan_nimi = $ov->yhteyshenkilo;
 				$kuvk->tiedosto = $newname;
-				$kuvk->kuvaus = Yii::t('main', 'Tämä kuva saappunut onlinevarauksesta');
+				$kuvk->kuvaus = Yii::t('main', 'Tämä kuva saapunut onlinevarauksesta');
 				if(!$kuvk->save())
 				print_r($kuvk->getErrors());
 			}
