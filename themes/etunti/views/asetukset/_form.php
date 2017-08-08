@@ -253,6 +253,28 @@
 
    </div>
 
+   <div class="col-sm-3">
+    <legend><h2><?php echo Yii::t('main','Apuaika'); ?></h2></legend>
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'apuaika_meneeko_laskutukseen'); ?>
+		<?php 
+        	$l = array(
+			0=>'Ei',
+			1=>'Kyllä'
+		);
+		echo $form->dropDownList($model,'apuaika_meneeko_laskutukseen', $l, 
+		array('class'=>'form-control')) ?>
+		<?php echo $form->error($model,'apuaika_meneeko_laskutukseen'); ?>
+	</div>
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'apuaika_palkkalaji'); ?>
+		<?php echo $form->textField($model,'apuaika_palkkalaji',array('class'=>'form-control')); ?>
+		<?php echo $form->error($model,'apuaika_palkkalaji'); ?>
+	</div>
+   </div>
+
   </div>
 <?php endif; ?>
 <!-- Työvuorot -->

@@ -196,10 +196,18 @@ $(".muokaValiko").click(function() {
 /* valikot */
 
  $('#Tyovuoroot_status').change(function(){
-	if($(this).val() == '10')
+
+	if($(this).val() !== '3'){
+		$('#apuaika_div').hide();
+	} else {
+		$('#apuaika_div').show();
+	}
+
+	if($(this).val() == '10'){
 		$('#Tyovuoroot_tyoajanmerkinta').val('Ei lasketa/red');
-	else
+	} else {
 		$('#Tyovuoroot_tyoajanmerkinta').val('Normaali/');
+	}
  });
 
 });
@@ -220,10 +228,22 @@ $(".muokaValiko").click(function() {
   <div class="col-sm-3">
 		<?php echo $form->labelEx($model,'peruutettu'); ?>
 		<?php
-		$list = array(0=>'Ei', 1=>'Peruutettu', 2=>'Peruutettu laskutettava');
 		echo $form->dropDownList($model,'peruutettu', $list, 
 		array('empty'=>'Valitse','class'=>'form-control'));
 		?>
+  </div>
+
+  <div class="col-sm-3">
+
+  </div>
+
+  <div class="col-sm-3">
+	<div id="apuaika_div" style="margin-top:5px">
+		<?php echo $form->labelEx($model,'apuaika'); ?>
+		<?php
+		echo $form->checkbox($model,'apuaika', $list, array('class'=>'form-control'));
+		?>
+	</div>
   </div>
 
 </div>

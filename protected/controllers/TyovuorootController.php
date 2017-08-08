@@ -1236,6 +1236,14 @@ class TyovuorootController extends Controller
 		{
 
 			$model->attributes=$_POST['Tyovuoroot'];
+
+			// <-- Apuaika
+			if($_POST['Tyovuoroot']['apuaika'] == 1)
+				$model->apuaika = 1;
+			else
+				$model->apuaika = 0;
+			//     Apuaika -->
+
 			$model->pvm = date("d.m.Y",strtotime($_POST['Tyovuoroot']['pvm']));
 
 			if($model->save())
@@ -1245,8 +1253,6 @@ class TyovuorootController extends Controller
 			if(isset($_POST['Tyovuoroot']['PushNotify']) and $_POST['Tyovuoroot']['PushNotify'] == 'on')
 			$this->pushNotifySending($model->id);
 			// PushNotify -->
-
-
 
 
 
@@ -2872,6 +2878,15 @@ class TyovuorootController extends Controller
 			// Tyontekijan vaihto -->
 
 			$model->attributes=$_POST['Tyovuoroot'];
+
+			// <-- Apuaika
+			if($_POST['Tyovuoroot']['apuaika'] == 1)
+				$model->apuaika = 1;
+			else
+				$model->apuaika = 0;
+			//     Apuaika -->
+
+
 			if($model->save()){
 
 				// <-- Onko tyopari esitetty
