@@ -54,9 +54,13 @@ if(isset($ov->id) and !empty($ov->kohde_id) and empty($model->kohde)){
 
 ?>
 
-	<?php if(isset($ov->id)) : ?>
+	<?php if(isset($ov->id) and $model->osoiteOnline == 2) : ?>
 	<div class="section alert bg-warning">
 	<?php echo Yii::t('main', 'Tämä kohde on onlinevarauksesta.'); ?>
+	</div>
+	<?php elseif(isset($ov->id) and $model->osoiteOnline == 3): ?>
+	<div class="section alert bg-warning">
+	<?php echo Yii::t('main', 'Tämä kohde on eDicosta.'); ?>
 	</div>
 	<?php endif; ?>
 
