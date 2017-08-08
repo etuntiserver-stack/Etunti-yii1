@@ -74,6 +74,7 @@ $forPVM = date('d.m.Y',strtotime($s->aloitan));
 		<?php 
 
 		         $opt = array($s->kohdenID=>array('selected'=>true));
+/*
 		      if($s->status == 2){
 		         $k = Kohteet::model()->find("osoite='MATKA'");
 		         $opt = array($k->id=>array('selected'=>true));
@@ -81,7 +82,7 @@ $forPVM = date('d.m.Y',strtotime($s->aloitan));
 		         $k = Kohteet::model()->find("osoite='LOUNASTAUKO'");
 		         $opt = array($k->id=>array('selected'=>true));
 		      } 
-
+*/
 		      echo $form->dropDownList($model,'kohde_kannasta', 
 			CHtml::listData(Kohteet::model()->findAll(array('order' => 'osoite ASC')), 'id', 'osoite'), 
 			    array(
