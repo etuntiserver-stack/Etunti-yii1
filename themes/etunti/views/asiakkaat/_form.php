@@ -72,7 +72,7 @@ $model->hinta_sis_alv = round($model->hinta_sis_alv, 2);
 		<?php echo $form->numberField($model,'asiakasnumero',$asnum); ?>
 		<?php echo $form->error($model,'asiakasnumero'); ?>
 	</div>
-
+<?php /*
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'asiakastila'); ?>
 
@@ -103,6 +103,7 @@ $model->hinta_sis_alv = round($model->hinta_sis_alv, 2);
 
 		<?php echo $form->error($model,'asiakastila'); ?>
 	</div>
+*/ ?>
 
 	<div class="section fill mb5 tyyppi">
 		<?php echo $form->labelEx($model,'tyyppi'); ?>
