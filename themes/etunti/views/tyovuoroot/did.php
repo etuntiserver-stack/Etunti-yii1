@@ -230,7 +230,7 @@ if(!isset($_POST['tulosta']))
 
 	   if($tvVal->alku != '' and $tvVal->loppu != '')
 	   {
-		if($tvVal->status == 10 and $asetukset->lasketaanko_lounastauko == 0)
+		if(isset($asetukset) and $tvVal->status == 10 and $asetukset->lasketaanko_lounastauko == 0)
 		{
 		} else {
     			$sum += strtotime($tvVal->loppu)-strtotime($tvVal->alku);
