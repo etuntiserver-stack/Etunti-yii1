@@ -82,6 +82,9 @@
 	   else 
 	    $isEripaivat = '';
 
+	   if($status == 3)
+		$kohde .= ' <i class="p3 fa fa-hourglass text-info"></i>';
+
 	   if($status == 2)
 		$kohde .= ' <i class="p3 fa fa-bus text-warning"></i>';
 
