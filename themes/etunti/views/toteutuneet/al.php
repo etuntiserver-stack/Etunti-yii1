@@ -15,6 +15,7 @@
   $ashyv = $explStr['9'];
   $tietoja = $explStr['10'];
   $sairaus = $explStr['11'];
+  $status = $explStr['12'];
 
      $riviTietoja = '';
   if(!empty($tietoja) and isset($_POST['tulosta']))
@@ -80,6 +81,12 @@
 	    $isEripaivat = '<i class="fa fa-retweet text-danger" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" style="font-size: 130%" title="'.Yii::t('main', 'Päivämäärät  eivät täsmää').'"></i> '; 
 	   else 
 	    $isEripaivat = '';
+
+	   if($status == 2)
+		$kohde .= ' <i class="p3 fa fa-bus text-warning"></i>';
+
+	   if($status == 10)
+		$kohde .= ' <i class="p3 fa fa-cutlery text-danger"></i>';
 
 
 	   echo '

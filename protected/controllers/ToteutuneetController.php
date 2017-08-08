@@ -563,7 +563,7 @@ $xml = '
 		   if($tvVal->id){
 		   $muutos = true;
 
-	   	$get[strtotime($tvVal->aloitan).'_'.$tvVal->id] = $tvVal->id."//".$tvVal->aloitan."//".$tvVal->loppui."//".$tvVal->kohde_kannasta."//".$did."//".$tid."//".$muutos."//".(strtotime($tvVal->loppui)-strtotime($tvVal->aloitan))."//".$tvVal->kid."//".$tvVal->asiakas_hyvaksy."//".$tvVal->tietoja."//".$tvVal->sairaus;
+	   	$get[strtotime($tvVal->aloitan).'_'.$tvVal->id] = $tvVal->id."//".$tvVal->aloitan."//".$tvVal->loppui."//".$tvVal->kohde_kannasta."//".$did."//".$tid."//".$muutos."//".(strtotime($tvVal->loppui)-strtotime($tvVal->aloitan))."//".$tvVal->kid."//".$tvVal->asiakas_hyvaksy."//".$tvVal->tietoja."//".$tvVal->sairaus."//".$tvVal->status;
 	
 		  $tvVal->loppui = date("Y-m-d H:i",strtotime($tvVal->loppui));
 		  $tvVal->aloitan = date("Y-m-d H:i",strtotime($tvVal->aloitan));
@@ -592,7 +592,7 @@ $xml = '
 		   if($tvVal->id){
 		   $muutos = false;
 
-		   $get[strtotime($tvVal->aloitan).'_'.$tvVal->id] = $tvVal->id."//".$tvVal->aloitan."//".$tvVal->loppui."//".$tvVal->kohde_kannasta."//".$did."//".$tid."//".$muutos."//".(strtotime($tvVal->loppui)-strtotime($tvVal->aloitan))."//".$tvVal->id."//".$tvVal->asiakas_hyvaksy."////".$tvVal->sairaus;
+		   $get[strtotime($tvVal->aloitan).'_'.$tvVal->id] = $tvVal->id."//".$tvVal->aloitan."//".$tvVal->loppui."//".$tvVal->kohde_kannasta."//".$did."//".$tid."//".$muutos."//".(strtotime($tvVal->loppui)-strtotime($tvVal->aloitan))."//".$tvVal->id."//".$tvVal->asiakas_hyvaksy."////".$tvVal->sairaus."//".$tvVal->status;
 	
 	
 		  $tvVal->loppui = date("Y-m-d H:i",strtotime($tvVal->loppui));
