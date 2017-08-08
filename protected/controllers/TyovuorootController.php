@@ -1238,9 +1238,9 @@ class TyovuorootController extends Controller
 			$model->attributes=$_POST['Tyovuoroot'];
 
 			// <-- Apuaika
-			if($_POST['Tyovuoroot']['apuaika'] == 1)
+			if(isset($_POST['Tyovuoroot']['apuaika']) and $_POST['Tyovuoroot']['apuaika'] == 1)
 				$model->apuaika = 1;
-			else
+			else if(isset($_POST['Tyovuoroot']['apuaika']) and $_POST['Tyovuoroot']['apuaika'] != 1)
 				$model->apuaika = 0;
 			//     Apuaika -->
 
@@ -2880,9 +2880,9 @@ class TyovuorootController extends Controller
 			$model->attributes=$_POST['Tyovuoroot'];
 
 			// <-- Apuaika
-			if($_POST['Tyovuoroot']['apuaika'] == 1)
+			if(isset($_POST['Tyovuoroot']['apuaika']) and $_POST['Tyovuoroot']['apuaika'] == 1)
 				$model->apuaika = 1;
-			else
+			else if(isset($_POST['Tyovuoroot']['apuaika']) and $_POST['Tyovuoroot']['apuaika'] != 1)
 				$model->apuaika = 0;
 			//     Apuaika -->
 
