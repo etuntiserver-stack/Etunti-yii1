@@ -298,6 +298,7 @@ if(isset($tilauksen_kuvaus['paa']) and is_array($tilauksen_kuvaus['paa']))
   $message .= '<br></td></tr>';
 }
 
+$kuvaus .=  Yii::t('main', 'Lisätietoja').': '.$ov->lisatietoja."\n";
 
 
 $message .= '
