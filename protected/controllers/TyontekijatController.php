@@ -487,8 +487,8 @@ class TyontekijatController extends Controller
 				<b>Käyttäjätunnus:</b> '.$model->tekijan_email.'<br>
 				<b>Luo oma salasana:</b> <a href='.Yii::app()->createAbsoluteUrl('tyontekijat/salasana', array('domain' => Yii::app()->user->domain, 'token' => $token, 'id' => $model->id)).'>tästä</a><br>';
 
-				echo $message;
-				exit;
+				//echo $message;
+				//exit;
 
 				$ft = FirmanTiedot::model()->findByPk(1);
 				$mail = new YiiMailer();
