@@ -13,9 +13,11 @@
 	   		$tun += strtotime($tvVal->loppu)-strtotime($tvVal->alku);
 
 
-	echo '<div class="small">';
 	if($tun > 0)
+	{
+	echo '<div class="small">';
 		echo sprint($tun)."//".$tun;
 	echo '</div>';
+	}
 ?>
 
