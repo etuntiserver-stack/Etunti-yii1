@@ -417,6 +417,30 @@ class TyontekijatController extends Controller
 		));
 	}
 
+
+	public function actionSalasana($domain, $token, $id)
+	{
+
+                Yii::app()->theme = 'classic';
+		$model=$this->loadModel($id);
+
+		if(isset($model->id) and !empty($model->token) and $model->token == $token) 
+			$tilanne = 1;
+		elseif(isset($model->id) and empty($model->token)) 
+			$tilanne = 2;  
+		else 
+			die('Error');
+
+		if(isset($model->id) and isset($_POST['password1']) and $_POST['password1'] == $_POST['password2'])
+		{
+			Tyontekijat::model()->updateByPk($model->id, array('salasana' => $_POST['password1'], 'token' => ''));
+			$tilanne = 2;
+		}
+
+		$this->render('salasana', array('tilanne' => $tilanne));
+	}
+
+
 	/**
 	 * Updates a particular model.
 	 * If update is successful, the browser will be redirected to the 'view' page.
@@ -451,7 +475,7 @@ class TyontekijatController extends Controller
 		{
 
 				$token = sha1(uniqid(time().$model->id, true));
-				Asiakkaat::model()->updateByPk($model->id, array('token' => $token));
+				Tyontekijat::model()->updateByPk($model->id, array('token' => $token));
 
 				$subject = 'Tervetuloa Etunnin käyttäjäksi.';
 				$message = 'Hei '.$model->tekijan_nimi.'!<br>
