@@ -89,6 +89,20 @@ if(empty($model->position) and isset($model->id))
 		<?php echo $form->error($model,'salasana'); ?>
 	</div>
 
+	<div class="section fill mb5 ashidd_a">
+		<?php echo CHtml::link(Yii::t('main', 'Lähetä tunnukset työntekijälle'), 
+				array('update', 'id'=>$model->id, 'laheta_tunnukset'=>true), 
+				array(
+					'class' => 'btn btn-primary btn-block myBgColors',
+					'data-toggle'=>'tooltip', 
+					'data-placement'=>'top', 
+					'title'=>Yii::t('main', 'Lähetä'),
+					//'target' => '_blank'
+				)
+			); 
+		?>
+	</div>
+
 	<div class="section fill mb5 piilotetaan">
 		<?php echo $form->labelEx($model,'tekijan_katuosoite'); ?>
 		<?php echo $form->textField($model,'tekijan_katuosoite',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
