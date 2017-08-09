@@ -27,6 +27,10 @@ class TyontekijatController extends Controller
 	public function accessRules()
 	{
 		return array(
+			array('allow',
+				'actions'=>array('salasana'),
+				'users'=>array('*'),
+			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
 				'actions'=>array('admin', 'admin_ajax', 'delete', 'create', 'update', 'index', 'view','merkkipaivat', 'tulosta', 'migraatio', 'verotustiedot', 'muuta_suhteet', 'tyoryhmat_hallinta', 'check_tyovuorot', 'is_aktiivinen_multiple'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
@@ -481,7 +485,10 @@ class TyontekijatController extends Controller
 				$message = 'Hei '.$model->tekijan_nimi.'!<br>
 				<b>Domain:</b> '.Yii::app()->user->domain.'<br>
 				<b>Käyttäjätunnus:</b> '.$model->tekijan_email.'<br>
-				<b>Luo oma salasana:</b> <a href='.Yii::app()->createAbsoluteUrl('tyontekijat/salasana', array('domain' => Yii::app()->user->domain, 'token' => $token, 'id' => $model->id)).'>url</a><br>';
+				<b>Luo oma salasana:</b> <a href='.Yii::app()->createAbsoluteUrl('tyontekijat/salasana', array('domain' => Yii::app()->user->domain, 'token' => $token, 'id' => $model->id)).'>tästä</a><br>';
+
+				echo $message;
+				exit;
 
 				$ft = FirmanTiedot::model()->findByPk(1);
 				$mail = new YiiMailer();
@@ -500,7 +507,7 @@ class TyontekijatController extends Controller
 							$log->save();
 							//     LOG -->
 
-				//$this->redirect(array('index'));
+				$this->redirect(array('index'));
 		}
 		//     Tunnukset lahetys -->
 
