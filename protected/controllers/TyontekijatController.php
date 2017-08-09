@@ -444,6 +444,43 @@ class TyontekijatController extends Controller
 		$netvisorResponse = '';
 		$model=$this->loadModel($id);
 
+
+
+		// <-- Tunnukset lahetys
+		if(isset($_GET['laheta_tunnukset']))
+		{
+
+				$token = sha1(uniqid(time().$model->id, true));
+				Asiakkaat::model()->updateByPk($model->id, array('token' => $token));
+
+				$subject = 'Tervetuloa Etunnin käyttäjäksi.';
+				$message = 'Hei '.$model->tekijan_nimi.'!<br>
+				<b>Domain:</b> '.Yii::app()->user->domain.'<br>
+				<b>Käyttäjätunnus:</b> '.$model->tekijan_email.'<br>
+				<b>Luo oma salasana:</b> <a href='.Yii::app()->createAbsoluteUrl('tyontekijat/salasana', array('domain' => Yii::app()->user->domain, 'token' => $token, 'id' => $model->id)).'>url</a><br>';
+
+				$ft = FirmanTiedot::model()->findByPk(1);
+				$mail = new YiiMailer();
+				$mail->setFrom($ft->sahkoposti, $ft->tyonantaja);
+				$mail->setTo($model->tekijan_email);
+				$mail->setSubject($subject);
+				$mail->setBody($message);
+				$mail->send();
+
+							// <-- LOG
+							$log=new Log;
+							$log->log_category 	= 1; // 1-email
+							$log->email_to 		= $model->tekijan_email;
+							$log->email_subject	= $subject;
+							$log->email_message	= json_encode($message);
+							$log->save();
+							//     LOG -->
+
+				//$this->redirect(array('index'));
+		}
+		//     Tunnukset lahetys -->
+
+
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
