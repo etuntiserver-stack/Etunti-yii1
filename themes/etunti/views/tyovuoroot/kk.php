@@ -149,8 +149,10 @@ echo	'<input type=hidden id=number value='.cal_days_in_month(CAL_GREGORIAN, $mon
 	elseif(isset($explT[1]) and (int)$explT[1] > 28800)
 	$cl = "btn btn-xs btn-danger";
 
-
-	echo '<TD class="text-small" style="font-size:90%"><span class="'.$cl.'">'.$explT[0].'</span></TD>';
+	echo '<td>';
+	if(!empty($tot[$i]))
+	echo '<span class="link text-small '.$cl.'" tyle="font-size:90%" pvm="'.date("Y-m-d", strtotime($thisDate)).'" tid="'.$v->id.'">'.$explT[0].'</span>';
+	echo '</td>';
 
    }
   echo '<TD class="text-small"><b>'.sprint($yht).'</b></TD>';
@@ -167,3 +169,59 @@ echo	'<input type=hidden id=number value='.cal_days_in_month(CAL_GREGORIAN, $mon
             </div>
 
 
+	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/tyovuorot.css">
+	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/bootstrap.modal.js"></script>
+
+     <div id="temaus-modal" class="modal fade" tabindex="-1" role="dialog">
+        <!-- Admin Form Popup -->
+        <div id="modal-form" class=" popup-basic popup-xl admin-form mfp-with-anim mfp-hide">
+          <div class="panel">
+            <div class="panel-heading">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="font-size:170%">
+				<span aria-hidden="true">&times;</span>
+			</button>
+              <span class="panel-title"></span>
+            </div>
+            <!-- end .panel-heading section -->
+
+              <div class="panel-body p25">
+
+
+              </div>
+              <!-- end .form-body section -->
+
+              <div class="panel-footer">
+		<button type="button" class="button btn-default" data-dismiss="modal" aria-label="Close">Sulje</button>
+                <!--<button type="submit" class="button btn-primary">Post Comment</button>-->
+              </div>
+              <!-- end .form-footer section -->
+          </div>
+          <!-- end: .panel -->
+        </div>
+        <!-- end: .admin-form -->
+     </div>
+
+
+<script>
+$(document).ready(function() {
+
+  $(".link").click(function(){
+
+	var pvm = $(this).attr('pvm');
+	var tid = $(this).attr('tid');
+
+        $.ajax({
+           url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/did?pvm='+pvm+'&tid='+tid+'&from=ajax',
+           type: "POST",
+	   //data: { hyvaksy : "kylla", kuka : kuka },
+           success: function(data){
+		data = JSON.parse(data);
+		console.log(data);
+		$('#temaus-modal').modal().find('.panel-body').html(data);
+           }
+        });
+
+  });
+
+});
+</script>
