@@ -809,6 +809,16 @@ $xml = '
 	        $criteria->order = " id DESC ";
 		}
 
+/*
+if(isset($_POST['osoite']))
+{
+$osoite = filter_var($_POST['osoite'], FILTER_SANITIZE_SPECIAL_CHARS);
+echo $osoite;
+exit;
+}
+*/
+
+
 		if(isset($_POST['osoite']) and !empty($_POST['osoite']))
 	        $criteria->addCondition (" osoite LIKE '%".$_POST['osoite']."%' ");
 

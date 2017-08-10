@@ -455,35 +455,6 @@ $(document).ready(function(){
 	 echo '</div>';
 	 //}
 	}
-
-/*
-	foreach(array_reverse(glob(Yii::app()->basePath."/../img/uploadedfromphone/".Yii::app()->user->domain."/".$model->id."_*.*")) as $file) {
-	$i++;
-	$explNimi = explode("/",$file);
-	$exlEndNimi = explode("_",end($explNimi));
-	$tekija = '';
-	if(isset($exlEndNimi[1]))
-	{
-		$tt = Tyontekijat::model()->findbypk($exlEndNimi[1]);
-		if(isset($tt->id))
-		$tekija = $tt->tekijan_nimi;
-	}
- 	echo '
-	<div class="col-sm-3">
-	  <div class="link poistaKuva" this="'.$file.'">'.Yii::t('main','poista').'</div>
-	  <label>'.$tekija.'</label><br>
-	  <a href="../../img/uploadedfromphone/'.Yii::app()->user->domain.'/'.end($explNimi).'" target="_blank">
-	  <img src="../../img/uploadedfromphone/'.Yii::app()->user->domain.'/'.end($explNimi).'" class="img-responsive thumbnail" style="height:200px">
-	  </a>
-	  <br>
-	  <label>'.Yii::t('main','Kuvaus').'</label><br>
-	  
-	</div>
-	';
-	}
-*/
-
-
    echo '</div>';
 ?>
 

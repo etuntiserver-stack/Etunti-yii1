@@ -105,6 +105,7 @@
   <table class="table table-striped" id="mobileTable">
   <thead class="myBgColors">
   <tr>
+  <th></th>
   <th><?php echo Yii::t('main', 'Maksupäivä'); ?></th>
   <th><?php echo Yii::t('main', 'Työvuoro'); ?></th>
   <th><?php echo Yii::t('main', 'Kesto'); ?></th>
@@ -116,7 +117,7 @@
   <th><?php echo Yii::t('main', 'Osoite'); ?></th>
   <th><?php echo Yii::t('main', 'Sähköposti'); ?></th>
   <th><?php echo Yii::t('main', 'Tietoja'); ?></th>
-  <th></th>
+  <th><?php echo Yii::t('main', 'Valokuvat'); ?></th>
   </tr>
   </thead>
   <?php $this->widget('zii.widgets.CListView', array(

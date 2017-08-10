@@ -7,6 +7,19 @@ $tilauksen_kuvaus = json_decode($data->tilauksen_kuvaus, true);
 
 <tr>
 	<td>
+		<?php echo CHtml::link('<i class="fa fa-pencil-square-o" aria-hidden="true" style="font-size: 110%"></i>', 
+				array('update', 'id'=>$data->id), 
+				array(
+					'class'=>'btn btn-primary myBgColors', 
+					'style'=>'color:white', 
+					'data-toggle'=>'tooltip', 
+					'data-placement'=>'top', 
+					'title'=>Yii::t('main', 'Muokkaa') 
+				)
+			); 
+		?>
+	</td>
+	<td>
 		<?php echo date("d.m.Y  H:i",strtotime($data->time)); ?>
 	</td>
 	<td>
@@ -63,9 +76,17 @@ if(isset($tilauksen_kuvaus['paa']) and isset($tilauksen_kuvaus['lisa']))
 	<td>
 		<?php echo $data->lisatietoja; ?>
 	</td>
-
 	<td>
-		<?php echo CHtml::link('', array('update', 'id'=>$data->id), array('class'=>'fa fa-pencil-square-o')); ?>
+	<?php
+
+		$criteria = new CDbCriteria();
+		$criteria->condition = " kohde_id='".$data->kohde_id."'  ";
+		$kuvk = KuviaKohteesta::model()->findAll($criteria);
+
+		foreach($kuvk as $d) {
+	 	 echo '<a href="../../img/uploadedfromphone/'.Yii::app()->user->domain.'/'.$d->tiedosto.'">'.$d->tiedosto.'</a><br>';
+		}
+	?>
 	</td>
 </tr>
 

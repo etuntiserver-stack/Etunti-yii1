@@ -82,13 +82,13 @@ if(empty($model->position) and isset($model->id))
 		<?php echo $form->textField($model,'tekijan_email',array('size'=>50,'maxlength'=>50,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'tekijan_email'); ?>
 	</div>
-
+<?php /*
 	<div class="section fill mb5 piilotetaan">
 		<?php echo $form->labelEx($model,'salasana'); ?>
 		<?php echo $form->textField($model,'salasana',array('size'=>60,'maxlength'=>100,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'salasana'); ?>
 	</div>
-
+*/ ?>
 	<div class="section fill mb5 ashidd_a">
 		<?php echo CHtml::link(Yii::t('main', 'Lähetä tunnukset työntekijälle'), 
 				array('update', 'id'=>$model->id, 'laheta_tunnukset'=>true), 
