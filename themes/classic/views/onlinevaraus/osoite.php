@@ -178,8 +178,8 @@ if(isset($_POST['kuvanLisaaminen']))
        <div class="col-sm-6">
 	<label><?php echo Yii::t('main', 'Asiakastyyppi '); ?></label>
 	  <select id="tyyppi" class="form-control input-lg">
-	  <option value="yritys">Yritys</option>
 	  <option value="henkilo">Yksityishenkilö</option>
+	  <option value="yritys">Yritys</option>
 	  </select>
 
        </div>
@@ -410,12 +410,14 @@ if(isset(Yii::app()->user->aid)){
 <script type="text/javascript">
 $(document).ready(function(){
 
+tyyppi();
 $("#tyyppi").change(function() {
-    var value = $(this).val();
-    tyyppi(value);
+    tyyppi();
 });
 
-function tyyppi(v){
+function tyyppi(){
+
+	var v = $("#tyyppi").val();
 
 	if(v == 'henkilo')
 	{
