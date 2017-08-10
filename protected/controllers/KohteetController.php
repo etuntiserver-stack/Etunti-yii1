@@ -341,7 +341,10 @@ class KohteetController extends Controller
 		{
 			$model->attributes=$_POST['Kohteet'];
 			if($model->save())
+			{
+				Yii::app()->user->setFlash('success', "Tallennettu.");
 				$this->redirect(array('index'));
+			}
 		}
 
 		$this->render('update',array(

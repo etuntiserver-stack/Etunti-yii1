@@ -484,7 +484,7 @@ class TyontekijatController extends Controller
 		if(isset($_GET['sulje_mobiili']))
 		{
 				Tyontekijat::model()->updateByPk($model->id, array('mobiili' => '0'));
-				Yii::app()->user->setFlash('success', "Mobiili on suljettu");
+				Yii::app()->user->setFlash('warning', "Mobiili on suljettu");
 				$this->redirect(array('update', 'id' => $model->id));
 		}
 		//    Sulje mobiili -->
@@ -578,7 +578,7 @@ class TyontekijatController extends Controller
 					$netvisorResponse = $this->netvisorTyontekija('edit', $model);
 				}
 				//     Netvisor updater -->
-
+				Yii::app()->user->setFlash('success', "Tallennettu.");
 				$this->redirect(array('index'));
 			}
 		}

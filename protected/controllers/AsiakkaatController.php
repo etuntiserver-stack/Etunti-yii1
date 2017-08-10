@@ -506,7 +506,7 @@ class AsiakkaatController extends Controller
 			    }
 			   //  Netvisor -->
 
-
+				Yii::app()->user->setFlash('success', "Tallennettu.");
 				$this->redirect(array('index'));
 			}
 		}

@@ -213,7 +213,7 @@ $(document).ready(function(){
 <div class="">
 	<?php
 	foreach(Yii::app()->user->getFlashes() as $key => $message) {
-        	echo '<p><div class="container"><div class="alert bg-success flash-' . $key . '">' . $message . "</div></div></p>\n";
+        	echo '<p><div class="container"><div class="alert bg-' . $key . '">' . $message . "</div></div></p>\n";
     	}
 	?>
 	<?php echo $content; ?>
