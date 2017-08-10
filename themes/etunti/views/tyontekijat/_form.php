@@ -89,6 +89,8 @@ if(empty($model->position) and isset($model->id))
 		<?php echo $form->error($model,'salasana'); ?>
 	</div>
 */ ?>
+
+	<?php if(isset($model->id)) : ?>
 	<div class="section fill mb5 ashidd_a">
 		<?php echo CHtml::link(Yii::t('main', 'Lähetä tunnukset työntekijälle'), 
 				array('update', 'id'=>$model->id, 'laheta_tunnukset'=>true), 
@@ -102,8 +104,9 @@ if(empty($model->position) and isset($model->id))
 			); 
 		?>
 	</div>
+	<?php endif; ?>
 
-	<?php if($model->mobiili == 1) : ?>
+	<?php if(isset($model->id) and $model->mobiili == 1) : ?>
 	<div class="section fill mb5 ashidd_a">
 		<?php echo CHtml::link(Yii::t('main', 'Sulje mobiilisovellus'), 
 				array('update', 'id'=>$model->id, 'sulje_mobiili'=>true), 
@@ -119,7 +122,7 @@ if(empty($model->position) and isset($model->id))
 	</div>
 	<?php endif; ?>
 
-	<?php if($model->mobiili == 0) : ?>
+	<?php if(isset($model->id) and $model->mobiili == 0) : ?>
 	<div class="section fill mb5 ashidd_a">
 		<?php echo CHtml::link(Yii::t('main', 'Avaa mobiilisovellus'), 
 				array('update', 'id'=>$model->id, 'avaa_mobiili'=>true), 
