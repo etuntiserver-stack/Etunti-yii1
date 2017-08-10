@@ -562,7 +562,7 @@ if($("#aid_sahkoposti").length)
 	$('.tallennaUusi').html('Valmis');
 }
 
-$(document).delegate('#sahkoposti', "keyup blur", function() {
+$(document).delegate('#sahkoposti', "keyup", function() {
 
    var sahkoposti = $(this).val();
 
