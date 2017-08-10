@@ -211,7 +211,11 @@ $(document).ready(function(){
 
 
 <div class="">
-
+	<?php
+	foreach(Yii::app()->user->getFlashes() as $key => $message) {
+        	echo '<p><div class="container"><div class="alert bg-success flash-' . $key . '">' . $message . "</div></div></p>\n";
+    	}
+	?>
 	<?php echo $content; ?>
 
 <script type="text/javascript" src="https://etunti.atlassian.net/s/d41d8cd98f00b204e9800998ecf8427e-T/-3x7nu4/100023/c/1000.0.11/_/download/batch/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector.js?locale=en-US&collectorId=f67c367e"></script>

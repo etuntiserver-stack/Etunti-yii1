@@ -46,4 +46,18 @@
 				echo $data->tyoryhma; 
 		?>
 	</td>
+	<td>
+		<?php echo CHtml::link(Yii::t('main', 'Lähetä tunnukset työntekijälle'), 
+				array('update', 'id'=>$data->id, 'laheta_tunnukset'=>true), 
+				array(
+					'class' => 'btn btn-primary btn-block myBgColors',
+					'data-toggle'=>'tooltip', 
+					'data-placement'=>'top', 
+					'title'=>Yii::t('main', 'Lähetä'),
+					//'target' => '_blank'
+					'style' => 'color:white'
+				)
+			); 
+		?>
+	</td>
 </tr>

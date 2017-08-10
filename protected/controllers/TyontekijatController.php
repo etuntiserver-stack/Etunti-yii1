@@ -484,6 +484,7 @@ class TyontekijatController extends Controller
 		if(isset($_GET['sulje_mobiili']))
 		{
 				Tyontekijat::model()->updateByPk($model->id, array('mobiili' => '0'));
+				Yii::app()->user->setFlash('success', "Mobiili on suljettu");
 				$this->redirect(array('update', 'id' => $model->id));
 		}
 		//    Sulje mobiili -->
@@ -492,6 +493,7 @@ class TyontekijatController extends Controller
 		if(isset($_GET['avaa_mobiili']))
 		{
 				Tyontekijat::model()->updateByPk($model->id, array('mobiili' => 1));
+				Yii::app()->user->setFlash('success', "Mobiili on avattu");
 				$this->redirect(array('update', 'id' => $model->id));
 		}
 		//    Avaa mobiili -->
@@ -501,8 +503,8 @@ class TyontekijatController extends Controller
 		if(isset($_GET['laheta_tunnukset']))
 		{
 
-				$token = sha1(uniqid(time().$model->id, true));
-				Tyontekijat::model()->updateByPk($model->id, array('token' => $token));
+				$token = sha1(uniqid(time().$id, true));
+				Tyontekijat::model()->updateByPk($id, array('token' => $token));
 
 				$subject = 'Tervetuloa Etunnin käyttäjäksi.';
 				$message = 'Hei '.$model->tekijan_nimi.'!<br>
@@ -530,6 +532,7 @@ class TyontekijatController extends Controller
 							$log->save();
 							//     LOG -->
 
+				Yii::app()->user->setFlash('success', "Lähetys onnistunnut!");
 				$this->redirect(array('index'));
 		}
 		//     Tunnukset lahetys -->

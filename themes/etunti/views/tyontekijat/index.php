@@ -174,6 +174,7 @@
   <th><?php echo Yii::t('main', 'Sähköposti'); ?></th>
   <th><?php echo Yii::t('main', 'Osoite'); ?></th>
   <th><?php echo Yii::t('main', 'Työryhmä'); ?></th>
+  <th></th>
   </tr>
   </thead>
   <?php $this->widget('zii.widgets.CListView', array(
