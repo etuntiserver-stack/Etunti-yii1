@@ -86,7 +86,7 @@ public $tunnus;
 			array('tekijan_henkilotunnus, tekijan_puh, tekijan_lanka_puh', 'length', 'max'=>20),
 			array('tekijan_email, tekijan_ptoimipaikka, tyoehtosopimus, tekijan_kulunvalvonta, tekijan_konttori, aktiivinen', 'length', 'max'=>50),
 			array('tekijan_pnumero', 'length', 'max'=>7),
-			array('sukunimi, ammattinimike', 'length', 'max'=>255),
+			array('sukunimi, ammattinimike, token', 'length', 'max'=>255),
 			array('ayjasenyys', 'length', 'max'=>10),
 			array('kortit, tekijan_muisti, tekijan_tietoja, tietoja_onlinevarauksen', 'length', 'max'=>2000),
 			array('gcm_reg_id, position, kortit_voimassaolo, tyoryhma', 'length', 'max'=>500),

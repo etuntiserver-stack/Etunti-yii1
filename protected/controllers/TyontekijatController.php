@@ -27,6 +27,10 @@ class TyontekijatController extends Controller
 	public function accessRules()
 	{
 		return array(
+			array('allow',
+				'actions'=>array('salasana'),
+				'users'=>array('*'),
+			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
 				'actions'=>array('admin', 'admin_ajax', 'delete', 'create', 'update', 'index', 'view','merkkipaivat', 'tulosta', 'migraatio', 'verotustiedot', 'muuta_suhteet', 'tyoryhmat_hallinta', 'check_tyovuorot', 'is_aktiivinen_multiple'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
@@ -417,6 +421,30 @@ class TyontekijatController extends Controller
 		));
 	}
 
+
+	public function actionSalasana($domain, $token, $id)
+	{
+
+                Yii::app()->theme = 'classic';
+		$model=$this->loadModel($id);
+
+		if(isset($model->id) and !empty($model->token) and $model->token == $token) 
+			$tilanne = 1;
+		elseif(isset($model->id) and empty($model->token)) 
+			$tilanne = 2;  
+		else 
+			die('Error');
+
+		if(isset($model->id) and isset($_POST['password1']) and $_POST['password1'] == $_POST['password2'])
+		{
+			Tyontekijat::model()->updateByPk($model->id, array('salasana' => $_POST['password1'], 'token' => ''));
+			$tilanne = 2;
+		}
+
+		$this->render('salasana', array('tilanne' => $tilanne));
+	}
+
+
 	/**
 	 * Updates a particular model.
 	 * If update is successful, the browser will be redirected to the 'view' page.
@@ -443,6 +471,46 @@ class TyontekijatController extends Controller
 
 		$netvisorResponse = '';
 		$model=$this->loadModel($id);
+
+
+
+		// <-- Tunnukset lahetys
+		if(isset($_GET['laheta_tunnukset']))
+		{
+
+				$token = sha1(uniqid(time().$model->id, true));
+				Tyontekijat::model()->updateByPk($model->id, array('token' => $token));
+
+				$subject = 'Tervetuloa Etunnin käyttäjäksi.';
+				$message = 'Hei '.$model->tekijan_nimi.'!<br>
+				<b>Domain:</b> '.Yii::app()->user->domain.'<br>
+				<b>Käyttäjätunnus:</b> '.$model->tekijan_email.'<br>
+				<b>Luo oma salasana:</b> <a href='.Yii::app()->createAbsoluteUrl('tyontekijat/salasana', array('domain' => Yii::app()->user->domain, 'token' => $token, 'id' => $model->id)).'>tästä</a><br>';
+
+				//echo $message;
+				//exit;
+
+				$ft = FirmanTiedot::model()->findByPk(1);
+				$mail = new YiiMailer();
+				$mail->setFrom($ft->sahkoposti, $ft->tyonantaja);
+				$mail->setTo($model->tekijan_email);
+				$mail->setSubject($subject);
+				$mail->setBody($message);
+				$mail->send();
+
+							// <-- LOG
+							$log=new Log;
+							$log->log_category 	= 1; // 1-email
+							$log->email_to 		= $model->tekijan_email;
+							$log->email_subject	= $subject;
+							$log->email_message	= json_encode($message);
+							$log->save();
+							//     LOG -->
+
+				$this->redirect(array('index'));
+		}
+		//     Tunnukset lahetys -->
+
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);

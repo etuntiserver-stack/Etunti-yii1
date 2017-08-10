@@ -431,7 +431,7 @@ class AsiakkaatController extends Controller
 				$message = 'Hei '.$asiakas.'!<br>
 				<b>Domain:</b> '.Yii::app()->user->domain.'<br>
 				<b>Käyttäjätunnus:</b> '.$model->sahkoposti.'<br>
-				<b>Luo oma salasana:</b> <a href='.Yii::app()->createAbsoluteUrl('asiakkaat/salasana', array('domain' => Yii::app()->user->domain, 'token' => $token, 'asiakasid' => $model->id)).'>url</a><br>
+				<b>Luo oma salasana:</b> <a href='.Yii::app()->createAbsoluteUrl('asiakkaat/salasana', array('domain' => Yii::app()->user->domain, 'token' => $token, 'asiakasid' => $model->id)).'>tästä</a><br>
 <p>
 				Tervetuloa Etunnin käyttäjäksi. '.$yr.' on lisännyt sinulle profiilin Etuntiin. Lataa sovellus puhelimeesi alla olevien linkkien kautta.
 </p><br>
