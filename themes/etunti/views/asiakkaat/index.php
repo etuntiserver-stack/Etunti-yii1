@@ -116,22 +116,12 @@ $(document).ready(function() {
                           </label>
                         </div>
 
-		      <?php if(isset($_POST['ryhma'])) echo '<input type="hidden" id="ryhma" value="'.$_POST['ryhma'].'">'; ?>
                         <div class="section">
-                          <label class="field select">
-			<?php
-					$list = array();
-			      		$l = Valikkoot::model()->findAll(" select_type='asiakas_ryhma_real' ",array('order' => "select_type"));
-					foreach($l as $v)
-					$list[$v->id] = $v->value;
-			
-					if(count($list) > 0)
-					{
-			        	echo CHtml::dropDownList('ryhma', 'ryhma', $list,
-					array('empty'=>'Valitse ryhmä','class'=>'form-control form-group', 'id'=>'ryhmaSelect'));
-					}
-			?>
-                            <i class="arrow double"></i>
+                          <label class="field prepend-icon">
+
+   			    <input type="text" name="asiakasnumero" class="gui-input" value="<?php if(isset($_POST['asiakasnumero'])) echo $_POST['asiakasnumero']; ?>" placeholder="<?php echo Yii::t('main','Asiakasnumero'); ?>">
+                            <label for="firstname" class="field-icon">
+                              <i class="fa fa-at"></i>
                             </label>
                           </label>
                         </div>
@@ -199,6 +189,28 @@ $(document).ready(function() {
                             </label>
                           </label>
                         </div>
+
+
+		      <?php if(isset($_POST['ryhma'])) echo '<input type="hidden" id="ryhma" value="'.$_POST['ryhma'].'">'; ?>
+                        <div class="section">
+                          <label class="field select">
+			<?php
+					$list = array();
+			      		$l = Valikkoot::model()->findAll(" select_type='asiakas_ryhma_real' ",array('order' => "select_type"));
+					foreach($l as $v)
+					$list[$v->id] = $v->value;
+			
+					if(count($list) > 0)
+					{
+			        	echo CHtml::dropDownList('ryhma', 'ryhma', $list,
+					array('empty'=>'Valitse ryhmä','class'=>'form-control form-group', 'id'=>'ryhmaSelect'));
+					}
+			?>
+                            <i class="arrow double"></i>
+                            </label>
+                          </label>
+                        </div>
+
                       </div>
 
                       <div class="col-md-2">
@@ -250,6 +262,20 @@ $(document).ready(function() {
 		'.CHtml::link('<i class="fa fa-arrow-down"></i>','index?sort=yrityksen_nimi&s=asc').'
 	  </td><td>
 		'.CHtml::link('<i class="fa fa-arrow-up"></i>','index?sort=yrityksen_nimi&s=desc').'
+	  </td>
+	 </tr>
+	</table>';
+      ?>
+  </th>
+  <th><?php echo '
+	<table>
+	 <tr>
+	  <td>
+		<span class="p10">'.Yii::t('main', 'Asiakasnumero').'</span>
+	  </td><td>
+		'.CHtml::link('<i class="fa fa-arrow-down"></i>','index?sort=asiakasnumero&s=asc').'
+	  </td><td>
+		'.CHtml::link('<i class="fa fa-arrow-up"></i>','index?sort=asiakasnumero&s=desc').'
 	  </td>
 	 </tr>
 	</table>';

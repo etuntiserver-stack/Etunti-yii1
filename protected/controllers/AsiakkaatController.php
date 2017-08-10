@@ -848,6 +848,9 @@ exit;
 		if(isset($_POST['sahkoposti']) and !empty(trim($_POST['sahkoposti'])))
 	        $criteria->addCondition (" sahkoposti LIKE '%".$_POST['sahkoposti']."%' ");
 
+		if(isset($_POST['asiakasnumero']) and !empty(trim($_POST['asiakasnumero'])))
+	        $criteria->addCondition (" asiakasnumero LIKE '%".$_POST['asiakasnumero']."%' ");
+
 		$dataProvider=new CActiveDataProvider('Asiakkaat', array(
 			'criteria'=>$criteria,
 			//'pagination'=>false
