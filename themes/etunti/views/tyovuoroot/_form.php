@@ -238,7 +238,7 @@ $(".muokaValiko").click(function() {
   </div>
 
   <div class="col-sm-3">
-
+		<br><p><div id="kohde_url"></div></p>
   </div>
 <?php /*
   <div class="col-sm-3">
@@ -1139,6 +1139,7 @@ function laatikonPaivays(thisDataReturn){
   $('#Tyovuoroot_kohde').change(function(){
 
 	var thisID = $(this).val();
+	linkkiKohteeseen();
 
 	  $.ajax({
 		  url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/showohje?id='+thisID,
@@ -1162,6 +1163,16 @@ function laatikonPaivays(thisDataReturn){
 	  });
   });
 
+  linkkiKohteeseen();
+
+  function linkkiKohteeseen(){
+	var thisID = $('#Tyovuoroot_kohde option:selected').val();
+	var thisText = $('#Tyovuoroot_kohde option:selected').text();
+	var url = location.protocol + "//" + location.host + '/index.php/kohteet/update?id='+ thisID;
+	if(thisID !== '')
+	$("#kohde_url").html('<a href="'+ url +'" target="_blank">Muokkaa '+ thisText +'</a>');
+	console.log(thisID);
+  }
 
   $('#tekijanVaihdo').change(function(){
 	var thisId = $('#tekijanVaihdo option:selected').val();
