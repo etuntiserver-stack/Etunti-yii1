@@ -103,6 +103,7 @@ class AsiakkaatController extends Controller
 		{
 			Asiakkaat::model()->updateByPk($model->id, array('salasana' => $_POST['password1'], 'token' => ''));
 			$tilanne = 2;
+			$this->redirect(array('/site/index'));
 		}
 
 		$this->render('salasana', array('tilanne' => $tilanne));

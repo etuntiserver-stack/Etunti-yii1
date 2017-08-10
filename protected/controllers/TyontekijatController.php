@@ -360,16 +360,22 @@ class TyontekijatController extends Controller
 			if($model->save())
 			{
 
+
 				$d = Domainit::model()->find("domain='".Yii::app()->user->domain."'");
 				$yr =  '';
 				if(isset($d->yritys))
 				$yr =  $d->yritys;
 
+				$token = sha1(uniqid(time().$model->id, true));
+				Tyontekijat::model()->updateByPk($model->id, array('token' => $token));
+
 				$subject = 'Tervetuloa Etunnin käyttäjäksi.';
 				$message = 'Hei '.$model->tekijan_nimi.'!<br>
 				<b>Domain:</b> '.Yii::app()->user->domain.'<br>
 				<b>Käyttäjätunnus:</b> '.$model->tekijan_email.'<br>
-				<b>Salasana:</b> '.$model->salasana.'<br>
+				<b>Luo oma salasana:</b> <a href='.Yii::app()->createAbsoluteUrl('tyontekijat/salasana', array('domain' => Yii::app()->user->domain, 'token' => $token, 'id' => $model->id)).'>tästä</a><br>';
+
+				$message .= '
 <p>
 				Tervetuloa Etunnin käyttäjäksi. '.$yr.' on lisännyt sinulle profiilin Etuntiin. Lataa sovellus puhelimeesi alla olevien linkkien kautta.
 </p><br>
@@ -439,6 +445,7 @@ class TyontekijatController extends Controller
 		{
 			Tyontekijat::model()->updateByPk($model->id, array('salasana' => $_POST['password1'], 'token' => ''));
 			$tilanne = 2;
+			$this->redirect(array('/site/index'));
 		}
 
 		$this->render('salasana', array('tilanne' => $tilanne));
