@@ -174,8 +174,9 @@ public function actionPaivita_tiedot($dom)
 		// check domain is not empty -->
 
 		$criteria = new CDbCriteria();
-		$criteria->condition = " 
-			salasana!='' 
+		$criteria->condition = "
+			aktiivinen=1 AND mobiili=1 
+			AND salasana!='' 
 			AND tekijan_email = '".$_POST['email']."' 
 			AND salasana = '".$_POST['salasana']."' 
 		";
@@ -185,6 +186,8 @@ public function actionPaivita_tiedot($dom)
 			$token = $_POST['token'];
 			Tyontekijat::model()->updatebypk($ttekija->id, array('gcm_reg_id'=>$token));
         		$this->_sendResponse(200, CJSON::encode('token updated'));
+		} else {
+        		$this->_sendResponse(200, CJSON::encode('tyontekija error'));
 		}
 
 		exit;
@@ -328,8 +331,9 @@ public function actionTiedosto($dom)
 
 
 	   	$criteria = new CDbCriteria();
-	    	$criteria->condition = "  
-			salasana!='' 
+	    	$criteria->condition = "
+			aktiivinen=1 AND mobiili=1 
+			AND salasana!='' 
 			AND tekijan_email = '".$_POST['email']."' 
 			AND salasana = '".$_POST['salasana']."' 
 	    	";
@@ -508,7 +512,7 @@ public function actionImei($dom)
 	{
 		$criteria = new CDbCriteria();
 		$criteria->condition = " 
-			aktiivinen=1 
+			aktiivinen=1 AND mobiili=1
 			AND tekijan_email = '".$_POST['email']."' 
 			AND salasana = '".$_POST['salasana']."' 
 		";

@@ -480,6 +480,22 @@ class TyontekijatController extends Controller
 		$model=$this->loadModel($id);
 
 
+		// <-- Sulje mobiili
+		if(isset($_GET['sulje_mobiili']))
+		{
+				Tyontekijat::model()->updateByPk($model->id, array('mobiili' => '0'));
+				$this->redirect(array('update', 'id' => $model->id));
+		}
+		//    Sulje mobiili -->
+
+		// <-- Avaa mobiili
+		if(isset($_GET['avaa_mobiili']))
+		{
+				Tyontekijat::model()->updateByPk($model->id, array('mobiili' => 1));
+				$this->redirect(array('update', 'id' => $model->id));
+		}
+		//    Avaa mobiili -->
+
 
 		// <-- Tunnukset lahetys
 		if(isset($_GET['laheta_tunnukset']))

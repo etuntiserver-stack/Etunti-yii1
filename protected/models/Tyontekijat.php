@@ -80,7 +80,7 @@ public $tunnus;
 		return array(
 			array('tekijan_nimi, aktiivinen', 'required'),
 			array('tekijan_pankkitili, tekijan_konttori, ammattinimike, tekijan_henkilotunnus', 'netvisorCheck', 'on'=>'insert, update'),
-			array('online_varauksen_valmina, ilmoitus_merkkipaivasta_vuosi, tyontekijan_numero', 'numerical', 'integerOnly'=>true),
+			array('online_varauksen_valmina, ilmoitus_merkkipaivasta_vuosi, tyontekijan_numero, mobiili', 'numerical', 'integerOnly'=>true),
 			array('imei', 'length', 'max'=>100),
 			array('tyo_toimialue, laiten_puh, tekijan_nimi, tekijan_katuosoite, tekijan_pankkitili, salasana', 'length', 'max'=>100),
 			array('tekijan_henkilotunnus, tekijan_puh, tekijan_lanka_puh', 'length', 'max'=>20),
