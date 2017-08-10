@@ -299,7 +299,7 @@
 
 <script type="text/javascript">
 $(document).ready(function(){
-
+/*
   $(".getTekijanTiedot").click(function(e){
 	e.preventDefault();
 	var id = $(this).attr('for');
@@ -316,6 +316,7 @@ $(document).ready(function(){
 
            }
         });
+*/
   });
 
 
