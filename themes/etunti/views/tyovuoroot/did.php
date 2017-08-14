@@ -215,16 +215,21 @@ if(!isset($_POST['tulosta']))
 		$tvController = Yii::app()->createController('Tyovuoroot');
 
         	$l = $tvController[0]->tilanteet();
-		if($tvVal->status == 10)
-		$status = ' <i class="p3 fa fa-cutlery text-danger"></i>';
-		elseif($tvVal->status == 2)
-		$status = ' <i class="p3 fa fa-bus text-warning"></i>';
-		elseif($tvVal->status == 3)
-		$status = ' <i class="p3 fa fa-hourglass text-info"></i>';
-		elseif($tvVal->status == 11)
-		$status = ' <i class="p3 fa fa-clock-o text-info"></i>';
-		else
-	   	$status = ' ('.$l[$tvVal['status']].') ';
+		if($tvVal->status == 10){
+			($tvVal->piilota_mobiilista == 0)? $teksti_vari = 'text-default' : $teksti_vari = 'text-danger';
+			$status = ' <i class="p3 fa fa-cutlery '.$teksti_vari.'"></i>';
+		} elseif($tvVal->status == 2) {
+			($tvVal->piilota_mobiilista == 0)? $teksti_vari = 'text-warning' : $teksti_vari = 'text-danger';
+			$status = ' <i class="p3 fa fa-bus '.$teksti_vari.'"></i>';
+		} elseif($tvVal->status == 3) {
+			($tvVal->piilota_mobiilista == 0)? $teksti_vari = 'text-info' : $teksti_vari = 'text-danger';
+			$status = ' <i class="p3 fa fa-hourglass '.$teksti_vari.'"></i>';
+		} elseif($tvVal->status == 11) {
+			($tvVal->piilota_mobiilista == 0)? $teksti_vari = 'text-info' : $teksti_vari = 'text-danger';
+			$status = ' <i class="p3 fa fa-clock-o '.$teksti_vari.'"></i>';
+		} else {
+	   		$status = ' ('.$l[$tvVal['status']].') ';
+		}
 	   }
 
 
