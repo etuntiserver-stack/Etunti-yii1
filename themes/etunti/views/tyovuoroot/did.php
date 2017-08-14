@@ -216,7 +216,7 @@ if(!isset($_POST['tulosta']))
 
         	$l = $tvController[0]->tilanteet();
 		if($tvVal->status == 10){
-			($tvVal->piilota_mobiilista == 0)? $teksti_vari = 'text-default' : $teksti_vari = 'text-danger';
+			($tvVal->piilota_mobiilista == 0)? $teksti_vari = 'text-success' : $teksti_vari = 'text-danger';
 			$status = ' <i class="p3 fa fa-cutlery '.$teksti_vari.'"></i>';
 		} elseif($tvVal->status == 2) {
 			($tvVal->piilota_mobiilista == 0)? $teksti_vari = 'text-warning' : $teksti_vari = 'text-danger';
