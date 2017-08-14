@@ -74,7 +74,7 @@ class Lisatyotunnit extends DB2ActiveRecord
 			'pvm' => Yii::t('main', 'Päivämäärä'),
 			'syy' => Yii::t('main', 'Syy'),
 			'prosentti' => Yii::t('main', 'Prosentti'),
-			'tunnimaara' => Yii::t('main', 'Tunnimäärä'),
+			'tunnimaara' => Yii::t('main', 'Tuntimäärä'),
 		);
 	}
 
