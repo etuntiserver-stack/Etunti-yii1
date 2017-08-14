@@ -421,14 +421,16 @@ class TyovuorootController extends Controller
 		{
 
 		$kenelle = json_decode(Yii::app()->request->getPost('kenelle'));
+		$kenelle = array_filter($kenelle);
 
 		// <-- Update piilota_mobiilista nollaksi
-		$tids = implode(",", $kenelle);
+		$tids = "(tid='".implode("' OR tid='", $kenelle)."')";
 		$criteria=new CDbCriteria;
 		$criteria->condition = " 
 			YEARWEEK(DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d'))='".$_POST['year'].$_POST['week']."' 
-			AND tid IN ('$tids')
+			AND $tids
 		";
+
 		if(isset($_POST['P']))
 		$criteria->Addcondition ( " DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%w') IN (".implode(",",$_POST['P']).") ");
 
