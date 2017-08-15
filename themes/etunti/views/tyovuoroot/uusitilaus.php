@@ -79,6 +79,7 @@ $(document).ready(function(){
     <div class="section nimi ashidd">
 		<label><?php echo Yii::t('main', 'Yhteyshenkilö'); ?> <span class="required">*</span></label>
 		<input type="text" name="Asiakkaat[yhteyshenkilo]" id="Asiakas_yhteyshenkilo" class="form-control" required>
+		<div id="yhteyshenkilo_error"></div>
     </div>
     <div class="sectionfill mb5">
 		<label><?php echo Yii::t('main', 'Asiakkaan osoite'); ?> <span class="required">*</span></label>
@@ -118,6 +119,26 @@ $(document).ready(function(){
 				$('#yrityksen_nimi_error').addClass('errorMessage').show().html(data);
 			else
 				$('#yrityksen_nimi_error').removeClass('errorMessage').hide().html('');
+	   	},
+		error:function(data){
+		console.log(data);
+	    	}
+	  });
+  });
+
+  $("#Asiakas_yhteyshenkilo").blur(function() {
+    var value = $(this).val();
+	  $.ajax({
+		  url: 'is_yhteyshenkilo',
+		  data:{ yhteyshenkilo : value },
+		  type:'POST',
+		  success:function(data){
+			data = JSON.parse(data);
+			//console.log(data);
+			if( data !== '')
+				$('#yhteyshenkilo_error').addClass('errorMessage').show().html(data);
+			else
+				$('#yhteyshenkilo_error').removeClass('errorMessage').hide().html('');
 	   	},
 		error:function(data){
 		console.log(data);
