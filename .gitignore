@@ -23,6 +23,7 @@ ohjevideot
 !tiedostot/etusivu/*
 !tiedostot/trust/*
 img/*
+img
 protected/views/domainit/sql/*
 protected/runtime/*
 protected/runtime/application.log
@@ -39,3 +40,4 @@ protected/vendors/phpdocx/lib/pdf/lib/fonts/log.htm
 protected/modules/reportico/components/*
 access.log
 error.log
+robots.txt
