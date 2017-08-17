@@ -121,13 +121,13 @@ session_start();
 
   $db = 'etuntifw';
   $db_host = 'localhost';
-  $etuntifw_user = 'mulgikapsas';
-  $etuntifw_pass = 'KristinA1';
+  $etuntifw_user = 'root';
+  $etuntifw_pass = 'Etunti2017!';
 
   $db2 = $_SESSION['domain'];
   $db2_host = 'localhost';
-  $db2_user = 'mulgikapsas';
-  $db2_pass = 'KristinA1';
+  $db2_user = 'root';
+  $db2_pass = 'Etunti2017!';
   }
 
 
