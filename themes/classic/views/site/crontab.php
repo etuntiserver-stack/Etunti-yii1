@@ -30,7 +30,7 @@
 	}
 	Yii::app()->db1->setActive(true);
 
-echo Yii::app()->db1->password;
+
 	$asetukset = Asetukset::model()->findByPk(1);
 	$aikavali_halytys = 15;
 	if(!empty($asetukset->aikavali_halytys))
