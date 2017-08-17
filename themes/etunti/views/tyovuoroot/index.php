@@ -281,9 +281,9 @@ $(document).ready(function(){
 
            }
         });
-*/
-  });
 
+  });
+*/
 
 });
 </script>

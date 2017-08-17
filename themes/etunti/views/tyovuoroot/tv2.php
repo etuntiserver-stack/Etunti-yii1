@@ -316,9 +316,9 @@ $(document).ready(function(){
 
            }
         });
-*/
-  });
 
+  });
+*/
 
 });
 </script>
