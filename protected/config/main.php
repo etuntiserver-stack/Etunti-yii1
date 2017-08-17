@@ -123,6 +123,8 @@ session_start();
   $etuntifw_user = 'root';
   $etuntifw_pass = 'Etunti2017!';
 
+  $db2 = '';
+  if(isset($_SESSION['domain']))
   $db2 = $_SESSION['domain'];
   $db2_host = 'localhost';
   $db2_user = 'root';
