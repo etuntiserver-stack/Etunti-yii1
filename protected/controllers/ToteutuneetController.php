@@ -1383,9 +1383,11 @@ $xml = '
 
 		foreach($m as $v)
 		{
-			$bod .= '<p>'.
-			$v->getAttributeLabel('syy').': '.$korvArr[$v->syy].'<br>'.
-			$v->getAttributeLabel('korvaus').': '.$v->korvaus.'<br>';
+			$bod .= '<p>';
+			if(isset($korvArr[$v->syy]))
+			$v->getAttributeLabel('syy').': '.$korvArr[$v->syy].'<br>';
+
+			$bod .= $v->getAttributeLabel('korvaus').': '.$v->korvaus.'<br>';
 	
 			$bod .=  CHtml::link("Poista", '#', array(
 			  	'submit'=>array('index', "deleteKorvaus"=>true, "id"=>$v->id), 
