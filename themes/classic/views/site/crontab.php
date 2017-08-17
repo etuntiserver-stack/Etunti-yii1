@@ -25,8 +25,8 @@
       	    Yii::app()->db1->username = 'root';
             Yii::app()->db1->password = '';
     	} else {
-      	    Yii::app()->db1->username = 'mulgikapsas';
-            Yii::app()->db1->password = 'KristinA1';
+      	    Yii::app()->db1->username = 'root';
+            Yii::app()->db1->password = 'Etunti2017!';
 	}
 	Yii::app()->db1->setActive(true);
 
