@@ -328,7 +328,7 @@ class SiteController extends Controller
 			 	mkdir( Yii::app()->basePath.'/../backup/defdb', 0755, true );
 			}
 
-			exec("/usr/bin/mysqldump -u mulgikapsas -pKristinA1 defdb | gzip -c > backup/defdb/defdb.sql.gz");
+			exec("/usr/bin/mysqldump -u root -pEtunti2017! defdb | gzip -c > backup/defdb/defdb.sql.gz");
 			$defdb = file_get_contents('backup/defdb/defdb.sql.gz');
 			echo($defdb);
 		}
@@ -350,8 +350,8 @@ class SiteController extends Controller
 				$password = "";
 			} else {
 				$servername = "localhost";
-				$username = "mulgikapsas";
-				$password = "KristinA1";
+				$username = "root";
+				$password = "Etunti2017!";
 			}
 
 		$return = array(
@@ -1208,7 +1208,7 @@ $(document).ready(function(){
 		   }
 
 
-		  	    exec("/usr/bin/mysqldump -u mulgikapsas -pKristinA1 ".Yii::app()->user->domain." | gzip -c > backup/".Yii::app()->user->domain."/".date("Y-m-d")."_".Yii::app()->user->domain.".sql.gz");
+		  	    exec("/usr/bin/mysqldump -u root -pEtunti2017! ".Yii::app()->user->domain." | gzip -c > backup/".Yii::app()->user->domain."/".date("Y-m-d")."_".Yii::app()->user->domain.".sql.gz");
 
 
 		      	    //echo '<span id="uusiVarmuskopioText">uusi varmuskopio on tehty</span>';
