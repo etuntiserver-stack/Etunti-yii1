@@ -670,7 +670,8 @@ var etusivuAjax = function(){
 	
 
 	<div class="row">
-	 <div class="form-inline">
+	 <div class="col-sm-12">
+	  <div class="form-inline">
 
 		<div class="pull-right">
 			 <button class="synkronoi_gps_sijainti btn btn-primary myBgColors"><?php echo Yii::t('main', 'Synkronoi kohteet kartalle'); ?></button>
@@ -686,6 +687,7 @@ var etusivuAjax = function(){
 		<option value="kaikki"><?php echo Yii::t('main', 'Kaikki tänään'); ?></option>
 		</select>
 		<input type="hidden" id="getTila" value="<?php if(isset($_GET['tila'])) echo $_GET['tila']; ?>">
+	  </div>
 	 </div>
 	</div>
 

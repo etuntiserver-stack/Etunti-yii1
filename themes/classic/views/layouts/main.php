@@ -48,6 +48,7 @@ if( isset(Yii::app()->user->domain) )
 
 
 <?php
+/*
     if (isset($_SERVER['HTTP_USER_AGENT'])) {
     	$agent = $_SERVER['HTTP_USER_AGENT'];
     }
@@ -57,7 +58,9 @@ if( isset(Yii::app()->user->domain) )
     } else {
     echo "<link href='https://fonts.googleapis.com/css?family=Ubuntu:400,300,700' rel='stylesheet' type='text/css'>";
     }
+*/
 ?>
+	<link href='https://fonts.googleapis.com/css?family=Ubuntu:400,300,700' rel='stylesheet' type='text/css'>
 
         <link type="text/css" media="screen" rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/assets_classic/css/style.css?v=2.13"/>
         <link type="text/css" media="screen" rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/assets_classic/css/theme-responsive.css"/>
