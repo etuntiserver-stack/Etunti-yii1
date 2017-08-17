@@ -16,7 +16,7 @@
    foreach($list as $d)
    {
 
-
+	echo $d->domain.'<br>';
 
 	Yii::app()->db1->setActive(false);
 	Yii::app()->db1->connectionString = 'mysql:host=localhost;dbname='.$d->domain;
