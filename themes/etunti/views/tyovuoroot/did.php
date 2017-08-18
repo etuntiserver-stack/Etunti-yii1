@@ -299,10 +299,7 @@ if(!isset($_POST['tulosta']))
 	$bod .= '
 	<script type="text/javascript">
 	$(document).ready(function(){
-	
 		setTimeout(function(){ $("#sum_tunnit_'.$did.'_'.$tid.'").html("'.$this->sprint($sum).'"); }, 500);
-		//console.log("#sum_tunnit_'.$did.'_'.$tid.'");
-
 	});
 	</script>';
 	}
