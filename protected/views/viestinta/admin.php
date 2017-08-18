@@ -5,13 +5,13 @@
 //print_r(Yii::app()->getSession()->getSessionId());
 //phpinfo();
 
-					$ft = FirmanTiedot::model()->findByPk(1);
-					$mail = new YiiMailer();
-					$mail->setFrom($ft->sahkoposti, $ft->tyonantaja);
-					$mail->setTo('laptopsr@gmail.com');
-					$mail->setSubject('test');
-					$mail->setBody('testi');
-					$mail->send();
+	$ft = FirmanTiedot::model()->findByPk(1);
+	$mail = new YiiMailer();
+	$mail->setFrom($ft->sahkoposti, $ft->tyonantaja);
+	$mail->setTo('turkka.rantanen@etunti.fi');
+	$mail->setSubject('test');
+	$mail->setBody('testi');
+	$mail->send();
 
 
 $this->breadcrumbs=array(
