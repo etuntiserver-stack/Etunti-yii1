@@ -98,11 +98,11 @@ td .tp{
           <?php echo CHtml::button(Yii::t('main', 'Valitse kaikki'),array('target'=>'_blank','class'=>'btn btn-default valitseKaikki')); ?>&nbsp;
  	<div class="form-group">
           <?php echo CHtml::button(Yii::t('main', 'Lähetä'),array('target'=>'_blank','class'=>'btn btn-default','id'=>'lahetaKaikkille')); ?> &nbsp;
- 	</div><div class="form-group">
+ 	</div><?php /*<div class="form-group">
       	  <form action="#" target="_blank" method="POST">
            <input type="submit" name="tulosta" class="btn btn-default" value="PDF">
           </form>
-	</div>
+	</div>*/ ?>
       </div>
      </div>
     </div>
