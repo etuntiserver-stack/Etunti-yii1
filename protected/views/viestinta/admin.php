@@ -2,9 +2,17 @@
 /* @var $this ViestintaController */
 /* @var $model Viestinta */
 
-print_r(Yii::app()->getSession()->getSessionId());
+//print_r(Yii::app()->getSession()->getSessionId());
+//phpinfo();
 
-phpinfo();
+					$ft = FirmanTiedot::model()->findByPk(1);
+					$mail = new YiiMailer();
+					$mail->setFrom($ft->sahkoposti, $ft->tyonantaja);
+					$mail->setTo('laptopsr@gmail.com');
+					$mail->setSubject('test');
+					$mail->setBody('testi');
+					$mail->send();
+
 
 $this->breadcrumbs=array(
 	Yii::t('main', 'Viestintä')=>array('index'),
