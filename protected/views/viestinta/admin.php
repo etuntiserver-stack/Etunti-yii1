@@ -5,14 +5,22 @@
 //print_r(Yii::app()->getSession()->getSessionId());
 //phpinfo();
 
+if(isset($_GET['mail'])){
+	$m = $_GET['mail'];
 	$ft = FirmanTiedot::model()->findByPk(1);
 	$mail = new YiiMailer();
 	$mail->setFrom($ft->sahkoposti, $ft->tyonantaja);
-	$mail->setTo('turkka.rantanen@etunti.fi');
+	$mail->setTo($m);
 	$mail->setSubject('test');
 	$mail->setBody('testi');
-	$mail->send();
+	if($mail->send())
+	{
+		echo 'sähköposti lähetetty '.$m;
+	}
+}
 
+
+exit;
 
 $this->breadcrumbs=array(
 	Yii::t('main', 'Viestintä')=>array('index'),
