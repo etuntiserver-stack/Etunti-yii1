@@ -4168,4 +4168,13 @@ class TyovuorootController extends Controller
 	   return $site[0]->etuSukunimi($tid);
 	}
 
+	protected function peruutettuArray()
+	{
+		$list = array(
+		1 => Yii::t('main', 'Peruutettu'), 
+		2 => Yii::t('main', 'Peruutettu laskutettava')
+		);
+		return $list;
+	}
+
 }

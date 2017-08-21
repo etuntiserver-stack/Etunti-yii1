@@ -232,7 +232,7 @@ $(".muokaValiko").click(function() {
   <div class="col-sm-3">
 		<?php echo $form->labelEx($model,'peruutettu'); ?>
 		<?php
-		$list = array(1 => Yii::t('main', 'Peruutettu'), 2 => Yii::t('main', 'Peruutettu laskutettava'));
+		$list = $this->peruutettuArray();
 		echo $form->dropDownList($model,'peruutettu', $list, 
 		array('empty'=>'Valitse','class'=>'form-control'));
 		?>
