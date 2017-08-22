@@ -167,9 +167,10 @@ public function actionLogin($domain)
 				   $kohteet_lista .= '<div class="row mb10">';
 				   foreach($k as $v)
 				   {
+					// kohteet.html?id='.$v->id.'
 					$kohteet_lista .= '
 				          <div class="col-md-12" id="vinkit_painike">
-					   <a href="kohteet.html?id='.$v->id.'" class="link">
+					   <a href="#" class="link">
 				            <div class="panel bg-info light of-h mb10">
 				              <div class="pn pl20 p5">
 				                <div class="icon-bg">
