@@ -39,7 +39,7 @@ public function actionLogin($domain)
         case 'asiakkaat':
 
 		$return	= array();
-		if($this->kirjautuminen($_POST['tunnus'], $_POST['salasana']) == true)
+		if($this->kirjautuminen($domain, $_POST['tunnus'], $_POST['salasana']) == true)
 		{
 			$criteria=new CDbCriteria;
 			$criteria->condition = " 
@@ -81,7 +81,7 @@ public function actionLogin($domain)
 	{
 
 		$return = '';
-		if(isset($_POST['tunnus']) and $this->kirjautuminen($_POST['tunnus'], $_POST['salasana']) == true)
+		if(isset($_POST['tunnus']) and $this->kirjautuminen($domain, $_POST['tunnus'], $_POST['salasana']) == true)
 		{
 		   $model=Asiakkaat::model()->findByPk($_POST['asiakasID']);
 		   if(isset($model->id))
@@ -124,7 +124,7 @@ public function actionLogin($domain)
 	{
 
 		$return = '';
-		if(isset($_POST['tunnus']) and $this->kirjautuminen($_POST['tunnus'], $_POST['salasana']) == true)
+		if(isset($_POST['tunnus']) and $this->kirjautuminen($domain, $_POST['tunnus'], $_POST['salasana']) == true)
 		{
 
 		   $model=Asiakkaat::model()->findByPk($_POST['asiakasID']);
@@ -220,7 +220,7 @@ public function actionLogin($domain)
 	{
 
 		$return = '';
-		if(isset($_POST['tunnus']) and $this->kirjautuminen($_POST['tunnus'], $_POST['salasana']) == true)
+		if(isset($_POST['tunnus']) and $this->kirjautuminen($domain, $_POST['tunnus'], $_POST['salasana']) == true)
 		{
 
 		   $model=Asiakkaat::model()->findByPk($_POST['asiakasID']);
@@ -483,7 +483,7 @@ public function actionLogin($domain)
 	{
 
 		$return = '';
-		if(isset($_POST['tunnus']) and $this->kirjautuminen($_POST['tunnus'], $_POST['salasana']) == true)
+		if(isset($_POST['tunnus']) and $this->kirjautuminen($domain, $_POST['tunnus'], $_POST['salasana']) == true)
 		{
 
 		   $model=Asiakkaat::model()->findByPk($_POST['asiakasID']);
@@ -501,7 +501,7 @@ public function actionLogin($domain)
 				$this->_sendResponse(200, CJSON::encode('Ei tuloksia'));
 	}
 
-	protected function kirjautuminen($tunnus, $salasana)
+	protected function kirjautuminen($domain, $tunnus, $salasana)
 	{
 
 		$criteria=new CDbCriteria;
@@ -513,6 +513,7 @@ public function actionLogin($domain)
 		$model=Asiakkaat::model()->find($criteria);
 		if(isset($model->id))
 		{
+			Yii::app()->user->setState('domain', $domain);
 			Yii::app()->user->setState('asiakas', $model->id);
 			return true;
 		} else {
@@ -539,7 +540,7 @@ public function actionLogin($domain)
 	{
 
 		$return = '';
-		if(isset($_POST['tunnus']) and $this->kirjautuminen($_POST['tunnus'], $_POST['salasana']) == true)
+		if(isset($_POST['tunnus']) and $this->kirjautuminen($domain, $_POST['tunnus'], $_POST['salasana']) == true)
 		{
 
 		   $model=Asiakkaat::model()->findByPk($_POST['asiakasID']);
@@ -602,7 +603,7 @@ public function actionLogin($domain)
 	{
 
 		$return = '';
-		if(isset($_POST['tunnus']) and $this->kirjautuminen($_POST['tunnus'], $_POST['salasana']) == true)
+		if(isset($_POST['tunnus']) and $this->kirjautuminen($domain, $_POST['tunnus'], $_POST['salasana']) == true)
 		{
 
 		   $model=Asiakkaat::model()->findByPk($_POST['asiakasID']);
@@ -664,7 +665,7 @@ public function actionLogin($domain)
 	{
 
 		$return = '';
-		if(isset($_POST['tunnus']) and $this->kirjautuminen($_POST['tunnus'], $_POST['salasana']) == true)
+		if(isset($_POST['tunnus']) and $this->kirjautuminen($domain, $_POST['tunnus'], $_POST['salasana']) == true)
 		{
 
 		   $model=Asiakkaat::model()->findByPk($_POST['asiakasID']);
@@ -758,7 +759,7 @@ public function actionLogin($domain)
 	{
 
 		$return = '';
-		if(isset($_POST['tunnus']) and $this->kirjautuminen($_POST['tunnus'], $_POST['salasana']) == true)
+		if(isset($_POST['tunnus']) and $this->kirjautuminen($domain, $_POST['tunnus'], $_POST['salasana']) == true)
 		{
 
 		   $model=Asiakkaat::model()->findByPk($_POST['asiakasID']);

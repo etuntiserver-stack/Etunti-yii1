@@ -1,6 +1,5 @@
 $(document).ready(function(){
 
-var domain = loginArr['domain'];
 
 function getUrlVars() {
     var vars = {};

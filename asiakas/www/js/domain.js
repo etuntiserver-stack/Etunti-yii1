@@ -44,8 +44,8 @@ $(document).ready(function(){
 		$('#inputPassword').val(loginArr['salasana']);
 	});
 
-	console.log(loginArr);
-	console.log('Asiakas: '+asiakasID);
+	//console.log(loginArr);
+	//console.log('Asiakas: '+asiakasID);
 
     }
 
@@ -55,7 +55,7 @@ $(document).ready(function(){
 
     // <-- Palvelin
 
-    //var server = '../../';
+    var server = '../../';
     var url = server+"index.php/dico/asiakkaat";
     var versio = "";
     // Palvelin -->
