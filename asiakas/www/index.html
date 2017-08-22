@@ -228,7 +228,7 @@
         <div class="row mb10">
 
           <div class="col-md-12" id="tyovuorot_painike">
-	   <a href="#" class="link">
+	   <a href="index.html?sivu=tyovuorot" class="link">
             <div class="panel bg-danger light of-h mb10">
               <div class="pn pl20 p5">
                 <div class="icon-bg">
@@ -274,6 +274,7 @@
             </div>
 	   </a>
           </div>
+<!--
           <div class="col-md-12" id="alennuskoodit_painike">
 	   <a href="historia.html?tyyppi=naytaAlennuskoodit" class="link">
             <div class="panel bg-success light of-h mb10">
@@ -289,7 +290,7 @@
             </div>
 	   </a>
           </div>
-
+-->
           <div class="col-md-12" id="tilaus_painike">
 	   <a href="#" class="link to-tilaus">
             <div class="panel bg-warning light of-h mb10">
@@ -306,7 +307,23 @@
 	   </a>
           </div>
 
-          <div class="col-md-12" id="vinkit_painike">
+          <div class="col-md-12" id="vinkit_palautteet_painike">
+	   <a href="index.html?sivu=vinkit" class="link">
+            <div class="panel bg-success light of-h mb10">
+              <div class="pn pl20 p5">
+                <div class="icon-bg">
+                  <i class="fa fa-ticket"></i>
+                </div>
+                <h2 class="mt15 lh15">
+                  <b>Vinkit ja palautteet</b>
+                </h2>
+                <h5 class="text-muted-new">Anna vinkkejä ja palauttetta</h5>
+              </div>
+            </div>
+	   </a>
+          </div>
+
+          <div class="col-md-12 collapse" id="vinkit_painike">
 	   <a href="historia.html?tyyppi=naytaVinkit" class="link">
             <div class="panel bg-info light of-h mb10">
               <div class="pn pl20 p5">
@@ -321,12 +338,12 @@
             </div>
 	   </a>
           </div>
-          <div class="col-md-12" id="palautteet_painike">
+          <div class="col-md-12 collapse" id="palautteet_painike">
 	   <a href="historia.html?tyyppi=naytaPalautteet" class="link">
             <div class="panel bg-success light of-h mb10">
               <div class="pn pl20 p5">
                 <div class="icon-bg">
-                  <i class="fa fa-envelope"></i>
+                  <i class="fa fa-smile-o"></i>
                 </div>
                 <h2 class="mt15 lh15">
                   <b>Palaute</b>
@@ -337,7 +354,7 @@
 	   </a>
           </div>
           <div class="col-md-12" id="asiakirjat_painike">
-	   <a href="#" class="link">
+	   <a href="index.html?sivu=asiakirjat" class="link">
             <div class="panel bg-info light of-h mb10">
               <div class="pn pl20 p5">
                 <div class="icon-bg">
@@ -411,7 +428,7 @@
             </div>
 	   </a>
           </div>
-          <div class="col-md-12" id="laskut_painike">
+          <div class="col-md-12 collapse" id="laskut_painike">
 	   <a href="historia.html?tyyppi=naytaLaskut" class="link">
             <div class="panel bg-warning light of-h mb10">
               <div class="pn pl20 p5">
@@ -439,21 +456,18 @@
 
     <!-- footer -->
     <div class="nav navbar-fixed-bottom navbar-shadow myBgColors">
-     <div class="" id="footer-body">
+     <div class="container" id="footer-body">
       <center>
-	<ul class="list-inline">
+	
+	<div class="row">
+	   <li class="col-xs-2"><a class="myBgColors" href="index.html"><h2 class="fa fa-home"></h2></a></li>
+	   <li class="col-xs-2"><a class="myBgColors" href="historia.html?tyyppi=naytaTyovuorot"><h2 class="fa fa-calendar"></h2></a></li>
+	   <li class="col-xs-2"><a class="myBgColors" href="historia.html?tyyppi=naytaToteutuneetTunnit"><h2 class="fa fa-check-square"></h2></a></li>
+	   <li class="col-xs-2"><a class="myBgColors" href="historia.html?tyyppi=naytaVinkit"><h2 class="fa fa-thumbs-o-up"></h2></a></li>
+	   <li class="col-xs-2"><a class="myBgColors" href="historia.html?tyyppi=naytaPalautteet"><h2 class="fa fa-smile-o"></h2></a></li>
+	   <li class="col-xs-2"><a class="myBgColors" href="index.html?sivu=asiakirjat"><h2 class="fa fa-file-text-o"></h2></a></li>
+	</div>
 
-   <li><a class="myBgColors" href="historia.html?tyyppi=naytaTyovuorot"><h2 class="fa fa-calendar"></h2></a></li>
-   <li><a class="myBgColors" href="historia.html?tyyppi=naytaToteutuneetTunnit"><h2 class="fa fa-check-square"></h2></a></li>
-   <li><a class="myBgColors" href="historia.html?tyyppi=naytaVinkit"><h2 class="fa fa-thumbs-o-up"></h2></a></li>
-   <li><a class="myBgColors" href="historia.html?tyyppi=naytaPalautteet"><h2 class="fa fa-smile-o"></h2></a></li>
-<!--   <li><a class="myBgColors" href="historia.html?tyyppi=naytaLaskut"><h2 class="fa fa-credit-card"></h2></a></li>
-   <li><a class="myBgColors" href="tarjoukset.html"><h2 class="fa fa-calculator"></h2></a></li>
--->
-   <li><a class="myBgColors" href="#" id="asiakirjat"><h2 class="fa fa-file-text-o"></h2></a></li>
-	 
-	 
-	</ul>
       </center>
      </div>
     </div>
@@ -465,6 +479,30 @@
   <script type="text/javascript">
   jQuery(document).ready(function() {
 
+	function getUrlVars() {
+	    var vars = {};
+	    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi,    
+	    function(m,key,value) {
+	      vars[key] = value;
+	    });
+	    return vars;
+	}
+
+	var sivu = '';
+	if(getUrlVars()["sivu"])
+		sivu = getUrlVars()["sivu"];
+
+	if(sivu == 'asiakirjat'){
+		asiakirjat();
+	}
+	if(sivu == 'vinkit'){
+		vinkit();
+	}
+	if(sivu == 'tyovuorot'){
+		tyovuorot();
+	}
+
+
 	if(localStorage.getItem('login_paketti'))
 	{
 		paketti = localStorage.getItem('login_paketti').split(',');
@@ -474,25 +512,43 @@
 		}
 	}
 
-	$("#asiakirjat, #asiakirjat_painike").click(function(e){
-		e.preventDefault();
+	function asiakirjat(){
 		$("#tyovuorot_painike").hide(370);
 		$("#tilaus_painike").hide(370);
 		$("#vinkit_painike").hide(370);
 		$("#palautteet_painike").hide(370);
-		//$("#laskut_painike").hide(370);
 		$("#asiakirjat_painike").hide(370);
 
 		$("#tarjoukset_painike").show(370);
 		$("#sopimukset_painike").show(370);
 		$("#tyonkuvaukset_painike").show(370);
 		$("#muut_tiedostot_painike").show(370);
+		$("#laskut_painike").show(370);
+		$("#vinkit_palautteet_painike").hide(370);
 
 		$('body').scrollTop(0);
-	});
+	}
 
-	$("#tyovuorot_painike").click(function(e){
-		e.preventDefault();
+	function vinkit(){
+
+		$("#tyovuorot_painike").hide(370);
+		$("#tilaus_painike").hide(370);
+		$("#laskut_painike").hide(370);
+		$("#asiakirjat_painike").hide(370);
+		$("#tarjoukset_painike").hide(370);
+		$("#sopimukset_painike").hide(370);
+		$("#tyonkuvaukset_painike").hide(370);
+		$("#muut_tiedostot_painike").hide(370);
+		$("#vinkit_palautteet_painike").hide(370);
+
+		$("#vinkit_painike").show(370);
+		$("#palautteet_painike").show(370);
+
+		$('body').scrollTop(0);
+	}
+
+	function tyovuorot(){
+
 		$("#tyovuorot_painike").hide(370);
 		$("#tilaus_painike").hide(370);
 		$("#vinkit_painike").hide(370);
@@ -500,12 +556,13 @@
 		$("#laskut_painike").hide(370);
 		$("#asiakirjat_painike").hide(370);
 		$("#alennuskoodit_painike").hide(370);
+		$("#vinkit_palautteet_painike").hide(370);
 
 		$("#tulevat_painike").show(370);
 		$("#toteutuneet_painike").show(370);
 
 		$('body').scrollTop(0);
-	});
+	}
 
 
   });

@@ -29,5 +29,6 @@
 	line-height: 80%;
 	font-size: 80%;
 }
-#footer-body h2{ font-size: 240%; margin-right: 15px; }
-#footer-body h2:hover{ clear: both; }
+/* #footer-body h2{ font-size: 240%; margin-right: 15px; } */
+#footer-body h2{ font-size: 220%; }
+#footer-body a:hover{ color: none; }
