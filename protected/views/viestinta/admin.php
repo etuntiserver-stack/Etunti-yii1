@@ -15,7 +15,7 @@ if(isset($_GET['mail'])){
 	$mail->setBody('testi');
 	if($mail->send())
 	{
-		echo 'sähköposti lähetetty '.$m;
+		echo 'sähköposti lähetetty ok '.$m;
 	}
 }
 
