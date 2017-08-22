@@ -300,6 +300,8 @@ if($ismobile and !empty($model->puh_nro)) {
 $(document).ready(function(){
 
 
+$("input").attr('disabled', 'yes');
+
 // Send form by ajax
 $('#Kohteet_asiakas_id').change(function(){
 
