@@ -3226,7 +3226,7 @@ class TyovuorootController extends Controller
 					$ft = FirmanTiedot::model()->findByPk(1);
 					$mail = new YiiMailer();
 					//$mail->clearLayout();//if layout is already set in config
-					$mail->setFrom($ft->sahkoposti, $ft->tyonantaja);
+					$mail->setFrom('no-reply@etunti.fi');
 					$mail->setTo($asiakkaat->sahkoposti);
 					$mail->setSubject($subject);
 					$mail->setBody($message);
