@@ -38,7 +38,7 @@
 
 
   <!-- Start: Header -->
-    <header class="navbar navbar-fixed-top navbar-shadow">
+    <header class="navbar navbar-fixed-top navbar-shadow myBgColors">
 
       <div class="navbar-branding">
         <a class="logo" href="index.html">
@@ -66,7 +66,8 @@
         </li>
 	-->
 
-        <li class="dropdown menu-merge" data-toggle="tooltip" data-placement="bottom" title="Valitse värit">
+
+        <li class="dropdown menu-merge hidden" data-toggle="tooltip" data-placement="bottom" title="Valitse värit">
           <a class="dropdown-toggle" data-toggle="dropdown" href="#">
              <span class="fa fa-eyedropper"></span> 
 
@@ -140,8 +141,6 @@
      </li>
 
 
-
-
         <li class="dropdown menu-merge" id="kirjauduOikealla">
           <a href="#" data-toggle="dropdown"> 
                  <span id="asiakasNimi"></span> </a>
@@ -162,7 +161,7 @@
             </li>
           </ul>
         </li>
-        <li class="powerButton"><a href="#" id="exitPainike" onclick="exitFromApp()"><span  style="font-size: 180%" class="fa fa-power-off"></span></a></li>
+        <li class="powerButton"><a href="#" id="exitPainike" onclick="exitFromApp()"><span  class="fa fa-power-off"></span></a></li>
         <li id="toggle_sidemenu_t">  
         		<span class="fa fa-caret-up"></span>
         </li>
@@ -236,7 +235,7 @@
                   <i class="fa fa-calendar"></i>
                 </div>
                 <h2 class="mt15 lh15">
-                  <b>Työvuorot</b>
+                  <b>Työvuorot ja tunnit</b>
                 </h2>
                 <h5 class="text-muted-new">Tarkasta menneet ja tulevat työvuorot.</h5>
               </div>
@@ -245,10 +244,10 @@
           </div>
           <div class="col-md-12 collapse" id="tulevat_painike">
 	   <a href="historia.html?tyyppi=naytaTyovuorot" class="link">
-            <div class="panel bg-alert light of-h mb10">
+            <div class="panel bg-danger light of-h mb10">
               <div class="pn pl20 p5">
                 <div class="icon-bg">
-                  <i class="fa fa-check-square"></i>
+                  <i class="fa fa-calendar"></i>
                 </div>
 
                 <h2 class="mt15 lh15">
@@ -280,7 +279,7 @@
             <div class="panel bg-success light of-h mb10">
               <div class="pn pl20 p5">
                 <div class="icon-bg">
-                  <i class="fa fa-envelope"></i>
+                  <i class="fa fa-ticket"></i>
                 </div>
                 <h2 class="mt15 lh15">
                   <b>Alennuskoodit</b>
@@ -312,7 +311,7 @@
             <div class="panel bg-info light of-h mb10">
               <div class="pn pl20 p5">
                 <div class="icon-bg">
-                  <i class="fa fa-comments"></i>
+                  <i class="fa fa-thumbs-o-up"></i>
                 </div>
                 <h2 class="mt15 lh15">
                   <b>Vinkit</b>
@@ -443,14 +442,15 @@
      <div class="" id="footer-body">
       <center>
 	<ul class="list-inline">
-	 <li><a class="myBgColors" href="index.html"><h2 class="fa fa-home" style="font-size: 180%"></h2></a></li>
-   <li><a class="myBgColors" href="historia.html?tyyppi=naytaTyovuorot"><h2 class="fa fa-calendar" style="font-size: 180%"></h2></a></li>
-   <li><a class="myBgColors" href="historia.html?tyyppi=naytaToteutuneetTunnit"><h2 class="fa fa-check-square" style="font-size: 180%"></h2></a></li>
-   <li><a class="myBgColors" href="historia.html?tyyppi=naytaVinkit"><h2 class="fa fa-comments" style="font-size: 180%"></h2></a></li>
-   <li><a class="myBgColors" href="historia.html?tyyppi=naytaPalautteet"><h2 class="fa fa-smile-o" style="font-size: 180%"></h2></a></li>
-   <li><a class="myBgColors" href="historia.html?tyyppi=naytaLaskut"><h2 class="fa fa-credit-card" style="font-size: 180%"></h2></a></li>
-   <li><a class="myBgColors" href="tarjoukset.html"><h2 class="fa fa-calculator" style="font-size: 180%"></h2></a></li>
-   <li><a class="myBgColors" href="sopimukset.html"><h2 class="fa fa-file-text-o" style="font-size: 180%"></h2></a></li>
+
+   <li><a class="myBgColors" href="historia.html?tyyppi=naytaTyovuorot"><h2 class="fa fa-calendar"></h2></a></li>
+   <li><a class="myBgColors" href="historia.html?tyyppi=naytaToteutuneetTunnit"><h2 class="fa fa-check-square"></h2></a></li>
+   <li><a class="myBgColors" href="historia.html?tyyppi=naytaVinkit"><h2 class="fa fa-thumbs-o-up"></h2></a></li>
+   <li><a class="myBgColors" href="historia.html?tyyppi=naytaPalautteet"><h2 class="fa fa-smile-o"></h2></a></li>
+<!--   <li><a class="myBgColors" href="historia.html?tyyppi=naytaLaskut"><h2 class="fa fa-credit-card"></h2></a></li>
+   <li><a class="myBgColors" href="tarjoukset.html"><h2 class="fa fa-calculator"></h2></a></li>
+-->
+   <li><a class="myBgColors" href="#" id="asiakirjat"><h2 class="fa fa-file-text-o"></h2></a></li>
 	 
 	 
 	</ul>
@@ -474,14 +474,13 @@
 		}
 	}
 
-
-	$("#asiakirjat_painike").click(function(e){
+	$("#asiakirjat, #asiakirjat_painike").click(function(e){
 		e.preventDefault();
 		$("#tyovuorot_painike").hide(370);
 		$("#tilaus_painike").hide(370);
 		$("#vinkit_painike").hide(370);
 		$("#palautteet_painike").hide(370);
-		$("#laskut_painike").hide(370);
+		//$("#laskut_painike").hide(370);
 		$("#asiakirjat_painike").hide(370);
 
 		$("#tarjoukset_painike").show(370);
@@ -500,12 +499,15 @@
 		$("#palautteet_painike").hide(370);
 		$("#laskut_painike").hide(370);
 		$("#asiakirjat_painike").hide(370);
+		$("#alennuskoodit_painike").hide(370);
 
 		$("#tulevat_painike").show(370);
 		$("#toteutuneet_painike").show(370);
 
 		$('body').scrollTop(0);
 	});
+
+
   });
 
 
@@ -559,6 +561,8 @@
     	   }
         });
     //     check palautteet -->
+
+
 
   });
   </script>
