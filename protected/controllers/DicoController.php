@@ -119,6 +119,103 @@ public function actionLogin($domain)
 	    
 	}
 
+
+	public function actionKohteet($domain)
+	{
+
+		$return = '';
+		if(isset($_POST['tunnus']) and $this->kirjautuminen($_POST['tunnus'], $_POST['salasana']) == true)
+		{
+
+		   $model=Asiakkaat::model()->findByPk($_POST['asiakasID']);
+		   if(isset($model->id))
+		   {
+
+			// <-- submit form
+			if(isset($_POST['Kohteet']))
+			{
+
+				$mk = Kohteet::model()->findByPk($_POST['id']);
+				$mk->attributes=$_POST['Kohteet'];
+				if($mk->save())
+				{
+					$this->_sendResponse(200, CJSON::encode(array('kohteet_lista'=>'tallennettu')));
+					exit;
+				}
+			}
+			//     submit form -->
+
+			// <-- showlist
+			if(isset($_POST['showlist']))
+			{
+				$criteria=new CDbCriteria;
+				$criteria->condition = " 
+					aktiivinen='1' 
+					AND asiakas_id='".$model->id."'
+				";
+				if(isset($_POST['id']))
+				$criteria->addCondition(" id='".$_POST['id']."' "); 
+
+				$k=Kohteet::model()->findAll($criteria);
+				$kohteet_lista = '';
+
+				if(!isset($_POST['id']))
+				$kohteet_lista .= '<legend><h1>'.Yii::t('main', 'Omat kohteet').'</h1></legend>';
+
+				if(isset($k[0]))
+				{
+				   $kohteet_lista .= '<div class="row mb10">';
+				   foreach($k as $v)
+				   {
+					$kohteet_lista .= '
+				          <div class="col-md-12" id="vinkit_painike">
+					   <a href="kohteet.html?id='.$v->id.'" class="link">
+				            <div class="panel bg-info light of-h mb10">
+				              <div class="pn pl20 p5">
+				                <div class="icon-bg">
+				                  <i class="fa fa-home"></i>
+				                </div>
+				                <h2 class="mt15 lh15">
+				                  <b>'.$v->osoite.'</b>
+				                </h2>
+				                <h5 class="text-muted">'.$v->kaupunki.' '.$v->pnumero.'</h5>
+				              </div>
+				            </div>
+					   </a>
+				          </div>
+					';
+				   }
+				   $kohteet_lista .= '</div>';
+
+
+				   if(isset($_POST['id']))
+				   {
+					$kohteet_lista .= $this->renderPartial('//kohteet/form_asiakas', array('model'=>Kohteet::model()->findByPk($_POST['id'])), true);
+				   }
+
+				}
+
+
+				$this->_sendResponse(200, CJSON::encode(array('kohteet_lista'=>$kohteet_lista)));
+				exit;
+			}
+			//     showlist -->
+
+		   }
+
+		}
+
+
+	}
+
+
+	protected function etuSukunimi($tid)
+	{
+	   $site = Yii::app()->createController('Site');
+	   return $site[0]->etuSukunimi($tid);
+	}
+
+
 	public function actionHistoria($domain)
 	{
 
