@@ -189,11 +189,16 @@ if(!isset($_POST['tulosta']))
 
 	   // peruutettu
 	   $peruutettu = '';
-	   if($tvVal->peruutettu == 1){
-		$peruutettu = '<p><span class="text-danger">'. $this->peruutettuArray()[1] .'</span></p>';
+
+	   if($tvVal->peruutettu != 0){
+		   $tv_controller = Yii::app()->createController('Tyovuoroot');
+	   }	
+
+	   if($tvVal->peruutettu == 1 and isset($tv_controller)){
+		$peruutettu = '<p><span class="text-danger">'. $tv_controller[0]->peruutettuArray()[1] .'</span></p>';
 	   }
-	   if($tvVal->peruutettu == 2){
-		$peruutettu = '<p><span class="text-danger">'. $this->peruutettuArray()[2] .'</span></p>';
+	   if($tvVal->peruutettu == 2 and isset($tv_controller)){
+		$peruutettu = '<p><span class="text-danger">'. $tv_controller[0]->peruutettuArray()[2] .'</span></p>';
 	   }
 
 	   // Tyopari
