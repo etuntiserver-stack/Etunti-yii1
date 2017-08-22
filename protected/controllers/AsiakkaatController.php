@@ -182,7 +182,7 @@ class AsiakkaatController extends Controller
 			$ft = FirmanTiedot::model()->findbypk(1);
 			$mail = new YiiMailer();
 			//$mail->clearLayout();//if layout is already set in config
-			$mail->setFrom($ft->sahkoposti, $ft->tyonantaja);
+			$mail->setFrom('no-reply@etunti.fi');
 			$mail->setTo($ft->sahkoposti);
 			$mail->setSubject($subject);
 			$mail->setBody($bd);
@@ -454,7 +454,7 @@ class AsiakkaatController extends Controller
 
 				$ft = FirmanTiedot::model()->findByPk(1);
 				$mail = new YiiMailer();
-				$mail->setFrom($ft->sahkoposti, $ft->tyonantaja);
+				$mail->setFrom('no-reply@etunti.fi');
 				$mail->setTo($model->sahkoposti);
 				$mail->setSubject($subject);
 				$mail->setBody($message);
@@ -1477,7 +1477,7 @@ exit;
 				{
 				$subject = Yii::t('main', 'Palaute'). ': '.$nimi;
 				$mail = new YiiMailer();
-				$mail->setFrom($ft->sahkoposti, $ft->tyonantaja);
+				$mail->setFrom('no-reply@etunti.fi');
 				$mail->setTo($ft->sahkoposti);
 				$mail->setSubject($subject);
 				$mail->setBody($message);
@@ -1498,7 +1498,7 @@ exit;
 				{
 				$subject = Yii::t('main', 'Palaute'). ': '.$nimi;
 				$mail = new YiiMailer();
-				$mail->setFrom($ft->sahkoposti, $ft->tyonantaja);
+				$mail->setFrom('no-reply@etunti.fi');
 				$mail->setTo($as->sahkoposti);
 				$mail->setSubject($subject);
 				$mail->setBody($message);

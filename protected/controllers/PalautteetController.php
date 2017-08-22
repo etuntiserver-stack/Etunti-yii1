@@ -127,7 +127,7 @@ class PalautteetController extends Controller
 				{
 				$subject = Yii::t('main', 'Palaute'). ': '.$nimi;
 				$mail = new YiiMailer();
-				$mail->setFrom($ft->sahkoposti, $ft->tyonantaja);
+				$mail->setFrom('no-reply@etunti.fi');
 				$mail->setTo($ft->sahkoposti);
 				$mail->setSubject($subject);
 				$mail->setBody($message);
@@ -148,7 +148,7 @@ class PalautteetController extends Controller
 				{
 				$subject = Yii::t('main', 'Palaute'). ': '.$nimi;
 				$mail = new YiiMailer();
-				$mail->setFrom($ft->sahkoposti, $ft->tyonantaja);
+				$mail->setFrom('no-reply@etunti.fi');
 				$mail->setTo($as->sahkoposti);
 				$mail->setSubject($subject);
 				$mail->setBody($message);
@@ -224,7 +224,7 @@ class PalautteetController extends Controller
 							{
 							$subject = Yii::t('main', 'Palaute'). ': '.$nimi;
 							$mail = new YiiMailer();
-							$mail->setFrom($ft->sahkoposti, $ft->tyonantaja);
+							$mail->setFrom('no-reply@etunti.fi');
 							$mail->setTo($ft->sahkoposti);
 							$mail->setSubject($subject);
 							$mail->setBody($message);
@@ -283,7 +283,7 @@ class PalautteetController extends Controller
 				{
 				$subject = Yii::t('main', 'Palaute'). ': '.$nimi;
 				$mail = new YiiMailer();
-				$mail->setFrom($ft->sahkoposti, $ft->tyonantaja);
+				$mail->setFrom('no-reply@etunti.fi');
 				$mail->setTo($ft->sahkoposti);
 				$mail->setSubject($subject);
 				$mail->setBody($message);

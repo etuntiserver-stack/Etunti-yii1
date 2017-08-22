@@ -205,7 +205,7 @@ $randstring = generateRandomString();
 		$subject = Yii::t('main', 'Sopimus'). ', '.$ft->tyonantaja;
 		$mail = new YiiMailer();
 		//$mail->clearLayout();//if layout is already set in config
-		$mail->setFrom($ft->sahkoposti, $ft->tyonantaja);
+		$mail->setFrom('no-reply@etunti.fi');
 		$mail->setTo($crm->asiakkaan_sahkoposti);
 		$mail->setSubject($subject);
 		$mail->setBody($message);

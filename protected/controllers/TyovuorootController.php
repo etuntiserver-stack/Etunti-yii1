@@ -376,7 +376,7 @@ class TyovuorootController extends Controller
 
 		$mail = new YiiMailer();
 		//$mail->clearLayout();//if layout is already set in config
-		$mail->setFrom($ft->sahkoposti, $ft->tyonantaja);
+		$mail->setFrom('no-reply@etunti.fi');
 		$mail->setTo($saaja);
 		$mail->setSubject($subject);
 		$mail->setBody($message);
@@ -493,7 +493,7 @@ class TyovuorootController extends Controller
 		  $ft = FirmanTiedot::model()->findbypk(1);
 		  $mail = new YiiMailer();
 		  //$mail->clearLayout();//if layout is already set in config
-		  $mail->setFrom($ft->sahkoposti, $ft->tyonantaja);
+		  $mail->setFrom('no-reply@etunti.fi');
 		  $mail->setTo($tt->tekijan_email);
 		  $mail->setSubject($subject);
 		  $mail->setBody($message);
@@ -554,7 +554,7 @@ class TyovuorootController extends Controller
 
 		  $mail = new YiiMailer();
 		  //$mail->clearLayout();//if layout is already set in config
-		  $mail->setFrom($ft->sahkoposti, $ft->tyonantaja);
+		  $mail->setFrom('no-reply@etunti.fi');
 		  $mail->setTo($saaja);
 		  $mail->setSubject($subject);
 		  $mail->setBody($message);
