@@ -1,5 +1,7 @@
 $(document).ready(function(){
 
+var domain = loginArr['domain'];
+
 function getUrlVars() {
     var vars = {};
     var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi,    
