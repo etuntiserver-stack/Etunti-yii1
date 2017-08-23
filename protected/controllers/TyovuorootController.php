@@ -3178,6 +3178,7 @@ class TyovuorootController extends Controller
 				$m->kohde = $kohteet->id;
 				$m->pvm = date("d.m.Y",strtotime($_POST['Tyovuoroot']['pvm']));
 				$m->tid=$tid;
+				$m->status=3;
 				if($m->save())
 				{
 					$luotu[$m->id] = $m->tid;
