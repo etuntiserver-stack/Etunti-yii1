@@ -19,9 +19,9 @@
 		$free_text = $k->osoite;
 		$a = Asiakkaat::model()->findbypk($k->asiakas_id);
 	}
-	if(isset($a->id))
+	if(isset($k->id))
 	{
-		$free_text = $a->osoite;
+		$free_text = $k->osoite;
 	}
 
 	if(isset($k->id) and $k->alv != 0)
