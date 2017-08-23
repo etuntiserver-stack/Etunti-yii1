@@ -3232,8 +3232,8 @@ class TyovuorootController extends Controller
 					$mail->setBody($message);
 
 					foreach(array_reverse(glob(Yii::app()->baseUrl.'tiedostot/firma/'.Yii::app()->user->domain.'/toimitusehdot*')) as $file) {
-						$mail->setAttachment('../../'.$file);
-						break;
+						$mail->setAttachment($file);
+						//break;
 					}
 
 					if($mail->send())
