@@ -3230,6 +3230,12 @@ class TyovuorootController extends Controller
 					$mail->setTo($asiakkaat->sahkoposti);
 					$mail->setSubject($subject);
 					$mail->setBody($message);
+
+					foreach(array_reverse(glob(Yii::app()->baseUrl.'tiedostot/firma/'.Yii::app()->user->domain.'/toimitusehdot*')) as $file) {
+						$mail->setAttachment('../../'.$file);
+						break;
+					}
+
 					if($mail->send())
 					{
 
