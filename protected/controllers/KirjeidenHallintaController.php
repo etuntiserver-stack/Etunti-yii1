@@ -111,7 +111,7 @@ class KirjeidenHallintaController extends Controller
 
 		$subject = Yii::t('main', 'Kirje'). ', '.$ft->tyonantaja;
 		$mail = new YiiMailer();
-		$mail->setFrom($ft->sahkoposti, $ft->tyonantaja);
+		$mail->setFrom('no-reply@etunti.fi');
 		$mail->setTo($as->sahkoposti);
 		$mail->setSubject($subject);
 		$mail->setBody($message);

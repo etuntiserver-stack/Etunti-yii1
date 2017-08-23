@@ -833,7 +833,7 @@ class SiteController extends Controller
 
 				$subject = Yii::t('main', 'Uusi salasana'). ' '.$model->adm_nimi;
 				$mail = new YiiMailer();
-				$mail->setFrom($ft->sahkoposti, $ft->tyonantaja);
+				$mail->setFrom('no-reply@etunti.fi');
 				$mail->setTo($model->adm_email);
 				$mail->setSubject($subject);
 				$mail->setBody($message);
@@ -892,7 +892,7 @@ class SiteController extends Controller
 			{			
 	
 			$mail = new YiiMailer();
-			$mail->setFrom($ft->sahkoposti, $ft->tyonantaja);
+			$mail->setFrom('no-reply@etunti.fi');
 			$mail->setTo($sahkoposti);
 			$mail->setSubject(Yii::t('main', 'ETUNTI.FI'));
 			$mail->setBody($message);

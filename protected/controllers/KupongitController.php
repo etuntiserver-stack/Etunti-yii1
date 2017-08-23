@@ -106,7 +106,7 @@ class KupongitController extends Controller
 				{
 				$subject = Yii::t('main', 'Uusi alennuskoodi'). ': '.$nimi;
 				$mail = new YiiMailer();
-				$mail->setFrom($ft->sahkoposti, $ft->tyonantaja);
+				$mail->setFrom('no-reply@etunti.fi');
 				$mail->setTo($ft->sahkoposti);
 				$mail->setSubject($subject);
 				$mail->setBody($message);

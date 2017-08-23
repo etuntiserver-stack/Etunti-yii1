@@ -394,7 +394,7 @@ class TyontekijatController extends Controller
 
 				$ft = FirmanTiedot::model()->findByPk(1);
 				$mail = new YiiMailer();
-				$mail->setFrom($ft->sahkoposti, $ft->tyonantaja);
+				$mail->setFrom('no-reply@etunti.fi');
 				$mail->setTo($model->tekijan_email);
 				$mail->setSubject($subject);
 				$mail->setBody($message);
@@ -517,7 +517,7 @@ class TyontekijatController extends Controller
 
 				$ft = FirmanTiedot::model()->findByPk(1);
 				$mail = new YiiMailer();
-				$mail->setFrom($ft->sahkoposti, $ft->tyonantaja);
+				$mail->setFrom('no-reply@etunti.fi');
 				$mail->setTo($model->tekijan_email);
 				$mail->setSubject($subject);
 				$mail->setBody($message);

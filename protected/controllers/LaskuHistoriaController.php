@@ -395,7 +395,7 @@ class LaskuHistoriaController extends Controller
 		$saaja = $_POST['sahkoposti'];
 		$subject = Yii::t('main', 'Laskut'). ' '.$from.' - '.$to;
 		$mail = new YiiMailer();
-		$mail->setFrom($ft->sahkoposti, $ft->tyonantaja);
+		$mail->setFrom('no-reply@etunti.fi');
 		$mail->setTo($saaja);
 		$mail->setSubject($subject);
 		$mail->setBody($message);

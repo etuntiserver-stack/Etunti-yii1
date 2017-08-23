@@ -111,7 +111,7 @@ class AdministratorsController extends Controller
 				Etunti<br>';
 				$subject = Yii::t('main', 'Tervetuloa Etunnin käyttäjäksi.');
 				$mail = new YiiMailer();
-				$mail->setFrom($ft->sahkoposti, $ft->tyonantaja);
+				$mail->setFrom('no-reply@etunti.fi');
 				$mail->setTo($model->adm_email);
 				$mail->setSubject($subject);
 				$mail->setBody($message);

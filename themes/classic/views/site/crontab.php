@@ -206,7 +206,7 @@
 						{
 							$subject = Yii::t('main', 'Ilmoitus avoimista kohteesta '.date("d.m.Y H:i"));
 							$mail = new YiiMailer();
-							$mail->setFrom($ft->sahkoposti, $ft->tyonantaja);
+							$mail->setFrom('no-reply@etunti.fi');
 							$mail->setTo($sahkopostiArray);
 							$mail->setSubject($subject);
 							$mail->setBody($mailMessage);
@@ -349,7 +349,7 @@
 						{
 							$subject = Yii::t('main', 'Ilmoitus myöhästyneistä kohteesta '.date("d.m.Y H:i"));
 							$mail = new YiiMailer();
-							$mail->setFrom($ft->sahkoposti, $ft->tyonantaja);
+							$mail->setFrom('no-reply@etunti.fi');
 							$mail->setTo($sahkopostiArray);
 							$mail->setSubject();
 							$mail->setBody($mailMessage);
@@ -480,7 +480,7 @@
 						{
 							$subject = Yii::t('main', 'Ilmoitus merkkipäivästä '.date("d.m.Y H:i"));
 							$mail = new YiiMailer();
-							$mail->setFrom($ft->sahkoposti, $ft->tyonantaja);
+							$mail->setFrom('no-reply@etunti.fi');
 							$mail->setTo($sahkopostiArray);
 							$mail->setSubject($subject);
 							$mail->setBody($mailMessage);
@@ -590,7 +590,7 @@
 			   {		
 				$subject = Yii::t('main', 'lmoitus toistuvien työvuorojen päättymisestä');
 				$mail = new YiiMailer();
-				$mail->setFrom($ft->sahkoposti, $ft->tyonantaja);
+				$mail->setFrom('no-reply@etunti.fi');
 				$mail->setTo($sahkoposti);
 				$mail->setSubject($subject);
 				$mail->setBody($message);
