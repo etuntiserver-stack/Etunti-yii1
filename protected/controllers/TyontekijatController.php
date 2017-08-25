@@ -657,22 +657,22 @@ class TyontekijatController extends Controller
 		$criteria = $site[0]->etuSukunimiCriteria($criteria);
 		//     Return order etu ja sukunimella -->
 
-		if(isset($_POST['aktiivinen']) and $_POST['aktiivinen'] != 'kaikki')
-	        $criteria->addCondition (" aktiivinen ='".(int)$_POST['aktiivinen']."' ");
+		if(isset($_GET['aktiivinen']) and $_GET['aktiivinen'] != 'kaikki')
+	        $criteria->addCondition (" aktiivinen ='".(int)$_GET['aktiivinen']."' ");
 		else
 	        $criteria->addCondition (" aktiivinen=1 ");
 
-		if(isset($_POST['tekijan_katuosoite']) and !empty($_POST['tekijan_katuosoite']))
-	        $criteria->addCondition (" tekijan_katuosoite LIKE '%".$_POST['tekijan_katuosoite']."%' ");
+		if(isset($_GET['tekijan_katuosoite']) and !empty($_GET['tekijan_katuosoite']))
+	        $criteria->addCondition (" tekijan_katuosoite LIKE '%".$_GET['tekijan_katuosoite']."%' ");
 
-		if(isset($_POST['tekijan_nimi']) and !empty(trim($_POST['tekijan_nimi'])))
-	        $criteria->addCondition (" tekijan_nimi LIKE '%".$_POST['tekijan_nimi']."%' OR sukunimi LIKE '%".$_POST['tekijan_nimi']."%' ");
+		if(isset($_GET['tekijan_nimi']) and !empty(trim($_GET['tekijan_nimi'])))
+	        $criteria->addCondition (" tekijan_nimi LIKE '%".$_GET['tekijan_nimi']."%' OR sukunimi LIKE '%".$_GET['tekijan_nimi']."%' ");
 
-		if(isset($_POST['tekijan_puh']) and !empty(trim($_POST['tekijan_puh'])))
-	        $criteria->addCondition (" laiten_puh LIKE '%".$_POST['tekijan_puh']."%' OR tekijan_puh LIKE '%".$_POST['tekijan_puh']."%' ");
+		if(isset($_GET['tekijan_puh']) and !empty(trim($_GET['tekijan_puh'])))
+	        $criteria->addCondition (" laiten_puh LIKE '%".$_GET['tekijan_puh']."%' OR tekijan_puh LIKE '%".$_GET['tekijan_puh']."%' ");
 
-		if(isset($_POST['tekijan_email']) and !empty(trim($_POST['tekijan_email'])))
-	        $criteria->addCondition (" tekijan_email LIKE '%".$_POST['tekijan_email']."%' ");
+		if(isset($_GET['tekijan_email']) and !empty(trim($_GET['tekijan_email'])))
+	        $criteria->addCondition (" tekijan_email LIKE '%".$_GET['tekijan_email']."%' ");
 
 		$dataProvider=new CActiveDataProvider('Tyontekijat', array(
 			'criteria'=>$criteria,

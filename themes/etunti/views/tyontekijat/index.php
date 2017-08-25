@@ -14,7 +14,7 @@
 
 
 
-   	    <form id="mobForm" action="#" class="form-inline" method="POST">
+   	    <form id="mobForm" action="#" class="form-inline" method="GET">
    	    <input type="hidden" name="mob_hae">
 
             <div class="admin-form">
@@ -37,8 +37,8 @@
 		   $tal[$exV[1]] = $exV[0];
 		}
 		$selectedValues = 1;
-		if(isset($_POST['aktiivinen']))
-		$selectedValues = array($_POST['aktiivinen']=> Array('selected' => 'selected'));
+		if(isset($_GET['aktiivinen']))
+		$selectedValues = array($_GET['aktiivinen']=> Array('selected' => 'selected'));
 
 		echo CHtml::dropDownList('aktiivinen','aktiivinen', $tal, 
 		array('class'=>'gui-input','options' => $selectedValues)) 
@@ -61,7 +61,7 @@
 				$mod = 'Tyontekijat';
 				$sarake = 'tekijan_nimi';
 				$placeholder = 'Nimi';
-				if(isset($_POST[$sarake])) $postvalue = $_POST[$sarake]; else $postvalue='';
+				if(isset($_GET[$sarake])) $postvalue = $_GET[$sarake]; else $postvalue='';
 		 	        $site[0]->autocompleteFor($mod, $sarake, $placeholder, $postvalue);
 			    ?>
 			    <!-- Autocomplete -->
@@ -82,7 +82,7 @@
 				$mod = 'Tyontekijat';
 				$sarake = 'tekijan_puh';
 				$placeholder = 'Puhelin';
-				if(isset($_POST[$sarake])) $postvalue = $_POST[$sarake]; else $postvalue='';
+				if(isset($_GET[$sarake])) $postvalue = $_GET[$sarake]; else $postvalue='';
 		 	        $site[0]->autocompleteFor($mod, $sarake, $placeholder, $postvalue);
 			    ?>
 			    <!-- Autocomplete -->
@@ -103,7 +103,7 @@
 				$mod = 'Tyontekijat';
 				$sarake = 'tekijan_katuosoite';
 				$placeholder = 'Osoite';
-				if(isset($_POST[$sarake])) $postvalue = $_POST[$sarake]; else $postvalue='';
+				if(isset($_GET[$sarake])) $postvalue = $_GET[$sarake]; else $postvalue='';
 		 	        $site[0]->autocompleteFor($mod, $sarake, $placeholder, $postvalue);
 			    ?>
 			    <!-- Autocomplete -->
@@ -125,7 +125,7 @@
 				$mod = 'Tyontekijat';
 				$sarake = 'tekijan_email';
 				$placeholder = 'Sähköposti';
-				if(isset($_POST[$sarake])) 			$postvalue = $_POST[$sarake]; 
+				if(isset($_GET[$sarake])) 			$postvalue = $_GET[$sarake]; 
 				else if(isset(Yii::app()->session[$sarake])) 	$postvalue = Yii::app()->session[$sarake]; 
 				else $postvalue='';				
 		 	        $site[0]->autocompleteFor($mod, $sarake, $placeholder, $postvalue);
