@@ -334,7 +334,7 @@ class SiteController extends Controller
 		}
 		exit;
 	}
-
+/*
 	protected function WHMtunnukset()
 	{
 
@@ -367,7 +367,7 @@ class SiteController extends Controller
 		return $return;
 
 	}
-
+*/
   	public function actionAloita()
 	{
 
@@ -384,8 +384,8 @@ class SiteController extends Controller
 			$yritystunnus = str_replace(' ', '_', $yritystunnus);
 			$yritystunnus = strtolower($yritystunnus);
 
+			/*
 			$t = $this->WHMtunnukset();
-
 			$connectCpanel = json_decode($this->cPanelConnect($t['host'], $t['user'], $t['token'], $t['c_panel_user']), true);
 			if(isset($connectCpanel['data']['session']))
 			{
@@ -399,6 +399,61 @@ class SiteController extends Controller
 					die('Error WHL');
 				}
 			}
+			*/
+
+
+
+				Yii::app()->db->setActive(false);
+				Yii::app()->db->connectionString = 'mysql:host=localhost;dbname=etuntifw';
+				Yii::app()->db->setActive(true);
+
+				$chk_domain = Domainit::model()->find(" domain='".$yritystunnus."' ");
+				if(!isset($chk_domain->id))
+				{
+					$new_domain = new Domainit;
+					$new_domain->domain = $yritystunnus;
+					$new_domain->yritys = $_POST['yrityksen_nimi'];
+					$new_domain->paketti = '1,2,3,4,5,6';
+					$new_domain->sahkoposti = $_POST['sahkoposti'];
+					$new_domain->aktiivinen = 1;
+					$new_domain->save();
+				}
+
+/*
+				Yii::app()->db1->setActive(false);
+				Yii::app()->db1->connectionString = 'mysql:host=localhost;dbname='.$yritystunnus;
+				Yii::app()->db1->setActive(true);
+
+
+
+				$adm = Administrators::model()->findByPk(1);
+				if(isset($adm->id))
+				{
+					Administrators::model()->updateByPk($adm->id, array(
+						'adm_login' => $_POST['username'],
+						'adm_salasana' => password_hash($_POST['password'], PASSWORD_BCRYPT),
+						'adm_email' => $_POST['sahkoposti'],
+						'adm_nimi' => $_POST['yhteyshenkilo'],
+					));
+
+				}
+				$ft = FirmanTiedot::model()->findByPk(1);
+				if(isset($ft->id))
+				{
+					FirmanTiedot::model()->updateByPk($ft->id, array(
+						'tyonantaja' => $_POST['yrityksen_nimi'],
+						'osoite' => $_POST['osoite'],
+						'postinumero' => $_POST['postinumero'],
+						'postitoimipaikka' => $_POST['postitoimipaikka'],
+						'johtaja' => $_POST['yhteyshenkilo'],
+						'y_tunnus' => $_POST['yritys_tunnus'],
+						'puhelin' => $_POST['puhelinnumero'],
+						'sahkoposti' => $_POST['sahkoposti'],
+					));
+				}
+*/
+
+			exit;
 
 		}
 
@@ -410,7 +465,7 @@ class SiteController extends Controller
     
 	}
 
-
+/*
 	protected function cPanelConnect($host, $user, $token, $c_panel_user)
 	{
 
@@ -642,7 +697,7 @@ class SiteController extends Controller
 
 			return true;
 	}
-
+*/
 
 
 	public function actionUlkonaky()
@@ -963,7 +1018,7 @@ class SiteController extends Controller
 			'model'=>$model,
 		));
 	}
-
+/*
 	public function actionDelete_etunnin_asiakas($id)
 	{
 		$drop = false;
@@ -993,7 +1048,7 @@ class SiteController extends Controller
 		}	
 
 	}
-
+*/
 	public function actionEtunnin_asiakkaat()
 	{
        		$criteria = new CDbCriteria();
