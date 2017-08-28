@@ -402,10 +402,16 @@ class SiteController extends Controller
 			*/
 
 
-
 				Yii::app()->db->setActive(false);
 				Yii::app()->db->connectionString = 'mysql:host=localhost;dbname=etuntifw';
 				Yii::app()->db->setActive(true);
+				$connection=Yii::app()->db;
+				$connection->createCommand("CREATE DATABASE IF NOT EXISTS `$yritystunnus`")->execute();
+
+				exec("mysqldump -u '".$connection->username."' -p'".$connection->password."' defdb > lib/defdb.sql");
+				$str = "mysql -u ".$connection->username." -p".$connection->password." $yritystunnus < lib/defdb.sql";
+				exec($str, $output, $return_var);
+
 
 				$chk_domain = Domainit::model()->find(" domain='".$yritystunnus."' ");
 				if(!isset($chk_domain->id))
@@ -417,9 +423,10 @@ class SiteController extends Controller
 					$new_domain->sahkoposti = $_POST['sahkoposti'];
 					$new_domain->aktiivinen = 1;
 					$new_domain->save();
+
 				}
 
-/*
+
 				Yii::app()->db1->setActive(false);
 				Yii::app()->db1->connectionString = 'mysql:host=localhost;dbname='.$yritystunnus;
 				Yii::app()->db1->setActive(true);
@@ -451,9 +458,9 @@ class SiteController extends Controller
 						'sahkoposti' => $_POST['sahkoposti'],
 					));
 				}
-*/
 
-			exit;
+
+				$this->redirect(array('index'));
 
 		}
 
