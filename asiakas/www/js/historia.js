@@ -261,7 +261,7 @@ function getUrlVars() {
 		console.log(data);
 		if(data['OK'])
 		{
-			//window.location.reload();
+			window.location.reload();
 		}
            }
         });
