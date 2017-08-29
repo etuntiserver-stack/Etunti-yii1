@@ -277,14 +277,27 @@ if(isset($asetukset->checkout_id) and !empty($asetukset->checkout_id) and !empty
 
 
     <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/onlinevaraus/rekisteriseloste" target="_blank"><?php echo Yii::t('main','Onlinevaraus tietosuoja- ja rekisteriseloste'); ?> </a>
-   <br>
+
    <?php
    foreach(array_reverse(glob(Yii::app()->baseUrl.'tiedostot/firma/'.Yii::app()->user->domain.'/onlinevarausehdot.*')) as $file) 
    {
 		$explNimi = explode("/",$file);
 		// <-- file_safe_opener
 		$filepath = 'tiedostot/firma/'.Yii::app()->user->domain.'/'.end($explNimi);
-		echo CHtml::link(Yii::t('main', 'Onlinevarausehdot'),
+		echo '<br>'.CHtml::link(Yii::t('main', 'Onlinevarausehdot'),
+			array('/site/file_safe_opener', 'filepath' => $filepath, 'ext' => 'pdf'),
+			array('target'=>'_blank','class'=>'text-danger'
+		));
+		//     file_safe_opener -->
+	
+   }
+
+   foreach(array_reverse(glob(Yii::app()->baseUrl.'tiedostot/firma/'.Yii::app()->user->domain.'/Konevuokraus_toimitusehdot.*')) as $file) 
+   {
+		$explNimi = explode("/",$file);
+		// <-- file_safe_opener
+		$filepath = 'tiedostot/firma/'.Yii::app()->user->domain.'/'.end($explNimi);
+		echo '<br>'.CHtml::link(Yii::t('main', 'Konevuokraus toimitusehdot'),
 			array('/site/file_safe_opener', 'filepath' => $filepath, 'ext' => 'pdf'),
 			array('target'=>'_blank','class'=>'text-danger'
 		));
@@ -292,7 +305,7 @@ if(isset($asetukset->checkout_id) and !empty($asetukset->checkout_id) and !empty
 	
    }
    ?>
-
+   <br>
 </div>
 
 
