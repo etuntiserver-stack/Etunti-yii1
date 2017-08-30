@@ -3994,6 +3994,13 @@ class TyovuorootController extends Controller
 				//$return[] = array('tid'=>$tid, 'pvm'=>$pvm, 'ymd'=>date("Ymd",strtotime($pvm)));
 				$onkosama = $this->onko_sama(null, $pvm, $tid, $kohde, $alku, $loppu);
 				$tt = Tyontekijat::model()->findByPk($tid);
+
+				$tekijan_nimi='';
+				if(isset($tt->tekijan_nimi) and $tid!=0)
+					$tekijan_nimi=$tt->tekijan_nimi;
+				elseif(!isset($tt->tekijan_nimi) and $tid==0)
+					$tekijan_nimi='VARAUS';
+
 				if(empty($onkosama))
 				{			
 
@@ -4020,11 +4027,11 @@ class TyovuorootController extends Controller
 						}
 
 					} else {
-						$return[] = array('tid'=>$tid, 'pvm'=>$pvm, 'ymd'=>date("Ymd",strtotime($pvm)), 'isSaved'=>false, 'tekijan_nimi'=>$tt->tekijan_nimi, 'vkopvm' => $fi[date("N",strtotime($pvm))], 'uusi'=>true );
+						$return[] = array('tid'=>$tid, 'pvm'=>$pvm, 'ymd'=>date("Ymd",strtotime($pvm)), 'isSaved'=>false, 'tekijan_nimi'=>$tekijan_nimi, 'vkopvm' => $fi[date("N",strtotime($pvm))], 'uusi'=>true );
 					}
 
 				} else {
-					$return[] = array('tid'=>$tid, 'pvm'=>$pvm, 'ymd'=>date("Ymd",strtotime($pvm)),'onkosama'=>$onkosama, 'isSaved'=>false, 'tekijan_nimi'=>$tt->tekijan_nimi, 'vkopvm' => $fi[date("N",strtotime($pvm))], 'onkosama'=>$onkosama );
+					$return[] = array('tid'=>$tid, 'pvm'=>$pvm, 'ymd'=>date("Ymd",strtotime($pvm)),'onkosama'=>$onkosama, 'isSaved'=>false, 'tekijan_nimi'=>$tekijan_nimi, 'vkopvm' => $fi[date("N",strtotime($pvm))], 'onkosama'=>$onkosama );
 				}
 
 			}
