@@ -384,22 +384,6 @@ class SiteController extends Controller
 			$yritystunnus = str_replace(' ', '_', $yritystunnus);
 			$yritystunnus = strtolower($yritystunnus);
 
-			/*
-			$t = $this->WHMtunnukset();
-			$connectCpanel = json_decode($this->cPanelConnect($t['host'], $t['user'], $t['token'], $t['c_panel_user']), true);
-			if(isset($connectCpanel['data']['session']))
-			{
-				$session = $connectCpanel['data']['cp_security_token'];
-
-				if($this->cPanelCreateDb($session, $t['host'], $t['user'], $t['token'], $t['c_panel_user'], $yritystunnus))
-				{
-					$this->importDump($yritystunnus, $t['servername'], $t['username'], $t['password']);
-					$database = true;
-				} else {
-					die('Error WHL');
-				}
-			}
-			*/
 
 
 				Yii::app()->db->setActive(false);
@@ -411,6 +395,7 @@ class SiteController extends Controller
 				exec("mysqldump -u '".$connection->username."' -p'".$connection->password."' defdb > lib/defdb.sql");
 				$str = "mysql -u ".$connection->username." -p".$connection->password." $yritystunnus < lib/defdb.sql";
 				exec($str, $output, $return_var);
+				$database = true;
 
 
 				$chk_domain = Domainit::model()->find(" domain='".$yritystunnus."' ");
@@ -460,7 +445,7 @@ class SiteController extends Controller
 				}
 
 
-				$this->redirect(array('index'));
+				//$this->redirect(array('index'));
 
 		}
 
@@ -1025,37 +1010,24 @@ class SiteController extends Controller
 			'model'=>$model,
 		));
 	}
-/*
+
 	public function actionDelete_etunnin_asiakas($id)
 	{
 		$drop = false;
 		$model=Domainit::model()->findbypk($id);
-		if( isset($model->id) and $_SERVER['REMOTE_ADDR'] != '::1' and $_SERVER['REMOTE_ADDR'] != '127.0.0.1' )
+		if(isset($model->id))
 		{
 			$yritystunnus = $model->domain;
 
-			$t = $this->WHMtunnukset();
+			$connection=Yii::app()->db;
+			$connection->createCommand("DROP DATABASE IF EXISTS `$yritystunnus`")->execute();
+			$model->delete();
+			$this->redirect(array('etunnin_asiakkaat'));
 
-			$connectCpanel = json_decode($this->cPanelConnect($t['host'], $t['user'], $t['token'], $t['c_panel_user']), true);
-			if(!empty($yritystunnus) and isset($connectCpanel['data']['session']))
-			{
-				$session = $connectCpanel['data']['cp_security_token'];
-
-				if($this->cPanelDropDb($session, $t['host'], $t['user'], $t['token'], $t['c_panel_user'], $yritystunnus))
-				{
-					$model->delete();
-					$this->redirect(array('etunnin_asiakkaat'));
-				} else {
-					die('Error drop WHL');
-				}
-			}
-
-		} else {
-					die('Error drop WHL');
 		}	
 
 	}
-*/
+
 	public function actionEtunnin_asiakkaat()
 	{
        		$criteria = new CDbCriteria();
