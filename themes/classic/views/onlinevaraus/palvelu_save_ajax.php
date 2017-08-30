@@ -102,7 +102,7 @@
 	$nimike 	= '';
 	$otsikko 	= '';
 	$tyo_toimialue	= '';
-	$kotitalousvahennys = 0;
+	$kotitalousvahennys = '';
 
 	if(!empty($model->alv) and $model->alv != 0)		$perusAlv	= $model->alv;
 	$_SESSION['onlinevaraus']['alv'] 					= $perusAlv;
