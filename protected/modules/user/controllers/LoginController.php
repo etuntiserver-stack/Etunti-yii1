@@ -91,9 +91,9 @@ class LoginController extends Controller
 				Yii::app()->user->setState(trim($_POST['UserLogin']['domain']), true);
 					$this->lastViset();
 					if (Yii::app()->user->returnUrl=='/index.php')
-						$this->redirect(Yii::app()->request->baseUrl.'/index.php/user/profile');
+						$this->redirect(Yii::app()->request->baseUrl.'/index.php/domainit/admin');
 					else
-						$this->redirect(Yii::app()->request->baseUrl.'/index.php/user/profile'); 
+						$this->redirect(Yii::app()->request->baseUrl.'/index.php/domainit/admin'); 
 				}
 			}
 
