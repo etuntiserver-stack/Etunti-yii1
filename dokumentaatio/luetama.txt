@@ -1,3 +1,7 @@
+cd protected
+php yiic doc app ../dokumentaatio/api/  -  se luo documentaatio
+
+////////////////////////////////
 https://github.com/phpnode/Yii-Docs-Generator
 
 
