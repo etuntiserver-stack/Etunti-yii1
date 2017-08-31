@@ -131,7 +131,11 @@ Yii::app()->clientScript->registerPackage('jquery');
 ?>
 
 
-
+	<?php
+	foreach(Yii::app()->user->getFlashes() as $key => $message) {
+        	echo '<p><div class="container"><div class="alert bg-' . $key . '">' . $message . "</div></div></p>\n";
+    	}
+	?>
 	<?php echo $content; ?>
 
 

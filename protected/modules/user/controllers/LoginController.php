@@ -51,7 +51,8 @@ class LoginController extends Controller
 				
 				if(!$login)
 				{
-					$this->redirect(Yii::app()->request->baseUrl.'/index.php/user/login?InvalidPassword');
+					Yii::app()->user->setFlash('danger', "Tarkasta yritys- ja käyttäjätunnus sekä salasana");
+					$this->redirect(Yii::app()->request->baseUrl.'/index.php/site/index');
 					exit;
 				}
 				//     Check password -->
@@ -72,7 +73,8 @@ class LoginController extends Controller
 
 			    $this->redirect(Yii::app()->request->baseUrl.'/index.php/site/etusivu');
 			  } else {
-			    $this->redirect(Yii::app()->request->baseUrl.'/index.php/user/login');
+			    Yii::app()->user->setFlash('danger', "Tarkasta yritys- ja käyttäjätunnus sekä salasana");
+			    $this->redirect(Yii::app()->request->baseUrl.'/index.php/site/index');
 			  }
 			exit;
 			}
@@ -96,7 +98,11 @@ class LoginController extends Controller
 			}
 
 			// display the login form
-			$this->render('/user/login',array('model'=>$model));
+			//$this->render('/user/login',array('model'=>$model));
+
+			    Yii::app()->user->setFlash('danger', "Tarkasta yritys- ja käyttäjätunnus sekä salasana");
+			    $this->redirect(Yii::app()->request->baseUrl.'/index.php/site/index');
+
 		} else
 			$this->redirect(Yii::app()->controller->module->returnUrl);
 	}
