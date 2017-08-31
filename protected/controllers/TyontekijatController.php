@@ -661,6 +661,9 @@ class TyontekijatController extends Controller
                 
                 if(isset($_GET['tekijan_katuosoite']))
                 Yii::app()->session['tekijan_katuosoite']=$_GET['tekijan_katuosoite']; 
+                
+                if(isset($_GET['aktiivinen']))
+                Yii::app()->session['aktiivinen']=$_GET['aktiivinen']; 
 
 
        		$criteria = new CDbCriteria();
@@ -670,8 +673,8 @@ class TyontekijatController extends Controller
 		$criteria = $site[0]->etuSukunimiCriteria($criteria);
 		//     Return order etu ja sukunimella -->
 
-		if(isset($_GET['aktiivinen']) and $_GET['aktiivinen'] != 'kaikki')
-	        $criteria->addCondition (" aktiivinen ='".(int)$_GET['aktiivinen']."' ");
+		if(isset(Yii::app()->session['aktiivinen']) and Yii::app()->session['aktiivinen'] != 'kaikki')
+	        $criteria->addCondition (" aktiivinen ='".(int)Yii::app()->session['aktiivinen']."' ");
 		else
 	        $criteria->addCondition (" aktiivinen=1 ");
 

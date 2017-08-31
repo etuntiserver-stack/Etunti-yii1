@@ -37,8 +37,8 @@
 		   $tal[$exV[1]] = $exV[0];
 		}
 		$selectedValues = 1;
-		if(isset($_GET['aktiivinen']))
-		$selectedValues = array($_GET['aktiivinen']=> Array('selected' => 'selected'));
+		if(isset( Yii::app()->session['aktiivinen']))
+		$selectedValues = array( Yii::app()->session['aktiivinen']=> Array('selected' => 'selected'));
 
 		echo CHtml::dropDownList('aktiivinen','aktiivinen', $tal, 
 		array('class'=>'gui-input','options' => $selectedValues)) 
@@ -61,8 +61,7 @@
 				$mod = 'Tyontekijat';
 				$sarake = 'tekijan_nimi';
 				$placeholder = 'Nimi';
-				if(isset(Yii::app()->session['tekijan_nimi']))  $postvalue = Yii::app()->session['tekijan_nimi'];
-                                else if(isset(Yii::app()->session[$sarake])) 	$postvalue = Yii::app()->session[$sarake]; 
+				if(isset(Yii::app()->session['tekijan_nimi']))  $postvalue = Yii::app()->session['tekijan_nimi']; 
 				else $postvalue='';
 		 	        $site[0]->autocompleteFor($mod, $sarake, $placeholder, $postvalue);
 			    ?>
@@ -85,7 +84,6 @@
 				$sarake = 'tekijan_puh';
 				$placeholder = 'Puhelin';
 				if(Yii::app()->session['tekijan_puh'])          $postvalue = Yii::app()->session['tekijan_puh']; 
-				else if(isset(Yii::app()->session[$sarake])) 	$postvalue = Yii::app()->session[$sarake]; 
 				else $postvalue='';
 		 	        $site[0]->autocompleteFor($mod, $sarake, $placeholder, $postvalue);
 			    ?>
@@ -108,7 +106,6 @@
 				$sarake = 'tekijan_katuosoite';
 				$placeholder = 'Osoite';
 				if(isset(Yii::app()->session['tekijan_katuosoite'])) $postvalue = Yii::app()->session['tekijan_katuosoite'];
-				else if(isset(Yii::app()->session[$sarake])) 	$postvalue = Yii::app()->session[$sarake]; 
 				else $postvalue='';
 		 	        $site[0]->autocompleteFor($mod, $sarake, $placeholder, $postvalue);
 			    ?>
