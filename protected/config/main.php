@@ -47,7 +47,7 @@ session_start();
   if( isset($_SERVER['HTTP_REFERER']) ) $refer = $_SERVER['HTTP_REFERER']; else $refer = '';
   if( isset($_POST) ) $post = json_encode($_POST); else $post = '';
 
-  if( 
+  if(   isset($_SERVER['REMOTE_ADDR']) and
 	($_SERVER['REMOTE_ADDR'] == '::1' 
 	or $_SERVER['REMOTE_ADDR'] == '127.0.0.1' 
 	)
@@ -81,6 +81,10 @@ session_start();
 
   } else {
 
+	$remote_addr = '';
+	if(isset($_SERVER['REMOTE_ADDR']))
+	$remote_addr = $_SERVER['REMOTE_ADDR'];
+
 	$for_log = array(
 				array(
 					'class'=>'CFileLogRoute',
@@ -92,7 +96,7 @@ session_start();
 				        'class'=>'CEmailLogRoute',
                 			'levels'=>'error', //'trace, info, error, warning, vardump'
 					'emails'=>'laptopsr@gmail.com',
-					'subject'=>'Log File Message. Domain: '.$domain.', IP: '.$_SERVER['REMOTE_ADDR'].', SID: '.session_id().', refer: '.$refer.', post: '.$post,
+					'subject'=>'Log File Message. Domain: '.$domain.', IP: '.$remote_addr.', SID: '.session_id().', refer: '.$refer.', post: '.$post,
 			        )
 	);
   }
@@ -101,7 +105,7 @@ session_start();
 
 
 
-  if( $_SERVER['REMOTE_ADDR'] == '::1' or $_SERVER['REMOTE_ADDR'] == '127.0.0.1' )
+  if( isset($_SERVER['REMOTE_ADDR']) and ($_SERVER['REMOTE_ADDR'] == '::1' or $_SERVER['REMOTE_ADDR'] == '127.0.0.1' ))
   {
   $db = 'etuntifw';
   $db_host = 'localhost';
