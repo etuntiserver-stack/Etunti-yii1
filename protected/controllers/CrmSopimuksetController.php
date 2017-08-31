@@ -203,18 +203,30 @@ $randstring = generateRandomString();
 		
 
 		$subject = Yii::t('main', 'Sopimus'). ', '.$ft->tyonantaja;
-		$mail = new YiiMailer();
-		//$mail->clearLayout();//if layout is already set in config
-		$mail->setFrom('no-reply@etunti.fi');
-		$mail->setTo($crm->asiakkaan_sahkoposti);
-		$mail->setSubject($subject);
-		$mail->setBody($message);
+
+		// <-- Mail sender
+		$site = Yii::app()->createController('Site');
+		$recipient_name = '';
+		$to = $crm->asiakkaan_sahkoposti;
+		$subject = $subject;
+		$html_text = $message;
+		$copy = null; // if null not copy
+		$liite = null; // if null not attachment
+		$type = 'text/plain';
+		$file_name = '';
+		$content = '';
 
 		if(file_exists(Yii::app()->basePath."/../tiedostot/sopimukset/".Yii::app()->user->domain."/".$crm->liite.".pdf"))
-		$mail->setAttachment($path.'/'.$file);
+		{
+		$liite = 1; // if null not attachment
+		$type = 'text/plain';
+		$file_name = $file;
+		$content = base64_encode(file_get_contents($path.'/'.$file));
+		}
 
-		   if($mail->send())
-		   {
+		if($site[0]->mandrill($recipient_name, $to, $subject, $html_text, $liite, $type, $file_name, $content, $copy))
+		{
+							Yii::app()->user->setFlash('success', "Sähköposti lähetetty");
 
 							// <-- LOG
 							$log=new Log;
