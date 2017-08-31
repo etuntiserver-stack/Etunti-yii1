@@ -649,6 +649,19 @@ class TyontekijatController extends Controller
 	   $site = Yii::app()->createController('Site');
 	   $site[0]->checkOikeus($checkOikeus);
 	//  Oikeudet -->
+          //To Keep the session data in the SearchForm
+                if(isset($_GET['tekijan_nimi']))
+                Yii::app()->session['tekijan_nimi']=$_GET['tekijan_nimi'];
+
+                if(isset($_GET['tekijan_puh']))
+                Yii::app()->session['tekijan_puh']=$_GET['tekijan_puh'];
+
+                if(isset($_GET['tekijan_email']))
+                Yii::app()->session['tekijan_email']=$_GET['tekijan_email'];
+                
+                if(isset($_GET['tekijan_katuosoite']))
+                Yii::app()->session['tekijan_katuosoite']=$_GET['tekijan_katuosoite']; 
+
 
        		$criteria = new CDbCriteria();
 
@@ -662,17 +675,17 @@ class TyontekijatController extends Controller
 		else
 	        $criteria->addCondition (" aktiivinen=1 ");
 
-		if(isset($_GET['tekijan_katuosoite']) and !empty($_GET['tekijan_katuosoite']))
-	        $criteria->addCondition (" tekijan_katuosoite LIKE '%".$_GET['tekijan_katuosoite']."%' ");
+		if(isset(Yii::app()->session['tekijan_katuosoite']) and !empty(Yii::app()->session['tekijan_katuosoite']))
+	        $criteria->addCondition (" tekijan_katuosoite LIKE '%".Yii::app()->session['tekijan_katuosoite']."%' ");
 
-		if(isset($_GET['tekijan_nimi']) and !empty(trim($_GET['tekijan_nimi'])))
-	        $criteria->addCondition (" tekijan_nimi LIKE '%".$_GET['tekijan_nimi']."%' OR sukunimi LIKE '%".$_GET['tekijan_nimi']."%' ");
+		if(isset(Yii::app()->session['tekijan_nimi']) and !empty(trim(Yii::app()->session['tekijan_nimi'])))
+	        $criteria->addCondition (" tekijan_nimi LIKE '%".Yii::app()->session['tekijan_nimi']."%' OR sukunimi LIKE '%".Yii::app()->session['tekijan_nimi']."%' ");
 
-		if(isset($_GET['tekijan_puh']) and !empty(trim($_GET['tekijan_puh'])))
-	        $criteria->addCondition (" laiten_puh LIKE '%".$_GET['tekijan_puh']."%' OR tekijan_puh LIKE '%".$_GET['tekijan_puh']."%' ");
+		if(isset(Yii::app()->session['tekijan_puh']) and !empty(trim(Yii::app()->session['tekijan_puh'])))
+	        $criteria->addCondition (" laiten_puh LIKE '%".Yii::app()->session['tekijan_puh']."%' OR tekijan_puh LIKE '%".Yii::app()->session['tekijan_puh']."%' ");
 
-		if(isset($_GET['tekijan_email']) and !empty(trim($_GET['tekijan_email'])))
-	        $criteria->addCondition (" tekijan_email LIKE '%".$_GET['tekijan_email']."%' ");
+		if(isset(Yii::app()->session['tekijan_email']) and !empty(trim(Yii::app()->session['tekijan_email'])))
+	        $criteria->addCondition (" tekijan_email LIKE '%".Yii::app()->session['tekijan_email']."%' ");
 
 		$dataProvider=new CActiveDataProvider('Tyontekijat', array(
 			'criteria'=>$criteria,
