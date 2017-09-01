@@ -987,6 +987,10 @@ $('.tvchange').change(function(){
             </a>
             <ul class="nav sub-nav">
               <li>
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/tyovuoroot/hallinta">
+                  <span class="fa fa-clock-o"></span> <?php echo Yii::t('main', 'Hallinta'); ?></a>
+              </li>
+              <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/tyovuoroot/index">
                   <span class="fa fa-clock-o"></span> <?php echo Yii::t('main', 'Työvuorot'); ?></a>
               </li>

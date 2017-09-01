@@ -28,7 +28,7 @@ class TyovuorootController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','updatetime','showohje','did','muisti','operatio','viikko','fromto','autoinsert','autoremove','viikkottain', 'viikkottain_pdf', 'laheta','kk','pvmtid','laheta_k', 'muistin', 'muisticlear', 'muistissa', 'vkolopput', 'vkolopchange', 'uusitilaus', 'tv2', 'PoistaTv', 'valitse_kokopaiva', 'tv_kohteet', 'siivous_tyonimike', 'getKohdeByAsiakas', 'getKohdeById', 'getAsiakasByKohde', 'paivita_laatikot', 'poista_toistuva', 'onko_sama', 'asiakas_autocomplete', 'kohde_autocomplete', 'check_paallekkain', 'get_tekijantiedot', 'is_asiakas', 'is_yhteyshenkilo'),
+				'actions'=>array('admin','delete','create','update','index','view','updatetime','showohje','did','muisti','operatio','viikko','fromto','autoinsert','autoremove','viikkottain', 'viikkottain_pdf', 'laheta','kk','pvmtid','laheta_k', 'muistin', 'muisticlear', 'muistissa', 'vkolopput', 'vkolopchange', 'uusitilaus', 'tv2', 'PoistaTv', 'valitse_kokopaiva', 'tv_kohteet', 'siivous_tyonimike', 'getKohdeByAsiakas', 'getKohdeById', 'getAsiakasByKohde', 'paivita_laatikot', 'poista_toistuva', 'onko_sama', 'asiakas_autocomplete', 'kohde_autocomplete', 'check_paallekkain', 'get_tekijantiedot', 'is_asiakas', 'is_yhteyshenkilo', 'hallinta'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny', // allow admin user to perform 'admin' and 'delete' actions
@@ -4191,4 +4191,59 @@ class TyovuorootController extends Controller
 		return $list;
 	}
 
+	public function actionHallinta()
+	{
+
+		if(Yii::app()->request->getPost('tekijaPaaSivulla'))
+		Yii::app()->session['tekijaPaaSivulla'] = Yii::app()->request->getPost('tekijaPaaSivulla');
+		if(Yii::app()->request->getPost('from'))
+		Yii::app()->session['from'] = Yii::app()->request->getPost('from');
+		if(Yii::app()->request->getPost('to'))
+		Yii::app()->session['to'] = Yii::app()->request->getPost('to');
+		if(Yii::app()->request->getPost('status'))
+		Yii::app()->session['status'] = Yii::app()->request->getPost('status');
+
+		$from = date("d.m.Y", strtotime('first day of this month'));
+		$to = date("d.m.Y");
+		if(isset(Yii::app()->session['from']))
+		$from = date("d.m.Y", strtotime(Yii::app()->session['from']));
+		if(isset(Yii::app()->session['to']))
+		$to = date("d.m.Y", strtotime(Yii::app()->session['to']));
+
+
+		$criteria = new CDBCriteria;
+        	$criteria->condition = " 				
+			DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') 
+			BETWEEN '".date("Y-m-d", strtotime($from))."' AND '".date("Y-m-d", strtotime($to))."' 
+		";
+
+		if(isset(Yii::app()->session['tekijaPaaSivulla']))
+		{
+			$impl = implode(",", Yii::app()->session['tekijaPaaSivulla']);
+	        	$criteria->addCondition (" id IN ($impl) ");
+		}
+		if(isset(Yii::app()->session['status']))
+		{
+	        	$criteria->addCondition (" status='".Yii::app()->session['status']."' ");
+		}
+
+		$model = Tyovuoroot::model()->findAll($criteria);
+
+		//$dataProvider->pagination->pageSize = 50;
+
+		$this->render('hallinta', array(
+			'model' => $model,
+			'from' => $from,
+			'to' => $to,
+		));
+
+	}
+
+
+	protected function getKohde($id)
+	{
+		$k = Kohteet::model()->findbypk($id);
+		if(isset($k->id))
+		return $k;
+	}
 }
