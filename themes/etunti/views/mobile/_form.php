@@ -32,6 +32,7 @@ if(isset($model->tietoja))
 	'clientOptions' => array(
                     'validateOnSubmit' => false,
                 ),
+        
 )); ?>
 
 
@@ -144,7 +145,7 @@ if(isset($model->tietoja))
 	</div>
 	<div class="section">
 		<?php echo $form->labelEx($model,'kohdenID'); ?>
-		<?php echo $form->dropDownList($model, 'kohdenID', CHtml::listData(Kohteet::model()->findAll(), 'id', 'osoite'), array('empty'=>'Valitse', 'class'=>'form-control')); ?>
+		<?php echo $form->dropDownList($model, 'kohdenID', CHtml::listData(Kohteet::model()->findAll(array('order'=>'osoite')), 'id', 'osoite'), array('empty'=>'Valitse', 'class'=>'form-control')); ?>
 		<?php echo $form->hiddenField($model,'kohde_kannasta',array('size'=>20,'maxlength'=>20,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'kohdenID'); ?>
 	</div>

@@ -245,6 +245,7 @@ function num($val){
 			if(Yii::app()->request->getPost('to'))
 			Yii::app()->session['to'] = date("Y-m-d",strtotime(Yii::app()->request->getPost('to')));
 
+
 			if(isset($_POST['ilman']))
 			{
 			  foreach($_POST['ilman'] as $val){

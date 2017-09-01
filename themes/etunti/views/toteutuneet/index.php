@@ -360,6 +360,7 @@ function dateDiff($start, $end) {
 					'taulu'=>'korvaukset',
 					'pvm'=>date("Y-m-d",strtotime($date)),
 					'tid'=>$tid,
+                                        //'disabled'=>'disabled'
 			)).'
 			<br>
 			<div class="row">
