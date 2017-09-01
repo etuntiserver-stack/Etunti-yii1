@@ -96,6 +96,7 @@
                           <label class="field select">
 				<?php 
 		   		$tilanteet = $this->tilanteet();
+		   		$tilanteet[0] = 'Ei määritetty';
 				echo '<select class="" id="status" name="status[]" multiple>';
 		   		foreach($tilanteet as $k=>$v)
 				echo '<option value="'.$k.'" '.((isset(Yii::app()->session['status']) and is_array(Yii::app()->session['status']) and in_array($k, Yii::app()->session['status']))?'selected':'').'>'.$v.'</option>';
