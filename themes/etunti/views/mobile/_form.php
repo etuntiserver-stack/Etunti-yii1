@@ -31,8 +31,7 @@ if(isset($model->tietoja))
 	'enableAjaxValidation'=>false,
 	'clientOptions' => array(
                     'validateOnSubmit' => false,
-                ),
-        
+                ),        
 )); ?>
 
 
