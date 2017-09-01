@@ -4202,6 +4202,8 @@ class TyovuorootController extends Controller
 		Yii::app()->session['to'] = Yii::app()->request->getPost('to');
 		if(Yii::app()->request->getPost('status'))
 		Yii::app()->session['status'] = Yii::app()->request->getPost('status');
+		if(Yii::app()->request->getPost('osoite'))
+		Yii::app()->session['osoite'] = Yii::app()->request->getPost('osoite');
 
 		$from = date("d.m.Y", strtotime('first day of this month'));
 		$to = date("d.m.Y");
@@ -4220,11 +4222,16 @@ class TyovuorootController extends Controller
 		if(isset(Yii::app()->session['tekijaPaaSivulla']))
 		{
 			$impl = implode(",", Yii::app()->session['tekijaPaaSivulla']);
-	        	$criteria->addCondition (" id IN ($impl) ");
+	        	$criteria->addCondition (" tid IN ($impl) ");
 		}
 		if(isset(Yii::app()->session['status']))
 		{
-	        	$criteria->addCondition (" status='".Yii::app()->session['status']."' ");
+			$impl_status = implode(",", Yii::app()->session['status']);
+	        	$criteria->addCondition (" status IN ($impl_status) ");
+		}
+		if(isset(Yii::app()->session['osoite']))
+		{
+	        	$criteria->addCondition (" kohde IN (SELECT id FROM sivex_kohdet WHERE osoite LIKE '%".Yii::app()->session['osoite']."%') ");
 		}
 
 		$model = Tyovuoroot::model()->findAll($criteria);

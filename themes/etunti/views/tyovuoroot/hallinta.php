@@ -8,7 +8,7 @@
         <div class="tray-center">
 
 
-              <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-envelope"></i> <?=Yii::t('main', 'Työvuoro hallinta')?> </h2>
+              <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-envelope"></i> <?=Yii::t('main', 'Työvuorot')?> </h2>
 
 
 
@@ -96,9 +96,9 @@
                           <label class="field select">
 				<?php 
 		   		$tilanteet = $this->tilanteet();
-				echo '<select class="gui-input" name="status">';
+				echo '<select class="" id="status" name="status[]" multiple>';
 		   		foreach($tilanteet as $k=>$v)
-				echo '<option value="'.$k.'" '.((isset(Yii::app()->session['status']) and Yii::app()->session['status'] == $k)?'selected':'').'>'.$v.'</option>';
+				echo '<option value="'.$k.'" '.((isset(Yii::app()->session['status']) and is_array(Yii::app()->session['status']) and in_array($k, Yii::app()->session['status']))?'selected':'').'>'.$v.'</option>';
 
 				echo '</select>';
 				?>
@@ -265,6 +265,18 @@ function multi(){
   });
 }
 
+  $('#status').multiselect({
+	//inheritClass: true,
+	//enableFiltering: true,
+        includeSelectAllOption: true,
+	nonSelectedText: '<?php echo Yii::t("main", "Tyhjä"); ?>',
+	selectAllText: '<?php echo Yii::t("main", "Valitse kaikki"); ?>',
+	allSelectedText: '<?php echo Yii::t("main", "Tilanteet"); ?>',
+	nSelectedText: '<?php echo Yii::t("main", "valittu"); ?>',
+	numberDisplayed: 0,
+	buttonWidth: '100%',
+        maxHeight: 300,
+  });
 
   $(".aktiivinen").change(function(){
 	var thisVal = parseInt($(this).val());
