@@ -52,7 +52,7 @@ if ($conn->connect_error) {
 } 
 
 mysqli_select_db($conn,"defdb");
-$sql = mysqli_query($conn,"SHOW FULL COLUMNS FROM sivex_administrators"); //WHERE hinta_sis_alv=0 AND alv!=0
+$sql = mysqli_query($conn,"SHOW FULL COLUMNS FROM asetukset"); //WHERE hinta_sis_alv=0 AND alv!=0
  
 $last = 'id';
 while($row = mysqli_fetch_array($sql)) {
