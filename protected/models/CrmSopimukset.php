@@ -23,7 +23,32 @@ public $template;
 	 */
 	public function tableName()
 	{
-		return 'sopimukset';
+
+		$tb_name = 'sopimukset';
+		$table = Yii::app()->db1->schema->getTable($tb_name);
+		$table_structure = array(
+			'id' => 'INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST',
+			'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP AFTER id',
+			'asiakas_id' => 'INT(11) AFTER time',
+			'teksti' => 'TEXT AFTER asiakas_id',
+			'hyvaksyn_koodi' => 'varchar(255) AFTER teksti',
+			'asiakkaan_sahkoposti' => 'varchar(100) AFTER hyvaksyn_koodi',
+			'status' => 'INT(11) AFTER asiakkaan_sahkoposti',
+			'liite' => 'varchar(255) AFTER status',
+			'template' => 'varchar(255) AFTER liite',
+			'yhteystiedot_id' => 'INT(11) AFTER template',
+			'tarjous_id' => 'INT(11) AFTER yhteystiedot_id',
+			'voimassa' => 'varchar(20) AFTER tarjous_id',
+
+		);
+
+		foreach($table_structure as $key=>$value)
+		{
+			if (!isset($table->columns[$key])) {
+				Yii::app()->db1->createCommand()->addColumn($tb_name, $key, $value);
+			}
+		}		
+		return $tb_name;
 	}
 
 	/**

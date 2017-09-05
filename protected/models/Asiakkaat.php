@@ -36,7 +36,70 @@ public $verot;
 	 */
 	public function tableName()
 	{
-		return 'asiakkaat';
+
+		$tb_name = 'asiakkaat';
+
+		$table = Yii::app()->db1->schema->getTable($tb_name);
+		if(!isset($table->columns['id'])) {
+
+			Yii::app()->db1->createCommand(" CREATE TABLE IF NOT EXISTS $tb_name 
+			(`id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY)
+			")->execute();
+		}
+
+		$table_structure = array(
+
+                     'id' => 'int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST',
+                     'time' => 'timestamp CURRENT_TIMESTAMP AFTER id',
+                     'yrityksen_nimi' => 'varchar(100) AFTER time',
+                     'y_tunnus' => 'varchar(50) AFTER yrityksen_nimi',
+                     'yhteyshenkilo' => 'varchar(100) AFTER y_tunnus',
+                     'osoite' => 'varchar(255) AFTER yhteyshenkilo',
+                     'kaupunki' => 'varchar(100) AFTER osoite',
+                     'postinumero' => 'varchar(100) AFTER kaupunki',
+                     'puhelin' => 'varchar(100) AFTER postinumero',
+                     'sahkoposti' => 'varchar(100) AFTER puhelin',
+                     'ryhma' => 'varchar(255) AFTER sahkoposti',
+                     'aktiivinen' => 'int(1) AFTER ryhma',
+                     'laskutus_kanava' => 'varchar(255) AFTER aktiivinen',
+                     'maksuehto' => 'varchar(20) AFTER laskutus_kanava',
+                     'tyyppi' => 'varchar(100) AFTER maksuehto',
+                     'asiakasnumero' => 'varchar(100) AFTER tyyppi',
+                     'ovt_tunnus' => 'varchar(100) AFTER asiakasnumero',
+                     'valittajan_tunnus' => 'varchar(100) AFTER ovt_tunnus',
+                     'verkkolaskuosoite' => 'varchar(255) AFTER valittajan_tunnus',
+                     'alv' => 'int(3) AFTER verkkolaskuosoite',
+                     'hinta_tyyppi' => 'varchar(50) AFTER alv',
+                     'hinta' => 'varchar(10) AFTER hinta_tyyppi',
+                     'muistutuslasku_auto' => 'int(1) AFTER hinta',
+                     'kirjeenluokka' => 'int(1) AFTER muistutuslasku_auto',
+                     'myyja' => 'varchar(100) AFTER kirjeenluokka',
+                     'viivastyskorko' => 'varchar(20) AFTER myyja',
+                     'salasana' => 'varchar(255) AFTER viivastyskorko',
+                     'vinkki_tunnit' => 'varchar(10) AFTER salasana',
+                     'vinkki_prosentti' => 'varchar(10) AFTER vinkki_tunnit',
+                     'netvisorkey' => 'int(11) AFTER vinkki_prosentti',
+                     'k_osoite' => 'varchar(255) AFTER netvisorkey',
+                     'k_postinumero' => 'varchar(100) AFTER k_osoite',
+                     'k_kaupunki' => 'varchar(100) AFTER k_postinumero',
+                     'onlinevarauksen_asiakas' => 'int(1) AFTER k_kaupunki',
+                     'asiakastila' => 'int(11) AFTER onlinevarauksen_asiakas',
+                     'sahkopostilaskuosoite' => 'varchar(255) AFTER asiakastila',
+                     'vinkki_id' => 'int(11) AFTER sahkopostilaskuosoite',
+                     'hinta_sis_alv' => 'float AFTER vinkki_id',
+                     'alennuskoodit' => 'text AFTER hinta_sis_alv',
+                     'token' => 'varchar(255) AFTER alennuskoodit',
+
+
+		);
+
+		foreach($table_structure as $key=>$value)
+		{
+			if (!isset($table->columns[$key])) {
+				Yii::app()->db1->createCommand()->addColumn($tb_name, $key, $value);
+			}
+		}		
+		return $tb_name;
 	}
 
 	/**
