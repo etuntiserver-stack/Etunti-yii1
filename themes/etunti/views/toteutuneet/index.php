@@ -537,7 +537,9 @@ function dateDiff($start, $end) {
 		   <td><span class="allaLS" total="'.(int)$ls.'">'.$this->sprint($ls).'</span></td>
 		   <td><span class="allaVL" total="'.(int)$vl.'">'.$vl.'</span></td>
 		   <td><span class="allaVKL" total="'.(int)$vkl.'">'.$vkl.'</span></td>
-		  </tr>
+		  </tr>';
+		 if($asetukset->netvisor_kaytto == 1) { 
+		  echo ' 
 		  <tr>
 		   <td colspan="13">			
 			<button class="btn btn-default btn-sm btn-block esittele_tyotunnit" nvtilanne="'.$nvtilanne.'"
@@ -556,7 +558,10 @@ function dateDiff($start, $end) {
 				ls		="'.(int)$ls.'"
 			></button>
 		   </td>
-		  </tr>
+		  </tr>';
+		  }
+
+		  echo '
 		</table>
 	</td></tr>';
 
