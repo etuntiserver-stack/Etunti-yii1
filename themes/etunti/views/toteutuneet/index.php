@@ -353,8 +353,12 @@ function dateDiff($start, $end) {
 		   <td><h3>'.$arrDate[$explColDate[0]].' '.date("d.m",strtotime($date)).$vlChecker.$ispyha.'</h3></td>
 		  </tr>
 		  <tr>	
-		   <td>
-			'.CHtml::button(Yii::t('main', 'Korvaukset ja ennakot'), 
+		   <td>';
+
+    if($asetukset->netvisor_kaytto == 1)
+    {
+    echo 
+			CHtml::button(Yii::t('main', 'Korvaukset ja ennakot'.$asetukset->netvisor_kaytto), 
 				array(
 					'class'=>'btn btn-sm btn-primary btn-group myBgColors avaaModalFor', 
 					'taulu'=>'korvaukset',
@@ -364,7 +368,10 @@ function dateDiff($start, $end) {
 			<br>
 			<div class="row">
 			  '.$korv.' 
-			</div>
+			</div>';
+     }
+
+     echo '
 		   </td>
 		  </tr>
 		</table>
@@ -530,7 +537,9 @@ function dateDiff($start, $end) {
 		   <td><span class="allaLS" total="'.(int)$ls.'">'.$this->sprint($ls).'</span></td>
 		   <td><span class="allaVL" total="'.(int)$vl.'">'.$vl.'</span></td>
 		   <td><span class="allaVKL" total="'.(int)$vkl.'">'.$vkl.'</span></td>
-		  </tr>
+		  </tr>';
+		 if($asetukset->netvisor_kaytto == 1) { 
+		  echo ' 
 		  <tr>
 		   <td colspan="13">			
 			<button class="btn btn-default btn-sm btn-block esittele_tyotunnit" nvtilanne="'.$nvtilanne.'"
@@ -549,7 +558,10 @@ function dateDiff($start, $end) {
 				ls		="'.(int)$ls.'"
 			></button>
 		   </td>
-		  </tr>
+		  </tr>';
+		  }
+
+		  echo '
 		</table>
 	</td></tr>';
 
