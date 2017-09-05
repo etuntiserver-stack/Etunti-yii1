@@ -43,14 +43,13 @@ public $verot;
 		if(!isset($table->columns['id'])) {
 
 			Yii::app()->db1->createCommand(" CREATE TABLE IF NOT EXISTS $tb_name 
-			(`id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY)
+			(`id` int(11) AUTO_INCREMENT PRIMARY KEY)
 			")->execute();
 		}
 
 		$table_structure = array(
 
-                     'id' => 'int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST',
-                     'time' => 'timestamp CURRENT_TIMESTAMP AFTER id',
+                     'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP AFTER id',
                      'yrityksen_nimi' => 'varchar(100) AFTER time',
                      'y_tunnus' => 'varchar(50) AFTER yrityksen_nimi',
                      'yhteyshenkilo' => 'varchar(100) AFTER y_tunnus',
@@ -98,7 +97,8 @@ public $verot;
 			if (!isset($table->columns[$key])) {
 				Yii::app()->db1->createCommand()->addColumn($tb_name, $key, $value);
 			}
-		}		
+		}	
+
 		return $tb_name;
 	}
 
