@@ -2029,4 +2029,11 @@ $(document).ready(function(){
 		return $criteria;
 	}
 
+	public function daysBetween($d1, $d2)
+	{
+		$date1 = new DateTime($d1);
+		$date2 = new DateTime($d2);
+
+		return $date2->diff($date1)->format("%a");
+	}
 }
