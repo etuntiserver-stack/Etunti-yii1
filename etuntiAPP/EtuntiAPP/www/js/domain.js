@@ -142,7 +142,7 @@ setTimeout(function() {
     function onServerReady2() {
 
 
-
+	if(device.platform != 'iOS'){
 	// <-- GET FCM Token
 	FCMPlugin.getToken(
 	  function(token){
@@ -208,7 +208,7 @@ setTimeout(function() {
 	  }
 	);
 	//    GET FCM message -->
-
+	}
 
 
 	function showAppVersion() {
