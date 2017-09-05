@@ -885,11 +885,24 @@ $xml = '
 	 */
 	public function actionIndex()
 	{
+		// <-- Check days count
+		if(Yii::app()->request->getPost('from') and Yii::app()->request->getPost('to'))
+		{
+			$site = Yii::app()->createController('Site');
+			$daysreturn = $site[0]->daysBetween(Yii::app()->request->getPost('from'), Yii::app()->request->getPost('to'));
+			if((int)$daysreturn > 100)
+			{
+				Yii::app()->user->setFlash('danger', "Haku aikaväli on liian pitkä.");
+				$this->redirect(array("index"));
+			}
+		}
+		//     Check days count -->
 
-	function sprint($val){
-	    if($val > 0)
-		return sprintf('%02d:%02d', $val/3600, ($val % 3600)/60);
-	}
+
+		function sprint($val){
+		    if($val > 0)
+			return sprintf('%02d:%02d', $val/3600, ($val % 3600)/60);
+		}
 
 
 		if(isset($_GET['deleteKorvaus']))

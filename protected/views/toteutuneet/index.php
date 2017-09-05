@@ -94,6 +94,7 @@ function dateDiff($start, $end) {
 		$to = date("d.m.Y",strtotime(Yii::app()->session['to']));
 
 		$dateDiff = dateDiff($from, $to);
+        
 ?>
 
   <table class="table table-striped table-bordered">
