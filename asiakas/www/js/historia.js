@@ -101,7 +101,7 @@ function getUrlVars() {
  	   data: sendDataPost,
            success: function(data){
 		var data = JSON.parse(data);
-		//console.log(data);
+		console.log(data);
 		if(data['OK'])
 		{
 			$('#avaaVinkki').removeClass('in');
