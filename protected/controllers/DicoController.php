@@ -372,12 +372,13 @@ public function actionLogin($domain)
 
 
 							$subject='=?UTF-8?B?'.base64_encode($asiakas ." suosittele").'?=';
-							$headers="From: ".$asiakas." <".$model->sahkoposti.">\r\n".
-								"Reply-To: noreply@etunti.fi\r\n".
+							$headers="From: ".$asiakas." <no-reply@etunti.fi>\r\n".
+								"Reply-To: no-reply@etunti.fi\r\n".
 								"MIME-Version: 1.0\r\n".
 								"Content-type: text/html; charset=UTF-8";
 
-							mail($mod->sahkoposti,$subject,$message,$headers);
+							if(mail($mod->sahkoposti,$subject,$message,$headers))
+							{
 							//     Sahkoposti lahetys -->
 
 							// <-- LOG
@@ -391,6 +392,10 @@ public function actionLogin($domain)
 
 							$this->_sendResponse(200, CJSON::encode(array('OK'=>Yii::t('main', 'Vinkki lähetetty.'))));
 							exit;
+							} else {
+							$this->_sendResponse(200, CJSON::encode(array('Error'=>Yii::t('main', 'Ei onnistunut lähetä.'))));
+							exit;
+							}
 						} else {
 							$this->_sendResponse(200, CJSON::encode(array('Error'=>$mod->getErrors())));
 							exit;
