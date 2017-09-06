@@ -1,35 +1,26 @@
-$(document).ready(function(){
-
-    var loginArr = [];
-
-    if(localStorage.getItem('loginOK'))
-    {
-	loginArr = JSON.parse(localStorage.getItem('loginOK')).loginOK;
-	$('#laatikot').show(370);
-	$('#kirjauduOikealla').show(370);
-	$('#asiakasNimi').html(loginArr['asiakasNimi']);
-
-    } else {
-	$('#loginLomake').show(370);
-    }
-    
-});
-
-
-
-    //localStorage.clear();
 
     var server = 'https://etunti.fi/';
     var domain = '';
     var tunnus = '';
     var salasana = '';
-    var loginArr = [];
     var paketti = [];
-
+    var loginArr = [];
+    var loginFull = [];
 
     if(localStorage.getItem('loginOK'))
     {
 	loginArr = JSON.parse(localStorage.getItem('loginOK')).loginOK[0];
+	loginFull = JSON.parse(localStorage.getItem('loginOK')).loginOK;
+    } 
+
+
+
+
+    //localStorage.clear();
+
+
+    if(localStorage.getItem('loginOK'))
+    {
 
 	var asiakasID = JSON.parse(localStorage.getItem('loginOK')).loginOK['asiakasID'];
 	
@@ -158,12 +149,6 @@ $("body").ready(function(){
 	window.location.href='asetukset.html';
   });
 
-  $("#vaihdaTunnus").click(function(){
- 	localStorage.removeItem('loginOK');
-	//localStorage.clear();
-	window.location.href='index.html';
-  });
-
   $("#toteutuneetTunnit").click(function(){
 	window.location.href='toteutuneet.html';
   });
@@ -171,6 +156,120 @@ $("body").ready(function(){
 });
 
 
+
+   $("#eHeader").replaceWith(''+
+
+    '<header class="navbar navbar-fixed-top navbar-shadow myBgColors">' +
+
+      '<div class="navbar-branding">' +
+        '<a class="logo" href="index.html">' +
+	'<img src="img/logo.png" height="40">' +
+        '</a>' +
+      '</div>' +
+
+      '<ul class="nav navbar-nav navbar-right">' +
+
+        '<li class="dropdown menu-merge hidden" data-toggle="tooltip" data-placement="bottom" title="Valitse värit">' +
+          '<a class="dropdown-toggle" data-toggle="dropdown" href="#">' +
+             '<span class="fa fa-eyedropper"></span> ' +
+
+	  '</a>' +
+          '<ul class="dropdown-menu pv5 animated animated-short flipInX" role="menu">' +
+            '<li>' +
+
+  '<div id="skin-toolbox">' +
+    '<div class="panel">' +
+      '<div class="panel-heading">' +
+
+      '</div>' +
+      '<div class="panel-body pn">' +
+
+        '<div class="text-dark">' +
+          '<div class="col-sm-6">' +
+            '<form id="toolbox-header-skin">' +
+              '<h4 class="mv20">Väri</h4>' +
+              '<div class="skin-toolbox-swatches">' +
+                '<div class="checkbox-custom checkbox-disabled fill mb5">' +
+                  '<input type="radio" name="headerSkin" id="headerSkin8" checked value="">' +
+                  '<label for="headerSkin8">Light</label>' +
+                '</div>' +
+               '<div class="checkbox-custom fill checkbox-primary mb5">' +
+                  '<input type="radio" name="headerSkin" id="headerSkin1" value="bg-primary">' +
+                  '<label for="headerSkin1">Primary</label>' +
+                '</div>' +
+                '<div class="checkbox-custom fill checkbox-info mb5">' +
+                  '<input type="radio" name="headerSkin" id="headerSkin3" value="bg-info">' +
+                  '<label for="headerSkin3">Info</label>' +
+                '</div>' +
+                '<div class="checkbox-custom fill checkbox-warning mb5">' +
+                  '<input type="radio" name="headerSkin" id="headerSkin4" value="bg-warning">' +
+                  '<label for="headerSkin4">Warning</label>' +
+                '</div>' +
+                '<div class="checkbox-custom fill checkbox-danger mb5">' +
+                  '<input type="radio" name="headerSkin" id="headerSkin5" value="bg-danger">' +
+                  '<label for="headerSkin5">Danger</label>' +
+                '</div>' +
+                '<div class="checkbox-custom fill checkbox-alert mb5">' +
+                  '<input type="radio" name="headerSkin" id="headerSkin6" value="bg-alert">' +
+                  '<label for="headerSkin6">Alert</label>' +
+                '</div>' +
+                '<div class="checkbox-custom fill checkbox-system mb5">' +
+                  '<input type="radio" name="headerSkin" id="headerSkin7" value="bg-system">' +
+                  '<label for="headerSkin7">System</label>' +
+                '</div>' +
+                '<div class="checkbox-custom fill checkbox-success mb5">' +
+                  '<input type="radio" name="headerSkin" id="headerSkin2" value="bg-success">' +
+                  '<label for="headerSkin2">Success</label>' +
+                '</div>' +
+                '<div class="checkbox-custom fill mb5">' +
+                  '<input type="radio" name="headerSkin" id="headerSkin9" value="bg-dark">' +
+                  '<label for="headerSkin9">Dark</label>' +
+                '</div>' +
+              '</div>' +
+            '</form>' +
+          '</div>' +
+        '</div>' +
+
+      '</div>' +
+    '</div>' +
+  '</div>' +
+
+        '<div class="form-group mn br-t p15">' +
+          '<a href="#" id="clearLocalStorage" class="btn btn-primary btn-block pb10 pt10">Palauta oletusasetukset</a>' +
+        '</div>' +
+
+	'</li>' +
+      '</ul>' +
+     '</li>' +
+
+
+        '<li class="dropdown menu-merge" id="kirjauduOikealla">' +
+          '<a href="#" data-toggle="dropdown"> ' +
+                 '<span id="asiakasNimi"></span> </a>' +
+          '</a>' +
+          '<ul class="dropdown-menu list-group dropdown-persist w250" role="menu">' +
+            '<li class="list-group-item">' +
+              '<a href="#" class="animated animated-short fadeInUp" id="asetukset">' +
+                '<span class="fa fa-gear"></span> Omat asetukset </a>' +
+            '</li>' +
+            
+            '<li class="list-group-item">' +
+              '<a href="kohteet.html" class="animated animated-short fadeInUp">' +
+                '<span class="fa fa-gear"></span> Omat kohteet </a>' +
+	    '</li>' +
+            '<li class="list-group-item">' +
+              '<a id="vaihdaTunnus" href="#" class="animated animated-short fadeInUp">' +
+                '<span class="fa fa-sign-out"></span> Kirjaudu ulos </a>' +
+            '</li>' +
+          '</ul>' +
+        '</li>' +
+        '<li class="powerButton"><a href="#" id="exitPainike" onclick="exitFromApp()"><span  class="fa fa-power-off"></span></a></li>' +
+        '<li id="toggle_sidemenu_t">' +
+        		'<span class="fa fa-caret-up"></span>' +
+        '</li>' +
+      '</ul>' +
+    '</header>' 
+   );
 
    $("#eFooter").replaceWith(''+
     '<div class="nav navbar-fixed-bottom navbar-shadow myBgColors">' +
@@ -190,5 +289,25 @@ $("body").ready(function(){
      '</div>' +
     '</div>'
    );
+
+
+
+   $("#vaihdaTunnus").click(function(){
+ 	localStorage.removeItem('loginOK');
+	//localStorage.clear();
+	window.location.href='index.html';
+   });
+
+
+
+   if(localStorage.getItem('loginOK'))
+   {
+	$('#laatikot').show(370);
+	$('#kirjauduOikealla').show(370);
+	$('#asiakasNimi').html(loginFull['asiakasNimi']);
+
+   } else {
+	$('#loginLomake').show(370);
+   }
 
 });
