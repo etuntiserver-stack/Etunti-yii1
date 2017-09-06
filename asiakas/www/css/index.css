@@ -32,3 +32,8 @@
 /* #footer-body h2{ font-size: 240%; margin-right: 15px; } */
 #footer-body h2{ font-size: 220%; }
 #footer-body a:hover{ color: none; }
+
+.foot .btn-default{
+    background: rgba(255, 255, 255, 1);
+    border:none;
+}
