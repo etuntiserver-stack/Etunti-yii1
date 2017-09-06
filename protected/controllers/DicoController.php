@@ -377,7 +377,8 @@ public function actionLogin($domain)
 								"MIME-Version: 1.0\r\n".
 								"Content-type: text/html; charset=UTF-8";
 
-							mail($mod->sahkoposti,$subject,$message,$headers);
+							if(mail($mod->sahkoposti,$subject,$message,$headers))
+							{
 							//     Sahkoposti lahetys -->
 
 							// <-- LOG
@@ -391,6 +392,10 @@ public function actionLogin($domain)
 
 							$this->_sendResponse(200, CJSON::encode(array('OK'=>Yii::t('main', 'Vinkki lähetetty.'))));
 							exit;
+							} else {
+							$this->_sendResponse(200, CJSON::encode(array('Error'=>Yii::t('main', 'Ei onnistunut lähetä.'))));
+							exit;
+							}
 						} else {
 							$this->_sendResponse(200, CJSON::encode(array('Error'=>$mod->getErrors())));
 							exit;
