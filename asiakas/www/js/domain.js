@@ -172,5 +172,23 @@ $("body").ready(function(){
 
 
 
+   $("#eFooter").replaceWith(''+
+    '<div class="nav navbar-fixed-bottom navbar-shadow myBgColors">' +
+     '<div class="container" id="footer-body">' +
+      '<center>' +
+	
+	'<div class="row">' +
+	   '<li class="col-xs-2"><a class="myBgColors" href="index.html"><h2 class="fa fa-home"></h2></a></li>' +
+	   '<li class="col-xs-2"><a class="myBgColors" href="historia.html?tyyppi=naytaTyovuorot"><h2 class="fa fa-calendar"></h2></a></li>' +
+	   '<li class="col-xs-2"><a class="myBgColors" href="historia.html?tyyppi=naytaToteutuneetTunnit"><h2 class="fa fa-check-square"></h2></a></li>' +
+	   '<li class="col-xs-2"><a class="myBgColors" href="historia.html?tyyppi=naytaVinkit"><h2 class="fa fa-thumbs-o-up"></h2></a></li>' +
+	   '<li class="col-xs-2"><a class="myBgColors" href="historia.html?tyyppi=naytaPalautteet"><h2 class="fa fa-smile-o"></h2></a></li>' +
+	   '<li class="col-xs-2"><a class="myBgColors" href="index.html?sivu=asiakirjat"><h2 class="fa fa-file-text-o"></h2></a></li>' +
+	'</div>' +
+
+      '</center>' +
+     '</div>' +
+    '</div>'
+   );
 
 });
