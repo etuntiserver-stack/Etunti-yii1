@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <!-- Meta, title, CSS, favicons, etc. -->
+  <meta charset="utf-8">
+  <title>Etunti - voita siivousalan haasteet</title>
+  <meta name="keywords" content="etunti" />
+  <meta name="description" content="AdminDesigns - A Responsive HTML5 Admin UI Framework">
+  <meta name="author" content="AdminDesigns">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Theme CSS -->
+  <link rel="stylesheet" type="text/css" href="assets_etunti/assets/skin/default_skin/css/theme.css">
+  <!-- Admin Forms CSS -->
+  <link rel="stylesheet" type="text/css" href="assets_etunti/assets/admin-tools/admin-forms/css/admin-forms.css">
+  <link rel='stylesheet' type='text/css' href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,600'>
+  <link rel="stylesheet" type="text/css" href="css/index.css">
+
+  <!-- Jquery Javascript -->
+  <script type="text/javascript" src="js/jquery-1.11.2.min.js"></script>
+
+  <!-- Theme Javascript -->
+  <script src="cordova.js"></script>
+  <script src="js/domain.js"></script>
+  <script src="js/info.js"></script>
+
+  <script src="js/jquery-ui.min.js"></script>
+  <script src="assets_etunti/assets/js/utility/utility.js"></script>
+  <script src="assets_etunti/assets/js/demo/demo.js"></script>
+  <script src="assets_etunti/assets/js/main.js"></script>
+
+  <!-- Widget Javascript 
+  <script src="assets_etunti/assets/js/demo/widgets.js"></script>-->
+
+</head>
+
+<body class="sb-l-o sb-r-c onload-check">
+
+
+    <!-- eHeader -->
+    <div id="eHeader"></div>
+    <!-- eHeader -->
+
+
+    <!-- container -->
+    <div class="container">
+     <div id="page">
+
+	<div id="resultLaatiko"></div>	
+
+     </div><!-- page -->
+    </div>
+    <!-- container -->
+
+
+    <!-- footer -->
+    <div id="eFooter"></div>
+    <!-- footer -->
+
+
+
+
+  <script type="text/javascript">
+  jQuery(document).ready(function() {
+
+	if(localStorage.getItem('login_paketti'))
+	{
+		paketti = localStorage.getItem('login_paketti').split(',');
+		a = paketti.indexOf("3");
+		if(a == -1){
+		$("#laskut_painike").hide();
+		}
+	}
+
+
+	$("#asiakirjat_painike").click(function(e){
+		e.preventDefault();
+		$("#tyovuorot_painike").hide(370);
+		$("#tilaus_painike").hide(370);
+		$("#vinkit_painike").hide(370);
+		$("#palautteet_painike").hide(370);
+		$("#laskut_painike").hide(370);
+		$("#asiakirjat_painike").hide(370);
+
+		$("#tarjoukset_painike").show(370);
+		$("#sopimukset_painike").show(370);
+		$("#tyonkuvaukset_painike").show(370);
+		$("#muut_tiedostot_painike").show(370);
+
+		$('body').scrollTop(0);
+	});
+
+	$("#tyovuorot_painike").click(function(e){
+		e.preventDefault();
+		$("#tyovuorot_painike").hide(370);
+		$("#tilaus_painike").hide(370);
+		$("#vinkit_painike").hide(370);
+		$("#palautteet_painike").hide(370);
+		$("#laskut_painike").hide(370);
+		$("#asiakirjat_painike").hide(370);
+
+		$("#tulevat_painike").show(370);
+		$("#toteutuneet_painike").show(370);
+
+		$('body').scrollTop(0);
+	});
+  });
+
+
+  jQuery(document).ready(function() {
+
+    "use strict";
+
+    Core.init();
+
+    Demo.init();
+    $('.admin-panels').adminpanel({
+      grid: '.admin-grid',
+      draggable: true,
+      preserveGrid: true,
+      mobile: false,
+      onStart: function() {
+        // Do something before AdminPanels runs
+      },
+      onFinish: function() {
+        $('.admin-panels').addClass('animated fadeIn').removeClass('fade-onload');
+
+        demoHighCharts.init();
+        runVectorMaps(); // function below
+      },
+      onSave: function() {
+        $(window).trigger('resize');
+      }
+    });
+
+
+    // <-- check
+	var sendData = loginArr;
+	sendData['asiakasID'] = asiakasID;
+
+	//console.log(sendData);
+
+        $.ajax({
+           url: url+'/check?domain='+domain,
+	   type:'POST',
+ 	   data: sendData,
+           success: function(data){
+		var d = JSON.parse(data);
+		if(d !== '')
+		{
+			//console.log(d);
+			$('#lukematonPalaute').html('<div class="alert bg-danger"><a class="text-white" href="historia.html?tyyppi=naytaPalautteet&id='+d+'">Olet saanut vastauksen palautteeseen</a></div>');
+		}
+    	   },
+    		error:function (xhr, ajaxOptions, thrownError){
+        	console.log(xhr.responseText);
+    	   }
+        });
+    //     check palautteet -->
+
+  });
+  </script>
+
+
+
+
+
+</body>
+</html>

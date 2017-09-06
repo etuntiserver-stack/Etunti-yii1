@@ -210,6 +210,27 @@ public function actionLogin($domain)
 	}
 
 
+	public function actionInfo($domain)
+	{
+
+		$return = '';
+		if(isset($_POST['tunnus']) and $this->kirjautuminen($domain, $_POST['tunnus'], $_POST['salasana']) == true)
+		{
+
+		   $model=Asiakkaat::model()->findByPk($_POST['asiakasID']);
+		   if(isset($model->id))
+		   {
+				$return = 'ok';
+				$this->_sendResponse(200, CJSON::encode(array('ok'=>$return)));
+				exit;
+
+		   }
+
+		}
+
+
+	}
+
 	protected function etuSukunimi($tid)
 	{
 	   $site = Yii::app()->createController('Site');
