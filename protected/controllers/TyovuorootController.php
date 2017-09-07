@@ -3521,14 +3521,9 @@ class TyovuorootController extends Controller
 	           $criteria->addCondition ("
 		   id IN (  
 		     SELECT tid FROM sivex_tvuoro WHERE DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') 
-
 		     BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."'
-		       AND tid IN 
-		       (
-			    SELECT id FROM sivex_ttekijat WHERE $tyoryhma_like
-		       )
-
 		   )
+		   AND ($tyoryhma_like)
 		   ");
 		}
 		//   tyoryhma -->

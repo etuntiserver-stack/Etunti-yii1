@@ -36,7 +36,7 @@
 <?php endif; ?>
 
 <?php if( count($tyontekijat_model) == 0 ) : ?>
-	<div class="alert alert-danger"><?php echo Yii::t('main', 'Ei tuloksia, tarkasta haku.'); ?></div>
+	<h2 class="alert bg-danger"><?php echo Yii::t('main', 'Ei tuloksia, tarkasta haku.'); ?></h2>
 <?php endif; ?>
 
 
