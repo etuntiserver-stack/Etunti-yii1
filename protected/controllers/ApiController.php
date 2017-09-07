@@ -997,6 +997,7 @@ public function actionImei($dom)
 	            $viestinta->viesti = $viestinta->viesti."\n".date("d.m H:i").", ".$this->etuSukunimi($ttekija->id).": ".$_POST['vastText'];
 	            $viestinta->save();
 		    // lahetta sahkopostiin
+		    /*
 		    $admin = '';
 		    $sending = '';
 		      $exAdmin = explode(",",$viestinta->admin);
@@ -1015,16 +1016,17 @@ public function actionImei($dom)
 					"MIME-Version: 1.0\r\n".
 					"Content-type: text/html; charset=UTF-8";
 
+
 				$message = '<h2>Keskustelun ID: '.$_POST['viestinID']."</h2><br>";
 				$message .= str_replace("\n","<br>",$viestinta->viesti);
-
 
 				if(mail($adm->adm_email,$subject,$message,$headers)){
 				   $sending = 'ok';
 				} else {
-				   $this->_sendResponse(200, 'Mail send ERROR');
+				   $this->_sendResponse(200, 'Mail send ERROR '.$headers);
 				}
 		      }
+		    */
 
 		    $this->_sendResponse(200, $viestinta->viesti);
 		exit;
