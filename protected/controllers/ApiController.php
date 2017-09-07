@@ -1010,8 +1010,8 @@ public function actionImei($dom)
 			
 				$name='=?UTF-8?B?'.base64_encode($viestinta->id).'?=';
 				$subject='=?UTF-8?B?'.base64_encode("Työntekijä ".$this->etuSukunimi($ttekija->id)." vastaa").'?=';
-				$headers="From: ".$this->etuSukunimi($ttekija->id)." <etunti@etunti.fi>\r\n".
-					"Reply-To: no_replay@etunti.fi\r\n".
+				$headers="From: ".$this->etuSukunimi($ttekija->id)." <no-reply@etunti.fi>\r\n".
+					"Reply-To: no-reply@etunti.fi\r\n".
 					"MIME-Version: 1.0\r\n".
 					"Content-type: text/html; charset=UTF-8";
 
