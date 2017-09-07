@@ -319,10 +319,10 @@ if( $curpage == 'tyovuoroot/tv2' )
 
 			<select class="form-control form-group" id="viikkonhyppaminen">
 			<?php
-			    echo '<option value="'.$_SERVER['PHP_SELF'].'?week='.$week.'&year='.$year.'">'.Yii::t('main', 'Viikko').': '.date('W', strtotime($year ."W". $week . '1')).', '.date('d.m', strtotime($year ."W". $week . '1')).' - '.date('d.m', strtotime($year ."W". $week . '7')).'</option>';
+			    echo '<option value="'.$_SERVER['PHP_SELF'].'?week='.$week.'&year='.$year.'">'.Yii::t('main', 'Viikko').': '.date('W', strtotime($year ."W". $week . '1')).', '.Yii::t('main', 'Vuosi').': '.date('Y', strtotime($year ."W". $week . '1')).', '.date('d.m', strtotime($year ."W". $week . '1')).' - '.date('d.m', strtotime($year ."W". $week . '7')).'</option>';
 
 			while (date('Y', $nextMonday) == $year) {
-			    echo '<option value="'.$_SERVER['PHP_SELF'].'?week='.date('W', $nextMonday).'&year='.$year.'">'.Yii::t('main', 'Viikko').': '.date('W', $nextMonday).', '.date('d.m', $nextMonday).' - '.date('d.m', $nextSunday).'</option>';
+			    echo '<option value="'.$_SERVER['PHP_SELF'].'?week='.date('W', $nextMonday).'&year='.$year.'">'.Yii::t('main', 'Viikko').': '.date('W', $nextMonday).', '.Yii::t('main', 'Vuosi').': '.date('Y', $nextMonday).', '.date('d.m', $nextMonday).' - '.date('d.m', $nextSunday).'</option>';
 	
 			    $nextMonday = strtotime('+1 week', $nextMonday);
 			    $nextSunday = strtotime('+1 week', $nextSunday);
