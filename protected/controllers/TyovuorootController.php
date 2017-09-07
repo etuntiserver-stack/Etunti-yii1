@@ -1451,7 +1451,10 @@ class TyovuorootController extends Controller
 
 
 			if($saankoSuoritta == 1)
+			{
 			$toistuva->save();
+			$model->delete();
+			}
 
 	
 			if(!isset($_POST['tyopaari']))
