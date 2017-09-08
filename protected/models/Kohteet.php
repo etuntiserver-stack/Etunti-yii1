@@ -52,7 +52,76 @@ public $verot;
 	 */
 	public function tableName()
 	{
-		return 'sivex_kohdet';
+		$tb_name = 'sivex_kohdet';
+		$check_this_table = false;
+		//unset(Yii::app()->session[$tb_name]); // this use if want many times play
+		if(!isset(Yii::app()->session[$tb_name]))
+		{
+			Yii::app()->session[$tb_name] = true;
+			$check_this_table = true;
+		}
+
+
+		if($check_this_table)
+		{
+		$table = Yii::app()->db1->schema->getTable($tb_name);
+		if(!isset($table->columns['id'])) {
+
+			Yii::app()->db1->createCommand(" CREATE TABLE IF NOT EXISTS $tb_name 
+			(`id` int(11) AUTO_INCREMENT PRIMARY KEY)
+			")->execute();
+		}
+
+		$table_structure = array(
+
+                     'asiakas_id' => 'int(11) ',
+                     'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP ',
+                     'tag_id' => 'varchar(20) ',
+                     'gps_sijainti' => 'varchar(50) ',
+                     'lyhenne' => 'varchar(46) YES ',
+                     'osoite' => 'varchar(50) MUL YES ',
+                     'katuosoite' => 'varchar(50) YES ',
+                     'kaupunki' => 'varchar(20) YES ',
+                     'toimipaikka' => 'varchar(20) YES ',
+                     'pnumero' => 'varchar(7) YES ',
+                     'email' => 'varchar(72) YES ',
+                     'aikataulu' => 'text YES ',
+                     'hinnoittelu' => 'text YES ',
+                     'muut' => 'text YES ',
+                     'toimenpiteet' => 'longtext YES ',
+                     'tietoja' => 'text YES ',
+                     'tyoryhma' => 'varchar(20) YES ',
+                     'ryhma' => 'varchar(10) YES ',
+                     'aktiivinen' => 'int(1) YES ',
+                     'avain' => 'varchar(255) MUL ',
+                     'kenella_on_avain' => 'varchar(50) ',
+                     'puh_nro' => 'varchar(50) ',
+                     'siivous' => 'varchar(100) ',
+                     'etu_suku_nimet' => 'varchar(100) ',
+                     'maksuehto_paiva' => 'int(2) ',
+                     'viivastyskorko' => 'varchar(10) ',
+                     'lasku_tiedot' => 'varchar(255) ',
+                     'hinta_tyyppi' => 'varchar(50) ',
+                     'hinta' => 'varchar(10) ',
+                     'avaimen_sijainti' => 'int(1) ',
+                     'tarvittavien_tyontekijoiden_maara' => 'int(3) ',
+                     'arvioitu_kesto' => 'varchar(100) ',
+                     'uusi_tilaus' => 'int(1) ',
+                     'alv' => 'int(2) ',
+                     'hinta_sis_alv' => 'float ',
+
+
+		);
+
+		foreach($table_structure as $key=>$value)
+		{
+			if (!isset($table->columns[$key])) {
+				Yii::app()->db1->createCommand()->addColumn($tb_name, $key, $value);
+			}
+		}	
+		} // if($check_this_table)
+
+		return $tb_name;
 	}
 
 	/**

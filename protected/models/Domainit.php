@@ -28,7 +28,56 @@ public $viesti;
 	 */
 	public function tableName()
 	{
-		return 'domainit';
+		$tb_name = 'domainit';
+
+		$check_this_table = false;
+		if(!isset(Yii::app()->session[$tb_name]))
+		{
+			Yii::app()->session[$tb_name] = true;
+			$check_this_table = true;
+		}
+
+
+		if($check_this_table)
+		{
+
+		$table = Yii::app()->db->schema->getTable($tb_name);
+		if(!isset($table->columns['id'])) {
+
+			Yii::app()->db->createCommand(" CREATE TABLE IF NOT EXISTS $tb_name 
+			(`id` int(11) AUTO_INCREMENT PRIMARY KEY)
+			")->execute();
+		}
+
+		$table_structure = array(
+
+                     'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP ',
+                     'domain' => 'varchar(100) ',
+                     'paketti' => 'varchar(100) ',
+                     'yritys' => 'varchar(100) ',
+                     'puhelin' => 'varchar(255) ',
+                     'sahkoposti' => 'varchar(255) ',
+                     'pakettin_nimetus' => 'varchar(100) ',
+                     'huoltokatko' => 'int(1) ',
+                     'palveluhinta_persiivoja' => 'int(11) ',
+                     'tyovuorohinta_persiivoja' => 'int(11) ',
+                     'muut_tyokaluhinta' => 'int(11) ',
+                     'aktiivinen' => 'int(1) DEFAULT 1 ',
+                  
+
+
+                );
+
+		foreach($table_structure as $key=>$value)
+		{
+			if (!isset($table->columns[$key])) {
+				Yii::app()->db->createCommand()->addColumn($tb_name, $key, $value);
+			}
+		}	
+
+		} // if($check_this_table)
+
+		return $tb_name;
 	}
 
 /*

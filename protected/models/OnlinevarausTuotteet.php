@@ -31,7 +31,55 @@ public $image;
 	 */
 	public function tableName()
 	{
-		return 'onlinevaraus_tuotteet';
+		$tb_name = 'onlinevaraus_tuotteet';
+		$check_this_table = false;
+		//unset(Yii::app()->session[$tb_name]); // this use if want many times play
+		if(!isset(Yii::app()->session[$tb_name]))
+		{
+			Yii::app()->session[$tb_name] = true;
+			$check_this_table = true;
+		}
+
+
+		if($check_this_table)
+		{
+		$table = Yii::app()->db1->schema->getTable($tb_name);
+		if(!isset($table->columns['id'])) {
+
+			Yii::app()->db1->createCommand(" CREATE TABLE IF NOT EXISTS $tb_name 
+			(`id` int(11) AUTO_INCREMENT PRIMARY KEY)
+			")->execute();
+		}
+
+		$table_structure = array(
+
+                     'nimike' => 'varchar(255) ',
+                     'hinta' => 'varchar(20) ',
+                     'selitysteksti' => 'text ',
+                     'palvelu' => 'int(1) ',
+                     'kesto' => 'varchar(20) ',
+                     'nelio' => 'varchar(20) ',
+                     'kotitalousvahennys' => 'varchar(20) ',
+                     'nayta_sivuilla' => 'int(1) DEFAULT 1 ',
+                     'paa_palvelu' => 'int(11) ',
+                     'toinen_valikko_rakenne' => 'text ',
+                     'lisapalvelut' => 'text ',
+                     'alv' => 'int(3) ',
+
+
+
+
+		);
+
+		foreach($table_structure as $key=>$value)
+		{
+			if (!isset($table->columns[$key])) {
+				Yii::app()->db1->createCommand()->addColumn($tb_name, $key, $value);
+			}
+		}	
+		} // if($check_this_table)
+
+		return $tb_name;
 	}
 
 	/**

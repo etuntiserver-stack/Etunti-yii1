@@ -50,7 +50,76 @@ public $tunnus;
 	 */
 	public function tableName()
 	{
-		return 'sivex_ttekijat';
+		$tb_name = 'sivex_ttekijat';
+		$check_this_table = false;
+		unset(Yii::app()->session[$tb_name]); // this use if want many times play
+		if(!isset(Yii::app()->session[$tb_name]))
+		{
+			Yii::app()->session[$tb_name] = true;
+			$check_this_table = true;
+		}
+
+
+		if($check_this_table)
+		{
+		$table = Yii::app()->db1->schema->getTable($tb_name);
+		if(!isset($table->columns['id'])) {
+
+			Yii::app()->db1->createCommand(" CREATE TABLE IF NOT EXISTS $tb_name 
+			(`id` int(11) AUTO_INCREMENT PRIMARY KEY)
+			")->execute();
+		}
+
+		$table_structure = array(
+
+                     'imei' => 'varchar(100) ',
+                     'laiten_puh' => 'varchar(100) ',
+                     'tekijan_nimi' => 'varchar(100) ',
+                     'tekijan_henkilotunnus' => 'varchar(20) ',
+                     'tekijan_puh' => 'varchar(20) ',
+                     'tekijan_email' => 'varchar(50) ',
+                     'tekijan_lanka_puh' => 'varchar(20) ',
+                     'tekijan_katuosoite' => 'varchar(100) ',
+                     'tekijan_pnumero' => 'varchar(7) ',
+                     'tekijan_ptoimipaikka' => 'varchar(50) ',
+                     'tyoryhma' => 'varchar(500) ',
+                     'tyoehtosopimus' => 'varchar(50) ',
+                     'tekijan_kulunvalvonta' => 'varchar(50) ',
+                     'tekijan_pankkitili' => 'varchar(100) ',
+                     'tekijan_konttori' => 'varchar(50) ',
+                     'aktiivinen' => 'varchar(50) ',
+                     'tekijan_tietoja' => 'text ',
+                     'tekijan_muisti' => 'text ',
+                     'salasana' => 'varchar(100) ',
+                     'online_varauksen_valmina' => 'int(1)',
+                     'kortit' => 'text ',
+                     'ayjasenyys' => 'varchar(10) ',
+                     'gcm_reg_id' => 'varchar(500) ',
+                     'position' => 'varchar(255) ',
+                     'tyo_toimialue' => 'varchar(100) ',
+                     'tietoja_onlinevarauksen' => 'text ',
+                     'sukunimi' => 'varchar(255) ',
+                     'ilmoitus_merkkipaivasta_vuosi' => 'int(4) ',
+                     'kortit_voimassaolo' => 'varchar(500) ',
+                     'tyontekijan_numero' => 'int(10) ',
+                     'ammattinimike' => 'varchar(255) ',
+                     'onlinevaraus_tuotteet' => 'text ',
+
+
+
+
+
+		);
+
+		foreach($table_structure as $key=>$value)
+		{
+			if (!isset($table->columns[$key])) {
+				Yii::app()->db1->createCommand()->addColumn($tb_name, $key, $value);
+			}
+		}	
+		} // if($check_this_table)
+
+		return $tb_name;
 	}
 
 

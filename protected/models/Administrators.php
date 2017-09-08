@@ -31,8 +31,54 @@ public $adm_salasana_repeat;
 	 */
 	public function tableName()
 	{
-		return 'sivex_administrators';
+
+		$tb_name = 'sivex_administrators';
+
+		$check_this_table = false;
+		if(!isset(Yii::app()->session[$tb_name]))
+		{
+			Yii::app()->session[$tb_name] = true;
+			$check_this_table = true;
+		}
+
+
+		if($check_this_table)
+		{
+
+		$table = Yii::app()->db1->schema->getTable($tb_name);
+		if(!isset($table->columns['id'])) {
+
+			Yii::app()->db1->createCommand(" CREATE TABLE IF NOT EXISTS $tb_name 
+			(`id` int(11) AUTO_INCREMENT PRIMARY KEY)
+			")->execute();
+		}
+
+		$table_structure = array(
+
+                     'adm_login' => 'varchar(100) ',
+                     'adm_salasana' => 'varchar(100) ',
+                     'adm_email' => 'varchar(100) ',
+                     'adm_nimi' => 'varchar(100) ',
+                     'status' => 'int(1) ',
+                     'ulkonaky' => 'text ',
+                     'token' => 'varchar(255) ',
+
+
+
+		);
+
+		foreach($table_structure as $key=>$value)
+		{
+			if (!isset($table->columns[$key])) {
+				Yii::app()->db1->createCommand()->addColumn($tb_name, $key, $value);
+			}
+		}	
+
+		} // if($check_this_table)
+
+		return $tb_name;
 	}
+
 
 	/**
 	 * @return array validation rules for model attributes.

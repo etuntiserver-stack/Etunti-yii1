@@ -72,7 +72,101 @@ public $template;
 	 */
 	public function tableName()
 	{
-		return 'sivex_tyosopimukset';
+		$tb_name = 'sivex_tyosopimukset';
+		$check_this_table = false;
+		//unset(Yii::app()->session[$tb_name]); // this use if want many times play
+		if(!isset(Yii::app()->session[$tb_name]))
+		{
+			Yii::app()->session[$tb_name] = true;
+			$check_this_table = true;
+		}
+
+
+		if($check_this_table)
+		{
+		$table = Yii::app()->db1->schema->getTable($tb_name);
+		if(!isset($table->columns['id'])) {
+
+			Yii::app()->db1->createCommand(" CREATE TABLE IF NOT EXISTS $tb_name 
+			(`id` int(11) AUTO_INCREMENT PRIMARY KEY)
+			")->execute();
+		}
+
+		$table_structure = array(
+
+                     'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP ',
+                     'key' => 'int(1) DEFAULT 1 ',
+                     'tyonantaja' => 'varchar(70) ',
+                     'osoite' => 'varchar(255) ',
+                     'postinumero' => 'varchar(7) ',
+                     'postitoimipaikka' => 'varchar(100) ',
+                     'puhelin' => 'varchar(50) ',
+                     'y_tunnus' => 'varchar(50) ',
+                     'sahkoposti' => 'varchar(100) ',
+                     'tekijan_email' => 'varchar(100) ',
+                     'tid' => 'int(7) ',
+                     'tekijan_nimi' => 'varchar(70) ',
+                     'tekijan_katuosoite' => 'varchar(100) ',
+                     'tekijan_pnumero' => 'varchar(7) ',
+                     'tekijan_ptoimipaikka' => 'varchar(50) ',
+                     'tekijan_puh' => 'varchar(50) ',
+                     'tekijan_henkilotunnus' => 'varchar(50) ',
+                     'sopimus' => 'varchar(50) ',
+                     'ToistaVoimaSopimus' => 'varchar(100) ',
+                     'MaaraVoimaSopimusAlkaa' => 'varchar(100) ',
+                     'MaaraVoimaSopimusPaattyy' => 'varchar(100) ',
+                     'peruste' => 'text ',
+                     'koeaika' => 'varchar(100) ',
+                     'SoveltavaSopimus' => 'varchar(100) ',
+                     'Tyotehtavat' => 'text ',
+                     'tyonSuorittamisPaikka' => 'text ',
+                     'PalkanMaaraytymisperuste' => 'varchar(50) ',
+                     'PalkanMaaraytymisperusteMuu' => 'varchar(100) ',
+                     'TyokokemusVuotta' => 'varchar(20) ',
+                     'TyokokemusKuu' => 'varchar(20) ',
+                     'palkka_kk' => 'varchar(20) ',
+                     'Palkkaluokka' => 'varchar(50) ',
+                     'palkka_h' => 'varchar(20) ',
+                     'Luontaiseudut' => 'text ',
+                     'Raha_arvo' => 'varchar(70) ',
+                     'Verotusarvo' => 'varchar(70) ',
+                     'palkka_muu2' => 'varchar(70) ',
+                     'Palkanmaksukausi' => 'varchar(50) ',
+                     'Palkanmaksupaivat' => 'varchar(50) ',
+                     'Palkka_tilille' => 'varchar(100) ',
+                     'tyoaika_hvrk' => 'varchar(50) ',
+                     'tyoaika_hvko' => 'varchar(50) ',
+                     'tyoaika_h_jakso' => 'varchar(50) ',
+                     'tyoaika_vko_jaksossa' => 'varchar(50) ',
+                     'RuokataukonPituus' => 'varchar(50) ',
+                     'Muu_tyoaika' => 'text ',
+                     'lomasta_sovittu' => 'text ',
+                     'Salassapito' => 'text ',
+                     'IrtisanomisaikaM' => 'varchar(50) ',
+                     'Muut_sopimusehdot' => 'text ',
+                     'Muutospaiva' => 'varchar(50) ',
+                     'LisayksetSopimukseen' => 'text ',
+                     'Paivays' => 'varchar(50) ',
+                     'Paikka' => 'varchar(100) ',
+                     'TyonantajanEdustaja' => 'varchar(100) ',
+                     'NimikeTehtava' => 'varchar(100) ',
+                     'tiedosto' => 'varchar(255) ',
+                     'teksti' => 'text ',
+
+
+
+
+		);
+
+		foreach($table_structure as $key=>$value)
+		{
+			if (!isset($table->columns[$key])) {
+				Yii::app()->db1->createCommand()->addColumn($tb_name, $key, $value);
+			}
+		}	
+		} // if($check_this_table)
+
+		return $tb_name;
 	}
 
 	/**

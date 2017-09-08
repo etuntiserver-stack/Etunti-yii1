@@ -43,7 +43,67 @@ class Tyosuhdet extends DB2ActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'sivex_tyosuhdet';
+		$tb_name = 'sivex_tyosuhdet';
+		$check_this_table = false;
+		unset(Yii::app()->session[$tb_name]); // this use if want many times play
+		if(!isset(Yii::app()->session[$tb_name]))
+		{
+			Yii::app()->session[$tb_name] = true;
+			$check_this_table = true;
+		}
+
+
+		if($check_this_table)
+		{
+		$table = Yii::app()->db1->schema->getTable($tb_name);
+		if(!isset($table->columns['id'])) {
+
+			Yii::app()->db1->createCommand(" CREATE TABLE IF NOT EXISTS $tb_name 
+			(`id` int(11) AUTO_INCREMENT PRIMARY KEY)
+			")->execute();
+		}
+
+		$table_structure = array(
+
+                     'tid' => 'int(7) ',
+                     'alku' => 'varchar(20) ',
+                     'loppu' => 'varchar(20) ',
+                     'vktyoaika' => 'varchar(10) ',
+                     'nimike' => 'varchar(40) ',
+                     'palkkausmuoto' => 'varchar(30) ',
+                     'tuntihinta' => 'varchar(10) ',
+                     'matka_thinta' => 'varchar(10) ',
+                     'lippu_kuumaks' => 'varchar(10) ',
+                     'koe_loppu' => 'varchar(20) ',
+                     'koe_hinta' => 'varchar(10) ',
+                     'tuloraja_ajalle' => 'varchar(100) ',
+                     'perusprosentti' => 'varchar(10) ',
+                     'lisaprosentti' => 'varchar(10) ',
+                     'kuukaudessa' => 'varchar(10) ',
+                     'kahdessa_viikossa' => 'varchar(10) ',
+                     'viikossa' => 'varchar(10) ',
+                     'paivassa' => 'varchar(10) ',
+                     'atk_varten' => 'varchar(10) ',
+                     'yksi_tuloraja' => 'varchar(10) ',
+                     'tyopvm_kk' => 'int(2) ',
+                     'palkka_tyyppi' => 'varchar(10) ',
+                     'veronumero' => 'varchar(255) ',
+
+
+
+
+
+		);
+
+		foreach($table_structure as $key=>$value)
+		{
+			if (!isset($table->columns[$key])) {
+				Yii::app()->db1->createCommand()->addColumn($tb_name, $key, $value);
+			}
+		}	
+		} // if($check_this_table)
+
+		return $tb_name;
 	}
 
 	/**

@@ -35,4 +35,45 @@ while($row=mysqli_fetch_array($sql))
 }
 */
 
+
+
+
+
+$servername = "localhost";
+$username = "root";
+$password = "111111";
+
+// Create connection
+$conn = new mysqli($servername, $username, $password);
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+} 
+
+mysqli_select_db($conn,"defdb"); // defdb == default daatabase  , etuntifw == settings 
+$sql = mysqli_query($conn,"SHOW FULL COLUMNS FROM vuosilomat"); //WHERE hinta_sis_alv=0 AND alv!=0
+ 
+$last = 'id';
+while($row = mysqli_fetch_array($sql)) {
+
+	if($row['Field'] == 'id')
+	continue;
+
+	if(!empty($row['Default']))
+	$row['Key'] = $row['Key'].' DEFAULT';
+
+
+	if($row['Null'] == 'NO')
+	$null = '';
+	else
+	$null = $row['Null'];
+
+    	echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\''.$row['Field'].'\' => \''.$row['Type'].' '.$row['Key'].' '.$null.' '.$row['Default'].' '.$row['Extra'].'\',<br>';
+
+
+	$last = $row['Field'];
+}
+
+
 ?>

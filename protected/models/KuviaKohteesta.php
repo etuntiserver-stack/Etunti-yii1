@@ -20,7 +20,50 @@ class KuviaKohteesta extends DB2ActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'kuvia_kohteesta';
+		$tb_name = 'kuvia_kohteesta';
+		$check_this_table = false;
+		//unset(Yii::app()->session[$tb_name]); // this use if want many times play
+		if(!isset(Yii::app()->session[$tb_name]))
+		{
+			Yii::app()->session[$tb_name] = true;
+			$check_this_table = true;
+		}
+
+
+		if($check_this_table)
+		{
+		$table = Yii::app()->db1->schema->getTable($tb_name);
+		if(!isset($table->columns['id'])) {
+
+			Yii::app()->db1->createCommand(" CREATE TABLE IF NOT EXISTS $tb_name 
+			(`id` int(11) AUTO_INCREMENT PRIMARY KEY)
+			")->execute();
+		}
+
+		$table_structure = array(
+
+                     'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP ',
+                     'kohde_id' => 'int(11) ',
+                     'osoite' => 'varchar(255) ',
+                     'tid' => 'int(11) ',
+                     'tekijan_nimi' => 'varchar(255) ',
+                     'tiedosto' => 'varchar(255) ',
+                     'kuvaus' => 'text ',
+
+
+
+
+		);
+
+		foreach($table_structure as $key=>$value)
+		{
+			if (!isset($table->columns[$key])) {
+				Yii::app()->db1->createCommand()->addColumn($tb_name, $key, $value);
+			}
+		}	
+		} // if($check_this_table)
+
+		return $tb_name;
 	}
 
 	/**

@@ -53,7 +53,70 @@ public $count;
 	 */
 	public function tableName()
 	{
-		return 'sivexkuitti_repaired';
+		$tb_name = 'sivexkuitti_repaired';
+		$check_this_table = false;
+		//unset(Yii::app()->session[$tb_name]); // this use if want many times play
+		if(!isset(Yii::app()->session[$tb_name]))
+		{
+			Yii::app()->session[$tb_name] = true;
+			$check_this_table = true;
+		}
+
+
+		if($check_this_table)
+		{
+		$table = Yii::app()->db1->schema->getTable($tb_name);
+		if(!isset($table->columns['id'])) {
+
+			Yii::app()->db1->createCommand(" CREATE TABLE IF NOT EXISTS $tb_name 
+			(`id` int(11) AUTO_INCREMENT PRIMARY KEY)
+			")->execute();
+		}
+
+		$table_structure = array(
+
+                     'kid' => 'int(7) ',
+                     'asiakas_num' => 'varchar(50) ',
+                     'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP ',
+                     'requests' => 'int(7) DEFAULT 1 ',
+                     'puh_numero' => 'varchar(50) ',
+                     'imei' => 'varchar(100) ',
+                     'bluetooth_name' => 'varchar(50) ',
+                     'sim_serial_number' => 'varchar(100) ',
+                     'subscriber_id' => 'varchar(50) ',
+                     'my_location' => 'varchar(1000) ',
+                     'osoite' => 'varchar(255) ',
+                     'kohde_kannasta' => 'varchar(100) ',
+                     'kohdenID' => 'int(7) ',
+                     'aloitan' => 'varchar(20) ',
+                     'loppui' => 'varchar(20) ',
+                     'viesti' => 'varchar(250) ',
+                     'tekijan_nimi' => 'varchar(50) ',
+                     'tid' => 'int(7) ',
+                     'etaisyys' => 'varchar(20) ',
+                     'status' => 'int(1) ',
+                     'tietoja' => 'text ',
+                     'admin' => 'int(1) ',
+                     'tyoajanlaatu' => 'varchar(100) ',
+                     'tyoajanmerkinta' => 'varchar(100) ',
+                     'hyvaksytty' => 'varchar(100) ',
+                     'asiakas_hyvaksy' => 'varchar(100) ',
+                     'sairaus' => 'int(1) ',
+                     'laskutettu' => 'int(1) ',
+                     'laskutetaan' => 'int(1) DEFAULT 1 ',
+
+
+		);
+
+		foreach($table_structure as $key=>$value)
+		{
+			if (!isset($table->columns[$key])) {
+				Yii::app()->db1->createCommand()->addColumn($tb_name, $key, $value);
+			}
+		}	
+		} // if($check_this_table)
+
+		return $tb_name;
 	}
 
 	/**

@@ -40,7 +40,64 @@ public $tyontekijat;
 	 */
 	public function tableName()
 	{
-		return 'sivex_kirjallinen_varoitus';
+		$tb_name = 'sivex_kirjallinen_varoitus';
+		$check_this_table = false;
+		//unset(Yii::app()->session[$tb_name]); // this use if want many times play
+		if(!isset(Yii::app()->session[$tb_name]))
+		{
+			Yii::app()->session[$tb_name] = true;
+			$check_this_table = true;
+		}
+
+
+		if($check_this_table)
+		{
+		$table = Yii::app()->db1->schema->getTable($tb_name);
+		if(!isset($table->columns['id'])) {
+
+			Yii::app()->db1->createCommand(" CREATE TABLE IF NOT EXISTS $tb_name 
+			(`id` int(11) AUTO_INCREMENT PRIMARY KEY)
+			")->execute();
+		}
+
+		$table_structure = array(
+
+                     'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP ',
+                     'key' => 'int(1) DEFAULT 2 ',
+                     'tyonantaja' => 'varchar(70) ',
+                     'osoite' => 'varchar(255) ',
+                     'postinumero' => 'varchar(7) ',
+                     'postitoimipaikka' => 'varchar(100) ',
+                     'puhelin' => 'varchar(50) ',
+                     'y_tunnus' => 'varchar(50) ',
+                     'sahkoposti' => 'varchar(100) ',
+                     'tekijan_email' => 'varchar(100) ',
+                     'tid' => 'int(7) ',
+                     'tekijan_nimi' => 'varchar(70) ',
+                     'tekijan_katuosoite' => 'varchar(100) ',
+                     'tekijan_pnumero' => 'varchar(7) ',
+                     'tekijan_ptoimipaikka' => 'varchar(50) ',
+                     'tekijan_puh' => 'varchar(50) ',
+                     'tekijan_henkilotunnus' => 'varchar(50) ',
+                     'kirjallisen_varoituksen' => 'text ',
+                     'Paivays' => 'varchar(50) ',
+                     'Paikka' => 'varchar(100) ',
+                     'TyonantajanEdustaja' => 'varchar(100) ',
+                     'NimikeTehtava' => 'varchar(100) ',
+                     'tiedosto' => 'varchar(255) ',
+
+
+		);
+
+		foreach($table_structure as $key=>$value)
+		{
+			if (!isset($table->columns[$key])) {
+				Yii::app()->db1->createCommand()->addColumn($tb_name, $key, $value);
+			}
+		}	
+		} // if($check_this_table)
+
+		return $tb_name;
 	}
 
 	/**

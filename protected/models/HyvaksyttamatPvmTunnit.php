@@ -18,7 +18,38 @@ class HyvaksyttamatPvmTunnit extends DB2ActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'hyvaksyttamat_pvm_tunnit';
+		$tb_name = 'hyvaksyttamat_pvm_tunnit';
+
+		$table = Yii::app()->db1->schema->getTable($tb_name);
+		if(!isset($table->columns['id'])) {
+
+			Yii::app()->db1->createCommand(" CREATE TABLE IF NOT EXISTS $tb_name 
+			(`id` int(11) AUTO_INCREMENT PRIMARY KEY)
+			")->execute();
+		}
+
+		$table_structure = array(
+
+                     'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP ',
+                     'pvm' => 'varchar(50) ',
+                     'tid' => 'int(11) ',
+                     'admin' => 'int(11) ',
+                     'json_arvot' => 'text ',
+                     'netvisor_ok_list' => 'text ',
+
+
+
+
+		);
+
+		foreach($table_structure as $key=>$value)
+		{
+			if (!isset($table->columns[$key])) {
+				Yii::app()->db1->createCommand()->addColumn($tb_name, $key, $value);
+			}
+		}	
+
+		return $tb_name;
 	}
 
 	/**

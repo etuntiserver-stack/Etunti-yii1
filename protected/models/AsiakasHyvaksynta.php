@@ -31,7 +31,49 @@ class AsiakasHyvaksynta extends DB2ActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'asiakas_hyvaksynta';
+		$tb_name = 'asiakas_hyvaksynta';
+		$check_this_table = false;
+		//unset(Yii::app()->session[$tb_name]); // this use if want many times play
+		if(!isset(Yii::app()->session[$tb_name]))
+		{
+			Yii::app()->session[$tb_name] = true;
+			$check_this_table = true;
+		}
+
+
+		if($check_this_table)
+		{
+		$table = Yii::app()->db1->schema->getTable($tb_name);
+		if(!isset($table->columns['id'])) {
+
+			Yii::app()->db1->createCommand(" CREATE TABLE IF NOT EXISTS $tb_name 
+			(`id` int(11) AUTO_INCREMENT PRIMARY KEY)
+			")->execute();
+		}
+
+		$table_structure = array(
+
+                     'asiakas_id' => 'int(11) ',
+                     'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP ',
+                     'ids' => 'text ',
+                     'sahkoposti' => 'varchar(255) ',
+                     'code' => 'varchar(500) ',
+                     'status' => 'int(2) ',
+                     'selitys' => 'text ',
+                     'kirjen_body' => 'text ',
+
+
+		);
+
+		foreach($table_structure as $key=>$value)
+		{
+			if (!isset($table->columns[$key])) {
+				Yii::app()->db1->createCommand()->addColumn($tb_name, $key, $value);
+			}
+		}	
+		} // if($check_this_table)
+
+		return $tb_name;
 	}
 
 	/**
