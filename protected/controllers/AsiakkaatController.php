@@ -1153,6 +1153,16 @@ exit;
 
 	protected function toteutuneetTunnitCRM($model, $from, $to)
 	{
+
+		$asetukset = Asetukset::model()->findbypk(1);
+		if(empty($asetukset->edico_tehdyt_tyot))
+		{
+			return '';
+		} elseif($asetukset->edico_tehdyt_tyot == 'kirjattu') {
+			// ei tarvitse mitaan
+		}
+
+
 		$bod = '<div>';
 
 		$dataArr = array();
@@ -1240,6 +1250,7 @@ exit;
 
 		$bod .= '</div>';
 	
+
 		return $bod;
 	}
 

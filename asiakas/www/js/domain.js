@@ -46,7 +46,7 @@
 
     // <-- Palvelin
 
-    //var server = '../../';
+    var server = '../../';
     var url = server+"index.php/dico/asiakkaat";
     var versio = "";
     // Palvelin -->
