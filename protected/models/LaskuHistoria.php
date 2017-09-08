@@ -31,7 +31,52 @@ public $viitenumero, $laskunumero, $yhteensa_total_veroton, $yhteensa_total_vero
 	 */
 	public function tableName()
 	{
-		return 'lasku_historia';
+		$tb_name = 'lasku_historia';
+		$check_this_table = false;
+		//unset(Yii::app()->session[$tb_name]); // this use if want many times play
+		if(!isset(Yii::app()->session[$tb_name]))
+		{
+			Yii::app()->session[$tb_name] = true;
+			$check_this_table = true;
+		}
+
+
+		if($check_this_table)
+		{
+		$table = Yii::app()->db1->schema->getTable($tb_name);
+		if(!isset($table->columns['id'])) {
+
+			Yii::app()->db1->createCommand(" CREATE TABLE IF NOT EXISTS $tb_name 
+			(`id` int(11) AUTO_INCREMENT PRIMARY KEY)
+			")->execute();
+		}
+
+		$table_structure = array(
+
+                     'lid' => 'int(11) ',
+                     'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP ',
+                     'status' => 'text ',
+                     'yht_euro' => 'varchar(50) ',
+                     'palvelu' => 'varchar(50) ',
+                     'trust_statuscode' => 'varchar(100) ',
+                     'paydate' => 'varchar(50) ',
+                     'amount' => 'varchar(50) ',
+                     'postita_statuscode' => 'varchar(100) ',
+
+
+
+
+		);
+
+		foreach($table_structure as $key=>$value)
+		{
+			if (!isset($table->columns[$key])) {
+				Yii::app()->db1->createCommand()->addColumn($tb_name, $key, $value);
+			}
+		}	
+		} // if($check_this_table)
+
+		return $tb_name;
 	}
 
 	/**

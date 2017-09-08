@@ -20,7 +20,41 @@ class DigistenTunnitKk extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'digisten_tunnit_kk';
+		$tb_name = 'digisten_tunnit_kk';
+
+		$table = Yii::app()->db->schema->getTable($tb_name);
+		if(!isset($table->columns['id'])) {
+
+			Yii::app()->db->createCommand(" CREATE TABLE IF NOT EXISTS $tb_name 
+			(`id` int(11) AUTO_INCREMENT PRIMARY KEY)
+			")->execute();
+		}
+
+		$table_structure = array(
+
+                     'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP ',
+                     'domain_id' => 'int(11) ',
+                     'domain' => 'varchar(255) YES ',
+                     'year' => 'int(4) ',
+                     'month' => 'int(2) ',
+                     'tunnit' => 'int(11) ',
+                     'tasot' => 'text ',
+                     'maksettu' => 'int(1) 0 ',
+                     'laskutettu' => 'int(1) ',
+                     'lasku_id' => 'int(11) ',
+
+
+
+		);
+
+		foreach($table_structure as $key=>$value)
+		{
+			if (!isset($table->columns[$key])) {
+				Yii::app()->db->createCommand()->addColumn($tb_name, $key, $value);
+			}
+		}	
+
+		return $tb_name;
 	}
 
 	/**

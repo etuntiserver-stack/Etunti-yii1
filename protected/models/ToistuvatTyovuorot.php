@@ -28,7 +28,62 @@ class ToistuvatTyovuorot extends DB2ActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'toistuvat_tyovuorot';
+		
+		$tb_name = 'toistuvat_tyovuorot';
+		$check_this_table = false;
+		//unset(Yii::app()->session[$tb_name]); // this use if want many times play
+		if(!isset(Yii::app()->session[$tb_name]))
+		{
+			Yii::app()->session[$tb_name] = true;
+			$check_this_table = true;
+		}
+
+
+		if($check_this_table)
+		{
+		$table = Yii::app()->db1->schema->getTable($tb_name);
+		if(!isset($table->columns['id'])) {
+
+			Yii::app()->db1->createCommand(" CREATE TABLE IF NOT EXISTS $tb_name 
+			(`id` int(11) AUTO_INCREMENT PRIMARY KEY)
+			")->execute();
+		}
+
+		$table_structure = array(
+
+                     'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP ',
+                     'pfrom' => 'varchar(50) ',
+                     'pto' => 'varchar(50) ',
+                     'viikkoja' => 'int(1) ',
+                     'viikko_paivat' => 'text ',
+                     'tid' => 'int(11) ',
+                     'kohde' => 'int(11) ',
+                     'pvm' => 'varchar(50) ',
+                     'alku' => 'varchar(10) ',
+                     'loppu' => 'varchar(10) ',
+                     'pituus' => 'varchar(10) ',
+                     'kesto' => 'varchar(10) ',
+                     'tyoajanmerkinta' => 'varchar(100) ',
+                     'status' => 'int(3) ',
+                     'tietoja' => 'text ',
+                     'tyopaari' => 'text ',
+                     'ilmoitus_paattymisesta' => 'int(1) ',
+                     'tvuoro_ids' => 'text ',
+
+
+
+
+		);
+
+		foreach($table_structure as $key=>$value)
+		{
+			if (!isset($table->columns[$key])) {
+				Yii::app()->db1->createCommand()->addColumn($tb_name, $key, $value);
+			}
+		}	
+		} // if($check_this_table)
+
+		return $tb_name;
 	}
 
 	/**

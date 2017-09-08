@@ -24,7 +24,65 @@ class Onlinevaraus extends DB2ActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'onlinevaraus';
+		$tb_name = 'onlinevaraus';
+		$check_this_table = false;
+		//unset(Yii::app()->session[$tb_name]); // this use if want many times play
+		if(!isset(Yii::app()->session[$tb_name]))
+		{
+			Yii::app()->session[$tb_name] = true;
+			$check_this_table = true;
+		}
+
+
+		if($check_this_table)
+		{
+		$table = Yii::app()->db1->schema->getTable($tb_name);
+		if(!isset($table->columns['id'])) {
+
+			Yii::app()->db1->createCommand(" CREATE TABLE IF NOT EXISTS $tb_name 
+			(`id` int(11) AUTO_INCREMENT PRIMARY KEY)
+			")->execute();
+		}
+
+		$table_structure = array(
+
+                     'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP ',
+                     'tv_id' => 'int(11) ',
+                     'maksun_onnistu_koodi' => 'varchar(1000) ',
+                     'tila' => 'int(1) ',
+                     'asiakas_id' => 'int(11) ',
+                     'kohde_id' => 'int(11) ',
+                     'kesto' => 'varchar(50) ',
+                     'hinta' => 'varchar(50) ',
+                     'tilauksen_kuvaus' => 'text ',
+                     'yhteyshenkilo' => 'varchar(100) ',
+                     'puhelin' => 'varchar(100) ',
+                     'osoite' => 'varchar(255) ',
+                     'postinumero' => 'varchar(10) ',
+                     'kaupunki' => 'varchar(255) ',
+                     'lisatietoja' => 'text ',
+                     'sahkoposti' => 'varchar(255) ',
+                     'alv' => 'int(3) ',
+                     'veroton_hinta' => 'varchar(10) ',
+                     'tyyppi' => 'varchar(100) ',
+                     'yrityksen_nimi' => 'varchar(255) ',
+                     'y_tunnus' => 'varchar(100) ',
+                     'valokuvat' => 'text ',
+
+
+
+
+		);
+
+		foreach($table_structure as $key=>$value)
+		{
+			if (!isset($table->columns[$key])) {
+				Yii::app()->db1->createCommand()->addColumn($tb_name, $key, $value);
+			}
+		}	
+		} // if($check_this_table)
+
+		return $tb_name;
 	}
 
 	/**

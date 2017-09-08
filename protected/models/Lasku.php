@@ -68,7 +68,100 @@ public $digisten_tunnit_id;
 	 */
 	public function tableName()
 	{
-		return 'laskut';
+		$tb_name = 'laskut';
+		$check_this_table = false;
+		//unset(Yii::app()->session[$tb_name]); // this use if want many times play
+		if(!isset(Yii::app()->session[$tb_name]))
+		{
+			Yii::app()->session[$tb_name] = true;
+			$check_this_table = true;
+		}
+
+
+		if($check_this_table)
+		{
+		$table = Yii::app()->db1->schema->getTable($tb_name);
+		if(!isset($table->columns['id'])) {
+
+			Yii::app()->db1->createCommand(" CREATE TABLE IF NOT EXISTS $tb_name 
+			(`id` int(11) AUTO_INCREMENT PRIMARY KEY)
+			")->execute();
+		}
+
+		$table_structure = array(
+
+                     'lid' => 'int(11) ',
+                     'yid' => 'int(11) ',
+                     'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP ',
+                     'tyyppi' => 'varchar(100) ',
+                     'yritys' => 'varchar(100) ',
+                     'y_tunnus' => 'varchar(50) ',
+                     'nimi' => 'varchar(100) ',
+                     'as_nro' => 'int(11) ',
+                     'osoite' => 'varchar(255) ',
+                     'postinumero' => 'varchar(10) ',
+                     'toimipaikka' => 'varchar(50) ',
+                     'laskutus' => 'varchar(50) ',
+                     'sahkoposti' => 'varchar(100) ',
+                     'verkkolaskuosoite' => 'varchar(255) ',
+                     'v_tunnus' => 'varchar(100) ',
+                     'yhteyshenkilo' => 'varchar(100) ',
+                     'nimitarkenne' => 'varchar(100) ',
+                     'puhelin' => 'varchar(50) ',
+                     't_yritys' => 'varchar(100) ',
+                     't_y_tunnus' => 'varchar(50) ',
+                     't_nimi' => 'varchar(100) ',
+                     't_osoite' => 'varchar(100) ',
+                     't_postinumero' => 'varchar(10) ',
+                     't_toimipaikka' => 'varchar(100) ',
+                     't_puhelin' => 'varchar(50) ',
+                     't_sahkoposti' => 'varchar(100) ',
+                     'toimitusosoite' => 'varchar(100) ',
+                     'paivays' => 'varchar(20) ',
+                     'erapaiva' => 'varchar(20) ',
+                     'toimituspaiva' => 'varchar(20) ',
+                     'maksuehto' => 'varchar(20) ',
+                     'viitenumero' => 'varchar(100) ',
+                     'viivastyskorko' => 'varchar(50) ',
+                     'yhteensa_total_verot' => 'varchar(20) ',
+                     'yhteensa_total_veroton' => 'varchar(20) ',
+                     'yhteensa_total' => 'varchar(20) ',
+                     'saaja_iban' => 'varchar(100) ',
+                     'saaja_virtualkoodi' => 'varchar(255) ',
+                     'tilanne' => 'varchar(50) ',
+                     'maksettu_euro' => 'varchar(100) ',
+                     'hyvityslasku' => 'varchar(20) ',
+                     'laskun_nimetys' => 'varchar(100) ',
+                     'response' => 'text ',
+                     'response_finvoice' => 'text ',
+                     'postita_jobid' => 'varchar(100) ',
+                     'trust_jobid' => 'varchar(100) ',
+                     'tapahtumapvm' => 'varchar(50) ',
+                     'laskunumero' => 'varchar(11) ',
+                     'muistutuslasku_auto' => 'int(1) ',
+                     'kirjeenluokka' => 'int(1) ',
+                     'viitenne' => 'varchar(255) ',
+                     'viitemme' => 'varchar(255) ',
+                     'freetext' => 'varchar(255) ',
+                     'deliverymethod' => 'varchar(255) ',
+                     'deliveryterm' => 'varchar(255) ',
+                     'vatperiod' => 'varchar(50) ',
+                     'netvisorkey' => 'int(11) ',
+
+
+
+
+		);
+
+		foreach($table_structure as $key=>$value)
+		{
+			if (!isset($table->columns[$key])) {
+				Yii::app()->db1->createCommand()->addColumn($tb_name, $key, $value);
+			}
+		}	
+		} // if($check_this_table)
+
+		return $tb_name;
 	}
 
 	/**

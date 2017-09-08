@@ -3502,16 +3502,19 @@ class TyovuorootController extends Controller
 		if(isset(Yii::app()->session['tyo_toimialue']))
 		{
 
-		   $tyo_toimialue_like = "tyo_toimialue LIKE '%".implode("%' OR tyo_toimialue LIKE '%", Yii::app()->session['tyo_toimialue'])."%'";
+		   $arr = array();
+		   foreach(Yii::app()->session['tyo_toimialue'] as $it)
+		   {
+			$arr[] = str_replace("\\", "\\\\\\\\", json_encode($it));
+		   }
+
+		   $tyo_toimialue_like = "tyo_toimialue LIKE '%".implode("%' OR tyo_toimialue LIKE '%", $arr)."%'";
 	           $criteria->addCondition ("
 		   id IN (  
 		     SELECT tid FROM sivex_tvuoro WHERE DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') 
 		     BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."'
-		       AND tid IN 
-		       (
-			    SELECT id FROM sivex_ttekijat WHERE $tyo_toimialue_like
-		       )
 		   )
+		   AND ($tyo_toimialue_like)
 		   ");
 		}
 		//   tyo_toimialue -->

@@ -28,8 +28,129 @@ class Asetukset extends DB2ActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'asetukset';
+
+		$tb_name = 'asetukset';
+		$check_this_table = false;
+		if(!isset(Yii::app()->session[$tb_name]))
+		{
+			Yii::app()->session[$tb_name] = true;
+			$check_this_table = true;
+		}
+
+
+		if($check_this_table)
+		{
+		$table = Yii::app()->db1->schema->getTable($tb_name);
+		if(!isset($table->columns['id'])) {
+
+			Yii::app()->db1->createCommand(" CREATE TABLE IF NOT EXISTS $tb_name 
+			(`id` int(11) AUTO_INCREMENT PRIMARY KEY)
+			")->execute();
+		}
+
+		$table_structure = array(
+
+                     'syntyrin_emails' => 'text ',
+                     'paivan_uutinen' => 'varchar(500) ',
+                     'logon_polkku' => 'varchar(500) ',
+                     'logon_korkeus' => 'int(4) ',
+                     'johtaja' => 'varchar(100) ',
+                     'viivastyskorko' => 'varchar(50) ',
+                     'tilinumero' => 'varchar(100) ',
+                     'iban' => 'varchar(100) ',
+                     'bic' => 'varchar(100) ',
+                     'postita_username' => 'varchar(100) ',
+                     'postita_password' => 'varchar(100) ',
+                     'trust_cid' => 'varchar(100) ',
+                     'trust_api' => 'varchar(100) ',
+                     'palvelu_tyyppi' => 'int(1) ',
+                     'trust_url' => 'varchar(255) ',
+                     'pyhapaivat' => 'text ',
+                     'erikoislauantai' => 'text ',
+                     'sovellus_tyovuorot' => 'int(2) ',
+                     'checkout_id' => 'varchar(100) ',
+                     'checkout_salasana' => 'varchar(255) ',
+                     'viikonloppulisa_la' => 'varchar(10) ',
+                     'viikonloppulisa_su' => 'varchar(10) ',
+                     'tilausvahvistus' => 'text ',
+                     'oikeudet' => 'text ',
+                     'rekisteriseloste' => 'text ',
+                     'lasku_asiakasnumero' => 'int(1) ',
+                     'show_name' => 'int(1) ',
+                     'trust_ws_api_url' => 'varchar(255) ',
+                     'trust_ws_cid' => 'varchar(100) ',
+                     'trust_ws_salasana' => 'varchar(100) ',
+                     'vinkki_tunnit' => 'varchar(10) ',
+                     'vinkki_prosentti' => 'varchar(10) ',
+                     'onlinevaraus_laatu_luotettavuus' => 'text ',
+                     'onlinevaraus_takuu_turvallisuus' => 'text ',
+                     'onlinevaraus_asiakaspalvelu' => 'text ',
+                     'onlinevaraus_arvio_siivouksesta' => 'text ',
+                     'aikavali_halytys' => 'int(3) ',
+                     'ilmoitus_avoimista_kohteesta_sahkopostiin' => 'int(1) ',
+                     'ilmoitus_myohastyneista_kohteesta_sahkopostiin' => 'int(1) ',
+                     'netvisor_customer_id' => 'varchar(255) ',
+                     'netvisor_partner_id' => 'varchar(255) ',
+                     'netvisor_userkey' => 'varchar(255) ',
+                     'netvisor_partnerkey' => 'varchar(255) ',
+                     'netvisor_kaytto' => 'int(1) ',
+                     'netvisor_organisation_identifier' => 'varchar(255) ',
+                     'merkkipaivailmoitukset_sahkoposti' => 'varchar(255) ',
+                     'asiakas_tyovuorossa' => 'int(1) ',
+                     'onlinevaraus_aikaisintaan_paivamaara' => 'int(2) ',
+                     'onlinevaraus_alku' => 'int(2) ',
+                     'onlinevaraus_loppu' => 'int(2) ',
+                     'app_show_phone' => 'int(1) ',
+                     'paikkakunta_tyovuorossa' => 'int(1) ',
+                     'app_lopettaa_vain_tagilla' => 'int(1) ',
+                     'ilmoitus_toistuvien_tyovuorojen_paattymisesta' => 'int(1) ',
+                     'ilmoitus_toistuvien_tyovuorojen_paattymisesta_paivat_ennen' => 'int(3) ',
+                     'ilmoitus_toistuvien_tyovuorojen_paattymisesta_saajat' => 'text ',
+                     'tyovuorolahetys_naytetaanko_asiakas' => 'int(1) ',
+                     'tyovuorolahetys_naytetaanko_kohteen_postitoimipaikka' => 'int(1) ',
+                     'ilmoitus_merkkipaivasta' => 'int(1) ',
+                     'ilmoitus_uudesta_kuvasta_saajat' => 'text ',
+                     'netvisor_host' => 'varchar(500) ',
+                     'tyontekijan_etunimi_sukunimi_jarjestys' => 'int(1) ',
+                     'netvisor_acceptancestatus' => 'varchar(50) ',
+                     'netvisor_mita_lahetetaan' => 'varchar(255) ',
+                     'app_hyvaksytyt_tyot_vkomaara' => 'int(3) DEFAULT 4 ',
+                     'app_naytetaanko_hyvaksyttyt_tunnit' => 'int(1) ',
+                     'app_naytta_avain' => 'int(1) ',
+                     'edico_laatutaso_1' => 'text ',
+                     'edico_laatutaso_2' => 'text ',
+                     'edico_laatutaso_3' => 'text ',
+                     'edico_muut_kulut' => 'text ',
+                     'tapaturmavakuutus' => 'int(11) ',
+                     'ryhmahenkivakuutus' => 'int(11) ',
+                     'tyottomyysvakuutusmaksu' => 'int(11) ',
+                     'sosiaaliturvamaksu' => 'int(11) ',
+                     'tyel_maksun_osuus_palkkansummasta' => 'int(11) ',
+                     'gtm' => 'varchar(255) ',
+                     'app_naytetaanko_kohteen_yhteyshenkilo' => 'int(1) ',
+                     'onlinevaraus_viikonlopput' => 'int(1) ',
+                     'maksullinen' => 'int(1) DEFAULT 1 ',
+                     'ilmainen_versio_kayttotunnit' => 'int(11) ',
+                     'alennus_max_euro' => 'float ',
+                     'alennus_max_prosentti' => 'float ',
+                     'peruutta_paiva_ennen' => 'int(2) YES ',
+
+
+
+		);
+
+		foreach($table_structure as $key=>$value)
+		{
+			if (!isset($table->columns[$key])) {
+				Yii::app()->db1->createCommand()->addColumn($tb_name, $key, $value);
+			}
+		}
+
+		} // if($check_this_table)	
+
+		return $tb_name;
 	}
+
 
 	/**
 	 * @return array validation rules for model attributes.

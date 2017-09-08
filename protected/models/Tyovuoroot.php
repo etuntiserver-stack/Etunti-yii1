@@ -45,7 +45,66 @@ public $suunnittellut;
 	 */
 	public function tableName()
 	{
-		return 'sivex_tvuoro';
+		$tb_name = 'sivex_tvuoro';
+		$check_this_table = false;
+		unset(Yii::app()->session[$tb_name]); // this use if want many times play
+		if(!isset(Yii::app()->session[$tb_name]))
+		{
+			Yii::app()->session[$tb_name] = true;
+			$check_this_table = true;
+		}
+
+
+		if($check_this_table)
+		{
+		$table = Yii::app()->db1->schema->getTable($tb_name);
+		if(!isset($table->columns['id'])) {
+
+			Yii::app()->db1->createCommand(" CREATE TABLE IF NOT EXISTS $tb_name 
+			(`id` int(11) AUTO_INCREMENT PRIMARY KEY)
+			")->execute();
+		}
+
+		$table_structure = array(
+
+                     'tid' => 'int(7) ',
+                     'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP ',
+                     'kohde' => 'varchar(255) ',
+                     'pvm' => 'varchar(20)  ',
+                     'alku' => 'varchar(10)  ',
+                     'loppu' => 'varchar(10)  ',
+                     'pituus' => 'varchar(10)  ',
+                     'ruokatauko' => 'varchar(50) ',
+                     'alku_r' => 'varchar(10) ',
+                     'kesto' => 'varchar(10) ',
+                     'tyoajanlaatu' => 'varchar(50) ',
+                     'tyoajanmerkinta' => 'varchar(50) ',
+                     'tietoja' => 'text ',
+                     'osoiteOnline' => 'varchar(100) ',
+                     'onlinevaraus_id' => 'int(11) ',
+                     'status' => 'int(2) ',
+                     'toistuva_id' => 'int(11) ',
+                     'tyopaari' => 'text ',
+                     'ilmoitus_avoimista_kohteesta' => 'int(1) ',
+                     'ilmoitus_myohastyneista_kohteesta' => 'int(1) ',
+                     'piilota_mobiilista' => 'int(1) ',
+                     'tuoteID' => 'int(11) ',
+                     'peruutettu' => 'int(1) ',
+
+
+
+
+		);
+
+		foreach($table_structure as $key=>$value)
+		{
+			if (!isset($table->columns[$key])) {
+				Yii::app()->db1->createCommand()->addColumn($tb_name, $key, $value);
+			}
+		}	
+		} // if($check_this_table)
+
+		return $tb_name;
 	}
 
 	/**

@@ -19,7 +19,53 @@ class VinkkiExtranet extends DB2ActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'vinkki_extranet';
+		$tb_name = 'vinkki_extranet';
+		$check_this_table = false;
+		//unset(Yii::app()->session[$tb_name]); // this use if want many times play
+		if(!isset(Yii::app()->session[$tb_name]))
+		{
+			Yii::app()->session[$tb_name] = true;
+			$check_this_table = true;
+		}
+
+
+		if($check_this_table)
+		{
+		$table = Yii::app()->db1->schema->getTable($tb_name);
+		if(!isset($table->columns['id'])) {
+
+			Yii::app()->db1->createCommand(" CREATE TABLE IF NOT EXISTS $tb_name 
+			(`id` int(11) AUTO_INCREMENT PRIMARY KEY)
+			")->execute();
+		}
+
+		$table_structure = array(
+
+                     'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP ',
+                     'asiakas_id' => 'int(11) ',
+                     'nimi' => 'varchar(100) ',
+                     'puhelin' => 'varchar(100) ',
+                     'sahkoposti' => 'varchar(255) ',
+                     'teksti' => 'text ',
+                     'tila' => 'int(1) ',
+                     'muutos_pvm' => 'varchar(50) ',
+                     'token' => 'varchar(255) ',
+                     'vinkkaja_asiakas_id' => 'int(11) ',
+
+
+
+
+		);
+
+		foreach($table_structure as $key=>$value)
+		{
+			if (!isset($table->columns[$key])) {
+				Yii::app()->db1->createCommand()->addColumn($tb_name, $key, $value);
+			}
+		}	
+		} // if($check_this_table)
+
+		return $tb_name;
 	}
 
 	/**

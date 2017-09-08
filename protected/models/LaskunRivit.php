@@ -36,7 +36,58 @@ class LaskunRivit extends DB2ActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'laskun_rivit';
+		$tb_name = 'laskun_rivit';
+		$check_this_table = false;
+		//unset(Yii::app()->session[$tb_name]); // this use if want many times play
+		if(!isset(Yii::app()->session[$tb_name]))
+		{
+			Yii::app()->session[$tb_name] = true;
+			$check_this_table = true;
+		}
+
+
+		if($check_this_table)
+		{
+		$table = Yii::app()->db1->schema->getTable($tb_name);
+		if(!isset($table->columns['id'])) {
+
+			Yii::app()->db1->createCommand(" CREATE TABLE IF NOT EXISTS $tb_name 
+			(`id` int(11) AUTO_INCREMENT PRIMARY KEY)
+			")->execute();
+		}
+
+		$table_structure = array(
+
+                     'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP ',
+                     'lid' => 'int(11) ',
+                     'rivi' => 'int(11) ',
+                     'tkoodi' => 'varchar(255) ',
+                     'nimike' => 'varchar(100) ',
+                     'kpl' => 'varchar(20) ',
+                     'yksikko' => 'varchar(20) ',
+                     'hinta' => 'varchar(20) ',
+                     'alv' => 'varchar(20) ',
+                     'hinta_alv' => 'varchar(20) ',
+                     'ale' => 'varchar(20) ',
+                     'veroton' => 'varchar(20) ',
+                     'yhteensa_alv' => 'varchar(20) ',
+                     'tuoteID' => 'int(11) ',
+                     'free_text' => 'varchar(250) ',
+
+
+
+
+		);
+
+		foreach($table_structure as $key=>$value)
+		{
+			if (!isset($table->columns[$key])) {
+				Yii::app()->db1->createCommand()->addColumn($tb_name, $key, $value);
+			}
+		}	
+		} // if($check_this_table)
+
+		return $tb_name;
 	}
 
 	/**

@@ -245,6 +245,7 @@ function num($val){
 			if(Yii::app()->request->getPost('to'))
 			Yii::app()->session['to'] = date("Y-m-d",strtotime(Yii::app()->request->getPost('to')));
 
+
                         if(isset($_POST['ilman']))
 			{
 			  foreach($_POST['ilman'] as $val){
@@ -3057,6 +3058,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			AND status = '2'
 			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$from."' AND '".$to."'
 		";
+
 
 
 
