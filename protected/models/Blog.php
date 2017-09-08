@@ -17,7 +17,46 @@ class Blog extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'blog';
+		$tb_name = 'blog';
+		$check_this_table = false;
+		//unset(Yii::app()->session[$tb_name]); // this use if want many times play
+		if(!isset(Yii::app()->session[$tb_name]))
+		{
+			Yii::app()->session[$tb_name] = true;
+			$check_this_table = true;
+		}
+
+
+		if($check_this_table)
+		{
+		$table = Yii::app()->db->schema->getTable($tb_name);
+		if(!isset($table->columns['id'])) {
+
+			Yii::app()->db->createCommand(" CREATE TABLE IF NOT EXISTS $tb_name 
+			(`id` int(11) AUTO_INCREMENT PRIMARY KEY)
+			")->execute();
+		}
+
+		$table_structure = array(
+
+
+                     'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP AFTER id',
+                     'luoja' => 'varchar(255) AFTER time',
+                     'otsikko' => 'varchar(255) AFTER luoja',
+                     'teksti' => 'text AFTER otsikko',
+                     'kuva' => 'varchar(255) AFTER teksti',
+
+
+		);
+
+		foreach($table_structure as $key=>$value)
+		{
+			if (!isset($table->columns[$key])) {
+				Yii::app()->db->createCommand()->addColumn($tb_name, $key, $value);
+			}
+		}	
+		} // if($check_this_table)
+		return $tb_name;
 	}
 
 	/**

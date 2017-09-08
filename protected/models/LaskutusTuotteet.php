@@ -29,7 +29,54 @@ class LaskutusTuotteet extends DB2ActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'laskutus_tuotteet';
+		$tb_name = 'laskutus_tuotteet';
+		$check_this_table = false;
+		//unset(Yii::app()->session[$tb_name]); // this use if want many times play
+		if(!isset(Yii::app()->session[$tb_name]))
+		{
+			Yii::app()->session[$tb_name] = true;
+			$check_this_table = true;
+		}
+
+
+		if($check_this_table)
+		{
+		$table = Yii::app()->db1->schema->getTable($tb_name);
+		if(!isset($table->columns['id'])) {
+
+			Yii::app()->db1->createCommand(" CREATE TABLE IF NOT EXISTS $tb_name 
+			(`id` int(11) AUTO_INCREMENT PRIMARY KEY)
+			")->execute();
+		}
+
+		$table_structure = array(
+
+                     'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP ',
+                     'tuotenimi' => 'varchar(100) ',
+                     'hinta_alv_0' => 'varchar(20) ',
+                     'hinta_alv_sis' => 'varchar(20) ',
+                     'alv' => 'varchar(10) ',
+                     'yksikko' => 'varchar(20) ',
+                     'netvisorkey' => 'int(11) ',
+                     'ryhma' => 'int(3) ',
+                     'is_active' => 'int(1) ',
+                     'varastoitava' => 'int(1) ',
+                     'myyntituote' => 'int(1) DEFAULT 1 ',
+
+
+
+
+		);
+
+		foreach($table_structure as $key=>$value)
+		{
+			if (!isset($table->columns[$key])) {
+				Yii::app()->db1->createCommand()->addColumn($tb_name, $key, $value);
+			}
+		}	
+		} // if($check_this_table)
+
+		return $tb_name;
 	}
 
 	/**

@@ -37,7 +37,66 @@ class DigistenHinnasto extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'digisten_hinnasto';
+		$tb_name = 'digisten_hinnasto';
+		$check_this_table = false;
+		if(!isset(Yii::app()->session[$tb_name]))
+		{
+			Yii::app()->session[$tb_name] = true;
+			$check_this_table = true;
+		}
+
+
+		if($check_this_table)
+		{
+		$table = Yii::app()->db->schema->getTable($tb_name);
+		if(!isset($table->columns['id'])) {
+
+			Yii::app()->db->createCommand(" CREATE TABLE IF NOT EXISTS $tb_name 
+			(`id` int(11) AUTO_INCREMENT PRIMARY KEY)
+			")->execute();
+		}
+
+		$table_structure = array(
+
+                     'etyo_1000' => 'float ',
+                     'etyo_1000_2000' => 'float ',
+                     'etyo_2000_3000' => 'float ',
+                     'etyo_3000_6000' => 'float ',
+                     'etyo_6000_9000' => 'float ',
+                     'etyo_9000_plus' => 'float ',
+                     'elasku_1000' => 'float ',
+                     'elasku_1000_2000' => 'float ',
+                     'elasku_2000_3000' => 'float ',
+                     'elasku_3000_6000' => 'float ',
+                     'elasku_6000_9000' => 'float ',
+                     'elasku_9000_plus' => 'float ',
+                     'eonline_1000' => 'float ',
+                     'eonline_1000_2000' => 'float ',
+                     'eonline_2000_3000' => 'float ',
+                     'eonline_3000_6000' => 'float ',
+                     'eonline_6000_9000' => 'float ',
+                     'eonline_9000_plus' => 'float ',
+                     'edico_1000' => 'float ',
+                     'edico_1000_2000' => 'float ',
+                     'edico_2000_3000' => 'float ',
+                     'edico_3000_6000' => 'float ',
+                     'edico_6000_9000' => 'float ',
+                     'edico_9000_plus' => 'float ',
+                     'jarjestelmanvalvoja' => 'float ',
+                     'snapshot_pvm' => 'int(11) ',
+
+
+
+		);
+
+		foreach($table_structure as $key=>$value)
+		{
+			if (!isset($table->columns[$key])) {
+				Yii::app()->db->createCommand()->addColumn($tb_name, $key, $value);
+			}
+		}	
+		} // if($check_this_table)
+		return $tb_name;
 	}
 
 	/**

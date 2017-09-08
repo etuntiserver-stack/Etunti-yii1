@@ -34,6 +34,17 @@ public $adm_salasana_repeat;
 
 		$tb_name = 'sivex_administrators';
 
+		$check_this_table = false;
+		if(!isset(Yii::app()->session[$tb_name]))
+		{
+			Yii::app()->session[$tb_name] = true;
+			$check_this_table = true;
+		}
+
+
+		if($check_this_table)
+		{
+
 		$table = Yii::app()->db1->schema->getTable($tb_name);
 		if(!isset($table->columns['id'])) {
 
@@ -44,13 +55,14 @@ public $adm_salasana_repeat;
 
 		$table_structure = array(
 
-                     'adm_login' => 'varchar(100) AFTER id',
-                     'adm_salasana' => 'varchar(100) AFTER adm_login',
-                     'adm_email' => 'varchar(100) AFTER adm_salasana',
-                     'adm_nimi' => 'varchar(100) AFTER adm_email',
-                     'status' => 'int(1) AFTER adm_nimi',
-                     'ulkonaky' => 'text AFTER status',
-                     'token' => 'varchar(255) AFTER ulkonaky',
+                     'adm_login' => 'varchar(100) ',
+                     'adm_salasana' => 'varchar(100) ',
+                     'adm_email' => 'varchar(100) ',
+                     'adm_nimi' => 'varchar(100) ',
+                     'status' => 'int(1) ',
+                     'ulkonaky' => 'text ',
+                     'token' => 'varchar(255) ',
+
 
 
 		);
@@ -61,6 +73,8 @@ public $adm_salasana_repeat;
 				Yii::app()->db1->createCommand()->addColumn($tb_name, $key, $value);
 			}
 		}	
+
+		} // if($check_this_table)
 
 		return $tb_name;
 	}

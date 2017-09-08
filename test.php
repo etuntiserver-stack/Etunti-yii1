@@ -51,8 +51,8 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 } 
 
-mysqli_select_db($conn,"defdb");
-$sql = mysqli_query($conn,"SHOW FULL COLUMNS FROM asetukset"); //WHERE hinta_sis_alv=0 AND alv!=0
+mysqli_select_db($conn,"defdb"); // defdb == default daatabase  , etuntifw == settings 
+$sql = mysqli_query($conn,"SHOW FULL COLUMNS FROM vuosilomat"); //WHERE hinta_sis_alv=0 AND alv!=0
  
 $last = 'id';
 while($row = mysqli_fetch_array($sql)) {
@@ -60,7 +60,7 @@ while($row = mysqli_fetch_array($sql)) {
 	if($row['Field'] == 'id')
 	continue;
 
-	if($row['Field'] == 'time')
+	if(!empty($row['Default']))
 	$row['Key'] = $row['Key'].' DEFAULT';
 
 
@@ -69,7 +69,7 @@ while($row = mysqli_fetch_array($sql)) {
 	else
 	$null = $row['Null'];
 
-    	echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\''.$row['Field'].'\' => \''.$row['Type'].' '.$row['Key'].' '.$null.' '.$row['Default'].' '.$row['Extra'].' AFTER '.$last.'\',<br>';
+    	echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\''.$row['Field'].'\' => \''.$row['Type'].' '.$row['Key'].' '.$null.' '.$row['Default'].' '.$row['Extra'].'\',<br>';
 
 
 	$last = $row['Field'];

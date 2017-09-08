@@ -38,7 +38,16 @@ public $verot;
 	{
 
 		$tb_name = 'asiakkaat';
+		$check_this_table = false;
+		if(!isset(Yii::app()->session[$tb_name]))
+		{
+			Yii::app()->session[$tb_name] = true;
+			$check_this_table = true;
+		}
 
+
+		if($check_this_table)
+		{
 		$table = Yii::app()->db1->schema->getTable($tb_name);
 		if(!isset($table->columns['id'])) {
 
@@ -98,7 +107,7 @@ public $verot;
 				Yii::app()->db1->createCommand()->addColumn($tb_name, $key, $value);
 			}
 		}	
-
+		} // if($check_this_table)
 		return $tb_name;
 	}
 
