@@ -3453,7 +3453,7 @@ class TyovuorootController extends Controller
 		$criteria = $site[0]->etuSukunimiCriteria($criteria);
 		//     Return order etu ja sukunimella -->
 
-        		$criteria->select = "id,tekijan_nimi";
+        		$criteria->select = "id,tekijan_nimi, tyoryhma";
         		$criteria->condition = " aktiivinen = '1' ";
 
 		    	if(count(Yii::app()->session['tyontekijat'] > 1))
@@ -3520,7 +3520,13 @@ class TyovuorootController extends Controller
 		if(isset(Yii::app()->session['tyoryhma']))
 		{
 
-		   $tyoryhma_like = "tyoryhma LIKE '%".implode("%' OR tyoryhma LIKE '%", Yii::app()->session['tyoryhma'])."%'";
+		   $arr = array();
+		   foreach(Yii::app()->session['tyoryhma'] as $it)
+		   {
+			$arr[] = str_replace("\\", "\\\\\\\\", json_encode($it));
+		   }
+
+		   $tyoryhma_like = " tyoryhma LIKE '%".implode("%' OR tyoryhma LIKE '%", $arr)."%'";
 	           $criteria->addCondition ("
 		   id IN (  
 		     SELECT tid FROM sivex_tvuoro WHERE DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') 
@@ -3528,6 +3534,7 @@ class TyovuorootController extends Controller
 		   )
 		   AND ($tyoryhma_like)
 		   ");
+
 		}
 		//   tyoryhma -->
 
