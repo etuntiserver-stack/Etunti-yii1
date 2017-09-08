@@ -172,7 +172,7 @@
 
 		echo '
 		<div class="row">
-		  <div class="col-sm-12">'.$t->tyoryhma.'<br>
+		  <div class="col-sm-12">
 		    	<a href="#" class="getTekijanTiedot" for="'.$t->id.'"><img src="'.$img.'" alt="avatar" class="mw50 br64 mr15"><br> '.$this->etuSukunimi($t->id).'</a>
 			<br>
 			<span '.$cl.'><b id="vk_'.$week.'_'.$t->id.'">'.$kokoViikko. '</b> ('.$vktyoaika.')</span>
