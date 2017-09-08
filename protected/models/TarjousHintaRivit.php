@@ -30,7 +30,7 @@ class TarjousHintaRivit extends DB2ActiveRecord
 	{
 		$tb_name = 'tarjous_hinta_rivit';
 		$check_this_table = false;
-		unset(Yii::app()->session[$tb_name]); // this use if want many times play
+		//unset(Yii::app()->session[$tb_name]); // this use if want many times play
 		if(!isset(Yii::app()->session[$tb_name]))
 		{
 			Yii::app()->session[$tb_name] = true;
