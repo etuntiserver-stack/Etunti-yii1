@@ -96,7 +96,7 @@ public $count;
                      'etaisyys' => 'varchar(20) ',
                      'status' => 'int(1) ',
                      'tietoja' => 'text ',
-                     'admin' => 'int(1) 0 ',
+                     'admin' => 'int(1) ',
                      'tyoajanlaatu' => 'varchar(100) ',
                      'tyoajanmerkinta' => 'varchar(100) ',
                      'hyvaksytty' => 'varchar(100) ',
@@ -104,8 +104,6 @@ public $count;
                      'sairaus' => 'int(1) ',
                      'laskutettu' => 'int(1) ',
                      'laskutetaan' => 'int(1) DEFAULT 1 ',
-
-
 
 
 		);
