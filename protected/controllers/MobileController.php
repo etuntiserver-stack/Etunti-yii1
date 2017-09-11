@@ -97,6 +97,9 @@ class MobileController extends Controller
 	public function transformHtmlTo($header, $html_content, $ext)
 	{
 
+		// Tämä funktio vaaditaan uudempi kun 16.0 versio pandoc ja apt-get install xvfb
+		// wget https://github.com/jgm/pandoc/releases/download/1.17.0.2/pandoc-1.17.0.2-1-amd64.deb
+
 		if (!file_exists( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain )) {
 		 	mkdir( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain, 0777, true );
 		}
