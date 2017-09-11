@@ -341,17 +341,12 @@ echo '
 
 			foreach($m as $data)
 			{
-			$t = Tyontekijat::model()->findbypk($data->tid);
-			$k = Kohteet::model()->findbypk($data->kohde);
-			   if(isset($k->id) and isset($t->id))
-			   {
 			     echo '<tr>
 	                        <td>
 	                          '.$data->alku.'-'.$data->loppu.'</td>
-	                        <td>'.$this->etuSukunimi($t->id).'<br>'.$k->osoite.'</td>
+	                        <td>'.$this->etuSukunimi($data->tid).'<br>'.(isset($data->kohteet->osoite)? $data->kohteet->osoite: '').'</td>
 	                      </tr>
 				  ';
-			   }
 			}
 	
 		    }
