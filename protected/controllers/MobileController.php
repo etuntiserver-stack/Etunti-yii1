@@ -192,7 +192,7 @@ class MobileController extends Controller
 			{
 		                $content = file_get_contents($path.$tiedosto.'.xls');
 				Yii::app()->request->sendFile("excel.xls",$content);
-				exit;
+				exit;//
 			}
 		}
 
