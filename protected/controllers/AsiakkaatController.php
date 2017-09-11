@@ -36,7 +36,7 @@ class AsiakkaatController extends Controller
                 		'expression'=>"Yii::app()->controller->isAsiakas()",
 			),
 			array('allow',
-				'actions'=>array('admin', 'delete', 'create', 'update', 'index', 'view', 'checkLastAsiakasID', 'showshift', 'send_vastaus', 'getLaskuPDF'),
+				'actions'=>array('admin', 'delete', 'create', 'update', 'index', 'view', 'checkLastAsiakasID', 'showshift', 'send_vastaus', 'getLaskuPDF', 'kartta'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -107,6 +107,11 @@ class AsiakkaatController extends Controller
 		}
 
 		$this->render('salasana', array('tilanne' => $tilanne));
+	}
+
+	public function actionKartta()
+	{
+		$this->render('kartta');
 	}
 
 	public function actionGetLaskuPDF($id)
