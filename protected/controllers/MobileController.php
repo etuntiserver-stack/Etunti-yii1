@@ -190,12 +190,8 @@ class MobileController extends Controller
 			exec('pandoc -s '.$path.$tiedosto.'.html -o '.$path.$tiedosto.'.xls', $output, $return);
 		        if (file_exists( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain.'/'.$tiedosto.'.xls' ))
 			{
-				header("Content-Length: " . filesize ( $path.$tiedosto.'.xls' ) ); 
-		                header("Content-type: application/vnd.ms-excel;"); 
-		                header("Content-disposition: attachment; filename=".basename($path.$tiedosto.'.xls'));
-		                header('Expires: 0');
-		                header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
-		                readfile($path.$tiedosto.'.xls');
+		                $content = file_get_contents($path.$tiedosto.'.xls');
+				Yii::app()->request->sendFile("excel.xls",$content);
 				exit;
 			}
 		}
