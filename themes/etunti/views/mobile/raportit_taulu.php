@@ -232,7 +232,6 @@
 $(document).ready(function() {
     $('#mobileTable').DataTable({
         "bPaginate": false,
-
         "bFilter": false,
         "bInfo": false
     });
