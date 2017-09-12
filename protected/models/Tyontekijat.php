@@ -127,7 +127,7 @@ public $tunnus;
 	{
 
 		$asetukset = Asetukset::model()->findByPk(1);
-		if($asetukset->netvisor_kaytto == 1)
+		if($asetukset->netvisor_kaytto == 1 and $asetukset->netvisor_lahetetaanko_tyontekija == 1)
 		{
 			if(
 				empty($this->tekijan_pankkitili)
