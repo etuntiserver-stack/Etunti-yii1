@@ -50,6 +50,8 @@ public function actionLogin($domain)
 			$model=Asiakkaat::model()->find($criteria);
 			if(isset($model->id))
 			{
+
+				$asetukset=Asetukset::model()->findByPk(1);
 				$asiakasNimi = '';
 				if(!empty($model->yrityksen_nimi))
 				$asiakasNimi = $model->yrityksen_nimi;
@@ -59,7 +61,13 @@ public function actionLogin($domain)
 				$domainit=Domainit::model()->find(" domain = '".$domain."' ");
 				(isset($domainit->paketti))? $paketti = $domainit->paketti: $paketti = '';
 
-				$return['loginOK'] = array('asiakasID'=>$model->id, 'asiakasNimi'=>$asiakasNimi, $_POST, 'paketti'=>$paketti);
+				$return['loginOK'] = array(
+					'asiakasID'=>$model->id, 
+					'asiakasNimi'=>$asiakasNimi, 
+					$_POST, 
+					'paketti'=>$paketti,
+					'edico_tehdyt_tyot'=>$asetukset->edico_tehdyt_tyot,
+				);
 			}
 		}
 

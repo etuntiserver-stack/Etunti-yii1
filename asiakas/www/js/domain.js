@@ -11,6 +11,7 @@
     {
 	loginArr = JSON.parse(localStorage.getItem('loginOK')).loginOK[0];
 	loginFull = JSON.parse(localStorage.getItem('loginOK')).loginOK;
+	//console.log(loginFull.edico_tehdyt_tyot)
     } 
 
 
@@ -46,7 +47,7 @@
 
     // <-- Palvelin
 
-    //var server = '../../';
+    var server = '../../';
     var url = server+"index.php/dico/asiakkaat";
     var versio = "";
     // Palvelin -->
@@ -83,7 +84,7 @@ $(document).ready(function(){
 
 	var values = $(this).serializeArray();
 	console.log(values);
-	var url = 'https://' + values[0]['value']+'/index.php/dico/asiakkaat';
+	//var url = 'https://' + values[0]['value']+'/index.php/dico/asiakkaat';
 	domain = values[1]['value'];
 
         $.ajax({
@@ -92,13 +93,14 @@ $(document).ready(function(){
  	   data: $(this).serialize(),
            success: function(data){
 		var d = JSON.parse(data);
+		console.log(d);
 		//return false;
 		if(d['loginOK'])
 		{
 			localStorage.setItem('loginOK', JSON.stringify(d));
 			localStorage.setItem('login_paketti', d['loginOK'].paketti);
+			//localStorage.setItem('edico_tehdyt_tyot', d['loginOK'].edico_tehdyt_tyot);
 			window.location.href="index.html";
-			console.log(d);
 		} else {
 			$('#yllaIlmoitus').html('<h3 class="alert alert-danger">Kirjautuminen ei onnistunut. Tarkasta yritystunnus, sähköposti ja salasana</h3>');
 		}
@@ -280,7 +282,7 @@ $("body").ready(function(){
 
 	   '<button class="myBgColors btn btn-default"><a href="index.html"><h2 class="fa fa-home"></h2></a></button>' +
 	   '<button class="myBgColors btn btn-default"><a href="historia.html?tyyppi=naytaTyovuorot"><h2 class="fa fa-calendar"></h2></a></button>' +
-	   '<button class="myBgColors btn btn-default"><a href="historia.html?tyyppi=naytaToteutuneetTunnit"><h2 class="fa fa-check-square"></h2></a></button>' +
+	   '<button class="naytaToteutuneetTunnit myBgColors btn btn-default"><a href="historia.html?tyyppi=naytaToteutuneetTunnit"><h2 class="fa fa-check-square"></h2></a></button>' +
 	   '<button class="myBgColors btn btn-default"><a href="historia.html?tyyppi=naytaVinkit"><h2 class="fa fa-thumbs-o-up"></h2></a></button>' +
 	   '<button class="myBgColors btn btn-default"><a href="historia.html?tyyppi=naytaPalautteet"><h2 class="fa fa-smile-o"></h2></a></button>' +
 	   '<button class="myBgColors btn btn-default"><a href="index.html?sivu=asiakirjat"><h2 class="fa fa-file-text-o"></h2></a></button>' +
