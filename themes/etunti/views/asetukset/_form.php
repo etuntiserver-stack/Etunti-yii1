@@ -952,6 +952,22 @@ jQuery(function(){
 		<?php echo $form->error($model,'peruutta_paiva_ennen'); ?>
 	</div>
 
+	<legend><h2><?php echo Yii::t('main','Toteutuneet tunnit'); ?></h2></legend>
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'edico_tehdyt_tyot'); ?>
+		<?php 
+        	$l = array(
+			''=>'Ei mitään',
+			'kirjattu'=>'Kirjattu',
+			'hyvaksytty'=>'Hyväksytty',
+			'laskutettu'=>'Laskutettu',
+		);
+		echo $form->dropDownList($model,'edico_tehdyt_tyot', $l, 
+		array('class'=>'form-control')) ?>
+		<?php echo $form->error($model,'edico_tehdyt_tyot'); ?>
+	</div>
+
+
    </div>
   </div>
 

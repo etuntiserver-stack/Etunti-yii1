@@ -1158,6 +1158,21 @@ exit;
 
 	protected function toteutuneetTunnitCRM($model, $from, $to)
 	{
+
+		$cond = "";
+		$asetukset = Asetukset::model()->findbypk(1);
+		if(empty($asetukset->edico_tehdyt_tyot))
+		{
+			return '';
+		} elseif($asetukset->edico_tehdyt_tyot == 'kirjattu') {
+			// ei tarvitse mitaan
+		} elseif($asetukset->edico_tehdyt_tyot == 'hyvaksytty') {
+			$cond = " AND hyvaksytty!=''";
+		} elseif($asetukset->edico_tehdyt_tyot == 'laskutettu') {
+			$cond = " AND laskutettu!=0";
+		}
+
+
 		$bod = '<div>';
 
 		$dataArr = array();
@@ -1172,6 +1187,7 @@ exit;
 				WHERE asiakas_id IN(SELECT id FROM asiakkaat WHERE id='".$model->id."')
 			) 
 			AND loppui!=''
+			$cond
 		";
 
 		if(!empty($from) and !empty($to))
@@ -1210,6 +1226,7 @@ exit;
 				WHERE asiakas_id IN(SELECT id FROM asiakkaat WHERE id='".$model->id."')
 			) 
 			AND loppui!=''
+			$cond
 		";
 
 		if(!empty($from) and !empty($to))
@@ -1245,6 +1262,7 @@ exit;
 
 		$bod .= '</div>';
 	
+
 		return $bod;
 	}
 

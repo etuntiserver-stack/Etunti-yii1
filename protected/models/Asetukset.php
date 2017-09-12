@@ -30,7 +30,7 @@ class Asetukset extends DB2ActiveRecord
 	{
 
 		$tb_name = 'asetukset';
-		$check_this_table = false;
+		$check_this_table = true;
 		if(!isset(Yii::app()->session[$tb_name]))
 		{
 			Yii::app()->session[$tb_name] = true;
@@ -134,7 +134,7 @@ class Asetukset extends DB2ActiveRecord
                      'alennus_max_euro' => 'float ',
                      'alennus_max_prosentti' => 'float ',
                      'peruutta_paiva_ennen' => 'int(2) YES ',
-
+		     'edico_tehdyt_tyot' => 'varchar(100)',
 
 
 		);
@@ -163,7 +163,7 @@ class Asetukset extends DB2ActiveRecord
 			array('id,logon_polkku, logon_korkeus, johtaja', 'required'),
 			array('id, show_name, app_show_phone, sovellus_tyovuorot, logon_korkeus, palvelu_tyyppi, lasku_asiakasnumero, ilmoitus_avoimista_kohteesta_sahkopostiin, ilmoitus_myohastyneista_kohteesta_sahkopostiin, netvisor_kaytto, asiakas_tyovuorossa, onlinevaraus_aikaisintaan_paivamaara, onlinevaraus_alku, onlinevaraus_loppu, paikkakunta_tyovuorossa, app_lopettaa_vain_tagilla, ilmoitus_toistuvien_tyovuorojen_paattymisesta, ilmoitus_toistuvien_tyovuorojen_paattymisesta_paivat_ennen, tyovuorolahetys_naytetaanko_asiakas, tyovuorolahetys_naytetaanko_kohteen_postitoimipaikka, ilmoitus_merkkipaivasta, tyontekijan_etunimi_sukunimi_jarjestys, app_hyvaksytyt_tyot_vkomaara, app_naytetaanko_hyvaksyttyt_tunnit, app_naytta_avain, tapaturmavakuutus, ryhmahenkivakuutus, tyottomyysvakuutusmaksu, sosiaaliturvamaksu, tyel_maksun_osuus_palkkansummasta, app_naytetaanko_kohteen_yhteyshenkilo, onlinevaraus_viikonlopput, maksullinen, ilmainen_versio_kayttotunnit, alennus_max_euro, alennus_max_prosentti, peruutta_paiva_ennen, lasketaanko_lounastauko, apuaika_meneeko_laskutukseen', 'numerical', 'integerOnly'=>true),
 			array('paivan_uutinen, logon_polkku, netvisor_host', 'length', 'max'=>500),
-			array('johtaja, viivastyskorko, tilinumero, iban, bic, , postita_username, postita_password, trust_cid, trust_api, checkout_id, trust_ws_cid, trust_ws_salasana, netvisor_acceptancestatus', 'length', 'max'=>100),
+			array('johtaja, viivastyskorko, tilinumero, iban, bic, , postita_username, postita_password, trust_cid, trust_api, checkout_id, trust_ws_cid, trust_ws_salasana, netvisor_acceptancestatus, edico_tehdyt_tyot', 'length', 'max'=>100),
 			array('trust_url, checkout_salasana, trust_ws_api_url, netvisor_customer_id, netvisor_partner_id, netvisor_userkey, netvisor_partnerkey, netvisor_organisation_identifier, merkkipaivailmoitukset_sahkoposti, netvisor_mita_lahetetaan, gtm, apuaika_palkkalaji', 'length', 'max'=>255),
 			array('viikonloppulisa_la, viikonloppulisa_su, vinkki_tunnit, vinkki_prosentti', 'length', 'max'=>10),
 			array('aikavali_halytys', 'length', 'max'=>3),
@@ -258,6 +258,7 @@ class Asetukset extends DB2ActiveRecord
 			'peruutta_paiva_ennen' => Yii::t('main', 'Montako päivää ennen voidaan peruuttaa'),
 			'apuaika_meneeko_laskutukseen' => Yii::t('main', 'Meneeko laskutukseen'),
 			'apuaika_palkkalaji' => Yii::t('main', 'Palkkalaji'),
+			'edico_tehdyt_tyot' => Yii::t('main', 'Edico tehdyt työt'),
 		);
 	}
 
