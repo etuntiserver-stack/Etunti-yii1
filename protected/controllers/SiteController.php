@@ -41,7 +41,7 @@ class SiteController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', 
-				'actions'=>array('site_error', 'etusivu','ohjesivu','etusivu_esimerki', 'change_color', 'valiko', 'valiko_ajax', 'kohderyhma', 'ohjevideot', 'mobemu', 'etusivu_ajax', 'ulkonaky', 'autocomplete', 'synkronoi_gps_sijainti', 'mail_template', 'getcityes', 'edico_etusivulle', 'maksullinen', 'tyot_tanaan', 'parassiivojatanaan', 'avoimet_kohteet', 'toteututhismonth', 'tehdyttunnittanaan', 'suunnitteltutunnittanaan', 'viestittanaan', 'kayttajaonline'),
+				'actions'=>array('site_error', 'etusivu','ohjesivu','etusivu_esimerki', 'change_color', 'valiko', 'valiko_ajax', 'kohderyhma', 'ohjevideot', 'mobemu', 'etusivu_ajax', 'ulkonaky', 'autocomplete', 'synkronoi_gps_sijainti', 'mail_template', 'getcityes', 'edico_etusivulle', 'maksullinen', 'tyot_tanaan', 'parassiivojatanaan', 'avoimet_kohteet', 'toteututhismonth', 'tehdyttunnittanaan', 'suunnitteltutunnittanaan', 'viestittanaan', 'kayttajaonline', 'suunniteltulistatanaan'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('allow', 
@@ -329,6 +329,47 @@ class SiteController extends Controller
 		    }
 		$bd .='</tbody>
                   </table>';
+		echo json_encode($bd);
+	}
+
+	public function actionSuunniteltulistatanaan()
+	{
+		$bd = '
+                  <table class="table mbn tc-med-1 tc-bold-last">
+                    <thead>
+                      <tr class="hidden">
+                        <th>#</th>
+                        <th>First Name</th>
+                      </tr>
+                    </thead>
+                    <tbody>';
+
+       		    $criteria = new CDbCriteria();
+       		    $criteria->order = " DATE_FORMAT(STR_TO_DATE(CONCAT(pvm, alku), '%d.%m.%Y %H:%i'), '%Y-%m-%d  %H:%i') ASC";
+       		    $criteria->condition = " 
+			DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE()
+			AND alku!='00:00'
+		    ";
+		    $m = Tyovuoroot::model()->findAll($criteria);
+		    if(isset($m[0]))
+		    {
+
+			foreach($m as $data)
+			{
+			     $bd .= '<tr>
+	                        <td>
+	                          '.$data->alku.'-'.$data->loppu.'</td>
+	                        <td>'.$this->etuSukunimi($data->tid).'<br>'.(isset($data->kohteet->osoite)? $data->kohteet->osoite: '').'</td>
+	                      </tr>
+				  ';
+			}
+	
+		    }
+
+		$bd .= '
+                    </tbody>
+                  </table>';
+
 		echo json_encode($bd);
 	}
 
@@ -1724,15 +1765,18 @@ $(document).ready(function(){
 */
 
 
-	public function tilatTanaan($tila)
+	public function tilatTanaan()
 	{
-		$total_l = 0;
+		$total = array();
+		$total[2] = 0;
+		$total[3] = 0;
+		$total[10] = 0;
 
        		$criteria = new CDbCriteria();
-        	$criteria->select = " COUNT(*) as count";
+        	$criteria->select = " COUNT(*) as count,status";
         	$criteria->group = " status ";
         	$criteria->condition = "  
-			aloitan !='' and loppui !='' and status ='".$tila."'
+			aloitan !='' and loppui !='' and (status=2 OR status=3 OR status=10)
 			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d')  = CURDATE()
 			AND t.id NOT IN(select kid from sivexkuitti_repaired)
 		";
@@ -1740,26 +1784,26 @@ $(document).ready(function(){
 		$lu = Mobile::model()->findAll($criteria);
 		foreach($lu as $l)
 		{
-		    $total_l += $l->count;
+		    $total[$l->status] += $l->count;
 		}
 		/* ////////////////////////// */
 
        		$criteria = new CDbCriteria();
-        	$criteria->select = " COUNT(*) as count";
+        	$criteria->select = " COUNT(*) as count, status";
         	$criteria->group = " status ";
         	$criteria->condition = "  
-			aloitan !='' and loppui !='' and status ='".$tila."'
+			aloitan !='' and loppui !='' and (status=2 OR status=3 OR status=10)
 			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d')  = CURDATE()
 		";
 
 		$tot = Toteutuneet::model()->findAll($criteria);
 		foreach($tot as $l)
 		{
-		    $total_l += $l->count;
+		    $total[$l->status] += $l->count;
 		}
 
 
-		return $total_l;
+		return $total;
 	}
 
 	public function actionParassiivojatanaan()

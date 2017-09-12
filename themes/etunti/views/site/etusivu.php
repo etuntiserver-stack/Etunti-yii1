@@ -172,41 +172,7 @@ $months=array(
                   <span class="panel-title"><?php echo Yii::t('main', 'Suunniteltu'); ?></span>
                 </div>
                 <div class="panel-body panel-scroller scroller-md scroller-overlay pn">
-                  <table class="table mbn tc-med-1 tc-bold-last">
-                    <thead>
-                      <tr class="hidden">
-                        <th>#</th>
-                        <th>First Name</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-
-		    <?php
-       		    $criteria = new CDbCriteria();
-       		    $criteria->order = " DATE_FORMAT(STR_TO_DATE(CONCAT(pvm, alku), '%d.%m.%Y %H:%i'), '%Y-%m-%d  %H:%i') ASC";
-       		    $criteria->condition = " 
-			DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE()
-			AND alku!='00:00'
-		    ";
-		    $m = Tyovuoroot::model()->findAll($criteria);
-		    if(isset($m[0]))
-		    {
-
-			foreach($m as $data)
-			{
-			     echo '<tr>
-	                        <td>
-	                          '.$data->alku.'-'.$data->loppu.'</td>
-	                        <td>'.$this->etuSukunimi($data->tid).'<br>'.(isset($data->kohteet->osoite)? $data->kohteet->osoite: '').'</td>
-	                      </tr>
-				  ';
-			}
-	
-		    }
-		    ?>
-
-                    </tbody>
-                  </table>
+                  <div id="suunniteltulistatanaan"></div>
                 </div>
               </div>
 
@@ -237,9 +203,10 @@ $months=array(
                   <div class="row">
                     <div class="col-xs-4 text-center">
 			<?php 
-			$tyot = $this->tilatTanaan(3);
-			$matkat = $this->tilatTanaan(2);
-			$lounaat = $this->tilatTanaan(10);
+			$tilatTanaan = $this->tilatTanaan();
+			$tyot = $tilatTanaan[3];
+			$matkat = $tilatTanaan[2];
+			$lounaat = $tilatTanaan[10];
 			?>
                       <div class="info-circle" id="c1" value="<?php echo (int)$tyot; ?>" data-circle-color="primary"></div>
                     </div>
@@ -653,5 +620,11 @@ var etusivuAjax = function(){
   <script src="<?php echo Yii::app()->request->baseUrl; ?>/assets_etunti/vendor/plugins/jvectormap/assets/jquery-jvectormap-us-lcc-en.js"></script> 
 
   <!-- Widget Javascript -->
-  <script src="<?php echo Yii::app()->request->baseUrl; ?>/assets_etunti/assets/js/demo/widgets.js"></script>
+  <?php /* <script src="<?php echo Yii::app()->request->baseUrl; ?>/assets_etunti/assets/js/demo/widgets.js"></script> */ ?>
+
+<script>
+ $.getScript("<?php echo Yii::app()->request->baseUrl; ?>/assets_etunti/assets/js/demo/etunti_ajax.js", function(){
+	$.getScript("<?php echo Yii::app()->request->baseUrl; ?>/assets_etunti/assets/js/demo/widgets.js");
+ });
+</script>
 
