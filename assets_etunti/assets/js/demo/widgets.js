@@ -42,12 +42,7 @@ var eDico = function() {
 
 }
 
-
-
 var toteututhismonth = function () {
-
-
-  	    $("#toteututhismonth").html('<img src="'+location.protocol + "//" + location.host + '/lib/img/etusivu/odota.gif" height="100">');
 
 	    // <-- SiteController avoimet_kohteet
             $.ajax({
@@ -70,9 +65,6 @@ var toteututhismonth = function () {
 
 var tehdyttunnittanaan = function () {
 
-
-  	    $("#tehdyttunnittanaan").html('<img src="'+location.protocol + "//" + location.host + '/lib/img/etusivu/odota.gif" height="100">');
-
 	    // <-- SiteController avoimet_kohteet
             $.ajax({
                url: 'tehdyttunnittanaan',
@@ -82,20 +74,17 @@ var tehdyttunnittanaan = function () {
 			    var d = JSON.parse(data);
 			    $("#tehdyttunnittanaan").replaceWith(d);
 		    } catch (e) {
-		            window.location.href=location.protocol + "//" + location.host + '/index.php/site/site_error?toteututhismonth'
+		            window.location.href=location.protocol + "//" + location.host + '/index.php/site/site_error?tehdyttunnittanaan'
 		    }
                },
                error: function(data){
-		            window.location.href=location.protocol + "//" + location.host + '/index.php/site/site_error?toteututhismonth'
+		            window.location.href=location.protocol + "//" + location.host + '/index.php/site/site_error?tehdyttunnittanaan'
 	       }
             });
 	    // SiteController avoimet_kohteet -->
 }
 
 var suunnitteltutunnittanaan = function () {
-
-
-  	    $("#suunnitteltutunnittanaan").html('<img src="'+location.protocol + "//" + location.host + '/lib/img/etusivu/odota.gif" height="100">');
 
 	    // <-- SiteController avoimet_kohteet
             $.ajax({
@@ -106,20 +95,38 @@ var suunnitteltutunnittanaan = function () {
 			    var d = JSON.parse(data);
 			    $("#suunnitteltutunnittanaan").replaceWith(d);
 		    } catch (e) {
-		            window.location.href=location.protocol + "//" + location.host + '/index.php/site/site_error?toteututhismonth'
+		            window.location.href=location.protocol + "//" + location.host + '/index.php/site/site_error?suunnitteltutunnittanaan'
 		    }
                },
                error: function(data){
-		            window.location.href=location.protocol + "//" + location.host + '/index.php/site/site_error?toteututhismonth'
+		            window.location.href=location.protocol + "//" + location.host + '/index.php/site/site_error?suunnitteltutunnittanaan'
+	       }
+            });
+	    // SiteController avoimet_kohteet -->
+}
+
+var suunniteltulistatanaan = function () {
+
+	    // <-- SiteController avoimet_kohteet
+            $.ajax({
+               url: 'suunniteltulistatanaan',
+	       //async: false,
+               success: function(data){
+		    try {
+			    var d = JSON.parse(data);
+			    $("#suunniteltulistatanaan").replaceWith(d);
+		    } catch (e) {
+		            window.location.href=location.protocol + "//" + location.host + '/index.php/site/site_error?suunniteltulistatanaan'
+		    }
+               },
+               error: function(data){
+		            window.location.href=location.protocol + "//" + location.host + '/index.php/site/site_error?suunniteltulistatanaan'
 	       }
             });
 	    // SiteController avoimet_kohteet -->
 }
 
 var viestittanaan = function () {
-
-
-  	    $("#viestittanaan").html('<img src="'+location.protocol + "//" + location.host + '/lib/img/etusivu/odota.gif" height="100">');
 
 	    // <-- SiteController avoimet_kohteet
             $.ajax({
@@ -130,11 +137,11 @@ var viestittanaan = function () {
 			    var d = JSON.parse(data);
 			    $("#viestittanaan").replaceWith(d);
 		    } catch (e) {
-		            window.location.href=location.protocol + "//" + location.host + '/index.php/site/site_error?toteututhismonth'
+		            window.location.href=location.protocol + "//" + location.host + '/index.php/site/site_error?viestittanaan'
 		    }
                },
                error: function(data){
-		            window.location.href=location.protocol + "//" + location.host + '/index.php/site/site_error?toteututhismonth'
+		            window.location.href=location.protocol + "//" + location.host + '/index.php/site/site_error?viestittanaan'
 	       }
             });
 	    // SiteController avoimet_kohteet -->
@@ -142,9 +149,6 @@ var viestittanaan = function () {
 
 
 var avoimetKohteet = function () {
-
-
-  	    $("#avoimet_kohteet").html('<img src="'+location.protocol + "//" + location.host + '/lib/img/etusivu/odota.gif" height="100">');
 
 	    // <-- SiteController avoimet_kohteet
             $.ajax({
@@ -166,9 +170,6 @@ var avoimetKohteet = function () {
 }
 
 var kayttajaonline = function () {
-
-
-  	    $("#kayttajaonline").html('<img src="'+location.protocol + "//" + location.host + '/lib/img/etusivu/odota.gif" height="100">');
 
 	    // <-- SiteController avoimet_kohteet
             $.ajax({
@@ -202,9 +203,6 @@ var kayttajaonline = function () {
 
             // Column Charts
             var demoHighColumns = function() {
-
-
-  	    $("#tyot_tanaan").html('<img src="'+location.protocol + "//" + location.host + '/lib/img/etusivu/odota.gif" height="100">');
 
 	    // <-- SiteController tyot_tanaan
             $.ajax({
@@ -746,9 +744,8 @@ var kayttajaonline = function () {
             // Pie Charts
             var demoHighPies = function() { 
 
-                var pie1 = $('#high-pie');
+            var pie1 = $('#high-pie');
 
-  	    $("#high-pie").html('<img src="'+location.protocol + "//" + location.host + '/lib/img/etusivu/odota.gif" height="100">');
             var pieParasSiivoja = '';
 	    // <-- SiteController ParasSiivojaTanaan
             $.ajax({
@@ -1544,25 +1541,25 @@ var kayttajaonline = function () {
 
 
             // Init Chart Types
-            demoHighColumns();
-            //demoHighLines();
-            demoHighBars();
-            demoHighPies();
-            demoHighAreas();
-
-
 	    eDico();
 	    toteututhismonth();
 	    tehdyttunnittanaan();
 	    suunnitteltutunnittanaan();
+	    suunniteltulistatanaan();
 	    viestittanaan();
 	    avoimetKohteet();
 	    kayttajaonline();
 
-            //demoHighChartMenus();
-            //demoSparklines();
+            demoHighColumns();
+            demoHighBars();
+            demoHighPies();
             demoCircleGraphs();
 
+
+            //demoHighAreas();
+            //demoHighLines();
+            //demoHighChartMenus();
+            //demoSparklines();
             //defineHelpers();
 
 
