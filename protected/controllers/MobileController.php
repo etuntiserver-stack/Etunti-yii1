@@ -106,7 +106,7 @@ class MobileController extends Controller
 		$tiedosto = 'temp_raporti_'.str_replace(" ", "_", Yii::app()->user->nimi);
                 if(isset($_POST['fileName']) and isset($_POST['from']) and isset($_POST['to']))
 		{
-			$tiedosto=$_POST['fileName'].'_'.$_POST['from'].'-'.$_POST['to'];
+			$tiedosto=$_POST['fileName'].'_'.date("d.m.Y", strtotime($_POST['from'])).'-'.date("d.m.Y", strtotime($_POST['to']));
 		}
   		
 		$path = 'tiedostot/temp/'.Yii::app()->user->domain.'/';
