@@ -42,7 +42,7 @@ class DigistenTunnitKk extends CActiveRecord
                      'maksettu' => 'int(1) 0 ',
                      'laskutettu' => 'int(1) ',
                      'lasku_id' => 'int(11) ',
-
+		     'jarjestelmanvalvoja_maara' => 'int(11) ',
 
 
 		);
@@ -66,7 +66,7 @@ class DigistenTunnitKk extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('year, month, tunnit, tasot', 'required'),
-			array('year, month, tunnit, maksettu, domain_id, laskutettu, lasku_id', 'numerical', 'integerOnly'=>true),
+			array('year, month, tunnit, maksettu, domain_id, laskutettu, lasku_id, jarjestelmanvalvoja_maara', 'numerical', 'integerOnly'=>true),
 			array('domain', 'length', 'max'=>255),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.

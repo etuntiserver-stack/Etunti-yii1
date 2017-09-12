@@ -55,6 +55,12 @@
 		<?php echo $form->error($model,'maksettu'); ?>
 	</div>
 
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'jarjestelmanvalvoja_maara'); ?>
+		<?php echo $form->textField($model,'jarjestelmanvalvoja_maara', array('class'=>'form-control')); ?>
+		<?php echo $form->error($model,'jarjestelmanvalvoja_maara'); ?>
+	</div>
+
  </div>
 </div><!-- form -->
 
