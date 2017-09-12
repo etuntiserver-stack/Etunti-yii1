@@ -186,6 +186,9 @@
       </div>
       <br>
   </div>
+
+
+
   <div class="panel heading-border">
 
    <div class="panel-body">
@@ -229,7 +232,6 @@
 $(document).ready(function() {
     $('#mobileTable').DataTable({
         "bPaginate": false,
-
         "bFilter": false,
         "bInfo": false
     });

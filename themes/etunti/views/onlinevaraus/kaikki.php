@@ -98,12 +98,45 @@
         </div>
 
 
+<div class="admin-form">
+
+  <div class="panel-header">
+      <div class="row">
+       <div class="col-sm-12">
+        <div class="pull-right">
+         <div class="form-inline">
+    	  <!--<button class="btn btn-primary myBgColors submitPrintSivuLuetut"><i class="fa fa-print" aria-hidden="true"></i></button>-->
+	  <form action="<?php echo Yii::app()->request->baseUrl; ?>/index.php/mobile/tulostus" class="form-group" target="_blank" method="POST">
+	    <input type="hidden" name="ext" value="doc">
+	    <textarea name="html_content" class="form-control" style="display:none"></textarea>
+    	    <button type="submit" class="btn btn-primary myBgColors submitForm"><i class="fa fa-file-word-o" aria-hidden="true"></i></button>
+	  </form>
+	  <form action="<?php echo Yii::app()->request->baseUrl; ?>/index.php/mobile/tulostus" class="form-group" target="_blank" method="POST">
+	    <input type="hidden" name="ext" value="xls">
+	    <textarea name="html_content" class="form-control" style="display:none"></textarea>
+    	    <button type="submit" class="btn btn-primary myBgColors submitForm"><i class="fa fa-file-excel-o" aria-hidden="true"></i></button>
+	  </form>
+	  <form action="<?php echo Yii::app()->request->baseUrl; ?>/index.php/mobile/tulostus" class="form-group" target="_blank" method="POST">
+	    <input type="hidden" name="header" value="<?php if(Yii::app()->request->getPost('raporti_tyyppi')) echo Yii::app()->request->getPost('raporti_tyyppi'); ?>, <?=$from?>-<?=$to?>">
+	    <input type="hidden" name="ext" value="pdf">
+	    <textarea name="html_content" class="form-control" style="display:none"></textarea>
+    	    <button type="submit" class="btn btn-primary myBgColors submitForm"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></button>
+	  </form>
+         </div>
+        </div>
+       </div>
+      </div>
+      <br>
+  </div>
+
+
   <div class="panel heading-border">
    <div class="panel-body">
 
-<div class="table-responsive">
+<div class="row">
+ <div class="table-responsive raporti_taulu" id="tableContent">
   <table class="table table-striped" id="mobileTable">
-  <thead class="myBgColors">
+  <thead>
   <tr>
   <th></th>
   <th><?php echo Yii::t('main', 'Maksupäivä'); ?></th>
@@ -120,6 +153,7 @@
   <th><?php echo Yii::t('main', 'Valokuvat'); ?></th>
   </tr>
   </thead>
+  <tbody>
   <?php $this->widget('zii.widgets.CListView', array(
 	'dataProvider'=>$dataProvider,
 	'itemView'=>'_view',
@@ -137,12 +171,36 @@
        ), 
 
   )); ?>
+  </tbody>
   </table>
+ </div>
 </div>
+
 
    </div>
   </div>
 
+</div>
+
+<link href="<?php echo Yii::app()->request->baseUrl; ?>/css/dataTables.bootstrap.min.css" rel="stylesheet" type="text/css" />
+<script src="<?php echo Yii::app()->request->baseUrl; ?>/js/jquery.dataTables.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+    $('#mobileTable').DataTable({
+        "bPaginate": false,
+        "bFilter": false,
+        "bInfo": false
+    });
+
+    $(".submitForm").on('click', function(e){
+	$('.mobileTable').addClass('table-bordered');
+	$(this).prev('textarea').val(JSON.stringify($('#tableContent').html()));
+	$(this).closest('form').submit();
+	e.preventDefault();
+    });
+
+});
+</script>
 
 
 
