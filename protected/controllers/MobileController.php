@@ -103,8 +103,12 @@ class MobileController extends Controller
 		if (!file_exists( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain )) {
 		 	mkdir( Yii::app()->basePath.'/../tiedostot/temp/'.Yii::app()->user->domain, 0777, true );
 		}
-
-  		$tiedosto = 'temp_raporti_'.str_replace(" ", "_", Yii::app()->user->nimi);
+		$tiedosto = 'temp_raporti_'.str_replace(" ", "_", Yii::app()->user->nimi);
+                if(isset($_POST['fileName']) and isset($_POST['from']) and isset($_POST['to']))
+		{
+			$tiedosto=$_POST['fileName'].'_'.date("d.m.Y", strtotime($_POST['from'])).'-'.date("d.m.Y", strtotime($_POST['to']));
+		}
+  		
 		$path = 'tiedostot/temp/'.Yii::app()->user->domain.'/';
 
 		// <-- Poistetaan edelliset
@@ -1060,6 +1064,7 @@ function num($val){
 	 		$tekijan_nimi 	= $model->tekijan_nimi;
 
 			$model->attributes=$_POST['Mobile'];
+
 
 			if(isset($_POST['Mobile']['status']) and empty($_POST['Mobile']['loppui']) and $_POST['Mobile']['status'] == 3)
 			$model->status=1;
