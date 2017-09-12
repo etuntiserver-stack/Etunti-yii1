@@ -412,7 +412,7 @@ class TyontekijatController extends Controller
 
 				// <-- Netvisor updater
 				$asetukset = Asetukset::model()->findByPk(1);
-				if($asetukset->netvisor_kaytto == 1)
+				if($asetukset->netvisor_kaytto == 1 and $asetukset->netvisor_lahetetaanko_tyontekija == 1)
 				{
 					$netvisorResponse = $this->netvisorTyontekija('add', $model);
 				}
@@ -573,7 +573,7 @@ class TyontekijatController extends Controller
 			if($model->save()){
 				// <-- Netvisor updater
 				$asetukset = Asetukset::model()->findByPk(1);
-				if($asetukset->netvisor_kaytto == 1)
+				if($asetukset->netvisor_kaytto == 1 and $asetukset->netvisor_lahetetaanko_tyontekija == 1)
 				{
 					$netvisorResponse = $this->netvisorTyontekija('edit', $model);
 				}
