@@ -19,8 +19,8 @@
 	//if(isset($vastaus))
 		//echo $vastaus;
 
-	if($database and !empty($yritystunnus))
-	echo '<div class="alert bg-success">'.Yii::t('main', 'Kirjaudu sisään käymällä "Yritystunnus": <b>'.$yritystunnus.'</b> '.CHtml::link('tästä linkistä',array('user/login', 'target'=>'_blank')) ).'</div>';
+	if($database and !empty($kirjautumistunnus))
+	echo '<div class="alert bg-success">'.Yii::t('main', 'Kirjaudu sisään käymällä "Yritystunnus": <b>'.$kirjautumistunnus.'</b> '.CHtml::link('tästä linkistä',array('user/login', 'target'=>'_blank')) ).'</div>';
 ?> 
   
 
@@ -30,8 +30,10 @@
     <div class="panel-heading"><?php echo Yii::t('main', 'Aloita Etunnin käyttäminen'); ?></div>
     <div class="panel-body">
       	<form action="#" method="POST" autocomplete="off">
+        <label><?php echo Yii::t('main', 'Kirjautumistunnus')?></label>
+        <input type="text" id="kirjautumistunnus" name="kirjautumistunnus" class="form-control input-lg" required autofocus>
         <label><?php echo Yii::t('main', 'Yrityksen nimi')?></label>
-        <input type="text" id="yrityksen_nimi" name="yrityksen_nimi" class="form-control input-lg" required autofocus>
+        <input type="text" id="yrityksen_nimi" name="yrityksen_nimi" class="form-control input-lg" required>
         <label><?php echo Yii::t('main', 'Yritystunnus')?></label>
         <input type="text" id="yritys_tunnus" name="yritys_tunnus" class="form-control input-lg" required>
         <label><?php echo Yii::t('main', 'Osoite')?></label>
