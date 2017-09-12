@@ -74,6 +74,7 @@
 
 					if( $tunnit > 0 )
 					{
+						$adm = Administrators::model()->findAll();
 
 						$dt = new DigistenTunnitKk;
 						$dt->domain_id = $d->id;
@@ -82,6 +83,7 @@
 						$dt->year = date("Y", strtotime('first day of last month'));
 						$dt->month = date("n", strtotime('first day of last month'));
 						$dt->tasot = $paketti;
+						$dt->jarjestelmanvalvoja_maara=count($adm);
 
 						if(!$dt->save())
 							var_dump($dt->getErrors());

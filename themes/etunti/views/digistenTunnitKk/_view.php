@@ -37,15 +37,15 @@
 	<td>
 		<?php 
 			$dh = DigistenHinnasto::model()->findByPk(1);
-			$adm = Administrators::model()->findAll();
+			$adm = (int)$data->jarjestelmanvalvoja_maara;
 			$jarj_valv_kpl = 0;
 			$jarj_valv = 0;
-			if( isset($dh->id) and count($adm) > 2 )
+			if( isset($dh->id) and $adm > 2 )
 			{
-				echo (count($adm)).' kpl (2 ilmaista)<br>'
-				.$dh->jarjestelmanvalvoja*(count($adm)-2).' &euro;';
-				$jarj_valv += $dh->jarjestelmanvalvoja*(count($adm)-2);
-				$jarj_valv_kpl = count($adm);
+				echo $adm.' kpl (2 ilmaista)<br>'
+				.$dh->jarjestelmanvalvoja*($adm-2).' &euro;';
+				$jarj_valv += $dh->jarjestelmanvalvoja*($adm-2);
+				$jarj_valv_kpl = $adm;
 			}
 		?>
 	</td>

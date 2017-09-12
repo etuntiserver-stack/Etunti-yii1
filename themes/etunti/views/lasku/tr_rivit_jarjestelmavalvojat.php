@@ -9,14 +9,15 @@
 	$yksikkot = $this->yksikkot(null);
 
 	$dh = DigistenHinnasto::model()->findByPk(1);
-	$adm = Administrators::model()->findAll();
+
 	$jarj_valv_kpl = 0;
 	$jarj_valv = 0;
-	if( isset($dh->id) and count($adm) > 2 )
+	if( isset($dh->id) and isset($_GET['jv']) and $_GET['jv'] > 2 )
 	{
+		$adm = $_GET['jv'];
 		$tuote = 'Järjestelmävalvojat';
 		$hinta = $dh->jarjestelmanvalvoja;
-		$maara = (count($adm)-2);
+		$maara = $adm-2;
 	}
 ?>
 

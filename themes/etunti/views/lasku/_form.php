@@ -980,7 +980,7 @@ if($("#modelID").val() != '1'){
     {
     	rowCount = rowCount+1;
         $.ajax({
-           url: location.protocol + "//" + location.host + '/index.php/lasku/tr_rivit_jarjestelmavalvojat',
+           url: location.protocol + "//" + location.host + '/index.php/lasku/tr_rivit_jarjestelmavalvojat?jv=<?=$_GET["jv"]?>',
            type: "POST",
            data: {num : rowCount},
            success: function(html){
