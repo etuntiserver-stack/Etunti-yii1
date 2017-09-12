@@ -1380,7 +1380,7 @@ nyt ne ovat etusivu.php ssa
         // Init the rest of the plugins now that the panels
         // have had a chance to be moved and organized.
         // It's less taxing to organize empty panels
-        demoHighCharts.init();
+        //demoHighCharts.init();
         //runVectorMaps(); // function below
       },
       onSave: function() {

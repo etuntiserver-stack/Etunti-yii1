@@ -41,7 +41,7 @@ class SiteController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', 
-				'actions'=>array('etusivu','ohjesivu','etusivu_esimerki', 'change_color', 'valiko', 'valiko_ajax', 'kohderyhma', 'ohjevideot', 'mobemu', 'etusivu_ajax', 'ulkonaky', 'autocomplete', 'synkronoi_gps_sijainti', 'mail_template', 'getcityes', 'edico_etusivulle', 'maksullinen'),
+				'actions'=>array('site_error', 'etusivu','ohjesivu','etusivu_esimerki', 'change_color', 'valiko', 'valiko_ajax', 'kohderyhma', 'ohjevideot', 'mobemu', 'etusivu_ajax', 'ulkonaky', 'autocomplete', 'synkronoi_gps_sijainti', 'mail_template', 'getcityes', 'edico_etusivulle', 'maksullinen', 'tyot_tanaan', 'parassiivojatanaan', 'avoimet_kohteet', 'toteututhismonth', 'tehdyttunnittanaan', 'suunnitteltutunnittanaan', 'viestittanaan', 'kayttajaonline'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('allow', 
@@ -107,6 +107,11 @@ class SiteController extends Controller
                 parent::init();
 
         }
+
+	public function actionSite_error()
+	{
+		die('Error: virhe');
+	}
 
 	public function actionOpentmp($domain, $file)
 	{
@@ -282,10 +287,57 @@ class SiteController extends Controller
 
 	}
 
+	public function actionTyot_tanaan()
+	{
+		$this->renderPartial('tyot_tanaan');
+	}
+
+	public function actionAvoimet_kohteet()
+	{
+		$this->renderPartial('avoimet_kohteet');
+	}
+
+	public function actionKayttajaonline()
+	{
+
+		$bd = '
+                  <table class="table mbn tc-list-1 tc-text-muted-2 tc-fw600-2">
+                    <thead>
+                      <tr class="hidden">
+                        <th class="w30">#</th>
+                        <th>First Name</th>
+                      </tr>
+                    </thead>
+                    <tbody>';
+
+       		    $criteria = new CDbCriteria();
+       		    $criteria->order = " time DESC ";
+       		    $criteria->group = "user";
+		    $uo = UsersOnline::model()->findAll($criteria);
+		    if(isset($uo[0]))
+		    {
+			foreach($uo as $data)
+			{
+			  $bd .= '
+			  <tr>
+			   <td>'.date("H:i",$data->time).'</td>
+			   <td>'.$data->user.'</td>
+			  </tr>
+			  ';
+			}
+	
+		    }
+		$bd .='</tbody>
+                  </table>';
+		echo json_encode($bd);
+	}
+
 	public function actionMail_template()
 	{
 		$this->renderPartial('mail_template');
 	}
+
+
 
 	protected function tasot($num)
 	{
@@ -1468,10 +1520,67 @@ $(document).ready(function(){
 		$this->redirect(Yii::app()->homeUrl);
 	}
 
-
-	public function toteutuThisMonth($k)
+	public function actionSuunnitteltutunnittanaan()
 	{
-		$month = $k;
+
+		$criteria = new CDbCriteria();
+        	$criteria->select = "
+			SUM(TIME_TO_SEC(TIMEDIFF(loppu, alku))) as l_tunnit
+		";
+        	$criteria->condition = " 
+			loppu!='' and alku!='' 
+			AND ".$this->eiLasketa()."
+			AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE()
+		";
+	  	$su = Tyovuoroot::model()->find($criteria);
+		  $suunniteltu = '00:00';
+		if(isset($su->l_tunnit) and $su->l_tunnit > 0)
+		  $suunniteltu = $this->sprint($su->l_tunnit);
+
+
+                  echo json_encode($suunniteltu);
+	}
+
+	public function actionViestittanaan()
+	{
+
+		$criteria = new CDbCriteria();
+        	$criteria->select = " COUNT(*) as count ";
+        	$criteria->condition = " 
+			DATE(time) = CURDATE()
+			AND tekija='toimisto'
+		";
+	  	$v = Viestinta::model()->find($criteria);
+		  $viestit = '0';
+		if(isset($v->count) and $v->count > 0)
+		  $viestit = (int)$v->count;
+
+
+                  echo json_encode($viestit);
+	}
+
+	public function actionTehdyttunnittanaan()
+	{
+
+		$criteria = new CDbCriteria;
+		$criteria->select="
+			SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
+			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit
+		";	
+		$criteria->condition=" 
+			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE() and status=3
+		";
+		$a = Mobile::model()->find($criteria);
+		  $tehdyht = '00:00';
+		if(isset($a->l_tunnit) and $a->l_tunnit > 0)
+		  $tehdyht = $this->sprint($a->l_tunnit);
+
+                  echo json_encode($tehdyht);
+	}
+
+	public function actionToteututhismonth()
+	{
+		$month = date("Ym");
 		$total_l = 0;
 		$total_t = 0;
 
@@ -1506,8 +1615,12 @@ $(document).ready(function(){
 
 
 		$result = $total_l+$total_t;
+		if($result == 0)
+		$return = '00:00'; 
+		else
+		$return = $this->sprint($result);
 
-		return $result;
+		echo json_encode($return);
 
 	}
 
@@ -1649,7 +1762,7 @@ $(document).ready(function(){
 		return $total_l;
 	}
 
-	public function parasSiivojaTanaan()
+	public function actionParassiivojatanaan()
 	{
 		$total_l = array();
 
@@ -1686,7 +1799,7 @@ $(document).ready(function(){
 		}
 
 
-		return $total_l;
+		echo json_encode($total_l);
 
 	}
 

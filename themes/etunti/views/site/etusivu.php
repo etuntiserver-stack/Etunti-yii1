@@ -42,14 +42,7 @@ $months=array(
                   <i class="fa fa-calendar"></i>
                 </div>
                 <h2 class="mt15 lh15">
-                  <b>	<?php 
-				$kktunnint = $this->toteutuThisMonth(date("Ym"));
-				if($kktunnint == 0)
-				echo '00:00'; 
-				else
-				echo $this->sprint($kktunnint); 
-			?>
-		  </b>
+                  <b><div id="toteututhismonth"></div></b>
                 </h2>
                 <h5 class="text-muted"><?php echo $months[date("m")].' '.Yii::t('main', 'toteuma'); ?></h5>
               </div>
@@ -62,22 +55,7 @@ $months=array(
                   <i class="fa fa-clock-o"></i>
                 </div>
                 <h2 class="mt15 lh15">
-		<?php
-		$criteria = new CDbCriteria;
-		$criteria->select="
-			SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
-			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit
-		";	
-		$criteria->condition=" 
-			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE() and status=3
-		";
-		$a = Mobile::model()->find($criteria);
-		  $tehdyht = '00:00';
-		if(isset($a->l_tunnit) and $a->l_tunnit > 0)
-		  $tehdyht = $this->sprint($a->l_tunnit);
-
-                  echo '<b>'.$tehdyht.'</b>';
-		?>
+                  <b><div id="tehdyttunnittanaan"></div></b>
                 </h2>
                 <h5 class="text-muted"><?php echo Yii::t('main','Tehdyt tunnit tänään'); ?></h5>
               </div>
@@ -89,28 +67,8 @@ $months=array(
                 <div class="icon-bg">
                   <i class="fa fa-table"></i>
                 </div>
-		<?php
-
-		$site = Yii::app()->createController('Site');
-		$eilasketa = $site[0]->eiLasketa();
-
-		$criteria = new CDbCriteria();
-        	$criteria->select = "
-			SUM(TIME_TO_SEC(TIMEDIFF(loppu, alku))) as l_tunnit
-		";
-        	$criteria->condition = " 
-			loppu!='' and alku!='' 
-			AND $eilasketa
-			AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE()
-		";
-	  	$su = Tyovuoroot::model()->find($criteria);
-		  $suunniteltu = '00:00';
-		if(isset($su->l_tunnit) and $su->l_tunnit > 0)
-		  $suunniteltu = $this->sprint($su->l_tunnit);
-		?>
-
                 <h2 class="mt15 lh15">
-                  <b><?php echo $suunniteltu; ?></b>
+                  <b><div id="suunnitteltutunnittanaan"></div></b>
                 </h2>
                 <h5 class="text-muted"><?php echo Yii::t('main', 'Suunniteltu tänään'); ?></h5>
               </div>
@@ -122,20 +80,8 @@ $months=array(
                 <div class="icon-bg">
                   <i class="fa fa-envelope"></i>
                 </div>
-		<?php
-		$criteria = new CDbCriteria();
-        	$criteria->select = " COUNT(*) as count ";
-        	$criteria->condition = " 
-			DATE(time) = CURDATE()
-			AND tekija='toimisto'
-		";
-	  	$v = Viestinta::model()->find($criteria);
-		  $viestit = '0';
-		if(isset($v->count) and $v->count > 0)
-		  $viestit = (int)$v->count;
-		?>
                 <h2 class="mt15 lh15">
-                  <b><?php echo $viestit; ?></b>
+                  <b><div id="viestittanaan"></div></b>
                 </h2>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/viestinta"><h5 class="text-muted"><?php echo Yii::t('main', 'Viestit tänään'); ?></h5></a>
               </div>
@@ -168,74 +114,7 @@ $months=array(
                         </div>
                       </div>
 
-
-<?php 
-	$crsun = new CDbCriteria();
-	$crsun->select = "  COUNT(*) as count ";
-	$crsun->condition = " 
-		DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE()
-		AND kohde!=''
-		AND tyoajanmerkinta NOT LIKE '%Ei lasketa%'
-	";
-	$s = Tyovuoroot::model()->find($crsun);
-
-	$crsun = new CDbCriteria();
-	$crsun->select = "  COUNT(*) as count ";
-	$crsun->condition = " status=1	";
-	$a = Mobile::model()->find($crsun);	
-
-	$crsun = new CDbCriteria();
-	$crsun->select = "  COUNT(*) as count ";
-	$crsun->condition = " 
-		DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE() and status=3
-	";
-	$t = Mobile::model()->find($crsun);
-
-
-	$ss = 0;
-	if(isset($s->count))
-	$ss = $s->count;
-
-	$aa = 0;
-	if(isset($a->count))
-	$aa = $a->count;
-
-	$tt = 0;
-	if(isset($t->count))
-	$tt = $t->count;
-
-echo '
-		<input type="hidden" id="tanaan_sun" value="'.$ss.'">
-		<input type="hidden" id="tanaan_al" value="'.$aa.'">
-		<input type="hidden" id="tanaan_tehdyt" value="'.$tt.'">
-
-                      <table class="table mbn tc-med-1 tc-bold-last">
-                        <thead>
-                          <tr class="hidden">
-                            <th>#</th>
-                            <th>First Name</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr>
-                            <td>
-                              <span class="fa fa-circle text-warning fs14 mr10"></span>'.Yii::t('main','Suunnitellut').'</td>
-                            <td>'.$ss.'</td>
-                          </tr>
-                          <tr>
-                            <td>
-                              <span class="fa fa-circle text-info fs14 mr10"></span>'.Yii::t('main','Käynnissä').'</td>
-                            <td>'.$aa.'</td>
-                          </tr>
-                          <tr>
-                            <td>
-                              <span class="fa fa-circle text-primary fs14 mr10"></span>'.Yii::t('main','Tehdyt').'</td>
-                            <td>'.$tt.'</td>
-                          </tr>
-                        </tbody>
-                      </table>
-';
-?>
+			<div id="tyot_tanaan"></div>
 
                     </div>
                   </div>
@@ -250,10 +129,6 @@ echo '
               <div class="panel" id="p10">
                 <div class="panel-heading">
                   <span class="panel-title"><?php echo Yii::t('main', 'Työntekijät tänään'); ?></span>
-		  <?php 
-		   $parasSiivoja = json_encode($this->parasSiivojaTanaan());
-		  ?>
-		  <div id="pieParasSiivoja" style="display:none"><?php echo $parasSiivoja; ?></div>
                 </div>
                 <div class="panel-body pn">
                   <div id="high-pie" style="width: 100%; height: 200px; margin: 0 auto"></div>
@@ -268,15 +143,6 @@ echo '
               <div class="panel" id="p12">
                 <div class="panel-heading">
                   <span class="panel-title"><?php echo Yii::t('main', 'Toimipaikat'); ?></span>
-		  <?php /*
-		    $hesari1 = $this->toteutuThisMonthByCity(date("Ym"), "helsinki"); 
-		    $hesari2 = $this->toteutuThisMonthByCity(date("Ym",strtotime("-1 month")), "helsinki"); 
-		    $espoo1 = $this->toteutuThisMonthByCity(date("Ym"), "espoo"); 
-		    $espoo2 = $this->toteutuThisMonthByCity(date("Ym",strtotime("-1 month")), "espoo");
-		    $vantaa1 = $this->toteutuThisMonthByCity(date("Ym"), "vantaa"); 
-		    $vantaa2 = $this->toteutuThisMonthByCity(date("Ym",strtotime("-1 month")), "vantaa");
-		  */ ?>
-
 		  <?php 
 		    $month1 = $months[date("m")];
 		    $month2 = $months[date("m",strtotime("-1 month"))];
@@ -286,24 +152,11 @@ echo '
 		  ?>
                   <input type="hidden" id="month1" value="<?php echo $month1; ?>" month="<?php echo $m1; ?>" m="<?php echo date('m'); ?>">
                   <input type="hidden" id="month2" value="<?php echo $month2; ?>" month="<?php echo $m2; ?>" m="<?php echo date('m',strtotime('-1 month')); ?>">
-<?php /*
-                  <input type="hidden" id="hesari1" value="<?php echo $hesari1; ?>">
-                  <input type="hidden" id="hesari2" value="<?php echo $hesari2; ?>">
-                  <input type="hidden" id="espoo1" value="<?php echo $espoo1; ?>">
-                  <input type="hidden" id="espoo2" value="<?php echo $espoo2; ?>">
-                  <input type="hidden" id="vantaa1" value="<?php echo $vantaa1; ?>">
-                  <input type="hidden" id="vantaa2" value="<?php echo $vantaa2; ?>">
-*/ ?>
                 </div>
                 <div class="panel-menu">
 
                   <div class="chart-legend" data-chart-id="#high-bars">
 		    <div id="toimipakat_bars"></div>
-		<?php /*
-                    <a data-chart-id="0" class="legend-item btn btn-warning btn-sm mr5">Data 1</a>
-                    <a data-chart-id="1" class="legend-item btn btn-primary btn-sm mr5">Data 2</a>
-                    <a data-chart-id="2" class="legend-item btn btn-info btn-sm">Data 3</a>
-		*/ ?>
                   </div>
                 </div>
                 <div class="panel-body pn">
@@ -470,7 +323,7 @@ var etusivuAjax = function(){
 		try {
 			var d = JSON.parse(data);
 		} catch (e) {
-		        window.location.href=location.protocol + "//" + location.host + '/index.php/user/login'
+		        window.location.href=location.protocol + "//" + location.host + '/index.php/site/site_error'
 		}
 
 		$("#ylittaneet").html(d[0]);
@@ -479,7 +332,7 @@ var etusivuAjax = function(){
 
            },
            error: function(data){
-		        window.location.href=location.protocol + "//" + location.host + '/index.php/user/login'
+		        window.location.href=location.protocol + "//" + location.host + '/index.php/site/site_error'
 	   }
         });
 
@@ -573,35 +426,7 @@ var etusivuAjax = function(){
                   <span class="panel-title"><?php echo Yii::t('main', 'Käyttäjää online'); ?></span>
                 </div>
                 <div class="panel-body pn">
-                  <table class="table mbn tc-list-1 tc-text-muted-2 tc-fw600-2">
-                    <thead>
-                      <tr class="hidden">
-                        <th class="w30">#</th>
-                        <th>First Name</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-		    <?php
-       		    $criteria = new CDbCriteria();
-       		    $criteria->order = " time DESC ";
-       		    $criteria->group = "user";
-		    $uo = UsersOnline::model()->findAll($criteria);
-		    if(isset($uo[0]))
-		    {
-			foreach($uo as $data)
-			{
-			  echo '
-			  <tr>
-			   <td>'.date("H:i",$data->time).'</td>
-			   <td>'.$data->user.'</td>
-			  </tr>
-			  ';
-			}
-	
-		    }
-		    ?>
-                    </tbody>
-                  </table>
+			<div id="kayttajaonline"></div>
                 </div>
               </div>
 
@@ -613,45 +438,7 @@ var etusivuAjax = function(){
                   <span class="panel-title"><?php echo Yii::t('main', 'Avoimet kohteet'); ?></span>
                 </div>
                 <div class="panel-body pn">
-                  <table class="table mbn tc-med-1 tc-bold-last">
-                    <thead>
-                      <tr class="hidden">
-                        <th>#</th>
-                        <th>First Name</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-
-		    <?php
-       		    $criteria = new CDbCriteria();
-       		    $criteria->select = " aloitan,loppui,kohde_kannasta  ";
-       		    $criteria->order = " id DESC  ";
-       		    $criteria->group = "kohde_kannasta";
-       		    $criteria->condition = "status=1";
-		    $m = Mobile::model()->findAll($criteria);
-		    if(isset($m[0]))
-		    {
-			foreach($m as $data)
-			{
-
- 			  $data->loppui = date("d.m.Y H:i",time());
-			  $data->aloitan = date("d.m.Y H:i",strtotime($data->aloitan));
-			  $kesto =  strtotime($data->loppui) - strtotime($data->aloitan);
-
-			  echo '
-                      <tr>
-                        <td>
-                          <span class=""></span> '.$data->kohde_kannasta.'</td>
-                        <td>'.$this->sprint($kesto).'</td>
-                      </tr>
-			  ';
-			}
-	
-		    }
-		    ?>
-
-                    </tbody>
-                  </table>
+			<div id="avoimet_kohteet"></div>
                 </div>
               </div>
 
