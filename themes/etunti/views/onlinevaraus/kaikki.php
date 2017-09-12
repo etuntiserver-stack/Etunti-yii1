@@ -108,17 +108,26 @@
     	  <!--<button class="btn btn-primary myBgColors submitPrintSivuLuetut"><i class="fa fa-print" aria-hidden="true"></i></button>-->
 	  <form action="<?php echo Yii::app()->request->baseUrl; ?>/index.php/mobile/tulostus" class="form-group" target="_blank" method="POST">
 	    <input type="hidden" name="ext" value="doc">
-	    <textarea name="html_content" class="form-control" style="display:none"></textarea>
+	    <input type="hidden" name="fileName" value="Onlinevaraus">
+	    <input type="hidden" name="from" value="<?=$from?>">
+	    <input type="hidden" name="to" value="<?=$to?>">
+		<textarea name="html_content" class="form-control" style="display:none"></textarea>
     	    <button type="submit" class="btn btn-primary myBgColors submitForm"><i class="fa fa-file-word-o" aria-hidden="true"></i></button>
 	  </form>
 	  <form action="<?php echo Yii::app()->request->baseUrl; ?>/index.php/mobile/tulostus" class="form-group" target="_blank" method="POST">
 	    <input type="hidden" name="ext" value="xls">
+	    <input type="hidden" name="fileName" value="Onlinevaraus">
+	    <input type="hidden" name="from" value="<?=$from?>">
+	    <input type="hidden" name="to" value="<?=$to?>">
 	    <textarea name="html_content" class="form-control" style="display:none"></textarea>
     	    <button type="submit" class="btn btn-primary myBgColors submitForm"><i class="fa fa-file-excel-o" aria-hidden="true"></i></button>
 	  </form>
 	  <form action="<?php echo Yii::app()->request->baseUrl; ?>/index.php/mobile/tulostus" class="form-group" target="_blank" method="POST">
 	    <input type="hidden" name="header" value="<?php if(Yii::app()->request->getPost('raporti_tyyppi')) echo Yii::app()->request->getPost('raporti_tyyppi'); ?>, <?=$from?>-<?=$to?>">
 	    <input type="hidden" name="ext" value="pdf">
+	    <input type="hidden" name="fileName" value="Onlinevaraus">
+	    <input type="hidden" name="from" value="<?=$from?>">
+	    <input type="hidden" name="to" value="<?=$to?>">
 	    <textarea name="html_content" class="form-control" style="display:none"></textarea>
     	    <button type="submit" class="btn btn-primary myBgColors submitForm"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></button>
 	  </form>
