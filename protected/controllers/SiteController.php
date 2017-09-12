@@ -466,16 +466,16 @@ class SiteController extends Controller
 
 		$database = false;
 		$vastaus = '';
-		$yritystunnus = '';
+		$kirjautumistunnus = '';
 
-		if(isset($_POST['yrityksen_nimi']))
+		if(isset($_POST['kirjautumistunnus']))
 		{
 
 
 
-			$yritystunnus = preg_replace('/[^\p{L}\p{N}\s]/u', '', $_POST['yrityksen_nimi']);
-			$yritystunnus = str_replace(' ', '_', $yritystunnus);
-			$yritystunnus = strtolower($yritystunnus);
+			$kirjautumistunnus = preg_replace('/[^\p{L}\p{N}\s]/u', '', $_POST['kirjautumistunnus']);
+			$kirjautumistunnus = str_replace(' ', '_', $kirjautumistunnus);
+			$kirjautumistunnus = strtolower($kirjautumistunnus);
 
 
 
@@ -483,19 +483,19 @@ class SiteController extends Controller
 				Yii::app()->db->connectionString = 'mysql:host=localhost;dbname=etuntifw';
 				Yii::app()->db->setActive(true);
 				$connection=Yii::app()->db;
-				$connection->createCommand("CREATE DATABASE IF NOT EXISTS `$yritystunnus`")->execute();
+				$connection->createCommand("CREATE DATABASE IF NOT EXISTS `$kirjautumistunnus`")->execute();
 
 				exec("mysqldump -u '".$connection->username."' -p'".$connection->password."' defdb > lib/defdb.sql");
-				$str = "mysql -u ".$connection->username." -p".$connection->password." $yritystunnus < lib/defdb.sql";
+				$str = "mysql -u ".$connection->username." -p".$connection->password." $kirjautumistunnus < lib/defdb.sql";
 				exec($str, $output, $return_var);
 				$database = true;
 
 
-				$chk_domain = Domainit::model()->find(" domain='".$yritystunnus."' ");
+				$chk_domain = Domainit::model()->find(" domain='".$kirjautumistunnus."' ");
 				if(!isset($chk_domain->id))
 				{
 					$new_domain = new Domainit;
-					$new_domain->domain = $yritystunnus;
+					$new_domain->domain = $kirjautumistunnus;
 					$new_domain->yritys = $_POST['yrityksen_nimi'];
 					$new_domain->paketti = '1,2,3,4,5,6';
 					$new_domain->sahkoposti = $_POST['sahkoposti'];
@@ -506,7 +506,7 @@ class SiteController extends Controller
 
 
 				Yii::app()->db1->setActive(false);
-				Yii::app()->db1->connectionString = 'mysql:host=localhost;dbname='.$yritystunnus;
+				Yii::app()->db1->connectionString = 'mysql:host=localhost;dbname='.$kirjautumistunnus;
 				Yii::app()->db1->setActive(true);
 
 
@@ -545,7 +545,7 @@ class SiteController extends Controller
 		$this->render('aloita', array(
 			'vastaus' => $vastaus,
 			'database' => $database,
-			'yritystunnus' => $yritystunnus,
+			'kirjautumistunnus' => $kirjautumistunnus,
 		));
     
 	}
