@@ -615,6 +615,7 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 	<!-- Digisten -->
         <?php if(isset($_GET['jv']) and $_GET['jv'] > 0) : ?>
 		<input type="hidden" id="tr_rivit_jarjestelmavalvojat" value="1">
+		<input type="hidden" id="jv_maara" value="<?=$_GET['jv']?>">
         <?php endif; ?>
 	<!-- Digisten -->
 
@@ -980,7 +981,7 @@ if($("#modelID").val() != '1'){
     {
     	rowCount = rowCount+1;
         $.ajax({
-           url: location.protocol + "//" + location.host + '/index.php/lasku/tr_rivit_jarjestelmavalvojat?jv=<?=$_GET["jv"]?>',
+           url: location.protocol + "//" + location.host + '/index.php/lasku/tr_rivit_jarjestelmavalvojat?jv='+$("#jv_maara").val(),
            type: "POST",
            data: {num : rowCount},
            success: function(html){
