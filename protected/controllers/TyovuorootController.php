@@ -28,7 +28,7 @@ class TyovuorootController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','updatetime','showohje','did','muisti','operatio','viikko','fromto','autoinsert','autoremove','viikkottain', 'viikkottain_pdf', 'laheta','kk','pvmtid','laheta_k', 'muistin', 'muisticlear', 'muistissa', 'vkolopput', 'vkolopchange', 'uusitilaus', 'tv2', 'PoistaTv', 'valitse_kokopaiva', 'tv_kohteet', 'siivous_tyonimike', 'getKohdeByAsiakas', 'getKohdeById', 'getAsiakasByKohde', 'paivita_laatikot', 'poista_toistuva', 'onko_sama', 'asiakas_autocomplete', 'kohde_autocomplete', 'check_paallekkain', 'get_tekijantiedot', 'is_asiakas', 'is_yhteyshenkilo', 'hallinta'),
+				'actions'=>array('admin','delete','create','update','index','view','updatetime','showohje','did','muisti','operatio','viikko','fromto','autoinsert','autoremove','viikkottain', 'viikkottain_pdf', 'laheta','kk','pvmtid','laheta_k', 'muistin', 'muisticlear', 'muistissa', 'vkolopput', 'vkolopchange', 'uusitilaus', 'tv2', 'PoistaTv', 'valitse_kokopaiva', 'tv_kohteet', 'siivous_tyonimike', 'getKohdeByAsiakas', 'getKohdeById', 'getAsiakasByKohde', 'paivita_laatikot', 'poista_toistuva', 'onko_sama', 'asiakas_autocomplete', 'kohde_autocomplete', 'check_paallekkain', 'get_tekijantiedot', 'is_asiakas', 'is_yhteyshenkilo', 'hallinta', 'didnew'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny', // allow admin user to perform 'admin' and 'delete' actions
@@ -1100,6 +1100,27 @@ class TyovuorootController extends Controller
 			'tietoja'=>$tietoja,
 			'asetukset'=>$asetukset
 		));
+	}
+
+	public function actionDidnew()
+	{
+	     if(is_array(json_decode($_POST['kohteet_siivous'], true)))
+	     $ks = json_decode($_POST['kohteet_siivous'], true);
+	     else
+	     $ks = array();
+
+
+	     $asetukset = Asetukset::model()->findByPk(1);
+ 	     $this->renderPartial('did',array(
+					'pvm'=>$_POST['pvm'],
+					'tid'=>$_POST['tid'],
+					'from'=>$_POST['from'], 
+					'kohteet_siivous'=>$ks, 
+					'asetukset'=>$asetukset,
+					'asiakas'=>$_POST['asiakas'],
+					'kohde'=>$_POST['kohde'],
+	     ));
+
 	}
 
 	public function actionViikko($tid,$viikko,$year)

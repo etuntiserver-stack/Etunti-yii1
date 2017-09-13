@@ -193,7 +193,15 @@
 	     if($pyhat == true)
 	     $clPyhat = 'style="background:#ddd"';
 
+		if(count($kohteet_siivous) > 0)
+		$ks = json_encode($kohteet_siivous);
+		else
+		$ks = "0";
+
+
 	     echo '<td '.$clPyhat.' id="'.$did.'_'.$t->id.'" valign="top">';
+	     echo '<div class="luolaatiko" for="'.$did.'_'.$t->id.'" pvm="'.$date.'" tid="'.$t->id.'" from="tvuoro" kohteet_siivous="'.$ks.'" asiakas="'.$asiakas.'" kohde="'.$kohde.'"></div>';
+/*
  	     $did = $this->renderPartial('//tyovuoroot/did',array(
 					'pvm'=>$date,
 					'tid'=>$t->id,
@@ -204,6 +212,7 @@
 					'kohde'=>$kohde,
 	     ), true);
 	     echo json_decode($did, true);
+*/
 	     echo '</td>';
 	  }
 	  echo '</tr>';
@@ -219,6 +228,35 @@
               </div>
             </div>
 </div>
+
+
+<script>
+$( ".luolaatiko" ).each(function( index ) {
+
+	var forThis = $(this).attr("for");
+	$("#"+forThis).html('odota..');
+	var pvm = $(this).attr("pvm");
+	var tid = $(this).attr("tid");
+	var from = $(this).attr("from");
+	var kohteet_siivous = $(this).attr("kohteet_siivous");
+	var asiakas = $(this).attr("asiakas");
+	var kohde = $(this).attr("kohde");
+
+        $.ajax({
+           url: "didnew",
+           type: "POST",
+	   data: { pvm : pvm, tid : tid, from : from, kohteet_siivous : kohteet_siivous, asiakas : asiakas, kohde : kohde },
+           success: function(data){
+		d = JSON.parse(data);
+		//console.log(d)
+		$("#"+forThis).html(d);
+           },
+    	   error: function(XMLHttpRequest, textStatus, errorThrown) {
+	    	//console.log(XMLHttpRequest);
+ 	   }
+        });
+});
+</script>
 <?php endif; ?>
 
 
