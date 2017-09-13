@@ -1150,7 +1150,7 @@ exit;
 	  	}
 		//  toteutuneet -->
 
-		ksort($dataArr);
+		krsort($dataArr);
 
 
 		return $dataArr;
