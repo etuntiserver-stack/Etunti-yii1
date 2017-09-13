@@ -27,7 +27,7 @@
       			<span class="input-group-btn" style="padding-right:5px">
                           <label class="field prepend-icon">
 
-   			    <input type="text" class="gui-input datepickerFI" name="from" value="<?php echo date('d.m.Y', strtotime($from)); ?>" placeholder="<?php echo Yii::t('main', 'Aloitus'); ?>..">
+   			    <input type="date" class="gui-input" name="from" value="<?php echo date('Y-m-d', strtotime($from)); ?>" >
 
                             <label for="firstname" class="field-icon">
                               <i class="fa fa-calendar"></i>
@@ -38,7 +38,7 @@
       			<span class="input-group-btn" style="padding-right:5px">
                           <label class="field prepend-icon">
 
-   			    <input type="text" class="gui-input datepickerFI" name="to" value="<?php echo date('d.m.Y', strtotime($to)); ?>" placeholder="<?php echo Yii::t('main', 'Lopetus'); ?>..">
+   			    <input type="date" class="gui-input" name="to" value="<?php echo date('Y-m-d', strtotime($to)); ?>">
 
                             <label for="firstname" class="field-icon">
                               <i class="fa fa-calendar"></i>
