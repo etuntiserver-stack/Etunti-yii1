@@ -14,44 +14,58 @@
 <br>
 
         <div class="tray-center">
-   	    <form id="mobForm" action="#" class="form-horizontal" method="POST">
+   	    <form id="mobForm" action="#" class="form-inline" method="POST">
    	    <input type="hidden" name="mob_hae">
 
             <div class="admin-form">
               <div class="panel heading-border">
                 <div class="panel-body bg-light">
 
+		<?php if(isset($_POST['asiakasID'])) : ?>
+		<!-- Mobile -->
                  <div class="row">
-		   <div class="input-group">
+                  <div class="col-sm-12">
 
-      			<span class="input-group-btn" style="padding-right:5px">
-                          <label class="field prepend-icon">
 
-   			    <input type="date" class="gui-input" name="from" value="<?php echo date('Y-m-d', strtotime($from)); ?>" >
+      			<div class="form-group">
+   			    <input type="date" class="form-control" name="from" value="<?php echo date('Y-m-d', strtotime($from)); ?>" >
+      			</div>
 
-                            <label for="firstname" class="field-icon">
-                              <i class="fa fa-calendar"></i>
-                            </label>
-                          </label>
-      			</span>
+      			<div class="form-group">
+   			    <input type="date" class="form-control" name="to" value="<?php echo date('Y-m-d', strtotime($to)); ?>">
+      			</div>
 
-      			<span class="input-group-btn" style="padding-right:5px">
-                          <label class="field prepend-icon">
+      			<div class="form-group">
+        	            <button type="submit" class="btn btn-block btn-primary haemob myBgColors">Hae</button>
+      			</div>
 
-   			    <input type="date" class="gui-input" name="to" value="<?php echo date('Y-m-d', strtotime($to)); ?>">
 
-                            <label for="firstname" class="field-icon">
-                              <i class="fa fa-calendar"></i>
-                            </label>
-                          </label>
-      			</span>
-
-      			<span class="input-group-btn">
-        	        <button type="submit" class="btn btn-primary haemob btn-block myBgColors" style="width:40px"><i class="fa fa-search" aria-hidden="true"></i></button>
-      			</span>
-
-		   </div><!--input-group-->
+                  </div>
                  </div>
+		<!-- Mobile -->
+		<?php else: ?>
+		<!-- WEB -->
+                 <div class="row">
+                  <div class="col-sm-12">
+
+
+      			<div class="form-group">
+   			    <input type="text" class="form-control datepickerFI" name="from" value="<?php echo date('d.m.Y', strtotime($from)); ?>" >
+      			</div>
+
+      			<div class="form-group">
+   			    <input type="text" class="form-control datepickerFI" name="to" value="<?php echo date('d.m.Y', strtotime($to)); ?>">
+      			</div>
+
+      			<div class="form-group">
+        	            <button type="submit" class="btn btn-block btn-primary haemob myBgColors">Hae</button>
+      			</div>
+
+
+                  </div>
+                 </div>
+		<!-- WEB -->
+		<?php endif; ?>
 		
 
                 </div>
