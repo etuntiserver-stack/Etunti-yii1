@@ -1567,28 +1567,18 @@ exit;
 
 		if(isset($p[0])){
 
-		$bod .= '<table class="table table-bordered">
 
-		 <tr>
-		  <th>'.Yii::t('main', 'Päiväys').'</th>
-		  <th>'.Yii::t('main', 'Nimi').'</th>
-		  <th>'.Yii::t('main', 'Teksti').'</th>
-		  <th>'.Yii::t('main', 'Tila').'</th>
-		 </tr>';
-	
-		foreach($p as $data)
-		{
-	  	$bod .= '
-		<tr>
+		   foreach($p as $data)
+		   {
+	  		$bod .= '<table class="table table-bordered">
+			<tr><th>'.Yii::t('main', 'Päiväys').'</th><td>'.date("d.m.Y", strtotime($data->time)).'</td></tr>
+			<tr><th>'.Yii::t('main', 'Nimi').'</th><td>'.$data->nimi.'</td></tr>
+			<tr><th>'.Yii::t('main', 'Teksti').'</th><td>'.$data->teksti.'</td></tr>';
+			if(!isset($_POST['asiakasID']))
+		  	$bod .= '<tr><th>'.Yii::t('main', 'Tila').'</th><td>'.$this->VinkitilaMuutos($data->tila).'</td></tr>';
+			$bod .= '</table>';
+	  	   }
 
-		<td>'.date("d.m.Y", strtotime($data->time)).'</td>
-		<td>'.$data->nimi.'</td>
-		<td>'.$data->teksti.'</td>';
-
-	  	$bod .= '<td>'.$this->VinkitilaMuutos($data->tila).'</td>';
-		$bod .= '</tr>';
-	  	}
-		$bod .= '</table>';
 		}
 	
 		if(empty($bod))
