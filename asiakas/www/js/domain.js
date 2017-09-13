@@ -46,7 +46,6 @@
     }
 
     // <-- Palvelin
-
     var server = '../../';
     var url = server+"index.php/dico/asiakkaat";
     var versio = "";

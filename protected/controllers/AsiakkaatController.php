@@ -1253,7 +1253,7 @@ exit;
 	  	}
 		//  toteutuneet -->
 
-		ksort($dataArr);
+		krsort($dataArr);
 
 		foreach($dataArr as $data)
 		{
