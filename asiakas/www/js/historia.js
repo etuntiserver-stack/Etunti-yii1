@@ -283,19 +283,6 @@ function getUrlVars() {
     }
     function reloadDatepicker()
     {
-
-jQuery('input[type="date"]')                                             
-    .each(function(){                                                              
-        Object.defineProperty(this,'value',{                                         
-          get: function() {                                   
-            return myFormatDateFunction(this.valueAsDate, 'dd.mm.yyyy');      
-          },                                                                         
-          configurable: true,                                                        
-          enumerable : true                                                          
-        });                                                                          
-      });  
-
-
         $( ".datepickerFI" ).datetimepicker({
          format : 'DD.MM.YYYY',
 	 locale: 'fi',
