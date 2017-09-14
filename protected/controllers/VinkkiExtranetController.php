@@ -222,12 +222,36 @@ class VinkkiExtranetController extends Controller
 	   $site[0]->checkOikeus($checkOikeus);
 	//  Oikeudet -->
 */
+		if(isset($_POST['yrityksen_nimi']) and empty($_POST['yrityksen_nimi']))
+			unset(Yii::app()->session['yrityksen_nimi']);
+		else if(isset($_POST['yrityksen_nimi']) and !empty($_POST['yrityksen_nimi']))
+			Yii::app()->session['yrityksen_nimi'] = Yii::app()->request->getPost('yrityksen_nimi');
+		if(isset($_POST['sahkoposti']) and empty($_POST['sahkoposti']))
+			unset(Yii::app()->session['sahkoposti']);
+		else if(isset($_POST['sahkoposti']) and !empty($_POST['sahkoposti']))
+			Yii::app()->session['sahkoposti'] = Yii::app()->request->getPost('sahkoposti');
+
        		$criteria = new CDbCriteria();
 	        $criteria->order = " id DESC ";
 		$criteria->condition = " token='' ";
 
 		$from = date("d.m.Y", strtotime("-1 month"));
 		$to = date("d.m.Y");
+
+
+
+		if(Yii::app()->session['sahkoposti'])
+	        $criteria->addCondition (" sahkoposti LIKE '%".Yii::app()->session['sahkoposti']."%' ");
+
+		if(isset(Yii::app()->session['yrityksen_nimi']))
+		{
+	        	$criteria->addCondition (" 
+				asiakas_id IN (SELECT id FROM asiakkaat 
+				WHERE (yrityksen_nimi LIKE '%".Yii::app()->session['yrityksen_nimi']."%' OR yhteyshenkilo LIKE '%".Yii::app()->session['yrityksen_nimi']."%')
+				) 
+			");
+		}
+
 
 		if(isset($_POST['from']) and isset($_POST['to'])){
 		$from 	= date("Y-m-d",strtotime($_POST['from']));
