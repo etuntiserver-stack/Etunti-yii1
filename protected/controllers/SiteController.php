@@ -1586,14 +1586,12 @@ $(document).ready(function(){
 	{
 
 		$criteria = new CDbCriteria();
-        	$criteria->select = " COUNT(*) as count ";
         	$criteria->condition = " 
-			DATE(time) = CURDATE()
-			AND tekija='toimisto'
+			status=0 AND tekija='toimisto'
 		";
-	  	$v = Viestinta::model()->find($criteria);
-		  $viestit = '0';
-		if(isset($v->count) and $v->count > 0)
+	  	$v = Viestinta::model()->findAll($criteria);
+		  $viestit = 0;
+		if(count($v) > 0)
 		  $viestit = (int)$v->count;
 
 
