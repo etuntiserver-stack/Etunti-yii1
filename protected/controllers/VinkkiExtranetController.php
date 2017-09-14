@@ -243,6 +243,7 @@ class VinkkiExtranetController extends Controller
 		if(Yii::app()->session['sahkoposti'])
 	        $criteria->addCondition (" sahkoposti LIKE '%".Yii::app()->session['sahkoposti']."%' ");
 
+
 		if(isset(Yii::app()->session['yrityksen_nimi']))
 		{
 	        	$criteria->addCondition (" 
