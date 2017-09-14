@@ -259,6 +259,10 @@ $("body").ready(function(){
                 '<span class="fa fa-gear"></span> Omat kohteet </a>' +
 	    '</li>' +
             '<li class="list-group-item">' +
+              '<a href="info.html" class="animated animated-short fadeInUp">' +
+                '<span class="fa fa-sign-out"></span> Info </a>' +
+            '</li>' +
+            '<li class="list-group-item">' +
               '<a id="vaihdaTunnus" href="#" class="animated animated-short fadeInUp">' +
                 '<span class="fa fa-sign-out"></span> Kirjaudu ulos </a>' +
             '</li>' +
@@ -285,7 +289,6 @@ $("body").ready(function(){
 	   '<button class="myBgColors btn btn-default"><a href="historia.html?tyyppi=naytaVinkit"><h2 class="fa fa-thumbs-o-up"></h2></a></button>' +
 	   '<button class="myBgColors btn btn-default"><a href="historia.html?tyyppi=naytaPalautteet"><h2 class="fa fa-smile-o"></h2></a></button>' +
 	   '<button class="myBgColors btn btn-default"><a href="index.html?sivu=asiakirjat"><h2 class="fa fa-file-text-o"></h2></a></button>' +
-	   '<button class="myBgColors btn btn-default"><a href="info.html"><h2 class="fa fa-info-circle"></h2></a></button>' +
 
        '</div>' +
       '</div>' +
