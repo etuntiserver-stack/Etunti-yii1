@@ -62,7 +62,7 @@ $months=array(
             </div>
           </div>
           <div class="col-sm-6 col-md-3">
-            <div class="panel bg-danger light of-h mb10">
+            <div class="panel bg-warning light of-h mb10">
               <div class="pn pl20 p5">
                 <div class="icon-bg">
                   <i class="fa fa-table"></i>
@@ -87,7 +87,7 @@ $months=array(
 	  <?php endif; ?>
 
           <div class="col-sm-6 col-md-3 pulsar">
-            <div class="panel bg-warning light of-h mb10">
+            <div class="panel bg-danger light of-h mb10">
               <div class="pn pl20 p5">
                 <div class="icon-bg">
                   <i class="fa fa-envelope"></i>
@@ -95,7 +95,7 @@ $months=array(
                 <h2 class="mt15 lh15">
                   <b><div id="viestittanaan"></div></b>
                 </h2>
-                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/viestinta"><h5 class="text-muted"><?php echo Yii::t('main', 'Viestit tänään'); ?></h5></a>
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/viestinta"><h5 class="text-muted"><?php echo Yii::t('main', 'Lukemattomat viestit'); ?></h5></a>
               </div>
             </div>
           </div>
