@@ -2423,6 +2423,134 @@ class TyovuorootController extends Controller
 			//     Jos on Alkaen on sama kun edellinen  mutta Loppuen on vähempi kun edellinen -->
 
 
+			// <-- Jos on Alkaen on vähempi kun edellinen mutta Loppuen on sama
+			if(
+				!empty($edellinenToistuva->tvuoro_ids) and is_array($edelliset_tvuoro_ids)
+				and $edellinenToistuva->viikko_paivat == json_encode($_POST['P'])
+				and $edellinenToistuva->viikkoja == $_POST['ToistuvatTyovuorot']['viikkoja']
+				and $edellinenToistuva->pfrom > $_POST['ToistuvatTyovuorot']['pfrom']
+				and strtotime($_POST['ToistuvatTyovuorot']['pto']) == strtotime($edellinenToistuva->pto)
+			)
+			{
+
+				//$return[] = array('ERROR'=>json_encode($edelliset_tvuoro_ids));
+
+				//  <-- Uudet päivät
+				if( $tyopaari_forUpdater == '' )
+				{
+					$return[] = $this->toistuvaInsert(
+						$edellinenToistuva->id,
+						date("d.m.Y", strtotime($_POST['ToistuvatTyovuorot']['pfrom'])),
+						date("d.m.Y", strtotime($edellinenToistuva->pfrom.' -1 day')),
+						json_decode($edellinenToistuva->viikko_paivat, true),
+						$edellinenToistuva->viikkoja, 
+						$edellinenToistuva->tid, 
+						$edellinenToistuva->kohde, 
+						$edellinenToistuva->alku, 
+						$edellinenToistuva->loppu, 
+						$edellinenToistuva->pituus, 
+						$edellinenToistuva->tyoajanmerkinta, 
+						$edellinenToistuva->tietoja,
+						$edellinenToistuva->status,
+						$edellinenToistuva->tyopaari,
+						$saankoSuoritta
+						);
+				} else {
+
+  				    foreach(json_decode($tyopaari_forUpdater, true) as $tid)
+				    {
+
+					if( $model->tid != $tv->tid and $model->tid == $tid )
+					continue;
+
+					$return[] = $this->toistuvaInsert(
+						$edellinenToistuva->id,
+						date("d.m.Y", strtotime($_POST['ToistuvatTyovuorot']['pfrom'])),
+						date("d.m.Y", strtotime($edellinenToistuva->pfrom.' -1 day')),
+						json_decode($edellinenToistuva->viikko_paivat, true),
+						$edellinenToistuva->viikkoja, 
+						$tid, 
+						$edellinenToistuva->kohde, 
+						$edellinenToistuva->alku, 
+						$edellinenToistuva->loppu, 
+						$edellinenToistuva->pituus, 
+						$edellinenToistuva->tyoajanmerkinta, 
+						$edellinenToistuva->tietoja,
+						$edellinenToistuva->status,
+						$edellinenToistuva->tyopaari,
+						$saankoSuoritta
+						);
+				    }
+				}
+				//  Uudet päivät -->
+
+
+
+
+				$uusiPfrom = $_POST['ToistuvatTyovuorot']['pfrom'];
+				$tvuoro_ids_implode = implode(",", $edelliset_tvuoro_ids);
+				$criteria = new CDBcriteria;
+				$criteria->condition=" 
+					id IN ($tvuoro_ids_implode) 
+					AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') 
+						BETWEEN '".date("Y-m-d", strtotime($uusiPfrom))."' AND '".date("Y-m-d", strtotime($edellinenToistuva->pto))."'
+				";
+
+
+			  	$t = Tyovuoroot::model()->findAll($criteria);
+				$uusiKetju = array();
+				foreach($t as $item)
+				{
+						if( $saankoSuoritta != 1 )
+						{
+					    	    $return[] = array(
+							'tid'=>$item->tid, 
+							'pvm'=>$item->pvm, 
+							'ymd'=>date("Ymd",strtotime($item->pvm)), 
+							'isSaved'=>false,
+							'muokkaus'=>true, 
+							'tekijan_nimi'=>$this->etuSukunimi($item->tid), 
+							'vkopvm' => $fi[date("N",strtotime($item->pvm))]
+					    	    );
+
+						} else {
+
+							// <-- Kortti update
+							$newPostArr = array(
+								'kohde'=>$tv->kohde,
+								'alku'=>$tv->alku,
+								'loppu'=>$tv->loppu,
+								'pituus'=>$tv->pituus,
+								'tyoajanmerkinta'=>$tv->tyoajanmerkinta,
+								'tietoja'=>$tv->tietoja,
+								'status'=>$tv->status,
+							);
+
+							Tyovuoroot::model()->updateAll($newPostArr, $criteria);
+
+						}
+				}
+
+
+
+				if( $saankoSuoritta == 1 )
+				{
+					//echo json_encode($edelliset_tvuoro_ids);
+					//exit;
+
+					foreach($return as $item)
+					  foreach($item as $line)
+						$edelliset_tvuoro_ids[] = $line['tvuoro_id'];
+
+
+				    	ToistuvatTyovuorot::model()->updateByPk($edellinenToistuva->id, array(
+						'pfrom'=>$uusiPfrom
+				    	));
+				}
+
+			}
+			//     Jos on Alkaen on vähempi kun edellinen mutta Loppuen on sama -->
+
 
 			// <-- Jos on Viikkon päivä on otettu pois
 			$edelliset_viikko_paivat = json_decode($edellinenToistuva->viikko_paivat, true);
