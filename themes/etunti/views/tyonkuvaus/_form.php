@@ -25,6 +25,7 @@
 
 
 	<div class="section fill mb5">
+
 		<?php echo $form->labelEx($model,'asiakas_id'); ?>
 		<?php
 		$asiakas_selected[Yii::app()->request->getParam('asiakas_id')] = array('selected' => 'selected');
@@ -46,6 +47,28 @@
         	?>
 		<?php echo $form->error($model,'asiakas_id'); ?>
 	</div>
+			<!-- Autocomplete -->
+                        <div class="section fill mb5">
+                          <label class="field prepend-icon">
+		<?php echo $form->labelEx($model,'asiakas_id'); ?>
+			    <?php
+	   			$site = Yii::app()->createController('Site');
+				$mod = 'Asiakkaat';
+				$sarake = 'yrityksen_nimi';
+				$placeholder = 'Asiakas';
+				if(isset($_POST[$sarake])) 			$postvalue = $_POST[$sarake]; 
+				else if(isset(Yii::app()->session[$sarake])) 	$postvalue = Yii::app()->session[$sarake]; 
+				else $postvalue='';				
+		 	        $site[0]->autocompleteFor($mod,array('yrityksen_nimi','yhteyshenkilo'), $placeholder, $postvalue);
+			    ?>
+			<!-- Autocomplete -->
+
+                            <label for="firstname" class="field-icon">
+                              <i class="fa fa-user"></i>
+                            </label>
+                          </label>
+		<?php echo $form->error($model,'asiakas_id'); ?>
+                        </div>
 
 <script type="text/javascript">
 $(document).ready(function(){

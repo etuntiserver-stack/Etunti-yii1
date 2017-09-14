@@ -141,6 +141,22 @@ class TyonkuvausController extends Controller
 	public function actionCreate()
 	{
 		$model=new Tyonkuvaus;
+                //To add the autocomplete field to Asiakaas
+		if(isset($_POST['yrityksen_nimi']) and empty($_POST['yrityksen_nimi']))
+			unset(Yii::app()->session['yrityksen_nimi']);
+		else if(isset($_POST['yrityksen_nimi']) and !empty($_POST['yrityksen_nimi']))
+			Yii::app()->session['yrityksen_nimi'] = Yii::app()->request->getPost('yrityksen_nimi');
+
+
+		if(isset(Yii::app()->session['yrityksen_nimi']))
+		{
+	        	$criteria->addCondition (" 
+				asiakas_id IN (SELECT id FROM asiakkaat 
+				WHERE (yrityksen_nimi LIKE '%".Yii::app()->session['yrityksen_nimi']."%' OR yhteyshenkilo LIKE '%".Yii::app()->session['yrityksen_nimi']."%')
+				) 
+			");
+		}
+              // end of Autocomplete field
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
@@ -260,6 +276,7 @@ class TyonkuvausController extends Controller
 					echo '<hr>';
 					*/
 				}
+
 			}
 			//exit;
 
