@@ -1590,9 +1590,7 @@ $(document).ready(function(){
 			status=0 AND tekija='toimisto'
 		";
 	  	$v = Viestinta::model()->findAll($criteria);
-		  $viestit = '0';
-		if(count($v) > 0)
-		  $viestit = (int)$v->count;
+	  	$viestit = count($v);
 
 
                   echo json_encode($viestit);
