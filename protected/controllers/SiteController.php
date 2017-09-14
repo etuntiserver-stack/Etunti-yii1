@@ -2054,6 +2054,7 @@ $(document).ready(function(){
 		    $arr[] = array(
 		        'label'=>$data->yrityksen_nimi,
 		        'value'=>$data->yrityksen_nimi,    
+
 		        'id'=>$data->id,
         	    );
 		    } else if($model == 'Asiakkaat' and $data->tyyppi == 'henkilo')
