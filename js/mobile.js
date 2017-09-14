@@ -5,22 +5,6 @@ $(document).ready(function(){
         placeholder: "pp.kk.vvvv tt:mm"
   });
 
-
-
-$(document).delegate(".vastaanotettu","click",function(){
-
-	var thisVid = $(this).attr("for");
-	var id = $(this).attr("for").split("_");
-
-        $.ajax({
-           url: location.protocol + "//" + location.host + '/index.php/viestinta/vastaanotettu?id='+id[1],
-           success: function(data){
-		console.log(data);
-		$("#"+thisVid).hide('slow');
-           }
-        });
-
-});
 /*
 $(".vietyovuoroon").click(function(){
 

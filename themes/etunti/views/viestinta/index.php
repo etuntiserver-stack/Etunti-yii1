@@ -82,6 +82,47 @@
         </div>
 
 
+
+<?php
+       	$criteria = new CDbCriteria();
+	$criteria->condition = " status=0 AND tekija='toimisto' ";
+	$vi = Viestinta::model()->findAll($criteria);
+
+	if(isset($vi[0]->id) and !empty($vi[0]->id))
+	{
+	echo '
+<div class="admin-form">
+  <div class="panel heading-border">
+   <div class="panel-body">';
+
+	echo '<h2>'.Yii::t('main','Vastaamattomat viestit').'</h2>';
+	echo '<div class="row">';
+	
+	   foreach($vi as $v)
+	   {
+
+	   	echo '<div class="col-sm-4" id="v_'.$v->id.'">';
+	   	echo '<div class="well">';
+
+		echo '<span>'.str_replace("\n","<br>",$v->viesti).'</span>
+
+		<div class="row">
+	 	 <div class="pull-right">
+		  '.CHtml::link("Vasta", Yii::app()->request->baseUrl.'/index.php/viestinta/update?id='.$v->id, array('class'=>'btn btn-xs btn-primary')).'
+		  <div class="btn btn-xs btn-default vastaanotettu" for="v_'.$v->id.'">'.Yii::t('main','Sulje').'</div>
+		 </div>
+		</div>';
+		echo '</div>';
+		echo '</div>';
+	   }
+	echo '</div>
+   </div>
+  </div>
+</div>
+';
+	}
+?>
+
 <div class="admin-form">
   <div class="panel heading-border">
    <div class="panel-body">
@@ -131,6 +172,22 @@ $(document).ready(function(){
 
 $(".haemob").click(function(){
 	$("#mobForm").submit();
+});
+
+
+$(document).delegate(".vastaanotettu","click",function(){
+
+	var thisVid = $(this).attr("for");
+	var id = $(this).attr("for").split("_");
+
+        $.ajax({
+           url: location.protocol + "//" + location.host + '/index.php/viestinta/vastaanotettu?id='+id[1],
+           success: function(data){
+		console.log(data);
+		$("#"+thisVid).hide('slow');
+           }
+        });
+
 });
 
 });

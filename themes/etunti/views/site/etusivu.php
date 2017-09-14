@@ -74,7 +74,19 @@ $months=array(
               </div>
             </div>
           </div>
-          <div class="col-sm-6 col-md-3">
+
+	  <?php
+		$vastaamattomat = Viestinta::model()->findAll(" status=0 AND tekija='toimisto' ");
+	  ?>
+	  <?php if(count($vastaamattomat) > 0) : ?>
+	  <script>
+	  $( document ).ready(function() {
+		$(".pulsar").effect("pulsate", { times:3 }, 7000);
+	  });
+	  </script>
+	  <?php endif; ?>
+
+          <div class="col-sm-6 col-md-3 pulsar">
             <div class="panel bg-warning light of-h mb10">
               <div class="pn pl20 p5">
                 <div class="icon-bg">
