@@ -24,7 +24,7 @@ class SiteController extends Controller
 	public function filters()
 	{
 		return array(
-			//'accessControl', // perform access control for CRUD operations
+			'accessControl', // perform access control for CRUD operations
 			//'postOnly + delete', // we only allow deletion via POST request
 		);
 	}
@@ -1995,7 +1995,7 @@ $(document).ready(function(){
 		if(is_array($sarake))
 		{
 			$source_sarake = json_encode($sarake);
-			$sarake = array_shift(array_values($sarake));
+			$sarake = array_shift($sarake);
 		} else {
 			$source_sarake = $sarake;
 		}

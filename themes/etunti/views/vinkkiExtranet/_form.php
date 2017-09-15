@@ -2,8 +2,9 @@
 /* @var $this VinkkiExtranetController */
 /* @var $model VinkkiExtranet */
 /* @var $form CActiveForm */
-if(isset($model->id))
+if(isset($model->id)){
    $model->time= date("d.m.Y H:i:s", strtotime($model->time));
+}
 ?>
 
 <div class="row">
