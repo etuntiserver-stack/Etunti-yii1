@@ -2,6 +2,8 @@
 /* @var $this VinkkiExtranetController */
 /* @var $model VinkkiExtranet */
 /* @var $form CActiveForm */
+if(isset($model->id))
+   $model->time= date("d.m.Y H:i:s", strtotime($model->time));
 ?>
 
 <div class="row">
@@ -22,7 +24,7 @@
 
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'time'); ?>
-		<?php echo $form->textField($model,'time',array('size'=>60,'maxlength'=>100, 'class'=>'form-control')); ?>
+		<?php echo $form->textField($model,'time',array('size'=>60,'maxlength'=>100, 'class'=>'form-control datepickerFI')); ?>
 		<?php echo $form->error($model,'time'); ?>
 	</div>
 

@@ -181,12 +181,13 @@ class VinkkiExtranetController extends Controller
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
-		$model->time=date("d.m.Y H:i:s",strtotime($model->time));
 		if(isset($_POST['VinkkiExtranet']))
 		{
 			$model->attributes=$_POST['VinkkiExtranet'];
 			$model->muutos_pvm = date("Y-m-d H:i:s");
+			$model->time=date("Y-m-d", strtotime($_POST['VinkkiExtranet']['time']));
 			if($model->save())
+			$model->time=date("Y-m-d H:i:s", strtotime($model->time));
 				$this->redirect(array('index'));
 		}
 
