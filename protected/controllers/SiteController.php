@@ -261,8 +261,8 @@ class SiteController extends Controller
 
 	       			$criteria = new CDbCriteria();
 		        	$criteria->select = "
-					SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppu, '%H:%i'), '%H:%i'), 
-					DATE_FORMAT(STR_TO_DATE(alku, '%H:%i'), '%H:%i')))) as l_tunnit
+					SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(CONCAT(pvm, loppu), '%d.%m.%Y %H:%i'), '%Y-%m-%d  %H:%i'), 
+					DATE_FORMAT(STR_TO_DATE(CONCAT(pvm, alku), '%d.%m.%Y %H:%i'), '%Y-%m-%d  %H:%i')))) as l_tunnit
 				";
 			        $criteria->condition = " 
 					alku!='' AND loppu!=''
@@ -276,7 +276,7 @@ class SiteController extends Controller
 			}
 	
 		}
-	
+
 		if($result > 0)
 		{
 			$ilmainen_tunti = ($result/3600);
