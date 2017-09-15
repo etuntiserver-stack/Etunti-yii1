@@ -873,7 +873,7 @@ $('.mult').multiselect({
 
 					   if(d['onkosama'])
 					   {
-					   	$('#sopivatPaivat').append('<div class="row"><b class="text-danger"><div class="col-sm-3">'+d['pvm']+'</div><div class="col-sm-3">'+d['vkopvm']+'</div><div class="col-sm-3">'+d['tekijan_nimi']+'</div><div class="col-sm-3">Ei muutoksia</div></b></div>');
+					   	$('#sopivatPaivat').append('<div class="row"><b class="text-danger"><div class="col-sm-3">'+d['pvm']+'</div><div class="col-sm-3">'+d['vkopvm']+'</div><div class="col-sm-3">'+d['tekijan_nimi']+'</div><div class="col-sm-3">Tämä on jo olemassa</div></b></div>');
 					   } 
 					   else if(d['poistetaan'])
 					   {

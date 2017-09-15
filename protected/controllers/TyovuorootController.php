@@ -4191,7 +4191,7 @@ class TyovuorootController extends Controller
 					}
 
 				} else {
-					$return[] = array('tid'=>$tid, 'pvm'=>$pvm, 'ymd'=>date("Ymd",strtotime($pvm)),'onkosama'=>$onkosama, 'isSaved'=>false, 'tekijan_nimi'=>$tekijan_nimi, 'vkopvm' => $fi[date("N",strtotime($pvm))], 'onkosama'=>$onkosama );
+					$return[] = array('tid'=>$tid, 'pvm'=>$pvm, 'ymd'=>date("Ymd",strtotime($pvm)),'onkosama'=>$onkosama, 'isSaved'=>false, 'tekijan_nimi'=>$tekijan_nimi, 'vkopvm' => $fi[date("N",strtotime($pvm))] );
 				}
 
 			}
