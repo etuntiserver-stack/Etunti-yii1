@@ -101,7 +101,7 @@ setTimeout(function() {
     }
     // On device Ready -->
 
-    server = '../../..';
+    //server = '../../..';
     var url = server+"/index.php/api/mob";
     var puh_nro = "";
     var versio = "";
@@ -233,7 +233,7 @@ setTimeout(function() {
 	options = {
 	    //maximumAge: 60000,
 	    timeout: 30000,
-	    enableHighAccuracy: false
+	    enableHighAccuracy: true
 	};
 	var watchID = navigator.geolocation.watchPosition(onSuccessWatch, onErrorWatch, options);
 
