@@ -376,7 +376,7 @@ public function actionTiedosto($dom)
 
 
 				$message = Yii::t('main', 'Hei. Valokuva on saapunut kohteista: ').$k->osoite;
-				$headers = "From: ". $firma->sahkoposti;
+				$headers = "From:  no-reply@etunti.fi";
 				$subject = Yii::t('main', 'Uusi valokuva kohteista. Lähettäjä: '). ' '.$this->etuSukunimi($ttekija->id);
 				mail($saajat,$subject,$message,$headers);
 
