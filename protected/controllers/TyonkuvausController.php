@@ -277,6 +277,7 @@ class TyonkuvausController extends Controller
 					*/
 				}
 
+
 			}
 			//exit;
 
