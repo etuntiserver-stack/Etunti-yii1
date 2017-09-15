@@ -209,6 +209,8 @@ class SiteController extends Controller
 	{
 
 		$result = 0;
+		$mob_result = 0;
+		$tyovuorot_result = 0;
 
 		$begin = new DateTime( date("Y-m-d", strtotime('first day of last month')) );
 		$end = new DateTime( date("Y-m-d", strtotime('last day of last month')) );
@@ -256,7 +258,7 @@ class SiteController extends Controller
 
 			if( $mobile > 0 )
 			{
-				$result += $mobile;
+				$mob_result += $mobile;
 			} else {
 
 	       			$criteria = new CDbCriteria();
@@ -271,11 +273,13 @@ class SiteController extends Controller
 				$tv = Tyovuoroot::model()->find($criteria);
 
 				if(isset($tv->l_tunnit))
-				$result += $tv->l_tunnit;
+				$tyovuorot_result += $tv->l_tunnit;
 
 			}
 	
 		}
+
+		$result = $mob_result+$tyovuorot_result;
 
 		if($result > 0)
 		{

@@ -26,7 +26,7 @@ $months=array(
 	'12'=>Yii::t('main', 'Joulukuu'),
 	);
 
-
+// echo $this->sprint($this->laskuri()); tuntien laskuri mobiili + tyovuorot
 ?>
 
 
