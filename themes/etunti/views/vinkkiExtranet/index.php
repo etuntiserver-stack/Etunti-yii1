@@ -36,7 +36,7 @@
 				if(isset($_POST[$sarake])) 			$postvalue = $_POST[$sarake]; 
 				else if(isset(Yii::app()->session[$sarake])) 	$postvalue = Yii::app()->session[$sarake]; 
 				else $postvalue='';				
-		 	        $site[0]->autocompleteFor($mod, $sarake, $placeholder, $postvalue);
+		 	        $site[0]->autocompleteFor($mod, array('yrityksen_nimi','yhteyshenkilo'), $placeholder, $postvalue);
 			    ?>
 			    <!-- Autocomplete -->
 

@@ -25,6 +25,7 @@
 
 
 	<div class="section fill mb5">
+
 		<?php echo $form->labelEx($model,'asiakas_id'); ?>
 		<?php
 		$asiakas_selected[Yii::app()->request->getParam('asiakas_id')] = array('selected' => 'selected');
@@ -46,6 +47,38 @@
         	?>
 		<?php echo $form->error($model,'asiakas_id'); ?>
 	</div>
+			<!-- Autocomplete -->
+                        <div class="section fill mb5">
+
+			    <?php echo $form->labelEx($model,'asiakas_id'); ?>
+			    <div class="input-group">
+			    <?php
+	   			$site = Yii::app()->createController('Site');
+				$mod = 'Asiakkaat';
+				$sarake = 'yrityksen_nimi';
+				$placeholder = 'Asiakas';
+				if(isset($_GET['asiakas_id']))
+				{
+			      		$la = Asiakkaat::model()->findByPk($_GET['asiakas_id']);
+
+					if(isset($la->id) and $la->tyyppi == 'yritys')
+					$postvalue = $la->yrityksen_nimi; 
+					elseif(isset($la->id) and $la->tyyppi == 'henkilo')
+					$postvalue = $la->yhteyshenkilo; 
+
+				} else {
+					$postvalue='';
+				}
+		 	        $site[0]->autocompleteFor($mod,array('yrityksen_nimi','yhteyshenkilo'), $placeholder, $postvalue);
+			    ?>
+			      <span class="input-group-btn">
+			        <button class="btn btn-default go" type="button"><i class="fa fa-search" aria-hidden="true"></i></button>
+			      </span>
+			    </div>
+			<!-- Autocomplete -->
+
+			<?php echo $form->error($model,'asiakas_id'); ?>
+                        </div>
 
 <script type="text/javascript">
 $(document).ready(function(){
@@ -53,6 +86,21 @@ $(document).ready(function(){
  $("#Tyonkuvaus_asiakas_id").change(function(){
 	window.location.href= "create?asiakas_id=" + $(this).val();
  });
+
+ $(".go").click(function(){
+
+	var thisVal = $("#yrityksen_nimi").val()
+        $.ajax({
+           url: location.protocol + "//" + location.host + "/index.php/site/getasiakasidbynimi?nimi="+ thisVal,
+           success: function(data){
+		if(data !== '0'){
+		  window.location.href= "create?asiakas_id=" + data;
+		}
+           }
+        });
+
+ });
+
 
 });
 </script>

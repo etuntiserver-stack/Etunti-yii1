@@ -41,7 +41,7 @@ class SiteController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', 
-				'actions'=>array('site_error', 'etusivu','ohjesivu','etusivu_esimerki', 'change_color', 'valiko', 'valiko_ajax', 'kohderyhma', 'ohjevideot', 'mobemu', 'etusivu_ajax', 'ulkonaky', 'autocomplete', 'synkronoi_gps_sijainti', 'mail_template', 'getcityes', 'edico_etusivulle', 'maksullinen', 'tyot_tanaan', 'parassiivojatanaan', 'avoimet_kohteet', 'toteututhismonth', 'tehdyttunnittanaan', 'suunnitteltutunnittanaan', 'viestittanaan', 'kayttajaonline', 'suunniteltulistatanaan'),
+				'actions'=>array('site_error', 'etusivu','ohjesivu','etusivu_esimerki', 'change_color', 'valiko', 'valiko_ajax', 'kohderyhma', 'ohjevideot', 'mobemu', 'etusivu_ajax', 'ulkonaky', 'autocomplete', 'synkronoi_gps_sijainti', 'mail_template', 'getcityes', 'edico_etusivulle', 'maksullinen', 'tyot_tanaan', 'parassiivojatanaan', 'avoimet_kohteet', 'toteututhismonth', 'tehdyttunnittanaan', 'suunnitteltutunnittanaan', 'viestittanaan', 'kayttajaonline', 'suunniteltulistatanaan', 'getasiakasidbynimi'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('allow', 
@@ -1210,6 +1210,18 @@ class SiteController extends Controller
 	}
 
 
+	public function actionGetasiakasidbynimi($nimi)
+	{
+
+       		$criteria = new CDbCriteria();
+       		$criteria->condition = " yrityksen_nimi='".$nimi."' OR yhteyshenkilo='".$nimi."' ";
+		$a = Asiakkaat::model()->find($criteria);
+		if(isset($a->id))
+			echo $a->id;
+		else
+			echo 0;
+	}
+
 	public function actionKohderyhma()
 	{
 
@@ -1991,16 +2003,25 @@ $(document).ready(function(){
 	// <-- Autocomplete
 	public function autocompleteFor($model, $sarake, $placeholder, $postvalue)
 	{
+
+		if(is_array($sarake))
+		{
+			$source_sarake = json_encode($sarake);
+			$sarake = array_shift($sarake);
+		} else {
+			$source_sarake = $sarake;
+		}
+
 		$this->widget('zii.widgets.jui.CJuiAutoComplete',array(
 		    'name'=>$sarake,
 		    'value'=> $postvalue,
-		    'source'=>$this->createUrl('autocomplete', array('model'=>$model,'sarake'=>$sarake)),
+		    'source'=>$this->createUrl('autocomplete', array('model'=>$model,'sarake'=>$source_sarake)),
 		    'options'=>array(
 		        'minLength'=>'2',
 		    ),
 		    'htmlOptions'=>array(
                         'showAnim'=>'fold',
-			'class'=>'gui-input',
+			'class'=>'gui-input autocomplete_valikko',
 		     	'placeholder'=> Yii::t('main', $placeholder),
 		    ),
 		));
@@ -2011,19 +2032,57 @@ $(document).ready(function(){
 
 		$term = trim($term);
 		$criteria = new CDBcriteria;
-		$criteria->order = " $sarake ";
-		$criteria->group = " $sarake ";
-		$criteria->condition = " $sarake LIKE '%".$term."%' ";
-		$model = $model::model()->findAll($criteria);
+
+		if(is_array(json_decode($sarake, true)))
+		{
+			$cond = '';
+			$i = 0;
+			foreach(json_decode($sarake, true) as $item)
+			{
+				if($i == 0)
+					$cond .= $item." LIKE '%".$term."%'";
+				else
+					$cond .= " OR $item LIKE '%".$term."%'";
+
+				$i++;
+			}
+
+			$criteria->condition = $cond;
+
+		} else {
+			$criteria->order = " $sarake ";
+			$criteria->group = " $sarake ";
+			$criteria->condition = " $sarake LIKE '%".$term."%' ";
+		}
+
+		$m = $model::model()->findAll($criteria);
 
 		$arr = array();
-		foreach($model as $data)
+		foreach($m as $data)
 		{
+
+		    if($model == 'Asiakkaat' and $data->tyyppi == 'yritys')
+		    {
 		    $arr[] = array(
-		        'label'=>$data->$sarake,
-		        'value'=>$data->$sarake,    
+		        'label'=>$data->yrityksen_nimi,
+		        'value'=>$data->yrityksen_nimi,    
+
 		        'id'=>$data->id,
         	    );
+		    } else if($model == 'Asiakkaat' and $data->tyyppi == 'henkilo')
+		    {
+		    $arr[] = array(
+		        'label'=>$data->yhteyshenkilo,
+		        'value'=>$data->yhteyshenkilo,    
+		        'id'=>$data->id,
+        	    );
+		    } else {
+		    $arr[] = array(
+		        'label'=>$data->$sarake_nimi,
+		        'value'=>$data->$sarake_nimi,    
+		        'id'=>$data->id,
+        	    );
+		    }
 		}
   
 		echo CJSON::encode($arr);
