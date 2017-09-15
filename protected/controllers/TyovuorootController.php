@@ -144,8 +144,11 @@ class TyovuorootController extends Controller
 		$model = Tyontekijat::model()->findByPk($id);
 
 		$bd = '';
-		$bd .= '<div class="row section">';
-		$bd .= $this->renderPartial('//tyontekijat/_form', array('model'=>$model, 'from' => 'tyovuorot'), true);
+		$bd .= '<div class="section">';
+		$bd .= Yii::t('main', 'Nimi').': <b>'.$this->etuSukunimi($model->id).'</b><br>';
+		$bd .= Yii::t('main', 'Puhelinnumero').': <b>'.$model->laiten_puh.' '.$model->tekijan_puh.'</b><br>';
+		$bd .= Yii::t('main', 'Sähköpostiosoite').': <b>'.$model->tekijan_email.'</b><br>';
+		$bd .= Yii::t('main', 'Kotiosoite').': <b>'.$model->tekijan_katuosoite.'</b><br>';
 		$bd .= '</div>';
 
 		echo json_encode(array('bd'=>$bd, 'etusuku' => $this->etuSukunimi($model->id)));	
