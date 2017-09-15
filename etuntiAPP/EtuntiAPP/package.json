@@ -14,14 +14,14 @@
             "cordova-plugin-compat": {},
             "cordova-plugin-device": {},
             "cordova-plugin-dialogs": {},
-            "cordova-plugin-fcm": {},
             "cordova-plugin-file": {},
             "cordova-plugin-file-transfer": {},
-            "cordova-plugin-geolocation": {},
             "cordova-plugin-media": {},
             "cordova-plugin-whitelist": {},
             "de.appplant.cordova.plugin.local-notification": {},
-            "phonegap-nfc": {}
+            "phonegap-nfc": {},
+            "cordova-plugin-geolocation": {},
+            "cordova-plugin-fcm": {}
         }
     },
     "dependencies": {
@@ -32,10 +32,10 @@
         "cordova-plugin-compat": "~1.1.0",
         "cordova-plugin-device": "~1.1.6",
         "cordova-plugin-dialogs": "~1.3.3",
-        "cordova-plugin-fcm": "~2.1.2",
+        "cordova-plugin-fcm": "^2.1.2",
         "cordova-plugin-file": "~4.3.3",
         "cordova-plugin-file-transfer": "~1.6.3",
-        "cordova-plugin-geolocation": "~2.4.3",
+        "cordova-plugin-geolocation": "^2.4.3",
         "cordova-plugin-media": "~3.0.1",
         "cordova-plugin-whitelist": "~1.3.2",
         "cordova-ubuntu": "^4.3.4",

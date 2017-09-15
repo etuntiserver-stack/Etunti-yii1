@@ -34,6 +34,7 @@ protected/data/*.db
 etuntiAPP/.DS_Store
 etuntiAPP/EtuntiAPP/platforms/*
 etuntiAPP/EtuntiAdmin/platforms/*
+etuntiAPP/EtuntiAPP/node_modules/*
 asiakas/platforms/*
 error_log
 .htaccess

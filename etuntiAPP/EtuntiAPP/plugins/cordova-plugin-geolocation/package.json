@@ -2,7 +2,7 @@
   "_args": [
     [
       "cordova-plugin-geolocation",
-      "/home/roman/mytmp/EtuntiAPP"
+      "/var/www/html/etunti/etuntiAPP/EtuntiAPP"
     ]
   ],
   "_from": "cordova-plugin-geolocation@latest",
@@ -36,7 +36,7 @@
   "_shasum": "1dd00023d1f1a2ce330f8767ed08f7b738fe7184",
   "_shrinkwrap": null,
   "_spec": "cordova-plugin-geolocation",
-  "_where": "/home/roman/mytmp/EtuntiAPP",
+  "_where": "/var/www/html/etunti/etuntiAPP/EtuntiAPP",
   "author": {
     "name": "Apache Software Foundation"
   },
