@@ -24,7 +24,7 @@ class SiteController extends Controller
 	public function filters()
 	{
 		return array(
-			//'accessControl', // perform access control for CRUD operations
+			'accessControl', // perform access control for CRUD operations
 			//'postOnly + delete', // we only allow deletion via POST request
 		);
 	}
@@ -41,7 +41,7 @@ class SiteController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', 
-				'actions'=>array('site_error', 'etusivu','ohjesivu','etusivu_esimerki', 'change_color', 'valiko', 'valiko_ajax', 'kohderyhma', 'ohjevideot', 'mobemu', 'etusivu_ajax', 'ulkonaky', 'autocomplete', 'synkronoi_gps_sijainti', 'mail_template', 'getcityes', 'edico_etusivulle', 'maksullinen', 'tyot_tanaan', 'parassiivojatanaan', 'avoimet_kohteet', 'toteututhismonth', 'tehdyttunnittanaan', 'suunnitteltutunnittanaan', 'viestittanaan', 'kayttajaonline', 'suunniteltulistatanaan'),
+				'actions'=>array('site_error', 'etusivu','ohjesivu','etusivu_esimerki', 'change_color', 'valiko', 'valiko_ajax', 'kohderyhma', 'ohjevideot', 'mobemu', 'etusivu_ajax', 'ulkonaky', 'autocomplete', 'synkronoi_gps_sijainti', 'mail_template', 'getcityes', 'edico_etusivulle', 'maksullinen', 'tyot_tanaan', 'parassiivojatanaan', 'avoimet_kohteet', 'toteututhismonth', 'tehdyttunnittanaan', 'suunnitteltutunnittanaan', 'viestittanaan', 'kayttajaonline', 'suunniteltulistatanaan', 'getasiakasidbynimi'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('allow', 
@@ -1206,6 +1206,18 @@ class SiteController extends Controller
 	}
 
 
+	public function actionGetasiakasidbynimi($nimi)
+	{
+
+       		$criteria = new CDbCriteria();
+       		$criteria->condition = " yrityksen_nimi='".$nimi."' OR yhteyshenkilo='".$nimi."' ";
+		$a = Asiakkaat::model()->find($criteria);
+		if(isset($a->id))
+			echo $a->id;
+		else
+			echo 0;
+	}
+
 	public function actionKohderyhma()
 	{
 
@@ -1995,7 +2007,7 @@ $(document).ready(function(){
 		if(is_array($sarake))
 		{
 			$source_sarake = json_encode($sarake);
-			$sarake = array_shift(array_values($sarake));
+			$sarake = array_shift($sarake);
 		} else {
 			$source_sarake = $sarake;
 		}
@@ -2009,7 +2021,7 @@ $(document).ready(function(){
 		    ),
 		    'htmlOptions'=>array(
                         'showAnim'=>'fold',
-			'class'=>'gui-input',
+			'class'=>'gui-input autocomplete_valikko',
 		     	'placeholder'=> Yii::t('main', $placeholder),
 		    ),
 		));
