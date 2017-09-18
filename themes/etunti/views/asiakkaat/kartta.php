@@ -21,6 +21,7 @@
 
 		<select id="tilanneKartalla" class="form-control">
 		<option><?php echo Yii::t('main', 'Tilanne'); ?></option>
+		<option value="aktiiviset_asiakkaat"><?php echo Yii::t('main', 'Kaikki aktiiviset asiakkaat'); ?></option>
 		<option value="aktiiviset"><?php echo Yii::t('main', 'Aktiiviset tänään'); ?></option>
 		<option value="toteutetut"><?php echo Yii::t('main', 'Toteutetut tänään'); ?></option>
 		<option value="kaikki"><?php echo Yii::t('main', 'Kaikki tänään'); ?></option>
