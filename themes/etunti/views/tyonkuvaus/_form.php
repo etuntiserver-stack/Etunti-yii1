@@ -47,8 +47,8 @@
         	?>
 		<?php echo $form->error($model,'asiakas_id'); ?>
 	</div>
-			<!-- Autocomplete -->
-                        <div class="section fill mb5">
+
+	<div class="section fill mb5">
 
 			    <?php echo $form->labelEx($model,'asiakas_id'); ?>
 			    <div class="input-group">
@@ -78,7 +78,7 @@
 			<!-- Autocomplete -->
 
 			<?php echo $form->error($model,'asiakas_id'); ?>
-                        </div>
+	</div>
 
 <script type="text/javascript">
 $(document).ready(function(){
