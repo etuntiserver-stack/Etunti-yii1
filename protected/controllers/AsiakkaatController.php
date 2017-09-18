@@ -387,38 +387,12 @@ class AsiakkaatController extends Controller
 		));
 	}
 
-	/**
-	 * Updates a particular model.
-	 * If update is successful, the browser will be redirected to the 'view' page.
-	 * @param integer $id the ID of the model to be updated
-	 */
-	public function actionUpdate($id)
-	{
 
-	// <-- Oikeudet
-	   $checkOikeus = "asiakkaat_2_".Yii::app()->user->adminStatus;
-	   $site = Yii::app()->createController('Site');
-	   $site[0]->checkOikeus($checkOikeus);
-	//  Oikeudet -->
+	public function LahetaTunnukset($id)
+	{
 
 		$model=$this->loadModel($id);
 
-
-		if(isset($_GET['suljeJuttelu']))
-		{
-			Palautteet::model()->updatebypk($_GET['suljeJuttelu'], array('status'=>3));
-			$this->redirect(array('update','id'=>$id));
-		}
-		if(isset($_POST['palaute_id']))
-		{
-			$this->palautteetVastaus($_POST);
-			$this->redirect(array('update','id'=>$id));
-		}
-
-
-		// <-- Tunnukset lahetys
-		if(isset($_GET['laheta_tunnukset']))
-		{
 				$d = Domainit::model()->find("domain='".Yii::app()->user->domain."'");
 				$yr =  '';
 				if(isset($d->yritys))
@@ -463,7 +437,8 @@ class AsiakkaatController extends Controller
 				$mail->setTo($model->sahkoposti);
 				$mail->setSubject($subject);
 				$mail->setBody($message);
-				$mail->send();
+				if($mail->send())
+				{
 
 							// <-- LOG
 							$log=new Log;
@@ -473,7 +448,46 @@ class AsiakkaatController extends Controller
 							$log->email_message	= json_encode($message);
 							$log->save();
 							//     LOG -->
+					return 'sendOK';
+				}
 
+		return false;
+	}
+
+	/**
+	 * Updates a particular model.
+	 * If update is successful, the browser will be redirected to the 'view' page.
+	 * @param integer $id the ID of the model to be updated
+	 */
+	public function actionUpdate($id)
+	{
+
+	// <-- Oikeudet
+	   $checkOikeus = "asiakkaat_2_".Yii::app()->user->adminStatus;
+	   $site = Yii::app()->createController('Site');
+	   $site[0]->checkOikeus($checkOikeus);
+	//  Oikeudet -->
+
+		$model=$this->loadModel($id);
+
+
+		if(isset($_GET['suljeJuttelu']))
+		{
+			Palautteet::model()->updatebypk($_GET['suljeJuttelu'], array('status'=>3));
+			$this->redirect(array('update','id'=>$id));
+		}
+		if(isset($_POST['palaute_id']))
+		{
+			$this->palautteetVastaus($_POST);
+			$this->redirect(array('update','id'=>$id));
+		}
+
+
+		// <-- Tunnukset lahetys
+		if(isset($_GET['laheta_tunnukset']))
+		{
+
+				$this->LahetaTunnukset($id);
 				$this->redirect(array('index'));
 		}
 		//     Tunnukset lahetys -->

@@ -78,46 +78,7 @@
 
 $(document).ready(function(){
 
-  // <-- Login
-  $("#form-signin").on('submit', function(e){
-
-	var values = $(this).serializeArray();
-	console.log(values);
-	//var url = 'https://' + values[0]['value']+'/index.php/dico/asiakkaat';
-	domain = values[1]['value'];
-
-        $.ajax({
-           url: url+'/login?domain='+domain,
-	   type:'POST',
- 	   data: $(this).serialize(),
-           success: function(data){
-		var d = JSON.parse(data);
-		console.log(d);
-		//return false;
-		if(d['loginOK'])
-		{
-			localStorage.setItem('loginOK', JSON.stringify(d));
-			localStorage.setItem('login_paketti', d['loginOK'].paketti);
-			//localStorage.setItem('edico_tehdyt_tyot', d['loginOK'].edico_tehdyt_tyot);
-			window.location.href="index.html";
-		} else {
-			$('#yllaIlmoitus').html('<h3 class="alert alert-danger">Kirjautuminen ei onnistunut. Tarkasta yritystunnus, sähköposti ja salasana</h3>');
-		}
-    	},
-    		error: function (xhr, status, error){
-        	console.log(url+'/login?domain='+domain);
-    	}
-        });
-	e.preventDefault();
-   });
-  //  Login -->
-
-
-
 	
-
-$("body").ready(function(){
-
 
 
   $(".to-tilaus").click(function(e){
@@ -142,19 +103,6 @@ $("body").ready(function(){
    }
   });
 
-  $("#home").click(function(){
-	window.location.href='index.html';
-  });
-
-  $("#asetukset").click(function(){
-	window.location.href='asetukset.html';
-  });
-
-  $("#toteutuneetTunnit").click(function(){
-	window.location.href='toteutuneet.html';
-  });
-
-});
 
 
 
@@ -297,6 +245,68 @@ $("body").ready(function(){
     '</div>'
    );
 
+   $("#loginLomake").html(''+
+            '<div class="admin-form">'+
+              '<div class="panel heading-border">'+
+                '<div class="panel-body bg-light">'+
+		     '<div class="col-sm-4 col-sm-offset-4">'+
+		     '<h3>Kirjaudu sisään</h3>'+
+		      '<form action="#" class="form-signin" id="form-signin" method="POST" autocomplete="off">'+
+		        '<label>Palvelin</label>'+
+		        '<input type="text" name="palvelin" id="palvelin" class="form-control input-lg" required value="etunti.fi" />'+
+		        '<label>Yritystunnus</label>'+
+		        '<input type="text" name="domain" id="domain" class="form-control input-lg" required autofocus />'+
+		        '<label>Sähköposti</label>'+
+		        '<input type="email" id="inputEmail" name="tunnus" class="form-control input-lg" required autocomplete="off" />'+
+		        '<label>Salasana</label>'+
+		        '<input type="password" id="inputPassword" name="salasana" class="form-control input-lg" required autocomplete="off" />'+
+			'<br>'+
+		        '<p><a href="recovery.html">Unohditko salasana</a></p>'+
+			'<br>'+
+		        '<button class="btn btn-lg btn-primary btn-block myBgColors" type="submit">Tallenna</button>'+
+		      '</form>'+
+		     '</div>'+
+                '</div>'+
+              '</div>'+
+            '</div>'
+   );
+
+
+
+
+  // <-- Login
+  $("#form-signin").on('submit', function(e){
+
+	var values = $(this).serializeArray();
+	console.log(values);
+	//var url = 'https://' + values[0]['value']+'/index.php/dico/asiakkaat';
+	domain = values[1]['value'];
+
+        $.ajax({
+           url: url+'/login?domain='+domain,
+	   type:'POST',
+ 	   data: $(this).serialize(),
+           success: function(data){
+		var d = JSON.parse(data);
+		console.log(d);
+		//return false;
+		if(d['loginOK'])
+		{
+			localStorage.setItem('loginOK', JSON.stringify(d));
+			localStorage.setItem('login_paketti', d['loginOK'].paketti);
+			//localStorage.setItem('edico_tehdyt_tyot', d['loginOK'].edico_tehdyt_tyot);
+			window.location.href="index.html";
+		} else {
+			$('#yllaIlmoitus').html('<h3 class="alert alert-danger">Kirjautuminen ei onnistunut. Tarkasta yritystunnus, sähköposti ja salasana</h3>');
+		}
+    	},
+    		error: function (xhr, status, error){
+        	console.log(url+'/login?domain='+domain);
+    	}
+        });
+	e.preventDefault();
+   });
+  //  Login -->
 
 
    $("#vaihdaTunnus").click(function(){

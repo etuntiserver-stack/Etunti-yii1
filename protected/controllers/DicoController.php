@@ -85,6 +85,38 @@ public function actionLogin($domain)
 
 }
 
+
+	public function actionRecovery($domain)
+	{
+
+		$return = array();
+
+		if(isset($_POST['sahkoposti']))
+		{
+			$criteria=new CDbCriteria;
+			$criteria->condition = " 
+				sahkoposti='".$_POST['sahkoposti']."' 
+			";
+			$a=Asiakkaat::model()->find($criteria);
+		
+			if(isset($a->id))
+			{
+				Yii::app()->user->setState('domain', $domain);
+				Yii::app()->user->setState('asiakas', $a->id);
+				$asiakkaat = Yii::app()->createController('Asiakkaat');
+				$asiakkaat[0]->LahetaTunnukset($a->id);
+
+				$return['ok'] = 'Asiakas: '.$a->id;
+				$this->_sendResponse(200, CJSON::encode($return));
+			}
+		}
+
+		$return['error'] = 'Error';
+		$this->_sendResponse(200, CJSON::encode($return));
+		exit;
+	}
+
+
 	public function actionCheck($domain)
 	{
 

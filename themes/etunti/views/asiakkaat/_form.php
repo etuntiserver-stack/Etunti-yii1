@@ -223,7 +223,7 @@ $model->hinta_sis_alv = round($model->hinta_sis_alv, 2);
 		<?php echo $form->error($model,'salasana'); ?>
 	</div>
 	*/ ?>
-
+	<?php if(isset($model->id)): ?>
 	<div class="section fill mb5 ashidd_a">
 		<?php echo CHtml::link(Yii::t('main', 'Lähetä tunnukset asiakkaalle'), 
 				array('update', 'id'=>$model->id, 'laheta_tunnukset'=>true), 
@@ -237,7 +237,9 @@ $model->hinta_sis_alv = round($model->hinta_sis_alv, 2);
 			); 
 		?>
 	</div>
-<?php endif ; ?>
+	<?php endif; ?>
+
+<?php endif; ?>
 
 
   </div><div class="col-sm-3">
