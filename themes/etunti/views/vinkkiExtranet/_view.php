@@ -32,6 +32,10 @@
 	</td>
 	<td>
 		<?php echo date("d.m.Y H:i", strtotime($data->time)); ?>
+		<?php if(!empty($data->muutos_pvm)): ?>
+		<br>
+		<?=Yii::t('main', 'Muokkattu').' '.date("d.m.Y H:i", strtotime($data->muutos_pvm))?>
+		<?php endif; ?>
 	</td>
 	<td>
 		<?php echo CHtml::link($nimi, array('//asiakkaat/update', 'id'=>$as_id), array('class'=>'link')); ?>
