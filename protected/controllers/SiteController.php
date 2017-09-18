@@ -2035,6 +2035,7 @@ $(document).ready(function(){
 
 		if(is_array(json_decode($sarake, true)))
 		{
+			$sarake_nimi = array_shift($sarake);
 			$cond = '';
 			$i = 0;
 			foreach(json_decode($sarake, true) as $item)
@@ -2050,6 +2051,7 @@ $(document).ready(function(){
 			$criteria->condition = $cond;
 
 		} else {
+			$sarake_nimi = $sarake;
 			$criteria->order = " $sarake ";
 			$criteria->group = " $sarake ";
 			$criteria->condition = " $sarake LIKE '%".$term."%' ";
