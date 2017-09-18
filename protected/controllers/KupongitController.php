@@ -213,6 +213,7 @@ class KupongitController extends Controller
 	public function actionIndex()
 	{
        		$criteria = new CDbCriteria();
+		$criteria->order = "id DESC";
 
 
 		if(isset($_POST['kupongin_maara']) and $_POST['kupongin_maara'] > 0)

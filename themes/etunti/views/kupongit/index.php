@@ -115,6 +115,7 @@
   <tr>
   <th></th>
   <th><?php echo Yii::t('main', 'Luotu'); ?></th>
+  <th><?php echo Yii::t('main', 'Asiakas'); ?></th>
   <th><?php echo Yii::t('main', 'Kupongi'); ?></th>
   <th><?php echo Yii::t('main', 'Voimassa'); ?></th>
   <th><?php echo Yii::t('main', 'Muoto'); ?></th>

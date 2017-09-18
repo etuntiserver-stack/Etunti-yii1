@@ -2007,7 +2007,7 @@ $(document).ready(function(){
 		if(is_array($sarake))
 		{
 			$source_sarake = json_encode($sarake);
-			$sarake = array_shift($sarake);
+			$sarake = $sarake[0];
 		} else {
 			$source_sarake = $sarake;
 		}
@@ -2035,7 +2035,7 @@ $(document).ready(function(){
 
 		if(is_array(json_decode($sarake, true)))
 		{
-			$sarake_nimi = array_shift($sarake);
+			$sarake_nimi = $sarake[0];
 			$cond = '';
 			$i = 0;
 			foreach(json_decode($sarake, true) as $item)
@@ -2068,7 +2068,6 @@ $(document).ready(function(){
 		    $arr[] = array(
 		        'label'=>$data->yrityksen_nimi,
 		        'value'=>$data->yrityksen_nimi,    
-
 		        'id'=>$data->id,
         	    );
 		    } else if($model == 'Asiakkaat' and $data->tyyppi == 'henkilo')

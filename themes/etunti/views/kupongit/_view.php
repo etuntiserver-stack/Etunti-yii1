@@ -2,7 +2,38 @@
 /* @var $this KohteetController */
 /* @var $data Kohteet */
 
-		$list = array('0'=>Yii::t('main', 'Ei'),'1'=>Yii::t('main', 'Kyllä'));
+	$asiakas='';
+	if($data->asiakas_id != 0)
+	{
+	$a = Asiakkaat::model()->findbypk($data->asiakas_id);
+		if(isset($a->id) and !empty($a->yrityksen_nimi))
+		{
+			$asiakas = CHtml::link($a->yrityksen_nimi, 
+				array('/asiakkaat/update', 'id'=>$data->id), 
+				array(
+					'class'=>'btn btn-primary btn-block myBgColors', 
+					'style'=>'color:white', 
+					'data-toggle'=>'tooltip', 
+					'data-placement'=>'top', 
+					'title'=>Yii::t('main', 'Katso') 
+				)
+			);
+		} elseif(isset($a->id) and empty($a->yrityksen_nimi) and !empty($a->yhteyshenkilo))
+		{
+			$asiakas = CHtml::link($a->yhteyshenkilo, 
+				array('/asiakkaat/update', 'id'=>$data->id), 
+				array(
+					'class'=>'btn btn-primary btn-block myBgColors', 
+					'style'=>'color:white', 
+					'data-toggle'=>'tooltip', 
+					'data-placement'=>'top', 
+					'title'=>Yii::t('main', 'Katso') 
+				)
+			);
+		}
+	}
+
+	$list = array('0'=>Yii::t('main', 'Ei'),'1'=>Yii::t('main', 'Kyllä'));
 ?>
 
 <tr>
@@ -21,6 +52,9 @@
 	</td>
 	<td>
 		<?php echo date("d.m.Y H:i", strtotime($data->time)); ?>
+	</td>
+	<td>
+		<?php echo $asiakas; ?>
 	</td>
 	<td>
 		<h3><?php echo $data->kupongin_id; ?></h3>

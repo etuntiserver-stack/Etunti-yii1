@@ -22,7 +22,7 @@ class Kupongit extends DB2ActiveRecord
 	public function tableName()
 	{
 		$tb_name = 'kupongit';
-		$check_this_table = false;
+		$check_this_table = true;
 		//unset(Yii::app()->session[$tb_name]); // this use if want many times play
 		if(!isset(Yii::app()->session[$tb_name]))
 		{
@@ -42,7 +42,6 @@ class Kupongit extends DB2ActiveRecord
 		}
 
 		$table_structure = array(
-
                      'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP ',
                      'kupongin_id' => 'varchar(255) YES ',
                      'voimassa' => 'date ',
@@ -51,10 +50,7 @@ class Kupongit extends DB2ActiveRecord
                      'maara_tyyppi' => 'varchar(255) YES ',
                      'jatkuva' => 'int(1) 0 ',
                      'status' => 'int(1) 0 ',
-
-
-
-
+                     'asiakas_id' => 'int(11) ',
 		);
 
 		foreach($table_structure as $key=>$value)
@@ -78,7 +74,7 @@ class Kupongit extends DB2ActiveRecord
 		return array(
 			array('kupongin_id, voimassa, maara_tyyppi', 'required'),
                         array('kupongin_id','unique', 'message'=>'Tämä alennuskoodi on varattu.'),
-			array('prosentti_maara, jatkuva, status', 'numerical', 'integerOnly'=>true),
+			array('prosentti_maara, jatkuva, status, asiakas_id', 'numerical', 'integerOnly'=>true),
 			array('euro_maara', 'numerical'),
 			array('kupongin_id, maara_tyyppi', 'length', 'max'=>255),
 			// The following rule is used by search().
@@ -113,6 +109,7 @@ class Kupongit extends DB2ActiveRecord
 			'maara_tyyppi' => Yii::t('main', 'Määrä tyyppi'),
 			'jatkuva' => 'Jatkuva',
 			'status' => Yii::t('main', 'Käytetty'),
+			'asiakas_id' => Yii::t('main', 'Asiakas'),
 		);
 	}
 

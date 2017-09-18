@@ -23,6 +23,55 @@
 <div class="row">
   <div class="col-sm-3">
 
+
+	<div class="section fill mb5">
+		<?php echo $form->hiddenField($model,'asiakas_id',array('size'=>60,'maxlength'=>255, 'class'=>'form-control')); ?>
+
+			<!-- Autocomplete -->
+			    <?php echo $form->labelEx($model,'asiakas_id'); ?>
+			    <?php
+	   			$site = Yii::app()->createController('Site');
+				$mod = 'Asiakkaat';
+				$placeholder = 'Asiakas';
+
+				$postvalue = '';
+		      		$la = Asiakkaat::model()->findByPk($model->asiakas_id);
+				if(isset($la->id) and $la->tyyppi == 'yritys')
+				$postvalue = $la->yrityksen_nimi; 
+				elseif(isset($la->id) and $la->tyyppi == 'henkilo')
+				$postvalue = $la->yhteyshenkilo; 
+
+		 	        $site[0]->autocompleteFor($mod,array('yrityksen_nimi','yhteyshenkilo'), $placeholder, $postvalue);
+			    ?>
+			<!-- Autocomplete -->
+
+
+		<script type="text/javascript">
+		$(document).ready(function(){
+
+		 $("#Tyonkuvaus_asiakas_id").change(function(){
+			window.location.href= "create?asiakas_id=" + $(this).val();
+		 });
+
+		 $("#yrityksen_nimi").blur(function(){
+		
+			var thisVal = $("#yrityksen_nimi").val()
+		        $.ajax({
+		           url: location.protocol + "//" + location.host + "/index.php/site/getasiakasidbynimi?nimi="+ thisVal,
+		           success: function(data){
+				if(data !== '0'){
+				  $("#Kupongit_asiakas_id").val(data);
+				}
+		           }
+		        });
+		
+		 });
+
+		});
+		</script>
+		<?php echo $form->error($model,'asiakas_id'); ?>
+	</div>
+
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'kupongin_id'); ?>
 		<?php echo $form->textField($model,'kupongin_id',array('size'=>60,'maxlength'=>255, 'class'=>'form-control')); ?>
