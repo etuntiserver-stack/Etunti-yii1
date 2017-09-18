@@ -433,6 +433,17 @@ class KohteetController extends Controller
 		if(isset($_POST['email']) and !empty(trim($_POST['email'])))
 	        $criteria->addCondition (" email LIKE '%".$_POST['email']."%' ");
 
+		if(isset($_POST['yrityksen_nimi']) and !empty(trim($_POST['yrityksen_nimi'])))
+		{
+	        	$criteria->addCondition (" 
+				asiakas_id IN (
+					SELECT id FROM asiakkaat 
+					WHERE yrityksen_nimi LIKE '%".$_POST['yrityksen_nimi']."%' OR yhteyshenkilo LIKE '%".$_POST['yrityksen_nimi']."%'
+				)		
+			");
+		}
+
+
 		$dataProvider=new CActiveDataProvider('Kohteet', array(
 			'criteria'=>$criteria,
 			//'pagination'=>false
