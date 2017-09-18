@@ -206,6 +206,13 @@ class KohteetController extends Controller
 			WHERE DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE() 
 			)
 		");
+		} elseif(isset($_GET['tila']) and $_GET['tila'] == 'aktiiviset_asiakkaat') {
+		$criteria->addCondition("
+			asiakas_id IN
+			( 
+			SELECT id FROM asiakkaat WHERE aktiivinen=1
+			)
+		");
 		} 
 
 		$model=Kohteet::model()->findAll($criteria);
