@@ -2035,7 +2035,7 @@ $(document).ready(function(){
 
 		if(is_array(json_decode($sarake, true)))
 		{
-			$sarake_nimi = $sarake[0];
+			$sarake_nimi = json_decode($sarake, true)[0];
 			$cond = '';
 			$i = 0;
 			foreach(json_decode($sarake, true) as $item)
