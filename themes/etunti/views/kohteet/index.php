@@ -88,7 +88,7 @@
 	   			$site = Yii::app()->createController('Site');
 				$mod = 'Kohteet';
 				$sarake = 'etu_suku_nimet';
-				$placeholder = 'Nimi';
+				$placeholder = 'Kohteen yhteyshenkilö';
 				if(isset($_POST[$sarake])) $postvalue = $_POST[$sarake]; else $postvalue='';
 		 	        $site[0]->autocompleteFor($mod, $sarake, $placeholder, $postvalue);
 			    ?>
