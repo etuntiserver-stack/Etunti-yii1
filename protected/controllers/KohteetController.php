@@ -328,9 +328,9 @@ class KohteetController extends Controller
 	        $latAuto = '';
 	        $lngAuto = '';
 	    	$coordinates = $this->getlatlong($model->osoite);
-		if(isset($coordinates->results[0]->geometry->location->lat))
+		if($coordinates and isset($coordinates->results[0]->geometry->location->lat))
 	        $latAuto = $coordinates->results[0]->geometry->location->lat.',';
-		if(isset($coordinates->results[0]->geometry->location->lng))
+		if($coordinates and isset($coordinates->results[0]->geometry->location->lng))
 	        $lngAuto = $coordinates->results[0]->geometry->location->lng;
 	
 		if( isset($model->id) and empty($model->gps_sijainti) and !empty($latAuto) and !empty($lngAuto))
@@ -360,10 +360,10 @@ class KohteetController extends Controller
 
 	protected function getlatlong($address)
 	{
-	        $url = 'http://maps.googleapis.com/maps/api/geocode/json?address=' . urlencode($address) . '&sensor=true';
+	        $url = 'https://maps.googleapis.com/maps/api/geocode/json?address=' . urlencode($address) . '&sensor=true';
 	        $json = @file_get_contents($url);
 	        $data = json_decode($json);
-	        if ($data->status == "OK")
+	        if (isset($data->status) and $data->status == "OK")
 	            return $data;
 	        else
 	            return false;
