@@ -179,14 +179,13 @@ class KohteetController extends Controller
 
        		$criteria = new CDbCriteria();
 
-		if(isset($_GET['tila']) and $_GET['tila'] == 'aktiiviset')
+		if(isset($_GET['tila']) and $_GET['tila'] == 'avoimet')
 		{
 		$criteria->addCondition("
 			id IN 
 			( 
 			SELECT kohdenID FROM sivexkuitti 
-			WHERE DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = CURDATE() 
-			AND status=1
+			WHERE status=1
 			)
 		");
 		} elseif(isset($_GET['tila']) and $_GET['tila'] == 'toteutetut') {
