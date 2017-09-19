@@ -333,7 +333,7 @@ class KohteetController extends Controller
 		if(isset($coordinates->results[0]->geometry->location->lng))
 	        $lngAuto = $coordinates->results[0]->geometry->location->lng;
 	
-		if( isset($model->id) and empty($model->gps_sijainti) and !empty($latAuto.$lngAuto))
+		if( isset($model->id) and empty($model->gps_sijainti) and !empty($latAuto) and !empty($lngAuto))
 			Kohteet::model()->updateBypk($model->id, array('gps_sijainti' => $latAuto.$lngAuto));
 		// Koordinatiit -->
 
