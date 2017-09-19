@@ -370,7 +370,8 @@ class KohteetController extends Controller
 
 		}
 		catch(Exception $e){
-		    throw new Exception ('Error '$e);
+			throw new Exception ('Error ' .$e);
+			return false;
 		}
 
 	            return false;
