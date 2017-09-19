@@ -361,7 +361,7 @@ class KohteetController extends Controller
 	protected function getlatlong($address)
 	{
 	        $url = 'https://maps.googleapis.com/maps/api/geocode/json?address=' . urlencode($address) . '&sensor=true';
-	        $json = @file_get_contents($url);
+	        $json = file_get_contents($url);
 	        $data = json_decode($json);
 	        if (isset($data->status) and $data->status == "OK")
 	            return $data;
