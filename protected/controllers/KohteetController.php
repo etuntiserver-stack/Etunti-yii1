@@ -328,7 +328,6 @@ class KohteetController extends Controller
 	        $latAuto = '';
 	        $lngAuto = '';
 	    	$coordinates = $this->getlatlong($model->osoite);
-exit;
 		if($coordinates and isset($coordinates->results[0]->geometry->location->lat))
 	        $latAuto = $coordinates->results[0]->geometry->location->lat.',';
 		if($coordinates and isset($coordinates->results[0]->geometry->location->lng))
@@ -361,27 +360,22 @@ exit;
 
 	protected function getlatlong($address)
 	{
-	        $url = 'https://maps.googleapis.com/maps/api/geocode/json?address=' . urlencode($address) . '&sensor=true';
 
-		//try{
+		$asetuksetForAll = AsetuksetForAll::model()->findByPk(1);
+		if(isset($asetuksetForAll->googlemaps_apikey) and !empty($asetuksetForAll->googlemaps_apikey))
+		{
+	        	$url = 'https://maps.googleapis.com/maps/api/geocode/json?address=' . urlencode($address) . '&sensor=true&key='.$asetuksetForAll->googlemaps_apikey;
 		        $json = @file_get_contents($url);
 		        $data = json_decode($json);
 		        if (isset($data->status) and $data->status == "OK")
 			{
 			        return $data;
 			} else {
-				print_r($json);
-				exit;
+				return false;
 			}
-/*
 		}
-		catch(Exception $e){
-			throw new Exception ('Error ' .$e);
-			return false;
-		}
-*/
 
-	            //return false;
+	            return false;
 	}
 
 	/**
