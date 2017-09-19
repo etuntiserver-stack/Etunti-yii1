@@ -369,7 +369,7 @@ class KohteetController extends Controller
 			{
 			        return $data;
 			} else {
-				print_r($data);
+				print_r($json);
 				exit;
 			}
 /*
