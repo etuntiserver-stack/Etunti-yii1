@@ -228,10 +228,10 @@ exit;
 
 
 
-
+<?php /*
             <div class="admin-form">
               <div class="panel heading-border">
-                <div class="panel-heading"><h2><?php echo Yii::t('main', 'Tehdyt työvuorot'); ?></h2></div>
+                <div class="panel-heading"><h2><?php echo Yii::t('main', 'Toteutuneet tunnit'); ?></h2></div>
                 <div class="panel-body bg-light">
 
 
@@ -246,8 +246,8 @@ exit;
   </tr>
   </thead>
   <?php $this->widget('zii.widgets.CListView', array(
-	'dataProvider'=>$dataProviderTehdytTyovuorot,
-	'itemView'=>'_view_tehdyt_tyovuorot',
+	'dataProvider'=>$dataToteutuneet,
+	'itemView'=>'_view_toteutuneet',
   	'template'=>'{items}<table class="table table-striped table-condensed"></table><br/>{pager}',
 
 
@@ -268,7 +268,7 @@ exit;
                 </div>
               </div>
             </div>
-
+*/ ?>
 
 
             <div class="admin-form">

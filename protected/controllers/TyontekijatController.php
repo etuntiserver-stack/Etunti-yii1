@@ -584,26 +584,22 @@ class TyontekijatController extends Controller
 		}
 
 
-
+/*
 	       	$criteria = new CDbCriteria();
-		$criteria->with=array('kohteet','tt');
-		$criteria->order = " DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') DESC ";
 		$criteria->condition = " 
 			tid='".$id."' 
-			AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') <= CURDATE()
-			AND alku!='00:00' AND loppu!='00:00'
 		";
 
-		$dataProviderTehdytTyovuorot=new CActiveDataProvider('Tyovuoroot', array(
+		$dataToteutuneet=new CActiveDataProvider('Mobile', array(
 			'criteria'=>$criteria,
 			//'pagination'=>false
 		));
-		$dataProviderTehdytTyovuorot->pagination->pageSize = 50;
-
+		$dataToteutuneet->pagination->pageSize = 50;
+*/
 
 		$this->render('update',array(
 			'model'=>$model,
-			'dataProviderTehdytTyovuorot'=>$dataProviderTehdytTyovuorot
+			//'dataToteutuneet'=>$dataToteutuneet
 		));
 	}
 

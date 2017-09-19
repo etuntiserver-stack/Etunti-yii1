@@ -11,20 +11,20 @@
 
 <tr>
 	<td>
-		<?php echo $data->pvm; ?>
+		<?php echo $data->time; ?>
 	</td>
 	<td>
-		<?php if(isset($data->kohteet->osoite)) echo $data->kohteet->osoite; ?>
+		<?php $data->kohde_kannasta; ?>
 	</td>
 	<td>
-		<?php echo $data->alku; ?>
+		<?php echo $data->aloitan; ?>
 	</td>
 	<td>
-		<?php echo $data->loppu; ?>
+		<?php echo $data->loppui; ?>
 	</td>
 	<td>
 		<?php 
-			echo $this->sprint(strtotime($data->loppu)-strtotime($data->alku)); 
+			echo $this->sprint(strtotime($data->loppui)-strtotime($data->aloitan)); 
 		?>
 	</td>
 </tr>
