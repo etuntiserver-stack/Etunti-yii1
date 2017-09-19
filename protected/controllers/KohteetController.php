@@ -328,6 +328,7 @@ class KohteetController extends Controller
 	        $latAuto = '';
 	        $lngAuto = '';
 	    	$coordinates = $this->getlatlong($model->osoite);
+exit;
 		if($coordinates and isset($coordinates->results[0]->geometry->location->lat))
 	        $latAuto = $coordinates->results[0]->geometry->location->lat.',';
 		if($coordinates and isset($coordinates->results[0]->geometry->location->lng))
@@ -371,7 +372,6 @@ class KohteetController extends Controller
 		}
 		catch(Exception $e){
 			throw new Exception ('Error ' .$e);
-			exit;
 			return false;
 		}
 
