@@ -366,9 +366,12 @@ class KohteetController extends Controller
 		        $json = @file_get_contents($url);
 		        $data = json_decode($json);
 		        if (isset($data->status) and $data->status == "OK")
+			{
 			        return $data;
-			else
-				return false;
+			} else {
+				print_r($data);
+				exit;
+			}
 /*
 		}
 		catch(Exception $e){
