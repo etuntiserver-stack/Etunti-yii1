@@ -1,4 +1,5 @@
 <?php
+
 /*
 $servername = "localhost";
 $username = "root";
@@ -37,7 +38,7 @@ while($row=mysqli_fetch_array($sql))
 
 
 
-
+/*
 
 $servername = "localhost";
 $username = "root";
@@ -74,6 +75,6 @@ while($row = mysqli_fetch_array($sql)) {
 
 	$last = $row['Field'];
 }
-
+*/
 
 ?>

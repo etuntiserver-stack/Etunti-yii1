@@ -24,7 +24,7 @@ public $template;
 	public function tableName()
 	{
 		$tb_name = 'sivex_tarjoukset';
-		$check_this_table = false;
+		$check_this_table = true;
 		unset(Yii::app()->session[$tb_name]); // this use if want many times play
 		if(!isset(Yii::app()->session[$tb_name]))
 		{
