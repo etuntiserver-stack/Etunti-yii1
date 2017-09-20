@@ -63,7 +63,7 @@
 			 	echo '<tr><td>';
 
 				// <-- file_safe_opener
-				$filepath = '../../'.$file;
+				$filepath = Yii::getPathOfAlias('application').'/../'.$file;
 				echo CHtml::link(end($explNimi),
 					array('/site/file_safe_opener', 'filepath' => $filepath, 'ext' => 'docx'),
 					array(
