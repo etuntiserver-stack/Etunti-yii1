@@ -701,7 +701,7 @@ class CrmTarjouksetController extends Controller
 		<table class="table table-bordered" style="background:white">
 		    <tr>
 		        <th>'.Yii::t('main','Tilat').'</th>
-			<th>'.Yii::t('main','Työtehtävät').'</th>
+			<th>'.Yii::t('main','Työtehtävät ja päivät').'</th>
 			<th>'.Yii::t('main','Kommenti').'</th>
 		    </tr>';
 
@@ -719,13 +719,28 @@ class CrmTarjouksetController extends Controller
 		    <tr class="rivi" num="'.$key.'">
 		        <td>'.$tilat.'</td>
 		        <td class="tyotehtavatVkoPvmTD">';
-
 			$tyontehtavat = json_decode($r->tyontehtavat, true);
+			$bd .= '<table class="table table-bordered" align="center" border="none">';
+			$bd .= '<tr>
+			<th>Työtehtävät</th><th>Vko. Pvm</th><th>Viikkoväli</th>
+			</tr>';
 			foreach($tyontehtavat as $k2=>$r2)
-				$bd .= '<br>'.$r2['tyotehtava'].': <b>('.$r2['vkopvm'].')</b>. Joka '.$r2['vkovali'].' vko.';
+			{ 
+                        $bd .= '<tr>';
+			$bd .= '<td>';
+			$bd .= $r2['tyotehtava'].'<br>';
+			$bd .= '</td>';
+			$bd .= '<td>';
+			$bd .= '<b>('.$r2['vkopvm'].')</b><br>.';
+			$bd .= '</td>';
+			$bd .= '<td>';
+			$bd .= '<b>Joka '.$r2['vkovali'].' vko.';
+			$bd .= '</td>';
+             		$bd .= '</tr>';
+			}
+			$bd .= '</table>';
+				$bd .= '</td>
 
-
-		$bd .= '</td>
 		        <td>'.$r->kommenti.'</td>
 		    </tr>
 		';
