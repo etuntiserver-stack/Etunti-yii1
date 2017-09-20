@@ -178,12 +178,21 @@
 			  foreach(glob(Yii::app()->baseUrl.$this->templates_polkku().'/*.docx') as $file) 
 			  {
 				$explNimi = explode("/",$file);
-			 	echo '
-				<tr>
-				  <td><a href="../../'.$file.'">'.end($explNimi).'</a></td>
-				  <td><i class="poista text-danger fa fa-trash link" for="'.Yii::app()->baseUrl.$this->templates_polkku().end($explNimi).'"></i></td>
-				</tr>
-				';
+
+			 	echo '<tr><td>';
+
+				// <-- file_safe_opener
+				$filepath = Yii::getPathOfAlias('application').'/../'.$file;
+				echo CHtml::link(end($explNimi),
+					array('/site/file_safe_opener', 'filepath' => $filepath, 'ext' => 'docx'),
+					array(
+						'target'=>'_blank',
+						'class'=>'link'
+				));
+				//     file_safe_opener// -->
+			 	echo '</td><td><i class="poista text-danger fa fa-trash link" for="'.Yii::app()->baseUrl.$this->templates_polkku().end($explNimi).'"></i><td>';
+			 	echo '</tr>';
+
 			  }
 			  ?>
 			  </table>
