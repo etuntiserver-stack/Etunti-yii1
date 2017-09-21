@@ -278,7 +278,7 @@ $randstring = generateRandomString();
 				if(isset($model->id))
 				{
 					$site = Yii::app()->createController('Site');
-  					$tiedosto = $site[0]->tiedostonNimiAsiakasKohdeAika($tiedosto, $model->asiakas_id, $model->kohde_id, date('Y-m-d'));
+  					$tiedosto = $site[0]->tiedostonNimiAsiakasKohdeAika($tiedosto, $model->asiakas_id, $model->tarjous->kohteen_osoite, date('Y-m-d'));
 				}
 				//     Tiedoston nimi -->
 				CrmSopimukset::model()->updateByPk($model->id, array('liite'=>$tiedosto));
@@ -320,9 +320,11 @@ $randstring = generateRandomString();
 				if(isset($model->id))
 				{
 					$site = Yii::app()->createController('Site');
-  					$tiedosto = $site[0]->tiedostonNimiAsiakasKohdeAika($tiedosto, $model->asiakas_id, $model->kohde_id, date('Y-m-d'));
+  					$tiedosto = $site[0]->tiedostonNimiAsiakasKohdeAika($tiedosto, $model->asiakas_id, $model->tarjous->kohteen_osoite, date('Y-m-d'));
 				}
 				//     Tiedoston nimi -->
+
+
 				CrmSopimukset::model()->updateByPk($model->id, array('liite'=>$tiedosto));
 
 				$as = Asiakkaat::model()->findbypk($model->asiakas_id);
