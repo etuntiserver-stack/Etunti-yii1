@@ -3,9 +3,9 @@
 /* @var $data Tarjouslaskenta */
 	$asiakas='';
 	$a = Asiakkaat::model()->findbypk($data->asiakas_id);
-	if(isset($a->id) and !empty($a->yrityksen_nimi))
+	if(isset($a->id) and $a->tyyppi == 'yritys')
 	$asiakas = $a->yrityksen_nimi;
-	elseif(isset($a->id) and empty($a->yrityksen_nimi) and !empty($a->yhteyshenkilo))
+	elseif(isset($a->id) and $a->tyyppi == 'henkilo')
 	$asiakas = $a->yhteyshenkilo;
 
 	$y = Yhteystiedot::model()->findbypk($data->yhteystiedot_id);
@@ -53,7 +53,7 @@
 	</td>
 	<td>
 		<?php echo CHtml::link('<i class="fa fa-file-pdf-o" aria-hidden="true" style="font-size: 110%"></i>', 
-				array('pdf', 'id'=>$data->id), 
+				array('pdf', 'id'=>$data->id, 'open_status' => 'openPDF'), 
 				array(
 					'data-toggle'=>'tooltip', 
 					'data-placement'=>'top', 

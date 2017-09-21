@@ -118,7 +118,16 @@ class TyonkuvausController extends Controller
 		if (!file_exists( $basePath )) {
 		 	mkdir( $basePath, 0777, true );
 		}
-  		$tiedosto = $id.'_tyonkuvaus';
+
+		// <-- Tiedoston nimi
+		$tiedosto = 'Tyonkuvaus';
+		if(isset($tk->id))
+		{
+			$site = Yii::app()->createController('Site');
+  			$tiedosto = $site[0]->tiedostonNimiAsiakasKohdeAika($tiedosto, $tk->asiakas_id, $tk->kohde_id, $tk->time);
+		}
+		//     Tiedoston nimi -->
+
 
 		file_put_contents($path.'/'.$tiedosto.'.html', $html);
 		$output = exec('xvfb-run -a wkhtmltopdf --margin-bottom 10 --margin-top 10 '.$path.$tiedosto.'.html '.$path.$tiedosto.'.pdf 2>&1'); 
@@ -135,9 +144,9 @@ class TyonkuvausController extends Controller
 
 		} elseif ($open_status == 'getFile' and file_exists( $path.$tiedosto.'.pdf' )){
 			unlink($path.$tiedosto.'.html');
-			echo $path.$tiedosto.'.pdf';
+			return $path.$tiedosto.'.pdf';
 		} else {
-			echo $output;
+			return $output;
 		}
 
 	}

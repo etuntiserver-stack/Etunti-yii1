@@ -2253,4 +2253,41 @@ $(document).ready(function(){
 
 		return $date2->diff($date1)->format("%a");
 	}
+
+	public function aakkoset($string)
+	{
+		 $string = str_replace("ä", "a", $string);
+		 $string = str_replace("ö", "o", $string);
+		 $string = str_replace("Ä", "A", $string);
+		 $string = str_replace("Ö", "O", $string);
+		 $string = str_replace("´", "", $string);
+		 $string = str_replace(" ", "_", $string);
+		 return $string;
+	}
+
+
+	// <-- Tiedoston nimi
+	public function tiedostonNimiAsiakasKohdeAika($tyyppi, $asiakas_id, $kohde_id, $time)
+	{
+		$a = Asiakkaat::model()->findbypk($asiakas_id);
+		$k = Kohteet::model()->findbypk($kohde_id);
+  		$tiedosto = $tyyppi;
+
+			if(isset($a->id) and $a->tyyppi == 'yritys')
+				$tiedosto .= '_'.$a->yrityksen_nimi;
+			elseif(isset($a->id) and $a->tyyppi == 'henkilo')
+				$tiedosto .= '_'.$a->yhteyshenkilo;
+
+			if(isset($k->osoite))
+				$tiedosto .= '_'.$k->osoite;
+
+			$tiedosto .= '_'.date("d.m.Y", strtotime($time));
+
+		$tiedosto = $this->aakkoset($tiedosto);
+		//echo $tiedosto;
+		//exit;
+
+		return $tiedosto;
+	}
+	//     Tiedoston nimi -->
 }
