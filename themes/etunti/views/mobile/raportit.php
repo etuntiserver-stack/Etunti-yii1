@@ -180,7 +180,7 @@ $(document).ready(function(){
        <div class="col-sm-6">
     	   <select name="ilman[]" class="eilasketa"  multiple="multiple"  title="<?php echo Yii::t('main', 'Ei lasketa'); ?>">
     	   <option value="Lounastauko"><?php echo Yii::t('main', 'Lounastauko'); ?></option>
-    	   <option value="MATKA"><?php echo Yii::t('main', 'MATKA'); ?></option>
+    	   <option value="MATKA"><?php echo Yii::t('main', 'Matka'); ?></option>
     	   </select>
        </div>
 
@@ -319,7 +319,7 @@ $(document).ready(function(){
        <div class="col-sm-6">
     	   <select name="ilman[]" class="eilasketa"  multiple="multiple"  title="<?php echo Yii::t('main', 'Ei lasketa'); ?>">
     	   <option value="Lounastauko"><?php echo Yii::t('main', 'Lounastauko'); ?></option>
-    	   <option value="MATKA"><?php echo Yii::t('main', 'MATKA'); ?></option>
+    	   <option value="MATKA"><?php echo Yii::t('main', 'Matka'); ?></option>
     	   </select>
        </div>
 

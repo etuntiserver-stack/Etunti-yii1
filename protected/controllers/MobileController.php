@@ -309,7 +309,7 @@ function num($val){
 			allSess();
 
 		       	$criteria = new CDbCriteria();
-			$criteria->select = " aloitan,loppui,tid,tekijan_nimi,kohde_kannasta,viesti,sairaus ";
+			$criteria->select = " aloitan,loppui,tid,tekijan_nimi,kohde_kannasta,viesti,sairaus,status ";
 			$criteria->order = " DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i') ASC ";
 			$criteria->condition = " 
 				aloitan!='' and loppui!='' 
@@ -363,7 +363,7 @@ function num($val){
 
 			/* lu */
 		       	$criteria = new CDbCriteria();
-			$criteria->select = " time,aloitan,loppui,tid,tekijan_nimi,kohde_kannasta,viesti,sairaus ";
+			$criteria->select = " time,aloitan,loppui,tid,tekijan_nimi,kohde_kannasta,viesti,sairaus,status ";
 			$criteria->order = " DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i') ASC ";
 			$criteria->condition = " aloitan!='' and loppui!='' AND id NOT IN (SELECT kid FROM sivexkuitti_repaired) ";
 
@@ -3428,10 +3428,22 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 	$r .= '<td style="width:10%">'.date("H:i",strtotime($data->loppui)).'</td>';
 	$r .= '<td style="width:10%">'.sprint($kesto).'</td>'; //<br><b>('.num($kesto).')</b>
 	$r .= '<td style="width:25%">'.$viesti.'</td>';
+	$r .= '<td style="width:10%">'.$this->statusMuutosNimeksi($data->status).'</td>';
 	$r .= '</tr>';
 	return $r;
 	}
 
+	protected function statusMuutosNimeksi($nro){
+
+		$r = '';
+		if($nro == 3)
+			$r = Yii::t('main', 'Työ');
+		elseif($nro == 2)
+			$r = Yii::t('main', 'Matka');
+		elseif($nro == 10)
+			$r = Yii::t('main', 'Lounastauko');
+		return $r;
+	}
 
 	public function actionTyoajan_seuranta()
 	{
