@@ -189,15 +189,31 @@ class CrmTarjouksetController extends Controller
 		$mail->setSubject($subject);
 		$mail->setBody($message);
 
+		$tkPDF = '';
+		if($crm->tyonkuvaus_id != 0)
+		{
+	   		$tk_controller = Yii::app()->createController('Tyonkuvaus');
+	   		$tkPDF = $tk_controller[0]->PdfOpener($crm->tyonkuvaus_id, 'getFile');
+   			if(file_exists(Yii::app()->basePath."/../".$tkPDF))
+			{
+				$mail->addAttachment($tkPDF);
+			}
+		}
+
+
    		if(file_exists(Yii::app()->basePath."/../tiedostot/tarjoukset/".Yii::app()->user->domain."/".$crm->liite.".pdf"))
 		{
-			$mail->setAttachment($path.'/'.$file);
+			$mail->addAttachment($path.'/'.$file);
 			//echo $message;
 			//exit;
 		}
 
 		   if($mail->send())
 		   {
+
+			if(file_exists(Yii::app()->basePath."/../".$tkPDF))
+			unlink($tkPDF);
+	
 
 							// <-- LOG
 							$log=new Log;
@@ -340,7 +356,16 @@ class CrmTarjouksetController extends Controller
 				}
 				//     Hinta -->
 
-				$tiedosto = str_replace(" ", "_", $model->kohteen_osoite).'_'.date('Y-m-d').'_'.$model->id;
+
+				// <-- Tiedoston nimi
+				$tiedosto = 'Tarjous';
+				if(isset($model->id))
+				{
+					$site = Yii::app()->createController('Site');
+  					$tiedosto = $site[0]->tiedostonNimiAsiakasKohdeAika($tiedosto, $model->asiakas_id, $model->kohde_id, date('Y-m-d'));
+				}
+				//     Tiedoston nimi -->
+
 				CrmTarjoukset::model()->updateByPk($model->id, array('liite'=>$tiedosto));
 
 				$as = Asiakkaat::model()->findbypk($model->asiakas_id);
@@ -406,7 +431,16 @@ class CrmTarjouksetController extends Controller
 				}
 				//     Hinta -->
 
-				$tiedosto = str_replace(" ", "_", $model->kohteen_osoite).'_'.date('Y-m-d').'_'.$model->id;
+
+				// <-- Tiedoston nimi
+				$tiedosto = 'Tarjous';
+				if(isset($model->id))
+				{
+					$site = Yii::app()->createController('Site');
+  					$tiedosto = $site[0]->tiedostonNimiAsiakasKohdeAika($tiedosto, $model->asiakas_id, $model->kohde_id, date('Y-m-d'));
+				}
+				//     Tiedoston nimi -->
+
 				CrmTarjoukset::model()->updateByPk($model->id, array('liite'=>$tiedosto));
 
 				$as = Asiakkaat::model()->findbypk($model->asiakas_id);
@@ -569,16 +603,10 @@ class CrmTarjouksetController extends Controller
 			);
 			$docx->replaceVariableByText($variables_2);
 
+/*
 			if( $model->tyonkuvaus_id != 0 )
 			{
-			/*
-				$tb = $this->get_tyonkuvaus($model->tyonkuvaus_id);
-				$docx->replaceVariableByHTML('tyonkuvaus', 'block', $tb, 
-					array('isFile' => false, 'parseDivsAsPs' => true, 'downloadImages' => false)
-				);
-			*/
 			$tyonkuvaus = $this->get_tyonkuvaus_by_id($model->tyonkuvaus_id);
-
 			$valuesTable = array(
 			    array(
 			        'Tilat','Työtehtävät','Kommenti'
@@ -613,6 +641,7 @@ class CrmTarjouksetController extends Controller
 			$docx->addTable($valuesTable, $paramsTable);
 
 			}
+*/
 
 
 			$path = 'tiedostot/'.$this->kansio().'/'.Yii::app()->user->domain.'/'.$tiedosto;

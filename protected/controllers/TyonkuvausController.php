@@ -81,7 +81,12 @@ class TyonkuvausController extends Controller
 		));
 	}
 
-	public function actionPdf($id)
+	public function actionPdf($id, $open_status)
+	{
+		$this->PdfOpener($id, $open_status);
+	}
+
+	public function PdfOpener($id, $open_status)
 	{
 		$asetukset=Asetukset::model()->findByPk(1);
 		$ft = FirmanTiedot::model()->findByPk(1);
@@ -113,11 +118,20 @@ class TyonkuvausController extends Controller
 		if (!file_exists( $basePath )) {
 		 	mkdir( $basePath, 0777, true );
 		}
-  		$tiedosto = $id.'_tyonkuvaus';
+
+		// <-- Tiedoston nimi
+		$tiedosto = 'Tyonkuvaus';
+		if(isset($tk->id))
+		{
+			$site = Yii::app()->createController('Site');
+  			$tiedosto = $site[0]->tiedostonNimiAsiakasKohdeAika($tiedosto, $tk->asiakas_id, $tk->kohde_id, $tk->time);
+		}
+		//     Tiedoston nimi -->
+
 
 		file_put_contents($path.'/'.$tiedosto.'.html', $html);
 		$output = exec('xvfb-run -a wkhtmltopdf --margin-bottom 10 --margin-top 10 '.$path.$tiedosto.'.html '.$path.$tiedosto.'.pdf 2>&1'); 
-		if (file_exists( $path.$tiedosto.'.pdf' ))
+		if ($open_status == 'openPDF' and file_exists( $path.$tiedosto.'.pdf' ))
 		{
 
 			header("Content-Length: " . filesize ( $path.$tiedosto.'.pdf' ) ); 
@@ -126,12 +140,15 @@ class TyonkuvausController extends Controller
 		        readfile($path.$tiedosto.'.pdf');
 			unlink($path.$tiedosto.'.html');
 			unlink($path.$tiedosto.'.pdf');
+			exit;
 
+		} elseif ($open_status == 'getFile' and file_exists( $path.$tiedosto.'.pdf' )){
+			unlink($path.$tiedosto.'.html');
+			return $path.$tiedosto.'.pdf';
 		} else {
-			echo $output;
+			return $output;
 		}
 
-		exit;
 	}
 
 	/**
