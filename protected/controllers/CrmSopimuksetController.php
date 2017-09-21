@@ -315,14 +315,7 @@ $randstring = generateRandomString();
 			if($model->save()){
 
 
-				// <-- Tiedoston nimi
-				$tiedosto = 'Tarjous';
-				if(isset($model->id))
-				{
-					$site = Yii::app()->createController('Site');
-  					$tiedosto = $site[0]->tiedostonNimiAsiakasKohdeAika($tiedosto, $model->asiakas_id, $model->kohde_id, date('Y-m-d'));
-				}
-				//     Tiedoston nimi -->
+				$tiedosto = str_replace(" ", "_", $model->tarjous->kohteen_osoite).'_'.date('Y-m-d').'_'.$model->id;
 				CrmSopimukset::model()->updateByPk($model->id, array('liite'=>$tiedosto));
 
 				$as = Asiakkaat::model()->findbypk($model->asiakas_id);
