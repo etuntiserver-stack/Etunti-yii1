@@ -23,32 +23,35 @@
 		<?php //echo $data->kohteen_osoite; ?>
 	</td>
 	<td>
+	<div class="row">
+	<div class="form-inline">
 	<?php
 		if(file_exists( Yii::app()->basePath.'/../'.$this->valmiit_polkku().'/'.$data->liite.'.docx' ))
 		{
 		// <-- file_safe_opener
 		$ext = 'docx';
 		$filepath = Yii::app()->baseUrl.$this->valmiit_polkku().'/'.$data->liite.'.'.$ext;
-		echo CHtml::link($data->liite.'.'.$ext,
+		echo CHtml::link('<i class="fa fa-file-word-o btn btn-primary myBgColors" style="margin-right: 5px"></i>',
 			array('/site/file_safe_opener', 'filepath' => $filepath, 'ext' => $ext),
-			array('target'=>'_blank','class'=>'text-danger'
+			array('target'=>'_blank', 'class' => 'form-group'
 		));
 		//     file_safe_opener -->
 		}
 
-		echo '<br>';
 		if(file_exists( Yii::app()->basePath.'/../'.$this->valmiit_polkku().'/'.$data->liite.'.pdf' ))
 		{
 		// <-- file_safe_opener
 		$ext = 'pdf';
 		$filepath = Yii::app()->baseUrl.$this->valmiit_polkku().'/'.$data->liite.'.'.$ext;
-		echo CHtml::link($data->liite.'.'.$ext,
+		echo CHtml::link('<i class="fa fa-file-pdf-o btn btn-primary myBgColors"></i>',
 			array('/site/file_safe_opener', 'filepath' => $filepath, 'ext' => $ext),
-			array('target'=>'_blank','class'=>'text-danger'
+			array('target'=>'_blank', 'class' => 'form-group'
 		));
 		//     file_safe_opener -->
 		}
 	?>
+	</div>
+	</div>
 	</td>
 	<td>
 		<?php echo $data->asiakkaan_sahkoposti; ?>
