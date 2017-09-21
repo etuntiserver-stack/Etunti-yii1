@@ -953,6 +953,9 @@ $('#poistaTv').click(function(){
 	var model = $(this).attr('model');
 	var toistuva_aktiivinen = $('#toistuva_aktiivinen').is(':checked');
 
+	if(toistuva_aktiivinen == true)
+	var r = confirm('Poistaa kaikki tähän toistuvaan työvuoroon kuuluvat työvuorot.');
+	else
 	var r = confirm('Haluatko varmasti poistaa?');
 	if(r)
 	{
