@@ -47,7 +47,7 @@
 			array('/site/file_safe_opener', 'filepath' => $filepath, 'ext' => $ext),
 			array('target'=>'_blank', 'class' => 'form-group'
 		));
-		//     file_safe_opener -->
+		//   file_safe_opener -->
 		}
 	?>
 	</div>
