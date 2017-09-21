@@ -27,10 +27,9 @@
 <tr>
 
 	<td>
-		<?php echo CHtml::link('<i class="fa fa-pencil-square-o" aria-hidden="true" style="font-size: 110%"></i>', 
+		<?php echo CHtml::link('<i class="fa fa-pencil-square-o btn btn-primary myBgColors" aria-hidden="true"></i>', 
 				array('update', 'id'=>$data->id, 'asiakas_id' => $asiakas_id), 
 				array(
-					'class'=>'btn btn-primary myBgColors', 
 					'style'=>'color:white', 
 					'data-toggle'=>'tooltip', 
 					'data-placement'=>'top', 
@@ -52,7 +51,7 @@
 		<?php echo ($data->aktiivinen == 1) ? 'Aktiivinen' : 'Passivinen'; ?>
 	</td>
 	<td>
-		<?php echo CHtml::link('<i class="fa fa-file-pdf-o" aria-hidden="true" style="font-size: 110%"></i>', 
+		<?php echo CHtml::link('<i class="fa fa-file-pdf-o btn btn-primary myBgColors" aria-hidden="true"></i>', 
 				array('pdf', 'id'=>$data->id, 'open_status' => 'openPDF'), 
 				array(
 					'data-toggle'=>'tooltip', 
