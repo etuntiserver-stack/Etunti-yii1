@@ -134,7 +134,8 @@ class SiteController extends Controller
 		if (!file_exists( Yii::app()->basePath.'/../tmp/'.Yii::app()->user->domain )) {
 		 	mkdir( Yii::app()->basePath.'/../tmp/'.Yii::app()->user->domain, 0777, true );
 		}
-		$newfile = Yii::app()->basePath.'/../tmp/'.Yii::app()->user->domain.'/'.md5(time()).'.'.$ext;
+
+		$newfile = basename($filepath);
 		if (copy($filepath, $newfile)) 
 		{
 				header("Content-Length: " . filesize ( $newfile ) ); 
