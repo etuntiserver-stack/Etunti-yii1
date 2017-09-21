@@ -380,7 +380,10 @@ $(".muokaValiko").click(function() {
 	<br>
 	<p>
 	<b><?php echo Yii::t('main','Muokkaa toistuvaa työvuoroa. Jos valintaa ei ole tehtynä, muokataan vain kyseisen päivän työvuoroa.'); ?></b> <br> 
-	<input type="checkbox" class="sw" name="ToistuvatTyovuorot[toistuva_aktiivinen]" id="toistuva_aktiivinen">
+	<input type="checkbox" class="sw" name="ToistuvatTyovuorot[toistuva_aktiivinen]" id="toistuva_aktiivinen"><br>
+
+	<b><?php echo Yii::t('main','Luo toistuva työvuoro uudestaan.'); ?></b> <br> 
+	<input type="checkbox" class="sw" name="ToistuvatTyovuorot[toistuva_repair]" id="toistuva_repair">
 	</p>
 	<br>
 
