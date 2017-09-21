@@ -58,6 +58,7 @@ window.onload = function () {
     <th><?php echo Yii::t('main', 'Lopetus'); ?></th>
     <th><?php echo Yii::t('main', 'Kesto'); ?></th>
     <th><?php echo Yii::t('main', 'Viesti'); ?></th>
+    <th><?php echo Yii::t('main', 'Tila'); ?></th>
   </tr>
   </thead>
   <tbody>
@@ -119,6 +120,7 @@ window.onload = function () {
     <th></th>
     <th><?php echo Yii::t('main', 'Yhteensä'); ?></th>
     <th><?php echo sprint($kkesto); ?><!--<b>(<?php echo num($kkesto); ?>)</b>--></th>
+    <th></th>
     <th></th>
   </tr>
   </tfoot>
