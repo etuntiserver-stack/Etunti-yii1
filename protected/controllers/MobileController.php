@@ -1310,7 +1310,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			kohdenID IN ( 
 			SELECT id FROM sivex_kohdet WHERE asiakas_id IN 
 				( SELECT id FROM asiakkaat 
-					WHERE yrityksen_nimi LIKE '%".Yii::app()->session['yrityksen_nimi']."%' OR yhteyshenkilo LIKE '%".Yii::app()->session['yrityksen_nimi']."%'
+					WHERE yrityksen_nimi LIKE '%".Yii::app()->session['mobile_yrityksen_nimi']."%' OR yhteyshenkilo LIKE '%".Yii::app()->session['mobile_yrityksen_nimi']."%'
 				)
 			)
 		");
