@@ -1516,18 +1516,21 @@ class TyovuorootController extends Controller
 
 			//$return[] = array('ERROR'=>json_encode($r));
 
-			if($saankoSuoritta == 1 and count($update_vanhat_ids) > 0)
+			if($saankoSuoritta == 1)
 			{
+				if($vanhat == true and count($update_vanhat_ids) > 0)
+				{
 				ToistuvatTyovuorot::model()->updatebypk($edellinenToistuva->id, 
 					array('tvuoro_ids' => json_encode($update_vanhat_ids), 'pto' => date("Y-m-d", strtotime('-1 day')))
 				);
+				} else {
+				ToistuvatTyovuorot::model()->findbypk($edellinenToistuva->id)->delete();
+				}
+
 				Tyovuoroot::model()->deleteAll($pois_criteria);
 			}
 
 
-
-			if(isset($_POST['P']))
-			$toistuva->viikko_paivat=json_encode($_POST['P']);
 
 			// <-- jos on tyopaari
 			if(isset($_POST['tyopaari']) and count($_POST['tyopaari']) > 0)
@@ -1582,6 +1585,29 @@ class TyovuorootController extends Controller
 				);
 
 			}
+
+
+			// <-- tvuoro_ids Updater
+			if( $saankoSuoritta == 1 and count($return) > 0 )
+			{
+
+				$tvuoro_ids	= array();
+				foreach($return as $k=>$item)
+				{
+					foreach($item as $item2)
+					{
+						if(isset($item2['tvuoro_id']))
+							$tvuoro_ids[] = $item2['tvuoro_id'];
+					}
+				}
+
+				if( count($tvuoro_ids) > 0 )
+				{
+					ToistuvatTyovuorot::model()->updatebypk($toistuva->id, array('tvuoro_ids' => json_encode($tvuoro_ids)));
+				}
+
+			}
+			//  tvuoro_ids Updater -->
 
 			if( count($return) > 0 )
 				echo json_encode($return);
