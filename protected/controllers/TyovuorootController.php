@@ -1455,6 +1455,10 @@ class TyovuorootController extends Controller
 			$toistuva=new ToistuvatTyovuorot;
 			$toistuva->attributes=$_POST['ToistuvatTyovuorot'];
 			$toistuva->attributes=$_POST['Tyovuoroot'];
+			$toistuva->pvm = date("d.m.Y",strtotime($_POST['Tyovuoroot']['pvm']));
+
+			if(isset($_POST['P']))
+			$toistuva->viikko_paivat=json_encode($_POST['P']);
 
 			if(strtotime($edellinenToistuva->pfrom) < strtotime(date("d.m.Y")))
 			{
@@ -1465,10 +1469,19 @@ class TyovuorootController extends Controller
 			}
 
 
+			if($saankoSuoritta == 1)
+			{
+				if(!$toistuva->save())
+				{
+					$return[] = array('ERROR'=>json_encode(var_dump($toistuva->getErrors())));
+				}
+			}
+
+
 			$tvuoro_ids_implode = implode(",", $edelliset_tvuoro_ids);
 			$criteria = new CDBcriteria;
 			$criteria->condition=" 
-				id IN ($tvuoro_ids_implode) 
+				toistuva_id='".$edellinenToistuva->id."'
 				AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') 
 				BETWEEN '".date("Y-m-d", strtotime($edellinenToistuva->pfrom))."' AND '".date("Y-m-d", strtotime('-1 day'))."'
 			";
@@ -1484,19 +1497,31 @@ class TyovuorootController extends Controller
 						'pvm'=>$item->pvm, 
 						'ymd'=>date("Ymd",strtotime($item->pvm)), 
 						'isSaved'=>false,
-						'poistaminen'=>true, 
+						'repair_ei-muutoksia'=>true, 
 						'tekijan_nimi'=>$this->etuSukunimi($item->tid), 
 						'vkopvm' => $fi[date("N",strtotime($item->pvm))]
 					);
 				} 
 			}
+
+
+			// <-- Pois kaikki vanhat
+			$pois_criteria = new CDBcriteria;
+			$pois_criteria->condition=" 
+				toistuva_id='".$edellinenToistuva->id."'
+				AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') >= CURDATE()
+			";
+			//    Pois kaikki vanhat -->
+
+
 			//$return[] = array('ERROR'=>json_encode($r));
 
 			if($saankoSuoritta == 1 and count($update_vanhat_ids) > 0)
 			{
-				ToistuvatTyovuorot::model()->updatebypk($toistuva->id, 
+				ToistuvatTyovuorot::model()->updatebypk($edellinenToistuva->id, 
 					array('tvuoro_ids' => json_encode($update_vanhat_ids), 'pto' => date("Y-m-d", strtotime('-1 day')))
 				);
+				Tyovuoroot::model()->deleteAll($pois_criteria);
 			}
 
 
@@ -4295,7 +4320,7 @@ class TyovuorootController extends Controller
 					and $_POST['ToistuvatTyovuorot']['toistuva_repair'] == 'on')
 				{
 					$repair = true;
-					$onkosama = '';
+					if($saankoSuoritta == 1){ $onkosama = ''; }
 				} else {
 					$repair = false;
 				}
@@ -4319,18 +4344,67 @@ class TyovuorootController extends Controller
 					{
 						if($t->save())
 						{
-							$return[] = array('tid'=>$t->tid, 'pvm'=>$t->pvm, 'ymd'=>date("Ymd",strtotime($t->pvm)), 'isSaved'=>true, 'tvuoro_id'=>$t->id, 'uusi'=>true);
+							$return[] = array(
+								'tid'=>$t->tid, 
+								'pvm'=>$t->pvm, 
+								'ymd'=>date("Ymd",strtotime($t->pvm)), 
+								'isSaved'=>true, 
+								'tvuoro_id'=>$t->id, 
+								'uusi'=>true
+							);
 
 						} else {
 							$return[] = array('ERROR'=>json_encode(var_dump($t->getErrors())));
 						}
 
 					} else {
-						$return[] = array('tid'=>$tid, 'pvm'=>$pvm, 'ymd'=>date("Ymd",strtotime($pvm)), 'isSaved'=>false, 'tekijan_nimi'=>$tekijan_nimi, 'vkopvm' => $fi[date("N",strtotime($pvm))], 'uusi'=>true );
+
+						if($repair)
+						{
+							$return[] = array(
+								'tid'=>$tid, 
+								'pvm'=>$pvm, 
+								'ymd'=>date("Ymd",strtotime($pvm)), 
+								'isSaved'=>false, 'tekijan_nimi'=>$tekijan_nimi, 
+								'vkopvm' => $fi[date("N",strtotime($pvm))], 
+								'uusi_repair'=>true 
+							);
+						} else {
+							$return[] = array(
+								'tid'=>$tid, 
+								'pvm'=>$pvm, 
+								'ymd'=>date("Ymd",strtotime($pvm)), 
+								'isSaved'=>false, 'tekijan_nimi'=>$tekijan_nimi, 
+								'vkopvm' => $fi[date("N",strtotime($pvm))], 
+								'uusi'=>true 
+							);
+						}
 					}
 
 				} else {
-					$return[] = array('tid'=>$tid, 'pvm'=>$pvm, 'ymd'=>date("Ymd",strtotime($pvm)),'onkosama'=>$onkosama, 'isSaved'=>false, 'tekijan_nimi'=>$tekijan_nimi, 'vkopvm' => $fi[date("N",strtotime($pvm))] );
+
+					if($repair)
+					{
+						$return[] = array(
+							'tid'=>$tid, 
+							'pvm'=>$pvm, 
+							'ymd'=>date("Ymd",strtotime($pvm)),
+							'onkosama_repair'=>$onkosama, 
+							'isSaved'=>false, 
+							'tekijan_nimi'=>$tekijan_nimi, 
+							'vkopvm' => $fi[date("N",strtotime($pvm))] 
+						);
+					} else {
+						$return[] = array(
+							'tid'=>$tid, 
+							'pvm'=>$pvm, 
+							'ymd'=>date("Ymd",strtotime($pvm)),
+							'onkosama'=>$onkosama, 
+							'isSaved'=>false, 
+							'tekijan_nimi'=>$tekijan_nimi, 
+							'vkopvm' => $fi[date("N",strtotime($pvm))] 
+						);
+					}
 				}
 
 			}
