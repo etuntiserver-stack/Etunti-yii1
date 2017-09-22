@@ -1252,7 +1252,7 @@ function num($val){
 		if(isset($_POST['yrityksen_nimi']) and empty($_POST['yrityksen_nimi']))
 			unset(Yii::app()->session['yrityksen_nimi']);
 		else if(isset($_POST['yrityksen_nimi']) and !empty($_POST['yrityksen_nimi']))
-			Yii::app()->session['mobile_yrityksen_nimi'] = Yii::app()->request->getPost('yrityksen_nimi');
+			Yii::app()->session['yrityksen_nimi'] = Yii::app()->request->getPost('yrityksen_nimi');
 
 		if(isset($_POST['siivousPaaSivulla']) and empty($_POST['siivousPaaSivulla']))
 			unset(Yii::app()->session['siivousPaaSivulla']);
@@ -1304,7 +1304,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		if(Yii::app()->session['tunni_status'])
 	        $criteria->addCondition (" status = '".Yii::app()->session['tunni_status']."' ");
 
-		if(isset(Yii::app()->session['mobile_yrityksen_nimi']))
+		if(isset(Yii::app()->session['yrityksen_nimi']))
 		{
 	        $criteria->addCondition ("  
 			kohdenID IN ( 
