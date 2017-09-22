@@ -136,6 +136,7 @@ class Asetukset extends DB2ActiveRecord
                      'peruutta_paiva_ennen' => 'int(2) YES ',
 		     'edico_tehdyt_tyot' => 'varchar(100)',
 		     'netvisor_lahetetaanko_tyontekija' => 'int(1)',
+		     'lasketaanko_lounastauko' => 'int(1)',
 
 		);
 		$is_added_somthing = false;
