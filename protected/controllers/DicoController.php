@@ -271,6 +271,48 @@ public function actionLogin($domain)
 
 	}
 
+	public function actionKayttoehdot($domain)
+	{
+
+		if(isset($_POST['tunnus']) and $this->kirjautuminen($domain, $_POST['tunnus'], $_POST['salasana']) == true)
+		{
+		   $model=Asiakkaat::model()->findByPk($_POST['asiakasID']);
+		   $a=Asetukset::model()->findByPk(1);
+
+		   // <-- Hyvaksyn
+		   if(isset($_POST['hyvaksyn']) and isset($model->id))
+		   {
+
+				Asiakkaat::model()->updateByPk($model->id, array('app_kayttoehdot'=>1));
+				$this->_sendResponse(200, CJSON::encode(array('hyvaksytty'=>true)));
+				exit;
+		   }
+		   //     Hyvaksyn -->
+
+		   if(isset($_POST['getkayttoehdot']) and isset($model->id) and isset($a->edico_kayttoehdot))
+		   {
+
+				$return = '<legend><h1>Käyttöehdot</h1></legend>';
+				$return .= str_replace("\n", "<br>", $a->edico_kayttoehdot);
+				$return .= '<br><br><p><input type="checkbox" id="hyvaksyn_kayttoehdot"> <b>Hyväksyn käyttöehdot</b></p>';
+
+				$this->_sendResponse(200, CJSON::encode(array('ok'=>$return)));
+				exit;
+		   }
+
+
+		   if(isset($model->id) and $model->app_kayttoehdot == 1)
+		   {
+				$this->_sendResponse(200, CJSON::encode(array('kayttoehdot'=>true)));
+		   } else {
+				$this->_sendResponse(200, CJSON::encode(array('kayttoehdot'=>false)));
+		   }
+		}
+
+		exit;
+	}
+
+
 	protected function etuSukunimi($tid)
 	{
 	   $site = Yii::app()->createController('Site');

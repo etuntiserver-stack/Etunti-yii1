@@ -807,6 +807,12 @@
     <legend><h2><?php echo Yii::t('main','eDico'); ?></h2></legend>
 
 	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'edico_kayttoehdot'); ?>
+		<?php echo $form->textarea($model,'edico_kayttoehdot',array('rows'=>4, 'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'edico_kayttoehdot'); ?>
+	</div>
+
+	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'edico_laatutaso_1'); ?>
 		<?php echo $form->textarea($model,'edico_laatutaso_1',array('rows'=>4, 'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'edico_laatutaso_1'); ?>
