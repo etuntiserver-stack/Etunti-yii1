@@ -327,4 +327,38 @@ $(document).ready(function(){
 	$('#loginLomake').show(370);
    }
 
+
+
+   // <-- Kayttoehdot check
+  if(localStorage.getItem('loginOK'))
+  {
+	var sendData = loginArr;
+	sendData['asiakasID'] = asiakasID;
+
+	//console.log(sendData);
+
+        $.ajax({
+           url: url+'/kayttoehdot?domain='+domain,
+	   type:'POST',
+ 	   data: sendData,
+           success: function(data){
+		var d = JSON.parse(data);
+		if(d['kayttoehdot'])
+		{
+			console.log(d['kayttoehdot']);
+		} else {
+			if(window.location.href.substr(window.location.href.lastIndexOf("/")+1) !== 'kayttoehdot.html')
+			window.location.href="kayttoehdot.html";
+
+			return false;
+		}
+    	   },
+    		error:function (xhr, ajaxOptions, thrownError){
+        	console.log(xhr.responseText);
+    	   }
+        });
+   }
+   //     Kayttoehdot check -->
+
+
 });

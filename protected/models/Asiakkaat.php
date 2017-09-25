@@ -38,7 +38,7 @@ public $verot;
 	{
 
 		$tb_name = 'asiakkaat';
-		$check_this_table = false;
+		$check_this_table = true;
 		if(!isset(Yii::app()->session[$tb_name]))
 		{
 			Yii::app()->session[$tb_name] = true;
@@ -58,46 +58,46 @@ public $verot;
 
 		$table_structure = array(
 
-                     'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP AFTER id',
-                     'yrityksen_nimi' => 'varchar(100) AFTER time',
-                     'y_tunnus' => 'varchar(50) AFTER yrityksen_nimi',
-                     'yhteyshenkilo' => 'varchar(100) AFTER y_tunnus',
-                     'osoite' => 'varchar(255) AFTER yhteyshenkilo',
-                     'kaupunki' => 'varchar(100) AFTER osoite',
-                     'postinumero' => 'varchar(100) AFTER kaupunki',
-                     'puhelin' => 'varchar(100) AFTER postinumero',
-                     'sahkoposti' => 'varchar(100) AFTER puhelin',
-                     'ryhma' => 'varchar(255) AFTER sahkoposti',
-                     'aktiivinen' => 'int(1) AFTER ryhma',
-                     'laskutus_kanava' => 'varchar(255) AFTER aktiivinen',
-                     'maksuehto' => 'varchar(20) AFTER laskutus_kanava',
-                     'tyyppi' => 'varchar(100) AFTER maksuehto',
-                     'asiakasnumero' => 'varchar(100) AFTER tyyppi',
-                     'ovt_tunnus' => 'varchar(100) AFTER asiakasnumero',
-                     'valittajan_tunnus' => 'varchar(100) AFTER ovt_tunnus',
-                     'verkkolaskuosoite' => 'varchar(255) AFTER valittajan_tunnus',
-                     'alv' => 'int(3) AFTER verkkolaskuosoite',
-                     'hinta_tyyppi' => 'varchar(50) AFTER alv',
-                     'hinta' => 'varchar(10) AFTER hinta_tyyppi',
-                     'muistutuslasku_auto' => 'int(1) AFTER hinta',
-                     'kirjeenluokka' => 'int(1) AFTER muistutuslasku_auto',
-                     'myyja' => 'varchar(100) AFTER kirjeenluokka',
-                     'viivastyskorko' => 'varchar(20) AFTER myyja',
-                     'salasana' => 'varchar(255) AFTER viivastyskorko',
-                     'vinkki_tunnit' => 'varchar(10) AFTER salasana',
-                     'vinkki_prosentti' => 'varchar(10) AFTER vinkki_tunnit',
-                     'netvisorkey' => 'int(11) AFTER vinkki_prosentti',
-                     'k_osoite' => 'varchar(255) AFTER netvisorkey',
-                     'k_postinumero' => 'varchar(100) AFTER k_osoite',
-                     'k_kaupunki' => 'varchar(100) AFTER k_postinumero',
-                     'onlinevarauksen_asiakas' => 'int(1) AFTER k_kaupunki',
-                     'asiakastila' => 'int(11) AFTER onlinevarauksen_asiakas',
-                     'sahkopostilaskuosoite' => 'varchar(255) AFTER asiakastila',
-                     'vinkki_id' => 'int(11) AFTER sahkopostilaskuosoite',
-                     'hinta_sis_alv' => 'float AFTER vinkki_id',
-                     'alennuskoodit' => 'text AFTER hinta_sis_alv',
-                     'token' => 'varchar(255) AFTER alennuskoodit',
-
+                     'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP',
+                     'yrityksen_nimi' => 'varchar(100)',
+                     'y_tunnus' => 'varchar(50)',
+                     'yhteyshenkilo' => 'varchar(100)',
+                     'osoite' => 'varchar(255)',
+                     'kaupunki' => 'varchar(100)',
+                     'postinumero' => 'varchar(100)',
+                     'puhelin' => 'varchar(100)',
+                     'sahkoposti' => 'varchar(100)',
+                     'ryhma' => 'varchar(255)',
+                     'aktiivinen' => 'int(1)',
+                     'laskutus_kanava' => 'varchar(255)',
+                     'maksuehto' => 'varchar(20)',
+                     'tyyppi' => 'varchar(100)',
+                     'asiakasnumero' => 'varchar(100)',
+                     'ovt_tunnus' => 'varchar(100)',
+                     'valittajan_tunnus' => 'varchar(100)',
+                     'verkkolaskuosoite' => 'varchar(255)',
+                     'alv' => 'int(3)',
+                     'hinta_tyyppi' => 'varchar(50)',
+                     'hinta' => 'varchar(10)',
+                     'muistutuslasku_auto' => 'int(1)',
+                     'kirjeenluokka' => 'int(1)',
+                     'myyja' => 'varchar(100)',
+                     'viivastyskorko' => 'varchar(20)',
+                     'salasana' => 'varchar(255)',
+                     'vinkki_tunnit' => 'varchar(10)',
+                     'vinkki_prosentti' => 'varchar(10)',
+                     'netvisorkey' => 'int(11)',
+                     'k_osoite' => 'varchar(255)',
+                     'k_postinumero' => 'varchar(100)',
+                     'k_kaupunki' => 'varchar(100)',
+                     'onlinevarauksen_asiakas' => 'int(1)',
+                     'asiakastila' => 'int(11)',
+                     'sahkopostilaskuosoite' => 'varchar(255)',
+                     'vinkki_id' => 'int(11)',
+                     'hinta_sis_alv' => 'float',
+                     'alennuskoodit' => 'text',
+                     'token' => 'varchar(255)',
+                     'app_kayttoehdot' => 'int(1)',
 
 		);
 
@@ -122,7 +122,7 @@ public $verot;
 			array('tyyppi, osoite, postinumero, kaupunki', 'required'),
                         array('asiakasnumero','unique', 'message'=>'Tämä asiakasnumero on jo olemassa!'),
 			//array('etunimi, sukunimi, osoite, kaupunki, postinumero, puhelin, sahkoposti, ryhma, aktiivinen', 'required'),
-			array('kirjeenluokka, muistutuslasku_auto, aktiivinen, netvisorkey, onlinevarauksen_asiakas, asiakastila, vinkki_id', 'numerical', 'integerOnly'=>true),
+			array('kirjeenluokka, muistutuslasku_auto, aktiivinen, netvisorkey, onlinevarauksen_asiakas, asiakastila, vinkki_id, app_kayttoehdot', 'numerical', 'integerOnly'=>true),
 			array('myyja, postinumero, k_postinumero, yhteyshenkilo, yrityksen_nimi, y_tunnus, kaupunki, k_kaupunki, puhelin, sahkoposti', 'length', 'max'=>100),
 			array('tyyppi, laskutus_kanava, osoite, k_osoite, verkkolaskuosoite, salasana, ryhma, sahkopostilaskuosoite, token', 'length', 'max'=>255),
 			array('hinta_sis_alv', 'numerical', 'integerOnly'=>false),
@@ -187,6 +187,7 @@ public $verot;
 			'salasana'=> Yii::t('main', 'Extranet-salasana'),
 			'sahkopostilaskuosoite'=> Yii::t('main', 'Sähköpostilaskuosoite'),
 			'hinta_sis_alv' => Yii::t('main', 'Hinta (sis. ALV)'),
+			'app_kayttoehdot' => Yii::t('main', 'Sovelluksen käyttöehdot'),
 		);
 	}
 

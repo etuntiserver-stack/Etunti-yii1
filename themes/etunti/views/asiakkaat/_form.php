@@ -237,6 +237,14 @@ $model->hinta_sis_alv = round($model->hinta_sis_alv, 2);
 			); 
 		?>
 	</div>
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'app_kayttoehdot'); ?>
+		<?php echo $form->checkbox($model,'app_kayttoehdot',array('class'=>'form-control')); ?>
+		<?php echo $form->error($model,'app_kayttoehdot'); ?>
+	</div>
+
+
 	<?php endif; ?>
 
 <?php endif; ?>
