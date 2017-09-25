@@ -46,7 +46,14 @@ $tilauksen_kuvaus = json_decode($data->tilauksen_kuvaus, true);
 		<?php echo $data->hinta.'&euro;'; ?>
 	</td>
 	<td>
-		<?php if($data->tila == 1) echo 'Maksettu'; else echo '<span class="text-danger">Ei maksettu</span>';?>
+		<?php 
+		if($data->tila == 1) 
+			echo 'Maksettu';
+		elseif($data->tila == 3) 
+			echo 'eDico tilaus'; 
+		else 
+			echo '<span class="text-danger">Ei maksettu</span>';
+		?>
 	</td>
 	<td>
 		<?php
