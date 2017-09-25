@@ -274,7 +274,7 @@ $randstring = generateRandomString();
 			if($model->save()){
 
 				// <-- Tiedoston nimi
-				$tiedosto = 'Tarjous';
+				$tiedosto = 'Sopimus';
 				if(isset($model->id))
 				{
 					$site = Yii::app()->createController('Site');
@@ -316,7 +316,7 @@ $randstring = generateRandomString();
 
 
 				// <-- Tiedoston nimi
-				$tiedosto = 'Tarjous';
+				$tiedosto = 'Sopimus';
 				if(isset($model->id))
 				{
 					$site = Yii::app()->createController('Site');
