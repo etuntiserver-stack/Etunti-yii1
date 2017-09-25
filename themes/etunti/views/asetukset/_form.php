@@ -939,7 +939,7 @@ jQuery(function(){
 
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'paivat_peruutusehdoissa'); ?>
-		<?php echo $form->textarea($model,'paivat_peruutusehdoissa',array('rows'=>4,'class'=>'form-control')); ?>
+		<?php echo $form->numberField($model,'paivat_peruutusehdoissa',array('class'=>'form-control')); ?>
 		<?php echo $form->error($model,'paivat_peruutusehdoissa'); ?>
 	</div>
    </div>
