@@ -382,8 +382,10 @@ $(".muokaValiko").click(function() {
 	<b><?php echo Yii::t('main','Muokkaa toistuvaa työvuoroa. Jos valintaa ei ole tehtynä, muokataan vain kyseisen päivän työvuoroa.'); ?></b> <br> 
 	<input type="checkbox" class="sw" name="ToistuvatTyovuorot[toistuva_aktiivinen]" id="toistuva_aktiivinen"><br>
 	<?php if(isset($model->id)) : ?>
-	<b><?php echo Yii::t('main','Luo toistuva työvuoro uudestaan.'); ?></b> <br> 
-	<input type="checkbox" class="sw" name="ToistuvatTyovuorot[toistuva_repair]" id="toistuva_repair">
+	<div class="collapse" id="toistuva-repair-funktio">
+		<b><?php echo Yii::t('main','Luo toistuva työvuoro uudestaan.'); ?></b> <br> 
+		<input type="checkbox" class="sw" name="ToistuvatTyovuorot[toistuva_repair]" id="toistuva_repair">
+	</div>
 	<?php endif; ?>
 	</p>
 	<br>
@@ -1217,8 +1219,11 @@ function laatikonPaivays(thisDataReturn){
 		$('#pto').removeClass('bg-success').addClass('bg-danger');
 
 		$('#submitButton').val('Tarkista päivämäärät').attr("pvmTarkistus",true);
+		$('#toistuva-repair-funktio').addClass('in');
+
 	} else {
 		$('#submitButton').val('Tallenna').removeAttr( "pvmTarkistus" );
+		$('#toistuva-repair-funktio').removeClass('in');
 	}
 	switchesPvm();
   });
