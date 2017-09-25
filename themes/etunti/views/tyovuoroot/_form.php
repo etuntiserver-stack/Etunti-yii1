@@ -380,11 +380,17 @@ $(".muokaValiko").click(function() {
 	<br>
 	<p>
 	<b><?php echo Yii::t('main','Muokkaa toistuvaa työvuoroa. Jos valintaa ei ole tehtynä, muokataan vain kyseisen päivän työvuoroa.'); ?></b> <br> 
-	<input type="checkbox" class="sw" name="ToistuvatTyovuorot[toistuva_aktiivinen]" id="toistuva_aktiivinen">
+	<input type="checkbox" class="sw" name="ToistuvatTyovuorot[toistuva_aktiivinen]" id="toistuva_aktiivinen"><br>
+	<?php if(isset($model->id)) : ?>
+	<div class="collapse" id="toistuva-repair-funktio">
+		<b><?php echo Yii::t('main','Luo toistuva työvuoro uudestaan.'); ?></b> <br> 
+		<input type="checkbox" class="sw" name="ToistuvatTyovuorot[toistuva_repair]" id="toistuva_repair">
+	</div>
+	<?php endif; ?>
 	</p>
 	<br>
 
-<div class="row">
+<div class="row" id="alkaen_loppuen">
   <div class="col-sm-4">
 	<label><?php echo Yii::t('main', 'Alkaen'); ?></label>
 	<input type="text" class="form-control datepickerFI" name="ToistuvatTyovuorot[pfrom]" id="pfrom" value="<?php echo date('d.m.Y', strtotime($pfrom)); ?>">
@@ -395,7 +401,7 @@ $(".muokaValiko").click(function() {
   </div>
   <div class="col-sm-4">
 	<label><?php echo Yii::t('main', 'Työvuorojen viikkoväli'); ?></label>
-	<select class="form-control" name="ToistuvatTyovuorot[viikkoja]">
+	<select class="form-control" name="ToistuvatTyovuorot[viikkoja]" id="Toistuva_viikkoja">
 	<?php
 	if(!empty($viikkoja)) echo '<option value="'.$viikkoja.'">'.$viikkoja.'</option>';
 	?>
@@ -874,13 +880,20 @@ $('.mult').multiselect({
 					   if(d['onkosama'])
 					   {
 					   	$('#sopivatPaivat').append('<div class="row"><b class="text-danger"><div class="col-sm-3">'+d['pvm']+'</div><div class="col-sm-3">'+d['vkopvm']+'</div><div class="col-sm-3">'+d['tekijan_nimi']+'</div><div class="col-sm-3">Tämä on jo olemassa</div></b></div>');
-					   } 
+					   }
+					   else if(d['onkosama_repair'])
+					   {
+					   	$('#sopivatPaivat').append('<div class="row"><b class="text-danger"><div class="col-sm-3">'+d['pvm']+'</div><div class="col-sm-3">'+d['vkopvm']+'</div><div class="col-sm-3">'+d['tekijan_nimi']+'</div><div class="col-sm-3">Vanha pois. Luo uusi</div></b></div>');
+					   }
 					   else if(d['poistetaan'])
 					   {
 					   	$('#sopivatPaivat').append('<div class="row"><b class="text-warning"><div class="col-sm-3">Kaikki</div><div class="col-sm-3">Kaikki</div><div class="col-sm-3">'+d['tekijan_nimi']+'</div><div class="col-sm-3">Pois taulusta</div></b></div>');
 					   }
 					   else if(d['uusi']) {
 					   	$('#sopivatPaivat').append('<div class="row"><b class="text-success"><div class="col-sm-3">'+d['pvm']+'</div><div class="col-sm-3">'+d['vkopvm']+'</div><div class="col-sm-3">'+d['tekijan_nimi']+'</div><div class="col-sm-3">Uusi</div></b></div>');
+					   }
+					   else if(d['uusi_repair']) {
+					   	$('#sopivatPaivat').append('<div class="row"><b class="text-danger"><div class="col-sm-3">'+d['pvm']+'</div><div class="col-sm-3">'+d['vkopvm']+'</div><div class="col-sm-3">'+d['tekijan_nimi']+'</div><div class="col-sm-3">Vanha pois. Luo uusi</div></b></div>');
 					   }
 					   else if(d['muokkaus']) {
 					   	$('#sopivatPaivat').append('<div class="row"><b class="text-warning"><div class="col-sm-3">'+d['pvm']+'</div><div class="col-sm-3">'+d['vkopvm']+'</div><div class="col-sm-3">'+d['tekijan_nimi']+'</div><div class="col-sm-3">Muokkaus</div></b></div>');
@@ -896,6 +909,9 @@ $('.mult').multiselect({
 					   }
 					   else if(d['ketjunMuutos']) {
 					   	$('#sopivatPaivat').append('<div class="row"><b class="text-warning"><div class="col-sm-3">'+d['pvm']+'</div><div class="col-sm-3">'+d['vkopvm']+'</div><div class="col-sm-3">'+d['tekijan_nimi']+'</div><div class="col-sm-3">Ketjun muutos</div></b></div>');
+					   }
+					   else if(d['repair_ei-muutoksia']) {
+					   	$('#sopivatPaivat').append('<div class="row"><b class="text-warning"><div class="col-sm-3">'+d['pvm']+'</div><div class="col-sm-3">'+d['vkopvm']+'</div><div class="col-sm-3">'+d['tekijan_nimi']+'</div><div class="col-sm-3">Ei muutoksia</div></b></div>');
 					   }
 					   else if(d['ERROR']) {
 						   	$('#sopivatPaivat').append(d['ERROR']);
@@ -1203,11 +1219,34 @@ function laatikonPaivays(thisDataReturn){
 		$('#pto').removeClass('bg-success').addClass('bg-danger');
 
 		$('#submitButton').val('Tarkista päivämäärät').attr("pvmTarkistus",true);
+		$('#toistuva-repair-funktio').addClass('in');
+
 	} else {
 		$('#submitButton').val('Tallenna').removeAttr( "pvmTarkistus" );
+		$('#toistuva-repair-funktio').removeClass('in');
 	}
 	switchesPvm();
   });
+
+  $('#toistuva_repair').on('switchChange.bootstrapSwitch', function(event, state) {
+	if(state === true){
+		$('#alkaen_loppuen').hide(370);
+		$('#vikoPvm').hide(370);
+		$('#pfrom').attr('readonly', 'yes');
+		$('#pto').attr('readonly', 'yes');
+		$('#Toistuva_viikkoja').attr('readonly', 'yes');
+		$('#vikoPvm').addClass('collapse');
+	} else {
+		$('#alkaen_loppuen').show(370);
+		$('#vikoPvm').show(370);
+		$('#pfrom').removeAttr('readonly');
+		$('#pto').removeAttr('readonly');
+		$('#Toistuva_viikkoja').removeAttr('readonly');
+		$('#vikoPvm').removeClass('collapse');
+	}
+  });
+
+
 
   $('#ma,#ti,#ke,#to,#pe,#la,#su').on('switchChange.bootstrapSwitch', function(event, state) {
 	switchesPvm();
