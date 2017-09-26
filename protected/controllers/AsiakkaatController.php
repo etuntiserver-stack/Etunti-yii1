@@ -1307,7 +1307,8 @@ exit;
 
 		if(isset($tar[0])){
 
-	
+		$asetukset=Asetukset::model()->findByPk(1);
+
 			foreach($tar as $data)
 			{
 				$kesto = strtotime($data->loppu)-strtotime($data->alku);
@@ -1324,12 +1325,29 @@ exit;
 					<td>'.Yii::t('main', 'Kesto').'</td><td>'.$this->sprint($kesto).'</td></tr>
 					<td>'.Yii::t('main', 'Tietoja').'</td><td>'.$data->tietoja.'</td></tr>';
 
-				if($data->peruutettu ==1)
+				// <-- peruutus 
+				$peruutettu = 0;
+				$r = $this->dateDifference(date("Y-m-d", strtotime($data->pvm)), date("Y-m-d") );
+				$asetukset=Asetukset::model()->findByPk(1);
+				if( $asetukset->peruutta_paiva_ennen > 0 and $r > $asetukset->peruutta_paiva_ennen )
+				{
+					$peruutettu = 1;
+				} else {
+					$peruutettu = 2;
+				}
+				// peruutus -->
+
+				if($data->peruutettu ==1){
 			  	$bod .= '<td></td><td><span class="text-danger">'.Yii::t('main', 'Peruutettu').'</span></td></tr>';
-				elseif($data->peruutettu ==2)
+				} elseif($data->peruutettu ==2){
 			  	$bod .= '<td></td><td><span class="text-danger">'.Yii::t('main', 'Peruutettu laskutettava').'</span></td></tr>';
-				else
-			  	$bod .= '<td></td><td><button class="btn btn-danger peruuttaa" for="'.$data->id.'">'.Yii::t('main', 'Peruuta').'</button></td></tr>';
+				} else {
+			  	$bod .= '<td></td>
+						<td>
+							<div id="peruutusehdot" style="display:none">'.$asetukset->peruutusehdot.'</div>
+							<button class="btn btn-danger peruuttaa" for="'.$data->id.'" peruutus_tilanne="'.$peruutettu.'">'.Yii::t('main', 'Peruuta').'</button>
+						</td></tr>';
+				}
 			  	$bod .= '
 				</table><br>';
 		  	}
@@ -1341,7 +1359,16 @@ exit;
 		return $bod;
 	}
 
-
+	protected function dateDifference($date_1 , $date_2 , $differenceFormat = '%a' )
+	{
+	    $datetime1 = date_create($date_1);
+	    $datetime2 = date_create($date_2);
+	    
+	    $interval = date_diff($datetime1, $datetime2);
+	    
+	    return $interval->format($differenceFormat);
+	    
+	}
 
 	protected function palautteetCRM($model, $from, $to, $naytaId, $kayttaja)
 	{
