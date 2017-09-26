@@ -277,7 +277,6 @@ public function actionLogin($domain)
 		if(isset($_POST['tunnus']) and $this->kirjautuminen($domain, $_POST['tunnus'], $_POST['salasana']) == true)
 		{
 		   $model=Asiakkaat::model()->findByPk($_POST['asiakasID']);
-		   $a=Asetukset::model()->findByPk(1);
 
 		   // <-- Hyvaksyn
 		   if(isset($_POST['hyvaksyn']) and isset($model->id))
@@ -289,11 +288,16 @@ public function actionLogin($domain)
 		   }
 		   //     Hyvaksyn -->
 
-		   if(isset($_POST['getkayttoehdot']) and isset($model->id) and isset($a->edico_kayttoehdot))
+		   if(isset($_POST['getkayttoehdot']) and isset($model->id))
 		   {
 
+				$path = Yii::app()->basePath."/../tiedostot/firma/".$domain.'/eDico_kayttoehdot.html';
+
 				$return = '<legend><h1>Käyttöehdot</h1></legend>';
-				$return .= str_replace("\n", "<br>", $a->edico_kayttoehdot);
+				if (file_exists($path)) {
+		  			$html_content = file_get_contents($path);
+					$return .= $html_content;
+				}
 				$return .= '<br><br><p><input type="checkbox" id="hyvaksyn_kayttoehdot"> <b>Hyväksyn käyttöehdot</b></p>';
 
 				$this->_sendResponse(200, CJSON::encode(array('ok'=>$return)));

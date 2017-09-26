@@ -84,6 +84,54 @@ if(isset($_POST['uploaded_Konevuokraus_toimitusehdot']))
 }
 
 
+if(isset($_POST['uploaded_edico_kayttoehdot']))
+{
+
+  $path = Yii::app()->basePath."/../tiedostot/firma/".Yii::app()->user->domain;
+  if (!file_exists($path)) {
+  	mkdir($path, 0777, true);
+  }
+
+  $path_html = Yii::app()->basePath."/../tiedostot/firma/".Yii::app()->user->domain.'/eDico_html';
+  if (!file_exists($path_html)) {
+  	mkdir($path_html, 0777, true);
+  }
+
+  $uploaddir = $path.'/';
+  $ext = pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION);
+  $bname = 'eDico_kayttoehdot';
+  if($ext == 'pdf')
+  {
+	$uploadfile = $uploaddir . basename($bname.'.pdf');
+	if (move_uploaded_file($_FILES['file']['tmp_name'], $uploadfile))
+	{
+		$exec = 'pdftohtml -c -s -noframes '.$path.'/'.$bname.'.pdf '.$path_html.'/'.$bname.'.html';
+		exec($exec.' 2>&1', $output, $return);
+
+		if (file_exists($path_html.'/'.$bname.'.html')) {
+		  	$html_content = file_get_contents($path_html.'/'.$bname.'.html');
+		  	$html_content = str_replace("background image", "", $html_content);
+		  	$html_content = str_replace("body bgcolor=\"#A0A0A0\"", "body bgcolor=\"#FFFFFF\"", $html_content);
+			$html_content = preg_replace("/<img[^>]+\>/i", "", $html_content);
+		  	$html_content = str_replace("p {margin: 0; padding: 0;}", "", $html_content);
+
+			//$html_content = strip_tags($html_content, '<style>');
+$html_content = preg_replace('/(<[^>]+) style=".*?"/i', '$1', $html_content);
+$html_content = preg_replace('/(<[^>]+) class=".*?"/i', '$1', $html_content);
+			if(file_put_contents($path.'/'.basename($bname.'.html'), $html_content))
+  				exec('rm -rf '.$path_html);
+		}
+		$this->redirect(array('update', 'id'=>1));
+	}
+
+  } else {
+
+	Yii::app()->user->setFlash('danger', "Lataaminen ei onnistunut, odottelaan PDF");
+	//$this->redirect(array('update', 'id'=>1));
+  }
+}
+
+
 
 if(isset($_POST['poistaTamaTiedosto'])){
 	unlink($_POST['poistaTamaTiedosto']);
@@ -211,13 +259,22 @@ exit;
 	$i = 0;
 	foreach(array_reverse(glob(Yii::app()->baseUrl.'tiedostot/firma/'.Yii::app()->user->domain.'/*')) as $file) {
 	$i++;
-	$explNimi = explode("/",$file);
+	$ext = pathinfo(basename($file), PATHINFO_EXTENSION);
  	echo '
 	<div class="form-inline" id="t_'.$model->id.$i.'">
-	  <div class="btn btn-xs btn-danger poistaTiedosto" this="'.$file.'" model="'.$model->id.'" for="t_'.$model->id.$i.'">X</div>
-	  <a href="../../'.$file.'">'.end($explNimi).'</a>
-	</div>
-	';
+	  <div class="btn btn-xs btn-danger poistaTiedosto" this="'.$file.'" model="'.$model->id.'" for="t_'.$model->id.$i.'">X</div> ';
+
+				// <-- file_safe_opener
+				$filepath = Yii::getPathOfAlias('application').'/../'.$file;
+				echo CHtml::link(basename($file),
+					array('/site/file_safe_opener', 'filepath' => $filepath, 'ext' => $ext),
+					array(
+						'target'=>'_blank',
+						'class'=>'link'
+				));
+				//     file_safe_opener// -->
+
+	echo '</div>';
 	$kuvat[$i] = $file;
 	}
 	?>
@@ -292,6 +349,24 @@ exit;
          <span class="button"><?php echo Yii::t('main', 'Konevuokraus toimitusehdot'); ?></span>
          <input type="file" class="gui-file" name="file" id="t_file" onChange="document.getElementById('tiedostoUP').value = this.value;">
          <input type="text" class="gui-input" name="uploaded_Konevuokraus_toimitusehdot" id="tiedostoUP" placeholder="Valitse tiedosto..">
+         <label class="field-icon">
+          <i class="fa fa-upload"></i>
+         </label>
+       </label>
+	<span class="input-group-btn">
+          <input type="submit" value="Lataa" class="btn btn-primary btn-group myBgColors" />
+	</span>
+    </div>
+  </form>
+ </div>
+
+ <div class="admin-form col-sm-6">
+  <form id="uploadimage" action="#" class="form-input" method="post" enctype="multipart/form-data">
+     <div class="section input-group">
+       <label class="field prepend-icon append-button file">
+         <span class="button"><?php echo Yii::t('main', 'eDico APP käyttöehdot'); ?></span>
+         <input type="file" class="gui-file" name="file" id="t_file" onChange="document.getElementById('tiedostoUP').value = this.value;">
+         <input type="text" class="gui-input" name="uploaded_edico_kayttoehdot" id="tiedostoUP" placeholder="Valitse tiedosto..">
          <label class="field-icon">
           <i class="fa fa-upload"></i>
          </label>
@@ -394,7 +469,8 @@ $(".poistaTiedosto").click(function(){
 	var forThis = $(this).attr("this");
 	var model = $(this).attr("model");
 	var forID = $(this).attr("for");
-
+	if(confirm('Oletko varmaa?'))
+	{
         $.ajax({
            url: "update?id="+model,
 	   type:'POST',
@@ -404,6 +480,7 @@ $(".poistaTiedosto").click(function(){
 		$("#"+forID).remove();
            }
         });
+	}
 });
 
 /*
