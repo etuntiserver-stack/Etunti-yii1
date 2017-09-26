@@ -126,6 +126,8 @@ class Asetukset extends DB2ActiveRecord
                      'tyottomyysvakuutusmaksu' => 'int(11) ',
                      'sosiaaliturvamaksu' => 'int(11) ',
                      'tyel_maksun_osuus_palkkansummasta' => 'int(11) ',
+                     'peruutusehdot' => 'text ',
+                     'paivat_peruutusehdoissa' => 'int(2)',
                      'gtm' => 'varchar(255) ',
                      'app_naytetaanko_kohteen_yhteyshenkilo' => 'int(1) ',
                      'onlinevaraus_viikonlopput' => 'int(1) ',
@@ -166,13 +168,13 @@ class Asetukset extends DB2ActiveRecord
 		// will receive user inputs.
 		return array(
 			array('id,logon_polkku, logon_korkeus, johtaja', 'required'),
-			array('id, show_name, app_show_phone, sovellus_tyovuorot, logon_korkeus, palvelu_tyyppi, lasku_asiakasnumero, ilmoitus_avoimista_kohteesta_sahkopostiin, ilmoitus_myohastyneista_kohteesta_sahkopostiin, netvisor_kaytto, asiakas_tyovuorossa, onlinevaraus_aikaisintaan_paivamaara, onlinevaraus_alku, onlinevaraus_loppu, paikkakunta_tyovuorossa, app_lopettaa_vain_tagilla, ilmoitus_toistuvien_tyovuorojen_paattymisesta, ilmoitus_toistuvien_tyovuorojen_paattymisesta_paivat_ennen, tyovuorolahetys_naytetaanko_asiakas, tyovuorolahetys_naytetaanko_kohteen_postitoimipaikka, ilmoitus_merkkipaivasta, tyontekijan_etunimi_sukunimi_jarjestys, app_hyvaksytyt_tyot_vkomaara, app_naytetaanko_hyvaksyttyt_tunnit, app_naytta_avain, tapaturmavakuutus, ryhmahenkivakuutus, tyottomyysvakuutusmaksu, sosiaaliturvamaksu, tyel_maksun_osuus_palkkansummasta, app_naytetaanko_kohteen_yhteyshenkilo, onlinevaraus_viikonlopput, maksullinen, ilmainen_versio_kayttotunnit, alennus_max_euro, alennus_max_prosentti, peruutta_paiva_ennen, lasketaanko_lounastauko, apuaika_meneeko_laskutukseen, netvisor_lahetetaanko_tyontekija', 'numerical', 'integerOnly'=>true),
+			array('id, show_name, app_show_phone, sovellus_tyovuorot, logon_korkeus, palvelu_tyyppi, lasku_asiakasnumero, ilmoitus_avoimista_kohteesta_sahkopostiin, ilmoitus_myohastyneista_kohteesta_sahkopostiin, netvisor_kaytto, asiakas_tyovuorossa, onlinevaraus_aikaisintaan_paivamaara, onlinevaraus_alku, onlinevaraus_loppu, paikkakunta_tyovuorossa, app_lopettaa_vain_tagilla, ilmoitus_toistuvien_tyovuorojen_paattymisesta, ilmoitus_toistuvien_tyovuorojen_paattymisesta_paivat_ennen, tyovuorolahetys_naytetaanko_asiakas, tyovuorolahetys_naytetaanko_kohteen_postitoimipaikka, ilmoitus_merkkipaivasta, tyontekijan_etunimi_sukunimi_jarjestys, app_hyvaksytyt_tyot_vkomaara, app_naytetaanko_hyvaksyttyt_tunnit, app_naytta_avain, tapaturmavakuutus, ryhmahenkivakuutus, tyottomyysvakuutusmaksu, sosiaaliturvamaksu, tyel_maksun_osuus_palkkansummasta, app_naytetaanko_kohteen_yhteyshenkilo, onlinevaraus_viikonlopput, maksullinen, ilmainen_versio_kayttotunnit, alennus_max_euro, alennus_max_prosentti, peruutta_paiva_ennen, lasketaanko_lounastauko, apuaika_meneeko_laskutukseen, netvisor_lahetetaanko_tyontekija, paivat_peruutusehdoissa', 'numerical', 'integerOnly'=>true),
 			array('paivan_uutinen, logon_polkku, netvisor_host', 'length', 'max'=>500),
 			array('johtaja, viivastyskorko, tilinumero, iban, bic, , postita_username, postita_password, trust_cid, trust_api, checkout_id, trust_ws_cid, trust_ws_salasana, netvisor_acceptancestatus, edico_tehdyt_tyot', 'length', 'max'=>100),
 			array('trust_url, checkout_salasana, trust_ws_api_url, netvisor_customer_id, netvisor_partner_id, netvisor_userkey, netvisor_partnerkey, netvisor_organisation_identifier, merkkipaivailmoitukset_sahkoposti, netvisor_mita_lahetetaan, gtm, apuaika_palkkalaji', 'length', 'max'=>255),
 			array('viikonloppulisa_la, viikonloppulisa_su, vinkki_tunnit, vinkki_prosentti', 'length', 'max'=>10),
 			array('aikavali_halytys', 'length', 'max'=>3),
-			array('oikeudet, pyhapaivat, erikoislauantai, tilausvahvistus, rekisteriseloste, onlinevaraus_laatu_luotettavuus, onlinevaraus_takuu_turvallisuus, onlinevaraus_asiakaspalvelu, onlinevaraus_arvio_siivouksesta, ilmoitus_toistuvien_tyovuorojen_paattymisesta_saajat, ilmoitus_uudesta_kuvasta_saajat, edico_muut_kulut, edico_laatutaso_1, edico_laatutaso_2, edico_laatutaso_3', 'safe'),
+			array('oikeudet, pyhapaivat, erikoislauantai, tilausvahvistus, rekisteriseloste, onlinevaraus_laatu_luotettavuus, onlinevaraus_takuu_turvallisuus, onlinevaraus_asiakaspalvelu, onlinevaraus_arvio_siivouksesta, ilmoitus_toistuvien_tyovuorojen_paattymisesta_saajat, ilmoitus_uudesta_kuvasta_saajat, edico_muut_kulut, edico_laatutaso_1, edico_laatutaso_2, edico_laatutaso_3,peruutusehdot', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('id, syntyrin_emails, paivan_uutinen, logon_polkku, logon_korkeus, johtaja, viivastyskorko, tilinumero, iban, bic, trust_cid, trust_api, palvelu_tyyppi, trust_url, pyhapaivat, erikoislauantai, sovellus_tyovuorot', 'safe', 'on'=>'search'),
@@ -257,6 +259,8 @@ class Asetukset extends DB2ActiveRecord
 			'tyottomyysvakuutusmaksu' => Yii::t('main', 'TYÖTTÖMYYSVAKUUTUSMAKSU'),
 			'sosiaaliturvamaksu' => Yii::t('main', 'SOSIAALITURVAMAKSU'),
 			'tyel_maksun_osuus_palkkansummasta' => Yii::t('main', 'TyEL-MAKSUN OSUUS PALKKASUMMASTA'),
+			'peruutusehdot' => Yii::t('main', 'Asiakkaalle naytettavat varauksen peruutusehdot'),
+			'paivat_peruutusehdoissa' => Yii::t('main', 'Päivät peruutusehdoissa'),
 			'gtm' => Yii::t('main', 'Google Tag Manager'),
 			'app_naytetaanko_kohteen_yhteyshenkilo' => Yii::t('main', 'Näytetäänkö kohteen yhteyshenkilö'),
 			'onlinevaraus_viikonlopput'=> Yii::t('main', 'Näytetäänkö viikonloput'),

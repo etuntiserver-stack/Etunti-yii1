@@ -928,6 +928,20 @@ jQuery(function(){
 		<?php echo $form->numberField($model,'tyel_maksun_osuus_palkkansummasta',array('maxlength'=>11,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'tyel_maksun_osuus_palkkansummasta'); ?>
 	</div>
+
+	<legend><h2><?php echo Yii::t('main','Peruutusehdot'); ?></h2></legend>
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'peruutusehdot'); ?>
+		<?php echo $form->textarea($model,'peruutusehdot',array('rows'=>4,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'peruutusehdot'); ?>
+	</div>
+
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'paivat_peruutusehdoissa'); ?>
+		<?php echo $form->numberField($model,'paivat_peruutusehdoissa',array('class'=>'form-control')); ?>
+		<?php echo $form->error($model,'paivat_peruutusehdoissa'); ?>
+	</div>
    </div>
 
    <div class="col-sm-4">
