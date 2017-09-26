@@ -83,6 +83,23 @@ Yii::app()->clientScript->registerPackage('bootstrapJS');
 Yii::app()->clientScript->registerPackage('bootstrapCSS');
 */
 
+// <-- POST GET Log
+if(isset($_SERVER['REQUEST_METHOD']) and ($_SERVER['REQUEST_METHOD'] == 'POST' or $_SERVER['REQUEST_METHOD'] == 'GET'))
+{
+	$tapahtuma = '';
+	if($_SERVER['REQUEST_METHOD'] == 'POST') $tapahtuma = json_encode($_POST);
+	if($_SERVER['REQUEST_METHOD'] == 'GET') $tapahtuma = json_encode($_GET);
+
+
+	$log=new Log;
+	$log->log_category 	= 2;
+	$log->log_nimike	= 'Tapahtuma';
+	$log->tapahtuma	= $tapahtuma;
+	$log->save();
+
+}
+//     POST GET Log -->
+
 // <-- Huoltokatko
 if(isset(Yii::app()->user->domain))
 {

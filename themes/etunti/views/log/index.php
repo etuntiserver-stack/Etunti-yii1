@@ -47,7 +47,8 @@
 
 
 			   <select class="gui-input" name="log_category" id="log_category">
-       				<option value="1"><?php echo Yii::t('main', 'Sähköpostit'); ?></option>
+       				<option value="1" <?php echo (isset($_POST['log_category']) and $_POST['log_category'] == 1)? 'selected': '';?>><?php echo Yii::t('main', 'Sähköpostit'); ?></option>
+       				<option value="2" <?php echo (isset($_POST['log_category']) and $_POST['log_category'] == 2)? 'selected': '';?>><?php echo Yii::t('main', 'Tapahtumat'); ?></option>
        				<option value="kaikki"><?php echo Yii::t('main', 'Kaikki'); ?></option>
 			   </select>
 
@@ -134,10 +135,14 @@
   <!--<th></th>-->
   <th><?php echo Yii::t('main', 'Pvm'); ?></th>
   <th><?php echo Yii::t('main', 'Tehtävän nimike'); ?></th>
+  <?php if(isset($_POST['log_category']) and $_POST['log_category'] == 1): ?>
   <th><?php echo Yii::t('main', 'Saaja'); ?></th>
   <th><?php echo Yii::t('main', 'Otsikko'); ?></th>
   <th><?php echo Yii::t('main', 'Viesti'); ?></th>
   <th><?php echo Yii::t('main', 'Liitteen sisältö'); ?></th>
+  <?php elseif(isset($_POST['log_category']) and $_POST['log_category'] == 2): ?>
+  <th><?php echo Yii::t('main', 'Tapahtuma'); ?></th>
+  <?php endif; ?>
   </tr>
   </thead>
   <?php $this->widget('zii.widgets.CListView', array(
