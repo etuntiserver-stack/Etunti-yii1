@@ -239,7 +239,8 @@ function getUrlVars() {
 
 
 	var thisID = $(this).attr('for');
-
+	var peruutus_tilanne = parseInt($(this).attr('peruutus_tilanne'));
+	var peruutusehdot = $("#peruutusehdot").text();
 
 	var sendDataPost = $(this).serializeArray();
 	$.each(loginArr, function( index, value ) {
@@ -250,7 +251,11 @@ function getUrlVars() {
 		sendDataPost.push({name: "id", value: thisID});
 		sendDataPost.push({name: "peruuttaa_tyovuoroa", value: "true"});
 
-	if( confirm('Haluatko varmaasti peruuttaa?') )
+	var confirm_teksti = 'Haluatko varmaasti peruuttaa?';
+	if(peruutus_tilanne == 2)
+	confirm_teksti = peruutusehdot + "\n\n" + confirm_teksti;
+
+	if( confirm(confirm_teksti) )
 	{
         $.ajax({
            url: url+'/historia?domain='+domain,

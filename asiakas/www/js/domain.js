@@ -294,7 +294,7 @@ $(document).ready(function(){
 		{
 			localStorage.setItem('loginOK', JSON.stringify(d));
 			localStorage.setItem('login_paketti', d['loginOK'].paketti);
-			//localStorage.setItem('edico_tehdyt_tyot', d['loginOK'].edico_tehdyt_tyot);
+			localStorage.setItem('edico_tehdyt_tyot', d['loginOK'].edico_tehdyt_tyot);
 			window.location.href="index.html";
 		} else {
 			$('#yllaIlmoitus').html('<h3 class="alert alert-danger">Kirjautuminen ei onnistunut. Tarkasta yritystunnus, sähköposti ja salasana</h3>');

@@ -127,7 +127,6 @@ class Asetukset extends DB2ActiveRecord
                      'sosiaaliturvamaksu' => 'int(11) ',
                      'tyel_maksun_osuus_palkkansummasta' => 'int(11) ',
                      'peruutusehdot' => 'text ',
-                     'paivat_peruutusehdoissa' => 'int(2)',
                      'gtm' => 'varchar(255) ',
                      'app_naytetaanko_kohteen_yhteyshenkilo' => 'int(1) ',
                      'onlinevaraus_viikonlopput' => 'int(1) ',
