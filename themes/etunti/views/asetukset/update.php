@@ -121,7 +121,7 @@ $html_content = preg_replace('/(<[^>]+) class=".*?"/i', '$1', $html_content);
 			if(file_put_contents($path.'/'.basename($bname.'.html'), $html_content))
   				exec('rm -rf '.$path_html);
 		}
-		//$this->redirect(array('update', 'id'=>1));
+		$this->redirect(array('update', 'id'=>1));
 	}
 
   } else {
