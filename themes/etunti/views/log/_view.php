@@ -63,9 +63,9 @@
 			    if(!empty($item))
 			    {
 				if($m->getAttributeLabel($k))
-					echo $m->getAttributeLabel($k).': '.((is_array($item))? json_encode($item) : $item ).'<br>';
+					echo '<b>'.$m->getAttributeLabel($k).':</b> '.((is_array($item))? json_encode($item) : $item ).'<br>';
 				else
-					echo $k.': '.((is_array($item))? json_encode($item) : $item ).'<br>';
+					echo '<b>'.$k.':</b> '.((is_array($item))? json_encode($item) : $item ).'<br>';
 			    }
 			}
 		}
@@ -83,9 +83,9 @@
 			    if(!empty($item))
 			    {
 				if($m->getAttributeLabel($k))
-					echo $m->getAttributeLabel($k).': '.((is_array($item))? json_encode($item) : $item ).'<br>';
+					echo '<b>'.$m->getAttributeLabel($k).':</b> '.((is_array($item))? json_encode($item) : $item ).'<br>';
 				else
-					echo $k.': '.((is_array($item))? json_encode($item) : $item ).'<br>';
+					echo '<b>'.$k.':</b> '.((is_array($item))? json_encode($item) : $item ).'<br>';
 			    }
 			}
 		}
