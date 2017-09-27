@@ -46,6 +46,9 @@
 	</td>
 	<?php elseif(isset($_POST['log_category']) and $_POST['log_category'] == 2): ?>
 	<td>
+		<?php echo $data->kuka; ?>
+	</td>
+	<td>
 		<?php echo $data->tilanne; ?>
 	</td>
 	<td>
