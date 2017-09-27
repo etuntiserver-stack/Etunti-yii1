@@ -1260,6 +1260,32 @@ class TyovuorootController extends Controller
 			//  tvuoro_ids Updater -->
 
 
+			// <-- LOG
+			if( $saankoSuoritta == 1 )
+			{
+			$model_log 	= 'ToistuvatTyovuorot';
+			$name_log 	= 'Toistuvat työvuorot';
+			$status_log 	= 'Create';
+			if(isset($toistuva->id))
+			{
+				$old_values = null;
+
+				if(isset($_POST['P']))
+				$_POST[$model_log]['viikko_paivat'] = $_POST['P'];
+				if(isset($_POST['tyopaari']))
+				{
+					$_POST[$model_log]['tyopaari'] = $_POST['tyopaari'];
+					array_push($_POST[$model_log]['tyopaari'], $model->tid);
+				}
+
+				$new_values = json_encode($toistuva->attributes);
+				$site = Yii::app()->createController('Site');
+				$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+			}
+			}
+			//     LOG -->
+
+
 			echo json_encode($return);
 			exit;
 		}
@@ -3153,6 +3179,32 @@ class TyovuorootController extends Controller
 
 
 
+			// <-- LOG
+			if( $saankoSuoritta == 1 )
+			{
+			$model_log 	= 'ToistuvatTyovuorot';
+			$name_log 	= 'Toistuvat työvuorot';
+			$status_log 	= 'Update';
+			if(isset($_POST[$model_log]) and isset($edellinenToistuva->id))
+			{
+				$old_values = json_encode($edellinenToistuva->attributes);
+
+				if(isset($_POST['P']))
+				$_POST[$model_log]['viikko_paivat'] = $_POST['P'];
+				if(isset($_POST['tyopaari']))
+				{
+					$_POST[$model_log]['tyopaari'] = $_POST['tyopaari'];
+					array_push($_POST[$model_log]['tyopaari'], $model->tid);
+				}
+
+				$new_values = json_encode($_POST[$model_log]);
+				$site = Yii::app()->createController('Site');
+				$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+			}
+			}
+			//     LOG -->
+
+
 			if( count($return) > 0 )
 				echo json_encode($return);
 			else
@@ -3176,6 +3228,18 @@ class TyovuorootController extends Controller
 		{
 
 
+		// <-- LOG
+		$model_log 	= 'Tyovuoroot';
+		$name_log 	= 'Työvuorot';
+		$status_log 	= 'Update';
+		if(isset($_POST[$model_log]))
+		{
+			$old_values = json_encode($model->attributes);
+			$new_values = json_encode($_POST[$model_log]);
+			$site = Yii::app()->createController('Site');
+			$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+		}
+		//     LOG -->
 
 
 			// <-- Oliko se toistuvassa tyovuorossa. Poistetaan ketjusta

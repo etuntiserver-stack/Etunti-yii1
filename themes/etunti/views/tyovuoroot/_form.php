@@ -816,7 +816,7 @@ $('.mult').multiselect({
 	   	},
 		error:function(data){
 			console.log(data);
-			window.location.href=location.protocol + "//" + location.host + '/index.php';
+			//window.location.href=location.protocol + "//" + location.host + '/index.php';
 	    	}
 	  });
 

@@ -2291,4 +2291,18 @@ $(document).ready(function(){
 		return $tiedosto;
 	}
 	//     Tiedoston nimi -->
+
+	public function initPostLoger($model_name, $log_nimike, $tilanne, $old_values, $new_values)
+	{
+		$log=new Log;
+		$log->kuka = Yii::app()->user->nimi;
+		$log->log_category 	= 2;
+		$log->log_nimike	= $log_nimike;
+		$log->model		= $model_name;
+		$log->tilanne		= $tilanne;
+		$log->old_values	= $old_values;
+		$log->new_values	= $new_values;
+		$log->save();
+	}
+
 }

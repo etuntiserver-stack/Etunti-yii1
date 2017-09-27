@@ -46,7 +46,47 @@
 	</td>
 	<?php elseif(isset($_POST['log_category']) and $_POST['log_category'] == 2): ?>
 	<td>
-		<?php echo $data->tapahtuma; ?>
+		<?php echo $data->tilanne; ?>
+	</td>
+	<td>
+		<?php 
+		if(is_array(json_decode($data->old_values, true)) and isset($data->model) and !empty($data->model))
+		{
+			$m = new $data->model;
+			$arr = array();
+			$arr = json_decode($data->old_values, true);
+			foreach($arr as $k=>$item)
+			{
+			    if(!empty($item))
+			    {
+				if($m->getAttributeLabel($k))
+					echo $m->getAttributeLabel($k).': '.((is_array($item))? json_encode($item) : $item ).'<br>';
+				else
+					echo $k.': '.((is_array($item))? json_encode($item) : $item ).'<br>';
+			    }
+			}
+		}
+		?>
+	</td>
+	<td>
+		<?php 
+		if(is_array(json_decode($data->new_values, true)) and isset($data->model) and !empty($data->model))
+		{
+			$m = new $data->model;
+			$arr = array();
+			$arr = json_decode($data->new_values, true);
+		  	foreach($arr as $k=>$item)
+			{
+			    if(!empty($item))
+			    {
+				if($m->getAttributeLabel($k))
+					echo $m->getAttributeLabel($k).': '.((is_array($item))? json_encode($item) : $item ).'<br>';
+				else
+					echo $k.': '.((is_array($item))? json_encode($item) : $item ).'<br>';
+			    }
+			}
+		}
+		?>
 	</td>
 	<?php endif; ?>
 </tr>
