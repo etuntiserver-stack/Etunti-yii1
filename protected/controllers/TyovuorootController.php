@@ -1269,16 +1269,8 @@ class TyovuorootController extends Controller
 			if(isset($toistuva->id))
 			{
 				$old_values = null;
-
-				if(isset($_POST['P']))
-				$_POST[$model_log]['viikko_paivat'] = $_POST['P'];
-				if(isset($_POST['tyopaari']))
-				{
-					$_POST[$model_log]['tyopaari'] = $_POST['tyopaari'];
-					array_push($_POST[$model_log]['tyopaari'], $model->tid);
-				}
-
-				$new_values = json_encode($toistuva->attributes);
+				$n_m = ToistuvatTyovuorot::model()->findbypk($toistuva->id);
+				$new_values = json_encode($n_m->attributes);
 				$site = Yii::app()->createController('Site');
 				$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
 			}
@@ -1353,6 +1345,21 @@ class TyovuorootController extends Controller
 
 			}
 			// jos on tyopaari -->
+
+
+			// <-- LOG
+			$model_log 	= 'Tyovuoroot';
+			$name_log 	= 'Työvuorot';
+			$status_log 	= 'Create';
+			if(isset($_POST[$model_log]))
+			{
+				$old_values = null;
+				$n_m = Tyovuoroot::model()->findbypk($model->id);
+				$new_values = json_encode($n_m->attributes);
+				$site = Yii::app()->createController('Site');
+				$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+			}
+			//     LOG -->
 
 
 			$return[] = array('tid'=>$model->tid, 'pvm'=>$model->pvm, 'ymd'=>date("Ymd",strtotime($model->pvm)));
