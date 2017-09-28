@@ -61,6 +61,11 @@
 			$arr = json_decode($data->old_values, true);
 			foreach($arr as $k=>$item)
 			{
+			    if(isset($k) and $k == 'tid')
+			    $item = '(ID: '.$item.') '.$this->etuSukunimi($item);
+			    if(isset($k) and $k == 'kohde' and $this->kohdeOsoite($item))
+			    $item = '(ID: '.$item.') '.$this->kohdeOsoite($item);
+
 			    if(!empty($item))
 			    {
 				if($m->getAttributeLabel($k))
@@ -81,6 +86,11 @@
 			$arr = json_decode($data->new_values, true);
 		  	foreach($arr as $k=>$item)
 			{
+			    if(isset($k) and $k == 'tid')
+			    $item = '(ID: '.$item.') '.$this->etuSukunimi($item);
+			    if(isset($k) and $k == 'kohde' and $this->kohdeOsoite($item))
+			    $item = '(ID: '.$item.') '.$this->kohdeOsoite($item);
+
 			    if(!empty($item))
 			    {
 				if($m->getAttributeLabel($k))

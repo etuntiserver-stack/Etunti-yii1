@@ -244,4 +244,20 @@ class LogController extends Controller
 
 		return $str;
 	}
+
+	protected function etuSukunimi($tid)
+	{
+	   $site = Yii::app()->createController('Site');
+	   return $site[0]->etuSukunimi($tid);
+	}
+
+	protected function kohdeOsoite($id)
+	{
+		$k = Kohteet::model()->findByPk($id);
+		if(isset($k->id) and !empty($k->osoite))		
+			return $k->osoite;
+		else
+			return false;
+
+	}
 }
