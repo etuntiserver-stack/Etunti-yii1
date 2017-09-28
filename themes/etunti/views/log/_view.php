@@ -67,6 +67,8 @@
 			    $item = '(ID: '.$item.') '.$this->kohdeOsoite($item);
 			    if(isset($k) and $k == 'time')
 			    $item = date("d.m.Y H:i", strtotime($item));
+			    if(isset($k) and $k == 'tvuoro_ids')
+			    $item = '<textarea class="form-control">'.$item.'</textarea>';
 
 			    if(!empty($item))
 			    {
@@ -94,6 +96,8 @@
 			    $item = '(ID: '.$item.') '.$this->kohdeOsoite($item);
 			    if(isset($k) and $k == 'time')
 			    $item = date("d.m.Y H:i", strtotime($item));
+			    if(isset($k) and $k == 'tvuoro_ids')
+			    $item = '<textarea class="form-control">'.$item.'</textarea>';
 
 			    if(!empty($item))
 			    {
