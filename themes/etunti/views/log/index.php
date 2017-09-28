@@ -47,8 +47,8 @@
 
 
 			   <select class="gui-input" name="log_category" id="log_category">
-       				<option value="1" <?php echo (isset($_GET['log_category']) and $_GET['log_category'] == 1)? 'selected': '';?>><?php echo Yii::t('main', 'Sähköpostit'); ?></option>
        				<option value="2" <?php echo (isset($_GET['log_category']) and $_GET['log_category'] == 2)? 'selected': '';?>><?php echo Yii::t('main', 'Tapahtumat'); ?></option>
+       				<option value="1" <?php echo (isset($_GET['log_category']) and $_GET['log_category'] == 1)? 'selected': '';?>><?php echo Yii::t('main', 'Sähköpostit'); ?></option>
        				<option value="kaikki"><?php echo Yii::t('main', 'Kaikki'); ?></option>
 			   </select>
 
