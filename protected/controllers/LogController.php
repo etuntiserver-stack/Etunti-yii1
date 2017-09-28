@@ -160,6 +160,9 @@ class LogController extends Controller
 		if(isset($_POST['email_to']))
 	        $criteria->addCondition (" email_to LIKE '%".$_POST['email_to']."%' ");
 
+		if(isset($_POST['kuka']))
+	        $criteria->addCondition (" kuka LIKE '%".$_POST['kuka']."%' ");
+
 		if(isset($_POST['from']) and isset($_POST['to']) and !empty($_POST['from']) and !empty($_POST['to']))
 		{
 	        	$criteria->addCondition (" DATE(time) BETWEEN '".date("Y-m-d H:i:s", strtotime($_POST['from']))."' AND '".date("Y-m-d H:i:s", strtotime($_POST['to']))."' ");
