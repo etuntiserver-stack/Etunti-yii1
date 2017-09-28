@@ -50,7 +50,7 @@
 		<?php echo $data->kuka; ?>
 	</td>
 	<td>
-		<?php echo $data->tilanne; ?>
+		<?php echo Yii::t('log', $data->tilanne); ?>
 	</td>
 	<td>
 		<?php 
