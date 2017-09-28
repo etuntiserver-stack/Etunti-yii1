@@ -101,7 +101,7 @@ setTimeout(function() {
     }
     // On device Ready -->
 
-    server = '../../..';
+    //server = '../../..';
     var url = server+"/index.php/api/mob";
     var puh_nro = "";
     var versio = "";

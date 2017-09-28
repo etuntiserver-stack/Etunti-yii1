@@ -871,6 +871,7 @@ function num($val){
 	{
 
 		$model 		= $this->loadModel($_POST['id']);
+		$vanha_attr 	= $model->attributes;
 
  		$kohde_kannasta	= $model->kohde_kannasta;
  		$aloitan 	= $model->aloitan;
@@ -893,6 +894,20 @@ function num($val){
 
 
 		if($model->save()){
+
+				// <-- LOG
+				if( isset($model->id) )
+				{
+				$model_log 	= 'Mobile';
+				$name_log 	= 'Tunnit';
+				$status_log 	= 'Update by admin';
+	
+					$old_values = json_encode($vanha_attr);
+					$new_values = json_encode($model->attributes);
+					$site = Yii::app()->createController('Site');
+					$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+				}
+				//     LOG -->
 
 			// <-- Kirjoitetaan historia luettut tietokantaan
 			$this->renderPartial('//mobile/historia',array(
@@ -1024,7 +1039,24 @@ function num($val){
 			}
 
 			if($isLine == false)
-			$model->save();
+			{
+				if($model->save())
+				{
+				// <-- LOG
+				if( isset($model->id) )
+				{
+				$model_log 	= 'Mobile';
+				$name_log 	= 'Tunnit';
+				$status_log 	= 'Create by admin';
+	
+					$old_values = null;
+					$new_values = json_encode($model->attributes);
+					$site = Yii::app()->createController('Site');
+					$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+				}
+				//     LOG -->
+				}
+			}
 
 			echo $isLine;
 			exit;
@@ -1063,6 +1095,7 @@ function num($val){
 	 		$kohde_kannasta	= $model->kohde_kannasta;
 	 		$tekijan_nimi 	= $model->tekijan_nimi;
 
+			$vanha_attr = $model->attributes;
 			$model->attributes=$_POST['Mobile'];
 
 
@@ -1071,6 +1104,21 @@ function num($val){
 
 			if($model->save())
 			{
+
+				// <-- LOG
+				if( isset($model->id) )
+				{
+				$model_log 	= 'Mobile';
+				$name_log 	= 'Tunnit';
+				$status_log 	= 'Update by admin';
+	
+					$old_values = json_encode($vanha_attr);
+					$new_values = json_encode($model->attributes);
+					$site = Yii::app()->createController('Site');
+					$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+				}
+				//     LOG -->
+
 
 				// <-- Kirjoitetaan historia luettut tietokantaan
 				$this->renderPartial('//mobile/historia',array(
