@@ -29,7 +29,7 @@
 
 
 
-   	    <form id="mobForm" action="#" class="form-inline" method="GET">
+   	    <form id="mobForm" action="index" class="form-inline" method="GET">
    	    <input type="hidden" name="mob_hae">
 
             <div class="admin-form">
@@ -280,10 +280,11 @@ $("#aktiivinen").val($("#akt").val());
 else
 $("#aktiivinen").val(1);
 
+/*
 $(".haemob").click(function(){
 	$("#mobForm").submit();
 });
-
+*/
 
  $(".kpl").click(function(){
 	var kohteetPerSivu = $(this).attr('kpl');
