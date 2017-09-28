@@ -177,6 +177,10 @@ class LogController extends Controller
 	        	$criteria->addCondition (" DATE(time) BETWEEN '".date("Y-m-d H:i:s", strtotime($_GET['from']))."' AND '".date("Y-m-d H:i:s", strtotime($_GET['to']))."' ");
 		}
 
+		if(!isset($_GET['mob_hae']))
+		{
+			$criteria->condition = " id=null ";
+		}
 
 		$dataProvider=new CActiveDataProvider('Log', array(
 			'criteria'=>$criteria,
