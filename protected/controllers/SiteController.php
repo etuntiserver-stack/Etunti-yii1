@@ -2296,8 +2296,14 @@ $(document).ready(function(){
 	{
 		$log=new Log;
 
-		if(isset(Yii::app()->user->nimi))
+		if($model_name == 'Mob' and is_array(json_decode($new_values, true)))
+		{
+			$kuka = json_decode($new_values, true);
+			if(isset($kuka['tekijan_nimi']))
+			$log->kuka = $kuka['tekijan_nimi'];
+		} else {
 			$log->kuka = Yii::app()->user->nimi;
+		}
 
 		$log->log_category 	= 2;
 		$log->log_nimike	= $log_nimike;

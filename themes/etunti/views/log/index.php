@@ -175,7 +175,7 @@
   <th><?php echo Yii::t('main', 'Viesti'); ?></th>
   <th><?php echo Yii::t('main', 'Liitteen sisältö'); ?></th>
   <?php elseif(isset($_POST['log_category']) and $_POST['log_category'] == 2): ?>
-  <th><?php echo Yii::t('main', 'Admin'); ?></th>
+  <th><?php echo Yii::t('main', 'Nimi'); ?></th>
   <th><?php echo Yii::t('main', 'Tilanne'); ?></th>
   <th><?php echo Yii::t('main', 'Vanhat arvot'); ?></th>
   <th><?php echo Yii::t('main', 'Uudet arvot'); ?></th>
