@@ -425,6 +425,23 @@ $xml = '
 	{
 		if(isset($_POST['id']))
 		{
+
+			$m_d = Mobile::model()->findbypk($_POST['id']);
+
+			if(isset($m_d->id))
+			{
+				// <-- LOG
+				$model_log 	= 'Mobile';
+				$name_log 	= 'Tunnit';
+				$status_log 	= 'Delete';
+	
+					$old_values = json_encode($m_d->attributes);
+					$new_values = null;
+					$site = Yii::app()->createController('Site');
+					$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+				//     LOG -->
+			}
+
 			Mobile::model()->deletebypk($_POST['id']);
 			Toteutuneet::model()->deleteAll(" kid='".$_POST['id']."' ");
 			echo json_encode('poistettu ID '.$_POST['id']);
