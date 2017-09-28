@@ -139,16 +139,29 @@
                           </label>
                         </div>
 
-                        <div class="section">
-                          <label class="field prepend-icon">
 
-   			    <input type="text" class="gui-input" name="model" value="<?php if(isset($_GET['model'])) echo $_GET['model']; ?>" placeholder="<?php echo Yii::t('main', 'Model'); ?>...">
+                        <div class="section">
+                          <label class="field select">
+
+			   <?php
+				$l = Log::model()->findAll(array('group' => 'model'));
+				$option = array();
+				foreach($l as $item)
+					$option[] = $item->model;
+			   ?>
+			   <select class="gui-input" name="model" id="model">
+       				<option value=""><?=Yii::t('main', 'Valitse model')?></option>
+				<?php foreach($option as $o) : ?>
+       				<option value="<?=$o?>" <?php echo (isset($_GET['model']) and $_GET['model'] == $o)? 'selected': ''; ?>><?=Yii::t('main', $o)?></option>
+				<?php endforeach; ?>
+			   </select>
 
                             <label for="firstname" class="field-icon">
-                              <i class="glyphicon glyphicon-user"></i>
+                            <i class="arrow double"></i>
                             </label>
                           </label>
                         </div>
+
                       </div>
 
                       <div class="col-md-2">
