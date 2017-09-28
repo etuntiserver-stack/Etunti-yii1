@@ -65,6 +65,8 @@
 			    $item = '(ID: '.$item.') '.$this->etuSukunimi($item);
 			    if(isset($k) and $k == 'kohde' and $this->kohdeOsoite($item))
 			    $item = '(ID: '.$item.') '.$this->kohdeOsoite($item);
+			    if(isset($k) and $k == 'time')
+			    $item = date("d.m.Y H:i", strtotime($item));
 
 			    if(!empty($item))
 			    {
@@ -90,6 +92,8 @@
 			    $item = '(ID: '.$item.') '.$this->etuSukunimi($item);
 			    if(isset($k) and $k == 'kohde' and $this->kohdeOsoite($item))
 			    $item = '(ID: '.$item.') '.$this->kohdeOsoite($item);
+			    if(isset($k) and $k == 'time')
+			    $item = date("d.m.Y H:i", strtotime($item));
 
 			    if(!empty($item))
 			    {
