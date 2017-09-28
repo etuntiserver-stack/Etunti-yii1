@@ -1251,6 +1251,7 @@ public function actionImei($dom)
 	    if(isset($mob->id)){
 
                 $mobupdate = Mob::model()->findbypk($mob->id);
+		$log_old = $mobupdate->attributes;
                 $mobupdate->loppui = date("d.m.Y H:i:s");
 
 		$vanhaViesti = '';
@@ -1304,6 +1305,21 @@ public function actionImei($dom)
 		$save = '';
 		if($mobupdate->save())
 		{
+
+				// <-- LOG
+				if( isset($mobupdate->id) )
+				{
+				$model_log 	= 'Mob';
+				$name_log 	= 'Tunnit';
+				$status_log 	= 'Update by APP';
+	
+					$old_values = json_encode($log_old);
+					$new_values = json_encode($mobupdate->attributes);
+					$site = Yii::app()->createController('Site');
+					$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+				}
+				//     LOG -->
+
 			$save = 'ok';
 		} else {
 			$save = var_dump($mobupdate->getErrors());
@@ -1342,6 +1358,20 @@ public function actionImei($dom)
 
                 if($mobinsert->save())
 		{
+
+				// <-- LOG
+				if( isset($mobinsert->id) )
+				{
+				$model_log 	= 'Mob';
+				$name_log 	= 'Tunnit';
+				$status_log 	= 'Create from APP';
+	
+					$old_values = null;
+					$new_values = json_encode($mobinsert->attributes);
+					$site = Yii::app()->createController('Site');
+					$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+				}
+				//     LOG -->
 
 
 			$loppu = '';
