@@ -157,19 +157,19 @@ class LogController extends Controller
 		if(isset($_GET['log_category']) and $_GET['log_category'] != 'kaikki')
 	        $criteria->addCondition (" log_category='".(int)$_GET['log_category']."' ");
 
-		if(isset($_GET['email_to']))
+		if(isset($_GET['email_to']) and !empty($_GET['email_to']))
 	        $criteria->addCondition (" email_to LIKE '%".$_GET['email_to']."%' ");
 
-		if(isset($_GET['kuka']))
+		if(isset($_GET['kuka']) and !empty($_GET['kuka']))
 	        $criteria->addCondition (" kuka LIKE '%".$_GET['kuka']."%' ");
 
-		if(isset($_GET['log_nimike']))
+		if(isset($_GET['log_nimike']) and !empty($_GET['log_nimike']))
 	        $criteria->addCondition (" log_nimike LIKE '%".$_GET['log_nimike']."%' ");
 
-		if(isset($_GET['tilanne']))
+		if(isset($_GET['tilanne']) and !empty($_GET['tilanne']))
 	        $criteria->addCondition (" tilanne LIKE '%".$_GET['tilanne']."%' ");
 
-		if(isset($_GET['model']))
+		if(isset($_GET['model']) and !empty($_GET['model']))
 	        $criteria->addCondition (" model LIKE '%".$_GET['model']."%' ");
 
 		if(isset($_GET['from']) and isset($_GET['to']) and !empty($_GET['from']) and !empty($_GET['to']))
