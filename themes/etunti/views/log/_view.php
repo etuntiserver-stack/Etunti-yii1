@@ -28,7 +28,7 @@
 		<?php echo $this->nimikeMuutos($data->log_nimike); ?>
 		<?php echo ((!empty($data->model))?'<p><b>Model:</b>'.$data->model.'</p>':''); ?>
 	</td>
-	<?php if(isset($_POST['log_category']) and $_POST['log_category'] == 1): ?>
+	<?php if(isset($_GET['log_category']) and $_GET['log_category'] == 1): ?>
 	<td>
 		<?php echo $data->email_to; ?>
 	</td>
@@ -45,7 +45,7 @@
 			<span class="btn btn-default nayta" for="<?php echo $data->id; ?>" get="email_attachment_sisalto"><?php echo Yii::t('main', 'Näytä'); ?></span>
 		<?php endif; ?>
 	</td>
-	<?php elseif(isset($_POST['log_category']) and $_POST['log_category'] == 2): ?>
+	<?php elseif(isset($_GET['log_category']) and $_GET['log_category'] == 2): ?>
 	<td>
 		<?php echo $data->kuka; ?>
 	</td>

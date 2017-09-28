@@ -29,7 +29,7 @@
 
 
 
-   	    <form id="mobForm" action="#" class="form-inline" method="POST">
+   	    <form id="mobForm" action="#" class="form-inline" method="GET">
    	    <input type="hidden" name="mob_hae">
 
             <div class="admin-form">
@@ -41,14 +41,14 @@
 
                       <div class="col-md-4">
 
-		      <?php if(isset($_POST['aktiivinen'])) echo '<input type="hidden" id="akt" value="'.$_POST['aktiivinen'].'">'; ?>
+		      <?php if(isset($_GET['aktiivinen'])) echo '<input type="hidden" id="akt" value="'.$_GET['aktiivinen'].'">'; ?>
                         <div class="section">
                           <label class="field select">
 
 
 			   <select class="gui-input" name="log_category" id="log_category">
-       				<option value="1" <?php echo (isset($_POST['log_category']) and $_POST['log_category'] == 1)? 'selected': '';?>><?php echo Yii::t('main', 'Sähköpostit'); ?></option>
-       				<option value="2" <?php echo (isset($_POST['log_category']) and $_POST['log_category'] == 2)? 'selected': '';?>><?php echo Yii::t('main', 'Tapahtumat'); ?></option>
+       				<option value="1" <?php echo (isset($_GET['log_category']) and $_GET['log_category'] == 1)? 'selected': '';?>><?php echo Yii::t('main', 'Sähköpostit'); ?></option>
+       				<option value="2" <?php echo (isset($_GET['log_category']) and $_GET['log_category'] == 2)? 'selected': '';?>><?php echo Yii::t('main', 'Tapahtumat'); ?></option>
        				<option value="kaikki"><?php echo Yii::t('main', 'Kaikki'); ?></option>
 			   </select>
 
@@ -63,7 +63,7 @@
                         <div class="section">
                           <label class="field prepend-icon">
 
-   			    <input type="text" class="gui-input datepicker" name="from" value="<?php if(isset($_POST['from'])) echo $_POST['from']; ?>" placeholder="<?php echo Yii::t('main', 'Mistä'); ?>...">
+   			    <input type="text" class="gui-input datepicker" name="from" value="<?php if(isset($_GET['from'])) echo $_GET['from']; ?>" placeholder="<?php echo Yii::t('main', 'Mistä'); ?>...">
 
                             <label for="firstname" class="field-icon">
                               <i class="glyphicon glyphicon-calendar"></i>
@@ -76,7 +76,7 @@
                         <div class="section">
                           <label class="field prepend-icon">
 
-   			    <input type="text" class="gui-input datepicker" name="to" value="<?php if(isset($_POST['to'])) echo $_POST['to']; ?>" placeholder="<?php echo Yii::t('main', 'Mihin'); ?>...">
+   			    <input type="text" class="gui-input datepicker" name="to" value="<?php if(isset($_GET['to'])) echo $_GET['to']; ?>" placeholder="<?php echo Yii::t('main', 'Mihin'); ?>...">
 
                             <label for="firstname" class="field-icon">
                               <i class="glyphicon glyphicon-calendar"></i>
@@ -89,11 +89,11 @@
                       </div>
 
 
-                      <div class="col-md-3">
+                      <div class="col-md-2">
                         <div class="section">
                           <label class="field prepend-icon">
 
-   			    <input type="text" class="gui-input" name="email_to" value="<?php if(isset($_POST['email_to'])) echo $_POST['email_to']; ?>" placeholder="<?php echo Yii::t('main', 'Sähköpostin saaja'); ?>...">
+   			    <input type="text" class="gui-input" name="email_to" value="<?php if(isset($_GET['email_to'])) echo $_GET['email_to']; ?>" placeholder="<?php echo Yii::t('main', 'Sähköpostin saaja'); ?>...">
 
                             <label for="firstname" class="field-icon">
                               <i class="glyphicon glyphicon-calendar"></i>
@@ -104,7 +104,7 @@
                         <div class="section">
                           <label class="field prepend-icon">
 
-   			    <input type="text" class="gui-input" name="kuka" value="<?php if(isset($_POST['kuka'])) echo $_POST['kuka']; ?>" placeholder="<?php echo Yii::t('main', 'Admin nimi'); ?>...">
+   			    <input type="text" class="gui-input" name="kuka" value="<?php if(isset($_GET['kuka'])) echo $_GET['kuka']; ?>" placeholder="<?php echo Yii::t('main', 'Admin nimi'); ?>...">
 
                             <label for="firstname" class="field-icon">
                               <i class="glyphicon glyphicon-user"></i>
@@ -114,11 +114,11 @@
                       </div>
 
 
-                      <div class="col-md-3">
+                      <div class="col-md-2">
                         <div class="section">
                           <label class="field prepend-icon">
 
-   			    <input type="text" class="gui-input" name="log_nimike" value="<?php if(isset($_POST['log_nimike'])) echo $_POST['log_nimike']; ?>" placeholder="<?php echo Yii::t('main', 'Tehtävän nimike'); ?>...">
+   			    <input type="text" class="gui-input" name="log_nimike" value="<?php if(isset($_GET['log_nimike'])) echo $_GET['log_nimike']; ?>" placeholder="<?php echo Yii::t('main', 'Tehtävän nimike'); ?>...">
 
                             <label for="firstname" class="field-icon">
                               <i class="glyphicon glyphicon-calendar"></i>
@@ -129,7 +129,7 @@
                         <div class="section">
                           <label class="field prepend-icon">
 
-   			    <input type="text" class="gui-input" name="model" value="<?php if(isset($_POST['model'])) echo $_POST['model']; ?>" placeholder="<?php echo Yii::t('main', 'Model'); ?>...">
+   			    <input type="text" class="gui-input" name="model" value="<?php if(isset($_GET['model'])) echo $_GET['model']; ?>" placeholder="<?php echo Yii::t('main', 'Model'); ?>...">
 
                             <label for="firstname" class="field-icon">
                               <i class="glyphicon glyphicon-user"></i>
@@ -138,6 +138,29 @@
                         </div>
                       </div>
 
+                      <div class="col-md-2">
+                        <div class="section">
+                          <label class="field select">
+
+			   <?php
+				$l = Log::model()->findAll(array('group' => 'tilanne'));
+				$option = array();
+				foreach($l as $item)
+					$option[] = $item->tilanne;
+			   ?>
+			   <select class="gui-input" name="tilanne" id="tilanne">
+       				<option value=""><?=Yii::t('main', 'Valitse')?></option>
+				<?php foreach($option as $o) : ?>
+       				<option value="<?=$o?>" <?php echo (isset($_GET['tilanne']) and $_GET['tilanne'] == $o)? 'selected': ''; ?>><?=Yii::t('main', $o)?></option>
+				<?php endforeach; ?>
+			   </select>
+
+                            <label for="firstname" class="field-icon">
+                            <i class="arrow double"></i>
+                            </label>
+                          </label>
+                        </div>
+                      </div>
 
                       <div class="col-md-2">
         	        <input type="submit" class="btn btn-primary btn-lg haemob btn-block myBgColors" value="<?php echo Yii::t('main', 'Hae'); ?>">
@@ -169,12 +192,12 @@
   <!--<th></th>-->
   <th><?php echo Yii::t('main', 'Pvm'); ?></th>
   <th><?php echo Yii::t('main', 'Tehtävän nimike'); ?></th>
-  <?php if(isset($_POST['log_category']) and $_POST['log_category'] == 1): ?>
+  <?php if(isset($_GET['log_category']) and $_GET['log_category'] == 1): ?>
   <th><?php echo Yii::t('main', 'Saaja'); ?></th>
   <th><?php echo Yii::t('main', 'Otsikko'); ?></th>
   <th><?php echo Yii::t('main', 'Viesti'); ?></th>
   <th><?php echo Yii::t('main', 'Liitteen sisältö'); ?></th>
-  <?php elseif(isset($_POST['log_category']) and $_POST['log_category'] == 2): ?>
+  <?php elseif(isset($_GET['log_category']) and $_GET['log_category'] == 2): ?>
   <th><?php echo Yii::t('main', 'Nimi'); ?></th>
   <th><?php echo Yii::t('main', 'Tilanne'); ?></th>
   <th><?php echo Yii::t('main', 'Vanhat arvot'); ?></th>
