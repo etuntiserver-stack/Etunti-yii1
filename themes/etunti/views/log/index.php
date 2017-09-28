@@ -114,6 +114,29 @@
                       </div>
 
 
+                      <div class="col-md-3">
+                        <div class="section">
+                          <label class="field prepend-icon">
+
+   			    <input type="text" class="gui-input" name="log_nimike" value="<?php if(isset($_POST['log_nimike'])) echo $_POST['log_nimike']; ?>" placeholder="<?php echo Yii::t('main', 'Tehtävän nimike'); ?>...">
+
+                            <label for="firstname" class="field-icon">
+                              <i class="glyphicon glyphicon-calendar"></i>
+                            </label>
+                          </label>
+                        </div>
+
+                        <div class="section">
+                          <label class="field prepend-icon">
+
+   			    <input type="text" class="gui-input" name="model" value="<?php if(isset($_POST['model'])) echo $_POST['model']; ?>" placeholder="<?php echo Yii::t('main', 'Model'); ?>...">
+
+                            <label for="firstname" class="field-icon">
+                              <i class="glyphicon glyphicon-user"></i>
+                            </label>
+                          </label>
+                        </div>
+                      </div>
 
 
                       <div class="col-md-2">

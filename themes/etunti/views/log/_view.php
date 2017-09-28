@@ -26,6 +26,7 @@
 	</td>
 	<td>
 		<?php echo $this->nimikeMuutos($data->log_nimike); ?>
+		<?php echo ((!empty($data->model))?'<p><b>Model:</b>'.$data->model.'</p>':''); ?>
 	</td>
 	<?php if(isset($_POST['log_category']) and $_POST['log_category'] == 1): ?>
 	<td>
