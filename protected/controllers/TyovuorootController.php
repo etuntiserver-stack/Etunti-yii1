@@ -3302,6 +3302,8 @@ class TyovuorootController extends Controller
 					Tyovuoroot::model()->updateAll($newPostArr, $criteria);
 				  	$t = Tyovuoroot::model()->findAll($criteria);
 
+					ToistuvatTyovuorot::model()->updateByPk($edellinenToistuva->id, $newPostArr);
+
 					foreach($t as $item)
 					{
 
@@ -3324,22 +3326,14 @@ class TyovuorootController extends Controller
 			// <-- LOG
 			if( $saankoSuoritta == 1 )
 			{
+			$n_t = ToistuvatTyovuorot::model()->findByPk($edellinenToistuva->id);
 			$model_log 	= 'ToistuvatTyovuorot';
 			$name_log 	= 'Toistuvat työvuorot';
 			$status_log 	= 'Update';
-			if(isset($_POST[$model_log]) and isset($edellinenToistuva->id))
+			if(isset($_POST[$model_log]) and isset($edellinenToistuva->id) and isset($n_t->id))
 			{
 				$old_values = json_encode($edellinenToistuva->attributes);
-
-				if(isset($_POST['P']))
-				$_POST[$model_log]['viikko_paivat'] = $_POST['P'];
-				if(isset($_POST['tyopaari']))
-				{
-					$_POST[$model_log]['tyopaari'] = $_POST['tyopaari'];
-					array_push($_POST[$model_log]['tyopaari'], $model->tid);
-				}
-
-				$new_values = json_encode($_POST[$model_log]);
+				$new_values = json_encode($n_t->attributes);
 				$site = Yii::app()->createController('Site');
 				$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
 			}
