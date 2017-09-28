@@ -425,6 +425,23 @@ $xml = '
 	{
 		if(isset($_POST['id']))
 		{
+
+			$m_d = Mobile::model()->findbypk($_POST['id']);
+
+			if(isset($m_d->id))
+			{
+				// <-- LOG
+				$model_log 	= 'Mobile';
+				$name_log 	= 'Tunnit';
+				$status_log 	= 'Delete';
+	
+					$old_values = json_encode($m_d->attributes);
+					$new_values = null;
+					$site = Yii::app()->createController('Site');
+					$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+				//     LOG -->
+			}
+
 			Mobile::model()->deletebypk($_POST['id']);
 			Toteutuneet::model()->deleteAll(" kid='".$_POST['id']."' ");
 			echo json_encode('poistettu ID '.$_POST['id']);
@@ -779,6 +796,21 @@ $xml = '
 			if($model->save()){
 
 
+				// <-- LOG
+			   	$m_m = Mobile::model()->findByPk($model->kid);
+				if( isset($model->id) and isset($m_m->id) )
+				{
+				$model_log 	= 'Toteutuneet';
+				$name_log 	= 'Tuntien hyväksyntä';
+				$status_log 	= 'Update from mobile';
+
+					$old_values = json_encode($m_m->attributes);
+					$new_values = json_encode($model->attributes);
+					$site = Yii::app()->createController('Site');
+					$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+				}
+				//     LOG -->
+
 			   	Mobile::model()->updateByPk($model->kid, array('sairaus'=>$model->sairaus));
 
 			   	$did = date("Ymd",strtotime($model->aloitan));
@@ -826,6 +858,8 @@ $xml = '
 	 		$tekijan_nimi	= $model->tekijan_nimi;
 
 			$k = Kohteet::model()->findbypk($_POST['Toteutuneet']['kohde_kannasta']);
+
+			$vanha_attr = $model->attributes;
 			$model->attributes=$_POST['Toteutuneet'];
 			$model->aloitan = date("d.m.Y H:i:s",strtotime($_POST['Toteutuneet']['aloitan']));
 			$model->loppui = date("d.m.Y H:i:s",strtotime($_POST['Toteutuneet']['loppui']));
@@ -840,6 +874,22 @@ $xml = '
 			if($model->save()){
 
 			   Mobile::model()->updateByPk($model->kid, array('sairaus'=>$model->sairaus));
+
+
+				// <-- LOG
+				if( isset($model->id) )
+				{
+				$model_log 	= 'Toteutuneet';
+				$name_log 	= 'Tuntien hyväksyntä';
+				$status_log 	= 'Update';
+	
+					$old_values = json_encode($vanha_attr);
+					$new_values = json_encode($model->attributes);
+					$site = Yii::app()->createController('Site');
+					$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+				}
+				//     LOG -->
+
 
 			   $did = date("Ymd",strtotime($model->aloitan));
 			   echo $did."_".$model->tid;

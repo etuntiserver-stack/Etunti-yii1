@@ -356,6 +356,20 @@ class AsiakkaatController extends Controller
 			if($model->save())
 			{
 
+				// <-- LOG
+				if( isset($model->id) )
+				{
+				$model_log 	= 'Asiakkaat';
+				$name_log 	= 'Asiakas';
+				$status_log 	= 'Create';
+	
+					$old_values = null;
+					$new_values = json_encode($model->attributes);
+					$site = Yii::app()->createController('Site');
+					$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+				}
+				//     LOG -->
+
 			   	// <-- Vinkki
 				$vinkki = VinkkiExtranet::model()->findByPk($model->vinkki_id);
 				if(isset($vinkki->id))
@@ -500,8 +514,8 @@ class AsiakkaatController extends Controller
 
 		if(isset($_POST['Asiakkaat']))
 		{
-//print_r($_POST['Asiakkaat']['hinta_sis_alv']);
-//exit;
+
+			$vanha_attr = $model->attributes;
 			$model->attributes=$_POST['Asiakkaat'];
 
 			if(isset($_POST['Asiakkaat']['ryhma']))
@@ -511,6 +525,19 @@ class AsiakkaatController extends Controller
 
 			if($model->save())
 			{
+
+
+				// <-- LOG
+				$model_log 	= 'Asiakkaat';
+				$name_log 	= 'Asiakas';
+				$status_log 	= 'Update';
+	
+					$old_values = json_encode($vanha_attr);
+					$new_values = json_encode($model->attributes);
+					$site = Yii::app()->createController('Site');
+					$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+				//     LOG -->
+
 
 			   // <-- Netvisor
 			   $a = Asetukset::model()->findbypk(1);
@@ -548,6 +575,41 @@ class AsiakkaatController extends Controller
 	   $site = Yii::app()->createController('Site');
 	   $site[0]->checkOikeus($checkOikeus);
 	//  Oikeudet -->
+
+
+		$a_d = Asiakkaat::model()->findbypk($id);
+		$k_d = Kohteet::model()->findAll(" asiakas_id='".$id."' ");
+
+			if(isset($a_d->id))
+			{
+				// <-- LOG
+				$model_log 	= 'Asiakkaat';
+				$name_log 	= 'Asiakas';
+				$status_log 	= 'Delete';
+	
+					$old_values = json_encode($a_d->attributes);
+					$new_values = null;
+					$site = Yii::app()->createController('Site');
+					$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+				//     LOG -->
+			}
+
+			if(count($k_d) > 0)
+			{
+			    foreach($k_d as $k_m)
+			    {
+				// <-- LOG
+				$model_log 	= 'Kohteet';
+				$name_log 	= 'Kohde';
+				$status_log 	= 'Delete';
+	
+					$old_values = json_encode($k_m->attributes);
+					$new_values = null;
+					$site = Yii::app()->createController('Site');
+					$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+				//     LOG -->
+			    }
+			}
 
 
 		Kohteet::model()->deleteAll(" asiakas_id='".$id."' ");

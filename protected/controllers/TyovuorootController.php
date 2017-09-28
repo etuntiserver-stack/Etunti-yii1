@@ -721,6 +721,21 @@ class TyovuorootController extends Controller
 				$edelliset_tvuoro_ids = array_values( array_diff($edelliset_tvuoro_ids, array($ketjustaPois)) );
 
 				$return[] = array('tid'=>$model->tid, 'pvm'=>$model->pvm, 'ymd'=>date("Ymd",strtotime($model->pvm)));
+
+			// <-- LOG
+			if( isset($model->id) )
+			{
+			$model_log 	= 'Tyovuoroot';
+			$name_log 	= 'Työvuorot';
+			$status_log 	= 'Delete';
+
+				$old_values = json_encode($model->attributes);
+				$new_values = null;
+				$site = Yii::app()->createController('Site');
+				$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+			}
+			//     LOG -->
+
 			}
 
 			Tyovuoroot::model()->deleteAll($poistoCriteria);
@@ -732,6 +747,21 @@ class TyovuorootController extends Controller
 				));
 			} elseif( is_array($edelliset_tvuoro_ids) and count($edelliset_tvuoro_ids) == 0 )
 			{
+
+			// <-- LOG
+			if( isset($model->toistuva_id) )
+			{
+			$model_log 	= 'ToistuvatTyovuorot';
+			$name_log 	= 'Toistuvat työvuorot';
+			$status_log 	= 'Delete';
+				$t_m = ToistuvatTyovuorot::model()->findByPk($model->toistuva_id);
+				$old_values = json_encode($t_m->attributes);
+				$new_values = null;
+				$site = Yii::app()->createController('Site');
+				$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+			}
+			//     LOG -->
+
 				ToistuvatTyovuorot::model()->findByPk($model->toistuva_id)->delete();
 			}
 
@@ -748,6 +778,21 @@ class TyovuorootController extends Controller
 			{
 				$return[] = array('tid'=>$model->tid, 'pvm'=>$model->pvm, 'ymd'=>date("Ymd",strtotime($model->pvm)));
 			}
+
+			// <-- LOG
+			if( isset($model->id) )
+			{
+			$model_log 	= 'Tyovuoroot';
+			$name_log 	= 'Työvuorot';
+			$status_log 	= 'Delete';
+
+				$old_values = json_encode($model->attributes);
+				$new_values = null;
+				$site = Yii::app()->createController('Site');
+				$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+			}
+			//     LOG -->
+
 			Tyovuoroot::model()->deletebypk($model->id);
 			echo json_encode($return);
 			exit;
@@ -796,6 +841,21 @@ class TyovuorootController extends Controller
 			}
 			//     Jos se oli toistuvassa, poistetaan sen työvuoro ID -->
 
+			// <-- LOG
+			if( isset($t->id) )
+			{
+			$model_log 	= 'Tyovuoroot';
+			$name_log 	= 'Työvuorot';
+			$status_log 	= 'Delete';
+
+				$old_values = json_encode($t->attributes);
+				$new_values = null;
+				$site = Yii::app()->createController('Site');
+				$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+			}
+			//     LOG -->
+
+
 			Tyovuoroot::model()->deletebypk($ex[0]);
 		}
 
@@ -822,6 +882,20 @@ class TyovuorootController extends Controller
 			$model->toistuva_id=0;
 			$model->tyopaari='';
 			$model->save();
+
+			// <-- LOG
+			if( isset($t->id) and isset($model->id) )
+			{
+			$model_log 	= 'Tyovuoroot';
+			$name_log 	= 'Työvuorot';
+			$status_log 	= 'Copy';
+
+				$old_values = json_encode($t->attributes);
+				$new_values = json_encode($model->attributes);
+				$site = Yii::app()->createController('Site');
+				$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+			}
+			//     LOG -->
 			
 		}
 
@@ -873,7 +947,24 @@ class TyovuorootController extends Controller
 			$model->toistuva_id=0;
 			$model->tyopaari='';
 			$model->save();
-			$t = Tyovuoroot::model()->deletebypk($ex[0]);	
+
+			Tyovuoroot::model()->deletebypk($ex[0]);	
+
+
+			// <-- LOG
+			if( isset($t->id) and isset($model->id) )
+			{
+			$model_log 	= 'Tyovuoroot';
+			$name_log 	= 'Työvuorot';
+			$status_log 	= 'Move';
+
+				$old_values = json_encode($t->attributes);
+				$new_values = json_encode($model->attributes);
+				$site = Yii::app()->createController('Site');
+				$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+			}
+			//     LOG -->
+
 			} else {
 			echo json_encode('id puuttuu');
 			break;
@@ -1260,6 +1351,24 @@ class TyovuorootController extends Controller
 			//  tvuoro_ids Updater -->
 
 
+			// <-- LOG
+			if( $saankoSuoritta == 1 )
+			{
+			$model_log 	= 'ToistuvatTyovuorot';
+			$name_log 	= 'Toistuvat työvuorot';
+			$status_log 	= 'Create';
+			if(isset($toistuva->id))
+			{
+				$old_values = null;
+				$n_m = ToistuvatTyovuorot::model()->findbypk($toistuva->id);
+				$new_values = json_encode($n_m->attributes);
+				$site = Yii::app()->createController('Site');
+				$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+			}
+			}
+			//     LOG -->
+
+
 			echo json_encode($return);
 			exit;
 		}
@@ -1327,6 +1436,21 @@ class TyovuorootController extends Controller
 
 			}
 			// jos on tyopaari -->
+
+
+			// <-- LOG
+			$model_log 	= 'Tyovuoroot';
+			$name_log 	= 'Työvuorot';
+			$status_log 	= 'Create';
+			if(isset($_POST[$model_log]))
+			{
+				$old_values = null;
+				$n_m = Tyovuoroot::model()->findbypk($model->id);
+				$new_values = json_encode($n_m->attributes);
+				$site = Yii::app()->createController('Site');
+				$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+			}
+			//     LOG -->
 
 
 			$return[] = array('tid'=>$model->tid, 'pvm'=>$model->pvm, 'ymd'=>date("Ymd",strtotime($model->pvm)));
@@ -1524,6 +1648,21 @@ class TyovuorootController extends Controller
 					array('tvuoro_ids' => json_encode($update_vanhat_ids), 'pto' => date("Y-m-d", strtotime('-1 day')))
 				);
 				} else {
+
+				// <-- LOG
+				if( isset($edellinenToistuva->id) )
+				{
+				$model_log 	= 'ToistuvatTyovuorot';
+				$name_log 	= 'Toistuvat työvuorot';
+				$status_log 	= 'Delete';
+					$t_m = ToistuvatTyovuorot::model()->findByPk($edellinenToistuva->id);
+					$old_values = json_encode($t_m->attributes);
+					$new_values = null;
+					$site = Yii::app()->createController('Site');
+					$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+				}
+				//     LOG -->
+
 				ToistuvatTyovuorot::model()->findbypk($edellinenToistuva->id)->delete();
 				}
 
@@ -1657,6 +1796,20 @@ class TyovuorootController extends Controller
 			if($saankoSuoritta == 1)
 			{
 			$toistuva->save();
+
+				// <-- LOG
+				if( isset($model->id) )
+				{
+				$model_log 	= 'Tyovuoroot';
+				$name_log 	= 'Työvuorot';
+				$status_log 	= 'Delete';
+					$old_values = json_encode($model->attributes);
+					$new_values = null;
+					$site = Yii::app()->createController('Site');
+					$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+				}
+				//     LOG -->
+
 			$model->delete();
 			}
 
@@ -2803,7 +2956,22 @@ class TyovuorootController extends Controller
 
 					} else {
 
+
+						// <-- LOG
+						if( isset($item->id) )
+						{
+						$model_log 	= 'Tyovuoroot';
+						$name_log 	= 'Työvuorot';
+						$status_log 	= 'Delete';
+							$old_values = json_encode($item->attributes);
+							$new_values = null;
+							$site = Yii::app()->createController('Site');
+							$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+						}
+						//     LOG -->
+
 					    Tyovuoroot::model()->findByPk($item->id)->delete();
+
 					    $return[] = array(
 						'tid'=>$item->tid, 
 						'pvm'=>$item->pvm, 
@@ -3134,6 +3302,8 @@ class TyovuorootController extends Controller
 					Tyovuoroot::model()->updateAll($newPostArr, $criteria);
 				  	$t = Tyovuoroot::model()->findAll($criteria);
 
+					ToistuvatTyovuorot::model()->updateByPk($edellinenToistuva->id, $newPostArr);
+
 					foreach($t as $item)
 					{
 
@@ -3151,6 +3321,24 @@ class TyovuorootController extends Controller
 			}
 			//     Updater kaikki -->
 
+
+
+			// <-- LOG
+			if( $saankoSuoritta == 1 )
+			{
+			$n_t = ToistuvatTyovuorot::model()->findByPk($edellinenToistuva->id);
+			$model_log 	= 'ToistuvatTyovuorot';
+			$name_log 	= 'Toistuvat työvuorot';
+			$status_log 	= 'Update';
+			if(isset($_POST[$model_log]) and isset($edellinenToistuva->id) and isset($n_t->id))
+			{
+				$old_values = json_encode($edellinenToistuva->attributes);
+				$new_values = json_encode($n_t->attributes);
+				$site = Yii::app()->createController('Site');
+				$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+			}
+			}
+			//     LOG -->
 
 
 			if( count($return) > 0 )
@@ -3176,6 +3364,18 @@ class TyovuorootController extends Controller
 		{
 
 
+		// <-- LOG
+		$model_log 	= 'Tyovuoroot';
+		$name_log 	= 'Työvuorot';
+		$status_log 	= 'Update';
+		if(isset($_POST[$model_log]))
+		{
+			$old_values = json_encode($model->attributes);
+			$new_values = json_encode($_POST[$model_log]);
+			$site = Yii::app()->createController('Site');
+			$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+		}
+		//     LOG -->
 
 
 			// <-- Oliko se toistuvassa tyovuorossa. Poistetaan ketjusta

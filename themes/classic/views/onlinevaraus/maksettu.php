@@ -375,9 +375,41 @@ $message .= '
 			$t->tietoja=$kuvaus;
 			$t->save();
 
+
+				// <-- LOG
+				if( isset($t->id) )
+				{
+				$t = Tyovuoroot::model()->findbypk($t->id);
+				$model_log 	= 'Tyovuoroot';
+				$name_log 	= 'Työvuorot';
+				$status_log 	= 'Luo työvuoro onlinevarauksen kautta';
+
+					$old_values = null;
+					$new_values = json_encode($t->attributes);
+					$site = Yii::app()->createController('Site');
+					$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+				}
+				//     LOG -->
+
 			$o = Onlinevaraus::model()->findbypk($ov->id);
 			$o->tila=1;
 			$o->save();
+
+
+				// <-- LOG
+				if( isset($o->id) )
+				{
+				$o = Onlinevaraus::model()->findbypk($o->id);
+				$model_log 	= 'Onlinevaraus';
+				$name_log 	= 'Onlinevaraus';
+				$status_log 	= 'Create';
+
+					$old_values = null;
+					$new_values = json_encode($o->attributes);
+					$site = Yii::app()->createController('Site');
+					$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+				}
+				//     LOG -->
 
 			$this->redirect(Yii::app()->request->baseUrl.'/index.php/onlinevaraus/maksettu?check=ok');
 	

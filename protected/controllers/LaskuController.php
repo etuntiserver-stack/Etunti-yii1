@@ -689,6 +689,20 @@ class LaskuController extends Controller
 			Lasku::model()->updatebypk($model->id, array('viitenumero'=>$viite));
 
 
+				// <-- LOG
+			   	$l_m = Lasku::model()->findByPk($model->id);
+				if( isset($l_m->id) )
+				{
+				$model_log 	= 'Lasku';
+				$name_log 	= 'Lasku';
+				$status_log 	= 'Create';
+
+					$old_values = null;
+					$new_values = json_encode($l_m->attributes);
+					$site = Yii::app()->createController('Site');
+					$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+				}
+				//     LOG -->
 
 
 
@@ -783,10 +797,27 @@ class LaskuController extends Controller
 		echo '</pre>';
 		exit;
 		*/
+			$vanha_attr 	= $model->attributes;
 			$model->attributes=$_POST['Lasku'];
 			$model->paivays=date("Y-m-d", strtotime($_POST['Lasku']['paivays']));
 			$model->erapaiva=date("Y-m-d", strtotime($_POST['Lasku']['erapaiva']));
 			if($model->save()){
+
+
+				// <-- LOG
+				if( isset($model->id) )
+				{
+				$model_log 	= 'Lasku';
+				$name_log 	= 'Lasku';
+				$status_log 	= 'Update';
+
+					$old_values = json_encode($vanha_attr);
+					$new_values = json_encode($model->attributes);
+					$site = Yii::app()->createController('Site');
+					$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+				}
+				//     LOG -->
+
 
 			LaskunRivit::model()->deleteAll("lid='".$id."'");
 
@@ -847,6 +878,23 @@ class LaskuController extends Controller
 	   $site = Yii::app()->createController('Site');
 	   $site[0]->checkOikeus($checkOikeus);
 	//  Oikeudet -->
+
+
+		$l_d = Lasku::model()->findbypk($id);
+
+			if(isset($l_d->id))
+			{
+				// <-- LOG
+				$model_log 	= 'Lasku';
+				$name_log 	= 'Lasku';
+				$status_log 	= 'Delete';
+	
+					$old_values = json_encode($l_d->attributes);
+					$new_values = null;
+					$site = Yii::app()->createController('Site');
+					$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+				//     LOG -->
+			}
 
 		$this->loadModel($id)->delete();
 		LaskunRivit::model()->deleteAll(" lid='".$id."' ");

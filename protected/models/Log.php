@@ -22,7 +22,7 @@ class Log extends DB2ActiveRecord
 	public function tableName()
 	{
 		$tb_name = 'log';
-		$check_this_table = false;
+		$check_this_table = true;
 		//unset(Yii::app()->session[$tb_name]); // this use if want many times play
 		if(!isset(Yii::app()->session[$tb_name]))
 		{
@@ -53,9 +53,10 @@ class Log extends DB2ActiveRecord
                      'email_attachment' => 'varchar(500) ',
                      'email_attachment_sisalto' => 'text ',
                      'log_nimike' => 'varchar(100) ',
-
-
-
+                     'old_values' => 'text ',
+                     'new_values' => 'text ',
+                     'tilanne' => 'varchar(255) ',
+                     'model' => 'varchar(255) ',
 
 		);
 
@@ -82,9 +83,9 @@ class Log extends DB2ActiveRecord
 			array('log_category', 'numerical', 'integerOnly'=>true),
 			array('kuka', 'length', 'max'=>50),
 			array('log_nimike', 'length', 'max'=>100),
-			array('email_to, email_subject', 'length', 'max'=>255),
+			array('email_to, email_subject, tilanne, model', 'length', 'max'=>255),
 			array('email_attachment', 'length', 'max'=>500),
-			array('text, email_message, email_attachment_sisalto', 'length', 'max'=>60000),
+			array('text, email_message, email_attachment_sisalto, old_values, new_values', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('id, time, text, kuka, log_category, email_to, email_subject, email_message, email_attachment', 'safe', 'on'=>'search'),

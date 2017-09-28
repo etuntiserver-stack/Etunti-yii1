@@ -83,6 +83,7 @@ Yii::app()->clientScript->registerPackage('bootstrapJS');
 Yii::app()->clientScript->registerPackage('bootstrapCSS');
 */
 
+
 // <-- Huoltokatko
 if(isset(Yii::app()->user->domain))
 {

@@ -125,12 +125,12 @@ class ToistuvatTyovuorot extends DB2ActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'time' => 'Time',
-			'pfrom' => 'Pfrom',
-			'pto' => 'Pto',
+			'time' => Yii::t('main', 'Luotu'),
+			'pfrom' => Yii::t('main', 'Aloitus'),
+			'pto' => Yii::t('main', 'Lopetus'),
 			'viikkoja' => 'Viikkoja',
-			'viikko_paivat' => 'Viikko Paivat',
-			'tid' => 'Tid',
+			'viikko_paivat' => Yii::t('main', 'Viikko päivät'),
+			'tid' => Yii::t('main', 'Työntekijän id nro.'),
 			'kohde' => 'Kohde',
 			'pvm' => 'Pvm',
 			'alku' => 'Alku',

@@ -154,15 +154,27 @@ class LogController extends Controller
        		$criteria = new CDbCriteria();
 	        $criteria->order = " id DESC ";
 
-		if(isset($_POST['log_category']) and $_POST['log_category'] != 'kaikki')
-	        $criteria->addCondition (" log_category='".(int)$_POST['log_category']."' ");
+		if(isset($_GET['log_category']) and $_GET['log_category'] != 'kaikki')
+	        $criteria->addCondition (" log_category='".(int)$_GET['log_category']."' ");
 
-		if(isset($_POST['email_to']))
-	        $criteria->addCondition (" email_to LIKE '%".$_POST['email_to']."%' ");
+		if(isset($_GET['email_to']))
+	        $criteria->addCondition (" email_to LIKE '%".$_GET['email_to']."%' ");
 
-		if(isset($_POST['from']) and isset($_POST['to']))
+		if(isset($_GET['kuka']))
+	        $criteria->addCondition (" kuka LIKE '%".$_GET['kuka']."%' ");
+
+		if(isset($_GET['log_nimike']))
+	        $criteria->addCondition (" log_nimike LIKE '%".$_GET['log_nimike']."%' ");
+
+		if(isset($_GET['tilanne']))
+	        $criteria->addCondition (" tilanne LIKE '%".$_GET['tilanne']."%' ");
+
+		if(isset($_GET['model']))
+	        $criteria->addCondition (" model LIKE '%".$_GET['model']."%' ");
+
+		if(isset($_GET['from']) and isset($_GET['to']) and !empty($_GET['from']) and !empty($_GET['to']))
 		{
-	        	$criteria->addCondition (" DATE(time) BETWEEN '".date("Y-m-d H:i:s", strtotime($_POST['from']))."' AND '".date("Y-m-d H:i:s", strtotime($_POST['to']))."' ");
+	        	$criteria->addCondition (" DATE(time) BETWEEN '".date("Y-m-d H:i:s", strtotime($_GET['from']))."' AND '".date("Y-m-d H:i:s", strtotime($_GET['to']))."' ");
 		}
 
 
@@ -231,5 +243,21 @@ class LogController extends Controller
 			$str = Yii::t('main', 'Uusi tilaus');
 
 		return $str;
+	}
+
+	protected function etuSukunimi($tid)
+	{
+	   $site = Yii::app()->createController('Site');
+	   return $site[0]->etuSukunimi($tid);
+	}
+
+	protected function kohdeOsoite($id)
+	{
+		$k = Kohteet::model()->findByPk($id);
+		if(isset($k->id) and !empty($k->osoite))		
+			return $k->osoite;
+		else
+			return false;
+
 	}
 }

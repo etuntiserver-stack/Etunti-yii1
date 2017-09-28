@@ -256,7 +256,24 @@ class KohteetController extends Controller
 		{
 			$model->attributes=$_POST['Kohteet'];
 			if($model->save())
+			{
+
+				// <-- LOG
+				if( isset($model->id) )
+				{
+				$model_log 	= 'Kohteet';
+				$name_log 	= 'Kohde';
+				$status_log 	= 'Create';
+	
+					$old_values = null;
+					$new_values = json_encode($model->attributes);
+					$site = Yii::app()->createController('Site');
+					$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+				}
+				//     LOG -->
+
 				$this->redirect(array('view','id'=>$model->id));
+			}
 		}
 
 		$this->render('createfromasiakas',array(
@@ -284,6 +301,21 @@ class KohteetController extends Controller
 			$model->attributes=$_POST['Kohteet'];
 			if($model->save())
 			{
+
+				// <-- LOG
+				if( isset($model->id) )
+				{
+				$model_log 	= 'Kohteet';
+				$name_log 	= 'Kohde';
+				$status_log 	= 'Create';
+	
+					$old_values = null;
+					$new_values = json_encode($model->attributes);
+					$site = Yii::app()->createController('Site');
+					$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+				}
+				//     LOG -->
+
 
 				// <-- Koordinatiit
 				$model=$this->loadModel($model->id);
@@ -345,9 +377,23 @@ class KohteetController extends Controller
 
 		if(isset($_POST['Kohteet']))
 		{
+
+			$vanha_attr = $model->attributes;
 			$model->attributes=$_POST['Kohteet'];
 			if($model->save())
 			{
+
+				// <-- LOG
+				$model_log 	= 'Kohteet';
+				$name_log 	= 'Kohde';
+				$status_log 	= 'Update';
+	
+					$old_values = json_encode($vanha_attr);
+					$new_values = json_encode($model->attributes);
+					$site = Yii::app()->createController('Site');
+					$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+				//     LOG -->
+
 				Yii::app()->user->setFlash('success', "Tallennettu.");
 				$this->redirect(array('index'));
 			}
@@ -391,6 +437,23 @@ class KohteetController extends Controller
 	   $site = Yii::app()->createController('Site');
 	   $site[0]->checkOikeus($checkOikeus);
 	//  Oikeudet -->
+
+
+		$k_d = Kohteet::model()->findbypk($id);
+
+			if(isset($k_d->id))
+			{
+				// <-- LOG
+				$model_log 	= 'Kohteet';
+				$name_log 	= 'Kohde';
+				$status_log 	= 'Delete';
+	
+					$old_values = json_encode($k_d->attributes);
+					$new_values = null;
+					$site = Yii::app()->createController('Site');
+					$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+				//     LOG -->
+			}
 
 		$this->loadModel($id)->delete();
 
