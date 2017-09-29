@@ -31,18 +31,14 @@ window.onload = function () {
 
 
 
-<table id="ylataulu" class="table">
- <tr><td>
+
   <?php $asetukset=Asetukset::model()->findByPk(1); ?>
-  <img src="<?php echo $asetukset->logon_polkku; ?>" height="<?php echo $asetukset->logon_korkeus; ?>">
- </td><td align="right">
-  <?php echo Yii::t('main', $tyyppi); ?>
+  <p><img src="<?php echo $asetukset->logon_polkku; ?>" height="<?php echo $asetukset->logon_korkeus; ?>"></p>
+  
   <?php if(isset(Yii::app()->session['from']) and isset(Yii::app()->session['to'])) : ?>
-    <?php echo date("d.m.Y",strtotime(Yii::app()->session['from'])).'-'.date("d.m.Y",strtotime(Yii::app()->session['to'])); ?>
+    <p><b><?php echo Yii::t('main', $tyyppi); ?> <?php echo date("d.m.Y",strtotime(Yii::app()->session['from'])).'-'.date("d.m.Y",strtotime(Yii::app()->session['to'])); ?></b></p>
   <?php endif; ?>
- </td>
- </tr>
-</table>
+
 
 <br>
 
