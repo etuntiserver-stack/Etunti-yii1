@@ -347,8 +347,19 @@ class LaskuController extends Controller
 	{
 		$tuote = LaskutusTuotteet::model()->findbypk($_POST['tuoteID']);
 		if(isset($tuote->id)) $tuoteID = $tuote->id; else $tuoteID = '';
+		{
+			$arr = array(
+				'id' => $tuote->id,
+				'tuotenimi' => $tuote->tuotenimi,
+				'hinta_alv_0' => $tuote->hinta_alv_0,
+				'alv' => $tuote->alv,
+				'yksikko' => $tuote->yksikko,
+				'hinta_alv_sis' => $tuote->hinta_alv_sis,
+			);
+			echo json_encode($arr);
 
-		echo $tuote->tuotenimi."//".$tuote->hinta_alv_0."//".$tuote->alv."//".$tuote->yksikko."//".$tuote->hinta_alv_sis."//".$tuoteID;
+		}
+		exit;
 
 	}
 

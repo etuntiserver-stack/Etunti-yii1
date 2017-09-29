@@ -1014,7 +1014,7 @@ $("#uusiRivi").click(function() {
 function makeid()
 {
     var text = "";
-    var possible = "0123456789";
+    var possible = "123456789";
 
     for( var i=0; i < 7; i++ )
         text += possible.charAt(Math.floor(Math.random() * possible.length));
@@ -1029,9 +1029,9 @@ function jumpToPageBottom() {
 
 
 
-function valitseTuote(){
 
-$("table#TableRivit .valitseTuote").change(function() {
+$(document).delegate("table#TableRivit .valitseTuote","change",function(){
+
     var tuoteID = $(this).val();
     var num = $(this).attr("num");
 
@@ -1040,24 +1040,19 @@ $("table#TableRivit .valitseTuote").change(function() {
            type: "POST",
            data: { tuoteID : tuoteID },
            success: function(data){
-		var sp = data.split("//");
+		var sp = JSON.parse(data);
 
-		$("#kpl_"+num).val("1");
-
-		if(sp[0])
-		$("#tkoodi_"+num).val(sp[0]);
-		if(sp[1])
-		$("#hinta_"+num).val(sp[1]);
-		if(sp[3])
-		$("#yksikko_"+num+" option[value="+sp[3]+"]").attr('selected','selected');
-		if(sp[2])
-		$("#alv_"+num+" option[value="+sp[2]+"]").attr('selected','selected');
-
-		if(sp[5])
-		$("#tuoteID_"+num).val(sp[5]);
+		if(sp['id'])
+		{
+			$("#kpl_"+num).val(1);
+			$("#tkoodi_"+num).val(sp['tuotenimi']);
+			$("#hinta_"+num).val(parseFloat(sp['hinta_alv_0']));
+			$("#yksikko_"+num+" option[value="+sp['yksikko']+"]").attr('selected','selected');
+			$("#alv_"+num+" option[value="+sp['alv']+"]").attr('selected','selected');
+			$("#tuoteID_"+num).val(sp['id']);
+		}
 
 		eachLaskenta();
-		$("#lt_"+num).hide();
 		console.log(data)
            }
         });
@@ -1065,7 +1060,7 @@ $("table#TableRivit .valitseTuote").change(function() {
 });
 
 
-}
+
 
 
 
@@ -1079,27 +1074,13 @@ $("table#TableRivit .valitseTuote").change(function() {
 Rivi();
 function Rivi(){
 
-  valitseTuote();
-
   $(".onlyDigits ").attr('type', 'number').attr('step', '0.01');
-
-  $('#rivit input[type="number"]').keyup(function() {
-  	eachLaskenta();
-    	yhteensaTotal();
-
-  });
-
-  $('.for_tkoodi').keyup(function(){
-	var forID = $(this).attr("id").split("_");
-	$('#lt_'+forID[1]).hide();
-  });
 
 }
 
-
   eachLaskenta();
 
-  var aleAsiakkaasta = '';
+var aleAsiakkaasta = '';
 function eachLaskenta(){
 
   $("#rivit input").each(function() {
@@ -1110,10 +1091,10 @@ function eachLaskenta(){
 	var ale = 0;
 
 	var inputKenta = $(this).attr("id").split("_");
-	if($("#hinta_"+inputKenta[1]).length) { hinta_alv_0 = parseFloat($("#hinta_"+inputKenta[1]).val()) };
-	if($("#alv_"+inputKenta[1]).length) { alv = parseFloat($("#alv_"+inputKenta[1]).val()) };
-	if($("#kpl_"+inputKenta[1]).length) { kpl = parseFloat($("#kpl_"+inputKenta[1]).val()) };
-	if($("#ale_"+inputKenta[1]).length) { ale = parseFloat($("#ale_"+inputKenta[1]).val()) };
+	if($("#hinta_"+inputKenta[1]).val()) { hinta_alv_0 = parseFloat($("#hinta_"+inputKenta[1]).val()) };
+	if($("#alv_"+inputKenta[1]).val()) { alv = parseFloat($("#alv_"+inputKenta[1]).val()) };
+	if($("#kpl_"+inputKenta[1]).val()) { kpl = parseFloat($("#kpl_"+inputKenta[1]).val()) };
+	if($("#ale_"+inputKenta[1]).val()) { ale = parseFloat($("#ale_"+inputKenta[1]).val()) };
 
 
 	inputKenta[1] = parseFloat(inputKenta[1], 10);
@@ -1126,16 +1107,8 @@ function eachLaskenta(){
 	yhteensa = laske+veroton;
 
 	$("#hinta_alv_"+inputKenta[1]).val((laske).toFixed(2));
-
-	//if(veroton-laskeAleV > 0)
-	  $("#veroton_"+inputKenta[1]).val(veroton.toFixed(2));
-	//else
-	  //$("#veroton_"+inputKenta[1]).val('0.00');
-
-	//if(yhteensa-laskeAleY > 0)
-	  $("#yhteensa_alv_"+inputKenta[1]).val(yhteensa.toFixed(2));
-	//else
-	  //$("#yhteensa_alv_"+inputKenta[1]).val('0.00');
+	$("#veroton_"+inputKenta[1]).val(veroton.toFixed(2));
+	$("#yhteensa_alv_"+inputKenta[1]).val(yhteensa.toFixed(2));
 
   });
     	yhteensaTotal();
@@ -1160,6 +1133,12 @@ function yhteensaTotal(){
 	    $('#yhteensa_total').val(sum2.toFixed(2));
 	});
 }
+
+
+  $(document).delegate('#rivit input[type="number"]','keyup',function(){
+  	eachLaskenta();
+    	yhteensaTotal();
+  });
 
 
 $(".luoRiviTunti").click(function() {
