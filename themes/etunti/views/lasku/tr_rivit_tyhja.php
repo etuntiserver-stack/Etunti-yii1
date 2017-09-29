@@ -29,13 +29,24 @@
 
 	<input type="hidden" size="1" name="tuoteID[<?php echo $num; ?>]" id="tuoteID_<?php echo $num; ?>" class="form-control">
 
-	<input type="text" size="1" name="tkoodi[<?php echo $num; ?>]" id="tkoodi_<?php echo $num; ?>" class="for_tkoodi form-control" value="<?=$tuote?>" data-toggle="collapse"  data-target="#lt_<?php echo $num; ?>">
-	<?php
+	<div class="row">
+	  <div class="col-lg-12">
+	    <div class="input-group">
+	      <span class="input-group-btn">
+
+		<?php
 		$criteria = new CDbCriteria();
        		$criteria->condition = " is_active=1 ";
 		echo CHtml::dropdownList('','palvelu', CHtml::listData(LaskutusTuotteet::model()->findAll($criteria), 'id', 'tuotenimi'), 
-		array('empty'=>'Valitse tuote/palvelu','class'=>'form-control collapse valitseTuote input-sm','id'=>'lt_'.$num,'num'=>$num));
-	?>
+		array('empty'=>'','class'=>'form-control valitseTuote','id'=>'lt_'.$num,'num'=>$num));
+		?>
+
+	      </span>
+	      <input type="text" size="1" name="tkoodi[<?php echo $num; ?>]" id="tkoodi_<?php echo $num; ?>" class="for_tkoodi form-control form-group" value="<?=$tuote?>">
+	    </div><!-- /input-group -->
+	  </div><!-- /.col-lg-12 -->
+	</div>
+
 	</TD>
 
 	<TD><input type="text" size="5" name="kpl[<?php echo $num; ?>]" id="kpl_<?php echo $num; ?>" class="onlyDigits form-control" value="<?=$maara?>"><span class="errmsg"></span></TD>
