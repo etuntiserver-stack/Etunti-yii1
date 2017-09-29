@@ -65,7 +65,7 @@
 			    $item = '(ID: '.$item.') '.$this->etuSukunimi($item);
 			    if(isset($k) and $k == 'kohde' and $this->kohdeOsoite($item))
 			    $item = '(ID: '.$item.') '.$this->kohdeOsoite($item);
-			    if(isset($k) and $k == 'time')
+			    if(isset($k) and !empty($item) and $k == 'time')
 			    $item = date("d.m.Y H:i", strtotime($item));
 			    if(isset($k) and $k == 'tvuoro_ids')
 			    $item = '<textarea class="form-control">'.$item.'</textarea>';
@@ -94,7 +94,7 @@
 			    $item = '(ID: '.$item.') '.$this->etuSukunimi($item);
 			    if(isset($k) and $k == 'kohde' and $this->kohdeOsoite($item))
 			    $item = '(ID: '.$item.') '.$this->kohdeOsoite($item);
-			    if(isset($k) and $k == 'time')
+			    if(isset($k) and !empty($item) and $k == 'time')
 			    $item = date("d.m.Y H:i", strtotime($item));
 			    if(isset($k) and $k == 'tvuoro_ids')
 			    $item = '<textarea class="form-control">'.$item.'</textarea>';

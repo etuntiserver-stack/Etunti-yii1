@@ -77,25 +77,25 @@ public $tkohde_kannasta;
 
 		$table_structure = array(
 
-                     'asiakas_num' => 'varchar(50) MUL ',
-                     'time' => 'timestamp MUL DEFAULT CURRENT_TIMESTAMP ',
+                     'asiakas_num' => 'varchar(50)',
+                     'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP ',
                      'requests' => 'int(7) DEFAULT 1 ',
                      'puh_numero' => 'varchar(50) ',
                      'imei' => 'varchar(100) ',
                      'bluetooth_name' => 'varchar(50) ',
                      'sim_serial_number' => 'varchar(100) ',
                      'subscriber_id' => 'varchar(50) ',
-                     'my_location' => 'varchar(1000) MUL ',
+                     'my_location' => 'varchar(1000)',
                      'osoite' => 'varchar(255) ',
-                     'kohde_kannasta' => 'varchar(100) MUL ',
-                     'kohdenID' => 'int(7) MUL ',
-                     'aloitan' => 'varchar(20) MUL ',
-                     'loppui' => 'varchar(20) MUL ',
-                     'viesti' => 'varchar(250) MUL ',
-                     'tekijan_nimi' => 'varchar(50) MUL ',
-                     'tid' => 'int(7) MUL ',
-                     'etaisyys' => 'varchar(20) MUL ',
-                     'status' => 'int(1) MUL ',
+                     'kohde_kannasta' => 'varchar(100)',
+                     'kohdenID' => 'int(7)',
+                     'aloitan' => 'varchar(20)',
+                     'loppui' => 'varchar(20)',
+                     'viesti' => 'varchar(250)',
+                     'tekijan_nimi' => 'varchar(50)',
+                     'tid' => 'int(7)',
+                     'etaisyys' => 'varchar(20)',
+                     'status' => 'int(1)',
                      'tietoja' => 'text ',
                      'admin' => 'int(1) 0 ',
                      'hyvaksytty' => 'varchar(100) ',
@@ -104,8 +104,6 @@ public $tkohde_kannasta;
                      'sairaus' => 'int(1) ',
                      'laskutettu' => 'int(1) ',
                      'laskutetaan' => 'int(1) DEFAULT 1 ',
-
-
 
 		);
 
