@@ -8,7 +8,7 @@ return array(
 'Delete' => '<span class="btn btn-block btn-danger">Poisto</span>',
 'Move' => '<span class="btn btn-block btn-success">Siirtö</span>',
 'Copy' => '<span class="btn btn-block btn-success">Kopio</span>',
-'Create from APP' => '<span class="btn btn-block btn-success"><i class="fa fa-mobile" aria-hidden="true"></i> Luonti</span>',
+'Create from APP' => '<span class="btn btn-block btn-success fa fa-mobile"> Luonti</span>',
 );
 
 
