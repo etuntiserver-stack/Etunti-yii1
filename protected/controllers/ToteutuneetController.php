@@ -802,7 +802,7 @@ $xml = '
 				{
 				$model_log 	= 'Toteutuneet';
 				$name_log 	= 'Tuntien hyväksyntä';
-				$status_log 	= 'Update from mobile';
+				$status_log 	= 'Update';
 
 					$old_values = json_encode($m_m->attributes);
 					$new_values = json_encode($model->attributes);
