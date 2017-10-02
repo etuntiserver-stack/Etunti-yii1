@@ -111,7 +111,10 @@ $(document).delegate(".tv_edit","click",function(){
            //data: {"tarjousPainike" : "true"},
            success: function(html){
 		$('#showres').modal().html(html);
-           }
+           },
+	   error:function(data){
+		alert('Kohdetta ei löydy! Päivitä sivu!');
+	   }
         });
 });
 
