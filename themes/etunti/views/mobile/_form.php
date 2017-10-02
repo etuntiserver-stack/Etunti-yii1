@@ -112,7 +112,7 @@ if(isset($model->tietoja))
 
 </div>
 
-
+<?php /*
 <div class="row">
             <div class="panel">
                 <div class="panel-heading myBgColors">
@@ -125,6 +125,7 @@ if(isset($model->tietoja))
                 </ul>
             </div>
 </div>
+*/ ?>
 
 
 
