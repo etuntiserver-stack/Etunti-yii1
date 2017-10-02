@@ -92,10 +92,10 @@
                         <div class="section">
                           <label class="field prepend-icon">
 
-   			    <input type="text" class="gui-input datepicker" name="hakusana" value="<?php if(isset($_GET['hakusana'])) echo $_GET['hakusana']; ?>" placeholder="<?php echo Yii::t('main', 'Hakusana'); ?>...">
+   			    <input type="text" class="gui-input" name="hakusana" value="<?php if(isset($_GET['hakusana'])) echo $_GET['hakusana']; ?>" placeholder="<?php echo Yii::t('main', 'Hakusana'); ?>...">
 
                             <label for="firstname" class="field-icon">
-                              <i class="glyphicon glyphicon-calendar"></i>
+                              <i class="glyphicon glyphicon-user"></i>
                             </label>
                           </label>
                         </div>
