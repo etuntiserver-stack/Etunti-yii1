@@ -172,6 +172,10 @@ class LogController extends Controller
 		if(isset($_GET['model']) and !empty($_GET['model']))
 	        $criteria->addCondition (" model LIKE '%".$_GET['model']."%' ");
 
+		if(isset($_GET['hakusana']) and !empty($_GET['hakusana']))
+	        $criteria->addCondition (" old_values LIKE '%".$_GET['hakusana']."%' OR new_values LIKE '%".$_GET['hakusana']."%' ");
+
+
 		if(isset($_GET['from']) and isset($_GET['to']) and !empty($_GET['from']) and !empty($_GET['to']))
 		{
 	        	$criteria->addCondition (" DATE(time) BETWEEN '".date("Y-m-d H:i:s", strtotime($_GET['from']))."' AND '".date("Y-m-d H:i:s", strtotime($_GET['to']))."' ");
