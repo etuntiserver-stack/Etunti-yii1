@@ -88,6 +88,18 @@ class TyosuhdetController extends Controller
 		{
 			$model->attributes=$_POST['Tyosuhdet'];
 			if($model->save()){
+
+				// <-- LOG
+				$model_log 	= 'Tyosuhdet';
+				$name_log 	= 'Työsuhteet';
+				$status_log 	= 'Create';
+	
+					$old_values = null;
+					$new_values = json_encode($model->attributes);
+					$site = Yii::app()->createController('Site');
+					$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+				//     LOG -->
+
 				echo json_encode('saveOK');
 			} else {
 				echo json_encode('saveError');
@@ -114,8 +126,21 @@ class TyosuhdetController extends Controller
 
 		if(isset($_POST['Tyosuhdet']))
 		{
+			$vanha_attr = $model->attributes;
 			$model->attributes=$_POST['Tyosuhdet'];
 			if($model->save()){
+
+				// <-- LOG
+				$model_log 	= 'Tyosuhdet';
+				$name_log 	= 'Työsuhteet';
+				$status_log 	= 'Update';
+	
+					$old_values = json_encode($vanha_attr);
+					$new_values = json_encode($model->attributes);
+					$site = Yii::app()->createController('Site');
+					$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+				//     LOG -->
+
 				echo json_encode('saveOK');
 			} else {
 				echo json_encode('saveError');

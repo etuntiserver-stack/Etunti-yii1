@@ -134,37 +134,13 @@ exit;
 <div class="row">
   <div class="col-sm-12">
 	<?php 
-		$tid = $model->id;
-
-
 		$ts = Tyosuhdet::model()->find(" tid='".$model->id."' ");
-		if(isset($ts['id']))
+		if(isset($ts->id))
 		{
-
-			$m=Tyosuhdet::model()->findbypk($ts['id']);
-
-		    if(isset($_POST['Tyosuhdet']))
-		    {
-			$m->attributes=$_POST['Tyosuhdet'];
-			$m->tid=$tid;
-			if($m->save())
-				$this->redirect(array('update','id'=>$model->id));
-		    }
-
-			echo $this->renderPartial('//tyosuhdet/_form', array('model'=>$ts));
+			echo $this->renderPartial('//tyosuhdet/_form',array('model'=>$ts));
 		} else {
-
-			$m=new Tyosuhdet;
-
-		    if(isset($_POST['Tyosuhdet']))
-		    {
-			$m->attributes=$_POST['Tyosuhdet'];
-			$m->tid=$tid;
-			if($m->save())
-				$this->redirect(array('update','id'=>$model->id));
-		    }
-
-			echo $this->renderPartial('//tyosuhdet/_form',array('model'=>$m));
+			$ts = new Tyosuhdet;
+			echo $this->renderPartial('//tyosuhdet/_form',array('model'=>$ts));
 		}
 	?>
   </div>

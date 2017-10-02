@@ -360,6 +360,20 @@ class TyontekijatController extends Controller
 			if($model->save())
 			{
 
+				// <-- LOG
+				if( isset($model->id) )
+				{
+				$model_log 	= 'Tyontekijat';
+				$name_log 	= 'Työntekijät';
+				$status_log 	= 'Create';
+	
+					$old_values = null;
+					$new_values = json_encode($model->attributes);
+					$site = Yii::app()->createController('Site');
+					$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+				}
+				//     LOG -->
+
 
 				$d = Domainit::model()->find("domain='".Yii::app()->user->domain."'");
 				$yr =  '';
@@ -544,7 +558,7 @@ class TyontekijatController extends Controller
 		if(isset($_POST['Tyontekijat']))
 		{
 
-
+			$vanha_attr = $model->attributes;
 			$model->attributes=$_POST['Tyontekijat'];
 
 			if(isset($_POST['tyo_toimialue']))
@@ -571,6 +585,19 @@ class TyontekijatController extends Controller
 				$model->kortit = "";
 
 			if($model->save()){
+
+				// <-- LOG
+				$model_log 	= 'Tyontekijat';
+				$name_log 	= 'Työntekijät';
+				$status_log 	= 'Update';
+	
+					$old_values = json_encode($vanha_attr);
+					$new_values = json_encode($model->attributes);
+					$site = Yii::app()->createController('Site');
+					$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+				//     LOG -->
+
+
 				// <-- Netvisor updater
 				$asetukset = Asetukset::model()->findByPk(1);
 				if($asetukset->netvisor_kaytto == 1 and $asetukset->netvisor_lahetetaanko_tyontekija == 1)
@@ -621,6 +648,23 @@ class TyontekijatController extends Controller
 	   $site = Yii::app()->createController('Site');
 	   $site[0]->checkOikeus($checkOikeus);
 	//  Oikeudet -->
+
+
+		$t_d = Tyontekijat::model()->findbypk($id);
+
+			if(isset($t_d->id))
+			{
+				// <-- LOG
+				$model_log 	= 'Tyontekijat';
+				$name_log 	= 'Työntekijät';
+				$status_log 	= 'Delete';
+	
+					$old_values = json_encode($t_d->attributes);
+					$new_values = null;
+					$site = Yii::app()->createController('Site');
+					$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+				//     LOG -->
+			}
 
 
 	   $filename = "../../img/tekijat/".Yii::app()->user->domain."/".$id.".jpg";
