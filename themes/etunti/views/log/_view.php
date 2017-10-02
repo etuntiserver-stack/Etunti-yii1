@@ -67,7 +67,7 @@
 			    $item = $item.' ('.$this->kohdeOsoite($item).')';
 			    if(isset($k) and !empty($item) and $k == 'time')
 			    $item = date("d.m.Y H:i", strtotime($item));
-			    if(isset($k) and $k == 'tvuoro_ids')
+			    if(is_array(json_decode($item, true)))
 			    $item = '<textarea class="form-control">'.$item.'</textarea>';
 
 			    if(!empty($item))
@@ -96,7 +96,7 @@
 			    $item = $item.' ('.$this->kohdeOsoite($item).')';
 			    if(isset($k) and !empty($item) and $k == 'time')
 			    $item = date("d.m.Y H:i", strtotime($item));
-			    if(isset($k) and $k == 'tvuoro_ids')
+			    if(is_array(json_decode($item, true)))
 			    $item = '<textarea class="form-control">'.$item.'</textarea>';
 
 			    if(!empty($item))

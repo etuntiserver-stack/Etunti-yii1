@@ -165,6 +165,7 @@ class AsetuksetController extends Controller
 		if(isset($_POST['Asetukset']))
 		{
 
+			$vanha_attr = $model->attributes;
 			$model->attributes=$_POST['Asetukset'];
 			if(isset($_POST['Asetukset']['netvisor_mita_lahetetaan']))
 			$model->netvisor_mita_lahetetaan=json_encode($_POST['Asetukset']['netvisor_mita_lahetetaan']);
@@ -175,7 +176,21 @@ class AsetuksetController extends Controller
 				$model->edico_muut_kulut='';
 
 			if($model->save())
+			{
+
+				// <-- LOG
+				$model_log 	= 'Asetukset';
+				$name_log 	= 'Asetukset';
+				$status_log 	= 'Update';
+	
+					$old_values = json_encode($vanha_attr);
+					$new_values = json_encode($model->attributes);
+					$site = Yii::app()->createController('Site');
+					$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+				//     LOG -->
+
 				$this->redirect(array('update','id'=>$model->id));
+			}
 		}
 
 		$this->render('update',array(
