@@ -62,9 +62,9 @@
 			foreach($arr as $k=>$item)
 			{
 			    if(isset($k) and $k == 'tid')
-			    $item = '(ID: '.$item.') '.$this->etuSukunimi($item);
+			    $item = $item.' ('.$this->etuSukunimi($item).')';
 			    if(isset($k) and $k == 'kohde' and $this->kohdeOsoite($item))
-			    $item = '(ID: '.$item.') '.$this->kohdeOsoite($item);
+			    $item = $item.' ('.$this->kohdeOsoite($item).')';
 			    if(isset($k) and !empty($item) and $k == 'time')
 			    $item = date("d.m.Y H:i", strtotime($item));
 			    if(isset($k) and $k == 'tvuoro_ids')
@@ -91,9 +91,9 @@
 		  	foreach($arr as $k=>$item)
 			{
 			    if(isset($k) and $k == 'tid')
-			    $item = '(ID: '.$item.') '.$this->etuSukunimi($item);
+			    $item = $item.' ('.$this->etuSukunimi($item).')';
 			    if(isset($k) and $k == 'kohde' and $this->kohdeOsoite($item))
-			    $item = '(ID: '.$item.') '.$this->kohdeOsoite($item);
+			    $item = $item.' ('.$this->kohdeOsoite($item).')';
 			    if(isset($k) and !empty($item) and $k == 'time')
 			    $item = date("d.m.Y H:i", strtotime($item));
 			    if(isset($k) and $k == 'tvuoro_ids')
