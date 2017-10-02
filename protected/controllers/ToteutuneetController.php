@@ -729,11 +729,31 @@ $xml = '
  		if(isset($model->id)) $loppui = $model->loppui; else $loppui = '';
  		if(isset($model->id)) $tekijan_nimi = $model->tekijan_nimi; else $tekijan_nimi = '';
 
+
+				// <-- LOG
+				if( isset($model->id))
+				{
+				$m_m = Mobile::model()->findbypk($model->kid);
+				if(isset($m_m->id))
+				{
+				$model_log 	= 'Toteutuneet';
+				$name_log 	= 'Tuntien hyväksyntä';
+				$status_log 	= 'Delete';
+
+					$old_values = json_encode($model->attributes);
+					$new_values = json_encode($m_m->attributes);
+					$site = Yii::app()->createController('Site');
+					$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+				}
+				}
+				//     LOG -->
+
 		Toteutuneet::model()->deletebypk($_POST['id']);
 
 		$mob = Mobile::model()->findbypk($model->kid);
 
 		// <-- Kirjoitetaan historia luettut tietokantaan
+		/*
 		$this->renderPartial('//mobile/historia',array(
 		'id'=>$model->kid,
 		'tilanne'=>"Toteutuneet",
@@ -742,6 +762,7 @@ $xml = '
 		'loppui'=>array('vanha'=>$loppui, 'uusi'=>$mob->loppui),
 		'tekijan_nimi'=>array('vanha'=>$tekijan_nimi, 'uusi'=>$mob->tekijan_nimi),
 		));
+		*/
 		// Kirjoitetaan historia luettut tietokantaan -->
 	}
 
@@ -802,7 +823,7 @@ $xml = '
 				{
 				$model_log 	= 'Toteutuneet';
 				$name_log 	= 'Tuntien hyväksyntä';
-				$status_log 	= 'Update';
+				$status_log 	= 'Create';
 
 					$old_values = json_encode($m_m->attributes);
 					$new_values = json_encode($model->attributes);

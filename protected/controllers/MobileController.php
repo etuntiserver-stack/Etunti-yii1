@@ -910,6 +910,7 @@ function num($val){
 				//     LOG -->
 
 			// <-- Kirjoitetaan historia luettut tietokantaan
+			/*
 			$this->renderPartial('//mobile/historia',array(
 			'id'=>$model->id,
 			'tilanne'=>"Luetut",
@@ -918,6 +919,7 @@ function num($val){
 			'loppui'=>array('vanha'=>$loppui, 'uusi'=>$model->loppui),
 			'tekijan_nimi'=>array('vanha'=>$tekijan_nimi, 'uusi'=>$model->tekijan_nimi),
 			));
+			*/
 			// Kirjoitetaan historia luettut tietokantaan -->
 
 			echo $_POST['request']."//".date("H:i",strtotime($model->aloitan))."//".date("H:i",strtotime($model->loppui));
@@ -1121,6 +1123,7 @@ function num($val){
 
 
 				// <-- Kirjoitetaan historia luettut tietokantaan
+				/*
 				$this->renderPartial('//mobile/historia',array(
 				'id'=>$model->id,
 				'tilanne'=>"Luetut",
@@ -1129,6 +1132,7 @@ function num($val){
 				'loppui'=>array('vanha'=>$loppui, 'uusi'=>$model->loppui),
 				'tekijan_nimi'=>array('vanha'=>$tekijan_nimi, 'uusi'=>$model->tekijan_nimi),
 				));
+				*/
 				// Kirjoitetaan historia luettut tietokantaan -->
 
 				$this->redirect(array('index'));
