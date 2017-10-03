@@ -255,22 +255,35 @@ function getUrlVars() {
 	if(peruutus_tilanne == 2)
 	confirm_teksti = peruutusehdot + "\n\n" + confirm_teksti;
 
-	if( confirm(confirm_teksti) )
-	{
-        $.ajax({
-           url: url+'/historia?domain='+domain,
-	   type:'POST',
-	   data: sendDataPost,
-           success: function(data){
-		data = JSON.parse(data);
-		console.log(data);
-		if(data['OK'])
-		{
-			window.location.reload();
+	confirm_teksti = confirm_teksti.replace(/\n/g, "<br />");
+
+
+	alertify.confirm(confirm_teksti, 
+		function(){ 
+			alertify.success('Ok') 
+		}, 
+		function(){ 
+			alertify.error('Cancel')
 		}
-           }
-        });
-	}
+	);
+
+
+/*
+		        $.ajax({
+		           url: url+'/historia?domain='+domain,
+			   type:'POST',
+			   data: sendDataPost,
+		           success: function(data){
+				data = JSON.parse(data);
+				console.log(data);
+				if(data['OK'])
+				{
+					window.location.reload();
+				}
+		           }
+		        });
+*/
+
     });
     //     Peruuttaa tyovuoroa -->
 
