@@ -175,6 +175,11 @@ class LogController extends Controller
 		if(isset($_GET['hakusana']) and !empty($_GET['hakusana']))
 	        $criteria->addCondition (" old_values LIKE '%".$_GET['hakusana']."%' OR new_values LIKE '%".$_GET['hakusana']."%' ");
 
+		if(isset($_GET['tyontekija']) and !empty($_GET['tyontekija']))
+		{
+	        	$criteria->addCondition (" old_values LIKE '%\"tid\":\"".$_GET['tyontekija']."\"%' OR new_values LIKE '%\"tid\":\"".$_GET['tyontekija']."\"%' ");
+		}
+
 
 		if(isset($_GET['from']) and isset($_GET['to']) and !empty($_GET['from']) and !empty($_GET['to']))
 		{

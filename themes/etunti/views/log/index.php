@@ -128,7 +128,7 @@
 					$option[] = $item->kuka;
 			   ?>
 			   <select class="gui-input" name="kuka" id="kuka">
-       				<option value=""><?=Yii::t('main', 'Valitse nimi')?></option>
+       				<option value=""><?=Yii::t('main', 'Merkinnän tekijä')?></option>
 				<?php foreach($option as $o) : ?>
        				<option value="<?=$o?>" <?php echo (isset($_GET['kuka']) and $_GET['kuka'] == $o)? 'selected': ''; ?>><?=Yii::t('main', $o)?></option>
 				<?php endforeach; ?>
@@ -140,6 +140,28 @@
                           </label>
                         </div>
 
+
+                        <div class="section">
+                          <label class="field select">
+
+			   <?php
+				$l = Tyontekijat::model()->findAll('aktiivinen=1');
+				$option = array();
+				foreach($l as $item)
+					$option[$item->id] = $this->etuSukunimi($item->id);
+			   ?>
+			   <select class="gui-input" name="tyontekija" id="tyontekija">
+       				<option value=""><?=Yii::t('main', 'Työntekijä')?></option>
+				<?php foreach($option as $k=>$o) : ?>
+       				<option value="<?=$k?>" <?php echo (isset($_GET['tyontekija']) and $_GET['tyontekija'] == $k)? 'selected': ''; ?>><?=$o?></option>
+				<?php endforeach; ?>
+			   </select>
+
+                            <label for="firstname" class="field-icon">
+                            <i class="arrow double"></i>
+                            </label>
+                          </label>
+                        </div>
                       </div>
 
 
