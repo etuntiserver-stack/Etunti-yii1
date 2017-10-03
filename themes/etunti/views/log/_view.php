@@ -25,8 +25,13 @@
 		<?php echo date("d.m.Y H:i", strtotime($data->time)); ?>
 	</td>
 	<td>
+
+		<?php if(!empty($data->model)) : ?>
+		<?php echo Yii::t('log', $data->model); ?>
+		<?php else: ?>
 		<?php echo $this->nimikeMuutos($data->log_nimike); ?>
-		<?php echo ((!empty($data->model))?'<p><b>Model:</b>'.$data->model.'</p>':''); ?>
+		<?php endif; ?>
+
 	</td>
 	<?php if(isset($_GET['log_category']) and $_GET['log_category'] == 1): ?>
 	<td>
