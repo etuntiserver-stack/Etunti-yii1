@@ -4,6 +4,7 @@
 return array(
 /* Views */
 'Create' => '<span class="btn btn-block btn-success">Luonti</span>',
+'Create by admin' => '<span class="btn btn-block btn-success">Luonti admin</span>',
 'Update' => '<span class="btn btn-block btn-warning">Muokkaus</span>',
 'Delete' => '<span class="btn btn-block btn-danger">Poisto</span>',
 'Move' => '<span class="btn btn-block btn-success">Siirtö</span>',

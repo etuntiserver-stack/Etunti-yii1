@@ -200,6 +200,28 @@
                           </label>
                         </div>
 
+                        <div class="section">
+                          <label class="field prepend-icon">
+
+			    <!-- Autocomplete -->
+			    <?php
+	   			$site = Yii::app()->createController('Site');
+				$mod = 'Kohteet';
+				$sarake = 'osoite';
+				$placeholder = 'Osoite';
+				if(isset($_GET[$sarake])) $postvalue = $_GET[$sarake]; else $postvalue='';
+		 	        $site[0]->autocompleteFor($mod, $sarake, $placeholder, $postvalue);
+			    ?>
+			    <!-- Autocomplete -->
+
+                            <label for="firstname" class="field-icon">
+                              <i class="fa fa-user"></i>
+                            </label>
+                          </label>
+                        </div>
+
+
+
                       </div>
 
                       <div class="col-md-2">

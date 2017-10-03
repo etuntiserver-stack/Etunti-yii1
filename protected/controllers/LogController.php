@@ -180,6 +180,52 @@ class LogController extends Controller
 	        	$criteria->addCondition (" old_values LIKE '%\"tid\":\"".$_GET['tyontekija']."\"%' OR new_values LIKE '%\"tid\":\"".$_GET['tyontekija']."\"%' ");
 		}
 
+		if(isset($_GET['osoite']) and !empty($_GET['osoite']))
+		{
+			$check = false;
+			$k = Kohteet::model()->findAll("osoite LIKE '%".$_GET['osoite']."%'");
+			foreach($k as $kid)
+			{
+
+			   if(isset($_GET['model']) and $_GET['model'] == 'Tyovuoroot')
+			   {
+		        	$criteria->compare ("old_values", "kohde\":\"".$kid->id, true); 
+		        	$criteria->compare ("new_values", "kohde\":\"".$kid->id, true,  'OR'); 
+				$check = true;
+			   }
+			   if(isset($_GET['model']) and $_GET['model'] == 'Kohteet')
+			   {
+		        	$criteria->compare ("old_values", "id\":\"".$kid->id, true); 
+		        	$criteria->compare ("new_values", "id\":\"".$kid->id, true,  'OR'); 
+				$check = true;
+			   }
+			   if(isset($_GET['model']) and $_GET['model'] == 'Mob')
+			   {
+		        	$criteria->compare ("old_values", "kohdenID\":\"".$kid->id, true); 
+		        	$criteria->compare ("new_values", "kohdenID\":\"".$kid->id, true,  'OR'); 
+				$check = true;
+			   }
+
+			   if(isset($_GET['model']) and $_GET['model'] == 'Mobile')
+			   {
+		        	$criteria->compare ("old_values", "kohdenID\":\"".$kid->id, true); 
+		        	$criteria->compare ("new_values", "kohdenID\":\"".$kid->id, true,  'OR'); 
+				$check = true;
+			   }
+			}
+
+
+			if($check == false)
+			{
+		        	$criteria->compare ("old_values", $_GET['osoite'], true); 
+		        	$criteria->compare ("new_values", $_GET['osoite'], true,  'OR'); 
+			}
+
+			//print_r($criteria);
+			//exit;
+
+		}
+
 
 		if(isset($_GET['from']) and isset($_GET['to']) and !empty($_GET['from']) and !empty($_GET['to']))
 		{
