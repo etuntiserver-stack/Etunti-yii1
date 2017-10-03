@@ -274,7 +274,7 @@
 	'itemView'=>'_view',
   	//'template'=>'{items}<table class="table table-striped table-condensed"></table><br/>{pager}',
 
-
+/*
 	'pager' => array(
            'firstPageLabel'=>'<<',
            'prevPageLabel'=>'< Edellinen',
@@ -284,6 +284,7 @@
            'header'=>'<h3>Siirry sivulle:</h3>',
            'cssFile'=>false,
        ), 
+*/
 
   )); ?>
   </table>
