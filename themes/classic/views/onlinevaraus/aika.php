@@ -173,7 +173,7 @@ function kaksiKalenteria()
 		window.location.href="index?keskeyta=true";
    	},
 	error:function(data){
-		console.log(data);
+		window.location.href="index?keskeyta=true";
     	}
     });
 }
