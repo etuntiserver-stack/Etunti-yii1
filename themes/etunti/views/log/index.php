@@ -188,9 +188,9 @@
 					$option[] = $item->model;
 			   ?>
 			   <select class="gui-input" name="model" id="model">
-       				<option value=""><?=Yii::t('main', 'Valitse model')?></option>
+       				<option value=""><?=Yii::t('main', 'Valitse tyyppi')?></option>
 				<?php foreach($option as $o) : ?>
-       				<option value="<?=$o?>" <?php echo (isset($_GET['model']) and $_GET['model'] == $o)? 'selected': ''; ?>><?=Yii::t('main', $o)?></option>
+       				<option value="<?=$o?>" <?php echo (isset($_GET['model']) and $_GET['model'] == $o)? 'selected': ''; ?>><?=Yii::t('log', $o)?></option>
 				<?php endforeach; ?>
 			   </select>
 

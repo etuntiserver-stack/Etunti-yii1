@@ -10,6 +10,8 @@ return array(
 'Copy' => '<span class="btn btn-block btn-success">Kopio</span>',
 'Create from APP' => '<span class="btn btn-block btn-success">Luonti APP</span>',
 'Update by APP' => '<span class="btn btn-block btn-warning">Muokkaus APP</span>',
+'Tyovuoroot' => 'Työvuorot',
+'Tyosuhdet' => 'Työsuhteet',
 );
 
 
