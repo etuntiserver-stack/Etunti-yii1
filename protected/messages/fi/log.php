@@ -12,6 +12,10 @@ return array(
 'Update by APP' => '<span class="btn btn-block btn-warning">Muokkaus APP</span>',
 'Tyovuoroot' => 'Työvuorot',
 'Tyosuhdet' => 'Työsuhteet',
+'Tyontekijat' => 'Työntekijät',
+'Mob' => 'Sovellus',
+'Mobile' => 'Työtunnit',
+'Toteutuneet' => 'Työtunnit',
 );
 
 
