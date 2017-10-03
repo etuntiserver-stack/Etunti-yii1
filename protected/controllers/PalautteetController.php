@@ -361,6 +361,12 @@ class PalautteetController extends Controller
 	//  Oikeudet -->
 */
 
+		if(isset($_GET['suljeJuttelu']))
+		{
+			Palautteet::model()->updatebypk($_GET['suljeJuttelu'], array('status'=>3));
+			$this->redirect(array('index'));
+		}
+
 		if(isset($_POST['palaute_id']))
 		{
 	   		$asiakkaat = Yii::app()->createController('Asiakkaat');
