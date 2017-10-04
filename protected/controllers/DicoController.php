@@ -378,7 +378,8 @@ public function actionLogin($domain)
 							$message .= '<p><b>'.$k->osoite.'</b>, '.$tv->pvm.' '.$tv->alku.'-'.$tv->loppu.'</p>';
 							if($peruutettu == 2)
 							{
-								$message .= '<p>On laskutettava</p>';
+								$message .= '<h3>Peruutusehdot</h3>';
+								$message .= '<p>'.$asetukset->peruutusehdot.'</p>';
 							}
 							$message .= '
 							</body>
