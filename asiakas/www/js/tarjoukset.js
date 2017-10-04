@@ -55,18 +55,13 @@ function getUrlVars() {
  	   data: sendData,
            success: function(data){
 		var d = JSON.parse(data);
-		if(d['lista'])
-		{
-			//$('#resultLaatiko').html(d['lista']);
-			//reloadSkin();
-			//reloadDatepicker();
+
+			console.log(d);
+		if(d['link']){
+			//$('#myiframe').attr('src', d['link']).show();
+			saveFileToStorage(d['link'], d['filename']);
 		}
 
-		if((d['liite'] !== '') && (d['nimike'] !== ''))
-		{
-			console.log(d['liite']);
-			window.open(d['liite'], '_system', 'location=no'); 
-		}
     	   },
     		error:function (xhr, ajaxOptions, thrownError){
         	console.log(xhr.responseText);
@@ -90,6 +85,63 @@ function getUrlVars() {
 	 locale: 'fi',
         });
     }
+
+
+
+
+function saveFileToStorage(link, filename){
+   document.addEventListener("deviceready", onDeviceReady, false);
+   function onDeviceReady() {
+
+	var fileTransfer = new FileTransfer();
+	var uri = encodeURI(link);
+
+	window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function (fileSystem) {
+
+		fileTransfer.download(
+		    uri,
+		    fileSystem.root.toURL() + filename,
+		    function(entry) {
+		        console.log("download complete: " + entry.fullPath);
+			openThisFile(fileSystem.root.toURL() + filename)
+		    },
+		    function(error) {
+		        console.log("download error source " + error.source);
+		        console.log("download error target " + error.target);
+		        console.log("upload error code" + error.code);
+		    },
+		    false,
+		    {
+		        headers: {
+		            "Authorization": "Basic dGVzdHVzZXJuYW1lOnRlc3RwYXNzd29yZA=="
+		        }
+		    }
+		);
+
+	});
+
+	function openThisFile(fileForOpener){
+		var open = cordova.plugins.disusered.open;
+
+		function success() {
+		  console.log('Success');
+		}
+
+		function error(code) {
+		  if (code === 1) {
+		    console.log('No file handler found');
+		  } else {
+		    console.log('Undefined error');
+		  }
+		}
+
+		open(fileForOpener, success, error);
+	}
+
+
+
+   }
+}
 
 
 
