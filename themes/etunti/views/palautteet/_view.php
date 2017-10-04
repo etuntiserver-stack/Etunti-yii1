@@ -86,7 +86,7 @@
 		if(isset(Yii::app()->user->adminID) and $data->status != 3)
 		{
 		$bod .= CHtml::link('Sulje', '#', array(
-		'submit'=>array('/asiakkaat/update', "suljeJuttelu"=>$data->keskustelu_id, "id"=>$data->asiakas_id), 
+		'submit'=>array('index', "suljeJuttelu"=>$data->keskustelu_id, "id"=>$data->asiakas_id), 
 		'class'=>'btn btn-danger btn-sm btn-block', 'style'=>'color:white'
 		));
 		}
