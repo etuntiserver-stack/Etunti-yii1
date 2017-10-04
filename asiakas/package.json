@@ -14,7 +14,8 @@
             "cordova-plugin-dialogs": {},
             "cordova-plugin-file": {},
             "cordova-plugin-inappbrowser": {},
-            "cordova-plugin-whitelist": {}
+            "cordova-plugin-whitelist": {},
+            "cordova-plugin-file-transfer": {}
         }
     },
     "dependencies": {
@@ -24,6 +25,7 @@
         "cordova-plugin-device": "^1.1.6",
         "cordova-plugin-dialogs": "^1.3.3",
         "cordova-plugin-file": "^4.3.3",
+        "cordova-plugin-file-transfer": "^1.6.3",
         "cordova-plugin-inappbrowser": "^1.7.1",
         "cordova-plugin-whitelist": "^1.3.2",
         "cordova-ubuntu": "^4.3.4"

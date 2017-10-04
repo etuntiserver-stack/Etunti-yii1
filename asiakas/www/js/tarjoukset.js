@@ -58,7 +58,31 @@ function getUrlVars() {
 
 			console.log(d);
 		if(d['link']){
-			$('#myiframe').attr('src', d['link']).show();
+			//$('#myiframe').attr('src', d['link']).show();
+
+var fileTransfer = new FileTransfer();
+var uri = encodeURI(d['link']);
+var fileURL = d['link'];
+
+fileTransfer.download(
+    uri,
+    fileURL,
+    function(entry) {
+        console.log("download complete: " + entry.fullPath);
+    },
+    function(error) {
+        console.log("download error source " + error.source);
+        console.log("download error target " + error.target);
+        console.log("upload error code" + error.code);
+    },
+    false,
+    {
+        headers: {
+            "Authorization": "Basic dGVzdHVzZXJuYW1lOnRlc3RwYXNzd29yZA=="
+        }
+    }
+);
+
 		}
 
     	   },

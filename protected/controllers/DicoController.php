@@ -718,6 +718,7 @@ public function actionLogin($domain)
 	{
 
 		$t = $liite;
+		$filename = '';
    		if(file_exists(Yii::app()->basePath."/../".$t))
    		{
 
@@ -731,9 +732,10 @@ public function actionLogin($domain)
 				exit;
 			} else {
 				$link = Yii::app()->request->hostInfo .'/tmp/'.$domain.'/'.basename($file);
+				$filename = basename($file);
 			}
 
-			$this->_sendResponse(200, CJSON::encode(array('link'=>$link)));
+			$this->_sendResponse(200, CJSON::encode(array('link'=>$link, 'filename'=>$filename)));
 			exit;
 		}
 		return false;

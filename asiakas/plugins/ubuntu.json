@@ -27,6 +27,9 @@
         },
         "cordova-plugin-whitelist": {
             "PACKAGE_NAME": "fi.etunti.dico"
+        },
+        "cordova-plugin-file-transfer": {
+            "PACKAGE_NAME": "fi.etunti.dico"
         }
     },
     "dependent_plugins": {}
