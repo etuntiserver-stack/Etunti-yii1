@@ -24,16 +24,11 @@ $model->asiakas_id = Yii::app()->user->asiakas;
 .emoji_passive{ opacity:0.5 }
 .emoji_active { /*border: 2px #37bc9b solid;*/ }
 </style>
-
+<legend><?=Yii::t('main', 'Aloita palauteen antaminen valitsemalla hymynaama.')?></legend>
 <div class="row" id="emoji">
  <div class="col-xs-6">
 	<img src="img/emoji/1.png" class="img-thumbnail emoji_passive" tila="1">
  </div>
-<!--
- <div class="col-xs-4">
-	<img src="img/emoji/2.png" class="img-thumbnail emoji_passive" tila="2">
- </div>
--->
  <div class="col-xs-6">
 	<img src="img/emoji/3.png" class="img-thumbnail emoji_passive" tila="3">
  </div>
