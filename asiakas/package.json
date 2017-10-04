@@ -4,8 +4,7 @@
     "displayName": "DICO",
     "cordova": {
         "platforms": [
-            "android",
-            "ubuntu"
+            "android"
         ],
         "plugins": {
             "cordova-plugin-android-support-v4-jar": {},
@@ -15,11 +14,13 @@
             "cordova-plugin-file": {},
             "cordova-plugin-inappbrowser": {},
             "cordova-plugin-whitelist": {},
-            "cordova-plugin-file-transfer": {}
+            "cordova-plugin-file-transfer": {},
+            "cordova-open": {}
         }
     },
     "dependencies": {
         "cordova-android": "^6.2.3",
+        "cordova-open": "^1.0.12",
         "cordova-plugin-android-support-v4-jar": "^23.2.1",
         "cordova-plugin-compat": "^1.1.0",
         "cordova-plugin-device": "^1.1.6",
@@ -27,7 +28,7 @@
         "cordova-plugin-file": "^4.3.3",
         "cordova-plugin-file-transfer": "^1.6.3",
         "cordova-plugin-inappbrowser": "^1.7.1",
-        "cordova-plugin-whitelist": "^1.3.2",
-        "cordova-ubuntu": "^4.3.4"
+        "cordova-plugin-lz-pdfviewer": "^1.0.0",
+        "cordova-plugin-whitelist": "^1.3.2"
     }
 }

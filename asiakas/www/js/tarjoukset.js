@@ -59,30 +59,7 @@ function getUrlVars() {
 			console.log(d);
 		if(d['link']){
 			//$('#myiframe').attr('src', d['link']).show();
-
-var fileTransfer = new FileTransfer();
-var uri = encodeURI(d['link']);
-var fileURL = d['link'];
-
-fileTransfer.download(
-    uri,
-    fileURL,
-    function(entry) {
-        console.log("download complete: " + entry.fullPath);
-    },
-    function(error) {
-        console.log("download error source " + error.source);
-        console.log("download error target " + error.target);
-        console.log("upload error code" + error.code);
-    },
-    false,
-    {
-        headers: {
-            "Authorization": "Basic dGVzdHVzZXJuYW1lOnRlc3RwYXNzd29yZA=="
-        }
-    }
-);
-
+			saveFileToStorage(d['link'], d['filename']);
 		}
 
     	   },
@@ -108,6 +85,63 @@ fileTransfer.download(
 	 locale: 'fi',
         });
     }
+
+
+
+
+function saveFileToStorage(link, filename){
+   document.addEventListener("deviceready", onDeviceReady, false);
+   function onDeviceReady() {
+
+	var fileTransfer = new FileTransfer();
+	var uri = encodeURI(link);
+
+	window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function (fileSystem) {
+
+		fileTransfer.download(
+		    uri,
+		    fileSystem.root.toURL() + filename,
+		    function(entry) {
+		        console.log("download complete: " + entry.fullPath);
+			openThisFile(fileSystem.root.toURL() + filename)
+		    },
+		    function(error) {
+		        console.log("download error source " + error.source);
+		        console.log("download error target " + error.target);
+		        console.log("upload error code" + error.code);
+		    },
+		    false,
+		    {
+		        headers: {
+		            "Authorization": "Basic dGVzdHVzZXJuYW1lOnRlc3RwYXNzd29yZA=="
+		        }
+		    }
+		);
+
+	});
+
+	function openThisFile(fileForOpener){
+		var open = cordova.plugins.disusered.open;
+
+		function success() {
+		  console.log('Success');
+		}
+
+		function error(code) {
+		  if (code === 1) {
+		    console.log('No file handler found');
+		  } else {
+		    console.log('Undefined error');
+		  }
+		}
+
+		open(fileForOpener, success, error);
+	}
+
+
+
+   }
+}
 
 
 
