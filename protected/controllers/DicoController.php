@@ -374,7 +374,7 @@ public function actionLogin($domain)
 							</head>
 							<body>';
 
-							$message .= '<br>Hei, <p>Työvuorosi on peruutettu.</p>';
+							$message .= '<br>Hei, <p>Tilauksesi on peruutettu.</p>';
 							$message .= '<p><b>'.$k->osoite.'</b>, '.$tv->pvm.' '.$tv->alku.'-'.$tv->loppu.'</p>';
 							if($peruutettu == 2)
 							{
