@@ -521,6 +521,8 @@ $(".muokaValiko").click(function() {
 		elseif(isset($model->id) and $tallenna == 1)
 		echo CHtml::submitButton('Tallenna',array('class'=>'btn btn-primary','id'=>'submitButton')); 
 		?>
+
+		<div id="virheilmoitus" class="alert bg-danger" style="display:none"></div>
 	</div>		
 
 
@@ -814,9 +816,9 @@ $('.mult').multiselect({
 			console.log(thisDataReturn);
 			paivaysTarkistus(thisDataReturn);
 	   	},
-		error:function(data){
-			console.log(data);
-			window.location.href=location.protocol + "//" + location.host + '/index.php';
+		error: function(xhr, status, error) {
+			/*window.location.href=location.protocol + "//" + location.host + '/index.php';*/
+			$('#virheilmoitus').html('<br><p>Virheilmoitus: \n\n' + xhr.responseText + '</p>').show();
 	    	}
 	  });
 
