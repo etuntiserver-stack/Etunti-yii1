@@ -818,7 +818,7 @@ $('.mult').multiselect({
 	   	},
 		error: function(xhr, status, error) {
 			/*window.location.href=location.protocol + "//" + location.host + '/index.php';*/
-			$('#virheilmoitus').html('<br><p>Virheilmoitus: \n\n' + xhr.responseText + '</p>').show();
+			$('#virheilmoitus').html('Virheilmoitus: \n\n' + xhr.responseText).show();
 	    	}
 	  });
 
