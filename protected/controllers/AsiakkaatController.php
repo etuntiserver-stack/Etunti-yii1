@@ -501,8 +501,13 @@ class AsiakkaatController extends Controller
 		if(isset($_GET['laheta_tunnukset']))
 		{
 
-				$this->LahetaTunnukset($id);
-				$this->redirect(array('index'));
+				$path = Yii::app()->basePath."/../tiedostot/firma/".Yii::app()->user->domain.'/eDico_kayttoehdot.html';
+				if (!file_exists($path)) {
+					Yii::app()->user->setFlash('danger', "eDico käyttöehtoja ei löydy asetuksista. Lisää ehdot ennen käyttönottoa.");
+				} else {
+					$this->LahetaTunnukset($id);
+					$this->redirect(array('index'));
+				}
 		}
 		//     Tunnukset lahetys -->
 
