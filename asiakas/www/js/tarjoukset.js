@@ -55,18 +55,12 @@ function getUrlVars() {
  	   data: sendData,
            success: function(data){
 		var d = JSON.parse(data);
-		if(d['lista'])
-		{
-			//$('#resultLaatiko').html(d['lista']);
-			//reloadSkin();
-			//reloadDatepicker();
+
+			console.log(d);
+		if(d['link']){
+			$('#myiframe').attr('src', d['link']).show();
 		}
 
-		if((d['liite'] !== '') && (d['nimike'] !== ''))
-		{
-			console.log(d['liite']);
-			window.open(d['liite'], '_system', 'location=no'); 
-		}
     	   },
     		error:function (xhr, ajaxOptions, thrownError){
         	console.log(xhr.responseText);

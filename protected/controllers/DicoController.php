@@ -667,7 +667,8 @@ public function actionLogin($domain)
 			if(isset($_POST['liite']))
 			{
 				$nimike = $_POST['liite'];
-				$link = $this->valmistaTMP($domain, $_POST['liite'], $_POST['ext']);
+				$this->valmistaKontentti($domain, $_POST['liite']);
+				exit;
 			}
 
 
@@ -712,6 +713,31 @@ public function actionLogin($domain)
 				exit;
 	}
 
+
+	protected function valmistaKontentti($domain, $liite)
+	{
+
+		$t = $liite;
+   		if(file_exists(Yii::app()->basePath."/../".$t))
+   		{
+
+			if (!file_exists( Yii::app()->basePath.'/../tmp/'.$domain )) {
+			 	mkdir( Yii::app()->basePath.'/../tmp/'.$domain, 0777, true );
+			}
+			$file = Yii::app()->basePath."/../".$t;
+			$liite = Yii::app()->basePath.'/../tmp/'.$domain.'/'.basename($file);
+			if (!copy($file, $liite)) {
+			    	$this->_sendResponse(200, CJSON::encode('Copy error'));
+				exit;
+			} else {
+				$link = Yii::app()->request->hostInfo .'/tmp/'.$domain.'/'.basename($file);
+			}
+
+			$this->_sendResponse(200, CJSON::encode(array('link'=>$link)));
+			exit;
+		}
+		return false;
+	}
 
 	public function actionSopimukset($domain)
 	{
