@@ -258,17 +258,10 @@ function getUrlVars() {
 	confirm_teksti = confirm_teksti.replace(/\n/g, "<br />");
 
 
-	alertify.confirm(confirm_teksti, 
-		function(){ 
-			alertify.success('Ok') 
-		}, 
-		function(){ 
-			alertify.error('Cancel')
-		}
-	);
+	alertify.confirm(confirm_teksti,
+          function(e){
+                if(e){
 
-
-/*
 		        $.ajax({
 		           url: url+'/historia?domain='+domain,
 			   type:'POST',
@@ -282,7 +275,14 @@ function getUrlVars() {
 				}
 		           }
 		        });
-*/
+
+                    /*alertify.success('Ok');*/
+
+                } else {
+                    alertify.error('Cancel');
+                }
+          });
+
 
     });
     //     Peruuttaa tyovuoroa -->
