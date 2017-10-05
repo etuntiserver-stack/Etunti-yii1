@@ -726,6 +726,9 @@ public function actionLogin($domain)
 			if (!file_exists( Yii::app()->basePath.'/../tmp/'.$domain )) {
 			 	mkdir( Yii::app()->basePath.'/../tmp/'.$domain, 0777, true );
 			}
+
+			$this->removeAllFromTMP($domain);
+
 			$file = Yii::app()->basePath."/../".$t;
 			$liite = Yii::app()->basePath.'/../tmp/'.$domain.'/'.basename($file);
 			if (!copy($file, $liite)) {
@@ -759,8 +762,8 @@ public function actionLogin($domain)
 			$nimike = '';
 			if(isset($_POST['liite']))
 			{
-				$nimike = $_POST['liite'];
-				$link = $this->valmistaTMP($domain, $_POST['liite'], $_POST['ext']);
+				$this->valmistaNew($domain, $_POST['liite']);
+				exit;
 			}
 
 
@@ -828,7 +831,12 @@ public function actionLogin($domain)
 					 	mkdir( Yii::app()->basePath.'/../tmp/'.$domain, 0777, true );
 					}
 
-			  		$tiedosto = $model->id.'_tyonkuvaus';
+					// <-- Remove all from tmp
+					$this->removeAllFromTMP($domain);
+
+					$site = Yii::app()->createController('Site');
+					$tiedosto = 'Tyonkuvaus';
+		  			$tiedosto = $site[0]->tiedostonNimiAsiakasKohdeAika($tiedosto, $model->id, null, date("Y-m-d H:i:s"));
 					$path = 'tmp/'.$domain;
 
 					$tk = Tyonkuvaus::model()->findByPk($_POST['liite']);
@@ -849,8 +857,13 @@ public function actionLogin($domain)
 					    if (file_exists( Yii::app()->basePath.'/../'.$path.'/'.$tiedosto.'.pdf' ))
 					    {
 
-						$link = Yii::app()->request->hostInfo .'/index.php/site/opentmp?domain='.$domain.'&file='.$tiedosto.'.pdf';
 						unlink($path.'/'.$tiedosto.'.html');
+						$link = Yii::app()->request->hostInfo .'/'.$path.'/'.$tiedosto.'.pdf';
+						$filename = basename($link);
+						$ext = pathinfo($filename, PATHINFO_EXTENSION);
+
+						$this->_sendResponse(200, CJSON::encode(array('link'=>$link, 'filename'=>$filename, 'ext'=>$ext)));
+						exit;
 
 					    }
 					}
@@ -897,7 +910,11 @@ public function actionLogin($domain)
 	}
 
 
-
+	protected function removeAllFromTMP($domain)
+	{
+		exec('rm -rf tmp/'.$domain.'/*');
+		return true;
+	}
 
 	public function actionMuuttiedostot($domain)
 	{
