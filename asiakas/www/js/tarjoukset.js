@@ -55,13 +55,11 @@ function getUrlVars() {
  	   data: sendData,
            success: function(data){
 		var d = JSON.parse(data);
-
-			console.log(d);
+		console.log(d);
 		if(d['link']){
-			//$('#myiframe').attr('src', d['link']).show();
-			saveFileToStorage(d['link'], d['filename']);
+			//$('#myembed').attr('src', d['link']).show();
+			saveFileToStorage(d['link'], d['filename'], d['ext']);
 		}
-
     	   },
     		error:function (xhr, ajaxOptions, thrownError){
         	console.log(xhr.responseText);
@@ -88,9 +86,9 @@ function getUrlVars() {
 
 
 
-
-function saveFileToStorage(link, filename){
-   document.addEventListener("deviceready", onDeviceReady, false);
+/* file opener */
+function saveFileToStorage(link, filename, ext){
+   document.addEventListener("deviceready", onDeviceReady, notReady());
    function onDeviceReady() {
 
 	var fileTransfer = new FileTransfer();
@@ -138,10 +136,15 @@ function saveFileToStorage(link, filename){
 		open(fileForOpener, success, error);
 	}
 
-
-
    }
+
+   function notReady(){
+	if(ext == 'pdf')
+	$('#myembed').attr('src', link).show();
+   }
+
 }
+/* file opener */
 
 
 
