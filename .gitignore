@@ -37,7 +37,6 @@ etuntiAPP/EtuntiAdmin/platforms/*
 etuntiAPP/EtuntiAPP/node_modules/*
 asiakas/platforms/*
 asiakas/node_modules/*
-asiakas/plugins/*
 error_log
 .htaccess
 protected/vendors/phpdocx/lib/pdf/lib/fonts/log.htm
