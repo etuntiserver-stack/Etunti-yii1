@@ -247,11 +247,15 @@ class TyonkuvausController extends Controller
 						$tyontehtavat = array();
 						foreach($_POST['TyonkuvausRivit']['tyotehtava'][$key] as $k2=>$i2)
 						{
+
+						    if(isset($_POST['TyonkuvausRivit']['vkopvm'][$key][$k2]) and isset($_POST['TyonkuvausRivit']['vkovali'][$key][$k2]))
+						    {
 							$tyontehtavat[$k2] = array(
 								'tyotehtava'=>$i2, 
 								'vkopvm' => $_POST['TyonkuvausRivit']['vkopvm'][$key][$k2],
 								'vkovali' => $_POST['TyonkuvausRivit']['vkovali'][$key][$k2]
 							);
+						    }
 						}
 					}
 
