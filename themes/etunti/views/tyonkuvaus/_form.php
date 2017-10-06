@@ -276,8 +276,11 @@ $(document).ready(function(){
 			foreach($tyontehtavat as $k2=>$r2)
 			{
 
-			if(!isset($r2['vkopvm']) and !isset($r2['vkovali']))
+			if(isset($r2['vkopvm']) and isset($r2['vkovali']))
+			{
+			} else {
 			continue;
+			}
 
 
 			$svVko = array();
