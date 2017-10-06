@@ -24,7 +24,7 @@ class SiteController extends Controller
 	public function filters()
 	{
 		return array(
-			//'accessControl', // perform access control for CRUD operations
+			'accessControl', // perform access control for CRUD operations
 			//'postOnly + delete', // we only allow deletion via POST request
 		);
 	}
@@ -2263,6 +2263,7 @@ $(document).ready(function(){
 		 $string = str_replace("Ö", "O", $string);
 		 $string = str_replace("´", "", $string);
 		 $string = str_replace(" ", "_", $string);
+		 $string = str_replace("/", "_", $string);
 		 return $string;
 	}
 
