@@ -1,8 +1,5 @@
 <?php
 
-	if(isset($yhteensa) and $yhteensa == true)
-	$site = Yii::app()->createController('Site');
-
 
     	$color = '';
 	$height = '';
@@ -240,24 +237,26 @@ if(!isset($_POST['tulosta']))
 
 	   if($tvVal->alku != '' and $tvVal->loppu != '')
 	   {
+
+		$eilasketa = $this->eiLasketaSubStr($tvVal->tyoajanmerkinta);
+
 		if(isset($asetukset) and $tvVal->status == 10 and $asetukset->lasketaanko_lounastauko == 0)
 		{
 		} else {
+			if($eilasketa != true)
     			$sum += strtotime($tvVal->loppu)-strtotime($tvVal->alku);
 		}
 
 		if(isset($yhteensa) and $yhteensa == true)
 		{
-			$eilasketa = $site[0]->eiLasketaSubStr($tvVal->tyoajanmerkinta);
 			if($eilasketa != true)
 	    		$yht += strtotime($tvVal->loppu)-strtotime($tvVal->alku);
 		}
 
-	    //if(!isset($_POST['tulosta'])) $br = '<br>'; else $br = '';
 
-	    $al = '<b>'.$tvVal->alku.'-'.$tvVal->loppu.$toistuva.$tyopari.$status.$tarvittavien_tyontekijoiden_maara.'</b>';
+	   	$al = '<b>'.$tvVal->alku.'-'.$tvVal->loppu.$toistuva.$tyopari.$status.$tarvittavien_tyontekijoiden_maara.'</b>';
 	   } else {
-	    $al = '';
+	   	$al = '';
 	   }
 
 	   $color = '';
