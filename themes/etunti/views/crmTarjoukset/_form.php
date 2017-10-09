@@ -67,17 +67,8 @@
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'asiakas_id'); ?>
 		<?php
-		$list = array();
-		$criteria=new CDbCriteria;
-		//$criteria->condition="";
-      		$l = Asiakkaat::model()->findAll($criteria);
-		foreach($l as $v)
-		{
-			if($v->tyyppi == 'yritys')
-			$list[$v->id] = $v->yrityksen_nimi;
-			elseif($v->tyyppi == 'henkilo')
-			$list[$v->id] = $v->yhteyshenkilo;
-		}
+			$a_controller = Yii::app()->createController('Asiakkaat');
+			$list = $a_controller[0]->asiakkaatArrHelper(true);
 
         		echo $form->dropDownList($model, 'asiakas_id', $list,
 			array('empty'=>'Valitse','class'=>'form-control'));
