@@ -28,18 +28,10 @@
 
 		<?php echo $form->labelEx($model,'asiakas_id'); ?>
 		<?php
-		$asiakas_selected[Yii::app()->request->getParam('asiakas_id')] = array('selected' => 'selected');
-		$list = array();
-		$criteria=new CDbCriteria;
-		//$criteria->condition="";
-      		$l = Asiakkaat::model()->findAll($criteria);
-		foreach($l as $v)
-		{
-			if(!empty($v->yrityksen_nimi))
-			$list[$v->id] = $v->yrityksen_nimi;
-			elseif(empty($v->yrityksen_nimi) and !empty($v->yhteyshenkilo))
-			$list[$v->id] = $v->yhteyshenkilo;
-		}
+			$asiakas_selected[Yii::app()->request->getParam('asiakas_id')] = array('selected' => 'selected');
+
+			$a_controller = Yii::app()->createController('Asiakkaat');
+			$list = $a_controller[0]->asiakkaatArrHelper(true);
 
         		echo $form->dropDownList($model, 'asiakas_id', $list,
 			array('empty'=>'Valitse','class'=>'form-control', 'options'=>$asiakas_selected));

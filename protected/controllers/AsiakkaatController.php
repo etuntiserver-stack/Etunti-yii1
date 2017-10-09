@@ -1770,4 +1770,30 @@ exit;
 	    return $result;
 	}
 
+	public function asiakkaatArrHelper($aktiivinen)
+	{
+
+		$list = array();
+		$criteria=new CDbCriteria;
+		if($aktiivinen == true)
+			$criteria->condition=" aktiivinen=1 ";
+
+      		$l = Asiakkaat::model()->findAll($criteria);
+		$as_arr = array();
+		foreach($l as $v)
+		{
+			if($v->tyyppi == 'yritys')
+			$as_arr[$v->yrityksen_nimi] = $v->id;
+			if($v->tyyppi == 'henkilo')
+			$as_arr[$v->yhteyshenkilo] = $v->id;
+		}
+		ksort($as_arr);
+		foreach($as_arr as $k=>$v)
+		{
+			$list[$v] = $k;
+		}
+		
+		return $list;
+	}
+
 }

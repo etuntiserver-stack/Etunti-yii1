@@ -80,23 +80,12 @@
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'asiakas_id'); ?>
 		<?php
-		$list = array();
-		$criteria=new CDbCriteria;
-		//$criteria->condition="";
-      		$l = Asiakkaat::model()->findAll($criteria);
-		foreach($l as $v)
-		{
-			if(!empty($v->yrityksen_nimi) and empty($v->yhteyshenkilo))
-			$list[$v->id] = $v->yrityksen_nimi;
-			elseif(empty($v->yrityksen_nimi) and !empty($v->yhteyshenkilo))
-			$list[$v->id] = $v->yhteyshenkilo;
-		}
+			$a_controller = Yii::app()->createController('Asiakkaat');
+			$list = $a_controller[0]->asiakkaatArrHelper(true);
 
-		if(count($list) > 0)
-		{
         		echo $form->dropDownList($model, 'asiakas_id', $list,
 			array('empty'=>'Valitse','class'=>'form-control', 'options'=>$asiakas_selected));
-		}		
+		
         	?>
 		<?php echo $form->error($model,'asiakas_id'); ?>
 	</div>
