@@ -3574,4 +3574,14 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 	}
 
 
+	public function eiLasketaSubStr($val)
+	{
+
+		$return = false;
+		if (strpos($val, 'Ei lasketa') !== false or strpos($val, 'Varallaolo') !== false) {
+		    $return = true;
+		}
+		return $return;
+	}
+
 }
