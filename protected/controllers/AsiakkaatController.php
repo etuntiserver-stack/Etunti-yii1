@@ -1165,9 +1165,6 @@ exit;
 //'.CHtml::link('PDF', array('//lasku/lasku_pdf', 'id'=>$data->id), array('target'=>'_blank')).'
 		}
 	
-		if(empty($bod))
-		return Yii::t('main', 'Ei tuloksia');
-		else
 		return $bod;
 	}
 
@@ -1254,7 +1251,7 @@ exit;
 		}
 
 
-		$bod = '<div>';
+		$bod = '';
 
 		$dataArr = array();
 
@@ -1341,8 +1338,6 @@ exit;
 	  	$bod .= $data;
 	  	}
 
-		$bod .= '</div>';
-	
 
 		return $bod;
 	}
@@ -1420,9 +1415,7 @@ exit;
 		  	}
 
 		}
-		if(empty($bod))
-		return Yii::t('main', 'Ei tuloksia');
-		else
+
 		return $bod;
 	}
 
@@ -1548,9 +1541,6 @@ exit;
 		}
 	
 
-		if(empty($bod))
-		return 'Ei tuloksia';
-		else
 		return $bod;
 	}
 

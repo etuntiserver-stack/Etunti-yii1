@@ -13,6 +13,27 @@
 
 <br>
 
+
+
+	<?php if(isset($_POST['asiakasID'])) : ?>
+	 <?php if(isset($naytaTyovuorot)): ?>
+	  <legend><h3><?php echo Yii::t('main', 'Työvuorot'); ?></h3></legend>
+	 <?php elseif(isset($naytaLaskut)): ?>
+	  <legend><h3><?php echo Yii::t('main', 'Laskut'); ?></h3></legend>
+	 <?php elseif(isset($naytaAlennuskoodit)): ?>
+	  <legend><h3><?php echo Yii::t('main', 'Alennuskoodit'); ?></h3></legend>
+	 <?php elseif(isset($naytaTarjoukset)): ?>
+	  <legend><h3><?php echo Yii::t('main', 'Tarjoukset'); ?></h3></legend>
+	 <?php elseif(isset($naytaPalautteet)): ?>
+	  <legend><h3><?php echo Yii::t('main', 'Palautteet'); ?></h3></legend>
+	 <?php elseif(isset($naytaVinkit)): ?>
+	  <legend><h3><?php echo Yii::t('main', 'Vinkit'); ?></h3></legend>
+	 <?php elseif(isset($naytaToteutuneetTunnit)): ?>
+	  <legend><h3><?php echo Yii::t('main', 'Toteutuneet tunnit'); ?></h3></legend>
+	 <?php endif; ?>
+	<?php endif; ?>
+
+
         <div class="tray-center">
    	    <form id="mobForm" action="#" class="form-inline" method="POST">
    	    <input type="hidden" name="mob_hae">
@@ -75,15 +96,21 @@
             </div>
         </div>
 
-
-	<?php if(isset($naytaToteutuneetTunnit)) : ?>
-	<h3><?php echo Yii::t('main', 'Toteutuneet tunnit'); ?></h3>
+	<?php if(isset($naytaToteutuneetTunnit) and isset($_POST['from'])) : ?>
+	<?php $returnBod = $asiakkaat[0]->toteutuneetTunnitCRM($model, $from, $to); ?>
+	<?php if($kayttaja == 'admin'): ?>
+	  <legend><h3><?php echo Yii::t('main', 'Toteutuneet tunnit').$kayttaja; ?></h3></legend>
+	<?php endif; ?>
         <div class="tray-center">
             <div class="admin-form">
               <div class="panel heading-border">
                 <div class="panel-body bg-light">
-                 <div class="table-responsive">
-		  <?php echo $asiakkaat[0]->toteutuneetTunnitCRM($model, $from, $to); ?>
+                 <div class="table-responsive tuloshakusta">
+		 <?php if(empty($returnBod)): ?>
+		    <p><?=Yii::t('main', 'Ei tuloksia')?></p>
+	  	 <?php else: ?>
+		    <?=$returnBod?>
+		 <?php endif; ?>
 		 </div>
                 </div>
               </div>
@@ -92,14 +119,21 @@
 	<?php endif; ?>
 
 
-	<?php if(isset($naytaAlennuskoodit)) : ?>
-	<h3><?php echo Yii::t('main', 'Alennuskoodit'); ?></h3>
+	<?php if(isset($naytaAlennuskoodit) and isset($_POST['from'])) : ?>
+	<?php $returnBod = $asiakkaat[0]->alennuskooditCRM($model, $from, $to); ?>
+	<?php if($kayttaja == 'admin'): ?>
+	  <legend><h3><?php echo Yii::t('main', 'Alennuskoodit'); ?></h3></legend>
+	<?php endif; ?>
         <div class="tray-center">
             <div class="admin-form">
               <div class="panel heading-border">
                 <div class="panel-body bg-light">
-                 <div class="table-responsive">
-		  <?php echo $asiakkaat[0]->alennuskooditCRM($model, $from, $to); ?>
+                 <div class="table-responsive tuloshakusta">
+		 <?php if(empty($returnBod)): ?>
+		    <p><?=Yii::t('main', 'Ei tuloksia')?></p>
+	  	 <?php else: ?>
+		    <?=$returnBod?>
+		 <?php endif; ?>
 		 </div>
                 </div>
               </div>
@@ -108,14 +142,21 @@
 	<?php endif; ?>
 
 
-	<?php if(isset($naytaTyovuorot)) : ?>
-	<h3><?php echo Yii::t('main', 'Työvuorot'); ?></h3>
+	<?php if(isset($naytaTyovuorot) and isset($_POST['from'])) : ?>
+	<?php $returnBod = $asiakkaat[0]->tyovuorotCRM($model, $from, $to); ?>
+	<?php if($kayttaja == 'admin'): ?>
+	  <legend><h3><?php echo Yii::t('main', 'Työvuorot'); ?></h3></legend>
+	<?php endif; ?>
         <div class="tray-center">
             <div class="admin-form">
               <div class="panel heading-border">
                 <div class="panel-body bg-light">
-                 <div class="table-responsive">
-		  <?php echo $asiakkaat[0]->tyovuorotCRM($model, $from, $to); ?>
+                 <div class="table-responsive tuloshakusta">
+		 <?php if(empty($returnBod)): ?>
+		    <p><?=Yii::t('main', 'Ei tuloksia')?></p>
+	  	 <?php else: ?>
+		    <?=$returnBod?>
+		 <?php endif; ?>
 		 </div>
                 </div>
               </div>
@@ -123,14 +164,21 @@
         </div>
 	<?php endif; ?>
 
-	<?php if(isset($naytaLaskut)) : ?>
-	<h3><?php echo Yii::t('main', 'Laskut'); ?></h3>
+	<?php if(isset($naytaLaskut) and isset($_POST['from'])) : ?>
+	<?php $returnBod = $asiakkaat[0]->laskutuksetCRM($model, $from, $to); ?>
+	<?php if($kayttaja == 'admin'): ?>
+	  <legend><h3><?php echo Yii::t('main', 'Laskut'); ?></h3></legend>
+	<?php endif; ?>
         <div class="tray-center">
             <div class="admin-form">
               <div class="panel heading-border">
                 <div class="panel-body bg-light">
-                 <div class="table-responsive">
-		  <?php echo $asiakkaat[0]->laskutuksetCRM($model, $from, $to); ?>
+                 <div class="table-responsive tuloshakusta">
+		 <?php if(empty($returnBod)): ?>
+		    <p><?=Yii::t('main', 'Ei tuloksia')?></p>
+	  	 <?php else: ?>
+		    <?=$returnBod?>
+		 <?php endif; ?>
 		 </div>
                 </div>
               </div>
@@ -138,14 +186,21 @@
         </div>
 	<?php endif; ?>
 
-	<?php if(isset($naytaTarjoukset)) : ?>
-	<h3><?php echo Yii::t('main', 'Tarjoukset'); ?></h3>
+	<?php if(isset($naytaTarjoukset) and isset($_POST['from'])) : ?>
+	<?php $returnBod = $asiakkaat[0]->tarjouksetCRM($model, $from, $to); ?>
+	<?php if($kayttaja == 'admin'): ?>
+	  <legend><h3><?php echo Yii::t('main', 'Tarjoukset'); ?></h3></legend>
+	<?php endif; ?>
         <div class="tray-center">
             <div class="admin-form">
               <div class="panel heading-border">
                 <div class="panel-body bg-light">
-                 <div class="table-responsive">
-		  <?php echo $asiakkaat[0]->tarjouksetCRM($model, $from, $to); ?>
+                 <div class="table-responsive tuloshakusta">
+		 <?php if(empty($returnBod)): ?>
+		    <p><?=Yii::t('main', 'Ei tuloksia')?></p>
+	  	 <?php else: ?>
+		    <?=$returnBod?>
+		 <?php endif; ?>
 		 </div>
                 </div>
               </div>
@@ -153,7 +208,8 @@
         </div>
 	<?php endif; ?>
 
-	<?php if(isset($naytaPalautteet)) : ?>
+	<?php if(isset($naytaPalautteet) and isset($_POST['from'])) : ?>
+	<?php $returnBod = $asiakkaat[0]->palautteetCRM($model, $from, $to, $naytaId, $kayttaja); ?>
 	<?php
 		if(isset($_POST['PalautteetVastaus']['this_id']))
 		{
@@ -161,28 +217,41 @@
 			echo json_encode($return);
 		}
 	?>
-	<h3><?php echo Yii::t('main', 'Palautteet'); ?></h3>
+	<?php if($kayttaja == 'admin'): ?>
+	  <legend><h3><?php echo Yii::t('main', 'Palauteet'); ?></h3></legend>
+	<?php endif; ?>
         <div class="tray-center">
             <div class="admin-form">
               <div class="panel heading-border">
                 <div class="panel-body bg-light">
-
-		  <?php echo $asiakkaat[0]->palautteetCRM($model, $from, $to, $naytaId, $kayttaja); ?>
-
+                 <div class="table-responsive tuloshakusta">
+		 <?php if(empty($returnBod)): ?>
+		    <p><?=Yii::t('main', 'Ei tuloksia')?></p>
+	  	 <?php else: ?>
+		    <?=$returnBod?>
+		 <?php endif; ?>
+		 </div>
                 </div>
               </div>
             </div>
         </div>
 	<?php endif; ?>
 
-	<?php if(isset($naytaVinkit)) : ?>
-	<h3><?php echo Yii::t('main', 'Vinkit'); ?></h3>
+	<?php if(isset($naytaVinkit) and isset($_POST['from'])) : ?>
+	<?php $returnBod = $asiakkaat[0]->vinkitCRM($model, $from, $to); ?>
+	<?php if($kayttaja == 'admin'): ?>
+	  <legend><h3><?php echo Yii::t('main', 'Vinkit'); ?></h3></legend>
+	<?php endif; ?>
         <div class="tray-center">
             <div class="admin-form">
               <div class="panel heading-border">
                 <div class="panel-body bg-light">
-                 <div class="table-responsive">
-		  <?php echo $asiakkaat[0]->vinkitCRM($model, $from, $to); ?>
+                 <div class="table-responsive tuloshakusta">
+		 <?php if(empty($returnBod)): ?>
+		    <p><?=Yii::t('main', 'Ei tuloksia')?></p>
+	  	 <?php else: ?>
+		    <?=$returnBod?>
+		 <?php endif; ?>
 		 </div>
                 </div>
               </div>

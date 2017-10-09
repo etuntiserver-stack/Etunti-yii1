@@ -58,6 +58,9 @@ function getUrlVars() {
 
 	//console.log(sendDataPost);
 
+	$('.haemob').hide();
+	$('.tuloshakusta').text('Odota..');
+
         $.ajax({
            url: url+'/historia?domain='+domain,
 	   type:'POST',
@@ -136,6 +139,9 @@ function getUrlVars() {
 		sendDataPost.push({name: tyyppi, value: tyyppi});
 
 	//console.log(sendDataPost);
+
+	$('.haemob').hide();
+	$('.tuloshakusta').text('Odota..');
 
         $.ajax({
            url: url+'/historia?domain='+domain,
