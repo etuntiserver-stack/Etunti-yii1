@@ -603,10 +603,11 @@ class CrmTarjouksetController extends Controller
 			);
 			$docx->replaceVariableByText($variables_2);
 
-
+/*
 $tb = $this->hinnatTaulu($model->id);
 print_r($tb);
 exit;
+*/
 
 /*
 $docx->replaceVariableByHTML('prices_table', 'block', '<table align="center"><tr><td>AAA</td><td>AAA</td></tr><tr><td>BBB</td><td>BBB</td></tr><tr><td>CCC</td><td>CCC</td></tr></table>', array('parseDivsAsPs' => true));
