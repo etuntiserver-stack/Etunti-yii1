@@ -211,8 +211,8 @@ class CrmTarjouksetController extends Controller
 		   if($mail->send())
 		   {
 
-			if(file_exists(Yii::app()->basePath."/../".$tkPDF))
-			unlink($tkPDF);
+			//if(file_exists(Yii::app()->basePath."/../".$tkPDF))
+			//unlink($tkPDF);
 	
 
 							// <-- LOG

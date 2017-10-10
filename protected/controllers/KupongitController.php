@@ -80,21 +80,25 @@ class KupongitController extends Controller
 		if(isset($_POST['asiakas_id']))
 		{
 
-	       		$criteria = new CDbCriteria();
-	       		$criteria->condition = "
-				id='".$_POST['asiakas_id']."'
-				AND alennuskoodit NOT LIKE '%".$_POST['kupongin_id']."%'
-			";
+			$asiakkaat = Asiakkaat::model()->findByPk($_POST['asiakas_id']);
 
-			$asiakkaat = Asiakkaat::model()->find($criteria);
 			if(isset($asiakkaat->id))
 			{
+
 				$alennuskoodit = array();
 
 				if(is_array(json_decode($asiakkaat->alennuskoodit, true)))
 				$alennuskoodit = json_decode($asiakkaat->alennuskoodit, true);
 
-				array_push($alennuskoodit, array($_POST['id']=>$_POST['kupongin_id']));
+
+				if(isset($alennuskoodit[$_POST['id']]) and $alennuskoodit[$_POST['id']] == $_POST['kupongin_id'])
+				{
+					Yii::app()->user->setFlash('warning', "Tämä alennuskoodi on jo lähetetty tälle henkilölle.");
+					$this->redirect(array('index'));
+				}
+
+
+				$alennuskoodit[$_POST['id']] = $_POST['kupongin_id'];
 				Asiakkaat::model()->updateByPk($asiakkaat->id, array('alennuskoodit' => json_encode($alennuskoodit)));
 
 				// <-- Lahetys
@@ -107,7 +111,7 @@ class KupongitController extends Controller
 				$subject = Yii::t('main', 'Uusi alennuskoodi');
 				$mail = new YiiMailer();
 				$mail->setFrom('no-reply@etunti.fi');
-				$mail->setTo($ft->sahkoposti);
+				$mail->setTo($asiakkaat->sahkoposti);
 				$mail->setSubject($subject);
 				$mail->setBody($message);
 				$mail->send();
@@ -115,7 +119,7 @@ class KupongitController extends Controller
 							// <-- LOG
 							$log=new Log;
 							$log->log_category 	= 1; // 1-email
-							$log->email_to 		= $ft->sahkoposti;
+							$log->email_to 		= $asiakkaat->sahkoposti;
 							$log->email_subject	= $subject;
 							$log->email_message	= json_encode($message);
 							$log->save();
