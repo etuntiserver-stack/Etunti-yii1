@@ -603,15 +603,18 @@ class CrmTarjouksetController extends Controller
 			);
 			$docx->replaceVariableByText($variables_2);
 
-/*
+
 $tb = $this->hinnatTaulu($model->id);
 print_r($tb);
 exit;
 
+/*
 $docx->replaceVariableByHTML('prices_table', 'block', '<table align="center"><tr><td>AAA</td><td>AAA</td></tr><tr><td>BBB</td><td>BBB</td></tr><tr><td>CCC</td><td>CCC</td></tr></table>', array('parseDivsAsPs' => true));
 */
 
+
 /*
+
 			if( $model->tyonkuvaus_id != 0 )
 			{
 			$tyonkuvaus = $this->get_tyonkuvaus_by_id($model->tyonkuvaus_id);
@@ -682,12 +685,12 @@ $docx->replaceVariableByHTML('prices_table', 'block', '<table align="center"><tr
 		$trRivit=TarjousHintaRivit::model()->findAll("tarjous_id='".$tarjous_id."'", array('order'=>'id'));
 		if( count($trRivit) == 0 )
 		{
-			$bod .= $this->renderPartial("tr_rivit_tyhja",array('num'=>0));
+			$bod .= $this->renderPartial("tr_rivit_tyhja",array('num'=>0), true);
 		} else {
 			$num = 0;
 			foreach($trRivit as $rivi){ 
 			$num++;
-			$bod .= $this->renderPartial("tr_rivi_update",array('num'=>$num,'rivi'=>$rivi));
+			$bod .= $this->renderPartial("tr_rivi_update",array('num'=>$num,'rivi'=>$rivi), true);
 			}
 		}
 
