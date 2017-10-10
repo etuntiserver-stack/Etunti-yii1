@@ -4433,7 +4433,18 @@ class TyovuorootController extends Controller
 	{
 		$model=Tyovuoroot::model()->findByPk($id);
 		if($model===null)
-			throw new CHttpException(404,'The requested page does not exist.');
+		{
+			$tilanne = '('.date("d.m.Y H:i").' - '.Yii::app()->user->nimi.'): Työvuoroja '.$id.' ei löydy.';
+			$log=new Log;
+			$log->log_category 	= 3;
+			$log->kuka 		= Yii::app()->user->nimi;
+			$log->log_nimike	= 'error';
+			$log->model		= 'Tyovuoroot';
+			$log->tilanne		= $tilanne;
+			$log->save();
+
+			throw new CHttpException(404, $tilanne);
+		}
 		return $model;
 	}
 
