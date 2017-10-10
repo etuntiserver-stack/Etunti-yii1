@@ -2308,13 +2308,13 @@ class TyovuorootController extends Controller
 			{
 
 
-
 				$updateTyoparia = false;
 				$updateTyovuoroja = false;
 
 				$uusiPfrom = $_POST['ToistuvatTyovuorot']['pfrom'];
 				$uusiPto = $_POST['ToistuvatTyovuorot']['pto'];
 
+				//$return[] = array('ERROR'=>json_encode($edelliset_tvuoro_ids));
 
 
 				if( $model->tid != $_POST['Tyovuoroot']['tid'])
@@ -2378,7 +2378,7 @@ class TyovuorootController extends Controller
 							'ymd'=>date("Ymd",strtotime($item->pvm)), 
 							'isSaved'=>false,
 							'poistaminen'=>true, 
-							'tekijan_nimi'=>$this->etuSukunimi($item->tid).' '.$item->id, 
+							'tekijan_nimi'=>$this->etuSukunimi($item->tid), 
 							'vkopvm' => $fi[date("N",strtotime($item->pvm))]
 					    	    );
 
@@ -2789,7 +2789,7 @@ class TyovuorootController extends Controller
 				!empty($edellinenToistuva->tvuoro_ids) and is_array($edelliset_tvuoro_ids)
 				and $edellinenToistuva->viikko_paivat == json_encode($_POST['P'])
 				and $edellinenToistuva->viikkoja == $_POST['ToistuvatTyovuorot']['viikkoja']
-				and $edellinenToistuva->pfrom > $_POST['ToistuvatTyovuorot']['pfrom']
+				and strtotime($edellinenToistuva->pfrom) > strtotime($_POST['ToistuvatTyovuorot']['pfrom'])
 				and strtotime($_POST['ToistuvatTyovuorot']['pto']) == strtotime($edellinenToistuva->pto)
 			)
 			{
@@ -2844,8 +2844,6 @@ class TyovuorootController extends Controller
 				    }
 				}
 				//  Uudet päivät -->
-
-
 
 
 				$uusiPfrom = $_POST['ToistuvatTyovuorot']['pfrom'];

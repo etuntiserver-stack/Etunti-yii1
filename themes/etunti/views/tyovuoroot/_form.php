@@ -806,7 +806,7 @@ $('.mult').multiselect({
   	  }
 	// paivita vanhat
 
-
+	  $('#virheilmoitus').html('').hide();
 	  $.ajax({
 		  url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/update?id='+e.target[0].value,
 		  data:$(this).serialize(),
