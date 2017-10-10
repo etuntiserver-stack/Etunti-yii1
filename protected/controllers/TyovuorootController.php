@@ -2900,8 +2900,15 @@ class TyovuorootController extends Controller
 					//exit;
 
 					foreach($return as $item)
-					  foreach($item as $line)
-						$edelliset_tvuoro_ids[] = $line['tvuoro_id'];
+					{
+					   foreach($item as $line)
+					   {
+					        if(isset($line['tvuoro_id']))
+						{
+							$edelliset_tvuoro_ids[] = $line['tvuoro_id'];
+						}
+					   }
+					}
 
 
 				    	ToistuvatTyovuorot::model()->updateByPk($edellinenToistuva->id, array(

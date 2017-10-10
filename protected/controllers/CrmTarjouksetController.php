@@ -604,6 +604,14 @@ class CrmTarjouksetController extends Controller
 			$docx->replaceVariableByText($variables_2);
 
 /*
+$tb = $this->hinnatTaulu($model->id);
+print_r($tb);
+exit;
+
+$docx->replaceVariableByHTML('prices_table', 'block', '<table align="center"><tr><td>AAA</td><td>AAA</td></tr><tr><td>BBB</td><td>BBB</td></tr><tr><td>CCC</td><td>CCC</td></tr></table>', array('parseDivsAsPs' => true));
+*/
+
+/*
 			if( $model->tyonkuvaus_id != 0 )
 			{
 			$tyonkuvaus = $this->get_tyonkuvaus_by_id($model->tyonkuvaus_id);
@@ -653,6 +661,42 @@ class CrmTarjouksetController extends Controller
 			$this->redirect(array('index'));
 	}
 
+
+	protected function hinnatTaulu($tarjous_id)
+	{
+		$bod = '
+<table id="TableRivit" border="1">
+     <TR>
+	<TH><span id="uusiRivi" class="link" style="font-size: 150%;"><i class="fa fa-plus-square"></i></span></TH>
+	<TH class="col-sm-2">Tuote/Palvelu</TH>
+	<TH class="col-sm-1">Kpl</TH>
+	<TH class="col-sm-1">Yksikkö <span class="btn btn-primary btn-xs myBgColors muokaValiko" for="laskutus_yksikko"><i class="fa fa-pencil-square-o"></i></span></TH>
+	<TH class="col-sm-1">Hinta</TH>
+	<TH class="col-sm-1">ALV %</TH>
+	<TH class="col-sm-1">ALV</TH>
+	<TH class="col-sm-1">Ale %</TH>
+	<TH class="col-sm-1">Veroton</TH>
+	<TH class="col-sm-1">Yhteensä</TH>
+     </TR>';
+
+		$trRivit=TarjousHintaRivit::model()->findAll("tarjous_id='".$tarjous_id."'", array('order'=>'id'));
+		if( count($trRivit) == 0 )
+		{
+			$bod .= $this->renderPartial("tr_rivit_tyhja",array('num'=>0));
+		} else {
+			$num = 0;
+			foreach($trRivit as $rivi){ 
+			$num++;
+			$bod .= $this->renderPartial("tr_rivi_update",array('num'=>$num,'rivi'=>$rivi));
+			}
+		}
+
+		$bod .= '
+</table>';
+
+		echo $bod;
+
+	}
 
 	public function actionDelete($id)
 	{
