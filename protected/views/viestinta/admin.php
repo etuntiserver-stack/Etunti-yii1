@@ -20,7 +20,7 @@ if(isset($_GET['mail'])){
 }
 
 
-
+phpinfo();
 
 $this->breadcrumbs=array(
 	Yii::t('main', 'Viestintä')=>array('index'),
