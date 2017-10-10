@@ -115,6 +115,13 @@
 		}
 		?>
 	</td>
+	<?php elseif(isset($_GET['log_category']) and $_GET['log_category'] == 3): ?>
+	<td>
+		<?php echo $data->kuka; ?>
+	</td>
+	<td>
+		<?php echo Yii::t('log', $data->tilanne); ?>
+	</td>
 	<?php endif; ?>
 </tr>
 

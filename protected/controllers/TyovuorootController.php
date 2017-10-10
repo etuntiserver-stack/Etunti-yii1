@@ -1158,6 +1158,9 @@ class TyovuorootController extends Controller
 	public function actionShowohje($id)
 	{
 		$m = Kohteet::model()->findbypk($id);
+		if($m === null)
+		throw new CHttpException(404, 'Kohdetta '.$id.' ei löydy');
+
 		$k = explode("//",$m->kenella_on_avain);
 
 		  $ohje = '';
@@ -1174,6 +1177,7 @@ class TyovuorootController extends Controller
 		if(!empty($m->muut))
 		  $ohje .= "<br>Muut: ".$m->muut;
 		echo json_encode(array($ohje,$m->tietoja,$m->arvioitu_kesto));
+	
 	}
 
 	public function actionView($id)
@@ -4433,7 +4437,18 @@ class TyovuorootController extends Controller
 	{
 		$model=Tyovuoroot::model()->findByPk($id);
 		if($model===null)
-			throw new CHttpException(404,'The requested page does not exist.');
+		{
+			$tilanne = '('.date("d.m.Y H:i").' - '.Yii::app()->user->nimi.'): Työvuoroja '.$id.' ei löydy.';
+			$log=new Log;
+			$log->log_category 	= 3;
+			$log->kuka 		= Yii::app()->user->nimi;
+			$log->log_nimike	= 'error';
+			$log->model		= 'Tyovuoroot';
+			$log->tilanne		= $tilanne;
+			$log->save();
+
+			throw new CHttpException(404, $tilanne);
+		}
 		return $model;
 	}
 

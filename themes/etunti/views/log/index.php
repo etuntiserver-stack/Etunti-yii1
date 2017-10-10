@@ -49,6 +49,7 @@
 			   <select class="gui-input" name="log_category" id="log_category">
        				<option value="2" <?php echo (isset($_GET['log_category']) and $_GET['log_category'] == 2)? 'selected': '';?>><?php echo Yii::t('main', 'Tapahtumat'); ?></option>
        				<option value="1" <?php echo (isset($_GET['log_category']) and $_GET['log_category'] == 1)? 'selected': '';?>><?php echo Yii::t('main', 'Sähköpostit'); ?></option>
+       				<option value="3" <?php echo (isset($_GET['log_category']) and $_GET['log_category'] == 3)? 'selected': '';?>><?php echo Yii::t('main', 'Virheilmoitukset'); ?></option>
        				<option value="kaikki"><?php echo Yii::t('main', 'Kaikki'); ?></option>
 			   </select>
 
@@ -288,6 +289,9 @@
   <th><?php echo Yii::t('main', 'Tilanne'); ?></th>
   <th><?php echo Yii::t('main', 'Vanhat arvot'); ?></th>
   <th><?php echo Yii::t('main', 'Uudet arvot'); ?></th>
+  <?php elseif(isset($_GET['log_category']) and $_GET['log_category'] == 3): ?>
+  <th><?php echo Yii::t('main', 'Nimi'); ?></th>
+  <th><?php echo Yii::t('main', 'Tilanne'); ?></th
   <?php endif; ?>
   </tr>
   </thead>
