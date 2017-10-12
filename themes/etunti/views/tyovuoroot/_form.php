@@ -860,6 +860,7 @@ $('.mult').multiselect({
 				if( isSaved === true )
 				{
 					laatikonPaivays(thisDataReturn);
+					window.location.reload();
 
 				} else {
 
