@@ -100,7 +100,7 @@ if(isset($ov->id) and !empty($ov->kohde_id) and empty($model->kohde)){
   </div>
 
   <div class="col-sm-3">
-		<?php echo $form->labelEx($model,'kohde'); ?>
+		<?php echo $form->labelEx($model,'kohde'); ?> <span style="color:red">*</span>
 		<?php
         		$list = CHtml::listData(Kohteet::model()->findAll(array('order' => 'osoite')), 'id', 'osoite');
         		echo $form->dropDownList($model, 'kohde', $list,array('empty'=>'Valitse','class'=>'form-control kohde'));
@@ -121,12 +121,12 @@ if(isset($ov->id) and !empty($ov->kohde_id) and empty($model->kohde)){
 <div class="row">
 
   <div class="col-sm-3">
-		<?php echo $form->labelEx($model,'alku'); ?>
+		<?php echo $form->labelEx($model,'alku'); ?> <span style="color:red">*</span>
 		<input type="text" name="Tyovuoroot[alku]" class="form-control laske timeVuorot" id="alku" value="<?php echo $model->alku; ?>" autofocus>
   </div>
 
   <div class="col-sm-3">
-		<?php echo $form->labelEx($model,'loppu'); ?>
+		<?php echo $form->labelEx($model,'loppu'); ?> <span style="color:red">*</span>
 		<input type="text" name="Tyovuoroot[loppu]" class="form-control laske timeVuorot" id="loppu" value="<?php echo $model->loppu; ?>">
   </div>
 
