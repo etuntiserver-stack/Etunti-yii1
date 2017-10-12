@@ -860,7 +860,7 @@ $('.mult').multiselect({
 				if( isSaved === true )
 				{
 					laatikonPaivays(thisDataReturn);
-					window.location.reload();
+					if(('<?=$model->id?>') !== ''){	window.location.reload(); }
 
 				} else {
 
