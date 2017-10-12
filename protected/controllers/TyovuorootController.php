@@ -1578,7 +1578,7 @@ class TyovuorootController extends Controller
 			$saankoSuoritta = $_POST['ToistuvatTyovuorot']['sopivatPaivat'];
 			$edelliset_tvuoro_ids = json_decode($edellinenToistuva->tvuoro_ids, true);
 
-			$toistuva=new ToistuvatTyovuorot;
+			$toistuva = ToistuvatTyovuorot::model()->findByPk($edellinenToistuva->id);
 			$toistuva->attributes=$_POST['ToistuvatTyovuorot'];
 			$toistuva->attributes=$_POST['Tyovuoroot'];
 			$toistuva->pvm = date("d.m.Y",strtotime($_POST['Tyovuoroot']['pvm']));
