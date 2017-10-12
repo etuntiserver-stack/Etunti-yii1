@@ -686,6 +686,24 @@ $('.mult').multiselect({
 
  	}
 
+	/* <-- Tarkistetaan Aloitus/Lopetus Klo ja osoite */
+	if( $('#alku').val() === '' )
+	{
+		$('#alku').addClass('bg-danger').focus();
+		return false;
+	}
+	if( $('#loppu').val() === '' )
+	{
+		$('#loppu').addClass('bg-danger').focus();
+		return false;
+	}
+	if( $('#Tyovuoroot_kohde option:selected').val() === '' )
+	{
+		$('#Tyovuoroot_kohde').addClass('bg-danger').focus();
+		return false;
+	}
+	/*     Tarkistetaan Aloitus/Lopetus Klo ja osoite --> */
+
 	/* <-- Tarkistetaan Alkaen pvm */
  	if( 
 		('<?=$model->id?>') !== '' 
@@ -1110,6 +1128,7 @@ function laatikonPaivays(thisDataReturn){
   }
 
   $('#alku').blur(function(){
+	$(this).removeClass('bg-danger');
 	var alku = $("#alku").val().split(':');
 	if(!alku[1] & $("#alku").val() !== '')
 	{
@@ -1121,6 +1140,7 @@ function laatikonPaivays(thisDataReturn){
   });
 
   $('#loppu').blur(function(){
+	$(this).removeClass('bg-danger');
 	var alku = $("#loppu").val().split(':');
 	if(!alku[1])
 	{
@@ -1172,6 +1192,7 @@ function laatikonPaivays(thisDataReturn){
 
   $('#Tyovuoroot_kohde').change(function(){
 
+	$(this).removeClass('bg-danger');
 	var thisID = $(this).val();
 	linkkiKohteeseen();
 
