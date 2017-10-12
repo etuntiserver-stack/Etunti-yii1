@@ -1128,7 +1128,14 @@ function laatikonPaivays(thisDataReturn){
 	laskePituus();
   });
 
-
+  $('#pfrom').blur(function(){
+	var thisVal = $(this).val().split('.');
+	var inputDate = new Date(+thisVal[1]+"/"+thisVal[0]+"/"+thisVal[2]); //"11/21/2011"
+	var todaysDate = new Date();
+	if(inputDate.setHours(0,0,0,0) < todaysDate.setHours(0,0,0,0)) {
+		alert('Ei voi olla pienempi kun tämä päivä.');
+	}
+  });
   
   if( $('#Tyovuoroot_kohde').val() !== '' ){
 	var thisID = $('#Tyovuoroot_kohde option:selected').val();
