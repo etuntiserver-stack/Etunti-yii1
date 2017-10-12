@@ -381,12 +381,6 @@ $(".muokaValiko").click(function() {
 	<p>
 	<b><?php echo Yii::t('main','Muokkaa toistuvaa työvuoroa. Jos valintaa ei ole tehtynä, muokataan vain kyseisen päivän työvuoroa.'); ?></b> <br> 
 	<input type="checkbox" class="sw" name="ToistuvatTyovuorot[toistuva_aktiivinen]" id="toistuva_aktiivinen"><br>
-	<?php if(isset($model->id)) : ?>
-	<div class="collapse" id="toistuva-repair-funktio">
-		<b><?php echo Yii::t('main','Luo toistuva työvuoro uudestaan.'); ?></b> <br> 
-		<input type="checkbox" class="sw" name="ToistuvatTyovuorot[toistuva_repair]" id="toistuva_repair">
-	</div>
-	<?php endif; ?>
 	</p>
 	<br>
 
@@ -665,19 +659,6 @@ $('.mult').multiselect({
 	offText: "Ei"
   });
 
-/* ei toimi kun haluan luoda toistuva olevasta tyovuorosta
-  if( $('#updateMuoto').val() == "true" )
-  {
-    $('.vkopvmswitch').on('switchChange.bootstrapSwitch', function () {
-    	$('#pfrom').attr('readonly', 'yes');
-    	$('#pto').attr('readonly', 'yes');
-    });
-
-    $('#pfrom, #pto').on('blur', function () {
-    	$(".vkopvmswitch").bootstrapSwitch('toggleDisabled',true,true);
-    });
-  }
-*/
 
 	var pfrom = '';
 	var pto = '';
@@ -691,6 +672,16 @@ $('.mult').multiselect({
 
 
 	$('#tyovuoroot-form').on('submit',function(e) {
+
+ 	if( 
+		('<?=$model->id?>') !== '' 
+		&& ('<?=$model->toistuva_id?>') !== '0' 
+		&& ( $('#toistuva_aktiivinen').bootstrapSwitch('state') === false )
+ 	)
+ 	{
+		if(!confirm('Tallentamalla irrotat tämän työvuoron työvuoroketjusta. Haluatko irrottaa?'))
+ 		return false;
+ 	}
 
 	if( ($('#submitButton').val() === 'Luo') || ($('#submitButton').val() === 'Tallenna') ) 
 		$('#submitButton').hide();
@@ -1227,7 +1218,7 @@ function laatikonPaivays(thisDataReturn){
 		$('#submitButton').val('Tallenna').removeAttr( "pvmTarkistus" );
 		$('#toistuva-repair-funktio').removeClass('in');
 	}
-	switchesPvm();
+
   });
 
   $('#toistuva_repair').on('switchChange.bootstrapSwitch', function(event, state) {
@@ -1251,27 +1242,8 @@ function laatikonPaivays(thisDataReturn){
 
 
   $('#ma,#ti,#ke,#to,#pe,#la,#su').on('switchChange.bootstrapSwitch', function(event, state) {
-	switchesPvm();
+
   });
-
-  function switchesPvm(){
-
-	if( ($('#toistuva_aktiivinen').bootstrapSwitch('state') === true) && 
-	(	$('#ma').bootstrapSwitch('state') === true | 
-		$('#ti').bootstrapSwitch('state') === true | 
-		$('#ke').bootstrapSwitch('state') === true | 
-		$('#to').bootstrapSwitch('state') === true | 
-		$('#pe').bootstrapSwitch('state') === true | 
-		$('#la').bootstrapSwitch('state') === true | 
-		$('#su').bootstrapSwitch('state') === true
-	) )
-	{
-		$('#vikoPvm').removeClass('alert alert-danger').addClass('alert alert-success');
-	} else {
-		$('#vikoPvm').removeClass('alert alert-success').addClass('alert alert-danger');
-	}
-
-  }
 
 
 
