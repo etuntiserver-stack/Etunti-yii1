@@ -681,17 +681,28 @@ $('.mult').multiselect({
  	{
 		if(!confirm('Tallentamalla irrotat tämän työvuoron työvuoroketjusta. Haluatko irrottaa?'))
  		return false;
+
+
+
  	}
 
 	/* <-- Tarkistetaan Alkaen pvm */
-	var thisVal = $('#pfrom').val().split('.');
-	var inputDate = new Date(+thisVal[1]+"/"+thisVal[0]+"/"+thisVal[2]); //"11/21/2011"
-	var todaysDate = new Date();
-	if(inputDate.setHours(0,0,0,0) < todaysDate.setHours(0,0,0,0)) {
-		alert('Toistuvan työvuoron aloitus päivämäärä ei voida muokata alkamaan menneisyydestä.');
-		return false;
+ 	if( 
+		('<?=$model->id?>') !== '' 
+		&& ('<?=$model->toistuva_id?>') !== '0' 
+		&& ( $('#toistuva_aktiivinen').bootstrapSwitch('state') === true )
+ 	)
+ 	{
+		var thisVal = $('#pfrom').val().split('.');
+		var inputDate = new Date(+thisVal[1]+"/"+thisVal[0]+"/"+thisVal[2]); //"11/21/2011"
+		var todaysDate = new Date();
+		if(inputDate.setHours(0,0,0,0) < todaysDate.setHours(0,0,0,0)) {
+			alert('Toistuvan työvuoron aloitus päivämäärä ei voida muokata alkamaan menneisyydestä.');
+			return false;
+		}
 	}
 	/*    Tarkistetaan Alkaen pvm --> */
+
 
 	if( ($('#submitButton').val() === 'Luo') || ($('#submitButton').val() === 'Tallenna') ) 
 		$('#submitButton').hide();
