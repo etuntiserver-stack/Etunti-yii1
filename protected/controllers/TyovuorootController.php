@@ -1582,17 +1582,19 @@ class TyovuorootController extends Controller
 
 		// <-- Toistuva tyovuorot ja tyoparit
 		if(
-			isset($edellinenToistuva->id) 
-			and isset($_POST['ToistuvatTyovuorot']['toistuva_aktiivinen']) 
+			isset($_POST['ToistuvatTyovuorot']['toistuva_aktiivinen']) 
 			and $_POST['ToistuvatTyovuorot']['toistuva_aktiivinen'] == 'on'
 		)
 		{
 			$fi = $this->vkoPaivat();
 			//$return[] = array('ERROR'=>json_encode($tyopaari_forUpdater));
 			$saankoSuoritta = $_POST['ToistuvatTyovuorot']['sopivatPaivat'];
-			$edelliset_tvuoro_ids = json_decode($edellinenToistuva->tvuoro_ids, true);
 
-			$toistuva = ToistuvatTyovuorot::model()->findByPk($edellinenToistuva->id);
+			if(isset($edellinenToistuva->id))
+				$toistuva = ToistuvatTyovuorot::model()->findByPk($edellinenToistuva->id);
+			else
+				$toistuva = new ToistuvatTyovuorot;
+
 			$toistuva->attributes=$_POST['ToistuvatTyovuorot'];
 			$toistuva->attributes=$_POST['Tyovuoroot'];
 			$toistuva->pvm = date("d.m.Y",strtotime($_POST['Tyovuoroot']['pvm']));
@@ -1600,12 +1602,9 @@ class TyovuorootController extends Controller
 			if(isset($_POST['P']))
 			$toistuva->viikko_paivat=json_encode($_POST['P']);
 
-			if(strtotime($edellinenToistuva->pfrom) < strtotime(date("d.m.Y")))
+			if(isset($edellinenToistuva->id) and strtotime($edellinenToistuva->pfrom) < strtotime(date("d.m.Y")))
 			{
-				$vanhat = true;
 				$toistuva->pfrom = date("d.m.Y");
-			} else {
-				$vanhat = false;
 			}
 
 
@@ -1622,7 +1621,7 @@ class TyovuorootController extends Controller
 				// <-- Pois kaikki vanhat
 				$pois_criteria = new CDBcriteria;
 				$pois_criteria->condition=" 
-					toistuva_id='".$edellinenToistuva->id."'
+					toistuva_id='".$toistuva->id."'
 					AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') >= CURDATE()
 				";
 				Tyovuoroot::model()->deleteAll($pois_criteria);
@@ -1631,7 +1630,7 @@ class TyovuorootController extends Controller
 				// <-- Otetaan pois tyovuoro_id noista jotka on tehtty
 				$upd_criteria = new CDBcriteria;
 				$upd_criteria->condition=" 
-					toistuva_id='".$edellinenToistuva->id."'
+					toistuva_id='".$toistuva->id."'
 				";
 				Tyovuoroot::model()->updateAll(array('toistuva_id'=>0), $upd_criteria);
 				//    Otetaan pois tyovuoro_id noista jotka on tehtty -->
@@ -1713,7 +1712,9 @@ class TyovuorootController extends Controller
 				{
 
 					ToistuvatTyovuorot::model()->updatebypk($toistuva->id, array('tvuoro_ids' => json_encode($tvuoro_ids)));
-
+				
+					if(isset($edellinenToistuva->id))
+					{
 					// <-- LOG
 					$model_log 	= 'ToistuvatTyovuorot';
 					$name_log 	= 'Toistuvat työvuorot';
@@ -1723,6 +1724,17 @@ class TyovuorootController extends Controller
 					$site = Yii::app()->createController('Site');
 					$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
 					//     LOG -->
+					} else {
+					// <-- LOG
+					$model_log 	= 'ToistuvatTyovuorot';
+					$name_log 	= 'Toistuvat työvuorot';
+					$status_log 	= 'Create';
+					$old_values = null;
+					$new_values = json_encode($toistuva->attributes);
+					$site = Yii::app()->createController('Site');
+					$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+					//     LOG -->
+					}
 
 				}
 
