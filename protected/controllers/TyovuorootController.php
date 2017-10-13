@@ -1618,6 +1618,13 @@ class TyovuorootController extends Controller
 					$return[] = array('ERROR'=>json_encode(var_dump($toistuva->getErrors())));
 				}
 
+				// <-- Pois valittuna Työvuoro
+				if(!isset($edellinenToistuva->id))
+				{
+					Tyovuoroot::model()->deleteByPk($id);
+				}
+				//     Pois valittuna Työvuoro -->
+
 				// <-- Pois kaikki vanhat
 				$pois_criteria = new CDBcriteria;
 				$pois_criteria->condition=" 
