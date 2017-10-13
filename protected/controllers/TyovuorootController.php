@@ -28,7 +28,7 @@ class TyovuorootController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','updatetime','showohje','did','muisti','operatio','viikko','fromto','autoinsert','autoremove','viikkottain', 'viikkottain_pdf', 'laheta','kk','pvmtid','laheta_k', 'muistin', 'muisticlear', 'muistissa', 'vkolopput', 'vkolopchange', 'uusitilaus', 'tv2', 'PoistaTv', 'valitse_kokopaiva', 'tv_kohteet', 'siivous_tyonimike', 'getKohdeByAsiakas', 'getKohdeById', 'getAsiakasByKohde', 'paivita_laatikot', 'poista_toistuva', 'onko_sama', 'asiakas_autocomplete', 'kohde_autocomplete', 'check_paallekkain', 'get_tekijantiedot', 'is_asiakas', 'is_yhteyshenkilo', 'hallinta', 'didnew'),
+				'actions'=>array('admin','delete','create','update','index','view','updatetime','showohje','did','muisti','operatio','viikko','fromto','autoinsert','autoremove','viikkottain', 'viikkottain_pdf', 'laheta','kk','pvmtid','laheta_k', 'muistin', 'muisticlear', 'muistissa', 'vkolopput', 'vkolopchange', 'uusitilaus', 'tv2', 'PoistaTv', 'valitse_kokopaiva', 'tv_kohteet', 'siivous_tyonimike', 'getKohdeByAsiakas', 'getKohdeById', 'getAsiakasByKohde', 'paivita_laatikot', 'poista_toistuva', 'onko_sama', 'asiakas_autocomplete', 'kohde_autocomplete', 'check_paallekkain', 'get_tekijantiedot', 'is_asiakas', 'is_yhteyshenkilo', 'hallinta', 'didnew', 'palautta_toistuva_pvm'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny', // allow admin user to perform 'admin' and 'delete' actions
@@ -793,7 +793,15 @@ class TyovuorootController extends Controller
 			}
 			//     LOG -->
 
+			// <-- Jos toistuva, otetaan sen Päivämäärä pois ketjusta
+			if( isset($model->pvm) and $model->toistuva_id != 0)
+			{
+				$this->toistuvaDeletePvm($model->toistuva_id, $model->pvm);
+			}
+			//     Jos toistuva, otetaan sen Päivämäärä pois ketjusta -->
+
 			Tyovuoroot::model()->deletebypk($model->id);
+
 			echo json_encode($return);
 			exit;
 		}
@@ -824,22 +832,13 @@ class TyovuorootController extends Controller
 			$ex = explode("_",$cp);
 
 			$t = Tyovuoroot::model()->findbypk($ex[0]);
-			// <-- Jos se oli toistuvassa, poistetaan sen työvuoro ID
-			if( $t->toistuva_id != 0)
+
+			// <-- Jos toistuva, otetaan sen Päivämäärä pois ketjusta
+			if( isset($t->pvm) and $t->toistuva_id != 0)
 			{
-				$toistuva = ToistuvatTyovuorot::model()->findbypk($t->toistuva_id);
-				if(isset($toistuva->id) and !empty($toistuva->tvuoro_ids))
-				{
-					$tvuoro_ids = json_decode($toistuva->tvuoro_ids, true);
-					if(is_array($tvuoro_ids))
-					{
-						$ketjustaPois = $t->id;
-						$result = array_values( array_diff($tvuoro_ids, array($ketjustaPois)) );
-						ToistuvatTyovuorot::model()->updatebypk($toistuva->id, array('tvuoro_ids'=>json_encode($result)));
-					}
-				}
+				$this->toistuvaDeletePvm($t->toistuva_id, $t->pvm);
 			}
-			//     Jos se oli toistuvassa, poistetaan sen työvuoro ID -->
+			//     Jos toistuva, otetaan sen Päivämäärä pois ketjusta -->
 
 			// <-- LOG
 			if( isset($t->id) )
@@ -919,22 +918,12 @@ class TyovuorootController extends Controller
 			if(isset($t->id))
 			{
 	
-			// <-- Jos se oli toistuvassa, poistetaan sen työvuoro ID
-			if( $t->toistuva_id != 0)
+			// <-- Jos toistuva, otetaan sen Päivämäärä pois ketjusta
+			if( isset($t->pvm) and $t->toistuva_id != 0)
 			{
-				$toistuva = ToistuvatTyovuorot::model()->findbypk($t->toistuva_id);
-				if(isset($toistuva->id) and !empty($toistuva->tvuoro_ids))
-				{
-					$tvuoro_ids = json_decode($toistuva->tvuoro_ids, true);
-					if(is_array($tvuoro_ids))
-					{
-						$ketjustaPois = $t->id;
-						$result = array_values( array_diff($tvuoro_ids, array($ketjustaPois)) );
-						ToistuvatTyovuorot::model()->updatebypk($toistuva->id, array('tvuoro_ids'=>json_encode($result)));
-					}
-				}
+				$this->toistuvaDeletePvm($t->toistuva_id, $t->pvm);
 			}
-			//     Jos se oli toistuvassa, poistetaan sen työvuoro ID -->
+			//     Jos toistuva, otetaan sen Päivämäärä pois ketjusta -->
 
 			$model=new Tyovuoroot;
 			$model->attributes=$t->attributes;
@@ -983,7 +972,32 @@ class TyovuorootController extends Controller
 		}
 	}
 
+	public function toistuvaDeletePvm($toistuva_id, $pvm)
+	{
+		$toistuva = ToistuvatTyovuorot::model()->findbypk($toistuva_id);
+		if(isset($toistuva->id))
+		{
+			$poistettu_pvm = array();
+			$poistettu_pvm = json_decode($toistuva->poistettu_pvm, true);
 
+				$poistettu_pvm[] = $pvm;
+				ToistuvatTyovuorot::model()->updatebypk($toistuva->id, array('poistettu_pvm'=>json_encode($poistettu_pvm)));
+
+		}
+	}
+
+	public function actionPalautta_toistuva_pvm($id, $pvm)
+	{
+		$toistuva = ToistuvatTyovuorot::model()->findByPk($id);
+		if(isset($toistuva->poistettu_pvm) and is_array(json_decode($toistuva->poistettu_pvm, true)))
+		{
+			$poistettu_pvm = json_decode($toistuva->poistettu_pvm, true);
+			$uusi_ketju = array_values( array_diff($poistettu_pvm, array($pvm)) );
+			ToistuvatTyovuorot::model()->updateByPk($toistuva->id, array('poistettu_pvm' => json_encode($uusi_ketju)));
+			echo json_encode('ok');
+		}
+		exit;
+	}
 
 	public function actionAutoinsert()
 	{
@@ -1749,46 +1763,14 @@ class TyovuorootController extends Controller
 		//     LOG -->
 
 
-			// <-- Oliko se toistuvassa tyovuorossa. Poistetaan ketjusta
-			if( isset($edellinenToistuva->id) )
+
+			// <-- Jos toistuva, otetaan sen Päivämäärä pois ketjusta
+			if( isset($model->pvm) and $model->toistuva_id != 0)
 			{
-
-				if(!empty($edellinenToistuva->tvuoro_ids) and is_array(json_decode($edellinenToistuva->tvuoro_ids, true)))
-				{
-
-					$poistoCriteria = new CDBcriteria;
-					$poistoCriteria->condition="
-						id!='".$model->id."'
-						AND toistuva_id='".$edellinenToistuva->id."'
-						AND pvm='".$model->pvm."'
-					";
-				  	$t = Tyovuoroot::model()->findAll($poistoCriteria);
-					$ketjustaPois = array();
-					foreach($t as $item)
-					{
-						$ketjustaPois[] = $item->id;
-
-						$return[] = array(
-							'tid'=>$item->tid, 
-							'pvm'=>$item->pvm, 
-							'ymd'=>date("Ymd",strtotime($item->pvm)),
-							'isSaved'=>true
-							);
-					}
-						$ketjustaPois[] = $model->id;
-
-					$tvuoro_ids_Arr = json_decode($edellinenToistuva->tvuoro_ids, true);
-					$result = array_values( array_diff($tvuoro_ids_Arr, $ketjustaPois) );
-					ToistuvatTyovuorot::model()->updateByPk($edellinenToistuva->id, array('tvuoro_ids'=>json_encode($result) ));
-				  	Tyovuoroot::model()->deleteAll($poistoCriteria);
-				}
+				$this->toistuvaDeletePvm($model->toistuva_id, $model->pvm);
 				$_POST['Tyovuoroot']['toistuva_id'] = 0;
 			}
-			//     Oliko se toistuvassa tyovuorossa. Poistetaan ketjusta -->
-
-
-
-
+			//     Jos toistuva, otetaan sen Päivämäärä pois ketjusta -->
 
 
 			$_POST['Tyovuoroot']['pvm'] = date("d.m.Y",strtotime($_POST['Tyovuoroot']['pvm']));
@@ -2867,8 +2849,16 @@ class TyovuorootController extends Controller
 	{
 
 		$fi = $this->vkoPaivat();
-
-
+		$tt = Tyontekijat::model()->findByPk($tid);
+		
+		// <-- Tsekataan poistettut PVM
+		$poistettu_pvm = array();
+		$toistuva = ToistuvatTyovuorot::model()->findByPk($id);
+		if(isset($toistuva->poistettu_pvm) and is_array(json_decode($toistuva->poistettu_pvm, true)))
+		{
+			$poistettu_pvm = json_decode($toistuva->poistettu_pvm, true);
+		}
+		//     Tsekataan poistettut PVM -->
 
 		$startDate	= $pfrom;
 		$end_date	= $pto;
@@ -2914,8 +2904,8 @@ class TyovuorootController extends Controller
 			{
 				$pvm = $date;
 				//$return[] = array('tid'=>$tid, 'pvm'=>$pvm, 'ymd'=>date("Ymd",strtotime($pvm)));
-				$onkosama = $this->onko_sama(null, $pvm, $tid, $kohde, $alku, $loppu);
-				$tt = Tyontekijat::model()->findByPk($tid);
+				//$onkosama = $this->onko_sama(null, $pvm, $tid, $kohde, $alku, $loppu);
+
 
 				$tekijan_nimi='';
 				if(isset($tt->tekijan_nimi) and $tid!=0)
@@ -2923,7 +2913,19 @@ class TyovuorootController extends Controller
 				elseif(!isset($tt->tekijan_nimi) and $tid==0)
 					$tekijan_nimi='VARAUS';
 
-
+				if(in_array($pvm, $poistettu_pvm))
+				{
+							$return[] = array(
+								'tid'=>$tid, 
+								'pvm'=>$pvm, 
+								'ymd'=>date("Ymd",strtotime($pvm)), 
+								'isSaved'=>false, 
+								'tekijan_nimi'=>$tekijan_nimi, 
+								'vkopvm' => $fi[date("N",strtotime($pvm))],
+								'toistuva_id'=>$id,
+								'otettu_pois'=>true 
+							);
+				} else {
 
 					$t = new Tyovuoroot;
 					$t->tid = $tid;
@@ -2967,6 +2969,8 @@ class TyovuorootController extends Controller
 							);
 
 					}
+
+				} // if otettu pois
 
 			}
 			//$return[] = array('tid'=>$tid, 'pvm'=>$date, 'ymd'=>date("Ymd",strtotime($date)));

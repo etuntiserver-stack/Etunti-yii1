@@ -925,9 +925,6 @@ $('.mult').multiselect({
 					   else if(d['uusi']) {
 					   	$('#sopivatPaivat').append('<div class="row"><b class="text-success"><div class="col-sm-3">'+d['pvm']+'</div><div class="col-sm-3">'+d['vkopvm']+'</div><div class="col-sm-3">'+d['tekijan_nimi']+'</div><div class="col-sm-3">Uusi</div></b></div>');
 					   }
-					   else if(d['uusi_repair']) {
-					   	$('#sopivatPaivat').append('<div class="row"><b class="text-danger"><div class="col-sm-3">'+d['pvm']+'</div><div class="col-sm-3">'+d['vkopvm']+'</div><div class="col-sm-3">'+d['tekijan_nimi']+'</div><div class="col-sm-3">Vanha pois. Luo uusi</div></b></div>');
-					   }
 					   else if(d['muokkaus']) {
 					   	$('#sopivatPaivat').append('<div class="row"><b class="text-warning"><div class="col-sm-3">'+d['pvm']+'</div><div class="col-sm-3">'+d['vkopvm']+'</div><div class="col-sm-3">'+d['tekijan_nimi']+'</div><div class="col-sm-3">Muokkaus</div></b></div>');
 					   }
@@ -943,12 +940,42 @@ $('.mult').multiselect({
 					   else if(d['ketjunMuutos']) {
 					   	$('#sopivatPaivat').append('<div class="row"><b class="text-warning"><div class="col-sm-3">'+d['pvm']+'</div><div class="col-sm-3">'+d['vkopvm']+'</div><div class="col-sm-3">'+d['tekijan_nimi']+'</div><div class="col-sm-3">Ketjun muutos</div></b></div>');
 					   }
-					   else if(d['repair_ei-muutoksia']) {
-					   	$('#sopivatPaivat').append('<div class="row"><b class="text-warning"><div class="col-sm-3">'+d['pvm']+'</div><div class="col-sm-3">'+d['vkopvm']+'</div><div class="col-sm-3">'+d['tekijan_nimi']+'</div><div class="col-sm-3">Ei muutoksia</div></b></div>');
+					   else if(d['otettu_pois']) {
+					   	$('#sopivatPaivat').append('<div class="row"><b class="text-danger"><div class="col-sm-3">'+d['pvm']+' (poistettu)</div><div class="col-sm-3">'+d['vkopvm']+'</div><div class="col-sm-3">'+d['tekijan_nimi']+'</div><div class="col-sm-3"><input type="checkbox" class="palaaPvm" id="palaaPvm_'+d['toistuva_id']+'_'+d['ymd']+'" toistuva_id="'+d['toistuva_id']+'" pvm="'+d['pvm']+'"> Palaa takaisin</div></b></div>');
+
+
+						$('#palaaPvm_'+d['toistuva_id']+'_'+d['ymd']).change(function(){
+
+							if(!confirm('Haluatko varmaasti palauttaa '+ $(this).attr('pvm')))
+							{
+								$( this ).prop( "checked", false );
+								return false;
+							}
+				
+						    	if ($( this ).is(":checked")) {
+						        $.ajax({
+						           url: 'palautta_toistuva_pvm?id='+$(this).attr('toistuva_id')+'&pvm='+$(this).attr('pvm'),
+							   type:'GET',
+						           success: function(data){
+								d = JSON.parse(data);
+							    	if(d == 'ok')
+								{
+									$('#submitButton').trigger( "click" );
+								}
+						    	   },
+						    	   error: function(XMLHttpRequest, textStatus, errorThrown) {
+							    	console.log(XMLHttpRequest);
+						 	   }
+						        });
+							}
+						});
+
+
 					   }
 					   else if(d['ERROR']) {
 						   	$('#sopivatPaivat').append(d['ERROR']);
 					   }
+
 
 
 
@@ -993,6 +1020,8 @@ $('.mult').multiselect({
 	e.preventDefault();
 
 	});
+
+
 
 
 // Poistaminen
