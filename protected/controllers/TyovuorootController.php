@@ -1545,44 +1545,37 @@ class TyovuorootController extends Controller
 
 	public function actionPaivita_laatikot()
 	{
-		if(isset($_POST['toistuva_id']))
+		if(isset($_POST['tids']))
 		{
+			$tids_arr = $_POST['tids'];
+			$tids_arr = array_unique(array_values($tids_arr));
 
 			$return = array();
-			$criteria = new CDBcriteria;
-			//$criteria->condition = " toistuva_id='".$_POST['toistuva_id']."' ";
 			if(isset(Yii::app()->session['from']) and isset(Yii::app()->session['to']))
 			{
-				$criteria->addCondition(" 
-					DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') 
-		     			BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."'
-				");
+
+			   foreach($tids_arr as $tid)
+			   {
+				$start_date = Yii::app()->session['from'];
+				$end_date = Yii::app()->session['to'];
+
+				while (strtotime($start_date) <= strtotime($end_date)) {
+					$return[] = array(
+						'tid'=>$tid, 
+						'pvm'=>date("d.m.Y", strtotime($start_date)), 
+						'ymd'=>date("Ymd",strtotime($start_date))
+					);
+					$start_date = date ("Y-m-d", strtotime("+1 days", strtotime($start_date)));
+				}
+			   }
 			}
 
-			$data = Tyovuoroot::model()->findAll($criteria);
-			foreach($data as $model)
-			$return[] = array('tid'=>$model->tid, 'pvm'=>$model->pvm, 'ymd'=>date("Ymd",strtotime($model->pvm)));
-
 			echo json_encode($return);
 			exit;
 		}
 	}
-/*
-	public function actionPoista_toistuva()
-	{
-		if(isset($_POST['toistuva_id']))
-		{
-			$data = Tyovuoroot::model()->findAll(" toistuva_id='".$_POST['toistuva_id']."' ");
-			foreach($data as $model)
-			$return[] = array('tid'=>$model->tid, 'pvm'=>$model->pvm, 'ymd'=>date("Ymd",strtotime($model->pvm)));
-	
-			ToistuvatTyovuorot::model()->findByPk($_POST['toistuva_id'])->delete();
 
-			echo json_encode($return);
-			exit;
-		}
-	}
-*/
+
 	public function actionUpdate($id)
 	{
 
