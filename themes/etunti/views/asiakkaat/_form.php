@@ -19,7 +19,7 @@ $asiakasnumero = 'voidaan käyttää oleva ID numero';
    $as = Asiakkaat::model()->find(array("order"=>"id DESC"));
 
    if(isset($as->id) and !isset($model->id) and $asetukset->lasku_asiakasnumero == 0)
-   $asnum = array('value'=>($as->id+1),'class'=>'form-control');
+   $asnum = array('value'=>($as->asiakasnumero+1),'class'=>'form-control');
    else
    $asnum = array('class'=>'form-control');
 
