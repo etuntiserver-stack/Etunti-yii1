@@ -1547,7 +1547,19 @@ class TyovuorootController extends Controller
 	{
 		if(isset($_POST['toistuva_id']))
 		{
-			$data = Tyovuoroot::model()->findAll(" toistuva_id='".$_POST['toistuva_id']."' ");
+
+			$return = array();
+			$criteria = new CDBcriteria;
+			//$criteria->condition = " toistuva_id='".$_POST['toistuva_id']."' ";
+			if(isset(Yii::app()->session['from']) and isset(Yii::app()->session['to']))
+			{
+				$criteria->addCondition(" 
+					DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') 
+		     			BETWEEN '".Yii::app()->session['from']."' AND '".Yii::app()->session['to']."'
+				");
+			}
+
+			$data = Tyovuoroot::model()->findAll($criteria);
 			foreach($data as $model)
 			$return[] = array('tid'=>$model->tid, 'pvm'=>$model->pvm, 'ymd'=>date("Ymd",strtotime($model->pvm)));
 

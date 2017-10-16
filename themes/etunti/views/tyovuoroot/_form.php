@@ -813,8 +813,9 @@ $('.mult').multiselect({
 	if( e.target[0].value != '')
 	{
 
-	// paivita vanhat
 	  var toistuva_aktiivinen = $('#toistuva_aktiivinen').is(':checked');
+
+	  // paivita vanhat
 	  if((toistuva_aktiivinen === true) && ($('#sopivatPaivatInput').val() == 1))
 	  {
 	  //alert(e.target[7].value);
@@ -823,10 +824,9 @@ $('.mult').multiselect({
 		  data:{ toistuva_id : $('#Tyovuoroot_toistuva_id').val() },
 		  type:'POST',
 		  success:function(data){
-			data = JSON.parse(data);
+			//data = JSON.parse(data);
 			console.log('paivita laatikot > ' +data);
-			laatikonPaivays(data);
-
+			//laatikonPaivays(data);
 	   	},
 		error:function(data){
 		console.log(data);
@@ -834,7 +834,7 @@ $('.mult').multiselect({
 	    	}
 	  });
   	  }
-	// paivita vanhat
+	  // paivita vanhat
 
 	  $('#virheilmoitus').html('').hide();
 	  $.ajax({
@@ -843,7 +843,7 @@ $('.mult').multiselect({
 		  type:'POST',
 		  success:function(data){
 			thisDataReturn = JSON.parse(data);
-			console.log(thisDataReturn);
+			//console.log(thisDataReturn);
 			paivaysTarkistus(thisDataReturn);
 	   	},
 		error: function(xhr, status, error) {
@@ -899,7 +899,6 @@ $('.mult').multiselect({
 				if( isSaved === true )
 				{
 					laatikonPaivays(thisDataReturn);
-					if(('<?=$model->id?>') !== ''){	window.location.reload(); }
 
 				} else {
 
@@ -1198,6 +1197,13 @@ function laatikonPaivays(thisDataReturn){
 	laskePituus();
   });
 
+  $('#pto, #pfrom').blur(function(){
+	$('#sopivatPaivat').html('');
+  });
+
+  $('#Toistuva_viikkoja').change(function(){
+	$('#sopivatPaivat').html('');
+  });
   
   if( $('#Tyovuoroot_kohde').val() !== '' ){
 	var thisID = $('#Tyovuoroot_kohde option:selected').val();
@@ -1313,7 +1319,7 @@ function laatikonPaivays(thisDataReturn){
 
 
   $('#ma,#ti,#ke,#to,#pe,#la,#su').on('switchChange.bootstrapSwitch', function(event, state) {
-
+	$('#sopivatPaivat').html('');
   });
 
 

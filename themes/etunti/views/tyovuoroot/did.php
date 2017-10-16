@@ -290,8 +290,8 @@ if(!isset($_POST['tulosta']))
 	   $bod .=  '<p><span style="color: blue; border: 1px #333 solid">'.str_replace("\n","<br>",$tvVal->tietoja).'</span></p>';
 
 	   $bod .= $peruutettu;
-	   //if($tvVal->toistuva_id != 0)
-	   //$bod .=  '<br><span class="text-warning">Ketjun numero:'.$tvVal->toistuva_id.'</span> '; //$tvVal->id
+	   if($tvVal->toistuva_id != 0) // piilotetaan
+	   $bod .=  '<br><span class="text-warning">'.$tvVal->id.'. Ketjun numero:'.$tvVal->toistuva_id.'</span> '; // piilotetaan
 
 	   $bod .=  '<br>
 	   </div>';
