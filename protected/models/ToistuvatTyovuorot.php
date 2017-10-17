@@ -30,7 +30,7 @@ class ToistuvatTyovuorot extends DB2ActiveRecord
 	{
 		
 		$tb_name = 'toistuvat_tyovuorot';
-		$check_this_table = false;
+		$check_this_table = true;
 		//unset(Yii::app()->session[$tb_name]); // this use if want many times play
 		if(!isset(Yii::app()->session[$tb_name]))
 		{
@@ -69,10 +69,7 @@ class ToistuvatTyovuorot extends DB2ActiveRecord
                      'tyopaari' => 'text ',
                      'ilmoitus_paattymisesta' => 'int(1) ',
                      'tvuoro_ids' => 'text ',
-
-
-
-
+                     'poistettu_pvm' => 'text',
 		);
 
 		foreach($table_structure as $key=>$value)
@@ -100,7 +97,7 @@ class ToistuvatTyovuorot extends DB2ActiveRecord
 			array('alku, loppu, pituus, kesto', 'length', 'max'=>10),
 			array('tyoajanmerkinta', 'length', 'max'=>100),
 			array('tietoja', 'length', 'max'=>10000),
-			array('tyopaari, tvuoro_ids', 'safe'),
+			array('tyopaari, tvuoro_ids, poistettu_pvm', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('id, time, pfrom, pto, viikkoja, viikko_paivat, tid, kohde, pvm, alku, loppu, kesto, tyoajanmerkinta, status, tietoja, tyopaari', 'safe', 'on'=>'search'),
