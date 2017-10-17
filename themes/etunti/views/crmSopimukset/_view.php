@@ -20,7 +20,7 @@
 		<?php echo $data->voimassa; ?>
 	</td>
 	<td>
-		<?php //echo $data->kohteen_osoite; ?>
+		<?php echo (isset($data->tarjous->id))? $data->tarjous->kohteen_osoite.', '.$data->tarjous->kohteen_postinumero.' '.$data->tarjous->kohteen_postitoimipaikka: ''; ?>
 	</td>
 	<td>
 	<div class="row">

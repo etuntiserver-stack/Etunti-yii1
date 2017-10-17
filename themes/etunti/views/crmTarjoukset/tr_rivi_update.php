@@ -3,7 +3,7 @@
 ?>
 
      <tr class="kaikkitr" id="trRivi_<?php echo $num; ?>">
-	<?php if(!isset($_POST['CrmTarjoukset'])) : ?>
+	<?php if(!isset($_POST['CrmTarjoukset']) and !isset($_POST['CrmSopimukset'])) : ?>
 	<td><b class="link text-danger poista" for="poista_<?php echo $num; ?>" style="font-size:150%"><i class="fa fa-times"></i></b></td>
 	<?php endif; ?>
 
@@ -14,7 +14,7 @@
 
 	<td><input type="text" size="5" name="kpl[<?php echo $num; ?>]" id="kpl_<?php echo $num; ?>" class="onlyDigits form-control" value="<?php echo $rivi['kpl']; ?>"><span class="errmsg"></span></td>
 	<td>
-		<?php if(isset($_POST['CrmTarjoukset'])) : ?>
+		<?php if(isset($_POST['CrmTarjoukset']) or isset($_POST['CrmSopimukset'])) : ?>
 		<?=$rivi['yksikko']?>
 		<?php else : ?>
 		<select type="text" name="yksikko[<?php echo $num; ?>]" id="yksikko_<?php echo $num; ?>" class="form-control">
@@ -25,7 +25,7 @@
 	</td>
 	<td><input type="text" size="10" name="hinta[<?php echo $num; ?>]" id="hinta_<?php echo $num; ?>" class="onlyDigits form-control" value="<?php echo $rivi['hinta']; ?>" step="0.01"><span class="errmsg"></span></td>
 	<td>
-		<?php if(isset($_POST['CrmTarjoukset'])) : ?>
+		<?php if(isset($_POST['CrmTarjoukset']) or isset($_POST['CrmSopimukset'])) : ?>
 		<?=$rivi['alv']?>
 		<?php else : ?>
 		<select type="text" name="alv[<?php echo $num; ?>]" id="alv_<?php echo $num; ?>" class="form-control">

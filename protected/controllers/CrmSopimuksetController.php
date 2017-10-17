@@ -370,6 +370,8 @@ $randstring = generateRandomString();
 
 		#tyonantajan_edustaja#
 		#tuote_palvelu#
+
+		#prices_table#
 		';
 
 		return $var;
@@ -481,54 +483,10 @@ $randstring = generateRandomString();
 			);
 			$docx->replaceVariableByText($variables_2);
 
-			if( $model->tarjous->tyonkuvaus_id != 0 )
-			{
-			/*
-				$tb = $this->get_tyonkuvaus($model->tyonkuvaus_id);
-				$docx->replaceVariableByHTML('tyonkuvaus', 'block', $tb, 
-					array('isFile' => false, 'parseDivsAsPs' => true, 'downloadImages' => false)
-				);
-			*/
 
-			$crmTarjous = Yii::app()->createController('CrmTarjoukset');
-			$tyonkuvaus = $crmTarjous[0]->get_tyonkuvaus_by_id($model->tarjous->tyonkuvaus_id);
-
-			$valuesTable = array(
-			    array(
-			        'Tilat','Työtehtävät','Laatutaso','Kommenti'
-			    )
-			);
-
-				if( is_array($tyonkuvaus) and isset($tyonkuvaus['tilat']) )
-				{
-				    foreach($tyonkuvaus['tilat'] as $key=>$items)
-				    {
-					$tyontehtavat = $tyonkuvaus['tyontehtavat'][$key];
-					$tt_result = '';
-					foreach($tyontehtavat as $kt=>$it)
-						$tt_result .= $it['tyotehtava'].': '.$it['vkopvm']."\r\n";
-	
-					$valuesTable[] = array(
-						implode("\r\n", $items),
-						$tt_result,
-						implode("\r\n", $tyonkuvaus['laatutaso'][$key]),
-						implode("\r\n", $tyonkuvaus['kommenti'][$key])
-					);
-	
-				    }
-				}
-
-			$paramsTable = array(
-			    //'border' => 'single',
-			    //'tableAlign' => 'center',
-			    //'borderWidth' => 10,
-			    //'borderColor' => 'B70000',
-			    //'textProperties' => array('bold' => true, 'font' => 'Algerian', 'fontSize' => 18),
-			);
-			$docx->addTable($valuesTable, $paramsTable);
-
-			}
-
+			$tarjoukset = Yii::app()->createController('CrmTarjoukset');
+			$tb = $tarjoukset[0]->hinnatTaulu($model->tarjous_id);
+			$docx->replaceVariableByHTML('prices_table', 'block', $tb, array('parseDivsAsPs' => true));
 
 			$path = 'tiedostot/'.$this->kansio().'/'.Yii::app()->user->domain.'/'.$tiedosto;
 			$docx->createDocx($path);

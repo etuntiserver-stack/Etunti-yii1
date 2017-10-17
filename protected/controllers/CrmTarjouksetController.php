@@ -613,49 +613,6 @@ class CrmTarjouksetController extends Controller
 			$docx->replaceVariableByHTML('prices_table', 'block', $tb, array('parseDivsAsPs' => true));
 
 
-
-/*
-
-			if( $model->tyonkuvaus_id != 0 )
-			{
-			$tyonkuvaus = $this->get_tyonkuvaus_by_id($model->tyonkuvaus_id);
-			$valuesTable = array(
-			    array(
-			        'Tilat','Työtehtävät','Kommenti'
-			    )
-			);
-
-				if( is_array($tyonkuvaus) and isset($tyonkuvaus['tilat']) )
-				{
-				    foreach($tyonkuvaus['tilat'] as $key=>$items)
-				    {
-					$tyontehtavat = $tyonkuvaus['tyontehtavat'][$key];
-					$tt_result = '';
-					foreach($tyontehtavat as $kt=>$it)
-						$tt_result .= $it['tyotehtava'].': ('.$it['vkopvm'].'). Joka '.$it['vkovali']." vko.\r\n";
-	
-					$valuesTable[] = array(
-						implode("\r\n", $items),
-						$tt_result,
-						implode("\r\n", $tyonkuvaus['kommenti'][$key])
-					);
-	
-				    }
-				}
-
-			$paramsTable = array(
-			    //'border' => 'single',
-			    //'tableAlign' => 'center',
-			    //'borderWidth' => 10,
-			    //'borderColor' => 'B70000',
-			    //'textProperties' => array('bold' => true, 'font' => 'Algerian', 'fontSize' => 18),
-			);
-			$docx->addTable($valuesTable, $paramsTable);
-
-			}
-*/
-
-
 			$path = 'tiedostot/'.$this->kansio().'/'.Yii::app()->user->domain.'/'.$tiedosto;
 			$docx->createDocx($path);
 
@@ -666,7 +623,7 @@ class CrmTarjouksetController extends Controller
 	}
 
 
-	protected function hinnatTaulu($tarjous_id)
+	public function hinnatTaulu($tarjous_id)
 	{
 		$bod = '
 		<style>
