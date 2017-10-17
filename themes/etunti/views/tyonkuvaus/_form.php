@@ -198,7 +198,6 @@ $(document).ready(function(){
 	?>
 
 
-	      <a href="#" title="" class="add-author"><i class="fa fa-plus" aria-hidden="true"></i></a>
 
 		<table class="table table-bordered authors-list">
 		    <tr>
@@ -388,7 +387,8 @@ $(document).ready(function(){
 		    </tr>
 		<?php endif; ?>
 		</table>
-
+		<br>
+		<p style="margin-left: 10px"><a href="#" title="" class="add-author"><i class="fa fa-plus fa-2x" aria-hidden="true"></i></a></p>
 
 
 		<div class="input-group" id="kuvauksetTuoteesta" style="display:none">
