@@ -328,4 +328,17 @@ $(document).ready(function(){
 
 
 
+<?php /* jos joku avasi samantien sama ikkuna
+<script>
+$(document).on('show.bs.modal','#showres', function () {
+  console.log(this)
+});
+$(document).on('hidden.bs.modal','#showres', function () {
+
+});
+</script>
+*/ ?>
+
+
+
 
