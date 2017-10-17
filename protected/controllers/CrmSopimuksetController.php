@@ -323,7 +323,8 @@ $randstring = generateRandomString();
   					$tiedosto = $site[0]->tiedostonNimiAsiakasKohdeAika($tiedosto, $model->asiakas_id, $model->tarjous->kohteen_osoite, date('Y-m-d'));
 				}
 				//     Tiedoston nimi -->
-
+echo $tiedosto;
+exit;
 
 				CrmSopimukset::model()->updateByPk($model->id, array('liite'=>$tiedosto));
 
