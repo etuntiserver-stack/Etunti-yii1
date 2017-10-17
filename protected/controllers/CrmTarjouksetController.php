@@ -608,12 +608,8 @@ class CrmTarjouksetController extends Controller
 			);
 			$docx->replaceVariableByText($variables_2);
 
+
 			$tb = $this->hinnatTaulu($model->id);
-
-
-//print_r($tb);
-//exit;
-
 			$docx->replaceVariableByHTML('prices_table', 'block', $tb, array('parseDivsAsPs' => true));
 
 
