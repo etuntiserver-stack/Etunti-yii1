@@ -350,11 +350,17 @@ $randstring = generateRandomString();
 		#yrityksen_osoite#
 		#yrityksen_postinumero#
 		#yrityksen_toimipaikka#
+		#yrityksen_puhelin#
+		#yrityksen_email#
+		#yrityksen_yhteyshenkilo#
+		#yrityksen_y_tunnus#
 
 		#asiakas#
 		#asiakkaan_osoite#
 		#asiakkaan_postinumero#
 		#asiakkaan_toimipaikka#
+		#asiakkaan_puhelin#
+		#asiakkaan_email#
 
 		#teksti#
 		
@@ -371,6 +377,7 @@ $randstring = generateRandomString();
 		#tuote_palvelu#
 
 		#prices_table#
+		#tyonkuvaus#
 		';
 
 		return $var;
@@ -404,6 +411,13 @@ $randstring = generateRandomString();
 			$firma = FirmanTiedot::model()->findbypk(1);
 
 			// <-- Jos se on Asiakas
+
+				$asiakkaan_osoite 	= '';
+				$asiakkaan_postinumero 	= '';
+				$asiakkaan_toimipaikka 	= '';
+				$asiakkaan_puhelin 	= '';
+				$asiakkaan_email	= '';
+
 			$as = Asiakkaat::model()->findbypk($model->tarjous->asiakas_id);
 			if(isset($as->id))
 			{
@@ -414,9 +428,11 @@ $randstring = generateRandomString();
 				else
 				   $asiakas = '';
 
-				$asiakkaan_osoite = $as->osoite;
-				$asiakkaan_postinumero = $as->postinumero;
-				$asiakkaan_toimipaikka = $as->kaupunki;
+				$asiakkaan_osoite 	= $as->osoite;
+				$asiakkaan_postinumero 	= $as->postinumero;
+				$asiakkaan_toimipaikka 	= $as->kaupunki;
+				$asiakkaan_puhelin 	= $as->puhelin;
+				$asiakkaan_email	= $as->salasana;
 			}
 			//     Jos se on Asiakas -->
 
@@ -444,14 +460,28 @@ $randstring = generateRandomString();
 				'asiakkaan_osoite' => $asiakkaan_osoite,
 				'asiakkaan_postinumero' => $asiakkaan_postinumero,
 				'asiakkaan_toimipaikka' => $asiakkaan_toimipaikka,
+				'asiakkaan_puhelin' => $asiakkaan_puhelin,
+				'asiakkaan_email' => $asiakkaan_email,
 				'yritys' => $firma->tyonantaja,
 				'yrityksen_osoite' => $firma->osoite,
 				'yrityksen_postinumero' => $firma->postinumero,
 				'yrityksen_toimipaikka' => $firma->postitoimipaikka,
 				'yrityksen_y_tunnus' => $firma->y_tunnus,
 				'yrityksen_puhelin' => $firma->puhelin,
+				'yrityksen_email' => $firma->sahkoposti,
+				'yrityksen_yhteyshenkilo' => $firma->johtaja,
+				'yrityksen_y_tunnus' => $firma->y_tunnus,
 				'teksti' => $model->teksti,
 			);
+
+			$tk = Tyonkuvaus::model()->findByPk($model->tarjous->tyonkuvaus_id);
+			if(isset($tk->id))
+			{
+				$site = Yii::app()->createController('Site');
+  				$tiedosto = $site[0]->tiedostonNimiAsiakasKohdeAika($tiedosto, $tk->asiakas_id, $tk->kohde_id, $tk->time);
+				$variables['tyonkuvaus'] = 'On kuvattu liitessä. '.$tiedosto.'.pdf';
+			}
+
 			$docx->replaceVariableByText($variables);
 
 			$a = Asiakkaat::model()->findByPk($model->tarjous->asiakas_id);

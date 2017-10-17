@@ -627,9 +627,10 @@ class CrmTarjouksetController extends Controller
 	{
 		$bod = '
 		<style>
-		#TableRivit{ width:100%;border:none; border-collapse: collapse;font-size: 80%; }
+		#TableRivit{ width:100%;border:none; border-collapse: collapse; }
 		#TableRivit, th, td {
-		    border: 1px solid black;
+		    	border: 1px solid black;
+			font-size: 75%;
 		}
 		</style>
 		';
