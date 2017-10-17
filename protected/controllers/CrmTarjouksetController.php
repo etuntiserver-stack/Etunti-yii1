@@ -495,6 +495,8 @@ class CrmTarjouksetController extends Controller
 
 		#tyonantajan_edustaja#
 		#tuote_palvelu#
+
+		#prices_table#
 		';
 
 		return $var;
