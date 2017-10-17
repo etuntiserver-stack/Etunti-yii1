@@ -453,6 +453,9 @@ class CrmTarjouksetController extends Controller
 
 				$this->docx($model, $tiedosto);
 			
+			} else {
+				var_dump($model->getErrors());
+				exit;
 			}
 		}
 
@@ -542,11 +545,11 @@ class CrmTarjouksetController extends Controller
 
 
 
-			define('PHPDOCX_INCLUDE_PATH', (dirname(Yii::app()->basePath)).'/protected/vendors/phpdocx');
+			define('PHPDOCX_INCLUDE_PAth', (dirname(Yii::app()->basePath)).'/protected/vendors/phpdocx');
 			spl_autoload_unregister(array('YiiBase','autoload'));
-			require_once PHPDOCX_INCLUDE_PATH.'/lib/pdf/dompdf_config.inc.php';
-			//require_once PHPDOCX_INCLUDE_PATH.'/classes/TransformDocAdv.inc';
-			require_once PHPDOCX_INCLUDE_PATH.'/classes/CreateDocx.inc';
+			require_once PHPDOCX_INCLUDE_PAth.'/lib/pdf/dompdf_config.inc.php';
+			//require_once PHPDOCX_INCLUDE_PAth.'/classes/TransformDocAdv.inc';
+			require_once PHPDOCX_INCLUDE_PAth.'/classes/CreateDocx.inc';
 			spl_autoload_register(array('AutoLoader','load'));
 			spl_autoload_register(array('YiiBase', 'autoload'));
 
@@ -603,15 +606,14 @@ class CrmTarjouksetController extends Controller
 			);
 			$docx->replaceVariableByText($variables_2);
 
-/*
-$tb = $this->hinnatTaulu($model->id);
-print_r($tb);
-exit;
-*/
+			$tb = $this->hinnatTaulu($model->id);
 
-/*
-$docx->replaceVariableByHTML('prices_table', 'block', '<table align="center"><tr><td>AAA</td><td>AAA</td></tr><tr><td>BBB</td><td>BBB</td></tr><tr><td>CCC</td><td>CCC</td></tr></table>', array('parseDivsAsPs' => true));
-*/
+
+//print_r($tb);
+//exit;
+
+			$docx->replaceVariableByHTML('prices_table', 'block', $tb, array('parseDivsAsPs' => true));
+
 
 
 /*
@@ -669,25 +671,31 @@ $docx->replaceVariableByHTML('prices_table', 'block', '<table align="center"><tr
 	protected function hinnatTaulu($tarjous_id)
 	{
 		$bod = '
-<table id="TableRivit" border="1">
-     <TR>
-	<TH><span id="uusiRivi" class="link" style="font-size: 150%;"><i class="fa fa-plus-square"></i></span></TH>
-	<TH class="col-sm-2">Tuote/Palvelu</TH>
-	<TH class="col-sm-1">Kpl</TH>
-	<TH class="col-sm-1">Yksikkö <span class="btn btn-primary btn-xs myBgColors muokaValiko" for="laskutus_yksikko"><i class="fa fa-pencil-square-o"></i></span></TH>
-	<TH class="col-sm-1">Hinta</TH>
-	<TH class="col-sm-1">ALV %</TH>
-	<TH class="col-sm-1">ALV</TH>
-	<TH class="col-sm-1">Ale %</TH>
-	<TH class="col-sm-1">Veroton</TH>
-	<TH class="col-sm-1">Yhteensä</TH>
-     </TR>';
+		<style>
+		#TableRivit{ width:100%;border:none; border-collapse: collapse;font-size: 80%; }
+		#TableRivit, th, td {
+		    border: 1px solid black;
+		}
+		</style>
+		';
+
+		$bod .= '
+<table id="TableRivit">
+     <tr>
+	<th>Nimike</th>
+	<th>Määrä</th>
+	<th>Yksikkö <span class="btn btn-primary btn-xs myBgColors muokaValiko" for="laskutus_yksikko"><i class="fa fa-pencil-square-o"></i></span></th>
+	<th>Hinta</th>
+	<th>ALV %</th>
+	<th>ALV</th>
+	<th>Ale %</th>
+	<th>Veroton</th>
+	<th>Yhteensä</th>
+     </tr>';
 
 		$trRivit=TarjousHintaRivit::model()->findAll("tarjous_id='".$tarjous_id."'", array('order'=>'id'));
-		if( count($trRivit) == 0 )
+		if( count($trRivit) > 0 )
 		{
-			$bod .= $this->renderPartial("tr_rivit_tyhja",array('num'=>0), true);
-		} else {
 			$num = 0;
 			foreach($trRivit as $rivi){ 
 			$num++;
@@ -698,7 +706,7 @@ $docx->replaceVariableByHTML('prices_table', 'block', '<table align="center"><tr
 		$bod .= '
 </table>';
 
-		echo $bod;
+		return $bod;
 
 	}
 
