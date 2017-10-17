@@ -357,7 +357,6 @@ $randstring = generateRandomString();
 		#asiakkaan_toimipaikka#
 
 		#teksti#
-		#tyonkuvaus#
 		
 		#hinta_tyyppi#
 		#hinta#

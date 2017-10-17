@@ -1052,8 +1052,11 @@ exit;
 			if(is_array(json_decode($asiakkaat->alennuskoodit, true)))
 			{
 				foreach(json_decode($asiakkaat->alennuskoodit, true) as $k=>$v)
+				 if(is_array($v))
+				 {
 				  foreach($v as $k1=>$v1)
 					$bod .= '<div class="alert bg-warning"><center>'.$v1.'</center></div>';
+				 }
 			}
 		}
 

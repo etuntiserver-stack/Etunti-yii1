@@ -38,7 +38,7 @@
 			<form action="#" class="form-input" method="post" enctype="multipart/form-data">
 			     <div class="section input-group">
 			       <label class="field prepend-icon append-button file">
-			         <span class="button"><?=Yii::t('main', 'Työtodistus template')?></span>
+			         <span class="button"><?=Yii::t('main', 'Sopimus template')?></span>
 			         <input type="file" class="gui-file" name="file" onChange="document.getElementById(\'tiedostoUP\').value = this.value;">
 			         <input type="text" class="gui-input" name="file_upload" id="tiedostoUP" placeholder="Valitse tiedosto..">
 			         <label class="field-icon">
