@@ -440,7 +440,6 @@ class CrmTarjouksetController extends Controller
   					$tiedosto = $site[0]->tiedostonNimiAsiakasKohdeAika($tiedosto, $model->asiakas_id, $model->kohde_id, date('Y-m-d'));
 				}
 				//     Tiedoston nimi -->
-
 				CrmTarjoukset::model()->updateByPk($model->id, array('liite'=>$tiedosto));
 
 				$as = Asiakkaat::model()->findbypk($model->asiakas_id);

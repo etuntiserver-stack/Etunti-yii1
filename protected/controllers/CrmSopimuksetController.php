@@ -323,8 +323,6 @@ $randstring = generateRandomString();
   					$tiedosto = $site[0]->tiedostonNimiAsiakasKohdeAika($tiedosto, $model->asiakas_id, $model->tarjous->kohteen_osoite, date('Y-m-d'));
 				}
 				//     Tiedoston nimi -->
-
-
 				CrmSopimukset::model()->updateByPk($model->id, array('liite'=>$tiedosto));
 
 				$as = Asiakkaat::model()->findbypk($model->asiakas_id);
@@ -478,8 +476,8 @@ $randstring = generateRandomString();
 			if(isset($tk->id))
 			{
 				$site = Yii::app()->createController('Site');
-  				$tiedosto = $site[0]->tiedostonNimiAsiakasKohdeAika($tiedosto, $tk->asiakas_id, $tk->kohde_id, $tk->time);
-				$variables['tyonkuvaus'] = 'On kuvattu liitessä. '.$tiedosto.'.pdf';
+  				$tk_tiedosto = $site[0]->tiedostonNimiAsiakasKohdeAika($tiedosto, $tk->asiakas_id, $tk->kohde_id, $tk->time);
+				$variables['tyonkuvaus'] = 'On kuvattu liitessä. '.$tk_tiedosto.'.pdf';
 			}
 
 			$docx->replaceVariableByText($variables);
