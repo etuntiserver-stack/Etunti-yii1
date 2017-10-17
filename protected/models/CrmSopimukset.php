@@ -25,7 +25,7 @@ public $template;
 	{
 
 		$tb_name = 'sopimukset';
-		$check_this_table = false;
+		$check_this_table = true;
 		//unset(Yii::app()->session[$tb_name]); // this use if want many times play
 		if(!isset(Yii::app()->session[$tb_name]))
 		{
@@ -57,9 +57,7 @@ public $template;
                      'yhteystiedot_id' => 'int(11) ',
                      'tarjous_id' => 'int(11) ',
                      'voimassa' => 'varchar(20) ',
-
-
-
+                     'voimassaolo' => 'int(1) ',
 		);
 
 		foreach($table_structure as $key=>$value)
@@ -83,7 +81,7 @@ public $template;
 		return array(
 			array('tarjous_id, template', 'required'),
 			//array('time, asiakas_id, teksti, hyvaksyn_koodi, asiakkaan_sahkoposti, status, liite', 'required'),
-			array('asiakas_id, status, yhteystiedot_id', 'numerical', 'integerOnly'=>true),
+			array('asiakas_id, status, yhteystiedot_id, voimassaolo', 'numerical', 'integerOnly'=>true),
 			array('hyvaksyn_koodi, liite, template', 'length', 'max'=>255),
 			array('asiakkaan_sahkoposti', 'length', 'max'=>100),
 			array('teksti', 'safe'),
