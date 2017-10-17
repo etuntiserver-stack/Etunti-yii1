@@ -67,9 +67,9 @@ public $template;
                      'tarvikkeet' => 'text ',
                      'voimassa' => 'varchar(20) ',
                      'tuote_palvelu' => 'varchar(255) ',
-
-
-
+		     'yhteensa_total_verot' => 'float',
+		     'yhteensa_total_veroton' => 'float',
+		     'yhteensa_total' => 'float',
 		);
 
 		foreach($table_structure as $key=>$value)
@@ -93,6 +93,7 @@ public $template;
 		return array(
 			array('template, asiakas_id, kohde_id, kohteen_osoite, asiakkaan_sahkoposti', 'required'),
 			array('asiakas_id, yhteystiedot_id, status, kohde_id, tyonkuvaus_id, alv, hinta', 'numerical', 'integerOnly'=>true),
+			array('yhteensa_total_verot, yhteensa_total_veroton, yhteensa_total', 'type', 'type'=>'float'),
 			array('hyvaksyn_koodi, liite, kohteen_osoite, kohteen_postitoimipaikka, tuote_palvelu', 'length', 'max'=>255),
 			array('asiakkaan_sahkoposti, kohteen_postinumero', 'length', 'max'=>100),
 			array('hinta_tyyppi', 'length', 'max'=>50),
