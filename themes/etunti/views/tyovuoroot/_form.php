@@ -1067,9 +1067,39 @@ function laatikonPaivays(thisDataReturn){
 
 }
 
+laskePituus();
 
-// Poistaminen
-$('#poistaTv').click(function(){
+function laskePituus(){
+
+	var alku = $("#alku").val().split(':');
+	var loppu = $("#loppu").val().split(':');
+
+	if(loppu[0] < alku[0])
+	var d2 = new Date(2016, 0, 21, loppu[0], loppu[1]);
+	else
+	var d2 = new Date(2016, 0, 20, loppu[0], loppu[1]);
+
+	var d1 = new Date(2016, 0, 20, alku[0], alku[1]);
+	var seconds =  (d2- d1)/1000;
+	var sec = seconds;
+	var h = sec/3600 ^ 0 ;
+	var m = (sec-h*3600)/60 ^ 0 ;
+
+	$("#tvPituus").html((h<10?"0"+h:h)+":"+(m<10?"0"+m:m));
+}
+
+function checkOnkoToistuvaRuksiPaallaKunMuutetaan(){
+ 	if( $('#toistuva_aktiivinen').bootstrapSwitch('state') === false )
+ 	{
+		return true;
+	} else {
+		return false;
+	}
+}
+
+
+  // Poistaminen
+  $('#poistaTv').click(function(){
 
 	var thisID = 'checkThis_'+$(this).attr('for');
 	var model = $(this).attr('model');
@@ -1097,29 +1127,10 @@ $('#poistaTv').click(function(){
         });
 	}
 
-});
+  });
 
 
-  laskePituus();
 
-  function laskePituus(){
-
-	var alku = $("#alku").val().split(':');
-	var loppu = $("#loppu").val().split(':');
-
-	if(loppu[0] < alku[0])
-	var d2 = new Date(2016, 0, 21, loppu[0], loppu[1]);
-	else
-	var d2 = new Date(2016, 0, 20, loppu[0], loppu[1]);
-
-	var d1 = new Date(2016, 0, 20, alku[0], alku[1]);
-	var seconds =  (d2- d1)/1000;
-	var sec = seconds;
-	var h = sec/3600 ^ 0 ;
-	var m = (sec-h*3600)/60 ^ 0 ;
-
-	$("#tvPituus").html((h<10?"0"+h:h)+":"+(m<10?"0"+m:m));
-  }
 
   $('#alku').blur(function(){
 	$(this).removeClass('bg-danger');
@@ -1165,12 +1176,23 @@ $('#poistaTv').click(function(){
 
   $('#pto, #pfrom').blur(function(){
 	$('#sopivatPaivat').html('');
+	if(checkOnkoToistuvaRuksiPaallaKunMuutetaan()){ $('#toistuva_aktiivinen').bootstrapSwitch('state', true); }
+  });
+
+  $('#Toistuva_viikkoja').change(function(){
+	if(checkOnkoToistuvaRuksiPaallaKunMuutetaan()){ $('#toistuva_aktiivinen').bootstrapSwitch('state', true); }
   });
 
   $('#Toistuva_viikkoja, #tyopaari').change(function(){
 	$('#sopivatPaivat').html('');
   });
   
+  $('#ma,#ti,#ke,#to,#pe,#la,#su').on('switchChange.bootstrapSwitch', function(event, state) {
+	$('#sopivatPaivat').html('');
+	if(checkOnkoToistuvaRuksiPaallaKunMuutetaan()){ $('#toistuva_aktiivinen').bootstrapSwitch('state', true); }
+  });
+
+
   if( $('#Tyovuoroot_kohde').val() !== '' ){
 	var thisID = $('#Tyovuoroot_kohde option:selected').val();
 	  $.ajax({
@@ -1280,12 +1302,6 @@ $('#poistaTv').click(function(){
 		$('#Toistuva_viikkoja').removeAttr('readonly');
 		$('#vikoPvm').removeClass('collapse');
 	}
-  });
-
-
-
-  $('#ma,#ti,#ke,#to,#pe,#la,#su').on('switchChange.bootstrapSwitch', function(event, state) {
-	$('#sopivatPaivat').html('');
   });
 
 
