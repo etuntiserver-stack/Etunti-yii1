@@ -44,12 +44,14 @@ public function actionLogin($domain)
 			$criteria=new CDbCriteria;
 			$criteria->condition = " 
 				sahkoposti='".$_POST['tunnus']."' 
-				AND salasana='".$_POST['salasana']."'
-				AND salasana!=''
+				AND token=''
 			";
 			$model=Asiakkaat::model()->find($criteria);
-			if(isset($model->id))
+
+			$l = $this->loginChecker($model, $_POST['salasana']);
+			if($l['login'] == true)
 			{
+				$_POST['salasana'] = $l['new_salasana'];
 
 				$asetukset=Asetukset::model()->findByPk(1);
 				$asiakasNimi = '';
@@ -85,6 +87,47 @@ public function actionLogin($domain)
 
 }
 
+
+	protected function kirjautuminen($domain, $tunnus, $salasana)
+	{
+
+		$criteria=new CDbCriteria;
+		$criteria->condition = " 
+			sahkoposti='".$tunnus."' 
+			AND token=''
+		";
+		$model=Asiakkaat::model()->find($criteria);
+
+		$l = $this->loginChecker($model, $salasana);
+		if($l['login'] == true)
+		{
+			Yii::app()->user->setState('domain', $domain);
+			Yii::app()->user->setState('asiakas', $model->id);
+			return true;
+		} else {
+			$this->_sendResponse(200, CJSON::encode('login_error'));
+			exit;
+			return false;
+		}
+
+	}
+
+	protected function loginChecker($model, $salasana)
+	{
+
+		$login = false;
+		$new_salasana = '';
+
+		if (isset($model->id) and strlen($salasana) == 60 and $salasana == $model->salasana){
+			$login = true;
+			$new_salasana = $salasana;
+		} elseif(isset($model->id) and strlen($salasana) != 60 and password_verify($salasana, $model->salasana)){
+			$login = true;
+			$new_salasana = $model->salasana;
+		}
+
+		return array('login' => $login, 'new_salasana' => $new_salasana);
+	}
 
 	public function actionRecovery($domain)
 	{
@@ -307,9 +350,9 @@ public function actionLogin($domain)
 
 		   if(isset($model->id) and $model->app_kayttoehdot == 1)
 		   {
-				$this->_sendResponse(200, CJSON::encode(array('kayttoehdot'=>true)));
+				$this->_sendResponse(200, CJSON::encode(array('kayttoehdot'=>'ok')));
 		   } else {
-				$this->_sendResponse(200, CJSON::encode(array('kayttoehdot'=>false)));
+				$this->_sendResponse(200, CJSON::encode(array('kayttoehdot'=>'error')));
 		   }
 		}
 
@@ -613,27 +656,6 @@ public function actionLogin($domain)
 		}
 
 				$this->_sendResponse(200, CJSON::encode('Ei tuloksia'));
-	}
-
-	protected function kirjautuminen($domain, $tunnus, $salasana)
-	{
-
-		$criteria=new CDbCriteria;
-		$criteria->condition = " 
-			sahkoposti='".$tunnus."' 
-			AND salasana='".$salasana."'
-			AND salasana!=''
-		";
-		$model=Asiakkaat::model()->find($criteria);
-		if(isset($model->id))
-		{
-			Yii::app()->user->setState('domain', $domain);
-			Yii::app()->user->setState('asiakas', $model->id);
-			return true;
-		} else {
-			return false;
-		}
-
 	}
 
 	protected function luo_palaute($mod, $post)

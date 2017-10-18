@@ -18,14 +18,48 @@
 
 
     //localStorage.clear();
+    if(loginArr['palvelin']){
+		server = 'https://'+loginArr['palvelin']+'/';
+    }
+
+    // <-- Palvelin
+    //var server = '../../';
+    var url = server+"index.php/dico/asiakkaat";
+    var versio = "";
+    // Palvelin -->
 
 
     if(localStorage.getItem('loginOK'))
     {
 
 	var asiakasID = JSON.parse(localStorage.getItem('loginOK')).loginOK['asiakasID'];
-	
 	domain = loginArr['domain'];
+
+	/* <-- Check login  */
+        $.ajax({
+           url: url+'/login?domain=' + domain,
+	   type:'POST',
+ 	   data: { tunnus : loginArr['tunnus'], salasana : loginArr['salasana'] },
+	   async: false,
+           success: function(data){
+		var d = JSON.parse(data);
+		console.log(d);
+		//return false;
+		if(!d['loginOK'])
+		{
+			localStorage.clear();
+			if(window.location.href.substr(window.location.href.lastIndexOf("/")+1) !== 'asetukset.html')
+			window.location.href="asetukset.html";
+		}
+    	   },
+    		error: function (xhr, status, error){
+        	console.log(url+'/login?domain=' + domain);
+    	   }
+        });
+
+			$('#yllaIlmoitus').html('<h3 class="alert alert-danger">Kirjautuminen ei onnistunut. Tarkasta yritystunnus, sähköposti ja salasana</h3>');
+	/* Check login --> */
+
 
 	$(document).ready(function(){
 		if(loginArr['palvelin']){
@@ -40,16 +74,6 @@
 	//console.log('Asiakas: '+asiakasID);
 
     }
-
-    if(loginArr['palvelin']){
-		server = 'https://'+loginArr['palvelin']+'/';
-    }
-
-    // <-- Palvelin
-    //var server = '../../';
-    var url = server+"index.php/dico/asiakkaat";
-    var versio = "";
-    // Palvelin -->
 
 
 
@@ -343,10 +367,11 @@ $(document).ready(function(){
  	   data: sendData,
            success: function(data){
 		var d = JSON.parse(data);
-		if(d['kayttoehdot'])
+		//console.log(data);
+		if(d['kayttoehdot'] == 'ok')
 		{
 			console.log(d['kayttoehdot']);
-		} else {
+		} else if (d['kayttoehdot'] == 'error') {
 			if(window.location.href.substr(window.location.href.lastIndexOf("/")+1) !== 'kayttoehdot.html')
 			window.location.href="kayttoehdot.html";
 

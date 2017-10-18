@@ -101,7 +101,8 @@ class AsiakkaatController extends Controller
 
 		if(isset($model->id) and isset($_POST['password1']) and $_POST['password1'] == $_POST['password2'])
 		{
-			Asiakkaat::model()->updateByPk($model->id, array('salasana' => $_POST['password1'], 'token' => ''));
+			$new_password = password_hash($_POST['password1'], PASSWORD_BCRYPT);
+			Asiakkaat::model()->updateByPk($model->id, array('salasana' => $new_password, 'token' => ''));
 			$tilanne = 2;
 			$this->redirect(array('/site/index'));
 		}
