@@ -433,7 +433,7 @@ class CrmSopimuksetController extends Controller
 				$asiakkaan_postinumero 	= $as->postinumero;
 				$asiakkaan_toimipaikka 	= $as->kaupunki;
 				$asiakkaan_puhelin 	= $as->puhelin;
-				$asiakkaan_email	= $as->salasana;
+				$asiakkaan_email	= $as->sahkoposti;
 			}
 			//     Jos se on Asiakas -->
 
