@@ -675,6 +675,7 @@ public function actionLogin($domain)
 			$criteria=new CDbCriteria;
 			$criteria->condition = " 
 				asiakas_id='".$model->id."' 
+				AND status=2
 			";
 			$m2 = CrmTarjoukset::model()->findAll($criteria);
 
