@@ -249,6 +249,24 @@
 	 </div>
 	</div>';
 
+	if(!isset($kup->id))
+	{
+	$body .= '
+	<div class="row">
+	 <div class="col-xs-2">
+	   	<i class="fa fa-gift"></i> 
+	 </div>
+	 <div class="col-xs-10">
+	    <div class="input-group">
+	      <input type="text" id="kupongi_id" class="form-control" placeholder="Alennuskoodi">
+	      <span class="input-group-btn">
+	        <button class="btn btn-warning" id="kupongi_add" type="button">'.Yii::t('main', 'Käytä').'</button>
+	      </span>
+	    </div>
+	    <div id="kupongi_result"></div>
+	 </div>
+	</div>';
+	}
 
 	$path = Yii::app()->basePath."/../tiedostot/onlinevaraus_tuote/".Yii::app()->user->domain;
 	if(file_exists($path."/".$model->id.".jpg"))

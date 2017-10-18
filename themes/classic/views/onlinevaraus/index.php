@@ -323,13 +323,12 @@ $("#lispalvimg").click(function(){
 });
 
 
-$("#kupongi").keyup(function(){
+$(document).delegate("#kupongi_add","click",function(){
 
-   if( $(this).val().length >= 2 )
-   {
+
    $.ajax({
 	url: 'kupongi_checker',
-	data:{ kupongi : $(this).val() },
+	data:{ kupongi : $('#kupongi_id').val() },
 	type:'POST',
 	success:function(data){
 		data = JSON.parse(data);
@@ -347,7 +346,7 @@ $("#kupongi").keyup(function(){
 		console.log(data);
     	}
     });
-    }
+   
 });
 
 $("#palvelu").change(function(){
