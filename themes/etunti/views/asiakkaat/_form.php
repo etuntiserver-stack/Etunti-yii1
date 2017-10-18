@@ -247,15 +247,13 @@ $model->hinta_sis_alv = round($model->hinta_sis_alv, 2);
 	<?php if(isset($model->id)) : ?>
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'alennuskoodit'); ?>
-		<div class="form-control">
 		<?php
 		if(is_array(json_decode($model->alennuskoodit, true)))
 		{
 			$alennuskoodit = json_decode($model->alennuskoodit, true);
-			echo implode(", ", $alennuskoodit);
+			echo '<textarea class="form-control">'.implode("\n", $alennuskoodit).'</textarea>';
 		}
 		?>
-		</div>
 	</div>
 	<?php endif; ?>
 

@@ -60,7 +60,11 @@
 		<h3><?php echo $data->kupongin_id; ?></h3>
 	</td>
 	<td>
-		<?php echo date("d.m.Y", strtotime($data->voimassa)); ?>
+		<?php if( strtotime($data->voimassa) <= time() ) : ?>
+			<span class="text-danger"><?=date("d.m.Y", strtotime($data->voimassa))?></span>
+		<?php else : ?>
+			<?=date("d.m.Y", strtotime($data->voimassa))?>
+		<?php endif; ?>
 	</td>
 	<td>
 		<?php 
@@ -77,6 +81,9 @@
 		<?=$list[$data->status]?>
 	</td>
 	<td>
+		<?php if( strtotime($data->voimassa) <= time() ) : ?>
+
+		<?php else : ?>
 		<?php echo CHtml::link('<i class="fa fa-paper-plane-o" aria-hidden="true" style="font-size: 110%"></i>', 
 				array('laheta', 'id'=>$data->id), 
 				array(
@@ -88,6 +95,7 @@
 				)
 			); 
 		?>
+		<?php endif; ?>
 	</td>
 </tr>
 
