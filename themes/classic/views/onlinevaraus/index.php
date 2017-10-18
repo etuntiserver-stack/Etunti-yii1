@@ -323,31 +323,30 @@ $("#lispalvimg").click(function(){
 });
 
 
-$("#kupongi").keyup(function(){
+$(document).delegate("#kupongi_add","click",function(){
 
-   if( $(this).val().length >= 2 )
-   {
+
    $.ajax({
 	url: 'kupongi_checker',
-	data:{ kupongi : $(this).val() },
+	data:{ kupongi : $('#kupongi_id').val() },
 	type:'POST',
 	success:function(data){
 		data = JSON.parse(data);
 		console.log(data);
 		if(data !== '')
 		{
-			$("#kupongi_result").html('<span class="text-success">Kupongi on voimassa</span>');
+			$("#kupongi_result").html('<span class="text-success">Alennuskoodi on voimassa.</span>');
 			ajaaPalveluSave();
 
 		} else {
-			$("#kupongi_result").html('<span class="text-danger">Kupongi ei ole voimassa</span>');
+			$("#kupongi_result").html('<span class="text-danger">Alennuskoodi ei ole voimassa.</span>');
 		}
    	},
 	error:function(data){
 		console.log(data);
     	}
     });
-    }
+   
 });
 
 $("#palvelu").change(function(){
