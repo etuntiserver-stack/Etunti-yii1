@@ -22,7 +22,7 @@
 	 <div class="col-xs-2">
 		<i class="fa fa-star" aria-hidden="true"></i>
 	 </div><div class="col-xs-10">
-		'.Yii::t('main', 'Kupongi').': '.$kup_maara.'
+		'.Yii::t('main', 'Alennuskoodi').': '.$kup_maara.'
 	 </div>
 	</div>
  	';

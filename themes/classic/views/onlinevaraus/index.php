@@ -335,11 +335,11 @@ $(document).delegate("#kupongi_add","click",function(){
 		console.log(data);
 		if(data !== '')
 		{
-			$("#kupongi_result").html('<span class="text-success">Kupongi on voimassa</span>');
+			$("#kupongi_result").html('<span class="text-success">Alennuskoodi on voimassa</span>');
 			ajaaPalveluSave();
 
 		} else {
-			$("#kupongi_result").html('<span class="text-danger">Kupongi ei ole voimassa</span>');
+			$("#kupongi_result").html('<span class="text-danger">Alennuskoodi ei ole voimassa</span>');
 		}
    	},
 	error:function(data){
