@@ -770,7 +770,8 @@ public function actionLogin($domain)
 
 			$criteria=new CDbCriteria;
 			$criteria->condition = " 
-				asiakas_id='".$model->id."' 
+				asiakas_id='".$model->id."'
+				AND status=2
 			";
 			$m2 = CrmSopimukset::model()->findAll($criteria);
 			if(count($m2) > 0)
