@@ -13,7 +13,7 @@
 	{
 
 	if($kup->maara_tyyppi == 'euro')
-	$kup_maara = '-'.$kup->euro_maara.'&euro;';
+	$kup_maara = '-'.$kup->euro_maara.' &euro;';
 	if($kup->maara_tyyppi == 'prosentti')
 	$kup_maara = '-'.$kup->prosentti_maara.'%';
 
