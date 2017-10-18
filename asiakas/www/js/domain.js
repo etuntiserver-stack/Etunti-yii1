@@ -303,7 +303,7 @@ $(document).ready(function(){
 
 	var values = $(this).serializeArray();
 	console.log(values);
-	//var url = 'https://' + values[0]['value']+'/index.php/dico/asiakkaat';
+	var url = 'https://' + values[0]['value']+'/index.php/dico/asiakkaat';
 	domain = values[1]['value'];
 
         $.ajax({
