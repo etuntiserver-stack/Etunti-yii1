@@ -249,7 +249,7 @@
 	 </div>
 	</div>';
 
-	if(!isset($kup->id))
+	if(!isset($kup->id) and isset($sivu) and $sivu == 'index')
 	{
 	$body .= '
 	<div class="row">
