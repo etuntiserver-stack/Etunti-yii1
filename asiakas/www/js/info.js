@@ -34,9 +34,22 @@ function getUrlVars() {
            success: function(data){
 		var d = JSON.parse(data);
 		//console.log(data);
-		if(d['ok'])
+		if(d['content'])
 		{
-			$('#resultLaatiko').html(d['ok']);
+			$('#resultLaatiko').html(d['content']);
+
+			/* <-- Versio */
+			document.addEventListener("deviceready", onServerReadyInfo, false);
+			function onServerReadyInfo() {
+
+			   function showAppVersion() {
+				  cordova.getAppVersion(function(version) {
+				    $('#resultLaatiko').append('<p>Versio: '+ version +'</p>');
+				  });
+			   }
+			   showAppVersion();
+			}
+			/*     Versio --> */
 		}
 
     	   },
