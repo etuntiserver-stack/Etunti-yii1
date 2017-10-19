@@ -222,7 +222,7 @@ class KupongitController extends Controller
 
 		if(isset($_POST['kupongin_maara']) and $_POST['kupongin_maara'] > 0)
 		{
-		    for ($i = 0; $i <= $_POST['kupongin_maara']; $i++)
+		    for ($i = 1; $i <= $_POST['kupongin_maara']; $i++)
 		    {
 			$model = new Kupongit;
 			$model->attributes=$_POST['Kupongit'];
