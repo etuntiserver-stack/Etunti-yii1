@@ -39,18 +39,44 @@ class AsetuksetForAllController extends Controller
 				'actions'=>array('admin','delete'),
 				'expression' => "Yii::app()->User->isAdmin()",
 			),
+			array('allow', // allow admin user to perform 'admin' and 'delete' actions
+				'actions'=>array('update'),
+				'expression' => "Yii::app()->controller->isDigisten()",
+			),
 			array('deny',  // deny all users
 				'users'=>array('*'),
 			),
 		);
 	}
 
+	public function isDigisten() {
+
+		if($this->tasot(999))
+		{
+	            return true;
+		} else {
+	            return false;
+		}
+	}
+
+	protected function tasot($num)
+	{
+		$tas = array();
+		if(isset(Yii::app()->user->adminPaketti)) 
+		$tas = explode(",",Yii::app()->user->adminPaketti);
+		if(in_array($num,$tas))
+		return true;
+		else
+		return false;
+	}
+
         public function init()
         {
 
-                if (Yii::app()->user->isAdmin())
-		{
+                if (Yii::app()->user->isAdmin()){
                         Yii::app()->theme = 'admin';
+		} elseif($this->isDigisten()){
+                        Yii::app()->theme = 'etunti';
                 } else {
                         Yii::app()->theme = 'classic';
 		}
@@ -107,7 +133,10 @@ class AsetuksetForAllController extends Controller
 		{
 			$model->attributes=$_POST['AsetuksetForAll'];
 			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+			{
+				Yii::app()->user->setFlash('success', "Onnistunut");
+				$this->redirect(array('update','id'=>$model->id));
+			}
 		}
 
 		$this->render('update',array(
