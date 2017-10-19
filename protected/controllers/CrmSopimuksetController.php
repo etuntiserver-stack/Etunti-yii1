@@ -210,7 +210,8 @@ class CrmSopimuksetController extends Controller
 		$mail->setBody($message);
 
 		$tkPDF = '';
-		if($crm->tarjous->tyonkuvaus_id != 0)
+		$tk = Tyonkuvaus::model()->find(" id='".$crm->tarjous->tyonkuvaus_id."' AND aktiivinen=1 ");
+		if(isset($tk->id))
 		{
 	   		$tk_controller = Yii::app()->createController('Tyonkuvaus');
 	   		$tkPDF = $tk_controller[0]->PdfOpener($crm->tarjous->tyonkuvaus_id, 'getFile');
@@ -280,8 +281,9 @@ class CrmSopimuksetController extends Controller
 				$tiedosto = 'Sopimus';
 				if(isset($model->id))
 				{
+					$new_model = CrmSopimukset::model()->findByPk($model->id);
 					$site = Yii::app()->createController('Site');
-  					$tiedosto = $site[0]->tiedostonNimiAsiakasKohdeAika($tiedosto, $model->asiakas_id, $model->tarjous->kohteen_osoite, $model->time);
+  					$tiedosto = $site[0]->tiedostonNimiAsiakasKohdeAika($tiedosto, $model->asiakas_id, $model->tarjous->kohteen_osoite, $new_model->time);
 				}
 				//     Tiedoston nimi -->
 				CrmSopimukset::model()->updateByPk($model->id, array('liite'=>$tiedosto));

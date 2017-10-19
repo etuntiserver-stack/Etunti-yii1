@@ -7,11 +7,11 @@
 		$nimi = '';
 		$as_id = '';
 
-		if(isset($as->yrityksen_nimi) and !empty($as->yrityksen_nimi))
+		if(isset($as->id) and $as->tyyppi == 'yritys')
 		$nimi = $as->yrityksen_nimi;
-		elseif(isset($as->yhteyshenkilo) and !empty($as->yhteyshenkilo))
+		if(isset($as->id) and $as->tyyppi == 'henkilo')
 		$nimi = $as->yhteyshenkilo;
-
+		if(isset($as->id))
 		$as_id = $as->id;
 
 ?>
