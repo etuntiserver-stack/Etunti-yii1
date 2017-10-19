@@ -7,6 +7,7 @@
     var loginArr = [];
     var loginFull = [];
 
+
     var developer = false; // true false kun pelaat localhostissa
 
     if(localStorage.getItem('loginOK'))

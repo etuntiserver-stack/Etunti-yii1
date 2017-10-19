@@ -300,11 +300,12 @@ public function actionLogin($domain)
 		if(isset($_POST['tunnus']) and $this->kirjautuminen($domain, $_POST['tunnus'], $_POST['salasana']) == true)
 		{
 
-		   $model=Asiakkaat::model()->findByPk($_POST['asiakasID']);
-		   if(isset($model->id))
+		   $model = Asiakkaat::model()->findByPk($_POST['asiakasID']);
+		   $afa = AsetuksetForAll::model()->findByPk(1);
+		   if(isset($model->id) and !empty($afa->app_info_sivu))
 		   {
-				$return = 'ok';
-				$this->_sendResponse(200, CJSON::encode(array('ok'=>$return)));
+				$return = str_replace("\n", "<br>", $afa->app_info_sivu);
+				$this->_sendResponse(200, CJSON::encode(array('content'=>$return)));
 				exit;
 
 		   }

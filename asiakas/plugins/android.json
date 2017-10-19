@@ -33,6 +33,9 @@
         },
         "cordova-open": {
             "PACKAGE_NAME": "fi.etunti.dico"
+        },
+        "cordova-plugin-app-version": {
+            "PACKAGE_NAME": "fi.etunti.dico"
         }
     },
     "dependent_plugins": {}

@@ -26,7 +26,41 @@ class AsetuksetForAll extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'asetukset';
+		$tb_name = 'asetukset';
+		$check_this_table = true;
+
+		if($check_this_table)
+		{
+		$table = Yii::app()->db->schema->getTable($tb_name);
+		if(!isset($table->columns['id'])) {
+
+			Yii::app()->db->createCommand(" CREATE TABLE IF NOT EXISTS $tb_name 
+			(`id` int(11) AUTO_INCREMENT PRIMARY KEY)
+			")->execute();
+		}
+
+		$table_structure = array(
+
+                     'asetus' => 'varchar(255)',
+                     'api_access_key' => 'varchar(500)',
+                     'ohjesivu' => 'text',
+                     'googlemaps_apikey' => 'varchar(500)',
+                     'viralliset_pyhapaivat' => 'text',
+                     'erikoislauantai' => 'text',
+                     'app_info_sivu' => 'text',
+		);
+
+		foreach($table_structure as $key=>$value)
+		{
+			if (!isset($table->columns[$key])) {
+				Yii::app()->db->createCommand()->addColumn($tb_name, $key, $value);
+			}
+		}
+
+		} // check
+
+		return $tb_name;
+
 	}
 
 	/**
@@ -40,7 +74,7 @@ class AsetuksetForAll extends CActiveRecord
 			array('asetus, api_access_key', 'required'),
 			array('asetus', 'length', 'max'=>255),
 			array('api_access_key, googlemaps_apikey', 'length', 'max'=>500),
-			array('ohjesivu, viralliset_pyhapaivat, erikoislauantai', 'safe'),
+			array('ohjesivu, viralliset_pyhapaivat, erikoislauantai, app_info_sivu', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('id, asetus, api_access_key, ohjesivu', 'safe', 'on'=>'search'),

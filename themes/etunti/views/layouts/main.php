@@ -210,13 +210,27 @@ $(document).ready(function(){
 <?php  endif; ?>
 
 
-
-<div class="">
 	<?php
 	foreach(Yii::app()->user->getFlashes() as $key => $message) {
-        	echo '<p><div class="container"><div class="alert bg-' . $key . '">' . $message . "</div></div></p>\n";
+        	echo '
+		<p>
+		<div class="container-fluid">
+		 <div class="row">
+		  <div class="col-sm-12">
+		   <div class="tray-center">
+			<div class="alert bg-' . $key . '">' . $message . "</div>
+		   </div>
+		  </div>
+		 </div>
+		</div>
+		</p>
+		";
     	}
 	?>
+
+
+<div class="">
+
 	<?php echo $content; ?>
 
 <?php if( $_SERVER['REMOTE_ADDR'] != '::1' and $_SERVER['REMOTE_ADDR'] != '127.0.0.1' ) : ?>
