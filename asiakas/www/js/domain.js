@@ -7,6 +7,8 @@
     var loginArr = [];
     var loginFull = [];
 
+    var developer = true; // true false kun pelaat localhostissa
+
     if(localStorage.getItem('loginOK'))
     {
 	loginArr = JSON.parse(localStorage.getItem('loginOK')).loginOK[0];
@@ -23,7 +25,7 @@
     }
 
     // <-- Palvelin
-    //var server = '../../';
+    if(developer){ var server = '../../'; }
     var url = server+"index.php/dico/asiakkaat";
     var versio = "";
     // Palvelin -->
@@ -303,7 +305,13 @@ $(document).ready(function(){
 
 	var values = $(this).serializeArray();
 	console.log(values);
-	var url = 'https://' + values[0]['value']+'/index.php/dico/asiakkaat';
+
+	if(developer){
+		var url = 'http://etunti.local/index.php/dico/asiakkaat'; 
+	} else {
+		var url = 'https://' + values[0]['value']+'/index.php/dico/asiakkaat'; 
+	}
+
 	domain = values[1]['value'];
 
         $.ajax({

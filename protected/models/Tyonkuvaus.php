@@ -18,7 +18,7 @@ class Tyonkuvaus extends DB2ActiveRecord
 	public function tableName()
 	{
 		$tb_name = 'tyonkuvaus';
-		$check_this_table = false;
+		$check_this_table = true;
 		//unset(Yii::app()->session[$tb_name]); // this use if want many times play
 		if(!isset(Yii::app()->session[$tb_name]))
 		{
@@ -45,8 +45,6 @@ class Tyonkuvaus extends DB2ActiveRecord
                      'otsikko' => 'varchar(255) ',
                      'aktiivinen' => 'int(1) DEFAULT 1 ',
                      'kohde_id' => 'int(11) ',
-
-
 
 		);
 

@@ -898,6 +898,7 @@ public function actionLogin($domain)
 			$criteria=new CDbCriteria;
 			$criteria->condition = " 
 				asiakas_id='".$model->id."' 
+				AND aktiivinen=1
 			";
 			$m2 = Tyonkuvaus::model()->findAll($criteria);
 			if(count($m2) > 0)

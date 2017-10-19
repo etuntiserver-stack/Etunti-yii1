@@ -190,7 +190,9 @@ class CrmTarjouksetController extends Controller
 		$mail->setBody($message);
 
 		$tkPDF = '';
-		if($crm->tyonkuvaus_id != 0)
+
+		$tk = Tyonkuvaus::model()->find(" id='".$crm->tyonkuvaus_id."' AND aktiivinen=1 ");
+		if(isset($tk->id))
 		{
 	   		$tk_controller = Yii::app()->createController('Tyonkuvaus');
 	   		$tkPDF = $tk_controller[0]->PdfOpener($crm->tyonkuvaus_id, 'getFile');
@@ -358,8 +360,9 @@ class CrmTarjouksetController extends Controller
 				$tiedosto = 'Tarjous';
 				if(isset($model->id))
 				{
+					$new_model = CrmTarjoukset::model()->findByPk($model->id);
 					$site = Yii::app()->createController('Site');
-  					$tiedosto = $site[0]->tiedostonNimiAsiakasKohdeAika($tiedosto, $model->asiakas_id, $model->kohde_id, $model->time);
+  					$tiedosto = $site[0]->tiedostonNimiAsiakasKohdeAika($tiedosto, $model->asiakas_id, $model->kohde_id, $new_model->time);
 				}
 				//     Tiedoston nimi -->
 

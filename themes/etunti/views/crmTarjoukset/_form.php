@@ -162,7 +162,7 @@
 		{
 			echo '<script>$(document).ready(function(){$(\'.tyonkuvaus\').addClass(\'in\');});</script>';
 			$criteria=new CDbCriteria;
-			$criteria->condition=" kohde_id='".$model->kohde_id."' ";
+			$criteria->condition=" kohde_id='".$model->kohde_id."' AND aktiivinen=1 ";
 	      		$l = Tyonkuvaus::model()->findAll($criteria);
 			if( $l != null )
 			{
