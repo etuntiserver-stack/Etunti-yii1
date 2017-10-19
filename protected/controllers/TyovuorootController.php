@@ -704,70 +704,80 @@ class TyovuorootController extends Controller
 				AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN 
 				'".date("Y-m-d", strtotime($_POST['pfrom']))."'
 					AND '".date("Y-m-d", strtotime($_POST['pto']))."'
+				AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') >= CURDATE()
 			";
 			$m = Tyovuoroot::model()->findAll($poistoCriteria);
-
-			$toistuva = ToistuvatTyovuorot::model()->findByPk($model->toistuva_id);
-			$edelliset_tvuoro_arr = json_decode($toistuva->tvuoro_ids, true);
-
-			$edelliset_tvuoro_ids = array();
-			if(is_array($edelliset_tvuoro_arr))
-			$edelliset_tvuoro_ids = $edelliset_tvuoro_arr;
 
 			
 			foreach($m as $model)
 			{
-				$ketjustaPois = $model->id;
-				$edelliset_tvuoro_ids = array_values( array_diff($edelliset_tvuoro_ids, array($ketjustaPois)) );
 
 				$return[] = array('tid'=>$model->tid, 'pvm'=>$model->pvm, 'ymd'=>date("Ymd",strtotime($model->pvm)));
+				$this->toistuvaDeletePvm($model->toistuva_id, $model->pvm);
 
-			// <-- LOG
-			if( isset($model->id) )
-			{
-			$model_log 	= 'Tyovuoroot';
-			$name_log 	= 'Työvuorot';
-			$status_log 	= 'Delete';
-
-				$old_values = json_encode($model->attributes);
-				$new_values = null;
-				$site = Yii::app()->createController('Site');
-				$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
-			}
-			//     LOG -->
+				// <-- LOG
+				if( isset($model->id) )
+				{
+					$model_log 	= 'Tyovuoroot';
+					$name_log 	= 'Työvuorot';
+					$status_log 	= 'Delete';
+	
+					$old_values = json_encode($model->attributes);
+					$new_values = null;
+					$site = Yii::app()->createController('Site');
+					$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+				}
+				//     LOG -->
 
 			}
 
 			Tyovuoroot::model()->deleteAll($poistoCriteria);
 
-			if( is_array($edelliset_tvuoro_ids) and count($edelliset_tvuoro_ids) > 0 )
-			{
-				ToistuvatTyovuorot::model()->updateByPk($model->toistuva_id, array(
-					'tvuoro_ids'=>json_encode($edelliset_tvuoro_ids)
-				));
-			} elseif( is_array($edelliset_tvuoro_ids) and count($edelliset_tvuoro_ids) == 0 )
+			// <-- Otetaan pois tyovuoro_id noista jotka on tehtty
+			$upd_criteria = new CDBcriteria;
+			$upd_criteria->condition=" 
+				toistuva_id='".$model->toistuva_id."'
+				AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') < CURDATE()
+			";
+			Tyovuoroot::model()->updateAll(array('toistuva_id'=>0), $upd_criteria);
+			//    Otetaan pois tyovuoro_id noista jotka on tehtty -->
+
+			// <-- Tsekataan, onko jai jonkun tyovuorojen koskemattomana
+			$tsekka_tv = Tyovuoroot::model()->findAll(" toistuva_id='".$model->toistuva_id."' ");
+			//  Tsekataan, onko jai jonkun tyovuorojen koskemattomana -->
+
+
+
+			if( $tsekka_tv == null )
 			{
 
-			// <-- LOG
-			if( isset($model->toistuva_id) )
-			{
-			$model_log 	= 'ToistuvatTyovuorot';
-			$name_log 	= 'Toistuvat työvuorot';
-			$status_log 	= 'Delete';
-				$t_m = ToistuvatTyovuorot::model()->findByPk($model->toistuva_id);
-				$old_values = json_encode($t_m->attributes);
-				$new_values = null;
-				$site = Yii::app()->createController('Site');
-				$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
-			}
-			//     LOG -->
+				// <-- LOG
+				if( isset($model->toistuva_id) )
+				{
+					$model_log 	= 'ToistuvatTyovuorot';
+					$name_log 	= 'Toistuvat työvuorot';
+					$status_log 	= 'Delete';
+					$t_m = ToistuvatTyovuorot::model()->findByPk($model->toistuva_id);
+					$old_values = json_encode($t_m->attributes);
+					$new_values = null;
+					$site = Yii::app()->createController('Site');
+					$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
+				}
+				//     LOG -->
 
 				ToistuvatTyovuorot::model()->findByPk($model->toistuva_id)->delete();
+
+			} else {
+
+				// Keksi loogikka
 			}
+
 
 			echo json_encode($return);
 			exit;
 		}
+
+
 
 
 		if(	isset($_POST['toistuva_aktiivinen']) 
@@ -1345,30 +1355,6 @@ class TyovuorootController extends Controller
 			// jos on tyopaari -->
 
 
-
-			// <-- tvuoro_ids Updater
-			if( $saankoSuoritta == 1 and count($return) > 0 )
-			{
-
-				$tvuoro_ids	= array();
-				foreach($return as $k=>$item)
-				{
-					foreach($item as $item2)
-					{
-						if(isset($item2['tvuoro_id']))
-							$tvuoro_ids[] = $item2['tvuoro_id'];
-					}
-				}
-
-				if( count($tvuoro_ids) > 0 )
-				{
-					ToistuvatTyovuorot::model()->updatebypk($toistuva->id, array('tvuoro_ids' => json_encode($tvuoro_ids)));
-				}
-
-			}
-			//  tvuoro_ids Updater -->
-
-
 			// <-- LOG
 			if( $saankoSuoritta == 1 )
 			{
@@ -1706,24 +1692,6 @@ class TyovuorootController extends Controller
 			}
 
 
-			// <-- tvuoro_ids Updater
-			if( $saankoSuoritta == 1 and count($return) > 0 )
-			{
-
-				$tvuoro_ids	= array();
-				foreach($return as $k=>$item)
-				{
-					foreach($item as $item2)
-					{
-						if(isset($item2['tvuoro_id']))
-							$tvuoro_ids[] = $item2['tvuoro_id'];
-					}
-				}
-
-				if( count($tvuoro_ids) > 0 )
-				{
-
-					ToistuvatTyovuorot::model()->updatebypk($toistuva->id, array('tvuoro_ids' => json_encode($tvuoro_ids)));
 				
 					if(isset($edellinenToistuva->id))
 					{
@@ -1748,10 +1716,7 @@ class TyovuorootController extends Controller
 					//     LOG -->
 					}
 
-				}
 
-			}
-			//  tvuoro_ids Updater -->
 
 			if( count($return) > 0 )
 				echo json_encode($return);
