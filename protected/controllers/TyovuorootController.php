@@ -1301,22 +1301,12 @@ class TyovuorootController extends Controller
 	
 			if(!isset($_POST['tyopaari']))
 			{
-			$return[] = $this->toistuvaInsert(
-				$toistuva->id,
-				$toistuva->pfrom, 
-				$toistuva->pto, 
-				json_decode($toistuva->viikko_paivat, true),
-				$toistuva->viikkoja, 
-				$toistuva->tid, 
-				$toistuva->kohde, 
-				$toistuva->alku, 
-				$toistuva->loppu, 
-				$toistuva->pituus, 
-				$toistuva->tyoajanmerkinta, 
-				$toistuva->tietoja,
-				$toistuva->status,
-				'', // tyopaari
-				$saankoSuoritta
+			  	$return[] = $this->toistuvaInsert(
+					$toistuva,
+					$toistuva->tid,  
+					json_decode($toistuva->viikko_paivat, true),
+					'', // tyopaari
+					$saankoSuoritta
 				);
 			}
 
@@ -1332,19 +1322,9 @@ class TyovuorootController extends Controller
 			    foreach($_POST['tyopaari'] as $tid)
 			    {
 				$return[] = $this->toistuvaInsert(
-					$toistuva->id,
-					$toistuva->pfrom, 
-					$toistuva->pto, 
+					$toistuva,
+					$tid,  
 					json_decode($toistuva->viikko_paivat, true),
-					$toistuva->viikkoja, 
-					$tid, 
-					$toistuva->kohde, 
-					$toistuva->alku, 
-					$toistuva->loppu, 
-					$toistuva->pituus, 
-					$toistuva->tyoajanmerkinta, 
-					$toistuva->tietoja,
-					$toistuva->status,
 					json_encode($_POST['tyopaari']),
 					$saankoSuoritta
 					);
@@ -1578,7 +1558,6 @@ class TyovuorootController extends Controller
 		)
 		{
 			$fi = $this->vkoPaivat();
-			//$return[] = array('ERROR'=>json_encode($tyopaari_forUpdater));
 			$saankoSuoritta = $_POST['ToistuvatTyovuorot']['sopivatPaivat'];
 
 			if(isset($edellinenToistuva->id))
@@ -1586,8 +1565,8 @@ class TyovuorootController extends Controller
 			else
 				$toistuva = new ToistuvatTyovuorot;
 
-			$toistuva->attributes=$_POST['ToistuvatTyovuorot'];
-			$toistuva->attributes=$_POST['Tyovuoroot'];
+			$toistuva->attributes = $_POST['ToistuvatTyovuorot'];
+			$toistuva->attributes = $_POST['Tyovuoroot'];
 			$toistuva->pvm = date("d.m.Y",strtotime($_POST['Tyovuoroot']['pvm']));
 
 			if(isset($_POST['P']))
@@ -1599,7 +1578,8 @@ class TyovuorootController extends Controller
 			}
 
 
-			//$return[] = array('ERROR'=>json_encode($r));
+			//$return[] = array('ERROR'=>json_encode($toistuva->attributes));
+
 
 			if($saankoSuoritta == 1)
 			{
@@ -1647,19 +1627,9 @@ class TyovuorootController extends Controller
 			    foreach($_POST['tyopaari'] as $tid)
 			    {
 				$return[] = $this->toistuvaInsert(
-					$toistuva->id,
-					$toistuva->pfrom, 
-					$toistuva->pto, 
-					json_decode($toistuva->viikko_paivat, true),
-					$toistuva->viikkoja, 
+					$toistuva, 
 					$tid, 
-					$toistuva->kohde, 
-					$toistuva->alku, 
-					$toistuva->loppu, 
-					$toistuva->pituus, 
-					$toistuva->tyoajanmerkinta, 
-					$toistuva->tietoja,
-					$toistuva->status,
+					json_decode($toistuva->viikko_paivat, true),
 					json_encode($_POST['tyopaari']),
 					$saankoSuoritta
 					);
@@ -1671,22 +1641,12 @@ class TyovuorootController extends Controller
 			// jos on tyopaari -->
 			{
 
-			$return[] = $this->toistuvaInsert(
-				$toistuva->id,
-				$toistuva->pfrom, 
-				$toistuva->pto, 
-				json_decode($toistuva->viikko_paivat, true),
-				$toistuva->viikkoja, 
-				$toistuva->tid, 
-				$toistuva->kohde, 
-				$toistuva->alku, 
-				$toistuva->loppu, 
-				$toistuva->pituus, 
-				$toistuva->tyoajanmerkinta, 
-				$toistuva->tietoja,
-				$toistuva->status,
-				'', // tyopaari
-				$saankoSuoritta
+				$return[] = $this->toistuvaInsert(
+					$toistuva,
+					$toistuva->tid, 
+					json_decode($toistuva->viikko_paivat, true),
+					'', // tyopaari
+					$saankoSuoritta
 				);
 
 			}
@@ -2834,32 +2794,33 @@ class TyovuorootController extends Controller
 	}
 
 
-	protected function toistuvaInsert($id, $pfrom, $pto, $p, $viikkoja, $tid, $kohde, $alku, $loppu, $pituus, $tyoajanmerkinta, $tietoja, $status, $tyopaari, $saankoSuoritta)
+	protected function toistuvaInsert($attr, $tid, $viikko_paivat, $tyopaari, $saankoSuoritta)
 	{
+
 
 		$fi = $this->vkoPaivat();
 		$tt = Tyontekijat::model()->findByPk($tid);
 		
 		// <-- Tsekataan poistettut PVM
 		$poistettu_pvm = array();
-		$toistuva = ToistuvatTyovuorot::model()->findByPk($id);
+		$toistuva = ToistuvatTyovuorot::model()->findByPk($attr->id);
 		if(isset($toistuva->poistettu_pvm) and is_array(json_decode($toistuva->poistettu_pvm, true)))
 		{
 			$poistettu_pvm = json_decode($toistuva->poistettu_pvm, true);
 		}
 		//     Tsekataan poistettut PVM -->
 
-		$startDate	= $pfrom;
-		$end_date	= $pto;
+		$startDate	= $attr->pfrom;
+		$end_date	= $attr->pto;
 		$date		= $startDate;
 
 		$var		= 1;
 
-		if($viikkoja == 1)
+		if($attr->viikkoja == 1)
 			$var	= 0;
 
-		$w		= $p;
-		$v 		= $viikkoja;
+		$w		= $viikko_paivat;
+		$v 		= $attr->viikkoja;
 		$weeksArr = array();
  		while (strtotime($date) <= strtotime($end_date)) {
 
@@ -2872,7 +2833,7 @@ class TyovuorootController extends Controller
 		$sopivaViikot = array();
 		foreach($weeksArr as $k=>$result)
 		{
-		    if($i % $viikkoja === $var) {
+		    if($i % $attr->viikkoja === $var) {
 		        $sopivaViikot[$result] = $result;
 		    }
 		    $i++;
@@ -2911,23 +2872,17 @@ class TyovuorootController extends Controller
 								'isSaved'=>false, 
 								'tekijan_nimi'=>$tekijan_nimi, 
 								'vkopvm' => $fi[date("N",strtotime($pvm))],
-								'toistuva_id'=>$id,
+								'toistuva_id'=>$attr->id,
 								'otettu_pois'=>true 
 							);
 				} else {
 
 					$t = new Tyovuoroot;
+					$t->attributes = $attr->attributes;
 					$t->tid = $tid;
-					$t->kohde = $kohde;
 					$t->pvm = $pvm;
-					$t->alku = $alku;
-					$t->loppu = $loppu;
-					$t->pituus = $pituus;
-					$t->tyoajanmerkinta = $tyoajanmerkinta;
-					$t->tietoja = $tietoja;
-					$t->status = $status;
 					$t->tyopaari = $tyopaari;
-					$t->toistuva_id = $id;
+					$t->toistuva_id = $attr->id;
 					if($saankoSuoritta == 1)
 					{
 						if($t->save())
