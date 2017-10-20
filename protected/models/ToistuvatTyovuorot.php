@@ -67,9 +67,11 @@ class ToistuvatTyovuorot extends DB2ActiveRecord
                      'status' => 'int(3) ',
                      'tietoja' => 'text ',
                      'tyopaari' => 'text ',
+		     'piilota_mobiilista' => 'int(1)',
                      'ilmoitus_paattymisesta' => 'int(1) ',
                      'tvuoro_ids' => 'text ',
                      'poistettu_pvm' => 'text',
+
 		);
 
 		foreach($table_structure as $key=>$value)
@@ -92,7 +94,7 @@ class ToistuvatTyovuorot extends DB2ActiveRecord
 		// will receive user inputs.
 		return array(
 			//array('time, pfrom, pto, viikkoja, viikko_paivat, tid, kohde, pvm, alku, loppu, kesto, tyoajanmerkinta, status, tietoja, tyopaari', 'required'),
-			array('viikkoja, tid, kohde, status, ilmoitus_paattymisesta', 'numerical', 'integerOnly'=>true),
+			array('viikkoja, tid, kohde, status, ilmoitus_paattymisesta, piilota_mobiilista', 'numerical', 'integerOnly'=>true),
 			array('pfrom, pto, pvm', 'length', 'max'=>50),
 			array('alku, loppu, pituus, kesto', 'length', 'max'=>10),
 			array('tyoajanmerkinta', 'length', 'max'=>100),
@@ -137,6 +139,7 @@ class ToistuvatTyovuorot extends DB2ActiveRecord
 			'status' => 'Status',
 			'tietoja' => 'Tietoja',
 			'tyopaari' => 'Tyopaari',
+
 		);
 	}
 
