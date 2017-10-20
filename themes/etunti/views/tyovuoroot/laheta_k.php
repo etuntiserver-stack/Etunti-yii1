@@ -1,6 +1,6 @@
 <?php
 
-
+$asetukset = Asetukset::model()->findByPk(1);
 $paivat=array(
 	1=>'Maanantai',
 	2=>'Tiistai',
@@ -78,12 +78,15 @@ $paivat=array(
 
 <?php $ids = ''; ?>
 <?php 
+$tyosuhteet_checker = array();
 $kenelleLahetetaan = array();
 foreach ($tv as $t) { 
 ?>
 <br>
 <?php
 $tt = Tyontekijat::model()->findbypk($t->tid);
+$ts = Tyosuhdet::model()->find(" tid='".$t->tid."' ");
+
 
 if(isset($tt->tekijan_email)){
 $ids .= $tt->id.',';
@@ -106,11 +109,16 @@ array_push($kenelleLahetetaan, $this->etuSukunimi($tt->id));
 <th><?php echo Yii::t('main', 'Tietoja'); ?></th>
 </tr>
 <?php
-$asetukset = Asetukset::model()->findByPk(1);
+
 for($day= 1; $day <= 7; $day++) {
 
   $d = strtotime($year ."W". $week . $day);
   $date = date('d.m.Y',$d);
+
+  if( !isset($tyosuhteet_checker[$tt->id]) and isset($ts->loppu) and !empty($ts->loppu) and strtotime($ts->loppu) < strtotime($date) )
+  {
+	$tyosuhteet_checker[$tt->id] = array('nimi' => $this->etuSukunimi($tt->id), 'tsloppu' => $ts->loppu );
+  }
 
   echo '<tr>';
   echo '<td width="50">'.$paivat[date('N',$d)].'<br>'.$date.'</td>';
@@ -274,7 +282,13 @@ $ids = json_encode(explode(",",$ids));
   </div>
 </div>
 
-    <button class="btn btn-success btn-sm laheta"><?php echo Yii::t('main','Lähetä'); ?></button>
+    <?php
+	foreach($tyosuhteet_checker as $item)
+	{
+		echo '<div class="alert bg-danger">Huom! Työntekijä '.$item['nimi'].' työsuhde on päättynyt '.$item['tsloppu'].'</div>';
+	}
+    ?>
+    <button class="btn btn-success btn-lg laheta"><?php echo Yii::t('main','Lähetä'); ?></button>
   </form>
  </div>
 </div>
