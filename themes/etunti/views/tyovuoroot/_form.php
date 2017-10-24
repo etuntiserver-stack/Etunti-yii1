@@ -990,13 +990,22 @@ function getAllTids(){
 	}
 	/* Työpari */
 
-	console.log('Tids joille päivitetään laatikko: ' + tids);
-	return tids;
+	var clearArr = remove_duplicates_es6(tids);
+
+	console.log('Tids joille päivitetään laatikko: ' + clearArr);
+	return clearArr;
+}
+
+function remove_duplicates_es6(arr) {
+    let s = new Set(arr);
+    let it = s.values();
+    return Array.from(it);
 }
 
 function laatikonPaivaysData(tids){
 
 	  console.log('GET: ' + tids);
+
 	  $.ajax({
 		  url: 'paivita_laatikot',
 		  data:{ tids : tids },
