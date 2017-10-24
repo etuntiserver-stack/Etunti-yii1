@@ -20,6 +20,33 @@ $tilauksen_kuvaus = json_decode($data->tilauksen_kuvaus, true);
 		?>
 	</td>
 	<td>
+		<?php if($data->laskutettu == 0 and $data->lasku_id == 0) : ?>
+		<?php echo CHtml::link(Yii::t('main', 'Luo lasku'), 
+				array('//lasku/create', 'edico_tilaus_id'=>$data->id), 
+				array(
+					'class'=>'btn btn-warning', 
+					'style'=>'color:white', 
+					'data-toggle'=>'tooltip', 
+					'data-placement'=>'top', 
+					'title'=>Yii::t('main', 'Luo lasku') 
+				)
+			); 
+		?>
+		<?php else : ?>
+		<?php echo CHtml::link(Yii::t('main', 'Laskutettu'), 
+				array('//lasku/update', 'id'=>$data->lasku_id), 
+				array(
+					'class'=>'btn btn-success', 
+					'style'=>'color:white', 
+					'data-toggle'=>'tooltip', 
+					'data-placement'=>'top', 
+					'title'=>Yii::t('main', 'Luo lasku') 
+				)
+			); 
+		?>
+		<?php endif; ?>
+	</td>
+	<td>
 		<?php echo date("d.m.Y  H:i",strtotime($data->time)); ?>
 	</td>
 	<td>
@@ -47,10 +74,8 @@ $tilauksen_kuvaus = json_decode($data->tilauksen_kuvaus, true);
 	</td>
 	<td>
 		<?php 
-		if($data->tila == 1) 
-			echo 'Maksettu';
-		else 
-			echo '<span class="text-danger">Ei maksettu</span>';
+		if($data->tila == 3) 
+			echo 'eDico tilaus'; 
 		?>
 	</td>
 	<td>
