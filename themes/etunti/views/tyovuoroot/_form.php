@@ -983,14 +983,21 @@ function getAllTids(){
 	}
 	if( ('<?=$model->tyopaari?>') !== '' ){
 		var edelliset_tyoparit = JSON.parse('<?=$model->tyopaari?>');
-		console.log('Edelliset työparit: ' + edelliset_tyoparit);
-		$(edelliset_tyoparit).each(function( index, val ) {
+
+		var edelliset_values = $.map(edelliset_tyoparit, function () {
+		    return this.name;
+		});
+
+		console.log('Edelliset työparit: ' + edelliset_values);
+		$(edelliset_values).each(function( index, val ) {
 			tids.push(val);
 		});
 	}
 	/* Työpari */
 
 	var clearArr = remove_duplicates_es6(tids);
+
+
 
 	console.log('Tids joille päivitetään laatikko: ' + clearArr);
 	return clearArr;
@@ -1005,7 +1012,6 @@ function remove_duplicates_es6(arr) {
 function laatikonPaivaysData(tids){
 
 	  console.log('GET: ' + tids);
-
 	  $.ajax({
 		  url: 'paivita_laatikot',
 		  data:{ tids : tids },
