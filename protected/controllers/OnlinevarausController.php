@@ -32,7 +32,7 @@ class OnlinevarausController extends Controller
                 		'users'=>array("*"),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update', 'kaikki', 'varaukset_raportti'),
+				'actions'=>array('create','update', 'kaikki', 'kaikkieDico', 'varaukset_raportti'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -205,20 +205,22 @@ class OnlinevarausController extends Controller
 		$from = date("Y-m-d");
 		$to = date("Y-m-d");
 
-		if(isset($_POST['from']) and isset($_POST['to'])){
-		$from 	= date("Y-m-d",strtotime($_POST['from']));
-		$to 	= date("Y-m-d",strtotime($_POST['to']));
+		if(isset($_GET['from']) and isset($_GET['to'])){
+		$from 	= date("Y-m-d",strtotime($_GET['from']));
+		$to 	= date("Y-m-d",strtotime($_GET['to']));
 		}
 
-	        $criteria->addCondition (" DATE(time) BETWEEN '".$from."' AND '".$to."' ");
+	        $criteria->addCondition (" 
+			tila!=3
+			AND DATE(time) BETWEEN '".$from."' AND '".$to."' 
+		");
 
-		if(Yii::app()->request->getPost('tila') == 1)
-	        	$criteria->addCondition (" tila=1 ");
+		if(isset($_GET['tila']) and !empty($_GET['tila']))
+	        	$criteria->addCondition (" tila='".$_GET['tila']."' ");
 
-		if(Yii::app()->request->getPost('tulosta'))
+		if(isset($_GET['tulosta']))
 		{
 
-	        	$criteria->addCondition (" tila=1 ");
 			$model = Onlinevaraus::model()->findAll($criteria);
 
 
@@ -255,6 +257,65 @@ class OnlinevarausController extends Controller
 		}
 	}
 
+
+	public function actionKaikkieDico()
+	{
+
+                Yii::app()->theme = 'etunti';
+
+       		$criteria = new CDbCriteria();
+	        $criteria->order = " id DESC ";
+
+		$from = date("Y-m-d");
+		$to = date("Y-m-d");
+
+		if(isset($_GET['from']) and isset($_GET['to'])){
+		$from 	= date("Y-m-d",strtotime($_GET['from']));
+		$to 	= date("Y-m-d",strtotime($_GET['to']));
+		}
+
+	        $criteria->addCondition (" 
+			tila=3
+			AND DATE(time) BETWEEN '".$from."' AND '".$to."' 
+		");
+
+		if(isset($_GET['tulosta']))
+		{
+
+			$model = Onlinevaraus::model()->findAll($criteria);
+
+	          	$html2pdf = Yii::app()->ePdf->HTML2PDF('P', 'A4', 'en');
+			$html2pdf->setDefaultFont('Arial');
+		        $html2pdf->WriteHTML($this->renderPartial('varaukset_raportti', array(
+				'model' => $model,
+				'from' => $from,
+				'to' => $to
+			),true));
+		        $html2pdf->Output();
+
+			/*
+			$this->render('varaukset_raportti', array(
+				'model' => $model,
+				'from' => $from,
+				'to' => $to
+			));
+			*/
+
+		} else {
+
+			$dataProvider=new CActiveDataProvider('Onlinevaraus', array(
+				'criteria'=>$criteria,
+				//'pagination'=>false
+			));
+
+			$dataProvider->pagination->pageSize = 50;
+			$this->render('kaikkiedico', array(
+				'dataProvider' => $dataProvider,
+				'from' => $from,
+				'to' => $to
+			));
+		}
+	}
 
 	public function actionCheckout()
 	{
