@@ -1571,12 +1571,12 @@ class TyovuorootController extends Controller
 
 			if(isset($_POST['P']))
 			$toistuva->viikko_paivat=json_encode($_POST['P']);
-
+/*
 			if(isset($edellinenToistuva->id) and strtotime($edellinenToistuva->pfrom) < strtotime(date("d.m.Y")))
 			{
 				$toistuva->pfrom = date("d.m.Y");
 			}
-
+*/
 
 			//$return[] = array('ERROR'=>json_encode($toistuva->attributes));
 
