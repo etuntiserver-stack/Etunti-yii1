@@ -392,7 +392,7 @@ $(document).ready(function(){
 
   </div>
 
-  <div class="col-sm-6">
+  <div class="col-sm-3">
 		<?php echo $form->labelEx($model,'tid'); ?>
 
 
@@ -405,6 +405,16 @@ $(document).ready(function(){
 
         	<?php echo $form->dropDownList($model, 'tid', $list,array('empty'=>'Valitse','class'=>'form-control'));	?>
   </div>
+
+  <div class="col-sm-3">
+		<?php echo $form->labelEx($model,'status'); ?>
+		<?php 
+        	$l = $this->tilanteet();
+		echo $form->dropDownList($model,'status', $l, 
+		array('class'=>'form-control')) ?>
+
+  </div>
+
 </div>
 
 <div class="row">

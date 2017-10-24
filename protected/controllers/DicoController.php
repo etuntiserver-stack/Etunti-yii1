@@ -44,12 +44,14 @@ public function actionLogin($domain)
 			$criteria=new CDbCriteria;
 			$criteria->condition = " 
 				sahkoposti='".$_POST['tunnus']."' 
-				AND salasana='".$_POST['salasana']."'
-				AND salasana!=''
+				AND token=''
 			";
 			$model=Asiakkaat::model()->find($criteria);
-			if(isset($model->id))
+
+			$l = $this->loginChecker($model, $_POST['salasana']);
+			if($l['login'] == true)
 			{
+				$_POST['salasana'] = $l['new_salasana'];
 
 				$asetukset=Asetukset::model()->findByPk(1);
 				$asiakasNimi = '';
@@ -85,6 +87,47 @@ public function actionLogin($domain)
 
 }
 
+
+	protected function kirjautuminen($domain, $tunnus, $salasana)
+	{
+
+		$criteria=new CDbCriteria;
+		$criteria->condition = " 
+			sahkoposti='".$tunnus."' 
+			AND token=''
+		";
+		$model=Asiakkaat::model()->find($criteria);
+
+		$l = $this->loginChecker($model, $salasana);
+		if($l['login'] == true)
+		{
+			Yii::app()->user->setState('domain', $domain);
+			Yii::app()->user->setState('asiakas', $model->id);
+			return true;
+		} else {
+			$this->_sendResponse(200, CJSON::encode('login_error'));
+			exit;
+			return false;
+		}
+
+	}
+
+	protected function loginChecker($model, $salasana)
+	{
+
+		$login = false;
+		$new_salasana = '';
+
+		if (isset($model->id) and strlen($salasana) == 60 and $salasana == $model->salasana){
+			$login = true;
+			$new_salasana = $salasana;
+		} elseif(isset($model->id) and strlen($salasana) != 60 and password_verify($salasana, $model->salasana)){
+			$login = true;
+			$new_salasana = $model->salasana;
+		}
+
+		return array('login' => $login, 'new_salasana' => $new_salasana);
+	}
 
 	public function actionRecovery($domain)
 	{
@@ -257,11 +300,12 @@ public function actionLogin($domain)
 		if(isset($_POST['tunnus']) and $this->kirjautuminen($domain, $_POST['tunnus'], $_POST['salasana']) == true)
 		{
 
-		   $model=Asiakkaat::model()->findByPk($_POST['asiakasID']);
-		   if(isset($model->id))
+		   $model = Asiakkaat::model()->findByPk($_POST['asiakasID']);
+		   $afa = AsetuksetForAll::model()->findByPk(1);
+		   if(isset($model->id) and !empty($afa->app_info_sivu))
 		   {
-				$return = 'ok';
-				$this->_sendResponse(200, CJSON::encode(array('ok'=>$return)));
+				$return = str_replace("\n", "<br>", $afa->app_info_sivu);
+				$this->_sendResponse(200, CJSON::encode(array('content'=>$return)));
 				exit;
 
 		   }
@@ -307,9 +351,9 @@ public function actionLogin($domain)
 
 		   if(isset($model->id) and $model->app_kayttoehdot == 1)
 		   {
-				$this->_sendResponse(200, CJSON::encode(array('kayttoehdot'=>true)));
+				$this->_sendResponse(200, CJSON::encode(array('kayttoehdot'=>'ok')));
 		   } else {
-				$this->_sendResponse(200, CJSON::encode(array('kayttoehdot'=>false)));
+				$this->_sendResponse(200, CJSON::encode(array('kayttoehdot'=>'error')));
 		   }
 		}
 
@@ -615,27 +659,6 @@ public function actionLogin($domain)
 				$this->_sendResponse(200, CJSON::encode('Ei tuloksia'));
 	}
 
-	protected function kirjautuminen($domain, $tunnus, $salasana)
-	{
-
-		$criteria=new CDbCriteria;
-		$criteria->condition = " 
-			sahkoposti='".$tunnus."' 
-			AND salasana='".$salasana."'
-			AND salasana!=''
-		";
-		$model=Asiakkaat::model()->find($criteria);
-		if(isset($model->id))
-		{
-			Yii::app()->user->setState('domain', $domain);
-			Yii::app()->user->setState('asiakas', $model->id);
-			return true;
-		} else {
-			return false;
-		}
-
-	}
-
 	protected function luo_palaute($mod, $post)
 	{
 		$palauteet = Yii::app()->createController('Palautteet');
@@ -675,6 +698,7 @@ public function actionLogin($domain)
 			$criteria=new CDbCriteria;
 			$criteria->condition = " 
 				asiakas_id='".$model->id."' 
+				AND status=2
 			";
 			$m2 = CrmTarjoukset::model()->findAll($criteria);
 
@@ -769,7 +793,8 @@ public function actionLogin($domain)
 
 			$criteria=new CDbCriteria;
 			$criteria->condition = " 
-				asiakas_id='".$model->id."' 
+				asiakas_id='".$model->id."'
+				AND status=2
 			";
 			$m2 = CrmSopimukset::model()->findAll($criteria);
 			if(count($m2) > 0)
@@ -874,6 +899,7 @@ public function actionLogin($domain)
 			$criteria=new CDbCriteria;
 			$criteria->condition = " 
 				asiakas_id='".$model->id."' 
+				AND aktiivinen=1
 			";
 			$m2 = Tyonkuvaus::model()->findAll($criteria);
 			if(count($m2) > 0)

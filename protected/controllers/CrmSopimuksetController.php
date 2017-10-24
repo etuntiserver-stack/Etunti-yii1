@@ -165,24 +165,23 @@ class CrmSopimuksetController extends Controller
 		$this->render('vanhentunut');		
 	}
 
+	protected function generateRandomString($length = 40) {
+	    $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+	    $charactersLength = strlen($characters);
+	    $randomString = '';
+	    for ($i = 0; $i < $length; $i++) {
+	        $randomString .= $characters[rand(0, $charactersLength - 1)];
+	    }
+	    return $randomString;
+	}
+
 	public function actionLaheta()
 	{
 		if(isset($_POST['id']))
 		{
-			$crm = CrmSopimukset::model()->findbypk($_POST['id']);
-
-
-
-function generateRandomString($length = 40) {
-    $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    $charactersLength = strlen($characters);
-    $randomString = '';
-    for ($i = 0; $i < $length; $i++) {
-        $randomString .= $characters[rand(0, $charactersLength - 1)];
-    }
-    return $randomString;
-}
-$randstring = generateRandomString();
+			
+		$crm = CrmSopimukset::model()->findbypk($_POST['id']);
+		$randstring = $this->generateRandomString();
 
 
 
@@ -202,31 +201,37 @@ $randstring = generateRandomString();
 		';
 		
 
+
 		$subject = Yii::t('main', 'Sopimus'). ', '.$ft->tyonantaja;
+		$mail = new YiiMailer();
+		$mail->setFrom('no-reply@etunti.fi');
+		$mail->setTo($crm->asiakkaan_sahkoposti);
+		$mail->setSubject($subject);
+		$mail->setBody($message);
 
-		// <-- Mail sender
-		$site = Yii::app()->createController('Site');
-		$recipient_name = '';
-		$to = $crm->asiakkaan_sahkoposti;
-		$subject = $subject;
-		$html_text = $message;
-		$copy = null; // if null not copy
-		$liite = null; // if null not attachment
-		$type = 'text/plain';
-		$file_name = '';
-		$content = '';
-
-		if(file_exists(Yii::app()->basePath."/../tiedostot/sopimukset/".Yii::app()->user->domain."/".$crm->liite.".pdf"))
+		$tkPDF = '';
+		$tk = Tyonkuvaus::model()->find(" id='".$crm->tarjous->tyonkuvaus_id."' AND aktiivinen=1 ");
+		if(isset($tk->id))
 		{
-		$liite = 1; // if null not attachment
-		$type = 'text/plain';
-		$file_name = $file;
-		$content = base64_encode(file_get_contents($path.'/'.$file));
+	   		$tk_controller = Yii::app()->createController('Tyonkuvaus');
+	   		$tkPDF = $tk_controller[0]->PdfOpener($crm->tarjous->tyonkuvaus_id, 'getFile');
+   			if(file_exists(Yii::app()->basePath."/../".$tkPDF))
+			{
+				$mail->addAttachment($tkPDF);
+			}
 		}
 
-		if($site[0]->mandrill($recipient_name, $to, $subject, $html_text, $liite, $type, $file_name, $content, $copy))
+
+   		if(file_exists(Yii::app()->basePath."/../tiedostot/sopimukset/".Yii::app()->user->domain."/".$crm->liite.".pdf"))
 		{
-							Yii::app()->user->setFlash('success', "Sähköposti lähetetty");
+			$mail->addAttachment($path.'/'.$file);
+			//echo $message;
+			//exit;
+		}
+
+		if($mail->send())
+		{
+	
 
 							// <-- LOG
 							$log=new Log;
@@ -237,14 +242,13 @@ $randstring = generateRandomString();
 							$log->save();
 							//     LOG -->
 
+
 			CrmSopimukset::model()->updatebypk($_POST['id'], array('status'=>1,'hyvaksyn_koodi'=>$randstring));
 			$this->redirect(array('index'));
-		   }
-
-
-
+		}
 
 		}
+
 	}
 
 	public function actionView($id)
@@ -277,8 +281,9 @@ $randstring = generateRandomString();
 				$tiedosto = 'Sopimus';
 				if(isset($model->id))
 				{
+					$new_model = CrmSopimukset::model()->findByPk($model->id);
 					$site = Yii::app()->createController('Site');
-  					$tiedosto = $site[0]->tiedostonNimiAsiakasKohdeAika($tiedosto, $model->asiakas_id, $model->tarjous->kohteen_osoite, $model->time);
+  					$tiedosto = $site[0]->tiedostonNimiAsiakasKohdeAika($tiedosto, $model->asiakas_id, $model->tarjous->kohteen_osoite, $new_model->time);
 				}
 				//     Tiedoston nimi -->
 				CrmSopimukset::model()->updateByPk($model->id, array('liite'=>$tiedosto));
@@ -430,7 +435,7 @@ $randstring = generateRandomString();
 				$asiakkaan_postinumero 	= $as->postinumero;
 				$asiakkaan_toimipaikka 	= $as->kaupunki;
 				$asiakkaan_puhelin 	= $as->puhelin;
-				$asiakkaan_email	= $as->salasana;
+				$asiakkaan_email	= $as->sahkoposti;
 			}
 			//     Jos se on Asiakas -->
 

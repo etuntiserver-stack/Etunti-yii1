@@ -190,7 +190,9 @@ class CrmTarjouksetController extends Controller
 		$mail->setBody($message);
 
 		$tkPDF = '';
-		if($crm->tyonkuvaus_id != 0)
+
+		$tk = Tyonkuvaus::model()->find(" id='".$crm->tyonkuvaus_id."' AND aktiivinen=1 ");
+		if(isset($tk->id))
 		{
 	   		$tk_controller = Yii::app()->createController('Tyonkuvaus');
 	   		$tkPDF = $tk_controller[0]->PdfOpener($crm->tyonkuvaus_id, 'getFile');
@@ -208,11 +210,8 @@ class CrmTarjouksetController extends Controller
 			//exit;
 		}
 
-		   if($mail->send())
-		   {
-
-			//if(file_exists(Yii::app()->basePath."/../".$tkPDF))
-			//unlink($tkPDF);
+		if($mail->send())
+		{
 	
 
 							// <-- LOG
@@ -227,7 +226,7 @@ class CrmTarjouksetController extends Controller
 
 			CrmTarjoukset::model()->updatebypk($id, array('status'=>1,'hyvaksyn_koodi'=>$randstring));
 			$this->redirect(array('index'));
-		   }
+		}
    		
 
 
@@ -361,8 +360,9 @@ class CrmTarjouksetController extends Controller
 				$tiedosto = 'Tarjous';
 				if(isset($model->id))
 				{
+					$new_model = CrmTarjoukset::model()->findByPk($model->id);
 					$site = Yii::app()->createController('Site');
-  					$tiedosto = $site[0]->tiedostonNimiAsiakasKohdeAika($tiedosto, $model->asiakas_id, $model->kohde_id, date('Y-m-d'));
+  					$tiedosto = $site[0]->tiedostonNimiAsiakasKohdeAika($tiedosto, $model->asiakas_id, $model->kohde_id, $new_model->time);
 				}
 				//     Tiedoston nimi -->
 
@@ -437,7 +437,7 @@ class CrmTarjouksetController extends Controller
 				if(isset($model->id))
 				{
 					$site = Yii::app()->createController('Site');
-  					$tiedosto = $site[0]->tiedostonNimiAsiakasKohdeAika($tiedosto, $model->asiakas_id, $model->kohde_id, date('Y-m-d'));
+  					$tiedosto = $site[0]->tiedostonNimiAsiakasKohdeAika($tiedosto, $model->asiakas_id, $model->kohde_id, $model->time);
 				}
 				//     Tiedoston nimi -->
 				CrmTarjoukset::model()->updateByPk($model->id, array('liite'=>$tiedosto));

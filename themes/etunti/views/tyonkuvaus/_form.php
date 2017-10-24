@@ -198,7 +198,6 @@ $(document).ready(function(){
 	?>
 
 
-
 		<table class="table table-bordered authors-list">
 		    <tr>
 		        <th></td><td><?php echo Yii::t('main','Tilat'); ?></th>
@@ -388,8 +387,8 @@ $(document).ready(function(){
 		<?php endif; ?>
 		</table>
 		<br>
-		<p style="margin-left: 7px"><a href="#" title="" class="add-author"><i class="fa fa-plus fa-2x" aria-hidden="true"></i></a></p>
 
+		<p style="margin-left: 7px"><a href="#" title="" class="add-author"><i class="fa fa-plus fa-2x" aria-hidden="true"></i></a></p>
 
 		<div class="input-group" id="kuvauksetTuoteesta" style="display:none">
 		 <?php echo CHtml::dropDownList("", "", $tal, array("multiple" => "multiple", "class"=> "form-control mult tyonkuvaus_tilat_selecter")); ?>

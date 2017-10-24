@@ -71,6 +71,7 @@ function getUrlVars() {
 		if(data)
 		{
 			$('#resultLaatiko').html(data);
+			$('.sisainen').remove();
 			reloadSkin();
 			reloadDatepicker();
 		}
@@ -277,6 +278,7 @@ function getUrlVars() {
 				console.log(data);
 				if(data['OK'])
 				{
+					alert("Tilaus on peruutettu.");
 					window.location.reload();
 				}
 		           }

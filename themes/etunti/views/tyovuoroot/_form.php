@@ -100,7 +100,7 @@ if(isset($ov->id) and !empty($ov->kohde_id) and empty($model->kohde)){
   </div>
 
   <div class="col-sm-3">
-		<?php echo $form->labelEx($model,'kohde'); ?> <span style="color:red">*</span>
+		<?php echo $form->labelEx($model,'kohde'); ?>
 		<?php
         		$list = CHtml::listData(Kohteet::model()->findAll(array('order' => 'osoite')), 'id', 'osoite');
         		echo $form->dropDownList($model, 'kohde', $list,array('empty'=>'Valitse','class'=>'form-control kohde'));
@@ -686,7 +686,7 @@ $('#tyovuoroot-form').on('submit',function(e) {
 
  	}
 
-	/* <-- Tarkistetaan Aloitus/Lopetus Klo ja osoite */
+	/* <-- Tarkistetaan Aloitus/Lopetus Klo ja */
 	if( $('#alku').val() === '' )
 	{
 		$('#alku').addClass('bg-danger').focus();
@@ -697,12 +697,7 @@ $('#tyovuoroot-form').on('submit',function(e) {
 		$('#loppu').addClass('bg-danger').focus();
 		return false;
 	}
-	if( $('#Tyovuoroot_kohde option:selected').val() === '' )
-	{
-		$('#Tyovuoroot_kohde').addClass('bg-danger').focus();
-		return false;
-	}
-	/*     Tarkistetaan Aloitus/Lopetus Klo ja osoite --> */
+	/*     Tarkistetaan Aloitus/Lopetus Klo ja --> */
 
 	/* <-- Tarkistetaan Alkaen pvm */
  	if( 
