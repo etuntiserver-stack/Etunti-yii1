@@ -1571,12 +1571,6 @@ class TyovuorootController extends Controller
 
 			if(isset($_POST['P']))
 			$toistuva->viikko_paivat=json_encode($_POST['P']);
-/*
-			if(isset($edellinenToistuva->id) and strtotime($edellinenToistuva->pfrom) < strtotime(date("d.m.Y")))
-			{
-				$toistuva->pfrom = date("d.m.Y");
-			}
-*/
 
 			//$return[] = array('ERROR'=>json_encode($toistuva->attributes));
 
@@ -1595,6 +1589,14 @@ class TyovuorootController extends Controller
 					Tyovuoroot::model()->deleteByPk($id);
 				}
 				//     Pois valittuna Työvuoro -->
+
+//date("Y-m-d",strtotime($_POST['ToistuvatTyovuorot']['pfrom']))
+/*
+					AND id NOT IN ( SELECT id FROM sivex_tvuoro WHERE
+						
+						DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') < '".date("Y-m-d",strtotime($_POST['ToistuvatTyovuorot']['pfrom']))."'
+					)
+*/
 
 				// <-- Pois kaikki vanhat
 				$pois_criteria = new CDBcriteria;
