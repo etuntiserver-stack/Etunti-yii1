@@ -687,7 +687,7 @@ $('.mult').multiselect({
 		var todaysDate = new Date();
 		if(old_pfrom.setHours(0,0,0,0) < todaysDate.setHours(0,0,0,0)) {
 			$('#pfrom').val('<?=date("d.m.Y")?>')
-			$('#pfrom').after('<p class="text-danger">Ketjun Alkupäivämäärä muuttuu. Sitä aikaisemmat päivät irtoavat ketjusta tavallisiksi työvuoroiksi.</p>');
+			$('#pfrom').after('<p class="text-danger">Ketjun Alkupäivämäärä muuttuu. Sitä aikaisemmat päivät muuttuvat yksittäisiksi työvuoroiksi.</p>');
 		}
 	}
 
