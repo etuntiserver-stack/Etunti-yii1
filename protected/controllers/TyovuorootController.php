@@ -1615,6 +1615,7 @@ class TyovuorootController extends Controller
 						AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') 
 						BETWEEN '".date("Y-m-d",strtotime($edellinenToistuva->pfrom))."'
 						AND '".date("Y-m-d",strtotime($_POST['ToistuvatTyovuorot']['pfrom']))."'
+						AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') >= CURDATE()
 					";
 					Tyovuoroot::model()->deleteAll($pois_valipavm);
 				}
