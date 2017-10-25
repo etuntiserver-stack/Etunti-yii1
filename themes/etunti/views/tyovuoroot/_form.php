@@ -372,15 +372,21 @@ $(".muokaValiko").click(function() {
 <div class="row">
  <div class="col-sm-12">
 
-	<?php //if((isset($model->id) and $model->toistuva_id != 0) or !isset($model->id)) : ?>
+
   	<a href="#" class="btn btn-sm btn-primary" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample"> <?php echo Yii::t('main','Toistuva työvuoro'); ?></a>
-	<?php //endif; ?>
+
 
 	<div class="<?php echo $classCol; ?>" id="collapseExample">
 	<br>
 	<p>
 	<b><?php echo Yii::t('main','Muokkaa toistuvaa työvuoroa. Jos valintaa ei ole tehtynä, muokataan vain kyseisen päivän työvuoroa.'); ?></b> <br> 
 	<input type="checkbox" class="sw" name="ToistuvatTyovuorot[toistuva_aktiivinen]" id="toistuva_aktiivinen"><br>
+
+	  <div id="poisto_alkaen_taaksepain_laatikko" class="hidden">
+	   <b class="text-danger"><?php echo Yii::t('main','Alkupäivämäärä on muuttunut. Poistetaanko vanhan ja uuden aloituspäivämäärän väliin jäävät työvuorot.'); ?></b> <br> 
+	   <input type="checkbox" class="sw" name="poisto_alkaen_taaksepain" id="poisto_alkaen_taaksepain">
+	  </div>
+
 	</p>
 	<br>
 
@@ -671,6 +677,21 @@ $('.mult').multiselect({
 
 
 
+ 	if( 
+		('<?=$model->id?>') !== '' 
+		&& ('<?=$model->toistuva_id?>') !== '0' 
+ 	)
+ 	{
+		var edellinen_pfrom = ('<?=$pfrom?>').split('.');
+		var old_pfrom = new Date(+edellinen_pfrom[1]+"/"+edellinen_pfrom[0]+"/"+edellinen_pfrom[2]); //"11/21/2011"
+		var todaysDate = new Date();
+		if(old_pfrom.setHours(0,0,0,0) < todaysDate.setHours(0,0,0,0)) {
+			$('#pfrom').val('<?=date("d.m.Y")?>')
+			$('#pfrom').after('<p class="text-danger">Ketjun Alkupäivämäärä muuttuu. Sitä aikaisemmat päivät muuttuvat yksittäisiksi työvuoroiksi.</p>');
+		}
+	}
+
+
 $('#tyovuoroot-form').on('submit',function(e) {
 
  	if( 
@@ -706,12 +727,18 @@ $('#tyovuoroot-form').on('submit',function(e) {
 		&& ( $('#toistuva_aktiivinen').bootstrapSwitch('state') === true )
  	)
  	{
-		var thisVal = $('#pfrom').val().split('.');
-		var inputDate = new Date(+thisVal[1]+"/"+thisVal[0]+"/"+thisVal[2]); //"11/21/2011"
+		var edellinen_pfrom = ('<?=$pfrom?>').split('.');
+		var valinnut_pfrom = $('#pfrom').val().split('.');
+		var old_pfrom = new Date(+edellinen_pfrom[1]+"/"+edellinen_pfrom[0]+"/"+edellinen_pfrom[2]); //"11/21/2011"
+		var new_pfrom = new Date(+valinnut_pfrom[1]+"/"+valinnut_pfrom[0]+"/"+valinnut_pfrom[2]); //"11/21/2011"
 		var todaysDate = new Date();
-		if(inputDate.setHours(0,0,0,0) < todaysDate.setHours(0,0,0,0)) {
+		if(new_pfrom.setHours(0,0,0,0) < todaysDate.setHours(0,0,0,0)) {
 			alert('Toistuvan työvuoron aloitus päivämäärä ei voida muokata alkamaan menneisyydestä.');
 			return false;
+		}
+
+		if(new_pfrom.setHours(0,0,0,0) > old_pfrom.setHours(0,0,0,0) && $('#poisto_alkaen_taaksepain_laatikko').hasClass( "hidden" )) {
+			$('#poisto_alkaen_taaksepain_laatikko').removeClass( "hidden" );
 		}
 	}
 	/*    Tarkistetaan Alkaen pvm --> */
@@ -1187,6 +1214,7 @@ function checkOnkoToistuvaRuksiPaallaKunMuutetaan(){
   $('#pto, #pfrom').blur(function(){
 	$('#sopivatPaivat').html('');
 	if(checkOnkoToistuvaRuksiPaallaKunMuutetaan()){ $('#toistuva_aktiivinen').bootstrapSwitch('state', true); }
+	$('#poisto_alkaen_taaksepain_laatikko').addClass( "hidden" );
   });
 
   $('#Toistuva_viikkoja').change(function(){

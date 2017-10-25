@@ -1571,12 +1571,6 @@ class TyovuorootController extends Controller
 
 			if(isset($_POST['P']))
 			$toistuva->viikko_paivat=json_encode($_POST['P']);
-/*
-			if(isset($edellinenToistuva->id) and strtotime($edellinenToistuva->pfrom) < strtotime(date("d.m.Y")))
-			{
-				$toistuva->pfrom = date("d.m.Y");
-			}
-*/
 
 			//$return[] = array('ERROR'=>json_encode($toistuva->attributes));
 
@@ -1596,22 +1590,44 @@ class TyovuorootController extends Controller
 				}
 				//     Pois valittuna Työvuoro -->
 
-				// <-- Pois kaikki vanhat
+				//date("Y-m-d",strtotime($_POST['ToistuvatTyovuorot']['pfrom']))
+
+
+				// <-- Pois kaikki Aloitus pvm alkaen
 				$pois_criteria = new CDBcriteria;
 				$pois_criteria->condition=" 
 					toistuva_id='".$toistuva->id."'
-					AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') >= CURDATE()
+					AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') >= '".date("Y-m-d",strtotime($_POST['ToistuvatTyovuorot']['pfrom']))."'
 				";
 				Tyovuoroot::model()->deleteAll($pois_criteria);
-				//    Pois kaikki vanhat -->
+				//    Pois kaikki Aloitus pvm alkaen -->
 
-				// <-- Otetaan pois tyovuoro_id noista jotka on tehtty
+				// <-- Poistetaanko vai säilytetäänkö vanhan ja uuden aloituspäivämäärän väliin jäävät työvuorot
+				if(
+					isset($_POST['poisto_alkaen_taaksepain'])
+					and isset($edellinenToistuva->id)
+					and strtotime($_POST['ToistuvatTyovuorot']['pfrom']) > strtotime($edellinenToistuva->pfrom)
+				)
+				{
+					$pois_valipavm = new CDBcriteria;
+					$pois_valipavm->condition=" 
+						toistuva_id='".$toistuva->id."'
+						AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') 
+						BETWEEN '".date("Y-m-d",strtotime($edellinenToistuva->pfrom))."'
+						AND '".date("Y-m-d",strtotime($_POST['ToistuvatTyovuorot']['pfrom']))."'
+						AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') >= CURDATE()
+					";
+					Tyovuoroot::model()->deleteAll($pois_valipavm);
+				}
+				//     Poistetaanko vai säilytetäänkö vanhan ja uuden aloituspäivämäärän väliin jäävät työvuorot -->
+
+				// <-- Otetaan pois tyovuoro_id noista jotka on jaanyt
 				$upd_criteria = new CDBcriteria;
 				$upd_criteria->condition=" 
 					toistuva_id='".$toistuva->id."'
 				";
 				Tyovuoroot::model()->updateAll(array('toistuva_id'=>0), $upd_criteria);
-				//    Otetaan pois tyovuoro_id noista jotka on tehtty -->
+				//    Otetaan pois tyovuoro_id noista jotka on jaanyt -->
 
 			}
 
