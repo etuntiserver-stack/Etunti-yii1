@@ -6,13 +6,41 @@
 	$tuote = '';
 	$hinta = '';
 	$maara = '';
+	$get_tuote = '';
+	$viesti = '';
 	$yksikkot = $this->yksikkot(null);
 
-	$ov = Onlinevaraus::model()->findByPk($edico_tilaus_id);
+	$ov = Onlinevaraus::model()->findByPk($_POST['edico_tilaus_id']);
 	if(isset($ov->id))
 	{
 
+		$tilauksen_kuvaus = json_decode($ov->tilauksen_kuvaus, true);
+		if(isset($tilauksen_kuvaus['paa']) and is_array($tilauksen_kuvaus['paa']))
+		{
+		
+		  foreach($tilauksen_kuvaus['paa'] as $k=>$v){
+			$get_tuote .=  $k;
+			if(!empty($v)){
+				$get_tuote .=  ', '.$v;
+			}
+		  }
+		
+		  if(isset($tilauksen_kuvaus['lisa']) and is_array($tilauksen_kuvaus['lisa']))
+		  {
+		     foreach($tilauksen_kuvaus['lisa'] as $k=>$v){
+			$viesti .=  $k.", ".$v."h\n";
+		     }
+		  }
+		
+		}
+
+
+		$tuote = $get_tuote;
+		$maara = 1;
+		$yksikkot = '<option value="kpl">kpl</option>';
+		$hinta = $ov->veroton_hinta;
 	}
+
 ?>
 
      <TR class="kaikkiTR" id="trRivi_<?php echo $num; ?>">
@@ -52,5 +80,5 @@
 	<TD><input type="text" size="10" name="ale[<?php echo $num; ?>]" id="ale_<?php echo $num; ?>" value="0" class="onlyDigits form-control"><span class="errmsg"></span></TD>
 	<TD><input class="yhteensa_total_veroton form-control" type="text" size="10" name="veroton[<?php echo $num; ?>]" id="veroton_<?php echo $num; ?>" value="0.00" readonly></TD>
 	<TD><input class="yhteensa_total form-control" type="text" size="10" name="yhteensa_alv[<?php echo $num; ?>]" id="yhteensa_alv_<?php echo $num; ?>" value="0.00" readonly></TD>
-	<TD><input type="text" size="5" name="free_text[<?php echo $num; ?>]" id="free_text_<?php echo $num; ?>" class="form-control"></TD>
+	<TD><input type="text" size="5" name="free_text[<?php echo $num; ?>]" id="free_text_<?php echo $num; ?>" class="form-control" value="<?=$viesti?>"></TD>
      </TR>
