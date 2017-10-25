@@ -23,7 +23,7 @@ class LaskuController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','etsikohde','etsiasiakas', 'etsisaaja','luoKohteista', 'luoAsiakaasta', 'tr_rivit', 'tr_rivitkk','lasku_pdf', 'finvoice', 'postita', 'tr_rivit_tyhja','valitsetuote', 'hyvityslasku', 'postita_pdf', 'get_historia', 'kohteen_tieto', 'osoite_haku', 'indexnv', 'updatenv', 'laheta_valitsemmat', 'tr_rivit_jarjestelmavalvojat'),
+				'actions'=>array('admin','delete','create','update','index','view','etsikohde','etsiasiakas', 'etsisaaja','luoKohteista', 'luoAsiakaasta', 'tr_rivit', 'tr_rivitkk','lasku_pdf', 'finvoice', 'postita', 'tr_rivit_tyhja','valitsetuote', 'hyvityslasku', 'postita_pdf', 'get_historia', 'kohteen_tieto', 'osoite_haku', 'indexnv', 'updatenv', 'laheta_valitsemmat', 'tr_rivit_jarjestelmavalvojat', 'tr_rivit_edico_tilaus', 'edico_tilaus_get_asiakas'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny', // allow admin user to perform 'admin' and 'delete' actions
@@ -73,10 +73,31 @@ class LaskuController extends Controller
 		return  number_format((float)$val/3600, 2, '.', '');
 	}
 
+	public function actionEdico_tilaus_get_asiakas($edico_tilaus_id)
+	{
+		$return = array();
+		$ov = Onlinevaraus::model()->findByPk($edico_tilaus_id);
+		if(isset($ov->id))
+		{
+			$as = Asiakkaat::model()->findByPk($ov->asiakas_id);
+			if(isset($as->id))
+			{
+				$return['asiakas_id'] = $as->asiakasnumero;
+			}
+		}
+
+		echo json_encode($return);
+		exit;
+	}
 
 	public function actionTr_rivit_jarjestelmavalvojat()
 	{
 		$this->renderPartial('tr_rivit_jarjestelmavalvojat');
+	}
+
+	public function actionTr_rivit_edico_tilaus()
+	{
+		$this->renderPartial('tr_rivit_edico_tilaus');
 	}
 
 	public function actionTr_rivit_tyhja()

@@ -617,6 +617,9 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 		<input type="hidden" id="tr_rivit_jarjestelmavalvojat" value="1">
 		<input type="hidden" id="jv_maara" value="<?=$_GET['jv']?>">
         <?php endif; ?>
+        <?php if(isset($_GET['edico_tilaus_id']) and $_GET['edico_tilaus_id'] > 0) : ?>
+		<input type="hidden" id="edico_tilaus_id" value="<?=$_GET['edico_tilaus_id']?>">
+        <?php endif; ?>
 	<!-- Digisten -->
 
 
@@ -992,6 +995,40 @@ if($("#modelID").val() != '1'){
         });
 
     }
+    /* <-- Edisco Tilaus */
+    if( $('#edico_tilaus_id').length )
+    {
+
+	var edico_tilaus_id = $('#edico_tilaus_id').val();
+
+        $.ajax({
+           url: location.protocol + "//" + location.host + '/index.php/lasku/edico_tilaus_get_asiakas?edico_tilaus_id='+edico_tilaus_id,
+           type: "GET",
+           success: function(data){
+         	d = JSON.parse(data);
+		console.log(d);
+		if(d['asiakas_id'] && d['asiakas_id'] > 0)
+		{
+			$('#Lasku_as_nro').val(d['asiakas_id']).trigger('change');;
+		}
+           }
+        });
+
+    	rowCount = rowCount+1;
+        $.ajax({
+           url: location.protocol + "//" + location.host + '/index.php/lasku/tr_rivit_edico_tilaus',
+           type: "POST",
+           data: {num : rowCount, edico_tilaus_id : edico_tilaus_id },
+           success: function(html){
+        	$("table#TableRivit tbody tr").empty();
+         	$("table#TableRivit tbody tr").last().after(html);
+	  	Rivi();
+		eachLaskenta();
+           }
+        });
+
+    }
+    /*   Edisco Tilaus --> */
 
 }
 
