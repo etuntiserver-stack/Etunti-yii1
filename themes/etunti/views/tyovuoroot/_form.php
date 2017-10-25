@@ -677,6 +677,21 @@ $('.mult').multiselect({
 
 
 
+ 	if( 
+		('<?=$model->id?>') !== '' 
+		&& ('<?=$model->toistuva_id?>') !== '0' 
+ 	)
+ 	{
+		var edellinen_pfrom = ('<?=$pfrom?>').split('.');
+		var old_pfrom = new Date(+edellinen_pfrom[1]+"/"+edellinen_pfrom[0]+"/"+edellinen_pfrom[2]); //"11/21/2011"
+		var todaysDate = new Date();
+		if(old_pfrom.setHours(0,0,0,0) < todaysDate.setHours(0,0,0,0)) {
+			$('#pfrom').val('<?=date("d.m.Y")?>')
+			$('#pfrom').after('<p class="text-danger">Automaatisesti korjattu. Edelliset päivät jotka kuuluu tämän ketjun muutettavat tavalliseksi</p>');
+		}
+	}
+
+
 $('#tyovuoroot-form').on('submit',function(e) {
 
  	if( 
@@ -713,9 +728,9 @@ $('#tyovuoroot-form').on('submit',function(e) {
  	)
  	{
 		var edellinen_pfrom = ('<?=$pfrom?>').split('.');
-		var pfrom = $('#pfrom').val().split('.');
+		var valinnut_pfrom = $('#pfrom').val().split('.');
 		var old_pfrom = new Date(+edellinen_pfrom[1]+"/"+edellinen_pfrom[0]+"/"+edellinen_pfrom[2]); //"11/21/2011"
-		var new_pfrom = new Date(+pfrom[1]+"/"+pfrom[0]+"/"+pfrom[2]); //"11/21/2011"
+		var new_pfrom = new Date(+valinnut_pfrom[1]+"/"+valinnut_pfrom[0]+"/"+valinnut_pfrom[2]); //"11/21/2011"
 		var todaysDate = new Date();
 		if(new_pfrom.setHours(0,0,0,0) < todaysDate.setHours(0,0,0,0)) {
 			alert('Toistuvan työvuoron aloitus päivämäärä ei voida muokata alkamaan menneisyydestä.');
