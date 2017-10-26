@@ -53,6 +53,7 @@ Asetukset::model()->updatebypk(1, array('onlinevaraus_loppu'=>18));
 	Tyovuoroot::model()->deletebypk($_SESSION['onlinevaraus']['modelTV']);
 
   unset($_SESSION['onlinevaraus']);
+
 //
 ?>
 <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/onlinevaraus_2.css">
@@ -327,11 +328,10 @@ $(document).delegate("#kupongi_add","click",function(){
 
 
    $.ajax({
-	url: 'kupongi_checker',
-	data:{ kupongi : $('#kupongi_id').val() },
-	type:'POST',
+	url: 'kupongi_checker?kupongi='+$('#kupongi_id').val(),
+	//data:{ kupongi : $('#kupongi_id').val() },
+	type:'GET',
 	success:function(data){
-		data = JSON.parse(data);
 		console.log(data);
 		if(data !== '')
 		{

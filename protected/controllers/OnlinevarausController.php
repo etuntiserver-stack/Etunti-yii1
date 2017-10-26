@@ -77,19 +77,29 @@ class OnlinevarausController extends Controller
 				Yii::app()->user->setState('aid', $_GET['aid']);
 
 			}
-
+			if(isset($_GET['alennuskoodi']))
+			{
+				Yii::app()->user->setState('alennuskoodi', $_GET['alennuskoodi']);
+			} else {
+				Yii::app()->user->setState('alennuskoodi',null);
+			}
 			$this->redirect(array('index'));
 		}
         }
 
 
-	public function actionKupongi_checker()
+	public function actionKupongi_checker($kupongi)
+	{
+
+		$result = $this->Kupongi_checker($kupongi);
+		echo $result;
+	}
+
+	protected function Kupongi_checker($kupongi)
 	{
 
 		$result = '';
-		if(isset($_POST['kupongi']))
-		{
-			$kupongi = $_POST['kupongi'];
+
 	       		$criteria = new CDbCriteria();
 	       		$criteria->condition = " 
 				DATE(voimassa) > CURDATE()
@@ -102,8 +112,8 @@ class OnlinevarausController extends Controller
 				$_SESSION['onlinevaraus']['kupongi'] = $kup->id;
 				$result = $kup->id;
 			}
-		}
-		echo json_encode($result);
+
+		return $result;
 	}
 
 	public function actionGet_lomake_ajax($id)

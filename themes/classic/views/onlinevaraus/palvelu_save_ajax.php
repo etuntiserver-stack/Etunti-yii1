@@ -5,6 +5,11 @@
 
   // <-- Kupongi
   $blockKupongi = '';
+  if(isset(Yii::app()->user->alennuskoodi) and !empty($this->Kupongi_checker(Yii::app()->user->alennuskoodi)))
+  {
+	$_SESSION['onlinevaraus']['kupongi'] = $this->Kupongi_checker(Yii::app()->user->alennuskoodi);
+  }
+
   if(isset($_SESSION['onlinevaraus']['kupongi']))
   {
 	$kup = Kupongit::model()->findbypk($_SESSION['onlinevaraus']['kupongi']);
