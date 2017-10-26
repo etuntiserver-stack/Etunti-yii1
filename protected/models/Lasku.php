@@ -51,7 +51,7 @@
 class Lasku extends DB2ActiveRecord
 {
 
-public $digisten_tunnit_id;
+public $digisten_tunnit_id, $edico_tilaus_id;
 
 	/**
 	 * Returns the static model of the specified AR class.

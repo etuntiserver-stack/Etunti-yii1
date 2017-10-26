@@ -81,6 +81,15 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 	</div>
 	<?php endif; ?>
 
+	<?php if(isset($_GET['edico_tilaus_id'])) : ?>
+	<div class="section fill mb5">
+		<?php
+		$edico_tilaus_id = $_GET['edico_tilaus_id'];
+		?>
+		<?php echo $form->hiddenField($model,'edico_tilaus_id',array('value'=>$edico_tilaus_id, 'class'=>'form-control')); ?>
+	</div>
+	<?php endif; ?>
+
 
 	<?php if(isset($model->id)) : ?> 
 	<div class="section fill mb5">

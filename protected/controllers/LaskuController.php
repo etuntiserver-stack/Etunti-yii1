@@ -716,9 +716,14 @@ class LaskuController extends Controller
 				DigistenTunnitKk::model()->updateByPk($_POST['Lasku']['digisten_tunnit_id'], array('laskutettu' => 1, 'lasku_id' => $model->id));
 				//     digisten_tunnit_id -->
 
-			// Viite
-			$viite = $this->Viite($model->as_nro."00".$model->id);
-			Lasku::model()->updatebypk($model->id, array('viitenumero'=>$viite));
+				// <-- edico_tilaus_id
+				if(isset($_POST['Lasku']['edico_tilaus_id']) and $_POST['Lasku']['edico_tilaus_id'] != '')
+				Onlinevaraus::model()->updateByPk($_POST['Lasku']['edico_tilaus_id'], array('laskutettu' => 1, 'lasku_id' => $model->id));
+				//     edico_tilaus_id -->
+
+				// Viite
+				$viite = $this->Viite($model->as_nro."00".$model->id);
+				Lasku::model()->updatebypk($model->id, array('viitenumero'=>$viite));
 
 
 				// <-- LOG
