@@ -7,7 +7,7 @@ $model->asiakas_id = Yii::app()->user->asiakas;
 
 	   <h2 class="myBgColors p10 link" data-toggle="collapse" data-target="#avaaVinkki"> <i class="fa fa-paper-plane-o"></i> <?php echo Yii::t('main', 'Lähetä vinkki'); ?> <i class="fa fa-caret-down" aria-hidden="true"></i> </h2>
 
-            <div class="admin-form collapse" id="avaaVinkki">
+            <div class="admin-form collapse in" id="avaaVinkki">
               <div class="panel heading-border">
                 <div class="panel-body bg-light">
 
