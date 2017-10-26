@@ -1,0 +1,84 @@
+<?php
+	if(isset($_POST['num'])){
+		$num = $_POST['num'];
+	}
+	
+	$tuote = '';
+	$hinta = '';
+	$maara = '';
+	$get_tuote = '';
+	$viesti = '';
+	$yksikkot = $this->yksikkot(null);
+
+	$ov = Onlinevaraus::model()->findByPk($_POST['edico_tilaus_id']);
+	if(isset($ov->id))
+	{
+
+		$tilauksen_kuvaus = json_decode($ov->tilauksen_kuvaus, true);
+		if(isset($tilauksen_kuvaus['paa']) and is_array($tilauksen_kuvaus['paa']))
+		{
+		
+		  foreach($tilauksen_kuvaus['paa'] as $k=>$v){
+			$get_tuote .=  $k;
+			if(!empty($v)){
+				$get_tuote .=  ', '.$v;
+			}
+		  }
+		
+		  if(isset($tilauksen_kuvaus['lisa']) and is_array($tilauksen_kuvaus['lisa']))
+		  {
+		     foreach($tilauksen_kuvaus['lisa'] as $k=>$v){
+			$viesti .=  $k.", ".$v."h\n";
+		     }
+		  }
+		
+		}
+
+
+		$tuote = $get_tuote;
+		$maara = 1;
+		$yksikkot = '<option value="kpl">kpl</option>';
+		$hinta = $ov->veroton_hinta;
+	}
+
+?>
+
+     <TR class="kaikkiTR" id="trRivi_<?php echo $num; ?>">
+	<TD><span class="link text-danger poista" for="poista_<?php echo $num; ?>" style="font-size:150%"><i class="fa fa-times"></i></span></TD>
+	<TD>
+
+	<input type="hidden" size="1" name="tuoteID[<?php echo $num; ?>]" id="tuoteID_<?php echo $num; ?>" class="form-control">
+
+	<div class="row">
+	  <div class="col-lg-4">
+		<?php
+		$criteria = new CDbCriteria();
+       		$criteria->condition = " is_active=1 ";
+		echo CHtml::dropdownList('','palvelu', CHtml::listData(LaskutusTuotteet::model()->findAll($criteria), 'id', 'tuotenimi'), 
+		array('empty'=>'','class'=>'form-control valitseTuote','id'=>'lt_'.$num,'num'=>$num));
+		?>
+	  </div><div class="col-lg-8">
+	      <input type="text" size="1" name="tkoodi[<?php echo $num; ?>]" id="tkoodi_<?php echo $num; ?>" class="for_tkoodi form-control form-group" value="<?=$tuote?>">
+	  </div>
+	</div>
+
+	</TD>
+
+	<TD><input type="text" size="5" name="kpl[<?php echo $num; ?>]" id="kpl_<?php echo $num; ?>" class="onlyDigits form-control" value="<?=$maara?>"><span class="errmsg"></span></TD>
+	<TD>
+		<select type="text" name="yksikko[<?php echo $num; ?>]" id="yksikko_<?php echo $num; ?>" class="form-control">
+		<?php echo $yksikkot; ?>
+		</select>
+	</TD>
+	<TD><input type="text" size="10" name="hinta[<?php echo $num; ?>]" id="hinta_<?php echo $num; ?>" class="onlyDigits form-control" value="<?=$hinta?>" step="0.01"><span class="errmsg"></span></TD>
+	<TD>
+		<select type="text" name="alv[<?php echo $num; ?>]" id="alv_<?php echo $num; ?>" class="form-control">
+		<?php echo $this->alv(null); ?>
+		</select>
+	</TD>
+	<TD><input class="yhteensa_total_verot form-control" size="10" type="text" name="hinta_alv[<?php echo $num; ?>]" id="hinta_alv_<?php echo $num; ?>" value="0.00" readonly></TD>
+	<TD><input type="text" size="10" name="ale[<?php echo $num; ?>]" id="ale_<?php echo $num; ?>" value="0" class="onlyDigits form-control"><span class="errmsg"></span></TD>
+	<TD><input class="yhteensa_total_veroton form-control" type="text" size="10" name="veroton[<?php echo $num; ?>]" id="veroton_<?php echo $num; ?>" value="0.00" readonly></TD>
+	<TD><input class="yhteensa_total form-control" type="text" size="10" name="yhteensa_alv[<?php echo $num; ?>]" id="yhteensa_alv_<?php echo $num; ?>" value="0.00" readonly></TD>
+	<TD><input type="text" size="5" name="free_text[<?php echo $num; ?>]" id="free_text_<?php echo $num; ?>" class="form-control" value="<?=$viesti?>"></TD>
+     </TR>

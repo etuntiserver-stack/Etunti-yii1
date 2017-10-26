@@ -19,7 +19,7 @@
    <!-- tulostus -->
 
 
-              <h2 class="myBgColors p10"> <?php echo Yii::t('main', 'Onlinevaraukset'); ?></h2>
+              <h2 class="myBgColors p10"> <?php echo Yii::t('main', 'eDico tilaukset'); ?></h2>
 
 
 
@@ -33,19 +33,6 @@
                     <!-- Input Icons -->
                     <div class="row">
 
-                      <div class="col-md-2">
-                        <div class="section">
-                          <label class="field select">
-
-			    <select name="tila" id="tila" class="gui-input">
-			     <option value="" <?php if ( isset($_GET['tila']) and $_GET['tila'] == '' ) echo 'selected'; ?>><?php echo Yii::t('main', 'Kaikki'); ?></option>
-			     <option value="1" <?php if ( isset($_GET['tila']) and $_GET['tila'] == 1 ) echo 'selected'; ?>><?php echo Yii::t('main', 'Maksettu'); ?></option>
-			    </select>
-                            <i class="arrow double"></i>
-                            </label>
-                          </label>
-                        </div>
-                      </div>
 
                       <div class="col-md-2">
                         <div class="section">
@@ -144,6 +131,7 @@
   <thead>
   <tr>
   <th></th>
+  <th></th>
   <th><?php echo Yii::t('main', 'Maksupäivä'); ?></th>
   <th><?php echo Yii::t('main', 'Työvuoro'); ?></th>
   <th><?php echo Yii::t('main', 'Kesto'); ?></th>
@@ -161,7 +149,7 @@
   <tbody>
   <?php $this->widget('zii.widgets.CListView', array(
 	'dataProvider'=>$dataProvider,
-	'itemView'=>'_view',
+	'itemView'=>'_view_edico',
   	'template'=>'{items}<table class="table table-striped table-condensed"></table><br/>{pager}',
 
 

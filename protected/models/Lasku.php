@@ -51,7 +51,7 @@
 class Lasku extends DB2ActiveRecord
 {
 
-public $digisten_tunnit_id;
+public $digisten_tunnit_id, $edico_tilaus_id;
 
 	/**
 	 * Returns the static model of the specified AR class.
@@ -69,7 +69,7 @@ public $digisten_tunnit_id;
 	public function tableName()
 	{
 		$tb_name = 'laskut';
-		$check_this_table = false;
+		$check_this_table = true;
 		//unset(Yii::app()->session[$tb_name]); // this use if want many times play
 		if(!isset(Yii::app()->session[$tb_name]))
 		{

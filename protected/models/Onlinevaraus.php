@@ -25,7 +25,7 @@ class Onlinevaraus extends DB2ActiveRecord
 	public function tableName()
 	{
 		$tb_name = 'onlinevaraus';
-		$check_this_table = false;
+		$check_this_table = true;
 		//unset(Yii::app()->session[$tb_name]); // this use if want many times play
 		if(!isset(Yii::app()->session[$tb_name]))
 		{
@@ -68,9 +68,8 @@ class Onlinevaraus extends DB2ActiveRecord
                      'yrityksen_nimi' => 'varchar(255) ',
                      'y_tunnus' => 'varchar(100) ',
                      'valokuvat' => 'text ',
-
-
-
+                     'laskutettu' => 'int(1) ',
+                     'lasku_id' => 'int(11) ',
 
 		);
 
@@ -95,7 +94,7 @@ class Onlinevaraus extends DB2ActiveRecord
 		return array(
 			//array('time', 'required'),
 			array('tv_id, asiakas_id, kohde_id', 'length', 'max'=>11),
-			array('alv', 'numerical', 'integerOnly'=>true),
+			array('alv, laskutettu, lasku_id', 'numerical', 'integerOnly'=>true),
 			array('tila', 'length', 'max'=>1),
 			array('yhteyshenkilo, puhelin, tyyppi, y_tunnus', 'length', 'max'=>100),
 			array('osoite, postinumero, kaupunki, sahkoposti, yrityksen_nimi', 'length', 'max'=>255),
