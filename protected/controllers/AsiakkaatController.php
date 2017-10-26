@@ -1287,7 +1287,7 @@ exit;
 		$kesto = strtotime($data->loppui)-strtotime($data->aloitan);
 	  	$dataArr[strtotime($data->aloitan)] = '
 		<table class="table table-bordered">
-		  <tr><td colspan="2"><h3>'.date("d.m.Y", strtotime($data->aloitan)).', '.$data->kohde_kannasta.'</h3></td></tr>
+		  <tr><td colspan="2"><h3 style="white-space: normal">'.date("d.m.Y", strtotime($data->aloitan)).', '.$data->kohde_kannasta.'</h3></td></tr>
 		  <tr><td width="50%">'.Yii::t('main', 'Aloitus').'</td> <td>'.date("H:i", strtotime($data->aloitan)).'</td></tr>
 		  <tr><td width="50%">'.Yii::t('main', 'Lopetus').'</td> <td>'.date("H:i", strtotime($data->loppui)).'</td></tr>
 		  <tr><td width="50%">'.Yii::t('main', 'Kesto').'</td> <td>'.$this->sprint($kesto).'</td></tr>
