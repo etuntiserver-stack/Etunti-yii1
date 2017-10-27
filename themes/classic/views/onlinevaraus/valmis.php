@@ -253,7 +253,7 @@ $message .= '
 <tr><td>Hinta</td><td>'.number_format($ov->veroton_hinta, 2, ',', '').' &euro;</td></tr>
 <tr><td>ALV</td><td>'.number_format( ($ov->hinta-$ov->veroton_hinta) , 2, ',', '').' &euro;</td></tr>
 <tr><td>Yhteeensä</td><td>'.number_format($ov->hinta, 2, ',', '').' &euro;</td></tr>
-<tr><td>Maksu</td><td>Maksu ei vahvistettu</td></tr>
+<tr><td>Maksu</td><td>Laskutetaan</td></tr>
 </table>
 </div>
 
@@ -272,7 +272,7 @@ $message .= '
 			$mail->setFrom('info@etunti.fi', 'ETUNTI.FI');
 			$mail->addReplyTo($firmanTiedot->sahkoposti, $firmanTiedot->tyonantaja);
 			$mail->setTo($ov->sahkoposti);
-			$mail->setSubject('Online varaus');
+			$mail->setSubject('Sähköinen varaus');
 			$mail->setBody($message);
 			if($mail->send())
 			{
