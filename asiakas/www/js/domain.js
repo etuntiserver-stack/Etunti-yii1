@@ -279,8 +279,10 @@ $(document).ready(function(){
 		     '<div class="col-sm-4 col-sm-offset-4">'+
 		     '<h3>Kirjaudu sisään</h3>'+
 		      '<form action="#" class="form-signin" id="form-signin" method="POST" autocomplete="off">'+
+		        '<div id="palvelin_asetus" class="collapse">'+
 		        '<label>Palvelin</label>'+
 		        '<input type="text" name="palvelin" id="palvelin" class="form-control input-lg" required value="etunti.fi" />'+
+		        '</div>'+
 		        '<label>Yritystunnus</label>'+
 		        '<input type="text" name="domain" id="domain" class="form-control input-lg" required autofocus />'+
 		        '<label>Sähköposti</label>'+
@@ -288,7 +290,11 @@ $(document).ready(function(){
 		        '<label>Salasana</label>'+
 		        '<input type="password" id="inputPassword" name="salasana" class="form-control input-lg" required autocomplete="off" />'+
 			'<br>'+
-		        '<p><a href="recovery.html">Unohditko salasana</a></p>'+
+		        '<p>' +
+				'<i class="pull-right" data-toggle="collapse" data-target="#palvelin_asetus">' +
+				   '<i class="btn btn-primary fa fa-cog" aria-hidden="true"></i>' +
+				'</i>' +
+				'<a href="recovery.html">Unohditko salasana</a></p>'+
 			'<br>'+
 		        '<button class="btn btn-lg btn-primary btn-block myBgColors" type="submit">Tallenna</button>'+
 		      '</form>'+
