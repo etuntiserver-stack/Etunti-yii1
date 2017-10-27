@@ -3092,6 +3092,13 @@ class TyovuorootController extends Controller
 	public function actionLista()
 	{
 
+		if(isset($_POST['asiakkaatPerSivu']))
+		{
+			Yii::app()->user->setState('asiakkaatPerSivu', $_POST['asiakkaatPerSivu']);
+			echo json_encode($_POST['asiakkaatPerSivu']);
+			exit;
+		}
+
 		$from = date("d.m.Y", strtotime('first day of this month'));
 		$to = date("d.m.Y");
 		if(isset($_GET['from']))
@@ -3131,12 +3138,22 @@ class TyovuorootController extends Controller
 	        	$criteria->addCondition (" kohde IN (SELECT id FROM sivex_kohdet WHERE osoite LIKE '%".$_GET['osoite']."%') ");
 		}
 
-		$model = Tyovuoroot::model()->findAll($criteria);
 
-		//$dataProvider->pagination->pageSize = 50;
+		$dataProvider=new CActiveDataProvider('Tyovuoroot', array(
+			'criteria'=>$criteria,
+			//'pagination'=>false
+		));
+
+		$perSivu = 50;
+		if(isset(Yii::app()->user->asiakkaatPerSivu))
+		$perSivu = Yii::app()->user->asiakkaatPerSivu;
+
+		$dataProvider->pagination->pageSize = $perSivu;
+
 
 		$this->render('lista', array(
-			'model' => $model,
+			'dataProvider' => $dataProvider,
+			'perSivu' => $perSivu,
 			'from' => $from,
 			'to' => $to,
 		));
