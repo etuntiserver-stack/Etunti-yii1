@@ -100,7 +100,7 @@
 						$name_tyontekijat, // name
 						'null', //class
 						'tyontekijat', // id
-						$_GET['tekijaPaaSivulla'], //selected
+						(isset($_GET['tekijaPaaSivulla']))? $_GET['tekijaPaaSivulla']: array(), //selected
 						$aktiivinen// aktiivinen
 				);
 				echo $tyontekiatLista;
