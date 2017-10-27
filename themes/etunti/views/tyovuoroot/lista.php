@@ -8,11 +8,11 @@
         <div class="tray-center">
 
 
-              <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-envelope"></i> <?=Yii::t('main', 'Työvuorot')?> </h2>
+              <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-envelope"></i> <?=Yii::t('main', 'Lista työvuoroista')?> </h2>
 
 
 
-   	    <form id="mobForm" action="#" class="form-inline" method="POST">
+   	    <form id="mobForm" action="#" class="form-inline" method="GET">
    	    <input type="hidden" name="mob_hae">
 
             <div class="admin-form">
@@ -22,7 +22,49 @@
                     <!-- Input Icons -->
                     <div class="row">
 
-                      <div class="col-md-3">
+                      <div class="col-md-2">
+                        <div class="section">
+                          <label class="field prepend-icon">
+
+			    <!-- Autocomplete -->
+			    <?php
+	   			$site = Yii::app()->createController('Site');
+				$mod = 'Asiakkaat';
+				$sarake = 'yrityksen_nimi';
+				$placeholder = 'Yritys';
+				if(isset($_GET[$sarake])) $postvalue = $_GET[$sarake]; else $postvalue='';
+		 	        $site[0]->autocompleteFor($mod, array('yrityksen_nimi','yhteyshenkilo'), $placeholder, $postvalue);
+			    ?>
+			    <!-- Autocomplete -->
+
+
+                            <label for="firstname" class="field-icon">
+                              <i class="fa fa-user"></i>
+                            </label>
+                          </label>
+                        </div>
+                        <div class="section">
+                          <label class="field prepend-icon">
+
+			    <!-- Autocomplete -->
+			    <?php
+	   			$site = Yii::app()->createController('Site');
+				$mod = 'Kohteet';
+				$sarake = 'osoite';
+				$placeholder = 'Osoite';
+				if(isset($_GET[$sarake])) $postvalue = $_GET[$sarake]; else $postvalue='';
+		 	        $site[0]->autocompleteFor($mod, $sarake, $placeholder, $postvalue);
+			    ?>
+			    <!-- Autocomplete -->
+
+                            <label for="firstname" class="field-icon">
+                              <i class="fa fa-user"></i>
+                            </label>
+                          </label>
+                        </div>
+                      </div>
+
+                      <div class="col-md-2">
                         <div class="section">
                           <label class="field select">
 
@@ -35,8 +77,8 @@
 				   $tal[$exV[1]] = $exV[0];
 				}
 				$selectedValues = 1;
-				if(isset($_POST['aktiivinen']))
-				$selectedValues = array($_POST['aktiivinen']=> Array('selected' => 'selected'));
+				if(isset($_GET['aktiivinen']))
+				$selectedValues = array($_GET['aktiivinen']=> Array('selected' => 'selected'));
 		
 				echo CHtml::dropDownList('aktiivinen','aktiivinen', $tal, 
 				array('class'=>'gui-input aktiivinen','options' => $selectedValues)) 
@@ -52,13 +94,13 @@
                             <div id="tekijat_result"> 
 				<?php
 				$name_tyontekijat = 'tekijaPaaSivulla';
-				(isset($_POST['aktiivinen']))? $aktiivinen = $_POST['aktiivinen'] : $aktiivinen = 1;
+				(isset($_GET['aktiivinen']))? $aktiivinen = $_GET['aktiivinen'] : $aktiivinen = 1;
 		   		$site = Yii::app()->createController('Site');
 		   		$tyontekiatLista = $site[0]->tyontekiatLista( 
 						$name_tyontekijat, // name
 						'null', //class
 						'tyontekijat', // id
-						Yii::app()->request->getPost('tekijaPaaSivulla'), //selected
+						$_GET['tekijaPaaSivulla'], //selected
 						$aktiivinen// aktiivinen
 				);
 				echo $tyontekiatLista;
@@ -72,26 +114,7 @@
                       </div>
 
 
-                      <div class="col-md-3">
-                        <div class="section">
-                          <label class="field prepend-icon">
-
-			    <!-- Autocomplete -->
-			    <?php
-	   			$site = Yii::app()->createController('Site');
-				$mod = 'Kohteet';
-				$sarake = 'osoite';
-				$placeholder = 'Osoite';
-				if(isset($_POST[$sarake])) $postvalue = $_POST[$sarake]; else $postvalue='';
-		 	        $site[0]->autocompleteFor($mod, $sarake, $placeholder, $postvalue);
-			    ?>
-			    <!-- Autocomplete -->
-
-                            <label for="firstname" class="field-icon">
-                              <i class="fa fa-user"></i>
-                            </label>
-                          </label>
-                        </div>
+                      <div class="col-md-2">
                         <div class="section">
                           <label class="field select">
 				<?php 
@@ -107,7 +130,6 @@
                             </label>
                           </label>
                         </div>
-
                       </div>
 
                       <div class="col-md-2">
@@ -164,7 +186,7 @@
         <div class="pull-right">
          <div class="form-inline">
     	  <!--<button class="btn btn-primary myBgColors submitPrintSivuLuetut"><i class="fa fa-print" aria-hidden="true"></i></button>-->
-	  <form action="<?php echo Yii::app()->request->baseUrl; ?>/index.php/mobile/tulostus" class="form-group" target="_blank" method="POST">
+	  <form action="<?php echo Yii::app()->request->baseUrl; ?>/index.php/mobile/tulostus" class="form-group" target="_blank" method="GET">
 	    <input type="hidden" name="ext" value="doc">
 	    <input type="hidden" name="fileName" value="Tyovuorot">
 	    <input type="hidden" name="from" value="<?=$from?>">
@@ -172,7 +194,7 @@
 	    <textarea name="html_content" class="form-control" style="display:none"></textarea>
     	    <button type="submit" class="btn btn-primary myBgColors submitForm"><i class="fa fa-file-word-o" aria-hidden="true"></i></button>
 	  </form>
-	  <form action="<?php echo Yii::app()->request->baseUrl; ?>/index.php/mobile/tulostus" class="form-group" target="_blank" method="POST">
+	  <form action="<?php echo Yii::app()->request->baseUrl; ?>/index.php/mobile/tulostus" class="form-group" target="_blank" method="GET">
 	    <input type="hidden" name="ext" value="xls">
 	    <input type="hidden" name="fileName" value="Tyovuorot">
 	    <input type="hidden" name="from" value="<?=$from?>">
@@ -180,8 +202,7 @@
 	    <textarea name="html_content" class="form-control" style="display:none"></textarea>
     	    <button type="submit" class="btn btn-primary myBgColors submitForm"><i class="fa fa-file-excel-o" aria-hidden="true"></i></button>
 	  </form>
-	  <form action="<?php echo Yii::app()->request->baseUrl; ?>/index.php/mobile/tulostus" class="form-group" target="_blank" method="POST">
-	    <input type="hidden" name="header" value="<?php if(Yii::app()->request->getPost('raporti_tyyppi')) echo Yii::app()->request->getPost('raporti_tyyppi'); ?>, <?=$from?>-<?=$to?>">
+	  <form action="<?php echo Yii::app()->request->baseUrl; ?>/index.php/mobile/tulostus" class="form-group" target="_blank" method="GET">
 	    <input type="hidden" name="ext" value="pdf">
 	    <input type="hidden" name="fileName" value="Tyovuorot">
 	    <input type="hidden" name="from" value="<?=$from?>">
@@ -218,7 +239,7 @@
   <?php
   foreach($model as $data)
   {
-	echo $this->renderPartial('_hallinta', array( 
+	echo $this->renderPartial('_lista', array( 
 			'data' => $data
 	), true);
   }
