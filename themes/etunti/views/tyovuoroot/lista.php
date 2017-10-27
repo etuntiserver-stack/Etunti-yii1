@@ -198,6 +198,8 @@
 
 <div class="admin-form">
   <div class="panel-header">
+
+<?php /*
       <div class="row">
        <div class="col-sm-12">
         <div class="pull-right">
@@ -233,7 +235,7 @@
       </div>
       <br>
   </div>
-
+*/ ?>
 
 
   <div class="panel heading-border">
