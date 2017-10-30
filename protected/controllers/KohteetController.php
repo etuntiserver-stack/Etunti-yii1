@@ -488,8 +488,8 @@ class KohteetController extends Controller
 		if(isset($_POST['osoite']) and !empty($_POST['osoite']))
 	        $criteria->addCondition (" osoite LIKE '%".$_POST['osoite']."%' ");
 
-		if(isset($_POST['aktiivinen']) and $_POST['aktiivinen'] != 'kaikki')
-	        $criteria->addCondition (" aktiivinen='".(int)$_POST['aktiivinen']."' ");
+		if(isset($_POST['aktiivinen']) and $_POST['aktiivinen'] == 1)
+	        $criteria->addCondition (" aktiivinen=1 ");
 
 
 		if(isset($_POST['etu_suku_nimet']) and !empty(trim($_POST['etu_suku_nimet'])))

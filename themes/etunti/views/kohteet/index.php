@@ -60,15 +60,13 @@
                         </div>
 
 
-		      <?php if(isset($_POST['aktiivinen'])) echo '<input type="hidden" id="akt" value="'.$_POST['aktiivinen'].'">'; ?>
                         <div class="section">
                           <label class="field select">
 
 
 			   <select class="gui-input" name="aktiivinen" id="aktiivinen">
-       				<option value="1"><?php echo Yii::t('main', 'Aktiiviset'); ?></option>
-       				<option value="0"><?php echo Yii::t('main', 'Passiviset'); ?></option>
        				<option value="kaikki"><?php echo Yii::t('main', 'Kaikki'); ?></option>
+       				<option value="1" <?php echo (isset($_POST['aktiivinen']) and $_POST['aktiivinen'] == 1)? 'selected':''; ?>><?php echo Yii::t('main', 'Aktiiviset'); ?></option>
 			   </select>
 
                             <label for="firstname" class="field-icon">
@@ -254,10 +252,6 @@
 <script type="text/javascript">
 $(document).ready(function(){
 
-if($("#akt").val())
-$("#aktiivinen").val($("#akt").val());
-else
-$("#aktiivinen").val(1);
 
 $(".haemob").click(function(){
 	$("#mobForm").submit();
