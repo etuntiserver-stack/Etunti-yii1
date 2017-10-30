@@ -1668,7 +1668,9 @@ class TyovuorootController extends Controller
 			}
 
 
-				
+			if($saankoSuoritta == 1)
+			{
+					$nt = ToistuvatTyovuorot::model()->findbypk($toistuva->id);
 					if(isset($edellinenToistuva->id))
 					{
 					// <-- LOG
@@ -1676,7 +1678,7 @@ class TyovuorootController extends Controller
 					$name_log 	= 'Toistuvat työvuorot';
 					$status_log 	= 'Update';
 					$old_values = json_encode($edellinenToistuva->attributes);
-					$new_values = json_encode($toistuva->attributes);
+					$new_values = json_encode($nt->attributes);
 					$site = Yii::app()->createController('Site');
 					$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
 					//     LOG -->
@@ -1686,12 +1688,12 @@ class TyovuorootController extends Controller
 					$name_log 	= 'Toistuvat työvuorot';
 					$status_log 	= 'Create';
 					$old_values = null;
-					$new_values = json_encode($toistuva->attributes);
+					$new_values = json_encode($nt->attributes);
 					$site = Yii::app()->createController('Site');
 					$criteria = $site[0]->initPostLoger($model_log, $name_log, $status_log, $old_values, $new_values);
 					//     LOG -->
 					}
-
+			}
 
 
 			if( count($return) > 0 )
