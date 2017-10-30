@@ -1375,7 +1375,7 @@ $("#Lasku_as_nro").change(function() {
 			$("#kkKalut").hide();
 		}
 
-
+		/*
 		if(spdata['vinkki'] !== ''){
 
 			var allennus = JSON.parse(spdata['vinkki']);
@@ -1385,6 +1385,7 @@ $("#Lasku_as_nro").change(function() {
 				$('#ale_1').val(parseInt(allennus['vinkki_prosentti']));
 			}
 		}
+		*/
 
            },
            error: function(XMLHttpRequest, textStatus, errorThrown){
