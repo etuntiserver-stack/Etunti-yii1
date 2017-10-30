@@ -230,6 +230,7 @@ $(document).ready(function(){
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'aktiivinen'); ?>
 		<?php
+		if(empty($model->aktiivinen)) $model->aktiivinen = 0;
 		$list = array(1=>'Kyllä',0=>'Ei');
         	echo $form->dropDownList($model, 'aktiivinen', $list,
 		array('class'=>'form-control'));
