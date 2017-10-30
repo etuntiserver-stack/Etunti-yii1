@@ -232,7 +232,7 @@ $(document).ready(function(){
 		<?php
 		$list = array(1=>'Kyllä',0=>'Ei');
         	echo $form->dropDownList($model, 'aktiivinen', $list,
-		array('empty'=>'Valitse', 'class'=>'form-control'));
+		array('class'=>'form-control'));
         	?>
 		<?php echo $form->error($model,'aktiivinen'); ?>
 	</div>
