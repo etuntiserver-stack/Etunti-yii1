@@ -481,69 +481,66 @@ class SiteController extends Controller
 			$kirjautumistunnus = preg_replace('/[^\p{L}\p{N}\s]/u', '', $_POST['kirjautumistunnus']);
 			$kirjautumistunnus = str_replace(' ', '_', $kirjautumistunnus);
 			$kirjautumistunnus = strtolower($kirjautumistunnus);
+			$_SESSION['domain'] = $kirjautumistunnus;
 
 
-
-				Yii::app()->db->setActive(false);
-				Yii::app()->db->connectionString = 'mysql:host=localhost;dbname=etuntifw';
-				Yii::app()->db->setActive(true);
-				$connection=Yii::app()->db;
-				$connection->createCommand("CREATE DATABASE IF NOT EXISTS `$kirjautumistunnus`")->execute();
-
-				exec("mysqldump -u '".$connection->username."' -p'".$connection->password."' defdb > lib/defdb.sql");
-				$str = "mysql -u ".$connection->username." -p".$connection->password." $kirjautumistunnus < lib/defdb.sql";
-				exec($str, $output, $return_var);
-				$database = true;
+			Yii::app()->db->setActive(false);
+			Yii::app()->db->connectionString = 'mysql:host=localhost;dbname=etuntifw';
+			Yii::app()->db->setActive(true);
+			$connection=Yii::app()->db;
+			$connection->createCommand("CREATE DATABASE IF NOT EXISTS `$kirjautumistunnus`")->execute();
 
 
-				$chk_domain = Domainit::model()->find(" domain='".$kirjautumistunnus."' ");
-				if(!isset($chk_domain->id))
-				{
-					$new_domain = new Domainit;
-					$new_domain->domain = $kirjautumistunnus;
-					$new_domain->yritys = $_POST['yrityksen_nimi'];
-					$new_domain->paketti = '1,2,3,4,5,6';
-					$new_domain->sahkoposti = $_POST['sahkoposti'];
-					$new_domain->aktiivinen = 1;
-					$new_domain->save();
+			exec("mysqldump -u '".$connection->username."' -p'".$connection->password."' defdb > lib/defdb.sql");
+			$str = "mysql -u ".$connection->username." -p".$connection->password." $kirjautumistunnus < lib/defdb.sql";
+			exec($str, $output, $return_var);
+			$database = true;
 
-				}
-
-
-				Yii::app()->db1->setActive(false);
-				Yii::app()->db1->connectionString = 'mysql:host=localhost;dbname='.$kirjautumistunnus;
-				Yii::app()->db1->setActive(true);
-
+			$chk_domain = Domainit::model()->find(" domain='".$kirjautumistunnus."' ");
+			if(!isset($chk_domain->id))
+			{
+				$new_domain = new Domainit;
+				$new_domain->domain = $kirjautumistunnus;
+				$new_domain->yritys = $_POST['yrityksen_nimi'];
+				$new_domain->paketti = '1,2,3,4,5,6';
+				$new_domain->sahkoposti = $_POST['sahkoposti'];
+				$new_domain->aktiivinen = 1;
+				$new_domain->save();
+			}
 
 
-				$adm = Administrators::model()->findByPk(1);
-				if(isset($adm->id))
-				{
-					Administrators::model()->updateByPk($adm->id, array(
-						'adm_login' => $_POST['username'],
-						'adm_salasana' => password_hash($_POST['password'], PASSWORD_BCRYPT),
-						'adm_email' => $_POST['sahkoposti'],
-						'adm_nimi' => $_POST['yhteyshenkilo'],
-					));
-
-				}
-				$ft = FirmanTiedot::model()->findByPk(1);
-				if(isset($ft->id))
-				{
-					FirmanTiedot::model()->updateByPk($ft->id, array(
-						'tyonantaja' => $_POST['yrityksen_nimi'],
-						'osoite' => $_POST['osoite'],
-						'postinumero' => $_POST['postinumero'],
-						'postitoimipaikka' => $_POST['postitoimipaikka'],
-						'johtaja' => $_POST['yhteyshenkilo'],
-						'y_tunnus' => $_POST['yritys_tunnus'],
-						'puhelin' => $_POST['puhelinnumero'],
-						'sahkoposti' => $_POST['sahkoposti'],
-					));
-				}
+			Yii::app()->db1->setActive(false);
+			Yii::app()->db1->connectionString = 'mysql:host=localhost;dbname='.$kirjautumistunnus;
+			Yii::app()->db1->setActive(true);
 
 
-				//$this->redirect(array('index'));
+			$adm = Administrators::model()->findByPk(1);
+			if(isset($adm->id))
+			{
+				Administrators::model()->updateByPk($adm->id, array(
+					'adm_login' => $_POST['username'],
+					'adm_salasana' => password_hash($_POST['password'], PASSWORD_BCRYPT),
+					'adm_email' => $_POST['sahkoposti'],
+					'adm_nimi' => $_POST['yhteyshenkilo'],
+				));
+			}
+			$ft = FirmanTiedot::model()->findByPk(1);
+			if(isset($ft->id))
+			{
+				FirmanTiedot::model()->updateByPk($ft->id, array(
+					'tyonantaja' => $_POST['yrityksen_nimi'],
+					'osoite' => $_POST['osoite'],
+					'postinumero' => $_POST['postinumero'],
+					'postitoimipaikka' => $_POST['postitoimipaikka'],
+					'johtaja' => $_POST['yhteyshenkilo'],
+					'y_tunnus' => $_POST['yritys_tunnus'],
+					'puhelin' => $_POST['puhelinnumero'],
+					'sahkoposti' => $_POST['sahkoposti'],
+				));
+			}
+
+			Yii::app()->user->setFlash('success', "Ilmainen tila on valmis. Kirjaudu sisään yritystunnuksella $kirjautumistunnus ja käyttäjätunnuksella ".$_POST['username']);
+			$this->redirect(array('index'));
 
 		}
 

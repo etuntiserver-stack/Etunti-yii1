@@ -53,7 +53,8 @@
         <label><?php echo Yii::t('main', 'Salasana')?></label>
         <input type="password" id="password" name="password" class="form-control input-lg" required autocomplete='off'>
 	<br>
-        <button class="btn btn-lg btn-primary btn-group submit" type="submit"><?php echo Yii::t('main', 'Aloita'); ?></button>
+	<p><a href="#" data-toggle="modal" data-target="#kehdot">Käyttöehdot</a></p>
+        <p><button class="btn btn-lg btn-primary btn-group submit" type="submit"><?php echo Yii::t('main', 'Aloita'); ?></button></p>
     	</form>
 	<div id="success"></div>
 
@@ -63,6 +64,58 @@
 </div>
 
 
+
+
+
+<!-- Modal -->
+<div id="kehdot" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Käyttöehdot</h4>
+      </div>
+      <div class="modal-body">
+        <p>Some text in the modal.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Sulje</button>
+        <button type="button" class="btn btn-primary hyvaksyn" data-dismiss="modal">Hyväksyn</button>
+      </div>
+    </div>
+
+  </div>
 </div>
 
 
+
+</div>
+
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+
+  localStorage.clear();
+
+  $(".hyvaksyn").click(function(){
+  	localStorage.setItem('kayttoehdot_luettu', true);
+  });
+
+  $("#kehdot").click(function(e){
+	e.preventDefault();
+  });
+
+  $(".submit").click(function(e){
+
+	if(!localStorage.getItem('kayttoehdot_luettu')){
+		e.preventDefault();
+		alert('Lue ensin käyttöehdot.');
+		return false;
+	}
+  });
+
+});
+</script>
