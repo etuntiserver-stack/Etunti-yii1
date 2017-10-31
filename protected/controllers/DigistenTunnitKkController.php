@@ -271,9 +271,16 @@ class DigistenTunnitKkController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$dataProvider=new CActiveDataProvider('DigistenTunnitKk');
-		$this->render('index',array(
-			'dataProvider'=>$dataProvider,
+       		$criteria = new CDbCriteria();
+	        $criteria->order = " id DESC ";
+
+		$dataProvider=new CActiveDataProvider('DigistenTunnitKk', array(
+			'criteria'=>$criteria,
+			//'pagination'=>false
+		));
+
+		$this->render('index', array(
+			'dataProvider' => $dataProvider, 
 		));
 	}
 
