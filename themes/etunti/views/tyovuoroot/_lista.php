@@ -6,6 +6,7 @@
 <tr>
 	<td><?=$this->etuSukunimi($data->tid)?></td>
 	<td><?=$data->pvm?></td>
+	<td><?=$data->alku?>-<?=$data->loppu?></td>
 	<td><?=(isset($this->getKohde($data->kohde)->osoite))?$this->getKohde($data->kohde)->osoite:''?></td>
 	<td><?=($data->status != 0)?$this->tilanteet()[$data->status]:''?></td>
 </tr>

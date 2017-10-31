@@ -1,0 +1,11 @@
+{
+     "android": {
+         "release": {
+             "keystore": "edico.keystore",
+             "storePassword": "111111",
+             "alias": "edico",
+             "password" : "111111",
+             "keystoreType": ""
+         }
+     }
+ }
