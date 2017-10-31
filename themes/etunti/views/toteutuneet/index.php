@@ -509,7 +509,7 @@ function dateDiff($start, $end) {
 		<table class="yhteensaPvmAllaTaulu_'.date("W",strtotime($date)).' forFooterAlla table table-bordered" cellspacing="0" cellpadding="0" id="yhteensaPvmAllaTaulu_'.$did.'_'.$tid.'">
 		 <thead>
 		  <tr>
-		   <th>'.Yii::t('main', 'Työtynnit').'</th>
+		   <th>'.Yii::t('main', 'Työtunnit').'</th>
 		   <th>'.Yii::t('main', 'Matkat').'</th>
 		   <th>'.Yii::t('main', 'Lounaat').'</th>
 		   <th>'.Yii::t('main', 'Ilta').'</th>
