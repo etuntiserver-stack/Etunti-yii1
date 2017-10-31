@@ -477,7 +477,7 @@ class SiteController extends Controller
 		{
 
 
-
+			unset($_SESSION['domain']);
 			$kirjautumistunnus = preg_replace('/[^\p{L}\p{N}\s]/u', '', $_POST['kirjautumistunnus']);
 			$kirjautumistunnus = str_replace(' ', '_', $kirjautumistunnus);
 			$kirjautumistunnus = strtolower($kirjautumistunnus);
