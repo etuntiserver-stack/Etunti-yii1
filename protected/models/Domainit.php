@@ -30,7 +30,7 @@ public $viesti;
 	{
 		$tb_name = 'domainit';
 
-		$check_this_table = false;
+		$check_this_table = true;
 		if(!isset(Yii::app()->session[$tb_name]))
 		{
 			Yii::app()->session[$tb_name] = true;
@@ -63,8 +63,7 @@ public $viesti;
                      'tyovuorohinta_persiivoja' => 'int(11) ',
                      'muut_tyokaluhinta' => 'int(11) ',
                      'aktiivinen' => 'int(1) DEFAULT 1 ',
-                  
-
+                     'maksullinen' => 'int(1) DEFAULT 0 ',                  
 
                 );
 
