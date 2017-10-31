@@ -48,7 +48,7 @@
 	   			$site = Yii::app()->createController('Site');
 				$mod = 'Asiakkaat';
 				$sarake = 'yrityksen_nimi';
-				$placeholder = 'Yritys';
+				$placeholder = 'Yritys tai yhteyshenkilö';
 				if(isset($_GET[$sarake])) $postvalue = $_GET[$sarake]; else $postvalue='';
 		 	        $site[0]->autocompleteFor($mod, array('yrityksen_nimi','yhteyshenkilo'), $placeholder, $postvalue);
 			    ?>
