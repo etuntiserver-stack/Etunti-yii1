@@ -176,7 +176,8 @@
 	    if(date('N', strtotime($date)) == 7)
 	    {
   	    echo '<tr>';
-  		echo '<td class="text-center myBgColors viikkoRivi fixed-column"><b>'.Yii::t('main', 'Viikko').' '.date("W",strtotime($date)).'</b></td>';
+  		echo '<td class="text-center myBgColors viikkoRivi fixed-column"><b>'.Yii::t('main', 'Viikko').' '.date("W",strtotime($date)).' <i class="fa fa-arrow-up" aria-hidden="true"></i>
+</b></td>';
 
 
 
