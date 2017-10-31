@@ -23,7 +23,7 @@
 	   ?>
 	 </span>
 
-	 <i class="glyphicon glyphicon-envelope"></i> <?=Yii::t('main', 'Lista työvuoroista')?> 
+	 <i class="glyphicon glyphicon-envelope"></i> <?=Yii::t('main', 'Lista suunnitelluista työvuoroista')?> 
 
 	</h2>
 
