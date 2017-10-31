@@ -28,6 +28,33 @@ $(document).delegate(".tuntienHyvaksyntaTaulu","click",function(){
     newWin.close();
 });
 
+$(document).delegate(".tuntienHyvaksyntaTauluTivistelma","click",function(){
+	
+    $('#tuntienHyvaksyntaTaulu tr.su_lu_tot').remove();
+    var divToPrint = document.getElementById('tuntienHyvaksyntaTaulu');
+    var htmlToPrint = '' +
+        '<style type="text/css">' +
+	'.table tbody>tr>td{' +
+	    	'vertical-align: top;' +
+	'}' +
+        'table {' +
+	'border-collapse: collapse;' +
+	'border: 0;' +
+        '}' +
+        'table th, table td {' +
+        'border:1px solid #333;' +
+        'padding:3px 5px;' +
+        '}' +
+        '</style>';
+    htmlToPrint += $('#forTulostus').html();
+    htmlToPrint += divToPrint.outerHTML;
+    newWin = window.open("");
+    newWin.document.write(htmlToPrint);
+    newWin.print();
+    newWin.close();
+});
+
+
 
 $(document).delegate(".uusirivi","click",function(){
 
@@ -300,8 +327,20 @@ $(document).ready(function(){
   });
 
   $(document).delegate(".uusiTot","click",function(){
-		$(this).remove();
-		$('#toteutuneet-form').submit();
+
+	if( 
+		$('#Toteutuneet_status option:selected').val() == 3 
+		&& $('#Toteutuneet_kohde_kannasta').val() === '' 
+		&& $('#Toteutuneet_osoite').val() === '' 
+	)
+	{
+		alert('Valitse osoite!')
+		return false;
+	}
+
+	$(this).remove();
+	$('#toteutuneet-form').submit();
+
   });
 
   $(document).on('submit', '#toteutuneet-form', function(e) {

@@ -34,6 +34,7 @@ table { width: 100%; }
    <!-- tulostus -->
    <div class="pull-right">
      <button class="btn btn-primary btn-sm myBgColors tuntienHyvaksyntaTaulu"><?php echo Yii::t('main', 'Tulosta'); ?></button>
+     <button class="btn btn-primary btn-sm myBgColors tuntienHyvaksyntaTauluTivistelma"><?php echo Yii::t('main', 'Tulosta tiivistelmä'); ?></button>
    </div>
 <?php
 /*
@@ -377,7 +378,7 @@ function dateDiff($start, $end) {
 		</table>
 	</td></tr>';
 
-    echo '<tr>';
+    echo '<tr class="su_lu_tot">';
   
 
 	$dido = '';
