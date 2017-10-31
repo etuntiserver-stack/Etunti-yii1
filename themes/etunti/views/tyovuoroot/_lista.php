@@ -16,7 +16,13 @@
 ?>
 
 <tr>
-	<td><?=$this->etuSukunimi($data->tid)?></td>
+	<td>
+		<?php if($data->tid == 0): ?>
+		<?=Yii::t('main', 'VARAUS')?>
+		<?php else: ?>
+		<?=$this->etuSukunimi($data->tid)?>
+		<?php endif; ?>
+	</td>
 	<td><?=$data->pvm?></td>
 	<td><?=$data->alku?>-<?=$data->loppu?></td>
 	<td><?=$asiakas?></td>
