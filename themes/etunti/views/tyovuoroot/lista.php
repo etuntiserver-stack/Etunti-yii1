@@ -251,6 +251,7 @@
   <th><?=Yii::t('main', 'Työntekijä')?></th>
   <th><?=Yii::t('main', 'Päivämäärä')?></th>
   <th><?=Yii::t('main', 'Klo')?></th>
+  <th><?=Yii::t('main', 'Asiakas')?></th>
   <th><?=Yii::t('main', 'Kohde')?></th>
   <th><?=Yii::t('main', 'Tilanne')?></th>
   </tr>
