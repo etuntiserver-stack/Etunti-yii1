@@ -89,8 +89,13 @@
 	{
   	  $d = strtotime($year ."W". $week . $day);
 	  $date = date('d.m.Y',$d);
-	 //($this->pyhat($date))? $ispyha = ' <i class="text-warning fa fa-flag-o" aria-hidden="true" style="font-size:150%" data-toggle="tooltip" data-placement="bottom" title="'.Yii::t('main', 'Pyhäpäivä').'"></i>' : $ispyha = '';
-	  echo '<th>'.$paivat[date('N',$d)].', '.$date.'</th>'; //$ispyha
+	  $ispyha = '';
+	  if($this->pyhat($date) == 'pyhapaiva')
+	  {
+		$ispyha = ' <i class="text-warning fa fa-flag-o" aria-hidden="true" style="font-size:150%" data-toggle="tooltip" data-placement="bottom" title="'.Yii::t('main', 'Pyhäpäivä').'"></i>';
+	  }
+ 
+	  echo '<th>'.$paivat[date('N',$d)].', '.$date.$ispyha.'</th>';
 	}
         ?>
      </tr>
@@ -122,7 +127,7 @@
 
 	     $clPyhat = '';
 	     $pyhat = $this->pyhat($date);
-	     if($pyhat == true)
+	     if($pyhat == 'su' or $pyhat == 'pyhapaiva')
 	     $clPyhat = 'style="background:#ddd"';
 
 	     echo '<td '.$clPyhat.' id="'.$did.'_0" valign="top">';

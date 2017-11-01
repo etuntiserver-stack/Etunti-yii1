@@ -136,14 +136,18 @@
 	  $clPyhat = '';
 	  $pyhat = $this->pyhat($date);
 	  $ispyha = '';
-
-	  if($pyhat == true){
+	  if($pyhat == 'su' or $pyhat == 'pyhapaiva')
+	  {
 		$clPyhat = 'style="background:#ddd"';
-		//$ispyha = ' <i class="text-warning fa fa-flag-o" aria-hidden="true" style="font-size:150%" data-toggle="tooltip" data-placement="bottom" title="'.Yii::t('main', 'Pyhäpäivä').'"></i>';
+	  }
+
+	  if($pyhat == 'pyhapaiva')
+	  {
+		$ispyha = ' <i class="text-warning fa fa-flag-o" aria-hidden="true" style="font-size:150%" data-toggle="tooltip" data-placement="bottom" title="'.Yii::t('main', 'Pyhäpäivä').'"></i>';
 	  }
 
   	    echo '<tr>';
-  		echo '<td '.$clPyhat.' class="fixed-column" id="first_'.$did.'"><b>'.$arrDate[$explColDate[0]].", ".$explColDate[1].'</b></td>'; //.$ispyha
+  		echo '<td '.$clPyhat.' class="fixed-column" id="first_'.$did.'"><b>'.$arrDate[$explColDate[0]].", ".$explColDate[1].$ispyha.'</b></td>';
 
 		// VARAUS
 		  echo '<td '.$clPyhat.' id="'.$did.'_0">';
