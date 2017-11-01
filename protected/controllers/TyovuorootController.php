@@ -2791,8 +2791,8 @@ class TyovuorootController extends Controller
 	$pyh = explode("\n",$asetukset->viralliset_pyhapaivat);
 
 	if(
-	   date("N",strtotime($date)) == 6 
-	   or date("N",strtotime($date)) == 7
+	   //date("N",strtotime($date)) == 6 
+	    date("N",strtotime($date)) == 7
 	   or strstr($asetukset->viralliset_pyhapaivat, $dateMonth)
 	)
 	return true;
