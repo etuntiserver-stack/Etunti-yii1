@@ -349,6 +349,9 @@ var etusivuAjax = function(){
 		if( $prosentti > 100 ){
 			$pr_class = 'danger';
 			Yii::app()->user->setState('ilmainen', false);
+		} elseif( $prosentti < 100 and $prosentti > 90 ){
+			$pr_class = 'warning';
+			Yii::app()->user->setState('ilmainen', true);
 		} else {
 			Yii::app()->user->setState('ilmainen', true);
 		}
