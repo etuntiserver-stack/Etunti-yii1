@@ -184,7 +184,8 @@ if(isset(Yii::app()->user->nimi))
 
 <!-- Kokeiluversio -->
 <?php $asetukset = Asetukset::model()->findByPk(1); ?>
-<?php if( $asetukset->maksullinen == 0 and $asetukset->ilmainen_versio_kayttotunnit > 500 ) : ?>
+<?php $domainit = Domainit::model()->find(" domain='".Yii::app()->user->domain."' and maksullinen=0 "); ?>
+<?php if( isset($domainit->id) and $asetukset->ilmainen_versio_kayttotunnit > 500 ) : ?>
 <script type="text/javascript">
 $(document).ready(function(){
 
