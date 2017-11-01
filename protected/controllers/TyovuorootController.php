@@ -2800,6 +2800,10 @@ class TyovuorootController extends Controller
 			return 'pyhapaiva';
 		}
 
+		if(strstr($asetukset->erikoislauantai, $dateMonth))
+		{
+			return 'erikoislauantai';
+		}
 
 		return false;
 
