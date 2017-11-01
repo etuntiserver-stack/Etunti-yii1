@@ -130,7 +130,7 @@ class Asetukset extends DB2ActiveRecord
                      'gtm' => 'varchar(255) ',
                      'app_naytetaanko_kohteen_yhteyshenkilo' => 'int(1) ',
                      'onlinevaraus_viikonlopput' => 'int(1) ',
-                     'maksullinen' => 'int(1) DEFAULT 1 ',
+                     'maksullinen' => 'int(1) DEFAULT 0 ',
                      'ilmainen_versio_kayttotunnit' => 'int(11) ',
                      'alennus_max_euro' => 'float ',
                      'alennus_max_prosentti' => 'float ',

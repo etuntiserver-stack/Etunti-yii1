@@ -1273,8 +1273,6 @@ class TyovuorootController extends Controller
 	public function actionCreate()
 	{
 
-
-
 		$return = array();
 
 		if(isset($_POST['ToistuvatTyovuorot']) and isset($_POST['ToistuvatTyovuorot']['toistuva_aktiivinen']) and $_POST['ToistuvatTyovuorot']['toistuva_aktiivinen'] == 'on')

@@ -63,8 +63,7 @@ public $viesti;
                      'tyovuorohinta_persiivoja' => 'int(11) ',
                      'muut_tyokaluhinta' => 'int(11) ',
                      'aktiivinen' => 'int(1) DEFAULT 1 ',
-                     'maksullinen' => 'int(1) DEFAULT 0 ',                  
-
+                     'maksullinen' => 'int(1) DEFAULT 0 '
                 );
 
 		foreach($table_structure as $key=>$value)
@@ -190,7 +189,7 @@ public $viesti;
 		// will receive user inputs.
 		return array(
 			array('domain', 'required'),
-			array('huoltokatko, palveluhinta_persiivoja, tyovuorohinta_persiivoja, muut_tyokaluhinta, aktiivinen', 'numerical', 'integerOnly'=>true),
+			array('huoltokatko, palveluhinta_persiivoja, tyovuorohinta_persiivoja, muut_tyokaluhinta, aktiivinen, maksullinen', 'numerical', 'integerOnly'=>true),
 			array('time, domain, paketti, yritys, pakettin_nimetus', 'length', 'max'=>100),
 			array('puhelin, sahkoposti', 'length', 'max'=>255),
 			// The following rule is used by search().

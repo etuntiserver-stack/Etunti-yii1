@@ -193,17 +193,10 @@ class SiteController extends Controller
 
 	public function actionMaksullinen()
 	{
-		$state = '';
-		if(isset($_POST['state']))
-		{
-			if($_POST['state'] == 'false')
-			$state = 0;
-			if($_POST['state'] == 'true')
-			$state = 1;
-			Asetukset::model()->updateByPk(1, array('maksullinen' => $state));
-		}
-		echo json_encode($state);
-		exit;
+		$domainit = Domainit::model()->find(" domain='".Yii::app()->user->domain."' ");
+		if(isset($domainit->id))
+			Domainit::model()->updateByPk($domainit->id, array('maksullinen' => 1));
+		$this->redirect(array('index'));
 	}
 
 	public function laskuri()
@@ -213,16 +206,17 @@ class SiteController extends Controller
 		$mob_result = 0;
 		$tyovuorot_result = 0;
 
-		$begin = new DateTime( date("Y-m-d", strtotime('first day of last month')) );
-		$end = new DateTime( date("Y-m-d", strtotime('last day of last month')) );
+		$start_date = date( "Y-m-d", strtotime('first day of this month') );
+		$end_date = date("Y-m-d", strtotime('last day of this month') );
 
-		$interval = DateInterval::createFromDateString('1 day');
-		$period = new DatePeriod($begin, $interval, $end);
 
-		foreach ( $period as $dt )
+
+		while (strtotime($start_date) <= strtotime($end_date))
 		{
 			$mobile = 0;
-			$pvm = $dt->format( "Y-m-d" );
+			$pvm = date( "Y-m-d", strtotime($start_date));
+			$start_date = date ("Y-m-d", strtotime($start_date. " +1 day"));
+
 
 			// <-- Ensin katsotaan mobile taulusta toteutuneet
 	       		$criteria = new CDbCriteria();
@@ -260,27 +254,32 @@ class SiteController extends Controller
 			if( $mobile > 0 )
 			{
 				$mob_result += $mobile;
-			} else {
-
-	       			$criteria = new CDbCriteria();
-		        	$criteria->select = "
-					SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(CONCAT(pvm, loppu), '%d.%m.%Y %H:%i'), '%Y-%m-%d  %H:%i'), 
-					DATE_FORMAT(STR_TO_DATE(CONCAT(pvm, alku), '%d.%m.%Y %H:%i'), '%Y-%m-%d  %H:%i')))) as l_tunnit
-				";
-			        $criteria->condition = " 
-					alku!='' AND loppu!=''
-					AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = '".$pvm."'
-				";
-				$tv = Tyovuoroot::model()->find($criteria);
-
-				if(isset($tv->l_tunnit))
-				$tyovuorot_result += $tv->l_tunnit;
-
 			}
-	
+
+
+			// <-- tyovuorot
+	       		$criteria = new CDbCriteria();
+		        $criteria->select = "
+				SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(CONCAT(pvm, loppu), '%d.%m.%Y %H:%i'), '%Y-%m-%d  %H:%i'), 
+				DATE_FORMAT(STR_TO_DATE(CONCAT(pvm, alku), '%d.%m.%Y %H:%i'), '%Y-%m-%d  %H:%i')))) as l_tunnit
+			";
+			$criteria->condition = " 
+				alku!='' AND loppu!=''
+				AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = '".$pvm."'
+			";
+			$tv = Tyovuoroot::model()->find($criteria);
+
+			if(isset($tv->l_tunnit))
+			$tyovuorot_result += $tv->l_tunnit;
+			//     tyovuorot -->
+
+				
 		}
 
-		$result = $mob_result+$tyovuorot_result;
+		if($mob_result > $tyovuorot_result)
+		$result = $mob_result;
+		if($mob_result < $tyovuorot_result)
+		$result = $tyovuorot_result;
 
 		if($result > 0)
 		{
@@ -288,7 +287,7 @@ class SiteController extends Controller
 			Asetukset::model()->updateByPk(1, array('ilmainen_versio_kayttotunnit'=>$ilmainen_tunti));
 		}
 
-		return $result;
+		return $result/3600;
 
 	}
 
@@ -469,6 +468,17 @@ class SiteController extends Controller
   	public function actionAloita()
 	{
 
+		/*
+		if(isset($_POST['keyup_kirjautumistunnus']))
+		{
+			$kirjautumistunnus = preg_replace('/[^\p{L}\p{N}\s]/u', '', $_POST['keyup_kirjautumistunnus']);
+			$kirjautumistunnus = str_replace(' ', '_', $kirjautumistunnus);
+			$kirjautumistunnus = strtolower($kirjautumistunnus);
+			echo $kirjautumistunnus;
+			exit;
+		}
+		*/
+
 		$database = false;
 		$vastaus = '';
 		$kirjautumistunnus = '';
@@ -505,6 +515,7 @@ class SiteController extends Controller
 				$new_domain->paketti = '1,2,3,4,5,6';
 				$new_domain->sahkoposti = $_POST['sahkoposti'];
 				$new_domain->aktiivinen = 1;
+				$new_domain->maksullinen = 0;
 				$new_domain->save();
 			}
 
@@ -514,16 +525,6 @@ class SiteController extends Controller
 			Yii::app()->db1->setActive(true);
 
 
-			$adm = Administrators::model()->findByPk(1);
-			if(isset($adm->id))
-			{
-				Administrators::model()->updateByPk($adm->id, array(
-					'adm_login' => $_POST['username'],
-					'adm_salasana' => password_hash($_POST['password'], PASSWORD_BCRYPT),
-					'adm_email' => $_POST['sahkoposti'],
-					'adm_nimi' => $_POST['yhteyshenkilo'],
-				));
-			}
 			$ft = FirmanTiedot::model()->findByPk(1);
 			if(isset($ft->id))
 			{
@@ -539,8 +540,39 @@ class SiteController extends Controller
 				));
 			}
 
-			Yii::app()->user->setFlash('success', "Ilmainen tila on valmis. Kirjaudu sisään yritystunnuksella $kirjautumistunnus ja käyttäjätunnuksella ".$_POST['username']);
-			$this->redirect(array('index'));
+			$adm = Administrators::model()->findByPk(1);
+			if(isset($adm->id))
+			{
+				$token = sha1(uniqid(time().$adm->adm_nimi, true));
+				Administrators::model()->updateByPk($adm->id, array(
+					'adm_login' => $_POST['username'],
+					'adm_salasana' => '',
+					'adm_email' => $_POST['sahkoposti'],
+					'adm_nimi' => $_POST['yhteyshenkilo'],
+					'token' => $token,
+				));
+
+				$message = '';
+				$message .= '<p>Yritystunnus: '.$kirjautumistunnus.'</p>';
+				$message .= '<p>Käyttäjätunnus: '.$_POST['username'].'</p>';
+				$message .= '<p>Aktivoi käyttäjätunnuksesi <a href="'.Yii::app()->getBaseUrl(true).'/index.php/site/confirm?token='.$token.'">tästä</a><br>';
+
+				$subject = Yii::t('main', 'Tervetuloa Etunti');
+				$mail = new YiiMailer();
+				$mail->setFrom('no-reply@etunti.fi');
+				$mail->setTo($_POST['sahkoposti']);
+				$mail->setSubject($subject);
+				$mail->setBody($message);
+				if($mail->send())
+				{
+
+					Yii::app()->user->setFlash('success', "Ilmainen tila on valmis. Tarkista oma sähköpostisi");
+					$this->redirect(array('index'));
+
+				}
+
+			}
+
 
 		}
 
@@ -855,7 +887,11 @@ class SiteController extends Controller
 				$uusi_salasana = password_hash(Yii::app()->request->getPost('uusi_salasana'), PASSWORD_BCRYPT);
 				$upd = Administrators::model()->updateByPk($model->id, array('adm_salasana' => $uusi_salasana, 'token' => ''));
 				if( $upd != null )
-				echo json_encode(array('ok'));
+				{
+					Yii::app()->user->setFlash('success', "Salasanasi on luotu, kirjaudu sisään.");
+					echo json_encode(array('ok'));
+				}
+
 			} elseif(
 				isset($model->id) 
 				and !empty(Yii::app()->request->getPost('uusi_salasana'))

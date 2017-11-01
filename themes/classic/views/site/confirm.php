@@ -109,7 +109,7 @@ function validatePassword(p) {
 		}
 		if(data[0] == 'ok')
 		{
-			window.location.href=location.protocol + "//" + location.host + "/index.php/user/login";
+			window.location.href=location.protocol + "//" + location.host + "/index.php/site/index";
 			$('input').val('');
 			$('#success').html('<br><span class="alert alert-success btn-block">Salasanasi vaihdettu. Kirjaudu ulos ja käytä uusi salasana.</span>');
 			$('.submit').remove();
