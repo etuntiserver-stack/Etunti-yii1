@@ -281,6 +281,13 @@ class SiteController extends Controller
 		if($mob_result < $tyovuorot_result)
 		$result = $tyovuorot_result;
 
+		if($result/3600 > 500)
+		{
+			Yii::app()->user->setState('ilmainen', false);
+		} else {
+			Yii::app()->user->setState('ilmainen', true);
+		}
+
 		if($result > 0)
 		{
 			$ilmainen_tunti = ($result/3600);
