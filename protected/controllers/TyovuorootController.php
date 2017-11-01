@@ -1415,7 +1415,7 @@ class TyovuorootController extends Controller
 
 			    }
 			    foreach($luotu as $k=>$v)
-					Tyovuoroot::model()->updatebypk($k, array('tyopaari' => json_encode(array_values($luotu))));
+					Tyovuoroot::model()->updatebypk($k, array('tyopaari' => json_encode($luotu)));
 
 
 			}
@@ -1816,7 +1816,7 @@ class TyovuorootController extends Controller
 	
 				    foreach($arr as $k=>$v)
 				    {
-					Tyovuoroot::model()->updatebypk($k, array('tyopaari' => json_encode(array_values($luotu))));
+					Tyovuoroot::model()->updatebypk($k, array('tyopaari' => json_encode($luotu)));
 					$return[] = array('tid'=>$v[0], 'pvm'=>$v[1], 'ymd'=>date("Ymd",strtotime($v[1])));
 		
 					// <-- PushNotify
