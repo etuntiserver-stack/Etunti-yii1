@@ -3,6 +3,24 @@
 /* @var $model Tyovuoroot */
 /* @var $form CActiveForm */
 
+
+		// <-- Check tunnit jos ilmainen
+		$domainit = Domainit::model()->find(" domain='".Yii::app()->user->domain."' ");
+		if(!isset($model->id) and $domainit->maksullinen == 0)
+		{
+			$site = Yii::app()->createController('Site');
+			$sum_tunnit = $site[0]->laskuri();
+			if($sum_tunnit > 500)
+			{
+				Yii::app()->user->setFlash('danger', "Ilmainen käyttö on mahdoton jos tunnit enemmään kun 500");
+				//$this->redirect(array('/site/index'));
+				echo '<script>window.location.href="index"</script>';
+				exit;
+			}
+		}
+		//     Check tunnit jos ilmainen -->
+
+
 if(isset($_POST['pvm']))
   $model->pvm = date("d.m.Y",strtotime($_POST['pvm']));
 else
