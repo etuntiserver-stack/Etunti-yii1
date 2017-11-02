@@ -26,7 +26,7 @@ class Valikkoot extends DB2ActiveRecord
 	public function tableName()
 	{
 		$tb_name = 'sivex_selects';
-		$check_this_table = false;
+		$check_this_table = true;
 		//unset(Yii::app()->session[$tb_name]); // this use if want many times play
 		if(!isset(Yii::app()->session[$tb_name]))
 		{
@@ -46,14 +46,9 @@ class Valikkoot extends DB2ActiveRecord
 		}
 
 		$table_structure = array(
-
                      'value' => 'varchar(255) ',
                      'select_type' => 'varchar(50) ',
                      'value2' => 'varchar(255) ',
-
-
-
-
 		);
 
 		foreach($table_structure as $key=>$value)

@@ -479,6 +479,7 @@ class SiteController extends Controller
   	public function actionAloita()
 	{
 
+
 		/*
 		if(isset($_POST['keyup_kirjautumistunnus']))
 		{
@@ -516,6 +517,7 @@ class SiteController extends Controller
 			$str = "mysql -u ".$connection->username." -p".$connection->password." $kirjautumistunnus < lib/defdb.sql";
 			exec($str, $output, $return_var);
 			$database = true;
+
 
 			$chk_domain = Domainit::model()->find(" domain='".$kirjautumistunnus."' ");
 			if(!isset($chk_domain->id))
@@ -576,11 +578,12 @@ class SiteController extends Controller
 				$mail->setBody($message);
 				if($mail->send())
 				{
-
 					Yii::app()->user->setFlash('success', "Ilmainen tila on valmis. Tarkista oma sähköpostisi");
+					//Yii::app()->session->destroy();
 					$this->redirect(array('index'));
+				} 
 
-				}
+				throw new CHttpException(404, 'Aloita lomake error');
 
 			}
 
@@ -595,6 +598,32 @@ class SiteController extends Controller
     
 	}
 
+	public function AjaaKaikkiModelit()
+	{
+
+		$models = array();
+		$modelsDir = Yii::getPathOfAlias("application.models");
+		$dh = opendir($modelsDir);
+		if ($dh !== false)
+		{
+		    $matches = array();
+		    while (($modelFileName = readdir($dh)) !== false)
+		    {
+		        if (preg_match("/^([A-Za-z0-9]+)\.php$/", $modelFileName, $matches))
+			{
+			   if( 
+				isset($matches[1])
+				and $matches[1] != 'Page'
+				and $matches[1] != 'LoginForm'
+			    )
+			    {
+		            	$m = new $matches[1];
+			    }
+			}
+		    }
+		    closedir($dh);
+		}
+	}
 /*
 	protected function cPanelConnect($host, $user, $token, $c_panel_user)
 	{

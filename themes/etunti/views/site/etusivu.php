@@ -8,8 +8,17 @@
 	}
 	// Change password to bcrypt -->
 
+	// <-- Ajaa kaikki modelit
+	if(!isset(Yii::app()->user->AjaaKaikkiModelit))
+	{
+		Yii::app()->user->setState('AjaaKaikkiModelit', true);
+		$this->AjaaKaikkiModelit();
+	}
+	//     Ajaa kaikki modelit -->
 
 	$asetukset = Asetukset::model()->findByPk(1);
+
+
 
 $months=array(
 	'01'=>Yii::t('main', 'Tammikuu'),
