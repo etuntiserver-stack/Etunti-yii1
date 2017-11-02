@@ -108,6 +108,16 @@ $model->time = date("d.m.Y", strtotime($model->time));
 		<?php echo $form->error($model,'aktiivinen'); ?>
 	</div>
 
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'maksullinen'); ?>
+		<?php
+		$list = array(0=>'Ei',1=>'Kyllä');
+        	echo $form->dropDownList($model, 'maksullinen', $list,
+		array('class'=>'form-control'));	
+        	?>
+		<?php echo $form->error($model,'maksullinen'); ?>
+	</div>
+
 </div>
 </div><!-- form -->
 

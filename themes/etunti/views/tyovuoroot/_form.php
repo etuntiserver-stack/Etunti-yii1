@@ -5,18 +5,16 @@
 
 
 		// <-- Check tunnit jos ilmainen
-		$domainit = Domainit::model()->find(" domain='".Yii::app()->user->domain."' ");
-		if(!isset($model->id) and $domainit->maksullinen == 0)
+		$site = Yii::app()->createController('Site');
+		if(
+			!isset($model->id) 
+			and $site[0]->laskuri() !== false 
+			and isset(Yii::app()->user->ilmainen_kayttotunnit) 
+			and Yii::app()->user->ilmainen_kayttotunnit > 500)
 		{
-			$site = Yii::app()->createController('Site');
-			$sum_tunnit = $site[0]->laskuri();
-			if($sum_tunnit > 500)
-			{
-				Yii::app()->user->setFlash('danger', "Ilmainen käyttö on mahdoton jos tunnit enemmään kun 500");
-				//$this->redirect(array('/site/index'));
-				echo '<script>window.location.href="index"</script>';
-				exit;
-			}
+			Yii::app()->user->setFlash('danger', Yii::app()->user->ilmainen_ilmoitus);
+			echo '<script>window.location.href="index"</script>';
+			exit;
 		}
 		//     Check tunnit jos ilmainen -->
 

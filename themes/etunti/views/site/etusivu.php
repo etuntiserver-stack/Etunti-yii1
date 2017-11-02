@@ -10,7 +10,6 @@
 
 
 	$asetukset = Asetukset::model()->findByPk(1);
-	$domainit = Domainit::model()->find(" domain='".Yii::app()->user->domain."' ");
 
 $months=array(
 	'01'=>Yii::t('main', 'Tammikuu'),
@@ -337,10 +336,10 @@ var etusivuAjax = function(){
 
 
               <!-- Text List -->
-	      <?php if($domainit->maksullinen == 0) : ?>
+	      <?php if($this->laskuri() !== false and isset(Yii::app()->user->ilmainen_kayttotunnit)) : ?>
 
 	      <?php
-		$sum_laskuri = $this->laskuri(); //tuntien laskuri mobiili + tyovuorot
+		$sum_laskuri = Yii::app()->user->ilmainen_kayttotunnit; //tuntien laskuri mobiili + tyovuorot
 		$prosentti = 0;
 		if( $sum_laskuri > 0 )
 		$prosentti = ($sum_laskuri*100)/500;
@@ -350,7 +349,6 @@ var etusivuAjax = function(){
 			$pr_class = 'danger';
 		} elseif( $prosentti < 100 and $prosentti > 90 ){
 			$pr_class = 'warning';
-			Yii::app()->user->setState('ilmainen', true);
 		}
 	      ?>
 

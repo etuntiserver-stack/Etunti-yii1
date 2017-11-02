@@ -202,102 +202,106 @@ class SiteController extends Controller
 	public function laskuri()
 	{
 
-		$result = 0;
-		$mob_result = 0;
-		$tyovuorot_result = 0;
+		$domainit = Domainit::model()->find(" domain='".Yii::app()->user->domain."' AND maksullinen=0 ");
+		Yii::app()->user->setState('ilmainen_ilmoitus', 'Ilmainen käyttö on mahdoton jos tunnit enemmään kun 500');
 
-		$start_date = date( "Y-m-d", strtotime('first day of this month') );
-		$end_date = date("Y-m-d", strtotime('last day of this month') );
-
-
-
-		while (strtotime($start_date) <= strtotime($end_date))
+		if(isset($domainit->id) and $domainit->maksullinen == 0)
 		{
-			$mobile = 0;
-			$pvm = date( "Y-m-d", strtotime($start_date));
-			$start_date = date ("Y-m-d", strtotime($start_date. " +1 day"));
-
-
-			// <-- Ensin katsotaan mobile taulusta toteutuneet
-	       		$criteria = new CDbCriteria();
-	        	$criteria->select = "
-				SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
-				DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit
-			";
-		        $criteria->condition = " 
-				aloitan!='' AND loppui!=''
-				AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = '".$pvm."'
-				AND id NOT IN (SELECT kid FROM sivexkuitti_repaired)
+			$result = 0;
+			$mob_result = 0;
+			$tyovuorot_result = 0;
 	
-			";
-			$lu = Mobile::model()->find($criteria);
-
-
-	       		$criteria = new CDbCriteria();
-	        	$criteria->select = "
-				SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
-				DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit
-			";
-		        $criteria->condition = " 
-				aloitan!='' AND loppui!=''
-				AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = '".$pvm."'
-			";
-			$tot = Toteutuneet::model()->find($criteria);
+			$start_date = date( "Y-m-d", strtotime('first day of this month') );
+			$end_date = date("Y-m-d", strtotime('last day of this month') );
 	
-			if(isset($lu->l_tunnit))
-			$mobile += $lu->l_tunnit;
-	
-			if(isset($tot->l_tunnit))
-			$mobile += $tot->l_tunnit;
-			// Ensin katsotaan mobile taulusta toteutuneet -->
 
-			if( $mobile > 0 )
+
+			while (strtotime($start_date) <= strtotime($end_date))
 			{
-				$mob_result += $mobile;
+				$mobile = 0;
+				$pvm = date( "Y-m-d", strtotime($start_date));
+				$start_date = date ("Y-m-d", strtotime($start_date. " +1 day"));
+	
+	
+				// <-- Ensin katsotaan mobile taulusta toteutuneet
+		       		$criteria = new CDbCriteria();
+		        	$criteria->select = "
+					SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
+					DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit
+				";
+			        $criteria->condition = " 
+					aloitan!='' AND loppui!=''
+					AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = '".$pvm."'
+					AND id NOT IN (SELECT kid FROM sivexkuitti_repaired)
+		
+				";
+				$lu = Mobile::model()->find($criteria);
+	
+	
+		       		$criteria = new CDbCriteria();
+		        	$criteria->select = "
+					SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
+					DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit
+				";
+			        $criteria->condition = " 
+					aloitan!='' AND loppui!=''
+					AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = '".$pvm."'
+				";
+				$tot = Toteutuneet::model()->find($criteria);
+		
+				if(isset($lu->l_tunnit))
+				$mobile += $lu->l_tunnit;
+		
+				if(isset($tot->l_tunnit))
+				$mobile += $tot->l_tunnit;
+				// Ensin katsotaan mobile taulusta toteutuneet -->
+	
+				if( $mobile > 0 )
+				{
+					$mob_result += $mobile;
+				}
+	
+	
+				// <-- tyovuorot
+		       		$criteria = new CDbCriteria();
+			        $criteria->select = "
+					SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(CONCAT(pvm, loppu), '%d.%m.%Y %H:%i'), '%Y-%m-%d  %H:%i'), 
+					DATE_FORMAT(STR_TO_DATE(CONCAT(pvm, alku), '%d.%m.%Y %H:%i'), '%Y-%m-%d  %H:%i')))) as l_tunnit
+				";
+				$criteria->condition = " 
+					alku!='' AND loppu!=''
+					AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = '".$pvm."'
+				";
+				$tv = Tyovuoroot::model()->find($criteria);
+	
+				if(isset($tv->l_tunnit))
+				$tyovuorot_result += $tv->l_tunnit;
+				//     tyovuorot -->
+	
+					
 			}
+	
+			if($mob_result > $tyovuorot_result)
+			$result = $mob_result;
+			if($mob_result < $tyovuorot_result)
+			$result = $tyovuorot_result;
+	
+			$sum_result = $result/3600;
+			Asetukset::model()->updateByPk(1, array('ilmainen_versio_kayttotunnit'=>$sum_result));
 
-
-			// <-- tyovuorot
-	       		$criteria = new CDbCriteria();
-		        $criteria->select = "
-				SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(CONCAT(pvm, loppu), '%d.%m.%Y %H:%i'), '%Y-%m-%d  %H:%i'), 
-				DATE_FORMAT(STR_TO_DATE(CONCAT(pvm, alku), '%d.%m.%Y %H:%i'), '%Y-%m-%d  %H:%i')))) as l_tunnit
-			";
-			$criteria->condition = " 
-				alku!='' AND loppu!=''
-				AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = '".$pvm."'
-			";
-			$tv = Tyovuoroot::model()->find($criteria);
-
-			if(isset($tv->l_tunnit))
-			$tyovuorot_result += $tv->l_tunnit;
-			//     tyovuorot -->
-
-				
-		}
-
-		if($mob_result > $tyovuorot_result)
-		$result = $mob_result;
-		if($mob_result < $tyovuorot_result)
-		$result = $tyovuorot_result;
-
-		if($result/3600 > 500)
-		{
-			Yii::app()->user->setState('ilmainen', false);
-		} else {
 			Yii::app()->user->setState('ilmainen', true);
-		}
+			Yii::app()->user->setState('ilmainen_kayttotunnit', $sum_result);
 
-		if($result > 0)
-		{
-			$ilmainen_tunti = ($result/3600);
-			Asetukset::model()->updateByPk(1, array('ilmainen_versio_kayttotunnit'=>$ilmainen_tunti));
-		}
+			return true;
 
-		return $result/3600;
+		} else {
+			Yii::app()->user->setState('ilmainen', false);
+			return false;
+		}	
 
+	
 	}
-
+	
 	public function actionTyot_tanaan()
 	{
 		$this->renderPartial('tyot_tanaan');
@@ -1172,17 +1176,18 @@ class SiteController extends Controller
 	        $criteria->order = " id DESC ";
 	        $criteria->condition = " domain!='defdb'  ";
 
-		if(isset($_POST['aktiivinen']) and $_POST['aktiivinen'] == 0 and $_POST['aktiivinen'] != 'kaikki')
-	        	$criteria->addCondition (" aktiivinen=0 ");
-		elseif(isset($_POST['aktiivinen']) and $_POST['aktiivinen'] == 1 and $_POST['aktiivinen'] != 'kaikki')
-	        	$criteria->addCondition (" aktiivinen=1 ");
-		elseif(isset($_POST['aktiivinen']) and $_POST['aktiivinen'] == 'kaikki')
-	        	$criteria->addCondition (" aktiivinen=1 OR aktiivinen=0 ");
-		elseif(!isset($_POST['aktiivinen']))
+		if(isset($_GET['aktiivinen']))
+	        	$criteria->addCondition (" aktiivinen='".$_GET['aktiivinen']."' ");
+		else
 	        	$criteria->addCondition (" aktiivinen=1 ");
 
-		if(isset($_POST['domain_nimi']) and !empty($_POST['domain_nimi']))
-	        $criteria->addCondition (" domain LIKE '%".$_POST['domain_nimi']."%' ");
+		if(isset($_GET['maksullinen']))
+	        	$criteria->addCondition (" maksullinen='".$_GET['maksullinen']."' ");
+		else
+	        	$criteria->addCondition (" maksullinen=1 ");
+
+		if(isset($_GET['domain_nimi']) and !empty($_GET['domain_nimi']))
+	        $criteria->addCondition (" domain LIKE '%".$_GET['domain_nimi']."%' ");
 
 		$dataProvider=new CActiveDataProvider('Domainit', array(
 			'criteria'=>$criteria,

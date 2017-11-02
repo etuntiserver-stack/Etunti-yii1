@@ -183,9 +183,13 @@ if(isset(Yii::app()->user->nimi))
 ?>
 
 <!-- Kokeiluversio -->
-<?php $asetukset = Asetukset::model()->findByPk(1); ?>
-<?php $domainit = Domainit::model()->find(" domain='".Yii::app()->user->domain."' and maksullinen=0 "); ?>
-<?php if( isset($domainit->id) and $asetukset->ilmainen_versio_kayttotunnit > 500 ) : ?>
+<?php 		
+		if(
+			isset(Yii::app()->user->ilmainen) 
+			and Yii::app()->user->ilmainen == true
+			and isset(Yii::app()->user->ilmainen_kayttotunnit) 
+			and Yii::app()->user->ilmainen_kayttotunnit > 500)
+		: ?>
 <script type="text/javascript">
 $(document).ready(function(){
 
