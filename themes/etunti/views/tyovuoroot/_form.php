@@ -3,6 +3,22 @@
 /* @var $model Tyovuoroot */
 /* @var $form CActiveForm */
 
+
+		// <-- Check tunnit jos ilmainen
+		$site = Yii::app()->createController('Site');
+		if(
+			!isset($model->id) 
+			and $site[0]->laskuri() !== false 
+			and isset(Yii::app()->user->ilmainen_kayttotunnit) 
+			and Yii::app()->user->ilmainen_kayttotunnit > 500)
+		{
+			Yii::app()->user->setFlash('danger', Yii::app()->user->ilmainen_ilmoitus);
+			echo '<script>window.location.href="index"</script>';
+			exit;
+		}
+		//     Check tunnit jos ilmainen -->
+
+
 if(isset($_POST['pvm']))
   $model->pvm = date("d.m.Y",strtotime($_POST['pvm']));
 else

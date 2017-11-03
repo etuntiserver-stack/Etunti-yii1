@@ -193,105 +193,117 @@ class SiteController extends Controller
 
 	public function actionMaksullinen()
 	{
-		$state = '';
-		if(isset($_POST['state']))
-		{
-			if($_POST['state'] == 'false')
-			$state = 0;
-			if($_POST['state'] == 'true')
-			$state = 1;
-			Asetukset::model()->updateByPk(1, array('maksullinen' => $state));
-		}
-		echo json_encode($state);
-		exit;
+		$domainit = Domainit::model()->find(" domain='".Yii::app()->user->domain."' ");
+		if(isset($domainit->id))
+			Domainit::model()->updateByPk($domainit->id, array('maksullinen' => 1));
+		$this->redirect(array('index'));
 	}
 
 	public function laskuri()
 	{
 
-		$result = 0;
-		$mob_result = 0;
-		$tyovuorot_result = 0;
+		$domainit = Domainit::model()->find(" domain='".Yii::app()->user->domain."' AND maksullinen=0 ");
+		Yii::app()->user->setState('ilmainen_ilmoitus', 'Ilmainen käyttö on mahdoton jos tunnit enemmään kun 500');
 
-		$begin = new DateTime( date("Y-m-d", strtotime('first day of last month')) );
-		$end = new DateTime( date("Y-m-d", strtotime('last day of last month')) );
-
-		$interval = DateInterval::createFromDateString('1 day');
-		$period = new DatePeriod($begin, $interval, $end);
-
-		foreach ( $period as $dt )
+		if(isset($domainit->id) and $domainit->maksullinen == 0)
 		{
-			$mobile = 0;
-			$pvm = $dt->format( "Y-m-d" );
-
-			// <-- Ensin katsotaan mobile taulusta toteutuneet
-	       		$criteria = new CDbCriteria();
-	        	$criteria->select = "
-				SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
-				DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit
-			";
-		        $criteria->condition = " 
-				aloitan!='' AND loppui!=''
-				AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = '".$pvm."'
-				AND id NOT IN (SELECT kid FROM sivexkuitti_repaired)
+			$result = 0;
+			$mob_result = 0;
+			$tyovuorot_result = 0;
 	
-			";
-			$lu = Mobile::model()->find($criteria);
-
-
-	       		$criteria = new CDbCriteria();
-	        	$criteria->select = "
-				SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
-				DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit
-			";
-		        $criteria->condition = " 
-				aloitan!='' AND loppui!=''
-				AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = '".$pvm."'
-			";
-			$tot = Toteutuneet::model()->find($criteria);
+			$start_date = date( "Y-m-d", strtotime('first day of this month') );
+			$end_date = date("Y-m-d", strtotime('last day of this month') );
 	
-			if(isset($lu->l_tunnit))
-			$mobile += $lu->l_tunnit;
-	
-			if(isset($tot->l_tunnit))
-			$mobile += $tot->l_tunnit;
-			// Ensin katsotaan mobile taulusta toteutuneet -->
 
-			if( $mobile > 0 )
+
+			while (strtotime($start_date) <= strtotime($end_date))
 			{
-				$mob_result += $mobile;
-			} else {
-
-	       			$criteria = new CDbCriteria();
+				$mobile = 0;
+				$pvm = date( "Y-m-d", strtotime($start_date));
+				$start_date = date ("Y-m-d", strtotime($start_date. " +1 day"));
+	
+	
+				// <-- Ensin katsotaan mobile taulusta toteutuneet
+		       		$criteria = new CDbCriteria();
 		        	$criteria->select = "
+					SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
+					DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit
+				";
+			        $criteria->condition = " 
+					aloitan!='' AND loppui!=''
+					AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = '".$pvm."'
+					AND id NOT IN (SELECT kid FROM sivexkuitti_repaired)
+		
+				";
+				$lu = Mobile::model()->find($criteria);
+	
+	
+		       		$criteria = new CDbCriteria();
+		        	$criteria->select = "
+					SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(loppui, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i'), 
+					DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y %H:%i'), '%Y-%m-%d %H:%i')))) as l_tunnit
+				";
+			        $criteria->condition = " 
+					aloitan!='' AND loppui!=''
+					AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = '".$pvm."'
+				";
+				$tot = Toteutuneet::model()->find($criteria);
+		
+				if(isset($lu->l_tunnit))
+				$mobile += $lu->l_tunnit;
+		
+				if(isset($tot->l_tunnit))
+				$mobile += $tot->l_tunnit;
+				// Ensin katsotaan mobile taulusta toteutuneet -->
+	
+				if( $mobile > 0 )
+				{
+					$mob_result += $mobile;
+				}
+	
+	
+				// <-- tyovuorot
+		       		$criteria = new CDbCriteria();
+			        $criteria->select = "
 					SUM(TIME_TO_SEC(TIMEDIFF(DATE_FORMAT(STR_TO_DATE(CONCAT(pvm, loppu), '%d.%m.%Y %H:%i'), '%Y-%m-%d  %H:%i'), 
 					DATE_FORMAT(STR_TO_DATE(CONCAT(pvm, alku), '%d.%m.%Y %H:%i'), '%Y-%m-%d  %H:%i')))) as l_tunnit
 				";
-			        $criteria->condition = " 
+				$criteria->condition = " 
 					alku!='' AND loppu!=''
 					AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = '".$pvm."'
 				";
 				$tv = Tyovuoroot::model()->find($criteria);
-
+	
 				if(isset($tv->l_tunnit))
 				$tyovuorot_result += $tv->l_tunnit;
-
+				//     tyovuorot -->
+	
+					
 			}
 	
-		}
+			if($mob_result > $tyovuorot_result)
+			$result = $mob_result;
+			if($mob_result < $tyovuorot_result)
+			$result = $tyovuorot_result;
+	
+			$sum_result = $result/3600;
 
-		$result = $mob_result+$tyovuorot_result;
+			if($domainit->ilmainen_versio_kayttotunnit != $sum_result)
+				Domainit::model()->updateByPk($domainit->id, array('ilmainen_versio_kayttotunnit'=>$sum_result));
 
-		if($result > 0)
-		{
-			$ilmainen_tunti = ($result/3600);
-			Asetukset::model()->updateByPk(1, array('ilmainen_versio_kayttotunnit'=>$ilmainen_tunti));
-		}
+			Yii::app()->user->setState('ilmainen', true);
+			Yii::app()->user->setState('ilmainen_kayttotunnit', $sum_result);
 
-		return $result;
+			return true;
 
+		} else {
+			Yii::app()->user->setState('ilmainen', false);
+			return false;
+		}	
+
+	
 	}
-
+	
 	public function actionTyot_tanaan()
 	{
 		$this->renderPartial('tyot_tanaan');
@@ -469,6 +481,18 @@ class SiteController extends Controller
   	public function actionAloita()
 	{
 
+
+		/*
+		if(isset($_POST['keyup_kirjautumistunnus']))
+		{
+			$kirjautumistunnus = preg_replace('/[^\p{L}\p{N}\s]/u', '', $_POST['keyup_kirjautumistunnus']);
+			$kirjautumistunnus = str_replace(' ', '_', $kirjautumistunnus);
+			$kirjautumistunnus = strtolower($kirjautumistunnus);
+			echo $kirjautumistunnus;
+			exit;
+		}
+		*/
+
 		$database = false;
 		$vastaus = '';
 		$kirjautumistunnus = '';
@@ -477,73 +501,94 @@ class SiteController extends Controller
 		{
 
 
-
+			unset($_SESSION['domain']);
 			$kirjautumistunnus = preg_replace('/[^\p{L}\p{N}\s]/u', '', $_POST['kirjautumistunnus']);
 			$kirjautumistunnus = str_replace(' ', '_', $kirjautumistunnus);
 			$kirjautumistunnus = strtolower($kirjautumistunnus);
+			$_SESSION['domain'] = $kirjautumistunnus;
 
 
-
-				Yii::app()->db->setActive(false);
-				Yii::app()->db->connectionString = 'mysql:host=localhost;dbname=etuntifw';
-				Yii::app()->db->setActive(true);
-				$connection=Yii::app()->db;
-				$connection->createCommand("CREATE DATABASE IF NOT EXISTS `$kirjautumistunnus`")->execute();
-
-				exec("mysqldump -u '".$connection->username."' -p'".$connection->password."' defdb > lib/defdb.sql");
-				$str = "mysql -u ".$connection->username." -p".$connection->password." $kirjautumistunnus < lib/defdb.sql";
-				exec($str, $output, $return_var);
-				$database = true;
+			Yii::app()->db->setActive(false);
+			Yii::app()->db->connectionString = 'mysql:host=localhost;dbname=etuntifw';
+			Yii::app()->db->setActive(true);
+			$connection=Yii::app()->db;
+			$connection->createCommand("CREATE DATABASE IF NOT EXISTS `$kirjautumistunnus`")->execute();
 
 
-				$chk_domain = Domainit::model()->find(" domain='".$kirjautumistunnus."' ");
-				if(!isset($chk_domain->id))
+			exec("mysqldump -u '".$connection->username."' -p'".$connection->password."' defdb > lib/defdb.sql");
+			$str = "mysql -u ".$connection->username." -p".$connection->password." $kirjautumistunnus < lib/defdb.sql";
+			exec($str, $output, $return_var);
+			$database = true;
+
+
+			$chk_domain = Domainit::model()->find(" domain='".$kirjautumistunnus."' ");
+			if(!isset($chk_domain->id))
+			{
+				$new_domain = new Domainit;
+				$new_domain->domain = $kirjautumistunnus;
+				$new_domain->yritys = $_POST['yrityksen_nimi'];
+				$new_domain->paketti = '1,2,3,4,5,6';
+				$new_domain->sahkoposti = $_POST['sahkoposti'];
+				$new_domain->aktiivinen = 1;
+				$new_domain->maksullinen = 0;
+				$new_domain->save();
+			}
+
+
+			Yii::app()->db1->setActive(false);
+			Yii::app()->db1->connectionString = 'mysql:host=localhost;dbname='.$kirjautumistunnus;
+			Yii::app()->db1->setActive(true);
+
+
+			$ft = FirmanTiedot::model()->findByPk(1);
+			if(isset($ft->id))
+			{
+				FirmanTiedot::model()->updateByPk($ft->id, array(
+					'tyonantaja' => $_POST['yrityksen_nimi'],
+					'osoite' => $_POST['osoite'],
+					'postinumero' => $_POST['postinumero'],
+					'postitoimipaikka' => $_POST['postitoimipaikka'],
+					'johtaja' => $_POST['yhteyshenkilo'],
+					'y_tunnus' => $_POST['yritys_tunnus'],
+					'puhelin' => $_POST['puhelinnumero'],
+					'sahkoposti' => $_POST['sahkoposti'],
+				));
+			}
+
+			$adm = Administrators::model()->findByPk(1);
+			if(isset($adm->id))
+			{
+				$token = sha1(uniqid(time().$adm->adm_nimi, true));
+				Administrators::model()->updateByPk($adm->id, array(
+					'adm_login' => $_POST['username'],
+					'adm_salasana' => '',
+					'adm_email' => $_POST['sahkoposti'],
+					'adm_nimi' => $_POST['yhteyshenkilo'],
+					'token' => $token,
+				));
+
+				$message = '';
+				$message .= '<p>Yritystunnus: '.$kirjautumistunnus.'</p>';
+				$message .= '<p>Käyttäjätunnus: '.$_POST['username'].'</p>';
+				$message .= '<p>Aktivoi käyttäjätunnuksesi <a href="'.Yii::app()->getBaseUrl(true).'/index.php/site/confirm?token='.$token.'">tästä</a><br>';
+
+				$subject = Yii::t('main', 'Tervetuloa Etunti');
+				$mail = new YiiMailer();
+				$mail->setFrom('no-reply@etunti.fi');
+				$mail->setTo($_POST['sahkoposti']);
+				$mail->setSubject($subject);
+				$mail->setBody($message);
+				if($mail->send())
 				{
-					$new_domain = new Domainit;
-					$new_domain->domain = $kirjautumistunnus;
-					$new_domain->yritys = $_POST['yrityksen_nimi'];
-					$new_domain->paketti = '1,2,3,4,5,6';
-					$new_domain->sahkoposti = $_POST['sahkoposti'];
-					$new_domain->aktiivinen = 1;
-					$new_domain->save();
+					Yii::app()->user->setFlash('success', "Ilmainen tila on valmis. Tarkista oma sähköpostisi");
+					//Yii::app()->session->destroy();
+					$this->redirect(array('index'));
+				} 
 
-				}
+				throw new CHttpException(404, 'Aloita lomake error');
 
+			}
 
-				Yii::app()->db1->setActive(false);
-				Yii::app()->db1->connectionString = 'mysql:host=localhost;dbname='.$kirjautumistunnus;
-				Yii::app()->db1->setActive(true);
-
-
-
-				$adm = Administrators::model()->findByPk(1);
-				if(isset($adm->id))
-				{
-					Administrators::model()->updateByPk($adm->id, array(
-						'adm_login' => $_POST['username'],
-						'adm_salasana' => password_hash($_POST['password'], PASSWORD_BCRYPT),
-						'adm_email' => $_POST['sahkoposti'],
-						'adm_nimi' => $_POST['yhteyshenkilo'],
-					));
-
-				}
-				$ft = FirmanTiedot::model()->findByPk(1);
-				if(isset($ft->id))
-				{
-					FirmanTiedot::model()->updateByPk($ft->id, array(
-						'tyonantaja' => $_POST['yrityksen_nimi'],
-						'osoite' => $_POST['osoite'],
-						'postinumero' => $_POST['postinumero'],
-						'postitoimipaikka' => $_POST['postitoimipaikka'],
-						'johtaja' => $_POST['yhteyshenkilo'],
-						'y_tunnus' => $_POST['yritys_tunnus'],
-						'puhelin' => $_POST['puhelinnumero'],
-						'sahkoposti' => $_POST['sahkoposti'],
-					));
-				}
-
-
-				//$this->redirect(array('index'));
 
 		}
 
@@ -555,6 +600,32 @@ class SiteController extends Controller
     
 	}
 
+	public function AjaaKaikkiModelit()
+	{
+
+		$models = array();
+		$modelsDir = Yii::getPathOfAlias("application.models");
+		$dh = opendir($modelsDir);
+		if ($dh !== false)
+		{
+		    $matches = array();
+		    while (($modelFileName = readdir($dh)) !== false)
+		    {
+		        if (preg_match("/^([A-Za-z0-9]+)\.php$/", $modelFileName, $matches))
+			{
+			   if( 
+				isset($matches[1])
+				and $matches[1] != 'Page'
+				and $matches[1] != 'LoginForm'
+			    )
+			    {
+		            	$m = new $matches[1];
+			    }
+			}
+		    }
+		    closedir($dh);
+		}
+	}
 /*
 	protected function cPanelConnect($host, $user, $token, $c_panel_user)
 	{
@@ -858,7 +929,11 @@ class SiteController extends Controller
 				$uusi_salasana = password_hash(Yii::app()->request->getPost('uusi_salasana'), PASSWORD_BCRYPT);
 				$upd = Administrators::model()->updateByPk($model->id, array('adm_salasana' => $uusi_salasana, 'token' => ''));
 				if( $upd != null )
-				echo json_encode(array('ok'));
+				{
+					Yii::app()->user->setFlash('success', "Salasanasi on luotu, kirjaudu sisään.");
+					echo json_encode(array('ok'));
+				}
+
 			} elseif(
 				isset($model->id) 
 				and !empty(Yii::app()->request->getPost('uusi_salasana'))
@@ -1132,17 +1207,18 @@ class SiteController extends Controller
 	        $criteria->order = " id DESC ";
 	        $criteria->condition = " domain!='defdb'  ";
 
-		if(isset($_POST['aktiivinen']) and $_POST['aktiivinen'] == 0 and $_POST['aktiivinen'] != 'kaikki')
-	        	$criteria->addCondition (" aktiivinen=0 ");
-		elseif(isset($_POST['aktiivinen']) and $_POST['aktiivinen'] == 1 and $_POST['aktiivinen'] != 'kaikki')
-	        	$criteria->addCondition (" aktiivinen=1 ");
-		elseif(isset($_POST['aktiivinen']) and $_POST['aktiivinen'] == 'kaikki')
-	        	$criteria->addCondition (" aktiivinen=1 OR aktiivinen=0 ");
-		elseif(!isset($_POST['aktiivinen']))
+		if(isset($_GET['aktiivinen']))
+	        	$criteria->addCondition (" aktiivinen='".$_GET['aktiivinen']."' ");
+		else
 	        	$criteria->addCondition (" aktiivinen=1 ");
 
-		if(isset($_POST['domain_nimi']) and !empty($_POST['domain_nimi']))
-	        $criteria->addCondition (" domain LIKE '%".$_POST['domain_nimi']."%' ");
+		if(isset($_GET['maksullinen']))
+	        	$criteria->addCondition (" maksullinen='".$_GET['maksullinen']."' ");
+		else
+	        	$criteria->addCondition (" maksullinen=1 ");
+
+		if(isset($_GET['domain_nimi']) and !empty($_GET['domain_nimi']))
+	        $criteria->addCondition (" domain LIKE '%".$_GET['domain_nimi']."%' ");
 
 		$dataProvider=new CActiveDataProvider('Domainit', array(
 			'criteria'=>$criteria,

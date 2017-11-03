@@ -10,7 +10,7 @@
 
 
 
-   	    <form id="mobForm" action="#" class="form-inline" method="POST">
+   	    <form id="mobForm" action="#" class="form-inline" method="GET">
    	    <input type="hidden" name="mob_hae">
 
             <div class="admin-form">
@@ -21,14 +21,25 @@
                     <div class="row">
 
 
-		      <?php if(isset($_POST['aktiivinen'])) echo '<input type="hidden" id="akt" value="'.$_POST['aktiivinen'].'">'; ?>
                       <div class="col-md-2">
                         <div class="section">
                           <label class="field select">
 			   <select class="gui-input" name="aktiivinen" id="aktiivinen">
-       				<option value=1><?php echo Yii::t('main', 'Aktiiviset'); ?></option>
-       				<option value=0><?php echo Yii::t('main', 'Passiviset'); ?></option>
-       				<option value="kaikki"><?php echo Yii::t('main', 'Kaikki'); ?></option>
+       				<option value=1 <?php echo(isset($_GET['aktiivinen']) and $_GET['aktiivinen'] == 1)? 'selected':''; ?>><?php echo Yii::t('main', 'Aktiiviset'); ?></option>
+       				<option value=0 <?php echo(isset($_GET['aktiivinen']) and $_GET['aktiivinen'] == 0)? 'selected':''; ?>><?php echo Yii::t('main', 'Passiviset'); ?></option>
+			   </select>
+                            <i class="arrow double"></i>
+                            </label>
+                          </label>
+                        </div>
+                      </div>
+
+                      <div class="col-md-2">
+                        <div class="section">
+                          <label class="field select">
+			   <select class="gui-input" name="maksullinen" id="maksullinen">
+       				<option value=1 <?php echo(isset($_GET['maksullinen']) and $_GET['maksullinen'] == 1)? 'selected':''; ?>><?php echo Yii::t('main', 'Maksulliset'); ?></option>
+       				<option value=0 <?php echo(isset($_GET['maksullinen']) and $_GET['maksullinen'] == 0)? 'selected':''; ?>><?php echo Yii::t('main', 'Ilmaiset'); ?></option>
 			   </select>
                             <i class="arrow double"></i>
                             </label>
@@ -40,7 +51,7 @@
                         <div class="section">
                           <label class="field prepend-icon">
 
-   			    <input type="text" class="gui-input" name="domain_nimi" value="<?php if(isset($_POST['domain_nimi'])) echo $_POST['domain_nimi']; ?>" placeholder="<?php echo Yii::t('main', 'Domain'); ?>..">
+   			    <input type="text" class="gui-input" name="domain_nimi" value="<?php if(isset($_GET['domain_nimi'])) echo $_GET['domain_nimi']; ?>" placeholder="<?php echo Yii::t('main', 'Domain'); ?>..">
 
                             <label for="firstname" class="field-icon">
                               <i class="fa fa-user"></i>
@@ -73,6 +84,10 @@
         <!-- loppu: .tray-center -->
         </div>
 
+<?php
+	$start_date = date( "Y-m-d", strtotime('first day of this month') );
+	$end_date = date("Y-m-d", strtotime('last day of this month') );
+?>
 
   <div class="panel heading-border">
    <div class="panel-body">
@@ -89,6 +104,12 @@
   <th><?php echo Yii::t('main', 'Modulit'); ?></th>
   <th><?php echo Yii::t('main', 'Kuukauden käyttö (tunnit)'); ?></th>
   <th><?php echo Yii::t('main', 'Hinnat'); ?></th>
+  <?php if( isset($_GET['maksullinen']) and $_GET['maksullinen'] == 0 ): ?>
+  <th>
+	<?php echo Yii::t('main', 'Käyttötunnit'); ?>
+	<p><?=date("d.m.Y", strtotime($start_date))?>-<?=date("d.m.Y", strtotime($end_date))?></p>
+  </th>
+  <?php endif; ?>
   <th><?php echo Yii::t('main', 'Kuukauden laskuri'); ?></th>
   </tr>
   </thead>
@@ -96,7 +117,7 @@
 	'dataProvider'=>$dataProvider,
 	'itemView'=>'_etunnin_asiakkaat',
   	'template'=>'{items}<table class="table table-striped table-condensed"></table><br/>{pager}',
-
+	//'viewData' => array( 'site' => $site ),
 
 	'pager' => array(
            'firstPageLabel'=>'<<',
@@ -118,11 +139,6 @@
 
 <script type="text/javascript">
 $(document).ready(function(){
-
-if($("#akt").val())
-$("#aktiivinen").val($("#akt").val());
-else
-$("#aktiivinen").val(1);
 
 
 $(".haemob").click(function(){

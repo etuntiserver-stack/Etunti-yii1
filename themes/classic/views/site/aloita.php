@@ -15,25 +15,16 @@
 
 <div class="container">
 
-<?php
-	//if(isset($vastaus))
-		//echo $vastaus;
-
-	if($database and !empty($kirjautumistunnus))
-	echo '<div class="alert bg-success">'.Yii::t('main', 'Kirjaudu sisään käymällä "Yritystunnus": <b>'.$kirjautumistunnus.'</b> '.CHtml::link('tästä linkistä',array('user/login', 'target'=>'_blank')) ).'</div>';
-?> 
-  
+<h2><legend><?=Yii::t('main', 'Aloita Etunnin käyttäminen')?></legend></h2> 
 
 <div class="row">
- <div class="col-sm-6 col-sm-offset-3">
+ <div class="col-sm-6">
   <div class="panel panel-default">
-    <div class="panel-heading"><?php echo Yii::t('main', 'Aloita Etunnin käyttäminen'); ?></div>
+    <div class="panel-heading"><?php echo Yii::t('main', 'Yrityksen tiedot'); ?></div>
     <div class="panel-body">
       	<form action="#" method="POST" autocomplete="off">
-        <label><?php echo Yii::t('main', 'Kirjautumistunnus')?></label>
-        <input type="text" id="kirjautumistunnus" name="kirjautumistunnus" class="form-control input-lg" required autofocus>
         <label><?php echo Yii::t('main', 'Yrityksen nimi')?></label>
-        <input type="text" id="yrityksen_nimi" name="yrityksen_nimi" class="form-control input-lg" required>
+        <input type="text" id="yrityksen_nimi" name="yrityksen_nimi" class="form-control input-lg" required autofocus>
         <label><?php echo Yii::t('main', 'Yritystunnus')?></label>
         <input type="text" id="yritys_tunnus" name="yritys_tunnus" class="form-control input-lg" required>
         <label><?php echo Yii::t('main', 'Osoite')?></label>
@@ -48,21 +39,103 @@
         <input type="text" id="puhelinnumero" name="puhelinnumero" class="form-control input-lg">
         <label><?php echo Yii::t('main', 'Sähköpostiosoite')?></label>
         <input type="text" id="sahkoposti" name="sahkoposti" class="form-control input-lg" required>
+    </div>
+  </div>
+ </div>
+
+ <div class="col-sm-6">
+  <div class="panel panel-default">
+    <div class="panel-heading"><?php echo Yii::t('main', 'Tunnukset'); ?></div>
+    <div class="panel-body">
+
+        <label><?php echo Yii::t('main', 'Kirjautumistunnus')?></label>
+        <input type="text" id="kirjautumistunnus" name="kirjautumistunnus" class="form-control input-lg" required placeholder="Esim. yrityksen nimi">
         <label><?php echo Yii::t('main', 'Käyttäjätunnus')?></label>
         <input type="text" id="username" name="username" class="form-control input-lg" required autocomplete='off'>
+
+<?php /*
         <label><?php echo Yii::t('main', 'Salasana')?></label>
         <input type="password" id="password" name="password" class="form-control input-lg" required autocomplete='off'>
-	<br>
-        <button class="btn btn-lg btn-primary btn-group submit" type="submit"><?php echo Yii::t('main', 'Aloita'); ?></button>
-    	</form>
-	<div id="success"></div>
+*/ ?>
 
     </div>
   </div>
  </div>
 </div>
 
+	<br>
+	<p><a href="#" data-toggle="modal" data-target="#kehdot">Käyttöehdot</a></p>
+        <p><button class="btn btn-lg btn-primary btn-group submit" type="submit"><?php echo Yii::t('main', 'Aloita'); ?></button></p>
+    	</form>
+	<div id="success"></div>
+
+
+
+<!-- Modal -->
+<div id="kehdot" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Käyttöehdot</h4>
+      </div>
+      <div class="modal-body">
+        <p>Some text in the modal.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Sulje</button>
+        <button type="button" class="btn btn-primary hyvaksyn" data-dismiss="modal">Hyväksyn</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
 
 </div>
 
 
+
+<script type="text/javascript">
+$(document).ready(function(){
+
+  localStorage.clear();
+
+  $(".hyvaksyn").click(function(){
+  	localStorage.setItem('kayttoehdot_luettu', true);
+  });
+
+  $("#kehdot").click(function(e){
+	e.preventDefault();
+  });
+
+  $(".submit").click(function(e){
+
+	if(!localStorage.getItem('kayttoehdot_luettu')){
+		e.preventDefault();
+		alert('Lue ensin käyttöehdot.');
+		return false;
+	}
+  });
+
+/*
+  $("#yrityksen_nimi").keyup(function(e){
+	$.ajax({
+	  url: '#',
+	  data: { keyup_kirjautumistunnus : $(this).val() },
+	  type:'POST',
+	  success:function(data){
+  		$('#kirjautumistunnus').val(data);
+	  },
+	  error:function(data){
+  		console.log(data); 
+	  }
+  	});
+  });
+*/
+
+});
+</script>

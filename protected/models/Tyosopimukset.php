@@ -73,7 +73,7 @@ public $template;
 	public function tableName()
 	{
 		$tb_name = 'sivex_tyosopimukset';
-		$check_this_table = false;
+		$check_this_table = true;
 		//unset(Yii::app()->session[$tb_name]); // this use if want many times play
 		if(!isset(Yii::app()->session[$tb_name]))
 		{
@@ -151,10 +151,7 @@ public $template;
                      'TyonantajanEdustaja' => 'varchar(100) ',
                      'NimikeTehtava' => 'varchar(100) ',
                      'tiedosto' => 'varchar(255) ',
-                     'teksti' => 'text ',
-
-
-
+                     'teksti' => 'text '
 
 		);
 
