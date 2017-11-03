@@ -287,7 +287,9 @@ class SiteController extends Controller
 			$result = $tyovuorot_result;
 	
 			$sum_result = $result/3600;
-			Asetukset::model()->updateByPk(1, array('ilmainen_versio_kayttotunnit'=>$sum_result));
+
+			if($domainit->ilmainen_versio_kayttotunnit != $sum_result)
+				Domainit::model()->updateByPk($domainit->id, array('ilmainen_versio_kayttotunnit'=>$sum_result));
 
 			Yii::app()->user->setState('ilmainen', true);
 			Yii::app()->user->setState('ilmainen_kayttotunnit', $sum_result);

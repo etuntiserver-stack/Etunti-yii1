@@ -63,7 +63,8 @@ public $viesti;
                      'tyovuorohinta_persiivoja' => 'int(11) ',
                      'muut_tyokaluhinta' => 'int(11) ',
                      'aktiivinen' => 'int(1) DEFAULT 1 ',
-                     'maksullinen' => 'int(1) DEFAULT 0 '
+                     'maksullinen' => 'int(1) DEFAULT 0 ',
+                     'ilmainen_versio_kayttotunnit' => 'int(11) '
                 );
 
 		foreach($table_structure as $key=>$value)

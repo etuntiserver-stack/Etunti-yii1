@@ -43,6 +43,13 @@
 
 		?>
 	</td>
+
+	<?php if( isset($_GET['maksullinen']) and $_GET['maksullinen'] == 0 ): ?>
+	<td>
+		<?=$data->ilmainen_versio_kayttotunnit?>h
+	</td>
+	<?php endif; ?>
+
 	<td>
 		<?php echo CHtml::link('Näytä', array('etunnin_asiakas_kk_laskuri', 'id'=>$data->id), array('class'=>'btn btn-sm btn-primary myBgColors', 'style'=>'color:white')); ?>
 	</td>

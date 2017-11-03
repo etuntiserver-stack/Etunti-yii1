@@ -84,6 +84,10 @@
         <!-- loppu: .tray-center -->
         </div>
 
+<?php
+	$start_date = date( "Y-m-d", strtotime('first day of this month') );
+	$end_date = date("Y-m-d", strtotime('last day of this month') );
+?>
 
   <div class="panel heading-border">
    <div class="panel-body">
@@ -100,6 +104,12 @@
   <th><?php echo Yii::t('main', 'Modulit'); ?></th>
   <th><?php echo Yii::t('main', 'Kuukauden käyttö (tunnit)'); ?></th>
   <th><?php echo Yii::t('main', 'Hinnat'); ?></th>
+  <?php if( isset($_GET['maksullinen']) and $_GET['maksullinen'] == 0 ): ?>
+  <th>
+	<?php echo Yii::t('main', 'Käyttötunnit'); ?>
+	<p><?=date("d.m.Y", strtotime($start_date))?>-<?=date("d.m.Y", strtotime($end_date))?></p>
+  </th>
+  <?php endif; ?>
   <th><?php echo Yii::t('main', 'Kuukauden laskuri'); ?></th>
   </tr>
   </thead>
@@ -107,7 +117,7 @@
 	'dataProvider'=>$dataProvider,
 	'itemView'=>'_etunnin_asiakkaat',
   	'template'=>'{items}<table class="table table-striped table-condensed"></table><br/>{pager}',
-
+	//'viewData' => array( 'site' => $site ),
 
 	'pager' => array(
            'firstPageLabel'=>'<<',
