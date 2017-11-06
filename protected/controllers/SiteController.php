@@ -96,7 +96,17 @@ class SiteController extends Controller
         public function init()
         {
                 if (Yii::app()->controller->isEtuntiAdmin() and !isset(Yii::app()->user->user_theme)) {
+
+			// <-- Ajaa kaikki modelit
+			if(!isset(Yii::app()->user->AjaaKaikkiModelit))
+			{
+				Yii::app()->user->setState('AjaaKaikkiModelit', true);
+				$this->AjaaKaikkiModelit();
+			}
+			//     Ajaa kaikki modelit -->
+
                         Yii::app()->theme = 'etunti';
+
                 } elseif (Yii::app()->controller->isEtuntiAdmin() and isset(Yii::app()->user->user_theme)) {
                         Yii::app()->theme = Yii::app()->user->user_theme;
                 } elseif (isset(Yii::app()->user->asiakas)) {
@@ -620,9 +630,11 @@ class SiteController extends Controller
 			    )
 			    {
 		            	$m = new $matches[1];
+				//echo $matches[1].'<br>';
 			    }
 			}
 		    }
+		    //exit;
 		    closedir($dh);
 		}
 	}
