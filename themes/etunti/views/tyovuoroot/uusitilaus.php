@@ -424,6 +424,13 @@ $(document).ready(function(){
 		'placeholder'=>Yii::t('main', 'Kirjoita tähän toimenpiteet, jotka näytetään sekä asiakkaalle että kohteen kortilla toimenpite kentäällä')
 		)); ?>
 		<?php echo $form->error($model,'toimenpiteet'); ?>
+
+		<?php echo $form->labelEx($model,'tilausviesti'); ?>
+		<?php echo $form->textarea($model,'tilausviesti',array('rows'=>4,'class'=>'form-control', 
+		'placeholder'=>Yii::t('main', 'Kirjoita tähän viesti')
+		)); ?>
+		<?php echo $form->error($model,'tilausviesti'); ?>
+
   </div>
   <div class="col-sm-6">
 		<?php echo $form->labelEx($model,'tietoja'); ?>

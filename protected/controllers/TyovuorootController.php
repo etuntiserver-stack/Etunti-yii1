@@ -2074,6 +2074,9 @@ class TyovuorootController extends Controller
 					if(!empty($kohteet->toimenpiteet))
 					$message .= str_replace("\n", "<br>",$kohteet->toimenpiteet);
 
+					if(isset($_POST['Tyovuoroot']['tilausviesti']) and !empty($_POST['Tyovuoroot']['tilausviesti']))
+					$message .= str_replace("\n", "<br>", $_POST['Tyovuoroot']['tilausviesti']);
+
 					$message .= '<h2>Kiitos tilauksesta.</h2>';
 					$subject = Yii::t('main', 'Kiitos tilauksesta');
 
