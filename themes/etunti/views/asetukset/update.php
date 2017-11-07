@@ -293,8 +293,8 @@ exit;
      <div class="section input-group">
        <label class="field prepend-icon append-button file">
          <span class="button"><?php echo Yii::t('main', 'Onlinevarausehdot'); ?></span>
-         <input type="file" class="gui-file" name="file" id="t_file" onChange="document.getElementById('tiedostoUP').value = this.value;">
-         <input type="text" class="gui-input" name="uploaded_onlinevarausehdot" id="tiedostoUP" placeholder="Valitse tiedosto..">
+         <input type="file" class="gui-file" name="file" id="t_file" onChange="document.getElementById('tiedostoUP_ove').value = this.value;">
+         <input type="text" class="gui-input" name="uploaded_onlinevarausehdot" id="tiedostoUP_ove" placeholder="Valitse tiedosto..">
          <label class="field-icon">
           <i class="fa fa-upload"></i>
          </label>
@@ -311,8 +311,8 @@ exit;
      <div class="section input-group">
        <label class="field prepend-icon append-button file">
          <span class="button"><?php echo Yii::t('main', 'Sopimukset jne.'); ?></span>
-         <input type="file" class="gui-file" name="file" id="t_file" onChange="document.getElementById('tiedostoUP').value = this.value;">
-         <input type="text" class="gui-input" name="uploaded_t" id="tiedostoUP" placeholder="Valitse tiedosto..">
+         <input type="file" class="gui-file" name="file" id="t_file" onChange="document.getElementById('tiedostoUP_sop').value = this.value;">
+         <input type="text" class="gui-input" name="uploaded_t" id="tiedostoUP_sop" placeholder="Valitse tiedosto..">
          <label class="field-icon">
           <i class="fa fa-upload"></i>
          </label>
@@ -329,8 +329,8 @@ exit;
      <div class="section input-group">
        <label class="field prepend-icon append-button file">
          <span class="button"><?php echo Yii::t('main', 'Toimitusehdot'); ?></span>
-         <input type="file" class="gui-file" name="file" id="t_file" onChange="document.getElementById('tiedostoUP').value = this.value;">
-         <input type="text" class="gui-input" name="uploaded_toimitusehdot" id="tiedostoUP" placeholder="Valitse tiedosto..">
+         <input type="file" class="gui-file" name="file" id="t_file" onChange="document.getElementById('tiedostoUP_te').value = this.value;">
+         <input type="text" class="gui-input" name="uploaded_toimitusehdot" id="tiedostoUP_te" placeholder="Valitse tiedosto..">
          <label class="field-icon">
           <i class="fa fa-upload"></i>
          </label>
@@ -347,8 +347,8 @@ exit;
      <div class="section input-group">
        <label class="field prepend-icon append-button file">
          <span class="button"><?php echo Yii::t('main', 'Konevuokraus toimitusehdot'); ?></span>
-         <input type="file" class="gui-file" name="file" id="t_file" onChange="document.getElementById('tiedostoUP').value = this.value;">
-         <input type="text" class="gui-input" name="uploaded_Konevuokraus_toimitusehdot" id="tiedostoUP" placeholder="Valitse tiedosto..">
+         <input type="file" class="gui-file" name="file" id="t_file" onChange="document.getElementById('tiedostoUP_kv').value = this.value;">
+         <input type="text" class="gui-input" name="uploaded_Konevuokraus_toimitusehdot" id="tiedostoUP_kv" placeholder="Valitse tiedosto..">
          <label class="field-icon">
           <i class="fa fa-upload"></i>
          </label>
@@ -365,8 +365,8 @@ exit;
      <div class="section input-group">
        <label class="field prepend-icon append-button file">
          <span class="button"><?php echo Yii::t('main', 'eDico APP käyttöehdot'); ?></span>
-         <input type="file" class="gui-file" name="file" id="t_file" onChange="document.getElementById('tiedostoUP').value = this.value;">
-         <input type="text" class="gui-input" name="uploaded_edico_kayttoehdot" id="tiedostoUP" placeholder="Valitse tiedosto..">
+         <input type="file" class="gui-file" name="file" id="t_file" onChange="document.getElementById('tiedostoUP_eke').value = this.value;">
+         <input type="text" class="gui-input" name="uploaded_edico_kayttoehdot" id="tiedostoUP_eke" placeholder="Valitse tiedosto..">
          <label class="field-icon">
           <i class="fa fa-upload"></i>
          </label>
