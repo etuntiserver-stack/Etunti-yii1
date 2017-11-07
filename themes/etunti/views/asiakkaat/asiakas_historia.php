@@ -208,7 +208,7 @@
         </div>
 	<?php endif; ?>
 
-	<?php if(isset($naytaPalautteet) and isset($_POST['from'])) : ?>
+	<?php if(isset($naytaPalautteet) and (isset($_POST['from']) or $naytaId != 0)) : ?>
 	<?php $returnBod = $asiakkaat[0]->palautteetCRM($model, $from, $to, $naytaId, $kayttaja); ?>
 	<?php
 		if(isset($_POST['PalautteetVastaus']['this_id']))

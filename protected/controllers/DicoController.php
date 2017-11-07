@@ -174,6 +174,7 @@ public function actionLogin($domain)
 				asiakas_id='".$model->id."' 
 				AND lahettaja='admin'
 				AND asiakas_luettu=0
+				AND teksti NOT LIKE '%sisainen%'
 			";
 			$pal=Palautteet::model()->find($criteria);
 	
