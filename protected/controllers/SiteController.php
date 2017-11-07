@@ -1607,12 +1607,7 @@ $(document).ready(function(){
 
 	public function actionIndex()
 	{
-
-		//if(isset(Yii::app()->user->adminID))
-			$this->render('index');
-		//else
-			//$this->render('start');
-
+		$this->render('aloita'); // index sijaan
 	}
 
 
