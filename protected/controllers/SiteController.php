@@ -2390,7 +2390,7 @@ $(document).ready(function(){
 			$kuka = json_decode($new_values, true);
 			if(isset($kuka['tekijan_nimi']))
 			$log->kuka = $kuka['tekijan_nimi'];
-		} else {
+		} elseif(isset(Yii::app()->user->nimi)) {
 			$log->kuka = Yii::app()->user->nimi;
 		}
 

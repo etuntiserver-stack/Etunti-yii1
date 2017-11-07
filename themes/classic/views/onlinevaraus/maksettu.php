@@ -1,4 +1,7 @@
 <?php
+require YiiBase::getPathOfAlias('webroot').'/lib/CheckoutFinland/Response.php';
+use CheckoutFinland\Response;
+
 error_reporting(E_ALL|E_STRICT);
 ini_set('display_errors', 1);
 ?>
@@ -38,24 +41,13 @@ ini_set('display_errors', 1);
 
 
 	<?php
-	if(isset($_GET['check']))
-	{
-		if(isset($_SESSION['onlinevaraus']))
-		{
-			echo $_SESSION['onlinevaraus']['message'];
-			unset($_SESSION['onlinevaraus']);
-		}
-		exit;
-	}
 
 
 
+if(!isset($_GET['check']))
+{
 
 
-
-require 'lib/CheckoutFinland/Response.php';
-
-use CheckoutFinland\Response;
 
 $asetukset = Asetukset::model()->findbypk(1);
 if(!empty($asetukset->checkout_salasana))
@@ -418,6 +410,20 @@ $message .= '
 
 
 }
+} // check
+
+
+
+
+	if(isset($_GET['check']) and $_GET['check'] == 'ok')
+	{
+		if(isset($_SESSION['onlinevaraus']))
+		{
+			echo $_SESSION['onlinevaraus']['message'];
+			unset($_SESSION['onlinevaraus']);
+		}
+
+	}
 ?>
 
 
