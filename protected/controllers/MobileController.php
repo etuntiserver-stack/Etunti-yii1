@@ -1676,8 +1676,8 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
 			BETWEEN '".$from."' AND '".$to."'
 			AND status='".$status."'
+			AND sairaus!=1
 			AND id NOT IN (SELECT kid FROM sivexkuitti_repaired)
-
 		";
 
 
@@ -1696,6 +1696,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
 			BETWEEN '".$from."' AND '".$to."'
 			AND status='".$status."'
+			AND sairaus!=1
 		";
 
 
