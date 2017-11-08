@@ -1079,16 +1079,12 @@ function laatikonPaivays(thisDataReturn){
 		$(thisDataReturn).each(function( iarr, arr ) {
 		 $(arr).each(function( i, d ) {
 
-		    var kohde = '';
-		    if(d['kohde'])
-		    kohde = d['kohde'];
-
 		    //console.log(d);
 
 	  	    $.ajax({
 			url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/did',
 			type:'GET',
-			data: { "pvm" : d['pvm'], "tid" : d['tid'], "kohde" : kohde, "from" : "ajax" },
+			data: { "pvm" : d['pvm'], "tid" : d['tid'], "kohde" : d['kohde'], "from" : "ajax" },
 			  success:function(data){
 			  //console.log(data);
 
@@ -1114,7 +1110,7 @@ function laatikonPaivays(thisDataReturn){
 			  },
 			  error:function(data){
 			  	console.log(data);
-				//window.location.href=location.protocol + "//" + location.host + '/index.php';
+				window.location.href=location.protocol + "//" + location.host + '/index.php';
 			  }
 	 	    });
 
