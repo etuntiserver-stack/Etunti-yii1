@@ -92,8 +92,12 @@
 		$kohde .= ' <i class="p3 fa fa-cutlery text-danger"></i>';
 
 
+	   echo '<div id="'.$rivi.'_'.$did.'_'.$tid.'" class="fullRivi form-inline">';
+
+	   if($aloitan > 0 and $loppui > 0)
+	   echo '<span class="pull-right mob_kesto hidden">'.$this->num(strtotime($loppui)-strtotime($aloitan)).'</span>';
+
 	   echo '
-	   <div id="'.$rivi.'_'.$did.'_'.$tid.'" class="fullRivi form-inline">
 	   <div class="pull-right">'.$ap.'</div>';
 	   echo '
 		<span class="form-group">
