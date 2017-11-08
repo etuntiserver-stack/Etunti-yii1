@@ -253,8 +253,12 @@ if(!isset($_POST['tulosta']))
 	    		$yht += strtotime($tvVal->loppu)-strtotime($tvVal->alku);
 		}
 
+		$al = '<span class="pull-right tv_kesto hidden">'.$this->num(strtotime($tvVal->loppu)-strtotime($tvVal->alku)).'</span>';
+	   	$al .= '<b>'
+			.$tvVal->alku.'-'.$tvVal->loppu
+			.$toistuva.$tyopari.$status.$tarvittavien_tyontekijoiden_maara
+			.'</b>';
 
-	   	$al = '<b>'.$tvVal->alku.'-'.$tvVal->loppu.$toistuva.$tyopari.$status.$tarvittavien_tyontekijoiden_maara.'</b>';
 	   } else {
 	   	$al = '';
 	   }

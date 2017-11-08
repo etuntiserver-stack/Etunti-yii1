@@ -760,6 +760,9 @@ function dateDiff($start, $end) {
 <script type="text/javascript">
 $(document).ready(function(){
 
+ $('.mob_kesto').removeClass('hidden');
+ $('.tv_kesto').removeClass('hidden');
+
  yhteensaTfoot();
  function yhteensaTfoot(){
 	var getContent = $('#yhteensaTfoot').html();
