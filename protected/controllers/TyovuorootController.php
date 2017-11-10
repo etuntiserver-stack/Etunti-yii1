@@ -1186,8 +1186,11 @@ class TyovuorootController extends Controller
 	public function actionShowohje($id)
 	{
 		$m = Kohteet::model()->findbypk($id);
-		if($m === null)
-		throw new CHttpException(404, 'Kohdetta '.$id.' ei löydy');
+		if($m === null){
+			//throw new CHttpException(404, 'Kohdetta '.$id.' ei löydy');
+			echo json_encode('Kohdetta '.$id.' ei löydy');
+			exit;
+		}
 
 		$k = explode("//",$m->kenella_on_avain);
 
