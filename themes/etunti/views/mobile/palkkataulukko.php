@@ -167,7 +167,7 @@ $this->breadcrumbs=array(
   <th><?php echo Yii::t('main', 'PY'); ?></th>
   <th><?php echo Yii::t('main', 'EL'); ?></th>
   <th><?php echo Yii::t('main', 'SL'); ?></th>
-  <th><?php echo Yii::t('main', 'SPL<br>Pvm'); ?></th>
+  <th><?php echo Yii::t('main', 'SPL'); ?></th>
   <th><?php echo Yii::t('main', 'LS'); ?></th>
   <th><?php echo Yii::t('main', 'VL'); ?></th>
   <th><?php echo Yii::t('main', 'VKL'); ?></th>
