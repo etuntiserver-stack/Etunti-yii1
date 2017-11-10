@@ -12,9 +12,6 @@
 
 		$sum = $return[0];
 
-		if($return[0] != 0)
-		$return[0] = $this->num($return[0]);
-
 		if($return[1] != 0)
 		$return[1] = '<b>Työt</b>:<br>'.$this->num($return[1]);
 	        else
@@ -62,7 +59,7 @@
 	<td class="tulostus_tekija col1"><?php echo $this->etuSukunimi($data->id); ?></td>
 	<td class="col2"><?php if($tp != 0) echo $tp; ?></td>
 	<td class="col3"><?php if($this->num($matka) != 0) echo $this->num($matka); ?></td>
-	<td class="col4"><?php if($return[0] != 0) echo $return[0]; ?></td>
+	<td class="col4"><?php if($return[0] != 0) echo $this->num($return[0]); ?></td>
 	<td class="col5"><?php echo $sum; ?></td>
 	<td class="col6"><?php echo $return[1].$matkaIlta; ?></td>
 	<td class="col7"><?php echo $this->num($iltaMatkaPlusIltatunnit); ?></td>
@@ -72,7 +69,7 @@
 	<td class="col10"><?php echo $this->num($pyhat); ?></td>
 	<td class="col10"><?php echo $this->num($el); ?></td>
 	<td class="col10"><?php echo $this->num($sl); ?></td>
-	<td class="col11"><?php if($spl > 0) echo $spl; ?></td>
+	<td class="col11"><?php if($spl > 0) echo $this->num($spl); ?></td>
 	<td class="col12"><?php echo $this->num($ls); ?></td>
 	<td class="col12"><?php if($vl > 0) echo $vl; ?></td>
 	<td class="col12"><?php if($vkl > 0) echo $vkl; ?></td>

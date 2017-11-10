@@ -234,7 +234,7 @@ $this->breadcrumbs=array(
 	$return = $this->toteutu($data->id,"palkkataulukko",$from,$to);
 	$mPlusTYht += $return[0]+$m;
 
-	$loun = $this->lounaat($data->id,$from,$to);
+	$loun = $this->TidfromtoStatus($from,$to,$data->id,10);
 	$lounYht += $loun;
 
 	$matkaIlta = $this->matkaIlta($data->id,$from,$to);
@@ -294,7 +294,7 @@ $this->breadcrumbs=array(
 	<td><?php echo $this->num($pyhatYht); ?></td>
 	<td><?php echo $this->num($elYht); ?></td>
 	<td><?php echo $this->num($slYht); ?></td>
-	<td><?php if($splYht != 0) echo $splYht; ?></td>
+	<td><?php if($splYht != 0) echo $this->num($splYht); ?></td>
 	<td><?php echo $this->num($lsYht); ?></td>
 	<td><?php if($vlYht != 0) echo $vlYht; ?></td>
 	<td><?php if($vklYht != 0) echo $vklYht; ?></td>
