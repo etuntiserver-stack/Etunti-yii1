@@ -1791,6 +1791,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 
        		$criteria = new CDbCriteria();
 		$criteria->group = "DATE(DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d'))";
+	        $criteria->select = " COUNT(*) as count ";
 	        $criteria->condition = " 
 			aloitan!='' AND loppui!=''
 			AND tid='".$tid."'
@@ -1806,8 +1807,8 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 
 
        		$criteria = new CDbCriteria();
+	        $criteria->select = " COUNT(*) as count ";
 		$criteria->group = "DATE(DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d'))";
-
 	        $criteria->condition = " 
 			aloitan!='' AND loppui!=''
 			AND tid='".$tid."'
@@ -1820,10 +1821,10 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		$tot = Toteutuneet::model()->find($criteria);
 
 		if($lu !== null)
-		$result_lu = count($lu);
+		$result_lu = $lu->count;
 
 		if($tot !== null)
-		$result_tot = count($tot);
+		$result_tot = $tot->count;
 
 
 		return $result_lu+$result_tot;
