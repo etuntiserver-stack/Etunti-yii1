@@ -2057,7 +2057,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') 
 			BETWEEN '".$from."' AND '".$to."' 
 			AND tid='".$tid."'
-			AND sairaus=''
+			AND sairaus!=1
 			AND aloitan!=loppui
 		";
 
@@ -3013,6 +3013,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 
         	$criteria->condition = "  
 			tid = '".$tid."' and aloitan !='' and loppui !='' 
+			AND sairaus!=1
 			AND id NOT IN(select kid from sivexkuitti_repaired)
 		";
 
@@ -3057,6 +3058,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 
         	$criteria->condition = "  
 			tid = '".$tid."' and aloitan !='' and loppui !='' 
+			AND sairaus!=1
 		";
 
 		if($sivu == 'palkkataulukko')
@@ -3117,6 +3119,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			tid = '".$tid."' and aloitan !='' and loppui !='' 
 			AND id NOT IN(select kid from sivexkuitti_repaired)
 			AND status = '2'
+			AND sairaus!=1
 			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$from."' AND '".$to."'
 		";
 
@@ -3147,6 +3150,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
         	$criteria->condition = "  
 			tid = '".$tid."' and aloitan !='' and loppui !='' 
 			AND status = '2'
+			AND sairaus!=1
 			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$from."' AND '".$to."'
 		";
 
@@ -3191,6 +3195,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 			tid = '".$tid."' and aloitan !='' and loppui !='' 
 			AND id NOT IN(select kid from sivexkuitti_repaired)
 			AND status = '10'
+			AND sairaus!=1
 			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$from."' AND '".$to."'
 		";
 
@@ -3213,6 +3218,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
         	$criteria->condition = "  
 			tid = '".$tid."' and aloitan !='' and loppui !='' 
 			AND status = '10'
+			AND sairaus!=1
 			AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '".$from."' AND '".$to."'
 
 		";
