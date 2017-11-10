@@ -1773,7 +1773,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		return $result;
 	}
 
-
+/*
 	public function TidfromtoSairausTP($from,$to,$tid,$sairaus)
 	{
 
@@ -1829,6 +1829,9 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 
 		return $result_lu+$result_tot;
 	}
+*/
+
+
 /*
 	protected function TidfromtoSL($from,$to,$tid)
 	{

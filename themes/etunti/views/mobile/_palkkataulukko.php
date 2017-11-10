@@ -69,7 +69,7 @@
 	<td class="col10"><?php echo $this->num($pyhat); ?></td>
 	<td class="col10"><?php echo $this->num($el); ?></td>
 	<td class="col10"><?php echo $this->num($sl); ?></td>
-	<td class="col11"><?php if($spl > 0) { echo $this->num($spl); echo ' ('.$this->TidfromtoSairausTP($from,$to,$data->id,'SPL').')'; } ?></td>
+	<td class="col11"><?php if($spl > 0) { echo $this->num($spl); /* echo ' ('.$this->TidfromtoSairausTP($from,$to,$data->id,'SPL').')'; */ } ?></td>
 	<td class="col12"><?php echo $this->num($ls); ?></td>
 	<td class="col12"><?php if($vl > 0) echo $vl; ?></td>
 	<td class="col12"><?php if($vkl > 0) echo $vkl; ?></td>
