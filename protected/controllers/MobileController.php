@@ -1773,7 +1773,7 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		return $result;
 	}
 
-/*
+
 	public function TidfromtoSairausTP($from,$to,$tid,$sairaus)
 	{
 
@@ -1788,10 +1788,10 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		$result = '';
 		$result_lu = 0;
 		$result_tot = 0;
+		$lu_r = [];
+		$tot_r = [];
 
        		$criteria = new CDbCriteria();
-		$criteria->group = "DATE(DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d'))";
-	        $criteria->select = " COUNT(*) as count ";
 	        $criteria->condition = " 
 			aloitan!='' AND loppui!=''
 			AND tid='".$tid."'
@@ -1803,12 +1803,15 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		";
 
 
-		$lu = Mobile::model()->find($criteria);
-
+		$lu = Mobile::model()->findAll($criteria);
+		$i = 0;
+		foreach($lu as $item)
+		{
+			$i++;
+			$lu_r[date("Y-m-d", strtotime($item->aloitan))] = $i;
+		}
 
        		$criteria = new CDbCriteria();
-	        $criteria->select = " COUNT(*) as count ";
-		$criteria->group = "DATE(DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d'))";
 	        $criteria->condition = " 
 			aloitan!='' AND loppui!=''
 			AND tid='".$tid."'
@@ -1818,18 +1821,17 @@ time <= date_sub(NOW(), interval 3 hour) AND status IN (1,2,10) AND loppui='' DE
 		";
 
 
-		$tot = Toteutuneet::model()->find($criteria);
+		$tot = Toteutuneet::model()->findAll($criteria);
+		$i = 0;
+		foreach($tot as $item)
+		{
+			$i++;
+			$tot_r[date("Y-m-d", strtotime($item->aloitan))] = $i;
+		}
 
-		if($lu !== null)
-		$result_lu = $lu->count;
-
-		if($tot !== null)
-		$result_tot = $tot->count;
-
-
-		return $result_lu+$result_tot;
+		return count($lu_r)+count($tot_r);
 	}
-*/
+
 
 
 /*
