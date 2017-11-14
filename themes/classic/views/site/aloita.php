@@ -5,59 +5,40 @@
 
 <div class="container">
 
-<h2><legend><?=Yii::t('main', 'Aloita Etunnin käyttäminen')?></legend></h2> 
+
 
 <div class="row">
- <div class="col-sm-6">
+ <div class="col-sm-offset-3 col-sm-6">
   <div class="panel panel-default">
-    <div class="panel-heading"><?php echo Yii::t('main', 'Yrityksen tiedot'); ?></div>
+    <div class="panel-heading"><?=Yii::t('main', 'Aloita Etunnin käyttäminen')?></div>
     <div class="panel-body">
-      	<form action="#" method="POST" autocomplete="off">
+
+      	<form action="aloita" id="aloita-lomake" method="POST" autocomplete="off">
         <label><?php echo Yii::t('main', 'Yrityksen nimi')?></label>
         <input type="text" id="yrityksen_nimi" name="yrityksen_nimi" class="form-control input-lg" required autofocus>
-        <label><?php echo Yii::t('main', 'Yritystunnus')?></label>
+        <label><?php echo Yii::t('main', 'Y-tunnus')?></label>
         <input type="text" id="yritys_tunnus" name="yritys_tunnus" class="form-control input-lg" required>
-        <label><?php echo Yii::t('main', 'Osoite')?></label>
-        <input type="text" id="osoite" name="osoite" class="form-control input-lg" required>
-        <label><?php echo Yii::t('main', 'Postinumero')?></label>
-        <input type="number" id="postinumero" name="postinumero" class="form-control input-lg" required>
-        <label><?php echo Yii::t('main', 'Postitoimipaikka')?></label>
-        <input type="text" id="postitoimipaikka" name="postitoimipaikka" class="form-control input-lg" required>
-        <label><?php echo Yii::t('main', 'Yhteyshenkilö')?></label>
-        <input type="text" id="yhteyshenkilo" name="yhteyshenkilo" class="form-control input-lg" required>
         <label><?php echo Yii::t('main', 'Puhelinnumero')?></label>
         <input type="text" id="puhelinnumero" name="puhelinnumero" class="form-control input-lg">
         <label><?php echo Yii::t('main', 'Sähköpostiosoite')?></label>
         <input type="text" id="sahkoposti" name="sahkoposti" class="form-control input-lg" required>
-    </div>
-  </div>
- </div>
-
- <div class="col-sm-6">
-  <div class="panel panel-default">
-    <div class="panel-heading"><?php echo Yii::t('main', 'Tunnukset'); ?></div>
-    <div class="panel-body">
-
-        <label><?php echo Yii::t('main', 'Kirjautumistunnus')?></label>
-        <input type="text" id="kirjautumistunnus" name="kirjautumistunnus" class="form-control input-lg" required placeholder="Esim. yrityksen nimi">
-        <label><?php echo Yii::t('main', 'Käyttäjätunnus')?></label>
-        <input type="text" id="username" name="username" class="form-control input-lg" required autocomplete='off'>
-
-<?php /*
-        <label><?php echo Yii::t('main', 'Salasana')?></label>
-        <input type="password" id="password" name="password" class="form-control input-lg" required autocomplete='off'>
-*/ ?>
+        <label><?php echo Yii::t('main', 'Vahvista sähköpostiosoite')?></label>
+        <input type="text" id="sahkoposti2" name="sahkoposti2" class="form-control input-lg" required>
+	<br>
+	<p><a href="#" data-toggle="modal" data-target="#kehdot">Käyttöehdot</a></p>
+        <p><button class="btn btn-lg btn-primary btn-group submit" type="submit"><?php echo Yii::t('main', 'Aloita'); ?></button></p>
+    	</form>
+	<div id="success"></div>
 
     </div>
   </div>
  </div>
 </div>
 
-	<br>
-	<p><a href="#" data-toggle="modal" data-target="#kehdot">Käyttöehdot</a></p>
-        <p><button class="btn btn-lg btn-primary btn-group submit" type="submit"><?php echo Yii::t('main', 'Aloita'); ?></button></p>
-    	</form>
-	<div id="success"></div>
+
+
+
+
 
 
 
@@ -104,11 +85,19 @@ $(document).ready(function(){
 
   $(".submit").click(function(e){
 
+	if( $('#sahkoposti').val() !== $('#sahkoposti2').val() ){
+		e.preventDefault();
+		alert('Tarkasta sähköpostiosoite.');
+		return false;
+	}
+
 	if(!localStorage.getItem('kayttoehdot_luettu')){
 		e.preventDefault();
 		alert('Lue ensin käyttöehdot.');
 		return false;
 	}
+
+	$('#aloita-lomake').submit();
   });
 
 /*
