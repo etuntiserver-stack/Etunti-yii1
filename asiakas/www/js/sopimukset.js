@@ -133,7 +133,7 @@ function saveFileToStorage(link, filename, ext){
 		  if (code === 1) {
 		    console.log('No file handler found');
 		  } else {
-		    console.log('Undefined error');
+		    alert('Undefined error: '+ fileForOpener);
 		  }
 		}
 

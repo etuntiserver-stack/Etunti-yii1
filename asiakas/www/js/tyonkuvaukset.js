@@ -100,7 +100,7 @@ function saveFileToStorage(link, filename, ext){
 		    uri,
 		    fileSystem.root.toURL() + filename,
 		    function(entry) {
-		        console.log("download complete: " + fileSystem.root.toURL() + filename);
+		        console.log("download complete: " + entry.fullPath);
 			openThisFile(fileSystem.root.toURL() + filename)
 		    },
 		    function(error) {
