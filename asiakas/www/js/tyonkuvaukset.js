@@ -100,7 +100,7 @@ function saveFileToStorage(link, filename, ext){
 		    uri,
 		    fileSystem.root.toURL() + filename,
 		    function(entry) {
-		        console.log("download complete: " + entry.fullPath);
+		        console.log("download complete: " + fileSystem.root.toURL() + filename);
 			openThisFile(fileSystem.root.toURL() + filename)
 		    },
 		    function(error) {
@@ -129,7 +129,7 @@ function saveFileToStorage(link, filename, ext){
 		  if (code === 1) {
 		    console.log('No file handler found');
 		  } else {
-		    console.log('Undefined error');
+		    alert('Undefined error: '+ fileForOpener);
 		  }
 		}
 

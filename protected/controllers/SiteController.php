@@ -2371,7 +2371,7 @@ $(document).ready(function(){
 			if(isset($k->osoite))
 				$tiedosto .= '_'.$k->osoite;
 
-			$tiedosto .= '_'.date("d.m.Y_H_i", strtotime($time));
+			$tiedosto .= '_'.date("dmY_H_i", strtotime($time));
 
 		$tiedosto = $this->aakkoset($tiedosto);
 		//echo $tiedosto;
