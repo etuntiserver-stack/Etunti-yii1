@@ -41,17 +41,10 @@
 
 	$ft = FirmanTiedot::model()->findByPk(1);
 	$dh = DigistenHinnasto::model()->findByPk(1);
-
-	// <-- ilmainen versio laskuri
-		if( $asetukset->maksullinen == 0 )
-		{ 
-	   		$site = Yii::app()->createController('Site');
-			$site[0]->laskuri();
-		}
-	//     ilmainen versio laskuri -->
+   	$domainit = Domainit::model()->findByPk($d->id);
 
 	// <-- maksullinen versio
-		if( $asetukset->maksullinen == 1 and isset($dh->snapshot_pvm) and $dh->snapshot_pvm > 0 )
+		if( $domainit->maksullinen == 1 and isset($dh->snapshot_pvm) and $dh->snapshot_pvm > 0 )
 		{ 
 			$snapshot_paiva = $dh->snapshot_pvm;
 
@@ -70,7 +63,7 @@
 
 		   			$site = Yii::app()->createController('Site');
 					$tunnit = 0;
-					$tunnit = ($site[0]->laskuri())/3600;
+					$tunnit = $site[0]->laskuriForCron($d->domain);
 
 					$domainit = Domainit::model()->find(" domain='".$d->domain."' ");
 					(isset($domainit->id))? $paketti = $domainit->paketti : $paketti = '';
@@ -92,6 +85,7 @@
 							var_dump($dt->getErrors());
 						else
 							echo '<p>Snapshot '.$d->domain.', Tunnit: '.(int)$tunnit.'</p>';
+
 					}
 
 				}

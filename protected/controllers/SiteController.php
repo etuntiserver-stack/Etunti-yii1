@@ -215,16 +215,55 @@ class SiteController extends Controller
 		$domainit = Domainit::model()->find(" domain='".Yii::app()->user->domain."' AND maksullinen=0 ");
 		Yii::app()->user->setState('ilmainen_ilmoitus', 'Ilmainen käyttö on mahdoton jos tunnit enemmään kun 500');
 
-		if(isset($domainit->id) and $domainit->maksullinen == 0)
+		if( isset($domainit->id) )
 		{
-			$result = 0;
-			$mob_result = 0;
-			$tyovuorot_result = 0;
 	
 			$start_date = date( "Y-m-d", strtotime('first day of this month') );
 			$end_date = date("Y-m-d", strtotime('last day of this month') );
+			$sum_result = $this->digistenTunnitYhteensa($start_date, $end_date);
+
+			if($domainit->ilmainen_versio_kayttotunnit != $sum_result)
+				Domainit::model()->updateByPk($domainit->id, array('ilmainen_versio_kayttotunnit'=>$sum_result));
+
+			Yii::app()->user->setState('ilmainen', true);
+			Yii::app()->user->setState('ilmainen_kayttotunnit', $sum_result);
+
+			return true;
+
+		} else {
+			Yii::app()->user->setState('ilmainen', false);
+			return false;
+		}	
+
+	}
 	
 
+	public function laskuriForCron($domain)
+	{
+
+		$domainit = Domainit::model()->find(" domain='".$domain."' AND maksullinen=1 ");
+		if( isset($domainit->id) )
+		{
+	
+			$start_date = date( "Y-m-d", strtotime('first day of last month') );
+			$end_date = date("Y-m-d", strtotime('last day of last month') );
+			$sum_result = $this->digistenTunnitYhteensa($start_date, $end_date);
+
+			return $sum_result;
+
+		} else {
+			return false;
+		}	
+
+	}
+
+	protected function digistenTunnitYhteensa($start_date, $end_date)
+	{
+
+
+			$result = 0;
+			$mob_result = 0;
+			$tyovuorot_result = 0;
 
 			while (strtotime($start_date) <= strtotime($end_date))
 			{
@@ -298,22 +337,9 @@ class SiteController extends Controller
 	
 			$sum_result = $result/3600;
 
-			if($domainit->ilmainen_versio_kayttotunnit != $sum_result)
-				Domainit::model()->updateByPk($domainit->id, array('ilmainen_versio_kayttotunnit'=>$sum_result));
-
-			Yii::app()->user->setState('ilmainen', true);
-			Yii::app()->user->setState('ilmainen_kayttotunnit', $sum_result);
-
-			return true;
-
-		} else {
-			Yii::app()->user->setState('ilmainen', false);
-			return false;
-		}	
-
-	
+			return $sum_result;
 	}
-	
+
 	public function actionTyot_tanaan()
 	{
 		$this->renderPartial('tyot_tanaan');
