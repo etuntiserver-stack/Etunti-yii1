@@ -1,19 +1,19 @@
 {
-  "_from": "cordova-plugin-file-transfer@^1.7.0",
+  "_from": "cordova-plugin-file-transfer",
   "_id": "cordova-plugin-file-transfer@1.7.0",
   "_inBundle": false,
   "_integrity": "sha1-5iLBiomShlhQ0lvcMMxLcd5R2HQ=",
   "_location": "/cordova-plugin-file-transfer",
   "_phantomChildren": {},
   "_requested": {
-    "type": "range",
+    "type": "tag",
     "registry": true,
-    "raw": "cordova-plugin-file-transfer@^1.7.0",
+    "raw": "cordova-plugin-file-transfer",
     "name": "cordova-plugin-file-transfer",
     "escapedName": "cordova-plugin-file-transfer",
-    "rawSpec": "^1.7.0",
+    "rawSpec": "",
     "saveSpec": null,
-    "fetchSpec": "^1.7.0"
+    "fetchSpec": "latest"
   },
   "_requiredBy": [
     "#USER",
@@ -21,7 +21,7 @@
   ],
   "_resolved": "https://registry.npmjs.org/cordova-plugin-file-transfer/-/cordova-plugin-file-transfer-1.7.0.tgz",
   "_shasum": "e622c18a8992865850d25bdc30cc4b71de51d874",
-  "_spec": "cordova-plugin-file-transfer@^1.7.0",
+  "_spec": "cordova-plugin-file-transfer",
   "_where": "/var/www/html/etunti/asiakas",
   "author": {
     "name": "Apache Software Foundation"
