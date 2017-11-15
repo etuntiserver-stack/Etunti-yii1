@@ -534,12 +534,14 @@ class SiteController extends Controller
 		$vastaus = '';
 		$kirjautumistunnus = '';
 
-		if(isset($_POST['kirjautumistunnus']))
+		if(isset($_POST['yrityksen_nimi']))
 		{
 
+			//print_r($_POST);
+			//exit;
 
 			unset($_SESSION['domain']);
-			$kirjautumistunnus = preg_replace('/[^\p{L}\p{N}\s]/u', '', $_POST['kirjautumistunnus']);
+			$kirjautumistunnus = preg_replace('/[^\p{L}\p{N}\s]/u', '', $_POST['yrityksen_nimi']);
 			$kirjautumistunnus = str_replace(' ', '_', $kirjautumistunnus);
 			$kirjautumistunnus = strtolower($kirjautumistunnus);
 			$_SESSION['domain'] = $kirjautumistunnus;
@@ -582,10 +584,6 @@ class SiteController extends Controller
 			{
 				FirmanTiedot::model()->updateByPk($ft->id, array(
 					'tyonantaja' => $_POST['yrityksen_nimi'],
-					'osoite' => $_POST['osoite'],
-					'postinumero' => $_POST['postinumero'],
-					'postitoimipaikka' => $_POST['postitoimipaikka'],
-					'johtaja' => $_POST['yhteyshenkilo'],
 					'y_tunnus' => $_POST['yritys_tunnus'],
 					'puhelin' => $_POST['puhelinnumero'],
 					'sahkoposti' => $_POST['sahkoposti'],
@@ -597,16 +595,15 @@ class SiteController extends Controller
 			{
 				$token = sha1(uniqid(time().$adm->adm_nimi, true));
 				Administrators::model()->updateByPk($adm->id, array(
-					'adm_login' => $_POST['username'],
+					'adm_login' => 'admin',
 					'adm_salasana' => '',
 					'adm_email' => $_POST['sahkoposti'],
-					'adm_nimi' => $_POST['yhteyshenkilo'],
 					'token' => $token,
 				));
 
 				$message = '';
 				$message .= '<p>Yritystunnus: '.$kirjautumistunnus.'</p>';
-				$message .= '<p>Käyttäjätunnus: '.$_POST['username'].'</p>';
+				$message .= '<p>Käyttäjätunnus: admin</p>';
 				$message .= '<p>Aktivoi käyttäjätunnuksesi <a href="'.Yii::app()->getBaseUrl(true).'/index.php/site/confirm?token='.$token.'">tästä</a><br>';
 
 				$subject = Yii::t('main', 'Tervetuloa Etunti');
@@ -1271,31 +1268,31 @@ class SiteController extends Controller
 
 	public function actionAjankohtaista()
 	{
-		Yii::app()->theme = 'classic';
-		$this->render('ajankohtaista');
+		//Yii::app()->theme = 'classic';
+		//$this->render('ajankohtaista');
 	}
 	public function actionOhjevideot()
 	{
-		$this->render('ohjevideot');
+		//$this->render('ohjevideot');
 	}
 	public function actionAsiakkaat()
 	{
-		$this->render('asiakkaat');
+		//$this->render('asiakkaat');
 	}
 	public function actionYritys()
 	{
-		Yii::app()->theme = 'classic';
-		$this->render('yritys');
+		//Yii::app()->theme = 'classic';
+		//$this->render('yritys');
 	}
 	public function actionYhteystiedot()
 	{
-		Yii::app()->theme = 'classic';
-		$this->render('yhteystiedot');
+		//Yii::app()->theme = 'classic';
+		//$this->render('yhteystiedot');
 	}
 	public function actionLomake_lataailmainen()
 	{
-		Yii::app()->theme = 'classic';
-		$this->render('lomake_lataailmainen');
+		//Yii::app()->theme = 'classic';
+		//$this->render('lomake_lataailmainen');
 	}
 	public function actionUusi_kommento()
 	{
@@ -1608,12 +1605,7 @@ $(document).ready(function(){
 
 	public function actionIndex()
 	{
-
-		//if(isset(Yii::app()->user->adminID))
-			$this->render('index');
-		//else
-			//$this->render('start');
-
+		$this->render('aloita'); // index sijaan
 	}
 
 

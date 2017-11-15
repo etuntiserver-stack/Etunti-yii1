@@ -44,3 +44,4 @@ protected/modules/reportico/components/*
 access.log
 error.log
 robots.txt
+.htpasswd
