@@ -41,7 +41,7 @@ if( isset(Yii::app()->user->domain) )
 
         
         <meta charset="utf-8">
-        <title>Etunti - voita toiminnan haasteet</title>
+        <title>Etunti - Liikkuva työ hallussa</title>
         <meta name="keywords" content="HTML5 Template" />
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>

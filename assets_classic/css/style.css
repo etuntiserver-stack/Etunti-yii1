@@ -114,13 +114,16 @@ html{
 	font-size: 18px;
 }
 body{
-    font-size: 18px;
+    	background: url('../../etusivuimg/Etunti-tausta-2.jpg');
+	background-size:     cover;                      /* <------ */
+    	background-repeat:   no-repeat;
+    	background-position: center center;   
+	font-size: 18px;
 	font-family: "Ubuntu", "Helvetica Neue", Helvetica, Arial, sans-serif;
 	line-height: 1.6;
 	color: #777;
 	-webkit-font-smoothing: antialiased;
 	font-weight: normal;
-	background: #fff;
 }
 .link{ cursor: pointer; }
 h1, h2, h3, h4, h5, h6 {
@@ -793,7 +796,7 @@ form{
 
 /*  Header -------------------------------------------*/
 header{
-	background-color: #fff;
+	background-color: rgba(255, 255, 255, 0.95);
 	padding: 22px 0;
 	left: 0;
 	width: 100%;
@@ -809,7 +812,7 @@ header{
 .is-sticky header{
 	padding: 10px 0 12px 0;
 	z-index: 9999;
-	background: rgba(255,255, 255, 1);
+	background: rgba(255,255, 255, 0,5);
 	-webkit-transition: 0.3s all ease;
 	-moz-transition: 0.3s all ease;
 	-o-transition: 0.3s all ease;

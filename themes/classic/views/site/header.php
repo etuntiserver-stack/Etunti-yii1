@@ -61,7 +61,7 @@
 
                     <!-- Nav-->
                     <div class="col-md-9 slogan">
-                        Voita toiminnan haasteet
+                        Liikkuva työ hallussa
                     </div>
                     <!-- End Nav-->
                 </div>
