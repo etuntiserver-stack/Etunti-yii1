@@ -94,6 +94,7 @@ function saveFileToStorage(link, filename, ext){
 	var fileTransfer = new FileTransfer();
 	var uri = encodeURI(link);
 
+
 	window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function (fileSystem) {
 
 		fileTransfer.download(
@@ -119,21 +120,23 @@ function saveFileToStorage(link, filename, ext){
 	});
 
 	function openThisFile(fileForOpener){
-		var open = cordova.plugins.disusered.open;
 
-		function success() {
-		  console.log('Success');
-		}
+		document.addEventListener('deviceready', function () {
 
-		function error(code) {
-		  if (code === 1) {
-		    console.log('No file handler found');
-		  } else {
-		    alert('Undefined error: '+ fileForOpener);
-		  }
-		}
+		cordova.plugins.fileOpener2.open(
+		    fileForOpener,
+		    'application/pdf', 
+		    { 
+		        error : function(e) { 
+		            console.log('Error status: ' + e.status + ' - Error message: ' + e.message);
+		        },
+		        success : function () {
+		            console.log('file opened successfully'); 				
+		        }
+		    }
+		);
 
-		open(fileForOpener, success, error);
+		}, false);
 	}
 
    }
