@@ -1,19 +1,19 @@
 {
-  "_from": "cordova-plugin-file@^5.0.0",
+  "_from": "cordova-plugin-file",
   "_id": "cordova-plugin-file@5.0.0",
   "_inBundle": false,
   "_integrity": "sha1-05doIyFmnAAL6McfjvRDiq6Pkl0=",
   "_location": "/cordova-plugin-file",
   "_phantomChildren": {},
   "_requested": {
-    "type": "range",
+    "type": "tag",
     "registry": true,
-    "raw": "cordova-plugin-file@^5.0.0",
+    "raw": "cordova-plugin-file",
     "name": "cordova-plugin-file",
     "escapedName": "cordova-plugin-file",
-    "rawSpec": "^5.0.0",
+    "rawSpec": "",
     "saveSpec": null,
-    "fetchSpec": "^5.0.0"
+    "fetchSpec": "latest"
   },
   "_requiredBy": [
     "#USER",
@@ -21,7 +21,7 @@
   ],
   "_resolved": "https://registry.npmjs.org/cordova-plugin-file/-/cordova-plugin-file-5.0.0.tgz",
   "_shasum": "d397682321669c000be8c71f8ef4438aae8f925d",
-  "_spec": "cordova-plugin-file@^5.0.0",
+  "_spec": "cordova-plugin-file",
   "_where": "/var/www/html/etunti/asiakas",
   "author": {
     "name": "Apache Software Foundation"

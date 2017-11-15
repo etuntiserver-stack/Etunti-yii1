@@ -217,12 +217,6 @@ $(".muokaValiko").click(function() {
 
  $('#Tyovuoroot_status').change(function(){
 
-	if($(this).val() !== '3'){
-		$('#apuaika_div').hide();
-	} else {
-		$('#apuaika_div').show();
-	}
-
 	if($(this).val() == '10'){
 		$('#Tyovuoroot_tyoajanmerkinta').val('Ei lasketa/red');
 	} else {
@@ -723,7 +717,12 @@ $('#tyovuoroot-form').on('submit',function(e) {
 
  	}
 
-	/* <-- Tarkistetaan Aloitus/Lopetus Klo ja */
+	/* <-- Tarkistetaan Aloitus/Lopetus Klo ja status */
+	if( $('#Tyovuoroot_status option:selected').val() === '' )
+	{
+		$('#Tyovuoroot_status').addClass('bg-danger').focus();
+		return false;
+	}
 	if( $('#alku').val() === '' )
 	{
 		$('#alku').addClass('bg-danger').focus();
@@ -734,7 +733,7 @@ $('#tyovuoroot-form').on('submit',function(e) {
 		$('#loppu').addClass('bg-danger').focus();
 		return false;
 	}
-	/*     Tarkistetaan Aloitus/Lopetus Klo ja --> */
+	/*     Tarkistetaan Aloitus/Lopetus Klo ja status --> */
 
 	/* <-- Tarkistetaan Alkaen pvm */
  	if( 
