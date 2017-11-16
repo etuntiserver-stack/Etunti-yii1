@@ -178,6 +178,26 @@ class AsetuksetController extends Controller
 			if($model->save())
 			{
 
+				// <-- kirjautumistunnus
+				if(isset($_POST['Asetukset']['kirjautumistunnus']) and !empty($_POST['Asetukset']['kirjautumistunnus']))
+				{
+			       		$criteria = new CDbCriteria();
+			       		$criteria->condition = " 
+						domain!='".Yii::app()->user->domain."' 
+						AND kirjautumistunnus!='' AND kirjautumistunnus='".$_POST['Asetukset']['kirjautumistunnus']."'
+					";
+					$domainit_all = Domainit::model()->findAll($criteria);
+
+					if(isset($domainit_all[0]))
+					{
+						Yii::app()->user->setFlash('danger', "Tämä kirjautumistunnus on varattu.");
+					} else {
+						$domainit = Domainit::model()->find(" domain='".Yii::app()->user->domain."' ");
+						Domainit::model()->updateByPk($domainit->id, array('kirjautumistunnus' => $_POST['Asetukset']['kirjautumistunnus']));
+					}
+				}
+				//     kirjautumistunnus -->
+
 				// <-- LOG
 				$model_log 	= 'Asetukset';
 				$name_log 	= 'Asetukset';
