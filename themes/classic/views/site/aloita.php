@@ -1,4 +1,4 @@
-<?php $this->renderPartial('/site/header'); ?>
+
 
 
 <br><br>
@@ -13,7 +13,7 @@
     <div class="panel-heading"><?=Yii::t('main', 'Aloita Etunnin käyttäminen')?></div>
     <div class="panel-body">
 
-      	<form action="aloita" id="aloita-lomake" method="POST" autocomplete="off">
+      	<form action="<?php echo Yii::app()->request->baseUrl; ?>/index.php/site/aloita" id="aloita-lomake" method="POST" autocomplete="off">
         <label><?php echo Yii::t('main', 'Yrityksen nimi')?></label>
         <input type="text" id="yrityksen_nimi" name="yrityksen_nimi" class="form-control input-lg" required autofocus>
         <label><?php echo Yii::t('main', 'Y-tunnus')?></label>
