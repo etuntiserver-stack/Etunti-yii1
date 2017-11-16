@@ -685,6 +685,23 @@ public function actionLogin($domain)
 		   if(isset($model->id))
 		   {
 
+			if(isset($_POST['asia']))
+			{
+				$return = false;
+				$crm = CrmTarjoukset::model()->findbypk($_POST['id']);
+				if($_POST['asia'] == 'hyvaksy' and isset($crm->id) and $crm->hyvaksyn_koodi == $_POST['code'] and $crm->status == 1){
+					CrmTarjoukset::model()->updatebypk($_POST['id'], array('status'=>2));
+					$return = true;
+				}
+				if($_POST['asia'] == 'hylatty' and isset($crm->id) and $crm->hyvaksyn_koodi == $_POST['code'] and $crm->status == 1){
+					CrmTarjoukset::model()->updatebypk($_POST['id'], array('status'=>3));
+					$return = true;
+				}
+				$asia = $_POST['asia'];
+				$this->_sendResponse(200, CJSON::encode($return));
+				exit;
+			}
+
 			$liite = '';
 			$link = '';
 			$nimike = '';
@@ -697,32 +714,78 @@ public function actionLogin($domain)
 
 
 			$criteria=new CDbCriteria;
+			$criteria->order = " status "; 
 			$criteria->condition = " 
 				asiakas_id='".$model->id."' 
-				AND status=2
+				AND status!=0
 			";
 			$m2 = CrmTarjoukset::model()->findAll($criteria);
 
 			if(count($m2) > 0)
 			{
 			$lista = '<br><div class="lista">';
+			$lista .= '<center><p><h2>Tarjoukset</h2></p></center><br>';
+			$lista .= '<table class="table table-bordered">';
 			foreach($m2 as $item)
 			{
 				$f = "tiedostot/tarjoukset/".$domain."/".$item->liite.".pdf";
    				if(file_exists(Yii::app()->basePath."/../".$f))
    				{
+						
+					$txt = '';
+					$bg_color = '';
+					$tila = '';
+					if($item->status == 1)
+					{
+						$txt = Yii::t('main', 'Uusi tarjous');
+						$bg_color = 'bg-warning';
+						$tila = '
+						<div class="row">
+						 <div class="col-xs-4">
+							<i class="link avaaPDF fa fa-eye fa-2x text-primary" aria-hidden="true" liite="'.$f.'" ext="pdf"></i>
+						 </div>
+						 <div class="col-xs-4">
+							<i class="link asia fa fa-check fa-2x text-success" aria-hidden="true" asia="hyvaksy" id="'.$item->id.'" code="'.$item->hyvaksyn_koodi.'"></i>
+						 </div>
+						 <div class="col-xs-4">
+							<i class="link asia fa fa-times fa-2x text-danger" aria-hidden="true" asia="hylatty" id="'.$item->id.'" code="'.$item->hyvaksyn_koodi.'"></i>
+						 </div>
+						</div>
+						';
+					}
+					if($item->status == 2)
+					{
+						$txt = Yii::t('main', 'Hyväksytty tarjous');
+						$bg_color = 'bg-success';
+						$tila = '<i class="link avaaPDF fa fa-eye fa-2x text-primary" aria-hidden="true" liite="'.$f.'" ext="pdf"></i>';
+					}
+					if($item->status == 3)
+					{
+						$txt = Yii::t('main', 'Hylätty tarjous');
+						$bg_color = 'bg-danger';
+						$tila = '<i class="link avaaPDF fa fa-eye fa-2x text-primary" aria-hidden="true" liite="'.$f.'" ext="pdf"></i>';
+					}
 					$lista .= '
-					<div class="row link avaaPDF" liite="'.$f.'" ext="pdf">
-					 <div class="col-sm-12">
+					<tr>
+					 <th>
+					  <div>
+					   <center><h4 class="alert '.$bg_color.'">'.$txt.'</h4></center>
+					   '.date("d.m.Y H:i", strtotime($item->time)).'<br>
+					   '.$item->kohteen_osoite.' '.$item->kohteen_postinumero.', '.$item->kohteen_postitoimipaikka.'
+					  </div>
+					 </th>
+					 <td>
+					  <div class="">
+					   <center>'.$tila.'</center>
+					  </div>
+					 </td>
+					</tr>	
 					';
-						$lista .= '<div class="alert bg-warning text-center"><h2>'.Yii::t('main', 'Tarjous').'</h2> '.date("d.m.Y H:i", strtotime($item->time)).'</div>';
-					$lista .= '
-					 </div>
-					</div>
-					';
+
 				}
 
 			}
+			$lista .= '</table>';
 			$lista .= '</div>';
 
 				$return = array('lista'=>$lista, 'liite'=>$link, 'nimike'=>$nimike);
@@ -782,42 +845,107 @@ public function actionLogin($domain)
 		   if(isset($model->id))
 		   {
 
+			if(isset($_POST['asia']))
+			{
+				$return = false;
+				$crm = CrmSopimukset::model()->findbypk($_POST['id']);
+				if($_POST['asia'] == 'hyvaksy' and isset($crm->id) and $crm->hyvaksyn_koodi == $_POST['code'] and $crm->status == 1){
+					CrmSopimukset::model()->updatebypk($_POST['id'], array('status'=>2));
+					$return = true;
+				}
+				if($_POST['asia'] == 'hylatty' and isset($crm->id) and $crm->hyvaksyn_koodi == $_POST['code'] and $crm->status == 1){
+					CrmSopimukset::model()->updatebypk($_POST['id'], array('status'=>3));
+					$return = true;
+				}
+				$asia = $_POST['asia'];
+				$this->_sendResponse(200, CJSON::encode($return));
+				exit;
+			}
+
 			$liite = '';
 			$link = '';
 			$nimike = '';
 			if(isset($_POST['liite']))
 			{
+				$nimike = $_POST['liite'];
 				$this->valmistaNew($domain, $_POST['liite']);
 				exit;
 			}
 
 
 			$criteria=new CDbCriteria;
+			$criteria->order = " status "; 
 			$criteria->condition = " 
-				asiakas_id='".$model->id."'
-				AND status=2
+				asiakas_id='".$model->id."' 
+				AND status!=0
 			";
 			$m2 = CrmSopimukset::model()->findAll($criteria);
+
 			if(count($m2) > 0)
 			{
 			$lista = '<br><div class="lista">';
+			$lista .= '<center><p><h2>Sopimukset</h2></p></center><br>';
+			$lista .= '<table class="table table-bordered">';
 			foreach($m2 as $item)
 			{
 				$f = "tiedostot/sopimukset/".$domain."/".$item->liite.".pdf";
    				if(file_exists(Yii::app()->basePath."/../".$f))
    				{
+						
+					$txt = '';
+					$bg_color = '';
+					$tila = '';
+					if($item->status == 1)
+					{
+						$txt = Yii::t('main', 'Uusi sopimus');
+						$bg_color = 'bg-warning';
+						$tila = '
+						<div class="row">
+						 <div class="col-xs-4">
+							<i class="link avaaPDF fa fa-eye fa-2x text-primary" aria-hidden="true" liite="'.$f.'" ext="pdf"></i>
+						 </div>
+						 <div class="col-xs-4">
+							<i class="link asia fa fa-check fa-2x text-success" aria-hidden="true" asia="hyvaksy" id="'.$item->id.'" code="'.$item->hyvaksyn_koodi.'"></i>
+						 </div>
+						 <div class="col-xs-4">
+							<i class="link asia fa fa-times fa-2x text-danger" aria-hidden="true" asia="hylatty" id="'.$item->id.'" code="'.$item->hyvaksyn_koodi.'"></i>
+						 </div>
+						</div>
+						';
+					}
+					if($item->status == 2)
+					{
+						$txt = Yii::t('main', 'Hyväksytty sopimus');
+						$bg_color = 'bg-success';
+						$tila = '<i class="link avaaPDF fa fa-eye fa-2x text-primary" aria-hidden="true" liite="'.$f.'" ext="pdf"></i>';
+					}
+					if($item->status == 3)
+					{
+						$txt = Yii::t('main', 'Hylätty sopimus');
+						$bg_color = 'bg-danger';
+						$tila = '<i class="link avaaPDF fa fa-eye fa-2x text-primary" aria-hidden="true" liite="'.$f.'" ext="pdf"></i>';
+					}
 					$lista .= '
-					<div class="row link avaaPDF" liite="'.$f.'" ext="pdf">
-					 <div class="col-sm-12">
+					<tr>
+					 <th>
+					  <div>
+					   <center><h4 class="alert '.$bg_color.'">'.$txt.'</h4></center>
+					   '.date("d.m.Y H:i", strtotime($item->time)).'<br>
+					   '.$item->tarjous->kohteen_osoite.' '.$item->tarjous->kohteen_postinumero.', '.$item->tarjous->kohteen_postitoimipaikka.'
+					  </div>
+					 </th>
+					 <td>
+					  <div class="">
+					   <center>'.$tila.'</center>
+					  </div>
+					 </td>
+					</tr>	
 					';
-						$lista .= '<div class="alert bg-warning text-center"><h2>'.Yii::t('main', 'Sopimus').'</h2> '.date("d.m.Y H:i", strtotime($item->time)).' '.$item->template.'</div>';
-					$lista .= '
-					 </div>
-					</div>
-					';
+
 				}
 
 			}
+			$lista .= '</table>';
 			$lista .= '</div>';
 
 				$return = array('lista'=>$lista, 'liite'=>$link, 'nimike'=>$nimike);

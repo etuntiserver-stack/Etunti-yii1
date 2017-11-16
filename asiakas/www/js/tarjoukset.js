@@ -43,7 +43,6 @@ function getUrlVars() {
 
     $(document).delegate('.avaaPDF', 'click', function() {
 
-	$(this).find('.bg-warning').removeClass('bg-warning').addClass('bg-success');
 	var liite = $(this).attr('liite');
 	var ext = $(this).attr('ext');
 	sendData['liite'] = liite;
@@ -68,6 +67,44 @@ function getUrlVars() {
 
     });
 
+    $(document).delegate('.asia', 'click', function() {
+
+	var asia = $(this).attr('asia');
+	var id = $(this).attr('id');
+	var code = $(this).attr('code');
+
+	sendData['asia'] = asia;
+	sendData['id'] = id;
+	sendData['code'] = code;
+
+	var confrm = '';
+	if(asia == 'hyvaksy'){
+		confrm = 'Haluatko varmaasti hyväksyttä tarjous?';
+	}	
+	if(asia == 'hylatty'){
+		confrm = 'Haluatko varmaasti hylkää tarjous?';
+	}
+
+	if(confirm(confrm)){
+        $.ajax({
+           url: url+'/tarjoukset?domain='+domain,
+	   type:'POST',
+ 	   data: sendData,
+           success: function(data){
+		var d = JSON.parse(data);
+		console.log(d);
+		if(d == true)
+			window.location.reload();
+		else
+			alert('Virhe');
+    	   },
+    		error:function (xhr, ajaxOptions, thrownError){
+        	console.log(xhr.responseText);
+    	   }
+        });
+	}
+
+    });
 
     function reloadSkin()
     {
