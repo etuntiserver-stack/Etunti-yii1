@@ -1605,7 +1605,7 @@ $(document).ready(function(){
 
 	public function actionIndex()
 	{
-		$this->render('aloita'); // index sijaan
+		$this->render('index'); 
 	}
 
 
