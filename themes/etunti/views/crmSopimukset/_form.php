@@ -130,7 +130,7 @@ function voimassaChecker(){
 		$list = array();
 		$criteria=new CDbCriteria;
 
-		$criteria->condition=" asiakas_id='".$model->asiakas_id."' ";
+		$criteria->condition=" asiakas_id='".$model->asiakas_id."' AND status=2 ";
       		$l = CrmTarjoukset::model()->findAll($criteria);
 		foreach($l as $v)
 		{

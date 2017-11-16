@@ -76,6 +76,7 @@ class CrmSopimuksetController extends Controller
 
 	public function actionVastaus($asia, $id, $code)
 	{
+	/*
 		Yii::app()->theme = 'classic';
 		$crm = CrmSopimukset::model()->findbypk($id);
 		if($asia == 'hyvaksy' and isset($crm->id) and $crm->hyvaksyn_koodi == $code and $crm->status == 1){
@@ -144,7 +145,7 @@ class CrmSopimuksetController extends Controller
 		} else {
 			$this->redirect(array('vanhentunut'));
 		}
-	
+	*/
 	}
 
 	public function actionSuccess()
@@ -190,15 +191,21 @@ class CrmSopimuksetController extends Controller
 		$path = Yii::app()->request->baseUrl."tiedostot/sopimukset/".Yii::app()->user->domain;
 
 		$ft = FirmanTiedot::model()->findbypk(1);
-		$message = '<h1>'.Yii::t('main', 'Sopimus').'</h1>';
-		$message .= '<br>
-		<a href="http://'.$_SERVER['SERVER_NAME'].'/index.php/CrmSopimukset/vastaus?asia=hyvaksy&id='.$_POST['id'].'&code='.$randstring.'">
-				<h2 style="color:green">'.Yii::t('main', 'Hyväksy').'</h2>
-		</a>
-		<a href="http://'.$_SERVER['SERVER_NAME'].'/index.php/CrmSopimukset/vastaus?asia=hylatty&id='.$_POST['id'].'&code='.$randstring.'">
-				<h4 style="color:red">'.Yii::t('main', 'Hylkää').'</h4>
-		</a>
-		';
+		$message = '<h1>'.Yii::t('main', 'Tässä liittenä uusi sopimus').'</h1>';
+		$message .= '
+		<p>Lataa sovellus puhelimeesi alla olevien linkkien kautta. Hyväksyminen tai hylkää tehdään sovelluksessa</p>
+		<p>Ystävällisin terveisin.<br>
+		Etunti.
+		</p>
+
+		<p>
+		<span style="float:left;">
+		<a href="https://play.google.com/store/apps/details?id=fi.etunti.dico&utm_source=global_co&utm_medium=prtnr&utm_content=Mar2515&utm_campaign=PartBadge&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1"><img alt="Get it on Google Play" src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" style="height:100px" /></a>
+		</span><span style="display: inline-block;margin-top:16px;">
+		<a href="https://geo.itunes.apple.com/fi/app/etunti/id1100648690?mt=8"><img src="http://etunti.fi/etusivuimg/app_store.png" style="height:68px" ></a>
+		</span>
+		</p>
+				';
 		
 
 
@@ -601,7 +608,7 @@ class CrmSopimuksetController extends Controller
 	public function actionGet_tarjous($asiakas_id)
 	{
 		$bd = '<option value=>'.Yii::t('main', 'Valitse').'</options>';
-		$data = CrmTarjoukset::model()->findAll(" asiakas_id='".$asiakas_id."' ");
+		$data = CrmTarjoukset::model()->findAll(" asiakas_id='".$asiakas_id."' AND status=2 ");
 		foreach($data as $item){
 			$bd .= '<option value="'.$item->id.'">'.date("d.m.Y H:i", strtotime($item->time)).', '.$item->kohteen_osoite.'</option>';
 		}
