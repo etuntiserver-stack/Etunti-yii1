@@ -9,6 +9,7 @@ class LoginController extends Controller
 	 */
 	public function actionLogin()
 	{
+
 		if (Yii::app()->user->isGuest) {
 			$model=new UserLogin;
 			// collect user input data
@@ -20,7 +21,14 @@ class LoginController extends Controller
 			)
 			{
 
-			$domain = trim(Yii::app()->request->getPost('UserLogin')['domain']);
+			$domainit = Domainit::model()->find(" kirjautumistunnus='".Yii::app()->request->getPost('UserLogin')['domain']."' ");
+			if(isset($domainit->domain))
+			{
+				$domain = $domainit->domain;
+				$_SESSION['domain'] = $domain;
+			} else {
+				$domain = trim(Yii::app()->request->getPost('UserLogin')['domain']);
+			}
 
 	       		$criteria = new CDbCriteria();
 		        $criteria->condition = " 
