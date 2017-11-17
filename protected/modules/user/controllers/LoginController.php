@@ -55,8 +55,6 @@ class LoginController extends Controller
 
 
 
-
-
 			if(isset($_SESSION['domain']))
 			{
 				$domain = $_SESSION['domain'];
