@@ -1,6 +1,13 @@
 <?php
 /* @var $this AsiakkaatController */
 /* @var $data Asiakkaat */
+	$tyontekijat_maara = 0;
+	Yii::app()->db1->setActive(false);
+	Yii::app()->db1->connectionString = 'mysql:host=localhost;dbname='.$data->domain;
+	Yii::app()->db1->setActive(true);
+	$tt = Tyontekijat::model()->findAll(" aktiivinen=1 ");
+	if(isset($tt[0]))
+	$tyontekijat_maara = count($tt);
 ?>
 
 <tr>
@@ -28,6 +35,9 @@
 	</td>
 	<td>
 		<?php echo $data->sahkoposti; ?>
+	</td>
+	<td>
+		<?php echo $tyontekijat_maara; ?>
 	</td>
 	<td>
 		<?php echo $this->moduliMuutos($data->paketti); ?>

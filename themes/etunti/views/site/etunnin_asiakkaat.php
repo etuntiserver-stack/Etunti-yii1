@@ -101,6 +101,7 @@
   <th><?php echo Yii::t('main', 'Yritys'); ?></th>
   <th><?php echo Yii::t('main', 'Puhelin'); ?></th>
   <th><?php echo Yii::t('main', 'Sähköposti'); ?></th>
+  <th><?php echo Yii::t('main', 'Työntekijöiden lukumäärä'); ?></th>
   <th><?php echo Yii::t('main', 'Modulit'); ?></th>
   <th><?php echo Yii::t('main', 'Kuukauden käyttö (tunnit)'); ?></th>
   <th><?php echo Yii::t('main', 'Hinnat'); ?></th>
