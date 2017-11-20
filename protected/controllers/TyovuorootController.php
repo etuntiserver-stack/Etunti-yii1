@@ -1868,7 +1868,10 @@ class TyovuorootController extends Controller
 
 
 		$criteria = new CDBcriteria;
-		$criteria->order="tekijan_nimi";
+		// <-- Return order etu ja sukunimella
+		$site = Yii::app()->createController('Site');
+		$criteria = $site[0]->etuSukunimiCriteria($criteria);
+		//     Return order etu ja sukunimella -->
 		$criteria->condition="aktiivinen=1";
 	  	$t = Tyontekijat::model()->findAll($criteria);
 		$tekijan_nimi = '<select id="tekijanVaihdo" class="form-control">';
