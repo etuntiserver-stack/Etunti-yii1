@@ -372,7 +372,7 @@ var etusivuAjax = function(){
 		      </tr>
                     </tbody>
                   </table>
-		<center><?php echo CHtml::link(Yii::t('main', 'Haluan maksullinen'),"maksullinen", array("submit"=>array('maksullinen'), 'confirm' => 'Oletko varma?')); ?></center>
+		<center><?php echo CHtml::link(Yii::t('main', 'Aloita maksullinen käyttö'),"maksullinen", array("submit"=>array('maksullinen'), 'confirm' => 'Oletko varma?')); ?></center>
                 </div>
               </div>
 	      <?php endif; ?>
