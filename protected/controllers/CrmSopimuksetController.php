@@ -191,9 +191,12 @@ class CrmSopimuksetController extends Controller
 		$path = Yii::app()->request->baseUrl."tiedostot/sopimukset/".Yii::app()->user->domain;
 
 		$ft = FirmanTiedot::model()->findbypk(1);
-		$message = '<h1>'.Yii::t('main', 'Tässä liittenä uusi sopimus').'</h1>';
-		$message .= '
-		<p>Lataa sovellus puhelimeesi alla olevien linkkien kautta. Hyväksyminen tai hylkää tehdään sovelluksessa</p>
+		$message = '
+		<p>
+		Olet saanut sopimuksen yritykseltä '.$ft->tyonantaja.'. Sopimus löytyy tiedostosta, joka on tämän viestin liitteenä. 
+		Tutustu sopimukseen ja hyväksy tai hylkää valintasi mukaan alla olevista painikkeista.
+		</p>
+
 		<p>Ystävällisin terveisin.<br>
 		Etunti.
 		</p>
