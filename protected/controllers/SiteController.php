@@ -203,9 +203,27 @@ class SiteController extends Controller
 
 	public function actionMaksullinen()
 	{
-		$domainit = Domainit::model()->find(" domain='".Yii::app()->user->domain."' ");
+		$domainit = Domainit::model()->find(" domain='".Yii::app()->user->domain."' AND maksullinen=0 ");
 		if(isset($domainit->id))
-			Domainit::model()->updateByPk($domainit->id, array('maksullinen' => 1));
+		{
+				Domainit::model()->updateByPk($domainit->id, array('maksullinen' => 1));
+
+				$subject = Yii::t('main', 'Etunti-käyttäjä vaihtoi maksulliseksi');
+				$message = '
+				'.$domainit->yritys.' vaihtoi Etunnin maksulliseksi.<br>
+				Domain: '.$domainit->domain.'<br>
+				Sähköposti-osoite: '.$domainit->sahkoposti.'
+				';
+				$mail = new YiiMailer();
+				$mail->setFrom('no-reply@etunti.fi');
+				$mail->setTo('laptopsr@gmail.com');
+				$mail->setSubject($subject);
+				$mail->setBody($message);
+				$mail->send();
+
+				Yii::app()->user->setFlash('success', "Olette vaihtaneet ilmaisen palvelun laajempisisältöiseen maksulliseen palveluun.<br> Kysymyksissä pyydämme ottamaan yhteyttä sähköpostilla osoitteeseen tuki@etunti.fi");
+
+		}
 		$this->redirect(array('index'));
 	}
 
@@ -600,6 +618,22 @@ class SiteController extends Controller
 					'adm_email' => $_POST['sahkoposti'],
 					'token' => $token,
 				));
+
+
+				$subject = Yii::t('main', 'Uusi Etuntikäyttäjä');
+				$message = '
+				<p>Yrityksen nimi: '.$_POST['yrityksen_nimi'].'</p>
+				<p>Y-tunnus: '.$_POST['yritys_tunnus'].'</p>
+				<p>Puhelinnumero: '.$_POST['puhelinnumero'].'</p>
+				<p>Sähköpostiosoite: '.$_POST['sahkoposti'].'</p>
+				';
+				$mail = new YiiMailer();
+				$mail->setFrom('no-reply@etunti.fi');
+				$mail->setTo('etuntimarkkinointi@etunti.fi');
+				$mail->setSubject($subject);
+				$mail->setBody($message);
+				$mail->send();
+
 
 				$message = '';
 				$message .= '<p>Yritystunnus: '.$kirjautumistunnus.'</p>';
