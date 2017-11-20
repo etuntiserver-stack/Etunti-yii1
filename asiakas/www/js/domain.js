@@ -8,7 +8,7 @@
     var loginFull = [];
 
 
-    var developer = false; // true false kun pelaat localhostissa
+    var developer = true; // true false kun pelaat localhostissa
 
     if(localStorage.getItem('loginOK'))
     {
@@ -262,7 +262,7 @@ $(document).ready(function(){
 	   '<button class="myBgColors btn btn-default"><a href="historia.html?tyyppi=naytaTyovuorot"><h2 class="fa fa-calendar"></h2></a></button>' +
 	   '<button class="naytaToteutuneetTunnit myBgColors btn btn-default"><a href="historia.html?tyyppi=naytaToteutuneetTunnit"><h2 class="fa fa-check-square"></h2></a></button>' +
 	   '<button class="myBgColors btn btn-default"><a href="historia.html?tyyppi=naytaVinkit"><h2 class="fa fa-thumbs-o-up"></h2></a></button>' +
-	   '<button class="myBgColors btn btn-default"><a href="historia.html?tyyppi=naytaPalautteet"><h2 class="fa fa-smile-o"></h2></a></button>' +
+	   '<button class="myBgColors btn btn-default"><a href="historia.html?tyyppi=naytaPalautteet" class="palautelink"><h2 class="fa fa-smile-o"></h2></a></button>' +
 	   '<button class="myBgColors btn btn-default"><a href="index.html?sivu=asiakirjat"><h2 class="fa fa-file-text-o"></h2></a></button>' +
 
        '</div>' +

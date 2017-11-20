@@ -163,7 +163,7 @@ public function actionLogin($domain)
 	public function actionCheck($domain)
 	{
 
-		$return = '';
+		$return = [];
 		if(isset($_POST['tunnus']) and $this->kirjautuminen($domain, $_POST['tunnus'], $_POST['salasana']) == true)
 		{
 		   $model=Asiakkaat::model()->findByPk($_POST['asiakasID']);
@@ -177,13 +177,35 @@ public function actionLogin($domain)
 				AND teksti NOT LIKE '%sisainen%'
 			";
 			$pal=Palautteet::model()->find($criteria);
-	
 			if(isset($pal->id))
 			{
-				$this->_sendResponse(200, CJSON::encode($pal->keskustelu_id));
-				exit;
+				$return['uusi_palaute'] = $pal->keskustelu_id;
 			}
 
+			$criteria=new CDbCriteria;
+			$criteria->condition = " 
+				asiakas_id='".$model->id."' 
+				AND status=1
+			";
+			$tar=CrmTarjoukset::model()->find($criteria);
+			if(isset($tar->id))
+			{
+				$return['uusi_tarjous'] = $tar->id;
+			}
+
+			$criteria=new CDbCriteria;
+			$criteria->condition = " 
+				asiakas_id='".$model->id."' 
+				AND status=1
+			";
+			$sop=CrmSopimukset::model()->find($criteria);
+			if(isset($sop->id))
+			{
+				$return['uusi_sopimus'] = $sop->id;
+			}
+
+			$this->_sendResponse(200, CJSON::encode($return));
+			exit;
 		   }
 		}
 		
