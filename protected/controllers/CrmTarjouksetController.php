@@ -170,11 +170,12 @@ class CrmTarjouksetController extends Controller
 
 		$ft = FirmanTiedot::model()->findbypk(1);
 
-		$message = '<h1>'.Yii::t('main', 'Tässä liittenä uusi tarjous').'</h1>';
+		$message = '
+		<p>
+		Olet saanut tarjouksen yritykseltä '.$ft->tyonantaja.'. Tarjous löytyy tiedostosta, joka on tämän viestin liitteenä. <br>
+		Tutustu tarjoukseen ja hyväksy tai hylkää valintasi mukaan alla olevista painikkeista.
+		</p>
 
-
-		$message .= '
-		<p>Lataa sovellus puhelimeesi alla olevien linkkien kautta. Hyväksyminen tai hylkää tehdään sovelluksessa</p>
 		<p>Ystävällisin terveisin.<br>
 		Etunti.
 		</p>
