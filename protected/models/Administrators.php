@@ -34,7 +34,7 @@ public $adm_salasana_repeat;
 
 		$tb_name = 'sivex_administrators';
 
-		$check_this_table = false;
+		$check_this_table = true;
 		if(!isset(Yii::app()->session[$tb_name]))
 		{
 			Yii::app()->session[$tb_name] = true;
