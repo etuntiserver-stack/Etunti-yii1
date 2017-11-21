@@ -114,10 +114,10 @@ html{
 	font-size: 18px;
 }
 body{
-    	background: url('../../etusivuimg/Etunti-tausta-2.jpg');
-	background-size:     cover;                      /* <------ */
+    	/*background: url('../../etusivuimg/Etunti-tausta-2.jpg');
+	background-size:     cover;             
     	background-repeat:   no-repeat;
-    	background-position: center center;   
+    	background-position: center center; */  
 	font-size: 18px;
 	font-family: "Ubuntu", "Helvetica Neue", Helvetica, Arial, sans-serif;
 	line-height: 1.6;
