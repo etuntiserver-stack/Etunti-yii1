@@ -40,12 +40,12 @@ $model->time = date("d.m.Y", strtotime($model->time));
 		   {
 		     if(trim($c) == trim($val->taso))
 		     {
-		    echo '<option value="'.$val->taso.'" selected>'.$val->nimetys.'</option>';
+		    echo '<option value="'.$val->taso.'" selected>'.$val->kuvaus.'</option>';
 		    	$on = true;
 		     }
 		   }
 		    if($on == false)
-		    echo '<option value="'.$val->taso.'">'.$val->nimetys.'</option>';
+		    echo '<option value="'.$val->taso.'">'.$val->kuvaus.'</option>';
 		  }
 		echo '</select>';
 		?>
