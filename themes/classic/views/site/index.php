@@ -71,11 +71,8 @@
 
 <!-- Modal -->
 <div id="kehdot" class="modal fade" role="dialog">
-<<<<<<< df5e40613e3a73f2481002d7142f83f94fc98486
   <div class="modal-dialog modal-lg">
-=======
-  <div class="modal-dialog">
->>>>>>> aloita korjaus
+
 
 
 
@@ -91,7 +88,6 @@
         <h4 class="modal-title">Käyttöehdot</h4>
       </div>
       <div class="modal-body">
-<<<<<<< df5e40613e3a73f2481002d7142f83f94fc98486
         <div class="well" style="background: #FFFFFF">
 <p>1.	Soveltamisala</p>
 <p>Näitä sopimusehtoja sovelletaan Digisten Oy:n (myöhemmin Digisten tai Palveluntoimittaja) verkon välityksellä tarjoamaan Etunti-verkkopalveluun (myöhemmin Etunti tai Etunti- verkkopalvelu) sekä Tilaajan asiointiin verkkopalvelussa.</p>
@@ -170,9 +166,6 @@ Sopimussakon määrä ei rajoita loukatun osapuolen oikeutta vaatia vahingonkorv
 <p>17.	Sopimuksen voimassaolo</p>
 <p>Sopimus on voimassa toistaiseksi. Sopimuksen irtisanomisaika on kolme (3) kuukautta.
 	</div>
-=======
-        <p>Some text in the modal.</p>
->>>>>>> aloita korjaus
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Sulje</button>
