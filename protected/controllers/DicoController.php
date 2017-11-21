@@ -746,7 +746,7 @@ public function actionLogin($domain)
 			if(count($m2) > 0)
 			{
 			$lista = '<br><div class="lista">';
-			$lista .= '<legend><p><h2>'.Yii::t('main', 'TARJOUKSET').'</h2></p></legend><br>';
+			$lista .= '<legend><h2>'.Yii::t('main', 'TARJOUKSET').'</h2></legend><br>';
 			foreach($m2 as $item)
 			{
 				$f = "tiedostot/tarjoukset/".$domain."/".$item->liite.".pdf";
@@ -893,7 +893,7 @@ public function actionLogin($domain)
 			if(count($m2) > 0)
 			{
 			$lista = '<br><div class="lista">';
-			$lista .= '<legend><p><h2>'.Yii::t('main', 'SOPIMUKSET').'</h2></p></legend><br>';
+			$lista .= '<legend><h2>'.Yii::t('main', 'SOPIMUKSET').'</h2></legend><br>';
 			foreach($m2 as $item)
 			{
 				$f = "tiedostot/sopimukset/".$domain."/".$item->liite.".pdf";
