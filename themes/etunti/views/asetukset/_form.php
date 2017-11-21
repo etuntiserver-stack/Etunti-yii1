@@ -823,7 +823,7 @@
 		<?php echo $form->textarea($model,'edico_laatutaso_3',array('rows'=>4,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'edico_laatutaso_3'); ?>
 	</div>
-
+<?php /*
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'edico_muut_kulut'); ?>
 
@@ -892,13 +892,13 @@ jQuery(function(){
 
 		<?php echo $form->error($model,'edico_muut_kulut'); ?>
 	</div>
-
+*/ ?>
    </div>
 
 
    <div class="col-sm-4">
     <legend><h2><?php echo Yii::t('main','eDico'); ?></h2></legend>
-
+<?php /*
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'tapaturmavakuutus'); ?>
 		<?php echo $form->numberField($model,'tapaturmavakuutus',array('maxlength'=>11,'class'=>'form-control')); ?>
@@ -928,7 +928,7 @@ jQuery(function(){
 		<?php echo $form->numberField($model,'tyel_maksun_osuus_palkkansummasta',array('maxlength'=>11,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'tyel_maksun_osuus_palkkansummasta'); ?>
 	</div>
-
+*/ ?>
 	<legend><h2><?php echo Yii::t('main','Peruutusehdot'); ?></h2></legend>
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'peruutusehdot'); ?>
@@ -947,7 +947,7 @@ jQuery(function(){
 
    <div class="col-sm-4">
     <legend><h2><?php echo Yii::t('main','VINKKI'); ?></h2></legend>
-
+<?php /*
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'vinkki_tunnit'); ?>
 		<?php echo $form->numberField($model,'vinkki_tunnit',array('maxlength'=>10,'class'=>'form-control')); ?>
@@ -959,6 +959,7 @@ jQuery(function(){
 		<?php echo $form->numberField($model,'vinkki_prosentti',array('maxlength'=>10,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'vinkki_prosentti'); ?>
 	</div>
+*/ ?>
 
 	<legend><h2><?php echo Yii::t('main','Alennuskoodit'); ?></h2></legend>
 	<div class="section fill mb5">

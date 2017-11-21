@@ -145,6 +145,30 @@ exit;
 	   <h2 class="myBgColors p20"> <i class="fa fa-gear"></i> <?php echo Yii::t('main', 'ASETUKSET'); ?> </h2>
 
 
+	   <?php
+		$domainit = Domainit::model()->find(" domain='".Yii::app()->user->domain."' AND maksullinen=0 ");
+	   ?>
+	   <?php if( isset($domainit->id) ) : ?>
+	   <style>
+	   .isoradio { 
+	   height: 20px;
+	   width: 20px;
+	   display: inline-block;
+	   cursor: pointer;
+	   margin-top: 0;
+	   background: #FFF;
+	   border: 1px solid #d2d2d2;
+	   border-radius: 100%;
+	  }
+	   </style>
+
+		<center><p>
+		<?php echo CHtml::link('<h2><input type="radio" class="isoradio"> ' .Yii::t('main', 'Aloita maksullinen käyttö').'</h2>',"/site/maksullinen", 
+			array("submit"=>array('/site/maksullinen'), 'confirm' => 'Oletko varma?'
+		)); ?>
+		</p></center>
+	   <?php endif; ?>
+
 	   <p><div class="btn btn-primary btn-block myBgColors" data-toggle="collapse" data-target="#yrityksentiedot"><h3><?php echo Yii::t('main','Yrityksen tiedot'); ?> &nbsp; <i class="fa fa-caret-square-o-down" aria-hidden="true"></i> </h3></div></p>
 
             <div class="admin-form collapse" id="yrityksentiedot">
@@ -405,52 +429,6 @@ exit;
 		// GIT version -->
 	  	?>
                 </div>
-
-<?php /*
-		<!-- Maksullinen changer -->
-		<div class="row">
-		 <div class="col-lg-3 col-md-offset-4">
-		  <input type="checkbox" class="sw" id="maksullinen" <?php echo ($model->maksullinen == 1)? 'checked' : ''; ?>>
-		  <script type="text/javascript">
-		  $(document).ready(function(){
-
-		    $(".sw").bootstrapSwitch({
-			size: "large",
-			onColor: "success",
-			offColor: "warning",
-			onText: "Maksullinen",
-			offText: "Ilmainen"
-		    });
-
-    		    $('#maksullinen').on('switchChange.bootstrapSwitch', function (event, state) {
-    			console.log(state);
-
-		        $.ajax({
-		           url: location.protocol + "//" + location.host + '/index.php/site/maksullinen',
-		           type: "POST",
-		           data: { state : state },
-		           success: function(data){
-				var d = JSON.parse(data);
-				console.log(d);
-				if(d == '0')
-				$('#sw_result').html('<br><div class="alert bg-warning">Ilmainen palvelu</div>');
-				if(d == '1')
-				$('#sw_result').html('<br><div class="alert bg-success">Maksullinen palvelu</div>');
-		           }
-		        });
-
-    		    });
-
-
-		  });
-		  </script>
-		 </div>
-		</div>
-		<div id="sw_result"></div>
-		<!-- Maksullinen changer -->
-*/ ?>
-
-
 
 
                 </div>

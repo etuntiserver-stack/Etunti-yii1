@@ -74,14 +74,16 @@ class CrmTarjouksetController extends Controller
         }
 
 
-	public function actionVastaus($asia, $id, $code)
+	public function actionVastaus($domain, $asia, $id, $code)
 	{
+	/*
 		Yii::app()->theme = 'classic';
 		$crm = CrmTarjoukset::model()->findbypk($id);
 		if($asia == 'hyvaksy' and isset($crm->id) and $crm->hyvaksyn_koodi == $code and $crm->status == 1){
 
-			CrmTarjoukset::model()->updatebypk($id, array('status'=>2));
-			$this->redirect(array('success'));
+			//CrmTarjoukset::model()->updatebypk($id, array('status'=>2));
+			//$this->redirect(array('success'));
+			echo json_encode('ok');
 
 		} elseif($asia == 'hylatty' and isset($crm->id) and $crm->hyvaksyn_koodi == $code and $crm->status == 1){
 
@@ -96,7 +98,7 @@ class CrmTarjouksetController extends Controller
 		} else {
 			$this->redirect(array('vanhentunut'));
 		}
-	
+	*/
 	}
 
 
@@ -168,17 +170,28 @@ class CrmTarjouksetController extends Controller
 
 		$ft = FirmanTiedot::model()->findbypk(1);
 
-		$message = '<h1>'.Yii::t('main', 'Tarjous').'</h1>';
-		$message .= '
-		<a href="http://'.$_SERVER['SERVER_NAME'].'/index.php/crmTarjoukset/vastaus?asia=hyvaksy&id='.$id.'&code='.$randstring.'">
-				<h2 style="color:green">'.Yii::t('main', 'Hyväksy').'</h2>
-		</a>
-		<a href="http://'.$_SERVER['SERVER_NAME'].'/index.php/crmTarjoukset/vastaus?asia=hylatty&id='.$id.'&code='.$randstring.'">
-				<h4 style="color:red">'.Yii::t('main', 'Hylkää').'</h4>
-		</a>
-		';
-	
+		$message = '
+		<p>
+		Olet saanut tarjouksen yritykseltä '.$ft->tyonantaja.'. Tarjous löytyy tiedostosta, joka on tämän viestin liitteenä. <br>
+		Tutustu tarjoukseen ja hyväksy tai hylkää valintasi mukaan alla olevista painikkeista.
+		</p>
 
+		<p>Ystävällisin terveisin.<br>
+		Etunti.
+		</p>
+
+		<p>
+		<span style="float:left;">
+		<a href="https://play.google.com/store/apps/details?id=fi.etunti.dico&utm_source=global_co&utm_medium=prtnr&utm_content=Mar2515&utm_campaign=PartBadge&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1"><img alt="Get it on Google Play" src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" style="height:100px" /></a>
+		</span><span style="display: inline-block;margin-top:16px;">
+		<a href="https://geo.itunes.apple.com/fi/app/etunti/id1100648690?mt=8"><img src="http://etunti.fi/etusivuimg/app_store.png" style="height:68px" ></a>
+		</span>
+		</p>
+				';
+
+
+		//echo $message;
+		//exit;
 
 
 		$subject = Yii::t('main', 'Tarjous'). ', '.$ft->tyonantaja;

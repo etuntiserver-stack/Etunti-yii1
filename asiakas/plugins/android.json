@@ -7,16 +7,7 @@
     "files": {}
   },
   "installed_plugins": {
-    "cordova-open": {
-      "PACKAGE_NAME": "fi.etunti.dico"
-    },
-    "cordova-plugin-android-support-v4-jar": {
-      "PACKAGE_NAME": "fi.etunti.dico"
-    },
     "cordova-plugin-app-version": {
-      "PACKAGE_NAME": "fi.etunti.dico"
-    },
-    "cordova-plugin-compat": {
       "PACKAGE_NAME": "fi.etunti.dico"
     },
     "cordova-plugin-device": {
@@ -28,13 +19,15 @@
     "cordova-plugin-file": {
       "PACKAGE_NAME": "fi.etunti.dico"
     },
+    "cordova-plugin-file-opener2": {
+      "PACKAGE_NAME": "fi.etunti.dico"
+    },
+    "cordova-plugin-file-transfer": {
+      "PACKAGE_NAME": "fi.etunti.dico"
+    },
     "cordova-plugin-whitelist": {
       "PACKAGE_NAME": "fi.etunti.dico"
     }
   },
-  "dependent_plugins": {
-    "cordova-plugin-file-transfer": {
-      "PACKAGE_NAME": "fi.etunti.dico"
-    }
-  }
+  "dependent_plugins": {}
 }

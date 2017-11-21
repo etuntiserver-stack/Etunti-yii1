@@ -62,12 +62,14 @@
 
 <style>
 .text-muted-new{ color: #666; }
+.text-muted-new-tapahtumat { color: #FFFFFF; }
 </style>
 
-	<div id="lukematonPalaute"></div>
 
         <!-- Dashboard Tiles -->
         <div class="row mb10">
+
+	<div id="checkresult"></div>
 
           <div class="col-md-12" id="tyovuorot_painike">
 	   <a href="index.html?sivu=tyovuorot" class="link">
@@ -433,12 +435,50 @@
 	   type:'POST',
  	   data: sendData,
            success: function(data){
-		var d = JSON.parse(data);
-		if(d !== '')
+	    var d = JSON.parse(data);
+	    console.log(d);
+	    if(d['uusi_palaute'] || d['uusi_tarjous'] || d['uusi_sopimus'])
+	    {
+
+		var body = '' +
+		          '<div class="col-md-12">' +
+		            '<div class="panel bg-primary light of-h mb10">' +
+		              '<div class="pn pl20 p5">' +
+		                '<div class="icon-bg">' +
+		                  '<i class="fa fa-info-circle"></i>' +
+		                '</div>' +
+		                '<h2 class="mt15 lh15">' +
+		                  '<b>Tapahtumat</b>' +
+		                '</h2><br>';
+		if(d['uusi_palaute'])
 		{
-			//console.log(d);
-			$('#lukematonPalaute').html('<div class="alert bg-danger"><a class="text-white" href="historia.html?tyyppi=naytaPalautteet&id='+d+'">Olet saanut vastauksen palautteeseen</a></div>');
+			body += '' +
+			   '<a href="historia.html?tyyppi=naytaPalautteet&id='+d['uusi_palaute']+'" class="link">' +
+		                '<h4 class="text-muted-new-tapahtumat"><i class="fa fa-caret-right" aria-hidden="true"></i> Olet saanut vastauksen palautteeseen.</h4>' +
+			   '</a>';
 		}
+		if(d['uusi_tarjous'])
+		{
+			body += '' +
+			   '<a href="tarjoukset.html?id='+d['uusi_tarjous']+'" class="link">' +
+		                '<h4 class="text-muted-new-tapahtumat"><i class="fa fa-caret-right" aria-hidden="true"></i> Olet saanut uuden tarjouksen.</h4>' +
+			   '</a>';
+		}
+		if(d['uusi_sopimus'])
+		{
+			body += '' +
+			   '<a href="sopimukset.html?id='+d['uusi_sopimus']+'" class="link">' +
+		                '<h4 class="text-muted-new-tapahtumat"><i class="fa fa-caret-right" aria-hidden="true"></i> Olet saanut uuden sopimuksen.</h4>' +
+			   '</a>';
+		}
+		body += '' +
+		              '</div>' +
+		            '</div>' +
+		          '</div>';
+
+		$('#checkresult').html(body);
+	    }
+
     	   },
     		error:function (xhr, ajaxOptions, thrownError){
         	console.log(xhr.responseText);

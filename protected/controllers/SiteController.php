@@ -320,6 +320,7 @@ class SiteController extends Controller
 				$criteria->condition = " 
 					alku!='' AND loppu!=''
 					AND DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') = '".$pvm."'
+					AND status=3
 				";
 				$tv = Tyovuoroot::model()->find($criteria);
 	
@@ -1604,7 +1605,7 @@ $(document).ready(function(){
 
 	public function actionIndex()
 	{
-		$this->render('aloita'); // index sijaan
+		$this->render('index'); 
 	}
 
 
