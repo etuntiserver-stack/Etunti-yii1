@@ -746,8 +746,7 @@ public function actionLogin($domain)
 			if(count($m2) > 0)
 			{
 			$lista = '<br><div class="lista">';
-			$lista .= '<center><p><h2>Tarjoukset</h2></p></center><br>';
-			$lista .= '<table class="table table-bordered">';
+			$lista .= '<legend><p><h2>'.Yii::t('main', 'TARJOUKSET').'</h2></p></legend><br>';
 			foreach($m2 as $item)
 			{
 				$f = "tiedostot/tarjoukset/".$domain."/".$item->liite.".pdf";
@@ -760,17 +759,14 @@ public function actionLogin($domain)
 					if($item->status == 1)
 					{
 						$txt = Yii::t('main', 'Uusi tarjous');
-						$bg_color = 'bg-warning';
+						$bg_color = 'bg-info';
 						$tila = '
 						<div class="row">
-						 <div class="col-xs-4">
-							<i class="link avaaPDF fa fa-eye fa-2x text-primary" aria-hidden="true" liite="'.$f.'" ext="pdf"></i>
+						 <div class="col-xs-6">
+							<button class="asia btn btn-success btn-lg btn-block" aria-hidden="true" asia="hyvaksy" id="'.$item->id.'" code="'.$item->hyvaksyn_koodi.'"><i class="fa fa-check"></i> '.Yii::t('main', 'Hyväksy').'</button>
 						 </div>
-						 <div class="col-xs-4">
-							<i class="link asia fa fa-check fa-2x text-success" aria-hidden="true" asia="hyvaksy" id="'.$item->id.'" code="'.$item->hyvaksyn_koodi.'"></i>
-						 </div>
-						 <div class="col-xs-4">
-							<i class="link asia fa fa-times fa-2x text-danger" aria-hidden="true" asia="hylatty" id="'.$item->id.'" code="'.$item->hyvaksyn_koodi.'"></i>
+						 <div class="col-xs-6">
+							<button class="pull-right asia btn btn-danger btn-lg btn-block" aria-hidden="true" asia="hylatty" id="'.$item->id.'" code="'.$item->hyvaksyn_koodi.'"><i class="fa fa-times"></i> '.Yii::t('main', 'Hylkää').'</button>
 						 </div>
 						</div>
 						';
@@ -779,35 +775,26 @@ public function actionLogin($domain)
 					{
 						$txt = Yii::t('main', 'Hyväksytty tarjous');
 						$bg_color = 'bg-success';
-						$tila = '<i class="link avaaPDF fa fa-eye fa-2x text-primary" aria-hidden="true" liite="'.$f.'" ext="pdf"></i>';
 					}
 					if($item->status == 3)
 					{
 						$txt = Yii::t('main', 'Hylätty tarjous');
 						$bg_color = 'bg-danger';
-						$tila = '<i class="link avaaPDF fa fa-eye fa-2x text-primary" aria-hidden="true" liite="'.$f.'" ext="pdf"></i>';
 					}
 					$lista .= '
-					<tr>
-					 <th>
-					  <div>
-					   <center><h4 class="alert '.$bg_color.'">'.$txt.'</h4></center>
+					  <div class="link avaaPDF alert '.$bg_color.' text-left" liite="'.$f.'" ext="pdf">
+					   <i class="pull-right fa fa-file-pdf-o fa-5x" aria-hidden="true"></i>
+					   <h3>'.$txt.'</h3>
 					   '.date("d.m.Y H:i", strtotime($item->time)).'<br>
 					   '.$item->kohteen_osoite.' '.$item->kohteen_postinumero.', '.$item->kohteen_postitoimipaikka.'
 					  </div>
-					 </th>
-					 <td>
-					  <div class="">
-					   <center>'.$tila.'</center>
-					  </div>
-					 </td>
-					</tr>	
+					  '.$tila.'
+					  <hr>
 					';
 
 				}
 
 			}
-			$lista .= '</table>';
 			$lista .= '</div>';
 
 				$return = array('lista'=>$lista, 'liite'=>$link, 'nimike'=>$nimike);
@@ -906,8 +893,7 @@ public function actionLogin($domain)
 			if(count($m2) > 0)
 			{
 			$lista = '<br><div class="lista">';
-			$lista .= '<center><p><h2>Sopimukset</h2></p></center><br>';
-			$lista .= '<table class="table table-bordered">';
+			$lista .= '<legend><p><h2>'.Yii::t('main', 'SOPIMUKSET').'</h2></p></legend><br>';
 			foreach($m2 as $item)
 			{
 				$f = "tiedostot/sopimukset/".$domain."/".$item->liite.".pdf";
@@ -920,17 +906,14 @@ public function actionLogin($domain)
 					if($item->status == 1)
 					{
 						$txt = Yii::t('main', 'Uusi sopimus');
-						$bg_color = 'bg-warning';
+						$bg_color = 'bg-info';
 						$tila = '
 						<div class="row">
-						 <div class="col-xs-4">
-							<i class="link avaaPDF fa fa-eye fa-2x text-primary" aria-hidden="true" liite="'.$f.'" ext="pdf"></i>
+						 <div class="col-xs-6">
+							<button class="asia btn btn-success btn-lg btn-block" aria-hidden="true" asia="hyvaksy" id="'.$item->id.'" code="'.$item->hyvaksyn_koodi.'"><i class="fa fa-check"></i> '.Yii::t('main', 'Hyväksy').'</button>
 						 </div>
-						 <div class="col-xs-4">
-							<i class="link asia fa fa-check fa-2x text-success" aria-hidden="true" asia="hyvaksy" id="'.$item->id.'" code="'.$item->hyvaksyn_koodi.'"></i>
-						 </div>
-						 <div class="col-xs-4">
-							<i class="link asia fa fa-times fa-2x text-danger" aria-hidden="true" asia="hylatty" id="'.$item->id.'" code="'.$item->hyvaksyn_koodi.'"></i>
+						 <div class="col-xs-6">
+							<button class="pull-right asia btn btn-danger btn-lg btn-block" aria-hidden="true" asia="hylatty" id="'.$item->id.'" code="'.$item->hyvaksyn_koodi.'"><i class="fa fa-times"></i> '.Yii::t('main', 'Hylkää').'</button>
 						 </div>
 						</div>
 						';
@@ -939,35 +922,26 @@ public function actionLogin($domain)
 					{
 						$txt = Yii::t('main', 'Hyväksytty sopimus');
 						$bg_color = 'bg-success';
-						$tila = '<i class="link avaaPDF fa fa-eye fa-2x text-primary" aria-hidden="true" liite="'.$f.'" ext="pdf"></i>';
 					}
 					if($item->status == 3)
 					{
 						$txt = Yii::t('main', 'Hylätty sopimus');
 						$bg_color = 'bg-danger';
-						$tila = '<i class="link avaaPDF fa fa-eye fa-2x text-primary" aria-hidden="true" liite="'.$f.'" ext="pdf"></i>';
 					}
 					$lista .= '
-					<tr>
-					 <th>
-					  <div>
-					   <center><h4 class="alert '.$bg_color.'">'.$txt.'</h4></center>
+					  <div class="link avaaPDF alert '.$bg_color.' text-left" liite="'.$f.'" ext="pdf">
+					   <i class="pull-right fa fa-file-pdf-o fa-5x" aria-hidden="true"></i>
+					   <h3>'.$txt.'</h3>
 					   '.date("d.m.Y H:i", strtotime($item->time)).'<br>
 					   '.$item->tarjous->kohteen_osoite.' '.$item->tarjous->kohteen_postinumero.', '.$item->tarjous->kohteen_postitoimipaikka.'
 					  </div>
-					 </th>
-					 <td>
-					  <div class="">
-					   <center>'.$tila.'</center>
-					  </div>
-					 </td>
-					</tr>	
+					  '.$tila.'
+					  <hr>
 					';
 
 				}
 
 			}
-			$lista .= '</table>';
 			$lista .= '</div>';
 
 				$return = array('lista'=>$lista, 'liite'=>$link, 'nimike'=>$nimike);
