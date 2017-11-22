@@ -67,10 +67,15 @@ class FirmanTiedot extends DB2ActiveRecord
                      'iban' => 'varchar(100) ',
                      'bic' => 'varchar(20) ',
                      'johtaja' => 'varchar(100) ',
-
-
-
-
+			
+                     'laskutus_kanava' => 'varchar(255)',
+                     'laskutus_osoite' => 'varchar(255)',
+                     'laskutus_postinumero' => 'varchar(50)',
+                     'laskutus_postitoimipaikka' => 'varchar(255)',
+                     'sahkopostilaskuosoite' => 'varchar(255)',
+                     'laskutus_ovt_tunnus' => 'varchar(255)',
+                     'verkkolaskuosoite' => 'varchar(255)',
+                     'operaattorin_valittajan_tunnus' => 'varchar(255)'
 		);
 
 		foreach($table_structure as $key=>$value)
@@ -95,6 +100,7 @@ class FirmanTiedot extends DB2ActiveRecord
 			array('tyonantaja, osoite, postinumero, postitoimipaikka, puhelin, y_tunnus, sahkoposti', 'required'),
 			array('tyonantaja, postinumero, postitoimipaikka, y_tunnus', 'length', 'max'=>50),
 			array('osoite, puhelin, sahkoposti, tilinumero, iban, johtaja', 'length', 'max'=>100),
+			array('laskutus_kanava, laskutus_osoite, laskutus_postinumero, laskutus_postitoimipaikka, sahkopostilaskuosoite, laskutus_ovt_tunnus, verkkolaskuosoite, operaattorin_valittajan_tunnus', 'length', 'max'=>255),
 			array('bic', 'length', 'max'=>20),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.

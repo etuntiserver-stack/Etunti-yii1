@@ -173,8 +173,6 @@ exit;
 
             <div class="admin-form collapse" id="yrityksentiedot">
               <div class="panel heading-border">
-
-		<h2 class="p15"><?php echo Yii::t('main','Yrityksen tiedot'); ?></h2>
                  <div class="panel-body bg-light">
                   <div class="row">
 		  <?php echo $this->renderPartial('//firmanTiedot/_form', array('model'=>$f)); ?>
