@@ -8,11 +8,15 @@
 
 
 <div class="row">
- <div class="col-sm-offset-3 col-sm-6">
+ <div class="col-sm-offset-1 col-sm-10">
   <div class="panel panel-default">
     <div class="panel-heading"><?=Yii::t('main', 'Aloita Etunnin käyttäminen')?></div>
     <div class="panel-body">
 
+     <div class="row">
+      <div class="col-sm-5">
+
+	<legend><h3 class="text-info"><?php echo Yii::t('main', 'Ota käyttöön'); ?></h3></legend>
       	<form action="<?php echo Yii::app()->request->baseUrl; ?>/index.php/site/aloita" id="aloita-lomake" method="POST" autocomplete="off">
         <label><?php echo Yii::t('main', 'Yrityksen nimi')?></label>
         <input type="text" id="yrityksen_nimi" name="yrityksen_nimi" class="form-control input-lg" required autofocus>
@@ -26,9 +30,28 @@
         <input type="text" id="sahkoposti2" name="sahkoposti2" class="form-control input-lg" required>
 	<br>
 	<p><a href="#" data-toggle="modal" data-target="#kehdot">Käyttöehdot</a></p>
-        <p><button class="btn btn-lg btn-primary btn-group submit" type="submit"><?php echo Yii::t('main', 'Aloita'); ?></button></p>
+        <p><button class="btn btn-lg btn-primary btn-group submit" type="submit"><?php echo Yii::t('main', 'Ota käyttöön'); ?></button></p>
     	</form>
 	<div id="success"></div>
+
+      </div>
+      <div class="col-sm-5 pull-right">
+
+	<legend><h3 class="text-info"><?php echo Yii::t('main', 'Kirjaudu'); ?></h3></legend>
+		<form action="<?php echo Yii::app()->request->baseUrl; ?>/index.php/user/login" method="POST">
+		<label><?php echo Yii::t('main', 'Kirjautumistunnus')?></label>
+		<input type="text" class="form-control input-lg" name="UserLogin[domain]" required>
+		<label><?php echo Yii::t('main', 'Käyttäjätunnus')?></label>
+		<input type="text" class="form-control input-lg" name="UserLogin[username]" required>
+		<label><?php echo Yii::t('main', 'Salasana')?></label>
+		<input type="password" class="form-control input-lg" name="UserLogin[password]" required>
+		<br>
+		<input type="submit" class="btn btn-lg btn-primary btn-group" value="Kirjaudu">
+		</form>
+		<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/site/salasanan_palauttaminen" class="link"><?php echo Yii::t('main', 'Unohditko salasanasi?'); ?></a>
+
+      </div>
+     </div>
 
     </div>
   </div>
