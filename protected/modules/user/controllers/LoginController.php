@@ -4,23 +4,59 @@ class LoginController extends Controller
 {
 	public $defaultAction = 'login';
 
+        public function init()
+        {
+
+		if( isset($_POST['UserLogin']) )
+		{
+		    $domainit = Domainit::model()->find(" domain!='".$_POST['UserLogin']['domain']."' AND kirjautumistunnus='".$_POST['UserLogin']['domain']."' ");
+		    if(isset($domainit->domain))
+		    {
+
+			$domain = $domainit->domain;
+			$_SESSION['domain'] = $domain;
+
+		        echo '
+			<form id="myForm" action="'.Yii::app()->request->baseUrl.'/index.php/user/login" method="post">
+			<input type="hidden" name="UserLogin[domain]" value="'.$domain.'">
+			<input type="hidden" name="UserLogin[username]" value="'.$_POST['UserLogin']['username'].'">
+			<input type="hidden" name="UserLogin[password]" value="'.$_POST['UserLogin']['password'].'">
+			</form>
+			<script type="text/javascript">
+			    document.getElementById("myForm").submit();
+			</script>
+			';
+			exit;
+		    }
+		}
+
+                parent::init();
+        }
+
 	/**
 	 * Displays the login page
 	 */
 	public function actionLogin()
 	{
+
 		if (Yii::app()->user->isGuest) {
 			$model=new UserLogin;
 			// collect user input data
 			if(
-				Yii::app()->request->getPost('UserLogin')
-				and trim(Yii::app()->request->getPost('UserLogin')['domain']) != 'superadmin'
-				and trim(Yii::app()->request->getPost('UserLogin')['domain']) != 'etusivu'
-				and trim(Yii::app()->request->getPost('UserLogin')['domain']) != ''
+				isset($_POST['UserLogin'])
+				and trim($_POST['UserLogin']['domain']) != 'superadmin'
+				and trim($_POST['UserLogin']['domain']) != 'etusivu'
+				and trim($_POST['UserLogin']['domain']) != ''
 			)
 			{
 
-			$domain = trim(Yii::app()->request->getPost('UserLogin')['domain']);
+
+			if(isset($_SESSION['domain']))
+			{
+				$domain = $_SESSION['domain'];
+			} else {
+				$domain = trim(Yii::app()->request->getPost('UserLogin')['domain']);
+			}
 
 	       		$criteria = new CDbCriteria();
 		        $criteria->condition = " 
@@ -29,7 +65,6 @@ class LoginController extends Controller
 				AND adm_salasana!=''
 			";
 			$mod=Administrators::model()->find($criteria);
-
 
 
 			  if(isset($mod->id))
@@ -99,6 +134,7 @@ class LoginController extends Controller
 
 			// display the login form
 			//$this->render('/user/login',array('model'=>$model));
+
 
 			    Yii::app()->user->setFlash('danger', "Tarkasta yritys- ja käyttäjätunnus sekä salasana");
 			    $this->redirect(Yii::app()->request->baseUrl.'/index.php/site/index');
