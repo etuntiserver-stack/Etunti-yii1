@@ -1451,6 +1451,18 @@ $(document).ready(function(){
 	public function actionEtusivu()
 	{
 
+		// <-- juuri_tullut_asiakkaaksi
+		if( isset(Yii::app()->user->domain) )
+		{
+		   $dm = Domainit::model()->find(" domain='".Yii::app()->user->domain."' and maksullinen=0 ");
+		   $fm = FirmanTiedot::model()->find(" id=1 AND juuri_tullut_asiakkaaksi=1 ");
+		   if( isset($dm->id) and isset($fm->id) )
+		   {
+			$this->redirect(array('/asetukset/update', 'id' => 1, 'first' => true));
+		   }
+		}
+		//     juuri_tullut_asiakkaaksi -->
+
 		// <-- Backup
 		if (
 			isset(Yii::app()->user->domain) and 

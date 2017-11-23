@@ -62,8 +62,11 @@
 laskutus_kanava, laskutus_osoite, laskutus_postinumero, laskutus_postitoimipaikka, sahkopostilaskuosoite, laskutus_ovt_tunnus, verkkolaskuosoite, operaattorin_valittajan_tunnus
 */ ?>
 
- </div><div class="col-sm-3">
-	<legend><?=Yii::t('main', 'Laskutusosoite')?></legend>
+ </div>
+
+<?php /*
+ <div class="col-sm-3">
+	<legend><?=Yii::t('main', 'Ostolaskujen Laskuohje')?></legend>
 
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'laskutus_osoite'); ?>
@@ -82,9 +85,6 @@ laskutus_kanava, laskutus_osoite, laskutus_postinumero, laskutus_postitoimipaikk
 		<?php echo $form->textField($model,'laskutus_postitoimipaikka',array('size'=>60,'maxlength'=>255,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'laskutus_postitoimipaikka'); ?>
 	</div>
-
- </div><div class="col-sm-3">
-	<legend><?php echo Yii::t('main', 'Laskutus tiedot'); ?></legend>
 
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'laskutus_kanava'); ?>
@@ -122,7 +122,7 @@ laskutus_kanava, laskutus_osoite, laskutus_postinumero, laskutus_postitoimipaikk
 		<?php echo $form->textField($model,'operaattorin_valittajan_tunnus',array('class'=>'form-control')); ?>
 		<?php echo $form->error($model,'operaattorin_valittajan_tunnus'); ?>
 	</div>
-
+*/ ?>
 
  </div>
 </div><!-- form -->
