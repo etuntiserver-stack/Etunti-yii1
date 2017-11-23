@@ -231,7 +231,7 @@ class SiteController extends Controller
 	{
 
 		$domainit = Domainit::model()->find(" domain='".Yii::app()->user->domain."' AND maksullinen=0 ");
-		Yii::app()->user->setState('ilmainen_ilmoitus', 'Ilmainen käyttö on mahdoton jos tunnit enemmään kun 500');
+		Yii::app()->user->setState('ilmainen_ilmoitus', $this->ilmainenIlmoitus());
 
 		if( isset($domainit->id) )
 		{
@@ -255,6 +255,10 @@ class SiteController extends Controller
 
 	}
 	
+	public function ilmainenIlmoitus()
+	{
+		return 'Ilmainen käyttö on mahdoton jos tunnit enemmään kun 500';
+	}
 
 	public function laskuriForCron($domain)
 	{
@@ -275,7 +279,7 @@ class SiteController extends Controller
 
 	}
 
-	protected function digistenTunnitYhteensa($start_date, $end_date)
+	public function digistenTunnitYhteensa($start_date, $end_date)
 	{
 
 

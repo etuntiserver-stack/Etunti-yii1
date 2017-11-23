@@ -439,17 +439,28 @@ public function actionTiedosto($dom)
 }
 
 
-protected function checkKokeiluversion()
+protected function checkKokeiluversion($domain)
 {
+		$sum_result = 0;
+		$site = Yii::app()->createController('Site');
+		$domainit = Domainit::model()->find(" domain='".$domain."' AND maksullinen=0 ");
+		Yii::app()->user->setState('ilmainen_ilmoitus', 'Ilmainen käyttö on mahdoton jos tunnit enemmään kun 500');
 
-	$asetukset = Asetukset::model()->findbypk(1);
-	if( $asetukset->maksullinen == 0 and $asetukset->ilmainen_versio_kayttotunnit > 500 )
-	{
-        	return false;
-	} else {
-        	return true;
-	}
+		if( isset($domainit->id) )
+		{
+	
+			$start_date = date( "Y-m-d", strtotime('first day of this month') );
+			$end_date = date("Y-m-d", strtotime('last day of this month') );
+			$sum_result = $site[0]->digistenTunnitYhteensa($start_date, $end_date);
 
+			if($domainit->ilmainen_versio_kayttotunnit != $sum_result)
+				Domainit::model()->updateByPk($domainit->id, array('ilmainen_versio_kayttotunnit'=>$sum_result));
+		}
+
+	if($sum_result > 500)
+		return false;
+	else
+		return true;
 }
 
 public function actionImei($dom)
@@ -465,9 +476,10 @@ public function actionImei($dom)
 		$this->checkDBexists($dom);
 
 		// <-- kokeiluversion
-		if(!$this->checkKokeiluversion())
+		if(!$this->checkKokeiluversion($dom))
 		{
-        		$this->_sendResponse(200, "eiLoytyTekija//Kokeiluversion aikaraja on täyttynyt.");
+			$site = Yii::app()->createController('Site');
+        		$this->_sendResponse(200, "eiLoytyTekija//".$site[0]->ilmainenIlmoitus());
 			exit;
 		}
 		//     kokeiluversion -->
