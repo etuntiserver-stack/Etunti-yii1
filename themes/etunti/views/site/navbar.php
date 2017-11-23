@@ -1082,7 +1082,7 @@ $('.tvchange').change(function(){
           </li>
 	<?php endif; ?>
 
-	<?php if(in_array('4',$tas)) : ?>
+
           <li>
             <a class="accordion-toggle onlinevaraus" href="#">
               <span class="fa fa-clock-o"></span>
@@ -1104,7 +1104,7 @@ $('.tvchange').change(function(){
               </li>
             </ul>
           </li>
-	<?php endif; ?>
+
 
 
 	<?php if(in_array('5',$tas)) : ?>
