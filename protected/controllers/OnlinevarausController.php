@@ -47,30 +47,46 @@ class OnlinevarausController extends Controller
 
 	public function isEtuntiAdmin() {
 
-	$tas = '';
-	if(isset(Yii::app()->user->adminPaketti))
-	$tas = explode(",",Yii::app()->user->adminPaketti);
+		$tas = '';
+		if(isset(Yii::app()->user->adminPaketti))
+		$tas = explode(",",Yii::app()->user->adminPaketti);
 
 		if(isset(Yii::app()->user->adminID) and in_array('4',$tas))
 		{
-		$m = Administrators::model()->findbypk(Yii::app()->user->adminID);
-	       	if($m->id == Yii::app()->user->adminID)
-	       	  return true;
-		else
-	       	   return false;		
+		   $m = Administrators::model()->findbypk(Yii::app()->user->adminID);
+	       	   if($m->id == Yii::app()->user->adminID)
+		   {
+			return true;
+		   } else {
+			$this->otaKaytoonFlash();
+	       	   	return false;
+		   }		
 
 		} else {
-	            return false;
+		    $this->otaKaytoonFlash();
+	            $this->redirect(array('/site/etusivu'));
 		}
 	}
 
         public function init()
         {
-
                 Yii::app()->theme = 'classic';
-		parent::init();
-		if(isset($_GET['domain']))
+		if(isset($_GET['domain']) and !isset(Yii::app()->user->domain))
 		{
+
+			$domainit = Domainit::model()->find(" domain='".$_GET['domain']."' ");
+			if(isset($domainit->paketti))
+			{
+				$tas = array();
+				$tas = explode(",",$domainit->paketti);
+				if(!in_array('4', $tas))
+				{
+				    $this->otaKaytoonFlash();
+			            $this->redirect(array('/site/index'));
+				}
+			}
+	
+
 			Yii::app()->user->setState('domain', $_GET['domain']);
 			if(isset($_GET['aid']))
 			{
@@ -85,8 +101,32 @@ class OnlinevarausController extends Controller
 			}
 			$this->redirect(array('index'));
 		}
+
+
+		if(isset(Yii::app()->user->domain))
+		{
+
+			$domainit = Domainit::model()->find(" domain='".Yii::app()->user->domain."' ");
+			if(isset($domainit->paketti))
+			{
+				$tas = array();
+				$tas = explode(",",$domainit->paketti);
+				if(!in_array('4', $tas))
+				{
+				    $this->otaKaytoonFlash();
+			            $this->redirect(array('/site/etusivu'));
+				}
+			}
+		}
+
+		parent::init();
         }
 
+	protected function otaKaytoonFlash()
+	{
+		Yii::app()->user->setFlash('warning', "Ota Online-varaus käyttöön ottamalla yhteyttä: tuki@etunti.fi.");
+		return true;
+	}
 
 	public function actionKupongi_checker($kupongi)
 	{
