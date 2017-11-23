@@ -372,11 +372,45 @@ var etusivuAjax = function(){
 		      </tr>
                     </tbody>
                   </table>
-		<center><?php echo CHtml::link(Yii::t('main', 'Aloita maksullinen käyttö'),"maksullinen", array("submit"=>array('maksullinen'), 'confirm' => 'Oletko varma?')); ?></center>
+		<center><a href="#" data-toggle="modal" data-target="#myModalAloitus">
+		<?=Yii::t('main', 'Aloita Laajennettu käyttö')?>
+		</a></center>
                 </div>
               </div>
 	      <?php endif; ?>
 
+
+
+<!-- Modal -->
+<style>
+.modal-dialog-center {
+    margin-top: 15%;
+}
+</style>
+<div id="myModalAloitus" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-dialog-center">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Modal Header</h4>
+      </div>
+      <div class="modal-body">
+        <p>Some text in the modal.</p>
+      </div>
+      <div class="modal-footer">
+	<?php echo CHtml::link(Yii::t('main', 'Aloita Laajennettu käyttö'),"maksullinen", 
+			array("submit"=>array('maksullinen'), 
+			'confirm' => 'Oletko varma?',
+			'class' => 'btn btn-primary'
+	)); ?>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
 
 	      <?php if($this->tasot(5)) : ?>
               <div class="panel" id="p22">
