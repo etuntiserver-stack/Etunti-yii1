@@ -32,6 +32,7 @@ setTimeout(function() {
     var domain = '';
     var email = '';
     var salasana = '';
+    var developer = false;
 
 
     if(localStorage.getItem('domain'))
@@ -101,7 +102,10 @@ setTimeout(function() {
     }
     // On device Ready -->
 
-    //server = '../../..';
+    if(developer == true){
+    	server = '../../..';
+    }
+
     var url = server+"/index.php/api/mob";
     var puh_nro = "";
     var versio = "";
