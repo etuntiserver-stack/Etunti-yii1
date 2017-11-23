@@ -7,6 +7,47 @@ $this->breadcrumbs=array(
 	$model->id=>array('view','id'=>$model->id),
 	'Update',
 );
+
+if(isset($_GET['first']))
+{
+echo '
+<!-- Modal -->
+<style>
+.modal-dialog-center {
+    margin-top: 15%;
+}
+</style>
+<div id="myModalFirst" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-dialog-center">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Tervetuloa Etunnin käyttäjäksi.</h4>
+      </div>
+      <div class="modal-body">
+        <p>Ohjeet löydät ylärivin valikosta, kohta Asetukset. Käyttöönotto-ohjeen saat <a href="'.Yii::app()->request->baseUrl.'/lib/pdf/etunti_ko.pdf" target="_blank">tästä</a>.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Sulje</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+	$("#myModalFirst").modal({ show : true });
+	$("#yrityksentiedot").addClass("in");
+});
+</script>
+';
+
+	FirmanTiedot::model()->updateByPk(1, array( 'juuri_tullut_asiakkaaksi' => 0 ));
+}
 /*
 $this->menu=array(
 	array('label'=>'List Asetukset', 'url'=>array('index')),

@@ -35,7 +35,7 @@ class FirmanTiedot extends DB2ActiveRecord
 	public function tableName()
 	{
 		$tb_name = 'sivex_tyonantaja';
-		$check_this_table = false;
+		$check_this_table = true;
 		//unset(Yii::app()->session[$tb_name]); // this use if want many times play
 		if(!isset(Yii::app()->session[$tb_name]))
 		{
@@ -75,7 +75,8 @@ class FirmanTiedot extends DB2ActiveRecord
                      'sahkopostilaskuosoite' => 'varchar(255)',
                      'laskutus_ovt_tunnus' => 'varchar(255)',
                      'verkkolaskuosoite' => 'varchar(255)',
-                     'operaattorin_valittajan_tunnus' => 'varchar(255)'
+                     'operaattorin_valittajan_tunnus' => 'varchar(255)',
+                     'juuri_tullut_asiakkaaksi' => 'int(1) DEFAULT 1'
 		);
 
 		foreach($table_structure as $key=>$value)
@@ -102,6 +103,7 @@ class FirmanTiedot extends DB2ActiveRecord
 			array('osoite, puhelin, sahkoposti, tilinumero, iban, johtaja', 'length', 'max'=>100),
 			array('laskutus_kanava, laskutus_osoite, laskutus_postinumero, laskutus_postitoimipaikka, sahkopostilaskuosoite, laskutus_ovt_tunnus, verkkolaskuosoite, operaattorin_valittajan_tunnus', 'length', 'max'=>255),
 			array('bic', 'length', 'max'=>20),
+			array('juuri_tullut_asiakkaaksi', 'numerical', 'integerOnly'=>false),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('id, tyonantaja, osoite, postinumero, postitoimipaikka, puhelin, y_tunnus, sahkoposti, tilinumero, iban, bic, johtaja', 'safe', 'on'=>'search'),
@@ -137,6 +139,12 @@ class FirmanTiedot extends DB2ActiveRecord
 			'iban' => Yii::t('main', 'IBAN'),
 			'bic' => Yii::t('main', 'BIC'),
 			'johtaja' => Yii::t('main', 'Johtaja'),
+			'operaattorin_valittajan_tunnus' => Yii::t('main', 'Operaattorin välittäjän tunnus'),
+			'sahkopostilaskuosoite' => Yii::t('main', 'Sähköpostilaskuosoite'),
+			'laskutus_kanava' => Yii::t('main', 'Laskutus kanava'),
+			'laskutus_osoite' => Yii::t('main', 'laskutus osoite'),
+			'laskutus_postinumero' => Yii::t('main', 'Laskutus postinumero'),
+			'laskutus_postitoimipaikka' => Yii::t('main', 'Laskutus postitoimipaikka'),
 		);
 	}
 
