@@ -994,7 +994,8 @@ $months=array(
 
 		$criteria=new CDbCriteria;
 		$criteria->condition = "
-			online_varauksen_valmina=1 
+			aktiivinen=1
+			AND online_varauksen_valmina=1 
 			AND id NOT IN ( SELECT tid FROM sivex_tvuoro WHERE pvm='".date("d.m.Y", strtotime($date))."' )
 		";
 		if(!empty($tyo_toimialue))
@@ -1026,7 +1027,7 @@ $months=array(
 		$criteria->order = " tid,UNIX_TIMESTAMP(STR_TO_DATE(loppu, '%H:%i'))  ";
 		$criteria->condition = "
 			pvm='".date("d.m.Y", strtotime($date))."'
-			AND tid IN ( SELECT id FROM sivex_ttekijat WHERE online_varauksen_valmina=1 )
+			AND tid IN ( SELECT id FROM sivex_ttekijat WHERE aktiivinen=1 AND online_varauksen_valmina=1 )
 			AND UNIX_TIMESTAMP(STR_TO_DATE(alku, '%H:%i')) >='".strtotime($onlinevaraus_alku.":00")."'
 			AND UNIX_TIMESTAMP(STR_TO_DATE(loppu, '%H:%i')) <='".strtotime($onlinevaraus_loppu.":00")."'
 		";
