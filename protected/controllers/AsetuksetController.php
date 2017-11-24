@@ -158,8 +158,8 @@ class AsetuksetController extends Controller
 		if(isset($_POST['FirmanTiedot']))
 		{
 			$f->attributes=$_POST['FirmanTiedot'];
-			$f->save();
-
+			if($f->save())
+			$this->redirect(array('update','id'=>$model->id));
 		}
 
 		if(isset($_POST['Asetukset']))
