@@ -203,10 +203,29 @@ class SiteController extends Controller
 
 	public function actionMaksullinen()
 	{
+
+		$return = '';
+		$arr = array();
+		if(isset($_POST['dat']))
+		{
+			foreach($_POST['dat'] as $key => $item)
+			  if($item == 'true')
+				$arr[] = $key;
+
+			ksort($arr);
+			$return = '1,2';
+			if(count($arr) > 0)
+			$return .= ",".implode(",", $arr);
+
+		}
+
+
 		$domainit = Domainit::model()->find(" domain='".Yii::app()->user->domain."' AND maksullinen=0 ");
 		if(isset($domainit->id))
 		{
 				Domainit::model()->updateByPk($domainit->id, array('maksullinen' => 1));
+				if(!empty($return))
+				Domainit::model()->updateByPk($domainit->id, array('paketti' => $return));
 
 				$subject = Yii::t('main', 'Etunti-käyttäjä vaihtoi maksulliseksi');
 				$message = '

@@ -384,7 +384,7 @@ var etusivuAjax = function(){
 <!-- Modal -->
 <style>
 .modal-dialog-center {
-    margin-top: 15%;
+    margin-top: 10%;
 }
 .modal_checkbox {
     -webkit-appearance:none;
@@ -411,7 +411,7 @@ var etusivuAjax = function(){
         <button type="button" class="close" data-dismiss="modal">&times;</button>
         <h4 class="modal-title"><?=Yii::t('main', 'Olet aloittamassa Etunnin laajennetun käytön.')?></h4>
       </div>
-      <div class="modal-body">
+      <div class="modal-body" id="body-aloita">
         <p>
 <p>Laajennettu Etunti-ohjelma mahdollistaa yli <b>500</b> työtunnin suunnittelun ja toteuman.</p> 
 <p>Lisäksi saat kattavamman käyttäjätuen käyttöösi. Sinulla on myös mahdollisuus muokata palvelupakettiasi haluamaasi kokoonpanoon. Tutustu lisäosiin tästä. (Linkki lisäosiin)</p>
@@ -424,13 +424,13 @@ Valitse Laajennetun palvelun kokonaisuus tästä:</p>
 	<p><input type="checkbox" name="eTyo" value="eTyo" class="modal_checkbox" checked disabled> 
 		<span class="modaltxt">eTyö (Sisältyy)</span>
 	</p>
-	<p><input type="checkbox" name="eLasku" class="modal_checkbox" value="eLasku"> 
+	<p><input type="checkbox" name="eLasku" class="modal_checkbox val" value="3"> 
 		<span class="modaltxt">eLasku</span>
 	</p>
-	<p><input type="checkbox" name="eOnline" class="modal_checkbox" value="eOnline"> 
+	<p><input type="checkbox" name="eOnline" class="modal_checkbox val" value="4"> 
 		<span class="modaltxt">eOnline</span>
 	</p>
-	<p><input type="checkbox" name="eDico" class="modal_checkbox" value="eDico"> 
+	<p><input type="checkbox" name="eDico" class="modal_checkbox val" value="5"> 
 		<span class="modaltxt">eDico</span>
 	</p>
  </div>
@@ -442,11 +442,53 @@ Valitse Laajennetun palvelun kokonaisuus tästä:</p>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Sulje</button>
         <button type="button" class="btn btn-primary aloitan_maksullinen"><?=Yii::t('main', 'Aloita Laajennettu käyttö')?></button>
+	<?php echo CHtml::link('Kirjaudu ulos',"/index.php/user/logout",array(
+		"class"=>"btn btn-primary hidden",
+		"id" => "ulospainike"
+	)); ?>
       </div>
     </div>
 
   </div>
 </div>
+
+<script>
+$( document ).ready(function() {
+  $(".aloitan_maksullinen").click(function(){
+
+    $(".aloitan_maksullinen").text('Odota..');
+    var paketti = [];
+    $( ".modal_checkbox.val" ).each(function(index) {
+	paketti[$( this ).val()] = $( this ).prop('checked');
+    });
+    //console.log(paketti);
+	if(confirm('Oletko varma?'))
+	{
+        $.ajax({
+           url: location.protocol + "//" + location.host + "/index.php/site/maksullinen",
+	   type:'POST',
+	   data: {dat : paketti},
+           success: function(data){
+		console.log(data);
+
+		$(".aloitan_maksullinen").remove();
+		$("#ulospainike").removeClass('hidden');
+	
+		$("#body-aloita").html('<p>Onneksi olkoon!</p>' +
+			'Sinulla on nyt laajennettu Etunti-ohjelma liiketoimintasi tukena.' +
+			'<p><b>Kirjaudu ulos ja palaa takaisin.</b></p>'
+		);
+
+    	   },
+    	   error: function(XMLHttpRequest, textStatus, errorThrown) {
+	    	console.log(XMLHttpRequest);
+ 	   }
+        });
+	}
+	return false;
+  });
+});
+</script>
 <!-- Modal -->
 
 
