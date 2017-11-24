@@ -422,7 +422,7 @@ Valitse Laajennetun palvelun kokonaisuus tästä:</p>
 <div class="row">
  <div class="col-sm-offset-1 col-sm-6">
 	<p><input type="checkbox" name="eTyo" value="eTyo" class="modal_checkbox" checked disabled> 
-		<span class="modaltxt">Sisältyy</span>
+		<span class="modaltxt">eTyö (Sisältyy)</span>
 	</p>
 	<p><input type="checkbox" name="eLasku" class="modal_checkbox" value="eLasku"> 
 		<span class="modaltxt">eLasku</span>
