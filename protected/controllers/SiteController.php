@@ -1273,7 +1273,7 @@ class SiteController extends Controller
 	}
 	public function actionOhjevideot()
 	{
-		//$this->render('ohjevideot');
+		$this->render('ohjevideot');
 	}
 	public function actionAsiakkaat()
 	{
