@@ -386,6 +386,21 @@ var etusivuAjax = function(){
 .modal-dialog-center {
     margin-top: 15%;
 }
+.modal_checkbox {
+    -webkit-appearance:none;
+    width:20px;
+    height:20px;
+    background:white;
+    border-radius:5px;
+    border:2px solid #555;
+}
+.modal_checkbox:checked {
+    background: #abd;
+}
+.modaltxt{
+  margin-left: 10px;
+  font-size:120%;
+}
 </style>
 <div id="myModalAloitus" class="modal fade" role="dialog">
   <div class="modal-dialog modal-dialog-center">
@@ -394,23 +409,47 @@ var etusivuAjax = function(){
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Modal Header</h4>
+        <h4 class="modal-title"><?=Yii::t('main', 'Olet aloittamassa Etunnin laajennetun käytön.')?></h4>
       </div>
       <div class="modal-body">
-        <p>Some text in the modal.</p>
+        <p>
+<p>Laajennettu Etunti-ohjelma mahdollistaa yli <b>500</b> työtunnin suunnittelun ja toteuman.</p> 
+<p>Lisäksi saat kattavamman käyttäjätuen käyttöösi. Sinulla on myös mahdollisuus muokata palvelupakettiasi haluamaasi kokoonpanoon. Tutustu lisäosiin tästä. (Linkki lisäosiin)</p>
+<p>Etunti-ohjelman maksullisen version hinta perustuu suunniteltuihin tai toteutuneisiin työtunteihin, riippuen siitä, kumpi luku on suurempi. Maksat siis työtuntien mukaan. Katso tarkempi hinnasto täältä. (Linkki hinnastoon).</p>
+<p><b>Huom!</b> Kun olet ottanut käyttöön maksullisen version, ei sitä voi enää palauttaa ilmaisversioksi. <br>
+Valitse Laajennetun palvelun kokonaisuus tästä:</p>
+
+<div class="row">
+ <div class="col-sm-offset-1 col-sm-6">
+	<p><input type="checkbox" name="eTyo" value="eTyo" class="modal_checkbox" checked disabled> 
+		<span class="modaltxt">Sisältyy</span>
+	</p>
+	<p><input type="checkbox" name="eLasku" class="modal_checkbox" value="eLasku"> 
+		<span class="modaltxt">eLasku</span>
+	</p>
+	<p><input type="checkbox" name="eOnline" class="modal_checkbox" value="eOnline"> 
+		<span class="modaltxt">eOnline</span>
+	</p>
+	<p><input type="checkbox" name="eDico" class="modal_checkbox" value="eDico"> 
+		<span class="modaltxt">eDico</span>
+	</p>
+ </div>
+</div>
+
+
+	</p>
       </div>
       <div class="modal-footer">
-	<?php echo CHtml::link(Yii::t('main', 'Aloita Laajennettu käyttö'),"maksullinen", 
-			array("submit"=>array('maksullinen'), 
-			'confirm' => 'Oletko varma?',
-			'class' => 'btn btn-primary'
-	)); ?>
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Sulje</button>
+        <button type="button" class="btn btn-primary aloitan_maksullinen"><?=Yii::t('main', 'Aloita Laajennettu käyttö')?></button>
       </div>
     </div>
 
   </div>
 </div>
+<!-- Modal -->
+
+
 
 	      <?php if($this->tasot(5)) : ?>
               <div class="panel" id="p22">
