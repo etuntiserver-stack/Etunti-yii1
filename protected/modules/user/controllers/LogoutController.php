@@ -10,6 +10,7 @@ class LogoutController extends Controller
 	public function actionLogout()
 	{
 		Yii::app()->user->logout();
+		if(isset($_SESSION['domain'])){ unset($_SESSION['domain']); }
 		$this->redirect(Yii::app()->request->baseUrl.'/index.php');
 	}
 
