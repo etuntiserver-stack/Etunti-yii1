@@ -1351,7 +1351,7 @@ exit;
 	{
 
 		$criteria=new CDbCriteria;
-		$criteria->order = " DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') DESC ";
+		$criteria->order = " DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') ASC ";
 		$criteria->condition = " 
 			kohde IN
 			(
