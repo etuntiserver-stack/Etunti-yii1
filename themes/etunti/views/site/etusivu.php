@@ -413,11 +413,14 @@ var etusivuAjax = function(){
       </div>
       <div class="modal-body" id="body-aloita">
         <p>
-<p>Laajennettu Etunti-ohjelma mahdollistaa yli <b>500</b> työtunnin suunnittelun ja toteuman.</p> 
-<p>Lisäksi saat kattavamman käyttäjätuen käyttöösi. Sinulla on myös mahdollisuus muokata palvelupakettiasi haluamaasi kokoonpanoon. Tutustu lisäosiin tästä. (Linkki lisäosiin)</p>
-<p>Etunti-ohjelman maksullisen version hinta perustuu suunniteltuihin tai toteutuneisiin työtunteihin, riippuen siitä, kumpi luku on suurempi. Maksat siis työtuntien mukaan. Katso tarkempi hinnasto täältä. (Linkki hinnastoon).</p>
-<p><b>Huom!</b> Kun olet ottanut käyttöön maksullisen version, ei sitä voi enää palauttaa ilmaisversioksi. <br>
-Valitse Laajennetun palvelun kokonaisuus tästä:</p>
+<p><b>Laajennettu</b> Etunti-ohjelma mahdollistaa yli <b>500</b> työtunnin suunnittelun ja toteuman. Lisäksi saat kattavamman käyttäjätuen käyttöösi. Sinulla on myös mahdollisuus muokata palvelupakettiasi haluamaasi kokoonpanoon. Tutustu lisäosiin <?php echo CHtml::link('tästä',"/index.php/site/mika-on-etunti"); ?>.</p>
+ 
+<p><b>Etunti-ohjelman</b> maksullisen version hinta perustuu suunniteltuihin tai toteutuneisiin työtunteihin, riippuen siitä, kumpi luku on suurempi. Työtunti tarkoittaa joko suunniteltua tai leimattua työtuntia, riippuen siitä kumpien yhteenlaskettu summa on suurempi. Työtunnit eivät sisällä matkoja eivätkä lounaita. Maksat siis vain työtuntien mukaan. Katso tarkempi hinnasto täältä. (Linkki hinnastoon).</p>
+ 
+<p><b>Huom!</b> Kun olet ottanut käyttöön maksullisen version, ei sitä voi enää palauttaa ilmaisversioksi.</p>
+ 
+ 
+<p>Valitse Laajennetun palvelun kokonaisuus tästä:</p>
 
 <div class="row">
  <div class="col-sm-offset-1 col-sm-6">
