@@ -62,7 +62,7 @@ setTimeout(function() {
 	else
     		var server = 'https://'+localStorage.getItem('server');
     } else {
-    	var server = 'https://etunti.fi';
+    	var server = 'https://app.etunti.fi';
     }
 
     localStorage.removeItem('platform');
@@ -90,7 +90,7 @@ setTimeout(function() {
 	    if(localStorage.getItem('server'))
 	    	server = 'https://'+localStorage.getItem('server');
 	    else
-	    	server = 'https://etunti.fi';
+	    	server = 'https://app.etunti.fi';
 
 	}
 
