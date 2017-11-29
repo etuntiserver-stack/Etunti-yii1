@@ -6,6 +6,7 @@
 <div class="container">
 
 
+<script src='https://www.google.com/recaptcha/api.js'></script>
 
 <div class="row">
  <div class="col-sm-offset-1 col-sm-10">
@@ -30,6 +31,9 @@
         <input type="text" id="sahkoposti2" name="sahkoposti2" class="form-control input-lg" required>
 	<br>
 	<p><a href="#" data-toggle="modal" data-target="#kehdot">Käyttöehdot</a></p>
+
+	<p><div class="g-recaptcha" data-sitekey="6LcY2joUAAAAAFhvZM36PBNwej6vJiaHBZNsXeL4"></div></p>
+
         <p><button class="btn btn-lg btn-primary btn-group submit" type="submit"><?php echo Yii::t('main', 'Ota käyttöön'); ?></button></p>
     	</form>
 	<div id="success"></div>
