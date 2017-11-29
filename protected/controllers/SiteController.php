@@ -608,7 +608,7 @@ class SiteController extends Controller
 				$new_domain->domain = $kirjautumistunnus;
 				$new_domain->kirjautumistunnus = $kirjautumistunnus;
 				$new_domain->yritys = $_POST['yrityksen_nimi'];
-				$new_domain->paketti = '1,2,3,4,5,6';
+				$new_domain->paketti = '1,2,3,5';
 				$new_domain->sahkoposti = $_POST['sahkoposti'];
 				$new_domain->aktiivinen = 1;
 				$new_domain->maksullinen = 0;
