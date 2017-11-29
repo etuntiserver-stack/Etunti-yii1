@@ -24,7 +24,7 @@ class AsetuksetController extends Controller
 		return array(
 
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('update','oikeudet', 'rekisteriseloste'),
+				'actions'=>array('update', 'yrityksentiedot', 'oikeudet', 'rekisteriseloste'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -141,7 +141,7 @@ class AsetuksetController extends Controller
 	 * If update is successful, the browser will be redirected to the 'view' page.
 	 * @param integer $id the ID of the model to be updated
 	 */
-	public function actionUpdate($id)
+	public function actionYrityksentiedot($id)
 	{
 
 	// <-- Oikeudet
@@ -159,9 +159,34 @@ class AsetuksetController extends Controller
 		{
 			$f->attributes=$_POST['FirmanTiedot'];
 			if($f->save())
-			$this->redirect(array('update','id'=>$model->id));
+			{
+				Yii::app()->user->setFlash('success', "Tiedot tallennettu.");
+				$this->redirect(array('yrityksentiedot','id'=>$model->id));
+			}
 		}
 
+		$this->render('yrityksentiedot',array(
+			'f'=>$f,
+		));
+
+	}
+
+
+	/**
+	 * Updates a particular model.
+	 * If update is successful, the browser will be redirected to the 'view' page.
+	 * @param integer $id the ID of the model to be updated
+	 */
+	public function actionUpdate($id)
+	{
+
+	// <-- Oikeudet
+	   $checkOikeus = "asetukset_2_".Yii::app()->user->adminStatus;
+	   $site = Yii::app()->createController('Site');
+	   $site[0]->checkOikeus($checkOikeus);
+	//  Oikeudet -->
+
+		$model=$this->loadModel($id);
 		if(isset($_POST['Asetukset']))
 		{
 
@@ -215,7 +240,6 @@ class AsetuksetController extends Controller
 
 		$this->render('update',array(
 			'model'=>$model,
-			'f'=>$f,
 		));
 	}
 

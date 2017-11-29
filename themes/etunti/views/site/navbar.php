@@ -600,6 +600,10 @@ $('.tvchange').change(function(){
                 <span class="fa fa-gear"></span> <?php echo Yii::t('main','Asetukset'); ?> </a>
             </li>
             <li class="list-group-item">
+              <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/asetukset/yrityksentiedot?id=1" class="animated animated-short fadeInUp">
+                <span class="fa fa-gear"></span> <?=Yii::t('main','Yrityksen tiedot')?> </a>
+            </li>
+            <li class="list-group-item">
               <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/administrators/index" class="animated animated-short fadeInUp">
                 <span class="fa fa-gear"></span> <?php echo Yii::t('main','Käyttäjät'); ?> </a>
             </li>

@@ -11,7 +11,7 @@
 )); ?>
 
 <div class="row">
- <div class="col-sm-3">
+ <div class="col-sm-12">
 	<legend><?=Yii::t('main', 'Yrityksen tiedot')?></legend>
 
 	<?php echo $form->errorSummary($model); ?>
@@ -124,12 +124,12 @@ laskutus_kanava, laskutus_osoite, laskutus_postinumero, laskutus_postitoimipaikk
 	</div>
 */ ?>
 
- </div>
+
 </div><!-- form -->
 
 <br>
 
-	<div class="section fill mb5">
+	<div class="section buttons">
 		<?php echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Tallenna',array('class'=>'btn btn-primary')); ?>
 	</div>
 
