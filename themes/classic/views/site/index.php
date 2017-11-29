@@ -1,6 +1,6 @@
-
-
-
+<?php
+	if(isset($_SESSION['domain'])){ unset($_SESSION['domain']); }
+?>
 <br><br>
 
 <div class="container">
