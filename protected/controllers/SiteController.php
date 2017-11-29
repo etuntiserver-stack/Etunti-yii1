@@ -672,7 +672,7 @@ class SiteController extends Controller
 				$mail->setBody($message);
 				if($mail->send())
 				{
-					Yii::app()->user->setFlash('success', "Ilmainen tila on valmis. Tarkista oma sähköpostisi");
+					Yii::app()->user->setFlash('success', "Kiitoksia tilauksesta.<br> Palvelun käyttöön tarvittavat tunnukset on lähetty sähköpostiisi.<br> Näillä tunnuksilla voit heti aloittaa palvelun käyttämisen.");
 					//Yii::app()->session->destroy();
 					$this->redirect(array('index'));
 				} 
