@@ -1175,7 +1175,7 @@ $('.tvchange').change(function(){
 
 	<?php if(in_array('6',$tas)) : ?>
           <li>
-            <a class="accordion-toggle onlinevaraus" href="#">
+            <a class="accordion-toggle" href="#">
               <span class="fa fa-line-chart"></span>
               <span class="sidebar-title"><?php echo Yii::t('main', 'Management'); ?></span>
               <span class="caret"></span>
