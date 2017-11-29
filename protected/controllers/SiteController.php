@@ -575,7 +575,7 @@ class SiteController extends Controller
 		$vastaus = '';
 		$kirjautumistunnus = '';
 
-		if(isset($_POST['yrityksen_nimi']))
+		if(isset($_POST['yrityksen_nimi']) and !empty($_POST['yrityksen_nimi']))
 		{
 
 			//print_r($_POST);
@@ -684,7 +684,7 @@ class SiteController extends Controller
 
 		}
 
-		$this->render('aloita', array(
+		$this->render('index', array(
 			'vastaus' => $vastaus,
 			'database' => $database,
 			'kirjautumistunnus' => $kirjautumistunnus,
