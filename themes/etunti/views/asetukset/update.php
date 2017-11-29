@@ -8,46 +8,7 @@ $this->breadcrumbs=array(
 	'Update',
 );
 
-if(isset($_GET['first']))
-{
-echo '
-<!-- Modal -->
-<style>
-.modal-dialog-center {
-    margin-top: 15%;
-}
-</style>
-<div id="myModalFirst" class="modal fade" role="dialog">
-  <div class="modal-dialog modal-dialog-center">
 
-    <!-- Modal content-->
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Tervetuloa Etunnin käyttäjäksi.</h4>
-      </div>
-      <div class="modal-body">
-        <p>Ohjeet löydät ylärivin valikosta, kohta Asetukset. Käyttöönotto-ohjeen saat <a href="'.Yii::app()->request->baseUrl.'/lib/pdf/etunti_ko.pdf" target="_blank">tästä</a>.</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Sulje</button>
-      </div>
-    </div>
-
-  </div>
-</div>
-
-
-<script type="text/javascript">
-$(document).ready(function(){
-	$("#myModalFirst").modal({ show : true });
-	$("#yrityksentiedot").addClass("in");
-});
-</script>
-';
-
-	FirmanTiedot::model()->updateByPk(1, array( 'juuri_tullut_asiakkaaksi' => 0 ));
-}
 /*
 $this->menu=array(
 	array('label'=>'List Asetukset', 'url'=>array('index')),
@@ -185,43 +146,6 @@ exit;
 
 	   <h2 class="myBgColors p20"> <i class="fa fa-gear"></i> <?php echo Yii::t('main', 'ASETUKSET'); ?> </h2>
 
-
-	   <?php
-		$domainit = Domainit::model()->find(" domain='".Yii::app()->user->domain."' AND maksullinen=0 ");
-	   ?>
-	   <?php if( isset($domainit->id) ) : ?>
-	   <style>
-	   .isoradio { 
-	   height: 20px;
-	   width: 20px;
-	   display: inline-block;
-	   cursor: pointer;
-	   margin-top: 0;
-	   background: #FFF;
-	   border: 1px solid #d2d2d2;
-	   border-radius: 100%;
-	  }
-	   </style>
-
-		<center><p>
-		<?php echo CHtml::link('<h2><input type="radio" class="isoradio"> ' .Yii::t('main', 'Aloita maksullinen käyttö').'</h2>',"/site/maksullinen", 
-			array("submit"=>array('/site/maksullinen'), 'confirm' => 'Oletko varma?'
-		)); ?>
-		</p></center>
-	   <?php endif; ?>
-
-	   <p><div class="btn btn-primary btn-block myBgColors" data-toggle="collapse" data-target="#yrityksentiedot"><h3><?php echo Yii::t('main','Yrityksen tiedot'); ?> &nbsp; <i class="fa fa-caret-square-o-down" aria-hidden="true"></i> </h3></div></p>
-
-            <div class="admin-form collapse" id="yrityksentiedot">
-              <div class="panel heading-border">
-                 <div class="panel-body bg-light">
-                  <div class="row">
-		  <?php echo $this->renderPartial('//firmanTiedot/_form', array('model'=>$f)); ?>
-                  </div>
-                 </div>
-
-              </div>
-            </div>
 
 
             <div class="admin-form">

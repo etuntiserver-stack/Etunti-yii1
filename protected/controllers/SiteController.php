@@ -1516,7 +1516,7 @@ $(document).ready(function(){
 		   $fm = FirmanTiedot::model()->find(" id=1 AND juuri_tullut_asiakkaaksi=1 ");
 		   if( isset($dm->id) and isset($fm->id) )
 		   {
-			$this->redirect(array('/asetukset/update', 'id' => 1, 'first' => true));
+			$this->redirect(array('/asetukset/yrityksentiedot', 'id' => 1, 'first' => true));
 		   }
 		}
 		//     juuri_tullut_asiakkaaksi -->
