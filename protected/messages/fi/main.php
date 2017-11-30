@@ -668,6 +668,12 @@ Etunti
 ',
 	'laskutettuAllaOlevaIlmoitus'=>'Vihreät reunukset kertovat, että tietoja ei voida enää muokata, koska niitä on jo muokattu tuntien hyväksynnässä.',
 
+
+
+'ilmainen_maksulliseksi' => 'Perusversio muutettu Laajaksi',
+'new_domain' => 'Yritys on rekisteröinyt Perusversion',
+
+
 	);
 
 

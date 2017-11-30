@@ -1213,6 +1213,10 @@ $('.tvchange').change(function(){
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/asetuksetForAll/update?id=1">
                   <span class="fa fa-clock-o"></span> <?php echo Yii::t('main', 'Digisten asetukset'); ?></a>
               </li>
+              <li>
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/DigistenYritysLog/index">
+                  <span class="fa fa-clock-o"></span> <?php echo Yii::t('main', 'Yritysten loki'); ?></a>
+              </li>
             </ul>
           </li>
 	<?php endif; ?>
