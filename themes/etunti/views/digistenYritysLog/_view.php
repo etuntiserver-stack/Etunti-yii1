@@ -27,6 +27,14 @@
 		?>
 	</td>
 	<td>
+		<?php 
+		if(isset($data->domain->yritys))
+		{
+			echo $data->domain->sahkoposti; 
+		}
+		?>
+	</td>
+	<td>
 		<?php echo date("d.m.Y H:i", strtotime($data->time)); ?>
 	</td>
 	<td>
