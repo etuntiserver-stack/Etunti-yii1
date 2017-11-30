@@ -235,10 +235,14 @@ class SiteController extends Controller
 				';
 				$mail = new YiiMailer();
 				$mail->setFrom('no-reply@etunti.fi');
-				$mail->setTo('laptopsr@gmail.com');
+				$mail->setTo('etuntimarkkinointi@etunti.fi');
 				$mail->setSubject($subject);
 				$mail->setBody($message);
 				$mail->send();
+
+
+				$DigistenYritysLog = Yii::app()->createController('DigistenYritysLog');
+				$DigistenYritysLog[0]->addTapahtuma($domainit->id, 'ilmainen_maksulliseksi', $return);
 
 				Yii::app()->user->setFlash('success', "Olette vaihtaneet ilmaisen palvelun laajempisisältöiseen maksulliseen palveluun.<br> Kysymyksissä pyydämme ottamaan yhteyttä sähköpostilla osoitteeseen tuki@etunti.fi");
 
@@ -604,15 +608,20 @@ class SiteController extends Controller
 			$chk_domain = Domainit::model()->find(" domain='".$kirjautumistunnus."' ");
 			if(!isset($chk_domain->id))
 			{
+				$paketti = '1,2,3,5';
 				$new_domain = new Domainit;
 				$new_domain->domain = $kirjautumistunnus;
 				$new_domain->kirjautumistunnus = $kirjautumistunnus;
 				$new_domain->yritys = $_POST['yrityksen_nimi'];
-				$new_domain->paketti = '1,2,3,5';
+				$new_domain->paketti = $paketti;
 				$new_domain->sahkoposti = $_POST['sahkoposti'];
 				$new_domain->aktiivinen = 1;
 				$new_domain->maksullinen = 0;
-				$new_domain->save();
+				if($new_domain->save())
+				{
+					$DigistenYritysLog = Yii::app()->createController('DigistenYritysLog');
+					$DigistenYritysLog[0]->addTapahtuma($new_domain->id, 'new_domain', $paketti);
+				}
 			}
 
 
@@ -662,7 +671,7 @@ class SiteController extends Controller
 				$message = '';
 				$message .= '<p>Yritystunnus: '.$kirjautumistunnus.'</p>';
 				$message .= '<p>Käyttäjätunnus: admin</p>';
-				$message .= '<p>Aktivoi käyttäjätunnuksesi <a href="'.Yii::app()->getBaseUrl(true).'/index.php/site/confirm?token='.$token.'">tästä</a><br>';
+				$message .= '<p>Aktivoi käyttäjätunnuksesi <a href="'.Yii::app()->getBaseUrl(true).'/index.php/site/confirm?domain='.$kirjautumistunnus.'&token='.$token.'">tästä</a><br>';
 
 				$subject = Yii::t('main', 'Tervetuloa Etunti');
 				$mail = new YiiMailer();
@@ -2253,6 +2262,13 @@ $(document).ready(function(){
 		    $arr[] = array(
 		        'label'=>$data->yhteyshenkilo,
 		        'value'=>$data->yhteyshenkilo,    
+		        'id'=>$data->id,
+        	    );
+		    } else if($model == 'Domainit')
+		    {
+		    $arr[] = array(
+		        'label'=>$data->yritys,
+		        'value'=>$data->id,    
 		        'id'=>$data->id,
         	    );
 		    } else {
