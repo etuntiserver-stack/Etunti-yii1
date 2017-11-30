@@ -404,7 +404,7 @@ var etusivuAjax = function(){
 }
 </style>
 <div id="myModalAloitus" class="modal fade" role="dialog">
-  <div class="modal-dialog modal-dialog-center">
+  <div class="modal-dialog modal-lg modal-dialog-center">
 
     <!-- Modal content-->
     <div class="modal-content">
