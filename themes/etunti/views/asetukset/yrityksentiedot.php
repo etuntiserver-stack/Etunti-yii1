@@ -131,7 +131,7 @@ $( document ).ready(function() {
 	paketti[$( this ).val()] = $( this ).prop('checked');
     });
     //console.log(paketti);
-	if(confirm('Oletko varma?'))
+	if(confirm('Olet ottamassa käyttöön Etunnin laajennetun palvelun. Painamalla OK vahvistat tutustuneesi palvelun hinnastoon.'))
 	{
         $.ajax({
            url: location.protocol + "//" + location.host + "/index.php/site/maksullinen",
