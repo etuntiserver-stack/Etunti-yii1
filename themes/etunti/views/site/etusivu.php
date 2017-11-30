@@ -384,7 +384,7 @@ var etusivuAjax = function(){
 <!-- Modal -->
 <style>
 .modal-dialog-center {
-    margin-top: 10%;
+    margin-top: 7%;
     margin-bottom: 5%;
 }
 .modal_checkbox {
