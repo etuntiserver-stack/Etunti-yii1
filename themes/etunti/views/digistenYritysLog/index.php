@@ -91,6 +91,7 @@
   <tr>
   <th></th>
   <th><?php echo Yii::t('main', 'Yritys'); ?></th>
+  <th><?php echo Yii::t('main', 'Sähköposti'); ?></th>
   <th><?php echo Yii::t('main', 'Päivämäärä'); ?></th>
   <th><?php echo Yii::t('main', 'Tapahtuma'); ?></th>
   <th><?php echo Yii::t('main', 'Tasot'); ?></th>
