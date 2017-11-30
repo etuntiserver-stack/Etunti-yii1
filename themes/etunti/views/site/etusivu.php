@@ -413,7 +413,7 @@ var etusivuAjax = function(){
         <h4 class="modal-title"><?=Yii::t('main', 'Olet aloittamassa Etunnin laajennetun käytön.')?></h4>
       </div>
       <div class="modal-body" id="body-aloita">
-        <p>
+        <p class="small">
 <p><b>Laajennettu</b> Etunti-ohjelma mahdollistaa yli <b>500</b> työtunnin suunnittelun ja toteuman. Lisäksi saat kattavamman käyttäjätuen käyttöösi. Sinulla on myös mahdollisuus muokata palvelupakettiasi haluamaasi kokoonpanoon. Tutustu lisäosiin <?php echo CHtml::link('tästä',"/index.php/site/mika-on-etunti"); ?>.</p>
  
 <p><b>Etunti-ohjelman</b> maksullisen version hinta perustuu suunniteltuihin tai toteutuneisiin työtunteihin, riippuen siitä, kumpi luku on suurempi. Työtunti tarkoittaa joko suunniteltua tai leimattua työtuntia, riippuen siitä kumpien yhteenlaskettu summa on suurempi. Työtunnit eivät sisällä matkoja eivätkä lounaita. Maksat siis vain työtuntien mukaan. Katso tarkempi hinnasto <?php echo CHtml::link('täältä',"/index.php/site/mika-on-etunti"); ?>.</p>
@@ -425,18 +425,18 @@ var etusivuAjax = function(){
 
 <div class="row">
  <div class="col-sm-offset-1 col-sm-6">
-	<p><input type="checkbox" name="eTyo" value="eTyo" class="modal_checkbox" checked disabled> 
+	<input type="checkbox" name="eTyo" value="eTyo" class="modal_checkbox" checked disabled> 
 		<span class="modaltxt">eTyö (Sisältyy)</span>
-	</p>
-	<p><input type="checkbox" name="eLasku" class="modal_checkbox val" value="3"> 
+	<br>
+	<input type="checkbox" name="eLasku" class="modal_checkbox val" value="3"> 
 		<span class="modaltxt">eLasku</span>
-	</p>
-	<p><input type="checkbox" name="eOnline" class="modal_checkbox val" value="4"> 
+	<br>
+	<input type="checkbox" name="eOnline" class="modal_checkbox val" value="4"> 
 		<span class="modaltxt">eOnline</span>
-	</p>
-	<p><input type="checkbox" name="eDico" class="modal_checkbox val" value="5"> 
+	<br>
+	<input type="checkbox" name="eDico" class="modal_checkbox val" value="5"> 
 		<span class="modaltxt">eDico</span>
-	</p>
+
  </div>
 </div>
 
