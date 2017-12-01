@@ -1,4 +1,25 @@
 <?php
+
+?>
+
+
+
+        <!-- begin: .tray-center -->
+        <div class="tray-center">
+
+	   <h2 class="myBgColors p20"> <i class="fa fa-gear"></i> <?php echo Yii::t('main', 'Käyttöoikeudet'); ?> </h2>
+
+
+
+            <div class="admin-form">
+              <div class="panel heading-border">
+                <div class="panel-body bg-light">
+                 <div class="row">
+
+
+
+
+<?php
  $array = array
  (
 	'asetukset'=>array(0=>null,1=>null,2=>'Muokaa asetukset',3=>null),
@@ -82,6 +103,15 @@ foreach($array as $k=>$v)
 </table>
 <br>
 <span class="btn btn-primary myBgColors tallennaOikeudet">Tallenna oikeudet</span>
+
+
+
+                 </div>
+                </div>
+              </div>
+            </div>
+
+        </div>
 
 <?php
 $asetukset = Asetukset::model()->findbypk(1);
