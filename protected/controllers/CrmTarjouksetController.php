@@ -172,12 +172,11 @@ class CrmTarjouksetController extends Controller
 
 		$message = '
 		<p>
-		Olet saanut tarjouksen yritykseltä '.$ft->tyonantaja.'. Tarjous löytyy tiedostosta, joka on tämän viestin liitteenä. <br>
-		Tutustu tarjoukseen ja hyväksy tai hylkää valintasi mukaan alla olevista painikkeista.
-		</p>
+Olet saanut tarjouksen yritykseltä '.$ft->tyonantaja.'. Tarjous löytyy tiedostosta, joka on tämän viestin liitteenä.
+Tutustu tarjoukseen ja vahvista päätöksesi ilmoittamalla siitä tarjouksessa ilmoitetulle henkilölle. Helpoimmin hyväksyt tai hylkäät tarjouksen eDico sovelluksessa.
 
-		<p>Ystävällisin terveisin.<br>
-		Etunti.
+Ystävällisin terveisin.
+'.$ft->tyonantaja.'
 		</p>
 
 		<p>
