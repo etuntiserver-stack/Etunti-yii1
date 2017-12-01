@@ -48,7 +48,7 @@ class Palautteet extends DB2ActiveRecord
                      'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP ',
                      'asiakas_id' => 'int(11) ',
                      'teksti' => 'text ',
-                     'otsikko' => 'varchar(255) ',
+                     //'otsikko' => 'varchar(255) ',
                      'status' => 'int(1) ',
                      'emoji_tila' => 'int(1) ',
                      'asiakas_luettu' => 'int(1) ',
@@ -80,9 +80,9 @@ class Palautteet extends DB2ActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('asiakas_id, teksti, otsikko', 'required'),
+			array('asiakas_id, teksti', 'required'),
 			array('keskustelu_id, asiakas_id, status, emoji_tila, asiakas_luettu, kategoria', 'numerical', 'integerOnly'=>true),
-			array('otsikko, viimeinen_tyo', 'length', 'max'=>255),
+			array('viimeinen_tyo', 'length', 'max'=>255),
 			array('lahettaja', 'length', 'max'=>20),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.

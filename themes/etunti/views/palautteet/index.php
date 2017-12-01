@@ -158,7 +158,6 @@ $(".muokaValiko").click(function() {
   <th></th>
   <th><?php echo Yii::t('main', 'Aika'); ?></th>
   <th><?php echo Yii::t('main', 'Asiakas'); ?></th>
-  <th><?php echo Yii::t('main', 'Otsikko'); ?></th>
   <th><?php echo Yii::t('main', 'Kategoria'); ?></th>
   <th><?php echo Yii::t('main', 'Palaute'); ?></th>
   <th><?php echo Yii::t('main', 'Tila'); ?></th>

@@ -1484,7 +1484,6 @@ exit;
 		<div class="row">
 		 <div class="col-xs-12">
 			'.$emoji_img.' 
-			<h3 style="line-height:30%"><b>'.$data->otsikko.'</b></h3>
 			<p><small>'.date("d.m.Y", strtotime($data->time)).'</small></p>
 		 </div>
 		</div>';
@@ -1570,7 +1569,6 @@ exit;
 			$p = Palautteet::model()->findbypk($post['palaute_id']);
 
 			$model->attributes=$post['PalautteetVastaus'];
-			$model->otsikko=$p->otsikko;
 			$model->asiakas_id=$p->asiakas_id;
 
 
