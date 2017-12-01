@@ -177,7 +177,7 @@ exit;
             </div>
 
 
-<?php if(Yii::app()->user->username == 'admin'): ?>
+<?php if(Yii::app()->user->username == 'admin' or Yii::app()->user->username == 'roman'): ?>
 	   <p><div class="btn btn-primary btn-block myBgColors" data-toggle="collapse" data-target="#kehitys"><h3><?php echo Yii::t('main','Kehitys'); ?>&nbsp; <i class="fa fa-caret-square-o-down" aria-hidden="true"></i></h3></div></p>
 
             <div class="admin-form collapse" id="kehitys">
