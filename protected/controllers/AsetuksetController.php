@@ -24,7 +24,7 @@ class AsetuksetController extends Controller
 		return array(
 
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('update', 'yrityksentiedot', 'oikeudet', 'rekisteriseloste'),
+				'actions'=>array('update', 'yrityksentiedot', 'oikeudet', 'rekisteriseloste', 'tiedostot'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -74,6 +74,138 @@ class AsetuksetController extends Controller
 
 			$this->render('oikeudet');
 		}
+	}
+
+	public function actionTiedostot($id)
+	{
+
+		$model = $this->loadModel($id);
+
+		if(isset($_POST['uploaded_t']))
+		{
+
+		  if (!file_exists(Yii::app()->basePath."/../tiedostot/firma/".Yii::app()->user->domain)) {
+		  	mkdir(Yii::app()->basePath."/../tiedostot/firma/".Yii::app()->user->domain, 0777, true);
+		  }
+
+		  $uploaddir = Yii::app()->basePath.'/../tiedostot/firma/'.Yii::app()->user->domain.'/';
+		  $uploadfile = $uploaddir . basename($model->id.'_'.$_FILES['file']['name']);
+		  if (move_uploaded_file($_FILES['file']['tmp_name'], $uploadfile)) {
+		     //echo "";
+		  } 
+		}
+
+
+		if(isset($_POST['uploaded_onlinevarausehdot']))
+		{
+
+		  if (!file_exists(Yii::app()->basePath."/../tiedostot/firma/".Yii::app()->user->domain)) {
+		  	mkdir(Yii::app()->basePath."/../tiedostot/firma/".Yii::app()->user->domain, 0777, true);
+		  }
+
+		  $uploaddir = Yii::app()->basePath.'/../tiedostot/firma/'.Yii::app()->user->domain.'/';
+		  $temp = explode(".", $_FILES["file"]["name"]);
+		  $uploadfile = $uploaddir . basename('onlinevarausehdot.'.end($temp));
+		  if (move_uploaded_file($_FILES['file']['tmp_name'], $uploadfile)) {
+		     $this->redirect(array('tiedostot', 'id' => 1));
+		  } 
+		}
+
+		if(isset($_POST['uploaded_toimitusehdot']))
+		{
+		
+		  if (!file_exists(Yii::app()->basePath."/../tiedostot/firma/".Yii::app()->user->domain)) {
+		  	mkdir(Yii::app()->basePath."/../tiedostot/firma/".Yii::app()->user->domain, 0777, true);
+		  }
+
+		  $uploaddir = Yii::app()->basePath.'/../tiedostot/firma/'.Yii::app()->user->domain.'/';
+		  $temp = explode(".", $_FILES["file"]["name"]);
+		  $uploadfile = $uploaddir . basename('toimitusehdot.'.end($temp));
+		  if (move_uploaded_file($_FILES['file']['tmp_name'], $uploadfile)) {
+		     $this->redirect(array('tiedostot', 'id' => 1));
+		  } 
+		}
+
+		if(isset($_POST['uploaded_Konevuokraus_toimitusehdot']))
+		{
+
+		  if (!file_exists(Yii::app()->basePath."/../tiedostot/firma/".Yii::app()->user->domain)) {
+		  	mkdir(Yii::app()->basePath."/../tiedostot/firma/".Yii::app()->user->domain, 0777, true);
+		  }
+
+		  $uploaddir = Yii::app()->basePath.'/../tiedostot/firma/'.Yii::app()->user->domain.'/';
+		  $temp = explode(".", $_FILES["file"]["name"]);
+		  if(end($temp) == 'pdf')
+		  {
+			$uploadfile = $uploaddir . basename('Konevuokraus_toimitusehdot.'.end($temp));
+			if (move_uploaded_file($_FILES['file']['tmp_name'], $uploadfile))
+		     $this->redirect(array('tiedostot', 'id' => 1));
+
+		  } else {
+	
+			Yii::app()->user->setFlash('danger', "Lataaminen ei onnistunut, odottelaan PDF");
+		     $this->redirect(array('tiedostot', 'id' => 1));
+		  }
+		}
+
+
+		if(isset($_POST['uploaded_edico_kayttoehdot']))
+		{
+		
+		  $path = Yii::app()->basePath."/../tiedostot/firma/".Yii::app()->user->domain;
+		  if (!file_exists($path)) {
+		  	mkdir($path, 0777, true);
+		  }
+
+		  $path_html = Yii::app()->basePath."/../tiedostot/firma/".Yii::app()->user->domain.'/eDico_html';
+		  if (!file_exists($path_html)) {
+		  	mkdir($path_html, 0777, true);
+		  }
+
+		  $uploaddir = $path.'/';
+		  $ext = pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION);
+		  $bname = 'eDico_kayttoehdot';
+		  if($ext == 'pdf')
+		  {
+			$uploadfile = $uploaddir . basename($bname.'.pdf');
+			if (move_uploaded_file($_FILES['file']['tmp_name'], $uploadfile))
+			{
+				$exec = 'pdftohtml -c -s -noframes '.$path.'/'.$bname.'.pdf '.$path_html.'/'.$bname.'.html';
+				exec($exec.' 2>&1', $output, $return);
+
+				if (file_exists($path_html.'/'.$bname.'.html')) {
+				  	$html_content = file_get_contents($path_html.'/'.$bname.'.html');
+				  	$html_content = str_replace("background image", "", $html_content);
+				  	$html_content = str_replace("body bgcolor=\"#A0A0A0\"", "body bgcolor=\"#FFFFFF\"", $html_content);
+					$html_content = preg_replace("/<img[^>]+\>/i", "", $html_content);
+				  	$html_content = str_replace("p {margin: 0; padding: 0;}", "", $html_content);
+
+					//$html_content = strip_tags($html_content, '<style>');
+		$html_content = preg_replace('/(<[^>]+) style=".*?"/i', '$1', $html_content);
+		$html_content = preg_replace('/(<[^>]+) class=".*?"/i', '$1', $html_content);
+					if(file_put_contents($path.'/'.basename($bname.'.html'), $html_content))
+		  				exec('rm -rf '.$path_html);
+				}
+		     $this->redirect(array('tiedostot', 'id' => 1));
+			}
+
+		  } else {
+
+			Yii::app()->user->setFlash('danger', "Lataaminen ei onnistunut, odottelaan PDF");
+			//$this->redirect(array('update', 'id'=>1));
+		  }
+		}
+
+
+
+		if(isset($_POST['poistaTamaTiedosto'])){
+			unlink($_POST['poistaTamaTiedosto']);
+		exit;
+		}
+
+		$this->render('tiedostot',array(
+			'model'=>$model,
+		));
 	}
 
 	protected function sprint($val){
