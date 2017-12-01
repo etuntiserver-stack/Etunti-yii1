@@ -56,12 +56,6 @@ $model->asiakas_id = Yii::app()->user->asiakas;
 	<?php echo $form->hiddenField($model,'lahettaja',array('value'=>'asiakas', 'class'=>'form-control')); ?>
 
 	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'otsikko'); ?>
-		<?php echo $form->textField($model,'otsikko',array('size'=>60,'maxlength'=>255, 'class'=>'form-control')); ?>
-		<?php echo $form->error($model,'otsikko'); ?>
-	</div>
-
-	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'kategoria'); ?>
 
 		<?php
