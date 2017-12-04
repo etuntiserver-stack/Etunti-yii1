@@ -13,26 +13,26 @@
 
 
 
+ <div class="row">
    <?php
 	Yii::app()->db1->setActive(true);
 	$model = Ohjevideot::model()->findAll(array('order'=>'sort ASC'));
    	foreach($model as $data) 
    	{
 
-	 	echo '<p>
-		<div class="row">
-		 <div class="col-sm-6 col-sm-offset-3">
-			<h2>'.$data->otsiko.'</h2>
+	 	echo '
+		 <div class="col-sm-4" style="margin-bottom:20px">
 			<video class="img-thumbnail" controls="controls" style="width:100%">
 			  <source src="../../ohjevideot/'.$data->tiedoston_nimi.'" type="video/mp4">
 			</video>
-			<h3>'.$data->kuvaus.'</h3>
+			<b>'.$data->otsiko.'</b><br>
+			'.$data->kuvaus.'
 		 </div>
-		</div></p>
 		';
 
    	}
    ?>
+ </div>
 
 
 
