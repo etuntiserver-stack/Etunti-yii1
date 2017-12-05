@@ -41,7 +41,7 @@
 		<?php echo Yii::t('main', $data->tapahtuma); ?>
 	</td>
 	<td>
-		<?php echo Yii::t('main', $data->paketti); ?>
+		<?php echo $this->pakettiMuutos($data->paketti); ?>
 	</td>
 </tr>
 

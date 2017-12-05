@@ -104,6 +104,7 @@ $(document).ready(function(){
 		  <tr>
 		  <th><?php echo Yii::t('main', 'Päivämäärä'); ?></th>
 		  <th><?php echo Yii::t('main', 'Tapahtuman sisältö'); ?></th>
+		  <th><?php echo Yii::t('main', 'Tasot'); ?></th>
 		  </tr>
 		  </thead>
 		  <?php $this->widget('zii.widgets.CListView', array(

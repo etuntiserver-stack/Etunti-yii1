@@ -223,4 +223,20 @@ class DigistenYritysLogController extends Controller
 			Yii::app()->end();
 		}
 	}
+
+	protected function pakettiMuutos($pakettit)
+	{
+		$tasot = explode(",", $pakettit);
+		$return = array();
+		if(in_array(1, $tasot) and in_array(2, $tasot))
+		$return[] = 'eTyö';
+		if(in_array(3, $tasot))
+		$return[] = 'eLasku';
+		if(in_array(4, $tasot))
+		$return[] = 'eOnline';
+		if(in_array(5, $tasot))
+		$return[] = 'eDico';
+
+		return implode(", ", $return);
+	}
 }
