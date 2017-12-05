@@ -277,7 +277,7 @@ class AsetuksetController extends Controller
 	{
 
 	// <-- Oikeudet
-	   $checkOikeus = "asetukset_2_".Yii::app()->user->adminStatus;
+	   $checkOikeus = "yrityksentiedot_2_".Yii::app()->user->adminStatus;
 	   $site = Yii::app()->createController('Site');
 	   $site[0]->checkOikeus($checkOikeus);
 	//  Oikeudet -->

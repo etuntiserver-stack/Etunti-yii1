@@ -23,6 +23,7 @@
  $array = array
  (
 	'asetukset'=>array(0=>null,1=>null,2=>'Muokaa asetukset',3=>null),
+	'yrityksentiedot'=>array(0=>null,1=>null,2=>'Muokaa yrityksentiedot',3=>null),
 	'henkilotunnukset'=>array(0=>null,1=>null,2=>'Henkilötunnukset',3=>null),
 	'ryhmat'=>array(0=>null,1=>null,2=>'Ryhmät',3=>null),
 	'asiakkaat'=>array(0=>'Asiakkaat taulu',1=>'Luo asiakas',2=>'Muokaa asiakas',3=>'Poista asiakas'),
