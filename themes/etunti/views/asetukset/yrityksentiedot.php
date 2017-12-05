@@ -52,117 +52,90 @@ $(document).ready(function(){
      <div class="admin-form">
       <div class="panel heading-border">
        <div class="panel-body bg-light">
+
         <div class="row">
 	  <div class="col-sm-3">
 		  <?php echo $this->renderPartial('//firmanTiedot/_form', array('model'=>$f)); ?>
 	  </div>
-
-
-<?php
-		$domainit = Domainit::model()->find(" domain='".Yii::app()->user->domain."' AND maksullinen=0 ");
-?>
-	  <?php if(isset($domainit->id)) : ?>
 	  <div class="col-sm-offset-1 col-sm-8">
-	  <legend><?=Yii::t('main', 'Aloita laajennettu käyttö')?></legend>
 
+		<?php $domainit = Domainit::model()->find(" domain='".Yii::app()->user->domain."' "); ?>
 
-<!-- Modal -->
-<style>
-.modal_checkbox {
-    -webkit-appearance:none;
-    width:20px;
-    height:20px;
-    background:white;
-    border-radius:5px;
-    border:2px solid #555;
-}
-.modal_checkbox:checked {
-    background: #abd;
-}
-.modaltxt{
-  margin-left: 10px;
-  font-size:120%;
-}
-</style>
+		<!-- ilmainen_kaytto -->
+		<?php if(isset($domainit->id) and $domainit->maksullinen == 0) : ?>
+		<?php echo $this->renderPartial('_ilmainen_kaytto'); ?>
+		<?php endif; ?>
+		<!-- ilmainen_kaytto -->
 
-<div id="body-aloita">
-<p><b>Laajennettu</b> Etunti-ohjelma mahdollistaa yli <b>500</b> työtunnin suunnittelun ja toteuman. Lisäksi saat kattavamman käyttäjätuen käyttöösi. Sinulla on myös mahdollisuus muokata palvelupakettiasi haluamaasi kokoonpanoon. Tutustu lisäosiin <?php echo CHtml::link('tästä',"/index.php/site/mika-on-etunti"); ?>.</p>
- 
-<p><b>Etunti-ohjelman</b> maksullisen version hinta perustuu suunniteltuihin tai toteutuneisiin työtunteihin, riippuen siitä, kumpi luku on suurempi. Työtunti tarkoittaa joko suunniteltua tai leimattua työtuntia, riippuen siitä kumpien yhteenlaskettu summa on suurempi. Työtunnit eivät sisällä matkoja eivätkä lounaita. Maksat siis vain työtuntien mukaan. Katso tarkempi hinnasto <?php echo CHtml::link('täältä',Yii::app()->request->baseUrl."/lib/pdf/tuntihinnasto.pdf", array('target' => '_blank')); ?>.</p>
- 
-<p><b>Huom!</b> Kun olet ottanut käyttöön maksullisen version, ei sitä voi enää palauttaa ilmaisversioksi.</p>
- 
- 
-<p>Valitse Laajennetun palvelun kokonaisuus tästä:</p>
+		<!-- Hinnastot -->
+		<?php if(isset($domainit->id) and $domainit->maksullinen == 1) : ?>
+		<?php echo $this->renderPartial('_hinnastot'); ?>
+		<?php endif; ?>
+		<!-- Hinnastot -->
 
-<div class="row">
- <div class="col-sm-offset-1 col-sm-6">
-	<p><input type="checkbox" name="eTyo" value="eTyo" class="modal_checkbox" checked disabled> 
-		<span class="modaltxt">eTyö (Sisältyy)</span>
-	</p>
-	<p><input type="checkbox" name="eLasku" class="modal_checkbox val" value="3"> 
-		<span class="modaltxt">eLasku</span>
-	</p>
-	<p><input type="checkbox" name="eOnline" class="modal_checkbox val" value="4"> 
-		<span class="modaltxt">eOnline</span>
-	</p>
-	<p><input type="checkbox" name="eDico" class="modal_checkbox val" value="5"> 
-		<span class="modaltxt">eDico</span>
-	</p>
- </div>
-</div>
-
-</div>
-
-        <button type="button" class="btn btn-primary aloitan_maksullinen"><?=Yii::t('main', 'Aloita Laajennettu käyttö')?></button>
-	<?php echo CHtml::link('Kirjaudu ulos',"/index.php/user/logout",array(
-		"class"=>"btn btn-primary hidden",
-		"id" => "ulospainike"
-	)); ?>
-
-
-<script>
-$( document ).ready(function() {
-  $(".aloitan_maksullinen").click(function(){
-
-    $(".aloitan_maksullinen").text('Odota..');
-    var paketti = [];
-    $( ".modal_checkbox.val" ).each(function(index) {
-	paketti[$( this ).val()] = $( this ).prop('checked');
-    });
-    //console.log(paketti);
-	if(confirm('Olet ottamassa käyttöön Etunnin laajennetun palvelun. Painamalla OK vahvistat tutustuneesi palvelun hinnastoon.'))
-	{
-        $.ajax({
-           url: location.protocol + "//" + location.host + "/index.php/site/maksullinen",
-	   type:'POST',
-	   data: {dat : paketti},
-           success: function(data){
-		console.log(data);
-
-		$(".aloitan_maksullinen").remove();
-		$("#ulospainike").removeClass('hidden');
-	
-		$("#body-aloita").html('<p>Onneksi olkoon!</p>' +
-			'Sinulla on nyt laajennettu Etunti-ohjelma liiketoimintasi tukena.' +
-			'<p><b>Kirjaudu ulos ja palaa takaisin.</b></p>'
-		);
-
-    	   },
-    	   error: function(XMLHttpRequest, textStatus, errorThrown) {
-	    	console.log(XMLHttpRequest);
- 	   }
-        });
-	}
-	return false;
-  });
-});
-</script>
-
+	  </div>
         </div>
-	<?php endif; ?>
-
 
        </div>
       </div>
      </div>
+
+
+     <h2 class="myBgColors p20"> <i class="fa fa-gear"></i> <?=Yii::t('main','Tapahtumat')?> </h2>
+     <div class="admin-form">
+      <div class="panel heading-border">
+       <div class="panel-body bg-light">
+        <div class="row">
+	  <div class="col-sm-12">
+		<?php
+		$domainit=Domainit::model()->find(" domain = '".Yii::app()->user->domain."' ");
+		$criteria = new CDbCriteria();
+		$criteria->condition = " 
+			yritys_id='".$domainit->id."' 
+		";
+		$dataProvider=new CActiveDataProvider('DigistenYritysLog', array(
+			'criteria'=>$criteria,
+			//'pagination'=>false
+		));
+		$ylog = DigistenYritysLog::model()->findAll($criteria);
+		?>
+
+		 <div class="row table-responsive">
+		  <table class="table table-striped" id="mobileTable">
+		  <thead class="myBgColors">
+		  <tr>
+		  <th><?php echo Yii::t('main', 'Päivämäärä'); ?></th>
+		  <th><?php echo Yii::t('main', 'Tapahtuman sisältö'); ?></th>
+		  </tr>
+		  </thead>
+		  <?php $this->widget('zii.widgets.CListView', array(
+			'dataProvider'=>$dataProvider,
+			'itemView'=>'_yrityksen_lokitus',
+		  	'template'=>'{items}<table class="table table-striped table-condensed"></table><br/>{pager}',
+
+
+			'pager' => array(
+		           'firstPageLabel'=>'<<',
+		           'prevPageLabel'=>'< Edellinen',
+		           'nextPageLabel'=>'Seuraava >',
+		           'lastPageLabel'=>'>>',
+		           //'maxButtonCount'=>'10',
+		           'header'=>'<h3>Siirry sivulle:</h3>',
+		           'cssFile'=>false,
+		       ), 
+
+		  )); ?>
+		  </table>
+		 </div>
+
+	  </div>
+       </div>
+      </div>
+     </div>
+
+
+
+
+     </div>
+
+
