@@ -422,24 +422,21 @@ class AsiakkaatController extends Controller
 				$token = sha1(uniqid(time().$model->id, true));
 				Asiakkaat::model()->updateByPk($model->id, array('token' => $token));
 
-				$subject = 'Tervetuloa Etunnin käyttäjäksi.';
+				$subject = $yr.' toivottaa sinut tervetulleeksi käyttämään eDicoa';
 				$message = 'Hei '.$asiakas.'!<br>
 				<b>Domain:</b> '.Yii::app()->user->domain.'<br>
 				<b>Käyttäjätunnus:</b> '.$model->sahkoposti.'<br>
 				<b>Luo oma salasana:</b> <a href='.Yii::app()->createAbsoluteUrl('asiakkaat/salasana', array('domain' => Yii::app()->user->domain, 'token' => $token, 'asiakasid' => $model->id)).'>tästä</a><br>
 <p>
-				Tervetuloa Etunnin käyttäjäksi. '.$yr.' on lisännyt sinulle profiilin Etuntiin. Lataa sovellus puhelimeesi alla olevien linkkien kautta.
-</p><br>
-				<br>
-				<p>Ystävällisin terveisin</p>
-				Etunti<br>
-
+Olemme tehneet sinulle profiilin eDico-sovellukseen, jolla voit olla kätevästi yhteydessä meihin, antaa palautetta, tarkastella tilauksiasi ja vahvistaa sopimukset ja tarjoukset. 
+Lataa eDico-sovellus älylaitteeseesi alla olevan linkin kautta.
+Ystävällisin terveisin,
+Yritys '.$yr.'
+</p>
 <p>
-<a href="https://www.microsoft.com/store/apps/9nblggh4nd0w?ocid=badge"><img src="https://assets.windowsphone.com/85864462-9c82-451e-9355-a3d5f874397a/English_get-it-from-MS_InvariantCulture_Default.png" alt="Get it from Microsoft" height="70" /></a>
-
-<a href="https://play.google.com/store/apps/details?id=fi.etunti.local&utm_source=global_co&utm_medium=prtnr&utm_content=Mar2515&utm_campaign=PartBadge&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1"><img alt="Get it on Google Play" src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png" height="70" /></a>
-
-<a href="https://geo.itunes.apple.com/fi/app/etunti/id1100648690?mt=8"><img src="http://etunti.fi/etusivuimg/app_store.png" height="70" ></a>
+<a href="https://play.google.com/store/apps/details?id=fi.etunti.dico&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1"><img alt="Get it on Google Play" src="https://play.google.com/intl/en_us/badges/images/generic/fi_badge_web_generic.png"/ height="105" style="margin:-17px;"></a>
+<br>
+<a href="https://geo.itunes.apple.com/fi/app/etunti/id1100648690?mt=8"><img src="http://etunti.fi/etusivuimg/app_store.png" style="max-width:237px"></a>
 </p>
 				';
 
