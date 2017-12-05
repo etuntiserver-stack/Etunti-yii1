@@ -59,7 +59,6 @@ $(document).ready(function(){
 	  </div>
 	  <div class="col-sm-offset-1 col-sm-8">
 
-		<?php $domainit = Domainit::model()->find(" domain='".Yii::app()->user->domain."' "); ?>
 
 		<!-- ilmainen_kaytto -->
 		<?php if(isset($domainit->id) and $domainit->maksullinen == 0) : ?>
@@ -69,7 +68,7 @@ $(document).ready(function(){
 
 		<!-- Hinnastot -->
 		<?php if(isset($domainit->id) and $domainit->maksullinen == 1) : ?>
-		<?php echo $this->renderPartial('_hinnastot'); ?>
+		<?php echo $this->renderPartial('_hinnastot', array('domainit' => $domainit, 'tasot' => $tasot)); ?>
 		<?php endif; ?>
 		<!-- Hinnastot -->
 
@@ -88,7 +87,6 @@ $(document).ready(function(){
         <div class="row">
 	  <div class="col-sm-12">
 		<?php
-		$domainit=Domainit::model()->find(" domain = '".Yii::app()->user->domain."' ");
 		$criteria = new CDbCriteria();
 		$criteria->condition = " 
 			yritys_id='".$domainit->id."' 

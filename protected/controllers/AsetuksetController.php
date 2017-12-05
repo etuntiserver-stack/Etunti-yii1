@@ -282,6 +282,24 @@ class AsetuksetController extends Controller
 	   $site[0]->checkOikeus($checkOikeus);
 	//  Oikeudet -->
 
+		$domainit = Domainit::model()->find(" domain='".Yii::app()->user->domain."' ");
+		$tasot = explode(",", $domainit->paketti);
+
+
+		// <-- Uusi taso ota kayttoon
+		if(isset($_POST['taso']))
+		{
+			array_push($tasot, $_POST['taso']);
+			sort($tasot);
+			$paketti = implode(",", $tasot);
+			Domainit::model()->updateByPk($domainit->id, array('paketti' => $paketti));
+
+			echo json_encode($tasot);
+			exit;
+		}
+		//   Uusi taso ota kayttoon -->
+
+
 		$model=$this->loadModel($id);
 		$f = FirmanTiedot::model()->findbypk(1);
 		// Uncomment the following line if AJAX validation is needed
@@ -299,6 +317,8 @@ class AsetuksetController extends Controller
 
 		$this->render('yrityksentiedot',array(
 			'f'=>$f,
+			'tasot' => $tasot,
+			'domainit' => $domainit
 		));
 
 	}
