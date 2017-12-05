@@ -127,8 +127,8 @@ class KohteetController extends Controller
 	{
 
 	       	$criteria = new CDbCriteria();
-		$criteria->condition = " aktiivinen=1
-			AND id IN (SELECT SUBSTRING_INDEX(kenella_on_avain, '//', 1) FROM sivex_kohdet)
+		$criteria->condition = "
+			id IN (SELECT SUBSTRING_INDEX(kenella_on_avain, '//', 1) FROM sivex_kohdet)
 		";
 
 		if(isset($_POST['Tekija'])){
