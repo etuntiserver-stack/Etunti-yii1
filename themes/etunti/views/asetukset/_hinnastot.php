@@ -76,9 +76,10 @@ $(document).ready(function(){
 $(".otakayttoon").click(function(){
 
     var taso = $(this).attr('taso');
+    var nimike = $(this).attr('nimike');
     var thisButton = $(this);
 
-    if(confirm('Haluatko varmaasti ota käyttöön '+$(this).attr('nimike')+' toiminnon?'))
+    if(confirm('Haluatko varmaasti ota käyttöön '+ nimike +' toiminnon?'))
     {
         $.ajax({
            url: 'yrityksentiedot?id=1',
@@ -88,7 +89,7 @@ $(".otakayttoon").click(function(){
 		data = JSON.parse(data);
 		console.log(data);
 		thisButton.replaceWith('<button class="btn btn-block btn-success"><i class="fa fa-check-square-o" aria-hidden="true"></i> Valittu</button>');
-		$("#valmis").addClass('alert bg-success').html($(this).attr('nimike') +' on käytössä silloin kun kirjaudut seuraavan kerran Etuntiin.');
+		$("#valmis").addClass('alert bg-success').html(nimike +' on käytössä silloin kun kirjaudut seuraavan kerran Etuntiin.');
            }
         });
     }
