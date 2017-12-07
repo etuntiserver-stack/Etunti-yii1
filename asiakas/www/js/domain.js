@@ -111,6 +111,12 @@ $(document).ready(function(){
   $(".to-tilaus").click(function(e){
    if(asiakasID)
    {
+
+	if ( !window.cordova ) {
+		window.open(encodeURI(server+'index.php/onlinevaraus/index?domain='+domain+'&aid='+asiakasID), '_blank', 'location=yes');
+		return false;
+	}
+
 	document.addEventListener("deviceready", onInAPPDeviceReady, false);
 	event.preventDefault();
 	function onInAPPDeviceReady() {
@@ -127,6 +133,7 @@ $(document).ready(function(){
 		);
 		*/
 	}
+
    }
   });
 
