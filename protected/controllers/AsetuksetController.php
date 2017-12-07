@@ -355,6 +355,14 @@ class AsetuksetController extends Controller
 			if($model->save())
 			{
 
+				// <-- Check TRUST
+				if($model->palvelu_tyyppi == 2 and empty($model->trust_cid) and empty($model->trust_cid))
+				{
+					Yii::app()->user->setFlash('danger', "Sinulla ei ole asetuksissa määritettynä TRUST-tunnuksia.
+Jos yritykselläsi ei ole Ropo Capital Oy:n kanssa sopimusta tunnuksista, lähetä viesti osoitteeseen tuki@etunti.fi ja autamme sopimuksen syntymisessä.");
+				}
+				//    Check TRUST -->
+
 				// <-- kirjautumistunnus
 				if(isset($_POST['Asetukset']['kirjautumistunnus']) and !empty($_POST['Asetukset']['kirjautumistunnus']))
 				{
