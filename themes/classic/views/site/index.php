@@ -30,7 +30,10 @@
         <label><?php echo Yii::t('main', 'Vahvista sähköpostiosoite')?></label>
         <input type="text" id="sahkoposti2" name="sahkoposti2" class="form-control input-lg" required>
 	<br>
-	<p><a href="#" data-toggle="modal" data-target="#kehdot">Käyttöehdot</a></p>
+	<p>
+		<a href="#" data-toggle="modal" data-target="#kehdot">Käyttöehdot</a> | 
+		<?= CHtml::link('Rekisteriseloste',Yii::app()->request->baseUrl."/lib/pdf/Rekisteriseloste_08122017.pdf", array('target' => '_blank')) ?>
+	</p>
 
 	<p><div class="g-recaptcha" data-sitekey="6LcY2joUAAAAAFhvZM36PBNwej6vJiaHBZNsXeL4"></div></p>
 
