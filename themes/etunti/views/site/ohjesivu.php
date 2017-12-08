@@ -22,18 +22,32 @@
                     <!-- Input Icons -->
                     <div class="row">
 
-
                       <div class="col-sm-12">
-                        <div class="section">
-                          <label class="field prepend-icon">
 
-   			    	<?php echo $o->ohjesivu; ?>
+		    	<p><?= CHtml::link('<i class="fa fa-file-pdf-o pull-right" aria-hidden="true"></i> Etunti ota käyttöön', 
+				Yii::app()->request->baseUrl."/lib/pdf/etunti_ko.pdf", array(
+				'target' => '_blank',
+				'class' => 'btn btn-primary btn-lg btn-block myBgColors'
+			)); ?></p>
 
-                            <label for="firstname" class="field-icon">
-                              <i class="fa fa-user"></i>
-                            </label>
-                          </label>
-                        </div>
+		    	<p><?= CHtml::link('<i class="fa fa-file-pdf-o pull-right" aria-hidden="true"></i> Etunti mobiilisovellus', 
+				Yii::app()->request->baseUrl."/lib/pdf/Etunti-mobiilisovellus.pdf", array(
+				'target' => '_blank',
+				'class' => 'btn btn-primary btn-lg btn-block myBgColors'
+			)); ?></p>
+
+		    	<p><?= CHtml::link('<i class="fa fa-file-pdf-o pull-right" aria-hidden="true"></i> eDico mobiilisovellus', 
+				Yii::app()->request->baseUrl."/lib/pdf/.pdf", array(
+				'target' => '_blank',
+				'class' => 'btn btn-primary btn-lg btn-block myBgColors'
+			)); ?></p>
+
+		    	<p><?= CHtml::link('<i class="fa fa-file-pdf-o pull-right" aria-hidden="true"></i> eDico käyttöehdotmalli', 
+				Yii::app()->request->baseUrl."/lib/pdf/.pdf", array(
+				'target' => '_blank',
+				'class' => 'btn btn-primary btn-lg btn-block myBgColors'
+			)); ?></p>
+
                       </div>
 
                     </div>
