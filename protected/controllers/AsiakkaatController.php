@@ -517,9 +517,44 @@ Yritys '.$yr.'
 
 		if(isset($_POST['Asiakkaat']))
 		{
+			if(isset($_POST['Asiakkaat']['verot']))
+			unset($_POST['Asiakkaat']['verot']);
 
 			$vanha_attr = $model->attributes;
 			$model->attributes=$_POST['Asiakkaat'];
+
+
+
+			// <-- Kaikki kohteet passiviseksi jos asiakas passivinen
+			if($_POST['Asiakkaat']['aktiivinen'] == 0 and $vanha_attr['aktiivinen'] == 1)
+			{
+
+				$criteria=new CDbCriteria;
+				$criteria->condition = " 
+					asiakas_id='".$id."'
+					AND id IN ( SELECT kohde FROM sivex_tvuoro
+						WHERE DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') >= CURDATE()
+					)
+				";
+				$kohteet = Kohteet::model()->findAll($criteria);
+
+				if(count($kohteet) > 0)
+				{
+					Yii::app()->user->setFlash('danger', "Asiakkaalla on suunniteltuja työvuoroja. Poista ensin kaikki tulevat työvuorot ja vasta sitten muuta asiakas Ei Aktiiviseksi.");
+
+					$this->redirect(array('update', 'id' => $id));
+				} else {
+
+					$criteria=new CDbCriteria;
+					$criteria->condition = " 
+						asiakas_id='".$id."'
+					";
+					Kohteet::model()->updateAll(array('aktiivinen'=>'0'), $criteria);
+				}
+
+			}
+			//     Kaikki kohteet passiviseksi jos asiakas passivinen -->
+
 
 			if(isset($_POST['Asiakkaat']['ryhma']))
 				$model->ryhma=json_encode($_POST['Asiakkaat']['ryhma']);
@@ -528,7 +563,6 @@ Yritys '.$yr.'
 
 			if($model->save())
 			{
-
 
 				// <-- LOG
 				$model_log 	= 'Asiakkaat';
