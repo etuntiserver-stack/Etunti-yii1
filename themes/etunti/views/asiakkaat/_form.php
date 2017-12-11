@@ -240,7 +240,7 @@ $model->hinta_sis_alv = round($model->hinta_sis_alv, 2);
 
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'app_kayttoehdot'); ?>
-		<?php echo $form->checkbox($model,'app_kayttoehdot',array('class'=>'form-control')); ?>
+		<?php echo $form->checkbox($model,'app_kayttoehdot',array('class'=>'sw')); ?>
 		<?php echo $form->error($model,'app_kayttoehdot'); ?>
 	</div>
 
@@ -439,6 +439,14 @@ $model->hinta_sis_alv = round($model->hinta_sis_alv, 2);
 
 <script type="text/javascript">
 $(document).ready(function(){
+
+  $(".sw").bootstrapSwitch({
+	size: "large",
+	onColor: "success",
+	offColor: "danger",
+	onText: "Kyllä",
+	offText: "Ei"
+  });
 
   laskurin();
 

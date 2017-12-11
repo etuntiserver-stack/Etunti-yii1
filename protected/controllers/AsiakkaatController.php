@@ -504,7 +504,8 @@ Yritys '.$yr.'
 					Yii::app()->user->setFlash('danger', "eDico käyttöehtoja ei löydy asetuksista. Lisää ehdot ennen käyttönottoa.");
 				} else {
 					$this->LahetaTunnukset($id);
-					$this->redirect(array('index'));
+					Yii::app()->user->setFlash('success', "Lähetetty.");
+					$this->redirect(array('update','id'=>$id));
 				}
 		}
 		//     Tunnukset lahetys -->
