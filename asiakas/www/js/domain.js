@@ -1,5 +1,5 @@
 
-    var server = 'https://etunti.fi/';
+    var server = 'https://app.etunti.fi/';
     var domain = '';
     var tunnus = '';
     var salasana = '';
@@ -8,7 +8,7 @@
     var loginFull = [];
 
 
-    var developer = true; // true false kun pelaat localhostissa
+    var developer = false; // true false kun pelaat localhostissa
 
     if(localStorage.getItem('loginOK'))
     {
@@ -288,7 +288,7 @@ $(document).ready(function(){
 		      '<form action="#" class="form-signin" id="form-signin" method="POST" autocomplete="off">'+
 		        '<div id="palvelin_asetus" class="collapse">'+
 		        '<label>Palvelin</label>'+
-		        '<input type="text" name="palvelin" id="palvelin" class="form-control input-lg" required value="etunti.fi" />'+
+		        '<input type="text" name="palvelin" id="palvelin" class="form-control input-lg" required value="app.etunti.fi" />'+
 		        '</div>'+
 		        '<label>Yritystunnus</label>'+
 		        '<input type="text" name="domain" id="domain" class="form-control input-lg" required autofocus />'+
