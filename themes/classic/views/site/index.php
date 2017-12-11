@@ -185,6 +185,11 @@ $(document).ready(function(){
 
   $(".submit").click(function(e){
 
+	if (grecaptcha.getResponse() == ""){
+		alert("Varmistaa, ettet ole robotti");
+		return false;
+	}
+
 	if( $('#sahkoposti').val() !== $('#sahkoposti2').val() ){
 		e.preventDefault();
 		alert('Tarkasta sähköpostiosoite.');
