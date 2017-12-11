@@ -2250,14 +2250,14 @@ $(document).ready(function(){
 		foreach($m as $data)
 		{
 
-		    if($model == 'Asiakkaat' and $data->tyyppi == 'yritys')
+		    if($model == 'Asiakkaat' and $sarake == 'yrityksen_nimi' and $data->tyyppi == 'yritys')
 		    {
 		    $arr[] = array(
 		        'label'=>$data->yrityksen_nimi,
 		        'value'=>$data->yrityksen_nimi,    
 		        'id'=>$data->id,
         	    );
-		    } else if($model == 'Asiakkaat' and $data->tyyppi == 'henkilo')
+		    } else if($model == 'Asiakkaat' and $sarake == 'yrityksen_nimi' and $data->tyyppi == 'henkilo')
 		    {
 		    $arr[] = array(
 		        'label'=>$data->yhteyshenkilo,
