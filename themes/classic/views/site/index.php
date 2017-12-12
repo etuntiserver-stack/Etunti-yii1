@@ -202,6 +202,7 @@ $(document).ready(function(){
 		return false;
 	}
 
+	dataLayer.push({'event': 'aloitus'});
 	$('#aloita-lomake').submit();
   });
 
