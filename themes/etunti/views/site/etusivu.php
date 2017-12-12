@@ -372,10 +372,129 @@ var etusivuAjax = function(){
 		      </tr>
                     </tbody>
                   </table>
-		<center><?php echo CHtml::link(Yii::t('main', 'Aloita maksullinen käyttö'),"maksullinen", array("submit"=>array('maksullinen'), 'confirm' => 'Oletko varma?')); ?></center>
+		<center><a href="#" data-toggle="modal" data-target="#myModalAloitus">
+		<?=Yii::t('main', 'Aloita Laajennettu käyttö')?>
+		</a></center>
                 </div>
               </div>
 	      <?php endif; ?>
+
+
+
+<!-- Modal -->
+<style>
+.modal-dialog-center {
+    margin-top: 7%;
+    margin-bottom: 5%;
+}
+.modal_checkbox {
+    -webkit-appearance:none;
+    width:20px;
+    height:20px;
+    background:white;
+    border-radius:5px;
+    border:2px solid #555;
+}
+.modal_checkbox:checked {
+    background: #abd;
+}
+.modaltxt{
+  margin-left: 10px;
+  font-size:120%;
+}
+</style>
+<div id="myModalAloitus" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-lg modal-dialog-center">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title"><?=Yii::t('main', 'Olet aloittamassa Etunnin laajennetun käytön.')?></h4>
+      </div>
+      <div class="modal-body" id="body-aloita">
+        <p class="small">
+<p>Laajennettu Etunti-ohjelma mahdollistaa yli 500 työtunnin suunnittelun ja toteuman. Lisäksi saat kattavamman käyttäjätuen käyttöösi. Sinulla on myös mahdollisuus muokata palvelupakettiasi haluamaasi kokoonpanoon. Tutustu lisäosiin <?php echo CHtml::link('tästä',"/index.php/site/mika-on-etunti"); ?>.</p>
+ 
+<p>Laajennetun version hinta perustuu suunniteltuihin tai toteutuneisiin työtunteihin, riippuen siitä, kumpien yhteenlaskettu summa on suurempi. Työtunti tarkoittaa joko suunniteltua tai leimattua työtuntia. Työtunnit eivät sisällä matkoja eivätkä lounaita. Maksat siis vain työtuntien mukaan. Katso tarkempi hinnasto <?php echo CHtml::link('täältä',Yii::app()->request->baseUrl."/lib/pdf/tuntihinnasto.pdf", array('target' => '_blank')); ?>.</p>
+ 
+<p>Huom! Kun olet ottanut käyttöön maksullisen version, ei sitä voi enää palauttaa ilmaisversioksi.</p>
+ 
+ 
+<p>Valitse Laajennetun palvelun kokonaisuus tästä:</p>
+
+<div class="row">
+ <div class="col-sm-offset-1 col-sm-6">
+	<input type="checkbox" name="eTyo" value="eTyo" class="modal_checkbox" checked disabled> 
+		<span class="modaltxt">eTyö (Sisältyy)</span>
+	<br>
+	<input type="checkbox" name="eLasku" class="modal_checkbox val" value="3"> 
+		<span class="modaltxt">eLasku</span>
+	<br>
+	<input type="checkbox" name="eOnline" class="modal_checkbox val" value="4"> 
+		<span class="modaltxt">eOnline</span>
+	<br>
+	<input type="checkbox" name="eDico" class="modal_checkbox val" value="5"> 
+		<span class="modaltxt">eDico</span>
+
+ </div>
+</div>
+
+
+	</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Sulje</button>
+        <button type="button" class="btn btn-primary aloitan_maksullinen"><?=Yii::t('main', 'Aloita Laajennettu käyttö')?></button>
+	<?php echo CHtml::link('Kirjaudu ulos',"/index.php/user/logout",array(
+		"class"=>"btn btn-primary hidden",
+		"id" => "ulospainike"
+	)); ?>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+$( document ).ready(function() {
+  $(".aloitan_maksullinen").click(function(){
+
+    $(".aloitan_maksullinen").text('Odota..');
+    var paketti = [];
+    $( ".modal_checkbox.val" ).each(function(index) {
+	paketti[$( this ).val()] = $( this ).prop('checked');
+    });
+    //console.log(paketti);
+	if(confirm('Olet ottamassa käyttöön Etunnin laajennetun palvelun. Painamalla OK vahvistat tutustuneesi palvelun hinnastoon.'))
+	{
+        $.ajax({
+           url: location.protocol + "//" + location.host + "/index.php/site/maksullinen",
+	   type:'POST',
+	   data: {dat : paketti},
+           success: function(data){
+		console.log(data);
+
+		$(".aloitan_maksullinen").remove();
+		$("#ulospainike").removeClass('hidden');
+	
+		$("#body-aloita").html('<p>Onneksi olkoon!</p>' +
+			'Sinulla on nyt laajennettu Etunti-ohjelma liiketoimintasi tukena.' +
+			'<p><b>Kirjaudu ulos ja palaa takaisin.</b></p>'
+		);
+
+    	   },
+    	   error: function(XMLHttpRequest, textStatus, errorThrown) {
+	    	console.log(XMLHttpRequest);
+ 	   }
+        });
+	}
+	return false;
+  });
+});
+</script>
+<!-- Modal -->
+
 
 
 	      <?php if($this->tasot(5)) : ?>

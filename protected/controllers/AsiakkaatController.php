@@ -422,24 +422,21 @@ class AsiakkaatController extends Controller
 				$token = sha1(uniqid(time().$model->id, true));
 				Asiakkaat::model()->updateByPk($model->id, array('token' => $token));
 
-				$subject = 'Tervetuloa Etunnin käyttäjäksi.';
+				$subject = $yr.' toivottaa sinut tervetulleeksi käyttämään eDicoa';
 				$message = 'Hei '.$asiakas.'!<br>
 				<b>Domain:</b> '.Yii::app()->user->domain.'<br>
 				<b>Käyttäjätunnus:</b> '.$model->sahkoposti.'<br>
 				<b>Luo oma salasana:</b> <a href='.Yii::app()->createAbsoluteUrl('asiakkaat/salasana', array('domain' => Yii::app()->user->domain, 'token' => $token, 'asiakasid' => $model->id)).'>tästä</a><br>
 <p>
-				Tervetuloa Etunnin käyttäjäksi. '.$yr.' on lisännyt sinulle profiilin Etuntiin. Lataa sovellus puhelimeesi alla olevien linkkien kautta.
-</p><br>
-				<br>
-				<p>Ystävällisin terveisin</p>
-				Etunti<br>
-
+Olemme tehneet sinulle profiilin eDico-sovellukseen, jolla voit olla kätevästi yhteydessä meihin, antaa palautetta, tarkastella tilauksiasi ja vahvistaa sopimukset ja tarjoukset. 
+Lataa eDico-sovellus älylaitteeseesi alla olevan linkin kautta.
+Ystävällisin terveisin,
+Yritys '.$yr.'
+</p>
 <p>
-<a href="https://www.microsoft.com/store/apps/9nblggh4nd0w?ocid=badge"><img src="https://assets.windowsphone.com/85864462-9c82-451e-9355-a3d5f874397a/English_get-it-from-MS_InvariantCulture_Default.png" alt="Get it from Microsoft" height="70" /></a>
-
-<a href="https://play.google.com/store/apps/details?id=fi.etunti.local&utm_source=global_co&utm_medium=prtnr&utm_content=Mar2515&utm_campaign=PartBadge&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1"><img alt="Get it on Google Play" src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png" height="70" /></a>
-
-<a href="https://geo.itunes.apple.com/fi/app/etunti/id1100648690?mt=8"><img src="http://etunti.fi/etusivuimg/app_store.png" height="70" ></a>
+<a href="https://play.google.com/store/apps/details?id=fi.etunti.dico&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1"><img alt="Get it on Google Play" src="https://play.google.com/intl/en_us/badges/images/generic/fi_badge_web_generic.png"/ height="105" style="margin:-17px;"></a>
+<br>
+<a href="https://geo.itunes.apple.com/fi/app/etunti/id1100648690?mt=8"><img src="http://etunti.fi/etusivuimg/app_store.png" style="max-width:237px"></a>
 </p>
 				';
 
@@ -507,7 +504,8 @@ class AsiakkaatController extends Controller
 					Yii::app()->user->setFlash('danger', "eDico käyttöehtoja ei löydy asetuksista. Lisää ehdot ennen käyttönottoa.");
 				} else {
 					$this->LahetaTunnukset($id);
-					$this->redirect(array('index'));
+					Yii::app()->user->setFlash('success', "Lähetetty.");
+					$this->redirect(array('update','id'=>$id));
 				}
 		}
 		//     Tunnukset lahetys -->
@@ -520,9 +518,44 @@ class AsiakkaatController extends Controller
 
 		if(isset($_POST['Asiakkaat']))
 		{
+			if(isset($_POST['Asiakkaat']['verot']))
+			unset($_POST['Asiakkaat']['verot']);
 
 			$vanha_attr = $model->attributes;
 			$model->attributes=$_POST['Asiakkaat'];
+
+
+
+			// <-- Kaikki kohteet passiviseksi jos asiakas passivinen
+			if($_POST['Asiakkaat']['aktiivinen'] == 0 and $vanha_attr['aktiivinen'] == 1)
+			{
+
+				$criteria=new CDbCriteria;
+				$criteria->condition = " 
+					asiakas_id='".$id."'
+					AND id IN ( SELECT kohde FROM sivex_tvuoro
+						WHERE DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') >= CURDATE()
+					)
+				";
+				$kohteet = Kohteet::model()->findAll($criteria);
+
+				if(count($kohteet) > 0)
+				{
+					Yii::app()->user->setFlash('danger', "Asiakkaalla on suunniteltuja työvuoroja. Poista ensin kaikki tulevat työvuorot ja vasta sitten muuta asiakas Ei Aktiiviseksi.");
+
+					$this->redirect(array('update', 'id' => $id));
+				} else {
+
+					$criteria=new CDbCriteria;
+					$criteria->condition = " 
+						asiakas_id='".$id."'
+					";
+					Kohteet::model()->updateAll(array('aktiivinen'=>'0'), $criteria);
+				}
+
+			}
+			//     Kaikki kohteet passiviseksi jos asiakas passivinen -->
+
 
 			if(isset($_POST['Asiakkaat']['ryhma']))
 				$model->ryhma=json_encode($_POST['Asiakkaat']['ryhma']);
@@ -531,7 +564,6 @@ class AsiakkaatController extends Controller
 
 			if($model->save())
 			{
-
 
 				// <-- LOG
 				$model_log 	= 'Asiakkaat';

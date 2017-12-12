@@ -203,9 +203,50 @@ class SiteController extends Controller
 
 	public function actionMaksullinen()
 	{
-		$domainit = Domainit::model()->find(" domain='".Yii::app()->user->domain."' ");
+
+		$return = '';
+		$arr = array();
+		if(isset($_POST['dat']))
+		{
+			foreach($_POST['dat'] as $key => $item)
+			  if($item == 'true')
+				$arr[] = $key;
+
+			ksort($arr);
+			$return = '1,2';
+			if(count($arr) > 0)
+			$return .= ",".implode(",", $arr);
+
+		}
+
+
+		$domainit = Domainit::model()->find(" domain='".Yii::app()->user->domain."' AND maksullinen=0 ");
 		if(isset($domainit->id))
-			Domainit::model()->updateByPk($domainit->id, array('maksullinen' => 1));
+		{
+				Domainit::model()->updateByPk($domainit->id, array('maksullinen' => 1));
+				if(!empty($return))
+				Domainit::model()->updateByPk($domainit->id, array('paketti' => $return));
+
+				$subject = Yii::t('main', 'Etunti-käyttäjä vaihtoi maksulliseksi');
+				$message = '
+				'.$domainit->yritys.' vaihtoi Etunnin maksulliseksi.<br>
+				Domain: '.$domainit->domain.'<br>
+				Sähköposti-osoite: '.$domainit->sahkoposti.'
+				';
+				$mail = new YiiMailer();
+				$mail->setFrom('no-reply@etunti.fi');
+				$mail->setTo('etuntimarkkinointi@etunti.fi');
+				$mail->setSubject($subject);
+				$mail->setBody($message);
+				$mail->send();
+
+
+				$DigistenYritysLog = Yii::app()->createController('DigistenYritysLog');
+				$DigistenYritysLog[0]->addTapahtuma($domainit->id, 'ilmainen_maksulliseksi', $return);
+
+				Yii::app()->user->setFlash('success', "Olette vaihtaneet ilmaisen palvelun laajempisisältöiseen maksulliseen palveluun.<br> Kysymyksissä pyydämme ottamaan yhteyttä sähköpostilla osoitteeseen tuki@etunti.fi");
+
+		}
 		$this->redirect(array('index'));
 	}
 
@@ -213,7 +254,7 @@ class SiteController extends Controller
 	{
 
 		$domainit = Domainit::model()->find(" domain='".Yii::app()->user->domain."' AND maksullinen=0 ");
-		Yii::app()->user->setState('ilmainen_ilmoitus', 'Ilmainen käyttö on mahdoton jos tunnit enemmään kun 500');
+		Yii::app()->user->setState('ilmainen_ilmoitus', $this->ilmainenIlmoitus());
 
 		if( isset($domainit->id) )
 		{
@@ -237,6 +278,10 @@ class SiteController extends Controller
 
 	}
 	
+	public function ilmainenIlmoitus()
+	{
+		return 'Ilmainen käyttö on mahdoton jos tunnit enemmään kun 500';
+	}
 
 	public function laskuriForCron($domain)
 	{
@@ -257,7 +302,7 @@ class SiteController extends Controller
 
 	}
 
-	protected function digistenTunnitYhteensa($start_date, $end_date)
+	public function digistenTunnitYhteensa($start_date, $end_date)
 	{
 
 
@@ -534,7 +579,7 @@ class SiteController extends Controller
 		$vastaus = '';
 		$kirjautumistunnus = '';
 
-		if(isset($_POST['yrityksen_nimi']))
+		if(isset($_POST['yrityksen_nimi']) and !empty($_POST['yrityksen_nimi']))
 		{
 
 			//print_r($_POST);
@@ -563,14 +608,20 @@ class SiteController extends Controller
 			$chk_domain = Domainit::model()->find(" domain='".$kirjautumistunnus."' ");
 			if(!isset($chk_domain->id))
 			{
+				$paketti = '1,2,3,5';
 				$new_domain = new Domainit;
 				$new_domain->domain = $kirjautumistunnus;
+				$new_domain->kirjautumistunnus = $kirjautumistunnus;
 				$new_domain->yritys = $_POST['yrityksen_nimi'];
-				$new_domain->paketti = '1,2,3,4,5,6';
+				$new_domain->paketti = $paketti;
 				$new_domain->sahkoposti = $_POST['sahkoposti'];
 				$new_domain->aktiivinen = 1;
 				$new_domain->maksullinen = 0;
-				$new_domain->save();
+				if($new_domain->save())
+				{
+					$DigistenYritysLog = Yii::app()->createController('DigistenYritysLog');
+					$DigistenYritysLog[0]->addTapahtuma($new_domain->id, 'new_domain', $paketti);
+				}
 			}
 
 
@@ -601,10 +652,26 @@ class SiteController extends Controller
 					'token' => $token,
 				));
 
+
+				$subject = Yii::t('main', 'Uusi Etuntikäyttäjä');
+				$message = '
+				<p>Yrityksen nimi: '.$_POST['yrityksen_nimi'].'</p>
+				<p>Y-tunnus: '.$_POST['yritys_tunnus'].'</p>
+				<p>Puhelinnumero: '.$_POST['puhelinnumero'].'</p>
+				<p>Sähköpostiosoite: '.$_POST['sahkoposti'].'</p>
+				';
+				$mail = new YiiMailer();
+				$mail->setFrom('no-reply@etunti.fi');
+				$mail->setTo('etuntimarkkinointi@etunti.fi');
+				$mail->setSubject($subject);
+				$mail->setBody($message);
+				$mail->send();
+
+
 				$message = '';
 				$message .= '<p>Yritystunnus: '.$kirjautumistunnus.'</p>';
 				$message .= '<p>Käyttäjätunnus: admin</p>';
-				$message .= '<p>Aktivoi käyttäjätunnuksesi <a href="'.Yii::app()->getBaseUrl(true).'/index.php/site/confirm?token='.$token.'">tästä</a><br>';
+				$message .= '<p>Aktivoi käyttäjätunnuksesi <a href="'.Yii::app()->getBaseUrl(true).'/index.php/site/confirm?domain='.$kirjautumistunnus.'&token='.$token.'">tästä</a><br>';
 
 				$subject = Yii::t('main', 'Tervetuloa Etunti');
 				$mail = new YiiMailer();
@@ -614,7 +681,7 @@ class SiteController extends Controller
 				$mail->setBody($message);
 				if($mail->send())
 				{
-					Yii::app()->user->setFlash('success', "Ilmainen tila on valmis. Tarkista oma sähköpostisi");
+					Yii::app()->user->setFlash('success', "Kiitoksia tilauksesta.<br> Palvelun käyttöön tarvittavat tunnukset on lähetty sähköpostiisi.<br> Näillä tunnuksilla voit heti aloittaa palvelun käyttämisen.");
 					//Yii::app()->session->destroy();
 					$this->redirect(array('index'));
 				} 
@@ -626,7 +693,7 @@ class SiteController extends Controller
 
 		}
 
-		$this->render('aloita', array(
+		$this->render('index', array(
 			'vastaus' => $vastaus,
 			'database' => $database,
 			'kirjautumistunnus' => $kirjautumistunnus,
@@ -1458,7 +1525,7 @@ $(document).ready(function(){
 		   $fm = FirmanTiedot::model()->find(" id=1 AND juuri_tullut_asiakkaaksi=1 ");
 		   if( isset($dm->id) and isset($fm->id) )
 		   {
-			$this->redirect(array('/asetukset/update', 'id' => 1, 'first' => true));
+			$this->redirect(array('/asetukset/yrityksentiedot', 'id' => 1, 'first' => true));
 		   }
 		}
 		//     juuri_tullut_asiakkaaksi -->
@@ -2183,18 +2250,25 @@ $(document).ready(function(){
 		foreach($m as $data)
 		{
 
-		    if($model == 'Asiakkaat' and $data->tyyppi == 'yritys')
+		    if($model == 'Asiakkaat' and $sarake == 'yrityksen_nimi' and $data->tyyppi == 'yritys')
 		    {
 		    $arr[] = array(
 		        'label'=>$data->yrityksen_nimi,
 		        'value'=>$data->yrityksen_nimi,    
 		        'id'=>$data->id,
         	    );
-		    } else if($model == 'Asiakkaat' and $data->tyyppi == 'henkilo')
+		    } else if($model == 'Asiakkaat' and $sarake == 'yrityksen_nimi' and $data->tyyppi == 'henkilo')
 		    {
 		    $arr[] = array(
 		        'label'=>$data->yhteyshenkilo,
 		        'value'=>$data->yhteyshenkilo,    
+		        'id'=>$data->id,
+        	    );
+		    } else if($model == 'Domainit')
+		    {
+		    $arr[] = array(
+		        'label'=>$data->yritys,
+		        'value'=>$data->id,    
 		        'id'=>$data->id,
         	    );
 		    } else {

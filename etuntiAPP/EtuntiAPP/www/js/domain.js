@@ -32,6 +32,7 @@ setTimeout(function() {
     var domain = '';
     var email = '';
     var salasana = '';
+    var developer = false;
 
 
     if(localStorage.getItem('domain'))
@@ -61,7 +62,7 @@ setTimeout(function() {
 	else
     		var server = 'https://'+localStorage.getItem('server');
     } else {
-    	var server = 'https://etunti.fi';
+    	var server = 'https://app.etunti.fi';
     }
 
     localStorage.removeItem('platform');
@@ -89,7 +90,7 @@ setTimeout(function() {
 	    if(localStorage.getItem('server'))
 	    	server = 'https://'+localStorage.getItem('server');
 	    else
-	    	server = 'https://etunti.fi';
+	    	server = 'https://app.etunti.fi';
 
 	}
 
@@ -101,7 +102,10 @@ setTimeout(function() {
     }
     // On device Ready -->
 
-    //server = '../../..';
+    if(developer == true){
+    	server = '../../..';
+    }
+
     var url = server+"/index.php/api/mob";
     var puh_nro = "";
     var versio = "";

@@ -1,12 +1,17 @@
 <?php
 
 ?>
-
+<br><br>
 <?php if($tilanne == 1) : ?>
 <div class="container">
+
 <div class="row">
-<div class="col-sm-6 col-sm-offset-3">
-<p class="text-center"><h1>Luo salasana</h1></p>
+ <div class="col-sm-6 col-sm-offset-3">
+  <div class="panel panel-default">
+    <div class="panel-heading"><?php echo Yii::t('main', 'Salasanan luominen'); ?></div>
+    <div class="panel-body">
+
+
 <form method="post" id="passwordForm">
 <input type="password" class="input-lg form-control" name="password1" id="password1" placeholder="Uusi salasana" autocomplete="off">
 <div class="row">
@@ -27,9 +32,12 @@
 </div>
 <input type="submit" class="col-xs-12 btn btn-primary btn-load btn-lg" data-loading-text="Changing Password..." value="Luo">
 </form>
-</div><!--/col-sm-6-->
-</div><!--/row-->
+
+    </div>
+  </div>
+ </div>
 </div>
+
 <?php endif; ?>
 
 

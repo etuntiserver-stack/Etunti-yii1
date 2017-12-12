@@ -24,7 +24,7 @@ class AsetuksetController extends Controller
 		return array(
 
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('update','oikeudet', 'rekisteriseloste'),
+				'actions'=>array('update', 'yrityksentiedot', 'oikeudet', 'rekisteriseloste', 'tiedostot'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -74,6 +74,138 @@ class AsetuksetController extends Controller
 
 			$this->render('oikeudet');
 		}
+	}
+
+	public function actionTiedostot($id)
+	{
+
+		$model = $this->loadModel($id);
+
+		if(isset($_POST['uploaded_t']))
+		{
+
+		  if (!file_exists(Yii::app()->basePath."/../tiedostot/firma/".Yii::app()->user->domain)) {
+		  	mkdir(Yii::app()->basePath."/../tiedostot/firma/".Yii::app()->user->domain, 0777, true);
+		  }
+
+		  $uploaddir = Yii::app()->basePath.'/../tiedostot/firma/'.Yii::app()->user->domain.'/';
+		  $uploadfile = $uploaddir . basename($model->id.'_'.$_FILES['file']['name']);
+		  if (move_uploaded_file($_FILES['file']['tmp_name'], $uploadfile)) {
+		     //echo "";
+		  } 
+		}
+
+
+		if(isset($_POST['uploaded_onlinevarausehdot']))
+		{
+
+		  if (!file_exists(Yii::app()->basePath."/../tiedostot/firma/".Yii::app()->user->domain)) {
+		  	mkdir(Yii::app()->basePath."/../tiedostot/firma/".Yii::app()->user->domain, 0777, true);
+		  }
+
+		  $uploaddir = Yii::app()->basePath.'/../tiedostot/firma/'.Yii::app()->user->domain.'/';
+		  $temp = explode(".", $_FILES["file"]["name"]);
+		  $uploadfile = $uploaddir . basename('onlinevarausehdot.'.end($temp));
+		  if (move_uploaded_file($_FILES['file']['tmp_name'], $uploadfile)) {
+		     $this->redirect(array('tiedostot', 'id' => 1));
+		  } 
+		}
+
+		if(isset($_POST['uploaded_toimitusehdot']))
+		{
+		
+		  if (!file_exists(Yii::app()->basePath."/../tiedostot/firma/".Yii::app()->user->domain)) {
+		  	mkdir(Yii::app()->basePath."/../tiedostot/firma/".Yii::app()->user->domain, 0777, true);
+		  }
+
+		  $uploaddir = Yii::app()->basePath.'/../tiedostot/firma/'.Yii::app()->user->domain.'/';
+		  $temp = explode(".", $_FILES["file"]["name"]);
+		  $uploadfile = $uploaddir . basename('toimitusehdot.'.end($temp));
+		  if (move_uploaded_file($_FILES['file']['tmp_name'], $uploadfile)) {
+		     $this->redirect(array('tiedostot', 'id' => 1));
+		  } 
+		}
+
+		if(isset($_POST['uploaded_Konevuokraus_toimitusehdot']))
+		{
+
+		  if (!file_exists(Yii::app()->basePath."/../tiedostot/firma/".Yii::app()->user->domain)) {
+		  	mkdir(Yii::app()->basePath."/../tiedostot/firma/".Yii::app()->user->domain, 0777, true);
+		  }
+
+		  $uploaddir = Yii::app()->basePath.'/../tiedostot/firma/'.Yii::app()->user->domain.'/';
+		  $temp = explode(".", $_FILES["file"]["name"]);
+		  if(end($temp) == 'pdf')
+		  {
+			$uploadfile = $uploaddir . basename('Konevuokraus_toimitusehdot.'.end($temp));
+			if (move_uploaded_file($_FILES['file']['tmp_name'], $uploadfile))
+		     $this->redirect(array('tiedostot', 'id' => 1));
+
+		  } else {
+	
+			Yii::app()->user->setFlash('danger', "Lataaminen ei onnistunut, odottelaan PDF");
+		     $this->redirect(array('tiedostot', 'id' => 1));
+		  }
+		}
+
+
+		if(isset($_POST['uploaded_edico_kayttoehdot']))
+		{
+		
+		  $path = Yii::app()->basePath."/../tiedostot/firma/".Yii::app()->user->domain;
+		  if (!file_exists($path)) {
+		  	mkdir($path, 0777, true);
+		  }
+
+		  $path_html = Yii::app()->basePath."/../tiedostot/firma/".Yii::app()->user->domain.'/eDico_html';
+		  if (!file_exists($path_html)) {
+		  	mkdir($path_html, 0777, true);
+		  }
+
+		  $uploaddir = $path.'/';
+		  $ext = pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION);
+		  $bname = 'eDico_kayttoehdot';
+		  if($ext == 'pdf')
+		  {
+			$uploadfile = $uploaddir . basename($bname.'.pdf');
+			if (move_uploaded_file($_FILES['file']['tmp_name'], $uploadfile))
+			{
+				$exec = 'pdftohtml -c -s -noframes '.$path.'/'.$bname.'.pdf '.$path_html.'/'.$bname.'.html';
+				exec($exec.' 2>&1', $output, $return);
+
+				if (file_exists($path_html.'/'.$bname.'.html')) {
+				  	$html_content = file_get_contents($path_html.'/'.$bname.'.html');
+				  	$html_content = str_replace("background image", "", $html_content);
+				  	$html_content = str_replace("body bgcolor=\"#A0A0A0\"", "body bgcolor=\"#FFFFFF\"", $html_content);
+					$html_content = preg_replace("/<img[^>]+\>/i", "", $html_content);
+				  	$html_content = str_replace("p {margin: 0; padding: 0;}", "", $html_content);
+
+					//$html_content = strip_tags($html_content, '<style>');
+		$html_content = preg_replace('/(<[^>]+) style=".*?"/i', '$1', $html_content);
+		$html_content = preg_replace('/(<[^>]+) class=".*?"/i', '$1', $html_content);
+					if(file_put_contents($path.'/'.basename($bname.'.html'), $html_content))
+		  				exec('rm -rf '.$path_html);
+				}
+		     $this->redirect(array('tiedostot', 'id' => 1));
+			}
+
+		  } else {
+
+			Yii::app()->user->setFlash('danger', "Lataaminen ei onnistunut, odottelaan PDF");
+			//$this->redirect(array('update', 'id'=>1));
+		  }
+		}
+
+
+
+		if(isset($_POST['poistaTamaTiedosto'])){
+			unlink($_POST['poistaTamaTiedosto']);
+		exit;
+		}
+
+		$this->render('tiedostot',array(
+			'model'=>$model,
+		));
 	}
 
 	protected function sprint($val){
@@ -141,6 +273,62 @@ class AsetuksetController extends Controller
 	 * If update is successful, the browser will be redirected to the 'view' page.
 	 * @param integer $id the ID of the model to be updated
 	 */
+	public function actionYrityksentiedot($id)
+	{
+
+	// <-- Oikeudet
+	   $checkOikeus = "yrityksentiedot_2_".Yii::app()->user->adminStatus;
+	   $site = Yii::app()->createController('Site');
+	   $site[0]->checkOikeus($checkOikeus);
+	//  Oikeudet -->
+
+		$domainit = Domainit::model()->find(" domain='".Yii::app()->user->domain."' ");
+		$tasot = explode(",", $domainit->paketti);
+
+
+		// <-- Uusi taso ota kayttoon
+		if(isset($_POST['taso']))
+		{
+			array_push($tasot, $_POST['taso']);
+			sort($tasot);
+			$paketti = implode(",", $tasot);
+			Domainit::model()->updateByPk($domainit->id, array('paketti' => $paketti));
+
+			echo json_encode($tasot);
+			exit;
+		}
+		//   Uusi taso ota kayttoon -->
+
+
+		$model=$this->loadModel($id);
+		$f = FirmanTiedot::model()->findbypk(1);
+		// Uncomment the following line if AJAX validation is needed
+		// $this->performAjaxValidation($model);
+
+		if(isset($_POST['FirmanTiedot']))
+		{
+			$f->attributes=$_POST['FirmanTiedot'];
+			if($f->save())
+			{
+				Yii::app()->user->setFlash('success', "Tiedot tallennettu.");
+				$this->redirect(array('yrityksentiedot','id'=>$model->id));
+			}
+		}
+
+		$this->render('yrityksentiedot',array(
+			'f'=>$f,
+			'tasot' => $tasot,
+			'domainit' => $domainit
+		));
+
+	}
+
+
+	/**
+	 * Updates a particular model.
+	 * If update is successful, the browser will be redirected to the 'view' page.
+	 * @param integer $id the ID of the model to be updated
+	 */
 	public function actionUpdate($id)
 	{
 
@@ -151,17 +339,6 @@ class AsetuksetController extends Controller
 	//  Oikeudet -->
 
 		$model=$this->loadModel($id);
-		$f = FirmanTiedot::model()->findbypk(1);
-		// Uncomment the following line if AJAX validation is needed
-		// $this->performAjaxValidation($model);
-
-		if(isset($_POST['FirmanTiedot']))
-		{
-			$f->attributes=$_POST['FirmanTiedot'];
-			$f->save();
-
-		}
-
 		if(isset($_POST['Asetukset']))
 		{
 
@@ -177,6 +354,34 @@ class AsetuksetController extends Controller
 
 			if($model->save())
 			{
+
+				// <-- Check TRUST
+				if($model->palvelu_tyyppi == 2 and empty($model->trust_cid) and empty($model->trust_cid))
+				{
+					Yii::app()->user->setFlash('danger', "Sinulla ei ole asetuksissa määritettynä TRUST-tunnuksia.
+Jos yritykselläsi ei ole Ropo Capital Oy:n kanssa sopimusta tunnuksista, lähetä viesti osoitteeseen tuki@etunti.fi ja autamme sopimuksen syntymisessä.");
+				}
+				//    Check TRUST -->
+
+				// <-- kirjautumistunnus
+				if(isset($_POST['Asetukset']['kirjautumistunnus']) and !empty($_POST['Asetukset']['kirjautumistunnus']))
+				{
+			       		$criteria = new CDbCriteria();
+			       		$criteria->condition = " 
+						domain!='".Yii::app()->user->domain."' 
+						AND kirjautumistunnus!='' AND kirjautumistunnus='".$_POST['Asetukset']['kirjautumistunnus']."'
+					";
+					$domainit_all = Domainit::model()->findAll($criteria);
+
+					if(isset($domainit_all[0]))
+					{
+						Yii::app()->user->setFlash('danger', "Tämä kirjautumistunnus on varattu.");
+					} else {
+						$domainit = Domainit::model()->find(" domain='".Yii::app()->user->domain."' ");
+						Domainit::model()->updateByPk($domainit->id, array('kirjautumistunnus' => $_POST['Asetukset']['kirjautumistunnus']));
+					}
+				}
+				//     kirjautumistunnus -->
 
 				// <-- LOG
 				$model_log 	= 'Asetukset';
@@ -195,7 +400,6 @@ class AsetuksetController extends Controller
 
 		$this->render('update',array(
 			'model'=>$model,
-			'f'=>$f,
 		));
 	}
 
@@ -274,5 +478,22 @@ class AsetuksetController extends Controller
 		$otsiko[$data->id] = $data->nimike;
 		return $otsiko;
 	}
+
+	protected function pakettiMuutos($pakettit)
+	{
+		$tasot = explode(",", $pakettit);
+		$return = array();
+		if(in_array(1, $tasot) and in_array(2, $tasot))
+		$return[] = 'eTyö';
+		if(in_array(3, $tasot))
+		$return[] = 'eLasku';
+		if(in_array(4, $tasot))
+		$return[] = 'eOnline';
+		if(in_array(5, $tasot))
+		$return[] = 'eDico';
+
+		return implode(", ", $return);
+	}
+
 
 }

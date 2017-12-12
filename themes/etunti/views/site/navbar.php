@@ -600,6 +600,18 @@ $('.tvchange').change(function(){
                 <span class="fa fa-gear"></span> <?php echo Yii::t('main','Asetukset'); ?> </a>
             </li>
             <li class="list-group-item">
+              <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/asetukset/yrityksentiedot?id=1" class="animated animated-short fadeInUp">
+                <span class="fa fa-gear"></span> <?=Yii::t('main','Yrityksen tiedot')?> </a>
+            </li>
+            <li class="list-group-item">
+              <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/asetukset/oikeudet" class="animated animated-short fadeInUp">
+                <span class="fa fa-gear"></span> <?=Yii::t('main','Käyttöoikeudet')?> </a>
+            </li>
+            <li class="list-group-item">
+              <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/asetukset/tiedostot?id=1" class="animated animated-short fadeInUp">
+                <span class="fa fa-gear"></span> <?=Yii::t('main','Tiedostot')?> </a>
+            </li>
+            <li class="list-group-item">
               <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/administrators/index" class="animated animated-short fadeInUp">
                 <span class="fa fa-gear"></span> <?php echo Yii::t('main','Käyttäjät'); ?> </a>
             </li>
@@ -1171,7 +1183,7 @@ $('.tvchange').change(function(){
 
 	<?php if(in_array('6',$tas)) : ?>
           <li>
-            <a class="accordion-toggle onlinevaraus" href="#">
+            <a class="accordion-toggle" href="#">
               <span class="fa fa-line-chart"></span>
               <span class="sidebar-title"><?php echo Yii::t('main', 'Management'); ?></span>
               <span class="caret"></span>
@@ -1208,6 +1220,10 @@ $('.tvchange').change(function(){
               <li>
                 <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/asetuksetForAll/update?id=1">
                   <span class="fa fa-clock-o"></span> <?php echo Yii::t('main', 'Digisten asetukset'); ?></a>
+              </li>
+              <li>
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/DigistenYritysLog/index">
+                  <span class="fa fa-clock-o"></span> <?php echo Yii::t('main', 'Yritysten loki'); ?></a>
               </li>
             </ul>
           </li>

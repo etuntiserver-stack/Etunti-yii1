@@ -73,6 +73,55 @@
                           </label>
                         </div>
                       </div>
+
+                      <div class="col-md-2">
+                        <div class="section">
+                          <label class="field">
+
+
+				<?php
+				$selected = array();
+				if(isset($_POST['Tekija'])) $selected = $_POST['Tekija'];
+		   		$site = Yii::app()->createController('Site');
+		   		$tyontekiatLista = $site[0]->tyontekiatLista( 
+					'Tekija', // name
+					null, // class
+					'tyontekijat_passiviset', // id
+					$selected, //selected
+					'2' // aktiivinen
+				);
+				echo $tyontekiatLista;
+				?>
+
+
+                          </label>
+                        </div>
+                      </div>
+
+                      <div class="col-md-2">
+                        <div class="section">
+                          <label class="field">
+
+
+				<?php
+				$selected = array();
+				if(isset($_POST['Tekija'])) $selected = $_POST['Tekija'];
+		   		$site = Yii::app()->createController('Site');
+		   		$tyontekiatLista = $site[0]->tyontekiatLista( 
+					'Tekija', // name
+					null, // class
+					'tyontekijat_lopettaneet', // id
+					$selected, //selected
+					'3' // aktiivinen
+				);
+				echo $tyontekiatLista;
+				?>
+
+
+                          </label>
+                        </div>
+                      </div>
+
                       <div class="col-md-2">
                         <div class="section">
                           <label class="field prepend-icon">
@@ -86,7 +135,7 @@
                         </div>
                       </div>
 
-                      <div class="col-md-2 col-md-offset-5">
+                      <div class="col-md-2 col-md-offset-1">
         	        <input type="submit" class="btn btn-primary btn-lg haemob btn-block myBgColors" value="<?php echo Yii::t('main', 'Hae'); ?>">
 		      </div>
 
@@ -226,7 +275,33 @@ $('#tyontekijat').multiselect({
 	//inheritClass: true,
 	//enableFiltering: true,
         includeSelectAllOption: true,
-	nonSelectedText: '<?php echo Yii::t("main", "Tyhjä"); ?>',
+	nonSelectedText: '<?php echo Yii::t("main", "Aktiiviset työntekijät"); ?>',
+	selectAllText: 'Valitse kaikki',
+	allSelectedText: 'Kaikki',
+	nSelectedText: 'valittu',
+	numberDisplayed: 0,
+	buttonWidth: '100%',
+        maxHeight: 300,
+});
+
+$('#tyontekijat_passiviset').multiselect({
+	//inheritClass: true,
+	//enableFiltering: true,
+        includeSelectAllOption: true,
+	nonSelectedText: '<?php echo Yii::t("main", "Passiviset työntekijät"); ?>',
+	selectAllText: 'Valitse kaikki',
+	allSelectedText: 'Kaikki',
+	nSelectedText: 'valittu',
+	numberDisplayed: 0,
+	buttonWidth: '100%',
+        maxHeight: 300,
+});
+
+$('#tyontekijat_lopettaneet').multiselect({
+	//inheritClass: true,
+	//enableFiltering: true,
+        includeSelectAllOption: true,
+	nonSelectedText: '<?php echo Yii::t("main", "Lopettaneet työntekijät"); ?>',
 	selectAllText: 'Valitse kaikki',
 	allSelectedText: 'Kaikki',
 	nSelectedText: 'valittu',

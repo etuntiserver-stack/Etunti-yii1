@@ -750,9 +750,12 @@ public function actionLogin($domain)
 			foreach($m2 as $item)
 			{
 				$f = "tiedostot/tarjoukset/".$domain."/".$item->liite.".pdf";
-   				if(file_exists(Yii::app()->basePath."/../".$f))
+   				if(!file_exists(Yii::app()->basePath."/../".$f))
    				{
-						
+					$lista .= 'Tiedosto ei löydy. Tarjous nro.: '. $item->id.' <hr>';				
+					continue;
+				}
+		
 					$txt = '';
 					$bg_color = '';
 					$tila = '';
@@ -791,8 +794,6 @@ public function actionLogin($domain)
 					  '.$tila.'
 					  <hr>
 					';
-
-				}
 
 			}
 			$lista .= '</div>';
@@ -897,8 +898,11 @@ public function actionLogin($domain)
 			foreach($m2 as $item)
 			{
 				$f = "tiedostot/sopimukset/".$domain."/".$item->liite.".pdf";
-   				if(file_exists(Yii::app()->basePath."/../".$f))
+   				if(!file_exists(Yii::app()->basePath."/../".$f))
    				{
+					$lista .= 'Tiedosto ei löydy. Sopimus nro.: '. $item->id.' <hr>';				
+					continue;
+				}
 						
 					$txt = '';
 					$bg_color = '';
@@ -938,8 +942,6 @@ public function actionLogin($domain)
 					  '.$tila.'
 					  <hr>
 					';
-
-				}
 
 			}
 			$lista .= '</div>';

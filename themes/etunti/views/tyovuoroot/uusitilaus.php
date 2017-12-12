@@ -585,9 +585,9 @@ function laatikonPaivays(thisDataReturn){
 	  	    $.ajax({
 			url: location.protocol + "//" + location.host + '/index.php/tyovuoroot/did',
 			type:'GET',
-			data: { "pvm" : d['pvm'], "tid" : d['tid'], "from" : "ajax" },
+			data: { "pvm" : d['pvm'], "tid" : d['tid'], kohde : '', "from" : "ajax" },
 			  success:function(data){
-			  //console.log(data);
+			  console.log(data);
 
 
 			  if( $('#'+d['ymd']+'_'+d['tid']).length )
