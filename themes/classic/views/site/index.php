@@ -177,6 +177,7 @@ $(document).ready(function(){
 
   $(".hyvaksyn").click(function(){
   	localStorage.setItem('kayttoehdot_luettu', true);
+	dataLayer.push({'event': 'aloitus'});
   });
 
   $("#kehdot").click(function(e){
@@ -185,26 +186,27 @@ $(document).ready(function(){
 
   $(".submit").click(function(e){
 
-	if (grecaptcha.getResponse() == ""){
+
+	e.preventDefault();
+
+	if (grecaptcha.getResponse() == "" && location.hostname !== "etunti.local"){
 		alert("Varmistaa, ettet ole robotti");
 		return false;
 	}
 
 	if( $('#sahkoposti').val() !== $('#sahkoposti2').val() ){
-		e.preventDefault();
 		alert('Tarkasta sähköpostiosoite.');
 		return false;
 	}
 
 	if(!localStorage.getItem('kayttoehdot_luettu')){
-		e.preventDefault();
 		alert('Lue ensin käyttöehdot.');
 		return false;
 	}
 
-	dataLayer.push({'event': 'aloitus'});
 	$('#aloita-lomake').submit();
   });
+
 
 /*
   $("#yrityksen_nimi").keyup(function(e){
