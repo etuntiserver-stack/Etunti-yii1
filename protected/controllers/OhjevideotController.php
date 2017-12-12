@@ -149,11 +149,6 @@ class OhjevideotController extends Controller
 			$model->attributes=$_POST['Ohjevideot'];
 			$tiedoston_nimi = CUploadedFile::getInstance($model, 'tiedoston_nimi');
 			$model->tiedoston_nimi = $tiedoston_nimi !== null ? $tiedoston_nimi->getName() : $original_tiedosto;
-
-
-//print_r($_POST);
-//exit;
-
             		if($model->save()){
 
 			    if (!empty($tiedoston_nimi))
