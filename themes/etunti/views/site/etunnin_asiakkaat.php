@@ -32,6 +32,11 @@
                             </label>
                           </label>
                         </div>
+
+                      <div class="">
+			<?php echo CHtml::link(Yii::t('main', 'Lähetä kirje'),Yii::app()->request->baseUrl.'/index.php/site/laheta_et_kirje',array('class'=>'btn btn-default')); ?>
+		      </div>
+
                       </div>
 
                       <div class="col-md-2">
@@ -66,9 +71,6 @@
         	        <input type="submit" class="btn btn-primary btn-lg haemob btn-block myBgColors" value="<?php echo Yii::t('main', 'Hae'); ?>">
 		      </div>
 
-                      <div class="col-md-2 col-md-offset-4">
-			<?php echo CHtml::link(Yii::t('main', 'Lähetä kirje'),Yii::app()->request->baseUrl.'/index.php/site/laheta_et_kirje',array('class'=>'btn btn-default')); ?>
-		      </div>
 
                     </div>
 
