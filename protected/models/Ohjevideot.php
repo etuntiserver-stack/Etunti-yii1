@@ -18,7 +18,7 @@ class Ohjevideot extends CActiveRecord
 	public function tableName()
 	{
 		$tb_name = 'ohjevideot';
-		$check_this_table = false;
+		$check_this_table = true;
 		//unset(Yii::app()->session[$tb_name]); // this use if want many times play
 		if(!isset(Yii::app()->session[$tb_name]))
 		{
@@ -70,6 +70,7 @@ class Ohjevideot extends CActiveRecord
 			array('otsiko, kuvaus', 'required'),
 			array('sort', 'numerical', 'integerOnly'=>true),
 			array('otsiko, tiedoston_nimi', 'length', 'max'=>500),
+			//array('tiedoston_nimi', 'required','on'=>array('create')),
 		        //array('tiedoston_nimi', 'file', 'types'=>'mp4'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.

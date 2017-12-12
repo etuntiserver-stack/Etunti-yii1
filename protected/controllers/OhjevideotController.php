@@ -29,15 +29,15 @@ class OhjevideotController extends Controller
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
 				'actions'=>array('index','view'),
-				'users'=>array('*'),
+				'expression' => "Yii::app()->User->isAdmin() || Yii::app()->controller->isDigisten()",
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
 				'actions'=>array('create','update'),
-				'expression' => "Yii::app()->User->isAdmin()",
+				'expression' => "Yii::app()->User->isAdmin() || Yii::app()->controller->isDigisten()",
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
 				'actions'=>array('admin','delete'),
-				'expression' => "Yii::app()->User->isAdmin()",
+				'expression' => "Yii::app()->User->isAdmin() || Yii::app()->controller->isDigisten()",
 			),
 			array('deny',  // deny all users
 				'users'=>array('*'),
@@ -45,6 +45,26 @@ class OhjevideotController extends Controller
 		);
 	}
 
+	public function isDigisten() {
+
+		if($this->tasot(999))
+		{
+	            return true;
+		} else {
+	            return false;
+		}
+	}
+
+	protected function tasot($num)
+	{
+		$tas = array();
+		if(isset(Yii::app()->user->adminPaketti)) 
+		$tas = explode(",",Yii::app()->user->adminPaketti);
+		if(in_array($num,$tas))
+		return true;
+		else
+		return false;
+	}
 
         public function init()
         {
@@ -52,6 +72,9 @@ class OhjevideotController extends Controller
                 if (Yii::app()->user->isAdmin())
 		{
                         Yii::app()->theme = 'admin';
+                } elseif ($this->isDigisten())
+		{
+                        Yii::app()->theme = 'etunti';
                 } else {
                         Yii::app()->theme = 'classic';
 		}
@@ -116,19 +139,32 @@ class OhjevideotController extends Controller
   		}
 
 		$model=$this->loadModel($id);
+		$original_tiedosto = $model->tiedoston_nimi;
 
 		// Uncomment the following line if AJAX validation is needed
-		$this->performAjaxValidation($model);
+		//$this->performAjaxValidation($model);
 
 		if(isset($_POST['Ohjevideot']))
 		{
 			$model->attributes=$_POST['Ohjevideot'];
-            		$model->tiedoston_nimi=CUploadedFile::getInstance($model,'tiedoston_nimi');
+			$tiedoston_nimi = CUploadedFile::getInstance($model, 'tiedoston_nimi');
+			$model->tiedoston_nimi = $tiedoston_nimi !== null ? $tiedoston_nimi->getName() : $original_tiedosto;
+
+
+//print_r($_POST);
+//exit;
+
             		if($model->save()){
-		                $path=Yii::getPathOfAlias('webroot').'/ohjevideot/'.$model->tiedoston_nimi->getName();
-		                $model->tiedoston_nimi->saveAs($path);
-				$this->redirect(array('view','id'=>$model->id));
-		        }
+
+			    if (!empty($tiedoston_nimi))
+			    {
+		                $path=Yii::getPathOfAlias('webroot').'/ohjevideot/'.$tiedoston_nimi->getName();
+		                $tiedoston_nimi->saveAs($path);
+				$this->redirect(array('//site/ohjevideot'));
+			    }
+		        } else {
+				var_dump($model->getErrors());
+			}
 
 		}
 
