@@ -157,6 +157,7 @@ class OhjevideotController extends Controller
 		                $tiedoston_nimi->saveAs($path);
 				$this->redirect(array('//site/ohjevideot'));
 			    }
+
 		        } else {
 				var_dump($model->getErrors());
 			}

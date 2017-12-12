@@ -315,6 +315,27 @@ public function actionLogin($domain)
 
 	}
 
+	public function actionOmat($domain)
+	{
+
+		$return = '';
+		if(isset($_POST['tunnus']) and $this->kirjautuminen($domain, $_POST['tunnus'], $_POST['salasana']) == true)
+		{
+
+		   $model = Asiakkaat::model()->findByPk($_POST['asiakasID']);
+		   if(isset($model->id))
+		   {
+				Yii::app()->theme = 'etunti';
+				$return = $this->renderPartial('/asiakkaat/view', array('model' => $model), true);
+				$this->_sendResponse(200, CJSON::encode(array('content'=>$return)));
+				exit;
+
+		   }
+
+		}
+
+
+	}
 
 	public function actionInfo($domain)
 	{
