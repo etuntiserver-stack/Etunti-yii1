@@ -216,11 +216,13 @@ setTimeout(function() {
 
 
 	function showAppVersion() {
-		  cordova.getAppVersion(function(version) {
+	    cordova.getAppVersion(function(version) {
+	     if(device.platform !== 'iOS'){
 		  document.getElementById('versioBlock').style.display="block";
 		  document.getElementById('version').innerHTML = version;
 		  versio = version;
-		  });
+	     }
+	    });
 	}
 	showAppVersion();
 
