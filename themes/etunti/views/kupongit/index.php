@@ -30,7 +30,7 @@
                         <div class="section">
                           <label class="field prepend-icon">
 
-			      <input type="number" class="gui-input" name="kupongin_maara" placeholder="Alennuskoodi määrä...">
+			      <input type="number" class="gui-input" name="kupongin_maara" placeholder="Alennuskoodi määrä..." required>
                             <label for="firstname" class="field-icon">
                               <i class="fa fa-calendar"></i>
                             </label>
@@ -55,7 +55,7 @@
                         <div class="section">
                           <label class="field prepend-icon">
 
-			      <input type="text" class="gui-input datepickerFI" name="Kupongit[voimassa]" placeholder="Voimassa päivämäärä...">
+			      <input type="text" class="gui-input datepickerFI" name="Kupongit[voimassa]" placeholder="Voimassa päivämäärä..." required>
                             <label for="firstname" class="field-icon">
                               <i class="fa fa-calendar"></i>
                             </label>
@@ -115,7 +115,7 @@
   <tr>
   <th></th>
   <th><?php echo Yii::t('main', 'Luotu'); ?></th>
-  <th><?php echo Yii::t('main', 'Asiakas'); ?></th>
+  <th><?php echo Yii::t('main', 'Asiakaat'); ?></th>
   <th><?php echo Yii::t('main', 'Kupongi'); ?></th>
   <th><?php echo Yii::t('main', 'Voimassa'); ?></th>
   <th><?php echo Yii::t('main', 'Muoto'); ?></th>
@@ -163,17 +163,13 @@ $("#aktiivinen").val($("#akt").val());
 else
 $("#aktiivinen").val(1);
 
-$(".haemob").click(function(){
-	$("#mobForm").submit();
-});
-
 	var alennus_max_euro = parseInt("<?=$alennus_max_euro?>");
 	var alennus_max_prosentti = parseInt("<?=$alennus_max_prosentti?>");
 
  $(document).delegate(".maara","keyup",function(){
 
 	if( ($("#maara_tyyppi").val() == 'euro' ) && ($(this).val() > alennus_max_euro) ){
-		$("#maara_check_result").html('<span class="required">Maksimi arvo on '+ alennus_max_euro +'</span>');
+		$("#maara_check_result").html('<span class="required">Maksimi arvo on '+ alennus_max_euro +'. Tarkista asetukset</span>');
 		$('.haemob').attr('disabled', 'yes');
 	} else if($("#maara_tyyppi").val() == 'euro' ) {
 		$('.haemob').removeAttr('disabled');
@@ -181,7 +177,7 @@ $(".haemob").click(function(){
 	}
 
 	if( ($("#maara_tyyppi").val() == 'prosentti' ) && ($(this).val() > alennus_max_prosentti) ){
-		$("#maara_check_result").html('<span class="required">Maksimi arvo on '+ alennus_max_prosentti +'</span>');
+		$("#maara_check_result").html('<span class="required">Maksimi arvo on '+ alennus_max_prosentti +'. Tarkista asetukset</span>');
 		$('.haemob').attr('disabled', 'yes');
 	} else if($("#maara_tyyppi").val() == 'prosentti' ) {
 		$('.haemob').removeAttr('disabled');

@@ -2,34 +2,25 @@
 /* @var $this KohteetController */
 /* @var $data Kohteet */
 
-	$asiakas='';
-	if($data->asiakas_id != 0)
+	$asiakas_lista='';
+	if(is_array(json_decode($data->lahetetyt_asiakas_id_lista, true)))
 	{
-	$a = Asiakkaat::model()->findbypk($data->asiakas_id);
-		if(isset($a->id) and !empty($a->yrityksen_nimi))
+		$asiakas_id_lista = json_decode($data->lahetetyt_asiakas_id_lista, true);
+
+		foreach($asiakas_id_lista as $item)
 		{
-			$asiakas = CHtml::link($a->yrityksen_nimi, 
-				array('/asiakkaat/update', 'id'=>$data->id), 
+		    $a = Asiakkaat::model()->findbypk($item);
+		    if(isset($a->id))
+		    {
+			$asiakas_lista .= CHtml::link($a->yrityksen_nimi, 
+				array('/asiakkaat/update', 'id'=>$a->id), 
 				array(
-					'class'=>'btn btn-primary btn-block myBgColors', 
-					'style'=>'color:white', 
 					'data-toggle'=>'tooltip', 
 					'data-placement'=>'top', 
 					'title'=>Yii::t('main', 'Katso') 
 				)
-			);
-		} elseif(isset($a->id) and empty($a->yrityksen_nimi) and !empty($a->yhteyshenkilo))
-		{
-			$asiakas = CHtml::link($a->yhteyshenkilo, 
-				array('/asiakkaat/update', 'id'=>$data->id), 
-				array(
-					'class'=>'btn btn-primary btn-block myBgColors', 
-					'style'=>'color:white', 
-					'data-toggle'=>'tooltip', 
-					'data-placement'=>'top', 
-					'title'=>Yii::t('main', 'Katso') 
-				)
-			);
+			).'<br>';
+		    }
 		}
 	}
 
@@ -54,13 +45,13 @@
 		<?php echo date("d.m.Y H:i", strtotime($data->time)); ?>
 	</td>
 	<td>
-		<?php echo $asiakas; ?>
+		<?php echo $asiakas_lista; ?>
 	</td>
 	<td>
 		<h3><?php echo $data->kupongin_id; ?></h3>
 	</td>
 	<td>
-		<?php if( strtotime($data->voimassa) <= time() ) : ?>
+		<?php if( !empty($data->voimassa) and strtotime($data->voimassa) <= time() ) : ?>
 			<span class="text-danger"><?=date("d.m.Y", strtotime($data->voimassa))?></span>
 		<?php else : ?>
 			<?=date("d.m.Y", strtotime($data->voimassa))?>

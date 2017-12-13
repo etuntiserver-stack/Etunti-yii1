@@ -81,32 +81,35 @@ class KupongitController extends Controller
 		{
 
 			$asiakkaat = Asiakkaat::model()->findByPk($_POST['asiakas_id']);
+			$kupongit = Kupongit::model()->findByPk($id);
 
 			if(isset($asiakkaat->id))
 			{
 
 				$alennuskoodit = array();
-
 				if(is_array(json_decode($asiakkaat->alennuskoodit, true)))
 				$alennuskoodit = json_decode($asiakkaat->alennuskoodit, true);
-
 
 				if(isset($alennuskoodit[$_POST['id']]) and $alennuskoodit[$_POST['id']] == $_POST['kupongin_id'])
 				{
 					Yii::app()->user->setFlash('warning', "Tämä alennuskoodi on jo lähetetty tälle henkilölle.");
 					$this->redirect(array('index'));
 				}
-
-
 				$alennuskoodit[$_POST['id']] = $_POST['kupongin_id'];
 				Asiakkaat::model()->updateByPk($asiakkaat->id, array('alennuskoodit' => json_encode($alennuskoodit)));
 
-				// <-- Lahetys
-				$ft = FirmanTiedot::model()->findbypk(1);
 
+				$asiakas_id_lista = array();
+				if(is_array(json_decode($kupongit->lahetetyt_asiakas_id_lista, true)))
+				   $asiakas_id_lista = json_decode($kupongit->lahetetyt_asiakas_id_lista, true);
+				if(!isset($asiakas_id_lista[$asiakkaat->id]))
+				   $asiakas_id_lista[$asiakkaat->id] = $asiakkaat->id;
+				Kupongit::model()->updateByPk($kupongit->id, array('lahetetyt_asiakas_id_lista' => json_encode($asiakas_id_lista)));
+
+				// <-- Lahetys
 				$message = Yii::t('main', 'Uusi alennuskoodi on').': '.$_POST['kupongin_id'].'<br>';
 
-				if(isset($ft->sahkoposti) and !empty($ft->sahkoposti))
+				if(isset($asiakkaat->sahkoposti) and !empty($asiakkaat->sahkoposti))
 				{
 				$subject = Yii::t('main', 'Uusi alennuskoodi');
 				$mail = new YiiMailer();
@@ -128,6 +131,7 @@ class KupongitController extends Controller
 				}
 
 			}
+				Yii::app()->user->setFlash('success', "Lähetetty.");
 				$this->redirect(array('index'));
 		}
 
@@ -230,8 +234,11 @@ class KupongitController extends Controller
 			$model->kupongin_id = $this->generateRandomString($_POST['merkkien_maara']);
 			if( $model->maara_tyyppi == 'euro' )
 			$model->euro_maara=$_POST['maara'];
+
 			if( $model->maara_tyyppi == 'prosentti' )
 			$model->prosentti_maara=$_POST['maara'];
+
+			if(!empty($_POST['Kupongit']['voimassa']))
 			$model->voimassa=date("Y-m-d", strtotime($_POST['Kupongit']['voimassa']));
 
 			if(!$model->save())
