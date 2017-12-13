@@ -51,6 +51,7 @@ class Kupongit extends DB2ActiveRecord
                      'jatkuva' => 'int(1) 0 ',
                      'status' => 'int(1) 0 ',
                      'asiakas_id' => 'int(11) ',
+                     'lahetetyt_asiakas_id_lista' => 'text ',
 		);
 
 		foreach($table_structure as $key=>$value)
@@ -77,6 +78,7 @@ class Kupongit extends DB2ActiveRecord
 			array('prosentti_maara, jatkuva, status, asiakas_id', 'numerical', 'integerOnly'=>true),
 			array('euro_maara', 'numerical'),
 			array('kupongin_id, maara_tyyppi', 'length', 'max'=>255),
+			array('lahetetyt_asiakas_id_lista', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('id, time, kupongin_id, voimassa, euro_maara, prosentti_maara, maara_tyyppi, jatkuva, status', 'safe', 'on'=>'search'),
