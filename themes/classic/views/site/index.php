@@ -168,6 +168,30 @@ Sopimussakon määrä ei rajoita loukatun osapuolen oikeutta vaatia vahingonkorv
 
 </div>
 
+<?php if(isset($_GET['aloita']) and isset($_GET['kirjautumistunnus']) and isset($_GET['email']) and $_GET['aloita'] == "ok") : ?>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ window.dataLayer.push({
+ 'event' : 'aloita',
+ 'tilanne' : 'OK',
+ 'kirjautumistunnus' : '<?=$_GET["kirjautumistunnus"]?>',
+ 'email' : '<?=$_GET["email"]?>',
+ });
+</script>
+<?php endif; ?>
+
+
+<?php if(isset($_GET['aloita']) and isset($_GET['kirjautumistunnus']) and isset($_GET['email']) and $_GET['aloita'] == "error") : ?>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ window.dataLayer.push({
+ 'event' : 'aloita',
+ 'tilanne' : 'ERROR',
+ 'kirjautumistunnus' : '<?=$_GET["kirjautumistunnus"]?>',
+ 'email' : '<?=$_GET["email"]?>',
+ });
+</script>
+<?php endif; ?>
 
 
 <script type="text/javascript">
@@ -177,7 +201,6 @@ $(document).ready(function(){
 
   $(".hyvaksyn").click(function(){
   	localStorage.setItem('kayttoehdot_luettu', true);
-	dataLayer.push({'event': 'aloitus'});
   });
 
   $("#kehdot").click(function(e){
