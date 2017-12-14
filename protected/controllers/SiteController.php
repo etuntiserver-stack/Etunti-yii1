@@ -1521,6 +1521,21 @@ $(document).ready(function(){
 	public function actionEtusivu()
 	{
 
+		if(isset($_GET['soittaa'])){
+			$message = 'Soittopyyntö koskien laskutusta. Domain: '.Yii::app()->user->domain;
+
+			$mail = new YiiMailer();
+			$mail->setFrom('no-reply@etunti.fi');
+			$mail->setTo('etuntimarkkinointi@etunti.fi'); 
+			$mail->setSubject('Soittopyyntöviesti');
+			$mail->setBody($message);
+			if($mail->send())
+			{
+				Yii::app()->user->setFlash('success','Viesti lähetetty.');
+				$this->redirect(array('etusivu'));
+			}
+		}
+
 		// <-- juuri_tullut_asiakkaaksi
 		if( isset(Yii::app()->user->domain) )
 		{

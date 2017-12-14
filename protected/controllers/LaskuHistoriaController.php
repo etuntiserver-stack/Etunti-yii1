@@ -75,6 +75,33 @@ class LaskuHistoriaController extends Controller
                 } else {
                         Yii::app()->theme = 'classic';
                 }
+
+		$asetukset = Asetukset::model()->findByPk(1);
+		if(isset($asetukset->palvelu_tyyppi) and $asetukset->palvelu_tyyppi == 0)
+		{
+			echo '
+			<div class="modal show" id="myModalIlmoitus" role="dialog">
+			  <div class="modal-dialog" role="document">
+			    <div class="modal-content">
+			      <div class="modal-header">
+			        <h5 class="modal-title">Ilmoitus</h5>
+			      </div>
+			      <div class="modal-body">
+			        <p>Laskutus toimii sähköisesti ja edellyttää luotettavaa yhteistyökumppania laskujen välittämiseksi.<br>
+				Välittäjän tunnukset syötetään asetuksissa. Välittäjätunnukset saat helposti kauttamme.<br>
+				<p><b>Haluan että soitatte minulle ja kerrotaan tarkemmin:</b></p> 
+				</p>
+			      </div>
+			      <div class="modal-footer">
+			        '.CHtml::link('KYLLÄ',array("site/etusivu", "soittaa" => true), array('class' => 'btn btn-primary')).'
+			        '.CHtml::link('EI',array("site/etusivu"), array('class' => 'btn btn-default')).'
+			      </div>
+			    </div>
+			  </div>
+			</div>
+			';
+		}
+
                 parent::init();
         }
 
