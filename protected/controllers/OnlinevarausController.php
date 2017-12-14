@@ -71,7 +71,7 @@ class OnlinevarausController extends Controller
         public function init()
         {
                 Yii::app()->theme = 'classic';
-		if(isset($_GET['domain']) and !isset(Yii::app()->user->domain))
+		if(isset($_GET['domain']))
 		{
 
 			$domainit = Domainit::model()->find(" domain='".$_GET['domain']."' ");
@@ -85,7 +85,6 @@ class OnlinevarausController extends Controller
 			            $this->redirect(array('/site/index'));
 				}
 			}
-	
 
 			Yii::app()->user->setState('domain', $_GET['domain']);
 			if(isset($_GET['aid']))
@@ -100,23 +99,6 @@ class OnlinevarausController extends Controller
 				Yii::app()->user->setState('alennuskoodi',null);
 			}
 			$this->redirect(array('index'));
-		}
-
-
-		if(isset(Yii::app()->user->domain))
-		{
-
-			$domainit = Domainit::model()->find(" domain='".Yii::app()->user->domain."' ");
-			if(isset($domainit->paketti))
-			{
-				$tas = array();
-				$tas = explode(",",$domainit->paketti);
-				if(!in_array('4', $tas))
-				{
-				    $this->otaKaytoonFlash();
-			            $this->redirect(array('/site/etusivu'));
-				}
-			}
 		}
 
 		parent::init();
