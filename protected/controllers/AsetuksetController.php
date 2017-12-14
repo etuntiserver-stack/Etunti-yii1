@@ -318,7 +318,8 @@ class AsetuksetController extends Controller
 		$this->render('yrityksentiedot',array(
 			'f'=>$f,
 			'tasot' => $tasot,
-			'domainit' => $domainit
+			'domainit' => $domainit,
+			'asetukset' => $model
 		));
 
 	}

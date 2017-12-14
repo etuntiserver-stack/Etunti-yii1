@@ -72,6 +72,11 @@ $(document).ready(function(){
 		<?php endif; ?>
 		<!-- Hinnastot -->
 
+		<!-- Laskuri -->
+		<?php if(isset($domainit->id) and $domainit->maksullinen == 1) : ?>
+		<h2>Käytetyt tunnit: <?=$asetukset->ilmainen_versio_kayttotunnit; ?></h2>
+		<?php endif; ?>
+		<!-- laskuri -->
 	  </div>
         </div>
 
