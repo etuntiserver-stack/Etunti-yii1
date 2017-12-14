@@ -126,7 +126,7 @@
   <tr>
   <th></th>
   <th><?php echo Yii::t('main', 'Luotu'); ?></th>
-  <th><?php echo Yii::t('main', 'Kupongi'); ?></th>
+  <th><?php echo Yii::t('main', 'Alennuskoodi'); ?></th>
   <th><?php echo Yii::t('main', 'Voimassa'); ?></th>
   <th><?php echo Yii::t('main', 'Muoto'); ?></th>
   <th><?php echo Yii::t('main', 'Useampikäyttöinen'); ?></th>
