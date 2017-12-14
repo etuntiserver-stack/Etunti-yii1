@@ -802,6 +802,8 @@
 <div class="btn btn-primary btn-block myBgColors" data-toggle="collapse" data-target="#eDico"><h3><?php echo Yii::t('main','eDico'); ?>&nbsp; <i class="fa fa-caret-square-o-down" aria-hidden="true"></i></h3></div>
 
   <div class="row form collapse" id="eDico">
+
+<?php /*
    <div class="col-sm-4">
     <legend><h2><?php echo Yii::t('main','eDico'); ?></h2></legend>
 
@@ -822,7 +824,7 @@
 		<?php echo $form->textarea($model,'edico_laatutaso_3',array('rows'=>4,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'edico_laatutaso_3'); ?>
 	</div>
-<?php /*
+
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'edico_muut_kulut'); ?>
 
@@ -891,9 +893,9 @@ jQuery(function(){
 
 		<?php echo $form->error($model,'edico_muut_kulut'); ?>
 	</div>
-*/ ?>
-   </div>
 
+   </div>
+*/ ?>
 
    <div class="col-sm-4">
     <legend><h2><?php echo Yii::t('main','eDico'); ?></h2></legend>
