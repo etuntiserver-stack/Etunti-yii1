@@ -6,7 +6,7 @@ $asetukset = Asetukset::model()->findbypk(1);
 ?>
 <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/onlinevaraus_2.css">
 
-<div class="container-fluid">
+<div class="container-fluid well">
 <br>
 
 <div class="row">
