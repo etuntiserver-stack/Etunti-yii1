@@ -90,14 +90,15 @@ class KupongitController extends Controller
 				$asiakas_id_lista = array();
 				if(is_array(json_decode($kupongit->lahetetyt_asiakas_id_lista, true)))
 				   $asiakas_id_lista = json_decode($kupongit->lahetetyt_asiakas_id_lista, true);
-				if(!isset($asiakas_id_lista[$asiakkaat->id]))
-				   $asiakas_id_lista[$asiakkaat->id] = $asiakkaat->id;
 
 				if( count($asiakas_id_lista) > 0 and $kupongit->jatkuva == 0)
 				{
 					Yii::app()->user->setFlash('danger', "Alennuskoodin tyyppi ei useampikäyttöinen.");
 					$this->redirect(array('index'));
 				}
+
+				if(!isset($asiakas_id_lista[$asiakkaat->id]))
+				   $asiakas_id_lista[$asiakkaat->id] = $asiakkaat->id;
 
 				Kupongit::model()->updateByPk($kupongit->id, array('lahetetyt_asiakas_id_lista' => json_encode($asiakas_id_lista)));
 				//     asiakas_id_lista -->
