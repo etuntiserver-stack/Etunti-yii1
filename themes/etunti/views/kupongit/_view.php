@@ -2,17 +2,26 @@
 /* @var $this KohteetController */
 /* @var $data Kohteet */
 
-	$asiakas_lista='';
+	$asiakas_lista='<span class="text-success">Avoin</span>';
 	if(is_array(json_decode($data->lahetetyt_asiakas_id_lista, true)))
 	{
+		$asiakas_lista = '';
 		$asiakas_id_lista = json_decode($data->lahetetyt_asiakas_id_lista, true);
 
+		$i = 0;
 		foreach($asiakas_id_lista as $item)
 		{
+		    $i++;
 		    $a = Asiakkaat::model()->findbypk($item);
 		    if(isset($a->id))
 		    {
-			$asiakas_lista .= CHtml::link($a->yrityksen_nimi, 
+
+			if($a->tyyppi == 'yritys')
+			   $asiakas = $a->yrityksen_nimi;
+			if($a->tyyppi == 'henkilo')
+			   $asiakas = $a->yhteyshenkilo;
+
+			$asiakas_lista .= CHtml::link($i.'. '.$asiakas, 
 				array('/asiakkaat/update', 'id'=>$a->id), 
 				array(
 					'data-toggle'=>'tooltip', 
@@ -25,6 +34,10 @@
 	}
 
 	$list = array('0'=>Yii::t('main', 'Ei'),'1'=>Yii::t('main', 'Kyllä'));
+
+	$kaytetty = '';
+	if($data->status == 1 and $data->jatkuva == 0)
+	$kaytetty = '<br><b class="text-danger">Tämä koodi on käytetty</b>';
 ?>
 
 <tr>
@@ -43,9 +56,6 @@
 	</td>
 	<td>
 		<?php echo date("d.m.Y H:i", strtotime($data->time)); ?>
-	</td>
-	<td>
-		<?php echo $asiakas_lista; ?>
 	</td>
 	<td>
 		<h3><?php echo $data->kupongin_id; ?></h3>
@@ -68,8 +78,14 @@
 	<td>
 		<?=$list[$data->jatkuva]?>
 	</td>
+<?php /*
 	<td>
 		<?=$list[$data->status]?>
+	</td>
+*/ ?>
+	<td>
+		<?php echo $asiakas_lista; ?>
+		<?=$kaytetty?>
 	</td>
 	<td>
 		<?php if( strtotime($data->voimassa) <= time() ) : ?>

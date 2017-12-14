@@ -50,7 +50,7 @@ class Kupongit extends DB2ActiveRecord
                      'maara_tyyppi' => 'varchar(255) YES ',
                      'jatkuva' => 'int(1) 0 ',
                      'status' => 'int(1) 0 ',
-                     'asiakas_id' => 'int(11) ',
+                     //'asiakas_id' => 'int(11) ',
                      'lahetetyt_asiakas_id_lista' => 'text ',
 		);
 
@@ -75,7 +75,7 @@ class Kupongit extends DB2ActiveRecord
 		return array(
 			array('kupongin_id, voimassa, maara_tyyppi', 'required'),
                         array('kupongin_id','unique', 'message'=>'Tämä alennuskoodi on varattu.'),
-			array('prosentti_maara, jatkuva, status, asiakas_id', 'numerical', 'integerOnly'=>true),
+			array('prosentti_maara, jatkuva, status', 'numerical', 'integerOnly'=>true),
 			array('euro_maara', 'numerical'),
 			array('kupongin_id, maara_tyyppi', 'length', 'max'=>255),
 			array('lahetetyt_asiakas_id_lista', 'safe'),
@@ -104,12 +104,12 @@ class Kupongit extends DB2ActiveRecord
 		return array(
 			'id' => 'ID',
 			'time' => 'Time',
-			'kupongin_id' => Yii::t('main', 'Kupongi'),
+			'kupongin_id' => Yii::t('main', 'Alennuskoodi'),
 			'voimassa' => 'Voimassa',
 			'euro_maara' => Yii::t('main', 'Euro määrä'),
 			'prosentti_maara' => Yii::t('main', 'Prosentti määrä'),
 			'maara_tyyppi' => Yii::t('main', 'Määrä tyyppi'),
-			'jatkuva' => 'Jatkuva',
+			'jatkuva' => Yii::t('main', 'Useampikäyttöinen'),
 			'status' => Yii::t('main', 'Käytetty'),
 			'asiakas_id' => Yii::t('main', 'Asiakas'),
 		);
