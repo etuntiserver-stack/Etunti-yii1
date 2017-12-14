@@ -87,8 +87,8 @@
                         <div class="section">
                           <label class="field select">
 			   <select class="gui-input" name="Kupongit[jatkuva]" id="maara_tyyppi">
+       				<option value="0"><?php echo Yii::t('main', 'Kertakäyttöinen'); ?></option>
        				<option value="1"><?php echo Yii::t('main', 'Useampikäyttöinen'); ?></option>
-       				<option value="0"><?php echo Yii::t('main', 'Ei'); ?></option>
 			   </select>
                             <i class="arrow double"></i>
                             </label>
