@@ -74,7 +74,7 @@ $(document).ready(function(){
 
 		<!-- Laskuri -->
 		<?php if(isset($domainit->id) and $domainit->maksullinen == 1) : ?>
-		<h2>Käytetyt tunnit tässä kuussa: <?=$asetukset->ilmainen_versio_kayttotunnit; ?></h2>
+		<h2>Tehdyt työtunnit tässä kuussa: <?=$asetukset->ilmainen_versio_kayttotunnit; ?></h2>
 		<?php endif; ?>
 		<!-- laskuri -->
 	  </div>
