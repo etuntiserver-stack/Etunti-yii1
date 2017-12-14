@@ -93,7 +93,7 @@ class KupongitController extends Controller
 
 				if( count($asiakas_id_lista) > 0 and $kupongit->jatkuva == 0)
 				{
-					Yii::app()->user->setFlash('danger', "Alennuskoodin tyyppi ei useampikäyttöinen.");
+					Yii::app()->user->setFlash('danger', "Koodi on jo käytössä ja se on määritetty kertakäyttöiseksi.");
 					$this->redirect(array('index'));
 				}
 
