@@ -86,6 +86,23 @@ class KupongitController extends Controller
 			if(isset($asiakkaat->id))
 			{
 
+				// <-- asiakas_id_lista
+				$asiakas_id_lista = array();
+				if(is_array(json_decode($kupongit->lahetetyt_asiakas_id_lista, true)))
+				   $asiakas_id_lista = json_decode($kupongit->lahetetyt_asiakas_id_lista, true);
+				if(!isset($asiakas_id_lista[$asiakkaat->id]))
+				   $asiakas_id_lista[$asiakkaat->id] = $asiakkaat->id;
+
+				if( count($asiakas_id_lista) > 0 and $kupongit->jatkuva == 0)
+				{
+					Yii::app()->user->setFlash('danger', "Alennuskoodin tyyppi ei useampikäyttöinen.");
+					$this->redirect(array('index'));
+				}
+
+				Kupongit::model()->updateByPk($kupongit->id, array('lahetetyt_asiakas_id_lista' => json_encode($asiakas_id_lista)));
+				//     asiakas_id_lista -->
+
+				// <-- asiakas tallentaminen
 				$alennuskoodit = array();
 				if(is_array(json_decode($asiakkaat->alennuskoodit, true)))
 				$alennuskoodit = json_decode($asiakkaat->alennuskoodit, true);
@@ -97,14 +114,7 @@ class KupongitController extends Controller
 				}
 				$alennuskoodit[$_POST['id']] = $_POST['kupongin_id'];
 				Asiakkaat::model()->updateByPk($asiakkaat->id, array('alennuskoodit' => json_encode($alennuskoodit)));
-
-
-				$asiakas_id_lista = array();
-				if(is_array(json_decode($kupongit->lahetetyt_asiakas_id_lista, true)))
-				   $asiakas_id_lista = json_decode($kupongit->lahetetyt_asiakas_id_lista, true);
-				if(!isset($asiakas_id_lista[$asiakkaat->id]))
-				   $asiakas_id_lista[$asiakkaat->id] = $asiakkaat->id;
-				Kupongit::model()->updateByPk($kupongit->id, array('lahetetyt_asiakas_id_lista' => json_encode($asiakas_id_lista)));
+				//     asiakas tallentaminen -->
 
 				// <-- Lahetys
 				$message = Yii::t('main', 'Uusi alennuskoodi on').': '.$_POST['kupongin_id'].'<br>';

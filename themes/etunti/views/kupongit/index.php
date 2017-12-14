@@ -83,6 +83,17 @@
                             </label>
                           </label>			
                         </div>
+
+                        <div class="section">
+                          <label class="field select">
+			   <select class="gui-input" name="Kupongit[jatkuva]" id="maara_tyyppi">
+       				<option value="1"><?php echo Yii::t('main', 'Useampikäyttöinen'); ?></option>
+       				<option value="0"><?php echo Yii::t('main', 'Ei'); ?></option>
+			   </select>
+                            <i class="arrow double"></i>
+                            </label>
+                          </label>
+                        </div>
 		      </div>
 
                       <div class="col-md-3">
@@ -115,12 +126,12 @@
   <tr>
   <th></th>
   <th><?php echo Yii::t('main', 'Luotu'); ?></th>
-  <th><?php echo Yii::t('main', 'Asiakaat'); ?></th>
   <th><?php echo Yii::t('main', 'Kupongi'); ?></th>
   <th><?php echo Yii::t('main', 'Voimassa'); ?></th>
   <th><?php echo Yii::t('main', 'Muoto'); ?></th>
-  <th><?php echo Yii::t('main', 'Jatkuva'); ?></th>
-  <th><?php echo Yii::t('main', 'Käytetty'); ?></th>
+  <th><?php echo Yii::t('main', 'Useampikäyttöinen'); ?></th>
+  <!--<th><?php echo Yii::t('main', 'Käytetty'); ?></th>-->
+  <th><?php echo Yii::t('main', 'Toimitettu'); ?></th>
   <th><?php echo Yii::t('main', 'Lähetä'); ?></th>
   </tr>
   </thead>
