@@ -898,7 +898,6 @@ jQuery(function(){
 */ ?>
 
    <div class="col-sm-4">
-    <legend><h2><?php echo Yii::t('main','eDico'); ?></h2></legend>
 <?php /*
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'tapaturmavakuutus'); ?>
@@ -947,7 +946,6 @@ jQuery(function(){
    </div>
 
    <div class="col-sm-4">
-    <legend><h2><?php echo Yii::t('main','VINKKI'); ?></h2></legend>
 <?php /*
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'vinkki_tunnit'); ?>
