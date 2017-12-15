@@ -496,5 +496,8 @@ Jos yritykselläsi ei ole Ropo Capital Oy:n kanssa sopimusta tunnuksista, lähet
 		return implode(", ", $return);
 	}
 
-
+	protected function num($val){
+	    if($val > 0)
+		return  number_format((float)$val/3600, 2, '.', '');
+	}
 }

@@ -80,7 +80,7 @@ $(document).ready(function(){
 			$end_date = date("Y-m-d", strtotime('last day of this month') );
 			$sum_result = $site[0]->digistenTunnitYhteensa($start_date, $end_date);
 		?>
-		<h2>Arvio työtunneista tässä kuussa: <?=$sum_result; ?></h2>
+		<h2>Arvio työtunneista tässä kuussa: <?=(int)$sum_result; ?></h2>
 		<?php endif; ?>
 		<!-- laskuri -->
 	  </div>
