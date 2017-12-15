@@ -69,7 +69,15 @@ class LaskuController extends Controller
 		$asetukset = Asetukset::model()->findByPk(1);
 		if(isset($asetukset->palvelu_tyyppi) and $asetukset->palvelu_tyyppi == 0)
 		{
-			echo '
+			echo $this->ilmoitusModal();
+		}
+
+                parent::init();
+        }
+
+	public function ilmoitusModal()
+	{
+			return '
 			<div class="modal show" id="myModalIlmoitus" role="dialog">
 			  <div class="modal-dialog" role="document">
 			    <div class="modal-content">
@@ -77,9 +85,10 @@ class LaskuController extends Controller
 			        <h5 class="modal-title">Ilmoitus</h5>
 			      </div>
 			      <div class="modal-body">
-			        <p>Laskutus toimii sähköisesti ja edellyttää luotettavaa yhteistyökumppania laskujen välittämiseksi.<br>
-				Välittäjän tunnukset syötetään asetuksissa. Välittäjätunnukset saat helposti kauttamme.<br>
-				<p><b>Haluan että soitatte minulle ja kerrotaan tarkemmin:</b></p> 
+			        <p>
+				<p>Laskutus toimii sähköisesti ja edellyttää luotettavaa yhteistyökumppania laskujen välittämiseksi.</p>
+				<p>Välittäjän tunnukset syötetään asetuksissa. Välittäjätunnukset saat helposti kauttamme.</p>
+				<p><b>Haluan että soitatte minulle ja kerrotte tarkemmin: </b></p>
 				</p>
 			      </div>
 			      <div class="modal-footer">
@@ -90,10 +99,7 @@ class LaskuController extends Controller
 			  </div>
 			</div>
 			';
-		}
-
-                parent::init();
-        }
+	}
 
 	protected function num($val){
 	    if($val > 0)
