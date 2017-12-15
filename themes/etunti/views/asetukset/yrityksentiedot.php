@@ -76,11 +76,11 @@ $(document).ready(function(){
 		<?php if(isset($domainit->id) and $domainit->maksullinen == 1) : ?>
 		<?php
 			$site = Yii::app()->createController('Site');
-			$start_date = date( "Y-m-d", strtotime('first day of last month') );
-			$end_date = date("Y-m-d", strtotime('last day of last month') );
+			$start_date = date( "Y-m-d", strtotime('first day of this month') );
+			$end_date = date("Y-m-d", strtotime('last day of this month') );
 			$sum_result = $site[0]->digistenTunnitYhteensa($start_date, $end_date);
 		?>
-		<h2>Tehdyt työtunnit tässä kuussa: <?=$sum_result; ?></h2>
+		<h2>Arvio työtunneista tässä kuussa: <?=$sum_result; ?></h2>
 		<?php endif; ?>
 		<!-- laskuri -->
 	  </div>
