@@ -326,8 +326,8 @@ class SiteController extends Controller
 			        $criteria->condition = " 
 					aloitan!='' AND loppui!=''
 					AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = '".$pvm."'
+					AND status=3
 					AND id NOT IN (SELECT kid FROM sivexkuitti_repaired)
-		
 				";
 				$lu = Mobile::model()->find($criteria);
 	
@@ -339,6 +339,7 @@ class SiteController extends Controller
 				";
 			        $criteria->condition = " 
 					aloitan!='' AND loppui!=''
+					AND status=3
 					AND DATE_FORMAT(STR_TO_DATE(aloitan, '%d.%m.%Y'), '%Y-%m-%d') = '".$pvm."'
 				";
 				$tot = Toteutuneet::model()->find($criteria);
