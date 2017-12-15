@@ -1526,8 +1526,8 @@ $(document).ready(function(){
 			$message = 'Soittopyyntö koskien laskutusta. Domain: '.Yii::app()->user->domain;
 
 			$mail = new YiiMailer();
-			$mail->setFrom('no-reply@etunti.fi');
-			$mail->setTo('etuntimarkkinointi@etunti.fi'); 
+			$mail->setFrom(Yii::app()->params['etuntiEmail']);
+			$mail->setTo(Yii::app()->params['etuntiEmail']); 
 			$mail->setSubject('Soittopyyntöviesti');
 			$mail->setBody($message);
 			if($mail->send())

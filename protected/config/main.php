@@ -455,6 +455,7 @@ return array(
 	// application-level parameters that can be accessed
 	// using Yii::app()->params['paramName']
     'params'=>array(
+	'etuntiEmail'=>'etuntimarkkinointi@gmail.com',
 /*
         'RestfullYii' => array(
             'req.auth.ajax.user' => function(){
