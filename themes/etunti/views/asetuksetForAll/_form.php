@@ -17,9 +17,9 @@
   <div class="col-sm-3">
 
 	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'asetus'); ?>
-		<?php echo $form->textField($model,'asetus',array('size'=>60,'maxlength'=>255,'class'=>'form-control')); ?>
-		<?php echo $form->error($model,'asetus'); ?>
+		<?php echo $form->labelEx($model,'email'); ?>
+		<?php echo $form->textField($model,'email',array('size'=>60,'maxlength'=>255,'class'=>'form-control')); ?>
+		<?php echo $form->error($model,'email'); ?>
 	</div>
 
 	<div class="section fill mb5">
@@ -54,14 +54,8 @@
 <div class="row">
   <div class="col-sm-12">
 	<div class="section fill mb5">
-		<?php echo $form->labelEx($model,'ohjesivu'); ?>
-		<?php echo $form->textarea($model,'ohjesivu',array('rows'=>20,'maxlength'=>50000,'class'=>'form-control')); ?>
-		<?php echo $form->error($model,'ohjesivu'); ?>
-	</div>
-
-	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'app_info_sivu'); ?>
-		<?php echo $form->textarea($model,'app_info_sivu',array('rows'=>20,'maxlength'=>50000,'class'=>'form-control')); ?>
+		<?php echo $form->textarea($model,'app_info_sivu',array('rows'=>10,'maxlength'=>50000,'class'=>'form-control')); ?>
 		<?php echo $form->error($model,'app_info_sivu'); ?>
 	</div>
   </div>

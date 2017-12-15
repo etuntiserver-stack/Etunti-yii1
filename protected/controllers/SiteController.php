@@ -1522,12 +1522,15 @@ $(document).ready(function(){
 	public function actionEtusivu()
 	{
 
-		if(isset($_GET['soittaa'])){
+		if(isset($_GET['soittaa']))
+		{
+		   $afa = AsetuksetForAll::model()->findByPk(1);
+		   if(isset($afa->email))
+		   {
 			$message = 'Soittopyyntö koskien laskutusta. Domain: '.Yii::app()->user->domain;
-
 			$mail = new YiiMailer();
-			$mail->setFrom(Yii::app()->params['etuntiEmail']);
-			$mail->setTo(Yii::app()->params['etuntiEmail']); 
+			$mail->setFrom($afa->email);
+			$mail->setTo($afa->email); 
 			$mail->setSubject('Soittopyyntöviesti');
 			$mail->setBody($message);
 			if($mail->send())
@@ -1535,6 +1538,7 @@ $(document).ready(function(){
 				Yii::app()->user->setFlash('success','Viesti lähetetty.');
 				$this->redirect(array('etusivu'));
 			}
+		   }
 		}
 
 		// <-- juuri_tullut_asiakkaaksi

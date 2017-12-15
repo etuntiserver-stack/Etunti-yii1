@@ -48,6 +48,7 @@ class AsetuksetForAll extends CActiveRecord
                      'viralliset_pyhapaivat' => 'text',
                      'erikoislauantai' => 'text',
                      'app_info_sivu' => 'text',
+		     'email' => 'varchar(255)'
 		);
 
 		foreach($table_structure as $key=>$value)
@@ -71,8 +72,8 @@ class AsetuksetForAll extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('asetus, api_access_key', 'required'),
-			array('asetus', 'length', 'max'=>255),
+			array('api_access_key', 'required'),
+			array('asetus, email', 'length', 'max'=>255),
 			array('api_access_key, googlemaps_apikey', 'length', 'max'=>500),
 			array('ohjesivu, viralliset_pyhapaivat, erikoislauantai, app_info_sivu', 'safe'),
 			// The following rule is used by search().
@@ -100,6 +101,7 @@ class AsetuksetForAll extends CActiveRecord
 		return array(
 			'id' => Yii::t('main', 'ID'),
 			'asetus' => Yii::t('main', 'Asetus'),
+			'email' => Yii::t('main', 'Sähköposti'),
 			'api_access_key' => Yii::t('main', 'Api Access Key'),
 			'ohjesivu' => Yii::t('main', 'Ohjesivu'),
 		);
