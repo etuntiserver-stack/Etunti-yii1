@@ -73,15 +73,13 @@ $(document).ready(function(){
 		<!-- Hinnastot -->
 
 		<!-- Laskuri -->
-		<?php if(isset($domainit->id) and $domainit->maksullinen == 1) : ?>
 		<?php
 			$site = Yii::app()->createController('Site');
 			$start_date = date( "Y-m-d", strtotime('first day of this month') );
 			$end_date = date("Y-m-d", strtotime('last day of this month') );
 			$sum_result = $site[0]->digistenTunnitYhteensa($start_date, $end_date);
 		?>
-		<h2>Arvio työtunneista tässä kuussa: <?=(int)$sum_result; ?></h2>
-		<?php endif; ?>
+		<p><h2>Arvio työtunneista tässä kuussa: <?=(int)$sum_result; ?></h2></p>
 		<!-- laskuri -->
 	  </div>
         </div>
