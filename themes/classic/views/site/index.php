@@ -9,14 +9,15 @@
 <script src='https://www.google.com/recaptcha/api.js'></script>
 
 <div class="row">
- <div class="col-sm-offset-1 col-sm-10">
+ <div class="col-sm-offset-3 col-sm-6">
   <div class="panel panel-default">
     <div class="panel-heading"><?=Yii::t('main', 'Aloita Etunnin käyttäminen')?></div>
     <div class="panel-body">
 
      <div class="row">
-      <div class="col-sm-5">
 
+      <?php if(isset($_GET['aloita'])) : ?>
+      <div class="col-sm-12">
 	<legend><h3 class="text-info"><?php echo Yii::t('main', 'Ota käyttöön'); ?></h3></legend>
       	<form action="<?php echo Yii::app()->request->baseUrl; ?>/index.php/site/aloita" id="aloita-lomake" method="POST" autocomplete="off">
         <label><?php echo Yii::t('main', 'Yrityksen nimi')?></label>
@@ -42,8 +43,10 @@
 	<div id="success"></div>
 
       </div>
-      <div class="col-sm-5 pull-right">
+      <?php endif; ?>
 
+      <?php if(!isset($_GET['aloita'])) : ?>
+      <div class="col-sm-12">
 	<legend><h3 class="text-info"><?php echo Yii::t('main', 'Kirjaudu'); ?></h3></legend>
 		<form action="<?php echo Yii::app()->request->baseUrl; ?>/index.php/user/login" method="POST">
 		<label><?php echo Yii::t('main', 'Kirjautumistunnus')?></label>
@@ -58,6 +61,8 @@
 		<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/site/salasanan_palauttaminen" class="link"><?php echo Yii::t('main', 'Unohditko salasanasi?'); ?></a>
 
       </div>
+      <?php endif; ?>
+
      </div>
 
     </div>
