@@ -1103,7 +1103,7 @@ $('.tvchange').change(function(){
             </a>
             <ul class="nav sub-nav">
               <li>
-                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/onlinevaraus/index">
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/onlinevaraus/index?domain=<?=Yii::app()->user->domain?>">
                   <span class="fa fa-clock-o"></span> <?php echo Yii::t('main', 'Onlinevaraus'); ?></a>
               </li>
               <li>
