@@ -181,19 +181,19 @@ Ystävällisin terveisin.
 		<center>
 		<p>
 		<span>
-		<a href="https://play.google.com/store/apps/details?id=fi.etunti.dico&utm_source=global_co&utm_medium=prtnr&utm_content=Mar2515&utm_campaign=PartBadge&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1"><img alt="Get it on Google Play" src="'.Yii::app()->request->hostInfo.'/lib/img/app/google-play.jpg" style="height:100px" /></a>
+		<a href="https://play.google.com/store/apps/details?id=fi.etunti.dico&utm_source=global_co&utm_medium=prtnr&utm_content=Mar2515&utm_campaign=PartBadge&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1"><img alt="Get it on Google Play" src="'.Yii::app()->request->hostInfo.'/lib/app/google-play.jpg" style="height:100px" /></a>
 		</span>
 
 		<span>
-		<a href="https://geo.itunes.apple.com/fi/app/etunti/id1100648690?mt=8"><img src="'.Yii::app()->request->hostInfo.'/lib/img/app/app-ios.jpg" style="height:100px" ></a>
+		<a href="https://geo.itunes.apple.com/fi/app/etunti/id1100648690?mt=8"><img src="'.Yii::app()->request->hostInfo.'/lib/app/app-ios.jpg" style="height:100px" ></a>
 		</span>
 		</p>
 		</center>
 				';
 
 
-		echo $message;
-		exit;
+		//echo $message;
+		//exit;
 
 
 		$subject = Yii::t('main', 'Tarjous'). ', '.$ft->tyonantaja;
