@@ -6,8 +6,6 @@
 <div class="container">
 
 
-<script src='https://www.google.com/recaptcha/api.js'></script>
-
 <div class="row">
  <div class="col-sm-offset-3 col-sm-6">
   <div class="panel panel-default">
@@ -17,6 +15,8 @@
      <div class="row">
 
       <?php if(isset($_GET['aloita'])) : ?>
+      <script src='https://www.google.com/recaptcha/api.js'></script>
+
       <div class="col-sm-12">
 	<legend><h3 class="text-info"><?php echo Yii::t('main', 'Ota käyttöön'); ?></h3></legend>
       	<form action="<?php echo Yii::app()->request->baseUrl; ?>/index.php/site/aloita" id="aloita-lomake" method="POST" autocomplete="off">
