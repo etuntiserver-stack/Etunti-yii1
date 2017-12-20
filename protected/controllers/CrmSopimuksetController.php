@@ -201,13 +201,17 @@ class CrmSopimuksetController extends Controller
 		Etunti.
 		</p>
 
+		<center>
 		<p>
-		<span style="float:left;">
-		<a href="https://play.google.com/store/apps/details?id=fi.etunti.dico&utm_source=global_co&utm_medium=prtnr&utm_content=Mar2515&utm_campaign=PartBadge&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1"><img alt="Get it on Google Play" src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" style="height:100px" /></a>
-		</span><span style="display: inline-block;margin-top:16px;">
-		<a href="https://geo.itunes.apple.com/fi/app/etunti/id1100648690?mt=8"><img src="http://app.etunti.fi/etusivuimg/app_store.png" style="height:68px" ></a>
+		<span>
+		<a href="https://play.google.com/store/apps/details?id=fi.etunti.dico&utm_source=global_co&utm_medium=prtnr&utm_content=Mar2515&utm_campaign=PartBadge&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1"><img alt="Get it on Google Play" src="'.Yii::app()->request->hostInfo.'/lib/img/app/google-play.jpg" style="height:100px" /></a>
+		</span>
+
+		<span>
+		<a href="https://geo.itunes.apple.com/fi/app/etunti/id1100648690?mt=8"><img src="'.Yii::app()->request->hostInfo.'/lib/img/app/app-ios.jpg" style="height:100px" ></a>
 		</span>
 		</p>
+		</center>
 				';
 		
 
