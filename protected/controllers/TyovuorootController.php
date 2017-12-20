@@ -2784,7 +2784,8 @@ class TyovuorootController extends Controller
 			$log->tilanne		= $tilanne;
 			$log->save();
 
-			throw new CHttpException(404, $tilanne);
+			//throw new CHttpException(404, $tilanne);
+			echo $tilanne;
 		}
 		return $model;
 	}
