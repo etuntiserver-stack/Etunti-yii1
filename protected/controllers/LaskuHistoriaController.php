@@ -58,10 +58,10 @@ class LaskuHistoriaController extends Controller
 	       	if($m->id == Yii::app()->user->adminID)
 	       	  return true;
 		else
-	       	   return false;		
+	       	   $this->redirect(array('/site/otakaytoon', 'tila' => 'lasku'));		
 
 		} else {
-	            return false;
+	            $this->redirect(array('/site/otakaytoon', 'tila' => 'lasku'));
 		}
 	}
 
@@ -79,8 +79,7 @@ class LaskuHistoriaController extends Controller
 		$asetukset = Asetukset::model()->findByPk(1);
 		if(isset($asetukset->palvelu_tyyppi) and $asetukset->palvelu_tyyppi == 0)
 		{
-	  		$lasku = Yii::app()->createController('Lasku');
-	   		echo $lasku[0]->ilmoitusModal();
+	  		$this->redirect(array('/site/otakaytoon', 'tila' => 'lasku'));
 		}
 
                 parent::init();

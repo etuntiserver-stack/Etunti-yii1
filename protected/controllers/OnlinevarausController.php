@@ -28,7 +28,7 @@ class OnlinevarausController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view', 'check', 'aika', 'osoite', 'maksu', 'valmis', 'palvelu_ajax', 'palvelu_save_ajax', 'lisat_ajax', 'ajaat_ajax', 'aika_ajax', 'onkokohde', 'luouusi', 'checkout', 'maksettu', 'rekisteriseloste', 'tidtietoja', 'get_lomake_ajax', 'kupongi_checker'),
+				'actions'=>array('index','view', 'check', 'aika', 'osoite', 'maksu', 'valmis', 'palvelu_ajax', 'palvelu_save_ajax', 'lisat_ajax', 'ajaat_ajax', 'aika_ajax', 'onkokohde', 'luouusi', 'checkout', 'maksettu', 'rekisteriseloste', 'tidtietoja', 'get_lomake_ajax', 'kupongi_checker', 'otakaytoon'),
                 		'users'=>array("*"),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
@@ -58,13 +58,11 @@ class OnlinevarausController extends Controller
 		   {
 			return true;
 		   } else {
-			$this->otaKaytoonFlash();
-	       	   	return false;
+			$this->redirect(array('/site/otakaytoon', 'tila' => 'onlinevaraus'));
 		   }		
 
 		} else {
-		    $this->otaKaytoonFlash();
-	            $this->redirect(array('/site/etusivu'));
+			$this->redirect(array('/site/otakaytoon', 'tila' => 'onlinevaraus'));
 		}
 	}
 
@@ -81,8 +79,12 @@ class OnlinevarausController extends Controller
 				$tas = explode(",",$domainit->paketti);
 				if(!in_array('4', $tas))
 				{
-				    $this->otaKaytoonFlash();
-			            $this->redirect(array('/site/index'));
+				    if(isset(Yii::app()->user->adminID))
+				    {
+				    	$this->redirect(array('/site/otakaytoon', 'tila' => 'onlinevaraus'));
+				    } else {
+			            	$this->redirect('https://etunti.fi');
+				    }
 				}
 			}
 
@@ -103,12 +105,6 @@ class OnlinevarausController extends Controller
 
 		parent::init();
         }
-
-	protected function otaKaytoonFlash()
-	{
-		Yii::app()->user->setFlash('warning', "Ota Online-varaus käyttöön ottamalla yhteyttä: tuki@etunti.fi.");
-		return true;
-	}
 
 	public function actionKupongi_checker($kupongi)
 	{

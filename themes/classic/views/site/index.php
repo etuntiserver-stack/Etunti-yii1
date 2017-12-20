@@ -187,15 +187,7 @@ Sopimussakon määrä ei rajoita loukatun osapuolen oikeutta vaatia vahingonkorv
 
 
 <?php if(isset($_GET['aloita']) and isset($_GET['kirjautumistunnus']) and isset($_GET['email']) and $_GET['aloita'] == "error") : ?>
-<script>
- window.dataLayer = window.dataLayer || [];
- window.dataLayer.push({
- 'event' : 'aloita',
- 'tilanne' : 'ERROR',
- 'kirjautumistunnus' : '<?=$_GET["kirjautumistunnus"]?>',
- 'email' : '<?=$_GET["email"]?>',
- });
-</script>
+
 <?php endif; ?>
 
 

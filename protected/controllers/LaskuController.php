@@ -22,6 +22,10 @@ class LaskuController extends Controller
 	public function accessRules()
 	{
 		return array(
+			array('allow',  // allow all users to perform 'index' and 'view' actions
+				'actions'=>array('otakaytoon'),
+                		'users'=>array("*"),
+			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
 				'actions'=>array('admin','delete','create','update','index','view','etsikohde','etsiasiakas', 'etsisaaja','luoKohteista', 'luoAsiakaasta', 'tr_rivit', 'tr_rivitkk','lasku_pdf', 'finvoice', 'postita', 'tr_rivit_tyhja','valitsetuote', 'hyvityslasku', 'postita_pdf', 'get_historia', 'kohteen_tieto', 'osoite_haku', 'indexnv', 'updatenv', 'laheta_valitsemmat', 'tr_rivit_jarjestelmavalvojat', 'tr_rivit_edico_tilaus', 'edico_tilaus_get_asiakas'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
@@ -38,20 +42,22 @@ class LaskuController extends Controller
 
 	public function isEtuntiAdmin() {
 
-	$tas = '';
-	if(isset(Yii::app()->user->adminPaketti))
-	$tas = explode(",",Yii::app()->user->adminPaketti);
+		$tas = '';
+		if(isset(Yii::app()->user->adminPaketti))
+		$tas = explode(",",Yii::app()->user->adminPaketti);
 
 		if(isset(Yii::app()->user->adminID) and in_array('3',$tas))
 		{
-		$m = Administrators::model()->findbypk(Yii::app()->user->adminID);
-	       	if($m->id == Yii::app()->user->adminID)
-	       	  return true;
-		else
-	       	   return false;		
+		   $m = Administrators::model()->findbypk(Yii::app()->user->adminID);
+	       	   if($m->id == Yii::app()->user->adminID)
+		   {
+			return true;
+		   } else {
+			$this->redirect(array('/site/otakaytoon', 'tila' => 'lasku'));
+		   }		
 
 		} else {
-	            return false;
+			$this->redirect(array('/site/otakaytoon', 'tila' => 'lasku'));
 		}
 	}
 
@@ -69,37 +75,11 @@ class LaskuController extends Controller
 		$asetukset = Asetukset::model()->findByPk(1);
 		if(isset($asetukset->palvelu_tyyppi) and $asetukset->palvelu_tyyppi == 0)
 		{
-			echo $this->ilmoitusModal();
+			$this->redirect(array('/site/otakaytoon', 'tila' => 'lasku'));
 		}
 
                 parent::init();
         }
-
-	public function ilmoitusModal()
-	{
-			return '
-			<div class="modal show" id="myModalIlmoitus" role="dialog">
-			  <div class="modal-dialog" role="document">
-			    <div class="modal-content">
-			      <div class="modal-header">
-			        <h5 class="modal-title">Ilmoitus</h5>
-			      </div>
-			      <div class="modal-body">
-			        <p>
-				<p>Laskutus toimii sähköisesti ja edellyttää luotettavaa yhteistyökumppania laskujen välittämiseksi.</p>
-				<p>Välittäjän tunnukset syötetään asetuksissa. Välittäjätunnukset saat helposti kauttamme.</p>
-				<p><b>Haluan että soitatte minulle ja kerrotte tarkemmin: </b></p>
-				</p>
-			      </div>
-			      <div class="modal-footer">
-			        '.CHtml::link('KYLLÄ',array("site/etusivu", "soittaa" => true), array('class' => 'btn btn-primary')).'
-			        '.CHtml::link('EI',array("site/etusivu"), array('class' => 'btn btn-default')).'
-			      </div>
-			    </div>
-			  </div>
-			</div>
-			';
-	}
 
 	protected function num($val){
 	    if($val > 0)

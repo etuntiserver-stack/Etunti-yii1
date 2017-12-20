@@ -37,7 +37,7 @@ class SiteController extends Controller
                 		'expression'=>"Yii::app()->controller->isDigisten()",
 			),
 			array('allow', 
-				'actions'=>array( 'header', 'footer', 'lomake_tarjouspyynto', 'lomake_testiryhma', 'ajankohtaista', 'asiakkaat', 'yritys', 'yhteystiedot', 'lomake_lataailmainen', 'uusi_kommento', 'crontab', 'logout', 'salasanan_palauttaminen', 'change_password'),
+				'actions'=>array( 'header', 'footer', 'lomake_tarjouspyynto', 'lomake_testiryhma', 'ajankohtaista', 'asiakkaat', 'yritys', 'yhteystiedot', 'lomake_lataailmainen', 'uusi_kommento', 'crontab', 'logout', 'salasanan_palauttaminen', 'change_password', 'otakaytoon'),
 				'users'=>array('*'),
 			),
 			array('allow', 
@@ -117,6 +117,14 @@ class SiteController extends Controller
                 parent::init();
 
         }
+
+	public function actionOtakaytoon($tila)
+	{
+                Yii::app()->theme = 'etunti';
+		$this->render('otakaytoon', array(
+			'tila' => $tila
+		));
+	}
 
 	public function actionSite_error()
 	{
@@ -1522,25 +1530,6 @@ $(document).ready(function(){
 	public function actionEtusivu()
 	{
 
-		if(isset($_GET['soittaa']))
-		{
-		   $afa = AsetuksetForAll::model()->findByPk(1);
-		   if(isset($afa->email))
-		   {
-			$message = 'Soittopyyntö koskien laskutusta. Domain: '.Yii::app()->user->domain;
-			$mail = new YiiMailer();
-			$mail->setFrom($afa->email);
-			$mail->setTo($afa->email); 
-			$mail->setSubject('Soittopyyntöviesti');
-			$mail->setBody($message);
-			if($mail->send())
-			{
-				Yii::app()->user->setFlash('success','Viesti lähetetty.');
-				$this->redirect(array('etusivu'));
-			}
-		   }
-		}
-
 		// <-- juuri_tullut_asiakkaaksi
 		if( isset(Yii::app()->user->domain) )
 		{
@@ -1707,6 +1696,26 @@ $(document).ready(function(){
 
 	public function actionIndex()
 	{
+
+		if(isset($_GET['soittaa']) and isset($_GET['otsikko']) and isset($_GET['viesti']))
+		{
+		   $afa = AsetuksetForAll::model()->findByPk(1);
+		   if(isset($afa->email))
+		   {
+			$message = $_GET['viesti'];
+			$mail = new YiiMailer();
+			$mail->setFrom($afa->email);
+			$mail->setTo($afa->email); 
+			$mail->setSubject($_GET['otsikko']);
+			$mail->setBody($message);
+			if($mail->send())
+			{
+				Yii::app()->user->setFlash('success','Viesti lähetetty.');
+				$this->redirect(array('etusivu'));
+			}
+		   }
+		}
+
 		$this->render('index'); 
 	}
 

@@ -58,13 +58,11 @@ class OnlinevarausTuotteetController extends Controller
 		   {
 			return true;
 		   } else {
-			$this->otaKaytoonFlash();
-	       	   	return false;
+			$this->redirect(array('/site/otakaytoon', 'tila' => 'onlinevaraus'));
 		   }		
 
 		} else {
-		    $this->otaKaytoonFlash();
-	            $this->redirect(array('/site/etusivu'));
+			$this->redirect(array('/site/otakaytoon', 'tila' => 'onlinevaraus'));
 		}
 	}
 
@@ -81,11 +79,6 @@ class OnlinevarausTuotteetController extends Controller
                 parent::init();
         }
 
-	protected function otaKaytoonFlash()
-	{
-		Yii::app()->user->setFlash('warning', "Ota Online-varaus käyttöön ottamalla yhteyttä: tuki@etunti.fi.");
-		return true;
-	}
 
 	/**
 	 * Displays a particular model.
