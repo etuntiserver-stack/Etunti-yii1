@@ -8,7 +8,7 @@
     var loginFull = [];
 
 
-    var developer = true; // true false kun pelaat localhostissa
+    var developer = false; // true false kun pelaat localhostissa
 
     if(localStorage.getItem('loginOK'))
     {

@@ -130,13 +130,23 @@ if (
 Yii::app()->clientScript->registerPackage('jquery');
 ?>
 
+	<?php if(!isset($curpage_controller)): ?>
+	  <?php $this->renderPartial('/site/header'); ?>
+	<?php endif; ?>
 
-	<?php $this->renderPartial('/site/header'); ?>
+	<?php if(isset($curpage_controller) and $curpage_controller == 'onlinevaraus'): ?>
+	<style>
+	body{ background : none; }
+	</style>
+	<?php endif; ?>
+
 	<?php
 	foreach(Yii::app()->user->getFlashes() as $key => $message) {
         	echo '<p><div class="container"><div class="alert bg-' . $key . '">' . $message . "</div></div></p>\n";
     	}
 	?>
+
+
 	<?php echo $content; ?>
 
 
