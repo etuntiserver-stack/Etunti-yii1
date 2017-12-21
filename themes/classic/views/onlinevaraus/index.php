@@ -58,7 +58,7 @@ Asetukset::model()->updatebypk(1, array('onlinevaraus_loppu'=>18));
 ?>
 <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/onlinevaraus_2.css">
 
-<div class="container-fluid well">
+<div class="container-fluid">
 <br>
 
 <div class="row">
