@@ -223,16 +223,20 @@ class CrmSopimuksetController extends Controller
 		$mail->setSubject($subject);
 		$mail->setBody($message);
 
-		$tkPDF = '';
-		$tk = Tyonkuvaus::model()->find(" id='".$crm->tarjous->tyonkuvaus_id."' AND aktiivinen=1 ");
-		if(isset($tk->id))
+
+		if(isset($crm->tarjous->tyonkuvaus_id))
 		{
+		   $tkPDF = '';
+		   $tk = Tyonkuvaus::model()->find(" id='".$crm->tarjous->tyonkuvaus_id."' AND aktiivinen=1 ");
+		   if(isset($tk->id))
+		   {
 	   		$tk_controller = Yii::app()->createController('Tyonkuvaus');
 	   		$tkPDF = $tk_controller[0]->PdfOpener($crm->tarjous->tyonkuvaus_id, 'getFile');
    			if(file_exists(Yii::app()->basePath."/../".$tkPDF))
 			{
 				$mail->addAttachment($tkPDF);
 			}
+		   }
 		}
 
 
@@ -287,6 +291,9 @@ class CrmSopimuksetController extends Controller
 		if(isset($_POST['CrmSopimukset']))
 		{
 
+			if(empty($_POST['CrmSopimukset']['tarjous_id']))
+			$_POST['CrmSopimukset']['tarjous_id'] = 0;
+
 			$model->attributes=$_POST['CrmSopimukset'];
 
 			if($model->save()){
@@ -297,7 +304,9 @@ class CrmSopimuksetController extends Controller
 				{
 					$new_model = CrmSopimukset::model()->findByPk($model->id);
 					$site = Yii::app()->createController('Site');
-  					$tiedosto = $site[0]->tiedostonNimiAsiakasKohdeAika($tiedosto, $model->asiakas_id, $model->tarjous->kohteen_osoite, $new_model->time);
+
+					if($model->tarjous_id != 0){ $kohde = $model->tarjous->kohteen_osoite; } else {$kohde = null;}
+  					$tiedosto = $site[0]->tiedostonNimiAsiakasKohdeAika($tiedosto, $model->asiakas_id, $kohde, $new_model->time);
 				}
 				//     Tiedoston nimi -->
 				CrmSopimukset::model()->updateByPk($model->id, array('liite'=>$tiedosto));
@@ -339,7 +348,8 @@ class CrmSopimuksetController extends Controller
 				if(isset($model->id))
 				{
 					$site = Yii::app()->createController('Site');
-  					$tiedosto = $site[0]->tiedostonNimiAsiakasKohdeAika($tiedosto, $model->asiakas_id, $model->tarjous->kohteen_osoite, $model->time);
+					if($model->tarjous_id != 0){ $kohde = $model->tarjous->kohteen_osoite; } else {$kohde = null;}
+  					$tiedosto = $site[0]->tiedostonNimiAsiakasKohdeAika($tiedosto, $model->asiakas_id, $kohde, $model->time);
 				}
 				//     Tiedoston nimi -->
 				CrmSopimukset::model()->updateByPk($model->id, array('liite'=>$tiedosto));
@@ -435,7 +445,7 @@ class CrmSopimuksetController extends Controller
 				$asiakkaan_puhelin 	= '';
 				$asiakkaan_email	= '';
 
-			$as = Asiakkaat::model()->findbypk($model->tarjous->asiakas_id);
+			$as = Asiakkaat::model()->findbypk($model->asiakas_id);
 			if(isset($as->id))
 			{
 				if(isset($as->id) and !empty($as->yrityksen_nimi))
@@ -531,8 +541,12 @@ class CrmSopimuksetController extends Controller
 
 
 			$tarjoukset = Yii::app()->createController('CrmTarjoukset');
-			$tb = $tarjoukset[0]->hinnatTaulu($model->tarjous_id);
-			$docx->replaceVariableByHTML('prices_table', 'block', $tb, array('parseDivsAsPs' => true));
+
+			if($model->tarjous_id != 0)
+			{
+				$tb = $tarjoukset[0]->hinnatTaulu($model->tarjous_id);
+				$docx->replaceVariableByHTML('prices_table', 'block', $tb, array('parseDivsAsPs' => true));
+			}
 
 			$path = 'tiedostot/'.$this->kansio().'/'.Yii::app()->user->domain.'/'.$tiedosto;
 			$docx->createDocx($path);
