@@ -55,7 +55,7 @@
 					$list[$val->id] = $val->value;
 		
 		        		echo CHtml::dropDownList('kategoria', 'kategoria', $list,
-					array('empty'=>'Valitse', 'class'=>'form-control'));
+					array('empty'=>'Kategoria', 'class'=>'form-control'));
 		        	?>
 				<span class="input-group-btn">
 					<span class="btn btn-primary myBgColors muokaValiko" for="kategoria"><i class="fa fa-pencil-square-o"></i></span>
