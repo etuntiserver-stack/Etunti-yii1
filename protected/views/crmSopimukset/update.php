@@ -1,21 +1,21 @@
 <?php
-/* @var $this CrmSopimuksetController */
-/* @var $model CrmSopimukset */
+/* @var $this CrmTarjouksetController */
+/* @var $model CrmTarjoukset */
 
 $this->breadcrumbs=array(
-	'Crm Sopimuksets'=>array('index'),
+	'Crm Tarjouksets'=>array('index'),
 	$model->id=>array('view','id'=>$model->id),
 	'Update',
 );
 
 $this->menu=array(
-	array('label'=>'List CrmSopimukset', 'url'=>array('index')),
-	array('label'=>'Create CrmSopimukset', 'url'=>array('create')),
-	array('label'=>'View CrmSopimukset', 'url'=>array('view', 'id'=>$model->id)),
-	array('label'=>'Manage CrmSopimukset', 'url'=>array('admin')),
+	array('label'=>'List CrmTarjoukset', 'url'=>array('index')),
+	array('label'=>'Create CrmTarjoukset', 'url'=>array('create')),
+	array('label'=>'View CrmTarjoukset', 'url'=>array('view', 'id'=>$model->id)),
+	array('label'=>'Manage CrmTarjoukset', 'url'=>array('admin')),
 );
 ?>
 
-<h1>Update CrmSopimukset <?php echo $model->id; ?></h1>
+<h1>Update CrmTarjoukset <?php echo $model->id; ?></h1>
 
 <?php $this->renderPartial('_form', array('model'=>$model)); ?>

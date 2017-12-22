@@ -28,7 +28,7 @@ class CrmTarjouksetController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('vastaus', 'success', 'cancel', 'vanhentunut'),
+				'actions'=>array('success', 'cancel', 'vanhentunut'),
 				'users'=>array('*'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -72,35 +72,6 @@ class CrmTarjouksetController extends Controller
                 }
                 parent::init();
         }
-
-
-	public function actionVastaus($domain, $asia, $id, $code)
-	{
-	/*
-		Yii::app()->theme = 'classic';
-		$crm = CrmTarjoukset::model()->findbypk($id);
-		if($asia == 'hyvaksy' and isset($crm->id) and $crm->hyvaksyn_koodi == $code and $crm->status == 1){
-
-			//CrmTarjoukset::model()->updatebypk($id, array('status'=>2));
-			//$this->redirect(array('success'));
-			echo json_encode('ok');
-
-		} elseif($asia == 'hylatty' and isset($crm->id) and $crm->hyvaksyn_koodi == $code and $crm->status == 1){
-
-			if( $crm->tyonkuvaus_id != 0 )
-			Tyonkuvaus::model()->updatebypk($crm->tyonkuvaus_id, array('aktiivinen'=>0));
-
-			if( $crm->kohde_id != 0 )
-			Kohteet::model()->updatebypk($crm->kohde_id, array('aktiivinen'=>0));
-
-			CrmTarjoukset::model()->updatebypk($id, array('status'=>3));
-			$this->redirect(array('cancel'));
-		} else {
-			$this->redirect(array('vanhentunut'));
-		}
-	*/
-	}
-
 
 	public function actionGet_asiakastilat($asiakastila)
 	{
@@ -860,56 +831,6 @@ Ystävällisin terveisin.
 
 		return $bd;
 	}
-
-
-	protected function get_tarjouslaskenta($tb, $id)
-	{
-
-		$bd = '';
-       		$criteria = new CDbCriteria();
-	        $criteria->order = " id DESC ";
-	        $criteria->condition = " $tb='".$id."' ";
-		$model = Tarjouslaskenta::model()->findAll($criteria);
-		
-		if( count($model) > 0 )
-		{
-		$bd = '<h1>'.Yii::t('main', 'Valitse tarjouslaskenta').'</h1>';
-
-		foreach($model as $data)
-		{
-			$tl = $this->renderPartial('//tarjouslaskenta/view', array('model'=>$data), true);
-
-			$bd .= '<div class="tyokuvauksetValinta" id="tarjouslaskenta_'.$data->id.'">
-				<h2>'.Yii::t('main', 'Tarjouslaskenta').' #'.$data->id.' <input type="radio" name="tarjouslaskenta" class="tarjouslaskenta" for="'.$data->id.'"></h2>
-			</div>';
-			$bd .= $tl;
-			$bd .= '<hr>';
-		}
-
-
-		}
-
-		return trim($bd);
-	}
-
-
-	public function actionGet_tarjouslaskenta_by_id($id)
-	{
-
-		$bd = array();
-		$model = Tarjouslaskenta::model()->findByPk($id);
-		
-		if( isset($model->id) )
-		{
-
-                		$bd = array_filter($model->attributes);
-
-
-		}
-
-		echo json_encode($bd);
-	}
-
 
 	/**
 	 * Manages all models.

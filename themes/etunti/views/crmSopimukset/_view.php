@@ -17,10 +17,27 @@
 		?>
 	</td>
 	<td>
+		<?php echo date("d.m.Y", strtotime($data->time)); ?>
+	</td>
+	<td>
 		<?php echo $data->voimassa; ?>
 	</td>
 	<td>
-		<?php echo (isset($data->tarjous->id))? $data->tarjous->kohteen_osoite.', '.$data->tarjous->kohteen_postinumero.' '.$data->tarjous->kohteen_postitoimipaikka: ''; ?>
+		<?php echo $data->kohteen_osoite; ?>
+	</td>
+	<td>
+		<?php if($data->tyonkuvaus_id != 0): ?>
+		<?php echo CHtml::link('<i class="fa fa-file-pdf-o btn btn-primary myBgColors" aria-hidden="true"></i>', 
+				array('tyonkuvaus/pdf', 'id'=>$data->tyonkuvaus_id, 'open_status' => 'openPDF'), 
+				array(
+					'data-toggle'=>'tooltip', 
+					'data-placement'=>'top', 
+					'title'=>Yii::t('main', 'PDF'),
+					'target' => '_blank'
+				)
+			); 
+		?>
+		<?php endif; ?>
 	</td>
 	<td>
 	<div class="row">
@@ -47,7 +64,7 @@
 			array('/site/file_safe_opener', 'filepath' => $filepath, 'ext' => $ext),
 			array('target'=>'_blank', 'class' => 'form-group'
 		));
-		//   file_safe_opener -->
+		//     file_safe_opener -->
 		}
 	?>
 	</div>
@@ -60,9 +77,9 @@
 		<?php 
 			if(!empty($data->asiakkaan_sahkoposti) and $data->status == 0)
 			{
-				echo '<button class="btn btn-primary btn-block laheta" for="'.$data->id.'">'.Yii::t('main', 'lähetä').'</button>';
+				echo '<button class="btn btn-primary btn-block laheta" for="'.$data->id.'">'.Yii::t('main', 'Lähetä').'</button>';
 			} elseif($data->status == 1){
-				echo '<button class="btn btn-warning btn-block">'.Yii::t('main', 'Lähetetty').'</button>';
+				echo '<button class="btn btn-warning btn-block laheta" for="'.$data->id.'">'.Yii::t('main', 'Lähetetty').'</button>';
 			} elseif($data->status == 2){
 				echo '<button class="btn btn-success btn-block">'.Yii::t('main', 'Hyväksytty').'</button>';
 			} elseif($data->status == 3){

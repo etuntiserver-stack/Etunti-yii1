@@ -2,14 +2,13 @@
 
 ?>
 
-
         <!-- begin: .tray-center -->
         <div class="tray-center">
 
 
-        <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-home"></i> <?php echo Yii::t('main', 'Sopimukset'); ?> 
-		
+	<h2 class="myBgColors p10"> <i class="glyphicon glyphicon-home"></i> <?php echo Yii::t('main', 'Sopimukset'); ?> 
 		<?php echo CHtml::link('',Yii::app()->request->baseUrl.'/index.php/crmSopimukset/create',array('class'=>'btn btn-default fa fa-plus')); ?>
+
 	<!-- Mallitiedoston oikeus -->
 	<?php
 	   $checkOikeus = "mallitiedostot_2_".Yii::app()->user->adminStatus;
@@ -21,7 +20,6 @@
 	<?php endif; ?>
 	<!-- Mallitiedoston oikeus -->
 	</h2>
-
 
 
 
@@ -38,7 +36,7 @@
 			<form action="#" class="form-input" method="post" enctype="multipart/form-data">
 			     <div class="section input-group">
 			       <label class="field prepend-icon append-button file">
-			         <span class="button"><?=Yii::t('main', 'Sopimus template')?></span>
+			         <span class="button"><?=Yii::t('main', 'Työtodistus template')?></span>
 			         <input type="file" class="gui-file" name="file" onChange="document.getElementById(\'tiedostoUP\').value = this.value;">
 			         <input type="text" class="gui-input" name="file_upload" id="tiedostoUP" placeholder="Valitse tiedosto..">
 			         <label class="field-icon">
@@ -102,6 +100,8 @@
 
 <br>
 
+
+
                 </div>
               </div>
             </div>
@@ -121,8 +121,10 @@
   <thead class="myBgColors">
   <tr>
   <th></th>
+  <th><?php echo Yii::t('main', 'Päivämäärä'); ?></th>
   <th><?php echo Yii::t('main', 'Voimassa'); ?></th>
   <th><?php echo Yii::t('main', 'Sopimuksen kohde'); ?></th>
+  <th><?php echo Yii::t('main', 'Työnkuvaus'); ?></th>
   <th><?php echo Yii::t('main', 'Sopimus'); ?></th>
   <th><?php echo Yii::t('main', 'Sähköposti'); ?></th>
   <th><?php echo Yii::t('main', 'Lähettäminen'); ?></th>
@@ -155,10 +157,6 @@
 <script type="text/javascript">
 $(document).ready(function(){
 
-if($("#akt").val())
-$("#aktiivinen").val($("#akt").val());
-else
-$("#aktiivinen").val(1);
 
 $(".poista").click(function(){
 	var polku = $(this).attr('for');
@@ -176,13 +174,21 @@ $(".poista").click(function(){
 	}
 });
 
+
+if($("#akt").val())
+$("#aktiivinen").val($("#akt").val());
+else
+$("#aktiivinen").val(1);
+
+
 $(".haemob").click(function(){
 	$("#mobForm").submit();
 });
 
 $(".laheta").click(function(){
 	var id = $(this).attr('for');
-
+	window.location.href="laheta?id=" + id;
+/*
         $.ajax({
            url: 'laheta',
            type: "POST",
@@ -192,6 +198,8 @@ $(".laheta").click(function(){
 		window.location.reload();
            }
         });
+*/
+
 });
 
 });

@@ -6,7 +6,7 @@
  * The followings are the available columns in table 'tarjous_hinta_rivit':
  * @property integer $id
  * @property string $time
- * @property integer $tarjous_id
+ * @property integer $sopimus_id
  * @property integer $rivi
  * @property string $tkoodi
  * @property string $nimike
@@ -21,14 +21,14 @@
  * @property integer $tuoteID
  * @property string $free_text
  */
-class TarjousHintaRivit extends DB2ActiveRecord
+class SopimusHintaRivit extends DB2ActiveRecord
 {
 	/**
 	 * @return string the associated database table name
 	 */
 	public function tableName()
 	{
-		$tb_name = 'tarjous_hinta_rivit';
+		$tb_name = 'sopimus_hinta_rivit';
 		$check_this_table = true;
 		//unset(Yii::app()->session[$tb_name]); // this use if want many times play
 		if(!isset(Yii::app()->session[$tb_name]))
@@ -51,7 +51,7 @@ class TarjousHintaRivit extends DB2ActiveRecord
 		$table_structure = array(
 
                      'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP ',
-                     'tarjous_id' => 'int(11) ',
+                     'sopimus_id' => 'int(11) ',
                      'rivi' => 'int(11) ',
                      'tkoodi' => 'varchar(255) ',
                      'nimike' => 'varchar(100) ',
@@ -90,15 +90,15 @@ class TarjousHintaRivit extends DB2ActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			//array('id, time, tarjous_id, rivi, tkoodi, nimike, kpl, yksikko, hinta, alv, hinta_alv, ale, veroton, yhteensa_alv, tuoteID', 'required'),
-			array('tarjous_id, rivi, tuoteID', 'numerical', 'integerOnly'=>true),
+			//array('id, time, sopimus_id, rivi, tkoodi, nimike, kpl, yksikko, hinta, alv, hinta_alv, ale, veroton, yhteensa_alv, tuoteID', 'required'),
+			array('sopimus_id, rivi, tuoteID', 'numerical', 'integerOnly'=>true),
 			array('tkoodi', 'length', 'max'=>255),
 			array('nimike', 'length', 'max'=>100),
 			array('kpl, yksikko, hinta, alv, hinta_alv, ale, veroton, yhteensa_alv', 'length', 'max'=>20),
 			array('free_text', 'length', 'max'=>250),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, time, tarjous_id, rivi, tkoodi, nimike, kpl, yksikko, hinta, alv, hinta_alv, ale, veroton, yhteensa_alv, tuoteID, free_text', 'safe', 'on'=>'search'),
+			array('id, time, sopimus_id, rivi, tkoodi, nimike, kpl, yksikko, hinta, alv, hinta_alv, ale, veroton, yhteensa_alv, tuoteID, free_text', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -121,7 +121,7 @@ class TarjousHintaRivit extends DB2ActiveRecord
 		return array(
 			'id' => 'ID',
 			'time' => 'Time',
-			'tarjous_id' => 'Tarjous',
+			'sopimus_id' => 'Sopimus',
 			'rivi' => 'Rivi',
 			'tkoodi' => 'Tkoodi',
 			'nimike' => 'Nimike',
@@ -158,7 +158,7 @@ class TarjousHintaRivit extends DB2ActiveRecord
 
 		$criteria->compare('id',$this->id);
 		$criteria->compare('time',$this->time,true);
-		$criteria->compare('tarjous_id',$this->tarjous_id);
+		$criteria->compare('sopimus_id',$this->sopimus_id);
 		$criteria->compare('rivi',$this->rivi);
 		$criteria->compare('tkoodi',$this->tkoodi,true);
 		$criteria->compare('nimike',$this->nimike,true);
@@ -182,7 +182,7 @@ class TarjousHintaRivit extends DB2ActiveRecord
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return TarjousHintaRivit the static model class
+	 * @return SopimusHintaRivit the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{

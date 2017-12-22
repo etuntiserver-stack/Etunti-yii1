@@ -54,12 +54,10 @@ public $template;
                      'liite' => 'varchar(255) ',
                      'yhteystiedot_id' => 'int(11) ',
                      'tyonkuvaus' => 'text ',
-                     'tarjouslaskenta' => 'text ',
                      'kohde_id' => 'int(11) ',
                      'kohteen_osoite' => 'varchar(255) ',
                      'kohteen_postinumero' => 'varchar(50) ',
                      'kohteen_postitoimipaikka' => 'varchar(255) ',
-                     'onko_osoite_sama' => 'varchar(10) ',
                      'tyonkuvaus_id' => 'int(11) ',
                      'alv' => 'int(3) ',
                      'hinta_tyyppi' => 'varchar(50) ',
@@ -98,7 +96,7 @@ public $template;
 			array('asiakkaan_sahkoposti, kohteen_postinumero', 'length', 'max'=>100),
 			array('hinta_tyyppi', 'length', 'max'=>50),
 			array('voimassa', 'length', 'max'=>20),
-			array('tarjous, tyonkuvaus, tarjouslaskenta, onko_osoite_sama, tarvikkeet', 'safe'),
+			array('tarjous, tyonkuvaus, tarvikkeet', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('id, time, asiakas_id, tarjous, hyvaksyn_koodi, asiakkaan_sahkoposti, status', 'safe', 'on'=>'search'),

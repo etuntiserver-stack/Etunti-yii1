@@ -439,9 +439,6 @@ function yhteensaTotal(){
 <!-- HINTA -->
 
 
-		<?php //echo $form->textArea($model,'tyonkuvaus',array('rows'=>6, 'cols'=>50, 'class'=>'form-control', 'style'=>'display:none')); ?>
-		<?php //echo $form->textArea($model,'tarjouslaskenta',array('rows'=>6, 'cols'=>50, 'class'=>'form-control', 'style'=>'display:none')); ?>
-
 
 	<div class="section fill mb5">
 		<div id="tyonkuvaus"></div>

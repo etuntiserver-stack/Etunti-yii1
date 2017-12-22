@@ -1,6 +1,6 @@
 <?php
-/* @var $this CrmSopimuksetController */
-/* @var $data CrmSopimukset */
+/* @var $this CrmTarjouksetController */
+/* @var $data CrmTarjoukset */
 ?>
 
 <div class="view">
@@ -17,8 +17,8 @@
 	<?php echo CHtml::encode($data->asiakas_id); ?>
 	<br />
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('teksti')); ?>:</b>
-	<?php echo CHtml::encode($data->teksti); ?>
+	<b><?php echo CHtml::encode($data->getAttributeLabel('tarjous')); ?>:</b>
+	<?php echo CHtml::encode($data->tarjous); ?>
 	<br />
 
 	<b><?php echo CHtml::encode($data->getAttributeLabel('hyvaksyn_koodi')); ?>:</b>
@@ -33,11 +33,5 @@
 	<?php echo CHtml::encode($data->status); ?>
 	<br />
 
-	<?php /*
-	<b><?php echo CHtml::encode($data->getAttributeLabel('liite')); ?>:</b>
-	<?php echo CHtml::encode($data->liite); ?>
-	<br />
-
-	*/ ?>
 
 </div>
