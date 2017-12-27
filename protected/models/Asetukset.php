@@ -141,7 +141,9 @@ class Asetukset extends DB2ActiveRecord
 		     'edico_tehdyt_tyot' => 'varchar(100)',
 		     'netvisor_lahetetaanko_tyontekija' => 'int(1)',
 		     'lasketaanko_lounastauko' => 'int(1)',
+
 		     'apuaika_meneeko_laskutukseen' => 'int(1) DEFAULT 0',
+		     'apuaika_palkkalaji' => 'varchar(255)',
 
 		);
 		$is_added_somthing = false;
