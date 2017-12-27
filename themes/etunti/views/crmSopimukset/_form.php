@@ -246,7 +246,11 @@
 
      <tbody>
 	<?php
+		if(isset($_GET['sopimus_tarjouksesta']) and isset($_GET['id']))
+		$trRivit=TarjousHintaRivit::model()->findAll("tarjous_id='".$_GET['id']."'", array('order'=>'id'));
+		else
 		$trRivit=SopimusHintaRivit::model()->findAll("sopimus_id='".$model->id."'", array('order'=>'id'));
+
 		if( count($trRivit) == 0 )
 		{
 			echo $this->renderPartial("tr_rivit_tyhja",array('num'=>0));

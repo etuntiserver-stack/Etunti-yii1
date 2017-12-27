@@ -128,6 +128,7 @@
   <th><?php echo Yii::t('main', 'Tarjous'); ?></th>
   <th><?php echo Yii::t('main', 'Sähköposti'); ?></th>
   <th><?php echo Yii::t('main', 'Lähettäminen'); ?></th>
+  <th><?php echo Yii::t('main', 'Sopimukset'); ?></th>
   </tr>
   </thead>
   <?php $this->widget('zii.widgets.CListView', array(

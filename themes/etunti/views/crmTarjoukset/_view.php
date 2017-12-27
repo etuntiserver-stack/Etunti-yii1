@@ -88,6 +88,13 @@
 			}
 		?>
 	</td>
+	<td>
+		<?php if( isset($data->sopimukset->tarjous_id) and $data->sopimukset->tarjous_id == $data->id ) : ?>
+		<?php echo CHtml::link('<span class="btn btn-success">'.Yii::t('main', 'Valmis').'</span>',Yii::app()->request->baseUrl.'/index.php/crmSopimukset/update?id='.$data->sopimukset->id); ?>
+		<?php else : ?>
+		<?php echo CHtml::link('<span class="btn btn-primary">'.Yii::t('main', 'Tee sopimus').'</span>',Yii::app()->request->baseUrl.'/index.php/crmSopimukset/create?sopimus_tarjouksesta=true&id='.$data->id); ?>
+		<?php endif; ?>
+	</td>
 </tr>
 
 

@@ -48,6 +48,7 @@ public $template;
 		$table_structure = array(
 
                      'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP ',
+                     'tarjous_id' => 'int(11) ',
                      'asiakas_id' => 'int(11) ',
                      'tarjous' => 'text ',
                      'hyvaksyn_koodi' => 'varchar(255) ',

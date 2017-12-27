@@ -302,6 +302,17 @@ Ystävällisin terveisin.
 	{
 		$model=new CrmSopimukset;
 
+		// <-- Sopimus tarjouksesta
+		if(isset($_GET['sopimus_tarjouksesta']) and isset($_GET['id']))
+		{
+			$tar = CrmTarjoukset::model()->findByPk($_GET['id']);
+			$model->attributes = $tar->attributes;
+			$model->tarjous_id = $_GET['id'];
+			$model->status = null;
+		}
+		//     Sopimus tarjouksesta -->
+
+
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 		if(isset($_POST['CrmSopimukset']))

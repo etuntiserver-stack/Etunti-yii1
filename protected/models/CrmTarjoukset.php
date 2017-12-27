@@ -15,8 +15,8 @@
 class CrmTarjoukset extends DB2ActiveRecord
 {
 
-public $asiakastila;
-public $template;
+	public $asiakastila, $template;
+
 
 	/**
 	 * @return string the associated database table name
@@ -111,6 +111,7 @@ public $template;
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+		        'sopimukset' => array(self::HAS_ONE, 'CrmSopimukset', 'tarjous_id'),
 		);
 	}
 
