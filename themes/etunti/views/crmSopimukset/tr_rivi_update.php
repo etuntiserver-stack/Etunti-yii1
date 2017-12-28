@@ -63,7 +63,7 @@
 		<?php if(isset($_POST['CrmTarjoukset']) or isset($_POST['CrmSopimukset'])) : ?>
 		0
 		<?php else : ?>
-		<input type="text" size="10" name="ale[<?php echo $num; ?>]" id="ale_<?php echo $num; ?>" value="<?php echo $rivi['ale']; ?" class="onlyDigits form-control">
+		<input type="text" size="10" name="ale[<?php echo $num; ?>]" id="ale_<?php echo $num; ?>" value="<?php echo $rivi['ale']; ?>" class="onlyDigits form-control">
 		<span class="errmsg"></span>
 		<?php endif; ?>
 	</td>
