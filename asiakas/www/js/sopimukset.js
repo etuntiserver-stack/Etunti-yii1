@@ -146,7 +146,7 @@ function saveFileToStorage(link, filename, ext){
 		    function(error) {
 		        console.log("download error source " + error.source);
 		        console.log("download error target " + error.target);
-		        console.log("upload error code" + error.code);
+		        alert("upload error code" + error.code);
 		    },
 		    false,
 		    {
