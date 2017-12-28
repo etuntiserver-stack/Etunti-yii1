@@ -72,7 +72,9 @@
 	</td>
 	<td>
 		<?php if(isset($data->tarjoukset->id) and $data->tarjoukset->id == $data->tarjous_id) : ?>
-		<?php echo $data->tarjoukset->id; ?>
+		<?php echo CHtml::link('<span class="btn btn-success btn-block">'.Yii::t('main', 'Katso tarjous').'</span>',Yii::app()->request->baseUrl.'/index.php/crmTarjoukset/update?id='.$data->tarjoukset->id); ?>
+		<?php else : ?>
+		<?php echo Yii::t('main', 'Ei tarjousta'); ?>
 		<?php endif; ?>
 	</td>
 	<td>
