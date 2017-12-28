@@ -71,7 +71,9 @@
 	</div>
 	</td>
 	<td>
-		<?php echo $data->asiakkaan_sahkoposti; ?>
+		<?php if(isset($data->tarjoukset->id) and $data->tarjoukset->id == $data->tarjous_id) : ?>
+		<?php echo $data->tarjoukset->id; ?>
+		<?php endif; ?>
 	</td>
 	<td>
 		<?php 

@@ -98,14 +98,12 @@ session_start();
 					'enabled'=>YII_DEBUG,
                     			//'categories'=>'system.*',
 				), 
-/*
 			        array(
 				        'class'=>'CEmailLogRoute',
                 			'levels'=>'error', //'trace, info, error, warning, vardump'
-					'emails'=>'laptopsr@gmail.com',
+					'emails'=>'vikailmoitusetunti@gmail.com',
 					'subject'=>'Log File Message. Domain: '.$domain.', IP: '.$remote_addr.', SID: '.session_id().', refer: '.$refer.', post: '.$post,
 			        )
-*/
 	);
   }
   //     LOG -->

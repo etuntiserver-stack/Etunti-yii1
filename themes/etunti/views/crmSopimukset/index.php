@@ -126,7 +126,7 @@
   <th><?php echo Yii::t('main', 'Sopimuksen kohde'); ?></th>
   <th><?php echo Yii::t('main', 'Työnkuvaus'); ?></th>
   <th><?php echo Yii::t('main', 'Sopimus'); ?></th>
-  <th><?php echo Yii::t('main', 'Sähköposti'); ?></th>
+  <th><?php echo Yii::t('main', 'Tarjous'); ?></th>
   <th><?php echo Yii::t('main', 'Lähettäminen'); ?></th>
   </tr>
   </thead>
