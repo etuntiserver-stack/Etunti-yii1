@@ -610,3 +610,13 @@ $('.tarvikkeet').multiselect({
 });
 </script>
 
+
+<?php if(isset($model->id) and $model->status == 2) : ?>
+<script type="text/javascript">
+$(document).ready(function(){
+  $("input").attr("readonly", "yes");
+  $(".submitButton").remove();
+});
+</script>
+<?php endif; ?>
+
