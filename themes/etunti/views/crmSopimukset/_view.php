@@ -1,5 +1,9 @@
 <?php
-
+  $asiakas = '';
+  if(isset($data->asiakkaat->id) and $data->asiakkaat->tyyppi == 'henkilo')
+  $asiakas = $data->asiakkaat->yhteyshenkilo;
+  if(isset($data->asiakkaat->id) and $data->asiakkaat->tyyppi == 'yritys')
+  $asiakas = $data->asiakkaat->yrityksen_nimi;
 ?>
 
 <tr>
@@ -21,6 +25,9 @@
 	</td>
 	<td>
 		<?php echo $data->voimassa; ?>
+	</td>
+	<td>
+		<?=$asiakas?>
 	</td>
 	<td>
 		<?php echo $data->kohteen_osoite; ?>

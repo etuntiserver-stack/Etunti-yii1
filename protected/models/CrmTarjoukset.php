@@ -112,6 +112,7 @@ class CrmTarjoukset extends DB2ActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
 		        'sopimukset' => array(self::HAS_ONE, 'CrmSopimukset', 'tarjous_id'),
+		        'asiakkaat' => array(self::BELONGS_TO, 'Asiakkaat', 'asiakas_id'),
 		);
 	}
 

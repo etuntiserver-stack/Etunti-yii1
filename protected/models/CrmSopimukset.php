@@ -115,6 +115,7 @@ public $template;
 		// class name for the relations automatically generated below.
 		return array(
 		        'tarjoukset' => array(self::BELONGS_TO, 'CrmTarjoukset', 'tarjous_id'),
+		        'asiakkaat' => array(self::BELONGS_TO, 'Asiakkaat', 'asiakas_id'),
 		);
 	}
 

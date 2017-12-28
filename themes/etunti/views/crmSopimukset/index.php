@@ -123,6 +123,7 @@
   <th></th>
   <th><?php echo Yii::t('main', 'Päivämäärä'); ?></th>
   <th><?php echo Yii::t('main', 'Voimassa'); ?></th>
+  <th><?php echo Yii::t('main', 'Asiakas'); ?></th>
   <th><?php echo Yii::t('main', 'Sopimuksen kohde'); ?></th>
   <th><?php echo Yii::t('main', 'Työnkuvaus'); ?></th>
   <th><?php echo Yii::t('main', 'Sopimus'); ?></th>

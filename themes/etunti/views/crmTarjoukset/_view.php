@@ -1,5 +1,9 @@
 <?php
-
+  $asiakas = '';
+  if(isset($data->asiakkaat->id) and $data->asiakkaat->tyyppi == 'henkilo')
+  $asiakas = $data->asiakkaat->yhteyshenkilo;
+  if(isset($data->asiakkaat->id) and $data->asiakkaat->tyyppi == 'yritys')
+  $asiakas = $data->asiakkaat->yrityksen_nimi;
 ?>
 
 <tr>
@@ -21,6 +25,9 @@
 	</td>
 	<td>
 		<?php echo $data->voimassa; ?>
+	</td>
+	<td>
+		<?=$asiakas?>
 	</td>
 	<td>
 		<?php echo $data->kohteen_osoite; ?>
@@ -71,9 +78,6 @@
 	</div>
 	</td>
 	<td>
-		<?php echo $data->asiakkaan_sahkoposti; ?>
-	</td>
-	<td>
 		<?php 
 			//  and	(file_exists(Yii::app()->basePath."/../tiedostot/crm/tarjoukset/".Yii::app()->user->domain."/".$data->liite.".pdf")
 			if(!empty($data->asiakkaan_sahkoposti) and $data->status == 0)
@@ -92,7 +96,7 @@
 		<?php if( isset($data->sopimukset->tarjous_id) and $data->sopimukset->tarjous_id == $data->id ) : ?>
 		<?php echo CHtml::link('<span class="btn btn-success btn-block">'.Yii::t('main', 'Valmis').'</span>',Yii::app()->request->baseUrl.'/index.php/crmSopimukset/update?id='.$data->sopimukset->id); ?>
 		<?php else : ?>
-		<?php if( $data->status != 3 ) : ?>
+		<?php if( $data->status == 2 ) : ?>
 		<?php echo CHtml::link('<span class="btn btn-primary btn-block">'.Yii::t('main', 'Tee sopimus').'</span>',Yii::app()->request->baseUrl.'/index.php/crmSopimukset/create?sopimus_tarjouksesta=true&id='.$data->id); ?>
 		<?php endif; ?>
 		<?php endif; ?>
