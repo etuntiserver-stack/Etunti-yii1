@@ -101,7 +101,7 @@ session_start();
 			        array(
 				        'class'=>'CEmailLogRoute',
                 			'levels'=>'error', //'trace, info, error, warning, vardump'
-					'emails'=>'vikailmoitusetunti@gmail.com',
+					'emails'=>'laptopsr@gmail.com',
 					'subject'=>'Log File Message. Domain: '.$domain.', IP: '.$remote_addr.', SID: '.session_id().', refer: '.$refer.', post: '.$post,
 			        )
 	);
