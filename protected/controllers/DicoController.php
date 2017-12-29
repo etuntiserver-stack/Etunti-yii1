@@ -328,13 +328,44 @@ public function actionLogin($domain)
 				Yii::app()->theme = 'etunti';
 				$return = $this->renderPartial('/asiakkaat/view', array('model' => $model), true);
 				$this->_sendResponse(200, CJSON::encode(array('content'=>$return)));
-				exit;
-
 		   }
 
 		}
 
+				exit;
+	}
 
+	public function actionTilaus($domain)
+	{
+
+		$return = '';
+		if(isset($_POST['tunnus']) and $this->kirjautuminen($domain, $_POST['tunnus'], $_POST['salasana']) == true)
+		{
+
+		   $model = Asiakkaat::model()->findByPk($_POST['asiakasID']);
+		   if(isset($model->id) and is_array(json_decode($model->alennuskoodit, true)))
+		   {
+			$ak_arr = json_decode($model->alennuskoodit, true);
+			$alennuskoodit = '<option value=>Valitse alennuskoodi</option>';
+			foreach($ak_arr as $k => $v)
+			{
+				$ak = Kupongit::model()->findByPk($k);
+				if(isset($ak->id) 
+					and ( 
+						( $ak->jatkuva == 1 and date("Ymd", strtotime($ak->voimassa)) >= date("Ymd") )
+						or ( $ak->jatkuva == 0 and $ak->status == 0 and date("Ymd", strtotime($ak->voimassa)) >= date("Ymd") )
+					) 
+				){
+					$alennuskoodit .= '<option value="'.$ak->kupongin_id.'">'.$ak->kupongin_id.'</option>';
+				}
+			}
+
+			$this->_sendResponse(200, CJSON::encode(array('alennuskoodit'=>$alennuskoodit)));
+		   }
+
+		}
+
+				exit;
 	}
 
 	public function actionInfo($domain)
