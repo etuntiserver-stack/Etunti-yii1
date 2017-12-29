@@ -92,7 +92,7 @@ public $template;
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('template, asiakas_id, kohde_id, kohteen_osoite, asiakkaan_sahkoposti, voimassa', 'required'),
+			array('template, asiakas_id, kohde_id, kohteen_osoite, asiakkaan_sahkoposti', 'required'),
 			array('asiakas_id, yhteystiedot_id, status, kohde_id, tyonkuvaus_id, alv, hinta', 'numerical', 'integerOnly'=>true),
 			array('yhteensa_total_verot, yhteensa_total_veroton, yhteensa_total', 'type', 'type'=>'float'),
 			array('hyvaksyn_koodi, liite, kohteen_osoite, kohteen_postitoimipaikka, tuote_palvelu', 'length', 'max'=>255),
