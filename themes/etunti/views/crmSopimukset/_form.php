@@ -38,9 +38,20 @@
      </div><div class="col-sm-3">
 
 	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'voimassaolo'); ?>
+		<?php
+		$list = array(0 => 'Toistaiseksi voimassaoleva', 1 => 'Määräaikainen');
+
+        		echo $form->dropDownList($model, 'voimassaolo', $list,
+			array('class'=>'form-control'));
+		?>
+		<?php echo $form->error($model,'voimassaolo'); ?>
+
+		<div id="voimassa_div" style="display:none">
 		<?php echo $form->labelEx($model,'voimassa'); ?>
 		<?php echo $form->textField($model,'voimassa',array('size'=>20,'maxlength'=>20,'class'=>'form-control datepickerFI')); ?>
 		<?php echo $form->error($model,'voimassa'); ?>
+		</div>
 	</div>
 
      </div><div class="col-sm-3">
@@ -58,6 +69,27 @@
 </div>
 <hr>
 <!-- hattu -->
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+
+ voimassaChecker();
+ $('#CrmSopimukset_voimassaolo').change(function(){
+	voimassaChecker();
+ });
+
+
+function voimassaChecker(){
+ if( $('#CrmSopimukset_voimassaolo option:selected').val() == 1 ){
+	$('#voimassa_div').show();
+ } else {
+	$('#voimassa_div').hide();
+ }
+}
+
+});
+</script>
 
 <div class="row">
   <div class="col-sm-3">

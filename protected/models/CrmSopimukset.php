@@ -71,6 +71,7 @@ public $template;
 		     'yhteensa_total_verot' => 'float',
 		     'yhteensa_total_veroton' => 'float',
 		     'yhteensa_total' => 'float',
+		     'voimassaolo' => 'int(11) DEFAULT 0',
 		);
 
 		foreach($table_structure as $key=>$value)
