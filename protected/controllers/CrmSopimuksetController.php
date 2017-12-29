@@ -28,11 +28,11 @@ class CrmSopimuksetController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('vastaus', 'success', 'cancel', 'vanhentunut'),
+				'actions'=>array('success', 'cancel', 'vanhentunut'),
 				'users'=>array('*'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view', 'laheta', 'get_tarjous'),
+				'actions'=>array('admin','delete','create','update','index','view', 'laheta', 'get_tyonkuvaus_by_asiakas', 'get_tyonkuvaus_by_id', 'get_tarjouslaskenta_by_id', 'get_tyonkuvaus', 'get_kohteentiedot', 'get_asiakastilat', 'view_tyonkuvaus', 'get_kohde', 'tr_rivit_tyhja'),
                 		'expression'=>"Yii::app()->controller->isEtuntiAdmin()",
 			),
 			array('deny',  // deny all users
@@ -74,78 +74,32 @@ class CrmSopimuksetController extends Controller
         }
 
 
-	public function actionVastaus($asia, $id, $code)
+	public function actionGet_asiakastilat($asiakastila)
 	{
-	/*
-		Yii::app()->theme = 'classic';
-		$crm = CrmSopimukset::model()->findbypk($id);
-		if($asia == 'hyvaksy' and isset($crm->id) and $crm->hyvaksyn_koodi == $code and $crm->status == 1){
+		$return = '';
 
-			CrmSopimukset::model()->updatebypk($id, array('status'=>2));
-
-			// <-- Luodaan Asiakas ja kohde jos Yhteystiedot kautta
-			if($crm->yhteystiedot_id != 0 and $crm->tarjous_id != 0)
-			{
-				$tarjous = CrmTarjoukset::model()->findbypk($crm->tarjous_id);
-				$yhteystiedot = Yhteystiedot::model()->findbypk($crm->yhteystiedot_id);
-
-				if(isset($tarjous->id) and $tarjous->status != 2)
-				die('Tarjous ei hyväksytty');
-
-				if(isset($tarjous->id) and isset($yhteystiedot->id) and $tarjous->status == 2)
-				{
-					$asiakkaat = new Asiakkaat;
-					$asiakkaat->attributes=$yhteystiedot->attributes;
-					$asiakkaat->aktiivinen=1;
-					$asiakkaat->tyyppi=$yhteystiedot->yhteystieto_tyyppi;
-					$asiakkaat->kaupunki=$yhteystiedot->postitoimipaikka;
-					if($asiakkaat->save())
-					{
-
-						$kohteet = new Kohteet;
-						$kohteet->asiakas_id = $asiakkaat->id;
-						if(!empty($asiakkaat->yrityksen_nimi))
-							$kohteet->etu_suku_nimet = $asiakkaat->yrityksen_nimi;
-						elseif(empty($asiakkaat->yrityksen_nimi) and !empty($asiakkaat->yhteyshenkilo))
-							$kohteet->etu_suku_nimet = $asiakkaat->yhteyshenkilo;
-					
-						if( $tarjous->onko_osoite_sama == 'ei')
-						{
-							$kohteet->osoite = $tarjous->kohteen_osoite;
-							$kohteet->pnumero = $tarjous->kohteen_postinumero;
-							$kohteet->kaupunki = $tarjous->kohteen_postitoimipaikka;
-
-						} else {
-							$kohteet->osoite = $asiakkaat->osoite;
-							$kohteet->pnumero = $asiakkaat->postinumero;
-							$kohteet->kaupunki = $asiakkaat->kaupunki;
-						}
-						$kohteet->puh_nro = $asiakkaat->puhelin;
-						$kohteet->email = $asiakkaat->sahkoposti;
-						if(!$kohteet->save())
-						{
-							var_dump($kohteet->getErrors());
-							exit;
-						}
-
-					} else {
-						var_dump($asiakkaat->getErrors());
-						exit;
-					}
-				}
-			}
-			// Luodaan Asiakas ja kohde jos Yhteystiedot kautta -->
-
-			$this->redirect(array('success'));
-
-		} elseif($asia == 'hylatty' and isset($crm->id) and $crm->hyvaksyn_koodi == $code and $crm->status == 1){
-
-			CrmSopimukset::model()->updatebypk($id, array('status'=>3));
-			$this->redirect(array('cancel'));
-		} else {
-			$this->redirect(array('vanhentunut'));
+		$criteria=new CDbCriteria;
+		$criteria->condition=" asiakastila='".$asiakastila."' ";
+      		$l = Asiakkaat::model()->findAll($criteria);
+		$list = array();
+		foreach($l as $v)
+		{
+			if($v->tyyppi == 'yritys' and !empty($v->yrityksen_nimi))
+			$list[$v->id] = $v->yrityksen_nimi;
+			elseif($v->tyyppi == 'henkilo' and !empty($v->yhteyshenkilo))
+			$list[$v->id] = $v->yhteyshenkilo;
+			else
+			$list[$v->id] = 'Asiakasnumero: '.$v->asiakasnumero;
 		}
-	*/
+
+		if(count($list) > 0)
+		{
+        		$return .= CHtml::dropDownList('CrmSopimukset[asiakas_id]', 'asiakas_id', $list,
+			array('empty'=>'Valitse','class'=>'form-control'));
+		}
+		
+		echo json_encode($return);
+
 	}
 
 	public function actionSuccess()
@@ -176,31 +130,26 @@ class CrmSopimuksetController extends Controller
 	    return $randomString;
 	}
 
-	public function actionLaheta()
+	public function actionLaheta($id)
 	{
-		if(isset($_POST['id']))
-		{
-			
-		$crm = CrmSopimukset::model()->findbypk($_POST['id']);
+
+		$crm = CrmSopimukset::model()->findbypk($id);
 		$randstring = $this->generateRandomString();
-
-
 
 		/* file */
 		$file = $crm->liite.'.pdf';
 		$path = Yii::app()->request->baseUrl."tiedostot/sopimukset/".Yii::app()->user->domain;
 
 		$ft = FirmanTiedot::model()->findbypk(1);
+
 		$message = '
 		<p>
-		Olet saanut sopimuksen yritykseltä '.$ft->tyonantaja.'. Sopimus löytyy tiedostosta, joka on tämän viestin liitteenä. 
-		Tutustu sopimukseen ja hyväksy tai hylkää valintasi mukaan alla olevista painikkeista.
-		</p>
+Olet saanut sopimuksen yritykseltä '.$ft->tyonantaja.'. Sopimus löytyy tiedostosta, joka on tämän viestin liitteenä.
+Tutustu sopimukseen ja vahvista päätöksesi ilmoittamalla siitä sopimuksessa ilmoitetulle henkilölle. Helpoimmin hyväksyt tai hylkäät sopimuksen eDico sovelluksessa.
 
-		<p>Ystävällisin terveisin.<br>
-		Etunti.
+Ystävällisin terveisin.
+'.$ft->tyonantaja.'
 		</p>
-
 		<center>
 		<p>
 		<span>
@@ -213,30 +162,31 @@ class CrmSopimuksetController extends Controller
 		</p>
 		</center>
 				';
-		
+
+
+		//echo $message;
+		//exit;
 
 
 		$subject = Yii::t('main', 'Sopimus'). ', '.$ft->tyonantaja;
 		$mail = new YiiMailer();
+		//$mail->clearLayout();//if layout is already set in config
 		$mail->setFrom('no-reply@etunti.fi');
 		$mail->setTo($crm->asiakkaan_sahkoposti);
 		$mail->setSubject($subject);
 		$mail->setBody($message);
 
+		$tkPDF = '';
 
-		if(isset($crm->tarjous->tyonkuvaus_id))
+		$tk = Tyonkuvaus::model()->find(" id='".$crm->tyonkuvaus_id."' AND aktiivinen=1 ");
+		if(isset($tk->id))
 		{
-		   $tkPDF = '';
-		   $tk = Tyonkuvaus::model()->find(" id='".$crm->tarjous->tyonkuvaus_id."' AND aktiivinen=1 ");
-		   if(isset($tk->id))
-		   {
 	   		$tk_controller = Yii::app()->createController('Tyonkuvaus');
-	   		$tkPDF = $tk_controller[0]->PdfOpener($crm->tarjous->tyonkuvaus_id, 'getFile');
+	   		$tkPDF = $tk_controller[0]->PdfOpener($crm->tyonkuvaus_id, 'getFile');
    			if(file_exists(Yii::app()->basePath."/../".$tkPDF))
 			{
 				$mail->addAttachment($tkPDF);
 			}
-		   }
 		}
 
 
@@ -261,12 +211,75 @@ class CrmSopimuksetController extends Controller
 							//     LOG -->
 
 
-			CrmSopimukset::model()->updatebypk($_POST['id'], array('status'=>1,'hyvaksyn_koodi'=>$randstring));
+			CrmSopimukset::model()->updatebypk($id, array('status'=>1,'hyvaksyn_koodi'=>$randstring));
 			$this->redirect(array('index'));
 		}
+   		
 
+
+	}
+
+
+	public function actionGet_kohde($id)
+	{
+		$asiakas_tiedot = '';
+		$asiakas_sahkoposti = '';
+		$a = Asiakkaat::model()->findByPk($id);
+		if(isset($a->id))
+		{
+			$asiakas_sahkoposti = $a->sahkoposti;
+			$asiakas_tiedot = $this->renderPartial('//asiakkaat/view', 
+				array('id'=>$a->id, 'model'=>$a)
+			, true);
 		}
 
+		$bd = '<option value="0">Valitse</option>';
+		$data = Kohteet::model()->findAll(" asiakas_id='".$id."' ");
+		foreach($data as $item){
+			$bd .= '<option value="'.$item->id.'">'.$item->osoite.'</option>';
+		}
+
+		$result = array(
+			'options'=>$bd, 
+			'asiakas_sahkoposti' => $asiakas_sahkoposti,
+			'asiakas_tiedot' => $asiakas_tiedot
+		);
+		echo json_encode($result);
+	}
+
+	public function actionGet_tyonkuvaus($id)
+	{
+		$model = Tyonkuvaus::model()->findByPk($id);
+		if(isset($model->id))
+			echo json_encode($this->get_tyonkuvaus($id));
+
+	}
+
+	public function actionGet_kohteentiedot($id)
+	{
+		$kohde = array();
+		$tk = '';
+		$k = Kohteet::model()->findByPk($id);
+		if(isset($k->id))
+		{
+			$kohde = $k->attributes;
+
+			$data = Tyonkuvaus::model()->findAll(" kohde_id='".$k->id."' ");
+			if( count($data) > 0 )
+			{
+			   $tk .= '<option value="0">Valitse</option>';
+			   foreach($data as $item){
+				$tk .= '<option value="'.$item->id.'">'.date("d.m.Y", strtotime($item->time)).' - '.$k->osoite.'</option>';
+			   }
+			}
+		}
+		$result = array('kohde'=>$kohde, 'tk'=>$tk);
+		echo json_encode($result);
+	}
+
+	public function actionView_tyonkuvaus($id)
+	{
+		echo json_encode($this->get_tyonkuvaus($id));
 	}
 
 	public function actionView($id)
@@ -274,6 +287,11 @@ class CrmSopimuksetController extends Controller
 		$this->render('view',array(
 			'model'=>$this->loadModel($id),
 		));
+	}
+
+	public function actionTr_rivit_tyhja()
+	{
+		$this->renderPartial('tr_rivit_tyhja');
 	}
 
 	/**
@@ -284,19 +302,57 @@ class CrmSopimuksetController extends Controller
 	{
 		$model=new CrmSopimukset;
 
+		// <-- Sopimus tarjouksesta
+		if(isset($_GET['sopimus_tarjouksesta']) and isset($_GET['id']))
+		{
+			$tar = CrmTarjoukset::model()->findByPk($_GET['id']);
+			$model->attributes = $tar->attributes;
+			$model->tarjous_id = $_GET['id'];
+			$model->status = null;
+		}
+		//     Sopimus tarjouksesta -->
+
+
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
-
-
 		if(isset($_POST['CrmSopimukset']))
 		{
 
-			if(empty($_POST['CrmSopimukset']['tarjous_id']))
-			$_POST['CrmSopimukset']['tarjous_id'] = 0;
-
 			$model->attributes=$_POST['CrmSopimukset'];
-
+			if(isset($_POST['CrmSopimukset']['tarvikkeet']))
+				$model->tarvikkeet=json_encode($_POST['CrmSopimukset']['tarvikkeet']);
+			else
+				$model->tarvikkeet="";
 			if($model->save()){
+
+
+				// <-- Hinta
+				if(isset($_POST['tkoodi']))
+				{
+				  foreach($_POST['tkoodi'] as $key=>$val)
+				  {
+					$lr = new SopimusHintaRivit;
+					$lr->sopimus_id	=$model->id;
+					$lr->rivi	=$key;
+					$lr->tkoodi	=$_POST['tkoodi'][$key];
+					//$lr->free_text	=$_POST['free_text'][$key];
+					$lr->kpl	=$_POST['kpl'][$key];
+					$lr->yksikko	=$_POST['yksikko'][$key];
+					$lr->hinta	=$_POST['hinta'][$key];
+					$lr->alv	=$_POST['alv'][$key];
+					$lr->hinta_alv	=$_POST['hinta_alv'][$key];
+					$lr->ale	=$_POST['ale'][$key];
+	
+					if(isset($_POST['tuoteID']))
+						$lr->tuoteID	=$_POST['tuoteID'][$key];
+	
+					$lr->veroton	=$_POST['veroton'][$key];
+					$lr->yhteensa_alv=$_POST['yhteensa_alv'][$key];
+					$lr->save();
+				  }
+				}
+				//     Hinta -->
+
 
 				// <-- Tiedoston nimi
 				$tiedosto = 'Sopimus';
@@ -304,11 +360,10 @@ class CrmSopimuksetController extends Controller
 				{
 					$new_model = CrmSopimukset::model()->findByPk($model->id);
 					$site = Yii::app()->createController('Site');
-
-					if($model->tarjous_id != 0){ $kohde = $model->tarjous->kohteen_osoite; } else {$kohde = null;}
-  					$tiedosto = $site[0]->tiedostonNimiAsiakasKohdeAika($tiedosto, $model->asiakas_id, $kohde, $new_model->time);
+  					$tiedosto = $site[0]->tiedostonNimiAsiakasKohdeAika($tiedosto, $model->asiakas_id, $model->kohde_id, $new_model->time);
 				}
 				//     Tiedoston nimi -->
+
 				CrmSopimukset::model()->updateByPk($model->id, array('liite'=>$tiedosto));
 
 				$as = Asiakkaat::model()->findbypk($model->asiakas_id);
@@ -316,10 +371,8 @@ class CrmSopimuksetController extends Controller
 					CrmSopimukset::model()->updatebypk($model->id, array('asiakkaan_sahkoposti'=>$as->sahkoposti));
 
 				$this->docx($model, $tiedosto);
-
 			}
-
-		} 
+		}
 
 		$this->render('create',array(
 			'model'=>$model
@@ -335,12 +388,46 @@ class CrmSopimuksetController extends Controller
 	{
 		$model=$this->loadModel($id);
 
-
+	
 		if(isset($_POST['CrmSopimukset']))
 		{
 
 			$model->attributes=$_POST['CrmSopimukset'];
+
+			if(isset($_POST['CrmSopimukset']['tarvikkeet']))
+				$model->tarvikkeet=json_encode($_POST['CrmSopimukset']['tarvikkeet']);
+			else
+				$model->tarvikkeet="";
+
 			if($model->save()){
+
+				// <-- Hinta
+				SopimusHintaRivit::model()->deleteAll("sopimus_id='".$model->id."'");
+				if(isset($_POST['tkoodi']))
+				{
+				  foreach($_POST['tkoodi'] as $key=>$val)
+				  {
+					$lr = new SopimusHintaRivit;
+					$lr->sopimus_id	=$model->id;
+					$lr->rivi	=$key;
+					$lr->tkoodi	=$_POST['tkoodi'][$key];
+					//$lr->free_text	=$_POST['free_text'][$key];
+					$lr->kpl	=$_POST['kpl'][$key];
+					$lr->yksikko	=$_POST['yksikko'][$key];
+					$lr->hinta	=$_POST['hinta'][$key];
+					$lr->alv	=$_POST['alv'][$key];
+					$lr->hinta_alv	=$_POST['hinta_alv'][$key];
+					$lr->ale	=$_POST['ale'][$key];
+	
+					if(isset($_POST['tuoteID']))
+						$lr->tuoteID	=$_POST['tuoteID'][$key];
+	
+					$lr->veroton	=$_POST['veroton'][$key];
+					$lr->yhteensa_alv=$_POST['yhteensa_alv'][$key];
+					$lr->save();
+				  }
+				}
+				//     Hinta -->
 
 
 				// <-- Tiedoston nimi
@@ -348,24 +435,32 @@ class CrmSopimuksetController extends Controller
 				if(isset($model->id))
 				{
 					$site = Yii::app()->createController('Site');
-					if($model->tarjous_id != 0){ $kohde = $model->tarjous->kohteen_osoite; } else {$kohde = null;}
-  					$tiedosto = $site[0]->tiedostonNimiAsiakasKohdeAika($tiedosto, $model->asiakas_id, $kohde, $model->time);
+  					$tiedosto = $site[0]->tiedostonNimiAsiakasKohdeAika($tiedosto, $model->asiakas_id, $model->kohde_id, $model->time);
 				}
 				//     Tiedoston nimi -->
 				CrmSopimukset::model()->updateByPk($model->id, array('liite'=>$tiedosto));
 
 				$as = Asiakkaat::model()->findbypk($model->asiakas_id);
+				$y = Yhteystiedot::model()->findbypk($model->yhteystiedot_id);
 				if(isset($as->sahkoposti))
 					CrmSopimukset::model()->updatebypk($model->id, array('asiakkaan_sahkoposti'=>$as->sahkoposti));
 
+				if(isset($y->sahkoposti))
+					CrmSopimukset::model()->updatebypk($model->id, array('asiakkaan_sahkoposti'=>$y->sahkoposti));
+
 				$this->docx($model, $tiedosto);
+			
+			} else {
+				var_dump($model->getErrors());
+				exit;
 			}
 		}
 
 		$this->render('update',array(
-			'model'=>$model
+			'model'=>$model,
 		));
 	}
+
 
 	protected function template_variables()
 	{
@@ -377,19 +472,14 @@ class CrmSopimuksetController extends Controller
 		#yrityksen_osoite#
 		#yrityksen_postinumero#
 		#yrityksen_toimipaikka#
-		#yrityksen_puhelin#
-		#yrityksen_email#
-		#yrityksen_yhteyshenkilo#
-		#yrityksen_y_tunnus#
 
 		#asiakas#
 		#asiakkaan_osoite#
 		#asiakkaan_postinumero#
 		#asiakkaan_toimipaikka#
-		#asiakkaan_puhelin#
-		#asiakkaan_email#
 
 		#teksti#
+		#tyonkuvaus#
 		
 		#hinta_tyyppi#
 		#hinta#
@@ -404,7 +494,6 @@ class CrmSopimuksetController extends Controller
 		#tuote_palvelu#
 
 		#prices_table#
-		#tyonkuvaus#
 		';
 
 		return $var;
@@ -429,7 +518,6 @@ class CrmSopimuksetController extends Controller
 
 	protected function docx($model, $tiedosto)
 	{
-
 	
 			if (!file_exists( Yii::app()->basePath.'/../'.$this->valmiit_polkku() )) {
 			 	mkdir( Yii::app()->basePath.'/../'.$this->valmiit_polkku(), 0777, true );
@@ -438,13 +526,6 @@ class CrmSopimuksetController extends Controller
 			$firma = FirmanTiedot::model()->findbypk(1);
 
 			// <-- Jos se on Asiakas
-
-				$asiakkaan_osoite 	= '';
-				$asiakkaan_postinumero 	= '';
-				$asiakkaan_toimipaikka 	= '';
-				$asiakkaan_puhelin 	= '';
-				$asiakkaan_email	= '';
-
 			$as = Asiakkaat::model()->findbypk($model->asiakas_id);
 			if(isset($as->id))
 			{
@@ -455,23 +536,22 @@ class CrmSopimuksetController extends Controller
 				else
 				   $asiakas = '';
 
-				$asiakkaan_osoite 	= $as->osoite;
-				$asiakkaan_postinumero 	= $as->postinumero;
-				$asiakkaan_toimipaikka 	= $as->kaupunki;
-				$asiakkaan_puhelin 	= $as->puhelin;
-				$asiakkaan_email	= $as->sahkoposti;
+				$asiakkaan_osoite = $as->osoite;
+				$asiakkaan_postinumero = $as->postinumero;
+				$asiakkaan_toimipaikka = $as->kaupunki;
 			}
 			//     Jos se on Asiakas -->
 
 
 
-			define('PHPDOCX_INCLUDE_PATH', (dirname(Yii::app()->basePath)).'/protected/vendors/phpdocx');
+			define('PHPDOCX_INCLUDE_PAth', (dirname(Yii::app()->basePath)).'/protected/vendors/phpdocx');
 			spl_autoload_unregister(array('YiiBase','autoload'));
-			require_once PHPDOCX_INCLUDE_PATH.'/lib/pdf/dompdf_config.inc.php';
-			//require_once PHPDOCX_INCLUDE_PATH.'/classes/TransformDocAdv.inc';
-			require_once PHPDOCX_INCLUDE_PATH.'/classes/CreateDocx.inc';
+			require_once PHPDOCX_INCLUDE_PAth.'/lib/pdf/dompdf_config.inc.php';
+			//require_once PHPDOCX_INCLUDE_PAth.'/classes/TransformDocAdv.inc';
+			require_once PHPDOCX_INCLUDE_PAth.'/classes/CreateDocx.inc';
 			spl_autoload_register(array('AutoLoader','load'));
 			spl_autoload_register(array('YiiBase', 'autoload'));
+
 
 			$template_tiedosto = $this->templates_polkku().$model->template;
 
@@ -487,36 +567,22 @@ class CrmSopimuksetController extends Controller
 				'asiakkaan_osoite' => $asiakkaan_osoite,
 				'asiakkaan_postinumero' => $asiakkaan_postinumero,
 				'asiakkaan_toimipaikka' => $asiakkaan_toimipaikka,
-				'asiakkaan_puhelin' => $asiakkaan_puhelin,
-				'asiakkaan_email' => $asiakkaan_email,
 				'yritys' => $firma->tyonantaja,
 				'yrityksen_osoite' => $firma->osoite,
 				'yrityksen_postinumero' => $firma->postinumero,
 				'yrityksen_toimipaikka' => $firma->postitoimipaikka,
 				'yrityksen_y_tunnus' => $firma->y_tunnus,
 				'yrityksen_puhelin' => $firma->puhelin,
-				'yrityksen_email' => $firma->sahkoposti,
-				'yrityksen_yhteyshenkilo' => $firma->johtaja,
-				'yrityksen_y_tunnus' => $firma->y_tunnus,
-				'teksti' => $model->teksti,
+				'teksti' => $model->tarjous,
 			);
-
-			$tk = Tyonkuvaus::model()->findByPk($model->tarjous->tyonkuvaus_id);
-			if(isset($tk->id))
-			{
-				$site = Yii::app()->createController('Site');
-  				$tk_tiedosto = $site[0]->tiedostonNimiAsiakasKohdeAika($tiedosto, $tk->asiakas_id, $tk->kohde_id, $tk->time);
-				$variables['tyonkuvaus'] = 'On kuvattu liitessä. '.$tk_tiedosto.'.pdf';
-			}
-
 			$docx->replaceVariableByText($variables);
 
-			$a = Asiakkaat::model()->findByPk($model->tarjous->asiakas_id);
-			$k = Kohteet::model()->findByPk($model->tarjous->kohde_id);
+			$a = Asiakkaat::model()->findByPk($model->asiakas_id);
+			$k = Kohteet::model()->findByPk($model->kohde_id);
 			$tarvikkeet = array();
-			if( is_array(json_decode($model->tarjous->tarvikkeet, true)) )
+			if( is_array(json_decode($model->tarvikkeet, true)) )
 			{
-				foreach(json_decode($model->tarjous->tarvikkeet, true) as $l)
+				foreach(json_decode($model->tarvikkeet, true) as $l)
 				{
 	      				$v = Valikkoot::model()->findByPk($l);
 					if( isset($v->id) )
@@ -525,28 +591,24 @@ class CrmSopimuksetController extends Controller
 			}
 
 			$variables_2 = array(
-				'hinta_tyyppi' => $model->tarjous->hinta_tyyppi,
-				'hinta' => $model->tarjous->hinta,
-				'alv' => $model->tarjous->alv,
-				'kohteen_osoite' => $model->tarjous->kohteen_osoite,
-				'kohteen_postinumero' => $model->tarjous->kohteen_postinumero,
-				'kohteen_postitoimipaikka' => $model->tarjous->kohteen_postitoimipaikka,
+				'hinta_tyyppi' => $model->hinta_tyyppi,
+				'hinta' => $model->hinta,
+				'alv' => $model->alv,
+				'kohteen_osoite' => $model->kohteen_osoite,
+				'kohteen_postinumero' => $model->kohteen_postinumero,
+				'kohteen_postitoimipaikka' => $model->kohteen_postitoimipaikka,
 				'tyonantajan_edustaja' => $asetukset->johtaja,
 				'tarvikkeet' => implode(", ", $tarvikkeet),
 				'maksuehto' => $a->maksuehto,
 				'viivastyskorko' => $a->viivastyskorko,
-				'tuote_palvelu' => $model->tarjous->tuote_palvelu,
+				'tuote_palvelu' => $model->tuote_palvelu,
 			);
 			$docx->replaceVariableByText($variables_2);
 
 
-			$tarjoukset = Yii::app()->createController('CrmTarjoukset');
+			$tb = $this->hinnatTaulu($model->id);
+			$docx->replaceVariableByHTML('prices_table', 'block', $tb, array('parseDivsAsPs' => true));
 
-			if($model->tarjous_id != 0)
-			{
-				$tb = $tarjoukset[0]->hinnatTaulu($model->tarjous_id);
-				$docx->replaceVariableByHTML('prices_table', 'block', $tb, array('parseDivsAsPs' => true));
-			}
 
 			$path = 'tiedostot/'.$this->kansio().'/'.Yii::app()->user->domain.'/'.$tiedosto;
 			$docx->createDocx($path);
@@ -557,8 +619,53 @@ class CrmSopimuksetController extends Controller
 			$this->redirect(array('index'));
 	}
 
+
+	public function hinnatTaulu($sopimus_id)
+	{
+		$bod = '
+		<style>
+		#TableRivit{ width:100%;border:none; border-collapse: collapse; }
+		#TableRivit, th, td {
+		    	border: 1px solid black;
+			font-size: 75%;
+		}
+		</style>
+		';
+
+		$bod .= '
+<table id="TableRivit">
+     <tr>
+	<th>Nimike</th>
+	<th>Määrä</th>
+	<th>Yksikkö <span class="btn btn-primary btn-xs myBgColors muokaValiko" for="laskutus_yksikko"><i class="fa fa-pencil-square-o"></i></span></th>
+	<th>Hinta</th>
+	<th>ALV %</th>
+	<th>ALV</th>
+	<th>Ale %</th>
+	<th>Veroton</th>
+	<th>Yhteensä</th>
+     </tr>';
+
+		$trRivit=SopimusHintaRivit::model()->findAll("sopimus_id='".$sopimus_id."'", array('order'=>'id'));
+		if( count($trRivit) > 0 )
+		{
+			$num = 0;
+			foreach($trRivit as $rivi){ 
+			$num++;
+			$bod .= $this->renderPartial("tr_rivi_update",array('num'=>$num,'rivi'=>$rivi), true);
+			}
+		}
+
+		$bod .= '
+</table>';
+
+		return $bod;
+
+	}
+
 	public function actionDelete($id)
 	{
+
 		// <-- tiedoston poistaminen
 		$model = $this->loadModel($id);
 		$model->delete();
@@ -567,6 +674,8 @@ class CrmSopimuksetController extends Controller
 		if (file_exists( Yii::app()->basePath.'/../'.$this->valmiit_polkku().'/'.$model->liite.'.pdf' )) 
 			unlink(Yii::app()->baseUrl.$this->valmiit_polkku().'/'.$model->liite.'.pdf');
 		//     tiedoston poistaminen -->
+
+		SopimusHintaRivit::model()->deleteAll("sopimus_id='".$id."'");
 
 		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
 		if(!isset($_GET['ajax']))
@@ -607,9 +716,9 @@ class CrmSopimuksetController extends Controller
 		    	}
 		}
 
+
        		$criteria = new CDbCriteria();
 	        $criteria->order = "  id DESC ";
-
 
 		$dataProvider=new CActiveDataProvider('CrmSopimukset', array(
 			'criteria'=>$criteria,
@@ -617,44 +726,127 @@ class CrmSopimuksetController extends Controller
 		));
 
 		$dataProvider->pagination->pageSize = 50;
-
-		$tal = $this->tal();
-
-		$this->render('index', array(
-			'dataProvider' => $dataProvider,
-			'tal' => $tal,
-		));
+		$this->render('index', array('dataProvider' => $dataProvider));
 	}
 
-	public function actionGet_tarjous($asiakas_id)
+	public function get_tyonkuvaus($id)
 	{
-		$bd = '<option value=>'.Yii::t('main', 'Valitse').'</options>';
-		$data = CrmTarjoukset::model()->findAll(" asiakas_id='".$asiakas_id."' AND status=2 ");
-		foreach($data as $item){
-			$bd .= '<option value="'.$item->id.'">'.date("d.m.Y H:i", strtotime($item->time)).', '.$item->kohteen_osoite.'</option>';
+	
+		$bd = '';
+		$data = Tyonkuvaus::model()->findByPk($id);
+		
+		$bd .= '
+		<table class="table table-bordered" style="background:white">
+		    <tr>
+		        <th>'.Yii::t('main','Tilat').'</th>
+			<th>'.Yii::t('main','Työtehtävät ja päivät').'</th>
+			<th>'.Yii::t('main','Kommenti').'</th>
+		    </tr>';
+
+
+		$rivit = TyonkuvausRivit::model()->findAll(" tyonkuvaus_id='".$data->id."' ");
+		foreach($rivit as $key=>$r)
+		{
+
+		$exTilat = explode("\n", json_decode($r->tilat));
+		$tilat = '';
+		foreach($exTilat as $itm)
+			$tilat .= '<br>'.trim($itm);
+
+		$bd .= '
+		    <tr class="rivi" num="'.$key.'">
+		        <td>'.$tilat.'</td>
+		        <td class="tyotehtavatVkoPvmTD">';
+			$tyontehtavat = json_decode($r->tyontehtavat, true);
+			$bd .= '<table class="table table-bordered" align="center" border="none">';
+			$bd .= '<tr>
+			<th>Työtehtävät</th><th>Vko. Pvm</th><th>Viikkoväli</th>
+			</tr>';
+			foreach($tyontehtavat as $k2=>$r2)
+			{ 
+                        $bd .= '<tr>';
+			$bd .= '<td>';
+			$bd .= $r2['tyotehtava'].'<br>';
+			$bd .= '</td>';
+			$bd .= '<td>';
+			$bd .= '<b>('.$r2['vkopvm'].')</b><br>.';
+			$bd .= '</td>';
+			$bd .= '<td>';
+			$bd .= '<b>Joka '.$r2['vkovali'].' vko.';
+			$bd .= '</td>';
+             		$bd .= '</tr>';
+			}
+			$bd .= '</table>';
+				$bd .= '</td>
+
+		        <td>'.$r->kommenti.'</td>
+		    </tr>
+		';
 		}
 
-		$result = array(
-			'options'=>$bd
-		);
-		echo json_encode($result);
+		$bd .= '</table>';
+		
+
+
+		return trim($bd);
 	}
 
 
-	protected function tal()
+	public function get_tyonkuvaus_by_id($id)
 	{
+	
+		$bd = array();
+		$data = Tyonkuvaus::model()->findByPk($id);
+		if(isset($data->id))
+		{
+		$bd['otsikko'] = $data->otsikko;
 
-        	$tal = array(
-			'palvelusopimus_kuluttajat'=>Yii::t('main', 'Palvelusopimus kuluttajat'),
-			'sosiaalialan_palvelusopimus'=>Yii::t('main', 'Sosiaalialan palvelusopimus'),
-			'palvelusopimus_novosan'=>Yii::t('main', 'Palvelusopimus Novosan'),
-			'avainten_luovutussopimus'=>Yii::t('main', 'Avainten luovutussopimus'),
-			'hotelfinn_helsinki_siivousehdotus'=>Yii::t('main', 'Hotelfinn Helsinki siivousehdotus'),
-		);
-		return $tal;
+		$rivit = TyonkuvausRivit::model()->findAll(" tyonkuvaus_id='".$data->id."' ");
+		foreach($rivit as $key=>$r)
+		{
+
+		$exTilat = explode("\n", json_decode($r->tilat));
+		$tilat = array();
+		foreach($exTilat as $itm)
+			$tilat[] = trim($itm);
+
+		$bd['tilat'][] = $tilat;
+
+			$tyontehtavat = json_decode($r->tyontehtavat, true);
+			$tt = array();
+			foreach($tyontehtavat as $k2=>$r2)
+				$tt[] = array('tyotehtava'=>$r2['tyotehtava'],'vkopvm'=>$r2['vkopvm'],'vkovali'=>$r2['vkovali']);
+
+		$bd['tyontehtavat'][] = $tt;
+
+
+
+		$exLaatutaso = explode("\n", json_decode($r->laatutaso));
+		$tasot = array();
+		foreach($exLaatutaso as $itm)
+			$tasot[] = trim($itm);
+
+		$bd['laatutaso'][] = $tasot;
+
+		$exKommenti = explode("\n", $r->kommenti);
+		$kommentit = array();
+		foreach($exKommenti as $itm)
+			$kommentit[] = trim($itm);
+
+		$bd['kommenti'][] = $kommentit;
+
+		}
+
+		}
+
+
+
+		return $bd;
 	}
 
-
+	/**
+	 * Manages all models.
+	 */
 	public function actionAdmin()
 	{
 		$model=new CrmSopimukset('search');

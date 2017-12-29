@@ -924,7 +924,7 @@ public function actionLogin($domain)
 					$lista .= 'Tiedosto ei löydy. Sopimus nro.: '. $item->id.' <hr>';				
 					continue;
 				}
-						
+		
 					$txt = '';
 					$bg_color = '';
 					$tila = '';
@@ -958,7 +958,7 @@ public function actionLogin($domain)
 					   <i class="pull-right fa fa-file-pdf-o fa-5x" aria-hidden="true"></i>
 					   <h3>'.$txt.'</h3>
 					   '.date("d.m.Y H:i", strtotime($item->time)).'<br>
-					   '.$item->tarjous->kohteen_osoite.' '.$item->tarjous->kohteen_postinumero.', '.$item->tarjous->kohteen_postitoimipaikka.'
+					   '.$item->kohteen_osoite.' '.$item->kohteen_postinumero.', '.$item->kohteen_postitoimipaikka.'
 					  </div>
 					  '.$tila.'
 					  <hr>

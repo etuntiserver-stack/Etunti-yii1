@@ -24,7 +24,7 @@
 		</select>
 	</TD>
 	<TD><input class="yhteensa_total_verot form-control" size="10" type="text" name="hinta_alv[<?php echo $num; ?>]" id="hinta_alv_<?php echo $num; ?>" value="<?php echo $rivi['hinta_alv']; ?>" readonly></TD>
-	<TD><input type="text" size="10" name="ale[<?php echo $num; ?>]" id="ale_<?php echo $num; ?>" value="0" class="onlyDigits form-control"><span class="errmsg"></span></TD>
+	<TD><input type="text" size="10" name="ale[<?php echo $num; ?>]" id="ale_<?php echo $num; ?>" value="<?php echo $rivi['ale']; ?>" class="onlyDigits form-control"><span class="errmsg"></span></TD>
 	<TD><input class="yhteensa_total_veroton form-control" type="text" size="10" name="veroton[<?php echo $num; ?>]" id="veroton_<?php echo $num; ?>" value="<?php echo $rivi['veroton']; ?>" readonly></TD>
 	<TD><input class="yhteensa_total form-control" type="text" size="10" name="yhteensa_alv[<?php echo $num; ?>]" id="yhteensa_alv_<?php echo $num; ?>" value="<?php echo $rivi['yhteensa_alv']; ?>" readonly></TD>
 	<TD><input type="text" size="5" name="free_text[<?php echo $num; ?>]" id="free_text_<?php echo $num; ?>" class="form-control" value="<?php echo $rivi['free_text']; ?>"></TD>

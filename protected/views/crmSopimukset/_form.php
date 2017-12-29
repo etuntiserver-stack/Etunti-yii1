@@ -1,13 +1,13 @@
 <?php
-/* @var $this CrmSopimuksetController */
-/* @var $model CrmSopimukset */
+/* @var $this CrmTarjouksetController */
+/* @var $model CrmTarjoukset */
 /* @var $form CActiveForm */
 ?>
 
 <div class="form">
 
 <?php $form=$this->beginWidget('CActiveForm', array(
-	'id'=>'crm-sopimukset-form',
+	'id'=>'crm-tarjoukset-form',
 	// Please note: When you enable ajax validation, make sure the corresponding
 	// controller action is handling ajax validation correctly.
 	// There is a call to performAjaxValidation() commented in generated controller code.
@@ -32,9 +32,9 @@
 	</div>
 
 	<div class="row">
-		<?php echo $form->labelEx($model,'teksti'); ?>
-		<?php echo $form->textArea($model,'teksti',array('rows'=>6, 'cols'=>50)); ?>
-		<?php echo $form->error($model,'teksti'); ?>
+		<?php echo $form->labelEx($model,'tarjous'); ?>
+		<?php echo $form->textArea($model,'tarjous',array('rows'=>6, 'cols'=>50)); ?>
+		<?php echo $form->error($model,'tarjous'); ?>
 	</div>
 
 	<div class="row">
@@ -53,12 +53,6 @@
 		<?php echo $form->labelEx($model,'status'); ?>
 		<?php echo $form->textField($model,'status'); ?>
 		<?php echo $form->error($model,'status'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'liite'); ?>
-		<?php echo $form->textField($model,'liite',array('size'=>60,'maxlength'=>255)); ?>
-		<?php echo $form->error($model,'liite'); ?>
 	</div>
 
 	<div class="row buttons">

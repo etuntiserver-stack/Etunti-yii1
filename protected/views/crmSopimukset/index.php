@@ -1,18 +1,18 @@
 <?php
-/* @var $this CrmSopimuksetController */
+/* @var $this CrmTarjouksetController */
 /* @var $dataProvider CActiveDataProvider */
 
 $this->breadcrumbs=array(
-	'Crm Sopimuksets',
+	'Crm Tarjouksets',
 );
 
 $this->menu=array(
-	array('label'=>'Create CrmSopimukset', 'url'=>array('create')),
-	array('label'=>'Manage CrmSopimukset', 'url'=>array('admin')),
+	array('label'=>'Create CrmTarjoukset', 'url'=>array('create')),
+	array('label'=>'Manage CrmTarjoukset', 'url'=>array('admin')),
 );
 ?>
 
-<h1>Crm Sopimuksets</h1>
+<h1>Crm Tarjouksets</h1>
 
 <?php $this->widget('zii.widgets.CListView', array(
 	'dataProvider'=>$dataProvider,

@@ -1,21 +1,21 @@
 <?php
 
 /**
- * This is the model class for table "sopimukset".
+ * This is the model class for table "sivex_tarjoukset".
  *
- * The followings are the available columns in table 'sopimukset':
+ * The followings are the available columns in table 'sivex_tarjoukset':
  * @property integer $id
  * @property string $time
  * @property integer $asiakas_id
- * @property string $teksti
+ * @property string $tarjous
  * @property string $hyvaksyn_koodi
  * @property string $asiakkaan_sahkoposti
  * @property integer $status
- * @property string $liite
  */
 class CrmSopimukset extends DB2ActiveRecord
 {
 
+public $asiakastila;
 public $template;
 
 	/**
@@ -23,10 +23,9 @@ public $template;
 	 */
 	public function tableName()
 	{
-
 		$tb_name = 'sopimukset';
 		$check_this_table = true;
-		//unset(Yii::app()->session[$tb_name]); // this use if want many times play
+		unset(Yii::app()->session[$tb_name]); // this use if want many times play
 		if(!isset(Yii::app()->session[$tb_name]))
 		{
 			Yii::app()->session[$tb_name] = true;
@@ -37,7 +36,9 @@ public $template;
 		if($check_this_table)
 		{
 		$table = Yii::app()->db1->schema->getTable($tb_name);
-		if(!isset($table->columns['id'])) {
+		if(!isset($table->columns['hinta'])) {
+
+			Yii::app()->db1->createCommand(" DROP TABLE IF EXISTS $tb_name")->execute();
 
 			Yii::app()->db1->createCommand(" CREATE TABLE IF NOT EXISTS $tb_name 
 			(`id` int(11) AUTO_INCREMENT PRIMARY KEY)
@@ -47,17 +48,30 @@ public $template;
 		$table_structure = array(
 
                      'time' => 'timestamp DEFAULT CURRENT_TIMESTAMP ',
+                     'tarjous_id' => 'int(11) ',
                      'asiakas_id' => 'int(11) ',
-                     'teksti' => 'text ',
+                     'tarjous' => 'text ',
                      'hyvaksyn_koodi' => 'varchar(255) ',
                      'asiakkaan_sahkoposti' => 'varchar(100) ',
                      'status' => 'int(1) ',
                      'liite' => 'varchar(255) ',
-                     'template' => 'varchar(255) ',
                      'yhteystiedot_id' => 'int(11) ',
-                     'tarjous_id' => 'int(11) ',
+                     'tyonkuvaus' => 'text ',
+                     'kohde_id' => 'int(11) ',
+                     'kohteen_osoite' => 'varchar(255) ',
+                     'kohteen_postinumero' => 'varchar(50) ',
+                     'kohteen_postitoimipaikka' => 'varchar(255) ',
+                     'tyonkuvaus_id' => 'int(11) ',
+                     'alv' => 'int(3) ',
+                     'hinta_tyyppi' => 'varchar(50) ',
+                     'hinta' => 'int(11) ',
+                     'tarvikkeet' => 'text ',
                      'voimassa' => 'varchar(20) ',
-                     'voimassaolo' => 'int(1) ',
+                     'tuote_palvelu' => 'varchar(255) ',
+		     'yhteensa_total_verot' => 'float',
+		     'yhteensa_total_veroton' => 'float',
+		     'yhteensa_total' => 'float',
+		     'voimassaolo' => 'int(11) DEFAULT 0',
 		);
 
 		foreach($table_structure as $key=>$value)
@@ -79,16 +93,17 @@ public $template;
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('template', 'required'), //tarjous_id
-			//array('time, asiakas_id, teksti, hyvaksyn_koodi, asiakkaan_sahkoposti, status, liite', 'required'),
-			array('tarjous_id, asiakas_id, status, yhteystiedot_id, voimassaolo', 'numerical', 'integerOnly'=>true),
-			array('hyvaksyn_koodi, liite, template', 'length', 'max'=>255),
-			array('asiakkaan_sahkoposti', 'length', 'max'=>100),
-			array('teksti', 'safe'),
+			array('template, asiakas_id, kohde_id, kohteen_osoite, asiakkaan_sahkoposti, voimassaolo', 'required'),
+			array('asiakas_id, yhteystiedot_id, status, kohde_id, tyonkuvaus_id, alv, hinta', 'numerical', 'integerOnly'=>true),
+			array('yhteensa_total_verot, yhteensa_total_veroton, yhteensa_total', 'type', 'type'=>'float'),
+			array('hyvaksyn_koodi, liite, kohteen_osoite, kohteen_postitoimipaikka, tuote_palvelu', 'length', 'max'=>255),
+			array('asiakkaan_sahkoposti, kohteen_postinumero', 'length', 'max'=>100),
+			array('hinta_tyyppi', 'length', 'max'=>50),
 			array('voimassa', 'length', 'max'=>20),
+			array('tarjous, tyonkuvaus, tarvikkeet', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, time, asiakas_id, teksti, hyvaksyn_koodi, asiakkaan_sahkoposti, status, liite', 'safe', 'on'=>'search'),
+			array('id, time, asiakas_id, tarjous, hyvaksyn_koodi, asiakkaan_sahkoposti, status', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -100,7 +115,8 @@ public $template;
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-		        'tarjous' => array(self::BELONGS_TO, 'CrmTarjoukset', 'tarjous_id'),
+		        'tarjoukset' => array(self::BELONGS_TO, 'CrmTarjoukset', 'tarjous_id'),
+		        'asiakkaat' => array(self::BELONGS_TO, 'Asiakkaat', 'asiakas_id'),
 		);
 	}
 
@@ -113,13 +129,21 @@ public $template;
 			'id' => 'ID',
 			'time' => 'Time',
 			'asiakas_id' => 'Asiakas',
-			'teksti' => 'Teksti',
+			'tarjous' => 'Teksti',
 			'hyvaksyn_koodi' => 'Hyvaksyn Koodi',
-			'asiakkaan_sahkoposti' => 'Asiakkaan Sahkoposti',
+			'asiakkaan_sahkoposti' => 'Sähköposti',
 			'status' => 'Status',
-			'liite' => 'Liite',
-			'tarjous_id' => Yii::t('main', 'Tarjous'),
+			'tyonkuvaus' => Yii::t('main', 'Työnkuvaus'),
 			'yhteystiedot_id' => Yii::t('main', 'Yhteystiedot'),
+			'kohde_id' => Yii::t('main', 'Kohde'),
+			'kohteen_osoite' => Yii::t('main', 'Kohteen osoite'),
+			'kohteen_postinumero' => Yii::t('main', 'Kohteen postinumero'),
+			'kohteen_postitoimipaikka' => Yii::t('main', 'Kohteen postitoimipaikka'),
+			'asiakastila' => Yii::t('main', 'Asiakastila'),
+			'kohde_id' => Yii::t('main', 'Kohde'),
+			'tyonkuvaus_id' => Yii::t('main', 'Työnkuvaus'),
+			'template' => Yii::t('main', 'Malli'),
+			'tuote_palvelu' => Yii::t('main', 'Tuote / Palvelu'),
 		);
 	}
 
@@ -144,11 +168,10 @@ public $template;
 		$criteria->compare('id',$this->id);
 		$criteria->compare('time',$this->time,true);
 		$criteria->compare('asiakas_id',$this->asiakas_id);
-		$criteria->compare('teksti',$this->teksti,true);
+		$criteria->compare('tarjous',$this->tarjous,true);
 		$criteria->compare('hyvaksyn_koodi',$this->hyvaksyn_koodi,true);
 		$criteria->compare('asiakkaan_sahkoposti',$this->asiakkaan_sahkoposti,true);
 		$criteria->compare('status',$this->status);
-		$criteria->compare('liite',$this->liite,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -159,7 +182,7 @@ public $template;
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return CrmSopimukset the static model class
+	 * @return CrmTarjoukset the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{

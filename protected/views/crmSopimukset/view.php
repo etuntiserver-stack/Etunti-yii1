@@ -1,22 +1,22 @@
 <?php
-/* @var $this CrmSopimuksetController */
-/* @var $model CrmSopimukset */
+/* @var $this CrmTarjouksetController */
+/* @var $model CrmTarjoukset */
 
 $this->breadcrumbs=array(
-	'Crm Sopimuksets'=>array('index'),
+	'Crm Tarjouksets'=>array('index'),
 	$model->id,
 );
 
 $this->menu=array(
-	array('label'=>'List CrmSopimukset', 'url'=>array('index')),
-	array('label'=>'Create CrmSopimukset', 'url'=>array('create')),
-	array('label'=>'Update CrmSopimukset', 'url'=>array('update', 'id'=>$model->id)),
-	array('label'=>'Delete CrmSopimukset', 'url'=>'#', 'linkOptions'=>array('submit'=>array('delete','id'=>$model->id),'confirm'=>'Are you sure you want to delete this item?')),
-	array('label'=>'Manage CrmSopimukset', 'url'=>array('admin')),
+	array('label'=>'List CrmTarjoukset', 'url'=>array('index')),
+	array('label'=>'Create CrmTarjoukset', 'url'=>array('create')),
+	array('label'=>'Update CrmTarjoukset', 'url'=>array('update', 'id'=>$model->id)),
+	array('label'=>'Delete CrmTarjoukset', 'url'=>'#', 'linkOptions'=>array('submit'=>array('delete','id'=>$model->id),'confirm'=>'Are you sure you want to delete this item?')),
+	array('label'=>'Manage CrmTarjoukset', 'url'=>array('admin')),
 );
 ?>
 
-<h1>View CrmSopimukset #<?php echo $model->id; ?></h1>
+<h1>View CrmTarjoukset #<?php echo $model->id; ?></h1>
 
 <?php $this->widget('zii.widgets.CDetailView', array(
 	'data'=>$model,
@@ -24,10 +24,9 @@ $this->menu=array(
 		'id',
 		'time',
 		'asiakas_id',
-		'teksti',
+		'tarjous',
 		'hyvaksyn_koodi',
 		'asiakkaan_sahkoposti',
 		'status',
-		'liite',
 	),
 )); ?>

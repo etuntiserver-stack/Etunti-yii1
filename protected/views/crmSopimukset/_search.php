@@ -1,6 +1,6 @@
 <?php
-/* @var $this CrmSopimuksetController */
-/* @var $model CrmSopimukset */
+/* @var $this CrmTarjouksetController */
+/* @var $model CrmTarjoukset */
 /* @var $form CActiveForm */
 ?>
 
@@ -27,8 +27,8 @@
 	</div>
 
 	<div class="row">
-		<?php echo $form->label($model,'teksti'); ?>
-		<?php echo $form->textArea($model,'teksti',array('rows'=>6, 'cols'=>50)); ?>
+		<?php echo $form->label($model,'tarjous'); ?>
+		<?php echo $form->textArea($model,'tarjous',array('rows'=>6, 'cols'=>50)); ?>
 	</div>
 
 	<div class="row">
@@ -44,11 +44,6 @@
 	<div class="row">
 		<?php echo $form->label($model,'status'); ?>
 		<?php echo $form->textField($model,'status'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->label($model,'liite'); ?>
-		<?php echo $form->textField($model,'liite',array('size'=>60,'maxlength'=>255)); ?>
 	</div>
 
 	<div class="row buttons">

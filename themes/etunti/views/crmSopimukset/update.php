@@ -11,6 +11,7 @@
         <div class="tray-center">
 
 	   <div class="pull-right">
+	   <?php if($model->status == 0) : ?>
 	   <?php     
 		echo CHtml::link("poista", '#', array(
 		'submit'=>array('delete', "id"=>$model->id), 
@@ -18,6 +19,7 @@
 		'class'=>'btn btn-primary myBgColors'
 		));
 	   ?>
+	   <?php endif; ?>
 	   </div>
 	   <h2 class="myBgColors p10"> <i class="glyphicon glyphicon-user"></i> <?php echo $head; ?> </h2>
 

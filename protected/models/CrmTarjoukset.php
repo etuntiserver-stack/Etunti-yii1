@@ -15,8 +15,8 @@
 class CrmTarjoukset extends DB2ActiveRecord
 {
 
-public $asiakastila;
-public $template;
+	public $asiakastila, $template;
+
 
 	/**
 	 * @return string the associated database table name
@@ -54,12 +54,10 @@ public $template;
                      'liite' => 'varchar(255) ',
                      'yhteystiedot_id' => 'int(11) ',
                      'tyonkuvaus' => 'text ',
-                     'tarjouslaskenta' => 'text ',
                      'kohde_id' => 'int(11) ',
                      'kohteen_osoite' => 'varchar(255) ',
                      'kohteen_postinumero' => 'varchar(50) ',
                      'kohteen_postitoimipaikka' => 'varchar(255) ',
-                     'onko_osoite_sama' => 'varchar(10) ',
                      'tyonkuvaus_id' => 'int(11) ',
                      'alv' => 'int(3) ',
                      'hinta_tyyppi' => 'varchar(50) ',
@@ -91,14 +89,14 @@ public $template;
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('template, asiakas_id, kohde_id, kohteen_osoite, asiakkaan_sahkoposti', 'required'),
+			array('template, asiakas_id, kohde_id, kohteen_osoite, asiakkaan_sahkoposti, voimassa', 'required'),
 			array('asiakas_id, yhteystiedot_id, status, kohde_id, tyonkuvaus_id, alv, hinta', 'numerical', 'integerOnly'=>true),
 			array('yhteensa_total_verot, yhteensa_total_veroton, yhteensa_total', 'type', 'type'=>'float'),
 			array('hyvaksyn_koodi, liite, kohteen_osoite, kohteen_postitoimipaikka, tuote_palvelu', 'length', 'max'=>255),
 			array('asiakkaan_sahkoposti, kohteen_postinumero', 'length', 'max'=>100),
 			array('hinta_tyyppi', 'length', 'max'=>50),
 			array('voimassa', 'length', 'max'=>20),
-			array('tarjous, tyonkuvaus, tarjouslaskenta, onko_osoite_sama, tarvikkeet', 'safe'),
+			array('tarjous, tyonkuvaus, tarvikkeet', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('id, time, asiakas_id, tarjous, hyvaksyn_koodi, asiakkaan_sahkoposti, status', 'safe', 'on'=>'search'),
@@ -113,6 +111,8 @@ public $template;
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+		        'sopimukset' => array(self::HAS_ONE, 'CrmSopimukset', 'tarjous_id'),
+		        'asiakkaat' => array(self::BELONGS_TO, 'Asiakkaat', 'asiakas_id'),
 		);
 	}
 
