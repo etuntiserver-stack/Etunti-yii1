@@ -84,6 +84,8 @@ function voimassaChecker(){
  if( $('#CrmSopimukset_voimassaolo option:selected').val() == 1 ){
 	$('#voimassa_div').show();
  } else {
+
+	$('#CrmSopimukset_voimassa').val('');
 	$('#voimassa_div').hide();
  }
 }

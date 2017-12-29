@@ -24,7 +24,12 @@
 		<?php echo date("d.m.Y", strtotime($data->time)); ?>
 	</td>
 	<td>
+		<?php if(!empty($data->voimassa) and $data->voimassaolo == 1) : ?>
 		<?php echo $data->voimassa; ?>
+		<?php endif; ?>
+		<?php if(empty($data->voimassa) and $data->voimassaolo == 0) : ?>
+		<?php echo 'Toistaiseksi voimassaoleva'; ?>
+		<?php endif; ?>
 	</td>
 	<td>
 		<?=$asiakas?>
