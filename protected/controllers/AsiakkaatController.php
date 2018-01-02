@@ -408,10 +408,10 @@ class AsiakkaatController extends Controller
 
 		$model=$this->loadModel($id);
 
-				$d = Domainit::model()->find("domain='".Yii::app()->user->domain."'");
+				$ft = FirmanTiedot::model()->findByPk(1);
 				$yr =  '';
-				if(isset($d->yritys))
-				$yr =  $d->yritys;
+				if(isset($ft->tyonantaja))
+				$yr =  $ft->tyonantaja;
 
 				$asiakas = '';
 				if($model->tyyppi == 'yritys')
@@ -428,22 +428,23 @@ class AsiakkaatController extends Controller
 				<b>Käyttäjätunnus:</b> '.$model->sahkoposti.'<br>
 				<b>Luo oma salasana:</b> <a href='.Yii::app()->createAbsoluteUrl('asiakkaat/salasana', array('domain' => Yii::app()->user->domain, 'token' => $token, 'asiakasid' => $model->id)).'>tästä</a><br>
 <p>
-Olemme tehneet sinulle profiilin eDico-sovellukseen, jolla voit olla kätevästi yhteydessä meihin, antaa palautetta, tarkastella tilauksiasi ja vahvistaa sopimukset ja tarjoukset. 
-Lataa eDico-sovellus älylaitteeseesi alla olevan linkin kautta.
-Ystävällisin terveisin,
+Olemme tehneet sinulle profiilin eDico-sovellukseen, jolla voit olla kätevästi yhteydessä meihin, antaa palautetta, tarkastella tilauksiasi ja vahvistaa sopimukset ja tarjoukset. <br>
+Lataa eDico-sovellus älylaitteeseesi alla olevan linkin kautta.<br>
+
+<p>Ystävällisin terveisin,<br>
 Yritys '.$yr.'
 </p>
+</p>
 <p>
-<a href="https://play.google.com/store/apps/details?id=fi.etunti.dico&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1"><img alt="Get it on Google Play" src="https://play.google.com/intl/en_us/badges/images/generic/fi_badge_web_generic.png"/ height="105" style="margin:-17px;"></a>
-<br>
-<a href="https://geo.itunes.apple.com/fi/app/etunti/id1100648690?mt=8"><img src="http://etunti.fi/etusivuimg/app_store.png" style="max-width:237px"></a>
+<a href="https://play.google.com/store/apps/details?id=fi.etunti.dico&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1"><img alt="Get it on Google Play" src="'.Yii::app()->request->hostInfo.'/lib/app/google-play.jpg" style="height:100px" /></a>
+
+<a href="https://geo.itunes.apple.com/fi/app/etunti/id1100648690?mt=8"><img src="'.Yii::app()->request->hostInfo.'/lib/app/app-ios.jpg" style="height:100px" ></a>
 </p>
 				';
 
 				//echo $message;
 				//exit;
 
-				$ft = FirmanTiedot::model()->findByPk(1);
 				$mail = new YiiMailer();
 				$mail->setFrom('no-reply@etunti.fi');
 				$mail->setTo($model->sahkoposti);
