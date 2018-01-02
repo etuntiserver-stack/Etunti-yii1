@@ -67,9 +67,10 @@ $(document).ready(function(){
 		<!-- ilmainen_kaytto -->
 
 		<!-- Hinnastot -->
-		<?php if(isset($domainit->id) and $domainit->maksullinen == 1) : ?>
+		<hr>
+		<?php // if(isset($domainit->id) and $domainit->maksullinen == 1) : ?>
 		<?php echo $this->renderPartial('_hinnastot', array('domainit' => $domainit, 'tasot' => $tasot)); ?>
-		<?php endif; ?>
+		<?php // endif; ?>
 		<!-- Hinnastot -->
 
 		<!-- Laskuri -->

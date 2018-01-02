@@ -416,7 +416,7 @@ var etusivuAjax = function(){
         <p class="small">
 <p>Laajennettu Etunti-ohjelma mahdollistaa yli 500 työtunnin suunnittelun ja toteuman. Lisäksi saat kattavamman käyttäjätuen käyttöösi. Sinulla on myös mahdollisuus muokata palvelupakettiasi haluamaasi kokoonpanoon. Tutustu lisäosiin <?php echo CHtml::link('tästä',"https://etunti.fi", array('target' => '_blank')); ?>.</p>
  
-<p>Laajennetun version hinta perustuu suunniteltuihin tai toteutuneisiin työtunteihin, riippuen siitä, kumpien yhteenlaskettu summa on suurempi. Työtunti tarkoittaa joko suunniteltua tai leimattua työtuntia. Työtunnit eivät sisällä matkoja eivätkä lounaita. Maksat siis vain työtuntien mukaan. Katso tarkempi hinnasto <?php echo CHtml::link('täältä',Yii::app()->request->baseUrl."/lib/pdf/tuntihinnasto.pdf", array('target' => '_blank')); ?>.</p>
+<p>Laajennetun version hinta perustuu suunniteltuihin tai toteutuneisiin työtunteihin, riippuen siitä, kumpien yhteenlaskettu summa on suurempi. Työtunti tarkoittaa joko suunniteltua tai leimattua työtuntia. Työtunnit eivät sisällä matkoja eivätkä lounaita. Maksat siis vain työtuntien mukaan. Katso tarkempi hinnasto <?php echo CHtml::link('täältä',array('asetukset/yrityksentiedot', 'id' => 1), array('target' => '_blank')); ?>.</p>
  
 <p>Huom! Kun olet ottanut käyttöön maksullisen version, ei sitä voi enää palauttaa ilmaisversioksi.</p>
  
