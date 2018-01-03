@@ -440,6 +440,9 @@ class TyovuorootController extends Controller
 		} elseif(Yii::app()->request->getPost('pdf_email'))
 		{
 
+		$from = date("Y-m-d", strtotime("{$_POST['year']}-W{$_POST['week']}-1"));
+		$to = date("Y-m-d", strtotime("{$_POST['year']}-W{$_POST['week']}-7"));
+
 		$kenelle = json_decode(Yii::app()->request->getPost('kenelle'));
 		$kenelle = array_filter($kenelle);
 
@@ -447,16 +450,15 @@ class TyovuorootController extends Controller
 		$tids = "(tid='".implode("' OR tid='", $kenelle)."')";
 		$criteria=new CDbCriteria;
 		$criteria->condition = " 
-			YEARWEEK(DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d'))='".$_POST['year'].$_POST['week']."' 
+			DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%Y-%m-%d') BETWEEN '$from' AND '$to'
 			AND $tids
 		";
 
 		if(isset($_POST['P']))
 		$criteria->Addcondition ( " DATE_FORMAT(STR_TO_DATE(pvm, '%d.%m.%Y'), '%w') IN (".implode(",",$_POST['P']).") ");
 
-		Tyovuoroot::model()->updateAll(array('piilota_mobiilista'=>0), $criteria);
+		Tyovuoroot::model()->updateAll(array('piilota_mobiilista'=>'0'), $criteria);
 		//    Update piilota_mobiilista nollaksi -->
-
 
   		if(!isset($_POST['P'])) {
 		    echo 'Days error';
