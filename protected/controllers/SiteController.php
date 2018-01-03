@@ -572,18 +572,6 @@ class SiteController extends Controller
   	public function actionAloita()
 	{
 
-
-		/*
-		if(isset($_POST['keyup_kirjautumistunnus']))
-		{
-			$kirjautumistunnus = preg_replace('/[^\p{L}\p{N}\s]/u', '', $_POST['keyup_kirjautumistunnus']);
-			$kirjautumistunnus = str_replace(' ', '_', $kirjautumistunnus);
-			$kirjautumistunnus = strtolower($kirjautumistunnus);
-			echo $kirjautumistunnus;
-			exit;
-		}
-		*/
-
 		$database = false;
 		$vastaus = '';
 		$kirjautumistunnus = '';
@@ -595,7 +583,9 @@ class SiteController extends Controller
 			//exit;
 
 			unset($_SESSION['domain']);
-			$kirjautumistunnus = preg_replace('/[^\p{L}\p{N}\s]/u', '', $_POST['yrityksen_nimi']);
+
+			$str = str_replace(array('ä','ö','ü','Ä','Ö','Ü'),array('a','o','u','A','O','U'), $_POST['yrityksen_nimi']);
+			$kirjautumistunnus = preg_replace('/[^\p{L}\p{N}\s]/u', '', $str);
 			$kirjautumistunnus = str_replace(' ', '_', $kirjautumistunnus);
 			$kirjautumistunnus = strtolower($kirjautumistunnus);
 			$_SESSION['domain'] = $kirjautumistunnus;

@@ -228,22 +228,6 @@ $(document).ready(function(){
   });
 
 
-/*
-  $("#yrityksen_nimi").keyup(function(e){
-	$.ajax({
-	  url: '#',
-	  data: { keyup_kirjautumistunnus : $(this).val() },
-	  type:'POST',
-	  success:function(data){
-  		$('#kirjautumistunnus').val(data);
-	  },
-	  error:function(data){
-  		console.log(data); 
-	  }
-  	});
-  });
-*/
-
 });
 </script>
 
