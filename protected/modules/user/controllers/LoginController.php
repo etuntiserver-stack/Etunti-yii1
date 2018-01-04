@@ -111,7 +111,7 @@ class LoginController extends Controller
 			    $this->redirect(Yii::app()->request->baseUrl.'/index.php/site/etusivu');
 			  } else {
 			    Yii::app()->user->setFlash('danger', "Tarkasta yritys- ja käyttäjätunnus sekä salasana");
-			    $this->redirect(Yii::app()->request->baseUrl.'/index.php/user/index');
+			    $this->redirect(Yii::app()->request->baseUrl.'/index.php/site/index');
 			  }
 			exit;
 			}
