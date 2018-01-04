@@ -31,12 +31,12 @@ class LogController extends Controller
 		if(isset(Yii::app()->user->adminID))
 		{
 		$m = Administrators::model()->findbypk(Yii::app()->user->adminID);
-	        if($m->id == Yii::app()->user->adminID)
+	        if(isset($m->id))
 	            return true;
 		else
-	            return false;
+	            $this->redirect(array('/user/logout'));
 		} else {
-	            return false;
+	            $this->redirect(array('/user/logout'));
 		}
 	}
 
@@ -45,12 +45,6 @@ class LogController extends Controller
 
                 if (Yii::app()->controller->isEtuntiAdmin() and !isset(Yii::app()->user->user_theme)) {
                         Yii::app()->theme = 'etunti';
-                } elseif (Yii::app()->controller->isEtuntiAdmin() and isset(Yii::app()->user->user_theme)) {
-                        Yii::app()->theme = Yii::app()->user->user_theme;
-                } elseif (isset(Yii::app()->user->asiakas)) {
-                        Yii::app()->theme = 'customer';
-                } else {
-                        Yii::app()->theme = 'classic';
                 }
                 parent::init();
         }
