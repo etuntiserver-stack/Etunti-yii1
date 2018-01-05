@@ -33,6 +33,7 @@ iframe{
  <div class="row">
   <div class="col-sm-offset-3 col-sm-6">
     <iframe src="www" frameborder="0" style="overflow:hidden;height:80%;width:100%" height="100%" width="100%" ></iframe>
+ <a href="../index.php/user/logout" class="btn btn-primary">Kirjaudu ulos</a>
   </div>
  </div>
 </div>
