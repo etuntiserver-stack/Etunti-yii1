@@ -65,7 +65,7 @@ session_start();
 				array(
 					'class'=>'CFileLogRoute',
                 			'levels'=>'error, warning', //'trace, info, error, warning, vardump'
-					'enabled'=>YII_DEBUG,
+					//'enabled'=>YII_DEBUG,
                     			//'categories'=>'system.*',
 				), /*
             			array(
@@ -98,19 +98,12 @@ session_start();
 					'enabled'=>YII_DEBUG,
                     			//'categories'=>'system.*',
 				), 
-				array(
-				        'class'=>'CWebLogRoute',
-                			'levels'=>'error, warning', //'trace, info, error, warning, vardump'
-
-				)
-/*
 			        array(
 				        'class'=>'CEmailLogRoute',
                 			'levels'=>'error', //'trace, info, error, warning, vardump'
 					'emails'=>'laptopsr@gmail.com', // vikailmoitusetunti@gmail.com pass: Otto5566
 					'subject'=>'Log File Message. Domain: '.$domain.', IP: '.$remote_addr.', SID: '.session_id().', refer: '.$refer.', post: '.$post,
 			        )
-*/
 	);
   }
   //     LOG -->

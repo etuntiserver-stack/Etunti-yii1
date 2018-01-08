@@ -58,5 +58,5 @@
 <?php if(isset($_GET['lines'])) : ?>
 <?php $output = shell_exec('tail -n '.$_GET['lines'].' protected/runtime/application.log'); ?>
 <pre><?=$output?></pre>
-<?php endif; d ?>
+<?php endif;d ?>
 
