@@ -31,8 +31,7 @@
 class Mob extends DB2ActiveRecord
 {
 
-public $tekijan_nimi;
-public $domain;
+public $tekijan_nimi, $domain, $appVersio, $email, $salasana, $avoinID;
 
 	/**
 	 * Returns the static model of the specified AR class.
