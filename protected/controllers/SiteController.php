@@ -77,7 +77,7 @@ class SiteController extends Controller
 		{
 	            return true;
 		} else {
-	            return false;
+	            $this->redirect(array('/user/logout'));
 		}
 	}
 
