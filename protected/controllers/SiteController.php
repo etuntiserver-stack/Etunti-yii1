@@ -33,7 +33,7 @@ class SiteController extends Controller
 	{
 		return array(
 			array('allow', 
-				'actions'=>array('etunnin_asiakkaat', 'update_etunnin_asiakas', 'etunnin_asiakas_kk', 'laheta_et_kirje', 'etunnin_asiakas_kk_laskuri', 'delete_etunnin_asiakas'),
+				'actions'=>array('etunnin_asiakkaat', 'update_etunnin_asiakas', 'etunnin_asiakas_kk', 'laheta_et_kirje', 'etunnin_asiakas_kk_laskuri', 'delete_etunnin_asiakas', 'errorlog'),
                 		'expression'=>"Yii::app()->controller->isDigisten()",
 			),
 			array('allow', 
@@ -124,6 +124,11 @@ class SiteController extends Controller
 		$this->render('otakaytoon', array(
 			'tila' => $tila
 		));
+	}
+
+	public function actionErrorlog()
+	{
+		$this->render('errorlog');
 	}
 
 	public function actionSite_error()
