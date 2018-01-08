@@ -37,10 +37,6 @@ class SiteController extends Controller
                 		'expression'=>"Yii::app()->controller->isDigisten()",
 			),
 			array('allow', 
-				'actions'=>array('errorlog'),
-                		'expression'=>"Yii::app()->user->name == 'roman'",
-			),
-			array('allow', 
 				'actions'=>array( 'header', 'footer', 'lomake_tarjouspyynto', 'lomake_testiryhma', 'ajankohtaista', 'asiakkaat', 'yritys', 'yhteystiedot', 'lomake_lataailmainen', 'uusi_kommento', 'crontab', 'logout', 'salasanan_palauttaminen', 'change_password', 'otakaytoon'),
 				'users'=>array('*'),
 			),
@@ -77,7 +73,7 @@ class SiteController extends Controller
 
 	public function isDigisten() {
 
-		if($this->tasot(999))
+		if($this->tasot(999) or (isset(Yii::app()->user->username) and Yii::app()->user->username == 'roman'))
 		{
 	            return true;
 		} else {
