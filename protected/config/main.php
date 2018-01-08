@@ -96,7 +96,7 @@ session_start();
 					'class'=>'CFileLogRoute',
                 			'levels'=>'error, warning', //'trace, info, error, warning, vardump'
 					'enabled'=>YII_DEBUG,
-                    			'categories'=>'system.*',
+                    			//'categories'=>'system.*',
 				), 
 				array(
 				        'class'=>'CWebLogRoute',
