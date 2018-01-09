@@ -143,6 +143,24 @@
   </form>
  </div>
 
+ <div class="admin-form col-sm-6">
+  <form id="uploadimage" action="#" class="form-input" method="post" enctype="multipart/form-data">
+     <div class="section input-group">
+       <label class="field prepend-icon append-button file">
+         <span class="button"><?php echo Yii::t('main', 'Logo'); ?></span>
+         <input type="file" class="gui-file" name="file" id="t_file" onChange="document.getElementById('tiedostoUP_logo').value = this.value;">
+         <input type="text" class="gui-input" name="uploaded_logo" id="tiedostoUP_logo" placeholder="Valitse tiedosto..">
+         <label class="field-icon">
+          <i class="fa fa-upload"></i>
+         </label>
+       </label>
+	<span class="input-group-btn">
+          <input type="submit" value="Lataa" class="btn btn-primary btn-group myBgColors" />
+	</span>
+    </div>
+  </form>
+ </div>
+
  </div>
 </div>
 

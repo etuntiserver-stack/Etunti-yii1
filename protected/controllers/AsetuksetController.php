@@ -197,6 +197,29 @@ class AsetuksetController extends Controller
 		}
 
 
+		if(isset($_POST['uploaded_logo']))
+		{
+
+		  if (!file_exists(Yii::app()->basePath."/../tiedostot/firma/".Yii::app()->user->domain)) {
+		  	mkdir(Yii::app()->basePath."/../tiedostot/firma/".Yii::app()->user->domain, 0777, true);
+		  }
+
+		  $uploaddir = Yii::app()->basePath.'/../tiedostot/firma/'.Yii::app()->user->domain.'/';
+		  $ext = pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION);
+		  $uploadfile = $uploaddir . basename('systemlogo.'.$ext);
+		  if($ext != 'jpg' and $ext != 'png')
+		  {
+			Yii::app()->user->setFlash('danger', "Lataaminen ei onnistunut, odottelaan JPG tai PNG.");
+			$this->redirect(array('tiedostot','id'=>$model->id));
+			exit;
+		  }
+
+		  if (move_uploaded_file($_FILES['file']['tmp_name'], $uploadfile)) {
+		     $this->redirect(array('tiedostot', 'id' => 1));
+		  } 
+		}
+
+
 
 		if(isset($_POST['poistaTamaTiedosto'])){
 			unlink($_POST['poistaTamaTiedosto']);
