@@ -64,7 +64,8 @@ Asetukset::model()->updatebypk(1, array('onlinevaraus_loppu'=>18));
 <div class="row">
  <div class="form-inline col-sm-12">
    <div class="form-group">
-	<img src="<?php echo $asetukset->logon_polkku; ?>" height="<?php echo $asetukset->logon_korkeus; ?>">
+
+	<?php $site = Yii::app()->createController('Site'); echo $site[0]->logoShower(null); ?>
 
 	&nbsp;<span data-toggle="modal" data-target=".kysymys" class="link"><img src="<?php echo Yii::app()->request->baseUrl; ?>/ylapalkki/kysymys.png" height="30"></span>
 
