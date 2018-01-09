@@ -223,12 +223,27 @@ $model->hinta_sis_alv = round($model->hinta_sis_alv, 2);
 		<?php echo $form->error($model,'salasana'); ?>
 	</div>
 	*/ ?>
-	<?php if(isset($model->id)): ?>
+	<?php if(isset($model->id) and !empty($model->sahkoposti)): ?>
 	<div class="section fill mb5 ashidd_a">
-		<?php echo CHtml::link(Yii::t('main', 'Lähetä tunnukset asiakkaalle'), 
+		<?php 
+		$str = '';
+		$cl = 'btn btn-primary btn-block';
+		if(empty($model->salasana) and empty($model->token))
+			$str = Yii::t('main', 'Lähetä tunnukset asiakkaalle');
+		if(empty($model->salasana) and !empty($model->token)){
+			$cl = 'btn btn-warning btn-block';
+			$str = Yii::t('main', 'Tunnukset on lähetetty. Lähetä uudelleen');
+		}
+		if(!empty($model->salasana) and empty($model->token)){
+			$cl = 'btn btn-success btn-block';
+			$str = Yii::t('main', 'Tunnus on aktiivinen. Lähetä uudelleen');
+		}
+		?>
+
+		<?php echo CHtml::link($str, 
 				array('update', 'id'=>$model->id, 'laheta_tunnukset'=>true), 
 				array(
-					'class' => 'btn btn-primary btn-block myBgColors',
+					'class' => $cl,
 					'data-toggle'=>'tooltip', 
 					'data-placement'=>'top', 
 					'title'=>Yii::t('main', 'Lähetä'),
@@ -236,6 +251,7 @@ $model->hinta_sis_alv = round($model->hinta_sis_alv, 2);
 				)
 			); 
 		?>
+
 	</div>
 
 	<div class="section fill mb5">
