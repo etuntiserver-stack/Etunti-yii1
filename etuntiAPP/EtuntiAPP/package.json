@@ -40,6 +40,7 @@
     "cordova-plugin-whitelist": "~1.3.2",
     "cordova-ubuntu": "^4.3.4",
     "de.appplant.cordova.plugin.local-notification": "~0.8.5",
-    "phonegap-nfc": "~0.6.6"
+    "phonegap-nfc": "~0.6.6",
+    "ubuntu": "^4.3.4"
   }
 }
