@@ -127,7 +127,7 @@ if(empty($model->position) and isset($model->id))
 		<?php echo CHtml::link(Yii::t('main', 'Avaa mobiilisovellus'), 
 				array('update', 'id'=>$model->id, 'avaa_mobiili'=>true), 
 				array(
-					'class' => 'btn btn-primary btn-block myBgColors',
+					'class' => 'btn btn-danger btn-block',
 					'data-toggle'=>'tooltip', 
 					'data-placement'=>'top', 
 					'title'=>Yii::t('main', 'Lähetä'),
