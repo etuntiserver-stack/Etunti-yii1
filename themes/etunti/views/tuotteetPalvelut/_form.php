@@ -47,9 +47,7 @@ $model->kotitalousvahennys = (int)$model->kotitalousvahennys;
 		<?php echo $form->error($model,'kotitalousvahennys'); ?>
 	</div>
 
-	<br><br>
-
-
+	<legend><h3><?php echo Yii::t('main', 'Hinta'); ?></h3></legend>
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'hinta_alv_0'); ?>
 		<?php echo $form->numberField($model,'hinta_alv_0',array('size'=>20,'maxlength'=>20,'class'=>'form-control', 'step'=>'0.01')); ?>
@@ -147,6 +145,34 @@ $(".muokaValiko").click(function() {
 	   </div>
 
 		<?php echo $form->error($model,'yksikko'); ?>
+	</div>
+
+
+	<legend><h3><?php echo Yii::t('main', 'Netvisor'); ?></h3></legend>
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'varastoitava'); ?>
+		<?php 
+        	$l = array(0=>Yii::t('main', 'Ei'),1=>Yii::t('main', 'Kyllä'));
+		echo $form->dropDownList($model,'varastoitava',$l, 
+			array('class'=>'form-control','options' => array('24'=>array('selected'=>true)))
+		);
+
+		?>
+
+		<?php echo $form->error($model,'varastoitava'); ?>
+	</div>
+
+	<div class="section fill mb5">
+		<?php echo $form->labelEx($model,'myyntituote'); ?>
+		<?php 
+        	$l = array(0=>Yii::t('main', 'Ei'),1=>Yii::t('main', 'Kyllä'));
+		echo $form->dropDownList($model,'myyntituote',$l, 
+			array('class'=>'form-control','options' => array('24'=>array('selected'=>true)))
+		);
+
+		?>
+
+		<?php echo $form->error($model,'myyntituote'); ?>
 	</div>
 
 

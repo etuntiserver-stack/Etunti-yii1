@@ -71,6 +71,8 @@ public $image;
                      'yksikko' => 'varchar(20) ',
                      'netvisorkey' => 'int(11) ',
                      'aktiivinen' => 'int(1) DEFAULT 1',
+                     'varastoitava' => 'int(1) ',
+                     'myyntituote' => 'int(1) DEFAULT 1 ',
 
 		);
 
@@ -95,7 +97,7 @@ public $image;
 		return array(
 			array('nimike, kategoria', 'required'),
 			array('image', 'file','types'=>'jpg', 'allowEmpty'=>true, 'on'=>'update'),
-			array('palvelu, nayta_sivuilla, paa_palvelu, alv, aktiivinen', 'numerical', 'integerOnly'=>true),
+			array('palvelu, nayta_sivuilla, paa_palvelu, alv, aktiivinen, varastoitava, myyntituote', 'numerical', 'integerOnly'=>true),
 			array('nimike, selitysteksti', 'length', 'max'=>255),
 			array('hinta_alv_0, hinta_alv_sis, yksikko', 'length', 'max'=>20),
 			array('hinta, kesto, nelio, kotitalousvahennys, netvisorkey', 'length', 'max'=>20),

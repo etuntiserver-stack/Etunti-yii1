@@ -130,7 +130,20 @@ class TuotteetPalvelutController extends Controller
 				$model->lisapalvelut='';
 
 			if($model->save())
+			{
+			   // <-- Netvisor
+			   $a = Asetukset::model()->findbypk(1);
+			   if($a->netvisor_kaytto == 1)
+			   {
+					$InsertedDataIdentifier = $this->netvisorProduct("add", $model);
+					if(!empty($InsertedDataIdentifier))
+					TuotteetPalvelut::model()->updateByPk($model->id, array('netvisorkey'=>$InsertedDataIdentifier));
+
+			   }
+			   //  Netvisor -->
+
 				$this->redirect(array('index'));
+			}
 		}
 
 		$this->render('create',array(
@@ -188,7 +201,28 @@ class TuotteetPalvelutController extends Controller
 
 
 			if($model->save())
+			{
+
+			   // <-- Netvisor
+			   $a = Asetukset::model()->findbypk(1);
+			   if($a->netvisor_kaytto == 1)
+			   {
+				if($model->netvisorkey == 0)
+				{
+					$InsertedDataIdentifier = $this->netvisorProduct("add", $model);
+					if(!empty($InsertedDataIdentifier))
+					TuotteetPalvelut::model()->updateByPk($model->id, array('netvisorkey'=>$InsertedDataIdentifier));
+
+				} else {
+
+					$InsertedDataIdentifier = $this->netvisorProduct("edit", $model);
+
+				}
+			    }
+			   //  Netvisor -->
+
 				$this->redirect(array('index'));
+			}
 		}
 
 		$this->render('update',array(
@@ -308,5 +342,135 @@ class TuotteetPalvelutController extends Controller
 
             	return $return;
 	}
+
+	protected function netvisorProduct($tila, $model)
+	{
+
+		$return = '';
+		$site = Yii::app()->createController('Site');
+		$n = $site[0]->netvisorYhteys();
+
+	if(isset($n[0]))
+	{
+		if( $tila == 'add' and $model->netvisorkey == 0)
+		$url		= $n[0].'/product.nv?method=add';
+		elseif( $tila == 'edit' and $model->netvisorkey != 0)
+		$url		= $n[0].'/product.nv?id='.$model->netvisorkey.'&method=edit';
+
+		$host 		= $n[1];
+
+		$sender 	= $n[2];
+		$customerId	= $n[3];
+		$partnerId	= $n[4];
+		$timestamp	= $n[5];
+		$language	= $n[6];
+		$organisationIdentifier	= $n[7];
+		$transactionIdentifier	= $n[8];
+		$userKey 	= $n[9];
+		$partnerKey	= $n[10];
+
+
+
+	$getMAC = md5(
+		$url.'&'.
+		$sender.'&'.
+		$customerId.'&'.
+		$timestamp.'&'.
+		$language.'&'.
+		$organisationIdentifier.'&'.
+		$transactionIdentifier.'&'.
+		$userKey.'&'.
+		$partnerKey
+	 	);
+	
+	$auth_data = 
+	    "Host: $host\r\n".  
+	    "X-Netvisor-Authentication-Sender: $sender\r\n".  
+	    "X-Netvisor-Authentication-CustomerId: $customerId\r\n".  
+	    "X-Netvisor-Authentication-PartnerId: $partnerId\r\n".  
+	    "X-Netvisor-Authentication-Timestamp: $timestamp\r\n".
+	    "X-Netvisor-Interface-Language: $language\r\n".
+	    "X-Netvisor-Organisation-ID: $organisationIdentifier\r\n".  
+	    "X-Netvisor-Authentication-TransactionId: $transactionIdentifier\r\n".
+	    "X-Netvisor-Authentication-MAC: $getMAC\r\n"
+	; 
+	
+	$ryhma = '';
+	if(isset($model->ryhma))
+	{
+	  $r = Valikkoot::model()->findbypk($model->ryhma);
+	   if(isset($r->id))
+	   $ryhma = $r->value;
+	}
+
+$model->hinta_alv_0 = str_replace(",",".",$model->hinta_alv_0);
+$model->hinta_alv_sis = str_replace(",",".",$model->hinta_alv_0);
+
+$xml = '
+<root>
+  <product>
+    <productbaseinformation>
+      <productcode>'.$model->id.'</productcode>
+      <productgroup>'.$ryhma.'</productgroup>
+      <name>'.$model->nimike.'</name>
+      <description></description>
+      <unitprice type="net">'.$model->hinta_alv_0.'</unitprice>
+      <unit>'.$model->yksikko.'</unit>
+      <unitweight>1</unitweight>
+      <purchaseprice>'.$model->hinta_alv_sis.'</purchaseprice>
+      <tariffheading></tariffheading>
+      <comissionpercentage>0</comissionpercentage>
+      <isactive>'.$model->aktiivinen.'</isactive>
+      <issalesproduct>'.$model->myyntituote.'</issalesproduct>
+      <inventoryenabled>'.$model->varastoitava.'</inventoryenabled>
+    </productbaseinformation>
+    <productbookkeepingdetails>
+      <defaultvatpercentage>'.$model->alv.'</defaultvatpercentage>
+    </productbookkeepingdetails>
+  </product>
+</root>';
+	
+	$optsPOST = array(
+	  'http'=>array(
+	    'method'=>"POST",
+	    'header'=>"Accept: text/plain\r\n" .
+	              "Content-Type: application/x-www-form-urlencoded\r\n".
+	              "Content-Length: ".strlen($xml)."\r\n".
+		      $auth_data,
+	    'content'=> $xml
+	  )
+	);
+	
+	$context = stream_context_create($optsPOST);
+	
+	$response = file_get_contents($url, false, $context);
+	$result = new SimpleXMLElement($response);
+	
+	
+	  if($result->ResponseStatus->Status == 'OK')
+	  {
+		if( $tila == 'add' )
+		$return=$result->Replies->InsertedDataIdentifier;
+		if( $tila == 'edit' )
+		$return=$result;
+
+	  } else {
+
+		echo '<pre>';
+		print_r( $response );
+		echo '</pre>';
+
+	  }
+
+	
+
+
+	} // if isset $n[0]
+
+		return $return;
+
+
+	}
+
 
 }
