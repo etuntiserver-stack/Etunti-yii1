@@ -188,7 +188,7 @@ public $verot;
 			'salasana'=> Yii::t('main', 'Extranet-salasana'),
 			'sahkopostilaskuosoite'=> Yii::t('main', 'Sähköpostilaskuosoite'),
 			'hinta_sis_alv' => Yii::t('main', 'Hinta (sis. ALV)'),
-			'app_kayttoehdot' => Yii::t('main', 'Sovelluksen käyttöehdot'),
+			'app_kayttoehdot' => Yii::t('main', 'eDico käytöehdot hyväksytty'),
 		);
 	}
 

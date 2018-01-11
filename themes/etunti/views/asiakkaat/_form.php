@@ -226,10 +226,10 @@ $model->hinta_sis_alv = round($model->hinta_sis_alv, 2);
 	<?php if(isset($model->id) and !empty($model->sahkoposti)): ?>
 	<div class="section fill mb5 ashidd_a">
 		<?php 
-		$str = '';
+		$str = 'Lähetä eDico tunnukset asiakkaalle';
 		$cl = 'btn btn-primary btn-block';
 		if(empty($model->salasana) and empty($model->token))
-			$str = Yii::t('main', 'Lähetä tunnukset asiakkaalle');
+			$str = Yii::t('main', 'Lähetä eDico tunnukset asiakkaalle');
 		if(empty($model->salasana) and !empty($model->token)){
 			$cl = 'btn btn-warning btn-block';
 			$str = Yii::t('main', 'Tunnukset on lähetetty. Lähetä uudelleen');
@@ -260,15 +260,12 @@ $model->hinta_sis_alv = round($model->hinta_sis_alv, 2);
 		<?php echo $form->error($model,'app_kayttoehdot'); ?>
 	</div>
 
-	<?php if(isset($model->id)) : ?>
+	<?php if(isset($model->id) and is_array(json_decode($model->alennuskoodit, true))) : ?>
 	<div class="section fill mb5">
 		<?php echo $form->labelEx($model,'alennuskoodit'); ?>
 		<?php
-		if(is_array(json_decode($model->alennuskoodit, true)))
-		{
 			$alennuskoodit = json_decode($model->alennuskoodit, true);
 			echo '<textarea class="form-control" name="Asiakkaat[alennuskoodit]">'.implode("\n", $alennuskoodit).'</textarea>';
-		}
 		?>
 	</div>
 	<?php endif; ?>
@@ -457,7 +454,7 @@ $model->hinta_sis_alv = round($model->hinta_sis_alv, 2);
 $(document).ready(function(){
 
   $(".sw").bootstrapSwitch({
-	size: "large",
+	//size: "large",
 	onColor: "success",
 	offColor: "danger",
 	onText: "Kyllä",
