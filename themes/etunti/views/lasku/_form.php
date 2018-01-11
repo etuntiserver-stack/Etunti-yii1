@@ -546,7 +546,9 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 	</div><div class="col-sm-6">
 	<br>
 	<?php
-	echo CHtml::dropdownList('palvelu','palvelu', CHtml::listData(LaskutusTuotteet::model()->findAll(), 'id', 'tuotenimi'), 
+	$criteria = new CDbCriteria();
+       	$criteria->condition = " aktiivinen=1 AND kategoria='laskutus' ";
+	echo CHtml::dropdownList('palvelu','palvelu', CHtml::listData(TuotteetPalvelut::model()->findAll($criteria), 'id', 'nimike'), 
 	array('empty'=>'Valitse tuote/palvelu','class'=>'form-control valitseTuote'));
 	?>
 	</div>
@@ -586,7 +588,9 @@ echo '<input type="hidden" id="palvelu_tyyppi" value="'.$asetukset->palvelu_tyyp
 	</div><div class="col-sm-6">
 	<br>
 	<?php
-	echo CHtml::dropdownList('','', CHtml::listData(LaskutusTuotteet::model()->findAll(), 'id', 'tuotenimi'), 
+	$criteria = new CDbCriteria();
+       	$criteria->condition = " aktiivinen=1 AND kategoria='laskutus' ";
+	echo CHtml::dropdownList('','', CHtml::listData(TuotteetPalvelut::model()->findAll($criteria), 'id', 'nimike'), 
 	array('empty'=>'Valitse tuote/palvelu','class'=>'form-control valitseTuote'));
 	?>
 	</div>

@@ -379,12 +379,12 @@ class LaskuController extends Controller
 
 	public function actionValitsetuote()
 	{
-		$tuote = LaskutusTuotteet::model()->findbypk($_POST['tuoteID']);
+		$tuote = TuotteetPalvelut::model()->findbypk($_POST['tuoteID']);
 		if(isset($tuote->id)) $tuoteID = $tuote->id; else $tuoteID = '';
 		{
 			$arr = array(
 				'id' => $tuote->id,
-				'tuotenimi' => $tuote->tuotenimi,
+				'tuotenimi' => $tuote->nimike,
 				'hinta_alv_0' => $tuote->hinta_alv_0,
 				'alv' => $tuote->alv,
 				'yksikko' => $tuote->yksikko,

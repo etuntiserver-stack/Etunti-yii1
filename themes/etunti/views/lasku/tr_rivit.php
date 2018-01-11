@@ -33,11 +33,11 @@
 	//     Free text -->
 
 	$tuotePalvelu = '';
-	$tuote = LaskutusTuotteet::model()->findbypk($_POST['tuotePalvelu']);
+	$tuote = TuotteetPalvelut::model()->findbypk($_POST['tuotePalvelu']);
 	if(isset($tuote->id))
 	{
 		$tuoteID	= $tuote->id;
-		$tuotePalvelu 	= $tuote->tuotenimi;
+		$tuotePalvelu 	= $tuote->nimike;
 	} else {
 		$tuoteID	= '';
 		$tuotePalvelu 	= '';

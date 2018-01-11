@@ -33,8 +33,8 @@
 	  <div class="col-lg-4">
 		<?php
 		$criteria = new CDbCriteria();
-       		$criteria->condition = " is_active=1 ";
-		echo CHtml::dropdownList('','palvelu', CHtml::listData(LaskutusTuotteet::model()->findAll($criteria), 'id', 'tuotenimi'), 
+       		$criteria->condition = " aktiivinen=1 AND kategoria='laskutus' ";
+		echo CHtml::dropdownList('','palvelu', CHtml::listData(TuotteetPalvelut::model()->findAll($criteria), 'id', 'nimike'), 
 		array('empty'=>'','class'=>'form-control valitseTuote','id'=>'lt_'.$num,'num'=>$num));
 		?>
 	  </div><div class="col-lg-8">
